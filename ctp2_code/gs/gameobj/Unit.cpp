@@ -100,7 +100,7 @@
 #include "gamefile.h"
 #include "TerrainRecord.h"
 #include "SlicObject.h"
-#include "GovernmentRecord.h"
+#include "profileDB.h"
 
 extern Pollution *  g_thePollution;
 
@@ -816,7 +816,7 @@ void Unit::SetHP(const double newval)
 
 void Unit::SetType(const sint32 type)
 {
-	AccessData()->SetType(type); 
+	AccessData()->SetType(type);
 }
 
 void Unit::SetHPToMax()
@@ -2556,6 +2556,17 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 		order_valid = NeedsRefueling();
 //	else if(order_rec->GetUnitPretest_CanParadrop())
 //		order_valid = unit_rec->GetParatrooperTransport();
+	else if(order_rec->GetUnitPretest_CanUpgrade())
+	{
+		if(g_theProfileDB->IsUpgrade())
+		{
+			order_valid = (GetData()->GetBestUpgradeUnitType() >= 0);
+		}
+		else
+		{
+			order_valid = false;
+		}
+	}
 	else if(order_rec->GetUnitPretest_None())
 		order_valid = true;
 
@@ -2588,68 +2599,6 @@ bool Unit::Sink(sint32 chance)
 	return false;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : Unit::Upgrade
-//
-// Description: Upgrades a unit to the given type and displays a slic message.
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : Like SetType but displays an upgrade slic message.
-//
-//----------------------------------------------------------------------------
-void Unit::Upgrade(const sint32 type)
-{
-	// Notify player of upgrades
-	SlicObject *so = new SlicObject("999UnitUpgraded");
-	so->AddRecipient(GetOwner());
-	so->AddUnitRecord(GetType());
-	so->AddUnitRecord(type);
-	g_slicEngine->Execute(so);
-
-	SetType(type);
-}
-
-sint32 Unit::GetBestUpgradeUnitType() const
-{
-	sint32 bestUnit = -1;
-	const UnitRecord *rec = GetDBRec();
-	
-	if(rec->GetNumUpgradeTo() > 0)
-	{
-		for(sint32 i = 0; i < rec->GetNumUpgradeTo(); ++i)
-		{
-			sint32 currentType = rec->GetUpgradeToIndex(i);
-			if(g_player[GetOwner()]->CanBuildUnit(currentType)
-			&& unitutil_IsUnitBetterThan(currentType, bestUnit, g_player[GetOwner()]->GetGovernmentType())
-			){
-				bestUnit = currentType;
-			}
-		}
-	}
-
-	return bestUnit;
-}
-
-sint32 Unit::GetUpgradeCosts(sint32 upgradeType) const
-{
-	const UnitRecord *rec = GetDBRec();
-
-	sint32 govType   = g_player[GetOwner()]->m_government_type;
-	sint32 oldshield = rec->GetShieldCost();
-	sint32 newshield = g_theUnitDB->Get(upgradeType, govType)->GetShieldCost();
-	double rushmod   = g_theGovernmentDB->Get(govType)->GetUnitRushModifier();
-
-	return static_cast<sint32>((newshield - oldshield) * rushmod);
-}
-
-
-
 bool Unit::IsHiddenNationality() const //emod to map to unit actor andmake color same as barbarians
 {
 	return GetDBRec()->GetHiddenNationality();
@@ -2660,9 +2609,9 @@ sint32 Unit::IsElite() const
 	return GetData()->IsElite();
 }
 
-void Unit::SetElite()  
+void Unit::SetElite()
 {
-	AccessData()->SetElite();  
+	AccessData()->SetElite();
 }
 
 void Unit::UnElite()

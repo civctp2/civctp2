@@ -34,6 +34,7 @@
 // - Seperated the CheckOrders event from MoveUnits event. (13-Aug-2008 Martin Gühmann)
 // - Moved the startegic state calculation before everthing else, so that
 //   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
+// - Added upgrade events. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -347,6 +348,8 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(SettleInCity,               "Adds a pops to a city with a settler", "%a&i")
 	EVENT(CheckOrders,                "Added by the MoveUnit event to execute the next moves", "%a%l%l")
 	EVENT(AiBeginTurn,                "Begin a player's turn main Ai", "%P")
+	EVENT(UpgradeOrder,               "Adds an upgrade order to this army", "%a")
+	EVENT(UpgradeUnit,                "This unit upgrades", "%u")
 
 	EVENT(MAX,                        "This is not a real event, it marks the end of the list", "")
 };

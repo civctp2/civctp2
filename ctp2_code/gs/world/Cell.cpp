@@ -1320,9 +1320,8 @@ bool Cell::IsDead() const
 bool Cell::IsUnitUpgradePosition(sint32 unitOwner) const
 {
 	// For now just stick to the city approach
-	return HasCity();
+	//return HasCity();
 
-	/*
 	// ToDo improve efficency
 	// Add an owner check
 	// -> Also a check for figureing out if on unowned terrain can be upgraded
@@ -1330,30 +1329,39 @@ bool Cell::IsUnitUpgradePosition(sint32 unitOwner) const
 
 	bool canUpgrade = rec->GetEnvBase()->GetCanUpgrade();
 
-	if(HasCity() && rec->HasEnvCity()) {
+	if(HasCity() && rec->HasEnvCity())
+	{
 		canUpgrade |= rec->GetEnvCityPtr()->GetCanUpgrade();
 	}
 
-	if(HasRiver() && rec->HasEnvRiver()) {
+	if(HasRiver() && rec->HasEnvRiver())
+	{
 		canUpgrade |= rec->GetEnvRiverPtr()->GetCanUpgrade();
 	}
 
 	sint32 good;
-	if(g_theWorld->GetGood(this, good)) {
+	if(g_theWorld->GetGood(this, good))
+	{
 		canUpgrade |= g_theResourceDB->Get(good)->GetCanUpgrade();
 	}
 
 	size_t const	count	= m_objects ? m_objects->Num() : 0;
-	for (size_t i = 0; i < count; ++i)
+	for(size_t i = 0; i < count; ++i)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			const TerrainImprovementRecord *impRec = 
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 
 			canUpgrade |= impRec->GetCanUpgrade();
+
+			const TerrainImprovementRecord::Effect* effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+			if(effect != NULL)
+			{
+				canUpgrade |= effect->GetCanUpgrade();
+			}
 		}
 	}
 
 	return canUpgrade;
-	*/
+	
 }

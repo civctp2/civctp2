@@ -23,6 +23,7 @@
 //   - April 24th 2005 Martin Gühmann
 // - Fixed targets of Sue and Injoin orders. (29-Oct-2007 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added ORDER_UPGRADE (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -253,6 +254,24 @@ ORDER_UNLOAD {
   InvalidCursor 69
 }
 
+
+ORDER_UPGRADE {
+  Gold 0
+  Move 0
+  EventName "UpgradeOrder"
+
+  LocalizedName str_ldl_order_upgrade
+  StatusText str_ldl_order_upgrade
+
+  TargetPretest:None
+  UnitPretest_CanUpgrade
+
+  CPIcon "upgradeunit_buttonactive.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_UPGRADE
+  Cursor 1
+  InvalidCursor 2
+}
 
 ORDER_DISBAND_ARMY {
   Gold 0

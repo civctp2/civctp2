@@ -969,11 +969,10 @@ bool ArmyData::IsAsleep() const
 // Put this army on sentinal duty or upgrade it.
 void ArmyData::Sleep()
 {
-	Upgrade(); // Has to be moved so that it is executed by its own event
-
 	for(sint32 i = m_nElements - 1; i >= 0; i--)
 	{
-		if(!m_array[i]->IsAsleep()){
+		if(!m_array[i]->IsAsleep())
+		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
 			                       GEA_Unit, m_array[i],
 			                       GEA_End);
@@ -1533,9 +1532,12 @@ void ArmyData::BeginTurn()
 	//Upgrade AI
 	if(g_player[m_owner]->IsRobot()) // Added so human units don't automatically upgrade 3-27-2007
 	{
-		Upgrade();
+		if(g_theProfileDB->GetValueByName("Upgrade"))
+		{
+			Upgrade();
+		}
 	}
-	
+
 	/// @todo remove this or implement this
 //If diff->chokeunit and unit is surrounded
 //	RadiusIterator it(cityPos, m_sizeIndex);
@@ -3575,23 +3577,27 @@ ORDER_RESULT ArmyData::BioInfect(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 
-	if(c.GetOwner() == m_array[0].GetOwner()) {
+	if(c.GetOwner() == m_array[0].GetOwner())
+	{
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-    if(c.IsBioInfected()) {
-        return ORDER_RESULT_ILLEGAL;
-    }        
+	if(c.IsBioInfected())
+	{
+		return ORDER_RESULT_ILLEGAL;
+	}
 
-    //InformAI(UNIT_ORDER_BIO_INFECT, point); //does nothing here but could be implemented
+	//InformAI(UNIT_ORDER_BIO_INFECT, point); //does nothing here but could be implemented
 
-	if(m_array[uindex].IsVeteran()) {
+	if(m_array[uindex].IsVeteran())
+	{
 		chance += g_theConstDB->Get(0)->GetEliteTerroristBonus();
 	}
 
 	SlicObject * so = NULL;
 
-	if(c.IsBioImmune()) {
+	if(c.IsBioImmune())
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Bio infection failed because city immune\n"));
 		so = new CityReport("10iImmuneToBioInfect", c);
 		so->AddCivilisation(c.GetOwner());
@@ -3611,13 +3617,16 @@ ORDER_RESULT ArmyData::BioInfect(const MapPoint &point)
 	c.ModifySpecialAttackChance(UNIT_ORDER_BIO_INFECT, chance);
 	c.SetWatchful();
 
-	if(g_rand->Next(100) < sint32(chance * 100.0)) {
+	if(g_rand->Next(100) < sint32(chance * 100.0))
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BioInfectCityUnit,
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
 							   GEA_End);
 		return ORDER_RESULT_SUCCEEDED;
-	} else {
+	}
+	else
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Bio infection failed because I said so.\n"));
 		so = new CityReport("10iBioInfectFailed", c);
 		so->AddCivilisation(GetOwner());
@@ -6341,6 +6350,10 @@ bool ArmyData::ExecuteOrders(bool propagate)
 			case UNIT_ORDER_SETTLE_IN_CITY:
 				completedOrder = true;
 				SettleInCity();
+				break;
+			case UNIT_ORDER_UPGRADE:
+				completedOrder = true;
+				Upgrade();
 				break;
 			default:
 				Assert(false);
@@ -9223,8 +9236,10 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 	GAME_EVENT gev = Order::OrderToEvent(order->m_order);
 	sint32 odb;
-	for(odb = 0; odb < g_theOrderDB->NumRecords(); odb++) {
-		if(s_orderDBToEventMap[odb] == gev) {
+	for(odb = 0; odb < g_theOrderDB->NumRecords(); odb++)
+	{
+		if(s_orderDBToEventMap[odb] == gev)
+		{
 			break;
 		}
 	}
@@ -9240,11 +9255,14 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		if(g_player[m_owner]->m_gold->GetLevel() < order_rec->GetGold())
 		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == m_owner) || 
-				(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+			if
+			  (
+			       visiblePlayer == m_owner
+			    || (m_array[0].GetVisibility() & (1 << visiblePlayer))
+			  )
 			{
 				sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_CANT"))->GetValue();
-				sint32	soundID = gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE);
+				sint32	soundID  = gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE);
 
 				g_director->AddSpecialEffect(order->m_point, spriteID, soundID);
 			}
@@ -9383,8 +9401,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		}
 #endif _DEBUG
 
-	if(result == ORDER_RESULT_ILLEGAL) {
-		
+	if(result == ORDER_RESULT_ILLEGAL)
+	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_owner) || 
 			(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
@@ -9395,7 +9413,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			g_director->AddSpecialEffect(order->m_point, spriteID, soundID);
 		}
 
-		for (sint32 i = m_nElements - 1; i >= 0; i--) {
+		for(sint32 i = m_nElements - 1; i >= 0; i--)
+		{
 			Assert(!m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW));
 			m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 		}
@@ -11034,44 +11053,58 @@ bool ArmyData::NearestUnexplored(MapPoint &pos) const
 	return m_array[index].NearestUnexplored(searchRadius, pos);
 }
 
-void ArmyData::Upgrade()
+bool ArmyData::Upgrade()
 {
-	if(!g_theProfileDB->GetValueByName("Upgrade"))
-		return;
+	sint32 count = 0;
 
-	// Should be moved to an event
-	if(g_player[m_owner]->HasFreeUnitUpgrades()
-//	|| Position allows free upgrades
-	){
-		for(sint32 i = 0; i < m_nElements; ++i)
+	sint32 type  = 0;
+	sint32 costs = 0;
+
+	for(sint32 i = m_nElements - 1; i >= 0; i--)
+	{
+		if(m_array[i]->CanUpgrade(type, costs))
 		{
-			sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
-			if(upgradeType > -1)
-			{
-				m_array[i].Upgrade(upgradeType);
-			}
-		}
-	}
-	else{
-		if(g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner)){
-			for(sint32 i = 0; i < m_nElements; ++i)
-			{
-				sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
-				if(upgradeType > -1)
-				{
-					sint32 upgradeCost = m_array[i].GetUpgradeCosts(upgradeType);
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UpgradeUnit,
+			                       GEA_Unit, m_array[i],
+			                       GEA_End);
 
-					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
-					{
-						m_array[i].Upgrade(upgradeType);
-						g_player[m_owner]->m_gold->SubGold(upgradeCost);
-					}
-				}
-			}
+			++count;
 		}
 	}
 
-	UpdateMoveIntersection();
+	return count != 0;
+}
+
+bool ArmyData::UpgradeTypeAndCosts(bool & full, sint32 & costs, sint32 & fullCosts, sint8 & numUpgrade, sint8 & numUpgradeAll) const
+{
+	numUpgrade    = 0;
+	numUpgradeAll = 0;
+	costs         = 0;
+	fullCosts     = 0;
+
+	for(sint32 i = 0; i < m_nElements; ++i)
+	{
+		sint32 type = m_array[i]->GetBestUpgradeUnitType();
+
+		if(type >= 0)
+		{
+			++numUpgradeAll;
+
+			sint32 unit_costs = m_array[i]->GetUpgradeCosts(type);
+
+			fullCosts += unit_costs;
+
+			if(costs + unit_costs <= g_player[m_owner]->m_gold->GetLevel())
+			{
+				costs += unit_costs;
+				++numUpgrade;
+			}
+		}
+	}
+
+	full = (numUpgrade == numUpgradeAll);
+
+	return numUpgradeAll != 0;
 }
 
 void ArmyData::CheckHostileTerrain()

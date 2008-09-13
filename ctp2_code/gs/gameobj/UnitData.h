@@ -384,6 +384,10 @@ public:
 	                    CAUSE_REMOVE_ARMY cause) ;
 	void BeginTurnCity(const Unit &me, UnitDynamicArray &dead);
 	void SetType(sint32 type);
+	bool CanUpgrade(sint32 & upgradeType, sint32 & upgradeCosts) const;
+	void Upgrade(const sint32 type, const sint32 costs);
+	sint32 GetBestUpgradeUnitType() const;
+	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 
 
 

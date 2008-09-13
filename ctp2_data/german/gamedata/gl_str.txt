@@ -717,6 +717,7 @@ ORDER_TARGET					"Zielen"
 ORDER_THROW_PARTY				"Empfang geben"
 ORDER_UNDERGROUND_RAILWAY			"Sklaven befreien"
 ORDER_UNLOAD					"Entladen"
+ORDER_UPGRADE					"Modernisieren"
 
 PERSONALITY_KAHN_DESCRIPTION			"Bösartiger, blutrünstiger Mörder"
 PERSONALITY_GHANDI_DESCRIPTION			"Diplomatischer Friedensbringer"

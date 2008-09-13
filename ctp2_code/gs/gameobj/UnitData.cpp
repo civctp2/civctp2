@@ -158,6 +158,7 @@
 #include "wonderutil.h"
 #include "World.h"
 #include "Wormhole.h"
+#include "GovernmentRecord.h"
 
 #ifdef _DEBUG
 #include "aui.h"
@@ -4777,8 +4778,8 @@ void UnitData::SetIsProfessional(bool on)
 
 void UnitData::SetOwner(PLAYER_INDEX newo)
 {
-	m_owner = newo; 
-	ENQUEUE(); 
+	m_owner = newo;
+	ENQUEUE();
 }
 
 void UnitData::SetType(sint32 type)
@@ -4804,7 +4805,7 @@ void UnitData::SetType(sint32 type)
 		){
 			Unit* tmp;
 			m_cargo_list->ResizeCreate(rec->GetCargoDataPtr()->GetMaxCargo(), tmp);
-		} 
+		}
 	//	else
 	//	{
 	//		Do nothing: Upgraded transporters may have a lower cargo capacity but for
@@ -4816,11 +4817,103 @@ void UnitData::SetType(sint32 type)
 	m_sprite_state->SetIndex(rec->GetDefaultSprite()->GetValue());
 	m_actor->ChangeType(m_sprite_state, m_type, Unit(m_id), true);
 
+	if(m_army.m_id != 0)
+	{
+		m_army->UpdateMoveIntersection();
+	}
+
 	// Maybe more stuff has to be done.
 	//4-8-2007 may have to add a reset movement here?
 
 	// Synchronize MP
 	ENQUEUE();
+}
+
+bool UnitData::CanUpgrade(sint32 & upgradeType, sint32 & upgradeCosts) const
+{
+	upgradeType = GetBestUpgradeUnitType();
+
+	if(upgradeType > -1)
+	{
+		upgradeCosts = (g_player[m_owner]->HasFreeUnitUpgrades()) ? 0 : GetUpgradeCosts(upgradeType);
+
+		return
+		      (
+		           g_player[m_owner]->HasFreeUnitUpgrades()
+		        ||
+		          (
+		               g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner)
+		            && upgradeCosts <= g_player[m_owner]->m_gold->GetLevel()
+		          )
+		      );
+	}
+	else
+	{
+		return false;
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::Upgrade
+//
+// Description: Upgrades a unit to the given type and displays a slic message.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Like SetType but displays an upgrade slic message.
+//
+//----------------------------------------------------------------------------
+void UnitData::Upgrade(const sint32 type, const sint32 costs)
+{
+	// Notify player of upgrades
+	SlicObject *so = new SlicObject("999UnitUpgraded");
+	so->AddRecipient(m_owner);
+	so->AddUnitRecord(m_type);
+	so->AddUnitRecord(type);
+	g_slicEngine->Execute(so);
+
+	// And remove gold
+	g_player[m_owner]->m_gold->SubGold(costs);
+
+	SetType(type);
+}
+
+sint32 UnitData::GetBestUpgradeUnitType() const
+{
+	sint32 bestUnit = -1;
+	const UnitRecord *rec = GetDBRec();
+	
+	if(rec->GetNumUpgradeTo() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumUpgradeTo(); ++i)
+		{
+			sint32 currentType = rec->GetUpgradeToIndex(i);
+			if(g_player[GetOwner()]->CanBuildUnit(currentType)
+			&& unitutil_IsUnitBetterThan(currentType, bestUnit, g_player[m_owner]->GetGovernmentType())
+			){
+				bestUnit = currentType;
+			}
+		}
+	}
+
+	return bestUnit;
+}
+
+sint32 UnitData::GetUpgradeCosts(sint32 upgradeType) const
+{
+	const UnitRecord *rec = GetDBRec();
+
+	sint32 govType   = g_player[m_owner]->m_government_type;
+	sint32 oldshield = rec->GetShieldCost();
+	sint32 newshield = g_theUnitDB->Get(upgradeType, govType)->GetShieldCost();
+	double rushmod   = g_theGovernmentDB->Get(govType)->GetUnitRushModifier();
+
+	return static_cast<sint32>((newshield - oldshield) * rushmod);
 }
 
 void UnitData::SetHP(const double hp)

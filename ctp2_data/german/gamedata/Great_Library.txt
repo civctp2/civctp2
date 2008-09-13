@@ -10375,6 +10375,33 @@ Mit dem <L:DATABASE_ORDERS,ORDER_TARGET>"Zielen"<e>-Befehl können Nuklearraketen
 [ORDER_CLEAR_TARGET_HISTORICAL]
 [END]
 
+[ORDER_UPGRADE_PREREQ]
+Voraussetzung:
+Gold: Menge ist variable und ist abhängig vom alten und neuen Einheitentyp
+Ort: <L:DATABASE_CONCEPTS,CONCEPT_CITY>Stadt<e> oder <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FORTIFICATIONS>Festung<e>
+[END]
+
+[ORDER_UPGRADE_STATISTICS]
+Effekt:
+Modernisiert Einheiten in einer Truppe
+[END]
+
+[ORDER_UPGRADE_GAMEPLAY]
+Modernisiert alle Einheiten in einer Truppe sofern der Spieler genug Gold hat. Wenn der Spieler nur genug Gold hat um einige Einheiten in einer Truppe zu modernisieren, werden solange Einheiten modernisiert bis der Spieler kein Gold mehr hat.
+
+Damit Einheiten modernisiert werden können, muss die Sonderregel "Einheiten modernisieren" beim Erstellen eines neuem Spieles eingeschaltet werden. Standartmäßig ist "Einheiten modernisieren" ausgeschaltet. Eine weitere Sonderregel erlaubt es der KI ihre Einheiten ohne Gold und unhabhängig vom Ort zu merdernsieren, diese Regel ist standartmäßig eingeschaltet.
+
+Wenn "Einheiten modernsieren" eingeschaltet ist und eine Einheit in einer Truppe modernisiert werden kann und diese Truppe ausgewält ist, so erscheint bei den Einheitenbefehlen der Befehl Modernisieren. Befindet sich der Mauszeiger über dem Modernisieren Knopf, so erscheinen im Status-Balken, neben dem Befehlsnamen, drei Zahlen: Die erste Zahl zeigt die Anzahl der Einheiten die mit dem verfügbaren Gold modernisiert werden können. Die zweite Zahl gibt die Anzahl der veralteten Einheiten an und die dritte Zahl zeigt die Anzahl der Einheiten an, die sich in der Truppe befinden. Außerdem werden zwei Goldbeträge angezeigt: Der erste Betrag gibt an, wieviel es kostet die Einheiten zu modernisieren, die mit dem verfügbaren Gold modernisiert werden können, der zweite Betrag gibt an wieviel es kostet alle Einheiten in der Truppe zu modernisieren.
+
+Die <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>-Kosten ergeben sich aus dem Unterschied der Produktionskosten des alten und des neuen Einheitentyps multipliziert mit der Einheiten-Sofortkauf-Strafe der gegenwärtigen Regierung eines Spielers.
+
+Ein Spieler möchte seine Einheiten aus verschiedenen Gründen modernisieren. Veraltete Einheiten sind zu schwach um gegen moderne Einheiten im Kampf bestehen zu können. Jedoch können die Modernisierungskosten sehr hoch sein so dass ein Spieler nicht alle seine Einheiten in einer Runde modernisieren kann.
+[END]
+
+[ORDER_UPGRADE_HISTORICAL]
+[END]
+
+
 [WONDER_THE_AGENCY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_GLOBAL_DEFENSE>Globale Verteidigung<e>
@@ -11058,26 +11085,6 @@ Im späten 20. Jahrhundert war die Gesellschaft der westlichen Welt regelrecht pr
 [END]
 
 ########################  AE MOD  Entries
-
-[ORDER_UPGRADE_ARMY_PREREQ]
-Requires:
-Any unit
-[END]
-
-[ORDER_UPGRADE_ARMY_STATISTICS]
-Effect:
-Permanently deletes the old unit and replaces it with a new unit
-Units must be upgraded in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> 
-<L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
-[END]
-
-[ORDER_UPGRADE_ARMY_GAMEPLAY]
-A player may want to upgrade a unit for a variety of reasons.  Older and obsolete units are often too weak to be much of an asset in combat.  In some rules setting the AI player is able to upgrade without a gold cost. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
-
-[END]
-
-[ORDER_UPGRADE_ARMY_HISTORICAL]
-[END]
 
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:

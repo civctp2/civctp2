@@ -199,8 +199,11 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_PLAGUE,                       // 60
 	UNIT_ORDER_VICTORY_MOVE,                 // 61
 	UNIT_ORDER_SETTLE_IN_CITY,               // 62
+	UNIT_ORDER_UPGRADE,                      // 63
 
-	UNIT_ORDER_MAX                           // 63
+	// Add new orders above this line
+
+	UNIT_ORDER_MAX                           // 64
 };
 
 enum SPECATTACK
@@ -793,27 +796,24 @@ public:
 	CityData *GetCityData() const;
 	CityData *CD() { return GetCityData(); }
 
-	std::string	GetDisplayName(void) const;
+	std::string GetDisplayName(void) const;
 
 	bool NeedsRefueling() const;
 	bool UnitValidForOrder(const OrderRecord * order_rec) const;
 
 	void SetType(const sint32 type);
 	bool Sink(sint32 chance);
-	void Upgrade(const sint32 type);
-	sint32 GetBestUpgradeUnitType() const;
-	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 
 	bool IsHiddenNationality() const;  //emod for barb color 2-7-2009
 	sint32 IsElite() const;
-	void SetElite();  
-	void UnElite(); 
+	void SetElite();
+	void UnElite();
 	sint32 IsConscript() const;
-	void SetConscript();  
-	void UnConscript(); 
+	void SetConscript();
+	void UnConscript();
 	sint32 IsMercenary() const;
-	void SetMercenary();  
-	void UnMercenary(); 
+	void SetMercenary();
+	void UnMercenary();
 };
 
 uint32 Unit_Unit_GetVersion(void);

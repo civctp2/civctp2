@@ -8700,6 +8700,33 @@ Le <L:DATABASE_ORDERS,ORDER_TARGET>ciblage<e> permet au joueur de choisir les <L
 [ORDER_CLEAR_TARGET_HISTORICAL]
 [END]
 
+[ORDER_UPGRADE_PREREQ]
+Requires:
+Gold, amount is variable, depending of old unit type and new unit type
+Location: <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FORTIFICATIONS>Fortification<e>
+[END]
+
+[ORDER_UPGRADE_STATISTICS]
+Effect:
+Upgrades units of an army
+[END]
+
+[ORDER_UPGRADE_GAMEPLAY]
+Upgrades all the units in an army that can be upgraded if the player has enough gold. If the player has only gold to upgrade some units in the army the units in the army are upgraded until the player ran out of gold.
+
+So that units can be upgraded at all, the game rule "Upgrade Units" must be enabled when a new game is created. By default "Upgrade Units" is disabled. Another rule allows the AI to upgrade without gold and independly of the location. By default this rule is enabled.
+
+If "Upgrade Units" is enabled and an army contains a unit that can be upgraded and this army is selected, the order Upgrade is diplayed on the unit order button bank. If the mouse cursor hovers over the Upgrade button then three numbers are displayed in the status bar besides the order name: The first number displays the number of units that can be upgraded with the amount of gold in the treasury. The second number shows the number of obsolete units in the army. And the third number shows the number of units in the army. Addionally, two gold values are shown: The first value shows the costs needed to upgrade the units that can be upgraded with the gold in the treasury. And the second value shows the gold that is needed to upgrade all units in the army.
+
+The <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
+
+A player may want to upgrade a unit for a variety of reasons. Obsolete units are often too weak to be much of an asset in combat. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
+[END]
+
+[ORDER_UPGRADE_HISTORICAL]
+[END]
+
+
 [WONDER_THE_AGENCY_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_GLOBAL_DEFENSE>Défense mondiale<e>

@@ -717,6 +717,7 @@ ORDER_TARGET					"Target Nuke"
 ORDER_THROW_PARTY				"Hold Reception"
 ORDER_UNDERGROUND_RAILWAY			"Free Slave"
 ORDER_UNLOAD					"Unload"
+ORDER_UPGRADE					"Upgrade"
 
 PERSONALITY_KAHN_DESCRIPTION			"Villainous, Bloodthirsty Murderer"
 PERSONALITY_GHANDI_DESCRIPTION			"Diplomacy-minded Peacemaker"

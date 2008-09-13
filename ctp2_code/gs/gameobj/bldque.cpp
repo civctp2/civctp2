@@ -1284,7 +1284,7 @@ double BuildQueue::GetPercentRemaining(sint32 shieldstore) const
 	if(!m_list->GetHead())
 		return 1.0;
 
-	if (m_list->GetHead()->m_cost == 0) 
+	if (m_list->GetHead()->m_cost == 0)
 		return 0.0;
 
 	return ((double) GetProductionRemaining(shieldstore) / (double) m_list->GetHead()->m_cost);

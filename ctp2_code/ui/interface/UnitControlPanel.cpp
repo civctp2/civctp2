@@ -27,6 +27,7 @@
 // - Option added to select which order buttons are displayed for an army.
 // - Added unit display name.
 // - Standartized code (May 21st 2006 Martin Gühmann)
+// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -803,15 +804,13 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 
 void UnitControlPanel::UpdateOrderButtons()  //emod3 this is the method
 {
-	
-	
 	static bool enableState[NUMBER_OF_ORDER_BUTTONS];
 
-	
-	
-	Army army = GetSelectedArmy();	
-	if(m_lastSelectionUnit == m_armySelectionUnit) {
-		if(army.m_id == m_lastSelectedArmy.m_id) {
+	Army army = GetSelectedArmy();
+	if(m_lastSelectionUnit == m_armySelectionUnit)
+	{
+		if(army.m_id == m_lastSelectedArmy.m_id)
+		{
 			if(army.IsValid() && army.Num() == m_lastSelectedArmyCount)
 				return;
 			else if(!army.IsValid() && !m_lastSelectedArmy.IsValid())
@@ -824,40 +823,36 @@ void UnitControlPanel::UpdateOrderButtons()  //emod3 this is the method
 	m_lastSelectedArmyCount = army.IsValid() ? army.Num() : 0;
 
 	sint32 orderIndex;
-	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
-		
+	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++)
+	{
 		m_orderButton[orderIndex]->ExchangeImage(4, 0, NULL);
 		m_orderButton[orderIndex]->ShouldDraw();
-
-		
 		m_orderButton[orderIndex]->SetActionFuncAndCookie(NULL, NULL);
 
-		
 		enableState[orderIndex] = false;
 
 		aui_TipWindow *tipwin = (aui_TipWindow *)m_orderButton[orderIndex]->GetTipWindow();
-		if(tipwin) {
+		if(tipwin)
+		{
 			tipwin->SetTipText("");
 		}
 	}
 
-	if (army.IsValid()) {
-		
-		
+	if(army.IsValid())
+	{
 		ArmyData *armyData = army.AccessData();
-		if(armyData) {
+		if(armyData)
+		{
 			bool const 	isShowOrderIntersection	= 
 				!g_theProfileDB->GetValueByName("ShowOrderUnion");
 			
-			for(sint32 index = 0; index < g_theOrderDB->NumRecords(); index++) {
-				
+			for(sint32 index = 0; index < g_theOrderDB->NumRecords(); index++)
+			{
 				const OrderRecord *orderRecord = g_theOrderDB->Get(index);
 
-				
 				if(stricmp(orderRecord->GetIDText(), "ORDER_ENSLAVE_SETTLER") == 0)
 					continue;
 
-				
 				bool const	isSelectedCapable	= 
 					(m_armySelectionUnit >= 0) &&
 					armyData->TestOrderUnit(orderRecord, m_armySelectionUnit);
@@ -867,44 +862,66 @@ void UnitControlPanel::UpdateOrderButtons()  //emod3 this is the method
 										  : armyData->TestOrderAny(orderRecord)
 										 );
 
-				if (isArmyCapable) 
+				if(isArmyCapable)
 				{
 					sint32 orderButtonIndex = orderRecord->GetButtonLocation();
 
-					
 					m_orderButton[orderButtonIndex]->ExchangeImage(4, 0,
 						orderRecord->GetCPIcon());
 
-					m_orderButton[orderButtonIndex]->SetStatusText(g_theStringDB->GetNameStr(orderRecord->GetStatusText()));
+					bool   full          = true;
+					sint32 costs         = 0;
+					sint32 fullCosts     = 0;
+					sint8  numUpgrade    = 0;
+					sint8  numUpgradeAll = 0;
 
-					aui_TipWindow *tipwin = (aui_TipWindow *)m_orderButton[orderButtonIndex]->GetTipWindow();
-					if(tipwin) {
-						tipwin->SetTipText((char *)g_theStringDB->GetNameStr(orderRecord->GetLocalizedName()));
+					if
+					  (
+					       stricmp(orderRecord->GetEventName(), "UpgradeOrder") == 0
+					    && armyData->UpgradeTypeAndCosts(full, costs, fullCosts, numUpgrade, numUpgradeAll)
+					  )
+					{
+						char buff[1024];
+						sprintf(buff, "%s, %d/%d/%d, %s%d/%d", g_theStringDB->GetNameStr(orderRecord->GetStatusText()), numUpgrade, numUpgradeAll, army->Num(), g_theStringDB->GetNameStr("str_ldl_Gold_COLON_"), costs, fullCosts);
+
+						m_orderButton[orderButtonIndex]->SetStatusTextCopy(buff);
+
+						aui_TipWindow *tipwin = (aui_TipWindow *)m_orderButton[orderButtonIndex]->GetTipWindow();
+						if(tipwin)
+						{
+							sprintf(buff, "%s, %d/%d/%d, %s%d/%d", g_theStringDB->GetNameStr(orderRecord->GetLocalizedName()), numUpgrade, numUpgradeAll, army->Num(), g_theStringDB->GetNameStr("str_ldl_Gold_COLON_"), costs, fullCosts);
+							tipwin->SetTipText(buff);
+						}
+					}
+					else
+					{
+						m_orderButton[orderButtonIndex]->SetStatusText(g_theStringDB->GetNameStr(orderRecord->GetStatusText()));
+
+						aui_TipWindow *tipwin = (aui_TipWindow *)m_orderButton[orderButtonIndex]->GetTipWindow();
+						if(tipwin)
+						{
+							tipwin->SetTipText((char *)g_theStringDB->GetNameStr(orderRecord->GetLocalizedName()));
+						}
 					}
 
-					
-					
 					ORDER_TEST orderTest = armyData->TestOrder(orderRecord);
 
 					sint32 range;
 					if(!orderRecord->GetRange(range))
 						range = 0;
 
-					
 					if((orderTest == ORDER_TEST_OK) ||
 						(orderTest == ORDER_TEST_NEEDS_TARGET) ||
 						(orderTest == ORDER_TEST_NO_MOVEMENT) ||
 						(orderTest == ORDER_TEST_INVALID_TARGET)) {
-						
+
 						m_orderPair[orderButtonIndex].first = this; //change the index to a list?
 						m_orderPair[orderButtonIndex].second = //change the index to a list?
 							const_cast<OrderRecord*>(orderRecord);
 
-						
 						m_orderButton[orderButtonIndex]->SetActionFuncAndCookie(  //change the index to a list?
 							OrderButtonActionCallback, &m_orderPair[orderButtonIndex]);
 
-						
 						enableState[orderButtonIndex] = true; //change the index to a list?
 					}
 				}
@@ -912,12 +929,15 @@ void UnitControlPanel::UpdateOrderButtons()  //emod3 this is the method
 		}
 	}
 
-	
-	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) { //change the index to a list?
-		if(m_orderButton[orderIndex]->IsDisabled()) {
-			if(enableState[orderIndex])	
+	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++)
+	{ //change the index to a list?
+		if(m_orderButton[orderIndex]->IsDisabled())
+		{
+			if(enableState[orderIndex])
 				m_orderButton[orderIndex]->Enable(true);
-		} else if(!enableState[orderIndex]) {	
+		}
+		else if(!enableState[orderIndex])
+		{
 			m_orderButton[orderIndex]->Enable(false);
 		}
 	}

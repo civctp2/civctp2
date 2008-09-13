@@ -548,7 +548,7 @@ BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, die Nachrichten vom Bl
 #New Messages#
 CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders?"
 LOST_AT_SEA				"{unitrecord[0].name#OUR_SINGULAR_CAPS} ist in der See versunken! Merkt Euch einige Schiffe sinken leicht auf hoher See und reißen alle an Bord befindlichen Einheiten mit in die Tiefe!"
-UNIT_UPGRADED				"{unitrecord[0].name#OUR_SINGULAR_CAPS} wurde modernisiert und aufgerüstet zu {unitrecord[1].name#UNDEF_DAT}!"
+UNIT_UPGRADED				"{unitrecord[0].name#OUR_SINGULAR_CAPS} wurde zu {unitrecord[1].name#UNDEF_DAT} modernisiert!"
 HOSTILE_TERRAIN				"Extremes Wetter beeinträchtigt die Gesundheit {unitrecord[0].name#OUR_GEN}!"
 INSURGENT_SPAWN				"Bewaffnete Rebellen sind vor unserer Stadt {city[0].name} aufgetaucht."
 GUERRILLA_SPAWN				"{unitrecord[0].name#OUR_SINGULAR_CAPS} konnte Partisanenkämpfer für unsere Sache anwerben!"

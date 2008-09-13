@@ -26,6 +26,7 @@
 //
 // - AddUnitToArmyEvent does not crash in the debug version if the unit to
 //   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
+// - Added an upgrade unit event. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -708,7 +709,23 @@ STDEHANDLER(SetUnloadMovementUnitEvent)
 	return GEV_HD_Continue;
 }
 
-void unitevent_Initialize() 
+STDEHANDLER(UpgradeUnit)
+{
+	Unit u;
+	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
+
+	sint32 type  = 0;
+	sint32 costs = 0;
+
+	if(u->CanUpgrade(type, costs))
+	{
+		u->Upgrade(type, costs);
+	}
+
+	return GEV_HD_Continue;
+}
+
+void unitevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_KillUnit, GEV_PRI_Primary, &s_KillUnitEvent);
 	g_gevManager->AddCallback(GEV_KillCity, GEV_PRI_Primary, &s_KillUnitEvent);
@@ -750,6 +767,7 @@ void unitevent_Initialize()
 	g_gevManager->AddCallback(GEV_ActivateAllUnits, GEV_PRI_Primary, &s_ActivateAllUnitsEvent);
 
 	g_gevManager->AddCallback(GEV_SetUnloadMovementUnit, GEV_PRI_Primary, &s_SetUnloadMovementUnitEvent);
+	g_gevManager->AddCallback(GEV_UpgradeUnit, GEV_PRI_Primary, &s_UpgradeUnit);
 }
 
 void unitevent_Cleanup()

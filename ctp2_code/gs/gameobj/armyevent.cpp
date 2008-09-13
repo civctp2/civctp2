@@ -33,6 +33,7 @@
 //   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - Merged finish move. (13-Aug-2008 Martin Gühmann)
+// - Added an upgrade order event. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -499,7 +500,7 @@ STDEHANDLER(ArmyBioInfectOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
-	a->AddOrders(UNIT_ORDER_BIO_INFECT , pos);
+	a->AddOrders(UNIT_ORDER_BIO_INFECT, pos);
 	return GEV_HD_Continue;
 }
 
@@ -590,7 +591,7 @@ STDEHANDLER(ArmyPillageOrderEvent)
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
-	a->AddOrders(UNIT_ORDER_PILLAGE );
+	a->AddOrders(UNIT_ORDER_PILLAGE);
 	return GEV_HD_Continue;
 
 }
@@ -610,7 +611,7 @@ STDEHANDLER(ArmyPirateOrderEvent)
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
-	a->AddOrders(UNIT_ORDER_INTERCEPT_TRADE );
+	a->AddOrders(UNIT_ORDER_INTERCEPT_TRADE);
 	return GEV_HD_Continue;
 }
 
@@ -692,6 +693,16 @@ STDEHANDLER(TargetOrderEvent)
 	return GEV_HD_Continue;
 }
 
+STDEHANDLER(UpgradeOrderEvent)
+{
+	Army a;
+	MapPoint targetPos;
+
+	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
+
+	a->AddOrders(UNIT_ORDER_UPGRADE);
+	return GEV_HD_Continue;
+}
 
 STDEHANDLER(ArmyMoveEvent)
 {
@@ -1420,7 +1431,6 @@ STDEHANDLER(RemoveFranchiseEvent)
 
 STDEHANDLER(ExpelUnitsEvent)
 {
-	
 	return GEV_HD_Continue;
 }
 
@@ -1499,7 +1509,6 @@ STDEHANDLER(ArmyBeginTurnExecuteEvent)
 
 void armyevent_Initialize()
 {
-	
 	g_gevManager->AddCallback(GEV_MoveOrder, GEV_PRI_Primary, &s_ArmyMoveOrderEvent);
 	g_gevManager->AddCallback(GEV_MoveToOrder, GEV_PRI_Primary, &s_ArmyMoveToOrderEvent);
 	g_gevManager->AddCallback(GEV_MovePathOrder, GEV_PRI_Primary, &s_ArmyMovePathOrderEvent);
@@ -1550,8 +1559,8 @@ void armyevent_Initialize()
 	g_gevManager->AddCallback(GEV_BoardTransportOrder, GEV_PRI_Primary, &s_BoardTransportOrderEvent);
 	g_gevManager->AddCallback(GEV_LaunchOrder, GEV_PRI_Primary, &s_LaunchOrderEvent);
 	g_gevManager->AddCallback(GEV_TargetOrder, GEV_PRI_Primary, &s_TargetOrderEvent);
+	g_gevManager->AddCallback(GEV_UpgradeOrder, GEV_PRI_Primary, &s_UpgradeOrderEvent);
 
-	
 	g_gevManager->AddCallback(GEV_MoveArmy, GEV_PRI_Primary, &s_ArmyMoveEvent);
 	g_gevManager->AddCallback(GEV_ClearOrders, GEV_PRI_Primary, &s_ClearOrdersEvent);
 	g_gevManager->AddCallback(GEV_FinishAttack, GEV_PRI_Primary, &s_FinishAttackEvent);

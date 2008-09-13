@@ -237,7 +237,7 @@ ProfileDB::ProfileDB()
     m_GoldPerCity                       (FALSE),
     m_AINoShieldHunger                  (FALSE),
     m_AINoGoldHunger                    (FALSE),
-    m_AIFreeUpgrade                     (FALSE),
+    m_AIFreeUpgrade                     (TRUE),
     m_AIMilitiaUnit                     (FALSE),
     m_OneCityChallenge                  (FALSE),
     m_NRG                               (FALSE),

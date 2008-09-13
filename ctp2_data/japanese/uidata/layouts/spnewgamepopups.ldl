@@ -1101,9 +1101,21 @@ SPNewGameRulesScreen {
 	}
 
 #EMOD
-	NonRandomCivs:GAMEPLAY_CHECKBOX { 
+	Upgrade:GAMEPLAY_CHECKBOX {
 
 		int	ypix	80
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_Upgrade_Off"
+			string	string1	"str_tbl_ldl_Upgrade_On"
+		}
+	}
+
+	NonRandomCivs:GAMEPLAY_CHECKBOX {
+
+		int	ypix	110
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1113,9 +1125,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	CityCapture:GAMEPLAY_CHECKBOX { 
+	CityCapture:GAMEPLAY_CHECKBOX {
 
-		int	ypix	110
+		int	ypix	140
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1125,9 +1137,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	RevoltInsurgents:GAMEPLAY_CHECKBOX { 
+	RevoltInsurgents:GAMEPLAY_CHECKBOX {
 
-		int	ypix	140
+		int	ypix	170
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1137,9 +1149,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	BarbSpawn:GAMEPLAY_CHECKBOX { 
+	BarbSpawn:GAMEPLAY_CHECKBOX {
 
-		int	ypix	170
+		int	ypix	200
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1149,9 +1161,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	CityGold:GAMEPLAY_CHECKBOX { 
+	CityGold:GAMEPLAY_CHECKBOX {
 
-		int	ypix	200
+		int	ypix	230
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1161,9 +1173,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	noshield:GAMEPLAY_CHECKBOX { 
+	NoShield:GAMEPLAY_CHECKBOX {
 
-		int	ypix	230
+		int	ypix	260
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1172,9 +1184,10 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_AINoShieldHunger_On"
 		}
 	}
-	nop:GAMEPLAY_CHECKBOX { 
 
-		int	ypix	260
+	NoProductionDeficit:GAMEPLAY_CHECKBOX {
+
+		int	ypix	290
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1183,9 +1196,10 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_NoAIProductionDeficit_On"
 		}
 	}
-	noaicitylimit:GAMEPLAY_CHECKBOX { 
 
-		int	ypix	290
+	NoAiCityLimit:GAMEPLAY_CHECKBOX {
+
+		int	ypix	320
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1213,43 +1227,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	OneCity:GAMEPLAY_CHECKBOX { 
+	FreeUpgrade:GAMEPLAY_CHECKBOX {
 
 		int	ypix	80
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_OneCityChallenge_Off"
-			string	string1	"str_tbl_ldl_OneCityChallenge_On"
-		}
-	}
-
-	RevoltCasualties:GAMEPLAY_CHECKBOX { 
-
-		int	ypix	110
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_RevoltCasualties_Off"
-			string	string1	"str_tbl_ldl_RevoltCasualties_On"
-		}
-	}
-	SectHappy:GAMEPLAY_CHECKBOX { 
-
-		int	ypix	140
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_SectarianHappiness_Off"
-			string	string1	"str_tbl_ldl_SectarianHappiness_On"
-		}
-	}
-	freeupgrade:GAMEPLAY_CHECKBOX { 
-
-		int	ypix	170
 		int	xpix	325 #emod
 		int	widthpix	275
 
@@ -1259,7 +1239,43 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	UnitGold:GAMEPLAY_CHECKBOX { 
+	OneCity:GAMEPLAY_CHECKBOX {
+
+		int	ypix	110
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_OneCityChallenge_Off"
+			string	string1	"str_tbl_ldl_OneCityChallenge_On"
+		}
+	}
+
+	RevoltCasualties:GAMEPLAY_CHECKBOX {
+
+		int	ypix	140
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_RevoltCasualties_Off"
+			string	string1	"str_tbl_ldl_RevoltCasualties_On"
+		}
+	}
+
+	SectHappy:GAMEPLAY_CHECKBOX {
+
+		int	ypix	170
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_SectarianHappiness_Off"
+			string	string1	"str_tbl_ldl_SectarianHappiness_On"
+		}
+	}
+
+	UnitGold:GAMEPLAY_CHECKBOX {
 
 		int	ypix	200
 		int	xpix	325 #emod
@@ -1270,7 +1286,8 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_GoldPerUnitSupport_On"
 		}
 	}
-	nogold:GAMEPLAY_CHECKBOX { 
+
+	NoGold:GAMEPLAY_CHECKBOX {
 
 		int	ypix	230
 		int	xpix	325 #emod
@@ -1281,7 +1298,8 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_AINoGoldHunger_On"
 		}
 	}
-	nog:GAMEPLAY_CHECKBOX { 
+
+	NoGoldDeficit:GAMEPLAY_CHECKBOX {
 
 		int	ypix	260
 		int	xpix	325 #emod
@@ -1292,7 +1310,8 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_NoAIGoldDeficit_On"
 		}
 	}
-	nocitylimit:GAMEPLAY_CHECKBOX { 
+
+	NoCityLimit:GAMEPLAY_CHECKBOX {
 
 		int	ypix	290
 		int	xpix	325 #emod

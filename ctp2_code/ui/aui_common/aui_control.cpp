@@ -27,6 +27,7 @@
 //
 // - Standardised min/max usage.
 // - Prevented crashes in destructor with uninitialised m_stringTable.
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -101,15 +102,16 @@ aui_Control::aui_Control
 	m_stringTable           (NULL),
 	m_allocatedTip          (false),
 	m_statusText            (NULL),
-	m_numberOfLayers        (0), 
+	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
-	m_layerRenderFlags      (NULL)
+	m_layerRenderFlags      (NULL),
+	m_statusTextCopy        (NULL)
 {
 	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommonLdl(ldlBlock, ActionFunc, cookie);
-    }
+	{
+		*retval = InitCommonLdl(ldlBlock, ActionFunc, cookie);
+	}
 }
 
 
@@ -133,15 +135,16 @@ aui_Control::aui_Control
 	m_stringTable           (NULL),
 	m_allocatedTip          (false),
 	m_statusText            (NULL),
-	m_numberOfLayers        (0), 
+	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+	m_statusTextCopy        (NULL)
 {
 	if (AUI_SUCCESS(*retval))
-    {
-    	*retval = InitCommon(ActionFunc, cookie);
+	{
+		*retval = InitCommon(ActionFunc, cookie);
 	}
 }
 
@@ -261,9 +264,9 @@ AUI_ERRCODE aui_Control::InitCommon(
 aui_Control::~aui_Control()
 {
 	ReleaseKeyboardFocus();
-    ReleaseMouseOwnership();
+	ReleaseMouseOwnership();
 
-    delete m_stringTable;
+	delete m_stringTable;
 	
 	if (m_allocatedTip)
 	{
@@ -272,7 +275,8 @@ aui_Control::~aui_Control()
 	
 	delete m_imageLayerList;
 	delete [] m_layerRenderFlags;
-    // m_statusText: reference only
+	// m_statusText: reference only
+	delete m_statusTextCopy;
 }
 
 
@@ -854,22 +858,25 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 	if(IsDisabled())
 		return;
 
-	if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this) {
+	if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
+	{
 		SetWhichSeesMouse( this );
 
-		
 		if(GetWhichSeesMouse() == this) {
 			
 			Highlight();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
-			if(m_statusText) {
+			if(m_statusText)
+			{
 				StatusBar::SetText(m_statusText, this);
 			}
+			else if(m_statusTextCopy)
+			{
+				StatusBar::SetText(m_statusTextCopy, this);
+			}
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -882,7 +889,11 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 			else if ( m_action )
 				m_action->Execute( this, 0, 0 );
 		}
-	} else MouseMoveOutside( mouseData );
+	}
+	else
+	{
+		MouseMoveOutside( mouseData );
+	}
 }
 
 
@@ -1877,4 +1888,24 @@ bool aui_Control::HandleKey(uint32 wParam)
 void aui_Control::SetStatusText(const MBCHAR *text)
 {
 	m_statusText = text;
+
+	if(m_statusTextCopy != NULL)
+	{
+		StatusBar::SetText("", NULL);
+		delete m_statusTextCopy;
+		m_statusTextCopy = NULL;
+	}
+}
+
+void aui_Control::SetStatusTextCopy(const MBCHAR *text)
+{
+	m_statusText = NULL;
+
+	if(m_statusTextCopy != NULL)
+	{
+		delete m_statusTextCopy;
+		StatusBar::SetText("", NULL);
+	}
+	m_statusTextCopy = new MBCHAR[strlen(text)+1];
+	strcpy(m_statusTextCopy, text);
 }

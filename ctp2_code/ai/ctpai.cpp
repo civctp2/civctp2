@@ -2380,7 +2380,6 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 		rush_buy.first = city.CD()->HowMuchLonger();
 		if (rush_buy.first > 1)
 		{
-			
 			rush_buy.first += 
 				(sint32) ceil(1.0 - MapAnalysis::GetMapAnalysis().GetThreatRank(city.CD()) * threat_bonus);
 			rush_buy.second = city.m_id;

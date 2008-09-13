@@ -2366,6 +2366,7 @@ str_ldl_order_nuke_city				"Ciudad nuclear"
 str_ldl_order_disband_army			"Disolver ejército"
 str_ldl_order_board_transport			"Transportar a bordo"
 str_ldl_order_unload				"Descargar"
+str_ldl_order_upgrade				"Upgrade"
 str_ldl_order_launch				"Lanzamiento espacial"
 str_ldl_order_target				"Establecer objetivo"
 str_ldl_order_clear_target			"Borrar objetivo"
@@ -2970,6 +2971,7 @@ str_ldl_Remove					"Quitar >"
 str_ldl_AddAll					"<< Añadir todos"
 str_ldl_RemoveAll				"Quitar todos >>"
 
+
 # # END OF STUFF ADDED 9/5/00
 
 #Disbanding Cities Strings
@@ -3077,43 +3079,44 @@ str_tbl_ldl_Command_Enter_Alternate		"Insertar comando alterno (playtest)"
 
 # New gamesetting options
 #implemented
-str_ldl_Army_Names_Off				"Hide Army Names"
 str_ldl_Army_Names_On				"Show Army Names"
-str_ldl_Civ_Flags_Off				"Hide Nation Flags"
+str_ldl_Army_Names_Off				"Hide Army Names"
 str_ldl_Civ_Flags_On				"Show Nation Flags"
+str_ldl_Civ_Flags_Off				"Hide Nation Flags"
 str_ldl_SmoothBorders_On			"Smooth Icon Borders"
 str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
 str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
 str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
-str_tbl_ldl_OneCityChallenge_Off		"Normal City Expansion"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
-str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
-str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_OneCityChallenge_Off		"Normal City Expansion"
 str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
 str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"		# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
 str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"		# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
 str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entrenched barbs create more barbs
 str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
 
 
-str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities can make gold debts
-str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# AI pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI pays shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI pays unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI pays gold for upgrades
-str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI doesn't get cheapest unit
-
 str_tbl_ldl_NoAIProductionDeficit_On		"No AI Production Deficits"
+str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
 str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"			# AI cities don't go negative in gold
+str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities can make gold debts
 str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"				# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
 str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# AI pays gold amount per city
 str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"			# AI doesn't pay shield hunger (gets lots of units)
+str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI pays shield hunger (gets lots of units)
 str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"			# AI doesnt pay unit gold hunger
+str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI pays unit gold hunger
 str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"				# AI doesn't pay goldfor upgrades
+str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI pays gold for upgrades
+str_tbl_ldl_Upgrade_On				"Upgrade Units"					# Units can be upgraded
+str_tbl_ldl_Upgrade_Off				"No Unit Upgrade"				# Units cannot be upgraded
 str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"				# If city is empty at turn start AI gets cheapest unit
+str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI doesn't get cheapest unit
 
 str_ldl_DebugAI					"Debug AI"
 str_ldl_ShowEnemyHealth_On			"Show Enemy Health"

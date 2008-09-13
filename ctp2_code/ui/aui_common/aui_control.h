@@ -26,6 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Prevented crash in destructor after using the default constructor.
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -110,7 +111,7 @@ public:
 	}
 
 protected:
-	aui_Control() 
+	aui_Control()
 	:	aui_ImageBase       (),
 		aui_TextBase        (),
 		aui_Region          (),
@@ -122,7 +123,8 @@ protected:
 		m_imagesPerLayer    (0),
 		m_imageLayerList    (NULL),
 		m_layerRenderFlags  (NULL),
-		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+		m_statusTextCopy    (NULL)
 	{};
 
 	AUI_ERRCODE InitCommonLdl(
@@ -296,8 +298,9 @@ protected:
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);	
 
 private:
-	
+
 	const MBCHAR *m_statusText;
+	MBCHAR *m_statusTextCopy;
 
 
 
@@ -319,6 +322,7 @@ public:
 	
 	
 	void SetStatusText(const MBCHAR *text);
+	void SetStatusTextCopy(const MBCHAR *text);
 
 	virtual sint32 KeyboardFocusIndex() { return m_focusIndex; }
 

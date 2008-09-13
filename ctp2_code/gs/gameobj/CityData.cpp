@@ -5561,11 +5561,11 @@ void CityData::SetName(const MBCHAR *name)
 	}
 }
 
-sint32 CityData::GetOvertimeCost() 
+sint32 CityData::GetOvertimeCost()
 {
-
-	if (m_build_queue.GetHead() == NULL) {
-		// TODO: return 0 when nothing in queue. 
+	if (m_build_queue.GetHead() == NULL)
+	{
+		// TODO: return 0 when nothing in queue.
 		// But check usage (e.g. in ctpai.cpp) before doing so.
 		return 1000000;
 	}
@@ -5576,7 +5576,8 @@ sint32 CityData::GetOvertimeCost()
 	if(production_remaining < 0)
 		production_remaining = 0;
 
-	if(buildingutil_NoRushBuyPenalty(GetEffectiveBuildings())) {
+	if(buildingutil_NoRushBuyPenalty(GetEffectiveBuildings()))
+	{
 		percent_remaining = 0;
 		type_coeff = 1;
 	}

@@ -717,6 +717,7 @@ ORDER_TARGET					"Punta missile nucleare"
 ORDER_THROW_PARTY				"Dai un ricevimento"
 ORDER_UNDERGROUND_RAILWAY			"Libera gli schiavi"
 ORDER_UNLOAD					"Sbarca"
+ORDER_UPGRADE					"Upgrade"
 
 PERSONALITY_KAHN_DESCRIPTION			"Assassino sanguinario"
 PERSONALITY_GHANDI_DESCRIPTION			"Pacifista diplomatico"
