@@ -134,10 +134,10 @@ class FeatTracker {
 	static void CleanupEvents();
 
   private:
-	PointerList<Feat> *m_activeList;  
+	PointerList<Feat> *m_activeList;
 	PointerList<Feat> *m_effectList[FEAT_EFFECT_MAX]; 
-	bool *m_achieved; 
-	bool *m_buildingFeat; 
+	bool *m_achieved;
+	bool *m_buildingFeat;
 };
 
 extern FeatTracker *g_featTracker;

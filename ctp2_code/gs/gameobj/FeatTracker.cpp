@@ -79,8 +79,8 @@ Feat::Feat(sint32 type, sint32 player, sint32 round)
 :	m_type		(type),
 	m_player	(player)
 {
-	m_round = (USE_CURRENT_ROUND == round) 
-	          ? NewTurnCount::GetCurrentRound() 
+	m_round = (USE_CURRENT_ROUND == round)
+	          ? NewTurnCount::GetCurrentRound()
 	          : round;
 }
 
@@ -95,9 +95,12 @@ Feat::~Feat()
 
 void Feat::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive.StoreChunk((uint8*)this, ((uint8 *)&m_round) + sizeof(m_round));
-	} else {
+	}
+	else
+	{
 		archive.LoadChunk((uint8*)this, ((uint8 *)&m_round) + sizeof(m_round));
 	}
 }
@@ -106,8 +109,8 @@ FeatTracker::FeatTracker()
 {
 	m_activeList = new PointerList<Feat>;
 	sint32 i;
-	for(i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++) {
-		
+	for(i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++)
+	{
 		m_effectList[i] = NULL;
 	}
 
@@ -124,9 +127,8 @@ FeatTracker::FeatTracker(CivArchive &archive)
 {
 	m_activeList = new PointerList<Feat>;
 
-	sint32 i;
-	for(i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++) {
-		
+	for(sint32 i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++)
+	{
 		m_effectList[i] = NULL;
 	}
 
@@ -138,20 +140,23 @@ FeatTracker::~FeatTracker()
 	m_activeList->DeleteAll();
 	delete m_activeList;
 
-	sint32 i;
-	for(i = 0; i < FEAT_EFFECT_MAX; i++) {
-		if(m_effectList[i]) {
+	for(sint32 i = 0; i < FEAT_EFFECT_MAX; i++)
+	{
+		if(m_effectList[i])
+		{
 			delete m_effectList[i];
 			m_effectList[i] = NULL;
 		}
 	}
 
-	if(m_achieved) {
+	if(m_achieved)
+	{
 		delete [] m_achieved;
 		m_achieved = NULL;
 	}
 
-	if(m_buildingFeat) {
+	if(m_buildingFeat)
+	{
 		delete [] m_buildingFeat;
 		m_buildingFeat = NULL;
 	}
@@ -161,7 +166,8 @@ void FeatTracker::Serialize(CivArchive & archive)
 {
 	sint32 count;
 
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		count = m_activeList->GetCount();
 		archive << count;
 
@@ -179,10 +185,13 @@ void FeatTracker::Serialize(CivArchive & archive)
 		archive << count;
 		archive.Store((uint8*)m_buildingFeat, count * sizeof(bool));
 
-	} else {
+	}
+	else
+	{
 		archive >> count;
 		sint32 i;
-		for(i = 0; i < count; i++) {
+		for(i = 0; i < count; i++)
+		{
 			Feat *feat = new Feat(archive);
 			m_activeList->AddTail(feat);
 		}
@@ -191,7 +200,8 @@ void FeatTracker::Serialize(CivArchive & archive)
 		m_achieved = new bool[count];
 		archive.Load((uint8*)m_achieved, count * sizeof(bool));
 
-		if(count != g_theFeatDB->NumRecords()) {
+		if(count != g_theFeatDB->NumRecords())
+		{
 			delete m_achieved;
 			m_achieved = new bool[g_theFeatDB->NumRecords()];
 			memset(m_achieved, 0, g_theFeatDB->NumRecords() * sizeof(bool));
@@ -201,7 +211,8 @@ void FeatTracker::Serialize(CivArchive & archive)
 		m_buildingFeat = new bool[count];
 		archive.Load((uint8*)m_buildingFeat, count * sizeof(bool));
 
-		if(count != g_theBuildingDB->NumRecords()) {
+		if(count != g_theBuildingDB->NumRecords())
+		{
 			delete [] m_buildingFeat;
 			m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 			memset(m_buildingFeat, 0, g_theBuildingDB->NumRecords() * sizeof(bool));
@@ -209,7 +220,8 @@ void FeatTracker::Serialize(CivArchive & archive)
 
 		
 		PointerList<Feat>::Walker walk(m_activeList);
-		while(walk.IsValid()) {
+		while(walk.IsValid())
+		{
 			Feat *feat = walk.GetObj();
 			AddFeatToEffectLists(feat);
 			walk.Next();
@@ -300,48 +312,49 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 	Assert(rec);
 	if(!rec) return;
 	
-	if(m_achieved[type]) {
-		
+	if(m_achieved[type])
+	{
 		return;
 	}
 
-	if(rec->GetNumExcludeAdvance() > 0) {
-		
-		sint32 a, p;
-		for(a = 0; a < rec->GetNumExcludeAdvance(); a++) {
-			for(p = 0; p < k_MAX_PLAYERS; p++) {
-				if(g_player[p] && g_player[p]->HasAdvance(rec->GetExcludeAdvanceIndex(a))) {
+	if(rec->GetNumExcludeAdvance() > 0)
+	{
+		for(sint32 a = 0; a < rec->GetNumExcludeAdvance(); a++)
+		{
+			for(sint32 p = 0; p < k_MAX_PLAYERS; p++)
+			{
+				if(g_player[p] && g_player[p]->HasAdvance(rec->GetExcludeAdvanceIndex(a)))
+				{
 					return;
 				}
 			}
 		}
 	}
 
-	if(rec->GetNumExcludeWonder() > 0) {
-		
-		sint32 w;
-		for(w = 0; w < rec->GetNumExcludeWonder(); w++) {
+	if(rec->GetNumExcludeWonder() > 0)
+	{
+		for(sint32 w = 0; w < rec->GetNumExcludeWonder(); w++)
+		{
 			if(g_theWonderTracker->HasWonderBeenBuilt(rec->GetExcludeWonderIndex(w)))
 				return;
 		}
 	}
 
-	if(rec->GetNumExcludeFeat() > 0) {
-		
-		sint32 f;
-		for(f = 0; f < rec->GetNumExcludeFeat(); f++) {
+	if(rec->GetNumExcludeFeat() > 0)
+	{
+		for(sint32 f = 0; f < rec->GetNumExcludeFeat(); f++)
+		{
 			if(m_achieved[rec->GetExcludeFeatIndex(f)])
 				return;
 		}
 	}
 
-	
 	const MBCHAR *slicFunc;
-	if(rec->GetExcludeFunction(slicFunc)) {
+	if(rec->GetExcludeFunction(slicFunc))
+	{
 		if(g_slicEngine->CallExcludeFunc(slicFunc, type, player))
 			return;
 	}
-
 
 	m_achieved[type] = true;
 
@@ -352,11 +365,15 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 
 	const MBCHAR *slicMessage;
 	SlicObject *so;
-	if(rec->GetSlicMessage(slicMessage)) {
+	if(rec->GetSlicMessage(slicMessage))
+	{
 		so = new SlicObject((char *)slicMessage);
-	} else {
+	}
+	else
+	{
 		so = new SlicObject("MGenericFeatAccomplished");
 	}
+
 	so->AddPlayer(player);
 	so->AddRecipient(player);
 	so->AddInt(type);
@@ -370,7 +387,8 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 void FeatTracker::AddFeat(const MBCHAR *name, sint32 player)
 {
 	sint32 featIndex;
-	if(!g_theFeatDB->GetNamedItem(name, featIndex)) {
+	if(!g_theFeatDB->GetNamedItem(name, featIndex))
+	{
 		bool unknown_feat = false;
 		Assert(unknown_feat);
 		return;
@@ -380,7 +398,6 @@ void FeatTracker::AddFeat(const MBCHAR *name, sint32 player)
 						   GEA_Int, featIndex,
 						   GEA_Player, player,
 						   GEA_End);
-	
 }
 
 sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
@@ -391,10 +408,13 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 	sint32 result = 0;
 	sint32 sub = 0;
 	PointerList<Feat>::Walker walk(m_effectList[effect]);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->GetPlayer() == player) {
+	while(walk.IsValid())
+	{
+		if(walk.GetObj()->GetPlayer() == player)
+		{
 			const FeatRecord *rec = g_theFeatDB->Get(walk.GetObj()->GetType());
-			switch(effect) {
+			switch(effect)
+			{
 				case FEAT_EFFECT_BOAT_MOVEMENT:               rec->GetEffectBoatMovement(sub);break;
 				case FEAT_EFFECT_CITY_DEFENSE_BONUS:          rec->GetEffectCityDefenseBonus(sub);break;
 				case FEAT_EFFECT_REDUCE_CITY_WALLS:           rec->GetEffectReduceCityWalls(sub);break;
@@ -424,13 +444,16 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 					Assert(FALSE);
 					break;
 			}
+
 			if(getTotal)
 				result += sub;
 			else
 				result = std::max(sub, result);
 		}
+
 		walk.Next();
 	}
+
 	return result;
 }
 
@@ -447,30 +470,33 @@ sint32 FeatTracker::GetMaxEffect(FEAT_EFFECT effect, sint32 player)
 void FeatTracker::BeginTurn(sint32 player)
 {
 	PointerList<Feat>::Walker walk(m_activeList);
-	while(walk.IsValid()) {
+	while(walk.IsValid())
+	{
 		Feat *feat = walk.GetObj();
-		if(feat->GetPlayer() == player) {
-			
+		if(feat->GetPlayer() == player)
+		{
 			const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
-			if(rec->GetDuration() + feat->GetRound() <= NewTurnCount::GetCurrentRound()) {
-				
+			if(rec->GetDuration() + feat->GetRound() <= NewTurnCount::GetCurrentRound())
+			{
 				walk.Remove();
 				RemoveFeatFromEffectLists(feat);
 				delete feat;
 				continue; 
 			}
 		}
+
 		walk.Next();
 	}
 }
 
 void FeatTracker::FindBuildingFeats()
 {
-	sint32 f;
-	for(f = 0; f < g_theFeatDB->NumRecords(); f++) {
+	for(sint32 f = 0; f < g_theFeatDB->NumRecords(); f++)
+	{
 		const FeatRecord *rec = g_theFeatDB->Get(f);
 		const FeatRecord::BuildingFeat *bf;
-		if(rec->GetBuilding(bf)) {
+		if(rec->GetBuilding(bf))
+		{
 			m_buildingFeat[bf->GetBuildingIndex()] = true;
 		}
 	}
@@ -480,37 +506,40 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 {
 	if(!m_buildingFeat[building]) return;
 
-	for(sint32 f = 0; f < g_theFeatDB->NumRecords(); f++) {
+	for(sint32 f = 0; f < g_theFeatDB->NumRecords(); f++)
+	{
 		const FeatRecord *rec = g_theFeatDB->Get(f);
 		const FeatRecord::BuildingFeat *bf;
 
-		if(rec->GetBuilding(bf)) {
-			
-			if(bf->GetBuildingIndex() == building) {
-				
+		if(rec->GetBuilding(bf))
+		{
+			if(bf->GetBuildingIndex() == building)
+			{
 				sint32 numCities = 0;
-				sint32 c;
-				for(c = 0; c < g_player[city.GetOwner()]->m_all_cities->Num(); c++) {
+				for(sint32 c = 0; c < g_player[city.GetOwner()]->m_all_cities->Num(); c++)
+				{
 					Unit aCity = g_player[city.GetOwner()]->m_all_cities->Access(c);
 					if(aCity.CD()->HasBuilding(building))
 						numCities++;
 				}
-				
+
 				sint32 num, percent;
-				
-				if(bf->GetNum(num)) {
-					if(numCities >= num) {
-						
+
+				if(bf->GetNum(num))
+				{
+					if(numCities >= num)
+					{
 						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 											   GEA_Int, f,
 											   GEA_Player, city.GetOwner(),
 											   GEA_End);
 					}
-				} else if(bf->GetPercentCities(percent)) {
+				}
+				else if(bf->GetPercentCities(percent))
+				{
 					sint32 havePercent = (numCities * 100) / g_player[city.GetOwner()]->m_all_cities->Num();
-					if(havePercent >= percent) {
-						
-						AddFeat(f, city.GetOwner());
+					if(havePercent >= percent)
+					{
 						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 											   GEA_Int, f,
 											   GEA_Player, city.GetOwner(),
@@ -563,19 +592,23 @@ bool FeatTracker::HasFeat(sint32 type) const
 bool FeatTracker::PlayerHasFeat(sint32 type, sint32 player) const
 {
 	PointerList<Feat>::Walker walk(m_activeList);
-	while(walk.IsValid()) {
+	while(walk.IsValid())
+	{
 		Feat *feat = walk.GetObj();
-		if(feat->GetPlayer() != player) {
+		if(feat->GetPlayer() != player)
+		{
 			return false;
 		}
-	
-		if(feat->GetType() != type ){ //g_theFeatDB->Get(type)) {
+
+		if(feat->GetType() != type )
+		{
 			return false;
 		}
 	}
 
 	return true;
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : AccomplishFeat::GEVHookCallback
@@ -593,7 +626,6 @@ bool FeatTracker::PlayerHasFeat(sint32 type, sint32 player) const
 //              feat and the player that accomplished it.
 //
 //----------------------------------------------------------------------------
-
 STDEHANDLER(AccomplishFeat)
 {
 	
@@ -603,14 +635,14 @@ STDEHANDLER(AccomplishFeat)
 
 	g_featTracker->AddFeat(featIndex, player);
 
-	if (g_network.IsHost()) 
+	if (g_network.IsHost())
 	{
 		// Propagate the information to the clients.
 		// Remark: g_player[player] has been verified in GetPlayer.
 		g_network.Block(player);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ACCOMPLISHED_FEAT,
-									  featIndex, 
-									  player, 
+									  featIndex,
+									  player,
 									  g_player[player]->GetCurRound()
 									 )
 						 );
@@ -619,7 +651,6 @@ STDEHANDLER(AccomplishFeat)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(FeatBeginTurn)
 {
@@ -647,7 +678,6 @@ void FeatTracker::InitializeEvents()
 	g_gevManager->AddCallback(GEV_AccomplishFeat, GEV_PRI_Primary, &s_AccomplishFeat);
 
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Post, &s_FeatBeginTurn);
-	g_gevManager->AddCallback(GEV_CreateBuilding, GEV_PRI_Post, &s_FeatBuildingBuilt);
 	g_gevManager->AddCallback(GEV_CreateBuilding, GEV_PRI_Post, &s_FeatBuildingBuilt);
 }
 

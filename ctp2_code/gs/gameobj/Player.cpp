@@ -8056,7 +8056,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 	
 	const AdvanceRecord *advRec = g_theAdvanceDB->Get(advance);
 
-	if (im_the_first && !ScenarioEditor::IsGivingAdvances())
+	if(im_the_first && !ScenarioEditor::IsGivingAdvances())
 	{
 		CheckWonderObsoletions(advance);
 
@@ -8067,7 +8067,10 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 		){
 			if(!g_network.IsActive() || g_network.ReadyToStart())
 			{
-				g_featTracker->AddFeat(feat, m_owner);
+				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
+									   GEA_Int, feat,
+									   GEA_Player, m_owner,
+									   GEA_End);
 			}
 		}
 	}

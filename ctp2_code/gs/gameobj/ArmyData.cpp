@@ -5217,35 +5217,48 @@ bool ArmyData::CanBombard(const MapPoint &point) const
 	// Check for bombardable units
 	CellUnitList defender;
 	g_theWorld->GetArmy(point, defender);
-	for (sint32 i = 0; i < m_nElements; ++i) 
+
+	if(defender.Num() > 0)
 	{
-		if (m_array[i].CanBombard(defender))
+		for(sint32 i = 0; i < m_nElements; ++i)
 		{
-			return true;
+			if(m_array[i].CanBombard(defender))
+			{
+				return true;
+			}
 		}
 	}
+
+#if 0
+	// This prevents the AI from figuring out wheather a uit can be bombarded
+	// Fix this first, before you enable it again.
+	// In case of doubt check the method's callers
+
+	// The actual bombard event is guarded by the CanBombardType method
+	// so it doesn't work anyway.
 
 	// EMOD Bombard tile Imps by E 20-JAN-2006
 	// This could harm the AI by bombarding every tileimp on its way
 
 	// Check for bombardable (= pillagable) tile improvements
 	Cell *  cell = g_theWorld->GetCell(point);
-	for (sint32 ti = 0; ti < cell->GetNumDBImprovements(); ++ti)
-	{
-		TerrainImprovementRecord const * trec = 
-		    g_theTerrainImprovementDB->Get(cell->GetDBImprovement(ti));
 
-		if (trec->GetCantPillage())
+	if(m_owner != cell->GetOwner()) // Don't bombard your own terrain improvements
+	{
+		for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ++ti)
 		{
-			// No action: improvement is not pillagable.
-		}
-		else
-		{
-			/// @todo Check m_array to find a suitable bombarder for
-			///       the improvement type (land, sea, etc.)
-			return CanBombard();
+			TerrainImprovementRecord const * trec = 
+			    g_theTerrainImprovementDB->Get(cell->GetDBImprovement(ti));
+
+			if(!trec->GetCantPillage())
+			{
+				/// @todo Check m_array to find a suitable bombarder for
+				///       the improvement type (land, sea, etc.)
+				return CanBombard();
+			}
 		}
 	}
+#endif
 
 	// Nothing bombardable at this point
 	return false;
@@ -9835,10 +9848,8 @@ void ArmyData::CharacterizeArmy
 		haszoc     |= !rec->GetNoZoc();
 		canbombard |= (rec->GetCanBombard() != 0x0);
 
-		if(m_array[i].GetAttack()  > maxattack)
-			maxattack = sint32(rec->GetAttack());
-		if(m_array[i].GetDefense() > maxdefense)
-			maxdefense = sint32(rec->GetDefense());
+		maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+		maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 	}
 }
 
@@ -9879,10 +9890,8 @@ void ArmyData::CharacterizeCargo
 				haszoc     |= !rec->GetNoZoc();
 				canbombard |= (rec->GetCanBombard() != 0x0);
 
-				if(m_array[i].GetAttack()  > maxattack)
-					maxattack = sint32(rec->GetAttack());
-				if(m_array[i].GetDefense() > maxdefense)
-					maxdefense = sint32(rec->GetDefense());
+				maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+				maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 			}
 		}
 	}

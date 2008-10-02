@@ -533,9 +533,9 @@ STDEHANDLER(GrantAdvanceEvent)
 	sint32 player;
 	sint32 cause;
 
-	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
-	if(!args->GetInt(0, advance)) return GEV_HD_Continue;
-	if (!args->GetInt(1, cause)) return GEV_HD_Continue;
+	if(!args->GetPlayer(0, player))  return GEV_HD_Continue;
+	if(!args->GetInt   (0, advance)) return GEV_HD_Continue;
+	if(!args->GetInt   (1, cause))   return GEV_HD_Continue;
 
 	g_player[player]->m_advances->GiveAdvance(advance, (CAUSE_SCI)cause, false);
 	return GEV_HD_Continue;

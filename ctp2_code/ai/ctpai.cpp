@@ -1956,6 +1956,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 	}
 }
 
+#if 0
 //PFT 12 apr 05: no longer used
 void CtpAi::BombardAdjacentEnemies(const Army & army)
 {
@@ -2015,6 +2016,7 @@ void CtpAi::BombardAdjacentEnemies(const Army & army)
 		}
 	}
 }
+#endif
 
 bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance)
 {
@@ -2458,20 +2460,25 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 			MapPoint def_pos;
 			sint32 i, dist = 0, min_dist = 0x7fffffff;
 			//bombard the first enemy army within range
-			for(i = 0; i < num_armies; i++){
+			for(i = 0; i < num_armies; i++)
+			{
 				def_army = foreigner_ptr->m_all_armies->Access(i);
 
 				//visibility check
-				if( !def_army->IsVisible(playerId) )
+				if(!def_army->IsVisible(playerId))
 					continue;
 				
 				def_army->GetPos(def_pos);
 
-				dist = pos.NormalizedDistance(def_pos);
-				if(dist < min_dist){
-					min_dist = dist;
-					if(min_dist <= max_rge){
+				if(!army->CanBombard(def_pos))
+					continue;
 
+				dist = pos.NormalizedDistance(def_pos);
+				if(dist < min_dist)
+				{
+					min_dist = dist;
+					if(min_dist <= max_rge)
+					{
 						g_gevManager->AddEvent( GEV_INSERT_Tail, 
 												GEV_BombardOrder,
 												GEA_Army, army.m_id,
@@ -2497,6 +2504,9 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 					continue;
 
 				def_city->GetPos(def_pos);
+				if(!army->CanBombard(def_pos))
+					continue;
+
 				dist = pos.NormalizedDistance(def_pos);
 				if(dist < min_dist)
 				{

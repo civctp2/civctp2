@@ -509,7 +509,12 @@ void Plan::Rollback_Emptied_Transporters()
 			CTPAgent_ptr agent_ptr = m_the_squad->Get_Agent();
 
 			const MapPoint pos     = agent_ptr->Get_Target_Pos();
-			const MapPoint goalPos = ctpgoal_ptr->Get_Target_Pos();
+			MapPoint goalPos(-1,-1);
+
+			if(ctpgoal_ptr->Get_Target_Army().m_id == 0 || ctpgoal_ptr->Get_Target_Army().IsValid())
+			{
+				goalPos = ctpgoal_ptr->Get_Target_Pos();
+			}
 
 			if(pos == goalPos)
 			{

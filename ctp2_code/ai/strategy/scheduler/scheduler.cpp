@@ -628,7 +628,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 		Utility     oldMatchValue   = goal_ptr->Get_Matching_Value();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		MapPoint pos = goal_ptr->Get_Target_Pos();
+		MapPoint pos = (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 

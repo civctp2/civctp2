@@ -61,11 +61,9 @@ Squad::Squad(const Army & army)
 
 Squad::Squad(const Squad &squad)
 {
-//	m_agent = squad.m_agent;
+	m_agent = squad.m_agent;
 
-//	m_goal_references.copy();
-
-	*this = squad;
+	m_goal_references.assign(squad.m_goal_references.begin(), squad.m_goal_references.end());
 }
 
 Squad::~Squad()

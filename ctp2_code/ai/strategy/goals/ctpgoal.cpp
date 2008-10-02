@@ -531,6 +531,8 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		// A real Attack force, depending on threat
 		m_current_needed_strength.Set_Attack      (attack);
 		m_current_needed_strength.Set_Defense     (defense);
+	//	m_current_needed_strength.Set_Attack      (defense); // Reverse attack and defense
+	//	m_current_needed_strength.Set_Defense     (attack);
 		m_current_needed_strength.Set_Ranged      (ranged);
 		m_current_needed_strength.Set_Bombard_Land(bombardLand);
 		m_current_needed_strength.Set_Bombard_Sea (bombardSea);

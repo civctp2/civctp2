@@ -142,8 +142,9 @@ private:
 	
 	static void AddMiscMapTargets(const PLAYER_INDEX player);
 
-	
+#if 0
 	static void BombardAdjacentEnemies(const Army & army);
+#endif
 
 	static void BombardNearbyEnemies(Army army, sint32 max_rge);
 

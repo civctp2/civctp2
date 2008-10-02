@@ -355,7 +355,7 @@ STDEHANDLER(ArmyBombardOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
-	a->AddOrders(UNIT_ORDER_BOMBARD , pos);
+	a->AddOrders(UNIT_ORDER_BOMBARD, pos);
 	return GEV_HD_Continue;
 }
 
