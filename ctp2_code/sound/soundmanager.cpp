@@ -205,7 +205,7 @@ SoundManager::InitSoundDriver(){
 
 // 22khz @ 16 Bit stereo
     output_channels = 2;
-    output_rate = 22050;
+    output_rate = 44100;//SDL_ffmpeg has problems with audio in 22050Hz so movies are encoded to 44100Hz and this has to be adjusted too!
 
     MBCHAR *smname = "Sound Manager";
 
@@ -219,7 +219,7 @@ SoundManager::InitSoundDriver(){
         printf("%s L%d: Error initializing SDL_audio: %s\n", __FILE__, __LINE__, SDL_GetError());
         }
     else { //Mix_OpenAudio is an SDL_Mixer wrapper for SDL_OpenAudio!!!
-        errcode = Mix_OpenAudio(output_rate, output_format, output_channels, 8192);
+        errcode = Mix_OpenAudio(output_rate, output_format, output_channels, 512); //only 512 gave a correct sound with 44100Hz and sdl_ffmpeg. Why??? could perhaps be made more flexible with SDL_ffmpegGetAudioSpec. Game sound qualtity was not influenced by these adjustments!
         if (errcode < 0) {
             printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
             m_noSound = TRUE;

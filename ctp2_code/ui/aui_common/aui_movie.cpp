@@ -284,7 +284,7 @@ void reload_audio(int channel){
     }
 */
 
-/* old sdl_ffmpeg
+/* sdl_ffmpeg <= 0.7.1 
 void audioCallback(void *udata, Uint8 *stream, int len) {
 
     // unpack our void pointer 
@@ -323,10 +323,10 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
     return;
 }
 */
-
+/* sdl_ffmpeg > 0.7.1*/
 void audioCallback(void *udata, Uint8 *stream, int len) {
 
-    /* unpack our void pointer */
+    // unpack our void pointer 
     SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
 
     int bytesUsed;
@@ -335,38 +335,39 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
 	
     while(len > 0) {
 
-        /* try to get a new frame */
+        // try to get a new frame 
         frame = SDL_ffmpegGetAudioFrame(file);
 
-        /* we could not receive a new frame, break from loop */
+        // we could not receive a new frame, break from loop 
         if(!frame) break;
 
         if(frame->size <= len) {
-            /* this frame is smaller or equal to the amount of data needed. */
+            // this frame is smaller or equal to the amount of data needed. 
             bytesUsed = frame->size;
             } else {
-                /* this frame has more data than needed */
+                // this frame has more data than needed 
                 bytesUsed = len;
                 }
 
-        /* copy the correct amount of data */
+        // copy the correct amount of data 
         memcpy(stream, frame->buffer, bytesUsed);
 
-        /* adjust the needed length accordingly */
+        // adjust the needed length accordingly 
         len -= bytesUsed;
 		
-        /* adjust stream offset */
+        // adjust stream offset 
         stream += bytesUsed;
 
-        /* adjust size of frame to prevent reusing the same data */
+        // adjust size of frame to prevent reusing the same data 
         frame->size -= bytesUsed;
 		
-        /* adjust buffer of frame for the same reason */
+        // adjust buffer of frame for the same reason
         frame->buffer += bytesUsed;
         }
 
     return;
     }
+
 
 #endif
 
@@ -576,8 +577,8 @@ g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.
 //                printf("%s L%d: Mix_OpenAudio: %s\n", __FILE__, __LINE__, Mix_GetError());
 
             SDL_ffmpegStartDecoding(film); //returns always 0!
-            //SDL_ffmpegPause(film, 0);//unpause film
-            SDL_ffmpegPlay(film, 1);
+            //SDL_ffmpegPause(film, 0);//unpause film sdl_ffmpeg <= 0.7.1
+            SDL_ffmpegPlay(film, 1);//unpause film sdl_ffmpeg > 0.7.1
             //start audio here or in process or open???
 /*
             SDL_ffmpegAudioFrame *aframe;
@@ -715,8 +716,8 @@ AUI_ERRCODE aui_Movie::Stop( void ){
 #else
         printf("%s L%d: Stopping movie!\n", __FILE__, __LINE__);
         if(film){
-            //SDL_ffmpegPause(film, 1);//pause film
-            SDL_ffmpegPlay(film, 0);
+            //SDL_ffmpegPause(film, 1);//pause film film sdl_ffmpeg <= 0.7.1
+            SDL_ffmpegPlay(film, 0);//pause film sdl_ffmpeg > 0.7.1
             //SDL_ffmpegStopDecoding(film);
             }
         g_soundManager->ReacquireSoundDriver(); //no function with SDL, see soundmanager.cpp
@@ -735,8 +736,8 @@ AUI_ERRCODE aui_Movie::Pause( void )
 	{
 #ifdef USE_SDL
         if(film)
-            //SDL_ffmpegPause(film, 1);//pause film
-            SDL_ffmpegPlay(film, 0);
+            //SDL_ffmpegPause(film, 1);//pause film sdl_ffmpeg <= 0.7.1
+            SDL_ffmpegPlay(film, 0);//pause film sdl_ffmpeg > 0.7.1
 #endif
 		m_isPaused = TRUE;
 	}
@@ -752,8 +753,8 @@ AUI_ERRCODE aui_Movie::Resume( void )
 	{
 #ifdef USE_SDL
         if(film)
-            //SDL_ffmpegPause(film, 0);//pause film
-            SDL_ffmpegPlay(film, 1);
+            //SDL_ffmpegPause(film, 0);//unpause film sdl_ffmpeg <= 0.7.1
+            SDL_ffmpegPlay(film, 1);//unpause film sdl_ffmpeg > 0.7.1
 #endif
 		m_isPaused = FALSE;
 	}
@@ -901,7 +902,7 @@ printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]))
 
                     // After releasing this frame, you can no longer use it. 
                     // you should call this function every time you get a frame! 
-                    //not in svn sdl_ffmpeg!
+                    //not in sdl_ffmpeg > 0.7.1!!!
                     //SDL_ffmpegReleaseVideo(film, frame);
 
                     // we flip the double buffered screen so we might actually see something 
