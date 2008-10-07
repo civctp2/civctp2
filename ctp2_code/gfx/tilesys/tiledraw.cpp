@@ -575,7 +575,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 
 	AddDirtyToMix(x, y, width, height);
 
-    SurfaceLock lock        = SurfaceLock(surf);
+	SurfaceLock lock        = SurfaceLock(surf);
 	if (!lock.IsValid()) return;
 
 	uint8 *     pSurfBase   = lock.Base();
@@ -611,11 +611,14 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 		*pDestPixel = selectColorPixel;
 
 		row++;
-
 	}
 
+#if 0
+	// Add a timer and a possibility to disable the blinking
+	// Move it into the calling method, so that the blinking in the scenario editor would be correct
 	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
 	if (g_curSelectColor > COLOR_SELECT_2) g_curSelectColor = COLOR_SELECT_0;
+#endif
 }
 
 void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)

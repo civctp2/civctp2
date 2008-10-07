@@ -394,8 +394,8 @@ GOAL_SLAVE_RAID {
   EnemyValueBonus         100
   AlliedValueBonus        100
   PowerBonus              100
-  DistanceToHomeBonus      -1
-  DistanceToEnemyBonus     -1
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0

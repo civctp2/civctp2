@@ -191,7 +191,7 @@ void MapAnalysis::BeginTurn()
 
     ComputeHandicapRatios();
 
-	size_t player;
+    size_t player;
     for (player = 0; player < m_threatGrid.size(); ++player)
     {
         m_threatGrid       [player].Clear();
@@ -353,7 +353,6 @@ void MapAnalysis::BeginTurn()
 
 
             m_valueGrid[player].AddValue(pos, total_value);
-
 
             TradeDynamicArray * trade_routes = city.CD()->GetTradeSourceList();
             Assert(trade_routes != NULL);

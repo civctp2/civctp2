@@ -676,8 +676,8 @@ public:
 #endif
 
 	bool IsLocalResource( sint32 resource ) const;
-	bool HasTileImpInRadius(sint32 tileimp, MapPoint const & cityPos) const; //EMOD 4-7-2006 bool if a city has imp in radius
-
+	bool HasTileImpInRadius(sint32 tileimp) const; //EMOD 4-7-2006 bool if a city has imp in radius
+	bool HasAnyTileImpInRadiusAndIsExploredBy(const sint32 player) const;
 	
 	
 	bool GetResourceTradeRoute(sint32 resource, TradeRoute & route) const;

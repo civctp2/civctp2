@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City radius handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,8 +46,8 @@ extern MapPoint g_mp_size;
 //
 // Description: Perform an action on all tiles in the radius of a city.
 //
-// Parameters : cpos	: the location of the city
-//              cb		: the action (callback) to perform
+// Parameters : cpos    : the location of the city
+//              cb      : the action (callback) to perform
 //
 // Globals    : -
 //
@@ -53,7 +56,6 @@ extern MapPoint g_mp_size;
 // Remark(s)  : The action is performed on the location itself as well.
 //
 //----------------------------------------------------------------------------
-
 void CityRadiusIterator(const MapPoint &cpos, 
 						CityRadiusCallback *cb)
 {
@@ -116,7 +118,6 @@ void CityRadiusIterator(const MapPoint &cpos,
 // Remark(s)  : The action is performed on the location itself as well.
 //
 //----------------------------------------------------------------------------
-
 void AdjacentIterator(const MapPoint &cpos, CityRadiusCallback *cb)
 {
 	for (int dir = 0; dir <= NOWHERE; ++dir)

@@ -319,7 +319,7 @@ MIN_ABSOLUTE_START_DISTANCE 5
 
 #
 # These map size settings must all be defined,
-# and in this order
+# and in this order, first is height, second is width
 #
 MAP_SIZE_SMALL          26      52      2
 MAP_SIZE_MEDIUM         48      96      2

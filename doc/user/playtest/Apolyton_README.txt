@@ -48,11 +48,63 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2008-10-08 (Revision 906)
+Fixed:    The tile highlight square at the mouse pointing position does not not
+          blink anymore. In general, blinking items draw attention even if
+          there is nothing important. In that case it was blinking always at
+          the of the GUI repainting speed, which just makes the player tired.
+Fixed:    The AI now uses the right settle city bounding rectangle for settling.
+Changed:  The AI only considers a city in its goal assignment as unexplored if
+          no tile improvement is visible. That is the same way as a human player
+          behaves, since if he sees a tile improvement without a city then he
+          concludes it must be in the dark.
+Added:    Extra upgrade command for the order button bank. The upgrade command
+          has to be enabled before the game start from special rules screen.
+          The upgrade command button is only visible if an army is active
+          that contains an upgradable unit.
+Fixed:    The AI does rebuild its capitol if it has lost its capitol.
+Fixed:    The ration, workday, and wages sliders now add happiness, even if
+          the overall slider happiness is positive. This behavior is the 
+          expected one, even if the programmers capped the total increase,
+          originally.
+Changed:  Cities are now watchful for seven turns like in Cradle, so that
+          slavers go more to other cities.
+Changed:  If the AI build for offense it builds city walls first. Makes its
+          defense stronger and protects from slavery.
+Fixed:    Slaves do not go to cities if those cities are at the population
+          maximum.
+Fixed:    Slave raid failure message now displays the target city correctly.
+Fixed:    Slavers do not go to cities with walls.
+Fixed:    The AI does not consider boats with cargo as defenders although
+          the cargo cannot defend. (e.g. Slavers)
+Changed:  Cleaned up various AI code files to improve code reliability and
+          speed.
+Fixed:    The game does not crash anymore if a new civilization has the same
+          player number that was used by a civilization killed previously.
+Fixed:    A crash while the game checked whether a unit can settle.
+Changed:  Instead of moving units first to a goal and then canceling the goal
+          if it has not enough units when the units were already moved, it now
+          does not send its units to those goals at all.
+Changed:  The AI now considers all goals on the base of nearby units.
+Changed:  The AI uses an algorithm for rallying troops that works.
+Fixed:    Slavers now go to cities with at least to population points.
+Fixed:    Some problems in multiplayer, but not all.
+Changed:  Some settings in goods.txt and DiffDB.txt for the Apolyton Edition Mod.
+Fixed:    A crash with missing population assignment data.
+Fixed:    The AI can now settle more than one city per turn.
+Fixed:    A potential crash in the char window.
+Fixed:    A bug caused by adding new civilisations during the game.
+Fixed:    The AI strategy is restored after a game reload, this fixes the AI's
+          settling behavior for instance.
+Fixed:    A bug that makes the game crash if a unit is killed after a reload
+          before it had its turn.
+
 2008-05-24 (Revision 875)
 Fixed:    The progress bar in the city manager, so that it does overlap.
 Fixed:    The edges of the borders of the load/save window.
-Fixed:    AI force matching. AI force matching is now based on attack,     defense,
-          bombard, ranged, and foreign troop vales instead of just threat.
+Fixed:    AI force matching. AI force matching is now based on attack,
+          defense, bombard, ranged, and foreign troop vales instead of just
+          threat.
 Fixed:    Non-Combat units cannot attack anymore.
 Fixed:    AE mod loads without error pop ups
 Fixed:    Fortified units will be defortified if they are put to sleep.

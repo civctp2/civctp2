@@ -149,7 +149,7 @@ private:
 
 	uint32 m_env;
 	uint32 m_zoc;
-	sint16 m_move_cost; 
+	sint16 m_move_cost;
 
 #ifdef BATTLE_FLAGS
 	uint16 m_battleFlags;
@@ -178,6 +178,7 @@ private:
 
 public:
 
+	bool m_cityHasVisibleTileImprovement;
 	sint32 m_search_count;
 	AstarPoint *m_point;
 

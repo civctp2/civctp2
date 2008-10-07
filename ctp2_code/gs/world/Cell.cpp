@@ -123,6 +123,7 @@ Cell::Cell()
     m_unit_army          (NULL),
     m_objects            (NULL),
     m_jabba              (NULL),
+    m_cityHasVisibleTileImprovement(false),
     m_search_count       (0),
     m_point              (NULL)
 #ifdef CELL_COLOR

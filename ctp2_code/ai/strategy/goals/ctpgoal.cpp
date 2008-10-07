@@ -1071,9 +1071,20 @@ Utility CTPGoal::Compute_Raw_Priority()
 	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 
-	if (!player_ptr->IsExplored(target_pos))
+	if(!player_ptr->IsExplored(target_pos))
 	{
-		cell_value += goal_rec->GetUnexploredBonus();
+		if
+		  (
+		       g_theWorld->IsCity(target_pos)
+		    && g_theWorld->GetCell(target_pos)->m_cityHasVisibleTileImprovement
+		  )
+		{
+			// Nothing to add
+		}
+		else
+		{
+			cell_value += goal_rec->GetUnexploredBonus();
+		}
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
@@ -1081,7 +1092,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 
-	if (!player_ptr->IsVisible(target_pos))
+	if(!player_ptr->IsVisible(target_pos))
 	{
 		cell_value += goal_rec->GetNotVisibleBonus();
 	}
@@ -1092,7 +1103,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 #endif //_DEBUG
 
 	PLAYER_INDEX territoryOwner = g_theWorld->GetCell( target_pos )->GetOwner();
-	if (m_playerId == territoryOwner)
+	if(m_playerId == territoryOwner)
 	{
 		cell_value += goal_rec->GetInHomeTerritoryBonus();
 	}
@@ -1102,7 +1113,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	report_cell_lastvalue       = cell_value;
 #endif //_DEBUG
 
-	if (m_playerId != territoryOwner && territoryOwner >= 0) // 0: Barbarian player
+	if(m_playerId != territoryOwner && territoryOwner >= 0) // 0: Barbarian player
 	{
 		cell_value += goal_rec->GetInEnemyTerritoryBonus();
 	}
@@ -1112,7 +1123,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
 
-	if (territoryOwner == PLAYER_UNASSIGNED)
+	if(territoryOwner == PLAYER_UNASSIGNED)
 	{
 		cell_value += goal_rec->GetNoOwnerTerritoryBonus();
 	}

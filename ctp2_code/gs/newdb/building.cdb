@@ -72,8 +72,8 @@ Building {
 	Bit(Int)                    IntBorderRadius          // FU added by E
 	Record TerrainImprovement[] ShowOnMap                // FU
 	Record TerrainImprovement[] ShowOnMapRadius          // FU
-	Bit(Record MapIcon)			ShowCityIconTop			// Like show on map but put on top of city like icons
-	Bit(Record MapIcon)			ShowCityIconBottom		// Like show on map but puts the graphic behind the city 
+	Bit(Record MapIcon)         ShowCityIconTop          // Like show on map but put on top of city like icons
+	Bit(Record MapIcon)         ShowCityIconBottom       // Like show on map but puts the graphic behind the city 
 	Bit(Record MapIcon)         IsReligionIcon           // Displays city religion icon
 
 	Bit(Float)                  TreasuryInterest         // FU

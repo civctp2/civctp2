@@ -4369,7 +4369,6 @@ bool CityData::BuildWonder(sint32 type)
 
 void CityData::AddWonder(sint32 type)
 {
-
 	const WonderRecord* rec = wonderutil_Get(type); // Added by E
 	MapPoint point(m_home_city.RetPos());
 
@@ -5393,19 +5392,43 @@ void CityData::AddGoodToCity(sint32 good)
 	 m_collectingResources.AddResource(good);
 }
 
-bool CityData::HasTileImpInRadius(sint32 tileimp, MapPoint const & cityPos) const
+bool CityData::HasTileImpInRadius(sint32 tileimp) const
 {
-	CityInfluenceIterator it(cityPos, m_sizeIndex);
+	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
 
-	for(it.Start(); !it.End(); it.Next()) {
+	for(it.Start(); !it.End(); it.Next())
+	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 
-		sint32 i;
-		for(i = 0; i < cell->GetNumDBImprovements(); ++i){
+		for(sint32 i = 0; i < cell->GetNumDBImprovements(); ++i)
+		{
 			if(cell->GetDBImprovement(i) == tileimp)
+			{
 				return true;
+			}
 		}
 	}
+	return false;
+}
+
+bool CityData::HasAnyTileImpInRadiusAndIsExploredBy(const sint32 player) const
+{
+	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
+
+	for(it.Start(); !it.End(); it.Next())
+	{
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+
+		if
+		  (
+		       cell->GetNumDBImprovements() > 0
+		    && g_player[player]->IsExplored(it.Pos())
+		  )
+		{
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -6781,17 +6804,17 @@ double CityData::IsProtectedFromSlavery() const
 
 void CityData::NotifyAdvance(AdvanceType advance)
 {
-	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) 
-    {
-		if (m_built_improvements & ((uint64)1 << i)) 
-        {
+	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
+		if (m_built_improvements & ((uint64)1 << i))
+		{
 			BuildingRecord const * irec = 
-                g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType());
+			    g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType());
 
 			for (sint32 o = 0; o < irec->GetNumObsoleteAdvance(); o++) 
-            {
+			{
 				if (irec->GetObsoleteAdvanceIndex(o) == advance) 
-                {
+				{
 					SellBuilding(i, false);
 					break;
 				}
@@ -8004,7 +8027,8 @@ bool CityData::PayForBuyFront()
 
 void CityData::AddBuyFront()
 {
-	if(PayForBuyFront()) {
+	if(PayForBuyFront())
+	{
 		m_buyFront = true;
 	}
 }
@@ -8022,9 +8046,10 @@ void CityData::AddImprovement(sint32 type)
 	}
 
 	sint32 intRad;
-    	sint32 sqRad;
+	sint32 sqRad;
 	//EMOD increases city borders
-	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
+	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad))
+	{
 		GenerateBorders(point, m_owner, intRad, sqRad);
 	}
 
@@ -8036,12 +8061,65 @@ void CityData::AddImprovement(sint32 type)
 //		}
 //	}
 
+	for(sint32 s = 0; s < rec->GetNumShowOnMap(); s++)
+	{
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
 
-	//end Emod
-//EMOD Visible Buildings 4-1-2006
-	CityInfluenceIterator it(point, m_sizeIndex); 
-	for(it.Start(); !it.End(); it.Next()) {
-//		Cell *cell = g_theWorld->GetCell(it.Pos());
+		if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s)))
+		{
+			MapPoint spot(-1,-1);
+			bool found = false;
+			CityInfluenceIterator it(point, m_sizeIndex);
+
+			for(it.Start(); !it.End(); it.Next())
+			{
+				if(point == it.Pos())
+					continue;
+				if(terrainutil_HasUrban(it.Pos()))
+					continue;
+				if(terrainutil_HasWonder(it.Pos()))
+					continue;
+
+				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos()))
+				{
+					if(found)
+					{
+						if
+						  (
+						       g_theWorld->GetCell(spot)->HasTerrainImprovementOrInFuture(rec->GetShowOnMapIndex(s))     // ToDo: check whether the new improvement would remove any of the old ones, if the new one doesn't remove any of the old ones no new location is needed.
+						   && !g_theWorld->GetCell(it.Pos())->HasTerrainImprovementOrInFuture(rec->GetShowOnMapIndex(s))
+						  )
+						{
+							spot = it.Pos();
+							break;
+						}
+					}
+					else
+					{
+						spot = it.Pos();
+						found = true;
+
+						if(!g_theWorld->GetCell(it.Pos())->HasTerrainImprovementOrInFuture(rec->GetShowOnMapIndex(s)))
+						{
+							break;
+						}
+					}
+				}
+			}
+
+			if(found)
+			{
+				g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), spot, 0);
+			}
+		}
+	}
+
+	//EMOD Visible Buildings 4-1-2006
+
+	// This fills the city influence radius with the given terrain improvement
+	CityInfluenceIterator it(point, m_sizeIndex);
+	for(it.Start(); !it.End(); it.Next())
+	{
 		if(point == it.Pos())
 			continue;
 		if(terrainutil_HasUrban(it.Pos()))
@@ -8049,44 +8127,24 @@ void CityData::AddImprovement(sint32 type)
 		if(terrainutil_HasWonder(it.Pos()))
 			continue;
 
-		sint32 s;
-		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
+		//EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius and should cost PW 
+		for(sint32 s = 0; s < rec->GetNumShowOnMapRadius(); s++)
+		{
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-			if(!HasTileImpInRadius(rec->GetShowOnMapIndex(s), it.Pos())) {
-				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), it.Pos(), 0);
-				}
-			}
-
-
-//			bool SpotFound = true;
-//			for(s = 0; s < rec->GetNumShowOnMap(); s++) {
-//				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-//				if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-//					SpotFound = false;
-//					break;
-//				}
-//				if(!SpotFound){
-//					continue;
-//				} else {
-//					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), it.Pos(), 0);
-//					return;
-//				}
-		}
-//EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius and should cost PW 
-		for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
-			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-			if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
+			if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos()))
+			{
+				g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
 			}
 		}
-	
 	}
+
 	//EMOD for Buildings to increase HP
 	sint32 hpBonus = buildingutil_GetIncreaseHP((uint64)1 << type);
-	if(hpBonus > 0) {
-		sint32 i, n = g_player[m_owner]->m_all_units->Num();
-		for(i = 0; i < n; i++) {
+	if(hpBonus > 0)
+	{
+		sint32 n = g_player[m_owner]->m_all_units->Num();
+		for(sint32 i = 0; i < n; i++)
+		{
 			g_player[m_owner]->m_all_units->Access(i).AddWonderHPBonus(hpBonus);
 		}
 	}

@@ -1139,15 +1139,35 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 
 void CtpAi::BeginTurn(const PLAYER_INDEX player)
 {
-	if (s_maxPlayers <= 0)
+	if(s_maxPlayers <= 0)
 		return;
 
 	Assert(player < s_maxPlayers);
 	Assert(player == g_selected_item->GetCurPlayer());
 	Player * player_ptr = g_player[player];
 
-	if (player_ptr == NULL)
+	if(player_ptr == NULL)
 		return;
+
+	for(sint32 i = 0; i < k_MAX_PLAYERS; ++i)
+	{
+		if(player == i)
+			continue;
+
+		Player * other_player = g_player[player];
+		if(other_player == NULL)
+			continue;
+
+		sint32 num_cities = other_player->m_all_cities->Num();
+		for(sint32 c = 0; c < num_cities; c++)
+		{
+			Unit city = other_player->m_all_cities->Access(c);
+
+			MapPoint pos = city->GetPos();
+
+			g_theWorld->GetCell(pos)->m_cityHasVisibleTileImprovement = player_ptr->IsExplored(pos) || city->GetCityData()->HasAnyTileImpInRadiusAndIsExploredBy(player);
+		}
+	}
 
 	sint32 round = player_ptr->GetCurRound();
 
@@ -1805,7 +1825,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 				char buf[10];
 				sprintf(buf, "%4.0f", settle_target.m_value);
 				g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude);
-					
+
 				desired_goals--;
 			}
 		}
