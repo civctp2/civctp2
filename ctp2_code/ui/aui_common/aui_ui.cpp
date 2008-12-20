@@ -18,6 +18,9 @@
 //
 // Compiler flags
 //
+// __AUI_USE_DIRECTX__
+// - Use DirectX 
+//
 // _DEBUG
 // - Generate debug version when set.
 //
@@ -29,61 +32,103 @@
 //
 // - Moved CalculateHash to aui_Base
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Prevented processing of uninitialised input
+// - Marked DirectX specific items
+// - Handled race condition with mouse initialisation at startup
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "c3.h"             // Precompiled header
+#include "aui_ui.h"         // Own declarations
+
 #include "aui_action.h"
-#include "aui_surface.h"
-#include "aui_mouse.h"
-#include "aui_keyboard.h"
-#include "aui_joystick.h"
 #include "aui_blitter.h"
-#include "aui_window.h"
 #include "aui_control.h"
 #include "aui_dirtylist.h"
-#include "aui_region.h"
+#include "aui_joystick.h"
+#include "aui_keyboard.h"
 #include "aui_ldl.h"
-#include "aui_static.h"
-#include "aui_uniqueid.h"
+#include "aui_mouse.h"
 #include "aui_rectangle.h"
+#include "aui_region.h"
+#include "aui_static.h"
+#include "aui_surface.h"
+#include "aui_uniqueid.h"
+#include "aui_window.h"
 
+#if defined(__AUI_USE_DIRECTX__)
 #include "dxver.h"
-
-#include "aui_ui.h"
-
-#include "civ3_main.h"
-
-extern BOOL		g_exclusiveMode;
-
+extern BOOL g_exclusiveMode;
+#endif
 
 aui_UI *g_ui = NULL;
 
-aui_UI::aui_UI(
-	AUI_ERRCODE *retval,
-	HINSTANCE hinst,
-	HWND hwnd,
-	sint32 width,
-	sint32 height,
-	sint32 bpp,
-	const MBCHAR *ldlFilename )
-	:
-	aui_Region( retval, 0, 0, 0, width, height )
+aui_UI::aui_UI
+(
+	AUI_ERRCODE *   retval,
+	HINSTANCE       hinst,
+	HWND            hwnd,
+	sint32          width,
+	sint32          height,
+	sint32          bpp,
+	const MBCHAR *  ldlFilename
+)
+:
+	aui_Region                  (retval, 0, 0, 0, width, height),
+	m_dirtyRectInfoMemory       (NULL),
+	m_dirtyRectInfoList         (NULL),
+	m_hinst                     (hinst),
+	m_hwnd                      (hwnd),
+	m_bpp                       (bpp),
+	m_pixelFormat               (AUI_SURFACE_PIXELFORMAT_UNKNOWN),
+	m_ldl                       (NULL),
+	m_primary                   (NULL),
+	m_blitter                   (NULL),
+	m_memmap                    (NULL),
+	m_mouse                     (NULL),
+	m_keyboard                  (NULL),
+	m_joystick                  (NULL),
+	m_dirtyList                 (NULL),
+	m_color                     (k_AUI_UI_NOCOLOR),
+	m_image                     (NULL),
+	m_colorAreas                (NULL),
+	m_imageAreas                (NULL),
+	m_virtualFocus              (NULL),
+	m_dxver                     (0),
+	m_editMode                  (false),
+	m_editRegion                (NULL),
+	m_editWindow                (NULL),
+	m_localRectText             (NULL),
+	m_absoluteRectText          (NULL),
+	m_editModeLdlName           (NULL),
+	m_imageResource             (NULL),
+	m_cursorResource            (NULL),
+	m_bitmapFontResource        (NULL),
+	m_audioManager              (NULL),
+	m_movieManager              (NULL),
+	m_actionList                (NULL),
+	m_destructiveActionList     (NULL),
+	m_winList                   (NULL),
+	m_minimize                  (false),
+	m_savedMouseAnimFirstIndex  (0),
+	m_savedMouseAnimLastIndex   (0),
+	m_savedMouseAnimCurIndex    (0),
+	m_savedMouseAnimDelay       (0)
 {
 	if (AUI_SUCCESS(*retval))
-    {
-        if (!g_ui)
-        {
-	        g_ui = this;
-        }
+	{
+		if (!g_ui)
+		{
+			g_ui = this;
+		}
 
-	    *retval = InitCommon(hinst, hwnd, bpp, ldlFilename);
+		*retval = InitCommon(hinst, hwnd, bpp, ldlFilename);
 
-	    if (AUI_SUCCESS(*retval))
-        {
-	        *retval = CreateScreen();
-        }
-    }
+		if (AUI_SUCCESS(*retval))
+		{
+			*retval = CreateScreen();
+		}
+	}
 }
 
 
@@ -261,9 +306,9 @@ aui_UI::~aui_UI()
 	delete m_ldl;
 	
 	if (this == g_ui)
-    {
-        g_ui = NULL;
-    }
+	{
+		g_ui = NULL;
+	}
 
 	free_crc();
 }
@@ -331,18 +376,14 @@ COLORREF aui_UI::SetBackgroundColor( COLORREF color )
 	COLORREF prevColor = m_color;
 	m_color = color;
 
-	if ( (m_color = color) == k_AUI_UI_NOCOLOR )
+	if (color == k_AUI_UI_NOCOLOR)
 	{
-		if ( m_colorAreas )
-		{
-			delete m_colorAreas;
-			m_colorAreas = NULL;
-		}
+		delete m_colorAreas;
+		m_colorAreas = NULL;
 	}
 	else if ( !m_colorAreas )
 	{
 		m_colorAreas = new aui_DirtyList;
-		Assert( m_colorAreas != NULL );
 	}
 	
 	return prevColor;
@@ -509,14 +550,12 @@ AUI_ERRCODE aui_UI::AddWin( HWND hwnd )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-AUI_ERRCODE aui_UI::RemoveWin( HWND hwnd )
+/// Unmark a window as child window
+/// \param hwnd The ID/handle of the window to remove as a child
+void aui_UI::RemoveWin(HWND hwnd)
 {
 	ListPos position = m_winList->Find( hwnd );
 	if ( position ) m_winList->DeleteAt( position );
-
-	return AUI_ERRCODE_OK;
 }
 
 
@@ -560,7 +599,7 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 
 	
 	
-	BOOL found = FALSE;
+	bool found = false;
 
 	m_childListChanged = TRUE;
 
@@ -583,7 +622,7 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 
 				
 				m_childList->InsertBefore( curPosition, window );
-				found = TRUE;
+				found = true;
 			}
 		}
 		else
@@ -1018,7 +1057,7 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 
 	
 	
-	BOOL equals = FALSE;
+	bool equals = false;
 	ListPos position = m_dirtyRectInfoList->GetHeadPosition();
 	for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- )
 	{
@@ -1044,7 +1083,7 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 					return AUI_ERRCODE_OK;
 				}
 
-				equals = TRUE;
+				equals = true;
 			}
 		}
 		else
@@ -1523,11 +1562,11 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 		
 		if ( event->key == AUI_KEYBOARD_KEY_TAB )
 		{
-			static BOOL wasJustDown = FALSE;
+			static bool wasJustDown = false;
 
 			if ( !event->down )
 			{
-				wasJustDown = FALSE;
+				wasJustDown = false;
 			}
 			else if ( !wasJustDown )
 			{
@@ -1559,7 +1598,7 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 				if ( m_virtualFocus )
 					m_virtualFocus->SetKeyboardFocus();
 
-				wasJustDown = TRUE;
+				wasJustDown = true;
 			}
 		}
 	}
@@ -1853,11 +1892,11 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 	}
 
 	if ( m_minimize )
-		if ( m_primary )
-		{
-			delete m_primary;
-			m_primary = NULL;
-		}
+    {
+		delete m_primary;
+		m_primary = NULL;
+	}
+
 #ifdef __AUI_USE_DIRECTX__
 	while ( ShowCursor( TRUE ) < 0 )
 		; 
@@ -1917,16 +1956,18 @@ BOOL aui_UI::MinimizeOnAltTabOut( BOOL minimize )
 AUI_ERRCODE aui_UI::Process( void )
 {
 	Idle();
-	HandleMouseEvents();
-	HandleKeyboardEvents();
-	if ( m_joystick ) HandleJoystickEvents();
+
+	// Scan human interface devices - when available
+	if (m_mouse)    HandleMouseEvents();
+	if (m_keyboard) HandleKeyboardEvents();
+	if (m_joystick) HandleJoystickEvents();
 	HandleActions();
 	HandleDestructiveActions();
 	Draw();
 
 	return AUI_ERRCODE_OK;
 }
-
+	
 
 
 

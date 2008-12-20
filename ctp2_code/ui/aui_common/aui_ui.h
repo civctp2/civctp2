@@ -24,12 +24,16 @@
 //
 // - Import structure changed to compile with Mingw
 // - Moved CalculateHash() to aui_Base
+// - Prevented processing of uninitialised input
 //
 //----------------------------------------------------------------------------
 
-#ifndef __AUI_UI_H__
-#define __AUI_UI_H__
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_UI_H_
+#define AUI_UI_H_
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -96,7 +100,50 @@ public:
 	virtual ~aui_UI();
 
 protected:
-	aui_UI() : aui_Region() {}
+	aui_UI()
+	:
+		aui_Region                  (),
+		m_dirtyRectInfoMemory       (NULL),
+		m_dirtyRectInfoList         (NULL),
+		m_hinst                     ((HINSTANCE) INVALID_HANDLE_VALUE),
+		m_hwnd                      ((HWND) INVALID_HANDLE_VALUE),
+		m_bpp                       (0),
+		m_pixelFormat               (AUI_SURFACE_PIXELFORMAT_UNKNOWN),
+		m_ldl                       (NULL),
+		m_primary                   (NULL),
+		m_blitter                   (NULL),
+		m_memmap                    (NULL),
+		m_mouse                     (NULL),
+		m_keyboard                  (NULL),
+		m_joystick                  (NULL),
+		m_dirtyList                 (NULL),
+		m_color                     (k_AUI_UI_NOCOLOR),
+		m_image                     (NULL),
+		m_colorAreas                (NULL),
+		m_imageAreas                (NULL),
+		m_virtualFocus              (NULL),
+		m_dxver                     (0),
+		m_editMode                  (false),
+		m_editRegion                (NULL),
+		m_editWindow                (NULL),
+		m_localRectText             (NULL),
+		m_absoluteRectText          (NULL),
+		m_editModeLdlName           (NULL),
+		m_imageResource             (NULL),
+		m_cursorResource            (NULL),
+		m_bitmapFontResource        (NULL),
+		m_audioManager              (NULL),
+		m_movieManager              (NULL),
+		m_actionList                (NULL),
+		m_destructiveActionList     (NULL),
+		m_winList                   (NULL),
+		m_minimize                  (false),
+		m_savedMouseAnimFirstIndex  (0),
+		m_savedMouseAnimLastIndex   (0),
+		m_savedMouseAnimCurIndex    (0),
+		m_savedMouseAnimDelay       (0)
+	{};
+
 	AUI_ERRCODE InitCommon(
 		HINSTANCE hinst,
 		HWND hwnd,
@@ -295,7 +342,7 @@ public:
 	BOOL		IsChildWin( HWND hwnd ) const
 	{ return (m_winList->Find(hwnd) ? TRUE : FALSE); }
 	AUI_ERRCODE	AddWin( HWND hwnd );
-	AUI_ERRCODE	RemoveWin( HWND hwnd );
+	void		RemoveWin( HWND hwnd );
 
 	
 	aui_Region	*TheEditRegion( void ) const { return m_editRegion; }
