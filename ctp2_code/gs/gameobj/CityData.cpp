@@ -10305,7 +10305,7 @@ void CityData::RiotCasualties()
 	   (      g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()
 	      ||  g_theProfileDB->IsRevoltCasualties()
 	   )
-	   &&     PopCount() > 1
+	   &&     PopCount() >= 10
 	  )
 	{
 		sint32 casualties = (g_rand->Next(PopCount() / 10));

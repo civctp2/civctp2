@@ -35,8 +35,13 @@ public:
 	sint32 CallCount() { return m_callCount; }
 
     sint32 Next(); 
-    sint32 Next(sint32 r) { 
+    sint32 Next(sint32 r)
+	{ 
 		Assert(0 <r);
+
+		if(r <= 0)
+			return 0;
+
 #ifdef LOG_RAND
 		if(this == g_rand) {
 			sint32 res = Next() % r;
