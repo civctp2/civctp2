@@ -49,6 +49,7 @@
 //   is the avarage match value of the matches needed for the goal.
 // - Simplified the design the number of committed agents and number of
 //   agents are now calculated inside the Match_Resources method. (21-Aug-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -79,6 +80,7 @@
 #include "gfx_options.h"
 #include "Army.h"
 #include "ArmyData.h"
+#include "CityData.h"
 #include "World.h"
 
 namespace
@@ -337,6 +339,10 @@ void Scheduler::Planning_Status_Reset()
 //////////////////////////////////////////////////////////////////////////
 Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 {
+
+	DPRINTF(k_DBG_AI, ("//       Change squad matches\n"));
+	time_t t1 = GetTickCount();
+
 	Squad_List::iterator squad_ptr_iter = m_squads.begin();
 	while(squad_ptr_iter != m_squads.end())
 	{
@@ -361,6 +367,10 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 		squad_ptr_iter++;
 	}
 
+	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
+	DPRINTF(k_DBG_AI, ("//       Add new squad matches\n"));
+	t1 = GetTickCount();
+
 	Squad_List::iterator new_squad_iter = m_new_squads.begin();
 	while(new_squad_iter != m_new_squads.end())
 	{
@@ -380,6 +390,8 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 
 		new_squad_iter = m_new_squads.erase(new_squad_iter);
 	}
+
+	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	return TIME_SLICE_DONE;
 }
@@ -1278,6 +1290,11 @@ bool Scheduler::Prioritize_Goals()
 		}
 	}
 
+	t2 = GetTickCount();
+	DPRINTF(k_DBG_AI, ("//  Raw goal priorities calculated:\n"));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
+	t1 = GetTickCount();
+
 	for(goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
@@ -1329,6 +1346,10 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
 	}
+
+	t2 = GetTickCount();
+	DPRINTF(k_DBG_AI, ("//  Goals sorted:\n"));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 
 	return true;
 }
@@ -1962,3 +1983,113 @@ void Scheduler::Sort_Goal_Matches_If_Necessary()
 		theGoal->Sort_Matches_If_Necessary();
 	}
 }
+
+void Scheduler::Assign_Garrison()
+{
+	sint32 cityNum = g_player[m_playerId]->GetNumCities();
+	Sorted_Agent_List_Vector garrisonAgents;
+
+	garrisonAgents.resize(cityNum);
+
+	for
+	(
+	    Squad_List::iterator squad_iter  = m_squads.begin();
+	                         squad_iter != m_squads.end();
+	                       ++squad_iter
+	)
+	{
+		Squad_ptr squad = (*squad_iter);
+
+		squad->Get_Agent()->m_neededForGarrison = false;
+
+		Army army = squad->Get_Agent()->Get_Army();
+
+		if(!army.IsValid())
+			continue;
+
+		if(army->NumOrders() > 0)
+			continue;
+
+		if((army->GetMovementType() &
+		     (k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit)) == 0)
+		{
+			continue;
+		}
+
+		MapPoint pos = army->RetPos();
+		Unit city = g_theWorld->GetCity(pos);
+		if(city.m_id == 0)
+			continue;
+
+		sint32 transports,max,empty;
+		if(army->GetCargo(transports, max, empty))
+			continue;
+
+		if(
+		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
+		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
+		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 )
+		  )
+		{
+
+			sint16 defense_count;
+			sint16 tmp_count;
+			double tmp;
+			double defense_strength;
+			army->ComputeStrength(tmp,
+			                      defense_strength,
+			                      tmp,
+			                      defense_count,
+			                      tmp_count,
+			                      tmp,
+			                      tmp,
+			                      tmp,
+			                      tmp,
+			                      false
+			                     );
+
+			defense_strength += city.GetDefendersBonus() * static_cast<double>(defense_count);
+
+			sint32 idx = -1;
+			if(g_player[m_playerId]->GetCityIndex(city, idx))
+			{
+				garrisonAgents[idx].push_back(Sorted_Agent_ptr(defense_strength, squad->Get_Agent()));
+			}
+		}
+	}
+
+	for(sint32 i = 0; i < cityNum; ++i)
+	{
+		Unit city = g_player[m_playerId]->GetCityFromIndex(i);
+
+		garrisonAgents[i].sort();
+
+		sint8  needed_garrison           = city.CD()->GetNeededGarrison();
+		double needed_garrison_strength  = city.CD()->GetNeededGarrisonStrength();
+
+		sint8  current_garrison          = 0;
+		double current_garrison_strength = 0.0;
+
+		for
+		(
+		    Sorted_Agent_Iter agent_iter  = garrisonAgents[i].begin();
+		                      agent_iter != garrisonAgents[i].end();
+		                    ++agent_iter
+		)
+		{
+			if
+			  (
+			      current_garrison_strength < needed_garrison_strength
+			   || current_garrison          < needed_garrison
+			  )
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, static_cast<CTPAgent_ptr>(agent_iter->second)->Get_Army(), city.GetName()));
+
+				current_garrison_strength += agent_iter->first;
+				current_garrison          += static_cast<CTPAgent_ptr>(agent_iter->second)->Get_Army()->Num();
+				static_cast<CTPAgent_ptr>(agent_iter->second)->m_neededForGarrison = true;
+			}
+		}
+	}
+}
+

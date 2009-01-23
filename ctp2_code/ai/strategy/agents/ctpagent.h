@@ -27,6 +27,7 @@
 // - Improved design
 // - Made FindPath and GetRounds methods more flexible. (25-Jan-2008 Martin Gühmann)
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -136,6 +137,8 @@ public:
 	void WaitHere(const MapPoint & goal_pos);
 	void ClearOrders();
 	bool HasMovePoints() const;
+
+	bool     m_neededForGarrison;
 
 protected:
 

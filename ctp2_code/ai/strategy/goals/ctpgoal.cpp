@@ -86,6 +86,7 @@
 //   twelve units. (13-Aug-2008 Martin Gühmann)
 // - Added new rally algorithm. (13-Aug-2008 Martin Gühmann)
 // - Slavers don't go to cities with city walls. (06-Sep-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -666,6 +667,13 @@ Utility CTPGoal::Compute_Matching_Value(const Agent_ptr agent) const
 		return Goal::BAD_UTILITY;
 	}
 
+	MapPoint curr_pos = ctpagent_ptr->Get_Pos();
+
+	if(ctpagent_ptr->m_neededForGarrison && dest_pos != curr_pos)
+	{
+		return Goal::BAD_UTILITY;
+	}
+
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 
@@ -686,14 +694,6 @@ Utility CTPGoal::Compute_Matching_Value(const Agent_ptr agent) const
 		{
 			return Goal::BAD_UTILITY;
 		}
-	}
-
-	sint8 new_garrison = 0;
-	double new_garrison_strength = 0.0;
-	if(NeededForGarrison(ctpagent_ptr, dest_pos, new_garrison, new_garrison_strength))
-	{
-		// Needs to be modified
-		return Goal::BAD_UTILITY;
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -2126,10 +2126,9 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 	{
 		if(first_army->Get_Pos() != dest_pos)
 		{
-			sint8 new_garrison           = 0;
-			double new_garrison_strength = 0.0;
-			if(NeededForGarrison(first_army, dest_pos, new_garrison, new_garrison_strength))
+			if(first_army->m_neededForGarrison)
 			{
+				Assert(false);
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, first_army->Get_Army().m_id,
 					("GOAL %x (%d): FollowPathToTask::Can not send army needed for garrison to destination (x=%d,y=%d):\n", this,
 					m_goal_type, dest_pos.x, dest_pos.y));
@@ -2140,8 +2139,8 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 			}
 			else
 			{
-				city->GetCityData()->SetCurrentGarrison(new_garrison);
-				city->GetCityData()->SetCurrentGarrisonStrength(new_garrison_strength);
+				// Do nothing, city garrisons are calculated before build phase, where it only matters.
+				// Garrison units are only calculated ones, so that nothing changes between process matches.
 			}
 		}
 	}

@@ -638,6 +638,7 @@ void Goal::Set_Matching_Value(Utility combinedUtility)
 
 bool Goal::Add_Match(const Squad_ptr & squad, const bool update_match_value, const bool needsCargo)
 {
+#if defined(_DEBUG)
 	for
 	   (
 	    Plan_List::iterator   plan_test_iter  = m_matches.begin();
@@ -647,6 +648,7 @@ bool Goal::Add_Match(const Squad_ptr & squad, const bool update_match_value, con
 	{
 		Assert(plan_test_iter->Get_Squad() != squad);
 	}
+#endif
 
 	Plan the_match(squad, this, needsCargo);
 
@@ -718,19 +720,6 @@ bool Goal::Commited_Agents_Need_Orders() const
 
 void Goal::Rollback_All_Agents()
 {
-#if defined(_DEBUG)
-	Squad_Strength strength  = m_current_attacking_strength;
-	Squad_Strength strength1 = Compute_Current_Strength();
-
-	Squad_Strength strength2 = strength1;
-	strength2 -= strength;
-	Assert(strength2.NothingNeeded());
-
-	Squad_Strength strength3 = strength;
-	strength3 -= strength1;
-	Assert(strength3.NothingNeeded());
-#endif
-
 	for
 	(
 	    Plan_List::iterator

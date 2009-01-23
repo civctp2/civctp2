@@ -48,7 +48,7 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2008-10-08 (Revision 906)
+2008-10-08 (Revision 907)
 Fixed:    The tile highlight square at the mouse pointing position does not not
           blink anymore. In general, blinking items draw attention even if
           there is nothing important. In that case it was blinking always at

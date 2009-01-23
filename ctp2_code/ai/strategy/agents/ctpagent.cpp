@@ -37,6 +37,7 @@
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 // - For boats with cargo the squad class is now computed from the cargo. (06-Sep-2008 Martin Gühmann)
 // - Empty transporters cannot defend. (06-Sep-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,32 +70,35 @@ extern MapPoint g_mp_size;
 
 CTPAgent::CTPAgent()
 :
-    Agent           (),
-    m_army          (),
-    m_playerId      (PLAYER_UNASSIGNED),
-    m_targetOrder   (OrderRecord::INDEX_INVALID),
-    m_targetPos     ()
+    Agent               (),
+    m_neededForGarrison (false),
+    m_army              (),
+    m_playerId          (PLAYER_UNASSIGNED),
+    m_targetOrder       (OrderRecord::INDEX_INVALID),
+    m_targetPos         ()
 {
 }
 
 CTPAgent::CTPAgent(const Army & army)
 :
-    Agent           (),
-    m_army          (army),
-    m_playerId      (army->GetOwner()),
-    m_targetOrder   (OrderRecord::INDEX_INVALID),
-    m_targetPos     ()
+    Agent               (),
+    m_neededForGarrison (false),
+    m_army              (army),
+    m_playerId          (army->GetOwner()),
+    m_targetOrder       (OrderRecord::INDEX_INVALID),
+    m_targetPos         ()
 {
 	Compute_Squad_Strength();
 }
 
 CTPAgent::CTPAgent(CTPAgent const & an_Original)
 :
-    Agent           (an_Original),
-    m_army          (an_Original.m_army),
-    m_playerId      (an_Original.m_playerId),
-    m_targetOrder   (an_Original.m_targetOrder),
-    m_targetPos     (an_Original.m_targetPos)
+    Agent               (an_Original),
+    m_neededForGarrison (an_Original.m_neededForGarrison),
+    m_army              (an_Original.m_army),
+    m_playerId          (an_Original.m_playerId),
+    m_targetOrder       (an_Original.m_targetOrder),
+    m_targetPos         (an_Original.m_targetPos)
 {
 }
 

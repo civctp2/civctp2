@@ -1860,7 +1860,7 @@ sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_
 		gross_production -= static_cast<sint32>(ceil(gross_production * g_theConstDB->Get(0)->GetBioInfectionProductionCoef()));
 	}
 
-	crime_loss = CrimeLoss(static_cast<sint32>(gross_production));
+	crime_loss = CrimeLoss(gross_production);
 	
 	double net_production = gross_production - crime_loss;
 
@@ -8452,7 +8452,6 @@ void CityData::CollectOtherTrade(const bool projectedOnly, bool changeResources)
 	if(!projectedOnly) {
 		g_player[m_owner]->m_gold->AddIncome(m_net_gold);
 	}
-
 }
 
 //----------------------------------------------------------------------------
@@ -9063,7 +9062,7 @@ sint32 CityData::CrimeLoss(sint32 gross) const
 double CityData::CrimeLoss(double gross) const
 {
 	double crime_loss = ceil(gross * m_happy->GetCrime()); // Remove ceil
-	return std::max<double>(0, crime_loss);
+	return std::max<double>(0.0, crime_loss);
 }
 
 #if defined(NEW_RESOURCE_PROCESS)

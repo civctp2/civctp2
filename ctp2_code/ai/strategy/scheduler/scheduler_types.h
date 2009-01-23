@@ -61,7 +61,8 @@ typedef Goal*			Goal_ptr;
 typedef Squad*			Squad_ptr;
 typedef Plan*			Plan_ptr;
 
-typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr; 
+typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr;
+typedef std::pair<double, Agent_ptr> Sorted_Agent_ptr;
 
 
 template<class _T1, class _T2>

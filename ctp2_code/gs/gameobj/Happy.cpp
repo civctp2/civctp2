@@ -502,7 +502,6 @@ double Happy::CalcWonders(CityData &cd, Player *p)
 
 
 double Happy::CalcCrime(CityData &cd, Player *p)
-
 {
 	double threshold = p->GetCrimeOffset();
 
@@ -514,9 +513,9 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
 		double total_crime = 0.01 * base_crime;
 		total_crime += cops * total_crime;
-        m_crime = std::min(1.0, total_crime * p->GetCrimeCoef());
-		if(m_crime < 0)
-			m_crime = 0;
+		m_crime = std::min(1.0, total_crime * p->GetCrimeCoef());
+		if(m_crime < 0.0)
+			m_crime = 0.0;
 	}
 
 	

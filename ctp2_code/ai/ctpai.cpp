@@ -70,6 +70,7 @@
 // - Moved the startegic state calculation before everthing else, so that
 //   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -648,6 +649,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 	Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	scheduler.Process_Squad_Changes();
+	scheduler.Assign_Garrison();
 
 	scheduler.Reset_Squad_Execution();
 
@@ -697,7 +699,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                          Player %d\n", playerId));
 
-	CtpAi::ComputeCityGarrisons(playerId);
 	g_player[playerId]->CalcCargoCapacity();
 	scheduler.Process_Squad_Changes();
 	scheduler.Rollback_Emptied_Transporters();
@@ -1946,7 +1947,6 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (city.m_id == 0)
 			continue;
 
-		
 		sint32 transports,max,empty;
 		if (army->GetCargo(transports, max, empty))
 			continue;

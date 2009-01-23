@@ -31,6 +31,7 @@
 //   is the avarage match value of the matches needed for the goal.
 // - Simplified the design the number of committed agents and number of
 //   agents are now calculated inside the Match_Resources method. (21-Aug-2008 Martin Gühmann)
+// - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -65,19 +66,24 @@ public:
 #ifdef _DEBUG
 	#define dbga dbgallocator
 
-	typedef std::vector<sint16, dbgallocator<sint16> > Count_Vector;
-	typedef std::list<GOAL_TYPE, dbgallocator<GOAL_TYPE> > Goal_Type_List;
-	typedef std::list<Sorted_Goal_ptr, dbgallocator<Sorted_Goal_ptr> > Sorted_Goal_List;
-	typedef Sorted_Goal_List::iterator Sorted_Goal_Iter;
-	typedef std::list<Goal_ptr, dbgallocator<Goal_ptr> > Goal_List;
-	typedef std::list<SQUAD_CLASS, dbgallocator<SQUAD_CLASS> > Squad_Class_List;
-	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> > Sorted_Goal_List_Vector;
+	typedef std::vector<sint16, dbgallocator<sint16> >                       Count_Vector;
+	typedef std::list<GOAL_TYPE, dbgallocator<GOAL_TYPE> >                   Goal_Type_List;
+	typedef std::list<Sorted_Goal_ptr, dbgallocator<Sorted_Goal_ptr> >       Sorted_Goal_List;
+	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
+	typedef std::list<Goal_ptr, dbgallocator<Goal_ptr> >                     Goal_List;
+	typedef std::list<SQUAD_CLASS, dbgallocator<SQUAD_CLASS> >               Squad_Class_List;
+	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> >   Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator, dbgallocator<Sorted_Goal_List::iterator> > Sorted_Goal_List_Iter_Vector;
-	typedef std::vector<Squad_List, dbgallocator<Squad_List> > Squad_List_Vector;
+	typedef std::vector<Squad_List, dbgallocator<Squad_List> >               Squad_List_Vector;
+
+	typedef std::list<Sorted_Agent_ptr, dbgallocator<Sorted_Agent_ptr> >     Sorted_Agent_List;
+	typedef std::vector<Sorted_Agent_List, dbgallocator<Sorted_Agent_List> > Sorted_Agent_List_Vector;
+	typedef Sorted_Agent_List::iterator                                      Sorted_Agent_Iter;
+
 #if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version
-	typedef std::deque<Scheduler, dbga<Scheduler> > Scheduler_Vector;
+	typedef std::deque<Scheduler, dbga<Scheduler> >                          Scheduler_Vector;
 #else
-	typedef std::vector<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
+	typedef std::vector<Scheduler, dbgallocator<Scheduler> >                 Scheduler_Vector;
 #endif
 
 #else
@@ -92,6 +98,10 @@ public:
 	typedef std::vector<Sorted_Goal_List> Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator> Sorted_Goal_List_Iter_Vector;
 	typedef std::vector<Squad_List> Squad_List_Vector;
+
+	typedef std::list<Sorted_Agent_ptr> Sorted_Agent_List;
+	typedef std::vector<Sorted_Agent_List> Sorted_Agent_List_Vector;
+	typedef Sorted_Agent_List::iterator Sorted_Agent_Iter;
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
 	typedef std::deque<Scheduler> Scheduler_Vector;
@@ -232,6 +242,7 @@ public:
 	void Compute_Squad_Strength();
 	void Rollback_Emptied_Transporters();
 	void Sort_Goal_Matches_If_Necessary();
+	void Assign_Garrison();
 
 protected:
 
