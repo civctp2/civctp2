@@ -938,10 +938,10 @@ void CellUnitList::ComputeStrength(double & attack,
 		if (!m_array[i].IsValid())
 			continue;
 
-		UnitRecord const * rec = m_array[i].GetDBRec();
+		UnitRecord const * rec = m_array[i]->GetDBRec();
 		if (!rec) continue;
 
-		if (m_array[i].GetDefense() > 0.0)
+		if (rec->GetDefense() > 0.0)
 			defend_unit_count++;
 
 		if (rec->GetZBRangeAttack() > 0)
@@ -962,7 +962,7 @@ void CellUnitList::ComputeStrength(double & attack,
 		}
 		else
 		{
-			defense  +=   m_array[i]->GetPositionDefense(Unit())
+			defense  +=   m_array[i]->GetPositionDefense(Unit()) // Expensive
 			            * hitpoints
 			            * firepower;
 		}
@@ -997,16 +997,16 @@ void CellUnitList::ComputeStrength(double & attack,
 
 		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
 		sint32             cargoCount = cargo_list ? cargo_list->Num() : 0;
-		
+
 		for(sint32 j = 0; j < cargoCount; j++)
 		{
-			rec = cargo_list->Access(j).GetDBRec();
+			rec = cargo_list->Access(j)->GetDBRec();
 			if (!rec) continue;
 
 			firepower = static_cast<double>(rec->GetFirepower());
 			hitpoints = static_cast<double>(rec->GetMaxHP());
 
-			if (m_array[i].GetDefense() > 0.0)
+			if (rec->GetDefense() > 0.0)
 				defend_unit_count++;
 
 			if (rec->GetZBRangeAttack() > 0)

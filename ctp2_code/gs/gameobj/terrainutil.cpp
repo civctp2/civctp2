@@ -960,20 +960,21 @@ void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, d
 	terrain_bonus = cell->GetTerrainDefenseBonus();
 	double bonus;
 
-	
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	sint32 numDBImps = cell->GetNumDBImprovements();
 
-		
+	for(sint32 i = 0; i < numDBImps; i++)
+	{
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
-		if(rec) {
-			
+		if(rec)
+		{
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-			if(eff) {
-				if(eff->GetDefenseBonus(bonus)) {
-					
+			if(eff)
+			{
+				if(eff->GetDefenseBonus(bonus))
+				{
 					fort_bonus += bonus;
 				}
 			}

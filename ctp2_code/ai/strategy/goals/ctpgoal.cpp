@@ -433,15 +433,16 @@ bool CTPGoal::Is_Execute_Incrementally() const
 
 void CTPGoal::Compute_Needed_Troop_Flow()
 {
+	MapAnalysis &  mapAnalysis = MapAnalysis::GetMapAnalysis();
 	const MapPoint pos         = Get_Target_Pos();
-	const sint32   threat      = MapAnalysis::GetMapAnalysis().GetThreat          (m_playerId, pos);
-	const sint32   attack      = MapAnalysis::GetMapAnalysis().GetEnemyAttack     (m_playerId, pos);
-	const sint32   defense     = MapAnalysis::GetMapAnalysis().GetEnemyDefense    (m_playerId, pos);
-	const sint32   ranged      = MapAnalysis::GetMapAnalysis().GetEnemyRanged     (m_playerId, pos);
-	const sint32   bombardLand = MapAnalysis::GetMapAnalysis().GetEnemyBombardLand(m_playerId, pos);
-	const sint32   bombardSea  = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (m_playerId, pos);
-	const sint32   bombardAir  = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (m_playerId, pos);
-	const sint32   value       = MapAnalysis::GetMapAnalysis().GetEnemyValue      (m_playerId, pos);
+	const double   threat      = static_cast<double>(mapAnalysis.GetThreat          (m_playerId, pos));
+	const double   attack      = static_cast<double>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
+	const double   defense     = static_cast<double>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
+	const double   ranged      = static_cast<double>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
+	const double   bombardLand = static_cast<double>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
+	const double   bombardSea  = static_cast<double>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
+	const double   bombardAir  = static_cast<double>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
+	const double   value       = static_cast<double>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
 
 	m_current_needed_strength   = Squad_Strength(1);
 		// why only one unit ? Why then zero units? - Martin Gühmann
@@ -452,20 +453,20 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	if(goal_record->GetTargetTypeChokePoint())
 	{
 		// Need also attack and ranged strength - Calvitix
-		m_current_needed_strength.Set_Attack      (attack       / 2);
-		m_current_needed_strength.Set_Defense     (defense      / 2);
-		m_current_needed_strength.Set_Ranged      (ranged       / 2);
-		m_current_needed_strength.Set_Bombard_Land(bombardLand  / 2);
-		m_current_needed_strength.Set_Bombard_Sea (bombardSea   / 2);
-		m_current_needed_strength.Set_Bombard_Air (bombardAir   / 2);
-		m_current_needed_strength.Set_Value       (value        / 2);
+		m_current_needed_strength.Set_Attack      (attack       * 0.5);
+		m_current_needed_strength.Set_Defense     (defense      * 0.5);
+		m_current_needed_strength.Set_Ranged      (ranged       * 0.5);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5);
+		m_current_needed_strength.Set_Value       (value        * 0.5);
 	}
 	else if(goal_record->GetTargetTypeImprovement()
 	     || goal_record->GetTargetTypeTradeRoute()
 	     ){
 
-		m_current_needed_strength.Set_Attack(attack  / 2);
-		m_current_needed_strength.Set_Ranged(defense / 2);
+		m_current_needed_strength.Set_Attack(attack  * 0.5);
+		m_current_needed_strength.Set_Ranged(defense * 0.5);
 		m_current_needed_strength.Set_Value(value);
 	}
 	else if(goal_record->GetTargetTypeEndgame())
@@ -561,13 +562,13 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	else if(goal_record->GetTargetTypeBorder())
 	{
 		// assuming threat is the global strength to use (to be coherent with other changes) - Calvitix
-		m_current_needed_strength.Set_Attack      (attack       / 2);
-		m_current_needed_strength.Set_Defense     (defense      / 2);
-		m_current_needed_strength.Set_Ranged      (ranged       / 2);
-		m_current_needed_strength.Set_Bombard_Land(bombardLand  / 2);
-		m_current_needed_strength.Set_Bombard_Sea (bombardSea   / 2);
-		m_current_needed_strength.Set_Bombard_Air (bombardAir   / 2);
-		m_current_needed_strength.Set_Value       (value        / 2); // Actually this stuff should go to the force matches
+		m_current_needed_strength.Set_Attack      (attack       * 0.5);
+		m_current_needed_strength.Set_Defense     (defense      * 0.5);
+		m_current_needed_strength.Set_Ranged      (ranged       * 0.5);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5);
+		m_current_needed_strength.Set_Value       (value        * 0.5); // Actually this stuff should go to the force matches
 	}
 	else if (   goal_record->GetTargetTypeSettleLand()
 	        ||  goal_record->GetTargetTypeSettleSea()
@@ -988,7 +989,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
-	if ( maxThreat > 0 )
+	if ( maxThreat > 0.0 )
 	{
 		cell_value += 
 		( ( static_cast<double>(map.GetThreat(m_playerId, target_pos)) /
@@ -1002,7 +1003,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	}
 
 	double maxEnemyValue = static_cast<double>(map.GetMaxEnemyValue(m_playerId));
-	if (maxEnemyValue)
+	if(maxEnemyValue > 0.0)
 	{
 		cell_value += 
 		( ( static_cast<double>(map.GetEnemyValue( m_playerId, target_pos)) /
@@ -1028,6 +1029,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		report_cell_lastvalue   = cell_value;
 #endif //_DEBUG
 	}
+
 	double maxPower = static_cast<double>(map.GetMaxPower(m_playerId)); // Get Max Power of all Allies
 	if (maxPower > 0)
 	{

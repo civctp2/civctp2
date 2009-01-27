@@ -258,11 +258,6 @@ Utility Goal::Get_Raw_Priority() const
 	return m_raw_priority;
 }
 
-bool Goal::Get_Totally_Complete() const
-{
-	return false;
-}
-
 void Goal::Set_Invalid(const bool &is_invalid)
 {
 	m_is_invalid = is_invalid;
@@ -271,11 +266,6 @@ void Goal::Set_Invalid(const bool &is_invalid)
 bool Goal::Get_Invalid() const
 {
 	return m_is_invalid;
-}
-
-bool Goal::Get_Removal_Time() const
-{
-	return false;
 }
 
 void Goal::Set_Removal_Time(const REMOVAL_TIME & removal_time)

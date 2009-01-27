@@ -134,7 +134,7 @@ public:
     virtual bool Get_Invalid() const;
 
 
-    virtual bool Get_Removal_Time() const;
+    virtual bool Get_Removal_Time() const = 0;
 
 
     void Set_Removal_Time(const REMOVAL_TIME & removal_time);
