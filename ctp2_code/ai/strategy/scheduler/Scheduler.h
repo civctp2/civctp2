@@ -161,7 +161,7 @@ public:
 
 
 
-	virtual ~Scheduler();
+	~Scheduler();
 
 	
 	Scheduler& operator= (const Scheduler &scheduler);

@@ -82,7 +82,7 @@
 #include "Diplomat.h"
 #include "Scheduler.h"
 #include "ctpagent.h"
-#include "ctpgoal.h"
+#include "Goal.h"
 #include "GoalRecord.h"                     // g_theGoalDB
 #include "Squad.h"
 #include "mapanalysis.h"
@@ -232,7 +232,7 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 		   || g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
 		  )
 		{
-			CTPGoal * goal_ptr = new CTPGoal();
+			Goal * goal_ptr = new Goal();
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(ownerId);
 			goal_ptr->Set_Target_City(city);
@@ -258,7 +258,7 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 		   || g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
 		  )
 		{
-			CTPGoal * goal_ptr = new CTPGoal();
+			Goal * goal_ptr = new Goal();
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(foreignerId);
 			goal_ptr->Set_Target_City(city);
@@ -348,7 +348,7 @@ STDEHANDLER(CtpAi_KillCityEvent)
 			     )
 			   )
 			{
-				CTPGoal * goal_ptr = new CTPGoal();
+				Goal * goal_ptr = new Goal();
 				goal_ptr->Set_Type( goal_type );
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Target_Pos( u.RetPos() );
@@ -402,7 +402,7 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 					(g_theWorld->IsWater(city.RetPos()) == TRUE) && 
 					(g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
 				{
-					CTPGoal * goal_ptr = new CTPGoal();
+					Goal * goal_ptr = new Goal();
 					goal_ptr->Set_Type( goal_type );
 					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( city.RetPos() );
@@ -527,7 +527,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			     && (goal->GetTargetOwnerSelf() == (foreignerId == playerId))
 			  )
 			{
-				CTPGoal_ptr     goal_ptr = new CTPGoal();
+				Goal_ptr     goal_ptr = new Goal();
 				goal_ptr->Set_Type(goal_type);
 				goal_ptr->Set_Player_Index(foreignerId);
 				goal_ptr->Set_Target_Army(army);
@@ -841,7 +841,7 @@ STDEHANDLER(CtpAi_ImprovementComplete)
 				if (playerId == owner && !goal_rec->GetTargetOwnerSelf())
 					continue;
 					
-				CTPGoal_ptr goal_ptr = new CTPGoal();
+				Goal_ptr goal_ptr = new Goal();
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Type(static_cast<GOAL_TYPE>(goal_type));
 				goal_ptr->Set_Target_Pos( pos );
@@ -1759,7 +1759,7 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 				// After completion of one exploration goal a human player
 				// explores the a map point nearby the old exploration target,
 				// in most cases a neighbour tile.
-				CTPGoal * goal_ptr = new CTPGoal();
+				Goal * goal_ptr = new Goal();
 				goal_ptr->Set_Type( goal_type );
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Target_Pos( pos );
@@ -1815,7 +1815,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 				 (g_theWorld->IsWater(settle_target.m_pos)) && 
 				 (g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
 			{
-				CTPGoal_ptr goal_ptr = new CTPGoal();
+				Goal_ptr goal_ptr = new Goal();
 				goal_ptr->Set_Type( goal_type );
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Target_Pos( settle_target.m_pos );
@@ -1870,7 +1870,7 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 				if (cell->GetIsChokePoint() &&
 					g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 				{
-					CTPGoal * goal_ptr = new CTPGoal();
+					Goal * goal_ptr = new Goal();
 					goal_ptr->Set_Type( goal_type );
 					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( pos );
@@ -1880,7 +1880,7 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 
 				if (cell->GetGoodyHut())
 				{
-					CTPGoal * goal_ptr = new CTPGoal();
+					Goal * goal_ptr = new Goal();
 					goal_ptr->Set_Type( goal_type );
 					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( pos );

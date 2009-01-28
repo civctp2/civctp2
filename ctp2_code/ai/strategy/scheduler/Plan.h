@@ -56,7 +56,7 @@ public:
 	Plan(Squad_ptr squad, Goal_ptr goal, bool needsCargo);
 	Plan(const Plan &plan);
 
-	virtual ~Plan();
+	~Plan();
 
 	Plan& operator= (const Plan &plan);
 

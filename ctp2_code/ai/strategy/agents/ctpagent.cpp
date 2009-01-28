@@ -63,7 +63,7 @@
 #include "ctpaidebug.h"
 #include "ctpai.h"
 #include "GoalRecord.h"
-#include "CTPGoal.h"
+#include "Goal.h"
 
 extern MapPoint g_mp_size;
 
@@ -684,7 +684,7 @@ void CTPAgent::Group_With( CTPAgent_ptr second_army )
 		goalString[myComp] = myText[myComp + 5];
 	}
 
-	MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
+	MapPoint dest_pos = m_goal->Get_Target_Pos();
 
 	sprintf(myString, "Grouping at (%d,%d) to %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
 	g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
@@ -873,9 +873,9 @@ void CTPAgent::ClearOrders()
 
 		MapPoint pos;
 		Get_Army()->GetPos(pos);
-		if(!static_cast<CTPGoal_ptr>(m_goal)->Get_Invalid())
+		if(!m_goal->Get_Invalid())
 		{
-			MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
+			MapPoint dest_pos = m_goal->Get_Target_Pos();
 
 			sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
 		}

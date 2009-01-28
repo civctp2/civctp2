@@ -135,7 +135,7 @@
 #include "CitySizeRecord.h"
 #include "ConstRecord.h"
 #include "ctpai.h"
-#include "ctpgoal.h"
+#include "Goal.h"
 #include "Diplomat.h"
 #include "Events.h"
 #include "gaiacontroller.h"
@@ -4588,11 +4588,11 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 	sint32 defend_goal_type = CtpAi::GetGoalDefendIndex();
 
 	bool is_satisfied = false;
-	CTPGoal_ptr ctp_goal_ptr = 
-		(CTPGoal_ptr) Scheduler::GetScheduler(m_playerId).GetHighestPriorityGoal((GOAL_TYPE)defend_goal_type, is_satisfied);
-	if (ctp_goal_ptr != NULL)
+	Goal_ptr goal_ptr =Scheduler::GetScheduler(m_playerId).GetHighestPriorityGoal((GOAL_TYPE)defend_goal_type, is_satisfied);
+
+	if (goal_ptr != NULL)
 	{
-		sc.AddCity(ctp_goal_ptr->Get_Target_City());
+		sc.AddCity(goal_ptr->Get_Target_City());
 		return defendAreaAdviceId;
 	}
 
@@ -4616,11 +4616,11 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 	sint32 seige_goal_type = CtpAi::GetGoalSeigeIndex();
 
 	is_satisfied = true;
-	ctp_goal_ptr = 
-		(CTPGoal_ptr) Scheduler::GetScheduler(m_playerId).GetHighestPriorityGoal((GOAL_TYPE)seige_goal_type, is_satisfied);
-	if (ctp_goal_ptr != NULL)
+	goal_ptr = Scheduler::GetScheduler(m_playerId).GetHighestPriorityGoal((GOAL_TYPE)seige_goal_type, is_satisfied);
+
+	if (goal_ptr != NULL)
 	{
-		sc.AddCity(ctp_goal_ptr->Get_Target_City());
+		sc.AddCity(goal_ptr->Get_Target_City());
 		return seigeAdviceId;
 	}
 

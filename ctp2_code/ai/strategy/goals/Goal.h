@@ -25,11 +25,18 @@
 // Modifications from the original Activision code:
 //
 // - Removed MSVC specific code
+// - Set the SUB_TASK_TYPE global - Calvitix
+// - Added an SUB_TASK_TYPE attribute (used for armytext display) - Calvitix
+// - Added methods to Ungroup armies - Calvitix
 // - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
 //   be changed on wounded case) - Calvitix
+// - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
+// - Use more than one transporter if the goal needs more than one. (8-Feb-2008 Martin Gühmann)
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 // - Now the goals are used for the matching process, the goal match value
 //   is the avarage match value of the matches needed for the goal.
+// - Merged in CTPGoal, removed virtual functions, for design and speed
+//   improvement. (28-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -44,6 +51,24 @@ class Goal;
 #include "scheduler_types.h"
 #include "Plan.h"
 #include "squad_Strength.h"
+#include "MapPoint.h"
+#include "Army.h"
+#include "Unit.h"
+
+class CTPAgent;
+typedef CTPAgent * CTPAgent_ptr;
+
+//Now the enum is global and can be accessed by other objects
+enum SUB_TASK_TYPE
+{
+    SUB_TASK_GOAL,
+    SUB_TASK_RALLY,
+    SUB_TASK_TRANSPORT_TO_BOARD,
+    SUB_TASK_TRANSPORT_TO_GOAL,
+    SUB_TASK_CARGO_TO_BOARD,
+    SUB_TASK_AIRLIFT,
+    SUB_TASK_UNGROUP
+};
 
 class Goal
 {
@@ -58,22 +83,14 @@ public:
     const static Utility BAD_UTILITY;
     const static Utility MAX_UTILITY;
 
-
-protected:
-	// Only part of derived classes
     Goal();
-
-
     Goal(const Goal & goal);
-
-public:
-    virtual ~Goal();
+    ~Goal();
 
 
-    virtual Goal & operator = (const Goal & goal);
-
-
-    bool operator < (const Goal & goal) const;
+    Goal & operator = (const Goal & goal);
+    bool operator ==  (const Goal & rval) const;
+    bool operator <   (const Goal & goal) const;
 
 
     GOAL_TYPE Get_Goal_Type() const;
@@ -85,10 +102,10 @@ public:
     PLAYER_INDEX Get_Player_Index() const;
 
 
-    virtual bool Is_Satisfied() const;
+    bool Is_Satisfied() const;
 
 
-    virtual bool Is_Goal_Undercommitted() const;
+    bool Is_Goal_Undercommitted() const;
 
 
     sint16 Get_Agent_Count() const;
@@ -100,41 +117,32 @@ public:
     bool Commit_Agent(const Agent_ptr & agent);
 
 
-    const Agent_List & Get_Agent_List() const;
-
-
     void Rollback_Agent(Agent_ptr agent_ptr);
     void Rollback_Emptied_Transporters();
 
-    virtual bool Is_Execute_Incrementally() const = 0;
+    bool Is_Execute_Incrementally() const;
 
 
-    virtual void Compute_Needed_Troop_Flow() = 0;
+    void Compute_Needed_Troop_Flow();
 
-    virtual Utility Compute_Matching_Value (const Agent_ptr agent) const = 0;
+    Utility Compute_Matching_Value(const Agent_ptr agent) const;
 
-    virtual Utility Compute_Raw_Priority() = 0;
+    Utility Compute_Raw_Priority();
 
 
     Utility Get_Raw_Priority() const;
 
 
-    virtual GOAL_RESULT Execute_Task() = 0;
+    GOAL_RESULT Execute_Task();
 
 
-    virtual bool Get_Totally_Complete() const = 0;
+    bool Get_Totally_Complete() const;
 
 
-    virtual bool Pretest_Bid(const Agent_ptr agent_ptr) const = 0;
+    bool Get_Invalid() const;
 
 
-    virtual void Set_Invalid(const bool & is_invalid);
-
-
-    virtual bool Get_Invalid() const;
-
-
-    virtual bool Get_Removal_Time() const = 0;
+    bool Get_Removal_Time() const;
 
 
     void Set_Removal_Time(const REMOVAL_TIME & removal_time);
@@ -146,10 +154,7 @@ public:
     void Set_Can_Be_Executed(const bool & can_be_executed);
 
 
-    virtual bool Validate() const;
-
-
-    virtual void Log_Debug_Info(const int & log) const = 0;
+    bool Validate() const;
 
 
     void Set_Type(const GOAL_TYPE & type);
@@ -168,8 +173,6 @@ public:
 
 
     const Squad_Strength Get_Strength_Needed() const;
-    virtual const MapPoint & Get_Target_Pos() const = 0;
-
 
     Utility Compute_Matching_Value(const bool update = true);
     Utility Recompute_Matching_Value(const bool update = true, const bool show_strength = true);
@@ -194,18 +197,110 @@ public:
     void Recompute_Current_Attacking_Strength();
     Squad_Strength Compute_Current_Strength();
 
-    virtual bool Can_Add_To_Goal(const Agent_ptr agent_ptr) const = 0;
+    bool Can_Add_To_Goal(const Agent_ptr agent_ptr) const;
 
     void Sort_Matches_If_Necessary();
+    void Set_Target_Pos(const MapPoint & pos);
 
-protected:
+
+    void Set_Target_Army(const Army & army);
+
+
+    void Set_Target_City(const Unit & city);
+
+
+    const MapPoint & Get_Target_Pos() const;
+    const MapPoint Get_Target_Pos(const Army & army) const;
+
+	const Army & Get_Target_Army() const;
+
+    const SUB_TASK_TYPE & Get_Sub_Task() const;
+
+    void Set_Sub_Task(const SUB_TASK_TYPE & sub_task);
+
+
+
+    const Unit & Get_Target_City() const;
+
+
+    sint32 Get_Target_Value() const;
+
+
+    PLAYER_INDEX Get_Target_Owner() const;
+
+
+    bool Pretest_Bid(const Agent_ptr agent_ptr) const;
+
+
+    bool Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos) const;
+
+
+    bool ArmiesAtGoal() const;
+
+
+    sint32 GetThreatenBonus() const;
+
+
+    bool ReferencesAgent(const CTPAgent * ctp_agent) const;
+
+
+    void Log_Debug_Info(const int & log) const;
+    void Log_Debug_Info_Full(const int & log) const;
+
+private:
+
+    bool NeededForGarrison(CTPAgent_ptr army,
+                           const MapPoint & dest_pos,
+                           sint8 & garrison_count,
+                           double & garrison_strength) const;
+
+    bool FindPathToTask(CTPAgent_ptr the_army,
+                        const MapPoint & goal_pos,
+                        Path & found_path);
+
+    bool FollowPathToTask(CTPAgent_ptr first_army,
+                          CTPAgent_ptr second_army,
+                          const MapPoint & dest_pos,
+                          const Path & path);
+
+
+    bool GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_transport, MapPoint & pos);
+
+
+    bool GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos);
+
+
+    bool Ok_To_Rally() const;
+
+
+    bool RallyComplete() const;
+
+    MapPoint MoveOutOfCity(CTPAgent_ptr rallyAgent);
+    CTPAgent_ptr GetRallyAgent() const;
+    MapPoint GetFreeNeighborPos(MapPoint pos) const;
+    bool RallyTroops();
+    void GroupTroops();
+
+    bool UnGroupTroops();
+
+    bool UnGroupComplete() const;
+
+    bool Goal_Too_Expensive() const;
+
+
+    bool TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos);
+
+
+    bool FindTransporters(const CTPAgent_ptr & agent_ptr, std::list< std::pair<Utility, CTPAgent_ptr> > & transporter_list);
+
+
+    bool LoadTransporters(CTPAgent_ptr agent_ptr);
 
     inline void Sort_Matches();
 
     GOAL_TYPE                         m_goal_type;
     Utility                           m_raw_priority;
     REMOVAL_TIME                      m_removal_time;
-    bool                              m_is_invalid;
     Squad_Strength                    m_current_needed_strength;
     Squad_Strength                    m_current_attacking_strength;
     Squad_Strength                    m_current_projected_strength;
@@ -214,6 +309,10 @@ protected:
     PLAYER_INDEX                      m_playerId;
     Utility                           m_combinedUtility;
     bool                              m_needs_sorting;
+    MapPoint                          m_target_pos;
+    Unit                              m_target_city;
+    Army                              m_target_army;
+    SUB_TASK_TYPE                     m_sub_task;
 };
 
 template<>

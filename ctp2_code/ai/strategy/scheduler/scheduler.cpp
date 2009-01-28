@@ -72,7 +72,6 @@
 #include "Diplomat.h"
 #include "CTPDatabase.h"
 #include "GoalRecord.h"
-#include "ctpgoal.h"
 #include "ctpaidebug.h"
 #include "c3math.h"
 #include "ctpagent.h"
@@ -550,7 +549,7 @@ void Scheduler::Sort_Goals()
 	    ++goal_iter
 	)
 	{
-		CTPGoal_ptr goal = static_cast<CTPGoal_ptr>(*goal_iter);
+		Goal_ptr goal = static_cast<Goal_ptr>(*goal_iter);
 
 		Utility value = goal->Get_Matching_Value();
 
@@ -636,7 +635,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			break;
 		}
 
-		CTPGoal_ptr goal_ptr        = static_cast<CTPGoal_ptr>(*goal_iter);
+		Goal_ptr goal_ptr        = static_cast<Goal_ptr>(*goal_iter);
 		Utility     oldMatchValue   = goal_ptr->Get_Matching_Value();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -1044,19 +1043,19 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 		      ++sorted_goal_iter
 		)
 		{
-			CTPGoal_ptr const ctp_goal_ptr = 
-				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
+			Goal_ptr const goal_ptr = 
+				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
-			if(ctp_goal_ptr->Get_Invalid()		||
-			   ctp_goal_ptr->Is_Satisfied()	||
-			   ctp_goal_ptr->ArmiesAtGoal()
+			if(goal_ptr->Get_Invalid()		||
+			   goal_ptr->Is_Satisfied()	||
+			   goal_ptr->ArmiesAtGoal()
 			  )
 			{
 				// Goal has become invalid or has been satisfied: try next.
 			}
 			else
 			{
-				total_value += ctp_goal_ptr->Get_Target_Value();
+				total_value += goal_ptr->Get_Target_Value();
 			}
 		}
 	}
@@ -1097,19 +1096,19 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 		      ++sorted_goal_iter
 		)
 		{
-			CTPGoal_ptr	const	ctp_goal_ptr = 
-				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
+			Goal_ptr	const	goal_ptr = 
+				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
-			if(ctp_goal_ptr->Get_Invalid()                  ||
-			    (satisfied != ctp_goal_ptr->Is_Satisfied()) ||
-			    ctp_goal_ptr->ArmiesAtGoal()
+			if(goal_ptr->Get_Invalid()                  ||
+			    (satisfied != goal_ptr->Is_Satisfied()) ||
+			    goal_ptr->ArmiesAtGoal()
 			   )
 			{
 				// Goal does not match: try next.
 			}
 			else
 			{
-				return ctp_goal_ptr;
+				return goal_ptr;
 			}
 		}
 	}
@@ -1159,16 +1158,16 @@ bool Scheduler::Prioritize_Goals()
 	                      ++goal_ptr_iter
 	)
 	{
-		sint32 goal_type    = (*goal_ptr_iter)->Get_Goal_Type();
+		Goal_ptr goal2 = static_cast<Goal_ptr>(*goal_ptr_iter);
 
-		CTPGoal_ptr goal2 = (CTPGoal_ptr) *goal_ptr_iter;
+		sint32 goal_type    = goal2->Get_Goal_Type();
 
 		Sorted_Goal_Iter tmp_goal_iter = 
 			m_goals_of_type[goal_type].begin();
 
 		while (tmp_goal_iter != m_goals_of_type[goal_type].end())
 		{
-			CTPGoal_ptr goal1 = (CTPGoal_ptr) tmp_goal_iter->second;
+			Goal_ptr goal1 = tmp_goal_iter->second;
 			if ( *goal1 == *goal2)
 			{
 				break;
@@ -1291,6 +1290,9 @@ bool Scheduler::Prioritize_Goals()
 	}
 
 	t2 = GetTickCount();
+#if defined(_DEBUG)
+	time_t t = t2 - t1;
+#endif
 	DPRINTF(k_DBG_AI, ("//  Raw goal priorities calculated:\n"));
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 	t1 = GetTickCount();
@@ -1488,8 +1490,7 @@ bool Scheduler::Prune_Goals()
 			{
 					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
 						("\t%3d: [%x]", count, goal_ptr_iter->second));
-					CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) goal_ptr_iter->second;
-					ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
+					goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 			}
 			count++;
 		}
@@ -1612,18 +1613,13 @@ void Scheduler::Rollback_Matches_For_Goal
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("ROLLBACK_MATCHES_FOR_GOAL\n"));
-#endif
-
-	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) goal;
-
-#if defined(_DEBUG) || defined(USE_LOGGING)
-	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\t"));
-	ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER);
-	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\n"));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\t"));
+	goal->Log_Debug_Info(k_DBG_SCHEDULER);
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 #endif
 
 	Squad_Strength needed_strength = 
-		ctpgoal_ptr->Get_Strength_Needed();
+		goal->Get_Strength_Needed();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
@@ -1833,9 +1829,9 @@ bool Scheduler::CachedHasContactWithExceptSelf(sint32 player1, sint32 player2)
 
 #ifdef _DEBUG
 
-		int test1 = g_player[player1]->HasContactWith(player2) && (player1!=player2);
-		int test2 = ((m_contactCache>>player2) & 1) != 0;
-		Assert(test1==test2);
+	//	int test1 = g_player[player1]->HasContactWith(player2) && (player1!=player2);
+	//	int test2 = ((m_contactCache>>player2) & 1) != 0;
+	//	Assert(test1==test2);
 #endif
 
 		return ((m_contactCache>>player2)&1) != 0;
@@ -1874,10 +1870,10 @@ bool Scheduler::CachedIsNeutralRegard(sint32 player, sint32 opponent)
 
 #ifdef _DEBUG
 
-		Diplomat & diplomat = Diplomat::GetDiplomat(player);
-		int test1 = diplomat.TestEffectiveRegard(opponent, NEUTRAL_REGARD);
-		int test2 = ((m_neutralRegardCache>>opponent) & 1) != 0;
-		Assert(test1==test2);
+	//	Diplomat & diplomat = Diplomat::GetDiplomat(player);
+	//	int test1 = diplomat.TestEffectiveRegard(opponent, NEUTRAL_REGARD);
+	//	int test2 = ((m_neutralRegardCache>>opponent) & 1) != 0;
+	//	Assert(test1==test2);
 #endif
 		return ((m_neutralRegardCache>>opponent)&1) != 0;
 	}
@@ -1912,10 +1908,10 @@ bool Scheduler::CachedIsAllyRegard(sint32 player, sint32 ally)
 
 #ifdef _DEBUG
 		
-		Diplomat & diplomat = Diplomat::GetDiplomat(player);
-		int test1 = diplomat.TestAlliedRegard(ally);
-		int test2 = ((m_allyRegardCache>>ally) & 1) != 0;
-		Assert(test1==test2);
+	//	Diplomat & diplomat = Diplomat::GetDiplomat(player);
+	//	int test1 = diplomat.TestAlliedRegard(ally);
+	//	int test2 = ((m_allyRegardCache>>ally) & 1) != 0;
+	//	Assert(test1==test2);
 #endif
 		return ((m_allyRegardCache>>ally)&1) != 0;
 	}

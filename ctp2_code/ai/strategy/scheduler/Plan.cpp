@@ -97,7 +97,6 @@
 #include "Agent.h"
 #include "ArmyData.h"
 #include "ctpagent.h"
-#include "ctpgoal.h"
 #include "squad_strength.h"
 #include "ctpaidebug.h"
 
@@ -318,7 +317,7 @@ Utility Plan::Compute_Matching_Value()
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
-		m_matching_value   = static_cast<CTPGoal_ptr>(m_the_goal)->Compute_Matching_Value(m_the_squad->Get_Agent());
+		m_matching_value   = m_the_goal->Compute_Matching_Value(static_cast<Agent_ptr>(m_the_squad->Get_Agent()));
 	}
 	else
 	{
@@ -435,15 +434,13 @@ void Plan::Commit_Agent_Common()
 
 	if(debug_plan && Agent_Committed())
 	{
-		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
-
 		sint32 mask;
-		if(goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
+		if(m_the_goal->Is_Satisfied() || m_the_goal->Is_Execute_Incrementally())
 			mask = k_DBG_SCHEDULER;
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
 
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", goal_ptr, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 
 		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 		DPRINTF(mask, ("\t\t\t\n"));
@@ -487,11 +484,9 @@ void Plan::Rollback_All_Agents()
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
-		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
-
 		if(Agent_Committed())
 		{
-			ctpgoal_ptr->Rollback_Agent(m_the_squad->Get_Agent());
+			m_the_goal->Rollback_Agent(m_the_squad->Get_Agent());
 			m_the_squad->Get_Agent()->Set_Goal(NULL);
 		}
 	}
@@ -502,8 +497,6 @@ void Plan::Rollback_Emptied_Transporters()
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
-		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
-
 		if(Agent_Committed())
 		{
 			CTPAgent_ptr agent_ptr = m_the_squad->Get_Agent();
@@ -511,19 +504,19 @@ void Plan::Rollback_Emptied_Transporters()
 			const MapPoint pos     = agent_ptr->Get_Target_Pos();
 			MapPoint goalPos(-1,-1);
 
-			if(ctpgoal_ptr->Get_Target_Army().m_id == 0 || ctpgoal_ptr->Get_Target_Army().IsValid())
+			if(m_the_goal->Get_Target_Army().m_id == 0 || m_the_goal->Get_Target_Army().IsValid())
 			{
-				goalPos = ctpgoal_ptr->Get_Target_Pos();
+				goalPos = m_the_goal->Get_Target_Pos();
 			}
 
 			if(pos == goalPos)
 			{
-				if(!ctpgoal_ptr->Pretest_Bid(agent_ptr, goalPos))
+				if(!m_the_goal->Pretest_Bid(agent_ptr, goalPos))
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_the_goal->Get_Goal_Type(), -1, 
 						("\t\tTransporter not needed anymore, removing from goal\n"));
 
-					ctpgoal_ptr->Rollback_Agent(m_the_squad->Get_Agent());
+					m_the_goal->Rollback_Agent(m_the_squad->Get_Agent());
 					m_matching_value       = Goal::BAD_UTILITY;
 					agent_ptr->Set_Goal(NULL);
 				}
