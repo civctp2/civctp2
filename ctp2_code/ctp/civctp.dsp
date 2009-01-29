@@ -15894,14 +15894,6 @@ SOURCE=..\ai\strategy\Goals\Goal.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\ai\strategy\Squads\Squad.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\ai\strategy\Squads\squad.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\ai\strategy\Squads\squad_Strength.cpp
 # End Source File
 # Begin Source File

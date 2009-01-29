@@ -74,7 +74,7 @@ public:
 	typedef std::list<SQUAD_CLASS, dbgallocator<SQUAD_CLASS> >               Squad_Class_List;
 	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> >   Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator, dbgallocator<Sorted_Goal_List::iterator> > Sorted_Goal_List_Iter_Vector;
-	typedef std::vector<Squad_List, dbgallocator<Squad_List> >               Squad_List_Vector;
+	typedef std::vector<Agent_List, dbgallocator<Agent_List> >               Agent_List_Vector;
 
 	typedef std::list<Sorted_Agent_ptr, dbgallocator<Sorted_Agent_ptr> >     Sorted_Agent_List;
 	typedef std::vector<Sorted_Agent_List, dbgallocator<Sorted_Agent_List> > Sorted_Agent_List_Vector;
@@ -97,7 +97,7 @@ public:
 	typedef std::list<SQUAD_CLASS> Squad_Class_List;
 	typedef std::vector<Sorted_Goal_List> Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator> Sorted_Goal_List_Iter_Vector;
-	typedef std::vector<Squad_List> Squad_List_Vector;
+	typedef std::vector<Agent_List> Agent_List_Vector;
 
 	typedef std::list<Sorted_Agent_ptr> Sorted_Agent_List;
 	typedef std::vector<Sorted_Agent_List> Sorted_Agent_List_Vector;
@@ -181,21 +181,13 @@ public:
 	
 	void SetPlayerId(const PLAYER_INDEX &team_index);
 
-	void Reclassify_Squad
-	(
-		Squad_ptr the_squad,
-		const SQUAD_CLASS &old_squad_class
-	);
-
-
-
 	void Planning_Status_Reset();
 
-	TIME_SLICE_STATE Process_Squad_Changes();
+	TIME_SLICE_STATE Process_Agent_Changes();
 	TIME_SLICE_STATE Process_Goal_Changes();
 
 
-	void Reset_Squad_Execution();
+	void Reset_Agent_Execution();
 
 	void Sort_Goals();
 
@@ -206,8 +198,8 @@ public:
 	
 	void Add_New_Goal(const Goal_ptr & new_goal);
 
-	void Add_New_Squad(const Squad_ptr & new_squad);
-	Squad_List::iterator Add_Squad(const Squad_ptr & squad);
+	void Add_New_Agent(const Agent_ptr & new_agent);
+	Agent_List::iterator Add_Agent(const Agent_ptr & agent);
 
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
 
@@ -239,7 +231,7 @@ public:
 	
 	void SetArmyDetachState(const Army & army, const bool detach);
 	void Recompute_Goal_Strength();
-	void Compute_Squad_Strength();
+	void Compute_Agent_Strength();
 	void Rollback_Emptied_Transporters();
 	void Sort_Goal_Matches_If_Necessary();
 	void Assign_Garrison();
@@ -253,13 +245,13 @@ protected:
 	);
 
 
-	void Add_New_Matches_For_Squad(const Squad_ptr & squad);
+	void Add_New_Matches_For_Agent(const Agent_ptr & agent);
 
 
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );
 
 
-	void Remove_Matches_For_Squad( const Squad_ptr & squad );
+	void Remove_Matches_For_Agent( const Agent_ptr & agnet );
 
 
 	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
@@ -284,12 +276,12 @@ private:
 	Count_Vector                 m_pruned_goals_count;
 	Sorted_Goal_List_Vector      m_goals_of_type;
 	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type; // Not needed
-	Squad_List                   m_squads;
-	Squad_List                   m_transport_squads;
+	Agent_List                   m_agents;
+	Agent_List                   m_transport_agents;
 	Goal_List                    m_new_goals;
-	Squad_List                   m_new_squads;
+	Agent_List                   m_new_agents;
 	PLAYER_INDEX                 m_playerId;
-	Squad_Strength               m_neededSquadStrength;
+	Squad_Strength               m_neededAgentStrength;
 	Utility                      m_maxUndercommittedPriority; // Probably not needed
 	Goal_List                    m_goals;
 

@@ -110,7 +110,7 @@ public:
     sint16 Get_Agent_Count() const;
 
 
-    bool Is_Single_Squad() const;
+    bool Is_Single_Agent() const;
 
 
     bool Commit_Agent(const Agent_ptr & agent);
@@ -178,8 +178,8 @@ public:
     Utility Get_Matching_Value() const;
     void    Set_Matching_Value(Utility combinedUtility);
 
-    bool Add_Match(const Squad_ptr & squad, const bool update_match_value = true, const bool needsCargo = false);
-    bool Add_Transport_Match(const Squad_ptr & squad) { return Add_Match(squad, true, true); };
+    bool Add_Match(const Agent_ptr & agent, const bool update_match_value = true, const bool needsCargo = false);
+    bool Add_Transport_Match(const Agent_ptr & agent) { return Add_Match(agent, true, true); };
 
     bool CanGoalBeReevaluated() const;
     bool Commited_Agents_Need_Orders() const;
@@ -187,8 +187,8 @@ public:
     void Commit_Agents();
     void Commit_Transport_Agents();
     void Remove_Matches();
-    void Remove_Match(const Squad_ptr & squad);
-    bool Has_Squad_And_Set_Needs_Cargo(Squad* squad);
+    void Remove_Match(const Agent_ptr & agent);
+    bool Has_Agent_And_Set_Needs_Cargo(Agent* agent);
     size_t Get_Matches_Num() const { return m_matches.size(); }
     void Set_Needs_Transporter(const bool needs_transporter);
     sint16 Get_Transporters_Num() const { return m_current_attacking_strength.Get_Transport(); }

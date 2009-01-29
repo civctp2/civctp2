@@ -83,7 +83,7 @@
 #include "Scheduler.h"
 #include "Goal.h"
 #include "GoalRecord.h"                     // g_theGoalDB
-#include "Squad.h"
+#include "Agent.h"
 #include "mapanalysis.h"
 #include "governor.h"
 #include "AgreementMatrix.h"
@@ -508,7 +508,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 {
 	PLAYER_INDEX    playerId = army.GetOwner();
 
-	Scheduler::GetScheduler(playerId).Add_New_Squad(new Squad(army));
+	Scheduler::GetScheduler(playerId).Add_New_Agent(new Agent(army));
 
 
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
@@ -647,10 +647,10 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	g_player[playerId]->CalcCargoCapacity();
 
 	Scheduler & scheduler = Scheduler::GetScheduler(playerId);
-	scheduler.Process_Squad_Changes();
+	scheduler.Process_Agent_Changes();
 	scheduler.Assign_Garrison();
 
-	scheduler.Reset_Squad_Execution();
+	scheduler.Reset_Agent_Execution();
 
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -699,10 +699,10 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	DPRINTF(k_DBG_AI, ("//                          Player %d\n", playerId));
 
 	g_player[playerId]->CalcCargoCapacity();
-	scheduler.Process_Squad_Changes();
+	scheduler.Process_Agent_Changes();
 	scheduler.Rollback_Emptied_Transporters();
-	scheduler.Reset_Squad_Execution();
-	scheduler.Compute_Squad_Strength();
+	scheduler.Reset_Agent_Execution();
+	scheduler.Compute_Agent_Strength();
 	scheduler.Recompute_Goal_Strength();
 	scheduler.Sort_Goal_Matches_If_Necessary();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));

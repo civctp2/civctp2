@@ -30,6 +30,7 @@
 // - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 // - Merged in CTPAgent, removed virtual functions, for design and speed
 //   improvement. (29-Jan-2009 Martin Gühmann)
+// - Merged in Squad, no need for an additional class, just wastes space. (29-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ class Agent;
 
 #include "c3.h"
 
+#include "goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
 #include "scheduler_types.h"
 #include "squad_Strength.h"
 #include "Army.h"               // Army
@@ -52,9 +54,17 @@ class Agent;
 #include "player.h"             // PLAYER_INDEX
 #include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
 #include "GameEventTypes.h"
+#include "c3debugstl.h"
 
 class Agent
 {
+public:
+#if defined(_DEBUG)
+	typedef std::list<Goal_ptr, dbgallocator<Goal_ptr> > Goal_Ref_List;
+#else
+	typedef std::list<Goal_ptr> Goal_Ref_List;
+#endif
+
 private:
 	Agent();
 public:
@@ -70,9 +80,9 @@ public:
 
 	SQUAD_CLASS Get_Squad_Class() const;
 
-	void     Set_Goal(Goal_ptr goal){ m_goal = goal; };
-	Goal_ptr Get_Goal()             { return m_goal; };
-	bool     Has_Goal()             { return m_goal != NULL; };
+	void     Set_Goal(Goal_ptr goal)       { m_goal = goal; };
+	Goal_ptr Get_Goal()              const { return m_goal; };
+	bool     Has_Goal()              const { return m_goal != NULL; };
 
 	bool Get_Is_Dead() const;
 
@@ -146,9 +156,8 @@ public:
 
 	void Ungroup_Order();
 
-
-	sint32 DisbandObsoleteUnits();
-
+	sint32 DisbandObsoleteArmies();
+	inline sint32 DisbandObsoleteUnits();
 
 	void MoveIntoTransport();
 	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
@@ -157,7 +166,13 @@ public:
 	void ClearOrders();
 	bool HasMovePoints() const;
 
-	bool     m_neededForGarrison;
+	void Add_Goal_Reference   (const Goal_ptr goal) { m_goal_references.push_back(goal); };
+	void Remove_Goal_Reference(const Goal_ptr goal) { m_goal_references.remove(goal);    };
+
+	void Remove_Matches();
+	bool ContainsArmyIn(const Agent_ptr agent) const;
+
+	bool           m_neededForGarrison;
 
 private:
 
@@ -172,6 +187,7 @@ private:
 	sint32         m_targetOrder;
 	sint32         m_playerId;
 	MapPoint       m_targetPos;
+	Goal_Ref_List  m_goal_references;
 };
 
 #endif // __AGENT_H__

@@ -63,9 +63,8 @@
 
 
 #include "goal.h"
-#include "agent.h"
-#include "squad.h"
 #include "Plan.h"
+#include "agent.h"
 
 #include "c3errors.h"
 
@@ -216,39 +215,39 @@ Scheduler& Scheduler::operator= (const Scheduler &scheduler)
 
 void Scheduler::Cleanup()
 {
-	Squad_List::iterator squad_ptr_iter = m_new_squads.begin();
-	while(squad_ptr_iter != m_new_squads.end())
+	Agent_List::iterator agent_ptr_iter = m_new_agents.begin();
+	while(agent_ptr_iter != m_new_agents.end())
 	{
-		delete *squad_ptr_iter;
-		squad_ptr_iter = m_new_squads.erase(squad_ptr_iter);
+		delete *agent_ptr_iter;
+		agent_ptr_iter = m_new_agents.erase(agent_ptr_iter);
 	}
 
 #if defined(_DEBUG_SCHEDULER)
 	// Maybe removed again
-	squad_ptr_iter = m_squads.begin();
-	while(squad_ptr_iter != m_squads.end())
+	agent_ptr_iter = m_agents.begin();
+	while(agent_ptr_iter != m_agents.end())
 	{
-		Squad_List::iterator squad2_ptr_iter = squad_ptr_iter;
-		++squad2_ptr_iter;
+		Agent_List::iterator agent2_ptr_iter = agent_ptr_iter;
+		++agent2_ptr_iter;
 
-		while(squad2_ptr_iter != m_squads.end())
+		while(agent2_ptr_iter != m_agents.end())
 		{
-			Squad* squad1 = (*squad_ptr_iter);
-			Squad* squad2 = (*squad2_ptr_iter);
+			Agent* agent1 = (*agent_ptr_iter);
+			Agent* agent2 = (*agent2_ptr_iter);
 
-			Assert(squad1 != squad2);
+			Assert(agent1 != agent2);
 
-			++squad2_ptr_iter;
+			++agent2_ptr_iter;
 		}
-		++squad_ptr_iter;
+		++agent_ptr_iter;
 	}
 #endif
 
-	squad_ptr_iter = m_squads.begin();
-	while(squad_ptr_iter != m_squads.end())
+	agent_ptr_iter = m_agents.begin();
+	while(agent_ptr_iter != m_agents.end())
 	{
-		delete *squad_ptr_iter;
-		squad_ptr_iter = m_squads.erase(squad_ptr_iter);
+		delete *agent_ptr_iter;
+		agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 	}
 
 	Goal_List::iterator goal_ptr_iter = m_new_goals.begin();
@@ -317,77 +316,77 @@ void Scheduler::Planning_Status_Reset()
 
 //////////////////////////////////////////////////////////////////////////
 //
-//  Process_Squad_Changes
+//  Process_Agent_Changes
 //
-//  When: Squads Change
+//  When: Agents Change
 //
-//  Iterate: m_squads
+//  Iterate: m_agents
 //
-//  1. Remove any empty squads and any matches that reference them.
+//  1. Remove any empty agents and any matches that reference them.
 //
-//  2. Recompute squad class for all squads with changed/killed agents.
+//  2. Recompute agent class for all agents with changed/killed agents.
 //
-//  3. If squad class of squad changes, Add_New_Matches_For_Squad
+//  3. If agent class of agent changes, Add_New_Matches_For_Agent
 //
 //
-//  4. Create new squads from new agents, add to squads_of_class <= where does the m_new_squads list come from
+//  4. Create new agents from new agents, add to agents_of_class <= where does the m_new_agents list come from
 //     list and create new matches from pruned_goals_list.
 //
 //  5. Count up total number of agents available to match
 //
 //////////////////////////////////////////////////////////////////////////
-Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
+Scheduler::TIME_SLICE_STATE Scheduler::Process_Agent_Changes()
 {
 
-	DPRINTF(k_DBG_AI, ("//       Change squad matches\n"));
+	DPRINTF(k_DBG_AI, ("//       Change agent matches\n"));
 	time_t t1 = GetTickCount();
 
-	Squad_List::iterator squad_ptr_iter = m_squads.begin();
-	while(squad_ptr_iter != m_squads.end())
+	Agent_List::iterator agent_ptr_iter = m_agents.begin();
+	while(agent_ptr_iter != m_agents.end())
 	{
-		Squad* theSquad = (*squad_ptr_iter);
+		Agent* theAgent = (*agent_ptr_iter);
 
-		if(theSquad->Is_Dead())
+		if(theAgent->Get_Is_Dead())
 		{
-			delete theSquad;
-			squad_ptr_iter = m_squads.erase(squad_ptr_iter);
+			delete theAgent;
+			agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 			continue;
 		}
 
-		SQUAD_CLASS old_class       = theSquad->Get_Squad_Class();
-		SQUAD_CLASS new_class       = theSquad->Compute_Squad_Class();
+		SQUAD_CLASS old_class       = theAgent->Get_Squad_Class();
+		SQUAD_CLASS new_class       = theAgent->Compute_Squad_Class();
 
 		if(old_class != new_class)
 		{
-			Remove_Matches_For_Squad(theSquad);
-			Add_New_Matches_For_Squad(theSquad);
+			Remove_Matches_For_Agent(theAgent);
+			Add_New_Matches_For_Agent(theAgent);
 		}
 
-		squad_ptr_iter++;
+		agent_ptr_iter++;
 	}
 
 	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
-	DPRINTF(k_DBG_AI, ("//       Add new squad matches\n"));
+	DPRINTF(k_DBG_AI, ("//       Add new agent matches\n"));
 	t1 = GetTickCount();
 
-	Squad_List::iterator new_squad_iter = m_new_squads.begin();
-	while(new_squad_iter != m_new_squads.end())
+	Agent_List::iterator new_agent_iter = m_new_agents.begin();
+	while(new_agent_iter != m_new_agents.end())
 	{
-		Squad* newSquad = (*new_squad_iter);
+		Agent* newAgent = (*new_agent_iter);
 
-		if(newSquad->Is_Dead())
+		if(newAgent->Get_Is_Dead())
 		{
-			delete newSquad;
+			delete newAgent;
 		}
 		else
 		{
-			SQUAD_CLASS new_class       = newSquad->Compute_Squad_Class();
-			squad_ptr_iter              = Add_Squad(newSquad);
+			SQUAD_CLASS new_class       = newAgent->Compute_Squad_Class();
+			agent_ptr_iter              = Add_Agent(newAgent);
 
-			Add_New_Matches_For_Squad(newSquad);
+			Add_New_Matches_For_Agent(newAgent);
 		}
 
-		new_squad_iter = m_new_squads.erase(new_squad_iter);
+		new_agent_iter = m_new_agents.erase(new_agent_iter);
 	}
 
 	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
@@ -397,23 +396,23 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 
 //////////////////////////////////////////////////////////////////////////
 //
-//  Reset_Squad_Execution
+//  Reset_Agent_Execution
 //
-//  When: After Squads Change
+//  When: After agents Change
 //
-//  Iterate: m_squads
+//  Iterate: m_agents
 //
-//  make squads available for goals
+//  make agents available for goals
 //
 //////////////////////////////////////////////////////////////////////////
-void Scheduler::Reset_Squad_Execution()
+void Scheduler::Reset_Agent_Execution()
 {
-	Squad_List::iterator squad_ptr_iter = m_squads.begin();
-	while(squad_ptr_iter != m_squads.end())
+	Agent_List::iterator agent_ptr_iter = m_agents.begin();
+	while(agent_ptr_iter != m_agents.end())
 	{
-		(*squad_ptr_iter)->Set_Can_Be_Executed(true);
-		(*squad_ptr_iter)->Set_Needs_Transporter(false);
-		squad_ptr_iter++;
+		(*agent_ptr_iter)->Set_Can_Be_Executed(true);
+		(*agent_ptr_iter)->Set_Needs_Transporter(false);
+		agent_ptr_iter++;
 	}
 }
 
@@ -456,7 +455,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 
 	Prune_Goals();
 
-	m_neededSquadStrength       = Squad_Strength(0);
+	m_neededAgentStrength       = Squad_Strength(0);
 	m_maxUndercommittedPriority = Goal::BAD_UTILITY;
 
 	return TIME_SLICE_DONE;
@@ -471,7 +470,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 //  Iterate: m_gaols Goal_List
 //
 //  1. For each gaol, compute the utility value between the
-//     goal and each component agent in the squad.
+//     goal and each component agent in the agent.
 //
 //  2. Compute average match value from agent utility values and
 //     goal raw priority.
@@ -512,12 +511,12 @@ void Scheduler::Sort_Goals()
 	// Looks like something Calvitix added
 	for
 	(
-	    Squad_List::iterator squad_iter  = m_squads.begin();
-	                         squad_iter != m_squads.end();
-	                       ++squad_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
-		const Agent_List & agent_list = (*squad_iter)->Get_Agent_List();
+		const Agent_List & agent_list = (*agent_iter)->Get_Agent_List();
 		for
 		(
 		    Agent_List::const_iterator agent_iter  = agent_list.begin();
@@ -561,7 +560,7 @@ void Scheduler::Sort_Goals()
 				("\t[%d] goal_prioriry=%d %s\n",
 					count++, value, g_theGoalDB->Get(goal_type)->GetNameText()));
 
-			// Match and squad go inside goal log
+			// Match and agent go inside goal log
 			goal->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 		}
 		else
@@ -572,7 +571,7 @@ void Scheduler::Sort_Goals()
 				("\t[%d] goal_bad_prioriry=%d %s, %d\n",
 					count++, value, g_theGoalDB->Get(goal_type)->GetNameText(), Goal::BAD_UTILITY));
 
-			// Match and squad go inside goal log
+			// Match and agent go inside goal log
 			goal->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 		}
 	}
@@ -595,20 +594,20 @@ void Scheduler::Sort_Goals()
 //
 //  Iterate: matches
 //
-//  1. For each match, move agents from donor squad to goal.
+//  1. For each match, move agents from donor agent to goal.
 //
 //  2. If goal is in progress, execute goal and check status.
 //
-//  3. If goal is completed, create a new squad from agents that
+//  3. If goal is completed, create a new agent from agents that
 //     completed the goal.
 //
-//  4. If goal failed, rollback agents to donor squads.
+//  4. If goal failed, rollback agents to donor agents.
 //     Rollback marks agents in matches as invalid for the goal.
 //
 //  5. When all agents have been committed, check all goals on
 //     pruned_goals_class list.  If under committed, rollback
-//     all agents to donor squads. If over committed, rollback
-//     excess agents to donor squads.
+//     all agents to donor agents. If over committed, rollback
+//     excess agents to donor agents.
 //
 //////////////////////////////////////////////////////////////////////////
 void Scheduler::Match_Resources(const bool move_armies)
@@ -619,7 +618,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 #endif
 
 	sint32 committed_agents = 0;
-	sint32 total_agents     = m_squads.size();
+	sint32 total_agents     = m_agents.size();
 
 	for
 	(
@@ -771,11 +770,11 @@ void Scheduler::Match_Resources(const bool move_armies)
 			case GOAL_COMPLETE:
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
-					("\t\tGOAL_COMPLETE (goal: %x squad: %x)\n", goal_ptr));
+					("\t\tGOAL_COMPLETE (goal: %x agent: %x)\n", goal_ptr));
 
 				committed_agents -= goal_ptr->Get_Agent_Count();
 #if 0
-				if(!goal_ptr->Is_Single_Squad())
+				if(!goal_ptr->Is_Single_Agent())
 				{
 				}
 #endif
@@ -877,76 +876,76 @@ void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//    Add_New_Squad
+//    Add_New_Agent
 //
 //
-// Add a new squad to the m_new_squads Squad_List
+// Add a new agent to the m_new_agents Agent_List
 //
-// New squads are created by AddGoalsForArmy, which is called whenever a savegame is loaded
+// New agents are created by AddGoalsForArmy, which is called whenever a savegame is loaded
 // or an army is created.
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
-void Scheduler::Add_New_Squad(const Squad_ptr & new_squad)
+void Scheduler::Add_New_Agent(const Agent_ptr & new_agent)
 {
 #ifdef _DEBUG_SCHEDULER
 
-	Squad_List::iterator squad_iter = m_new_squads.begin();
-	while (squad_iter != m_new_squads.end() && !(*squad_iter)->ContainsArmyIn(new_squad))
+	Agent_List::iterator agent_iter = m_new_agents.begin();
+	while (agent_iter != m_new_agents.end() && !(*agent_iter)->ContainsArmyIn(new_agent))
 	{
-		squad_iter++;
+		agent_iter++;
 	}
-	Assert(squad_iter == m_new_squads.end());
+	Assert(agent_iter == m_new_agents.end());
 
-	squad_iter = m_squads.begin();
-	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(new_squad))
+	agent_iter = m_agents.begin();
+	while (agent_iter != m_agents.end() && !(*agent_iter)->ContainsArmyIn(new_agent))
 	{
-		squad_iter++;
+		agent_iter++;
 	}
 	
-	Assert(squad_iter == m_squads.end());
+	Assert(agent_iter == m_agents.end());
 #endif // _DEBUG_SCHEDULER
 
-	m_new_squads.push_back(new_squad);
+	m_new_agents.push_back(new_agent);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//    Add_Squad
+//    Add_Agent
 //
 //
-// Add a new squad to the m_squads Squad_List
+// Add a new agent to the m_agents Agent_List
 //
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
-Squad_List::iterator Scheduler::Add_Squad(const Squad_ptr & squad)
+Agent_List::iterator Scheduler::Add_Agent(const Agent_ptr & agent)
 {
 #ifdef _DEBUG_SCHEDULER
 
-	Squad_List::iterator squad_iter = m_squads.begin();
-	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(squad))
+	Agent_List::iterator agent_iter = m_agents.begin();
+	while (agent_iter != m_agents.end() && !(*agent_iter)->ContainsArmyIn(agent))
 	{
-		squad_iter++;
+		agent_iter++;
 	}
 	
-	Assert(squad_iter == m_squads.end());
+	Assert(agent_iter == m_agents.end());
 
-	squad_iter = m_transport_squads.begin();
-	while (squad_iter != m_transport_squads.end() && !(*squad_iter)->ContainsArmyIn(squad))
+	agent_iter = m_transport_agents.begin();
+	while (agent_iter != m_transport_agents.end() && !(*agent_iter)->ContainsArmyIn(agent))
 	{
-		squad_iter++;
+		agent_iter++;
 	}
 	
-	Assert(squad_iter == m_transport_squads.end());
+	Assert(agent_iter == m_transport_agents.end());
 #endif // _DEBUG_SCHEDULER
 
-	Squad_Strength strength;
-	squad->Compute_Strength(strength);
+	Squad_Strength strength = agent->Compute_Squad_Strength();
+
 	if(strength.Get_Transport() > 0)
 	{
-		m_transport_squads.push_back(squad);
+		m_transport_agents.push_back(agent);
 	}
 
-	return m_squads.insert(m_squads.end(), squad);
+	return m_agents.insert(m_agents.end(), agent);
 }
 
 ////////////////////////////////////////////////////////////
@@ -1237,7 +1236,7 @@ bool Scheduler::Prioritize_Goals()
 			// Get_Totally_Complete also called in Compute_Raw_Priority
 			if(goal_ptr->Get_Totally_Complete())
 			{
-				if(!goal_ptr->Is_Single_Squad())
+				if(!goal_ptr->Is_Single_Agent())
 				{
 				}
 			}
@@ -1512,9 +1511,9 @@ bool Scheduler::Prune_Goals()
 //   list m_goals_of_type[goal_type]
 //
 //   If it's ok to match the goal (because so far there's less than maxeval of them, and
-//   it's raw_priority != Goal::BAD_UTILITY), it iterates through the Squad_List m_squads
-//   and calls Add_New_Match_For_Goal_And_Squad to try and add a 3-tuple <goal,squad,matching value>,
-//   for each squad that qualifies, to the plan
+//   it's raw_priority != Goal::BAD_UTILITY), it iterates through the Agent_List m_agents
+//   and calls Add_New_Match_For_Goal_And_Agent to try and add a 3-tuple <goal,agent,matching value>,
+//   for each agent that qualifies, to the plan
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Matches_For_Goal
@@ -1532,37 +1531,34 @@ void Scheduler::Add_New_Matches_For_Goal
 
 	for
 	(
-	    Squad_List::iterator squad_iter  = m_squads.begin();
-	                         squad_iter != m_squads.end();
-	                       ++squad_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
-		Squad* squad = (*squad_iter);
-		if((goal_squad_class & squad->Get_Squad_Class()) != goal_squad_class)
+		Agent* agent = (*agent_iter);
+		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
 			continue;
 
-		goal_ptr->Add_Match(squad, update_match_value);
+		goal_ptr->Add_Match(agent, update_match_value);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //
-//   Add_New_Matches_For_Squad
+//   Add_New_Matches_For_Agent
 //
-//   called by Process_Squad_Changes
+//   called by Process_Agent_Changes
 //
 //////////////////////////////////////////////////////////////////////////////////////////////
-void Scheduler::Add_New_Matches_For_Squad
+void Scheduler::Add_New_Matches_For_Agent
 (
-    const Squad_ptr & squad
+    const Agent_ptr & agent
 )
 {
-	if(squad->Get_Num_Agents() <= 0)
-		return;
-
 	sint32 count = 0;
 
-	SQUAD_CLASS squad_class = squad->Get_Squad_Class();
+	SQUAD_CLASS squad_class = agent->Get_Squad_Class();
 
 	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
 	{
@@ -1584,7 +1580,7 @@ void Scheduler::Add_New_Matches_For_Squad
 			if(goal_iter->second->Get_Invalid())
 				continue;
 
-			goal_iter->second->Add_Match(squad);
+			goal_iter->second->Add_Match(agent);
 		}
 	}
 }
@@ -1597,13 +1593,13 @@ void Scheduler::Remove_Matches_For_Goal
 	goal_ptr->Remove_Matches();
 }
 
-// Move to squad
-void Scheduler::Remove_Matches_For_Squad
+// Move to agent
+void Scheduler::Remove_Matches_For_Agent
 (
-    const Squad_ptr & squad
+    const Agent_ptr & agent
 )
 {
-	squad->Remove_Matches();
+	agent->Remove_Matches();
 }
 
 void Scheduler::Rollback_Matches_For_Goal
@@ -1636,7 +1632,7 @@ void Scheduler::Rollback_Matches_For_Goal
 		m_maxUndercommittedPriority = goal->Get_Raw_Priority();
 	}
 
-	m_neededSquadStrength.Set_To_The_Maximum(needed_strength);
+	m_neededAgentStrength.Set_To_The_Maximum(needed_strength);
 
 	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\t%d agents to roll back for Goal %x, %s.\n", goal->Get_Agent_Count(), goal, g_theGoalDB->Get(goal->Get_Goal_Type())->GetNameText()));
 
@@ -1654,17 +1650,17 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 
 	for
 	(
-	    Squad_List::iterator squad_iter  = m_squads.begin();
-	                         squad_iter != m_squads.end();
-	                       ++squad_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
-		Squad* squad = (*squad_iter);
-		if ( (k_Goal_SquadClass_CanTransport_Bit & squad->Get_Squad_Class()) !=
+		Agent* agent = (*agent_iter);
+		if ( (k_Goal_SquadClass_CanTransport_Bit & agent->Get_Squad_Class()) !=
 			  k_Goal_SquadClass_CanTransport_Bit )
 			  continue;
 
-		bool hasMatch  = goal_ptr->Has_Squad_And_Set_Needs_Cargo(squad);
+		bool hasMatch  = goal_ptr->Has_Agent_And_Set_Needs_Cargo(agent);
 		match_added   |= hasMatch;
 
 		if(hasMatch)
@@ -1677,16 +1673,14 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		sint32 empty;
 		sint32 freeTransportCapacity = 0;
 
-		Agent_ptr agent_ptr = squad->Get_Agent();
-
-		if(!agent_ptr->Has_Goal())
+		if(!agent->Has_Goal())
 		{
-			agent_ptr->Get_Army()->GetCargo(transports, max, empty);
+			agent->Get_Army()->GetCargo(transports, max, empty);
 			freeTransportCapacity += empty;
 		}
 
 		if(freeTransportCapacity > 0
-		&& goal_ptr->Add_Transport_Match(squad)
+		&& goal_ptr->Add_Transport_Match(agent)
 		){
 			match_added = true;
 		}
@@ -1754,27 +1748,27 @@ void Scheduler::DisbandObsoleteArmies(const sint16 max_count)
 {
 	sint32 count = 0;
 
-	Squad_List::iterator squad_ptr_iter = m_squads.begin();
-	while (squad_ptr_iter != m_squads.end() && count < max_count)
+	Agent_List::iterator agent_ptr_iter = m_agents.begin();
+	while (agent_ptr_iter != m_agents.end() && count < max_count)
 	{
-		if ((*squad_ptr_iter)->DisbandObsoleteArmies() > 0)
+		if ((*agent_ptr_iter)->DisbandObsoleteArmies() > 0)
 			count++;
-		squad_ptr_iter++;
+		agent_ptr_iter++;
 	}
 }
 
 Squad_Strength Scheduler::GetMostNeededStrength() const
 {
-	return m_neededSquadStrength;
+	return m_neededAgentStrength;
 }
 
 void Scheduler::SetArmyDetachState(const Army & army, const bool detach)
 {
-	Squad_List::iterator squad_ptr_iter = m_squads.begin();
+	Agent_List::iterator agent_ptr_iter = m_agents.begin();
 	bool found = false;
-	while(squad_ptr_iter != m_squads.end() && !found)
+	while(agent_ptr_iter != m_agents.end() && !found)
 	{
-		Agent_ptr ctp_agent = (*squad_ptr_iter)->Get_Agent();
+		Agent_ptr ctp_agent = (*agent_ptr_iter);
 		if(ctp_agent->Get_Army().m_id == army.m_id)
 		{
 			ctp_agent->Set_Detached(detach);
@@ -1782,23 +1776,23 @@ void Scheduler::SetArmyDetachState(const Army & army, const bool detach)
 			break;
 		}
 
-		squad_ptr_iter++;
+		agent_ptr_iter++;
 	}
 }
 
 bool Scheduler::GetArmyDetachState(const Army & army) const
 {
-	Squad_List::const_iterator squad_ptr_iter = m_squads.begin();
+	Agent_List::const_iterator agent_ptr_iter = m_agents.begin();
 
-	while(squad_ptr_iter != m_squads.end())
+	while(agent_ptr_iter != m_agents.end())
 	{
-		const Agent_ptr ctp_agent = (*squad_ptr_iter)->Get_Agent();
+		const Agent_ptr ctp_agent = (*agent_ptr_iter);
 		if (ctp_agent->Get_Army().m_id == army.m_id)
 		{
 			return ctp_agent->Get_Detached();
 		}
 
-		squad_ptr_iter++;
+		agent_ptr_iter++;
 	}
 	return false;
 }
@@ -1935,18 +1929,16 @@ void Scheduler::Recompute_Goal_Strength()
 	}
 }
 
-void Scheduler::Compute_Squad_Strength()
+void Scheduler::Compute_Agent_Strength()
 {
 	for
 	(
-	    Squad_List::iterator squad_iter  = m_squads.begin();
-	                         squad_iter != m_squads.end();
-	                       ++squad_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
-		Squad_Strength strength;
-		Squad* squad = (*squad_iter);
-		squad->Compute_Strength(strength);
+		(*agent_iter)->Compute_Squad_Strength();
 	}
 }
 
@@ -1959,9 +1951,7 @@ void Scheduler::Rollback_Emptied_Transporters()
 	                      ++goal_iter
 	)
 	{
-		Goal_ptr theGoal = static_cast<Goal_ptr>(*goal_iter);
-
-		theGoal->Rollback_Emptied_Transporters();
+		(*goal_iter)->Rollback_Emptied_Transporters();
 	}
 }
 
@@ -1974,9 +1964,7 @@ void Scheduler::Sort_Goal_Matches_If_Necessary()
 	                      ++goal_iter
 	)
 	{
-		Goal_ptr theGoal = static_cast<Goal_ptr>(*goal_iter);
-
-		theGoal->Sort_Matches_If_Necessary();
+		(*goal_iter)->Sort_Matches_If_Necessary();
 	}
 }
 
@@ -1989,16 +1977,16 @@ void Scheduler::Assign_Garrison()
 
 	for
 	(
-	    Squad_List::iterator squad_iter  = m_squads.begin();
-	                         squad_iter != m_squads.end();
-	                       ++squad_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
-		Squad_ptr squad = (*squad_iter);
+		Agent_ptr agent = (*agent_iter);
 
-		squad->Get_Agent()->m_neededForGarrison = false;
+		agent->m_neededForGarrison = false;
 
-		Army army = squad->Get_Agent()->Get_Army();
+		Army army = agent->Get_Army();
 
 		if(!army.IsValid())
 			continue;
@@ -2022,9 +2010,9 @@ void Scheduler::Assign_Garrison()
 			continue;
 
 		if(
-		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
-		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
-		   ((squad->Get_Agent()->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 )
+		   ((agent->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
+		   ((agent->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
+		   ((agent->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 )
 		  )
 		{
 
@@ -2049,7 +2037,7 @@ void Scheduler::Assign_Garrison()
 			sint32 idx = -1;
 			if(g_player[m_playerId]->GetCityIndex(city, idx))
 			{
-				garrisonAgents[idx].push_back(Sorted_Agent_ptr(defense_strength, squad->Get_Agent()));
+				garrisonAgents[idx].push_back(Sorted_Agent_ptr(defense_strength, agent));
 			}
 		}
 	}

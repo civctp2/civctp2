@@ -39,6 +39,7 @@
 // - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 // - Merged in CTPAgent, removed virtual functions, for design and speed
 //   improvement. (29-Jan-2009 Martin Gühmann)
+// - Merged in Squad, no need for an additional class, just wastes space. (29-Jan-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ Agent::Agent()
     m_targetOrder       (OrderRecord::INDEX_INVALID),
     m_targetPos         ()
 {
+	m_goal_references.resize(0);
 }
 
 Agent::Agent(const Army & army)
@@ -100,6 +102,7 @@ Agent::Agent(const Army & army)
     m_targetOrder       (OrderRecord::INDEX_INVALID),
     m_targetPos         ()
 {
+	m_goal_references.resize(0);
 	Compute_Squad_Strength();
 }
 
@@ -118,11 +121,12 @@ Agent::Agent(const Agent & an_Original)
     m_targetOrder       (an_Original.m_targetOrder),
     m_targetPos         (an_Original.m_targetPos)
 {
+	m_goal_references.assign(an_Original.m_goal_references.begin(), an_Original.m_goal_references.end());
 }
 
 Agent::~Agent()
 {
-    // No action: nothing to delete
+	Remove_Matches();
 }
 
 Agent & Agent::operator = (const Agent & an_Original)
@@ -141,6 +145,7 @@ Agent & Agent::operator = (const Agent & an_Original)
 		m_playerId          = an_Original.m_playerId;
 		m_targetOrder       = an_Original.m_targetOrder;
 		m_targetPos         = an_Original.m_targetPos;
+		m_goal_references   = an_Original.m_goal_references;
 	}
 
 	return *this;
@@ -800,6 +805,19 @@ void Agent::MoveIntoTransport()
 	Set_Can_Be_Executed(false);
 }
 
+sint32 Agent::DisbandObsoleteArmies()
+{
+	sint32 count = DisbandObsoleteUnits();
+
+	if (count > 0)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER, m_army.GetOwner(), -1, -1, ("*** Disbanding Army:\n"));
+		Log_Debug_Info(k_DBG_SCHEDULER, Get_Goal());
+	}
+
+	return count;
+}
+
 sint32 Agent::DisbandObsoleteUnits()
 {
 	sint32 unit_count = m_army.IsValid() ? m_army.Num() : 0;
@@ -966,4 +984,26 @@ bool Agent::HasMovePoints() const
 	double movePoints;
 	Get_Army()->CurMinMovementPoints(movePoints);
 	return movePoints >= 1.0;
+}
+
+/// Remove all goals from the agent
+void Agent::Remove_Matches()
+{
+	for
+	   (
+	    Goal_Ref_List::iterator
+	        goal_ref_iter  = m_goal_references.begin();
+	        goal_ref_iter != m_goal_references.end();
+	      ++goal_ref_iter
+	   )
+	{
+		(*goal_ref_iter)->Remove_Match(this);
+	}
+
+	m_goal_references.clear();
+}
+
+bool Agent::ContainsArmyIn(const Agent_ptr agent) const
+{
+	return Get_Army() == agent->Get_Army();
 }

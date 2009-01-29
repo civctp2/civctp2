@@ -53,12 +53,10 @@ typedef sint32				PLAYER_INDEX;
 class Agent;
 class Squad_Strength;
 class Goal;
-class Squad;
 class Plan;
 
 typedef Agent*			Agent_ptr;
 typedef Goal*			Goal_ptr;
-typedef Squad*			Squad_ptr;
 typedef Plan*			Plan_ptr;
 
 typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr;
@@ -76,7 +74,6 @@ bool operator <
 };
 
 typedef std::list<Agent_ptr> Agent_List;
-typedef std::list<Squad_ptr> Squad_List;
 typedef std::list<Plan>      Plan_List;
 
 #endif //__SCHEDULER_TYPES_H__

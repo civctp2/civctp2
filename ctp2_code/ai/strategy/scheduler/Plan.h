@@ -53,7 +53,7 @@ class Plan
 private:
 	Plan();
 public:
-	Plan(Squad_ptr squad, Goal_ptr goal, bool needsCargo);
+	Plan(Agent_ptr agent, Goal_ptr goal, bool needsCargo);
 	Plan(const Plan &plan);
 
 	~Plan();
@@ -77,7 +77,7 @@ public:
 	Goal_ptr Get_Goal() const;
 
 
-	Squad_ptr Get_Squad() const;
+	Agent_ptr Get_Agent() const;
 
 
 	void Commit_Agent();
@@ -116,7 +116,7 @@ public:
 protected:
 
 	Utility          m_matching_value;
-	Squad_ptr        m_the_squad;
+	Agent_ptr        m_the_agent;
 	Goal_ptr         m_the_goal;
 	bool             m_needs_cargo;
 };
