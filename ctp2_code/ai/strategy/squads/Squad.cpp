@@ -36,8 +36,7 @@
 #include "c3.h"
 #include "Squad.h"
 
-#include "CTPAgent.h"
-#include "ctpagent.h"
+#include "Agent.h"
 #include "ctpaidebug.h"
 #include "Plan.h"
 #include "ArmyData.h"
@@ -54,7 +53,7 @@ Squad::Squad()
 
 Squad::Squad(const Army & army)
 :
-    m_agent          (new CTPAgent(army))
+    m_agent          (new Agent(army))
 {
 	m_goal_references.resize(0);
 }

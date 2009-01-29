@@ -45,7 +45,7 @@ class Squad;
 #include "Goal.h"
 #include "c3debugstl.h"
 #include "Army.h"
-#include "CTPAgent.h"
+#include "Agent.h"
 
 class Squad
 {
@@ -71,7 +71,7 @@ public:
 
 	size_t Get_Num_Agents() const; // Replace
 
-	CTPAgent_ptr Get_Agent() const { return m_agent; };
+	Agent_ptr Get_Agent() const { return m_agent; };
 
 	SQUAD_CLASS Compute_Squad_Class();
 
@@ -96,8 +96,8 @@ public:
 
 protected:
 
-	CTPAgent_ptr                    m_agent;
-	Goal_Ref_List                   m_goal_references;
+	Agent_ptr                    m_agent;
+	Goal_Ref_List                m_goal_references;
 };
 
 #endif // SQUAD_H__

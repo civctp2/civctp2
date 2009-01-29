@@ -109,7 +109,6 @@
 #include "SelItem.h"
 #include "net_action.h"
 #include "Path.h"
-#include "ctpagent.h"
 #include "OrderRecord.h"
 #include "gfx_options.h"
 #include "net_diplomacy.h"

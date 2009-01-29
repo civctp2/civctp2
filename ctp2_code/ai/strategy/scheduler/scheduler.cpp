@@ -63,6 +63,7 @@
 
 
 #include "goal.h"
+#include "agent.h"
 #include "squad.h"
 #include "Plan.h"
 
@@ -74,7 +75,6 @@
 #include "GoalRecord.h"
 #include "ctpaidebug.h"
 #include "c3math.h"
-#include "ctpagent.h"
 #include "AgreementMatrix.h"
 #include "gfx_options.h"
 #include "Army.h"
@@ -1677,7 +1677,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		sint32 empty;
 		sint32 freeTransportCapacity = 0;
 
-		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(squad->Get_Agent());
+		Agent_ptr agent_ptr = squad->Get_Agent();
 
 		if(!agent_ptr->Has_Goal())
 		{
@@ -1774,7 +1774,7 @@ void Scheduler::SetArmyDetachState(const Army & army, const bool detach)
 	bool found = false;
 	while(squad_ptr_iter != m_squads.end() && !found)
 	{
-		CTPAgent_ptr ctp_agent = static_cast<CTPAgent_ptr>((*squad_ptr_iter)->Get_Agent());
+		Agent_ptr ctp_agent = (*squad_ptr_iter)->Get_Agent();
 		if(ctp_agent->Get_Army().m_id == army.m_id)
 		{
 			ctp_agent->Set_Detached(detach);
@@ -1792,7 +1792,7 @@ bool Scheduler::GetArmyDetachState(const Army & army) const
 
 	while(squad_ptr_iter != m_squads.end())
 	{
-		const CTPAgent_ptr ctp_agent = static_cast<const CTPAgent_ptr>((*squad_ptr_iter)->Get_Agent());
+		const Agent_ptr ctp_agent = (*squad_ptr_iter)->Get_Agent();
 		if (ctp_agent->Get_Army().m_id == army.m_id)
 		{
 			return ctp_agent->Get_Detached();
@@ -2079,11 +2079,11 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, static_cast<CTPAgent_ptr>(agent_iter->second)->Get_Army(), city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army(), city.GetName()));
 
 				current_garrison_strength += agent_iter->first;
-				current_garrison          += static_cast<CTPAgent_ptr>(agent_iter->second)->Get_Army()->Num();
-				static_cast<CTPAgent_ptr>(agent_iter->second)->m_neededForGarrison = true;
+				current_garrison          += agent_iter->second->Get_Army()->Num();
+				agent_iter->second->m_neededForGarrison = true;
 			}
 		}
 	}

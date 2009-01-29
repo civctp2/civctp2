@@ -81,7 +81,6 @@
 #include "gfx_options.h"
 #include "Diplomat.h"
 #include "Scheduler.h"
-#include "ctpagent.h"
 #include "Goal.h"
 #include "GoalRecord.h"                     // g_theGoalDB
 #include "Squad.h"

@@ -55,8 +55,7 @@ class Goal;
 #include "Army.h"
 #include "Unit.h"
 
-class CTPAgent;
-typedef CTPAgent * CTPAgent_ptr;
+class Agent;
 
 //Now the enum is global and can be accessed by other objects
 enum SUB_TASK_TYPE
@@ -125,7 +124,7 @@ public:
 
     void Compute_Needed_Troop_Flow();
 
-    Utility Compute_Matching_Value(const Agent_ptr agent) const;
+    Utility Compute_Matching_Value(const Agent_ptr agent_ptr) const;
 
     Utility Compute_Raw_Priority();
 
@@ -241,7 +240,7 @@ public:
     sint32 GetThreatenBonus() const;
 
 
-    bool ReferencesAgent(const CTPAgent * ctp_agent) const;
+    bool ReferencesAgent(const Agent * ctp_agent) const;
 
 
     void Log_Debug_Info(const int & log) const;
@@ -249,25 +248,25 @@ public:
 
 private:
 
-    bool NeededForGarrison(CTPAgent_ptr army,
+    bool NeededForGarrison(Agent_ptr army,
                            const MapPoint & dest_pos,
                            sint8 & garrison_count,
                            double & garrison_strength) const;
 
-    bool FindPathToTask(CTPAgent_ptr the_army,
+    bool FindPathToTask(Agent_ptr the_army,
                         const MapPoint & goal_pos,
                         Path & found_path);
 
-    bool FollowPathToTask(CTPAgent_ptr first_army,
-                          CTPAgent_ptr second_army,
+    bool FollowPathToTask(Agent_ptr first_army,
+                          Agent_ptr second_army,
                           const MapPoint & dest_pos,
                           const Path & path);
 
 
-    bool GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_transport, MapPoint & pos);
+    bool GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport, MapPoint & pos);
 
 
-    bool GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos);
+    bool GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos);
 
 
     bool Ok_To_Rally() const;
@@ -275,8 +274,8 @@ private:
 
     bool RallyComplete() const;
 
-    MapPoint MoveOutOfCity(CTPAgent_ptr rallyAgent);
-    CTPAgent_ptr GetRallyAgent() const;
+    MapPoint MoveOutOfCity(Agent_ptr rallyAgent);
+    Agent_ptr GetRallyAgent() const;
     MapPoint GetFreeNeighborPos(MapPoint pos) const;
     bool RallyTroops();
     void GroupTroops();
@@ -288,13 +287,13 @@ private:
     bool Goal_Too_Expensive() const;
 
 
-    bool TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos);
+    bool TryTransport(Agent_ptr agent_ptr, const MapPoint & goal_pos);
 
 
-    bool FindTransporters(const CTPAgent_ptr & agent_ptr, std::list< std::pair<Utility, CTPAgent_ptr> > & transporter_list);
+    bool FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Utility, Agent_ptr> > & transporter_list);
 
 
-    bool LoadTransporters(CTPAgent_ptr agent_ptr);
+    bool LoadTransporters(Agent_ptr agent_ptr);
 
     inline void Sort_Matches();
 

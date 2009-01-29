@@ -96,7 +96,7 @@
 #include "Scheduler.h"
 #include "Agent.h"
 #include "ArmyData.h"
-#include "ctpagent.h"
+#include "agent.h"
 #include "squad_strength.h"
 #include "ctpaidebug.h"
 
@@ -383,8 +383,7 @@ void Plan::Commit_Agent_Common()
 	{
 
 #ifdef _DEBUG_SCHEDULER
-		CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
-		if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
+		if (m_the_goal->ReferencesAgent(agent_ptr))
 		{
 			Assert(false);
 		}
@@ -420,9 +419,7 @@ void Plan::Commit_Agent_Common()
 	{
 		debug_plan = false;
 
-		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent());
-
-		if(CtpAiDebug::DebugLogCheck(-1, -1, agent_ptr->Get_Army().m_id))
+		if(CtpAiDebug::DebugLogCheck(-1, -1, m_the_squad->Get_Agent()->Get_Army().m_id))
 		{
 			debug_plan = true;
 		}
@@ -440,7 +437,7 @@ void Plan::Commit_Agent_Common()
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
 
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", m_the_goal, m_the_squad, m_the_squad->Get_Agent()->Get_Army().m_id));
 
 		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 		DPRINTF(mask, ("\t\t\t\n"));
@@ -499,7 +496,7 @@ void Plan::Rollback_Emptied_Transporters()
 	{
 		if(Agent_Committed())
 		{
-			CTPAgent_ptr agent_ptr = m_the_squad->Get_Agent();
+			Agent_ptr agent_ptr = m_the_squad->Get_Agent();
 
 			const MapPoint pos     = agent_ptr->Get_Target_Pos();
 			MapPoint goalPos(-1,-1);
