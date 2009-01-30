@@ -55,6 +55,9 @@ class Agent;
 #include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
 #include "GameEventTypes.h"
 #include "c3debugstl.h"
+#include "Army.h"
+#include "ArmyData.h"
+#include "World.h"          // g_theWorld
 
 class Agent
 {
@@ -74,52 +77,53 @@ public:
 
 	Agent& operator= (const Agent & an_Original);
 
-	sint16 Get_Type() const;
+	sint16 Get_Type() const { return m_agent_type; };
 
-	void Set_Type(const sint16 & type);
+	void Set_Type(const sint16 & type) { m_agent_type = type; };
 
-	SQUAD_CLASS Get_Squad_Class() const;
+	SQUAD_CLASS Get_Squad_Class() const { return m_squad_class; };
 
 	void     Set_Goal(Goal_ptr goal)       { m_goal = goal; };
 	Goal_ptr Get_Goal()              const { return m_goal; };
 	bool     Has_Goal()              const { return m_goal != NULL; };
 
-	bool Get_Is_Dead() const;
+	bool Get_Is_Dead() const { return !m_army.IsValid() || m_army->GetOwner() != m_playerId; }
+;
 
-	void Set_Squad_Class(const SQUAD_CLASS & squad_class);
+	void Set_Squad_Class(const SQUAD_CLASS & squad_class) { m_squad_class = squad_class; };
 
 	SQUAD_CLASS Compute_Squad_Class();
 
-	const Squad_Strength & Get_Squad_Strength() const;
+	const Squad_Strength & Get_Squad_Strength() const { return m_squad_strength; };
 
 	const Squad_Strength & Compute_Squad_Strength();
 
-	void Set_Can_Be_Executed(const bool &can_be_executed);
+	void Set_Can_Be_Executed(const bool &can_be_executed) { m_can_be_executed = can_be_executed; };
 
-	bool Get_Can_Be_Executed() const;
+	bool Get_Can_Be_Executed() const { return m_can_be_executed && !m_detached; };
 
-	void Set_Detached(const bool detached);
+	void Set_Detached(const bool detached) { m_detached = detached; };
 
-	bool Get_Detached() const;
+	bool Get_Detached() const { return m_detached; };
 
 	void Log_Debug_Info(const int & log, const Goal * const goal) const;
 
 	void Set_Needs_Transporter(const bool needs_transporter) { m_needs_transporter = needs_transporter; };
 	bool Get_Needs_Transporter() const                       { return m_needs_transporter; };
 
-	const Army & Get_Army() const;
+	const Army & Get_Army() const { return m_army; };
 
 
 	PLAYER_INDEX Get_Player_Number() const { return m_playerId; };
 
 
-	MapPoint Get_Pos() const;
+	MapPoint Get_Pos() const { return m_army.IsValid() ? m_army->RetPos() : MapPoint(); };
 
-	sint32 GetUnitsAtPos() const;
-	bool IsArmyPosFilled() const;
-	bool IsOneArmyAtPos() const;
+	sint32 GetUnitsAtPos() const { return g_theWorld->GetCell(Get_Pos())->GetNumUnits(); };
+	bool IsArmyPosFilled() const { return g_theWorld->GetCell(Get_Pos())->GetNumUnits() >= k_MAX_ARMY_SIZE; };
+	bool IsOneArmyAtPos () const { return g_theWorld->GetCell(Get_Pos())->GetNumUnits() == Get_Army()->Num(); };
 
-	bool CanMove() const;
+	bool CanMove() const { return m_army.IsValid() && m_army->CanMove(); };
 
 
 	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
@@ -133,10 +137,11 @@ public:
 
 	bool EstimateTransportUtility(const Agent_ptr transport, Utility & utility) const;
 
-	void Set_Target_Order(const sint32 order_type);
-	void Set_Target_Pos(const MapPoint &order_pos);
-	sint32 Get_Target_Order() const;
-	const MapPoint & Get_Target_Pos() const;
+	void Set_Target_Order(const sint32   &target_order) { m_targetOrder = target_order; };
+	void Set_Target_Pos  (const MapPoint &target_pos)   { m_targetPos   = target_pos;   };
+
+	sint32           Get_Target_Order() const { return m_targetOrder; };
+	const MapPoint & Get_Target_Pos  () const { return m_targetPos;   };
 
 #if 0
 	void Follow_Path(const Path & found_path, const sint32 & order_type);
@@ -170,7 +175,7 @@ public:
 	void Remove_Goal_Reference(const Goal_ptr goal) { m_goal_references.remove(goal);    };
 
 	void Remove_Matches();
-	bool ContainsArmyIn(const Agent_ptr agent) const;
+	bool ContainsArmyIn(const Agent_ptr agent) const { return Get_Army() == agent->Get_Army(); };
 
 	bool           m_neededForGarrison;
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AI and automated governor handling.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -60,7 +60,7 @@ public:
 	
 	static MapAnalysis & GetMapAnalysis();
 
-	virtual ~MapAnalysis();
+	~MapAnalysis();
 	
 	void Resize( const PLAYER_INDEX & maxPlayerId,
 				 const sint16 & xSize, 

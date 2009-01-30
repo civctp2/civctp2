@@ -130,16 +130,6 @@ Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 	return *this;
 }
 
-sint32 Squad_Strength::Get_Agent_Count() const
-{
-	return m_agent_count;
-}
-
-void Squad_Strength::Set_Agent_Count(const sint32 & count)
-{
-	m_agent_count = count;
-}
-
 void Squad_Strength::Add_Agent_Strength(const Agent_ptr & agent)
 {
 	(*this) += agent->Get_Squad_Strength();
@@ -206,107 +196,6 @@ void Squad_Strength::Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 
 	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (playerId, pos);
 	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (playerId, pos);
 	m_value             = MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos);
-}
-
-double Squad_Strength::Get_Attack() const
-{
-	return m_attack_str;
-}
-
-void Squad_Strength::Set_Attack(const double & attack)
-{
-	m_attack_str = attack;
-}
-
-double Squad_Strength::Get_Defense() const
-{
-	return m_defense_str;
-}
-
-void Squad_Strength::Set_Defense(const double & defense)
-{
-	m_defense_str = defense;
-}
-
-double Squad_Strength::Get_Ranged() const
-{
-	return m_ranged_str;
-}
-
-void Squad_Strength::Set_Ranged(const double & ranged)
-{
-	m_ranged_str = ranged;
-}
-
-double Squad_Strength::Get_Bombard_Land() const
-{
-	return m_land_bombard_str;
-}
-
-void Squad_Strength::Set_Bombard_Land(const double & land)
-{
-	m_land_bombard_str = land;
-}
-
-double Squad_Strength::Get_Bombard_Sea() const
-{
-	return m_water_bombard_str;
-}
-
-void Squad_Strength::Set_Bombard_Sea(const double & sea)
-{
-	m_water_bombard_str = sea;
-}
-
-double Squad_Strength::Get_Bombard_Air() const
-{
-	return m_air_bombard_str;
-}
-
-void Squad_Strength::Set_Bombard_Air(const double & air)
-{
-	m_air_bombard_str = air;
-}
-
-double Squad_Strength::Get_Value() const
-{
-	return m_value;
-}
-
-void Squad_Strength::Set_Value(const double & value)
-{
-	m_value = value;
-} 
-
-sint16 Squad_Strength::Get_Transport() const
-{
-	return m_transport;
-}
-
-void Squad_Strength::Set_Transport(const sint16 & slots)
-{
-	Assert(slots >= 0);
-	m_transport = slots;
-}
-
-sint16 Squad_Strength::Get_Defenders() const
-{
-	return m_defenders;
-}
-
-void Squad_Strength::Set_Defenders(const sint16 & units)
-{
-	m_defenders = units;
-}
-
-sint16 Squad_Strength::Get_Ranged_Units() const
-{
-	return m_ranged;
-}
-
-void Squad_Strength::Set_Ranged_Units(const sint16 & units)
-{
-	m_ranged = units;
 }
 
 void Squad_Strength::Set_Force_Matching( const double attack_ratio,

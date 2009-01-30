@@ -48,11 +48,8 @@
 
 #include "gfx_options.h"
 #include "robotastar2.h"
-#include "World.h"          // g_theWorld
 #include "Cell.h"
 #include "Unit.h"
-#include "Army.h"
-#include "ArmyData.h"
 #include "player.h"
 #include "Events.h"
 #include "Order.h"
@@ -151,64 +148,6 @@ Agent & Agent::operator = (const Agent & an_Original)
 	return *this;
 }
 
-sint16 Agent::Get_Type() const
-{
-	return m_agent_type;
-}
-
-void Agent::Set_Type(const sint16 & type)
-{
-	m_agent_type = type;
-}
-
-void Agent::Set_Squad_Class(const SQUAD_CLASS & squad_class)
-{
-	m_squad_class = squad_class;
-}
-
-SQUAD_CLASS Agent::Get_Squad_Class() const
-{
-	return m_squad_class;
-}
-
-const Squad_Strength & Agent::Get_Squad_Strength() const
-{
-	return m_squad_strength;
-}
-
-void Agent::Set_Can_Be_Executed(const bool &can_be_executed)
-{
-	m_can_be_executed = can_be_executed;
-}
-
-bool Agent::Get_Can_Be_Executed() const
-{
-	return m_can_be_executed && !m_detached;
-}
-
-void Agent::Set_Detached(const bool detached)
-{
-	m_detached = detached;
-}
-
-bool Agent::Get_Detached() const
-{
-	return m_detached;
-}
-
-const Army & Agent::Get_Army() const
-{
-	return m_army;
-}
-
-bool Agent::Get_Is_Dead() const
-{
-	if (!m_army.IsValid())
-		return true;
-
-	return m_army->GetOwner() != m_playerId;
-}
-
 SQUAD_CLASS Agent::Compute_Squad_Class()
 {
 	m_squad_class = SQUAD_CLASS_DEFAULT;
@@ -282,31 +221,6 @@ SQUAD_CLASS Agent::Compute_Squad_Class()
 		m_squad_class |= k_Goal_SquadClass_CanTransport_Bit;
 
 	return m_squad_class;
-}
-
-bool Agent::IsArmyPosFilled() const
-{
-	return g_theWorld->GetCell(Get_Pos())->GetNumUnits() >= k_MAX_ARMY_SIZE;
-}
-
-bool Agent::IsOneArmyAtPos() const
-{
-	return g_theWorld->GetCell(Get_Pos())->GetNumUnits() == Get_Army()->Num();
-}
-
-sint32 Agent::GetUnitsAtPos() const
-{
-	return g_theWorld->GetCell(Get_Pos())->GetNumUnits();
-}
-
-bool Agent::CanMove() const
-{
-	return m_army.IsValid() && m_army->CanMove();
-}
-
-MapPoint Agent::Get_Pos() const
-{
-	return m_army.IsValid() ? m_army->RetPos() : MapPoint();
 }
 
 const Squad_Strength & Agent::Compute_Squad_Strength()
@@ -590,26 +504,6 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	tile_count));                                  // Rounds to target
 
 	return true;
-}
-
-void Agent::Set_Target_Order(const sint32 target_order)
-{
-	m_targetOrder = target_order;
-}
-
-void Agent::Set_Target_Pos(const MapPoint &target_pos)
-{
-	m_targetPos = target_pos;
-}
-
-sint32 Agent::Get_Target_Order() const
-{
-	return m_targetOrder;
-}
-
-const MapPoint & Agent::Get_Target_Pos() const
-{
-	return m_targetPos;
 }
 
 #if 0
@@ -1001,9 +895,4 @@ void Agent::Remove_Matches()
 	}
 
 	m_goal_references.clear();
-}
-
-bool Agent::ContainsArmyIn(const Agent_ptr agent) const
-{
-	return Get_Army() == agent->Get_Army();
 }

@@ -134,7 +134,7 @@ public:
 	
 	Governor(PLAYER_INDEX const & playerId = PLAYER_UNASSIGNED);
 	Governor(Governor const &copyme);
-	virtual ~Governor();
+	~Governor();
 
 	void SetPlayerId(const PLAYER_INDEX &playerId);
 

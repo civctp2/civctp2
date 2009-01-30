@@ -89,28 +89,28 @@ public:
 
     Goal & operator = (const Goal & goal);
     bool operator ==  (const Goal & rval) const;
-    bool operator <   (const Goal & goal) const;
+    bool operator <   (const Goal & goal) const { return (m_raw_priority < goal.m_raw_priority); };
 
 
-    GOAL_TYPE Get_Goal_Type() const;
+    GOAL_TYPE Get_Goal_Type() const { return m_goal_type; };
 
 
-    void Set_Player_Index(const PLAYER_INDEX & player_index);
+    void Set_Player_Index(const PLAYER_INDEX & playerId) { m_playerId = playerId; };
 
 
-    PLAYER_INDEX Get_Player_Index() const;
+    PLAYER_INDEX Get_Player_Index() const { return m_playerId; };
 
 
     bool Is_Satisfied() const;
 
 
-    bool Is_Goal_Undercommitted() const;
+    bool Is_Goal_Undercommitted() const { return (!Is_Satisfied() && m_agents.size() > 0); };
 
 
-    sint16 Get_Agent_Count() const;
+    sint16 Get_Agent_Count() const { return m_agents.size(); };
 
 
-    bool Is_Single_Agent() const;
+    bool Is_Single_Agent() const { return m_agents.size() == 1; };
 
 
     bool Commit_Agent(const Agent_ptr & agent);
@@ -129,13 +129,10 @@ public:
     Utility Compute_Raw_Priority();
 
 
-    Utility Get_Raw_Priority() const;
+    Utility Get_Raw_Priority() const { return m_raw_priority; };
 
 
     GOAL_RESULT Execute_Task();
-
-
-    bool Get_Totally_Complete() const;
 
 
     bool Get_Invalid() const;
@@ -144,7 +141,7 @@ public:
     bool Get_Removal_Time() const;
 
 
-    void Set_Removal_Time(const REMOVAL_TIME & removal_time);
+    void Set_Removal_Time(const REMOVAL_TIME & removal_time) { m_removal_time = removal_time; };
 
 
     bool Can_Be_Executed() const;
@@ -247,6 +244,8 @@ public:
     void Log_Debug_Info_Full(const int & log) const;
 
 private:
+
+    bool Get_Totally_Complete() const;
 
     bool NeededForGarrison(Agent_ptr army,
                            const MapPoint & dest_pos,

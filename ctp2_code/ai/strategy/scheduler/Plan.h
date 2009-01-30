@@ -60,8 +60,8 @@ public:
 
 	Plan& operator= (const Plan &plan);
 
-	bool operator< (const Plan &plan) const;
-	bool operator> (const Plan &plan) const;
+	bool operator<  (const Plan &plan) const;
+	bool operator>  (const Plan &plan) const;
 	bool operator== (const Plan &plan) const;
 	bool operator!= (const Plan &plan) const;
 
@@ -69,15 +69,13 @@ public:
 	GOAL_TYPE Get_Goal_Type() const;
 
 
-	bool Plan_Is_Needed_And_Valid() const;
+	bool Plan_Is_Needed_And_Valid() const { return m_the_goal && m_the_agent; };
 
 	Utility Compute_Matching_Value();
-	Utility Get_Matching_Value() const;
+	Utility Get_Matching_Value() const { return m_matching_value; };
 
-	Goal_ptr Get_Goal() const;
-
-
-	Agent_ptr Get_Agent() const;
+	Goal_ptr   Get_Goal() const { return m_the_goal;  };
+	Agent_ptr Get_Agent() const { return m_the_agent; };
 
 
 	void Commit_Agent();
@@ -101,15 +99,15 @@ public:
 	///
 	bool CanMatchesBeReevaluated() const;
 
-	bool Agent_Committed(const Agent_ptr agent_ptr) const;
+	bool Agent_Committed(const Agent_ptr agent_ptr) const { return agent_ptr == m_the_agent && Agent_Committed(); };
 	bool Agent_Committed() const;
 	sint32 Get_Free_Transport_Capacity() const;
 
-	bool Has_Cargo() const;
+	bool Has_Cargo      ()                const;
 
-	void Log_Debug_Info(const int & log) const;
-	bool Needs_Cargo() const;
-	void Set_Needs_Cargo(const bool needsCargo) { m_needs_cargo = needsCargo; };
+	void Log_Debug_Info (const int & log) const;
+	bool Needs_Cargo    ()                const { return m_needs_cargo && !Has_Cargo();         };
+	void Set_Needs_Cargo(const bool needsCargo) { m_needs_cargo = needsCargo;                   };
 
 	bool Can_Add_To_Goal() const;
 

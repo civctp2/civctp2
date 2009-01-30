@@ -294,11 +294,6 @@ GOAL_TYPE Plan::Get_Goal_Type() const
 	}
 }
 
-bool Plan::Plan_Is_Needed_And_Valid() const
-{
-	return m_the_goal  && m_the_agent;
-}
-
 sint32 Plan::Get_Free_Transport_Capacity() const
 {
 	sint32 transports = 0;
@@ -323,21 +318,6 @@ Utility Plan::Compute_Matching_Value()
 	}
 
 	return m_matching_value;
-}
-
-Utility Plan::Get_Matching_Value() const
-{
-	return m_matching_value;
-}
-
-Goal_ptr Plan::Get_Goal() const
-{
-	return m_the_goal;
-}
-
-Agent_ptr Plan::Get_Agent() const
-{
-	return m_the_agent;
 }
 
 void Plan::Commit_Agent()
@@ -516,20 +496,15 @@ void Plan::Rollback_Emptied_Transporters()
 	}
 }
 
-bool Plan::Has_Cargo() const
-{
-	return m_the_agent->Get_Army()->HasCargo();
-}
-
-bool Plan::Agent_Committed(const Agent_ptr agent_ptr) const
-{
-	return agent_ptr == m_the_agent && Agent_Committed();
-}
-
 bool Plan::Agent_Committed() const
 {
 	Assert(m_the_goal != NULL);
 	return m_the_goal != NULL && m_the_agent->Get_Goal() == m_the_goal;
+}
+
+bool Plan::Has_Cargo() const
+{
+	return m_the_agent->Get_Army()->HasCargo();
 }
 
 void Plan::Log_Debug_Info(const int & log) const
@@ -542,11 +517,6 @@ bool Plan::All_Unused_Or_Used_By_This() const
 	Goal_ptr goal = m_the_agent->Get_Goal();
 
 	return goal == NULL || goal == m_the_goal;
-}
-
-bool Plan::Needs_Cargo() const
-{
-	return m_needs_cargo && !Has_Cargo();
 }
 
 bool Plan::Can_Add_To_Goal() const

@@ -194,26 +194,6 @@ bool Goal::operator == (const Goal & rval) const
 	       (m_target_pos  == rval.m_target_pos);
 }
 
-bool Goal::operator< (const Goal &goal) const
-{
-	return (m_raw_priority < goal.m_raw_priority);
-}
-
-GOAL_TYPE Goal::Get_Goal_Type() const
-{
-	return m_goal_type;
-}
-
-void Goal::Set_Player_Index(const PLAYER_INDEX & playerId)
-{
-	m_playerId = playerId;
-}
-
-PLAYER_INDEX Goal::Get_Player_Index() const
-{
-	return m_playerId;
-}
-
 bool Goal::Is_Satisfied() const
 {
 	if(m_agents.size() == 0)
@@ -232,21 +212,6 @@ bool Goal::Is_Satisfied() const
 
 //	if(m_current_needed_strength > m_current_attacking_strength)
 	return m_current_attacking_strength.HasEnough(m_current_needed_strength);
-}
-
-bool Goal::Is_Goal_Undercommitted() const
-{
-	return (!Is_Satisfied() && m_agents.size() > 0);
-}
-
-sint16 Goal::Get_Agent_Count() const
-{
-	return m_agents.size();
-}
-
-bool Goal::Is_Single_Agent() const
-{
-	return m_agents.size() == 1;
 }
 
 bool Goal::Commit_Agent(const Agent_ptr & agent)
@@ -296,11 +261,6 @@ bool Goal::Commit_Agent(const Agent_ptr & agent)
 	return false;
 }
 
-/*const Agent_List & Goal::Get_Agent_List() const
-{
-	return m_agents;
-}*/
-
 void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 {
 	Assert(agent_ptr);
@@ -348,16 +308,6 @@ void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 	}
 #endif // _DEBUG_SCHEDULER
 
-}
-
-Utility Goal::Get_Raw_Priority() const
-{
-	return m_raw_priority;
-}
-
-void Goal::Set_Removal_Time(const REMOVAL_TIME & removal_time)
-{
-	m_removal_time = removal_time;
 }
 
 bool Goal::Can_Be_Executed() const
@@ -1757,16 +1707,10 @@ Utility Goal::Compute_Raw_Priority()
 
 	//alway compute a foreign center (even if the target is owned by the player
 	// otherwise it compute with coords (0,0) !!
-	MapPoint empire_center;
-	MapPoint foreign_empire_center;
-	empire_center = map.GetEmpireCenter(m_playerId);
-	if (target_owner > 0 && m_playerId != target_owner)
-		foreign_empire_center = map.GetEmpireCenter(target_owner);
-	else
-		foreign_empire_center = map.GetNearestForeigner(m_playerId, target_pos);
+	MapPoint empire_center         = map.GetEmpireCenter(m_playerId);
+	MapPoint foreign_empire_center = (target_owner > 0 && m_playerId != target_owner) ? map.GetEmpireCenter(target_owner) : map.GetNearestForeigner(m_playerId, target_pos);
 
-	const Diplomat       & diplomat = Diplomat::GetDiplomat(m_playerId);
-	const StrategyRecord & strategy = diplomat.GetCurrentStrategy();
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	Assert(m_goal_type < strategy.GetNumGoalElement());
 	Assert(strategy.GetGoalElement(m_goal_type) != NULL);
@@ -1964,34 +1908,36 @@ Utility Goal::Compute_Raw_Priority()
 		m_raw_priority = Goal::BAD_UTILITY;
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-	char buff[256];
-	sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
-	        this,
-	        goal_rec->GetNameText(),
-	        m_raw_priority,
-	        target_pos.x,
-	        target_pos.y,
-	        report_cell_value,
-	        report_cell_lastvalue,
-	        report_cell_threat,
-	        report_cell_EnemyValue,
-	        report_cell_AlliedValue,
-	        report_cell_MaxPower,
-	        report_cell_HomeDistance,
-	        empire_center.x,
-	        empire_center.y,
-	        report_cell_EnemyDistance,
-	        foreign_empire_center.x,
-	        foreign_empire_center.y,
-	        report_cell_Settle,
-	        report_cell_Chokepoint,
-	        report_cell_Unexplored,
-	        report_cell_NotVisible,
-	        threaten_bonus
-	       );
+	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
+	{
+		char buff[256];
+		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+		        this,
+		        goal_rec->GetNameText(),
+		        m_raw_priority,
+		        target_pos.x,
+		        target_pos.y,
+		        report_cell_value,
+		        report_cell_lastvalue,
+		        report_cell_threat,
+		        report_cell_EnemyValue,
+		        report_cell_AlliedValue,
+		        report_cell_MaxPower,
+		        report_cell_HomeDistance,
+		        empire_center.x,
+		        empire_center.y,
+		        report_cell_EnemyDistance,
+		        foreign_empire_center.x,
+		        foreign_empire_center.y,
+		        report_cell_Settle,
+		        report_cell_Chokepoint,
+		        report_cell_Unexplored,
+		        report_cell_NotVisible,
+		        threaten_bonus
+		       );
 
-	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,("%s\t%s\n", buff, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
-
+		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%s\n", buff, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
+	}
 	// For some reason the following does not work in VC6:
 /*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
 	("\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%s \n",
