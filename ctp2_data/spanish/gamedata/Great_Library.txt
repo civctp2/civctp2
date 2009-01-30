@@ -4755,7 +4755,7 @@ Defensa: +100%
 [TERRAIN_BROWN_MOUNTAIN_GAMEPLAY]
 Las montañas desérticas admiten sólo las condiciones de vida más duras y no producen ningún tipo de <L:DATABASE_CONCEPTS,CONCEPT_FOOD>alimento<e>. Sin embargo, tienen una <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>producción<e> alta y un <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>comercio<e> moderado. No se pueden construir <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>granjas<e>, sólo <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>carreteras<e>, y <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>minas<e>. Las casillas de montaña desértica otogan una sustancial bonificación en <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>defensa<e> a cualquier unidad que se encuentre en ellas, pero el movimiento a través de montañas desérticas es extremadamente lento cuando no cuentan con carreteras.
 
-El adelanto de los <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>explosivos<e> permite<L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraformar<e> las montañas desérticas.
+El adelanto de los <L:DATABASE_ADVANCES,ADVANCE_FUSION>la fusión<e> permite<L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraformar<e> las montañas desérticas.
 
 <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Mercancías<e> tales como <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>té<e> y <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>esmeraldas<e> se producen en las montañas desérticas.
 [END]

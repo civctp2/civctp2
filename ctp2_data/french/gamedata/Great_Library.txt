@@ -4797,7 +4797,7 @@ Défense : + 100 %
 [TERRAIN_BROWN_MOUNTAIN_GAMEPLAY]
 Les montagnes désertiques sont extrêmement hostiles : seules les formes de vie les plus résistantes y survivent. Elles ne fournissent aucune <L:DATABASE_CONCEPTS,CONCEPT_FOOD>nourriture<e> mais offrent un niveau élevé de <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>production<e> et un volume moyen de <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commerce<e>. Il est impossible d'y aménager des <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>fermes.<e> Seules les <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>routes<e> et les <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>mines<e> peuvent y être construites. Les cases de montagne désertique offrent un bonus de <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>défense<e> substantiel à toutes les unités qui s'y trouvent, mais faute de routes, les déplacements y sont extrêmement lents. 
 
-Grâce aux <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>explosifs<e>, il est possible de <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraformer<e> des montagnes désertiques. 
+Grâce aux <L:DATABASE_ADVANCES,ADVANCE_FUSION>fusion<e>, il est possible de <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraformer<e> des montagnes désertiques. 
 
 Les montagnes désertiques fournissent des <L:DATABASE_CONCEPTS,CONCEPT_GOODS>marchandises<e> telles que le <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>thé<e> et les <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>émeraudes<e>.
 [END]

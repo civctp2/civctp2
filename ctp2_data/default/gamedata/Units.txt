@@ -179,11 +179,10 @@ UNIT_ARCHER {
    VisionRange 2
    EnableAdvance ADVANCE_BALLISTICS
    ObsoleteAdvance ADVANCE_CANNON_MAKING
-   UpgradeTo UNIT_LONGBOWMAN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
+   UpgradeTo UNIT_MOUNTED_ARCHER
+   UpgradeTo UNIT_CAVALRY
+   UpgradeTo UNIT_TANK
+   UpgradeTo UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -647,7 +646,7 @@ UNIT_CATAMARAN {
    ShieldHunger 2
    GoldHunger 5
    FoodHunger 0
-   MaxMovePoints 200 #300 would be better
+   MaxMovePoints 200
    VisionRange 1
    EnableAdvance ADVANCE_SHIP_BUILDING
    ObsoleteAdvance ADVANCE_HULL_MAKING
@@ -686,7 +685,7 @@ UNIT_CATAMARAN {
    }
 
    CargoData {
-      MaxCargo 1  #2 for usual civ?
+      MaxCargo 1
       Load SOUND_ID_TRIREME_LOAD
       Unload SOUND_ID_TRIREME_UNLOAD
    }
@@ -1564,7 +1563,8 @@ UNIT_FASCIST {
    VisionRange 2
    EnableAdvance ADVANCE_FASCISM
    GovernmentType GOVERNMENT_FASCISM
-   GovernmentType GOVERNMENT_FASCISM
+   UpgradeTo	UNIT_MARINE
+   UpgradeTo	UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2992,6 +2992,7 @@ UNIT_PARATROOPER {
    MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3893,10 +3894,6 @@ UNIT_SWORDSMAN {
    VisionRange 1
    EnableAdvance ADVANCE_IRON_WORKING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4265,11 +4262,6 @@ UNIT_WARRIOR {
    VisionRange 2
    EnableAdvance ADVANCE_TOOLMAKING
    ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_SWORDSMAN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4343,6 +4335,7 @@ UNIT_Z_FREIGHT_TRANSPORT {
 
 ## UNIT 72
 UNIT_LONGBOWMAN {
+   GLHidden
    Description DESCRIPTION_UNIT_ARCHER
    DefaultIcon ICON_UNIT_LONGBOWMAN
    DefaultSprite SPRITE_LONGBOWMAN
@@ -4360,7 +4353,7 @@ UNIT_LONGBOWMAN {
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 2
-   EnableAdvance ADVANCE_FEUDALISM
+   EnableAdvance ADVANCE_SUBNEURAL_ADS #FEUDALISM
    ObsoleteAdvance ADVANCE_CANNON_MAKING
    UpgradeTo UNIT_INFANTRYMAN
    UpgradeTo UNIT_MACHINE_GUNNER
@@ -4403,6 +4396,7 @@ UNIT_LONGBOWMAN {
 
 ## UNIT 73
 UNIT_ELEPHANT_WARRIOR {
+   GLHidden
    Description DESCRIPTION_UNIT_KNIGHT
    DefaultIcon ICON_UNIT_ELEPHANT_WARRIOR
    DefaultSprite SPRITE_ELEPHANT_WARRIOR
@@ -4420,7 +4414,7 @@ UNIT_ELEPHANT_WARRIOR {
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
-   EnableAdvance ADVANCE_SUBNEURAL_ADS #ADVANCE_FEUDALISM
+   EnableAdvance ADVANCE_SUBNEURAL_ADS #FEUDALISM
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_TANK_WARFARE
    ActiveDefenseRange 0
@@ -4450,7 +4444,6 @@ UNIT_ELEPHANT_WARRIOR {
    MovementType: Land
    Size: Large
    VisionClass: Standard
-   GLHidden
 
    CanReform {
       Sound SOUND_ID_REFORM_CITY

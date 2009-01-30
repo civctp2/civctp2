@@ -5907,7 +5907,7 @@ Defense: +100%
 [TERRAIN_BROWN_MOUNTAIN_GAMEPLAY]
 Desert Mountains are hostile to all but the hardiest of life and give no <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>.  However, they afford moderate amounts of <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  One cannot build <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farms<e>, only <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mines<e>.  Desert Mountain tiles give a substantial <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defensive<e> bonus to any units on them, but movement across Desert Mountains without the benefit of roads is extremely slow.
 
-The <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e> Advance allows one to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Desert Mountains.
+The <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e> Advance allows one to <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Desert Mountains.
 
 <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> like <L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_ONE>Iron Ore<e> and <L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_TWO>Silver<e> are found in Desert Mountains.
 [END]
@@ -6154,7 +6154,7 @@ Defense: +25%
 [TERRAIN_JUNGLE_GAMEPLAY]
 Rain Forests have an abundance of natural resources, making available small amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, substantial <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> and a minimum of <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  A <L:DATABASE_CONCEPTS,CONCEPT_RIVER>River<e> enhances the bonuses.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farming<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mining<e> are both impossible, but one can build Commerce improvements such as <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_TRADING_POST>Trading Posts<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_OUTLET_MALL>Shopping Malls<e>.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e> are strongly advised, as unaided movement through this terrain is slow.
 
-The discovery of <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e> enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> of Rain Forest tiles.
+The discovery of <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> of Rain Forest tiles.
 
 <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Medicinal Herbs<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananas<e> and <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Sugar<e> are the Goods found in rain forests.
 [END]
@@ -6265,7 +6265,7 @@ Defense: +25%
 [TERRAIN_SWAMP_GAMEPLAY]
 Swamps are unsuitable for <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.  There is a scarce amount of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> minimal <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e> and a small amount of <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>.  <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_RAILROAD>Railroads<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MAGLEV>Maglevs<e> are the only tile improvements one can build.
 
-The <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> Advance enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Swamp tiles.
+The <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e> Advance enables <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> Swamp tiles.
 
 <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligator<e> , <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Rice<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e> and <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Peat<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Good<e> found on swamps.
 [END]

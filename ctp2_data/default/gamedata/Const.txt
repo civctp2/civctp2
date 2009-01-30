@@ -388,6 +388,6 @@ MAX_CITY_WONDERS    1000  # 1000 is source code default; modifying this will lim
 MAX_CITY_BUILDINGS  1000  
 CAPTURED_CITY_KILL_POP   1  # when a city is captured this number of the population is lost, a -1 value makes it a random number of the population
 # Like veteran by zeroed out, possible for mods
-COMBAT_ELITE_CHANCE 0.05 
-COMBAT_LEADER_CHANCE 0.01 
-CITY_ON_TRADE_ROUTE_BONUS  0.3   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value
+COMBAT_ELITE_CHANCE 0.00 
+COMBAT_LEADER_CHANCE 0.00 
+CITY_ON_TRADE_ROUTE_BONUS  0.0   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value

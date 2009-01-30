@@ -4742,7 +4742,7 @@ Difesa: +100%
 [TERRAIN_BROWN_MOUNTAIN_GAMEPLAY]
 Le montagne desertiche sono inospitali persino per le forme di vita più resistenti e non offrono alcun tipo di <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e>. Comunque, forniscono <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzioni<e> elevate e <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e> modesto. Non è possibile costruire <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>fattorie<e>, solo <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>strade<e> e <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>miniere<e>. Le caselle Montagne Desertiche offrono un consistente bonus <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>difensivo<e> a qualsiasi unità che si trovi su di esse, ma gli spostamenti attraverso le montagne desertiche senza il supporto delle strade sono estremamente lenti.
 
-L'avanzamento <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Esplosivi<e> permette di <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformare<e> le montagne desertiche.
+L'avanzamento <L:DATABASE_ADVANCES,ADVANCE_FUSION>fusione nucleare<e> permette di <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformare<e> le montagne desertiche.
 
 <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Beni<e> come il <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>tè<e> e gli <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>smeraldi<e> sono reperibili presso le montagne desertiche.
 [END]

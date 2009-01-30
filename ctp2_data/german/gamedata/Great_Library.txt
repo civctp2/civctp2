@@ -6095,7 +6095,7 @@ Verteidigung: +100%
 [TERRAIN_BROWN_MOUNTAIN_GAMEPLAY]
 Sandberge würden wohl nur von den Hartgesottensten als angenehme Umgebung bezeichnet. Sie bieten keinerlei <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e>, dafür aber hohe <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> und mäßige <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e>. <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> können auf diesen Geländefeldern nicht errichtet werden, sondern nur <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerke<e>. Sandberg-Einheiten profitieren auf diesen Geländefeldern von einem bedeutenden <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defensivbonus<e>, die Fortbewegungsgeschwindigkeit ist hier allerdings äußerst gering, es sei denn, es sind Straßen vorhanden.
 
-Nach der Entdeckung von <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoff<e> ist die Umwandlung von Sandberg-Geländefeldern per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+Nach der Entdeckung von <L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e> ist die Umwandlung von Sandberg-Geländefeldern per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
 In Sandbergen sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tee<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Smaragde<e>, <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Eisenerz<e> und <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e> zu finden.
 [END]
@@ -6340,7 +6340,7 @@ Verteidigung: +25%
 [TERRAIN_JUNGLE_GAMEPLAY]
 Dschungel bieten jede Menge natürliche Ressourcen, die geringe <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e>, bedeutende <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktions-<e> und gar keine <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> ermöglichen. Ein durch derartiges Gelände fließender <L:DATABASE_CONCEPTS,CONCEPT_RIVER>Fluss<e> erhöht allerdings die Boni. Weder die Errichtung von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> noch von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerken<e> ist möglich. Es ist sehr empfehlenswert, auf diesen Geländefeldern <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> anzulegen, denn ansonsten ist lediglich eine langsame Fortbewegungsgeschwindigkeit möglich.
 
-Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Werkzeugbau<e> ist die Umwandlung von Dschungelgelände per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Landwirtschaftlichen Revolution<e> ist die Umwandlung von Dschungelgelände per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
 In Dschungelgebieten sind gelegentlich die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Heilkräuter<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>, <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananen<e> und <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Zuckerr<e> zu finden.
 [END]
@@ -6451,7 +6451,7 @@ Verteidigung: +25%
 [TERRAIN_SWAMP_GAMEPLAY]
 Sümpfe sind nicht für die Ansiedelung von <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> geeignet. Sie bieten weder <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Nahrungs-<e> noch <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Wirtschaftserträge<e> und auch <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> ist nur spärlich zu erzielen. Die Fortbewegungsgeschwindigkeit von Einheiten ist niedrig und die Errichtung von <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>Farmen<e> ist nicht möglich, aber es können <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Straßen<e> und <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Bergwerke<e> gebaut werden.
 
-Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Landwirtschaftlichen Revolution<e> ist die Umwandlung von Sümpfen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
+Nach der Erforschung der <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrielle Revolution<e> ist die Umwandlung von Sümpfen per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforming<e> möglich.
 
 In Sümpfen sind die <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Handelsgüter<e> <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligatoren<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Reis<e>, <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e> und <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Torf<e> zu finden.
 [END]
