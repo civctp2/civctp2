@@ -543,7 +543,6 @@ Utility Goal::Compute_Matching_Value(const bool update)
 	}
 
 	Sort_Matches();
-
 	return Recompute_Matching_Value(update);
 }
 
@@ -612,15 +611,18 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	if(update && show_strength)
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-		m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
-		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
-		Squad_Strength strength;
-		strength.Set_Pos_Strength(Get_Target_Pos());
-		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
-		Squad_Strength grid_strength;
-		grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
-		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
+		if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
+			m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
+			m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
+			Squad_Strength strength;
+			strength.Set_Pos_Strength(Get_Target_Pos());
+			strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
+			Squad_Strength grid_strength;
+			grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
+			grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
+		}
 	}
 #endif
 
@@ -675,12 +677,12 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 	}
 #endif
 
-	Plan the_match(agent, this, needsCargo);
-
 	Assert(!Get_Invalid())
 
-	if(the_match.Can_Add_To_Goal())
+	if(Can_Add_To_Goal(agent))
 	{
+		Plan the_match(agent, this, needsCargo);
+
 		if(update_match_value)
 		{
 			Utility matching_value = the_match.Compute_Matching_Value();
@@ -691,25 +693,10 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 
 		m_needs_sorting = true;
 
-		/*
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, this->Get_Goal_Type(), -1, 
-				("\tAdded match for goal: %x agent: %x  value = %d\n",
-				 this,
-				 (*agent_iter),
-				 matching_value));
-		*/
-
 		return true;
 	}
 	else
 	{
-	/*
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, this->Get_Goal_Type(), -1, 
-		("\tMatch for goal: %x (%d) agent: %x has BAD_UTILITY.\n",
-			 this,
-		goal_iter->second->Get_Goal_Type(),
-			 (*agent_iter)));
-	*/
 		return false;
 	}
 }
@@ -962,15 +949,13 @@ void Goal::Set_Target_City(const Unit & city)
 const MapPoint Goal::Get_Target_Pos(const Army & army) const
 {
 	const GoalRecord *rec               = g_theGoalDB->Get(m_goal_type);
-	sint32            max_squared_dist  = (g_theWorld->GetWidth() * g_theWorld->GetHeight());
-	                  max_squared_dist *= max_squared_dist;
-	sint32            best_squared_dist = max_squared_dist;
-	sint32            tmp_squared_dist;
-	MapPoint          best_target_pos;
-	MapPoint          army_pos          = army->RetPos();
 
 	if (rec->GetTargetTypeTradeRoute())
 	{
+		const sint32      max_squared_dist  = 0x7fffffff;
+		sint32            best_squared_dist = 0x7fffffff;
+		MapPoint          best_target_pos;
+
 		Assert( m_target_city.m_id != 0);
 
 		const TradeDynamicArray* trade_routes = 
@@ -988,8 +973,8 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 
 				if (cell->CanEnter(army->GetMovementType()))
 				{
-					tmp_squared_dist = 
-					MapPoint::GetSquaredDistance(path->Get(j), army_pos);
+					sint32 tmp_squared_dist = 
+					MapPoint::GetSquaredDistance(path->Get(j), army->RetPos());
 					if (tmp_squared_dist < best_squared_dist)
 					{
 						best_squared_dist = tmp_squared_dist;
@@ -1013,10 +998,16 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 
 		if (m_target_city->GetCityData()->WasTerrainImprovementBuilt())
 		{
+			const sint32      max_squared_dist  = 0x7fffffff;
+			sint32            best_squared_dist = 0x7fffffff;
+			MapPoint          best_target_pos;
 			CityInfluenceIterator it(m_target_city.RetPos(), m_target_city.GetCityData()->GetSizeIndex());
-			for(it.Start(); !it.End(); it.Next()) 
+			for(it.Start(); !it.End(); it.Next())
 			{
 				Cell *cell = g_theWorld->GetCell(it.Pos());
+
+				if (m_target_city.RetPos() == it.Pos())
+					continue;
 
 				if (!(cell->GetCityOwner() == m_target_city))
 					continue;
@@ -1024,12 +1015,9 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 				if (cell->GetNumDBImprovements() <= 0)
 					continue;
 
-				if (m_target_city.RetPos() == it.Pos())
-					continue;
-
 				if (cell->CanEnter(army->GetMovementType()))
 				{
-					tmp_squared_dist = MapPoint::GetSquaredDistance(it.Pos(), army_pos);
+					sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(it.Pos(), army->RetPos());
 					if (tmp_squared_dist < best_squared_dist)
 					{
 						best_squared_dist = tmp_squared_dist;
@@ -1047,10 +1035,11 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 			}
 		}
 	}
-	else if (rec->GetTargetTypePetrolStation()){
+	else if (rec->GetTargetTypePetrolStation())
+	{
 		sint32 distance_to_refuel;
 		MapPoint refuel_pos;
-		CtpAi::GetNearestRefuel(army, army_pos, refuel_pos, distance_to_refuel);
+		CtpAi::GetNearestRefuel(army, army->RetPos(), refuel_pos, distance_to_refuel);
 		return refuel_pos;
 	}
 
@@ -1416,16 +1405,19 @@ Utility Goal::Compute_Matching_Value(const Agent_ptr agent_ptr) const
 		return Goal::BAD_UTILITY;
 	}
 
-	MapPoint dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
+	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
+	MapPoint curr_pos = agent_ptr->Get_Pos();
 
-	if(!Pretest_Bid(agent_ptr, dest_pos))
+	if(agent_ptr->m_neededForGarrison && dest_pos != curr_pos)
 	{
 		return Goal::BAD_UTILITY;
 	}
 
-	MapPoint curr_pos = agent_ptr->Get_Pos();
+	// This is expensive, because of pillage, get city target first.
+	dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
 
-	if(agent_ptr->m_neededForGarrison && dest_pos != curr_pos)
+	// This is expensive, so remove first the garrison units.
+	if(!Pretest_Bid(agent_ptr, dest_pos))
 	{
 		return Goal::BAD_UTILITY;
 	}
@@ -2556,25 +2548,9 @@ bool Goal::Get_Removal_Time() const
 	return false;
 }
 
-bool Goal::Pretest_Bid(const Agent_ptr agent_ptr) const
-{
-	return Pretest_Bid(agent_ptr, MapPoint(-1,-1));
-}
-
-bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos) const
+bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) const
 {
 	const Army & army = agent_ptr->Get_Army();
-
-	MapPoint target_pos;
-
-	if (cache_pos == MapPoint(-1,-1))
-		target_pos = Get_Target_Pos(army);
-	else
-		target_pos = cache_pos;
-
-	const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
-
-	const OrderRecord *order_rec = goal_rec->GetExecute();
 
 	if (army->GetMinFuel() != 0x7fffffff)
 	{
@@ -2599,14 +2575,23 @@ bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos) co
 			return false;
 	}
 
+	const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+
 	if (goal_rec->GetSquadClassCanBombard())
 	{
-		static CellUnitList defenders;
-		defenders.Clear();
-		g_theWorld->GetArmy(target_pos, defenders);
-		if(!agent_ptr->Get_Army()->CanBombardTargetType(defenders))
+		if(g_theWorld->GetCell(target_pos)->IsAnyUnitInCell())
+		{
+			CellUnitList* defenders = g_theWorld->GetCell(target_pos)->UnitArmy();
+			if(!army->CanBombardTargetType(*defenders))
+				return false;
+		}
+		else
+		{
 			return false;
+		}
 	}
+
+	const OrderRecord *order_rec = goal_rec->GetExecute();
 
 	sint32 transports;
 	sint32 max_cargo_slots;

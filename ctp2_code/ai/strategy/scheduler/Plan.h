@@ -109,8 +109,6 @@ public:
 	bool Needs_Cargo    ()                const { return m_needs_cargo && !Has_Cargo();         };
 	void Set_Needs_Cargo(const bool needsCargo) { m_needs_cargo = needsCargo;                   };
 
-	bool Can_Add_To_Goal() const;
-
 protected:
 
 	Utility          m_matching_value;

@@ -1352,6 +1352,10 @@ bool Scheduler::Prioritize_Goals()
 	DPRINTF(k_DBG_AI, ("//  Goals sorted:\n"));
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 
+#if defined(_DEBUG)
+	t = t2 - t1;
+#endif
+
 	return true;
 }
 
@@ -1415,7 +1419,7 @@ bool Scheduler::Prune_Goals()
 			{
 				if (goal_ptr->Get_Matches_Num() == 0)
 				{
-					// Not needed anymore
+					// Not needed anymore?
 					Add_New_Matches_For_Goal(goal_ptr, false);
 				}
 
@@ -1428,7 +1432,7 @@ bool Scheduler::Prune_Goals()
 			{
 				if(goal_ptr->Get_Matches_Num() > 0)
 				{
-					// Not needed anymore
+					// Not needed anymore?
 					Remove_Matches_For_Goal(goal_ptr);
 				}
 

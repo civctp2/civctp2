@@ -202,7 +202,7 @@ void Cell::Serialize(CivArchive &archive)
 }
 
 bool Cell::IsAnyUnitInCell() const
-{ 
+{
 	return m_unit_army != NULL;
 }
 
@@ -840,7 +840,7 @@ sint32 Cell::GetNumUnits() const
 
 void Cell::GetArmy(CellUnitList &al)
 {
-    if(m_unit_army) 
+	if(m_unit_army)
 		al = *m_unit_army;
 	else
 		al.Clear();

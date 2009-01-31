@@ -225,10 +225,7 @@ public:
     PLAYER_INDEX Get_Target_Owner() const;
 
 
-    bool Pretest_Bid(const Agent_ptr agent_ptr) const;
-
-
-    bool Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos) const;
+    bool Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) const;
 
 
     bool ArmiesAtGoal() const;

@@ -518,18 +518,3 @@ bool Plan::All_Unused_Or_Used_By_This() const
 
 	return goal == NULL || goal == m_the_goal;
 }
-
-bool Plan::Can_Add_To_Goal() const
-{
-	Assert(m_the_goal && m_the_agent);
-
-	if(m_the_goal && m_the_agent)
-	{
-		if(!m_the_goal->Can_Add_To_Goal(m_the_agent))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
