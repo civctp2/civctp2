@@ -5377,7 +5377,6 @@ Unterhalt:
 [IMPROVE_HOSPITAL_STATISTICS]
 Effekt:
 Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
-Erhöht die maximale Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]

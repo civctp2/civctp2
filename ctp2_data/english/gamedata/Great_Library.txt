@@ -5240,8 +5240,7 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Gives:
-Increases City Max Size
-Reduces <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Overcrowding<e> Effect by {BuildingDB(Building[0]).RaiseMaxPopulation}
+Reduces <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Overcrowding<e> Effect by {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]

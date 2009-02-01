@@ -4223,7 +4223,6 @@ Coût :
 [IMPROVE_HOSPITAL_STATISTICS]
 Résultat :
 Réduit l'effet de <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>surpopulation<e>
-Accroît la taille maximale des villes
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]

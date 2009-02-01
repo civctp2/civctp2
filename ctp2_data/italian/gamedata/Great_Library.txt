@@ -4168,7 +4168,6 @@ MAnutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Offre:
-Aumenta le dimensioni massime della città
 Riduce gli effetti della <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>sovrappopolazione<e>
 [END]
 

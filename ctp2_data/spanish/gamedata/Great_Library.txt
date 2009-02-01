@@ -4182,8 +4182,7 @@ Costes:
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Da:
-Aumento del tamaño máximo de una ciudad
-reducción del efecto de la <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>masificación<e>
+Reducción del efecto de la <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>masificación<e>
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]

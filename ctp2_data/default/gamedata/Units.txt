@@ -1251,6 +1251,7 @@ UNIT_DESTROYER {
    CanBombard: Air
    CanBombard: Water
    CanSee: Standard
+   Defend: Air
    MovementType: Sea
    MovementType: ShallowWater
    Size: Large
@@ -2097,7 +2098,9 @@ UNIT_INTERCEPTOR {
    EnableAdvance ADVANCE_SUPERSONIC_FLIGHT
    ObsoleteAdvance ADVANCE_AI_SURVEILLANCE
    UpgradeTo	UNIT_STEALTH_FIGHTER
-   ActiveDefenseRange 0
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 1
    EnableCarrierDefenses
    LossMoveToDmgNone
    NoFuelThenCrash
@@ -2124,6 +2127,7 @@ UNIT_INTERCEPTOR {
    CanAttack: Sea
    CanAttack: ShallowWater
    CanSee: Standard
+   Defend: Air
    MovementType: Air
    Size: Medium
    VisionClass: Standard
@@ -2419,6 +2423,8 @@ UNIT_LEVIATHON {
    CanBombard: Air
    CanSee: Standard
    Defend: Air
+   Defend: Land
+   Defend: Water
    MovementType: Land
    Size: Large
    VisionClass: Standard
@@ -2715,6 +2721,7 @@ UNIT_MOREY_STRIKER {
    CanAttack: ShallowWater
    CanBombard: Water
    CanSee: Standard
+   Defend: Water
    MovementType: Sea
    MovementType: ShallowWater
    Size: Large
@@ -3142,7 +3149,7 @@ UNIT_PLASMA_DESTROYER {
    CanBombard: Water
    CanSee: Standard
    CanSee: Underwater
-   Defend: Air
+   Defend: Water
    MovementType: Sea
    MovementType: ShallowWater
    Size: Large
@@ -3894,6 +3901,10 @@ UNIT_SWORDSMAN {
    VisionRange 1
    EnableAdvance ADVANCE_IRON_WORKING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   UpgradeTo UNIT_INFANTRYMAN
+   UpgradeTo UNIT_MACHINE_GUNNER
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4262,6 +4273,11 @@ UNIT_WARRIOR {
    VisionRange 2
    EnableAdvance ADVANCE_TOOLMAKING
    ObsoleteAdvance ADVANCE_GUNPOWDER
+   UpgradeTo UNIT_SWORDSMAN
+   UpgradeTo UNIT_INFANTRYMAN
+   UpgradeTo UNIT_MACHINE_GUNNER
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
