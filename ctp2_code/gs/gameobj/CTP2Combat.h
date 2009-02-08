@@ -109,7 +109,7 @@ public:
 	double GetOffense() const
 	{
 		return (m_isVeteran) 
-			   ? m_offense + (m_offense * g_theConstDB->Get(0)->GetVeteranCoef())
+			   ? m_offense + (m_offense * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)
 			   : m_offense;
 	}
 	double GetDefense() { return m_defense; }
@@ -118,7 +118,7 @@ public:
 	double GetRangedAttack() const
 	{
 		return (m_isVeteran) 
-			   ? m_ranged + (m_ranged * g_theConstDB->Get(0)->GetVeteranCoef())
+			   ? m_ranged + (m_ranged * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)
 			   : m_ranged;
 	}
 	UNIT_TYPE GetCombatType() { return m_type; }

@@ -1427,9 +1427,9 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 
 	double dmr = 1.0/defender.GetHPModifier(); 
 	if (IsVeteran())  //copy and make for elite units
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01); 
 	if (IsElite())  //just an increase in veteran coefficient-- for now
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01); 
 	
 	for (sint32 i = 0; i < n; ++i) 
 	{
@@ -1465,11 +1465,11 @@ void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender,
 
 	if (IsVeteran())  //copy and make for elite units
 	{
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
 	}
 	if (IsElite())  //copy and make for elite units
 	{
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
 	}
 
 	p  = int (p *(1.0 + dbonus));
@@ -1567,10 +1567,10 @@ void UnitData::FightOneRound(Unit did, double defenders_bonus,
 	double a = GetAttack(GetDBRec(), did);
 	
 	if (IsVeteran()) {  //copy and make for elite units
-		a += a * g_theConstDB->Get(0)->GetVeteranCoef();
+		a += a * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01;
 	}
 	if (IsElite()) {  //copy and make for elite units
-		a += a * g_theConstDB->Get(0)->GetVeteranCoef();
+		a += a * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01;
 	}
 
 	Assert(0.00001f < a+d); 

@@ -4555,11 +4555,23 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		break;
 	}
 
-	if(category == m_build_category_at_begin_turn) {
+	if(category == m_build_category_at_begin_turn)
+	{
 		m_shieldstore = m_shieldstore_at_begin_turn;
-	} else {
-		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 	}
+	else
+	{
+		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
+		
+		penalty = std::min
+		                  (
+		                   1.0,
+		                   std::max(0.0, 1.0 - penalty * 0.01)
+		                  );
+
+		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * penalty);
+	}
+
 	return true;
 }
 

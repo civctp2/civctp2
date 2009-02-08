@@ -436,8 +436,8 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	GetHistogram(map, histogram);
 	sint32 landPercent = sint32(g_theProfileDB->PercentLand() * 100);
 	sint32 waterPercent = 100 - landPercent;
-	sint32 mountainPercent = sint32(g_theConstDB->Get(0)->GetPercentMountain() * 100);
-	sint32 hillPercent = sint32(g_theConstDB->Get(0)->GetPercentHills() * 100);
+	sint32 mountainPercent = sint32(g_theConstDB->Get(0)->GetPercentMountain());
+	sint32 hillPercent = sint32(g_theConstDB->Get(0)->GetPercentHills());
 	hillPercent += mountainPercent;
 
 	sint32 waterLevel=0, hillLevel=80, mountainLevel=100;
@@ -750,6 +750,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	NewGenerateRivers(map, wetmap);
 	GenerateDeepWater();
 	GenerateVolcano();
+	GenerateTrenches();
 
 	thirdPass->Release();
 	FreeMapPlugin();
@@ -1047,8 +1048,7 @@ sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y)
 
 
 sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
-
-{ 
+{
     MapPoint pos (i, j);
     MapPoint n; 
    
@@ -1076,8 +1076,7 @@ sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j)
     if(pos.GetNeighborPosition(EAST, n))
 		if (GetCell(n)->m_terrain_type == t) return TRUE; 
 
-    return FALSE; 
-  
+    return FALSE;
 }
 
 
@@ -1125,24 +1124,23 @@ sint32 World::IsNextToWater(const sint32 i, const sint32 j)
 }
 
 sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
-{  
-    
-    MapPoint pos (i, j);
-    MapPoint n; 
+{
+	MapPoint pos (i, j);
+	MapPoint n; 
 
-    if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+	if(pos.GetNeighborPosition(NORTHWEST, n))
+		if (IsWater(n)) return TRUE;
 
-    if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+	if(pos.GetNeighborPosition(NORTHEAST, n))
+		if (IsWater(n)) return TRUE;
 
-    if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+	if(pos.GetNeighborPosition(SOUTHWEST, n))
+		if (IsWater(n)) return TRUE;
 
-    if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+	if(pos.GetNeighborPosition(SOUTHEAST, n))
+		if (IsWater(n)) return TRUE;
 
-    return FALSE; 
+	return FALSE; 
 }
 
 
@@ -1264,84 +1262,114 @@ void World::GenerateDeepWater()
 					}       else if (g_rand->Next(100) < 95) { 
 						m_map[i][j]->m_search_count = rcount;
 					}
-  
-				} 
+				}
 			}
-                
-
-		} 
-
+		}
 	}
 }
 
 
 void World::GenerateTrenches()
-
 {
-    sint32 i, j;
-    sint32 tcount = 0;
-    sint32 m = sint32(g_theConstDB->Get(0)->GetPercentTrench() * m_size.x * m_size.y); 
+	sint32 trench = g_theConstDB->Get(0)->GetPercentTrench();
 
-    if (m < 1) 
-        return ; 
-    
-    MapPoint pos; 
-    sint32 searching = TRUE; 
-    MapPoint tmp;
-    
-    sint32 ocount; 
-    sint32 sdcount, socount; 
-    
-    for (i=0; i<m_size.x; i++) { 
-        for (j=0; j<m_size.y; j++) { 
-            if ((m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF) && 
-                IsNextTo(TERRAIN_WATER_DEEP, i, j))
-            { 
-                
-                if (g_rand->Next(100) < 20) { 
-                    
-                    pos.Set(i, j); 
-                    sdcount= 0; 
-                    socount= 0; 
+	if(trench <= 0)
+	{
+		return;
+	}
+
+	sint32 i, j;
+	sint32 tcount = 0;
+	sint32 m = 0;
+
+	for(i=0; i<m_size.x; i++)
+	{
+		for(j=0; j<m_size.y; j++)
+		{
+			if
+			  (
+			       (m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF)
+			    && IsNextTo(TERRAIN_WATER_DEEP, i, j)
+			  )
+			{
+				++m;
+			}
+		}
+	}
+
+	m *= trench;
+	m *= 0.01;
+
+	if (m < 1)
+		return;
+
+	MapPoint pos;
+	sint32 searching = TRUE;
+	MapPoint tmp;
+
+	sint32 ocount;
+	sint32 sdcount, socount;
+
+	for (i=0; i<m_size.x; i++)
+	{
+		for (j=0; j<m_size.y; j++)
+		{
+			if
+			  (
+			       (m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF)
+			    && IsNextTo(TERRAIN_WATER_DEEP, i, j)
+			  )
+			{
+				if(g_rand->Next(100) < trench)
+				{
+					pos.Set(i, j);
+					sdcount= 0;
+					socount= 0;
 					if(pos.GetNeighborPosition(NORTHWEST, tmp))
+						if(GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
+
+					if(pos.GetNeighborPosition(NORTHEAST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
-                    if(pos.GetNeighborPosition(NORTHEAST,tmp))
+
+					if(pos.GetNeighborPosition(SOUTHEAST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
-                    if(pos.GetNeighborPosition(SOUTHEAST, tmp))
+
+					if(pos.GetNeighborPosition(SOUTHWEST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
-                    if(pos.GetNeighborPosition(SOUTHWEST,tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
-                    if(pos.GetNeighborPosition(SOUTH,tmp))
+
+					if(pos.GetNeighborPosition(SOUTH,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
-                    if(pos.GetNeighborPosition(NORTH,tmp))
+
+					if(pos.GetNeighborPosition(NORTH,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
-                    if(pos.GetNeighborPosition(WEST,tmp))
+
+					if(pos.GetNeighborPosition(WEST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
-                    if(pos.GetNeighborPosition(EAST,tmp))
+
+					if(pos.GetNeighborPosition(EAST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
-                    
-                    
-                    if (((sdcount == 2) && (socount == 0)) || 
-                        ((sdcount == 0) && (socount == 2))) { 
-                        
-                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH; 
-                        tcount++; 
-                        if (m <= tcount) 
-                            return; 
-                    }
-                }
-                
-            }
-        }
-    }
-    
-    
-    searching = TRUE; 
-    
+
+					if
+					  (
+					       ((sdcount == 2) && (socount == 0))
+					    || ((sdcount == 0) && (socount == 2))
+					  )
+					{
+						m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH; 
+						tcount++;
+						if(m <= tcount)
+							break;
+					}
+				}
+			}
+		}
+
+		if(m <= tcount)
+			break;
+	}
+
+	searching = TRUE;
+
     while (searching && ( tcount < m)) { 
         searching = FALSE; 
         for (i=0; i<m_size.x; i++) { 
@@ -1396,14 +1424,14 @@ void World::GenerateTrenches()
             }
         }
     }
-    
-    sint32 dcount; 
-    searching = TRUE; 
-    while (searching) { 
-        searching = FALSE; 
-        for (i=0; i<m_size.x; i++) { 
-            for (j=0; j<m_size.y; j++) { 
-                if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_TRENCH) { 
+
+    sint32 dcount;
+    searching = TRUE;
+    while (searching) {
+        searching = FALSE;
+        for (i=0; i<m_size.x; i++) {
+            for (j=0; j<m_size.y; j++) {
+                if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_TRENCH) {
                     pos.Set(i, j); 
                     dcount=0; 
                     ocount=0; 
@@ -1425,7 +1453,7 @@ void World::GenerateTrenches()
                     if(pos.GetNeighborPosition(NORTHEAST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
                     
-                    switch(ocount) { 
+                    switch(ocount) {
                     case 0: 
                         m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF; 
                         searching = TRUE; 
@@ -1448,10 +1476,9 @@ void World::GenerateTrenches()
                         break; 
                     }
                 }
-                
-            } 
-        } 
-}   
+            }
+        }
+	}
 }
 
 
