@@ -700,6 +700,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 
 	g_player[playerId]->CalcCargoCapacity();
 	scheduler.Process_Agent_Changes();
+	scheduler.Assign_Garrison();
 	scheduler.Rollback_Emptied_Transporters();
 	scheduler.Reset_Agent_Execution();
 	scheduler.Compute_Agent_Strength();

@@ -6469,21 +6469,31 @@ bool Player::ActuallySetGovernment(sint32 type)
 	m_government_type = type;
 
 	bool unit_disbanded = false;
-	for(i = m_all_units->Num() - 1; i >= 0; i--) {
+	for(i = m_all_units->Num() - 1; i >= 0; i--)
+	{
 		const UnitRecord *rec = m_all_units->Access(i).GetDBRec();
 		if(rec->GetNumGovernmentType() < 1)
 			continue;
 
 		sint32 j;
 		bool found = false;
-		for(j = 0; j < rec->GetNumGovernmentType(); j++) {
-			if(rec->GetGovernmentTypeIndex(j) == type) {
+		for(j = 0; j < rec->GetNumGovernmentType(); j++)
+		{
+			if(rec->GetGovernmentTypeIndex(j) == type)
+			{
 				found = true;
 				break;
 			}
 		}
-		if(!found) {
-			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE, -1);
+
+		if(!found)
+		{
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillUnit,
+			                       GEA_Unit, m_all_units->Access(i),
+			                       GEA_Int, CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE,
+			                       GEA_Player, -1,
+			                       GEA_End);
+
 			unit_disbanded = true;
 		}
 	}

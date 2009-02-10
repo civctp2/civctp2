@@ -214,7 +214,7 @@ bool Goal::Is_Satisfied() const
 	return m_current_attacking_strength.HasEnough(m_current_needed_strength);
 }
 
-bool Goal::Commit_Agent(const Agent_ptr & agent)
+void Goal::Commit_Agent(const Agent_ptr & agent)
 {
 #ifdef _DEBUG_SCHEDULER
 	for
@@ -245,8 +245,9 @@ bool Goal::Commit_Agent(const Agent_ptr & agent)
 
 		m_agents.push_back(agent);
 
+		agent->Set_Goal(this);
+
 #ifdef _DEBUG_SCHEDULER
-		Agent_ptr agent_ptr = (Agent_ptr) agent;
 
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 		if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
@@ -255,10 +256,7 @@ bool Goal::Commit_Agent(const Agent_ptr & agent)
 		}
 #endif // _DEBUG_SCHEDULER
 
-		return true;
 	}
-
-	return false;
 }
 
 void Goal::Rollback_Agent(Agent_ptr agent_ptr)
@@ -308,6 +306,7 @@ void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 	}
 #endif // _DEBUG_SCHEDULER
 
+	agent_ptr->Set_Goal(NULL);
 }
 
 bool Goal::Can_Be_Executed() const

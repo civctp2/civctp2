@@ -365,10 +365,7 @@ void Plan::Commit_Agent_Common()
 		}
 #endif // _DEBUG_SCHEDULER
 
-		if(m_the_goal->Commit_Agent(m_the_agent))
-		{
-			m_the_agent->Set_Goal(m_the_goal); // Move inside goals
-		}
+		m_the_goal->Commit_Agent(m_the_agent);
 
 #ifdef _DEBUG_SCHEDULER
 		
@@ -460,7 +457,6 @@ void Plan::Rollback_All_Agents()
 		if(Agent_Committed())
 		{
 			m_the_goal->Rollback_Agent(m_the_agent);
-			m_the_agent->Set_Goal(NULL);
 		}
 	}
 }
@@ -489,7 +485,6 @@ void Plan::Rollback_Emptied_Transporters()
 
 					m_the_goal->Rollback_Agent(m_the_agent);
 					m_matching_value       = Goal::BAD_UTILITY;
-					m_the_agent->Set_Goal(NULL);
 				}
 			}
 		}

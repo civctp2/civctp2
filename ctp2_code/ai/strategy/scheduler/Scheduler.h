@@ -270,7 +270,7 @@ private:
 
 	static char s_debug_str[MAX_DEBUG_STR];
 
-	static Scheduler_Vector s_theSchedulers;
+	static Scheduler_Vector      s_theSchedulers;
 
 
 	Count_Vector                 m_pruned_goals_count;

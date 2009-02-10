@@ -113,7 +113,7 @@ public:
     bool Is_Single_Agent() const { return m_agents.size() == 1; };
 
 
-    bool Commit_Agent(const Agent_ptr & agent);
+    void Commit_Agent(const Agent_ptr & agent);
 
 
     void Rollback_Agent(Agent_ptr agent_ptr);

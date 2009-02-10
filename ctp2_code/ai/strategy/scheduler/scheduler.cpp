@@ -2075,7 +2075,13 @@ void Scheduler::Assign_Garrison()
 
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
+
 				agent_iter->second->m_neededForGarrison = true;
+
+				if(agent_iter->second->Has_Goal())
+				{
+					agent_iter->second->Get_Goal()->Rollback_Agent(agent_iter->second);
+				}
 			}
 		}
 	}
