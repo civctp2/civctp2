@@ -836,7 +836,7 @@ void Agent::WaitHere(const MapPoint & goal_pos)
 
 void Agent::ClearOrders()
 {
-	if(Has_Goal())
+	if(Has_Any_Goal())
 	{
 		Get_Army()->ClearOrders();
 

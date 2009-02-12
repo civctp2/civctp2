@@ -53,7 +53,7 @@ class Plan
 private:
 	Plan();
 public:
-	Plan(Agent_ptr agent, Goal_ptr goal, bool needsCargo);
+	Plan(Agent_ptr agent, bool needsCargo);
 	Plan(const Plan &plan);
 
 	~Plan();
@@ -66,46 +66,21 @@ public:
 	bool operator!= (const Plan &plan) const;
 
 
-	GOAL_TYPE Get_Goal_Type() const;
+	bool Plan_Is_Needed_And_Valid() const { return m_the_agent != NULL; };
 
-
-	bool Plan_Is_Needed_And_Valid() const { return m_the_goal && m_the_agent; };
-
-	Utility Compute_Matching_Value();
+	Utility Compute_Matching_Value(Goal_ptr goal_ptr);
 	Utility Get_Matching_Value() const { return m_matching_value; };
 
-	Goal_ptr   Get_Goal() const { return m_the_goal;  };
 	Agent_ptr Get_Agent() const { return m_the_agent; };
 
+	void Commit_Agent_Common(Goal_ptr goal_ptr);
 
-	void Commit_Agent();
-	void Commit_Agent_Common();
-	void Commit_Transport_Agent();
+	bool All_Unused_Or_Used_By_This(const Goal_ptr theGoal) const;
 
-
-	GOAL_RESULT Execute_Task();
-
-
-	void Rollback_All_Agents();
-	void Rollback_Emptied_Transporters();
-
-
-	bool Commited_Agents_Need_Orders() const;
-	bool All_Unused_Or_Used_By_This() const;
-
-	///
-	/// Check if the agents can be rollbacked to eventually receive other priority 
-	/// (for example : not if they are too close to their goals and grouping)
-	///
-	bool CanMatchesBeReevaluated() const;
-
-	bool Agent_Committed(const Agent_ptr agent_ptr) const { return agent_ptr == m_the_agent && Agent_Committed(); };
-	bool Agent_Committed() const;
 	sint32 Get_Free_Transport_Capacity() const;
 
 	bool Has_Cargo      ()                const;
 
-	void Log_Debug_Info (const int & log) const;
 	bool Needs_Cargo    ()                const { return m_needs_cargo && !Has_Cargo();         };
 	void Set_Needs_Cargo(const bool needsCargo) { m_needs_cargo = needsCargo;                   };
 
@@ -113,7 +88,6 @@ protected:
 
 	Utility          m_matching_value;
 	Agent_ptr        m_the_agent;
-	Goal_ptr         m_the_goal;
 	bool             m_needs_cargo;
 };
 

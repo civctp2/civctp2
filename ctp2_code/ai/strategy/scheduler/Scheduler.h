@@ -135,10 +135,6 @@ public:
 
 	static Scheduler & GetScheduler(const sint32 & playerId);
 
-	
-	static void ValidateAll();
-
-	
 	static void CleanupAll(void);
 
 
@@ -211,8 +207,6 @@ public:
 	Squad_Strength GetMostNeededStrength() const;
 
 
-	bool Validate() const;
-
 	sint32 GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const;
 
 
@@ -282,7 +276,6 @@ private:
 	Agent_List                   m_new_agents;
 	PLAYER_INDEX                 m_playerId;
 	Squad_Strength               m_neededAgentStrength;
-	Utility                      m_maxUndercommittedPriority; // Probably not needed
 	Goal_List                    m_goals;
 
 	static sint32 m_contactCachedPlayer;

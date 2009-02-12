@@ -129,9 +129,6 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "gfx_options.h"
 #include "World.h"
 
-#ifdef _DEBUG_SCHEDULER
-#include "ArmyData.h"
-#endif //_DEBUG_SCHEDULER
 #include "ctpaidebug.h"
 #include "GoalRecord.h"
 
@@ -247,29 +244,13 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 
 		agent->Set_Goal(this);
 
-#ifdef _DEBUG_SCHEDULER
-
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
-		if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
-		{
-			Assert(0);
-		}
-#endif // _DEBUG_SCHEDULER
-
 	}
 }
 
 void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 {
 	Assert(agent_ptr);
-
-#ifdef _DEBUG_SCHEDULER
-	if (agent_ptr->Get_Army().IsValid())
-	{
-//		Assert(agent_ptr->Get_Army()->m_theAgent == agent_ptr);
-//		Assert(agent_ptr->Get_Army()->m_theGoal == this);
-	}
-#endif // _DEBUG_SCHEDULER
 
 	if(!agent_ptr->Get_Is_Dead()
 	&&  g_player[m_playerId]
@@ -299,12 +280,6 @@ void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 	next_agent_iter = m_agents.erase(next_agent_iter);
 
 	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
-#ifdef _DEBUG_SCHEDULER
-	if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
-	{
-		Assert(0);
-	}
-#endif // _DEBUG_SCHEDULER
 
 	agent_ptr->Set_Goal(NULL);
 }
@@ -354,77 +329,6 @@ void Goal::Set_Needs_Transporter(const bool needs_transporter)
 	{
 		(*agent_iter)->Set_Needs_Transporter(needs_transporter);
 	}
-}
-
-bool Goal::Validate() const
-{
-#ifdef _DEBUG
-
-	for
-	(
-	    Agent_List::const_iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
-	)
-	{
-		uint32 *first_bytes =
-			(uint32 *)&(*(*agent_iter));
-
-		if(*first_bytes == 0xdddddddd)
-		{
-			bool ARMY_DELETED_WITHOUT_TELLING_GOAL = false;
-			Assert(ARMY_DELETED_WITHOUT_TELLING_GOAL);
-		}
-
-		Assert((*agent_iter)->Has_Goal());
-
-		Plan_List::const_iterator match_iter;
-		for
-		(
-		            match_iter  = m_matches.begin();
-		            match_iter != m_matches.end();
-		          ++match_iter
-		)
-		{
-			if(match_iter->Agent_Committed()) // With the simplification this doesn't make much sense anymore
-			{
-#ifdef _DEBUG_SCHEDULER
-
-				Agent_ptr tmp_agent_ptr = match_iter->Get_Agent();
-				Goal_ptr tmp_goal_ptr = match_iter->Get_Goal();
-				Agent_ptr agent_ptr = (Agent_ptr)(*agent_iter);
-
-				if(!agent_ptr->Get_Is_Dead())
-				{
-//					Assert(agent_ptr->Get_Army()->m_theAgent == agent_ptr);
-//					Assert(agent_ptr->Get_Army()->m_theGoal == tmp_goal_ptr);
-				}
-				else
-				{
-					// Do nothing army might be dead and is going to be removed
-				}
-#endif // _DEBUG_SCHEDULER
-
-				break;
-			}
-		}
-
-		if(match_iter == m_matches.end())
-		{
-
-#ifdef _DEBUG_SCHEDULER
-//			Agent_ptr agent_ptr = (Agent_ptr)(*agent_iter);
-//			Assert(agent_ptr->Get_Army().AccessData()->m_theAgent == agent_ptr);
-//			Assert(agent_ptr->Get_Army().AccessData()->m_theGoal != NULL);
-#endif // _DEBUG_SCHEDULER
-
-			Assert(0);
-		}
-	}
-
-#endif // _DEBUG
-
-	return true;
 }
 
 void Goal::Set_Type(const GOAL_TYPE & type)
@@ -535,7 +439,7 @@ Utility Goal::Compute_Matching_Value(const bool update)
 			continue;
 		}
 
-		match_iter->Compute_Matching_Value();
+		match_iter->Compute_Matching_Value(this);
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
 					("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
 		++count;
@@ -567,7 +471,7 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 	          ++match_iter
 	)
 	{
-		if(!match_iter->All_Unused_Or_Used_By_This())
+		if(!match_iter->All_Unused_Or_Used_By_This(this))
 			continue;
 
 		if(match_iter->Needs_Cargo())
@@ -680,11 +584,11 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 
 	if(Can_Add_To_Goal(agent))
 	{
-		Plan the_match(agent, this, needsCargo);
+		Plan the_match(agent, needsCargo);
 
 		if(update_match_value)
 		{
-			Utility matching_value = the_match.Compute_Matching_Value();
+			the_match.Compute_Matching_Value(this);
 		}
 
 		m_matches.push_back(the_match);
@@ -711,21 +615,21 @@ bool Goal::CanGoalBeReevaluated() const
 
 bool Goal::Commited_Agents_Need_Orders() const
 {
-	bool needOrders = false;
-
-	Plan_List::const_iterator match_iter;
-
 	for
 	(
-	      match_iter  = m_matches.begin();
-	      match_iter != m_matches.end();
-	    ++match_iter
+	    Plan_List::const_iterator   match_iter  = m_matches.begin();
+	                                match_iter != m_matches.end();
+	                              ++match_iter
 	)
 	{
-		needOrders |= match_iter->Commited_Agents_Need_Orders();
+		if(match_iter->Get_Agent()->Has_Goal(this))
+		{
+			if(match_iter->Get_Agent()->Get_Army()->NumOrders() <= 0)
+				return true;
+		}
 	}
 
-	return needOrders;
+	return false;
 }
 
 void Goal::Rollback_All_Agents()
@@ -738,7 +642,10 @@ void Goal::Rollback_All_Agents()
 	    ++match_iter
 	)
 	{
-		match_iter->Rollback_All_Agents();
+		if(match_iter->Get_Agent()->Has_Goal(this))
+		{
+			Rollback_Agent(match_iter->Get_Agent());
+		}
 	}
 
 	Assert(m_current_attacking_strength.NothingNeeded());
@@ -768,7 +675,10 @@ void Goal::Commit_Agents()
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
 				("\t\tAGENTS CAN BE COMMITTED:       (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 
-			match_iter->Commit_Agent();
+			if(!match_iter->Needs_Cargo())
+			{
+				match_iter->Commit_Agent_Common(this);
+			}
 		}
 	}
 
@@ -806,7 +716,10 @@ void Goal::Commit_Transport_Agents()
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
 				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 
-			match_iter->Commit_Transport_Agent();
+			if(match_iter->Get_Agent()->Get_Army()->CanTransport())
+			{
+				match_iter->Commit_Agent_Common(this);
+			}
 		}
 	}
 }
@@ -820,13 +733,18 @@ void Goal::Remove_Matches()
 	                      ++match_iter
 	)
 	{
-		match_iter->Rollback_All_Agents();
-
 		Agent_ptr agent_ptr = match_iter->Get_Agent();
 
 		Assert(agent_ptr);
 		if(agent_ptr)
+		{
+			if(agent_ptr->Has_Goal(this))
+			{
+				Rollback_Agent(agent_ptr);
+			}
+
 			agent_ptr->Remove_Goal_Reference(this);
+		}
 	}
 
 	m_matches.clear();
@@ -843,10 +761,50 @@ void Goal::Remove_Match(const Agent_ptr & agent)
 	{
 		if(agent == match_iter->Get_Agent())
 		{
-			match_iter->Rollback_All_Agents();
+			if(agent->Has_Goal(this))
+			{
+				Rollback_Agent(agent);
+			}
+
 			m_matches.erase(match_iter);
 
 			return;
+		}
+	}
+}
+void Goal::Rollback_Emptied_Transporters()
+{
+	for
+	(
+	    Plan_List::iterator
+	      match_iter  = m_matches.begin();
+	      match_iter != m_matches.end();
+	    ++match_iter
+	)
+	{
+		Agent_ptr agent_ptr = match_iter->Get_Agent();
+
+		if(agent_ptr->Has_Goal(this))
+		{
+			const MapPoint pos     = agent_ptr->Get_Target_Pos();
+			MapPoint goalPos(-1,-1);
+
+			if(Get_Target_Army().m_id == 0 || Get_Target_Army().IsValid())
+			{
+				goalPos = Get_Target_Pos();
+			}
+
+			if(pos == goalPos)
+			{
+				if(!Pretest_Bid(agent_ptr, goalPos))
+				{
+					AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), Get_Goal_Type(), -1, 
+						("\t\tTransporter not needed anymore, removing from goal\n"));
+
+					Rollback_Agent(agent_ptr);
+					//Set match invalid? Low priority
+				}
+			}
 		}
 	}
 }
@@ -900,20 +858,6 @@ Squad_Strength Goal::Compute_Current_Strength()
 	}
 
 	return strength;
-}
-
-void Goal::Rollback_Emptied_Transporters()
-{
-	for
-	(
-	    Plan_List::iterator
-	      match_iter  = m_matches.begin();
-	      match_iter != m_matches.end();
-	    ++match_iter
-	)
-	{
-		match_iter->Rollback_Emptied_Transporters();
-	}
 }
 
 void Goal::Sort_Matches()
@@ -1392,7 +1336,7 @@ void Goal::Compute_Needed_Troop_Flow()
 	}
 }
 
-Utility Goal::Compute_Matching_Value(const Agent_ptr agent_ptr) const
+Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 {
 #if defined(_DEBUG)
 	Player *player_ptr = g_player[ m_playerId ];
@@ -2791,67 +2735,6 @@ bool Goal::ReferencesAgent(const Agent *ctp_agent) const
 	return false;
 }
 
-// Garrison needs to be calculated differently
-// Probably needs to go the scheduler
-bool Goal::NeededForGarrison(Agent_ptr army,
-								const MapPoint &dest_pos,
-								sint8 & new_garrison,
-								double & new_garrison_strength) const
-{
-	Unit city = g_theWorld->GetCity( army->Get_Pos() );
-
-	if (city.m_id == 0)
-		return false;
-
-	// Needs to be computed since the result is used, even if we return false.
-	new_garrison = city->GetCityData()->GetCurrentGarrison();
-	new_garrison_strength = city->GetCityData()->GetCurrentGarrisonStrength();
-
-	if (( army->Get_Army()->GetMovementType() & 
-		  (k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit)) == 0)
-	{
-		return false;
-	}
-
-	if ( dest_pos == army->Get_Pos() )
-		return false;
-
-	if (((army->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
-		((army->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
-		((army->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 ))
-	{
-		sint16 defense_count;
-		double defense_strength;
-		sint16 tmpCount;
-		double tmp;
-		army->Get_Army()->ComputeStrength(tmp,
-		                                  defense_strength,
-		                                  tmp,
-		                                  defense_count,
-		                                  tmpCount,
-		                                  tmp,
-		                                  tmp,
-		                                  tmp,
-		                                  tmp,
-		                                  false
-		                                 );
-
-		defense_strength += city->GetCityData()->GetDefendersBonus() * static_cast<double>(defense_count);
-
-		new_garrison -= static_cast<sint8>(defense_count);
-		new_garrison_strength -= defense_strength;
-
-		if(new_garrison >= city->GetCityData()->GetNeededGarrison()
-		&& new_garrison_strength >= city->GetCityData()->GetNeededGarrisonStrength()
-		){
-			return false;
-		}
-		return true;
-	}
-
-	return false;
-}
-
 bool Goal::FollowPathToTask( Agent_ptr first_army,
                                 Agent_ptr second_army,
                                 const MapPoint &dest_pos,
@@ -2919,7 +2802,7 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 	){
 
 		//I want to see armytext even in optimized test version - Calvitix
-		Utility val = Compute_Matching_Value(static_cast<Agent_ptr>(first_army));
+		Utility val = Compute_Agent_Matching_Value(first_army);
 		uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
 		const char * myText = goal_rec->GetNameText();
 		MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
@@ -3324,7 +3207,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 
 			if (waiting_for_buddies)
 			{
-				Utility val = Compute_Matching_Value(static_cast<Agent_ptr>(the_army));
+				Utility val = Compute_Agent_Matching_Value(the_army);
 				uint8 magnitude = (uint8)(((5000000 - val) * 255.0) / 5000000);
 				MBCHAR * myString = new MBCHAR[40];
 				sprintf(myString, "Waiting GROUP to GO (%d,%d)\n", goal_pos.x, goal_pos.y);
@@ -4144,11 +4027,6 @@ bool Goal::Can_Add_To_Goal(const Agent_ptr agent_ptr) const
 
 	MapPoint dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
 
-	if(!Pretest_Bid(agent_ptr, dest_pos))
-	{
-		return false;
-	}
-
-	return true;
+	return Pretest_Bid(agent_ptr, dest_pos);
 }
 

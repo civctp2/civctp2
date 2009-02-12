@@ -83,9 +83,10 @@ public:
 
 	SQUAD_CLASS Get_Squad_Class() const { return m_squad_class; };
 
-	void     Set_Goal(Goal_ptr goal)       { m_goal = goal; };
-	Goal_ptr Get_Goal()              const { return m_goal; };
-	bool     Has_Goal()              const { return m_goal != NULL; };
+	void     Set_Goal(Goal_ptr goal)                 { m_goal = goal; };
+	Goal_ptr Get_Goal()                        const { return m_goal; };
+	bool     Has_Any_Goal()                    const { return m_goal != NULL; };
+	bool     Has_Goal(const Goal * const goal) const { return m_goal == goal; };
 
 	bool Get_Is_Dead() const { return !m_army.IsValid() || m_army->GetOwner() != m_playerId; }
 ;

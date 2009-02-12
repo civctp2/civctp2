@@ -83,7 +83,7 @@
 //
 //----------------------------------------------------------------------------
 //
-/// @todo Check what happens when the m_the_goal or m_the_agent references
+/// @todo Check what happens when the m_the_agent references
 ///       become invalid through delete.
 
 #include "c3.h"
@@ -120,7 +120,6 @@ Plan::Plan()
 :
     m_matching_value    (Goal::BAD_UTILITY),
     m_the_agent         (NULL),
-    m_the_goal          (NULL),
     m_needs_cargo       (false)
 {
 }
@@ -140,11 +139,10 @@ Plan::Plan()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-Plan::Plan(Agent_ptr agent, Goal_ptr goal, bool needsCargo)
+Plan::Plan(Agent_ptr agent, bool needsCargo)
 :
     m_matching_value    (Goal::BAD_UTILITY),
     m_the_agent         (agent),
-    m_the_goal          (goal),
     m_needs_cargo       (needsCargo)
 {
 }
@@ -168,7 +166,6 @@ Plan::Plan(Plan const & a_Original)
 :
     m_matching_value    (a_Original.m_matching_value),
     m_the_agent         (a_Original.m_the_agent),
-    m_the_goal          (a_Original.m_the_goal),
     m_needs_cargo       (a_Original.m_needs_cargo)
 {
 }
@@ -192,7 +189,6 @@ Plan & Plan::operator = (Plan const & a_Original)
 {
 	if(this != &a_Original)
 	{
-		m_the_goal          = a_Original.m_the_goal;
 		m_the_agent         = a_Original.m_the_agent;
 		m_matching_value    = a_Original.m_matching_value;
 		m_needs_cargo       = a_Original.m_needs_cargo;
@@ -218,7 +214,6 @@ Plan & Plan::operator = (Plan const & a_Original)
 //----------------------------------------------------------------------------
 Plan::~Plan()
 {
-	// m_the_goal not deleted   : reference only
 	// m_the_agent not deleted  : reference only
 }
 
@@ -267,31 +262,19 @@ bool Plan::operator > (Plan const & plan) const
 //                        to compare against.
 //
 // Remark(s)  : Equality is defined is having the same agent and the same 
-//              goal.
+//              matching value.
+//              Probably not used
 //
 //----------------------------------------------------------------------------
 bool Plan::operator == (Plan const & plan) const
 {
-	return (m_the_agent == plan.m_the_agent) &&
-	       (m_the_goal  == plan.m_the_goal);
+	return (m_the_agent       == plan.m_the_agent) &&
+	       (m_matching_value  == plan.m_matching_value);
 }
 
 bool Plan::operator!= (Plan const & plan) const
 {
 	return !(operator == (plan));
-}
-
-GOAL_TYPE Plan::Get_Goal_Type() const
-{
-	if (m_the_goal)
-	{
-		return m_the_goal->Get_Goal_Type();
-	}
-	else
-	{
-		Assert(false);
-		return GOAL_TYPE_NULL;
-	}
 }
 
 sint32 Plan::Get_Free_Transport_Capacity() const
@@ -305,12 +288,12 @@ sint32 Plan::Get_Free_Transport_Capacity() const
 	return empty;
 }
 
-Utility Plan::Compute_Matching_Value()
+Utility Plan::Compute_Matching_Value(Goal_ptr goal_ptr)
 {
-	Assert(m_the_goal && m_the_agent);
-	if(m_the_goal && m_the_agent)
+	Assert(m_the_agent);
+	if(m_the_agent)
 	{
-		m_matching_value   = m_the_goal->Compute_Matching_Value(m_the_agent);
+		m_matching_value   = goal_ptr->Compute_Agent_Matching_Value(m_the_agent);
 	}
 	else
 	{
@@ -320,73 +303,23 @@ Utility Plan::Compute_Matching_Value()
 	return m_matching_value;
 }
 
-void Plan::Commit_Agent()
-{
-	Assert(m_the_goal);
-	Assert(m_the_agent);
-
-	if(m_the_goal && m_the_agent)
-	{
-		if(!Needs_Cargo())
-		{
-			Commit_Agent_Common();
-		}
-	}
-}
-
-void Plan::Commit_Transport_Agent()
-{
-	Assert(m_the_goal);
-	Assert(m_the_agent);
-
-	if(m_the_goal && m_the_agent)
-	{
-		if(m_the_agent->Get_Army()->CanTransport())
-		{
-			Commit_Agent_Common();
-		}
-	}
-}
-
-void Plan::Commit_Agent_Common()
+void Plan::Commit_Agent_Common(Goal_ptr goal_ptr)
 {
 	if
 	  (
 	       m_matching_value > Goal::BAD_UTILITY
-	   && !m_the_agent->Has_Goal()
+	   && !m_the_agent->Has_Any_Goal()
 	   &&  m_the_agent->Get_Can_Be_Executed()
 	  )
 	{
-
-#ifdef _DEBUG_SCHEDULER
-		if (m_the_goal->ReferencesAgent(m_the_agent))
-		{
-			Assert(false);
-		}
-#endif // _DEBUG_SCHEDULER
-
-		m_the_goal->Commit_Agent(m_the_agent);
-
-#ifdef _DEBUG_SCHEDULER
-		
-		m_the_goal->Validate();
-#endif // _DEBUG_SCHEDULER
-
+		goal_ptr->Commit_Agent(m_the_agent);
 	}
-
-#ifdef _DEBUG_SCHEDULER
-	
-	if (!m_the_goal->Validate())
-	{
-		Assert(false);
-	}
-#endif // _DEBUG_SCHEDULER
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	bool debug_plan;
 	if (CtpAiDebug::IsDebugGoalTypeSet())
 	{
-		debug_plan = CtpAiDebug::DebugLogCheck(-1, m_the_goal->Get_Goal_Type(), -1);
+		debug_plan = CtpAiDebug::DebugLogCheck(-1, goal_ptr->Get_Goal_Type(), -1);
 	}
 	else if (CtpAiDebug::IsDebugArmyIdSet())
 	{
@@ -399,102 +332,23 @@ void Plan::Commit_Agent_Common()
 	}
 	else
 	{
-		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
+		debug_plan = CtpAiDebug::DebugLogCheck(goal_ptr->Get_Player_Index(), -1, -1);
 	}
 
-	if(debug_plan && Agent_Committed())
+	if(debug_plan && m_the_agent->Has_Goal(goal_ptr))
 	{
 		sint32 mask;
-		if(m_the_goal->Is_Satisfied() || m_the_goal->Is_Execute_Incrementally())
+		if(goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
 			mask = k_DBG_SCHEDULER;
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
 
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x agent: %x, id: 0%x)\n", m_the_goal, m_the_agent, m_the_agent->Get_Army().m_id));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x agent: %x, id: 0%x)\n", goal_ptr, m_the_agent, m_the_agent->Get_Army().m_id));
 
-		m_the_agent->Log_Debug_Info(mask, m_the_goal);
+		m_the_agent->Log_Debug_Info(mask, goal_ptr);
 		DPRINTF(mask, ("\t\t\t\n"));
 	}
 #endif // _DEBUG
-}
-
-GOAL_RESULT Plan::Execute_Task()
-{
-	Assert(m_the_goal);
-	return m_the_goal ? m_the_goal->Execute_Task() : GOAL_FAILED;
-}
-
-bool Plan::Commited_Agents_Need_Orders() const
-{
-	if(Agent_Committed())
-	{
-		if(m_the_agent->Get_Army()->NumOrders() <= 0)
-			return true;
-	}
-
-	return false;
-}
-
-bool Plan::CanMatchesBeReevaluated() const
-{
-	Assert(m_the_goal);
-	if(m_the_goal)
-	{
-		GOAL_TYPE const     my_goal_type    = m_the_goal->Get_Goal_Type();
-		GoalRecord const *  goalRecord      = g_theGoalDB->Get(my_goal_type);
-
-		return goalRecord && !goalRecord->GetNoRollback();
-	}
-
-	return false;
-}
-
-void Plan::Rollback_All_Agents()
-{
-	Assert(m_the_goal && m_the_agent);
-	if(m_the_goal && m_the_agent)
-	{
-		if(Agent_Committed())
-		{
-			m_the_goal->Rollback_Agent(m_the_agent);
-		}
-	}
-}
-
-void Plan::Rollback_Emptied_Transporters()
-{
-	Assert(m_the_goal && m_the_agent);
-	if(m_the_goal && m_the_agent)
-	{
-		if(Agent_Committed())
-		{
-			const MapPoint pos     = m_the_agent->Get_Target_Pos();
-			MapPoint goalPos(-1,-1);
-
-			if(m_the_goal->Get_Target_Army().m_id == 0 || m_the_goal->Get_Target_Army().IsValid())
-			{
-				goalPos = m_the_goal->Get_Target_Pos();
-			}
-
-			if(pos == goalPos)
-			{
-				if(!m_the_goal->Pretest_Bid(m_the_agent, goalPos))
-				{
-					AI_DPRINTF(k_DBG_SCHEDULER, m_the_agent->Get_Army()->GetOwner(), m_the_goal->Get_Goal_Type(), -1, 
-						("\t\tTransporter not needed anymore, removing from goal\n"));
-
-					m_the_goal->Rollback_Agent(m_the_agent);
-					m_matching_value       = Goal::BAD_UTILITY;
-				}
-			}
-		}
-	}
-}
-
-bool Plan::Agent_Committed() const
-{
-	Assert(m_the_goal != NULL);
-	return m_the_goal != NULL && m_the_agent->Get_Goal() == m_the_goal;
 }
 
 bool Plan::Has_Cargo() const
@@ -502,14 +356,9 @@ bool Plan::Has_Cargo() const
 	return m_the_agent->Get_Army()->HasCargo();
 }
 
-void Plan::Log_Debug_Info(const int & log) const
-{
-	m_the_agent->Log_Debug_Info(log, m_the_goal);
-}
-
-bool Plan::All_Unused_Or_Used_By_This() const
+bool Plan::All_Unused_Or_Used_By_This(const Goal_ptr theGoal) const
 {
 	Goal_ptr goal = m_the_agent->Get_Goal();
 
-	return goal == NULL || goal == m_the_goal;
+	return goal == NULL || goal == theGoal;
 }

@@ -124,7 +124,7 @@ public:
 
     void Compute_Needed_Troop_Flow();
 
-    Utility Compute_Matching_Value(const Agent_ptr agent_ptr) const;
+    Utility Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const;
 
     Utility Compute_Raw_Priority();
 
@@ -148,9 +148,6 @@ public:
 
 
     void Set_Can_Be_Executed(const bool & can_be_executed);
-
-
-    bool Validate() const;
 
 
     void Set_Type(const GOAL_TYPE & type);
@@ -243,11 +240,6 @@ public:
 private:
 
     bool Get_Totally_Complete() const;
-
-    bool NeededForGarrison(Agent_ptr army,
-                           const MapPoint & dest_pos,
-                           sint8 & garrison_count,
-                           double & garrison_strength) const;
 
     bool FindPathToTask(Agent_ptr the_army,
                         const MapPoint & goal_pos,

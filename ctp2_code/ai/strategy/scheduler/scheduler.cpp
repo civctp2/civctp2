@@ -170,15 +170,6 @@ Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 	return s_theSchedulers[playerId]; 
 }
 
-/// not used
-void Scheduler::ValidateAll()
-{
-	for(size_t i = 0; i < s_theSchedulers.size(); i++)
-	{
-		s_theSchedulers[i].Validate();
-	}
-}
-
 void Scheduler::CleanupAll(void)
 {
 	Scheduler_Vector().swap(s_theSchedulers);
@@ -456,7 +447,6 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 	Prune_Goals();
 
 	m_neededAgentStrength       = Squad_Strength(0);
-	m_maxUndercommittedPriority = Goal::BAD_UTILITY;
 
 	return TIME_SLICE_DONE;
 }
@@ -987,30 +977,6 @@ void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
 	{
 		// Action in for
 	}
-}
-
-bool Scheduler::Validate() const
-{
-#ifdef _DEBUG_SCHEDULER
-	Sorted_Goal_List::const_iterator sorted_goal_iter;
-
-	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
-	{
-		sorted_goal_iter = m_goals_of_type[i].begin();
-
-		while (sorted_goal_iter != m_goals_of_type[i].end())
-		{
-			if (!sorted_goal_iter->second->Validate())
-			{
-				bool GOAL_VALIDATION_FAILED = false;
-				Assert(GOAL_VALIDATION_FAILED);
-			}
-			sorted_goal_iter++;
-		}
-	}
-#endif // _DEBUG_SCHEDULER
-
-	return true;
 }
 
 //----------------------------------------------------------------------------
@@ -1631,11 +1597,6 @@ void Scheduler::Rollback_Matches_For_Goal
 
 #endif
 
-	if(goal->Get_Raw_Priority() > m_maxUndercommittedPriority)
-	{
-		m_maxUndercommittedPriority = goal->Get_Raw_Priority();
-	}
-
 	m_neededAgentStrength.Set_To_The_Maximum(needed_strength);
 
 	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\t%d agents to roll back for Goal %x, %s.\n", goal->Get_Agent_Count(), goal, g_theGoalDB->Get(goal->Get_Goal_Type())->GetNameText()));
@@ -1677,7 +1638,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		sint32 empty;
 		sint32 freeTransportCapacity = 0;
 
-		if(!agent->Has_Goal())
+		if(!agent->Has_Any_Goal())
 		{
 			agent->Get_Army()->GetCargo(transports, max, empty);
 			freeTransportCapacity += empty;
@@ -2078,7 +2039,7 @@ void Scheduler::Assign_Garrison()
 
 				agent_iter->second->m_neededForGarrison = true;
 
-				if(agent_iter->second->Has_Goal())
+				if(agent_iter->second->Has_Any_Goal())
 				{
 					agent_iter->second->Get_Goal()->Rollback_Agent(agent_iter->second);
 				}
