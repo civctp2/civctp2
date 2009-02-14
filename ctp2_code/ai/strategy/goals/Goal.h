@@ -231,9 +231,6 @@ public:
     sint32 GetThreatenBonus() const;
 
 
-    bool ReferencesAgent(const Agent * ctp_agent) const;
-
-
     void Log_Debug_Info(const int & log) const;
     void Log_Debug_Info_Full(const int & log) const;
 

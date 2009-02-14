@@ -159,6 +159,7 @@ Goal::Goal(const Goal &goal)
 
 Goal::~Goal()
 {
+	// Nothing to delete, references only
 }
 
 Goal& Goal::operator= (const Goal &goal)
@@ -224,6 +225,14 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 		Assert((*agent_iter) != agent);
 	}
 #endif
+
+	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
+	MapPoint curr_pos = agent->Get_Pos();
+
+	if(agent->m_neededForGarrison && dest_pos != curr_pos)
+	{
+		return;
+	}
 
 	Squad_Strength strength = agent->Compute_Squad_Strength();
 	strength += m_current_attacking_strength;
@@ -423,13 +432,11 @@ Utility Goal::Compute_Matching_Value(const bool update)
 
 	sint32 count = 0;
 
-	Plan_List::iterator match_iter;
-
 	for
 	(
-	            match_iter  = m_matches.begin();
-	            match_iter != m_matches.end();
-	          ++match_iter
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
 	)
 	{
 		// Maybe this also needs to be handled.
@@ -592,7 +599,6 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 		}
 
 		m_matches.push_back(the_match);
-		agent->Add_Goal_Reference(this);
 
 		m_needs_sorting = true;
 
@@ -742,8 +748,6 @@ void Goal::Remove_Matches()
 			{
 				Rollback_Agent(agent_ptr);
 			}
-
-			agent_ptr->Remove_Goal_Reference(this);
 		}
 	}
 
@@ -802,7 +806,6 @@ void Goal::Rollback_Emptied_Transporters()
 						("\t\tTransporter not needed anymore, removing from goal\n"));
 
 					Rollback_Agent(agent_ptr);
-					//Set match invalid? Low priority
 				}
 			}
 		}
@@ -835,8 +838,8 @@ void Goal::Recompute_Current_Attacking_Strength()
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
 		m_current_attacking_strength += (*agent_iter)->Get_Squad_Strength();
@@ -850,8 +853,8 @@ Squad_Strength Goal::Compute_Current_Strength()
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
 		strength += (*agent_iter)->Get_Squad_Strength();
@@ -2715,24 +2718,6 @@ void Goal::Log_Debug_Info(const int &log) const
 	}
 
 #endif // _DEBUG
-}
-
-
-bool Goal::ReferencesAgent(const Agent *ctp_agent) const
-{
-#ifdef _DEBUG
-	for(Agent_List::const_iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                               agent_iter++)
-	{
-		
-		Agent_ptr tmp_ctp_agent = (Agent_ptr) *agent_iter;
-		if (ctp_agent == tmp_ctp_agent)
-			return true;
-	}
-#endif // _DEBUG
-
-	return false;
 }
 
 bool Goal::FollowPathToTask( Agent_ptr first_army,

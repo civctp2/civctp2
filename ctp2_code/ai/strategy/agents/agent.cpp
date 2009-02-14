@@ -40,6 +40,7 @@
 // - Merged in CTPAgent, removed virtual functions, for design and speed
 //   improvement. (29-Jan-2009 Martin Gühmann)
 // - Merged in Squad, no need for an additional class, just wastes space. (29-Jan-2009 Martin Gühmann)
+// - Removed last Squad remainings, no need to allocate all that memory. (14-Feb-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,7 +82,6 @@ Agent::Agent()
     m_targetOrder       (OrderRecord::INDEX_INVALID),
     m_targetPos         ()
 {
-	m_goal_references.resize(0);
 }
 
 Agent::Agent(const Army & army)
@@ -99,7 +99,6 @@ Agent::Agent(const Army & army)
     m_targetOrder       (OrderRecord::INDEX_INVALID),
     m_targetPos         ()
 {
-	m_goal_references.resize(0);
 	Compute_Squad_Strength();
 }
 
@@ -118,12 +117,11 @@ Agent::Agent(const Agent & an_Original)
     m_targetOrder       (an_Original.m_targetOrder),
     m_targetPos         (an_Original.m_targetPos)
 {
-	m_goal_references.assign(an_Original.m_goal_references.begin(), an_Original.m_goal_references.end());
 }
 
 Agent::~Agent()
 {
-	Remove_Matches();
+// Nothing to delete, references only
 }
 
 Agent & Agent::operator = (const Agent & an_Original)
@@ -142,7 +140,6 @@ Agent & Agent::operator = (const Agent & an_Original)
 		m_playerId          = an_Original.m_playerId;
 		m_targetOrder       = an_Original.m_targetOrder;
 		m_targetPos         = an_Original.m_targetPos;
-		m_goal_references   = an_Original.m_goal_references;
 	}
 
 	return *this;
@@ -878,21 +875,4 @@ bool Agent::HasMovePoints() const
 	double movePoints;
 	Get_Army()->CurMinMovementPoints(movePoints);
 	return movePoints >= 1.0;
-}
-
-/// Remove all goals from the agent
-void Agent::Remove_Matches()
-{
-	for
-	   (
-	    Goal_Ref_List::iterator
-	        goal_ref_iter  = m_goal_references.begin();
-	        goal_ref_iter != m_goal_references.end();
-	      ++goal_ref_iter
-	   )
-	{
-		(*goal_ref_iter)->Remove_Match(this);
-	}
-
-	m_goal_references.clear();
 }

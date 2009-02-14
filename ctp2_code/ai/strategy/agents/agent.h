@@ -31,6 +31,7 @@
 // - Merged in CTPAgent, removed virtual functions, for design and speed
 //   improvement. (29-Jan-2009 Martin Gühmann)
 // - Merged in Squad, no need for an additional class, just wastes space. (29-Jan-2009 Martin Gühmann)
+// - Removed last Squad remainings, no need to allocate all that memory. (14-Feb-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -172,11 +173,9 @@ public:
 	void ClearOrders();
 	bool HasMovePoints() const;
 
-	void Add_Goal_Reference   (const Goal_ptr goal) { m_goal_references.push_back(goal); };
-	void Remove_Goal_Reference(const Goal_ptr goal) { m_goal_references.remove(goal);    };
-
-	void Remove_Matches();
+#ifdef _DEBUG_SCHEDULER
 	bool ContainsArmyIn(const Agent_ptr agent) const { return Get_Army() == agent->Get_Army(); };
+#endif
 
 	bool           m_neededForGarrison;
 
@@ -193,7 +192,6 @@ private:
 	sint32         m_targetOrder;
 	sint32         m_playerId;
 	MapPoint       m_targetPos;
-	Goal_Ref_List  m_goal_references;
 };
 
 #endif // __AGENT_H__

@@ -110,19 +110,6 @@ public:
 #endif
 #endif
 
-	enum TIME_SLICE_STATE
-	{
-		TIME_SLICE_NOT_DONE = 0,
-		TIME_SLICE_DONE = 1
-	};
-
-
-	enum
-	{
-		MAX_DEBUG_STR = 1000
-	};
-
-	
 	static sint32 s_max_match_list_cycles;
 
 
@@ -165,22 +152,18 @@ public:
 	
 	void Cleanup();
 
-	
+#if 0
 	void Load(CivArchive & archive);
-
-	
 	void Save(CivArchive & archive);
+#endif
 
-	
 	void Initialize();
 
 	
 	void SetPlayerId(const PLAYER_INDEX &team_index);
 
-	void Planning_Status_Reset();
-
-	TIME_SLICE_STATE Process_Agent_Changes();
-	TIME_SLICE_STATE Process_Goal_Changes();
+	void Process_Agent_Changes();
+	void Process_Goal_Changes();
 
 
 	void Reset_Agent_Execution();
@@ -261,8 +244,6 @@ protected:
 	bool GetArmyDetachState(const Army & army) const;
 
 private:
-
-	static char s_debug_str[MAX_DEBUG_STR];
 
 	static Scheduler_Vector      s_theSchedulers;
 

@@ -237,6 +237,7 @@ void Scheduler::Cleanup()
 	agent_ptr_iter = m_agents.begin();
 	while(agent_ptr_iter != m_agents.end())
 	{
+		// No need to delete agent references in goals, they will be deleted anyway.
 		delete *agent_ptr_iter;
 		agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 	}
@@ -266,6 +267,7 @@ void Scheduler::Cleanup()
 	m_goals.clear();
 }
 
+#if 0
 /// No longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::Load(CivArchive & archive)
 {
@@ -277,6 +279,7 @@ void Scheduler::Save(CivArchive & archive)
 {
 	// Nice reason but that could be more difficult than thought.
 }
+#endif
 
 void Scheduler::Initialize()
 {
@@ -301,10 +304,6 @@ void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
 	m_playerId = player_index;
 }
 
-void Scheduler::Planning_Status_Reset()
-{
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 //  Process_Agent_Changes
@@ -326,7 +325,7 @@ void Scheduler::Planning_Status_Reset()
 //  5. Count up total number of agents available to match
 //
 //////////////////////////////////////////////////////////////////////////
-Scheduler::TIME_SLICE_STATE Scheduler::Process_Agent_Changes()
+void Scheduler::Process_Agent_Changes()
 {
 
 	DPRINTF(k_DBG_AI, ("//       Change agent matches\n"));
@@ -339,6 +338,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Agent_Changes()
 
 		if(theAgent->Get_Is_Dead())
 		{
+			Remove_Matches_For_Agent(theAgent);
 			delete theAgent;
 			agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 			continue;
@@ -381,8 +381,6 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Agent_Changes()
 	}
 
 	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
-
-	return TIME_SLICE_DONE;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -420,7 +418,7 @@ void Scheduler::Reset_Agent_Execution()
 //  2. Prune_Goals
 //
 //////////////////////////////////////////////////////////////////////////
-Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
+void Scheduler::Process_Goal_Changes()
 {
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\t//\n"));
@@ -447,8 +445,6 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Goal_Changes()
 	Prune_Goals();
 
 	m_neededAgentStrength       = Squad_Strength(0);
-
-	return TIME_SLICE_DONE;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1563,13 +1559,27 @@ void Scheduler::Remove_Matches_For_Goal
 	goal_ptr->Remove_Matches();
 }
 
-// Move to agent
+
 void Scheduler::Remove_Matches_For_Agent
 (
     const Agent_ptr & agent
 )
 {
-	agent->Remove_Matches();
+	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
+	{
+		Sorted_Goal_List & goal_list = m_goals_of_type[i];
+
+		for
+		(
+		    Sorted_Goal_Iter goal_iter  = goal_list.begin();
+		                     goal_iter != goal_list.end() &&
+		                     goal_iter != m_pruned_goals_of_type[i];
+		                   ++goal_iter
+		){
+
+			goal_iter->second->Remove_Match(agent);
+		}
+	}
 }
 
 void Scheduler::Rollback_Matches_For_Goal
@@ -2041,7 +2051,15 @@ void Scheduler::Assign_Garrison()
 
 				if(agent_iter->second->Has_Any_Goal())
 				{
-					agent_iter->second->Get_Goal()->Rollback_Agent(agent_iter->second);
+					Goal_ptr goal_ptr = agent_iter->second->Get_Goal();
+
+					MapPoint dest_pos = goal_ptr->Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
+					MapPoint curr_pos = agent_iter->second->Get_Pos();
+
+					if(dest_pos != curr_pos)
+					{
+						goal_ptr->Rollback_Agent(agent_iter->second);
+					}
 				}
 			}
 		}
