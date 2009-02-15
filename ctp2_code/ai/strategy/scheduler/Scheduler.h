@@ -70,6 +70,7 @@ public:
 	typedef std::list<GOAL_TYPE, dbgallocator<GOAL_TYPE> >                   Goal_Type_List;
 	typedef std::list<Sorted_Goal_ptr, dbgallocator<Sorted_Goal_ptr> >       Sorted_Goal_List;
 	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
+	typedef Sorted_Goal_List::const_iterator                                 Sorted_Goal_Const_Iter;
 	typedef std::list<Goal_ptr, dbgallocator<Goal_ptr> >                     Goal_List;
 	typedef std::list<SQUAD_CLASS, dbgallocator<SQUAD_CLASS> >               Squad_Class_List;
 	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> >   Sorted_Goal_List_Vector;
@@ -88,25 +89,26 @@ public:
 
 #else
 	
-	typedef std::vector<sint16> Count_Vector;
-	typedef std::list<GOAL_TYPE> Goal_Type_List;
+	typedef std::vector<sint16>                                              Count_Vector;
+	typedef std::list<GOAL_TYPE>                                             Goal_Type_List;
 	
-	typedef std::list<Sorted_Goal_ptr> Sorted_Goal_List;
-	typedef Sorted_Goal_List::iterator Sorted_Goal_Iter;
-	typedef std::list<Goal_ptr> Goal_List;
-	typedef std::list<SQUAD_CLASS> Squad_Class_List;
-	typedef std::vector<Sorted_Goal_List> Sorted_Goal_List_Vector;
-	typedef std::vector<Sorted_Goal_List::iterator> Sorted_Goal_List_Iter_Vector;
-	typedef std::vector<Agent_List> Agent_List_Vector;
+	typedef std::list<Sorted_Goal_ptr>                                       Sorted_Goal_List;
+	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
+	typedef Sorted_Goal_List::const_iterator                                 Sorted_Goal_Const_Iter;
+	typedef std::list<Goal_ptr>                                              Goal_List;
+	typedef std::list<SQUAD_CLASS>                                           Squad_Class_List;
+	typedef std::vector<Sorted_Goal_List>                                    Sorted_Goal_List_Vector;
+	typedef std::vector<Sorted_Goal_List::iterator>                          Sorted_Goal_List_Iter_Vector;
+	typedef std::vector<Agent_List>                                          Agent_List_Vector;
 
-	typedef std::list<Sorted_Agent_ptr> Sorted_Agent_List;
-	typedef std::vector<Sorted_Agent_List> Sorted_Agent_List_Vector;
-	typedef Sorted_Agent_List::iterator Sorted_Agent_Iter;
+	typedef std::list<Sorted_Agent_ptr>                                      Sorted_Agent_List;
+	typedef std::vector<Sorted_Agent_List>                                   Sorted_Agent_List_Vector;
+	typedef Sorted_Agent_List::iterator                                      Sorted_Agent_Iter;
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
-	typedef std::deque<Scheduler> Scheduler_Vector;
+	typedef std::deque<Scheduler>                                            Scheduler_Vector;
 #else
-	typedef std::vector<Scheduler> Scheduler_Vector;
+	typedef std::vector<Scheduler>                                           Scheduler_Vector;
 #endif
 #endif
 
@@ -252,7 +254,6 @@ private:
 	Sorted_Goal_List_Vector      m_goals_of_type;
 	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type; // Not needed
 	Agent_List                   m_agents;
-	Agent_List                   m_transport_agents;
 	Goal_List                    m_new_goals;
 	Agent_List                   m_new_agents;
 	PLAYER_INDEX                 m_playerId;

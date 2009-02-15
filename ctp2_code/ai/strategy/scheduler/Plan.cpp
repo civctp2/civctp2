@@ -159,7 +159,7 @@ Plan::Plan(Agent_ptr agent, bool needsCargo)
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Pointless, since the goals do not copy this
 //
 //----------------------------------------------------------------------------
 Plan::Plan(Plan const & a_Original)

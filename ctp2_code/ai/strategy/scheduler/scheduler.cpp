@@ -183,10 +183,60 @@ Scheduler::Scheduler()
 }
 
 Scheduler::Scheduler(const Scheduler &scheduler)
+:
+    m_pruned_goals_count    (),
+    m_goals_of_type         (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
+    m_pruned_goals_of_type  (),
+    m_agents                (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
+    m_new_goals             (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
+    m_new_agents            (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
+    m_playerId              (scheduler.m_playerId),
+    m_neededAgentStrength   (scheduler.m_neededAgentStrength),
+    m_goals                 ()
 {
-	m_playerId = -1;
+	m_pruned_goals_count.resize  (g_theGoalDB->NumRecords(),0);   // Not needed
+	m_goals_of_type.resize       (g_theGoalDB->NumRecords());
+	m_pruned_goals_of_type.resize(g_theGoalDB->NumRecords());   // Maybe needed, can maybe replaced by priority == BAD_PRIORITY
 
-	*this = scheduler;
+	for(size_t i = 0; i < m_goals_of_type.size(); ++i)
+	{
+		m_pruned_goals_of_type[i] = m_goals_of_type[i].end();
+	}
+
+	Agent_List::const_iterator agent_ptr_iter = scheduler.m_new_agents.begin();
+	while(agent_ptr_iter != scheduler.m_new_agents.end())
+	{
+		m_new_agents.push_back(new Agent(**agent_ptr_iter));
+		++agent_ptr_iter;
+	}
+
+	agent_ptr_iter = scheduler.m_agents.begin();
+	while(agent_ptr_iter != scheduler.m_agents.end())
+	{
+		m_agents.push_back(new Agent(**agent_ptr_iter));
+		++agent_ptr_iter;
+	}
+
+	Goal_List::const_iterator goal_ptr_iter = scheduler.m_new_goals.begin();
+	while(goal_ptr_iter != scheduler.m_new_goals.end())
+	{
+		m_new_goals.push_back(new Goal(**goal_ptr_iter));
+		++goal_ptr_iter;
+	}
+
+	Sorted_Goal_Const_Iter sorted_goal_iter;
+	for(size_t    goal_type = 0;
+	              goal_type < scheduler.m_goals_of_type.size();
+	              goal_type++
+	){
+		sorted_goal_iter = scheduler.m_goals_of_type[goal_type].begin();
+
+		while(sorted_goal_iter != scheduler.m_goals_of_type[goal_type].end() )
+		{
+			m_goals_of_type[goal_type].push_back(Sorted_Goal_ptr(Goal::BAD_UTILITY, new Goal(*sorted_goal_iter->second)));
+			++sorted_goal_iter;
+		}
+	}
 }
 
 Scheduler::~Scheduler()
@@ -196,7 +246,7 @@ Scheduler::~Scheduler()
 
 Scheduler& Scheduler::operator= (const Scheduler &scheduler)
 {
-	Assert(m_playerId == -1);
+	Assert(false); // Hopefully not used
 	Assert(scheduler.m_playerId == -1);
 
 	Initialize();
@@ -914,22 +964,7 @@ Agent_List::iterator Scheduler::Add_Agent(const Agent_ptr & agent)
 	}
 	
 	Assert(agent_iter == m_agents.end());
-
-	agent_iter = m_transport_agents.begin();
-	while (agent_iter != m_transport_agents.end() && !(*agent_iter)->ContainsArmyIn(agent))
-	{
-		agent_iter++;
-	}
-	
-	Assert(agent_iter == m_transport_agents.end());
 #endif // _DEBUG_SCHEDULER
-
-	Squad_Strength strength = agent->Compute_Squad_Strength();
-
-	if(strength.Get_Transport() > 0)
-	{
-		m_transport_agents.push_back(agent);
-	}
 
 	return m_agents.insert(m_agents.end(), agent);
 }

@@ -153,8 +153,23 @@ Goal::Goal()
 }
 
 Goal::Goal(const Goal &goal)
+:
+    m_goal_type                     (goal.m_goal_type),
+    m_raw_priority                  (goal.m_raw_priority),
+    m_removal_time                  (goal.m_removal_time),
+    m_current_needed_strength       (goal.m_current_needed_strength),
+    m_current_attacking_strength    (0),                         // Nothing since the agent list is not copied
+    m_current_projected_strength    (0),                         // Nothing since the agent list is not copied
+    m_matches                       (),                          // Contains refernces that are invalid after copy
+    m_agents                        (),                          // Agents are just pointers, which are changed on copy
+    m_playerId                      (goal.m_playerId),
+    m_combinedUtility               (goal.m_combinedUtility),
+    m_needs_sorting                 (goal.m_needs_sorting),
+    m_target_pos                    (goal.m_target_pos),
+    m_target_city                   (goal.m_target_city),
+    m_target_army                   (goal.m_target_army),
+    m_sub_task                      (goal.m_sub_task)
 {
-	*this = goal;
 }
 
 Goal::~Goal()
@@ -180,6 +195,7 @@ Goal& Goal::operator= (const Goal &goal)
 	m_target_army                = goal.m_target_army;
 	m_sub_task                   = goal.m_sub_task;
 
+	Assert(false); // Hopefully not used
 	return *this;
 }
 

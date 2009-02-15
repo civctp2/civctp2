@@ -105,13 +105,13 @@ Agent::Agent(const Army & army)
 Agent::Agent(const Agent & an_Original)
 :
     m_squad_class       (an_Original.m_squad_class),
-    m_agent_type        (an_Original.m_agent_type), 
-    m_goal              (an_Original.m_goal),
+    m_agent_type        (an_Original.m_agent_type),
+    m_goal              (NULL),                            // Pointer reference, different after a scheduler copy
     m_squad_strength    (an_Original.m_squad_strength),
-    m_can_be_executed   (an_Original.m_can_be_executed),
+    m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
     m_detached          (an_Original.m_detached),
-    m_needs_transporter (an_Original.m_needs_transporter),
-    m_neededForGarrison (an_Original.m_neededForGarrison),
+    m_needs_transporter (false),                           // Goal reference gone
+    m_neededForGarrison (an_Original.m_neededForGarrison), // Depends on location
     m_army              (an_Original.m_army),
     m_playerId          (an_Original.m_playerId),
     m_targetOrder       (an_Original.m_targetOrder),
@@ -126,6 +126,7 @@ Agent::~Agent()
 
 Agent & Agent::operator = (const Agent & an_Original)
 {
+	Assert(false); // Hopefully not used
 	if (this != &an_Original)
 	{
 		m_squad_class       = an_Original.m_squad_class;
