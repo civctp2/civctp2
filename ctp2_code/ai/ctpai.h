@@ -53,7 +53,7 @@ class CtpAi {
 public:
 
 	
-	static PLAYER_INDEX s_maxPlayers;
+	static PLAYER_INDEX s_maxPlayers; /// The maximum numbers of players in the game, including Barbarians
 
 	
 	static void Cleanup();

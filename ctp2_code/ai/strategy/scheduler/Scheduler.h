@@ -254,8 +254,6 @@ private:
 	Sorted_Goal_List_Vector      m_goals_of_type;
 	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type; // Not needed
 	Agent_List                   m_agents;
-	Goal_List                    m_new_goals;
-	Agent_List                   m_new_agents;
 	PLAYER_INDEX                 m_playerId;
 	Squad_Strength               m_neededAgentStrength;
 	Goal_List                    m_goals;

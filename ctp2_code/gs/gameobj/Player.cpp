@@ -883,7 +883,7 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 
 	u.SetFlag(k_UDF_TEMP_SLAVE_UNIT);
 
-	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnitNoPosition(t=%d) : newunit=%d\n", 
+	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnitNoPosition(t=%d) : newunit=%x\n", 
 	                          u.GetType(), (uint32)u));
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(oldOwner)) {

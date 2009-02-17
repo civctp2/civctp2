@@ -1645,7 +1645,7 @@ Utility Goal::Compute_Raw_Priority()
 		return m_raw_priority;
 	}
 
-	MapPoint target_pos = Get_Target_Pos();
+	const MapPoint & target_pos = Get_Target_Pos();
 
 	if(!player_ptr->CanUseSeaTab()
 	&& (g_theWorld->IsWater(target_pos) || g_theWorld->IsShallowWater(target_pos))

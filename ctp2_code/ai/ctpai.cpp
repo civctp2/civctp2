@@ -1132,7 +1132,7 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 	Diplomat::GetDiplomat(newPlayerId).Initialize();
 	Diplomat::GetDiplomat(newPlayerId).InitStrategicState();
 
-		for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
+	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
 		Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
 	}
@@ -1681,13 +1681,13 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 	}
 }
 
-void CtpAi::Resize() 
+void CtpAi::Resize()
 {
 	s_maxPlayers = 0;
 
-	for (sint32 index = 0; index < k_MAX_PLAYERS; ++index) 
+	for(sint32 index = 0; index < k_MAX_PLAYERS; ++index)
 	{
-		if (g_player[index])
+		if(g_player[index])
 		{
 			s_maxPlayers = std::max<sint32>(index + 1, s_maxPlayers);
 		}

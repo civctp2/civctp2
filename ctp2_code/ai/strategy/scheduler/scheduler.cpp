@@ -124,9 +124,9 @@ uint32 Scheduler::m_allyRegardCache           =  0;
 
 void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
-	s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
+	s_theSchedulers.resize(newMaxPlayerId);
 
-	for(sint32 i = 0; i <= newMaxPlayerId; ++i)
+	for(sint32 i = 0; i < newMaxPlayerId; ++i)
 	{
 		s_theSchedulers[i].SetPlayerId(i);
 	}
@@ -188,8 +188,6 @@ Scheduler::Scheduler(const Scheduler &scheduler)
     m_goals_of_type         (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
     m_pruned_goals_of_type  (),
     m_agents                (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
-    m_new_goals             (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
-    m_new_agents            (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
     m_playerId              (scheduler.m_playerId),
     m_neededAgentStrength   (scheduler.m_neededAgentStrength),
     m_goals                 ()
@@ -203,25 +201,11 @@ Scheduler::Scheduler(const Scheduler &scheduler)
 		m_pruned_goals_of_type[i] = m_goals_of_type[i].end();
 	}
 
-	Agent_List::const_iterator agent_ptr_iter = scheduler.m_new_agents.begin();
-	while(agent_ptr_iter != scheduler.m_new_agents.end())
-	{
-		m_new_agents.push_back(new Agent(**agent_ptr_iter));
-		++agent_ptr_iter;
-	}
-
-	agent_ptr_iter = scheduler.m_agents.begin();
+	Agent_List::const_iterator agent_ptr_iter = scheduler.m_agents.begin();
 	while(agent_ptr_iter != scheduler.m_agents.end())
 	{
 		m_agents.push_back(new Agent(**agent_ptr_iter));
 		++agent_ptr_iter;
-	}
-
-	Goal_List::const_iterator goal_ptr_iter = scheduler.m_new_goals.begin();
-	while(goal_ptr_iter != scheduler.m_new_goals.end())
-	{
-		m_new_goals.push_back(new Goal(**goal_ptr_iter));
-		++goal_ptr_iter;
 	}
 
 	Sorted_Goal_Const_Iter sorted_goal_iter;
@@ -256,13 +240,6 @@ Scheduler& Scheduler::operator= (const Scheduler &scheduler)
 
 void Scheduler::Cleanup()
 {
-	Agent_List::iterator agent_ptr_iter = m_new_agents.begin();
-	while(agent_ptr_iter != m_new_agents.end())
-	{
-		delete *agent_ptr_iter;
-		agent_ptr_iter = m_new_agents.erase(agent_ptr_iter);
-	}
-
 #if defined(_DEBUG_SCHEDULER)
 	// Maybe removed again
 	agent_ptr_iter = m_agents.begin();
@@ -284,19 +261,12 @@ void Scheduler::Cleanup()
 	}
 #endif
 
-	agent_ptr_iter = m_agents.begin();
+	Agent_List::iterator agent_ptr_iter = m_agents.begin();
 	while(agent_ptr_iter != m_agents.end())
 	{
 		// No need to delete agent references in goals, they will be deleted anyway.
 		delete *agent_ptr_iter;
 		agent_ptr_iter = m_agents.erase(agent_ptr_iter);
-	}
-
-	Goal_List::iterator goal_ptr_iter = m_new_goals.begin();
-	while(goal_ptr_iter != m_new_goals.end())
-	{
-		delete *goal_ptr_iter;
-		goal_ptr_iter = m_new_goals.erase(goal_ptr_iter);
 	}
 
 	Sorted_Goal_Iter sorted_goal_iter;
@@ -369,7 +339,7 @@ void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
 //  3. If agent class of agent changes, Add_New_Matches_For_Agent
 //
 //
-//  4. Create new agents from new agents, add to agents_of_class <= where does the m_new_agents list come from
+//  4. Create new agents from new agents, add to agents_of_class
 //     list and create new matches from pruned_goals_list.
 //
 //  5. Count up total number of agents available to match
@@ -404,30 +374,6 @@ void Scheduler::Process_Agent_Changes()
 		}
 
 		agent_ptr_iter++;
-	}
-
-	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
-	DPRINTF(k_DBG_AI, ("//       Add new agent matches\n"));
-	t1 = GetTickCount();
-
-	Agent_List::iterator new_agent_iter = m_new_agents.begin();
-	while(new_agent_iter != m_new_agents.end())
-	{
-		Agent* newAgent = (*new_agent_iter);
-
-		if(newAgent->Get_Is_Dead())
-		{
-			delete newAgent;
-		}
-		else
-		{
-			SQUAD_CLASS new_class       = newAgent->Compute_Squad_Class();
-			agent_ptr_iter              = Add_Agent(newAgent);
-
-			Add_New_Matches_For_Agent(newAgent);
-		}
-
-		new_agent_iter = m_new_agents.erase(new_agent_iter);
 	}
 
 	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
@@ -889,7 +835,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 //    Add_New_Goal
 //
 //
-// Add a new goal to the m_new_goals Goal_List
+// Add a new goal to the m_goals_of_type Goal_List
 //
 // New goals are primarily added in CtpAi:
 //
@@ -907,7 +853,24 @@ void Scheduler::Match_Resources(const bool move_armies)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
-	m_new_goals.push_back(new_goal);
+	sint32 goal_type    = new_goal->Get_Goal_Type();
+
+	Sorted_Goal_Iter tmp_goal_iter = 
+		m_goals_of_type[goal_type].begin();
+
+	while(tmp_goal_iter != m_goals_of_type[goal_type].end())
+	{
+		Goal_ptr old_goal = tmp_goal_iter->second;
+		if(*old_goal == *new_goal)
+		{
+			delete new_goal;
+			return;
+		}
+		tmp_goal_iter++;
+	}
+
+	m_goals_of_type[goal_type].
+		push_back(Sorted_Goal_ptr(Goal::BAD_UTILITY, new_goal));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -915,7 +878,7 @@ void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 //    Add_New_Agent
 //
 //
-// Add a new agent to the m_new_agents Agent_List
+// Add a new agent to the m_agents Agent_List
 //
 // New agents are created by AddGoalsForArmy, which is called whenever a savegame is loaded
 // or an army is created.
@@ -923,25 +886,18 @@ void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Agent(const Agent_ptr & new_agent)
 {
-#ifdef _DEBUG_SCHEDULER
-
-	Agent_List::iterator agent_iter = m_new_agents.begin();
-	while (agent_iter != m_new_agents.end() && !(*agent_iter)->ContainsArmyIn(new_agent))
+	if(new_agent->Get_Is_Dead())
 	{
-		agent_iter++;
+		Assert(false);
+		delete new_agent;
 	}
-	Assert(agent_iter == m_new_agents.end());
-
-	agent_iter = m_agents.begin();
-	while (agent_iter != m_agents.end() && !(*agent_iter)->ContainsArmyIn(new_agent))
+	else
 	{
-		agent_iter++;
-	}
-	
-	Assert(agent_iter == m_agents.end());
-#endif // _DEBUG_SCHEDULER
+		new_agent->Compute_Squad_Class();
+		Add_Agent(new_agent);
 
-	m_new_agents.push_back(new_agent);
+		Add_New_Matches_For_Agent(new_agent);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1147,66 +1103,6 @@ bool Scheduler::Prioritize_Goals()
 {
 	time_t t1 = GetTickCount();
 
-	for
-	(
-	    Goal_List::iterator goal_ptr_iter  = m_new_goals.begin();
-	                        goal_ptr_iter != m_new_goals.end();
-	                      ++goal_ptr_iter
-	)
-	{
-		Goal_ptr goal2 = static_cast<Goal_ptr>(*goal_ptr_iter);
-
-		sint32 goal_type    = goal2->Get_Goal_Type();
-
-		Sorted_Goal_Iter tmp_goal_iter = 
-			m_goals_of_type[goal_type].begin();
-
-		while (tmp_goal_iter != m_goals_of_type[goal_type].end())
-		{
-			Goal_ptr goal1 = tmp_goal_iter->second;
-			if ( *goal1 == *goal2)
-			{
-				break;
-			}
-			tmp_goal_iter++;
-		}
-
-		if (tmp_goal_iter != m_goals_of_type[goal_type].end())
-		{
-			delete goal2;
-			continue;
-		}
-
-		m_goals_of_type[goal_type].
-			push_back(Sorted_Goal_ptr(Goal::BAD_UTILITY, *goal_ptr_iter));
-
-#if 0
-		// For some reason this is shown even for k_DBG_SCHEDULER, so removed
-		AI_DPRINTF
-		          (
-		               k_DBG_SCHEDULER_DETAIL,
-		               m_playerId,
-		               goal_type,
-		               -1,
-		               (
-		                    "\tAdded New Goal: %x (%s) - (%3d,%3d)\n",
-		                    goal2,
-		                    g_theGoalDB->Get(goal_type)->GetNameText(),
-		                    goal2->Get_Target_Pos().x,
-		                    goal2->Get_Target_Pos().y
-		               )
-		          );
-#endif
-	}
-
-	m_new_goals.clear();
-
-	time_t t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  Add new goals to list:\n"));
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
-
-	t1 = GetTickCount();
-
 	bool first_turn_of_war = Diplomat::GetDiplomat(m_playerId).FirstTurnOfWar();
 
 	Sorted_Goal_Iter sorted_goal_iter;
@@ -1285,7 +1181,7 @@ bool Scheduler::Prioritize_Goals()
 		}
 	}
 
-	t2 = GetTickCount();
+	time_t t2 = GetTickCount();
 #if defined(_DEBUG)
 	time_t t = t2 - t1;
 #endif
