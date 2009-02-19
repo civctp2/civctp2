@@ -605,7 +605,7 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 
 	Assert(!Get_Invalid())
 
-	if(Can_Add_To_Goal(agent))
+	if(!agent->Get_Is_Dead())
 	{
 		Plan the_match(agent, needsCargo);
 
@@ -4018,16 +4018,3 @@ bool Goal::Goal_Too_Expensive() const
 	            m_current_needed_strength.Get_Value() * 3
 	       );
 }
-
-bool Goal::Can_Add_To_Goal(const Agent_ptr agent_ptr) const
-{
-	if(agent_ptr->Get_Is_Dead())
-	{
-		return false;
-	}
-
-	MapPoint dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
-
-	return Pretest_Bid(agent_ptr, dest_pos);
-}
-

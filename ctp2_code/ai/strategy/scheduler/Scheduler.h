@@ -249,10 +249,7 @@ private:
 
 	static Scheduler_Vector      s_theSchedulers;
 
-
-	Count_Vector                 m_pruned_goals_count;
 	Sorted_Goal_List_Vector      m_goals_of_type;
-	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type; // Not needed
 	Agent_List                   m_agents;
 	PLAYER_INDEX                 m_playerId;
 	Squad_Strength               m_neededAgentStrength;

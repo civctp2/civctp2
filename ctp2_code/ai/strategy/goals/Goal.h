@@ -190,8 +190,6 @@ public:
     void Recompute_Current_Attacking_Strength();
     Squad_Strength Compute_Current_Strength();
 
-    bool Can_Add_To_Goal(const Agent_ptr agent_ptr) const;
-
     void Sort_Matches_If_Necessary();
     void Set_Target_Pos(const MapPoint & pos);
 

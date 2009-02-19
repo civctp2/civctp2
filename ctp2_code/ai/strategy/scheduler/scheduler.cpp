@@ -184,22 +184,13 @@ Scheduler::Scheduler()
 
 Scheduler::Scheduler(const Scheduler &scheduler)
 :
-    m_pruned_goals_count    (),
     m_goals_of_type         (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
-    m_pruned_goals_of_type  (),
     m_agents                (), // Pointers point to objects that will be deleted, so the objects themselves must be copied
     m_playerId              (scheduler.m_playerId),
     m_neededAgentStrength   (scheduler.m_neededAgentStrength),
     m_goals                 ()
 {
-	m_pruned_goals_count.resize  (g_theGoalDB->NumRecords(),0);   // Not needed
 	m_goals_of_type.resize       (g_theGoalDB->NumRecords());
-	m_pruned_goals_of_type.resize(g_theGoalDB->NumRecords());   // Maybe needed, can maybe replaced by priority == BAD_PRIORITY
-
-	for(size_t i = 0; i < m_goals_of_type.size(); ++i)
-	{
-		m_pruned_goals_of_type[i] = m_goals_of_type[i].end();
-	}
 
 	Agent_List::const_iterator agent_ptr_iter = scheduler.m_agents.begin();
 	while(agent_ptr_iter != scheduler.m_agents.end())
@@ -308,15 +299,8 @@ void Scheduler::Initialize()
 
 	Cleanup();
 
-	m_pruned_goals_count.resize(g_theGoalDB->NumRecords(),0);   // Not needed
 	m_goals_of_type.resize(g_theGoalDB->NumRecords());
-	m_pruned_goals_of_type.resize(g_theGoalDB->NumRecords());   // Maybe needed, can maybe replaced by priority == BAD_PRIORITY
 	m_goals.clear();
-
-	for(size_t i = 0; i < m_goals_of_type.size(); ++i)
-	{
-		m_pruned_goals_of_type[i] = m_goals_of_type[i].end();
-	}
 }
 
 void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
@@ -936,20 +920,11 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 {
 	GOAL_TYPE goal_type = sorted_goal_iter->second->Get_Goal_Type();
 
-	Sorted_Goal_List & list = m_goals_of_type[goal_type];
-
 	Remove_Matches_For_Goal(sorted_goal_iter->second);
 
 	delete sorted_goal_iter->second;
 
-	bool deleteFirstPruned = (m_pruned_goals_of_type[goal_type] == sorted_goal_iter);
-
-	Scheduler::Sorted_Goal_Iter next_iter = list.erase(sorted_goal_iter);
-
-	if (deleteFirstPruned)
-		m_pruned_goals_of_type[goal_type] = next_iter;
-
-	return next_iter;
+	return m_goals_of_type[goal_type].erase(sorted_goal_iter);
 }
 
 void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
@@ -1273,16 +1248,14 @@ bool Scheduler::Prioritize_Goals()
 //////////////////////////////////////////////////////////////////////////
 bool Scheduler::Prune_Goals()
 {
-	m_pruned_goals_count.assign(g_theGoalDB->NumRecords(), 0);
+	time_t t1 = GetTickCount();
 
 	sint16 max_eval;
 	sint16 max_exec;
 
 	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	time_t prune_time = 0;
-
-	m_goals.resize(0); // @ToDo: Optimize code, by setting the initial size.
+	m_goals.resize(0);
 
 	for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 	{
@@ -1297,14 +1270,42 @@ bool Scheduler::Prune_Goals()
 		Sorted_Goal_Iter pruned_goal_iter = m_goals_of_type[goal_type].end();
 		Sorted_Goal_Iter goal_ptr_iter    = m_goals_of_type[goal_type].begin();
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		sint32 count = 0;
+
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n",
+			g_theGoalDB->Get(goal_type)->GetNameText(),
+			goal_type));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+			("\t// max eval = %3.2f, max_exec = %3.2f",
+			goal_element_ptr->GetMaxEval(),
+			goal_element_ptr->GetMaxExec()));
+		if(goal_element_ptr->GetExecPerCity())
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+				(" (ExecPerCity)"));
+		if(goal_element_ptr->GetEvalPerCity())
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+				(" (EvalPerCity)"));
+		if(goal_element_ptr->GetPerCity())
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+				(" (PerCity)"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+			("\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+			("\t//\n\n"));
+#endif
+
+		sint32 goals_added = 0;
+
 		while(goal_ptr_iter != pruned_goal_iter &&
 		      goal_ptr_iter != m_goals_of_type[goal_type].end()
 		){
 			Goal_ptr goal_ptr     = goal_ptr_iter->second;
 			Utility  raw_priority = goal_ptr_iter->first;
 
-			bool ok_to_match_goal =
-				(m_pruned_goals_count[goal_type] < max_eval);
+			bool ok_to_match_goal = (goals_added < max_eval);
 
 			ok_to_match_goal &= (raw_priority != Goal::BAD_UTILITY);
 
@@ -1318,7 +1319,7 @@ bool Scheduler::Prune_Goals()
 
 				m_goals.push_back(goal_ptr);
 
-				m_pruned_goals_count[goal_type]++;
+				goals_added++;
 				goal_ptr_iter++;
 			}
 			else
@@ -1329,73 +1330,21 @@ bool Scheduler::Prune_Goals()
 					Remove_Matches_For_Goal(goal_ptr);
 				}
 
-				Sorted_Goal_Iter tmp_goal_iter = goal_ptr_iter;
-				goal_ptr_iter++;
-
-				m_goals_of_type[goal_type].splice(m_goals_of_type[goal_type].end(),
-								  m_goals_of_type[goal_type],
-								  tmp_goal_iter);
-
-				if(pruned_goal_iter == m_goals_of_type[goal_type].end())
-				{
-					pruned_goal_iter--;
-				}
-			}
-		}
-
-		m_pruned_goals_of_type[goal_type] = pruned_goal_iter;
-
-		time_t t2 = GetTickCount();
-		prune_time += t2 - t1;
-
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		sint32 count = 0;
-		for
-		(
-		      goal_ptr_iter  = m_pruned_goals_of_type[goal_type];
-		      goal_ptr_iter != m_goals_of_type[goal_type].end();
-		    ++goal_ptr_iter
-		){
-			if(count == 0)
-			{
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n",
-					g_theGoalDB->Get(goal_type)->GetNameText(),
-					goal_type));
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					("\t// max eval = %3.2f, max_exec = %3.2f",
-					goal_element_ptr->GetMaxEval(),
-					goal_element_ptr->GetMaxExec()));
-				if(goal_element_ptr->GetExecPerCity())
-					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					(" (ExecPerCity)"));
-				if(goal_element_ptr->GetEvalPerCity())
-					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					(" (EvalPerCity)"));
-				if(goal_element_ptr->GetPerCity())
-					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					(" (PerCity)"));
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					("\n"));
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					("\t//\n\n"));
-			}
+					("\t%3d: [%x]", count, goal_ptr_iter->second));
+				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 
-			if(goal_ptr_iter->first > Goal::BAD_UTILITY + 0.5)
-			{
-					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-						("\t%3d: [%x]", count, goal_ptr_iter->second));
-					goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
-			}
-			count++;
-		}
+				count++;
 #endif
 
+				goal_ptr_iter++;
+			}
+		}
 	}
 
 	DPRINTF(k_DBG_AI, ("//  PRUNE goals based on max eval and max exec:\n"));
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", prune_time  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", GetTickCount() - t1 ));
 
 	return true;
 }
@@ -1470,10 +1419,12 @@ void Scheduler::Add_New_Matches_For_Agent
 		for
 		(
 		    Sorted_Goal_Iter goal_iter  = goal_list.begin();
-		                     goal_iter != goal_list.end() &&
-		                     goal_iter != m_pruned_goals_of_type[i];
+		                     goal_iter != goal_list.end();
 		                   ++goal_iter
 		){
+			if(goal_iter->second->Get_Matches_Num() == 0)
+				continue;
+
 			if(goal_iter->second->Get_Invalid())
 				continue;
 
@@ -1503,8 +1454,7 @@ void Scheduler::Remove_Matches_For_Agent
 		for
 		(
 		    Sorted_Goal_Iter goal_iter  = goal_list.begin();
-		                     goal_iter != goal_list.end() &&
-		                     goal_iter != m_pruned_goals_of_type[i];
+		                     goal_iter != goal_list.end();
 		                   ++goal_iter
 		){
 
