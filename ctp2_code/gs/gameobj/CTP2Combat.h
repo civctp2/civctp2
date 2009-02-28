@@ -256,7 +256,10 @@ private:
 
 	void ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY, 
 					   CombatField *defender, sint32 defX, sint32 defY);
+	void ExecuteCounterAttack(CombatField *attacker, sint32 attX, sint32 attY, 
+					   CombatField *defender, sint32 defX, sint32 defY);
 	void DoAttacks(CombatField *attacker, CombatField *defender);
+	void DoCounterAttacks(CombatField *attacker, CombatField *defender);
 	void DoAttacks();
 	void DoCounterAttacks();
 	void DoMovement();

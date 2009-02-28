@@ -245,6 +245,7 @@ ProfileDB::ProfileDB()
     m_ruin                              (FALSE),
     m_NoCityLimit                       (FALSE),
     m_DebugCityAstar                    (FALSE),
+    m_newcombat                         (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -443,6 +444,7 @@ ProfileDB::ProfileDB()
 	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
+	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL);
 }
 
 void ProfileDB::DefaultSettings(void)

@@ -1204,6 +1204,75 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 	}
 }
 
+void CTP2Combat::ExecuteCounterAttack(CombatField *attacker, sint32 attX, sint32 attY,
+							   CombatField *defender, sint32 defX, sint32 defY)
+{
+	m_noAttacksPossible = false;
+
+	
+	CombatUnit *att = &attacker->GetUnit(attX, attY);
+	CombatUnit *def = &defender->GetUnit(defX, defY);
+
+	
+	if(m_battle && !att->m_alreadyAttacked) {
+		BattleEvent *attackEvent = new BattleEvent(BATTLE_EVENT_TYPE_ATTACK);
+		m_battle->AddUnitAttack(attackEvent,
+			(attacker == &m_defenders), att->m_unit);
+		m_battle->AddEvent(attackEvent);
+		att->m_alreadyAttacked = true;
+	}
+
+	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
+	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
+
+	
+	double hitChance = att->m_unit->GetDefense(def->m_unit) /
+		(att->m_unit->GetDefense(def->m_unit) + def->m_unit->GetDefense(att->m_unit));
+	combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) -Attacking-  %s@(%2d,%2d) -  HitChance: %.2lf\n", attackString, attX, attY,
+				 defenseString, defX, defY, hitChance);
+
+	if(sint32(COMBATRAND(1000)) < sint32(hitChance * 1000.0)) {
+		
+		double damage = att->GetStrength() / def->GetArmor();
+		combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) -HIT-  %s@(%2d,%2d) for %.2lf", attackString, attX, attY,
+					 defenseString, defX, defY, damage);
+#ifdef TEST_APP
+		s_trackedUnits[att->m_id].m_DamageInflicted += damage;
+#endif
+
+		def->DeductHP(damage);
+
+		if(!def->IsAlive()) {
+			combat_print(k_COMBAT_DEBUG_VERBOSE, ", killing %s.\n", defenseString);
+
+			
+			if(m_battle) {
+				BattleEvent *deathEvent = new BattleEvent(BATTLE_EVENT_TYPE_DEATH);
+				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit));
+				m_battle->AddUnitDeath(deathEvent,
+					(defender == &m_defenders), def->m_unit);
+				m_battle->AddEvent(deathEvent);
+			}
+			s_somethingDied = true;
+		} else {
+			combat_print(k_COMBAT_DEBUG_VERBOSE, ", %s has %.2lfHP.\n", defenseString, def->GetHP());
+
+			
+			if(m_battle) {
+				if(!def->m_alreadyExploded) {
+					BattleEvent *explodeEvent = new BattleEvent(BATTLE_EVENT_TYPE_EXPLODE);
+					m_battle->AddUnitExplosion(explodeEvent,
+											   (defender == &m_defenders), def->m_unit);
+					m_battle->AddEvent(explodeEvent);
+					def->m_alreadyExploded = true;
+				}
+			}
+		}
+	} else {
+		combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) MISSED %s@(%2d,%2d).\n", attackString, attX, attY, 
+					 defenseString, defX, defY);
+	}
+}
 
 void CTP2Combat::DoAttacks(CombatField *attacker, CombatField *defender)
 {
@@ -1225,6 +1294,26 @@ void CTP2Combat::DoAttacks(CombatField *attacker, CombatField *defender)
 	}
 }
 
+void CTP2Combat::DoCounterAttacks(CombatField *attacker, CombatField *defender)
+{
+	
+	sint32 x = 0, y;
+	
+	for(y = 0; y < m_height; y++) {
+		CombatUnit *att = &attacker->GetUnit(x, y);
+		if(att->IsActive() &&
+		   att->GetOffense() > 0.001) {
+			sint32 dx, dy;
+			if(!defender->FindTargetForAttackFrom(x, y, &dx, &dy, att->GetCombatType() == UNIT_TYPE_FLANKER)) {
+				
+			} else {
+				Assert(dx >= 0 && dy >= 0);
+				ExecuteCounterAttack(attacker, x, y, defender, dx, dy);
+			}
+		}
+	}
+}
+
 void CTP2Combat::DoAttacks()
 {
 	DoAttacks(&m_attackers, &m_defenders);
@@ -1232,7 +1321,12 @@ void CTP2Combat::DoAttacks()
 
 void CTP2Combat::DoCounterAttacks()
 {
-	DoAttacks(&m_defenders, &m_attackers);
+	if (g_theProfileDB->IsNewCombat())
+	{
+		DoCounterAttacks(&m_defenders, &m_attackers);
+	} else {
+		DoAttacks(&m_defenders, &m_attackers);
+	}
 }
 
 void CTP2Combat::DoMovement()

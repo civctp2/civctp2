@@ -59,6 +59,7 @@
 // - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
 // - Removed new rules attempt - E 12.27.2006
 // - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added a new combat option (28-Feb-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -407,6 +408,8 @@ private:
     sint32 m_NoCityLimit;
     /// Shows the path along that a city governor would build a road
     sint32 m_DebugCityAstar;
+    /// Enable new combat
+    sint32 m_newcombat;
 
 
 
@@ -605,6 +608,7 @@ public:
     void SetDebugAI(BOOL on)                            { m_debugai = on; }
     void SetNoCityLimit(BOOL on)                        { m_NoCityLimit = on; }
     void SetUpgrade(BOOL on)                            { m_upgrade = on; }
+    void SetNewCombat(BOOL on)                          { m_newcombat = on; }
 /*
     void SetDebugAI(BOOL on)   //emod2
     {
@@ -864,6 +868,7 @@ public:
     BOOL    IsNoCityLimit()                     { return m_NoCityLimit; }
     BOOL    IsDebugCityAstar()                  { return m_DebugCityAstar; }
     BOOL    IsUpgrade()                         { return m_upgrade; }
+    BOOL    IsNewCombat()                       { return m_newcombat; }
 
 //later add start age and end age?
 };
