@@ -3061,7 +3061,7 @@ str_profile_AIMilitiaUnit                       "Unité de milice gratuite pour A
 str_profile_OneCityChallenge                    "Défi une ville"                                # One city challenge
 str_profile_CityCaptureOptions                  "Options de capture des villes"                 # Captured city options
 str_profile_DebugCityAstar                      "Débogage du tracé du réseau routier"
-
+str_profile_NewCombat                           "La défense d'utilisation de défenseurs seulement"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"0ptions Musique"
@@ -3129,7 +3129,8 @@ str_tbl_ldl_AINoCityLimit_On			"Pas de limite au nombre de villes AI"		# AI not 
 str_tbl_ldl_AINoCityLimit_Off			"Nombre de villes AI limité"			# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"Nombre de villes illimité"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Limites normales au nombre de villes"		# City limit for all players
-
+str_tbl_ldl_NewCombat_Off			"La défense et attaque d'utilisation de défenseurs"
+str_tbl_ldl_NewCombat_On			"La défense d'utilisation de défenseurs seulement"
 
 # Not Implemented
 str_SE_DebugAI					"débogage AI"

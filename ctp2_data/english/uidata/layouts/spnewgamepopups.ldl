@@ -1323,6 +1323,18 @@ SPNewGameRulesScreen {
 		}
 	}
 
+	NewCombat:GAMEPLAY_CHECKBOX {
+
+		int	ypix	320
+		int	xpix	325
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NewCombat_Off"
+			string	string1	"str_tbl_ldl_NewCombat_On"
+		}
+	}
+
 # Cut from spec.
 #	RuleTwo:POPUP_TOGGLESWITCH {
 #

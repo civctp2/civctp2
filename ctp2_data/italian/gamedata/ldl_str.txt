@@ -3061,7 +3061,7 @@ str_profile_AIMilitiaUnit                       "AI Free Militia Unit"          
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
-
+str_profile_NewCombat                           "Difesa di uso delle protezioni soltanto"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Musicoptions"
@@ -3129,7 +3129,8 @@ str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by ci
 str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
-
+str_tbl_ldl_NewCombat_Off			"Difesa ed attacco di uso delle protezioni"
+str_tbl_ldl_NewCombat_On			"Difesa di uso delle protezioni soltanto"
 
 # Not Implemented
 str_SE_DebugAI					"debug"
