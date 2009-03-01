@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Veteran effect added.
+// - Added a new combat option (28-Feb-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1302,7 +1303,7 @@ void CTP2Combat::DoCounterAttacks(CombatField *attacker, CombatField *defender)
 	for(y = 0; y < m_height; y++) {
 		CombatUnit *att = &attacker->GetUnit(x, y);
 		if(att->IsActive() &&
-		   att->GetOffense() > 0.001) {
+		   att->GetDefense() > 0.001) {
 			sint32 dx, dy;
 			if(!defender->FindTargetForAttackFrom(x, y, &dx, &dy, att->GetCombatType() == UNIT_TYPE_FLANKER)) {
 				

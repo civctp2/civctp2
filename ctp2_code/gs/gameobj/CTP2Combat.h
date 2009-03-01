@@ -26,6 +26,7 @@
 //
 // - Veteran effect added.
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added a new combat option (28-Feb-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
