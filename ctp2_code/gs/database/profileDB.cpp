@@ -50,6 +50,7 @@
 // - Added DebugAI option
 // - Made the upgrade option show up in the debug version. (19-May-2007 Martin Gühmann)
 // - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added a new combat option (28-Feb-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -444,7 +445,7 @@ ProfileDB::ProfileDB()
 	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
-	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL);
+	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)
