@@ -1610,7 +1610,8 @@ bool ArmyData::CanFight(CellUnitList &defender)
 
 	bool haveCombatUnits = false;
     for(i = 0; i < m_nElements; i++) {
-        if(m_array[i].GetDBRec()->GetAttack() > 0) {
+        if(m_array[i].GetDBRec()->GetAttack() > 0
+		|| m_array[i].GetDBRec()->GetDefense() > 0) {
 			haveCombatUnits = true;
             break;
         }
@@ -8657,24 +8658,20 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 	}
 
-
-
 	// end EMOD
 
 	bool defenderSucks = true;
 	for(i = 0; i < defender.Num(); i++) {
-		if(defender[i].GetAttack() > 0) {
+		if(defender[i].GetAttack() > 0
+		|| defender[i].GetDefense() > 0) {
 			defenderSucks = false;
 			break;
 		}
 	}
 
 	if(defenderSucks) {
-		
-
 		if(ta.IsValid()) {
 			g_director->AddAttack(ta, td);
-			
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_BattleAftermath,
 								   GEA_Army, m_id,
