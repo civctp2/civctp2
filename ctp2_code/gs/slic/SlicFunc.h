@@ -646,6 +646,9 @@ SLICFUNC(SFR_VOID, Plunder);
 SLICFUNC(SFR_VOID, Liberate);
 SLICFUNC(SFR_VOID, AddPW);  
 SLICFUNC(SFR_VOID, PuppetGovt); 
+//New slicfunctions by Maq
+SLICFUNC(SFR_INT,  CreateBuilding)
+SLICFUNC(SFR_INT,  CreateWonder)
 
 
 #endif // __SLICFUNC_H__

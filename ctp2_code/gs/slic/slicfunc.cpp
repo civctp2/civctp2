@@ -7576,3 +7576,58 @@ SFN_ERROR Slic_AddPW::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
+
+SFN_ERROR Slic_CreateBuilding::Call(SlicArgList *args)
+{
+	if (args->Count() != 2) {
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	Unit city;
+	sint32 type;
+	if(!args->GetCity(0, city)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	if(!args->GetInt(1, type))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(type < 0 || type >= g_theBuildingDB->NumRecords())
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	city.CD()->AddImprovement(type);
+	return SFN_ERROR_OK;
+
+}
+
+SFN_ERROR Slic_CreateWonder::Call(SlicArgList *args)
+{
+	if (args->Count() != 2) {
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	Unit city;
+	sint32 type;
+	if(!args->GetCity(0, city)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	if(!args->GetInt(1, type))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(city)) {
+		return SFN_ERROR_OK;
+	}
+
+	if(type < 0 || type >= g_theWonderDB->NumRecords())
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	city.CD()->AddWonder(type);
+	return SFN_ERROR_OK;
+
+}
+

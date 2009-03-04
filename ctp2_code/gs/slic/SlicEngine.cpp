@@ -990,7 +990,10 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_Plunder);
 	m_functionHash->Add(new Slic_Liberate);
 	m_functionHash->Add(new Slic_AddPW);
-//	m_functionHash->Add(new Slic_PuppetGovt);
+	//m_functionHash->Add(new Slic_PuppetGovt);
+	//Added by Maq
+	m_functionHash->Add(new Slic_CreateBuilding);
+	m_functionHash->Add(new Slic_CreateWonder);
 
 }
 
