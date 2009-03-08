@@ -92,6 +92,13 @@ private:
 	
 	ctp2_Static				*m_cityBonusText;
 	ctp2_Static				*m_cityBonusValue;
+
+	ctp2_Static				*m_citylandattackBonusText;
+	ctp2_Static				*m_citylandattackBonusValue;
+	ctp2_Static				*m_cityairattackBonusText;
+	ctp2_Static				*m_cityairattackBonusValue;
+	ctp2_Static				*m_cityseaattackBonusText;
+	ctp2_Static				*m_cityseaattackBonusValue;
 	
 	ctp2_Static				*m_cityName;
 

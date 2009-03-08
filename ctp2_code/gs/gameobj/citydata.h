@@ -49,6 +49,8 @@
 // - Added HasNeededGood method by E
 // - Added HasEitherGood method by E
 // - Added HasTileImpInRadius method by E 4-7-2006 bool if a city has imp in radius
+// - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
+//   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -554,6 +556,9 @@ public:
 	void NewGovernment(sint32 government_type);
 
 	double GetDefendersBonus() const;
+	double GetCityLandAttackBonus() const;
+	double GetCityAirAttackBonus() const;
+	double GetCitySeaAttackBonus() const;
 	double GetDefendersBonusNoWalls() const;
 
 	// Modified by kaan to address bug # 12

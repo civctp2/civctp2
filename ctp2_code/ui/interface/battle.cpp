@@ -56,6 +56,9 @@
 Battle::Battle() :
 m_eventQueue(new PointerList<BattleEvent>),
 m_cityBonus(0.0),
+m_citylandattackBonus(0.0),
+m_cityairattackBonus(0.0),
+m_cityseaattackBonus(0.0),
 m_cityImage(-1),
 m_terrainBonus(0.0),
 m_terrainType(0),
@@ -108,11 +111,16 @@ void Battle::Initialize(Army const & attackers, CellUnitList const & defenders)
 
 	
 	MapPoint		defPos;
+	MapPoint		attPos;
 	defenders.GetPos(defPos);
+	attackers.GetPos(attPos);//tile attacking from
 
 	terrainutil_GetDefenseBonus(defPos, m_terrainBonus, m_fortBonus);
 
 	unitutil_GetAverageDefenseBonus(defPos, attackers, defenders, m_cityBonus, m_fortifiedBonus);
+	unitutil_GetCityLandAttackBonus(defPos, m_citylandattackBonus);
+	unitutil_GetCityAirAttackBonus(defPos, m_cityairattackBonus);
+	unitutil_GetCitySeaAttackBonus(defPos, m_cityseaattackBonus);
 	unitutil_GetCityInfo(defPos, m_cityName, m_cityImage);
 
 	

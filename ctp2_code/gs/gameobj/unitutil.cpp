@@ -30,6 +30,9 @@
 // - Added function to compare unit type quality, based on unit cargo capacity
 //   or on the units statistics like attack, defense and range. (19-May-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added GetCityLandAttackBonus, GetCityAirAttackBonus and GetCitySeaAttackBonus
+//   for battleview window. Moved leader bonus from positiondefense, 
+//   to unitdata::getdefense. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -247,6 +250,48 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 	entrenched_bonus /= defenders.Num();
 }
 
+void unitutil_GetCityLandAttackBonus(const MapPoint &pos, double & city_landatk_bonus)
+{
+	const CityData *cityData;
+	city_landatk_bonus = 0.0;
+
+	const Cell *    cell = g_theWorld->GetCell(pos);
+	if (cell->GetCity().IsValid()) 
+    {
+		cityData = cell->GetCity().GetData()->GetCityData();
+		Assert(cityData);
+		city_landatk_bonus += cityData->GetCityLandAttackBonus();
+	}
+}
+
+void unitutil_GetCityAirAttackBonus(const MapPoint &pos, double & city_airatk_bonus)
+{
+	const CityData *cityData;
+	city_airatk_bonus = 0.0;
+
+	const Cell *    cell = g_theWorld->GetCell(pos);
+	if (cell->GetCity().IsValid()) 
+    {
+		cityData = cell->GetCity().GetData()->GetCityData();
+		Assert(cityData);
+		city_airatk_bonus += cityData->GetCityAirAttackBonus();
+	}
+}
+
+void unitutil_GetCitySeaAttackBonus(const MapPoint &pos, double & city_seaatk_bonus)
+{
+	const CityData *cityData;
+	city_seaatk_bonus = 0.0;
+
+	const Cell *    cell = g_theWorld->GetCell(pos);
+	if (cell->GetCity().IsValid()) 
+    {
+		cityData = cell->GetCity().GetData()->GetCityData();
+		Assert(cityData);
+		city_seaatk_bonus += cityData->GetCitySeaAttackBonus();
+	}
+}
+
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 {
 	const CityData *cityData;
@@ -419,17 +464,6 @@ double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrench
 		(rec->GetMovementTypeSpace() && g_theWorld->IsSpace(pos))) 
 	{
 		def += basedef * terrain_bonus;
-	}
-
-	// Added for Leaders to double defense - EMOD 6-6-2007
-	for (sint32 i = 0; i < cell->GetNumUnits(); i++)
-	{
-		if(cell->AccessUnit(i).GetDBRec()->GetLeader())
-		{
-			def += def;
-			break; // Only double for one leader not more
-			//def += LEADERBONUS? UnitDB or ConstDB?
-		}
 	}
 
 	return def;

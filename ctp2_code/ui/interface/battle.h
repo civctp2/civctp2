@@ -41,6 +41,9 @@ public:
 	void					ShowEvent(BattleEvent *event);
 
 	double					GetCityBonus(void) { return m_cityBonus; }
+	double					GetCityLandAttackBonus(void) { return m_citylandattackBonus; }
+	double					GetCityAirAttackBonus(void) { return m_cityairattackBonus; }
+	double					GetCitySeaAttackBonus(void) { return m_cityseaattackBonus; }
 	sint32					GetCityImage(void) { return m_cityImage; }
 	MBCHAR					*GetCityName(void) { return m_cityName; }
 	double					GetTerrainBonus(void) { return m_terrainBonus; }
@@ -84,6 +87,9 @@ private:
 
 	
 	double						m_cityBonus;
+	double						m_citylandattackBonus;
+	double						m_cityairattackBonus;
+	double						m_cityseaattackBonus;
 	sint32						m_cityImage;
 	MBCHAR						m_cityName[k_MAX_NAME_LEN];
 

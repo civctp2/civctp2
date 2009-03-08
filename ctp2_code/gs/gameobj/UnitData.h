@@ -35,6 +35,7 @@
 // - Added IsReligion bools
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added GetRanged, and GetDefCounterAttack for new combat option. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -516,6 +517,8 @@ public:
 
 	double GetOffense(const Unit &defender) const;
 	double GetDefense(const Unit &attacker) const;
+	double GetRanged(const Unit &defender) const;
+	double GetDefCounterAttack(const Unit &attacker) const;
 
 	double GetAttack(const UnitRecord *rec, const Unit defender) const;
 	bool HasAirport() const;

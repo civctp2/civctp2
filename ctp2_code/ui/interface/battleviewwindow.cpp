@@ -156,6 +156,12 @@ BattleViewWindow::BattleViewWindow
     m_terrainBonusValue     (NULL),
     m_cityBonusText         (NULL),
     m_cityBonusValue        (NULL),
+    m_citylandattackBonusText (NULL),
+    m_citylandattackBonusValue (NULL),
+    m_cityairattackBonusText (NULL),
+    m_cityairattackBonusValue (NULL),
+    m_cityseaattackBonusText (NULL),
+    m_cityseaattackBonusValue (NULL),
     m_cityName              (NULL),
     m_fortBonusText         (NULL),
     m_fortBonusValue        (NULL),
@@ -189,6 +195,12 @@ BattleViewWindow::~BattleViewWindow()
 	delete m_terrainBonusValue;
 	delete m_cityBonusText;
 	delete m_cityBonusValue;
+	delete m_citylandattackBonusText;
+	delete m_citylandattackBonusValue;
+	delete m_cityairattackBonusText;
+	delete m_cityairattackBonusValue;
+	delete m_cityseaattackBonusText;
+	delete m_cityseaattackBonusValue;
 	delete m_cityName;
 	delete m_fortBonusText;
 	delete m_fortBonusValue;
@@ -259,13 +271,33 @@ AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	m_cityBonusValue = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
 	Assert(m_cityBonusValue);
 
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CityLandAttackBonusText");
+	m_citylandattackBonusText = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_citylandattackBonusText);
+
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CityLandAttackBonusValue");
+	m_citylandattackBonusValue = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_citylandattackBonusValue);
+
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CityAirAttackBonusText");
+	m_cityairattackBonusText = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_cityairattackBonusText);
+
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CityAirAttackBonusValue");
+	m_cityairattackBonusValue = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_cityairattackBonusValue);
+
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CitySeaAttackBonusText");
+	m_cityseaattackBonusText = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_cityseaattackBonusText);
+
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "CitySeaAttackBonusValue");
+	m_cityseaattackBonusValue = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(m_cityseaattackBonusValue);
+
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "CityName");
 	m_cityName = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
 	Assert(m_cityName);
-
-	
-	
-	
 
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "FortBonusText");
 	m_fortBonusText = new ctp2_Static(&errcode, aui_UniqueId(), buttonBlock);
@@ -440,7 +472,18 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	sprintf(s, "+%d", (sint32)bonus);
 	m_cityBonusValue->SetText(s);
 
+	bonus = battle->GetCityLandAttackBonus();
+	sprintf(s, "+%d", (sint32)bonus);
+	m_citylandattackBonusValue->SetText(s);
+
+	bonus = battle->GetCityAirAttackBonus();
+	sprintf(s, "+%d", (sint32)bonus);
+	m_cityairattackBonusValue->SetText(s);
 	
+	bonus = battle->GetCitySeaAttackBonus();
+	sprintf(s, "+%d", (sint32)bonus);
+	m_cityseaattackBonusValue->SetText(s);
+
 	bonus = battle->GetFortBonus();
 	sprintf(s, "+%d%%", (sint32)(bonus * 100.0));
 	m_fortBonusValue->SetText(s);

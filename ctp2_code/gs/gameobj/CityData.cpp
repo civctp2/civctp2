@@ -193,6 +193,8 @@
 // - The CityInfluenceChanged event is now valid after conquest that destroyed
 //   the city. (26-Jan-2008 Martin Gühmann)
 // - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+// - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
+//   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -4661,6 +4663,27 @@ double CityData::GetDefendersBonusNoWalls() const
 
 // EMOD - add influence or culture defese bonus here?
 // EMOD - compute reductions in defense by siege units here?
+
+	return b;
+}
+
+double CityData::GetCityLandAttackBonus() const
+{
+	double b = buildingutil_GetOffenseBonusLand(GetEffectiveBuildings());
+
+	return b;
+}
+
+double CityData::GetCityAirAttackBonus() const
+{
+	double b = buildingutil_GetOffenseBonusAir(GetEffectiveBuildings());
+
+	return b;
+}
+
+double CityData::GetCitySeaAttackBonus() const
+{
+	double b = buildingutil_GetOffenseBonusWater(GetEffectiveBuildings());
 
 	return b;
 }

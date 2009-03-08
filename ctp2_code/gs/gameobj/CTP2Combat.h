@@ -257,12 +257,17 @@ private:
 
 	void ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY, 
 					   CombatField *defender, sint32 defX, sint32 defY);
-	void ExecuteCounterAttack(CombatField *attacker, sint32 attX, sint32 attY, 
-					   CombatField *defender, sint32 defX, sint32 defY);
 	void DoAttacks(CombatField *attacker, CombatField *defender);
-	void DoCounterAttacks(CombatField *attacker, CombatField *defender);
 	void DoAttacks();
 	void DoCounterAttacks();
+	// below are used only when g_theProfileDB->IsNewCombat
+	void ExecuteRangedCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY, 
+							 CombatField *defender, sint32 defX, sint32 defY);
+	void DoRangedCounterAttacksNC(CombatField *attacker, CombatField *defender);
+	void ExecuteCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY, 
+					   CombatField *defender, sint32 defX, sint32 defY);
+	void DoCounterAttacksNC(CombatField *attacker, CombatField *defender);
+	// end newcombat option -Maq
 	void DoMovement();
 
 	void Balance();

@@ -79,7 +79,8 @@
 //   same tile. (7-Nov-2007 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
-// - 
+// - Modified GetAttack, GetOffense and GetDefense. Added GetRanged. Also added
+//	 GetDefCounterAttack for new combat option defenders. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1288,102 +1289,73 @@ bool UnitData::CanActivelyDefend(CellUnitList const &attacker) const
 
 double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 {
-	UnitRecord const *	defrec		= defender.GetDBRec();
+	UnitRecord const *	defrec	= defender.GetDBRec();
+	Cell *				cell = g_theWorld->GetCell(m_pos);
 
-	if(!(rec->GetCanAttack() & defrec->GetMovementType())) 
-	{
+	if(!(rec->GetCanAttack() & defrec->GetMovementType())) {
 		return 0.0;
 	}
 
-	double const		baseattack	= rec->GetAttack();
-	double				attack		= baseattack;
+	double				base	= rec->GetAttack();
+	double				bonuses	= 0.0;//cumulative % bonuses
 
-	if (defrec->GetWoodenShip())
-	{
-		attack += baseattack * rec->GetAttackWoodenShipBonus();
+	// Added for Leaders to increase attack
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			bonuses += 0.5;// @todo this needs a constDB value
+			break;
+		}
 	}
-
+	if (IsVeteran()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	if (IsElite()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	double				value		= 0.0;
+	if (defrec->GetWoodenShip()
+		 && rec->GetWoodenShipBonus(value)) {
+		bonuses += value;
+	}
 	MapPoint	dpos;
 	defender.GetPos(dpos);
-	double		cityAttack;
-	if ((g_theWorld->GetCell(dpos)->GetCity().m_id != (0)) &&
-	    rec->GetAttackCityBonus(cityAttack)
-	   )
-	{
-		attack += baseattack * cityAttack;
+	if ((g_theWorld->GetCell(dpos)->GetCity().m_id != (0))//city unit will attack
+		 && rec->GetAttackCityBonus(value)) {
+		bonuses += value;
 	}
+	if (defrec->GetIsSubmarine() 
+		 && rec->GetAttackBonusSubmarine(value)) {
+		bonuses += value;
+	}
+	//EMOD Civ Bonuses July 2, 2006
+	if (defender.GetMovementTypeLand() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusLand(value))) 
+	{
+		bonuses += value;
+	}
+	if (defender.GetMovementTypeAir() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusAir(value))) 
+	{
+		bonuses += value;
+	}
+	if (defender.GetMovementTypeShallowWater() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusWater(value))) 
+	{
+		bonuses += value;
+	}
+	base += (base * bonuses);
+	// finally add city attack buildings, so they're not subject to bonuses.
+	if (!g_theProfileDB->IsNewCombat()) {
+		Unit	city	= g_theWorld->GetCity(m_pos);
+		if(city.IsValid()) {
+			base += city.CD()->GetOffenseBonus(defender);
+		}
+	}
+	sint32 intAttack = (sint32)base;
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
+	if(modAttack != intAttack) base = modAttack;
 
-	double submarineAttack;
-	if (defrec->GetIsSubmarine() &&
-	    rec->GetAttackBonusSubmarine(submarineAttack)
-	   )
-	{
-		attack += baseattack * submarineAttack;
-	}
-
-	// EMOD
-	double	bonus;
-	if (defrec->GetIsFoot() && rec->GetFootBonus(bonus))
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsMounted() && rec->GetMountedBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsSiege() && rec->GetSiegeBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsWheeled() && rec->GetWheeledBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsMechanized() && rec->GetMechanizedBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsSpecialForces() && rec->GetSpecialForcesBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsHelicopter() && rec->GetHelicopterBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetCivilian() && rec->GetCivilianBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-
-	if (defrec->GetIsGuerrilla() && rec->GetGuerrillaBonus(bonus)) 
-	{
-		attack += baseattack * bonus;
-	}
-//EMOD Civ Bonuses July 2, 2006
-
-	if (defender.GetMovementTypeLand() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusLand(bonus))) 
-	{
-		attack += baseattack * bonus;
-	}
-	if (defender.GetMovementTypeAir() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusAir(bonus))) 
-	{
-		attack += baseattack * bonus;
-	}
-	if (defender.GetMovementTypeShallowWater() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusWater(bonus))) 
-	{
-		attack += baseattack * bonus;
-	}
-//end EMOD
-
-	return attack;
+	return base;
 }
 
 //----------------------------------------------------------------------------
@@ -1565,13 +1537,6 @@ void UnitData::FightOneRound(Unit did, double defenders_bonus,
 {
 	double d = did.GetDefense(Unit(this->m_id)); 
 	double a = GetAttack(GetDBRec(), did);
-	
-	if (IsVeteran()) {  //copy and make for elite units
-		a += a * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01;
-	}
-	if (IsElite()) {  //copy and make for elite units
-		a += a * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01;
-	}
 
 	Assert(0.00001f < a+d); 
 	
@@ -3350,132 +3315,400 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 {
 	return unitutil_GetPositionDefense(GetDBRec(), Flag(k_UDF_IS_ENTRENCHED), m_pos, attacker);
 }
-
-// returns this unit's attack points when attacking Unit defender
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetOffense
+//
+// Description: Gets all attack of unit against a defender.
+//
+// Parameters : -
+// 
+//
+// Globals    : -
+//
+// Returns    : Returns the unit's attack points.
+//
+// Remark(s)  : Base attack plus % bonuses.
+//				Attack city buildings added to the end.
+//				See GetDefCounterAttack for "newcombat" defender's offense.
+//
+//----------------------------------------------------------------------------
 double UnitData::GetOffense(const Unit &defender) const
 {
-	const UnitRecord *  myRec   = GetDBRec();
-	Unit                city    = g_theWorld->GetCity(m_pos);
-	double              base    = myRec->GetAttack();
+	const UnitRecord	*defrec, *rec;
+	defrec				= defender.GetDBRec();
+	rec					= GetDBRec();
+	double		base	= rec->GetAttack();
+	double		bonuses	= 0.0;//cumulative % bonuses
+	Cell *		cell	= g_theWorld->GetCell(m_pos);
 
-	if(city.IsValid())
-	{
-		base += city.CD()->GetOffenseBonus(defender);
-	}
-
-	// Added for Leaders to double defense
-	Cell *cell = g_theWorld->GetCell(m_pos);
-	for (sint32 i = 0; i < cell->GetNumUnits(); i++)
-	{
-		if(cell->AccessUnit(i).GetDBRec()->GetLeader())
-		{
-			base += base;
-			//base += LEADERBONUS? UnitDB or ConstDB?
+	// Added for Leaders to increase attack
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			bonuses += 0.5;// @todo this needs a constDB value
+			break;
 		}
 	}
-
+	if (IsVeteran()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	if (IsElite()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	double				value		= 0.0;
+	if (defrec->GetWoodenShip()
+		 && rec->GetWoodenShipBonus(value)) {
+		bonuses += value;
+	}
+	MapPoint	dpos;
+	defender.GetPos(dpos);
+	if ((g_theWorld->GetCell(dpos)->GetCity().m_id != (0))
+		 && rec->GetAttackCityBonus(value)) {
+		bonuses += value;
+	}
+	if (defrec->GetIsSubmarine() 
+		 && rec->GetAttackBonusSubmarine(value)) {
+		bonuses += value;
+	}
+	//EMOD Civ Bonuses July 2, 2006
+	if (defender.GetMovementTypeLand() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusLand(value))) 
+	{
+		bonuses += value;
+	}
+	if (defender.GetMovementTypeAir() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusAir(value))) 
+	{
+		bonuses += value;
+	}
+	if (defender.GetMovementTypeShallowWater() 
+		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusWater(value))) 
+	{
+		bonuses += value;
+	}
+	base += (base * bonuses);
+	// finally add city attack buildings, so they're not subject to bonuses.
+	if (!g_theProfileDB->IsNewCombat()) {
+		Unit	city	= g_theWorld->GetCity(m_pos);
+		if(city.IsValid()) {
+			base += city.CD()->GetOffenseBonus(defender);
+		}
+	}
 	sint32 intAttack = (sint32)base;
 	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
-	if(modAttack != intAttack)
-		base = modAttack;
+	if(modAttack != intAttack) base = modAttack;
+
 	return base;
 }
-
-// returns this units defense points when defending against Unit attacker 	
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetDefense
+//
+// Description: Gets all defence of unit against an attacker.
+//
+// Parameters : -
+// 
+//
+// Globals    : -
+//
+// Returns    : Returns the unit's defense points.
+//
+// Remark(s)  : Base defense plus % bonuses.
+//				Defense city buildings added to the end.
+//
+//----------------------------------------------------------------------------
 double UnitData::GetDefense(const Unit &attacker) const
 {
-	const UnitRecord *attackRec, *myRec;
-	Cell *cell = g_theWorld->GetCell(m_pos);
+	const UnitRecord	*attackRec, *myRec;
+	attackRec			= attacker.GetDBRec();
+	myRec				= GetDBRec();
+	double base			= myRec->GetDefense();
+	double bonuses		= 0.0;// cumulative bonuses
+	Cell *		   cell = g_theWorld->GetCell(m_pos);
 
-	attackRec = attacker.GetDBRec();
-	myRec = GetDBRec();
-	
-	double def = GetPositionDefense(attacker);
+	if(IsEntrenched()) {
+		bonuses += g_theConstDB->Get(0)->GetEntrenchmentBonus();
+	}
 
-	if(cell->GetCity().m_id != (0)) {
-		const CityData *cityData = cell->GetCity().GetData()->m_city_data;
-		Assert(cityData);
+	double terrain_bonus = 0.0;
+	double fort_bonus	= 0.0;
+	terrainutil_GetDefenseBonus(m_pos, terrain_bonus, fort_bonus);
 
-		if(attackRec->GetIgnoreCityWalls()) {
-			
-			def -= cityData->GetDefendersBonus();
-			
-			def += cityData->GetDefendersBonusNoWalls();
+	bonuses += fort_bonus;
+
+	if(terrain_bonus > 0 && 
+		(myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
+		(myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
+		(myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
+		(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos))) {
+
+		bonuses += terrain_bonus;
+	}
+	if (g_theProfileDB->IsNewCombat()) {// these were not in original combat for defence
+		if (IsVeteran()) {
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+		if (IsElite()) {
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+		// Added for Leaders to increase defense
+		for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+			if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+				bonuses += 0.5;// @todo this needs a constDB value
+				break;
+			}
 		}
 	}
-
 	double value = 0.0;
-	if(attackRec->GetIsMounted()) {
-		if(myRec->GetAgainstMountedBonus(value))
-			def += myRec->GetDefense() * value;
-		else if(myRec->GetBonusAgainstMounted())
-			def += myRec->GetDefense();
+	if(attackRec->GetIsMounted()
+		&& myRec->GetMountedBonus(value)) {
+		bonuses += value;
 	}
-
-	if(attackRec->GetMovementTypeAir()) {
-		if(myRec->GetAirDefenseBonus(value))
-			def += myRec->GetDefense() * value;
-		else if(myRec->GetBonusAirDefense())
-			def += myRec->GetDefense();
+	if(attackRec->GetMovementTypeAir()
+		&& myRec->GetAirBonus(value)) {
+		bonuses += value;
 	}
-
 	//Additional Battle Modifiers by E 12-05-2005
 	if(attackRec->GetIsFoot()
 	&& myRec->GetFootBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetIsSiege()
 	&& myRec->GetSiegeBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetIsWheeled()
 	&& myRec->GetWheeledBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
 
 	if(attackRec->GetIsMechanized()
 	&& myRec->GetMechanizedBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetIsHelicopter()
 	&& myRec->GetHelicopterBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetIsGuerrilla()
 	&& myRec->GetGuerrillaBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetCivilian()
 	&& myRec->GetCivilianBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
-
 	if(attackRec->GetIsSpecialForces()
 	&& myRec->GetSpecialForcesBonus(value)
 	){
-		def += myRec->GetDefense() * value;
+		bonuses += value;
 	}
+	base += (base * bonuses);
+	// finally calculate city defence buildings, so they're not subject to bonuses.
+	if(cell->GetCity().m_id != (0)) {
+		const CityData *cityData = cell->GetCity().GetData()->m_city_data;
+		Assert(cityData);
 
-	// End EMOD
+		base += cityData->GetDefendersBonus();
 
-	sint32 intDef = (sint32)def;
+		double walldef;
+		if(cityData->HasCityWalls() && attacker.IsValid()) {
+			if(attackRec->GetIgnoreCityWalls()) {
+				walldef = (buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings()))
+					* (g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef());
+				base -= walldef;// deduct correct walls defence
+			} else if (g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner())) {
+				base += g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner());// else just add feat deduction
+			//base -= cityData->GetDefendersBonus();
+			//base += cityData->GetDefendersBonusNoWalls();//@todo this doesn't work
+			}
+		}
+	}
+	// moddefense replaces all the above if used.
+	sint32 intDef = (sint32)base;
 	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
 	if(modDef != intDef)
-		def = modDef;
+		base = modDef;
 
-	return def;
+	return base;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetRanged
+//
+// Description: Gets all ranged attack of unit against an attacker.
+//
+// Parameters : -
+// 
+//
+// Globals    : -
+//
+// Returns    : Returns the unit's ranged attack points.
+//
+// Remark(s)  : Base ranged plus % bonuses.
+//				There are no city building bonuses to ranged attack.
+//
+//----------------------------------------------------------------------------
+double UnitData::GetRanged(const Unit &defender) const
+{
+	const UnitRecord *  myRec   = GetDBRec();
+	double              base	= myRec->GetZBRangeAttack();
+	Cell *				cell    = g_theWorld->GetCell(m_pos);
+	double				bonuses = 0.0;
+
+	if (g_theProfileDB->IsNewCombat()) {// these were not in original combat
+		if (IsVeteran()) {
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+		if (IsElite()) {
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+		// Added for Leaders to increase defense
+		for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+			if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+				bonuses += 0.5;// @todo this needs a constDB value
+				break;
+			}
+		}
+	}
+	sint32 intAttack = (sint32)base;
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitRangedAttack, intAttack, m_id, defender.m_id, intAttack);
+	if(modAttack != intAttack)
+		base = modAttack;
+
+	return base;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::GetDefCounterAttack
+//
+// Description: Gets all defence of unit against an attacker. Newcombat only.
+//
+// Parameters : -
+// 
+//
+// Globals    : -
+//
+// Returns    : Returns the unit's defence points.
+//
+// Remark(s)  : Only used in "newcombat" option.
+//				Like getdefense, but this adds the attack buildings and
+//				removes the defensive ones.
+//
+//----------------------------------------------------------------------------
+double UnitData::GetDefCounterAttack(const Unit &attacker) const
+{
+	const UnitRecord	*attackRec, *myRec;
+	attackRec			= attacker.GetDBRec();
+	myRec				= GetDBRec();
+	double base			= myRec->GetDefense();
+	double bonuses		= 0.0;// cumulative bonuses
+	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	// Added for Leaders to increase defense
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			bonuses += 0.5;// @todo this needs a constDB value
+			break;
+		}
+	}
+	if(IsEntrenched()) {
+		bonuses += g_theConstDB->Get(0)->GetEntrenchmentBonus();
+	}
+
+	double terrain_bonus = 0.0;
+	double fort_bonus	= 0.0;
+	terrainutil_GetDefenseBonus(m_pos, terrain_bonus, fort_bonus);
+
+	bonuses += fort_bonus;
+
+	if(terrain_bonus > 0 && 
+		(myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
+		(myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
+		(myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
+		(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos))) {
+
+		bonuses += terrain_bonus;
+	}
+	if (IsVeteran()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	if (IsElite()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	double value = 0.0;
+	if(attackRec->GetIsMounted()
+		&& myRec->GetMountedBonus(value)) {
+		bonuses += value;
+	}
+	if(attackRec->GetMovementTypeAir()
+		&& myRec->GetAirBonus(value)) {
+		bonuses += value;
+	}
+	//Additional Battle Modifiers by E 12-05-2005
+	if(attackRec->GetIsFoot()
+	&& myRec->GetFootBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetIsSiege()
+	&& myRec->GetSiegeBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetIsWheeled()
+	&& myRec->GetWheeledBonus(value)
+	){
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsMechanized()
+	&& myRec->GetMechanizedBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetIsHelicopter()
+	&& myRec->GetHelicopterBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetIsGuerrilla()
+	&& myRec->GetGuerrillaBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetCivilian()
+	&& myRec->GetCivilianBonus(value)
+	){
+		bonuses += value;
+	}
+	if(attackRec->GetIsSpecialForces()
+	&& myRec->GetSpecialForcesBonus(value)
+	){
+		bonuses += value;
+	}
+	base += (base * bonuses);
+	// finally add city attack buildings, so they're not subject to bonuses.
+	Unit	city	= g_theWorld->GetCity(m_pos);
+	if(city.IsValid()) {
+		base += city.CD()->GetOffenseBonus(attacker);// ballista etc
+	}
+	// moddefense replaces all the above if used.
+	sint32 intDef = (sint32)base;
+	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
+	if(modDef != intDef)
+		base = modDef;
+
+	return base;
 }
 
 // not used

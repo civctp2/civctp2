@@ -100,6 +100,9 @@ private:
                                 m_walker;
 	BattleEvent	*               m_activeEvent;
 	double						m_cityBonus;
+	double						m_citylandattackBonus;
+	double						m_cityairattackBonus;
+	double						m_cityseaattackBonus;
 	double						m_terrainBonus;
 	double						m_fortBonus;
 	double						m_fortifiedBonus;

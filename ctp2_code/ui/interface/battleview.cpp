@@ -70,6 +70,9 @@ BattleView::BattleView()
     m_walker                    (new PointerList<BattleEvent>::Walker),
 	m_activeEvent               (NULL),
 	m_cityBonus                 (0.0),
+	m_citylandattackBonus       (0.0),
+	m_cityairattackBonus        (0.0),
+	m_cityseaattackBonus        (0.0),
 	m_terrainBonus              (0.0),
 	m_fortBonus                 (0.0),
 	m_fortifiedBonus            (0.0)
