@@ -758,6 +758,9 @@ str_ldl_Cities	"ìsés"
 str_ldl_CITIES_COLON	"ìsés:"
 str_ldl_City	"ìsés"
 str_ldl_City_Bonus_COLON	"ìsésñhâq:"
+str_ldl_City_Air_Attack_Bonus_COLON		"City Air Attack:"
+str_ldl_City_Land_Attack_Bonus_COLON		"City Land Attack:"
+str_ldl_City_Sea_Attack_Bonus_COLON		"City Sea Attack:"
 str_ldl_City_Builder	"ìsésÇÃåöê›é“"
 str_ldl_CITY_ESPIONAGE	"ìsésÇÃíTçı"
 str_ldl_CITY_GOLD	"ìsésÇÃÉSÅ[ÉãÉh"
@@ -3218,7 +3221,7 @@ str_profile_AIFreeUpgrade 			"AI Free Upgrades"						# AI doesn't pay goldfor up
 str_profile_AIMilitiaUnit 			"AI Free Militia Unit"						#If city is empty at turn start AI gets cheapest unit
 str_profile_OneCityChallenge 			"One City Challenge"						#If city is empty at turn start AI gets cheapest unit
 str_profile_CityCaptureOptions 			"City Capture Options"						#If city is empty at turn start AI gets cheapest unit
-str_profile_NewCombat                           "Defenders Only Use Defense"
+str_profile_NewCombat                           "New Combat"
 
 
 ### Great Libary Strings ###
@@ -3282,8 +3285,8 @@ str_tbl_ldl_AIFreeUpgrade_On "AI Free Upgrades - On"						# AI doesn't pay goldf
 str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"						#If city is empty at turn start AI gets cheapest unit
 str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
 str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_NewCombat_Off			"Defenders Use Defense and Attack"
-str_tbl_ldl_NewCombat_On			"Defenders Only Use Defense"
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
 
 str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"

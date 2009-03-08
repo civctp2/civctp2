@@ -42,6 +42,8 @@
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
 #
 #
 #----------------------------------------------------------------------------
@@ -655,6 +657,9 @@ str_ldl_Cities					"Ciudades"
 str_ldl_CITIES_COLON				"CIUDAD:"
 str_ldl_City					"Ciudad"
 str_ldl_City_Bonus_COLON			"Bonus ciudad:"
+str_ldl_City_Air_Attack_Bonus_COLON		"City Air Attack:"
+str_ldl_City_Land_Attack_Bonus_COLON		"City Land Attack:"
+str_ldl_City_Sea_Attack_Bonus_COLON		"City Sea Attack:"
 str_ldl_City_Builder				"Constructor de ciudades"
 str_ldl_CITY_ESPIONAGE				"ESPIONAJE EN CIUDAD"
 str_ldl_CITY_GOLD				"ORO"
@@ -3061,7 +3066,7 @@ str_profile_AIMilitiaUnit                       "AI Free Militia Unit"          
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
-str_profile_NewCombat                           "Defensa del uso de los defensores solamente"
+str_profile_NewCombat                           "New Combat"
 
 # Añadido para extender las opciones del teclado. 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Opciones de Musica"
@@ -3129,8 +3134,8 @@ str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by ci
 str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"Defensa y ataque del uso de los defensores"
-str_tbl_ldl_NewCombat_On			"Defensa del uso de los defensores solamente"
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
 
 # Not Implemented
 str_SE_DebugAI					"debug"

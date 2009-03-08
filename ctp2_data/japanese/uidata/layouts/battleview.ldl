@@ -161,19 +161,19 @@ BattleViewWindow {
 ################################################################################
 	AttackersText:CTP2_STATIC_BACKGROUND {
 		int	xpix		97
-		int	ypix		37
+		int	ypix		17
 		int	widthpix	190
 		int	heightpix	20
 		string	text	"str_ldl_Attackers"
 	}
 	AttackersName:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20 {
 		int	xpix		97
-		int	ypix		57
+		int	ypix		37
 		int	widthpix	190
 	}
 	AttackersFlag {
 		int xpix		289
-		int ypix		54
+		int ypix		34
 		int widthpix	23
 		int heightpix	23
 	}
@@ -193,19 +193,19 @@ BattleViewWindow {
 ################################################################################
 	DefendersText:CTP2_STATIC_BACKGROUND {
 		int	xpix		439
-		int	ypix		37
+		int	ypix		17
 		int	widthpix	190
 		int	heightpix	20
 		string	text	"str_ldl_Defenders"
 	}
 	DefendersName:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20 {
 		int	xpix		439
-		int	ypix		57
+		int	ypix		37
 		int	widthpix	190
 	}
 	DefendersFlag {
 		int xpix		631
-		int ypix		54
+		int ypix		34
 		int widthpix	23
 		int heightpix	23
 	}
@@ -218,7 +218,7 @@ BattleViewWindow {
 	############################################################################
 	TerrainBonusText:CTP2_STATIC_BACKGROUND {
 		int	xpix		380
-		int	ypix		97
+		int	ypix		65
 		int	widthpix	74
 		int	heightpix	14
 		string	text	"str_ldl_Terrain_Bonus_COLON"
@@ -226,7 +226,7 @@ BattleViewWindow {
 	}
 	TerrainBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
 		int	xpix		484
-		int	ypix		97
+		int	ypix		65
 		int	widthpix	50
 		string	text	"str_ldl_0"
 	}
@@ -235,7 +235,7 @@ BattleViewWindow {
 	############################################################################
 	CityBonusText:CTP2_STATIC_BACKGROUND {
 		int	xpix		380
-		int	ypix		117
+		int	ypix		85
 		int	widthpix	74
 		int	heightpix	14
 		string	just	"left"
@@ -243,7 +243,58 @@ BattleViewWindow {
 	}
 	CityBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
 		int	xpix		484
-		int	ypix		117
+		int	ypix		85
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# City Land Attack
+	############################################################################
+	CityLandAttackBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		380
+		int	ypix		105 #125
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_City_Land_Attack_Bonus_COLON"
+	}
+	CityLandAttackBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		484
+		int	ypix		105 #125
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# City Air Attack
+	############################################################################
+	CityAirAttackBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		380
+		int	ypix		125
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_City_Air_Attack_Bonus_COLON"
+	}
+	CityAirAttackBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		484
+		int	ypix		125
+		int	widthpix	50
+		string	text	"str_ldl_0"
+	}
+	############################################################################
+	# City Sea Attack
+	############################################################################
+	CitySeaAttackBonusText:CTP2_STATIC_BACKGROUND {
+		int	xpix		540
+		int	ypix		105
+		int	widthpix	74
+		int	heightpix	14
+		string	just	"left"
+		string	text	"str_ldl_City_Sea_Attack_Bonus_COLON"
+	}
+	CitySeaAttackBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
+		int	xpix		672
+		int	ypix		105
 		int	widthpix	50
 		string	text	"str_ldl_0"
 	}
@@ -252,7 +303,7 @@ BattleViewWindow {
 	############################################################################	
 	FortBonusText:CTP2_STATIC_BACKGROUND {
 		int	xpix		540
-		int	ypix		97
+		int	ypix		65
 		int	widthpix	74
 		int	heightpix	14
 		string	just	"left"
@@ -260,7 +311,7 @@ BattleViewWindow {
 	}
 	FortBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
 		int	xpix		672
-		int	ypix		97
+		int	ypix		65
 		int	widthpix	50
 		string	text	"str_ldl_0"
 	}
@@ -269,7 +320,7 @@ BattleViewWindow {
 	############################################################################	
 	FortifiedBonusText:CTP2_STATIC_BACKGROUND {
 		int	xpix		540
-		int	ypix		117
+		int	ypix		85
 		int	widthpix	74
 		int	heightpix	14
 		string	just	"left"
@@ -277,7 +328,7 @@ BattleViewWindow {
 	}
 	FortifiedBonusValue:CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14 {
 		int	xpix		672
-		int	ypix		117
+		int	ypix		85
 		int	widthpix	50
 		string	text	"str_ldl_0"
 	}

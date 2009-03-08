@@ -42,6 +42,8 @@
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
 #
 #
 #----------------------------------------------------------------------------
@@ -655,6 +657,9 @@ str_ldl_Cities					"Città"
 str_ldl_CITIES_COLON				"CITTÀ"
 str_ldl_City					"Città"
 str_ldl_City_Bonus_COLON			"Difesa città:"
+str_ldl_City_Air_Attack_Bonus_COLON		"City Air Attack:"
+str_ldl_City_Land_Attack_Bonus_COLON		"City Land Attack:"
+str_ldl_City_Sea_Attack_Bonus_COLON		"City Sea Attack:"
 str_ldl_City_Builder				"Costruttore città"
 str_ldl_CITY_ESPIONAGE				"SPIONAGGIO CITTÀ"
 str_ldl_CITY_GOLD				"ORO CITTÀ"
@@ -3061,7 +3066,7 @@ str_profile_AIMilitiaUnit                       "AI Free Militia Unit"          
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
-str_profile_NewCombat                           "Difesa di uso delle protezioni soltanto"
+str_profile_NewCombat                           "New Combat"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Musicoptions"
@@ -3129,8 +3134,8 @@ str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by ci
 str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"Difesa ed attacco di uso delle protezioni"
-str_tbl_ldl_NewCombat_On			"Difesa di uso delle protezioni soltanto"
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
 
 # Not Implemented
 str_SE_DebugAI					"debug"

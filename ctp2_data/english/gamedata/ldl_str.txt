@@ -42,6 +42,8 @@
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
 #
 #
 #----------------------------------------------------------------------------
@@ -655,6 +657,9 @@ str_ldl_Cities					"Cities"
 str_ldl_CITIES_COLON				"CITIES:"
 str_ldl_City					"City"
 str_ldl_City_Bonus_COLON			"City Defense:"
+str_ldl_City_Air_Attack_Bonus_COLON		"City Air Attack:"
+str_ldl_City_Land_Attack_Bonus_COLON		"City Land Attack:"
+str_ldl_City_Sea_Attack_Bonus_COLON		"City Sea Attack:"
 str_ldl_City_Builder				"City Builder"
 str_ldl_CITY_ESPIONAGE				"CITY ESPIONAGE"
 str_ldl_CITY_GOLD				"CITY GOLD"
@@ -738,7 +743,7 @@ str_ldl_Enemy_Intrusion				"Enemy Intrusion"
 str_ldl_Enter_Password_COLON			"Enter Password:"
 str_ldl_ENTERTAINERS				"Entertainers"
 str_ldl_Entrench				"Fortify"
-str_ldl_Entrench_Bonus_COLON			"Fortification Bonus:"
+str_ldl_Entrench_Bonus_COLON			"Fortified Bonus:"
 str_ldl_Environment				"Customize Map"
 str_ldl_Environmentalism			"Environmentalism"
 str_ldl_Establish_Embassy			"Establish Embassy"
@@ -1127,7 +1132,7 @@ str_ldl_Team_Play_On				"Team Play On"
 str_ldl_Ten_Biggest				"Ten Biggest"
 str_ldl_TERRA					"TERRA"
 str_ldl_TERRAIN					"TERRAIN"
-str_ldl_Terrain_Bonus_COLON			"Terrain Bonus:"
+str_ldl_Terrain_Bonus_COLON			"Terrain Defense:"
 str_ldl_The_current_game_setup_is_default	"The current game setup is default."
 str_ldl_The_game_was_full			"The game was full."
 str_ldl_This_is_a_brand_spankin_new_game	"This is a new game."
@@ -3061,7 +3066,7 @@ str_profile_AIMilitiaUnit                       "AI Free Militia Unit"          
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
-str_profile_NewCombat                           "Defenders Only Use Defense"
+str_profile_NewCombat                           "New Combat"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Music options"
@@ -3129,8 +3134,8 @@ str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by ci
 str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"Defenders Use Defense and Attack"
-str_tbl_ldl_NewCombat_On			"Defenders Only Use Defense"
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
 
 # Not Implemented
 str_SE_DebugAI					"debug"
