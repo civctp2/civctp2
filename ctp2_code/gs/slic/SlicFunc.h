@@ -649,6 +649,7 @@ SLICFUNC(SFR_VOID, PuppetGovt);
 //New slicfunctions by Maq
 SLICFUNC(SFR_INT,  CreateBuilding)
 SLICFUNC(SFR_INT,  CreateWonder)
+SLICFUNC(SFR_INT, UnitMovementLeft)
 
 
 #endif // __SLICFUNC_H__

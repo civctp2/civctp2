@@ -7576,7 +7576,22 @@ SFN_ERROR Slic_AddPW::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-
+//----------------------------------------------------------------------------
+//
+// Authored   : Maq
+//
+// Name       : Slic_CreateBuilding
+//
+// Description: Function to create a building in a city.
+//
+// Parameters : SlicArg 0: city
+//				SlicArg 1: buildingdb index
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
 SFN_ERROR Slic_CreateBuilding::Call(SlicArgList *args)
 {
 	if (args->Count() != 2) {
@@ -7603,7 +7618,22 @@ SFN_ERROR Slic_CreateBuilding::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 
 }
-
+//----------------------------------------------------------------------------
+//
+// Authored   : Maq
+//
+// Name       : Slic_CreateWonder
+//
+// Description: Function to create a wonder in a city.
+//
+// Parameters : SlicArg 0: city
+//				SlicArg 1: wonderdb index
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
 SFN_ERROR Slic_CreateWonder::Call(SlicArgList *args)
 {
 	if (args->Count() != 2) {
@@ -7630,4 +7660,33 @@ SFN_ERROR Slic_CreateWonder::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 
 }
+//----------------------------------------------------------------------------
+//
+// Authored   : Maq
+//
+// Name       : Slic_UnitMovementLeft
+//
+// Description: Function to figure out how much movement is left for 
+//              a unit.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_UnitMovementLeft::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
 
+	Unit unit;
+	if(!args->GetUnit(0, unit)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	m_result.m_int = unit.GetMovementPoints();
+	
+	return SFN_ERROR_OK;
+}
