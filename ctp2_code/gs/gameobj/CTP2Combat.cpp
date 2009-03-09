@@ -26,7 +26,8 @@
 //
 // - Veteran effect added.
 // - Added a 'newcombat' option. (28-Feb-2009 Maq)
-// - Added GetCounterOffense for counter-attacking units. (04-Mar-2009 Maq)
+// - Added GetDefCounterAttack for counter-attacking units, and added attackers
+//	 to defend with attack in new combat. (08-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 

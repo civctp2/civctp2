@@ -131,6 +131,9 @@
 // - Special attack centers only if the auto center option on units and
 //   cities is set. (23-Feb-2008 Martin Gühmann)
 // - Merged finish move. (13-Aug-2008 Martin Gühmann)
+// - Modified CheckActiveDefenders to only fire when a valid target is alive.
+//   Also removed counterbombarding and returning active defense fire after
+//   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1433,7 +1436,7 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
     sint32 owner            = GetOwner();
 
     UnitDynamicArray deadDefenders;
-    sint32 i, j, n = activeDefenders.Num();
+    sint32 i, j, r, n = activeDefenders.Num();
     for (i = 0; i < n; i++) 
     {
         Unit        ta      = activeDefenders[i];
@@ -1443,13 +1446,60 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
             GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
         MapPoint    dpos    = ta.RetPos();
 
+		UnitRecord const *	rec	= ta.GetDBRec();
+		sint32 validtargets = 0;
+		if (rec->GetDefendLand() && validtargets == 0) {
+			for(r = 0; r < m_nElements; r++) {
+				if(!(m_array[r].GetHP() < 1.0) 
+				&& m_array[r].GetMovementTypeLand()) {
+					validtargets++;
+					continue;
+				}
+			}
+		}
+		if (rec->GetDefendMountain() && validtargets == 0) {
+			for(r = 0; r < m_nElements; r++) {
+				if(!(m_array[r].GetHP() < 1.0)
+				&& m_array[r].GetMovementTypeMountain()) {
+					validtargets++;
+					continue;
+				}
+			}
+		}
+		if (rec->GetDefendWater() && validtargets == 0) {
+			for(r = 0; r < m_nElements; r++) {
+				if(!(m_array[r].GetHP() < 1.0)
+				&& (m_array[r].GetMovementTypeSea()
+				 || m_array[r].GetMovementTypeShallowWater())) {
+					validtargets++;
+					continue;
+				}
+			}
+		}
+		if (rec->GetDefendAir() && validtargets == 0) {
+			for(r = 0; r < m_nElements; r++) {
+				if(!(m_array[r].GetHP() < 1.0)
+				&& m_array[r].GetMovementTypeAir()) {
+					validtargets++;
+					continue;
+				}
+			}
+		}
+		if (rec->GetDefendSpace() && validtargets == 0) {
+			for(r = 0; r < m_nElements; r++) {
+				if(!(m_array[r].GetHP() < 1.0)
+				&& m_array[r].GetMovementTypeSpace()) {
+					validtargets++;
+					continue;
+				}
+			}
+		}
+		if (validtargets <= 0) break;
+
         g_director->AddAttackPos(ta, m_pos);
         g_slicEngine->RunActiveDefenseTriggers(ta, td);
 
-        sint32 numAttacks = activeDefenders[i].CanActivelyDefend(Army(m_id));
-        for(j = 0; j < numAttacks; j++) {
-            activeDefenders[i].Bombard(*this, false);
-        }
+		activeDefenders[i].Bombard(*this, false);
 		activeDefenders[i].SetFlag(k_UDF_USED_ACTIVE_DEFENSE);
 
 		defenderOwner = activeDefenders[i].GetOwner();
@@ -1457,18 +1507,15 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
 		Cell *dcell = g_theWorld->GetCell(dpos);
 
 		for(j = 0; j < m_nElements; j++) {
-			if(!(m_array[j].GetHP() < 1.0) && 
-			   (m_array[j].CanCounterBombard(*dcell->UnitArmy()) ||
-				m_array[j].CanActivelyDefend(*dcell->UnitArmy()))) {
-				m_array[j].Bombard(*dcell->UnitArmy(), true);
+			if(!(m_array[j].GetHP() < 1.0)) {
 				for(sint32 k = 0; k < dcell->GetNumUnits(); k++) {
 					if(dcell->AccessUnit(k).GetHP() < 1.0 &&
                        !deadDefenders.IsPresent(dcell->AccessUnit(k)))
                         deadDefenders.Insert(dcell->AccessUnit(k));
                 }
-            }
-        }
-    }
+			}
+		}
+	}
 
     if(defenderOwner < 0)
         return false;
