@@ -81,6 +81,8 @@
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - Modified GetAttack, GetOffense and GetDefense. Added GetRanged. Also added
 //	 GetDefCounterAttack for new combat option defenders. (07-Mar-2009 Maq)
+// - Modified Bombard so ranged units and defenders use same bonuses as they
+//	 do in combat. (10-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1368,8 +1370,11 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 //            : Unit defender	          : the defending unit
 //            : bool isCounterBombardment : toggles Slic Bombardment/CounterBombardmentTriggers
 //
-// Globals    : g_slicEngine  : 
-//            : g_theConstDB  : 
+// Globals    : g_slicEngine
+//            	g_theConstDB
+//				g_theWorld
+//				g_slicEngine
+//				g_rand
 //
 // Returns    : -
 //
@@ -1379,6 +1384,7 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 					   bool isCounterBombardment)
 {
+	Cell *	cell    = g_theWorld->GetCell(m_pos);
 	sint32 f = (sint32)(rec->GetFirepower() / 
 		defender.GetDBRec()->GetArmor());
 	sint32 n;
@@ -1391,22 +1397,31 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 
 	g_slicEngine->RunCounterBombardmentTriggers(defender, Unit(m_id));
 
-	double defenseStrength = defender.GetDefense(Unit(m_id));
+	double defenseStrength = defender->GetDefense(Unit(m_id));
 	double attack = rec->GetZBRangeAttack();
 
+	if (IsVeteran())
+		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
+	if (IsElite())
+		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			attack += (rec->GetZBRangeAttack() * 0.5);// @todo this needs a constDB value
+			break;
+		}
+	}
+
 	double prob = attack / (attack + defenseStrength);
-	sint32 p = sint32(prob * 100);
 
 	double dmr = 1.0/defender.GetHPModifier(); 
-	if (IsVeteran())  //copy and make for elite units
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01); 
-	if (IsElite())  //just an increase in veteran coefficient-- for now
-		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01); 
+
+	sint32 p = sint32(prob * 100);
 	
 	for (sint32 i = 0; i < n; ++i) 
 	{
 		if (g_rand->Next(100) < p) 
 		{
+			//DPRINTF(k_DBG_GAMESTATE, ("BOMBARD: %i chance hit \n", p));
 			hp -= f * dmr; 
 		}
 	}
@@ -3324,7 +3339,12 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 // Parameters : -
 // 
 //
-// Globals    : -
+// Globals    : g_theWorld
+//				g_theConstDB
+//				g_slicEngine
+//				g_theCivilisationDB
+//				g_player
+//				g_theProfileDB
 //
 // Returns    : Returns the unit's attack points.
 //
@@ -3409,7 +3429,13 @@ double UnitData::GetOffense(const Unit &defender) const
 // Parameters : -
 // 
 //
-// Globals    : -
+// Globals    : g_theWorld
+//				g_theConstDB
+//				g_slicEngine
+//				g_theProfileDB
+//				g_theGovernmentDB
+//				g_player
+//				g_featTracker
 //
 // Returns    : Returns the unit's defense points.
 //
@@ -3549,7 +3575,9 @@ double UnitData::GetDefense(const Unit &attacker) const
 // Parameters : -
 // 
 //
-// Globals    : -
+// Globals    : g_theWorld
+//				g_theConstDB
+//				g_slicEngine
 //
 // Returns    : Returns the unit's ranged attack points.
 //
@@ -3564,19 +3592,17 @@ double UnitData::GetRanged(const Unit &defender) const
 	Cell *				cell    = g_theWorld->GetCell(m_pos);
 	double				bonuses = 0.0;
 
-	if (g_theProfileDB->IsNewCombat()) {// these were not in original combat
-		if (IsVeteran()) {
-			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
-		}
-		if (IsElite()) {
-			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
-		}
-		// Added for Leaders to increase defense
-		for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
-			if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
-				bonuses += 0.5;// @todo this needs a constDB value
-				break;
-			}
+	if (IsVeteran()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	if (IsElite()) {
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
+	// Added for Leaders to increase ranged
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			bonuses += 0.5;// @todo this needs a constDB value
+			break;
 		}
 	}
 	sint32 intAttack = (sint32)base;
@@ -3596,7 +3622,9 @@ double UnitData::GetRanged(const Unit &defender) const
 // Parameters : -
 // 
 //
-// Globals    : -
+// Globals    : g_theWorld
+//				g_theConstDB
+//				g_slicEngine
 //
 // Returns    : Returns the unit's defence points.
 //
