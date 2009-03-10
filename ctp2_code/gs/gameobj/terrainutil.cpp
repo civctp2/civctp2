@@ -50,6 +50,9 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added terrainutil_GetMinimumProductionCost to retrieve the minimum
 //   costs of a tile improvement. (17-Jan-2008 Martin Gühmann)
+// - Fixed GetNeedsIrrigation in terrainutil_CanPlayerBuildAt. CityInfluenceIterator
+//	 was not finding irrigation squares next to a city with irrigation from a tile imp.
+//	 (10-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -807,12 +810,13 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 					return false;
 		}
 
-		// EMOD for contiguous irrigation //finally works 4.12.2007
+		// EMOD for contiguous irrigation
+		// @todo check the cityinfluenceiterator works for other of E's mods above.
 		if(eff->GetNeedsIrrigation()) {
-			CityInfluenceIterator it(pos, 1);
+			SquareIterator it(pos, 1);
 			bool canbuild = false;
 			for(it.Start(); !it.End(); it.Next()) {
-				if( (g_theWorld->IsRiver(it.Pos())) || (terrainutil_HasIrrigation(it.Pos())) ){
+				if( g_theWorld->IsRiver(it.Pos()) || terrainutil_HasIrrigation(it.Pos()) ){
 					canbuild = true;
 						break;
 				}
