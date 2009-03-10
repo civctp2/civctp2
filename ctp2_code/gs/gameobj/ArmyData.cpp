@@ -1657,8 +1657,7 @@ bool ArmyData::CanFight(CellUnitList &defender)
 
 	bool haveCombatUnits = false;
     for(i = 0; i < m_nElements; i++) {
-        if(m_array[i].GetDBRec()->GetAttack() > 0
-		|| m_array[i].GetDBRec()->GetDefense() > 0) {
+		if(m_array[i].GetDBRec()->GetAttack() > 0) {
 			haveCombatUnits = true;
             break;
         }
