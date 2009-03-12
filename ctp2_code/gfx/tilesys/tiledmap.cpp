@@ -50,6 +50,7 @@
 // - added debugai profile switch - E 4-3-2007
 // - When yes the debugai switch causes a crash
 // - Full city radius is now drawn around settlers. (30-Jan-2008 Martin Gühmann)
+// - Changed colour of maximum zoom grid from white to black. (12-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1641,7 +1642,7 @@ sint32 TiledMap::CalculateWrap
 
 		
 		if (g_isGridOn)
-			DrawTileBorder(surface, x,y,0xffff);
+			DrawTileBorder(surface, x,y,(g_colorSet->GetColor(COLOR_BLACK)));
 
 
 
