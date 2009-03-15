@@ -173,6 +173,7 @@ public:
 	bool IsMovePointsEnough(const double cost) const;
 	bool IsMovePointsEnough(const MapPoint &pos) const;
 	bool GetMovementTypeAir() const;
+	bool LowestMoveBonusUnit(sint32 & value) const;
 	bool GetMovementTypeLand() const;
 	bool CanBeCargoPodded() const;
 	bool CanSpaceLand() const;

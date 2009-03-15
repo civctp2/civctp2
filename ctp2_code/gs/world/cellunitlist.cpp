@@ -32,6 +32,8 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 // - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
+// - Added LowestMoveBonusUnit to return movement required if cellunitlist contains 
+//	 only movebonus units, otherwise regular move cost check is used. (15-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -685,9 +687,11 @@ bool CellUnitList::IsMovePointsEnough(const MapPoint &pos) const
 {
 
     double cost; 
-    
+	sint32 value;
     if (GetMovementTypeAir()) { 
         cost = k_MOVE_AIR_COST; 
+	} else if (LowestMoveBonusUnit(value)) {
+		cost = value;
 	// Prevent ships from diving under and using tunnels.
 	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
 		sint32 icost;
@@ -700,6 +704,25 @@ bool CellUnitList::IsMovePointsEnough(const MapPoint &pos) const
     return IsMovePointsEnough(cost); 
 }
  
+bool CellUnitList::LowestMoveBonusUnit(sint32 & value) const 
+{ 
+	sint32 lowvalue = 999999;// lowest movebonus unit bonus
+	sint32 tmp;
+    for (sint32 i = 0; i < m_nElements; i++)
+	{ 
+		UnitRecord const * rec = m_array[i].GetDBRec();
+        if (!(rec->GetMoveBonus(tmp))) {
+            return false; 
+        } else if (rec->GetMoveBonus(tmp)) {
+			if (tmp < lowvalue) {
+				lowvalue = tmp;
+			}
+		}
+    }
+    value = lowvalue;
+    return true;
+}
+
 bool CellUnitList::GetMovementTypeAir() const 
 { 
     for (sint32 i = 0; i < m_nElements; i++) { 

@@ -83,6 +83,7 @@
 //	 GetDefCounterAttack for new combat option defenders. (07-Mar-2009 Maq)
 // - Modified Bombard so ranged units and defenders use same bonuses as they
 //	 do in combat. (10-Mar-2009 Maq)
+// - Fixed movebonus units movement. Pathing still needs to be fixed. (15-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -472,12 +473,12 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 {
 	const UnitRecord *rec = GetDBRec();
 
-	// EMOD
 	sint32 bonus;
-	if(rec->GetMoveBonus(bonus)) {  // EMOD
+	if(rec->GetMoveBonus(bonus))
+	{
 		m_movement_points -= bonus;
-//	} else {
-//		m_movement_points -= cost; // Outcomment here so air isn't deducted twice
+		m_movement_points = std::max(m_movement_points, 0.0);
+		ClearFlag(k_UDF_FIRST_MOVE);
 	}
 
 	if(!Flag(k_UDF_PACMAN) && !rec->HasMoveBonus())   //needed to add this flag because it seemed to affect movebonus too
