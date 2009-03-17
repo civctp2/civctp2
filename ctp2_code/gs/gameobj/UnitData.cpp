@@ -1302,6 +1302,10 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 	double				base	= rec->GetAttack();
 	double				bonuses	= 0.0;//cumulative % bonuses
 
+	sint32 intAttack = (sint32)base;
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
+	if(modAttack != intAttack) base = modAttack;
+
 	// Added for Leaders to increase attack
 	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
 		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
@@ -1354,9 +1358,6 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 			base += city.CD()->GetOffenseBonus(defender);
 		}
 	}
-	sint32 intAttack = (sint32)base;
-	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
-	if(modAttack != intAttack) base = modAttack;
 
 	return base;
 }
@@ -3363,6 +3364,10 @@ double UnitData::GetOffense(const Unit &defender) const
 	double		bonuses	= 0.0;//cumulative % bonuses
 	Cell *		cell	= g_theWorld->GetCell(m_pos);
 
+	sint32 intAttack = (sint32)base;
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
+	if(modAttack != intAttack) base = modAttack;
+
 	// Added for Leaders to increase attack
 	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
 		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
@@ -3415,9 +3420,6 @@ double UnitData::GetOffense(const Unit &defender) const
 			base += city.CD()->GetOffenseBonus(defender);
 		}
 	}
-	sint32 intAttack = (sint32)base;
-	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
-	if(modAttack != intAttack) base = modAttack;
 
 	return base;
 }
@@ -3452,6 +3454,11 @@ double UnitData::GetDefense(const Unit &attacker) const
 	double base			= myRec->GetDefense();
 	double bonuses		= 0.0;// cumulative bonuses
 	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	sint32 intDef = (sint32)base;
+	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
+	if(modDef != intDef)
+		base = modDef;
 
 	if(IsEntrenched()) {
 		bonuses += g_theConstDB->Get(0)->GetEntrenchmentBonus();
@@ -3558,11 +3565,6 @@ double UnitData::GetDefense(const Unit &attacker) const
 			}
 		}
 	}
-	// moddefense replaces all the above if used.
-	sint32 intDef = (sint32)base;
-	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
-	if(modDef != intDef)
-		base = modDef;
 
 	return base;
 }
@@ -3593,6 +3595,11 @@ double UnitData::GetRanged(const Unit &defender) const
 	Cell *				cell    = g_theWorld->GetCell(m_pos);
 	double				bonuses = 0.0;
 
+	sint32 intAttack = (sint32)base;
+	sint32 modAttack = g_slicEngine->CallMod(mod_UnitRangedAttack, intAttack, m_id, defender.m_id, intAttack);
+	if(modAttack != intAttack)
+		base = modAttack;
+
 	if (IsVeteran()) {
 		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
 	}
@@ -3606,10 +3613,6 @@ double UnitData::GetRanged(const Unit &defender) const
 			break;
 		}
 	}
-	sint32 intAttack = (sint32)base;
-	sint32 modAttack = g_slicEngine->CallMod(mod_UnitRangedAttack, intAttack, m_id, defender.m_id, intAttack);
-	if(modAttack != intAttack)
-		base = modAttack;
 
 	return base;
 }
@@ -3642,6 +3645,11 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 	double base			= myRec->GetDefense();
 	double bonuses		= 0.0;// cumulative bonuses
 	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	sint32 intDef = (sint32)base;
+	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
+	if(modDef != intDef)
+		base = modDef;
 
 	// Added for Leaders to increase defense
 	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
@@ -3731,11 +3739,6 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 	if(city.IsValid()) {
 		base += city.CD()->GetOffenseBonus(attacker);// ballista etc
 	}
-	// moddefense replaces all the above if used.
-	sint32 intDef = (sint32)base;
-	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
-	if(modDef != intDef)
-		base = modDef;
 
 	return base;
 }
