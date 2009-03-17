@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile map
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -32,6 +32,8 @@
 // - Repaired crash when no order is active.
 // - Corrected turn box computation for ship paths through cities.
 // - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added check if only movebonus units are in an army, and it returns the
+//	 highest movebonus value of the army for entry cost (17-Mar-2009 Maq).
 //
 //----------------------------------------------------------------------------
 
@@ -128,6 +130,10 @@ double GetEntryCost
 		{
 			cost = icost;
 		}
+	}
+	sint32 highestbonus;
+	if (a_Army.GetMoveBonusUnits(highestbonus)) {
+		cost = highestbonus;
 	}
 
 	return cost;

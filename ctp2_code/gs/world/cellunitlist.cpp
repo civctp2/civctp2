@@ -687,11 +687,8 @@ bool CellUnitList::IsMovePointsEnough(const MapPoint &pos) const
 {
 
     double cost; 
-	sint32 value;
     if (GetMovementTypeAir()) { 
         cost = k_MOVE_AIR_COST; 
-	} else if (LowestMoveBonusUnit(value)) {
-		cost = value;
 	// Prevent ships from diving under and using tunnels.
 	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
 		sint32 icost;
@@ -700,13 +697,15 @@ bool CellUnitList::IsMovePointsEnough(const MapPoint &pos) const
     } else { 
         cost = g_theWorld->GetMoveCost(pos); 
     }
+	sint32 value;
+	if (HighestMoveBonusUnit(value)) { cost = value; }
 
     return IsMovePointsEnough(cost); 
 }
  
-bool CellUnitList::LowestMoveBonusUnit(sint32 & value) const 
+bool CellUnitList::HighestMoveBonusUnit(sint32 & value) const 
 { 
-	sint32 lowvalue = 999999;// lowest movebonus unit bonus
+	sint32 highvalue = 0;// highest movebonus unit bonus
 	sint32 tmp;
     for (sint32 i = 0; i < m_nElements; i++)
 	{ 
@@ -714,12 +713,12 @@ bool CellUnitList::LowestMoveBonusUnit(sint32 & value) const
         if (!(rec->GetMoveBonus(tmp))) {
             return false; 
         } else if (rec->GetMoveBonus(tmp)) {
-			if (tmp < lowvalue) {
-				lowvalue = tmp;
+			if (tmp > highvalue) {
+				highvalue = tmp;
 			}
 		}
     }
-    value = lowvalue;
+    value = highvalue;
     return true;
 }
 

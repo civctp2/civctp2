@@ -28,6 +28,8 @@
 // - Added IsWounded method
 // - Added CanTransport and IsCivilian methods.
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Added check if only movebonus units are in an army, and it returns the
+//	 highest movebonus value of the army (17-Mar-2009 Maq).
 //
 //----------------------------------------------------------------------------
 
@@ -202,6 +204,17 @@ bool Army::IsAtLeastOneMoveMountain() const
 bool Army::GetMovementTypeAir() const
 {
 	return GetData()->GetMovementTypeAir();
+}
+
+bool Army::GetMoveBonusUnits(sint32 & value) const
+{
+	sint32 value1;
+	if (GetData()->HighestMoveBonusUnit(value1)) {
+		value = value1;
+		return true;
+	}
+
+	return false;
 }
 
 bool Army::IsMovePointsEnough(double cost)

@@ -29,6 +29,8 @@
 // - Added CanTransport and IsCivilian methods.
 // - Made GetCurrentHP const.
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Added check if only movebonus units are in an army, and it returns the
+//	 highest movebonus value of the army (17-Mar-2009 Maq).
 //
 //----------------------------------------------------------------------------
 
@@ -104,7 +106,8 @@ public:
 	bool IsAtLeastOneMoveShallowWater() const;
 	bool IsAtLeastOneMoveAir() const;
 	bool IsAtLeastOneMoveMountain() const;
-	bool GetMovementTypeAir() const; 
+	bool GetMovementTypeAir() const;
+	bool GetMoveBonusUnits(sint32 & value) const;
 	bool IsMovePointsEnough(double cost);
 
 	bool IsIgnoresZOC() const;
