@@ -2668,6 +2668,9 @@ str_ldl_HappyPositive				"Bonus"
 str_ldl_Polluters				"Contaminantes"
 str_ldl_Cleaners 				"Limpiadores"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Contaminación"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Crimen"
 str_ldl_CityWinCrimeFormat			"Crimen: %d%%"
 str_ldl_IW_CONFIRM_WAR				"¿Estás seguro de que quieres declararle la guerra a {player[0].country_name}?"
 

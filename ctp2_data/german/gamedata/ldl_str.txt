@@ -2668,6 +2668,9 @@ str_ldl_HappyPositive				"Positiv"
 str_ldl_Polluters				"Negativ"
 str_ldl_Cleaners				"Positiv"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Verschmutzung"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Kriminalität"
 str_ldl_CityWinCrimeFormat			"Kriminalität: %d%%"
 str_ldl_IW_CONFIRM_WAR				"Wollt Ihr {player[0].country_name#DAT} wirklich den Krieg erklären?"
 

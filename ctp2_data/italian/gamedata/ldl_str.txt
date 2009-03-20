@@ -2668,6 +2668,9 @@ str_ldl_HappyPositive				"Bonus"
 str_ldl_Polluters				"Inquinanti"
 str_ldl_Cleaners				"Depuratori"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Inquinamento"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Crimine"
 str_ldl_CityWinCrimeFormat			"Crimine: %%%d"
 str_ldl_IW_CONFIRM_WAR				"Vuoi davvero dichiarare guerra {player[0].civ_name_plural#DAT}?"
 

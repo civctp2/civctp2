@@ -2668,6 +2668,9 @@ str_ldl_HappyPositive				"Bonus"
 str_ldl_Polluters				"Polluters"
 str_ldl_Cleaners				"Cleaners"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Crime"
 str_ldl_CityWinCrimeFormat			"Crime: %d%%"
 str_ldl_IW_CONFIRM_WAR				"Declare war on {player[0].country_name}?"
 

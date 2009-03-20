@@ -2668,6 +2668,9 @@ str_ldl_HappyPositive				"Bonus"
 str_ldl_Polluters				"Agents polluants"
 str_ldl_Cleaners				"Agents assainissants"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Criminalité"
 str_ldl_CityWinCrimeFormat			"Criminalité : %d%%"
 str_ldl_IW_CONFIRM_WAR				"Entrer en guerre avec les {player[0].civ_name_plural} ?"
 

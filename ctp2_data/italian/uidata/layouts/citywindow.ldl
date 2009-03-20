@@ -890,6 +890,20 @@ CityWindow:CTP2_DIALOG_WINDOW {
 					# Tooltip
 					string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALSLAVES_DISPLAY"
 				}
+				CrimePercentage:CITY_WORKER_ALLOCATION_TEXT_BOX {
+					int	xpix		258
+					int	widthpix	80
+					int	ypix		36	
+					string	text "str_ldl_CityWinSpecTabCrimeFormat"
+					int	heightpix	16
+				}
+				PollutionTotal:CITY_WORKER_ALLOCATION_TEXT_BOX {
+					int	xpix		258
+					int	widthpix	80
+					int	ypix		64
+					string	text "str_ldl_TotalPollutionFormat"
+					int	heightpix	16
+				}
 				Total:CITY_WORKER_INFO_LABEL {
 					int	xpix	50
 					int	widthpix	80
@@ -910,6 +924,18 @@ CityWindow:CTP2_DIALOG_WINDOW {
 					int	widthpix	80
 					int	ypix	64
 					string	text	"str_ldl_Slaves"
+				}
+				CrimeLabel:CITY_WORKER_INFO_LABEL {
+					int xpix 198
+					int widthpix 80
+					int ypix 36	
+					string text "str_ldl_CityWinSpecTabCrimeLabel"
+				}
+				PollutionLabel:CITY_WORKER_INFO_LABEL {
+					int xpix 198
+					int widthpix 80
+					int ypix 64
+					string text "str_ldl_CityWinSpecTabPollutionLabel"
 				}
 				EfficiencyBar {
 					string objecttype "ctp2_Static"
