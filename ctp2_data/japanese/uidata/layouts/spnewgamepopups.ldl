@@ -1209,6 +1209,17 @@ SPNewGameRulesScreen {
 		}
 	}
 
+	NoGoodyHuts:GAMEPLAY_CHECKBOX {
+
+		int	ypix	350
+		int	xpix	30
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoGoodyHuts_Off"
+			string	string1	"str_tbl_ldl_NoGoodyHuts_On"
+		}
+	}
 
 #Add Settler Cheat?
 

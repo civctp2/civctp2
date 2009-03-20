@@ -3139,6 +3139,8 @@ str_tbl_ldl_NoCityLimit_On			"Nombre de villes illimité"			# No city limit for a
 str_tbl_ldl_NoCityLimit_Off			"Limites normales au nombre de villes"		# City limit for all players
 str_tbl_ldl_NewCombat_Off			"Old Combat"
 str_tbl_ldl_NewCombat_On			"New Combat"
+str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
+str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 
 # Not Implemented
 str_SE_DebugAI					"débogage AI"
