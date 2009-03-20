@@ -2330,9 +2330,26 @@ void CityWindow::FillPollutionList()
 			pollutionLabel->SetText("");
 		}
 	}
+	const COLORREF colorNorm = RGB(49,48,49);
+	const COLORREF colorCritical = g_colorSet->GetColorRef(COLOR_RED);
 
-	
-	
+	ctp2_Static *pollutionLabel2 = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.PollutionTotal");
+	if(pollutionLabel2) {
+		sint32 pollution = m_cityData->GetPollution();
+		char buf[k_MAX_NAME_LEN];
+		const char *format2 = g_theStringDB->GetNameStr("str_code_TotalPollutionFormat");
+		Assert(format2);
+		if(format2) {
+			sprintf(buf, format2,  m_cityData->GetPollution());
+			pollutionLabel2->SetText(buf);
+		} else {
+			pollutionLabel2->SetText("");
+		}
+		if (pollution > g_theConstDB->Get(0)->GetLocalPollutionLevel()) {
+			pollutionLabel2->SetTextColor(colorCritical);
+		} else
+			pollutionLabel2->SetTextColor(colorNorm);
+	}
 	
 
 	MBCHAR interp[k_MAX_NAME_LEN];
@@ -2447,6 +2464,12 @@ void CityWindow::FillStatsLists()
 		MBCHAR buf[k_MAX_NAME_LEN];
 		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_CityWinCrimeFormat"), sint32(100.0 * m_cityData->GetHappyCrime()));
 		crimeBox->SetText(buf);
+	}
+	ctp2_Static *crimeBox2 = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.CrimePercentage");
+	if(crimeBox2) {
+		MBCHAR buf[k_MAX_NAME_LEN];
+		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_CityWinSpecTabCrimeFormat"), sint32(100.0 * m_cityData->GetHappyCrime()));
+		crimeBox2->SetText(buf);
 	}
 }
 
