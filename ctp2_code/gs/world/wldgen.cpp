@@ -41,6 +41,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added a no goody huts option (20-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -2596,6 +2597,11 @@ void World::GenerateGoodyHuts()
 {
 	if(g_theProfileDB->IsTutorialAdvice()) {
 		
+		return;
+	}
+
+	if (g_theProfileDB->IsNoGoodyHuts()) {
+
 		return;
 	}
 

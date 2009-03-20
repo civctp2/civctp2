@@ -44,6 +44,7 @@
 // - Added no shield hunger for ai
 // - Added an upgrade option (13-Sep-2008 Martin Gühmann)
 // - Added a new combat option (28-Feb-2009 Maq)
+// - Added a no goody huts option (20-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -85,6 +86,7 @@ static aui_Switch		*s_genocide			= NULL,
 						*s_NonRandomCivs	= NULL,
 						*s_Upgrade			= NULL,
 						*s_NewCombat		= NULL,
+						*s_NoGoodyHuts		= NULL,
 
 						*s_UNITGOLD			= NULL,
 						*s_CITYGOLD			= NULL,
@@ -111,6 +113,7 @@ enum
 	R_NonRandomCivs,
 	R_UPGRADE,
 	R_NEWCOMBAT,
+	R_NOGOODYHUTS,
 	R_UNITGOLD,
 	R_CITYGOLD,
 	R_FREEUPGRADE,
@@ -136,6 +139,7 @@ static uint32 check[] =
 	R_NonRandomCivs,
 	R_UPGRADE,
 	R_NEWCOMBAT,
+	R_NOGOODYHUTS,
 	R_UNITGOLD,
 	R_CITYGOLD,
 	R_FREEUPGRADE,
@@ -165,6 +169,7 @@ sint32 spnewgamerulesscreen_updateData()
 	s_NonRandomCivs  ->SetState( g_theProfileDB->IsNonRandomCivs           () );
 	s_Upgrade        ->SetState( g_theProfileDB->IsUpgrade                 () );
 	s_NewCombat      ->SetState( g_theProfileDB->IsNewCombat               () );
+	s_NoGoodyHuts    ->SetState( g_theProfileDB->IsNoGoodyHuts             () );
 
 	s_UNITGOLD       ->SetState( g_theProfileDB->IsGoldPerUnitSupport      () );
 	s_CITYGOLD       ->SetState( g_theProfileDB->IsGoldPerCity             () );
@@ -245,6 +250,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_NonRandomCivs		= spNew_aui_Switch(&errcode, windowBlock, "NonRandomCivs",       spnewgamerulesscreen_checkPress, &check[R_NonRandomCivs]); //emod5
 	s_Upgrade			= spNew_aui_Switch(&errcode, windowBlock, "Upgrade",             spnewgamerulesscreen_checkPress, &check[R_UPGRADE      ]); //emod5
 	s_NewCombat			= spNew_aui_Switch(&errcode, windowBlock, "NewCombat",           spnewgamerulesscreen_checkPress, &check[R_NEWCOMBAT    ]);
+	s_NoGoodyHuts		= spNew_aui_Switch(&errcode, windowBlock, "NoGoodyHuts",         spnewgamerulesscreen_checkPress, &check[R_NOGOODYHUTS  ]);
 
 	s_UNITGOLD			= spNew_aui_Switch(&errcode, windowBlock, "UnitGold",            spnewgamerulesscreen_checkPress, &check[R_UNITGOLD     ]); //emod5
 	s_CITYGOLD			= spNew_aui_Switch(&errcode, windowBlock, "CityGold",            spnewgamerulesscreen_checkPress, &check[R_CITYGOLD     ]); //emod5
@@ -291,6 +297,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_NonRandomCivs);
 	mycleanup(s_Upgrade);
 	mycleanup(s_NewCombat);
+	mycleanup(s_NoGoodyHuts);
 	mycleanup(s_UNITGOLD);
 	mycleanup(s_CITYGOLD);
 	mycleanup(s_FREEUPGRADE);
@@ -329,6 +336,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		case R_NonRandomCivs: func = &ProfileDB::SetNonRandomCivs           ; break;
 		case R_UPGRADE      : func = &ProfileDB::SetUpgrade                 ; break;
 		case R_NEWCOMBAT    : func = &ProfileDB::SetNewCombat               ; break;
+		case R_NOGOODYHUTS  : func = &ProfileDB::SetNoGoodyHuts             ; break;
 
 		case R_UNITGOLD     : func = &ProfileDB::SetGoldPerUnitSupport      ; break;
 		case R_CITYGOLD     : func = &ProfileDB::SetGoldPerCity             ; break;
