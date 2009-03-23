@@ -63,6 +63,21 @@ template <class type> const COLORREF *ComparisonColor(type left, type right)
 	return((const COLORREF *)g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
+template <class type> const COLORREF *ComparisonColorOpposite(type left, type right)
+{
+	
+	static const sint32 LESS_THAN_CHARACTER = 0;
+	static const sint32 EQUAL_CHARACTER = 1;
+	static const sint32 GREATER_THAN_CHARACTER = 2;
+
+	
+	if(left > right)
+		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_RED));
+	if(right > left)
+		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_DARK_GREEN));
+	return((const COLORREF *)g_colorSet->GetColorRef(COLOR_BLACK));
+}
+
 
 GovernmentTab::GovernmentTab(MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
@@ -220,13 +235,10 @@ void GovernmentTab::UpdateCompareGovernmentDropdown()
 				break;
 			}
 		}
-
-		
-		
-		if(!obsoleteGovernment &&
-			((enablingAdvance < 0) ||
-			player->m_advances->HasAdvance(enablingAdvance))) {
 			
+		if(!obsoleteGovernment ||
+			(enablingAdvance < 0)) {
+
 			ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 				aui_Ldl::BuildHierarchyFromRoot("GovernmentListItem"));
 
@@ -286,6 +298,14 @@ void GovernmentTab::UpdateCompareGovernment()
 		
 		UpdateComparison(currentGovernment, compareGovernment);
 		UpdateGovernmentInformation(compareGovernment, m_compareInformation);
+
+		sint32 enablingAdvanceCompareGov = compareGovernment->GetEnableAdvanceIndex();
+
+		if(player->m_advances->HasAdvance(enablingAdvanceCompareGov))
+			m_enactButton->Enable(true);
+		else
+			m_enactButton->Enable(false);
+
 	} else {
 		
 		ClearGovernmentInformation(m_comparison);
@@ -302,33 +322,44 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 	m_comparison[GII_CITIES]->SetText(ComparisonCharacter(
 		currentGovernment->GetTooManyCitiesThreshold(),
 		compareGovernment->GetTooManyCitiesThreshold()));
+
 	m_comparison[GII_GROWTH]->SetText(ComparisonCharacter(
-		currentGovernment->GetGrowthRank(),
-		compareGovernment->GetGrowthRank()));
+		(100.0 * currentGovernment->GetFoodCoef()),
+		(100.0 * compareGovernment->GetFoodCoef())));
+
 	m_comparison[GII_PRODUCTION]->SetText(ComparisonCharacter(
-		currentGovernment->GetProductionRank(),
-		compareGovernment->GetProductionRank()));
+		(100.0 * currentGovernment->GetProductionCoef()),
+		(100.0 * compareGovernment->GetProductionCoef())));
+
 	m_comparison[GII_RESEARCH]->SetText(ComparisonCharacter(
-		currentGovernment->GetScienceRank(),
-		compareGovernment->GetScienceRank()));
+		(100.0 * (currentGovernment->GetMaxScienceRate() * currentGovernment->GetMaxScienceRate())),
+		(100.0 * (compareGovernment->GetMaxScienceRate() * compareGovernment->GetMaxScienceRate()))));
+
 	m_comparison[GII_ECONOMIC]->SetText(ComparisonCharacter(
-		currentGovernment->GetGoldRank(),
-		compareGovernment->GetGoldRank()));
+		(100.0 * currentGovernment->GetGoldCoef()),
+		(100.0 * compareGovernment->GetGoldCoef())));
+
+	//crime
 	m_comparison[GII_COMMERCE]->SetText(ComparisonCharacter(
-		currentGovernment->GetCommerceRank(),
-		compareGovernment->GetCommerceRank()));
+		(100.0 * currentGovernment->GetCrimeCoef()),
+		(100.0 * compareGovernment->GetCrimeCoef())));
+
 	m_comparison[GII_MILITARY]->SetText(ComparisonCharacter(
-		currentGovernment->GetMilitaryRank(),
-		compareGovernment->GetMilitaryRank()));
+		(100.0 * currentGovernment->GetSupportCoef()),
+		(100.0 * compareGovernment->GetSupportCoef())));
+
 	m_comparison[GII_LOYALTY]->SetText(ComparisonCharacter(
-		currentGovernment->GetLoyaltyRank(),
-		compareGovernment->GetLoyaltyRank()));
+		(10.0 * currentGovernment->GetWarDiscontentMaxUnits()),
+		(10.0 * compareGovernment->GetWarDiscontentMaxUnits())));
+
 	m_comparison[GII_MARTIAL_LAW]->SetText(ComparisonCharacter(
-		currentGovernment->GetMartialLawRank(),
-		compareGovernment->GetMartialLawRank()));
+		(currentGovernment->GetMaxMartialLawUnits() * currentGovernment->GetMartialLawEffect()),
+		(compareGovernment->GetMaxMartialLawUnits() * compareGovernment->GetMartialLawEffect())));
+
 	m_comparison[GII_ANTI_POLLUTION]->SetText(ComparisonCharacter(
 		currentGovernment->GetPollutionRank(),
 		compareGovernment->GetPollutionRank()));
+
 
 
 	m_currentInformation[GII_CITIES]->SetTextColor((long)ComparisonColor(
@@ -339,60 +370,62 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 		currentGovernment->GetTooManyCitiesThreshold()));
 
 	m_currentInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetGrowthRank(),
-		compareGovernment->GetGrowthRank()));
+		(100.0 * currentGovernment->GetFoodCoef()),
+		(100.0 * compareGovernment->GetFoodCoef())));
 	m_compareInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetGrowthRank(),
-		currentGovernment->GetGrowthRank()));
+		(100.0 * compareGovernment->GetFoodCoef()),
+		(100.0 * currentGovernment->GetFoodCoef())));
 
 	m_currentInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetProductionRank(),
-		compareGovernment->GetProductionRank()));
+		(100.0 * currentGovernment->GetProductionCoef()),
+		(100.0 * compareGovernment->GetProductionCoef())));
 	m_compareInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetProductionRank(),
-		currentGovernment->GetProductionRank()));
+		(100.0 * compareGovernment->GetProductionCoef()),
+		(100.0 * currentGovernment->GetProductionCoef())));
 
 	m_currentInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetScienceRank(),
-		compareGovernment->GetScienceRank()));
+		(100.0 * (currentGovernment->GetMaxScienceRate() * currentGovernment->GetMaxScienceRate())),
+		(100.0 * (compareGovernment->GetMaxScienceRate() * compareGovernment->GetMaxScienceRate()))));
 	m_compareInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetScienceRank(),
-		currentGovernment->GetScienceRank()));
+		(100.0 * (compareGovernment->GetMaxScienceRate() * compareGovernment->GetMaxScienceRate())),
+		(100.0 * (currentGovernment->GetMaxScienceRate() * currentGovernment->GetMaxScienceRate()))));
 
 	m_currentInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetGoldRank(),
-		compareGovernment->GetGoldRank()));
+		(100.0 * currentGovernment->GetGoldCoef()),
+		(100.0 * compareGovernment->GetGoldCoef())));
 	m_compareInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetGoldRank(),
-		currentGovernment->GetGoldRank()));
+		(100.0 * compareGovernment->GetGoldCoef()),
+		(100.0 * currentGovernment->GetGoldCoef())));
 
-	m_currentInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetCommerceRank(),
-		compareGovernment->GetCommerceRank()));
-	m_compareInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetCommerceRank(),
-		currentGovernment->GetCommerceRank()));
+	//higher crime = red
+	m_currentInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColorOpposite(
+		(100.0 * currentGovernment->GetCrimeCoef()),
+		(100.0 * compareGovernment->GetCrimeCoef())));
+	m_compareInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColorOpposite(
+		(100.0 * compareGovernment->GetCrimeCoef()),
+		(100.0 * currentGovernment->GetCrimeCoef())));
 
-	m_currentInformation[GII_MILITARY]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetMilitaryRank(),
-		compareGovernment->GetMilitaryRank()));
-	m_compareInformation[GII_MILITARY]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetMilitaryRank(),
-		currentGovernment->GetMilitaryRank()));
+	//higher support = red
+	m_currentInformation[GII_MILITARY]->SetTextColor((long)ComparisonColorOpposite(
+		(100.0 * currentGovernment->GetSupportCoef()),
+		(100.0 * compareGovernment->GetSupportCoef())));
+	m_compareInformation[GII_MILITARY]->SetTextColor((long)ComparisonColorOpposite(
+		(100.0 * compareGovernment->GetSupportCoef()),
+		(100.0 * currentGovernment->GetSupportCoef())));
 
 	m_currentInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetLoyaltyRank(),
-		compareGovernment->GetLoyaltyRank()));
+		(10.0 * currentGovernment->GetWarDiscontentMaxUnits()),
+		(10.0 * compareGovernment->GetWarDiscontentMaxUnits())));
 	m_compareInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetLoyaltyRank(),
-		currentGovernment->GetLoyaltyRank()));
+		(10.0 * compareGovernment->GetWarDiscontentMaxUnits()),
+		(10.0 * currentGovernment->GetWarDiscontentMaxUnits())));
 
 	m_currentInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
-		currentGovernment->GetMartialLawRank(),
-		compareGovernment->GetMartialLawRank()));
+		(currentGovernment->GetMaxMartialLawUnits() * currentGovernment->GetMartialLawEffect()),
+		(compareGovernment->GetMaxMartialLawUnits() * compareGovernment->GetMartialLawEffect())));
 	m_compareInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
-		compareGovernment->GetMartialLawRank(),
-		currentGovernment->GetMartialLawRank()));
+		(compareGovernment->GetMaxMartialLawUnits() * compareGovernment->GetMartialLawEffect()),
+		(currentGovernment->GetMaxMartialLawUnits() * currentGovernment->GetMartialLawEffect())));
 
 	m_currentInformation[GII_ANTI_POLLUTION]->SetTextColor((long)ComparisonColor(
 		currentGovernment->GetPollutionRank(),
@@ -422,57 +455,33 @@ void GovernmentTab::UpdateGovernmentInformation(
 	sprintf(stringBuffer, "%d", government->GetTooManyCitiesThreshold());
 	information[GII_CITIES]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_GROWTH_%i",government->GetGrowthRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetFoodCoef()));
 	information[GII_GROWTH]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_PRODUCTION_%i",government->GetProductionRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetProductionCoef()));
 	information[GII_PRODUCTION]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_RESEARCH_%i",government->GetScienceRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * (government->GetMaxScienceRate() * government->GetKnowledgeCoef())));
 	information[GII_RESEARCH]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_ECONOMIC_%i",government->GetGoldRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetGoldCoef()));
 	information[GII_ECONOMIC]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_COMMERCE_%i",government->GetCommerceRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	//"Crime/Corruption Levels"
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetCrimeCoef()));
 	information[GII_COMMERCE]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_MILITARY_%i",government->GetMilitaryRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
+	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetSupportCoef()));
 	information[GII_MILITARY]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_LOYALTY_%i",government->GetLoyaltyRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
+	sprintf(stringBuffer, "%.0f%%", ceil(10.0 * government->GetWarDiscontentMaxUnits()));
 	information[GII_LOYALTY]->SetText(stringBuffer);
 
-	
-	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_MARTIALLAW_%i",government->GetMartialLawRank());
-	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
+	sprintf(stringBuffer, "%d x %.0f", government->GetMaxMartialLawUnits(), government->GetMartialLawEffect());
 	information[GII_MARTIAL_LAW]->SetText(stringBuffer);
-
 	
 	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_ANTI_POLLUTION_%i",government->GetPollutionRank());
 	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
-	
-	
 	information[GII_ANTI_POLLUTION]->SetText(stringBuffer);
 }
 
