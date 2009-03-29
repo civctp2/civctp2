@@ -51,6 +51,8 @@
 // - Added HasTileImpInRadius method by E 4-7-2006 bool if a city has imp in radius
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
+// - Added functions to find total that each specialist type gives to a city,
+//	 after crime and other modifiers. (28-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -529,6 +531,11 @@ public:
 	void TryToBuild();
 	bool BeginTurn(); 
 	void EndTurn();
+
+	sint32 GetFinalFoodFromFarmers() const;
+	sint32 GetFinalProductionFromLaborers() const;
+	sint32 GetFinalGoldFromMerchants() const;
+	sint32 GetFinalScienceFromScientists() const;
 
 	sint32 GetNumPop() const; 
 

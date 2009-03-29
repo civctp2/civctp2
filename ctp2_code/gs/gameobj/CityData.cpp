@@ -195,6 +195,8 @@
 // - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
+// - Added functions to find total that each specialist type gives to a city,
+//	 after crime and other modifiers. (28-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -7066,6 +7068,91 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	return static_cast<sint32>(sci);
 }
 #endif
+
+sint32 CityData::GetFinalFoodFromFarmers() const
+{
+	double food = 0.0;
+	double beforecrime = 0.0;
+	const GovernmentRecord *gov =
+		g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
+
+	if(m_specialistDBIndex[POP_FARMER] >= 0 
+	&& m_specialistDBIndex[POP_FARMER] < g_thePopDB->NumRecords()) {
+		beforecrime = FarmerCount() * 
+					  (g_thePopDB->Get(m_specialistDBIndex[POP_FARMER], g_player[m_owner]->GetGovernmentType())->GetFood()
+					  * gov->GetFoodCoef());
+
+		food = beforecrime - (CrimeLoss(beforecrime));
+	}
+
+	return food;
+}
+
+sint32 CityData::GetFinalProductionFromLaborers() const
+{
+	double prod = 0.0;
+
+	if(m_specialistDBIndex[POP_LABORER] >= 0 
+	&& m_specialistDBIndex[POP_LABORER] < g_thePopDB->NumRecords()) {
+
+		const GovernmentRecord *gov = g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
+		double beforecrime = LaborerCount() * 
+					  g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
+		//NOTE: Labourers are not subject to government modifiers - strange considering the other specialists.
+		//NOTE2: They are subject to crime, franchise and bio infection losses though.
+
+		sint32 crimeLoss, specialLoss;
+
+		//deducts only bio infection loss here...
+		beforecrime = CityData::ComputeProductionLosses(beforecrime, crimeLoss, specialLoss);
+
+		//and crime and franchise losses here.
+		prod = beforecrime - (specialLoss + crimeLoss);
+	}
+
+	return prod;
+}
+
+sint32 CityData::GetFinalGoldFromMerchants() const
+{
+	double gold = 0.0;
+
+	if(m_specialistDBIndex[POP_MERCHANT] >= 0 
+	&& m_specialistDBIndex[POP_MERCHANT] < g_thePopDB->NumRecords()) {
+
+		const GovernmentRecord *gov = g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
+		sint32 beforecrime = MerchantCount() * 
+					  (g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce()
+					  * gov->GetGoldCoef());
+		sint32 conversionLoss, crimeLoss;
+		CityData::CalcGoldLoss(true, beforecrime, conversionLoss, crimeLoss);
+
+		gold = beforecrime;
+
+		if (gold < 0) { gold = 0; }
+	}
+
+	return gold;
+}
+
+sint32 CityData::GetFinalScienceFromScientists() const
+{
+	double sci = 0.0;
+	double beforecrime = 0.0;
+	const GovernmentRecord *gov =
+		g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
+
+	if(m_specialistDBIndex[POP_SCIENTIST] >= 0 
+	&& m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
+		beforecrime = ScientistCount() * 
+					  (g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST], g_player[m_owner]->GetGovernmentType())->GetScience()
+					  * gov->GetKnowledgeCoef());
+
+		sci = beforecrime - (CrimeLoss(beforecrime));
+	}
+
+	return sci;
+}
 
 sint32 CityData::GetNumPop() const
 {

@@ -27,6 +27,7 @@
 // - Added OptimizeSpecialists function for specialists optimisation option.
 //   - April 7th 2005 Martin Gühmann
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - Completely redesigned the window. Removed some CW_PANELS that are not used. (28-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -83,10 +84,8 @@ enum {
 };
 
 enum {
-	CW_PANEL_RESOURCES,
 	CW_PANEL_STATISTICS,
-	CW_PANEL_BUILD,
-	CW_PANEL_INVENTORY,
+	CW_PANEL_GARRISON,
 	CW_PANEL_MAX
 };
 
@@ -115,6 +114,11 @@ class CityWindow {
 	ctp2_Static *m_happinessBar;
 	ctp2_Static *m_growthDelta;
 	ctp2_Static *m_happinessValue;
+
+	ctp2_Static *m_conversionLossValue;
+	ctp2_Static *m_franchiseLossValue;
+
+	ctp2_Static *m_growthTurns;
 
 	ctp2_Static *m_buildProgressBar;
 
@@ -208,6 +212,8 @@ class CityWindow {
 	static void PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlock);
 
 	static void SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, ctp2_HyperTextBox *hyperTextBox, aui_Region *parent,
+								   ctp2_Button *itemButton = NULL);
+	static void SetItemIconOnly(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, aui_Region *parent,
 								   ctp2_Button *itemButton = NULL);
 
 
