@@ -72,6 +72,7 @@ public:
 	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
 	typedef Sorted_Goal_List::const_iterator                                 Sorted_Goal_Const_Iter;
 	typedef std::list<Goal_ptr, dbgallocator<Goal_ptr> >                     Goal_List;
+	typedef std::vector<Goal_ptr, dbgallocator<Goal_ptr> >                   Goal_Vector;
 	typedef std::list<SQUAD_CLASS, dbgallocator<SQUAD_CLASS> >               Squad_Class_List;
 	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> >   Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator, dbgallocator<Sorted_Goal_List::iterator> > Sorted_Goal_List_Iter_Vector;
@@ -96,6 +97,7 @@ public:
 	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
 	typedef Sorted_Goal_List::const_iterator                                 Sorted_Goal_Const_Iter;
 	typedef std::list<Goal_ptr>                                              Goal_List;
+	typedef std::vector<Goal_ptr>                                            Goal_Vector;
 	typedef std::list<SQUAD_CLASS>                                           Squad_Class_List;
 	typedef std::vector<Sorted_Goal_List>                                    Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator>                          Sorted_Goal_List_Iter_Vector;
@@ -254,6 +256,7 @@ private:
 	PLAYER_INDEX                 m_playerId;
 	Squad_Strength               m_neededAgentStrength;
 	Goal_List                    m_goals;
+	Goal_Vector                  m_generic_goals;
 
 	static sint32 m_contactCachedPlayer;
 	static uint32 m_contactCache;

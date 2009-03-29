@@ -431,7 +431,7 @@ const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing stre
 
 #include "MapAnalysis.h"
 
-Utility Goal::Compute_Matching_Value(const bool update)
+Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 {
 	AI_DPRINTF
 	          (
@@ -446,12 +446,19 @@ Utility Goal::Compute_Matching_Value(const bool update)
 	           )
 	          );
 
+	if(this->Get_Invalid())
+	{
+		m_combinedUtility = Goal::BAD_UTILITY;
+
+		return m_combinedUtility;
+	}
+
 	sint32 count = 0;
 
 	for
 	(
-	    Plan_List::iterator match_iter  = m_matches.begin();
-	                        match_iter != m_matches.end();
+	    Plan_List::iterator match_iter  = matches.begin();
+	                        match_iter != matches.end();
 	                      ++match_iter
 	)
 	{
@@ -468,11 +475,11 @@ Utility Goal::Compute_Matching_Value(const bool update)
 		++count;
 	}
 
-	Sort_Matches();
-	return Recompute_Matching_Value(update);
+	Sort_Matches(matches);
+	return Recompute_Matching_Value(matches, update);
 }
 
-Utility Goal::Recompute_Matching_Value(const bool update, const bool show_strength)
+Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, const bool show_strength)
 {
 	if(!update)
 	{
@@ -489,8 +496,8 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 	for
 	(
 	    Plan_List::iterator
-	            match_iter  = m_matches.begin();
-	            match_iter != m_matches.end();
+	            match_iter  = matches.begin();
+	            match_iter != matches.end();
 	          ++match_iter
 	)
 	{
@@ -602,8 +609,6 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 		Assert(plan_test_iter->Get_Agent() != agent);
 	}
 #endif
-
-	Assert(!Get_Invalid())
 
 	if(!agent->Get_Is_Dead())
 	{
@@ -879,9 +884,9 @@ Squad_Strength Goal::Compute_Current_Strength()
 	return strength;
 }
 
-void Goal::Sort_Matches()
+void Goal::Sort_Matches(Plan_List & matches)
 {
-	m_matches.sort(greater< Plan >());
+	matches.sort(greater< Plan >());
 	m_needs_sorting = false;
 }
 
@@ -889,7 +894,7 @@ void Goal::Sort_Matches_If_Necessary()
 {
 	if(m_needs_sorting)
 	{
-		Sort_Matches();
+		Sort_Matches(m_matches);
 	}
 }
 
@@ -1573,17 +1578,14 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	Utility match = bonus + time_term + raw_priority;
 
-#if 0
-	// Well we have to see whether this is good:
 	const ArmyData* army = agent_ptr->Get_Army().GetData();
 
 	Utility tieBreaker = 0;
-	sint32 govType = g_player[m_playerId]->GetGovernmentType();
 
 	for(sint32 i = 0; i < army->Num(); ++i)
 	{
-		sint32 type = army->Get(i).GetType();
-		const UnitRecord* rec = g_theUnitDB->Get(type, govType);
+		const UnitRecord* rec = army->Get(i)->GetDBRec();
+
 		tieBreaker += static_cast<Utility>(rec->GetAttack());
 		tieBreaker += static_cast<Utility>(rec->GetDefense());
 		tieBreaker +=                      rec->GetZBRangeAttack();
@@ -1592,12 +1594,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		tieBreaker +=                      rec->GetMaxHP();
 	}
 
-	Assert(army->Num() > 0);
-
-	tieBreaker /= army->Num();
-
 	match += tieBreaker;
-#endif
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	MapPoint target_pos = Get_Target_Pos();
@@ -2418,6 +2415,12 @@ bool Goal::Get_Totally_Complete() const
 
 bool Goal::Get_Invalid() const
 {
+	if(m_playerId < 0)
+	{
+		Assert(false);
+		return true;
+	}
+
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 
 	if(goal_record->GetTargetTypeAttackUnit()

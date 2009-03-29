@@ -167,8 +167,11 @@ public:
 
     const Squad_Strength Get_Strength_Needed() const;
 
-    Utility Compute_Matching_Value(const bool update = true);
-    Utility Recompute_Matching_Value(const bool update = true, const bool show_strength = true);
+    Utility Compute_Matching_With_Generic_Matches(Goal_ptr genric_goal, const bool update = true) { return Compute_Matching_Value(genric_goal->m_matches, update); };
+    Utility Compute_Matching_Value(Plan_List & matches, const bool update = true);
+    Utility Compute_Matching_Value(const bool update = true) { return Compute_Matching_Value(m_matches, update); };
+    Utility Recompute_Matching_Value(Plan_List & matches, const bool update = true, const bool show_strength = true);
+    Utility Recompute_Matching_Value(const bool update = true, const bool show_strength = true) { return Recompute_Matching_Value(m_matches, update, show_strength); };
     Utility Get_Matching_Value() const;
     void    Set_Matching_Value(Utility combinedUtility);
 
@@ -203,7 +206,7 @@ public:
     const MapPoint & Get_Target_Pos() const;
     const MapPoint Get_Target_Pos(const Army & army) const;
 
-	const Army & Get_Target_Army() const;
+    const Army & Get_Target_Army() const;
 
     const SUB_TASK_TYPE & Get_Sub_Task() const;
 
@@ -231,6 +234,12 @@ public:
 
     void Log_Debug_Info(const int & log) const;
     void Log_Debug_Info_Full(const int & log) const;
+
+    void Copy_Insert_Matches(Goal_ptr generic_goal)
+    {
+        m_matches = generic_goal->m_matches;
+        this->Compute_Matching_Value();
+    };
 
 private:
 
@@ -278,7 +287,7 @@ private:
 
     bool LoadTransporters(Agent_ptr agent_ptr);
 
-    inline void Sort_Matches();
+    inline void Sort_Matches(Plan_List & matches);
 
     GOAL_TYPE                         m_goal_type;
     Utility                           m_raw_priority;
