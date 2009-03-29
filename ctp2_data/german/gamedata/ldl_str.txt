@@ -45,6 +45,7 @@
 # - Renamed Lexikothek to Große Bibliothek
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
 #
 #----------------------------------------------------------------------------
 
@@ -2142,6 +2143,11 @@ str_ldl_Population				"Bev:"
 str_ldl_Growth					"Wachstum:"
 str_ldl_CityList				"Stadtliste"
 
+str_ldl_ConversionLoss				"Conversion Loss"
+str_ldl_FranchiseLoss				"Franchise Loss"
+
+str_ldl_GrowthTurns				"Growth Turns"
+
 str_ldl_DipProposalsReceived			"Erhaltene Gesuche"
 str_ldl_DipProposalsMade			"Gesendete Gesuche"
 
@@ -2937,7 +2943,7 @@ CONTEXT_GROUP_ALL				"  Alle Einheiten gruppieren"
 CONTEXT_UNGROUP_ALL				"  Alle Einheiten degruppieren"
 
 str_ldl_Citizens				"Bürger"
-str_ldl_ActivateUnit				"Einheit aktivieren"
+str_ldl_ActivateUnit				"Aktivieren"
 
 str_ldl_UnitsGarrisonedInCity			"Verschanzte Einheiten in der Stadt"
 str_ldl_CurrentQueue				"Aktuelle Liste"

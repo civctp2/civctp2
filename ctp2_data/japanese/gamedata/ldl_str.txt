@@ -2281,6 +2281,11 @@ str_ldl_Population 			"人口:"
 str_ldl_Growth 				"人口増加率:"
 str_ldl_CityList 			"都市のリスト"
 
+str_ldl_ConversionLoss			"Conversion Loss"
+str_ldl_FranchiseLoss			"Franchise Loss"
+
+str_ldl_GrowthTurns			"Growth Turns"
+
 str_ldl_DipProposalsReceived 		"受信した提案"
 str_ldl_DipProposalsMade     		"送信した提案"
 

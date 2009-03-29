@@ -44,6 +44,7 @@
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
 #
 #
 #----------------------------------------------------------------------------
@@ -2142,6 +2143,11 @@ str_ldl_Population				"Population :"
 str_ldl_Growth					"Croissance :"
 str_ldl_CityList				"Liste villes"
 
+str_ldl_ConversionLoss				"Conversion Loss"
+str_ldl_FranchiseLoss				"Franchise Loss"
+
+str_ldl_GrowthTurns				"Growth Turns"
+
 str_ldl_DipProposalsReceived			"Propositions reçues"
 str_ldl_DipProposalsMade			"Propositions envoyées"
 
@@ -2937,7 +2943,7 @@ CONTEXT_GROUP_ALL				"Grouper toutes les unités"
 CONTEXT_UNGROUP_ALL				"Disperser toutes les unités"
 
 str_ldl_Citizens				"Citoyens"
-str_ldl_ActivateUnit				"Activer unité"
+str_ldl_ActivateUnit				"Activer"
 
 str_ldl_UnitsGarrisonedInCity			"Unités en garnison"
 str_ldl_CurrentQueue				"Liste actuelle"
