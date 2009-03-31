@@ -197,6 +197,7 @@
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
 //	 after crime and other modifiers. (28-Mar-2009 Maq)
+// - Stopped UpgradeTo obsoleting units. (30-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -5987,17 +5988,6 @@ bool CityData::CanBuildUnit(sint32 type) const
 		for(sint32 i = 0; i < rec->GetNumObsoleteUnit(); i++)
 		{
 			if(CanBuildUnit(rec->GetObsoleteUnitIndex(i)))
-				return false;
-		}
-	}
-
-	// Added by E - units can be obsolete by the availability of unit the upgrade to
-	if(rec->GetNumUpgradeTo() > 0)
-	{
-		for(sint32 i = 0; i < rec->GetNumUpgradeTo(); i++)
-		{
-			if(CanBuildUnit(rec->GetUpgradeToIndex(i)))
-			//if(g_player[m_owner]->CanBuildUnit(rec->GetUpgradeToIndex(i)) //because of resources cities maybe different
 				return false;
 		}
 	}
