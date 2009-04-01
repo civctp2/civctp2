@@ -300,6 +300,12 @@ void Scheduler::Cleanup()
 
 	m_goals_of_type.clear();
 	m_goals.clear();
+
+	for(int i = 0; i < m_generic_goals.size(); ++i)
+	{
+		delete m_generic_goals[i];
+	}
+
 	m_generic_goals.clear();
 }
 
@@ -1558,6 +1564,11 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			  k_Goal_SquadClass_CanTransport_Bit )
 			  continue;
 
+		if(goal_ptr->Cannot_Be_Used(agent)) // Failed transporters
+		{
+			continue;
+		}
+
 		bool hasMatch  = goal_ptr->Has_Agent_And_Set_Needs_Cargo(agent);
 		match_added   |= hasMatch;
 
@@ -1569,15 +1580,13 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		sint32 transports;
 		sint32 max;
 		sint32 empty;
-		sint32 freeTransportCapacity = 0;
 
 		if(!agent->Has_Any_Goal())
 		{
 			agent->Get_Army()->GetCargo(transports, max, empty);
-			freeTransportCapacity += empty;
 		}
 
-		if(freeTransportCapacity > 0
+		if(empty > 0
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
 			match_added = true;

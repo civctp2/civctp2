@@ -378,6 +378,11 @@ AUI_ERRCODE EditQueue::Hide()
 
 AUI_ERRCODE EditQueue::Cleanup()
 {
+	if(s_editQueue)
+	{
+		s_editQueue->Hide();
+	}
+
 	delete s_editQueue;
 	s_editQueue = NULL;
 	return AUI_ERRCODE_OK;

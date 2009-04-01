@@ -79,16 +79,20 @@ public:
 
 	sint32 Get_Free_Transport_Capacity() const;
 
-	bool Has_Cargo      ()                const;
+	bool Has_Cargo         ()                        const;
 
-	bool Needs_Cargo    ()                const { return m_needs_cargo && !Has_Cargo();         };
-	void Set_Needs_Cargo(const bool needsCargo) { m_needs_cargo = needsCargo;                   };
+	bool Needs_Cargo       ()                        const { return m_needs_cargo && !Has_Cargo(); };
+	void Set_Needs_Cargo   (const bool needsCargo)         { m_needs_cargo = needsCargo;           };
+
+	bool Cannot_Be_Used    ()                        const { return m_cannot_be_used;              };
+	void Set_Cannot_Be_Used(const bool cannotBeUsed)       { m_cannot_be_used = cannotBeUsed;      };
 
 protected:
 
 	Utility          m_matching_value;
 	Agent_ptr        m_the_agent;
 	bool             m_needs_cargo;
+	bool             m_cannot_be_used;
 };
 
 

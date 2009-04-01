@@ -1406,7 +1406,10 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
 	if (IsElite())
 		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
-	for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+
+	sint32 i;
+
+	for (i = 0; i < cell->GetNumUnits(); i++) {
 		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
 			attack += (rec->GetZBRangeAttack() * 0.5);// @todo this needs a constDB value
 			break;
@@ -1419,7 +1422,7 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 
 	sint32 p = sint32(prob * 100);
 	
-	for (sint32 i = 0; i < n; ++i) 
+	for (i = 0; i < n; ++i) 
 	{
 		if (g_rand->Next(100) < p) 
 		{

@@ -186,6 +186,9 @@ public:
     void Remove_Matches();
     void Remove_Match(const Agent_ptr & agent);
     bool Has_Agent_And_Set_Needs_Cargo(Agent* agent);
+    bool Needs_Cargo(Agent* agent);
+    bool Cannot_Be_Used(Agent* agent);
+    void Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed);
     size_t Get_Matches_Num() const { return m_matches.size(); }
     void Set_Needs_Transporter(const bool needs_transporter);
     sint16 Get_Transporters_Num() const { return m_current_attacking_strength.Get_Transport(); }

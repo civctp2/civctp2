@@ -738,6 +738,10 @@ void Goal::Commit_Transport_Agents()
 				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
+		else if(match_iter->Cannot_Be_Used())
+		{
+			break;
+		}
 		else if(match_iter->Needs_Cargo())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
@@ -850,6 +854,58 @@ bool Goal::Has_Agent_And_Set_Needs_Cargo(Agent* agent)
 	}
 
 	return false;
+}
+
+bool Goal::Needs_Cargo(Agent* agent)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(agent == match_iter->Get_Agent())
+		{
+			return match_iter->Needs_Cargo();
+		}
+	}
+
+	return false;
+}
+
+bool Goal::Cannot_Be_Used(Agent* agent)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(agent == match_iter->Get_Agent())
+		{
+			return match_iter->Cannot_Be_Used();
+		}
+	}
+
+	return false;
+}
+
+void Goal::Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(agent == match_iter->Get_Agent())
+		{
+			match_iter->Set_Cannot_Be_Used(cannotBeUsed);
+		}
+	}
 }
 
 void Goal::Recompute_Current_Attacking_Strength()
@@ -3003,6 +3059,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
 			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 			        delete[] myString;
+			Set_Cannot_Be_Used(the_transport, true);
 		}
 		else
 		{
@@ -3087,7 +3144,13 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		}
 
 		if (found && FollowPathToTask(the_army, the_transport, dest_pos, found_path) )
+		{
 			return true;
+		}
+	/*	else
+		{
+			Set_Cannot_Be_Used(the_army, true);
+		}*/
 
 		break;
 	}
@@ -3839,10 +3902,7 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 	std::pair<Utility, Agent_ptr> transporter;
 
 	double          max_utility         = Goal::BAD_UTILITY;
-	sint32          needed_transport    = agent_ptr->Get_Army()->Num();
 	sint16 const    dest_cont           = g_theWorld->GetContinent(Get_Target_Pos());
-
-	m_current_needed_strength.Set_Transport(static_cast<sint16>(needed_transport));
 
 	for
 	(
@@ -3887,12 +3947,11 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 			transporter.second = possible_transport;
 
 			transporter_list.push_back(transporter);
-			needed_transport -= empty_slots;
 		}
 	}
 
 	// Probably more stuff needs to be done here
-//	m_current_needed_strength.Set_Transport(static_cast<sint16>(needed_transport));
+	m_current_needed_strength.Set_Transport(static_cast<sint16>(agent_ptr->Get_Army()->Num()));
 
 	transporter_list.sort(std::greater<std::pair<Utility,class Agent *> >());
 	return transporter_list.size() > 0;

@@ -486,6 +486,11 @@ AUI_ERRCODE CityWindow::Initialize()
 
 AUI_ERRCODE CityWindow::Cleanup()
 {
+	if(s_cityWindow)
+	{
+		s_cityWindow->Hide();
+	}
+
 	delete s_cityWindow;
 	s_cityWindow = NULL;
 	return AUI_ERRCODE_OK;
@@ -2535,7 +2540,6 @@ void CityWindow::NotifyBuildChange(CityData *city)
 
 void CityWindow::DoneEditingQueue(CityData *cd)
 {
-	Assert(s_cityWindow);
 	if(!s_cityWindow) return;
 
 	

@@ -937,8 +937,17 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	Governor & governor = Governor::GetGovernor(playerId);
 
+	time_t t1 = GetTickCount();
+
+	DPRINTF(k_DBG_AI, ("\n"));
+	DPRINTF(k_DBG_AI, ("// ADJUST SLIDER SETTINGS -- Turn %d\n", g_player[playerId]->GetCurRound()));
+	DPRINTF(k_DBG_AI, ("//						     Player %d\n", playerId));
+
 	governor.OptimizeSliders(sliders_setting);
 	governor.SetSliders(sliders_setting, true);
+
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
+	DPRINTF(k_DBG_AI, ("\n"));
 
 	UpdateCities();
 
