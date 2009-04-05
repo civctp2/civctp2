@@ -52,6 +52,7 @@
 // - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
+// - Added random map settings option. (5-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -249,6 +250,7 @@ ProfileDB::ProfileDB()
     m_DebugCityAstar                    (FALSE),
     m_newcombat                         (FALSE),
     m_noGoodyHuts                       (FALSE),
+    m_randomCustomMap                   (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -449,6 +451,7 @@ ProfileDB::ProfileDB()
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
 	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
 	Var("NoGoodyHuts"                , PV_BOOL  , &m_noGoodyHuts                , NULL, false);
+	Var("RandomCustomMap"            , PV_BOOL  , &m_randomCustomMap            , NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

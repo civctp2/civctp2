@@ -31,6 +31,7 @@
 //   (JJB)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added random map settings option. (5-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -44,21 +45,23 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
+#include "aui_switch.h"
 #include "aui_uniqueid.h"
 #include "aui_stringtable.h"
 #include "aui_action.h"
 
 #include "ConstRecord.h"
 
+#include "RandGen.h"
+
 #include "civapp.h"
 #include "profileDB.h"
-
-
 
 #include "spnewgamewindow.h"
 #include "custommapscreen.h"
 
 #include "keypress.h"
+#include "colorset.h"               // g_colorSet
 
 extern C3UI					*g_c3ui;
 
@@ -91,28 +94,43 @@ static c3_Static	*s_wet				= NULL,
 
 static sint32		s_useMode = 0;
 
+static aui_Switch		*s_RandomCustomMap	= NULL,
+						*s_NULL				= NULL;
+enum
+{
+	R_RANDOMCUSTOMMAP,
+	GP_TOTAL
+};
 
+static uint32 check[] =
+{
+	R_RANDOMCUSTOMMAP,
+	GP_TOTAL
+};
+RandomGenerator             *my_rand=NULL;
 
+sint32 custommapscreen_updateData()
+{
+	if(!g_theProfileDB) return -1;
 
+	s_RandomCustomMap->SetState(g_theProfileDB->IsRandomCustomMap());
+
+	return 1;
+}
 
 sint32	custommapscreen_displayMyWindow(BOOL viewMode, sint32 useMode)
 {
 	sint32 retval=0;
 	if(!s_customMapWindow) { retval = custommapscreen_Initialize(); }
 
-	AUI_ERRCODE auiErr;
+	custommapscreen_updateData();
+	custommapscreen_updateWindow();
 
-	
-	s_wetdry->Enable( !viewMode );
-	s_warmcold->Enable( !viewMode );
-	s_oceanland->Enable( !viewMode );
-	s_islandcontinent->Enable( !viewMode );
-	s_homodiverse->Enable( !viewMode );
-	s_goodcount->Enable( !viewMode );
+	AUI_ERRCODE auiErr;
 
 	s_useMode = useMode;
 
-	if ( s_useMode )
+	if ( s_useMode )// Not used.
 	{
 		s_customMapWindow->Cancel()->Show();
 		s_customMapWindow->Ok()->SetText( s_closeButtonStrings->GetString( 1 ) );
@@ -132,18 +150,40 @@ sint32	custommapscreen_displayMyWindow(BOOL viewMode, sint32 useMode)
 }
 sint32 custommapscreen_removeMyWindow(uint32 action)
 {
-	
-	
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	custommapscreen_setValues(
-		s_wetdry->GetValueX(),
-		s_warmcold->GetValueX(),
-		s_oceanland->GetValueX(),
-		s_islandcontinent->GetValueX(),
-		s_homodiverse->GetValueX(),
-		s_goodcount->GetValueX() );
+	if (g_theProfileDB->IsRandomCustomMap())
+	{
+		sint32 ranWetDry,
+			ranWarmCold,
+			ranOceanLand,
+			ranIslandContinent,
+			ranHomoDiverse,
+			ranGoodCount;
+		ranWetDry = my_rand->Next(11);
+		ranWarmCold = my_rand->Next(11);
+		ranOceanLand = my_rand->Next(11);
+		ranIslandContinent = my_rand->Next(11);
+		ranHomoDiverse = my_rand->Next(11);
+		ranGoodCount = my_rand->Next(11);
+		custommapscreen_setValues(
+			ranWetDry,
+			ranWarmCold,
+			ranOceanLand,
+			ranIslandContinent,
+			ranHomoDiverse,
+			ranGoodCount);
+	}
+	else
+	{
+		custommapscreen_setValues(
+			s_wetdry->GetValueX(),
+			s_warmcold->GetValueX(),
+			s_oceanland->GetValueX(),
+			s_islandcontinent->GetValueX(),
+			s_homodiverse->GetValueX(),
+			s_goodcount->GetValueX() );
+	}
 
 	AUI_ERRCODE auiErr;
 
@@ -164,6 +204,10 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+
+	uint32 seed = GetTickCount();
+	srand(seed);
+	my_rand = new RandomGenerator(seed); 
 
 	if ( s_customMapWindow ) return AUI_ERRCODE_OK; 
 
@@ -203,6 +247,9 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 	s_goodcount			= spNew_C3Slider(&errcode,windowBlock,"GoodCountSlider",custommapscreen_goodcountSlide);
 	s_poor				= spNew_c3_Static(&errcode,windowBlock,"Poor");
 	s_rich				= spNew_c3_Static(&errcode,windowBlock,"Rich");
+	s_RandomCustomMap	= spNew_aui_Switch(&errcode, windowBlock, "RandomCustomMap", custommapscreen_checkPress, &check[R_RANDOMCUSTOMMAP  ]);
+
+	custommapscreen_updateData();
 
 	s_wetdry->SetValue(g_theProfileDB->GetWetDry(), 0);
 	s_warmcold->SetValue(g_theProfileDB->GetWarmCold(), 0);
@@ -256,6 +303,7 @@ AUI_ERRCODE custommapscreen_Cleanup()
 	mycleanup(s_diverse);
 	mycleanup(s_poor);
 	mycleanup(s_rich);
+	mycleanup(s_RandomCustomMap);
 
 	delete s_customMapWindow;
 	s_customMapWindow = NULL;
@@ -274,10 +322,10 @@ void SetupMapEditorAction::Execute(aui_Control *, uint32, uint32)
 { ; }
 
 void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-	if(custommapscreen_removeMyWindow(action)) {
+{// This fires when you hover over the close button.
+	if(custommapscreen_removeMyWindow(action)) {// This fires when you press close.
 
-		if ( s_useMode == 1 ) {
+		if ( s_useMode == 1 ) {// This is not used.
 
 			
 			g_theProfileDB->SetSaveNote("");
@@ -289,6 +337,8 @@ void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 }
+
+// This is not used.
 void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == (sint32)AUI_BUTTON_ACTION_EXECUTE ) {
@@ -305,7 +355,7 @@ void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 dat
 void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
@@ -477,4 +527,109 @@ void custommapscreen_setValues(
 		(sint32)g_theConstDB->Get(0)->GetRiverCellHeightFewGoods() * ( 10 - goodcount );
 #endif
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
+}
+
+void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
+
+	uint32 checkbox = *((uint32*)cookie);
+	void (ProfileDB::*func)(BOOL) = 0;
+	uint32 state = data;
+
+	switch(checkbox)
+	{
+		case R_RANDOMCUSTOMMAP  : func = &ProfileDB::SetRandomCustomMap     ; break;
+
+		default             : Assert(0)                                     ; break;
+	};
+
+	if(func)
+		(g_theProfileDB->*func)(state ? FALSE : TRUE);
+
+	custommapscreen_updateWindow();
+}
+
+void custommapscreen_updateWindow()
+{
+	if (g_theProfileDB->IsRandomCustomMap())
+	{
+		s_wet->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_dry->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_warm->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_cold->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_ocean->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_land->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_island->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_continent->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_homo->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_diverse->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_poor->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+		s_rich->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
+
+		s_wetdry->HideChildren();
+		s_warmcold->HideChildren();
+		s_oceanland->HideChildren();
+		s_islandcontinent->HideChildren();
+		s_homodiverse->HideChildren();
+		s_goodcount->HideChildren();
+
+		sint32 ranWetDry,
+			ranWarmCold,
+			ranOceanLand,
+			ranIslandContinent,
+			ranHomoDiverse,
+			ranGoodCount;
+		ranWetDry = my_rand->Next(11);
+		ranWarmCold = my_rand->Next(11);
+		ranOceanLand = my_rand->Next(11);
+		ranIslandContinent = my_rand->Next(11);
+		ranHomoDiverse = my_rand->Next(11);
+		ranGoodCount = my_rand->Next(11);
+		custommapscreen_setValues(
+			ranWetDry,
+			ranWarmCold,
+			ranOceanLand,
+			ranIslandContinent,
+			ranHomoDiverse,
+			ranGoodCount);
+
+		s_wetdry->Enable(false);
+		s_warmcold->Enable(false);
+		s_oceanland->Enable(false);
+		s_islandcontinent->Enable(false);
+		s_homodiverse->Enable(false);
+		s_goodcount->Enable(false);
+	}
+	else
+	{
+		s_wet->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_dry->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_warm->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_cold->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_ocean->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_land->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_island->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_continent->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_homo->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_diverse->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_poor->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+		s_rich->SetTextColor(g_colorSet->GetColorRef(COLOR_BLACK));
+
+		s_wetdry->ShowChildren();
+		s_warmcold->ShowChildren();
+		s_oceanland->ShowChildren();
+		s_islandcontinent->ShowChildren();
+		s_homodiverse->ShowChildren();
+		s_goodcount->ShowChildren();
+
+		s_wetdry->Enable(true);
+		s_warmcold->Enable(true);
+		s_oceanland->Enable(true);
+		s_islandcontinent->Enable(true);
+		s_homodiverse->Enable(true);
+		s_goodcount->Enable(true);
+	}
+
+	s_customMapWindow->ShouldDraw(TRUE);
 }

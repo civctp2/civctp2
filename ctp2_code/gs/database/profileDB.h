@@ -61,6 +61,7 @@
 // - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
+// - Added random map settings option. (5-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -413,6 +414,8 @@ private:
     sint32 m_newcombat;
     /// Enable no goody huts
     sint32 m_noGoodyHuts;
+	/// Enable random map settings (wet/dry, warm/cold etc.)
+    sint32 m_randomCustomMap;
 
 
 
@@ -613,6 +616,7 @@ public:
     void SetUpgrade(BOOL on)                            { m_upgrade = on; }
     void SetNewCombat(BOOL on)                          { m_newcombat = on; }
     void SetNoGoodyHuts(BOOL on)                        { m_noGoodyHuts = on; }
+    void SetRandomCustomMap(BOOL on)                    { m_randomCustomMap = on; }
 /*
     void SetDebugAI(BOOL on)   //emod2
     {
@@ -874,6 +878,7 @@ public:
     BOOL    IsUpgrade()                         { return m_upgrade; }
     BOOL    IsNewCombat()                       { return m_newcombat; }
     BOOL    IsNoGoodyHuts()                     { return m_noGoodyHuts; }
+    BOOL    IsRandomCustomMap()                 { return m_randomCustomMap; }
 
 //later add start age and end age?
 };

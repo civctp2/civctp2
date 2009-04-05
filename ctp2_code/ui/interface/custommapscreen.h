@@ -32,5 +32,7 @@ void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 
 void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void custommapscreen_updateWindow();
 
 #endif 
