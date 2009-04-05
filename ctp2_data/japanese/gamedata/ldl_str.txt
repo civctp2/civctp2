@@ -3294,6 +3294,9 @@ str_tbl_ldl_NewCombat_Off			"Old Combat"
 str_tbl_ldl_NewCombat_On			"New Combat"
 str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
 str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
+# Custom map window (wet/dry etc.)
+str_tbl_ldl_RandomCustomMap_Off			"Manual Settings"
+str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"

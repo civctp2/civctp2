@@ -1,12 +1,9 @@
 
-
-
-
 template CUSTOMMAP_LABEL_LEFT:CTP2_STANDARD_FONT {
 
 	string	pattern	"uptg20e.tga"
 
-	int 	xpix		10
+	int 	xpix		17 #10
 
 	int	widthpix	80
 
@@ -24,11 +21,20 @@ template CUSTOMMAP_LABEL_RIGHT:CTP2_STANDARD_FONT {
 	int	widthpix	80
 
 	int	heightpix	20
-
-
 }
 
+GAMEPLAY_CHECKBOX_CUSTOMMAP:CTP2_STANDARD_FONT {
 
+	string	image0	"upbt11u0.tga"
+	string	image1	"upbt11u1.tga"
+	string	disabledimage0	"upbt11x0.tga"
+	string	disabledimage1	"upbt11x1.tga"
+
+
+	int	widthpix	230
+	string	imageblttype	"stretch"
+	int	heightpix	24
+}
 
 CustomMapWindow {
 
@@ -44,7 +50,7 @@ CustomMapWindow {
 
 	int	widthpix	450
 
-	int	heightpix	310
+	int	heightpix	336
 
 	Name:CTP_GREY_TITLE_FONT  {
 
@@ -483,6 +489,18 @@ CustomMapWindow {
 		string text	 "str_ldl_Many_Goods"
 	}
 
+	RandomCustomMap:GAMEPLAY_CHECKBOX_CUSTOMMAP {
+
+		int	xpix		110
+		int	ypix		295
+
+		int	widthpix	230
+
+		stringtable {
+			string	string0	"str_tbl_ldl_RandomCustomMap_Off"
+			string	string1	"str_tbl_ldl_RandomCustomMap_On"
+		}
+	}
 
 	CloseButtonStrings {
 		string	string0	"str_ldl_CLOSE"
