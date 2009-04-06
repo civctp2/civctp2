@@ -107,7 +107,7 @@ static uint32 check[] =
 	R_RANDOMCUSTOMMAP,
 	GP_TOTAL
 };
-RandomGenerator             *my_rand=NULL;
+RandomGenerator             *custommapscreenRand=NULL;
 
 sint32 custommapscreen_updateData()
 {
@@ -160,12 +160,12 @@ sint32 custommapscreen_removeMyWindow(uint32 action)
 			ranIslandContinent,
 			ranHomoDiverse,
 			ranGoodCount;
-		ranWetDry = my_rand->Next(11);
-		ranWarmCold = my_rand->Next(11);
-		ranOceanLand = my_rand->Next(11);
-		ranIslandContinent = my_rand->Next(11);
-		ranHomoDiverse = my_rand->Next(11);
-		ranGoodCount = my_rand->Next(11);
+		ranWetDry = custommapscreenRand->Next(11);
+		ranWarmCold = custommapscreenRand->Next(11);
+		ranOceanLand = custommapscreenRand->Next(11);
+		ranIslandContinent = custommapscreenRand->Next(11);
+		ranHomoDiverse = custommapscreenRand->Next(11);
+		ranGoodCount = custommapscreenRand->Next(11);
 		custommapscreen_setValues(
 			ranWetDry,
 			ranWarmCold,
@@ -207,7 +207,7 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 
 	uint32 seed = GetTickCount();
 	srand(seed);
-	my_rand = new RandomGenerator(seed); 
+	custommapscreenRand = new RandomGenerator(seed); 
 
 	if ( s_customMapWindow ) return AUI_ERRCODE_OK; 
 
@@ -304,6 +304,7 @@ AUI_ERRCODE custommapscreen_Cleanup()
 	mycleanup(s_poor);
 	mycleanup(s_rich);
 	mycleanup(s_RandomCustomMap);
+	mycleanup(custommapscreenRand);
 
 	delete s_customMapWindow;
 	s_customMapWindow = NULL;
@@ -580,12 +581,12 @@ void custommapscreen_updateWindow()
 			ranIslandContinent,
 			ranHomoDiverse,
 			ranGoodCount;
-		ranWetDry = my_rand->Next(11);
-		ranWarmCold = my_rand->Next(11);
-		ranOceanLand = my_rand->Next(11);
-		ranIslandContinent = my_rand->Next(11);
-		ranHomoDiverse = my_rand->Next(11);
-		ranGoodCount = my_rand->Next(11);
+		ranWetDry = custommapscreenRand->Next(11);
+		ranWarmCold = custommapscreenRand->Next(11);
+		ranOceanLand = custommapscreenRand->Next(11);
+		ranIslandContinent = custommapscreenRand->Next(11);
+		ranHomoDiverse = custommapscreenRand->Next(11);
+		ranGoodCount = custommapscreenRand->Next(11);
 		custommapscreen_setValues(
 			ranWetDry,
 			ranWarmCold,

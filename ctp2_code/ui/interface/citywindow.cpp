@@ -864,7 +864,6 @@ void CityWindow::UpdateBuildTabs()
 		
 		PopulateQueueList(m_cityData, lb, "cw_InventoryListItem");
 	}
-
 	
 	ctp2_Button *turnCountButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton");
 	MBCHAR buf[20];
@@ -2520,6 +2519,7 @@ void CityWindow::FillStatsLists()
 	}
 }
 
+// Not used?
 void CityWindow::NotifyUnitChange()
 {
 	
@@ -2629,6 +2629,8 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 					// Transfer the unit to the temporary army.
 					u.GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
 					u.ChangeArmy(temp, CAUSE_NEW_ARMY_GROUPING);
+
+					s_cityWindow->m_unitButtons[b]->SetToggleState(false);
 				}
 			}
 		} // for
