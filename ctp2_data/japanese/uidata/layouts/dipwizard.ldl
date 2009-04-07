@@ -5,7 +5,8 @@ template DIP_WIZARD_STAGE {
 	int ypix 32
 	int widthpix 240
 	int heightpix 280
-	string pattern "uptg20e.tga"
+	string	pattern	 "uptg20e.tga"
+	#string	pattern	"cw_TEST2.tga"
 }
 
 template DIP_WIZARD_TONE_BUTTON:CTP2_BUTTON_ICONIC {
@@ -56,26 +57,38 @@ template DIP_WIZARD_TONE_ICON:CTP2_STATIC_BASE {
 
 DipWizard:CTP2_DIALOG_WINDOW {
 
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	800 #576
+	int	heightpix	558
+
 	string title "str_ldl_DiplomacyWizardTitle"
 
 	Details {
 		string objecttype "ctp2_Static"
 		int xpix 290
-		int ypix 29
+		int ypix 40 #29
 		int widthpix 250
-		int heightpix 320
+		int heightpix 483 #320
+		string	pattern	"uptg20e.tga"
+		#string	pattern	"cw_TEST.tga"
 
-		# Picture:CTP2_STATIC_IMAGE {
-		# 	int xpix 4
-		# 	int ypix 12
-		# 	int widthpix 64
-		# 	int heightpix 48
-		# 	string image00 "updf01.tga"
-		# }
+		Picture:CTP2_STATIC_IMAGE {
+			int xpix 0 #29
+			int ypix 0 #25 #2 #12
+			int widthpix 139 #20 #64
+			int heightpix 170 #150 #48
+		#	string image00 "updf01.tga"
+			string image00 "error.tga"
+		}
 
 		Year:CTP2_STATIC_BASE {
-			int xpix 72
-			int ypix 4
+			int xpix 57 #72
+			int ypix 172 #177 #154 #4
 			int widthpix 140
 			int heightpix 20
 			string text "str_ldl_DipWizYear"
@@ -83,14 +96,14 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		ToneIcon:CTP2_STATIC_BASE {
 			int xpix 225
-			int ypix 4
+			int ypix 177 #154 #4
 			string image0 "updi39.tga"
 			string imagebltflag "chromakey"
 		}
 
 		Recipient:CTP2_STATIC_BASE {
 			int xpix 70
-			int ypix 20
+			int ypix 191 #196 #203 #170 #20
 			int widthpix 170
 			int heightpix 32
 			string text "str_ldl_DipWizRecipient"
@@ -102,7 +115,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		Proposal:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 72
+			int ypix 245 #222 #72
 			int widthpix 222
 			int heightpix 80
 		
@@ -114,7 +127,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		Exchange:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 156
+			int ypix 329 #306 #156
 			int widthpix 222
 			int heightpix 80
 		
@@ -126,7 +139,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		Response:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 240
+			int ypix 413 #390 #240
 			int widthpix 222
 			int heightpix 50
 			bool wordwrap TRUE
@@ -137,7 +150,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		Parchment:CTP2_STATIC_IMAGE {			
 			int xpix 0
-			int ypix 0
+			int ypix 163 #0
 			int widthpix 250
 			int heightpix 320
 			string image00 "updg01.tga"
@@ -150,6 +163,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			int ypix 7
 			string just "left"
 			string text "str_ldl_DipWizSelectNation"
+			
 		}
 
 		Nations:CTP2_DROPDOWN {
@@ -254,7 +268,11 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 		
 	}
+#################EMOD - Diplomacy Request/Offer/Treaty tab info is here
 	Stage1:DIP_WIZARD_STAGE {
+	#string	pattern	"uptg20e.tga"
+	#string	pattern	"cw_TEST2.tga"
+
 		Label:CTP2_STATIC_BASE {
 			int xpix 14
 			int ypix 7
@@ -265,6 +283,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			string textblttype "fill"
 			string just "left"
 			string text "str_ldl_DipWizSelectRequestOfferTreaty"
+			
 		}
 
 		Tabs:CTP2_TAB_GROUP {
@@ -300,6 +319,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 	}
 	Stage2:DIP_WIZARD_STAGE {
+
 		Label:CTP2_STATIC_BASE {
 			int xpix 14
 			int ypix 7
@@ -343,12 +363,14 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			}
 		}
 	}
+##################### End EMOD
 
 	# View stage
 	Stage3:DIP_WIZARD_STAGE:CTP2_STATIC_BASE {
 		int xpix	39
-		int ypix	93
-		string pattern	"updg99.tga"
+		int ypix	32 #57 #93
+		string pattern	"updg99.tga"   #response parchment - gold thing
+		#string	pattern	"cw_TEST2.tga"
 		int heightpix 153
 		int widthpix 250
 		
@@ -373,55 +395,58 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 	# Threat stage
 	Stage4:DIP_WIZARD_STAGE {
+	
 		List:CTP2_LISTBOX {
 			int xpix 8
-			int ypix 30
-			int heightpix 250
+			int ypix 13 #38 #10 #30
+			int heightpix 250 #250
 			int widthpix 212
 		}
 	}
 
 	CheckIntelligenceButton:CTP2_BUTTON_SMALL {
 		string text "str_ldl_DipWizardCheckIntelligence"
-		int xpix 132
-		int ypix 354
-		int widthpix 152
+		int xpix 42 #295 #135
+		int ypix 492 #417 #528 #354
+		int widthpix 240 #155
 		int heightpix 24
 		string	statustext	"STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON"
 	}
 
 	CreateButtons:CTP2_STATIC_BASE {
-		int xpix 0
-		int widthpix 560
-		int ypix 320
-		int heightpix 70
+		int xpix 42
+		int ypix 417 #442
+		int widthpix 240
+		int heightpix 74
+		#string	pattern	 "cw_TEST3.tga"
 
 		BackButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_Back"
-			int xpix 50
+			int xpix 0
 			int ypix 0
-			int widthpix 100
+			int widthpix 115 #120
 		}
 	
 		NextButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_Next"
-			int xpix 172
+			int xpix 125
 			int ypix 0
-			int widthpix 100
+			int widthpix 115
 		}
 	
 		CancelButton:CTP2_STANDARD_CLOSE { 
 			# Tooltip
-			int	xpix	46
-			int ypix 34
+			int xpix	0 #46
+			int ypix 	25 #34
+			int widthpix 240 #EMOD
 			string	text	"str_ldl_Cancel"
 			string	statustext	"STATUSBAR_DIPMAN_CREATE_EXIT_DIP_BUTTON"
 		}
 	
 		SendButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizSend"
-			int xpix 290
-			int ypix 34
+			int xpix 0 #290
+			int ypix 50 #34
 			int widthpix 240
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_CREATE_SENDPROP_BUTTON"
@@ -429,47 +454,50 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	}
 
 	ViewButtons:CTP2_STATIC_BASE {
-		int xpix 0
-		int widthpix 560
-		int ypix 356
-		int heightpix 30
+		int xpix 546 #0
+		int ypix 467 #356
+		int widthpix 210 #560
+		int heightpix 49 #30
+		#string	pattern	 "cw_TEST4.tga"
 
-#		CloseButton:CTP2_BUTTON_SMALL {
-#			string text "str_ldl_Close"
-#			int xpix 450
-#			int ypix 0
-#			int widthpix 100
-#		}
+	#	CloseButton:CTP2_BUTTON_SMALL {
+	#		string text "str_ldl_Close"
+	#		int xpix 50 #302
+	#		int ypix 50 #0
+	#		int widthpix 210 #80
+	#	}
 		AcceptButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizAccept"
-			int xpix 470
+			int xpix 0 #470
 			int ypix 0
-			int widthpix 80
+			int widthpix 104
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_RESPOND_ACCEPT_BUTTON"
 		}
 
 		RejectButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizReject"
-			int xpix 386
-			int ypix 0
-			int widthpix 80
+			int xpix 106 #175 #386
+			int ypix 0 #0 #100 #64 #0
+			int widthpix 104 #240 #115
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_RESPOND_REJECT_BUTTON"
 		}
 		CounterOrThreatenButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizThreaten"
-			int xpix 302
-			int ypix 0
-			int widthpix 80
+			int xpix 0 #302
+			int ypix 25 #0
+			int widthpix 210 #80
 		}
 	}
 
 	Background:CTP2_DIALOG_BG {
+		int	widthpix	800
+		int	heightpix	558
 		string image00 "uptg23a.tga"
 		string image02 "uptg23c.tga"
-		string image03 "uptg23d.tga"
-		string image05 "uptg23f.tga"
+		string image03 "dw_lb.tga" #"uptg23d.tga"
+		string image05 "dw_rb.tga" #"uptg23f.tga"
 	}
 
 }
