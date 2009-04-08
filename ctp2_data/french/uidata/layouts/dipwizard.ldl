@@ -100,8 +100,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 
 		Year:CTP2_STATIC_BASE {
-			int xpix 57 #72
-			int ypix 172 #177 #154 #4
+			int xpix 57
+			int ypix 172
 			int widthpix 140
 			int heightpix 20
 			string text "str_ldl_DipWizYear"
@@ -109,14 +109,14 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		ToneIcon:CTP2_STATIC_BASE {
 			int xpix 225
-			int ypix 177 #154 #4
+			int ypix 177
 			string image0 "updi39.tga"
 			string imagebltflag "chromakey"
 		}
 
 		Recipient:CTP2_STATIC_BASE {
 			int xpix 70
-			int ypix 191 #196 #203 #170 #20
+			int ypix 191
 			int widthpix 170
 			int heightpix 32
 			string text "str_ldl_DipWizRecipient"
@@ -129,7 +129,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		#Proposal:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		Proposal:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 245 #222 #72
+			int ypix 245
 			int widthpix 222
 			int heightpix 80
 		
@@ -142,7 +142,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		#Exchange:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		Exchange:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 329 #306 #156
+			int ypix 329
 			int widthpix 222
 			int heightpix 80
 		
@@ -155,7 +155,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		#Response:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		Response:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
-			int ypix 413 #390 #240
+			int ypix 413
 			int widthpix 222
 			int heightpix 50
 			bool wordwrap TRUE
@@ -166,7 +166,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 		Parchment:CTP2_STATIC_IMAGE {			
 			int xpix 0
-			int ypix 163 #0
+			int ypix 163
 			int widthpix 250
 			int heightpix 320
 			string image00 "updg01.tga"
@@ -286,8 +286,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	}
 #################EMOD - Diplomacy Request/Offer/Treaty tab info is here
 	Stage1:DIP_WIZARD_STAGE {
-	#string	pattern	"uptg20e.tga"
-	#string	pattern	"cw_TEST2.tga"
+	int xpix 42 #523
+	int ypix 32
 
 		Label:CTP2_STATIC_BASE {
 			int xpix 14
@@ -303,7 +303,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 
 		Tabs:CTP2_TAB_GROUP {
-			int xpix 8
+			int xpix 5
 			int ypix 30
 			int widthpix 222
 			int heightpix 260
@@ -349,7 +349,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 
 		Tabs:CTP2_TAB_GROUP {
-			int xpix 8
+			int xpix 5
 			int ypix 30
 			int widthpix 222
 			int heightpix 260
@@ -414,7 +414,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	Stage4:DIP_WIZARD_STAGE {
 	
 		List:CTP2_LISTBOX {
-			int xpix 8
+			int xpix 5 #8
 			int ypix 13 #38 #10 #30
 			int heightpix 250 #250
 			int widthpix 203 #212
@@ -423,9 +423,9 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 	CheckIntelligenceButton:CTP2_BUTTON_SMALL {
 		string text "str_ldl_DipWizardCheckIntelligence"
-		int xpix 42 #295 #135
-		int ypix 492 #417 #528 #354
-		int widthpix 232 #240 #155
+		int xpix 42
+		int ypix 492
+		int widthpix 232
 		int heightpix 24
 		string	statustext	"STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON"
 	}

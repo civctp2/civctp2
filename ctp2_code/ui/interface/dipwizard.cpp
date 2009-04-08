@@ -1330,7 +1330,7 @@ void DipWizard::UpdateDetails()
 				st->SetText(text);
 
 				//Modified by Martin Gühmann to display the emissary photo of recipient
-				DisplayDiplomat(-1);
+				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(m_viewSender);
 
 			} else if(m_viewResponseType == RESPONSE_COUNTER) {
