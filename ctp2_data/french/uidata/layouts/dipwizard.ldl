@@ -1,10 +1,23 @@
 
+template CTP2_PARCHMENT_FONT {
+	# Times New Roman Bold
+	string fontname 			"timesbi.ttf" #"timesbd.ttf"
+
+	# 10 point
+	int fontsize				10
+
+	# Dark Grey
+	int fontcolorred			50
+	int fontcolorgreen			50
+	int fontcolorblue			50
+}
+
 template DIP_WIZARD_STAGE {
 	string objecttype "ctp2_Static"
 	int xpix 42
 	int ypix 32
-	int widthpix 240
-	int heightpix 280
+	int widthpix 232 #240
+	int heightpix 282 #280
 	string	pattern	 "uptg20e.tga"
 	#string	pattern	"cw_TEST2.tga"
 }
@@ -70,7 +83,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 	Details {
 		string objecttype "ctp2_Static"
-		int xpix 290
+		int xpix 275 #282 #290
 		int ypix 40 #29
 		int widthpix 250
 		int heightpix 483 #320
@@ -113,7 +126,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			string just "left"
 		}
 
-		Proposal:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		#Proposal:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Proposal:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
 			int ypix 245 #222 #72
 			int widthpix 222
@@ -125,7 +139,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			string text "str_ldl_DipWizProposal"
 		}
 
-		Exchange:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		#Exchange:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Exchange:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
 			int ypix 329 #306 #156
 			int widthpix 222
@@ -137,7 +152,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			string text "str_ldl_DipWizExchange"
 		}
 
-		Response:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		#Response:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Response:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
 			int xpix 15
 			int ypix 413 #390 #240
 			int widthpix 222
@@ -185,7 +201,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		Tones:CTP2_STATIC_BASE {
 			int xpix 0
 			int ypix 100
-			int widthpix 240
+			int widthpix 232 #240
 			int heightpix 130
 			
 			ToneIcon0:DIP_WIZARD_TONE_ICON {
@@ -367,16 +383,17 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 	# View stage
 	Stage3:DIP_WIZARD_STAGE:CTP2_STATIC_BASE {
-		int xpix	39
+		int xpix	42 #32 #39
 		int ypix	32 #57 #93
-		string pattern	"updg99.tga"   #response parchment - gold thing
+		#string pattern	"updg99.tga"   #response parchment - gold plate thing
+		string pattern	"updg99small.tga"
 		#string	pattern	"cw_TEST2.tga"
-		int heightpix 153
-		int widthpix 250
+		int widthpix 232 #250
+		int heightpix 142 #153
 		
 		Text:CTP2_STATIC_BASE {
-			int xpix 29
-			int ypix 76
+			int xpix 24 #29
+			int ypix 60 #66 #76
 			int heightpix 60
 			int widthpix 200
 			bool wordwrap TRUE
@@ -386,8 +403,8 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		}
 
 		Diplomat:CTP2_STATIC_IMAGE {
-			int xpix 29
-			int ypix 29
+			int xpix 17 #29
+			int ypix 39 #29
 			int widthpix 200
 			int heightpix 6
 		}
@@ -400,7 +417,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			int xpix 8
 			int ypix 13 #38 #10 #30
 			int heightpix 250 #250
-			int widthpix 212
+			int widthpix 203 #212
 		}
 	}
 
@@ -408,7 +425,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		string text "str_ldl_DipWizardCheckIntelligence"
 		int xpix 42 #295 #135
 		int ypix 492 #417 #528 #354
-		int widthpix 240 #155
+		int widthpix 232 #240 #155
 		int heightpix 24
 		string	statustext	"STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON"
 	}
@@ -416,7 +433,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	CreateButtons:CTP2_STATIC_BASE {
 		int xpix 42
 		int ypix 417 #442
-		int widthpix 240
+		int widthpix 232 #240
 		int heightpix 74
 		#string	pattern	 "cw_TEST3.tga"
 
@@ -429,7 +446,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	
 		NextButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_Next"
-			int xpix 125
+			int xpix 117 #125
 			int ypix 0
 			int widthpix 115
 		}
@@ -438,7 +455,7 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			# Tooltip
 			int xpix	0 #46
 			int ypix 	25 #34
-			int widthpix 240 #EMOD
+			int widthpix 232 #240
 			string	text	"str_ldl_Cancel"
 			string	statustext	"STATUSBAR_DIPMAN_CREATE_EXIT_DIP_BUTTON"
 		}
@@ -447,16 +464,16 @@ DipWizard:CTP2_DIALOG_WINDOW {
 			string text "str_ldl_DipWizSend"
 			int xpix 0 #290
 			int ypix 50 #34
-			int widthpix 240
+			int widthpix 232 #240
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_CREATE_SENDPROP_BUTTON"
 		}
 	}
 
 	ViewButtons:CTP2_STATIC_BASE {
-		int xpix 546 #0
+		int xpix 526 #546 #0
 		int ypix 467 #356
-		int widthpix 210 #560
+		int widthpix 232 #210 #560
 		int heightpix 49 #30
 		#string	pattern	 "cw_TEST4.tga"
 
@@ -464,30 +481,30 @@ DipWizard:CTP2_DIALOG_WINDOW {
 	#		string text "str_ldl_Close"
 	#		int xpix 50 #302
 	#		int ypix 50 #0
-	#		int widthpix 210 #80
+	#		int widthpix 232 #210 #80
 	#	}
 		AcceptButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizAccept"
-			int xpix 0 #470
-			int ypix 0
-			int widthpix 104
+			int xpix 117 #0 #470
+			int ypix 25 #0
+			int widthpix 115 #104
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_RESPOND_ACCEPT_BUTTON"
 		}
 
 		RejectButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizReject"
-			int xpix 106 #175 #386
-			int ypix 0 #0 #100 #64 #0
-			int widthpix 104 #240 #115
+			int xpix 0 #117 #386
+			int ypix 25 #0
+			int widthpix 115
 			# Tooltip
 			string	statustext	"STATUSBAR_DIPMAN_RESPOND_REJECT_BUTTON"
 		}
 		CounterOrThreatenButton:CTP2_BUTTON_SMALL {
 			string text "str_ldl_DipWizThreaten"
 			int xpix 0 #302
-			int ypix 25 #0
-			int widthpix 210 #80
+			int ypix 0 #25
+			int widthpix 232 #210 #80
 		}
 	}
 
@@ -517,7 +534,8 @@ DipWizNationItem:CTP2_LIST_ITEM {
 DipWizProposalItem:CTP2_LIST_ITEM {
 	int widthpix 190
 	int heightpix 22
-	label:CTP2_HEADER_FONT {
+	#label:CTP2_HEADER_FONT {
+	label:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 		string just "left"
 		bool vertcenter TRUE
@@ -530,7 +548,8 @@ DipWizProposalItem:CTP2_LIST_ITEM {
 DipWizThreatItem:CTP2_LIST_ITEM {
 	int widthpix 212
 	int heightpix 22
-	label:CTP2_HEADER_FONT {
+	#label:CTP2_HEADER_FONT {
+	label:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 		string just "left"
 		bool vertcenter TRUE
