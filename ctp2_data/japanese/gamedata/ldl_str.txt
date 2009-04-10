@@ -3302,6 +3302,8 @@ str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"
 str_ldl_Civ_Flags_Off			"Nation Flags Off"
 str_ldl_Civ_Flags_On			"Nation Flags On"
+str_ldl_Good_Animations_Off		"Good Animations Off"
+str_ldl_Good_Animations_On		"Good Animations On"
 
 str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
 str_ldl_CityWinSpecTabCrimeFormat		"%d%%"

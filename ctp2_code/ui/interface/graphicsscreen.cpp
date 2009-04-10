@@ -25,6 +25,7 @@ extern C3UI					*g_c3ui;
 extern sint32				g_isGridOn;
 extern CivApp				*g_civApp;
 extern SpriteGroupList		*g_unitSpriteGroupList;
+extern SpriteGroupList		*g_goodSpriteGroupList;
 
 static ctp2_Button	*s_resScreenButton;
 static c3_PopupWindow *s_graphicsWindow	= NULL;
@@ -58,7 +59,8 @@ static aui_Switch			*s_walk		= NULL,
 							*s_cityNames = NULL, //;
 							*s_civflags = NULL, //CivFlagButton
 							*s_smooth = NULL, //emod1
-							*s_armyNames = NULL;
+							*s_armyNames = NULL,
+							*s_goodAnims = NULL;
 
 
 static BOOL			s_gridToggled = FALSE;
@@ -68,6 +70,7 @@ static BOOL			s_armyNamesToggled = FALSE; //emod
 static BOOL			s_civflagsToggled = FALSE; //emod
 static BOOL			s_smoothToggled = FALSE; //emod2
 static BOOL			s_unitAnimToggled = FALSE;
+static BOOL			s_goodAnimToggled = FALSE;
 
 enum
 {
@@ -88,6 +91,7 @@ enum
 	GS_ARMYNAMES,  //emod
 	GS_CIVFLAGS,  //emod
 	GS_SMOOTH,  //emod 3
+	GS_GOODANIMS,
 
 	GS_TOTAL };
 
@@ -111,6 +115,7 @@ static uint32 check[] =
 	GS_ARMYNAMES,  //emod
 	GS_CIVFLAGS,  //emod
 	GS_SMOOTH,  //emod 4
+	GS_GOODANIMS,
 	
 	GS_TOTAL 
 };
@@ -128,6 +133,7 @@ sint32	graphicsscreen_displayMyWindow()
 	keypress_RegisterHandler(s_graphicsWindow);
 
 	s_unitAnimToggled = FALSE;
+	s_goodAnimToggled = FALSE;
 
 	return retval;
 }
@@ -192,8 +198,10 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 	s_armyNames = spNew_aui_Switch(&errcode,windowBlock,"ArmyNamesButton", graphicsscreen_checkPress, &check[GS_ARMYNAMES]);
 	s_civflags = spNew_aui_Switch(&errcode,windowBlock,"CivFlagButton", graphicsscreen_checkPress, &check[GS_CIVFLAGS]);
 	s_resScreenButton = spNew_ctp2_Button( &errcode, windowBlock, "ResolutionButton", graphicsscreen_selectResolution );
-//emod5
+
 	s_smooth = spNew_aui_Switch(&errcode,windowBlock,"SmoothButton", graphicsscreen_checkPress, &check[GS_SMOOTH]);
+
+	s_goodAnims	= spNew_aui_Switch(&errcode,windowBlock,"GoodsButton",graphicsscreen_checkPress,&check[GS_GOODANIMS]);
 	
 	s_unitSpeed = spNew_C3Slider(&errcode, windowBlock, "UnitSpeedSlider", graphicsscreen_unitSpeedSlide);
 	s_unitSpeedN = spNew_c3_Static(&errcode, windowBlock, "UnitSpeedName");
@@ -206,24 +214,15 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	
 	s_walk->SetState(g_theProfileDB->IsUnitAnim());
-
-
 	s_trade->SetState(g_theProfileDB->IsTradeAnim());
 	s_wonder->SetState(g_theProfileDB->IsWonderMovies());
-
-
 	s_politicalBorders->SetState(g_theProfileDB->GetShowPoliticalBorders());
 	s_tradeRoutes->SetState(g_theProfileDB->GetShowTradeRoutes());
-
-	
 	s_cityNames->SetState(g_theProfileDB->GetShowCityNames());
 	s_armyNames->SetState(g_theProfileDB->GetShowArmyNames());  //emod
 	s_civflags->SetState(g_theProfileDB->IsCivFlags());  //emod
 	s_smooth->SetState(g_theProfileDB->IsSmoothBorders());  //emod6
-
-
-	
-
+	s_goodAnims->SetState(g_theProfileDB->IsGoodAnim());
 	s_cityInfluence->SetState( g_theProfileDB->IsShowCityInfluence() );
 	s_grid->SetState( g_isGridOn );
 
@@ -265,6 +264,7 @@ void graphicsscreen_Cleanup()
 	mycleanup(s_armyNames); //emod
 	mycleanup(s_civflags); //emod
 	mycleanup(s_smooth); //emod7
+	mycleanup(s_goodAnims);
 #undef mycleanup
 }
 
@@ -295,15 +295,16 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 				g_tiledMap->InvalidateMap();
 			}
 		}
-
-
-
-
-
-
 		if (s_unitAnimToggled) {
 			if (g_civApp->IsGameLoaded()) {
 				g_unitSpriteGroupList->RefreshBasicLoads(GROUPTYPE_UNIT);
+			}
+		}
+		// @todo fix updating good anims option mid-game.
+		// This doesn't work for goods, unlike units above.
+		if (s_goodAnimToggled) {
+			if (g_civApp->IsGameLoaded()) {
+				g_goodSpriteGroupList->RefreshBasicLoads(GROUPTYPE_GOOD);
 			}
 		}
 	}
@@ -327,26 +328,19 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		func = &ProfileDB::SetUnitAnim; 
 		s_unitAnimToggled = TRUE;
 		break;
-
-
-
-
-
-	case GS_TRADE:		func = &ProfileDB::SetTradeAnim; break;
-	case GS_WONDER:		func = &ProfileDB::SetWonderMovies; break;
-
-
+	case GS_TRADE:		
+		func = &ProfileDB::SetTradeAnim;
+		break;
+	case GS_WONDER:		
+		func = &ProfileDB::SetWonderMovies;
+		break;
 	case GS_POLITICALBORDERS:
 		func = &ProfileDB::SetShowPoliticalBorders; 
 		s_politicalBordersToggled = TRUE;
 		break;
-	case GS_TRADEROUTES:	func = &ProfileDB::SetShowTradeRoutes; break;
-
-
-
-
-
-
+	case GS_TRADEROUTES:	
+		func = &ProfileDB::SetShowTradeRoutes;
+		break;
 	case GS_CITYINFLUENCE:
 		func = NULL;
 		g_theProfileDB->SetShowCityInfluence(!state);
@@ -358,18 +352,21 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		s_gridToggled = TRUE;
 		break;
 	case GS_CITYNAMES:
-		func = &ProfileDB::SetShowCityNames; break;
+		func = &ProfileDB::SetShowCityNames;
 		break;
 	case GS_ARMYNAMES:
-		func = &ProfileDB::SetShowArmyNames; break;  //emod
+		func = &ProfileDB::SetShowArmyNames;//emod
 		break;
 	case GS_CIVFLAGS:
-		func = &ProfileDB::SetShowCivFlags; break;  //emod
+		func = &ProfileDB::SetShowCivFlags;//emod
 		break;
 	case GS_SMOOTH:
-		func = &ProfileDB::SetShowSmooth; break;  //emod8
+		func = &ProfileDB::SetShowSmooth;//emod8
 		break;
-
+	case GS_GOODANIMS:
+		func = &ProfileDB::SetGoodAnim;
+		//s_goodAnimToggled = TRUE;
+		break;
 	case GS_TOTAL:  break;
 	default:  Assert(0); break;
 	};

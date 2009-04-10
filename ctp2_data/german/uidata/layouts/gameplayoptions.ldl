@@ -7,6 +7,7 @@
 #
 # - increased size by 200 ypix
 # - added citycapture option
+# - removed city capture and debugAI (10-Apr-2009 Maq)
 #######################################
 
 ##-----------------------------------##
@@ -111,24 +112,14 @@ GamePlayOptionsWindow {
 			string	string1	"str_ldl_Auto_Tab_Select_On"
 		}
 	}
-	#EMOD
-	CityCaptureButton:GAMEPLAY_CHECKBOX {
+	EnemyHealthButton:GAMEPLAY_CHECKBOX {
 		int	ypix	200
 		int	xpix	30
 		stringtable {
-			string	string0	"str_tbl_ldl_CityCaptureOptions_Off"
-			string	string1	"str_tbl_ldl_CityCaptureOptions_On"
+			string	string0	"str_ldl_ShowEnemyHealth_Off"
+			string	string1	"str_ldl_ShowEnemyHealth_On"
 		}
 	}
-	DebugAIButton:GAMEPLAY_CHECKBOX {
-		int	ypix	230
-		int	xpix	30
-		stringtable {
-			string	string0	"str_ldl_Debug_AI_Off"
-			string	string1	"str_ldl_Debug_AI_On"
-		}
-	}
-	
 	
 #######RIGHT COLUMN BUTTONS
 
@@ -170,14 +161,6 @@ GamePlayOptionsWindow {
 		stringtable {
 			string	string0	"str_ldl_Left_Handed_Mouse_Off"
 			string	string1	"str_ldl_Left_Handed_Mouse_On"
-		}
-	}
-	EnemyHealthButton:GAMEPLAY_CHECKBOX {
-		int	ypix	230
-		int	xpix	280
-		stringtable {
-			string	string0	"str_ldl_ShowEnemyHealth_Off"
-			string	string1	"str_ldl_ShowEnemyHealth_On"
 		}
 	}
 

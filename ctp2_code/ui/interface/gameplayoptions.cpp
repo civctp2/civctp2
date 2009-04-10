@@ -30,6 +30,8 @@
 // - added citycapture options
 // - added show enemy health
 // - added show debug AI text
+// - Removed city capture options (already in rules window) and debug AI -
+//	 (already in scenario editor). (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -71,8 +73,6 @@ static aui_Switch			*s_tutorialadvice			= NULL,
 							*s_battleViewAlways			= NULL,	
 							*s_autoSave					= NULL,
 
-							*s_citycapture				= NULL, //emod1	
-							*s_DebugAI					= NULL, //emod1	
 							*s_EnemyHealth				= NULL, //emod1	
 
 							*s_leftHandedMouse			= NULL;	
@@ -96,8 +96,6 @@ enum
 	GP_BATTLEVIEWALWAYS,		
 	GP_AUTOSAVE,
 	GP_LEFTHANDEDMOUSE,	
-	GP_CITYCAPTURE, //emod2	
-	GP_DEBUGAI,
 	GP_ENEMYHEALTH,
 	GP_TOTAL
 };
@@ -116,8 +114,6 @@ static uint32 check[] =
 	GP_BATTLEVIEWALWAYS,		
 	GP_AUTOSAVE,
 	GP_LEFTHANDEDMOUSE,	
-	GP_CITYCAPTURE, //emod3
-	GP_DEBUGAI,
 	GP_ENEMYHEALTH,
 	GP_TOTAL
 };
@@ -154,9 +150,7 @@ sint32 gameplayoptions_updateData()
 	s_enemyMoves->SetState(g_theProfileDB->IsEnemyMoves());
 	s_autoCenter->SetState(g_theProfileDB->IsAutoCenter());
 	s_autoTabSelect->SetState( g_theProfileDB->GetAutoSwitchTabs() );
-	s_citycapture->SetState( g_theProfileDB->IsCityCaptureOptions() ); //emod4
 	s_EnemyHealth->SetState( g_theProfileDB->GetShowEnemyHealth() ); //emod4
-	s_DebugAI->SetState( g_theProfileDB->GetDebugAI() ); //emod4
 
 	return 1;
 }
@@ -261,10 +255,8 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 	s_leftHandedMouse	= spNew_aui_Switch(&errcode, windowBlock, "LeftHandedMouseButton",
 								gameplayoptions_checkPress, &check[GP_LEFTHANDEDMOUSE]);
 	//emod5
-	s_citycapture		= spNew_aui_Switch(&errcode, windowBlock, "CityCaptureButton", gameplayoptions_checkPress, &check[GP_CITYCAPTURE]);
-
-	s_EnemyHealth		= spNew_aui_Switch(&errcode, windowBlock, "EnemyHealthButton", gameplayoptions_checkPress, &check[GP_ENEMYHEALTH]);
-	s_DebugAI			= spNew_aui_Switch(&errcode, windowBlock, "DebugAIButton", gameplayoptions_checkPress, &check[GP_DEBUGAI]);
+	s_EnemyHealth		= spNew_aui_Switch(&errcode, windowBlock, "EnemyHealthButton", 
+								gameplayoptions_checkPress, &check[GP_ENEMYHEALTH]);
 
 
 
@@ -313,9 +305,7 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 	mycleanup(s_mouseSpeedN);
 	mycleanup(s_autoSave);
 	mycleanup(s_leftHandedMouse);
-	mycleanup(s_citycapture); //emod 6
 	mycleanup(s_EnemyHealth); //emod 6
-	mycleanup(s_DebugAI); //emod 6
 
 	delete s_gameplayoptionsWindow;
 	s_gameplayoptionsWindow = NULL;
@@ -351,8 +341,6 @@ void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data
 	case GP_TOTAL:  break;
 	case GP_BATTLEVIEWALWAYS: func = &ProfileDB::SetZoomedCombatAlways; break;
 	case GP_AUTOSAVE: func = &ProfileDB::SetAutoSave; break;
-	case GP_CITYCAPTURE: func = &ProfileDB::SetCityCaptureOptions; break; //emod7
-	case GP_DEBUGAI: func = &ProfileDB::SetDebugAI; 
 	case GP_ENEMYHEALTH: func = &ProfileDB::SetEnemyHealth; break; //emod7
 	case GP_LEFTHANDEDMOUSE: 
 		s_leftHandedMouseFlag = !state;

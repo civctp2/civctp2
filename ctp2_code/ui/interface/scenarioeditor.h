@@ -29,6 +29,7 @@
 //   city pop spinner, by Martin Gühmann.
 // - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
 // - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin Gühmann)
+// - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -127,6 +128,8 @@ class ScenarioEditor {
 	bool m_yWrap;
 	ctp2_Switch *m_yWrapButton;
 
+	ctp2_Switch *m_debugAI;
+
 	SCEN_ADD m_addMode;
 	sint32 m_paintTerrain;
 	sint32 m_paintTerrainImprovement;
@@ -172,7 +175,6 @@ class ScenarioEditor {
 	void PopulateTerrainImprovementList();
 
 	void RehideUnitSwitches();
-
 	
 	static bool HandleClicks();
 	static bool PaintTerrainMode();

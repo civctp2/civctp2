@@ -1,3 +1,12 @@
+#######################################
+# File: scenarioeditor.ldl
+# Last Access:
+# -------------------------------------
+# 
+# - Fixed debugAI button (10-Apr-2009 Maq)
+#
+#######################################
+
 template SCEN_TOGGLE_SWITCH:CTP2_SWITCH
 {
 #	string	image0	"upbt12aX.tga"
@@ -487,14 +496,16 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			#		string	string1	"str_ldl_ShowEnemyHealth_On"
 			#	}
 			#}
-			DebugAI:CTP2_BUTTON_SMALL {
-			int xpix 65
-			int ypix 230
-			int widthpix 110
-			string text "str_ldl_DebugAI"
-			string statustext "str_SE_GenerateGoods"
-			string tipwindow "str_SE_GenerateGoods"
-		} 
+			DebugAI:SCEN_TOGGLE_SWITCH {
+				int xpix 2
+				int ypix 228
+				int widthpix 110
+				int heightpix 24
+
+				string text "str_ldl_DebugAI"
+				string statustext "str_SE_DebugAI"
+				string tipwindow "str_SE_DebugAI"
+			} 
 		}
 
 		City:SCEN_TAB {

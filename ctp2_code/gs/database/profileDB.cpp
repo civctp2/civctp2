@@ -53,6 +53,8 @@
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
+// - Cleaned up advanced options window by removing options already present
+//	 in other windows. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -282,25 +284,25 @@ ProfileDB::ProfileDB()
 	Var("RiskLevel"                  , PV_NUM   , &m_risklevel                  , NULL, false);
 
 	Var("Pollution"                  , PV_BOOL  , &m_pollution                  , NULL, false);
-	Var("UnitAnim"                   , PV_BOOL  , &m_unitAnim                   , NULL);
+	Var("UnitAnim"                   , PV_BOOL  , &m_unitAnim                   , NULL, false);
 
-	Var("GoodAnim"                   , PV_BOOL  , &m_goodAnim                   , NULL);
-	Var("TradeAnim"                  , PV_BOOL  , &m_tradeAnim                  , NULL);
+	Var("GoodAnim"                   , PV_BOOL  , &m_goodAnim                   , NULL, false);
+	Var("TradeAnim"                  , PV_BOOL  , &m_tradeAnim                  , NULL, false);
 	Var("WaterAnim"                  , PV_BOOL  , &m_waterAnim                  , NULL, false);
 	Var("LibraryAnim"                , PV_BOOL  , &m_libraryAnim                , NULL, false);
-	Var("WonderMovies"               , PV_BOOL  , &m_wonderMovies               , NULL);
+	Var("WonderMovies"               , PV_BOOL  , &m_wonderMovies               , NULL, false);
 	Var("BounceMessage"              , PV_BOOL  , &m_bounceMessage              , NULL, false);
 	Var("MessageAdvice"              , PV_BOOL  , &m_messageAdvice              , NULL, false);
 	Var("TutorialAdvice"             , PV_BOOL  , &m_tutorialAdvice             , NULL, false);
-	Var("EnemyMoves"                 , PV_BOOL  , &m_enemyMoves                 , NULL);
+	Var("EnemyMoves"                 , PV_BOOL  , &m_enemyMoves                 , NULL, false);
 	Var("RevoltWarning"              , PV_BOOL  , &m_revoltWarning              , NULL, false);
 	Var("EnemyIntrude"               , PV_BOOL  , &m_enemyIntrude               , NULL, false);
 	Var("UnitLostWarning"            , PV_BOOL  , &m_unitLostWarning            , NULL, false);
 	Var("TradeLostWarning"           , PV_BOOL  , &m_tradeLostWarning           , NULL, false);
 	Var("CityLostWarning"            , PV_BOOL  , &m_cityLostWarning            , NULL, false);
-	Var("AutoCenter"                 , PV_BOOL  , &m_autocenter                 , NULL);
+	Var("AutoCenter"                 , PV_BOOL  , &m_autocenter                 , NULL, false);
 	Var("FullScreenMovies"           , PV_BOOL  , &m_fullScreenMovies           , NULL, false);
-	Var("AutoSave"                   , PV_BOOL  , &m_autoSave, NULL);
+	Var("AutoSave"                   , PV_BOOL  , &m_autoSave					, NULL, false);
 	Var("PlayerNumber"               , PV_NUM   , (sint32 *)&m_playerNumber     , NULL, false);
 	
 	Var("CivIndex"                   , PV_NUM   , (sint32 *)&m_civIndex         , NULL, false);
@@ -324,11 +326,11 @@ ProfileDB::ProfileDB()
 	Var("AutoDeselect"               , PV_BOOL  , &m_autoDeselect               , NULL);
 	Var("AutoSelectNext"             , PV_BOOL  , &m_autoSelectNext             , NULL);
 	Var("AutoSelectFirstUnit"        , PV_BOOL  , &m_autoSelectFirstUnit        , NULL);
-	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL);
+	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL, false);
 	Var("CombatLog"                  , PV_BOOL  , &m_combatLog                  , NULL, false);
 
 	Var("UseLeftClick"               , PV_BOOL  , &m_useLeftClick               , NULL, false);
-	Var("ShowZoomedCombat"           , PV_BOOL  , &m_showZoomedCombat           , NULL);
+	Var("ShowZoomedCombat"           , PV_BOOL  , &m_showZoomedCombat           , NULL, false);
 	Var("UseFingerPrinting"          , PV_BOOL  , &m_useFingerprinting          , NULL, false);
 	Var("UseRedbookAudio"            , PV_BOOL  , &m_useRedbookAudio            , NULL, false);
 	Var("RequireCD"                  , PV_BOOL  , &m_requireCD                  , NULL, false);
@@ -338,7 +340,7 @@ ProfileDB::ProfileDB()
 	Var("ScreenResWidth"             , PV_NUM   , &m_screenResWidth             , NULL, false);
 	Var("ScreenResHeight"            , PV_NUM   , &m_screenResHeight            , NULL, false);
 
-	Var("ZoomedCombatAlways"         , PV_BOOL  , &m_zoomedCombatAlways         , NULL);
+	Var("ZoomedCombatAlways"         , PV_BOOL  , &m_zoomedCombatAlways         , NULL, false);
 	Var("AttackEveryone"             , PV_BOOL  , &m_attackEveryone             , NULL, false);
 	Var("NonRandomCivs"              , PV_BOOL  , &m_nonRandomCivs              , NULL, false);
 	Var("GameWatchDirectory"         , PV_STRING, NULL, (char*)m_gameWatchDirectory   , false);
@@ -364,13 +366,13 @@ ProfileDB::ProfileDB()
 	Var("CheatAge"                   , PV_NUM   , &m_cheat_age                  , NULL, false);
 	Var("DontKillMessages"           , PV_BOOL  , &m_dontKillMessages           , NULL, false);
 	Var("AIPopCheat"                 , PV_BOOL  , &m_aiPopCheat                 , NULL, false);
-	Var("ShowCityNames"              , PV_BOOL  , &m_showCityNames              , NULL);
-	Var("ShowArmyNames"              , PV_BOOL  , &m_showArmyNames              , NULL);  //emod
-	Var("ShowTradeRoutes"            , PV_BOOL  , &m_showTradeRoutes            , NULL);
+	Var("ShowCityNames"              , PV_BOOL  , &m_showCityNames              , NULL, false);
+	Var("ShowArmyNames"              , PV_BOOL  , &m_showArmyNames              , NULL, false);
+	Var("ShowTradeRoutes"            , PV_BOOL  , &m_showTradeRoutes            , NULL, false);
 
-	Var("UnitSpeed"                  , PV_NUM   , &m_unitSpeed                  , NULL);
-	Var("MouseSpeed"                 , PV_NUM   , &m_mouseSpeed                 , NULL);
-	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL);
+	Var("UnitSpeed"                  , PV_NUM   , &m_unitSpeed                  , NULL, false);
+	Var("MouseSpeed"                 , PV_NUM   , &m_mouseSpeed                 , NULL, false);
+	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL, false);
 	
 	Var("CityBuiltMessage"           , PV_BOOL  , &m_cityBuiltMessage           , NULL, false);
 	Var("UseAttackMessages"          , PV_BOOL  , &m_useAttackMessages          , NULL, false);
@@ -392,10 +394,10 @@ ProfileDB::ProfileDB()
 	Var("AutoRenameCities"           , PV_BOOL  , &m_autoRenameCities           , NULL, false);
 	Var("AutoOpenCityWindow"         , PV_BOOL  , &m_autoOpenCityWindow         , NULL);
 
-	Var("ShowEnemyHealth"            , PV_BOOL  , &m_showEnemyHealth            , NULL); //used
+	Var("ShowEnemyHealth"            , PV_BOOL  , &m_showEnemyHealth            , NULL, false);
 
-	Var("ShowCityInfluence"          , PV_BOOL  , &m_showCityInfluence          , NULL);
-	Var("ShowPoliticalBorders"       , PV_BOOL  , &m_showPoliticalBorders       , NULL);
+	Var("ShowCityInfluence"          , PV_BOOL  , &m_showCityInfluence          , NULL, false);
+	Var("ShowPoliticalBorders"       , PV_BOOL  , &m_showPoliticalBorders       , NULL, false);
 
 	Var("EndTurnSound"               , PV_BOOL  , &m_endTurnSound               , NULL);
 	Var("EnableLogs"                 , PV_BOOL  , &m_enableLogs                 , NULL, false);
@@ -416,16 +418,16 @@ ProfileDB::ProfileDB()
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL  , &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
-	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false); //used emod2
+	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
 #if defined(_DEBUG)
 	/// @todo Move this to the scenario editor
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
 #else
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, false);
 #endif
-	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
+	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL, false);
 	// emod new profile flags // Please make sure that only those show up which are used.
-	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL); //used
+	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL, false);
 	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL, false);
 	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit            , NULL, false);
 	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
@@ -445,7 +447,7 @@ ProfileDB::ProfileDB()
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
-	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL);        //used //emod2 // Should go into the scenario editor
+	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, false);
 	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);

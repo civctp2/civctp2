@@ -357,6 +357,7 @@ str_SE_FindPosY "Y座標の入力"
 str_SE_FindMe "X､Y座標でクリックした場所を表示"
 str_SE_RemoveGoods "マップから全交易品を削除"
 str_SE_GenerateGoods "マップに交易品を追加"
+str_SE_DebugAI "Show AI Army Goals"
 
 ### Changed Strings
 ## add {city[0].name}

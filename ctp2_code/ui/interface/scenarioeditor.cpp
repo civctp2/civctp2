@@ -56,6 +56,7 @@
 //   panel city tab. (Feb 4th 2007 Martin Gühmann)
 // - TODO add show Enemy Health and Debug AI buttons to Unit Tab
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -259,6 +260,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	m_xWrap                     (true),
 	m_yWrap                     (false),
 	m_yWrapButton               (NULL),     // unused
+	m_debugAI		            (NULL),
 	m_addMode                   (SCEN_ADD_BUILDINGS),
     m_paintTerrain              (-1),
     m_paintTerrainImprovement   (-1),
@@ -349,10 +351,12 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.SpecialButton", 
 									UnitTabButton, (void *)SCEN_UNIT_CAT_SPECIAL);
 	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod
-	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI", DebugAI, NULL); //emod
 	//s_ShowEnemyHealth		= spNew_aui_Switch(err, s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod5
 	//ctp2_Switch *s_ShowEnemyHealth = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth");
     //s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
+	
+	m_debugAI = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI");
+	m_debugAI->SetActionFuncAndCookie(DebugAI, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "UnitControls.LabelToggle", ToggleLabels, NULL);
 
@@ -3511,13 +3515,19 @@ void ScenarioEditor::ShowEnemyHealth(aui_Control *control, uint32 action, uint32
 
 void ScenarioEditor::DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(g_graphicsOptions->IsArmyTextOn())
-	{
+	Assert(s_scenarioEditor);
+	if(!s_scenarioEditor)
+		return;
+
+	if(action == 0) {
+		return;
+	}
+
+	ctp2_Switch *sw = (ctp2_Switch *)control;
+
+	if(sw->GetState() != 0) {
+		g_graphicsOptions->ArmyTextOn();
+	} else {
 		g_graphicsOptions->ArmyTextOff();
 	}
-	else
-	{
-		g_graphicsOptions->ArmyTextOn();
-	}
 }
-

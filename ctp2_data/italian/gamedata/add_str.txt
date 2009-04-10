@@ -308,6 +308,7 @@ str_SE_FindPosY "Inserisci coordinata Y"
 str_SE_FindMe "Clicca per centrare sulle coordinate X,Y"
 str_SE_RemoveGoods "Rimuovi tutte le merci dalla mappa"
 str_SE_GenerateGoods "Aggiungi merci alla mappa"
+str_SE_DebugAI "Show AI Army Goals"
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SALVATAGGIO RAPIDO"

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The advance options profile edit window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unit animations option stuff, since the option is already present
+//	 in the graphics window, and should not clutter this one. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -55,8 +57,6 @@ extern SpriteGroupList		*g_unitSpriteGroupList;
 extern C3UI *g_c3ui;
 
 ProfileEdit *s_profileEdit = NULL;
-
-BOOL s_origUnitAnim = FALSE;
 
 ProfileEdit::ProfileEdit(AUI_ERRCODE *err)
 {
@@ -107,8 +107,6 @@ AUI_ERRCODE ProfileEdit::Display()
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 
-	s_origUnitAnim = g_theProfileDB->IsUnitAnim();
-
 	if(s_profileEdit->m_window) {
 		err = g_c3ui->AddWindow(s_profileEdit->m_window);
 		Assert(err == AUI_ERRCODE_OK);
@@ -132,12 +130,6 @@ AUI_ERRCODE ProfileEdit::Hide()
 	}
 	s_profileEdit->m_window->Hide();
 	g_c3ui->RemoveWindow(s_profileEdit->m_window->Id());
-
-	if(g_theProfileDB && s_origUnitAnim != g_theProfileDB->IsUnitAnim()) {
-		if(g_civApp && g_civApp->IsGameLoaded()) {
-			g_unitSpriteGroupList->RefreshBasicLoads(GROUPTYPE_UNIT);
-		}
-	}
 
 	return AUI_ERRCODE_OK;
 }
