@@ -1,0 +1,11 @@
+#
+# $Id: $
+#
+
+SUBDIRS = \
+	src \
+	demo
+
+bootstrap: Makefile
+	$(MAKE) -f Makefile $@
+

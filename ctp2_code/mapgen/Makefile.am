@@ -7,9 +7,6 @@ plugin_LTLIBRARIES=crater.la fault.la geometric.la plasma2.la
 if WIN32
 CTP2_WIN32_FREETYPE_INC=\
 	-I$(ctp2_code)/ui/freetype
-else
-CTP2_NOWIN32_INC=
-	-I$(ctp2_code)/os/nowin32
 endif
 
 crater_la_SOURCES = Crater.cpp
@@ -18,11 +15,15 @@ crater_la_LDFLAGS = -module -avoid-version
 fault_la_SOURCES = FaultGen.cpp
 fault_la_LDFLAGS = -module -avoid-version
 
-geometric_la_SOURCES = Geometric.cpp
+geometric_la_SOURCES = Geometric.cpp FaultGen_geometric.cpp
+geometric_la_CPPFLAGS = -DGEOMETRIC $(AM_CPPFLAGS)
 geometric_la_LDFLAGS = -module -avoid-version
 
 plasma2_la_SOURCES = PlasmaGen2.cpp
 plasma2_la_LDFLAGS = -module -avoid-version
+
+FaultGen_geometric.cpp: FaultGen.cpp
+	cp -p $< $@
 
 AM_CPPFLAGS = \
 	$(DIRECTX_INCLUDES) \
