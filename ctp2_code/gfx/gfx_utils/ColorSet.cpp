@@ -40,9 +40,8 @@
 #include "c3errors.h"
 #include "c3files.h"
 #include "pixelutils.h"
+#include <stdexcept>    // std::exception, std::runtime_error
 #include "Token.h"
-
-#include <stdexcept>
 
 extern sint32 g_is565Format;
 
@@ -258,7 +257,7 @@ void ColorSet::Import(uint32 fileNumber)
             c3errors_ErrorDialog(theToken.ErrStr(), "Missing close brace.");
         }
     }
-    catch (std::runtime_error const & error)
+    catch (std::exception const & error)
     {
         std::vector<Pixel16>().swap(m_colors);
         c3errors_FatalDialog(theToken.ErrStr(), error.what()); 

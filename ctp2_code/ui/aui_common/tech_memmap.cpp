@@ -15,31 +15,33 @@
 
 
 
-int tech_MemMap::GetFileExtension( char *filename, char *extension )
+bool tech_MemMap::GetFileExtension(char const * filename, char * extension)
 {
-	if ( !filename ) return 0;
+	if (filename && extension)
+	{
+		char const * lastDot = strrchr(filename, '.');
+		if (lastDot)
+		{
+			strcpy(extension, ++lastDot);
+			return true;
+		}
+	}
 
-	if ( !extension ) return 0;
-
-	char *lastDot = strrchr( filename, '.' );
-	if ( !lastDot ) return 0;
-
-	
-	strcpy( extension, ++lastDot );
-
-	return 1;
+	return false;
 }
 
 
 
-unsigned char *tech_MemMap::GetFileBits(
-	char *filename,
-	size_t *outfilesize )
+unsigned char *tech_MemMap::GetFileBits
+(
+	const char *    filename,
+	size_t *        outfilesize
+)
 {
+
 	if ( outfilesize ) *outfilesize = 0;
 
-	unsigned long filesize;
-	unsigned char *bits;
+	size_t        filesize;
 	FILE *f = fopen( filename, "rb" );
 
 	if ( !f )
@@ -57,7 +59,7 @@ unsigned char *tech_MemMap::GetFileBits(
 		return NULL;
 	}
 
-	bits = new unsigned char[filesize];
+	unsigned char * bits = new unsigned char[filesize];
 
 	if (!bits) {
 		fclose(f);

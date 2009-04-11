@@ -213,7 +213,7 @@ void keypress_QuitCallback( sint32 val )
         PostMessage(gHwnd, WM_CLOSE, 0, 0);
 #else
 	//assert(0);
-#endif
+#endif // USE_SDL
 	}
 }
 
@@ -299,7 +299,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
     KEY_FUNCTION	kf; 
 #ifdef _PLAYTEST
     int i;
-#endif
+#endif // _PLAYTEST
 	BOOL isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
 	Unit city;
 
@@ -320,7 +320,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 			case SDLK_RIGHT + 256:
 			case SDLK_UP + 256:
 			case SDLK_DOWN + 256:
-#endif
+#endif // !USE_SDL
 				
 				return TRUE;
 			default:
@@ -340,15 +340,15 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 		commandMode = g_commandLine.AddKey(wParam);
 		return TRUE;
 	}
-#endif
+#endif // _PLAYTEST
 
 #ifndef USE_SDL	
 	if (wParam == VK_ESCAPE) {
 #else
-        printf("%s L%d: Got key: %c\n", __FILE__, __LINE__, wParam);
+        printf("%s L%d: Got key: 0x%08x %c\n", __FILE__, __LINE__, wParam, wParam);
 	if (wParam == SDLK_ESCAPE + 256) {
             printf("%s L%d: Got esc key: %c\n", __FILE__, __LINE__, wParam);
-#endif
+#endif // !USE_SDL
 		extern OptionsWindow *g_optionsWindow;
 		
 		if(g_c3ui->TopWindow() && g_c3ui->TopWindow() == DipWizard::GetWindow()) {
@@ -443,13 +443,13 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 	case KEY_FUNCTION_ENTER_COMMAND: 
 #ifdef WIN32
 		segmentlist_Display();
-#endif
+#endif // WIN32
 		break;
 	case KEY_FUNCTION_ENTER_COMMAND_ALTERNATE:
 		commandMode = TRUE; 
 		move = FALSE; 
 		break;
-#endif
+#endif // _PLAYTEST
     case KEY_FUNCTION_NOOP: return FALSE; 
     case KEY_FUNCTION_MOVE_NORTHWEST: d = NORTHWEST; move = TRUE; break;
     case KEY_FUNCTION_MOVE_NORTH: d = NORTH; move = TRUE; break; 
@@ -838,7 +838,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
        g_is_rand_test=TRUE; 
          return TRUE; 
 		 break;
-#endif
+#endif // _PLAYTEST
         
 #if 0
 	case KEY_FUNCTION_ENDSLICE:
@@ -853,7 +853,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 		}
 		move = FALSE;
 		break;
-#endif
+#endif // 0
     case KEY_FUNCTION_ENDTURN: 
 #ifdef _PLAYTEST
         if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
@@ -888,7 +888,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 		}
 		move = FALSE;
         break;
-#endif
+#endif // _PLAYTEST
     
     case KEY_FUNCTION_NEXT_ROUND:   
 
@@ -965,7 +965,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
         }
         return TRUE; 
 		break;
-#endif
+#endif // _PLAYTEST
 	
     case KEY_FUNCTION_GROUP_ARMY:
 	{
@@ -1074,8 +1074,8 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 			g_debugOwner = k_DEBUG_OWNER_NONE;
 		}
 		break;	
-#endif
-#endif
+#endif // 0
+#endif // _DEBUG
 		case KEY_FUNCTION_HELP_MODE_TOGGLE:
 
 

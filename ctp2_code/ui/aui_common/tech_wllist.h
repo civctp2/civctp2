@@ -60,8 +60,8 @@ public:
 	virtual ~tech_WLList();
 
 	
-	size_t L( void ) const { return m_length; }
-	int IsEmpty( void ) const { return m_length == 0; }
+	size_t  L( void ) const { return m_length; }
+	bool    IsEmpty( void ) const { return m_length == 0; }
 
 	
 	T &GetHead( void ) { return m_pHead->element; }
@@ -242,14 +242,7 @@ inline void tech_WLList< T >::SetAt( ListPos position, const T &newElement )
 
 
 template< class T >
-#if defined(NON_STANDART_C_PLUS_PLUS)
-//Removed by Martin Gühmann
-tech_WLList< T >::Link *tech_WLList< T >::NewLink(
-#else
-//Added by Martin Gühmann to allow compiling on compilers
-//that require standart C++ code.
 typename tech_WLList< T >::Link *tech_WLList< T >::NewLink(
-#endif
 	Link *pPrevLink,
 	Link *pNextLink )
 {
@@ -346,11 +339,15 @@ T tech_WLList< T >::RemoveHead( void )
 {
 	Link *pOldLink = m_pHead;
 	T theElement = pOldLink->element;
-
-	if ( (m_pHead = pOldLink->pNext) )
+	m_pHead = pOldLink->pNext;
+	if (m_pHead)
+	{
 		m_pHead->pPrev = 0;
+	}
 	else
+	{
 		m_pTail = 0;
+	}
 
 	DeleteLink( pOldLink );
 
@@ -364,10 +361,15 @@ T tech_WLList< T >::RemoveTail( void )
 	Link *pOldLink = m_pTail;
 	T theElement = pOldLink->element;
 
-	if ( (m_pTail = pOldLink->pPrev) )
+	m_pTail = pOldLink->pPrev;
+	if (m_pTail)
+	{
 		m_pTail->pNext = 0;
+	}
 	else
+	{
 		m_pHead = 0;
+	}
 
 	DeleteLink( pOldLink );
 
@@ -427,19 +429,29 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 
 	if ( pOldLink == m_pHead )
 	{
-		if ((m_pHead = pOldLink->pNext))
+		m_pHead = pOldLink->pNext;
+		if (m_pHead)
+		{
 			m_pHead->pPrev = NULL;
+		}
 	}
 	else
+	{
 		pOldLink->pPrev->pNext = pOldLink->pNext;
+	}
 
 	if ( pOldLink == m_pTail )
 	{
-		if ((m_pTail = pOldLink->pPrev))
+		m_pTail = pOldLink->pPrev;
+		if (m_pTail)
+		{
 			m_pTail->pNext = NULL;
+		}
 	}
 	else
+	{
 		pOldLink->pNext->pPrev = pOldLink->pPrev;
+	}
 
 	DeleteLink( pOldLink );
 }

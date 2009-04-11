@@ -35,6 +35,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #endif
+#if defined HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 static int s_winsockInitialized = 0;
 

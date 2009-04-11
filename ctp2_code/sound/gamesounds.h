@@ -40,8 +40,8 @@
 #define __GAMESOUNDS_H__
 
 struct GameSoundData {
-	sint32		id;
-	MBCHAR		*name;
+	sint32      id;
+	MBCHAR *    name;
 };
 
 

@@ -20,6 +20,9 @@ extern CivPaths *g_civPaths;
 #include <sys/mman.h>
 #include <dirent.h>
 #endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #define MAX_ENTRIES_PER_TABLE 100
 #define ZFSFLAG_DELETED 0x0001

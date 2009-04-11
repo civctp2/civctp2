@@ -38,13 +38,16 @@
 
 #ifdef USE_SDL
 #include <SDL.h>
+#ifdef USE_SDL_FFMPEG
 #include <SDL_ffmpeg.h>
+#endif
 #include <SDL_mixer.h>
 #include <SDL_syswm.h>
 #include "soundmanager.h"		// g_soundManager
 #include "aui_sdlsurface.h"
-
+#ifdef USE_SDL_FFMPEG
 SDL_ffmpegFile* film;
+#endif
 Mix_Chunk achunk;
 
 int m_moviechannel;
@@ -244,8 +247,7 @@ uint32 aui_Movie::SetTimePerFrame( uint32 timePerFrame )
 	return prevTimePerFrame;
 }
 
-#ifdef USE_SDL
-
+#ifdef USE_SDL_FFMPEG
 /*
 void reload_audio(int channel){
 
@@ -447,7 +449,7 @@ if ( !m_isOpen )
 		
     m_rect.right = m_rect.left + m_aviStreamInfo.rcFrame.right;
     m_rect.bottom = m_rect.top + m_aviStreamInfo.rcFrame.bottom;
-#else //replaces a aui_sdlmovie::Open(
+#elif defined(USE_SDL_FFMPEG) //replaces a aui_sdlmovie::Open(
 
     //stop game sound
     g_soundManager->ReleaseSoundDriver(); //if CD is mounted music keeps playing...
@@ -510,7 +512,7 @@ AUI_ERRCODE aui_Movie::Close( void )
 			AVIFileRelease( m_aviFile );
 			m_aviFile = NULL;
 		}
-#else
+#elif defined(USE_SDL_FFMPEG)
                 if(film){
                     //SDL_Delay(5000);
                     printf("%s L%d: Changing music hook!\n", __FILE__, __LINE__);
@@ -549,7 +551,7 @@ AUI_ERRCODE aui_Movie::Play( void ){
             1000 );
         Assert( err == 0 );
         if ( err ) return AUI_ERRCODE_HACK;
-#else
+#elif defined(USE_SDL_FFMPEG)
 
 /*
 //mplayer "movie manager"
@@ -713,7 +715,7 @@ AUI_ERRCODE aui_Movie::Stop( void ){
         uint32 err = AVIStreamEndStreaming( m_aviStream );
         Assert( err == 0 );
         if ( err ) return AUI_ERRCODE_HACK;
-#else
+#elif defined(USE_SDL_FFMPEG)
         printf("%s L%d: Stopping movie!\n", __FILE__, __LINE__);
         if(film){
             //SDL_ffmpegPause(film, 1);//pause film film sdl_ffmpeg <= 0.7.1
@@ -734,7 +736,7 @@ AUI_ERRCODE aui_Movie::Pause( void )
 {
 	if ( m_isPlaying && !m_isPaused )
 	{
-#ifdef USE_SDL
+#ifdef USE_SDL_FFMPEG
         if(film)
             //SDL_ffmpegPause(film, 1);//pause film sdl_ffmpeg <= 0.7.1
             SDL_ffmpegPlay(film, 0);//pause film sdl_ffmpeg > 0.7.1
@@ -751,7 +753,7 @@ AUI_ERRCODE aui_Movie::Resume( void )
 {
 	if ( m_isPlaying && m_isPaused )
 	{
-#ifdef USE_SDL
+#ifdef USE_SDL_FFMPEG
         if(film)
             //SDL_ffmpegPause(film, 0);//unpause film sdl_ffmpeg <= 0.7.1
             SDL_ffmpegPlay(film, 1);//unpause film sdl_ffmpeg > 0.7.1
@@ -844,7 +846,7 @@ AUI_ERRCODE aui_Movie::Process( void ){
             retval = AUI_ERRCODE_HANDLED;
             }
         }
-#else
+#elif defined(USE_SDL_FFMPEG)
 
 //from SDL_ffmpeg example:
     if ( m_isPlaying && !m_isPaused )

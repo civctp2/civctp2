@@ -17,18 +17,22 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Created file (insert date)
+//
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __$MODULE$__h__
-#define __$MODULE$__h__ 1
+#ifndef __$MODULE$__H__
+#define __$MODULE$__H__ 1
 
 
 

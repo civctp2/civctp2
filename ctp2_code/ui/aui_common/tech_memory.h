@@ -48,48 +48,55 @@ public:
 protected:
 	struct Block
 	{
-		Block(size_t blockSize )
-			:
-			pNext( 0 ),
-			dataSize( blockSize )
+		Block(size_t blockSize)
+		:
+			pNext      (0),
+			usedSize   (blockSize / k_TECH_MEMORY_BITSPERDWORD),
+			used       (0),
+			dataSize   (blockSize),
+			data       (0)
 		{
-			
-			usedSize = dataSize / k_TECH_MEMORY_BITSPERDWORD;
-			size_t remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
-			if ( remainder ) usedSize++;
-
-			if ((used = new unsigned[ usedSize ]))
+			size_t const remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
+			if (remainder)
 			{
-				
+				usedSize++;
+			}
+
+			used = new unsigned[usedSize];
+			if (used)
+			{
 				memset( used, 0, usedSize * sizeof( unsigned ) );
 
 				
-				if ( remainder )
-					used[ usedSize - 1 ] = ~( ( 1 << remainder ) - 1 );
+				if (remainder)
+				{
+					used[usedSize - 1] = ~(( 1 << remainder ) - 1);
+				}
 			}
 			
-			data = new T[ dataSize ];
-		}
+			data = new T[dataSize];
+		};
+
 		virtual ~Block()
 		{
-			if ( used )
+			if (used)
 			{
-            delete[] used;
+				delete[] used;
 				used = 0;
 			}
 
-			if ( data )
+			if (data)
 			{
-            delete[] data;
+				delete[] data;
 				data = 0;
 			}
-		}
+		};
 
-		Block *pNext;			
-		size_t usedSize; 
-		unsigned *used;			
-		size_t dataSize; 
-		T *data;				
+		Block *     pNext;			
+		size_t      usedSize; 
+		unsigned *  used;			
+		size_t      dataSize; 
+		T *         data;				
 	};
 
 	
@@ -136,31 +143,23 @@ tech_Memory< T >::~tech_Memory()
 template< class T >
 T *tech_Memory< T >::New( void )
 {
-	T *t = NULL;
-
-	if ( m_pLast )
+	if (m_pLast)
 	{
-		if ( !(t = UseFreeElement()) )
-		{
-			if ((m_pLast->pNext = new Block( m_blockSize )))
-			{
-				m_pLast = m_pLast->pNext;
+		T * t = UseFreeElement();
 
-				*(m_pLast->used) |= 1;
-				t = m_pLast->data;
-			}
-		}
-	}
-	else
-	{
-		if ((m_pLast = m_pFirst = new Block( m_blockSize )))
+		if (t)
 		{
-			*(m_pLast->used) |= 1;
-			t = m_pLast->data;
+			return t;
 		}
+
+		m_pLast->pNext = new Block(m_blockSize);
+		m_pLast = m_pLast->pNext;
+	} else {
+		m_pLast = m_pFirst = new Block(m_blockSize);
 	}
 
-	return t;
+	*(m_pLast->used) |= 1;
+	return m_pLast->data;
 }
 
 

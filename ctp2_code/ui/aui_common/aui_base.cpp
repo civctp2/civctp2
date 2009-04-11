@@ -62,6 +62,7 @@ void free_crc()
 {
    if(g_crcTable)
       delete [] g_crcTable;
+   g_crcTable = NULL;
 }
 
 uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, sint32 data_blk_size)
