@@ -55,6 +55,7 @@
 // - Added random map settings option. (5-Apr-2009 Maq)
 // - Cleaned up advanced options window by removing options already present
 //	 in other windows. (10-Apr-2009 Maq)
+// - Added start and end age options. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -253,6 +254,8 @@ ProfileDB::ProfileDB()
     m_newcombat                         (FALSE),
     m_noGoodyHuts                       (FALSE),
     m_randomCustomMap                   (FALSE),
+	m_spStartingAge						(0),
+	m_spEndingAge						(0),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -454,6 +457,8 @@ ProfileDB::ProfileDB()
 	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
 	Var("NoGoodyHuts"                , PV_BOOL  , &m_noGoodyHuts                , NULL, false);
 	Var("RandomCustomMap"            , PV_BOOL  , &m_randomCustomMap            , NULL, false);
+	Var("SPStartingAge"              , PV_NUM   , &m_spStartingAge              , NULL, false);
+	Var("SPEndingAge"				 , PV_NUM   , &m_spEndingAge                , NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

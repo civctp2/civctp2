@@ -115,6 +115,7 @@
 // - The AI changes government immediately when a new government has been discovered. (29-Feb-2008 Martin Gühmann)
 // - Slaves aren't send to cities if it causes an population increase over
 //   the city maxium size. (06-Sep-2008 Martin Gühmann)
+// - Added single-player start and end age affects. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 //
@@ -483,9 +484,9 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	sint32 startAge = 0;
 	if(g_network.IsActive() || g_network.IsNetworkLaunch()) {
 		startAge = g_network.GetStartingAge();
+	} else {
+		startAge = g_theProfileDB->GetSPStartingAge();
 	}
-
-//add startAge option here for profile or pull down? ------EMOD
 
 	sint32 someAdvanceIHave = -1;
 	if(startAge == 0) {

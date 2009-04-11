@@ -30,6 +30,7 @@
 // - Allowed for a number of players less than 3 to be displayed
 //   - JJB 2005/06/28
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+// - Added setting up of single-player start and end age values. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -62,6 +63,8 @@
 #include "spnewgametribescreen.h"
 #include "spnewgamemapsizescreen.h"
 #include "StrDB.h"                      // g_theStringDB
+#include "agerecord.h"					// g_theAgeDB
+#include "agesscreen.h"
 
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
@@ -172,6 +175,13 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	m_spTitle			= spNew_c3_Static(retval,ldlBlock,"Title");
 	m_spBackground		= spNew_c3_Static(retval,ldlBlock,"Background");
 	m_string			= spNewStringTable(retval,"SPNewGameStrings");
+
+	// Reset failsafe start/end ages here, so they're correct before agesscreen is initialized.
+	agesscreen_setStartAge(0);
+	agesscreen_setEndAge(g_theAgeDB->NumRecords() - 1);
+	g_theProfileDB->SetSPStartingAge(0);
+	g_theProfileDB->SetSPEndingAge(g_theAgeDB->NumRecords() - 1);
+	g_theProfileDB->Save();
 
     Update();
 }
@@ -310,18 +320,12 @@ void SPNewGameWindow::Update( void )
 	// Removed the alteration to the value when it was below 3 - JJB
 	sprintf( s, "%d", numPlayers);
 	m_spPlayers->SetText( s );
+	
 
-
-
-
-	
-	
-	
-	
-	
-	
+	// Make sure start and end ages are still within range.
+	// A scenario was loaded.
 	if (g_civPaths->GetCurScenarioPath() != NULL) {
-		
+
 		if (strlen(g_scenarioName) > 0) {
 			m_scenarioName->SetText(g_scenarioName);
 			m_scenarioName->ShouldDraw(TRUE);
@@ -330,6 +334,16 @@ void SPNewGameWindow::Update( void )
 		m_spScenario->ShouldDraw(TRUE);
 		m_scenarioName->Show();
 		m_scenarioStaticText->Show();
+
+		sint32 ages		= g_theAgeDB->NumRecords();
+
+		// Reset failsafe start/end age.
+		g_theProfileDB->SetSPStartingAge(0);
+		g_theProfileDB->SetSPEndingAge(ages - 1);
+		agesscreen_setStartAge(0);
+		agesscreen_setEndAge(ages - 1);
+
+	// No scenario loaded.
 	} else {
 		
 		m_scenarioName->SetText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME"));
@@ -339,7 +353,31 @@ void SPNewGameWindow::Update( void )
 
 		m_spScenario->SetText(g_theStringDB->GetNameStr("str_ldl_SP_SCENARIO_PICKER"));
 		m_spScenario->ShouldDraw(TRUE);
+
+		sint32 ages		= g_theAgeDB->NumRecords();
+		sint32 startAge	= g_theProfileDB->GetSPStartingAge();
+		sint32 endAge	= g_theProfileDB->GetSPEndingAge();
+
+		// Check ages are still within range.
+		// Do not reset failsafe ages here, or they can never be set.
+		if (startAge != 0) {
+			if (startAge > endAge
+			 || startAge < 0) {
+				g_theProfileDB->SetSPStartingAge(0);
+				agesscreen_setStartAge(0);
+			}
+		}
+
+		if (endAge != (ages - 1)) {
+			if (endAge < startAge
+			 || endAge > (ages - 1)) {
+				g_theProfileDB->SetSPEndingAge(ages - 1);
+				agesscreen_setEndAge(ages - 1);
+			}
+		}
 	}
+	// Make sure changes are saved for a new game.
+	g_theProfileDB->Save();
 }
 
 

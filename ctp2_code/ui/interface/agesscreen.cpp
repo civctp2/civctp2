@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : MP Age Screen
+// Description  : Age Screen
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -29,6 +29,7 @@
 // - Compatibility restored. 
 // - Memory leak repaired.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added single-player start and end age. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@
 #include "ns_item.h"
 #include "spnewgamewindow.h"
 #include "StrDB.h"                  // g_theStringDB
+#include "profileDB.h"              // g_theProfileDB
 
 extern nf_GameSetup g_gamesetup;
 extern C3UI	*       g_c3ui;
@@ -91,6 +93,7 @@ void agesscreen_setStartAge( sint32 index )
 
 	s_startAge = index;
 	g_gamesetup.SetStartAge(static_cast<char>(index));
+	g_theProfileDB->SetSPStartingAge(index);
 }
 
 
@@ -108,6 +111,7 @@ void agesscreen_setEndAge( sint32 index )
 
 	s_endAge = index;
 	g_gamesetup.SetEndAge(static_cast<char>(index));
+	g_theProfileDB->SetSPEndingAge(index);
 }
 
 
@@ -133,6 +137,8 @@ sint32 agesscreen_removeMyWindow(uint32 action)
 
 	agesscreen_setStartAge( s_startDropDown->GetSelectedItem() );
 	agesscreen_setEndAge( s_endDropDown->GetSelectedItem() );
+	g_theProfileDB->SetSPStartingAge( s_startDropDown->GetSelectedItem() );
+	g_theProfileDB->SetSPEndingAge( s_endDropDown->GetSelectedItem() );
 
 	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(s_agesScreen->Id());
 	Assert(auiErr == AUI_ERRCODE_OK);
@@ -254,8 +260,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 	agesscreen_setStartAge(0);
 	agesscreen_setEndAge(s_numAges - 1);
-
-
 	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );

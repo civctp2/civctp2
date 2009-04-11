@@ -198,6 +198,7 @@
 // - Added functions to find total that each specialist type gives to a city,
 //	 after crime and other modifiers. (28-Mar-2009 Maq)
 // - Stopped UpgradeTo obsoleting units. (30-Mar-2009 Maq)
+// - Added single-player start and end age affects. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -937,6 +938,7 @@ void CityData::Initialize(sint32 settlerType)
 		SetName(GetName());
 	}
 
+	// Gives all starting age buildings to a new city.
 	if(g_network.IsActive() && g_network.GetStartingAge() > 0) {
 		sint32 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
@@ -949,6 +951,22 @@ void CityData::Initialize(sint32 settlerType)
 			sint32 enable = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnableAdvanceIndex();
 			if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_network.GetStartingAge()) {
 				m_built_improvements |= (uint64)1 << (uint64)i;
+			}
+		}
+	}else{
+		if (g_theProfileDB->GetSPStartingAge() > 0) {
+			sint32 i;
+			for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i)))
+					continue;
+
+				if(!CanBuildBuilding(i))
+					continue;
+
+				sint32 enable = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnableAdvanceIndex();
+				if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_theProfileDB->GetSPStartingAge()) {
+					m_built_improvements |= (uint64)1 << (uint64)i;
+				}
 			}
 		}
 	}

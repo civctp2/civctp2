@@ -21,8 +21,19 @@
 #  - Removed references to non-existing files upba5700.tga and upba5701.tga.
 #  - Uranus world shape added
 #  - CityCapture button added to rules screen it now works 3-21-2007
+#  - Added custom start/end "ages" button to rules window. (11-Apr-2009 Maq)
 # 
 ################################################################################
+
+template SP_RULES_BUTTON:SP_BUTTON_SMALL {
+
+	int widthpix	78
+
+	int heightpix	22
+
+	string	imagebltflag	"chromakey"
+
+}
 
 template SP_POPUP_LABEL:CTP2_STANDARD_FONT {
 
@@ -1045,7 +1056,7 @@ SPNewGameRulesScreen {
 
 	string	yanchor		"center"
 
-	int	widthpix	650 #250
+	int	widthpix	630 #650 #250
 
 	int	heightpix	450 #160
 
@@ -1219,6 +1230,13 @@ SPNewGameRulesScreen {
 			string	string0	"str_tbl_ldl_NoGoodyHuts_Off"
 			string	string1	"str_tbl_ldl_NoGoodyHuts_On"
 		}
+	}
+	AgesButton:SP_RULES_BUTTON {
+		string	text	"str_ldl_Ages"
+		int	xpix	254 #30
+		int	ypix	384
+		int	widthpix	123
+		int	heightpix	21
 	}
 
 #Add Settler Cheat?

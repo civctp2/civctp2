@@ -55,6 +55,7 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgamerulesscreen_Initialize( void );
 AUI_ERRCODE spnewgamerulesscreen_Cleanup();
 
+void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 

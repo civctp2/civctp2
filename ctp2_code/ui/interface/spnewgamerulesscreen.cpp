@@ -45,6 +45,7 @@
 // - Added an upgrade option (13-Sep-2008 Martin Gühmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
+// - Added custom start/end "ages" button. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -64,6 +65,7 @@
 
 #include "spnewgamewindow.h"
 #include "spnewgamerulesscreen.h"
+#include "agesscreen.h"
 
 #include "keypress.h"
 //missing?
@@ -99,6 +101,7 @@ static aui_Switch		*s_genocide			= NULL,
 						*s_NOCITYLIMIT		= NULL,
 
 						*s_NULL				= NULL;
+ctp2_Button				*s_ages				= NULL;
 
 enum
 {
@@ -263,13 +266,14 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_NOAICITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "NoAiCityLimit",       spnewgamerulesscreen_checkPress, &check[R_NOAICITYLIMIT]); //emod5
 	s_NOCITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "NoCityLimit",         spnewgamerulesscreen_checkPress, &check[R_NOCITYLIMIT  ]); //emod5
 
+	s_ages				= spNew_ctp2_Button(&errcode, windowBlock, "AgesButton", spnewgamerulesscreen_agesPress);
+
 	spnewgamerulesscreen_updateData();
 
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( block );
 	s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
-
 	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -307,12 +311,20 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_NOGDEFICIT);
 	mycleanup(s_NOAICITYLIMIT);
 	mycleanup(s_NOCITYLIMIT);
+	mycleanup(s_ages);
 
 	delete s_spNewGameRulesScreen;
 	s_spNewGameRulesScreen = NULL;
 
 	return AUI_ERRCODE_OK;
 #undef mycleanup
+}
+
+void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	agesscreen_displayMyWindow(0);
 }
 
 void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )

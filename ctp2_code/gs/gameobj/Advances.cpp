@@ -34,6 +34,7 @@
 // - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
 // - Added commodityGold and GoldSupport to projected science
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added single-player start and end age affects. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -492,11 +493,14 @@ void Advances::ResetCanResearch(sint32 justGot)
 			
 			
 			if(g_network.IsActive() && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge()) {
-				
-				
 				canResearch = FALSE;
+
+			} else if (!g_network.IsActive() && rec->GetAgeIndex() > g_theProfileDB->GetSPEndingAge()) {
+				canResearch = FALSE;
+
 			} else if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, rec->GetIndex())) {
 				canResearch = FALSE;
+
 			} else {
 				
 				for(sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) {

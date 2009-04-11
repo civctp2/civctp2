@@ -62,6 +62,7 @@
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
+// - Added start and end age options. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -416,6 +417,10 @@ private:
     sint32 m_noGoodyHuts;
 	/// Enable random map settings (wet/dry, warm/cold etc.)
     sint32 m_randomCustomMap;
+	/// Starting age in single player only
+    sint32 m_spStartingAge;
+	/// Ending age in single player only
+    sint32 m_spEndingAge;
 
 
 
@@ -617,16 +622,9 @@ public:
     void SetNewCombat(BOOL on)                          { m_newcombat = on; }
     void SetNoGoodyHuts(BOOL on)                        { m_noGoodyHuts = on; }
     void SetRandomCustomMap(BOOL on)                    { m_randomCustomMap = on; }
-/*
-    void SetDebugAI(BOOL on)   //emod2
-    {
-        if(on) {
-            g_graphicsOptions->ArmyTextOn();
-        }
-        else
-            g_graphicsOptions->ArmyTextOff();
-    }
-*/
+    void SetSPStartingAge(sint32 x)						{ m_spStartingAge = x; }
+    void SetSPEndingAge(sint32 x)						{ m_spEndingAge = x; }
+
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
 
@@ -879,8 +877,9 @@ public:
     BOOL    IsNewCombat()                       { return m_newcombat; }
     BOOL    IsNoGoodyHuts()                     { return m_noGoodyHuts; }
     BOOL    IsRandomCustomMap()                 { return m_randomCustomMap; }
+    sint32  GetSPStartingAge() const			{ return m_spStartingAge; }
+    sint32  GetSPEndingAge() const				{ return m_spEndingAge; }
 
-//later add start age and end age?
 };
 
 extern ProfileDB *g_theProfileDB;
