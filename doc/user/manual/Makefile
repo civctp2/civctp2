@@ -21,6 +21,9 @@ user_manual.pdf: $(USER_MANUAL_SOURCES)
 
 clean:
 	-rm -f user_manual.pdf
+	-rm -f user_manual.idx
+	-rm -f user_manual.ilg
+	-rm -f user_manual.ind
 	-rm -f *.aux *.dvi *.log *.out *.toc *.tpt
 	-rm -f include/*.aux
 

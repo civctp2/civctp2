@@ -43,7 +43,7 @@
 
 class CtpAi;
 
-#include "Player.h" // PLAYER_INDEX
+#include "player.h" // PLAYER_INDEX
 class Army;
 class MapPoint;
 class Unit;

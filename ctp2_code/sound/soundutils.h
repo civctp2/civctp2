@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __SOUNDUTILS_H__
 #define __SOUNDUTILS_H__
 

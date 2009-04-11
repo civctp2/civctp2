@@ -7,7 +7,7 @@ SUBDIRS=\
 purge: $(top_srcdir)/Makefile distclean
 	$(MAKE) -f $< $@
 
-bootstrap doc local playtest: $(top_srcdir)/Makefile
+bootstrap bootstrap-anet doc local playtest: $(top_srcdir)/Makefile
 	$(MAKE) -f $< $@
 
 .PHONY: purge bootstrap doc local playtest

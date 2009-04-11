@@ -1,12 +1,11 @@
 /**
  * $Id$
  */
-#ifndef __os_include_ctp2_inttypes_h__
-#define __os_include_ctp2_inttypes_h__ 1
-
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+#ifndef __os_include_ctp2_inttypes_h__
+#define __os_include_ctp2_inttypes_h__ 1
 
 #include "ctp2_config.h"
 

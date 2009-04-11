@@ -6,7 +6,9 @@
     <version>$VERSION$</version>
     <projectmanagement>KDevAutoProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
-    <ignoreparts/>
+    <ignoreparts>
+      <part>kdevreplace</part>
+    </ignoreparts>
     <projectdirectory>../../..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description/>
@@ -17,11 +19,11 @@
   </general>
   <kdevautoproject>
     <general>
-      <activetarget>ctp2_code/ctp/ctp2</activetarget>
-      <useconfiguration>debug</useconfiguration>
+      <activetarget>ctp2_code/ctp2</activetarget>
+      <useconfiguration>default</useconfiguration>
     </general>
     <run>
-      <mainprogram>ctp2_code/ctp/ctp2</mainprogram>
+      <mainprogram>ctp2_code/ctp2</mainprogram>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <programargs/>
@@ -32,18 +34,28 @@
     <configurations>
       <optimized>
         <builddir>optimized</builddir>
-        <ccompiler>GccOptions</ccompiler>
-        <cxxcompiler>GppOptions</cxxcompiler>
-        <f77compiler>G77Options</f77compiler>
-        <cxxflags>-O2 -g0</cxxflags>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <cxxflags>-O3 -fno-strict-aliasing -g0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-virtual-dtor</cxxflags>
+        <envvars/>
+        <configargs>-C</configargs>
+        <topsourcedir>.</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags>-O3 -fno-strict-aliasing -g0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses</cflags>
+        <f77flags/>
       </optimized>
       <debug>
-        <configargs>--enable-debug=full</configargs>
+        <configargs>--enable-debug=full -C</configargs>
         <builddir>debug</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <cxxflags>-O0 -g3</cxxflags>
+        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -g3</cxxflags>
         <envvars/>
         <topsourcedir>.</topsourcedir>
         <cppflags/>
@@ -51,9 +63,26 @@
         <ccompilerbinary/>
         <cxxcompilerbinary/>
         <f77compilerbinary/>
-        <cflags/>
+        <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
         <f77flags/>
       </debug>
+      <default>
+        <envvars/>
+        <configargs>-C</configargs>
+        <builddir>default</builddir>
+        <topsourcedir>.</topsourcedir>
+        <cppflags/>
+        <ldflags/>
+        <ccompiler>kdevgccoptions</ccompiler>
+        <cxxcompiler>kdevgppoptions</cxxcompiler>
+        <f77compiler>kdevpgf77options</f77compiler>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags>-O0 -Werror -W -Wall -Wno-unused -Wno-implicit-function-declaration -Wno-parentheses -g3</cflags>
+        <cxxflags>-O0 -Werror -Wall -Wno-non-template-friend -Wno-unused -Wno-format -Wno-switch -Wno-switch-enum -Wno-non-virtual-dtor -g3</cxxflags>
+        <f77flags/>
+      </default>
     </configurations>
     <make>
       <envvars>
@@ -61,9 +90,9 @@
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
       <abortonerror>true</abortonerror>
-      <numberofjobs>1</numberofjobs>
+      <numberofjobs>2</numberofjobs>
       <dontact>false</dontact>
-      <makebin>make</makebin>
+      <makebin>make -r</makebin>
       <prio>0</prio>
     </make>
   </kdevautoproject>
@@ -76,11 +105,11 @@
       <runShellScript/>
       <runGdbScript/>
       <breakonloadinglibs>true</breakonloadinglibs>
-      <separatetty>false</separatetty>
+      <separatetty>true</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
     </general>
     <display>
-      <staticmembers>false</staticmembers>
+      <staticmembers>true</staticmembers>
       <demanglenames>true</demanglenames>
       <outputradix>10</outputradix>
     </display>
@@ -133,19 +162,19 @@
   </kdevdoctreeview>
   <kdevfilecreate>
     <filetypes>
-      <type icon="source_cpp" ext="cpp" name="C++ Source" create="template" >
+      <type icon="source_cpp" ext="cpp" create="template" name="C++ Source" >
         <descr>A new empty C++ file.</descr>
       </type>
-      <type icon="source_c" ext="c" name="C Source" create="template" >
+      <type icon="source_c" ext="c" create="template" name="C Source" >
         <descr>A new empty C file.</descr>
       </type>
-      <type icon="source_h" ext="h" name="C/C++ Header" create="template" >
+      <type icon="source_h" ext="h" create="template" name="C/C++ Header" >
         <descr>A new empty header file for C or C++.</descr>
       </type>
-      <type icon="source_l" ext="l" name="flex C Source" create="template" >
+      <type icon="source_l" ext="l" create="template" name="flex C Source" >
         <descr>A new empty flex C source source file.</descr>
       </type>
-      <type icon="source_y" ext="y" name="bison C Source" create="template" >
+      <type icon="source_y" ext="y" create="template" name="bison C Source" >
         <descr>A new empty bison C source source file.</descr>
       </type>
     </filetypes>
@@ -191,6 +220,7 @@
   </kdevdocumentation>
   <kdevfileview>
     <groups>
+      <group pattern="ctp2_code/*" name="ctp2_code" />
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <hidenonlocation>false</hidenonlocation>
     </groups>

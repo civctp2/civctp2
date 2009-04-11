@@ -44,12 +44,15 @@ all:
 	# for a description of its use.    # \
 	####################################
 
-bootstrap:
+bootstrap-anet: ctp2_code/libs/anet ctp2_code/libs/anet/Makefile
+	$(MAKE) -C $< bootstrap
+	
+bootstrap: bootstrap-anet
 	@echo "Bootstraping Civilization Call to Power"
 	@echo " "
 	@echo "This is no official release by activision."
 	@echo " "
-	aclocal -I ctp2_code/os/autoconf
+	aclocal -I ctp2_code/os/autoconf -I ctp2_code/libs/anet/macros
 	autoheader
 	libtoolize --force --copy
 	automake --foreign --add-missing --copy

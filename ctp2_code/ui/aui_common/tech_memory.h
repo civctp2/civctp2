@@ -50,25 +50,28 @@ protected:
 	{
 		Block(size_t blockSize)
 		:
-			pNext       (0),
-            usedSize    (blockSize / k_TECH_MEMORY_BITSPERDWORD),
-            used        (0),
-			dataSize    (blockSize),
-            data        (0)
+			pNext      (0),
+			usedSize   (blockSize / k_TECH_MEMORY_BITSPERDWORD),
+			used       (0),
+			dataSize   (blockSize),
+			data       (0)
 		{
-			size_t const remainder  = dataSize % k_TECH_MEMORY_BITSPERDWORD;
-			
-            if (remainder) 
-            {
-                ++usedSize;
-            }
+			size_t const remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
+			if (remainder)
+			{
+				usedSize++;
+			}
 
 			used = new unsigned[usedSize];
-			memset( used, 0, usedSize * sizeof( unsigned ) );
-			
-			if (remainder)
-            {
-				used[usedSize - 1] = ~((1 << remainder) - 1);
+			if (used)
+			{
+				memset( used, 0, usedSize * sizeof( unsigned ) );
+
+				
+				if (remainder)
+				{
+					used[usedSize - 1] = ~(( 1 << remainder ) - 1);
+				}
 			}
 			
 			data = new T[dataSize];
@@ -76,8 +79,17 @@ protected:
 
 		virtual ~Block()
 		{
-            delete [] used;
-            delete [] data;
+			if (used)
+			{
+				delete[] used;
+				used = 0;
+			}
+
+			if (data)
+			{
+				delete[] data;
+				data = 0;
+			}
 		};
 
 		Block *     pNext;			
@@ -133,18 +145,16 @@ T *tech_Memory< T >::New( void )
 {
 	if (m_pLast)
 	{
-    	T * t = UseFreeElement();
-		
-        if (t)
-        {
-            return t;
-        }
-		
-	    m_pLast->pNext = new Block(m_blockSize);
+		T * t = UseFreeElement();
+
+		if (t)
+		{
+			return t;
+		}
+
+		m_pLast->pNext = new Block(m_blockSize);
 		m_pLast = m_pLast->pNext;
-	}
-	else
-	{
+	} else {
 		m_pLast = m_pFirst = new Block(m_blockSize);
 	}
 

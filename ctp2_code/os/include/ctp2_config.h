@@ -1,7 +1,7 @@
 #ifndef __os_include_ctp2_config_h__
 #define __os_include_ctp2_config_h__ 1
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 

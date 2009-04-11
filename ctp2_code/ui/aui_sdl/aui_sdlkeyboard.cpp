@@ -148,6 +148,8 @@ void aui_SDLKeyboard::convertSDLKeyboardEvent(SDL_KeyboardEvent &sdlevent,
 {
 	auievent.down = (sdlevent.state & SDL_PRESSED) ? TRUE : FALSE;
 	auievent.key = convertSDLKey(sdlevent.keysym.sym);
+	printf("convertSDLKeyboardEvent(): %08x %08x %c\n", auievent.key, 
+               sdlevent.keysym.sym, sdlevent.keysym.sym);
 }
 
 uint32 aui_SDLKeyboard::convertSDLKey(SDLKey k)

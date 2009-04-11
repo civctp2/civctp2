@@ -35,8 +35,9 @@
 // - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_AI_DEBUG_H__
 #define __CTP_AI_DEBUG_H__
 

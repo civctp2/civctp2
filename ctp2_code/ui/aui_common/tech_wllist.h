@@ -158,7 +158,14 @@ tech_WLList< T >::tech_WLList( size_t blockSize )
 template< class T >
 tech_WLList< T >::~tech_WLList()
 {
-	delete m_memory;
+	if ( m_memory )
+	{
+		delete m_memory;
+		m_memory = 0;
+	}
+
+	m_length = 0;
+	m_pHead = m_pTail = 0;
 }
 
 
@@ -330,17 +337,17 @@ void tech_WLList< T >::AddTail( const tech_WLList &NewList )
 template< class T >
 T tech_WLList< T >::RemoveHead( void )
 {
-	Link *  pOldLink    = m_pHead;
-	T       theElement  = pOldLink->element;
-    m_pHead = pOldLink->pNext;
+	Link *pOldLink = m_pHead;
+	T theElement = pOldLink->element;
+	m_pHead = pOldLink->pNext;
 	if (m_pHead)
-    {
-		m_pHead->pPrev = NULL;
-    }
+	{
+		m_pHead->pPrev = 0;
+	}
 	else
-    {
-		m_pTail = NULL;
-    }
+	{
+		m_pTail = 0;
+	}
 
 	DeleteLink( pOldLink );
 
@@ -351,18 +358,18 @@ T tech_WLList< T >::RemoveHead( void )
 template< class T >
 T tech_WLList< T >::RemoveTail( void )
 {
-	Link *  pOldLink    = m_pTail;
-	T       theElement  = pOldLink->element;
+	Link *pOldLink = m_pTail;
+	T theElement = pOldLink->element;
 
-    m_pTail = m_pTail->pPrev;
+	m_pTail = pOldLink->pPrev;
 	if (m_pTail)
-    {
-		m_pTail->pNext = NULL;
-    }
+	{
+		m_pTail->pNext = 0;
+	}
 	else
-    {
-		m_pHead = NULL;
-    }
+	{
+		m_pHead = 0;
+	}
 
 	DeleteLink( pOldLink );
 
@@ -422,29 +429,29 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 
 	if ( pOldLink == m_pHead )
 	{
-        m_pHead = pOldLink->pNext;
+		m_pHead = pOldLink->pNext;
 		if (m_pHead)
-        {
+		{
 			m_pHead->pPrev = NULL;
-        }
+		}
 	}
 	else
-    {
+	{
 		pOldLink->pPrev->pNext = pOldLink->pNext;
-    }
+	}
 
 	if ( pOldLink == m_pTail )
 	{
-        m_pTail = pOldLink->pPrev;
+		m_pTail = pOldLink->pPrev;
 		if (m_pTail)
-        {
+		{
 			m_pTail->pNext = NULL;
-        }
-    }
+		}
+	}
 	else
-    {
+	{
 		pOldLink->pNext->pPrev = pOldLink->pPrev;
-    }
+	}
 
 	DeleteLink( pOldLink );
 }

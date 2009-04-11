@@ -18,14 +18,14 @@
 bool tech_MemMap::GetFileExtension(char const * filename, char * extension)
 {
 	if (filename && extension)
-    {
-    	char const * lastDot = strrchr(filename, '.');
-        if (lastDot)
-        {
-        	strcpy(extension, ++lastDot);
-            return true;
-        }
-    }
+	{
+		char const * lastDot = strrchr(filename, '.');
+		if (lastDot)
+		{
+			strcpy(extension, ++lastDot);
+			return true;
+		}
+	}
 
 	return false;
 }
@@ -35,16 +35,18 @@ bool tech_MemMap::GetFileExtension(char const * filename, char * extension)
 unsigned char *tech_MemMap::GetFileBits
 (
 	const char *    filename,
-	size_t *        outfilesize 
+	size_t *        outfilesize
 )
 {
+
 	if ( outfilesize ) *outfilesize = 0;
+
+	size_t        filesize;
 	FILE *f = fopen( filename, "rb" );
 
 	if ( !f )
 		return NULL;
 	
-	size_t  filesize = 0;
 	if (fseek(f, 0, SEEK_END) == 0) {
 		filesize = ftell(f);
 	} else {
@@ -59,8 +61,13 @@ unsigned char *tech_MemMap::GetFileBits
 
 	unsigned char * bits = new unsigned char[filesize];
 
+	if (!bits) {
+		fclose(f);
+		return NULL;
+	}
+
 	if ( fread( bits, 1, filesize, f ) != filesize ) {
-		delete [] bits;
+		delete[] bits;
 		fclose(f);
 		return NULL;
 	}
@@ -76,6 +83,8 @@ unsigned char *tech_MemMap::GetFileBits
 
 void tech_MemMap::ReleaseFileBits( unsigned char *&bits )
 {
-	delete [] bits;
-	bits = NULL;
+	if (bits) {
+		delete[] bits;
+		bits = NULL;
+	}
 }
