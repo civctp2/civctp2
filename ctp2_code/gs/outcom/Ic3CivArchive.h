@@ -51,7 +51,7 @@ STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 #else
 #include "noCOMBase.h"
 
-class IC3CivArchive : public ICTP2Unknown {
+class IC3CivArchive : public IUnknown {
   virtual void Store(uint8 *pbData, uint32 ulLen) = 0;
   virtual void Load(uint8 *pbData, uint32 ulLen) = 0;
   virtual BOOL IsStoring() = 0;

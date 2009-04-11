@@ -1,0 +1,9 @@
+This directory and its subdirectories contain a modified LGPL release of the
+anet library based on anet 0.10 published under LGPL.
+
+It aims to support more platforms.
+
+Modifications so far:
+- Compilation with newer gcc versions on linux
+- Start of amd64 port
+

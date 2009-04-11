@@ -125,16 +125,11 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	delete [] m_indexToAlpha;
 	delete [] m_alphaToIndex;
 
-	for
-	(
-	    std::vector<T *>::iterator p = m_modifiedRecords.begin();
-	    p != m_modifiedRecords.end();
-	    ++p
-	)
+	for (size_t j = 0; j < m_modifiedRecords.size(); ++j)
 	{
-		delete *p;
+		delete m_modifiedRecords[j];
 	}
-	std::vector<T *>().swap(m_modifiedRecords);
+	m_modifiedRecords.clear();
 
 	if (m_modifiedList) 
 	{

@@ -8,3 +8,15 @@ all:
 clean:
 	rm -f *.tgz *.zip
 	cd src/linux; ./clean
+
+bootstrap:
+	@echo "Bootstraping anet"
+	@echo ""
+	aclocal -I macros
+	autoheader
+	libtoolize --force --copy
+	automake --foreign --add-missing --copy
+	autoconf
+	@echo " "
+	@echo "Bootstraping complete."
+

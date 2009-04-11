@@ -28,24 +28,34 @@ libgsnewdb_a_SOURCES = \
 	AdvanceRecord.cpp \
 	AgeCityStyleRecord.cpp \
 	AgeRecord.cpp \
-	BuildListSequenceRecord.cpp \
 	BuildingBuildListRecord.cpp \
 	BuildingRecord.cpp \
+	BuildListSequenceRecord.cpp \
 	CitySizeRecord.cpp \
 	CityStyleRecord.cpp \
 	CivilisationRecord.cpp \
+	ConceptRecord.cpp \
+	ConstRecord.cpp \
+	CultureRecord.cpp \
+	DifficultyRecord.cpp \
 	DiplomacyProposalRecord.cpp \
 	DiplomacyRecord.cpp \
 	DiplomacyThreatRecord.cpp \
 	EndGameObjectRecord.cpp \
 	FeatRecord.cpp \
+	GlobalWarmingRecord.cpp \
 	GoalRecord.cpp \
 	GovernmentRecord.cpp \
 	IconRecord.cpp \
 	ImprovementListRecord.cpp \
+	LeaderRecord.cpp \
+	MapIconRecord.cpp \
+	MapRecord.cpp \
 	OrderRecord.cpp \
 	PersonalityRecord.cpp \
+	PollutionRecord.cpp \
 	PopRecord.cpp \
+	ReligionRecord.cpp \
 	ResourceRecord.cpp \
 	RiskRecord.cpp \
 	SoundRecord.cpp \
@@ -77,18 +87,28 @@ newdb_CDBTYPES = \
 	CitySizeRecord \
 	CityStyleRecord \
 	CivilisationRecord \
+	ConceptRecord \
+	ConstRecord \
+	CultureRecord \
+	DifficultyRecord \
 	DiplomacyProposalRecord \
 	DiplomacyRecord \
 	DiplomacyThreatRecord \
 	EndGameObjectRecord \
 	FeatRecord \
+	GlobalWarmingRecord \
 	GoalRecord \
 	GovernmentRecord \
 	IconRecord \
 	ImprovementListRecord \
+	LeaderRecord \
+	MapIconRecord \
+	MapRecord \
 	OrderRecord \
 	PersonalityRecord \
+	PollutionRecord \
 	PopRecord \
+	ReligionRecord \
 	ResourceRecord \
 	RiskRecord \
 	SoundRecord \
@@ -147,7 +167,7 @@ AdvanceRecord.h: AdvanceRecord.stamp
 AdvanceRecord.stamp: $(ctp2_code)/gs/newdb/advance.cdb \
 		AgeRecord.h \
 		CityStyleRecord.h GovernmentRecord.h \
-		FeatRecord.h IconRecord.h \
+		FeatRecord.h IconRecord.h ResourceRecord.h \
 		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
@@ -166,13 +186,6 @@ AgeRecord.stamp: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
-BuildListSequenceRecord.cpp \
-BuildListSequenceRecord.h: BuildListSequenceRecord.stamp
-
-BuildListSequenceRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
-	$(CTPDB) . < $<
-	touch $@
-
 BuildingBuildListRecord.cpp \
 BuildingBuildListRecord.h: BuildingBuildListRecord.stamp
 
@@ -185,7 +198,16 @@ BuildingBuildListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
 BuildingRecord.cpp \
 BuildingRecord.h: BuildingRecord.stamp
 
-BuildingRecord.stamp: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB)
+BuildingRecord.stamp: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB) \
+		CivilisationRecord.h WonderRecord.h \
+		TerrainImprovementRecord.h
+	$(CTPDB) . < $<
+	touch $@
+
+BuildListSequenceRecord.cpp \
+BuildListSequenceRecord.h: BuildListSequenceRecord.stamp
+
+BuildListSequenceRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -210,10 +232,38 @@ CivilisationRecord.stamp: $(ctp2_code)/gs/newdb/Civilisation.cdb $(CTPDB) Person
 	$(CTPDB) . < $<
 	touch $@
 
+ConceptRecord.cpp \
+ConceptRecord.h: ConceptRecord.stamp
+
+ConceptRecord.stamp: $(ctp2_code)/gs/newdb/Concept.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+ConstRecord.cpp \
+ConstRecord.h: ConstRecord.stamp
+
+ConstRecord.stamp: $(ctp2_code)/gs/newdb/Const.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+CultureRecord.cpp \
+CultureRecord.h: CultureRecord.stamp
+
+CultureRecord.stamp: $(ctp2_code)/gs/newdb/culture.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+DifficultyRecord.cpp \
+DifficultyRecord.h: DifficultyRecord.stamp
+
+DifficultyRecord.stamp: $(ctp2_code)/gs/newdb/Difficulty.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
 DiplomacyProposalRecord.cpp \
 DiplomacyProposalRecord.h: DiplomacyProposalRecord.stamp
 
-DiplomacyProposalRecord.stamp: $(ctp2_code)/gs/newdb/dipproposal.cdb $(CTPDB)
+DiplomacyProposalRecord.stamp: $(ctp2_code)/gs/newdb/DiplomacyProposal.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -227,7 +277,7 @@ DiplomacyRecord.stamp: $(ctp2_code)/gs/newdb/diplomacy.cdb $(CTPDB)
 DiplomacyThreatRecord.cpp \
 DiplomacyThreatRecord.h: DiplomacyThreatRecord.stamp
 
-DiplomacyThreatRecord.stamp: $(ctp2_code)/gs/newdb/dipthreat.cdb $(CTPDB)
+DiplomacyThreatRecord.stamp: $(ctp2_code)/gs/newdb/DiplomacyThreat.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -245,6 +295,13 @@ FeatRecord.cpp \
 FeatRecord.h: FeatRecord.stamp
 
 FeatRecord.stamp: $(ctp2_code)/gs/newdb/feat.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+GlobalWarmingRecord.cpp \
+GlobalWarmingRecord.h: GlobalWarmingRecord.stamp
+
+GlobalWarmingRecord.stamp: $(ctp2_code)/gs/newdb/GlobalWarming.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -280,6 +337,27 @@ ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
 	$(CTPDB) . < $<
 	touch $@
 
+LeaderRecord.cpp \
+LeaderRecord.h: LeaderRecord.stamp
+
+LeaderRecord.stamp: $(ctp2_code)/gs/newdb/Leader.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+MapIconRecord.cpp \
+MapIconRecord.h: MapIconRecord.stamp
+
+MapIconRecord.stamp: $(ctp2_code)/gs/newdb/Map.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+MapRecord.cpp \
+MapRecord.h: MapRecord.stamp
+
+MapRecord.stamp: $(ctp2_code)/gs/newdb/Map.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
 OrderRecord.cpp \
 OrderRecord.h: OrderRecord.stamp
 
@@ -294,10 +372,25 @@ PersonalityRecord.stamp: $(ctp2_code)/gs/newdb/personality.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
+
+PollutionRecord.cpp \
+PollutionRecord.h: PollutionRecord.stamp
+
+PollutionRecord.stamp: $(ctp2_code)/gs/newdb/Pollution.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
 PopRecord.cpp \
 PopRecord.h: PopRecord.stamp
 
 PopRecord.stamp: $(ctp2_code)/gs/newdb/pop.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+ReligionRecord.cpp \
+ReligionRecord.h: ReligionRecord.stamp
+
+ReligionRecord.stamp: $(ctp2_code)/gs/newdb/religion.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -350,7 +443,7 @@ StrategyRecord.cpp \
 StrategyRecord.h: StrategyRecord.stamp
 
 StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
-		GoalRecord.h \
+		ConstRecord.h GoalRecord.h \
 		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
@@ -358,7 +451,7 @@ StrategyRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
 TerrainImprovementRecord.cpp \
 TerrainImprovementRecord.h: TerrainImprovementRecord.stamp
 
-TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/terrimprove.cdb \
+TerrainImprovementRecord.stamp: $(ctp2_code)/gs/newdb/TerrainImprovement.cdb \
 		TerrainRecord.h \
 		$(CTPDB)
 	$(CTPDB) . < $<

@@ -57,9 +57,9 @@ public:
 	class PointerListNode {
 	public:
 		PointerListNode(T* obj) :
+			m_obj(obj),
 			m_next(NULL),
-			m_prev(NULL),
-			m_obj(obj)
+			m_prev(NULL)
         { ; };
 		
 		virtual ~PointerListNode() 

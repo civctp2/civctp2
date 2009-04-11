@@ -24,7 +24,7 @@ DECLARE_INTERFACE_(IC3Rand, IUnknown)
 #else
 #include "noCOMBase.h"
 
-class IC3Rand : public ICTP2Unknown
+class IC3Rand : public IUnknown
 {
 public:
 	virtual sint32 Next(sint32 range) = 0;
