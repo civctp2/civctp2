@@ -31,8 +31,13 @@ struct PFPath
     FILE *              zfs_fp;
     unsigned char *     zms_start;
     unsigned char *     zms_end;
+#ifdef WIN32
     HANDLE              zms_hf;
     HANDLE              zms_hm;
+#else
+    int                 zms_hf;
+    size_t              zms_size;
+#endif
     char                dos_path[256];
 };
 

@@ -10,6 +10,18 @@
 #include <search.h>
 #include <ctype.h>
 
+#ifndef WIN32
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <dirent.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#endif // !WIN32
+
 #include "CivPaths.h"       // g_civPaths
 
 
@@ -57,6 +69,7 @@ int PFEntry_compare(const void *a, const void *b)
     return(stricmp(((PFEntry *) a)->rname, ((PFEntry *) b)->rname));
 }
 
+#ifdef WIN32
 void * mapFile(char const * path, long *size, HANDLE *mhandle, HANDLE *fhandle)
 {
 
@@ -100,6 +113,38 @@ void unmapFile(void *ptr, HANDLE mhandle, HANDLE fhandle)
     CloseHandle(mhandle);
     CloseHandle(fhandle);
 }
+#else
+
+void * mapFile(char const *path, long *size, PFPath &pfp)
+{
+    void *ptr;
+    struct stat tmpstat = { 0 };
+    if (stat(path, &tmpstat) != 0) {
+    	return NULL;
+    }
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) {
+        return NULL;
+    }
+    pfp.zms_size = tmpstat.st_size;
+    *size = tmpstat.st_size;
+
+    ptr = mmap(NULL, *size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (!ptr) {
+    	close(fd);
+        return(NULL);
+    }
+    pfp.zms_hf = fd;
+
+    return(ptr);
+}
+
+void unmapFile(PFPath &pfp)
+{
+    munmap(pfp.zms_start, pfp.zms_size);
+    close(pfp.zms_hf);
+}
+#endif
 
 ProjectFile::ProjectFile()
 :
@@ -132,10 +177,14 @@ ProjectFile::~ProjectFile()
             break;
 
         case PRJFILE_PATH_ZMS: 
+#ifdef WIN32
             unmapFile(m_paths[i].zms_start, 
                       m_paths[i].zms_hm,
                       m_paths[i].zms_hf
                      );
+#else
+            unmapFile(m_paths[i]);
+#endif
             break;
         }
     }
@@ -259,7 +308,9 @@ void *ProjectFile::getData_ZMS(PFEntry *entry, size_t & size)
 void *ProjectFile::getData_ZMS(PFEntry *entry, size_t & size,
                                HANDLE *hFileMap, size_t & offset)
 {
+#ifdef WIN32
     *hFileMap   = m_paths[entry->path].zms_hm;
+#endif
     offset      = entry->offset;
 
     return getData_ZMS(entry, size);
@@ -334,9 +385,17 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
     char tmp[256];
     sprintf(tmp, "%s%s*.*", m_paths[path].dos_path, FILE_SEP);
 
+#ifdef WIN32
     WIN32_FIND_DATA dirent;
     HANDLE          dirhandle = FindFirstFile(tmp, &dirent);
-    if (dirhandle == INVALID_HANDLE_VALUE) 
+    if (dirhandle == INVALID_HANDLE_VALUE)
+#else
+    DIR *dir;
+    struct dirent *dent = 0;
+    struct stat tmpstat;
+    dir = opendir(m_paths[path].dos_path);
+    if (!dir)
+#endif
     {
         sprintf(m_error_string, "Couldn't find \"%s\"", tmp);
         return(0);
@@ -344,11 +403,28 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
         
     int count = 0;
     do {
-        if (dirent.cFileName[0] == '.')
+#ifdef WIN32
+        MBCHAR *name = dirent.cFileName;
+#else
+	dent = readdir(dir);
+	if (!dent)
             continue;
+	MBCHAR *name = dent->d_name;
+#endif
+        if (name[0] == '.')
+            continue;
+
+#ifdef WIN32
         if (!(dirent.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            if ((table) && (!exists(dirent.cFileName))) {
-                strcasecpy(table->rname, dirent.cFileName);
+#else
+        snprintf(tmp, sizeof(tmp), "%s%s%s", m_paths[path].dos_path, FILE_SEP, name);
+        if (!stat(tmp, &tmpstat))
+            continue;
+
+        if (!S_ISDIR(tmpstat.st_mode)) {
+#endif
+            if ((table) && (!exists(name))) {
+                strcasecpy(table->rname, name);
                 table->offset = 0;
                 table->size = 0;
                 table->path = path;
@@ -358,8 +434,13 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
                 count++;
             }
         }
+#ifdef WIN32
     } while (FindNextFile(dirhandle, &dirent) == TRUE);
     FindClose(dirhandle);
+#else
+    } while (dent);
+    closedir(dir);
+#endif
     return(count);
 }
 
@@ -488,11 +569,16 @@ int ProjectFile::addPath_ZMS(char const * path)
     long            fsize;
     int             pathnum = m_num_paths;
     unsigned char * fbase   = reinterpret_cast<unsigned char *>
+#ifdef WIN32
         (mapFile(path, &fsize, 
                  &(m_paths[pathnum].zms_hm), 
                  &(m_paths[pathnum].zms_hf)
                 )
         );
+#else
+        (mapFile(path, &fsize, m_paths[pathnum])
+        );
+#endif
     if (fbase == NULL) {
         sprintf(m_error_string, "Could not open file \"%s\"", path);
         return(0);
