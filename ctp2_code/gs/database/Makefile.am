@@ -16,24 +16,15 @@ CTP2_WIN32_ZLIB_INC=\
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
+# Files not in civctp.dsp:
+# EndGameDB.cpp
+# EndGameRecord.cpp
 libgsdatabase_la_SOURCES = \
-	CivilisationDB.cpp \
-	CivilisationRec.cpp \
-	conceptdb.cpp \
-	ConstDB.cpp \
 	DB.cpp \
-	DiffDB.cpp \
 	filenamedb.cpp \
-	gwdb.cpp \
-	GWRecord.cpp \
 	highscoredb.cpp \
-	MapDB.cpp \
-	MapRecord.cpp \
 	moviedb.cpp \
-	orderdb.cpp \
 	PlayListDB.cpp \
-	pollutiondb.cpp \
-	PollutionRecord.cpp \
 	profileDB.cpp \
 	Rec.cpp \
 	StrDB.cpp \

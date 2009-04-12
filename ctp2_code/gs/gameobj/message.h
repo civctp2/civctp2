@@ -9,7 +9,7 @@ class Message;
 #include "Advances.h"       // AdvanceType
 #include "ID.h"             // ID
 #include "MessageData.h"    // MESSAGE_RESPONSE_TYPE, MESSAGE_TYPE
-#include "Player.h"         // PLAYER_INDEX
+#include "player.h"         // PLAYER_INDEX
 
 class Message : public ID
 {

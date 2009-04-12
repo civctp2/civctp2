@@ -31,7 +31,7 @@
 #ifndef __SLIC_FRAME_H__
 #define __SLIC_FRAME_H__
 
-enum SLIC_RT;
+#include "SlicError.h"
 
 #include "slicif.h"
 #include "SlicFunc.h"

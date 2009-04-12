@@ -40,7 +40,7 @@ enum ROUTE_TYPE {
 
 #include "DB.h"     // StringId
 #include "ID.h"     // ID
-#include "Player.h" // PLAYER_INDEX
+#include "player.h" // PLAYER_INDEX
 
 template <class T> class DynamicArray;
 class TradeRouteData;

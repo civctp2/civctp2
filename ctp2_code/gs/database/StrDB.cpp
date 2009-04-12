@@ -73,7 +73,7 @@ namespace
 size_t ComputeHashIndex(MBCHAR const * id)
 {
 		unsigned short hash;
-
+#ifdef WIN32
 		__asm 
 		{
           push eax              ; save registers
@@ -94,7 +94,19 @@ size_t ComputeHashIndex(MBCHAR const * id)
           pop  ecx
           pop  eax
 		}
-		
+#else
+		hash = 0;
+		const MBCHAR *p = id;
+		while (*p) {
+			// add a character
+			hash += (unsigned char)(*p++);
+			// rotate hash
+			if ((short)hash >= 0)
+				hash <<= 1;
+			else
+				hash <<= 1, ++hash;
+		}
+#endif
 		return static_cast<size_t>(hash % STRDB_NUM_HEADS);
 	}
 

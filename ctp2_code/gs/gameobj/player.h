@@ -131,6 +131,7 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "Readiness.h"          // READINESS_LEVEL
 #include "Strengths.h"          // STRENGTH_CAT
 #include "Unit.h"               // UNIT_COMMAND
+#include "GreatLibraryTypes.h"  // DATABASE
 
 template <class T> class DynamicArray;
 template <class T> class Database;
@@ -1038,7 +1039,7 @@ public:
 	sint32 CivHpBonus() const;
 
 	sint16 GetCargoCapacity() const;
-	void Player::CalcCargoCapacity();
+	void CalcCargoCapacity();
 	void AddCargoCapacity(const sint16 delta_cargo_slots);
 
 

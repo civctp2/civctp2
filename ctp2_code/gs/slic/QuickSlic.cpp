@@ -10,7 +10,6 @@
 
 
 
-
 void QuickSlic(char const * id, sint32 recipient)
 {
     if (g_slicEngine->GetSegment(id) &&

@@ -82,27 +82,7 @@ class TechListItem;
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
 
-enum DATABASE {
-	DATABASE_DEFAULT,
-	DATABASE_UNITS,
-	DATABASE_BUILDINGS,
-	DATABASE_WONDERS,
-	DATABASE_ADVANCES,
-	DATABASE_TERRAIN,
-	DATABASE_CONCEPTS,
-	DATABASE_GOVERNMENTS,
-	DATABASE_TILE_IMPROVEMENTS,
-	DATABASE_RESOURCE,
-	DATABASE_ORDERS,
-	DATABASE_SEARCH,
-
-	DATABASE_MAX
-};
-
-enum LIB_STRING {
-	LIB_STRING_INDEX,
-	LIB_STRING_TREE
-};
+#include "GreatLibraryTypes.h"
 
 //----------------------------------------------------------------------------
 // Project dependencies
@@ -273,7 +253,9 @@ private:
 	ctp2_HyperTextBox	*m_techRequirementsText;
 	ctp2_HyperTextBox	*m_techVariablesText;
 
+#ifdef WIN32
 	DirectVideo		*m_techMovie;
+#endif
 	ctp2_Static		*m_techStillShot;
 
 	aui_StringTable	*m_string;

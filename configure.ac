@@ -62,7 +62,7 @@ AC_WORDS_BIGENDIAN
 AC_OS_DEFINES
 AC_OS_PATHNAMES
 
-AC_CHECK_HEADERS(sys/param.h)
+AC_CHECK_HEADERS(limits.h sys/param.h)
 case $host in
 *-cygwin*)
 	;;

@@ -17,7 +17,8 @@ class Agreement;
 class TradeOffer;
 class GameEventArgList;
 class Army;
-enum UNIT_ORDER_TYPE;
+
+#include "UnitTypes.h"
 #include "diplomattypes.h"
 
 

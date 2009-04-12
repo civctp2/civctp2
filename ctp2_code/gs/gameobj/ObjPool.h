@@ -39,7 +39,7 @@ class ObjPool;
 
 #include "ctp2_inttypes.h"          // uint32
 #include "GameObj.h"
-#include "globals.h"                // k_GAME_OBJ_TYPE_...
+#include "Globals.h"                // k_GAME_OBJ_TYPE_...
 #include "ID.h"
 
 

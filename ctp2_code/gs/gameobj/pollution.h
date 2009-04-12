@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Pollution handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -60,7 +60,7 @@ class Pollution;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "Player.h"
+#include "player.h"
 #include "PollutionConst.h"
 
 //----------------------------------------------------------------------------

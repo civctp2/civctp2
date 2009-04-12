@@ -53,7 +53,7 @@ class AgreementMatrix;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "CivArchive.h"     // CivArchive
+#include "civarchive.h"     // CivArchive
 #include "diplomattypes.h"  // ai::..., PROPOSAL_TYPE
 #include "player.h"         // PLAYER_INDEX
 

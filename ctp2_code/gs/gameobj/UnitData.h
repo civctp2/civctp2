@@ -55,7 +55,7 @@ class VisibilityDurationArray;
 #include "citydata.h"
 #include "Army.h"
 #include "Order.h"          // ORDER_RESULT
-#include "Player.h"         // k_MAX_PLAYERS
+#include "player.h"         // k_MAX_PLAYERS
 #include "UnitActor.h"      // UnitActor
 #include "UnitRecord.h"
 

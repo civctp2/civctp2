@@ -17,7 +17,7 @@ typedef sint32 MESSAGE_TYPE;
 #include "civarchive.h"	// CivArchive
 #include "message.h"	// MessageData
 #include "ObjPool.h"	// ObjPool
-#include "Player.h"		// PLAYER_INDEX
+#include "player.h"		// PLAYER_INDEX
 
 #define k_HACK_RECONSTITUTED_CLASS 0x72adc754
 

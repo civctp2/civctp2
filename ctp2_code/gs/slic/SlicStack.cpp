@@ -35,7 +35,7 @@
 #include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
 #include "Army.h"
-#include "ProfileDB.h"
+#include "profileDB.h"
 
 SlicStack::SlicStack()
 {

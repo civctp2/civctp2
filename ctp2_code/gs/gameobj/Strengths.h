@@ -26,7 +26,7 @@ enum STRENGTH_CAT {
 	STRENGTH_CAT_MAX
 };
 
-#include "CivArchive.h"     // CivArchive
+#include "civarchive.h"     // CivArchive
 #include "SimpleDynArr.h"
 
 class Strengths {

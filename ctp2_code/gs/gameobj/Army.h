@@ -45,7 +45,7 @@ class Army;
 
 #include "AICause.h"
 #include "ID.h"
-#include "Player.h"
+#include "player.h"
 #include "Unit.h"
 
 class CivArchive;

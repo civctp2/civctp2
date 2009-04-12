@@ -20,7 +20,7 @@
 template <class T> class Database;
 
 #include "ctp2_inttypes.h"  // sint32
-#include "CivArchive.h"     // CivArchive
+#include "civarchive.h"     // CivArchive
 #include "dbtypes.h"        // StringId
 
 template <class T> class Database { 

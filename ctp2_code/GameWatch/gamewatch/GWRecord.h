@@ -16,7 +16,7 @@
 class GWRecord;
 
 
-#include <List>
+#include <list>
 
 
 using std::list;

@@ -19,12 +19,12 @@ CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 libgsslic_la_LDFLAGS = -static
 
 libgsslic_la_SOURCES = \
-	lex.yysc.c \
-	lex.yysl.c \
-	ysc.tab.c \
-	ysc.tab.h \
-	ysl.tab.c \
-	ysl.tab.h \
+	lex.sc.c \
+	lex.yy.c \
+	sc.tab.c \
+	sc.tab.h \
+	y.tab.c \
+	y.tab.h \
 	QuickSlic.cpp \
 	SlicArray.cpp \
 	SlicBuiltin.cpp \
@@ -50,29 +50,29 @@ libgsslic_la_SOURCES = \
 	SlicSymbol.cpp \
 	SlicSymTab.cpp
 
-lex.yysc.c: sliccmd.l ysc.tab.h
-	$(LEX) -i -Pyysc -o$@ $<
+lex.sc.c: sliccmd.l sc.tab.h
+	$(LEX) -i -Psc -o$@ $<
 
-lex.yysl.c: slic.l ysl.tab.h
-	$(LEX) -i -Pyysl -o$@ $<
+lex.yy.c: slic.l y.tab.h
+	$(LEX) -i -o$@ $<
 
-ysc.tab.c \
-ysc.tab.h: sliccmd.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yysc -bysc $<
+sc.tab.c \
+sc.tab.h: sliccmd.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p sc -bsc $<
 
-ysl.tab.c \
-ysl.tab.h: slic.y
-	$(YACC) $(YFLAGS) $(AM_YFLAGS) -p yysl -bysl $<
+y.tab.c \
+y.tab.h: slic.y
+	$(YACC) $(YFLAGS) $(AM_YFLAGS) -by $<
 
 MOSTLYCLEANFILES = \
 	lex.yysc.c \
 	lex.yysl.c \
-	ysc.tab.c \
-	ysc.tab.h \
-	ysl.tab.c \
-	ysl.tab.h \
-	ysl.output \
-	ysc.output
+	sc.tab.c \
+	sc.tab.h \
+	sc.output \
+	y.tab.c \
+	y.tab.h \
+	y.output
 
 AM_CXXFLAGS=\
 	$(SDL_CFLAGS)

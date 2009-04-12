@@ -56,11 +56,11 @@ class Diplomat;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "CivArchive.h"             // CivArchive
+#include "civarchive.h"             // CivArchive
 #include "ctp2_inttypes.h"          // sintN, uintN
 #include "dbtypes.h"                // StringId
 #include "DiplomacyRecord.h"        // DiplomacyRecord
-#include "DiplomatTypes.h"          // ai, AiState, Motivation, Threat, etc.
+#include "diplomattypes.h"          // ai, AiState, Motivation, Threat, etc.
 #include "Foreigner.h"              // Foreigner
 #include "PersonalityRecord.h"      // PersonalityRecord     
 #include "player.h"                 // PLAYER_INDEX, k_MAX_PLAYERS

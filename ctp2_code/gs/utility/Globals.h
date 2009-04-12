@@ -112,27 +112,25 @@ template <typename T> void clear(T * & a_Pointer)
     a_Pointer = NULL;
 }
 
-#if defined(_MSC_VER) && (_MSC_VER < 1400)
-
-/// \todo Check whether the clearContainer template works with earlier
-///       MSVC versions.
-
-#else
-
 /// Delete items from a container containing pointers
 /// \param a_Container The container to delete from
 /// \remarks The container will be cleared after its items have been deleted
 template <typename T> void clearContainer(T & a_Container)
 {
+#if defined(_MSC_VER) && (_MSC_VER >= 1400)
     for (T::iterator p = a_Container.begin(); p != a_Container.end(); ++p)
     {
         delete *p;
     }
+#else
+    for (int i = 0; i < a_Container.size(); i++) {
+        delete a_Container[i];
+    }
+#endif
 
     T().swap(a_Container);
 };
 
-#endif
 
 } // namespace allocated
 

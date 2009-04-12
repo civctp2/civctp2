@@ -51,7 +51,7 @@
 #include "c3debugstl.h"
 
 #include "civarchive.h"
-#include "goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
 
 class GoalRecord;
 class Scheduler;

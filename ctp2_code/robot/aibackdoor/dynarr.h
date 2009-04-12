@@ -45,7 +45,7 @@ template <class T> class DynamicArray;
 #include "AICause.h"
 #include "ctp2_inttypes.h"
 #include "civarchive.h"
-#include "Player.h"
+#include "player.h"
 
 template <class T> class DynamicArray 
 {   

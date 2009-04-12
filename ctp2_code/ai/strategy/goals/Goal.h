@@ -309,13 +309,15 @@ private:
     SUB_TASK_TYPE                     m_sub_task;
 };
 
+namespace std {
 template<>
-struct std::greater<Goal_ptr> : std::binary_function<Goal_ptr, Goal_ptr, bool>
+struct greater<Goal_ptr> : binary_function<Goal_ptr, Goal_ptr, bool>
 {
 	bool operator()(const Goal_ptr _X, const Goal_ptr _Y) const
 	{
 		return _X->Get_Matching_Value() > _Y->Get_Matching_Value();
 	}
 };
+}
 
 #endif

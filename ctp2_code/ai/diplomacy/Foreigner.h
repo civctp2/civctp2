@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Tribe relations handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +41,7 @@
 struct  RegardEvent;
 class   Foreigner;
 
-#include "CivArchive.h"
+#include "civarchive.h"
 #include "ctp2_inttypes.h"
 #include "dbtypes.h"
 #include "diplomattypes.h"

@@ -12,7 +12,7 @@
 
 
 #include "Globals.h"
-#include "Player.h" // PLAYER_INDEX
+#include "player.h" // PLAYER_INDEX
 
 
 class aui_Control;

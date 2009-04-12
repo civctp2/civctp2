@@ -28,7 +28,12 @@
 //
 //----------------------------------------------------------------------------
 
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 #include "y.tab.h"
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Build queue handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ class CityData;
 class UnitRecord;
 template <class T> class PointerList;
 
-#include "Player.h" // PLAYER_INDEX
+#include "player.h" // PLAYER_INDEX
 #include "Unit.h"   // Unit
 
 //----------------------------------------------------------------------------

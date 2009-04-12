@@ -95,7 +95,7 @@ enum  GAME_ACTION
 //----------------------------------------------------------------------------
 
 #include "ctp2_inttypes.h"      // sintNN, uintNN
-#include "DirectorActions.h"    // DQAction
+#include "directoractions.h"    // DQAction
 #include "MapPoint.h"           // MapPoint
 
 class ActorPath;

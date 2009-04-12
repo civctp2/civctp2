@@ -55,7 +55,7 @@ class HappyTimer;
 //----------------------------------------------------------------------------
 
 #include "HappyTracker.h"   // HAPPY_REASON, HappyTracker
-#include "Player.h"         // PLAYER_INDEX, Player
+#include "player.h"         // PLAYER_INDEX, Player
 
 class CityData; 
 class CivArchive;

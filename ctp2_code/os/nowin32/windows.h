@@ -102,6 +102,8 @@ typedef struct hinstance_t* HINSTANCE;
 typedef struct hpalette_t* HPALETTE;
 typedef struct hwnd_t* HWND;
 
+#define INVALID_HANDLE_VALUE ((HANDLE) ~0UL)
+
 /* Constants */
 #define _MAX_FNAME 256
 #define _MAX_DIR _MAX_FNAME
