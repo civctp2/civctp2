@@ -33,7 +33,7 @@
 // - Propagate PW each turn update
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 // - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin Gühmann)
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Separated the Settle event from the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 

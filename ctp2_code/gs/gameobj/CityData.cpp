@@ -504,14 +504,14 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
 	m_killList                          (NULL),
 	m_radiusNewOwner                    (0),
-    m_tilecount                         (0), 
+    m_tilecount                         (0),
 //            m_whichtile;
     m_tempGoodAdder                     (NULL),
-    m_tempGood                          (-1), 
+    m_tempGood                          (-1),
     m_tempGoodCount                     (0),
 	m_sentInefficientMessageAlready     (false),
-	m_culture							(0),  //emod
-	m_secthappy							(0) //emod
+	m_culture							(0),      //emod
+	m_secthappy							(0)       //emod
 #ifdef _DEBUG
   , m_ignore_happiness                  (false) 
 #endif
@@ -528,9 +528,9 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	} //for citystyle
 
 	for (size_t i = 0; i < POP_MAX; ++i) 
-    {
+	{
 		m_numSpecialists[i]     = 0;
-        m_specialistDBIndex[i]  = -1;
+		m_specialistDBIndex[i]  = -1;
 	}
 
 	ResetStarvationTurns();
@@ -548,7 +548,6 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_merchantsEff      = new double[g_theCitySizeDB->NumRecords()];
 	m_scientistsEff     = new double[g_theCitySizeDB->NumRecords()];
 #endif
-//	m_secthappy = 0; //emod does this initalize it? - no
 }
 
 CityData::~CityData()

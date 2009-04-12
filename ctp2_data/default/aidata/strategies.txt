@@ -3421,14 +3421,14 @@ STRATEGY_DEFENSE_LOW {
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
     DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_MEDIUM {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  3
+    DefensiveGarrisonCount  2
     RangedGarrisonCount     2
 }
 
@@ -3436,11 +3436,19 @@ STRATEGY_DEFENSE_HIGH {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  2
-    DefensiveGarrisonCount  3
-    RangedGarrisonCount     3
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_VERY_HIGH {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  2
+    DefensiveGarrisonCount  3
+    RangedGarrisonCount     2
+}
+
+STRATEGY_DEFENSE_PARANOIA {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  3

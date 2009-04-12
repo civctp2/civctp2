@@ -1415,6 +1415,26 @@ Unit Player::CreateCity(
 	sint32 virtgoldspent = 0;
 	u.CalcHappiness(virtgoldspent, FALSE);
 
+
+	const StrategyRecord & strategy = 
+		Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
+
+	sint32 offensive_garrison;
+	sint32 defensive_garrison;
+	sint32 ranged_garrison;
+	strategy.GetOffensiveGarrisonCount(offensive_garrison);
+	strategy.GetDefensiveGarrisonCount(defensive_garrison);
+	strategy.GetRangedGarrisonCount(ranged_garrison);
+
+	cityData->SetNeededGarrison(offensive_garrison + defensive_garrison + ranged_garrison);
+
+	const StrategyRecord::ForceMatch *  defense_force_match;
+	strategy.GetDefensive(defense_force_match);
+	double const threatFactor = defense_force_match->GetDefenseMatch();
+
+	double threat = MapAnalysis::GetMapAnalysis().GetThreat(m_owner, pos) * threatFactor;
+	cityData->SetNeededGarrisonStrength(threat);
+
 	if(g_network.IsHost())
 	{
 		if(cause != CAUSE_NEW_CITY_CHEAT)

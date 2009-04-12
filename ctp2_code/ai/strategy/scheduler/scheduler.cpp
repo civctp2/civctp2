@@ -1949,6 +1949,9 @@ void Scheduler::Assign_Garrison()
 		}
 	}
 
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("\n"));
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("Find armies for garrison\n"));
+
 	for(sint32 i = 0; i < cityNum; ++i)
 	{
 		Unit city = g_player[m_playerId]->GetCityFromIndex(i);
@@ -1994,7 +1997,12 @@ void Scheduler::Assign_Garrison()
 					}
 				}
 			}
+			else
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s (Not needed for city garrison)\n", agent_iter->second, agent_iter->second->Get_Army(), city.GetName()));
+			}
 		}
 	}
-}
 
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("\n"));
+}
