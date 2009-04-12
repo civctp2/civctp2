@@ -134,6 +134,8 @@
 // - Modified CheckActiveDefenders to only fire when a valid target is alive.
 //   Also removed counterbombarding and returning active defense fire after
 //   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
+//	 Fixed expelling if at least one unit on a tile cannot be expelled, then
+//	 none from that tile can be. (12-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -2343,6 +2345,12 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 	sint32 i, n = cell->GetNumUnits();
 	if(n > 0)
 	{
+		// If at least one unit on a tile cannot be expelled, then none can be. -Maq
+		for(i = 0; i < n; i++) {
+			if(!cell->AccessUnit(i).CanBeExpelled())
+				return ORDER_RESULT_ILLEGAL;
+		}
+
 		if(cell->UnitArmy()->GetOwner() == m_owner)
 			return ORDER_RESULT_ILLEGAL;
 	}
@@ -9894,6 +9902,31 @@ void ArmyData::CharacterizeArmy
 		maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
 		maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::IsStealth
+//
+// Description: True if all units are stealth
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool ArmyData::IsStealth() const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if (!m_array[i].GetDBRec()->GetVisionClassStealth())
+			return false;
+	}
+	return true;
 }
 
 void ArmyData::CharacterizeCargo

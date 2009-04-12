@@ -26,6 +26,7 @@
 //
 // - Special attack centers only if the auto center option on units and
 //   cities is set. (23-Feb-2008 Martin Gühmann)
+// - Stopped centering map on stealth units that you can't see. (12-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -63,6 +64,9 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	if(!args->GetPos(1, to)) return GEV_HD_Continue;
 
 	if(a.Num() <= 0) return GEV_HD_Continue;
+
+	if(a->IsStealth()
+		&& !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
 
 //	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(to.x, to.y);
 

@@ -55,6 +55,8 @@
 // - Move Civ flag underneath the healthbar.
 // - Unit stacking indications and special indecations are placed according
 //   their size. (9-Feb-2008 Martin Gühmann)
+// - Made the elite icon replace the veteran icon, rather than sit below it.
+//	 (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -2095,8 +2097,8 @@ void UnitActor::DrawIndicators(sint32 &x, sint32 &y, sint32 stack)
 				w = std::max<sint32>(w, iconDim.x);
 			}
 		}
-
-		if(m_unitID->GetArmy()->HasVeterans())
+		// Replace veteran icon with elite icon if an elite unit exists in army.
+		if(m_unitID->GetArmy()->HasVeterans() && !m_unitID->GetArmy()->HasElite())
 		{
 			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
 			{
@@ -2106,9 +2108,7 @@ void UnitActor::DrawIndicators(sint32 &x, sint32 &y, sint32 stack)
 				h += iconDim.y;
 				w = std::max<sint32>(w, iconDim.x);
 			}
-		}
-
-		if(m_unitID->GetArmy()->HasElite())
+		} else if(m_unitID->GetArmy()->HasElite())
 		{
 			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
 			{

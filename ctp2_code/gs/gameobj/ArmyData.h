@@ -510,6 +510,8 @@ public:
                            bool & canbombard
                           ) const;
 
+    bool IsStealth() const;
+
     void CharacterizeCargo(
                            bool & isspecial,
                            bool & isstealth,
