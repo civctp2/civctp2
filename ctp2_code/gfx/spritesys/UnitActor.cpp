@@ -57,6 +57,8 @@
 //   their size. (9-Feb-2008 Martin Gühmann)
 // - Made the elite icon replace the veteran icon, rather than sit below it.
 //	 (11-Apr-2009 Maq)
+// - Stopped the cargo icon showing for enemy transports if they're only carrying
+//	 stealth units. (13-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -2122,13 +2124,21 @@ void UnitActor::DrawIndicators(sint32 &x, sint32 &y, sint32 stack)
 
 		if(m_unitID->GetArmy()->HasCargo())
 		{
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+			// Do not draw the cargo icon if enemy army is carrying only stealth.
+			if (m_unitID->GetArmy()->HasCargoOnlyStealth()
+				&& m_playerNum != g_selected_item->GetVisiblePlayer())
+			{}
+			// Draw it in all other cases.
+			else
 			{
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
-				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
-				y2 += iconDim.y;
-				h += iconDim.y;
-				w = std::max<sint32>(w, iconDim.x);
+				if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+				{
+					g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
+					iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
+					y2 += iconDim.y;
+					h += iconDim.y;
+					w = std::max<sint32>(w, iconDim.x);
+				}
 			}
 		}
 	}

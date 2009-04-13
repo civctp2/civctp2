@@ -136,6 +136,7 @@
 //   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
 //	 Fixed expelling if at least one unit on a tile cannot be expelled, then
 //	 none from that tile can be. (12-Apr-2009 Maq)
+// - Added HasCargoOnlyStealth. (13-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -741,6 +742,47 @@ bool ArmyData::HasCargo() const
     }
 
     return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::HasCargoOnlyStealth
+//
+// Description: Test if cargo from all units in CellUnitList are only stealth
+//				units.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool true if all the cargo is only is stealth units.
+//
+// Remark(s)  : Assumes there is at least one unit with at least one cargo.
+//
+//----------------------------------------------------------------------------
+bool ArmyData::HasCargoOnlyStealth() const
+{
+    for(sint32 i = 0; i < m_nElements; ++i)
+    {
+        UnitDynamicArray const * cargo = 
+            m_array[i].AccessData()->GetCargoList();
+
+		if (cargo && cargo->Num() > 0)
+		{
+			sint32	cargoCount = cargo->Num();
+
+			for(sint32 j = 0; j < cargoCount; j++)
+			{
+				UnitRecord const * rec = m_array[i]->GetDBRec();
+				rec = cargo->Access(j)->GetDBRec();
+				if (!rec) continue;
+
+				if (!rec->GetVisionClassStealth())
+					return false;
+			}
+		}
+    }
+    return true;
 }
 
 //----------------------------------------------------------------------------

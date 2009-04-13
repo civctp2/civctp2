@@ -1081,6 +1081,7 @@ void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEven
 	Unit top;
 	GetTopUnit(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, top->GetArmy(), GEA_End);
+	Deselect(GetVisiblePlayer());
 }
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
@@ -1088,6 +1089,7 @@ void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEven
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
+	Deselect(GetVisiblePlayer());
 }
 
 void SelectedItem::SelectTradeRouteClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)

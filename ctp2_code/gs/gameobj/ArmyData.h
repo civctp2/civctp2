@@ -39,6 +39,7 @@
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - Merged finish move. (13-Aug-2008 Martin Gühmann)
+// - Added HasCargoOnlyStealth. (13-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -162,6 +163,7 @@ public:
     uint32 GetMovementType() const;
     uint32 GetCargoMovementType() const;
     bool HasCargo() const;
+    bool HasCargoOnlyStealth() const;
     bool GetCargo(sint32 &transports, sint32 &max, sint32 &empty) const;
     bool CargoCanEnter(const MapPoint &pos) const;
 
