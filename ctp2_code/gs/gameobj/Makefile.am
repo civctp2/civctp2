@@ -45,7 +45,6 @@ libgsgameobj_la_SOURCES = \
 	DiplomaticRequest.cpp \
 	DiplomaticRequestData.cpp \
 	DiplomaticRequestPool.cpp \
-	EmptyTile.cpp \
 	Events.cpp \
 	EventTracker.cpp \
 	Exclusions.cpp \
@@ -70,7 +69,6 @@ libgsgameobj_la_SOURCES = \
 	ObjPool.cpp \
 	Order.cpp \
 	Player.cpp \
-	PlayerAI.cpp \
 	PlayerEvent.cpp \
 	PlayerTurn.cpp \
 	PlayHap.cpp \

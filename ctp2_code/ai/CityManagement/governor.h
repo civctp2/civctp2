@@ -408,7 +408,7 @@ private:
 	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const;
 
 	
-	sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) const;
+	sint32 GetNeededUnitType(const CityData *city, sint32 & list_num) const;
 
 	
 	const UnitBuildListRecord * GetBuildListRecord(const StrategyRecord & strategy, const BUILD_UNIT_LIST list_type) const;

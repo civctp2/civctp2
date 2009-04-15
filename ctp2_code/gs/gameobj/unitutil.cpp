@@ -37,6 +37,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "Unit.h"
 #include "unitutil.h"
 
 #include "UnitRecord.h"

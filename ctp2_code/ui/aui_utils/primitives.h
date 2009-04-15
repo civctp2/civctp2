@@ -41,7 +41,8 @@
 class aui_Surface;
 class aui_Image;
 class Pattern;
-enum AUI_TABGROUP_ALIGNMENT;
+//enum AUI_TABGROUP_ALIGNMENT;
+#include "aui_tabgroup.h"
 
 enum PRIMITIVES_ERRCODE
 {

@@ -8,7 +8,7 @@ class ArmyManagerWindow;
 #include "MapPoint.h"
 #include "Army.h"
 #include "Unit.h"
-#include "aui_Control.h"    // aui_Control
+#include "aui_control.h"    // aui_Control
 #include "ctp2_inttypes.h"  // uint32
 #include "gstypes.h"        // k_MAX_ARMY_SIZE
 

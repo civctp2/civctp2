@@ -266,7 +266,7 @@
 #include "wonderutil.h"
 #include "World.h"
 #include "Wormhole.h"
-#include "Governor.h"
+#include "governor.h"
 
 extern C3UI                    *g_c3ui;
 extern PointerList<Player>     *g_deadPlayer;

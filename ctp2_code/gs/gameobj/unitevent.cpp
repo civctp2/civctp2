@@ -37,7 +37,7 @@
 #include "Army.h"
 #include "ArmyData.h"
 #include "Cell.h"
-#include "CellUnitList.h"
+#include "cellunitlist.h"
 #include "cityespionage.h"
 #include "director.h"                   // g_director
 #include "Events.h"
