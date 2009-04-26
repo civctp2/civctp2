@@ -83,12 +83,12 @@ struct POINT {
 };
 typedef struct POINT * LPPOINT;
 
-struct RECT {
+typedef struct tagRECT {
   sint32 left;
   sint32 top;
   sint32 right;
   sint32 bottom;
-};
+} RECT;
 
 /* Stub definitions */
 typedef struct critical_section_t {} CRITICAL_SECTION;
@@ -133,17 +133,17 @@ typedef struct hwnd_t* HWND;
 /* stub functions */
 char* _fullpath(char*, const char*, size_t);
 void _splitpath(const char*,char*,char*,char*,char*);
-void CopyRect(struct RECT *dest, struct RECT *src);
+void CopyRect(RECT *dest, RECT *src);
 uint32 GetTickCount();
 uint8 GetRValue(COLORREF c);
 uint8 GetGValue(COLORREF c);
 uint8 GetBValue(COLORREF c);
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags);
-void InflateRect(struct RECT *pr, int x, int y);
-void OffsetRect(struct RECT *pr, int x, int y);
-BOOL PtInRect(struct RECT* pr, struct POINT m);
-void SetRect(struct RECT* R, int left, int top, int right, int bottom);
-void SubtractRect(struct RECT* r, const struct RECT* a, const struct RECT* b);
+void InflateRect(RECT *pr, int x, int y);
+void OffsetRect(RECT *pr, int x, int y);
+BOOL PtInRect(RECT* pr, struct POINT m);
+void SetRect(RECT* R, int left, int top, int right, int bottom);
+void SubtractRect(RECT* r, const RECT* a, const RECT* b);
 #define lstrlen(s) strlen(s)
 #ifndef stricmp
 int stricmp(const char* s1, const char* s2);

@@ -91,7 +91,7 @@ MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 }
 
 void
-SubtractRect(struct RECT* dst, const struct RECT* r1, const struct RECT* r2)
+SubtractRect(RECT* dst, const RECT* r1, const RECT* r2)
 {
     bool xoverlap =
 	r1->left >= r2->left &&
@@ -165,7 +165,7 @@ strupr(char* str)
 }
 
 
-void CopyRect(struct RECT *dest, struct RECT *src) {
+void CopyRect(RECT *dest, RECT *src) {
 	*dest = *src;
 }
 
@@ -181,7 +181,7 @@ uint8 GetBValue(COLORREF c)
 {
 	return (c>>16) & 0xff;
 }
-void InflateRect(struct RECT *pr, int x, int y)
+void InflateRect(RECT *pr, int x, int y)
 {
 	if (!pr)
 		return;
@@ -191,7 +191,7 @@ void InflateRect(struct RECT *pr, int x, int y)
 	pr->right += x;
 	pr->top -= y;
 }
-void OffsetRect(struct RECT *pr, int x, int y)
+void OffsetRect(RECT *pr, int x, int y)
 {
 	if (!pr)
 		return;
@@ -201,7 +201,7 @@ void OffsetRect(struct RECT *pr, int x, int y)
 	pr->right += x;
 	pr->top += y;
 }
-BOOL PtInRect(struct RECT* pr, struct POINT m)
+BOOL PtInRect(RECT* pr, struct POINT m)
 {
 	if (!pr)
 		return FALSE;
@@ -209,7 +209,7 @@ BOOL PtInRect(struct RECT* pr, struct POINT m)
 	return pr->left <= m.x && m.x < pr->right && pr->top <= m.y && m.y < pr->bottom;
 }
 
-void SetRect(struct RECT* R, int left, int top, int right, int bottom)
+void SetRect(RECT* R, int left, int top, int right, int bottom)
 { 
 	R->left = left;
 	R->right = right;

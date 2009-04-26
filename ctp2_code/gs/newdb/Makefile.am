@@ -66,6 +66,7 @@ libgsnewdb_a_SOURCES = \
 	TerrainImprovementRecord.cpp \
 	TerrainRecord.cpp \
 	UnitBuildListRecord.cpp \
+	UnitpromotionRecord.cpp \
 	UnitRecord.cpp \
 	WonderBuildListRecord.cpp \
 	WonderMovieRecord.cpp \
@@ -119,6 +120,7 @@ newdb_CDBTYPES = \
 	TerrainImprovementRecord \
 	TerrainRecord \
 	UnitBuildListRecord \
+	UnitpromotionRecord \
 	UnitRecord \
 	WonderBuildListRecord \
 	WonderMovieRecord \
@@ -468,6 +470,13 @@ UnitBuildListRecord.cpp \
 UnitBuildListRecord.h: UnitBuildListRecord.stamp
 
 UnitBuildListRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+UnitpromotionRecord.cpp \
+UnitpromotionRecord.h: UnitpromotionRecord.stamp
+
+UnitpromotionRecord.stamp: $(ctp2_code)/gs/newdb/unitpromotion.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
