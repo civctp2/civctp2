@@ -31,13 +31,14 @@
 
 #include "aui.h"
 #include "aui_blitter.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
+#include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "aui_window.h"
 #include "aui_stringtable.h"
 
 #include "primitives.h"
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"                     // g_player
 #include "dynarr.h"
 #include "SelItem.h"                    // g_selected_item
@@ -168,10 +169,10 @@ void ResourceMap::InitCommon( sint32 scale)
 	
 	m_updateAction = NULL;
 
-	m_surface = new aui_DirectSurface( &errcode, 
-									   g_tiledMap->GetZoomTilePixelWidth() * ((k_MAX_CITY_RADIUS * 2) + 1),
-									   g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2),
-									   16, (g_c3ui)->DD());
+	m_surface = aui_Factory::new_Surface(errcode, 
+		g_tiledMap->GetZoomTilePixelWidth() * ((k_MAX_CITY_RADIUS * 2) + 1),
+		g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2),
+		16);
 	
 
 	Assert(m_surface);

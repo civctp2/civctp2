@@ -22,6 +22,8 @@
 // Modifications from the original Activision code:
 //
 // - Added separate counters in Sprite-derived classes to prevent crashes.
+// - Added Get*Size() methods to increase portability (_msize=windows api)
+// - Added size argument to Set*Data methods for increasing portability
 //
 //----------------------------------------------------------------------------
 
@@ -93,17 +95,21 @@ public:
 	void			DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
 						Pixel16 outlineColor, uint16 flags);
 
-	Pixel16			*GetFrameData(uint16 facing, uint16 frame) { return m_frames[facing][frame]; }
-	Pixel16			*GetMiniFrameData(uint16 facing, uint16 frame) { return m_miniframes[facing][frame]; }
+	Pixel16			*GetFrameData(uint16 facing, uint16 frame);
+	size_t			GetFrameDataSize(uint16 facing, uint16 frame);
+	Pixel16			*GetMiniFrameData(uint16 facing, uint16 frame);
+	size_t			GetMiniFrameDataSize(uint16 facing, uint16 frame);
 
-	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_frames[facing][frame] = data; }
-	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_miniframes[facing][frame] = data; }
+	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
+	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 	
-	Pixel16			*GetShadowFrameData(uint16 facing, uint16 frame) { return m_shadowFrames[facing][frame]; }
-	Pixel16			*GetMiniShadowFrameData(uint16 facing, uint16 frame) { return m_miniShadowFrames[facing][frame]; }
+	Pixel16			*GetShadowFrameData(uint16 facing, uint16 frame);
+	size_t			GetShadowFrameDataSize(uint16 facing, uint16 frame);
+	Pixel16			*GetMiniShadowFrameData(uint16 facing, uint16 frame);
+	size_t			GetMiniShadowFrameDataSize(uint16 facing, uint16 frame);
 	
-	void			SetShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_shadowFrames[facing][frame] = data; }
-	void			SetMiniShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_miniShadowFrames[facing][frame] = data; }
+	void			SetShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
+	void			SetMiniShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 
 	POINT			GetHotPoint(uint16 facing) { return m_hotPoints[facing]; }
 	POINT			*GetHotPoints(void) { return m_hotPoints; }
@@ -123,10 +129,14 @@ public:
 
 protected:
 	Pixel16			**m_frames[k_NUM_FACINGS];
+	size_t			*m_framesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniframes[k_NUM_FACINGS];
+	size_t			*m_miniframesSizes[k_NUM_FACINGS];
 	
 	Pixel16			**m_shadowFrames[k_NUM_FACINGS];
+	size_t			*m_shadowFramesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniShadowFrames[k_NUM_FACINGS];
+	size_t			*m_miniShadowFramesSizes[k_NUM_FACINGS];
 
 	uint16			m_hasShadow;
 

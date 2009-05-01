@@ -91,9 +91,27 @@ doc:
 .PHONY: all local playtest doc
 
 SRCDIRS=\
+	ctp2_code \
 	ctp2_code/ctp \
+	ctp2_code/gfx \
+	ctp2_code/gfx/gfx_utils \
+	ctp2_code/gs \
+	ctp2_code/gs/database \
+	ctp2_code/gs/dbgen \
+	ctp2_code/gs/events \
+	ctp2_code/gs/fileio \
+	ctp2_code/gs/gameobj \
+	ctp2_code/gs/newdb \
+	ctp2_code/gs/outcom \
+	ctp2_code/gs/slic \
+	ctp2_code/gs/utility \
+	ctp2_code/gs/world \
 	ctp2_code/mapgen \
-	ctp2_code/gs/dbgen
+	ctp2_code/os \
+	ctp2_code/os/nowin32 \
+	ctp2_code/sound \
+	ctp2_code/ui \
+	ctp2_code/ui/interface
 
 MRPROPER_DIRS=\
 	autom4te.cache \

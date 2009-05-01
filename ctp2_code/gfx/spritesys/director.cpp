@@ -37,7 +37,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Director.h"
+#include "director.h"
 
 #include "Action.h"
 #include "Actor.h"

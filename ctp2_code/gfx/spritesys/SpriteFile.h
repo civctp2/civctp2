@@ -197,8 +197,8 @@ public:
 
 	SPRITEFILEERR	ReadData(void *data, size_t bytes);
 
-	fpos_t			GetFilePos(void);
-	void			SetFilePos(fpos_t pos);
+	long  			GetFilePos(void);
+	void			SetFilePos(long pos);
 
 protected:
 	unsigned	m_version;			
@@ -232,6 +232,7 @@ protected:
 
 private:
 	FILE *      m_file;
+	fpos_t      m_filePos;
 	MBCHAR		m_filename[_MAX_PATH];
 };
 

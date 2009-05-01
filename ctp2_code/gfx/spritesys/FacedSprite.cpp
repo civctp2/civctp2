@@ -24,6 +24,8 @@
 // Modifications from the original Activision code:
 //
 // - Added separate counters in Sprite-derived classes to prevent crashes.
+// - Added Get*Size() methods to increase portability (_msize=windows api)
+// - Added size argument to Set*Data methods for increasing portability
 //
 //----------------------------------------------------------------------------
 
@@ -55,7 +57,9 @@ FacedSprite::FacedSprite()
 	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing)
 	{
 		m_frames[facing]        = NULL;
+		m_framesSizes[facing]   = NULL;
 		m_miniframes[facing]    = NULL;
+		m_miniframesSizes[facing] = NULL;
 	}
 	m_type = SPRITETYPE_FACED;
 }
@@ -65,15 +69,35 @@ FacedSprite::FacedSprite()
 FacedSprite::~FacedSprite()
 {
 	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing) 
-    {
+	{
 		for (size_t i = 0; i < m_facedFrameCount; ++i) 
-        {
-			delete m_frames[facing][i];
-			delete m_miniframes[facing][i];
+	        {
+			if ((m_frames[facing] != NULL) && (m_frames[facing][i] != NULL)) {
+				delete m_frames[facing][i];
+				m_frames[facing][i] = NULL;
+			}
+			if ((m_miniframes[facing] != NULL) && (m_miniframes[facing][i] != NULL)) {
+				delete m_miniframes[facing][i];
+				m_miniframes[facing][i] = NULL;
+			}
 		}
 
-		delete [] m_frames[facing];
-		delete [] m_miniframes[facing];
+		if (m_frames[facing] != NULL) {
+			delete [] m_frames[facing];
+			m_frames[facing] = NULL;
+		}
+		if (m_framesSizes[facing] != NULL) {
+			delete [] m_framesSizes[facing];
+			m_framesSizes[facing] = NULL;
+		}
+		if (m_miniframes[facing] != NULL) {
+			delete [] m_miniframes[facing];
+			m_miniframes[facing] = NULL;
+		}
+		if (m_miniframesSizes[facing] != NULL) {
+			delete [] m_miniframesSizes[facing];
+			m_miniframesSizes[facing] = NULL;
+		}
 	}
 }
 
@@ -89,6 +113,8 @@ void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 		{
 			char ext[_MAX_DIR];
 		
+			Pixel16 *   data        = NULL;
+			size_t      dataSize    = 0;
 			Pixel32 *   image       = NULL;      
 			Pixel32 *   miniimage	= NULL;
 			Pixel32 *   shadow		= NULL;
@@ -124,13 +150,15 @@ void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 				spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 		
 				
-				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height);
+				data = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &dataSize);
+				SetFrameData(facing, i, data, dataSize);
 		
 				if (shadow)
 					spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
 		
 				
-				m_miniframes[facing][i] = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1);
+				data = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1, &dataSize);
+				SetMiniFrameData(facing, i, data, dataSize);
 			}
 			else 
 			{
@@ -271,8 +299,79 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 	}
 }
 
+Pixel16 *FacedSprite::GetFrameData(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_frames[facing] != NULL);
 
+	return m_frames[facing][frame];
+}
 
+size_t FacedSprite::GetFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_framesSizes[facing] != NULL);
+#ifdef _WINDOWS
+	Assert(m_framesSizes[facing][frame] == _msize(GetFrameData(facing, frame)));
+
+	return _msize(GetFrameData(facing, frame));
+#else
+	return m_framesSizes[facing][frame];
+#endif
+}
+
+Pixel16 *FacedSprite::GetMiniFrameData(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_miniframes[facing] != NULL);
+
+	return m_miniframes[facing][frame];
+}
+
+size_t FacedSprite::GetMiniFrameDataSize(uint16 facing, uint16 frame)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_miniframesSizes[facing] != NULL);
+#ifdef _WINDOWS
+	Assert(m_miniframesSizes[facing][frame] = _msize(GetMiniFrameData(facing, frame)));
+
+	return _msize(GetMiniFrameData(facing, frame));
+#else
+	return m_miniframesSizes[facing][frame];
+#endif
+}
+
+void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_frames[facing] != NULL);
+	Assert(m_framesSizes[facing] != NULL);
+#ifdef _WINDOWS
+	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+#endif
+
+	m_frames[facing][frame] = data;
+	m_framesSizes[facing][frame] = size;
+}
+
+void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
+{
+	Assert(facing < k_NUM_FACINGS);
+	Assert(frame < m_facedFrameCount);
+	Assert(m_miniframes[facing] != NULL);
+	Assert(m_miniframesSizes[facing] != NULL);
+#ifdef _WINDOWS
+	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+#endif
+
+	m_miniframes[facing][frame] = data;
+	m_miniframesSizes[facing][frame] = size;
+}
 
 void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
@@ -482,13 +581,17 @@ void FacedSprite::AllocateFrameArrays(size_t count)
 
 	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing) 
     {
-		m_frames[facing]        = new Pixel16 * [count];
-		m_miniframes[facing]    = new Pixel16 * [count];
+		m_frames[facing]          = new Pixel16 * [count];
+		m_framesSizes[facing]     = new size_t    [count];
+		m_miniframes[facing]      = new Pixel16 * [count];
+		m_miniframesSizes[facing] = new size_t    [count];
 
         for (size_t i = 0; i < count; ++i)
         {
-            m_frames[facing][i]     = NULL;
-            m_miniframes[facing][i] = NULL;
+            m_frames[facing][i]          = NULL;
+            m_framesSizes[facing][i]     = 0;
+            m_miniframes[facing][i]      = NULL;
+            m_miniframesSizes[facing][i] = 0;
         }
 	}
 

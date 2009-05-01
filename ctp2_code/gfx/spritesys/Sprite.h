@@ -22,6 +22,8 @@
 // Modifications from the original Activision code:
 //
 // - Added separate counters in Sprite-derived classes to prevent crashes.
+// - Added Get*Size() methods to increase portability (_msize=windows api)
+// - Added size argument to Set*Data methods for increasing portability
 //
 //----------------------------------------------------------------------------
 
@@ -112,9 +114,9 @@ public:
 	
 	void			Import(size_t nframes, char **imageFiles, char **shadowFiles);
 	
-	void			ImportTIFF(uint16 index,char **imageFiles,Pixel32 **imageData);
+	void			ImportTIFF(uint16 index,char **imageFiles,Pixel32 **imageData, size_t *size = NULL);
 	
-	void			ImportTGA (uint16 index,char **imageFiles,Pixel32 **imageData);
+	void			ImportTGA (uint16 index,char **imageFiles,Pixel32 **imageData, size_t *size = NULL);
 	
 	void			Save(char const * filename);
 	void			Export(FILE *file);
@@ -154,13 +156,15 @@ public:
 	void			SetCurrentFrame(uint16 cFrame) { m_currentFrame = cFrame; };
 
 	Pixel16*		GetFrameData(uint16 frameNum);
+	size_t			GetFrameDataSize(uint16 frameNum);
 	Pixel16*		GetMiniFrameData(uint16 frameNum);
+	size_t			GetMiniFrameDataSize(uint16 frameNum);
 
 	uint16			GetFirstFrame(void) const { return m_firstFrame; }
 	void			SetFirstFrame(uint16 frame) { m_firstFrame = frame; }
 
-	void			SetFrameData(uint16 frameNum, Pixel16 *data);
-	void			SetMiniFrameData(uint16 frameNum, Pixel16 *data);
+	void			SetFrameData(uint16 frameNum, Pixel16 *data, size_t size);
+	void			SetMiniFrameData(uint16 frameNum, Pixel16 *data, size_t size);
 
 	virtual sint32	ParseFromTokens(Token *theToken);
 	virtual void	AllocateFrameArrays(size_t count);
@@ -334,7 +338,9 @@ protected:
 
 	uint16			m_numFrames;
 	Pixel16			**m_frames;
+	size_t			*m_framesSizes;
 	Pixel16			**m_miniframes;
+	size_t			*m_miniframesSizes;
 	uint16			m_firstFrame;
 	uint16			m_currentFrame;
 

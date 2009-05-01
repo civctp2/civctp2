@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Added separate counters in Sprite-derived classes to prevent crashes.
+// - Added Get*Size() methods to increase portability (_msize=windows api)
+// - Added size argument to Set*Data methods for increasing portability
 //
 //----------------------------------------------------------------------------
 
@@ -64,7 +66,9 @@ Sprite::Sprite()
 
 	m_numFrames = 0;
 	m_frames = NULL;
+	m_framesSizes = NULL;
 	m_miniframes = NULL;
+	m_miniframesSizes = NULL;
 	m_currentFrame = 0;
 	m_firstFrame = 0;
 
@@ -85,13 +89,32 @@ Sprite::Sprite()
 Sprite::~Sprite()
 {
 	for (size_t i = 0; i < m_numFrames; ++i) 
-    {
-		delete [] (m_frames[i]);
-		delete [] (m_miniframes[i]);
+	{
+		if (m_frames[i] != NULL) {
+			delete [] (m_frames[i]);
+			m_frames[i] = NULL;
+		}
+		if (m_miniframes[i] != NULL) {
+			delete [] (m_miniframes[i]);
+			m_miniframes[i] = NULL;
+		}
 	}
-
-	delete [] m_frames;
-	delete [] m_miniframes;
+	if (m_frames != NULL) {
+		delete [] m_frames;
+		m_frames = NULL;
+	}
+	if (m_framesSizes != NULL) {
+		delete [] m_framesSizes;
+		m_framesSizes = NULL;
+	}
+	if (m_miniframes != NULL) {
+		delete [] m_miniframes;
+		m_miniframes = NULL;
+	}
+	if (m_miniframesSizes != NULL) {
+		delete [] m_miniframesSizes;
+		m_miniframesSizes = NULL;
+	}
 }
 
 
@@ -119,10 +142,10 @@ void Sprite::Save(char const * filename)
 
 
 
-void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
+void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData, size_t *size)
 {
 		
-		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height);
+		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height, size);
 }
 #if 0
 		
@@ -142,15 +165,17 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
 				spriteutils_CreateQuarterSize((Pixel32 *)shadowTif, m_width, m_height, (Pixel32 **)&minishadow, FALSE);
 			}
 
-			
-			Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, (Pixel32 *)shadowTif, m_width, m_height);
-			if (frame) 
-				m_frames[index] = frame;
+			size_t size;
+			Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, (Pixel32 *)shadowTif, m_width, m_height, &size);
+			if (frame) {
+				SetFrameData(index, frame, size);
+			}
 
 			
-			Pixel16	*miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, (Pixel32 *)minishadow, m_width >> 1, m_height >> 1);
-			if (miniframe) 
-				m_miniframes[index] = miniframe;
+			Pixel16	*miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, (Pixel32 *)minishadow, m_width >> 1, m_height >> 1, &size);
+			if (miniframe) {
+				SetMiniFrameData(index, miniframe, size);
+			}
 
 			if (shadowTif)  free (shadowTif);
 			if (minishadow) free (minishadow);
@@ -168,7 +193,7 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 
 
-void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
+void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData, size_t *size)
 {
 	int		bpp; 
 	int     w,h;
@@ -193,6 +218,8 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 	}
 	
 	*imageData = new Pixel32[w*h];
+	if (size)
+		*size = w * h * sizeof(Pixel32);
 
 	Load_TGA_File_Simple(imageFiles[index],(unsigned char *)*imageData,w*sizeof(Pixel32),w,h);
 
@@ -211,34 +238,53 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 {
 	m_numFrames = static_cast<uint16>(nframes);
 
-    delete [] m_frames;
-    m_frames = new Pixel16*[m_numFrames];
+	if (m_frames) {
+		delete [] m_frames;
+	}
+	m_frames = new Pixel16*[m_numFrames];
+	if (m_framesSizes) {
+		delete [] m_framesSizes;
+	}
+	m_framesSizes = new size_t[m_numFrames];
 
-	delete [] m_miniframes;
+	if (m_miniframes) {
+		delete [] m_miniframes;
+	}
 	m_miniframes = new Pixel16*[m_numFrames];
+	if (m_miniframesSizes) {
+		delete [] m_miniframesSizes;
+	}
+	m_miniframesSizes = new size_t[m_numFrames];
 
 	Pixel32 *image,*miniimage;
+	size_t   imageSize, miniimageSize;
 	Pixel32 *shadow,*minishadow;
+	size_t   shadowSize, minishadowSize;
 
 	
 	for (uint16 i=0; i<m_numFrames; i++) 
 	{
 		char ext[_MAX_DIR];
 
-		
-		image		= NULL;      
+		Pixel16 *data   = NULL;
+		size_t dataSize = 0;
+		image		= NULL;
+		imageSize       = 0;
 		miniimage	= NULL;
+		miniimageSize   = 0;
 		shadow		= NULL;
+		shadowSize      = 0;
 		minishadow	= NULL;
+		minishadowSize  = 0;
 
 		
 		_splitpath(imageFiles[i],NULL,NULL,NULL,ext);
 
 		if (strstr(strupr(ext),"TIF"))
-			ImportTIFF(i,imageFiles,&image);
+			ImportTIFF(i,imageFiles,&image,&imageSize);
 		else
 			if (strstr(strupr(ext),"TGA"))
-				ImportTGA(i,imageFiles,&image);
+				ImportTGA(i,imageFiles,&image, &imageSize);
 			else
 			{
 				printf("Unknown image file \"%s\"\n",imageFiles[i]);
@@ -249,10 +295,10 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 		_splitpath(shadowFiles[i],NULL,NULL,NULL,ext);
 
 		if (strstr(strupr(ext),"TIF"))
-			ImportTIFF(i,shadowFiles,&shadow);
+			ImportTIFF(i,shadowFiles,&shadow, &shadowSize);
 		else
 			if (strstr(strupr(ext),"TGA"))
-				ImportTGA(i,shadowFiles,&shadow);
+				ImportTGA(i,shadowFiles,&shadow, &shadowSize);
 
 		
 		if (image)
@@ -295,13 +341,15 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 			spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 
 			
-			m_frames[i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height);
+			data = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &dataSize);
+			SetFrameData(i, data, dataSize);
 
 			if (shadow)
 				spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
 
 			
-			m_miniframes[i] = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1);
+			data = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1, &dataSize);
+			SetMiniFrameData(i, data, dataSize);
 		}
 
 		
@@ -702,7 +750,22 @@ Pixel16 *Sprite::GetFrameData(uint16 frameNum)
 	return m_frames[frameNum];
 }
 
+size_t Sprite::GetFrameDataSize(uint16 frameNum)
+{
+	Assert(frameNum < m_numFrames);
+	if (frameNum >= m_numFrames) return 0;
 
+	Assert(m_framesSizes != NULL);
+	if (m_framesSizes == NULL) return 0;
+
+#ifdef _WINDOWS
+	Assert(m_framesSizes[frameNum] == _msize(GetFrameData(frameNum)));
+
+	return _msize(GetFrameData(frameNum));
+#else
+	return m_framesSizes[frameNum];
+#endif
+}
 
 Pixel16 *Sprite::GetMiniFrameData(uint16 frameNum)
 {
@@ -715,10 +778,25 @@ Pixel16 *Sprite::GetMiniFrameData(uint16 frameNum)
 	return m_miniframes[frameNum];
 }
 
+size_t Sprite::GetMiniFrameDataSize(uint16 frameNum)
+{
+	Assert(frameNum < m_numFrames);
+	if (frameNum >= m_numFrames) return NULL;
+
+	Assert(m_miniframesSizes != NULL);
+	if (m_miniframesSizes == NULL) return 0;
+
+#ifdef _WINDOWS
+	Assert(m_miniframesSizes[frameNum] == _msize(GetMiniFrameData(frameNum)));
+
+	return _msize(GetMiniFrameData(frameNum));
+#else
+	return m_miniframesSizes[frameNum];
+#endif
+}
 
 
-
-void Sprite::SetFrameData(uint16 frameNum, Pixel16 *data)
+void Sprite::SetFrameData(uint16 frameNum, Pixel16 *data, size_t size)
 {
 	Assert(data != NULL);
 	if (data == NULL) return;
@@ -728,12 +806,19 @@ void Sprite::SetFrameData(uint16 frameNum, Pixel16 *data)
 	if (m_frames == NULL) return;
 
 	m_frames[frameNum] = data;
+
+	Assert(m_framesSizes != NULL);
+	if (m_framesSizes == NULL) return;
+#ifdef _WINDOWS
+	Assert(size == _msize(data));
+#endif
+	m_framesSizes[frameNum] = size;
 }
 
 
 
 
-void Sprite::SetMiniFrameData(uint16 frameNum, Pixel16 *data)
+void Sprite::SetMiniFrameData(uint16 frameNum, Pixel16 *data, size_t size)
 {
 	Assert(data != NULL);
 	if (data == NULL) return;
@@ -743,6 +828,13 @@ void Sprite::SetMiniFrameData(uint16 frameNum, Pixel16 *data)
 	if (m_miniframes == NULL) return;
 
 	m_miniframes[frameNum] = data;
+
+	Assert(m_miniframesSizes != NULL);
+	if (m_miniframesSizes == NULL) return;
+#ifdef _WINDOWS
+	Assert(size == _msize(data));
+#endif
+	m_miniframesSizes[frameNum] = size;
 }
 
 
@@ -795,10 +887,13 @@ sint32 Sprite::ParseFromTokens(Token *theToken)
 void Sprite::AllocateFrameArrays(size_t count)
 {
     Assert(!m_frames && !m_miniframes);
+    Assert(!m_framesSizes && !m_miniframesSizes);
 
     m_numFrames     = static_cast<uint16>(count);
 	m_frames        = new Pixel16*[m_numFrames];
+	m_framesSizes   = new size_t[m_numFrames];
 	m_miniframes    = new Pixel16*[m_numFrames];
+	m_miniframesSizes = new size_t[m_numFrames];
 }
 
 

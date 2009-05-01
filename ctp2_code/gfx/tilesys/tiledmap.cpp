@@ -62,7 +62,8 @@
 #include "ArmyData.h"
 #include "aui.h"
 #include "aui_blitter.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
+#include "aui_Factory.h"
 #include "aui_dirtylist.h"
 #include "aui_stringtable.h"
 #include "background.h"
@@ -294,7 +295,7 @@ sint32 TiledMap::Initialize(RECT *viewRect)
 	sint32			h = viewRect->bottom - viewRect->top;
 	AUI_ERRCODE		errcode;
 
-	m_mapSurface = new aui_DirectSurface( &errcode, w, h, 16, (g_c3ui)->DD() );
+	m_mapSurface = aui_Factory::new_Surface(errcode, w, h, 16);
 	Assert(m_mapSurface);
 	if (!m_mapSurface) return AUI_ERRCODE_MEMALLOCFAILED;
 
