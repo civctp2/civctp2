@@ -166,5 +166,13 @@ AUI_ERRCODE aui_SDLSurface::Unlock( LPVOID buffer )
 	return errcode;
 }
 
+AUI_ERRCODE aui_SDLSurface::Blank(const uint32 &color)
+{
+	int errcode = SDL_FillRect(m_lpdds, NULL, color);
+	if (errcode == 0)
+		return AUI_ERRCODE_OK;
+
+	return AUI_ERRCODE_BLTFAILED;	
+}
 
 #endif

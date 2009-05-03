@@ -140,7 +140,9 @@ void		c3files_StripSpaces(MBCHAR *s);
 
 
 bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
+#ifdef _WIN32
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
+#endif
 
 
 DriveIdType c3files_GetCtpCdId(void);

@@ -72,6 +72,7 @@ public:
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 
+	virtual AUI_ERRCODE Blank(const uint32 &color);
 	
 	LPDIRECTDRAWSURFACE	DDS( void ) const { return m_lpdds; }
 	BOOL				IsDCGot( void ) const { return m_dcIsGot; }
@@ -93,6 +94,7 @@ protected:
 	LPDIRECTDRAWSURFACE	m_lpdds;	
 };
 
+typedef aui_DirectSurface aui_NativeSurface;
 
 #endif 
 

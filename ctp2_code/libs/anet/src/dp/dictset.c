@@ -65,7 +65,7 @@ MSVC's warning level is set to 4.
 
 #include <assert.h>
 #include <limits.h>
-#ifdef __MWERKS__
+#if defined(__MWERKS__) || defined(__GNUC__)
     #include <string.h>
 #else
     #include <malloc.h>

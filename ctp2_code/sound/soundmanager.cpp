@@ -47,6 +47,7 @@
 #include "c3files.h"
 #include "PlayListDB.h"
 #include "gamesounds.h"
+#include <iostream>
 #include <cctype>
 
 extern HWND			gHwnd;
@@ -1012,7 +1013,13 @@ void SoundManager::StupidPlaySound(const sint32 &soundID)
 		fullPath[0] = 0;
 
 		g_civPaths->FindFile(C3DIR_SOUNDS, soundValue, fullPath);
-		PlaySound(fullPath, NULL, (SND_ASYNC | SND_FILENAME | SND_NOWAIT)); 
+#ifndef USE_SDL
+		PlaySound(fullPath, NULL, (SND_ASYNC | SND_FILENAME | SND_NOWAIT));
+#else
+		std::cerr << "SoundManager::StupidPlaySound("
+		          << soundID 
+		          << ") called." << std::endl;
+#endif
 	}
 }
 

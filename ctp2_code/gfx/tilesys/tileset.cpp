@@ -843,13 +843,13 @@ void TileSet::QuickLoadMapped(void)
 						0);
 #else
 	struct stat st;
-	int rc = stat(filename, &st);
+	int rc = stat(path, &st);
 	if (0 != rc) {
 		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
 		return;
 	}
 	m_MMapSize = st.st_size;
-	m_fd = open(filename, O_RDONLY);
+	m_fd = open(path, O_RDONLY);
 	if (m_fd < 0) {
 		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
 		return;

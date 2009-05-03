@@ -17,6 +17,8 @@
 #include "aui.h"
 #include "aui_blitter.h"
 #include "aui_directsurface.h"
+#include "aui_sdlsurface.h"
+#include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "aui_window.h"
 #include "aui_stringtable.h"
@@ -169,7 +171,7 @@ void WorkMap::InitCommon( sint32 scale)
 	}
 	m_numWorkers = 0;
 
-	m_surface = new aui_DirectSurface( &errcode, m_width, m_height, 16, (g_c3ui)->DD() );
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( m_surface != NULL );
 	if ( !m_surface ) return;
 

@@ -70,6 +70,7 @@
 
 #include "aui.h"
 #include "aui_directsurface.h"
+#include "aui_sdlsurface.h"
 #include "aui_bitmapfont.h"
 #include "pixelutils.h"
 #include "primitives.h"
@@ -928,21 +929,21 @@ void TiledMap::DrawPath(Path *path)
 
 sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 {
-	DDBLTFX ddbltfx;
-	ddbltfx.dwSize = sizeof(ddbltfx);
-	ddbltfx.dwFillColor = 0;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	aui_NativeSurface * nativeSurface = NULL;
 
 	if (!surface) surface = m_surface;
 
-	
-	LPDIRECTDRAWSURFACE	lpdds = ((aui_DirectSurface *)surface)->DDS();
-	
-	
-	AUI_ERRCODE errcode = static_cast<AUI_ERRCODE>
-        (lpdds->Blt(NULL,NULL,NULL,DDBLT_COLORFILL,&ddbltfx));
+	nativeSurface = (aui_NativeSurface *) surface;
+
+	if (!nativeSurface) {
+		errcode = AUI_ERRCODE_BLTFAILED;
+	} else {
+		errcode = nativeSurface->Blank(0);
+	}
 
 	Assert(errcode == AUI_ERRCODE_OK);
-	return (AUI_ERRCODE_OK == errcode) ? AUI_ERRCODE_OK : AUI_ERRCODE_BLTFAILED;
+	return errcode;
 }
 
 sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y) //EMOD this is for unexplored? could add bracket like icons that make it more like civ3

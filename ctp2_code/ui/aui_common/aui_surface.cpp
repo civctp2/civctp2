@@ -233,11 +233,15 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 
 
 		case AUI_SURFACE_PIXELFORMAT_565:
-			
+#ifdef __AUI_USE_DIRECTX__
 			return SetChromaKey(	((r & 0xF8) << 8) |
 									((g & 0xF8) << 3) |
 									((b & 0xF8) >> 3));
-
+#else
+			return SetChromaKey(	((r & 0xF8) << 8) |
+						((g & 0xFC) << 3) | //pixbug FC
+						((g & 0xF8) >> 3));
+#endif
 
 
 
@@ -370,9 +374,15 @@ AUI_ERRCODE aui_Surface::BlankRGB(const uint8 &red, const uint8 &green, const ui
 		              ((green & 0xF8) << 2) |
 		              ((blue & 0xF8) >> 3));
 	case AUI_SURFACE_PIXELFORMAT_565:
+#ifdef __AUI_USE_DIRECTX__
 		return Blank( ((red & 0xF8) << 8) |
 		              ((green & 0xF8) << 3) |
 		              ((blue & 0xF8) >> 3));
+#else
+		return Blank( ((red & 0xF8) << 8) |
+		              ((green & 0xFC) << 3) | //pixbug FC
+		              ((blue & 0xF8) >> 3));
+#endif
 	default:
 		Assert( FALSE );
 		break;

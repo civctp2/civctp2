@@ -49,6 +49,7 @@ public:
 
 
         virtual BOOL IsOK( void ) const;
+	virtual AUI_ERRCODE Blank(const uint32 &color);
 
 	static uint32 m_SDLSurfaceClassId;
 
@@ -58,6 +59,7 @@ protected:
 	SDL_Surface* m_lpdds;
 };
 
+typedef aui_SDLSurface aui_NativeSurface;
 
 #endif // defined(__AUI_USE_SDL__)
 

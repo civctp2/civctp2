@@ -36,7 +36,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -91,7 +91,7 @@ private:
 	sint32			m_soundID;
 	sint32			m_volume;
 	void			*m_dataptr;
-    sint32          m_datasize;
+    size_t          m_datasize;
 };
 
 #endif

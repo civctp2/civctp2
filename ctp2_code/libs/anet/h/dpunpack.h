@@ -41,12 +41,4 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma pack(pop)
 
-#elif defined(__GNUC__)     /* GCC */
-
-#if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1))
-#pragma pack(pop)
-#else
-/* Before 4.1, you had to repeat packing for each member - see the PACK macro */
-#endif /* GCC >= 4.1 */
-
 #endif

@@ -366,4 +366,18 @@ AUI_ERRCODE aui_DirectSurface::ReleaseDC( HDC hdc )
 }
 
 
+AUI_ERRCODE aui_DirectSurface::Blank(const uint32 &color)
+{
+	DDBLTFX ddbltfx;
+	ddbltfx.dwSize = sizeof(ddbltfx);
+	ddbltfx.dwFillColor = color;
+
+        AUI_ERRCODE errcode = static_cast<AUI_ERRCODE>
+        (m_lpdds->Blt(NULL,NULL,NULL,DDBLT_COLORFILL,&ddbltfx));
+
+        Assert(errcode == AUI_ERRCODE_OK);
+        return (AUI_ERRCODE_OK == errcode) ? AUI_ERRCODE_OK : AUI_ERRCODE_BLTFAILED;
+}
+
+
 #endif 

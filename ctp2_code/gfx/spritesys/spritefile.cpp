@@ -2243,7 +2243,7 @@ long SpriteFile::GetFilePos(void)
 	Assert(err == 0);
 
 #ifdef WIN32
-	return m_filePos;
+	return static_cast<long>(m_filePos);
 #elif defined(LINUX)
 	return m_filePos.__pos;
 #endif

@@ -45,6 +45,9 @@
 #include "soundmanager.h"
 #include "tracklen.h"
 
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
@@ -54,20 +57,35 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
+#ifdef LINUX
+#include <linux/fs.h>
+#include <linux/iso_fs.h>
+#include <errno.h>
+#include <dirent.h>
+#endif
 
 extern C3UI *       g_c3ui;
 
 namespace
 {
+#ifdef _WIN32 // #ifndef USE_SDL
     DriveIdType const   DRIVE_FIRST         = 'A';
     DriveIdType const   DRIVE_LAST          = 'Z';
     DriveIdType const   DRIVE_UNDETERMINED  = '\0';
     size_t const        DRIVE_COUNT         = 1 + (DRIVE_LAST - DRIVE_FIRST);
+#else
+    DriveIdType const   DRIVE_FIRST         = 0;
+    DriveIdType         DRIVE_LAST          = -1;
+    DriveIdType const   DRIVE_UNDETERMINED  = -1;
+    size_t              DRIVE_COUNT         = 0;
+#endif
     
     size_t const        VOLUME_NAME_SIZE    = 32;
 
     bool                g_hasCD             = false;
+#ifdef _WIN32 // #ifndef USE_SDL
     bool                IsCD[DRIVE_COUNT];
+#endif
     MBCHAR              VolumeName[VOLUME_NAME_SIZE];
     DriveIdType         WhichCD             = DRIVE_UNDETERMINED;
 
@@ -284,7 +302,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 
 bool c3files_PathIsValid(MBCHAR *path)
 {
-#if defined(WIN32)
+#if defined(_WIN32)
 	struct _stat tmpstat;
 	return !_stat(path, &tmpstat);
 #else
@@ -295,11 +313,11 @@ bool c3files_PathIsValid(MBCHAR *path)
 
 bool c3files_CreateDirectory(MBCHAR *path)
 {
-#if defined(WIN32)
+#if defined(_WIN32)
 	return CreateDirectory(path, NULL) != FALSE; // BOOL to bool conversion
 #else
 	mode_t mask = 0777;
-	return mkdir(path, mask);
+	return mkdir(path, mask) == 0;
 #endif
 }
 
@@ -335,11 +353,14 @@ void c3files_StripSpaces(MBCHAR * s)
 
 bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
 {
+#ifdef _WIN32
 	MBCHAR strbuf[256];
+#endif
 	MBCHAR path[_MAX_PATH];
 
 	g_civPaths->GetSavePath(dirID, path);
-	
+
+#ifdef _WIN32	
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
 		
@@ -362,12 +383,37 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 	}
 
 	FindClose(lpFileList);
+#elif defined(LINUX)
+        DIR *dir = opendir(path);
+	if (!dir)
+		return FALSE;
+	struct dirent *dent = NULL;
+	
+	while ((dent = readdir(dir)))
+	{
+                char *p = strrchr(dent->d_name, '.');
+		if (NULL == p) {
+			continue;
+		}
+		if (1 == strlen(p)) {
+			continue;
+		}
+                p++;
+                if (ext != NULL && 0 != strcasecmp(p, ext)) {
+			continue;
+		}
+		MBCHAR *lpFileName = new char[NAME_MAX];
+		strcpy(lpFileName, dent->d_name);
+		list->AddTail(lpFileName);
+	}
+
+	closedir(dir);
+#endif
 
 	return true;
 }
 
-
-
+#ifdef _WIN32
 bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
 {
 	MBCHAR strbuf[256];
@@ -404,6 +450,7 @@ bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND
 
 	return true;
 }
+#endif // _WIN32
 
 bool c3files_HasLegalCD()
 {
@@ -424,7 +471,8 @@ bool c3files_HasLegalCD()
 		}
 
 		if (!success) 
-        {
+		{
+#ifdef _WIN32
 			int const rval = MessageBox
                                 (g_c3ui ? g_c3ui->TheHWND() : NULL,
 			                     appstrings_GetString(APPSTR_INSERTCDROM),
@@ -438,9 +486,17 @@ bool c3files_HasLegalCD()
 
 			if (IDCANCEL == rval) 
             {
+#else
+	                c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
+					     appstrings_GetString(APPSTR_NEEDCDROM));
+#endif
+				
+
                 // Do not annoy the user with more messages after cancelling
 				exit(-1);
+#ifdef _WIN32
 			}
+#endif
 
             if (g_c3ui)
             {
@@ -493,6 +549,7 @@ namespace
 //----------------------------------------------------------------------------
 void c3files_GetCDDrives(void)
 {
+#ifdef _WIN32 // #ifndef USE_SDL
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 
@@ -510,6 +567,16 @@ void c3files_GetCDDrives(void)
             IsCD[i]         = false;
         }
 	}
+#else
+    int CDCnt = SDL_CDNumDrives();
+    Assert(CDCnt >= 0);
+    if (CDCnt < 0) {
+        DRIVE_COUNT = 0;
+    } else {
+        DRIVE_COUNT = CDCnt;
+    }
+    DRIVE_LAST = DRIVE_COUNT - 1;
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -529,6 +596,7 @@ void c3files_GetCDDrives(void)
 //----------------------------------------------------------------------------
 MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 {
+#ifdef WIN32
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 	drivepath[0] = id;
@@ -551,6 +619,57 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
     {
 		return VolumeName;
 	}
+#elif defined(LINUX)
+	/// \todo Add code to determine beginsector of iso_primary_sector
+	/// On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
+	const char *cd_dev = SDL_CDName(id);
+	FILE *cd = fopen(cd_dev, "rb");
+        int lerrno= errno;
+	if (cd == NULL) {
+		fprintf(stderr, "%s\n", strerror(lerrno));
+		return NULL;
+	}
+	int rc = fseek(cd, 0x8000, SEEK_SET);
+        lerrno= errno;
+	if (rc != 0) {
+		fprintf(stderr, "%s\n", strerror(lerrno));
+		fclose(cd);
+		return NULL;
+	}
+	struct iso_primary_descriptor ipd;
+	memset(&ipd, 0, sizeof(ipd));
+	size_t s = fread(&ipd, 1, sizeof(ipd), cd);
+        lerrno= errno;
+	if (s != sizeof(ipd)) {
+		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
+		        strerror(lerrno));
+		fclose(cd);
+		return NULL;
+	}
+	unsigned int i = 0;
+	s = std::min(sizeof(ipd.volume_id), sizeof(VolumeName));
+	assert(i < s);
+	while (i < s) {
+		if ('\0' == ipd.volume_id[i]) {
+			VolumeName[i] = '\0';
+			return VolumeName;
+		}
+		if ((!isalnum(ipd.volume_id[i])) && (!isspace(ipd.volume_id[i]))) {
+			return NULL;
+		}
+		VolumeName[i] = ipd.volume_id[i];
+		i++;
+	}
+	i--;
+	// Win32 Compat: GetVolumeInformation does not return ending spaces
+	while ((i > 0) && isspace(VolumeName[i])) {
+		i--;
+	}
+	if (isspace(VolumeName[i+1]))
+		VolumeName[i+1] = '\0';
+
+	return VolumeName;
+#endif
 
 	return NULL;
 }
@@ -574,33 +693,36 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 //----------------------------------------------------------------------------
 bool c3files_FindCDByName(MBCHAR const * name)
 {
-	WhichCD = DRIVE_UNDETERMINED;
-	g_hasCD = false;
-      Assert(name);
+    WhichCD = DRIVE_UNDETERMINED;
+    g_hasCD = false;
+    Assert(name);
 
-	for (size_t i = 0; (i < DRIVE_COUNT) && !g_hasCD; ++i)
+    for (DriveIdType i = DRIVE_FIRST; (i <= DRIVE_LAST) && !g_hasCD; ++i)
     {
-		if (IsCD[i])
-		{
-			MBCHAR const *  cdName  = c3files_GetVolumeName
-                                        (static_cast<MBCHAR>(i + DRIVE_FIRST));
+#ifdef _WIN32 // #ifndef USE_SDL
+        if (IsCD[static_cast<int>(i - DRIVE_FIRST)])
+	{
+#endif
+	    MBCHAR const *  cdName  = c3files_GetVolumeName(i);
 
-			if (cdName)
-            {
+	    if (cdName)
+	    {
                 size_t const checkLength = strlen(cdName);
 
                 if ((checkLength == strlen(name)) &&
                     !strnicmp(cdName, name, checkLength)
                    )
-			    {
-				    WhichCD = static_cast<MBCHAR>(i + DRIVE_FIRST);
-				    g_hasCD = true;
+		{
+		    WhichCD = i;
+		    g_hasCD = true;
                 }
-			}
-		}
+	    }
+#ifdef _WIN32 // #ifndef USE_SDL
+	}
+#endif
     }
-
-	return g_hasCD || !g_theProfileDB->IsRequireCD();
+    
+    return g_hasCD || !g_theProfileDB->IsRequireCD();
 }
 
 } // local namespace
