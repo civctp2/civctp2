@@ -153,7 +153,46 @@ STDEHANDLER(CaptureCityEvent)
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 
-			/// ToDo: Add a way for an AI to free the slaves:
+			// The AI frees slaves if it has no slaves or any units that can catch slaves
+			if(g_player[newOwner]->IsRobot())
+			{
+				bool freeSlaves = true;
+
+				sint32 i;
+
+				for(i = 0; i < g_player[newOwner]->m_all_cities->Num(); i++)
+				{
+					Unit newOwnerCity = g_player[newOwner]->GetCityFromIndex(i);
+
+					if(newOwnerCity != city && newOwnerCity.AccessData()->CountSlaves() > 0)
+					{
+						freeSlaves = false;
+						break;
+					}
+				}
+
+				if(freeSlaves)
+				{
+					for(i = 0; i < g_player[newOwner]->m_all_units->Num(); i++)
+					{
+						const UnitRecord *rec = g_player[newOwner]->m_all_units->Access(i).GetDBRec();
+						if
+						  (
+						       rec->HasSlaveRaids()
+						    || rec->HasSettlerSlaveRaids()
+						  )
+						{
+							freeSlaves = false;
+							break;
+						}
+					}
+				}
+
+				if(freeSlaves)
+				{
+					city->FreeSlaves();
+				}
+			}
 		}
 
 		if (

@@ -810,7 +810,7 @@ void Sprite::SetFrameData(uint16 frameNum, Pixel16 *data, size_t size)
 	Assert(m_framesSizes != NULL);
 	if (m_framesSizes == NULL) return;
 #ifdef _WINDOWS
-	Assert(size == _msize(data));
+//	Assert(size == _msize(data));
 #endif
 	m_framesSizes[frameNum] = size;
 }
@@ -832,7 +832,7 @@ void Sprite::SetMiniFrameData(uint16 frameNum, Pixel16 *data, size_t size)
 	Assert(m_miniframesSizes != NULL);
 	if (m_miniframesSizes == NULL) return;
 #ifdef _WINDOWS
-	Assert(size == _msize(data));
+//	Assert(size == _msize(data));
 #endif
 	m_miniframesSizes[frameNum] = size;
 }

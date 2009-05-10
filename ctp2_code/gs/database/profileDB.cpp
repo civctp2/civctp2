@@ -172,7 +172,7 @@ ProfileDB::ProfileDB()
     m_unitCompleteMessages              (FALSE),
     m_nonContinuousUnitCompleteMessages (FALSE),
     m_debugSlic                         (FALSE),
-    m_debugSlicEvents                   (TRUE),
+    m_debugSlicEvents                   (FALSE),
     m_dontKillMessages                  (FALSE),
     m_aiPopCheat                        (TRUE),
     m_showCityNames                     (TRUE),
@@ -254,8 +254,8 @@ ProfileDB::ProfileDB()
     m_newcombat                         (FALSE),
     m_noGoodyHuts                       (FALSE),
     m_randomCustomMap                   (FALSE),
-	m_spStartingAge						(0),
-	m_spEndingAge						(0),
+    m_spStartingAge                     (0),
+    m_spEndingAge                       (-1),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)

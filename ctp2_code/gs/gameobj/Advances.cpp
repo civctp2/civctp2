@@ -492,17 +492,29 @@ void Advances::ResetCanResearch(sint32 justGot)
 			
 			
 			
-			if(g_network.IsActive() && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge()) {
+			if
+			  (
+			       g_network.IsActive()
+			    && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge()
+			  )
+			{
 				canResearch = FALSE;
-
-			} else if (!g_network.IsActive() && rec->GetAgeIndex() > g_theProfileDB->GetSPEndingAge()) {
+			}
+			else if
+			  (
+			      !g_network.IsActive()
+			    && g_theProfileDB->GetSPEndingAge() >= 0
+			    && rec->GetAgeIndex() > g_theProfileDB->GetSPEndingAge()
+			  )
+			{
 				canResearch = FALSE;
-
-			} else if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, rec->GetIndex())) {
+			}
+			else if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, rec->GetIndex()))
+			{
 				canResearch = FALSE;
-
-			} else {
-				
+			}
+			else
+			{
 				for(sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) {
 					if(rec->GetIndex() == rec->GetPrerequisitesIndex(prereq)) {
 						canResearch = FALSE;

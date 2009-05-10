@@ -352,7 +352,7 @@ void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_
 	Assert(m_frames[facing] != NULL);
 	Assert(m_framesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+//	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 
 	m_frames[facing][frame] = data;
@@ -366,7 +366,7 @@ void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, s
 	Assert(m_miniframes[facing] != NULL);
 	Assert(m_miniframesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+//	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 
 	m_miniframes[facing][frame] = data;

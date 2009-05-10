@@ -8260,11 +8260,13 @@ void Player::Emancipate()
 {
 	sint32 i, n = m_all_cities->Num();
 	sint32 numFreed = 0;
-	for(i = 0; i < n; i++) {
+	for(i = 0; i < n; i++)
+	{
 		numFreed = m_all_cities->Access(i).FreeSlaves();
 		m_all_cities->Access(i).GetData()->GetCityData()->
 			GetBuildQueue()->RemoveIllegalItems();
-		if(numFreed > 0) {
+		if(numFreed > 0)
+		{
 			m_all_cities->Access(i).AccessData()->GetCityData()->GetHappy()->AddTimer(
 				g_theConstDB->Get(0)->GetEmancipationUnhappinessTurns(),
 				g_theConstDB->Get(0)->GetEmancipationUnhappinessAmount(),
@@ -8272,10 +8274,16 @@ void Player::Emancipate()
 		}
 	}
 
-	for(i = m_all_units->Num() - 1; i >= 0; i--) {
+	for(i = m_all_units->Num() - 1; i >= 0; i--)
+	{
 		const UnitRecord *rec = m_all_units->Access(i).GetDBRec();
-		if(rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids() ||
-		   rec->HasSlaveUprising()) {
+		if
+		  (
+		       rec->HasSlaveRaids() 
+		    || rec->HasSettlerSlaveRaids()
+		    || rec->HasSlaveUprising()
+		  )
+		{
 			m_all_units->Access(i).Kill(CAUSE_REMOVE_ARMY_EMANCIPATION, -1);
 		}
 	}

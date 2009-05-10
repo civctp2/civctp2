@@ -622,8 +622,8 @@ public:
     void SetNewCombat(BOOL on)                          { m_newcombat = on; }
     void SetNoGoodyHuts(BOOL on)                        { m_noGoodyHuts = on; }
     void SetRandomCustomMap(BOOL on)                    { m_randomCustomMap = on; }
-    void SetSPStartingAge(sint32 x)						{ m_spStartingAge = x; }
-    void SetSPEndingAge(sint32 x)						{ m_spEndingAge = x; }
+    void SetSPStartingAge(sint32 x)                     { m_spStartingAge = x; }
+    void SetSPEndingAge(sint32 x)                       { m_spEndingAge = x; }
 
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
@@ -877,8 +877,8 @@ public:
     BOOL    IsNewCombat()                       { return m_newcombat; }
     BOOL    IsNoGoodyHuts()                     { return m_noGoodyHuts; }
     BOOL    IsRandomCustomMap()                 { return m_randomCustomMap; }
-    sint32  GetSPStartingAge() const			{ return m_spStartingAge; }
-    sint32  GetSPEndingAge() const				{ return m_spEndingAge; }
+    sint32  GetSPStartingAge() const            { return m_spStartingAge; }
+    sint32  GetSPEndingAge() const              { return m_spEndingAge; }
 
 };
 

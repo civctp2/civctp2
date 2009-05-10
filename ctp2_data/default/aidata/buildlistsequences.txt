@@ -262,8 +262,8 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
-  BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
+  BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
@@ -295,9 +295,9 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
 // the same build list sequence are not allowed.
 BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { GarrisonUnitBuildList }
-  BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
+  BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
