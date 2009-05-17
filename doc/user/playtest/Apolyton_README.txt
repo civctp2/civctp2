@@ -29,15 +29,15 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?threadid=172035 "PROJECT: Playtest (Thread No. 6)"
+http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 981 (17-May-2009)"
 
 For further reading here are the previous playtest threads:
-http://apolyton.net/forums/showthread.php?threadid=103817 "PROJECT: Playtest"
-http://apolyton.net/forums/showthread.php?threadid=115144 "PROJECT: Playtest II"
-http://apolyton.net/forums/showthread.php?threadid=127059 "PROJECT: Playtest Thread III"
-http://apolyton.net/forums/showthread.php?threadid=147969 "PROJECT: Playtest (the 4th Thread)"
-http://apolyton.net/forums/showthread.php?threadid=161726 "PROJECT: Playtest (Thread No. 5)"
-
+http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
+http://apolyton.net/forums/showthread.php?t=115144 "PROJECT: Playtest II"
+http://apolyton.net/forums/showthread.php?t=127059 "PROJECT: Playtest Thread III"
+http://apolyton.net/forums/showthread.php?t=147969 "PROJECT: Playtest (the 4th Thread)"
+http://apolyton.net/forums/showthread.php?t=161726 "PROJECT: Playtest (Thread No. 5)"
+http://apolyton.net/forums/showthread.php?t=172035 "PROJECT: Playtest (Thread No. 6)"
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
@@ -48,8 +48,110 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2009-05-17 (Revision 981)
+Fixed:    The AI does not try to use units for conquest if those units were
+          assigned for city garrison. Such a attack does not fail anymore.
+Fixed:    Cell unit strength computation was fixed so that the AI knows how
+          much units it needs to conquer your cities.
+Changed:  The empire manager now shows the actual numbers used for rations and
+          wages.
+Changed:  The original gameplay was restored, including terrain, units, elite
+          units were disabled, and the trade bonus through cities was removed.
+Changed:  Upgrade paths now match those of the original Apolyton Pack mod.
+Fixed:    The Great Library now shows the right information about terraforming.
+Fixed:    Active defense was added to the units destroyer, plasma destroyer,
+          leviathan, morey striker, and interceptor to match the Great Library.
+Changed:  "Smooth borders" option graphics to just show thicker borders so they
+          are more visible than the original.
+Fixed:    Trenches are generated again when a map is created and if
+          PERCENT_TRENCH in Const.txt is zero. PERCENT_TRENCH is set to zero
+          until we have converted the CTP1 trenches to CTP2 trenches.
+Fixed:    The map is now generated with a proper distribution of hills and
+          mountains.
+Fixed:    The AI garrisons its just conquered cities, properly.
+Fixed:    The game does not crash anymore if a new civ is added and that civ is
+          destroyed immediately and another new civ is created then again.
+          May happen through slave uprising.
+Added:    A "New Combat" option was added to the rules screen. If it is on, front
+          line units of a defending army will use their defense stat (rather
+          than attack) to attack the front line units of the attacking army.
+Changed:  Units with defense > 0 but attack = 0 no longer die immediately, and
+          will at least defend themselves. If New Combat rule is enabled they
+          will also counter-attack in a battle. Only an army that contains units
+          all with attack = 0 and defense = 0 will die immediately.
+Added:    The slic functions CreateBuilding and CreateWonder were added. The
+          difference with events  with same name is that these functions do
+          not effect stored production in a city. And unlike the CreateWonder event,
+          CreateWonder function does not trigger a wonder movie.
+Added:    "City Land Attack", "City Air Attack" and "City Sea Attack" where
+          added to the battleview window to show these the city building
+          bonuses during battle.
+Fixed:    Many unit bonuses used in combat that were not working at all before.
+Added:    Added the slic function UnitMovementLeft(unit). It returns an integer 
+          of the unit's movement remaining. 100 = 1 move, 33 = a single road move etc.
+Fixed:    ActiveDefence to only fire when there's a valid target and still alive.
+          This removes the exploit of making a full army of active-defender's
+          waste their active defense on one unit.
+Removed:  Counter-bombard and counter-active-defense units do not fire anymore
+          after an active defender has fired, this removes the big disadvantage
+          of being the defender, and it was very cheesy to look at.
+Fixed:    Units that have Attack=0 cannot attack anymore even if they have the
+          "CanAttack" flag (Cyber Ninja for example).
+Changed:  Bombard so bombarding units and defenders use same bonuses
+          (such as terrain defense, veteran etc) as they do in normal combat.
+Fixed:    The GetNeedsIrrigation flag now finds irrigation squares next to a city
+          with a irrigation source of another tile improvement.
+Changed:  The grid color was changed from white to black to match the other
+          zoom levels.
+Fixed:    Movebonus ("all terrain as x") units.txt flag.
+Added:    A no ruins option was added to rules window.
+Changed:  The government comparison tab of the empire manager displayed more
+          detailed information, and displays yet researched researched
+          governments so that you can compare them with your current government.
+Changed:  The AI goal calculation is now also unit dependent and the AI was
+          sped up.
+Changed:  The city manager was redesigned to display all information from the
+          tabs in one window.
+Added:    Some tile graphics and all the rules for submarine canyon/trench
+          tiles were added.
+Changed:  The UpgradeTo flag does not obsolete units anymore.
+Fixed:    The game does not hang anymore if the AI tries to load a transporter
+          that cannot move to its load position.
+Added:    A random map settings option was added to the map settings window.
+Fixed:    The "activate" and "disband" buttons in the city manager will be
+          after disbanding a unit.
+Changed:  The diplomacy manager and diplomacy proposal window were resized to
+          fit on 600 pixels high resolution again. The width of the proposal
+          window were increased and its layout were modified, for easier
+          modification later.
+Fixed:    The Diplomat photo now shows up when the AI sent you a proposal.
+Changed:  The advance options window was cleaned by removing options already
+          present in other windows. Also other option windows were cleaned up.
+Added:    A Custom start and end ages option was added to single-player rules
+          screen.
+Fixed:    The map does not auto-center on moving stealth units that you can't see.
+Changed:  Elite medal icon now replaces veteran medal icon, rather than sitting
+          below it.
+Changed:  No units can be expelled from a tile anymore if there is at least one
+          unit that cannot be expelled.
+Fixed:    The AI uses any units inside a newly founded city for garrison.
+Changed:  The AI uses less units for city garrison for the higher higher 
+          defense levels. This is closer to the original game.
+Changed:  An enemy transporter does not show the cargo icon anymore if it only
+          carries stealth units.
+Fixed:    If you click on a hidden enemy stealth unit or on another kind of 
+          unit or city inside the fog of war your units or cities will
+          deselected.
+Changed:  Slic event debug messages are now off by default.
+Added:    The AI will free slaves when it conquers a city if it neither owns 
+          slaves nor it has any slavers.
+Fixed:    The AI builds caravans again.
+Fixed:    Rare crash at start-up (race condition with mouse initialization).
+Fixed:    The game does not crash anymore if the riot casualties option is used.
+Changed:  The map does not center on a pirate event if AutoCenter is off.
+
 2008-10-08 (Revision 907)
-Fixed:    The tile highlight square at the mouse pointing position does not not
+Fixed:    The tile highlight square at the mouse pointing position does not
           blink anymore. In general, blinking items draw attention even if
           there is nothing important. In that case it was blinking always at
           the of the GUI repainting speed, which just makes the player tired.

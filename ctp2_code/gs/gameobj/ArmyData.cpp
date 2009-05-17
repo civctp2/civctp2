@@ -136,7 +136,6 @@
 //   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
 //	 Fixed expelling if at least one unit on a tile cannot be expelled, then
 //	 none from that tile can be. (12-Apr-2009 Maq)
-// - Added HasCargoOnlyStealth. (13-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -5947,7 +5946,11 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				//InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); //does nothing here but could be implemented 
 				if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
 				{
-					g_director->AddCenterMap(m_pos);
+					if(g_selected_item->IsAutoCenterOn())
+					{
+						g_director->AddCenterMap(m_pos);
+					}
+
 					g_director->AddSpecialEffect(m_pos, effectId, soundId);
 				}
 				AddSpecialActionUsed(m_array[i]);

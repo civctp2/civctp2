@@ -107,7 +107,7 @@ MOUNTAIN_LENGTH 15   # average length of a mountain chain
 
 GLACIER_EXTENT   3   # number of tiles the glacier extends - should be normalized
 PERCENT_VOLCANO  1   # percent of deep sea floor with volcanos
-PERCENT_TRENCH   4   # percent chance that a trench is seeded - then it spreads automatically
+PERCENT_TRENCH   0   # percent chance that a trench is seeded - then it spreads automatically
 
 # Swamps are placed at humidity levels above what forest works out to.
 PERCENT_FOREST 20
