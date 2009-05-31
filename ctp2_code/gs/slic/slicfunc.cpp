@@ -1042,7 +1042,7 @@ SFN_ERROR Slic_IsWonderType::Call(SlicArgList *args)
 	if(args->m_argValue[1].m_type != SA_TYPE_STRING)
 		return SFN_ERROR_TYPE_ARGS;
 	
-	m_result.m_int = wonderutil_Get(wonder)->GetName() == args->m_argValue[1].m_int;
+	m_result.m_int = g_theWonderDB->Get(wonder)->GetName() == args->m_argValue[1].m_int;
 	return SFN_ERROR_OK;
 }
 
@@ -7449,7 +7449,7 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 		if (buildings&1)
 		{
 
-			p += buildingutil_GetProductionCost(i);
+			p += buildingutil_GetProductionCost(i, city->GetOwner());
 			city->GetCityData()->DestroyImprovement(i);
 		}
 	}
@@ -7509,7 +7509,7 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 
 		if (buildings&1)
 		{
-			p += buildingutil_GetProductionCost(i);
+			p += buildingutil_GetProductionCost(i, city->GetOwner());
 			city->GetCityData()->DestroyImprovement(i);
 		}
 	}

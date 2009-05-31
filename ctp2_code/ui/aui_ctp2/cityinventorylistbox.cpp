@@ -61,6 +61,7 @@
 #include "debugwindow.h"
 #include "UnitRecord.h"
 #include "wonderutil.h"
+#include "buildingutil.h"
 
 extern	ControlPanelWindow	*g_controlPanel;
 extern	Player				**g_player;
@@ -129,7 +130,7 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 		uint64 improvements = unit.GetImprovements();
 		for(i = 0 ; i < g_theBuildingDB->NumRecords(); i++) {
 			if(improvements & ((uint64)1 << (uint64)i)) {
-				sprintf(str, "%s    %i", g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name),g_theBuildingDB->Get(i)->GetUpkeep());
+				sprintf(str, "%s    %i", g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name), buildingutil_Get(i, unit->GetOwner())->GetUpkeep());
 				
 				item = new StaticTextItem(
 					&errcode,
@@ -150,7 +151,7 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 		uint64 wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
 		for(i = 0 ; i < g_theWonderDB->NumRecords(); i++) {
 			if(wonders & ((uint64)1 << (uint64)i)) {
-				sprintf(str, "%s", g_theStringDB->GetNameStr(wonderutil_Get(i)->m_name));
+				sprintf(str, "%s", g_theStringDB->GetNameStr(wonderutil_Get(i, unit->GetOwner())->m_name));
 
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
@@ -221,18 +222,25 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 		RemoveItemByIndex(i);
 	}
 
-	for(i = 0; i < n; i++) {
+	for(i = 0; i < n; i++)
+	{
 		const UnitRecord *rec = g_theUnitDB->Get(i, p->GetGovernmentType());
 		enable = rec->GetEnableAdvanceIndex();
 		isObsolete = false;
-		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
-			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o))) {
+
+		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++)
+		{
+			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
+			{
 				isObsolete = true;
 			}
 		}
+
 		if(isObsolete)
 			continue;
-		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
+
+		if((p->m_advances->HasAdvance(enable) || (enable < 0)))
+		{
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
@@ -252,17 +260,23 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	}
 	
 	n = g_theBuildingDB->NumRecords();
-	for(i = 0; i < n; i++) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(i, p->GetGovernmentType());
+	for(i = 0; i < n; i++)
+	{
+		const BuildingRecord *rec = buildingutil_Get(i, unit.GetOwner());
 		enable = rec->GetEnableAdvanceIndex();
 		isObsolete = false;
-		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
+
+		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++)
+		{
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
 				isObsolete = true;
 		}
+
 		if(isObsolete)
 			continue;
-		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
+
+		if((p->m_advances->HasAdvance(enable) || (enable < 0)))
+		{
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
@@ -283,7 +297,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 
 	n = g_theWonderDB->NumRecords();
 	for(i = 0; i < n; i++) {
-		const WonderRecord *rec = wonderutil_Get(i);
+		const WonderRecord *rec = wonderutil_Get(i, unit->GetOwner());
 		enable = rec->GetEnableAdvanceIndex();
 		isObsolete = false;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {

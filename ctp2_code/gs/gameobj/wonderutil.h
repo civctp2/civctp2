@@ -34,7 +34,7 @@
 
 class WonderRecord;
 
-const WonderRecord *wonderutil_Get(sint32 wonder);
+const WonderRecord *wonderutil_Get(const sint32 wonder, const sint32 playerId);
 
 bool wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders);
 bool wonderutil_GetCloseEmbassies(const uint64 builtWonders);

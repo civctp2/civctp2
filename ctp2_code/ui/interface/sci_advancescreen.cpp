@@ -73,7 +73,8 @@
 
 #include "colorset.h"
 #include "GovernmentRecord.h"
-
+#include "buildingutil.h"
+#include "wonderutil.h"
 
 #include "director.h"
 extern Director		*g_director;
@@ -624,7 +625,7 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 		return 0;
 	}
 
-	sci_advancescreen_setStatsInfo( (long)item->GetUserData() );
+	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayer());
 
 
 
@@ -658,7 +659,7 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 	return 1;
 }
 
-sint32 sci_advancescreen_setStatsInfo( sint32 index )
+sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 {
 
 
@@ -710,7 +711,7 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 
 
 	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(i);
+		const BuildingRecord *rec = buildingutil_Get(i, owner);
 		if(rec->GetEnableAdvanceIndex() == index) 		
 		{
 			
@@ -735,7 +736,7 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 
 
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-		const WonderRecord *rec = g_theWonderDB->Get(i);
+		const WonderRecord *rec = wonderutil_Get(i, owner);
 
 		if(rec->GetEnableAdvanceIndex() == index) 
 		{

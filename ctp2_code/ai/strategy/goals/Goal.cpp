@@ -2082,7 +2082,7 @@ GOAL_RESULT Goal::Execute_Task()
 
 			if(!GotoGoalTaskSolution(agent_ptr, goto_pos))
 			{
-				if(Needs_Transporter())
+				if(Needs_Transporter() && Get_Transporters_Num() < 1)
 				{
 					agent_ptr->Set_Needs_Transporter(true);
 					return GOAL_NEEDS_TRANSPORT;

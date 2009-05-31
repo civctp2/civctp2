@@ -57,6 +57,7 @@
 #include "Unit.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
+#include "wonderutil.h"
 
 
 extern C3UI                     *g_c3ui;
@@ -115,7 +116,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 	if(!g_theWonderTracker->GetCityWithWonder(wonder, curCity))
 		curCity.m_id = 0;
 
-	const WonderRecord *rec = g_theWonderDB->Get(wonder);
+	const WonderRecord *rec = wonderutil_Get(wonder, player);
 	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("WonderTabListItem");
 	Assert(item);
 	if(item) {

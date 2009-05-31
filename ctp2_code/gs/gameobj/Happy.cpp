@@ -365,7 +365,7 @@ double Happy::CalcPeaceMovement(CityData &cd, Player *p)
 
 	m_peace -= p->m_global_happiness->GetWarDiscontent();
 
-	m_peace += m_peace * buildingutil_GetLowerPeaceMovement(cd.GetEffectiveBuildings());
+	m_peace += m_peace * buildingutil_GetLowerPeaceMovement(cd.GetEffectiveBuildings(), cd.GetOwner());
 
 	m_tracker->SetHappiness(HAPPY_REASON_PEACE_MOVEMENT, m_peace);
 	return m_peace;
@@ -633,7 +633,7 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 		return;
 	}
 
-	if(buildingutil_GetNoUnhappyPeople(cd.GetEffectiveBuildings()))
+	if(buildingutil_GetNoUnhappyPeople(cd.GetEffectiveBuildings(), cd.GetOwner()))
 	{
 		return;
 	}

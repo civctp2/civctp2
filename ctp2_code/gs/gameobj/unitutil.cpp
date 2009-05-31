@@ -434,7 +434,7 @@ double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrench
 		{
 			if(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner()) > 0)
 			{
-				def += buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings());
+				def += buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings(), cityData->GetOwner());
 			}
 //			double deductwall;
 //			deductwall = myRec->GetReducesDefensesBonus();

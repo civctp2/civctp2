@@ -92,6 +92,7 @@
 #include "UnitRecord.h"
 #include "WonderRecord.h"
 #include "wonderutil.h"
+#include "buildingutil.h"
 
 extern SpriteGroupList   *g_unitSpriteGroupList;
 extern SpriteGroupList   *g_citySpriteGroupList;
@@ -2685,18 +2686,21 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	Unit	unit(m_unitID);
 	sint32  cityIcon = 0;
 	if (unit.IsValid() && unit.IsCity()) {
-	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-		if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconBottomIndex(cityIcon))
-		
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
+	{
+		if(buildingutil_Get(b, m_playerNum)->GetShowCityIconBottomIndex(cityIcon))
 		{
 			if(unit.CD()->GetImprovements() & ((uint64)1 << b)) 
 			{
-				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
+				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST)
+				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
 					else
 							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
-				} else {
+				}
+				else 
+				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
 								g_tiledMap->GetZoomTilePixelWidth(), 
@@ -2714,17 +2718,19 @@ void UnitActor::DrawCityImprovements(bool fogged)
 
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
-		if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconBottomIndex(cityIcon))
-		
+		if(wonderutil_Get(i, m_playerNum)->GetShowCityIconBottomIndex(cityIcon))
 		{
-			 if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
+			if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
 			{
-				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
+				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST)
+				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
 					else
 							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
-				} else {
+				}
+				else
+				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
 								g_tiledMap->GetZoomTilePixelWidth(), 

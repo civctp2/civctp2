@@ -63,6 +63,8 @@
 #include "terrainutil.h"
 #include "UnitRecord.h"
 #include "WonderRecord.h"
+#include "wonderutil.h"
+#include "buildingutil.h"
 
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;
@@ -650,7 +652,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	isAdvance = false;
 
 	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(i);
+		const BuildingRecord *rec = buildingutil_Get(i, g_selected_item->GetVisiblePlayer());
 		if(rec->GetEnableAdvanceIndex() == index) 		
 		{
 			
@@ -675,7 +677,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 
 
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-		const WonderRecord *rec = g_theWonderDB->Get(i);
+		const WonderRecord *rec = wonderutil_Get(i, g_selected_item->GetVisiblePlayer());
 
 		if(rec->GetEnableAdvanceIndex() == index) 
 		{

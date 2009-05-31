@@ -110,6 +110,8 @@
 #include "Civilisation.h"
 #include "BuildingRecord.h"    //emod
 #include "WonderRecord.h"    //emod
+#include "buildingutil.h"
+#include "wonderutil.h"
 
 extern Background	*g_background;
 extern ScreenManager *g_screenManager;
@@ -4738,15 +4740,17 @@ void TiledMap::DrawCityReligionIcons
 
 	Pixel16     color       = GetPlayerColor(owner, fog);
 
-	if (HasReligionIcon) {
+	if(HasReligionIcon)
+	{
 		iconRect.left   = popRect.left;
 		iconRect.right  = iconRect.left + iconDim.x + 1;
 		iconRect.top    = popRect.bottom;
 		iconRect.bottom = popRect.top + iconDim.y + 1;
 		sint32  cityIcon = 0;
 		CityData *cityData = unit.GetData()->GetCityData();
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
-			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		{
+			if(buildingutil_Get(i, owner)->GetIsReligionIconIndex(cityIcon))
 			{
 				if(cityData->GetImprovements() & ((uint64)1 << i))
 				{
@@ -4760,8 +4764,9 @@ void TiledMap::DrawCityReligionIcons
 			}
 		}
 		sint32  wonderIcon = 0;
-		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
-			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(wonderIcon))
+		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++)
+		{
+			if (wonderutil_Get(j, owner)->GetIsReligionIconIndex(wonderIcon))
 			{
 				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
 				{
@@ -4820,9 +4825,11 @@ void TiledMap::DrawCitySpecialIcons
 	sint32  cityIcon = 0;
 	CityData *cityData = unit.GetData()->GetCityData();
 	
-	if (HasSpecialIcon) {
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
-			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(cityIcon))
+	if(HasSpecialIcon)
+	{
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		{
+			if(buildingutil_Get(i, owner)->GetShowCityIconTopIndex(cityIcon))
 			{
 				if(cityData->GetImprovements() & ((uint64)1 << i))
 				{
@@ -4835,9 +4842,11 @@ void TiledMap::DrawCitySpecialIcons
 				}
 			}
 		}
+
 		sint32 wonderIcon = 0;
-		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
-			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(wonderIcon))
+		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++)
+		{
+			if (wonderutil_Get(j, owner)->GetShowCityIconTopIndex(wonderIcon))
 			{
 				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
 				{

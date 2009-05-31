@@ -513,25 +513,28 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+		if(g_player[foreignerId] != NULL)
 		{
-			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
-
-			if
-			  (
-			        goal
-			     && (   goal->GetTargetTypeAttackUnit()
-			         || goal->GetTargetTypeSpecialUnit()
-			        )
-			     && (goal->GetTargetOwnerSelf() == (foreignerId == playerId))
-			  )
+			for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 			{
-				Goal_ptr     goal_ptr = new Goal();
-				goal_ptr->Set_Type(goal_type);
-				goal_ptr->Set_Player_Index(foreignerId);
-				goal_ptr->Set_Target_Army(army);
+				GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
 
-				Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
+				if
+				  (
+				        goal
+				     && (   goal->GetTargetTypeAttackUnit()
+				         || goal->GetTargetTypeSpecialUnit()
+				        )
+				     && (goal->GetTargetOwnerSelf() == (foreignerId == playerId))
+				  )
+				{
+					Goal_ptr     goal_ptr = new Goal();
+					goal_ptr->Set_Type(goal_type);
+					goal_ptr->Set_Player_Index(foreignerId);
+					goal_ptr->Set_Target_Army(army);
+
+					Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
+				}
 			}
 		}
 	}

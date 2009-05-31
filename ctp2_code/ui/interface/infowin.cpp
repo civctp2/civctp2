@@ -1772,7 +1772,7 @@ void InfoWonderListItem::Update(void)
 
 	
 	subItem = (c3_Static *)GetChildByIndex(0);
-	strcpy(strbuf,g_theStringDB->GetNameStr(wonderutil_Get(m_index)->m_name));
+	strcpy(strbuf,g_theStringDB->GetNameStr(g_theWonderDB->Get(m_index)->m_name));
 	subItem->SetText(strbuf);
 
 	

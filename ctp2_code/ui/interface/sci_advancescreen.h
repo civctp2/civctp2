@@ -20,7 +20,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 
 sint32 sci_advancescreen_loadList( void );
 sint32 sci_advancescreen_updateData( MBCHAR *messageText = NULL, BOOL defaultMessage = TRUE );
-sint32 sci_advancescreen_setStatsInfo( sint32 index );
+sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner);
 sint32 sci_advancescreen_isOnScreen();
 
 #endif

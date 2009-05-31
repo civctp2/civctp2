@@ -3558,7 +3558,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 		double walldef;
 		if(cityData->HasCityWalls() && attacker.IsValid()) {
 			if(attackRec->GetIgnoreCityWalls()) {
-				walldef = (buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings()))
+				walldef = (buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings(), m_owner))
 					* (g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef());
 				base -= walldef;// deduct correct walls defence
 			} else if (g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner())) {

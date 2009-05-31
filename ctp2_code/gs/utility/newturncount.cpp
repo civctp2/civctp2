@@ -453,7 +453,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 				Unit *unit = &(player->GetAllCitiesList()->Access(i));
 				if (!(unit->IsCity()))
 					continue;
-				if (buildingutil_HaveFoodVat(unit->GetImprovements(), tmp))
+				if (buildingutil_HaveFoodVat(unit->GetImprovements(), tmp, unit->GetOwner()))
 					continue;
 				CityData *city = unit->GetData()->GetCityData();
 //				double fudge = (double)(g_theConstDB->StarvationWarningFudgeFactor()) / 100.0;

@@ -2667,8 +2667,8 @@ void GivesWhatCommand::Execute(sint32 argc, char **argv)
 
 	n = g_theWonderDB->NumRecords();
 	for(i = 0; i < n; i++) {
-		if(wonderutil_Get(i)->GetEnableAdvanceIndex() == adv) {
-			DPRINTF(k_DBG_GAMESTATE, ("Wonder: %d(%s)\n", i, g_theStringDB->GetNameStr(wonderutil_Get(i)->m_name)));
+		if(g_theWonderDB->Get(i)->GetEnableAdvanceIndex() == adv) {
+			DPRINTF(k_DBG_GAMESTATE, ("Wonder: %d(%s)\n", i, g_theStringDB->GetNameStr(g_theWonderDB->Get(i)->m_name)));
 		}
 	}
 }

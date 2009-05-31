@@ -938,31 +938,33 @@ void CityData::Initialize(sint32 settlerType)
 	}
 
 	// Gives all starting age buildings to a new city.
-	if(g_network.IsActive() && g_network.GetStartingAge() > 0) {
-		sint32 i;
-		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i)))
+	if(g_network.IsActive() && g_network.GetStartingAge() > 0)
+	{
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+			if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
 				continue;
 
 			if(!CanBuildBuilding(i))
 				continue;
 
-			sint32 enable = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnableAdvanceIndex();
+			sint32 enable = buildingutil_Get(i, m_owner)->GetEnableAdvanceIndex();
 			if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_network.GetStartingAge()) {
 				m_built_improvements |= (uint64)1 << (uint64)i;
 			}
 		}
-	}else{
-		if (g_theProfileDB->GetSPStartingAge() > 0) {
-			sint32 i;
-			for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i)))
+	}
+	else
+	{
+		if (g_theProfileDB->GetSPStartingAge() > 0)
+		{
+			for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
 					continue;
 
 				if(!CanBuildBuilding(i))
 					continue;
 
-				sint32 enable = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnableAdvanceIndex();
+				sint32 enable = buildingutil_Get(i, m_owner)->GetEnableAdvanceIndex();
 				if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_theProfileDB->GetSPStartingAge()) {
 					m_built_improvements |= (uint64)1 << (uint64)i;
 				}
@@ -1637,15 +1639,15 @@ void CityData::CalcPollution(void)
 	{
 		if(HasEffectiveBuilding(i))
 		{
-			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetPollutionAmount(temp))
+			if(buildingutil_Get(i, m_owner)->GetPollutionAmount(temp))
 			{
 				buildingPollution+=temp;
 			}
-			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetProductionPollutionPercent(temp))
+			if(buildingutil_Get(i, m_owner)->GetProductionPollutionPercent(temp))
 			{
 				buildingProductionPercentage+=temp;
 			}
-			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetPopulationPollutionPercent(temp))
+			if(buildingutil_Get(i, m_owner)->GetPopulationPollutionPercent(temp))
 			{
 				buildingPopulationPercentage+=temp;
 			}
@@ -1657,11 +1659,11 @@ void CityData::CalcPollution(void)
 		buildingCheck = (uint64)1 << (uint64)i;
 		if(GetBuiltWonders() & buildingCheck)
 		{
-			if(g_theWonderDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetPollutionAmount(temp))
+			if(wonderutil_Get(i, m_owner)->GetPollutionAmount(temp))
 			{
 				buildingPollution+=temp;
 			}
-			if(g_theWonderDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetPollutionPercent(temp))
+			if(wonderutil_Get(i, m_owner)->GetPollutionPercent(temp))
 			{
 				buildingProductionPercentage+=temp;
 				buildingPopulationPercentage+=temp;
@@ -1770,7 +1772,7 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 	gross_production = ceil(gross_production * workday_per_person);
 
 	double prodBonus;
-	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus);
+	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus, m_owner);
 	gross_production += ceil(gross_production * prodBonus);
 
 	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_PRODUCTION, m_owner);
@@ -2221,7 +2223,7 @@ void CityData::CollectResources()
 	sint32 good;
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 		if(m_built_improvements & ((uint64)1 << b)){
-			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+			const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 	//		Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if((rec->GetNumEnablesGood() > 0) && (IsBuildingOperational(b))){
 				for(good = 0; good < rec->GetNumEnablesGood(); good++){
@@ -2236,7 +2238,7 @@ void CityData::CollectResources()
 	// Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
 	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++){
 		if(m_builtWonders & ((uint64)1 << w)){
-			const WonderRecord *wrec = wonderutil_Get(w);
+			const WonderRecord *wrec = wonderutil_Get(w, m_owner);
 //			Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if(wrec->GetNumEnablesGood() > 0){
 				for(good = 0; good < wrec->GetNumEnablesGood(); good++){
@@ -2964,7 +2966,7 @@ sint32 CityData::ProcessFood()
 void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain) const{
 
 	double foodBonus;
-	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus);
+	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus, m_owner);
 	grossFood += producedFood * foodBonus;
 	
 	grossFood += ceil(grossFood * 
@@ -3175,14 +3177,14 @@ sint32 CityData::GetBuildingOvercrowdingBonus()
 {
 	
 	sint32 level = 0;
-	buildingutil_GetRaiseOvercrowdingLevel(GetEffectiveBuildings(), level);
+	buildingutil_GetRaiseOvercrowdingLevel(GetEffectiveBuildings(), level, m_owner);
 	return level;
 }
 
 sint32 CityData::GetBuildingMaxPopIncrease()
 {
 	sint32 level = 0;
-	buildingutil_GetRaiseMaxPopulation(GetEffectiveBuildings(), level);
+	buildingutil_GetRaiseMaxPopulation(GetEffectiveBuildings(), level, m_owner);
 	return level;
 }
 
@@ -3604,17 +3606,17 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 	sint32     buildingUpkeep = GetSupportBuildingsCost();
 
 	//EMOD notadd upkeep per city
-	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(GetEffectiveBuildings());
+	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(GetEffectiveBuildings(), m_owner);
 	buildingUpkeep += UpkeepPerCity * g_player[m_owner]->m_all_cities->Num();
 
 	///////////////////////////////////////////////
 	// EMOD - Add upkeep per unit
-	sint32 UpkeepPerUnit = buildingutil_GetUpkeepPerUnit(GetEffectiveBuildings());
+	sint32 UpkeepPerUnit = buildingutil_GetUpkeepPerUnit(GetEffectiveBuildings(), m_owner);
 	buildingUpkeep += UpkeepPerUnit * g_player[m_owner]->m_all_units->Num();
 
 	///////////////////////////////////////////////
 	// EMOD - upkeep per unit and multiplied by readiness level
-	sint32 UpkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings());
+	sint32 UpkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings(), m_owner);
 	buildingUpkeep += UpkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
 	
 	//end EMOD
@@ -3632,7 +3634,7 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 		    while (IsBankrupting() && (m_built_improvements != 0)) 
             {
 			    sint32 const    cheapBuilding = 
-                    buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel);
+                    buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel, m_owner);
 			    Assert(cheapBuilding >= 0);
 			    if (cheapBuilding < 0)
 				    break;
@@ -4180,7 +4182,7 @@ bool CityData::BeginTurn()
 
 	//END EMOD
 
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 
 	return true;
 }
@@ -4313,7 +4315,7 @@ bool CityData::BuildImprovement(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	const BuildingRecord* irec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	const BuildingRecord* irec = buildingutil_Get(type, m_owner);
 	Assert(irec);
 	if(irec == NULL)
 		return false;
@@ -4374,7 +4376,7 @@ bool CityData::BuildWonder(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	const WonderRecord* rec = wonderutil_Get(type);
+	const WonderRecord* rec = wonderutil_Get(type, m_owner);
 	Assert(rec);
 	if(rec == NULL)
 		return false;
@@ -4391,7 +4393,7 @@ bool CityData::BuildWonder(sint32 type)
 
 void CityData::AddWonder(sint32 type)
 {
-	const WonderRecord* rec = wonderutil_Get(type); // Added by E
+	const WonderRecord* rec = wonderutil_Get(type, m_owner); // Added by E
 	MapPoint point(m_home_city.RetPos());
 
 	m_builtWonders |= (uint64(1) << (uint64)type);
@@ -4510,7 +4512,7 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		}
 		break; 
 	case k_GAME_OBJ_TYPE_WONDER:
-		wrec = wonderutil_Get(item_type);
+		wrec = wonderutil_Get(item_type, m_owner);
 		Assert(wrec);
 
 		if(!CanBuildWonder(item_type))
@@ -4525,12 +4527,13 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		break; 
 
 	case k_GAME_OBJ_TYPE_IMPROVEMENT:
-		irec = g_theBuildingDB->Get(item_type, g_player[m_owner]->GetGovernmentType());
+		irec = buildingutil_Get(item_type, m_owner);
 		Assert(irec);
 
 		
-		if ((buildingutil_GetDesignatesCapitol((uint64)1 << item_type)) &&
-			(g_player[m_owner]->m_capitol->m_id != (0))) {
+		if ((buildingutil_GetDesignatesCapitol((uint64)1 << item_type, m_owner)) &&
+			(g_player[m_owner]->m_capitol->m_id != (0)))
+		{
 			SlicObject *so = new SlicObject("38IACapitolWarning");
 			so->AddCity(*(g_player[m_owner]->m_capitol));
 			so->AddCity(m_home_city);
@@ -4600,31 +4603,33 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 void CityData::DestroyCapitol()
 
 {
-	if(buildingutil_GetDesignatesCapitol(m_built_improvements)) {
+	if(buildingutil_GetDesignatesCapitol(m_built_improvements, m_owner)) {
 		uint64 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
-			   m_built_improvements & uint64((uint64)1 << i)) {
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
+			   m_built_improvements & uint64((uint64)1 << i))
+			{
 				m_built_improvements &= ~((uint64)1 << i);
 			}
 		}
 	}
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
 void CityData::RemoveCapitol()
 
 {
-	if(buildingutil_GetDesignatesCapitol(m_built_improvements)) {
+	if(buildingutil_GetDesignatesCapitol(m_built_improvements, m_owner)) {
 		uint64 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
-			   m_built_improvements & uint64((uint64)1 << i)) {
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
+			   m_built_improvements & uint64((uint64)1 << i), m_owner)
+			{
 				m_built_improvements &= ~((uint64)1 << i);
 			}
 		}
 	}
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
 
@@ -4647,7 +4652,7 @@ void CityData::DestroyImprovement(sint32 imp)
 
 
 
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
 void CityData::NewGovernment(sint32 government_type)
@@ -4679,7 +4684,7 @@ double CityData::GetDefendersBonus() const
 double CityData::GetDefendersBonusNoWalls() const
 {
 	double b;
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), b);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), b, m_owner);
 
 // EMOD - add influence or culture defese bonus here?
 // EMOD - compute reductions in defense by siege units here?
@@ -4689,21 +4694,21 @@ double CityData::GetDefendersBonusNoWalls() const
 
 double CityData::GetCityLandAttackBonus() const
 {
-	double b = buildingutil_GetOffenseBonusLand(GetEffectiveBuildings());
+	double b = buildingutil_GetOffenseBonusLand(GetEffectiveBuildings(), m_owner);
 
 	return b;
 }
 
 double CityData::GetCityAirAttackBonus() const
 {
-	double b = buildingutil_GetOffenseBonusAir(GetEffectiveBuildings());
+	double b = buildingutil_GetOffenseBonusAir(GetEffectiveBuildings(), m_owner);
 
 	return b;
 }
 
 double CityData::GetCitySeaAttackBonus() const
 {
-	double b = buildingutil_GetOffenseBonusWater(GetEffectiveBuildings());
+	double b = buildingutil_GetOffenseBonusWater(GetEffectiveBuildings(), m_owner);
 
 	return b;
 }
@@ -4761,12 +4766,12 @@ void CityData::AddHappyTimer(sint32 turns, double adjust,
 
 double CityData::GetImprovementCrimeMod() const
 {
-	return buildingutil_GetLowerCrime(GetEffectiveBuildings());
+	return buildingutil_GetLowerCrime(GetEffectiveBuildings(), m_owner);
 }
 
 sint32 CityData::GetImprovementPeaceMod() const
 {
-	return sint32(buildingutil_GetLowerPeaceMovement(GetEffectiveBuildings()));
+	return sint32(buildingutil_GetLowerPeaceMovement(GetEffectiveBuildings(), m_owner));
 }
 
 sint32 CityData::GetPollution() const
@@ -4956,23 +4961,23 @@ void CityData::GetNuked(UnitDynamicArray &killList)
 
 bool CityData::SafeFromNukes() const
 {
-	return buildingutil_GetProtectFromNukes(GetEffectiveBuildings());
+	return buildingutil_GetProtectFromNukes(GetEffectiveBuildings(), m_owner);
 }
 
 // called by TiledMap::DrawCityNames
 bool CityData::HasAirport() const
 {
-	return buildingutil_GetAirport(GetEffectiveBuildings());
+	return buildingutil_GetAirport(GetEffectiveBuildings(), m_owner);
 }
 
 bool CityData::HasCityWalls() const
 {
-	return buildingutil_GetCityWalls(GetEffectiveBuildings());
+	return buildingutil_GetCityWalls(GetEffectiveBuildings(), m_owner);
 }
 
 bool CityData::HasForceField() const
 {
-	return buildingutil_GetForceField(GetEffectiveBuildings());
+	return buildingutil_GetForceField(GetEffectiveBuildings(), m_owner);
 }
 
 void CityData::UseAirport()
@@ -5003,14 +5008,15 @@ void CityData::CityNullifyWalls()
 
 bool CityData::IsCapitol() const
 {
-	return buildingutil_GetDesignatesCapitol(GetEffectiveBuildings());
+	return buildingutil_GetDesignatesCapitol(GetEffectiveBuildings(), m_owner);
 }
 
 void CityData::SetCapitol()
 {
-	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetCapitol()) {
-			
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
+		if(buildingutil_Get(i, m_owner)->GetCapitol())
+		{
 			m_built_improvements |= ((uint64)1 << i);
 
 			return;
@@ -5078,13 +5084,13 @@ void CityData::ModifySpecialAttackChance(UNIT_ORDER_TYPE attack,
 	switch(attack) {
 		case UNIT_ORDER_BIO_INFECT:
 		case UNIT_ORDER_PLAGUE:
-			chance -= buildingutil_GetProtectFromBioAgents(GetEffectiveBuildings());
+			chance -= buildingutil_GetProtectFromBioAgents(GetEffectiveBuildings(), m_owner);
 			break;
 		case UNIT_ORDER_NANO_INFECT:
-			chance -= buildingutil_GetProtectFromNanoVirus(GetEffectiveBuildings());
+			chance -= buildingutil_GetProtectFromNanoVirus(GetEffectiveBuildings(), m_owner);
 			break;
 		case UNIT_ORDER_SLAVE_RAID:
-			chance -= buildingutil_GetPreventSlavery(GetEffectiveBuildings());
+			chance -= buildingutil_GetPreventSlavery(GetEffectiveBuildings(), m_owner);
 			break;
 	}
 }
@@ -5405,7 +5411,7 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 
 double CityData::TheologicalModifier() const
 {
-	return buildingutil_GetPreventConversion(GetEffectiveBuildings());
+	return buildingutil_GetPreventConversion(GetEffectiveBuildings(), m_owner);
 }
 
 void CityData::Unconvert(bool makeUnhappy)
@@ -5654,7 +5660,7 @@ sint32 CityData::GetOvertimeCost()
 	if(production_remaining < 0)
 		production_remaining = 0;
 
-	if(buildingutil_NoRushBuyPenalty(GetEffectiveBuildings()))
+	if(buildingutil_NoRushBuyPenalty(GetEffectiveBuildings(), m_owner))
 	{
 		percent_remaining = 0;
 		type_coeff = 1;
@@ -5735,12 +5741,12 @@ void CityData::BuildWhat() const
 	DPRINTF(k_DBG_GAMESTATE, ("Improvements:\n"));
 	n = g_theBuildingDB->NumRecords();
 	for(i = 0; i < n; i++) {
-		enable = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->m_enable;
-		obsolete = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->m_obsolete;
+		enable = buildingutil_Get(i, m_owner)->m_enable;
+		obsolete = buildingutil_Get(i, m_owner)->m_obsolete;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0)) &&
 		   ((!p->m_advances->HasAdvance(obsolete)) || (obsolete < 0))) {
 			DPRINTF(k_DBG_GAMESTATE, ("  %d(%s)\n", i,
-			                          g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name)));
+			                          g_theStringDB->GetNameStr(buildingutil_Get(i, m_owner)->m_name)));
 		}
 	}
 
@@ -5841,7 +5847,7 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 				return;
 
 			//EMOD to make unsellable buildings
-			if(g_theBuildingDB->Get(which, g_player[m_owner]->GetGovernmentType())->GetCantSell())
+			if(buildingutil_Get(which, m_owner)->GetCantSell())
 				return;
 
 			if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -5856,7 +5862,7 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 
 			m_alreadySoldABuilding = TRUE;
 		}
-		sint32 gold = sint32(double(g_theBuildingDB->Get(which, g_player[m_owner]->GetGovernmentType())->GetProductionCost()) * 
+		sint32 gold = sint32(double(buildingutil_Get(which, m_owner)->GetProductionCost()) * 
 			g_theConstDB->Get(0)->GetBuildingProductionToValueModifier());
 		if(byChoice)
 			g_player[m_owner]->m_gold->AddGold(gold);
@@ -5866,7 +5872,7 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 
 //		g_player[m_owner]->RegisterLostBuilding(m_home_city, which); Maybe worth of reimplementation
 		m_build_queue.RemoveIllegalItems(true);
-		if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)which))) {
+		if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)which), m_owner)) {
 			Assert(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id);
 			if(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id) {
 				g_player[m_owner]->m_capitol->m_id = 0;
@@ -5874,7 +5880,7 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 		}
 
 		// Selling a building may impact the defensive bonus 
-		buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+		buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 
 		if(byChoice && g_network.IsHost()) {
 			g_network.Unblock(m_owner);
@@ -6190,7 +6196,7 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	if(g_exclusions->IsBuildingExcluded(type))
 		return false;
 
-	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	const BuildingRecord* rec = buildingutil_Get(type, m_owner);
 	
 	
 	Assert(rec != NULL);
@@ -6538,7 +6544,7 @@ bool CityData::CanBuildWonder(sint32 type) const
 		return false;
 
 	// Added Wonder database 
-	const WonderRecord* rec = wonderutil_Get(type);
+	const WonderRecord* rec = wonderutil_Get(type, m_owner);
 
 	// Added PrerequisiteBuilding checks if city has building to build wonder 
 	if(rec->GetNumPrerequisiteBuilding() > 0)
@@ -6843,7 +6849,7 @@ sint32 CityData::CountTradeWith(PLAYER_INDEX player) const
 
 double CityData::IsProtectedFromSlavery() const
 {
-	return buildingutil_GetPreventSlavery(GetEffectiveBuildings());
+	return buildingutil_GetPreventSlavery(GetEffectiveBuildings(), m_owner);
 }
 
 void CityData::NotifyAdvance(AdvanceType advance)
@@ -6853,7 +6859,7 @@ void CityData::NotifyAdvance(AdvanceType advance)
 		if (m_built_improvements & ((uint64)1 << i))
 		{
 			BuildingRecord const * irec = 
-			    g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType());
+			    buildingutil_Get(i, m_owner);
 
 			for (sint32 o = 0; o < irec->GetNumObsoleteAdvance(); o++) 
 			{
@@ -6883,7 +6889,7 @@ void CityData::ContributeScience(double incomePercent,
 	subgold = m_net_gold * incomePercent * scienceRate;
 
 	double s;
-	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
+	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s, m_owner);
 
 	addscience = subgold + (subgold * s);
 
@@ -6987,7 +6993,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 		             g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST], g_player[m_owner]->GetGovernmentType())->GetScience();
 	}
 
-	sci += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings()) * static_cast<double>(PopCount() - SlaveCount());
+	sci += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings(), m_owner) * static_cast<double>(PopCount() - SlaveCount());
 
 //EMOD Citystyle bonuses
 
@@ -7057,7 +7063,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 //end EMOD
 
 	double p;
-	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p);
+	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p, m_owner);
 	sci += sci * p;
 	sci = sci * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef();
 	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
@@ -7211,7 +7217,7 @@ void CityData::DestroyRandomBuilding()
 	for(i = 0; i < k_MAX_BUILDINGS; i++) {
 		if(m_built_improvements & ((uint64)1 << (uint64)i)) {
 			
-			if(!buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i))
+			if(!buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 				buildings[count++] = i;
 		}
 	}
@@ -7223,7 +7229,7 @@ void CityData::DestroyRandomBuilding()
 //		g_player[m_owner]->RegisterLostBuilding(m_home_city, buildings[which]); //  Maybe worth of reimplementation
 		m_build_queue.RemoveIllegalItems(true);
 	}
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
 void CityData::AddConversionUnhappiness(sint32 who)
@@ -7312,9 +7318,9 @@ void CityData::BuildCapitalization()
 
 void CityData::EliminateNukes()
 {
-	if(buildingutil_IsNuclearPlant(m_built_improvements)) {
+	if(buildingutil_IsNuclearPlant(m_built_improvements, m_owner)) {
 		for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(buildingutil_IsNuclearPlant((uint64)1 << i)) {
+			if(buildingutil_IsNuclearPlant((uint64)1 << i, m_owner)) {
 				DestroyImprovement(i);
 			}
 		}
@@ -7526,7 +7532,7 @@ void CityData::DestroyWonder(sint32 which)
 	                       GEA_City, m_home_city.m_id,
 	                       GEA_Int, which,
 	                       GEA_End);
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
 
@@ -7592,7 +7598,7 @@ sint32 CityData::GetValue() const
 
 		if (buildings&1)
 		{
-			production += buildingutil_GetProductionCost(i);
+			production += buildingutil_GetProductionCost(i, m_owner);
 		}
 	}
 
@@ -8165,12 +8171,12 @@ void CityData::AddBuyFront()
 void CityData::AddImprovement(sint32 type)
 {
 	MapPoint point(m_home_city.RetPos()); //EMOD add for borders
-	const BuildingRecord *rec = g_theBuildingDB->Get(type); //EMOD add for borders
+	const BuildingRecord *rec = buildingutil_Get(type, m_owner); //EMOD add for borders
 
 	SetImprovements(m_built_improvements | ((uint64)1 << (uint64)type));
 	IndicateImprovementBuilt();
 
-	if (buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)type)) {
+	if (buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)type, m_owner)) {
 		g_player[m_owner]->SetCapitol(m_home_city); 
 	}
 
@@ -8268,7 +8274,7 @@ void CityData::AddImprovement(sint32 type)
 	}
 
 	//EMOD for Buildings to increase HP
-	sint32 hpBonus = buildingutil_GetIncreaseHP((uint64)1 << type);
+	sint32 hpBonus = buildingutil_GetIncreaseHP((uint64)1 << type, m_owner);
 	if(hpBonus > 0)
 	{
 		sint32 n = g_player[m_owner]->m_all_units->Num();
@@ -8291,7 +8297,7 @@ void CityData::AddImprovement(sint32 type)
 
 	//EMOD - Add Holy City here?
 
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 
 }
 
@@ -8355,7 +8361,7 @@ void CityData::RemoveBorders()
 void CityData::ResetStarvationTurns()
 {
 	m_starvation_turns = g_theConstDB->Get(0)->GetBaseStarvationProtection();
-	m_starvation_turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings());	
+	m_starvation_turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings(), m_owner);
 }
 
 sint32 CityData::GetStarvationProtection()
@@ -8363,7 +8369,7 @@ sint32 CityData::GetStarvationProtection()
 	sint32 turns;
 
 	turns = g_theConstDB->Get(0)->GetBaseStarvationProtection();
-	turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings());	
+	turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings(), m_owner);
 
 	return turns;
 }
@@ -8373,13 +8379,13 @@ double CityData::GetOffenseBonus(const Unit &defender)
 	const UnitRecord *defRec = defender.GetDBRec();
 	double bonus = 0;
 	if(defRec->GetMovementTypeLand() || defRec->GetMovementTypeMountain())
-		bonus += buildingutil_GetOffenseBonusLand(GetEffectiveBuildings());
+		bonus += buildingutil_GetOffenseBonusLand(GetEffectiveBuildings(), m_owner);
 	
 	if(defRec->GetMovementTypeSea() || defRec->GetMovementTypeShallowWater())
-		bonus += buildingutil_GetOffenseBonusWater(GetEffectiveBuildings());
+		bonus += buildingutil_GetOffenseBonusWater(GetEffectiveBuildings(), m_owner);
 
 	if(defRec->GetMovementTypeAir())
-		bonus += buildingutil_GetOffenseBonusAir(GetEffectiveBuildings());
+		bonus += buildingutil_GetOffenseBonusAir(GetEffectiveBuildings(), m_owner);
 
 	return bonus;
 }
@@ -8524,7 +8530,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, b
 	gold -= science;
 
 	
-	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
+	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s, m_owner);
 	science += static_cast<sint32>(ceil(science * s));
 
 	double ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
@@ -8711,30 +8717,30 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 	//EMOD moved to the end to avoid commercepercent multiplying flags that are likely to be used in the negative
 
-	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
+	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings(), m_owner);
 	gold += goldPerCitizen * PopCount();
 
 	//////////////////////////////////
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
-	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings());
+	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
 	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
 	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
 	
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
-	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings());
+	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings(), m_owner);
 	gold += static_cast<double>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
-	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings());
+	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings(), m_owner);
 	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 	
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
-	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
+	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings(), m_owner);
 	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 
 	double interest;
@@ -8813,7 +8819,7 @@ void CityData::CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &conv
 		if(m_convertedBy == CONVERTED_BY_CLERIC) {
 			convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetClericConversionFactor());
 		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
-			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings())) {
+			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings(), m_owner)) {
 				convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetTelevangelistConversionFactor());
 			} else {
 				convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetClericConversionFactor());
@@ -9977,7 +9983,7 @@ bool CityData::CanCollectGood(sint32 good) const
 bool CityData::IsBuildingOperational(sint32 type) const
 {
 
-	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	const BuildingRecord* rec = buildingutil_Get(type, m_owner);
 	
 	
 	Assert(rec != NULL);
@@ -10093,9 +10099,11 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 	// another (mosques, churches, synagogues, etc)
 	// randomized to add unpredictable realism
 
-	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-		if(m_built_improvements & ((uint64)1 << b)){
-			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[owner]->GetGovernmentType());
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
+	{
+		if(m_built_improvements & ((uint64)1 << b))
+		{
+			const BuildingRecord *rec = buildingutil_Get(b, owner);
 
 			// Checks if a city has a buildng that conflicts with 
 			// another (mosques, churches, synagogues, etc)
@@ -10288,11 +10296,11 @@ sint32 CityData::ProduceEnergy()
 	//Bit(Int)   ProducesEnergyPerPop
 
 	//energy produced per person
-	sint32 energyPerCitizen = buildingutil_GetProducesEnergyPerPop(GetEffectiveBuildings());
+	sint32 energyPerCitizen = buildingutil_GetProducesEnergyPerPop(GetEffectiveBuildings(), m_owner);
 	energy += energyPerCitizen * PopCount();
 
 	//energy produced per person
-	sint32 energyperbldg = buildingutil_GetProducesEnergy(GetEffectiveBuildings());
+	sint32 energyperbldg = buildingutil_GetProducesEnergy(GetEffectiveBuildings(), m_owner);
 	energy += energyperbldg;
 
 	//energy produced per person
@@ -10327,11 +10335,11 @@ sint32 CityData::ConsumeEnergy()
 	}
 
 	// Energy produced per person
-	sint32 energyPerCitizen = buildingutil_GetEnergyHungerPerPop(GetEffectiveBuildings());
+	sint32 energyPerCitizen = buildingutil_GetEnergyHungerPerPop(GetEffectiveBuildings(), m_owner);
 	energy += energyPerCitizen * PopCount();
 
 	// Energy produced per person
-	sint32 energyperbldg = buildingutil_GetEnergyHunger(GetEffectiveBuildings());
+	sint32 energyperbldg = buildingutil_GetEnergyHunger(GetEffectiveBuildings(), m_owner);
 	energy += energyperbldg;
 
 	// Energy produced per person
@@ -10496,7 +10504,7 @@ void CityData::CityGovernmentModifiers()
 	//EMOD if Player PrereqBuilding is different than the government than destroy it 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 		if(m_built_improvements & ((uint64)1 << b)){
-			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+			const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 			for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++) {
 				if(rec->GetExcludedByGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
 					DestroyImprovement(b);
@@ -10530,7 +10538,7 @@ void CityData::Militia()
 		{
 			if(m_built_improvements & ((uint64)1 << b))
 			{
-				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+				const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 				
 				if(HasBuilding(b)
 				&& rec->GetCreatesMiltiaUnit()
@@ -10546,10 +10554,10 @@ void CityData::Militia()
 void CityData::DestroyOnePerCiv()
 
 {
-	if(buildingutil_GetDesignatesOnePerCiv(m_built_improvements)) {
+	if(buildingutil_GetDesignatesOnePerCiv(m_built_improvements, m_owner)) {
 		uint64 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
 			   m_built_improvements & uint64((uint64)1 << i)) {
 				m_built_improvements &= ~((uint64)1 << i);
 			}
@@ -10559,7 +10567,7 @@ void CityData::DestroyOnePerCiv()
 
 bool CityData::HasReligionIcon() const
 {
-	if (buildingutil_GetHasReligionIcon(GetEffectiveBuildings())) {
+	if (buildingutil_GetHasReligionIcon(GetEffectiveBuildings(), m_owner)) {
 		return true;
 	}
 	if (wonderutil_GetHasReligionIcon(GetBuiltWonders())) {
@@ -10571,7 +10579,7 @@ bool CityData::HasReligionIcon() const
 
 bool CityData::IsReligious() const
 {
-	return buildingutil_GetIsReligious(GetEffectiveBuildings());
+	return buildingutil_GetIsReligious(GetEffectiveBuildings(), m_owner);
 }
 
 bool CityData::CityIsOnTradeRoute()
@@ -10613,7 +10621,7 @@ void CityData::GiveTradeRouteGold()
 bool CityData::HasSpecialIcon() const
 {
 //may add more to this bool so I can reuse the unseencell stuff and then break down the icon calls
-	if (buildingutil_GetShowCityIconTop(GetEffectiveBuildings())) {
+	if (buildingutil_GetShowCityIconTop(GetEffectiveBuildings(), m_owner)) {
 		return true;
 	}
 	if (wonderutil_GetShowCityIconTop(GetBuiltWonders())) {

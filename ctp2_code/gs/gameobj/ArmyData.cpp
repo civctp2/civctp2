@@ -4103,7 +4103,7 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 			if(!g_player[city.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
 				continue;
 
-			if(wonderutil_Get(i)->GetPreventConversion()) {
+			if(wonderutil_Get(i, m_owner)->GetPreventConversion()) {
 				so->AddWonder(i);
 				break;
 			}
@@ -4268,7 +4268,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 			{
 				for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++)
 				{
-					const BuildingRecord *brec = g_theBuildingDB->Get(urec->GetEstablishBuildingIndex(b));
+					const BuildingRecord *brec = buildingutil_Get(urec->GetEstablishBuildingIndex(b), m_owner);
 					if(brec->GetNumConflictsWithBuilding())
 					{
 						for(sint32 conflictb = 0; conflictb < brec->GetNumConflictsWithBuilding(); conflictb++)
@@ -5483,7 +5483,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 			sint32 r = g_rand->Next(100);
 			DPRINTF(k_DBG_GAMESTATE, ("Bombarding 0x%lx: r1 = %d\n", c.m_id, r));
 
-			prob = static_cast<sint32>(rec->GetZBRangeAttack() - buildingutil_GetCityWallsDefense(c.GetCityData()->GetImprovements()));
+			prob = static_cast<sint32>(rec->GetZBRangeAttack() - buildingutil_GetCityWallsDefense(c.GetCityData()->GetImprovements(), m_owner));
 			if(prob < 0)
 			{
 				prob = 0;

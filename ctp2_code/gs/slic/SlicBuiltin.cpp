@@ -1553,7 +1553,7 @@ class WonderSymbol_Name : public SlicStructMemberData {
 			type = 0;
 		}
 
-		strncpy(text, g_theStringDB->GetNameStr(wonderutil_Get(type)->GetName()), maxLen);
+		strncpy(text, g_theStringDB->GetNameStr(g_theWonderDB->Get(type)->GetName()), maxLen);
 		return TRUE;
 	}
 
@@ -1562,7 +1562,7 @@ class WonderSymbol_Name : public SlicStructMemberData {
 		BOOL res = m_parent->GetDataSymbol()->GetIntValue(type);
 		Assert(res);
 		if(res) {
-			return wonderutil_Get(type)->GetName();
+			return g_theWonderDB->Get(type)->GetName();
 		}
 		return -1;
 	}

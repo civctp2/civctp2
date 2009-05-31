@@ -85,6 +85,8 @@
 #include "NationalManagementDialog.h"
 #include "Globals.h"
 #include "Governor.h"
+#include "buildingutil.h"
+#include "wonderutil.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -505,9 +507,9 @@ sint32 EditQueue::CompareBuildingWonderItems(ctp2_ListItem *item1, ctp2_ListItem
 			sint32 cost1, cost2;
 			
 			if(info1->m_category == k_GAME_OBJ_TYPE_WONDER) {
-				cost1 = g_theWonderDB->Get(info1->m_type)->GetProductionCost();
+				cost1 = wonderutil_Get(info1->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 			} else if(info1->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-				cost1 = g_theBuildingDB->Get(info1->m_type)->GetProductionCost();
+				cost1 = buildingutil_Get(info1->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 			} else if(info1->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION ||
 					  info1->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
 				cost1 = 0;
@@ -516,9 +518,9 @@ sint32 EditQueue::CompareBuildingWonderItems(ctp2_ListItem *item1, ctp2_ListItem
 			}
 
 			if(info2->m_category == k_GAME_OBJ_TYPE_WONDER) {
-				cost2 = g_theWonderDB->Get(info2->m_type)->GetProductionCost();
+				cost2 = wonderutil_Get(info2->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 			} else if(info2->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-				cost2 = g_theBuildingDB->Get(info2->m_type)->GetProductionCost();
+				cost2 = buildingutil_Get(info2->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 			} else if(info2->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION ||
 					  info2->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
 				cost2 = 0;
@@ -768,7 +770,9 @@ void EditQueue::UpdateChoiceLists()
 							  new EditItemInfo(k_GAME_OBJ_TYPE_IMPROVEMENT, i),
 							  -1,
 							  m_buildingList);
-			} else if(!m_cityData) {
+			}
+			else if(!m_cityData)
+			{
 				
 				if(IsItemInQueueList(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
 					continue;
@@ -777,10 +781,12 @@ void EditQueue::UpdateChoiceLists()
 							  new EditItemInfo(k_GAME_OBJ_TYPE_IMPROVEMENT, i),
 							  -1,
 							  m_buildingList);
-			} else if(m_cityData->CanBuildBuilding(i) &&
-				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_IMPROVEMENT, i)) {
-				
-				prodRemaining = g_theBuildingDB->Get(i)->GetProductionCost();
+			}
+			else if(m_cityData->CanBuildBuilding(i) &&
+				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
+			{
+
+				prodRemaining = buildingutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 				AddChoiceItem(g_theBuildingDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_IMPROVEMENT, i),
 							  m_cityData->HowMuchLonger(prodRemaining),
@@ -848,7 +854,7 @@ void EditQueue::UpdateChoiceLists()
 				}
 			} else if(m_cityData->CanBuildWonder(i) &&
 				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_WONDER, i)) {
-				prodRemaining = g_theWonderDB->Get(i)->GetProductionCost();
+				prodRemaining = wonderutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 				AddChoiceItem(g_theWonderDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_WONDER, i),
 							  m_cityData->HowMuchLonger(prodRemaining),
@@ -1259,7 +1265,7 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 	if(!info) return;
 
 	if(!confirmed && info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT &&
-	   g_theBuildingDB->Get(info->m_type)->GetCapitol() &&
+	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol() &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid() &&
 		m_cityData) {
@@ -1379,8 +1385,8 @@ void EditQueue::Suggest(bool insert)
 	{
 		sint32  cat         = 0;
 		sint32  type        = CTPRecord::INDEX_INVALID;
-		Governor::GetGovernor(m_cityData->GetOwner()).ComputeDesiredUnits();
-		Governor::GetGovernor(m_cityData->GetOwner()).ComputeNextBuildItem(m_cityData, cat, type);
+		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeDesiredUnits();
+		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeNextBuildItem(m_cityData, cat, type);
 
 		EditItemInfo info(cat, type);;
 		InsertInQueue(&info, insert);

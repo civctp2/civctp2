@@ -139,6 +139,7 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include <algorithm>    // std::fill
 #include "ArmyPool.h"	// g_armyPool
+#include "buildingutil.h"
 
 extern C3UI                         *g_c3ui;
 
@@ -897,7 +898,7 @@ void CityWindow::UpdateBuildTabs()
 						label->SetText(g_theBuildingDB->Get(i)->GetNameText());
 
 						label = (ctp2_Static *)box->GetChildByIndex(1);
-						sprintf(buf, "%d", g_theBuildingDB->Get(i)->GetUpkeep());
+						sprintf(buf, "%d", buildingutil_Get(i, m_cityData->GetOwner())->GetUpkeep());
 						label->SetText(buf);
 					}
 					InventoryItemInfo *info = new InventoryItemInfo(true, i);
@@ -1045,7 +1046,7 @@ void CityWindow::UpdateCostsGives()
 					givesValue->SetText("---");
 				} else {
 					MBCHAR buf[20];
-					sprintf(buf, "%d", sint32(double(g_theBuildingDB->Get(info->m_type)->GetProductionCost()) *
+					sprintf(buf, "%d", sint32(double(buildingutil_Get(info->m_type, m_cityData->GetOwner())->GetProductionCost()) *
 							g_theConstDB->Get(0)->GetBuildingProductionToValueModifier()));
 					givesValue->SetText(buf);
 				}
@@ -2451,6 +2452,8 @@ void CityWindow::FillPollutionList()
 	{
 		if (m_cityData->HasBuilding(i))
 		{
+			const BuildingRecord* rec = buildingutil_Get(i, m_cityData->GetOwner());
+
 			// For an improvement, there are 3 values that contribute to or 
 			// decrease the pollution:
 			// - an intrinsic (fixed) building pollution value
@@ -2459,16 +2462,16 @@ void CityWindow::FillPollutionList()
 
 			// intrinsic
 			double	value							= 0;	// running total
-			g_theBuildingDB->Get(i)->GetPollutionAmount(value);
+			rec->GetPollutionAmount(value);
 
 			// production pollution modifier
 			double	production_pollution_percent	= 0;	
-			g_theBuildingDB->Get(i)->GetProductionPollutionPercent(production_pollution_percent);
+			rec->GetProductionPollutionPercent(production_pollution_percent);
 			value += m_cityData->GetProductionPollution() * production_pollution_percent;
 
 			// population pollution modifier
 			double	population_pollution_percent	= 0;	// population pollution modifier
-			g_theBuildingDB->Get(i)->GetPopulationPollutionPercent(population_pollution_percent);
+			rec->GetPopulationPollutionPercent(population_pollution_percent);
 			value += m_cityData->GetPopulationPollution() * population_pollution_percent;
 
 			if (fabs(value) < 1)
@@ -2482,7 +2485,7 @@ void CityWindow::FillPollutionList()
 				{
 					label = (ctp2_Static *)item->GetChildByIndex(0);
 					sublabel = (ctp2_Static *)label->GetChildByIndex(0);
-					sublabel->SetText(g_theBuildingDB->Get(i)->GetNameText());
+					sublabel->SetText(rec->GetNameText());
 					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 					sprintf(interp,"%d",(sint32) value);
 					sublabel->SetText(interp);

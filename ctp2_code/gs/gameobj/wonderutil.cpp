@@ -68,9 +68,16 @@ for(sint32 wndr=0;forEachBuilt>0;wndr++,forEachBuilt>>=1) \
     }\
     return amt;
 
-const WonderRecord *wonderutil_Get(sint32 wonder)
+const WonderRecord *wonderutil_Get(const sint32 wonder, const sint32 playerId)
 {
-	return g_theWonderDB->Get(wonder);
+	if(Player * player = g_player[playerId])
+	{
+		return g_theWonderDB->Get(wonder, player->GetGovernmentType());
+	}
+	else
+	{
+		return g_theWonderDB->Get(wonder);
+	}
 }
 
 

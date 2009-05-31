@@ -116,6 +116,8 @@
 // - Slaves aren't send to cities if it causes an population increase over
 //   the city maxium size. (06-Sep-2008 Martin Gühmann)
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
+// - When contact is made the players' regard is recomputed, so that you
+//   cannot establish good relationships so easily. (01-Jun-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -2100,7 +2102,7 @@ sint32 Player::CalcWonderGold()
 			n = g_player[p]->m_all_cities->Num();
 			for(i = 0; i < n; i++) {
 				if(buildingutil_GetTelevision(
-					g_player[p]->m_all_cities->Access(i).CD()->GetEffectiveBuildings())) {
+					g_player[p]->m_all_cities->Access(i).CD()->GetEffectiveBuildings(), p)) {
 					totalWonderGold += goldPerTelevision * g_player[p]->m_all_cities->Access(i).PopCount();
 				}
 			}
@@ -2112,7 +2114,7 @@ sint32 Player::CalcWonderGold()
 	if(GoldPerBuildingAnywhere > 0) {
 		sint32 w;
 		for(w = g_theWonderDB->NumRecords() - 1; w >= 0; w--) {
-			const WonderRecord *wrec = g_theWonderDB->Get(w);
+			const WonderRecord *wrec = wonderutil_Get(w, m_owner);
 			if (wrec->GetNumBuildingAnywhere() >0) {
 				for(sint32 h = 0; h < wrec->GetNumBuildingAnywhere(); h++) {
 					for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
@@ -5600,14 +5602,11 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 	DPRINTF(k_DBG_GAMESTATE, ("Player %d built wonder %d\n", m_owner, wonder));
 	m_builtWonders |= ((uint64)1 << wonder);
 	
-	const WonderRecord *wrec = g_theWonderDB->Get(wonder);
+	const WonderRecord *wrec = wonderutil_Get(wonder, m_owner);
 
 	sint32 polluters;
-	if (wonderutil_Get(wonder)->GetPollutersToParks(polluters)) {
-
-		
-		
-		
+	if (wrec->GetPollutersToParks(polluters))
+	{
 		if(!g_network.IsClient() || g_network.IsLocalPlayer(m_owner)) 
 		{
 			Unit *ua = new Unit[polluters];
@@ -5746,7 +5745,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		}
 	}
 
-	if(wonderutil_Get(wonder)->GetPreventConversion()) {
+	if(wonderutil_Get(wonder, m_owner)->GetPreventConversion()) {
 		sint32 i;
 		for(i = 0; i < m_all_cities->Num(); i++) {
 			m_all_cities->Access(i).GetData()->GetCityData()->Unconvert(FALSE);
@@ -5754,7 +5753,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 	}
 
 	
-	if(wonderutil_Get(wonder)->GetGlobalRadar()) {
+	if(wonderutil_Get(wonder, m_owner)->GetGlobalRadar()) {
 		m_hasGlobalRadar = TRUE;
 		g_theWonderTracker->SetGlobeSatFlags(g_theWonderTracker->GlobeSatFlags() | (1 << m_owner));
 
@@ -5862,11 +5861,11 @@ void Player::RemoveWonder(sint32 which, bool destroyed)
 	}
 
 	sint32 buildingIndex;
-	if(g_theWonderDB->Get(which)->GetBuildingEverywhereIndex(buildingIndex)) {
+	if(wonderutil_Get(which, m_owner)->GetBuildingEverywhereIndex(buildingIndex)) {
 		m_wonderBuildings &= ~((uint64)1 << buildingIndex);
 	}
 
-	if(g_theWonderDB->Get(which)->GetGlobalRadar()) {
+	if(wonderutil_Get(which, m_owner)->GetGlobalRadar()) {
 		m_hasGlobalRadar = FALSE;
 		g_theWonderTracker->SetGlobeSatFlags(g_theWonderTracker->GlobeSatFlags() & ~(1 << m_owner));
 	}
@@ -7900,6 +7899,8 @@ void Player::ContactMade(PLAYER_INDEX with)
 				{
 					Diplomat::GetDiplomat(with).SendGreeting(m_owner);
 					Diplomat::GetDiplomat(m_owner).SendGreeting(with);
+					Diplomat::GetDiplomat(with).RecomputeRegard();
+					Diplomat::GetDiplomat(m_owner).RecomputeRegard();
 				}
 			}
 		}
@@ -7959,7 +7960,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
     SlicObject *so;
 
     for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-        const WonderRecord *wrec = wonderutil_Get(i);
+        const WonderRecord *wrec = wonderutil_Get(i, m_owner);
 
 		bool is_obsolete = false;
         for(o = 0; o < wrec->GetNumObsoleteAdvance(); o++) {
@@ -8063,7 +8064,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 	}
 	else
 	{
-		foo = g_theWonderDB->Get(gaiaWonder)->GetEnableAdvanceIndex();
+		foo = wonderutil_Get(gaiaWonder, m_owner)->GetEnableAdvanceIndex();
 	}
 
 	if(advance == foo)

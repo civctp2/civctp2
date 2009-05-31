@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Player strength history
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -42,6 +45,7 @@
 #include "wonderutil.h"
 #include "newturncount.h"
 #include "SelItem.h"
+#include "buildingutil.h"
 
 Strengths::Strengths(sint32 owner)
 {
@@ -178,7 +182,7 @@ sint32 Strengths::GetTotalBuildingCost() const
 		uint64 builtImprovements = cities->Access(i).GetImprovements();
 		for(j = g_theBuildingDB->NumRecords() - 1; j >= 0; j--) {
 			if(builtImprovements & ((uint64)1 << (uint64)j)) {
-				c += g_theBuildingDB->Get(j)->GetProductionCost();
+				c += buildingutil_Get(j, m_owner)->GetProductionCost();
 			}
 		}
 	}
@@ -191,7 +195,7 @@ sint32 Strengths::GetTotalWonderCost() const
 	sint32 c = 0;
 	for(i = g_theWonderDB->NumRecords() - 1; i >= 0; i--) {
 		if(g_player[m_owner]->m_builtWonders & (uint64(1) << uint64(i))) {
-			c += wonderutil_Get(i)->GetProductionCost();
+			c += wonderutil_Get(i, m_owner)->GetProductionCost();
 		}
 	}
 	return c;

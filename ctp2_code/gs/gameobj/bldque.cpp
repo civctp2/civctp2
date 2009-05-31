@@ -232,14 +232,18 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 
 				sint32 bcost;
 
-				if(g_theBuildingDB->Get(type)->GetProductionCostPopModifier()) {
-					bcost = g_theBuildingDB->Get(type)->GetProductionCost() * m_city.CD()->PopCount();
-				} else {
-					bcost = g_theBuildingDB->Get(type)->GetProductionCost();
-				}				 
+				if(buildingutil_Get(type, m_owner)->GetProductionCostPopModifier())
+				{
+					bcost = buildingutil_Get(type, m_owner)->GetProductionCost() * m_city.CD()->PopCount();
+				}
+				else
+				{
+					bcost = buildingutil_Get(type, m_owner)->GetProductionCost();
+				}
+
 				cost = bcost;
 				//end EMOD 10-10-2006
-				//cost = g_theBuildingDB->Get(type)->GetProductionCost(); //original
+				//cost = buildingutil_Get(type, m_owner)->GetProductionCost(); //original
 				break;
 			case 'W':
 				category = k_GAME_OBJ_TYPE_WONDER;
@@ -248,7 +252,7 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 					continue;
 				}
 
-				cost = g_theWonderDB->Get(type)->GetProductionCost();
+				cost = wonderutil_Get(type, m_owner)->GetProductionCost();
 				break;
 			case '#':
 				
@@ -494,7 +498,7 @@ bool BuildQueue::BuildFrontWonder()
 	if(m_list->GetHead()->m_cost <= m_city.CD()->GetStoredCityProduction()) {
 		DPRINTF(k_DBG_GAMESTATE, ("City %lx built wonder: %s\n",
 								  (uint32)m_city,
-								  g_theStringDB->GetNameStr(wonderutil_Get(m_list->GetHead()->m_type)->GetName())));
+								  g_theStringDB->GetNameStr(g_theWonderDB->Get(m_list->GetHead()->m_type)->GetName())));
 
 		m_list->GetHead()->m_flags |= k_BUILD_NODE_FLAG_ALREADY_BUILT;
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateWonder,
@@ -722,7 +726,7 @@ void BuildQueue::FinishBuildFront(Unit &u)
 						so->AddAction(g_theStringDB->GetNameStr(g_theBuildingDB->Get(next->m_type)->m_name));
 						break;
 					case k_GAME_OBJ_TYPE_WONDER:
-						so->AddAction(g_theStringDB->GetNameStr(wonderutil_Get(next->m_type)->m_name));
+						so->AddAction(g_theStringDB->GetNameStr(g_theWonderDB->Get(next->m_type)->m_name));
 						break;
 					case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
 //						so->AddAction(g_theStringDB->GetNameStr(g_theEndGameDB->Get(next->m_type)->m_name));
@@ -1597,26 +1601,29 @@ void BuildQueue::RemoveIllegalItems(bool isClientAck)
 
 sint32 BuildQueue::GetCost(sint32 cat, sint32 t)
 {
-	switch(cat) {
-        case k_GAME_OBJ_TYPE_UNIT:
+	switch(cat)
+	{
+		case k_GAME_OBJ_TYPE_UNIT:
 			return g_theUnitDB->Get(t)->GetShieldCost();
 		case k_GAME_OBJ_TYPE_WONDER :
-			return wonderutil_Get(t)->GetProductionCost();
+			return wonderutil_Get(t, m_owner)->GetProductionCost();
 		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			//ProductionCostPopModifier m_city.CD()->PopCount()
 			//EMOD ProductionCostPopModifier  10-10-2006
 
 				sint32 bcost;
 
-				if (g_theBuildingDB->Get(t)->GetProductionCostPopModifier()) {
-					bcost = g_theBuildingDB->Get(t)->GetProductionCost() * m_city.CD()->PopCount();
-
-				} else {
-					bcost = g_theBuildingDB->Get(t)->GetProductionCost();
+				if(buildingutil_Get(t, m_owner)->GetProductionCostPopModifier())
+				{
+					bcost = buildingutil_Get(t, m_owner)->GetProductionCost() * m_city.CD()->PopCount();
+				}
+				else
+				{
+					bcost = buildingutil_Get(t, m_owner)->GetProductionCost();
 				}
 
 				return bcost;
-			//return g_theBuildingDB->Get(t)->GetProductionCost();
+			//return g_theBuildingDB->Get(t, m_owner)->GetProductionCost();
 		case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
 //			return g_theEndGameDB->Get(t)->GetCost();
 		default:
@@ -1705,13 +1712,13 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		uint64 i;
 		uint64 buildings = cd->GetEffectiveBuildings();
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesAllVeterans()) {
+			if(buildingutil_Get(i, m_owner)->GetEnablesAllVeterans()) {
 				if((buildings & ((uint64)1 << uint64(i)))) {
 					u.SetVeteran();
 				}
 			}
 			if(
-			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesLandVeterans()) 
+			  (buildingutil_Get(i, m_owner)->GetEnablesLandVeterans()) 
 			&&(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) 
 			){
 				if((buildings & ((uint64)1 << uint64(i)))) {
@@ -1720,7 +1727,7 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 			}
 
 			if(
-			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesSeaVeterans()) 
+			  (buildingutil_Get(i, m_owner)->GetEnablesSeaVeterans()) 
 			&&(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) 
 			){
 				if((buildings & ((uint64)1 << uint64(i)))) {
@@ -1729,7 +1736,7 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 			}
 			//Air Veterans
 			if(
-			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesAirVeterans()) 
+			  (buildingutil_Get(i, m_owner)->GetEnablesAirVeterans()) 
 			&&(rec->GetMovementTypeAir()) 
 			){
 				if((buildings & ((uint64)1 << uint64(i)))) {
