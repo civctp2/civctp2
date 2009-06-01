@@ -5054,7 +5054,7 @@ void UnitData::SetType(sint32 type)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Update unit 0x%lx From type %d to type %d @ (%d,%d), turn=%d\n", m_id, m_type, type, m_pos.x, m_pos.y, g_player[m_owner]->m_current_round));
 
-	if(GetDBRec()->GetUpgradeDoesNotHeal())
+	if(GetDBRec()->GetUpgradeDoesNotHeal()) //This stuff preserves the hp,fuel, and movement points of the unit if flag is present.
 	{
 		sint32 prevTotalHP = CalculateTotalHP();
 		sint32 prevTotalFuel = CalculateTotalFuel();
@@ -5084,7 +5084,7 @@ void UnitData::SetType(sint32 type)
 	}
 
 	ClearFlag(k_UDF_FIRST_MOVE); // Clear flag: Upgraded unit maybe mobile
-	if(!IsImmobile())
+	if(!IsImmobile() && m_movement_points > 0) //Don't let it move if it has no movement points!!!
 		SetFlag(k_UDF_FIRST_MOVE);
 
 	const UnitRecord *rec = GetDBRec();
@@ -5113,8 +5113,10 @@ void UnitData::SetType(sint32 type)
 		m_army->UpdateMoveIntersection();
 	}
 
+	g_selected_item->UpdateSelectedItem();
+
 	// Maybe more stuff has to be done.
-	//4-8-2007 may have to add a reset movement here?
+	//4-8-2007 may have to add a reset movement here? 
 
 	// Synchronize MP
 	ENQUEUE();
@@ -5132,7 +5134,7 @@ bool UnitData::CanUpgrade(sint32 & upgradeType, sint32 & upgradeCosts) const
 		      (
 		           g_player[m_owner]->HasFreeUnitUpgrades()
 		        ||
-		          (
+		          ( //If "UpgradeAnywhere" flag is present, skips position check
 		              ( GetDBRec()->GetUpgradeAnywhere()
                     || g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner) )
 		            && upgradeCosts <= g_player[m_owner]->m_gold->GetLevel()
