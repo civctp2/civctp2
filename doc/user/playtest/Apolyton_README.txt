@@ -29,7 +29,7 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 981 (17-May-2009)"
+http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -48,6 +48,24 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2009-06-01 (Revision 990)
+Fixed:    The game does not crash, if a civilization is wiped out.
+Fixed:    The game does not hang if the AI cannot find enough transporters for
+          a goal like sieging a city.
+Added:    More of the government modifed functionality for buildings and
+          wonders was implemented.
+Fixed:    The AI regard for another player is recomputed when first cobtact
+          is made. This prevents the AI to give the human player a map exchange
+          a peace treaty etc. on the first turn of contact. Now the human player
+          has to build up trust, first.
+Fixed:    Units with zero movepoints cannot move after an upgrade anymore.
+Fixed:    The game now updates the displayed unit information including its picture.
+Added:    New database flags for modders:
+- UnitDB:
+   UpgradeAnywhere         Unit can be upgraded outside of cities and forts
+   UpgradeDoesNotHeal      Unit does not regain fuel, HP, and movepoints
+                           after an upgrade.
+
 2009-05-17 (Revision 981)
 Fixed:    The AI does not try to use units for conquest if those units were
           assigned for city garrison. Such a attack does not fail anymore.
