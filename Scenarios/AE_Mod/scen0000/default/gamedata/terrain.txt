@@ -9,13 +9,13 @@ TERRAIN_FOREST {
 
    AddAdvance ADVANCE_CONSERVATION
    TransformAdd {
-      Time 5
+      Time 2
       Materials 800
    }
 
    RemoveAdvance ADVANCE_TOOLMAKING
    TransformRemove {
-      Time 3
+      Time 1
       Materials 200
    }
 
@@ -24,7 +24,7 @@ TERRAIN_FOREST {
       Food 5
       Shield 15
       Gold 5
-      Defense 0.5
+      Defense 0.25
       Movement 200
       Freight 180
       DeadFood 0
@@ -39,12 +39,13 @@ TERRAIN_FOREST {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
       Score 30
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -56,7 +57,7 @@ TERRAIN_FOREST {
    Resources TERRAIN_FOREST_GOOD_FOUR
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -71,7 +72,7 @@ TERRAIN_PLAINS {
 
    AddAdvance ADVANCE_TOOLMAKING
    TransformAdd {
-      Time 5
+      Time 1
       Materials 200
    }
 
@@ -101,12 +102,13 @@ TERRAIN_PLAINS {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
       Score 40
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -133,19 +135,19 @@ TERRAIN_TUNDRA {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 3
       Materials 800
    }
 
    RemoveAdvance ADVANCE_ADVANCED_COMPOSITES
    TransformRemove {
-      Time 5
+      Time 2
       Materials 400
    }
 
    EnvBase {
       Score 0
-      Food 5
+      Food 0
       Shield 5
       Gold 0
       Defense 0
@@ -163,12 +165,13 @@ TERRAIN_TUNDRA {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 10
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -177,7 +180,7 @@ TERRAIN_TUNDRA {
    Resources TERRAIN_TUNDRA_GOOD_ONE
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -195,9 +198,9 @@ TERRAIN_GLACIER {
       Materials 800
    }
 
-   RemoveAdvance ADVANCE_GAIA_THEORY
+   RemoveAdvance ADVANCE_ADVANCED_COMPOSITES
    TransformRemove {
-      Time 10
+      Time 5
       Materials 1000
    }
 
@@ -221,19 +224,20 @@ TERRAIN_GLACIER {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 0
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
    }
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -248,7 +252,7 @@ TERRAIN_GRASSLAND {
 
    AddAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    TransformAdd {
-      Time 5
+      Time 1
       Materials 400
    }
 
@@ -259,9 +263,9 @@ TERRAIN_GRASSLAND {
    }
 
    EnvBase {
-      Score 80
+      Score 90
       Food 15
-      Shield 5
+      Shield 7
       Gold 5
       Defense 0
       Movement 100
@@ -278,12 +282,13 @@ TERRAIN_GRASSLAND {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 40
+      Score 50
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -310,20 +315,20 @@ TERRAIN_DESERT {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 1
       Materials 800
    }
 
    RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    TransformRemove {
-      Time 7
-      Materials 800
+      Time 1
+      Materials 400
    }
 
    EnvBase {
-      Score 40
+      Score 10
       Food 0
-      Shield 10
+      Shield 0
       Gold 5
       Defense 0
       Movement 200
@@ -340,12 +345,13 @@ TERRAIN_DESERT {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 20
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -372,22 +378,22 @@ TERRAIN_SWAMP {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 2
       Materials 800
    }
 
    RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    TransformRemove {
-      Time 5
-      Materials 800
+      Time 1
+      Materials 400
    }
 
    EnvBase {
-      Score 40
+      Score 10
       Food 5
       Shield 5
       Gold 5
-      Defense 0.5
+      Defense 0.25
       Movement 300
       Freight 270
       DeadFood 0
@@ -402,12 +408,13 @@ TERRAIN_SWAMP {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 20
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -419,7 +426,7 @@ TERRAIN_SWAMP {
    Resources TERRAIN_SWAMP_GOOD_FOUR
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -434,22 +441,22 @@ TERRAIN_JUNGLE {
 
    AddAdvance ADVANCE_CONSERVATION
    TransformAdd {
-      Time 5
+      Time 2
       Materials 1600
    }
 
    RemoveAdvance ADVANCE_TOOLMAKING
    TransformRemove {
-      Time 3
-      Materials 400
+      Time 1
+      Materials 200
    }
 
    EnvBase {
-      Score 70
-      Food 10
+      Score 50
+      Food 5
       Shield 10
       Gold 5
-      Defense 0.5
+      Defense 0.25
       Movement 300
       Freight 540
       DeadFood 0
@@ -464,12 +471,13 @@ TERRAIN_JUNGLE {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
       Score 30
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -481,7 +489,7 @@ TERRAIN_JUNGLE {
    Resources TERRAIN_JUNGLE_GOOD_THREE
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -501,16 +509,16 @@ TERRAIN_MOUNTAIN {
 
    RemoveAdvance ADVANCE_FUSION
    TransformRemove {
-      Time 10
+      Time 5
       Materials 2000
    }
 
    EnvBase {
-      Score 60
+      Score 40
       Food 0
       Shield 15
-      Gold 5
-      Defense 2
+      Gold 10
+      Defense 1
       Movement 400
       Freight 540
       DeadFood 0
@@ -525,12 +533,13 @@ TERRAIN_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
       Score 30
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -557,22 +566,22 @@ TERRAIN_HILL {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 2
       Materials 800
    }
 
    RemoveAdvance ADVANCE_EXPLOSIVES
    TransformRemove {
-      Time 10
-      Materials 1000
+      Time 3
+      Materials 600
    }
 
    EnvBase {
-      Score 70
+      Score 50
       Food 5
       Shield 10
-      Gold 5
-      Defense 1
+      Gold 10
+      Defense 0.5
       Movement 200
       Freight 180
       DeadFood 0
@@ -587,12 +596,13 @@ TERRAIN_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
       Score 30
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -604,7 +614,7 @@ TERRAIN_HILL {
    Resources TERRAIN_HILL_GOOD_THREE
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -619,8 +629,8 @@ TERRAIN_WATER_SHALLOW {
    EnvBase {
       Score 60
       Food 10
-      Shield 5
-      Gold 10
+      Shield 10
+      Gold 5
       Defense 0
       Movement 100
       Freight 50
@@ -633,6 +643,7 @@ TERRAIN_WATER_SHALLOW {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
@@ -641,6 +652,7 @@ TERRAIN_WATER_SHALLOW {
    Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
 
    MovementType: Air
+   MovementType: Sea
    MovementType: ShallowWater
 }
 
@@ -654,10 +666,10 @@ TERRAIN_WATER_DEEP {
    InternalType: WaterDeep
 
    EnvBase {
-      Score 50
+      Score 70
       Food 10
-      Shield 5
-      Gold 10
+      Shield 10
+      Gold 5
       Defense 0
       Movement 100
       Freight 50
@@ -670,6 +682,7 @@ TERRAIN_WATER_DEEP {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -691,9 +704,9 @@ TERRAIN_WATER_VOLCANO {
 
    EnvBase {
       Score 90
-      Food 10
-      Shield 20
-      Gold 10
+      Food 0
+      Shield 25
+      Gold 15
       Defense 0
       Movement 100
       Freight 50
@@ -706,6 +719,7 @@ TERRAIN_WATER_VOLCANO {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
@@ -729,7 +743,7 @@ TERRAIN_WATER_BEACH {
    EnvBase {
       Score 90
       Food 10
-      Shield 5
+      Shield 10
       Gold 10
       Defense 0
       Movement 100
@@ -740,9 +754,9 @@ TERRAIN_WATER_BEACH {
    }
 
    EnvRiver {
-      Score 30
+      Score 40
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 100
       Freight 33
@@ -753,6 +767,7 @@ TERRAIN_WATER_BEACH {
    Resources TERRAIN_WATER_BEACH_GOOD_THREE
 
    MovementType: Air
+   MovementType: Sea
    MovementType: ShallowWater
 }
 
@@ -766,10 +781,10 @@ TERRAIN_WATER_SHELF {
    InternalType: WaterShelf
 
    EnvBase {
-      Score 70
-      Food 10
-      Shield 5
-      Gold 10
+      Score 50
+      Food 5
+      Shield 10
+      Gold 5
       Defense 0
       Movement 100
       Freight 50
@@ -782,6 +797,7 @@ TERRAIN_WATER_SHELF {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -820,6 +836,7 @@ TERRAIN_WATER_TRENCH {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -856,6 +873,7 @@ TERRAIN_WATER_RIFT {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -910,22 +928,22 @@ TERRAIN_BROWN_HILL {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 2
       Materials 800
    }
 
    RemoveAdvance ADVANCE_EXPLOSIVES
    TransformRemove {
-      Time 10
-      Materials 1000
+      Time 3
+      Materials 600
    }
 
    EnvBase {
-      Score 50
+      Score 30
       Food 0
       Shield 10
       Gold 5
-      Defense 1
+      Defense 0.5
       Movement 300
       Freight 180
       DeadFood 0
@@ -940,12 +958,13 @@ TERRAIN_BROWN_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 20
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -957,7 +976,7 @@ TERRAIN_BROWN_HILL {
    Resources TERRAIN_DESERT_GOOD_FOUR
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -977,16 +996,16 @@ TERRAIN_BROWN_MOUNTAIN {
 
    RemoveAdvance ADVANCE_FUSION
    TransformRemove {
-      Time 10
+      Time 5
       Materials 2000
    }
 
    EnvBase {
-      Score 60
+      Score 40
       Food 0
-      Shield 15
-      Gold 5
-      Defense 2
+      Shield 10
+      Gold 10
+      Defense 1
       Movement 400
       Freight 540
       DeadFood 0
@@ -1001,12 +1020,13 @@ TERRAIN_BROWN_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 20
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -1031,22 +1051,22 @@ TERRAIN_WHITE_HILL {
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
-      Time 5
+      Time 2
       Materials 800
    }
 
    RemoveAdvance ADVANCE_EXPLOSIVES
    TransformRemove {
-      Time 10
-      Materials 1000
+      Time 3
+      Materials 600
    }
 
    EnvBase {
-      Score 50
+      Score 20
       Food 0
-      Shield 10
+      Shield 5
       Gold 5
-      Defense 1
+      Defense 0.5
       Movement 300
       Freight 180
       DeadFood 0
@@ -1060,12 +1080,13 @@ TERRAIN_WHITE_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 10
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -1075,7 +1096,7 @@ TERRAIN_WHITE_HILL {
    Resources TERRAIN_WHITE_HILL_GOOD_TWO
 
    MovementType: Air
-   MovementType: Mountain
+   MovementType: Land
 }
 
 ############################################################
@@ -1095,16 +1116,16 @@ TERRAIN_WHITE_MOUNTAIN {
 
    RemoveAdvance ADVANCE_FUSION
    TransformRemove {
-      Time 10
+      Time 5
       Materials 2000
    }
 
    EnvBase {
-      Score 60
+      Score 30
       Food 0
-      Shield 15
+      Shield 10
       Gold 5
-      Defense 2
+      Defense 1
       Movement 400
       Freight 540
       DeadFood 0
@@ -1118,12 +1139,13 @@ TERRAIN_WHITE_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
-      Score 30
+      Score 10
       Food 5
-      Shield 0
+      Shield 5
       Gold 5
       Movement 50
       Freight 70
@@ -1148,10 +1170,10 @@ TERRAIN_WATER_KELP {
    InternalType: WaterKelp
 
    EnvBase {
-      Score 80
+      Score 90
       Food 15
-      Shield 5
-      Gold 10
+      Shield 10
+      Gold 5
       Defense 0
       Movement 100
       Freight 50
@@ -1164,6 +1186,7 @@ TERRAIN_WATER_KELP {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -1172,6 +1195,7 @@ TERRAIN_WATER_KELP {
    Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
 
    MovementType: Air
+   MovementType: Sea
    MovementType: ShallowWater
 }
 
@@ -1185,10 +1209,10 @@ TERRAIN_WATER_REEF {
    InternalType: WaterReef
 
    EnvBase {
-      Score 80
+      Score 90
       Food 10
-      Shield 10
-      Gold 10
+      Shield 15
+      Gold 5
       Defense 0
       Movement 100
       Freight 110
@@ -1201,6 +1225,7 @@ TERRAIN_WATER_REEF {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -1244,6 +1269,7 @@ TERRAIN_SPECIAL1 {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1290,6 +1316,7 @@ TERRAIN_SPECIAL2 {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {

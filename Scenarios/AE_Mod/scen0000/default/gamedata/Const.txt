@@ -24,22 +24,24 @@
 #
 #----------------------------------------------------------------------------
 
+TurnsAcceptedForOnePop 999
+
 # all numbers are integers ranging from 0 to 100
 
-PERCENT_LAND 40 # how much of the world is land
-PERCENT_CONTINENT 50 # how much of the world tends toward big continents verses small islands
-PERCENT_HOMOGENOUS 55  ## how "clumpy" the land terrain is
+PERCENT_LAND 45 #40  how much of the world is land
+PERCENT_CONTINENT 70 #50  how much of the world tends toward big continents verses small islands
+PERCENT_HOMOGENOUS 5  ## how "clumpy" the land terrain is
 
 # the meridians are normalize on the map at 0 to 100 - 0 is all the way north
 # and 100 is all the way south - 50 is the middle  - this works on a map of
 # any size
 
-MERIDIANA 5  # north of this is north pole
+MERIDIANA  1  #5 north of this is north pole
 MERIDIANB 25  # north of this is north mild
-MERIDIANC 35  # north of this is north deasert
-MERIDIAND 60  # north of this is the equatioral region
-MERIDIANE 70  # north of this is south desert
-MERIDIANF 95  # north of this is the south mild, south is the south pole
+MERIDIANC 35  # north of this is north desert
+MERIDIAND 65  # north of this is the equatioral region
+MERIDIANE 75  # north of this is south desert
+MERIDIANF 99  #95 north of this is the south mild, south is the south pole
 
 # the humidity controls the ditrabution of forest, jungle, swamp, grass, plains, desert
 #	tundra and glacier
@@ -62,16 +64,16 @@ HLEVELD 15  # below this is dry terrain
 # The sum of all the wet values together w/ the swamp wet value will add to 100.
 # Similarly for the dry values.  Actually, swamp = 100 - (forest + grass + plains + desert).
 
-FORESTWET 40
-GRASSWET 30
-PLAINSWET 20
-DESERTWET 0
+FORESTWET 19 #40
+GRASSWET  50 #30
+PLAINSWET 30 #20
+DESERTWET  0
 # This leaves 10 for swamp.
 
-FORESTDRY 15
-GRASSDRY 30
-PLAINSDRY 50
-DESERTDRY 5
+FORESTDRY 19 #15
+GRASSDRY  50 #30
+PLAINSDRY 30 #50
+DESERTDRY  1 #5
 # This leaves 0 for swamp.
 
 # The warm/cold slider on the custommap screen uses these values.
@@ -95,7 +97,7 @@ RIVERCELLWIDTHMANYGOODS 5
 RIVERCELLHEIGHTMANYGOODS 5
 
 
-PERCENT_MOUNTAIN 5  # percetage of land with mountaint on it - this is a target only
+PERCENT_MOUNTAIN 15  #5 percetage of land with mountaint on it - this is a target only
 MOUNTAIN_CELL 5     # length of a side of a cell - one cell contains at most 1 mountain chain. 
 
 PERCENT_HILLS 5     # percent of land with hills on it
@@ -104,15 +106,15 @@ MOUNTAIN_LENGTH 25   # average length of a mountain chain
 
 GLACIER_EXTENT 3	# number of tiles the glacier extends - should be normalized
 PERCENT_VOLCANO 1	# percent of deep sea floor with volcanos
-PERCENT_TRENCH 4	# percent chance that a trench is seeded - then it spreads automatically
+PERCENT_TRENCH 0	# percent chance that a trench is seeded - then it spreads automatically
 
 # Swamps are placed at humidity levels above what forest works out to.
 PERCENT_FOREST 20   
-PERCENT_GRASS  40   
-PERCENT_PLAINS 25   
-PERCENT_DESERT 10   
-PERCENT_WHITE 20
-PERCENT_BROWN 20
+PERCENT_GRASS  90   #from 40
+PERCENT_PLAINS 35  	#from 25 
+PERCENT_DESERT 1   
+PERCENT_WHITE 10	#from 20
+PERCENT_BROWN 10	#from 20
 TEMPERATURE_RANGE_ADJUST 60 # Adjust the temperature height map by negative this amount at the
 		                    # poles, positive at the equator, linear scale in between
 
@@ -124,7 +126,7 @@ RIVER_LENGTH 15 # average river length
 RIVER_CELL_WIDTH 5   # Size of cells to be searched for river starts
 RIVER_CELL_HEIGHT 5  # (highest point in each cell)
 
-RICHNESS 50 # density of special goods in the world
+RICHNESS 65 #50 density of special goods in the world
 
 CHANCE_LOST_AT_SEA 30 # chance of a unit being lost at sea
 VETERAN_COEF 50  #percent improvement in attack and defense of vetern units
@@ -133,7 +135,7 @@ DISCOVERIES_POLLUTION_SIZE_MODIFIER 0.5
 DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER 0.01
 AVERAGE_POLLUTION_TURNS	5
 POPULATION_PRODUCES_POLLUTION_THRESHOLD		16
-PRODUCTION_PRODUCES_POLLUTION_THRESHOLD		200
+PRODUCTION_PRODUCES_POLLUTION_THRESHOLD		450
 
 MAX_EMPIRE_DIST_COST  10.0  # max distance unhappyness
 HAPPINESS_LAUNCH_COST 0.0 # cost of going into space or landing for calculation happiness
@@ -171,15 +173,15 @@ AI_GOAL_TIME_SLICE 25	# time in milliseconds for an AI frame
 AI_MAX_TIME_SLICE  250  # (in milliseconds)if the ai exceeds this time its turn is ended
 AI_TOTAL_TIME_SLICE 3000 # (in milliseconds) if the total time in time in the ai player  exceeds this its turn is ended
 
-ENTRENCHMENT_BONUS 2.0  # defense bonus for being entrenched
+ENTRENCHMENT_BONUS 0.5  # defense bonus for being entrenched
 PARADROP_DISTANCE 20 # how far away can paratroopers drop?
 PARADROP_SUCCESS_PERCENT 100 # a miss results in a drop to a neighboring square
 
-ELITE_SPY_BONUS 0.0 # how much more likely elite spies are to succeed.
+ELITE_SPY_BONUS 0.15 #0.0  how much more likely elite spies are to succeed.
 CITY_SECOND_ATTEMPT_SPY_BONUS 0.5 # how much less likely a spy is to succeed on a second attempt.
 ASSASINATION_HAPPINESS_EFFECT -5 # unhappiness caused when a ruler is assasinated
 ASSASINATION_HAPPINESS_EFFECT_TIMER 5 # how long the above lasts
-SPIED_UPON_WARINESS_TIMER 5 # How many turns a spied upon city gets increased wariness
+SPIED_UPON_WARINESS_TIMER 7 #5  How many turns a spied upon city gets increased wariness
 
 MAX_PARTY_COST 500      # most than can be spent on a party
 MAX_PARTY_CHANCE 0.5    # the chance of hearing gossip at a party where the
@@ -193,11 +195,11 @@ TURNS_TO_SUE_FRANCHISE 0 # How many turns a lawsuit takes to expel a franchise
 SLAVER_ELITE_CHANCE 0.0 # Chance of a slaver becoming elite in a successful raid
 ELITE_SLAVER_BONUS 0.0 # Bonus to success percentage an elite slaver receives
 
-ABOLITIONIST_ELITE_CHANCE 0.0 # chance of an abolitionist becoming elite
-ELITE_ABOLITIONIST_BONUS 0.0 # Bonus an elite abolitionist receives
+ABOLITIONIST_ELITE_CHANCE 0.25 #0.0  chance of an abolitionist becoming elite
+ELITE_ABOLITIONIST_BONUS 0.15 #0.0  Bonus an elite abolitionist receives
 WATCHFUL_CITY_SUCCESS_MODIFIER 0.5 # Multiply an abolitionist or slaver's success chance by this
 WATCHFUL_CITY_DEATH_MODIFIER 1.0 # Multiply death chance by this
-WATCHFUL_CITY_TURNS 5 # how long a city remains watchful
+WATCHFUL_CITY_TURNS 7 #5 how long a city remains watchful
 
 BIO_INFECTION_TURNS 5
 NANO_INFECTION_TURNS 5
@@ -229,8 +231,8 @@ OTHER_FAITH_INDULGENCE_GOLD 2
 OTHER_FAITH_INDULGENCE_HAPPINESS 1
 SOOTHSAY_HAPPY_AMOUNT -5
 
-RUINS_BOX_WIDTH 6
-RUINS_BOX_HEIGHT 6
+RUINS_BOX_WIDTH 8 #6
+RUINS_BOX_HEIGHT 7 #6
 RUINS_CHANCE_PER_BOX 1.0
 MAX_RUINS_GOLD 100
 MAX_RUINS_ADVANCE 10
@@ -275,8 +277,8 @@ NORMAL_HEAL_RATE 0.1
 LOCAL_POLLUTION_LEVEL 400
 LOCAL_POLLUTION_CHANCE 0.0005
 
-ASSAULT_DESTROY_BUILDING_CHANCE 0.1  # chance of an assault on a city destroying a building
-BOMBARD_DESTROY_BUILDING_CHANCE 0.1  # chance of a bombardment on a city destroying a building
+ASSAULT_DESTROY_BUILDING_CHANCE 0.5 #0.1  chance of an assault on a city destroying a building
+BOMBARD_DESTROY_BUILDING_CHANCE 0.3 #0.1  chance of a bombardment on a city destroying a building
 ADVANCE_CHOICES_MIN 4
 ADVANCE_CHOICES_MAX 6
 
@@ -286,7 +288,7 @@ ATTACK_CONVERTER_UNHAPPINESS_AMOUNT -3.0
 MIN_START_DISTANCE_COEFFICIENT 0.45
 MAX_START_DISTANCE_COEFFICIENT 0.6
 MAX_SAME_TILES 4
-COMBAT_VETERAN_CHANCE 0.1
+COMBAT_VETERAN_CHANCE 0.25 #0.1
 
 STOP_TRADE_ROUNDS 5
 LEAVE_OUR_LANDS_ROUNDS 3
@@ -295,7 +297,7 @@ CAPTURE_CITY_ROUNDS 5
 END_POLLUTION_ROUNDS 10
 ATTACK_ENEMY_ROUNDS 10
 
-MIN_CONTINENT_START_SIZE 10
+MIN_CONTINENT_START_SIZE 15 #10
 
 BOMBARD_KILL_POP_CHANCE 0.1
 ASSAULT_KILL_POP_CHANCE 0.4
@@ -361,8 +363,8 @@ AI_CHEAT_ECO_PACT_MAX 50
 MAX_ABSOLUTE_GROWTH_RATE 2500
 TRADE_DISTANCE_COEFFICIENT 1
 MIN_LIKE_TILES_FOR_GOOD 1
-MIN_GOOD_VALUE 0.01
-MAX_GOOD_VALUE 0.05
+MIN_GOOD_VALUE 0.03 #0.01
+MAX_GOOD_VALUE 0.06 #0.05
 
 PIRACY_WASTE_COEFFICIENT 0.8
 
@@ -373,7 +375,7 @@ BIO_INFECTION_PRODUCTION_COEF 0.2
 NANO_BUILDING_KILL_PERCENTAGE 0.3
 BASE_STARVATION_PROTECTION 3
 
-CARAVAN_COEF 0.04
+CARAVAN_COEF 0.02 #0.04
 
 POLLUTION_CAUSED_BY_NUKE 1000000
 

@@ -72,7 +72,7 @@ IMPROVE_AQUA_FILTER {
    ProductionCost 8000
    Upkeep 18
    RaiseOvercrowdingLevel 6
-   RaiseMaxPopulation 10
+   RaiseMaxPopulation 6
 }
 
 ############################################################
@@ -99,7 +99,7 @@ IMPROVE_ARCOLOGIES {
    ProductionCost 5000
    Upkeep 12
    RaiseOvercrowdingLevel 8
-   RaiseMaxPopulation 10
+   RaiseMaxPopulation 14
 }
 
 ############################################################
@@ -385,7 +385,6 @@ IMPROVE_FOOD_SILO {
    Upkeep 4
    FoodPercent 0.15
    StarvationProtection 5
-   RaiseMaxPopulation 8
 }
 
 ############################################################
@@ -450,6 +449,7 @@ IMPROVE_HOSPITAL {
    ProductionCost 2375
    Upkeep 8
    RaiseOvercrowdingLevel 8
+   RaiseMaxPopulation 8
 }
 
 ############################################################
@@ -650,7 +650,7 @@ IMPROVE_SECURITY_MONITOR {
 
    ProductionCost 4000
    Upkeep 12
-   HappyInc -1
+   HappyInc -3
    LowerCrime -0.3
 }
 

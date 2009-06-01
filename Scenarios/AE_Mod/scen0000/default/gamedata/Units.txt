@@ -149,12 +149,11 @@ UNIT_ARCHER {
    MaxMovePoints 100
    VisionRange 2
    EnableAdvance ADVANCE_BALLISTICS
-   ObsoleteAdvance ADVANCE_FEUDALISM
-   UpgradeTo UNIT_LONGBOWMAN
-   UpgradeTo UNIT_CANNON
-   UpgradeTo UNIT_ARTILLERY
-   UpgradeTo UNIT_MOBILE_SAM
-   UpgradeTo UNIT_WAR_WALKER
+   ObsoleteAdvance ADVANCE_CANNON_MAKING
+   UpgradeTo UNIT_MOUNTED_ARCHER
+   UpgradeTo UNIT_CAVALRY
+   UpgradeTo UNIT_TANK
+   UpgradeTo UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -208,10 +207,9 @@ UNIT_ARTILLERY {
    ShieldHunger 15
    GoldHunger 30
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 2
    EnableAdvance ADVANCE_EXPLOSIVES
-   ObsoleteAdvance ADVANCE_RADAR
    UpgradeTo UNIT_MOBILE_SAM
    UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
@@ -403,10 +401,10 @@ UNIT_CANNON {
    ShieldHunger 12
    GoldHunger 20
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 2
    EnableAdvance ADVANCE_CANNON_MAKING
-   ObsoleteAdvance ADVANCE_EXPLOSIVES
+   ObsoleteAdvance ADVANCE_CYBERNETICS
    UpgradeTo UNIT_ARTILLERY
    UpgradeTo UNIT_MOBILE_SAM
    UpgradeTo UNIT_WAR_WALKER
@@ -622,7 +620,7 @@ UNIT_CATAMARAN {
    ShieldHunger 2
    GoldHunger 5
    FoodHunger 0
-   MaxMovePoints 300
+   MaxMovePoints 200
    VisionRange 1
    EnableAdvance ADVANCE_SHIP_BUILDING
    ObsoleteAdvance ADVANCE_HULL_MAKING
@@ -689,7 +687,7 @@ UNIT_CATAPULT {
    MaxMovePoints 100
    VisionRange 2
    EnableAdvance ADVANCE_GEOMETRY
-   ObsoleteAdvance ADVANCE_CANNON_MAKING
+   ObsoleteAdvance ADVANCE_EXPLOSIVES
    UpgradeTo UNIT_CANNON
    UpgradeTo UNIT_ARTILLERY
    UpgradeTo UNIT_MOBILE_SAM
@@ -750,10 +748,10 @@ UNIT_CAVALRY {
    ShieldHunger 12
    GoldHunger 15
    FoodHunger 0
-   MaxMovePoints 200
+   MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_CAVALRY_TACTICS
-   ObsoleteAdvance ADVANCE_TANK_WARFARE
+   ObsoleteAdvance ADVANCE_FUSION
    UpgradeTo UNIT_TANK
    UpgradeTo UNIT_FUSION_TANK
    ActiveDefenseRange 0
@@ -1198,7 +1196,7 @@ UNIT_DESTROYER {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_MASS_PRODUCTION
-   ObsoleteAdvance ADVANCE_PLASMA_ENGINEERING
+   ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
    UpgradeTo UNIT_PLASMA_DESTROYER
    BombRounds 5
    BombardRange 1
@@ -1525,9 +1523,9 @@ UNIT_FASCIST {
    DefaultIcon ICON_UNIT_FASCIST
    DefaultSprite SPRITE_FASCIST
    Category UNIT_CATEGORY_ATTACK
-   Attack 25
-   Defense 35
-   ZBRangeAttack 15
+   Attack 35
+   Defense 40
+   ZBRangeAttack 20
    Firepower 3
    Armor 1
    MaxHP 10
@@ -1536,10 +1534,12 @@ UNIT_FASCIST {
    ShieldHunger 10
    GoldHunger 20
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 2
    EnableAdvance ADVANCE_FASCISM
    GovernmentType GOVERNMENT_FASCISM
+   UpgradeTo	UNIT_MARINE
+   UpgradeTo	UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1655,7 +1655,7 @@ UNIT_FIRE_TRIREME {
    MaxMovePoints 200
    VisionRange 1
    EnableAdvance ADVANCE_ALCHEMY
-   ObsoleteAdvance ADVANCE_NAVAL_TACTICS
+   ObsoleteAdvance ADVANCE_MODERN_METALLURGY
    UpgradeTo UNIT_SHIP_OF_THE_LINE
    UpgradeTo UNIT_IRONCLAD
    UpgradeTo UNIT_BATTLESHIP
@@ -1717,7 +1717,7 @@ UNIT_FRIGATE {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_MASS_PRODUCTION
-   ObsoleteAdvance ADVANCE_PLASMA_ENGINEERING
+   ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -1775,7 +1775,7 @@ UNIT_FUSION_TANK {
    ShieldHunger 50
    GoldHunger 130
    FoodHunger 0
-   MaxMovePoints 400
+   MaxMovePoints 800
    VisionRange 3
    EnableAdvance ADVANCE_FUSION
    ActiveDefenseRange 0
@@ -1835,11 +1835,12 @@ UNIT_HOPLITE {
    MaxMovePoints 100
    VisionRange 1
    EnableAdvance ADVANCE_BRONZE_WORKING
-   ObsoleteAdvance ADVANCE_FEUDALISM
+   ObsoleteAdvance ADVANCE_GUNPOWDER
    UpgradeTo UNIT_PIKEMEN
    UpgradeTo UNIT_INFANTRYMAN
    UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_PLASMATICA
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1893,8 +1894,8 @@ UNIT_HOVER_INFANTRY {
    ShieldHunger 25
    GoldHunger 50
    FoodHunger 0
-   MaxMovePoints 300
-   VisionRange 3
+   MaxMovePoints 500
+   VisionRange 4
    EnableAdvance ADVANCE_CHAOS_THEORY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -1948,12 +1949,13 @@ UNIT_INFANTRYMAN {
    ShieldHunger 10
    GoldHunger 15
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 2
    EnableAdvance ADVANCE_GUNPOWDER
-   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ObsoleteAdvance ADVANCE_ADV_INFANTRY_TACTICS
    UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_PLASMATICA
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2186,10 +2188,11 @@ UNIT_KNIGHT {
    ShieldHunger 8
    GoldHunger 16
    FoodHunger 0
-   MaxMovePoints 200
+   MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_FEUDALISM
-   ObsoleteAdvance ADVANCE_CAVALRY_TACTICS
+   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
    UpgradeTo	UNIT_CAVALRY
    UpgradeTo	UNIT_TANK
    UpgradeTo	UNIT_FUSION_TANK
@@ -2249,7 +2252,6 @@ UNIT_KRAKEN {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_GENETIC_TAILORING
-   ObsoleteAdvance ADVANCE_SMART_MATERIALS
    UpgradeTo UNIT_DREADNAUGHT
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -2428,7 +2430,7 @@ UNIT_LONGSHIP {
    MaxMovePoints 300
    VisionRange 1
    EnableAdvance ADVANCE_HULL_MAKING
-   ObsoleteAdvance ADVANCE_OCEAN_FARING
+   ObsoleteAdvance ADVANCE_INTERNAL_COMBUSTION
    UpgradeTo UNIT_CARRACK
    UpgradeTo UNIT_TROOP_SHIP
    ActiveDefenseRange 0
@@ -2482,11 +2484,12 @@ UNIT_MACHINE_GUNNER {
    ShieldHunger 12
    GoldHunger 20
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 1
    EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
-   UpgradeTo UNIT_PLASMATICA
+   ObsoleteAdvance ADVANCE_CHAOS_THEORY
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2540,7 +2543,7 @@ UNIT_MARINE {
    ShieldHunger 14
    GoldHunger 14
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
    UpgradeTo UNIT_HOVER_INFANTRY
@@ -2599,10 +2602,9 @@ UNIT_MOBILE_SAM {
    ShieldHunger 20
    GoldHunger 40
    FoodHunger 0
-   MaxMovePoints 200
+   MaxMovePoints 400
    VisionRange 3
    EnableAdvance ADVANCE_RADAR
-   ObsoleteAdvance ADVANCE_CYBERNETICS
    UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
    BombardRange 1
@@ -2715,10 +2717,10 @@ UNIT_MOUNTED_ARCHER {
    Description DESCRIPTION_UNIT_MOUNTED_ARCHER
    DefaultIcon ICON_UNIT_MOUNTED_ARCHER
    DefaultSprite SPRITE_MOUNTED_ARCHER
-   Category UNIT_CATEGORY_FLANKER
-   Attack 15
+   Category UNIT_CATEGORY_RANGED
+   Attack 10
    Defense 10
-   ZBRangeAttack 10
+   ZBRangeAttack 20
    Firepower 1
    Armor 1
    MaxHP 10
@@ -2727,11 +2729,11 @@ UNIT_MOUNTED_ARCHER {
    ShieldHunger 3
    GoldHunger 3
    FoodHunger 0
-   MaxMovePoints 200
+   MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_HORSE_RIDING
-   ObsoleteAdvance ADVANCE_CAVALRY_TACTICS
-   UpgradeTo UNIT_KNIGHT
+   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
    UpgradeTo UNIT_CAVALRY
    UpgradeTo UNIT_TANK
    UpgradeTo UNIT_FUSION_TANK
@@ -2790,7 +2792,7 @@ UNIT_NUCLEAR_SUBMARINE {
    MaxMovePoints 500
    VisionRange 3
    EnableAdvance ADVANCE_NUCLEAR_POWER
-   ObsoleteAdvance ADVANCE_GENETICS
+   ObsoleteAdvance ADVANCE_GENETIC_TAILORING
    UpgradeTo UNIT_MOREY_STRIKER
    BombRounds 5
    BombardRange 1
@@ -2972,7 +2974,7 @@ UNIT_PARATROOPER {
    ShieldHunger 14
    GoldHunger 28
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
    UpgradeTo UNIT_HOVER_INFANTRY
@@ -3034,10 +3036,11 @@ UNIT_PIKEMEN {
    MaxMovePoints 100
    VisionRange 1
    EnableAdvance ADVANCE_FEUDALISM
-   ObsoleteAdvance ADVANCE_GUNPOWDER
+   ObsoleteAdvance ADVANCE_FASCISM
    UpgradeTo UNIT_INFANTRYMAN
    UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_PLASMATICA
+   UpgradeTo UNIT_MARINE
+   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3095,7 +3098,7 @@ UNIT_PLASMA_DESTROYER {
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 4
-   EnableAdvance ADVANCE_PLASMA_ENGINEERING
+   EnableAdvance ADVANCE_PLASMA_WEAPONRY
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 1
@@ -3223,6 +3226,7 @@ UNIT_SEA_ENGINEER {
    IgnoreZOC
    NoZoc
    SettleCityType UNIT_OCEAN_CITY
+   SettleSize 3
    CanBeExpelled
    CantCaptureCity
    DeathEffectsHappy
@@ -3239,6 +3243,11 @@ UNIT_SEA_ENGINEER {
    SoundWork SOUND_WORK_SEA_ENGINEER
    SoundVictory SOUND_VICTORY_SEA_ENGINEER
    SoundDeath SOUND_DEATH_SEA_ENGINEER
+   SettleBuilding IMPROVE_ACADEMY
+   SettleBuilding IMPROVE_COURTHOUSE
+   SettleBuilding IMPROVE_GRANARY
+   SettleBuilding IMPROVE_SHRINE
+   SettleBuilding IMPROVE_THEATER
 
    CanSee: Standard
    CanSee: Underwater
@@ -3863,7 +3872,7 @@ UNIT_SWORDSMAN {
    DefaultIcon ICON_UNIT_SWORDSMAN
    DefaultSprite SPRITE_SWORDSMAN
    Category UNIT_CATEGORY_ATTACK
-   Attack 30
+   Attack 20
    Defense 10
    ZBRangeAttack 0
    Firepower 2
@@ -3874,13 +3883,10 @@ UNIT_SWORDSMAN {
    ShieldHunger 5
    GoldHunger 3
    FoodHunger 0
-   MaxMovePoints 100
+   MaxMovePoints 200
    VisionRange 1
-   EnableAdvance ADVANCE_BUREAUCRACY
-   ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_MUSKETEER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
+   EnableAdvance ADVANCE_IRON_WORKING
+   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3935,10 +3941,10 @@ UNIT_TANK {
    ShieldHunger 20
    GoldHunger 40
    FoodHunger 0
-   MaxMovePoints 300
+   MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_TANK_WARFARE
-   ObsoleteAdvance ADVANCE_FUSION
+   ObsoleteAdvance ADVANCE_UNIFIED_PHYSICS
    UpgradeTo UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -3965,7 +3971,7 @@ UNIT_TANK {
    CanAttack: Land
    CanSee: Standard
    MovementType: Land
-   Size: Small
+   Size: Medium
    VisionClass: Standard
 
    CanReform {
@@ -3996,7 +4002,7 @@ UNIT_TELEVANGELIST {
    MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_MASS_MEDIA
-   GovernmentType GOVERNMENT_THEOCRACY
+   #GovernmentType GOVERNMENT_THEOCRACY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4183,7 +4189,7 @@ UNIT_WAR_WALKER {
    ShieldHunger 35
    GoldHunger 90
    FoodHunger 0
-   MaxMovePoints 300
+   MaxMovePoints 500
    VisionRange 4
    EnableAdvance ADVANCE_CYBERNETICS
    BombRounds 5
@@ -4252,12 +4258,7 @@ UNIT_WARRIOR {
    MaxMovePoints 100
    VisionRange 2
    EnableAdvance ADVANCE_TOOLMAKING
-   ObsoleteAdvance ADVANCE_IRON_WORKING
-   UpgradeTo UNIT_LEGION
-   UpgradeTo UNIT_SWORDSMAN
-   UpgradeTo UNIT_MUSKETEER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
+   ObsoleteAdvance ADVANCE_GUNPOWDER
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4330,299 +4331,4 @@ UNIT_Z_FREIGHT_TRANSPORT {
 
 ############################################################
 
-## UNIT 72
-UNIT_ELEPHANT_WARRIOR {
-   Description DESCRIPTION_UNIT_KNIGHT
-   DefaultIcon ICON_UNIT_ELEPHANT_WARRIOR
-   DefaultSprite SPRITE_ELEPHANT_WARRIOR
-   Category UNIT_CATEGORY_FLANKER
-   Attack 30
-   Defense 20
-   ZBRangeAttack 0
-   Firepower 2
-   Armor 1
-   MaxHP 10
-   ShieldCost 3000
-   PowerPoints 400
-   ShieldHunger 10
-   GoldHunger 15
-   FoodHunger 0
-   MaxMovePoints 200
-   VisionRange 2
-   EnableAdvance ADVANCE_SUBNEURAL_ADS #ADVANCE_FEUDALISM not using for now
-   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   ObsoleteAdvance ADVANCE_TANK_WARFARE
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsFlanker
-   CanBeGifted
-   ImmuneToHostileTerrain
-   NeedsCityGood TERRAIN_PLAINS_GOOD_TWO
-   SoundSelect1 SOUND_ID_ELEPHANT
-   SoundSelect2 SOUND_SELECT2_PIKEMEN
-   SoundMove SOUND_MOVE_PIKEMEN
-   SoundAcknowledge SOUND_ID_ELEPHANT
-   SoundCantMove SOUND_CANTMOVE_PIKEMEN
-   SoundAttack SOUND_ID_ELEPHANT
-   SoundWork SOUND_WORK_PIKEMEN
-   SoundVictory SOUND_ID_ELEPHANT
-   SoundDeath SOUND_ID_ELEPHANT
-   CanAttack: Land
-   CanSee: Standard
-   MovementType: Land
-   Size: Large
-   VisionClass: Standard
-   GLHidden
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
-
-## UNIT 73
-UNIT_LEGION {
-   Description DESCRIPTION_UNIT_SWORDSMAN
-   DefaultIcon ICON_UNIT_LEGION
-   DefaultSprite SPRITE_LEGION
-   Category UNIT_CATEGORY_ATTACK
-   Attack 20
-   Defense 10
-   ZBRangeAttack 0
-   Firepower 1
-   Armor 1
-   MaxHP 10
-   ShieldCost 225
-   PowerPoints 250
-   ShieldHunger 2
-   FoodHunger 0
-   MaxMovePoints 100
-   VisionRange 1
-   EnableAdvance ADVANCE_IRON_WORKING
-   ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_SWORDSMAN
-   UpgradeTo UNIT_MUSKETEER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsSpecialForces
-   IsFoot
-   SoundSelect1 SOUND_SELECT1_SAMURAI
-   SoundSelect2 SOUND_SELECT2_SAMURAI
-   SoundMove SOUND_MOVE_SAMURAI
-   SoundAcknowledge SOUND_ACKNOWLEDGE_SAMURAI
-   SoundCantMove SOUND_CANTMOVE_SAMURAI
-   SoundAttack SOUND_ATTACK_SAMURAI
-   SoundWork SOUND_WORK_SAMURAI
-   SoundVictory SOUND_VICTORY_SAMURAI
-   SoundDeath SOUND_DEATH_SAMURAI
-
-   CanAttack: Land
-   CanAttack: Mountain
-   CanSee: Standard
-   MovementType: Land
-   MovementType: Mountain
-   Size: Small
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
-
-## UNIT 74
-UNIT_LONGBOWMAN {
-   Description DESCRIPTION_UNIT_ARCHER
-   DefaultIcon ICON_UNIT_LONGBOWMAN
-   DefaultSprite SPRITE_LONGBOWMAN
-   Category UNIT_CATEGORY_RANGED
-   Attack 10
-   Defense 15
-   ZBRangeAttack 25
-   Firepower 2
-   Armor 1
-   MaxHP 10
-   ShieldCost 370
-   PowerPoints 200
-   ShieldHunger 3
-   GoldHunger 5
-   FoodHunger 0
-   MaxMovePoints 100
-   VisionRange 2
-   EnableAdvance ADVANCE_FEUDALISM
-   ObsoleteAdvance ADVANCE_CANNON_MAKING
-   UpgradeTo UNIT_CANNON
-   UpgradeTo UNIT_ARTILLERY
-   UpgradeTo UNIT_MOBILE_SAM
-   UpgradeTo UNIT_WAR_WALKER
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsFoot
-   SoundSelect1 SOUND_SELECT1_ARCHER
-   SoundSelect2 SOUND_SELECT2_ARCHER
-   SoundMove SOUND_MOVE_ARCHER
-   SoundAcknowledge SOUND_ACKNOWLEDGE_ARCHER
-   SoundCantMove SOUND_CANTMOVE_ARCHER
-   SoundAttack SOUND_ATTACK_ARCHER
-   SoundWork SOUND_WORK_ARCHER
-   SoundVictory SOUND_VICTORY_ARCHER
-   SoundDeath SOUND_DEATH_ARCHER
-
-   CanAttack: Land
-   CanAttack: Mountain
-   CanSee: Standard
-   MovementType: Land
-   MovementType: Mountain
-   Size: Small
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
-
-## UNIT 75
-UNIT_MUSKETEER {
-   Description DESCRIPTION_UNIT_INFANTRYMAN
-   DefaultIcon ICON_UNIT_MUSKETEER
-   DefaultSprite SPRITE_MUSKETEER
-   Category UNIT_CATEGORY_ATTACK
-   Attack 40
-   Defense 20
-   ZBRangeAttack 10
-   Firepower 3
-   Armor 1
-   MaxHP 10
-   ShieldCost 1000
-   PowerPoints 100
-   ShieldHunger 10
-   GoldHunger 15
-   FoodHunger 0
-   MaxMovePoints 100
-   VisionRange 2
-   EnableAdvance ADVANCE_INFANTRY_TACTICS
-   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsFoot
-   SoundSelect1 SOUND_SELECT1_INFANTRYMAN
-   SoundSelect2 SOUND_SELECT2_INFANTRYMAN
-   SoundMove SOUND_MOVE_INFANTRYMAN
-   SoundAcknowledge SOUND_ACKNOWLEDGE_INFANTRYMAN
-   SoundCantMove SOUND_CANTMOVE_INFANTRYMAN
-   SoundAttack SOUND_ATTACK_INFANTRYMAN
-   SoundWork SOUND_WORK_INFANTRYMAN
-   SoundVictory SOUND_VICTORY_INFANTRYMAN
-   SoundDeath SOUND_DEATH_INFANTRYMAN
-
-   CanAttack: Land
-   CanAttack: Mountain
-   CanSee: Standard
-   MovementType: Land
-   MovementType: Mountain
-   Size: Small
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
-
-## UNIT 76
-UNIT_PLASMATICA {
-   Description DESCRIPTION_UNIT_HOVER_INFANTRY
-   DefaultIcon ICON_UNIT_PLASMATICA
-   DefaultSprite SPRITE_PLASMATICA
-   Category UNIT_CATEGORY_DEFENSE
-   Attack 60
-   Defense 70
-   ZBRangeAttack 40
-   Firepower 5
-   Armor 1
-   MaxHP 10
-   ShieldCost 2500
-   PowerPoints 100
-   ShieldHunger 25
-   GoldHunger 50
-   FoodHunger 0
-   MaxMovePoints 200
-   VisionRange 2
-   EnableAdvance ADVANCE_PLASMA_WEAPONRY
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsFoot
-   SoundSelect1 SOUND_SELECT1_HOVER_INFANTRY
-   SoundSelect2 SOUND_SELECT2_HOVER_INFANTRY
-   SoundMove SOUND_MOVE_HOVER_INFANTRY
-   SoundAcknowledge SOUND_ACKNOWLEDGE_HOVER_INFANTRY
-   SoundCantMove SOUND_CANTMOVE_HOVER_INFANTRY
-   SoundAttack SOUND_ATTACK_HOVER_INFANTRY
-   SoundWork SOUND_WORK_HOVER_INFANTRY
-   SoundVictory SOUND_VICTORY_HOVER_INFANTRY
-   SoundDeath SOUND_DEATH_HOVER_INFANTRY
-
-   CanAttack: Land
-   CanAttack: Mountain
-   CanSee: Standard
-   MovementType: Land
-   MovementType: Mountain
-   Size: Small
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
 

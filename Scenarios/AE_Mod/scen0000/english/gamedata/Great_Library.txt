@@ -788,7 +788,6 @@ Requires:
 Gives:
 <L:DATABASE_UNITS,UNIT_KNIGHT>Knight<e>
 <L:DATABASE_UNITS,UNIT_PIKEMEN>Pikeman<e>
-<L:DATABASE_UNITS,UNIT_LONGBOWMAN>Longbowman<e>
 <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capitol<e>
 [END]
 
@@ -1245,13 +1244,11 @@ Requires:
 
 [ADVANCE_IRON_WORKING_STATISTICS]
 Gives:
-<L:DATABASE_UNITS,UNIT_LEGION>Legion<e>
+<L:DATABASE_UNITS,UNIT_SWORDSMAN>Samurai<e>
 [END]
 
 [ADVANCE_IRON_WORKING_GAMEPLAY]
 Iron is a cheaper, more plentiful material than bronze.  The development of tools and methods to manipulate iron contributes to the advance of warfare.
-
-The <L:DATABASE_UNITS,UNIT_LEGION>Legion<e> is an excellent unit, well suited to both attacking cities and defensive units.
 [END]
 
 [ADVANCE_IRON_WORKING_HISTORICAL]
@@ -1574,7 +1571,6 @@ The Micro Defense improvement helped solve this problem.  Using nanites to monit
 [ADVANCE_NATIONALISM_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
 [END]
 
 [ADVANCE_NATIONALISM_STATISTICS]
@@ -1861,16 +1857,15 @@ Requires:
 
 [ADVANCE_PLASMA_WEAPONRY_STATISTICS]
 Gives:
-<L:DATABASE_UNITS,UNIT_PLASMATICA>Plasmatica<e>
-<L:DATABASE_UNITS,UNIT_LEVIATHON>Leviathan<e>
+<L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>
 [END]
 
 [ADVANCE_PLASMA_WEAPONRY_GAMEPLAY]
-Plasma weapons take conventional warfare to a new level.  Capable of delivering extreme amounts of damage, units like the <L:DATABASE_UNITS,UNIT_PLASMATICA>Plasmatica<e> and the <L:DATABASE_UNITS,UNIT_LEVIATHON>Leviathan<e> dominate the battlefield with their terror-inspiring weapons.
+Plasma weapons take conventional warfare to a new level.  Capable of delivering extreme amounts of damage, units like the <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e> dominate the battlefield with their terror-inspiring weapons.
 [END]
 
 [ADVANCE_PLASMA_WEAPONRY_HISTORICAL]
-Plasma did not become a viable military technology until the development of fusion.  Prototypical particle accelerators, based on the research of noted plasma physicist David Ray, were implemented in such fearsome assault vehicles as Leviathans and Plasma Destroyers.  By firing particle beams at their target, they were capable of melting through conventional armor, and could cripple a target's electrical systems, rendering it little more than a defenseless mass.  Plasma weaponry undoubtedly increased the intensity of battles, forcing the nations of the world to desperately equip their armies with the means to meet the threat that plasma warfare posed.
+Plasma did not become a viable military technology until the development of fusion.  Prototypical particle accelerators, based on the research of noted plasma physicist David Ray, were implemented in such fearsome assault vehicles as Plasma Destroyers.  By firing particle beams at their target, they were capable of melting through conventional armor, and could cripple a target's electrical systems, rendering it little more than a defenseless mass.  Plasma weaponry undoubtedly increased the intensity of battles, forcing the nations of the world to desperately equip their armies with the means to meet the threat that plasma warfare posed.
 [END]
 
 [ADVANCE_PRINTING_PRESS_PREREQ]
@@ -4569,7 +4564,6 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 [IMPROVE_AIRPORT_STATISTICS]
 Gives:
 +{BuildingDB(Building[0]).CommercePercent}% <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
-Increases <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Pollution<e>
 [END]
 
 [IMPROVE_AIRPORT_GAMEPLAY]
@@ -5133,7 +5127,6 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 Gives:
 +{BuildingDB(Building[0]).FoodPercent}% <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
 Protects against <L:DATABASE_CONCEPTS,CONCEPT_STARVATION>Starvation<e> for {BuildingDB(Building[0]).StarvationProtection} extra turns
-Increases Max Size of City by {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_FOOD_SILO_GAMEPLAY]
@@ -5243,8 +5236,8 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Gives:
-Increases City Max Size
-Reduces <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Overcrowding<e> Effect by {BuildingDB(Building[0]).RaiseMaxPopulation}
+Reduces <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Overcrowding<e> Effect by {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Increases Max Size of City by {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]
@@ -5938,7 +5931,7 @@ Defense: +25%
 [TERRAIN_FOREST_GAMEPLAY]
 Forests provide a substantial bonus to the <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> output of <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.  However, one cannot build any <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> except for <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>Roads<e>.  <L:DATABASE_CONCEPTS,CONCEPT_RIVER>Rivers<e> that run through Forest tiles substantially increase <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>, <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.
 
-After the discovery of the <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Agricultural Revolution<e> Advance, players can <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraform<e> Forest tiles.
+After the discovery of the <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e> Advance, players can remove Forest tiles, and after researching <L:DATABASE_ADVANCES,ADVANCE_CONSERVATION>Conservation<e> you can terraform other tiles to forest terrain.
 
 Exotic <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hardwood<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bears<e>, <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Apples<e> and <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Beavers<e> are the trade <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to Forest tiles.
 [END]
@@ -8322,7 +8315,7 @@ In modern times, the lawyer acted as an advocate on behalf of his or her client.
 
 [UNIT_LEVIATHON_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY><e>
+<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -8558,7 +8551,7 @@ Ancient flanking unit
 [END]
 
 [UNIT_MOUNTED_ARCHER_GAMEPLAY]
-The Mounted Archer is an ideal unit to accompany <L:DATABASE_UNITS,UNIT_CATAPULT>Catapults<e> and <L:DATABASE_UNITS,UNIT_LEGION>Legions<e>.
+The Mounted Archer is an ideal unit to accompany <L:DATABASE_UNITS,UNIT_KNIGHT>Knights<e> and <L:DATABASE_UNITS,UNIT_SWORDSMAN>Samurai<e>.
 [END]
 
 [UNIT_MOUNTED_ARCHER_HISTORICAL]
@@ -8719,7 +8712,7 @@ For most of the medieval period, the horse-mounted knight dominated the battlefi
 
 [UNIT_PLASMA_DESTROYER_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PLASMA_ENGINEERING>Plasma Engineering<e>
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -10211,6 +10204,32 @@ With the <L:DATABASE_ORDERS,ORDER_TARGET>Target<e> function, a player can design
 [ORDER_CLEAR_TARGET_HISTORICAL]
 [END]
 
+[ORDER_UPGRADE_PREREQ]
+Requires:
+Gold, amount is variable, depending of old unit type and new unit type
+Location: <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FORTIFICATIONS>Fortification<e>
+[END]
+
+[ORDER_UPGRADE_STATISTICS]
+Effect:
+Upgrades units of an army
+[END]
+
+[ORDER_UPGRADE_GAMEPLAY]
+Upgrades all the units in an army that can be upgraded if the player has enough gold. If the player has only gold to upgrade some units in the army the units in the army are upgraded until the player ran out of gold.
+
+So that units can be upgraded at all, the game rule "Upgrade Units" must be enabled when a new game is created. By default "Upgrade Units" is disabled. Another rule allows the AI to upgrade without gold and independly of the location. By default this rule is enabled.
+
+If "Upgrade Units" is enabled and an army contains a unit that can be upgraded and this army is selected, the order Upgrade is diplayed on the unit order button bank. If the mouse cursor hovers over the Upgrade button then three numbers are displayed in the status bar besides the order name: The first number displays the number of units that can be upgraded with the amount of gold in the treasury. The second number shows the number of obsolete units in the army. And the third number shows the number of units in the army. Addionally, two gold values are shown: The first value shows the costs needed to upgrade the units that can be upgraded with the gold in the treasury. And the second value shows the gold that is needed to upgrade all units in the army.
+
+The <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
+
+A player may want to upgrade a unit for a variety of reasons. Obsolete units are often too weak to be much of an asset in combat. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
+[END]
+
+[ORDER_UPGRADE_HISTORICAL]
+[END]
+
 [WONDER_THE_AGENCY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GLOBAL_DEFENSE>Global Defense<e>
@@ -10226,6 +10245,8 @@ Gives every city in the host empire the protection of a <L:DATABASE_UNITS,UNIT_S
 
 [WONDER_THE_AGENCY_GAMEPLAY]
 The Agency is a highly secretive intelligence operation that gives each city in the host empire the protection of a <L:DATABASE_UNITS,UNIT_SPY>Spy<e>.  Each of the host empire's cities has a 50% chance of catching foreign <L:DATABASE_UNITS,UNIT_SPY>Spies<e> and <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber Ninjas<e> in the act of espionage.
+
+The discovery of the <L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neural Interface<e> <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> renders The Agency obsolete.
 [END]
 
 [WONDER_THE_AGENCY_HISTORICAL]
@@ -10252,7 +10273,7 @@ Eliminates unhappiness associated with distance from capitol by {WonderDB(Wonder
 [WONDER_THE_APPIAN_WAY_GAMEPLAY]
 The Appian Way is the central information route in the host nation.  It links important <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> and shipping centers with the capitol of the host empire, making trade and travel safer and easier.  <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> on the fringes the empire no longer experience <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Unhappiness<e> associated with their distance from the capital city.
 
-The discovery of the <L:DATABASE_ADVANCES,ADVANCE_AGE_OF_REASON>Age Of Reason<e> <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> renders The Appian Way obsolete.
+The discovery of the <L:DATABASE_ADVANCES,ADVANCE_RAILROAD>Railroad<e> <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> renders The Appian Way obsolete.
 [END]
 
 [WONDER_THE_APPIAN_WAY_HISTORICAL]
@@ -10391,7 +10412,7 @@ Costs:
 
 [WONDER_THE_EDEN_PROJECT_STATISTICS]
 Gives:
-Destroys the {WonderDB(Wonder[0]).PollutersToParks} most <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Polluting<e> <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>
+Destroys the most <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Polluting<e> <L:DATABASE_CONCEPTS,CONCEPT_CITY>City on the map<e>
 Allows <L:DATABASE_GOVERNMENTS,GOVERNMENT_ECOTOPIA>Ecotopian<e> empires to make <L:DATABASE_UNITS,UNIT_ECO_RANGER>Eco-Rangers<e>
 [END]
 
@@ -10626,6 +10647,8 @@ Worldwide radar coverage for the host empire
 
 [WONDER_GLOBESAT_GAMEPLAY]
 A network of satellites allow for round-the-clock surveillance and tracking for the entire planet.  The host empire that discovers the GlobeSat can track every city and unit in the game.  This provides enormous strategic and tactical advantages.
+
+The discovery of the <L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano Machines<e> <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> renders the GlobeSat obsolete.
 [END]
 
 [WONDER_GLOBESAT_HISTORICAL]
@@ -10831,6 +10854,8 @@ Increases the food production of every city in the host empire by {WonderDB(Wond
 
 [WONDER_PENICILLIN_GAMEPLAY]
 Penicillin is one of the most effective and inexpensive pharmaceuticals of the modern age.  Its low cost, wide range of uses and low risk of side effects makes overall health in the host empire higher.  This decreases infant mortality and allows people to live longer, increasing the <L:DATABASE_CONCEPTS,CONCEPT_GROWTH>Growth<e> rate of <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.
+
+The discovery of the <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gene Therapy<e> <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> renders Penicillin obsolete.
 [END]
 
 [WONDER_PENICILLIN_HISTORICAL]
@@ -10969,185 +10994,4 @@ The future is unknown, we know not what it will bring. Be it good or bad. Nobody
 The Middle Ages the age between the classical antiquity and the Renaissance. But it is little a more: It came out from the fall of the Roman Empire. Christianity lured with the promise of the release in the paradise after death and after the end of the world: Because the world was terrible the barbarians brought disaster and poverty over the Roman Empire. It was no miracle that the back was turned on polytheism and surrendered themselves to christianity. The epoch is defined by deep religiousness and devoutness. In addition, by fanatisicm and intollerance. These are one of the reasons for the crusades. To the end this  epoch the curches grew into the sky. The building of such a church took centuries. For example the Cologne Cathedral was finished only after well over half a millenium.
 [END]
 
-[ADVANCE_INFANTRY_TACTICS_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
-[END]
 
-[ADVANCE_INFANTRY_TACTICS_STATISTICS]
-Gives:
-<L:DATABASE_UNITS,UNIT_MUSKETEER>Musketeer<e>
-[END]
-
-[ADVANCE_INFANTRY_TACTICS_GAMEPLAY]
-The discovery of Infantry Tactics gives rise to alternative methods of employing foot soldiers in combat.  <L:DATABASE_UNITS,UNIT_MUSKETEER>Musketeer<e> attacks on the frontline better than any other in the renaissance age.
-[END]
-
-[ADVANCE_INFANTRY_TACTICS_HISTORICAL]
-Napoleon Bonaparte did many things to change the nature of warfare. Entrenching was among his adaptations. This meant that soldiers did not always have to stand exposed, and they could have a large degree of protection from direct fire weapons. The largest problem with entrenching was the time it took to make a trench.
-
-Another infantry tactic that Napoleon introduced was a diamond shaped formation, which allowed soldiers to rapidly change directions. He relied heavily on the column, a formation less than a hundred men wide and containing an entire brigade in tight formation. The constant movement and sheer mass of this formation could break through most enemy lines. However, improved weapons would eventually mow through this formation, making it obsolete by the end of the Napoleonic Wars.
-
-Long-used line tactics contributed significantly to the bloodshed of the American Civil War. By that time, weapons were accurate enough to render lines unnecessary; still, many commanders clung to traditional forms of combat. Line tactics were used against natives in lands being colonized by European powers during the late 19th century, and their use continued until World War I.
-[END]
-
-[UNIT_LEGION_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
-
-Abilities:
-<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
-[END]
-
-[UNIT_LEGION_STATISTICS]
-Attack: {UnitDB(UnitRecord[0]).Attack / 100}
-Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
-Defense: {UnitDB(UnitRecord[0]).Defense / 100}
-Armor: {UnitDB(UnitRecord[0]).Armor / 100}
-Damage: {UnitDB(UnitRecord[0]).Firepower}
-Vision: {UnitDB(UnitRecord[0]).VisionRange}
-Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
-Max HP: {UnitDB(UnitRecord[0]).MaxHP}
-
-Costs: {UnitDB(UnitRecord[0]).ShieldCost}
-Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
-[END]
-
-[UNIT_LEGION_SUMMARY]
-Ancient offensive unit
-[END]
-
-[UNIT_LEGION_GAMEPLAY]
-Whereas the <L:DATABASE_UNITS,UNIT_HOPLITE>Hoplite<e> is more suited to defense, the Legion is adept at attacking.  It is a perfect accompaniment to the <L:DATABASE_UNITS,UNIT_MOUNTED_ARCHER>Mounted Archer<e>, and is useful in providing escort for <L:DATABASE_UNITS,UNIT_CATAPULT>Catapults<e>.
-[END]
-
-[UNIT_LEGION_HISTORICAL]
-Called miles ("soldier") or legionarius in Latin, the Roman legionary was (usually) a Roman citizen under 45 years of age. The soldier enlisted in a legion for twenty-five years of service, a change from the early practice of enlisting only for the duration of a campaign. The last five years were on veteran lighter duties.
-
-On the march in unfriendly terrain, the legionary would be loaded down with armour (lorica segmentata), shield (scutum), helmet (galae), two javelins (one heavy pilum and one light), a short sword (gladius), a dagger (pugio), a pair of heavy sandals (Caligae), a Sarcina (marching pack), about fourteen days worth of food, a waterskin (bladder for water), cooking equipment, two stakes (Sudes murale) for the construction of palisades, and a shovel or wicker basket.
-
-The Roman soldier underwent especially rigorous training; discipline was the base of the army's success and the soldiers were relentlessly and constantly trained with weapons and especially with drill — forced marches with full load and in tight formation were frequent. Discipline was important and infractions were heavily punished by the centurions.
-[END]
-
-[UNIT_LONGBOWMAN_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
-[END]
-
-[UNIT_LONGBOWMAN_STATISTICS]
-Attack: {UnitDB(UnitRecord[0]).Attack / 100}
-Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
-Defense: {UnitDB(UnitRecord[0]).Defense / 100}
-Armor: {UnitDB(UnitRecord[0]).Armor / 100}
-Damage: {UnitDB(UnitRecord[0]).Firepower}
-Vision: {UnitDB(UnitRecord[0]).VisionRange}
-Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
-Max HP: {UnitDB(UnitRecord[0]).MaxHP}
-
-Costs: {UnitDB(UnitRecord[0]).ShieldCost}
-Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
-[END]
-
-[UNIT_LONGBOWMAN_SUMMARY]
-Ancient <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged<e> unit
-[END]
-
-[UNIT_LONGBOWMAN_GAMEPLAY]
-The Longbowman is ideally suited to supporting foot soldiers and mounted units, as it can attack from a distance and avoid direct conflict with stronger enemy units.
-[END]
-
-[UNIT_LONGBOWMAN_HISTORICAL]
-The earliest known bows, from Stellmoor in northern Germany, are dated to approximately 10,000 years ago. Arrow heads have been found in the Sahara and other places where dry sand is an excellent preservative. Recognizable longbows dating as far back as the Mesolithic period have been found in many parts of Northern Europe. The medieval English use of a powerful longbow as a decisive weapon of war was more of a social than a technical development. It required in particular the training, recruitment, and maintenance of a large number of men, their supply with yew wood by means of foreign trade, and their incorporation with other troop types into an effective tactical system.
-
-During the Anglo-Norman invasions of Wales, Welsh bowmen took a heavy toll on the invaders. The English were quick to realise the impact that the longbow could produce on the battlefield. As soon as the Welsh campaign was successfully over, Welsh conscripts began to be incorporated into the English army. The lessons the English learned in Wales were later used with deadly effect by Welsh mercenaries on the battlefields of France and Scotland. Their skill was exercised under King Edward I of England (r. 1272–1307), who banned all sports but archery on Sundays, to make sure Englishmen practised with the longbow. As a result, the English during this period as a whole became very effective with the longbow.
-
-The longbow decided a lot of medieval battles fought by the English, the most significant of which were the Battle of Crécy (1346) and the Battle of Agincourt (1415), during the Hundred Years' War and followed earlier successes, notably at the Battle of Halidon Hill (1333) during the Scottish wars. The longbow corps saw particularly heavy casualties at the Battle of Patay and this loss contributed to England's eventual defeat in that war. Longbows remained in use until around the 16th century, when advances in firearms made gunpowder weapons a significant factor in warfare and such units as arquebusiers and grenadiers began appearing. Before the English Civil War, a pamphlet by William Neade entitled The Double-Armed Man advocated that soldiers be trained in both the longbow and pike; this advice was not followed in anything but a few town militias. The last recorded use of bows, in an English battle, seems to have been a skirmish at Bridgnorth, in October 1642, during the English Civil War[10]. Longbowmen remained a feature of the Royalist Army, but were not used by the Roundheads.
-
-Although longbows were much faster and more accurate than any black powder weapons, longbowmen were always difficult to produce, because of the years of practice necessary before a war longbow could be used effectively (examples of longbows from the Mary Rose typically had draws greater than 65 kgf (143 lbf)). In an era in which warfare was usually seasonal and non-noble soldiers spent part of the year working at farms, the year-round training required for the effective use of the longbow was a challenge. A standing army was an expensive proposition to a medieval ruler. Mainland European armies seldom trained a significant longbow corps. Due to their specialized training, English longbowmen were sought as mercenaries in other European countries, most notably in the Italian city-states and in Spain. The White Company[11], containing men-at-arms and longbowmen and commanded by Sir John Hawkwood, is the best known English Free Company of the 14th Century.
-[END]
-
-[UNIT_MUSKETEER_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_INFANTRY_TACTICS>Infantry Tactics<e>
-[END]
-
-[UNIT_MUSKETEER_STATISTICS]
-Attack: {UnitDB(UnitRecord[0]).Attack / 100}
-Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
-Defense: {UnitDB(UnitRecord[0]).Defense / 100}
-Armor: {UnitDB(UnitRecord[0]).Armor / 100}
-Damage: {UnitDB(UnitRecord[0]).Firepower}
-Vision: {UnitDB(UnitRecord[0]).VisionRange}
-Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
-Max HP: {UnitDB(UnitRecord[0]).MaxHP}
-
-Costs: {UnitDB(UnitRecord[0]).ShieldCost}
-Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
-[END]
-
-[UNIT_MUSKETEER_SUMMARY]
-Renaissance offensive unit
-[END]
-
-[UNIT_MUSKETEER_GAMEPLAY]
-The Musketeer is skilled in frontline combat.  Armed with his trusty musket, he is suited to strike forces front on.
-[END]
-
-[UNIT_MUSKETEER_HISTORICAL]
-The earliest firearms were primitive devices, lacking buttstock or trigger, which had to be held under the arm making them difficult to aim.  The harquebus, which employed both of these things, was developed in the late 15th century.  It's slow rate of fire and inaccuracy did not make up for the fact that soldiers could now fire from their shoulders.  Nevertheless, some 16th century armies, most notably the Spanish tercio, employed harquebusiers with pikemen, who would open fire on approaching enemies and then retreat behind the pikemen as the range of combat got closer.  In 1588, 10,000 English troops were experimentally equipped with firearms, against Spanish forces relying on archers; the success of the English forces played a major role in the rise of firearms as the weapon of choice for infantrymen.  
-
-The musket was the first firearm to employ a flintlock firing mechanism.  Heavier and more powerful than a harquebus, it could be relied on to fire 2 to 3 times a minute at 100 to 150 yard range with minimal misfires.  By the end of the Thirty Years' War, infantrymen, armed with muskets, and pikemen were about equal in numbers for most armies.  Smaller tactical groups of infantrymen facilitated quicker rate of group fire with minimal mutual interference.  Lines dropped from 8 to 10 in the 17th century to 2 to 3 at the end of the 18th century.  Military strategists, most notably Prince Maurice of Nassau, a great Dutch military teacher, developed drill - the preparation for war by prescribed movements and formations - to increase efficiency.  The invention of the bayonet in 1670 gave infantries little reason to keep pikemen, and infantry units employed muskets and bayonet exclusively from then on.
-[END]
-
-[UNIT_PLASMATICA_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
-[END]
-
-[UNIT_PLASMATICA_STATISTICS]
-Attack: {UnitDB(UnitRecord[0]).Attack / 100}
-Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
-Defense: {UnitDB(UnitRecord[0]).Defense / 100}
-Armor: {UnitDB(UnitRecord[0]).Armor / 100}
-Damage: {UnitDB(UnitRecord[0]).Firepower}
-Vision: {UnitDB(UnitRecord[0]).VisionRange}
-Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
-Max HP: {UnitDB(UnitRecord[0]).MaxHP}
-
-Costs: {UnitDB(UnitRecord[0]).ShieldCost}
-Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
-[END]
-
-[UNIT_PLASMATICA_SUMMARY]
-Diamond Age defensive unit
-[END]
-
-[UNIT_PLASMATICA_GAMEPLAY]
-The Plasmatica is the most powerful infantry unit in the game.  Capable of defending even the most powerful Infantry, Plasmatica infantry deliver devastatingly effective counter-attacks.  They are an ideal complement to the <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>, but cannot travel on <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>beach<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>shallow water<e> tiles.
-[END]
-
-[UNIT_PLASMATICA_HISTORICAL]
-After several years of domination, the plasmatica weapon was born as a direct counter to the hover infantry's manueverability.  Although the hover infantry's anti-grav system does provide it with a significant movement advantage, the plasmatica is able to easily defend any attacks with superiory weaponary.
-[END]
-
-[ADVANCE_PLASMA_ENGINEERING_PREREQ]
-Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
-[END]
-
-[ADVANCE_PLASMA_ENGINEERING_STATISTICS]
-Gives:
-<L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>
-[END]
-
-[ADVANCE_PLASMA_ENGINEERING_GAMEPLAY]
-Plasma weapons take conventional warfare to a new level.  Capable of delivering extreme amounts of damage, the <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e> dominates the seas with its terror-inspiring weapons.
-[END]
-
-[ADVANCE_PLASMA_ENGINEERING_HISTORICAL]
-Plasma did not become a viable military technology until the development of fusion.  Prototypical particle accelerators, based on the research of noted plasma physicist David Ray, were implemented in such fearsome assault vehicles as Leviathans and Plasma Destroyers.  By firing particle beams at their target, they were capable of melting through conventional armor, and could cripple a target's electrical systems, rendering it little more than a defenseless mass.  Plasma weaponry undoubtedly increased the intensity of battles, forcing the nations of the world to desperately equip their armies with the means to meet the threat that plasma warfare posed.
-[END]

@@ -1,2 +1,2 @@
 AE Mod
-This scenario is intended for higher end players, who can accept that the AI has to cheat to be able to put up a fight.
+Version 0.2

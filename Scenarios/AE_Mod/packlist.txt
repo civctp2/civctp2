@@ -1,3 +1,3 @@
 AE Mod
-AE mod is the combined efforts of the posters at the Apolyton CtP2 sourcecode forum to rebalance, restructure, and generally improve the experience of playing CtP2.
+The AE mod is based on the original game but with many tweaks like the old Apolyton Pack. The game is more balanced and the AI is more competitive.
 2

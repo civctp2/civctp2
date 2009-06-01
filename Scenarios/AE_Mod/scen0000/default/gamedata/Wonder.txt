@@ -7,7 +7,7 @@ WONDER_ARISTOTLES_LYCEUM {
    ObsoleteAdvance ADVANCE_CLASSICAL_EDUCATION
 
    ProductionCost 3240
-   IncKnowledgePercent 10
+   IncKnowledgePercent 20
 }
 
 ############################################################
@@ -137,6 +137,7 @@ WONDER_GLOBAL_SURVEILLANCE_CENTER {
    EnableAdvance ADVANCE_EUGENICS
    ProductionCost 15200
    EmbassiesEverywhereEvenAtWar
+   IncreaseRegard 50
 }
 
 ############################################################
@@ -146,6 +147,9 @@ WONDER_GLOBESAT {
    Description DESCRIPTION_WONDER_GLOBESAT
    Movie MOVIE_WONDER_GLOBESAT
    EnableAdvance ADVANCE_GLOBAL_COMMUNICATIONS
+
+   ObsoleteAdvance ADVANCE_NANO_MACHINES
+
    ProductionCost 18600
    GlobalRadar
 }
@@ -253,6 +257,9 @@ WONDER_PENICILLIN {
    Description DESCRIPTION_WONDER_PENICILLIN
    Movie MOVIE_WONDER_PENICILLIN
    EnableAdvance ADVANCE_PHARMACEUTICALS
+
+   ObsoleteAdvance ADVANCE_EUGENICS
+
    ProductionCost 7200
    IncreaseFoodAllCities 30
 }
@@ -265,7 +272,7 @@ WONDER_PYRAMIDS {
    Movie MOVIE_WONDER_PYRAMIDS
    EnableAdvance ADVANCE_STONE_WORKING
    ProductionCost 2160
-   BonusGold 300
+   BonusGold 100
 }
 
 ############################################################
@@ -275,6 +282,9 @@ WONDER_RAMAYANA {
    Description DESCRIPTION_WONDER_RAMAYANA
    Movie MOVIE_WONDER_RAMAYANA
    EnableAdvance ADVANCE_RELIGION
+
+   ObsoleteAdvance ADVANCE_AGE_OF_REASON
+
    ProductionCost 2160
    IncHappinessEmpire 1
 }
@@ -286,6 +296,9 @@ WONDER_THE_AGENCY {
    Description DESCRIPTION_WONDER_THE_AGENCY
    Movie MOVIE_WONDER_THE_AGENCY
    EnableAdvance ADVANCE_GLOBAL_DEFENSE
+
+   ObsoleteAdvance ADVANCE_NEURAL_INTERFACE
+
    ProductionCost 8600
    SpiesEverywhere
 }
@@ -298,7 +311,7 @@ WONDER_THE_APPIAN_WAY {
    Movie MOVIE_WONDER_THE_APPIAN_WAY
    EnableAdvance ADVANCE_TRADE
 
-   ObsoleteAdvance ADVANCE_AGE_OF_REASON
+   ObsoleteAdvance ADVANCE_RAILROAD
 
    ProductionCost 2160
    DecEmpireSize 100
@@ -312,7 +325,7 @@ WONDER_THE_EDEN_PROJECT {
    Movie MOVIE_WONDER_THE_EDEN_PROJECT
    EnableAdvance ADVANCE_GAIA_THEORY
    ProductionCost 20000
-   PollutersToParks 3
+   PollutersToParks 1
    EnableParkRangers
 }
 

@@ -30,9 +30,9 @@
 RISK_VILLAGES_ONLY {
 	HutChanceBarbarian 0.00
 	HutChanceGold 0.3
-	HutChanceAdvance 0.15
-	HutChanceUnit 0.25
-	HutChanceCity 0
+	HutChanceAdvance 0.01
+	HutChanceUnit 0.15
+	HutChanceCity 0.00
 	HutChanceSettler 0.05
 	HutMaxBarbarians 0
 	HutMaxAdvancePrerequisites 1
@@ -58,13 +58,13 @@ RISK_VILLAGES_ONLY {
 RISK_BORING_HORDES {
 	HutChanceBarbarian 0.10
 	HutChanceGold 0.25
-	HutChanceAdvance 0.15
-	HutChanceUnit 0.25
-	HutChanceCity 0
+	HutChanceAdvance 0.01
+	HutChanceUnit 0.15
+	HutChanceCity 0.00
 	HutChanceSettler 0.05
-	HutMaxBarbarians 3
+	HutMaxBarbarians 2
 	HutMaxAdvancePrerequisites 1
-	HutMaxUnitPrerequisites 3
+	HutMaxUnitPrerequisites 2
 	HutMaxGold 400
 	HutMinGold 200
 	
@@ -73,7 +73,7 @@ RISK_BORING_HORDES {
 	BarbarianUnitRankMax 15
 	BarbarianUnitRankMin 25
 	MaxSpontaniousBarbarians 1
-	BarbarianFirstTurn 20
+	BarbarianFirstTurn 35
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }
@@ -81,13 +81,13 @@ RISK_BORING_HORDES {
 RISK_DECENT_HORDES {
 	HutChanceBarbarian 0.20
 	HutChanceGold 0.25
-	HutChanceAdvance 0.15
+	HutChanceAdvance 0.01
 	HutChanceUnit 0.15
-	HutChanceCity 0
+	HutChanceCity 0.00
 	HutChanceSettler 0.05
-	HutMaxBarbarians 4
+	HutMaxBarbarians 3
 	HutMaxAdvancePrerequisites 1
-	HutMaxUnitPrerequisites 4
+	HutMaxUnitPrerequisites 2
 	HutMaxGold 500
 	HutMinGold 250
 	
@@ -96,7 +96,7 @@ RISK_DECENT_HORDES {
 	BarbarianUnitRankMax 10
 	BarbarianUnitRankMin 20
 	MaxSpontaniousBarbarians 2
-	BarbarianFirstTurn 20
+	BarbarianFirstTurn 35
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }
@@ -104,13 +104,13 @@ RISK_DECENT_HORDES {
 RISK_RAGING_HORDES {
 	HutChanceBarbarian 0.25
 	HutChanceGold 0.2
-	HutChanceAdvance 0.20
+	HutChanceAdvance 0.01
 	HutChanceUnit 0.15
-	HutChanceCity 0
-	HutChanceSettler 0.1
+	HutChanceCity 0.00
+	HutChanceSettler 0.05
 	HutMaxBarbarians 4
 	HutMaxAdvancePrerequisites 1
-	HutMaxUnitPrerequisites 5
+	HutMaxUnitPrerequisites 3
 	HutMaxGold 700
 	HutMinGold 350
 	
@@ -118,8 +118,8 @@ RISK_RAGING_HORDES {
 
 	BarbarianUnitRankMax 8
 	BarbarianUnitRankMin 15
-	MaxSpontaniousBarbarians 2
-	BarbarianFirstTurn 20
+	MaxSpontaniousBarbarians 3
+	BarbarianFirstTurn 30
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }

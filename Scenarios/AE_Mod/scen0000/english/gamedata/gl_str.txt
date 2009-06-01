@@ -136,9 +136,6 @@ ADVANCE_LIFE_EXTENSION				"Life Extension"
 ADVANCE_SMART_MATERIALS				"Smart Materials"
 ADVANCE_GAIA_CONTROLLER				"Gaia Controller"
 
-ADVANCE_INFANTRY_TACTICS			"Infantry Tactics"
-ADVANCE_PLASMA_ENGINEERING			"Plasma Engineering"
-
 
 #### WONDER STRINGS ####
 WONDER_PYRAMIDS					"Pyramids"
@@ -245,7 +242,7 @@ UNIT_BOMBER					"Bomber"
 UNIT_TANK					"Tank"
 UNIT_CARGO_HELICOPTER				"Cargo Helicopter"
 UNIT_AIRCRAFT_CARRIER				"Aircraft Carrier"
-UNIT_MOBILE_SAM					"Mobile Missile System"
+UNIT_MOBILE_SAM					"Mobile SAM"
 UNIT_MARINE					"Marine"
 UNIT_PARATROOPER				"Paratrooper"
 UNIT_URBAN_PLANNER				"Urban Planner"
@@ -279,11 +276,6 @@ UNIT_DREADNAUGHT				"Dreadnaught"
 UNIT_CITY					"City"
 UNIT_OCEAN_CITY					"Sea Colony"
 UNIT_SPACE_CITY					"Space Colony"
-
-UNIT_LEGION					"Legion"
-UNIT_LONGBOWMAN					"Longbowman"
-UNIT_MUSKETEER					"Musketeer"
-UNIT_PLASMATICA					"Plasmatica"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchy"
@@ -697,6 +689,7 @@ ORDER_TARGET					"Target Nuke"
 ORDER_THROW_PARTY				"Hold Reception"
 ORDER_UNDERGROUND_RAILWAY			"Free Slave"
 ORDER_UNLOAD					"Unload"
+ORDER_UPGRADE					"Upgrade"
 
 PERSONALITY_KAHN_DESCRIPTION			"Villainous, Bloodthirsty Murderer"
 PERSONALITY_GHANDI_DESCRIPTION			"Diplomacy-minded Peacemaker"
@@ -711,7 +704,7 @@ PERSONALITY_CALLENBACH_DESCRIPTION		"Populist Zealot"
 ### Age Strings ###
 
 AGE_ONE						"Ancient"
-AGE_TWO						"Classic"
+AGE_TWO						"Classical"
 AGE_THREE					"Middle Ages"
 AGE_FOUR					"Renaissance"
 AGE_FIVE					"Industrial"
