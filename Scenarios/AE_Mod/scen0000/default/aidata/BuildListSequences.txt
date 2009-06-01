@@ -1,0 +1,555 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The build list sequesnces for the AIs and mayors
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Minor build order modifications.
+# - Moved BUILDING_BUILD_LIST_OFFENSE to the top of the BUILD_LIST_SEQUENCE_OFFENSE
+#   so that the AI builds city walls first, that will also help the to
+#   protect itself from slave raids. (06-Sep-2008 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+# 7
+
+BUILD_LIST_SEQUENCE_PRODUCTION {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_GROWTH {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_OFFENSE {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_DEFENSE {
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_SCIENCE {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_GOLD {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_WONDERS {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_HAPPINESS {
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+// Note: When build list sequence elements are redefined by merging strategies,
+// they are matched by build list sequence.  BuildListSequencesElements with
+// the same build list sequence are not allowed.
+BUILD_LIST_SEQUENCE_DEFAULT {
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ESSENTIAL }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+}
+
+BUILD_LIST_SEQUENCE_BARBARIAN {
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+}

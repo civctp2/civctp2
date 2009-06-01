@@ -1,0 +1,103 @@
+
+// Finds thePlayer's AEM_THE_NEAREST_CITY beyond or equal to theDistance to theLocation
+//     returns -1 if no such city exists
+//     otherwise returns the distance from AEM_THE_NEAREST_CITY to theLocation
+
+city_t AEM_THE_NEAREST_CITY;
+
+int_f AEM_FindTheNearestCity( int_t thePlayer, location_t theLocation, int_t theDistance){
+
+int_t smlDist;
+int_t tmpDist;
+int_t i;
+int_t tmpPlayer;
+location_t tmpLocation;
+city_t tmpCity;
+
+    smlDist=90000; //initialize to some absurdly large number
+    tmpPlayer=thePlayer;
+    tmpLocation=theLocation;
+    if (IsPlayerAlive(tmpPlayer)) {
+         if (PlayerCityCount(tmpPlayer)> 0) {
+	         for(i = 0; i < PlayerCityCount(tmpPlayer); i = i + 1) {
+	              if(GetCityByIndex(tmpPlayer, i, tmpCity)) {
+		              tmpDist=SquaredDistance(tmpLocation, tmpCity.location);
+		              if (theDistance <= tmpDist && tmpDist < smlDist) {
+			              smlDist = tmpDist;
+			              AEM_THE_NEAREST_CITY = tmpCity;			    
+		              }
+	              }
+	         }
+              if (smlDist<90000) {
+	              return  Distance(tmpLocation, AEM_THE_NEAREST_CITY); 
+              }
+	         else{
+	              return -1;// no such city exists
+	         }
+         }
+    }
+    else{
+	    return -1; // no cities at all or not a valid player
+    }  
+}
+
+HandleEvent (CreateImprovement)'AEM_SavePWForRoads' pre {
+int_t tmpImp;
+location_t tmpLoc;
+
+	tmpImp = value[0];
+	tmpLoc = location[0];
+
+	if (!IsHumanPlayer(player[0])) {
+		if (tmpImp != TerrainImprovementDB(TILEIMP_ROAD)
+		 && tmpImp != TerrainImprovementDB(TILEIMP_RAILROAD)
+		 && tmpImp != TerrainImprovementDB(TILEIMP_MAGLEV)
+		 && tmpImp != TerrainImprovementDB(TILEIMP_UNDERSEA_TUNNEL)) {
+			if (player[0].publicworkslevel < 1000) {
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent (CreateImprovement)'AEM_StopAIMinesNexttoCities' pre {// except hills & mountains
+int_t tmpImp;
+location_t tmpLoc;
+
+	tmpImp = value[0];
+	tmpLoc = location[0];
+
+	if (!IsHumanPlayer(player[0])) {
+		if ((tmpImp == TerrainImprovementDB(TILEIMP_MINES)
+		 || tmpImp == TerrainImprovementDB(TILEIMP_ADVANCED_MINES)
+		 || tmpImp == TerrainImprovementDB(TILEIMP_MEGA_MINES))
+		 && 
+		    (TerrainType(tmpLoc) == TerrainDB(TERRAIN_PLAINS)
+		 || TerrainType(tmpLoc) == TerrainDB(TERRAIN_GRASSLAND)
+		 || TerrainType(tmpLoc) == TerrainDB(TERRAIN_DESERT))) {
+			if (AEM_FindTheNearestCity(player[0].owner, tmpLoc, 1)) {
+				return STOP;
+			}
+		}
+	}
+}
+
+//int_t AEM_NetFood;
+//city_t AEM_City;
+//
+//HandleEvent (BeginTurn)'AEM_SendNetFood' post {
+//int_t i;
+//
+//	if (IsHumanPlayer(player[0])) {
+//		for(i = 0; i < player[0].cities; i = i + 1) {
+//			GetCityByIndex(player[0], i, AEM_City);
+//			AEM_NetFood = CityFoodDelta(AEM_City) / AEM_City.population;
+//			message(player[0],'AEM_SendNetFood_Msg');
+//		}
+//	}
+//}
+//
+//messagebox 'AEM_SendNetFood_Msg' {
+//	Text(ID_AEM_SendNetFood);
+//}
+

@@ -1,0 +1,679 @@
+///////////////////////////////////////////////////////////////////////////////////////////
+//Commerce Improvements for AIs v2.0 by Martin Gühmann (slic file MG_ComImpsForAIs.slc)  //
+///////////////////////////////////////////////////////////////////////////////////////////
+//This script file creates in the city sqare (it is a square not a cycle, it was easier  //
+//to program this in that way) commerce improvements like ports on beach tiles,drilling  //
+//platforms on continental shelf tiles and at least trading post, outlet malls and       //
+//nature preserves on hills, sand dunes, forrest tiles and jungle tiles.                 //
+///////////////////////////////////////////////////////////////////////////////////////////
+//To install this script just unzip the *zip file into your default CTP2 folder and open //
+//the file script.slc in your ..\ctp2_data\default\gamedata\ folder and add to the end of//
+//this file the line #include "MG_ComImpsForAIs.slc". If you want to use this file with  //
+//ApolytonPack or MedPack2 search for the according file like APOL_script.slc for        //
+//ApolytonPack. Unfortunatly this script file is not compartible with Craddle or MedPack.//
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+HandleEvent(BeginTurn)'AEM_ComerceImprovementsForAIs' post {
+location_t MGLoc;
+location_t MGLoc2;
+location_t MGLoc3;
+location_t MGLoc4;
+city_t MGCity;
+int_t MGRadius;
+int_t MGTileImp;
+int_t i;
+int_t j;
+int_t k;
+int_t m;
+int_t n;
+	if(!(IsHumanPlayer(player[0]))&&HasAdvance(player[0], ID_ADVANCE_HORSE_RIDING)){
+//	if (HasAdvance(player[0], ID_ADVANCE_HORSE_RIDING)){ //for testing
+		if ((HasAdvance(player[0], ID_ADVANCE_HORSE_RIDING)) && (!HasAdvance(player[0], ID_ADVANCE_MASS_MEDIA)) && (!HasAdvance(player[0], ID_ADVANCE_CONSERVATION))) {
+			MGTileImp = 36;
+		}
+		elseif ((HasAdvance(player[0], ID_ADVANCE_HORSE_RIDING)) && (HasAdvance(player[0], ID_ADVANCE_MASS_MEDIA)) && (!HasAdvance(player[0], ID_ADVANCE_CONSERVATION))) {
+			MGTileImp = 17;		
+		}
+		elseif ((HasAdvance(player[0], ID_ADVANCE_HORSE_RIDING)) && (HasAdvance(player[0], ID_ADVANCE_MASS_MEDIA)) && (HasAdvance(player[0], ID_ADVANCE_CONSERVATION))) {
+			MGTileImp = 15;
+		}
+//		for(i = 0; i < player[0].cities; i = i + 1) {
+//			GetCityByIndex(player[0], i, MGCity);
+//			if(CityisValid(MGCity)) {
+//				for (j=0; j<=7 ; j=j+1) { //directions
+//					GetNeighbor(MGCity.location, j, MGLoc);//look around
+//					if ( CellOwner(MGLoc)==MGCity.owner) {
+//						if (TerrainType(MGLoc)==0 || TerrainType(MGLoc)==7 || TerrainType(MGLoc)==9 || TerrainType(MGLoc)==18) {
+//							// 0=forest, 7=jungle
+//							FinishImprovements(MGLoc);
+//							if (!TileHasImprovement(MGLoc, MGTileImp)&&(!TileHasImprovement(MGLoc, 1))&&(!TileHasImprovement(MGLoc, 12))&&(!TileHasImprovement(MGLoc, 14))) {
+//								Event:CreateImprovement(MGCity.owner,MGLoc, MGTileImp,0);
+//							}
+//						}
+// regular AI can now build all these		elseif (TerrainType(MGLoc)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+//							FinishImprovements(MGLoc);
+//							if (!TileHasImprovement(MGLoc, 18)&&(!TileHasImprovement(MGLoc, 4))&&(!TileHasImprovement(MGLoc, 7))&&(!TileHasImprovement(MGLoc, 16))) {
+//								Event:CreateImprovement(MGCity.owner,MGLoc, 18,0);
+//							}
+//						}
+//						elseif (TerrainType(MGLoc)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+//							FinishImprovements(MGLoc);
+//							if (!TileHasImprovement(MGLoc, 5)&&(!TileHasImprovement(MGLoc, 4))&&(!TileHasImprovement(MGLoc, 7))&&(!TileHasImprovement(MGLoc, 16))) {
+//								Event:CreateImprovement(MGCity.owner,MGLoc, 5,0);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+		for(i = 0; i < player[0].cities; i = i + 1) {
+			GetCityByIndex(player[0], i, MGCity);
+			if(CityisValid(MGCity)) {
+				if (MGCity.population > 11) {// starts collecting a good % on 2nd ring
+					for (j=0; j<=7 ; j=j+1) { //directions
+					GetNeighbor(MGCity.location, j, MGLoc);//look around
+						for (k=0; k<=7 ; k=k+1) { //directions
+						GetNeighbor(MGLoc, k, MGLoc2);//look around
+							if (j == 1 && (k == 0 || k == 1 || k ==2)) {
+								if ( CellOwner(MGLoc2)==MGCity.owner) {
+									if (TerrainType(MGLoc2)==0 || TerrainType(MGLoc2)==1 || TerrainType(MGLoc2)==4 || TerrainType(MGLoc2)==5 || TerrainType(MGLoc2)==7) {
+										// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, MGTileImp)&&(!TileHasImprovement(MGLoc2, 0))&&(!TileHasImprovement(MGLoc2, 1))&&(!TileHasImprovement(MGLoc2, 6))
+										 &&(!TileHasImprovement(MGLoc2, 9))&&(!TileHasImprovement(MGLoc2, 12))&&(!TileHasImprovement(MGLoc2, 14))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, MGTileImp,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 18)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 18,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 5)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 5,0);
+										}
+									}
+								}
+							}
+							elseif (j == 3 && (k == 0 || k == 3 || k ==5)) {
+								if ( CellOwner(MGLoc2)==MGCity.owner) {
+									if (TerrainType(MGLoc2)==0 || TerrainType(MGLoc2)==1 || TerrainType(MGLoc2)==4 || TerrainType(MGLoc2)==5 || TerrainType(MGLoc2)==7) {
+										// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, MGTileImp)&&(!TileHasImprovement(MGLoc2, 0))&&(!TileHasImprovement(MGLoc2, 1))&&(!TileHasImprovement(MGLoc2, 6))
+										 &&(!TileHasImprovement(MGLoc2, 9))&&(!TileHasImprovement(MGLoc2, 12))&&(!TileHasImprovement(MGLoc2, 14))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, MGTileImp,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 18)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 18,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 5)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 5,0);
+										}
+									}
+								}
+							}
+							elseif (j == 4 && (k == 2 || k == 4 || k ==7)) {
+								if ( CellOwner(MGLoc2)==MGCity.owner) {
+									if (TerrainType(MGLoc2)==0 || TerrainType(MGLoc2)==1 || TerrainType(MGLoc2)==4 || TerrainType(MGLoc2)==5 || TerrainType(MGLoc2)==7) {
+										// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, MGTileImp)&&(!TileHasImprovement(MGLoc2, 0))&&(!TileHasImprovement(MGLoc2, 1))&&(!TileHasImprovement(MGLoc2, 6))
+										 &&(!TileHasImprovement(MGLoc2, 9))&&(!TileHasImprovement(MGLoc2, 12))&&(!TileHasImprovement(MGLoc2, 14))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, MGTileImp,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 18)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 18,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 5)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 5,0);
+										}
+									}
+								}
+							}
+							elseif (j == 6 && (k == 5 || k == 6 || k ==7)) {
+								if ( CellOwner(MGLoc2)==MGCity.owner) {
+									if (TerrainType(MGLoc2)==0 || TerrainType(MGLoc2)==1 || TerrainType(MGLoc2)==4 || TerrainType(MGLoc2)==5 || TerrainType(MGLoc2)==7) {
+										// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, MGTileImp)&&(!TileHasImprovement(MGLoc2, 0))&&(!TileHasImprovement(MGLoc2, 1))&&(!TileHasImprovement(MGLoc2, 6))
+										 &&(!TileHasImprovement(MGLoc2, 9))&&(!TileHasImprovement(MGLoc2, 12))&&(!TileHasImprovement(MGLoc2, 14))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, MGTileImp,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 18)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 18,0);
+										}
+									}
+									elseif (TerrainType(MGLoc2)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+										FinishImprovements(MGLoc2);
+										if (!TileHasImprovement(MGLoc2, 5)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+											Event:CreateImprovement(MGCity.owner,MGLoc2, 5,0);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, MGCity);
+			if(CityisValid(MGCity)) {
+				if (MGCity.population > 24) {// starts collecting a good % on 3rd ring
+					for (j=0; j<=7 ; j=j+1) { //directions
+						GetNeighbor(MGCity.location, j, MGLoc);//look around
+						for (k=0; k<=7 ; k=k+1) { //directions
+							GetNeighbor(MGLoc, k, MGLoc2);//look around
+							for (m=0; m<=7 ; m=m+1) { //directions
+								GetNeighbor(MGLoc2, m, MGLoc3);//look around
+								if ((j == 0 || j == 2 || j == 5 || j == 7) && j == k) {
+									if ( CellOwner(MGLoc2)==MGCity.owner) {
+										if (TerrainType(MGLoc2)==0 || TerrainType(MGLoc2)==1 || TerrainType(MGLoc2)==4 || TerrainType(MGLoc2)==5 || TerrainType(MGLoc2)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc2);
+											if (!TileHasImprovement(MGLoc2, MGTileImp)&&(!TileHasImprovement(MGLoc2, 0))&&(!TileHasImprovement(MGLoc2, 1))&&(!TileHasImprovement(MGLoc2, 6))
+											 &&(!TileHasImprovement(MGLoc2, 9))&&(!TileHasImprovement(MGLoc2, 12))&&(!TileHasImprovement(MGLoc2, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc2, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc2)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc2);
+											if (!TileHasImprovement(MGLoc2, 18)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc2, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc2)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc2);
+											if (!TileHasImprovement(MGLoc2, 5)&&(!TileHasImprovement(MGLoc2, 4))&&(!TileHasImprovement(MGLoc2, 7))&&(!TileHasImprovement(MGLoc2, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc2, 5,0);
+											}
+										}
+									}
+								}
+								if (j == 0 && k == 0 && (m == 1 || m == 3)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 1 && k == 1 && (m == 0 || m == 1 || m ==2)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 2 && k == 2 && (m == 1 || m == 4)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 3 && k == 3 && (m == 0 || m == 3 || m ==5)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 4 && k == 4 && (m == 2 || m == 4 || m ==7)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 5 && k == 5 && (m == 3 || m == 6)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 6 && k == 6 && (m == 5 || m == 6 || m ==7)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+								elseif (j == 7 && k == 7 && (m == 4 || m == 6)) {
+									if ( CellOwner(MGLoc3)==MGCity.owner) {
+										if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+											 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+											}
+										}
+										elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+											FinishImprovements(MGLoc3);
+											if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+												Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for(i = 0; i < player[0].cities; i = i + 1) {
+			GetCityByIndex(player[0], i, MGCity);
+			if(CityisValid(MGCity)) {
+				if (MGCity.population > 39) {// starts collecting a good % on 4th ring
+					for (j=0; j<=7 ; j=j+1) { //directions
+						GetNeighbor(MGCity.location, j, MGLoc);//look around
+						for (k=0; k<=7 ; k=k+1) { //directions
+							GetNeighbor(MGLoc, k, MGLoc2);//look around
+							for (m=0; m<=7 ; m=m+1) { //directions
+								GetNeighbor(MGLoc2, m, MGLoc3);//look around
+								for (n=0; n<=7 ; n=n+1) { //directions
+									GetNeighbor(MGLoc3, n, MGLoc4);//look around
+									if (j == 1 && k == 1 && m == 1 && (n == 0 || n == 1 || n ==2)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												 &&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 3 && k == 3 && m == 3 && (n == 0 || n == 3 || n ==5)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 4 && k == 4 && m == 4 && (n == 2 || n == 4 || n ==7)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 6 && k == 6 && m == 6 && (n == 5 || n == 6 || n ==7)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, MGCity);
+			if(CityisValid(MGCity)) {
+				if (MGCity.population > 53) {
+					for (j=0; j<=7 ; j=j+1) { //directions
+						GetNeighbor(MGCity.location, j, MGLoc);//look around
+						for (k=0; k<=7 ; k=k+1) { //directions
+							GetNeighbor(MGLoc, k, MGLoc2);//look around
+							for (m=0; m<=7 ; m=m+1) { //directions
+								GetNeighbor(MGLoc2, m, MGLoc3);//look around
+								for (n=0; n<=7 ; n=n+1) { //directions
+									GetNeighbor(MGLoc3, n, MGLoc4);//look around
+									if ((j == 0 || j == 2 || j == 5 || j == 7) && j == k && k == m) {
+										if ( CellOwner(MGLoc3)==MGCity.owner) {
+											if (TerrainType(MGLoc3)==0 || TerrainType(MGLoc3)==1 || TerrainType(MGLoc3)==4 || TerrainType(MGLoc3)==5 || TerrainType(MGLoc3)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc3);
+												if (!TileHasImprovement(MGLoc3, MGTileImp)&&(!TileHasImprovement(MGLoc3, 0))&&(!TileHasImprovement(MGLoc3, 1))&&(!TileHasImprovement(MGLoc3, 6))
+												 &&(!TileHasImprovement(MGLoc3, 9))&&(!TileHasImprovement(MGLoc3, 12))&&(!TileHasImprovement(MGLoc3, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc3, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc3)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc3);
+												if (!TileHasImprovement(MGLoc3, 18)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc3, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc3)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc3);
+												if (!TileHasImprovement(MGLoc3, 5)&&(!TileHasImprovement(MGLoc3, 4))&&(!TileHasImprovement(MGLoc3, 7))&&(!TileHasImprovement(MGLoc3, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc3, 5,0);
+												}
+											}
+										}
+									}
+									if (j == 0 && k == 0 && m == 0 && (n == 2 || n == 5)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+											// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 2 && k == 2 && m == 2 && (n == 0|| n == 7)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 5 && k == 5 && m == 5 && (n == 0|| n == 7)) {
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+									elseif (j == 7 && k == 7 && m == 7 && (n == 2|| n == 5)){
+										if ( CellOwner(MGLoc4)==MGCity.owner) {
+											if (TerrainType(MGLoc4)==0 || TerrainType(MGLoc4)==1 || TerrainType(MGLoc4)==4 || TerrainType(MGLoc4)==5 || TerrainType(MGLoc4)==7) {
+												// 0=forest, 1=plains, 4=grassland, 5=desert, 7=jungle
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, MGTileImp)&&(!TileHasImprovement(MGLoc4, 0))&&(!TileHasImprovement(MGLoc4, 1))&&(!TileHasImprovement(MGLoc4, 6))
+												&&(!TileHasImprovement(MGLoc4, 9))&&(!TileHasImprovement(MGLoc4, 12))&&(!TileHasImprovement(MGLoc4, 14))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, MGTileImp,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==13 && (HasAdvance(player[0], ID_ADVANCE_HULL_MAKING))){
+													FinishImprovements(MGLoc4);
+													if (!TileHasImprovement(MGLoc4, 18)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 18,0);
+												}
+											}
+											elseif (TerrainType(MGLoc4)==14 && (HasAdvance(player[0], ID_ADVANCE_OIL_REFINING))){
+												FinishImprovements(MGLoc4);
+												if (!TileHasImprovement(MGLoc4, 5)&&(!TileHasImprovement(MGLoc4, 4))&&(!TileHasImprovement(MGLoc4, 7))&&(!TileHasImprovement(MGLoc4, 16))) {
+													Event:CreateImprovement(MGCity.owner,MGLoc4, 5,0);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+//TILEIMP_TRADING_POST 36
+//TILEIMP_PORT 18
+//TILEIMP_OUTLET_MALL 17
+//TILEIMP_NATURE_PRESERVE 15
+//TILEIMP_DRILLING_PLATFORM 5
+//TILEIMP_ADVANCED_MINES 1
+//TILEIMP_MINES 14
+//TILEIMP_MEGA_MINES 12
+//TILEIMP_NETS 16
+//TILEIMP_AUTOMATED_FISHERIES 4
+//TILEIMP_FISHERIES 7
