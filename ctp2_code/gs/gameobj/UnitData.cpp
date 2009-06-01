@@ -5054,11 +5054,23 @@ void UnitData::SetType(sint32 type)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Update unit 0x%lx From type %d to type %d @ (%d,%d), turn=%d\n", m_id, m_type, type, m_pos.x, m_pos.y, g_player[m_owner]->m_current_round));
 
-	m_type = type; 
-
-	m_hp              = CalculateTotalHP();
-	m_fuel            = CalculateTotalFuel(); 
-	m_movement_points = CalculateTotalMovePoints();
+	if(GetDBRec()->GetUpgradeDoesNotHeal())
+	{
+		sint32 prevTotalHP = CalculateTotalHP();
+		sint32 prevTotalFuel = CalculateTotalFuel();
+		sint32 prevTotalMP = CalculateTotalMovePoints();
+		m_type = type;
+		m_hp              = CalculateTotalHP() * ( m_hp / prevTotalHP );
+		m_fuel            = CalculateTotalFuel() * ( m_fuel / prevTotalFuel ); 
+		m_movement_points = CalculateTotalMovePoints() * ( m_movement_points / prevTotalMP );
+	}
+	else
+	{
+		m_type = type;
+		m_hp              = CalculateTotalHP();
+		m_fuel            = CalculateTotalFuel(); 
+		m_movement_points = CalculateTotalMovePoints();
+	}
 
 	ClearFlag(k_UDF_FIRST_MOVE); // Clear flag: Upgraded unit maybe mobile
 	if(!IsImmobile())
@@ -5110,7 +5122,8 @@ bool UnitData::CanUpgrade(sint32 & upgradeType, sint32 & upgradeCosts) const
 		           g_player[m_owner]->HasFreeUnitUpgrades()
 		        ||
 		          (
-		               g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner)
+		              ( GetDBRec()->GetUpgradeAnywhere()
+                    || g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner) )
 		            && upgradeCosts <= g_player[m_owner]->m_gold->GetLevel()
 		          )
 		      );

@@ -713,7 +713,6 @@ STDEHANDLER(UpgradeUnit)
 {
 	Unit u;
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
-
 	sint32 type  = 0;
 	sint32 costs = 0;
 

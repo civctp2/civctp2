@@ -90,6 +90,9 @@ Unitpromotion {
 	Bit CanRebase							// FU to rebase CantMove units
 	Bit MultipleAttacks						// Can attack more than once in a turn (Civ3 - blitz)
 	Bit CanBeGifted							// Disbanding unit gives it to the friendly player
+	
+	Bit UpgradeAnywhere                     //Allows you to upgrade units at any location
+	Bit UpgradeDoesNotHeal                  //Units do not heal when upgraded
 
 	Bits Size {
 		Small,
