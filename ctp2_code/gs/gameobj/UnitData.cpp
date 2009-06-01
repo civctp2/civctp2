@@ -5060,9 +5060,20 @@ void UnitData::SetType(sint32 type)
 		sint32 prevTotalFuel = CalculateTotalFuel();
 		sint32 prevTotalMP = CalculateTotalMovePoints();
 		m_type = type;
-		m_hp              = CalculateTotalHP() * ( m_hp / prevTotalHP );
-		m_fuel            = CalculateTotalFuel() * ( m_fuel / prevTotalFuel ); 
-		m_movement_points = CalculateTotalMovePoints() * ( m_movement_points / prevTotalMP );
+		if(prevTotalHP > 0)
+			m_hp              = CalculateTotalHP() * ( m_hp / prevTotalHP );
+		else
+			m_hp              = CalculateTotalHP();
+
+		if(prevTotalFuel > 0)
+			m_fuel            = CalculateTotalFuel() * ( m_fuel / prevTotalFuel );
+		else
+			m_fuel            = CalculateTotalFuel();
+
+		if(prevTotalMP > 0)
+			m_movement_points = CalculateTotalMovePoints() * ( m_movement_points / prevTotalMP );
+		else
+			m_movement_points = CalculateTotalMovePoints();
 	}
 	else
 	{
