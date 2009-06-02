@@ -84,6 +84,7 @@
 // - Modified Bombard so ranged units and defenders use same bonuses as they
 //	 do in combat. (10-Mar-2009 Maq)
 // - Fixed movebonus units movement. Pathing still needs to be fixed. (15-Mar-2009 Maq)
+// - Added "UpgradeAnywhere","UpgradeDoesNotHeal" functionality and refreshed unit info on upgrade. (31-May-2009 EPW)
 //
 //----------------------------------------------------------------------------
 
@@ -5113,7 +5114,10 @@ void UnitData::SetType(sint32 type)
 		m_army->UpdateMoveIntersection();
 	}
 
-	g_selected_item->UpdateSelectedItem();
+	if (g_selected_item) 
+	{
+		g_selected_item->Refresh();
+	}
 
 	// Maybe more stuff has to be done.
 	//4-8-2007 may have to add a reset movement here? 

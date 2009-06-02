@@ -1942,7 +1942,7 @@ location_t	tmpLoc[100];
 	player[0] = tmpPlayer2;
 	numUnits = player[0].units;
 	foundLoc = 0;
-			
+	
 	for (i = 0; i < numUnits; i = i + 1) {
 		GetUnitByIndex(tmpPlayer2, i, tmpUnit);
 		tmpNum = GetUnitsAtLocation(tmpUnit.location);
@@ -1951,7 +1951,7 @@ location_t	tmpLoc[100];
 				return -1;
 			}
 			for (j = 0; j < indexLoc; j = j + 1) {
-				if (tmpUnit.location == tmpLoc[i]) {
+				if (tmpUnit.location == tmpLoc[j]) {
 					foundLoc = 1;
 				}
 			}
@@ -1960,7 +1960,7 @@ location_t	tmpLoc[100];
 			} else {
 				tmpLoc[indexLoc] = tmpUnit.location;
 				indexLoc = indexLoc + 1;
-				GetArmyFromUnit (tmpUnit, tmpArmy);
+				GetArmyFromUnit(tmpUnit, tmpArmy);
 				Event:GroupOrder(tmpArmy);
 			}
 		}
