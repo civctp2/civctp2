@@ -217,6 +217,9 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 
 void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 {
+	if(g_player[ownerId] == NULL)
+        return;
+
 	Assert(city.IsValid());
 
 	Scheduler & scheduler = Scheduler::GetScheduler(ownerId);
@@ -243,6 +246,9 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 
 void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreignerId)
 {
+	if(g_player[foreignerId] == NULL)
+        return;
+
 	Assert(city.IsValid());
 
 	Scheduler & scheduler = Scheduler::GetScheduler(foreignerId);
