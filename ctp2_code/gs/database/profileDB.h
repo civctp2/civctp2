@@ -63,6 +63,7 @@
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
 // - Added start and end age options. (11-Apr-2009 Maq)
+// - Added show city production under name option. (15-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -421,6 +422,8 @@ private:
     sint32 m_spStartingAge;
 	/// Ending age in single player only
     sint32 m_spEndingAge;
+	/// Show what a city is producing under it's name
+    sint32 m_showCityProduction;
 
 
 
@@ -563,7 +566,7 @@ public:
     void SetNonContinuousUnitCompleteMessages(BOOL on)  { m_nonContinuousUnitCompleteMessages = on; }
 
     void SetShowCityNames(BOOL on)                      { m_showCityNames = on; }
-    void SetShowArmyNames(BOOL on)                      { m_showArmyNames = on; } //emod2
+    void SetShowArmyNames(BOOL on)                      { m_showArmyNames = on; }
     void SetShowTradeRoutes(BOOL on)                    { m_showTradeRoutes = on; }
 
     void SetMoveHoldTime(sint32 t)                      { m_moveHoldTime = t; }
@@ -592,11 +595,11 @@ public:
     void SetDisplayFilter(BOOL on)                      { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on)                       { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on)                     { m_displayTerrain = on;}
-    void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; } //emod2
-    void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; } //emod2
-    void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; } //emod2
-    void SetOneCity(BOOL on)                            { m_OneCityChallenge = on; } //emod2
-    void SetRevoltInsurgents (BOOL on)                  { m_RevoltInsurgents = on; } //emod2
+    void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
+    void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
+    void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
+    void SetOneCity(BOOL on)                            { m_OneCityChallenge = on; }
+    void SetRevoltInsurgents (BOOL on)                  { m_RevoltInsurgents = on; }
     void SetNoAIProductionDeficit(BOOL on)              { m_NoAIProductionDeficit = on; }
     void SetNoAIGoldDeficit(BOOL on)                    { m_NoAIGoldDeficit = on; }
     void SetAICityDefenderBonus(BOOL on)                { m_AICityDefenderBonus = on; } 
@@ -624,6 +627,7 @@ public:
     void SetRandomCustomMap(BOOL on)                    { m_randomCustomMap = on; }
     void SetSPStartingAge(sint32 x)                     { m_spStartingAge = x; }
     void SetSPEndingAge(sint32 x)                       { m_spEndingAge = x; }
+    void SetShowCityProduction(BOOL on)                 { m_showCityProduction = on; }
 
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
@@ -879,6 +883,7 @@ public:
     BOOL    IsRandomCustomMap()                 { return m_randomCustomMap; }
     sint32  GetSPStartingAge() const            { return m_spStartingAge; }
     sint32  GetSPEndingAge() const              { return m_spEndingAge; }
+    BOOL    IsShowCityProduction()              { return m_showCityProduction; }
 
 };
 

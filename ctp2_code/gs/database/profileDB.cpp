@@ -56,6 +56,7 @@
 // - Cleaned up advanced options window by removing options already present
 //	 in other windows. (10-Apr-2009 Maq)
 // - Added start and end age options. (11-Apr-2009 Maq)
+// - Added show city production under name option. (15-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -176,7 +177,7 @@ ProfileDB::ProfileDB()
     m_dontKillMessages                  (FALSE),
     m_aiPopCheat                        (TRUE),
     m_showCityNames                     (TRUE),
-    m_showArmyNames                     (FALSE),  //emod
+    m_showArmyNames                     (FALSE),
     m_showTradeRoutes                   (TRUE),
     m_unitSpeed                         (1),
     m_mouseSpeed                        (SLIDER_MIDDLE),
@@ -256,6 +257,7 @@ ProfileDB::ProfileDB()
     m_randomCustomMap                   (FALSE),
     m_spStartingAge                     (0),
     m_spEndingAge                       (-1),
+    m_showCityProduction                (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -448,10 +450,10 @@ ProfileDB::ProfileDB()
 	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger             , NULL, false);
 	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade              , NULL, false);
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
-	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
-	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
 	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, false);
-	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
+	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
 	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
@@ -459,6 +461,7 @@ ProfileDB::ProfileDB()
 	Var("RandomCustomMap"            , PV_BOOL  , &m_randomCustomMap            , NULL, false);
 	Var("SPStartingAge"              , PV_NUM   , &m_spStartingAge              , NULL, false);
 	Var("SPEndingAge"				 , PV_NUM   , &m_spEndingAge                , NULL, false);
+	Var("ShowCityProduction"         , PV_BOOL  , &m_showCityProduction         , NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

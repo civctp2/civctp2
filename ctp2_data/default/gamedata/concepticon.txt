@@ -21,6 +21,7 @@
 # - Moved the map icons from the source code to this file. (23-Feb-2007 Martin Gühmann)
 # - Replaced the city slave icon by one that shows the color of the player
 #   that lost the slaves. (26-Jan-2008 Martin Gühmann)
+# - Added show city production icons (upc154/155). (25-Jun-2009 Maq)
 #
 #----------------------------------------------------------------------------
 
@@ -97,6 +98,17 @@ MAPICON_POLBORDERNE		"upc054.tga"
 MAPICON_POLBORDERSW		"upc055.tga"
 MAPICON_POLBORDERSE		"upc056.tga"
 MAPICON_ELITE			"upc057.tga"
+
+MAPICON_PRODUCTIONNEW		"upc154.tga"
+#when city grows to double figures, so it left-aligns with pop figure
+MAPICON_PRODUCTIONNEWBIG	"upc155.tga"
+
+
+###############################################
+## NOTE: All the mapicons above this point   ##
+## are hardcoded, so don't modify the order. ##
+###############################################
+
 
 # The mind virusses: The religions
 MAPICON_JUDAISM			"JudaismCI.tga"

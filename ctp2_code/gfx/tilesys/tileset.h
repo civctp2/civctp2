@@ -31,6 +31,7 @@
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 // - Increased the number of possible tile improvement graphics in the
 //   tile to 1024. (28-Feb-2008 Martin Gühmann)
+// - Added show city production icons. (25-Jun-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -114,13 +115,13 @@ struct MegaTileStep{
 
 enum MAPICON { 
 	
-	MAPICON_BIODISEASE, //upc001.rim
+	MAPICON_BIODISEASE,       //upc001.rim
 	MAPICON_NANODISEASE,
 	MAPICON_CONVERSION,
 	MAPICON_FRANCHISE,
 	MAPICON_INJUNCTION,
-	MAPICON_HERALD,	//upc006
-	MAPICON_UNHAPPY, //upc007.rim
+	MAPICON_HERALD,	          //upc006
+	MAPICON_UNHAPPY,          //upc007.rim
 
 	MAPICON_BRACKET1,
 	MAPICON_BRACKET2,
@@ -128,7 +129,7 @@ enum MAPICON {
 	
 	MAPICON_BRACKET4,
 
-	MAPICON_HERALD2, //upc012.rim
+	MAPICON_HERALD2,          //upc012.rim
 	MAPICON_HERALD3,
 	MAPICON_HERALD4,
 	MAPICON_HERALD5,
@@ -137,57 +138,60 @@ enum MAPICON {
 	MAPICON_HERALD8,
 	MAPICON_HERALD9,
 
-	MAPICON_RESOURCE1, //upc020.rim
+	MAPICON_RESOURCE1,        //upc020.rim
 	
 	MAPICON_RESOURCE2,
 	MAPICON_RESOURCE3,
 
-	MAPICON_FLAG,   //upc023.rim
+	MAPICON_FLAG,             //upc023.rim
 
 	MAPICON_CIRCLE1,
 	MAPICON_CIRCLE2,
 	MAPICON_CIRCLE3,
 
-	MAPICON_UNKNOWN1,  //upc027.rim  arch
+	MAPICON_UNKNOWN1,         //upc027.rim  arch
 	MAPICON_UNKNOWN2,    
 	MAPICON_UNKNOWN3,
-	MAPICON_UNKNOWN4,  //upc030.rim 
+	MAPICON_UNKNOWN4,         //upc030.rim 
 	
 	MAPICON_UNKNOWN5,
-	MAPICON_UNKNOWN6,    //house
-	MAPICON_UNKNOWN7,   //earth
-	MAPICON_UNKNOWN8,   //person/slave
-	MAPICON_UNKNOWN9, //upc035.rim  city
-	MAPICON_UNKNOWN10,   //house
-	MAPICON_UNKNOWN11,   //earth
-	MAPICON_UNKNOWN12,  //person/slave
+	MAPICON_UNKNOWN6,         //house
+	MAPICON_UNKNOWN7,         //earth
+	MAPICON_UNKNOWN8,         //person/slave
+	MAPICON_UNKNOWN9,         //upc035.rim  city
+	MAPICON_UNKNOWN10,        //house
+	MAPICON_UNKNOWN11,        //earth
+	MAPICON_UNKNOWN12,        //person/slave
 
 	MAPICON_SLAVE,
 	MAPICON_SLEEPINGUNITS,
 	
 	MAPICON_AIRPORT,
 	MAPICON_UPRISING,
-	MAPICON_WATCHFUL,  //upc043.rim
+	MAPICON_WATCHFUL,         //upc043.rim
 
-	MAPICON_POLLUTION,  //upc044.rim factory 
+	MAPICON_POLLUTION,        //upc044.rim factory
 
 	MAPICON_CARGO,
-	MAPICON_ARMY,      //upc046.rim   star
+	MAPICON_ARMY,             //upc046.rim star
 	MAPICON_VETERAN,
 
 
 	MAPICON_TARGET,
 	MAPICON_HERALD10,
 	MAPICON_HERALD11,
-	MAPICON_HERALD12,   //upc051.rim
+	MAPICON_HERALD12,         //upc051.rim
 //EMOD NEW ICONS
-	MAPICON_CAPITOL,	//upc052.tga
-//new borders?
-	MAPICON_POLBORDERNW, //53
-	MAPICON_POLBORDERNE, //54
-	MAPICON_POLBORDERSW,  //55
-	MAPICON_POLBORDERSE, //upc056.tga
-	MAPICON_ELITE,
+	MAPICON_CAPITOL,	      //upc052.tga
+//new borders
+	MAPICON_POLBORDERNW,      //upc053.tga
+	MAPICON_POLBORDERNE,      //upc054.tga
+	MAPICON_POLBORDERSW,      //upc055.tga
+	MAPICON_POLBORDERSE,      //upc056.tga
+	MAPICON_ELITE,            //upc057.tga
+//Show city production icons
+	MAPICON_PRODUCTIONNEW,	  //upc154.tga
+	MAPICON_PRODUCTIONNEWBIG, //upc155.tga
 //religions
 /*
 	MAPICON_RELIGION1,	//upc057.tga  //judaism

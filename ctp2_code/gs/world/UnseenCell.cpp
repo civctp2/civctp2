@@ -50,6 +50,7 @@
 #include "Cell.h"
 #include "citydata.h"
 #include "civarchive.h"
+#include "ConstRecord.h"		// g_theConstDB
 #include "director.h"           // g_director
 #include "dynarr.h"
 #include "installationtree.h"
@@ -252,6 +253,9 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			m_happinessAttackOwner = (sint8)cityData->GetOwner();
 			m_slaveBits = cityData->GetSlaveBits();
 			SetIsSpecialIcon(cityData->HasSpecialIcon()); //emod
+
+		    sint32 pollution = cityData->GetPollution();
+			SetIsPollutionRisk(pollution > g_theConstDB->Get(0)->GetLocalPollutionLevel());
 
 		} // city.IsValid
 	} // cell

@@ -468,8 +468,8 @@ public:
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful, BOOL isCapitol//added capitol
-								);
+								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
+								BOOL isPollutionRisk);
 
 	//EMOD to add Civ4 Style Icons
 	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );

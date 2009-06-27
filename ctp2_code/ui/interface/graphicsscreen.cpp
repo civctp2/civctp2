@@ -28,49 +28,53 @@ extern SpriteGroupList		*g_unitSpriteGroupList;
 extern SpriteGroupList		*g_goodSpriteGroupList;
 
 static ctp2_Button	*s_resScreenButton;
-static c3_PopupWindow *s_graphicsWindow	= NULL;
-static C3Slider		*s_bright			= NULL,
-					*s_gamma			= NULL,
-					*s_color			= NULL,
-					*s_contrast			= NULL;
+static c3_PopupWindow *s_graphicsWindow			= NULL;
+static C3Slider		*s_bright					= NULL,
+					*s_gamma					= NULL,
+					*s_color					= NULL,
+					*s_contrast					= NULL;
 
 
-static c3_Static	*s_unitSpeedN		 = NULL;
-static C3Slider		*s_unitSpeed		 = NULL;
+static c3_Static	*s_unitSpeedN				= NULL;
+static C3Slider		*s_unitSpeed				= NULL;
 
-static c3_Static	*s_brightN			= NULL,
-					*s_gammaN			= NULL,
-					*s_colorN			= NULL,
-					*s_contrastN		= NULL;
-static aui_Switch			*s_walk		= NULL,
-
-
-							*s_trade	= NULL,
-							*s_wonder	= NULL,
+static c3_Static	*s_brightN					= NULL,
+					*s_gammaN					= NULL,
+					*s_colorN					= NULL,
+					*s_contrastN				= NULL;
+static aui_Switch	*s_walk						= NULL,
 
 
-							*s_politicalBorders	= NULL,
-							*s_tradeRoutes = NULL,
+					*s_trade					= NULL,
+					*s_wonder					= NULL,
 
 
-							*s_cityInfluence = NULL,
-							*s_grid		= NULL,
+					*s_politicalBorders			= NULL,
+					*s_tradeRoutes				= NULL,
+
+
+					*s_cityInfluence			= NULL,
+					*s_grid						= NULL,
 							
-							*s_cityNames = NULL, //;
-							*s_civflags = NULL, //CivFlagButton
-							*s_smooth = NULL, //emod1
-							*s_armyNames = NULL,
-							*s_goodAnims = NULL;
+					*s_cityNames				= NULL,
+					*s_civflags					= NULL,
+					*s_smooth					= NULL,
+					*s_armyNames				= NULL,
+					*s_goodAnims				= NULL,
+					*s_cityProd					= NULL,
+
+					*s_NULL						= NULL;
 
 
-static BOOL			s_gridToggled = FALSE;
-static BOOL			s_cityInfluenceToggled = FALSE;
-static BOOL			s_politicalBordersToggled = FALSE;
-static BOOL			s_armyNamesToggled = FALSE; //emod
-static BOOL			s_civflagsToggled = FALSE; //emod
-static BOOL			s_smoothToggled = FALSE; //emod2
-static BOOL			s_unitAnimToggled = FALSE;
-static BOOL			s_goodAnimToggled = FALSE;
+static BOOL			s_gridToggled				= FALSE;
+static BOOL			s_cityInfluenceToggled		= FALSE;
+static BOOL			s_politicalBordersToggled	= FALSE;
+static BOOL			s_armyNamesToggled			= FALSE;
+static BOOL			s_civflagsToggled			= FALSE;
+static BOOL			s_smoothToggled				= FALSE;
+static BOOL			s_unitAnimToggled			= FALSE;
+static BOOL			s_goodAnimToggled			= FALSE;
+//static BOOL			s_showCityProdToggled		= FALSE;
 
 enum
 {
@@ -88,12 +92,14 @@ enum
 	GS_CITYINFLUENCE,
 	GS_GRID,
 	GS_CITYNAMES,	
-	GS_ARMYNAMES,  //emod
-	GS_CIVFLAGS,  //emod
-	GS_SMOOTH,  //emod 3
+	GS_ARMYNAMES,
+	GS_CIVFLAGS,
+	GS_SMOOTH,
 	GS_GOODANIMS,
+	GS_CITYPROD,
 
-	GS_TOTAL };
+	GS_TOTAL
+};
 
 static uint32 check[] =
 {
@@ -112,10 +118,11 @@ static uint32 check[] =
 	GS_GRID,
 
 	GS_CITYNAMES,
-	GS_ARMYNAMES,  //emod
-	GS_CIVFLAGS,  //emod
-	GS_SMOOTH,  //emod 4
+	GS_ARMYNAMES,
+	GS_CIVFLAGS,
+	GS_SMOOTH,
 	GS_GOODANIMS,
+	GS_CITYPROD,
 	
 	GS_TOTAL 
 };
@@ -177,34 +184,25 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	
 
-	s_walk		= spNew_aui_Switch(&errcode,windowBlock,"WalkButton",graphicsscreen_checkPress,&check[GS_WALK]);
+	s_walk				= spNew_aui_Switch(&errcode,windowBlock,"WalkButton",graphicsscreen_checkPress,&check[GS_WALK]);
+	s_trade				= spNew_aui_Switch(&errcode,windowBlock,"TradeButton",graphicsscreen_checkPress,&check[GS_TRADE]);
+	s_wonder			= spNew_aui_Switch(&errcode,windowBlock,"WonderButton",graphicsscreen_checkPress,&check[GS_WONDER]);
+	s_politicalBorders	= spNew_aui_Switch(&errcode,windowBlock,"PoliticalBordersButton",graphicsscreen_checkPress,&check[GS_POLITICALBORDERS]);
+	s_tradeRoutes		= spNew_aui_Switch(&errcode,windowBlock,"TradeRoutesButton",graphicsscreen_checkPress,&check[GS_TRADEROUTES]);
+	s_cityInfluence		= spNew_aui_Switch(&errcode,windowBlock,"CityInflenceButton",graphicsscreen_checkPress,&check[GS_CITYINFLUENCE]);
+	s_grid				= spNew_aui_Switch(&errcode,windowBlock,"GridButton",graphicsscreen_checkPress,&check[GS_GRID]);
+	s_cityNames			= spNew_aui_Switch(&errcode,windowBlock,"CityNamesButton", graphicsscreen_checkPress, &check[GS_CITYNAMES]);
+	s_armyNames			= spNew_aui_Switch(&errcode,windowBlock,"ArmyNamesButton", graphicsscreen_checkPress, &check[GS_ARMYNAMES]);
+	s_civflags			= spNew_aui_Switch(&errcode,windowBlock,"CivFlagButton", graphicsscreen_checkPress, &check[GS_CIVFLAGS]);
 
+	s_resScreenButton	= spNew_ctp2_Button( &errcode, windowBlock, "ResolutionButton", graphicsscreen_selectResolution );
 
-	s_trade		= spNew_aui_Switch(&errcode,windowBlock,"TradeButton",graphicsscreen_checkPress,&check[GS_TRADE]);
-	s_wonder	= spNew_aui_Switch(&errcode,windowBlock,"WonderButton",graphicsscreen_checkPress,&check[GS_WONDER]);
+	s_smooth			= spNew_aui_Switch(&errcode,windowBlock,"SmoothButton", graphicsscreen_checkPress, &check[GS_SMOOTH]);
+	s_goodAnims			= spNew_aui_Switch(&errcode,windowBlock,"GoodsButton",graphicsscreen_checkPress,&check[GS_GOODANIMS]);
+	s_cityProd			= spNew_aui_Switch(&errcode,windowBlock,"ShowCityProdButton",graphicsscreen_checkPress,&check[GS_CITYPROD]);
 
-
-	s_politicalBorders= spNew_aui_Switch(&errcode,windowBlock,"PoliticalBordersButton",graphicsscreen_checkPress,&check[GS_POLITICALBORDERS]);
-	s_tradeRoutes= spNew_aui_Switch(&errcode,windowBlock,"TradeRoutesButton",graphicsscreen_checkPress,&check[GS_TRADEROUTES]);
-
-	
-
-	s_cityInfluence = spNew_aui_Switch(&errcode,windowBlock,"CityInflenceButton",graphicsscreen_checkPress,&check[GS_CITYINFLUENCE]);
-	s_grid		= spNew_aui_Switch(&errcode,windowBlock,"GridButton",graphicsscreen_checkPress,&check[GS_GRID]);
-
-	
-	s_cityNames = spNew_aui_Switch(&errcode,windowBlock,"CityNamesButton", graphicsscreen_checkPress, &check[GS_CITYNAMES]);
-	//emod
-	s_armyNames = spNew_aui_Switch(&errcode,windowBlock,"ArmyNamesButton", graphicsscreen_checkPress, &check[GS_ARMYNAMES]);
-	s_civflags = spNew_aui_Switch(&errcode,windowBlock,"CivFlagButton", graphicsscreen_checkPress, &check[GS_CIVFLAGS]);
-	s_resScreenButton = spNew_ctp2_Button( &errcode, windowBlock, "ResolutionButton", graphicsscreen_selectResolution );
-
-	s_smooth = spNew_aui_Switch(&errcode,windowBlock,"SmoothButton", graphicsscreen_checkPress, &check[GS_SMOOTH]);
-
-	s_goodAnims	= spNew_aui_Switch(&errcode,windowBlock,"GoodsButton",graphicsscreen_checkPress,&check[GS_GOODANIMS]);
-	
-	s_unitSpeed = spNew_C3Slider(&errcode, windowBlock, "UnitSpeedSlider", graphicsscreen_unitSpeedSlide);
-	s_unitSpeedN = spNew_c3_Static(&errcode, windowBlock, "UnitSpeedName");
+	s_unitSpeed			= spNew_C3Slider(&errcode, windowBlock, "UnitSpeedSlider", graphicsscreen_unitSpeedSlide);
+	s_unitSpeedN		= spNew_c3_Static(&errcode, windowBlock, "UnitSpeedName");
 	
 	if(g_theProfileDB) {
 		s_unitSpeed->SetValue(g_theProfileDB->GetUnitSpeed(), 0);
@@ -213,18 +211,19 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 	}
 
 	
-	s_walk->SetState(g_theProfileDB->IsUnitAnim());
-	s_trade->SetState(g_theProfileDB->IsTradeAnim());
-	s_wonder->SetState(g_theProfileDB->IsWonderMovies());
-	s_politicalBorders->SetState(g_theProfileDB->GetShowPoliticalBorders());
-	s_tradeRoutes->SetState(g_theProfileDB->GetShowTradeRoutes());
-	s_cityNames->SetState(g_theProfileDB->GetShowCityNames());
-	s_armyNames->SetState(g_theProfileDB->GetShowArmyNames());  //emod
-	s_civflags->SetState(g_theProfileDB->IsCivFlags());  //emod
-	s_smooth->SetState(g_theProfileDB->IsSmoothBorders());  //emod6
-	s_goodAnims->SetState(g_theProfileDB->IsGoodAnim());
-	s_cityInfluence->SetState( g_theProfileDB->IsShowCityInfluence() );
-	s_grid->SetState( g_isGridOn );
+	s_walk				->SetState(g_theProfileDB->IsUnitAnim());
+	s_trade				->SetState(g_theProfileDB->IsTradeAnim());
+	s_wonder			->SetState(g_theProfileDB->IsWonderMovies());
+	s_politicalBorders	->SetState(g_theProfileDB->GetShowPoliticalBorders());
+	s_tradeRoutes		->SetState(g_theProfileDB->GetShowTradeRoutes());
+	s_cityNames			->SetState(g_theProfileDB->GetShowCityNames());
+	s_armyNames			->SetState(g_theProfileDB->GetShowArmyNames());
+	s_civflags			->SetState(g_theProfileDB->IsCivFlags());
+	s_smooth			->SetState(g_theProfileDB->IsSmoothBorders());
+	s_goodAnims			->SetState(g_theProfileDB->IsGoodAnim());
+	s_cityInfluence		->SetState(g_theProfileDB->IsShowCityInfluence());
+	s_grid				->SetState(g_isGridOn);
+	s_cityProd			->SetState(g_theProfileDB->IsShowCityProduction());
 
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", windowBlock, "Name" );
@@ -261,10 +260,11 @@ void graphicsscreen_Cleanup()
 	mycleanup(s_unitSpeed);
 	mycleanup(s_unitSpeedN);
 	mycleanup(s_graphicsWindow);
-	mycleanup(s_armyNames); //emod
-	mycleanup(s_civflags); //emod
-	mycleanup(s_smooth); //emod7
+	mycleanup(s_armyNames);
+	mycleanup(s_civflags);
+	mycleanup(s_smooth);
 	mycleanup(s_goodAnims);
+	mycleanup(s_cityProd);
 #undef mycleanup
 }
 
@@ -355,17 +355,20 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		func = &ProfileDB::SetShowCityNames;
 		break;
 	case GS_ARMYNAMES:
-		func = &ProfileDB::SetShowArmyNames;//emod
+		func = &ProfileDB::SetShowArmyNames;
 		break;
 	case GS_CIVFLAGS:
-		func = &ProfileDB::SetShowCivFlags;//emod
+		func = &ProfileDB::SetShowCivFlags;
 		break;
 	case GS_SMOOTH:
-		func = &ProfileDB::SetShowSmooth;//emod8
+		func = &ProfileDB::SetShowSmooth;
 		break;
 	case GS_GOODANIMS:
 		func = &ProfileDB::SetGoodAnim;
 		//s_goodAnimToggled = TRUE;
+		break;
+	case GS_CITYPROD:
+		func = &ProfileDB::SetShowCityProduction;
 		break;
 	case GS_TOTAL:  break;
 	default:  Assert(0); break;

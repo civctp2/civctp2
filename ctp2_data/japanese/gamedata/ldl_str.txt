@@ -11,6 +11,7 @@ str_ldl_comma	","
 
 CAPITALIZATION 	"資本化 "
 INFRASTRUCTURE 	"インフラ "
+BUILDINGNONE	"Empty"
 
 #時代の名前#	
 AGE_NAME_ANCIENT	"古代"
@@ -3302,6 +3303,8 @@ str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"
 str_ldl_Civ_Flags_Off			"Nation Flags Off"
 str_ldl_Civ_Flags_On			"Nation Flags On"
+str_ldl_Show_City_Prod_Off		"Hide City Production"
+str_ldl_Show_City_Prod_On		"Show City Production"
 str_ldl_Good_Animations_Off		"Good Animations Off"
 str_ldl_Good_Animations_On		"Good Animations On"
 

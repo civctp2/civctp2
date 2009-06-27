@@ -72,6 +72,7 @@
 #include "aui_directsurface.h"
 #include "aui_sdlsurface.h"
 #include "aui_bitmapfont.h"
+#include "ConstRecord.h"			// g_theConstDB
 #include "pixelutils.h"
 #include "primitives.h"
 #include "background.h"
@@ -129,6 +130,8 @@ namespace
 {   
     // Do not display digits when the number of turns till next pop is too large
     int const       THRESHOLD_SLOW_GROWTH       = 100;  // limit to 2 digits
+    // Do not display digits when the number of turns for construction is too large
+    int const       THRESHOLD_PROD_TIME		    = 1000;  // limit to 3 digits
     /// Text to display when no valid number can be calculated
     char const      TEXT_NONE []                = "---";
 
@@ -3402,6 +3405,8 @@ void TiledMap::DrawWater(void)
 void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 {
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale)/2;
+	sint32 showCityProd = g_theProfileDB->IsShowCityProduction();
+
 	bool		fog;
 	uint32		slaveBits = 0;
 
@@ -3424,10 +3429,13 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 			if(m_localVision->IsExplored(pos) || g_fog_toggle || g_god) {
 				
 				bool    drawCity             = false;
+				bool    drawOurCity          = false;
 				bool    drawQueueEmpty       = false;
 				sint32  pop                  = 0;
 				sint32  nextpop              = 0;
 				MBCHAR *name                 = NULL;
+				const char *buildItemName    = NULL;
+				sint32  buildItemTime        = 0;
 
 				sint32  owner = 0;
 
@@ -3443,7 +3451,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						isWatchful           = FALSE,
 						isCapitol            = FALSE,
 						HasReligionIcon      = FALSE,
-						HasSpecialIcon       = FALSE;
+						HasSpecialIcon       = FALSE,
+						isProdIcon			 = FALSE,
+						isPollutionRisk      = FALSE;
 				sint32	bioInfectedOwner     = 0,
 						nanoInfectedOwner    = 0,
 						convertedOwner       = 0,
@@ -3485,6 +3495,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					isCapitol            = ucell.m_unseenCell->IsCapitol(); //emod
 					HasReligionIcon      = ucell.m_unseenCell->IsReligionIcon(); //emod
 					HasSpecialIcon       = ucell.m_unseenCell->IsSpecialIcon(); //emod
+					isPollutionRisk      = ucell.m_unseenCell->IsPollutionRisk();
 					
 					if (pop > 0)
 						drawCity = true;
@@ -3511,6 +3522,46 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								nextpop          = unit.GetActor()->GetNextPop();
 								owner            = unit.GetActor()->GetPlayerNum();
 							}
+
+							if (showCityProd)
+							{
+								BuildQueue *bq = cityData->GetBuildQueue();
+								buildItemName = g_theStringDB->GetNameStr("BUILDINGNONE");
+
+								if(bq->GetHead())
+								{
+									BuildNode *bn = bq->GetHead();
+
+									/* @todo this doesn't show the right build time,
+									maybe just shows the AI's build time.*/
+									buildItemTime = cityData->HowMuchLonger();
+
+									switch(bn->m_category) {
+										case k_GAME_OBJ_TYPE_UNIT:
+											buildItemName = g_theUnitDB->Get(bn->m_type)->GetNameText();
+											break;
+										case k_GAME_OBJ_TYPE_IMPROVEMENT:
+											buildItemName = g_theBuildingDB->Get(bn->m_type)->GetNameText();
+											break;
+										case k_GAME_OBJ_TYPE_WONDER:
+											buildItemName = g_theWonderDB->Get(bn->m_type)->GetNameText();
+											break;
+										case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
+											buildItemName = g_theStringDB->GetNameStr("INFRASTRUCTURE");
+											buildItemTime = 1;
+											break;
+										case k_GAME_OBJ_TYPE_CAPITALIZATION:
+											buildItemName = g_theStringDB->GetNameStr("CAPITALIZATION");
+											buildItemTime = 1;
+											break;
+									}
+								}
+								else
+								{
+									buildItemName = g_theStringDB->GetNameStr("BUILDINGNONE");
+									buildItemTime = 0;
+								}
+							}
 							
 							name                 = cityData->GetName();
 							isBioInfected        = cityData->IsBioInfected();
@@ -3531,24 +3582,38 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							isRioting            = cityData->GetIsRioting();
 							hasAirport           = cityData->HasAirport();
 
+							sint32 pollution     = cityData->GetPollution();
+							isPollutionRisk      = (pollution > g_theConstDB->Get(0)->GetLocalPollutionLevel());
+
 							if (owner == g_selected_item->GetVisiblePlayer())
 								hasSleepingUnits = cityData->HasSleepingUnits();
 							else
 								hasSleepingUnits = FALSE;
 
 							drawCity = true;
-							if(owner == g_selected_item->GetVisiblePlayer() &&
-							   !cityData->GetBuildQueue()->GetHead()) {
-								drawQueueEmpty   = true;
+
+							if(owner == g_selected_item->GetVisiblePlayer())
+							{
+								drawOurCity = true;
 								HasReligionIcon  = cityData->HasReligionIcon();
 								HasSpecialIcon   = cityData->HasSpecialIcon();
+
+								if (!cityData->GetBuildQueue()->GetHead()) {
+									drawQueueEmpty   = true;
+								}
 							}
 						}
 					}
 				}
 
 				if (drawCity) {//it's a city now visible to the current player
-					
+
+					// Move city names up if city production is on,
+					// so it doesn't cover top of city sprite.
+					if (drawOurCity && showCityProd) {
+						yoffset = (sint32)((k_TILE_PIXEL_HEADROOM*m_scale)/2)+19;
+					}
+
 					sint32		x,y;
 					maputils_MapXY2PixelXY(mapX,mapY,&x,&y);//change map co-ordinates to pixel co-ordinates
 										
@@ -3576,6 +3641,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							rect.top = y;
 							rect.right = rect.left + widthname;
 							rect.bottom = rect.top + heightname;
+
+							// This is used to position the show city production stuff.
+							sint32 brectx = x;
 
 							boxRect = rect;//copy rect to boxRect
 
@@ -3764,6 +3832,131 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								AddDirtyRectToMix(rect);
 
 								right = popRectn.right;
+
+								if (showCityProd)
+								{
+									/////////////////////////////////////
+									// NOW DRAW THE BUILDING ITEM NAME //
+									/////////////////////////////////////
+
+									sint32 widthbuildItemName = m_font->GetStringWidth(buildItemName);
+									sint32 heightbuildItemName = m_font->GetMaxHeight();
+
+									// The building name inner rectangle
+									RECT brect;
+
+									//define brect's screen co-ordinates
+									brect.left = brectx;// same as city name's left
+									brect.top = (y+19); // below city name
+									brect.right = brect.left + widthbuildItemName;
+									brect.bottom = brect.top + heightbuildItemName;
+
+									boxRect = brect;//copy brect to boxRect
+
+									InflateRect(&boxRect, 2, 1);//expand boxRect to allow for borders
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, boxRect);
+									primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK));
+									InflateRect(&boxRect, 1, 1);//get ready to do borders (clipRect - boxRect now= a one pixel border)   
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, boxRect);
+									//color clipRect to be the player's color (this creates the border)
+									primitives_FrameRect16(surf, &clipRect, pixelColor);
+
+									//get the color for the city building's name text
+									COLORREF buildingnameColor;
+									if (fog) {// Should never be under fog?
+										buildingnameColor = GetColorRef(COLOR_WHITE, fog);
+									} else {
+										if (isRioting) {
+											buildingnameColor = GetColorRef(COLOR_RED);
+										} else if(drawQueueEmpty) {
+											buildingnameColor = GetColorRef(COLOR_YELLOW);
+										} else {
+											buildingnameColor = GetColorRef(COLOR_WHITE);
+										}
+									}
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, brect);
+									//draw what the city is building's name
+									m_font->DrawString(surf, &brect, &clipRect, buildItemName, 0, buildingnameColor, 0);
+
+									AddDirtyRectToMix(boxRect);
+
+									////////////////////////////////////
+									// NOW DRAW THE CONSTRUCTION TIME //
+									////////////////////////////////////
+									
+									// Put the construction time in str
+									MBCHAR strbt[80];
+									if (buildItemTime < THRESHOLD_PROD_TIME
+										&& buildItemTime != 0)
+									{
+										sprintf(strbt, "%i", buildItemTime);
+									}
+									else
+									{
+										sprintf(strbt, "%s", TEXT_NONE);
+									}
+
+									//width and height of the pop number 
+									width = m_font->GetStringWidth(strbt);
+									if (width < k_POP_BOX_SIZE_MINIMUM)
+										width = k_POP_BOX_SIZE_MINIMUM;
+									height = m_font->GetMaxHeight();
+
+									//RECT for construction time
+									RECT btRect = {0, 0, width+4, height+4};
+									//add the top left co-ordinates
+									OffsetRect(&btRect, boxRect.right, boxRect.top);
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, btRect);
+									//paint clipRect's surface black and give it a player colour frame
+									primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK));
+									primitives_FrameRect16(surf, &clipRect, pixelColor);
+		
+									//width and height of the construction time number	
+									width = m_font->GetStringWidth(strbt);
+									height = m_font->GetMaxHeight();
+
+									//this rect will be the inner rect that shows the number
+									RECT		btInnerRect = {0, 0, width, height}; // This shadows the outer rect and the outer outer rect
+
+									OffsetRect(&btInnerRect, btRect.left + (btRect.right-btRect.left)/2 -
+													width/2,
+													btRect.top + (btRect.bottom-btRect.top)/2 -
+													height/2);
+
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, btInnerRect);
+									m_font->DrawString(surf, &btInnerRect, &clipRect, strbt, 
+										0,
+										GetColorRef(COLOR_BLACK),
+										0);
+
+									
+									OffsetRect(&btInnerRect, 2, 0);
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, btInnerRect);
+									m_font->DrawString(surf, &btInnerRect, &clipRect, strbt, 
+										0,
+										GetColorRef(COLOR_BLACK),
+										0);
+
+									OffsetRect(&btInnerRect, -1, 0);
+
+									clipRect = primitives_GetScreenAdjustedRectCopy(surf, btInnerRect);
+									m_font->DrawString(surf, &btInnerRect, &clipRect, strbt, 
+										0,
+										GetColorRef(COLOR_WHITE, fog),
+										0);
+
+									btRect.bottom++;
+									btRect.right++;
+
+									AddDirtyRectToMix(btInnerRect);
+
+									isProdIcon = true;
+								}
 							}
 						}
 						else
@@ -3779,11 +3972,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								bioInfectedOwner, nanoInfectedOwner, convertedOwner,
 								franchiseOwner, injoinedOwner, happinessAttackOwner, 
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
-								isWatchful, isCapitol);
+								isWatchful, isCapitol, isProdIcon, pop, isPollutionRisk);
+
 					//if (CityIcons) {
-					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, HasReligionIcon);
+					//DrawCityReligionIcons(surf, pos, owner, fog, boxRect, HasReligionIcon);
 					//need to fix this.
-					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);
+					//DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);
 					//}
 
 				}
@@ -3821,12 +4015,17 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 //              BOOL              hasAirport           : not used
 //              BOOL              hasSleepingUnits     : if TRUE then draw MAPICON_SLEEPINGUNITS
 //              BOOL              isWatchful           : if TRUE then draw MAPICON_WATCHFUL
+//				BOOL			  isCapitol			   : if TRUE then draw capitol icon
+//				BOOL			  isProdIcon		   : if TRUE draw the production icon
+//				sint32			  citySize			   : the city's pop number
+//				BOOL              isPollutionRisk      : if city is at risk of creating polluted tiles
+//                                                     : then draw pollution icon.
 //
 // Globals    : 
 //
 // Returns    : 
 //
-// Remark(s)  : added Capitol
+// Remark(s)  : 
 //
 //----------------------------------------------------------------------------
 void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect,
@@ -3835,15 +4034,16 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful, BOOL isCapitol)  //added capitol
+								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
+								BOOL isPollutionRisk)
 {
 	TileSet	*   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
 	RECT		iconRect;
 	iconRect.left   = popRect.right + 3;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = popRect.top;
-	iconRect.bottom = iconRect.top + iconDim.y + 1;
+	iconRect.right  = iconRect.left + iconDim.x;
+	iconRect.top    = popRect.top - 2;
+	iconRect.bottom = iconRect.top + iconDim.y;
 
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
@@ -3853,56 +4053,11 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 	Pixel16     color       = GetPlayerColor(owner, fog);
 	Pixel16 *   cityIcon;
 
-	if (isBioInfected) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_BIODISEASE);
+	if (isCapitol) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
-		if (++g_bio_flash > 10) {
-			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, GetColor(COLOR_YELLOW));
-			g_bio_flash = 0;
-		} else {
-			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		}
 
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	if (iconRect.left < 0 || iconRect.top < 0 || 
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-	if (isNanoInfected) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_NANODISEASE);
-		Assert(cityIcon); if (!cityIcon) return;
-		Pixel16 const flashColor = GetColor(COLOR_YELLOW, fog);
-
-		if (++g_nano_flash > 10) {
-			g_nano_flash = 0;
-			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, flashColor);
-		} else {
-			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		}
-
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	
-	if (iconRect.left < 0 || iconRect.top < 0 || 
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-
-	if (isConverted) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_CONVERSION);
-		Assert(cityIcon); if (!cityIcon) return;
-
-		color = GetPlayerColor(convertedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
@@ -3910,34 +4065,16 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 
-		
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
 
-	if (isFranchised) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_FRANCHISE);
+	if (hasSleepingUnits) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_SLEEPINGUNITS);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
-		color = GetPlayerColor(franchiseOwner, fog);
-		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	
-	if (iconRect.left < 0 || iconRect.top < 0 || 
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-
-	if (isInjoined) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_INJUNCTION);
-		Assert(cityIcon); 
-		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_SLEEPINGUNITS);
 
 		color = GetColor(COLOR_YELLOW, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
@@ -3947,16 +4084,16 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 
-	
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
 
-	if (wasHappinessAttacked) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_UNHAPPY);
+	if (isWatchful) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_WATCHFUL);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_WATCHFUL);
 
 		color = GetColor(COLOR_YELLOW, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
@@ -3966,7 +4103,11 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 
-	
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
 	uint32 bits = slaveBits;
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 		if (bits & 1) {
@@ -3987,6 +4128,21 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		bits >>= 1;
 	}
 
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	/* All city icons following this are "tall"
+	so they have to be moved upwards to avoid overlapping
+	the show city production stuff.*/
+	iconRect.top    -= 10;
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
 	if (isRioting) {
 		cityIcon = tileSet->GetMapIconData(MAPICON_UPRISING);
 		Assert(cityIcon); 
@@ -4001,66 +4157,18 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 
-	if (hasSleepingUnits) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_SLEEPINGUNITS);
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isPollutionRisk) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_POLLUTION);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_SLEEPINGUNITS);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_SLEEPINGUNITS);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_POLLUTION);
 
-		color = GetColor(COLOR_YELLOW, fog);
-		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	if (isWatchful) {
-		cityIcon = tileSet->GetMapIconData(MAPICON_WATCHFUL);
-		Assert(cityIcon); 
-		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_WATCHFUL);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_WATCHFUL);
-
-		color = GetColor(COLOR_YELLOW, fog);
-		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	//emod. this bool is in he function line but never called and there is an icon so its a possible oversight/defect
-	if (hasAirport) {  
-		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
-		Assert(cityIcon); 
-		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_AIRPORT);
-
-		color = GetColor(COLOR_YELLOW, fog);
-		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	//emod to add an icon for the city capitol like civ3/4
-	if (isCapitol) {
-		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
-		iconRect.left   = popRect.left - + iconDim2.x;
-		iconRect.right  = iconRect.left + iconDim2.x;
-		iconRect.top    = popRect.top - iconDim2.y - 2;
-		iconRect.bottom = popRect.top - 1;
-		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
-		Assert(cityIcon); 
-		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
-
-		color = GetPlayerColor(owner, fog);  //optional
+        color = GetPlayerColor(owner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
@@ -4073,6 +4181,182 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.bottom >= surf->Height())
 		return;
 
+	if (isBioInfected) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_BIODISEASE);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+
+		Pixel16 const flashColor = GetColor(COLOR_YELLOW, fog);
+		color = GetPlayerColor(bioInfectedOwner, fog);
+
+		if (++g_bio_flash > 10) {
+			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, flashColor);
+			g_bio_flash = 0;
+		} else {
+			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		}
+
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isNanoInfected) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_NANODISEASE);
+		Assert(cityIcon); if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_NANODISEASE);
+
+		Pixel16 const flashColor = GetColor(COLOR_YELLOW, fog);
+		color = GetPlayerColor(nanoInfectedOwner, fog);
+
+		if (++g_nano_flash > 10) {
+			g_nano_flash = 0;
+			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, flashColor);
+		} else {
+			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		}
+
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isConverted) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_CONVERSION);
+		Assert(cityIcon);
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_CONVERSION);
+
+		color = GetPlayerColor(convertedOwner, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isFranchised) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_FRANCHISE);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_FRANCHISE);
+
+		color = GetPlayerColor(franchiseOwner, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+	
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isInjoined) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_INJUNCTION);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_INJUNCTION);
+
+		//color = GetPlayerColor(injoinedOwner, fog);
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+	
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (wasHappinessAttacked) {
+		cityIcon = tileSet->GetMapIconData(MAPICON_UNHAPPY);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_UNHAPPY);
+
+		//color = GetPlayerColor(happinessAttackOwner, fog);
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+
+	/*Airport icon is disabled here for now, since it serves
+	no purpose to see that your city has one.
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (hasAirport) {  
+		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_AIRPORT);
+
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}*/
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	if (isProdIcon) {
+		POINT		iconDim2;
+		if (citySize > 9) {
+			iconDim2    = tileSet->GetMapIconDimensions(MAPICON_PRODUCTIONNEWBIG);
+			cityIcon	= tileSet->GetMapIconData(MAPICON_PRODUCTIONNEWBIG);
+		}
+		else
+		{
+			iconDim2    = tileSet->GetMapIconDimensions(MAPICON_PRODUCTIONNEW);
+			cityIcon	= tileSet->GetMapIconData(MAPICON_PRODUCTIONNEW);
+		}
+		iconRect.left   = popRect.left - iconDim2.x - 3;
+		iconRect.right  = iconRect.left + iconDim2.x;
+		iconRect.top    = popRect.bottom + 2;
+		iconRect.bottom = iconRect.top + iconDim2.y;
+
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+
+		color = GetPlayerColor(owner, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+	}
 }
 
 sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blendValue)
