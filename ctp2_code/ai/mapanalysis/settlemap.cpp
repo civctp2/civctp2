@@ -103,7 +103,10 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 	for (it.Start(); !it.End(); it.Next()) 
 	{
 		const Cell * cell = g_theWorld->GetCell(it.Pos());
-		score += cell->GetScore();
+		if (!cell->GetCityOwner())
+		{
+			score += cell->GetScore();
+		}
 	}
 
 	return score;

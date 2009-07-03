@@ -115,6 +115,9 @@ class GaiaController {
 	
 	inline sint32 GetTowerTileImpIndex() const { return sm_towerTileImpIndex; }
 
+	static sint32 TheTowerTileImpIndex() 
+	{ return sm_towerTileImpIndex; }
+
 	
 	bool CanBuildTowers(const bool & check_pw) const;
 

@@ -3526,7 +3526,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if (showCityProd)
 							{
 								BuildQueue *bq = cityData->GetBuildQueue();
-								buildItemName = g_theStringDB->GetNameStr("BUILDINGNONE");
 
 								if(bq->GetHead())
 								{
@@ -3975,9 +3974,17 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								isWatchful, isCapitol, isProdIcon, pop, isPollutionRisk);
 
 					//if (CityIcons) {
-					//DrawCityReligionIcons(surf, pos, owner, fog, boxRect, HasReligionIcon);
-					//need to fix this.
-					//DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);
+
+					/*This may be causing problems in DrawColorizedOverlay,
+					but I left it enabled since we still have the religion mod.*/
+					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, HasReligionIcon);
+
+					/*This will definitely cause problems now the city name is higher up,
+					this stuff will try to draw above the city name and cause problems if
+					show city production is enabled. As far as I can see this is not used
+					at all at the moment though.
+					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);*/
+
 					//}
 
 				}

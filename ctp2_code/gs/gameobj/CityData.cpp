@@ -199,6 +199,8 @@
 //	 after crime and other modifiers. (28-Mar-2009 Maq)
 // - Stopped UpgradeTo obsoleting units. (30-Mar-2009 Maq)
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
+// - Prevented city from building gaia controller buildings unless science
+//   victory race has started. (01-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -235,6 +237,7 @@
 #include "director.h"                   // g_director
 #include "Exclusions.h"
 #include "FeatTracker.h"
+#include "gaiacontroller.h"				// To check buildings needed for science victory
 #include "GameEventManager.h"
 #include "gamefile.h"
 #include "GameSettings.h"
@@ -6270,6 +6273,19 @@ bool CityData::CanBuildBuilding(sint32 type) const
 			if(!HasCityWonder(rec->GetPrerequisiteWonderIndex(i))) // Only city specific, but not empire specific
 				return false;
 		}
+	}
+
+	// Added by Maq - fix so science victory buildings need gaia controller race to be started first,
+	//                in vanilla this is triggered by anyone building the "Solaris Project" wonder
+	if(rec->GetIndex() == GaiaController::GetMainframeBuildingIndex()
+	&& !wonderutil_GetStartGaiaController(g_theWonderTracker->GetBuiltWonders())
+	){
+		return false;
+	}
+	if(rec->GetIndex() == GaiaController::GetSatelliteBuildingIndex()
+	&& !wonderutil_GetStartGaiaController(g_theWonderTracker->GetBuiltWonders())
+	){
+		return false;
 	}
 
 	// EMOD this wonder is prevented by other wonders 

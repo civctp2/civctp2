@@ -53,6 +53,8 @@
 // - Fixed GetNeedsIrrigation in terrainutil_CanPlayerBuildAt. CityInfluenceIterator
 //	 was not finding irrigation squares next to a city with irrigation from a tile imp.
 //	 (10-Mar-2009 Maq)
+// - Prevented building of gaia controller tile imp unless science victory
+//   race has started. (01-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -89,6 +91,8 @@
 #include "UnitData.h"
 #include "UnitPool.h"
 #include "UnitRecord.h"
+#include "WonderTracker.h"				// to check for gaia controller wonder
+#include "wonderutil.h"					// to check for gaia controller wonder
 
 extern QuadTree<Unit> *g_theUnitTree;
 #endif
@@ -553,6 +557,14 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	Assert(g_player[pl]);
 	if(!g_player[pl])
 		return false;
+
+	// Added by Maq - fix so science victory tile imp needs gaia controller race to be started first,
+	//                in vanilla this is triggered by anyone building the "Solaris Project" wonder
+	if(rec->GetIndex() == GaiaController::TheTowerTileImpIndex()
+	&& !wonderutil_GetStartGaiaController(g_theWonderTracker->GetBuiltWonders())
+	){
+		return false;
+	}
 
 // Added by E - Compares Improvement's GovernmentType to the Player's Government
 	if(rec->GetNumGovernmentType() > 0) {
