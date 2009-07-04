@@ -2614,6 +2614,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	}
 	c.AddHappyTimer(timer, double(-amount), HAPPY_REASON_HAPPINESS_ATTACK);
 	c.AccessData()->GetCityData()->IndicateHappinessAttacked() ;
+	c.AccessData()->GetCityData()->HappinessAttackedBy(m_owner) ;
 
     if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
         g_slicEngine->Execute

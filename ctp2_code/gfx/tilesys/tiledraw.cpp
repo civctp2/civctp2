@@ -3571,12 +3571,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							wasHappinessAttacked = cityData->WasHappinessAttacked();
 							isWatchful           = cityData->IsWatchful();
 							isCapitol            = cityData->IsCapitol();
-							bioInfectedOwner     = cityData->GetOwner();
-							nanoInfectedOwner    = cityData->GetOwner();
+							bioInfectedOwner     = cityData->GetBioInfectedBy();
+							nanoInfectedOwner    = cityData->GetNanoInfectedBy();
 							convertedOwner       = cityData->IsConvertedTo();
 							franchiseOwner       = cityData->GetFranchiseOwner();
-							injoinedOwner        = cityData->GetOwner();
-							happinessAttackOwner = cityData->GetOwner();
+							injoinedOwner        = cityData->InjoinedBy();
+							happinessAttackOwner = cityData->GetHappinessAttackedBy();
 							slaveBits            = cityData->GetSlaveBits();
 							isRioting            = cityData->GetIsRioting();
 							hasAirport           = cityData->HasAirport();
@@ -4011,12 +4011,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 //              BOOL              isFranchised         :
 //              BOOL              isInjoined           :
 //              BOOL              wasHappinessAttacked :
-//              sint32            bioInfectedOwner     : not used (set to the city's owner)
-//              sint32            nanoInfectedOwner    : ditto.
+//              sint32            bioInfectedOwner     : the player who bio infected the city
+//              sint32            nanoInfectedOwner    : the player who nano infected the city
 //              sint32            convertedOwner       : the player who converted the city
 //              sint32            franchiseOwner       : the player who franchised the city
-//              sint32            injoinedOwner        : not used (set to the city's owner)
-//              sint32            happinessAttackOwner : ditto
+//              sint32            injoinedOwner        : the player who filed an injunction against the city
+//              sint32            happinessAttackOwner : the player who happiness attacked the city
 //              uint32            slaveBits            : which other player's citizens are enslaved here
 //              BOOL              isRioting            : if TRUE then draw MAPICON_UPRISING
 //              BOOL              hasAirport           : not used
@@ -4285,8 +4285,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		if (!cityIcon) return;
 		iconDim = tileSet->GetMapIconDimensions(MAPICON_INJUNCTION);
 
-		//color = GetPlayerColor(injoinedOwner, fog);
-		color = GetColor(COLOR_YELLOW, fog);
+		color = GetPlayerColor(injoinedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
@@ -4305,8 +4304,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		if (!cityIcon) return;
 		iconDim = tileSet->GetMapIconDimensions(MAPICON_UNHAPPY);
 
-		//color = GetPlayerColor(happinessAttackOwner, fog);
-		color = GetColor(COLOR_YELLOW, fog);
+		color = GetPlayerColor(happinessAttackOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 

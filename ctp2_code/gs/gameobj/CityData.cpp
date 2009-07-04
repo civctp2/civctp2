@@ -407,6 +407,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_convertedBy                       (CONVERTED_BY_NOTHING),
 	m_terrainWasPolluted                (false),
 	m_happinessAttacked                 (false),
+	m_happinessAttackedBy               (PLAYER_UNASSIGNED),
 	m_terrainImprovementWasBuilt        (false),
 	m_improvementWasBuilt               (false),
 	m_isInjoined                        (false),
@@ -6830,6 +6831,11 @@ double CityData::GetHappyImprovement() const { return m_happy->GetImprovement();
 double CityData::GetHappyWonders() const { return m_happy->GetWonders(); }
 double CityData::GetHappyCrime() const { return m_happy->GetCrime(); }  
 bool CityData::IsCelebratingHappiness(void) const { return (m_happy->IsVeryHappy()); }
+
+void CityData::HappinessAttackedBy(sint32 player)
+{
+	m_happinessAttackedBy = player;
+}
 
 bool CityData::WasHappinessAttacked(void) const
 {

@@ -245,12 +245,12 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			SetIsWatchful(cityData->IsWatchful());
 			SetIsCapitol(cityData->IsCapitol()); //emod
 			SetIsReligionIcon(cityData->HasReligionIcon()); //emod
-			m_bioInfectedOwner = (sint8)cityData->GetOwner();
-			m_nanoInfectedOwner = (sint8)cityData->GetOwner();
+			m_bioInfectedOwner = (sint8)cityData->GetBioInfectedBy();
+			m_nanoInfectedOwner = (sint8)cityData->GetNanoInfectedBy();
 			m_convertedOwner = (sint8)cityData->IsConvertedTo();
 			m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
-			m_injoinedOwner = (sint8)cityData->GetOwner();
-			m_happinessAttackOwner = (sint8)cityData->GetOwner();
+			m_injoinedOwner = (sint8)cityData->InjoinedBy();
+			m_happinessAttackOwner = (sint8)cityData->GetHappinessAttackedBy();
 			m_slaveBits = cityData->GetSlaveBits();
 			SetIsSpecialIcon(cityData->HasSpecialIcon()); //emod
 

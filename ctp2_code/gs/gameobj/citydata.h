@@ -244,6 +244,7 @@ private:
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
 	
+	sint32 m_happinessAttackedBy;
 	Unit m_home_city;
 	uint8 m_min_turns_revolt; // Number of revolt risk free turns.
 	BuildQueue m_build_queue;
@@ -733,6 +734,8 @@ public:
 	BOOL WasTerrainImprovementBuilt(void) const { return (m_terrainImprovementWasBuilt) ; }
 	void IndicateHappinessAttacked(void) { m_happinessAttacked = TRUE ; }
 	bool WasHappinessAttacked(void) const;
+	void HappinessAttackedBy(sint32 player);
+	sint32 GetHappinessAttackedBy() const { return m_happinessAttackedBy;}
 	void IndicateTerrainPolluted(void) { m_terrainWasPolluted = TRUE ; }
 	BOOL WasTerrainPolluted(void) const { return (m_terrainWasPolluted) ; }
 	sint32 GetScience(void) const { return (m_science) ; }
