@@ -3925,6 +3925,7 @@ ORDER_RESULT ArmyData::NanoInfect(const MapPoint &point)
 		DPRINTF(k_DBG_GAMESTATE, ("Nano Infection: Success\n"));
 		
 		so = new CityReport("911CrisisCityIsNanoInfected", c);
+		so->AddCivilisation(g_selected_item->GetVisiblePlayer());
 		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_SUCCEEDED;
@@ -4903,7 +4904,11 @@ ORDER_RESULT ArmyData::CreatePark(const MapPoint &point)
 
 	ActionSuccessful(SPECATTACK_CREATEPARK, m_array[uindex], c);
 	AddSpecialActionUsed(m_array[uindex]);
-	g_slicEngine->Execute(new CityReport("911NaniteCleanseCompleteVictim", c));
+
+	SlicObject * so = new CityReport("911NaniteCleanseCompleteVictim", c);
+	so->AddCivilisation(g_selected_item->GetVisiblePlayer());
+	g_slicEngine->Execute(so);
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateParkUnit,
 						   GEA_Unit, m_array[uindex].m_id,
 						   GEA_City, c.m_id,
