@@ -1701,6 +1701,9 @@ void Player::BeginTurnScience()
 		totalScience += m_all_cities->Access(i).CD()->GetScience();
 	}
 
+	totalScience += sint32(double(totalScience) * 
+										   (double(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, m_owner)) / 100.0));
+
 	sint32 pactScience = 
 		Science::ComputeScienceFromResearchPacts(m_owner);
 
@@ -5908,6 +5911,14 @@ void Player::Detrench(sint32 army_idx)
 		return;
 
 	m_all_armies->Access(army_idx).AddOrders(UNIT_ORDER_DETRENCH);
+}
+
+void Player::AddFeatHPBonus(sint32 hpBonus)
+{
+	sint32 i, n = m_all_units->Num();
+	for(i = 0; i < n; i++) {
+		m_all_units->Access(i).AddWonderHPBonus(hpBonus);
+	}
 }
 
 void Player::Sleep(sint32 army_idx)

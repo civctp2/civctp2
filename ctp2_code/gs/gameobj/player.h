@@ -462,6 +462,7 @@ public:
 
 	void Entrench(sint32 idx);
 	void Detrench(sint32 idx);
+    void AddFeatHPBonus(sint32 hpBonus);
 	void Sleep(sint32 idx);
 	void WakeUp(sint32 idx);
 

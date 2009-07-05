@@ -6032,8 +6032,9 @@ sint32 UnitData::CalculateTotalHP() const
 {
 	sint32 civHPBonus     = g_player[m_owner]->CivHpBonus();
 	sint32 wonderHPBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
+	sint32 featHPBonus    = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_HIT_POINTS, m_owner);
 
-	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus;
+	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus + featHPBonus;
 }
 
 sint32 UnitData::CalculateTotalFuel() const
