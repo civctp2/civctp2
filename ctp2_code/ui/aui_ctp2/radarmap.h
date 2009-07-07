@@ -28,7 +28,7 @@
 // - #pragma once commented out.
 // - #01 Allow shifing the X and Y axis in the radar map with RMouse click
 //   (L. Hirth 6/2004)
-//
+// -Added m_displayPolitical variable and associated functions (6-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -142,6 +142,8 @@ public:
 		{ m_displayTrade = status; Update(); g_theProfileDB->SetDisplayTrade(status);}
 	void DisplayTerrain(bool status = true) 
 		{ m_displayTerrain = status; Update(); g_theProfileDB->SetDisplayTerrain(status);}
+	void DisplayPolitical(bool status = true) 
+		{ m_displayPolitical = status; Update(); g_theProfileDB->SetDisplayPolitical(status);}
 
 	
 	bool IsDisplayUnits() { return(m_displayUnits); }
@@ -151,6 +153,7 @@ public:
 	bool IsDisplayOverlay() { return(m_displayOverlay); }
 	bool IsDisplayTrade() { return m_displayTrade; }
 	bool IsDisplayTerrain() { return m_displayTerrain; }
+	bool IsDisplayPolitical() { return m_displayPolitical; }
 
 private:
 	
@@ -217,7 +220,8 @@ private:
 	bool		m_displayOverlay;	
 	bool		m_filter;			
 	bool        m_displayTerrain;   
-	bool        m_displayTrade;     
+	bool        m_displayTrade;
+	bool		m_displayPolitical;
 
 	
 	

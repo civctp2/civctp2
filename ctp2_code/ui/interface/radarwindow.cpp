@@ -22,7 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Separate creation and display of the radar window for hotseat play.
-//
+// - Added Political map button (EPW July-6th 09
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -174,6 +174,20 @@ void MinimizeCallback(aui_Control *control, uint32 action, uint32 data, void *co
 	}
 }
 
+void PoliticalToggleButtonActionCallback(aui_Control *control,
+	uint32 action, uint32 data, void *cookie)
+{
+	switch (action)
+	{
+	case AUI_SWITCH_ACTION_ON:
+		g_radarMap->DisplayPolitical( true );
+		break;
+	case AUI_SWITCH_ACTION_OFF:
+		g_radarMap->DisplayPolitical( false );
+		break;
+	}
+}
+
 
 sint32 radarwindow_Initialize()
 {
@@ -281,6 +295,8 @@ sint32 radarwindow_Initialize()
 	 	"RadarWindow.TopBorder.Button6"));
 	ctp2_Switch *minimizeButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button7"));
+	ctp2_Switch *politicalButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
+		"RadarWindow.TopBorder.Button8"));
 
 	minimizeButton->Move(topBorder->Width() - minimizeButton->Width() - 15, minimizeButton->Y());
 
@@ -296,6 +312,7 @@ sint32 radarwindow_Initialize()
 	filterButton->SetState( g_radarMap->IsFilter() );
 	tradeButton->SetState( g_radarMap->IsDisplayTrade());
 	terrainButton->SetState( g_radarMap->IsDisplayTerrain());
+	politicalButton->SetState( g_radarMap->IsDisplayPolitical());
 
 	
 	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
@@ -305,6 +322,7 @@ sint32 radarwindow_Initialize()
 	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, NULL);
 	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
 	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);
+	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, NULL);
 
 
 	g_c3ui->AddWindow(g_radarWindow);

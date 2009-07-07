@@ -45,7 +45,7 @@
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
 # - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
-#
+# - Added strings for political map(Empty for all but English) - 6-Jul-2009 EPW
 #
 #----------------------------------------------------------------------------
 
@@ -2773,6 +2773,7 @@ str_ldl_ImproveTerraformOcean			"Trasforma l'oceano"
 str_ldl_RADAR_MAP_UNITS				"Unità"
 str_ldl_RADAR_MAP_CITIES			"Città"
 str_ldl_RADAR_MAP_BORDERS			"Confini"
+str_ldl_RADAR_MAP_POLITICAL         ""
 
 str_ldl_BV_RETREAT				"Ritirata"
 

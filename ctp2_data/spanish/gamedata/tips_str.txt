@@ -40,7 +40,7 @@
 # - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
 # - Added new statusbartip for new optimize specialist button, in the 
 #   city manager. - April 7th 2005 Martin Gühmann
-#
+# - Added strings for political map(Empty for all but English) - 6-Jul-2009 EPW
 #
 #----------------------------------------------------------------------------
 
@@ -296,6 +296,8 @@ STATUSBAR_MINIMAP_SHOW_TRADE_BUTTON			"Pulsa para Most./Ocul. rutas comerc."
 TOOLTIP_MINIMAP_SHOW_TRADE_BUTTON			"Most./Ocul. rutas comerc."
 STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON			"Pulsa para Most./Ocul. detalles de terreno."
 TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON			"Most./Ocul. detalles de terreno"
+STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON			""
+TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON			""
 
 # Empire Manager Screen
 #

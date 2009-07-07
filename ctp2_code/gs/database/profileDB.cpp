@@ -57,7 +57,7 @@
 //	 in other windows. (10-Apr-2009 Maq)
 // - Added start and end age options. (11-Apr-2009 Maq)
 // - Added show city production under name option. (15-Apr-2009 Maq)
-//
+// - Added show political map button options. (6-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -412,6 +412,7 @@ ProfileDB::ProfileDB()
 	Var("DisplayFilter"              , PV_BOOL  , &m_displayFilter              , NULL, false);
 	Var("DisplayTrade"               , PV_BOOL  , &m_displayTrade               , NULL, false);
 	Var("DisplayTerrain"             , PV_BOOL  , &m_displayTerrain             , NULL, false);
+	Var("DisplayPolitical"           , PV_BOOL  , &m_displayPolitical           , NULL, false);
 
 	Var("CloseOnEyepoint"            , PV_BOOL  , &m_closeEyepoint              , NULL);
 	Var("ShowExpensive"              , PV_BOOL  , &m_showExpensive              , NULL);

@@ -40,8 +40,8 @@
 //   is on, even if the there is no contact to that civilisation.
 //   - Mar. 4th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - TODO add player colored terrain maps (like civ3)
-//
+// - Added political map functionality (6-Jul-2009 EPW)
+// 
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -188,6 +188,7 @@ void RadarMap::InitCommon(void)
 	m_filter = g_theProfileDB->GetDisplayFilter() != FALSE;
 	m_displayTrade = g_theProfileDB->GetDisplayTrade() != FALSE;
 	m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
+	m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
 
 	m_mapOverlay = NULL;
 
@@ -416,15 +417,14 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 		int uCellValid = !g_fog_toggle && player->m_vision->GetLastSeen(worldpos, unseenCellCarton);
 
 		if(unit.IsValid()) {
-			if(unit.IsCity()) {
+			if(unit.IsCity()) {				
 				if(m_displayCities){
 					// Added distinction between hidden and non hidden tiles, by Martin Gühmann.
 					if(uCellValid){
-						
 						if(unseenCellCarton.m_unseenCell->GetActor()){
 						// Only if there was a city at the last visit
-							if(unit.m_id == m_selectedCity.m_id)
-								return(g_colorSet->GetColor(COLOR_RED));
+							if(m_displayPolitical)
+								return(g_colorSet->GetColor(COLOR_WHITE));
 							else
 								return(g_colorSet->GetPlayerColor(unseenCellCarton.m_unseenCell->GetCityOwner()));
 						}
@@ -435,20 +435,27 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 						}
 					}
 					else{
-						if(unit.m_id == m_selectedCity.m_id)
-							return(g_colorSet->GetColor(COLOR_RED));
+						if(m_displayPolitical)
+							return(g_colorSet->GetColor(COLOR_WHITE));
 						else
 							return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 					}
 				}
-				else {
-					
+				else {					
 					unit.m_id = 0;
 					g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
 				}
 			}
-			if(m_displayUnits && unit.m_id)
-				return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+			else if(m_displayUnits && unit.m_id)
+				if(m_displayPolitical && g_theWorld->GetOwner(worldpos) >= 0)
+					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
+				else
+					return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+		}
+
+		if(m_displayPolitical) {
+			if(!g_theWorld->IsWater(worldpos) && g_theWorld->GetOwner(worldpos) >= 0)
+				return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos));
 		}
 
 		

@@ -21,7 +21,7 @@
 # - Added to the tileimp tracker popup window a construction time line.
 #   (Aug 15th 2005 Martin Gühmann)
 # - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
-#
+# - Added political map button - 6-Jul-2009 EPW
 ################################################################################
 
 ################################################################################
@@ -2946,7 +2946,7 @@ RadarWindow {
 ################################################################################
 	TopBorder:CTP2_STATIC_BACKGROUND {	
 		# Size.
-		int		heightpix			36
+		int		heightpix			54
 
 		# Image layout.
 		int		numberoflayers		1
@@ -3050,7 +3050,6 @@ RadarWindow {
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON"
 		}
-
 		#Minimize/Maximize Button  -- not yet enabled		
 		Button7:RADARWINDOW_TOGGLE_BUTTON {
 			# Location.
@@ -3071,6 +3070,19 @@ RadarWindow {
 
 			# Tooltip
 			string	statustext	"STATUSBAR_MINIMAP_MINIMIZE"
+		}		
+		Button8:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			14
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_POLITICAL"
+			# Icon for button
+			string 	image0 		"upcb28u.tga"
+			string 	image1 		"upcb28.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON"
 		}
 
 	}

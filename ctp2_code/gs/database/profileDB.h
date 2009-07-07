@@ -64,7 +64,7 @@
 // - Added random map settings option. (5-Apr-2009 Maq)
 // - Added start and end age options. (11-Apr-2009 Maq)
 // - Added show city production under name option. (15-Apr-2009 Maq)
-//
+// - Added show political map button options. (6-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -316,6 +316,7 @@ private:
     sint32 m_displayFilter;
     sint32 m_displayTrade;
     sint32 m_displayTerrain;
+	sint32 m_displayPolitical;
 
 
 
@@ -595,6 +596,7 @@ public:
     void SetDisplayFilter(BOOL on)                      { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on)                       { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on)                     { m_displayTerrain = on;}
+	void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
     void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
     void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
@@ -817,6 +819,7 @@ public:
     BOOL GetDisplayFilter()                     { return m_displayFilter; }
     BOOL GetDisplayTrade()                      { return m_displayTrade; }
     BOOL GetDisplayTerrain()                    { return m_displayTerrain; }
+	BOOL GetDisplayPolitical()                  { return m_displayPolitical; }
     BOOL GetEnableLogs()                        { return m_enableLogs; }
     MBCHAR const *  GetRuleSets(void) const     { return m_ruleSets; };
 
