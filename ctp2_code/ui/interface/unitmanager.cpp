@@ -862,11 +862,14 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 	} else {
 		
 		double totalProd = pl->m_total_production;
+		double readinessCost = pl->m_readiness->GetCost();
 		sint32 p;
-		if(totalProd == 0)
+		if(readinessCost == 0)
+			p = 0;
+		else if(totalProd == 0)
 			p = 100;
 		else
-			p = (sint32(100.0 * (pl->m_readiness->GetCost() / totalProd)));
+			p = (sint32(100.0 * (readinessCost / totalProd)));
 
 		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepPercentFormat"), p);
 	}

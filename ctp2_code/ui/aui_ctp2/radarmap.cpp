@@ -397,8 +397,12 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 	Unit unit;
 
 	flags = 0;
+	
 
 	if(player->m_vision->IsExplored(worldpos)) {
+
+		sint32 owner = g_theWorld->GetOwner(worldpos);
+
 		if(m_displayTrade && g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() > 0) {
 			flags = 1;
 		}
@@ -447,21 +451,22 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 				}
 			}
 			else if(m_displayUnits && unit.m_id)
-				if(m_displayPolitical && unit.GetOwner() == g_theWorld->GetOwner(worldpos))
+				if(m_displayPolitical && unit.GetOwner() == owner)
 					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
 				else
 					return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 		}
 
 		if(m_displayPolitical) {
-			if(g_theWorld->GetOwner(worldpos) == player->m_owner
-				|| player->m_hasGlobalRadar 
-				|| Scheduler::CachedHasContactWithExceptSelf(player->m_owner, g_theWorld->GetOwner(worldpos))
-				|| g_fog_toggle // Don't forget if fog of war is off
-				|| g_god
-				) {
-			if(!g_theWorld->IsWater(worldpos) && g_theWorld->GetOwner(worldpos) >= 0)
-				return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos));
+			if(owner >= 0 && !g_theWorld->IsWater(worldpos)) {
+				if(owner == player->m_owner
+					|| player->m_hasGlobalRadar 
+					|| Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
+					|| g_fog_toggle // Don't forget if fog of war is off
+					|| g_god
+					) { 
+						return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos)); 
+				}			
 			}
 		}
 
