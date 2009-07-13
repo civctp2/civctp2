@@ -447,15 +447,22 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 				}
 			}
 			else if(m_displayUnits && unit.m_id)
-				if(m_displayPolitical && g_theWorld->GetOwner(worldpos) >= 0)
+				if(m_displayPolitical && unit.GetOwner() == g_theWorld->GetOwner(worldpos))
 					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
 				else
 					return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 		}
 
 		if(m_displayPolitical) {
+			if(g_theWorld->GetOwner(worldpos) == player->m_owner
+				|| player->m_hasGlobalRadar 
+				|| Scheduler::CachedHasContactWithExceptSelf(player->m_owner, g_theWorld->GetOwner(worldpos))
+				|| g_fog_toggle // Don't forget if fog of war is off
+				|| g_god
+				) {
 			if(!g_theWorld->IsWater(worldpos) && g_theWorld->GetOwner(worldpos) >= 0)
 				return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos));
+			}
 		}
 
 		

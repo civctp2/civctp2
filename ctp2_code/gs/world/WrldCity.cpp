@@ -50,7 +50,10 @@ extern Player **g_player;
 
 bool World::HasCity(const MapPoint &pos) const
 {
-	return GetCell(pos)->GetCity().m_id != (0);
+	if(pos.IsValid())
+		return GetCell(pos)->GetCity().m_id != (0);
+	else
+		return false;
 }
 
 void World::MoveUnitToCitySlot(Unit newCity, const MapPoint &pos)
