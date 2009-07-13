@@ -196,11 +196,13 @@
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
-//	 after crime and other modifiers. (28-Mar-2009 Maq)
+//   after crime and other modifiers. (28-Mar-2009 Maq)
 // - Stopped UpgradeTo obsoleting units. (30-Mar-2009 Maq)
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
 // - Prevented city from building gaia controller buildings unless science
 //   victory race has started. (01-Jul-2009 Maq)
+// - When a city is settled in foreign territory, its the national borders
+//   will expand as they should be. (13-Jul-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -5927,7 +5929,7 @@ void CityData::SetSize(sint32 size)
 		return;
 
 	for (sint32 i = 0; i < size - PopCount(); i++) 
-    {
+	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_End);
@@ -7814,7 +7816,8 @@ void CityData::AdjustSizeIndices()
 {
 	double oldVision = -1;
 
-	if(m_home_city->Flag(k_UDF_VISION_ADDED)) {
+	if(m_home_city->Flag(k_UDF_VISION_ADDED))
+	{
 		Assert(m_sizeIndex >= 0);
 		oldVision = GetVisionRadius();
 	}
@@ -7824,7 +7827,7 @@ void CityData::AdjustSizeIndices()
 	ComputeSizeIndexes(WorkerCount(), 
 	                   m_sizeIndex);
 #else
-	ComputeSizeIndexes(WorkerCount(), 
+	ComputeSizeIndexes(WorkerCount(),
 	                   m_sizeIndex,
 	                   m_workerFullUtilizationIndex,
 	                   m_workerPartialUtilizationIndex);
@@ -7855,6 +7858,7 @@ void CityData::AdjustSizeIndices()
 			}
 		}
 		GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);
+		GenerateBorders(m_home_city.RetPos(), m_owner, g_theConstDB->Get(0)->GetBorderIntRadius(), g_theConstDB->Get(0)->GetBorderSquaredRadius());
 	}
 
 	m_collectingResources.Clear();

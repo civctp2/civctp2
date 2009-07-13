@@ -26,6 +26,8 @@
 //
 // - For an AI transporter it is no more checked, whether the transporter cannot
 //   unload its cargo, because the cargo has not enough move points.
+// - A transporter's path does not not leave the target continent, once it
+//   is on the target continent. (13-Jul-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -74,22 +76,13 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 {
 	if (can_enter)
 	{
-		sint32 cont;
-		bool is_land;
-		bool wrong_cont;
+		sint32 cont     = g_theWorld->GetContinent(pos);
+		bool is_land    = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
+		bool wrong_cont = ( cont != m_transDestCont ) && (!g_theWorld->IsCity(pos));
 
-		cont = g_theWorld->GetContinent(pos);
-		is_land = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
+		bool occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot)));
 
-		wrong_cont = ( cont != m_transDestCont ) && 
-			(!g_theWorld->IsCity(pos));
-
-
-		bool occupied = false;
-
-		occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot)));
-
-		if (occupied || wrong_cont) 
+		if(occupied || wrong_cont)
 		{
 			if(  is_land
 			   && 
@@ -100,16 +93,32 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 			  )
 			{
 				cost = k_ASTAR_BIG;
-				entry = ASTAR_RETRY_DIRECTION; 
+				entry = ASTAR_RETRY_DIRECTION;
 				return false;
 			}
 		}
-		
-		if (g_theWorld->IsWater(pos) || g_theWorld->IsShallowWater(pos))
+
+		if(g_theWorld->IsWater(pos) || g_theWorld->IsShallowWater(pos))
 		{
+			if
+			  (
+			       (
+			           g_theWorld->IsLand(prev)
+			        || g_theWorld->IsMountain(prev)
+			       )
+			    && g_theWorld->GetContinent(prev) == m_transDestCont
+			  )
+			{
+				// Return invalid if we leave the target continent
+				cost = k_ASTAR_BIG;
+				entry = ASTAR_RETRY_DIRECTION;
+				return false;
+			}
+
 			cost *= float(m_transMaxR);
 		}
-			return true;
+
+		return true;
 	}
 	else
 	{
@@ -125,12 +134,13 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 										 const bool & is_zoc, 
 									     float & cost, 
 									     ASTAR_ENTRY_TYPE & entry)
-{ 
+{
 	PLAYER_INDEX pos_owner;
 	PLAYER_INDEX prev_owner;
 
 	pos_owner = g_theWorld->GetCell(pos)->GetOwner();
-    if (can_enter) { 
+	if (can_enter)
+	{
 		
 		if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
 			return true;
@@ -143,12 +153,11 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 		{
 			cost += k_MOVE_TREASPASSING_COST;
 			return true; 
-		} 
-    }
+		}
+	}
 
-	
-	cost = k_ASTAR_BIG; 
-	entry = ASTAR_ENTRY_TYPE(0); 
+	cost = k_ASTAR_BIG;
+	entry = ASTAR_ENTRY_TYPE(0);
 	return false;
 }
 
@@ -164,25 +173,25 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 							Path & new_path,
 							float & total_cost ) 
 						   
-{ 
+{
 	sint32 cutoff = 20000;
 
 	sint32 nodes_opened = 0;
 	const bool no_straight_lines = false;
 	const bool check_units_in_cell = true;
-    bool is_broken_path = false; 
+	bool is_broken_path = false; 
 	const bool pretty_path = false;
 	Path bad_path;
 
-    m_pathType = pathType; 
+	m_pathType = pathType; 
 	m_transDestCont = trans_dest_cont;
 	m_transMaxR = trans_max_r;
 	m_owner = g_theWorld->GetOwner(start);
 
-    sint32 nUnits; 
-    uint32 move_intersection; 
-    uint32 move_union; 
-    m_is_robot = true; 
+	sint32 nUnits; 
+	uint32 move_intersection; 
+	uint32 move_union; 
+	m_is_robot = true; 
 	
 	
 	bool isspecial, cancapture, haszoc, canbombard;

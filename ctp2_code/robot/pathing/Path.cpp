@@ -24,8 +24,6 @@
 //
 // Modifications from the original Activision code:
 //
-// - SnipEndUntilCanEnter now snips a path always to the MapPoint before the
-//   first non-enterable MapPoint comes. (30-Jan-2008 Martin Gühmann)
 // - SnipEndUntilCanEnter is now base on the army's ability to enter cell
 //   and not based on its movement type. (8-Feb-2008 Martin Gühmann)
 //
@@ -224,54 +222,54 @@ void Path::GetCurrentPoint(MapPoint &p) const
 }
 
 void Path::ClipStartToCurrent()
-
 {
-    m_start = m_current; 
-    if (m_next == m_step.Num()) { 
-        m_step.Clear(); 
-    } else { 
-        m_step.DelUpToIndex(m_next); 
-    }
-    m_next = 0; 
+	m_start = m_current;
+	if (m_next == m_step.Num())
+	{
+		m_step.Clear();
+	}
+	else
+	{
+		m_step.DelUpToIndex(m_next);
+	}
+	m_next = 0;
 }
-
-
- 
 
 void Path::GetStartPoint(MapPoint &pos) const
 {
-    pos = m_start;
+	pos = m_start;
 }
 
 void Path::StartDir(WORLD_DIRECTION &d)
-
 {
-   Assert(0 < m_step.Num()); 
-   d = WORLD_DIRECTION(m_step[1].dir); 
-   m_next_dir = 1; 
+	Assert(0 < m_step.Num());
+	d = WORLD_DIRECTION(m_step[1].dir);
+	m_next_dir = 1;
 }
 
 void Path::GetCurrentDir(WORLD_DIRECTION &d)
-
 {
-    d = WORLD_DIRECTION(m_step[m_next_dir].dir);
+	d = WORLD_DIRECTION(m_step[m_next_dir].dir);
 }
 
 bool Path::IsEndDir()
 {
-    return (m_start.x == -1) || (m_step.Num() <= m_next_dir); 
+	return (m_start.x == -1) || (m_step.Num() <= m_next_dir); 
 }
 
 void Path::IncDir()
 {
 	MapPoint p;
-	if(m_current.GetNeighborPosition(WORLD_DIRECTION(m_step[m_next_dir].dir), p)) {
-		m_current = p;         
-	} else {
-		Assert(false); 
+	if(m_current.GetNeighborPosition(WORLD_DIRECTION(m_step[m_next_dir].dir), p))
+	{
+		m_current = p;
+	}
+	else
+	{
+		Assert(false);
 	}
 	m_next++;
-	m_next_dir++; 
+	m_next_dir++;
 }
 
 void Path::Concat(Path const & otherpath)
@@ -292,106 +290,114 @@ void Path::Concat(Path const & otherpath)
 	}
 
 	sint32  n  = otherpath.m_step.Num();
-	for (sint32 i = 0; i < n; i++) 
-    {
+	for(sint32 i = 0; i < n; i++)
+	{
 		m_step.Insert(otherpath.m_step[i]);
 	}
 }
 
 void Path::ConcatReturnPath()
 {
-	for (sint32 i = m_step.Num() - 1; i >= 0; i--) 
-    {
-		switch(WORLD_DIRECTION(m_step[i].dir)) {
-			case NORTH: m_step.Insert(SOUTH); break;
+	for (sint32 i = m_step.Num() - 1; i >= 0; i--)
+	{
+		switch(WORLD_DIRECTION(m_step[i].dir))
+		{
+			case NORTH:     m_step.Insert(SOUTH);     break;
 			case NORTHEAST: m_step.Insert(SOUTHWEST); break;
-			case EAST: m_step.Insert(WEST); break;
+			case EAST:      m_step.Insert(WEST);      break;
 			case SOUTHEAST: m_step.Insert(NORTHWEST); break;
-			case SOUTH: m_step.Insert(NORTH); break;
+			case SOUTH:     m_step.Insert(NORTH);     break;
 			case SOUTHWEST: m_step.Insert(NORTHEAST); break;
-			case WEST: m_step.Insert(EAST); break;
+			case WEST:      m_step.Insert(EAST);      break;
 			case NORTHWEST: m_step.Insert(SOUTHEAST); break;
 			default:
-				Assert(FALSE);
+				Assert(false);
 				break;
 		}
 	}
 }
 
 void Path::Serialize(CivArchive &archive)
-
 {
-    
 	m_current.Serialize(archive);
 
-	if (archive.IsStoring()) { 
+	if (archive.IsStoring())
+	{
 		archive << m_next;
-        archive << m_next_dir; 
-     } else { 
-		 archive >> m_next;
-         archive >> m_next_dir; 
-     } 
+		archive << m_next_dir;
+	}
+	else
+	{
+		archive >> m_next;
+		archive >> m_next_dir;
+	}
 
-	m_start.Serialize(archive); 
-    m_step.Serialize(archive); 
+	m_start.Serialize(archive);
+	m_step.Serialize(archive);
 }
 
 void Path::InsertFront(const MapPoint &pos)
 {
-    sint32 num_step = m_step.Num(); 
+	sint32 num_step = m_step.Num();
 
-    m_step.ExtendByOne(); 
-    for (sint32 idx_step =(num_step-1); 0 <= idx_step; idx_step--) { 
-       m_step[idx_step+1] = m_step[idx_step]; 
-    } 
-    m_step[0]   = pos.GetNeighborDirection(m_start); 
-    m_start     = pos;
+	m_step.ExtendByOne();
+
+	for (sint32 idx_step =(num_step-1); 0 <= idx_step; idx_step--)
+	{
+		m_step[idx_step+1] = m_step[idx_step];
+	}
+
+	m_step[0]   = pos.GetNeighborDirection(m_start);
+	m_start     = pos;
 }
 
 void Path::PrependDir (sint32 dir)
+{
+	sint32 num_step = m_step.Num();
 
-{ 
-    sint32 num_step = m_step.Num(); 
+	m_step.ExtendByOne(); 
+	for (sint32 idx_step=(num_step-1); 0 <= idx_step; idx_step--)
+	{
+		m_step[idx_step+1] = m_step[idx_step];
+	}
 
-    m_step.ExtendByOne(); 
-    for (sint32 idx_step=(num_step-1); 0 <= idx_step; idx_step--) { 
-       m_step[idx_step+1] = m_step[idx_step]; 
-    } 
-    m_step[0] = (sint8)dir; 
-} 
+	m_step[0] = (sint8)dir;
+}
 
 void Path::InsertEnd(const MapPoint &pos)
 {
-    MapPoint old, tmp; 
+	MapPoint old, tmp;
 
-    Start(old); 
-    Next(tmp);  
-    for ( ; !IsEnd(); Next(tmp)) { 
-    }      
-    Direction d = tmp.GetNeighborDirection(pos); 
-    m_step.Insert(d); 
+	Next(tmp);
+	for( ; !IsEnd(); Next(tmp))
+	{
+		// Just move forward to the end
+	}
+
+	Direction d = tmp.GetNeighborDirection(pos);
+	m_step.Insert(d);
 }
 
 void Path::AddDir(const WORLD_DIRECTION d)
 {
-    m_step.Insert(d); 
+	m_step.Insert(d);
 }
 
 void Path::SpaceMove(const MapPoint &start, const MapPoint &dest)
 {
-    m_start = start; 
-    m_step.Clear(); 
-    Direction const d = Direction(start.GetNeighborDirection(dest)); 
-    m_step.Insert(d); 
-    m_step.Insert(d); 
+	m_start = start;
+	m_step.Clear();
+	Direction const d = Direction(start.GetNeighborDirection(dest));
+	m_step.Insert(d);
+	m_step.Insert(d);
 }
 
 void Path::SnipEnd()
 {
-    sint32 n = m_step.Num(); 
+	sint32 n = m_step.Num();
 
-    Assert(n >= 1); 
-    m_step.DelIndex(n-1); 
+	Assert(n >= 1);
+	m_step.DelIndex(n-1);
 }
 
 sint32 Path::GetMovesRemaining()
@@ -399,26 +405,23 @@ sint32 Path::GetMovesRemaining()
 	return m_step.Num() - m_next_dir;
 }
 
-
-
-
-
-
-
 MapPoint Path::GetEnd() const
 {
 	MapPoint end = m_start;
 	MapPoint next;
-	for(sint32 i = 0; i < m_step.Num(); i++) {
-		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next)) {
+	for(sint32 i = 0; i < m_step.Num(); i++)
+	{
+		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next))
+		{
 			end = next;
-		} else {
-			Assert(FALSE);
+		}
+		else
+		{
+			Assert(false);
 		}
 	}
 	return end;
 }
-
 
 sint32 Path::GetNextIndex() const
 {
@@ -429,12 +432,11 @@ void Path::RestoreIndexAndCurrentPos(const sint32 & index)
 {
 	m_current = m_start;
 	m_next    = 0;
-	while (m_next < index)
+	while(m_next < index)
 	{
 		Next(m_current);
 	}
 }
-
 
 MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 {
@@ -442,7 +444,6 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 	MapPoint end            = m_start;
 	MapPoint last           = m_start;
 	MapPoint next;
-	MapPoint beforeLast     = m_start;
 	sint32   last_can_enter = -1;
 
 	for(i = 0; i < m_step.Num(); i++)
@@ -453,7 +454,6 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 			if(army.CanEnter(next))
 			{
 				last_can_enter = i;
-				beforeLast     = last;
 				last           = end;
 			}
 			else
@@ -467,14 +467,6 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 		}
 	}
 
-	if(!g_theWorld->GetCell(end)->CanEnter(army.GetMovementType()))
-	{
-		if(last_can_enter > 0)
-			last_can_enter--;
-
-		last = beforeLast;
-	}
-
 	for(i = m_step.Num() - 1; i > last_can_enter; i--)
 	{
 		m_step.DelIndex(i);
@@ -482,4 +474,3 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 
 	return last;
 }
-

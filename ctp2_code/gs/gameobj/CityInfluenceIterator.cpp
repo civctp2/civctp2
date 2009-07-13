@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City influence handling.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -55,8 +55,8 @@ namespace
 //
 // Description: Apply SetScratch(0) to a block of tiles around a location.
 //
-// Parameters : a_Center	: center of the block
-//				a_Radius	: radius of the block
+// Parameters : a_Center    : center of the block
+//              a_Radius    : radius of the block
 //
 // Globals    : g_theWorld
 //
@@ -67,24 +67,24 @@ namespace
 //----------------------------------------------------------------------------
 void ClearScratch(MapPoint const & a_Center, size_t const a_Radius)
 {
-    SquareIterator  it(a_Center, a_Radius);
+	SquareIterator  it(a_Center, a_Radius);
 
-    for (it.Start(); !it.End(); it.Next())
-    {
-        g_theWorld->GetCell(it.Pos())->SetScratch(0);
+	for (it.Start(); !it.End(); it.Next())
+	{
+		g_theWorld->GetCell(it.Pos())->SetScratch(0);
 	}
 };
 
 bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint32 squaredRadius)
 {
 	Cell *cell = g_theWorld->GetCell(curPos);
-    Assert(cell);
+	Assert(cell);
 
-	if (cell->GetScratch() != 0) return false; 
+	if (cell->GetScratch() != 0) return false;
 
 	cell->SetScratch(1);
 
-	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false; 
+	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false;
 	if(UnitData::GetDistance(center, curPos, 0) > squaredRadius) return false;
 
 	cell->SetOwner(player);
@@ -99,7 +99,7 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 
 	bool redrawMe = false;
 
-	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
+	if(curPos.GetNeighborPosition(NORTHEAST, nextPos))
 		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
 			redrawMe = true;
 		}
@@ -116,7 +116,8 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 			redrawMe = true;
 		}
 
-	if(redrawMe) {
+	if(redrawMe)
+	{
 		g_tiledMap->RedrawTile(&curPos);
 	}
 
@@ -142,7 +143,8 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 	}
 	cell->SetScratch(1);
 
-	if(newOwner >= 0) {
+	if(newOwner >= 0)
+	{
 		g_network.Block(newOwner);
 		g_network.Enqueue(cell, curPos.x, curPos.y);
 		g_network.Unblock(newOwner);
@@ -152,7 +154,7 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 
 	bool redrawMe = false;
 
-	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
+	if(curPos.GetNeighborPosition(NORTHEAST, nextPos))
 		if(!ExpandInfluence(city, centerPos, nextPos, rec)) {
 			redrawMe = true;
 		}
@@ -169,7 +171,8 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 			redrawMe = true;
 		}
 
-	if(redrawMe && g_tiledMap) {
+	if(redrawMe && g_tiledMap)
+	{
 		g_tiledMap->RedrawTile(&curPos);
 	}
 
@@ -197,16 +200,16 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 //----------------------------------------------------------------------------
 sint32 RadiusFromIndex(sint32 sizeIndex)
 {
-    Assert(g_theCitySizeDB && (g_theCitySizeDB->NumRecords() > 0));
+	Assert(g_theCitySizeDB && (g_theCitySizeDB->NumRecords() > 0));
 
-    if (sizeIndex >= g_theCitySizeDB->NumRecords())
-    {
-        sizeIndex = g_theCitySizeDB->NumRecords() - 1;
-    }
-    
-    CitySizeRecord const *  citySizeData    = g_theCitySizeDB->Get(sizeIndex);
-    
-    return citySizeData ? citySizeData->GetIntRadius() : 0;
+	if (sizeIndex >= g_theCitySizeDB->NumRecords())
+	{
+		sizeIndex = g_theCitySizeDB->NumRecords() - 1;
+	}
+
+	CitySizeRecord const *  citySizeData    = g_theCitySizeDB->Get(sizeIndex);
+
+	return citySizeData ? citySizeData->GetIntRadius() : 0;
 }
 
 }; // namespace
@@ -217,11 +220,11 @@ sint32 RadiusFromIndex(sint32 sizeIndex)
 //
 // Description: Constructor
 //
-// Parameters : center			: location of city
-//				size			: size of city (as index in city size database)
+// Parameters : center          : location of city
+//              size            : size of city (as index in city size database)
 //
 // Globals    : g_theWorld
-//				g_theCitySizeDB
+//              g_theCitySizeDB
 //
 // Returns    : -
 //
@@ -242,10 +245,10 @@ CityInfluenceIterator::CityInfluenceIterator(MapPoint const & center, sint32 siz
 //              the iterator.
 //
 // Parameters : - 
-//				size			: size of city (as index in city size database)
+//              size           : size of city (as index in city size database)
 //
 // Globals    : g_theWorld
-//				g_theCitySizeDB
+//              g_theCitySizeDB
 //
 // Returns    : bool            : valid location
 //
@@ -254,9 +257,9 @@ CityInfluenceIterator::CityInfluenceIterator(MapPoint const & center, sint32 siz
 //----------------------------------------------------------------------------
 bool CityInfluenceIterator::IsIncluded()
 {
-    return (m_testXY.IsValid() &&
-		    (g_theWorld->GetCell(m_testXY.GetRC())->GetCityOwner().m_id == m_cityId)
-    	   );
+	return (m_testXY.IsValid() &&
+	        (g_theWorld->GetCell(m_testXY.GetRC())->GetCityOwner().m_id == m_cityId)
+	       );
 }
 
 //----------------------------------------------------------------------------
@@ -265,12 +268,12 @@ bool CityInfluenceIterator::IsIncluded()
 //
 // Description: -
 //
-// Parameters : cpos				: location of city
-//				size				: size of city
+// Parameters : cpos                : location of city
+//              size                : size of city
 //
 // Globals    : g_theWorld
-//				g_tiledMap
-//				g_theCitySizeDB
+//              g_tiledMap
+//              g_theCitySizeDB
 //
 // Returns    : -
 //
@@ -286,16 +289,16 @@ void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
 	g_theWorld->GetCell(cpos)->SetScratch(1);
 
 	MapPoint				cur;
-    CitySizeRecord const *  rec         = g_theCitySizeDB->Get(size);
+	CitySizeRecord const *  rec         = g_theCitySizeDB->Get(size);
 	if(cpos.GetNeighborPosition(NORTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
 	if(cpos.GetNeighborPosition(SOUTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
 	if(cpos.GetNeighborPosition(SOUTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
 	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
 
 	if (g_tiledMap)
-    {
+	{
 		g_tiledMap->RedrawTile(&cpos);
-    }
+	}
 }
 
 void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint32 squaredRadius)
@@ -318,8 +321,7 @@ void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint
 	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandBorders(cpos, cur, player, squaredRadius);
 
 	if (g_tiledMap)
-    {
-	    g_tiledMap->RedrawTile(&cpos);
-    }
+	{
+		g_tiledMap->RedrawTile(&cpos);
+	}
 }
-
