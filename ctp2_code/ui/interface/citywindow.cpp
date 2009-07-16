@@ -2648,6 +2648,8 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 
 		// Remove the disbanded units from the display.
 		s_cityWindow->UpdateUnitButtons();
+		// Update turn count button.
+		s_cityWindow->UpdateBuildTabs();
 	}
 }
 

@@ -7690,3 +7690,33 @@ SFN_ERROR Slic_UnitMovementLeft::Call(SlicArgList *args)
 	
 	return SFN_ERROR_OK;
 }
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Maq
+//
+// Name       : Slic_GetStoredProduction
+//
+// Description: Function to find out how much production a city has stored.
+//
+// Parameters : SlicArg 0: city
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_GetStoredProduction::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit city;
+	if(!args->GetCity(0, city)) {
+		return SFN_ERROR_TYPE_BUILTIN;
+	}
+
+	m_result.m_int = city.GetStoredCityProduction();
+	
+	return SFN_ERROR_OK;
+}

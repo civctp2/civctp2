@@ -942,9 +942,21 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 		return AUI_ERRCODE_OK;
 	}
 
-	
-	double storedProd = double(city.CD()->GetStoredCityProduction());
-	double neededProd = double(city.CD()->GetBuildQueue()->GetHead()->m_cost);
+	double storedProd;
+	double neededProd;
+
+	CityWindow* cityWindow = CityWindow::GetCityWindow();
+	CityData* cityData = cityWindow ? cityWindow->GetCityData() : NULL;
+	if(cityData != NULL && cityData->GetHomeCity() == city)
+	{
+		storedProd = double(cityData->GetStoredCityProduction());
+		neededProd = double(cityData->GetBuildQueue()->GetHead()->m_cost);
+	}
+	else
+	{
+		storedProd = double(city.CD()->GetStoredCityProduction());
+		neededProd = double(city.CD()->GetBuildQueue()->GetHead()->m_cost);
+	}
 	
 	double percentComplete;
 	if(neededProd == 0) {

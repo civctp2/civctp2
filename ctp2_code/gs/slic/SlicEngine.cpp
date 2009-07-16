@@ -995,6 +995,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_CreateBuilding);
 	m_functionHash->Add(new Slic_CreateWonder);
 	m_functionHash->Add(new Slic_UnitMovementLeft);
+	m_functionHash->Add(new Slic_GetStoredProduction);
 
 }
 
