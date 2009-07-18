@@ -21,11 +21,8 @@
 // _DEBUG
 // - Generate debug version when set.
 //
-// _SLOW_BUT_SAFE
-// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
-//   when set. But the defined symbols are never used, so this doesn't do
-//   anything at all. This makes preprocessing and compilation slower, but
-//   should be safe.
+// USE_WORLD_SIZE_CLASS
+// - Decoupled WorldSize from MapPoint class.
 //
 //----------------------------------------------------------------------------
 //
@@ -33,7 +30,9 @@
 //
 // - Modified GetSettleTargets so that no settle targets are found that cannot
 //   be settled, because the player does not has any units for the tile in
-//   question. (May 20th 2006 Martin GÃ¼hmann)
+//   question. (May 20th 2006 Martin Gühmann)
+// - Corrected delete operator for array.
+// - Improved settle radius determination on city growth.
 // 
 //----------------------------------------------------------------------------
 
@@ -41,22 +40,20 @@
 #include "settlemap.h"
 
 
-#include "gfx_options.h"
-#include "World.h"		            // g_theWorld
+#include "boundingrect.h"
+#include "Cell.h"
 #include "citydata.h"
-
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
-#include "Cell.h"
-#include <vector>
-#include <utility> 
+#include "Diplomat.h"
+#include "gfx_options.h"
 #include "mapanalysis.h"
 #include "StrategyRecord.h"
-#include "Diplomat.h"
-
-#include "boundingrect.h"
 #include "TerrainRecord.h"
 #include "UnitRecord.h"
+#include <utility> 
+#include <vector>
+#include "World.h"		            // g_theWorld
 
 namespace
 {
@@ -137,8 +134,11 @@ void SettleMap::Initialize()
 	{
 		for (rc_pos.y = 0; static_cast<size_t>(rc_pos.y) < y_size; rc_pos.y++)
 		{
+#if defined(USE_WORLDSIZE_CLASS)
+			xy_pos.rc2xy(rc_pos, g_theWorld->GetSize());
+#else
 			xy_pos.rc2xy(rc_pos, *g_theWorld->GetSize());
-
+#endif
 			double value    = VALUE_NEAR_EDGE_OF_WORLD;
 
 			if ( ( g_theWorld->IsYwrap() ||
@@ -162,37 +162,41 @@ void SettleMap::Initialize()
 	}
 }
 
-
+/// Update the settle target information when a city grows
+/// \param city The city
 void SettleMap::HandleCityGrowth(const Unit & city)
 {
-	/// @ToDo handle city shrinking
-	MapPoint pos = city.RetPos();
-	CityData *citydata = city.GetCityData();
-	Assert(citydata);
-	PLAYER_INDEX playerId = city.GetOwner();
-
-	
-	sint32 radius = g_theCitySizeDB->Get(citydata->GetSizeIndex())->GetIntRadius();
+	Assert(city.IsValid());
+	MapPoint        cityPos     = city.RetPos();
+	CityData *      citydata    = city.GetCityData();
+	PLAYER_INDEX    playerId    = city.GetOwner();
+	sint32          radius      = g_theCitySizeDB->Get(citydata->GetSizeIndex())->GetIntRadius();
+	/// @todo Check functionality. Using "2 * current radius + 1" looks arbitrary.
+	/// This does not account for future growth (city spacing may become too tight), but it also
+	/// prevents any overlap.
 	radius += radius + 1;
 	
-	RadiusIterator it(pos, radius);
+	// Mark tiles near to the grown city as not worth to settle at all
+	RadiusIterator it(cityPos, radius);
 	for (it.Start(); !it.End(); it.Next()) 
 	{
-		pos = it.Pos();
-		m_invalidCells.Set(pos.x, pos.y, TRUE);
+		MapPoint    clearPos = it.Pos();
+		m_invalidCells.Set(clearPos.x, clearPos.y, TRUE);
 	}
 
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
-	sint32 min_settle_distance = 0;
+	sint32                  min_settle_distance = 0;
 	strategy.GetMinSettleDistance(min_settle_distance);
 
-	RadiusIterator settleIt(pos, min_settle_distance);
+	// Mark tiles further away as having only half the usual value
+	/// \todo Optimise using CircleIterator, to skip computing values for the already invalidated tiles.
+	RadiusIterator settleIt(cityPos, min_settle_distance);
 	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
 	{
-		pos = settleIt.Pos();
-		double const new_value = ComputeSettleValue(pos) * 0.5;
-		m_settleValues.SetGridValue(pos, new_value);
+		MapPoint        claimPos    = settleIt.Pos();
+		double const    new_value   = ComputeSettleValue(claimPos) * 0.5;
+		m_settleValues.SetGridValue(claimPos, new_value);
 	}
 	
 	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
@@ -268,13 +272,17 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 
 	if(noSettleUnits)
 	{
-		delete settleTerrainTypes;
+		delete [] settleTerrainTypes;
 		return;
 	}
 
 	for(i = 0; rect.Get(i, xy_pos, rows, cols); i++)
 	{
+#if defined(USE_WORLDSIZE_CLASS)
+		rc_pos.xy2rc(xy_pos, g_theWorld->GetSize());
+#else
 		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
+#endif
 
 		settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
 		settle_target.m_pos = rc_pos;
@@ -315,7 +323,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		targets.push_back(settle_target);
 	}
 
-	delete settleTerrainTypes;
+	delete [] settleTerrainTypes;
 
 	if (targets.empty())
 	{
