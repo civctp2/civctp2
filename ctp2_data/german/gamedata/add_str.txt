@@ -302,7 +302,7 @@ str_SE_FindPosY "Y-Koordinate eingeben"
 str_SE_FindMe "Zum Zentrieren auf die X,Y-Koordinate anklicken"
 str_SE_RemoveGoods "Alle Handelsgüter von der Karte entfernen"
 str_SE_GenerateGoods "Handelsgüter zur Karte hinzufügen"
-str_SE_DebugAI "Show AI Army Goals"
+str_SE_DebugAI "KI-Armee-Ziele anzeigen"
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SCHNELLSPEICHERN"

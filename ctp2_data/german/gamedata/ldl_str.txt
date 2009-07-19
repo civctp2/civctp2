@@ -46,7 +46,8 @@
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
 # - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
-# - Added strings for political map(Empty for all but English) - 6-Jul-2009 EPW
+# - Added strings for political map - 6-Jul-2009 EPW
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-00
@@ -2144,10 +2145,10 @@ str_ldl_Population				"Bev:"
 str_ldl_Growth					"Wachstum:"
 str_ldl_CityList				"Stadtliste"
 
-str_ldl_ConversionLoss				"Conversion Loss"
-str_ldl_FranchiseLoss				"Franchise Loss"
+str_ldl_ConversionLoss				"Bekehrungsverlust"
+str_ldl_FranchiseLoss				"Lizenzgebühren"
 
-str_ldl_GrowthTurns				"Growth Turns"
+str_ldl_GrowthTurns				"Runden zum Wachstum"
 
 str_ldl_DipProposalsReceived			"Erhaltene Gesuche"
 str_ldl_DipProposalsMade			"Gesendete Gesuche"
@@ -2773,7 +2774,7 @@ str_ldl_ImproveTerraformOcean			"Terraforming Wasser"
 str_ldl_RADAR_MAP_UNITS				"Einheiten"
 str_ldl_RADAR_MAP_CITIES			"Städte"
 str_ldl_RADAR_MAP_BORDERS			"Grenzen"
-str_ldl_RADAR_MAP_POLITICAL         ""
+str_ldl_RADAR_MAP_POLITICAL			"Reiche"
 
 str_ldl_BV_RETREAT				"Rückzug"
 
@@ -3077,7 +3078,7 @@ str_profile_AIMilitiaUnit                       "AI Free Militia Unit"          
 str_profile_OneCityChallenge                    "Eine-Stadt-Herausforderung"                    # One city challenge
 str_profile_CityCaptureOptions                  "Stadteroberungsoptionen"                       # Captured city options
 str_profile_DebugCityAstar                      "Straßenbaupfad debuggen"
-str_profile_NewCombat                           "New Combat"
+str_profile_NewCombat                           "Neues Kampfsystem"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Musikeinstellungen"
@@ -3095,18 +3096,18 @@ str_tbl_ldl_Command_Enter_Alternate		"Alternativkommando eingeben (Playtest)"
 
 # New gamesetting options
 #implemented
-str_ldl_Army_Names_On				"Show Army Names"
-str_ldl_Army_Names_Off				"Hide Army Names"
-str_ldl_Civ_Flags_On				"Show Nation Flags"
-str_ldl_Civ_Flags_Off				"Hide Nation Flags"
-str_ldl_Show_City_Prod_Off			"Hide City Production"
-str_ldl_Show_City_Prod_On			"Show City Production"
-str_ldl_SmoothBorders_On			"Smooth Icon Borders"
-str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
-str_ldl_Good_Animations_Off			"Good Animations Off"
-str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Army_Names_On				"Armeenamen einblenden"
+str_ldl_Army_Names_Off				"Armeenamen ausblenden"
+str_ldl_Civ_Flags_On				"Nationalflaggen einblenden"
+str_ldl_Civ_Flags_Off				"Nationalflaggen ausblenden"
+str_ldl_Show_City_Prod_Off			"Stadtproduktion einblenden"
+str_ldl_Show_City_Prod_On			"Stadtproduction ausblenden"
+str_ldl_SmoothBorders_On			"Reichsgrenzen glätten"
+str_ldl_SmoothBorders_Off			"Standardreichsgrenzen"
+str_ldl_Good_Animations_Off			"Güter-Animationen Aus"
+str_ldl_Good_Animations_On			"Güter-Animationen An"
 str_tbl_ldl_CityCaptureOptions_On		"Stadteroberungsoptionen"
-str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
+str_tbl_ldl_CityCaptureOptions_Off		"Keine Stadteroberungsoptionen"
 str_tbl_ldl_OneCityChallenge_On			"Eine-Stadt-Herausforderung"
 str_tbl_ldl_OneCityChallenge_Off		"Viele Städte"
 str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
@@ -3139,23 +3140,23 @@ str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"				# If city is empty at t
 str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI doesn't get cheapest unit
 
 str_ldl_DebugAI					"Debug KI"
-str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
-str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
-str_ldl_Debug_AI_On				"Show Debug AI Text"
-str_ldl_Debug_AI_Off				"Hide Debug AI Text"
-str_tbl_ldl_NonRandomCivs_On			"Gegner zufällig wählen"
-str_tbl_ldl_NonRandomCivs_Off			"Gegner nach Liste wählen"
-str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by city limit
-str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
-str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
-str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"Old Combat"
-str_tbl_ldl_NewCombat_On			"New Combat"
-str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
-str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
+str_ldl_ShowEnemyHealth_On			"Lebenspunkte Feindeinheit ein"
+str_ldl_ShowEnemyHealth_Off			"Lebenspunkte Feindeinheit aus"
+str_ldl_Debug_AI_On				"Debug KI-Text Ein"
+str_ldl_Debug_AI_Off				"Debug KI-Text Aus"
+str_tbl_ldl_NonRandomCivs_On			"Gegner nach Liste wählen"
+str_tbl_ldl_NonRandomCivs_Off			"Gegner zufällig wählen"
+str_tbl_ldl_AINoCityLimit_On			"Kein Stadtlimit für die KI"			# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_Off			"Stadtlimit für die KI"				# AI affected by city limit
+str_tbl_ldl_NoCityLimit_On			"Stadtlimit An"					# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Stadtlimit Aus"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"Altes Kampfsystem"
+str_tbl_ldl_NewCombat_On			"Neues Kampfsystem"
+str_tbl_ldl_NoGoodyHuts_Off			"Ruinen An"
+str_tbl_ldl_NoGoodyHuts_On			"Ruinen Aus"
 # Custom map window (wet/dry etc.)
-str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
-str_tbl_ldl_RandomCustomMap_On			"Random Settings"
+str_tbl_ldl_RandomCustomMap_Off			"Wunscheinstellungen"
+str_tbl_ldl_RandomCustomMap_On			"Zufallseinstellungen"
 
 # Not Implemented
 str_SE_DebugAI					"debug"
