@@ -58,7 +58,9 @@
 #  - GoodyHutExcluded        : Prevents Some Units from appearing
 #  - ExcludedByWonder        : Prevents Units being built in cities with wonder
 #  - PrerequisiteWonder      : Needs Wonder in city to be built
-#
+#  - VictoryEnslavementChance: VictoryEnslavement chance of success
+#  - VictoryEnslavementStacks: VictoryEnslavement can stack with other units
+#   - GovernmentOnly         : Needs Government to build unit
 #-----------------------------------------------------------------------------
 
 Sprite : Int
@@ -112,6 +114,7 @@ Unit {
 	Record CityStyle[] CultureOnly			// Added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly		// Added by E--can only build units at cities with certain citystyle 
 	Record Civilisation[] CivilisationOnly	// Added by E -- can only build units if player is a specific civ
+	Record Government[] GovernmentOnly      // Added by EPW(lol) -- can only build units if player is in a specific gov(doesn't kill them though)
 	Record TerrainImprovement[]     SettleImprovement // entrenching units make specific imps like forts
 	Record Resource[] NeedsCityGood         // Must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll		// A city must have all resources listed to build unit
@@ -358,7 +361,10 @@ Unit {
 	Bit(struct SoundAndEffect) SlaveUprising
 
 	Bit(struct SuccessDeathEffect) UndergroundRailway	
-	Bit VictoryEnslavement	
+	
+	Bit VictoryEnslavement
+	Bit(float) VictoryEnslavementChance
+	Bit VictoryEnslavementStacks	
 
 	Bit DefuseLandMines
 	Bit DefuseSeaMines

@@ -19,7 +19,7 @@
 #  Modifications from the original Activision code:
 #
 #  - created file for possible Civ4 promotions (by E Aug 21st 2007)
-#
+#  - added VictoryEnslavementChance, VictoryEnslavementStacks, and GovernmentOnly flags (EPW, Jul 21st 2009)
 #-----------------------------------------------------------------------------
 
 Unitpromotion {
@@ -63,6 +63,7 @@ Unitpromotion {
 	Record CityStyle[] CultureOnly			// Added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly		// Added by E--can only build units at cities with certain citystyle 
 	Record Civilisation[] CivilisationOnly	// Added by E -- can only build units if player is a specific civ
+	Record Government[] GovernmentOnly      // Added by EPW(lol) -- can only build units if player is in a specific gov(doesn't kill them though)
 	Record Resource[] NeedsCityGood         // Must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll		// A city must have all resources listed to build unit
 	Record Resource[] NeedsCityGoodAnyCity	// must have a good in any city to build
@@ -306,7 +307,10 @@ Unitpromotion {
 	Bit(struct SoundAndEffect) SlaveUprising
 
 	Bit(struct SuccessDeathEffect) UndergroundRailway	
-	Bit VictoryEnslavement	
+	
+	Bit VictoryEnslavement
+	Bit(float) VictoryEnslavementChance
+	Bit VictoryEnslavementStacks	
 
 	Bit DefuseLandMines
 	Bit DefuseSeaMines

@@ -118,7 +118,7 @@
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
 // - When contact is made the players' regard is recomputed, so that you
 //   cannot establish good relationships so easily. (01-Jun-2009 Martin Gühmann)
-//
+// -Added GovernmentOnly for Units functionality.(21-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 //
 // Notes
@@ -8379,6 +8379,19 @@ bool Player::CanBuildUnit(const sint32 type) const
 		bool found = false;
 		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
 			if(rec->GetGovernmentTypeIndex(i) == m_government_type) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+	// Added by EPW - Checks if unit has GovernmentOnly requirement and checks if it is met
+	if(rec->GetNumGovernmentOnly() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < rec->GetNumGovernmentOnly(); i++) {
+			if(rec->GetGovernmentOnlyIndex(i) == m_government_type) {
 				found = true;
 				break;
 			}
