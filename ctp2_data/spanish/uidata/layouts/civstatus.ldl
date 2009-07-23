@@ -272,25 +272,25 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 			}
 
 			SlideLabel2:CTP2_STATIC_BASE {
-				int		xpix		55 #64 #50
+				int		xpix		57 #55 #64 #50
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel3:CTP2_STATIC_BASE {
-				int		xpix		86 #94 #80
+				int		xpix		90 #86 #94 #80
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel4:CTP2_STATIC_BASE {
-				int		xpix		119 #124 #110
+				int		xpix		125 #119 #124 #110
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel5:CTP2_STATIC_BASE {
-				int		xpix		152 #154 #140
+				int		xpix		160 #152 #154 #140
 				int		ypix		22
 				int		fontsize	8
 			}
@@ -1117,22 +1117,22 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							}
 
 							SlideLabel2 {
-								int		xpix		121
+								int		xpix		123 #121
 								string	text		"EMPIRE_COMMERCE_AMOUNT_1"
 							}
 
 							SlideLabel3 {
-								int		xpix		152
+								int		xpix		158 #156 #152
 								string	text		"EMPIRE_COMMERCE_AMOUNT_2"
 							}
 
 							SlideLabel4 {
-								int		xpix		185
+								int		xpix		195 #191 #185
 								string	text		"EMPIRE_COMMERCE_AMOUNT_3"
 							}
 
 							SlideLabel5 {
-								int		xpix		218
+								int		xpix		232 #226 #218
 								string	text		"EMPIRE_COMMERCE_AMOUNT_4"
 							}
 							

@@ -1,2 +1,2 @@
-AE Mod
-Version 0.2
+AE Mod - Version 0.03
+This mod is based on the orignal Super Apolyton Pack 2.0 mod, with many other small fixes and tweaks included. See ae_mod_readme.txt in the ...Scenarios\AE_Mod\scen0000 folder for the full list of changes.

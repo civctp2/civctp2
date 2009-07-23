@@ -14,7 +14,7 @@ UNIT_ABOLITIONIST {
    ShieldCost 540
    PowerPoints 250
    ShieldHunger 5
-   GoldHunger 5
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 1
@@ -76,7 +76,7 @@ UNIT_AIRCRAFT_CARRIER {
    ShieldCost 3000
    PowerPoints 3000
    ShieldHunger 30
-   GoldHunger 150
+   GoldHunger 7
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 3
@@ -107,7 +107,6 @@ UNIT_AIRCRAFT_CARRIER {
    CanAttack: Sea
    CanAttack: ShallowWater
    CanCarry: MedAir
-   CanCarry: SmallAir
    CanSee: Standard
    Defend: Air
    MovementType: Sea
@@ -144,7 +143,7 @@ UNIT_ARCHER {
    ShieldCost 150
    PowerPoints 100
    ShieldHunger 1
-   GoldHunger 1
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 2
@@ -205,7 +204,7 @@ UNIT_ARTILLERY {
    ShieldCost 1500
    PowerPoints 1200
    ShieldHunger 15
-   GoldHunger 30
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
@@ -236,15 +235,12 @@ UNIT_ARTILLERY {
    SoundVictory SOUND_VICTORY_ARTILLERY
    SoundDeath SOUND_DEATH_ARTILLERY
 
-   ##CanAttack: Air
    CanAttack: Land
-   ##CanAttack: Mountain
    CanBombard: Land
    CanBombard: Mountain
    CanBombard: Water
    CanSee: Standard
    MovementType: Land
-   ##MovementType: Mountain
    Size: Medium
    VisionClass: Standard
 
@@ -271,7 +267,7 @@ UNIT_BATTLESHIP {
    ShieldCost 3500
    PowerPoints 2000
    ShieldHunger 35
-   GoldHunger 150
+   GoldHunger 8
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 3
@@ -333,7 +329,7 @@ UNIT_BOMBER {
    ShieldCost 2250
    PowerPoints 3000
    ShieldHunger 22
-   GoldHunger 50
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 1000
    VisionRange 2
@@ -399,7 +395,7 @@ UNIT_CANNON {
    ShieldCost 1200
    PowerPoints 400
    ShieldHunger 12
-   GoldHunger 20
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
@@ -505,7 +501,7 @@ UNIT_CARGO_HELICOPTER {
    ShieldCost 1500
    PowerPoints 100
    ShieldHunger 15
-   GoldHunger 45
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 600
    VisionRange 3
@@ -529,10 +525,7 @@ UNIT_CARGO_HELICOPTER {
    SoundVictory SOUND_VICTORY_CARGO_HELICOPTER
    SoundDeath SOUND_DEATH_CARGO_HELICOPTER
 
-   CanAttack: Air
-   CanAttack: Land
-   CanAttack: Mountain
-   CanCarry: MedLand
+   CanCarry: SmallLand
    CanSee: Standard
    MovementType: Air
    Size: Large
@@ -562,7 +555,7 @@ UNIT_CARRACK {
    ShieldCost 920
    PowerPoints 100
    ShieldHunger 9
-   GoldHunger 15
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -618,7 +611,7 @@ UNIT_CATAMARAN {
    ShieldCost 225
    PowerPoints 100
    ShieldHunger 2
-   GoldHunger 5
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -644,19 +637,11 @@ UNIT_CATAMARAN {
    SoundVictory SOUND_VICTORY_CATAMARAN
    SoundDeath SOUND_DEATH_CATAMARAN
 
-   CanAttack: Sea
-   CanAttack: ShallowWater
-   CanCarry: MedLand
    CanCarry: SmallLand
    CanSee: Standard
    MovementType: ShallowWater
    Size: Large
    VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
 
    CargoData {
       MaxCargo 2
@@ -682,7 +667,7 @@ UNIT_CATAPULT {
    ShieldCost 740
    PowerPoints 100
    ShieldHunger 8
-   GoldHunger 16
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 2
@@ -746,7 +731,7 @@ UNIT_CAVALRY {
    ShieldCost 1200
    PowerPoints 700
    ShieldHunger 12
-   GoldHunger 15
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -858,6 +843,7 @@ UNIT_CLERIC {
    ShieldCost 540
    PowerPoints 200
    ShieldHunger 5
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -935,6 +921,7 @@ UNIT_CORPORATE_BRANCH {
    ShieldCost 1500
    PowerPoints 2000
    ShieldHunger 15
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -999,7 +986,7 @@ UNIT_CRAWLER {
    ShieldCost 3750
    PowerPoints 5000
    ShieldHunger 38
-   GoldHunger 200
+   GoldHunger 9
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 3
@@ -1050,13 +1037,13 @@ UNIT_CRUISE_MISSILE {
    Attack 60
    Defense 10
    ZBRangeAttack 60
-   Firepower 1
+   Firepower 4
    Armor 1
    MaxHP 10
    ShieldCost 1800
    PowerPoints 100
    ShieldHunger 20
-   GoldHunger 0
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 1000
    VisionRange 2
@@ -1111,7 +1098,7 @@ UNIT_CYBER_NINJA {
    ShieldCost 2500
    PowerPoints 2500
    ShieldHunger 25
-   GoldHunger 100
+   GoldHunger 6
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 3
@@ -1135,8 +1122,6 @@ UNIT_CYBER_NINJA {
    SoundVictory SOUND_VICTORY_CYBER_NINJA
    SoundDeath SOUND_DEATH_CYBER_NINJA
 
-   CanAttack: Land
-   CanAttack: Mountain
    CanSee: Standard
    CanSee: Stealth
    MovementType: Land
@@ -1191,7 +1176,7 @@ UNIT_DESTROYER {
    ShieldCost 2200
    PowerPoints 1000
    ShieldHunger 22
-   GoldHunger 60
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 600
    VisionRange 3
@@ -1225,6 +1210,7 @@ UNIT_DESTROYER {
    CanAttack: ShallowWater
    CanBombard: Air
    CanBombard: Water
+   Defend: Air
    CanSee: Standard
    MovementType: Sea
    MovementType: ShallowWater
@@ -1254,6 +1240,7 @@ UNIT_DIPLOMAT {
    ShieldCost 395
    PowerPoints 100
    ShieldHunger 4
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 2
@@ -1307,7 +1294,7 @@ UNIT_DREADNAUGHT {
    ShieldCost 6000
    PowerPoints 100
    ShieldHunger 60
-   GoldHunger 180
+   GoldHunger 15
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 4
@@ -1364,7 +1351,7 @@ UNIT_ECO_RANGER {
    ShieldCost 4000
    PowerPoints 100
    ShieldHunger 40
-   GoldHunger 5
+   GoldHunger 10
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 3
@@ -1390,10 +1377,11 @@ UNIT_ECO_RANGER {
    SoundDeath SOUND_DEATH_ECO_RANGER
 
    CanSee: Standard
+   CanSee: Stealth
    MovementType: Land
    MovementType: Mountain
    Size: Medium
-   VisionClass: Standard
+   VisionClass: Stealth
 
    CreateParks {
       Sound SOUND_ID_CREATE_PARKS
@@ -1418,7 +1406,7 @@ UNIT_ECO_TERRORIST {
    ShieldCost 3500
    PowerPoints 5000
    ShieldHunger 35
-   GoldHunger 25
+   GoldHunger 8
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -1480,7 +1468,7 @@ UNIT_EMPATHIC_DIPLOMAT {
    ShieldCost 1500
    PowerPoints 100
    ShieldHunger 15
-   GoldHunger 25
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -1532,7 +1520,7 @@ UNIT_FASCIST {
    ShieldCost 1000
    PowerPoints 1000
    ShieldHunger 10
-   GoldHunger 20
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
@@ -1593,7 +1581,7 @@ UNIT_FIGHTER {
    ShieldCost 1125
    PowerPoints 1500
    ShieldHunger 10
-   GoldHunger 30
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 3
@@ -1650,7 +1638,7 @@ UNIT_FIRE_TRIREME {
    ShieldCost 450
    PowerPoints 600
    ShieldHunger 5
-   GoldHunger 10
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -1683,7 +1671,6 @@ UNIT_FIRE_TRIREME {
    SoundDeath SOUND_DEATH_GREEK_FIRE_TRIREME
 
    CanAttack: ShallowWater
-   CanAttack: Sea
    CanSee: Standard
    MovementType: ShallowWater
    Size: Large
@@ -1712,7 +1699,7 @@ UNIT_FRIGATE {
    ShieldCost 2000
    PowerPoints 1000
    ShieldHunger 20
-   GoldHunger 45
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 600
    VisionRange 3
@@ -1773,7 +1760,7 @@ UNIT_FUSION_TANK {
    ShieldCost 5250
    PowerPoints 7000
    ShieldHunger 50
-   GoldHunger 130
+   GoldHunger 12
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 3
@@ -1830,7 +1817,7 @@ UNIT_HOPLITE {
    ShieldCost 175
    PowerPoints 100
    ShieldHunger 1
-   GoldHunger 1
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 1
@@ -1892,7 +1879,7 @@ UNIT_HOVER_INFANTRY {
    ShieldCost 2500
    PowerPoints 100
    ShieldHunger 25
-   GoldHunger 50
+   GoldHunger 6
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 4
@@ -1947,7 +1934,7 @@ UNIT_INFANTRYMAN {
    ShieldCost 1000
    PowerPoints 100
    ShieldHunger 10
-   GoldHunger 15
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
@@ -2007,7 +1994,7 @@ UNIT_INFECTOR {
    ShieldCost 3000
    PowerPoints 5000
    ShieldHunger 30
-   GoldHunger 100
+   GoldHunger 7
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -2068,14 +2055,16 @@ UNIT_INTERCEPTOR {
    ShieldCost 2500
    PowerPoints 100
    ShieldHunger 25
-   GoldHunger 65
+   GoldHunger 6
    FoodHunger 0
    MaxMovePoints 1200
    VisionRange 4
    EnableAdvance ADVANCE_SUPERSONIC_FLIGHT
    ObsoleteAdvance ADVANCE_AI_SURVEILLANCE
    UpgradeTo	UNIT_STEALTH_FIGHTER
-   ActiveDefenseRange 0
+   BombRounds 5
+   BombardRange 1
+   ActiveDefenseRange 1
    EnableCarrierDefenses
    LossMoveToDmgNone
    NoFuelThenCrash
@@ -2102,6 +2091,7 @@ UNIT_INTERCEPTOR {
    CanAttack: Sea
    CanAttack: ShallowWater
    CanSee: Standard
+   Defend: Air
    MovementType: Air
    Size: Medium
    VisionClass: Standard
@@ -2124,7 +2114,7 @@ UNIT_IRONCLAD {
    ShieldCost 1500
    PowerPoints 100
    ShieldHunger 15
-   GoldHunger 30
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -2186,7 +2176,7 @@ UNIT_KNIGHT {
    ShieldCost 740
    PowerPoints 400
    ShieldHunger 8
-   GoldHunger 16
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -2247,7 +2237,7 @@ UNIT_KRAKEN {
    ShieldCost 4500
    PowerPoints 100
    ShieldHunger 45
-   GoldHunger 210
+   GoldHunger 11
    FoodHunger 0
    MaxMovePoints 600
    VisionRange 3
@@ -2305,7 +2295,7 @@ UNIT_LAWYER {
    ShieldCost 1500
    PowerPoints 400
    ShieldHunger 15
-   GoldHunger 100 # Dude, its a lawyer
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -2361,7 +2351,7 @@ UNIT_LEVIATHON {
    ShieldCost 9000
    PowerPoints 12000
    ShieldHunger 100
-   GoldHunger 250
+   GoldHunger 25
    FoodHunger 0
    MaxMovePoints 10
    VisionRange 3
@@ -2397,6 +2387,9 @@ UNIT_LEVIATHON {
    CanBombard: Water
    CanBombard: Air
    CanSee: Standard
+   Defend: Land
+   Defend: Mountain
+   Defend: Water
    Defend: Air
    MovementType: Land
    Size: Large
@@ -2425,7 +2418,7 @@ UNIT_LONGSHIP {
    ShieldCost 630
    PowerPoints 600
    ShieldHunger 6
-   GoldHunger 6
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 1
@@ -2482,7 +2475,7 @@ UNIT_MACHINE_GUNNER {
    ShieldCost 1200
    PowerPoints 800
    ShieldHunger 12
-   GoldHunger 20
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -2541,7 +2534,7 @@ UNIT_MARINE {
    ShieldCost 1400
    PowerPoints 1000
    ShieldHunger 14
-   GoldHunger 14
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -2600,7 +2593,7 @@ UNIT_MOBILE_SAM {
    ShieldCost 2000
    PowerPoints 2000
    ShieldHunger 20
-   GoldHunger 40
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 3
@@ -2667,7 +2660,7 @@ UNIT_MOREY_STRIKER {
    ShieldCost 3500
    PowerPoints 100
    ShieldHunger 35
-   GoldHunger 70
+   GoldHunger 8
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 3
@@ -2699,6 +2692,7 @@ UNIT_MOREY_STRIKER {
    CanAttack: ShallowWater
    CanBombard: Water
    CanSee: Standard
+   Defend: Water
    MovementType: Sea
    MovementType: ShallowWater
    Size: Large
@@ -2727,7 +2721,7 @@ UNIT_MOUNTED_ARCHER {
    ShieldCost 340
    PowerPoints 100
    ShieldHunger 3
-   GoldHunger 3
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -2746,7 +2740,6 @@ UNIT_MOUNTED_ARCHER {
    CanPirate
    ExertsMartialLaw
    DeathEffectsHappy
-   IsFlanker
    IsMounted
    SoundSelect1 SOUND_SELECT1_MOUNTED_ARCHER
    SoundSelect2 SOUND_SELECT2_MOUNTED_ARCHER
@@ -2787,7 +2780,7 @@ UNIT_NUCLEAR_SUBMARINE {
    ShieldCost 1800
    PowerPoints 1850
    ShieldHunger 18
-   GoldHunger 50
+   GoldHunger 4
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 3
@@ -2857,7 +2850,7 @@ UNIT_NUKE {
    ShieldCost 4000
    PowerPoints 4000
    ShieldHunger 50
-   GoldHunger 50
+   GoldHunger 12
    FoodHunger 0
    MaxMovePoints 2000
    VisionRange 2
@@ -2972,7 +2965,7 @@ UNIT_PARATROOPER {
    ShieldCost 1400
    PowerPoints 2500
    ShieldHunger 14
-   GoldHunger 28
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 2
@@ -3031,7 +3024,7 @@ UNIT_PIKEMEN {
    ShieldCost 380
    PowerPoints 200
    ShieldHunger 4
-   GoldHunger 4
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 1
@@ -3094,7 +3087,7 @@ UNIT_PLASMA_DESTROYER {
    ShieldCost 4500
    PowerPoints 6000
    ShieldHunger 45
-   GoldHunger 100
+   GoldHunger 11
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 4
@@ -3120,7 +3113,7 @@ UNIT_PLASMA_DESTROYER {
    SoundVictory SOUND_VICTORY_PLASMA_DESTROYER
    SoundDeath SOUND_DEATH_PLASMA_DESTROYER
 
-   CanAttack: Air
+#   CanAttack: Air # why air?
    CanAttack: Sea
    CanAttack: Underwater
    CanAttack: ShallowWater
@@ -3129,7 +3122,7 @@ UNIT_PLASMA_DESTROYER {
    CanBombard: Water
    CanSee: Standard
    CanSee: Underwater
-   Defend: Air
+   Defend: Water
    MovementType: Sea
    MovementType: ShallowWater
    Size: Large
@@ -3158,7 +3151,7 @@ UNIT_SCOUT_SUB {
    ShieldCost 2500
    PowerPoints 100
    ShieldHunger 25
-   GoldHunger 75
+   GoldHunger 6
    FoodHunger 0
    MaxMovePoints 800
    VisionRange 6
@@ -3275,6 +3268,7 @@ UNIT_SETTLER {
    ShieldCost 740
    PowerPoints 400
    ShieldHunger 0
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 1
@@ -3328,7 +3322,7 @@ UNIT_SHIP_OF_THE_LINE {
    ShieldCost 1200
    PowerPoints 950
    ShieldHunger 12
-   GoldHunger 30
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -3391,7 +3385,7 @@ UNIT_SLAVER {
    ShieldCost 480
    PowerPoints 200
    ShieldHunger 5
-   GoldHunger 7
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -3507,7 +3501,7 @@ UNIT_SPACE_PLANE {
    ShieldCost 2250
    PowerPoints 4000
    ShieldHunger 25
-   GoldHunger 100
+   GoldHunger 6
    FoodHunger 0
    MaxMovePoints 1500
    VisionRange 1
@@ -3563,7 +3557,7 @@ UNIT_SPY {
    ShieldCost 860
    PowerPoints 1500
    ShieldHunger 8
-   GoldHunger 16
+   GoldHunger 2
    FoodHunger 0
    MaxMovePoints 300
    VisionRange 3
@@ -3644,7 +3638,7 @@ UNIT_SPY_PLANE {
    ShieldCost 2815
    PowerPoints 5000
    ShieldHunger 30
-   GoldHunger 90
+   GoldHunger 7
    FoodHunger 0
    MaxMovePoints 1000
    VisionRange 6
@@ -3672,7 +3666,7 @@ UNIT_SPY_PLANE {
    CanSee: Standard
    CanSee: Underwater
    MovementType: Air
-   Size: Medium
+   Size: Large
    VisionClass: Standard
 }
 
@@ -3693,7 +3687,7 @@ UNIT_STEALTH_BOMBER {
    ShieldCost 3375
    PowerPoints 6000
    ShieldHunger 35
-   GoldHunger 90
+   GoldHunger 8
    FoodHunger 0
    MaxMovePoints 1000
    VisionRange 4
@@ -3759,13 +3753,12 @@ UNIT_STEALTH_FIGHTER {
    ShieldCost 2815
    PowerPoints 4000
    ShieldHunger 30
-   GoldHunger 75
+   GoldHunger 7
    FoodHunger 0
    MaxMovePoints 1500
    VisionRange 4
    EnableAdvance ADVANCE_ADVANCED_COMPOSITES
-   CanCounterBombard
-   ActiveDefenseRange 1
+   ActiveDefenseRange 0
    EnableCarrierDefenses
    LossMoveToDmgNone
    NoFuelThenCrash
@@ -3792,7 +3785,6 @@ UNIT_STEALTH_FIGHTER {
    CanAttack: Sea
    CanAttack: ShallowWater
    CanSee: Standard
-   Defend: Air
    MovementType: Air
    Size: Medium
    VisionClass: Standard
@@ -3815,7 +3807,7 @@ UNIT_SUBMARINE {
    ShieldCost 1200
    PowerPoints 1500
    ShieldHunger 12
-   GoldHunger 40
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -3881,7 +3873,7 @@ UNIT_SWORDSMAN {
    ShieldCost 460
    PowerPoints 250
    ShieldHunger 5
-   GoldHunger 3
+   GoldHunger 1
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 1
@@ -3939,7 +3931,7 @@ UNIT_TANK {
    ShieldCost 2000
    PowerPoints 2000
    ShieldHunger 20
-   GoldHunger 40
+   GoldHunger 5
    FoodHunger 0
    MaxMovePoints 600
    VisionRange 3
@@ -3997,7 +3989,7 @@ UNIT_TELEVANGELIST {
    ShieldCost 1200
    PowerPoints 1000
    ShieldHunger 12
-   GoldHunger 100 #These guys are expensive
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 400
    VisionRange 2
@@ -4075,7 +4067,7 @@ UNIT_TROOP_SHIP {
    ShieldCost 1200
    PowerPoints 1200
    ShieldHunger 12
-   GoldHunger 20
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 2
@@ -4129,6 +4121,7 @@ UNIT_URBAN_PLANNER {
    ShieldCost 1200
    PowerPoints 100
    ShieldHunger 12
+   GoldHunger 3
    FoodHunger 0
    MaxMovePoints 200
    VisionRange 2
@@ -4187,7 +4180,7 @@ UNIT_WAR_WALKER {
    ShieldCost 3500
    PowerPoints 100
    ShieldHunger 35
-   GoldHunger 90
+   GoldHunger 8
    FoodHunger 0
    MaxMovePoints 500
    VisionRange 4
@@ -4220,9 +4213,10 @@ UNIT_WAR_WALKER {
    CanAttack: Air
    CanAttack: Land
    CanAttack: Mountain
+   CanBombard: Air
    CanBombard: Land
    CanBombard: Mountain
-   CanBombard: Air
+   CanBombard: Water
    CanSee: Standard
    Defend: Air
    MovementType: Land
@@ -4253,7 +4247,7 @@ UNIT_WARRIOR {
    ShieldCost 150
    PowerPoints 100
    ShieldHunger 1
-   GoldHunger 0 #you gotta afford something
+   GoldHunger 0
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 2

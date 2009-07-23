@@ -82,6 +82,7 @@ WONDER_EMANCIPATION_PROCLAMATION {
    EnableAdvance ADVANCE_AGE_OF_REASON
    ProductionCost 5760
    FreeSlaves
+   ProhibitSlavers
 }
 
 ############################################################

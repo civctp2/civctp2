@@ -1111,7 +1111,7 @@ Gives:
 [ADVANCE_HORSE_RIDING_GAMEPLAY]
 The domestication of horses and standardization of Horse Riding tactics opened up new opportunities in trade, combat and labor.  People can travel greater distances on horseback, improving the reach of their trade routes.
 
-The <L:DATABASE_UNITS,UNIT_MOUNTED_ARCHER>Mounted Archer<e> unit utilizes the speed and range of a horse allowing it flanking ability.<e>.
+The <L:DATABASE_UNITS,UNIT_MOUNTED_ARCHER>Mounted Archer<e> unit utilizes the speed of a horse allowing it to give ranged support to fast front line units.
 
 The <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_TRADING_POST>Trading Post<e> is a <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvement<e> that enables increased <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e> in a <L:DATABASE_CONCEPTS,CONCEPT_CITY>city<e>.
 [END]
@@ -2384,7 +2384,9 @@ Although the early Technocracy produced wondrous advances, it also produced a gr
 [END]
 
 [CONCEPT_ACTIVE_DEFENSE_GAMEPLAY]
-There are two types of Active Defense:  Anti-Air and Anti-Naval.  A unit with Active Defense automatically <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> any Unit of a specific type that comes within range.  Active Defense is a ranged attack, so the Unit does not put itself in danger when actively defending.
+There are three types of Active Defense:  Anti-Air, Anti-Naval and Anti-Land.  A unit with Active Defense automatically <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> any Unit of a specific type that comes within range.  Active Defense is a ranged attack, so the Unit does not put itself in danger when actively defending.
+
+The unit that is victim to an active defense attack cannot respond in any way while the attack is taking place.
 [END]
 
 [CONCEPT_ACTIVE_DEFENSE_HISTORICAL]
@@ -2475,6 +2477,15 @@ To control the distribution of wealth in an empire, players can set the <L:DATAB
 [CONCEPT_COMMERCE_HISTORICAL]
 [END]
 
+[CONCEPT_COUNTERBOMBARD_GAMEPLAY]
+A select number of <L:DATABASE_CONCEPTS,CONCEPT_UNITS>Units<e> in the game have the special counterbombard ability. When one of these units is <L:DATABASE_ORDERS,ORDER_BOMBARD>bombarded<e> by an enemy, it will immediately bombard back on the enemies turn.
+
+Note that counter-bombarding does not work when a counter-bombarding unit is victim to <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense<e>.
+[END]
+
+[CONCEPT_COUNTERBOMBARD_HISTORICAL]
+[END]
+
 [CONCEPT_CRIME_GAMEPLAY]
 When people feel that their needs are not met, they take matters into their own hands.  If this <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Unhappiness<e> reaches a certain level, the unfortunate by-product is criminal activity. 
 
@@ -2540,6 +2551,15 @@ If a player's empire is too large for the current <L:DATABASE_CONCEPTS,CONCEPT_G
 [END]
 
 [CONCEPT_EMPIRE_SIZE_HISTORICAL]
+[END]
+
+[CONCEPT_FLANKING_GAMEPLAY]
+A select number of <L:DATABASE_CONCEPTS,CONCEPT_UNITS>Units<e> in the game have the special flanking ability. When one of these units takes part in a battle, it will prefer to stand on the front line, but rather than stand in the middle to take the full frontal assault of attack and defensive units, it will try to position itself on either side of the front, to avoid direct fighting where it may be weak in defense. When it is the flanking unit's turn to attack, as opposed to regular front line attack units that will only attack when they have an opponent opposite them, flanking units will always attack any available unit on the enemy's front line.
+
+Flanking units then provide a useful advantage if you have superior numbers along the front line. Your regular front line attack units will assault the enemy's front line head on, while your flanking units will also attack the same targets at the same time, making for a much deadlier round of attack.
+[END]
+
+[CONCEPT_FLANKING_HISTORICAL]
 [END]
 
 [CONCEPT_FOOD_GAMEPLAY]
@@ -2636,6 +2656,8 @@ In Call To Power II, a city's industry can be converted to <L:DATABASE_CONCEPTS,
 Each Improvement has a Maintenance Cost, in <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>, which is extracted every turn from the treasury.  The more <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> required to build an Improvement, the more its Maintenance Cost will be when it is built.
 
 If the cost of <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>Improvement<e> maintenance in all <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> exceeds the amount of <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>  in the treasury, <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>Improvements<e> will automatically be sold until the treasury can pay for the total Maintenance Costs.  Once an <L:DATABASE_CONCEPTS,CONCEPT_IMPROVEMENTS>Improvement<e> is sold, its benefits (or drawbacks) no longer contribute to the city.
+
+If the rule is enabled, cities also have a maintenance cost. The cost is number of cities multiplied by your current government's maximum allowable cities. Thus the more advanced governments with higher maximum allowable cities will have much larger city maintenance costs.
 [END]
 
 [CONCEPT_MAINTENANCE_COST_HISTORICAL]
@@ -2862,6 +2884,8 @@ Players are wise to do everything they can to prevent Stealth Unit attacks.
 [CONCEPT_SUPPORT_COST_GAMEPLAY]
 Waging war is not without its price.  When a city builds a unit, the cost of that unit is measured in the <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> resources it takes to build it.  Once built, however, the unit incurs an additional cost of maintaining its health and training.  This Military Support cost is extracted from the total <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> output of an empire.  The larger the military, the more strain on <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> resources it has. 
 
+If the rule is enabled, units will also require wages, which is taken from your gold savings.
+
 Several things can affect Military Support costs, including <L:DATABASE_CONCEPTS,CONCEPT_GOVERNMENTS>Government<e> type, <L:DATABASE_CONCEPTS,CONCEPT_WONDERS>Wonders<e> and the <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> Setting.
 [END]
 
@@ -2936,6 +2960,8 @@ Consult the Units section of the Great Library for descriptions on each Unit.
 
 [CONCEPT_VETERANS_GAMEPLAY]
 When a military Unit survives a battle, it becomes a Veteran Unit.  This status bestows a small bonus to the Unit's <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e> capabilities.
+
+If "New Combat" is enabled unit's will also receive a defensive bonus in addition to an attack bonus.
 [END]
 
 [CONCEPT_VETERANS_HISTORICAL]
@@ -2963,6 +2989,19 @@ In order to achieve the conquest victory, you must conquer the world.  No empire
 [END]
 
 [CONCEPT_VICTORY_SCIENCE_GAMEPLAY]
+How to Win Through Science
+
+Only a truly advanced and careful leader can master the Science Victory. To succeed you must:
+
+1) Research 'Gaia Controller'
+2) Any player must complete the Wonder 'The Solaris Project'
+3) Build at least 10 Gaia Computer Cores and 10 Gaia Power Satellites
+4) Cover 60% of the map with Obelisks
+** This includes ocean area too. You may only build on territory controlled by you or an ally.
+** Building more Gaia Satellites than the minimum will increase the area of effect of each Obelisk. Max Satellites = 20.
+5) Initiate the Gaia Controller from the Science Victory screen
+6) Protect your cities and Obelisks for 10 turns
+
 Much of scientific research is in the pursuit of ways to improve the world, end its problems and make it more efficient.  Throughout Call To Power II, you will have the opportunity to research new scientific <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advances<e>, which will, in turn, give you and your people the access to better ways of living through art, culture, technology and understanding.  The <L:DATABASE_ADVANCES,ADVANCE_GAIA_CONTROLLER>Gaia Controller<e> is the culmination of more than six millennia of human determination, ingenuity and perseverance in the field of science.  A device that makes a limitless supply of energy available, its creation is the opening of a door to a true world utopia, free from want, conflict, scarcity and strife.  In order to achieve this magnificent creation, you must wind your way through the "technology tree" of scientific advances in the game.  Once you research the Gaia Controller advance, you will be able to build the <L:DATABASE_WONDERS,WONDER_THE_SOLARIS_PROJECT>Solaris Project<e>, a <L:DATABASE_CONCEPTS,CONCEPT_WONDERS>wonder of the world<e>.  Once the Solaris Project is built, the whole world can race to build the Gaia Controller.  The first nation to build all the components of the Gaia Controller wins the game.
 [END]
 
@@ -4889,8 +4928,7 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 [IMPROVE_CITY_WALLS_STATISTICS]
 Gives:
 +{BuildingDB(Building[0]).DefendersPercent / 100} City <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defense<e>
-Prevent {BuildingDB(Building[0]).PreventConversion}% attacks of Conversion
-Prevent {BuildingDB(Building[0]).PreventSlavery}% attacks of Slavery
+Prevents {BuildingDB(Building[0]).PreventConversion}% attacks of <L:DATABASE_ORDERS,ORDER_CONVERT>Conversion<e> and {BuildingDB(Building[0]).PreventSlavery}% of <L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Slave Raids<e>
 [END]
 
 [IMPROVE_CITY_WALLS_GAMEPLAY]
@@ -5163,7 +5201,6 @@ The rapid development of weapons and vehicle technology throughout the modern an
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 <L:DATABASE_BUILDINGS,IMPROVE_OIL_REFINERY>Oil Refinery<e>
-<L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>Kernkraftwerk<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
@@ -5187,6 +5224,7 @@ Fusion became the most environmentally clean power source the world had known.  
 [IMPROVE_GAIA_COMPUTER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GAIA_CONTROLLER>Gaia Controller<e>
+Anyone has built <L:DATABASE_WONDERS,WONDER_THE_SOLARIS_PROJECT>The Solaris Project<e> wonder
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
@@ -5198,6 +5236,8 @@ Required element for the <L:DATABASE_CONCEPTS,CONCEPT_VICTORY_SCIENCE>Gaia Contr
 
 [IMPROVE_GAIA_COMPUTER_GAMEPLAY]
 The Gaia Controller Core Improvement is an integral part of the Gaia Controller device.  Once there are Controller Cores in several <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>, they act as a distributed system, coordinating the Gaia Satellites and Obelisks in a grand-scale matter-to-energy conversion operation.  Controller Cores also process energy back into matter, giving <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> a limitless supply of raw materials.
+
+A minimum of 10 are required. Additional controller cores give no benefit.
 [END]
 
 [IMPROVE_GAIA_COMPUTER_HISTORICAL]
@@ -5303,7 +5343,7 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 
 [IMPROVE_MICRO_DEFENSE_STATISTICS]
 Gives:
-Protects against <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Nano-Attack<e> & <L:DATABASE_ORDERS,ORDER_BIO_INFECT>Infect City<e>
+Prevents {BuildingDB(Building[0]).ProtectFromNanoVirus}% of <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Nano-Attacks<e> & {BuildingDB(Building[0]).ProtectFromBioAgents}% of <L:DATABASE_ORDERS,ORDER_BIO_INFECT>Infect City<e> attacks.
 [END]
 
 [IMPROVE_MICRO_DEFENSE_GAMEPLAY]
@@ -5366,7 +5406,7 @@ Samuel L. Rothapfel, also known as "Roxy," was, more than anyone else, responsib
 [IMPROVE_NANITE_FACTORY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nano-Assembly<e>
-<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Fabrik<e>
+<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Factory<e>
 <L:DATABASE_BUILDINGS,IMPROVE_ROBOTIC_PLANT>Robotic Plant<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
@@ -5434,7 +5474,7 @@ Oil Refineries make available refined fossil fuels for consumption by machines. 
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SPACE_FLIGHT>Space Flight<e>
 <L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
-<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>Universität<e>
+<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>University<e>
 <L:DATABASE_BUILDINGS,IMPROVE_PUBLISHING_HOUSE>Publishing House<e>
 <L:DATABASE_BUILDINGS,IMPROVE_COMPUTER_CENTER>Computer Center<e>
 
@@ -5458,6 +5498,7 @@ As the advancement of science in the 21st century continued to gain momentum, re
 [IMPROVE_POWER_SATELLITE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GAIA_CONTROLLER>Gaia Controller<e>
+Anyone has built <L:DATABASE_WONDERS,WONDER_THE_SOLARIS_PROJECT>The Solaris Project<e> wonder
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
@@ -5469,6 +5510,8 @@ Required element for the <L:DATABASE_CONCEPTS,CONCEPT_VICTORY_SCIENCE>Gaia Contr
 
 [IMPROVE_POWER_SATELLITE_GAMEPLAY]
 Orbiting the Earth at high speed, the Gaia Satellites collect solar radiation and space debris, converts it to energy and beams it down to Obelisks on the ground below.  It is one of the three components of the Gaia Controller device. 
+
+A minimum of 10 are required, but a maximum of 20 can be built. The more satellites you build, the greater the radius of coverage each of your <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PROCESSING_TOWER>Obelisks<e> will give.
 [END]
 
 [IMPROVE_POWER_SATELLITE_HISTORICAL]
@@ -6753,6 +6796,7 @@ Ports are the nexus of commercial shipping in any city.  They increase the <L:DA
 [TILEIMP_PROCESSING_TOWER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GAIA_CONTROLLER>Gaia Controller<e>
+Anyone has built <L:DATABASE_WONDERS,WONDER_THE_SOLARIS_PROJECT>The Solaris Project<e> wonder
 [END]
 
 [TILEIMP_PROCESSING_TOWER_STATISTICS]
@@ -6762,6 +6806,8 @@ Requires:
 
 [TILEIMP_PROCESSING_TOWER_GAMEPLAY]
 Obelisks are one of three elements that make up the <L:DATABASE_BUILDINGS,IMPROVE_GAIA_COMPUTER>Gaia Controller<e> device.  They distribute the energy beamed down from Gaia Satellites to the Controller Cores.
+
+You must build a minimum of 5 obelisks. You can increase the radius of each obelisk by building more <L:DATABASE_BUILDINGS,IMPROVE_POWER_SATELLITE>Gaia Power Satellites<e>.
 [END]
 
 [TILEIMP_PROCESSING_TOWER_HISTORICAL]
@@ -6896,7 +6942,7 @@ Abilities:
 <L:DATABASE_ORDERS,ORDER_UNDERGROUND_RAILWAY>Frees Slaves<e>
 <L:DATABASE_ORDERS,ORDER_INCITE_UPRISING>Aids Uprisings<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
-Sees <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ABOLITIONIST_STATISTICS]
@@ -6911,14 +6957,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_ABOLITIONIST_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_UNDERGROUND_RAILWAY>Frees Slaves<e>
 <L:DATABASE_ORDERS,ORDER_INCITE_UPRISING>Aids Uprisings<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
-Sees <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ABOLITIONIST_GAMEPLAY]
@@ -6936,7 +6982,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_AVIATION>Naval Aviation<e>
 
 Abilities:
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 air units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 5 medium air units
+<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_STATISTICS]
@@ -6951,15 +6998,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 air units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 5 medium air units
+<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_GAMEPLAY]
 The Aircraft Carrier extends the range of air units by providing them with a mobile landing strip.  <L:DATABASE_UNITS,UNIT_FIGHTER>Fighters<e>, <L:DATABASE_UNITS,UNIT_INTERCEPTOR>Interceptors<e>, <L:DATABASE_UNITS,UNIT_BOMBER>Bombers<e>, <L:DATABASE_UNITS,UNIT_STEALTH_FIGHTER>Stealth Fighters<e> and <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER>Stealth Bombers<e> can both land on and launch from the Aircraft Carrier.
+
+Anti-Air active defense will only fire when the Carrier is carrying aircraft.
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_HISTORICAL]
@@ -6985,7 +7035,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_ARCHER_SUMMARY]
@@ -6994,6 +7044,8 @@ Ancient <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged<e> unit
 
 [UNIT_ARCHER_GAMEPLAY]
 The Archer is the first <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e> unit available in the game.  It is ideally suited to supporting foot soldiers and mounted units, as it can attack from a distance and avoid direct conflict with stronger enemy units.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MOUNTED_ARCHER>Mounted Archer<e>, <L:DATABASE_UNITS,UNIT_CAVALRY>Cavalry<e>, <L:DATABASE_UNITS,UNIT_TANK>Tank<e> and <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>.
 [END]
 
 [UNIT_ARCHER_HISTORICAL]
@@ -7005,7 +7057,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 [END]
 
 [UNIT_ARTILLERY_STATISTICS]
@@ -7020,15 +7072,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_ARTILLERY_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 [END]
 
 [UNIT_ARTILLERY_GAMEPLAY]
-Artillery is the most lethal Ranged Attack unit of the <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e>.  It is best suited to <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarding<e> enemy targets and supporting <L:DATABASE_UNITS,UNIT_TANK>Tanks<e> and <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunners<e>.  Though they pack a wallop from a distance, Artillery has weak defensive and close-range capabilities.
+Artillery is one of the most lethal Ranged Attack unit of the <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e>.  It is best suited to <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarding<e> enemy targets and supporting <L:DATABASE_UNITS,UNIT_TANK>Tanks<e> and <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunners<e>.  Though they pack a wallop from a distance, Artillery has weak defensive and close-range capabilities.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MOBILE_SAM>Mobile SAM<e> and <L:DATABASE_UNITS,UNIT_WAR_WALKER>War Walker<e>.
 [END]
 
 [UNIT_ARTILLERY_HISTORICAL]
@@ -7040,7 +7094,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ADV_NAVAL_TACTICS>Adv. Naval Tactics<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 [END]
 
 [UNIT_BATTLESHIP_STATISTICS]
@@ -7055,15 +7109,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_BATTLESHIP_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 [END]
 
 [UNIT_BATTLESHIP_GAMEPLAY]
 The Battleship rules the seas with superior <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e>, Ranged Attack and <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defensive<e> capabilities and can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> land or ocean targets from a distance.  It is unquestionably the most formidable naval combat unit of the <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>.
 [END]
 
 [UNIT_BATTLESHIP_HISTORICAL]
@@ -7078,7 +7134,8 @@ Requires:
 
 Abilities: 
 Can carry 1 <L:DATABASE_UNITS,UNIT_NUKE>Nuke<e> or <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missile<e>
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_BOMBER_STATISTICS]
@@ -7094,16 +7151,19 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_BOMBER_SUMMARY]
 Can carry 1 <L:DATABASE_UNITS,UNIT_NUKE>Nuke<e> or <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missile<e>
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_BOMBER_GAMEPLAY]
 The Bomber is the <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e> aerial support unit-of-choice.  Though its defensive capabilities are relatively weak, it has a powerful Ranged Attack. It can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> enemy targets as well.  It must <L:DATABASE_CONCEPTS,CONCEPT_FUEL>Refuel<e> every 5 turns.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER>Stealth Bomber<e>.
 [END]
 
 [UNIT_BOMBER_HISTORICAL]
@@ -7115,7 +7175,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Cannon Making<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land Units
 [END]
 
 [UNIT_CANNON_STATISTICS]
@@ -7130,15 +7190,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CANNON_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land Units
 [END]
 
 [UNIT_CANNON_GAMEPLAY]
 With its formidable Ranged Attack, the Cannon is a step above the <L:DATABASE_UNITS,UNIT_CATAPULT>Catapult<e> in the siege weapons category.  Use the Cannon to attack <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> and units from afar, but beware - weak defense and minimal close-range attack capabilities leave it vulnerable.  While Cannon can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> land based units and cities, they lack the range to <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> naval vessels.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_ARTILLERY>Artillery<e>, <L:DATABASE_UNITS,UNIT_MOBILE_SAM>Mobile SAM<e> and <L:DATABASE_UNITS,UNIT_WAR_WALKER>War Walker<e>.
 [END]
 
 [UNIT_CANNON_HISTORICAL]
@@ -7192,7 +7254,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CARGO_HELICOPTER_SUMMARY]
@@ -7212,7 +7274,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_OCEAN_FARING>Ocean Faring<e>
 
 Abilities:
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to three land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 3 small or medium land units
 [END]
 
 [UNIT_CARRACK_STATISTICS]
@@ -7227,15 +7289,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CARRACK_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to three land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 3 small or medium land units
 [END]
 
 [UNIT_CARRACK_GAMEPLAY]
 The Carrack is a large naval cargo vessel introduced in the <L:DATABASE_CONCEPTS,CONCEPT_RENAISSANCE_AGE>Renaissance Age<e>.  It is capable of transporting up to three land units across the ocean.  It is a step up from the <L:DATABASE_UNITS,UNIT_LONGSHIP>Longship<e> in both range and capacity.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_TROOP_SHIP>Troop Ship<e>.
 [END]
 
 [UNIT_CARRACK_HISTORICAL]
@@ -7251,7 +7315,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Shipbuilding<e>
 
 Abilities:
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> one land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 2 Small Land Units
 [END]
 
 [UNIT_CATAMARAN_STATISTICS]
@@ -7266,15 +7330,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CATAMARAN_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> one land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 2 Small Land Units
 [END]
 
 [UNIT_CATAMARAN_GAMEPLAY]
-The Coracle is the first naval <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> unit made available in the game and is, as such, integral to the expansion of your empire.  It is capable of transporting one land unit.  It is not a ship suited to <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> travel, however, and must stick to <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>.
+The Coracle is the first naval <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> unit made available in the game and is, as such, integral to the expansion of your empire.  It is capable of transporting two infantry units.  It is not a ship suited to <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> travel, however, and must stick to <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_LONGSHIP>Longship<e>, <L:DATABASE_UNITS,UNIT_CARRACK>Carrack<e> and <L:DATABASE_UNITS,UNIT_TROOP_SHIP>Troop Ship<e>.
 [END]
 
 [UNIT_CATAMARAN_HISTORICAL]
@@ -7286,7 +7352,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land Units
 [END]
 
 [UNIT_CATAPULT_STATISTICS]
@@ -7301,15 +7367,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CATAPULT_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land Units
 [END]
 
 [UNIT_CATAPULT_GAMEPLAY]
 The first <L:DATABASE_CONCEPTS,CONCEPT_RATIONS>Ranged Attack<e> unit to utilize the <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> capability, Catapults represent a fearsome advance in tactical combat.  Though effective at reducing small <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> to rubble, it suffers from poor defense and should be accompanied by a good offensive unit or two.  It also lacks sufficient range to bombard naval units, and should only be used to assault land targets.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_CANNON>Cannon<e>, <L:DATABASE_UNITS,UNIT_ARTILLERY>Artillery<e>, <L:DATABASE_UNITS,UNIT_MOBILE_SAM>Mobile SAM<e> and <L:DATABASE_UNITS,UNIT_WAR_WALKER>War Walker<e>.
 [END]
 
 [UNIT_CATAPULT_HISTORICAL]
@@ -7319,6 +7387,9 @@ The catapult was the one of the most effective siege weapons used in ancient and
 [UNIT_CAVALRY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Cavalry Tactics<e>
+
+Abilities:
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7333,15 +7404,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CAVALRY_SUMMARY]
-Renaissance Flanking unit
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_CAVALRY_GAMEPLAY]
 Cavalry excel at both <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e> and <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defense<e>.  They can move considerable distances and are well suited to expediently revealing unexplored areas of the map.  Try using them to escort slower moving ranged units, such as <L:DATABASE_UNITS,UNIT_CANNON>Cannon<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_TANK>Tank<e> and <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>.
 [END]
 
 [UNIT_CAVALRY_HISTORICAL]
@@ -7351,12 +7424,14 @@ The early 14th century development of gunpowder and armor-piercing bullets compl
 [UNIT_CLERIC_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
+<L:DATABASE_GOVERNMENTS,GOVERNMENT_THEOCRACY>Theocracy<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_CONVERT>Converts Cities<e>
 <L:DATABASE_ORDERS,ORDER_INDULGENCE>Sells Indulgences<e>
 <L:DATABASE_ORDERS,ORDER_SOOTHSAY>Soothsays<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CLERIC_STATISTICS]
@@ -7371,7 +7446,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CLERIC_SUMMARY]
@@ -7379,11 +7454,13 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 <L:DATABASE_ORDERS,ORDER_INDULGENCE>Sells Indulgences<e>
 <L:DATABASE_ORDERS,ORDER_SOOTHSAY>Soothsays<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
-Can only be built by <L:DATABASE_GOVERNMENTS,GOVERNMENT_THEOCRACY>Theocracy<e> 
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CLERIC_GAMEPLAY]
 The Cleric is a particularly insidious <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>, capable of silently extracting large sums of Gold from <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> eager for religion.  It can <L:DATABASE_ORDERS,ORDER_CONVERT>Convert Cities<e>, <L:DATABASE_ORDERS,ORDER_INDULGENCE>Sell Indulgences<e> and <L:DATABASE_ORDERS,ORDER_SOOTHSAY>Soothsay<e>.  Each of these actions carries a risk of infuriating the foreign empire's leader.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_TELEVANGELIST>Televangelist<e>.
 [END]
 
 [UNIT_CLERIC_HISTORICAL]
@@ -7398,6 +7475,7 @@ Abilities:
 <L:DATABASE_ORDERS,ORDER_ADVERTISE>Advertises<e>
 <L:DATABASE_ORDERS,ORDER_FRANCHISE>Establishes Franchises<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CORPORATE_BRANCH_STATISTICS]
@@ -7412,13 +7490,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CORPORATE_BRANCH_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ADVERTISE>Advertises<e>
 <L:DATABASE_ORDERS,ORDER_FRANCHISE>Establishes Franchises<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CORPORATE_BRANCH_GAMEPLAY]
@@ -7436,7 +7515,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Ultra-Pressure Machinery<e>
 
 Abilities: 
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 small or medium land units
+Underwater Unit
 [END]
 
 [UNIT_CRAWLER_STATISTICS]
@@ -7451,11 +7531,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CRAWLER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 5 small or medium land units
+Underwater Unit
 [END]
 
 [UNIT_CRAWLER_GAMEPLAY]
@@ -7469,6 +7550,10 @@ Using the same technology developed for constructing deep-water undersea colonie
 [UNIT_CRUISE_MISSILE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GUIDED_WEAPON_SYSTEMS>Guided Weapon Systems<e>
+
+Abilities:
+Can be carried by units that can transport missiles
+Single Use Weapon
 [END]
 
 [UNIT_CRUISE_MISSILE_STATISTICS]
@@ -7483,11 +7568,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CRUISE_MISSILE_SUMMARY]
 Can be carried by units that can transport missiles
+Single Use Weapon
 [END]
 
 [UNIT_CRUISE_MISSILE_GAMEPLAY]
@@ -7501,12 +7587,15 @@ In World War II, the Germans developed the V-1 missile, which was the precursor 
 [UNIT_CYBER_NINJA_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neural Interface<e>
+
 Abilities:
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Incites Revolutions<e>
 <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spies<e>
 <L:DATABASE_ORDERS,ORDER_STEAL_TECHNOLOGY>Steals Advances<e>
 <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Plants Nukes<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CYBER_NINJA_STATISTICS]
@@ -7521,7 +7610,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_CYBER_NINJA_SUMMARY]
@@ -7530,6 +7619,8 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 <L:DATABASE_ORDERS,ORDER_STEAL_TECHNOLOGY>Stealing Advances<e>
 <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Plants Nukes<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_CYBER_NINJA_GAMEPLAY]
@@ -7547,7 +7638,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea & Air Units
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
@@ -7563,16 +7654,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_DESTROYER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea & Air Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea & Air Units
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
 [UNIT_DESTROYER_GAMEPLAY]
 The Destroyer is a well-rounded naval assault unit.  Equally gifted in <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e>, <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e> and Defense, the Destroyer can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> naval targets and, more importantly, provide <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Support<e> for naval sorties.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>.
 [END]
 
 [UNIT_DESTROYER_HISTORICAL]
@@ -7588,11 +7681,15 @@ Requires:
 Abilities:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -7607,11 +7704,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_DIPLOMAT_GAMEPLAY]
 Whereas the <L:DATABASE_UNITS,UNIT_SETTLER>Settler<e> is crucial to the physical expansion of your empire, the Diplomat is crucial to the political and economic development of your nation.  The Diplomat can Establish Embassies in foreign cities to expand the diplomatic options available to the player.  They can also hold receptions in foreign cities to increase the host nation's <L:DATABASE_CONCEPTS,CONCEPT_REGARD>Regard<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e>.
 [END]
 
 [UNIT_DIPLOMAT_HISTORICAL]
@@ -7625,6 +7724,9 @@ The Greeks established many diplomatic conventions, including principles of inte
 [UNIT_DREADNAUGHT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SMART_MATERIALS>Smart Materials<e>
+
+Abilities:
+Underwater Unit
 [END]
 
 [UNIT_DREADNAUGHT_STATISTICS]
@@ -7639,11 +7741,11 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_DREADNAUGHT_SUMMARY]
-Extremely powerful Underwater unit
+Underwater Unit
 [END]
 
 [UNIT_DREADNAUGHT_GAMEPLAY]
@@ -7657,10 +7759,12 @@ The Dreadnaught was the most ingeniously designed military vehicle in history.  
 [UNIT_ECO_RANGER_PREREQ]
 Requires:
 <L:DATABASE_WONDERS,WONDER_THE_EDEN_PROJECT>The Eden Project<e>
+<L:DATABASE_GOVERNMENTS,GOVERNMENT_ECOTOPIA>Ecotopia<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_CREATE_PARK>Nanite Cleansing<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ECO_RANGER_STATISTICS]
@@ -7675,13 +7779,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_ECO_RANGER_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_CREATE_PARK>Nanite Cleansing<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
-Can only be built by <L:DATABASE_GOVERNMENTS,GOVERNMENT_ECOTOPIA>Ecotopia<e> government
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ECO_RANGER_GAMEPLAY]
@@ -7704,6 +7808,7 @@ Abilities:
 <L:DATABASE_ORDERS,ORDER_ASSASSINATE>Assassinates<e>
 <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Nano-Infects<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ECO_TERRORIST_STATISTICS]
@@ -7718,13 +7823,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_ECO_TERRORIST_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ASSASSINATE>Assassinates<e>
 <L:DATABASE_ORDERS,ORDER_NANO_INFECT>Nano-Infects<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_ECO_TERRORIST_GAMEPLAY]
@@ -7738,10 +7844,12 @@ The Ecotopian philosophy of radical environmentalism, comprised of a way of life
 [UNIT_EMPATHIC_DIPLOMAT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gene Therapy<e>
+
 Abilities:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
 See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_EMPATHIC_DIPLOMAT_STATISTICS]
@@ -7756,13 +7864,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_EMPATHIC_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
 See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_EMPATHIC_DIPLOMAT_GAMEPLAY]
@@ -7778,9 +7887,11 @@ On October 24, 2095, 150 years to the day after the establishment of the United 
 [UNIT_FASCIST_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
+<L:DATABASE_GOVERNMENTS,GOVERNMENT_FASCISM>Fascism<e> Government
 
 Abilities:
-Defends against <L:DATABASE_UNITS,UNIT_SPY>Spies<e>
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_FASCIST_STATISTICS]
@@ -7795,16 +7906,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_FASCIST_SUMMARY]
-Defends against <L:DATABASE_UNITS,UNIT_SPY>Spies<e>
-Can only be built by <L:DATABASE_GOVERNMENTS,GOVERNMENT_FASCISM>Fascism<e> government
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_FASCIST_GAMEPLAY]
 <L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e> thrives on unflagging dedication to the state and its ideals, no matter how destructive or extreme.  The Fascist is the foot soldier of this zealous and fanatic regime, fighting with unmatched ferocity.  No other <L:DATABASE_CONCEPTS,CONCEPT_GOVERNMENTS>Government<e> type is able to build the Fascist unit.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> and <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_FASCIST_HISTORICAL]
@@ -7836,17 +7949,19 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_FIGHTER_SUMMARY]
-Can land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_FIGHTER_GAMEPLAY]
 The Fighter is the first aerial combat unit available in the game.  The first empire to employ Fighters will have a tactical advantage, as they will be able to shrug off the limitations of land-based travel.
 
 The Fighter must refuel by landing in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>, at <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_AIR_BASES>Airbases<e> or on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carriers<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_INTERCEPTOR>Interceptor<e> and <L:DATABASE_UNITS,UNIT_STEALTH_FIGHTER>Stealth Fighter<e>.
 [END]
 
 [UNIT_FIGHTER_HISTORICAL]
@@ -7858,6 +7973,9 @@ During World War II, all-metal, propeller-engine fighters were capable of speeds
 [UNIT_FIRE_TRIREME_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ALCHEMY>Alchemy<e>
+
+Abilities:
++{UnitDB(UnitRecord[0]).WoodenShipBonus}% Attack Against Wooden Ships
 [END]
 
 [UNIT_FIRE_TRIREME_STATISTICS]
@@ -7872,15 +7990,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_FIRE_TRIREME_SUMMARY]
-Ancient offensive naval unit
++{UnitDB(UnitRecord[0]).WoodenShipBonus}% Attack Against Wooden Ships
 [END]
 
 [UNIT_FIRE_TRIREME_GAMEPLAY]
 The Fire Trireme is the most powerful naval unit of the <L:DATABASE_CONCEPTS,CONCEPT_ANCIENT_AGE>Ancient Age<e>.  It rams other ships, sprays them with liquid fire and leaves them crippled and burning.  It can also employ a <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_SHIP_OF_THE_LINE>Ship of the Line<e>, <L:DATABASE_UNITS,UNIT_IRONCLAD>Ironclad<e>, <L:DATABASE_UNITS,UNIT_BATTLESHIP>Battleship<e> and <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>.
 [END]
 
 [UNIT_FIRE_TRIREME_HISTORICAL]
@@ -7915,8 +8035,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e> 
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
-Sees <L:DATABASE_UNITS,UNIT_SUBMARINE>Submarines<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Sees Underwater Units
 [END]
 
 [UNIT_FRIGATE_STATISTICS]
@@ -7931,12 +8051,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_FRIGATE_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea Units
-Sees <L:DATABASE_UNITS,UNIT_SUBMARINE>Submarines<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Sees Underwater Units
 [END]
 
 [UNIT_FRIGATE_GAMEPLAY]
@@ -7955,6 +8075,7 @@ Requires:
 
 Abilities: 
 Can cross <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_FUSION_TANK_STATISTICS]
@@ -7969,11 +8090,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_FUSION_TANK_SUMMARY]
-Hover unit, can cross <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>
+Can cross <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_FUSION_TANK_GAMEPLAY]
@@ -8003,7 +8125,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_HOPLITE_SUMMARY]
@@ -8012,6 +8134,8 @@ Ancient defensive unit
 
 [UNIT_HOPLITE_GAMEPLAY]
 The Hoplite is an excellent defender.  One of the few units whose defensive capabilities exceed its attack strength, the Hoplite is ideal for <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e> <L:DATABASE_ORDERS,ORDER_FORTIFY>Fortification<e> in the <L:DATABASE_CONCEPTS,CONCEPT_ANCIENT_AGE>Ancient Age<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_PIKEMEN>Pikemen<e>, <L:DATABASE_UNITS,UNIT_INFANTRYMAN>Infantryman<e>, <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunner<e>, <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> and <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_HOPLITE_HISTORICAL]
@@ -8035,7 +8159,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_HOVER_INFANTRY_SUMMARY]
@@ -8067,7 +8191,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_INFANTRYMAN_SUMMARY]
@@ -8076,6 +8200,8 @@ Renaissance defensive unit
 
 [UNIT_INFANTRYMAN_GAMEPLAY]
 The Infantryman is equally skilled in all realms of combat.  Armed with his trusty musket, he is suited to strike forces as well as city <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Defense<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunner<e>, <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> and <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_INFANTRYMAN_HISTORICAL]
@@ -8092,6 +8218,7 @@ Abilities:
 <L:DATABASE_ORDERS,ORDER_BIO_INFECT>Infect City<e>
 <L:DATABASE_ORDERS,ORDER_PLAGUE>Plague<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_INFECTOR_STATISTICS]
@@ -8106,13 +8233,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_INFECTOR_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_BIO_INFECT>Infect City<e>
 <L:DATABASE_ORDERS,ORDER_PLAGUE>Plague<e>
 <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Unit<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_INFECTOR_GAMEPLAY]
@@ -8131,6 +8259,7 @@ Requires:
 
 Abilities:
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_INTERCEPTOR_STATISTICS]
@@ -8146,15 +8275,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_INTERCEPTOR_SUMMARY]
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_INTERCEPTOR_GAMEPLAY]
 The Interceptor is a ruthlessly efficient assault aircraft, capable of traveling great distances in a single turn.  It will actively defend against any air unit within its range.  Like its predecessor the <L:DATABASE_UNITS,UNIT_FIGHTER>Fighter<e>, the Interceptor must refuel by ending its turn at a <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_AIR_BASES>Airbase<e> or <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_STEALTH_FIGHTER>Stealth Fighter<e>.
 [END]
 
 [UNIT_INTERCEPTOR_HISTORICAL]
@@ -8168,7 +8300,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
 [END]
 
 [UNIT_IRONCLAD_STATISTICS]
@@ -8183,15 +8315,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_IRONCLAD_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
 [END]
 
 [UNIT_IRONCLAD_GAMEPLAY]
 The Ironclad is an improvement on the <L:DATABASE_UNITS,UNIT_SHIP_OF_THE_LINE>Ship-of-the-line<e>.  A wooden vessel attached with iron plates for defense, it combines the power of sails with a steam engine.  It can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> naval units, as well as <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e> and <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_BATTLESHIP>Battleship<e> and <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>.
 [END]
 
 [UNIT_IRONCLAD_HISTORICAL]
@@ -8205,6 +8339,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
 
 Abilities:
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
@@ -8220,16 +8355,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_KNIGHT_SUMMARY]
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
-Ancient flanking unit
 [END]
 
 [UNIT_KNIGHT_GAMEPLAY]
 The Knight is one of the most powerful early land units in the game.  It can travel great distances (but not over mountains) and attacks and defends better than any unit in the <L:DATABASE_CONCEPTS,CONCEPT_ANCIENT_AGE>Ancient Age<e>.  It is eventually out-classed by the <L:DATABASE_UNITS,UNIT_CAVALRY>Cavalry<e> unit.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_CAVALRY>Cavalry<e>, <L:DATABASE_UNITS,UNIT_TANK>Tank<e> and <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>.
 [END]
 
 [UNIT_KNIGHT_HISTORICAL]
@@ -8245,6 +8382,9 @@ The traditional knighthood saw a major decline in the 14th and 15th centuries.  
 [UNIT_KRAKEN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Genetic Tailoring<e>
+
+Abilities:
+Underwater Unit
 [END]
 
 [UNIT_KRAKEN_STATISTICS]
@@ -8259,7 +8399,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_KRAKEN_SUMMARY]
@@ -8268,6 +8408,8 @@ Genetic Age underwater unit
 
 [UNIT_KRAKEN_GAMEPLAY]
 The Kraken is a fearsome underwater assault unit.  It can attack <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Sea Colonies<e> and even vessels on the surface of the water.  It is the most powerful naval unit until the <L:DATABASE_UNITS,UNIT_DREADNAUGHT>Dreadnaught<e> becomes available.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_DREADNAUGHT>Dreadnaught<e>.
 [END]
 
 [UNIT_KRAKEN_HISTORICAL]
@@ -8281,6 +8423,7 @@ Requires:
 Abilities:
 <L:DATABASE_ORDERS,ORDER_INJOIN>Files Injunctions<e>
 <L:DATABASE_ORDERS,ORDER_SUE>Sues<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_LAWYER_STATISTICS]
@@ -8295,12 +8438,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_LAWYER_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_INJOIN>Files Injunctions<e>
 <L:DATABASE_ORDERS,ORDER_SUE>Sues<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_LAWYER_GAMEPLAY]
@@ -8318,8 +8462,10 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
-<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense vs. Air, Sea and Land<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
+<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense<e> vs. Land, Sea & Air
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_LEVIATHON_STATISTICS]
@@ -8334,12 +8480,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_LEVIATHON_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land, Sea & Air Units
-<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense vs. Air, Sea and Land<e><L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense vs. Air, Sea and Land<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
+<L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Active Defense<e> vs. Land, Sea & Air
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_LEVIATHON_GAMEPLAY]
@@ -8355,7 +8503,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hull Making<e>
 
 Abilities: 
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 2 land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 2 small or medium land units
 [END]
 
 [UNIT_LONGSHIP_STATISTICS]
@@ -8370,15 +8518,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_LONGSHIP_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 2 land units
+Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 2 small or medium land units
 [END]
 
 [UNIT_LONGSHIP_GAMEPLAY]
 Built to survive the punishment of the high seas, the Longship is a step above the <L:DATABASE_UNITS,UNIT_CATAMARAN>Coracle<e> in ocean transport.  Able to <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> two land units over even the deepest waters, the Longship also takes intercontinental exploration to a new level.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_CARRACK>Carrack<e> and <L:DATABASE_UNITS,UNIT_TROOP_SHIP>Troop Ship<e>.
 [END]
 
 [UNIT_LONGSHIP_HISTORICAL]
@@ -8402,15 +8552,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_MACHINE_GUNNER_SUMMARY]
-Modern offensive infantry unit
+Modern infantry unit
 [END]
 
 [UNIT_MACHINE_GUNNER_GAMEPLAY]
 The Machine Gunner is an excellent all-around land unit.  It is well suited to both assault teams and <L:DATABASE_ORDERS,ORDER_FORTIFY>Fortified<e> city defense.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> and <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_MACHINE_GUNNER_HISTORICAL]
@@ -8423,6 +8575,7 @@ Requires:
 
 Abilities:
 Amphibious Assault
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_MARINE_STATISTICS]
@@ -8437,15 +8590,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_MARINE_SUMMARY]
 Can attack immediately after unloading from naval transport vessels
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_MARINE_GAMEPLAY]
 What sets the Marine apart from the <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunner<e> is its ability to move and attack immediately after unloading from a Naval <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> vessel.  Whereas other infantry units must first land before beginning their assault, the Marine hits the ground running, striking targets with alacrity.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_MARINE_HISTORICAL]
@@ -8459,6 +8615,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
 
 Abilities:
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
@@ -8474,15 +8632,19 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_MOBILE_SAM_SUMMARY]
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
 [UNIT_MOBILE_SAM_GAMEPLAY]
 One of the most potent anti-aircraft weapons in the history of modern warfare, the Mobile Missile System provides Active Defense against any enemy aircraft within its range, and also heavy missile cover against ground targets.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_WAR_WALKER>War Walker<e>.
 [END]
 
 [UNIT_MOBILE_SAM_HISTORICAL]
@@ -8494,7 +8656,10 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GENETICS>Genetics<e>
 
 Abilities: 
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Naval Active Defense<e>
+Underwater Unit
 [END]
 
 [UNIT_MOREY_STRIKER_STATISTICS]
@@ -8509,11 +8674,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_MOREY_STRIKER_SUMMARY]
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Naval Active Defense<e>
+Underwater Unit
 [END]
 
 [UNIT_MOREY_STRIKER_GAMEPLAY]
@@ -8543,15 +8711,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_MOUNTED_ARCHER_SUMMARY]
-Ancient flanking unit
+Ancient mobile ranged unit
 [END]
 
 [UNIT_MOUNTED_ARCHER_GAMEPLAY]
 The Mounted Archer is an ideal unit to accompany <L:DATABASE_UNITS,UNIT_KNIGHT>Knights<e> and <L:DATABASE_UNITS,UNIT_SWORDSMAN>Samurai<e>.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_CAVALRY>Cavalry<e>, <L:DATABASE_UNITS,UNIT_TANK>Tank<e> and <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>.
 [END]
 
 [UNIT_MOUNTED_ARCHER_HISTORICAL]
@@ -8564,6 +8734,8 @@ Requires:
 
 Abilities:
 Can carry up to 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missiles<e> or <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Underwater Unit
 [END]
 
 [UNIT_NUCLEAR_SUBMARINE_STATISTICS]
@@ -8578,19 +8750,21 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_NUCLEAR_SUBMARINE_SUMMARY]
 Can carry up to 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missiles<e> or <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e>
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea Units
-
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Underwater Unit
 [END]
 
 [UNIT_NUCLEAR_SUBMARINE_GAMEPLAY]
 Powered by a nuclear reactor, the Nuclear Submarine is a considerable improvement on the standard <L:DATABASE_UNITS,UNIT_SUBMARINE>Submarine<e> unit.  It can travel great distances and go deeper than any preceding naval unit.  And, like a standard sub, it is capable of striking targets without detection.
 
 The <L:DATABASE_UNITS,UNIT_FRIGATE>PT Boat<e> is the only <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e> naval unit that is capable of detecting submarines.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_MOREY_STRIKER>Morey Striker<e>.
 [END]
 
 [UNIT_NUCLEAR_SUBMARINE_HISTORICAL]
@@ -8607,6 +8781,8 @@ Requires:
 
 Abilities:
 Destroys target and surrounding area.
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
+Single Use Weapon
 [END]
 
 [UNIT_NUKE_STATISTICS]
@@ -8621,11 +8797,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_NUKE_SUMMARY]
 Destroys target and reduces surrounding area to dead tiles.
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
+Single Use Weapon
 [END]
 
 [UNIT_NUKE_GAMEPLAY]
@@ -8646,6 +8824,7 @@ Requires:
 
 Abilities: 
 Air-Drop Assault
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_PARATROOPER_STATISTICS]
@@ -8660,15 +8839,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_PARATROOPER_SUMMARY]
-Can attack immediately after unloading from aerial transport vessels
+Can attack immediately after unloading from the <L:DATABASE_UNITS,UNIT_CARGO_HELICOPTER>Cargo Helicopter<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_PARATROOPER_GAMEPLAY]
 Paratroopers are particularly useful for strategic assaults behind enemy lines.  By loading them into the <L:DATABASE_UNITS,UNIT_CARGO_HELICOPTER>Cargo Helicopter<e>, players can move them to their destination, unload them and have them attack their target all within the same turn.  The <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> is the only other unit with this rapid strike capability, and it relies on naval transports.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_PARATROOPER_HISTORICAL]
@@ -8680,7 +8862,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
 
 Abilities:
-Defensive bonus vs. mounted units
++{UnitDB(UnitRecord[0]).MountedBonus}% Defense vs. Mounted Units
 [END]
 
 [UNIT_PIKEMEN_STATISTICS]
@@ -8695,15 +8877,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_PIKEMEN_SUMMARY]
-Defensive bonus vs. mounted units
++{UnitDB(UnitRecord[0]).MountedBonus}% Defense vs. Mounted Units
 [END]
 
 [UNIT_PIKEMEN_GAMEPLAY]
 The Pikeman is the bane of any mounted units' existence.  He is particularly adept at taking down <L:DATABASE_UNITS,UNIT_KNIGHT>Knights<e> and <L:DATABASE_UNITS,UNIT_MOUNTED_ARCHER>Mounted Archers<e> with the bladed polearm he wields.  Though lacking a <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e>, Pikemen are effective at both standard offense and defense.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_INFANTRYMAN>Infantryman<e>, <L:DATABASE_UNITS,UNIT_MACHINE_GUNNER>Machine Gunner<e>, <L:DATABASE_UNITS,UNIT_MARINE>Marine<e> and <L:DATABASE_UNITS,UNIT_HOVER_INFANTRY>Hover Infantry<e>.
 [END]
 
 [UNIT_PIKEMEN_HISTORICAL]
@@ -8715,8 +8899,9 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Naval Active Defense<e>
+Sees Underwater Units
 [END]
 
 [UNIT_PLASMA_DESTROYER_STATISTICS]
@@ -8731,12 +8916,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_PLASMA_DESTROYER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Naval Active Defense<e>
+Sees Underwater Units
 [END]
 
 [UNIT_PLASMA_DESTROYER_GAMEPLAY]
@@ -8752,7 +8938,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Fluid Breathing<e>
 
 Abilities:
-Sees Underwater Units
+Underwater Unit
 [END]
 
 [UNIT_SCOUT_SUB_STATISTICS]
@@ -8767,11 +8953,11 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SCOUT_SUB_SUMMARY]
-Sees Underwater Units
+Underwater Unit
 [END]
 
 [UNIT_SCOUT_SUB_GAMEPLAY]
@@ -8788,6 +8974,7 @@ Requires:
 
 Abilities:
 Creates <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Sea Colonies<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SEA_ENGINEER_STATISTICS]
@@ -8802,11 +8989,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SEA_ENGINEER_SUMMARY]
 Creates <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Sea Colonies<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SEA_ENGINEER_GAMEPLAY]
@@ -8823,6 +9011,7 @@ Nothing
 
 Abilities:
 Creates <L:DATABASE_CONCEPTS,CONCEPT_CITY>Land Cities<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SETTLER_STATISTICS]
@@ -8837,11 +9026,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SETTLER_SUMMARY]
 Creates <L:DATABASE_CONCEPTS,CONCEPT_CITY>Land Cities<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SETTLER_GAMEPLAY]
@@ -8859,7 +9049,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Naval Tactics<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
 [END]
 
 [UNIT_SHIP_OF_THE_LINE_STATISTICS]
@@ -8874,15 +9064,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SHIP_OF_THE_LINE_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
 [END]
 
 [UNIT_SHIP_OF_THE_LINE_GAMEPLAY]
 The Ship of the line is the most dominant wooden ship in the game.  Heavily laden with cannon, it is capable of destroying lesser ships with ruthless ferocity.  It is particularly effective at <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarding<e> naval units.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_IRONCLAD>Ironclad<e>, <L:DATABASE_UNITS,UNIT_BATTLESHIP>Battleship<e> and <L:DATABASE_UNITS,UNIT_PLASMA_DESTROYER>Plasma Destroyer<e>.
 [END]
 
 [UNIT_SHIP_OF_THE_LINE_HISTORICAL]
@@ -8896,7 +9088,9 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SLAVE_LABOR>Slave Labor<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Captures Slaves<e>
+<L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Slave Raids<e>
+Captures Settlers
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SLAVER_STATISTICS]
@@ -8911,11 +9105,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SLAVER_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Captures Slaves<e>
+<L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Slave Raids<e>
+Captures Settlers
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SLAVER_GAMEPLAY]
@@ -8931,8 +9127,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SPACE_FLIGHT>Space Flight<e>
 
 Abilities: 
-Sub-orbital launch
-<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 units
+Can <L:DATABASE_ORDERS,ORDER_SPACE_LAUNCH>Space Launch<e>
+<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 small or medium land units
 [END]
 
 [UNIT_SPACE_PLANE_STATISTICS]
@@ -8948,12 +9144,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SPACE_PLANE_SUMMARY]
-Sub-orbital launch
-<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 units
+Can <L:DATABASE_ORDERS,ORDER_SPACE_LAUNCH>Space Launch<e>
+<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 small or medium land units
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
@@ -8967,11 +9163,14 @@ In 2047, scientists at the National Aeronautical and Space Administration launch
 [UNIT_SPY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
+
 Abilities:
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Incites Revolutions<e>
 <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spies<e>
 <L:DATABASE_ORDERS,ORDER_PARADROP>Steals Advances<e>
 <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Plants Nukes<e>
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SPY_STATISTICS]
@@ -8986,7 +9185,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SPY_SUMMARY]
@@ -8994,10 +9193,14 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spies<e>
 <L:DATABASE_ORDERS,ORDER_PARADROP>Steals Advances<e>
 <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Plants Nukes<e>
+{UnitDB(UnitRecord[0]).DefendAgainstSpies}% Defense Against Spying
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SPY_GAMEPLAY]
 The Spy is a powerful <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e> with many special attacks at his disposal.  He can single-handedly <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Incite a Revolution<e> in a City.  He can <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spy<e>, revealing all the details of a particular city, including defenses and Production.  He can steal the secrets to <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advances<e> from rival empires. Perhaps most insidious of all, he can plant a nuke in a city
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber Ninja<e>.
 [END]
 
 [UNIT_SPY_HISTORICAL]
@@ -9013,6 +9216,9 @@ Much of World War I was fought on the basis of poor intelligence, due to the fac
 [UNIT_SPY_PLANE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>AI Surveillance<e>
+
+Abilities:
+Sees Underwater Units
 [END]
 
 [UNIT_SPY_PLANE_STATISTICS]
@@ -9028,11 +9234,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SPY_PLANE_SUMMARY]
 Advanced aerial reconnaissance unit
+Sees Underwater Units
 [END]
 
 [UNIT_SPY_PLANE_GAMEPLAY]
@@ -9048,8 +9255,9 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
-Carries 2 missiles
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
+Carries 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missiles<e> or <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e>
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_STEALTH_BOMBER_STATISTICS]
@@ -9065,12 +9273,13 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_STEALTH_BOMBER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land & Sea Units
 Can carry up to 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missiles<e> or <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e>
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_STEALTH_BOMBER_GAMEPLAY]
@@ -9084,6 +9293,9 @@ Developed in the 1980's and successfully tested during the Persian Gulf War, the
 [UNIT_STEALTH_FIGHTER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
+
+Abilities:
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_STEALTH_FIGHTER_STATISTICS]
@@ -9099,11 +9311,11 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_STEALTH_FIGHTER_SUMMARY]
-Advanced aerial combat unit
+Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
 [END]
 
 [UNIT_STEALTH_FIGHTER_GAMEPLAY]
@@ -9121,7 +9333,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Oil Refining<e>
 
 Abilities:
-Bombards 
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Underwater Unit
 [END]
 
 [UNIT_SUBMARINE_STATISTICS]
@@ -9136,17 +9349,18 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SUBMARINE_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Sea Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Sea Units
+Underwater Unit
 [END]
 
 [UNIT_SUBMARINE_GAMEPLAY]
 Submarines strike fear into the hearts of anyone on the surface of the ocean.  They lurk beneath the waves, launching torpedoes at unsuspecting vessels and laying waste to <L:DATABASE_CONCEPTS,CONCEPT_TRADE_ROUTE>Trade Routes<e> and navy flotillas.
 
-The Submarine is a <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth unit<e>.
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_NUCLEAR_SUBMARINE>Nuclear Submarine<e> and <L:DATABASE_UNITS,UNIT_MOREY_STRIKER>Morey Striker<e>.
 [END]
 
 [UNIT_SUBMARINE_HISTORICAL]
@@ -9173,11 +9387,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_SWORDSMAN_SUMMARY]
 Ancient offensive unit
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_SWORDSMAN_GAMEPLAY]
@@ -9191,6 +9406,9 @@ Samurai were the warrior class during the feudal period of Japanese history from
 [UNIT_TANK_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Tank Warfare<e>
+
+Abilities:
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_TANK_STATISTICS]
@@ -9205,15 +9423,17 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_TANK_SUMMARY]
-Modern Age flanking unit
+<L:DATABASE_CONCEPTS,CONCEPT_FLANKING>Flanking<e> Unit
 [END]
 
 [UNIT_TANK_GAMEPLAY]
 Superior <L:DATABASE_ORDERS,ORDER_ATTACK>Attack<e> and <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged Attack<e> capabilities make the Tank the most powerful <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Modern Age<e> land-based unit in the game.  Its versatility, speed and power comprise one of the most effective tools of military conquest you have at your command.
+
+<L:DATABASE_ORDERS,ORDER_UPGRADE>Upgrades<e> to <L:DATABASE_UNITS,UNIT_FUSION_TANK>Fusion Tank<e>.
 [END]
 
 [UNIT_TANK_HISTORICAL]
@@ -9227,6 +9447,7 @@ Abilities:
 <L:DATABASE_ORDERS,ORDER_CONVERT>Converts Cities<e>
 <L:DATABASE_ORDERS,ORDER_FAITH_HEALING>Faith Healing<e>
 <L:DATABASE_ORDERS,ORDER_SOOTHSAY>Soothsays<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_TELEVANGELIST_STATISTICS]
@@ -9241,14 +9462,14 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_TELEVANGELIST_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_CONVERT>Converts Cities<e>
 Performs <L:DATABASE_ORDERS,ORDER_FAITH_HEALING>Faith Healing<e>
 <L:DATABASE_ORDERS,ORDER_SOOTHSAY>Soothsays<e>
-Can only be built by <L:DATABASE_GOVERNMENTS,GOVERNMENT_THEOCRACY>Theocracy<e> 
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_TELEVANGELIST_GAMEPLAY]
@@ -9264,7 +9485,7 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 
 Abilities: 
-<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 Land units
+<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> 5 small or medium land units
 [END]
 
 [UNIT_TROOP_SHIP_STATISTICS]
@@ -9279,11 +9500,11 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_TROOP_SHIP_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> up to 5 Land units
+<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transports<e> 5 small or medium land units
 [END]
 
 [UNIT_TROOP_SHIP_GAMEPLAY]
@@ -9300,6 +9521,7 @@ Requires:
 
 Abilities:
 Creates Advanced <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_URBAN_PLANNER_STATISTICS]
@@ -9314,11 +9536,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_URBAN_PLANNER_SUMMARY]
 Creates Advanced <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>
+<L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
 [END]
 
 [UNIT_URBAN_PLANNER_GAMEPLAY]
@@ -9354,7 +9577,7 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_WARRIOR_SUMMARY]
@@ -9374,7 +9597,8 @@ Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CYBERNETICS>Cybernetics<e>
 
 Abilities:
-<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
@@ -9390,11 +9614,12 @@ Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
 Costs: {UnitDB(UnitRecord[0]).ShieldCost}
 Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
-Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+Support: {UnitDB(UnitRecord[0]).GoldHunger} Gold
 [END]
 
 [UNIT_WAR_WALKER_SUMMARY]
-Can <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombard<e> Land & Air Units
+<L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e> Land, Sea & Air Units
+Can <L:DATABASE_CONCEPTS,CONCEPT_COUNTERBOMBARD>Counter-Bombard<e>
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
 [END]
 
@@ -10481,11 +10706,11 @@ Costs:
 [WONDER_EMANCIPATION_PROCLAMATION_STATISTICS]
 Gives:
 Converts <L:DATABASE_CONCEPTS,CONCEPT_SLAVE>Slaves<e> to citizens worldwide 
-Causes revolts in slave-holding cities
+Eliminates <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e> worldwide
 [END]
 
 [WONDER_EMANCIPATION_PROCLAMATION_GAMEPLAY]
-The Emancipation Act is a major step forward in the struggle for human rights.  With its signing, all slaves the world over are immediately converted to citizen status.  The newly free citizens rise up against their former oppressors, rioting in all <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> on the map that employ <L:DATABASE_CONCEPTS,CONCEPT_SLAVE>Slaves<e>.
+The Emancipation Act is a major step forward in the struggle for human rights.  With its signing, all slaves the world over are immediately converted to citizen status.  The newly free citizens rise up against their former oppressors eliminating <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e> worldwide.
 [END]
 
 [WONDER_EMANCIPATION_PROCLAMATION_HISTORICAL]

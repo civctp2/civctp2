@@ -394,6 +394,8 @@ IMPROVE_FORCEFIELD {
    Description DESCRIPTION_IMPROVE_FORCEFIELD
    EnableAdvance ADVANCE_UNIFIED_PHYSICS
 
+   PrerequisiteBuilding IMPROVE_CITY_WALLS
+
    ProductionCost 10000
    Upkeep 20
    DefendersPercent 80
@@ -546,7 +548,7 @@ IMPROVE_NUCLEAR_PLANT {
    ProductionCost 4500
    Upkeep 12
    ProductionPercent 0.2
-   NuclearPlant
+#   NuclearPlant #dont destroy with nanite defuser
 }
 
 ############################################################

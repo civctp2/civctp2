@@ -1,4 +1,4 @@
-version 0.02
+version 0.03
 
 The "Apolyton Edition Mod" is the combined efforts of the posters at the Apolyton CtP2 sourcecode forum (http://www.apolyton.net/forums/forumdisplay.php?s=&forumid=213) to rebalance the game and improve the AI, while keeping as close to the original gameplay of CtP2 as possible.
 
@@ -6,16 +6,19 @@ AE Mod is based on the orignal Super Apolyton Pack 2.0 mod with some other tweak
 
 You can post any comments regarding this mod on the forum thread here: http://www.apolyton.net/forums/showthread.php?s=&threadid=165870
 
+
 REQUIREMENTS:
 =============
 
 Call to Power 2
 "Apolyton Edition" (AE) patch
 
+
 INSTALLATION:
 =============
 
 Extract the "AE_Mod" folder to your CtP2 "Scenarios" folder.
+
 
 GENERAL CHANGES:
 ================
@@ -25,6 +28,7 @@ diplomacy has been made slightly harder for human-to-AI, and slightly easier bet
 AI now builds more commerce improvements and farms, and no mines on flat land.
 trade is slightly more profitable and less caravans are required, like SAP2.
 
+
 ADVANCES:
 =========
 
@@ -33,14 +37,15 @@ changed:
 Fascism - requires Nationalism + Mass Media (was Gunpowder + Theology)
 Nationalism - removed Fascism as prerequisite
 
+
 BUILDINGS:
 ==========
 
 changed:
 
 aqua filter - maxpop +14 > maxpop +6
+nuclear plant - is now not destroyed/banned with nanite defuser wonder
 hospital - maxpop +0 > maxpop +8
-forcefield - now does not require city walls to build
 
 ---
 the following are the maximum city sizes where there is NO overcrowding effects:
@@ -64,6 +69,7 @@ with arcologies (requires aqueduct) +14
 with aqua filter (requires aqueduct and arcologies) +6
 *** with all above buildings maximum city size is 60.
 ---	
+
 
 TERRAIN:
 ========
@@ -89,6 +95,7 @@ dunes : explosives/explos. > NONE/explosives
 p.hill: explosives/explos. > NONE/explosives
 p.moun: fusion/fusion > NONE/fusion
 
+
 UNITS:
 ======
 
@@ -96,10 +103,17 @@ att/def/ran/damage/armour - moves/vision(cost/support) - advance - catagory
 
 changed:
 
+aircraft carrier - carry small or medium air > carry only medium air, so it can't carry missiles and nukes, otherwise a bunch of other units are obsolete.
+cargo helicopter - now transports only small rather than medium land units.
+coracle - can reform, can carry small or medium, 1 unit > cannot reform, can carry only small, but 2 units.
+cruise missile - increased firepower from 1 to 4, so it can actually damage something stronger than a warrior.
+eco ranger - now a stealth unit as it says in the GL.
 fascist - 25/35/15 > 35/40/20
 mobile SAM - bombards land, sea and air (not just air).
 sea engineer - settle size 1 > 3, now creates the buildings in a new city (like urban planner).
+spy plane - size medium > size large so it can't land on (and enable anti-air defence on) aircraft carriers.
 Televangelist - can be built by any government (before was just in Theocracy, and never got built).
+
 
 Upgrade paths:
 --------------
@@ -157,12 +171,14 @@ Spy Plane
 Urban Planner
 Warrior
 
+
 WONDERS:
 ========
 
 Aristotle's Lyceum - does not obsolete > obsolete at Classical Education.
 Central Matter Decompiler - "building everywhere"(Matter Decompiler), costs 20,000 > costs 30,000. (still needs better fix)
 Chichen Itza - does not obsolete > obsolete at Theology
+Emancipation Act - eliminates slavers worldwide again (like it did in the 1.1 patched game), also removed the GL text about making slave-holding cities revolt or riot, since this isn't true in either case (but we should look into making them riot).
 Field Dynamics Lab - +35% science > +10% science
 Genome Project - +10% prod., +10% health (+1HP) for units. > only +10% health for units.
 Globe Sat - costs 12,400, does not obsolete > costs 18,600, obsolete at Nano Machines.
@@ -175,3 +191,29 @@ The Appian Way - obsolete at Age of Reason > obsolete at Railroad
 The Eden Project - destroy 3 most polluting cities > destroy only 1.
 World Peace Center - added increase regard (+50%), as it says in GL. ("embassies even in war" may still be overpowered though)
 Zero Crime Bill - -60% crime > -30% crime, obsolete at Neural Reprogramming
+
+
+version history:
+================
+
+0.03:
+
+- fixed aircraft carrier carrying missiles
+- fixed cargo helicopter carrying medium sized units
+- fixed coracle reforming cities, and carrying medium sized units, also now carries 2
+- fixed cruise missile doing no damage to modern era units
+- eco ranger now stealth unit as the great library says
+- spy plane can no longer land on the aircraft carrier, and enable it's active-defence
+- emancipation act acts like 1.1 patched game again, banning/killing slavers worldwide
+- many updates to the great library (english only)
+
+0.02:
+
+- added upgrade paths from Apolyton Pack 2.0
+- tweaked wonders some more
+- given drug store and hospital overcrowding and max city size powers
+- moved fascism further in tech tree
+
+0.01:
+
+- modified mainly wonders and terrain
