@@ -25,6 +25,7 @@
 //
 // - Added m_optimizeSliderButton button for automatic slider optimization 
 //   option. Including a callback function. - April 7th 2005 Martin Gühmann
+// - Added more information to empire manager domestic tab. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -120,12 +121,17 @@ private:
 
 	
 	C3Slider		*m_foodRationsSpinner;
-	ctp2_Static		*m_foodRequired;
+	//ctp2_Static		*m_foodRequired;
 	ctp2_Static		*m_foodHappinessValue;
 	ctp2_Static		*m_foodCurValue;
 	ctp2_Static		*m_foodHappinessIcon;
 	
 	ctp2_Static		*m_detailsFoodTotal;
+	ctp2_Static		*m_detailsFoodTerrainTotal;
+	ctp2_Static		*m_detailsFoodFromBuildings;
+	ctp2_Static		*m_detailsFoodFarmers;
+	ctp2_Static		*m_detailsFoodFeatWonder;
+	ctp2_Static		*m_detailsFoodGovBonus;
 	ctp2_Static		*m_detailsFoodCrime;
 	ctp2_Static		*m_detailsFoodConsumed;
 	ctp2_Static		*m_detailsFoodSubTotal;
@@ -133,6 +139,7 @@ private:
 	
 	ctp2_Static		*m_summaryFoodTotal;
 	ctp2_Static		*m_summaryFoodConsumed;
+	ctp2_Static		*m_summaryFoodCrime;
 	ctp2_Static		*m_summaryFoodStored;
 
 
@@ -144,6 +151,13 @@ private:
 	ctp2_Static		*m_productionHappinessIcon;
 	
 	ctp2_Static		*m_detailsProductionTotal;
+	ctp2_Static		*m_detailsProdTerrainTotal;
+	ctp2_Static		*m_detailsProdWorkdayTotal;
+	ctp2_Static		*m_detailsProdFromBuildingsTotal;
+	ctp2_Static		*m_detailsProductionLaborersTotal;
+	ctp2_Static		*m_detailsProductionFeatWonderTotal;
+	ctp2_Static		*m_detailsProductionGovBonusTotal;
+	ctp2_Static		*m_detailsProductionFranchiseBioLoss;
 	ctp2_Static		*m_detailsProductionCrime;
 	ctp2_Static		*m_detailsProductionUnitUpkeep;
 	ctp2_Static		*m_detailsProductionSubTotal;
@@ -151,6 +165,9 @@ private:
 	ctp2_Static		*m_detailsProductionCityUse;
 	
 	ctp2_Static		*m_summaryProductionTotal;
+	ctp2_Static		*m_summaryProductionFranchiseBioLoss;
+	ctp2_Static		*m_summaryProductionUnitUpkeep;
+	ctp2_Static		*m_summaryProductionCrime;
 	ctp2_Static		*m_summaryProductionPublicWorks;
 	ctp2_Static		*m_summaryProductionCityUse;
 
@@ -161,17 +178,41 @@ private:
 	ctp2_Static		*m_commerceCurValue;
 	ctp2_Static		*m_commerceHappinessIcon;
 	
-	ctp2_Static		*m_detailsCommerceTotal;
-	ctp2_Static		*m_detailsCommerceCrime;
+	ctp2_Static		*m_detailsCommerceTerrain;
 	ctp2_Static		*m_detailsCommerceWages;
 	ctp2_Static		*m_detailsCommerceBuildingUpkeep;
-	ctp2_Static		*m_detailsCommerceSubTotal;
+	ctp2_Static		*m_detailsCommerceTotal;
+	ctp2_Static		*m_detailsCommerceScieCrime;
+	ctp2_Static		*m_detailsCommerceGoldCrime;
+	ctp2_Static		*m_detailsCommerceScienceBasic;
+	ctp2_Static		*m_detailsGoldFromCommerce;
+	ctp2_Static		*m_detailsCommerceScienceBuildings;
+	ctp2_Static		*m_detailsCommerceGoldBuildings;
+	ctp2_Static		*m_detailsCommerceScientistsScie;
+	ctp2_Static		*m_detailsCommerceFeatWonderScie;
+	ctp2_Static		*m_detailsCommerceMerchantsGold;
+	ctp2_Static		*m_detailsCommerceFeatWonderGold;
+	ctp2_Static		*m_detailsCommerceTradeGold;
+	ctp2_Static		*m_detailsCommerceConversionsGold;
+	ctp2_Static		*m_detailsCommerceScienceGov;
+	ctp2_Static		*m_detailsCommerceGoldGov;
+	ctp2_Static		*m_detailsCommerceScieSubTotal;
+	ctp2_Static		*m_detailsCommerceGoldSubTotal;
+	ctp2_Static		*m_detailsCommerceConvGoldLoss;
+	ctp2_Static		*m_detailsCommerceUnitWages;
 	ctp2_Static		*m_detailsCommerceScience;
 	ctp2_Static		*m_detailsCommerceSavings;
 	
 	ctp2_Static		*m_summaryCommerceTotal;
+	ctp2_Static		*m_summaryCommerceScieSubTotal;
+	ctp2_Static		*m_summaryCommerceGoldSubTotal;
+	ctp2_Static		*m_summaryCommerceConvGoldLoss;
+	ctp2_Static		*m_summaryCommerceUnitWages;
+	ctp2_Static		*m_summaryCommerceScieCrime;
+	ctp2_Static		*m_summaryCommerceGoldCrime;
 	ctp2_Static		*m_summaryCommerceScience;
 	ctp2_Static		*m_summaryCommerceSavings;
+	ctp2_Static		*m_summaryCommerceConversionsGold;
 
 	MBCHAR			m_ldlBlock[100];
 };

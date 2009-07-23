@@ -185,9 +185,10 @@ uint32 BldQue_BuildQueue_GetVersion(void)
 	return (k_BUILDQUEUE_VERSION_MAJOR<<16 | k_BUILDQUEUE_VERSION_MINOR) ;
 }
 
-
+// Loads a custom queue into a city.
 sint32 BuildQueue::Load(const MBCHAR *file)
 {
+
 	FILE * fpQueue = c3files_fopen(C3DIR_DIRECT, file, "r");
 	if (!fpQueue) return 0;
 
@@ -204,7 +205,8 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 	sint32 category = 0;
 	sint32 type = 0;
 	sint32 cost = 0;
-	while(!c3files_feof(fpQueue)) {
+	while(!c3files_feof(fpQueue))
+	{
 		
 		if(!c3files_fgets(buf, k_MAX_NAME_LEN, fpQueue))
 			continue;
@@ -212,10 +214,12 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 		buf[strlen(buf) - 1] = 0; 
 
 		
-		switch(buf[0]) {
+		switch(buf[0])
+		{
 			case 'U':
 				category = k_GAME_OBJ_TYPE_UNIT;
-				if(!g_theUnitDB->GetNamedItem(&buf[2], type)) {
+				if(!g_theUnitDB->GetNamedItem(&buf[2], type))
+				{
 					Assert(FALSE);
 					continue;
 				}
@@ -223,7 +227,8 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 				break;
 			case 'B':
 				category = k_GAME_OBJ_TYPE_IMPROVEMENT;
-				if(!g_theBuildingDB->GetNamedItem(&buf[2], type)) {
+				if(!g_theBuildingDB->GetNamedItem(&buf[2], type))
+				{
 					Assert(FALSE);
 					continue;
 				}
@@ -247,7 +252,8 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 				break;
 			case 'W':
 				category = k_GAME_OBJ_TYPE_WONDER;
-				if(!g_theWonderDB->GetNamedItem(&buf[2], type)) {
+				if(!g_theWonderDB->GetNamedItem(&buf[2], type))
+				{
 					Assert(FALSE);
 					continue;
 				}
@@ -1108,6 +1114,7 @@ void BuildQueue::RawInsertTail(sint32 cat, sint32 t, sint32 cost)
 	m_list->AddTail(newNode);
 }
 
+// This is not used.
 void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 { 
 	BuildNode * oldHead = m_list->GetHead();
@@ -1791,7 +1798,7 @@ void BuildQueue::MoveNodeUp(sint32 index)
 	}
 
     SynchroniseNetworkData();
-	}
+}
 
 void BuildQueue::MoveNodeDown(sint32 index)
 {
@@ -1810,7 +1817,7 @@ void BuildQueue::MoveNodeDown(sint32 index)
 	}
 
     SynchroniseNetworkData();
-	}
+}
 
 bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
 {
@@ -1898,4 +1905,3 @@ void BuildQueue::SynchroniseNetworkData(void) const
 	}
 	// else: No action: Single player game.
 }
-

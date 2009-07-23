@@ -34,6 +34,7 @@
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 // - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin Gühmann)
 // - Separated the Settle event from the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added stuff for unit and city gold support. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -227,6 +228,8 @@ STDEHANDLER(BeginTurnSupportEvent)
 	Player *p = g_player[player];
 
 	p->BeginTurnWonders();
+	p->BeginTurnCommodityMarket();
+	p->BeginTurnUnitSupportGold();
 	p->BeginTurnScience();
 
 	return GEV_HD_Continue;

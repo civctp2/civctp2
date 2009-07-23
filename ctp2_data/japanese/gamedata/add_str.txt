@@ -105,6 +105,7 @@ str_ldl_CityWinStatisticsTab "ó‘Ô"
 #str_code_CityWinTotalHappinessFormat "Total: %d"
 
 str_code_QueryRebuildCapitol "–{“–‚És­•{‚ğˆÚ“]‚µ‚Ü‚·‚©H"
+str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
 
 # Trade manager strings
 str_ldl_TradeManagerCities "“ss‚Ì•\¦:"

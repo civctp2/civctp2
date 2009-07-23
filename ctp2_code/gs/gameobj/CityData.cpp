@@ -203,6 +203,10 @@
 //   victory race has started. (01-Jul-2009 Maq)
 // - When a city is settled in foreign territory, its the national borders
 //   will expand as they should be. (13-Jul-2009 Martin Gühmann)
+// - Changed science formula to deduct crime after the government coefficient
+//   like all other resources. (22-Jul-2009 Maq)
+// - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
+// - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -237,6 +241,7 @@
 #include "DifficultyRecord.h"
 #include "Diplomat.h"                   // To be able to retrieve the current strategy
 #include "director.h"                   // g_director
+#include "EditQueue.h"
 #include "Exclusions.h"
 #include "FeatTracker.h"
 #include "gaiacontroller.h"				// To check buildings needed for science victory
@@ -378,12 +383,14 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_city_attitude                     (CITY_ATTITUDE_CONTENT),
 	m_collected_production_this_turn    (0),
 	m_gross_production                  (0),
+    m_gross_prod_before_bonuses         (0),
 	m_net_production                    (0),
 	m_production_lost_to_crime          (0),
 	m_built_improvements                (0),
 	m_builtWonders                      (0),
 	m_food_delta                        (0.0),
 	m_gross_food                        (0.0),
+    m_gross_food_before_bonuses         (0.0),
 	m_net_food                          (0.0),
 	m_food_lost_to_crime                (0.0),
 	m_food_consumed_this_turn           (0.0),
@@ -1099,6 +1106,8 @@ void CityData::Copy(CityData *copy)
 	memcpy(m_distanceToGood, copy->m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 	m_defensiveBonus = copy->m_defensiveBonus;
 
+	m_shieldstore = copy->m_shieldstore;
+
 	memcpy(m_ringFood,  copy->m_ringFood,  sizeof(sint32) * g_theCitySizeDB->NumRecords());
 	memcpy(m_ringProd,  copy->m_ringProd,  sizeof(sint32) * g_theCitySizeDB->NumRecords());
 	memcpy(m_ringGold,  copy->m_ringGold,  sizeof(sint32) * g_theCitySizeDB->NumRecords());
@@ -1787,12 +1796,13 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 	gross_production += ceil(gross_production *
 	                        (wonderutil_GetIncreaseProduction(g_player[m_owner]->m_builtWonders) * 0.01));
 
-	gross_production = ceil(gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
-
+    // Moved this above gov coefficient so laborers are included, so they work like all the other specialists.
 	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_LABORER] >= 0){
 		gross_production += LaborerCount() *
 			g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
 	}
+
+	gross_production = ceil(gross_production * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef());
 
 //EMOD Civilization bonuses
 //	gross_production += ceil(gross_production * g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation(), m_government_type)->GetProductionPercent());
@@ -2344,6 +2354,11 @@ void CityData::CollectResources()
 	
 	m_collected_production_this_turn = m_gross_production;
 	m_net_production = m_gross_production;
+	// Added for new Empire Manager details
+    m_gross_food_before_bonuses = m_gross_food;
+	m_gross_prod_before_bonuses = m_gross_production;
+	//m_gross_gold_before_bonuses = m_gross_gold;// raw commerce has no bonuses
+	// End - Added for new Empire manager details
 	m_net_food = m_gross_food;
 	m_net_gold = m_gross_gold;
 #endif
@@ -2659,8 +2674,15 @@ double CityData::ProcessFood(sint32 food) const
 	
 	///////////////////////////////////////////////
 	// Apply wonder boni
-	grossFood += grossFood * (wonderutil_GetIncreaseFoodAllCities(
-	                   g_player[m_owner]->m_builtWonders) / 100.0);
+
+	// @MartinG - I changed this because the original was also changed,
+	// to match the great library description of the Penicillin wonder.
+	// Which is to increase food by 30 units, not by 30%.
+	//grossFood += grossFood * (wonderutil_GetIncreaseFoodAllCities(
+	//                   g_player[m_owner]->m_builtWonders) / 100.0);
+
+	grossFood += wonderutil_GetIncreaseFoodAllCities(
+	                   g_player[m_owner]->m_builtWonders);
 
 	///////////////////////////////////////////////
 	// Add food from citizen
@@ -2974,10 +2996,9 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 	double foodBonus;
 	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus, m_owner);
 	grossFood += producedFood * foodBonus;
-	
-	grossFood += ceil(grossFood * 
-		static_cast<double>(wonderutil_GetIncreaseFoodAllCities(
-			g_player[m_owner]->m_builtWonders) / 100.0));
+
+	grossFood += wonderutil_GetIncreaseFoodAllCities(
+			g_player[m_owner]->m_builtWonders);
 
 	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_FARMER] >= 0) {
 		grossFood += FarmerCount() *
@@ -3594,8 +3615,8 @@ sint32 CityData::CalculateGoldFromResources()
 //
 // Name       : CityData::SupportBuildings
 //
-// Description: Pays the building support costs and sells buildings if
-//              necessary.
+// Description: Pays the building and city support costs and sells buildings
+//				if necessary.
 //
 // Parameters : projectedOnly: Whether costs should be paid or just be
 //                             estimated.
@@ -3610,6 +3631,9 @@ sint32 CityData::CalculateGoldFromResources()
 sint32 CityData::SupportBuildings(bool projectedOnly)
 {
 	sint32     buildingUpkeep = GetSupportBuildingsCost();
+
+	// City maintenance cost.
+	buildingUpkeep += GetSupportCityCost();
 
 	//EMOD notadd upkeep per city
 	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(GetEffectiveBuildings(), m_owner);
@@ -3676,6 +3700,43 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
     }
 
 	return buildingUpkeep;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetSupportCityCost
+//
+// Description: Each city costs the city's population in commerce (not gold).
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : Commerce to support the city.
+//
+// Remark(s)  : This is added to the buildings support cost in
+//				CityData::SupportBuildings.
+//				diffDB.txt entry takes precedence over userprofile.txt entry
+//				to enable this rule.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::GetSupportCityCost() const
+{
+	sint32 commerce = 0;
+	sint32 goldPerCity = 0;
+
+	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerCity(goldPerCity))
+	{
+		commerce = goldPerCity * PopCount();
+		return commerce;
+	}
+
+	if (g_theProfileDB->IsGoldPerCity()) {
+		commerce = PopCount();
+		return commerce;
+	}
+
+	return commerce;
 }
 
 //----------------------------------------------------------------------------
@@ -4469,6 +4530,7 @@ void CityData::AddWonder(sint32 type)
 
 }
 
+// Not used.
 bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 {
 	m_buildInfrastructure = FALSE;
@@ -4601,6 +4663,7 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		                  );
 
 		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * penalty);
+
 	}
 
 	return true;
@@ -5538,9 +5601,84 @@ bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 
 sint32 CityData::LoadQueue(const MBCHAR *file)
 {
+	m_build_category_before_load_queue = GetBuildQueue()->GetHead()->m_category;
+
 	sint32 r = m_build_queue.Load(file);
+
 	m_build_queue.SetOwner(m_owner);
+
+	// Get new queue top item
+	sint32 newCat = GetBuildQueue()->GetHead()->m_category;
+	if (newCat != GetBuildCategoryBeforeLoadQueue()
+		&& GetStoredCityProduction() > 0)
+	{
+		CheckSwitchProductionPenalty(newCat);
+	}
+
 	return r;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CheckSwitchProductionPenalty
+//
+// Description: Deduct shields stored when top production item was switched
+//				to a different type.
+//
+// Parameters : newCat - Set the category of the new item that is the top of
+//				the queue, so we can find it next time.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CityData::CheckSwitchProductionPenalty(sint32 newCat)
+{
+	// Deduct shields from build manager city data if it's open.
+	// Shields also deducted from city data kept in city control panel,
+	// since the build manager city data is not copied to there.
+	EditQueue* eqWindow = EditQueue::GetEditQueueWindow();
+	CityData* cityData = eqWindow ? eqWindow->GetCityData() : NULL;
+
+	if (GetStoredCityProduction() > 0)
+	{
+		sint32 s = 0;
+
+		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
+		
+		penalty = std::min
+						  (
+						   1.0,
+						   std::max(0.0, 1.0 - penalty * 0.01)
+						  );
+
+		s = static_cast<sint32>(static_cast<double>(GetStoredCityProduction()) * penalty);
+
+		// Update build manager city data if possible.
+		if(cityData != NULL && cityData->GetHomeCity() == m_home_city)
+		{
+			cityData->SetShieldstore(s);
+			cityData->SetBuildCategoryAtBeginTurn(newCat);
+		}
+
+		SetShieldstore(s);
+		SetBuildCategoryAtBeginTurn(newCat);
+	}
+	else
+	{
+		// Set this even for cities with no shields stored,
+		// so we know the last item type the next time a switch happens.
+
+		// Update build manager city data if possible.
+		if(cityData != NULL && cityData->GetHomeCity() == m_home_city)
+		{
+			cityData->SetBuildCategoryAtBeginTurn(newCat);
+		}
+		SetBuildCategoryAtBeginTurn(newCat);
+	}
 }
 
 sint32 CityData::SaveQueue(const MBCHAR *file)
@@ -5771,7 +5909,7 @@ void CityData::BuildWhat() const
 #endif
 }
 
-// Used?
+// Used? - Yes.
 sint32 CityData::HowMuchLonger() const
 {
 	if(m_build_queue.GetLen() < 1)
@@ -5807,7 +5945,7 @@ sint32 CityData::HowMuchLonger() const
 	return turns_remaining;
 }
 
-// Used?
+// Used? - Yes.
 sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 {
 	sint32 prod_remaining = productionRemaining;
@@ -7007,6 +7145,8 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 {
 	double sci = 0.0;
 
+
+	// Shouldn't this stuff be under !considerOnlyFromTerrain ?
 	double popWonderModifier = static_cast<double>(wonderutil_GetIncreaseScientists(m_builtWonders));
 	popWonderModifier += static_cast<double>(wonderutil_GetIncreaseSpecialists(g_player[m_owner]->m_builtWonders));
 	
@@ -7134,9 +7274,8 @@ sint32 CityData::GetFinalProductionFromLaborers() const
 
 		const GovernmentRecord *gov = g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
 		double beforecrime = LaborerCount() * 
-					  g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction();
-		//NOTE: Labourers are not subject to government modifiers - strange considering the other specialists.
-		//NOTE2: They are subject to crime, franchise and bio infection losses though.
+					  (g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction()
+					  * gov->GetProductionCoef());
 
 		sint32 crimeLoss, specialLoss;
 
@@ -8485,10 +8624,12 @@ void CityData::DoSupport(bool projectedOnly)
 	if (g_player[m_owner])
     {
 	    (void) PayWages(projectedOnly);
+		// City maintenance is included in this already:
 	    (void) SupportBuildings(projectedOnly);
     }
 }
 
+// Added possible city maintenance.-Maq
 sint32 CityData::GetSupport() const
 {
 	Assert(g_player[m_owner]);
@@ -8496,7 +8637,7 @@ sint32 CityData::GetSupport() const
 		return 0;
 
 	return CalcWages(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()))
-            + GetSupportBuildingsCost();
+            + GetSupportBuildingsCost() + GetSupportCityCost();
 }
 
 #if !defined(NEW_RESOURCE_PROCESS)
@@ -8517,7 +8658,7 @@ sint32 CityData::GetSupport() const
 //----------------------------------------------------------------------------
 void CityData::SplitScience(bool projectedOnly)
 {
-	SplitScience(projectedOnly, m_net_gold, m_science);
+	SplitScience(projectedOnly, m_net_gold, m_science, m_scie_lost_to_crime);
 }
 
 //----------------------------------------------------------------------------
@@ -8530,6 +8671,7 @@ void CityData::SplitScience(bool projectedOnly)
 //              gold:                    Amount of gross gold.
 //              science:                 Filled with the amount of science
 //                                       generated here.
+//				scieCrime				 Filled with science lost to crime.
 //              considerOnlyFromTerrain: Whether scientists should be considered.
 //
 // Globals    : g_player:            List of players
@@ -8540,7 +8682,7 @@ void CityData::SplitScience(bool projectedOnly)
 //              Use this function for estimations.
 //
 //----------------------------------------------------------------------------
-void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, bool considerOnlyFromTerrain) const
+void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, sint32 &scieCrime, bool considerOnlyFromTerrain) const
 {
 	if (g_player[m_owner]==NULL)
 		return;
@@ -8559,13 +8701,18 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, b
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s, m_owner);
 	science += static_cast<sint32>(ceil(science * s));
 
+	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, m_owner);
+	science += ceil(science * (static_cast<double>(featPercent) / 100.0));
+
 	double ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
 	science += static_cast<sint32>(ceil(science * ws));
 
 	science += GetScienceFromPops(considerOnlyFromTerrain);
-	
-	science -= CrimeLoss(science);
+
 	science = static_cast<sint32>(ceil(science * g_player[m_owner]->GetKnowledgeCoef()));
+
+	scieCrime = CrimeLoss(science);
+	science -= scieCrime;
 
 //	Just clutters debug log, if you need this kind of information uncomment this.
 //	DPRINTF(k_DBG_GAMESTATE, ("SplitScience: %lx: %d, %lf, %lf, %d, %lf, %lf\n", m_home_city.m_id, science,
@@ -8752,7 +8899,6 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
 	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
 	
-
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings(), m_owner);
@@ -8762,7 +8908,6 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings(), m_owner);
 	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
-	
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
@@ -10791,3 +10936,4 @@ void CityData::AddCitySlum()
 		}
 	}
 }
+

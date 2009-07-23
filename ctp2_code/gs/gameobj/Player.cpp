@@ -118,7 +118,10 @@
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
 // - When contact is made the players' regard is recomputed, so that you
 //   cannot establish good relationships so easily. (01-Jun-2009 Martin Gühmann)
-// -Added GovernmentOnly for Units functionality.(21-Jul-2009 EPW)
+// - Added GovernmentOnly for Units functionality.(21-Jul-2009 EPW)
+// - Added stuff for unit and city gold support. And changed formulas for unit
+//   gold support and city maintenance. (22-Jul-2009 Maq)
+//
 //----------------------------------------------------------------------------
 //
 // Notes
@@ -1701,9 +1704,6 @@ void Player::BeginTurnScience()
 		totalScience += m_all_cities->Access(i).CD()->GetScience();
 	}
 
-	totalScience += sint32(double(totalScience) * 
-										   (double(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, m_owner)) / 100.0));
-
 	sint32 pactScience = 
 		Science::ComputeScienceFromResearchPacts(m_owner);
 
@@ -2043,14 +2043,22 @@ void Player::BeginTurnUnits()
 void Player::BeginTurnWonders()
 {
 	m_gold->AddGold(CalcWonderGold());
-
-//  moved these to beginturn since they weren't calculated
-//	m_gold->AddGold(CommodityMarket());  //emod for calculating commodities should it be in profileDB?
-// 	m_gold->SubGold(CalcSupportGold()); //changed
 	
 	g_theWonderTracker->RecomputeIsBuilding(m_owner);
 }
 
+void Player::BeginTurnUnitSupportGold()
+{
+	m_gold->SubGold(CalcUnitSupportGold());
+}
+
+void Player::BeginTurnCommodityMarket()
+{
+	m_gold->AddGold(CommodityMarket());
+}
+
+// This is only used for projecting whether the player will run out of
+// gold, to send them a warning message.
 sint32 Player::CalcTotalBuildingUpkeep()
 {
 	sint32 i, n;
@@ -2063,8 +2071,16 @@ sint32 Player::CalcTotalBuildingUpkeep()
 		bu += buildingutil_GetTotalUpkeep(c->GetImprovements(),
 		                                  wonderLevel, m_owner);
 
+		// Add city maintenance to this projection.
+		bu += c->CD()->GetSupportCityCost();
+
+		/* Why did E apply the support modifier to building maintenance projections?
+		Removed for now until there is good reason to put it back.-Maq
+
 		// EMOD add new readiness modifier for buildings here?
  		bu *= GetSupportModifier();
+
+		*/
 
 	}
 
@@ -2137,32 +2153,20 @@ sint32 Player::CalcWonderGold()
 			}
 		}
 	}
-	//end EMOD
 
-	//EMOD to make unit maintenance and city maintenance a difficulty option instead of a building option
-	sint32 goldPerUnitSupport;
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport)
-	&& IsHuman()
-	){
-		totalWonderGold += goldPerUnitSupport * m_readiness->TotalUnitGoldSupport() * GetWagesPerPerson()
-			                                  * m_readiness->GetSupportModifier(m_government_type);
-	}
-
+	/* This is now retrieved from CityData::GetSupportCityCost,
+	which is used in CityData::SupportBuildings.-Maq
 	sint32 goldPerCity;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerCity(goldPerCity)
 	&& IsHuman()
 	){
 		totalWonderGold += goldPerCity * m_all_cities->Num()
 		                               * g_theGovernmentDB->Get(m_government_type)->GetTooManyCitiesThreshold();
-	}
+	}*/
 
-	//moved from beginturn wonders
+	/* Moved to Player::BeginTurnCommodityMarket.-Maq
 	totalWonderGold += CommodityMarket();  //emod for calculating commodities should it be in profileDB?
-
-	totalWonderGold -= CalcCitySupportGold(); //changed - move an divide by city and add to city wonder or wonder gold?
-
-	totalWonderGold -= CalcUnitSupportGold(); //changed
-	//EMOD - should i have the calc support here its not called elsewhere?
+	*/
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;
@@ -2170,26 +2174,85 @@ sint32 Player::CalcWonderGold()
 	return totalWonderGold;
 }
 
-//emod
-sint32 Player::CalcCitySupportGold()
-{
-	sint32 gold = 0;
-
-	if (g_theProfileDB->IsGoldPerCity()) { 
-		gold += m_all_cities->Num() * g_theGovernmentDB->Get(m_government_type)->GetTooManyCitiesThreshold();
-	}
-
-	return gold;
-}
-
+//----------------------------------------------------------------------------
+//
+// Name       : Player::CalcUnitSupportGold
+//
+// Description: Calculate the player's unit gold support.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : Amount required to pay for all units.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 sint32 Player::CalcUnitSupportGold()
 {
 	sint32 gold = 0;
 
-	if (g_theProfileDB->IsGoldPerUnitSupport()) { 
-		gold += m_readiness->TotalUnitGoldSupport() * GetWagesPerPerson() * m_readiness->GetSupportModifier(m_government_type);
+	/* This is how E originally wrote it, but it doesn't make sense.
+	 Multiplying by wages is currently too much, and while gold is deducted
+	 from savings it makes no sense to the player to multiply by wages.
+	sint32 goldPerUnitSupport;
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport)
+	&& IsHuman()
+	){
+	totalWonderGold += goldPerUnitSupport * m_readiness->TotalUnitGoldSupport() * GetWagesPerPerson()
+			                                  * m_readiness->GetSupportModifier(m_government_type);
+	}
+	*/
+
+	sint32 goldPerUnitSupport = 0;
+
+	// diffDB.txt entry, can define exact modifier to unit gold support.
+	// This method takes precedence above only the userprofile entry.
+	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport))
+	{
+		if (IsHuman())
+		{
+			gold += goldPerUnitSupport * m_readiness->TotalUnitGoldSupport();
+				// * GetWagesPerPerson();
+		}
+		else
+		{
+			if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger())
+			{
+				// do nothing.
+			}
+			else
+			{
+				gold += goldPerUnitSupport * m_readiness->TotalUnitGoldSupport();
+					//* GetWagesPerPerson();
+			}
+		}
+		return gold;
 	}
 
+	// user profile entry, cannot define exact support.
+	if (g_theProfileDB->IsGoldPerUnitSupport())
+	{
+		if (IsHuman())
+		{
+			gold += m_readiness->TotalUnitGoldSupport();
+				//* GetWagesPerPerson();
+		}
+		else
+		{
+			if (g_theProfileDB->IsAINoGoldHunger())
+			{
+				// do nothing.
+			}
+			else
+			{
+				gold += m_readiness->TotalUnitGoldSupport();
+					//* GetWagesPerPerson();
+			}
+		}
+		return gold;
+	}
 
 	return gold;
 }

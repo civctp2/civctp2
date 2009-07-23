@@ -53,6 +53,10 @@
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
 //	 after crime and other modifiers. (28-Mar-2009 Maq)
+// - Changed science formula to deduct crime after the government coefficient
+//   like all other resources. (22-Jul-2009 Maq)
+// - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
+// - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -244,6 +248,10 @@ private:
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
 	
+	sint32 m_build_category_before_load_queue;
+	sint32 m_scie_lost_to_crime;
+	double m_gross_food_before_bonuses;
+	sint32 m_gross_prod_before_bonuses;
 	sint32 m_happinessAttackedBy;
 	Unit m_home_city;
 	uint8 m_min_turns_revolt; // Number of revolt risk free turns.
@@ -369,6 +377,8 @@ public:
 	sint32 GetStoredCityFood() const { return m_accumulated_food; }
 	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
 	sint32 GetGrossCityFood() const { return sint32(m_gross_food); }
+	sint32 GetGrossCityFoodBeforeBonuses() const { return sint32(m_gross_food_before_bonuses); }
+	sint32 GetGrossCityProdBeforeBonuses() const { return sint32(m_gross_prod_before_bonuses); }
 
 	
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
@@ -388,6 +398,10 @@ public:
 	
 	double ProjectMilitaryContribution();
 	sint32 GetStoredCityProduction() const { return m_shieldstore; }
+	sint32 GetBuildCategoryAtBeginTurn() const { return m_build_category_at_begin_turn; }
+	sint32 GetBuildCategoryBeforeLoadQueue() const { return m_build_category_before_load_queue; }
+	void SetBuildCategoryAtBeginTurn(sint32 cat) { m_build_category_at_begin_turn = cat; }
+	void CheckSwitchProductionPenalty(sint32 newCat);
 	sint32 GetNetCityProduction() const { return m_net_production; }
 	sint32 GetGrossCityProduction() const { return m_gross_production; }
 
@@ -469,6 +483,7 @@ public:
 #endif
 	void CheckTopTen();
 	sint32 SupportBuildings(bool projectedOnly);
+	sint32 GetSupportCityCost() const;
 	sint32 GetSupportBuildingsCost() const;
 
 	void AddTradeRoute(TradeRoute &route, bool fromNetwork);
@@ -589,7 +604,7 @@ public:
 		foodConsumed = (sint32)(m_food_consumed_this_turn);
 	}
 
-	
+	sint32 GetScienceCrime() const { return m_scie_lost_to_crime; }
 	sint32 GetTradeCrime() const { return m_gold_lost_to_crime; }
 	sint32 GetProdCrime() const { return m_production_lost_to_crime; }
 	void GetFoodCrime( sint32 &foodCrime ) const {
@@ -930,7 +945,7 @@ public:
 	sint32 GetSupport() const;
 #if !defined(NEW_RESOURCE_PROCESS)
 	void   SplitScience(bool projectedOnly);
-	void   SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, bool considerOnlyFromTerrain = false) const;
+	void   SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, sint32 &scieCrime, bool considerOnlyFromTerrain = false) const;
 #endif
 	sint32 GetProjectedScience();
 	sint32 GetFounder() const;

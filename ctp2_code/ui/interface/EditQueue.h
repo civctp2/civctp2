@@ -26,6 +26,7 @@
 //
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 // - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -168,12 +169,12 @@ class EditQueue {
 	static bool EditingCity(CityData *city);
 
 	
-	void InsertInQueue(EditItemInfo *info, bool insert, bool confirm = false);
+	void InsertInQueue(EditItemInfo *info, bool insert, bool confirm = false, bool confirmSwitch = false);
 	void Add(bool insert);
 	void Suggest(bool insert);
-	void Remove();
-	void Up();
-	void Down();
+	void Remove(bool confirmSwitch = false);
+	void Up(bool confirmSwitch = false);
+	void Down(bool confirmSwitch = false);
 
 	static void ShowSelectedInfo();
 
@@ -236,6 +237,8 @@ class EditQueue {
 	bool IsItemInQueueList(uint32 cat, sint32 type);
 
 	static void NotifyCityCaptured(const Unit &c);
+	static EditQueue* GetEditQueueWindow();
+	CityData * GetCityData() const { return m_cityData; };
 };
 
 #endif

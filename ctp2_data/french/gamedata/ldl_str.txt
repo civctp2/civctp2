@@ -46,6 +46,7 @@
 #   new combat names. - 07-Mar-2009 Maq
 # - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
 # - Added strings for political map - 6-Jul-2009 EPW
+# - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 #
 #----------------------------------------------------------------------------
 
@@ -2510,6 +2511,24 @@ str_ldl_DD_SCIENCE_LABEL			"Science :"
 str_ldl_DD_SAVINGS_LABEL			"Réserves :"
 str_ldl_DD_DETAILS				"Détails"
 str_ldl_DD_OPTIMIZE_SLIDERS			"Optimiser réglages"
+str_ldl_DD_TERRAIN_LABEL			"Terrain:"
+str_ldl_DD_WORKDAY_LABEL			"Workday:"
+str_ldl_DD_TCOMMERCE_LABEL			"Commerce:"
+str_ldl_DD_SUB_TOTAL_LABEL			"Sub Total:"
+str_ldl_DD_BUILDINGS_LABEL			"Buildings:"
+str_ldl_DD_FARMERS_LABEL			"Farmers:"
+str_ldl_DD_LABORERS_LABEL			"Laborers:"
+str_ldl_DD_GOVERNMENT_LABEL			"Government:"
+str_ldl_DD_WAGES_EFFECT_LABEL			"Worker Wages:"
+str_ldl_DD_SCIENTISTS_LABEL			"Scientists:"
+str_ldl_DD_MERCHANTS_LABEL			"Merchants:"
+str_ldl_DD_FEATS_AND_WONDERS_LABEL		"Feats & Wonders:"
+str_ldl_DD_TRADE_LABEL				"Trade:"
+str_ldl_DD_CONVERSIONS_LABEL			"Conversions:"
+str_ldl_DD_UNIT_SUPPORT_LABEL			"Unit Support:"
+str_ldl_DD_ENEMY_LABEL				"Enemy:"
+str_ldl_DD_SCIENCE_TITLE			"SCIENCE"
+str_ldl_DD_GOLD_TITLE				"GOLD"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT				"Gouvernement actuel"
 str_ldl_DD_GOV_COMPARE				"Comparer avec"

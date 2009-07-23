@@ -42,6 +42,7 @@
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added stuff for unit and city gold support. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -751,9 +752,10 @@ public:
 	}
 
 	void BeginTurnWonders();
+	void BeginTurnUnitSupportGold();
+	void BeginTurnCommodityMarket();
 	sint32 CalcWonderGold();
-	sint32 CalcCitySupportGold();  //emod - for profile options	
-	sint32 CalcUnitSupportGold();  //emod - for profile options		
+	sint32 CalcUnitSupportGold();	
 	sint32 CalcTotalBuildingUpkeep();
 	void BuildUnit(sint32 type, Unit city);
 	void BuildImprovement(sint32 type, Unit city);

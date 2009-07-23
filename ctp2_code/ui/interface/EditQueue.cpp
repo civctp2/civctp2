@@ -40,6 +40,7 @@
 // - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@
 #include "ctp2_textfield.h"
 
 #include "citywindow.h"
+#include "ConstRecord.h"
 
 #include "UnitRecord.h"
 #include "BuildingRecord.h"
@@ -1172,6 +1174,8 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 
 	switch(s_editQueue->m_mode) {
 		case EDIT_QUEUE_MODE_SINGLE:
+			// Can use suggest editing single queue.
+			s_editQueue->m_suggestButton->Show();
 			s_editQueue->m_customModeButtons->Hide();
 			s_editQueue->m_normalModeButtons->Show();
 			s_editQueue->m_modeLabel->SetText(g_theStringDB->GetNameStr("str_ldl_EditQueueBuildableItems"));
@@ -1185,6 +1189,8 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			}
 			break;
 		case EDIT_QUEUE_MODE_MULTI:
+			// Can't use suggest editing multiple queues.
+			s_editQueue->m_suggestButton->Hide();
 			s_editQueue->m_customModeButtons->Hide();
 			s_editQueue->m_normalModeButtons->Show();
 			s_editQueue->m_modeLabel->SetText(g_theStringDB->GetNameStr("str_ldl_EditQueueBuildableItems"));
@@ -1197,6 +1203,8 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_customBuildList.DeleteAll();
 			break;
 		case EDIT_QUEUE_MODE_CUSTOM:
+			// Can't use suggest creating custom queue for multiple cities.
+			s_editQueue->m_suggestButton->Hide();
 			s_editQueue->m_customModeButtons->Show();
 			s_editQueue->m_normalModeButtons->Hide();
 			s_editQueue->m_modeLabel->SetText(g_theStringDB->GetNameStr("str_ldl_EditQueueAllItems"));
@@ -1255,11 +1263,52 @@ static void ConfirmRebuildCapitol(bool confirm, void *data)
 		if(!s_editQueue || !ccd || !ccd->info)
 			return;
 
-		s_editQueue->InsertInQueue(ccd->info, ccd->insert, true);
+		s_editQueue->InsertInQueue(ccd->info, ccd->insert, true, false);
 	}
 }
 
-void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
+struct SwitchProductionConfirmData {
+	EditItemInfo *info;
+	bool insert;
+};
+
+static void ConfirmSwitchProduction(bool confirm, void *data)
+{
+	if(confirm) {
+		SwitchProductionConfirmData *spcd = (SwitchProductionConfirmData *)data;
+		Assert(spcd && spcd->info);
+		Assert(s_editQueue);
+		if(!s_editQueue || !spcd || !spcd->info)
+			return;
+
+		s_editQueue->InsertInQueue(spcd->info, spcd->insert, true, true);
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : EditQueue::InsertInQueue
+//
+// Description: Final stage for adding and inserting items into a queue.
+//
+// Parameters : EditItemInfo *info - The info of the item being added.
+//									 Contains the category and type of item.
+//				bool insert - Whether to insert the item or just add
+//							  to the end.
+//				bool confirmed - Message query to the player whether they want
+//								 to rebuild their capital or not.
+//				bool confirmedSwitch - Message query to the player whether
+//									   they want to incur a production switch
+//								       penalty or not.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : "Suggest" button uses "Add", so also goes through this.
+//
+//----------------------------------------------------------------------------
+void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, bool confirmedSwitch)
 {
 	Assert(info);
 	if(!info) return;
@@ -1268,7 +1317,8 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol() &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid() &&
-		m_cityData) {
+		m_cityData)
+	{
 		static CapitolConfirmData data;
 		data.info = info;
 		data.insert = insert;
@@ -1279,23 +1329,89 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 	}
 
 	sint32 insIndex;
-	if(m_queueList && insert) {
+	if(m_queueList && insert)
+	{
 		sint32 buildIndex = m_queueList->GetSelectedItemIndex();
-		if(buildIndex >= 0) {
-			insIndex = buildIndex;
-		} else {
-			insIndex = -1;
+		if(buildIndex >= 0)
+		{
+			insIndex = buildIndex;// Insert in place of the currently selected item.
 		}
-	} else {
+		else
+		{
+			insIndex = -1;// Add to the end of the queue.
+		}
+	}
+	else
+	{
 		insIndex = -1;
 	}
 
-	if(m_cityData) {
+	if(m_cityData)// Editing a single queue?
+	{
+
+		if (insIndex == 0)// Inserting to replace top queue item.
+		{                 // Queues must have at least one item selected to "insert",
+			              // so we know we can get the head.
+			if (info->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
+				&& m_cityData->GetStoredCityProduction() > 0)
+			{
+				if(!confirmedSwitch)
+				{
+					static SwitchProductionConfirmData data;
+					data.info = info;
+					data.insert = insert;
+
+					MBCHAR buf[k_MAX_NAME_LEN];
+					sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
+					sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
+
+					MessageBoxDialog::Query(buf,
+											"QuerySwitchProduction",
+											ConfirmSwitchProduction, &data);
+					return;
+				}
+
+				m_cityData->CheckSwitchProductionPenalty(info->m_category);
+			}
+		}
+		else if (insIndex == -1 && m_queueList->NumItems() == 0)// Adding, and no items in queue, so adding to top.
+		{// This is also for when the "suggest" button is used and the queue is empty.
+
+			if (info->m_category != m_cityData->GetBuildCategoryAtBeginTurn()
+				&& m_cityData->GetStoredCityProduction() > 0)
+			{
+				if(!confirmedSwitch)
+				{
+					static SwitchProductionConfirmData data;
+					data.info = info;
+					data.insert = insert;
+
+					MBCHAR buf[k_MAX_NAME_LEN];
+					sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
+					sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
+
+					MessageBoxDialog::Query(buf,
+											"QuerySwitchProduction",
+											ConfirmSwitchProduction, &data);
+					return;
+				}
+
+				m_cityData->CheckSwitchProductionPenalty(info->m_category);
+			}
+		}
+
+		// Item is actually replaced here:
 		m_cityData->InsertBuildItem(insIndex, info->m_category, info->m_type);
-	} else {
+	}
+	else// Editing a custom queue or multiple city queues?
+	{
 		Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 		EditItemInfo *copiedInfo = new EditItemInfo(info->m_category, info->m_type);
-		if(insIndex < 0) {
+		if(insIndex < 0) {// Adding to the end of the queue or to empty queue.
+			//if (m_queueList->NumItems() == 0)
+			//{
+
+
 			m_customBuildList.AddTail(copiedInfo);
 		} else {
 			PointerList<EditItemInfo>::Walker walk(&m_customBuildList);
@@ -1388,26 +1504,74 @@ void EditQueue::Suggest(bool insert)
 		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeDesiredUnits();
 		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeNextBuildItem(m_cityData, cat, type);
 
-		EditItemInfo info(cat, type);;
-		InsertInQueue(&info, insert);
+		//EditItemInfo info(cat, type);
+		//InsertInQueue(&info, insert);
+		EditItemInfo *info = new EditItemInfo(cat, type);
+		Assert(info);
+		if(info) {
+			InsertInQueue(info, insert);
+		}
 	}
 }
 
-void EditQueue::Remove()
+static void ConfirmRemoveProduction(bool confirm, void *lemurpoo)
+{
+	if(confirm) {
+		Assert(s_editQueue);
+		if(!s_editQueue)
+			return;
+
+		s_editQueue->Remove(true);
+	}
+}
+
+void EditQueue::Remove(bool confirmedSwitch)
 {
 	if(!m_queueList)
 		return;
 
 	sint32 buildIndex = m_queueList->GetSelectedItemIndex();
-	if(buildIndex >= 0) {
-		if(m_cityData) {
+	if(buildIndex >= 0)
+	{
+		if(m_cityData)
+		{
+			if (buildIndex == 0// Removing the top item so 2nd item may move up if there is one.
+				&& m_queueList->NumItems() >= 2)
+			{
+				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				Assert(node);
+
+				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
+					&& m_cityData->GetStoredCityProduction() > 0)
+				{
+					if(!confirmedSwitch)
+					{
+						MBCHAR buf[k_MAX_NAME_LEN];
+						sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
+						sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
+
+						MessageBoxDialog::Query(buf,
+												"QuerySwitchProduction",
+												ConfirmRemoveProduction);
+						return;
+					}
+
+					if(node)
+						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+				}
+			}
+
 			m_cityData->GetBuildQueue()->RemoveNodeByIndex(buildIndex, CAUSE_REMOVE_BUILD_ITEM_MANUAL);
-		} else {
+		}
+		else
+		{
 			Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 			PointerList<EditItemInfo>::Walker walk(&m_customBuildList);
 			sint32 idx = 0;
-			while(walk.IsValid()) {
-				if(idx == buildIndex) {
+			while(walk.IsValid())
+			{
+				if(idx == buildIndex)
+				{
 					delete walk.Remove();
 					break;
 				}
@@ -1419,21 +1583,65 @@ void EditQueue::Remove()
 	}
 }
 
-void EditQueue::Up()
+static void ConfirmMoveUpProduction(bool confirm, void *lemurpoo)
+{
+	if(confirm) {
+		Assert(s_editQueue);
+		if(!s_editQueue)
+			return;
+
+		s_editQueue->Up(true);
+	}
+}
+
+void EditQueue::Up(bool confirmedSwitch)
 {
 	if(!m_queueList)
 		return;
 
 	sint32 selectedIndex = m_queueList->GetSelectedItemIndex();
-	if(selectedIndex > 0) {
-		if(m_cityData) {
+	if(selectedIndex > 0)
+	{
+		if(m_cityData)
+		{
+
+			if (selectedIndex == 1)// If the 2nd item will be moved up to replace the top item.
+			{
+				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				Assert(node);
+
+				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
+					&& m_cityData->GetStoredCityProduction() > 0)
+				{
+					if(!confirmedSwitch)
+					{
+						MBCHAR buf[k_MAX_NAME_LEN];
+						sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
+						sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
+
+						MessageBoxDialog::Query(buf,
+												"QuerySwitchProduction",
+												ConfirmMoveUpProduction);
+						return;
+					}
+
+					if(node)
+						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+				}
+			}
+
 			m_cityData->GetBuildQueue()->MoveNodeUp(selectedIndex);
-		} else {
+
+		}
+		else
+		{
 			Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 			PointerList<EditItemInfo>::Walker walk(&m_customBuildList);
 			sint32 idx = 0;
-			while(walk.IsValid()) {
-				if(idx == selectedIndex) {
+			while(walk.IsValid())
+			{
+				if(idx == selectedIndex)
+				{
 					walk.MoveUp();
 					break;
 				}
@@ -1454,7 +1662,18 @@ void EditQueue::Up()
 	}
 }
 
-void EditQueue::Down()
+static void ConfirmMoveDownProduction(bool confirm, void *lemurpoo)
+{
+	if(confirm) {
+		Assert(s_editQueue);
+		if(!s_editQueue)
+			return;
+
+		s_editQueue->Down(true);
+	}
+}
+
+void EditQueue::Down(bool confirmedSwitch)
 {
 	if(!m_queueList)
 		return;
@@ -1462,7 +1681,34 @@ void EditQueue::Down()
 	sint32 selectedIndex = m_queueList->GetSelectedItemIndex();
 	if(selectedIndex >= 0 && selectedIndex < m_queueList->NumItems() - 1) {
 		if(m_cityData) {
+
+			if (selectedIndex == 0)// The top item will be moved down to get replaced by 2nd item.
+			{
+				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				Assert(node);
+
+				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
+					&& m_cityData->GetStoredCityProduction() > 0)
+				{
+					if(!confirmedSwitch)
+					{
+						MBCHAR buf[k_MAX_NAME_LEN];
+						sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
+						sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
+
+						MessageBoxDialog::Query(buf,
+												"QuerySwitchProduction",
+												ConfirmMoveDownProduction);
+						return;
+					}
+
+					if(node)
+						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+				}
+			}
+
 			m_cityData->GetBuildQueue()->MoveNodeDown(selectedIndex);
+
 		} else {
 			Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 			PointerList<EditItemInfo>::Walker walk(&m_customBuildList);
@@ -1921,6 +2167,16 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 						continue;
 					break;
 			}
+			// Check first item only.
+			if (insIndex == 0) {
+				if (itemWalk.GetObj()->m_category
+					!= walk.GetObj()->m_cityData->GetBuildCategoryAtBeginTurn()
+					&& walk.GetObj()->m_cityData->GetStoredCityProduction() > 0)
+				{
+					walk.GetObj()->m_cityData->CheckSwitchProductionPenalty(itemWalk.GetObj()->m_category);
+				}
+			}
+
 			walk.GetObj()->m_cityData->InsertBuildItem(insIndex++, itemWalk.GetObj()->m_category,
 													   itemWalk.GetObj()->m_type);
 		}
@@ -2526,4 +2782,9 @@ void EditQueue::NotifyCityCaptured(const Unit &c)
 		if(wasEditing)
 			Hide();
 	}
+}
+
+EditQueue* EditQueue::GetEditQueueWindow()
+{
+	return s_editQueue;
 }

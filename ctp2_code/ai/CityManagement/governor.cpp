@@ -113,6 +113,8 @@
 // - Prevented crash with missing population assignment data.
 // - If the AI loses its Capitol it builds a new one in its most productive
 //   city. (08-Sep-2008 Martin Gühmann)
+// - Changed science formula to deduct crime after the government coefficient
+//   like all other resources. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -3130,9 +3132,9 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 				part_radii_scigold = 0;
 			}
 		}
-
-		city->SplitScience(true, full_radii_scigold, full_radii_science, true);
-		city->SplitScience(true, part_radii_scigold, part_radii_science, true);
+		sint32 scieCrime = 0;
+		city->SplitScience(true, full_radii_scigold, full_radii_science, scieCrime, true);
+		city->SplitScience(true, part_radii_scigold, part_radii_science, scieCrime, true);
 
 		///////////////////////////////////////////////////
 		// Check whether it might be better to use
@@ -3202,8 +3204,8 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 		{
 			popScience = city->GetScienceFromPops(true);
 			popScience += g_thePopDB->Get(bestSpecialist)->GetScience()*part_size_pop;
-			popScience -= city->CrimeLoss(popScience);
 			popScience = static_cast<sint32>(ceil(popScience * g_player[city->GetOwner()]->GetKnowledgeCoef()));
+			popScience -= city->CrimeLoss(popScience);
 
 			if(part_radii_science <= popScience)
 			{

@@ -89,6 +89,7 @@ str_ldl_CityWinStatisticsTab "Estado"
 #str_code_CityWinTotalHappinessFormat "Total: %d"
 
 str_code_QueryRebuildCapitol "¿Estás seguro de que quieres reconstruir tu capitolio?"
+str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
 
 # Trade manager strings
 str_ldl_TradeManagerCities "Most. ciud.:"
