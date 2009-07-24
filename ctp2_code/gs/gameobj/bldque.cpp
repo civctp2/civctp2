@@ -618,8 +618,27 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
         
         if (!Player::IsThisPlayerARobot(m_owner) ||
 			(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) { 
-			DPRINTF(k_DBG_GAMESTATE, ("Setting shieldstore to 0 for %lx\n", m_city.m_id));
-    		shieldstore = 0;
+			// Cities with empty queues lose the same switch penalty % of their shield store
+			// each turn they are empty.
+
+			shieldstore -= cd->GetNetCityProduction();// Remove shields given at beginturn.
+
+			if (shieldstore > 0)
+			{
+				sint32 s = 0;
+				double penalty =
+					static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
+				
+				penalty = std::min
+								  (
+								   1.0,
+								   std::max(0.0, 1.0 - penalty * 0.01)
+								  );
+
+				s = static_cast<sint32>(static_cast<double>(shieldstore) * penalty);
+				DPRINTF(k_DBG_GAMESTATE, ("Deducting %n shields for empty queue in city of %lx\n", s, m_city.m_id));
+				shieldstore = s;
+			}
         }
         return false;
     }
@@ -628,9 +647,15 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 void BuildQueue::FinishBuildFront(Unit &u)
 {
 	CityData *cd = m_city.CD();
+	sint32 rollOverShields = 0;
 	if (m_list->GetHead() && m_list->GetHead() == m_frontWhenBuilt) 
     {
+
+		if (cd->GetStoredCityProduction() > m_list->GetHead()->m_cost)
+			rollOverShields = (cd->GetStoredCityProduction() - m_list->GetHead()->m_cost);
+
 		HandleProductionComplete();
+			
 			
 		bool            isEmpty     = m_list->GetCount() <= 1;
 		bool            doRemove    = false;
@@ -755,10 +780,16 @@ void BuildQueue::FinishBuildFront(Unit &u)
 			m_city.AccessData()->GetCityData()->SetSentInefficientMessage();
 		}
 
+		if (isEmpty)
+			// Reset build category if something was built and there is nothing
+			// next in the queue. This is so a switch penalty is not added when a
+			// new item is added to an empty queue with production roll over on.
+			cd->SetBuildCategoryAtBeginTurn(-5);// set no penalty type after 
+		                                        // completing an item in an empty
+		                                        // queue.
 		
 		if(doRemove)
 			RemoveHead();
-
 	}
 
     // Check special actions for the (new) first item
@@ -771,9 +802,15 @@ void BuildQueue::FinishBuildFront(Unit &u)
 		g_network.Unblock(cd->GetHomeCity().GetOwner());
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("Setting shieldstore to 0 for %lx\n", m_city.m_id));
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
+	//DPRINTF(k_DBG_GAMESTATE, ("Setting shieldstore to 0 for %lx\n", m_city.m_id));
+	//g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
+	//					   GEA_City, m_city,
+	//					   GEA_End);
+
+	DPRINTF(k_DBG_GAMESTATE, ("Setting rollover shieldstore to %d for %lx\n", rollOverShields, m_city.m_id));
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RollOverProduction,
 						   GEA_City, m_city,
+						   GEA_Int, rollOverShields,
 						   GEA_End);
 
 	m_frontWhenBuilt = NULL;
@@ -1671,9 +1708,9 @@ bool BuildQueue::InsertBefore(BuildNode *old,
 void BuildQueue::FinishCreatingUnit(Unit &u)
 {
 	if(u.m_id != (0)) {
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
-							   GEA_City, m_city,
-							   GEA_End);
+		//g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
+		//					   GEA_City, m_city,
+		//					   GEA_End);
 
 		if(m_frontWhenBuilt && m_list->GetHead() == m_frontWhenBuilt) {
 			Assert(m_list->GetHead());

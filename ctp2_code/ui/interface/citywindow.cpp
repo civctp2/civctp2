@@ -104,6 +104,7 @@
 #include "BldQue.h"
 #include "gold.h"
 #include "Happy.h"
+#include "PopRecord.h"				// g_thePopDB
 #include "UnitData.h"
 
 #include "SlicContext.h"
@@ -684,23 +685,54 @@ void CityWindow::Update()
 	}
 
 	for(sint32 i = 0; i < CW_RES_MAX; i++) {
+
+		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+		sint32 amt = 0;
 		
 		if(m_resVal[i]) {
 			switch(i) {
 				case CW_RES_FOOD:
-					sprintf(value, "+%d", m_cityData->GetFinalFoodFromFarmers());
+					//sprintf(value, "+%d", m_cityData->GetFinalFoodFromFarmers());
+					if (m_cityData->FarmerCount() > 0)
+					{
+					amt = m_cityData->FarmerCount() *
+						(g_thePopDB->Get(m_cityData->GetBestSpecialist(POP_FARMER),
+						player->GetGovernmentType())->GetFood());
+					}
+					sprintf(value, "+%d", amt);
 					break;
 				case CW_RES_HAPPY:
 					sprintf(value, "+%d", static_cast<sint32>(m_cityData->GetHappyPopEntertainment()));
 					break;
 				case CW_RES_PROD:
-					sprintf(value, "+%d", m_cityData->GetFinalProductionFromLaborers());
+					//sprintf(value, "+%d", m_cityData->GetFinalProductionFromLaborers());
+					if (m_cityData->LaborerCount() > 0)
+					{
+					amt = m_cityData->LaborerCount() *
+						(g_thePopDB->Get(m_cityData->GetBestSpecialist(POP_LABORER),
+						player->GetGovernmentType())->GetProduction());
+					}
+					sprintf(value, "+%d", amt);
 					break;
 				case CW_RES_TRADE:
-					sprintf(value, "+%d", m_cityData->GetFinalGoldFromMerchants());
+					//sprintf(value, "+%d", m_cityData->GetFinalGoldFromMerchants());
+					if (m_cityData->MerchantCount() > 0)
+					{
+					amt = m_cityData->MerchantCount() *
+						(g_thePopDB->Get(m_cityData->GetBestSpecialist(POP_MERCHANT),
+						player->GetGovernmentType())->GetCommerce());
+					}
+					sprintf(value, "+%d", amt);
 					break;
 				case CW_RES_SCI:
-					sprintf(value, "+%d", m_cityData->GetFinalScienceFromScientists());
+					//sprintf(value, "+%d", m_cityData->GetFinalScienceFromScientists());
+					if (m_cityData->ScientistCount() > 0)
+					{
+					amt = m_cityData->ScientistCount() *
+						(g_thePopDB->Get(m_cityData->GetBestSpecialist(POP_SCIENTIST),
+						player->GetGovernmentType())->GetScience());
+					}
+					sprintf(value, "+%d", amt);
 					break;
 			}
 			m_resVal[i]->SetText(value);

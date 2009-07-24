@@ -350,6 +350,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(AiBeginTurn,                "Begin a player's turn main Ai", "%P")
 	EVENT(UpgradeOrder,               "Adds an upgrade order to this army", "%a")
 	EVENT(UpgradeUnit,                "This unit upgrades", "%u")
+	EVENT(RollOverProduction,         "Set a city's stored production to surplus production", "%c%i")
 
 	EVENT(MAX,                        "This is not a real event, it marks the end of the list", "")
 };

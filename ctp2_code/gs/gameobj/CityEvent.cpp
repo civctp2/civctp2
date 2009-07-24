@@ -136,6 +136,9 @@ STDEHANDLER(CaptureCityEvent)
 	}
 	else if (city.IsValid())
 	{
+		// Added by Maq - Reset shield store for captured cities.
+		city.CD()->SetShieldstore(0);
+
 		if (city.GetOwner() == g_selected_item->GetVisiblePlayer()) 
 		{
 			g_director->AddCenterMap(pos);
@@ -404,6 +407,17 @@ STDEHANDLER(ZeroProductionEvent)
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
 	city.CD()->SetShieldstore(0);
+	return GEV_HD_Continue;
+}
+
+STDEHANDLER(RollOverProductionEvent)
+{
+	Unit city;
+	sint32 shields;
+	if(!args->GetCity(0, city)) return GEV_HD_Continue;
+	if(!args->GetInt(0, shields)) return GEV_HD_Continue;
+
+	city.CD()->SetShieldstore(shields);
 	return GEV_HD_Continue;
 }
 
@@ -859,6 +873,7 @@ void cityevent_Initialize()
 	g_gevManager->AddCallback(GEV_BuildBuilding, GEV_PRI_Primary, &s_CityBuildBuildingEvent);
 	g_gevManager->AddCallback(GEV_BuildWonder, GEV_PRI_Primary, &s_CityBuildWonderEvent);
 	g_gevManager->AddCallback(GEV_ZeroProduction, GEV_PRI_Primary, &s_ZeroProductionEvent);
+	g_gevManager->AddCallback(GEV_RollOverProduction, GEV_PRI_Primary, &s_RollOverProductionEvent);
 
 	g_gevManager->AddCallback(GEV_MakePop, GEV_PRI_Primary, &s_MakePopEvent);
 	g_gevManager->AddCallback(GEV_KillPop, GEV_PRI_Primary, &s_KillPopEvent);

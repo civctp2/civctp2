@@ -5610,7 +5610,8 @@ sint32 CityData::LoadQueue(const MBCHAR *file)
 	// Get new queue top item
 	sint32 newCat = GetBuildQueue()->GetHead()->m_category;
 	if (newCat != GetBuildCategoryBeforeLoadQueue()
-		&& GetStoredCityProduction() > 0)
+		&& GetStoredCityProduction() > 0
+		&& m_build_category_at_begin_turn != -5)// -5 is the no penalty type.
 	{
 		CheckSwitchProductionPenalty(newCat);
 	}
@@ -7719,10 +7720,14 @@ void CityData::BuildFront()
     {
 		m_build_category_at_begin_turn = m_build_queue.GetHead()->m_category;
 	} 
-    else 
-    {
-		m_build_category_at_begin_turn = -3;
-	}
+	// If no item in build queue at begin turn, then use last item that was built
+	// as the type, NOT the empty type -3.
+	// This is so a switch penalty will not apply between items of the same type
+	// if the queue was empty between completing one item and adding a new one.
+ //   else 
+ //   {
+	//	m_build_category_at_begin_turn = -3;
+	//}
 }
 
 

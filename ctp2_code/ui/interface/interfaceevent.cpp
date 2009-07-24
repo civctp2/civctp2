@@ -223,6 +223,7 @@ void interfaceevent_Initialize()
 	g_gevManager->AddCallback(GEV_BuildFront, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
 	g_gevManager->AddCallback(GEV_CityBeginTurn, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
 	g_gevManager->AddCallback(GEV_ZeroProduction, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
+	g_gevManager->AddCallback(GEV_RollOverProduction, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
 
 	g_gevManager->AddCallback(GEV_StartMovePhase, GEV_PRI_Post, &s_InterfaceStartMovePhaseEvent);
 

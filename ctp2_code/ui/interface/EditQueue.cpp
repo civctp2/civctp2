@@ -1378,7 +1378,8 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 		{// This is also for when the "suggest" button is used and the queue is empty.
 
 			if (info->m_category != m_cityData->GetBuildCategoryAtBeginTurn()
-				&& m_cityData->GetStoredCityProduction() > 0)
+				&& m_cityData->GetStoredCityProduction() > 0
+				&& m_cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
 			{
 				if(!confirmedSwitch)
 				{
@@ -2171,7 +2172,8 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 			if (insIndex == 0) {
 				if (itemWalk.GetObj()->m_category
 					!= walk.GetObj()->m_cityData->GetBuildCategoryAtBeginTurn()
-					&& walk.GetObj()->m_cityData->GetStoredCityProduction() > 0)
+					&& walk.GetObj()->m_cityData->GetStoredCityProduction() > 0
+					&& walk.GetObj()->m_cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
 				{
 					walk.GetObj()->m_cityData->CheckSwitchProductionPenalty(itemWalk.GetObj()->m_category);
 				}
