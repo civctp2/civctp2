@@ -55,6 +55,7 @@
 //	 (10-Mar-2009 Maq)
 // - Prevented building of gaia controller tile imp unless science victory
 //   race has started. (01-Jul-2009 Maq)
+// - Added terrainutil_GetHealRate to suppurt tileimprovement healing (24-Jul-2009 EPW)
 //
 //----------------------------------------------------------------------------
 
@@ -1712,4 +1713,43 @@ sint32 terrainutil_GetMinimumProductionCost(sint32 type)
 		}
 	}
 	return cost;
+}
+//Calculates Heal Rate at a Mappoint
+double terrainutil_GetHealRate( const MapPoint & pos )
+{
+	double rate = 0.0, temp;
+	sint32 imp;
+	bool can_heal = false;
+	Cell *cell = g_theWorld->GetCell(pos);
+	sint32 imp_num = cell->GetNumDBImprovements();
+	const TerrainImprovementRecord *rec;
+	const TerrainImprovementRecord::Effect *eff;
+
+	//Cities gets top priority
+	if( g_theWorld->HasCity(pos) )
+		return g_theConstDB->Get(0)->GetCityHealRate();
+	//TileImp Heal rates are added together
+	if( imp_num > 0 ) {
+		for(sint32 i = 0; i < imp_num; i++) {
+			imp = cell->GetDBImprovement(i);
+			rec = g_theTerrainImprovementDB->Get(imp);
+
+			for(sint32 j = 0; j < rec->GetNumTerrainEffect(); j++) {
+				eff = terrainutil_GetTerrainEffect(rec, pos);
+
+				if(eff && eff->GetHealRate(temp)) {
+					rate += temp;
+					if(!can_heal)
+						can_heal = true;
+				}
+			}
+		}
+		if(can_heal)
+			return rate;
+	}
+	
+	if(!can_heal) //base rate is last :(
+		return g_theConstDB->Get(0)->GetNormalHealRate();
+		
+	return 0.0; //Should never get here
 }

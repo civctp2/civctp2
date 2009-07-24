@@ -85,7 +85,7 @@
 //	 do in combat. (10-Mar-2009 Maq)
 // - Fixed movebonus units movement. Pathing still needs to be fixed. (15-Mar-2009 Maq)
 // - Added "UpgradeAnywhere","UpgradeDoesNotHeal" functionality and refreshed unit info on upgrade. (31-May-2009 EPW)
-//
+// -Heal rate now calculated in terrainutil_GetHealRate, removed forts-heal-like-citys 24-Jul-09 (24-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -3169,19 +3169,11 @@ void UnitData::EndTurn()
 	double const	maxHp	= rec->GetMaxHP() + wonderBonus;
 
 	// PFT added: heal immobile units also, 17 Mar 05
+	//Heal rate now calculated in terrainutil_GetHealRate, 24-Jul-09
 	if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile() ) && (m_hp < maxHp))
 	{
-		if( (g_theWorld->HasCity(m_pos))
-		||  (g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
-	//	|| (PositionHasHealingUnit -> for supply trucks, but AI needs to learn
-		){
-			m_hp += maxHp * g_theConstDB->Get(0)->GetCityHealRate();
-		} 
-		else 
-		{
-			m_hp += maxHp * g_theConstDB->Get(0)->GetNormalHealRate();
-		}
-		
+		m_hp += maxHp * terrainutil_GetHealRate(m_pos);
+	
 		m_hp = std::min(m_hp, maxHp);
 	}
 

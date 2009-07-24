@@ -42,7 +42,7 @@
 #  - Enablesgood in Effect : Tileimp is replaced by a good on construction 
 #                            completion according to the position's terrain type (FutureUse)(E)
 #  - Added CanUpgrade flag for terrain dependent upgrading (Dec 24th 2006 Martin Gühmann)
-#
+#  - Added HealRate flag to allow improvements to heal! (24-Jul-2009 EPW)
 #-----------------------------------------------------------------------------
 
 TerrainImprovement {
@@ -155,6 +155,7 @@ TerrainImprovement {
 		Bit RiverOnly                       // Can only be built on rivers
 		Bit Obstacle                        // FU makes cell impassable
 		Bit NextToUrban
+		Bit(Float) HealRate                 //Unit HealRate on this improvement
 
 	}
 

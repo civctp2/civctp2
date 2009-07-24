@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Terrain utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,7 +26,7 @@
 //
 // - Added terrainutil_GetMinimumProductionCost to retrieve the minimum
 //   costs of a tile improvement. (17-Jan-2008 Martin Gühmann)
-//
+// - Added terrainutil_GetHealRate to suppurt tileimprovement healing (24-Jul-2009 EPW)
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -89,6 +89,8 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 
 bool terrainutil_AdvanceEnablesImprovementForPlayer(sint32 player, sint32 advance, sint32 imp);
 bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp);
+
+double terrainutil_GetHealRate( const MapPoint & pos );
 
 #define TERRAIN_TYPE            sint8
 

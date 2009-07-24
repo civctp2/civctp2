@@ -34,7 +34,7 @@
 # - Fixed the Construction tiles
 # - Fixed the terraform tileimp icons in the scenario editor
 # - Added Ruins Tileimp for cityruins option
-#
+# - Added HealRate flag for fortifications! (24-Jul-2009 EPW)
 #----------------------------------------------------------------------------
 
 ## 0 ##########################################################
@@ -613,6 +613,7 @@ TILEIMP_FORTIFICATIONS {
       ProductionCost 1000
       ProductionTime 4
       TilesetIndex 82
+	  HealRate 1.0
    }
 }
 
