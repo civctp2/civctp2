@@ -1072,7 +1072,7 @@ STDEHANDLER(AftermathEvent)
 
 		if(army.IsValid())
 		{
-			army.AccessData()->DoVictoryEnslavement(defense_owner, defender.Num());
+			army.AccessData()->DoVictoryEnslavement(defense_owner);
 		}
 	}
 	else
@@ -1087,7 +1087,7 @@ STDEHANDLER(AftermathEvent)
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
-		defender.DoVictoryEnslavement(attack_owner, army.Num());
+		defender.DoVictoryEnslavement(attack_owner);
 	}
 
 	if(attackerWon && army.IsValid() && army.Num() > 0)

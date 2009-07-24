@@ -164,7 +164,7 @@ public:
 
 	void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 	double GetHPModifier() const;
-	void DoVictoryEnslavement(sint32 origOwner, sint32 enemySize);
+	void DoVictoryEnslavement(sint32 origOwner);
 
 	bool CanMoveIntoCell(const MapPoint &pos,
 						 bool &zocViolation,

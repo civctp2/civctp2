@@ -560,42 +560,18 @@ double CellUnitList::GetHPModifier() const
     return (m_nElements > 0) ? m_array[0].GetHPModifier() : 0.0; 
 }
 
-void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
+void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 {
-	Unit can_stack_array[k_MAX_ARMY_SIZE];
-	sint32 stack_size = 0, unitnum;
-	double temp_success, success = 0;
-	bool enslavement_check = false;
-	//This puts units with VictoryEnslavementStacks in an array, or 
-	//saves the max chance of VictoryEnslavement units that don't stack
+	double success = 0;
+
 	for (sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetHP() > 0 &&
-		   m_array[i].GetDBRec()->GetVictoryEnslavement()) {   
-			if(m_array[i].GetDBRec()->GetVictoryEnslavementStacks())
-				can_stack_array[stack_size++] = m_array[i];
-			else if(stack_size == 0 && success < 1.0) {
-				if(!m_array[i].GetDBRec()->GetVictoryEnslavementChance(temp_success)) {
-					success = 1.0;
-					unitnum = i;
-				}
-				else if(temp_success > success)
-				{
-					success = temp_success;
-					unitnum = i;
-				}
-			}
-			if(!enslavement_check)
-				enslavement_check = true;
-		}
-	}
-
-	if(enslavement_check && stack_size > 0) { //If there is at least one unit that stacks
-		for (sint32 i = 0; i < stack_size; i++) {
-			if(!can_stack_array[i].GetDBRec()->GetVictoryEnslavementChance(success))
+			m_array[i].GetDBRec()->GetVictoryEnslavement()) {
+	
+			if(!m_array[i].GetDBRec()->GetVictoryEnslavementChance(success))
 				success = 1.0;
 
-			if(g_rand->Next(100) < sint32(success * 100.0))
-			{
+			if(g_rand->Next(100) < sint32(success * 100.0)) {
 				MapPoint slpos;
 				GetPos(slpos);
 							
@@ -617,41 +593,12 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
 									   GEA_End);
 
 				
-				g_slicEngine->RunVictoryEnslavementTriggers(can_stack_array[i],
+				g_slicEngine->RunVictoryEnslavementTriggers(m_array[i],
 															origOwner, hc);
 				if(g_network.IsHost()) {
 					g_network.Unblock(hc.GetOwner());
 				}
-
-				if(--enemySize < 1)
-					break;			
-			}
-		}
-	}
-	else if( enslavement_check ) {
-		MapPoint slpos;
-		GetPos(slpos);
-					
-		Unit hc;
-		sint32 r = g_player[m_array[0].GetOwner()]->
-			GetSlaveCity(slpos, hc);
-		
-		Assert(r && hc.IsValid());
-		if (hc.IsValid()) {
-			if(g_network.IsHost()) {
-				g_network.Block(hc.GetOwner());
-			}
-			
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
-								   GEA_City, hc.m_id,
-								   GEA_Player, origOwner,
-								   GEA_End);
-
-			
-			g_slicEngine->RunVictoryEnslavementTriggers(m_array[unitnum],
-														origOwner, hc);
-			if(g_network.IsHost()) {
-				g_network.Unblock(hc.GetOwner());
+				break;
 			}
 		}
 	}
