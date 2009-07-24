@@ -29,7 +29,7 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1011 (25-Jul-2009)"
+http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -49,7 +49,7 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2009-07-25 (Revision 1011)
+2009-07-25 (Revision 1013)
 Fixed:    Army grouping via slic in the Magnificant Samurai scenario works now.
 Fixed:    Database errors do not show up anymore when the Magnificant Samurai
           scenario is loaded.
@@ -103,6 +103,9 @@ Added:    New database flags for modders:
    VictoryEnslavementChance Unit's chance to enslave an enemy unit on victory
    GovernmentOnly           Unit can only be built with the given government.
                                The Unit is not destroyed on government change.
+- TerrainImprovementDB:
+   HealRate                 TerrainImprovent heals units on it with the given
+                               rate.
 
 2009-06-01 (Revision 990)
 Fixed:    The game does not crash, if a civilization is wiped out.
