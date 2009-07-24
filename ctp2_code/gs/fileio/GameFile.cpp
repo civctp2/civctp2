@@ -136,9 +136,11 @@ extern PointerList<Player> *        g_deadPlayer;
 
 
 
-
+#if USE_FORMAT_67
+#define k_GAME_MAGIC_VALUE		"CTP0067"
+#else
 #define k_GAME_MAGIC_VALUE		"CTP0066"
-
+#endif
 
 
 
@@ -169,7 +171,12 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0063", 63},
 	{ "CTP0064", 64},
 	{ "CTP0065", 65},
+#if USE_FORMAT_67
+	{ "CTP0066", 66},
+	{ "CTP0067", 67}
+#else
 	{ "CTP0066", 66}
+#endif
 };
 
 sint32 gamefile_CurrentVersion() 

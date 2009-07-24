@@ -60,7 +60,8 @@
 #  - PrerequisiteWonder      : Needs Wonder in city to be built
 #  - VictoryEnslavementChance: VictoryEnslavement chance of success
 #  - VictoryEnslavementStacks: VictoryEnslavement can stack with other units
-#   - GovernmentOnly         : Needs Government to build unit
+#  - GovernmentOnly          : Needs Government to build unit
+#
 #-----------------------------------------------------------------------------
 
 Sprite : Int

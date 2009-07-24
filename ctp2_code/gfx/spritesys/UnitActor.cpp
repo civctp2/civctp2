@@ -93,6 +93,7 @@
 #include "WonderRecord.h"
 #include "wonderutil.h"
 #include "buildingutil.h"
+#include "gamefile.h" // g_saveFileVersion
 
 extern SpriteGroupList   *g_unitSpriteGroupList;
 extern SpriteGroupList   *g_citySpriteGroupList;
@@ -2347,29 +2348,40 @@ void UnitActor::GetBoundingRect(RECT *rect) const
 void UnitActor::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
-    {
+	{
 		EndTurnProcess();
 
 		if (m_unitID.IsValid() && m_unitID.IsCity()) 
-        {
+		{
 			m_unitID.GetPop(m_size);
 		}
+
 		archive << m_facing;
 		archive << m_lastMoveFacing;
 		archive << m_size;
 		archive.PutUINT8((uint8)m_isUnseenCellActor);
 
 		archive.PutUINT8((uint8)m_type);
+#if USE_FORMAT_67
+		archive << m_spriteID;
+#else
 		archive.PutUINT8((uint8)m_spriteID);
+#endif
 		archive.PutUINT8((uint8)m_playerNum);
 		archive.PutUINT32((uint32)m_unitID);
+#if USE_FORMAT_67
+		archive << m_unitDBIndex;
+#else
 		archive.PutUINT8((uint8)m_unitDBIndex);
+#endif
 		archive << m_unitVisionRange;
 		archive << m_unitVisibility;
 		
 		m_pos.Serialize(archive);
 		m_spriteState->Serialize(archive);
-	} else {
+	}
+	else
+	{
 		archive >> m_facing;
 		archive >> m_lastMoveFacing;
 		archive >> m_size;
@@ -2377,12 +2389,28 @@ void UnitActor::Serialize(CivArchive &archive)
 		m_isUnseenCellActor = (BOOL)archive.GetUINT8();
 
 		m_type = (GROUPTYPE)archive.GetUINT8();
-		m_spriteID = archive.GetUINT8();
+
+		if (g_saveFileVersion >= 67)
+		{
+			archive >> m_spriteID;
+		}
+		else
+		{
+			m_spriteID = (sint32)archive.GetUINT8();
+		}
+
 		m_playerNum = (sint32)archive.GetUINT8();
+		m_unitID    = Unit(archive.GetUINT32());
 
-		m_unitID = Unit(archive.GetUINT32());
+		if (g_saveFileVersion >= 67)
+		{
+			archive >> m_unitDBIndex;
+		}
+		else
+		{
+			m_unitDBIndex = (sint32)archive.GetUINT8();
+		}
 
-		m_unitDBIndex = (sint32)archive.GetUINT8();
 		archive >> m_unitVisionRange;
 		archive >> m_unitVisibility;
 

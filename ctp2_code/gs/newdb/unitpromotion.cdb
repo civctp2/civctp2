@@ -18,8 +18,9 @@
 #
 #  Modifications from the original Activision code:
 #
-#  - created file for possible Civ4 promotions (by E Aug 21st 2007)
-#  - added VictoryEnslavementChance, VictoryEnslavementStacks, and GovernmentOnly flags (EPW, Jul 21st 2009)
+#  - Created file for possible Civ4 promotions (by E Aug 21st 2007)
+#  - Added VictoryEnslavementChance, VictoryEnslavementStacks, and GovernmentOnly flags (EPW, Jul 21st 2009)
+#
 #-----------------------------------------------------------------------------
 
 Unitpromotion {

@@ -67,11 +67,15 @@ enum	SPRITELISTERR
 // Class declarations
 //----------------------------------------------------------------------------
 
-uint8 const	k_MAX_SPRITES	= 255;
+#if USE_FORMAT_67
+uint32 const    k_MAX_SPRITES   = 511;
+#else
+uint8  const    k_MAX_SPRITES   = 255;
 // uint8 restriction: see UnitActor::Serialize. Going beyond 255 will require
 // a file format update.
+#endif
 
-class SpriteGroupList 
+class SpriteGroupList
 {
 public:
 	SpriteGroupList();
@@ -80,12 +84,12 @@ public:
 	SPRITELISTERR	LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
 
 	SpriteGroup *   GetSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
-	bool			ReleaseSprite(uint32 index, LOADTYPE loadType);
+	bool            ReleaseSprite(uint32 index, LOADTYPE loadType);
 
-	void			RefreshBasicLoads(GROUPTYPE groupType);
+	void            RefreshBasicLoads(GROUPTYPE groupType);
 
 private:
-	SpriteGroup	*   m_spriteList[k_MAX_SPRITES];
+	SpriteGroup *   m_spriteList[k_MAX_SPRITES];
 };
 
 //----------------------------------------------------------------------------

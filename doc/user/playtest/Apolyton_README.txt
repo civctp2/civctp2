@@ -29,7 +29,7 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
+http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1011 (25-Jul-2009)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -38,6 +38,7 @@ http://apolyton.net/forums/showthread.php?t=127059 "PROJECT: Playtest Thread III
 http://apolyton.net/forums/showthread.php?t=147969 "PROJECT: Playtest (the 4th Thread)"
 http://apolyton.net/forums/showthread.php?t=161726 "PROJECT: Playtest (Thread No. 5)"
 http://apolyton.net/forums/showthread.php?t=172035 "PROJECT: Playtest (Thread No. 6)"
+http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
@@ -48,15 +49,70 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2009-07-25 (Revision 1011)
+Fixed:    Army grouping via slic in the Magnificant Samurai scenario works now.
+Fixed:    Database errors do not show up anymore when the Magnificant Samurai
+          scenario is loaded.
+Fixed:    After an unit upgrade, its information is updated properly.
+Fixed:    The game does not crash, if a civilization is conquered. (Another bug)
+Added:    Cities show on the main map optionally what they are building.
+Added:    A polution main map icon for dirty cities.
+Changed:  Other main map city icons have better transparency and outlines.
+Changed:  Some good sprites were replaced so that they can be better seen.
+Changed:  New modern city styles have now all the same color so that the 
+          city styles cannot be distinguished so well anymore.
+Fixed:    The game cannot be one anymore by just building the Solaris project.
+          For archieving the science victory all the other components of the
+          Gaja Controller are now necessary, too.
+Fixed:    The AI does not consider tiles for new cities anymore if those
+          tiles are already controlled by other cities.
+Fixed:    The messages for nano infected and nano destroyed cities address
+          now the victim player and do not throw slic errors anymore.
+Changed:  The main map city icons for bio infection, nano infection, injoin
+          and happiness attack now show the civilization color of the attacker.
+Fixed:    The feat that is supposed to give extra science now gives extra
+          science.
+Fixed:    The feat that is supposed to increase the unit hit points now
+          increases the unit hit points.
+Added:    A political map option was added to the minimap.
+Fixed:    When a city is founded inside foreign territory it adds national
+          borders as it should do.
+Fixed:    The AI does not unload units from transporters on the target continet
+          before the final landfall.
+Fixed:    Sea transporter pathes do not end one tile too early.
+Changed:  Unit support percent is now zero if production and unit support is
+          zero.
+Fixed:    Units disbanded in the city window will now give their production
+          costs to back to the city, and the city window is updated accordingly.
+Fixed:    When a city grows, the AI updates the values of positions for new
+          cities, properly.
+Changed:  The Empire Manager shows now more information.
+Changed:  Crime for science is now calculated as all the other resources.
+Fixed:    Wonders that are supposed to give a flat food bonus give a flat food
+          bonus instead a food percent bonus.
+Changed:  Laborers now benefit from the government coefficent, too.
+Fixed:    Changing between buildings, wonders, and units costs now 25% of the
+          stored production.
+Fixed:    Database errors and Great Library errors in the Apolyton Edition
+          scenario were removed.
+Changed:  Production that is left from one item in the city build queue can be
+          used for the next build item.
+Changed:  When a city is captured all the stored production is lost.
+Added:    New database flags for modders:
+- UnitDB:
+   VictoryEnslavementChance Unit's chance to enslave an enemy unit on victory
+   GovernmentOnly           Unit can only be built with the given government.
+                               The Unit is not destroyed on government change.
+
 2009-06-01 (Revision 990)
 Fixed:    The game does not crash, if a civilization is wiped out.
 Fixed:    The game does not hang if the AI cannot find enough transporters for
           a goal like sieging a city.
 Added:    More of the government modifed functionality for buildings and
           wonders was implemented.
-Fixed:    The AI regard for another player is recomputed when first cobtact
-          is made. This prevents the AI to give the human player a map exchange
-          a peace treaty etc. on the first turn of contact. Now the human player
+Fixed:    The AI regard for another player is recomputed when first contact
+          is made. This prevents the AI to give the human player a map exchange,
+          a peace treaty, etc. on the first turn of contact. Now the human player
           has to build up trust, first.
 Fixed:    Units with zero movepoints cannot move after an upgrade anymore.
 Fixed:    The game now updates the displayed unit information including its picture.

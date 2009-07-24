@@ -3927,7 +3927,7 @@ ORDER_RESULT ArmyData::NanoInfect(const MapPoint &point)
 		DPRINTF(k_DBG_GAMESTATE, ("Nano Infection: Success\n"));
 		
 		so = new CityReport("911CrisisCityIsNanoInfected", c);
-		so->AddCivilisation(g_selected_item->GetVisiblePlayer());
+		so->AddCivilisation(c->GetOwner()); // ToDo: Move this into CityReport if possible
 		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_SUCCEEDED;
@@ -4908,7 +4908,7 @@ ORDER_RESULT ArmyData::CreatePark(const MapPoint &point)
 	AddSpecialActionUsed(m_array[uindex]);
 
 	SlicObject * so = new CityReport("911NaniteCleanseCompleteVictim", c);
-	so->AddCivilisation(g_selected_item->GetVisiblePlayer());
+	so->AddCivilisation(c->GetOwner());
 	g_slicEngine->Execute(so);
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateParkUnit,

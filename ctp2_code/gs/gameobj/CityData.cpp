@@ -829,35 +829,42 @@ void CityData::Initialize(sint32 settlerType)
 
 	const UnitRecord * settlerRec   = NULL;
 	sint32 numPops = 1;
-	if(settlerType >= 0) {
+	if(settlerType >= 0)
+	{
 		settlerRec = g_theUnitDB->Get(settlerType, g_player[m_owner]->GetGovernmentType());
 		if(settlerRec)
 			numPops = settlerRec->GetSettleSize();
 		
-	} else {
+	}
+	else
+	{
 		//Added by Martin Gühmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
 			numPops = ScenarioEditor::CitySize();
 	}
 
-	sint32 i;
 	//Added by Martin Gühmann to make sure that also cities created by the editor
 	//have a size.
-	if((settlerType != -2) || ScenarioEditor::PlaceCityMode()){
-		for(i = 0; i < numPops; i++){
+	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
+	{
+		for(sint32 i = 0; i < numPops; i++)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 			                       GEA_City, m_home_city,
 			                       GEA_End);
 		}
 	}
 	
-	if(settlerRec && settlerRec->GetNumSettleBuilding() > 0) {
-		for(i = 0; i < settlerRec->GetNumSettleBuilding(); i++) {
+	if(settlerRec && settlerRec->GetNumSettleBuilding() > 0)
+	{
+		for(sint32 i = 0; i < settlerRec->GetNumSettleBuilding(); i++)
+		{
 			sint32 bi = settlerRec->GetSettleBuildingIndex(i);
 			Assert(bi >= 0);
 			Assert(bi < g_theBuildingDB->NumRecords());
-			if(bi >= 0 && bi < g_theBuildingDB->NumRecords()) {
+			if(bi >= 0 && bi < g_theBuildingDB->NumRecords())
+			{
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateBuilding,
 				                       GEA_City, m_home_city.m_id,
 				                       GEA_Int, bi,
@@ -869,11 +876,13 @@ void CityData::Initialize(sint32 settlerType)
 	//add 	DynamicArray<Religion> ReligionArray; //why doesn't cities use like player.cpp -> m_allInstallations = new DynamicArray<Installation>; ????
 
 	Cell *cell = g_theWorld->GetCell(center_point);
-	if(cell->GetEnv() & k_BIT_ENV_INSTALLATION) {
+	if(cell->GetEnv() & k_BIT_ENV_INSTALLATION)
+	{
 		DynamicArray<Installation> instArray;
-		if(g_theInstallationTree->GetAt(center_point, instArray)) {
-			sint32 i;
-			for(i = instArray.Num() - 1; i >= 0; i--) {
+		if(g_theInstallationTree->GetAt(center_point, instArray))
+		{
+			for(sint32 i = instArray.Num() - 1; i >= 0; i--)
+			{
 				instArray[i].Kill();
 			}
 		}
@@ -882,9 +891,11 @@ void CityData::Initialize(sint32 settlerType)
 	
 	
 	sint32 good;
-	if(g_theWorld->GetGood(center_point, good)) {
-		if(CanCollectGood(good)){	
-		//EMOD 5-01-2006 to prevent free collection of goods
+	if(g_theWorld->GetGood(center_point, good))
+	{
+		if(CanCollectGood(good))
+		{	
+			//EMOD 5-01-2006 to prevent free collection of goods
 			m_collectingResources.AddResource(good);
 		}
 	}
@@ -894,13 +905,17 @@ void CityData::Initialize(sint32 settlerType)
 	                                k_MASK_ENV_ROAD |
 	                                k_MASK_ENV_INSTALLATION));
 	SetRoad();
-	if (NeedsCanalTunnel(center_point)) {
+	if (NeedsCanalTunnel(center_point))
+	{
 		g_theWorld->SetCanalTunnel(center_point, true);
 	}
 	
-	if (g_theWorld->IsWater(center_point)) {
+	if (g_theWorld->IsWater(center_point))
+	{
 		g_theWorld->NumberContinents();
-	} else if (g_theWorld->IsNextToWater(center_point.x, center_point.y)) {
+	}
+	else if (g_theWorld->IsNextToWater(center_point.x, center_point.y))
+	{
 		g_theWorld->NumberContinents();
 	}
 	
@@ -908,8 +923,10 @@ void CityData::Initialize(sint32 settlerType)
 	g_tiledMap->PostProcessTile(center_point, g_theWorld->GetTileInfo(center_point));
 	g_tiledMap->TileChanged(center_point);
 	MapPoint pos;
-	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1)) {
-		if(center_point.GetNeighborPosition(d, pos)) {
+	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1))
+	{
+		if(center_point.GetNeighborPosition(d, pos))
+		{
 			g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 			g_tiledMap->TileChanged(pos);
 		}
@@ -924,7 +941,8 @@ void CityData::Initialize(sint32 settlerType)
 	sint32 name;
 	Civilisation *civ = g_player[m_owner]->GetCivilisation();
 	CivilisationData *civData = g_theCivilisationPool->AccessData(*civ);
-	if (g_player[m_owner]->GetNumCities() == 0){
+	if (g_player[m_owner]->GetNumCities() == 0)
+	{
 		name = civData->GetCapitalName();
 
 
@@ -939,21 +957,22 @@ void CityData::Initialize(sint32 settlerType)
 		m_cityStyle = ScenarioEditor::CityStyle();
 	}
 
-	if (name != k_CITY_NAME_UNDEFINED){
+	if (name != k_CITY_NAME_UNDEFINED)
+	{
 		civData->GetCityName(name, s);
 		civData->UseCityName(name);
 		SetName(s);
-	} else {
-		
-		
-	
+	}
+	else 
+	{
 		SetName(GetName());
 	}
 
 	// Gives all starting age buildings to a new city.
 	if(g_network.IsActive() && g_network.GetStartingAge() > 0)
 	{
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		{
 			if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
 				continue;
 
@@ -961,7 +980,8 @@ void CityData::Initialize(sint32 settlerType)
 				continue;
 
 			sint32 enable = buildingutil_Get(i, m_owner)->GetEnableAdvanceIndex();
-			if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_network.GetStartingAge()) {
+			if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_network.GetStartingAge())
+			{
 				m_built_improvements |= (uint64)1 << (uint64)i;
 			}
 		}
@@ -970,7 +990,8 @@ void CityData::Initialize(sint32 settlerType)
 	{
 		if (g_theProfileDB->GetSPStartingAge() > 0)
 		{
-			for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+			for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+			{
 				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
 					continue;
 
@@ -978,7 +999,8 @@ void CityData::Initialize(sint32 settlerType)
 					continue;
 
 				sint32 enable = buildingutil_Get(i, m_owner)->GetEnableAdvanceIndex();
-				if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_theProfileDB->GetSPStartingAge()) {
+				if(g_theAdvanceDB->Get(enable, g_player[m_owner]->GetGovernmentType())->GetAgeIndex() < g_theProfileDB->GetSPStartingAge())
+				{
 					m_built_improvements |= (uint64)1 << (uint64)i;
 				}
 			}
