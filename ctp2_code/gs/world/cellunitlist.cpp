@@ -565,6 +565,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
 	Unit can_stack_array[k_MAX_ARMY_SIZE];
 	sint32 stack_size = 0, unitnum;
 	double temp_success, success = 0;
+	bool enslavement_check = false;
 	//This puts units with VictoryEnslavementStacks in an array, or 
 	//saves the max chance of VictoryEnslavement units that don't stack
 	for (sint32 i = 0; i < m_nElements; i++) {
@@ -572,7 +573,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
 		   m_array[i].GetDBRec()->GetVictoryEnslavement()) {   
 			if(m_array[i].GetDBRec()->GetVictoryEnslavementStacks())
 				can_stack_array[stack_size++] = m_array[i];
-			else if(stack_size == 0 && success < 1.0)
+			else if(stack_size == 0 && success < 1.0) {
 				if(!m_array[i].GetDBRec()->GetVictoryEnslavementChance(temp_success)) {
 					success = 1.0;
 					unitnum = i;
@@ -582,10 +583,13 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
 					success = temp_success;
 					unitnum = i;
 				}
+			}
+			if(!enslavement_check)
+				enslavement_check = true;
 		}
 	}
 
-	if(stack_size > 0) { //If there is at least one unit that stacks
+	if(enslavement_check && stack_size > 0) { //If there is at least one unit that stacks
 		for (sint32 i = 0; i < stack_size; i++) {
 			if(!can_stack_array[i].GetDBRec()->GetVictoryEnslavementChance(success))
 				success = 1.0;
@@ -624,7 +628,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, sint32 enemySize)
 			}
 		}
 	}
-	else {
+	else if( enslavement_check ) {
 		MapPoint slpos;
 		GetPos(slpos);
 					
