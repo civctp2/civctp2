@@ -46,6 +46,9 @@
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added custom start/end "ages" button. (11-Apr-2009 Maq)
+// - Removed AI specific rules from window, and added mouse-over description
+//   for each existing rule. (25-Jul-2009 Maq)
+// - Removed sectarian happiness rule as it isn't doing anything.(25-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +61,7 @@
 #include "c3_static.h"
 #include "c3slider.h"
 #include "c3ui.h"
+#include "aui_stringtable.h"
 #include "aui_switch.h"
 #include "aui_uniqueid.h"
 
@@ -79,53 +83,39 @@ extern Network				g_network;
 static c3_PopupWindow	*s_spNewGameRulesScreen	= NULL;
 static aui_Switch		*s_genocide			= NULL,
 						*s_pollution		= NULL,
-						*s_citycapture		= NULL, //emod1
-						*s_onecity			= NULL, //emod1
-						*s_revoltinsurgent  = NULL, //emod1
+						*s_citycapture		= NULL,
+						*s_onecity			= NULL,
+						*s_revoltinsurgent  = NULL,
 						*s_revoltcasualty   = NULL,
 						*s_barbspawn		= NULL,
-						*s_secthappy		= NULL,
 						*s_NonRandomCivs	= NULL,
 						*s_Upgrade			= NULL,
 						*s_NewCombat		= NULL,
 						*s_NoGoodyHuts		= NULL,
-
 						*s_UNITGOLD			= NULL,
 						*s_CITYGOLD			= NULL,
-						*s_FREEUPGRADE		= NULL,
-						*s_NOSHIELD			= NULL,
-						*s_NOGOLD			= NULL,
-						*s_NOPDEFICIT		= NULL,
-						*s_NOGDEFICIT		= NULL,
-						*s_NOAICITYLIMIT	= NULL,
 						*s_NOCITYLIMIT		= NULL,
-
 						*s_NULL				= NULL;
 ctp2_Button				*s_ages				= NULL;
+static c3_Static		*m_ruleDetails		= NULL;
+static aui_StringTable	*m_ruleDetailsStrings = NULL;
 
 enum
 {
 	R_GENOCIDE,
 	R_POLLUTION,
-	GP_CITYCAPTURE, //emod2
-	R_ONECITY, //emod2
+	GP_CITYCAPTURE,
+	R_ONECITY,
 	R_INSURGENT,
 	R_CASUALTY,
 	R_BARBSPAWN,
-	R_SECTHAPPY,
 	R_NonRandomCivs,
 	R_UPGRADE,
 	R_NEWCOMBAT,
 	R_NOGOODYHUTS,
 	R_UNITGOLD,
 	R_CITYGOLD,
-	R_FREEUPGRADE,
-	R_NOSHIELD,
-	R_NOGOLD,
-	R_NOPDEFICIT,
-	R_NOGDEFICIT,
 	R_NOCITYLIMIT,
-	R_NOAICITYLIMIT,
 	GP_TOTAL
 };
 
@@ -133,25 +123,18 @@ static uint32 check[] =
 {
 	R_GENOCIDE,
 	R_POLLUTION,
-	GP_CITYCAPTURE, //emod3
-	R_ONECITY, //emod3
+	GP_CITYCAPTURE,
+	R_ONECITY,
 	R_INSURGENT,
 	R_CASUALTY,
 	R_BARBSPAWN,
-	R_SECTHAPPY,
 	R_NonRandomCivs,
 	R_UPGRADE,
 	R_NEWCOMBAT,
 	R_NOGOODYHUTS,
 	R_UNITGOLD,
 	R_CITYGOLD,
-	R_FREEUPGRADE,
-	R_NOSHIELD,
-	R_NOGOLD,
-	R_NOPDEFICIT,
-	R_NOGDEFICIT,
 	R_NOCITYLIMIT,
-	R_NOAICITYLIMIT,
 
 	GP_TOTAL
 };
@@ -162,26 +145,17 @@ sint32 spnewgamerulesscreen_updateData()
 
 	s_genocide       ->SetState( g_theProfileDB->IsGenocideRule            () );
 	s_pollution      ->SetState( g_theProfileDB->IsPollutionRule           () );
-
-	s_citycapture    ->SetState( g_theProfileDB->IsCityCaptureOptions      () ); //emod4
-	s_onecity        ->SetState( g_theProfileDB->IsOneCityChallenge        () ); //emod4
-	s_revoltinsurgent->SetState( g_theProfileDB->IsRevoltInsurgents        () ); //emod4
-	s_revoltcasualty ->SetState( g_theProfileDB->IsRevoltCasualties        () ); //emod4
+	s_citycapture    ->SetState( g_theProfileDB->IsCityCaptureOptions      () );
+	s_onecity        ->SetState( g_theProfileDB->IsOneCityChallenge        () );
+	s_revoltinsurgent->SetState( g_theProfileDB->IsRevoltInsurgents        () );
+	s_revoltcasualty ->SetState( g_theProfileDB->IsRevoltCasualties        () );
 	s_barbspawn      ->SetState( g_theProfileDB->IsBarbarianSpawnsBarbarian() );
-	s_secthappy      ->SetState( g_theProfileDB->IsSectarianHappiness      () );
 	s_NonRandomCivs  ->SetState( g_theProfileDB->IsNonRandomCivs           () );
 	s_Upgrade        ->SetState( g_theProfileDB->IsUpgrade                 () );
 	s_NewCombat      ->SetState( g_theProfileDB->IsNewCombat               () );
 	s_NoGoodyHuts    ->SetState( g_theProfileDB->IsNoGoodyHuts             () );
-
 	s_UNITGOLD       ->SetState( g_theProfileDB->IsGoldPerUnitSupport      () );
 	s_CITYGOLD       ->SetState( g_theProfileDB->IsGoldPerCity             () );
-	s_FREEUPGRADE    ->SetState( g_theProfileDB->IsAIFreeUpgrade           () );
-	s_NOSHIELD       ->SetState( g_theProfileDB->IsAINoShieldHunger        () );
-	s_NOGOLD         ->SetState( g_theProfileDB->IsAINoGoldHunger          () );
-	s_NOPDEFICIT     ->SetState( g_theProfileDB->IsNoAIProductionDeficit   () );
-	s_NOGDEFICIT     ->SetState( g_theProfileDB->IsNoAIGoldDeficit         () );
-	s_NOAICITYLIMIT  ->SetState( g_theProfileDB->IsAINoCityLimit           () );
 	s_NOCITYLIMIT    ->SetState( g_theProfileDB->IsNoCityLimit             () );
 
 	return 1;
@@ -239,8 +213,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
-	
-	
+
 
 	s_genocide			= spNew_aui_Switch(&errcode, windowBlock, "RuleOne",             spnewgamerulesscreen_checkPress, &check[R_GENOCIDE     ]);
 	s_pollution			= spNew_aui_Switch(&errcode, windowBlock, "RuleTwo",             spnewgamerulesscreen_checkPress, &check[R_POLLUTION    ]);
@@ -249,24 +222,21 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_revoltinsurgent	= spNew_aui_Switch(&errcode, windowBlock, "RevoltInsurgents",    spnewgamerulesscreen_checkPress, &check[R_INSURGENT    ]); //emod5
 	s_revoltcasualty	= spNew_aui_Switch(&errcode, windowBlock, "RevoltCasualties",    spnewgamerulesscreen_checkPress, &check[R_CASUALTY     ]); //emod5
 	s_barbspawn			= spNew_aui_Switch(&errcode, windowBlock, "BarbSpawn",           spnewgamerulesscreen_checkPress, &check[R_BARBSPAWN    ]); //emod5
-	s_secthappy			= spNew_aui_Switch(&errcode, windowBlock, "SectHappy",           spnewgamerulesscreen_checkPress, &check[R_SECTHAPPY    ]); //emod5
 	s_NonRandomCivs		= spNew_aui_Switch(&errcode, windowBlock, "NonRandomCivs",       spnewgamerulesscreen_checkPress, &check[R_NonRandomCivs]); //emod5
 	s_Upgrade			= spNew_aui_Switch(&errcode, windowBlock, "Upgrade",             spnewgamerulesscreen_checkPress, &check[R_UPGRADE      ]); //emod5
 	s_NewCombat			= spNew_aui_Switch(&errcode, windowBlock, "NewCombat",           spnewgamerulesscreen_checkPress, &check[R_NEWCOMBAT    ]);
 	s_NoGoodyHuts		= spNew_aui_Switch(&errcode, windowBlock, "NoGoodyHuts",         spnewgamerulesscreen_checkPress, &check[R_NOGOODYHUTS  ]);
-
 	s_UNITGOLD			= spNew_aui_Switch(&errcode, windowBlock, "UnitGold",            spnewgamerulesscreen_checkPress, &check[R_UNITGOLD     ]); //emod5
 	s_CITYGOLD			= spNew_aui_Switch(&errcode, windowBlock, "CityGold",            spnewgamerulesscreen_checkPress, &check[R_CITYGOLD     ]); //emod5
-	s_FREEUPGRADE		= spNew_aui_Switch(&errcode, windowBlock, "FreeUpgrade",         spnewgamerulesscreen_checkPress, &check[R_FREEUPGRADE  ]); //emod5
-	s_NOSHIELD			= spNew_aui_Switch(&errcode, windowBlock, "NoShield",            spnewgamerulesscreen_checkPress, &check[R_NOSHIELD     ]); //emod5
-	s_NOGOLD			= spNew_aui_Switch(&errcode, windowBlock, "NoGold",              spnewgamerulesscreen_checkPress, &check[R_NOGOLD       ]); //emod5
-	s_NOPDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "NoProductionDeficit", spnewgamerulesscreen_checkPress, &check[R_NOPDEFICIT   ]); //emod5
-	s_NOGDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "NoGoldDeficit",       spnewgamerulesscreen_checkPress, &check[R_NOGDEFICIT   ]); //emod5
-
-	s_NOAICITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "NoAiCityLimit",       spnewgamerulesscreen_checkPress, &check[R_NOAICITYLIMIT]); //emod5
 	s_NOCITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "NoCityLimit",         spnewgamerulesscreen_checkPress, &check[R_NOCITYLIMIT  ]); //emod5
 
 	s_ages				= spNew_ctp2_Button(&errcode, windowBlock, "AgesButton", spnewgamerulesscreen_agesPress);
+
+	m_ruleDetails		= spNew_c3_Static(&errcode,windowBlock, "RuleDetail");
+
+	//AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
+	m_ruleDetailsStrings = new aui_StringTable(&errcode, "RuleDetailsStringTable");
+	//Assert(errcode == AUI_ERRCODE_OK);
 
 	spnewgamerulesscreen_updateData();
 
@@ -292,28 +262,24 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 
 	mycleanup(s_genocide);
 	mycleanup(s_pollution);
-	mycleanup(s_citycapture); //emod6
-	mycleanup(s_onecity); //emod 6
-	mycleanup(s_revoltinsurgent); //emod6
-	mycleanup(s_revoltcasualty); //emod6
-	mycleanup(s_barbspawn); //emod6
-	mycleanup(s_secthappy); //emod6
+	mycleanup(s_citycapture);
+	mycleanup(s_onecity);
+	mycleanup(s_revoltinsurgent);
+	mycleanup(s_revoltcasualty);
+	mycleanup(s_barbspawn);
 	mycleanup(s_NonRandomCivs);
 	mycleanup(s_Upgrade);
 	mycleanup(s_NewCombat);
 	mycleanup(s_NoGoodyHuts);
 	mycleanup(s_UNITGOLD);
 	mycleanup(s_CITYGOLD);
-	mycleanup(s_FREEUPGRADE);
-	mycleanup(s_NOSHIELD);
-	mycleanup(s_NOGOLD);
-	mycleanup(s_NOPDEFICIT);
-	mycleanup(s_NOGDEFICIT);
-	mycleanup(s_NOAICITYLIMIT);
 	mycleanup(s_NOCITYLIMIT);
 	mycleanup(s_ages);
+	mycleanup(m_ruleDetails);
 
+    delete m_ruleDetailsStrings;
 	delete s_spNewGameRulesScreen;
+    m_ruleDetailsStrings = NULL;
 	s_spNewGameRulesScreen = NULL;
 
 	return AUI_ERRCODE_OK;
@@ -322,6 +288,18 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 
 void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
+	if (m_ruleDetails && m_ruleDetailsStrings)
+	{
+		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->Hide();
+		m_ruleDetails->Show();
+
+		char buf[1024];
+		sprintf(buf, "%s", m_ruleDetailsStrings->GetString(14));
+
+		m_ruleDetails->SetText(buf);
+	}
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	agesscreen_displayMyWindow(0);
@@ -329,9 +307,53 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 
 void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
+	uint32 checkbox = *((uint32*)cookie);
+
+	sint32 rule = -1;
+
+	if (m_ruleDetails && m_ruleDetailsStrings)
+	{
+		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->Hide();
+
+		switch(checkbox)
+		{
+			case R_GENOCIDE     : rule = 0; break;
+			case R_POLLUTION    : rule = 1; break;
+			case GP_CITYCAPTURE : rule = 2; break;
+			case R_ONECITY      : rule = 3; break;
+			case R_INSURGENT    : rule = 4; break;
+			case R_CASUALTY     : rule = 5; break;
+			case R_BARBSPAWN    : rule = 6; break;
+			case R_NonRandomCivs: rule = 7; break;
+			case R_UPGRADE      : rule = 8; break;
+			case R_NEWCOMBAT    : rule = 9; break;
+			case R_NOGOODYHUTS  : rule = 10; break;
+			case R_UNITGOLD     : rule = 11; break;
+			case R_CITYGOLD     : rule = 12; break;
+			case R_NOCITYLIMIT  : rule = 13; break;
+			default             : Assert(0); break;
+		};
+
+		if (rule >= 0)
+		{
+			m_ruleDetails->Show();
+			m_ruleDetails->SetText("", NULL);
+
+			char buf[1024];
+			sprintf(buf, "%s", m_ruleDetailsStrings->GetString(rule));
+			m_ruleDetails->SetText(buf);
+		}
+		else
+		{
+			m_ruleDetails->SetText("", NULL);
+			m_ruleDetails->Hide();
+		}
+	}
+
+
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
-	uint32 checkbox = *((uint32*)cookie);
 	void (ProfileDB::*func)(BOOL) = 0;
 	uint32 state = data;
 
@@ -339,27 +361,18 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	{
 		case R_GENOCIDE     : func = &ProfileDB::SetGenocideRule            ; break;
 		case R_POLLUTION    : func = &ProfileDB::SetPollutionRule           ; break;
-		case GP_CITYCAPTURE : func = &ProfileDB::SetCityCaptureOptions      ; break; //emod7
-		case R_ONECITY      : func = &ProfileDB::SetOneCity                 ; break; //emod7
-		case R_INSURGENT    : func = &ProfileDB::SetRevoltInsurgents        ; break; //emod7
-		case R_CASUALTY     : func = &ProfileDB::SetRevoltCasualties        ; break; //emod7
-		case R_BARBSPAWN    : func = &ProfileDB::SetBarbarianSpawnsBarbarian; break; //emod7
-		case R_SECTHAPPY    : func = &ProfileDB::SetSectarianHappiness      ; break; //emod7
+		case GP_CITYCAPTURE : func = &ProfileDB::SetCityCaptureOptions      ; break;
+		case R_ONECITY      : func = &ProfileDB::SetOneCity                 ; break;
+		case R_INSURGENT    : func = &ProfileDB::SetRevoltInsurgents        ; break;
+		case R_CASUALTY     : func = &ProfileDB::SetRevoltCasualties        ; break;
+		case R_BARBSPAWN    : func = &ProfileDB::SetBarbarianSpawnsBarbarian; break;
 		case R_NonRandomCivs: func = &ProfileDB::SetNonRandomCivs           ; break;
 		case R_UPGRADE      : func = &ProfileDB::SetUpgrade                 ; break;
 		case R_NEWCOMBAT    : func = &ProfileDB::SetNewCombat               ; break;
 		case R_NOGOODYHUTS  : func = &ProfileDB::SetNoGoodyHuts             ; break;
-
 		case R_UNITGOLD     : func = &ProfileDB::SetGoldPerUnitSupport      ; break;
 		case R_CITYGOLD     : func = &ProfileDB::SetGoldPerCity             ; break;
-		case R_FREEUPGRADE  : func = &ProfileDB::SetAIFreeUpgrade           ; break;
-		case R_NOSHIELD     : func = &ProfileDB::SetAINoShieldHunger        ; break;
-		case R_NOGOLD       : func = &ProfileDB::SetAINoGoldHunger          ; break;
-		case R_NOPDEFICIT   : func = &ProfileDB::SetNoAIProductionDeficit   ; break;
-		case R_NOGDEFICIT   : func = &ProfileDB::SetNoAIGoldDeficit         ; break;
-		case R_NOAICITYLIMIT: func = &ProfileDB::SetAINoCityLimit           ; break;
 		case R_NOCITYLIMIT  : func = &ProfileDB::SetNoCityLimit             ; break;
-
 		default             : Assert(0)                                     ; break;
 	};
 

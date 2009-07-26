@@ -3124,38 +3124,23 @@ str_ldl_SmoothBorders_On			"Smooth Icon Borders"
 str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+
 str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
 str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
 str_tbl_ldl_OneCityChallenge_Off		"Normal City Expansion"
-str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
 str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"		# Revolting city loses 1/3 of population
 str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
 str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"		# Revolting city creates barbarians
 str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
 str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entrenched barbs create more barbs
 str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
-
-
-str_tbl_ldl_NoAIProductionDeficit_On		"No AI Production Deficits"
-str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"			# AI cities don't go negative in gold
-str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities can make gold debts
 str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"				# All pay thins int times unit support calculation
 str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
 str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amount per city
 str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# AI pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"			# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI pays shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"			# AI doesnt pay unit gold hunger
-str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI pays unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"				# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI pays gold for upgrades
 str_tbl_ldl_Upgrade_On				"Upgrade Units"					# Units can be upgraded
 str_tbl_ldl_Upgrade_Off				"No Unit Upgrade"				# Units cannot be upgraded
-str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"				# If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI doesn't get cheapest unit
 
 str_ldl_DebugAI					"Debug AI"
 str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
@@ -3164,8 +3149,6 @@ str_ldl_Debug_AI_On				"Show Debug AI Text"
 str_ldl_Debug_AI_Off				"Hide Debug AI Text"
 str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
 str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
-str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by city limit
-str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
 str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
 str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
 str_tbl_ldl_NewCombat_Off			"Old Combat"
@@ -3176,7 +3159,26 @@ str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
 str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
+# Rules window description strings.
+str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nDisables the Gaia Controller victory."
+str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
+str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
+str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."
+str_tbl_ldl_RuleDetail_RiotsCreateBarbarians	"Riots Create Barbarians\nWhen a city riots there is a chance of barbarians appearing near the city. The chance is increased with the barbarian level and further increased if your civilization has a conflicting city style (or culture) with the city."
+str_tbl_ldl_RuleDetail_RiotsKillPopulation	"Riots Kill Population\nWhen a city of size 10 or greater riots there is a chance of people being killed in the city."
+str_tbl_ldl_RuleDetail_BarbsSpawnBarbs		"Barbarians Spawn Barbarians\nIncreases the chance of more barbarians appearing."
+str_tbl_ldl_RuleDetail_NonRandomCivs		"Non-Random AI Nations\nAI civilizations will be chosen in order (rather than at random) from the civilization database. See civilisation.txt for the order of all civilizations."
+str_tbl_ldl_RuleDetail_Upgrade			"Unit Upgrading\nAllows players to upgrade units using gold savings. See the Great Library on each unit for upgrade types, and the Upgrade article in the GL for an explanation on the use and costs of upgrading."
+str_tbl_ldl_RuleDetail_NewCombat		"New Combat\nUnits from a defending army will only use their defense (rather than attack and defense) rating during a battle or bombardment. Veteran units will also receive a defensive boost."
+str_tbl_ldl_RuleDetail_NoGoodyHuts		"No Ruins\nNo ruins will be placed on the map for a new game."
+str_tbl_ldl_RuleDetail_UnitGold			"Unit Gold Support\nAs well as the normal unit production upkeep, units will cost gold savings to support. See the Great Library entry for each unit's gold support cost."
+str_tbl_ldl_RuleDetail_CityMaintenance		"City Maintenance Costs\nEach city will require it's city size in commerce to maintain."
+str_tbl_ldl_RuleDetail_NoCityLimit		"No City Limits\nNo city limits will allow all players to exceed government city caps without happiness penalties."
+str_tbl_ldl_RuleDetail_Ages			"Custom Ages\nIf an advanced starting age is chosen new cities will receive all buildings up to and including the starting age for free."
+
 # Not Implemented
+str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
 str_SE_DebugAI					"debug"
 str_SE_ShowEnemyHealth				"show"
 str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses

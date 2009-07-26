@@ -58,6 +58,9 @@
 // - Added start and end age options. (11-Apr-2009 Maq)
 // - Added show city production under name option. (15-Apr-2009 Maq)
 // - Added show political map button options. (6-Jul-2009 EPW)
+// - Removed the AI specific rules from profile, since they already exist in
+//   difficultyDB. (25-Jul-2009 Maq)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -229,8 +232,6 @@ ProfileDB::ProfileDB()
     m_upgrade                           (FALSE),
     m_smoothBorders                     (FALSE),
     m_CivFlags                          (FALSE),
-    m_NoAIProductionDeficit             (FALSE),
-    m_NoAIGoldDeficit                   (FALSE),
     m_AICityDefenderBonus               (FALSE),
     m_BarbarianCities                   (FALSE),
     m_SectarianHappiness                (FALSE),
@@ -239,12 +240,8 @@ ProfileDB::ProfileDB()
     m_BarbarianCamps                    (FALSE),
     m_BarbarianSpawnsBarbarian          (FALSE),
     m_AINoSinking                       (FALSE),
-    m_AINoCityLimit                     (FALSE),
     m_GoldPerUnitSupport                (FALSE),
     m_GoldPerCity                       (FALSE),
-    m_AINoShieldHunger                  (FALSE),
-    m_AINoGoldHunger                    (FALSE),
-    m_AIFreeUpgrade                     (TRUE),
     m_AIMilitiaUnit                     (FALSE),
     m_OneCityChallenge                  (FALSE),
     m_NRG                               (FALSE),
@@ -434,8 +431,6 @@ ProfileDB::ProfileDB()
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL, false);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL, false);
-	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL, false);
-	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit            , NULL, false);
 	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
 	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);
 	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);
@@ -444,12 +439,8 @@ ProfileDB::ProfileDB()
 	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);
 	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);
 	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);
-	Var("AINoCityLimit"              , PV_BOOL  , &m_AINoCityLimit              , NULL, false);
 	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);
 	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);
-	Var("AINoShieldHunger"           , PV_BOOL  , &m_AINoShieldHunger           , NULL, false);
-	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger             , NULL, false);
-	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade              , NULL, false);
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);

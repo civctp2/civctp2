@@ -8955,10 +8955,9 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 	//EMOD to assist AI
 	if(gold < 0){
-		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
-		||  g_theProfileDB->IsNoAIGoldDeficit() )
-		&& g_player[m_owner]->IsRobot()
-		){
+		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
+			&& g_player[m_owner]->IsRobot())
+		{
 			gold = 0;
 		}
 	}
@@ -10349,10 +10348,10 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 	//	}
 	//}
 
-	if (
-	   (m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords())
-	&& (g_player[m_owner] && g_player[m_owner]->GetCivilisation())
-	){
+	// @TODO: This doesn't do anything?
+	if ((m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords())
+		&& (g_player[m_owner] && g_player[m_owner]->GetCivilisation()))
+	{
 		newsecthappy -= 2;
 	}
 		 //if ((secthappy < PopCount()) || (secthappy > PopCount()) ) { //added for a cap because it was still randomizing and at values over a million since rev710

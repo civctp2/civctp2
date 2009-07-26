@@ -34,6 +34,8 @@
 // - added difficulty where AI ignores any citylimit because the flag causes 
 //   no unhappiness for ai
 // - Moved code of InitSStateEvent to Diplomat. (13-Jun-2008 Martin Gühmann)
+// - Stopped the AI checking it's city limit if no city limit rule is enabled.
+//   (25-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -62,6 +64,7 @@
 #include "wonderutil.h"
 #include "DifficultyRecord.h"   //EMOD
 #include "GameSettings.h"
+#include "profileDB.h"			// g_theProfileDB
 
 //----------------------------------------------------------------------------
 //
@@ -883,7 +886,8 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 //----------------------------------------------------------------------------
 STDEHANDLER(CheckCityLimit_NextSStateEvent)
 {	
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit())
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit()
+		|| g_theProfileDB->IsNoCityLimit())
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX playerId;

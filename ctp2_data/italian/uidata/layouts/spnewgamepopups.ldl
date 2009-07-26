@@ -1184,53 +1184,6 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	NoShield:GAMEPLAY_CHECKBOX {
-
-		int	ypix	260
-		int	xpix	30 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_AINoShieldHunger_Off"
-			string	string1	"str_tbl_ldl_AINoShieldHunger_On"
-		}
-	}
-
-	NoProductionDeficit:GAMEPLAY_CHECKBOX {
-
-		int	ypix	290
-		int	xpix	30 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_NoAIProductionDeficit_Off"
-			string	string1	"str_tbl_ldl_NoAIProductionDeficit_On"
-		}
-	}
-
-	NoAiCityLimit:GAMEPLAY_CHECKBOX {
-
-		int	ypix	320
-		int	xpix	30 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_AINoCityLimit_Off"
-			string	string1	"str_tbl_ldl_AINoCityLimit_On"
-		}
-	}
-
-	NoGoodyHuts:GAMEPLAY_CHECKBOX {
-
-		int	ypix	350
-		int	xpix	30
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_NoGoodyHuts_Off"
-			string	string1	"str_tbl_ldl_NoGoodyHuts_On"
-		}
-	}
 	AgesButton:SP_RULES_BUTTON {
 		string	text	"str_ldl_Ages"
 		int	xpix	254 #30
@@ -1256,21 +1209,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	FreeUpgrade:GAMEPLAY_CHECKBOX {
-
-		int	ypix	80
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_AIFreeUpgrade_Off"
-			string	string1	"str_tbl_ldl_AIFreeUpgrade_On"
-		}
-	}
-
 	OneCity:GAMEPLAY_CHECKBOX {
 
-		int	ypix	110
+		int	ypix	80
 		int	xpix	325 #emod
 		int	widthpix	275
 
@@ -1282,7 +1223,7 @@ SPNewGameRulesScreen {
 
 	RevoltCasualties:GAMEPLAY_CHECKBOX {
 
-		int	ypix	140
+		int	ypix	110
 		int	xpix	325 #emod
 		int	widthpix	275
 
@@ -1292,21 +1233,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	SectHappy:GAMEPLAY_CHECKBOX {
-
-		int	ypix	170
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_SectarianHappiness_Off"
-			string	string1	"str_tbl_ldl_SectarianHappiness_On"
-		}
-	}
-
 	UnitGold:GAMEPLAY_CHECKBOX {
 
-		int	ypix	200
+		int	ypix	140
 		int	xpix	325 #emod
 		int	widthpix	275
 
@@ -1316,33 +1245,9 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	NoGold:GAMEPLAY_CHECKBOX {
-
-		int	ypix	230
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_AINoGoldHunger_Off"
-			string	string1	"str_tbl_ldl_AINoGoldHunger_On"
-		}
-	}
-
-	NoGoldDeficit:GAMEPLAY_CHECKBOX {
-
-		int	ypix	260
-		int	xpix	325 #emod
-		int	widthpix	275
-
-		stringtable {
-			string	string0	"str_tbl_ldl_NoAIGoldDeficit_Off"
-			string	string1	"str_tbl_ldl_NoAIGoldDeficit_On"
-		}
-	}
-
 	NoCityLimit:GAMEPLAY_CHECKBOX {
 
-		int	ypix	290
+		int	ypix	170
 		int	xpix	325 #emod
 		int	widthpix	275
 
@@ -1354,7 +1259,7 @@ SPNewGameRulesScreen {
 
 	NewCombat:GAMEPLAY_CHECKBOX {
 
-		int	ypix	320
+		int	ypix	200
 		int	xpix	325
 		int	widthpix	275
 
@@ -1362,6 +1267,35 @@ SPNewGameRulesScreen {
 			string	string0	"str_tbl_ldl_NewCombat_Off"
 			string	string1	"str_tbl_ldl_NewCombat_On"
 		}
+	}
+
+	NoGoodyHuts:GAMEPLAY_CHECKBOX {
+
+		int	ypix	230
+		int	xpix	325
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoGoodyHuts_Off"
+			string	string1	"str_tbl_ldl_NoGoodyHuts_On"
+		}
+	}
+
+	RuleDetail:CTP2_STANDARD_FONT {
+
+		int	xpix		30
+		int	ypix		260
+
+		int	widthpix	570
+		int	heightpix	128
+
+		string	just		"center"
+
+		bool	vertcenter	TRUE
+
+		bool	wordwrap	TRUE
+
+		#string	pattern	"cw_TEST.tga"
 	}
 
 # Cut from spec.
@@ -1388,6 +1322,25 @@ SPNewGameRulesScreen {
 #
 #	}
 
+}
+
+RuleDetailsStringTable {
+	int numstrings		15
+	string	string0		"str_tbl_ldl_RuleDetail_Bloodlust"
+	string	string1		"str_tbl_ldl_RuleDetail_Pollution"
+	string	string2		"str_tbl_ldl_RuleDetail_CityCaptureOptions"
+	string	string3		"str_tbl_ldl_RuleDetail_OneCityChallenge"
+	string	string4		"str_tbl_ldl_RuleDetail_RiotsCreateBarbarians"
+	string	string5		"str_tbl_ldl_RuleDetail_RiotsKillPopulation"
+	string	string6		"str_tbl_ldl_RuleDetail_BarbsSpawnBarbs"
+	string	string7		"str_tbl_ldl_RuleDetail_NonRandomCivs"
+	string	string8		"str_tbl_ldl_RuleDetail_Upgrade"
+	string	string9		"str_tbl_ldl_RuleDetail_NewCombat"
+	string	string10	"str_tbl_ldl_RuleDetail_NoGoodyHuts"
+	string	string11	"str_tbl_ldl_RuleDetail_UnitGold"
+	string	string12	"str_tbl_ldl_RuleDetail_CityMaintenance"
+	string	string13	"str_tbl_ldl_RuleDetail_NoCityLimit"
+	string	string14	"str_tbl_ldl_RuleDetail_Ages"
 }
 
 

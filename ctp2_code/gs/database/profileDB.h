@@ -65,6 +65,9 @@
 // - Added start and end age options. (11-Apr-2009 Maq)
 // - Added show city production under name option. (15-Apr-2009 Maq)
 // - Added show political map button options. (6-Jul-2009 EPW)
+// - Removed the AI specific rules from profile, since they already exist in
+//   difficultyDB. (25-Jul-2009 Maq)
+//
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -370,10 +373,6 @@ private:
     /// emod new profile options
     /// enables civ flags
     sint32 m_CivFlags;   
-    /// bae=sed on diffdb gives ai no prod deficit
-    sint32 m_NoAIProductionDeficit;
-    /// based on diffdb ai doesn't get 0 as a city gold
-    sint32 m_NoAIGoldDeficit;
     /// adds population defense to AI cities
     sint32 m_AICityDefenderBonus; 
     /// after entrenching chance barbs makes cities
@@ -391,18 +390,10 @@ private:
     /// sinking flag enabled?
     /// ai ships don't sink
     sint32 m_AINoSinking; 
-    /// based on diffdb AI has no city build limit
-    sint32 m_AINoCityLimit; 
     /// gold unit support
     sint32 m_GoldPerUnitSupport; 
     //gold per city
-    sint32 m_GoldPerCity;
-    /// ai units dont cost shields
-    sint32 m_AINoShieldHunger; 
-    /// ai units gold hunger not calculated
-    sint32 m_AINoGoldHunger;
-    /// ai gets free upgrades
-    sint32 m_AIFreeUpgrade; 
+    sint32 m_GoldPerCity; 
     /// empty ai units spawn cheapest unit
     sint32 m_AIMilitiaUnit; 
     /// human player cant create settlers
@@ -602,8 +593,6 @@ public:
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
     void SetOneCity(BOOL on)                            { m_OneCityChallenge = on; }
     void SetRevoltInsurgents (BOOL on)                  { m_RevoltInsurgents = on; }
-    void SetNoAIProductionDeficit(BOOL on)              { m_NoAIProductionDeficit = on; }
-    void SetNoAIGoldDeficit(BOOL on)                    { m_NoAIGoldDeficit = on; }
     void SetAICityDefenderBonus(BOOL on)                { m_AICityDefenderBonus = on; } 
     void SetBarbarianCities(BOOL on)                    { m_BarbarianCities = on; }
     void SetSectarianHappiness(BOOL on)                 { m_SectarianHappiness = on; }
@@ -611,12 +600,8 @@ public:
     void SetBarbarianCamps(BOOL on)                     { m_BarbarianCamps = on; }
     void SetBarbarianSpawnsBarbarian(BOOL on)           { m_BarbarianSpawnsBarbarian = on; }
     void SetAINoSinking(BOOL on)                        { m_AINoSinking = on; }
-    void SetAINoCityLimit(BOOL on)                      { m_AINoCityLimit = on; }
     void SetGoldPerUnitSupport(BOOL on)                 { m_GoldPerUnitSupport = on; }
     void SetGoldPerCity(BOOL on)                        { m_GoldPerCity = on; }
-    void SetAINoShieldHunger(BOOL on)                   { m_AINoShieldHunger = on; }
-    void SetAINoGoldHunger(BOOL on)                     { m_AINoGoldHunger = on; }
-    void SetAIFreeUpgrade(BOOL on)                      { m_AIFreeUpgrade = on; }
     void SetAIMilitiaUnit(BOOL on)                      { m_AIMilitiaUnit = on; }
     void SetNRG(BOOL on)                                { m_NRG = on; }
     void SetEnemyHealth(BOOL on)                        { m_showEnemyHealth = on; }  //emod2 - implementing a scenario editor switch
@@ -860,20 +845,14 @@ public:
 
 //emod new profile flags later to be gameplay rules options
     BOOL    IsCivFlags()                        { return m_CivFlags; } //emod3
-    BOOL    IsNoAIProductionDeficit()           { return m_NoAIProductionDeficit; }
-    BOOL    IsNoAIGoldDeficit()                 { return m_NoAIGoldDeficit; }
     BOOL    IsAICityDefenderBonus()             { return m_AICityDefenderBonus; }   
     BOOL    IsBarbarianCities()                 { return m_BarbarianCities; }
     BOOL    IsSectarianHappiness()              { return m_SectarianHappiness; }
     BOOL    IsBarbarianCamps()                  { return m_BarbarianCamps; }
     BOOL    IsBarbarianSpawnsBarbarian()        { return m_BarbarianSpawnsBarbarian; } //emod3
     BOOL    IsAINoSinking()                     { return m_AINoSinking; }
-    BOOL    IsAINoCityLimit()                   { return m_AINoCityLimit; }
     BOOL    IsGoldPerUnitSupport()              { return m_GoldPerUnitSupport; }
     BOOL    IsGoldPerCity()                     { return m_GoldPerCity; }
-    BOOL    IsAINoShieldHunger()                { return m_AINoShieldHunger; }
-    BOOL    IsAINoGoldHunger()                  { return m_AINoGoldHunger; }
-    BOOL    IsAIFreeUpgrade()                   { return m_AIFreeUpgrade; }
     BOOL    IsAIMilitiaUnit()                   { return m_AIMilitiaUnit; }
     BOOL    IsOneCityChallenge()                { return m_OneCityChallenge; }
     BOOL    IsNRG()                             { return m_NRG; }

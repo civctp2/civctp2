@@ -237,22 +237,10 @@ double Happy::CalcTooManyCities(Player *p)
 
 	num_cities = std::max(1, num_cities);
 
-	// Can't we just combine those else ifs?
 	double res;
-	if (num_cities <= t)
-	{
-		res = 0.0;
-	//EMOD
-	}
-	else if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->IsRobot())
-	{
-		res = 0.0;
-	}
-	else if(g_theProfileDB->IsAINoCityLimit() && p->IsRobot())
-	{
-		res = 0.0;
-	}
-	else if(g_theProfileDB->IsNoCityLimit())
+	if (num_cities <= t
+		|| g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->IsRobot()
+		|| g_theProfileDB->IsNoCityLimit())
 	{
 		res = 0.0;
 		//add option for flexible city limits (set to map size?)

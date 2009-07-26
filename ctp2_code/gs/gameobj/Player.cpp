@@ -2208,7 +2208,7 @@ sint32 Player::CalcUnitSupportGold()
 	sint32 goldPerUnitSupport = 0;
 
 	// diffDB.txt entry, can define exact modifier to unit gold support.
-	// This method takes precedence above only the userprofile entry.
+	// If it exists, this method takes precedence above the userprofile/rules window choice.
 	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport))
 	{
 		if (IsHuman())
@@ -2241,7 +2241,7 @@ sint32 Player::CalcUnitSupportGold()
 		}
 		else
 		{
-			if (g_theProfileDB->IsAINoGoldHunger())
+			if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger())
 			{
 				// do nothing.
 			}
@@ -9158,11 +9158,8 @@ void Player::SetPlayerType(PLAYER_TYPE pt)
 
 bool Player::HasFreeUnitUpgrades() const
 {
-	return (
-	        (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade())
-	     || (g_theProfileDB->IsAIFreeUpgrade())
-	       )
-	        && IsRobot();
+	return (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade()
+	        && IsRobot());
 //	    || HasFreeUpgradeWonder like Civ2's Leonardo's workshop
 //	    || FreeUpgradeFeat
 //	    || Whatever
