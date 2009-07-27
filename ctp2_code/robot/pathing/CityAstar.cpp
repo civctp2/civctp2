@@ -76,7 +76,7 @@ bool CityAstar::EntryCost
     ASTAR_ENTRY_TYPE &  entry
 )
 {
-	if (m_pathRoad)
+	if(m_pathRoad)
 	{
 		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
 		if (!rec || !g_player[m_owner]->IsExplored(pos))
@@ -85,7 +85,7 @@ bool CityAstar::EntryCost
 			entry = ASTAR_BLOCKED;
 			return false;
 		}
-		
+
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
 		if(!effect)
 		{
@@ -142,6 +142,26 @@ bool CityAstar::EntryCost
 
 		entry = ASTAR_CAN_ENTER;
 	}
+	else
+	{
+		Cell *  entryCell   = g_theWorld->GetCell(pos);
+
+		cost  = static_cast<float>(entryCell->GetMoveCost());
+		entry = ASTAR_CAN_ENTER;
+
+		if(!g_player[m_owner]->IsExplored(pos))
+		{
+			cost *= 4.0F;
+		}
+		else if(entryCell->GetOwner() != m_owner)
+		{
+			cost *= 3.0F;
+		}
+		else if(entryCell->GetOwner() < 0)
+		{
+			cost *= 2.0F;
+		}
+	}
 
 	return true;
 }
@@ -151,7 +171,6 @@ sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 	return SOUTH;
 }
 
-// Don't use it, it needs the original CityAstar implementation, if you need it add a new DistanceAstar
 void CityAstar::FindCityDist
 (
     PLAYER_INDEX        owner,
@@ -160,14 +179,14 @@ void CityAstar::FindCityDist
     float &             cost
 )
 {
-	m_alliance_mask     = g_player[m_owner]->GetMaskAlliance(); 
+	m_alliance_mask     = g_player[m_owner]->GetMaskAlliance();
 	m_pathRoad          = false;
-	m_owner             = owner; 
+	m_owner             = owner;
 
 	Path    tmp_path; 
 	sint32  nodes_opened    = 0;
 
-	if (!FindPath(start, dest, tmp_path, cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened))
+	if (!FindPath(start, dest, tmp_path, cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened))
 	{
 		cost = static_cast<float>(g_player[m_owner]->GetMaxEmpireDistance());
 	}

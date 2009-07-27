@@ -414,11 +414,11 @@ void Governor::Save(CivArchive & archive) const
 
 sint32 Governor::ComputeBestGovernment() const
 {
-	const StrategyRecord & strategy = 
-		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
+
+	const StrategyRecord & strategy = 
+		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	for (sint32 gov_index = 0; gov_index < strategy.GetNumGovernment(); gov_index++)
 	{

@@ -421,7 +421,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 			int		ypix		54 #26
 			
 			Label {
-				string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+				string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 			}
 		}
 

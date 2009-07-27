@@ -279,46 +279,45 @@ double Happy::CalcConquestDistress(CityData &cd, Player *p)
 
 double Happy::CalcDistanceFromCapitol(CityData & cd, Player * p)
 {
-	if (cd.IsCapitol() || p->m_first_city) 
-    {
+	if (cd.IsCapitol() || p->m_first_city)
+	{
 		m_dist_to_capitol   = 0.0;
 		m_empire_dist       = 0.0;
-    }
-    else
-    {
-	    double      cost = p->GetMaxEmpireDistance();
-        MapPoint    start;
-        if (p->GetCapitolPos(start)) 
-        {
-	        MapPoint    dest;
-		    cd.m_home_city.GetPos(dest);
-            cost = std::min(cost,
-                            m_cost_to_capitol + 
-                                p->m_difficulty->GetDistanceFromCapitolAdjustment()
-                           );
+	}
+	else
+	{
+		/// @ToDo: Check whether CityAstar::FindCityDist is better for distance calculation
+		double      cost = p->GetMaxEmpireDistance();
+		MapPoint    start;
+		if(p->GetCapitolPos(start)) // If we have a capitol otherwise max distance
+		{
+			MapPoint    dest;
+			cd.m_home_city.GetPos(dest);
+			cost = std::min(cost,
+			                m_cost_to_capitol + // <-- Calculated in World Distances, ugly design
+			                    p->m_difficulty->GetDistanceFromCapitolAdjustment() // 0 in DifficultyDB
+			               );
+		}
 
-	    } 
-    	
-        m_dist_to_capitol = 
-            std::max(0.0, 
-                     cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
-                                GetMinEmpireDistance()
-                    ); 
+		m_dist_to_capitol =
+		    std::max(0.0,
+		             cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
+		                        GetMinEmpireDistance()
+		            );
 
+		m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
+		sint32 wonderDistanceModifier = wonderutil_GetDecreaseEmpireSize(p->m_builtWonders);
+		if (wonderDistanceModifier > 0)
+		{
+			m_empire_dist -= m_empire_dist * (double(wonderDistanceModifier) / 100.0);
+		}
+	}
 
-	    m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
-	    sint32 wonderDistanceModifier = wonderutil_GetDecreaseEmpireSize(p->m_builtWonders);
-	    if (wonderDistanceModifier > 0) 
-        {
-		    m_empire_dist -= m_empire_dist * (double(wonderDistanceModifier) / 100.0);
-	    }
-    }
-
-	m_tracker->SetHappiness(HAPPY_REASON_DISTANCE_FROM_CAPITOL,	m_empire_dist);
+	m_tracker->SetHappiness(HAPPY_REASON_DISTANCE_FROM_CAPITOL, m_empire_dist);
 	return m_empire_dist;
 }
 
-double Happy::CalcEnemyAction() 
+double Happy::CalcEnemyAction()
 {
 	m_enemy_action = 0.0;
 	m_tracker->SetHappiness(HAPPY_REASON_ENEMY_ACTION, m_enemy_action);
@@ -507,7 +506,7 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 	}
 
 	
-	m_tracker->SetHappiness(HAPPY_REASON_CRIME, 0); 
+	m_tracker->SetHappiness(HAPPY_REASON_CRIME, 0);
 	return m_crime;
 }
  
@@ -916,7 +915,7 @@ void Happy::RestoreTracker()
 double Happy::CalcFeats(Player *p)
 {
 	double res = g_featTracker->GetAdditiveEffect
-                    (FEAT_EFFECT_INCREASE_HAPPINESS, p->m_owner);
+	                (FEAT_EFFECT_INCREASE_HAPPINESS, p->m_owner);
 	m_tracker->SetHappiness(HAPPY_REASON_FEATS, res);
 	return res;
 }

@@ -104,7 +104,7 @@ Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 	m_value             += add_me.m_value;
 	m_transport         += add_me.m_transport;
 	m_defenders         += add_me.m_defenders;
-	m_ranged            += add_me.m_ranged; 
+	m_ranged            += add_me.m_ranged;
 
 	m_land_bombard_str  += add_me.m_land_bombard_str;
 	m_water_bombard_str += add_me.m_water_bombard_str;

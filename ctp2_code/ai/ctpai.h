@@ -93,7 +93,7 @@ public:
 	
 	static void NetworkClientBeginTurn(const PLAYER_INDEX player);
 
-	
+
 	static void AddForeignerGoalsForCity(const Unit & city, const PLAYER_INDEX ownerId);
 
 	

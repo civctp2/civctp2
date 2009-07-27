@@ -64,7 +64,6 @@ class Scheduler
 public:
 
 #ifdef _DEBUG
-	#define dbga dbgallocator
 
 	typedef std::vector<sint16, dbgallocator<sint16> >                       Count_Vector;
 	typedef std::list<GOAL_TYPE, dbgallocator<GOAL_TYPE> >                   Goal_Type_List;
@@ -83,16 +82,16 @@ public:
 	typedef Sorted_Agent_List::iterator                                      Sorted_Agent_Iter;
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version
-	typedef std::deque<Scheduler, dbga<Scheduler> >                          Scheduler_Vector;
+	typedef std::deque<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
 #else
 	typedef std::vector<Scheduler, dbgallocator<Scheduler> >                 Scheduler_Vector;
 #endif
 
 #else
-	
+
 	typedef std::vector<sint16>                                              Count_Vector;
 	typedef std::list<GOAL_TYPE>                                             Goal_Type_List;
-	
+
 	typedef std::list<Sorted_Goal_ptr>                                       Sorted_Goal_List;
 	typedef Sorted_Goal_List::iterator                                       Sorted_Goal_Iter;
 	typedef Sorted_Goal_List::const_iterator                                 Sorted_Goal_Const_Iter;
