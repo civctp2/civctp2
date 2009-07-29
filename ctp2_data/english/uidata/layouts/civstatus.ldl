@@ -777,7 +777,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 						Consumed:NEGATIVE_EFFECT_LABEL {
@@ -799,7 +799,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 
@@ -961,7 +961,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 						Enemy:NEGATIVE_EFFECT_LABEL {
@@ -1005,7 +1005,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 
@@ -1202,7 +1202,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		53
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 							Value:CTP2_STATIC_BASE {
 								int		widthpix	203
@@ -1271,7 +1271,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 
@@ -1348,7 +1348,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 
@@ -1438,7 +1438,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		53
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 							Value:CTP2_STATIC_BASE {
 								int		widthpix	203
@@ -1483,7 +1483,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 
@@ -1492,7 +1492,7 @@ DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 							int		ypix		211 #205 #177 #155 #2
 							
 							Label {
-								string	text		"str_ldl_DD_SUB_TOTAL_LABEL"
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
 							}
 						}
 

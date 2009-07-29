@@ -714,6 +714,10 @@ void CauseAndEffectTab::UpdateProductionValues()
 		// Franchise and bio infection losses.
 		sint32 tmpProduction = 0, crimeLoss = 0, franchiseLoss = 0;
 		tmpProduction = production;
+
+#if defined(NEW_RESOURCE_PROCESS)
+		double franchiseBioLoss = 0.0;
+#else
 		//  Production is returned with only bio infection removed, crimeLoss and franchiseLoss are filled:
 		sint32 franchiseBioLoss = cityData->ComputeProductionLosses(tmpProduction, crimeLoss, franchiseLoss);
 		// This now leaves bio infection loss:
@@ -724,7 +728,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 		{
 			franchiseBioLoss = 0;
 		}
-			
+#endif
 
 		// Crime.
 		sint32 productionCrime = cityData->GetProdCrime();

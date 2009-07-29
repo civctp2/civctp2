@@ -518,10 +518,7 @@ public:
 	sint32 GetNetCityGold() const { return m_net_gold; } 
 	sint32 GetGrossCityGold() const { return m_gross_gold; } 
 
-
-
 	void ResetConquestDistress(double new_distress);
-
 
 	void ImprovementHealUnitsInCity() const;
 	void ImprovementRefuelUnitsInCity() const;
@@ -531,14 +528,8 @@ public:
 	void UseRawMaterials(sint32 amt);
 	bool IsConnected(MapPoint &point, uint8* array = NULL, sint32 w = 0, sint32 h = 0);
 
-
-
 	void CalcPollution(void) ;
 	void DoLocalPollution();
-
-
-
-
 
 	void CheatBuildFirstItem();
 
@@ -548,17 +539,7 @@ public:
 	bool BeginTurn(); 
 	void EndTurn();
 
-	sint32 GetFinalFoodFromFarmers() const;
-	sint32 GetFinalProductionFromLaborers() const;
-	sint32 GetFinalGoldFromMerchants() const;
-	sint32 GetFinalScienceFromScientists() const;
-
 	sint32 GetNumPop() const; 
-
-
-
-
-
 
 	bool BuildUnit(sint32 type);
 	bool BuildImprovement(sint32 type);

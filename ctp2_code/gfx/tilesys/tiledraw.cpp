@@ -3531,8 +3531,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								{
 									BuildNode *bn = bq->GetHead();
 
-									/* @todo this doesn't show the right build time,
-									maybe just shows the AI's build time.*/
 									buildItemTime = cityData->HowMuchLonger();
 
 									switch(bn->m_category) {

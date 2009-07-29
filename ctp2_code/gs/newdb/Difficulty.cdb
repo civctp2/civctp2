@@ -167,6 +167,7 @@ Difficulty{
 	Bit					AINoGoldHunger						# AI doesnt pay unit gold hunger
 	Bit					AIFreeUpgrade						# AI doesn't pay goldfor upgrades
 	Bit					AIMilitiaUnit						# If city is empty at turn start AI gets cheapest unit
+	Bit(Float)			TechCostKnownDeduction				# % amount to deduct decided by % of civs that have the advance
 
 	# Bit(Int)			SmallMapExtraCities                 # This goes into a future map.cdb
 	# Bit(Int)			MediumMapExtraCities

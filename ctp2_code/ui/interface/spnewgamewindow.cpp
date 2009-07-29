@@ -177,8 +177,6 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	m_string			= spNewStringTable(retval,"SPNewGameStrings");
 
 	// Reset failsafe start/end ages here, so they're correct before agesscreen is initialized.
-	agesscreen_setStartAge(0);
-	agesscreen_setEndAge(g_theAgeDB->NumRecords() - 1);
 	g_theProfileDB->SetSPStartingAge(0);
 	g_theProfileDB->SetSPEndingAge(g_theAgeDB->NumRecords() - 1);
 	g_theProfileDB->Save();

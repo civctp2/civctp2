@@ -507,7 +507,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_crimeGoldLossOfOnePop             (0.0),
 	m_crimeScieLossOfOnePop             (0.0),
 	m_bioinfectionProdLossOfOnePop      (0.0),
-	m_franchiseProdLossOfOnePop         (0,0),
+	m_franchiseProdLossOfOnePop         (0.0),
 	m_conversionGoldLossOfOnePop        (0.0),
 	m_productionLostToBioinfection      (0),
 	m_max_scie_from_terrain             (0),
@@ -1832,10 +1832,13 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 	gross_production += g_player[m_owner]->CivProductionBonus();
 
 //EMOD Citystyle bonuses
-	gross_production += ceil(gross_production * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetProductionPercent());
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
 
-	gross_production += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusProduction();
-
+	if(styleRec)
+	{
+		gross_production += ceil(gross_production * styleRec->GetProductionPercent());
+		gross_production += styleRec->GetBonusProduction();
+	}
 
 //Added by E - EXPORT BONUSES TO GOODS if has good than a production bonus	Finally Works! 1-13-2006
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
@@ -2375,7 +2378,13 @@ void CityData::CollectResources()
 
 	
 	m_collected_production_this_turn = m_gross_production;
-	m_net_production = m_gross_production;
+
+	/* Why is gross production passed to net here?
+	 This is why GetNetCityProduction sometimes returns gross production
+	 if ProcessProduction has not fired afterward.
+	 Put it back if it causes problems.-Maq 29-Jul-2009 */
+	//m_net_production = m_gross_production;
+
 	// Added for new Empire Manager details
     m_gross_food_before_bonuses = m_gross_food;
 	m_gross_prod_before_bonuses = m_gross_production;
@@ -2687,7 +2696,7 @@ double CityData::ProcessFood(sint32 food) const
 	///////////////////////////////////////////////
 	// Apply building boni
 	double foodBonus;
-	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus);
+	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus, m_owner);
 	double grossFood = static_cast<double>(food) * foodBonus;
 
 	///////////////////////////////////////////////
@@ -2733,7 +2742,7 @@ double CityData::ProcessProd(sint32 prod) const
 	///////////////////////////////////////////////
 	// Apply building boni
 	double prodBonus;
-	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus);
+	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus, m_owner);
 	double grossProd = static_cast<double>(prod) * prodBonus;
 
 	///////////////////////////////////////////////
@@ -2792,7 +2801,7 @@ double CityData::ProcessGold(sint32 gold) const
 
 	///////////////////////////////////////////////
 	// Add(or if negative Subtract) gold per citizen
-	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings());
+	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings(), m_owner);
 	grossGold += static_cast<double>(goldPerCitizen * PopCount());
 
 	return grossGold;
@@ -2827,12 +2836,12 @@ double CityData::ProcessScie(sint32 science) const
 		             g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST], g_player[m_owner]->GetGovernmentType())->GetScience();
 	}
 
-	grossScience += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings()) * static_cast<double>(PopCount() - SlaveCount());
+	grossScience += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings(), m_owner) * static_cast<double>(PopCount() - SlaveCount());
 
 	///////////////////////////////////////////////
 	// Apply building boni
 	double scienceBonus;
-	buildingutil_GetSciencePercent(GetEffectiveBuildings(), scienceBonus);
+	buildingutil_GetSciencePercent(GetEffectiveBuildings(), scienceBonus, m_owner);
 	grossScience += static_cast<double>(grossScience) * scienceBonus;
 
 	///////////////////////////////////////////////
@@ -3029,13 +3038,16 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 
 	//EMOD Civilization and Citystyle bonuses 
 
-	//grossFood += ceil(grossFood * g_player[m_owner]->GetCivilisation()->GetFoodPercent());
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
 
-	grossFood += ceil(grossFood * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetFoodPercent());
+	if(styleRec)
+	{
+		grossFood += ceil(grossFood * styleRec->GetFoodPercent());
+		grossFood += styleRec->GetBonusFood();
+	}
 
 	grossFood += g_player[m_owner]->CivFoodBonus();
 
-	grossFood += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusFood();
 
 
 	//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (27-FEB-2006)	
@@ -3358,18 +3370,22 @@ bool CityData::GrowOrStarve()
 {
 	CalculateGrowthRate();
 
-	if(m_food_delta < 0) {
-		if(m_growth_rate < 0) {
-			if(m_starvation_turns > 0) {
-				
-				if (m_starvation_turns == GetStarvationProtection()) {
+	if(m_food_delta < 0)
+	{
+		if(m_growth_rate < 0)
+		{
+			if(m_starvation_turns > 0)
+			{
+				if (m_starvation_turns == GetStarvationProtection())
+				{
 					SlicObject *so = new SlicObject("911CityWillStarveInitialWarning") ;
 					so->AddRecipient(GetOwner()) ;
 		            so->AddCity(m_home_city) ;
 					so->AddPlayer(m_owner);
 					g_slicEngine->Execute(so) ;
 				}
-				else if (m_starvation_turns == (sint32)(GetStarvationProtection()/2)) {
+				else if (m_starvation_turns == (sint32)(GetStarvationProtection()/2))
+				{
 					SlicObject *so = new SlicObject("911CityWillStarveFoodStoresLow") ;
 					so->AddRecipient(GetOwner()) ;
 					so->AddCity(m_home_city) ;
@@ -3378,22 +3394,33 @@ bool CityData::GrowOrStarve()
 				}
 
 				m_starvation_turns--;
+
 				UpdateSprite();
+
 				return true;
+
 			} 
+
 			else m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 
 		}
+
 		m_partialPopulation += m_growth_rate;
 
-		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
+		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
 			                       GEA_City, m_home_city.m_id,
 			                       GEA_End);
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
+
 			UpdateSprite();
+
 			return true;
-		} else if(m_partialPopulation < 0) {
+
+		}
+		else if(m_partialPopulation < 0)
+		{
 			//PFT 05 apr 05: slaves starve first
 			if(SlaveCount() > 0 )
 				ChangeSpecialists(POP_SLAVE, -1);
@@ -3403,25 +3430,34 @@ bool CityData::GrowOrStarve()
 			                       GEA_End);
 			
 			m_partialPopulation += k_PEOPLE_PER_POPULATION;
+
 			UpdateSprite();
+
 			return true;
 		}
-	} else {
+	}
+	else
+	{
 		m_partialPopulation += sint32(m_growth_rate);
 
 		ResetStarvationTurns();
 
-		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION) {
+		if(m_partialPopulation >= k_PEOPLE_PER_POPULATION)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
 			                       GEA_City, m_home_city.m_id,
 			                       GEA_End);
 			
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
+
 			UpdateSprite();
+
 			return true;
 		}
 	}
+
 	UpdateSprite();
+
 	return false;
 }
 
@@ -4272,6 +4308,10 @@ bool CityData::BeginTurn()
 	//END EMOD
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
+
+	// Added this so city production turns are calculated on begin turn
+	// using correct amount of current net city production.
+	ProcessProduction(true);
 
 	return true;
 }
@@ -5973,8 +6013,6 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 {
 	sint32 prod_remaining = productionRemaining;
 
-
-
 	sint32 prod = GetNetCityProduction();
 
 	if(m_contribute_military) {
@@ -7183,8 +7221,12 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	sci += buildingutil_GetIncreaseSciencePerPop(GetEffectiveBuildings(), m_owner) * static_cast<double>(PopCount() - SlaveCount());
 
 //EMOD Citystyle bonuses
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
 
-	sci += ceil(sci * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetSciencePercent());
+	if(styleRec)
+	{
+		sci += ceil(sci * styleRec->GetSciencePercent());
+	}
 
 //Added by E - EXPORT BONUSES TO GOODS if has good than a science bonus  (11-JAN-2006)	
 //Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
@@ -7268,90 +7310,6 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	return static_cast<sint32>(sci);
 }
 #endif
-
-sint32 CityData::GetFinalFoodFromFarmers() const
-{
-	double food = 0.0;
-	double beforecrime = 0.0;
-	const GovernmentRecord *gov =
-		g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
-
-	if(m_specialistDBIndex[POP_FARMER] >= 0 
-	&& m_specialistDBIndex[POP_FARMER] < g_thePopDB->NumRecords()) {
-		beforecrime = FarmerCount() * 
-					  (g_thePopDB->Get(m_specialistDBIndex[POP_FARMER], g_player[m_owner]->GetGovernmentType())->GetFood()
-					  * gov->GetFoodCoef());
-
-		food = beforecrime - (CrimeLoss(beforecrime));
-	}
-
-	return food;
-}
-
-sint32 CityData::GetFinalProductionFromLaborers() const
-{
-	double prod = 0.0;
-
-	if(m_specialistDBIndex[POP_LABORER] >= 0 
-	&& m_specialistDBIndex[POP_LABORER] < g_thePopDB->NumRecords()) {
-
-		const GovernmentRecord *gov = g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
-		double beforecrime = LaborerCount() * 
-					  (g_thePopDB->Get(m_specialistDBIndex[POP_LABORER], g_player[m_owner]->GetGovernmentType())->GetProduction()
-					  * gov->GetProductionCoef());
-
-		sint32 crimeLoss, specialLoss;
-
-		//deducts only bio infection loss here...
-		beforecrime = CityData::ComputeProductionLosses(beforecrime, crimeLoss, specialLoss);
-
-		//and crime and franchise losses here.
-		prod = beforecrime - (specialLoss + crimeLoss);
-	}
-
-	return prod;
-}
-
-sint32 CityData::GetFinalGoldFromMerchants() const
-{
-	double gold = 0.0;
-
-	if(m_specialistDBIndex[POP_MERCHANT] >= 0 
-	&& m_specialistDBIndex[POP_MERCHANT] < g_thePopDB->NumRecords()) {
-
-		const GovernmentRecord *gov = g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
-		sint32 beforecrime = MerchantCount() * 
-					  (g_thePopDB->Get(m_specialistDBIndex[POP_MERCHANT], g_player[m_owner]->GetGovernmentType())->GetCommerce()
-					  * gov->GetGoldCoef());
-		sint32 conversionLoss, crimeLoss;
-		CityData::CalcGoldLoss(true, beforecrime, conversionLoss, crimeLoss);
-
-		gold = beforecrime;
-
-		if (gold < 0) { gold = 0; }
-	}
-
-	return gold;
-}
-
-sint32 CityData::GetFinalScienceFromScientists() const
-{
-	double sci = 0.0;
-	double beforecrime = 0.0;
-	const GovernmentRecord *gov =
-		g_theGovernmentDB->Get(g_player[m_owner]->GetGovernmentType());
-
-	if(m_specialistDBIndex[POP_SCIENTIST] >= 0 
-	&& m_specialistDBIndex[POP_SCIENTIST] < g_thePopDB->NumRecords()) {
-		beforecrime = ScientistCount() * 
-					  (g_thePopDB->Get(m_specialistDBIndex[POP_SCIENTIST], g_player[m_owner]->GetGovernmentType())->GetScience()
-					  * gov->GetKnowledgeCoef());
-
-		sci = beforecrime - (CrimeLoss(beforecrime));
-	}
-
-	return sci;
-}
 
 sint32 CityData::GetNumPop() const
 {
@@ -8065,6 +8023,13 @@ void CityData::ChangePopulation(sint32 delta)
     Assert(m_numSpecialists[POP_WORKER] >= 0);
 
 	AdjustSizeIndices();
+
+	// Recalculate resources for turns to next pop
+	// and city production figure.
+	ProcessAllResources();
+	//CalculateGrowthRate();
+	//ProcessProduction(true);
+
 	UpdateSprite();
 
 	if(g_network.IsHost()) {
@@ -8836,6 +8801,8 @@ void CityData::CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLos
 //----------------------------------------------------------------------------
 void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 {
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
+
 	if(gold > 0) {
 		
 	//(IsBuildingOperational(b))
@@ -8850,8 +8817,10 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 		//EMOD Civilization and Citystyle bonuses
 //		gold += ceil(gross_production * g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation(), m_government_type)->GetCommercePercent();
 	
-        
-		gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
+		if(styleRec)
+		{
+			gold += ceil(gold * styleRec->GetCommercePercent());
+		}
 
 		//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
 		//Added by E - EXPORT BONUSES TO GOODS This causes a crime effect if negative and efficiency if positive
@@ -8887,8 +8856,10 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//EMOD Civilization and Citystyle bonuses
 	gold += g_player[m_owner]->CivCommerceBonus();
 
-	gold += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusGold();
-
+	if(styleRec)
+	{
+		gold += styleRec->GetBonusGold();
+	}
 
 	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
@@ -9284,7 +9255,8 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 	double currentFood;
 	double foodDelta = m_food_delta;
 	sint32 bestSpecialist = GetBestSpecialist(POP_FARMER);
-	if(bestSpecialist >= 0 && considerOnlyFromTerrain){
+	if(bestSpecialist >= 0 && considerOnlyFromTerrain)
+	{
 		double crimeLossFood;
 		double currentFoodPerPop = GetProducedFood() / static_cast<double>(WorkerCount());
 		double popFood = static_cast<double>(g_thePopDB->Get(bestSpecialist, g_player[m_owner]->GetGovernmentType())->GetFood()*FarmerCount());
@@ -9295,26 +9267,31 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 		foodDelta  -= popFood;
 		foodDelta  += currentFoodPerPop*FarmerCount();
 	}
-	else{
+	else
+	{
 		currentFood = GetProducedFood() + processedBonusFood;
 	}
 	/////////////////////////////////////
 
 	const CitySizeRecord *nextRec = NULL;
 	if(m_sizeIndex >= 0 
-	&& m_sizeIndex < g_theCitySizeDB->NumRecords()){
+		&& m_sizeIndex < g_theCitySizeDB->NumRecords())
+	{
 		nextRec = g_theCitySizeDB->Get(m_sizeIndex);
 	} 
-	else{
+	else
+	{
 		nextRec = g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords()-1);
 	}
 
 	double foodForNextRing;
-	if(nextRec){
+	if(nextRec)
+	{
 //		foodForNextRing = GetFoodRequired(nextRec->GetPopulation() + 1 - SlaveCount());
 		foodForNextRing = GetFoodRequired(nextRec->GetPopulation() - SlaveCount());
 	}
-	else{
+	else
+	{
 		foodForNextRing = GetFoodRequired(PopCount() - SlaveCount());
 	}
 
@@ -9334,7 +9311,8 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 //	DPRINTF(k_DBG_GAMESTATE, ("foodForNextRing: %i\n", static_cast<sint32>(foodForNextRing)));
 //	DPRINTF(k_DBG_GAMESTATE, ("maxFoodFromTerrain: %i\n", static_cast<sint32>(maxFoodFromTerrain)));
 
-	if(food < foodForNextRing - maxFoodFromTerrain){
+	if(food < foodForNextRing - maxFoodFromTerrain)
+	{
 		food = foodForNextRing - maxFoodFromTerrain;
 	}
 //	DPRINTF(k_DBG_GAMESTATE, ("FoodNextRing: %i\n", static_cast<sint32>(food)));
@@ -9343,13 +9321,15 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 //	DPRINTF(k_DBG_GAMESTATE, ("foodForNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
 //	DPRINTF(k_DBG_GAMESTATE, ("currentFood: %i\n", static_cast<sint32>(currentFood)));
 
-	if(food < foodForNextPop - currentFood){
+	if(food < foodForNextPop - currentFood)
+	{
 		food = foodForNextPop - currentFood;
 	}
 //	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
 //	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(food)));
 
 	return static_cast<sint32>(ceil(food));
+
 #endif
 }
 
@@ -9416,9 +9396,10 @@ double CityData::CrimeLoss(double gross) const
 double CityData::BioinfectionLoss(double prod) const
 {
 	if(m_bioInfectionTurns > 0){
-		return prod * g_theConstDB->GetBioInfectionProductionCoef();
+		return prod * g_theConstDB->Get(0)->GetBioInfectionProductionCoef();
 	}
-	else{
+	else
+	{
 		return 0.0;
 	}
 }
@@ -9441,9 +9422,10 @@ double CityData::BioinfectionLoss(double prod) const
 double CityData::FranchiseLoss(double prod) const
 {
 	if(m_franchise_owner >= 0){
-		return prod * g_theConstDB->GetFranchiseEffect();
+		return prod * g_theConstDB->Get(0)->GetFranchiseEffect();
 	}
-	else{
+	else
+	{
 		return 0.0;
 	}
 }
@@ -9467,24 +9449,36 @@ double CityData::ConversionLoss(double gold) const
 {
 	double convertedGold = 0.0;
 
-	if(m_convertedTo >= 0) {
-		if(m_convertedBy == CONVERTED_BY_CLERIC) {
-			convertedGold = gold * g_theConstDB->ClericConversionFactor();
-		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
-			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings())) {
-				convertedGold = gold * g_theConstDB->TelevangelistConversionFactor();
-			} else {
-				convertedGold = gold * g_theConstDB->ClericConversionFactor();
+	if(m_convertedTo >= 0)
+	{
+		if(m_convertedBy == CONVERTED_BY_CLERIC)
+		{
+			convertedGold = gold * g_theConstDB->Get(0)->GetClericConversionFactor();
+		}
+		else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST)
+		{
+			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings(), m_owner))
+			{
+				convertedGold = gold * g_theConstDB->Get(0)->GetTelevangelistConversionFactor();
 			}
-		} else {
+			else
+			{
+				convertedGold = gold * g_theConstDB->Get(0)->GetClericConversionFactor();
+			}
+		}
+		else
+		{
 			Assert(false);
 		}
+
 		if(convertedGold < 1)
 			convertedGold = 1;
 
-		if (g_player[m_convertedTo]) {
+		if (g_player[m_convertedTo])
+		{
 			sint32 wonderIncrease = wonderutil_GetIncreaseConvertedCitiesFeePercentage(g_player[m_convertedTo]->m_builtWonders);
-			if(wonderIncrease > 0) {
+			if(wonderIncrease > 0)
+			{
 				convertedGold += (convertedGold * static_cast<double>(wonderIncrease)) / 100.0;
 			}
 		}
@@ -9723,17 +9717,20 @@ void CityData::ResourceFractions(double &foodFraction, double &prodFraction, dou
 
 	///////////////////////////////////////////////
 	// Calcuete the nominators of the fractions
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+	{
 		if(m_ringSizes[i] == 0){
 			break;
 		}
-		else if(m_ringSizes[i] <= workingPeople){
+		else if(m_ringSizes[i] <= workingPeople)
+		{
 			foodFraction += static_cast<double>(m_ringFood[i]);
 			prodFraction += static_cast<double>(m_ringProd[i]);
 			goldFraction += static_cast<double>(m_ringGold[i]);
 			workingPeople -= m_ringSizes[i];
 		}
-		else{
+		else
+		{
 			double utilization = static_cast<double>(workingPeople) / static_cast<double>(m_ringSizes[i]);
 			foodFraction += static_cast<double>(m_ringFood[i]) * utilization;
 			prodFraction += static_cast<double>(m_ringProd[i]) * utilization;
@@ -9748,7 +9745,8 @@ void CityData::ResourceFractions(double &foodFraction, double &prodFraction, dou
 		double foodTotal = 0.0;
 		double prodTotal = 0.0;
 		double goldTotal = 0.0;
-		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+		{
 			foodTotal += static_cast<double>(m_ringFood[i]);
 			prodTotal += static_cast<double>(m_ringProd[i]);
 			goldTotal += static_cast<double>(m_ringGold[i]);
@@ -9760,7 +9758,8 @@ void CityData::ResourceFractions(double &foodFraction, double &prodFraction, dou
 		prodFraction /= prodTotal;
 		goldFraction /= goldTotal;
 	}
-	else{
+	else
+	{
 		foodFraction = 1.0;
 		prodFraction = 1.0;
 		goldFraction = 1.0;
@@ -10083,9 +10082,9 @@ void CityData::GetSpecialistsEffect(sint32 ring, double &farmersEff, double &lab
 sint32 CityData::StyleHappinessIncr() const
 {
     CityStyleRecord const * style   = 
-        g_theCityStyleDB->Get(m_cityStyle, 
-                              g_player[m_owner]->GetGovernmentType()
-                             );
+        g_theCityStyleDB->Get(GetCityStyle(), 
+		g_player[m_owner]->GetGovernmentType());
+
     return (style) ? style->GetHappyInc() : 0;
 }
 

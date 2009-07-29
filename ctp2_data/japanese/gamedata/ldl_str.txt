@@ -3329,7 +3329,7 @@ str_tbl_ldl_RuleDetail_RiotsKillPopulation	"Riots Kill Population\nWhen a city o
 str_tbl_ldl_RuleDetail_BarbsSpawnBarbs		"Barbarians Spawn Barbarians\nIncreases the chance of more barbarians appearing."
 str_tbl_ldl_RuleDetail_NonRandomCivs		"Non-Random AI Nations\nAI civilizations will be chosen in order (rather than at random) from the civilization database. See civilisation.txt for the order of all civilizations."
 str_tbl_ldl_RuleDetail_Upgrade			"Unit Upgrading\nAllows players to upgrade units using gold savings. See the Great Library on each unit for upgrade types, and the Upgrade article in the GL for an explanation on the use and costs of upgrading."
-str_tbl_ldl_RuleDetail_NewCombat		"New Combat\nUnits from a defending army will only use their defense (rather than attack and defense) rating during a battle or bombardment. Veteran units will also receive a defensive boost."
+str_tbl_ldl_RuleDetail_NewCombat		"New Combat\nDuring battle the defending army's front line will only use their defense rating, and the attacking army's front line will only use their attack rating. Veteran units will also receive a defensive boost."
 str_tbl_ldl_RuleDetail_NoGoodyHuts		"No Ruins\nNo ruins will be placed on the map for a new game."
 str_tbl_ldl_RuleDetail_UnitGold			"Unit Gold Support\nAs well as the normal unit production upkeep, units will cost gold savings to support. See the Great Library entry for each unit's gold support cost."
 str_tbl_ldl_RuleDetail_CityMaintenance		"City Maintenance Costs\nEach city will require it's city size in commerce to maintain."

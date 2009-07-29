@@ -492,20 +492,9 @@ void Advances::ResetCanResearch(sint32 justGot)
 			
 			
 			
-			if
-			  (
-			       g_network.IsActive()
-			    && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge()
-			  )
-			{
-				canResearch = FALSE;
-			}
-			else if
-			  (
-			      !g_network.IsActive()
-			    && g_theProfileDB->GetSPEndingAge() >= 0
-			    && rec->GetAgeIndex() > g_theProfileDB->GetSPEndingAge()
-			  )
+			if((g_network.IsActive() && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge())
+				|| (!g_network.IsActive() && g_theProfileDB->GetSPEndingAge() >= 0
+			    && rec->GetAgeIndex() > g_theProfileDB->GetSPEndingAge()))
 			{
 				canResearch = FALSE;
 			}
@@ -941,14 +930,66 @@ sint32 Advances::GetCost(const AdvanceType adv) const
 	sint32 cost = g_player[m_owner]->GetScienceHandicap() * m_discovered + 
 		g_theAdvanceDB->Get(adv)->GetCost();
 
+
+	//////////////////////////////////////////
+	// Calculate tech dissemination deduction
+
+	double techCostKnownMod = 0.0;
+
+	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->
+		GetTechCostKnownDeduction(techCostKnownMod))
+	{
+		double knownToCivs = 0.0;
+		double allAliveCivs = 0.0;
+
+		// Barbs not included since you can't
+		// guarantee meeting them.
+		for(sint32 i = 1; i < k_MAX_PLAYERS; ++i)
+		{
+			if(g_player[i] && !g_player[i]->IsDead())
+			{
+				if(g_player[m_owner]->HasContactWith(i))
+				{
+					if(g_player[i]->HasAdvance(adv))
+					{
+						knownToCivs++;
+					}
+				}
+
+				allAliveCivs++;
+
+			}
+		}
+
+		if (allAliveCivs > 0)
+		{
+			double baseMod = (techCostKnownMod * knownToCivs) / allAliveCivs;
+
+			if(baseMod > 0.0)
+			{
+				cost -= 
+					static_cast<sint32>(ceil(static_cast<double>(g_theAdvanceDB->Get(adv)->GetCost())
+					* baseMod));
+			}
+
+			if (cost < 1) cost = 1;
+		}
+	}
+	// End Calculate tech dissemination deduction
+	///////////////////////////////////////////////
+
 	if(g_player[m_owner]->IsRobot() &&
-	   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
+	   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
+	{
 		sint32 age = 0; 
+
 		cost = static_cast<sint32>(ceil(static_cast<double>(cost) * 
-		                           diffutil_GetAiTechnologyCost(g_theGameSettings->GetDifficulty(), m_owner, age)));
-	} else {
+			diffutil_GetAiTechnologyCost(g_theGameSettings->GetDifficulty(), m_owner, age)));
+	}
+	else
+	{
 		cost += static_cast<sint32>(ceil(static_cast<double>(cost) * 
-		          g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetHumanScienceBonus()));
+			g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetHumanScienceBonus()));
 	}
 
 	return cost;
