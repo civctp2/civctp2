@@ -76,16 +76,22 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	sint32 i;
 	AUI_ERRCODE errcode;
 
-
 	m_centerButton = NULL;
 	m_left = NULL;
 	m_right = NULL;
 
-	for ( i = 0;i < k_MAX_PREREQ; i++ ) {
+	for ( i = 0;i < k_MAX_PREREQ; i++ )
+	{
 		m_preReqButton[i] = NULL;
 	}
 
-	for ( i = 0;i < k_MAX_LEADS_TO;i++ ) {
+	for ( i = 0;i < k_MAX_EITHER_PREREQ; i++ )
+	{
+		m_eitherPreReqButton[i] = NULL;
+	}
+
+	for ( i = 0;i < k_MAX_LEADS_TO;i++ )
+	{
 		m_leadsToButton[i] = NULL;
 	}
 
@@ -133,16 +139,8 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 			Assert( errcode == AUI_ERRCODE_OK );
 			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
 
-
-
-
-
-			
-
-
-
-
-			for ( i = 0;i < k_MAX_PREREQ; i++ ) {
+			for ( i = 0; i < k_MAX_PREREQ; i++ )
+			{
 				m_preReqButton[i] = new ctp2_Button(
 					&errcode,
 					aui_UniqueId(),
@@ -152,19 +150,23 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 				errcode = AddSubControl( m_preReqButton[i] );
 				Assert( errcode == AUI_ERRCODE_OK );
 				if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
-
-
-
-
-
-				
-
-
-
-
 			}
 
-			for ( i = 0;i < k_MAX_LEADS_TO;i++ ) {
+			for ( i = 0; i < k_MAX_EITHER_PREREQ; i++ )
+			{
+				m_eitherPreReqButton[i] = new ctp2_Button(
+					&errcode,
+					aui_UniqueId(),
+					block,
+					ChartEitherPreReqActionCallback, this );
+
+				errcode = AddSubControl( m_eitherPreReqButton[i] );
+				Assert( errcode == AUI_ERRCODE_OK );
+				if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
+			}
+
+			for ( i = 0; i < k_MAX_LEADS_TO;i++ )
+			{
 				m_leadsToButton[i] = new ctp2_Button(
 					&errcode,
 					aui_UniqueId(),
@@ -174,22 +176,12 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 				errcode = AddSubControl( m_leadsToButton[i] );
 				Assert( errcode == AUI_ERRCODE_OK );
 				if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
-
-
-
-
-
-				
-
-
-
-
 			}
 		}
 	}
 
-	if ( !m_centerButton ) {
-
+	if ( !m_centerButton )
+	{
 		m_centerButton = new ctp2_Button( 
 			&errcode, 
 			aui_UniqueId(),
@@ -205,19 +197,10 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 		font->SetPointSize(14);
 		m_centerButton->TextFlags() = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER;
 
-
-
-
-
-
-
-		
-
-
-
-
-		for ( i = 0;i < k_MAX_PREREQ;i++ ) {
-			m_preReqButton[i] = new ctp2_Button( &errcode, aui_UniqueId(), NULL, k_CHART_PATTERN, 0, 0, 100, 20, ChartPreReqActionCallback, this );
+		for ( i = 0;i < k_MAX_PREREQ;i++ )
+		{
+			m_preReqButton[i] = new ctp2_Button( &errcode, aui_UniqueId(),
+				NULL, k_CHART_PATTERN, 0, 0, 100, 20, ChartPreReqActionCallback, this );
 			errcode = AddSubControl( m_preReqButton[i] );
 			Assert( errcode == AUI_ERRCODE_OK );
 			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
@@ -227,23 +210,27 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 			font = m_preReqButton[i]->GetTextFont();
 			Assert(font);
 			font->SetPointSize(14);
-
-
-
-
-
-
-
-
-			
-
-
-
-
 		}
 
-		for ( i = 0;i < k_MAX_LEADS_TO;i++ ) {
-			m_leadsToButton[i] = new ctp2_Button( &errcode, aui_UniqueId(), NULL, k_CHART_PATTERN, 0, 0, 100, 20, ChartLeadsToActionCallback, this );
+		for ( i = 0;i < k_MAX_EITHER_PREREQ;i++ )
+		{
+			m_eitherPreReqButton[i] = new ctp2_Button( &errcode, aui_UniqueId(),
+				NULL, k_CHART_PATTERN, 0, 0, 100, 20, ChartEitherPreReqActionCallback, this );
+			errcode = AddSubControl( m_eitherPreReqButton[i] );
+			Assert( errcode == AUI_ERRCODE_OK );
+			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
+			m_eitherPreReqButton[i]->Hide();
+
+			m_eitherPreReqButton[i]->TextFlags() = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER;
+			font = m_eitherPreReqButton[i]->GetTextFont();
+			Assert(font);
+			font->SetPointSize(14);
+		}
+
+		for ( i = 0;i < k_MAX_LEADS_TO;i++ )
+		{
+			m_leadsToButton[i] = new ctp2_Button( &errcode, aui_UniqueId(),
+				NULL, k_CHART_PATTERN, 0, 0, 100, 20, ChartLeadsToActionCallback, this );
 			errcode = AddSubControl( m_leadsToButton[i] );
 			Assert( errcode == AUI_ERRCODE_OK );
 			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
@@ -253,18 +240,6 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 			font = m_leadsToButton[i]->GetTextFont();
 			Assert(font);
 			font->SetPointSize(14);
-
-
-
-
-
-
-
-
-			
-
-
-
 		}
 	}
 
@@ -279,11 +254,18 @@ Chart::~Chart()
 {
 	sint32 i;
 
-	for ( i = 0;i < k_MAX_PREREQ;i++ ) {
+	for ( i = 0;i < k_MAX_PREREQ;i++ )
+	{
 		delete m_preReqButton[i];
 	}
 
-	for ( i = 0;i < k_MAX_LEADS_TO;i++ ) {
+	for ( i = 0;i < k_MAX_EITHER_PREREQ;i++ )
+	{
+		delete m_eitherPreReqButton[i];
+	}
+
+	for ( i = 0;i < k_MAX_LEADS_TO;i++ )
+	{
 		delete m_leadsToButton[i];
 	}
 
@@ -307,6 +289,11 @@ AUI_ERRCODE Chart::Show()
 		m_preReqButton[i]->Hide();
 	}
 
+	for (i = m_numEitherPreReq; i < k_MAX_EITHER_PREREQ; i++)
+	{
+		m_eitherPreReqButton[i]->Hide();
+	}
+
 	for ( i = m_numLeadsTo;i < k_MAX_LEADS_TO;i++ )
 	{
 		m_leadsToButton[i]->Hide();
@@ -318,18 +305,13 @@ AUI_ERRCODE Chart::Show()
 AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
 	
 	if ( !IsHidden() )
 		errcode = DrawThis( surface, x, y );
 
-	
-	
-	
 	if ( errcode == AUI_ERRCODE_OK )
 		DrawChildren( surface, x, y );
 
-	
 	m_draw = 0;
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
@@ -343,7 +325,8 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 	sint32 i;
 	RECT tempRect;
 
-	for ( i = 0;i < m_numPreReq;i++ ) {
+	for ( i = 0; i < m_numPreReq; i++ )
+	{
 		tempRect.left = m_preReqButton[i]->X();
 		tempRect.top = m_preReqButton[i]->Y();
 		tempRect.right = tempRect.left + m_preReqButton[i]->Width();
@@ -353,7 +336,19 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 		primitives_FrameRect16( surface, &tempRect, g_colorSet->GetColor((COLOR)m_preReqColor[i]) );
 	}
 
-	for ( i = 0;i < m_numLeadsTo;i++ ) {
+	for ( i = 0; i < m_numEitherPreReq; i++ )
+	{
+		tempRect.left = m_eitherPreReqButton[i]->X();
+		tempRect.top = m_eitherPreReqButton[i]->Y();
+		tempRect.right = tempRect.left + m_eitherPreReqButton[i]->Width();
+		tempRect.bottom = tempRect.top + m_eitherPreReqButton[i]->Height();
+		InflateRect( &tempRect, 1, 1 );
+		OffsetRect( &tempRect, rect.left, rect.top );
+		primitives_FrameRect16( surface, &tempRect, g_colorSet->GetColor((COLOR)m_eitherPreReqColor[i]) );
+	}
+
+	for ( i = 0; i < m_numLeadsTo; i++ )
+	{
 		tempRect.left = m_leadsToButton[i]->X();
 		tempRect.top = m_leadsToButton[i]->Y();
 		tempRect.right = tempRect.left + m_leadsToButton[i]->Width();
@@ -371,7 +366,6 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &tempRect, rect.left, rect.top );
 	primitives_FrameRect16( surface, &tempRect, g_colorSet->GetColor((COLOR)m_centerColor) );
 
-
 	POINT center, leftCenter, rightCenter;
 	center.x = rect.left + m_centerButton->X();
 	center.y = rect.top + m_centerButton->Y() + m_centerButton->Height() / 2;
@@ -380,14 +374,23 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 	rightCenter.x = center.x + m_centerButton->Width() + m_distFromCenter / 2;
 	rightCenter.y = center.y;
 	
-	if ( m_numPreReq ) {
+	if ( m_numPreReq )
+	{
 		primitives_DrawLine16( surface, leftCenter.x, leftCenter.y, center.x, center.y, 0x0000 );
 	}
-	if ( m_numLeadsTo ) {
+
+	if ( m_numEitherPreReq )
+	{
+		primitives_DrawLine16( surface, leftCenter.x, leftCenter.y, center.x, center.y, g_colorSet->GetColor(COLOR_BLUE) );
+	}
+
+	if ( m_numLeadsTo )
+	{
 		primitives_DrawLine16( surface, center.x + m_centerButton->Width(), center.y,	rightCenter.x, rightCenter.y, 0x0000 );
 	}
 
-	for ( i = 0;i < m_numPreReq;i++ ) {
+	for ( i = 0;i < m_numPreReq;i++ )
+	{
 		POINT l, r;
 		l.x = rect.left + m_preReqButton[i]->X() + m_preReqButton[i]->Width();
 		l.y = rect.top + m_preReqButton[i]->Y() + m_preReqButton[i]->Height() / 2;
@@ -397,14 +400,37 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 		primitives_DrawLine16( surface, r.x, r.y, leftCenter.x, leftCenter.y, 0x0000 );
 	}
 
-	for ( i = 0;i < m_numLeadsTo;i++ ) {
+	for ( i = 0;i < m_numEitherPreReq;i++ )
+	{
+		POINT l, r;
+		l.x = rect.left + m_eitherPreReqButton[i]->X() + m_eitherPreReqButton[i]->Width();
+		l.y = rect.top + m_eitherPreReqButton[i]->Y() + m_eitherPreReqButton[i]->Height() / 2;
+		r.x = l.x + 5;
+		r.y = l.y;
+		primitives_DrawLine16( surface, l.x, l.y, r.x, r.y, g_colorSet->GetColor(COLOR_BLUE) );
+		primitives_DrawLine16( surface, r.x, r.y, leftCenter.x, leftCenter.y, g_colorSet->GetColor(COLOR_BLUE) );
+	}
+
+	for ( i = 0;i < m_numLeadsTo;i++ )
+	{
 		POINT l, r;
 		l.x = rect.left + m_leadsToButton[i]->X() - 5;
 		l.y = rect.top + m_leadsToButton[i]->Y() + m_leadsToButton[i]->Height() / 2;
 		r.x = l.x + 5;
 		r.y = l.y;
-		primitives_DrawLine16( surface, l.x, l.y, r.x, r.y, 0x0000 );
-		primitives_DrawLine16( surface, rightCenter.x, rightCenter.y, l.x, l.y, 0x0000 );
+
+		// If leadto advance has center advance as an eitherprerequisite then draw lines blue
+		// (rather than black) from center to leadto advance.
+		if(advanceutil_AdvanceHasEitherPrereq(GetLeadsToIndex(i), m_centerIndex))
+		{
+			primitives_DrawLine16( surface, l.x, l.y, r.x, r.y, g_colorSet->GetColor(COLOR_BLUE) );
+			primitives_DrawLine16( surface, rightCenter.x, rightCenter.y, l.x, l.y, g_colorSet->GetColor(COLOR_BLUE) );
+		}
+		else
+		{
+			primitives_DrawLine16( surface, l.x, l.y, r.x, r.y, 0x0000 );
+			primitives_DrawLine16( surface, rightCenter.x, rightCenter.y, l.x, l.y, 0x0000 );
+		}
 	}
 
 	if ( surface == m_window->TheSurface() )
@@ -422,36 +448,6 @@ AUI_ERRCODE Chart::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 sint32 Chart::SetTipInfo( ctp2_Button *button, sint32 index )
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	c3_HyperTipWindow *tipWindow = (c3_HyperTipWindow *)button->GetTipWindow();
 	
 	MBCHAR name[k_MAX_NAME_LEN];
@@ -471,13 +467,18 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	const MBCHAR *s;
 
 	m_numPreReq = g_theAdvanceDB->Get(index)->GetNumPrerequisites();
-
+	m_numEitherPreReq = g_theAdvanceDB->Get(index)->GetNumEitherPrerequisites();
 
 	m_numLeadsTo = 0;
-	for(i = 0; i < g_theAdvanceDB->NumRecords() && m_numLeadsTo < k_MAX_LEADS_TO; i++) {
+	for(i = 0; i < g_theAdvanceDB->NumRecords() && m_numLeadsTo < k_MAX_LEADS_TO; i++)
+	{
 		if(i == index) continue;
 
+		// No more than 4 lead to buttons: prerequisities + eitherprerequisites.
 		if(advanceutil_AdvanceHasPrereq(i, index))
+			m_leadsToIndex[m_numLeadsTo++] = i;
+
+		if(advanceutil_AdvanceHasEitherPrereq(i, index))
 			m_leadsToIndex[m_numLeadsTo++] = i;
 	}
 
@@ -487,13 +488,14 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	sint32 distanceFromCenter = m_distFromCenter;
 
 	sint32 xpos = m_distFromSide;
-	sint32 ypos = (Height() - (m_numPreReq * buttonHeight + (m_numPreReq - 1) * heightBetweenButtons)) / 2;
+	sint32 ypos = (Height() - ((m_numPreReq + m_numEitherPreReq) * buttonHeight
+		+ ((m_numPreReq + m_numEitherPreReq) - 1) * heightBetweenButtons)) / 2;
 
-	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	uint8 *adv = g_player[curPlayer]->m_advances->CanResearch();
 	
-	for ( i = 0;i < m_numPreReq;i++ ) {
+	for ( i = 0; i < m_numPreReq; i++ )
+	{
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);
 		s = g_theAdvanceDB->GetNameStr( m_preReqIndex[i] );
 
@@ -501,76 +503,110 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_preReqButton[i]->SetText( s );
 		m_preReqButton[i]->Show();
 
-
-		
-		
-		
-		
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
-		if (ldl) {
+		if (ldl)
+		{
 			ldl->Remove((void *)m_preReqButton[i]);
 
-			
 			MBCHAR name[k_MAX_NAME_LEN];
-
 			sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_preReqIndex[i])->m_name));
-
 			ldl->Associate((aui_Control *)m_preReqButton[i], name);
 		}
 		
-
-		if ( g_player[curPlayer]->HasAdvance(m_preReqIndex[i]) ) {
+		if ( g_player[curPlayer]->HasAdvance(m_preReqIndex[i]) )
+		{
 			m_preReqColor[i] = COLOR_GREEN;
 		}
-		else {
-			if ( adv[m_preReqIndex[i]] ) {
+		else 
+		{
+			if ( adv[m_preReqIndex[i]] )
+			{
 				m_preReqColor[i] = COLOR_YELLOW;
 			}
-			else {
+			else
+			{
 				m_preReqColor[i] = COLOR_RED;
 			}
 		}
 	}
 
-	while ( i < k_MAX_PREREQ ) {
+	while ( i < k_MAX_PREREQ )
+	{
 		m_preReqButton[i++]->Hide();
+	}
+
+	for ( i = 0; i < m_numEitherPreReq; i++ )
+	{
+		m_eitherPreReqIndex[i] = g_theAdvanceDB->Get(index)->GetEitherPrerequisitesIndex(i);
+		s = g_theAdvanceDB->GetNameStr( m_eitherPreReqIndex[i] );
+
+		m_eitherPreReqButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
+		m_eitherPreReqButton[i]->SetText( s );
+		m_eitherPreReqButton[i]->Show();
+
+		aui_Ldl		*ldl = g_c3ui->GetLdl();
+		if (ldl)
+		{
+			ldl->Remove((void *)m_eitherPreReqButton[i]);
+
+			MBCHAR name[k_MAX_NAME_LEN];
+			sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_eitherPreReqIndex[i])->m_name));
+			ldl->Associate((aui_Control *)m_eitherPreReqButton[i], name);
+		}
+		
+		if ( g_player[curPlayer]->HasAdvance(m_eitherPreReqIndex[i]) )
+		{
+			m_eitherPreReqColor[i] = COLOR_GREEN;
+		}
+		else 
+		{
+			if ( adv[m_eitherPreReqIndex[i]] )
+			{
+				m_eitherPreReqColor[i] = COLOR_YELLOW;
+			}
+			else
+			{
+				m_eitherPreReqColor[i] = COLOR_RED;
+			}
+		}
+	}
+
+	while ( i < k_MAX_EITHER_PREREQ )
+	{
+		m_eitherPreReqButton[i++]->Hide();
 	}
 
 	xpos += buttonWidth + distanceFromCenter;
 	ypos = (Height() - buttonHeight) / 2;
 
-	
 	m_centerIndex = index;
 	s = g_theAdvanceDB->GetNameStr( m_centerIndex );
 
 	m_centerButton->Move( xpos, ypos );
 	m_centerButton->SetText( s );
 
-
-	
-	
-	
-	
 	aui_Ldl		*ldl = g_c3ui->GetLdl();
-	if (ldl) {
+	if (ldl)
+	{
 		ldl->Remove((void *)m_centerButton);
 
-		
 		MBCHAR name[k_MAX_NAME_LEN];
-
 		sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_centerIndex)->m_name));
-
 		ldl->Associate((aui_Control *)m_centerButton, name);
 	}
 
-	if ( g_player[curPlayer]->HasAdvance(m_centerIndex) ) {
+	if ( g_player[curPlayer]->HasAdvance(m_centerIndex) )
+	{
 		m_centerColor = COLOR_GREEN;
 	}
-	else {
-		if ( adv[m_centerIndex] ) {
+	else
+	{
+		if ( adv[m_centerIndex] )
+		{
 			m_centerColor = COLOR_YELLOW;
 		}
-		else {
+		else
+		{
 			m_centerColor = COLOR_RED;
 		}
 	}
@@ -578,46 +614,43 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	xpos += buttonWidth + distanceFromCenter;
 	ypos = (Height() - (m_numLeadsTo * buttonHeight + (m_numLeadsTo - 1) * heightBetweenButtons)) / 2;
 
-	
-	for ( i = 0;i < m_numLeadsTo;i++ ) {
-		
+	for ( i = 0;i < m_numLeadsTo;i++ )
+	{
 		s = g_theAdvanceDB->GetNameStr( m_leadsToIndex[i] );
 
 		m_leadsToButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
 		m_leadsToButton[i]->SetText( s );
-
 		m_leadsToButton[i]->Show();
 
-		
-		
-		
-		
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
-		if (ldl) {
+		if (ldl)
+		{
 			ldl->Remove((void *)m_leadsToButton[i]);
 
-			
 			MBCHAR name[k_MAX_NAME_LEN];
-
 			sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_leadsToIndex[i])->m_name));
-
 			ldl->Associate((aui_Control *)m_leadsToButton[i], name);
 		}
 
-		if ( g_player[curPlayer]->HasAdvance(m_leadsToIndex[i]) ) {
+		if ( g_player[curPlayer]->HasAdvance(m_leadsToIndex[i]) )
+		{
 			m_leadsToColor[i] = COLOR_GREEN;
 		}
-		else {
-			if ( adv[m_leadsToIndex[i]] ) {
+		else
+		{
+			if ( adv[m_leadsToIndex[i]] )
+			{
 				m_leadsToColor[i] = COLOR_YELLOW;
 			}
-			else {
+			else
+			{
 				m_leadsToColor[i] = COLOR_RED;
 			}
 		}
 	}
 
-	while ( i < k_MAX_LEADS_TO) {
+	while ( i < k_MAX_LEADS_TO)
+	{
 		m_leadsToButton[i++]->Hide();
 	}
 
@@ -630,29 +663,47 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
 	sint32 numPreReq = chart->GetNumPreReq();
 
-	for ( sint32 i = 0;i < numPreReq;i++ ) {
-		if ( control->Id() == chart->GetPreReqButton(i)->Id() ) {
+	for ( sint32 i = 0;i < numPreReq;i++ )
+	{
+		if ( control->Id() == chart->GetPreReqButton(i)->Id() )
+		{
 			chart->Update( chart->GetPreReqIndex(i) );
+		}
+	}
+}
+
+void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	Chart *chart = (Chart *)cookie;
+	sint32 numEitherPreReq = chart->GetNumEitherPreReq();
+
+	for ( sint32 i = 0;i < numEitherPreReq;i++ )
+	{
+		if ( control->Id() == chart->GetEitherPreReqButton(i)->Id() )
+		{
+			chart->Update( chart->GetEitherPreReqIndex(i) );
 		}
 	}
 }
 
 void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
 	sint32 numLeadsTo = chart->GetNumLeadsTo();
 
-	for ( sint32 i = 0;i < numLeadsTo;i++ ) {
-		if ( control->Id() == chart->GetLeadsToButton(i)->Id() ) {
+	for ( sint32 i = 0;i < numLeadsTo;i++ )
+	{
+		if ( control->Id() == chart->GetLeadsToButton(i)->Id() )
+		{
 			chart->Update( chart->GetLeadsToIndex(i) );
 		}
 	}

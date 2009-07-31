@@ -525,34 +525,50 @@ void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action,
 
 void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
 	sint32 numPreReq = chart ? chart->GetNumPreReq() : 0;
 
-	for ( sint32 i = 0;i < numPreReq;i++ ) {
-		if ( control->Id() == chart->GetPreReqButton(i)->Id() ) {
+	for ( sint32 i = 0;i < numPreReq;i++ )
+	{
+		if ( control->Id() == chart->GetPreReqButton(i)->Id() )
+		{
 			g_greatLibrary->SetLibrary( chart->GetPreReqIndex(i), DATABASE_ADVANCES );
 		}
 	}
+}
 
+void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	Chart *chart = (Chart *)cookie;
+	sint32 numEitherPreReq = chart ? chart->GetNumEitherPreReq() : 0;
+
+	for ( sint32 i = 0;i < numEitherPreReq;i++ )
+	{
+		if ( control->Id() == chart->GetEitherPreReqButton(i)->Id() )
+		{
+			g_greatLibrary->SetLibrary( chart->GetEitherPreReqIndex(i), DATABASE_ADVANCES );
+		}
+	}
 }
 
 void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
 	sint32 numLeadsTo = chart ? chart->GetNumLeadsTo() : 0;
 
-	for ( sint32 i = 0;i < numLeadsTo;i++ ) {
-		if ( control->Id() == chart->GetLeadsToButton(i)->Id() ) {
+	for ( sint32 i = 0;i < numLeadsTo;i++ )
+	{
+		if ( control->Id() == chart->GetLeadsToButton(i)->Id() )
+		{
 			g_greatLibrary->SetLibrary( chart->GetLeadsToIndex(i), DATABASE_ADVANCES );
 		}
 	}
-
 }
 
 void GreatLibrary_Topics_List_Callback
@@ -887,11 +903,18 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	control->AddChild(m_techTree);
 
 	sint32 i;
-	for ( i = 0;i < k_MAX_PREREQ ;i++ ) {
+	for ( i = 0; i < k_MAX_PREREQ ; i++ )
+	{
 		m_techTree->GetPreReqButton(i)->SetActionFuncAndCookie( greatlibrary_PrereqActionCallback, m_techTree );
 	}
 
-	for ( i = 0;i < k_MAX_LEADS_TO ;i++ ) {
+	for ( i = 0; i < k_MAX_EITHER_PREREQ ; i++ )
+	{
+		m_techTree->GetEitherPreReqButton(i)->SetActionFuncAndCookie( greatlibrary_EitherPrereqActionCallback, m_techTree );
+	}
+
+	for ( i = 0; i < k_MAX_LEADS_TO ; i++ )
+	{
 		m_techTree->GetLeadsToButton(i)->SetActionFuncAndCookie( greatlibrary_LeadsToActionCallback, m_techTree );
 	}
 

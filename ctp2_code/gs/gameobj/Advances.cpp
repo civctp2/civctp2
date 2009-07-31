@@ -479,18 +479,17 @@ void Advances::ResetCanResearch(sint32 justGot)
 	sint32 i;
 	sint32 numEnabled = 0;
 
-	for(sint32 adv = 0; adv < m_size; adv++) {
-		if(m_hasAdvance[adv]) {
-			
+	for(sint32 adv = 0; adv < m_size; adv++)
+	{
+		if(m_hasAdvance[adv])
+		{
 			m_canResearch[adv] = FALSE;
-		} else {
-			
+		}
+		else
+		{		
 			const AdvanceRecord* rec = g_theAdvanceDB->Get(adv);
 			uint8 canResearch = TRUE;
 			BOOL  justEnabled = FALSE;
-			
-			
-			
 			
 			if((g_network.IsActive() && rec->GetAgeIndex() > g_theGameSettings->GetEndingAge())
 				|| (!g_network.IsActive() && g_theProfileDB->GetSPEndingAge() >= 0
@@ -504,107 +503,133 @@ void Advances::ResetCanResearch(sint32 justGot)
 			}
 			else
 			{
-				for(sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++) {
-					if(rec->GetIndex() == rec->GetPrerequisitesIndex(prereq)) {
+				for(sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); prereq++)
+				{
+					if(rec->GetIndex() == rec->GetPrerequisitesIndex(prereq))
+					{
 						canResearch = FALSE;
 						continue;
 					}
 
-					if(!m_hasAdvance[rec->GetPrerequisitesIndex(prereq)]) {
-						
+					if(!m_hasAdvance[rec->GetPrerequisitesIndex(prereq)])
+					{
 						canResearch = FALSE;
 					}
+
 					if(rec->GetPrerequisitesIndex(prereq) == justGot)
 						justEnabled = TRUE;
 				}
 
 /////////////////EitherPrerequisite
-				if(rec->GetNumEitherPrerequisites() > 0) {
-					bool    found   = false;
+				if(rec->GetNumEitherPrerequisites() > 0)
+				{
+					bool found = false;
 
                     for (sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) 
                     {
-						if (rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) 
+						if(rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either))
+						{
+							canResearch = FALSE;
+							continue;
+						}
+
+						if (rec->GetEitherPrerequisitesIndex(either) == justGot)
                         {
 							found = true;
-					        if (rec->GetEitherPrerequisitesIndex(either) == justGot)
-                            {
-						        justEnabled = TRUE;
-                            }
-							break;
+							justEnabled = TRUE;
 						}
 					}
 
-					if(!found)
-						canResearch = FALSE;
+					if(!found) canResearch = FALSE;
 				}
 ////////////// PreReq govt techs (but how do you remove them?)
-				if(rec->GetNumGovernmentType() > 0) {
+				if(rec->GetNumGovernmentType() > 0)
+				{
 					sint32 g;
 					bool found = false;
-					for(g = 0; g < rec->GetNumGovernmentType(); g++) {
-						if(rec->GetGovernmentTypeIndex(g) == g_player[m_owner]->GetGovernmentType()) {
-						found = TRUE; //fixed to found
-						break;
-						}
-					}
-					if(found){
-						justEnabled = TRUE;
-					}
-					
-					if(!found)
-						canResearch = FALSE;
-					}	
-////////////// CultureOnly Techs	
 
-				if(rec->GetNumCultureOnly() > 0) {
-					sint32 s;
-					bool found = false;
-					for(s = 0; s < rec->GetNumCultureOnly(); s++) {
-						if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+					for(g = 0; g < rec->GetNumGovernmentType(); g++)
+					{
+						if(rec->GetGovernmentTypeIndex(g) == g_player[m_owner]->GetGovernmentType())
+						{
 							found = TRUE; //fixed to found
 							break;
 						}
 					}
-					if(found){
+
+					if(found)
+					{
 						justEnabled = TRUE;
 					}
 					
-					if(!found)
-						canResearch = FALSE;
+					if(!found) canResearch = FALSE;
+				}	
+////////////// CultureOnly Techs	
+
+				if(rec->GetNumCultureOnly() > 0)
+				{
+					sint32 s;
+					bool found = false;
+
+					for(s = 0; s < rec->GetNumCultureOnly(); s++)
+					{
+						if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle())
+						{
+							found = TRUE; //fixed to found
+							break;
+						}
 					}
+
+					if(found)
+					{
+						justEnabled = TRUE;
+					}
+					
+					if(!found) canResearch = FALSE;
+				}
 /////////////////EMOD for Advances requiring Goods
-				if(rec->GetNumNeedsCityGoodAnyCity()) {
-		
+				if(rec->GetNumNeedsCityGoodAnyCity())
+				{
 					sint32 i, g;
 					sint32 n = g_player[m_owner]->m_all_cities->Num();
 					bool goodavail = false;
 
-					for(i = 0; i < n; i++) {
-						for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-							if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+					for(i = 0; i < n; i++)
+					{
+						for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++)
+						{
+							if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->
+								GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g)))
+							{ 
 								goodavail = true;
 								break;
 							}
 						}
 					}  //moved goodavail out of for loop
-					if(goodavail){
+
+					if(goodavail)
+					{
 						justEnabled = TRUE;
 					}
-					if(!goodavail)
-						canResearch = FALSE;
+
+					if(!goodavail) canResearch = FALSE;
 				}
 //////////////////////END EMOD
-
-
 			}
+
 			m_canResearch[adv] = canResearch;
-			if(canResearch) {
+
+			if(canResearch)
+			{
 				num++;
-				if(justEnabled) {
+
+				if(justEnabled)
+				{
 					numEnabled++;
 					m_turnsSinceOffered[adv] = k_MAX_ADVANCE_TURNS;
-				} else if(m_turnsSinceOffered[adv] < k_MAX_ADVANCE_TURNS) {
+				}
+				else if(m_turnsSinceOffered[adv] < k_MAX_ADVANCE_TURNS)
+				{
 					m_turnsSinceOffered[adv]++;
 				}
 			}
@@ -616,78 +641,87 @@ void Advances::ResetCanResearch(sint32 justGot)
 	sint32 turnCutoff = 0xffff;
 	sint32 total = 0;
 	
-	
-	if(num <= minChoices) {
-		
-		
+	if(num <= minChoices)
+	{
 		goto done;
 	}
 
-	
-	
 	sint32 j, numChosen;
 	uint16 histogram[k_MAX_ADVANCE_TURNS + 1];
 	memset(histogram, 0, sizeof(uint16) * (k_MAX_ADVANCE_TURNS + 1));
 
-	for(i = 0; i < m_size; i++) {
-		if(!m_canResearch[i])
-			continue;
+	for(i = 0; i < m_size; i++)
+	{
+		if(!m_canResearch[i]) continue;
 		histogram[m_turnsSinceOffered[i]]++;
 	}
 
 	
-	for(i = k_MAX_ADVANCE_TURNS; i >= 0; i--) {
+	for(i = k_MAX_ADVANCE_TURNS; i >= 0; i--)
+	{
 		total += histogram[i];
-		if(total >= minChoices) {
-			
+		if(total >= minChoices)
+		{
 			turnCutoff = i;
 			break;
 		}
 	}
 
 	numChosen = 0;
-	for(i = 0; i < m_size; i++) {
-		if(m_canResearch[i] && m_turnsSinceOffered[i] < turnCutoff) {
+	for(i = 0; i < m_size; i++)
+	{
+		if(m_canResearch[i] && m_turnsSinceOffered[i] < turnCutoff)
+		{
 			if(m_turnsSinceOffered[i] < k_MAX_ADVANCE_TURNS)
 				m_turnsSinceOffered[i]++;
 			m_canResearch[i] = 0;
-		} else if(m_canResearch[i]) {
+		}
+		else if(m_canResearch[i])
+		{
 			numChosen++;
 		}
 	}
 
-	if(numChosen == minChoices) {
+	if(numChosen == minChoices)
+	{
 		goto done;
 	}
 
-	for(i = k_MAX_ADVANCE_TURNS; i >= turnCutoff; i--) {
-		if(histogram[i] > 0) {
-			if(numOffered + histogram[i] > minChoices) {
-				
+	for(i = k_MAX_ADVANCE_TURNS; i >= turnCutoff; i--)
+	{
+		if(histogram[i] > 0)
+		{
+			if(numOffered + histogram[i] > minChoices)
+			{
 				sint32 howMany = minChoices - numOffered;
 				uint32 *possible = new uint32[m_size];
 				sint32 p = 0;
 				
-				for(j = 0; j < m_size; j++) {
-					if(m_canResearch[j] && m_turnsSinceOffered[j] == i) {
+				for(j = 0; j < m_size; j++)
+				{
+					if(m_canResearch[j] && m_turnsSinceOffered[j] == i)
+					{
 						possible[p] = j;
 						p++;
 					}
 				}
+
 				Assert(p >= howMany);
 				sint32 h;
 
-				
-				
-				for(h = p; h > howMany; h--) {
+				for(h = p; h > howMany; h--)
+				{
 					sint32 which = g_rand->Next(p);
 					m_canResearch[possible[which]] = 0;
 					memmove(&possible[which], &possible[which + 1], p - which - 1);
 					p--;
 				}
+
 				delete [] possible;
 				goto done;
-			} else {
+			}
+			else
+			{
 				numOffered += histogram[i];
 			}
 		}
@@ -802,8 +836,10 @@ void Advances::ResetCanResearch(sint32 justGot)
 
 	AddAlienLifeAdvance();
 
-	for(i = 0; i < m_size; i++) {
-		if(m_canResearch[i]) {
+	for(i = 0; i < m_size; i++)
+	{
+		if(m_canResearch[i])
+		{
 			m_turnsSinceOffered[i] = 0;
 		}
 	}

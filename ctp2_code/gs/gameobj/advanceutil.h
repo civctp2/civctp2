@@ -6,5 +6,6 @@ void advanceutil_Initialize();
 sint32 advanceutil_GetNukeAdvance();
 sint32 advanceutil_GetAlienLifeAdvance();
 bool advanceutil_AdvanceHasPrereq(sint32 advance, sint32 prereq);
+bool advanceutil_AdvanceHasEitherPrereq(sint32 advance, sint32 prereq);
 
 #endif

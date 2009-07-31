@@ -487,7 +487,8 @@ SPNewGameDiffScreen {
 DiffRiskItem:CTP2_LIST_ITEM {
 	int widthpix 130
 	int heightpix 22
-	label:CTP2_HEADER_FONT {
+	#label:CTP2_HEADER_FONT {
+	label:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 		string just "left"
 		bool vertcenter TRUE
