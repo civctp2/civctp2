@@ -135,6 +135,7 @@
 #include "citydata.h"
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
+#include "civarchive.h"     // CivArchive
 #include "ConstRecord.h"
 #include "ctpai.h"
 #include "Goal.h"
@@ -157,7 +158,7 @@
 #include "profileai.h"
 #include "ResourceRecord.h"
 #include "Scheduler.h"
-#include "StrategyRecord.h"
+#include "SlicContext.h"    // SlicContext
 #include "StrDB.h"
 #include "Strengths.h"
 #include "stringutils.h"

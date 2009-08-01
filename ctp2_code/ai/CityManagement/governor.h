@@ -76,21 +76,18 @@ class Governor;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "civarchive.h"     // CivArchive
-#include "DB.h"             // StringId
-#include "mapgrid.h"
-#include "Path.h"           // Path
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
-#include "SlicContext.h"    // SlicContext
 #include "StrategyRecord.h" // StrategyRecord
-#include "citydata.h"       // NEW_RESOURCE_PROCESS
 
+class Path;
+class CivArchive;
 class CityData;
 class BuildingBuildListRecord;
 class BuildListSequenceRecord;
 class WonderBuildListRecord;
 class StrategyRecord::PopAssignmentElement;
 class UnitBuildListRecord;
+class SlicContext;
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -163,13 +160,19 @@ public:
 	
 	
 
-	struct SlidersSetting {
-		SlidersSetting() 
+	struct SlidersSetting
+	{
+		SlidersSetting()
+		:
+		    m_deltaProduction    (0),
+		    m_deltaGold          (0),
+		    m_deltaFood          (0),
+		    m_optimizeProduction (false),
+		    m_optimizeGold       (false),
+		    m_optimizeFood       (false)
 		{
-			
-			m_deltaProduction = m_deltaGold = m_deltaFood = 0;
-			m_optimizeProduction = m_optimizeGold = m_optimizeFood = false;
 		}
+
 		const SlidersSetting & operator=(const SlidersSetting & rval)
 		{
 			m_deltaProduction = rval.m_deltaProduction;
@@ -193,9 +196,9 @@ public:
 		}
 
 		
-		sint32 m_deltaProduction;  
-		sint32 m_deltaGold;		   
-		sint32 m_deltaFood;		   
+		sint32 m_deltaProduction;
+		sint32 m_deltaGold;
+		sint32 m_deltaFood;
 		
 		bool m_optimizeProduction;
 		bool m_optimizeGold;

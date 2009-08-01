@@ -39,9 +39,10 @@
 
 #include "Astar.h"
 #include "Army.h"
+#include "squad_strength.h"
 
-class Cell; 
-class CityData; 
+class Cell;
+class CityData;
 class UnitAstar : public Astar
 {
     uint32 m_move_union;
@@ -61,19 +62,20 @@ protected:
     Army m_army;
 
     float m_army_minmax_move;
-    BOOL m_can_space_launch; 
-    BOOL m_can_space_land; 
+    BOOL m_can_space_launch;
+    BOOL m_can_space_land;
     BOOL m_can_be_cargo_podded;
-    bool m_check_rail_launchers; 
+    bool m_check_rail_launchers;
     bool m_ignore_zoc;
     bool m_is_cargo_pod;
     uint32 m_cargo_pod_intersection;
     bool m_check_dest;
     bool m_check_units_in_cell;
-    bool m_is_robot; 
-    bool m_army_can_expel_stealth; 
+    bool m_is_robot;
+    bool m_army_can_expel_stealth;
     MapPoint m_start;
     bool m_isTransporter;
+    Squad_Strength m_army_strength;
 
 public:
 

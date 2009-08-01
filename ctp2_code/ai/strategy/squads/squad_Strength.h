@@ -38,9 +38,10 @@
 #define __AGENT_STRENGTH_H__
 
 class Squad_Strength;
+class Army;
+class MapPoint;
 
 #include "ctp2_inttypes.h"      // sintN
-#include "MapPoint.h"           // MapPoint
 #include "scheduler_types.h"
 
 class Squad_Strength
@@ -60,6 +61,9 @@ public:
 	  m_air_bombard_str  (0.0)
 	{ ; };
 
+	Squad_Strength(const Army& army);
+	Squad_Strength(const MapPoint& pos);
+
 	// Use compiler generated copy constructor, destructor, and assignment operator.
 
 	bool operator> (const Squad_Strength &squad_strength) const;
@@ -76,6 +80,7 @@ public:
 
 
 	void Set_Pos_Strength       (const MapPoint & pos);
+	void Set_Army_Strength      (const Army & army);
 	void Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
 
 	double Get_Attack      () const { return m_attack_str;        };

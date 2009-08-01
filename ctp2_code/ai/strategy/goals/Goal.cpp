@@ -429,8 +429,6 @@ const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing stre
 	return needed_strength;
 }
 
-#include "MapAnalysis.h"
-
 Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 {
 	AI_DPRINTF

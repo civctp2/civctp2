@@ -123,13 +123,13 @@ bool UnitAstar::StraightLine
     Path &					a_path
 ) const
 {
-    if (start == dest) 
+	if(start == dest)
 	{
-		a_path.Clear(); 
-        return false; 
-    }
-    
-    a_path.SetStart(start);
+		a_path.Clear();
+		return false;
+	}
+
+	a_path.SetStart(start);
 
 	// Shortest distance vector from start to dest, using XY coordinates, and
 	// taking world wrap properties into account.
@@ -161,77 +161,8 @@ bool UnitAstar::StraightLine
 		a_path.AddDir(dirY);
 	}
 
-    return true;
+	return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 {
@@ -244,8 +175,8 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 	if (is_tunnel_and_boat)
 	{
 		sint32 icost_without_tunnel;
-		(void) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()->
-					GetMovement(icost_without_tunnel);
+		(void) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()-> // This is hard encoded, no way. @ToDo: Fix it
+			GetMovement(icost_without_tunnel);
 		return std::min(m_army_minmax_move, 
 						static_cast<float>(icost_without_tunnel)
 					   );
@@ -301,12 +232,19 @@ bool UnitAstar::CheckUnexplored(const MapPoint &prev, const MapPoint &pos,
 }
 
 
-bool UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,                           
-    Cell* the_prev_cell, Cell* the_pos_cell, 
-    float &cost, bool &is_zoc, bool &can_be_zoc, ASTAR_ENTRY_TYPE &entry, 
-	bool &can_enter)
+bool UnitAstar::CheckUnits
+(
+    const MapPoint   &prev,
+    const MapPoint   &pos,
+    Cell*             the_prev_cell,
+    Cell*             the_pos_cell,
+    float            &cost,
+    bool             &is_zoc,
+    bool             &can_be_zoc,
+    ASTAR_ENTRY_TYPE &entry,
+    bool             &can_enter
+)
 {
-
 	if (the_pos_cell->GetCity().m_id != 0)
 	{
 		if (the_pos_cell->GetCity().GetOwner() != m_owner)
@@ -322,11 +260,23 @@ bool UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 		if(m_is_robot || dest_army->IsVisible(m_owner))
 		{
 			PLAYER_INDEX dest_owner = dest_army->GetOwner();
-			if (dest_owner != m_owner) { 
-
-				if (pos != m_dest)
+			if (dest_owner != m_owner)
+			{
+				if (m_is_zero_attack)
 				{
-					if (m_is_robot && m_army_can_expel_stealth && dest_army->CanBeExpelled())
+					cost = k_ASTAR_BIG;
+					can_enter = false;
+					entry = ASTAR_BLOCKED;
+					
+					return true;
+				}
+				else if (pos != m_dest)
+				{
+					if(m_is_robot && m_army_can_expel_stealth && dest_army->CanBeExpelled())
+					{
+						return false;
+					}
+					else if(m_is_robot && g_player[m_owner]->HasWarWith(dest_owner) && m_army_strength.HasEnough(Squad_Strength(pos)))
 					{
 						return false;
 					}
@@ -338,14 +288,6 @@ bool UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 
 						return true;
 					}
-				}
-				else if (m_is_zero_attack)
-				{
-					cost = k_ASTAR_BIG;
-					can_enter = false;
-					entry = ASTAR_BLOCKED;
-					
-					return true;
 				}
 				else
 				{
@@ -673,7 +615,7 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	if (!m_check_dest  &&
 		pos == m_dest)
 	{
-		cost = 10; 
+		cost = 10;
 		entry = ASTAR_CAN_ENTER;
 		return true;
 	}
@@ -690,8 +632,11 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 	UnseenCellCarton ucell;
 	bool restore = false;
-	if(!m_is_robot) {
-		if(g_player[m_owner]->GetLastSeen(pos, ucell)) {
+	if(!m_is_robot)
+	{
+		if(g_player[m_owner]->GetLastSeen(pos, ucell))
+		{
+			// Ugly
 			the_pos_cell->SetEnvFast(ucell.m_unseenCell->m_env);
 			the_pos_cell->SetMoveCost(double(ucell.m_unseenCell->m_move_cost));
 			restore = true;
@@ -701,7 +646,7 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 #define RESTORE if(restore) {the_pos_cell->SetEnvFast(origEnv); the_pos_cell->SetMoveCost(double(origMove)); }
 
     
-    if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter)) return can_enter;
+	if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter)){ RESTORE; return can_enter; }
     
     
     if (m_check_units_in_cell) { 
@@ -1509,7 +1454,7 @@ bool UnitAstar::FindPath(Army army,
         return false;
     }
 
-
+	m_army_strength.Set_Army_Strength(army);
     m_army = army; 
     m_nUnits = nUnits; 
     m_move_intersection = move_intersection;
@@ -1675,21 +1620,22 @@ bool UnitAstar::IsBeachLanding(const MapPoint &prev,
 
 void UnitAstar::ClearMem()
 {
-    m_move_union        = MARK_UNUSED;
-    m_move_intersection = MARK_UNUSED; 
-    m_max_dir           = MARK_UNUSED;
-    m_mask_alliance     = MARK_UNUSED;
-    m_dest.x            = MARK_UNUSED16; 
-    m_dest.y            = MARK_UNUSED16; 
-	m_start.x           = MARK_UNUSED16;
-	m_start.y           = MARK_UNUSED16; 
-    m_owner             = MARK_UNUSED; 
-    m_nUnits            = MARK_UNUSED;
-    m_army.m_id         = MARK_UNUSED;    
-    m_army_minmax_move  = -9999999.0f;
-    m_can_space_launch  = 0x0; 
-    m_can_space_land    = 0x0; 
+    m_move_union          = MARK_UNUSED;
+    m_move_intersection   = MARK_UNUSED;
+    m_max_dir             = MARK_UNUSED;
+    m_mask_alliance       = MARK_UNUSED;
+    m_dest.x              = MARK_UNUSED16;
+    m_dest.y              = MARK_UNUSED16;
+	m_start.x             = MARK_UNUSED16;
+	m_start.y             = MARK_UNUSED16;
+    m_owner               = MARK_UNUSED;
+    m_nUnits              = MARK_UNUSED;
+    m_army.m_id           = MARK_UNUSED;
+    m_army_minmax_move    = -9999999.0f;
+    m_can_space_launch    = 0x0;
+    m_can_space_land      = 0x0;
 	m_can_be_cargo_podded = MARK_UNUSED;
+	m_army_strength       = Squad_Strength();
 }
 
 

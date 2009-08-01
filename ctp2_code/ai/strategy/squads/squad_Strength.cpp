@@ -45,8 +45,17 @@
 #include "World.h"
 #include "ctpaidebug.h"
 #include "mapanalysis.h"
+#include "MapPoint.h"           // MapPoint
 
-class Agent;
+Squad_Strength::Squad_Strength(const Army& army)
+{
+	Set_Army_Strength(army);
+}
+
+Squad_Strength::Squad_Strength(const MapPoint& pos)
+{
+	Set_Pos_Strength(pos);
+}
 
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
@@ -105,7 +114,6 @@ Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 	m_transport         += add_me.m_transport;
 	m_defenders         += add_me.m_defenders;
 	m_ranged            += add_me.m_ranged;
-
 	m_land_bombard_str  += add_me.m_land_bombard_str;
 	m_water_bombard_str += add_me.m_water_bombard_str;
 	m_air_bombard_str   += add_me.m_air_bombard_str;
@@ -141,6 +149,50 @@ void Squad_Strength::Remove_Agent_Strength(const Agent_ptr & agent)
 	Assert(Get_Agent_Count() > 0);
 	(*this) -= agent->Get_Squad_Strength();
 	Assert(m_transport >= 0);
+}
+
+void Squad_Strength::Set_Army_Strength(const Army & army)
+{
+	Assert(army.IsValid());
+
+	if(!army.IsValid())
+	{
+		*this           = Squad_Strength(1);
+		return;
+	}
+
+	army->ComputeStrength(m_attack_str,
+	                      m_defense_str,
+	                      m_ranged_str,
+	                      m_defenders,
+	                      m_ranged,
+	                      m_land_bombard_str,
+	                      m_water_bombard_str,
+	                      m_air_bombard_str,
+	                      m_value,
+	                      true
+	                     );
+
+	m_agent_count       = static_cast<sint16>(army.Num());
+
+	m_value = 0.0;
+	m_transport = 0;
+	for(sint32 i = m_agent_count; i > 0; --i)
+	{
+		Unit const &	unit	= army->Get(i - 1);
+		
+		if(unit.IsValid())
+		{
+			m_value		+= unit.GetDBRec()->GetShieldCost();
+			m_transport	+= (unit.GetCargoCapacity() - unit.GetNumCarried());
+		}
+		else
+		{
+			// Remove the invalid unit
+			army->DelIndex(i - 1);
+			--m_agent_count;
+		}
+	}
 }
 
 void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
