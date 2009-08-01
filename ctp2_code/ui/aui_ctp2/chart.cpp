@@ -535,6 +535,9 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_preReqButton[i++]->Hide();
 	}
 
+	ypos = (ypos + ((m_numPreReq + m_numEitherPreReq) * buttonHeight
+		+ ((m_numPreReq + m_numEitherPreReq) - 1) * heightBetweenButtons)) / 2 + heightBetweenButtons;
+
 	for ( i = 0; i < m_numEitherPreReq; i++ )
 	{
 		m_eitherPreReqIndex[i] = g_theAdvanceDB->Get(index)->GetEitherPrerequisitesIndex(i);

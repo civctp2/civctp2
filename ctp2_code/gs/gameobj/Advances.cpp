@@ -538,9 +538,18 @@ void Advances::ResetCanResearch(sint32 justGot)
 							found = true;
 							justEnabled = TRUE;
 						}
+
+						// If player has at least one eitherprereq then allow
+						// canResearch == TRUE to continue for further checks.
+						if (m_hasAdvance[rec->GetEitherPrerequisitesIndex(either)])
+                        {
+							found = true;
+						}
 					}
 
-					if(!found) canResearch = FALSE;
+					// If any eitherprereq is still missing but they have all the
+					// regular prereqs make sure they still cannot research it.
+					if(!found && canResearch == TRUE) canResearch = FALSE;
 				}
 ////////////// PreReq govt techs (but how do you remove them?)
 				if(rec->GetNumGovernmentType() > 0)
