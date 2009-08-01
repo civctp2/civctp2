@@ -419,7 +419,7 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 		r.x = l.x + 5;
 		r.y = l.y;
 
-		// If leadto advance has center advance as an eitherprerequisite then draw lines blue
+		// If leadto advance has center advance as an eitherprerequisite then draw lines BLUE
 		// (rather than black) from center to leadto advance.
 		if(advanceutil_AdvanceHasEitherPrereq(GetLeadsToIndex(i), m_centerIndex))
 		{
@@ -535,8 +535,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_preReqButton[i++]->Hide();
 	}
 
-	ypos = (ypos + ((m_numPreReq + m_numEitherPreReq) * buttonHeight
-		+ ((m_numPreReq + m_numEitherPreReq) - 1) * heightBetweenButtons)) / 2 + heightBetweenButtons;
+	ypos = ypos + m_numPreReq*heightBetweenButtons + m_numPreReq*buttonHeight;
 
 	for ( i = 0; i < m_numEitherPreReq; i++ )
 	{
