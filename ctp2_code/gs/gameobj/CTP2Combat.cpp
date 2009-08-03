@@ -1261,6 +1261,12 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 	
 	double hitChance = att->m_unit->GetOffense(def->m_unit) /
 		(att->m_unit->GetOffense(def->m_unit) + def->m_unit->GetDefense(att->m_unit));
+
+	//double attA = att->m_unit->GetOffense(def->m_unit);
+	//double defA = def->m_unit->GetDefense(att->m_unit);
+
+	//combat_print(k_COMBAT_DEBUG_VERBOSE, "Attack Rating: %.2lf vs Defence Rating: %.2lf\n", attA, defA);
+
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) -Attacking-  %s@(%2d,%2d) -  HitChance: %.2lf\n", attackString, attX, attY,
 				 defenseString, defX, defY, hitChance);
 

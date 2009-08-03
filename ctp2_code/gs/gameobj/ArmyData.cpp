@@ -136,6 +136,8 @@
 //   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
 //	 Fixed expelling if at least one unit on a tile cannot be expelled, then
 //	 none from that tile can be. (12-Apr-2009 Maq)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -9715,7 +9717,8 @@ bool ArmyData::IsWounded() const
 	for(sint32 i = 0 ; i < nb ; i ++)
 	{
 		totalcurrentHP += unithp[i];
-		totalHP+= g_theUnitDB->Get(unittypes[i], g_player[GetOwner()]->GetGovernmentType())->GetMaxHP();
+		totalHP += m_array[i]->CalculateTotalHP();
+		//totalHP+= g_theUnitDB->Get(unittypes[i], g_player[GetOwner()]->GetGovernmentType())->GetMaxHP();
 	}
 	return (totalcurrentHP < totalHP/2);
 	//criterion can be changed, but seems relevant. Even if support isn't

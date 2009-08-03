@@ -224,14 +224,15 @@ Unit {
 	Bit AttackFromSpaceship
 	Bit CantBeAttacked
 	Bit CargoPod
-	Bit IsFoot							// Added by E for additional battle modifiers Dec-7-2005	
+	Bit IsFoot	
+	Bit IsMelee
 	Bit IsMounted	
-	Bit IsSiege  						// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsWheeled 						// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsMechanized 					// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsHelicopter 					// Added by E for additional battle modifiers Dec-7-2005
+	Bit IsSiege
+	Bit IsWheeled
+	Bit IsMechanized
+	Bit IsHelicopter
 	Bit IsSubmarine			
-	Bit IgnoreCityWalls	
+	Bit WoodenShip
 
 	Bit NoLandAttack
 	Bit NoSeaAttack
@@ -240,34 +241,77 @@ Unit {
 	Bit NoUnderwaterAttack
 	Bit NoMountainAttack
 	Bit NoShallowWaterAttack
-
+	
+	Bit SingleUse
+	
 	Bit Paratrooper
 	Bit AssistedDrops
-	Bit BonusAgainstFoot 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstMounted
-	Bit BonusAgainstSiege 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstWheeled 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstMechanized 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstHelicopter 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstGuerrilla 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit BonusAgainstSpecialForces 		// Added by E for additional battle modifiers Dec-13-2005
-	Bit BonusAgainstSubmarine 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit SingleUse
-	Bit BonusAirDefense
 
-	Bit WoodenShip
-	Bit AttackFootBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackMountedBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackSiegeBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackWheeledBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackMechanizedBonus			// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackHelicopterBonus 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackSpecialForcesBonus		// Added by E for additional battle modifiers Dec-13-2005
-	Bit AttackCivilianBonus 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit AttackGuerrillaBonus 			// Added by E for additional battle modifiers Dec-13-2005
+	// Unit Defense Bonuses
+	Bit(Float) DefendAirBonus
+	Bit(Float) DefendCityBonus
+	Bit(Float) DefendSubmarineBonus
+	Bit(Float) DefendFootBonus
+	Bit(Float) DefendMeleeBonus
+	Bit(Float) DefendSiegeBonus
+	Bit(Float) DefendWheeledBonus
+	Bit(Float) DefendMechanizedBonus
+	Bit(Float) DefendHelicopterBonus
+	Bit(Float) DefendSpecialForcesBonus
+	Bit(Float) DefendCivilianBonus
+	Bit(Float) DefendGuerrillaBonus
+	Bit(Float) DefendMountedBonus
+	Bit(Float) DefendWoodenShipBonus
+	
+	Bit NoDefenseBonuses                // Unit doesn't receive any defensive bonuses - Maq
+	
+	
+	// Unit Attack Bonuses
+	Bit(Float) AttackAirBonus
+	Bit(Float) AttackCityBonus
+	Bit(Float) AttackSubmarineBonus
+	Bit(Float) AttackFootBonus
+	Bit(Float) AttackMeleeBonus
+	Bit(Float) AttackSiegeBonus
+	Bit(Float) AttackWheeledBonus
+	Bit(Float) AttackMechanizedBonus
+	Bit(Float) AttackHelicopterBonus
+	Bit(Float) AttackSpecialForcesBonus
+	Bit(Float) AttackCivilianBonus
+	Bit(Float) AttackGuerrillaBonus
+	Bit(Float) AttackMountedBonus
+	Bit(Float) AttackWoodenShipBonusNew
+	
+	
+	// Unit Ranged Bonuses
+	Bit(Float) RangedAirBonus
+	Bit(Float) RangedCityBonus
+	Bit(Float) RangedSubmarineBonus
+	Bit(Float) RangedFootBonus
+	Bit(Float) RangedMeleeBonus
+	Bit(Float) RangedSiegeBonus
+	Bit(Float) RangedWheeledBonus
+	Bit(Float) RangedMechanizedBonus
+	Bit(Float) RangedHelicopterBonus
+	Bit(Float) RangedSpecialForcesBonus
+	Bit(Float) RangedCivilianBonus
+	Bit(Float) RangedGuerrillaBonus
+	Bit(Float) RangedMountedBonus
+	Bit(Float) RangedWoodenShipBonus
+	
+	Bit IgnoreCityWalls
+	
+	// Legacy bonuses.
 	Bit AttackWoodenShipBonus
-	Bit HasAttackCityBonus	
-	Bit HasAttackBonusSubmarine
+	Bit(Float) WoodenShipBonus // Old attack wooden ship bonus.
+	
+	Bit BonusAgainstMounted
+	Bit(Float) MountedBonus // Old defence against mounted bonus.
+	
+	Bit BonusAirDefense
+	Bit(Float) AirBonus // Old defence against air bonus.
+
+
 
 	Bit(Int) ReplaceWithCargoModule
 	Bit VisibileAttacking
@@ -521,28 +565,12 @@ Unit {
 
     Int ShieldHunger
     Int FoodHunger
-    Int GoldHunger = 0					// Add for future possibility of gold cost per turn per unit
+    Int GoldHunger = 0
     Record Sprite DefaultSprite
 
 	
 	Bit(Int) LaunchPollution 
 	Bit(Int) DeathPollution 
-
-	Bit(Float) MountedBonus
-	Bit(Float) AirBonus
-	Bit(Float) WoodenShipBonus
-	Bit(Float) AttackCityBonus
-	Bit(Float) AttackBonusSubmarine
-	Bit(Float) FootBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) SiegeBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) WheeledBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) MechanizedBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) HelicopterBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) SpecialForcesBonus		// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) CivilianBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) GuerrillaBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) AgainstMountedBonus
-	Bit(Float) AirDefenseBonus
 
 	Bit(Int) CargoModule
 
@@ -651,7 +679,8 @@ Unit {
 	Bit(Float) ArmyWoodenShipBonus
 	Bit(Float) ArmyAttackCityBonus
 	Bit(Float) ArmyAttackBonusSubmarine
-	Bit(Float) ArmyFootBonus				
+	Bit(Float) ArmyFootBonus
+	Bit(Float) ArmyMeleeBonus
 	Bit(Float) ArmySiegeBonus				
 	Bit(Float) ArmyWheeledBonus				
 	Bit(Float) ArmyMechanizedBonus			

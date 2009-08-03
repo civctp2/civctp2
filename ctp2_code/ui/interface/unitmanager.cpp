@@ -28,6 +28,8 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Handled crash when disbanding armies at the main screen while the unit
 //   manager was shown.
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -766,8 +768,8 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 		case k_TACTICAL_HEALTH_COL:
 		{
 			
-			double p1 = u1.GetHP() / u1.GetDBRec()->GetMaxHP();
-			double p2 = u2.GetHP() / u2.GetDBRec()->GetMaxHP();
+			double p1 = u1.GetHP() / u1->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
+			double p2 = u2.GetHP() / u2->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
 
 			return sint32((100.0 * p1) - (100.0 * p2));
 		}
@@ -808,6 +810,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	};
 
 	AUI_ERRCODE err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
+
 	if(err != AUI_ERRCODE_OK)
 		return err;
 
@@ -824,22 +827,33 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	};
 
 	sint32 width = barRect.right - barRect.left;
+
 	double percent;
-	if(u.GetDBRec()->GetMaxHP() > 0) {
-		percent = double(u.GetHP()) / double(u.GetDBRec()->GetMaxHP());
-	} else {
+	if(u->CalculateTotalHP() > 0)//.GetDBRec()->GetMaxHP() > 0)
+	{
+		percent = double(u.GetHP()) / double(u->CalculateTotalHP());
+	}
+	else 
+	{
 		percent = 1;
 	}
 
 	barRect.right = barRect.left + sint32(double(width) * percent);
+
 	Pixel16 color;
-	if(percent > 0.666) {
+	if(percent > 0.666)
+	{
 		color = RGB(0,255,0);
-	} else if(percent > 0.333) {
+	}
+	else if(percent > 0.333)
+	{
 		color = RGB(255,255,0);
-	} else {
+	}
+	else
+	{
 		color = RGB(255,0,0);
 	}
+
 	err = g_ui->TheBlitter()->ColorBlt(surface, &barRect, color, 0);
 	
 	return err;

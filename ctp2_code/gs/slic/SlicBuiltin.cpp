@@ -48,6 +48,8 @@
 //   in the text files I don't fix it.
 // - Decreased number of Slic errors for mods.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Added unit.actualmaxhp to return the maxhp after wonders, feats and civ
+//   hp bonuses have been added. (3rd-Aug-2009 - Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -251,6 +253,21 @@ class UnitSymbol_HP : public SlicStructMemberData {
 	}
 };
 
+class UnitSymbol_ActualMaxHP : public SlicStructMemberData {
+	DEF_MAKECOPY(UnitSymbol_ActualMaxHP);
+
+	BOOL GetIntValue(sint32 &value) const {
+		Unit unit;
+		if (m_parent->GetDataSymbol()->GetUnit(unit))
+        {
+			value = (sint32)unit->CalculateTotalHP();
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+};
+
 class UnitSymbol_Valid : public SlicStructMemberData {
 	DEF_MAKECOPY(UnitSymbol_Valid);
 
@@ -294,6 +311,7 @@ SlicStruct_Unit::SlicStruct_Unit() :
 	AddMember("hp", new UnitSymbol_HP);
 	AddMember("valid", new UnitSymbol_Valid);
 	AddMember("name", new UnitSymbol_Name);
+	AddMember("actualmaxhp", new UnitSymbol_ActualMaxHP);
 }
 
 

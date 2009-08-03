@@ -28,6 +28,8 @@
 // - Added unit display name.
 // - Standartized code (May 21st 2006 Martin Gühmann)
 // - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1104,9 +1106,9 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 	if(!unit.IsValid())
 		return AUI_ERRCODE_OK;
 
-	double healthPercent = (unit.GetDBRec()->GetMaxHP() > 0) ?
+	double healthPercent = (unit->CalculateTotalHP() > 0) ? //.GetDBRec()->GetMaxHP() > 0) ?
 		static_cast<double>(unit.GetHP()) /
-		static_cast<double>(unit.GetDBRec()->GetMaxHP()) : 1.0;
+		static_cast<double>(unit->CalculateTotalHP()) : 1.0;//.GetDBRec()->GetMaxHP()) : 1.0;
 
 	Pixel16 color = RGB(255, 0, 0);		
 	if(healthPercent > 0.666) {

@@ -121,6 +121,8 @@
 // - Added GovernmentOnly for Units functionality.(21-Jul-2009 EPW)
 // - Added stuff for unit and city gold support. And changed formulas for unit
 //   gold support and city maintenance. (22-Jul-2009 Maq)
+// - Made units over the maxhp after a hp wonder is lost reset their maxhp
+//   to the latest maximum. (03-Aug-2009 Maq)
 //
 //----------------------------------------------------------------------------
 //
@@ -5934,6 +5936,19 @@ void Player::RemoveWonder(sint32 which, bool destroyed)
 	if(wonderutil_Get(which, m_owner)->GetGlobalRadar()) {
 		m_hasGlobalRadar = FALSE;
 		g_theWonderTracker->SetGlobeSatFlags(g_theWonderTracker->GlobeSatFlags() & ~(1 << m_owner));
+	}
+
+	sint32 value;
+	if(wonderutil_Get(which, m_owner)->GetIncreaseHp(value))
+	{
+		sint32 i, n = m_all_units->Num();
+		for(i = 0; i < n; i++)
+		{
+			if(m_all_units->Access(i)->GetHP() > double(m_all_units->Access(i)->CalculateTotalHP()))
+			{
+				m_all_units->Access(i)->SetHP(double(m_all_units->Access(i)->CalculateTotalHP()));
+			}
+		}
 	}
 }
 

@@ -89,6 +89,8 @@
 // - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 // - Merged in CTPGoal, removed virtual functions, for design and speed
 //   improvement. (28-Jan-2009 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1645,7 +1647,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		tieBreaker +=                      rec->GetZBRangeAttack();
 		tieBreaker +=                      rec->GetFirepower();
 		tieBreaker += static_cast<Utility>(rec->GetArmor());
-		tieBreaker +=                      rec->GetMaxHP();
+		tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
 	}
 
 	match += tieBreaker;

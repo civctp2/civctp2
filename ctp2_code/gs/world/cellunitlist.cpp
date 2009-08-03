@@ -34,6 +34,8 @@
 // - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
 // - Added LowestMoveBonusUnit to return movement required if cellunitlist contains 
 //	 only movebonus units, otherwise regular move cost check is used. (15-Mar-2009 Maq)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -978,7 +980,7 @@ void CellUnitList::ComputeStrength(double & attack,
 			ranged_unit_count++;
 
 		double firepower = static_cast<double>(rec->GetFirepower());
-		double hitpoints = static_cast<double>(rec->GetMaxHP());
+		double hitpoints = static_cast<double>(m_array[i]->CalculateTotalHP());//rec->GetMaxHP());
 
 		attack   +=   rec->GetAttack()
 		            * hitpoints
@@ -1034,7 +1036,7 @@ void CellUnitList::ComputeStrength(double & attack,
 			if (!rec) continue;
 
 			firepower = static_cast<double>(rec->GetFirepower());
-			hitpoints = static_cast<double>(rec->GetMaxHP());
+			hitpoints = static_cast<double>(cargo_list->Access(j)->CalculateTotalHP());//rec->GetMaxHP());
 
 			if (rec->GetDefense() > 0.0)
 				defend_unit_count++;
@@ -1087,7 +1089,7 @@ double CellUnitList::GetAverageHealthPercentage() const
     {
         if (m_array[i].IsValid() && m_array[i].GetDBRec()) 
         {
-            double maxHp = m_array[i].GetDBRec()->GetMaxHP();
+            double maxHp = m_array[i]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
             totalRatio += 
                 (maxHp) ? (m_array[i].GetHP() / maxHp) : m_array[i].GetHP();
         }

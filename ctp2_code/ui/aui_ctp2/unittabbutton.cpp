@@ -17,6 +17,7 @@
 #include "battleorderboxactions.h"
 #include "c3_coloredstatic.h"
 #include "UIUtils.h"
+#include "UnitData.h"
 
 
 
@@ -226,7 +227,7 @@ sint32 UnitTabButton::UpdateData( Unit *unit )
 	else {
 		
 		AddSubControl( m_healthBar );
-		sint32 healthPercent  = (sint32)( unit->GetHP() * 100  / unit->GetDBRec()->GetMaxHP() );
+		sint32 healthPercent  = (sint32)( unit->GetHP() * 100  / unit->AccessData()->CalculateTotalHP());//GetDBRec()->GetMaxHP() );
 		m_healthBar->SetPercentFilled( healthPercent );
 
 		

@@ -27,6 +27,8 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
 // - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -73,6 +75,7 @@
 
 #include "UnitPool.h"
 #include "ProfileDB.h"          // g_theProfileDB
+#include "UnitData.h"
 
 extern C3UI *g_c3ui;
 
@@ -941,7 +944,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 {
 	if (s_armyWindow->m_inArmy[(int)cookie].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_inArmy[(int)cookie].GetDBRec()->GetMaxHP();
+		sint32 const maxhp		= s_armyWindow->m_inArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
 		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[(int)cookie].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;
@@ -960,7 +963,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control,
 {
 	if (s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_outOfArmy[(int)cookie].GetDBRec()->GetMaxHP();
+		sint32 const maxhp		= s_armyWindow->m_outOfArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
 		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[(int)cookie].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;

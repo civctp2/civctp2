@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -50,6 +52,7 @@
 #include "terrainutil.h"
 #include "unitutil.h"
 #include "ArmyData.h"
+#include "UnitData.h"
 
 
 
@@ -344,7 +347,7 @@ void Battle::PositionUnit(BattleEvent *event, BOOL isDefender, Unit theUnit, sin
 
 	if(sethp) {
 		actor->SetHitPoints(theUnit.GetHP());
-		actor->SetHitPointsMax(theUnit.GetDBRec()->GetMaxHP());
+		actor->SetHitPointsMax(theUnit.AccessData()->CalculateTotalHP());//.GetDBRec()->GetMaxHP());
 	}
 
 	if (isDefender) {

@@ -33,6 +33,8 @@
 // - Outcommented some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Fixed memory leaks.
 // - Removed some unused items
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -2106,7 +2108,7 @@ void Director::AddAttack(Unit attacker, Unit defender)
 		action->attacker_ID		= attacker.GetAttackSoundID();
 		action->attacker_IsCity = attacker.IsCity();
 
-		attackerActor->SetHealthPercent(attacker.GetHP() / attacker.GetDBRec()->GetMaxHP());
+		attackerActor->SetHealthPercent(attacker.GetHP() / attacker->CalculateTotalHP());
 
 		Army army = attacker.GetArmy();
 		if (army.IsValid()) 
@@ -2123,7 +2125,7 @@ void Director::AddAttack(Unit attacker, Unit defender)
 		action->defender_ID		= defender.GetAttackSoundID();
 		action->defender_IsCity = defender.IsCity();
 	
-		defenderActor->SetHealthPercent(defender.GetHP() / defender.GetDBRec()->GetMaxHP());
+		defenderActor->SetHealthPercent(defender.GetHP() / defender->CalculateTotalHP());
 
 		CellUnitList *unitList;
 		unitList = g_theWorld->GetCell(defender.RetPos())->UnitArmy();

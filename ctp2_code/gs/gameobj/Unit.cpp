@@ -52,6 +52,8 @@
 // - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -821,7 +823,7 @@ void Unit::SetType(const sint32 type)
 
 void Unit::SetHPToMax()
 {
-   SetHP(GetDBRec()->GetMaxHP());
+   SetHP(AccessData()->CalculateTotalHP());
 }
 
 sint32 Unit::GetFuel() const
@@ -2046,7 +2048,7 @@ sint32 Unit::GetLastBattle() const
 
 bool Unit::IsInjured() const
 {
-	return GetDBRec()->GetMaxHP() > GetHP();
+	return AccessData()->CalculateTotalHP() > GetHP();
 }
 
 void Unit::RecalculateResources()

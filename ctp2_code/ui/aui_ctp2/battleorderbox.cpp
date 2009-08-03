@@ -26,6 +26,8 @@
 //
 // - Added unit display name.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -63,6 +65,7 @@
 #include "primitives.h"
 #include "UnitRecord.h"
 #include "IconRecord.h"
+#include "UnitData.h"
 
 #define k_UNIT_FRAME_THICKNESS	2
 
@@ -469,7 +472,7 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 	m_unitMovement->SetText(s);
 
 	
-	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit.GetDBRec()->GetMaxHP() );
+	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit->CalculateTotalHP());//.GetDBRec()->GetMaxHP() );
 	m_unitHealthBar->SetPercentFilled( healthPercent );
 
 	m_unitName->SetText(theUnit.GetDisplayName().c_str());

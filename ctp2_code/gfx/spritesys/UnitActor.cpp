@@ -59,6 +59,8 @@
 //	 (11-Apr-2009 Maq)
 // - Stopped the cargo icon showing for enemy transports if they're only carrying
 //	 stealth units. (13-Apr-2009 Maq)
+// - Changed occurances of UnitRecord::GetMaxHP to
+//   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
 
@@ -1836,7 +1838,7 @@ void UnitActor::DrawHealthBar(void)
 		{
 			if (m_healthPercent < 0)
 			{
-				ratio = std::max(0.0, m_unitID.GetHP() / m_unitID.GetDBRec()->GetMaxHP());
+				ratio = std::max(0.0, m_unitID.GetHP() / m_unitID->CalculateTotalHP());
 			}
 			else
 			{
