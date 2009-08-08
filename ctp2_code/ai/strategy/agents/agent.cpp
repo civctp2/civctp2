@@ -75,7 +75,6 @@ Agent::Agent()
     m_squad_strength    (0),
     m_can_be_executed   (true),
     m_detached          (false),
-    m_needs_transporter (false),
     m_neededForGarrison (false),
     m_army              (),
     m_playerId          (PLAYER_UNASSIGNED),
@@ -92,7 +91,6 @@ Agent::Agent(const Army & army)
     m_squad_strength    (0),
     m_can_be_executed   (true),
     m_detached          (false),
-    m_needs_transporter (false),
     m_neededForGarrison (false),
     m_army              (army),
     m_playerId          (army->GetOwner()),
@@ -110,7 +108,6 @@ Agent::Agent(const Agent & an_Original)
     m_squad_strength    (an_Original.m_squad_strength),
     m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
     m_detached          (an_Original.m_detached),
-    m_needs_transporter (false),                           // Goal reference gone
     m_neededForGarrison (an_Original.m_neededForGarrison), // Depends on location
     m_army              (an_Original.m_army),
     m_playerId          (an_Original.m_playerId),
@@ -135,7 +132,6 @@ Agent & Agent::operator = (const Agent & an_Original)
 		m_squad_strength    = an_Original.m_squad_strength;
 		m_can_be_executed   = an_Original.m_can_be_executed;
 		m_detached          = an_Original.m_detached;
-		m_needs_transporter = an_Original.m_needs_transporter;
 		m_neededForGarrison = an_Original.m_neededForGarrison;
 		m_army              = an_Original.m_army;
 		m_playerId          = an_Original.m_playerId;

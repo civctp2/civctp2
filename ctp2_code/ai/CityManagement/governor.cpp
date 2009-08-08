@@ -1466,9 +1466,9 @@ void Governor::ComputeRoadPriorities()
 
 		for (sint32 neighbor_index = 0; neighbor_index < num_cities; neighbor_index++)
 		{
-                  if (neighbor_index == city_index)
-                      continue;
-                  
+			if (neighbor_index == city_index)
+				continue;
+
 			Unit         neighbor_unit = cityList->Get(neighbor_index);
 			sint32 const neighbor_dist = MapPoint::GetSquaredDistance(neighbor_unit.RetPos(), city_unit.RetPos());
 
@@ -1477,7 +1477,7 @@ void Governor::ComputeRoadPriorities()
 				s_CityDistQueue.push_back(CityDist(neighbor_unit, neighbor_dist));
 				s_CityPairList.push_back(CityPair(city_index, neighbor_index));
 			}
-		} 
+		}
 
 		if (s_CityDistQueue.size() == 0)
 			continue;
@@ -1653,8 +1653,8 @@ void Governor::PlaceTileImprovements()
 // Remark(s)  : The information in goal is only valid when true is returned.
 //
 //----------------------------------------------------------------------------
-bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const{
-
+bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const
+{
 	sint32 tmp_bonus;
 	sint32 terrain;
 	const TerrainImprovementRecord *rec;

@@ -349,12 +349,36 @@ void Goal::Set_Needs_Transporter(const bool needs_transporter)
 {
 	for
 	(
-	    Agent_List::iterator agent_iter  = m_agents.begin();
-	                         agent_iter != m_agents.end();
-	                       ++agent_iter
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
 	)
 	{
-		(*agent_iter)->Set_Needs_Transporter(needs_transporter);
+		match_iter->Set_Needs_Transporter(needs_transporter);
+	}
+}
+
+void Goal::Set_Needs_Transporter(Agent_ptr agent_ptr)
+{
+
+	SQUAD_CLASS squadClass = agent_ptr->Get_Squad_Class();
+	sint32 cont = g_theWorld->GetContinent(agent_ptr->Get_Pos());
+
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if
+		  (
+		       squadClass == match_iter->Get_Agent()->Get_Squad_Class()
+		    && cont       == g_theWorld->GetContinent(match_iter->Get_Agent()->Get_Pos())
+		  )
+		{
+			match_iter->Set_Needs_Transporter(true);
+		}
 	}
 }
 
@@ -504,7 +528,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		if(!match_iter->All_Unused_Or_Used_By_This(this))
 			continue;
 
-		if(match_iter->Needs_Cargo())
+		if(match_iter->Get_Needs_Cargo())
 			continue;
 
 		if(!m_current_projected_strength.HasEnough(m_current_needed_strength)
@@ -702,7 +726,7 @@ void Goal::Commit_Agents()
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
 				("\t\tAGENTS CAN BE COMMITTED:       (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 
-			if(!match_iter->Needs_Cargo())
+			if(!match_iter->Get_Needs_Cargo())
 			{
 				match_iter->Commit_Agent_Common(this);
 			}
@@ -723,7 +747,7 @@ void Goal::Commit_Transport_Agents()
 {
 	for
 	(
-	    Plan_List::iterator match_iter  = m_matches.begin();
+	    Plan_List::iterator match_iter  = m_matches.begin(); // Maybe resort the matches, by agents that need a transporter and their distance
 	                        match_iter != m_matches.end();
 	                      ++match_iter
 	)
@@ -738,11 +762,11 @@ void Goal::Commit_Transport_Agents()
 				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
-		else if(match_iter->Cannot_Be_Used())
+		else if(match_iter->Get_Cannot_Be_Used())
 		{
 			break;
 		}
-		else if(match_iter->Needs_Cargo())
+		else if(match_iter->Get_Needs_Cargo())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
 				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
@@ -867,7 +891,7 @@ bool Goal::Needs_Cargo(Agent* agent)
 	{
 		if(agent == match_iter->Get_Agent())
 		{
-			return match_iter->Needs_Cargo();
+			return match_iter->Get_Needs_Cargo();
 		}
 	}
 
@@ -885,7 +909,7 @@ bool Goal::Cannot_Be_Used(Agent* agent)
 	{
 		if(agent == match_iter->Get_Agent())
 		{
-			return match_iter->Cannot_Be_Used();
+			return match_iter->Get_Cannot_Be_Used();
 		}
 	}
 
@@ -1485,14 +1509,14 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		for
 		(
-		    Agent_List::const_iterator agent_iter  = m_agents.begin(); 
-		                               agent_iter != m_agents.end();
-		                             ++agent_iter
+		    Plan_List::const_iterator match_iter  = m_matches.begin();
+		                              match_iter != m_matches.end();
+		                            ++match_iter
 		)
 		{
-			Agent_ptr agent_trans_ptr = static_cast<Agent_ptr>(*agent_iter);
+			Agent_ptr agent_trans_ptr = match_iter->Get_Agent();
 
-			if(!agent_trans_ptr->Get_Is_Dead() && agent_trans_ptr->Get_Needs_Transporter())
+			if(!agent_trans_ptr->Get_Is_Dead() && match_iter->Get_Needs_Transporter())
 			{
 				agent_trans_ptr->EstimateTransportUtility(agent_ptr, utility);
 				transport_utility += utility;
@@ -1574,8 +1598,35 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	double report_obsolete = bonus - report_wounded;
 #endif //_DEBUG
 
+	MapPoint point(-1, -1);
+
+	if(Needs_Transporter())
+	{
+		sint32 transports;
+		sint32 max;
+		sint32 empty;
+
+		if(
+		       agent_ptr->Get_Army()->GetCargo(transports, max, empty)
+		    && empty > 0
+		  )
+		{
+			point = GetClosestCargoPos(agent_ptr);       // If is transporter
+		}
+		else
+		{
+			point = GetClosestTransporterPos(agent_ptr); // If needs to be transported
+		}
+	}
+	else
+	{
+		point = dest_pos;
+	}
+
+	point = (point == MapPoint(-1, -1)) ? dest_pos : point;
+
 	sint32 squared_distance = 0;
-	double eta = agent_ptr->GetRoundsPrecise(dest_pos, squared_distance);
+	double eta = agent_ptr->GetRoundsPrecise(point, squared_distance);
 	double cell_dist = sqrt(static_cast<double>(squared_distance));
 
 	Utility raw_priority = Get_Raw_Priority();
@@ -1603,7 +1654,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(agent_ptr->Get_Army()->IsInVisionRangeAndCanEnter(dest_pos))
 	{
-		/// @ToDo: Use the actual path cost, to check whether the goody hut really so close.
+		/// @ToDo: Use the actual path cost, to check whether the goody hut is really so close.
 		bonus += g_theGoalDB->Get(m_goal_type)->GetInVisionRangeBonus();
 
 		if (!Barbarians::InBarbarianPeriod()
@@ -2084,7 +2135,7 @@ GOAL_RESULT Goal::Execute_Task()
 			{
 				if(Needs_Transporter() && Get_Transporters_Num() < 1)
 				{
-					agent_ptr->Set_Needs_Transporter(true);
+					Set_Needs_Transporter(agent_ptr);
 					return GOAL_NEEDS_TRANSPORT;
 				}
 				else
@@ -4079,4 +4130,56 @@ bool Goal::Goal_Too_Expensive() const
 	    && (m_current_attacking_strength.Get_Value() > 
 	            m_current_needed_strength.Get_Value() * 3
 	       );
+}
+
+MapPoint Goal::GetClosestTransporterPos(const Agent_ptr agent_ptr) const
+{
+	sint32            best_squared_dist = 0x7fffffff;
+	MapPoint          best_target_pos   = MapPoint(-1, -1);
+
+	for
+	(
+	    Plan_List::const_iterator match_iter  = m_matches.begin();
+	                              match_iter != m_matches.end();
+	                            ++match_iter
+	)
+	{
+		if(!match_iter->Get_Agent()->Get_Is_Dead() && match_iter->Get_Needs_Cargo())
+		{
+			sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(match_iter->Get_Agent()->Get_Pos(), agent_ptr->Get_Pos());
+			if (tmp_squared_dist < best_squared_dist)
+			{
+				best_squared_dist = tmp_squared_dist;
+				best_target_pos = match_iter->Get_Agent()->Get_Pos();
+			}
+		}
+	}
+
+	return best_target_pos;
+}
+
+MapPoint Goal::GetClosestCargoPos(const Agent_ptr agent_ptr) const
+{
+	sint32            best_squared_dist = 0x7fffffff;
+	MapPoint          best_target_pos   = MapPoint(-1, -1);
+
+	for
+	(
+	    Plan_List::const_iterator match_iter  = m_matches.begin();
+	                              match_iter != m_matches.end();
+	                            ++match_iter
+	)
+	{
+		if(!match_iter->Get_Agent()->Get_Is_Dead() && match_iter->Get_Needs_Transporter())
+		{
+			sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(match_iter->Get_Agent()->Get_Pos(), agent_ptr->Get_Pos());
+			if (tmp_squared_dist < best_squared_dist)
+			{
+				best_squared_dist = tmp_squared_dist;
+				best_target_pos = match_iter->Get_Agent()->Get_Pos();
+			}
+		}
+	}
+
+	return best_target_pos;
 }

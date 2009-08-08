@@ -171,7 +171,7 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 		((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
 		 (m_move_intersection & k_Unit_MovementType_ShallowWater_Bit)
 		);
-		 
+
 	if (is_tunnel_and_boat)
 	{
 		sint32 icost_without_tunnel;

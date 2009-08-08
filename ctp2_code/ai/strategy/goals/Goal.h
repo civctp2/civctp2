@@ -191,6 +191,7 @@ public:
     void Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed);
     size_t Get_Matches_Num() const { return m_matches.size(); }
     void Set_Needs_Transporter(const bool needs_transporter);
+    void Set_Needs_Transporter(Agent_ptr agent_ptr);
     sint16 Get_Transporters_Num() const { return m_current_attacking_strength.Get_Transport(); }
 
     void Recompute_Current_Attacking_Strength();
@@ -289,6 +290,9 @@ private:
 
 
     bool LoadTransporters(Agent_ptr agent_ptr);
+
+    MapPoint GetClosestTransporterPos(const Agent_ptr agent_ptr) const;
+    MapPoint GetClosestCargoPos      (const Agent_ptr agent_ptr) const;
 
     inline void Sort_Matches(Plan_List & matches);
 

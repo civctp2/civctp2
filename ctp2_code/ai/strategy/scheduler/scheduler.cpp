@@ -425,8 +425,17 @@ void Scheduler::Reset_Agent_Execution()
 	while(agent_ptr_iter != m_agents.end())
 	{
 		(*agent_ptr_iter)->Set_Can_Be_Executed(true);
-		(*agent_ptr_iter)->Set_Needs_Transporter(false);
 		agent_ptr_iter++;
+	}
+
+	for
+	(
+	    Goal_List::iterator goal_iter  = m_goals.begin();
+	                        goal_iter != m_goals.end();
+	                      ++goal_iter
+	)
+	{
+		(*goal_iter)->Set_Needs_Transporter(false);
 	}
 }
 
@@ -671,7 +680,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			break;
 		}
 
-		Utility newMatchValue = goal_ptr->Recompute_Matching_Value(false, false);
+		Utility newMatchValue = goal_ptr->Compute_Matching_Value(false);
 
 		if(newMatchValue == Goal::BAD_UTILITY)
 		{
@@ -805,7 +814,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			}
 			case GOAL_NEEDS_TRANSPORT:
 			{
-				// optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
+				// Optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
 				if (!out_of_transports)
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 

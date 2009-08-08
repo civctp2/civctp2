@@ -110,9 +110,6 @@ public:
 
 	void Log_Debug_Info(const int & log, const Goal * const goal) const;
 
-	void Set_Needs_Transporter(const bool needs_transporter) { m_needs_transporter = needs_transporter; };
-	bool Get_Needs_Transporter() const                       { return m_needs_transporter; };
-
 	const Army & Get_Army() const { return m_army; };
 
 
@@ -187,7 +184,6 @@ private:
 	Squad_Strength m_squad_strength;
 	bool           m_can_be_executed;
 	bool           m_detached;
-	bool           m_needs_transporter;
 	Army           m_army;
 	sint32         m_targetOrder;
 	sint32         m_playerId;
