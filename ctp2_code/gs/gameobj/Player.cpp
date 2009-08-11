@@ -8234,9 +8234,11 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 			m_researchGoal = -1;
 		}
 
+		// If advance given is one you could research.
 		if(advance == m_advances->GetResearching())
 		{
 			m_advances->ResetCanResearch(advance);
+			// If a research goal is set.
 			if(m_researchGoal >= 0)
 			{
 				StartResearchingAdvanceForGoal(m_researchGoal);
@@ -8262,6 +8264,11 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 			{
 				BuildResearchDialog(advance);
 			}
+		}
+		else
+		{
+			// Reset can research for advance from ruins too.
+			m_advances->ResetCanResearch(advance);
 		}
 
 		if(sci_advancescreen_isOnScreen() &&
@@ -9044,7 +9051,8 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 {
 	//Added by Martin Gühmann
 	//Clears reseach goal if index is smaller 0:
-	if(index < 0){
+	if(index < 0)
+	{
 		m_researchGoal = -1;
 		return 2;
 	}
@@ -9054,7 +9062,8 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 	sint32 tmpAdvance;
 	sint32 advance;
 
-	switch(db) {
+	switch(db)
+	{
 		case DATABASE_DEFAULT:
 		case DATABASE_SEARCH:
 		case DATABASE_ORDERS:
@@ -9081,10 +9090,13 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 		case DATABASE_TILE_IMPROVEMENTS:
 			advance = g_theTerrainImprovementDB->Get(index, m_government_type)->GetTerrainEffect(0)->GetEnableAdvanceIndex();
 			tmpCosts = m_advances->GetCost(advance);
-			for(i = 1; i < g_theTerrainImprovementDB->Get(index)->GetNumTerrainEffect(); i++){
+			for(i = 1; i < g_theTerrainImprovementDB->Get(index)->GetNumTerrainEffect(); i++)
+			{
 				tmpAdvance = g_theTerrainImprovementDB->Get(index)->GetTerrainEffect(i)->GetEnableAdvanceIndex();
-				if(!m_advances->HasAdvance(tmpAdvance)){
-					if(tmpCosts > m_advances->GetCost(tmpAdvance)){
+				if(!m_advances->HasAdvance(tmpAdvance))
+				{
+					if(tmpCosts > m_advances->GetCost(tmpAdvance))
+					{
 						tmpCosts = m_advances->GetCost(tmpAdvance);
 						advance = tmpAdvance;
 					}
@@ -9096,7 +9108,8 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 			return 2;
 	}
 
-	if(m_advances->HasAdvance(advance)){
+	if(m_advances->HasAdvance(advance))
+	{
 		//Clears research goal if the advance is already known.
 		m_researchGoal = -1;
 		return 0;
@@ -9111,9 +9124,10 @@ void Player::StartResearchingAdvanceForGoal(sint32 goal)
 {
 	m_researchGoal = goal;
 
-	if(m_advances->CanResearch(goal)) {
-		
+	if(m_advances->CanResearch(goal))
+	{
 		StartResearching(goal);
+
 		return;
 	}
 
@@ -9122,50 +9136,59 @@ void Player::StartResearchingAdvanceForGoal(sint32 goal)
 
 bool Player::RecursivelyStartResearching(sint32 advance)
 {
-	
-
 	const AdvanceRecord *rec = g_theAdvanceDB->Get(advance);
 	
-	if(m_advances->CanResearch(advance)) {
+	if(m_advances->CanResearch(advance))
+	{
 		StartResearching(advance);
 		return true;
 	}
 
 	sint32 i;
 	sint32 a_prereq = -1;
-	for(i = 0; i < rec->GetNumPrerequisites(); i++) {
+	for(i = 0; i < rec->GetNumPrerequisites(); i++)
+	{
 		if(rec->GetPrerequisitesIndex(i) == rec->GetIndex())
 			continue;
 
 		if(m_advances->HasAdvance(rec->GetPrerequisitesIndex(i)))
 			continue;
-		if(m_advances->CanResearch(rec->GetPrerequisitesIndex(i))) {
+
+		if(m_advances->CanResearch(rec->GetPrerequisitesIndex(i)))
+		{
 			StartResearching(rec->GetPrerequisitesIndex(i));
 			return true;
 		}
+
 		a_prereq = rec->GetPrerequisitesIndex(i);
 	}
 
-	
-	if(a_prereq >= 0) {
+	if(a_prereq >= 0)
+	{
 		return RecursivelyStartResearching(a_prereq);
 	}
 
-	
 	return false;
 }
 
 void Player::SetPlayerType(PLAYER_TYPE pt)
 { 
 	m_playerType = pt;
-	if(g_network.IsHost()) {
-		if(IsRobot()) {
-			if(m_owner != g_network.GetPlayerIndex()) {
+	if(g_network.IsHost())
+	{
+		if(IsRobot())
+		{
+			if(m_owner != g_network.GetPlayerIndex())
+			{
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_ATTACH_ROBOT, m_owner));
-			} else {
+			}
+			else
+			{
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_DETACH_ROBOT, m_owner));
 			}
-		} else {
+		}
+		else
+		{
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_DETACH_ROBOT, m_owner));
 		}
 	}

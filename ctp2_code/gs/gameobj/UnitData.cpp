@@ -1397,6 +1397,7 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 		defender.GetDBRec()->GetArmor());
 	sint32 n;
 	bool canBombard = rec->GetBombRounds(n);
+
 	Assert(canBombard);
 	if(!canBombard)
 		n = 0;
@@ -1406,26 +1407,11 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 	g_slicEngine->RunCounterBombardmentTriggers(defender, Unit(m_id));
 
 	double defenseStrength = defender->GetDefense(Unit(m_id));
-	double attack = rec->GetZBRangeAttack();
-
-	if (IsVeteran())
-		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
-	if (IsElite())
-		attack += (rec->GetZBRangeAttack() * (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)); 
+	double attack = Unit(m_id)->GetRanged(defender);
 
 	sint32 i;
-
-	for (i = 0; i < cell->GetNumUnits(); i++) {
-		if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
-			attack += (rec->GetZBRangeAttack() * 0.5);// @todo this needs a constDB value
-			break;
-		}
-	}
-
 	double prob = attack / (attack + defenseStrength);
-
 	double dmr = 1.0/defender.GetHPModifier(); 
-
 	sint32 p = sint32(prob * 100);
 	
 	for (i = 0; i < n; ++i) 
@@ -1443,9 +1429,12 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 	}
 
 	defender.SetHP(hp); 
-	if(isCounterBombardment) {
+	if(isCounterBombardment)
+	{
 		g_slicEngine->RunCounterBombardmentTriggers(Unit(m_id), defender);
-	} else {
+	}
+	else
+	{
 		g_slicEngine->RunBombardmentTriggers(Unit(m_id), defender);
 	}
 }
@@ -1541,8 +1530,8 @@ bool UnitData::Bombard(CellUnitList &defender, bool isCounterBombardment)
 
 	for (i = g_rand->Next(defender.Num()), j=0;
 		 j < defender.Num(); 
-		 i = ((i + 1) % defender.Num()), j++) {
-
+		 i = ((i + 1) % defender.Num()), j++)
+	{
 		if(!(defender[i].GetVisibility() & (1 << m_owner)) && !g_theWorld->GetCity(defender[i].RetPos()).IsValid())
 			continue;
 
@@ -1551,9 +1540,11 @@ bool UnitData::Bombard(CellUnitList &defender, bool isCounterBombardment)
 		if (CanBombardType(defender[i]) || rec->GetSingleUse())
 		{
 			Bombard(rec, defender[i], isCounterBombardment);
+
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -3174,11 +3165,20 @@ void UnitData::EndTurn()
 
 	// PFT added: heal immobile units also, 17 Mar 05
 	//Heal rate now calculated in terrainutil_GetHealRate, 24-Jul-09
-	if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile() ) && (m_hp < maxHp))
+	if(m_hp < maxHp)
 	{
-		m_hp += maxHp * terrainutil_GetHealRate(m_pos);
-	
-		m_hp = std::min(m_hp, maxHp);
+		if (rec->GetAlwaysHeal())
+		{
+			m_hp += maxHp * terrainutil_GetHealRate(m_pos);
+		
+			m_hp = std::min(m_hp, maxHp);
+		}
+		else if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile()))
+		{
+			m_hp += maxHp * terrainutil_GetHealRate(m_pos);
+		
+			m_hp = std::min(m_hp, maxHp);
+		}
 	}
 
 	if(rec->GetNoFuelThenCrash()) {
@@ -3483,6 +3483,12 @@ double UnitData::GetOffense(const Unit &defender) const
 		bonuses += value;
 	}
 
+	if (defrec->GetIsSurfaceShip() 
+		 && rec->GetAttackSurfaceShipBonus(value))
+	{
+		bonuses += value;
+	}
+
 	//EMOD Civ Bonuses July 2, 2006
 	if (defender.GetMovementTypeLand() 
 		&& (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->
@@ -3557,6 +3563,134 @@ double UnitData::GetDefense(const Unit &attacker) const
 	if(modDef != intDef)
 		base = modDef;
 
+	if (g_theProfileDB->IsNewCombat())
+	{// these were not in original combat for defence
+		if (IsVeteran())
+		{
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+
+		if (IsElite())
+		{
+			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+		}
+		// Added for Leaders to increase defense
+		for (sint32 i = 0; i < cell->GetNumUnits(); i++)
+		{
+			if(cell->AccessUnit(i).GetDBRec()->GetLeader())
+			{
+				bonuses += 0.5;// @todo this needs a constDB value
+				break;
+			}
+		}
+	}
+
+	double value = 0.0;
+
+	if(attackRec->GetIsMounted())
+	{
+		if(myRec->GetMountedBonus(value))// Legacy purposes.
+		{
+			bonuses += value;
+		}
+
+		if(myRec->GetDefendMountedBonus(value))
+		{
+			bonuses += value;
+		}
+	}
+
+	if(attackRec->GetMovementTypeAir())
+	{
+		if(myRec->GetAirBonus(value))// Legacy purposes.
+		{
+			bonuses += value;
+		}
+
+		if(myRec->GetDefendAirBonus(value))
+		{
+			bonuses += value;
+		}
+	}
+
+	if(attackRec->GetIsSubmarine()
+		&& myRec->GetDefendSubmarineBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsSurfaceShip()
+		&& myRec->GetDefendSurfaceShipBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsFoot()
+		&& myRec->GetDefendFootBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsMelee()
+		&& myRec->GetDefendMeleeBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsSiege()
+		&& myRec->GetDefendSiegeBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsWheeled()
+		&& myRec->GetDefendWheeledBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsMechanized()
+		&& myRec->GetDefendMechanizedBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsHelicopter()
+		&& myRec->GetDefendHelicopterBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsGuerrilla()
+		&& myRec->GetDefendGuerrillaBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetCivilian()
+		&& myRec->GetDefendCivilianBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetIsSpecialForces()
+		&& myRec->GetDefendSpecialForcesBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetWoodenShip()
+		&& myRec->GetDefendWoodenShipBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if (cell->GetCity().m_id != (0)
+		 && myRec->GetDefendCityBonus(value))
+	{
+		bonuses += value;
+	}
+
 	if(!myRec->GetNoDefenseBonuses())
 	{
 		if(IsEntrenched())
@@ -3577,128 +3711,6 @@ double UnitData::GetDefense(const Unit &attacker) const
 			(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos)))
 		{
 			bonuses += terrain_bonus;
-		}
-
-		if (g_theProfileDB->IsNewCombat())
-		{// these were not in original combat for defence
-			if (IsVeteran())
-			{
-				bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
-			}
-
-			if (IsElite())
-			{
-				bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
-			}
-			// Added for Leaders to increase defense
-			for (sint32 i = 0; i < cell->GetNumUnits(); i++)
-			{
-				if(cell->AccessUnit(i).GetDBRec()->GetLeader())
-				{
-					bonuses += 0.5;// @todo this needs a constDB value
-					break;
-				}
-			}
-		}
-
-		double value = 0.0;
-
-		if(attackRec->GetIsMounted())
-		{
-			if(myRec->GetMountedBonus(value))// Legacy purposes.
-			{
-				bonuses += value;
-			}
-
-			if(myRec->GetDefendMountedBonus(value))
-			{
-				bonuses += value;
-			}
-		}
-
-		if(attackRec->GetMovementTypeAir())
-		{
-			if(myRec->GetAirBonus(value))// Legacy purposes.
-			{
-				bonuses += value;
-			}
-
-			if(myRec->GetDefendAirBonus(value))
-			{
-				bonuses += value;
-			}
-		}
-
-		if(attackRec->GetIsSubmarine()
-			&& myRec->GetDefendSubmarineBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsFoot()
-			&& myRec->GetDefendFootBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsMelee()
-			&& myRec->GetDefendMeleeBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsSiege()
-			&& myRec->GetDefendSiegeBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsWheeled()
-			&& myRec->GetDefendWheeledBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsMechanized()
-			&& myRec->GetDefendMechanizedBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsHelicopter()
-			&& myRec->GetDefendHelicopterBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsGuerrilla()
-			&& myRec->GetDefendGuerrillaBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetCivilian()
-			&& myRec->GetDefendCivilianBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetIsSpecialForces()
-			&& myRec->GetDefendSpecialForcesBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if(attackRec->GetWoodenShip()
-			&& myRec->GetDefendWoodenShipBonus(value))
-		{
-			bonuses += value;
-		}
-
-		if (cell->GetCity().m_id != (0)
-			 && myRec->GetDefendCityBonus(value))
-		{
-			bonuses += value;
 		}
 
 		base += (base * bonuses);
@@ -3728,6 +3740,10 @@ double UnitData::GetDefense(const Unit &attacker) const
 				}
 			}
 		}
+	}
+	else
+	{
+		base += (base * bonuses);
 	}
 
 	return base;
@@ -3863,13 +3879,28 @@ double UnitData::GetRanged(const Unit &defender) const
 	MapPoint	dpos;
 	defender.GetPos(dpos);
 	if ((g_theWorld->GetCell(dpos)->GetCity().m_id != (0))
-		 && rec->GetRangedCityBonus(value))
+		 && rec->GetRangedAttackCityBonus(value))
 	{
 		bonuses += value;
 	}
 
+	Unit	city	= g_theWorld->GetCity(m_pos);
+	if(city.IsValid())
+	{
+		if(rec->GetRangedDefendCityBonus(value))
+		{
+			bonuses += value;
+		}
+	}
+
 	if (defrec->GetIsSubmarine() 
 		 && rec->GetRangedSubmarineBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if (defrec->GetIsSurfaceShip() 
+		 && rec->GetRangedSurfaceShipBonus(value))
 	{
 		bonuses += value;
 	}
@@ -3915,16 +3946,6 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 
 	if(!myRec->GetNoDefenseBonuses())
 	{
-		// Added for Leaders to increase defense
-		for (sint32 i = 0; i < cell->GetNumUnits(); i++)
-		{
-			if(cell->AccessUnit(i).GetDBRec()->GetLeader())
-			{
-				bonuses += 0.5;// @todo this needs a constDB value
-				break;
-			}
-		}
-
 		if(IsEntrenched())
 		{
 			bonuses += g_theConstDB->Get(0)->GetEntrenchmentBonus();
@@ -3945,125 +3966,142 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 
 			bonuses += terrain_bonus;
 		}
+	}
 
-		if (IsVeteran())
+	// Added for Leaders to increase defense
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++)
+	{
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader())
 		{
-			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+			bonuses += 0.5;// @todo this needs a constDB value
+			break;
 		}
+	}
 
-		if (IsElite())
-		{
-			bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
-		}
+	if (IsVeteran())
+	{
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
 
-		double value = 0.0;
+	if (IsElite())
+	{
+		bonuses += (g_theConstDB->Get(0)->GetVeteranCoef() * 0.01);
+	}
 
-		if(attackRec->GetIsMounted())
-		{
-			if(myRec->GetMountedBonus(value))// Legacy purposes.
-			{
-				bonuses += value;
-			}
+	double value = 0.0;
 
-			if(myRec->GetDefendMountedBonus(value))
-			{
-				bonuses += value;
-			}
-		}
-
-		if(attackRec->GetMovementTypeAir())
-		{
-			if(myRec->GetAirBonus(value))// Legacy purposes.
-			{
-				bonuses += value;
-			}
-
-			if(myRec->GetDefendAirBonus(value))
-			{
-				bonuses += value;
-			}
-		}
-
-		if(attackRec->GetIsSubmarine()
-			&& myRec->GetDefendSubmarineBonus(value))
+	if(attackRec->GetIsMounted())
+	{
+		if(myRec->GetMountedBonus(value))// Legacy purposes.
 		{
 			bonuses += value;
 		}
 
-		if(attackRec->GetIsFoot()
-			&& myRec->GetDefendFootBonus(value))
+		if(myRec->GetDefendMountedBonus(value))
+		{
+			bonuses += value;
+		}
+	}
+
+	if(attackRec->GetMovementTypeAir())
+	{
+		if(myRec->GetAirBonus(value))// Legacy purposes.
 		{
 			bonuses += value;
 		}
 
-		if(attackRec->GetIsMelee()
-			&& myRec->GetDefendMeleeBonus(value))
+		if(myRec->GetDefendAirBonus(value))
 		{
 			bonuses += value;
 		}
+	}
 
-		if(attackRec->GetIsSiege()
-			&& myRec->GetDefendSiegeBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsSubmarine()
+		&& myRec->GetDefendSubmarineBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetIsWheeled()
-			&& myRec->GetDefendWheeledBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsSurfaceShip()
+		&& myRec->GetDefendSurfaceShipBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetIsMechanized()
-			&& myRec->GetDefendMechanizedBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsFoot()
+		&& myRec->GetDefendFootBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetIsHelicopter()
-			&& myRec->GetDefendHelicopterBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsMelee()
+		&& myRec->GetDefendMeleeBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetIsGuerrilla()
-			&& myRec->GetDefendGuerrillaBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsSiege()
+		&& myRec->GetDefendSiegeBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetCivilian()
-			&& myRec->GetDefendCivilianBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsWheeled()
+		&& myRec->GetDefendWheeledBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetIsSpecialForces()
-			&& myRec->GetDefendSpecialForcesBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsMechanized()
+		&& myRec->GetDefendMechanizedBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if(attackRec->GetWoodenShip()
-			&& myRec->GetDefendWoodenShipBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsHelicopter()
+		&& myRec->GetDefendHelicopterBonus(value))
+	{
+		bonuses += value;
+	}
 
-		if (cell->GetCity().m_id != (0)
-			 && myRec->GetDefendCityBonus(value))
-		{
-			bonuses += value;
-		}
+	if(attackRec->GetIsGuerrilla()
+		&& myRec->GetDefendGuerrillaBonus(value))
+	{
+		bonuses += value;
+	}
 
-		base += (base * bonuses);
+	if(attackRec->GetCivilian()
+		&& myRec->GetDefendCivilianBonus(value))
+	{
+		bonuses += value;
+	}
 
-		// finally add city attack buildings, so they're not subject to bonuses.
-		Unit	city	= g_theWorld->GetCity(m_pos);
-		if(city.IsValid())
-		{
-			base += city.CD()->GetOffenseBonus(attacker);// ballista etc
-		}
+	if(attackRec->GetIsSpecialForces()
+		&& myRec->GetDefendSpecialForcesBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if(attackRec->GetWoodenShip()
+		&& myRec->GetDefendWoodenShipBonus(value))
+	{
+		bonuses += value;
+	}
+
+	if (cell->GetCity().m_id != (0)
+		 && myRec->GetDefendCityBonus(value))
+	{
+		bonuses += value;
+	}
+
+	base += (base * bonuses);
+
+	// finally add city attack buildings, so they're not subject to bonuses.
+	// These are added even if the unit has NoDefenseBonuses.
+	Unit	city	= g_theWorld->GetCity(m_pos);
+	if(city.IsValid())
+	{
+		base += city.CD()->GetOffenseBonus(attacker);// ballista etc
 	}
 
 	return base;

@@ -224,14 +224,15 @@ Unit {
 	Bit AttackFromSpaceship
 	Bit CantBeAttacked
 	Bit CargoPod
-	Bit IsFoot	
+	Bit IsFoot
 	Bit IsMelee
-	Bit IsMounted	
+	Bit IsMounted
 	Bit IsSiege
 	Bit IsWheeled
 	Bit IsMechanized
 	Bit IsHelicopter
-	Bit IsSubmarine			
+	Bit IsSubmarine
+	Bit IsSurfaceShip
 	Bit WoodenShip
 
 	Bit NoLandAttack
@@ -262,9 +263,9 @@ Unit {
 	Bit(Float) DefendGuerrillaBonus
 	Bit(Float) DefendMountedBonus
 	Bit(Float) DefendWoodenShipBonus
+	Bit(Float) DefendSurfaceShipBonus
 	
 	Bit NoDefenseBonuses                // Unit doesn't receive any defensive bonuses - Maq
-	
 	
 	// Unit Attack Bonuses
 	Bit(Float) AttackAirBonus
@@ -281,11 +282,12 @@ Unit {
 	Bit(Float) AttackGuerrillaBonus
 	Bit(Float) AttackMountedBonus
 	Bit(Float) AttackWoodenShipBonusNew
-	
+	Bit(Float) AttackSurfaceShipBonus
 	
 	// Unit Ranged Bonuses
 	Bit(Float) RangedAirBonus
-	Bit(Float) RangedCityBonus
+	Bit(Float) RangedAttackCityBonus
+	Bit(Float) RangedDefendCityBonus
 	Bit(Float) RangedSubmarineBonus
 	Bit(Float) RangedFootBonus
 	Bit(Float) RangedMeleeBonus
@@ -298,8 +300,11 @@ Unit {
 	Bit(Float) RangedGuerrillaBonus
 	Bit(Float) RangedMountedBonus
 	Bit(Float) RangedWoodenShipBonus
+	Bit(Float) RangedSurfaceShipBonus
 	
 	Bit IgnoreCityWalls
+	
+	Bit AlwaysHeal
 	
 	// Legacy bonuses.
 	Bit AttackWoodenShipBonus

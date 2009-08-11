@@ -1221,17 +1221,64 @@ sint32 Advances::GetMinPrerequisites(sint32 adv, sint32 limit) const
 
 	AdvanceRecord const *   rec         = g_theAdvanceDB->Get(adv);
 	sint32                  totalneeded = 0;
+	sint32					count		= 0;
 
+	// Check EitherPrerequisites for advance
+	if(rec->GetNumEitherPrerequisites() > 0)
+	{
+		for(sint32 j = 0; j < rec->GetNumEitherPrerequisites(); ++j)
+		{
+			sint32 const eitherPrereqDbIndex = rec->GetEitherPrerequisitesIndex(j);
+
+			// If advance does not have itself as this eitherprerequisite
+			if(rec->GetIndex() != eitherPrereqDbIndex)
+			{
+				// If player does not have this eitherprerequisite
+				if(!m_hasAdvance[eitherPrereqDbIndex])
+				{
+					count++;
+				}
+			}
+		}
+		// If player has none of the eitherprerequisites then
+		// find the prerequisites of each eitherprerequisite
+		if(count == rec->GetNumEitherPrerequisites())
+		{
+			for(sint32 k = 0; k < rec->GetNumEitherPrerequisites(); ++k)
+			{
+				sint32 const ePIndex = rec->GetEitherPrerequisitesIndex(k);
+
+				// Get all prerequisites for the eitherprerequisite itself... etc etc
+				// until all prerequisites of the eitherprerequisites are returned
+				totalneeded += GetMinPrerequisites(ePIndex, limit - 1);
+
+				// If total prerequisites required for advance exceeds
+				// the given limit, return now
+				if(totalneeded > limit)
+				{
+					return totalneeded;
+				}
+			}
+		}
+	}
+
+	// Check prerequisites for advance
 	for(sint32 i = 0; i < rec->GetNumPrerequisites(); ++i)
 	{
 		sint32 const prereqDbIndex = rec->GetPrerequisitesIndex(i);
 		
+		// If advance does not have itself as this prerequisite
 		if(rec->GetIndex() != prereqDbIndex)
 		{
+			// If player does not have this prerequisite
 			if(!m_hasAdvance[prereqDbIndex])
 			{
+				// Get all prerequisites for the prerequisite itself... etc etc
+				// until all prerequisites of the prerequisites are returned
 				totalneeded += GetMinPrerequisites(prereqDbIndex, limit - 1);
 
+				// If total prerequisites required for advance exceeds
+				// the given limit, return the total prereqs needed for advance.
 				if(totalneeded > limit)
 				{
 					return totalneeded;
