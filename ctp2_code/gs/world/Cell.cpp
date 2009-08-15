@@ -66,6 +66,7 @@
 #include "MoveFlags.h"
 #include "Globals.h"
 #include "World.h"
+#include <limits>           // std::numeric_limits<sint16>::max()
 
 extern void WhackScreen(); 
 
@@ -94,12 +95,6 @@ int Cell::PlayerLandArea(int player)
 
 #if 0
 
-
-
-
-
-
-
 void Cell::RecalcPlayerLandArea()
 {
 	g_theWorld->WholePlayerLandArea(m_playerLandArea);
@@ -109,25 +104,26 @@ void Cell::RecalcPlayerLandArea()
 
 
 Cell::Cell()
-:   m_env                (0),
-    m_zoc                (0),
-    m_move_cost          (1),
+:   m_env                  (0),
+    m_zoc                  (0),
+    m_move_cost            (1),
 #ifdef BATTLE_FLAGS
-    m_battleFlags        (0),
+    m_battleFlags          (0),
 #endif
-    m_continent_number   (0),
-    m_gf                 (0),
-    m_terrain_type       (-1),
-    m_city               (),
-    m_cellOwner          (-1),
-    m_unit_army          (NULL),
-    m_objects            (NULL),
-    m_jabba              (NULL),
+    m_continent_number     (0),
+    m_gf                   (0),
+    m_terrain_type         (-1),
+    m_city                 (),
+    m_cellOwner            (-1),
+    m_unit_army            (NULL),
+    m_objects              (NULL),
+    m_jabba                (NULL),
     m_cityHasVisibleTileImprovement(false),
-    m_search_count       (0),
-    m_point              (NULL)
+    m_search_count         (0),
+    m_point                (NULL),
+    m_tmp_future_move_cost (std::numeric_limits<sint16>::max())
 #ifdef CELL_COLOR
-,   m_color              (0)
+,   m_color                (0)
 #endif
 {
 	m_playerLandArea[0]++;
@@ -144,24 +140,24 @@ Cell::~Cell()
 
 
 void Cell::Serialize(CivArchive &archive)
-	{
-	
-    CHECKSERIALIZE
+{
+	CHECKSERIALIZE
 
-    m_search_count = 0; 
-	if (archive.IsStoring()) {
+	m_search_count = 0;
+	if(archive.IsStoring())
+	{
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_cellOwner)+sizeof(m_cellOwner));
-	} else {
-		
-		
-		
+	}
+	else
+	{
 		m_playerLandArea[m_cellOwner+1]--;
 		archive.LoadChunk((uint8 *)&m_env, ((uint8 *)&m_cellOwner)+sizeof(m_cellOwner));
 		m_playerLandArea[m_cellOwner+1]++;
 	}
 
 	uint8 flags;
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		flags = 0;
 		flags |= (m_unit_army != NULL);
 		flags |= (m_objects != NULL) << 1;
@@ -169,36 +165,75 @@ void Cell::Serialize(CivArchive &archive)
 
 		archive << flags;
 		if(m_unit_army)
-			m_unit_army->Serialize(archive) ;   
+			m_unit_army->Serialize(archive);
 
 		if(m_objects)
 			m_objects->Serialize(archive);
 
 		if(m_jabba)
 			m_jabba->Serialize(archive);
-			
-	} else {
+	}
+	else
+	{
 		archive >> flags;
 
-		if(flags & 1) {
+		if(flags & 1)
+		{
 			m_unit_army = new CellUnitList;
 			m_unit_army->Serialize(archive);
-		} else {
+		}
+		else
+		{
 			m_unit_army = NULL;
 		}
-		if(flags & 2) {
+		if(flags & 2)
+		{
 			m_objects = new DynamicArray<ID>;
 			m_objects->Serialize(archive);
-		} else {
+		}
+		else
+		{
 			m_objects = NULL;
 		}
-		if(flags & 4) {
+		if(flags & 4)
+		{
 			m_jabba = new GoodyHut;
 			m_jabba->Serialize(archive);
-		} else {
+		}
+		else
+		{
 			m_jabba = NULL;
 		}
+
+		m_tmp_future_move_cost = std::numeric_limits<sint16>::max();
 	}
+}
+
+void Cell::CalculateTmpFutureMoveCosts(sint32 tileImpType)
+{
+	const TerrainImprovementRecord *impRec = g_theTerrainImprovementDB->Get(tileImpType);
+	const TerrainImprovementRecord::Effect *effect = 
+	    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+
+	sint32 cost;
+	if(effect && effect->GetMoveCost(cost))
+	{
+		m_tmp_future_move_cost = static_cast<sint16>(cost);
+	}
+	else
+	{
+		m_tmp_future_move_cost = std::numeric_limits<sint16>::max();
+	}
+}
+
+void Cell::ResetTmpFutureMoveCosts()
+{
+	m_tmp_future_move_cost = std::numeric_limits<sint16>::max();
+}
+
+bool Cell::FutureMoveCostsAreReallyBig() const
+{
+	return m_tmp_future_move_cost == std::numeric_limits<sint16>::max();
 }
 
 bool Cell::IsAnyUnitInCell() const
@@ -206,50 +241,53 @@ bool Cell::IsAnyUnitInCell() const
 	return m_unit_army != NULL;
 }
 
-
 bool Cell::InsertUnit(Unit id)
 {
-	if(!m_unit_army) {
+	if(!m_unit_army)
+	{
 		m_unit_army = new CellUnitList;
 	}
 
 	return m_unit_army->Insert(id); 
 }
 
-
-sint32 Cell::RemoveUnitReference(const Unit &u)
-
+bool Cell::RemoveUnitReference(const Unit &u)
 {
+	if (m_unit_army && m_unit_army->Del(u))
+	{
+		if(m_unit_army->Num() <= 0)
+		{
+			delete m_unit_army;
+			m_unit_army = NULL;
+		}
 
-   if (m_unit_army && m_unit_army->Del(u)) {
-	   if(m_unit_army->Num() <= 0) {
-		   delete m_unit_army;
-		   m_unit_army = NULL;
-	   }
+		return true;
+	}
+	else if (u == GetCity())
+	{
+		SetCity(Unit());
+		return true;
+	}
+	else
+	{
+		if(!u.IsValid() || !u.IsBeingTransported())
+		{
+			Assert(false);
+		}
 
-       return TRUE; 
-   } else if (u == GetCity()) { 
-        SetCity(Unit());
-        return TRUE;
-   } else {
-
-	   if(!u.IsValid() || !u.IsBeingTransported()) {
-		   
-		   
-		   Assert(FALSE);
-	   }
-       return FALSE;
-   }
-
+		return false;
+	}
 }
 
-
-sint32 Cell::GetGoodsIndex(sint32 &val) const
+bool Cell::GetGoodsIndex(sint32 &val) const
 {
-    val = (m_env & k_MASK_ENV_GOOD);
-    if (val == 0) {
-        return FALSE;
-	} else {
+	val = (m_env & k_MASK_ENV_GOOD);
+	if (val == 0)
+	{
+		return false;
+	}
+	else
+	{
 		val >>= k_SHIFT_ENV_GOOD;
 		val--;
 		while(val >= 0 && 
@@ -257,47 +295,18 @@ sint32 Cell::GetGoodsIndex(sint32 &val) const
 			val--;
 		}
 		if(val < 0)
-			return FALSE;
-		return TRUE;
-    }
+			return false;
+		return true;
+	}
 }
 
 bool Cell::CanEnter(const uint32 flag) const
 {
 	return ((m_env & k_MASK_ENV_MOVEMENT_TYPE) & (flag << k_SHIFT_ENV_MOVEMENT_TYPE)) != 0;
-#if 0
-	
-	
-	
-	if((m_env & k_BIT_MOVEMENT_TYPE_LAND) &&
-	   (flag & k_Unit_MovementType_Land_Bit))
-		return TRUE;
-	else if((m_env & k_BIT_MOVEMENT_TYPE_WATER) &&
-			(flag & k_Unit_MovementType_Sea_Bit))
-		return TRUE;
-	else if((m_env & k_BIT_MOVEMENT_TYPE_AIR) &&
-			(flag & k_Unit_MovementType_Air_Bit))
-		return TRUE;
-	else if((m_env & k_BIT_MOVEMENT_TYPE_MOUNTAIN) &&
-			(flag & k_Unit_MovementType_Mountain_Bit))
-		return TRUE;
-	else if((m_env & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
-			(flag & k_Unit_MovementType_ShallowWater_Bit))
-		return TRUE;
-	else if((m_env & k_MASK_ENV_ROAD) &&
-			(flag & k_Unit_MovementType_Land_Bit))
-		return TRUE;
-	else if((!(m_env & k_BIT_MOVEMENT_TYPE_SPACE)) &&
-			(flag & k_Unit_MovementType_Air_Bit))
-		return TRUE;
-
-	return FALSE; 
-#endif
 }
 
-bool Cell::GetCanDie(void) const 
+bool Cell::GetCanDie(void) const
 {
-	
 	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
 }
 
@@ -360,7 +369,6 @@ sint32 Cell::GetFoodFromTerrain() const
 {
 	return GetFoodFromTerrain(m_terrain_type);
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -460,7 +468,6 @@ sint32 Cell::GetShieldsFromTerrain() const
 	return GetShieldsFromTerrain(m_terrain_type);
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : Cell::GetShieldsProduced
@@ -499,7 +506,6 @@ sint32 Cell::GetShieldsProduced() const
 
 	return shield; 
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -805,21 +811,9 @@ BOOL Cell::DecayBattleFlag()
 
 double Cell::GetTerrainDefenseBonus()
 {
-    const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type); 
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type); 
 	return rec->GetEnvBase()->GetDefense();
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 uint32 Cell_CELL_GetVersion(void)
 {
@@ -831,12 +825,10 @@ void Cell::Kill(void)
 	m_terrain_type = (sint8)TERRAIN_DEAD ;
 }
 
-
 sint32 Cell::GetNumUnits() const
 {
-    return m_unit_army ? m_unit_army->Num() : 0;
+	return m_unit_army ? m_unit_army->Num() : 0;
 }
-
 
 void Cell::GetArmy(CellUnitList &al)
 {
@@ -882,11 +874,11 @@ void Cell::SetCity(const Unit &c)
 Unit Cell::GetCity() const
 {
 	if (m_env & k_MASK_ENV_CITY) 
-    {
+	{
 		return m_city;
-	} 
-    else 
-    {
+	}
+	else
+	{
 		return Unit();
 	}
 }
@@ -907,7 +899,6 @@ void Cell::SetCityOwner(const Unit &c)
 		m_env &= ~(k_BIT_ENV_CITY_RADIUS);
 	}
 }
-
 
 sint32 Cell::GetNumImprovements() const
 {
@@ -946,7 +937,7 @@ TerrainImprovement Cell::AccessImprovement(sint32 index)
 void Cell::CreateGoodyHut()
 {
 	if (!m_jabba) 
-    {
+	{
 		m_jabba = new GoodyHut();
 	}
 }
@@ -1021,15 +1012,14 @@ void Cell::ClearUnitsNStuff()
 			   k_MASK_ENV_CITY_RADIUS);
 }
 
-
 sint16 Cell::GF() const
 {
-    return m_gf; 
-} 
+	return m_gf; 
+}
 
 void Cell::SetGF(const sint16 v)
 {
-    m_gf = (sint8)v; 
+	m_gf = (sint8)v;
 }
 
 void Cell::SetEnv(uint32 env)
@@ -1124,6 +1114,8 @@ double Cell::GetFutureTerrainMoveCost() const
 		}
 	}
 
+	tmp = std::min(tmp, static_cast<sint32>(m_tmp_future_move_cost));
+
 	return static_cast<double>(tmp);
 }
 
@@ -1147,7 +1139,7 @@ double Cell::GetFutureTerrainMoveCost() const
 //----------------------------------------------------------------------------
 bool Cell::HasTerrainImprovementOrInFuture(sint32 type) const
 {
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 		{
@@ -1161,7 +1153,7 @@ bool Cell::HasTerrainImprovementOrInFuture(sint32 type) const
 		}
 	}
 
-	return false;
+	return !FutureMoveCostsAreReallyBig();
 }
 
 //----------------------------------------------------------------------------
@@ -1364,5 +1356,4 @@ bool Cell::IsUnitUpgradePosition(sint32 unitOwner) const
 	}
 
 	return canUpgrade;
-	
 }

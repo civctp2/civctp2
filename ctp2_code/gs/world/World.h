@@ -324,9 +324,9 @@ public:
     sint32 PickNextRiver(sint32 v, MapPoint prev, MapPoint &pos);   
     void GenerateRivers(sint32 land);
     sint32 IsRiverClear(const sint32 x, const sint32 y);
-    void SetAllMoveCost(); 
-    
-    
+    void SetAllMoveCost();
+    void ResetAllTmpFutureMoveCosts();
+
     sint32 GetTerrain(sint32 x, sint32 y);
     void SetTerrain(sint32 x, sint32 y, sint32 type);
     MapPoint * GetSize() { return &m_size; }

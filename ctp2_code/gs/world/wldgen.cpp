@@ -1906,29 +1906,38 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
     delete[] raw_score; 
 }
 
-double World::CalcTerrainFreightCost(const MapPoint &pos) 
-
+double World::CalcTerrainFreightCost(const MapPoint &pos)
 {
-//Added by Martin Gühmann
-	
 	return AccessCell(pos)->CalcTerrainFreightCost();
-
 }
 
 void World::SetAllMoveCost()
-
 {
-   MapPoint pos; 
+	MapPoint pos;
 
-   for (pos.x=0; pos.x<m_size.x; pos.x++) { 
-      for (pos.y=0; pos.y<m_size.y; pos.y++) { 
-		 Cell *cell = GetCell(pos);
-		 cell->CalcTerrainMoveCost();
-		 cell->CalcMovementType();
-      }
-   }
+	for(pos.x = 0; pos.x < m_size.x; pos.x++)
+	{
+		for(pos.y = 0; pos.y < m_size.y; pos.y++)
+		{
+			Cell *cell = GetCell(pos);
+			cell->CalcTerrainMoveCost();
+			cell->CalcMovementType();
+		}
+	}
 }
 
+void World::ResetAllTmpFutureMoveCosts()
+{
+	MapPoint pos;
+
+	for(pos.x = 0; pos.x < m_size.x; pos.x++)
+	{
+		for(pos.y = 0; pos.y < m_size.y; pos.y++)
+		{
+			GetCell(pos)->ResetTmpFutureMoveCosts();
+		}
+	}
+}
 
 void World::MapDump(MBCHAR *mapName, sint8 *mapData, sint16 width, sint16 height)
 {
@@ -1988,15 +1997,7 @@ void World::TerrainDump (MBCHAR *mapName, sint8 *mapData, sint16 width,
 #endif
 }
 
-
-
-
-
-
-
-
 void World::Dump(FILE *fout)
-
 {
 #if 0
    sint32 i, j, k; 
@@ -2261,15 +2262,7 @@ void World::Dump(FILE *fout)
 #endif
 }
 
-
-
-
-
-
-
-
 void World::Mdump(FILE *fout)
-
 {
 #if 0
 	sint32 i, j, k; 
@@ -2388,15 +2381,6 @@ void World::Mdump(FILE *fout)
 #endif
 }
 
-
-
-
-
-
-
-
-
-
 // Need a global to fix number of goods.
 sint32 g_numGoods = 0;
 
@@ -2422,7 +2406,7 @@ void World::Serialize(CivArchive &archive)
 	CHECKSERIALIZE
 
 	if (archive.IsStoring()) 
-    {
+	{
 		archive.PerformMagic(WORLD_MAGIC);
 		archive << m_isXwrap;
 		archive << m_isYwrap;

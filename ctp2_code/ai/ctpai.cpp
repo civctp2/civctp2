@@ -1243,20 +1243,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	MapAnalysis::GetMapAnalysis().BeginTurn();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-	// update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
-	// Road computation round now a constant 
-	if (round % PERIOD_COMPUTE_ROADS == 0)
-	{
-		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
-		DPRINTF(k_DBG_AI, ("// COMPUTE ROAD PRIORITIES -- Turn %d\n", round));
-		DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
-		
-		
-		Governor::GetGovernor(player).ComputeRoadPriorities();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
-	}
-
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
 	if (player_ptr->IsRobot() &&
 		gaia_controller && gaia_controller->CanBuildTowers(false))
@@ -1270,22 +1256,15 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		gaia_controller->BuildProcessingTowers();
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
-	else
-	{
-		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
-		{
-			t1 = GetTickCount();
-			DPRINTF(k_DBG_AI, (LOG_SECTION_START));
-			DPRINTF(k_DBG_AI, ("// PLACE TILE IMPROVEMENTS -- Turn %d\n", round));
-			DPRINTF(k_DBG_AI, ("//							  Player %d\n", player));
-			
-			
-			Governor::GetGovernor(player).PlaceTileImprovements();
-			DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
-		}
-	}
-	
-	
+
+	t1 = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
+	DPRINTF(k_DBG_AI, ("// PLACE TILE IMPROVEMENTS -- Turn %d\n", round));
+	DPRINTF(k_DBG_AI, ("//							  Player %d\n", player));
+
+	Governor::GetGovernor(player).PlaceTileImprovements();
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
+
 	if (player_ptr->IsRobot() && !g_network.IsClient()) 
 	{
 		t1 = GetTickCount();

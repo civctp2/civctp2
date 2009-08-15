@@ -1407,10 +1407,11 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 
 bool Governor::AddRoadPriority(Path & path, const double & priority_delta)
 {
-	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-
 	double bonus;
+	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetRoadUtilityBonus(bonus);
+
 	TiGoal ti_goal;
+	ti_goal.utility =  bonus * priority_delta;
 
 	MapPoint old, pos;
 	path.Start(old);
@@ -1422,13 +1423,16 @@ bool Governor::AddRoadPriority(Path & path, const double & priority_delta)
 	{
 		ti_goal.type = GetBestRoadImprovement(pos);
 
-		if ( ti_goal.type >= 0
-		&&  !g_theWorld->GetCell(pos)->HasTerrainImprovementOrInFuture(ti_goal.type))
+		if(
+		         ti_goal.type >= 0
+		    &&  !g_theWorld->GetCell(pos)->HasTerrainImprovementOrInFuture(ti_goal.type)
+		    &&   g_theWorld->GetCell(pos)->FutureMoveCostsAreReallyBig()
+		  )
 		{
 			ti_goal.pos = pos;
 
-			strategy.GetRoadUtilityBonus(bonus);
-			ti_goal.utility =  bonus * priority_delta;
+			g_theWorld->GetCell(pos)->CalculateTmpFutureMoveCosts(ti_goal.type);
+
 			m_tileImprovementGoals.push_back(ti_goal);
 			addedRoadToQueue = true;
 		}
@@ -1437,13 +1441,14 @@ bool Governor::AddRoadPriority(Path & path, const double & priority_delta)
 	return addedRoadToQueue;
 }
 
-
 void Governor::ComputeRoadPriorities()
 {
 	Player *            player_ptr  = g_player[m_playerId];
 	Assert(player_ptr);
 	UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
 	sint32 const        num_cities  = cityList ? cityList->Num() : 0;
+
+	g_theWorld->ResetAllTmpFutureMoveCosts();
 
 	s_CityPairList.clear();
 
@@ -1495,21 +1500,21 @@ void Governor::ComputeRoadPriorities()
 			++iter
 		)
 		{
-		float   total_cost = 0.0;
-		Path    found_path;
+			float   total_cost = 0.0;
+			Path    found_path;
 			
 			Unit    min_neighbor_unit = iter->m_city;
 
-		if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
-			m_playerId,
-			found_path,
-			total_cost ))
-		{
-			Assert(0 < found_path.Num());
+			if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
+				m_playerId,
+				found_path,
+				total_cost ))
+			{
+				Assert(0 < found_path.Num());
 				if(AddRoadPriority(found_path, threat_rank))
 					break;
+			}
 		}
-		} 
 
 		s_CityDistQueue.clear();
 	}
@@ -1542,7 +1547,7 @@ void Governor::PlaceTileImprovements()
 	Player *                player_ptr  = g_player[m_playerId];
 	Assert(player_ptr);
 	StrategyRecord const &  strategy    = 
-        Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	    Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	
 
 	sint32  reserve_pw   = 0;
@@ -1669,9 +1674,9 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	CityData* city = city_owner.GetCityData();
 	Assert(city);
 	
-	double growth_rank = the_map.GetGrowthRank(city, false);
+	double growth_rank     = the_map.GetGrowthRank    (city, false);
 	double production_rank = the_map.GetProductionRank(city, false);
-	double gold_rank = the_map.GetCommerceRank(city, false);
+	double gold_rank       = the_map.GetCommerceRank  (city, false);
 	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) / 
 		(double) World::GetAvgFoodFromTerrain();
 	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
@@ -1795,8 +1800,10 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	}
 //	else if(moreProdNeeded
 //	|| best_gold_improvement < 0
-	else if((terr_prod_rank > 0.2) 
-	&&      (best_production_improvement >= 0)
+	else if((terr_prod_rank > 0.2
+	&&       best_production_improvement >= 0)
+	||      (best_production_improvement >= 0
+	&&       best_gold_improvement       <  0)
 	){
 		rec = g_theTerrainImprovementDB->Get(best_production_improvement);
 		effect = terrainutil_GetTerrainEffect(rec, pos);
@@ -1829,8 +1836,9 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			goal.utility += bonus;
 		}
 	}
-	else if((gold_rank > 0.4)
-	&&      (best_gold_improvement >= 0)
+	else if(//(gold_rank > 0.4)
+//	&&      (best_gold_improvement >= 0)
+	         best_gold_improvement >= 0
 	){
 		rec = g_theTerrainImprovementDB->Get(best_gold_improvement);
 		effect = terrainutil_GetTerrainEffect(rec, pos);
@@ -1925,6 +1933,12 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
 			goal.utility *= city->GetUtilisationRatio(sqDist);
 #endif
+		}
+		else
+		{
+			strategy.GetImproveSmallCityGrowthBonus(bonus);
+			bonus        *= strategy.GetSmallCityImproveCoeff();
+			goal.utility += bonus;
 		}
 	}
 	else

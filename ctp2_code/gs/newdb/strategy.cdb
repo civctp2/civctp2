@@ -376,5 +376,6 @@ Strategy {
 
 	Bit (Int)   UseBaseMoveCostsForRoads         = 0     & Record Const[0].UseBaseMoveCostsForRoads
 	Bit (Int)   BuildRoadsToClosestCities        = 5     & Record Const[0].BuildRoadsToClosestCities
-	Bit (Float) BaseRoadPriorityVsThreatRank     = 0.01  & Record Const[0].BaseRoadPriorityVsThreatRank
+	Bit (Float) BaseRoadPriorityVsThreatRank     = 0.5   & Record Const[0].BaseRoadPriorityVsThreatRank
+	Bit (Float) SmallCityImproveCoeff            = 1.0   & Record Const[0].SmallCityImproveCoeff
 }

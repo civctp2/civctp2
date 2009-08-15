@@ -181,6 +181,7 @@ public:
 	bool m_cityHasVisibleTileImprovement;
 	sint32 m_search_count;
 	AstarPoint *m_point;
+	sint16 m_tmp_future_move_cost;
 
 	friend class World;
 	friend class NetCellData;
@@ -192,9 +193,14 @@ public:
 	Cell();
 	~Cell();
 
+	double GetTmpFutureMoveCosts      ()  { return static_cast<double>(m_tmp_future_move_cost); };
+	void   CalculateTmpFutureMoveCosts(sint32 tileImpType);
+	void   ResetTmpFutureMoveCosts    ();
+	bool   FutureMoveCostsAreReallyBig() const;
+
 	bool IsAnyUnitInCell() const;
 	bool InsertUnit(const Unit id);
-	sint32 RemoveUnitReference(const Unit &id);
+	bool RemoveUnitReference(const Unit &id);
 
 
 	sint64 IsZoc (sint32 UnitFlags, uint64 maskAlliance);
@@ -287,7 +293,7 @@ public:
 #ifdef CELL_COLOR
 	void SetColor(sint32 c);
 #endif
-	sint32 GetGoodsIndex (sint32 &val) const;
+	bool GetGoodsIndex (sint32 &val) const;
 
 	void InsertImprovement(const TerrainImprovement &imp);
 	void RemoveImprovement(const TerrainImprovement &imp);
