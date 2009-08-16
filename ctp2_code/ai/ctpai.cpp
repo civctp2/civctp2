@@ -113,6 +113,7 @@
 #include "Army.h"
 #include "ArmyData.h"
 #include "Unit.h"
+#include "unitutil.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
 #include "UnitPool.h"
@@ -2381,20 +2382,76 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	sint32 i;
 	Unit city;
-	for (i = 0; i < num_cities; i++)
+
+	bool hasSmallCities       = false;
+	bool hasDefenselessCities = false;
+
+	for(i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
 		Assert( city.IsValid() );
 		Assert( city->GetCityData() != NULL );
 
+		sint32 citySize;
+		city->GetPop(citySize);
+
+		// Only decrease utility if the city has grown beyond the first ring.
+		if(citySize <= unitutil_GetSmallCityMaxSize())
+		{
+			hasSmallCities = true;
+		}
+	}
+
+	for(i = 0; i < num_cities; i++)
+	{
+		city = player_ptr->m_all_cities->Access(i);
+		Assert( city.IsValid() );
+		Assert( city->GetCityData() != NULL );
+
+		// Only decrease utility if the city has grown beyond the first ring.
+		if(g_theWorld->GetCell(city->GetPos())->GetNumUnits() <= 0)
+		{
+			hasDefenselessCities = true;
+		}
+	}
+
+	for(i = 0; i < num_cities; i++)
+	{
+		city = player_ptr->m_all_cities->Access(i);
+		Assert( city.IsValid() );
+		Assert( city->GetCityData() != NULL );
+
+		if(hasSmallCities)
+		{
+			sint32 citySize;
+			city->GetPop(citySize);
+
+			if
+			  (
+			       citySize > unitutil_GetSmallCityMaxSize()
+			    && g_theWorld->GetCell(city->GetPos())->GetNumUnits() > 0
+			  )
+			{
+				continue;
+			}
+		}
+
+		if
+		  (
+		       hasDefenselessCities
+		    && g_theWorld->GetCell(city->GetPos())->GetNumUnits() > 0
+		  )
+		{
+			continue;
+		}
+
 		rush_buy.first = city.CD()->HowMuchLonger();
-		if (rush_buy.first > 1)
+		if(rush_buy.first > 1)
 		{
 			rush_buy.first += 
 				(sint32) ceil(1.0 - MapAnalysis::GetMapAnalysis().GetThreatRank(city.CD()) * threat_bonus);
 			rush_buy.second = city.m_id;
 
-			
 			rush_buy_list.push_back(rush_buy);
 		}
 	}
@@ -2403,13 +2460,13 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	sint32 rush_buy_cost;
 	std::list< std::pair<sint32, Unit> >::iterator iter;
-	for (iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
+	for(iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
 	{
 		city = iter->second;
 
 		rush_buy_cost = city.CD()->GetOvertimeCost();
 
-		if (current_savings - rush_buy_cost < 0)
+		if(current_savings - rush_buy_cost < 0)
 			continue;
 
 		current_savings -= rush_buy_cost;
