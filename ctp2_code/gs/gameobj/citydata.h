@@ -445,8 +445,9 @@ public:
 	void   EatFood();
 	bool   FoodSupportTroops();
 
-	sint32 GetBuildingOvercrowdingBonus();
-	sint32 GetBuildingMaxPopIncrease();
+	sint32 GetBuildingOvercrowdingBonus() const;
+	sint32 GetBuildingMaxPopIncrease() const;
+	sint32 GetPossibleBuildingMaxPopIncrease() const;
 	void   CalculateGrowthRate();
 	double CalculateGrossGrowthRate(double &overcrowdingCoeff, double &baseRate, sint32 bonusFood = 0);
 	bool   GrowOrStarve();
@@ -933,17 +934,17 @@ public:
 
 	sint32 ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const;
 
-	double GetOvercrowding(const CitySizeRecord *rec)
+	double GetOvercrowding(const CitySizeRecord *rec) const
 	{
 		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus();
 	};
 
-	sint32 GetMaxPop()
+	sint32 GetMaxPop() const
 	{
 		return GetMaxPop(g_theCitySizeDB->Get(m_sizeIndex));
 	};
 
-	sint32 GetMaxPop(const CitySizeRecord *rec)
+	sint32 GetMaxPop(const CitySizeRecord *rec) const
 	{
 		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
 	};

@@ -3234,7 +3234,7 @@ void CityData::EatFood()
 
 }
 
-sint32 CityData::GetBuildingOvercrowdingBonus()
+sint32 CityData::GetBuildingOvercrowdingBonus() const
 {
 	
 	sint32 level = 0;
@@ -3242,11 +3242,27 @@ sint32 CityData::GetBuildingOvercrowdingBonus()
 	return level;
 }
 
-sint32 CityData::GetBuildingMaxPopIncrease()
+sint32 CityData::GetBuildingMaxPopIncrease() const
 {
 	sint32 level = 0;
 	buildingutil_GetRaiseMaxPopulation(GetEffectiveBuildings(), level, m_owner);
 	return level;
+}
+
+sint32 CityData::GetPossibleBuildingMaxPopIncrease() const
+{
+	sint32 value = 0;
+
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); ++i)
+	{
+		sint32 raise;
+		if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetRaiseMaxPopulation(raise) && this->CanBuildBuilding(i))
+		{
+			value += raise;
+		}
+	}
+
+	return value;
 }
 
 //----------------------------------------------------------------------------

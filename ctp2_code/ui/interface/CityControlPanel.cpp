@@ -950,12 +950,12 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 	if(cityData != NULL && cityData->GetHomeCity() == city)
 	{
 		storedProd = double(cityData->GetStoredCityProduction());
-		neededProd = double(cityData->GetBuildQueue()->GetHead()->m_cost);
+		neededProd = cityData->GetBuildQueue()->GetHead() ? double(cityData->GetBuildQueue()->GetHead()->m_cost) : 0.0;
 	}
 	else
 	{
 		storedProd = double(city.CD()->GetStoredCityProduction());
-		neededProd = double(city.CD()->GetBuildQueue()->GetHead()->m_cost);
+		neededProd = city.CD()->GetBuildQueue()->GetHead() ? double(city.CD()->GetBuildQueue()->GetHead()->m_cost) : 0.0;
 	}
 	
 	double percentComplete;

@@ -51,6 +51,8 @@
 // - Diplomatic more emphasis on embassies
 // - Economic moe emphasis on piracy
 // - Ecotopian more defense oriented (temporary)
+// - Added build list sequence elements for small cities and for cities at their
+//   maximum size. (20-Aug-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -351,6 +353,21 @@ STRATEGY_DEFAULT {
         Bottom 0.2 
         GrowthCities
         Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
     }
 
     BuildListSequenceElement {
@@ -958,13 +975,21 @@ STRATEGY_CAREFUL_START {
     DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
-	// Set so early cities will build offensive units to explore with after a granary
+    // Set so early cities will build offensive units to explore with after a granary
     BuildListSequenceElement {
         Priority 9100
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.6 
         ProductionCities
         Advice BUILD_OFFENSE_ADVICE
+    }
+    // Early cities have to build units and settlers to close the room
+    BuildListSequenceElement {
+        Priority -12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
     }
 }
 
@@ -985,6 +1010,14 @@ STRATEGY_AGRESSIVE_START {
         Top 0.6 
         ProductionCities
         Advice BUILD_OFFENSE_ADVICE
+    }
+    // Early cities have to build units and settlers to close the room
+    BuildListSequenceElement {
+        Priority -12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
     }
 }
 
@@ -1360,6 +1393,21 @@ STRATEGY_SCIENTIST_DEFAULT {
         Bottom 0.2 
         GrowthCities
         Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
     }
 
     BuildListSequenceElement {
@@ -1825,6 +1873,21 @@ STRATEGY_MILITARIST_DEFAULT {
         Bottom 0.2 
         GrowthCities
         Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
     }
 
     BuildListSequenceElement {
@@ -2300,6 +2363,21 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
+    }
+
+    BuildListSequenceElement {
         Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         Top 0.4
@@ -2763,6 +2841,21 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
+    }
+
+    BuildListSequenceElement {
         Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         Top 0.4
@@ -3223,6 +3316,21 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Bottom 0.2 
         GrowthCities
         Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        SmallCitiesMaxSize 6
+        MinNumUnits 2
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
+        Advice BUILD_GROWTH_ADVICE
+        BeforeMaxCitySize 2
     }
 
     BuildListSequenceElement {

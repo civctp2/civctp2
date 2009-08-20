@@ -22,10 +22,12 @@
 # - Moved BUILDING_BUILD_LIST_OFFENSE to the top of the BUILD_LIST_SEQUENCE_OFFENSE
 #   so that the AI builds city walls first, that will also help the to
 #   protect itself from slave raids. (06-Sep-2008 Martin Gühmann)
+# - Added build list sequences for small cities and for cities at their
+#   maximum size. (20-Aug-2009 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
-# 7
+# 10
 
 BUILD_LIST_SEQUENCE_PRODUCTION {
   BuildListElement { GarrisonUnitBuildList }
@@ -538,4 +540,69 @@ BUILD_LIST_SEQUENCE_BARBARIAN {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+}
+
+BUILD_LIST_SEQUENCE_SMALL_CITIES {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SMALL_CITIES }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { Freight }
+  BuildListElement { AllUnitBuildList }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
+}
+
+BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_MAXIUM_SIZED_CITIES }
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { Freight }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+
+  //BuildListElement { Infrastructure }
+  //BuildListElement { Capitalization }
+
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
+  BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }

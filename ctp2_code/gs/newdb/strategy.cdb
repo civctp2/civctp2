@@ -1,3 +1,26 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Strategy database type descriptor
+#  Id           : $Id:$
+#
+#-----------------------------------------------------------------------------
+#
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Added new flags
+#
+#-----------------------------------------------------------------------------
 
 // Improvement names from Improve.txt
 BuildingBuildList {
@@ -257,16 +280,19 @@ Strategy {
 		Record BuildListSequence BuildListSequence
 
 		// city criteria
-		Bit (Float) Top       // top percent of cities
-		Bit (Float) Bottom    // bottom percent of cities
-		Bit ProductionCities  // based on production
-		Bit GrowthCities      // based growth
-		Bit CommerceCities    // based on commerce income
-		Bit HappyCities		  // based on happiness
-		Bit ThreatenedCities  // based on enemy threat
-		Bit PowerCities		  // based on domestic attack strength
-		Bit Default           // if neither top or bottom, then use default
-		Bit (StringId) Advice // Advice to give player if selected
+		Bit (Float) Top              // Top percent of cities
+		Bit (Float) Bottom           // Bottom percent of cities
+		Bit ProductionCities         // Based on production
+		Bit GrowthCities             // Based growth
+		Bit CommerceCities           // Based on commerce income
+		Bit HappyCities              // Based on happiness
+		Bit ThreatenedCities         // Based on enemy threat
+		Bit PowerCities              // Based on domestic attack strength
+		Bit Default                  // If neither top or bottom, then use default
+		Bit (StringId) Advice        // Advice to give player if selected
+		Bit (Int) SmallCitiesMaxSize // For cities up to this size
+		Bit (Int) MinNumUnits        // Minimum number of units inside of city
+		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
 	}
 
 	// for each city with an empty build queue, build from first sequence that applies

@@ -115,6 +115,9 @@
 //   city. (08-Sep-2008 Martin Gühmann)
 // - Changed science formula to deduct crime after the government coefficient
 //   like all other resources. (22-Jul-2009 Maq)
+// - The AI can now select a special build list for small cities with enough
+//   garrison units, and can use a special build list for maximum size 
+//   increasing increasing buildings. (20-Aug-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3975,12 +3978,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	Assert(g_player[m_playerId]);
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	double rank = 0.0; 
+	double rank = 0.0;
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
 
 	sint32 i;
-	for (i = 0; i < strategy.GetNumBuildListSequenceElement(); i++)
+	for(i = 0; i < strategy.GetNumBuildListSequenceElement(); i++)
 	{
 		StrategyRecord::BuildListSequenceElement const * elem =
 			strategy.GetBuildListSequenceElement(i);
@@ -4024,6 +4027,16 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			       GetPowerRank(city);
 		}
 
+		else if(elem->HasSmallCitiesMaxSize())
+		{
+			// Do nothing
+		}
+
+		else if(elem->HasBeforeMaxCitySize())
+		{
+			// Do nothing
+		}
+
 		else if( elem->GetDefault() )
 		{
 
@@ -4045,7 +4058,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		   )
 		{
 			best_priority = elem->GetPriority();
-			best_elem = elem;
+			best_elem     = elem;
 		}
 
 		double bottom_value;
@@ -4054,7 +4067,33 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		   )
 		{
 			best_priority = elem->GetPriority();
-			best_elem = elem;
+			best_elem     = elem;
+		}
+
+		sint32 cityMaxSize;
+		sint32 citySize;
+		sint32 minNumUnits = elem->GetMinNumUnits(minNumUnits) ? minNumUnits : -1;
+		city->GetPop(citySize);
+
+		if(    g_theWorld->GetCell(city->GetHomeCity()->GetPos())->GetNumUnits() >= minNumUnits
+		    && elem->GetSmallCitiesMaxSize(cityMaxSize)
+		    && cityMaxSize >= citySize
+		   )
+		{
+			best_priority = elem->GetPriority();
+			best_elem     = elem;
+		}
+
+		sint32 value;
+		if
+		  (
+		       elem->GetBeforeMaxCitySize(value)
+		    && city->GetMaxPop() - value <= citySize
+		    && city->GetPossibleBuildingMaxPopIncrease() > 0
+		  )
+		{
+			best_priority = elem->GetPriority();
+			best_elem     = elem;
 		}
 	}
 

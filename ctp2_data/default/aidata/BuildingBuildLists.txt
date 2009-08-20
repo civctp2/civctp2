@@ -1,4 +1,28 @@
-# 8
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The build build lists for the AIs and mayors
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added build lists for small cities and for cities at their maximum size. (20-Aug-2009 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+# 10
 
 BUILDING_BUILD_LIST_HAPPINESS {
   Building IMPROVE_SHRINE
@@ -80,6 +104,22 @@ BUILDING_BUILD_LIST_GOLD {
   Building IMPROVE_SECURITY_MONITOR
   Building IMPROVE_E_BANK
   Building IMPROVE_BEHAVIORAL_MOD_CENTER
+}
+
+BUILDING_BUILD_LIST_SMALL_CITIES {
+  Building IMPROVE_CITY_WALLS
+  Building IMPROVE_GRANARY
+  Building IMPROVE_SHRINE
+  Building IMPROVE_BAZAAR
+  Building IMPROVE_THEATER
+  Building IMPROVE_ACADEMY
+  Building IMPROVE_COURTHOUSE
+}
+
+BUILDING_BUILD_LIST_MAXIUM_SIZED_CITIES {
+  Building IMPROVE_AQUEDUCT
+  Building IMPROVE_ARCOLOGIES
+  Building IMPROVE_AQUA_FILTER
 }
 
 BUILDING_BUILD_LIST_MISC {
