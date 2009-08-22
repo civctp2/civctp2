@@ -13,9 +13,9 @@ public:
 					sint32 numPlayers,
 					uint8 gameStyle,
 					sint32 movesPerSlice,
-					sint32 totalTime,
-					sint32 turnTime,
-					sint32 cityTime);
+					time_t totalTime,
+					time_t turnTime,
+					time_t cityTime);
 	NetGameSettings() {}
 
 	void Packetize(uint8 *buf, uint16 &size);
@@ -23,8 +23,11 @@ public:
 private:
 	sint32 m_x, m_y;
 	sint32 m_numPlayers;
-	uint8 m_gameStyle;
-	sint32 m_movesPerSlice, m_totalTime, m_turnTime, m_cityTime;
+	uint8  m_gameStyle;
+	sint32 m_movesPerSlice;
+	time_t m_totalTime;
+	time_t m_turnTime;
+	time_t m_cityTime;
 };
 
 #endif

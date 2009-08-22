@@ -343,12 +343,12 @@ public:
 	BOOL IsSimultaneousStyle() const;
 	sint32 GetUnitMovesPerSlice() const;
 	sint32 GetUnitMovesUsed() const;
-	sint32 GetTotalStartTime() const;
-	sint32 GetTotalTimeUsed() const;
-	sint32 GetTurnStartTime() const;
-	sint32 GetTurnStartedAt() const;
-	sint32 GetTurnEndsAt() const;
-	sint32 GetBonusTime() const;
+	time_t GetTotalStartTime() const;
+	time_t GetTotalTimeUsed() const;
+	time_t GetTurnStartTime() const;
+	time_t GetTurnStartedAt() const;
+	time_t GetTurnEndsAt() const;
+	time_t GetBonusTime() const;
 
 	void SetClassicStyle(BOOL fromServer = FALSE);
 	void SetUnitMovesStyle(BOOL on, sint32 unitMovesPerSlice, BOOL fromServer = FALSE);
@@ -362,9 +362,9 @@ public:
 
 	void SetStyleFromServer(uint8 gameStyle,
 							sint32 movesPerSlice,
-							sint32 totalTime,
-							sint32 turnTime,
-							sint32 cityTime);
+							time_t totalTime,
+							time_t turnTime,
+							time_t cityTime);
 	void UnitsMoved(sint32 count);
 	void TurnSync();
 
@@ -529,13 +529,13 @@ private:
 	uint8 m_gameStyle;
 	sint32 m_unitMovesPerSlice;
 	sint32 m_unitMovesUsed;
-	sint32 m_totalStartTime;
-	sint32 m_totalTimeUsed;
-	sint32 m_turnStartTime;
+	time_t m_totalStartTime;
+	time_t m_totalTimeUsed;
+	time_t m_turnStartTime;
 	time_t m_turnStartedAt;
-	sint32 m_bonusTime;
-	sint32 m_turnEndsAt;
-	sint32 m_extraTimePerCity;
+	time_t m_bonusTime;
+	time_t m_turnEndsAt;
+	time_t m_extraTimePerCity;
 
 	BOOL   m_setupMode;
 
@@ -574,8 +574,8 @@ private:
 
 	ChatList *m_chatList;
 
-	sint32 m_battleViewOpenedTime;
-	sint32 m_battleViewOriginalEndTime;
+	time_t m_battleViewOpenedTime;
+	time_t m_battleViewOriginalEndTime;
 
 	friend BOOL CALLBACK NetSessionNameDlgProc(HWND hwndDlg,
 									UINT uMsg,

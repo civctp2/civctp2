@@ -521,11 +521,7 @@ void CityControlPanel::UpdateBuildItem()
 		m_buildRushBuy->Enable(isMyTurn && (cost <= player->GetGold()));
 	}
 
-	sint32			turns			= m_currentTurns;
-	if (isMyTurn || g_network.IsActive())
-	{
-		turns = theCity ? theCity->HowMuchLonger() : CITY_PRODUCTION_HALTED;
-	}
+	sint32 turns = theCity ? theCity->HowMuchLonger() : CITY_PRODUCTION_HALTED;
 
 	if ((m_currentCity.m_id == city.m_id) &&
 	    (m_currentNumItems == numberOfItems) &&

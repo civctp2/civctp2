@@ -1958,6 +1958,11 @@ Utility Goal::Compute_Raw_Priority()
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
 
+	if(m_target_city.IsValid())
+	{
+		m_raw_priority += goal_rec->GetSlaveryProtectionBonus() * (1.0 - m_target_city.IsProtectedFromSlavery());
+	}
+
 	Assert(m_raw_priority <  Goal::MAX_UTILITY);
 	Assert(m_raw_priority >= Goal::BAD_UTILITY);
 	if (m_raw_priority > Goal::MAX_UTILITY)
@@ -2493,10 +2498,6 @@ bool Goal::Get_Totally_Complete() const
 
 		// Slavers must to go to cities with population to enslave, give an extra point so that the city isn't killed on conquest
 		if(popCount <= 2)
-			return true;
-
-		// Avoid cities with city walls, needs to be modified if you modify ArmyData::SlaveRaid, so that city walls only reduce the slave chance
-		if(m_target_city.IsProtectedFromSlavery())
 			return true;
 	}
 

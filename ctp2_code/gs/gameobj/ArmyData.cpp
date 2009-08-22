@@ -3018,18 +3018,8 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		return EnslaveSettler(point, uindex, home_city); 
 	}
 
-	// Modify CTPGoal::Get_Totally_Complete() if city walls should not be an absolute slavery prevention
-	if(target_city.IsProtectedFromSlavery())
-	{
-		g_slicEngine->Execute
-		    (new CityReport("140ProtectedFromSlaveryVictim", target_city));
-		SlicObject * so = new SlicObject("141ProtectedFromSlaveryAttacker");
-		so->AddRecipient(GetOwner());
-		so->AddCity(target_city);
-		g_slicEngine->Execute(so);
-
-		return ORDER_RESULT_FAILED;
-	}
+	double slaveryReduction = target_city.IsProtectedFromSlavery();
+	success *= slaveryReduction;
 
 	target_city.SetWatchful();
 
@@ -3099,6 +3089,18 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 			so->AddCivilisation(GetOwner());
 			so->AddCity(target_city);
 			g_slicEngine->Execute(so);
+
+		}
+
+		if(slaveryReduction < 1.0)
+		{
+			g_slicEngine->Execute
+			    (new CityReport("140ProtectedFromSlaveryVictim", target_city));
+			SlicObject * so = new SlicObject("141ProtectedFromSlaveryAttacker");
+			so->AddRecipient(GetOwner());
+			so->AddCity(target_city);
+			g_slicEngine->Execute(so);
+
 		}
 
 		return ORDER_RESULT_FAILED;

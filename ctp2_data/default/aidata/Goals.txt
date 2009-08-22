@@ -390,21 +390,22 @@ GOAL_SLAVE_RAID {
 
   Execute   ORDER_SLAVE_RAID
 
-  ThreatBonus             -50
-  EnemyValueBonus         100
-  AlliedValueBonus        100
-  PowerBonus              100
-  DistanceToHomeBonus       0
-  DistanceToEnemyBonus      0
-  InHomeTerritoryBonus      0
-  NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0
-  WoundedArmyBonus          0
-  NotVisibleBonus           0
-  ChokePointBonus         100
-  UnexploredBonus     -999999
-  ObsoleteArmyBonus         0
-  TreaspassingArmyBonus     0
+  ThreatBonus               -50
+  EnemyValueBonus           100
+  AlliedValueBonus          100
+  PowerBonus                100
+  DistanceToHomeBonus         0
+  DistanceToEnemyBonus        0
+  InHomeTerritoryBonus        0
+  NoOwnerTerritoryBonus       0
+  InEnemyTerritoryBonus       0
+  WoundedArmyBonus            0
+  NotVisibleBonus             0
+  ChokePointBonus           100
+  UnexploredBonus         -1000
+  ObsoleteArmyBonus           0
+  TreaspassingArmyBonus       0
+  SlaveryProtectionBonus -10000
 
   ThreatenType:SpecialAttackCity
   ThreatenBonus 5000

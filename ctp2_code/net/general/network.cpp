@@ -2954,32 +2954,32 @@ sint32 Network::GetUnitMovesUsed() const
 	return m_unitMovesUsed;
 }
 
-sint32 Network::GetTotalStartTime() const
+time_t Network::GetTotalStartTime() const
 {
     return m_totalStartTime;
 }
 
-sint32 Network::GetTotalTimeUsed() const
+time_t Network::GetTotalTimeUsed() const
 {
     return m_totalTimeUsed;
 }
 
-sint32 Network::GetTurnStartTime() const
+time_t Network::GetTurnStartTime() const
 {
     return m_turnStartTime;
 }
 
-sint32 Network::GetTurnStartedAt() const
+time_t Network::GetTurnStartedAt() const
 {
     return static_cast<sint32>(m_turnStartedAt);
 }
 
-sint32 Network::GetTurnEndsAt() const
+time_t Network::GetTurnEndsAt() const
 {
 	return m_turnEndsAt;
 }
 
-sint32 Network::GetBonusTime() const
+time_t Network::GetBonusTime() const
 {
 	return m_bonusTime;
 }
@@ -3093,9 +3093,9 @@ void Network::SetCarryoverStyle(BOOL on, BOOL fromServer)
 
 void Network::SetStyleFromServer(uint8 gameStyle,
 								 sint32 movesPerSlice,
-								 sint32 totalTime,
-								 sint32 turnTime,
-								 sint32 cityTime)
+								 time_t totalTime,
+								 time_t turnTime,
+								 time_t cityTime)
 {
 	m_gameStyle = gameStyle;
 	m_unitMovesPerSlice = movesPerSlice;

@@ -223,13 +223,20 @@ STDEHANDLER(DirectorActionSuccessful)
 				}
 			}
 		}
-	} else {
-		spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_SUCCESS"))->GetValue();
-		soundID = g_theSoundDB->FindTypeIndex("SOUND_ID_GENERALSUCCEED");
-		if(g_player[g_selected_item->GetVisiblePlayer()]->m_vision->IsVisible(attackPos)) {
-			g_director->AddCenterMap(attackPos);
+	}
+	else
+	{
+		if(g_player[g_selected_item->GetVisiblePlayer()]->m_vision->IsVisible(attackPos))
+		{
+			spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_SUCCESS"))->GetValue();
+			soundID  = g_theSoundDB->FindTypeIndex("SOUND_ID_GENERALSUCCEED");
+			if(g_selected_item->IsAutoCenterOn())
+			{
+				g_director->AddCenterMap(attackPos);
+			}
+	
+			g_director->AddSpecialEffect(attackPos, spriteID, soundID);
 		}
-		g_director->AddSpecialEffect(attackPos, spriteID, soundID);
 	}
 	return GEV_HD_Continue;
 }

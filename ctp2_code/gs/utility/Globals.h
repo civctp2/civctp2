@@ -42,6 +42,7 @@
 // Export overview
 //----------------------------------------------------------------------------
 
+#define k_GAME_OBJ_TYPE_NOTHING                 0
 #define k_GAME_OBJ_TYPE_UNIT                    1
 #define k_GAME_OBJ_TYPE_POP                     2
 #define k_GAME_OBJ_TYPE_IMPROVEMENT             3

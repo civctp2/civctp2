@@ -5679,7 +5679,7 @@ bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 
 sint32 CityData::LoadQueue(const MBCHAR *file)
 {
-	m_build_category_before_load_queue = GetBuildQueue()->GetHead()->m_category;
+	m_build_category_before_load_queue = GetBuildQueue()->GetHead() != NULL ? GetBuildQueue()->GetHead()->m_category : k_GAME_OBJ_TYPE_NOTHING;
 
 	sint32 r = m_build_queue.Load(file);
 

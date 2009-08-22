@@ -5419,7 +5419,7 @@ void UnitData::SetType(sint32 type)
 	{
 		sint32 prevTotalHP = CalculateTotalHP();
 		sint32 prevTotalFuel = CalculateTotalFuel();
-		sint32 prevTotalMP = CalculateTotalMovePoints();
+		double prevTotalMP = CalculateTotalMovePoints();
 		m_type = type;
 		if(prevTotalHP > 0)
 			m_hp              = CalculateTotalHP() * ( m_hp / prevTotalHP );
@@ -5431,7 +5431,7 @@ void UnitData::SetType(sint32 type)
 		else
 			m_fuel            = CalculateTotalFuel();
 
-		if(prevTotalMP > 0)
+		if(prevTotalMP > 0.0)
 			m_movement_points = CalculateTotalMovePoints() * ( m_movement_points / prevTotalMP );
 		else
 			m_movement_points = CalculateTotalMovePoints();
@@ -5715,10 +5715,9 @@ sint32 UnitData::CountTradeWith(PLAYER_INDEX player) const
 	return m_city_data ? m_city_data->CountTradeWith(player) : 0;
 }
 
-bool UnitData::IsProtectedFromSlavery() const
+double UnitData::IsProtectedFromSlavery() const
 {
-	Assert(m_city_data);
-	return m_city_data && (m_city_data->IsProtectedFromSlavery() > 0.0);
+	return m_city_data ? 1.0 - m_city_data->IsProtectedFromSlavery() : 1.0;
 }
 
 

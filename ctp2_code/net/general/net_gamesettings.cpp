@@ -38,9 +38,9 @@ NetGameSettings::NetGameSettings(sint32 x, sint32 y,
 								 sint32 numPlayers,
 								 uint8 gameStyle,
 								 sint32 movesPerSlice,
-								 sint32 totalTime,
-								 sint32 turnTime,
-								 sint32 cityTime)
+								 time_t totalTime,
+								 time_t turnTime,
+								 time_t cityTime)
 {
 	m_x = x;
 	m_y = y;

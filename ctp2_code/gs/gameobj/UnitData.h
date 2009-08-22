@@ -655,7 +655,7 @@ public:
 
 	sint32 CountTradeWith(PLAYER_INDEX) const;
 
-	bool IsProtectedFromSlavery() const;
+	double IsProtectedFromSlavery() const;
 
 
 	void NotifyAdvance(AdvanceType advance);

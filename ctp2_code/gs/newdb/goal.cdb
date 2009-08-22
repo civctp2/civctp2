@@ -87,14 +87,15 @@ Goal {
 	Int PowerBonus
 	Int DistanceToHomeBonus
 	Int DistanceToEnemyBonus
-	Int InHomeTerritoryBonus  = 0
-	Int NoOwnerTerritoryBonus = 0
-	Int InEnemyTerritoryBonus = 0
-	Int WoundedArmyBonus      = 0
-	Int NotVisibleBonus       = 0
-	Int InVisionRangeBonus    = 0
-	Int NoBarbarianBonus      = 0
-	Int CanAttackBonus        = 0
+	Int InHomeTerritoryBonus   = 0
+	Int NoOwnerTerritoryBonus  = 0
+	Int InEnemyTerritoryBonus  = 0
+	Int WoundedArmyBonus       = 0
+	Int NotVisibleBonus        = 0
+	Int InVisionRangeBonus     = 0
+	Int NoBarbarianBonus       = 0
+	Int CanAttackBonus         = 0
+	Int SlaveryProtectionBonus = 0
 
 	Int ChokePointBonus
 	Int UnexploredBonus

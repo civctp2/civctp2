@@ -2071,7 +2071,7 @@ sint32 Unit::CountTradeWith(PLAYER_INDEX player) const
 	return GetData()->CountTradeWith(player);
 }
 
-bool Unit::IsProtectedFromSlavery() const
+double Unit::IsProtectedFromSlavery() const
 {
 	return GetData()->IsProtectedFromSlavery();
 }
