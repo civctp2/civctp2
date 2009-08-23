@@ -8839,7 +8839,19 @@ bool Player::HasWarWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner <= 0
 	    ||  otherPlayer <= 0
-	    ||AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
+	    || AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
+}
+
+bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
+{
+	Assert(0 <= otherPlayer);
+	Assert(otherPlayer < k_MAX_PLAYERS);
+	Assert(m_owner != otherPlayer);
+
+	// Everyone is always at war with the barbarians.
+	return      m_owner > 0
+	    &&  otherPlayer > 0
+	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_ALLIANCE);
 }
 
 void player_ActivateSpaceButton(sint32 owner)

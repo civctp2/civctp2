@@ -2196,6 +2196,11 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 			CtpAi::BombardNearbyEnemies(army, max_rge);
 		}
 
+		if(army->NumOrders() == 0)
+		{
+			ExpellAdjacentUnits(army);
+		}
+
 		// If we don't have anything to do then we may refuel, otherwise we do something and crash
 		if (army->GetMinFuel() != 0x7fffffff &&
 			army->GetOrder(0) == NULL)
@@ -2496,7 +2501,7 @@ void CtpAi::SellRandomBuildings(const Unit & city, const double chance)
 }
 
 //PFT 12 apr 05, replaces BombardAdjacentEnemies to accomodate bombarding from range
-void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
+void CtpAi::BombardNearbyEnemies(const Army & army, const sint32 & max_rge)
 {
 	if (!army->CanBombard())
 		return;
@@ -2544,10 +2549,10 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 					min_dist = dist;
 					if(min_dist <= max_rge)
 					{
-						g_gevManager->AddEvent( GEV_INSERT_Tail, 
+						g_gevManager->AddEvent( GEV_INSERT_Tail,
 												GEV_BombardOrder,
 												GEA_Army, army.m_id,
-												GEA_MapPoint,def_pos,
+												GEA_MapPoint, def_pos,
 												GEA_End);
 						return;
 					}
@@ -2581,11 +2586,52 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 						g_gevManager->AddEvent( GEV_INSERT_Tail, 
 												GEV_BombardOrder,
 												GEA_Army, army.m_id,
-												GEA_MapPoint,def_pos,
+												GEA_MapPoint, def_pos,
 												GEA_End);
 						return;
 					}
 				}
+			}
+		}
+	}
+}
+
+void CtpAi::ExpellAdjacentUnits(const Army & army)
+{
+	if (!army->CanExpel())
+		return;
+
+	if (!army->CanPerformSpecialAction())
+		return;
+
+	PLAYER_INDEX playerId = army->GetOwner();
+
+	MapPoint pos = army->RetPos();
+	MapPoint adj;
+
+	for(sint8 dir = 0; dir < (sint8) NOWHERE; dir++)
+	{
+		if
+		  (
+		       pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj)
+		    && g_theWorld->GetCell(adj)->GetNumUnits() > 0
+		  )
+		{
+			CellUnitList* adj_army = g_theWorld->GetCell(adj)->UnitArmy();
+
+			if( adj_army->GetOwner() != playerId
+			&&  adj_army->CanBeExpelled()
+			&&  adj_army->IsVisible(playerId)
+			&&  g_player[playerId]
+			&& !g_player[playerId]->HasAllianceWith(adj_army->GetOwner())
+			){
+				g_gevManager->AddEvent( GEV_INSERT_Tail,
+										GEV_ExpelOrder,
+										GEA_Army, army.m_id,
+										GEA_MapPoint, adj,
+										GEA_End);
+							
+				return;
 			}
 		}
 	}

@@ -1,3 +1,5 @@
+### 0 #########################################################
+
 TERRAIN_FOREST {
    TilesetIndex 22
    HutTilesetIndexA 150
@@ -60,7 +62,7 @@ TERRAIN_FOREST {
    MovementType: Land
 }
 
-############################################################
+### 1 #########################################################
 
 TERRAIN_PLAINS {
    TilesetIndex 1
@@ -116,14 +118,14 @@ TERRAIN_PLAINS {
 
    Resources TERRAIN_PLAINS_GOOD_ONE
    Resources TERRAIN_PLAINS_GOOD_TWO
-   Resources       TERRAIN_PLAINS_GOOD_THREE
-   Resources       TERRAIN_PLAINS_GOOD_FOUR
+   Resources TERRAIN_PLAINS_GOOD_THREE
+   Resources TERRAIN_PLAINS_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
 }
 
-############################################################
+### 2 #########################################################
 
 TERRAIN_TUNDRA {
    TilesetIndex 2
@@ -183,7 +185,7 @@ TERRAIN_TUNDRA {
    MovementType: Land
 }
 
-############################################################
+### 3 #########################################################
 
 TERRAIN_GLACIER {
    TilesetIndex 3
@@ -240,7 +242,7 @@ TERRAIN_GLACIER {
    MovementType: Land
 }
 
-############################################################
+### 4 #########################################################
 
 TERRAIN_GRASSLAND {
    TilesetIndex 4
@@ -296,14 +298,14 @@ TERRAIN_GRASSLAND {
 
    Resources TERRAIN_GRASSLAND_GOOD_TWO
    Resources TERRAIN_GRASSLAND_GOOD_ONE
-   Resources	TERRAIN_GRASSLAND_GOOD_THREE	
-   Resources	TERRAIN_GRASSLAND_GOOD_FOUR
+   Resources TERRAIN_GRASSLAND_GOOD_THREE	
+   Resources TERRAIN_GRASSLAND_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
 }
 
-############################################################
+### 5 #########################################################
 
 TERRAIN_DESERT {
    TilesetIndex 5
@@ -326,7 +328,7 @@ TERRAIN_DESERT {
    }
 
    EnvBase {
-      Score 10
+      Score 30
       Food 0
       Shield 0
       Gold 5
@@ -349,7 +351,7 @@ TERRAIN_DESERT {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -359,14 +361,14 @@ TERRAIN_DESERT {
 
    Resources TERRAIN_DESERT_GOOD_ONE
    Resources TERRAIN_DESERT_GOOD_TWO
-   Resources       TERRAIN_DESERT_GOOD_THREE
-   Resources       TERRAIN_DESERT_GOOD_FOUR
+   Resources TERRAIN_DESERT_GOOD_THREE
+   Resources TERRAIN_DESERT_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
 }
 
-############################################################
+### 6 #########################################################
 
 TERRAIN_SWAMP {
    TilesetIndex 6
@@ -389,7 +391,7 @@ TERRAIN_SWAMP {
    }
 
    EnvBase {
-      Score 10
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -412,7 +414,7 @@ TERRAIN_SWAMP {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -429,7 +431,7 @@ TERRAIN_SWAMP {
    MovementType: Land
 }
 
-############################################################
+### 7 #########################################################
 
 TERRAIN_JUNGLE {
    TilesetIndex 7
@@ -492,7 +494,7 @@ TERRAIN_JUNGLE {
    MovementType: Land
 }
 
-############################################################
+### 8 #########################################################
 
 TERRAIN_MOUNTAIN {
    TilesetIndex 8
@@ -554,7 +556,7 @@ TERRAIN_MOUNTAIN {
    MovementType: Mountain
 }
 
-############################################################
+### 9 #########################################################
 
 TERRAIN_HILL {
    TilesetIndex 9
@@ -617,7 +619,7 @@ TERRAIN_HILL {
    MovementType: Land
 }
 
-############################################################
+### 10 #########################################################
 
 TERRAIN_WATER_SHALLOW {
    TilesetIndex 10
@@ -656,7 +658,7 @@ TERRAIN_WATER_SHALLOW {
    MovementType: ShallowWater
 }
 
-############################################################
+### 11 #########################################################
 
 TERRAIN_WATER_DEEP {
    TilesetIndex 11
@@ -693,7 +695,7 @@ TERRAIN_WATER_DEEP {
    MovementType: Sea
 }
 
-############################################################
+### 12 #########################################################
 
 TERRAIN_WATER_VOLCANO {
    TilesetIndex 12
@@ -731,7 +733,7 @@ TERRAIN_WATER_VOLCANO {
    MovementType: Sea
 }
 
-############################################################
+### 13 #########################################################
 
 TERRAIN_WATER_BEACH {
    TilesetIndex 13
@@ -771,7 +773,7 @@ TERRAIN_WATER_BEACH {
    MovementType: ShallowWater
 }
 
-############################################################
+### 14 #########################################################
 
 TERRAIN_WATER_SHELF {
    TilesetIndex 14
@@ -809,7 +811,7 @@ TERRAIN_WATER_SHELF {
    MovementType: Sea
 }
 
-############################################################
+### 15 #########################################################
 
 TERRAIN_WATER_TRENCH {
    TilesetIndex 15
@@ -847,7 +849,7 @@ TERRAIN_WATER_TRENCH {
    MovementType: Sea
 }
 
-############################################################
+### 16 #########################################################
 
 TERRAIN_WATER_RIFT {
    TilesetIndex 16
@@ -884,7 +886,7 @@ TERRAIN_WATER_RIFT {
    MovementType: Sea
 }
 
-############################################################
+### 17 #########################################################
 
 TERRAIN_DEAD {
    TilesetIndex 17
@@ -916,7 +918,7 @@ TERRAIN_DEAD {
    MovementType: Land
 }
 
-############################################################
+### 18 #########################################################
 
 TERRAIN_BROWN_HILL {
    TilesetIndex 18
@@ -939,7 +941,7 @@ TERRAIN_BROWN_HILL {
    }
 
    EnvBase {
-      Score 20
+      Score 40
       Food 0
       Shield 10
       Gold 5
@@ -962,7 +964,7 @@ TERRAIN_BROWN_HILL {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -979,7 +981,7 @@ TERRAIN_BROWN_HILL {
    MovementType: Land
 }
 
-############################################################
+### 19 #########################################################
 
 TERRAIN_BROWN_MOUNTAIN {
    TilesetIndex 19
@@ -1001,7 +1003,7 @@ TERRAIN_BROWN_MOUNTAIN {
    }
 
    EnvBase {
-      Score 20
+      Score 40
       Food 0
       Shield 10
       Gold 10
@@ -1024,7 +1026,7 @@ TERRAIN_BROWN_MOUNTAIN {
    }
 
    EnvRiver {
-      Score 20
+      Score 30
       Food 5
       Shield 5
       Gold 5
@@ -1039,7 +1041,7 @@ TERRAIN_BROWN_MOUNTAIN {
    MovementType: Mountain
 }
 
-############################################################
+### 20 #########################################################
 
 TERRAIN_WHITE_HILL {
    TilesetIndex 20
@@ -1099,7 +1101,7 @@ TERRAIN_WHITE_HILL {
    MovementType: Land
 }
 
-############################################################
+### 21 #########################################################
 
 TERRAIN_WHITE_MOUNTAIN {
    TilesetIndex 21
@@ -1160,7 +1162,7 @@ TERRAIN_WHITE_MOUNTAIN {
    MovementType: Mountain
 }
 
-############################################################
+### 22 #########################################################
 
 TERRAIN_WATER_KELP {
    TilesetIndex 23
@@ -1199,7 +1201,7 @@ TERRAIN_WATER_KELP {
    MovementType: ShallowWater
 }
 
-############################################################
+### 23 #########################################################
 
 TERRAIN_WATER_REEF {
    TilesetIndex 24
@@ -1238,7 +1240,7 @@ TERRAIN_WATER_REEF {
    MovementType: ShallowWater
 }
 
-############################################################
+### 24 #########################################################
 
 TERRAIN_SPECIAL1 {
    TilesetIndex 25
@@ -1285,7 +1287,7 @@ TERRAIN_SPECIAL1 {
    MovementType: Land
 }
 
-############################################################
+### 25 #########################################################
 
 TERRAIN_SPECIAL2 {
    TilesetIndex 26

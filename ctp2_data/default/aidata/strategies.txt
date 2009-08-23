@@ -227,8 +227,8 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  25  MaxExec  12 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  25  MaxExec   4 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
@@ -571,8 +571,8 @@ STRATEGY_BARBARIAN {
 	//
 
     GoalElement { Goal GOAL_ATTACK              Priority   400000  MaxEval  25	MaxExec  25 } // Maybe remove and so that only the harrass goal is used
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   390000  MaxEval   5	MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5	MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   390000  MaxEval   8	MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8	MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   400000  MaxEval  25	MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   400000  MaxEval  25	MaxExec  25 }
     GoalElement { Goal GOAL_PILLAGE             Priority   400000  MaxEval  10	MaxExec   5 }
@@ -1270,8 +1270,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
@@ -1750,8 +1750,8 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
@@ -2237,8 +2237,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
@@ -2715,8 +2715,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
@@ -3193,8 +3193,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
-    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
     GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }

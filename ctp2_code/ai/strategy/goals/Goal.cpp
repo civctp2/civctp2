@@ -494,8 +494,12 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 		}
 
 		match_iter->Compute_Matching_Value(this);
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-					("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+
+		if(update)
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+						("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+		}
 		++count;
 	}
 

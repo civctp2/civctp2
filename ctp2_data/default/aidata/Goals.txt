@@ -351,7 +351,7 @@ GOAL_ENSLAVE_SETTLER {
 
   Execute   ORDER_ENSLAVE_SETTLER
 
-  ThreatBonus             -50
+  ThreatBonus               0
   EnemyValueBonus         100
   AlliedValueBonus        100
   PowerBonus              100
@@ -390,7 +390,7 @@ GOAL_SLAVE_RAID {
 
   Execute   ORDER_SLAVE_RAID
 
-  ThreatBonus               -50
+  ThreatBonus                 0
   EnemyValueBonus           100
   AlliedValueBonus          100
   PowerBonus                100
@@ -402,10 +402,10 @@ GOAL_SLAVE_RAID {
   WoundedArmyBonus            0
   NotVisibleBonus             0
   ChokePointBonus           100
-  UnexploredBonus         -1000
+  UnexploredBonus         10000
   ObsoleteArmyBonus           0
   TreaspassingArmyBonus       0
-  SlaveryProtectionBonus -10000
+  SlaveryProtectionBonus  -1000
 
   ThreatenType:SpecialAttackCity
   ThreatenBonus 5000

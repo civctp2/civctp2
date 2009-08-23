@@ -146,7 +146,8 @@ private:
 	static void BombardAdjacentEnemies(const Army & army);
 #endif
 
-	static void BombardNearbyEnemies(Army army, sint32 max_rge);
+	static void BombardNearbyEnemies(const Army & army, const sint32 & max_rge);
+	static void ExpellAdjacentUnits(const Army & army);
 
 	static bool GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance);
 

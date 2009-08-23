@@ -711,10 +711,22 @@ void Director::HandleNextAction(void)
 
 			DHEXECUTE		executeType = DHEXECUTE_NORMAL;
 
-			if ((item->m_round < g_turn->GetRound() - 1) ||
-				(!g_theProfileDB->IsEnemyMoves() && item->GetOwner() != -1 && 
-					item->GetOwner() != g_selected_item->GetVisiblePlayer())) {
-				
+			if
+			  (
+			       item->m_round < g_turn->GetRound() - 1
+			    ||
+			       (
+			            !g_theProfileDB->IsEnemyMoves()
+			         &&  item->GetOwner() != -1
+			         &&  item->GetOwner() != g_selected_item->GetVisiblePlayer()
+			       )
+			    ||
+			       (
+			            !g_theProfileDB->IsUnitAnim()
+			         && g_player[item->GetOwner()]->IsRobot()
+			       )
+			  )
+			{
 				executeType = DHEXECUTE_IMMEDIATE;
 			}
 
