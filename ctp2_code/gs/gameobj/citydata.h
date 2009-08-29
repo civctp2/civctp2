@@ -448,6 +448,7 @@ public:
 	sint32 GetBuildingOvercrowdingBonus() const;
 	sint32 GetBuildingMaxPopIncrease() const;
 	sint32 GetPossibleBuildingMaxPopIncrease() const;
+	sint32 GetAllBuildingMaxPopIncrease() const;
 	void   CalculateGrowthRate();
 	double CalculateGrossGrowthRate(double &overcrowdingCoeff, double &baseRate, sint32 bonusFood = 0);
 	bool   GrowOrStarve();
@@ -949,6 +950,11 @@ public:
 		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
 	};
 
+	sint32 GetOverallMaxPop() const
+	{
+		return g_theCitySizeDB->Get(m_sizeIndex)->GetBaseMaxPop() + GetAllBuildingMaxPopIncrease();
+	};
+
 	sint32 CrimeLoss(sint32 gross) const;
 	double CrimeLoss(double gross) const;
 
@@ -1035,6 +1041,7 @@ public:
 	sint32 GetNumUrbanTile(const MapPoint pos) const;
 	sint32 GetSlumTileAvailable(const MapPoint pos) const;
 	sint32 GetUrbanTileAvailable(const MapPoint pos) const;
+	bool IsCoastal() const;
 
 private:
 	bool    IsBankrupting(void) const;

@@ -239,15 +239,8 @@ public:
         Assert(0 <= x);  Assert(x < m_size.x); 
         Assert(0 <= y);  Assert(y < m_size.y); 
         return m_map[x][y]; 
-    };  
+    };
 
-    
-    
-    
-    sint32 Verify1();
-    sint32 Verify2();
-    sint32 Verify3();
-    
     void RandTilePoint(MapPoint &r);
     void FillBox (const MapPoint r, const sint32 radius, sint32 c, sint32 &landCount);
     sint32 IsNearCon(MapPoint r, const sint32 radius,  const sint32 conCount);
@@ -257,9 +250,8 @@ public:
 //    void GenerateHumidity();
 //    void GenerateHills(); 
 //    void GenerateSpace();
-    
-    sint32 IsInTheOcean (const MapPoint r, sint32 cr);
-    void CalcRmap(sint32 ** m, sint32 rmapRadius, sint32 rmapCycle, 
+
+	void CalcRmap(sint32 ** m, sint32 rmapRadius, sint32 rmapCycle,
         sint32 hmin[k_NUM_MERIDIANS+1], sint32 hmax[k_NUM_MERIDIANS+1]);
     
     void GenerateMountains(const sint32 totalLand); 
@@ -281,18 +273,18 @@ public:
     void rand_dir(WORLD_DIRECTION &direction);
     void rand4dir(WORLD_DIRECTION &direction);
     void num_mountain (sint32 &nm);
-    
-    sint32 IsNextToLand(const sint32 i, const sint32 j);
-    sint32 IsNextToWater(const sint32 x, const sint32 y) ;
-    sint32 IsNextToWaterNotDiagonals(const sint32 x, const sint32 y);
-    sint32 IsNextTo (const sint32 t, const sint32 i, const sint32 j);
-    sint32 IsSurroundedByWater(const sint32 x, const sint32 y) ;
+
+    bool IsNextToLand(const sint32 i, const sint32 j);
+    bool IsNextToWater(const sint32 x, const sint32 y) ;
+    bool IsNextToWaterNotDiagonals(const sint32 x, const sint32 y);
+    bool IsNextTo (const sint32 t, const sint32 i, const sint32 j);
+    bool IsSurroundedByWater(const sint32 x, const sint32 y) ;
     void GenerateShallowWater();
     void GenerateDeepWater();
     void NewGenerateDeepWater();
 
-    BOOL GetAdjacentLand(MapPoint const & pos, MapPoint & land) const;
-    BOOL GetAdjacentOcean(MapPoint const & pos, sint32 & water_cont) const;
+    bool GetAdjacentLand(MapPoint const & pos, MapPoint & land) const;
+    bool GetAdjacentOcean(MapPoint const & pos, sint32 & water_cont) const;
     
     void GenerateTrenches();
     void GenerateVolcano();
@@ -403,8 +395,8 @@ public:
     const char * GetTerrainName (const MapPoint &pos);
     TERRAIN_TYPES GetTerrainType(const MapPoint &pos) const;
     
-    sint32 IsGood(const MapPoint &pos) const;
-    sint32 IsGood(const sint32 x, const sint32 y) const;
+    bool IsGood(const MapPoint &pos) const;
+    bool IsGood(const sint32 x, const sint32 y) const;
     bool GetGood(const MapPoint &pos, sint32 &good) const;
     bool GetGood(const Cell *c, sint32 &good) const;
     void SetGood(const sint32 x, const sint32 y, const sint32 g);

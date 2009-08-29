@@ -32,14 +32,15 @@
 Goal {
 	Bit NeedsEscort
 	Bit IsSally
-	Bit AvoidWatchfulCity       // Do not target watchful cities
-	Bit ExecuteIncrementally    // Execute while undercommited
-	Bit NeverSatisfied          // Retreat goals are never satisfied
+	Bit AvoidWatchfulCity                   // Do not target watchful cities
+	Bit ExecuteIncrementally                // Execute while undercommited
+	Bit NeverSatisfied                      // Retreat goals are never satisfied
 	Bit RemoveWhenComplete
-	Bit RallyFirst              // Armies need to rally before going to target
-	Bit NoTransport             // Do not use transports to satisfy this goal
+	Bit RallyFirst                          // Armies need to rally before going to target
+	Bit NoTransport                         // Do not use transports to satisfy this goal
 	Bit UnGroupFirst
 	Bit NoRollback
+	Bit HasTransportersOrNoCoastalCities    // The AI has to own transporters to persue this goal and needs coastal cities
 
 	Bits SquadClass {
 		CanExplore,
@@ -96,6 +97,7 @@ Goal {
 	Int NoBarbarianBonus       = 0
 	Int CanAttackBonus         = 0
 	Int SlaveryProtectionBonus = 0
+	Int SmallCitySizeBonus     = 0
 
 	Int ChokePointBonus
 	Int UnexploredBonus

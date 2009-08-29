@@ -175,7 +175,7 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 	if (is_tunnel_and_boat)
 	{
 		sint32 icost_without_tunnel;
-		(void) g_theTerrainDB->Access(TERRAIN_WATER_DEEP)->GetEnvBase()-> // This is hard encoded, no way. @ToDo: Fix it
+		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->
 			GetMovement(icost_without_tunnel);
 		return std::min(m_army_minmax_move, 
 						static_cast<float>(icost_without_tunnel)

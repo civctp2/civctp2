@@ -1742,6 +1742,23 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	return match;
 }
 
+Utility Goal::Get_Initial_Priority() const
+{
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+
+	for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
+	{
+		Assert(strategy.GetGoalElement(i)->GetGoalIndex() >= 0);
+
+		if(m_goal_type == strategy.GetGoalElement(i)->GetGoalIndex())
+		{
+			return strategy.GetGoalElement(i)->GetPriority();
+		}
+	}
+
+	return Goal::BAD_UTILITY;
+}
+
 Utility Goal::Compute_Raw_Priority()
 {
 	Player *    player_ptr = g_player[m_playerId];
@@ -1764,6 +1781,26 @@ Utility Goal::Compute_Raw_Priority()
 	}
 
 	const GoalRecord * goal_rec = g_theGoalDB->Get(m_goal_type);
+
+	if
+	  (
+	        goal_rec->GetHasTransportersOrNoCoastalCities()
+	    && 
+	       (
+	            !player_ptr->CanUseSeaTab()
+	         ||
+	            (
+	                  player_ptr->HasCostalCities()
+	              && !player_ptr->HasTransporters()
+	            )
+	       )
+	  )
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1, ("\t  No sea tab\n"));
+		m_raw_priority = Goal::BAD_UTILITY;
+		return m_raw_priority;
+	}
+
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 
@@ -1772,17 +1809,16 @@ Utility Goal::Compute_Raw_Priority()
 	MapPoint empire_center         = map.GetEmpireCenter(m_playerId);
 	MapPoint foreign_empire_center = (target_owner > 0 && m_playerId != target_owner) ? map.GetEmpireCenter(target_owner) : map.GetNearestForeigner(m_playerId, target_pos);
 
-	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	double cell_value = Get_Initial_Priority();
 
-	Assert(m_goal_type < strategy.GetNumGoalElement());
-	Assert(strategy.GetGoalElement(m_goal_type) != NULL);
-
-	double cell_value = (m_goal_type < strategy.GetNumGoalElement())
-	                    ? strategy.GetGoalElement(m_goal_type)->GetPriority()
-	                    : 0.0;
+	if(cell_value == Goal::BAD_UTILITY)
+	{
+		m_raw_priority = Goal::BAD_UTILITY;
+		return m_raw_priority;
+	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-	double report_cell_value            = cell_value;
+	double report_cell_initvalue        = cell_value;
 	double report_cell_lastvalue        = cell_value;
 	double report_cell_threat           = 0.0;
 	double report_cell_EnemyValue       = 0.0;
@@ -1797,6 +1833,8 @@ Utility Goal::Compute_Raw_Priority()
 	double report_cell_NoOwnerTerritory = 0.0;
 	double report_cell_InHomeTerritory  = 0.0;
 	double report_cell_InEnemyTerritory = 0.0;
+	double report_cell_SlaveryProtection= 0.0;
+	double report_cell_SmallCitySize    = 0.0;
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
@@ -1958,14 +1996,34 @@ Utility Goal::Compute_Raw_Priority()
 
 	}
 
+	if(m_target_city.IsValid())
+	{
+		cell_value += goal_rec->GetSlaveryProtectionBonus() * (1.0 - m_target_city.IsProtectedFromSlavery());
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		report_cell_SlaveryProtection    = cell_value - report_cell_lastvalue;
+		report_cell_lastvalue            = cell_value;
+#endif //_DEBUG
+
+		sint32 pop;
+		m_target_city->GetPop(pop);
+		cell_value += (1.0 - (static_cast<double>(pop) / static_cast<double>(m_target_city.CD()->GetOverallMaxPop()))) * static_cast<double>(goal_rec->GetSmallCitySizeBonus());
+
+		if(pop == m_target_city.CD()->GetMaxPop())
+		{
+			m_raw_priority = Goal::BAD_UTILITY;
+			return m_raw_priority;
+		}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		report_cell_SmallCitySize = cell_value - report_cell_lastvalue;
+		report_cell_lastvalue     = cell_value;
+#endif //_DEBUG
+	}
+
 	sint32 threaten_bonus = GetThreatenBonus();
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
-
-	if(m_target_city.IsValid())
-	{
-		m_raw_priority += goal_rec->GetSlaveryProtectionBonus() * (1.0 - m_target_city.IsProtectedFromSlavery());
-	}
 
 	Assert(m_raw_priority <  Goal::MAX_UTILITY);
 	Assert(m_raw_priority >= Goal::BAD_UTILITY);
@@ -1978,13 +2036,13 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[256];
-		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
 		        this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
 		        target_pos.x,
 		        target_pos.y,
-		        report_cell_value,
+		        report_cell_initvalue,
 		        report_cell_lastvalue,
 		        report_cell_threat,
 		        report_cell_EnemyValue,
@@ -2000,6 +2058,8 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_Chokepoint,
 		        report_cell_Unexplored,
 		        report_cell_NotVisible,
+		        report_cell_SlaveryProtection,
+		        report_cell_SmallCitySize,
 		        threaten_bonus
 		       );
 
@@ -2013,7 +2073,7 @@ Utility Goal::Compute_Raw_Priority()
 	m_raw_priority,
 	target_pos.x,
 	target_pos.y,
-	report_cell_value,
+	report_cell_initvalue,
 	report_cell_lastvalue,
 	report_cell_threat,
 	report_cell_EnemyValue,

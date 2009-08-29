@@ -938,210 +938,181 @@ void World::ComputeGoodsValues()
 	}
 }
 
-sint32 World::IsNextToLand(const sint32 i, const sint32 j) 
-{  
-    MapPoint pos(i, j);
-    MapPoint n; 
-
-    return GetAdjacentLand(pos, n);    
-}
-
-BOOL World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
-{  
-    for (sint16 dir = 0; dir < NOWHERE; ++dir) 
-    {
-        if (pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), land)) 
-        {
-            if (IsLand(land) || IsMountain(land)) 
-            { 
-		    return TRUE; 
-	      }
-        }
-    }
-
-    return FALSE; 
-}
-
-BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
+bool World::IsNextToLand(const sint32 i, const sint32 j)
 {
-	MapPoint water;
+	MapPoint pos(i, j);
+	MapPoint n; 
 
-	for (sint16 dir = 0; dir < NOWHERE; dir++) {
-		if(pos.GetNeighborPosition((WORLD_DIRECTION) dir, water)) {
-			if (IsWater(water)) { 
-				water_cont = GetCell(water)->GetContinent();
-				
-				if (GetWaterContinentSize(water_cont) > 25) 
-					return TRUE; 
+	return GetAdjacentLand(pos, n);
+}
+
+bool World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
+{
+	for(sint16 dir = 0; dir < NOWHERE; ++dir)
+	{
+		if(pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), land))
+		{
+			if(IsLand(land) || IsMountain(land))
+			{
+				return true;
 			}
 		}
 	}
 
-    return FALSE; 
+	return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y) 
-{  
-    MapPoint	pos (x,y);
-    MapPoint	n ;
-    
-    if(pos.GetNeighborPosition(NORTH, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(NORTHWEST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(NORTHEAST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(SOUTH, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(SOUTHWEST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(SOUTHEAST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(WEST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	if(pos.GetNeighborPosition(EAST, n)) {
-		if (!IsWater(n))
-			return (FALSE) ;
-		
-	}
-	return (TRUE) ;
-	}
-
-
-
-
-
-
-
-
-
-sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
+bool World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
-    MapPoint pos (i, j);
-    MapPoint n; 
-   
-    if(pos.GetNeighborPosition(NORTH, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+	MapPoint water;
 
-    if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+	for(sint16 dir = 0; dir < NOWHERE; dir++)
+	{
+		if(pos.GetNeighborPosition((WORLD_DIRECTION) dir, water))
+		{
+			if(IsWater(water))
+			{
+				water_cont = GetCell(water)->GetContinent();
 
-    if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+				if(GetWaterContinentSize(water_cont) > 25) 
+					return true;
+			}
+		}
+	}
 
-    if(pos.GetNeighborPosition(SOUTH, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
-
-    if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
-
-    if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
-
-    if(pos.GetNeighborPosition(WEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
-
-    if(pos.GetNeighborPosition(EAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
-
-    return FALSE;
+	return false;
 }
 
+bool World::IsSurroundedByWater(const sint32 x, const sint32 y)
+{
+	MapPoint	pos (x,y);
+	MapPoint	n ;
 
-
-
-
-
-
-
-
-
-
-
-
-sint32 World::IsNextToWater(const sint32 i, const sint32 j) 
-{  
-    MapPoint pos (i, j);
-    MapPoint n; 
-   
-    if(pos.GetNeighborPosition(NORTH, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(SOUTH, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(WEST, n))
-		if (IsWater(n)) return TRUE; 
-
-    if(pos.GetNeighborPosition(EAST, n))
-		if (IsWater(n)) return TRUE; 
-
-    return FALSE; 
+	if(pos.GetNeighborPosition(NORTH, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(NORTHWEST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(NORTHEAST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(SOUTH, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(SOUTHWEST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(SOUTHEAST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(WEST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	if(pos.GetNeighborPosition(EAST, n))
+	{
+		if (!IsWater(n))
+			return false;
+	}
+	return true;
 }
 
-sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
+bool World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
 {
 	MapPoint pos (i, j);
-	MapPoint n; 
+	MapPoint n;
+
+	if(pos.GetNeighborPosition(NORTH, n))
+		if (GetCell(n)->m_terrain_type == t) return true;
 
 	if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (IsWater(n)) return TRUE;
+		if (GetCell(n)->m_terrain_type == t) return true;
 
 	if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (IsWater(n)) return TRUE;
+		if (GetCell(n)->m_terrain_type == t) return true;
+
+	if(pos.GetNeighborPosition(SOUTH, n))
+		if (GetCell(n)->m_terrain_type == t) return true;
 
 	if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (IsWater(n)) return TRUE;
+		if (GetCell(n)->m_terrain_type == t) return true;
 
 	if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (IsWater(n)) return TRUE;
+		if (GetCell(n)->m_terrain_type == t) return true;
 
-	return FALSE; 
+	if(pos.GetNeighborPosition(WEST, n))
+		if (GetCell(n)->m_terrain_type == t) return true;
+
+	if(pos.GetNeighborPosition(EAST, n))
+		if (GetCell(n)->m_terrain_type == t) return true;
+
+	return false;
+}
+
+bool World::IsNextToWater(const sint32 i, const sint32 j) 
+{
+	MapPoint pos (i, j);
+	MapPoint n;
+
+	if(pos.GetNeighborPosition(NORTH, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(NORTHWEST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(NORTHEAST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(SOUTH, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(SOUTHWEST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(SOUTHEAST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(WEST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(EAST, n))
+		if (IsWater(n)) return true;
+
+	return false;
+}
+
+bool World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
+{
+	MapPoint pos (i, j);
+	MapPoint n;
+
+	if(pos.GetNeighborPosition(NORTHWEST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(NORTHEAST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(SOUTHWEST, n))
+		if (IsWater(n)) return true;
+
+	if(pos.GetNeighborPosition(SOUTHEAST, n))
+		if (IsWater(n)) return true;
+
+	return false;
 }
 
 
@@ -2517,45 +2488,16 @@ void World::SerializeJustMap(CivArchive &archive)
 
 
 uint32 World_World_GetVersion(void)
-	{
+{
 	return (k_WORLD_VERSION_MAJOR<<16 | k_WORLD_VERSION_MINOR) ;
-	}
-
-
-sint32 World::Verify1()
-
-{
-    sint32 x, y;
-
-    for (x=0; x<m_size.x; x++) { 
-        for (y=0; y<m_size.y; y++) { 
-            if (m_map[x][y]->m_terrain_type < 0) { 
-                Assert((m_map[x][y]->m_env  & k_MASK_ENV_MOVEMENT_TYPE) == 0);
-            }
-        } 
-    } 
-    return TRUE;
 }
-
-sint32 World::Verify2()
-{
-    return FALSE;
-}
-
-sint32 World::Verify3()
-{
-    return FALSE;
-}
-
-
-
 
 void World::AllocateTileInfoStorage(void)
-{	
+{
 	sint32			width = m_size.x;
 	sint32			height = m_size.y;
-    
-    delete [] m_tileInfoStorage;
+
+	delete [] m_tileInfoStorage;
 	m_tileInfoStorage = new TileInfo[width*height];
 }
 
@@ -2569,10 +2511,10 @@ TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 {
 	Assert(m_tileInfoStorage);
 	if (!m_tileInfoStorage)
-    {
-        return NULL;
-    }
-		
+	{
+		return NULL;
+	}
+
 	sint32 const    width = m_size.x;
 	return &m_tileInfoStorage[pos.x + pos.y * width];
 }

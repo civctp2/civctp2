@@ -9692,6 +9692,28 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 	}
 }
 
+bool Player::HasCostalCities() const
+{
+	for(sint32 i = 0; i < m_all_cities->Num(); i++)
+	{
+		if(m_all_cities->Access(i).CD()->IsCoastal())
+			return true;
+	}
+
+	return false;
+}
+
+bool Player::HasTransporters() const
+{
+	for(sint32 i = 0; i < m_all_units->Num(); i++)
+	{
+		if(m_all_units->Access(i)->GetMaxCargoCapacity() > 0)
+			return true;
+	}
+
+	return false;
+}
+
 /*
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 {

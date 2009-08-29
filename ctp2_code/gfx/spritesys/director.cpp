@@ -700,13 +700,8 @@ void Director::HandleNextAction(void)
 		Assert(item->m_handler != NULL);
 		if (item->m_handler != NULL) 
 		{
-			
 			SetActionFinished(FALSE);
 
-			
-			
-			
-			
 			m_dispatchedItems->AddTail(item);
 
 			DHEXECUTE		executeType = DHEXECUTE_NORMAL;
@@ -723,7 +718,9 @@ void Director::HandleNextAction(void)
 			    ||
 			       (
 			            !g_theProfileDB->IsUnitAnim()
-			         && g_player[item->GetOwner()]->IsRobot()
+			         &&  item->GetOwner() != -1
+			         &&  g_player[item->GetOwner()] != NULL
+			         &&  g_player[item->GetOwner()]->IsRobot()
 			       )
 			  )
 			{

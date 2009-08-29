@@ -1064,6 +1064,9 @@ public:
 	bool CanBuildLeader(const sint32 type) const;
 	void MergeCivs(sint32 Merger, sint32 Mergee);
 
+	bool HasCostalCities() const;
+	bool HasTransporters() const;
+
 private:
 	/// @ToDo: This is a copy from governor, merge both.
 	struct CityDist

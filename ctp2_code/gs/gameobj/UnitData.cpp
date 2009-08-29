@@ -802,6 +802,17 @@ sint32 UnitData::GetCargoCapacity() const
 	return 0;
 }
 
+sint32 UnitData::GetMaxCargoCapacity() const
+{
+	if (m_cargo_list && GetDBRec()->GetCargoDataPtr())
+	{
+		return std::max<sint32>
+		    (0, GetDBRec()->GetCargoDataPtr()->GetMaxCargo());
+	}
+
+	return 0;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetNumCarried

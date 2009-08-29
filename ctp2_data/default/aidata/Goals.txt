@@ -24,7 +24,7 @@
 #
 #----------------------------------------------------------------------------
 
-# 51
+# 53
 
 // Any changes made to the order, additions or subractions to this
 // file should be reflected in the strategies.txt file!!
@@ -256,6 +256,42 @@ GOAL_SETTLE_SEA {
 
 ## 6 ##########################################################
 
+GOAL_SETTLE_IN_CITY {
+  NeedsEscort
+  HasTransportersOrNoCoastalCities
+
+  SquadClass:Special
+
+  TargetType:City
+  TargetOwner:Self
+
+  Execute   ORDER_SETTLE_IN_CITY
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
+  ChokePointBonus           0
+  UnexploredBonus           0
+  ObsoleteArmyBonus         0
+  TreaspassingArmyBonus     0
+  SmallCitySizeBonus   100000
+
+  ThreatenType:None
+  ThreatenBonus 0
+
+  ForceMatch:Special
+}
+
+## 7 ##########################################################
+
 GOAL_EXPLORE {
   UnGroupFirst
 
@@ -294,7 +330,7 @@ GOAL_EXPLORE {
   ForceMatch:Special
 }
 
-## 7 ##########################################################
+## 8 ##########################################################
 
 GOAL_STEALTH_EXPLORE {
   UnGroupFirst
@@ -336,7 +372,7 @@ GOAL_STEALTH_EXPLORE {
   ForceMatch:Special
 }
 
-## 8 ##########################################################
+## 9 ##########################################################
 
 GOAL_ENSLAVE_SETTLER {
   UnGroupFirst
@@ -374,7 +410,7 @@ GOAL_ENSLAVE_SETTLER {
   ForceMatch:Special
 }
 
-## 9 ##########################################################
+## 10 ##########################################################
 
 GOAL_SLAVE_RAID {
   UnGroupFirst
@@ -413,7 +449,7 @@ GOAL_SLAVE_RAID {
   ForceMatch:Special
 }
 
-## 10 ##########################################################
+## 11 ##########################################################
 
 GOAL_CHOKEPOINT {
   RallyFirst
@@ -449,7 +485,7 @@ GOAL_CHOKEPOINT {
   ForceMatch:Defensive
 }
 
-## 11 ##########################################################
+## 12 ##########################################################
 
 GOAL_PATROL {
   NoTransport
@@ -486,7 +522,7 @@ GOAL_PATROL {
   ForceMatch:Defensive
 }
 
-## 12 ##########################################################
+## 13 ##########################################################
 
 GOAL_CONVERT_CITY {
   AvoidWatchfulCity
@@ -524,7 +560,7 @@ GOAL_CONVERT_CITY {
   ForceMatch:Special
 }
 
-## 13 ##########################################################
+## 14 ##########################################################
 
 GOAL_BIOTERROR_CITY {
   AvoidWatchfulCity
@@ -559,7 +595,7 @@ GOAL_BIOTERROR_CITY {
   ForceMatch:Special
 }
 
-## 14 ##########################################################
+## 15 ##########################################################
 
 GOAL_NANOATTACK_CITY {
   AvoidWatchfulCity
@@ -594,7 +630,7 @@ GOAL_NANOATTACK_CITY {
   ForceMatch:Special
 }
 
-## 15 ##########################################################
+## 16 ##########################################################
 
 GOAL_HARASS_CITY {
   RallyFirst
@@ -634,7 +670,7 @@ GOAL_HARASS_CITY {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 16 ##########################################################
+## 17 ##########################################################
 
 GOAL_BOMBARD {
   SquadClass:CanDefend
@@ -672,7 +708,7 @@ GOAL_BOMBARD {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 17 ##########################################################
+## 18 ##########################################################
 
 GOAL_EXPEL {
   SquadClass:CanAttack
@@ -706,7 +742,7 @@ GOAL_EXPEL {
   ForceMatch:Special
 }
 
-## 18 ##########################################################
+## 19 ##########################################################
 
 GOAL_PILLAGE {
   NoTransport
@@ -742,7 +778,7 @@ GOAL_PILLAGE {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 19 ##########################################################
+## 20 ##########################################################
 
 GOAL_PIRATE {
   NoTransport
@@ -777,7 +813,7 @@ GOAL_PIRATE {
   ForceMatch:Special
 }
 
-## 20 ##########################################################
+## 21 ##########################################################
 
 GOAL_COUNTER_STEALTH {
   NoTransport
@@ -810,6 +846,8 @@ GOAL_COUNTER_STEALTH {
 
   ForceMatch:Special
 }
+
+## 22 ##########################################################
 
 GOAL_GOODY_HUT {
   SquadClass:CanExplore
@@ -847,7 +885,7 @@ GOAL_GOODY_HUT {
   ForceMatch:Special
 }
 
-## 21 ##########################################################
+## 23 ##########################################################
 
 GOAL_PLANT_NUKE {
   AvoidWatchfulCity
@@ -884,7 +922,7 @@ GOAL_PLANT_NUKE {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 22 ##########################################################
+## 24 ##########################################################
 
 GOAL_CREATE_PARK {
   SquadClass:Special
@@ -919,7 +957,7 @@ GOAL_CREATE_PARK {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 23 ##########################################################
+## 25 ##########################################################
 
 GOAL_SOOTHSAY {
   AvoidWatchfulCity
@@ -954,7 +992,7 @@ GOAL_SOOTHSAY {
   ForceMatch:Special
 }
 
-## 24 ##########################################################
+## 26 ##########################################################
 
 GOAL_ESTABLISH_EMBASSY {
   NeedsEscort
@@ -993,7 +1031,7 @@ GOAL_ESTABLISH_EMBASSY {
   ForceMatch:Special
 }
 
-## 25 ##########################################################
+## 27 ##########################################################
 
 GOAL_FRANCHISING {
   SquadClass:Special
@@ -1028,7 +1066,7 @@ GOAL_FRANCHISING {
   ForceMatch:Special
 }
 
-## 26 ##########################################################
+## 28 ##########################################################
 
 GOAL_STEAL_TECHNOLOGY {
   AvoidWatchfulCity
@@ -1065,7 +1103,7 @@ GOAL_STEAL_TECHNOLOGY {
   ForceMatch:Special
 }
 
-## 27 ##########################################################
+## 29 ##########################################################
 
 GOAL_INVESTIGATE_CITY {
   AvoidWatchfulCity
@@ -1102,7 +1140,7 @@ GOAL_INVESTIGATE_CITY {
   ForceMatch:Special
 }
 
-## 28 ##########################################################
+## 30 ##########################################################
 
 GOAL_INCITE_REVOLUTION {
   AvoidWatchfulCity
@@ -1137,7 +1175,7 @@ GOAL_INCITE_REVOLUTION {
   ForceMatch:Special
 }
 
-## 29 ##########################################################
+## 31 ##########################################################
 
 GOAL_INJOIN {
   SquadClass:Special
@@ -1171,7 +1209,7 @@ GOAL_INJOIN {
   ForceMatch:Special
 }
 
-## 30 ##########################################################
+## 32 ##########################################################
 
 GOAL_ASSASSINATE {
   AvoidWatchfulCity
@@ -1206,7 +1244,7 @@ GOAL_ASSASSINATE {
   ForceMatch:Special
 }
 
-## 31 ##########################################################
+## 33 ##########################################################
 
 GOAL_UNDERGROUND_RAILWAY {
   SquadClass:Special
@@ -1241,7 +1279,7 @@ GOAL_UNDERGROUND_RAILWAY {
   ForceMatch:Special
 }
 
-## 32 ##########################################################
+## 34 ##########################################################
 
 GOAL_NUKE_CITY {
   SquadClass:Special
@@ -1276,7 +1314,7 @@ GOAL_NUKE_CITY {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 33 ##########################################################
+## 35 ##########################################################
 
 GOAL_WANDER {
   SquadClass:CanExplore
@@ -1313,7 +1351,7 @@ GOAL_WANDER {
   ForceMatch:Special
 }
 
-## 34 ##########################################################
+## 36 ##########################################################
 
 GOAL_SALLY {
   IsSally
@@ -1348,7 +1386,7 @@ GOAL_SALLY {
   ForceMatch:Offensive
 }
 
-## 35 ##########################################################
+## 37 ##########################################################
 
 GOAL_REFORM {
   SquadClass:CanAttack
@@ -1380,7 +1418,7 @@ GOAL_REFORM {
   ForceMatch:Special
 }
 
-## 36 ##########################################################
+## 38 ##########################################################
 
 GOAL_SUE_FRANCHISE {
   SquadClass:Special
@@ -1413,7 +1451,7 @@ GOAL_SUE_FRANCHISE {
   ForceMatch:Special
 }
 
-## 37 ##########################################################
+## 39 ##########################################################
 
 // Cause military units to pullback towards our city
 //
@@ -1454,7 +1492,7 @@ GOAL_RETREAT {
   ForceMatch:Special 
 }
 
-## 38 ##########################################################
+## 40 ##########################################################
 
 // Cause special units to pullback if no other goal
 //
@@ -1492,45 +1530,7 @@ GOAL_RETREAT_SPECIAL {
   ForceMatch:Special 
 }
 
-## 39 ##########################################################
-
-// Defend our endgame terrain improvements
-GOAL_PROTECT_ENDGAME
-{
-  ExecuteIncrementally
-  NoTransport
-
-  SquadClass:CanAttack
-  SquadClass:CanDefend
-
-  TargetType:Endgame
-  TargetOwner:Self
-
-  Execute   ORDER_MOVE
-
-  ThreatBonus             100
-  EnemyValueBonus           0
-  AlliedValueBonus         50
-  PowerBonus             -100
-  DistanceToHomeBonus       0
-  DistanceToEnemyBonus      0
-  InHomeTerritoryBonus      0
-  NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0
-  WoundedArmyBonus          0
-  NotVisibleBonus           0
-  ChokePointBonus         100
-  UnexploredBonus     -999999
-  ObsoleteArmyBonus       -10
-  TreaspassingArmyBonus     0
-
-  ThreatenType:None
-  ThreatenBonus 0
-
-  ForceMatch:Defensive
-}
-
-## 40 ##########################################################
+## 41 ##########################################################
 
 // Destroy other endgame terrain improvements
 GOAL_DESTROY_ENDGAME
@@ -1569,7 +1569,45 @@ GOAL_DESTROY_ENDGAME
   ForceMatch:Offensive
 }
 
-## 41 ##########################################################
+## 42 ##########################################################
+
+// Defend our endgame terrain improvements
+GOAL_PROTECT_ENDGAME
+{
+  ExecuteIncrementally
+  NoTransport
+
+  SquadClass:CanAttack
+  SquadClass:CanDefend
+
+  TargetType:Endgame
+  TargetOwner:Self
+
+  Execute   ORDER_MOVE
+
+  ThreatBonus             100
+  EnemyValueBonus           0
+  AlliedValueBonus         50
+  PowerBonus             -100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
+  InHomeTerritoryBonus      0
+  NoOwnerTerritoryBonus     0
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       -10
+  TreaspassingArmyBonus     0
+
+  ThreatenType:None
+  ThreatenBonus 0
+
+  ForceMatch:Defensive
+}
+
+## 43 ##########################################################
 
 GOAL_ADVERTISING {
   AvoidWatchfulCity
@@ -1606,7 +1644,7 @@ GOAL_ADVERTISING {
   ForceMatch:Special
 }
 
-## 42 ##########################################################
+## 44 ##########################################################
 
 GOAL_INCITE_UPRISING {
   AvoidWatchfulCity
@@ -1642,7 +1680,7 @@ GOAL_INCITE_UPRISING {
   ForceMatch:Special
 }
 
-## 43 ##########################################################
+## 45 ##########################################################
 
 GOAL_POISON_CITY {
   AvoidWatchfulCity
@@ -1677,7 +1715,7 @@ GOAL_POISON_CITY {
   ForceMatch:Special
 }
 
-## 44 ##########################################################
+## 46 ##########################################################
 
 GOAL_THROW_PARTY {
   NeedsEscort
@@ -1718,7 +1756,7 @@ GOAL_THROW_PARTY {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 45 ##########################################################
+## 47 ##########################################################
 
 GOAL_SUE {
   SquadClass:Special
@@ -1754,7 +1792,7 @@ GOAL_SUE {
   ForceMatch:Special
 }
 
-## 46 ##########################################################
+## 48 ##########################################################
 
 GOAL_INDULGENCE {
   AvoidWatchfulCity
@@ -1791,7 +1829,7 @@ GOAL_INDULGENCE {
   ForceMatch:Special
 }
 
-## 47 ##########################################################
+## 49 ##########################################################
 
 GOAL_FAITH_HEALING {
   SquadClass:Special
@@ -1827,7 +1865,7 @@ GOAL_FAITH_HEALING {
   ForceMatch:Special
 }
 
-## 48 ##########################################################
+## 50 ##########################################################
 
 GOAL_REFUEL {
   SquadClass:Special
@@ -1859,7 +1897,7 @@ GOAL_REFUEL {
   ForceMatch:Special
 }
 
-## 49 ##########################################################
+## 51 ##########################################################
 
 GOAL_PARADROP {
 
@@ -1897,7 +1935,7 @@ GOAL_PARADROP {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
-## 50 ##########################################################
+## 52 ##########################################################
 
 GOAL_RANGED_ATTACK {
   RallyFirst

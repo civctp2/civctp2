@@ -126,6 +126,7 @@ public:
 
     Utility Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const;
 
+    Utility Get_Initial_Priority() const;
     Utility Compute_Raw_Priority();
 
 

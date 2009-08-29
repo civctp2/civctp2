@@ -261,6 +261,7 @@ Strategy {
 
 	// Types of special units that should be built
 	Bit (Record UnitBuildList) SettlerUnitList
+	Bit (Record UnitBuildList) SeaSettlerUnitList
 	Bit (Record UnitBuildList) SpecialUnitList
 	Bit (Record UnitBuildList) SeaTransportUnitList
 	Bit (Record UnitBuildList) AirTransportUnitList
@@ -270,6 +271,9 @@ Strategy {
 	Bit (Int) OffensiveGarrisonCount
 	Bit (Int) DefensiveGarrisonCount
 	Bit (Int) RangedGarrisonCount
+	
+	Bit (Record Goal) DontBuildSettlersIfNoGoal
+	Bit (Record Goal) DontBuildSeaSettlersIfNoGoal
 
 	struct BuildListSequenceElement {
 		// A city that matches more than one criteria uses the one

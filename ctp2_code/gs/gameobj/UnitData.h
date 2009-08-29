@@ -278,6 +278,7 @@ public:
 	sint32 GetType() const { return m_type; };
 	bool CanCarry(const sint32 src) const;
 	sint32 GetCargoCapacity() const;
+	sint32 GetMaxCargoCapacity() const;
 	sint32 GetNumCarried() const;
 	bool CargoHasLandUnits() const;
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],

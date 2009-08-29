@@ -211,13 +211,13 @@ void World::UnsetRiver(const sint32 x, const sint32 y)
 	thisCell->CalcTerrainMoveCost();
 }
 
-sint32 World::IsGood(const MapPoint &pos) const 
+bool World::IsGood(const MapPoint &pos) const 
 {
 	return IsGood(pos.x, pos.y); 
 }
 
 
-sint32 World::IsGood(const sint32 x, const sint32 y) const 
+bool World::IsGood(const sint32 x, const sint32 y) const 
 {
 	sint32 i;
 	return GetCell(x, y)->GetGoodsIndex(i); 

@@ -225,6 +225,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  25  MaxExec  12 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  25  MaxExec   4 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -312,7 +313,7 @@ STRATEGY_DEFAULT {
     AirTransportUnitsCount  1
     SpecialUnitsCount       6
 
-    // Do not certain items in cities where if it takes too many turns
+    // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 30
     MaxUnitBuildTurns 20
     MaxWonderBuildTurns 35
@@ -331,18 +332,19 @@ STRATEGY_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
+
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  0
     RangedGarrisonCount     0
-
-    // For each city with an empty build queue, build from
-    // first sequence that applies
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -582,6 +584,7 @@ STRATEGY_BARBARIAN {
     GoalElement { Goal GOAL_SEIGE               Priority   500000  MaxEval  25	MaxExec  25 } // Maybe remove and so that only the harrass goal is used
     GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval  25  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0	MaxExec   0 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority        0  MaxEval   0	MaxExec   0 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0	MaxExec   0 }
@@ -970,6 +973,8 @@ STRATEGY_CAREFUL_START {
     // Percent of civilization support dedicated to units
     UnitSupportPercent 0.30
 
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   0  MaxExec   0 PerCity }
+
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
     DefensiveGarrisonCount  1
@@ -997,6 +1002,8 @@ STRATEGY_AGRESSIVE_START {
 
     // Percent of civilization support dedicated to units
     UnitSupportPercent 0.30
+
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   0  MaxExec   0 PerCity }
 
     // same as careful start, but with no garrison
     OffensiveGarrisonCount  0
@@ -1077,7 +1084,7 @@ STRATEGY_SETTLE_COMPACT {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
 
     // minimum distance between settled cities
-	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    // (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
     MinSettleDistance   4
 }
 
@@ -1091,7 +1098,7 @@ STRATEGY_SETTLE_LARGE {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
 
     // minimum distance between settled cities
-	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    // (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
     MinSettleDistance   6
 }
 
@@ -1268,6 +1275,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -1355,15 +1363,15 @@ STRATEGY_SCIENTIST_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
-	// Do not certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 30
-	MaxUnitBuildTurns 20
-	MaxWonderBuildTurns 35
+    // Do not build certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 30
+    MaxUnitBuildTurns 20
+    MaxWonderBuildTurns 35
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -1374,10 +1382,14 @@ STRATEGY_SCIENTIST_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_SCIENTIST
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
+
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -1748,6 +1760,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -1835,15 +1848,15 @@ STRATEGY_MILITARIST_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
-	// Do not certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 35
-	MaxUnitBuildTurns 25
-	MaxWonderBuildTurns 35
+    // Do not build certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 35
+    MaxUnitBuildTurns 25
+    MaxWonderBuildTurns 35
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -1854,10 +1867,14 @@ STRATEGY_MILITARIST_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
+
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -2235,6 +2252,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -2322,15 +2340,15 @@ STRATEGY_ECONOMIC_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
-	// Do not certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 35
-	MaxUnitBuildTurns 30
-	MaxWonderBuildTurns 40
+    // Do not build certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 35
+    MaxUnitBuildTurns 30
+    MaxWonderBuildTurns 40
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -2341,10 +2359,14 @@ STRATEGY_ECONOMIC_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECONOMIC
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
+
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -2713,6 +2735,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -2800,15 +2823,15 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       6
 
-	// Do not certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 40
-	MaxUnitBuildTurns 35
-	MaxWonderBuildTurns 45
+    // Do not build certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 40
+    MaxUnitBuildTurns 35
+    MaxWonderBuildTurns 45
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -2819,10 +2842,14 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECOTOPIAN
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
+
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -3191,6 +3218,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority   450000  MaxEval   1  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_EXPLORE             Priority     7000  MaxEval  15  MaxExec   2 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority     7000  MaxEval  15  MaxExec   3 }
     GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority   420000  MaxEval   8  MaxExec   3 }
@@ -3278,15 +3306,15 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       5
 
-	// Do not build certain items in cities where if it takes too many turns
-	MaxSettlerBuildTurns 30
-	MaxUnitBuildTurns 25
-	MaxWonderBuildTurns 35
+    // Do not build certain items in cities where if it takes too many turns
+    MaxSettlerBuildTurns 30
+    MaxUnitBuildTurns 25
+    MaxWonderBuildTurns 35
 
-	// maximum percent of conventional units to build before building
-	// special units of specified type
-	BuildTransportProductionLevel 0.25
-	BuildSettlerProductionLevel 0.25
+    // maximum percent of conventional units to build before building
+    // special units of specified type
+    BuildTransportProductionLevel 0.25
+    BuildSettlerProductionLevel 0.25
 
     // Types of standard units that should be built
     OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
@@ -3297,10 +3325,14 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 
     // Types of special units that should be built
     SettlerUnitList      UNIT_BUILD_LIST_LAND_SETTLER
+    SeaSettlerUnitList   UNIT_BUILD_LIST_SEA_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_DIPLOMATIC
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
+
+    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
+    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -3607,12 +3639,13 @@ STRATEGY_MAXIMUM_NUKES {
 STRATEGY_TOO_MANY_CITIES {
     SettlerUnitsCount       0
 
-    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec  0 }
-    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec  0 }
-    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec  0 }
-    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   1  MaxExec   1 PerCity }
 }
 
 STRATEGY_NO_REVOLUTON {
-    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
 }

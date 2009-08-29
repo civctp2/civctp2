@@ -3265,6 +3265,22 @@ sint32 CityData::GetPossibleBuildingMaxPopIncrease() const
 	return value;
 }
 
+sint32 CityData::GetAllBuildingMaxPopIncrease() const
+{
+	sint32 value = 0;
+
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); ++i)
+	{
+		sint32 raise;
+		if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetRaiseMaxPopulation(raise))
+		{
+			value += raise;
+		}
+	}
+
+	return value;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityData::CalculateGrowthRate
@@ -10976,5 +10992,11 @@ void CityData::AddCitySlum()
 			}
 		}
 	}
+}
+
+bool CityData::IsCoastal() const
+{
+	MapPoint pos = m_home_city.RetPos();
+	return g_theWorld->IsNextToWater(pos.x, pos.y);
 }
 

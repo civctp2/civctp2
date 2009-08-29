@@ -447,7 +447,7 @@ sint32 Agent::GetRounds(const MapPoint & pos, sint32 & cells) const
 bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utility) const
 {
 	Assert(transport);
-	utility = 0.0;
+	utility = 0;
 
 	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->Get_Army().GetData()) <= 0)
 		return false;
