@@ -143,7 +143,7 @@ Strategy {
 	//
 
 	// percent of gold to put into science (ie. SetMaterialsTax)
-	bit(Int) PublicWorksPercent
+	Bit(Int) PublicWorksPercent
 
 	// amount of public works (materials) to keep in reserve
 	Bit(Int) PublicWorksReserve
@@ -297,6 +297,7 @@ Strategy {
 		Bit (Int) SmallCitiesMaxSize // For cities up to this size
 		Bit (Int) MinNumUnits        // Minimum number of units inside of city
 		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
+		Bit (Record BuildingBuildList) HasBuildingsThenStop // Don't use this entry if the city has all the buildings on this list.
 	}
 
 	// for each city with an empty build queue, build from first sequence that applies

@@ -1307,7 +1307,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		}
 		else
 		{
-			valueProd = -1; // Should be lower than everything else
+			valueProd = std::numeric_limits<sint32>::min(); // Should be lower than everything else
 		}
 
 		if(!GoldSliderReachedMin(sliders_setting))
@@ -1319,7 +1319,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		}
 		else
 		{
-			valueGold = -1;
+			valueGold = std::numeric_limits<sint32>::min();
 		}
 
 		if(!FoodSliderReachedMin(sliders_setting))
@@ -1331,7 +1331,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		}
 		else
 		{
-			valueFood = -1;
+			valueFood = std::numeric_limits<sint32>::min();
 		}
 
 		// If all values are good and the people are 
@@ -3975,6 +3975,29 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 	type = m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType;
 }
 
+bool Governor::HasStopBuildings(const StrategyRecord::BuildListSequenceElement* elem, const CityData* cd) const
+{
+	if(elem->HasHasBuildingsThenStop())
+	{
+		const BuildingBuildListRecord* rec = elem->GetHasBuildingsThenStopPtr();
+
+		if(rec == NULL) return false;
+
+		for(sint32 j = 0; j < rec->GetNumBuilding(); ++j)
+		{
+			if(!cd->HasBuilding(rec->GetBuildingIndex(j)))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const
 {
@@ -3996,6 +4019,9 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			strategy.GetBuildListSequenceElement(i);
 
 		if(best_elem && elem->GetPriority() < best_priority)
+			continue;
+
+		if(HasStopBuildings(elem, city))
 			continue;
 
 		if(elem->GetProductionCities())
@@ -4164,7 +4190,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		{
 			continue;
 		}
-		
+
 		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
 		){
@@ -4383,6 +4409,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	sint32 max_production = 0;
 	sint32 needed_production = 0;
 	CellUnitList garrison_army;
+	sint32 cont;
 
 	Scheduler & scheduler = Scheduler::GetScheduler(m_playerId);
 	
@@ -4390,6 +4417,13 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	{
 
 		const BuildUnitList & list_ref = m_buildUnitList[list_num];
+
+		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
+		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
+		){
+			if (!g_theWorld->GetAdjacentOcean(city->GetHomeCity().RetPos(), cont))
+				continue;
+		}
 
 		if
 		  (

@@ -1576,8 +1576,20 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		if(agent_ptr->Get_Army()->CanSettle())
 		{
-			// If there is a settler in the army...
-			return Goal::BAD_UTILITY;
+			if
+			  (
+			       g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
+			    && m_target_city.IsValid()
+			    && g_theWorld->GetCell(m_target_city->GetPos())->GetNumUnits() == 0
+			  )
+			{
+				// Opportunity action march into the city even if the army contains a settler
+			}
+			else
+			{
+				// If there is a settler in the army...
+				return Goal::BAD_UTILITY;
+			}
 		}
 		
 		if(agent_ptr->Get_Army()->IsWounded() && !agent_ptr->Get_Army()->IsObsolete())

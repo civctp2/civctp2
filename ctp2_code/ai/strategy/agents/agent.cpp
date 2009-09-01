@@ -433,7 +433,7 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0
 	}
 
-	Get_Army()->MinMovementPoints(min_move);
+	m_army->MinMovementPoints(min_move);
 
 	// That are bee line move cost not necessarily the real path cost around an island for a shallow water unit.
 	return move_point_cost/min_move;
@@ -449,10 +449,10 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	Assert(transport);
 	utility = 0;
 
-	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->Get_Army().GetData()) <= 0)
+	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->m_army.GetData()) <= 0)
 		return false;
 
-	bool check_continents = !transport->Get_Army().GetMovementTypeAir();
+	bool check_continents = !transport->m_army.GetMovementTypeAir();
 	bool is_land;
 
 	sint16 my_continent;
@@ -480,11 +480,11 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	sint32 tile_count;
 	sint32 trans_rounds = GetRounds(trans_pos, tile_count);
 
-	size_t move_type_bonus = transport->Get_Army()->CountMovementTypeSea() * 1000;
+	size_t move_type_bonus = transport->m_army->CountMovementTypeSea() * 1000;
 
 	utility = move_type_bonus + (trans_rounds * -100) - tile_count;
 
-	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Army()->GetOwner(), -1, -1,
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), -1, -1,
 	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
@@ -583,7 +583,7 @@ void Agent::Execute_Order(const sint32 & order_type, const MapPoint & target_pos
 		                      );
 
 		MapPoint pos;
-		Get_Army()->GetPos(pos);
+		m_army->GetPos(pos);
 		Set_Target_Pos(pos);
 	}
 
@@ -602,7 +602,7 @@ void Agent::Group_Order()
 	                      );
 
 	MapPoint pos;
-	Get_Army()->GetPos(pos);
+	m_army->GetPos(pos);
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 }
@@ -611,7 +611,7 @@ void Agent::Group_With( Agent_ptr second_army )
 {
 	Assert(second_army->Get_Can_Be_Executed());
 
-	Army army = second_army->Get_Army();
+	Army army = second_army->m_army;
 
 	for (sint32 unit_num = army.Num() - 1; unit_num >= 0; unit_num--)
 	{
@@ -626,7 +626,7 @@ void Agent::Group_With( Agent_ptr second_army )
 	}
 
 	MapPoint pos;
-	Get_Army()->GetPos(pos);
+	m_army->GetPos(pos);
 
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
@@ -650,7 +650,7 @@ void Agent::Group_With( Agent_ptr second_army )
 	MapPoint dest_pos = m_goal->Get_Target_Pos();
 
 	sprintf(myString, "Grouping at (%d,%d) to %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
-	g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 
 	delete[] goalString;
 	delete[] myString;
@@ -667,13 +667,13 @@ void Agent::Ungroup_Order()
 	                      );
 
 	MapPoint pos;
-	Get_Army()->GetPos(pos);
+	m_army->GetPos(pos);
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 
 	MBCHAR * myString = new MBCHAR[40];
 	sprintf(myString, "Ungrouping at (%d,%d)", pos.x, pos.y);
-	g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 	delete[] myString;
 }
 
@@ -683,12 +683,12 @@ void Agent::MoveIntoTransport()
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 	                       GEV_BoardTransportOrder,
-	                       GEA_Army, Get_Army(),
+	                       GEA_Army, m_army,
 	                       GEA_End
 	                      );
 
 	MapPoint pos;
-	Get_Army()->GetPos(pos);
+	m_army->GetPos(pos);
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 }
@@ -716,13 +716,13 @@ sint32 Agent::DisbandObsoleteUnits()
 	if (!Get_Can_Be_Executed())
 		return 0;
 	
-	if (!Get_Army()->IsObsolete())
+	if (!m_army->IsObsolete())
 		return 0;
 
-	if (!Get_Army()->IsEntrenched())
+	if (m_army->HasCargo())
 		return 0;
 
-	if (Get_Army()->CanSettle())
+	if (m_army->CanSettle())
 		return 0;
 
 	MapPoint    pos         = Get_Pos();
@@ -760,12 +760,12 @@ sint32 Agent::DisbandObsoleteUnits()
 		}
 
 		Path found_path;
-		if (found && FindPath(Get_Army(), nearest_city_pos, true, found_path))
+		if (found && FindPath(m_army, nearest_city_pos, true, found_path))
 		{
 			const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 
 			PerformOrderHere(order_rec, &found_path);
-			g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
+			g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
 		}
 		return 0;
 	}
@@ -784,7 +784,7 @@ sint32 Agent::DisbandObsoleteUnits()
 	if(order_rec)
 	{
 		PerformOrder(order_rec);
-		g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
+		g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
 	}
 
 	return unit_count;
@@ -794,7 +794,7 @@ void Agent::PerformOrderHere(const OrderRecord * order_rec, const Path * path, G
 {
 	Assert(Get_Can_Be_Executed());
 
-	Get_Army()->PerformOrderHere(order_rec, path, priority);
+	m_army->PerformOrderHere(order_rec, path, priority);
 	Set_Target_Order(order_rec->GetIndex());
 	Set_Target_Pos(path->GetEnd());
 	Set_Can_Be_Executed(false);
@@ -805,8 +805,8 @@ void Agent::PerformOrder(const OrderRecord * order_rec)
 	Assert(Get_Can_Be_Executed());
 
 	MapPoint pos;
-	Get_Army()->GetPos(pos);
-	Get_Army()->PerformOrder(order_rec);
+	m_army->GetPos(pos);
+	m_army->PerformOrder(order_rec);
 	Set_Target_Order(order_rec->GetIndex());
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
@@ -817,13 +817,13 @@ void Agent::WaitHere(const MapPoint & goal_pos)
 	if(Get_Can_Be_Executed())
 	{
 		Set_Can_Be_Executed(false);
-		Get_Army()->ClearOrders();
+		m_army->ClearOrders();
 
 		MapPoint pos;
-		Get_Army()->GetPos(pos);
+		m_army->GetPos(pos);
 		MBCHAR * myString = new MBCHAR[40];
 		sprintf(myString, "Waiting GROUP @ (%d,%d) to GO (%d,%d)", pos.x, pos.y, goal_pos.x, goal_pos.y);
-		g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 		delete[] myString;
 	}
 }
@@ -832,7 +832,7 @@ void Agent::ClearOrders()
 {
 	if(Has_Any_Goal())
 	{
-		Get_Army()->ClearOrders();
+		m_army->ClearOrders();
 
 		const GoalRecord* rec = g_theGoalDB->Get(m_goal->Get_Goal_Type());
 
@@ -848,7 +848,7 @@ void Agent::ClearOrders()
 		}
 
 		MapPoint pos;
-		Get_Army()->GetPos(pos);
+		m_army->GetPos(pos);
 		if(!m_goal->Get_Invalid())
 		{
 			MapPoint dest_pos = m_goal->Get_Target_Pos();
@@ -860,7 +860,7 @@ void Agent::ClearOrders()
 			sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, m_targetPos.x, m_targetPos.y);
 		}
 
-		g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 
 		delete[] goalString;
 		delete[] myString;
@@ -870,6 +870,6 @@ void Agent::ClearOrders()
 bool Agent::HasMovePoints() const
 {
 	double movePoints;
-	Get_Army()->CurMinMovementPoints(movePoints);
+	m_army->CurMinMovementPoints(movePoints);
 	return movePoints >= 1.0;
 }

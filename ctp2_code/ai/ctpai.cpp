@@ -699,6 +699,11 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	if (!args->GetInt(0, cycle))
 		return GEV_HD_Continue;
 
+	cycle++;
+	sint32 diff_cycles = 0;
+	if (g_theGameSettings->GetDifficulty() == (g_theDifficultyDB->NumRecords() - 1))
+		diff_cycles = 2;
+
 	Player *    player_ptr  = g_player[playerId];
 	sint32      round       = player_ptr->GetCurRound();
 	time_t      t1          = GetTickCount();
@@ -727,11 +732,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	scheduler.Match_Resources(player_ptr->IsRobot());
 
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
-
-	cycle++;
-	sint32 diff_cycles = 0;
-	if (g_theGameSettings->GetDifficulty() == (g_theDifficultyDB->NumRecords() - 1))
-		diff_cycles = 2;
 
 	// Modified by Martin Gühmann so that this can be exposed to const.txt
 	if ( cycle < g_theConstDB->Get(0)->GetMaxMatchListCycles() + diff_cycles)

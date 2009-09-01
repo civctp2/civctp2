@@ -86,6 +86,7 @@ class BuildingBuildListRecord;
 class BuildListSequenceRecord;
 class WonderBuildListRecord;
 class StrategyRecord::PopAssignmentElement;
+class StrategyRecord::BuildListSequenceElement;
 class UnitBuildListRecord;
 class SlicContext;
 
@@ -411,7 +412,8 @@ private:
 
 	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const;
 
-	
+	bool HasStopBuildings(const StrategyRecord::BuildListSequenceElement* elem, const CityData* cd) const;
+
 	sint32 GetNeededUnitType(const CityData *city, sint32 & list_num) const;
 
 	

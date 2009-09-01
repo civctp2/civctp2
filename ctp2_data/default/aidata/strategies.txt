@@ -360,6 +360,7 @@ STRATEGY_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -992,6 +993,7 @@ STRATEGY_CAREFUL_START {
     BuildListSequenceElement {
         Priority -12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -1022,6 +1024,7 @@ STRATEGY_AGRESSIVE_START {
     BuildListSequenceElement {
         Priority -12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -1410,6 +1413,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -1895,6 +1899,7 @@ STRATEGY_MILITARIST_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES_MILITARIST_STOP
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -2025,7 +2030,7 @@ STRATEGY_MILITARIST_DEFAULT {
     // RangedMatch  - ratio of army's ranged strength to target's ranged strength
     // BombardMatch - ratio of army's bombard strength to target's bombard strength
     // ValueMatch   - ratio of army's value to target's value
-	
+
     Offensive {
         AttackMatch   0.6
         DefenseMatch  0.2
@@ -2387,6 +2392,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -2870,6 +2876,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
@@ -3353,6 +3360,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     BuildListSequenceElement {
         Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_SMALL_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
         Advice BUILD_GROWTH_ADVICE
