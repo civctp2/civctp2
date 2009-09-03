@@ -3985,7 +3985,7 @@ bool Governor::HasStopBuildings(const StrategyRecord::BuildListSequenceElement* 
 
 		for(sint32 j = 0; j < rec->GetNumBuilding(); ++j)
 		{
-			if(!cd->HasBuilding(rec->GetBuildingIndex(j)))
+			if(!cd->HasBuilding(rec->GetBuildingIndex(j)) && cd->CanBuildBuilding(j))
 			{
 				return false;
 			}
@@ -4012,7 +4012,20 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	const StrategyRecord::BuildListSequenceElement *best_elem = NULL;
 	sint32 best_priority = -99999;
 
+	sint32 pollution = city->GetPollution();
+	sint32 minPollution;
+
+	bool canBuildWonders = false;
 	sint32 i;
+	for(i = 0; i < g_theWonderDB->NumRecords(); ++i)
+	{
+		if(city->CanBuildWonder(i))
+		{
+			canBuildWonders = true;
+			break;
+		}
+	}
+
 	for(i = 0; i < strategy.GetNumBuildListSequenceElement(); i++)
 	{
 		StrategyRecord::BuildListSequenceElement const * elem =
@@ -4022,6 +4035,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			continue;
 
 		if(HasStopBuildings(elem, city))
+			continue;
+
+		if(elem->GetMinPollution(minPollution) && pollution < minPollution)
+			continue;
+
+		if(elem->GetCanBuildWonders() && !canBuildWonders)
 			continue;
 
 		if(elem->GetProductionCities())
@@ -4070,9 +4089,13 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			// Do nothing
 		}
 
+		else if(elem->HasMinPollution())
+		{
+			// Do nothing
+		}
+
 		else if( elem->GetDefault() )
 		{
-
 			if (best_elem == NULL)
 			{
 				best_priority = elem->GetPriority();
@@ -4124,6 +4147,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		    && city->GetMaxPop() - value <= citySize
 		    && city->GetPossibleBuildingMaxPopIncrease() > 0
 		  )
+		{
+			best_priority = elem->GetPriority();
+			best_elem     = elem;
+		}
+
+		if(elem->GetAllCities())
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
@@ -4193,6 +4222,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
+		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 		){
 			if (!g_theWorld->GetAdjacentOcean(city->GetHomeCity().RetPos(), cont))
 				continue;
@@ -4420,6 +4450,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
+		|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 		){
 			if (!g_theWorld->GetAdjacentOcean(city->GetHomeCity().RetPos(), cont))
 				continue;

@@ -286,6 +286,7 @@ Strategy {
 		// city criteria
 		Bit (Float) Top              // Top percent of cities
 		Bit (Float) Bottom           // Bottom percent of cities
+		Bit AllCities                // All cities
 		Bit ProductionCities         // Based on production
 		Bit GrowthCities             // Based growth
 		Bit CommerceCities           // Based on commerce income
@@ -298,6 +299,8 @@ Strategy {
 		Bit (Int) MinNumUnits        // Minimum number of units inside of city
 		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
 		Bit (Record BuildingBuildList) HasBuildingsThenStop // Don't use this entry if the city has all the buildings on this list.
+		Bit (Int) MinPollution       // Minimum Pollution needed to use this list
+		Bit CanBuildWonders          // Only applied if there are wonders buildable
 	}
 
 	// for each city with an empty build queue, build from first sequence that applies

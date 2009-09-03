@@ -771,6 +771,7 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Weltwunder (Dipl.)"
 BUILD_LIST_SEQUENCE_BARBARIAN			"Einheiten"
 BUILD_LIST_SEQUENCE_SMALL_CITIES		"Kleine St‰dte"
 BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE		"Maximalgroﬂe St‰dte"
+BUILD_LIST_SEQUENCE_DIRTY_CITIES		"Umweltverschmutzung"
 
 ##Risk strings moved from junk_str.txt ##
 RISK_NO_DANGER_HERE				"Keine Gefahr"

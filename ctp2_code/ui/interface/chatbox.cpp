@@ -436,7 +436,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					return FALSE;
 			}
 			
-			if (g_player[player])
+			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
 		}
 	}
@@ -462,7 +462,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 			else
 			{
-				if(g_player[player])
+				if(player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
 		}

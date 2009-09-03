@@ -368,6 +368,15 @@ STRATEGY_DEFAULT {
 
     BuildListSequenceElement {
         Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 300
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
         BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
         Advice BUILD_GROWTH_ADVICE
         BeforeMaxCitySize 2
@@ -674,6 +683,7 @@ STRATEGY_BARBARIAN {
 	// For each city with an empty build queue, build from first sequence that applies
 
     BuildListSequenceElement {
+        Priority 20000
         BuildListSequence BUILD_LIST_SEQUENCE_BARBARIAN
         Top 1.0
         ProductionCities
@@ -1427,6 +1437,15 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 200
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
         Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         Top 0.4
@@ -1910,6 +1929,15 @@ STRATEGY_MILITARIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
         Advice BUILD_GROWTH_ADVICE
         BeforeMaxCitySize 2
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 500
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
     }
 
     BuildListSequenceElement {
@@ -2406,6 +2434,15 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 400
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
         Priority 5000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         Top 0.4
@@ -2890,6 +2927,15 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 100
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
         Priority 6000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         Top 0.4
@@ -3371,6 +3417,15 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE
         Advice BUILD_GROWTH_ADVICE
         BeforeMaxCitySize 2
+    }
+
+    BuildListSequenceElement {
+        Priority 12000
+        BuildListSequence BUILD_LIST_SEQUENCE_DIRTY_CITIES
+        HasBuildingsThenStop BUILDING_BUILD_LIST_DIRTY_CITIES
+        MinPollution 300
+        AllCities
+        Advice BUILD_GROWTH_ADVICE
     }
 
     BuildListSequenceElement {

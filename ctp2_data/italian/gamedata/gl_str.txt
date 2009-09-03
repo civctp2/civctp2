@@ -771,6 +771,7 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
 BUILD_LIST_SEQUENCE_BARBARIAN			"Units"
 BUILD_LIST_SEQUENCE_SMALL_CITIES		"Small Cities"
 BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE		"Maxiumum Sized Cities"
+BUILD_LIST_SEQUENCE_DIRTY_CITIES		"Pollution"
 
 ##Risk strings moved from junk_str.txt ##
 RISK_NO_DANGER_HERE				"Nessun pericolo qui"
