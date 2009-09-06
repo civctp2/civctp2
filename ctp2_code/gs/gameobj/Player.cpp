@@ -2759,33 +2759,50 @@ void Player::DelTailPathOrder(sint32 index)
 }
 
 bool Player::GetNearestCity(const MapPoint &pos, Unit &nearest, 
-							  double &distance, bool butNotThisOne, const sint32 continent)
+							  double &distance, bool butNotThisOne, const sint32 continent, bool mustHaveRoom)
 {
-    sint32 j, n;
-    MapPoint cpos, diff; 
-    double d; 
+	sint32 j, n;
+	MapPoint cpos, diff;
+	double d;
 	sint32 cont;
 
-    
-    if (g_theWorld->HasCity(pos) && !butNotThisOne) {
-       nearest = g_theWorld->GetCity(pos);
-       if (nearest.GetOwner() == m_owner) { 
-           distance = 0; 
-           return true; 
-       } 
-    }
+	if
+	  (
+	        g_theWorld->HasCity(pos)
+	    && !butNotThisOne
+	    &&
+	       (
+	            !mustHaveRoom
+	         ||
+	            (
+	                 mustHaveRoom
+	              && g_theWorld->GetCell(pos)->GetNumUnits() < k_MAX_ARMY_SIZE
+	            )
+	       )
+	  )
+	{
+		nearest = g_theWorld->GetCity(pos);
+		if(nearest.GetOwner() == m_owner)
+		{
+			distance = 0;
+			return true;
+		}
+	}
 
-    nearest.m_id = (0); 
-    distance = -1.0; 
-    n = m_all_cities->Num(); 
-    
-    for (j=0; j<n; j++) { 
-        m_all_cities->Get(j).GetPos(cpos); 
+	nearest.m_id = (0);
+	distance = -1.0;
+	n = m_all_cities->Num();
+
+	for(j = 0; j < n; j++)
+	{
+		m_all_cities->Get(j).GetPos(cpos);
 		if(cpos == pos && butNotThisOne)
 			continue;
-		
-		
-		if (continent != -1)
+
+		if(mustHaveRoom && g_theWorld->GetCell(cpos)->GetNumUnits() == k_MAX_ARMY_SIZE)
+			continue;
+
+		if(continent != -1)
 		{
 			cont = g_theWorld->GetContinent(cpos);
 			if (cont != continent)
@@ -2794,12 +2811,12 @@ bool Player::GetNearestCity(const MapPoint &pos, Unit &nearest,
 
 		d = MapPoint::GetSquaredDistance(pos, cpos);
 
-        if (distance == -1.0 || d < distance) 
-        {
-            distance = d; 
-            nearest = m_all_cities->Get(j);
-        }
-    }
+		if(distance == -1.0 || d < distance)
+		{
+			distance = d;
+			nearest = m_all_cities->Get(j);
+		}
+	}
 
 	
 	if (distance > -1.0)
@@ -2923,11 +2940,16 @@ bool Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint3
 	bool foundOne = false;
 	sint32 cont;
 
-	for(i = 0; i < m_allInstallations->Num(); i++) {
+	for(i = 0; i < m_allInstallations->Num(); i++)
+	{
 		chkpos = m_allInstallations->Access(i).RetPos();
-		if(terrainutil_HasAirfield(chkpos)) {
-			
-			if (continent != -1)
+		if(terrainutil_HasAirfield(chkpos))
+		{
+
+			if(g_theWorld->GetCell(chkpos)->GetNumUnits() == k_MAX_ARMY_SIZE)
+				continue;
+
+			if(continent != -1)
 			{
 				cont = g_theWorld->GetContinent(chkpos);
 				if (cont != continent)
@@ -2936,7 +2958,8 @@ bool Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint3
 
 			d = MapPoint::GetSquaredDistance(src, chkpos);
 
-			if(mindist == -1.0 || d < mindist) {
+			if(mindist == -1.0 || d < mindist)
+			{
 				mindist = d;
 				dest = chkpos;
 				foundOne = true;

@@ -3199,7 +3199,7 @@ str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
 str_ldl_version "2004-07-26"
 str_ldl_RANKING_POLLUTION		"汚染"
-str_ldl_RANKING_WONDER		"七不思議"
+str_ldl_RANKING_WONDERS		"七不思議"
 
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"

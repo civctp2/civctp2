@@ -340,7 +340,9 @@ Governor::Governor(PLAYER_INDEX const & playerId)
 	m_playerId                  (playerId),
 	m_currentUnitCount          (),
 	m_neededFreight             (0.0),
-	m_tileImprovementGoals      ()
+	m_tileImprovementGoals      (),
+	m_canBuildLandSettlers      (false),
+	m_canBuildSeaSettlers       (false)
 { ; }
 
 //----------------------------------------------------------------------------
@@ -365,7 +367,9 @@ Governor::Governor(Governor const & copyme)
 	m_playerId                  (copyme.m_playerId),
 	m_currentUnitCount          (),
 	m_neededFreight             (copyme.m_neededFreight),
-	m_tileImprovementGoals      ()
+	m_tileImprovementGoals      (),
+	m_canBuildLandSettlers      (copyme.m_canBuildLandSettlers),
+	m_canBuildSeaSettlers       (copyme.m_canBuildSeaSettlers)
 {
 	std::copy(copyme.m_currentUnitCount.begin(),
 	          copyme.m_currentUnitCount.end(),
@@ -3732,14 +3736,17 @@ void Governor::ComputeDesiredUnits()
 
 void Governor::FillEmptyBuildQueues(bool noWarChange)
 {
-    Player *    player  = g_player[m_playerId];
+	Player *    player  = g_player[m_playerId];
 	Assert(player);
 	if (player == NULL)
 		return;
 
 	RebuildCapitol();
 	ComputeDesiredUnits();
-	
+
+	m_canBuildLandSettlers = SettleMap::s_settleMap.HasSettleTargets(m_playerId, false);
+	m_canBuildSeaSettlers  = SettleMap::s_settleMap.HasSettleTargets(m_playerId, true );
+
 	if (g_network.IsActive() && !g_network.IsLocalPlayer(m_playerId))
 		return;
 
@@ -4273,34 +4280,18 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
 			{
-				if(canBuildSettlers)
+				if(canBuildSettlers && m_canBuildLandSettlers)
 				{
-					sint32 goalIndex = -1;
-					if
-					  (
-					       !strategy.GetDontBuildSettlersIfNoGoalIndex(goalIndex)
-					    ||  scheduler.CountGoalsOfType(goalIndex) > 0
-					  )
-					{
-						max_list = static_cast<BUILD_UNIT_LIST>(list_num);
-						break;
-					}
+					max_list = static_cast<BUILD_UNIT_LIST>(list_num);
+					break;
 				}
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER)
 			{
-				if(canBuildSettlers)
+				if(canBuildSettlers && m_canBuildSeaSettlers)
 				{
-					sint32 goalIndex = -1;
-					if
-					  (
-					       !strategy.GetDontBuildSeaSettlersIfNoGoalIndex(goalIndex)
-					    ||  scheduler.CountGoalsOfType(goalIndex) > 0
-					  )
-					{
-						max_list = static_cast<BUILD_UNIT_LIST>(list_num);
-						break;
-					}
+					max_list = static_cast<BUILD_UNIT_LIST>(list_num);
+					break;
 				}
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL)
@@ -4494,12 +4485,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			   && garrisonPercent > build_settler_production_level
 			  )
 			{
-				sint32 goalIndex = -1;
-				if
-				  (
-				       strategy.GetDontBuildSettlersIfNoGoalIndex(goalIndex)
-				    && scheduler.CountGoalsOfType(goalIndex) == 0
-				  )
+				if(!m_canBuildLandSettlers)
 				{
 					continue;
 				}
@@ -4519,14 +4505,10 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			  (
 			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 			   && garrisonPercent > build_settler_production_level
+			   && this->m_canBuildSeaSettlers
 			  )
 			{
-				sint32 goalIndex = -1;
-				if
-				  (
-				       strategy.GetDontBuildSeaSettlersIfNoGoalIndex(goalIndex)
-				    && scheduler.CountGoalsOfType(goalIndex) == 0
-				  )
+				if(!m_canBuildSeaSettlers)
 				{
 					continue;
 				}

@@ -74,7 +74,7 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 	{
 		case kRankingScientific:
 		{
-			return a_Strengths.GetTurnStrength(STRENGTH_CAT_KNOWLEDGE,   a_Turn);
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_KNOWLEDGE,    a_Turn);
 		}
 		case kRankingMilitary:
 		{
@@ -118,13 +118,17 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 		}
 		case kRankingWonders:
 		{
-			return a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,      a_Turn);
 		}
 		case kRankingEconomic:
 		{
 			return a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn)
 			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,    a_Turn)
 			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,      a_Turn);
+		}
+		case kRankingProduction:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
 		}
 		case kRankingOverall:
 		{
@@ -137,11 +141,11 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 		default:
 		{
 			Assert(false);
-			return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNITS,       a_Turn)
-			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,        a_Turn)
-			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,   a_Turn)
-			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,     a_Turn)
-			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,  a_Turn);
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNITS,        a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,    a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,      a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
 		}
 	}
 
@@ -614,9 +618,19 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 	SetGraphBounds(minRound, curRound, minPower, maxPower);
 	HasIndicator(false);
 
-	sint32 color[k_MAX_PLAYERS];
-
 	sint32 i;
+	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
+	{
+		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
+		{
+			infoYCount++;
+		}
+	}
+
+	sint32* color = new sint32[infoYCount + g_deadPlayer->GetCount()];
+
+	infoYCount = 0;
+
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
@@ -624,7 +638,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 			color[infoYCount++] = g_colorSet->ComputePlayerColor(i);
 		}
 	}
-	
+
 	for
 	(
 	    PointerList<Player>::Walker walk(g_deadPlayer);
@@ -658,7 +672,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 	sint32 playerCount = 0;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
-		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
+		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
 		{
 			for (sint32 round = 0 ; round < infoXCount ; ++round)
 			{
@@ -697,5 +711,6 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 	SetLineData(infoYCount, infoXCount, (*infoGraphData), color);
 	SetGraphBounds(minRound, curRound, minPower, maxPower);
 	RenderGraph();
-}
 
+	delete color;
+}

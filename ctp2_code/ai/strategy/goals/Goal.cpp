@@ -2712,7 +2712,7 @@ bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) c
 
 		sint32 distance_to_refuel;
 		sint32 distance_to_target;
-		MapPoint refuel_pos;
+		MapPoint refuel_pos(-1, -1);
 		CtpAi::GetNearestRefuel(army, target_pos, refuel_pos, distance_to_refuel);
 
 		distance_to_target = 
@@ -3141,7 +3141,10 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			found = Agent::FindPath(the_transport->Get_Army(), dest_pos, check_dest, found_path);
 
 			if (found && FollowPathToTask(the_transport, the_army, dest_pos, found_path) )
+			{
+				pos = dest_pos;
 				return true;
+			}
 		}
 
 		break;
@@ -3216,6 +3219,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 
 		if (dest_pos == start_pos)
 		{
+			the_army->Set_Can_Be_Executed(true);
 			the_army->MoveIntoTransport();
 
 			return true;
@@ -3456,6 +3460,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 
 	if (move_success)
 	{
+		Assert(!the_army->Get_Can_Be_Executed())
 		the_army->Set_Can_Be_Executed(false);
 	}
 

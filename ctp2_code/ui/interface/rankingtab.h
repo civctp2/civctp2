@@ -73,6 +73,7 @@ private:
 	sint32          m_rankingEconomic;
 	sint32          m_rankingScientific;
 	sint32          m_rankingPollution;
+	sint32          m_rankingWonders;
 	sint32          m_rankingOverall;
 
 	

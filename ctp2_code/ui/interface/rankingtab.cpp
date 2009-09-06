@@ -88,6 +88,7 @@ RankingTab::RankingTab(ctp2_Window *parent)
 //  m_rankingEconomic    (0), // Initialized seperately
 //  m_rankingScientific  (0), // Initialized seperately
 //  m_rankingPollution   (0), // Initialized seperately
+//  m_rankingWonders     (0), // Initialized seperately
 //  m_rankingOverall     (0), // Initialized seperately
 {
 	Assert(m_rankingDropDown);
@@ -103,6 +104,8 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	m_rankingScientific = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_POLLUTION");
 	m_rankingPollution = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_WONDERS");
+	m_rankingWonders = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_OVERALL");
 	m_rankingOverall = counter++;
 
@@ -251,6 +254,8 @@ void RankingTab::UpdateGraph()
 		category = kRankingScientific;
 	else if (category == m_rankingPollution)
 		category = kRankingPollution;
+	else if (category == m_rankingWonders)
+		category = kRankingWonders;
 
 	sint32 infoXCount = 0;
 	m_infoGraph->GenrateGraph(infoXCount, m_infoYCount, &m_infoGraphData, category);

@@ -2037,18 +2037,18 @@ bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos,
 	max_squared_dist *= max_squared_dist;
 	sint32 squared_distance = max_squared_dist;
 	
-	for (sint32 i = 0; i < num_armies; i++)
+	for(sint32 i = 0; i < num_armies; i++)
 	{
 		Army    tmp_army = player_ptr->m_all_armies->Access(i);
 		Assert( tmp_army.IsValid() );
-		if ( !tmp_army.IsValid() )
+		if( !tmp_army.IsValid() )
 			continue;
 
-		if (tmp_army->NumUnitsCanMoveIntoThisTransport(*tmp_army.GetData()) != tmp_army->Num())
+		if(!tmp_army->CanMoveIntoThisTransport(*tmp_army.GetData()))
 			continue;
 			
 		sint32 tmp_squared_distance = MapPoint::GetSquaredDistance(tmp_army->RetPos(), army->RetPos());
-		if (tmp_squared_distance < squared_distance)
+		if(tmp_squared_distance < squared_distance)
 		{
 			squared_distance = tmp_squared_distance;
 			carrier_pos      = tmp_army->RetPos();
@@ -2075,7 +2075,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 
 	Unit city;
 	double distance;
-	if (player->GetNearestCity(start_pos, city, distance))
+	if (player->GetNearestCity(start_pos, city, distance, false, -1, true))
 	{
 		refueling_distance = static_cast<sint32>(distance);
 		refueling_pos = city.RetPos();

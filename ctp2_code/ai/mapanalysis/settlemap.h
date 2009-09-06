@@ -79,6 +79,8 @@ public:
 	void GetSettleTargets(const PLAYER_INDEX &player, 
 	                      SettleMap::SettleTargetList & targets) const;
 
+	bool HasSettleTargets(const PLAYER_INDEX &player, bool isWater) const;
+
 	bool CanSettlePos(const MapPoint & rc_pos) const;
 
 	void SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle);

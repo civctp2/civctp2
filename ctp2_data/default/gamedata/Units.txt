@@ -3246,6 +3246,7 @@ UNIT_SEA_ENGINEER {
    IgnoreZOC
    NoZoc
    SettleCityType UNIT_OCEAN_CITY
+   SettleSize 3
    CanBeExpelled
    CantCaptureCity
    DeathEffectsHappy
@@ -3262,6 +3263,11 @@ UNIT_SEA_ENGINEER {
    SoundWork SOUND_WORK_SEA_ENGINEER
    SoundVictory SOUND_VICTORY_SEA_ENGINEER
    SoundDeath SOUND_DEATH_SEA_ENGINEER
+   SettleBuilding IMPROVE_ACADEMY
+   SettleBuilding IMPROVE_COURTHOUSE
+   SettleBuilding IMPROVE_GRANARY
+   SettleBuilding IMPROVE_SHRINE
+   SettleBuilding IMPROVE_THEATER
 
    CanSee: Standard
    CanSee: Underwater

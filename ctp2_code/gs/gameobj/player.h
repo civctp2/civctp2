@@ -499,7 +499,7 @@ public:
 	sint32  GetMaxCityCount() const;
 	sint32  GetNumTileimps() const; //emod
 	bool    GetNearestCity(const MapPoint &pos, Unit &nearest, double &distance,
-	                       bool butNotThisOne = false, const sint32 continent = -1);
+	                       bool butNotThisOne = false, const sint32 continent = -1, bool mustHaveRoom = false);
 	bool    GetSlaveCity(const MapPoint &pos, Unit &city);
 
 	bool    GetNearestFort(const MapPoint &src, MapPoint &dest);

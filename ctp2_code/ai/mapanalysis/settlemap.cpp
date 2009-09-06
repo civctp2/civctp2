@@ -202,8 +202,53 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
 }
 
+bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) const
+{
+	BoundingRect rect =
+		MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
 
-void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId, 
+	if (!rect.IsValid())
+		return false;
+
+	rect.Expand( 10 );
+
+	MapPoint xy_pos(0,0);
+	MapPoint rc_pos(0,0);
+	SettleTarget settle_target;
+
+	sint16 rows = rect.GetMaxRows();
+	sint16 cols = rect.GetMaxCols();
+
+	sint32 settle_threshold = 0;
+	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
+
+	for(sint32 i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	{
+#if defined(USE_WORLDSIZE_CLASS)
+		rc_pos.xy2rc(xy_pos, g_theWorld->GetSize());
+#else
+		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
+#endif
+
+		if(!CanSettlePos(rc_pos))
+			continue;
+
+		if(m_settleValues.GetGridValue(rc_pos) <= settle_threshold)
+		{
+			continue;
+		}
+
+		if(g_theWorld->IsWater(rc_pos) == isWater)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+/*
+// Some experimental code that seems to make it worse for the AI
+void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 								 SettleMap::SettleTargetList & targets) const
 {
 	BoundingRect rect =
@@ -351,6 +396,230 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	SettleMap::SettleTargetList::iterator iter  = targets.begin();
 	SettleMap::SettleTargetList::iterator tmp_iter;
 
+	++iter;
+
+	while(iter != targets.end())
+	{
+		tmp_iter = targets.begin();
+		while(tmp_iter != iter)
+		{
+			if
+			  (
+			    MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
+			                   (min_settle_distance * min_settle_distance)
+			  )
+			{
+				if(iter->m_value >= tmp_iter->m_value)
+				{
+					tmp_iter = targets.erase(tmp_iter);
+				}
+				else
+				{
+					iter = targets.erase(iter);
+y					--iter;
+					break;
+				}
+			}
+			else
+			{
+				++tmp_iter;
+			}
+		}
+
+		++iter;
+	}
+
+	iter  = targets.begin();
+	++iter;
+
+	while (iter != targets.end())
+	{
+		g_theWorld->GetContinent(iter->m_pos, cont, is_land);
+
+#ifdef _DEBUG
+                  if (is_land) {Assert(cont < max_land_cont);}
+                  else {Assert(cont < max_water_cont);}
+#endif _DEBUG
+		Assert(cont >= 0);
+
+		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||  
+			(!is_land && (water_continent_count[cont] >= k_targets_per_continent)))
+		{
+			iter = targets.erase(iter);
+		}
+		else
+		{
+			if (is_land)
+			{
+				if (land_continent_count[cont] == 0)
+				{
+					iter->m_value += 2;
+				}
+				land_continent_count[cont]++;
+			}
+			else
+			{
+				if (water_continent_count[cont] == 0)
+				{
+					iter->m_value += 2;
+				}
+				water_continent_count[cont]++;
+			}
+
+			++iter;
+		}
+	}
+
+	targets.sort(std::greater<SettleTarget>()); // Should have been sorted already
+}*/
+
+void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
+								 SettleMap::SettleTargetList & targets) const
+{
+	BoundingRect rect =
+		MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
+
+	if (!rect.IsValid())
+		return;
+
+	rect.Expand( 10 );
+
+	MapPoint xy_pos(0,0);
+	MapPoint rc_pos(0,0);
+	SettleTarget settle_target;
+
+	sint16 rows = rect.GetMaxRows();
+	sint16 cols = rect.GetMaxCols();
+
+	sint32 settle_threshold = 0;
+	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
+
+	Player *player_ptr = g_player[playerId];
+	Assert(player_ptr);
+	if(!player_ptr)
+		return;
+
+	sint32 numTerrain = g_theTerrainDB->NumRecords();
+	bool* settleTerrainTypes = new bool[numTerrain];
+	std::fill(settleTerrainTypes, settleTerrainTypes + numTerrain, false);
+
+	bool noSettleUnits = true;
+	Unit unit;
+	sint32 i;
+
+	Assert(player_ptr->m_all_units);
+	for(i = 0; i < player_ptr->m_all_units->Num(); ++i)
+	{
+		unit = player_ptr->m_all_units->Access(i);
+		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
+		
+		Assert(rec);
+		if(!rec) continue;
+
+		if(rec->GetNumCanSettleOn() > 0)
+		{
+			for(sint32 j = 0; j < rec->GetNumCanSettleOn(); ++j){
+				settleTerrainTypes[rec->GetCanSettleOnIndex(j)] = true;
+				noSettleUnits = false;
+			}
+		}
+		else
+		{
+			for(sint32 j = 0; j < numTerrain; ++j)
+			{
+				const TerrainRecord* trec = g_theTerrainDB->Get(j);
+				if(trec->GetMovementTypeLand()                                        && rec->GetSettleLand()
+				|| trec->GetMovementTypeMountain()                                    && rec->GetSettleMountain()
+				||(trec->GetMovementTypeSea() || trec->GetMovementTypeShallowWater()) && rec->GetSettleWater()
+				|| trec->GetMovementTypeSpace()                                       && rec->GetSettleSpace()
+				){
+					settleTerrainTypes[j] = true;
+					noSettleUnits = false;
+				}
+			}
+		}
+	}
+
+	if(noSettleUnits)
+	{
+		delete [] settleTerrainTypes;
+		return;
+	}
+
+	for(i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	{
+#if defined(USE_WORLDSIZE_CLASS)
+		rc_pos.xy2rc(xy_pos, g_theWorld->GetSize());
+#else
+		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
+#endif
+
+		settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
+		settle_target.m_pos = rc_pos;
+
+		if(g_graphicsOptions->IsCellTextOn())
+		{
+			char buf[16];
+			sprintf(buf,"*%4.0f*",settle_target.m_value);
+			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+		}
+
+
+		if(!CanSettlePos(rc_pos))
+			continue;
+
+		if(settle_target.m_value <= settle_threshold)
+		{
+			if (g_graphicsOptions->IsCellTextOn())
+			{
+				char buf[16];
+				sprintf(buf,"(%4.0f)",settle_target.m_value);
+				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+			}
+
+			continue;
+		}
+
+		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
+			continue;
+
+		if(g_graphicsOptions->IsCellTextOn())
+		{
+			char buf[16];
+			sprintf(buf,"%4.0f",settle_target.m_value);
+			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+		}
+
+		targets.push_back(settle_target);
+	}
+
+	delete [] settleTerrainTypes;
+
+	if (targets.empty())
+	{
+		return;
+	}
+
+	targets.sort(std::greater<SettleTarget>());
+
+	sint16 max_water_cont = g_theWorld->GetMaxWaterContinent() - g_theWorld->GetMinWaterContinent();
+	sint16 max_land_cont  = g_theWorld->GetMaxLandContinent () - g_theWorld->GetMinLandContinent ();
+
+	
+	std::vector<sint16> water_continent_count(max_water_cont, 0);
+	std::vector<sint16>  land_continent_count(max_land_cont,  0);
+	bool   is_land;
+	sint16 cont;
+
+	
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
+	sint32 min_settle_distance = 0;
+	(void) strategy.GetMinSettleDistance(min_settle_distance);
+
+	
+	SettleMap::SettleTargetList::iterator iter  = targets.begin();
+	SettleMap::SettleTargetList::iterator tmp_iter;
+
 	settle_target = *iter;  // non-emptyness verified before
 	++iter;
 
@@ -412,7 +681,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 
 	targets.sort(std::greater<SettleTarget>());
 }
-
 
 bool SettleMap::CanSettlePos(const MapPoint & rc_pos) const
 {

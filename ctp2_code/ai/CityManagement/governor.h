@@ -78,6 +78,7 @@ class Governor;
 
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "StrategyRecord.h" // StrategyRecord
+#include "SettleMap.h"
 
 class Path;
 class CivArchive;
@@ -342,8 +343,10 @@ public:
 
 	
 	void ManageGoodsTradeRoutes();
-	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type) const
+	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type)
 	{
+		m_canBuildLandSettlers = SettleMap::s_settleMap.HasSettleTargets(m_playerId, false);
+		m_canBuildSeaSettlers  = SettleMap::s_settleMap.HasSettleTargets(m_playerId, true );
 		sint32 list_num = BUILD_UNIT_LIST_MAX;
 		ComputeNextBuildItem(city, cat, type, list_num);
 	};
@@ -506,6 +509,8 @@ private:
 	double              m_neededFreight;
 	/// Currently considered tile improvements
 	TiGoalQueue         m_tileImprovementGoals;
+	bool                m_canBuildLandSettlers;
+	bool                m_canBuildSeaSettlers;
 };
 
 #endif
