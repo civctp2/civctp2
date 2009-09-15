@@ -311,7 +311,9 @@ STRATEGY_DEFAULT {
     SettlerUnitsCount       4
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  1
-    SpecialUnitsCount       6
+    SlaveryUnitsCount       6
+    SpyUnitsCount           3
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 30
@@ -336,10 +338,9 @@ STRATEGY_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
@@ -660,10 +661,12 @@ STRATEGY_BARBARIAN {
 	AirUnitsPercent       0.00
 
 	// Number of special units that should be built
-	SettlerUnitsCount 0
+	SettlerUnitsCount      0
 	SeaTransportUnitsCount 1
 	AirTransportUnitsCount 0
-	SpecialUnitsCount 5
+	SlaveryUnitsCount      5
+	SpyUnitsCount          3
+	SpecialUnitsCount      2
 
 	// Do not certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 0
@@ -836,7 +839,9 @@ STRATEGY_ATTACK {
     // Number of special units that should be built
     SeaTransportUnitsCount 6
     AirTransportUnitsCount 4
-    SpecialUnitsCount      8
+    SlaveryUnitsCount      5
+    SpyUnitsCount          3
+    SpecialUnitsCount      2
 
     // Types of special units that should be built
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
@@ -1374,7 +1379,9 @@ STRATEGY_SCIENTIST_DEFAULT {
     SettlerUnitsCount       4
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
-    SpecialUnitsCount       6
+    SlaveryUnitsCount       6
+    SpyUnitsCount           3
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 30
@@ -1399,10 +1406,9 @@ STRATEGY_SCIENTIST_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_SCIENTIST
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -1869,7 +1875,9 @@ STRATEGY_MILITARIST_DEFAULT {
     SettlerUnitsCount       1
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
-    SpecialUnitsCount       6
+    SlaveryUnitsCount       6
+    SpyUnitsCount           3
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 35
@@ -1894,10 +1902,9 @@ STRATEGY_MILITARIST_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -2371,7 +2378,9 @@ STRATEGY_ECONOMIC_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
-    SpecialUnitsCount       6
+    SlaveryUnitsCount       6
+    SpyUnitsCount           3
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 35
@@ -2396,10 +2405,9 @@ STRATEGY_ECONOMIC_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECONOMIC
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -2864,7 +2872,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
-    SpecialUnitsCount       6
+    SlaveryUnitsCount       6
+    SpyUnitsCount           3
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 40
@@ -2889,10 +2899,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECOTOPIAN
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
@@ -3357,7 +3366,9 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SettlerUnitsCount       2
     SeaTransportUnitsCount  6
     AirTransportUnitsCount  2
-    SpecialUnitsCount       5
+    SlaveryUnitsCount       5
+    SpyUnitsCount           2
+    SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
     MaxSettlerBuildTurns 30
@@ -3382,10 +3393,9 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_NAVAL_SPECIAL
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_DIPLOMATIC
+    SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
+    SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_ANTISLAVERY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
-
-    DontBuildSettlersIfNoGoal    GOAL_SETTLE_LAND
-    DontBuildSeaSettlersIfNoGoal GOAL_SETTLE_SEA
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1

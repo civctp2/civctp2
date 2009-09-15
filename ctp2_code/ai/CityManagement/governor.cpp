@@ -3437,19 +3437,19 @@ void Governor::ComputeDesiredUnits()
 		unit = player_ptr->m_all_cities->Get(city_index);
 
 		if (unit.IsValid())
-        {
-            BuildQueue * buildQueue = 
-                unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
-		    Assert(buildQueue);
+		{
+			BuildQueue * buildQueue = 
+			    unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
+			Assert(buildQueue);
 			if (    buildQueue
 			     && buildQueue->GetHead()
 			     && k_GAME_OBJ_TYPE_UNIT == buildQueue->GetHead()->m_category
-               ) 
-		    {
-			    m_currentUnitCount[buildQueue->GetHead()->m_type]++;
-		    }
-        }
-	} 
+			   )
+			{
+				m_currentUnitCount[buildQueue->GetHead()->m_type]++;
+			}
+		}
+	}
 
 	m_maximumUnitShieldCost = 0;
 	m_currentUnitShieldCost = 0;
@@ -3459,15 +3459,16 @@ void Governor::ComputeDesiredUnits()
 	
 	for (int list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
-		m_buildUnitList[list_num].m_perCityGarrison = 0;
-		m_buildUnitList[list_num].m_desiredCount    = 0;
-		m_buildUnitList[list_num].m_maximumCount    = 0;
+		m_buildUnitList[list_num].m_perCityGarrison =  0;
+		m_buildUnitList[list_num].m_desiredCount    =  0;
+		m_buildUnitList[list_num].m_maximumCount    =  0;
+		m_buildUnitList[list_num].m_bestType        = -1;
+
+		sint32 desired_count                        =  0;
+		sint32 garrison_count                       =  0;
+		double unit_support_percent_by_type         =  0.0;
 
 		build_list_rec = GetBuildListRecord(strategy, (BUILD_UNIT_LIST) list_num);
-
-		sint32 desired_count                        = 0;
-		sint32 garrison_count                       = 0;
-		double unit_support_percent_by_type         = 0.0;
 
 		switch (list_num)
 		{
@@ -3517,6 +3518,16 @@ void Governor::ComputeDesiredUnits()
 			strategy.GetSettlerUnitsCount(desired_count);
 			break;
 
+		case BUILD_UNIT_LIST_SLAVERY:
+			if(!strategy.GetSlaveryUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
+		case BUILD_UNIT_LIST_SPY:
+			if(!strategy.GetSpyUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
 		case BUILD_UNIT_LIST_SPECIAL:
 			strategy.GetSpecialUnitsCount(desired_count);
 			break;
@@ -3551,6 +3562,9 @@ void Governor::ComputeDesiredUnits()
 			Assert(false);
 			break;
 		}
+
+		if(build_list_rec == NULL)
+			continue;
 
 		sint32 best_unit_type = ComputeBestUnitType(build_list_rec);
 		m_buildUnitList[list_num].m_bestType = best_unit_type;
@@ -3620,7 +3634,9 @@ void Governor::ComputeDesiredUnits()
 			{
 				m_buildUnitList[list_num].m_maximumCount = 	0;
 			}
-			
+
+		case BUILD_UNIT_LIST_SLAVERY:
+		case BUILD_UNIT_LIST_SPY:
 		case BUILD_UNIT_LIST_SPECIAL:
 		case BUILD_UNIT_LIST_FREIGHT:
 			if (best_unit_type >= 0)
@@ -3648,9 +3664,9 @@ void Governor::ComputeDesiredUnits()
 				if (m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount == 0) 
 				{
 					m_buildUnitList[list_num].m_desiredCount = 
-						static_cast<sint16>(desired_count
+					    static_cast<sint16>(desired_count
 					                        - m_currentUnitCount[best_unit_type]
-                                           );
+					                       );
 				}
 			}
 			break;
@@ -3660,7 +3676,7 @@ void Governor::ComputeDesiredUnits()
 			Assert(false);
 			break;
 		}
-	} 
+	}
 
 	m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount = 0;
 	m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount = 0;
@@ -3850,6 +3866,8 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 	{
 		if(static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SETTLER
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_SETTLER
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SLAVERY
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPY
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPECIAL
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4218,6 +4236,8 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		if( !g_player[m_playerId]->IsRobot()
 		&& (   static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4294,7 +4314,12 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 					break;
 				}
 			}
-			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL)
+			else if
+			  (
+			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
+			  )
 			{
 				if(canBuildSettlers)
 				{
@@ -4337,47 +4362,55 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 	{
 	case BUILD_UNIT_LIST_OFFENSE:
 		Assert(strategy.HasOffensiveUnitList());
-		return strategy.GetOffensiveUnitListPtr();
+		return strategy.HasOffensiveUnitList() ? strategy.GetOffensiveUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_DEFENSE:
 		Assert(strategy.HasDefensiveUnitList());
-		return strategy.GetDefensiveUnitListPtr();
+		return strategy.HasDefensiveUnitList() ? strategy.GetDefensiveUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_RANGED:
 		Assert(strategy.HasRangedUnitList());
-		return strategy.GetRangedUnitListPtr();
+		return strategy.HasRangedUnitList() ? strategy.GetRangedUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SEA:
 		Assert(strategy.HasSeaUnitList());
-		return strategy.GetSeaUnitListPtr();
+		return strategy.HasSeaUnitList() ? strategy.GetSeaUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_AIR:
 		Assert(strategy.HasAirUnitList());
-		return strategy.GetAirUnitListPtr();
+		return strategy.HasAirUnitList() ? strategy.GetAirUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SETTLER:
 		Assert(strategy.HasSettlerUnitList());
-		return strategy.GetSettlerUnitListPtr();
+		return strategy.HasSettlerUnitList() ? strategy.GetSettlerUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SEA_SETTLER:
 		Assert(strategy.HasSeaSettlerUnitList());
-		return strategy.GetSeaSettlerUnitListPtr();
+		return strategy.HasSeaSettlerUnitList() ? strategy.GetSeaSettlerUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_SLAVERY:
+		Assert(strategy.HasSlaverUnitList());
+		return strategy.HasSlaverUnitList() ? strategy.GetSlaverUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_SPY:
+		Assert(strategy.HasSpyUnitList());
+		return strategy.HasSpyUnitList() ? strategy.GetSpyUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:
 		Assert(strategy.HasSpecialUnitList());
-		return strategy.GetSpecialUnitListPtr();
+		return strategy.HasSpecialUnitList() ? strategy.GetSpecialUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SEA_TRANSPORT:
 		Assert(strategy.HasSeaTransportUnitList());
-		return strategy.GetSeaTransportUnitListPtr();
+		return strategy.HasSeaTransportUnitList() ? strategy.GetSeaTransportUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_AIR_TRANSPORT:
 		Assert(strategy.HasAirTransportUnitList());
-		return strategy.GetAirTransportUnitListPtr();
+		return strategy.HasAirTransportUnitList() ? strategy.GetAirTransportUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_FREIGHT:
 		Assert(strategy.HasFreightUnitList());
-		return strategy.GetFreightUnitListPtr();
+		return strategy.HasFreightUnitList() ? strategy.GetFreightUnitListPtr() : NULL;
 
 	default:
 		Assert(false);
@@ -4454,6 +4487,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 		  )
 		{
 			needed_production = 0;
+			continue;
 		}
 		else if ( city->GetGarrisonComplete() )
 		{
@@ -4526,7 +4560,10 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else if
 			  (
-			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
+			   (    static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
+			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
+			   )
 			   && garrisonPercent > build_settler_production_level
 			  )
 			{
@@ -4572,12 +4609,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
 			{
-				sint32 goalIndex = -1;
-				if
-				  (
-				       strategy.GetDontBuildSettlersIfNoGoalIndex(goalIndex)
-				    && scheduler.CountGoalsOfType(goalIndex) == 0
-				  )
+				if(!m_canBuildLandSettlers)
 				{
 					continue;
 				}
@@ -4598,12 +4630,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER)
 			{
-				sint32 goalIndex = -1;
-				if
-				  (
-				       strategy.GetDontBuildSeaSettlersIfNoGoalIndex(goalIndex)
-				    && scheduler.CountGoalsOfType(goalIndex) == 0
-				  )
+				if(!m_canBuildSeaSettlers)
 				{
 					continue;
 				}
@@ -4622,7 +4649,12 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					}
 				}
 			}
-			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL)
+			else if
+			  (
+			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
+			  )
 			{
 				if(garrisonComplte >= 1.0)
 				{
@@ -4655,7 +4687,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 		}
 
-		if ( needed_production > max_production ) 
+		if ( needed_production > max_production )
 		{
 			max_production = needed_production;
 			max_list = (BUILD_UNIT_LIST) list_num;
@@ -4672,7 +4704,11 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 		if (!city->CanBuildUnit(type))
 		{
 			const UnitBuildListRecord *build_list_rec = GetBuildListRecord(strategy, max_list);
-			type = ComputeBestUnitType(build_list_rec, city);
+
+			if(build_list_rec != NULL)
+			{
+				type = ComputeBestUnitType(build_list_rec, city);
+			}
 		}
 	}
 

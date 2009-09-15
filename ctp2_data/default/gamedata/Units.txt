@@ -1179,7 +1179,7 @@ UNIT_CYBER_NINJA {
 
    InvestigateCity {
       Chance 0.75
-      EliteChance 0.1
+      EliteChance 0.2
       DeathChance 0.25
    }
 
