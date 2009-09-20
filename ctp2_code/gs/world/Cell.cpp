@@ -60,6 +60,7 @@
 #include "TradeDynArr.h"
 #include "cellunitlist.h"
 #include "Unit.h"
+#include "UnitData.h"
 #include "UnitPool.h"
 #include "player.h"
 #include "terrainutil.h"
@@ -830,6 +831,24 @@ sint32 Cell::GetNumUnits() const
 	return m_unit_army ? m_unit_army->Num() : 0;
 }
 
+sint32 Cell::GetNumFortifiedUnits() const
+{
+	sint32 numFortifiedUnits = 0;
+
+	if(m_unit_army != NULL)
+	{
+		for(sint32 i = 0; i < m_unit_army->Num(); ++i)
+		{
+			if(m_unit_army->Get(i)->IsEntrenched() || m_unit_army->Get(i)->IsEntrenching())
+			{
+				++numFortifiedUnits;
+			}
+		}
+	}
+
+	return numFortifiedUnits;
+}
+
 void Cell::GetArmy(CellUnitList &al)
 {
 	if(m_unit_army)
@@ -861,8 +880,6 @@ Unit &Cell::AccessUnit(sint32 index)
 
 void Cell::SetCity(const Unit &c)
 {
-	
-	
 	m_city.m_id = c.m_id;
 	if(c.m_id != 0) {
 		m_env |= (k_BIT_ENV_CITY | k_BIT_ENV_CITY_RADIUS);

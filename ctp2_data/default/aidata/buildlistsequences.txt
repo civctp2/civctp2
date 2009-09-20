@@ -261,8 +261,8 @@ BUILD_LIST_SEQUENCE_WONDERS {
 }
 
 BUILD_LIST_SEQUENCE_HAPPINESS {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
   BuildListElement { AllUnitBuildList }
@@ -328,7 +328,6 @@ BUILD_LIST_SEQUENCE_DEFAULT {
 }
 
 BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
@@ -337,6 +336,7 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -367,7 +367,6 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
 }
 
 BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
@@ -376,6 +375,7 @@ BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -406,7 +406,6 @@ BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
 }
 
 BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
@@ -415,6 +414,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -445,7 +445,6 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
 }
 
 BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
@@ -454,6 +453,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -484,7 +484,6 @@ BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
 }
 
 BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
-  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
@@ -493,6 +492,7 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }

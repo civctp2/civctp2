@@ -4010,7 +4010,7 @@ bool Governor::HasStopBuildings(const StrategyRecord::BuildListSequenceElement* 
 
 		for(sint32 j = 0; j < rec->GetNumBuilding(); ++j)
 		{
-			if(!cd->HasBuilding(rec->GetBuildingIndex(j)) && cd->CanBuildBuilding(j))
+			if(!cd->HasBuilding(rec->GetBuildingIndex(j)) && cd->CanBuildBuilding(rec->GetBuildingIndex(j)))
 			{
 				return false;
 			}
@@ -4040,6 +4040,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 pollution = city->GetPollution();
 	sint32 minPollution;
 
+	sint32 minNumUnits;
+
 	bool canBuildWonders = false;
 	sint32 i;
 	for(i = 0; i < g_theWonderDB->NumRecords(); ++i)
@@ -4067,6 +4069,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		if(elem->GetCanBuildWonders() && !canBuildWonders)
 			continue;
+
+		if(elem->GetMinNumUnits(minNumUnits))
+		{
+			if(g_theWorld->GetCell(city->GetHomeCity()->GetPos())->GetNumUnits() < minNumUnits)
+				continue;
+		}
 
 		if(elem->GetProductionCities())
 		{
@@ -4153,11 +4161,10 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		sint32 cityMaxSize;
 		sint32 citySize;
-		sint32 minNumUnits = elem->GetMinNumUnits(minNumUnits) ? minNumUnits : -1;
 		city->GetPop(citySize);
 
-		if(    g_theWorld->GetCell(city->GetHomeCity()->GetPos())->GetNumUnits() >= minNumUnits
-		    && elem->GetSmallCitiesMaxSize(cityMaxSize)
+		if(
+		       elem->GetSmallCitiesMaxSize(cityMaxSize)
 		    && cityMaxSize >= citySize
 		   )
 		{

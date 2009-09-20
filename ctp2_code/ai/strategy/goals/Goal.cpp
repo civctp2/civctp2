@@ -2552,10 +2552,12 @@ bool Goal::Get_Totally_Complete() const
 
 	// Try to steal technology only if the other civ has more advances than player
 	// Otherwise, spy can do anything else
-	// Problem there might be techs we don't have.
 	if (order_record->GetUnitPretest_CanStealTechnology())
 	{
-		if (g_player[m_playerId]->NumAdvances() > g_player[target_owner]->NumAdvances())
+		sint32 num = 0;
+		g_player[m_playerId]->m_advances->CanAskFor(g_player[target_owner]->m_advances, num);
+
+		if(num <= 0)
 			return true;
 	}
 

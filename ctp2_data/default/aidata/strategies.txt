@@ -247,7 +247,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
@@ -416,9 +416,10 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -432,8 +433,10 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
@@ -1315,7 +1318,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1484,17 +1487,10 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 0
-        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
-        ProductionCities
-        Advice BUILD_WONDERS_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -1510,6 +1506,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     BuildListSequenceElement {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
@@ -1811,7 +1808,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1980,17 +1977,10 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 0
-        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
-        ProductionCities
-        Advice BUILD_WONDERS_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -2006,6 +1996,7 @@ STRATEGY_MILITARIST_DEFAULT {
     BuildListSequenceElement {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
@@ -2314,7 +2305,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   550000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2483,17 +2474,10 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 0
-        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
-        ProductionCities
-        Advice BUILD_WONDERS_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -2509,6 +2493,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     BuildListSequenceElement {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
@@ -2808,7 +2793,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2977,17 +2962,10 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 0
-        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
-        ProductionCities
-        Advice BUILD_WONDERS_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -3003,6 +2981,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     BuildListSequenceElement {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
@@ -3302,8 +3281,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   750000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   530000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -3471,17 +3450,10 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 0
-        BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
-        Top 0.1 
-        ProductionCities
-        Advice BUILD_WONDERS_ADVICE
-    }
-
-    BuildListSequenceElement {
-        Priority 8000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
-        Top 0.1 
+        MinNumUnits 2
+        Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
     }
@@ -3497,6 +3469,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     BuildListSequenceElement {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        MinNumUnits 2
         Bottom 0.1
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE

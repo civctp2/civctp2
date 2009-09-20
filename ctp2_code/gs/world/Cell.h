@@ -234,6 +234,7 @@ public:
 	void SetCanalTunnel(sint32 level);
 
 	sint32 GetNumUnits() const;
+	sint32 GetNumFortifiedUnits() const;
 	void GetArmy(CellUnitList &al);
 	CellUnitList *UnitArmy();
 	Unit &AccessUnit(sint32 index);
