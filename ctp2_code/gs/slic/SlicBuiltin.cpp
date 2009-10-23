@@ -54,36 +54,32 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 #include "SlicBuiltin.h"
-#include "SlicSymbol.h"
 
-
-#include "TurnCnt.h"
-#include "SelItem.h"
-
+#include "AdvanceRecord.h"
 #include "Army.h"
-#include "player.h"
-#include "UnitDynArr.h"
-#include "UnitRecord.h"
-#include "TerrImprove.h"
+#include "BuildingRecord.h"
+#include "c3math.h"             // AsPercentage
+#include "CityControlPanel.h"
+#include "citydata.h"
 #include "Civilisation.h"
 #include "CivilisationRecord.h"
+#include "Diplomat.h"
+#include "GovernmentRecord.h"
+#include "player.h"
+#include "Readiness.h"
+#include "ResourceRecord.h"
+#include "SelItem.h"
+#include "SlicSymbol.h"
 #include "StrDB.h"
-#include "BuildingRecord.h"
+#include "TerrImprove.h"
+#include "TurnCnt.h"
+#include "TurnYearStatus.h"
+#include "UnitData.h"
+#include "UnitDynArr.h"
+#include "UnitRecord.h"
 #include "WonderRecord.h"
 #include "wonderutil.h"
-#include "AdvanceRecord.h"
-#include "ResourceRecord.h"
-
-#include "TurnYearStatus.h"
-
-#include "citydata.h"
-#include "CityControlPanel.h"
-#include "UnitData.h"
-#include "GovernmentRecord.h"
-#include "Diplomat.h"
-#include "Readiness.h"
 
 #define DEF_MAKECOPY(t) \
 	SlicStructMemberData *MakeCopy(SlicStructInstance *parent) {\
@@ -311,7 +307,7 @@ SlicStruct_Unit::SlicStruct_Unit() :
 	AddMember("hp", new UnitSymbol_HP);
 	AddMember("valid", new UnitSymbol_Valid);
 	AddMember("name", new UnitSymbol_Name);
-	AddMember("actualmaxhp", new UnitSymbol_ActualMaxHP);
+	AddAccessor("actualmaxhp", new UnitSymbol_ActualMaxHP);
 }
 
 
@@ -614,10 +610,12 @@ class PlayerSymbol_Government : public SlicStructMemberData {
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
 		if (res)
-        {
-            value = g_player[pl] ? g_player[pl]->m_government_type : -1;
+		{
+			value = (g_player[pl])
+			      ? g_player[pl]->m_government_type
+			      : CTPRecord::INDEX_INVALID;
 		}
-        return res;
+		return res;
 	}
 };
 
@@ -1207,16 +1205,8 @@ class PlayerSymbol_PublicWorksTax : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if (res)
-		{
-			value = static_cast<sint32>(g_player[pl]->m_materialsTax * 100.0);
-			return TRUE;
-		}
-		else
-		{
-			value = 0;
-			return FALSE;
-		}
+		value = (res) ? AsPercentage(g_player[pl]->m_materialsTax) : 0;
+		return res;
 	}
 };
 
@@ -1227,18 +1217,9 @@ class PlayerSymbol_PublicWorksLevel : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(res)
-			{
-			value = g_player[pl]->GetMaterialsStored();
-			return TRUE;
-			}
-		else
-			{
-			value = 0;
-			return FALSE;
-			}
-		}
-
+		value = (res) ? g_player[pl]->GetMaterialsStored() : 0;
+		return res;
+	}
 };
 
 
