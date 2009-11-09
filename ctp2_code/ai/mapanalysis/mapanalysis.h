@@ -26,6 +26,7 @@
 //
 // - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
 //   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,6 +73,7 @@ public:
 
 	
 	void BeginTurn();
+	void RecalcCityRanks(sint32 player);
 
 #if !defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
 	sint32 GetThreat              (const sint32 & player, const MapPoint & pos) const;
@@ -144,12 +146,12 @@ public:
 
 	void DebugLog() const;
 
-	double GetProductionRank(const CityData *city, const bool & all_players) const;
-	double GetGrowthRank(const CityData *city, const bool & all_players) const;
-	double GetCommerceRank(const CityData *city, const bool & all_players) const;
-	double GetHappinessRank(const CityData *city) const;
-	double GetThreatRank(const CityData *city) const;
-	double GetPowerRank(const CityData *city) const;
+	double GetProductionRank(const CityData *city) const;
+	double GetGrowthRank    (const CityData *city) const;
+	double GetCommerceRank  (const CityData *city) const;
+	double GetHappinessRank (const CityData *city) const;
+	double GetThreatRank    (const CityData *city) const;
+	double GetPowerRank     (const CityData *city) const;
 
 	
 	void UpdateBoundingRectangle(const Army & army);
@@ -323,24 +325,17 @@ private:
 	
 	Sint16Vector m_piracyIncomeMatrix;
 
-	Sint32Vector m_minCityProduction;
-	Sint32Vector m_maxCityProduction;
-	sint32 m_minCityProductionAll;
-	sint32 m_maxCityProductionAll;
+	sint32 m_minCityProduction;
+	sint32 m_minCityGrowth;
+	sint32 m_minCityGold;
+	sint32 m_minCityHappiness;
 
-	Sint32Vector m_minCityGrowth;
-	Sint32Vector m_maxCityGrowth;
-	sint32 m_minCityGrowthAll;
-	sint32 m_maxCityGrowthAll;
-	
-	Sint32Vector m_minCityGold;
-	Sint32Vector m_maxCityGold;
-	sint32 m_minCityGoldAll;
-	sint32 m_maxCityGoldAll;
+	sint32 m_maxCityProduction;
+	sint32 m_maxCityGrowth;
+	sint32 m_maxCityGold;
+	sint32 m_maxCityHappiness;
 
-	Sint32Vector m_minCityHappiness;
-	Sint32Vector m_maxCityHappiness;
-
+	// Should be replaced by simple integers, too
 	Sint32Vector m_minCityThreat;
 	Sint32Vector m_maxCityThreat;
 

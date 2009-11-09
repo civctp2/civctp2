@@ -9220,6 +9220,7 @@ Costes:
 [WONDER_PENICILLIN_STATISTICS]
 Da:
 Mejora del <L:DATABASE_CONCEPTS,CONCEPT_GROWTH>crecimiento<e> de un imperio
+Increases the food production of every city in the host empire by {WonderDB(Wonder[0]).IncreaseFoodAllCities}%
 [END]
 
 [WONDER_PENICILLIN_GAMEPLAY]

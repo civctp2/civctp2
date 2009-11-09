@@ -1234,16 +1234,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
-	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn %d\n", round));
-	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
-
-	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
-
-	MapAnalysis::GetMapAnalysis().BeginTurn();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
-
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
 	if (player_ptr->IsRobot() &&
 		gaia_controller && gaia_controller->CanBuildTowers(false))
@@ -1303,6 +1293,16 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
+
+	t1 = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
+	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn %d\n", round));
+	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
+
+	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
+
+	MapAnalysis::GetMapAnalysis().BeginTurn();
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	AddSettleTargets (player);
 	AddExploreTargets(player);

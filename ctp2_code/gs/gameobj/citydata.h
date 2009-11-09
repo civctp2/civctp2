@@ -762,7 +762,7 @@ public:
 	bool SendSlaveTo(Unit &dest);
 	void SetFullHappinessTurns(sint32 turns);
 
-	sint32 GetHappinessFromPops();
+	sint32 GetHappinessFromPops() const;
 #if !defined(NEW_RESOURCE_PROCESS)
 	sint32 GetScienceFromPops(bool considerOnlyFromTerrain = false) const;
 #endif

@@ -2667,8 +2667,7 @@ void CityData::ComputeSpecialistsEffects()
 	sint32 totalProd = GetProdFromRing(-1);
 	sint32 totalGold = GetGoldFromRing(-1);
 
-	sint32 i;
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+	for(sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
 		m_farmersEff[i]     = (m_foodFromOnePop - m_crimeFoodLossOfOnePop) - m_net_food * (static_cast<double>(m_ringFood[i]) / static_cast<double>(totalFood));
 		m_laborersEff[i]    = (m_prodFromOnePop - m_crimeProdLossOfOnePop - m_bioinfectionProdLossOfOnePop - m_franchiseProdLossOfOnePop) - m_net_production * (static_cast<double>(m_ringProd[i]) / static_cast<double>(totalProd));
 		m_merchantsEff[i]   = (m_goldFromOnePop - m_crimeGoldLossOfOnePop - m_conversionGoldLossOfOnePop) - m_net_gold * (static_cast<double>(m_ringGold[i]) / static_cast<double>(totalGold));
@@ -2705,15 +2704,8 @@ double CityData::ProcessFood(sint32 food) const
 	
 	///////////////////////////////////////////////
 	// Apply wonder boni
-
-	// @MartinG - I changed this because the original was also changed,
-	// to match the great library description of the Penicillin wonder.
-	// Which is to increase food by 30 units, not by 30%.
-	//grossFood += grossFood * (wonderutil_GetIncreaseFoodAllCities(
-	//                   g_player[m_owner]->m_builtWonders) / 100.0);
-
-	grossFood += wonderutil_GetIncreaseFoodAllCities(
-	                   g_player[m_owner]->m_builtWonders);
+	grossFood += grossFood * (wonderutil_GetIncreaseFoodAllCities(
+	                   g_player[m_owner]->m_builtWonders) / 100.0);
 
 	///////////////////////////////////////////////
 	// Add food from citizen
@@ -2857,7 +2849,10 @@ double CityData::ProcessScie(sint32 science) const
 	// Add science from citizen
 	// No science from citizen. Maybe something to add.
 
-	if(grossScience < 0.0) {
+	///////////////////////////////////////////////
+	// Science cannot be negative
+	if(grossScience < 0.0)
+	{
 		grossScience = 0.0;
 	}
 
@@ -3028,8 +3023,8 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus, m_owner);
 	grossFood += producedFood * foodBonus;
 
-	grossFood += wonderutil_GetIncreaseFoodAllCities(
-			g_player[m_owner]->m_builtWonders);
+	grossFood += grossFood * (wonderutil_GetIncreaseFoodAllCities(
+	                   g_player[m_owner]->m_builtWonders) / 100.0);
 
 	if(!considerOnlyFromTerrain && m_specialistDBIndex[POP_FARMER] >= 0) {
 		grossFood += FarmerCount() *
@@ -3236,7 +3231,6 @@ void CityData::EatFood()
 
 sint32 CityData::GetBuildingOvercrowdingBonus() const
 {
-	
 	sint32 level = 0;
 	buildingutil_GetRaiseOvercrowdingLevel(GetEffectiveBuildings(), level, m_owner);
 	return level;
@@ -3412,7 +3406,7 @@ bool CityData::GrowOrStarve()
 				{
 					SlicObject *so = new SlicObject("911CityWillStarveInitialWarning") ;
 					so->AddRecipient(GetOwner()) ;
-		            so->AddCity(m_home_city) ;
+					so->AddCity(m_home_city) ;
 					so->AddPlayer(m_owner);
 					g_slicEngine->Execute(so) ;
 				}
@@ -7207,7 +7201,7 @@ void CityData::SetFullHappinessTurns(sint32 turns)
 	m_happy->SetFullHappinessTurns(turns);
 }
 
-sint32 CityData::GetHappinessFromPops()
+sint32 CityData::GetHappinessFromPops() const
 {
 	return (m_specialistDBIndex[POP_ENTERTAINER] < 0) 
            ? 0

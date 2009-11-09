@@ -301,7 +301,9 @@ Strategy {
 		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
 		Bit (Record BuildingBuildList) HasBuildingsThenStop // Don't use this entry if the city has all the buildings on this list.
 		Bit (Int) MinPollution       // Minimum Pollution needed to use this list
+		Bit (Int) MaxRawHappiness    // Maximum Happiness allowed without entertainers and sliders to use this list
 		Bit CanBuildWonders          // Only applied if there are wonders buildable
+		Bit NoUnits                  // Ignores GarrisonUnitBuildList and AllUnitBuildList from the build list sequence
 	}
 
 	// for each city with an empty build queue, build from first sequence that applies

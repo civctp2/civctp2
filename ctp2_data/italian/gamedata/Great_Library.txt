@@ -9196,6 +9196,7 @@ Costa:
 [WONDER_PENICILLIN_STATISTICS]
 Assegna:
 Migliora la <L:DATABASE_CONCEPTS,CONCEPT_GROWTH>crescita<e> dell'impero
+Increases the food production of every city in the host empire by {WonderDB(Wonder[0]).IncreaseFoodAllCities}%
 [END]
 
 [WONDER_PENICILLIN_GAMEPLAY]

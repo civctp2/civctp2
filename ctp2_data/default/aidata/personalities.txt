@@ -58,7 +58,7 @@ PERSONALITY_KAHN {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
   MaxIslandSize 100 // Maximum tiles an island has so that the following startegy is used.
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_MILITARIST Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -109,7 +109,7 @@ PERSONALITY_GHANDI {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_DIPLOMATIC Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -161,7 +161,7 @@ PERSONALITY_STALIN {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_MILITARIST Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -210,7 +210,7 @@ PERSONALITY_CEASAR {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_MILITARIST Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -259,7 +259,7 @@ PERSONALITY_DEGAULLE {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_MILITARIST Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -309,7 +309,7 @@ PERSONALITY_MEDICI {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_ECONOMIC   Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -359,7 +359,7 @@ PERSONALITY_TELLER {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_SCIENTIST  Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -411,7 +411,7 @@ PERSONALITY_STRANGELOVE {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_SCIENTIST  Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -461,7 +461,7 @@ PERSONALITY_CALLENBACH {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_ECOTOPIAN  Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
@@ -511,7 +511,7 @@ PERSONALITY_NADER {
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_ECOTOPIAN  Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }

@@ -416,7 +416,7 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         MinNumUnits 2
         Top 0.1
@@ -438,8 +438,19 @@ STRATEGY_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {
@@ -776,7 +787,7 @@ STRATEGY_SEIGE {
 	DistanceModifierFactor		     -150
 
     BuildListSequenceElement {
-        Priority 11000 //WW from 10500
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.5   //WW from .35
         ProductionCities
@@ -784,7 +795,7 @@ STRATEGY_SEIGE {
     }
 
     BuildListSequenceElement {
-        Priority 10500 //WW from 11000
+        Priority 10000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
         Top 0.2       //WW from .35
         ThreatenedCities
@@ -880,7 +891,7 @@ STRATEGY_ATTACK {
 	PreemptiveStrikeSuperiorityRatio 0.75
 
     BuildListSequenceElement {
-        Priority 11000        //WW from 10500
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.5   //WW from .35
         ProductionCities
@@ -888,7 +899,7 @@ STRATEGY_ATTACK {
     }
 
     BuildListSequenceElement {
-        Priority 10500        //WW from 11000
+        Priority 10000
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
         Top 0.2       //WW from .35
         ThreatenedCities
@@ -951,7 +962,7 @@ STRATEGY_DEFEND {
     GoalElement { Goal GOAL_BOMBARD             Priority   452000  MaxEval   5  MaxExec   3 }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 10000
         BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
         Top 0.5 //WW from .35
         ProductionCities
@@ -959,7 +970,7 @@ STRATEGY_DEFEND {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 10500
         BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
         Top 0.5 //WW from .7 
         ThreatenedCities
@@ -1049,6 +1060,12 @@ STRATEGY_AGRESSIVE_START {
     }
 }
 
+////////////////////////////////////////
+//
+//  Island Attribute Strategies
+//
+////////////////////////////////////////
+
 STRATEGY_ISLAND_NATION {
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.30
@@ -1065,6 +1082,86 @@ STRATEGY_ISLAND_NATION {
 	BuildSettlerProductionLevel	0.20 
 }
 
+
+STRATEGY_ISLAND_MILITARIST {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 6
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
+
+STRATEGY_ISLAND_DIPLOMATIC {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 6
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
+
+STRATEGY_ISLAND_ECONOMIC {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 6
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
+
+STRATEGY_ISLAND_SCIENTIST {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 6
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
+
+STRATEGY_ISLAND_ECOTOPIAN {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 6
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
 
 ////////////////////////////////////////
 //
@@ -1487,7 +1584,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
         MinNumUnits 2
         Top 0.1
@@ -1504,12 +1601,24 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {
@@ -1518,7 +1627,6 @@ STRATEGY_SCIENTIST_DEFAULT {
         Default
         Advice BUILD_DEFAULT_ADVICE
     }
-
 
     //
     //  ADVANCE LIST
@@ -1977,7 +2085,7 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
         MinNumUnits 2
         Top 0.1
@@ -1994,12 +2102,24 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {
@@ -2474,7 +2594,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
         MinNumUnits 2
         Top 0.1
@@ -2491,12 +2611,24 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {
@@ -2962,7 +3094,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
         MinNumUnits 2
         Top 0.1
@@ -2979,12 +3111,24 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {
@@ -3450,7 +3594,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 10500
+        Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
         MinNumUnits 2
         Top 0.1
@@ -3467,12 +3611,24 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11000
+        Priority 11500
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+        HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
         Bottom 0.1
+//      AllCities
+//      MaxRawHappiness 74
         HappyCities
         Advice BUILD_HAPPINESS_ADVICE
+    }
+
+    BuildListSequenceElement {
+        Priority 3000
+        BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+        MinNumUnits 2
+        AllCities
+        NoUnits
+        Advice BUILD_DEFAULT_ADVICE
     }
 
     BuildListSequenceElement {

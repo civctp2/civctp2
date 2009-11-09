@@ -41,6 +41,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -89,6 +90,7 @@
 #include "Governor.h"
 #include "buildingutil.h"
 #include "wonderutil.h"
+#include "MapAnalysis.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -1500,6 +1502,8 @@ void EditQueue::Suggest(bool insert)
 
 	if(m_cityData)
 	{
+		MapAnalysis::GetMapAnalysis().RecalcCityRanks(m_cityData->GetOwner());
+
 		sint32  cat         = 0;
 		sint32  type        = CTPRecord::INDEX_INVALID;
 		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeDesiredUnits();

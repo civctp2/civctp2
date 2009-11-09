@@ -31,6 +31,7 @@
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 // - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
 //   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,6 +58,7 @@
 
 #include "Scheduler.h"
 #include <vector>
+#include <limits>
 
 
 MapGrid < sint32 >::MapGridArray MapGrid < sint32 >::s_scratch;
@@ -66,10 +68,9 @@ MapAnalysis MapAnalysis::s_mapAnalysis;
 
 
 MapAnalysis & MapAnalysis::GetMapAnalysis()
-{ 
+{
 	return s_mapAnalysis; 
 }
-
 
 void MapAnalysis::Resize
 (
@@ -114,14 +115,6 @@ void MapAnalysis::Resize
 
     m_piracyIncomeMatrix.resize(maxPlayerId * maxPlayerId, 0);
 
-    m_minCityProduction.resize(maxPlayerId);
-    m_maxCityProduction.resize(maxPlayerId);
-    m_minCityGrowth.resize(maxPlayerId);
-    m_maxCityGrowth.resize(maxPlayerId);
-    m_minCityGold.resize(maxPlayerId);
-    m_maxCityGold.resize(maxPlayerId);
-    m_minCityHappiness.resize(maxPlayerId);
-    m_maxCityHappiness.resize(maxPlayerId);
     m_minCityThreat.resize(maxPlayerId);
     m_maxCityThreat.resize(maxPlayerId);
     m_nuclearWeapons.resize(maxPlayerId);
@@ -165,6 +158,43 @@ const sint16 route_value)
     m_piracyIncomeMatrix[index] += route_value;
 }
 
+void MapAnalysis::RecalcCityRanks(sint32 player)
+{
+	Player* player_ptr = g_player[player];
+	Assert(player_ptr != NULL);
+
+	if(player_ptr == NULL)
+		return;
+
+    m_minCityProduction = std::numeric_limits<sint32>::max();
+    m_minCityGrowth     = std::numeric_limits<sint32>::max();
+    m_minCityGold       = std::numeric_limits<sint32>::max();
+
+    m_maxCityProduction = std::numeric_limits<sint32>::min();
+    m_maxCityGrowth     = std::numeric_limits<sint32>::min();
+    m_maxCityGold       = std::numeric_limits<sint32>::min();
+
+    sint32 num_cities = player_ptr->m_all_cities->Num();
+    for(sint32 i = 0; i < num_cities; i++)
+    {
+        Unit& city = player_ptr->m_all_cities->Access(i);
+
+        sint32 prod =         city->GetCityData()->GetGrossCityProduction();
+        sint32 food =         city->GetCityData()->GetGrowthRate();
+        sint32 gold =         city->GetCityData()->GetGrossCityGold();
+        sint32 happ = (sint32)city->GetCityData()->GetHappiness();
+
+        m_minCityProduction = std::min(prod, m_minCityProduction);
+        m_minCityGrowth     = std::min(food, m_minCityGrowth);
+        m_minCityGold       = std::min(gold, m_minCityGold);
+        m_minCityHappiness  = std::min(happ, m_minCityHappiness);
+
+        m_maxCityProduction = std::max(prod, m_maxCityProduction);
+        m_maxCityGrowth     = std::max(food, m_maxCityGrowth);
+        m_maxCityGold       = std::max(gold, m_maxCityGold);
+        m_maxCityHappiness  = std::max(happ, m_maxCityHappiness);
+    }
+}
 
 void MapAnalysis::BeginTurn()
 {
@@ -173,14 +203,6 @@ void MapAnalysis::BeginTurn()
     Unit city;
     Unit unit;
     sint32 i;
-
-    m_minCityProductionAll = 99999;
-    m_minCityGrowthAll = 99999;
-    m_minCityGoldAll = 99999;
-
-    m_maxCityProductionAll = -99999;
-    m_maxCityGrowthAll = -99999;
-    m_maxCityGoldAll = -99999;
 
     m_piracyIncomeMatrix.assign(m_piracyIncomeMatrix.size(), 0);
 
@@ -205,17 +227,8 @@ void MapAnalysis::BeginTurn()
         m_tradeAtRiskGrid  [player].Clear();
         m_piracyLossGrid   [player].Clear();
 
-        m_minCityProduction[player] = 99999;
-        m_minCityGrowth    [player] = 99999;
-        m_minCityGold      [player] = 99999;
-        m_minCityHappiness [player] = 99999;
-        m_minCityThreat    [player] = 99999;
-
-        m_maxCityProduction[player] = -99999;
-        m_maxCityGrowth    [player] = -99999;
-        m_maxCityGold      [player] = -99999;
-        m_maxCityHappiness [player] = -99999;
-        m_maxCityThreat    [player] = -99999;
+        m_minCityThreat    [player] = std::numeric_limits<sint32>::max();
+        m_maxCityThreat    [player] = std::numeric_limits<sint32>::min();
 
         m_movementTypeUnion[player] = 0x0;
 
@@ -232,6 +245,8 @@ void MapAnalysis::BeginTurn()
         Player * player_ptr = g_player[player];
         if (player_ptr == NULL)
             continue;
+
+        RecalcCityRanks(player);
 
         m_projectedScience[player] =
             player_ptr->m_advances->GetProjectedScience();
@@ -383,42 +398,6 @@ void MapAnalysis::BeginTurn()
                     per_cell_value);
                 }
             }
-
-            sint32 prod = city->GetCityData()->GetGrossCityProduction();
-            if (prod < m_minCityProduction[player])
-                m_minCityProduction[player] = prod;
-            if (prod < m_minCityProductionAll)
-                m_minCityProductionAll = prod;
-            if (prod > m_maxCityProduction[player])
-                m_maxCityProduction[player] = prod;
-            if (prod > m_maxCityProductionAll)
-                m_maxCityProductionAll = prod;
-
-            sint32 food = city->GetCityData()->GetGrowthRate();
-            if (food < m_minCityGrowth[player])
-                m_minCityGrowth[player] = food;
-            if (food < m_minCityGrowthAll)
-                m_minCityGrowthAll = food;
-            if (food > m_maxCityGrowth[player])
-                m_maxCityGrowth[player] = food;
-            if (food > m_maxCityGrowthAll)
-                m_maxCityGrowthAll = food;
-
-            sint32 gold = city->GetCityData()->GetGrossCityGold();
-            if (gold < m_minCityGold[player])
-                m_minCityGold[player] = gold;
-            if (gold < m_minCityGoldAll)
-                m_minCityGoldAll = gold;
-            if (gold > m_maxCityGold[player])
-                m_maxCityGold[player] = gold;
-            if (gold > m_maxCityGoldAll)
-                m_maxCityGoldAll = gold;
-
-            sint32 happiness = (sint32)city->GetCityData()->GetHappiness();
-            if (happiness < m_minCityHappiness[player])
-                m_minCityHappiness[player] = happiness;
-            if (happiness > m_maxCityHappiness[player])
-                m_maxCityHappiness[player] = happiness;
 
             bool    is_land;
             sint16  cont;
@@ -662,74 +641,68 @@ sint32 MapAnalysis::GetMaxEnemyValue(const PLAYER_INDEX & player) const
 	return value;
 }
 
-double MapAnalysis::GetProductionRank(const CityData * city, const bool & all_players) const
+double MapAnalysis::GetProductionRank(const CityData * city) const
 {
-    Assert(city);
-    sint32 prod = city->GetGrossCityProduction();
-    PLAYER_INDEX owner = city->GetOwner();
+	Assert(city);
+	sint32 prod = city->GetGrossCityProduction();
 
-    if (all_players || (m_maxCityProduction[owner] - m_minCityProduction[owner]) <= 0)
-    {
-        if ((m_maxCityProductionAll - m_minCityProductionAll) > 0)
-            return ((double)(prod - m_minCityProductionAll) / (double)(m_maxCityProductionAll - m_minCityProductionAll));
-    }
-    else
-		return ((double)(prod - m_minCityProduction[owner]) / (double) (m_maxCityProduction[owner] - m_minCityProduction[owner]));
-
-    return 0.0;
-}
-
-double MapAnalysis::GetGrowthRank(const CityData * city, const bool & all_players) const
-{
-    Assert(city);
-    sint32 food = city->GetGrowthRate();
-    PLAYER_INDEX owner = city->GetOwner();
-
-
-    if (all_players || (m_maxCityGrowth[owner] - m_minCityGrowth[owner]) <= 0)
-    {
-        if ((m_maxCityGrowthAll - m_minCityGrowthAll) > 0)
-            return ((double)(food - m_minCityGrowthAll) / (double)(m_maxCityGrowthAll - m_minCityGrowthAll));
-    }
+	if(m_maxCityProduction - m_minCityProduction <= 0)
+	{
+		// If we only have one city
+		return 0.0;
+	}
 	else
 	{
-		return ((double)(food - m_minCityGrowth[owner]) / (double) (m_maxCityGrowth[owner] - m_minCityGrowth[owner]));
+		return ((double)(prod - m_minCityProduction) / (double) (m_maxCityProduction - m_minCityProduction));
 	}
-
-    return 0.0;
 }
 
-double MapAnalysis::GetCommerceRank(const CityData * city, const bool & all_players) const
+double MapAnalysis::GetGrowthRank(const CityData * city) const
 {
-    Assert(city);
-    sint32 commerce = city->GetGrossCityGold();
-    PLAYER_INDEX owner = city->GetOwner();
+	Assert(city);
+	sint32 food = city->GetGrowthRate();
 
-
-    if (all_players || (m_maxCityGold[owner] - m_minCityGold[owner]) <= 0)
-    {
-        if ((m_maxCityGoldAll - m_minCityGoldAll) > 0)
-            return ((double)(commerce - m_minCityGoldAll) / (double)(m_maxCityGoldAll - m_minCityGoldAll));
-    }
-	else 
+	if(m_maxCityGrowth - m_minCityGrowth <= 0)
 	{
-		return ((double)(commerce - m_minCityGold[owner]) / (double) (m_maxCityGold[owner] - m_minCityGold[owner]));
+		// If we have only one city
+		return 0.0;
 	}
+	else
+	{
+		return ((double)(food - m_minCityGrowth) / (double) (m_maxCityGrowth - m_minCityGrowth));
+	}
+}
 
-    return 0.0;
+double MapAnalysis::GetCommerceRank(const CityData * city) const
+{
+	Assert(city);
+	sint32 commerce = city->GetGrossCityGold();
+
+	if(m_maxCityGold - m_minCityGold <= 0)
+	{
+		// If we only have one city
+		return 0.0;
+	}
+	else
+	{
+		return ((double)(commerce - m_minCityGold) / (double) (m_maxCityGold - m_minCityGold));
+	}
 }
 
 double MapAnalysis::GetHappinessRank(const CityData * city) const
 {
-    Assert(city);
-    double happiness = city->GetHappiness();
-    PLAYER_INDEX owner = city->GetOwner();
+	Assert(city);
+	double happiness = city->GetHappiness();
 
-    if ((m_maxCityHappiness[owner] - m_minCityHappiness[owner]) > 0)
-        return ((double)(happiness - m_minCityHappiness[owner]) /
-        (double)(m_maxCityHappiness[owner] - m_minCityHappiness[owner]));
-
-    return 1.0;
+	if(m_maxCityHappiness - m_minCityHappiness > 0)
+	{
+		return ((double)(happiness - m_minCityHappiness) / (double)(m_maxCityHappiness - m_minCityHappiness));
+	}
+	else
+	{
+		// If we only have one city
+		return 1.0;
+	}
 }
 
 double MapAnalysis::GetThreatRank(const CityData * city) const
@@ -1343,14 +1316,6 @@ void MapAnalysis::Cleanup()
     BoundingRectVector().swap(m_empireBoundingRect);
     MapPointVector().swap(m_empireCenter);
     Sint16Vector().swap(m_piracyIncomeMatrix);
-    Sint32Vector().swap(m_minCityProduction);
-    Sint32Vector().swap(m_maxCityProduction);
-    Sint32Vector().swap(m_minCityGrowth);
-    Sint32Vector().swap(m_maxCityGrowth);
-    Sint32Vector().swap(m_minCityGold);
-    Sint32Vector().swap(m_maxCityGold);
-    Sint32Vector().swap(m_minCityHappiness);
-    Sint32Vector().swap(m_maxCityHappiness);
     Sint32Vector().swap(m_minCityThreat);
     Sint32Vector().swap(m_maxCityThreat);
     Sint16Vector().swap(m_nuclearWeapons);

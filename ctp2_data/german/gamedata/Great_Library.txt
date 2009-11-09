@@ -10978,7 +10978,7 @@ Kosten:
 [WONDER_PENICILLIN_STATISTICS]
 Effekt:
 Verbesserung des <L:DATABASE_CONCEPTS,CONCEPT_GROWTH>Bevölkerungswachstums<e> einer Nation 
-Erhöht die Nahrungserträge aller Städte um {WonderDB(Wonder[0]).IncreaseFoodAllCities} Einheiten
+Erhöht die Nahrungserträge aller Städte um {WonderDB(Wonder[0]).IncreaseFoodAllCities}%
 [END]
 
 [WONDER_PENICILLIN_GAMEPLAY]

@@ -415,7 +415,7 @@ private:
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;
 
 
-	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const;
+	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice, bool & noUnits) const;
 
 	bool HasStopBuildings(const StrategyRecord::BuildListSequenceElement* elem, const CityData* cd) const;
 

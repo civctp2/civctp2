@@ -10845,7 +10845,7 @@ Costs:
 [WONDER_PENICILLIN_STATISTICS]
 Gives:
 Improves <L:DATABASE_CONCEPTS,CONCEPT_GROWTH>Growth<e> of empire
-Increases the food production of every city in the host empire by {WonderDB(Wonder[0]).IncreaseFoodAllCities} food units
+Increases the food production of every city in the host empire by {WonderDB(Wonder[0]).IncreaseFoodAllCities}%
 [END]
 
 [WONDER_PENICILLIN_GAMEPLAY]

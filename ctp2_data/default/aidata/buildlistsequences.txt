@@ -27,8 +27,9 @@
 #
 #----------------------------------------------------------------------------
 
-# 10
+# 18
 
+### 0 ###
 BUILD_LIST_SEQUENCE_PRODUCTION {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
@@ -57,10 +58,11 @@ BUILD_LIST_SEQUENCE_PRODUCTION {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 1 ###
 BUILD_LIST_SEQUENCE_GROWTH {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -81,8 +83,8 @@ BUILD_LIST_SEQUENCE_GROWTH {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -93,6 +95,7 @@ BUILD_LIST_SEQUENCE_GROWTH {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 2 ###
 BUILD_LIST_SEQUENCE_OFFENSE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
   BuildListElement { GarrisonUnitBuildList }
@@ -121,10 +124,11 @@ BUILD_LIST_SEQUENCE_OFFENSE {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 03 ###
 BUILD_LIST_SEQUENCE_DEFENSE {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
@@ -145,8 +149,8 @@ BUILD_LIST_SEQUENCE_DEFENSE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -157,6 +161,7 @@ BUILD_LIST_SEQUENCE_DEFENSE {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 4 ###
 BUILD_LIST_SEQUENCE_SCIENCE {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
@@ -177,8 +182,8 @@ BUILD_LIST_SEQUENCE_SCIENCE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -189,6 +194,7 @@ BUILD_LIST_SEQUENCE_SCIENCE {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 5 ###
 BUILD_LIST_SEQUENCE_GOLD {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
@@ -209,8 +215,8 @@ BUILD_LIST_SEQUENCE_GOLD {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -221,9 +227,8 @@ BUILD_LIST_SEQUENCE_GOLD {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 6 ###
 BUILD_LIST_SEQUENCE_WONDERS {
-  BuildListElement { GarrisonUnitBuildList }
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
@@ -231,6 +236,8 @@ BUILD_LIST_SEQUENCE_WONDERS {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -256,10 +263,11 @@ BUILD_LIST_SEQUENCE_WONDERS {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 7 ###
 BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
   BuildListElement { GarrisonUnitBuildList }
@@ -280,8 +288,8 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -292,6 +300,7 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 8 ###
 // Note: When build list sequence elements are redefined by merging strategies,
 // they are matched by build list sequence.  BuildListSequencesElements with
 // the same build list sequence are not allowed.
@@ -315,8 +324,8 @@ BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -327,8 +336,8 @@ BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 9 ###
 BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
@@ -336,6 +345,7 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
@@ -362,12 +372,12 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 10 ###
 BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
@@ -375,6 +385,7 @@ BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
@@ -401,12 +412,12 @@ BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 11 ###
 BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
@@ -414,6 +425,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
@@ -440,12 +452,12 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 12 ###
 BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
@@ -453,6 +465,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
@@ -479,12 +492,12 @@ BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-//  BuildListElement { Infrastructure }
-//  BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 13 ###
 BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
@@ -492,6 +505,7 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
@@ -518,10 +532,11 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-//  BuildListElement { Infrastructure }
-//  BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 }
 
+### 14 ###
 BUILD_LIST_SEQUENCE_BARBARIAN {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { AllUnitBuildList }
@@ -542,6 +557,7 @@ BUILD_LIST_SEQUENCE_BARBARIAN {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 }
 
+### 15 ###
 BUILD_LIST_SEQUENCE_SMALL_CITIES {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SMALL_CITIES }
   BuildListElement { GarrisonUnitBuildList }
@@ -563,8 +579,8 @@ BUILD_LIST_SEQUENCE_SMALL_CITIES {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -575,6 +591,7 @@ BUILD_LIST_SEQUENCE_SMALL_CITIES {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 16 ###
 BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_MAXIUM_SIZED_CITIES }
   BuildListElement { GarrisonUnitBuildList }
@@ -595,8 +612,8 @@ BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -607,6 +624,7 @@ BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 }
 
+### 17 ###
 BUILD_LIST_SEQUENCE_DIRTY_CITIES {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DIRTY_CITIES }
   BuildListElement { GarrisonUnitBuildList }
@@ -627,8 +645,8 @@ BUILD_LIST_SEQUENCE_DIRTY_CITIES {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  //BuildListElement { Infrastructure }
-  //BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
+  BuildListElement { Capitalization }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}

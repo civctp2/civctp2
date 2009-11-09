@@ -118,6 +118,7 @@
 // - The AI can now select a special build list for small cities with enough
 //   garrison units, and can use a special build list for maximum size 
 //   increasing increasing buildings. (20-Aug-2009 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -150,6 +151,7 @@
 #include "GoalRecord.h"
 #include "GovernmentRecord.h"
 #include "gstypes.h"                    // TERRAIN_TYPES
+#include "Happy.h"
 #include "installationtree.h"
 #include <limits>
 #include "mapanalysis.h"
@@ -1682,9 +1684,9 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	CityData* city = city_owner.GetCityData();
 	Assert(city);
 	
-	double growth_rank     = the_map.GetGrowthRank    (city, false);
-	double production_rank = the_map.GetProductionRank(city, false);
-	double gold_rank       = the_map.GetCommerceRank  (city, false);
+	double growth_rank     = the_map.GetGrowthRank    (city);
+	double production_rank = the_map.GetProductionRank(city);
+	double gold_rank       = the_map.GetCommerceRank  (city);
 	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) / 
 		(double) World::GetAvgFoodFromTerrain();
 	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
@@ -2292,15 +2294,15 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 		double rank;
 		if (elem->GetProductionCities())
 		{
-			rank = MapAnalysis::GetMapAnalysis().GetProductionRank(city, false);
+			rank = MapAnalysis::GetMapAnalysis().GetProductionRank(city);
 		}
 		else if (elem->GetGrowthCities()) 
 		{
-			rank = MapAnalysis::GetMapAnalysis().GetGrowthRank(city, false);
+			rank = MapAnalysis::GetMapAnalysis().GetGrowthRank(city);
 		}
 		else if (elem->GetGoldCities()) 
 		{
-			rank = MapAnalysis::GetMapAnalysis().GetCommerceRank(city, false);
+			rank = MapAnalysis::GetMapAnalysis().GetCommerceRank(city);
 		}
 		else if (elem->GetDefault())
 		{
@@ -3757,6 +3759,7 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 	if (player == NULL)
 		return;
 
+	MapAnalysis::GetMapAnalysis().RecalcCityRanks(m_playerId);
 	RebuildCapitol();
 	ComputeDesiredUnits();
 
@@ -3844,8 +3847,9 @@ double Governor::PercentUnbuilt(const BUILD_UNIT_LIST unit_list) const
 StringId Governor::GetCityBuildQueueAdvice(const CityData *city) const
 {
 	StringId adviceId;
+	bool noUnits = false;
 
-	GetMatchingSequence(city, false, adviceId);
+	GetMatchingSequence(city, false, adviceId, noUnits);
 
 	return adviceId;
 }
@@ -3905,8 +3909,9 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const
 {
 	StringId advice;
+	bool noUnits = false;
 	const BuildListSequenceRecord *build_list_sequence = 
-		GetMatchingSequence(city, !g_player[m_playerId]->IsRobot(), advice);
+		GetMatchingSequence(city, !g_player[m_playerId]->IsRobot(), advice, noUnits);
 
 	if (city->GetUseGovernor() && !g_player[m_playerId]->IsRobot())
 	{
@@ -3928,7 +3933,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		BuildListSequenceRecord::BuildListElement const * elem =
 			build_list_sequence->GetBuildListElement(i);
 
-		if (!city_full)
+		if (!city_full && !noUnits)
 		{
 			if (elem->GetAllUnitBuildList())
 			{
@@ -4024,7 +4029,7 @@ bool Governor::HasStopBuildings(const StrategyRecord::BuildListSequenceElement* 
 	}
 }
 
-const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const
+const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice, bool & noUnits) const
 {
 	Assert(city);
 	if (city->GetUseGovernor() && human_city)
@@ -4041,6 +4046,10 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 minPollution;
 
 	sint32 minNumUnits;
+	sint32 maxRawHappiness;
+	
+	SlidersSetting sliders_setting;
+	sint32 cityRawHappiness = static_cast<sint32>(city->GetHappiness()) - city->GetHappinessFromPops();
 
 	bool canBuildWonders = false;
 	sint32 i;
@@ -4076,22 +4085,25 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 				continue;
 		}
 
+		if(elem->GetMaxRawHappiness(maxRawHappiness) && maxRawHappiness < cityRawHappiness)
+			continue;
+
 		if(elem->GetProductionCities())
 		{
 			rank = MapAnalysis::GetMapAnalysis().
-			       GetProductionRank(city, false);
+			       GetProductionRank(city);
 		}
 
 		else if(elem->GetGrowthCities())
 		{
 			rank = MapAnalysis::GetMapAnalysis().
-			       GetGrowthRank(city, false);
+			       GetGrowthRank(city);
 		}
 
 		else if(elem->GetCommerceCities())
 		{
 			rank = MapAnalysis::GetMapAnalysis().
-			       GetCommerceRank(city, false);
+			       GetCommerceRank(city);
 		}
 
 		else if(elem->GetHappyCities())
@@ -4125,6 +4137,13 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		else if(elem->HasMinPollution())
 		{
 			// Do nothing
+		}
+
+		else if(elem->GetAllCities())
+		{
+			best_priority = elem->GetPriority();
+			best_elem     = elem;
+			continue;
 		}
 
 		else if( elem->GetDefault() )
@@ -4183,12 +4202,6 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
 		}
-
-		if(elem->GetAllCities())
-		{
-			best_priority = elem->GetPriority();
-			best_elem     = elem;
-		}
 	}
 
 
@@ -4201,6 +4214,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		if (best_elem == NULL)
 			return g_theBuildListSequenceDB->Get(0);
 	}
+
+	noUnits = best_elem->GetNoUnits();
 
 	(void) best_elem->GetAdvice(advice);
 
