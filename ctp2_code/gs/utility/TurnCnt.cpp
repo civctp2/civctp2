@@ -958,10 +958,9 @@ void TurnCount::NextRound(BOOL fromDirector, BOOL force)
 sint32 finite_count=0;
 #endif
 
-	do {
-
+	do
+	{
 		Assert(finite_count++ < 100); 
-
 
 		sint32 curPlayer = g_selected_item->GetCurPlayer();
 		if((g_player[curPlayer]->IsHuman() ||
@@ -971,7 +970,8 @@ sint32 finite_count=0;
 			g_player[g_selected_item->GetCurPlayer()]->ProcessUnitOrders();
 		}
 
-		if(g_network.IsActive()) {
+		if(g_network.IsActive())
+		{
 			NetworkEndTurn();
 			return;
 		}
@@ -979,29 +979,16 @@ sint32 finite_count=0;
 		if (!VerifyEndTurn(force))
 			return;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 		g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayer());
-		if (g_theProfileDB->IsAIOn()) { 
-		
-		
+		if (g_theProfileDB->IsAIOn())
+		{
 			TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 		}
 
 		EndThisTurnBeginNewTurn();
 
-		if(m_isHotSeat || m_isEmail) {
+		if(m_isHotSeat || m_isEmail)
+		{
 			if(!g_player[g_selected_item->GetCurPlayer()]->IsRobot())
 			{
 				g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
@@ -1026,33 +1013,6 @@ sint32 finite_count=0;
 			InformMessages();
 		}
 	} while (0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void TurnCount::ChooseHappinessPlayer()

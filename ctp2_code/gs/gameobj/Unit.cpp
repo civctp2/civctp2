@@ -456,7 +456,7 @@ bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 	size_t  distance    = DISTANCE_NOT_ON_MAP;
 	MapPoint center;
 	GetPos(center);
-	CircleIterator it(center, searchRadius, GetVisionRange());
+	CircleIterator it(center, searchRadius, static_cast<sint32>(GetVisionRange()));
 	for (it.Start(); !it.End(); it.Next()) 
 	{
 		if (    !g_player[GetOwner()]->IsExplored(it.Pos()) 

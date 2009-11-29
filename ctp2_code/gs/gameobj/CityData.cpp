@@ -3730,8 +3730,8 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 
 	///////////////////////////////////////////////
 	// EMOD - upkeep per unit and multiplied by readiness level
-	sint32 UpkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings(), m_owner);
-	buildingUpkeep += UpkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	sint32 upkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings(), m_owner);
+	buildingUpkeep += static_cast<sint32>(upkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 	
 	//end EMOD
 
@@ -4569,12 +4569,14 @@ void CityData::AddWonder(sint32 type)
 
 	// EMOD Visible wonders 4-25-2006
 	MapPoint SpotFound;
-	CityInfluenceIterator it(point, GetVisionRadius());  //m_sizeIndex 
+	CityInfluenceIterator it(point, static_cast<sint32>(GetVisionRadius()));  //m_sizeIndex 
 	
 	sint32 s;
-	for(s = 0; s < rec->GetNumShowOnMap(); s++) {
-	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-		for(it.Start(); !it.End(); it.Next()) {
+	for(s = 0; s < rec->GetNumShowOnMap(); s++)
+	{
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
+		for(it.Start(); !it.End(); it.Next())
+		{
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			if(point == it.Pos())
@@ -4599,6 +4601,7 @@ void CityData::AddWonder(sint32 type)
 				}
 			}
 		}
+
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
 
@@ -8720,7 +8723,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 	science += static_cast<sint32>(ceil(science * s));
 
 	sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, m_owner);
-	science += ceil(science * (static_cast<double>(featPercent) / 100.0));
+	science += static_cast<sint32>(ceil(science * (static_cast<double>(featPercent) / 100.0)));
 
 	double ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
 	science += static_cast<sint32>(ceil(science * ws));
@@ -8845,7 +8848,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	
 		if(styleRec)
 		{
-			gold += ceil(gold * styleRec->GetCommercePercent());
+			gold += static_cast<sint32>(ceil(gold * styleRec->GetCommercePercent()));
 		}
 
 		//Added by E - EXPORT BONUSES TO GOODS if has good than a commerce bonus  (11-JAN-2006)	
@@ -8921,22 +8924,22 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
 	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
-	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	gold += static_cast<sint32>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
 	
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings(), m_owner);
-	gold += static_cast<double>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
+	gold += static_cast<sint32>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings(), m_owner);
-	gold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	gold += static_cast<sint32>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings(), m_owner);
-	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	gold += static_cast<sint32>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 
 	double interest;
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
@@ -10865,7 +10868,7 @@ void CityData::AddCityExpansion()
 
 		MapPoint point(m_home_city.RetPos());
 		MapPoint SpotFound(m_home_city.RetPos());
-		CityInfluenceIterator it(point, GetVisionRadius());
+		CityInfluenceIterator it(point, static_cast<sint32>(GetVisionRadius()));
 		bool found = false;
 
 		for(it.Start(); !it.End(); it.Next()) {
@@ -10905,7 +10908,7 @@ void CityData::AddCityExpansion()
 
 sint32 CityData::GetNumUrbanTile(const MapPoint pos) const
 {
-	CityInfluenceIterator it(pos, GetVisionRadius()); 
+	CityInfluenceIterator it(pos, static_cast<sint32>(GetVisionRadius())); 
 	sint32 UrbanImp = 0;
 	for(it.Start(); !it.End(); it.Next()) {
 		if(terrainutil_HasUrban(it.Pos())) {
@@ -10947,7 +10950,7 @@ void CityData::AddCitySlum()
 {
 	MapPoint point(m_home_city.RetPos());
 	MapPoint SpotFound;
-	CityInfluenceIterator it(point, GetVisionRadius()); 
+	CityInfluenceIterator it(point, static_cast<sint32>(GetVisionRadius()));
 
 	if (g_theConstDB->Get(0)->GetCityExpansionDenominator() > 0) //this checks if its specified in constDB 
 	{

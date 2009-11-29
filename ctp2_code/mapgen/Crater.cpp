@@ -17,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevented an unnecessary call to the overloaded sqrt function to support
 //   VC++ .NET compilation.
+// - Removed c3.h include, it is unecessary. - Jul 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -32,7 +35,6 @@
 #if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 
-#include "c3.h"
 #endif
 
 #include "Crater.h"

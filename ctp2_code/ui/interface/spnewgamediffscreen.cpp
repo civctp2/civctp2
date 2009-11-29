@@ -122,7 +122,7 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	AUI_ERRCODE auiErr;
 
-	uint32 i;
+	sint32 i;
 	for(i = 0; i < s_diffListBox->NumItems(); i++)
 		s_diffListBox->GetItemByIndex(i)->Enable(!viewMode);
 	for(i = 0; i < s_riskListBox->NumItems(); i++)
@@ -197,7 +197,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 	s_diffListBox->SetForceSelect(TRUE);
 	s_riskListBox->SetForceSelect(TRUE);
 
-	uint32 i;
+	sint32 i;
 	for(i = 0; i < g_theDifficultyDB->NumRecords(); ++i){
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DiffRiskItem");
 		Assert(item);

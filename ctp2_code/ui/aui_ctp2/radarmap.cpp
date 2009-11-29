@@ -1377,17 +1377,17 @@ void RadarMap::RedrawTile( const MapPoint *point )
                                    offsetpos.y + 1 + adjust
                                   );
 
-		dRect.left = sRect.left * (m_tilePixelWidth/2);
-		dRect.right = sRect.right * (m_tilePixelWidth/2);
-		dRect.top = sRect.top * m_tilePixelHeight;
-		dRect.bottom = sRect.bottom * m_tilePixelHeight;
+		dRect.left   = sRect.left   * static_cast<float>(m_tilePixelWidth/2);
+		dRect.right  = sRect.right  * static_cast<float>(m_tilePixelWidth/2);
+		dRect.top    = sRect.top    * static_cast<float>(m_tilePixelHeight);
+		dRect.bottom = sRect.bottom * static_cast<float>(m_tilePixelHeight);
 
 		primitives_Scale16(m_tempSurface, m_mapSurface, sRect, dRect, m_filter);
 
 		sRect.left = 0;
-		sRect.right = 1.0 + adjust;
+		sRect.right = 1.0f + adjust;
 		dRect.left = 0;
-		dRect.right = sRect.right * (m_tilePixelWidth/2);
+		dRect.right = sRect.right * static_cast<float>(m_tilePixelWidth/2);
 
 		primitives_Scale16(m_tempSurface, m_mapSurface, sRect, dRect, m_filter);
 	}
@@ -1403,10 +1403,10 @@ void RadarMap::RedrawTile( const MapPoint *point )
                                    offsetpos.y + 1 + adjust
                                   );
 		
-		dRect.left = sRect.left * (m_tilePixelWidth/2);
-		dRect.right = sRect.right * (m_tilePixelWidth/2);
-		dRect.top = sRect.top * m_tilePixelHeight;
-		dRect.bottom = sRect.bottom * m_tilePixelHeight;
+		dRect.left   = sRect.left   * static_cast<float>(m_tilePixelWidth/2);
+		dRect.right  = sRect.right  * static_cast<float>(m_tilePixelWidth/2);
+		dRect.top    = sRect.top    * static_cast<float>(m_tilePixelHeight);
+		dRect.bottom = sRect.bottom * static_cast<float>(m_tilePixelHeight);
 
 		primitives_Scale16(m_tempSurface, m_mapSurface, sRect, dRect, m_filter);
 	}

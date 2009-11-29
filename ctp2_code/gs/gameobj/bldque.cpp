@@ -1753,9 +1753,8 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 
 		// If cd had building enables veterans
 		// then u.SetVeteran();
-		uint64 i;
 		uint64 buildings = cd->GetEffectiveBuildings();
-		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 			if(buildingutil_Get(i, m_owner)->GetEnablesAllVeterans()) {
 				if((buildings & ((uint64)1 << uint64(i)))) {
 					u.SetVeteran();
