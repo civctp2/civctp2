@@ -249,7 +249,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 	uint32 bmpPitch = temp + Mod(-temp,sizeof( LONG ));
 
 	
-	uint32 bpp = g_ui->Primary()->BitsPerPixel();
+	uint32 bpp = g_ui->BitsPerPixel();
 
 	
 	AUI_ERRCODE errcode = image->LoadEmpty( width, height, bpp );

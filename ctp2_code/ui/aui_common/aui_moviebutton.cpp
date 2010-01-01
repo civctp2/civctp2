@@ -187,7 +187,7 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 			
 			ToScreen(&adjustedRect);
 
-			if (m_movie->Open(flags, g_c3ui->Primary(), &adjustedRect) != AUI_ERRCODE_OK) {
+			if (m_movie->Open(flags, g_c3ui->Secondary(), &adjustedRect) != AUI_ERRCODE_OK) {
 				
 				SetMovie(NULL);
 				if (GetActionFunc())

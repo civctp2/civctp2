@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// -None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +27,8 @@
 // - Import structure changed to compile with Mingw
 // - Moved CalculateHash() to aui_Base
 // - Prevented processing of uninitialised input
+// - Added graphics DirectX built in double buffering and extended it
+//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -96,7 +100,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		const MBCHAR *ldlFilename = NULL );
+		const MBCHAR *ldlFilename  = NULL);
 	virtual ~aui_UI();
 
 protected:
@@ -111,6 +115,7 @@ protected:
 		m_pixelFormat               (AUI_SURFACE_PIXELFORMAT_UNKNOWN),
 		m_ldl                       (NULL),
 		m_primary                   (NULL),
+		m_secondary                 (NULL),
 		m_blitter                   (NULL),
 		m_memmap                    (NULL),
 		m_mouse                     (NULL),
@@ -172,6 +177,59 @@ public:
 	HWND		TheHWND( void ) const { return m_hwnd; }
 	aui_Ldl		*GetLdl( void ) const { return m_ldl; }
 
+	AUI_ERRCODE BltToSecondary
+	                          (
+	                           sint32       destx,
+	                           sint32       desty,
+	                           aui_Surface *srcSurf,
+	                           RECT        *srcRect,
+	                           uint32       flags
+	                          )
+	{
+		return m_blitter->Blt(m_secondary, destx, desty, srcSurf, srcRect, flags);
+	};
+
+	AUI_ERRCODE BltSecondaryToPrimary
+	                        (
+	                         uint32       flags
+	                        );
+
+	AUI_ERRCODE ColorBltToSecondary
+	                             (
+	                              RECT     *destRect,
+	                              COLORREF  color,
+	                              uint32    flags
+	                             )
+	{
+		return m_blitter->ColorBlt(m_secondary, destRect, color, flags);
+	};
+
+	sint32 PrimaryHeight()  { return m_primary->Height(); };
+	sint32 PrimaryWidth()   { return m_primary->Width(); };
+	sint32 SecondaryHeight(){ return m_secondary->Height(); };
+	sint32 SecondaryWidth() { return m_secondary->Width(); };
+	bool HasPrimary()       { return m_primary != NULL; };
+
+	AUI_ERRCODE BlackScreen()
+	{
+		if(m_primary != NULL)
+		{
+			RECT rect = {0, 0, PrimaryWidth(), PrimaryHeight()};
+			return m_blitter->ColorBlt(m_primary, &rect, RGB(0,0,0), 0);
+		}
+		else
+		{
+			return AUI_ERRCODE_OK;
+		}
+	}
+
+	AUI_ERRCODE ClearSecondary()
+	{
+		RECT rect = {0, 0, SecondaryWidth(), SecondaryHeight()};
+		return m_blitter->ColorBlt(m_secondary, &rect, RGB(0,0,0), 0);
+	}
+
+	aui_Surface		*Secondary( void ) const { return m_secondary; }
 	aui_Surface		*Primary( void ) const { return m_primary; }
 	aui_Blitter		*TheBlitter( void ) const { return m_blitter; }
 	aui_MemMap		*TheMemMap( void ) const { return m_memmap; }
@@ -382,13 +440,13 @@ protected:
 	aui_Ldl			*m_ldl;			
 
 	aui_Surface		*m_primary;		
+	aui_Surface		*m_secondary;
 	aui_Blitter		*m_blitter;		
 	aui_MemMap		*m_memmap;		
 	aui_Mouse		*m_mouse;		
 	aui_Keyboard	*m_keyboard;	
 	aui_Joystick	*m_joystick;	
 	aui_DirtyList	*m_dirtyList;	
-									
 
 	COLORREF		m_color;		
 	aui_Image		*m_image;		

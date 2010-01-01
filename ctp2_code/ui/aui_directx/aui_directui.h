@@ -56,10 +56,11 @@ public:
 	virtual ~aui_DirectUI();
 
 protected:
-	aui_DirectUI() 
+	aui_DirectUI()
     :   aui_UI              (),
         aui_DirectX         (),
         m_lpdds             (NULL),
+        m_back              (NULL),
         m_isCoinitialized   (false)
     { ; };
 
@@ -78,8 +79,9 @@ public:
 	void SetHeight(sint32 height) { m_height = height; }
 
 protected:
-	LPDIRECTDRAWSURFACE m_lpdds; 
-    bool                m_isCoinitialized;
+	LPDIRECTDRAWSURFACE m_lpdds;
+	LPDIRECTDRAWSURFACE m_back;
+	bool                m_isCoinitialized;
 };
 
 

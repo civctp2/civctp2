@@ -39,6 +39,7 @@
 //
 // - Added alternative leak report. (Sep 9th 2005 Martin Gühmann)
 // - Increased the stack size to be reported. (Sep 9th 2005 Martin Gühmann)
+// - Added more fill bytes for enhanced memory reporting. (1-Jan-2010 Martin Gühmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -690,11 +691,13 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 
 typedef void *MemPtr;
 
-
-const unsigned char FILL_BYTE_USER = 0x66;		
-const unsigned char FILL_BYTE_FREE = 0x67;		
-const unsigned char FILL_BYTE_MARKER = 0x68;	
-const unsigned char FILL_BYTE_REALLOC = 0x69;	
+const unsigned char FILL_BYTE_NULL    = 0x00;
+const unsigned char FILL_BYTE_STRDUP  = 0x64;
+const unsigned char FILL_BYTE_CALLOC  = 0x65;
+const unsigned char FILL_BYTE_MALLOC  = 0x66;
+const unsigned char FILL_BYTE_FREE    = 0x67;
+const unsigned char FILL_BYTE_MARKER  = 0x68;
+const unsigned char FILL_BYTE_REALLOC = 0x69;
 
 
 const int DATA_GUARD_SIZE = 4;			
@@ -1262,7 +1265,7 @@ MemPtr DebugMemory_GuardedBlockRealloc (
 	Debug_GuardedDataTest (old_header, module_name, module_line);
 
 	
-	new_mem = DebugMemory_GuardedBlockAlloc (module_name, module_line, heap, new_size, false, 0, old_header->allocated_after_open);
+	new_mem = DebugMemory_GuardedBlockAlloc (module_name, module_line, heap, new_size, true, FILL_BYTE_FREE, old_header->allocated_after_open);
 	new_header = Debug_DataToHeader (new_mem);
 
 	
@@ -1907,13 +1910,13 @@ void DebugMemory_LeaksClear(void)
 void *DebugMemory_GuardedMalloc  (const char *file, int line, unsigned size)
 {
 	DebugMemory_EnsureInitialised();
-	return (DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, size, true, FILL_BYTE_USER, debug_memory->open));
+	return (DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, size, true, FILL_BYTE_MALLOC, debug_memory->open));
 }
 
 void *DebugMemory_GuardedCalloc  (const char *file, int line, unsigned size)
 {
 	DebugMemory_EnsureInitialised();
-	return (DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, size, true, 0, debug_memory->open));
+	return (DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, size, true, FILL_BYTE_CALLOC, debug_memory->open));
 }
 
 void *DebugMemory_GuardedRealloc (const char *file, int line, void *memory_block, int size)
@@ -1928,7 +1931,7 @@ char *DebugMemory_GuardedStrdup  (const char *file, int line, const char *string
 
 	
 	DebugMemory_EnsureInitialised();
-	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, strlen (string) + 1, false, 0, debug_memory->open);
+	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
 	strcpy (ptr, string);
 	return (ptr);
 }
@@ -1958,14 +1961,14 @@ void  DebugMemory_GuardedFree    (const char *file, int line, void **memory_bloc
 void *DebugMemoryHeap_GuardedMalloc  (const char *file, int line, MemoryHeap heap, unsigned size)
 {
 	DebugMemory_EnsureInitialised();
-	return (DebugMemory_GuardedBlockAlloc (file, line, heap, size, true, FILL_BYTE_USER, debug_memory->open));
+	return (DebugMemory_GuardedBlockAlloc (file, line, heap, size, true, FILL_BYTE_MALLOC, debug_memory->open));
 }
 
 
 void *DebugMemoryHeap_GuardedCalloc  (const char *file, int line, MemoryHeap heap, unsigned size)
 {
 	DebugMemory_EnsureInitialised();
-	return (DebugMemory_GuardedBlockAlloc (file, line, heap, size, true, 0, debug_memory->open));
+	return (DebugMemory_GuardedBlockAlloc (file, line, heap, size, true, FILL_BYTE_CALLOC, debug_memory->open));
 }
 
 
@@ -1982,7 +1985,7 @@ char *DebugMemoryHeap_GuardedStrdup  (const char *file, int line, MemoryHeap hea
 
 	DebugMemory_EnsureInitialised();
 	
-	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, heap, strlen (string) + 1, false, 0, debug_memory->open);
+	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
 	strcpy (ptr, string);
 	return (ptr);
 }

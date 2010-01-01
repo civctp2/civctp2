@@ -16,12 +16,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// USE_SDL
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -74,7 +77,8 @@ public:
 		sint32 bpp,
 		sint32 pitch = 0,
 		uint8 *buffer = NULL,
-		BOOL isPrimary = FALSE );
+		BOOL isPrimary = FALSE,
+		HDC hdc = NULL);
 	virtual ~aui_Surface();
 
 protected:
@@ -124,6 +128,9 @@ public:
 	virtual AUI_ERRCODE BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
 	virtual AUI_ERRCODE Blank(const uint32 &color);
 
+	virtual void Flip(){};
+	virtual void ReverseFlip(){};
+
 	static uint32 m_surfaceClassId;
 
 protected:
@@ -145,7 +152,7 @@ protected:
 	uint8	*m_buffer;		
 	
 	HDC		m_hdc;			
-	BOOL	m_dcIsGot;		
+	bool	m_dcIsGot;
 	HBITMAP	m_hbitmap;
 	HBITMAP	m_holdbitmap;
 
@@ -155,7 +162,7 @@ protected:
 	BOOL	m_isPrimary;	
 
 	BOOL	m_allocated;	
-	uint8	*m_saveBuffer;	
+	uint8	*m_saveBuffer;
 
 	aui_SurfaceSubset m_locklist[ k_SURFACE_MAXLOCK ]; 
 	sint32	m_locksRemain;	

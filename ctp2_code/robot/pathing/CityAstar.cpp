@@ -114,7 +114,7 @@ bool CityAstar::EntryCost
 		|| static_cast<float>(entryCell->GetBaseMoveCosts()) > cost
 		){
 			// We want to follow existing roads even if they run through mountains
-			prodCost = terrainutil_GetMinimumProductionCost(rec->GetIndex());
+			prodCost = static_cast<float>(terrainutil_GetMinimumProductionCost(rec->GetIndex()));
 
 			if(entryCell->HasTerrainImprovementOrInFuture(rec->GetIndex()))
 			{

@@ -35,6 +35,8 @@
 // - Prevented processing of uninitialised input
 // - Marked DirectX specific items
 // - Handled race condition with mouse initialisation at startup
+// - Added graphics DirectX built in double buffering and extended it
+//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,6 +85,7 @@ aui_UI::aui_UI
 	m_pixelFormat               (AUI_SURFACE_PIXELFORMAT_UNKNOWN),
 	m_ldl                       (NULL),
 	m_primary                   (NULL),
+	m_secondary                 (NULL),
 	m_blitter                   (NULL),
 	m_memmap                    (NULL),
 	m_mouse                     (NULL),
@@ -144,6 +147,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 	m_bpp = bpp;
 	m_pixelFormat = AUI_SURFACE_PIXELFORMAT_UNKNOWN;
 	m_primary = NULL;
+	m_secondary = NULL;
 	m_blitter = NULL;
 	m_memmap = NULL;
 	m_mouse = NULL;
@@ -263,17 +267,21 @@ AUI_ERRCODE aui_UI::InitCommon(
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::CreateScreen( void )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-
-	
-	
-	m_primary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, TRUE );
+	m_primary   = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, TRUE  );
 	Assert( AUI_NEWOK(m_primary,retcode) );
 	if ( !AUI_NEWOK(m_primary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	// Has to be added in aui_DirectUI, because we need the hdc from the DirectX screen
+	// do get a 16 bit HDC instead of a 15 bit one. Actally, this is an ugly solution.
+/*	if(m_secondary == NULL)
+	{
+		m_secondary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, FALSE );
+		Assert( AUI_NEWOK(m_secondary,retcode) );
+		if ( !AUI_NEWOK(m_secondary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+	}*/
 
 	m_pixelFormat = m_primary->PixelFormat();
 
@@ -290,6 +298,7 @@ aui_UI::~aui_UI()
 	}
 
 	delete m_primary;
+	delete m_secondary;
 	delete m_colorAreas;
 	delete m_imageAreas;
 	delete m_imageResource;
@@ -304,7 +313,7 @@ aui_UI::~aui_UI()
 
 	aui_Ldl::Remove(this);
 	delete m_ldl;
-	
+
 	if (this == g_ui)
 	{
 		g_ui = NULL;
@@ -313,15 +322,11 @@ aui_UI::~aui_UI()
 	free_crc();
 }
 
-
-
 void aui_UI::RegisterObject( aui_Blitter *blitter )
 {
 	Assert( blitter != NULL );
 	if ( blitter ) m_blitter = blitter;
 }
-
-
 
 void aui_UI::RegisterObject( aui_MemMap *memmap )
 {
@@ -329,15 +334,11 @@ void aui_UI::RegisterObject( aui_MemMap *memmap )
 	if ( memmap ) m_memmap = memmap;
 }
 
-
-
 void aui_UI::RegisterObject( aui_Mouse *mouse )
 {
 	Assert( mouse != NULL );
 	if ( mouse ) (m_mouse = mouse)->SetClip( 0, 0, m_width, m_height );
 }
-
-
 
 void aui_UI::RegisterObject( aui_Keyboard *keyboard )
 {
@@ -345,15 +346,11 @@ void aui_UI::RegisterObject( aui_Keyboard *keyboard )
 	if ( keyboard ) m_keyboard = keyboard;
 }
 
-
-
 void aui_UI::RegisterObject( aui_Joystick *joystick )
 {
 	Assert( joystick != NULL );
 	if ( joystick ) m_joystick = joystick;
 }
-
-
 
 void aui_UI::RegisterObject( aui_AudioManager *audioManager )
 {
@@ -361,15 +358,11 @@ void aui_UI::RegisterObject( aui_AudioManager *audioManager )
 	if ( audioManager ) m_audioManager = audioManager;
 }
 
-
-
 void aui_UI::RegisterObject( aui_MovieManager *movieManager )
 {
 	Assert( movieManager != NULL );
 	if ( movieManager ) m_movieManager = movieManager;
 }
-
-
 
 COLORREF aui_UI::SetBackgroundColor( COLORREF color )
 {
@@ -389,14 +382,12 @@ COLORREF aui_UI::SetBackgroundColor( COLORREF color )
 	return prevColor;
 }
 
-
-
 aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 {
 	aui_Image *prevImage = m_image;
 
 	SetRect( &m_imageRect, x, y, x, y );
-    m_image = image;
+	m_image = image;
 
 	if (m_image)
 	{
@@ -417,8 +408,6 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 
 	return prevImage;
 }
-
-
 
 AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 {
@@ -484,8 +473,6 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 
 }
 
-
-
 AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -540,8 +527,6 @@ AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::AddWin( HWND hwnd )
 {
 	if ( !m_winList->Find( hwnd ) )
@@ -558,16 +543,12 @@ void aui_UI::RemoveWin(HWND hwnd)
 	if ( position ) m_winList->DeleteAt( position );
 }
 
-
-
 AUI_ERRCODE aui_UI::AddDirtyRect( RECT *rect )
 {
 	if ( !rect ) return AddDirtyRect( 0, 0, m_width, m_height );
 
 	return AddDirtyRect( rect->left, rect->top, rect->right, rect->bottom );
 }
-
-
 
 AUI_ERRCODE aui_UI::AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 bottom )
 {
@@ -580,15 +561,10 @@ AUI_ERRCODE aui_UI::AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 
 	return AUI_ERRCODE_OK;
 }
 
-
-
 aui_Window *aui_UI::BringWindowToTop( uint32 windowId )
 {
 	return BringWindowToTop( (aui_Window *)GetChild( windowId ) );
 }
-
-
-
 
 aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 {
@@ -646,8 +622,6 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 	return prevTopWindow;
 }
 
-
-
 AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 {
 	if ( !recurse )
@@ -689,8 +663,6 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::Invalidate( RECT *rect )
 {
 	if ( rect )
@@ -710,8 +682,6 @@ AUI_ERRCODE aui_UI::Invalidate( RECT *rect )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::FlushDirtyList( void )
 {
 	m_dirtyList->Flush();
@@ -725,8 +695,6 @@ AUI_ERRCODE aui_UI::FlushDirtyList( void )
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
 {
@@ -745,8 +713,6 @@ AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -763,10 +729,6 @@ AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
-
 
 AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 {
@@ -1034,8 +996,6 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 {
 	Assert( !Rectangle_HasZeroArea( rect ) );
@@ -1103,16 +1063,11 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 void aui_UI::FlushDirtyRectInfoList( void )
 {
 	for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- )
 		m_dirtyRectInfoMemory->Delete( m_dirtyRectInfoList->RemoveHead() );
 }
-
-
-
 
 AUI_ERRCODE aui_UI::DrawOne(aui_Window *window)
 {
@@ -1152,11 +1107,8 @@ AUI_ERRCODE aui_UI::DrawOne(aui_Window *window)
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_UI::Draw( void )
 {
-	
 	if ( !m_primary ) return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE errcode;
@@ -1179,21 +1131,9 @@ AUI_ERRCODE aui_UI::Draw( void )
 			&m_imageRect,
 			m_imageAreas );
 
-
-
-
-
-
-
-
-
-
-
-	
-	
 	m_mouse->BltDirtyRectInfoToPrimary();
 
-  if ( m_editMode )
+	if( m_editMode )
 	{
 		ShowSelectedRegion( m_editRegion );
 	}
@@ -1201,11 +1141,8 @@ AUI_ERRCODE aui_UI::Draw( void )
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
-	
 	FlushDirtyList();
 
-	
 	FlushDirtyRectInfoList();
 
 	return AUI_ERRCODE_OK;
@@ -1892,7 +1829,7 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 	}
 
 	if ( m_minimize )
-    {
+	{
 		delete m_primary;
 		m_primary = NULL;
 	}
@@ -2055,4 +1992,21 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 	}
 
 	return AUI_ERRCODE_OK;
+}
+
+AUI_ERRCODE aui_UI::BltSecondaryToPrimary
+                        (
+                         uint32       flags
+                        )
+{
+	if(m_blitter == NULL)
+		return AUI_ERRCODE_NOBLITTER;
+
+	RECT rect = {0, 0, SecondaryWidth(), SecondaryHeight()};
+
+	AUI_ERRCODE hr = m_blitter->Blt(m_primary, 0, 0, m_secondary, &rect, flags);
+
+	m_primary->Flip();
+
+	return hr;
 }

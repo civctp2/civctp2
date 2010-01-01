@@ -147,7 +147,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_staticPane = new aui_Static(
 				&errcode,
@@ -165,7 +165,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_button = new aui_Button(
 				&errcode,
@@ -192,13 +192,13 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_listBoxWindow = new aui_Window(
 				&errcode,
 				aui_UniqueId(),
 				block,
-				g_ui->Primary()->BitsPerPixel(), AUI_WINDOW_TYPE_POPUP );
+				g_ui->BitsPerPixel(), AUI_WINDOW_TYPE_POPUP );
 
 			
 			
@@ -212,7 +212,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if (aui_Ldl::GetLdl()->FindDataBlock(block))
 				m_listBox = new aui_ListBox(
 					&errcode,
 					aui_UniqueId(),
@@ -226,7 +226,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 			&errcode,
 			aui_UniqueId(),
 			0, 0, m_width + m_buttonSize, m_windowSize,
-			g_ui->Primary()->BitsPerPixel(), AUI_WINDOW_TYPE_POPUP );
+			g_ui->BitsPerPixel(), AUI_WINDOW_TYPE_POPUP );
 
 	Assert( AUI_NEWOK(m_listBoxWindow,errcode) );
 	if ( !AUI_NEWOK(m_listBoxWindow,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -254,8 +254,6 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 aui_DropDown::~aui_DropDown()
 {

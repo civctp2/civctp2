@@ -301,7 +301,7 @@ void Scheduler::Cleanup()
 	m_goals_of_type.clear();
 	m_goals.clear();
 
-	for(int i = 0; i < m_generic_goals.size(); ++i)
+	for(size_t i = 0; i < m_generic_goals.size(); ++i)
 	{
 		delete m_generic_goals[i];
 	}
@@ -348,7 +348,7 @@ void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
 {
 	m_playerId = player_index;
 
-	for(int i = 0; i < m_generic_goals.size(); ++i)
+	for(size_t i = 0; i < m_generic_goals.size(); ++i)
 	{
 		m_generic_goals[i]->Set_Player_Index(player_index);
 	}

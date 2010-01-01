@@ -406,20 +406,10 @@ AUI_ERRCODE aui_DirectMovie::Stop( void )
 {
 	if ( m_isPlaying )
 	{
-		
-
-
-		
-		
-		
-		
-		if (m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD) {
-			if (m_windowSurface) {
-
-				
-				
-				
-				
+		if (m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)
+		{
+			if (m_windowSurface)
+			{
 				STREAM_TIME		st;
 
 				HRESULT hr = m_mmStream->GetDuration(&st);
@@ -544,12 +534,12 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 			
 			
 			if (!g_ui) return AUI_ERRCODE_UNHANDLED;
-			if (!g_ui->Primary()) return AUI_ERRCODE_UNHANDLED;
+			if (!g_ui->HasPrimary()) return AUI_ERRCODE_UNHANDLED;
 
 			LPDIRECTDRAWSURFACE lpdds =
 					((aui_DirectSurface *)g_ui->Primary())->DDS();
 
-			RECT surfRect = {0, 0, g_ui->Primary()->Width(), g_ui->Primary()->Height()};
+			RECT surfRect = {0, 0, g_ui->PrimaryWidth(), g_ui->PrimaryHeight()};
 			RECT destRect = {0, 0, m_streamRect.right * 2, m_streamRect.bottom * 2};
 
 			OffsetRect(&destRect, 

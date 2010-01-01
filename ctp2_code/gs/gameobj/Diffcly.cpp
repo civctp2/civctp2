@@ -104,10 +104,10 @@ double diffutil_GetAiAdjustment(const sint32 diff,
 	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
 	double const	rank_percent		= 
 		MapAnalysis::GetMapAnalysis().GetScienceHandicapRatio(playerId);
-	float percent_spread;
-	float value_spread;
-	float rank_spread_percent;
-	float value;
+	double percent_spread;
+	double value_spread;
+	double rank_spread_percent;
+	double value;
 
 	if (rank_percent < rec->GetAIMinBehind())
 	{

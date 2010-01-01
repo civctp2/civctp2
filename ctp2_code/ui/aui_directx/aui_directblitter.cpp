@@ -25,9 +25,6 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
-	
 	if ( !destSurf->Buffer()
 	&&   !srcSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId )
@@ -39,7 +36,6 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 
 		if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
 		{
-
 			do {
 
 				Assert(((aui_DirectSurface *)srcSurf)->DDS()->IsLost() == DD_OK);
@@ -51,39 +47,15 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 						DDBLT_KEYSRC,
 						NULL);
 
-
-
-
-
-
-
-
-
-
-
 				if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 					break;
-
-
-
-
-
 
 			} while ( 1 );
 		}
 		else
 		{
-
-			do {
-
-
-
-
-
-
-
-
-
+			do
+			{
 				Assert(((aui_DirectSurface *)srcSurf)->DDS()->IsLost() == DD_OK);
 				Assert(((aui_DirectSurface *)destSurf)->DDS()->IsLost() == DD_OK);
 
@@ -96,18 +68,9 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 				if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 					break;
 
-
-
-
-
-
 			} while ( 1 );
 		}
 
-		
-		
-		
-		
 		if(hr != DD_OK) {
 			DPRINTF(k_DBG_UI, ("%s:%d: hr = %d\n", __FILE__, __LINE__, hr));
 		}
@@ -124,8 +87,6 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 	return retcode;
 }
 
-
-
 AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 	aui_Surface *destSurf,
 	RECT *destRect,
@@ -134,14 +95,11 @@ AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
 	if ( !destSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId ) )
 	{
 		m_ddbfx.dwFillColor = color;
 		HRESULT hr;
-
 
 		do {
 			hr = ((aui_DirectSurface *)destSurf)->DDS()->Blt(
@@ -153,11 +111,6 @@ AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 
 			if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 				break;
-
-
-
-
-
 
 		} while ( 1 );
 
@@ -195,9 +148,6 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
-	
 	if ( !destSurf->Buffer()
 	&&   !srcSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId )
@@ -221,11 +171,6 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 				if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 					break;
 
-
-
-
-
-
 			} while ( 1 );
 		}
 		else
@@ -241,11 +186,6 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 
 				if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 					break;
-
-
-
-
-
 
 			} while ( 1 );
 		}
@@ -263,4 +203,3 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 
 	return retcode;
 }
-

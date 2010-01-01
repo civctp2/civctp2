@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface DirectX surface
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __AUI_USE_DIRECTX__
+// Use DirectX
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -34,9 +54,11 @@ aui_DirectSurface::aui_DirectSurface(
 	LPDIRECTDRAW lpdd,
 	LPDIRECTDRAWSURFACE lpdds,
 	BOOL isPrimary,
-	BOOL useVideoMemory )
+	BOOL useVideoMemory,
+	LPDIRECTDRAWSURFACE back)
 	:
-	aui_Surface()
+	aui_Surface(),
+	m_back      (back)
 {
 	*retval = aui_Surface::InitCommon( width, height, bpp, isPrimary );
 	Assert( AUI_SUCCESS(*retval) );
@@ -78,7 +100,6 @@ aui_DirectSurface::aui_DirectSurface(
 			return;
 		}
 
-		
 		DDBLTFX ddbfx;
 		memset( &ddbfx, 0, sizeof( ddbfx ) );
 		ddbfx.dwSize = sizeof( ddbfx );
@@ -261,8 +282,17 @@ BOOL aui_DirectSurface::IsOK( void ) const
 	return m_lpdds->IsLost() == DD_OK && m_saveBuffer != NULL;
 }
 
-
-
+void aui_DirectSurface::Flip()
+{
+	if(m_exclusiveMode)
+	{
+		m_lpdds->Flip(m_back, DDFLIP_WAIT);
+	}
+	else
+	{
+		m_lpdds->Blt(NULL,m_back,NULL,0,NULL);
+	}
+}
 
 AUI_ERRCODE aui_DirectSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
 {
@@ -274,12 +304,24 @@ AUI_ERRCODE aui_DirectSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
 
 	if ( g_ui->DXVer() >= 0x500 && !m_isPrimary ) flags |= DDLOCK_NOSYSLOCK;
 
-	HRESULT hr =
-		m_lpdds->Lock(
-			rect,
-			&ddsd,
-			DDLOCK_SURFACEMEMORYPTR | DDLOCK_WAIT | flags,
-			NULL );
+	HRESULT hr;
+
+	if(m_back == NULL)
+	{
+		hr = m_lpdds->Lock(
+				rect,
+				&ddsd,
+				DDLOCK_SURFACEMEMORYPTR | DDLOCK_WAIT | flags,
+				NULL );
+	}
+	else
+	{
+		hr = m_back->Lock(
+				rect,
+				&ddsd,
+				DDLOCK_SURFACEMEMORYPTR | DDLOCK_WAIT | flags,
+				NULL );
+	}
 
 	switch ( hr )
 	{
@@ -315,7 +357,15 @@ AUI_ERRCODE aui_DirectSurface::Unlock( LPVOID buffer )
 
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-		HRESULT hr = m_lpdds->Unlock( buffer );
+		HRESULT hr;
+		if(m_back == NULL)
+		{
+			hr = m_lpdds->Unlock( buffer );
+		}
+		else
+		{
+			hr = m_back->Unlock( buffer );
+		}
 
 		if ( hr != DD_OK ) errcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 	}
@@ -338,7 +388,7 @@ AUI_ERRCODE aui_DirectSurface::GetDC( HDC *hdc )
 		if ( hr != DD_OK )
 			errcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		else
-			m_dcIsGot = TRUE;
+			m_dcIsGot = true;
 	}
 
 	return errcode;
@@ -359,12 +409,11 @@ AUI_ERRCODE aui_DirectSurface::ReleaseDC( HDC hdc )
 		if ( hr != DD_OK )
 			errcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		else
-			m_dcIsGot = FALSE;
+			m_dcIsGot = false;
 	}
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_DirectSurface::Blank(const uint32 &color)
 {

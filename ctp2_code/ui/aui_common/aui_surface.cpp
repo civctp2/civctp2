@@ -16,12 +16,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// USE_SDL
+// __AUI_USE_DIRECTX__
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +56,8 @@ aui_Surface::aui_Surface(
 	sint32 bpp,
 	sint32 pitch,
 	uint8 *buffer,
-	BOOL isPrimary )
+	BOOL isPrimary,
+	HDC hdc)
 :
 	aui_Base    ()
 {
@@ -71,7 +76,9 @@ aui_Surface::aui_Surface(
 	if (!m_saveBuffer)
 	{
 #ifndef __AUI_USE_SDL__
-		HDC hdc = ::GetDC( g_ui->TheHWND() );
+
+		if(hdc == NULL)
+			hdc = ::GetDC( g_ui->TheHWND() );
 
 		
 		m_hdc = CreateCompatibleDC( hdc );
@@ -109,17 +116,15 @@ aui_Surface::aui_Surface(
 	}
 }
 
-
-
 AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BOOL isPrimary )
 {
 	m_pixelFormat = AUI_SURFACE_PIXELFORMAT_UNKNOWN,
-	m_chromaKey = 0x00000000, 
+	m_chromaKey = 0x00000000,
 	m_isPrimary = isPrimary,
 	m_buffer = NULL,
 #ifdef __AUI_USE_DIRECTX__
 	m_hdc = NULL,
-	m_dcIsGot = FALSE,
+	m_dcIsGot = false,
 	m_hbitmap = NULL,
 	m_holdbitmap = NULL,
 #endif // __AUI_USE_DIRECTX__
@@ -299,22 +304,38 @@ AUI_ERRCODE aui_Surface::GetDC(HDC * hdc)
 	if (!hdc) return AUI_ERRCODE_INVALIDPARAM;
 
 	Assert(m_allocated && !m_dcIsGot);
-    if (!m_allocated || m_dcIsGot) return AUI_ERRCODE_SURFACELOCKFAILED;
+	if (!m_allocated || m_dcIsGot) return AUI_ERRCODE_SURFACELOCKFAILED;
 
-    *hdc = m_hdc;
+	*hdc = m_hdc;
 
 	if (!m_hdc) return AUI_ERRCODE_HACK;
 
-	m_dcIsGot = TRUE;
+	m_dcIsGot = true;
 
-    BITMAPINFOHEADER bih;
-	memset( &bih, 0, sizeof( bih ) );
-	bih.biSize = sizeof( bih );
-	bih.biWidth = m_width;
-	bih.biHeight = -m_height;
-	bih.biPlanes = 1;
-	bih.biBitCount = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
-	bih.biCompression = BI_RGB;
+	BITMAPV4HEADER biv4h;
+	memset( &biv4h, 0, sizeof( biv4h ) );
+	biv4h.bV4Size          = sizeof( biv4h );
+	biv4h.bV4Width         = m_width;
+	biv4h.bV4Height        = -m_height;
+	biv4h.bV4Planes        = 1;
+	biv4h.bV4BitCount      = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
+	biv4h.bV4V4Compression = BI_RGB;
+
+	if(g_is565Format)
+	{
+
+		biv4h.bV4RedMask       = 0x0000F800u;
+		biv4h.bV4GreenMask     = 0x000007E0u;
+		biv4h.bV4BlueMask      = 0x0000001Fu;
+		biv4h.bV4V4Compression = BI_BITFIELDS;
+	}
+	else
+	{
+		biv4h.bV4RedMask       = 0x00007C00u;
+		biv4h.bV4GreenMask     = 0x000003E0u;
+		biv4h.bV4BlueMask      = 0x0000001Fu;
+
+	}
 
 	SetDIBits(
 		m_hdc,
@@ -322,7 +343,7 @@ AUI_ERRCODE aui_Surface::GetDC(HDC * hdc)
 		0,
 		m_height,
 		m_saveBuffer,
-		(BITMAPINFO *)&bih, 
+		(BITMAPINFO*) &biv4h,
 		DIB_RGB_COLORS );
 
 	return AUI_ERRCODE_OK;
@@ -331,21 +352,36 @@ AUI_ERRCODE aui_Surface::GetDC(HDC * hdc)
 
 AUI_ERRCODE aui_Surface::ReleaseDC(HDC hdc)
 {
-    if (hdc != m_hdc) return AUI_ERRCODE_INVALIDPARAM;
+	if (hdc != m_hdc) return AUI_ERRCODE_INVALIDPARAM;
 
-	Assert(m_allocated && !m_dcIsGot);
-    if (!m_allocated || m_dcIsGot) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
+	Assert(m_allocated && m_dcIsGot);
+	if (!m_allocated || !m_dcIsGot) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
-	m_dcIsGot = FALSE;
+	m_dcIsGot = false;
 
-    BITMAPINFOHEADER bih;
-	memset( &bih, 0, sizeof( bih ) );
-	bih.biSize = sizeof( bih );
-	bih.biWidth = m_width;
-	bih.biHeight = -m_height;
-	bih.biPlanes = 1;
-	bih.biBitCount = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
-	bih.biCompression = BI_RGB;
+	BITMAPV4HEADER biv4h;
+	memset( &biv4h, 0, sizeof( biv4h ) );
+	biv4h.bV4Size          = sizeof( biv4h );
+	biv4h.bV4Width         = m_width;
+	biv4h.bV4Height        = -m_height;
+	biv4h.bV4Planes        = 1;
+	biv4h.bV4BitCount      = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
+	biv4h.bV4V4Compression = BI_RGB;
+
+	if(g_is565Format)
+	{
+		// For some reason the 555 masks are still used
+		biv4h.bV4RedMask       = 0x0000F800u;
+		biv4h.bV4GreenMask     = 0x000007E0u;
+		biv4h.bV4BlueMask      = 0x0000001Fu;
+		biv4h.bV4V4Compression = BI_BITFIELDS;
+	}
+	else
+	{
+		biv4h.bV4RedMask       = 0x00007C00u;
+		biv4h.bV4GreenMask     = 0x000003E0u;
+		biv4h.bV4BlueMask      = 0x0000001Fu;
+	}
 
 	GetDIBits(
 		m_hdc,
@@ -353,10 +389,10 @@ AUI_ERRCODE aui_Surface::ReleaseDC(HDC hdc)
 		0,
 		m_height,
 		m_saveBuffer,
-		(BITMAPINFO *)&bih, 
+		(BITMAPINFO*) &biv4h,
 		DIB_RGB_COLORS );
 
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 #endif // __AUI_USE_DIRECTX__
 
@@ -400,9 +436,6 @@ inline BOOL aui_Surface::IsLocked( RECT *rect )
 
 	return FALSE;
 }
-
-
-
 
 inline BOOL aui_Surface::IsLocked( LPVOID buffer )
 {

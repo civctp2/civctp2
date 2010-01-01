@@ -2427,16 +2427,13 @@ void CivApp::CleanupGame(bool keepScenInfo)
 	}
 #endif
 
-    m_gameLoaded            = false;
+	m_gameLoaded            = false;
 
-    g_launchIntoCheatMode   = FALSE;
-    g_god                   = FALSE;
-    g_isCheatModeOn         = FALSE;
+	g_launchIntoCheatMode   = FALSE;
+	g_god                   = FALSE;
+	g_isCheatModeOn         = FALSE;
 
-	if(g_c3ui && g_c3ui->Primary() && g_c3ui->TheBlitter()) {
-		RECT rect = {0, 0, g_c3ui->Primary()->Width(), g_c3ui->Primary()->Height()};
-		g_c3ui->TheBlitter()->ColorBlt(g_c3ui->Primary(), &rect, RGB(0,0,0), 0);
-	}
+	g_c3ui->BlackScreen();
 }
 
 void CivApp::StartMessageSystem()
@@ -2717,7 +2714,7 @@ sint32 CivApp::Process(void)
 	}
 
 	
-	
+	// Sleep problem if the game is supposed to run in background
 	if (m_inBackground) 
 	{
 		Os::Sleep(50);
@@ -3201,7 +3198,7 @@ void InitializeImageMaps()
     delete g_ImageMapPF;
     g_ImageMapPF = new ProjectFile();
 
-    if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) 
+    if (g_c3ui->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) 
     {
         AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat555.zfs");
         AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic555.zfs");

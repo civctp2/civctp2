@@ -372,11 +372,17 @@ int ui_Initialize(void)
 		main_HideTaskBar();
 
 	
-	g_is565Format = AUI_SURFACE_PIXELFORMAT_565 == g_c3ui->Primary()->PixelFormat();
+	g_is565Format = AUI_SURFACE_PIXELFORMAT_565 == g_c3ui->PixelFormat();
 
 	
 	ColorSet::Initialize();
     g_c3ui->RegisterCleanup(&ColorSet::Cleanup);
+
+
+	SPLASH_STRING("Creating Blitter...");
+
+	g_c3ui->RegisterObject(new C3Blitter);
+	g_c3ui->RegisterObject(new C3MemMap);
 
 	SPLASH_STRING("Initializing Paths...");
 
@@ -443,11 +449,6 @@ int ui_Initialize(void)
             g_c3ui->AddMovieSearchPath(s);
         }
     }
-	
-	SPLASH_STRING("Creating Blitter...");
-
-	g_c3ui->RegisterObject(new C3Blitter);
-	g_c3ui->RegisterObject(new C3MemMap);
 
 	SPLASH_STRING("Creating Mouse...");
 	

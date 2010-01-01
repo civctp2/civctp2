@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialised pointer in default constructor to prevent destructor crash.
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +53,10 @@ public:
 		LPDIRECTDRAW lpdd,
 		LPDIRECTDRAWSURFACE lpdds = NULL,
 		BOOL isPrimary = FALSE,
-		BOOL useVideoMemory = FALSE );
+		BOOL useVideoMemory = FALSE,
+		LPDIRECTDRAWSURFACE back = NULL
+		);
+
 	virtual ~aui_DirectSurface();
 
 	virtual BOOL IsThisA( uint32 classId )
@@ -74,11 +78,13 @@ public:
 
 	virtual AUI_ERRCODE Blank(const uint32 &color);
 	
-	LPDIRECTDRAWSURFACE	DDS( void ) const { return m_lpdds; }
+	LPDIRECTDRAWSURFACE BUFFER ( void ) const { return (m_back == NULL) ? m_lpdds : m_back; }
+	LPDIRECTDRAWSURFACE DDS    ( void ) const { return m_lpdds; }
 	BOOL				IsDCGot( void ) const { return m_dcIsGot; }
 
 	
 	virtual BOOL IsOK( void ) const;
+	virtual void Flip();
 
 	static uint32 m_directSurfaceClassId;
 
@@ -86,12 +92,14 @@ protected:
 	aui_DirectSurface()
 	:
 		aui_Surface (),
-		m_lpdds     (NULL)
+		m_lpdds     (NULL),
+		m_back      (NULL)
 	{};
 
 	AUI_ERRCODE InitCommon( void );
 
-	LPDIRECTDRAWSURFACE	m_lpdds;	
+	LPDIRECTDRAWSURFACE m_lpdds;
+	LPDIRECTDRAWSURFACE m_back;
 };
 
 typedef aui_DirectSurface aui_NativeSurface;

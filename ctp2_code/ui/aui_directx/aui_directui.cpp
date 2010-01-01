@@ -27,6 +27,8 @@
 // Modifications from the original Activision code:
 //
 // - Prevented crashes
+// - Added graphics DirectX built in double buffering and extended it
+//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -75,6 +77,7 @@ aui_DirectUI::aui_DirectUI
     aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
     aui_DirectX         (),
     m_lpdds             (NULL),
+    m_back              (NULL),
     m_isCoinitialized   (false)
 {
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -86,8 +89,6 @@ aui_DirectUI::aui_DirectUI
 	*retval = CreateDirectScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
-
 
 AUI_ERRCODE aui_DirectUI::InitCommon()
 {
@@ -110,45 +111,33 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
 
 AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
 {
-    if (m_primary)
-    {
-    	((aui_DirectSurface *)m_primary)->DDS()->Release();
+	if (m_primary)
+	{
+		((aui_DirectSurface *)m_primary)->DDS()->Release();
 		delete m_primary;
-	    m_primary   = NULL;
-        m_lpdds     = NULL;
-    }
+		m_primary   = NULL;
+		m_lpdds     = NULL;
+	}
 
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 {
-	
 	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
-	
-	
-
 	HRESULT hr;
 
-	 // Unchanged if command line argument: nonexclusive is present
-	uint32 coopFlags = DDSCL_NORMAL;
-	if ( m_exclusiveMode )
-		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
+	uint32 coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
 
-	
-	
-	
-	if (g_createDirectDrawOnSecondary) {
-        coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
+	if (g_createDirectDrawOnSecondary)
+	{
+		coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
 					DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN;
 	}
 
-	
 	hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
@@ -158,7 +147,6 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
 
-	
 	MoveWindow(
 		m_hwnd,
 		0, 0,
@@ -167,15 +155,17 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		g_ScreenHeight,
 		TRUE );
 
-	
 	LPDIRECTDRAWSURFACE lpdds;
 	DDSURFACEDESC ddsd;
 	memset( &ddsd, 0, sizeof( ddsd ) );
 	ddsd.dwSize = sizeof( ddsd );
-	ddsd.dwFlags = DDSD_CAPS;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+	ddsd.dwFlags = DDSD_CAPS|DDSD_BACKBUFFERCOUNT;
+	ddsd.dwBackBufferCount = 1;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE|DDSCAPS_COMPLEX|DDSCAPS_FLIP;
+
 	hr = m_lpdd->CreateSurface( &ddsd, &lpdds, NULL );
 	Assert( hr == DD_OK || hr == DDERR_PRIMARYSURFACEALREADYEXISTS );
+
 	if ( hr != DD_OK )
 	{
 		if ( hr != DDERR_PRIMARYSURFACEALREADYEXISTS )
@@ -186,7 +176,22 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
 	}
 	else
+	{
 		m_lpdds = lpdds;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
+
+		hr = m_lpdds->GetAttachedSurface(&ddsd.ddsCaps, &m_back);
+		Assert( hr == DD_OK );
+		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
+	}
+	if ( !m_exclusiveMode )
+	{
+		// Changed if command line argument: nonexclusive is present
+		coopFlags = DDSCL_NORMAL;
+		hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
+		Assert( hr == DD_OK );
+		if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
+	}
 
 	delete m_primary;
 	m_primary = new aui_DirectSurface(
@@ -196,17 +201,27 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		m_bpp,
 		m_lpdd,
 		m_lpdds,
-		TRUE );
+		TRUE,
+		TRUE,
+		m_back);
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	if(m_secondary == NULL)
+	{
+		AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+		HDC hdc;
+		m_primary->GetDC(&hdc);
+		m_secondary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, FALSE, hdc );
+		m_primary->ReleaseDC(hdc);
+		Assert( AUI_NEWOK(m_secondary,retcode) );
+		if ( !AUI_NEWOK(m_secondary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+	}
 
 	m_pixelFormat = m_primary->PixelFormat();
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
 
 aui_DirectUI::~aui_DirectUI( void )
 {
@@ -215,16 +230,16 @@ aui_DirectUI::~aui_DirectUI( void )
 		m_lpdds->Release();
 	}
 
-    if (m_lpdd)
-    {
-	    m_lpdd->RestoreDisplayMode();
-    }
+	if (m_lpdd)
+	{
+		m_lpdd->RestoreDisplayMode();
+	}
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 	if (m_isCoinitialized)
-    {
-	    CoUninitialize();
-    }
+	{
+		CoUninitialize();
+	}
 #endif 
 }
 

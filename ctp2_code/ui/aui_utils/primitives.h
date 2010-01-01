@@ -71,7 +71,7 @@ PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface,
 
 
 PRIMITIVES_ERRCODE	primitives_DrawText(aui_Surface *pDirectSurface,
-				sint32 x,sint32 y, const MBCHAR *pString,COLORREF color,BOOL bg);
+				sint32 x, sint32 y, const MBCHAR *pString,COLORREF color, bool bg);
 PRIMITIVES_ERRCODE	primitives_DrawBoundedText(aui_Surface *pDirectSurface,
 				RECT *bound, const MBCHAR *pString,COLORREF color,BOOL bg);
 PRIMITIVES_ERRCODE	primitives_DrawTextBatch(aui_Surface *pDirectSurface,sint32 x,sint32 y,

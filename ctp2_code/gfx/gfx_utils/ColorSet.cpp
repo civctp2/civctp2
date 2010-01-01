@@ -71,12 +71,12 @@ ColorSet     s_theUniqueColorSet;
 //----------------------------------------------------------------------------
 COLORREF ColorRef(Pixel16 const & c)
 {
-    if (g_is565Format)
+    if (g_is565Format) // 5-6-5 bit pixel format
     {
         return static_cast<COLORREF>
             (((c & 0xF800) >> 8) | ((c & 0x07E0) << 5) | ((c & 0x001F) << 19));
     }
-    else
+    else // 5-5-5 bit pixel format
     {
         return static_cast<COLORREF>
             (((c & 0x7C00) >> 7) | ((c & 0x03e0) << 6) | ((c & 0x001F) << 19));

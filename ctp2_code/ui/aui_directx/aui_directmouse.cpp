@@ -65,9 +65,6 @@ aui_DirectMouse::aui_DirectMouse(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
-
-
 AUI_ERRCODE aui_DirectMouse::CreateDirectMouse( void )
 {
 	HRESULT hr;
@@ -76,7 +73,6 @@ AUI_ERRCODE aui_DirectMouse::CreateDirectMouse( void )
 	hr = m_lpdi->CreateDevice( GUID_SysMouse, &m_lpdid, NULL );
 	if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
 
-	
 	hr = m_lpdid->SetDataFormat( &c_dfDIMouse );
 	if ( hr != DI_OK ) return AUI_ERRCODE_SETFORMATFAILED;
 
@@ -108,9 +104,6 @@ AUI_ERRCODE aui_DirectMouse::CreateDirectMouse( void )
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
 
 AUI_ERRCODE aui_DirectMouse::GetInput( void )
 {
@@ -165,8 +158,8 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 		
 		case DIMOFS_X:
 			m_data.position.x += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.x >= g_ui->Primary()->Width() )
-				m_data.position.x = g_ui->Primary()->Width() - 1;
+			if ( m_data.position.x >= g_ui->PrimaryWidth() )
+				m_data.position.x = g_ui->PrimaryWidth() - 1;
 			else if ( m_data.position.x < 0 )
 				m_data.position.x = 0;
 			m_data.flags = m_flags;
@@ -176,8 +169,8 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 		
 		case DIMOFS_Y:
 			m_data.position.y += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.y >= g_ui->Primary()->Height() )
-				m_data.position.y = g_ui->Primary()->Height() - 1;
+			if ( m_data.position.y >= g_ui->PrimaryHeight() )
+				m_data.position.y = g_ui->PrimaryHeight() - 1;
 			else if ( m_data.position.y < 0 )
 				m_data.position.y = 0;
 			m_data.flags = m_flags;
@@ -258,11 +251,6 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			return AUI_ERRCODE_OK;
 		}
 	}
-
-	
-	
-	
-	
 
 	return AUI_ERRCODE_OK;
 }

@@ -281,7 +281,7 @@ AUI_ERRCODE aui_Movie::Open(
 		bih.biWidth = m_aviFileInfo.dwWidth;
 		bih.biHeight = m_aviFileInfo.dwHeight;
 		bih.biPlanes = 1;
-		bih.biBitCount = (uint16)g_ui->Primary()->BitsPerPixel();
+		bih.biBitCount = (uint16)g_ui->BitsPerPixel();
 		bih.biCompression = BI_RGB;
 
 		m_getFrame = AVIStreamGetFrameOpen(
@@ -504,7 +504,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 			
 			aui_Surface *surface =
 				( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
-				g_ui->Primary() :
+				g_ui->Secondary() :
 				m_surface;
 
 			uint8 *frame = (uint8 *)AVIStreamGetFrame( m_getFrame, m_curFrame );

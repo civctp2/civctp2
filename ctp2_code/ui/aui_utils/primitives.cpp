@@ -1045,201 +1045,13 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 #define k_BLEND_COLOR		0x0000
 #define k_BLEND_VALUE		10
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 PRIMITIVES_ERRCODE primitives_DrawText(
 	aui_Surface *pDirectSurface,	
 	sint32 x,							
 	sint32 y,							
 	const MBCHAR *pString,					
 	COLORREF color,						
-	BOOL bg								
+	bool bg								
 	)
 {
 	Assert(pDirectSurface);
@@ -1256,28 +1068,22 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	hr = pDirectSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, color);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 

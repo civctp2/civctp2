@@ -803,7 +803,7 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 	
 	if ( !string ) return AUI_ERRCODE_OK;
 
-	if ( !surface ) surface = g_ui->Primary();
+	if ( !surface ) surface = g_ui->Secondary();
 
 	RECT localRect = { 0, 0, surface->Width(), surface->Height() };
 	if ( !bound )
@@ -1484,7 +1484,7 @@ bool aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 void aui_BitmapFont::DumpCachedSurfaces( aui_Surface *destSurf )
 {
 	
-	if ( !destSurf ) destSurf = g_ui->Primary();
+	if ( !destSurf ) destSurf = g_ui->Secondary();
 
 	
 	Assert( destSurf->BitsPerPixel() == 16 );
