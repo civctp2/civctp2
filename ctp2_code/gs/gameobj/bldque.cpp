@@ -636,7 +636,7 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 								  );
 
 				s = static_cast<sint32>(static_cast<double>(shieldstore) * penalty);
-				DPRINTF(k_DBG_GAMESTATE, ("Deducting %n shields for empty queue in city of %lx\n", s, m_city.m_id));
+				DPRINTF(k_DBG_GAMESTATE, ("Deducting %i shields for empty queue in city of %lx\n", s, m_city.m_id));
 				shieldstore = s;
 			}
         }
