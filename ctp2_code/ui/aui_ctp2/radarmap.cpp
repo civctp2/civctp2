@@ -41,7 +41,7 @@
 //   - Mar. 4th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added political map functionality (6-Jul-2009 EPW)
-// 
+// - Added View capitol on minimap (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -189,6 +189,7 @@ void RadarMap::InitCommon(void)
 	m_displayTrade = g_theProfileDB->GetDisplayTrade() != FALSE;
 	m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
 	m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
+	m_displayCapitols = g_theProfileDB->GetDisplayCapitols() != FALSE;
 
 	m_mapOverlay = NULL;
 
@@ -621,6 +622,62 @@ void RadarMap::RenderTradeRoute(aui_Surface *surface,
 	primitives_PaintRect16(surface, &tradeRect, g_colorSet->GetColor(COLOR_YELLOW));
 }
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RenderCapitol	
+//		
+//---------------------------------------------------------------------------
+//	- Draws a Capitol marker for the current tile
+//
+//---------------------------------------------------------------------------
+void RadarMap::RenderCapitol(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player)
+{
+	if(!m_displayCapitols)
+		return;
+
+	if(!player->m_vision->IsExplored(worldpos))
+		return;
+
+	Unit unit;
+
+	if(!g_theWorld->GetTopVisibleUnit(worldpos, unit))
+		if(!g_theWorld->GetTopRadarUnit(worldpos, unit))
+			return;
+
+	if(!unit.IsValid() || !unit.IsCapitol())
+		return;
+
+	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
+
+	double xPosition = screenPosition.x * m_tilePixelWidth;
+	double yPosition = screenPosition.y * m_tilePixelHeight;
+
+	
+	if(screenPosition.y & 1)
+		xPosition += m_tilePixelWidth / 2.0;
+
+	//Now to build the "star"
+	RECT vertical = {
+		static_cast<sint32>(ceil(xPosition - m_tilePixelWidth)),
+		static_cast<sint32>(ceil(yPosition)),
+		static_cast<sint32>(ceil(xPosition + 2*m_tilePixelWidth)),
+		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
+	};
+
+	RECT horizontal = {
+		static_cast<sint32>(ceil(xPosition)),
+		static_cast<sint32>(ceil(yPosition  - m_tilePixelHeight)),
+		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
+		static_cast<sint32>(ceil(yPosition + 2*m_tilePixelHeight))
+	};
+
+
+	primitives_PaintRect16(surface, &vertical, g_colorSet->GetColor(COLOR_YELLOW));
+	primitives_PaintRect16(surface, &horizontal, g_colorSet->GetColor(COLOR_YELLOW));
+
+
+}
+
 
 
 //---------------------------------------------------------------------------
@@ -981,7 +1038,8 @@ void RadarMap::RenderMap(aui_Surface *surface)
 	for(y = 0; y < m_mapSize->y; y++)
 		for(x = 0; x < m_mapSize->x; x++)
 		{
-			RenderTileBorder(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
+			RenderTileBorder(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
+			RenderCapitol(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
 			RenderTrade(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
 		}
 }
@@ -1413,6 +1471,7 @@ void RadarMap::RedrawTile( const MapPoint *point )
 
 
 	RenderTileBorder(m_mapSurface, offsetpos, *point, player);
+	RenderCapitol(m_mapSurface, offsetpos, *point, player);
 	RenderTrade(m_mapSurface, offsetpos, *point, player);
 
 	if (m_filter)

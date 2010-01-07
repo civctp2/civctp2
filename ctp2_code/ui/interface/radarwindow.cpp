@@ -23,6 +23,7 @@
 //
 // - Separate creation and display of the radar window for hotseat play.
 // - Added Political map button (EPW July-6th 09
+//- Added View capitol button (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -188,6 +189,20 @@ void PoliticalToggleButtonActionCallback(aui_Control *control,
 	}
 }
 
+void CapitolsToggleButtonActionCallback(aui_Control *control,
+	uint32 action, uint32 data, void *cookie)
+{
+	switch (action)
+	{
+	case AUI_SWITCH_ACTION_ON:
+		g_radarMap->DisplayCapitols( true );
+		break;
+	case AUI_SWITCH_ACTION_OFF:
+		g_radarMap->DisplayCapitols( false );
+		break;
+	}
+}
+
 
 sint32 radarwindow_Initialize()
 {
@@ -297,6 +312,8 @@ sint32 radarwindow_Initialize()
 		"RadarWindow.TopBorder.Button7"));
 	ctp2_Switch *politicalButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button8"));
+	ctp2_Switch *capitolsButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
+		"RadarWindow.TopBorder.Button9"));
 
 	minimizeButton->Move(topBorder->Width() - minimizeButton->Width() - 15, minimizeButton->Y());
 
@@ -313,6 +330,7 @@ sint32 radarwindow_Initialize()
 	tradeButton->SetState( g_radarMap->IsDisplayTrade());
 	terrainButton->SetState( g_radarMap->IsDisplayTerrain());
 	politicalButton->SetState( g_radarMap->IsDisplayPolitical());
+	capitolsButton->SetState( g_radarMap->IsDisplayCapitols());
 
 	
 	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
@@ -323,6 +341,7 @@ sint32 radarwindow_Initialize()
 	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
 	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);
 	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, NULL);
+	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, NULL);
 
 
 	g_c3ui->AddWindow(g_radarWindow);

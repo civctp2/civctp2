@@ -29,6 +29,7 @@
 // - #01 Allow shifing the X and Y axis in the radar map with RMouse click
 //   (L. Hirth 6/2004)
 // -Added m_displayPolitical variable and associated functions (6-Jul-2009 EPW)
+// -Added m_displayCapitol and functions(5-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -129,21 +130,23 @@ public:
 
 	
 	void DisplayUnits(bool status = true)	
-	{ m_displayUnits = status; Update(); g_theProfileDB->SetDisplayUnits(status);}
+		{ m_displayUnits = status; Update(); g_theProfileDB->SetDisplayUnits(status);}
 	void DisplayCities(bool status = true)	
-	{ m_displayCities = status; Update(); g_theProfileDB->SetDisplayCities(status);}
+		{ m_displayCities = status; Update(); g_theProfileDB->SetDisplayCities(status);}
 	void DisplayBorders(bool status = true)	
-	{ m_displayBorders = status; Update(); g_theProfileDB->SetDisplayBorders(status);}
+		{ m_displayBorders = status; Update(); g_theProfileDB->SetDisplayBorders(status);}
 	void DisplayOverlay(bool status = true)	
-	{ m_displayOverlay = status; Update(); }
+		{ m_displayOverlay = status; Update(); }
 	void Filter(bool status = true)
-	{ m_filter = status; Update(); g_theProfileDB->SetDisplayFilter(status);}
+		{ m_filter = status; Update(); g_theProfileDB->SetDisplayFilter(status);}
 	void DisplayTrade(bool status = true) 
 		{ m_displayTrade = status; Update(); g_theProfileDB->SetDisplayTrade(status);}
 	void DisplayTerrain(bool status = true) 
 		{ m_displayTerrain = status; Update(); g_theProfileDB->SetDisplayTerrain(status);}
 	void DisplayPolitical(bool status = true) 
 		{ m_displayPolitical = status; Update(); g_theProfileDB->SetDisplayPolitical(status);}
+	void DisplayCapitols(bool status = true) 
+		{ m_displayCapitols = status; Update(); g_theProfileDB->SetDisplayCapitols(status);}
 
 	
 	bool IsDisplayUnits() { return(m_displayUnits); }
@@ -154,6 +157,7 @@ public:
 	bool IsDisplayTrade() { return m_displayTrade; }
 	bool IsDisplayTerrain() { return m_displayTerrain; }
 	bool IsDisplayPolitical() { return m_displayPolitical; }
+	bool IsDisplayCapitols() { return m_displayCapitols; }
 
 private:
 	
@@ -172,6 +176,8 @@ private:
 
 	
 	void RenderTradeRoute(aui_Surface *surf, const RECT &tileRectangle);
+
+	void RenderCapitol(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player);
 
 	
 	
@@ -222,6 +228,7 @@ private:
 	bool        m_displayTerrain;   
 	bool        m_displayTrade;
 	bool		m_displayPolitical;
+	bool		m_displayCapitols;
 
 	
 	
