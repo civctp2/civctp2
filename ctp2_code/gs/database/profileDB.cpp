@@ -61,6 +61,7 @@
 // - Removed the AI specific rules from profile, since they already exist in
 //   difficultyDB. (25-Jul-2009 Maq)
 // -Added display capital stull (5-Jan-10 EPW)
+// -Added display relations options (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -207,8 +208,9 @@ ProfileDB::ProfileDB()
     m_displayFilter                     (TRUE),
     m_displayTrade                      (TRUE),
     m_displayTerrain                    (TRUE),
-	m_displayPolitical                  (TRUE),
-	m_displayCapitols                   (TRUE),
+	m_displayPolitical                  (FALSE),
+	m_displayCapitols                   (FALSE),
+	m_displayRelations                  (FALSE),
     m_forest                            (USE_UNKNOWN),
     m_grass                             (USE_UNKNOWN),
     m_plains                            (USE_UNKNOWN),
@@ -413,6 +415,7 @@ ProfileDB::ProfileDB()
 	Var("DisplayTerrain"             , PV_BOOL  , &m_displayTerrain             , NULL, false);
 	Var("DisplayPolitical"           , PV_BOOL  , &m_displayPolitical           , NULL, false);
 	Var("DisplayCapitols"            , PV_BOOL  , &m_displayCapitols            , NULL, false);
+	Var("DisplayRelations"           , PV_BOOL  , &m_displayRelations           , NULL, false);
 	Var("CloseOnEyepoint"            , PV_BOOL  , &m_closeEyepoint              , NULL);
 	Var("ShowExpensive"              , PV_BOOL  , &m_showExpensive              , NULL);
 	Var("ColorSet"                   , PV_NUM   , &m_colorSet                   , NULL, false);

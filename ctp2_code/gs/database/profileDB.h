@@ -68,6 +68,7 @@
 // - Removed the AI specific rules from profile, since they already exist in
 //   difficultyDB. (25-Jul-2009 Maq)
 // -Added display capitol stuff (5-Jan-10 EPW)
+// -Added display relotionship options (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -321,6 +322,7 @@ private:
     sint32 m_displayTerrain;
 	sint32 m_displayPolitical;
 	sint32 m_displayCapitols;
+	sint32 m_displayRelations;
 
 
 
@@ -590,6 +592,7 @@ public:
     void SetDisplayTerrain(BOOL on)                     { m_displayTerrain = on;}
 	void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
 	void SetDisplayCapitols(BOOL on)					{ m_displayCapitols = on;}
+	void SetDisplayRelations(BOOL on)                   { m_displayRelations = on;}
     void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
     void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
@@ -808,6 +811,7 @@ public:
     BOOL GetDisplayTerrain()                    { return m_displayTerrain; }
 	BOOL GetDisplayPolitical()                  { return m_displayPolitical; }
 	BOOL GetDisplayCapitols()                   { return m_displayCapitols; }
+	BOOL GetDisplayRelations()                  { return m_displayRelations; }
     BOOL GetEnableLogs()                        { return m_enableLogs; }
     MBCHAR const *  GetRuleSets(void) const     { return m_ruleSets; };
 

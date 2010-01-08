@@ -43,6 +43,7 @@
 # - Renamed Lexikothek to Groﬂe Bibliothek.
 # - Added strings for political map - 6-Jul-2009 EPW
 # -Added strings for capitol button -5-Jan-10 EPW
+# -Added strings for relationship button -7-Jan-10 EPW
 #----------------------------------------------------------------------------
 
 # Control Panel
@@ -301,6 +302,8 @@ STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON			"Blendet die politische Karte ein oder
 TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON			"Politische Karte ein/aus"
 STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON			"Click to show or hide city capitols."
 TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON			"Show/Hide Capitols"
+STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON			"Click to show or hide relationships."
+TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON			"Show/Hide relationships"
 
 # Empire Manager Screen
 #

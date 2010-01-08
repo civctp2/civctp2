@@ -48,6 +48,7 @@
 # - Added strings for political map - 6-Jul-2009 EPW
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
+# -Added string for relationships 7-Jan-EPW
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -2792,6 +2793,7 @@ str_ldl_RADAR_MAP_CITIES			"Città"
 str_ldl_RADAR_MAP_BORDERS			"Confini"
 str_ldl_RADAR_MAP_POLITICAL			"Politico"
 str_ldl_RADAR_MAP_CAPITOLS			"Capitali"
+str_ldl_RADAR_MAP_RELATIONSHIPS		"Relationships"
 
 str_ldl_BV_RETREAT				"Ritirata"
 

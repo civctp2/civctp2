@@ -190,6 +190,7 @@ void RadarMap::InitCommon(void)
 	m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
 	m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
 	m_displayCapitols = g_theProfileDB->GetDisplayCapitols() != FALSE;
+	m_displayRelations = g_theProfileDB->GetDisplayRelations() != FALSE;
 
 	m_mapOverlay = NULL;
 
@@ -442,6 +443,8 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					else{
 						if(m_displayPolitical)
 							return(g_colorSet->GetColor(COLOR_WHITE));
+						else if(m_displayRelations && owner != player->m_owner)
+							return RadarTileRelationsColor(position, player, owner);
 						else
 							return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 					}
@@ -452,10 +455,19 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 				}
 			}
 			else if(m_displayUnits && unit.m_id)
-				if(m_displayPolitical && unit.GetOwner() == owner)
+			{
+				if(m_displayRelations && owner != player->m_owner)
+				{
+					if(m_displayPolitical && unit.GetOwner() == owner) 
+						return g_colorSet->GetDarkColor(static_cast<COLOR>(RadarTileRelationsColor(position, player, owner)));
+					else
+						return RadarTileRelationsColor(position, player, owner);
+				}
+				else if(m_displayPolitical && unit.GetOwner() == owner)
 					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
 				else
 					return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+			}
 		}
 
 		if(m_displayPolitical) {
@@ -466,7 +478,10 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					|| g_fog_toggle // Don't forget if fog of war is off
 					|| g_god
 					) { 
-						return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos)); 
+						if(m_displayRelations && owner != player->m_owner)
+							return RadarTileRelationsColor(position, player, owner);
+						else
+							return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos)); 
 				}			
 			}
 		}
@@ -524,7 +539,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 //	- Checks which color a border must be drawn for the current tile 
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
+Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *player)
 {
 	
 // Added by Martin Gühmann
@@ -532,8 +547,25 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position)
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_BLACK));
 
-	
-	return(g_colorSet->GetPlayerColor(owner));
+	if(m_displayRelations && player->m_owner != owner)
+		return RadarTileRelationsColor(position, player, owner);
+	else
+		return(g_colorSet->GetPlayerColor(owner));
+}
+
+Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 owner)
+{
+	Assert(true == m_displayRelations);
+	Assert(player->m_owner != owner);
+
+	if(player->HasWarWith(owner))
+		return(g_colorSet->GetColor(COLOR_RED));
+	else if(player->HasAllianceWith(owner))
+		return(g_colorSet->GetColor(COLOR_BLUE));
+	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
+		return(g_colorSet->GetColor(COLOR_GREEN));
+	else
+		return(g_colorSet->GetColor(COLOR_YELLOW));
 }
 
 
@@ -672,8 +704,8 @@ void RadarMap::RenderCapitol(aui_Surface *surface, const MapPoint &position, con
 	};
 
 
-	primitives_PaintRect16(surface, &vertical, g_colorSet->GetColor(COLOR_YELLOW));
-	primitives_PaintRect16(surface, &horizontal, g_colorSet->GetColor(COLOR_YELLOW));
+	primitives_PaintRect16(surface, &vertical, g_colorSet->GetColor(COLOR_ORANGE));
+	primitives_PaintRect16(surface, &horizontal, g_colorSet->GetColor(COLOR_ORANGE));
 
 
 }
@@ -942,7 +974,7 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 	if (borderFlags)
 	{
 		Pixel16 const	borderColor = 
-			RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y));
+			RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y), player);
 		sint32 const	x	= ((position.y / 2) + position.x) % m_mapSize->x;
 		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
 	}

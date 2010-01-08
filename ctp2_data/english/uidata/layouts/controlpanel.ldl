@@ -23,6 +23,7 @@
 # - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
 # - Added political map button - 6-Jul-2009 EPW
 # -Added view capital button -5-Jan-2009 EPW
+# -Added view relations button -7-Jan-10 EPW
 ################################################################################
 
 ################################################################################
@@ -3097,6 +3098,19 @@ RadarWindow {
 			# Tooltip
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON"
+		}
+		Button10:RADARWINDOW_TOGGLE_BUTTON {
+			# Location.
+			int		xpix			38
+			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_RELATIONS"
+			# Icon for button
+			string 	image0 		"upcb30u.tga"
+			string 	image1 		"upcb30.tga"
+			# Tooltip
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON"
 		}
 
 	}

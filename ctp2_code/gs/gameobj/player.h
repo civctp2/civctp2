@@ -43,7 +43,7 @@
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - Added stuff for unit and city gold support. (22-Jul-2009 Maq)
-//
+// -Added HasPeaceTreatyWith() and HasAnyPactWith() functions (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -1023,6 +1023,8 @@ public:
 	void ThisMeansWAR(PLAYER_INDEX defense_owner);
 	bool HasWarWith(PLAYER_INDEX otherPlayer) const;
 	bool HasAllianceWith(PLAYER_INDEX otherPlayer) const;
+	bool HasPeaceTreatyWith(PLAYER_INDEX otherPlayer) const;
+	bool HasAnyPactWith(PLAYER_INDEX otherPlayer) const;
 
 	void ResetVision();
 

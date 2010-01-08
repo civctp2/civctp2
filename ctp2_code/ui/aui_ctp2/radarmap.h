@@ -30,6 +30,7 @@
 //   (L. Hirth 6/2004)
 // -Added m_displayPolitical variable and associated functions (6-Jul-2009 EPW)
 // -Added m_displayCapitol and functions(5-Jan-10 EPW)
+// -Added m_displayRelations and functions(7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -147,6 +148,8 @@ public:
 		{ m_displayPolitical = status; Update(); g_theProfileDB->SetDisplayPolitical(status);}
 	void DisplayCapitols(bool status = true) 
 		{ m_displayCapitols = status; Update(); g_theProfileDB->SetDisplayCapitols(status);}
+	void DisplayRelations(bool status = true) 
+		{ m_displayRelations = status; Update(); g_theProfileDB->SetDisplayRelations(status);}
 
 	
 	bool IsDisplayUnits() { return(m_displayUnits); }
@@ -158,6 +161,7 @@ public:
 	bool IsDisplayTerrain() { return m_displayTerrain; }
 	bool IsDisplayPolitical() { return m_displayPolitical; }
 	bool IsDisplayCapitols() { return m_displayCapitols; }
+	bool IsDisplayRelations() { return m_displayRelations; }
 
 private:
 	
@@ -169,7 +173,9 @@ private:
 	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
 
 	
-	Pixel16 RadarTileBorderColor(const MapPoint &position);
+	Pixel16 RadarTileBorderColor(const MapPoint &position, const Player *player);
+
+	Pixel16 RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 owner);
 
 	
 	uint8 RadarTileBorder(const Player *player, const MapPoint &position);
@@ -229,6 +235,7 @@ private:
 	bool        m_displayTrade;
 	bool		m_displayPolitical;
 	bool		m_displayCapitols;
+	bool		m_displayRelations;
 
 	
 	

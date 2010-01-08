@@ -123,7 +123,7 @@
 //   gold support and city maintenance. (22-Jul-2009 Maq)
 // - Made units over the maxhp after a hp wonder is lost reset their maxhp
 //   to the latest maximum. (03-Aug-2009 Maq)
-//
+// -Added HasPeaceTreatyWith() and HasAnyPactWith() functions (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 //
 // Notes
@@ -8875,6 +8875,34 @@ bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
 	return      m_owner > 0
 	    &&  otherPlayer > 0
 	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_ALLIANCE);
+}
+
+bool Player::HasPeaceTreatyWith(PLAYER_INDEX otherPlayer) const
+{
+	Assert(0 <= otherPlayer);
+	Assert(otherPlayer < k_MAX_PLAYERS);
+	Assert(m_owner != otherPlayer);
+
+	// Everyone is always at war with the barbarians.
+	return      m_owner > 0
+	    &&  otherPlayer > 0
+	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_PEACE);
+}
+//True if player has at least one of trade/military/research/pollution pact with other player
+bool Player::HasAnyPactWith(PLAYER_INDEX otherPlayer) const
+{
+	Assert(0 <= otherPlayer);
+	Assert(otherPlayer < k_MAX_PLAYERS);
+	Assert(m_owner != otherPlayer);
+
+	// Everyone is always at war with the barbarians.
+	return      m_owner > 0
+	    &&  otherPlayer > 0
+	    && (AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_TRADE_PACT)
+		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_RESEARCH_PACT)
+		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_MILITARY_PACT)
+		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_POLLUTION_PACT));
+
 }
 
 void player_ActivateSpaceButton(sint32 owner)
