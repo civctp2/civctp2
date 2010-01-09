@@ -449,7 +449,7 @@ STRATEGY_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
@@ -1617,7 +1617,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
@@ -2118,7 +2118,7 @@ STRATEGY_MILITARIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
@@ -2627,7 +2627,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
@@ -3127,7 +3127,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
@@ -3627,7 +3627,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
         AllCities
-//      NoUnits
+        NoUnits
         Advice BUILD_DEFAULT_ADVICE
     }
 
