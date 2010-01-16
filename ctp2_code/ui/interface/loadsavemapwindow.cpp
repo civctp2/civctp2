@@ -41,7 +41,6 @@
 #include "aui_textfield.h"
 #include "aui_stringtable.h"
 #include "aui_tabgroup.h"
-#include "aui_directsurface.h"
 
 #include "c3ui.h"
 #include "c3_button.h"

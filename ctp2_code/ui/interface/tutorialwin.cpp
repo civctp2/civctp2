@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The tutorial window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -33,7 +33,6 @@
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
-#include "aui_directsurface.h"
 #include "aui_stringtable.h"
 
 #include "c3ui.h"

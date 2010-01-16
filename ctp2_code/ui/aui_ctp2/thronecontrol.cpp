@@ -35,7 +35,7 @@
 #include "aui_uniqueid.h"
 #include "aui_surface.h"
 
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
@@ -175,7 +175,8 @@ void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 
 			sprintf( block, "%s.%s", ldlBlock, s_upgradeName[i] );
 
-            if (aui_Ldl::GetLdl()->FindDataBlock( block ) ) {
+			if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+			{
 				m_upgradeText[i] = new c3_Static( &errcode, aui_UniqueId(), block );
 				m_upgradeText[i]->Hide();
 			}
@@ -184,7 +185,6 @@ void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 
 	InitCommon();
 }
-
 
 void ThroneControl::InitCommon(void)
 {
@@ -224,8 +224,7 @@ void ThroneControl::InitCommon(void)
 		m_drawOrder[i] = (sint8)i;
 	}
 
-	
-	m_throneSurface = new aui_DirectSurface( &errcode, m_width, m_height, 16, g_c3ui->DD() );
+	m_throneSurface = aui_Factory::new_Surface(errcode, m_width, m_height);
 	Assert( AUI_NEWOK(m_throneSurface, errcode) );
 
 	m_zoomedImage = NULL;
@@ -241,7 +240,6 @@ void ThroneControl::InitCommon(void)
 	m_isZoomed = FALSE;
 }
 
-
 void ThroneControl::UpdateThrone(aui_Surface *surf, sint32 x, sint32 y)
 {
 	RECT		rect = {0, 0, m_throneSurface->Width(), m_throneSurface->Height()};
@@ -250,16 +248,12 @@ void ThroneControl::UpdateThrone(aui_Surface *surf, sint32 x, sint32 y)
 	g_c3ui->TheBlitter()->Blt(surf, x, y, m_throneSurface, &rect, k_AUI_BLITTER_FLAG_COPY);
 }
 
-
 sint32 ThroneControl::RenderThrone( aui_Surface *surf )
 {
 	RECT	rect = { 0, 0, m_background->TheSurface()->Width(), m_background->TheSurface()->Height() };
 
-	
-
 	g_c3ui->TheBlitter()->Blt( surf, 0, 0, m_background->TheSurface(), &rect, k_AUI_BLITTER_FLAG_CHROMAKEY );
 
-	
 	for ( sint32 i = 0;i < k_THRONE_IMAGES;i++ ) {
 
 		
@@ -321,7 +315,7 @@ aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 
 	
 	if ( !tempBG ) {
-		tempBG = new aui_DirectSurface( &errcode, m_width, m_height, 16, g_c3ui->DD() );
+		tempBG = aui_Factory::new_Surface(errcode, m_width, m_height);
 		Assert( AUI_NEWOK(tempBG, errcode) );
 		if ( !AUI_NEWOK(tempBG, errcode) ) return NULL;
 	}
@@ -364,7 +358,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 
 	
 	if ( !m_oldCutout ) {
-		m_oldCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+		m_oldCutout = aui_Factory::new_Surface(errcode, width, height);
 		Assert( AUI_NEWOK(m_oldCutout, errcode) );
 
 		
@@ -379,7 +373,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 	
 	
 	if ( !m_newCutout ) {
-		m_newCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+		m_newCutout = aui_Factory::new_Surface(errcode, width, height);
 		Assert( AUI_NEWOK(m_newCutout, errcode) );
 
 		
@@ -387,8 +381,8 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 			k_AUI_BLITTER_FLAG_COPY );
 	}
 
-	
-	if ( tempBG ) {
+	if ( tempBG )
+	{
 		delete tempBG;
 	}
 }
@@ -436,19 +430,17 @@ void ThroneControl::HilightImage( sint32 index )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;	
 
 	
-	if ( !m_oldCutout ) {
-		m_oldCutout = new aui_DirectSurface( &errcode, width, height, 16, g_c3ui->DD() );
+	if ( !m_oldCutout )
+	{
+		m_oldCutout = aui_Factory::new_Surface(errcode, width, height);
 		Assert( AUI_NEWOK(m_oldCutout, errcode) );
 
-		
 		g_c3ui->TheBlitter()->Blt( m_oldCutout, 0, 0, m_upgradeImage[index]->TheSurface(),
 		&rect, k_AUI_BLITTER_FLAG_CHROMAKEY );
 	}
 
-	
 	primitives_LightenSurface( m_oldCutout, k_THRONE_HIGHLIGHT_IMAGE );
 
-	
 	g_c3ui->TheBlitter()->Blt( m_throneSurface, m_upgradeRect[index].left, m_upgradeRect[index].top, m_oldCutout,
 		&rect, k_AUI_BLITTER_FLAG_CHROMAKEY );
 

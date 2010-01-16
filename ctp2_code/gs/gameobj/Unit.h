@@ -308,7 +308,7 @@ public:
 
 	void GetPop(sint32 &p)const;
 	void GetTurnsToNextPop(sint32 &p)const;//PFT 29 mar 05, show # turns until city next grows a pop
-	sint32 IsCity() const;
+	bool IsCity() const;
 	void DrawCityStats(aui_Surface *surf, sint32 x, sint32 y);
 
 	

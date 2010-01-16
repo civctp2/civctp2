@@ -16,8 +16,6 @@
 
 #include "aui.h"
 #include "aui_blitter.h"
-#include "aui_directsurface.h"
-#include "aui_sdlsurface.h"
 #include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "aui_window.h"
@@ -171,7 +169,7 @@ void WorkMap::InitCommon( sint32 scale)
 	}
 	m_numWorkers = 0;
 
-	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height);
 	Assert( m_surface != NULL );
 	if ( !m_surface ) return;
 
@@ -182,10 +180,6 @@ void WorkMap::InitCommon( sint32 scale)
 
 AUI_ERRCODE WorkMap::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
-
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -193,11 +187,6 @@ AUI_ERRCODE WorkMap::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
-
-	
-	
-	
-
 
 	UpdateFromSurface(surface, &rect);
 	DrawSprites(surface, &rect);
@@ -217,12 +206,6 @@ AUI_ERRCODE WorkMap::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void WorkMap::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
-
-
-
-
-
-
 	if (IsDisabled()) return;
 
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
@@ -245,16 +228,17 @@ void WorkMap::MouseMoveInside(aui_MouseEvent *data)
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-    Assert(data); 
+	Assert(data);
 
 	POINT temp = data->position;
 	temp.x -= X();
 	temp.y -= Y();
 
-    MapPoint tmp;
-    if (MousePointToTilePos(temp, tmp)){
-        m_current_mouse_tile = tmp; 
-    }
+	MapPoint tmp;
+	if (MousePointToTilePos(temp, tmp))
+	{
+		m_current_mouse_tile = tmp; 
+	}
 
 	SetHiliteMouseTile(m_current_mouse_tile);
 
@@ -263,32 +247,21 @@ void WorkMap::MouseMoveInside(aui_MouseEvent *data)
 }
 
 void WorkMap::MouseMoveAway(aui_MouseEvent *data)
-
 {
 	if (IsDisabled()) return;
 
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-    Assert(data); 
+	Assert(data); 
 
 	m_drawHilite = FALSE;
 }
-
-
-
-
 
 void WorkMap::NotifyPopChanged()
 {
 	DrawSurface();
 }
-
-
-
-
-
-
 
 sint32 WorkMap::DrawSurface(void)
 {

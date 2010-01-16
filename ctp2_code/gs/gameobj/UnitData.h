@@ -410,7 +410,7 @@ public:
 	void SetActor(UnitActor *a) { m_actor = a; };
 	UnitActor * GetActor() const { return m_actor; };
 
-	sint32 IsCity() const { return m_city_data != NULL; }
+	bool IsCity() const { return m_city_data != NULL; }
 	void GetConsumptionStats(sint32 &foodConsumed) const;
 	void GetPop(sint32 &p)const; 
 	void GetTurnsToNextPop(sint32 &p)const; //PFT 29 mar 05, show # turns until city grows

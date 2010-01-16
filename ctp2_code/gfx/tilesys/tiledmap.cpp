@@ -295,7 +295,7 @@ sint32 TiledMap::Initialize(RECT *viewRect)
 	sint32			h = viewRect->bottom - viewRect->top;
 	AUI_ERRCODE		errcode;
 
-	m_mapSurface = aui_Factory::new_Surface(errcode, w, h, 16);
+	m_mapSurface = aui_Factory::new_Surface(errcode, w, h);
 	Assert(m_mapSurface);
 	if (!m_mapSurface) return AUI_ERRCODE_MEMALLOCFAILED;
 

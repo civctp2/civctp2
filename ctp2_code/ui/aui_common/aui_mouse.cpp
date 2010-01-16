@@ -21,7 +21,6 @@
 // _DEBUG
 // - Generate debug version when set.
 //
-// __AUI_USE_DIRECTX__
 // SEIZUREBLIT
 //
 //----------------------------------------------------------------------------
@@ -34,16 +33,8 @@
 
 #include "c3.h"
 
-#ifdef __AUI_USE_DIRECTX__
-#include "aui_directui.h"
-#include "aui_directsurface.h"
-#elif defined(__AUI_USE_SDL__)
-#include "aui_sdlui.h"
-#include "aui_sdlsurface.h"
-#else
+#include "aui_factory.h"
 #include "aui_ui.h"
-#include "aui_surface.h"
-#endif 
 
 #include "aui_blitter.h"
 #include "aui_cursor.h"
@@ -427,107 +418,48 @@ AUI_ERRCODE aui_Mouse::Start( void )
 
 AUI_ERRCODE aui_Mouse::CreatePrivateBuffers( void )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	DestroyPrivateBuffers();
 
-	
-#ifdef __AUI_USE_DIRECTX__
-	m_privateMix = new aui_DirectSurface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
-			NULL,
-			FALSE,
-			FALSE ); 
-	Assert( AUI_NEWOK(m_privateMix,retcode) );
-	if ( !AUI_NEWOK(m_privateMix,retcode) ) return retcode;
+	m_privateMix = aui_Factory::new_Surface(errcode, k_MOUSE_MAXSIZE, k_MOUSE_MAXSIZE);
+	Assert( AUI_NEWOK(m_privateMix, errcode) );
+	if ( !AUI_NEWOK(m_privateMix, errcode) ) return errcode;
 
-	m_pickup = new aui_DirectSurface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
-			NULL,
-			FALSE,
-			FALSE ); 
-	Assert( AUI_NEWOK(m_pickup,retcode) );
-	if ( !AUI_NEWOK(m_pickup,retcode) ) return retcode;
+	m_pickup =     aui_Factory::new_Surface(errcode, k_MOUSE_MAXSIZE, k_MOUSE_MAXSIZE);
+	Assert( AUI_NEWOK(m_pickup, errcode) );
+	if ( !AUI_NEWOK(m_pickup, errcode) ) return errcode;
 
-	m_prevPickup = new aui_DirectSurface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel(),
-			((aui_DirectUI *)g_ui)->DD(),
-			NULL,
-			FALSE,
-			FALSE ); 
-	Assert( AUI_NEWOK(m_prevPickup,retcode) );
-	if ( !AUI_NEWOK(m_prevPickup,retcode) ) return retcode;
-#else
-	m_privateMix = new aui_Surface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel() );
-	Assert( AUI_NEWOK(m_privateMix,retcode) );
-	if ( !AUI_NEWOK(m_privateMix,retcode) ) return retcode;
+	m_prevPickup = aui_Factory::new_Surface(errcode, k_MOUSE_MAXSIZE, k_MOUSE_MAXSIZE);
+	Assert( AUI_NEWOK(m_prevPickup, errcode) );
+	if ( !AUI_NEWOK(m_prevPickup, errcode) ) return errcode;
 
-	m_pickup = new aui_Surface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel() );
-	Assert( AUI_NEWOK(m_pickup,retcode) );
-	if ( !AUI_NEWOK(m_pickup,retcode) ) return retcode;
-
-	m_prevPickup = new aui_Surface(
-			&retcode,
-			k_MOUSE_MAXSIZE,
-			k_MOUSE_MAXSIZE,
-			g_ui->BitsPerPixel() );
-	Assert( AUI_NEWOK(m_prevPickup,retcode) );
-	if ( !AUI_NEWOK(m_prevPickup,retcode) ) return retcode;
-#endif 
-
-	return retcode;
+	return errcode;
 }
-
-
 
 void aui_Mouse::DestroyPrivateBuffers( void )
 {
 	delete m_privateMix;
 	m_privateMix = NULL;
 
-    delete m_pickup;
+	delete m_pickup;
 	m_pickup = NULL;
 	
 	delete m_prevPickup;
 	m_prevPickup = NULL;
 }
 
-
-
 AUI_ERRCODE aui_Mouse::End( void )
 {
-	
 	Unacquire();
 
 	if ( m_thread )
 	{
 		if ( m_threadEvent && m_terminateEvent )
 		{
-			
 			SetEvent( m_terminateEvent );
 			SetEvent( m_threadEvent );
 
-			
 			if ( WaitForSingleObject( m_thread, 2000 ) != WAIT_OBJECT_0 )
 				TerminateThread( m_thread, 1 );
 
@@ -540,7 +472,6 @@ AUI_ERRCODE aui_Mouse::End( void )
 		else
 			TerminateThread( m_thread, 1 );
 
-		
 		Erase();
 
 		if ( m_suspendEvent )
@@ -571,25 +502,19 @@ AUI_ERRCODE aui_Mouse::End( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 {
-	
 	if ( !m_thread ) return AUI_ERRCODE_NOTHREAD;
 
-	
 	if ( m_suspendCount )
 	{
 		m_suspendCount++;
 		return AUI_ERRCODE_OK;
 	}
 
-	
 	SetEvent( m_suspendEvent );
 	SetEvent( m_threadEvent );
 
-	
 	if ( WaitForSingleObject( m_replyEvent, INFINITE ) == WAIT_OBJECT_0 )
 	{
 		ResetEvent( m_replyEvent );
@@ -611,10 +536,6 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 
 	return AUI_ERRCODE_SUSPENDFAILED;
 }
-
-
-
-
 
 AUI_ERRCODE aui_Mouse::Resume( void )
 {

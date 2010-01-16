@@ -17,7 +17,7 @@
 //
 // Compiler flags
 //
-// __AUI_USE_DIRECTX__
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -30,21 +30,12 @@
 
 #include "c3.h"
 
-#ifdef __AUI_USE_DIRECTX__
-#include "aui_directui.h"
-#include "aui_directsurface.h"
-#else
-#include "aui_ui.h"
-#include "aui_surface.h"
-#endif 
-
 #include "aui_blitter.h"
+#include "aui_factory.h"
+#include "aui_image.h"
 #include "aui_memmap.h"
 #include "aui_pixel.h"
-
-#include "aui_image.h"
-
-
+#include "aui_ui.h"
 
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,
@@ -65,8 +56,6 @@ aui_Image::aui_Image(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-
 AUI_ERRCODE aui_Image::InitCommon( MBCHAR const *filename )
 {
 	m_surface = NULL,
@@ -79,14 +68,10 @@ AUI_ERRCODE aui_Image::InitCommon( MBCHAR const *filename )
 	return AUI_ERRCODE_OK;
 }
 
-
-
 aui_Image::~aui_Image()
 {
 	Unload();
 }
-
-
 
 AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 {
@@ -105,11 +90,8 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 	}
 
 	Assert(m_format);
-    return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
+	return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
 }
-
-
-
 
 AUI_ERRCODE aui_Image::Load( void )
 {
@@ -122,51 +104,29 @@ AUI_ERRCODE aui_Image::Load( void )
 	return m_format->Load(m_filename, this);
 }
 
-
-
-
 AUI_ERRCODE aui_Image::Unload( void )
 {
 	if (g_ui && g_ui->TheMemMap())
 	{
 		g_ui->TheMemMap()->ReleaseFileFormat(m_format);
-        m_format = NULL;
+		m_format = NULL;
 	}
 
 	delete  m_surface;
-    m_surface = NULL;
+	m_surface = NULL;
 
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
 AUI_ERRCODE aui_Image::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-#ifdef __AUI_USE_DIRECTX__
-	m_surface = new aui_DirectSurface(
-		&retcode,
-		width,
-		height,
-		bpp,
-		((aui_DirectUI *)g_ui)->DD() );
-#else
-	m_surface = new aui_Surface(
-		&retcode,
-		width,
-		height,
-		bpp );
-#endif 
+	m_surface = aui_Factory::new_Surface(errcode, width, height);
 
-	Assert( AUI_NEWOK(m_surface,retcode) );
-
-	return retcode;
+	Assert( AUI_NEWOK(m_surface, errcode) );
+	return errcode;
 }
-
-
 
 AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
                                        sint32 bpp, sint32 pitch, 
@@ -175,45 +135,35 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 	m_surface = new aui_Surface(
-		&retcode,
-		width,
-		height,
-		bpp,
-        pitch,
-        buffer );
+	    &retcode,
+	    width,
+	    height,
+	    bpp,
+	    pitch,
+	    buffer );
 
 	Assert( AUI_NEWOK(m_surface,retcode) );
 
 	return retcode;
 }
 
-
-
-
-
-
-
 AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
 	uint8 *filebits = g_ui->TheMemMap()->GetFileBits( filename );
 	Assert( filebits != NULL );
 	if ( !filebits ) return AUI_ERRCODE_HACK;
 
-	
 	BITMAPFILEHEADER bfh;
 	memcpy( &bfh, filebits, sizeof( bfh ) );
 	uint32 foffset = sizeof( bfh );
 
-	
 	if ( LOBYTE(bfh.bfType) != 'B' || HIBYTE(bfh.bfType) != 'M' ) {
 		g_ui->TheMemMap()->ReleaseFileBits( filebits );
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
-	
 	BITMAPINFOHEADER bih;
 	memcpy( &bih, filebits + foffset, sizeof( bih ) );
 	foffset += sizeof( bih );
@@ -224,7 +174,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
-	
 	RGBQUAD *rgbq = NULL;
 	if ( bih.biBitCount == 8 &&
 		(bfh.bfOffBits - (sizeof(bih) + sizeof(bfh)) == (256 * sizeof( RGBQUAD ))) ) {
@@ -240,18 +189,14 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 		foffset += 256 * sizeof( RGBQUAD );
 	}
 
-	
 	uint32 width = bih.biWidth;
 	uint32 height = bih.biHeight >= 0 ? bih.biHeight : -bih.biHeight;
 
-	
 	sint32 temp = width * bih.biBitCount / 8;
 	uint32 bmpPitch = temp + Mod(-temp,sizeof( LONG ));
 
-	
 	uint32 bpp = g_ui->BitsPerPixel();
 
-	
 	AUI_ERRCODE errcode = image->LoadEmpty( width, height, bpp );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) )
@@ -263,7 +208,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 
 	aui_Surface *surface = image->TheSurface();
 
-	
 	switch ( bpp )
 	{
 	case 8:
@@ -326,7 +270,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 		break;
 	}
 
-	
 	if ( rgbq ) delete rgbq;
 	g_ui->TheMemMap()->ReleaseFileBits( filebits );
 
@@ -376,17 +319,12 @@ void aui_Image::SetChromakey(sint32 r, sint32 g, sint32 b)
 	if (surf == NULL)
 		return;
 
-	
-	
-	
-	
 	Assert(r >= 0);
 	Assert(r <= 255);
 	Assert(g >= 0);
 	Assert(g <= 255);
 	Assert(b >= 0);
 	Assert(b <= 255);
-
 
 	surf->SetChromaKey((uint8) r, (uint8) g,(uint8) b);
 }

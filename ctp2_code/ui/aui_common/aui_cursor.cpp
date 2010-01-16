@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// __AUI_USE_DIRECTX__
+// -None
 //
 //----------------------------------------------------------------------------
 //
@@ -30,17 +30,8 @@
 
 #include "c3.h"
 
-#ifdef __AUI_USE_DIRECTX__
-#include "aui_directui.h"
-#include "aui_directsurface.h"
-#else
-#include "aui_ui.h"
-#include "aui_surface.h"
-#endif 
-
+#include "aui_factory.h"
 #include "aui_cursor.h"
-
-
 
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,
@@ -56,16 +47,12 @@ aui_Cursor::aui_Cursor(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-
 AUI_ERRCODE aui_Cursor::InitCommon( void )
 {
 	memset( &m_hotspot, 0, sizeof( m_hotspot ) );
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 AUI_ERRCODE aui_Cursor::GetHotspot( sint32 *x, sint32 *y )
 {
@@ -77,8 +64,8 @@ AUI_ERRCODE aui_Cursor::GetHotspot( sint32 *x, sint32 *y )
 
 void aui_Cursor::GetHotspot(POINT & a_Hotspot) const
 {
-    a_Hotspot.x = m_hotspot.x;
-    a_Hotspot.y = m_hotspot.y;
+	a_Hotspot.x = m_hotspot.x;
+	a_Hotspot.y = m_hotspot.y;
 }
 
 AUI_ERRCODE aui_Cursor::SetHotspot( sint32 x, sint32 y )
@@ -89,31 +76,12 @@ AUI_ERRCODE aui_Cursor::SetHotspot( sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
 AUI_ERRCODE aui_Cursor::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-#ifdef __AUI_USE_DIRECTX__
-	m_surface = new aui_DirectSurface(
-		&retcode,
-		width,
-		height,
-		bpp,
-		((aui_DirectUI *)g_ui)->DD(),
-		NULL,
-		FALSE,
-		FALSE );
-#else
-	m_surface = new aui_Surface(
-		&retcode,
-		width,
-		height,
-		bpp );
-#endif 
+	m_surface = aui_Factory::new_Surface(errcode, width, height);
 
-	Assert( AUI_NEWOK(m_surface,retcode) );
-	return retcode;
+	Assert( AUI_NEWOK(m_surface, errcode) );
+	return errcode;
 }

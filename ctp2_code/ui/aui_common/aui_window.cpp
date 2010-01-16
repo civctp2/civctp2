@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// __AUI_USE_DIRECTX__
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -31,13 +31,7 @@
 #include "c3.h"
 #include "aui_window.h"
 
-#ifdef __AUI_USE_DIRECTX__
-#include "aui_directui.h"
-#include "aui_directsurface.h"
-#else
-#include "aui_sdlui.h"
-#include "aui_sdlsurface.h"
-#endif 
+#include "aui_factory.h"
 
 #include "aui_blitter.h"
 #include "aui_control.h"
@@ -50,8 +44,6 @@
 extern C3UI *   g_c3ui;
 
 uint32 aui_Window::m_windowClassId = aui_UniqueId();
-
-
 
 aui_Window::aui_Window(
 	AUI_ERRCODE *retval,
@@ -68,8 +60,6 @@ aui_Window::aui_Window(
 	*retval = InitCommon( bpp, type );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
-
 
 aui_Window::aui_Window(
 	AUI_ERRCODE *retval,
@@ -89,7 +79,6 @@ aui_Window::aui_Window(
 	*retval = InitCommon( bpp, type );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 AUI_ERRCODE aui_Window::InitCommon( sint32 bpp, AUI_WINDOW_TYPE type )
 {
@@ -130,8 +119,6 @@ AUI_ERRCODE aui_Window::InitCommon( sint32 bpp, AUI_WINDOW_TYPE type )
 	return errcode;
 }
 
-
-
 AUI_ERRCODE aui_Window::CreateSurface( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -139,20 +126,8 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 	Assert( m_surface == NULL );
 	if ( !m_surface )
 	{
-#ifdef __AUI_USE_DIRECTX__
-		m_surface = new aui_DirectSurface(
-			&errcode,
-			m_width,
-			m_height,
-			m_bpp,
-			((aui_DirectUI *)g_ui)->DD() );
-#else
-		m_surface = new aui_Surface(
-			&errcode,
-			m_width,
-			m_height,
-			m_bpp );
-#endif 
+		m_surface = aui_Factory::new_Surface(errcode, m_width, m_height);
+
 		Assert( AUI_NEWOK(m_surface,errcode) );
 		if ( !AUI_NEWOK(m_surface,errcode) ) return errcode;
 	}
@@ -162,8 +137,6 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 	}
 	return errcode;
 }
-
-
 
 aui_Window::~aui_Window()
 {

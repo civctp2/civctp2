@@ -32,7 +32,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
 #include "aui_rectangle.h"
 
 #include "c3blitter.h"

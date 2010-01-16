@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : CTP2 drop down menu
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -35,7 +35,6 @@
 #include "aui_window.h"
 #include "aui_uniqueid.h"
 #include "aui_surface.h"
-#include "aui_directsurface.h"
 #include "aui_ranger.h"
 
 #include "c3ui.h"

@@ -15,7 +15,7 @@
 
 #include "aui.h"
 #include "aui_uniqueid.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
 #include "c3scroller.h"
@@ -187,14 +187,12 @@ AUI_ERRCODE TextTable::InitCommon( uint32 columns, aui_Surface *surface )
 	
 	if (surface) 
 	{
-		textHeight = textutils_GetFontHeight( 
-			(aui_DirectSurface *)surface, m_fontsize );
+		textHeight = textutils_GetFontHeight(surface, m_fontsize );
 	}
 	else
 	{
 		
-		textHeight = textutils_GetHeight( 
-			(aui_DirectSurface *)g_c3ui->Primary(), "Wj" );
+		textHeight = textutils_GetHeight(g_c3ui->Secondary(), "Wj" );
 	}
 	
 	

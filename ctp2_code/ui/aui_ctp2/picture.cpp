@@ -14,7 +14,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "c3blitter.h"
 #include "c3ui.h"
 
@@ -24,12 +24,6 @@
 
 extern C3UI		*g_c3ui;
 
-
-
-
-
-
-
 Picture::Picture(
 	AUI_ERRCODE *retval,
 	MBCHAR const * szFileName )
@@ -38,8 +32,6 @@ Picture::Picture(
 	Load();
 	MakeMipmap();
 }
-
-
 
 AUI_ERRCODE Picture::MakeMipmap( void )
 {
@@ -62,14 +54,13 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 		sint32 srcHeight = pSrcSurf->Height();
 		sint32 mipWidth = srcWidth >> 1;
 		sint32 mipHeight = srcHeight >> 1;
-		sint32 mipBpp = 16;
 
 		AUI_ERRCODE retcode;
-		pMipmap = new aui_DirectSurface(&retcode,mipWidth,mipHeight,mipBpp,g_c3ui->DD());
+		pMipmap = aui_Factory::new_Surface(retcode, mipWidth, mipHeight);
 		Assert(pMipmap);
 		if (pMipmap)
 		{
-	        uint16 *  pDestBuffer = NULL;
+			uint16 *  pDestBuffer = NULL;
 			errcode = pMipmap->Lock(NULL, (LPVOID *)&pDestBuffer, 0);
 
 			if (errcode == AUI_ERRCODE_OK)

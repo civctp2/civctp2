@@ -1214,7 +1214,7 @@ uint32 Unit_Unit_GetVersion(void)
 }
 
 
-sint32 Unit::IsCity() const
+bool Unit::IsCity() const
 {
 	return GetData()->IsCity();
 }

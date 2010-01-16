@@ -39,7 +39,6 @@
 
 #include "aui.h"
 #include "aui_surface.h"
-#include "aui_directsurface.h"
 #include "aui_image.h"
 #include "pattern.h"
 #include "aui_blitter.h"

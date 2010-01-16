@@ -37,7 +37,7 @@
 #include "aui_action.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "aui_static.h"
@@ -61,7 +61,6 @@ extern C3UI*		g_c3ui;
 #define k_C3_ANIMATION_MODIFIER				20
 #define k_C3_ANIMATION_SPEED				"animationSpeed"
 #define k_C3_ANIMATION_FRAMES				"FrameTable"
-#define k_C3_ANIMATION_BITS_PER_PIXEL		16
 #define k_C3_ANIMATION_MAXBLEND				32
 #define k_C3_ANIMATION_BLEND_STEP			1
 #define k_C3_ANIMATION_BLEND_SPEED			"blendSpeed"
@@ -452,8 +451,7 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 
 	
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;						
-	aui_DirectSurface *backSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-		k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+	aui_Surface *backSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom);
 	Assert(AUI_NEWOK(backSurface, errcode));
 
 	
@@ -463,8 +461,7 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, lastRect.right, lastRect.bottom,
-			k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, lastRect.right, lastRect.bottom);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		
@@ -493,8 +490,7 @@ AUI_ERRCODE c3_TriggeredAnimation::DrawBlendImage(aui_Surface *destSurf, RECT *d
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-			k_C3_ANIMATION_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		

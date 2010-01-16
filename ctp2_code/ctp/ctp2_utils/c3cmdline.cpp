@@ -6520,12 +6520,12 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
        l = 0;
        sprintf (buf, "call count %d", new_state.lCounts[1]);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+	   primitives_DrawText(surf, 
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
         l++;
        sprintf (buf, "currently allocated %d", new_state.lSizes[1]);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+	   primitives_DrawText(surf, 
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 
@@ -6533,7 +6533,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
        l++;
        l++;
        sprintf (buf, "cumlative total %d", new_state.lTotalCount);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+	   primitives_DrawText(surf, 
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 
@@ -6551,7 +6551,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
        } else { 
            color = 0;
        }
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+	   primitives_DrawText(surf, 
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, color , 0);
 #endif

@@ -30,7 +30,7 @@
 #include "textutils.h"
 
 #include "aui.h"
-#include "aui_directsurface.h"
+#include "aui_surface.h"
 
 
 #include "primitives.h"

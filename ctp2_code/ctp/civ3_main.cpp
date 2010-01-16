@@ -75,7 +75,7 @@
 #include "aui_directkeyboard.h"
 #include "aui_directmouse.h"
 #include "aui_directmoviemanager.h"
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "aui_ldl.h"
 #include "background.h"
 #include "backgroundwin.h"
@@ -823,20 +823,8 @@ sint32 sharedsurface_Initialize( void )
 	Assert( g_sharedSurface == NULL );
 	if ( !g_sharedSurface )
 	{
-#ifdef __AUI_USE_DIRECTX__
-		g_sharedSurface = new aui_DirectSurface(
-			&errcode,
-			k_SHARED_SURFACE_WIDTH,
-			k_SHARED_SURFACE_HEIGHT,
-			k_SHARED_SURFACE_BPP,
-			((aui_DirectUI *)g_ui)->DD() );
-#else
-		g_sharedSurface = new aui_Surface(
-			&errcode,
-			k_SHARED_SURFACE_WIDTH,
-			k_SHARED_SURFACE_HEIGHT,
-			k_SHARED_SURFACE_BPP );
-#endif 
+		g_sharedSurface = aui_Factory::new_Surface(errcode, k_SHARED_SURFACE_WIDTH, k_SHARED_SURFACE_HEIGHT);
+
 		Assert( AUI_NEWOK(g_sharedSurface,errcode) );
 		if ( !AUI_NEWOK(g_sharedSurface,errcode) ) return errcode;
 	}
@@ -847,7 +835,7 @@ sint32 sharedsurface_Initialize( void )
 
 void sharedsurface_Cleanup( void )
 {
-    allocated::clear(g_sharedSurface);
+	allocated::clear(g_sharedSurface);
 }
 
 int sprite_Initialize(void)

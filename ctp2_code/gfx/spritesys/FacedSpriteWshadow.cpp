@@ -40,7 +40,6 @@
 
 #include "aui.h"
 #include "aui_surface.h"
-#include "aui_directsurface.h"
 
 #include "Sprite.h"
 

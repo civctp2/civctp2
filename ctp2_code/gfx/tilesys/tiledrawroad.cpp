@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Road drawing.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,7 +30,6 @@
 
 #include "c3.h"
 #include "aui.h"
-#include "aui_directsurface.h"
 
 #include "pixelutils.h"
 

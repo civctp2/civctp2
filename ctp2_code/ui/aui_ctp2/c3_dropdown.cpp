@@ -34,7 +34,6 @@
 #include "aui_window.h"
 #include "aui_uniqueid.h"
 #include "aui_surface.h"
-#include "aui_directsurface.h"
 #include "aui_ranger.h"
 
 #include "c3ui.h"

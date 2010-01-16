@@ -37,7 +37,7 @@
 
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "aui_stringtable.h"
 #include "aui_window.h"
 
@@ -266,8 +266,7 @@ void LineGraph::InitCommon(void)
 {
 	AUI_ERRCODE			errcode = AUI_ERRCODE_OK;
 
-    m_surface = new aui_DirectSurface
-        (&errcode, m_width, m_height, 16, g_c3ui ? g_c3ui->DD() : NULL);
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height);
 	Assert( AUI_NEWOK(m_surface, errcode) );
 
 	SetRect(&m_surfaceRect, 0, 0, m_width, m_height);
@@ -295,7 +294,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	UpdateGraph((aui_DirectSurface *)surface, rect.left, rect.top);
+	UpdateGraph(surface, rect.left, rect.top);
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );

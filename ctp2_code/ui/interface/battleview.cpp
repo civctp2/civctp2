@@ -33,7 +33,7 @@
 #include "battleview.h"
 
 #include <algorithm>
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "aui_blitter.h"
 #include "c3ui.h"
 #include "battleviewactor.h"
@@ -131,9 +131,8 @@ void BattleView::Initialize(RECT const & battleViewRect)
 	sint32      height  = battleViewRect.bottom - battleViewRect.top;
 
 	m_battleViewRect    = battleViewRect;
-    delete m_battleSurface;
-	m_battleSurface     = 
-        new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
+	delete m_battleSurface;
+	m_battleSurface     = aui_Factory::new_Surface(errcode, width, height);
 	Assert(m_battleSurface);
 }
 

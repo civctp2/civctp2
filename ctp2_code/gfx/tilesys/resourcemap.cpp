@@ -169,10 +169,9 @@ void ResourceMap::InitCommon( sint32 scale)
 	
 	m_updateAction = NULL;
 
-	m_surface = aui_Factory::new_Surface(errcode, 
+	m_surface = aui_Factory::new_Surface(errcode,
 		g_tiledMap->GetZoomTilePixelWidth() * ((k_MAX_CITY_RADIUS * 2) + 1),
-		g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2),
-		16);
+		g_tiledMap->GetZoomTilePixelHeight() * ((k_MAX_CITY_RADIUS * 2) + 2));
 	
 
 	Assert(m_surface);

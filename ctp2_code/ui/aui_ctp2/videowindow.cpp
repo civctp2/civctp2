@@ -20,7 +20,7 @@
 
 #include "primitives.h"
 
-#include "aui_directsurface.h"
+#include "aui_factory.h"
 #include "CivPaths.h"
 #include "c3ui.h"
 #include "directvideo.h"
@@ -121,7 +121,7 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 
 	Resize(rect.right-rect.left+20, rect.bottom-rect.top+40);
 
-	m_surface = new aui_DirectSurface( &errcode, m_width, m_height, m_bpp, ((aui_DirectUI *)g_c3ui)->DD() );
+	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height);
 	Assert( m_surface != NULL );
 	if ( !m_surface ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -183,7 +183,7 @@ AUI_ERRCODE VideoWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 	
 	primitives_BevelRect16( m_surface, &rect, 1, 0, 16, 16 );
 
-	primitives_DropText((aui_DirectSurface *)m_surface, 5, 3, m_filename, 0xFFFF, TRUE);
+	primitives_DropText(m_surface, 5, 3, m_filename, 0xFFFF, TRUE);
 
 	rect.top += 20;
 

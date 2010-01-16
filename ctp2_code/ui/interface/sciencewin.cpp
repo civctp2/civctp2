@@ -33,7 +33,6 @@
 
 
 #include "aui.h"
-#include "aui_directsurface.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"

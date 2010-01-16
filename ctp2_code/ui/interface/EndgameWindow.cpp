@@ -42,7 +42,6 @@
 #include "keypress.h"
 
 
-#define k_C3_BLEND_BITS_PER_PIXEL			16
 #define k_C3_BLEND_MAXBLEND					32
 
 
@@ -407,8 +406,7 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	RECT srcRect = { 0, 0, srcSurf->Width(), srcSurf->Height() };
 
 	
-	aui_DirectSurface *backSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-		k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+	aui_Surface *backSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom);
 	Assert(AUI_NEWOK(backSurface, errcode));
 
 	
@@ -418,8 +416,7 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, srcRect.right, srcRect.bottom,
-			k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(errcode, srcRect.right, srcRect.bottom);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		
@@ -470,8 +467,8 @@ AUI_ERRCODE c3_Blend::DrawBlendImage(aui_Surface *destSurf, RECT *destRect)
 	
 	if(m_imagebltflag == AUI_IMAGEBASE_BLTFLAG_CHROMAKEY) {
 		
-		aui_DirectSurface *frontSurface = new aui_DirectSurface(&errcode, highlightRect.right,
-			highlightRect.bottom, k_C3_BLEND_BITS_PER_PIXEL, g_c3ui->DD());
+		aui_Surface *frontSurface = aui_Factory::new_Surface(&errcode, highlightRect.right,
+			highlightRect.bottom);
 		Assert(AUI_NEWOK(frontSurface, errcode));
 		
 		

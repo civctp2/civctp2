@@ -37,23 +37,23 @@ extern C3UI *   g_c3ui;
 
 aui_Surface *
 aui_Factory::new_Surface(AUI_ERRCODE &retval,
-                         const sint32 &width, const sint32 &height,
-                         const sint32 &bpp,
+                         const sint32 &width,
+                         const sint32 &height,
                          void *data,
                          const BOOL &isPrimary,
-			 const BOOL &useVideoMemory,
-			 const BOOL &takeOwnership
+                         const BOOL &useVideoMemory,
+                         const BOOL &takeOwnership
                         )
 {
 #if defined(__AUI_USE_SDL__)
   aui_SDLSurface *surface = 0;
 
-  surface = new aui_SDLSurface(&retval, width, height, bpp, g_c3ui->DD(),
+  surface = new aui_SDLSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
 			       isPrimary, useVideoMemory, takeOwnership);
 #elif defined(__AUI_USE_DIRECTX__)
   aui_DirectSurface *surface = 0;
 
-  surface = new aui_DirectSurface(&retval, width, height, bpp, g_c3ui->DD(),
+  surface = new aui_DirectSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
 				  (LPDIRECTDRAWSURFACE) data,
 				  isPrimary, useVideoMemory);
 #endif
