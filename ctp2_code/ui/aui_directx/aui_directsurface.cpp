@@ -214,7 +214,6 @@ aui_DirectSurface::aui_DirectSurface(
 	
 	SetChromaKey( m_chromaKey = 0x00000000 );
 
-	
 	DDSURFACEDESC ddsd;
 	memset( &ddsd, 0, sizeof( ddsd ) );
 	ddsd.dwSize = sizeof( ddsd );
@@ -228,7 +227,7 @@ aui_DirectSurface::aui_DirectSurface(
 	{
 		m_pitch = ddsd.lPitch;
 		m_size = m_pitch * m_height;
-		m_saveBuffer = (uint8 *)ddsd.lpSurface;
+	//	m_saveBuffer = (uint8 *)ddsd.lpSurface; // This might become invalid
 		m_lpdds->Unlock( ddsd.lpSurface );
 	}
 	else
@@ -327,6 +326,7 @@ AUI_ERRCODE aui_DirectSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
 	{
 	case DD_OK:
 		*buffer = ddsd.lpSurface;
+		m_saveBuffer = static_cast<uint8*>(ddsd.lpSurface);
 		errcode = ManipulateLockList( rect, buffer, AUI_SURFACE_LOCKOP_ADD );
 		break;
 
@@ -366,6 +366,8 @@ AUI_ERRCODE aui_DirectSurface::Unlock( LPVOID buffer )
 		{
 			hr = m_back->Unlock( buffer );
 		}
+
+		m_saveBuffer = NULL;
 
 		if ( hr != DD_OK ) errcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 	}

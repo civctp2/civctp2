@@ -1940,12 +1940,12 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 		{
 			return GEV_HD_Continue;
 		}
-		sint32 at_risk_value = ((double)at_risk_value_percent / 100.0) *
-			MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+		sint32 at_risk_value = static_cast<sint32>((static_cast<double>(at_risk_value_percent) / 100.0) *
+			MapAnalysis::GetMapAnalysis().TotalValue(receiver));
 		
 		type = PROPOSAL_REQUEST_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_ANGRY;
-        gold = std::min(at_risk_value, sender_income);
+		gold = std::min(at_risk_value, sender_income);
 	}
 	
 	else if ((MOTIVATION_TYPE) motivation_type == MOTIVATION_DESIRE_ENLIST_FRIEND)
@@ -2072,8 +2072,8 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	sint32 at_risk_value_percent = 
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(receiver,sender);
 
-	sint32 at_risk_value = ((double)at_risk_value_percent / 100.0) *
-		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+	sint32 at_risk_value = static_cast<sint32>((static_cast<double>(at_risk_value_percent) / 100.0) *
+		MapAnalysis::GetMapAnalysis().TotalValue(receiver));
 
 	
 	

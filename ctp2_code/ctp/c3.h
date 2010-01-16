@@ -79,6 +79,7 @@
 #define _SECURE_SCL_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
 #define _HAS_ITERATOR_DEBUGGING		0	// this one may be more interesting
 //#define _SECURE_SCL_THROWS 1
 #endif

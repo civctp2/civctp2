@@ -663,9 +663,9 @@ void World::OzoneDepletionEvent(void)
 			{
 				pos.Set(x, y);
 
-				c->Kill();
 				ClearGoods(x, y);
 				CutImprovements(pos);
+				c->Kill();
 			}
 		}
 	}

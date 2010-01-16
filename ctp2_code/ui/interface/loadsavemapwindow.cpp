@@ -458,11 +458,11 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	sint32 const    width       = m_mapTabImage->Width();
 	sint32 const    height      = m_mapTabImage->Height();
 	RadarMap *      radarMap    = new RadarMap
-        (&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
+	    (&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
 	if (!radarMap) return;
 
 	
-	aui_DirectSurface	*surf = (aui_DirectSurface *)radarMap->GetMapSurface();
+	aui_Surface	*surf = radarMap->GetMapSurface();
 
 	radarMap->RenderMap(surf);	
 
@@ -478,7 +478,7 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	sint32      pitch = surf->Pitch();
 
 	for (sint32 i = 0; i < height; i++) 
-    {
+	{
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(radarDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 

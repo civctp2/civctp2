@@ -69,7 +69,6 @@
 #include "tiledmap.h"               // tiledraw.h does not exist
 
 #include "aui.h"
-#include "aui_directsurface.h"
 #include "aui_sdlsurface.h"
 #include "aui_bitmapfont.h"
 #include "ConstRecord.h"			// g_theConstDB
@@ -935,16 +934,16 @@ void TiledMap::DrawPath(Path *path)
 sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	aui_NativeSurface * nativeSurface = NULL;
 
-	if (!surface) surface = m_surface;
+	if(surface == NULL) surface = m_surface;
 
-	nativeSurface = (aui_NativeSurface *) surface;
-
-	if (!nativeSurface) {
+	if(surface == NULL)
+	{
 		errcode = AUI_ERRCODE_BLTFAILED;
-	} else {
-		errcode = nativeSurface->Blank(0);
+	}
+	else
+	{
+		errcode = surface->Blank(0);
 	}
 
 	Assert(errcode == AUI_ERRCODE_OK);

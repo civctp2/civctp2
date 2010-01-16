@@ -184,6 +184,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		Assert( hr == DD_OK );
 		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
 	}
+
 	if ( !m_exclusiveMode )
 	{
 		// Changed if command line argument: nonexclusive is present

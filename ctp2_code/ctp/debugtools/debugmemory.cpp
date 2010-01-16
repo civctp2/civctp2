@@ -399,6 +399,8 @@ void *DebugMemory_FastMalloc  (unsigned size)
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastMalloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
+
 	return (memory);
 }
 
@@ -414,6 +416,8 @@ void *DebugMemory_FastCalloc  (unsigned size)
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastCalloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
+
 	return (memory);
 }
 
@@ -428,6 +432,8 @@ void *DebugMemory_FastRealloc (void *memory_block, unsigned size)
 	{
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
+
+	LOG ((LOG_DIAG, "FastRealloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
 
 	return (memory);
 }
@@ -445,12 +451,16 @@ char *DebugMemory_FastStrdup  (const char *string)
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastStrdup: 0x%x, %i", memory, memory));
+
 	return (memory);
-}  
+}
 
 
 void  DebugMemory_FastFree    (void **memory_block_ptr)
 {
+	LOG ((LOG_DIAG, "FastFree: 0x%x, %i", *memory_block_ptr, *memory_block_ptr));
+
 	free (*memory_block_ptr);
 	*memory_block_ptr = NULL;
 }
@@ -568,6 +578,8 @@ void *DebugMemoryHeap_FastMalloc  (MemoryHeap heap, unsigned size)
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastMalloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
+
 	return (memory);
 }
 
@@ -591,6 +603,8 @@ void *DebugMemoryHeap_FastCalloc  (MemoryHeap heap, unsigned size)
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastCalloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
+
 	return (memory);
 }
 
@@ -613,6 +627,8 @@ void *DebugMemoryHeap_FastRealloc (MemoryHeap heap, void *memory_block, unsigned
 		LOG ((LOG_FATAL, "Out of Memory"));
 	}
 
+	LOG ((LOG_DIAG, "FastRealloc: 0x%x, 0x%x, %i, %i", memory, size, memory, size));
+
 	return (memory);
 }
 
@@ -630,6 +646,8 @@ char *DebugMemoryHeap_FastStrdup  (MemoryHeap heap, const char *string)
 	copy_of_string = (char *) DebugMemoryHeap_FastMalloc (heap, strlen (string + 1));
 	strcpy (copy_of_string, string);
 
+	LOG ((LOG_DIAG, "FastStrdup: 0x%x, %i", string, string));
+
 	return (copy_of_string);
 }
 
@@ -641,6 +659,7 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 {
 	BOOL ok;
 
+	LOG ((LOG_DIAG, "FastFree: 0x%x, %i", *memory_block_ptr, *memory_block_ptr));
 	DebugMemory_EnsureInitialised();
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, heap);
@@ -1093,7 +1112,7 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 		}
 	}
 
-	
+	LOG_INDIRECT(module_name, module_line, (LOG_DIAG, "GuardedBlockAlloc: 0x%x, 0x%x, %i, %i", Debug_HeaderToData (header), size, Debug_HeaderToData (header), size));
 	return (Debug_HeaderToData (header));
 }
 
@@ -1139,7 +1158,8 @@ void  DebugMemory_GuardedBlockFree    (
 	
 	header = Debug_DataToHeader (mem);
 
-	
+	LOG_INDIRECT(module_name, module_line, (LOG_DIAG, "GuardedBlockFree: 0x%x, 0x%x, %i, %i", mem, header->size, mem, header->size));
+
 	if (Debug_GuardedHeaderTest (header, module_name, module_line)) 
 	{
 		Debug_GuardedDataTest (header, module_name, module_line);
@@ -1209,7 +1229,6 @@ void  DebugMemory_GuardedBlockFree    (
 
 	}
 
-	
 	*memory_block_ptr = NULL;
 }
 
@@ -1292,7 +1311,8 @@ MemPtr DebugMemory_GuardedBlockRealloc (
 	
 	new_header->allocated_after_open = old_header->allocated_after_open;
 
-	
+	LOG_INDIRECT(module_name, module_line, (LOG_DIAG, "GuardedBlockRealloc: 0x%x, 0x%x, %i, %i", new_mem, new_size, new_mem, new_size));
+
 	DebugMemory_GuardedBlockFree (module_name, module_line, heap, &old_mem);
 
 	

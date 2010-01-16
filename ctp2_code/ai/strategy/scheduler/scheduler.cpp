@@ -1586,9 +1586,9 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			continue;
 		}
 
-		sint32 transports;
-		sint32 max;
-		sint32 empty;
+		sint32 transports = 0;
+		sint32 max        = 0;
+		sint32 empty      = 0;
 
 		if(!agent->Has_Any_Goal())
 		{

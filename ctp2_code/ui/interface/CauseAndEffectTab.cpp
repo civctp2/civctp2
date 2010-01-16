@@ -713,7 +713,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 
 		// Franchise and bio infection losses.
 		sint32 tmpProduction = 0, crimeLoss = 0, franchiseLoss = 0;
-		tmpProduction = production;
+		tmpProduction = static_cast<sint32>(production);
 
 #if defined(NEW_RESOURCE_PROCESS)
 		double franchiseBioLoss = 0.0;
@@ -887,8 +887,8 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		buildingutil_GetSciencePercent(cityData->GetEffectiveBuildings(), ss, cityData->GetOwner());
 		sint32 scienceBuildingsBonus = static_cast<sint32>(ceil(commerceScience * ss));
 
-		scienceBuildingsBonus += buildingutil_GetIncreaseSciencePerPop(cityData->GetEffectiveBuildings(), cityData->GetOwner())
-			* static_cast<double>(cityData->PopCount() - cityData->SlaveCount());
+		scienceBuildingsBonus += static_cast<sint32>(buildingutil_GetIncreaseSciencePerPop(cityData->GetEffectiveBuildings(), cityData->GetOwner())
+			* static_cast<double>(cityData->PopCount() - cityData->SlaveCount()));
 
 		sint32 commerceSavings = cityData->GetNetCityGold();// final gold savings figure
 
@@ -906,7 +906,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		// science feats multiply terrain scie + buildings scie - see citydata::splitscience.
 		sint32 featWonderScie = 0;
 		sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_SCIENCE, player->GetOwner());
-		sint32 featScie = ceil(buildingAndTaxScience * (static_cast<double>(featPercent) / 100.0));
+		sint32 featScie = static_cast<sint32>(ceil(buildingAndTaxScience * (static_cast<double>(featPercent) / 100.0)));
 
 		// science wonders multiply terrain scie + buildings scie + feats scie - see citydata::splitscience.
 		buildingAndTaxScience += featScie;
@@ -945,8 +945,8 @@ void CauseAndEffectTab::UpdateCommerceValues()
 			if(popWonderModifier && bestScientist >= 0 
 				&& bestScientist < g_thePopDB->NumRecords())
 			{
-				scientistsScie += popWonderModifier * 
-							 g_thePopDB->Get(bestScientist, player->GetGovernmentType())->GetScience();
+				scientistsScie += static_cast<sint32>(popWonderModifier * 
+							 g_thePopDB->Get(bestScientist, player->GetGovernmentType())->GetScience());
 			}
 
 			scientistsScie += cityData->ScientistCount() *

@@ -68,13 +68,9 @@ void Debug_SystemRestore (void)
 
 void Debug_Open (void)
 {
-	char name[30];
-
 	DebugCallStack_Open();
 
-	sprintf(name, "%s%#.3d.txt", "CivCTP_debug", 0);
-	
-	Log_Open ("CTP_debug.cfg", name);
+	Log_Open ("CTP_debug.cfg", 0);
 
 	DebugAssert_Open (Debug_SystemCleanup, Debug_SystemRestore);
 	DebugException_Open (Debug_SystemCleanup);
