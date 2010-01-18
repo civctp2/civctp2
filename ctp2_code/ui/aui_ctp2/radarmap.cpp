@@ -442,7 +442,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					else{
 						if(m_displayPolitical)
 							return(g_colorSet->GetColor(COLOR_WHITE));
-						else if(m_displayRelations && owner != player->m_owner)
+						else if(m_displayRelations)
 							return RadarTileRelationsColor(position, player, owner);
 						else
 							return(g_colorSet->GetPlayerColor(unit.GetOwner()));
@@ -455,10 +455,10 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 			}
 			else if(m_displayUnits && unit.m_id)
 			{
-				if(m_displayRelations && owner != player->m_owner)
+				if(m_displayRelations)
 				{
 					if(m_displayPolitical && unit.GetOwner() == owner) 
-						return g_colorSet->GetDarkColor(static_cast<COLOR>(RadarTileRelationsColor(position, player, owner)));
+						return RadarTileRelationsDarkColor(position, player, owner);
 					else
 						return RadarTileRelationsColor(position, player, owner);
 				}
@@ -477,7 +477,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 					|| g_fog_toggle // Don't forget if fog of war is off
 					|| g_god
 					) { 
-						if(m_displayRelations && owner != player->m_owner)
+						if(m_displayRelations)
 							return RadarTileRelationsColor(position, player, owner);
 						else
 							return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos)); 
@@ -546,25 +546,54 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *p
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_BLACK));
 
-	if(m_displayRelations && player->m_owner != owner)
+	if(m_displayRelations)
 		return RadarTileRelationsColor(position, player, owner);
 	else
 		return(g_colorSet->GetPlayerColor(owner));
 }
 
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarTileBorderColor	
+//		
+//---------------------------------------------------------------------------
+//	- Checks which color a border must be drawn for the current tile 
+//
+//---------------------------------------------------------------------------
 Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 owner)
 {
 	Assert(true == m_displayRelations);
-	Assert(player->m_owner != owner);
-
+	
 	if(player->HasWarWith(owner))
 		return(g_colorSet->GetColor(COLOR_RED));
-	else if(player->HasAllianceWith(owner))
+	else if(player->HasAllianceWith(owner) || player->m_owner == owner)
 		return(g_colorSet->GetColor(COLOR_BLUE));
 	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
 		return(g_colorSet->GetColor(COLOR_GREEN));
 	else
 		return(g_colorSet->GetColor(COLOR_YELLOW));
+}
+
+//---------------------------------------------------------------------------
+//
+//	RadarMap::RadarTileBorderDarkColor	
+//		
+//---------------------------------------------------------------------------
+//	- Dark alternative to RadarTileBorderColor
+//
+//---------------------------------------------------------------------------
+Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 owner)
+{
+	Assert(true == m_displayRelations);
+	
+	if(player->HasWarWith(owner))
+		return(g_colorSet->GetDarkColor(COLOR_RED));
+	else if(player->HasAllianceWith(owner) || player->m_owner == owner)
+		return(g_colorSet->GetDarkColor(COLOR_BLUE));
+	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
+		return(g_colorSet->GetDarkColor(COLOR_GREEN));
+	else
+		return(g_colorSet->GetDarkColor(COLOR_YELLOW));
 }
 
 

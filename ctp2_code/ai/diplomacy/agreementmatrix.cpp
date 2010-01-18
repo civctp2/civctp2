@@ -45,6 +45,7 @@
 #include "ctpai.h"
 #include "MoveFlags.h"
 #include "Diplomat.h"
+#include "radarmap.h"
 
 
 ai::Agreement       AgreementMatrix::s_badAgreement;
@@ -249,6 +250,8 @@ void AgreementMatrix::SetAgreement( const ai::Agreement & agreement )
 #endif
 
 	} 
+	if(g_radarMap->IsDisplayRelations())
+		g_radarMap->Update();
 }
 
 

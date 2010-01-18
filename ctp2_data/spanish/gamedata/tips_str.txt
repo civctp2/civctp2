@@ -303,7 +303,7 @@ TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON			"Show/Hide Political Map"
 STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON			"Click to show or hide city capitols."
 TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON			"Show/Hide Capitols"
 STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON			"Click to show or hide relationships."
-TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON			"Show/Hide relationships"
+TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON			"Show/Hide Relationships"
 
 # Empire Manager Screen
 #

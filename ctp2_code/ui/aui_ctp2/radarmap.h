@@ -176,6 +176,7 @@ private:
 	Pixel16 RadarTileBorderColor(const MapPoint &position, const Player *player);
 
 	Pixel16 RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 owner);
+	Pixel16 RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 owner);
 
 	
 	uint8 RadarTileBorder(const Player *player, const MapPoint &position);
