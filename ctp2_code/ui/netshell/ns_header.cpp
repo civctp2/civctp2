@@ -31,7 +31,6 @@
 #include "c3.h"
 
 #include "aui_ui.h"
-#include "aui_directui.h"
 #include "aui_uniqueid.h"
 #include "ns_headerswitch.h"
 #include "aui_ldl.h"

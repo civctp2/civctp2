@@ -30,7 +30,13 @@
 #include "aui_Factory.h"
 
 #include "aui_directsurface.h"
+#include "aui_directmouse.h"
+#include "aui_directkeyboard.h"
+
 #include "aui_sdlsurface.h"
+#include "aui_sdlmouse.h"
+#include "aui_sdlkeyboard.h"
+
 #include "c3ui.h"   // C3UI
 
 extern C3UI *   g_c3ui;
@@ -46,21 +52,56 @@ aui_Factory::new_Surface(AUI_ERRCODE &retval,
                         )
 {
 #if defined(__AUI_USE_SDL__)
-  aui_SDLSurface *surface = 0;
+	aui_SDLSurface *surface = 0;
 
-  surface = new aui_SDLSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
-			       isPrimary, useVideoMemory, takeOwnership);
+	surface = new aui_SDLSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
+	                             isPrimary, useVideoMemory, takeOwnership);
 #elif defined(__AUI_USE_DIRECTX__)
-  aui_DirectSurface *surface = 0;
+	aui_DirectSurface *surface = 0;
 
-  surface = new aui_DirectSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
+	surface = new aui_DirectSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
 				  (LPDIRECTDRAWSURFACE) data,
 				  isPrimary, useVideoMemory);
 #endif
-  Assert( AUI_NEWOK(surface, retval) );
+	Assert( AUI_NEWOK(surface, retval) );
 
-  return surface;
+	return surface;
 }
 
+aui_Mouse *
+aui_Factory::new_Mouse(AUI_ERRCODE &retval,
+                       MBCHAR      *ldlBlock,
+                       const BOOL  &useExclusiveMode
+                      )
+{
+#if defined(__AUI_USE_SDL__)
+	aui_SDLMouse *mouse = 0;
 
+	mouse = new aui_SDLMouse(&retval, ldlBlock, useExclusiveMode);
+#elif defined(__AUI_USE_DIRECTX__)
+	aui_DirectMouse *mouse = 0;
+
+	mouse = new aui_DirectMouse(&retval, ldlBlock, useExclusiveMode);
+#endif
+	Assert( AUI_NEWOK(mouse, retval) );
+
+	return mouse;
+}
+
+aui_Keyboard *
+aui_Factory::new_Keyboard(AUI_ERRCODE &retval)
+{
+#if defined(__AUI_USE_SDL__)
+	aui_SDLKeyboard *keyboard = 0;
+
+	keyboard = new aui_SDLMouse(&retval);
+#elif defined(__AUI_USE_DIRECTX__)
+	aui_DirectKeyboard *keyboard = 0;
+
+	keyboard = new aui_DirectKeyboard(&retval);
+#endif
+	Assert( AUI_NEWOK(keyboard, retval) );
+
+	return keyboard;
+}
 

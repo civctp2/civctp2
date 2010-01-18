@@ -1642,7 +1642,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	MBCHAR name[k_SCENARIO_NAME_MAX];
 	memset(name, 0, k_SCENARIO_NAME_MAX);
 
-	if (strlen(g_scenarioName) > 0) {
+	if(strlen(g_scenarioName) > 0) // Problem in Multiplayer
+	{
 		strcpy(name, g_scenarioName);
 	}
 

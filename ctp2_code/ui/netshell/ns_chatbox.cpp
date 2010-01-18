@@ -30,7 +30,6 @@
 
 #include "c3.h"
 
-#include "aui_directui.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_ldl.h"

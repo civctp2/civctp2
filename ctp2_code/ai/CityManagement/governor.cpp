@@ -4407,15 +4407,15 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 		return strategy.HasSettlerUnitList() ? strategy.GetSettlerUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SEA_SETTLER:
-		Assert(strategy.HasSeaSettlerUnitList());
+//		Assert(strategy.HasSeaSettlerUnitList());
 		return strategy.HasSeaSettlerUnitList() ? strategy.GetSeaSettlerUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SLAVERY:
-		Assert(strategy.HasSlaverUnitList());
+//		Assert(strategy.HasSlaverUnitList());
 		return strategy.HasSlaverUnitList() ? strategy.GetSlaverUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPY:
-		Assert(strategy.HasSpyUnitList());
+//		Assert(strategy.HasSpyUnitList());
 		return strategy.HasSpyUnitList() ? strategy.GetSpyUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:

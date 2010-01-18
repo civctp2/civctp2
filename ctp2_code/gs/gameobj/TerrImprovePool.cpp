@@ -131,13 +131,16 @@ TerrainImprovementPool::Create
 	g_tiledMap->RedrawTile(&point);
 
 	// Added by Martin Gühmann to make a sound play when a tile improvement is built.
-	SoundRecord const *	soundRecord	= dbTerrainImprovement->GetSound();
-	if (soundRecord)
+	if(dbTerrainImprovement->GetSoundIndex() >= 0)
 	{
-		sint32 const	soundID		= soundRecord->GetIndex();
-		if ((soundID != -1) && (owner == g_selected_item->GetVisiblePlayer()))
+		SoundRecord const *	soundRecord	= dbTerrainImprovement->GetSound();
+		if (soundRecord)
 		{
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0, soundID, point.x, point.y);
+			sint32 const	soundID		= soundRecord->GetIndex();
+			if ((soundID != -1) && (owner == g_selected_item->GetVisiblePlayer()))
+			{
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0, soundID, point.x, point.y);
+			}
 		}
 	}
 

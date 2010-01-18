@@ -34,7 +34,6 @@
 
 #include "aui.h"
 #include "ns_civlistbox.h"
-#include "aui_directui.h"
 #include "aui_ranger.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"

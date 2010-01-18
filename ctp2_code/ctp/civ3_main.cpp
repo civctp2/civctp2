@@ -72,8 +72,6 @@
 #include "ancientwindows.h"
 #include "appstrings.h"
 #include "aui.h"
-#include "aui_directkeyboard.h"
-#include "aui_directmouse.h"
 #include "aui_directmoviemanager.h"
 #include "aui_factory.h"
 #include "aui_ldl.h"
@@ -453,11 +451,11 @@ int ui_Initialize(void)
 	SPLASH_STRING("Creating Mouse...");
 	
 	BOOL const mouseExclusiveMode = TRUE;
-	g_c3ui->RegisterObject(new aui_DirectMouse(&auiErr, "CivMouse", mouseExclusiveMode));
+	g_c3ui->RegisterObject(aui_Factory::new_Mouse(auiErr, "CivMouse", mouseExclusiveMode));
 
 	SPLASH_STRING("Creating Keyboard...");
 
-	g_c3ui->RegisterObject(new aui_DirectKeyboard(&auiErr));
+	g_c3ui->RegisterObject(aui_Factory::new_Keyboard(auiErr));
 
 
 #if !defined(__GNUC__)

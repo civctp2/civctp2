@@ -8,7 +8,6 @@
 
 #include "aui.h"
 #include "aui_ui.h"
-#include "aui_directui.h"
 #include "aui_blitter.h"
 #include "aui_surface.h"
 #include "aui_window.h"

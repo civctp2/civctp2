@@ -501,7 +501,7 @@ bool Astar::FindPath
     do 
     {  
         loop_count++; 
-        Assert(loop_count < 140000); 
+        Assert(loop_count < 1400000); // Ultra Gigantic problem
         
         float past_cost = best->m_past_cost + best->m_entry_cost; 
         best->SetExpanded(TRUE); 

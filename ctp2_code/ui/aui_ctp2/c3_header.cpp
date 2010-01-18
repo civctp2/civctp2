@@ -32,7 +32,6 @@
 
 #include "aui.h"
 #include "aui_ui.h"
-#include "aui_directui.h"
 #include "aui_uniqueid.h"
 #include "c3_headerswitch.h"
 #include "aui_ldl.h"

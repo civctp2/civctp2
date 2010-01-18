@@ -32,16 +32,26 @@
 #define __aui_Factory__h__ 1
 
 #include "aui_surface.h"
+#include "aui_mouse.h"
+#include "aui_Keyboard.h"
 
 class aui_Factory {
 public:
 	static aui_Surface *new_Surface(AUI_ERRCODE &retval,
-	                                const sint32 &width, const sint32 &height,
+	                                const sint32 &width,
+	                                const sint32 &height,
 	                                void *data = 0,
 	                                const BOOL &isPrimary = FALSE,
 	                                const BOOL &useVideoMemory = FALSE,
 	                                const BOOL &takeOwnership = FALSE
 	                               );
+
+	static aui_Mouse *new_Mouse(AUI_ERRCODE &retval,
+	                            MBCHAR      *ldlBlock,
+	                            const BOOL  &useExclusiveMode = FALSE
+	                           );
+
+	static aui_Keyboard *new_Keyboard(AUI_ERRCODE &retval);
 };
 
 #endif
