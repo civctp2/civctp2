@@ -6758,7 +6758,7 @@ void Player::CloseEmbassy(sint32 player)
 
 
 
-bool Player::HasEmbassyWith(sint32 player)
+bool Player::HasEmbassyWith(sint32 player) const
 {
 	if(!g_player[player])
 		return false;
@@ -8023,7 +8023,7 @@ void Player::ContactMade(PLAYER_INDEX with)
 	}
 }
 
-bool Player::HasContactWith(PLAYER_INDEX pl)
+bool Player::HasContactWith(PLAYER_INDEX pl) const
 {
 	Assert(pl >= 0);
 	Assert(pl < k_MAX_PLAYERS);

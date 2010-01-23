@@ -4669,32 +4669,67 @@ TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint3
 	}
 }
 
-sint32 TiledMap::GetVisibleCellOwner(MapPoint &pos)
+sint32 TiledMap::GetVisibleCellOwner(const MapPoint &pos) const
 {
 	if(!m_localVision->IsVisible(pos) 
 	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
 	){
 		UnseenCellCarton ucell;
-		if(m_localVision->GetLastSeen(pos, ucell)) {
+		if(m_localVision->GetLastSeen(pos, ucell))
+		{
 			return ucell.m_unseenCell->m_cell_owner;
 		}
 	}
+
 	return g_theWorld->GetCell(pos)->GetOwner();
 }
 
-uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
+uint32 TiledMap::GetVisibleCityOwner(const MapPoint &pos) const
 {
-// Added by Martin Gühmann
 	if(!m_localVision->IsVisible(pos) 
 	// Show the city influence radius from the last visit.
 	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
 	){
 		UnseenCellCarton ucell;
-		if(m_localVision->GetLastSeen(pos, ucell)) {
-			return ucell.m_unseenCell->GetVisibleCityOwner(); 
+		if(m_localVision->GetLastSeen(pos, ucell))
+		{
+			return ucell.m_unseenCell->GetVisibleCityOwner();
 		}
 	}
+
 	return g_theWorld->GetCell(pos)->GetCityOwner().m_id;
+}
+
+uint32 TiledMap::GetVisibleTerrainType(const MapPoint &pos) const
+{
+	if(!m_localVision->IsVisible(pos) 
+	// Show the city influence radius from the last visit.
+	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
+	){
+		UnseenCellCarton ucell;
+		if(m_localVision->GetLastSeen(pos, ucell))
+		{
+			return ucell.m_unseenCell->GetTerrainType();
+		}
+	}
+
+	return g_theWorld->GetCell(pos)->GetTerrainType();
+}
+
+bool TiledMap::HasVisibleCity(const MapPoint &pos) const
+{
+	if(!m_localVision->IsVisible(pos)
+	// Show the city influence radius from the last visit.
+	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
+	){
+		UnseenCellCarton ucell;
+		if(m_localVision->GetLastSeen(pos, ucell))
+		{
+			return ucell.m_unseenCell->GetActor() != NULL;
+		}
+	}
+
+	return g_theWorld->GetCell(pos)->GetCity().IsValid();
 }
 
 void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)

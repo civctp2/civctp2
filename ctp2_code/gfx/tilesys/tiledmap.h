@@ -475,7 +475,7 @@ public:
 	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );
 	void		DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasSpecialIcon);
 
-	void		Serialize(CivArchive &archive);
+//	void		Serialize(CivArchive &archive);
 
 	void		NextPlayer(void);
 	void		CopyVision();
@@ -501,8 +501,10 @@ public:
 	aui_BitmapFont		*GetFont(void) { return m_font; }
 	MBCHAR				*GetFortifyString(void) { return m_fortifyString; }
 
-	sint32 GetVisibleCellOwner(MapPoint &pos);
-	uint32 GetVisibleCityOwner(MapPoint &pos);
+	sint32 GetVisibleCellOwner  (const MapPoint &pos) const;
+	uint32 GetVisibleCityOwner  (const MapPoint &pos) const;
+	uint32 GetVisibleTerrainType(const MapPoint &pos) const;
+	bool   HasVisibleCity       (const MapPoint &pos) const;
 	void DrawNationalBorders(aui_Surface *surface, MapPoint &pos);
 
 	

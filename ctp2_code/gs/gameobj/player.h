@@ -795,7 +795,7 @@ public:
 	void ContributeMaterials(sint32 &cityProduction);
 
 
-	PLAYER_INDEX GetOwner() { return m_owner; }
+	PLAYER_INDEX GetOwner() const { return m_owner; }
 	sint32 GetGovernmentType() const { return m_government_type; }
 	bool   SetGovernmentType(sint32 type);
 	bool   ActuallySetGovernment(sint32 type);
@@ -912,7 +912,7 @@ public:
 
 	void   EstablishEmbassy(sint32 player);
 	void   CloseEmbassy(sint32 player);
-	bool   HasEmbassyWith(sint32 player);
+	bool   HasEmbassyWith(sint32 player) const;
 	sint32 GetProductionFromFranchises();
 	void   AddProductionFromFranchise(sint32 amt);
 
@@ -986,7 +986,7 @@ public:
 
 	void ContactMade(PLAYER_INDEX with);
 	bool HasSeen(PLAYER_INDEX player);
-	bool HasContactWith(PLAYER_INDEX player);
+	bool HasContactWith(PLAYER_INDEX player) const;
 	void SetHasAdvance(AdvanceType advance, const bool init = false);
 	void GiveArmyCommand(Army &army, UNIT_COMMAND command);
 	void CheckWonderObsoletions(AdvanceType advance);

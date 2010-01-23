@@ -394,141 +394,81 @@ Player *RadarMap::GetVisiblePlayerToRender()
 Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 								 const MapPoint &worldpos, uint32 &flags)
 {
-	
 	Unit unit;
 
 	flags = 0;
-	
 
-	if(player->m_vision->IsExplored(worldpos)) {
-
+	if(player->IsExplored(worldpos))
+	{
 		sint32 owner = g_theWorld->GetOwner(worldpos);
 
-		if(m_displayTrade && g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() > 0) {
+		if(m_displayTrade && g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() > 0)
+		{
 			flags = 1;
 		}
 
-		
-		if(m_displayOverlay && m_mapOverlay) {
+		if(m_displayOverlay && m_mapOverlay)
+		{
 			COLOR color = m_mapOverlay[worldpos.y * m_mapSize->x + worldpos.x];
-			if(color != COLOR_MAX)	
+			if(color != COLOR_MAX)
 				return(g_colorSet->GetColor(color));
 		}
 
-		if(!g_theWorld->GetTopVisibleUnit(worldpos, unit))
-			g_theWorld->GetTopRadarUnit(worldpos, unit);
-
-		UnseenCellCarton unseenCellCarton;
-		int uCellValid = !g_fog_toggle && player->m_vision->GetLastSeen(worldpos, unseenCellCarton);
-
-		if(unit.IsValid()) {
-			if(unit.IsCity()) {				
-				if(m_displayCities){
-					// Added distinction between hidden and non hidden tiles, by Martin Gühmann.
-					if(uCellValid){
-						if(unseenCellCarton.m_unseenCell->GetActor()){
-						// Only if there was a city at the last visit
-							if(m_displayPolitical)
-								return(g_colorSet->GetColor(COLOR_WHITE));
-							else
-								return(g_colorSet->GetPlayerColor(unseenCellCarton.m_unseenCell->GetCityOwner()));
-						}
-						else{
-							// Check wether something else is visible. At least invalidize the unit.
-							unit.m_id = 0;
-							g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
-						}
-					}
-					else{
-						if(m_displayPolitical)
-							return(g_colorSet->GetColor(COLOR_WHITE));
-						else if(m_displayRelations)
-							return RadarTileRelationsColor(position, player, owner);
-						else
-							return(g_colorSet->GetPlayerColor(unit.GetOwner()));
-					}
-				}
-				else {					
-					unit.m_id = 0;
-					g_theWorld->GetTopVisibleUnitNotCity(worldpos, unit);
-				}
-			}
-			else if(m_displayUnits && unit.m_id)
+		if(m_displayCities && g_tiledMap->HasVisibleCity(worldpos))
+		{
+			return(g_colorSet->GetColor(COLOR_WHITE));
+		}
+		
+		if(m_displayUnits && (g_theWorld->GetTopVisibleUnit(worldpos, unit) || g_theWorld->GetTopRadarUnit(worldpos, unit)))
+		{
+			if(m_displayRelations)
 			{
-				if(m_displayRelations)
-				{
-					if(m_displayPolitical && unit.GetOwner() == owner) 
-						return RadarTileRelationsDarkColor(position, player, owner);
-					else
-						return RadarTileRelationsColor(position, player, owner);
-				}
-				else if(m_displayPolitical && unit.GetOwner() == owner)
+				if(m_displayPolitical && unit.GetOwner() == owner) 
+					return RadarTileRelationsDarkColor(position, player);
+				else
+					return RadarTileRelationsColor(position, player);
+			}
+			else
+			{
+				if(m_displayPolitical && unit.GetOwner() == owner)
 					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
 				else
-					return(g_colorSet->GetPlayerColor(unit.GetOwner()));
+					return g_colorSet->GetPlayerColor(unit.GetOwner());
 			}
 		}
 
-		if(m_displayPolitical) {
-			if(owner >= 0 && !g_theWorld->IsWater(worldpos)) {
-				if(owner == player->m_owner
-					|| player->m_hasGlobalRadar 
-					|| Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
-					|| g_fog_toggle // Don't forget if fog of war is off
-					|| g_god
-					) { 
-						if(m_displayRelations)
-							return RadarTileRelationsColor(position, player, owner);
-						else
-							return g_colorSet->GetPlayerColor(g_theWorld->GetOwner(worldpos)); 
-				}			
-			}
+		if(m_displayPolitical && owner >= 0 && !g_theWorld->IsWater(worldpos) )
+		{
+			if(m_displayRelations)
+				return RadarTileRelationsColor(position, player);
+			else
+				return g_colorSet->GetPlayerColor(g_tiledMap->GetVisibleCellOwner(worldpos));
 		}
 
-		
-		if(uCellValid) {
-			if(m_displayTerrain) {
-				return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   unseenCellCarton.m_unseenCell->GetTerrainType())));	
-			} else {
-
-				if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
-
-					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-																   TERRAIN_GRASSLAND));
-				} else {
-					return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-																   TERRAIN_WATER_DEEP));
-				}
-			}
+		if(m_displayTerrain)
+		{
+			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 + g_tiledMap->GetVisibleTerrainType(worldpos))));
 		}
-					
-
-		Cell *cell = g_theWorld->GetCell(worldpos);
-
-		if(m_displayTerrain) {
-			
-			return(g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-														   cell->GetTerrainType())));
-		} else {
-			if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) {
+		else
+		{
+			if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos))
+			{
 				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   TERRAIN_GRASSLAND));
-			} else {
+														   TERRAIN_GRASSLAND));
+			}
+			else
+			{
 				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-															   TERRAIN_WATER_DEEP));
+														   TERRAIN_WATER_DEEP));
 			}
 		}
 	}
-
 
 	if(g_theWorld->GetTopRadarUnit(worldpos, unit))
 		return(g_colorSet->GetPlayerColor(unit.GetOwner()));
 
 	return(g_colorSet->GetColor(COLOR_BLACK));
 }
-		
-
 
 //---------------------------------------------------------------------------
 //
@@ -540,14 +480,12 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 //---------------------------------------------------------------------------
 Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *player)
 {
-	
-// Added by Martin Gühmann
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_BLACK));
 
 	if(m_displayRelations)
-		return RadarTileRelationsColor(position, player, owner);
+		return RadarTileRelationsColor(position, player);
 	else
 		return(g_colorSet->GetPlayerColor(owner));
 }
@@ -560,16 +498,21 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *p
 //	- Checks which color a border must be drawn for the current tile 
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 owner)
+Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player)
 {
-	Assert(true == m_displayRelations);
-	
-	if(player->HasWarWith(owner))
-		return(g_colorSet->GetColor(COLOR_RED));
-	else if(player->HasAllianceWith(owner) || player->m_owner == owner)
+	Assert(m_displayRelations);
+
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
+	if(owner < 0)
+		return(g_colorSet->GetColor(COLOR_WHITE));
+	else if(player->m_owner == owner || player->HasAllianceWith(owner))
 		return(g_colorSet->GetColor(COLOR_BLUE));
+	else if(player->HasWarWith(owner))
+		return(g_colorSet->GetColor(COLOR_RED));
 	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
 		return(g_colorSet->GetColor(COLOR_GREEN));
+	else if(!player->HasContactWith(owner))
+		return(g_colorSet->GetColor(COLOR_WHITE));
 	else
 		return(g_colorSet->GetColor(COLOR_YELLOW));
 }
@@ -582,16 +525,21 @@ Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player
 //	- Dark alternative to RadarTileBorderColor
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 owner)
+Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player)
 {
-	Assert(true == m_displayRelations);
+	Assert(m_displayRelations);
 	
-	if(player->HasWarWith(owner))
-		return(g_colorSet->GetDarkColor(COLOR_RED));
-	else if(player->HasAllianceWith(owner) || player->m_owner == owner)
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
+	if(owner < 0)
+		return(g_colorSet->GetDarkColor(COLOR_WHITE));
+	else if(player->m_owner == owner || player->HasAllianceWith(owner))
 		return(g_colorSet->GetDarkColor(COLOR_BLUE));
+	else if(player->HasWarWith(owner))
+		return(g_colorSet->GetDarkColor(COLOR_RED));
 	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
 		return(g_colorSet->GetDarkColor(COLOR_GREEN));
+	else if(!player->HasContactWith(owner))
+		return(g_colorSet->GetDarkColor(COLOR_WHITE));
 	else
 		return(g_colorSet->GetDarkColor(COLOR_YELLOW));
 }
