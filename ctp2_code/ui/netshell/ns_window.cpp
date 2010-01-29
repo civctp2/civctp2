@@ -26,6 +26,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ns_window.h"
 
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
@@ -36,10 +37,10 @@
 #include "aui_control.h"
 #include "aui_action.h"
 
-#include "ns_window.h"
 #include "c3_static.h"
 
-
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 ns_Window::ns_Window(
 	AUI_ERRCODE *retval,
@@ -61,7 +62,7 @@ ns_Window::ns_Window(
 
 AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

@@ -1,26 +1,18 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "aui_textfield.h"
+
 #include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_surface.h"
 #include "aui_ldl.h"
 #include "aui_action.h"
 
-#include "aui_textfield.h"
-
 #include "soundmanager.h"
 #include "gamesounds.h"
 #include "chatbox.h"
+
+#include "ldl_data.hpp"
 
 #ifdef __AUI_USE_SDL__
 #include "aui_sdlsurface.h"

@@ -1,17 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "ctp2_Window.h"
 
 #include "aui.h"
 #include "aui_control.h"
@@ -21,12 +10,13 @@
 
 #include "primitives.h"
 
-#include "ctp2_Window.h"
 #include "aui_action.h"
 
 #include "c3ui.h"
 #include "ctp2_Static.h"
 #include "StrDB.h"
+
+#include "ldl_data.hpp"
 
 extern C3UI *g_c3ui;
 
@@ -180,7 +170,7 @@ AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 		background->Enable(FALSE);
 	}
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *)ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *)ldlBlock);
 	if(block) {
 		MBCHAR *title = block->GetString("title");
 		if(title) {

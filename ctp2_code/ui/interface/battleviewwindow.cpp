@@ -28,6 +28,9 @@
 #include "TerrainRecord.h"
 #include "soundmanager.h"
 
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
+
 extern C3UI		*g_c3ui;
 extern sint32	g_modalWindow;
 

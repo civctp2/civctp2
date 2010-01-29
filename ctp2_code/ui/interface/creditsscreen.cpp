@@ -54,6 +54,8 @@
 #include "colorset.h"               // g_colorSet
 #include "StrDB.h"					// g_theStringDB
 
+#include "ldl_data.hpp"
+
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI*		g_c3ui;
@@ -274,7 +276,7 @@ AUI_ERRCODE c3_SimpleAnimation::Idle()
 
 void c3_SimpleAnimation::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock != NULL);
 	if(!datablock) return;
 

@@ -47,6 +47,9 @@
 #include "soundmanager.h"   // g_soundManager
 #include "textbutton.h"
 
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
+
 extern C3UI	*           g_c3ui;
 
 
@@ -145,7 +148,7 @@ C3Slider::C3Slider(
 
 AUI_ERRCODE C3Slider::InitCommon( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -174,7 +177,7 @@ AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_thumb = new C3Thumb(
 				&errcode,
 				aui_UniqueId(),

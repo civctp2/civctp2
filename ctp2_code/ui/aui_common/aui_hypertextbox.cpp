@@ -1,15 +1,7 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "aui_hypertextbox.h"
+
 #include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_uniqueid.h"
@@ -17,7 +9,8 @@
 #include "aui_ldl.h"
 #include "aui_static.h"
 
-#include "aui_hypertextbox.h"
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
@@ -42,8 +35,6 @@ aui_HyperTextBox::aui_HyperTextBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
-
 
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
@@ -76,7 +67,7 @@ aui_HyperTextBox::aui_HyperTextBox(
 
 AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -131,7 +122,7 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_ranger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),

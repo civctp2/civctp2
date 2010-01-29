@@ -19,6 +19,7 @@
 #include "aui_ldl.h"
 #include "c3ui.h"
 
+#include "ldl_data.hpp"
 
 #include "colorset.h"       // g_colorSet
 

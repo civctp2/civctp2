@@ -33,16 +33,13 @@
 
 
 #include "aui_base.h"
-#include "tech_wllist.h"
-
 #include "aui_control.h"
-
-#include "ldl_user.h"
 
 class aui_Region;
 class aui_Dimension;
+class ldl;
+class ldl_datablock;
 template <class T> class AvlTree;
-
 
 struct aui_LdlObject
 {

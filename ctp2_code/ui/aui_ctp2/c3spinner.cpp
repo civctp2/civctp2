@@ -28,6 +28,7 @@
 
 #include "primitives.h"
 
+#include "ldl_data.hpp"
 
 
 extern C3UI *g_c3ui;
@@ -77,7 +78,7 @@ C3Spinner::C3Spinner(
 
 AUI_ERRCODE C3Spinner::InitCommon( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

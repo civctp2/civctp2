@@ -106,16 +106,15 @@ void CivArchive::SetSize(uint32 ulSize)
 
 void CivArchive::DoubleExpand(uint32 ulAmount)
 {
-	uint32	ulSize ;
-	uint8	*pbData ;
-	sint32 count = 0; 
 
-	Assert(0 < m_ulAllocated); 
-	ulSize = m_ulAllocated;
+	Assert(0 < m_ulAllocated);
+	uint32 ulSize = m_ulAllocated;
 
 #ifdef _DEBUG
-	sint32 finite_loop=0; 
+	sint32 finite_loop=0;
 #endif
+
+	sint32 count = 0;
 
 	do
 	{
@@ -132,7 +131,7 @@ void CivArchive::DoubleExpand(uint32 ulAmount)
 	}
 	Assert(0<ulSize);
 
-	pbData = new uint8[ulSize];
+	uint8* pbData = new uint8[ulSize];
 	memcpy(pbData, m_pbBaseMemory, m_ulLength);
 	m_pbInsert = pbData + (m_pbInsert - m_pbBaseMemory);
 	m_ulAllocated = ulSize;

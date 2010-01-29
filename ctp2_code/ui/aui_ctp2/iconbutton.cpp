@@ -1,16 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "iconbutton.h"
 
@@ -25,6 +13,8 @@
 #include "colorset.h"       // g_colorSet
 #include "CivPaths.h"       // g_civPaths
 #include "primitives.h"
+
+#include "ldl_data.hpp"
 
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
@@ -75,7 +65,7 @@ AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 	MBCHAR		*name;
 
 	if (isLDL) {
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

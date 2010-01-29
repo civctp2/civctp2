@@ -1,21 +1,11 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "aui_moviebutton.h"
+
 #include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
 #include "aui_movie.h"
-
-#include "aui_moviebutton.h"
 
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
@@ -23,6 +13,7 @@ extern C3UI			*g_c3ui;
 #include "profileDB.h"
 extern ProfileDB	*g_theProfileDB;
 
+#include "ldl_data.hpp"
 
 aui_MovieButton::aui_MovieButton(
 	AUI_ERRCODE *retval,

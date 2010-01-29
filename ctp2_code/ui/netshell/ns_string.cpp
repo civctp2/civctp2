@@ -12,6 +12,7 @@
 
 #include "aui_ui.h"
 #include "aui_ldl.h"
+#include "ldl_data.hpp"
 #include "ns_string.h"
 
 #include "StrDB.h"

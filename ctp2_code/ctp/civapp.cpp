@@ -2976,7 +2976,7 @@ void CivApp::QuitGame(void)
 
 
 
-void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
+void CivApp::AutoSave(sint32 player, bool isQuickSave)
 {
 	if ((g_network.IsActive() && !g_network.IsHost()) || g_network.IsNetworkLaunch())
 		return;
@@ -3014,7 +3014,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	}
 }
 
-void CivApp::RestoreAutoSave(PLAYER_INDEX player)
+void CivApp::RestoreAutoSave(sint32 player)
 {
 	MBCHAR		filename[_MAX_PATH];
 	sprintf(filename, "auto%d.sav", player);
@@ -3041,7 +3041,7 @@ void CivApp::PostLoadSaveGameAction(MBCHAR const * name)
 	g_c3ui->AddAction(new LoadSaveGameAction(name));
 }
 
-void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
+void CivApp::PostLoadQuickSaveAction(sint32 player)
 {
 	/// @todo Check g_network.IsHost? See AutoSave. Otherwise, the dir assignment
 	///       becomes constant.

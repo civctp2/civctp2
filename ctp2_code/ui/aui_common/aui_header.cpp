@@ -29,15 +29,15 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_header.h"
+
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "aui_listbox.h"
 #include "aui_switch.h"
 #include "aui_ldl.h"
 
-#include "aui_header.h"
-
-
+#include "ldl_file.hpp"
 
 aui_Header::aui_Header(
 	AUI_ERRCODE *retval,
@@ -116,7 +116,7 @@ AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s%d", ldlBlock, k_AUI_HEADER_LDL_SWITCH, i );
 
-            if (!aui_Ldl::GetLdl()->FindDataBlock( block ) )
+			if (!aui_Ldl::GetLdl()->FindDataBlock( block ) )
 				break;
 
 			aui_Switch *theSwitch = new aui_Switch(

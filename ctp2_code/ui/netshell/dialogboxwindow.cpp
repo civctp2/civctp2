@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "dialogboxwindow.h"
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -41,13 +42,11 @@
 #include "ns_chatbox.h"
 #include "ns_customlistbox.h"
 
-
 #include "c3_button.h"
-
-#include "dialogboxwindow.h"
 
 #include "spnewgamewindow.h"
 
+#include "ldl_file.hpp"
 
 DialogBoxWindow::DialogBoxWindow(
 	AUI_ERRCODE *retval,
@@ -94,7 +93,7 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( block, "%s.titlestatictext", ldlBlock );
-    if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+	if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 	{
 		control = new aui_Static(
 			&errcode,

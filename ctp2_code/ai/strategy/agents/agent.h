@@ -134,6 +134,7 @@ public:
 	sint32 GetRounds(const MapPoint & pos, sint32 & cells) const;
 	double GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const;
 
+	bool CanReachTargetContinent(const MapPoint & pos) const;
 	bool EstimateTransportUtility(const Agent_ptr transport, Utility & utility) const;
 
 	void Set_Target_Order(const sint32   &target_order) { m_targetOrder = target_order; };

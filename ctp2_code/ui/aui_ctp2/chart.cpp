@@ -2,6 +2,7 @@
 
 
 #include "c3.h"
+#include "chart.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -29,12 +30,12 @@
 #include "Advances.h"
 #include "prjfile.h"
 
-#include "chart.h"
 
 #include "StrDB.h"
 #include "IconRecord.h"
 
 #include "advanceutil.h"
+#include "ldl_file.hpp"
 
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;

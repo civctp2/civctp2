@@ -29,6 +29,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3_ranger.h"
+
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_ranger.h"
@@ -39,12 +41,13 @@
 #include "aui_window.h"
 #include "aui_dimension.h"
 
-#include "c3_ranger.h"
 #include "c3_thumb.h"
 
 #include "pattern.h"
 #include "patternbase.h"
 #include "primitives.h"
+
+#include "ldl_file.hpp"
 
 extern aui_UI		*g_ui;
 
@@ -179,7 +182,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
 			
-            if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+			if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 				m_thumb = new c3_Thumb(
 					&errcode,
 					aui_UniqueId(),

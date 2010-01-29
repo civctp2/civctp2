@@ -1,15 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "ns_headerswitch.h"
 
 #include "aui_ui.h"
 #include "aui_blitter.h"
@@ -21,9 +12,7 @@
 #include "pattern.h"
 #include "primitives.h"
 
-#include "ns_headerswitch.h"
-
-
+#include "ldl_data.hpp"
 
 ns_HeaderSwitch::ns_HeaderSwitch(
 	AUI_ERRCODE *retval,
@@ -92,7 +81,7 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 
 AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

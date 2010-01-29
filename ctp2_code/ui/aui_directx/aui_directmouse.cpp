@@ -213,6 +213,26 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			m_data.flags = m_flags;
 			return AUI_ERRCODE_OK;
 
+		case DIMOFS_BUTTON4:
+			m_data.ubutton = uint8(ptrOd->dwData) & 0x80;
+			m_data.flags = m_flags;
+			return AUI_ERRCODE_OK;
+
+		case DIMOFS_BUTTON5:
+			m_data.vbutton = uint8(ptrOd->dwData) & 0x80;
+			m_data.flags = m_flags;
+			return AUI_ERRCODE_OK;
+
+		case DIMOFS_BUTTON6:
+			m_data.wbutton = uint8(ptrOd->dwData) & 0x80;
+			m_data.flags = m_flags;
+			return AUI_ERRCODE_OK;
+
+		case DIMOFS_BUTTON7:
+			m_data.xbutton = uint8(ptrOd->dwData) & 0x80;
+			m_data.flags = m_flags;
+			return AUI_ERRCODE_OK;
+
 		case DIK_LSHIFT :
 			if (uint8(ptrOd->dwData) & 0x80) {
 				

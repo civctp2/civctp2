@@ -27,6 +27,8 @@
 #include "pattern.h"
 #include "primitives.h"
 
+#include "ldl_data.hpp"
+
 extern C3UI *   g_c3ui;
 
 

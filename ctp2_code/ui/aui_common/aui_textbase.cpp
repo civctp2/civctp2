@@ -38,7 +38,7 @@
 #include "aui_bitmapfont.h"
 #include "StrDB.h"            // g_theStringDB
 
-
+#include "ldl_data.hpp"
 
 aui_TextBase::aui_TextBase
 (

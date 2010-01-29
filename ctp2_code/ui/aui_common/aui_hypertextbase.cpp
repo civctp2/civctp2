@@ -36,7 +36,7 @@
 #include "aui_surface.h"
 #include "aui_bitmapfont.h"
 #include "aui_static.h"
-
+#include "ldl_data.hpp"
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,

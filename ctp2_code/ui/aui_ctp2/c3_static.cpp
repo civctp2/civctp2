@@ -1,18 +1,19 @@
 
-
 #include "c3.h"
+#include "c3_static.h"
+
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_gamespecific.h"
 
-#include "c3_static.h"
-
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
+
+#include "ldl_data.hpp"
 
 extern aui_UI		*g_ui;
 
@@ -30,8 +31,8 @@ c3_Static::c3_Static
 	PatternBase     (ldlBlock, NULL)
 {
 	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommonLdl(ldlBlock);
+	{
+		*retval = InitCommonLdl(ldlBlock);
 	}
 }
 
@@ -58,16 +59,16 @@ c3_Static::c3_Static
 	PatternBase     (pattern)
 {
 	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommon(bevelWidth, bevelType);
-    }
+	{
+		*retval = InitCommon(bevelWidth, bevelType);
+	}
 }
 
 
 
 AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

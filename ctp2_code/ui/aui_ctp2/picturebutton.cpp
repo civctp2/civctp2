@@ -1,17 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "picturebutton.h"
 
 #include "aui.h"
 #include "picture.h"
@@ -19,7 +8,7 @@
 #include "aui_ldl.h"
 #include "c3ui.h"
 
-#include "picturebutton.h"
+#include "ldl_data.hpp"
 
 extern C3UI *g_c3ui;
 
@@ -68,10 +57,10 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 	MBCHAR		path[_MAX_PATH];
 
 	if (isLDL) 
-    {
+	{
 		ldlBlock = upPicture;
 
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

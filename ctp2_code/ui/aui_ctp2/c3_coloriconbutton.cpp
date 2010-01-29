@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "c3_coloriconbutton.h"
 
 #include "aui.h"
 #include "aui_action.h"
@@ -28,10 +29,10 @@
 
 
 #include "primitives.h"
-#include "c3_button.h"
-#include "c3_coloriconbutton.h"
 
 #include "c3ui.h"
+
+#include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 extern CivPaths		*g_civPaths;

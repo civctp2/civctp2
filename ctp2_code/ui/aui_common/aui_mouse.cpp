@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_mouse.h"
 
 #include "aui_factory.h"
 #include "aui_ui.h"
@@ -42,13 +43,14 @@
 #include "aui_rectangle.h"
 #include "aui_ldl.h"
 
-#include "aui_mouse.h"
-
 #include "profileDB.h"
 
 #include "c3ui.h"
 
+#include "aui_hypertextbox.h"
 
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 sint32 aui_Mouse::m_mouseRefCount = 0;
 LPCRITICAL_SECTION aui_Mouse::m_lpcs = NULL;
@@ -194,7 +196,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 		{
 			sprintf( temp, "%s.%s%d", ldlBlock, k_MOUSE_LDL_ANIM, i++ );
 
-            ldl_datablock *blk = aui_Ldl::GetLdl()->FindDataBlock( temp );
+			ldl_datablock *blk = aui_Ldl::GetLdl()->FindDataBlock( temp );
 			if ( !blk ) break;
 
 			POINT indexes;

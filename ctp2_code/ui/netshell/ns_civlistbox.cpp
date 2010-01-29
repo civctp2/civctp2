@@ -39,6 +39,8 @@
 #include "colorset.h"       // g_colorSet
 #include "ns_header.h"
 
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 ns_CivListBox::ns_CivListBox(
 	AUI_ERRCODE *retval,
@@ -126,7 +128,7 @@ ns_CivListBox::ns_CivListBox(
 
 AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -179,7 +181,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_header = new ns_Header(
 				&errcode,
 				aui_UniqueId(),

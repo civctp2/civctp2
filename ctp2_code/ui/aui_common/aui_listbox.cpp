@@ -31,6 +31,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_listbox.h"
+
 #include "aui_ui.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
@@ -45,8 +47,9 @@
 #include "aui_ldl.h"
 #include "aui_static.h"
 
-#include "aui_listbox.h"
 #include "ctp2_listitem.h"
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 #ifdef USE_SDL
 #include <SDL.h>
@@ -111,7 +114,7 @@ aui_ListBox::aui_ListBox(
 
 AUI_ERRCODE aui_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -234,7 +237,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_header = new aui_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -293,7 +296,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_horizontalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -343,7 +346,7 @@ aui_ListBox::~aui_ListBox()
 	delete m_horizontalRanger;
 	delete m_widthList;
 	delete m_selectedList;
-    delete m_selectedListLastTime;
+	delete m_selectedListLastTime;
 	delete m_visualSelectedList;
 	
 	if (m_dragDropWindow)
@@ -365,10 +368,10 @@ AUI_ERRCODE aui_ListBox::Draw(
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if (!surface)
-    {
+	{
 		surface = m_window->TheSurface();
-        if (!surface) return AUI_ERRCODE_OK;
-    }
+		if (!surface) return AUI_ERRCODE_OK;
+	}
 
 	AUI_ERRCODE errcode = DrawThis( surface, x, y );
 
@@ -1837,57 +1840,6 @@ void aui_ListBox::MouseRGrabInside( aui_MouseEvent *mouseData )
 				
 			m_visualSelectedList->AddTail( itemIndex );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSERGRABINSIDE;
 		}
 
@@ -2203,15 +2155,6 @@ void aui_ListBox::BuildListEnd(bool isAddBottom)
 	SortByColumn( m_sortColumn, m_sortAscending );
 }
 
-
-
-
-
-
-
-
-
-
 void ListBoxRangerActionCallback(
 	aui_Control *control,
 	uint32 action,
@@ -2229,6 +2172,7 @@ void ListBoxRangerActionCallback(
 
 aui_Item *aui_ListBox::ConstructAndAddTextItem(const MBCHAR *ldlblock, const MBCHAR *text, void *userData)
 {
+	/// @ToDo: An aui_ListBox should not know anything about a ctp2_ListItem
 	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot((MBCHAR *)ldlblock);
 	Assert(item);
 	if(!item) return NULL;

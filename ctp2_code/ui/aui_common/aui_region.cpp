@@ -47,6 +47,7 @@
 #include "Globals.h"
 #include "soundmanager.h"
 #include "StatusBar.h"
+#include "ldl_data.hpp"
 
 extern SoundManager		*g_soundManager;
 

@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "textbox.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -30,8 +31,7 @@
 #include "textutils.h"
 #include "colorset.h"
 
-#include "textbox.h"
-
+#include "ldl_file.hpp"
 
 extern C3UI			*g_c3ui;
 

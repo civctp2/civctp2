@@ -1,21 +1,12 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "c3_hypertipwindow.h"
+
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "aui_static.h"
 #include "aui_blitter.h"
-#include "c3_hypertipwindow.h"
 #include "aui_hypertextbox.h"
 
 #include "pattern.h"
@@ -23,6 +14,8 @@
 #include "primitives.h"
 #include "colorset.h"               // g_colorSet
 
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 c3_HyperTipWindow::c3_HyperTipWindow(
 	AUI_ERRCODE *retval,
@@ -78,7 +71,7 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	MBCHAR tipBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( tipBlock, "%s.%s", ldlBlock, k_C3_HYPERTIPWINDOW_LDL_TIP );
 
-    if (aui_Ldl::GetLdl()->FindDataBlock( tipBlock ) )
+	if (aui_Ldl::GetLdl()->FindDataBlock( tipBlock ) )
 	{
 		m_hyperTip = new aui_HyperTextBox(
 			&errcode,

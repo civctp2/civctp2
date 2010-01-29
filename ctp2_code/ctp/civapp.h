@@ -58,7 +58,6 @@ class CivApp;
 #include "aui_ldl.h"
 #include "aui_action.h"     // aui_Action
 #include "ctp2_inttypes.h"  // sint32, uint32
-#include "player.h"         // PLAYER_INDEX
 class CivArchive;
 
 //----------------------------------------------------------------------------
@@ -72,7 +71,7 @@ class CivApp
 public:
 	CivApp();
 
-	void		AutoSave(PLAYER_INDEX player, bool isQuickSave = false);
+	void		AutoSave(sint32 player, bool isQuickSave = false);
 	void		BeginKeyboardScrolling(sint32 key);
 	void		CleanupApp(void);
 	void		CleanupAppDB(void);
@@ -107,7 +106,7 @@ public:
 	sint32		LoadSavedGameMap(MBCHAR const * name); 
 	sint32		LoadScenarioGame(MBCHAR const * name);
 	void		PostEndGameAction(void);
-	void        PostLoadQuickSaveAction(PLAYER_INDEX player);
+	void        PostLoadQuickSaveAction(sint32 player);
 	void		PostLoadSaveGameAction(MBCHAR const *);
 	void		PostLoadScenarioGameAction(MBCHAR const * name);
 	void		PostQuitToLobbyAction(void);
@@ -150,7 +149,7 @@ private:
 	sint32      ProcessRobot(const uint32 target_milliseconds, uint32 &used_milliseconds);
 	sint32      ProcessSLIC(void);
 	sint32		ProcessUI(const uint32 target_milliseconds, uint32 &used_milliseconds);
-	void		RestoreAutoSave(PLAYER_INDEX player);
+	void		RestoreAutoSave(sint32 player);
 	void        StartMessageSystem();
 
 	bool		m_appLoaded;

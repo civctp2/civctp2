@@ -58,6 +58,8 @@
 #include "aui_uniqueid.h"
 #include "aui_window.h"
 
+#include "ldl_file.hpp"
+
 #if defined(__AUI_USE_DIRECTX__)
 #include "dxver.h"
 extern BOOL g_exclusiveMode;

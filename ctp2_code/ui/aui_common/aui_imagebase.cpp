@@ -36,7 +36,7 @@
 #include "aui_ldl.h"
 #include "aui_surface.h"
 #include "aui_ui.h"
-
+#include "ldl_data.hpp"
 
 MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST] =
 {

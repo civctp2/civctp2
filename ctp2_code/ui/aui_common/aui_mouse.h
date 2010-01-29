@@ -65,15 +65,19 @@ class ldl_datablock;
 
 struct aui_MouseEvent
 {
-	POINT	position;	
-	BOOL	lbutton;	
-	BOOL	rbutton;	
-	BOOL    mbutton;    
-	BOOL    tbutton;    
-	uint32	time;		
-	sint32	movecount;	
-	sint32	framecount;	
-	uint32	flags;		
+	POINT	position;
+	BOOL	lbutton;
+	BOOL	rbutton;
+	BOOL    mbutton;
+	BOOL    tbutton;
+	BOOL    ubutton;
+	BOOL    vbutton;
+	BOOL    wbutton;
+	BOOL    xbutton;
+	uint32	time;
+	sint32	movecount;
+	sint32	framecount;
+	uint32	flags;
 };
 
 

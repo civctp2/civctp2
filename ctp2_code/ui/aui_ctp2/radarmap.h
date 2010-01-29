@@ -46,8 +46,6 @@
 #include "Unit.h"
 #include "pixeltypes.h"
 #include "profileDB.h"
-#include "colorset.h"
-
 
 enum C3_RADAR_ACTION {
 	C3_RADAR_ACTION_NULL,
@@ -57,6 +55,7 @@ enum C3_RADAR_ACTION {
 class aui_Surface;
 class MapPoint;
 class Player;
+enum COLOR;
 
 class RadarMap : public aui_Control, public PatternBase
 {

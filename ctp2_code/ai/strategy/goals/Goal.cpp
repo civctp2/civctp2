@@ -1545,6 +1545,11 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 #endif
 	}
 
+	if(agent_ptr->Get_Army()->HasCargo() && !CanReachTargetContinent(agent_ptr))
+	{
+		return Goal::BAD_UTILITY;
+	}
+
 	Utility bonus = 0;
 
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus 
@@ -2995,10 +3000,10 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 		Utility val = Compute_Agent_Matching_Value(first_army);
 		uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
 		const char * myText = goal_rec->GetNameText();
-		MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
-		MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
-		memset(goalString, 0, strlen(myText) + 20);
-		memset(myString,   0, strlen(myText) + 40);
+		MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+		MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+		memset(goalString, 0, strlen(myText) + 40);
+		memset(myString,   0, strlen(myText) + 80);
 
 		for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
 		{
@@ -3058,8 +3063,8 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 	else
 	{
 		const char * myText = goal_rec->GetNameText();
-		MBCHAR * myString = new MBCHAR[strlen(myText) + 40];
-		memset(myString, 0, strlen(myText) + 40);
+		MBCHAR * myString = new MBCHAR[strlen(myText) + 80];
+		memset(myString, 0, strlen(myText) + 80);
 		sprintf(myString, "%s failed at (%d, %d)", goal_rec->GetNameText(), dest_pos.x, dest_pos.y);
 
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), myString, 0, m_goal_type);
@@ -3188,7 +3193,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			        this, m_goal_type, dest_pos.x, dest_pos.y));
 			the_transport->Log_Debug_Info(k_DBG_SCHEDULER, this);
 			        uint8 magnitude = 220;
-			        MBCHAR * myString = new MBCHAR[40];
+			        MBCHAR * myString = new MBCHAR[256];
 			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
 			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 			        delete[] myString;
@@ -3271,7 +3276,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			        this, m_goal_type, dest_pos.x, dest_pos.y));
 			the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 			        uint8 magnitude = 220;
-			        MBCHAR * myString = new MBCHAR[40];
+			        MBCHAR * myString = new MBCHAR[256];
 			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
 			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 			        delete[] myString;
@@ -3370,6 +3375,11 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 		{
 			Set_Sub_Task(SUB_TASK_TRANSPORT_TO_GOAL);
 		}
+		else
+		{
+			bool test = the_army->CanReachTargetContinent(goal_pos);
+			Assert(test);
+		}
 	}
 	else if ( the_army->Get_Army()->CanTransport()
 	     &&  !the_army->Get_Army()->GetMovementTypeAir()
@@ -3410,7 +3420,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 			{
 				Utility val = Compute_Agent_Matching_Value(the_army);
 				uint8 magnitude = (uint8)(((5000000 - val) * 255.0) / 5000000);
-				MBCHAR * myString = new MBCHAR[40];
+				MBCHAR * myString = new MBCHAR[256];
 				sprintf(myString, "Waiting GROUP to GO (%d,%d)\n", goal_pos.x, goal_pos.y);
 				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 				delete[] myString;
@@ -3425,7 +3435,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 				           this, m_goal_type, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
-				MBCHAR * myString = new MBCHAR[40];
+				MBCHAR * myString = new MBCHAR[256];
 				sprintf(myString, "NO PATH (GROUP)(%d,%d)", goal_pos.x, goal_pos.y);
 				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 				delete[] myString;
@@ -3442,7 +3452,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 				           this, m_goal_type, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
-				MBCHAR * myString = new MBCHAR[40];
+				MBCHAR * myString = new MBCHAR[256];
 				sprintf(myString, "NO PATH (TRANSP.)(%d,%d)", goal_pos.x, goal_pos.y);
 				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
 				delete[] myString;
@@ -3893,7 +3903,7 @@ bool Goal::RallyTroops()
 			else
 			{
 				uint8 magnitude = 220;
-				MBCHAR * myString = new MBCHAR[40];
+				MBCHAR * myString = new MBCHAR[256];
 				MapPoint goal_pos;
 				goal_pos = Get_Target_Pos(agent1_ptr->Get_Army());
 				sprintf(myString, "Waiting GROUP to GO (%d,%d)", goal_pos.x, goal_pos.y);
@@ -4075,6 +4085,11 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 				continue;
 		}
 
+		if(!possible_transport->CanReachTargetContinent(Get_Target_Pos()))
+		{
+			continue;
+		}
+
 		Utility  utility         = Goal::BAD_UTILITY;
 		if(agent_ptr->EstimateTransportUtility(possible_transport, utility))
 		{
@@ -4160,6 +4175,11 @@ bool Goal::LoadTransporters(Agent_ptr agent_ptr)
 	}
 
 	return success;
+}
+
+bool Goal::CanReachTargetContinent(Agent_ptr agent_ptr) const
+{
+	return agent_ptr->CanReachTargetContinent(Get_Target_Pos());
 }
 
 bool Goal::ArmiesAtGoal() const

@@ -1,14 +1,6 @@
 
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "staticpicture.h"
 
 #include "aui.h"
 #include "aui_ui.h"
@@ -20,7 +12,8 @@
 
 #include "picture.h"
 #include "primitives.h"
-#include "staticpicture.h"
+
+#include "ldl_data.hpp"
 
 extern CivPaths		*g_civPaths;
 extern aui_UI		*g_ui;
@@ -71,7 +64,7 @@ StaticPicture::StaticPicture(
 
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

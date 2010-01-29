@@ -444,6 +444,23 @@ sint32 Agent::GetRounds(const MapPoint & pos, sint32 & cells) const
 	return static_cast<sint32>(ceil(GetRoundsPrecise(pos, cells)));
 }
 
+bool Agent::CanReachTargetContinent(const MapPoint & pos) const
+{
+	if(m_army.GetMovementTypeAir())
+		return true;
+
+	sint16 target_cont;
+	sint16 my_continent;
+	bool   is_land;
+
+	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
+	g_theWorld->GetContinent( pos, target_cont, is_land );
+
+	Assert(is_land);
+
+	return g_theWorld->IsLandNextTooWater(target_cont, my_continent);
+}
+
 bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utility) const
 {
 	Assert(transport);
@@ -455,14 +472,14 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	bool check_continents = !transport->m_army.GetMovementTypeAir();
 	bool is_land;
 
-	sint16 my_continent;
-	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
 
 	MapPoint trans_pos = transport->Get_Pos();
 	if (check_continents)
 	{
 		sint16 trans_cont;
+		sint16 my_continent;
 
+		g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
 		g_theWorld->GetContinent( trans_pos, trans_cont, is_land );
 
 		if ( is_land )
@@ -637,10 +654,10 @@ void Agent::Group_With( Agent_ptr second_army )
 	const GoalRecord* rec = g_theGoalDB->Get(m_goal->Get_Goal_Type());
 
 	const char * myText = rec->GetNameText();
-	MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
-	MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
-	memset(goalString, 0, strlen(myText) + 20);
-	memset(myString,   0, strlen(myText) + 40);
+	MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+	MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+	memset(goalString, 0, strlen(myText) + 40);
+	memset(myString,   0, strlen(myText) + 80);
 
 	for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
 	{
@@ -671,7 +688,7 @@ void Agent::Ungroup_Order()
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 
-	MBCHAR * myString = new MBCHAR[40];
+	MBCHAR * myString = new MBCHAR[256];
 	sprintf(myString, "Ungrouping at (%d,%d)", pos.x, pos.y);
 	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 	delete[] myString;
@@ -821,7 +838,7 @@ void Agent::WaitHere(const MapPoint & goal_pos)
 
 		MapPoint pos;
 		m_army->GetPos(pos);
-		MBCHAR * myString = new MBCHAR[40];
+		MBCHAR * myString = new MBCHAR[255];
 		sprintf(myString, "Waiting GROUP @ (%d,%d) to GO (%d,%d)", pos.x, pos.y, goal_pos.x, goal_pos.y);
 		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 		delete[] myString;
@@ -837,10 +854,10 @@ void Agent::ClearOrders()
 		const GoalRecord* rec = g_theGoalDB->Get(m_goal->Get_Goal_Type());
 
 		const char * myText = rec->GetNameText();
-		MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
-		MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
-		memset(goalString, 0, strlen(myText) + 20);
-		memset(myString,   0, strlen(myText) + 40);
+		MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+		MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+		memset(goalString, 0, strlen(myText) + 40);
+		memset(myString,   0, strlen(myText) + 80);
 
 		for(uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
 		{

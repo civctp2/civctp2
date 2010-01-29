@@ -26,6 +26,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_progressbar.h"
+
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_blitter.h"
@@ -33,9 +35,7 @@
 #include "aui_window.h"
 #include "aui_animate.h"
 
-#include "aui_progressbar.h"
-
-
+#include "ldl_data.hpp"
 
 aui_ProgressBar::aui_ProgressBar(
 	AUI_ERRCODE *retval,

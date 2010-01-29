@@ -63,7 +63,7 @@
 #include "linegraph.h"
 #include "AvlTree.h"
 
-
+#include "ldl_user.h"
 
 
 ldl *aui_Ldl::s_ldl = NULL;

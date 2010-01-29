@@ -1,15 +1,7 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "aui_ranger.h"
+
 #include "aui_ui.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
@@ -20,9 +12,9 @@
 #include "aui_thumb.h"
 #include "aui_action.h"
 #include "aui_static.h"
-#include "aui_ranger.h"
 #include <string>
 
+#include "ldl_data.hpp"
 
 static const MBCHAR *k_AUI_RANGER_LDL_OVERLAP		= "overlap";
 static const MBCHAR *k_AUI_RANGER_LDL_DISPLAY		= "display";

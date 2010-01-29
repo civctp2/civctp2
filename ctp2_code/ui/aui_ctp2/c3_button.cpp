@@ -45,6 +45,8 @@
 #include "patternbase.h"
 #include "primitives.h"
 
+#include "ldl_data.hpp"
+
 c3_Button::c3_Button
 (
 	AUI_ERRCODE *retval,

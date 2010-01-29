@@ -1,19 +1,21 @@
 
 
 #include "c3.h"
+#include "ctp2_Static.h"
+
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_ui.h"             // g_ui
 #include "aui_window.h"
 #include "aui_gamespecific.h"
 
-#include "ctp2_Static.h"
 
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
 
+#include "ldl_data.hpp"
 
 ctp2_Static::ctp2_Static(
 	AUI_ERRCODE *retval,

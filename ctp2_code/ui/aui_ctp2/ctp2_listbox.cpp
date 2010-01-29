@@ -29,6 +29,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctp2_listbox.h"
+
 #include "aui.h"
 
 #include "aui_ui.h"                 // g_ui
@@ -44,7 +46,6 @@
 #include "c3_ranger.h"
 #include "c3_listitem.h"
 
-#include "ctp2_listbox.h"
 #include "ctp2_dropdown.h"
 
 #include "pattern.h"
@@ -54,7 +55,7 @@
 #include "ctp2_MenuButton.h"
 #include "aui_dragdropwindow.h"
 
-
+#include "ldl_data.hpp"
 
 uint32 ctp2_ListBox::m_ctp2_listboxClassId = aui_UniqueId();
 ctp2_ListBox *ctp2_ListBox::ms_mouseFocusListBox = NULL;

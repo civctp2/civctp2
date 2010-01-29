@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "c3textfield.h"
 
 #include "aui.h"
 #include "aui_window.h"
@@ -23,7 +24,7 @@
 #include "primitives.h"
 #include "c3ui.h"
 
-#include "c3textfield.h"
+#include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 

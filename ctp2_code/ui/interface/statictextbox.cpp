@@ -1,17 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "statictextbox.h"
 
 #include "aui.h"
 #include "aui_window.h"
@@ -21,10 +10,11 @@
 
 #include "primitives.h"
 
-#include "statictextbox.h"
 #include "textutils.h"
 
 #include "colorset.h"
+
+#include "ldl_data.hpp"
 
 #define k_STATICTEXTBOX_LDL_BEVEL "bevel"
 
@@ -47,13 +37,8 @@ StaticTextBox::StaticTextBox(
 	aui_TextBase( text, maxLength ),
 	aui_Static( retval, id, x, y, width, height )
 {
-	
-
-
-
 	m_bevel = bevel;
 }
-
 
 StaticTextBox::StaticTextBox(
 	AUI_ERRCODE *retval,
@@ -64,7 +49,7 @@ StaticTextBox::StaticTextBox(
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	aui_Static(retval, id, ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return;
 
@@ -75,14 +60,8 @@ StaticTextBox::StaticTextBox(
 	}
 }
 
-
-
 AUI_ERRCODE StaticTextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
-
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -94,22 +73,6 @@ AUI_ERRCODE StaticTextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	rect.left += 2;
 
 	primitives_BevelRect16( surface, &rect, 1, m_bevel, 16, 16 );
-
-
-
-	
-
-
-
-
-	
-
-
-
-
-
-
-
 
 	aui_TextBase::DrawThisText(surface, &rect);
 

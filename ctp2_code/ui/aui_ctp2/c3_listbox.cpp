@@ -39,6 +39,12 @@
 #endif
 
 #include "c3.h"
+#include "c3_listbox.h"
+
+#include "c3_header.h"
+#include "c3_ranger.h"
+#include "c3_listitem.h"
+
 #include "aui.h"
 
 #include "aui_ui.h"
@@ -49,14 +55,12 @@
 #include "aui_item.h"
 #include "aui_switch.h"
 
-#include "c3_header.h"
-#include "c3_listbox.h"
-#include "c3_ranger.h"
-#include "c3_listitem.h"
-
 #include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
+
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 extern aui_UI		*g_ui;
 
@@ -209,7 +213,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_header = new c3_Header(
 				&errcode,
 				aui_UniqueId(),

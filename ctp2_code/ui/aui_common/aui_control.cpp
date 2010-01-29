@@ -55,6 +55,8 @@
 #include "StatusBar.h"
 #include "aui_imagelist.h"
 #include "aui_static.h"
+#include "ldl_data.hpp"
+#include "ldl_file.hpp"
 
 
 static const MBCHAR *k_AUI_CONTROL_NUMBER_OF_LAYERS		= "numberoflayers";

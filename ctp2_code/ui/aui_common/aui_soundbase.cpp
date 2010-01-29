@@ -10,14 +10,16 @@
 
 
 #include "c3.h"
+#include "aui_soundbase.h"
+
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_sound.h"
 
-#include "aui_soundbase.h"
-
 #include "soundmanager.h"
 #include "gamesounds.h"
+
+#include "ldl_data.hpp"
 
 extern SoundManager		*g_soundManager;
 

@@ -1,6 +1,6 @@
 
-
 #include "c3.h"
+#include "c3_radio.h"
 
 #include "aui.h"
 #include "aui_ui.h"
@@ -9,12 +9,13 @@
 #include "aui_ldl.h"
 
 #include "c3ui.h"
-#include "c3_radio.h"
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"       // g_colorSet
 #include "SlicEngine.h"     // g_slicEngine
+
+#include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 
@@ -71,7 +72,7 @@ c3_Radio::c3_Radio(
 
 AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	

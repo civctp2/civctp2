@@ -1,24 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "messagewin.h"
 
@@ -56,6 +36,7 @@
 
 #include "controlpanelwindow.h"
 
+#include "ldl_data.hpp"
 
 extern C3UI	*           g_c3ui;
 extern MessageModal *   g_modalMessage;
@@ -109,7 +90,7 @@ AUI_ERRCODE messagewin_InitializeMessages( void )
 {
 	g_messageUserList = new tech_WLList<MessageList *>;
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock("MessageboxAttributes");
+	ldl_datablock * block = aui_Ldl::FindDataBlock("MessageboxAttributes");
 	Assert( block != NULL );
 	if ( !block ) {
 		return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;

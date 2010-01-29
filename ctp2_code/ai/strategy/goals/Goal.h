@@ -246,6 +246,8 @@ public:
         this->Compute_Matching_Value();
     };
 
+    bool CanReachTargetContinent(Agent_ptr agent_ptr) const;
+
 private:
 
     bool Get_Totally_Complete() const;

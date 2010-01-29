@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String table user interface object
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -35,6 +35,8 @@
 #include "aui_ldl.h"
 #include "aui_ui.h"
 #include "StrDB.h"              // g_theStringDB
+
+#include "ldl_data.hpp"
 
 #define k_AUI_STRINGTABLE_LDL_NUMSTRINGS		"numstrings"
 #define k_AUI_STRINGTABLE_LDL_STRING			"string"

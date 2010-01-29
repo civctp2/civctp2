@@ -14,6 +14,8 @@
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
 
+#include "ldl_data.hpp"
+
 extern C3UI			*g_c3ui;
 
 c3_CheckBox::c3_CheckBox(
@@ -70,7 +72,7 @@ AUI_ERRCODE c3_CheckBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	sint32		bevelWidth=k_C3_CHECKBOX_DEFAULT_BEVELWIDTH;
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	

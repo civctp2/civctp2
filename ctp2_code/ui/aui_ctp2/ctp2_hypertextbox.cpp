@@ -56,6 +56,8 @@
 #include "primitives.h"
 #include "screenutils.h"
 
+#include "ldl_data.hpp"
+
 extern C3UI	*   g_c3ui;
 
 #define k_CTP2_HYPERTEXTBOX_BEVELWIDTH	2

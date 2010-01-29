@@ -1,17 +1,6 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "ctp2_textfield.h"
 
 #include "aui.h"
 #include "aui_window.h"
@@ -23,7 +12,7 @@
 #include "primitives.h"
 #include "c3ui.h"
 
-#include "ctp2_textfield.h"
+#include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 
@@ -79,7 +68,7 @@ AUI_ERRCODE ctp2_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH;
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	

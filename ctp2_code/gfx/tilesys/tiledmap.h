@@ -89,7 +89,7 @@ extern TiledMap *   g_tiledMap;
 #include "colorset.h"
 #include "directions.h"     // WORLD_DIRECTION
 #include "MapPoint.h"       // MapPoint
-#include "pixelutils.h"
+#include "pixelutils.h"     // Pixel types
 #include "SelItem.h"
 #include "tileset.h"        // TileSet
 #include "tileutils.h"
@@ -474,8 +474,6 @@ public:
 	//EMOD to add Civ4 Style Icons
 	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );
 	void		DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasSpecialIcon);
-
-//	void		Serialize(CivArchive &archive);
 
 	void		NextPlayer(void);
 	void		CopyVision();

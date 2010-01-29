@@ -1,16 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "workmap.h"
 
@@ -55,6 +43,8 @@
 #include "UnitData.h"
 #include "GameEventManager.h"
 #include "CityInfluenceIterator.h"
+
+#include "ldl_data.hpp"
 
 #define k_NUDGE		48					
 
@@ -138,7 +128,7 @@ WorkMap::~WorkMap()
 
 void WorkMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return;
 

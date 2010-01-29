@@ -1596,6 +1596,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 
 		if(empty > 0
+		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
 			match_added = true;

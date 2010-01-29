@@ -6,8 +6,6 @@
 
 
 #include "c3.h"
-
-
 #include "ctp2_button.h"
 
 
@@ -24,6 +22,7 @@
 #include "colorset.h"           // g_colorSet
 #include "primitives.h"
 
+#include "ldl_data.hpp"
 
 extern C3UI	*g_c3ui;
 

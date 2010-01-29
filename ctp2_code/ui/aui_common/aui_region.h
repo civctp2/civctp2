@@ -100,13 +100,13 @@ enum AUI_EDIT_MODE_STATUS
 #include "aui_dimension.h"
 #include "aui_mouse.h"       // aui_MouseEvent
 #include "ctp2_inttypes.h"   // sintN, uintN
-#include "tech_wllist.h"
 
 class aui_Control;
 class aui_Dimension;
 class aui_DragDropWindow;
 class aui_Surface;
 class aui_Undo;
+class aui_Dimension;
 // AUI_ERRCODE, MBCHAR, POINT, RECT
 
 class aui_Region : public aui_Base

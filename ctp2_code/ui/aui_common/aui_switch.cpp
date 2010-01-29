@@ -1,27 +1,17 @@
 
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
+#include "aui_switch.h"
+
 #include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_action.h"
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 
-#include "aui_switch.h"
-
 #include "soundmanager.h"
 #include "gamesounds.h"
 
-
+#include "ldl_data.hpp"
 
 aui_Switch::aui_Switch(
 	AUI_ERRCODE *retval,

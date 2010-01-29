@@ -29,14 +29,14 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ns_header.h"
 
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "ns_headerswitch.h"
 #include "aui_ldl.h"
 
-#include "ns_header.h"
-
+#include "ldl_file.hpp"
 
 ns_Header::ns_Header(
 	AUI_ERRCODE *retval,
@@ -131,7 +131,7 @@ AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s%d", ldlBlock, k_AUI_HEADER_LDL_SWITCH, i );
 
-            if ( !aui_Ldl::GetLdl()->FindDataBlock( block ) )
+			if ( !aui_Ldl::GetLdl()->FindDataBlock( block ) )
 				break;
 
 			aui_Switch *theSwitch = new ns_HeaderSwitch(

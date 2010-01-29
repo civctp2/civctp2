@@ -43,7 +43,7 @@
 #include "ns_headerswitch.h"
 
 #include "netfunc.h"
-
+#include "ldl_data.hpp"
 
 
 template<class T,class NetShellT>
@@ -212,7 +212,7 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
