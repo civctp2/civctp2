@@ -97,9 +97,10 @@
 #include "buildingutil.h"
 #include "gamefile.h" // g_saveFileVersion
 
-extern SpriteGroupList   *g_unitSpriteGroupList;
-extern SpriteGroupList   *g_citySpriteGroupList;
-extern ScreenManager     *g_screenManager;
+extern SpriteGroupList     *g_unitSpriteGroupList;
+extern SpriteGroupList     *g_citySpriteGroupList;
+extern ScreenManager       *g_screenManager;
+extern PointerList<Player> *g_deadPlayer;
 
 #define k_SHIELD_ON_TIME        650
 #define k_SHIELD_OFF_TIME       150
@@ -2200,12 +2201,41 @@ void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //iden
 	}
 	else if(g_theProfileDB->IsCivFlags())
 	{
+		sint32 civ = -1;
 		// Add civilization flags here - moved flags here and edited the 
 		// heralds to put numbers on national flags emod 2-21-2007
-		sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+		if(g_player[displayedOwner] != NULL)
+		{
+			civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+		}
+		else
+		{
+			for
+			(
+			    PointerList<Player>::Walker walk(g_deadPlayer);
+			    walk.IsValid();
+			    walk.Next()
+			)
+			{
+				Player * p = walk.GetObj();
+		
+				if(p)
+				{
+					Civilisation *civP = p->GetCivilisation();
+					if(civP != NULL && g_theCivilisationPool->IsValid(*civP))
+					{
+						if(civP->GetOwner() == displayedOwner)
+						{
+							civ = civP->GetCivilisation();
+						}
+					}
+				}
+			}
+		}
+
 		sint32  civicon = 0;
 
-		if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+		if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon) && civ > -1)
 		{
 			sint32 xf = x; // + iconDim.x;
 			g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);

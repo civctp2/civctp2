@@ -2811,70 +2811,15 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		g_director->ActionFinished(seq);
 		return;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-   
+	visible =   g_director->TileIsVisibleToPlayer(oldP)||
+	            g_director->TileIsVisibleToPlayer(newP);
 
-   visible	=  	g_director->TileIsVisibleToPlayer(oldP)||
-				g_director->TileIsVisibleToPlayer(newP);
-
-   
-   
-		
-		
-		
-	   
-	   
-	   
-		
-		
-	   
-	
-	
-	
-		
-		
-
-
-		
-	 
-	 
-			
-		  
-	 
-	 
-	 
-			
-	  
-	  
-	
-
-
-	
-	
-	
 	if (visible && executeType == DHEXECUTE_NORMAL) 
 	{
 		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-	  	g_director->ActiveUnitAdd(theActor);
+		g_director->ActiveUnitAdd(theActor);
 
-		
-		
 		if (g_selected_item->GetVisiblePlayer()!= theActor->GetPlayerNum()
 			&& !g_tiledMap->TileIsVisible(theActor->GetPos().x, theActor->GetPos().y)) 
 		{
@@ -2884,12 +2829,12 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			g_tiledMap->InvalidateMix();
 			background_draw_handler(g_background);
 		}
-	} 
-	else 
-	{ 
+	}
+	else
+	{
 		if (theActor->WillDie()) 
 			g_director->FastKill(theActor);
-		else 
+		else
 			theActor->EndTurnProcess();
 	}
 }

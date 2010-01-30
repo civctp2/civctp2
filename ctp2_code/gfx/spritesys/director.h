@@ -319,7 +319,6 @@ public:
 	void			AddInvokeResearchAdvance(MBCHAR *text);	
 	void            AddBeginScheduler(sint32 player);
 
- 
 	void			ActiveUnitAdd(UnitActor *unitActor);
 	void			ActiveUnitRemove(UnitActor *unitActor);
 
