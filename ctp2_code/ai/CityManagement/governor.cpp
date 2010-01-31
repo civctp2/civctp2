@@ -1581,7 +1581,6 @@ void Governor::PlaceTileImprovements()
 
 		CityInfluenceIterator it(unit.RetPos(), city->GetSizeIndex());
 
-//Added by Martin Gühmann to store in memory the added boni
 		sint32  bonusFood = 0;
 		sint32  bonusProduction = 0;
 		sint32  bonusCommerce = 0;

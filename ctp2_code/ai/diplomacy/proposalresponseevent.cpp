@@ -633,11 +633,9 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 	PLAYER_INDEX sender;
 	PLAYER_INDEX receiver;
 
-	
 	if (!args->GetPlayer(0, sender))
 		return GEV_HD_Continue;
 
-	
 	if (!args->GetPlayer(1, receiver))
 		return GEV_HD_Continue;
 
@@ -647,31 +645,26 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 	const NewProposal & sender_proposal = 
 		sender_diplomat.GetMyLastNewProposal(receiver);
 
-	
 	if (sender_proposal.detail.first_type != PROPOSAL_REQUEST_STOP_PIRACY)
 		return GEV_HD_Continue;
 
-	
 	DiplomacyResult proposal_sender_result;
 	DiplomacyResult proposal_receiver_result;
 	ProposalAnalysis::ComputeResult( sender_proposal,
 									 proposal_sender_result,
 									 proposal_receiver_result );
 #ifdef _DEBUG
-	char name[100];
-	GetDescription(name,100);
+	char name[256];
+	GetDescription(name,sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
-
-	
 
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	sint32 piracy_lost_to_sender = map.GetPiracyIncomeByPlayer(sender, receiver);
 	sint32 piracy_income_from_sender = map.GetPiracyIncomeByPlayer(receiver, sender);
 	Response response;
 
-	
 	piracy_lost_to_sender = ProposalAnalysis::RoundGold(piracy_lost_to_sender);
 	piracy_income_from_sender = ProposalAnalysis::RoundGold(piracy_income_from_sender);
 
@@ -682,32 +675,20 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 		receiver_diplomat.GetAcceptPriority(sender, PROPOSAL_REQUEST_STOP_PIRACY);
 
 	if (accept_priority <= 0)
-		return GEV_HD_Continue;		
-	
-	
+		return GEV_HD_Continue;
+
 	if ( piracy_lost_to_sender == 0 && piracy_income_from_sender > 0)
 	{
 		DiplomacyArg arg;
 		arg.gold = piracy_income_from_sender * 3;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_GIVE_GOLD, 
 			arg, accept_priority, DIPLOMATIC_TONE_EQUAL);
-
-		
-		
-		
-		
 	}
-	
 	else if ( piracy_lost_to_sender >= piracy_income_from_sender )
 	{
 		DiplomacyArg arg;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_STOP_PIRACY, 
 			arg, accept_priority, DIPLOMATIC_TONE_INDIGNANT);
-
-		
-		
-		
-		
 	}
 
 	return GEV_HD_Continue;

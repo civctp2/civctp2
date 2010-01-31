@@ -451,12 +451,16 @@ bool Agent::CanReachTargetContinent(const MapPoint & pos) const
 
 	sint16 target_cont;
 	sint16 my_continent;
-	bool   is_land;
+	bool   origin_is_land;
+	bool   target_is_land;
 
-	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
-	g_theWorld->GetContinent( pos, target_cont, is_land );
+	g_theWorld->GetContinent( Get_Pos(), my_continent, origin_is_land );
+	g_theWorld->GetContinent( pos, target_cont, target_is_land );
 
-	Assert(is_land);
+	if(origin_is_land == target_is_land)
+	{
+		return my_continent == target_cont;
+	}
 
 	return g_theWorld->IsLandNextTooWater(target_cont, my_continent);
 }

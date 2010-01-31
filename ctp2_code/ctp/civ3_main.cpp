@@ -482,7 +482,7 @@ void ui_HandleMouseWheel(sint16 delta)
 	if (!g_civApp)  return;
 	if (0 == delta) return; // no rotation
 
-	ctp2_ListBox * box = ctp2_ListBox::GetMouseFocusListBox();
+	aui_ListBox * box = aui_ListBox::GetMouseFocusListBox();
 
 	if(box)
 	{

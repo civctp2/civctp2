@@ -250,8 +250,6 @@ public:
 	
 	void BuildListEnd(bool isAddBottom = false);
 
-    
-    
 	aui_Item *ConstructAndAddTextItem(const MBCHAR *ldlblock, const MBCHAR *text, void *userData);
 
 	void SetIgnoreOutsideDrops(bool ignore) { m_ignoreOutsideDrops = ignore; }
@@ -260,6 +258,13 @@ public:
 	virtual bool HandleKey(uint32 wParam);
 
 	void SetKeyboardActionControl(aui_Control *control);
+
+	static aui_ListBox *ms_mouseFocusListBox;
+
+	static aui_ListBox *GetMouseFocusListBox(void) { return ms_mouseFocusListBox; }
+	static void SetMouseFocusListBox(aui_ListBox *box) { ms_mouseFocusListBox = box; }
+
+	void ForceScroll(sint32 deltaX, sint32 deltaY);
 
 protected:
 	AUI_ERRCODE	CalculateDimensions( void );
@@ -348,38 +353,37 @@ protected:
 									
 									
 									
-	BOOL		m_savedForceSelect; 
-									
-	bool        m_ignoreOutsideDrops; 
-                                      
-	aui_Control *m_keyboardActionControl; 
+	BOOL		m_savedForceSelect;
+	bool        m_ignoreOutsideDrops;
+
+	aui_Control *m_keyboardActionControl;
 
 	bool        m_sendRightClicks;
 	
-	virtual void	PreChildrenCallback	(aui_MouseEvent * mouseData);
-	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
+	virtual void	PreChildrenCallback    (aui_MouseEvent * mouseData);
+	virtual void	PostChildrenCallback   (aui_MouseEvent * mouseData);
 
-	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
-	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveOver          (aui_MouseEvent * mouseData);
+	virtual void	MouseMoveInside        (aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway          (aui_MouseEvent * mouseData);
 
-	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
-	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
-	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOver         (aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway         (aui_MouseEvent * mouseData);
+	virtual void	MouseLDragInside       (aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOutside      (aui_MouseEvent * mouseData);
 
-	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabInside       (aui_MouseEvent * mouseData);
+	virtual void	MouseLDropInside       (aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside      (aui_MouseEvent * mouseData);
 	
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
 	
-	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
-	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRGrabInside       (aui_MouseEvent * mouseData);
+	virtual void	MouseRDropInside       (aui_MouseEvent * mouseData);
+	virtual void	MouseRDragAway         (aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOver         (aui_MouseEvent * mouseData);
 };
-
-
 
 aui_Control::ControlActionCallback ListBoxRangerActionCallback;
 
-
-#endif 
+#endif

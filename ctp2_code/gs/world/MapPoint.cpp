@@ -106,7 +106,17 @@ MapPoint & MapPoint::operator -= (const MapPoint &rhs)
 #if !defined(_SMALL_MAPPOINTS)
 	z -= rhs.z;
 #endif
-    return *this;
+	return *this;
+}
+
+MapPoint & MapPoint::operator += (const MapPointData &rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+#if !defined(_SMALL_MAPPOINTS)
+	z += rhs.z;
+#endif
+	return *this;
 }
 
 void MapPoint::Serialize(CivArchive &archive)
@@ -382,8 +392,6 @@ sint32 MapPoint::NormalizedDistance(MapPoint const & dest) const
 
 void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 {
-
-
 	static MapPoint s, d;
 
 	s.x = (g_mp_size.y-1) - (x + y);
@@ -440,7 +448,6 @@ void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 		sqmp(delta_dl, sq_min, diff);
 	}
 }
-
 
 void MapPoint::Iso2Norm(const MapPointData &pos)
 {
@@ -559,7 +566,6 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 }
 #endif
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : MapPoint::GetSquaredDistance
@@ -583,18 +589,6 @@ sint32 MapPoint::GetSquaredDistance(MapPoint const & from, MapPoint const & to)
 	// Check return value when defining !_SMALL_MAPPOINTS
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 uint32 MapPoint_MapPoint_GetVersion(void)
 	{
 	return (k_MAPPOINT_VERSION_MAJOR<<16 | k_MAPPOINT_VERSION_MINOR) ;
@@ -615,7 +609,6 @@ void verifyYwrap()
 	}
 }
 
-
 void MapPoint::xy2rc(const MapPoint & xy_pos, const MapPoint & map_size)
 {
 	y = xy_pos.y;
@@ -634,7 +627,6 @@ void MapPoint::xy2rc(const MapPoint & xy_pos, const MapPoint & map_size)
 	}
 }
 
-
 void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 {
 	y = rc_pos.y;
@@ -651,7 +643,6 @@ void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 		x -= w;
 	}
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -809,7 +800,7 @@ bool OrthogonalPoint::IsValid(void)
 //----------------------------------------------------------------------------
 void OrthogonalPoint::Move(MapPointData const & delta)
 {
-	m_point += MapPoint(delta);
+	m_point += delta;
 }
 
 //----------------------------------------------------------------------------
@@ -827,7 +818,7 @@ void OrthogonalPoint::Move
 	delta.z *= count;
 #endif
 
-	m_point += MapPoint(delta);
+	m_point += delta;
 }
 
 //----------------------------------------------------------------------------
@@ -941,7 +932,6 @@ MapPointData OrthogonalPoint::Step
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 SquareIterator::SquareIterator(MapPoint const & center, sint32 size)
 :	m_center        (center),
 	m_cur           (center),
@@ -980,7 +970,7 @@ void SquareIterator::Next()
 {
 	bool	isValid	= false;
 	
-	while (!isValid && !End())  
+	while (!isValid && !End())
 	{
 		m_cur.x++;
 		m_cur.y--;
@@ -996,8 +986,8 @@ void SquareIterator::Next()
 		}
 
 		isValid	= IsIncluded();
-	} 
-		
+	}
+
 	if (isValid)
 	{
 		m_wrappedCur = m_testXY.GetRC();
@@ -1014,7 +1004,7 @@ bool SquareIterator::IsIncluded()
 	return m_testXY.IsValid();
 }
 
-MapPoint SquareIterator::Pos() const
+const MapPoint& SquareIterator::Pos() const
 {
 	return m_wrappedCur;
 }

@@ -58,9 +58,6 @@
 #include "ldl_data.hpp"
 
 uint32 ctp2_ListBox::m_ctp2_listboxClassId = aui_UniqueId();
-ctp2_ListBox *ctp2_ListBox::ms_mouseFocusListBox = NULL;
-
-
 
 ctp2_ListBox::ctp2_ListBox(
 	AUI_ERRCODE *retval,
@@ -533,101 +530,14 @@ AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-void ctp2_ListBox::ForceScroll(sint32 deltaX, sint32 deltaY)
-{
-	m_scrollDx = 0;
-	m_scrollDy = (deltaY == 0) ? 0 : ((deltaY < 0) ? -1 : 1);
-
-	ScrollList();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void ctp2_ListBox::MouseMoveInside( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseMoveInside(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(this);
-}
-
-void ctp2_ListBox::MouseMoveOver( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseMoveOver(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(this);
-}
-
-void ctp2_ListBox::MouseMoveOutside( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseMoveOutside(mouseData);
-
-
-}
-
-void ctp2_ListBox::MouseMoveAway( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseMoveAway(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(NULL);
-}
-
-void ctp2_ListBox::MouseLDragOver( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseLDragOver(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(this);
-}
-
 void ctp2_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
+	aui_ListBox::MouseLDragAway(mouseData);
+
 	if ( GetMouseOwnership() == this )
 	{
-		if ( m_dragDropWindow )
-			RemoveItem( m_dragDropWindow->GetDragDropItem()->Id() );
-
-		CalculateScroll( mouseData->position.x, mouseData->position.y );
-
-		
-		
-		ScrollList();
-		DragSelect( mouseData->position.y - m_y );
-		m_scrolling = TRUE;
-		m_startWaitTime = mouseData->time;
-
-		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
-			m_mouseCode = AUI_ERRCODE_HANDLED;
-
 		if(m_menuButton) {			
 			if(mouseData->position.y < Y()) {
 				SetWhichSeesMouse(NULL);
@@ -635,31 +545,11 @@ void ctp2_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 			}
 		}
 	}
-
-	ctp2_ListBox::SetMouseFocusListBox(NULL);
-}
-
-void ctp2_ListBox::MouseRDragOver( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseRDragOver(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(this);
-}
-
-void ctp2_ListBox::MouseRDragAway( aui_MouseEvent *mouseData )
-{
-	if (IsDisabled()) return;
-
-	aui_ListBox::MouseRDragAway(mouseData);
-
-	ctp2_ListBox::SetMouseFocusListBox(NULL);
 }
 
 AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *) ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *) ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

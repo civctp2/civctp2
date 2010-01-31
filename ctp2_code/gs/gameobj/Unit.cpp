@@ -398,27 +398,24 @@ std::string Unit::GetDisplayName(void) const
 
 PLAYER_INDEX Unit::GetOwner() const
 {
-	return AccessData()->GetOwner();
+	return GetData()->GetOwner();
 }
 
 sint32 Unit::GetType() const
 {
-	return AccessData()->GetType();
+	return GetData()->GetType();
 }
 
 
 void Unit::GetPos(MapPoint &pos) const 
 {
-	AccessData()->GetPos(pos); 
+	GetData()->GetPos(pos); 
 }
 
-MapPoint Unit::RetPos() const 
+MapPoint Unit::RetPos() const
 {
-	MapPoint pos;
-	GetPos(pos);
-	return pos;
+	return AccessData()->GetPos();
 }
-
 
 double Unit::GetHPModifier() const
 {
@@ -427,12 +424,12 @@ double Unit::GetHPModifier() const
 
 double Unit::GetHP() const
 {
-	return AccessData()->GetHP();
+	return GetData()->GetHP();
 }
 
 uint32 Unit::GetOwnerBit() const
 {
-	return AccessData()->GetOwnerBit();
+	return GetData()->GetOwnerBit();
 }
 
 
@@ -798,12 +795,12 @@ bool Unit::CanBeachAssault() const
 //PFT
 bool Unit::IsImmobile()const
 {
-	return AccessData()->IsImmobile();
+	return GetData()->IsImmobile();
 }
 
 bool Unit::CantGroup()const
 {
-	return AccessData()->CantGroup();
+	return GetData()->CantGroup();
 }
 
 sint32 Unit::ResetMovement()

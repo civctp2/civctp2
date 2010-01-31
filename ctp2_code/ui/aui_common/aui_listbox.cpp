@@ -56,7 +56,7 @@
 #endif
 
 aui_DragDropWindow *aui_ListBox::m_dragDropWindow = NULL;
-
+aui_ListBox *aui_ListBox::ms_mouseFocusListBox = NULL;
 
 
 aui_ListBox::aui_ListBox(
@@ -1599,6 +1599,13 @@ void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 	}
 }
 
+void aui_ListBox::ForceScroll(sint32 deltaX, sint32 deltaY)
+{
+	m_scrollDx = 0;
+	m_scrollDy = (deltaY == 0) ? 0 : ((deltaY < 0) ? -1 : 1);
+
+	ScrollList();
+}
 
 
 void aui_ListBox::MouseMoveInside( aui_MouseEvent *mouseData )
@@ -1609,9 +1616,18 @@ void aui_ListBox::MouseMoveInside( aui_MouseEvent *mouseData )
 		MouseMoveAway( mouseData );
 	else if ( !IsActive() )
 		MouseMoveOver( mouseData );
+
+	aui_ListBox::SetMouseFocusListBox(this);
 }
 
+void aui_ListBox::MouseMoveAway( aui_MouseEvent *mouseData )
+{
+	if (IsDisabled()) return;
 
+	aui_Control::MouseMoveAway(mouseData);
+
+	aui_ListBox::SetMouseFocusListBox(NULL);
+}
 
 void aui_ListBox::MouseMoveOver( aui_MouseEvent *mouseData )
 {
@@ -1638,10 +1654,12 @@ void aui_ListBox::MouseMoveOver( aui_MouseEvent *mouseData )
 			m_action->Execute( this, 0, 0 );
 	}
 	else
+	{
 		MouseMoveOutside( mouseData );
+	}
+
+	aui_ListBox::SetMouseFocusListBox(this);
 }
-
-
 
 void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
@@ -1994,8 +2012,6 @@ void aui_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
-		
-		
 		ScrollList();
 		DragSelect( mouseData->position.y - m_y );
 		m_scrolling = TRUE;
@@ -2004,9 +2020,18 @@ void aui_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 	}
+
+	aui_ListBox::SetMouseFocusListBox(NULL);
 }
 
+void aui_ListBox::MouseRDragOver( aui_MouseEvent *mouseData )
+{
+	if (IsDisabled()) return;
 
+	aui_Control::MouseRDragOver(mouseData);
+
+	aui_ListBox::SetMouseFocusListBox(this);
+}
 
 void aui_ListBox::MouseLDragOver( aui_MouseEvent *mouseData )
 {
@@ -2016,9 +2041,18 @@ void aui_ListBox::MouseLDragOver( aui_MouseEvent *mouseData )
 
 	if ( GetMouseOwnership() == this )
 		DragSelect( mouseData->position.y - m_y );
+
+	aui_ListBox::SetMouseFocusListBox(this);
 }
 
+void aui_ListBox::MouseRDragAway( aui_MouseEvent *mouseData )
+{
+	if (IsDisabled()) return;
 
+	aui_Control::MouseRDragAway(mouseData);
+
+	aui_ListBox::SetMouseFocusListBox(NULL);
+}
 
 void aui_ListBox::MouseLDragInside( aui_MouseEvent *mouseData )
 {

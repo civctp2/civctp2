@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map point handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -149,6 +149,7 @@ public:
     bool operator != (const MapPoint &test_me) const;
     MapPoint & operator += (const MapPoint &rhs);
     MapPoint & operator -= (const MapPoint &rhs);
+    MapPoint & operator += (const MapPointData &rhs);
 
     double EuclidianLength () const
     {
@@ -247,7 +248,7 @@ public:
 	void            Start();
 	void            Next();
 	bool            End() const;
-	MapPoint        Pos() const;
+	const MapPoint&       Pos() const;
 
 protected:
 	MapPoint        m_center;
