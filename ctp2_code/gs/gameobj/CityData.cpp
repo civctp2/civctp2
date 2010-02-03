@@ -2291,7 +2291,8 @@ void CityData::CollectResources()
 
 
 	CityInfluenceIterator it(cityPos, m_sizeIndex);
-	for(it.Start(); !it.End(); it.Next()) {
+	for(it.Start(); !it.End(); it.Next())
+	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		sint32 ring = GetRing(it.Pos());
 		m_ringFood[ring] += cell->GetFoodProduced();
@@ -2326,7 +2327,7 @@ void CityData::CollectResources()
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
 			if (effect)
-            {
+			{
 				for (sint32 tgood = 0; tgood < effect->GetNumEnablesGood(); tgood++){
 					m_collectingResources.AddResource(effect->GetEnablesGoodIndex(tgood));
 				}

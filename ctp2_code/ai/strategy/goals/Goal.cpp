@@ -1520,9 +1520,13 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		{
 			Agent_ptr agent_trans_ptr = match_iter->Get_Agent();
 
-			if(!agent_trans_ptr->Get_Is_Dead() && match_iter->Get_Needs_Transporter())
+			if
+			  (
+			      !agent_trans_ptr->Get_Is_Dead()
+			   &&  match_iter->Get_Needs_Transporter()
+			   &&  agent_trans_ptr->EstimateTransportUtility(agent_ptr, utility)
+			  )
 			{
-				agent_trans_ptr->EstimateTransportUtility(agent_ptr, utility);
 				transport_utility += utility;
 
 				++count;

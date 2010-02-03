@@ -22,7 +22,7 @@
 #   (Aug 15th 2005 Martin Gühmann)
 # - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
 # - Added political map button - 6-Jul-2009 EPW
-#  -Added view capital button -5-Jan-2009 EPW
+# -Added view capital button -5-Jan-2009 EPW
 # -Added view relations button -7-Jan-10 EPW
 ################################################################################
 
@@ -1335,8 +1335,14 @@ ControlPanelWindow:CTP2_WINDOW {
 
 					}
 
+					#UnitOrderButtonGrid:ORDER_BUTTON_PANEL {
+					#}
+					#UnitActionButtonGrid:ORDER_BUTTON_PANEL {
+					#}
+
 					# Background for unit order buttons.
 					UnitOrderButtonGrid:CTP2_STATIC_BACKGROUND {
+					#### EMOD make into a template like tile imp?
 						# Location.
 						int		xpix	175
 						int		ypix	10
@@ -1467,7 +1473,6 @@ ControlPanelWindow:CTP2_WINDOW {
 				TabPanel:CONTROL_PANEL_TAB_BACKGROUND {
 ################################################################################
 # Start Tiles Tab Panel
-################################################################################
 ################################################################################
 					LandImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
@@ -2943,7 +2948,7 @@ RadarWindow {
 ################################################################################
 	TopBorder:CTP2_STATIC_BACKGROUND {	
 		# Size.
-		int		heightpix			36
+		int		heightpix			54
 
 		# Image layout.
 		int		numberoflayers		1
@@ -3047,7 +3052,6 @@ RadarWindow {
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON"
 		}
-
 		#Minimize/Maximize Button  -- not yet enabled		
 		Button7:RADARWINDOW_TOGGLE_BUTTON {
 			# Location.
@@ -3068,7 +3072,7 @@ RadarWindow {
 
 			# Tooltip
 			string	statustext	"STATUSBAR_MINIMAP_MINIMIZE"
-		}
+		}		
 		Button8:RADARWINDOW_TOGGLE_BUTTON {
 			# Location.
 			int		xpix			14
@@ -3108,6 +3112,7 @@ RadarWindow {
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON"
 		}
+
 	}
 	LeftBorder:CTP2_STATIC_BACKGROUND {	
 		# Image layout.

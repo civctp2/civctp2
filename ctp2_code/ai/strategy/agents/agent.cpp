@@ -457,12 +457,22 @@ bool Agent::CanReachTargetContinent(const MapPoint & pos) const
 	g_theWorld->GetContinent( Get_Pos(), my_continent, origin_is_land );
 	g_theWorld->GetContinent( pos, target_cont, target_is_land );
 
-	if(origin_is_land == target_is_land)
+	if(origin_is_land && target_is_land)
+	{
+		return g_theWorld->LandShareWater(my_continent, target_cont);
+	}
+	else if(!origin_is_land && !target_is_land)
 	{
 		return my_continent == target_cont;
 	}
-
-	return g_theWorld->IsLandNextTooWater(target_cont, my_continent);
+	else if(origin_is_land && !target_is_land)
+	{
+		return g_theWorld->IsLandNextTooWater(my_continent, target_cont);
+	}
+	else // if(!origin_is_land && target_is_land) // Last possibility
+	{
+		return g_theWorld->IsLandNextTooWater(target_cont, my_continent);
+	}
 }
 
 bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utility) const
