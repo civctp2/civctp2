@@ -378,8 +378,8 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 									 proposal_sender_result,
 									 proposal_receiver_result );
 #ifdef _DEBUG
-	char name[100];
-	GetDescription(name,100);
+	char name[256];
+	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
@@ -467,8 +467,8 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 									 proposal_sender_result,
 									 proposal_receiver_result );
 #ifdef _DEBUG
-	char name[100];
-	GetDescription(name,100);
+	char name[256];
+	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
@@ -558,8 +558,8 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 									 proposal_sender_result,
 									 proposal_receiver_result );
 #ifdef _DEBUG
-	char name[100];
-	GetDescription(name,100);
+	char name[256];
+	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
@@ -655,7 +655,7 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 									 proposal_receiver_result );
 #ifdef _DEBUG
 	char name[256];
-	GetDescription(name,sizeof(name));
+	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG

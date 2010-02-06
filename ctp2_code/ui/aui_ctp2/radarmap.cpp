@@ -424,9 +424,9 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 			if(m_displayRelations)
 			{
 				if(m_displayPolitical && unit.GetOwner() == owner) 
-					return RadarTileRelationsDarkColor(position, player);
+					return RadarTileRelationsDarkColor(position, player, unit.GetOwner());
 				else
-					return RadarTileRelationsColor(position, player);
+					return RadarTileRelationsColor(position, player, unit.GetOwner());
 			}
 			else
 			{
@@ -498,11 +498,11 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *p
 //	- Checks which color a border must be drawn for the current tile 
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player)
+Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 unitOwner)
 {
 	Assert(m_displayRelations);
 
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
+	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
 	if(owner < 0)
 		return(g_colorSet->GetColor(COLOR_WHITE));
 	else if(player->m_owner == owner || player->HasAllianceWith(owner))
@@ -525,11 +525,11 @@ Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player
 //	- Dark alternative to RadarTileBorderColor
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player)
+Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 unitOwner)
 {
 	Assert(m_displayRelations);
-	
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
+
+	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
 	if(owner < 0)
 		return(g_colorSet->GetDarkColor(COLOR_WHITE));
 	else if(player->m_owner == owner || player->HasAllianceWith(owner))

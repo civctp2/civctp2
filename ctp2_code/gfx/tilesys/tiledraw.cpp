@@ -3829,7 +3829,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								right = popRectn.right;
 
-								if (showCityProd)
+								if (showCityProd && buildItemName != NULL)
 								{
 									/////////////////////////////////////
 									// NOW DRAW THE BUILDING ITEM NAME //

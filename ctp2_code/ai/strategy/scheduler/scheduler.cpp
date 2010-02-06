@@ -1596,6 +1596,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 
 		if(empty > 0
+		&& max == empty // must be empty otherwise the reansporter would go somewhere else or is alread in the agent list
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){

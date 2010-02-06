@@ -233,9 +233,6 @@ bool Vision::GetLastSeen(const MapPoint &pos, UnseenCellCarton &ucell)
 
 void Vision::MergeMap(Vision *src)
 {
-	Cell *cell;
-	sint32 i, n;
-
 	Assert(m_width == src->m_width && m_height == src->m_height);
 	Assert(m_owner != src->m_owner);
 
@@ -246,28 +243,33 @@ void Vision::MergeMap(Vision *src)
 		for (int y = 0; y < m_height; y++)
 		{
 			uint16 *hisVersion = &src->m_array[x][y];
-			if(!(*hisVersion & k_EXPLORED_BIT))
+			if(!(*hisVersion & k_EXPLORED_BIT)) // He does not see this tile so go to next tile.
 				continue;
 
 			uint16 *myVersion = &m_array[x][y];
-			if(*myVersion & k_EXPLORED_BIT)
+			if(*myVersion & k_EXPLORED_BIT) // We know of this tile
 			{
-				if((*myVersion & k_VISIBLE_REFERENCE_MASK) > 0)
+				if((*myVersion & k_VISIBLE_REFERENCE_MASK) > 0) // We see this tile
 				{
 					continue;
 				}
 
-				if((*hisVersion & k_VISIBLE_REFERENCE_MASK) > 0)
+				MapPoint point(x, y);
+				Unconvert(point);
+
+				if
+				  (
+				    (*hisVersion & k_VISIBLE_REFERENCE_MASK) > 0
+				    || g_theWorld->GetOwner(point) == src->GetOwner()
+				  ) // He sees this tile but we don't or he owns it
 				{
-					MapPoint point(x, y);
-					Unconvert(point);
 					if(m_unseenCells->RemoveAt(point, ucell))
 					{
 						delete ucell.m_unseenCell;
 					}
-					cell = g_theWorld->GetCell(point);
-					n = cell->GetNumUnits();
-					for(i = 0; i < n; i++)
+					Cell* cell = g_theWorld->GetCell(point);
+					sint32 n = cell->GetNumUnits();
+					for(sint32 i = 0; i < n; i++)
 					{
 						if(cell->AccessUnit(i).GetVisibility() & (1 << src->m_owner))
 						{
@@ -284,7 +286,10 @@ void Vision::MergeMap(Vision *src)
 					ucell.m_unseenCell = new UnseenCell(point);
 					m_unseenCells->Insert(ucell);
 				}
-				
+				else
+				{
+					// Unfortunately there is no way to figure out whether our unseen cell is older than his
+				}
 			}
 			else
 			{
@@ -292,9 +297,9 @@ void Vision::MergeMap(Vision *src)
 				MapPoint point(x, y);
 				Unconvert(point);
 
-				cell = g_theWorld->GetCell(point);
-				n = cell->GetNumUnits();
-				for(i = 0; i < n; i++)
+				Cell* cell = g_theWorld->GetCell(point);
+				sint32 n = cell->GetNumUnits();
+				for(sint32 i = 0; i < n; i++)
 				{
 					if(cell->AccessUnit(i).GetVisibility() & (1 << src->m_owner))
 					{

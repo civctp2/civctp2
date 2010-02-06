@@ -3009,23 +3009,6 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 	merchantsEff = 0.0;
 	scientistsEff = 0.0;
 
-	double full_radii_food;
-	double part_radii_food;
-
-	sint32 full_radii_prod;
-	sint32 part_radii_prod;
-
-	sint32 full_radii_gold;
-	sint32 part_radii_gold;
-
-	sint32 full_radii_scigold;
-	sint32 part_radii_scigold;
-
-	sint32 full_radii_science;
-	sint32 part_radii_science;
-	
-	sint32 partSquaredRadius; 
-	sint32 fullSquaredRadius; 
 	double utilization_needed;
 	const CitySizeRecord *part_rec;
 	const CitySizeRecord *full_rec;
@@ -3054,7 +3037,22 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 
 	sint32 workers_needed = 0;
 	sint32 WorkersNeeded = 0;
-	
+
+	double full_radii_food = city->GetFoodFromRing(0);
+	double part_radii_food = 0;
+
+	sint32 full_radii_prod = city->GetProdFromRing(0);
+	sint32 part_radii_prod = 0;
+
+	sint32 full_radii_gold = city->GetGoldFromRing(0);
+	sint32 part_radii_gold = 0;
+
+	sint32 full_radii_scigold = 0;
+	sint32 part_radii_scigold = 0;
+
+	sint32 full_radii_science = 0;
+	sint32 part_radii_science = 0;
+
 	for(sint32 sizeIndex = 1; sizeIndex < g_theCitySizeDB->NumRecords(); sizeIndex++)
 	{
 		part_rec = g_theCitySizeDB->Get(sizeIndex);
@@ -3079,8 +3077,8 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 			part_size_pop = part_rec->GetMaxWorkers();
 		}
 
-		partSquaredRadius = part_rec->GetSquaredRadius();
-		fullSquaredRadius = full_rec->GetSquaredRadius();
+		sint32 partSquaredRadius = part_rec->GetSquaredRadius();
+		sint32 fullSquaredRadius = full_rec->GetSquaredRadius();
 
 		//////////////////////////////
 		// Intial resetting of values:
@@ -3112,8 +3110,8 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 				full_radii_food += cell->GetFoodProduced();
 				full_radii_prod += cell->GetShieldsProduced();
 				full_radii_gold += cell->GetGoldProduced();
-			} 
-			else if(partSquaredRadius > 0 
+			}
+			else if(partSquaredRadius > 0
 			&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
 			){
 				part_radii_food += cell->GetFoodProduced();
@@ -3121,6 +3119,14 @@ sint32 Governor::ComputeMinimumWorkers(const CityData *city,
 				part_radii_gold += cell->GetGoldProduced();
 			}
 		}
+
+/*		full_radii_food += part_radii_food;
+		full_radii_prod += part_radii_prod;
+		full_radii_gold += part_radii_gold;
+
+		part_radii_food += city->GetFoodFromRing(sizeIndex);
+		part_radii_prod += city->GetProdFromRing(sizeIndex);
+		part_radii_gold += city->GetGoldFromRing(sizeIndex);*/
 
 		////////////////////////////////////////
 		// Apply all resource boni and mali
