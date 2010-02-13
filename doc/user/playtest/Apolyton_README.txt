@@ -29,7 +29,6 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -39,6 +38,7 @@ http://apolyton.net/forums/showthread.php?t=147969 "PROJECT: Playtest (the 4th T
 http://apolyton.net/forums/showthread.php?t=161726 "PROJECT: Playtest (Thread No. 5)"
 http://apolyton.net/forums/showthread.php?t=172035 "PROJECT: Playtest (Thread No. 6)"
 http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
+http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
@@ -48,7 +48,125 @@ are described briefly below.
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
-Brief Changelog:
+Changelog (Well, you don't have to read the full thing. ;)):
+2010-XX-02 (Revision 105X)
+Fixed:    The AI does not check its city limit, if city limit is disabled.
+Changed:  The new game rules screen has been cleaned up and enhanced with
+          discriptions of what the single rules are good for.
+Fixed:    Possible crashes due to missing city styles have been fixed.
+Fixed:    City turns to growth and production display now updates on begin
+          turn and on city growth.
+Fixed:    For modders, an advance can only have four EitherPrerequisites and
+          Prerequisites combined (this is a limitation of the Great Library)
+Changed:  EitherPrerequisite advances are shown in blue in the Great Library.
+Changed:  For modders, combining EitherPrerequisites and Prerequisites in the
+          same advance.
+Fixed:    The AI now rolls over enemy units, if it is at war with them and the
+          army is strong enough. This way the clears the way to an enemy cities
+          and solves a problem it has with ZOCs.
+Fixed:    If a units gains a health bonus the health bar does not overflow
+          anymore.
+Fixed:    If a unit gained a health bonus from a wonder and the wonder is lost
+          its healt is reduced to the healt without wonder.
+Fixed:    If the AI needs for a goal a transporter it takes the transporter
+          army pair that are closest to each other, this way the AI sticks to its
+          decision and does not change transporters and armies for a goal all the
+          time.
+Fixed:    If a goody hut gives an advance then EitherPrerequisite and Prerequisite
+          are now checked whether a player can have an advance.
+Fixed:    Bombard range now uses all ranged boni used in normal combat and
+          not just the veteran boni.
+Fixed:    The AI now builds every turn tile improvements and roads.
+Improved: The AI consider roads along paths that it had layed down in the same
+          turn.
+Changed:  The AI prefers to build gold tile improvemts if it does not need to
+          build food or production tile improvements.
+Changed:  The AI builds in small cities tile improvements firs.
+Changed:  The AI rush buys items in cities without garrison first, then it
+          rush buys items in small cities.
+Added:    The Ai now has build lists for small cities and cities near the 
+          maximum size, so that it can build the right buildings there.
+Fixed:    If map auto center is off the map does not center anymore when
+          something is pillaged.
+Fixed:    The game does not crash id you load a build queue into a city build
+          queue that has been previously empty.
+Fixed:    Cities that prevents slavery will only reduce slave raid change by
+          the given percentage instead of stopping it entirely.
+Changed:  Increased settle values for dessert and swamp so that the AI will
+          eventually also will these areas, so less space for humans.
+Fixed:    Tiles with tunnels do not use the move costs of deep sea for ships,
+          instead they use the move costs of their terrain.
+Fixed:    The AI calculates the goal priorities correctly, even if they are in
+          diferent order in startegies.txt and goals.txt.
+Fixed:    The AI stops building settlers if there is no space left.
+Fixed:    The AI uses surpless settlers to increase the size of small cities.
+Fixed:    The AI builds land settlers and sea settlers at the same time.
+Fixed:    The game does not hang if it tries to optimize the sliders for a
+          civilization that will starve when the happiness requirements have
+          been met.
+Fixed:    The AI does not build ships in that do not have acceass to an ocean
+          but only access to a puddle.
+Fixed:    The AI conqueres empty cities with armies containing settlers.
+Fixed:    The AI builds pollution reduction buildings in dirty cities.
+Fixed:    The AI does not try to refuel units in cities that are full.
+Fixed:    The ranking graph does not crash if the civilisations dead or alive
+          is bigger 32.
+Added:    The ranking tab now has a wonder line graph.
+Fixed:    The AI builds slavers, or abolitionists, spies, and other special
+          units at the same time.
+Changed:  Cyper Ninjas have a higher elite change when they investigate a city.
+Fixed:    Spies steal advances from cities of civilization that have advances
+          to steal.
+Fixed:    The AI builds happy buildings in unhappy cities.
+Changed:  The AI builds wonders in high production cities.
+Fixed:    The AI calculates its city ranks correctly, so that it does not
+          almost all its cities to the wonder building list.
+Added:    Added for each AI personality an island strategy, that will use an
+          island specific advance list.
+Restored: The Penecilin wonder now does what it did in the original game.
+Changed:  The graphics are now drawn on a back buffer this removes drawing
+          artifacts and saves your eyes.
+Added:    The minimap has a button to show you the players' capitals.
+Added:    The minimap has a button to show your relations with other
+          civilisations. Blue is for you and your allies, green is for those
+          you are at piece with, yellow is for the neutrals, white for those
+          you do not know, and red is for those you are at war with.
+Fixed:    Fixed a problem with AI transporter handling, that also may lead to
+          a crash.
+Fixed:    Fixed a problem when fort vision is removed because the tile under it
+          had died.
+Fixed:    The drawing system does not try to use an invalid memory pointer,
+          this led to flicker artifacts at best and crashed at worst.
+Fixed:    If a mod does not specify a tile improvement sound than the game
+          handles it properly.
+Fixed:    The AI does not try to use boats that cannot reach the target continent.
+Fixed:    The game does not crash if a unit with a flag from a dead civilisation
+          should be drawn. (Units of dead civilizations are not removed when 
+          a civilization dies but later)
+Fixed:    The mouse scroll wheel now works in all list boxes.
+Fixed:    The new minimap buttons also show up in the French, German, Italian,
+          Japanese, and Spanish version.
+Fixed:    If you receive a map then all tiles that the giver sees or own are
+          updated.
+Fixed:    The AI does not use transporters carrying units that cannot be used
+          for the goal that needs transport.
+Added:    New database flags for modders:
+- DifficultyDB:
+   TechCostKnownDeduction 0.0 - 1.0
+         Deducts a percentage of an advance's cost based on % of total
+         civs in the game that you know that already have the advance.
+- UnitDB:
+   RangedDefendCityBonus     Unit gets a ranged bonus in city defence.
+   RangedAttackCityBonus     Unit gets a ranged bonus in city attack.
+   IsSurfaceShip             Unit is a ship on the water surface.
+   DefendSurfaceShipBonus    Unit gets a defence bonus for being a surface ship.
+   AttackSurfaceShipBonus    Unit gets an attack bonus for being a surface ship.
+   RangedSurfaceShipBonus    Unit gets a ranged for being a surface ship.
+   AlwaysHeal                Units heals always even if it had been moved.
+- GoalDB
+   SlaveryProtectionBonus    Goal gets a bonus if it is protected against slavery.
+
+
 2009-07-25 (Revision 1013)
 Fixed:    Army grouping via slic in the Magnificant Samurai scenario works now.
 Fixed:    Database errors do not show up anymore when the Magnificant Samurai

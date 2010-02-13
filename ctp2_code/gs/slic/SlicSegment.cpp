@@ -54,11 +54,11 @@
 
 namespace
 {
-    sint32 const                NOT_IN_USE    = -1;
-    GAME_EVENT_PRIORITY const   PRIORITY_DEFAULT    = GEV_PRI_Pre;
-    SLIC_OBJECT const           TYPE_DEFAULT        = SLIC_OBJECT_MESSAGEBOX;
+	sint32 const                NOT_IN_USE    = -1;
+	GAME_EVENT_PRIORITY const   PRIORITY_DEFAULT    = GEV_PRI_Pre;
+	SLIC_OBJECT const           TYPE_DEFAULT        = SLIC_OBJECT_MESSAGEBOX;
 
-    size_t const                SEGMENT_POOL_SIZE   = 100;
+	size_t const                SEGMENT_POOL_SIZE   = 100;
 	Pool<SlicSegment> *         s_segmentPond       = NULL;
 }
 
@@ -80,28 +80,28 @@ namespace
 SlicSegment::SlicSegment()
 :	GameEventHookCallback       (),
     m_type                      (TYPE_DEFAULT),
-	m_codeSize                  (0),
-	m_num_trigger_symbols       (0),
-	m_num_parameters            (0),
-	m_enabled                   (FALSE),
-	m_specialVariables          (0),
-	m_isAlert                   (FALSE),
-	m_isHelp                    (FALSE),
-	m_event                     (GEV_MAX),
-	m_priority                  (PRIORITY_DEFAULT),
-	m_fromFile                  (FALSE),
-	m_firstLineNumber           (NOT_IN_USE),
-	m_id                        (NULL),
-	m_code                      (NULL),
-	m_uiComponent               (NULL),
-	m_filename                  (NULL),
+    m_codeSize                  (0),
+    m_num_trigger_symbols       (0),
+    m_num_parameters            (0),
+    m_enabled                   (FALSE),
+    m_specialVariables          (0),
+    m_isAlert                   (FALSE),
+    m_isHelp                    (FALSE),
+    m_event                     (GEV_MAX),
+    m_priority                  (PRIORITY_DEFAULT),
+    m_fromFile                  (FALSE),
+    m_firstLineNumber           (NOT_IN_USE),
+    m_id                        (NULL),
+    m_code                      (NULL),
+    m_uiComponent               (NULL),
+    m_filename                  (NULL),
     m_trigger_symbols_indices   (NULL),
-	m_trigger_symbols           (NULL),
-	m_parameter_indices         (NULL),
-	m_parameter_symbols         (NULL),
-    m_poolIndex                 (NOT_IN_USE) 
+    m_trigger_symbols           (NULL),
+    m_parameter_indices         (NULL),
+    m_parameter_symbols         (NULL),
+    m_poolIndex                 (NOT_IN_USE)
 {
-    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
+	std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 }
 
 //----------------------------------------------------------------------------
@@ -123,30 +123,30 @@ SlicSegment::SlicSegment()
 //
 //----------------------------------------------------------------------------
 SlicSegment::SlicSegment(sint32 slicifIndex)
-:	GameEventHookCallback       (),
+:   GameEventHookCallback       (),
     m_type                      (TYPE_DEFAULT),
-	m_codeSize                  (0),
-	m_num_trigger_symbols       (0),
-	m_num_parameters            (0),
-	m_enabled                   (TRUE),
-	m_specialVariables          (0),
-	m_isAlert                   (FALSE),
-	m_isHelp                    (FALSE),
-	m_event                     (GEV_MAX),
-	m_priority                  (PRIORITY_DEFAULT),
-	m_fromFile                  (FALSE),
-	m_firstLineNumber           (NOT_IN_USE),
-	m_id                        (NULL),
-	m_code                      (NULL),
-	m_uiComponent               (NULL),
-	m_filename                  (NULL),
+    m_codeSize                  (0),
+    m_num_trigger_symbols       (0),
+    m_num_parameters            (0),
+    m_enabled                   (TRUE),
+    m_specialVariables          (0),
+    m_isAlert                   (FALSE),
+    m_isHelp                    (FALSE),
+    m_event                     (GEV_MAX),
+    m_priority                  (PRIORITY_DEFAULT),
+    m_fromFile                  (FALSE),
+    m_firstLineNumber           (NOT_IN_USE),
+    m_id                        (NULL),
+    m_code                      (NULL),
+    m_uiComponent               (NULL),
+    m_filename                  (NULL),
     m_trigger_symbols_indices   (NULL),
-	m_trigger_symbols           (NULL),
-	m_parameter_indices         (NULL),
-	m_parameter_symbols         (NULL),
-    m_poolIndex                 (slicifIndex) 
+    m_trigger_symbols           (NULL),
+    m_parameter_indices         (NULL),
+    m_parameter_symbols         (NULL),
+    m_poolIndex                 (slicifIndex)
 {
-    std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
+	std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 
 	Assert(slicifIndex < g_slicNumEntries);
 	struct PSlicObject *pobj = g_slicObjectArray[slicifIndex];
@@ -161,26 +161,26 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 	m_uiComponent = pobj->m_ui_component;
 	m_filename = pobj->m_filename;
 
-	if (m_type == SLIC_OBJECT_TRIGGER) 
-    {
+	if (m_type == SLIC_OBJECT_TRIGGER)
+	{
 		free(pobj->m_trigger_symbols);  // never used
 	}
 
-	if (m_type == SLIC_OBJECT_FUNCTION) 
-    {
-		if (pobj->m_num_parameters > 0) 
-        {
+	if (m_type == SLIC_OBJECT_FUNCTION)
+	{
+		if (pobj->m_num_parameters > 0)
+		{
 			m_parameter_indices = new sint32[pobj->m_num_parameters];
-		    memcpy(m_parameter_indices, pobj->m_parameters, pobj->m_num_parameters * sizeof(sint32));
+			memcpy(m_parameter_indices, pobj->m_parameters, pobj->m_num_parameters * sizeof(sint32));
 		}
 		m_num_parameters = pobj->m_num_parameters;
 		free(pobj->m_parameters);
 	}
 
 	if (m_type == SLIC_OBJECT_HANDLEEVENT) 
-    {
+	{
 		switch (pobj->m_priority) 
-        {
+		{
 			case SLIC_PRI_PRE:     m_priority = GEV_PRI_Pre;         break;
 			case SLIC_PRI_POST:    m_priority = GEV_PRI_Post;        break;
 			case SLIC_PRI_PRIMARY: m_priority = GEV_PRI_Primary;     break;
@@ -190,30 +190,30 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 				break;
 		}
 
-        if (g_gevManager)
-        {
-		    m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
-		    g_gevManager->AddCallback(m_event, m_priority, this);
-	    }
+		if (g_gevManager)
+		{
+			m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
+			g_gevManager->AddCallback(m_event, m_priority, this);
+		}
 	}
 
 	g_slicObjectArray[slicifIndex] = NULL;
 
 	m_enabled = TRUE;
 
-    if (g_slicEngine)
-    {
-	    SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
+	if (g_slicEngine)
+	{
+		SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
 		
-	    if (sym) 
-        {
-		    if((sym->GetType() == SLIC_SYM_ID) ||
-	    	   (sym->GetType() == SLIC_SYM_UFUNC)
-              ) 
-            {
-			    sym->SetSegment(this);
-		    }
-	    }
+		if (sym)
+		{
+			if((sym->GetType() == SLIC_SYM_ID) ||
+			   (sym->GetType() == SLIC_SYM_UFUNC)
+			  )
+			{
+				sym->SetSegment(this);
+			}
+		}
 	}
 
 	free(pobj);
@@ -236,27 +236,27 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 //----------------------------------------------------------------------------
 SlicSegment::SlicSegment(CivArchive &archive)
 :	GameEventHookCallback       (),
-	m_type                      (TYPE_DEFAULT),
-	m_codeSize                  (0),
-	m_num_trigger_symbols       (0),
-	m_num_parameters            (0),
-	m_enabled                   (TRUE),
-	m_specialVariables          (0),
-	m_isAlert                   (FALSE),
-	m_isHelp                    (FALSE),
-	m_event                     (GEV_MAX),
-	m_priority                  (PRIORITY_DEFAULT),
-	m_fromFile                  (FALSE),
-	m_firstLineNumber           (NOT_IN_USE),
-	m_id                        (NULL),
-	m_code                      (NULL),
-	m_uiComponent               (NULL),
-	m_filename                  (NULL),
-	m_trigger_symbols_indices   (NULL),
-	m_trigger_symbols           (NULL),
-	m_parameter_indices         (NULL),
-	m_parameter_symbols         (NULL)
-	// m_poolIndex              (filled when retrieving from the pool) 
+    m_type                      (TYPE_DEFAULT),
+    m_codeSize                  (0),
+    m_num_trigger_symbols       (0),
+    m_num_parameters            (0),
+    m_enabled                   (TRUE),
+    m_specialVariables          (0),
+    m_isAlert                   (FALSE),
+    m_isHelp                    (FALSE),
+    m_event                     (GEV_MAX),
+    m_priority                  (PRIORITY_DEFAULT),
+    m_fromFile                  (FALSE),
+    m_firstLineNumber           (NOT_IN_USE),
+    m_id                        (NULL),
+    m_code                      (NULL),
+    m_uiComponent               (NULL),
+    m_filename                  (NULL),
+    m_trigger_symbols_indices   (NULL),
+    m_trigger_symbols           (NULL),
+    m_parameter_indices         (NULL),
+    m_parameter_symbols         (NULL)
+    // m_poolIndex              (filled when retrieving from the pool)
 {
 	std::fill(m_lastShown, m_lastShown + k_MAX_PLAYERS, 0);
 	Serialize(archive);
@@ -274,27 +274,32 @@ SlicSegment::SlicSegment(CivArchive &archive)
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : All pointers must be NULLed, otherwise they will be delated
+//              again from the pool deletion.
 //
 //----------------------------------------------------------------------------
 SlicSegment::~SlicSegment()
 {
-	if(m_id) {
+	if(m_id)
+	{
 		free(m_id);
 		m_id = NULL;
 	}
 
-	if(m_code) {
+	if(m_code)
+	{
 		free(m_code);
 		m_code = NULL;
 	}
 
-	if(m_uiComponent) {
+	if(m_uiComponent)
+	{
 		free(m_uiComponent);
 		m_uiComponent = NULL;
 	}
 
-	if(m_filename) {
+	if(m_filename)
+	{
 		free(m_filename);
 		m_filename = NULL;
 	}
@@ -303,6 +308,14 @@ SlicSegment::~SlicSegment()
 	delete [] m_trigger_symbols;
 	delete [] m_parameter_indices;
 	delete [] m_parameter_symbols;
+
+	// Has to be set to NULL, because SlicSegments are deleted twice,
+	// first from the StringHashNode and then from the pool. Actuially,
+	// not a very nice design, but with this extra stuff it should be harmless.
+	m_trigger_symbols_indices = NULL;
+	m_trigger_symbols         = NULL;
+	m_parameter_indices       = NULL;
+	m_parameter_symbols       = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -361,13 +374,13 @@ void SlicSegment::operator delete(void *ptr)
 	SlicSegment * seg = static_cast<SlicSegment *>(ptr);
 	if (seg)
 	{
-        if ((SLIC_OBJECT_HANDLEEVENT == seg->m_type) && 
-            (GEV_MAX != seg->m_event) &&
-            g_gevManager
-           )
-        {
-            g_gevManager->RemoveCallback(seg->m_event, seg);
-        }
+		if ((SLIC_OBJECT_HANDLEEVENT == seg->m_type) && 
+		    (GEV_MAX != seg->m_event) &&
+		    g_gevManager
+		   )
+		{
+			g_gevManager->RemoveCallback(seg->m_event, seg);
+		}
 
 		int const poolIndex = seg->GetPoolIndex();
 		if ((poolIndex >= 0) && s_segmentPond)
@@ -379,9 +392,9 @@ void SlicSegment::operator delete(void *ptr)
 
 BOOL SlicSegment::TestLastShown(sint32 player, sint32 turn)
 {
-    int ls = GetLastShown(player);
+	int ls = GetLastShown(player);
 
-    return(!HasBeenShown(player) || ((g_turn->GetRound() - ls) >= turn));
+	return(!HasBeenShown(player) || ((g_turn->GetRound() - ls) >= turn));
 }
 
 void SlicSegment::Serialize(CivArchive &archive)
@@ -490,7 +503,6 @@ void SlicSegment::AddSpecials(SlicObject *obj)
 	}
 }
 
-
 void SlicSegment::LinkTriggerSymbols()
 {
 #if 0
@@ -529,7 +541,7 @@ void SlicSegment::LinkParameterSymbols()
 		return;
 
 	delete [] m_parameter_symbols;	
-    m_parameter_symbols = (m_num_parameters > 0) ? new SlicSymbolData *[m_num_parameters] : NULL;
+	m_parameter_symbols = (m_num_parameters > 0) ? new SlicSymbolData *[m_num_parameters] : NULL;
 	for(sint32 i = 0; i < m_num_parameters; i++) {
 		m_parameter_symbols[i] = g_slicEngine->GetSymbol(m_parameter_indices[i]);
 		Assert(m_parameter_symbols[i]);
@@ -582,10 +594,6 @@ SFN_ERROR SlicSegment::Call(SlicArgList *args, SlicObject *&obj)
 
 	g_slicEngine->Execute(obj);
 
-	
-	
-	
-
 	return SFN_ERROR_OK;
 }
 
@@ -601,29 +609,29 @@ void SlicSegment::GetDescription(char *str, sint32 maxsize)
 
 GAME_EVENT_HOOK_DISPOSITION SlicSegment::GEVHookCallback(GAME_EVENT type, GameEventArgList *args)
 {
-	if (IsEnabled()) 
-    {
-	    SlicObject *so = new SlicObject(this);
-	    so->AddRef();
-        so->Snarf(args);
-        so->SetResult((sint32)GEV_HD_Continue); 
-        g_slicEngine->Execute(so);
+	if (IsEnabled())
+	{
+		SlicObject *so = new SlicObject(this);
+		so->AddRef();
+		so->Snarf(args);
+		so->SetResult((sint32)GEV_HD_Continue); 
+		g_slicEngine->Execute(so);
 
-	    GAME_EVENT_HOOK_DISPOSITION disp = (GAME_EVENT_HOOK_DISPOSITION) so->GetResult();
-	    so->Release();
+		GAME_EVENT_HOOK_DISPOSITION disp = (GAME_EVENT_HOOK_DISPOSITION) so->GetResult();
+		so->Release();
 
-	    Assert(disp >= GEV_HD_Continue && disp < GEV_HD_MAX);
-	    if (g_slicEngine->AtBreak())
-		    return GEV_HD_NeedUserInput;
+		Assert(disp >= GEV_HD_Continue && disp < GEV_HD_MAX);
+		if (g_slicEngine->AtBreak())
+			return GEV_HD_NeedUserInput;
 
-        switch(disp) 
-        {
+		switch(disp)
+		{
 		default:
 			if (g_theProfileDB && g_theProfileDB->IsDebugSlic()) 
-            {
+			{
 				c3errors_ErrorDialog("Slic", "Bad return from event handler");
-            }
-            break;
+			}
+			break;
 		case SLIC_CONST_CONTINUE:
 			break;
 		case SLIC_CONST_GETINPUT:
@@ -635,7 +643,6 @@ GAME_EVENT_HOOK_DISPOSITION SlicSegment::GEVHookCallback(GAME_EVENT type, GameEv
 
 	return GEV_HD_Continue;
 }
-
 
 uint8 *SlicSegment::FindNextLine(uint8 *start)
 {
