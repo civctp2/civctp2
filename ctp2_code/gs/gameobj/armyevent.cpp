@@ -745,12 +745,11 @@ STDEHANDLER(ArmyMoveEvent)
 //city to another city anywhere in the world and costing that unit 1 move.
 
 		UnitDynamicArray revealedUnits;
-		bool revealedUnexplored = false;
 		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].GetDBRec()->GetCanRebase()){
 				if (!IsOccupiedByForeigner(order->m_point)){
 					if (g_theWorld->HasCity(order->m_point) || terrainutil_HasAirfield(order->m_point)) {  //add unit later?
- 						m_array[i].SetPosition(order->m_point, revealedUnits, revealedUnexplored);
+						m_array[i].SetPosition(order->m_point, revealedUnits);
 						return true;
 					}
 				}

@@ -248,7 +248,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1416,7 +1416,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1917,7 +1917,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2426,7 +2426,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   550000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2926,7 +2926,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -3426,7 +3426,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   750000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }

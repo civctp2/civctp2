@@ -573,8 +573,7 @@ public:
 
 	bool ShouldRevolt(const sint32 inciteBonus);
 	void Revolt(sint32 &playerToJoin, bool causeIsExternal = false);
-	void TeleportUnits(const MapPoint &pos,  bool &revealed_foreign_units, 
-	                         bool &revealed_unexplored, sint32 foreigner);
+	void TeleportUnits(const MapPoint &pos,  bool &revealed_foreign_units, sint32 foreigner);
 	void StopTradingWith(const PLAYER_INDEX bannedRecipient);
 	Happy *GetHappy(void) { return (m_happy); }
 	

@@ -136,7 +136,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 	uint16 unitSize;
 	if (uid.IsValid()) 
-    {
+	{
 		m_unitData = g_theUnitPool->AccessUnit((const Unit)getlong(&buf[2]));
 		MapPoint pnt = m_unitData->m_pos;
 		PLAYER_INDEX oldowner = m_unitData->m_owner;
@@ -145,27 +145,30 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
-		bool revealed_unexplored;
 
-		if(pnt != m_unitData->m_pos) {
+		if(pnt != m_unitData->m_pos)
+		{
 			UnitDynamicArray revealed;
 			MapPoint newPos = m_unitData->m_pos;
 			DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via unit packet\n",
 								m_unitData->m_id, newPos.x, newPos.y));
 			m_unitData->m_pos = pnt;
 			bool addVision = false;
-			if(!(oldFlags & k_UDF_TEMP_SLAVE_UNIT)) {
+			if(!(oldFlags & k_UDF_TEMP_SLAVE_UNIT))
+			{
 				g_theWorld->RemoveUnitReference(pnt, m_unitData->m_id);
 				addVision = (m_unitData->m_flags & k_UDF_VISION_ADDED) != 0;
 				m_unitData->RemoveUnitVision();
-			} else if(!(m_unitData->m_flags & k_UDF_TEMP_SLAVE_UNIT)) {
+			}
+			else if(!(m_unitData->m_flags & k_UDF_TEMP_SLAVE_UNIT))
+			{
 				addVision = true;
 			}
 			m_unitData->m_pos = newPos;
 
 			if(addVision) {
 				m_unitData->ClearFlag(k_UDF_VISION_ADDED);
-				m_unitData->AddUnitVision(revealed_unexplored);
+				m_unitData->AddUnitVision();
 			}
 			g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 
@@ -198,8 +201,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 #if 0
 		else if(oldVisionRange != m_unitData->m_vision_range) {
 			g_player[m_unitData->GetOwner()]->RemoveUnitVision(m_unitData->m_pos, oldVisionRange);
-			g_player[m_unitData->GetOwner()]->AddUnitVision(m_unitData->m_pos, m_unitData->m_vision_range,
-															revealed_unexplored);
+			g_player[m_unitData->GetOwner()]->AddUnitVision(m_unitData->m_pos, m_unitData->m_vision_range);
 		}
 #endif
 
@@ -274,11 +276,10 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 #if 0
 		if(m_unitData->m_vision_range != oldVisionRange) {
 			double newRange = m_unitData->m_vision_range;
-			BOOL revealed = FALSE;
 			m_unitData->m_vision_range = oldVisionRange;
 			m_unitData->RemoveUnitVision();
 			m_unitData->m_vision_range = newRange;
-			m_unitData->AddUnitVision(revealed);
+			m_unitData->AddUnitVision();
 		}
 #endif
 
@@ -484,23 +485,13 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_theWorld->RemoveUnitReference(ud->m_pos, u);
 	g_player[ud->GetOwner()]->RemoveUnitVision(ud->m_pos, ud->GetVisionRange());
 	ud->m_pos = m_point;
-	bool revealed_unexplored;
-	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
-											revealed_unexplored);
+	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange());
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
-	
-	
+
 	sint32 numRevealed = revealed.Num();
 	UnitActor **revealedActors = new UnitActor*[numRevealed];
 	for (sint32 i=0; i<numRevealed; i++)
 		revealedActors[i] = revealed[i].GetActor();
-
-
-
-
-
-
-
 
 	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors, 
 							NULL, NULL, FALSE, u.GetMoveSoundID()); 

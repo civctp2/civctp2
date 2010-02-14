@@ -1409,20 +1409,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			default: 
 				break; 
 		}
-		
-		
-	}     
-    
-    return TRUE;
+	}
+
+	return TRUE;
 }
 
 void WhackScreen()
-
 {
 	g_tiledMap->Refresh();
-
 	g_tiledMap->InvalidateMap();
-
 	g_radarMap->Update();
 }
 

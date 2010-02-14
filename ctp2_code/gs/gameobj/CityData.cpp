@@ -1475,7 +1475,6 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 //
 // Parameters : MapPoint &pos                 : destination
 //              bool &revealed_foreign_units  : zeroed out
-//              bool &revealed_unexplored     : zeroed out
 //              sint32 foreigner              : recipient
 //              
 // Globals    : g_theWorld
@@ -1486,8 +1485,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, 
-                             bool &revealed_unexplored, sint32 foreigner)
+void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, sint32 foreigner)
 {
 	
 	sint32 i;
@@ -1531,7 +1529,6 @@ void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units,
 	n = units.Num();
 
 	revealed_foreign_units = false;
-	revealed_unexplored = false;
 	UnitDynamicArray revealed;
 	DynamicArray<Army> moveArmies;
 
@@ -1542,7 +1539,7 @@ void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units,
 		units[i].GetPos(oldpos);
 
 		g_theWorld->RemoveUnitReference(oldpos, units[i]);
-		units[i].SetPosition(pos, revealed, revealed_unexplored);
+		units[i].SetPosition(pos, revealed);
 
 
 
@@ -5392,8 +5389,8 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_End);
 	}
-    else 
-    {
+	else
+	{
 		CleanupUprising(sa);
 	}
 }
@@ -5404,33 +5401,31 @@ void CityData::CleanupUprising(Army &sa)
 	sint32 i;
 
 	sint32 oldOwner = m_owner;
-	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1) {
+	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
-		
+
 		RemoveOneSlave(GetOwner());
-		
-		
-		
-	} else {
+	}
+	else
+	{
 		sint32 si = sa.GetOwner();
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded\n"));
-		
-		
-		
-		if(cell->UnitArmy()) {
+
+		if(cell->UnitArmy())
+		{
 			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, GetOwner());
 		}
 
-		
 		for(i = sa.Num() - 1; i >= 0; i--) {
 			if(sa[i].GetHP() < 1)
 				sa.DelIndex(i);
-			else {
-				bool revealed;
+			else
+			{
 				sa[i].SetTempSlaveUnit(false);
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
-				sa[i].AddUnitVision(revealed);
-				
+				sa[i].AddUnitVision();
+
 				UnitDynamicArray revealedUnits;
 				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i], revealedUnits);
 				g_player[sa.GetOwner()]->InsertUnitReference(sa[i], 
@@ -5450,7 +5445,6 @@ void CityData::CleanupUprising(Army &sa)
 
 		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING);
 	}
-
 }
 
 void CityData::Plague(sint32 player)
@@ -5458,23 +5452,21 @@ void CityData::Plague(sint32 player)
 	sint32 pn = PopCount();
 	sint32 kill = sint32(double(pn) * g_theConstDB->Get(0)->GetPlagueKillPercentage());
 
-	if(kill < 1 && pn > 1) {
+	if(kill < 1 && pn > 1)
+	{
 		kill = 1;
 	}
 
-	sint32 i;
-	for(i = 0; i < kill; i++) {
+	for(sint32 i = 0; i < kill; i++) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_End);
 		
 	}
-
 }
 
 void CityData::BioInfect( sint32 player )
 {
-
 	m_bioInfectedBy = player;
 	m_bioInfectionTurns = g_theConstDB->Get(0)->GetBioInfectionTurns();
 	AddHappyTimer(g_theConstDB->Get(0)->GetBioInfectionTurns(),
@@ -5488,9 +5480,12 @@ void CityData::NanoInfect( sint32 player )
 	m_nanoInfectionTurns = g_theConstDB->Get(0)->GetNanoInfectionTurns();
 	DPRINTF(k_DBG_GAMESTATE, ("City %lx: all buildings and wonders destroyed\n", uint32(m_home_city)));
 	
-	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		if(m_built_improvements & ((uint64)1 << i)) {
-			if(g_rand->Next(100) < (g_theConstDB->Get(0)->GetNanoBuildingKillPercentage() * 100.0)) {
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
+		if(m_built_improvements & ((uint64)1 << i))
+		{
+			if(g_rand->Next(100) < (g_theConstDB->Get(0)->GetNanoBuildingKillPercentage() * 100.0))
+			{
 				DestroyImprovement(i);
 			}
 		}
@@ -5529,7 +5524,7 @@ void CityData::SpreadNanoTerror()
 	Unit c;
 	sint32 n = m_tradeSourceList.Num();
 	for (sint32 i = 0; i < n; i++) 
-    {
+	{
 		// FIXME: See comment in CityData::SpreadBioTerror above - same applies here.
 		c = m_tradeSourceList[i].GetDestination();
 		if ((c.IsNanoImmune()) || (c.IsNanoInfected()))
@@ -7999,8 +7994,7 @@ void CityData::AdjustSizeIndices()
 			if(oldVision >= 0) {
 				m_home_city->RemoveOldUnitVision(oldVision);
 			}
-			bool revealed;
-			m_home_city->AddUnitVision(revealed);
+			m_home_city->AddUnitVision();
 		}
 		if(m_sizeIndex < oldSizeIndex) {
 			

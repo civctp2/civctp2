@@ -192,7 +192,7 @@ public:
 	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect);
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
-  	
+
 	void			SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color);
 	void			DrawTerrainOverlay(aui_Surface *destSurf);
 
@@ -200,26 +200,13 @@ public:
 	sint32			CalculateMetrics(void);
 	void			DrawBorderIcon(aui_Surface *surf, const MapPoint &pos);  //test
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	void            GetMapMetrics(sint32 *width,sint32 *height) const
 	{
 		*width = g_theWorld->GetWidth();
 		*height = g_theWorld->GetHeight();
 	}
 
-	
-	
+
 	sint32          GetMapWidth() const
 	{
 		return g_theWorld->GetWidth();
@@ -294,8 +281,8 @@ public:
 	
 	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
-	bool	        IsScrolling() const { return m_isScrolling;};
-	void	        SetScrolling(bool scroll){ m_isScrolling=scroll;};
+	bool			IsScrolling() const { return m_isScrolling;};
+	void			SetScrolling(bool scroll){ m_isScrolling=scroll;};
 	void			ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf);
 	bool			ScrollMap(sint32 deltaX, sint32 deltaY);
 	bool			ScrollMapSmooth(sint32 deltaX, sint32 deltaY);
@@ -477,8 +464,9 @@ public:
 
 	void		NextPlayer(void);
 	void		CopyVision();
-	Vision		*GetLocalVision(void) { return m_localVision; }
-	void		ReallocateVision();
+	const Vision		*GetLocalVision(void) const { return m_localVision; }
+	void		AddVisible(MapPoint& pos, double& radius) { m_localVision->AddVisible(pos, radius); };
+	void		RemoveVisible(MapPoint& pos, double& radius) { m_localVision->RemoveVisible(pos, radius); };
 
 	aui_Surface *GetSurface(void) { return m_surface; } 
 

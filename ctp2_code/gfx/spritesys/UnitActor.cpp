@@ -365,10 +365,9 @@ void UnitActor::AddVision(void)
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-	bool revealedUnexplored = false;
-	
-	if(!m_isUnseenCellActor && m_playerNum == g_selected_item->GetVisiblePlayer()) {
-		g_tiledMap->GetLocalVision()->AddVisible(m_pos, m_unitVisionRange, revealedUnexplored);
+	if(!m_isUnseenCellActor)
+	{
+		g_player[m_playerNum]->m_vision->AddVisible(m_pos, m_unitVisionRange);
 	}
 }
 
@@ -377,9 +376,10 @@ void UnitActor::RemoveVision(void)
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-	
-	if(!m_isUnseenCellActor && m_playerNum == g_selected_item->GetVisiblePlayer()) {
-		g_tiledMap->GetLocalVision()->RemoveVisible(m_pos,  m_unitVisionRange);
+
+	if(!m_isUnseenCellActor)
+	{
+		g_player[m_playerNum]->m_vision->RemoveVisible(m_pos,  m_unitVisionRange);
 	}
 }
 

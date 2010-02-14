@@ -296,8 +296,8 @@ public:
 	void			AddShow(Unit hider);
 	void			AddWork(Unit worker);
 	void			AddFastKill(Unit dead);
-	void			AddRemoveVision(MapPoint &pos, double range);	
-	void			AddAddVision(MapPoint &pos, double range);		
+	void			AddRemoveVision(const MapPoint &pos, double range);	
+	void			AddAddVision(const MapPoint &pos, double range);		
 	void			AddSetVisibility(UnitActor *actor, uint32 visibility);	
 	void			AddSetOwner(UnitActor *actor, sint32 owner);	
 	void			AddSetVisionRange(UnitActor *actor, double range);

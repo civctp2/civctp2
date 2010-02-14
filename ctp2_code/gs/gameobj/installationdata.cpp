@@ -331,29 +331,28 @@ void InstallationData::ChangeOwner(sint32 toOwner)
 									  m_id, m_owner, toOwner));
 	}
 
-	if(m_owner >= 0) {
-		if(g_player[m_owner]) {
-			g_player[m_owner]->RemoveInstallationReferences(Installation(m_id));
-		}
+	if(m_owner >= 0 && g_player[m_owner] != NULL)
+	{
+		g_player[m_owner]->RemoveInstallationReferences(Installation(m_id));
+
 		double visionRange = terrainutil_GetVisionRange(m_type, m_point);
-		if(g_selected_item->GetVisiblePlayer() == m_owner) {
-			g_tiledMap->GetLocalVision()->RemoveVisible(m_point, visionRange);
-		}
-		if(visionRange > 0) {
-			if ( g_player[m_owner] ) {
-				g_player[m_owner]->RemoveUnitVision(m_point,
-													visionRange);
-			}
+		g_player[m_owner]->m_vision->RemoveVisible(m_point, visionRange);
+
+		if(visionRange > 0)
+		{
+			g_player[m_owner]->RemoveUnitVision(m_point, visionRange);
 		}
 	}
 
-	if(toOwner >= 0) {
+	if(toOwner >= 0)
+	{
 		g_player[toOwner]->AddInstallation(Installation(m_id));
 	}
 	
 	m_owner = toOwner;
 
-	if(toOwner >= 0) {
+	if(toOwner >= 0)
+	{
 		DoVision();
 	}
 }

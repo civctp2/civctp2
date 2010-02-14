@@ -417,7 +417,6 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 	Assert( child != NULL );
 	if ( !child || !this) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	Assert( child->IsThisA( aui_Window::m_windowClassId ) );
 	if ( !child->IsThisA( aui_Window::m_windowClassId ) )
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -427,13 +426,12 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 	
 	ListPos position = m_childList->GetHeadPosition();
 
-	if ( !position ) {
-		
+	if ( !position )
+	{
 		m_childList->AddHead( child );
 	}
 	else
 	{
-		
 		if ( !GetChild( child->Id() ) )
 		{
 			sint32 j;
@@ -453,26 +451,21 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 			}
 
 			if ( !j )
-				
 				m_childList->AddTail( window );
-		} else {
-			
-			
-			
+		}
+		else
+		{
 			return AUI_ERRCODE_OK;
 		}
 	}
 
 	m_childListChanged = TRUE;
 
-	
 	window->SetParent( this );
 
-	
 	window->Draw();
 
 	return AUI_ERRCODE_OK;
-
 }
 
 AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )

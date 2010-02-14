@@ -173,10 +173,8 @@ public:
 	bool    DeductMoveCost(const double cost, bool &out_of_fuel);
 	void    GetPos(MapPoint &pos) const;
 	MapPoint RetPos(void) const;
-	bool MoveToPosition(const MapPoint &p, UnitDynamicArray &revealedUnits,
-	                    bool &revealed_unexplored);
-	bool SetPosition(const MapPoint &p, UnitDynamicArray &revealedUnits,
-	                 bool &revealed_unexplored);
+	bool MoveToPosition(const MapPoint &p, UnitDynamicArray &revealedUnits);
+	bool SetPosition(const MapPoint &p, UnitDynamicArray &revealedUnits);
 	void SetPosAndNothingElse(const MapPoint &p);
 
 	void Launch(void);
@@ -332,7 +330,7 @@ public:
 
 	
 	void RemoveUnitVision();
-	void AddUnitVision(bool &revealed);
+	void AddUnitVision();
 	void DoVision(UnitDynamicArray &revealedUnits);
 	void UndoVision();
 	uint32 GetVisibility() const;

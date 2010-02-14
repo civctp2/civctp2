@@ -170,11 +170,6 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	Unit uid(getlong(&buf[2]));
 	sint32 pos;
 
-	
-	
-	
-	
-
 	if(g_theUnitPool->IsValid(uid)) {
 		DPRINTF(k_DBG_NET, ("Net: received city %lx\n", (uint32)uid));
 		UnitData* unitData = g_theUnitPool->AccessUnit(uid);
@@ -253,19 +248,19 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		UnpacketizeResources(cityData->m_sellingResources, buf, pos);
 		UnpacketizeResources(cityData->m_buyingResources, buf, pos);
 
-		sint32 r;
-		for(r = 0; r < g_theResourceDB->NumRecords(); r++) {
+		for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++)
+		{
 			PULLLONG(cityData->m_distanceToGood[r]);
 		}
 
-		cityData->UpdateSprite();	
+		cityData->UpdateSprite();
 
 		if(resync)
 			g_network.RequestResync(RESYNC_CITY_STATS);
-		else if (oldVision != cityData->GetVisionRadius()) {
+		else if (oldVision != cityData->GetVisionRadius())
+		{
 			unitData->RemoveOldUnitVision(oldVision);
-			bool revealed;
-			unitData->AddUnitVision(revealed);
+			unitData->AddUnitVision();
 		}
 	}
 }
@@ -276,7 +271,6 @@ void NetCityName::Packetize(uint8* buf, uint16 &size)
 	PUSHID(k_PACKET_CITY_NAME_ID);
 	PUSHLONG((uint32)m_cityData->m_home_city);
 	PUSHSTRING(m_cityData->m_name);
-	
 }
 
 void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)

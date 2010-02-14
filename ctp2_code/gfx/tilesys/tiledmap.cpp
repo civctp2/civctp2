@@ -281,8 +281,8 @@ TiledMap::~TiledMap()
 	delete m_mixDirtyList;
 	delete m_oldMixDirtyList;
 	delete m_mapDirtyList;
-	delete m_localVision;
 	delete m_tileSet;
+	// m_localVision    not deleted: reference only
 	// m_surface        not deleted: reference only
 	// m_surfBase       not deleted: reference only
 	// m_overlayRec     not deleted: reference only
@@ -317,17 +317,11 @@ sint32 TiledMap::Initialize(RECT *viewRect)
 
 	CalculateMetrics();
 	
-	m_localVision = new Vision(g_selected_item->GetVisiblePlayer(), TRUE);
+	m_localVision = g_player[g_selected_item->GetVisiblePlayer()]->m_vision;
 
-	
 	Assert(m_localVision);
-	
-	if(g_player[g_selected_item->GetVisiblePlayer()])
-		m_localVision->Copy(g_player[g_selected_item->GetVisiblePlayer()]->m_vision);
 
-
-
-
+	m_localVision->SetAmOnScreen(true);
 
 	InitGrid( 128, 128);
 
@@ -367,12 +361,12 @@ void TiledMap::InitGrid(sint32 maxPixelsPerGridRectX, sint32 maxPixelsPerGridRec
 			tempRect.bottom = tempRect.top + maxPixelsPerGridRectY;
 
 			
-		    if(tempRect.right > m_surfaceRect.right)
+			if(tempRect.right > m_surfaceRect.right)
 			   tempRect.right = m_surfaceRect.right;
 			
 			
 			
-		    if(tempRect.bottom > m_surfaceRect.bottom)
+			if(tempRect.bottom > m_surfaceRect.bottom)
 			   tempRect.bottom = m_surfaceRect.bottom;
 
 			
@@ -5304,10 +5298,12 @@ void TiledMap::NextPlayer(void)
 void TiledMap::CopyVision()
 {
 	sint32  newPlayer   = g_selected_item->GetVisiblePlayer();	
-	if (g_player[newPlayer]) 
+	if (g_player[newPlayer])
 	{
-		m_localVision->Copy(g_player[newPlayer]->m_vision);
-		m_oldPlayer = newPlayer;
+		m_localVision->SetAmOnScreen(false);
+		m_localVision = g_player[newPlayer]->m_vision;
+		m_oldPlayer   = newPlayer;
+		m_localVision->SetAmOnScreen(true);
 	}
 
 	Refresh();
@@ -5352,16 +5348,6 @@ bool TiledMap::ReadyToDraw() const
                 ((g_turn->GetRound() > 0) || (m_localVision->GetOwner() > 0));
 }
 
-
-
-
-
-
-
-
-
-
-
 sint32 
 TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 flags)
 {
@@ -5375,18 +5361,7 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 	if (data == NULL) 
 		return 0;
 
-	
-
-	
-	
-
-
-	
-
-
-
-	
-	if (surface) 
+	if (surface)
 	{
 		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
 		Assert(errcode == AUI_ERRCODE_OK);
@@ -5394,28 +5369,24 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 		if ( errcode != AUI_ERRCODE_OK ) 
 			return AUI_ERRCODE_SURFACELOCKFAILED;
 
-		
 		surfWidth	= surface->Width();
 		surfHeight	= surface->Height();
 		surfPitch	= surface->Pitch();
-	} 
-	else 
+	}
+	else
 	{
 		surfBase	= m_surfBase;
 		surfWidth	= m_surfWidth;
 		surfHeight	= m_surfHeight;
 		surfPitch	= m_surfPitch;
 	}
-	
+
 	if ((x>=surfPitch)||(y>=surfHeight))
 	   return 0 ;
 
-	
-	
 	if ((x < 0) || (y < 0))
 		return 0;
 
-	
 	unsigned short	*destPixel;
 
 	uint16		start	= (uint16)*data++;
@@ -5425,15 +5396,12 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 	sint32 len,looplen;
 
-	
 	sint32 xoff=x;
 	sint32 i;
 
-	
 	Pixel16		*rowData;
 	Pixel16		tag;
 
-	
 	for (sint32 j = start; j <= end; j++) 
 	{
 		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
@@ -5524,13 +5492,6 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 	return 0;
 }
-
-
-
-
-
-
-
 
 void 
 TiledMap::DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 xpos, sint32 ypos)
@@ -5769,12 +5730,5 @@ void TiledMap::ZoomUpdate(sint32 zoomLevel)
 	InvalidateMap();
 
 	
-	ZoomHitMask();		
-}
-
-void TiledMap::ReallocateVision()
-{
-	delete m_localVision;
-	m_localVision = new Vision(g_selected_item->GetVisiblePlayer(), TRUE);
-	CopyVision();
+	ZoomHitMask();
 }

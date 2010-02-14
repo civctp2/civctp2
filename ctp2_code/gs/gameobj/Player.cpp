@@ -965,24 +965,21 @@ Unit Player::CreateUnit(const sint32 t,
 		}
 	}
 
-	if(!g_theWorld->CanEnter(pos, rec->GetMovementType())) {
-		if(!rec->GetIsTrader()) {
-			if(!g_theWorld->HasCity(pos) || g_theWorld->GetCity(pos).GetOwner() != m_owner) {
-				
+	if(!g_theWorld->CanEnter(pos, rec->GetMovementType()))
+	{
+		if(!rec->GetIsTrader())
+		{
+			if(!g_theWorld->HasCity(pos) || g_theWorld->GetCity(pos).GetOwner() != m_owner)
+			{
 				return Unit();
 			}
 		}
 	}
 
-	if(g_network.IsHost() && IsNetwork() && !g_network.SetupMode()) {
-		if(cause != CAUSE_NEW_ARMY_INITIAL) {
-			
-			
-			
-
-			
-
-			
+	if(g_network.IsHost() && IsNetwork() && !g_network.SetupMode())
+	{
+		if(cause != CAUSE_NEW_ARMY_INITIAL)
+		{
 			g_network.Block(m_owner);
 		}
 	}
@@ -1005,26 +1002,27 @@ Unit Player::CreateUnit(const sint32 t,
 		g_network.AddNewUnit(m_owner, u);
 	}
 
-	if(rec->GetIsTrader()) {
+	if(rec->GetIsTrader())
+	{
 		m_traderUnits->Insert(u);
 		AddTransportPoints((sint32)g_theUnitDB->Get(t, m_government_type)->GetMaxMovePoints());
 
 		return u;
-	} else {
+	}
+	else
+	{
 		UnitDynamicArray	revealed;
 
-		bool revealed_unexplored; 
-		sint32 r = u.SetPosition(pos, revealed, revealed_unexplored); 
+		sint32 r = u.SetPosition(pos, revealed);
 
-		
-		
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			g_network.Block(m_owner);
 			g_network.Enqueue(u.AccessData());
 			g_network.Unblock(m_owner);
 		}
 
-		Assert(r); 
+		Assert(r);
 
 		return InsertUnitReference(u, cause, hc);
 	}
@@ -3893,15 +3891,28 @@ void Player::SetResearching(AdvanceType advance)
 	}
 }
 
-void Player::AddUnitVision(const MapPoint &pnt, double range,
-						   bool &revealed_unexplored)
+void Player::AddUnitVision(const MapPoint &pnt, double range)
 {
-	m_vision->AddVisible(pnt, range, revealed_unexplored);
+	if(g_tiledMap == NULL || m_vision != g_tiledMap->GetLocalVision())
+	{
+		m_vision->AddVisible(pnt, range);
+	}
+	else
+	{
+		g_director->AddAddVision(pnt, range);
+	}
 }
 
 void Player::RemoveUnitVision(const MapPoint &pnt, double range)
 {
-	m_vision->RemoveVisible(pnt, range);
+	if(g_tiledMap == NULL || m_vision != g_tiledMap->GetLocalVision())
+	{
+		m_vision->RemoveVisible(pnt, range);
+	}
+	else
+	{
+		g_director->AddRemoveVision(pnt, range);
+	}
 }
 
 void Player::OwnExploredArea()
@@ -4069,12 +4080,11 @@ void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 {
 	UnitDynamicArray    revealed;
 	MapPoint	p ;
-	bool revealed_unexplored; 
 	Unit	u = m_all_units->Get(unit_idx).m_id ;
 
 	GetCapitolPos(p) ;
 	u.ResetUnitOwner(other_player, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
-	u.SetPosition(p, revealed, revealed_unexplored) ;
+	u.SetPosition(p, revealed) ;
 }
 
 void Player::StopTradingWith(PLAYER_INDEX bannedRecipient)
@@ -5130,8 +5140,8 @@ void Player::GiveCity(const PLAYER_INDEX player, const sint32 c)
 
 void Player::GiveCity(const PLAYER_INDEX recipient, Unit city)
 {
-
-	if(!g_theUnitPool->IsValid(city)) {
+	if(!g_theUnitPool->IsValid(city))
+	{
 		return;
 	}
 
@@ -5158,12 +5168,13 @@ void Player::GiveCity(const PLAYER_INDEX recipient, Unit city)
 				
 			}
 		}
-	}  else {
+	}
+	else
+	{
 		c.GetPos(newPos);
 		bool revealed_foreign_units;
-		bool revealed_unexplored;
 
-		cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored, recipient) ;
+		cityData->TeleportUnits(newPos, revealed_foreign_units, recipient) ;
 	}
 
 	city.ResetCityOwner(recipient, false, CAUSE_REMOVE_CITY_DIPLOMACY) ;
@@ -5592,11 +5603,7 @@ void Player::AddInstallation(const Installation &inst)
 
 	if(visionRange > 0)
 	{
-		if(g_selected_item->GetVisiblePlayer() == m_owner)
-		{
-			bool revealedUnexplored = false;
-			g_tiledMap->GetLocalVision()->AddVisible(pos, visionRange, revealedUnexplored);
-		}
+		m_vision->AddVisible(pos, visionRange);
 	}
 }
 
@@ -5876,10 +5883,8 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		m_vision->SetTheWholeWorldExplored();
 		m_vision->ClearUnseen();
 
-		if(m_owner == g_selected_item->GetVisiblePlayer()) {
-			
-			
-			
+		if(m_owner == g_selected_item->GetVisiblePlayer())
+		{
 			g_director->AddCopyVision();
 		}
 	}
@@ -8922,19 +8927,21 @@ void Player::ResetVision()
 	m_vision->SetTheWholeWorldUnseen();
 	sint32 j;
 
-	for(j = 0; j < m_all_units->Num(); j++) {
-		if(m_all_units->Access(j).Flag(k_UDF_VISION_ADDED)) {
-			bool revealed;
+	for(j = 0; j < m_all_units->Num(); j++)
+	{
+		if(m_all_units->Access(j).Flag(k_UDF_VISION_ADDED))
+		{
 			m_all_units->Access(j).ClearFlag(k_UDF_VISION_ADDED);
-			m_all_units->Access(j).AddUnitVision(revealed);
+			m_all_units->Access(j).AddUnitVision();
 		}
 	}
 	
-	for(j = 0; j < m_all_cities->Num(); j++) {
-		if(m_all_cities->Access(j).Flag(k_UDF_VISION_ADDED)) {
-			bool revealed;
+	for(j = 0; j < m_all_cities->Num(); j++)
+	{
+		if(m_all_cities->Access(j).Flag(k_UDF_VISION_ADDED))
+		{
 			m_all_cities->Access(j).ClearFlag(k_UDF_VISION_ADDED);
-			m_all_cities->Access(j).AddUnitVision(revealed);
+			m_all_cities->Access(j).AddUnitVision();
 			m_all_cities->Access(j).CD()->AdjustSizeIndices();
 		}
 	}
@@ -8952,8 +8959,7 @@ void Player::ResetVision()
 			terrainutil_GetVisionRange(inst.GetType(), pos);
 		if(vision_range <= 0)
 			continue;
-		bool revealed;
-		AddUnitVision(pos, vision_range, revealed);
+		AddUnitVision(pos, vision_range);
 	}
 }
 
@@ -9713,7 +9719,8 @@ bool Player::CanBuildLeader(const sint32 type) const
 
 void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gaining cities and Mergee is the loser
 {
-	for(sint32 i = 0; i < g_player[Mergee]->m_all_cities->Num(); i++) {
+	for(sint32 i = 0; i < g_player[Mergee]->m_all_cities->Num(); i++)
+	{
 		Unit	c = g_player[Mergee]->m_all_cities->Get(i).m_id ;
 
 		CityData	*cityData = m_all_cities->Get(c).GetData()->GetCityData() ;
@@ -9727,17 +9734,16 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 		GetNearestCity(oldPos, city, dist, true);
 		city.GetPos(newPos);
 
-		bool revealed_unexplored; 
-
 		//reset unit owner as well
 
 		Cell * cell = g_theWorld->GetCell(oldPos);
-		for (sint32 j = 0; j < cell->GetNumUnits(); j++) {
+		for (sint32 j = 0; j < cell->GetNumUnits(); j++)
+		{
 			UnitDynamicArray    revealed;
 			Unit u = cell->AccessUnit(j);
 			u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
-			u.SetPosition(oldPos, revealed, revealed_unexplored) ;
-			//cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored) ;
+			u.SetPosition(oldPos, revealed) ;
+			//cityData->TeleportUnits(newPos, revealed_foreign_units);
 		}
 		c.ResetCityOwner(Merger, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY) ;
 	}
@@ -9769,11 +9775,10 @@ bool Player::HasTransporters() const
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 {
 	UnitDynamicArray    revealed;
-	MapPoint	p ;
-	bool revealed_unexplored; 
-	Unit	u = m_all_units->Get(unit_idx).m_id ;
+	MapPoint	p;
+	Unit	u = m_all_units->Get(unit_idx).m_id;
 
-	GetCapitolPos(p) ;
-	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
-	u.SetPosition(p, revealed, revealed_unexplored) ;
+	GetCapitolPos(p);
+	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY);
+	u.SetPosition(p, revealed);
 */

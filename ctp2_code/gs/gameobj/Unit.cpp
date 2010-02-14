@@ -592,20 +592,18 @@ void Unit::Launch()
     }
 }
 
-bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                            bool &revealed_unexplored)
+bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed)
 {
-	return SetPosition(p, revealed, revealed_unexplored);
+	return SetPosition(p, revealed);
 }
 
 
-bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                       bool &revealed_unexplored)
+bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed)
 {
 	bool left_map = false;
-	AccessData()->SetPos(p, revealed_unexplored, left_map); 
+	AccessData()->SetPos(p, left_map); 
 
-    return left_map || g_theWorld->InsertUnit(p, *this, revealed); 
+	return left_map || g_theWorld->InsertUnit(p, *this, revealed); 
 }
 
 void Unit::SetPosAndNothingElse(const MapPoint &p)
@@ -1251,9 +1249,9 @@ void Unit::RemoveUnitVision()
 	AccessData()->RemoveUnitVision();
 }
 
-void Unit::AddUnitVision(bool &revealed)
+void Unit::AddUnitVision()
 {
-	AccessData()->AddUnitVision(revealed);
+	AccessData()->AddUnitVision();
 }
 
 void Unit::DoVision(UnitDynamicArray &revealedUnits)

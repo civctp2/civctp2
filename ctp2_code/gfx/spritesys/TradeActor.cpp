@@ -277,7 +277,7 @@ Anim *TradeActor::CreateAnim(GOODACTION action)
 	return new Anim(*origAnim);
 }
 
-void TradeActor::Draw(Vision *tileLocalVision)
+void TradeActor::Draw(const Vision *tileLocalVision)
 {
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;

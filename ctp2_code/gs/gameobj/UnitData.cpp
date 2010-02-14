@@ -258,12 +258,13 @@ void UnitData::Place(const MapPoint &center_pos)
 {
 	m_pos = center_pos;
 
-	if(!GetDBRec()->GetIsTrader()) {
-		bool revealedUnexplored = false;
+	if(!GetDBRec()->GetIsTrader())
+	{
 		SetVisible(m_owner);
-		AddUnitVision(revealedUnexplored);
+		AddUnitVision();
 
-		if(g_theWorld->GetCell(center_pos)->GetGoodyHut()) {
+		if(g_theWorld->GetCell(center_pos)->GetGoodyHut())
+		{
 			g_theWorld->GetCell(center_pos)->DeleteGoodyHut();
 		}
 
@@ -273,9 +274,12 @@ void UnitData::Place(const MapPoint &center_pos)
 			MapPoint chk;
 			g_theWorld->AddZOC(center_pos, m_owner);
 			uint32 moveType = GetDBRec()->GetMovementType();
-			for(dd = (sint32)NORTH; dd < (sint32)NOWHERE; dd++) {
-				if(center_pos.GetNeighborPosition((WORLD_DIRECTION)dd, chk)) {
-					if(g_theWorld->CanEnter(chk, moveType)) {
+			for(dd = (sint32)NORTH; dd < (sint32)NOWHERE; dd++)
+			{
+				if(center_pos.GetNeighborPosition((WORLD_DIRECTION)dd, chk))
+				{
+					if(g_theWorld->CanEnter(chk, moveType))
+					{
 						g_theWorld->AddZOC(chk, m_owner);
 					}
 				}
@@ -407,8 +411,7 @@ void UnitData::SetPosAndNothingElse(const MapPoint &p)
 	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
-void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
-                      bool &left_map)
+void UnitData::SetPos(const MapPoint &p, bool &left_map)
 {
 	if(Flag(k_UDF_IS_ENTRENCHED)) {
 		ClearFlag(k_UDF_IS_ENTRENCHED);
@@ -434,7 +437,7 @@ void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
 		g_player[m_owner]->RecoveredProbe(Unit());
 	} else {
 		left_map = false;
-		AddUnitVision(revealed_unexplored);
+		AddUnitVision();
 
 		Cell *cell = g_theWorld->GetCell(p);
 		if(g_wormhole) {
@@ -1081,13 +1084,12 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 			passenger = (*m_cargo_list)[i];
 			m_cargo_list->DelIndex(i); 
 			passenger .SetPosAndNothingElse(m_pos);     
- 			passenger .UnsetIsInTransport(); 
-  
+			passenger .UnsetIsInTransport(); 
+
 			UnitDynamicArray revealedUnits;
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
-			bool revealedUnexplored;
-			passenger.AddUnitVision(revealedUnexplored);
+			passenger.AddUnitVision();
 
 			if(debark.m_id == 0)
 			{
@@ -1149,14 +1151,13 @@ bool UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 			passenger = (*m_cargo_list)[i];
 			m_cargo_list->DelIndex(i); 
 			passenger .SetPosAndNothingElse(m_pos);
- 			passenger .UnsetIsInTransport();
-  
+			passenger .UnsetIsInTransport();
+
 			UnitDynamicArray revealedUnits;
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 			g_player[m_owner]->RegisterUnloadCargo(m_army.m_id, passenger.GetType(), (sint32)passenger.GetHP()); 
 
-			bool revealedUnexplored;
-			passenger.AddUnitVision(revealedUnexplored);
+			passenger.AddUnitVision();
 
 			if(debark.m_id == 0)
 			{
@@ -2052,8 +2053,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 
 	RemoveUnitVision(); // Now remove unit vision, the old owner knows what happend.
 	m_owner = newo; // Now change owner
-	bool revealedUnexplored;
-	AddUnitVision(revealedUnexplored);
+	AddUnitVision();
 
 	UnitDynamicArray revealed_units;
 	DoVision(revealed_units);
@@ -2135,17 +2135,16 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 
 	g_player[new_owner]->InsertUnitReference(me, new_cause, Unit()) ;
 
-	bool revealedUnexplored;
-	AddUnitVision(revealedUnexplored);
+	AddUnitVision();
 	
 	m_visibility |= (1 << new_owner);
 	m_temp_visibility |= (1 << new_owner);
 	m_ever_visible |= m_visibility;
-	if(m_actor) {
+	if(m_actor)
+	{
 		g_director->AddSetOwner(m_actor, new_owner);
 		g_director->AddSetVisibility(m_actor, m_visibility);
 		g_director->AddSetVisionRange(m_actor, (GetVisionRange()));
-
 	}
 
 	UnitDynamicArray revealed_units;
@@ -5794,7 +5793,7 @@ void UnitData::ExitWormhole(MapPoint &pos)
 			SetPosAndNothingElse(pos);
 			m_army.ResetPos();
 			g_theWorld->InsertUnit(pos, Unit(m_id), revealedUnits);
-			AddUnitVision(revealed);
+			AddUnitVision();
 
 			SlicObject *so = new SlicObject("307EndGameProbeReturned");
 			so->AddUnit(Unit(m_id));
@@ -5826,7 +5825,7 @@ void UnitData::ExitWormhole(MapPoint &pos)
 		SetPosAndNothingElse(pos);
 		m_army.ResetPos();
 		g_theWorld->InsertUnit(pos, Unit(m_id), revealedUnits);
-		AddUnitVision(revealed);
+		AddUnitVision();
 
 		SlicObject *so = new SlicObject("307EndGameProbeReturned");
 		so->AddUnit(Unit(m_id));
@@ -6097,9 +6096,6 @@ void UnitData::RemoveUnitVision()
 	if(Flag(k_UDF_VISION_ADDED)) {
 		g_player[m_owner]->RemoveUnitVision(m_pos, (GetVisionRange()));
 		ClearFlag(k_UDF_VISION_ADDED);
-
-		if (m_owner == g_selected_item->GetVisiblePlayer())
-			g_director->AddRemoveVision(m_pos, (GetVisionRange()));
 	}
 }
 
@@ -6109,22 +6105,16 @@ void UnitData::RemoveOldUnitVision(double oldRadius)
 	if(Flag(k_UDF_VISION_ADDED)) {
 		g_player[m_owner]->RemoveUnitVision(m_pos, oldRadius);
 		ClearFlag(k_UDF_VISION_ADDED);
-
-		if (m_owner == g_selected_item->GetVisiblePlayer())
-			g_director->AddRemoveVision(m_pos, oldRadius);
 	}
 }
 
-void UnitData::AddUnitVision(bool &revealed)
+void UnitData::AddUnitVision()
 {
 	Assert(!Flag(k_UDF_VISION_ADDED));
 	if(!Flag(k_UDF_VISION_ADDED)) {
 		double radius = GetVisionRange();
-		g_player[m_owner]->AddUnitVision(m_pos, radius, revealed);
+		g_player[m_owner]->AddUnitVision(m_pos, radius);
 		SetFlag(k_UDF_VISION_ADDED);
-		
-		if (m_owner == g_selected_item->GetVisiblePlayer())
-			g_director->AddAddVision(m_pos, radius);
 	}
 }
 

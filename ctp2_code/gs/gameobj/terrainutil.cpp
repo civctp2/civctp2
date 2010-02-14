@@ -394,36 +394,30 @@ void terrainutil_DoVision(const MapPoint &point)
 	sint32  type            = -1;
 
 	for (sint32 impr = 0; impr < cell->GetNumDBImprovements(); ++impr)
-    {
+	{
 		sint32      t       = cell->GetDBImprovement(impr);
 		TerrainImprovementRecord::Effect const *    
-                    effect  = terrainutil_GetTerrainEffect
-                                (g_theTerrainImprovementDB->Get(t), 
-                                 cell->GetTerrain()
-                                );
+		            effect  = terrainutil_GetTerrainEffect
+		                        (g_theTerrainImprovementDB->Get(t), 
+		                         cell->GetTerrain()
+		                        );
 		sint32 range;
 		if (effect && effect->GetVisionRange(range) && (range > maxVisionRange)) 
-        {
+		{
 			type            = t;
 			maxVisionRange  = range;
 		}
 	}
 
 	if (type < 0 || maxVisionRange <= 0) 
-    {
+	{
 		return;
 	}
 
-	bool    revealedUnexplored  = false;
-    sint32  cellOwner           = cell->GetOwner();
-	if (cellOwner >= 0) 
-    {
-		g_player[cellOwner]->AddUnitVision(point, maxVisionRange, revealedUnexplored);
-
-		if (g_selected_item->GetVisiblePlayer() == cellOwner)
-        {
-			g_director->AddCopyVision();
-        }
+	sint32  cellOwner           = cell->GetOwner();
+	if (cellOwner >= 0)
+	{
+		g_player[cellOwner]->AddUnitVision(point, maxVisionRange);
 	}
 
 	MapPoint topleft = MapPoint(point.x - maxVisionRange, point.y);
@@ -433,26 +427,26 @@ void terrainutil_DoVision(const MapPoint &point)
 	                          static_cast<sint16>(maxVisionRange) * 2 + 1,
 	                          static_cast<sint16>(maxVisionRange) * 2 + 1,
 	                          ~(1 << cellOwner)
-                             );
+	                         );
 
 	sint32 myrsq    = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 	sint32 un       = unitArray.Num();
 
 	for (sint32 i = 0; i < un; i++) 
-    {
+	{
 		UnitData * ud = unitArray[i].AccessData();
 		sint32 ls = UnitData::GetDistance(ud, point, maxVisionRange);
 		if(ls >= myrsq)
 			continue;
 
 		if (!(ud->GetRealVisibility() & (1 << cellOwner))) 
-        {
+		{
 			if (ud->GetDBRec()->GetVisionClass() &
 			    g_theTerrainImprovementDB->Get(type)->GetCanSee()
-               ) 
-            {
+			   ) 
+			{
 				if (cellOwner >= 0) 
-                {
+				{
 					ud->SetVisible((PLAYER_INDEX)cellOwner);
 				}
 			}
@@ -462,7 +456,6 @@ void terrainutil_DoVision(const MapPoint &point)
 
 bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec, sint32 pl, sint32 terr)
 {
-	
 	Assert(rec != NULL);
 	if(rec == NULL)
 		return false;

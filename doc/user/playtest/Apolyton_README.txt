@@ -150,6 +150,10 @@ Fixed:    If you receive a map then all tiles that the giver sees or own are
           updated.
 Fixed:    The AI does not use transporters carrying units that cannot be used
           for the goal that needs transport.
+Changed:  Player vision handling, the human player uses the vision of his/her
+          player directly instead of a copy, this saves memory.
+Changed:  Lowered the AI priority for investigate city goals. There more worthy
+          goals out there.
 Added:    New database flags for modders:
 - DifficultyDB:
    TechCostKnownDeduction 0.0 - 1.0

@@ -98,7 +98,7 @@ static sint32			s_return = 0;
 
 sint32	optionsscreen_displayMyWindow( sint32 from )
 {
-    sint32 retval = (g_optionsWindow) ? 0 : optionsscreen_Initialize();
+	sint32 retval = (g_optionsWindow) ? 0 : optionsscreen_Initialize();
 
 	s_return = from;
 
@@ -233,11 +233,11 @@ void optionsscreen_Cleanup()
 	scorewarn_Cleanup();
 
 	if (g_optionsWindow)
-    {
-	    g_c3ui->RemoveWindow( g_optionsWindow->Id() );
-    	g_optionsWindow->SetSurface(NULL);
-        allocated::clear(g_optionsWindow);
-    }
+	{
+		g_c3ui->RemoveWindow( g_optionsWindow->Id() );
+	//	g_optionsWindow->SetSurface(NULL); // Surface is created for the g_optionsWindow only
+		allocated::clear(g_optionsWindow);
+	}
 }
 
 

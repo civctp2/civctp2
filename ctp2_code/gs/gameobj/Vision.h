@@ -71,14 +71,14 @@ class UnseenCell;
 class Vision
 {
 private:
-    /// Operation to perform
-    enum CIRCLE_OP 
-    {
-	    CIRCLE_OP_ADD,          ///< add to normal vision
-	    CIRCLE_OP_SUBTRACT,     ///< remove from normal vision
-	    CIRCLE_OP_ADD_RADAR,    ///< add to radar vision
-	    CIRCLE_OP_MERGE         ///< merge 2 visions
-    };
+	/// Operation to perform
+	enum CIRCLE_OP 
+	{
+		CIRCLE_OP_ADD,          ///< add to normal vision
+		CIRCLE_OP_SUBTRACT,     ///< remove from normal vision
+		CIRCLE_OP_ADD_RADAR,    ///< add to radar vision
+		CIRCLE_OP_MERGE         ///< merge 2 visions
+	};
 	
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
@@ -96,32 +96,24 @@ private:
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
-	
+
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
-	
-	
 
-	friend class NetVision;  
+	friend class NetVision;
 	friend class MapFile;
-	
-	
-	
-	
 
-	Vision *m_mergeFrom; 
-	bool m_revealedUnexplored;
+	Vision *m_mergeFrom;
 
 	void FillCircle
 	(
-		MapPoint const &			center, 
-		double const				radius, 
+		MapPoint const &			center,
+		double const				radius,
 		CIRCLE_OP					op,
 		DynamicArray<MapPoint> *	removeadd = NULL
 	);
-	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
+	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op,
 						DynamicArray<MapPoint> *removeadd);
-
 
 public:
 	Vision(sint32 owner, bool amOnScreen = false);
@@ -130,58 +122,55 @@ public:
 	void Copy(const Vision *copy);
 
 	void AddExplored(MapPoint pos, double radius);
-    void SetTheWholeWorldExplored();
+	void SetTheWholeWorldExplored();
 	void SetTheWholeWorldUnexplored();
 	void SetTheWholeWorldUnseen();
 	bool IsExplored(MapPoint pos) const;
 
 	void AddRadar(MapPoint pos, double radius);
 
-	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored, 
+	void AddVisible(MapPoint pos, double radius,
 					DynamicArray<MapPoint> *removeadd = NULL);
 	void RemoveVisible(MapPoint pos, double radius,
 					   DynamicArray<MapPoint> *removeadd = NULL);
 	bool IsVisible(MapPoint pos) const;
 
-	
-	
-	
-	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
+	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell) const;
 
 	void Convert(MapPoint &pos) const 
-    {
-        int l_ResultY   = pos.y + pos.x;
+	{
+		int l_ResultY   = pos.y + pos.x;
 		while (l_ResultY >= m_height) 
-        {
+		{
 			l_ResultY  -= m_height;
 		}
-        pos.y = static_cast<sint16>(l_ResultY);
+		pos.y = static_cast<sint16>(l_ResultY);
 	}
 
 	void Unconvert(MapPoint & pos) const 
-    {
-        int l_ResultX   = pos.x;
+	{
+		int l_ResultX   = pos.x;
 
-        while (l_ResultX < 0)
-        {
+		while (l_ResultX < 0)
+		{
 			l_ResultX += m_width;
-        }
+		}
 		while (l_ResultX >= m_width)
-        {
+		{
 			l_ResultX -= m_width;
-        }
-        pos.x = static_cast<sint16>(l_ResultX);
+		}
+		pos.x = static_cast<sint16>(l_ResultX);
 
-        int l_ResultY   = pos.y - l_ResultX;
+		int l_ResultY   = pos.y - l_ResultX;
 		while (l_ResultY < 0) 
-        {
+		{
 			l_ResultY += m_height;
 		}
-        pos.y = static_cast<sint16>(l_ResultY);
+		pos.y = static_cast<sint16>(l_ResultY);
 	}
 
 
-	void MergeMap(Vision *src) ;									
+	void MergeMap(Vision *src);
 
 	void AddUnseen(const MapPoint &point);
 	void AddUnseen(UnseenCell *ucell); 
@@ -200,6 +189,8 @@ public:
 	void ClearUnseen();
 
 	sint32 GetOwner() const { return m_owner; }
+
+	void SetAmOnScreen(bool amOnScreen) { m_amOnScreen = amOnScreen; };
 };
 
 #endif

@@ -54,25 +54,6 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
 extern UnitPool *g_theUnitPool;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bool World::InsertUnit (const MapPoint &pos, Unit &id, 
 						  UnitDynamicArray &revealedUnits)
 {
@@ -99,52 +80,33 @@ sint32 World::RemoveUnitReference (const MapPoint &pos, const Unit &id)
 
 sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports)
 {
-   Cell *ptr = GetCell(pos); 
+	Cell *ptr = GetCell(pos); 
 
-   sint32 i; 
-   transports.Clear(); 
+	transports.Clear(); 
 
-   sint32 n = ptr->GetNumUnits(); 
-   for (i=0; i<n; i++) { 
-		if (0 < ptr->AccessUnit(i).GetCargoCapacity()) { 
-		   
+	sint32 n = ptr->GetNumUnits(); 
+	for (sint32 i=0; i<n; i++)
+	{
+		if (0 < ptr->AccessUnit(i).GetCargoCapacity())
+		{
+			transports.Insert(ptr->AccessUnit(i)); 
+		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          transports.Insert(ptr->AccessUnit(i)); 
-      } 
-   }
-
-   return transports.Num(); 
+	return transports.Num();
 }
-
 
 void World::GetArmy(const MapPoint &pos, CellUnitList &al)
 
 {
-   GetCell(pos)->GetArmy(al);
+	GetCell(pos)->GetArmy(al);
 }
 
 BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos, 
                       const BOOL is_check_only_visible) 
 {
-    CellUnitList *a; 
-    sint32 i; 
+	CellUnitList *a; 
+	sint32 i; 
 
     if (is_check_only_visible) { 
         if (g_player[owner]->IsVisible(pos) == FALSE) { 

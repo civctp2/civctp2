@@ -2817,12 +2817,11 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 	UnitDynamicArray revealedUnits;
 	MapPoint opos;
 	GetPos(opos);
-	bool revealed_unexplored;
 
-	for(sint32 i = 0; i < m_nElements; i++) 
+	for(sint32 i = 0; i < m_nElements; i++)
 	{
 		g_theWorld->RemoveUnitReference(opos, m_array[i]);
-		m_array[i].SetPosition(p, revealedUnits, revealed_unexplored);
+		m_array[i].SetPosition(p, revealedUnits);
 	}
 
 	FixActors(opos, p, revealedUnits);
@@ -4656,14 +4655,15 @@ void ArmyData::SetReentry(sint32 turns, MapPoint &pos)
 void ArmyData::Reenter()
 {
 	Assert(m_flags & k_CULF_IN_SPACE);
-	if(!(m_flags & k_CULF_IN_SPACE)) {
+	if(!(m_flags & k_CULF_IN_SPACE))
+	{
 		return;
 	}
 
 	sint32 i;
 	Unit city = g_theWorld->GetCity(m_reentryPos);
-	if(!city.IsValid() || city.GetOwner() != m_owner) {
-		
+	if(!city.IsValid() || city.GetOwner() != m_owner)
+	{
 		for (i = 0; i < m_nElements; i++) 
 		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
@@ -4672,10 +4672,13 @@ void ArmyData::Reenter()
 								   GEA_Player, -1,
 								   GEA_End);
 		}
-	} else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements)) {
-		
+	}
+	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements))
+	{
 		return;
-	} else {
+	}
+	else
+	{
 		m_flags &= ~(k_CULF_IN_SPACE);
 		MapPoint oldPos = m_pos;
 		UnitDynamicArray revealedUnits;
@@ -4687,8 +4690,7 @@ void ArmyData::Reenter()
 			
 			m_array[i]->SetPosAndNothingElse(m_reentryPos);
 			g_theWorld->InsertUnit(m_reentryPos, m_array[i], revealedUnits);
-			bool revealed;
-			m_array[i]->AddUnitVision(revealed);
+			m_array[i]->AddUnitVision();
 		}
 
 		
@@ -7781,7 +7783,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	}
 
 	UnitDynamicArray revealedUnits;
-	bool revealedUnexplored = false;
 
 #ifdef _DEBUG
 	bool notReported = true;
@@ -7804,7 +7805,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				if(g_theWorld->HasCity(pos)
 				|| terrainutil_HasAirfield(pos)
 				){  //add unit later?
-					m_array[i].SetPosition(pos, revealedUnits, revealedUnexplored);
+					m_array[i].SetPosition(pos, revealedUnits);
 				}
 			}
 		}
@@ -7838,7 +7839,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			}
 
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
-			bool r = m_array[i].MoveToPosition(pos, revealedUnits, revealedUnexplored);
+			bool r = m_array[i].MoveToPosition(pos, revealedUnits);
 
 			if(m_array[i].GetNumCarried() > 0)
 			{

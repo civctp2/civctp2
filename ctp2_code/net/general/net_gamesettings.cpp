@@ -115,9 +115,8 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	}
 
-	if(g_player[g_selected_item->GetVisiblePlayer()]) {
-		g_tiledMap->GetLocalVision()->Copy(g_player[g_selected_item->GetVisiblePlayer()]->m_vision);
-	}
+	g_tiledMap->CopyVision();
+
 	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p]) {
 			g_player[p]->m_all_armies->FastKillList();
@@ -182,7 +181,7 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	g_network.SetStyleFromServer(m_gameStyle, m_movesPerSlice, m_totalTime, m_turnTime, m_cityTime);
 
-	g_tiledMap->GetLocalVision()->Clear();
+	g_tiledMap->CopyVision();
 
 	gameinit_ResetForNetwork();
 

@@ -3293,19 +3293,14 @@ void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;
 
-
-	bool revealed;
-	g_player[player]->AddUnitVision(center, radius, revealed);
+	g_player[player]->AddUnitVision(center, radius);
 
 	g_player[player]->OwnExploredArea();
 
 	g_player[player]->RemoveUnitVision(center, radius);
 
-	if(player == g_selected_item->GetVisiblePlayer()) {
-		g_tiledMap->CopyVision();
-	}
-
-	if(m_iAmHost) {
+	if(m_iAmHost)
+	{
 		Enqueue(new NetInfo(NET_INFO_CODE_SET_SETUP_AREA,
 							player, center.x, center.y,
 							radius));

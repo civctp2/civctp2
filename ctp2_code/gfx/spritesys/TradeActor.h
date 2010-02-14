@@ -43,7 +43,7 @@ public:
 
 	Anim *          CreateAnim(GOODACTION action);
 
-	void			Draw(Vision *tileLocalVision);
+	void			Draw(const Vision *tileLocalVision);
 	void			DrawText(sint32 x, sint32 y, MBCHAR *goodText);
 
 	BOOL			IsAnimating(void);

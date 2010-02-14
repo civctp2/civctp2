@@ -62,7 +62,6 @@
 
 #include "ResourceRecord.h"
 
-// Added by Martin Gühmann
 #include "UnseenCell.h" //Unseen cell info is needed
 #include "tiledmap.h"
 #include "SelItem.h"
@@ -77,8 +76,6 @@ extern StringDB					*g_theStringDB;
 extern TerrainImprovementPool	*g_theTerrainImprovementPool;
 
 c3_PopupWindow					*g_helpTileWindow = NULL;
-
-
 
 static c3_Static			*s_tileFood			= NULL;
 static c3_Static			*s_tileFoodV		= NULL;
@@ -95,9 +92,7 @@ static c3_Static			*s_tileGoldV		= NULL;
 
 static aui_StringTable		*s_stringTable		= NULL;
 
-
 enum { STR_SALE_VALUE=0,STR_NONE=1 };
-
 
 static TileControl			*s_tileImage		= NULL;
 static c3_Static			*s_tileITop			= NULL;
@@ -107,18 +102,11 @@ static c3_Static			*s_tileITR			= NULL;
 static c3_Static			*s_tileIBL			= NULL;
 static c3_Static			*s_tileIBR			= NULL;
 
-
-
-
 #define IMPROVEMENT_LISTBOXldl "TileImprovementListBox" 
 #define HELPTILE_WINDOWldl "HelpTileWindow"
 static void bExitPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 static
 sint32 removeMyWindow(uint32);
-
-
-
-
 
 static AUI_ERRCODE newC3Static(MBCHAR *parent,MBCHAR *name,c3_Static **mystatic)
 {
@@ -129,9 +117,7 @@ static AUI_ERRCODE newC3Static(MBCHAR *parent,MBCHAR *name,c3_Static **mystatic)
 	*mystatic = new c3_Static( &errcode, aui_UniqueId(), textBlock );
 	Assert( AUI_NEWOK(*mystatic, errcode) );
 	return errcode;
-
 }
-
 
 sint32 helptile_Initialize( void )
 {
@@ -172,10 +158,9 @@ sint32 helptile_Initialize( void )
 	if(newC3Static(windowBlock,"GoldN",&s_tileGold)) return -1;
 	if(newC3Static(windowBlock,"GoldV",&s_tileGoldV)) return -1;
 
-    s_stringTable = spNewStringTable(&errcode, "HelpTileStringTable");
+	s_stringTable = spNewStringTable(&errcode, "HelpTileStringTable");
 	if (!s_stringTable) return -1;
-	
-	
+
 	if(newC3Static(windowBlock,"TileITop",&s_tileITop)) return -1;
 	if(newC3Static(windowBlock,"TileITL",&s_tileITL)) return -1;
 	if(newC3Static(windowBlock,"TileITR",&s_tileITR)) return -1;
@@ -188,20 +173,12 @@ sint32 helptile_Initialize( void )
 	Assert( AUI_NEWOK(s_tileImage, errcode) );
 	if ( !AUI_NEWOK(s_tileImage, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
-	
-
-
 	return 0;
 }
-
-
-
-
 
 template <typename T>
 static void mycleanup(T * & mypointer)
@@ -210,9 +187,9 @@ static void mycleanup(T * & mypointer)
 void helptile_Cleanup( void )
 {
 	if (g_helpTileWindow && g_c3ui)
-    {
-	    g_c3ui->RemoveWindow(g_helpTileWindow->Id());
-    }
+	{
+		g_c3ui->RemoveWindow(g_helpTileWindow->Id());
+	}
 
 	mycleanup(s_tileFood);
 	mycleanup(s_tileProd);
@@ -234,29 +211,18 @@ void helptile_Cleanup( void )
 	mycleanup(s_tileITR);
 	mycleanup(s_tileIBL);
 	mycleanup(s_tileIBR);
-    mycleanup(g_helpTileWindow);
+	mycleanup(g_helpTileWindow);
 }
-
-
-
-
-
-
-
-
 
 void helptile_displayData(const MapPoint &p)
 {
-	
-	if(!g_helpTileWindow) { Assert(0); return; } 
+	if(!g_helpTileWindow) { Assert(0); return; }
 
 	char myname[256];
 	char mytext[256];
 	sint32 goods=0;
 
 	const Cell *myTile = g_theWorld->GetCell(p);
-
-// Added by Martin Gühmann
 
 	UnseenCellCarton ucell;
 	if(!g_tiledMap->GetLocalVision()->IsVisible(p) 
@@ -266,7 +232,6 @@ void helptile_displayData(const MapPoint &p)
 	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
 	&& g_tiledMap->GetLocalVision()->GetLastSeen(p, ucell)
 	){
-
 		strcpy(myname, g_theStringDB->GetNameStr(g_theTerrainDB->Get(ucell.m_unseenCell->GetTerrainType())->GetName()));
 		g_helpTileWindow->TitleText()->SetText( myname );
 
@@ -276,12 +241,13 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
-        sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
+		sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
 		s_tileGoldV->SetText(mytext);
 
 		// Unfortunatly this kind of information is not stored in the
 		// UnseenCell object.
-		if(g_theWorld->IsGood(p)) {
+		if(g_theWorld->IsGood(p))
+		{
 			StringId	goodStrID;
 
 			myTile->GetGoodsIndex(goods);
@@ -289,21 +255,21 @@ void helptile_displayData(const MapPoint &p)
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
 			s_tileGoodV->SetText(mytext);
-
 		}
-		else {
+		else
+		{
 			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
 			s_tileGoodV->SetText(mytext);
 		}
 
-        s_tileSaleV->SetText("\0");
+		s_tileSaleV->SetText("\0");
 		s_tileSale->SetText("\0");
 
 		sprintf( mytext , "%.1f\n", (float)(ucell.m_unseenCell->m_move_cost / 100.0) );
 		s_tileMoveV->SetText(mytext);
 	}
-	else{
-
+	else
+	{
 		strcpy(myname, g_theWorld->GetTerrainName(p));
 		g_helpTileWindow->TitleText()->SetText( myname );
 
@@ -313,44 +279,44 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", myTile->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
-        sprintf( mytext, "%d", myTile->GetGoldProduced()); 
+		sprintf( mytext, "%d", myTile->GetGoldProduced()); 
 		s_tileGoldV->SetText(mytext);
 
-		if(g_theWorld->IsGood(p)) {
+		if(g_theWorld->IsGood(p))
+		{
 			StringId	goodStrID;
 
 			myTile->GetGoodsIndex(goods);
 		
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
-            s_tileGoodV->SetText(mytext);
-
+			s_tileGoodV->SetText(mytext);
 		}
-		else {
+		else
+		{
 			sprintf( mytext , "%s\n", s_stringTable->GetString(STR_NONE));
 			s_tileGoodV->SetText(mytext);
 		}
 
-        s_tileSaleV->SetText("\0");
+		s_tileSaleV->SetText("\0");
 		s_tileSale->SetText("\0");
 
 		sprintf( mytext , "%.1f\n", (float)(myTile->GetMoveCost() / 100.0) );
 		s_tileMoveV->SetText(mytext);
 	}
 
-
 	if(s_tileImage)
 		s_tileImage->SetMouseTile(p);
 
-
-	if ( g_c3ui->GetWindow(g_helpTileWindow->Id()) ) {
+	if ( g_c3ui->GetWindow(g_helpTileWindow->Id()) )
+	{
 		g_helpTileWindow->ShouldDraw();
 	}
-	else {
+	else
+	{
 		g_c3ui->AddWindow(g_helpTileWindow);
 	}
 }
-
 
 void helptile_setPosition(const MapPoint& p)
 {
@@ -364,17 +330,11 @@ void helptile_setPosition(const MapPoint& p)
 	g_helpTileWindow->Move(x,y);	
 }
 
-
-
-
-
 static
 void bExitPress( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	removeMyWindow(action);
 }
-
-
 
 static
 sint32 removeMyWindow(uint32 action)

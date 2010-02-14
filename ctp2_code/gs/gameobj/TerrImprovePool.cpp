@@ -85,19 +85,19 @@ TerrainImprovement
 TerrainImprovementPool::Create
 (
     sint32 owner,
-	MapPoint const & point,
-	sint32 type,
-	sint32 extraData
+    MapPoint const & point,
+    sint32 type,
+    sint32 extraData
 )
 {
 	TerrainImprovementRecord const *	dbTerrainImprovement	= 
 		g_theTerrainImprovementDB->Get(type);
 
 	if ((!dbTerrainImprovement) ||
-		(!terrainutil_GetTerrainEffect(dbTerrainImprovement, point) &&
+	    (!terrainutil_GetTerrainEffect(dbTerrainImprovement, point) &&
 	     !dbTerrainImprovement->GetClassTerraform()
-		) 
-       )
+	    )
+	   )
 	{
 		// Invalid or inapplicable improvement 
 		return TerrainImprovement();
@@ -111,26 +111,22 @@ TerrainImprovementPool::Create
 			g_player[i]->m_vision->AddUnseen(point);
 		}
 	}
-	if (g_tiledMap) 
-	{
-		g_tiledMap->GetLocalVision()->AddUnseen(point);
-	}
 
 	// Add the new improvement to the map
 	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
 	TerrainImprovementData *	newData = 
 		new TerrainImprovementData(newImprovement, owner, point, type, extraData);
 
-    if (g_network.IsActive() && g_network.IsHost()) 
-    {
-        g_network.Enqueue(newData); 
-    }
+	if (g_network.IsActive() && g_network.IsHost()) 
+	{
+		g_network.Enqueue(newData); 
+	}
 
 	Insert(newData);
 	g_theWorld->InsertImprovement(newImprovement, point);
 	g_tiledMap->RedrawTile(&point);
 
-	// Added by Martin Gühmann to make a sound play when a tile improvement is built.
+	// Plays a sound when a tile improvement is built
 	if(dbTerrainImprovement->GetSoundIndex() >= 0)
 	{
 		SoundRecord const *	soundRecord	= dbTerrainImprovement->GetSound();
@@ -156,10 +152,11 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 
 #define TERRIMPROVEPOOL_MAGIC 0x11223344
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
-	if(archive.IsStoring()) {
-		archive.PerformMagic(TERRIMPROVEPOOL_MAGIC) ;
+	if(archive.IsStoring())
+	{
+		archive.PerformMagic(TERRIMPROVEPOOL_MAGIC);
 		ObjPool::Serialize(archive);
 
 		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
@@ -167,16 +164,20 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 				count++;
 
 		archive<<count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+		{
 			if(m_table[i])
 				((TerrainImprovementData*)(m_table[i]))->Serialize(archive);
 		}
-	} else {
-		archive.TestMagic(TERRIMPROVEPOOL_MAGIC) ;
+	}
+	else
+	{
+		archive.TestMagic(TERRIMPROVEPOOL_MAGIC);
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++) {
+		for (i=0; i<count; i++)
+		{
 			data = new TerrainImprovementData(archive);
 			Insert(data);
 		}
@@ -191,12 +192,10 @@ BOOL TerrainImprovementPool::HasImprovement(const MapPoint &point,
 	return FALSE;
 }
 
-
 BOOL TerrainImprovementPool::HasAnyImprovement(const MapPoint &point)
 {
-	return (FALSE) ;
+	return (FALSE);
 }
-
 
 BOOL TerrainImprovementPool::CanHaveImprovement(const MapPoint &point,
 												TERRAIN_IMPROVEMENT type,

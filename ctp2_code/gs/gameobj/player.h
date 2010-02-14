@@ -678,15 +678,15 @@ public:
 	void RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
 
 	void AddTrader(Unit uid);
-    sint32 GetUnusedFreight()const;
-    sint32 GetTotalFreight()const;
+	sint32 GetUnusedFreight()const;
+	sint32 GetTotalFreight()const;
 
 
-	void AddUnitVision(const MapPoint &pnt, double range, bool &revealed_unexplored);
+	void AddUnitVision(const MapPoint &pnt, double range);
 	void RemoveUnitVision(const MapPoint &pnt, double range);
 	void OwnExploredArea();
-    bool IsExplored(const MapPoint &pos) const;
-    bool IsVisible(const MapPoint &pos) const;
+	bool IsExplored(const MapPoint &pos) const;
+	bool IsVisible(const MapPoint &pos) const;
 	bool IsExplored(sint32 x, sint32 y) const;
 	bool IsVisible(sint32 x, sint32 y) const;
 	bool GetLastSeen(const MapPoint &pnt, UnseenCellCarton &ucell);

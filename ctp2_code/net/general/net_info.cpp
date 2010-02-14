@@ -465,7 +465,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_INFO_CODE_START_UNITS:
 		{
-			g_tiledMap->GetLocalVision()->Copy(g_player[g_selected_item->GetVisiblePlayer()]->m_vision);
+			g_tiledMap->CopyVision();
 
 			for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 				if(g_player[p]) {
@@ -1390,9 +1390,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					g_network.RequestResync(RESYNC_BAD_PLAYER);
 					break;
 				}
-				bool revealed;
 				unit.SetTempSlaveUnit(FALSE);
-				unit.AddUnitVision(revealed);
+				unit.AddUnitVision();
 				MapPoint pos;
 				unit.GetPos(pos);
 
@@ -1521,11 +1520,9 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			MapPoint p;
 			g_network.UnpackedPos(m_data2, p);
-			if(g_player[m_data]) {
+			if(g_player[m_data])
+			{
 				g_player[m_data]->m_vision->AddUnseen(p);
-				if(m_data == (uint32)g_selected_item->GetVisiblePlayer()) {
-					g_tiledMap->GetLocalVision()->AddUnseen(p);
-				}
 			}
 			break;
 		}
