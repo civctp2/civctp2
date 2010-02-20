@@ -90,7 +90,11 @@ char *Debug_FunctionNameGet (unsigned address);
 #ifndef _BFR_
 #define k_MAP_FILE "civctp_rel.map"
 #else
+#if defined(USE_LOGGING)
+#define k_MAP_FILE "ctp2log.map"
+#else
 #define k_MAP_FILE "ctp2.map"
+#endif
 #endif
 #endif
 

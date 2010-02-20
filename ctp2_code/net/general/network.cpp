@@ -89,6 +89,7 @@
 
 #ifdef _PLAYTEST
 #include "net_cheat.h"
+extern sint32 g_debugOwner;
 #endif
 
 #include "UnitData.h"
@@ -1035,7 +1036,7 @@ Network::GetHandler(uint8* buf,
 
 		case k_PACKET_FEAT_TRACKER_ID:	handler = new NetFeatTracker(); break;
 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 		case k_PACKET_CHEAT_ID:         handler = new NetCheat; break;
 #endif
 	}
@@ -2448,7 +2449,6 @@ Network::ProcessNewPlayer(uint16 id)
 	}
 }
 
-extern sint32 g_debugOwner;
 void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
 {
 	
@@ -2873,9 +2873,11 @@ void Network::InitPacketLog()
 void Network::TogglePacketLog()
 {
 	m_displayPackets = !m_displayPackets;
+#if defined(_PLAYTEST)
 	if(m_displayPackets) {
 		g_debugOwner = k_DEBUG_OWNER_NETWORK_CHAT;
 	}
+#endif
 }
 
 #endif

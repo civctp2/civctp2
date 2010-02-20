@@ -1546,8 +1546,9 @@ sint32 TiledMap::CalculateMetrics(void)
 
 
 
-
+#if defined(_PLAYTEST)
 extern sint32 g_is_debug_map_color;
+#endif
 extern uint16 myRGB(sint32 r,  sint32 g, sint32 b);
 
 sint32 TiledMap::CalculateWrap
@@ -1712,7 +1713,7 @@ sint32 TiledMap::CalculateWrap
 		}
 	}
 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 	
 	if (g_is_debug_map_color)
 	{

@@ -414,7 +414,7 @@ void SlicObject::Finish()
 
 					if(g_player[m_recipientList[i]]->IsRobot()
 					&& *m_request == ID()
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 					&& !g_robotMessages
 #endif
 					){

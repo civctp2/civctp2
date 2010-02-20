@@ -458,26 +458,30 @@ void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem *item)
 
 void ArmyManagerWindow::UpdateAllArmyItems()
 {
-	sint32 i;
 	ctp2_ListBox *list = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
 
-	for(i = 0; i < list->NumItems(); i++) {
+	for(sint32 i = 0; i < list->NumItems(); i++)
+	{
 		ctp2_ListItem *item = (ctp2_ListItem *)list->GetItemByIndex(i);
 		Assert(item);
-		if(item) {
-			UpdateArmyItem(item);		
+		if(item)
+		{
+			UpdateArmyItem(item);
 		}
 	}
 }
-ctp2_ListItem *ArmyManagerWindow::AddArmyItem(ctp2_ListBox *list, ArmyListNode *node)
+
+ctp2_ListItem *ArmyManagerWindow::AddArmyItem(ctp2_ListBox *listBox, ArmyListNode *node)
 {
 	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ArmyManagerItem");
 	Assert(item);
-	if(item) {
+	if(item)
+	{
 		item->SetUserData(node);
 		UpdateArmyItem(item);
-		list->AddItem(item);
+		listBox->AddItem(item);
 	}
+
 	return item;
 }
 

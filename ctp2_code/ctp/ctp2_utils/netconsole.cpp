@@ -169,7 +169,7 @@ NetConsole::~NetConsole()
 
 void NetConsole::Idle()
 {
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 	fd_set readFds;
 	sint32 i;
 	struct timeval tv;

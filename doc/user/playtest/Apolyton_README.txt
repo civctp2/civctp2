@@ -14,7 +14,7 @@ version of CTP2, or over a previous playtest version.
 
 In theory this version is now compatible with most of the mods, but special
 actions may be required to make them work properly. Please visit the
-thread mentioned below and post queries if you desire further information.
+thread mentioned below and ask if you need more information.
 
 Installation instructions:
 Unzip into your CTP2 directory and play. If you get warnings about 
@@ -23,12 +23,13 @@ It might be wise, if you have the space available, to make a copy of
 your CTP2 directory and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
-After installation you can start a new game or continue a game from
+After installation, you can start a new game or continue a game from
 a previous version. All you need to do - after loading your save game - is to
 open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
+http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (20-Feb-2010)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -43,13 +44,13 @@ http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revis
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
-are described briefly below.
+are described below.
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Changelog (Well, you don't have to read the full thing. ;)):
-2010-XX-02 (Revision 105X)
+2010-20-02 (Revision 1055)
 Fixed:    The AI does not check its city limit, if city limit is disabled.
 Changed:  The new game rules screen has been cleaned up and enhanced with
           discriptions of what the single rules are good for.
@@ -67,7 +68,7 @@ Fixed:    The AI now rolls over enemy units, if it is at war with them and the
 Fixed:    If a units gains a health bonus the health bar does not overflow
           anymore.
 Fixed:    If a unit gained a health bonus from a wonder and the wonder is lost
-          its healt is reduced to the healt without wonder.
+          the unit's health is reduced to the health without wonder.
 Fixed:    If the AI needs for a goal a transporter it takes the transporter
           army pair that are closest to each other, this way the AI sticks to its
           decision and does not change transporters and armies for a goal all the
@@ -152,8 +153,10 @@ Fixed:    The AI does not use transporters carrying units that cannot be used
           for the goal that needs transport.
 Changed:  Player vision handling, the human player uses the vision of his/her
           player directly instead of a copy, this saves memory.
-Changed:  Lowered the AI priority for investigate city goals. There more worthy
-          goals out there.
+Changed:  Lowered the AI priority for investigate city goals. There ar more
+          worthy goals out there.
+Fixed:    When the game is closed, the memory is cleaned up like in the debug.
+          This fixes a potential crash when leaving the game.
 Added:    New database flags for modders:
 - DifficultyDB:
    TechCostKnownDeduction 0.0 - 1.0

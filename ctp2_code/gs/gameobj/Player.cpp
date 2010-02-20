@@ -5192,7 +5192,7 @@ void Player::ExchangeCity(const PLAYER_INDEX recipient, const Unit &cityA, const
 	g_player[recipient]->GiveCity(m_owner, cityB) ;
 }
 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 extern sint32 g_robotMessages;
 #endif
 
@@ -5225,7 +5225,7 @@ void Player::AddMessage(Message &msg)
 		}
 #endif
 		if(!IsRobot()
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 		   || g_robotMessages
 #endif
 		){

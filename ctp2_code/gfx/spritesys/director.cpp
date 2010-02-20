@@ -99,7 +99,7 @@ extern Background *         g_background;
 extern C3UI	*               g_c3ui;
 extern MessagePool *        g_theMessagePool;
 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 extern BOOL				    g_doingFastRounds;
 #endif
 
@@ -1055,7 +1055,7 @@ bool Director::CaughtUp(void)
 
 bool Director::TileIsVisibleToPlayer(MapPoint &pos)
 {
-#if defined(_DEBUG)
+#if defined(_PLAYTEST)
     if (g_doingFastRounds) return false;
 #endif
 
@@ -1360,7 +1360,7 @@ uint32 Director::KillAllActiveEffects()
 
 void Director::NextPlayer(BOOL forcedUpdate)
 {
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 	if (!g_doingFastRounds &&
 		(!g_network.IsActive() || g_player[g_selected_item->GetVisiblePlayer()]->IsRobot())) {
 		return;

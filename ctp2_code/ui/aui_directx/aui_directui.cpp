@@ -61,7 +61,6 @@ extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
 
-
 aui_DirectUI::aui_DirectUI
 (
 	AUI_ERRCODE *retval,
@@ -73,7 +72,7 @@ aui_DirectUI::aui_DirectUI
 	MBCHAR *ldlFilename,
 	BOOL useExclusiveMode 
 )
-:   
+:
     aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
     aui_DirectX         (),
     m_lpdds             (NULL),
@@ -106,8 +105,6 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
 {
@@ -241,15 +238,13 @@ aui_DirectUI::~aui_DirectUI( void )
 	{
 		CoUninitialize();
 	}
-#endif 
+#endif
 }
-
 
 AUI_ERRCODE aui_DirectUI::TearDownMouse(void)
 {
-	
-	
-	if (m_mouse) {
+	if (m_mouse)
+	{
 		m_mouse->GetAnimIndexes(&m_savedMouseAnimFirstIndex, &m_savedMouseAnimLastIndex);
 		m_savedMouseAnimCurIndex = m_mouse->GetCurrentCursorIndex();
 		m_savedMouseAnimDelay = (sint32)m_mouse->GetAnimDelay();
@@ -266,8 +261,6 @@ AUI_ERRCODE aui_DirectUI::TearDownMouse(void)
 
 	return AUI_ERRCODE_OK;
 }
-
-
 
 AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 {
@@ -300,11 +293,8 @@ AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 {
-
-
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
 
@@ -335,20 +325,16 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 			::ShowWindow( m_hwnd, SW_MINIMIZE );
 	}
 
-    if (g_civApp)
-    {
-        g_civApp->SetInBackground(TRUE);
-    }
+	if (g_civApp)
+	{
+		g_civApp->SetInBackground(TRUE);
+	}
 
 	return AUI_ERRCODE_OK;
 }
 
-
-
 AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 {
-
-
 	if ( !m_primary ) CreateDirectScreen( m_exclusiveMode );
 
 	if ( m_minimize || m_exclusiveMode )
@@ -360,9 +346,12 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 		; 
 
 
-	if (g_exclusiveMode) {
+	if (g_exclusiveMode)
+	{
 		RestoreMouse();
-	} else {
+	}
+	else
+	{
 		if ( m_minimize || m_exclusiveMode )
 		{
 			POINT point;
@@ -370,7 +359,8 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 			m_mouse->SetPosition( &point );
 		}
 
-		if (m_mouse) {
+		if (m_mouse)
+		{
 			m_mouse->Acquire();
 			m_mouse->Resume();
 		}
@@ -386,12 +376,11 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	if (m_keyboard) m_keyboard->Acquire();
 
 	if (g_civApp)
-    {
-        g_civApp->SetInBackground(FALSE);
-    }
+	{
+		g_civApp->SetInBackground(FALSE);
+	}
 
 	return FlushDirtyList();
 }
-
 
 #endif  // __AUI_USE_DIRECTX__ 

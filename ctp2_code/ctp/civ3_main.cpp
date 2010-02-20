@@ -166,8 +166,9 @@
 
 #if defined(_DEBUG)
 #include "debug.h"          // Os::SetThreadName
-#include "SlicSegment.h"    // SlicSegment::Cleanup
 #endif // _DEBUG 
+
+#include "SlicSegment.h"    // SlicSegment::Cleanup
 
 extern Background *     g_background;
 
@@ -951,11 +952,10 @@ void ui_CivAppProcess(void)
 		g_civApp->Process();
 }
 
-
 void AtExitProc(void)
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	DPRINTF(k_DBG_FIX, ("Existing game\n"));
+	DPRINTF(k_DBG_FIX, ("Exiting game\n"));
 	c3debug_CloseDebugLog();
 #endif
 
@@ -1126,7 +1126,7 @@ int WINAPI main_filehelper_GetOS(void)
 
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 
 	MBCHAR * s;
 	
@@ -1580,40 +1580,14 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	return msg.wParam;
 }
 
-#if defined(_DEBUG)
-
-void DoFinalCleanup(int)
+void DoFinalCleanup(int exitCode)
 {
 	if (!g_exclusiveMode)
 	{
 		main_RestoreTaskBar();
 	}
 
-	if (g_civApp)
-	{
-		g_civApp->QuitGame();
-		allocated::clear(g_civApp);
-	}
-
-	sliccmd_clear_symbols();
-	SlicSegment::Cleanup();
-	appstrings_Cleanup();
-
-#if defined(_DEBUGTOOLS)
-	Debug_Close();
-#endif
-}
-
-#else // _DEBUG
-
-void DoFinalCleanup(int exitCode)
-{
 	static bool s_cleaningUpTheApp = false;
-
-	if (g_c3ui)
-	{
-		g_c3ui->DestroyDirectScreen();
-	}
 
 	ShowWindow(gHwnd, SW_HIDE);
 
@@ -1623,14 +1597,21 @@ void DoFinalCleanup(int exitCode)
 
 		if (g_civApp)
 		{
-			g_civApp->CleanupApp();
+			g_civApp->QuitGame();
+			allocated::clear(g_civApp);
 		}
+
+		sliccmd_clear_symbols();
+		SlicSegment::Cleanup();
+		appstrings_Cleanup();
 	}
+
+#if defined(_DEBUGTOOLS)
+	Debug_Close();
+#endif
 
 	exit(exitCode);
 }
-
-#endif  // _DEBUG
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 

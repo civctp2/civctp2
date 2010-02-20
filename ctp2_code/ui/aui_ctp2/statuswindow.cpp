@@ -39,7 +39,7 @@ AUI_ERRCODE StatusWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	InflateRect(&rect, -2, -2);
 	primitives_BevelRect16( m_surface, &rect, 1, 1, 16, 16 );
 
-#ifdef _DEBUG
+#ifdef _PLAYTEST
 	g_commandLine.Draw();
 #endif
 	

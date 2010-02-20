@@ -67,7 +67,7 @@ class ArmyManagerWindow {
 	void UpdateArmyName();
 	void UpdateArmyItem(ctp2_ListItem *item);
 	void UpdateAllArmyItems();
-	ctp2_ListItem *AddArmyItem(ctp2_ListBox *list, ArmyListNode *node);
+	ctp2_ListItem *AddArmyItem(ctp2_ListBox *listBox, ArmyListNode *node);
 	void RemoveDeadArmies();
 	void UpdateList();
 
