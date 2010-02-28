@@ -7507,38 +7507,39 @@ double Player::GetPercentProductionToMilitary() const
 
 
 void Player::SetAttitude(PLAYER_INDEX player, ATTITUDE_TYPE attitude)
-	{
+{
 	Assert((player>=0) && (player<k_MAX_PLAYERS)) ;
 	Assert((attitude>=ATTITUDE_TYPE_MIN) & (attitude<=ATTITUDE_TYPE_MAX)) ;
 	
 #ifdef _DEBUG_INCOMPATIBLE
 	m_attitude[player] = attitude ;
 #endif
-	}
+}
 
 
 DIPLOMATIC_STRENGTH Player::GetRelativeStrength(PLAYER_INDEX him) const 
 {
 	
-	if(!g_player[him]) {
-		return DIPLOMATIC_STRENGTH_VERY_STRONG;
+	if(!g_player[him])
+	{
+		return DIPLOMATIC_STRENGTH_VERY_WEAK;
 	}
 
-    double my_str=0.0; 
-    sint32 turn = GetCurRound();
+	double my_str =0.0;
+	sint32 turn   = GetCurRound();
 
-    my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS,turn);
-	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD,turn);
-	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS,turn);
-	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,turn);
-	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION,turn);
+	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS,      turn);
+	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD,       turn);
+	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS,  turn);
+	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,    turn);
+	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, turn);
 
-    double his_str=0.0; 
-    his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS,turn);
-	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD,turn);
-	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS,turn);
-	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,turn);
-	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION,turn);
+	double his_str = 0.0;
+	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS,      turn);
+	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD,       turn);
+	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS,  turn);
+	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,    turn);
+	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, turn);
 
     if ((2.0 * my_str) < his_str) {
         return DIPLOMATIC_STRENGTH_VERY_WEAK;

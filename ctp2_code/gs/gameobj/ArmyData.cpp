@@ -717,6 +717,22 @@ uint32 ArmyData::GetCargoMovementType() const
     return tmp;
 }
 
+sint32 ArmyData::GetCargoNum() const
+{
+    sint32 num = 0;
+
+    for(sint32 i = 0; i < m_nElements; ++i)
+    {
+        UnitDynamicArray const * cargo = 
+            m_array[i].AccessData()->GetCargoList();
+
+        if(cargo)
+            num += cargo->Num();
+    }
+
+    return num;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::HasCargo
@@ -7192,8 +7208,12 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 //		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
 //		!g_player[m_owner]->WillViolatePact(defense_owner) &&
 	if(
-	      g_player[attack_owner]->HasWarWith(defense_owner)
-//	   || diplomat.DesireWarWith(defense_owner)  // This has to be repaired, as well.
+	           g_player[attack_owner]->HasWarWith(defense_owner)
+	   ||
+	      (
+	           g_player[attack_owner]->IsRobot()
+	        && diplomat.DesireWarWith(defense_owner)
+	      )
 	  )
 	{
 		Battle(pos, defender);
@@ -7216,8 +7236,8 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 			td = defender[0];
 		}
 
-		bool AlltaSneakAttack = true;
 		sint32 i;
+		bool AlltaSneakAttack = true;
 		for (i = m_nElements - 1; i>= 0; i--)
 		{
 			if(!m_array[i].GetDBRec()->GetSneakAttack())

@@ -1810,6 +1810,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 		
 	case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:
+		break;
 		
 	case PROPOSAL_OFFER_END_EMBARGO:
 		Diplomat::GetDiplomat(sender).SetEmbargo(receiver, false);
@@ -4064,7 +4065,7 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 			
 			declare_war = declare_war && DesireWarWith(foreignerId);
 			
-			declare_war = declare_war && (m_personality->GetTrustworthinessChaotic() == false);
+			declare_war = declare_war && !m_personality->GetTrustworthinessChaotic();
 			
 			
 			Threat war_threat;
@@ -5687,7 +5688,6 @@ bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 	return false;
 }
 
-
 bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 {
 	if (!g_player[m_playerId]) 
@@ -5706,51 +5706,38 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 	if (!best_hotwar_enemy)
 		return false;
 
-	
 	sint32 my_cities_at_risk =
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(m_playerId, foreignerId);
 
-	bool want_friend = false;
 	if (m_personality->GetConquestPassive())
 	{
 		if (relative_strength < DIPLOMATIC_STRENGTH_VERY_STRONG &&
 			(turns_at_peace == -1 ||
 			turns_at_peace > 14 ))
-			want_friend = true;
+			return false;
 
-		
 		if (my_cities_at_risk >= 20)
-			want_friend = true;
-
+			return false;
 	}
-	
-	
 	else if (GetPersonality()->GetConquestNeutral())
 	{
 		if (relative_strength < DIPLOMATIC_STRENGTH_STRONG &&
 			(turns_at_peace == -1 ||
 			turns_at_peace > 29))
-			want_friend = true;
+			return false;
 
-		
 		if (my_cities_at_risk >= 25)
-			want_friend = true;
+			return false;
 	}
-	
-	else {
+	else
+	{
 		if (relative_strength < DIPLOMATIC_STRENGTH_AVERAGE)
-			want_friend = true;
+			return false;
 
-		
 		if (my_cities_at_risk >= 30)
-			want_friend = true;
+			return false;
 	}
 
-	if (want_friend)
-		return false;
-
-	
-	
 	if (GetPersonality()->GetDiscoveryDiplomatic() ||
 		GetPersonality()->GetDiscoveryEconomic())
 	{
@@ -5770,13 +5757,8 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 		ideal_war_length = 30;
 	}
 
-	
-	if (turns_at_war < ideal_war_length)
-		return true;
-	
-	return false;
+	return (turns_at_war < ideal_war_length);
 }
-
 
 void Diplomat::ComputeAllDesireWarWith()
 {
@@ -5788,46 +5770,28 @@ void Diplomat::ComputeAllDesireWarWith()
 	}
 }
 
-
 bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 {
 	Player *    foreigner_ptr = g_player[foreignerId];
 	if (foreigner_ptr == NULL)
 		return false;
 
-	bool look_for_human = !foreigner_ptr->IsRobot();
+	DIPLOMATIC_STRENGTH lowest_relative_strength    = foreigner_ptr->GetRelativeStrength(m_playerId);
+	PLAYER_INDEX        weakest_enemy               = foreignerId;
 
-	DIPLOMATIC_STRENGTH lowest_relative_strength    = DIPLOMATIC_STRENGTH_VERY_STRONG;
-	PLAYER_INDEX        weakest_enemy               = PLAYER_UNASSIGNED; 
-
-	for (size_t otherIndex = 1; otherIndex < m_foreigners.size(); ++otherIndex) 
-    {
+	for (size_t otherIndex = 1; otherIndex < m_foreigners.size(); ++otherIndex)
+	{
 		Player *    other_ptr = g_player[otherIndex];
-        if (other_ptr == NULL)
-			continue;
-        
-        PLAYER_INDEX const  otherId = static_cast<PLAYER_INDEX>(otherIndex);
-		if ((otherId == m_playerId) || (otherId == foreignerId))
+		if (other_ptr == NULL)
 			continue;
 
-		if (!AgreementMatrix::s_agreements.
-			 HasAgreement(m_playerId, otherId, PROPOSAL_TREATY_DECLARE_WAR))
+		PLAYER_INDEX const  otherId = static_cast<PLAYER_INDEX>(otherIndex);
+		if (otherId == m_playerId || otherId == foreignerId)
 			continue;
 
-		if (look_for_human)
-		{
-			if (foreigner_ptr->IsRobot())
-				continue;
-		}
-		else
-		{
-			if (!foreigner_ptr->IsRobot())
-			{
-				/// @todo Check if this is deliberate: AIs after human are not considered?
-				return false;
-			}
-		}
-			
+		if (!other_ptr->HasWarWith(m_playerId))
+			continue;
+
 		DIPLOMATIC_STRENGTH const   relative_strength = 
 		    other_ptr->GetRelativeStrength(m_playerId);
 
@@ -5838,10 +5802,8 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 		}
 	}
 
-	return     (weakest_enemy == PLAYER_UNASSIGNED) // only enemy
-            || (weakest_enemy == foreignerId);      // weakest enemy
+	return (weakest_enemy == foreignerId);
 }
-
 
 bool Diplomat::CanFormAlliance(const PLAYER_INDEX foreignerId)
 {
@@ -5907,35 +5869,27 @@ bool Diplomat::CanExtortCityFrom(const PLAYER_INDEX foreginerId, const sint32 ma
 	sint32 num_cities = receiver_ptr->m_all_cities->Num();
 	double risk_ratio;
 	for (sint32 i = num_cities-1; i >= 0; i--)
-		{
-			city = receiver_ptr->m_all_cities->Access(i);
-			Assert(city.IsValid());
-			Assert(city->GetCityData() != NULL);
-			
-			
-			if (!sender_ptr->IsExplored(city->GetPos()))
-				continue;
+	{
+		city = receiver_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
+		Assert(city->GetCityData() != NULL);
 
-			
-			if ( city->GetCityData()->GetValue() > max_value)
-				continue;
+		if (!sender_ptr->IsExplored(city->GetPos()))
+			continue;
 
-			
-			if (city->GetCityData()->GetFounder() == m_playerId)
-				risk_ratio = 0.3;
-			else
-				risk_ratio = 0.75;
+		if ( city->GetCityData()->GetValue() > max_value)
+			continue;
 
-			
-			if (MapAnalysis::GetMapAnalysis().CityAtRiskRatio(city, m_playerId) < risk_ratio)
-				continue;
+		if (city->GetCityData()->GetFounder() == m_playerId)
+			risk_ratio = 0.3;
+		else
+			risk_ratio = 0.75;
 
-			
-            break;  /// @todo Check: this will return false always.
-#if 0   // unreachable			
-			return true;
-#endif
-		}				
+		if (MapAnalysis::GetMapAnalysis().CityAtRiskRatio(city, m_playerId) < risk_ratio)
+			continue;
+
+		return true;
+	}
 
 	return false;
 }

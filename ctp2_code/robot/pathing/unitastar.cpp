@@ -276,7 +276,7 @@ bool UnitAstar::CheckUnits
 					{
 						return false;
 					}
-					else if(m_is_robot && g_player[m_owner]->HasWarWith(dest_owner) && m_army_strength.HasEnough(Squad_Strength(pos)))
+					else if(m_is_robot && (g_player[m_owner]->HasWarWith(dest_owner) || Diplomat::GetDiplomat(m_owner).DesireWarWith(dest_owner)) && m_army_strength.HasEnough(Squad_Strength(pos)))
 					{
 						return false;
 					}

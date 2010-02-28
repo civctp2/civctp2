@@ -182,10 +182,10 @@ STDEHANDLER(ArmyUnloadOrderEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD; 
-	if (a.GetOwner() == g_selected_item->GetVisiblePlayer()) 
+	if (a.GetOwner() == g_selected_item->GetVisiblePlayer())
 	{
 		CellUnitList cargoToUnload;
-		if (MainControlPanel::GetSelectedCargo(cargoToUnload)) 
+		if (MainControlPanel::GetSelectedCargo(cargoToUnload) && !g_player[a.GetOwner()]->IsRobot())
 		{
 			ord = UNIT_ORDER_UNLOAD_SELECTED_STACK;
 		}

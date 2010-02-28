@@ -163,6 +163,7 @@ public:
     uint32 GetMovementType() const;
     uint32 GetCargoMovementType() const;
     bool HasCargo() const;
+    sint32 GetCargoNum() const;
     bool HasCargoOnlyStealth() const;
     bool GetCargo(sint32 &transports, sint32 &max, sint32 &empty) const;
     bool CargoCanEnter(const MapPoint &pos) const;

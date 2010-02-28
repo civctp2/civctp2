@@ -3072,7 +3072,8 @@ void UnitData::BeginTurn()
 {
 	bool needsEnqueue = false;
 	const UnitRecord *rec = GetDBRec();
-	if(rec->GetHearGossip()) {
+	if(rec->GetHearGossip())
+	{
 		AdjacentIterator(m_pos, this);
 	}
 

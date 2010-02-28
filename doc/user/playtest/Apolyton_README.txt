@@ -29,7 +29,7 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (20-Feb-2010)"
+http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -50,6 +50,19 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Changelog (Well, you don't have to read the full thing. ;)):
+2010-28-02 (Revision 1056)
+Fixed:    If the AI runs into a foreigner and if it desires war, it goes to
+          battle.
+Fixed:    The honor pollution agreement request does not set an embargo if
+          accepted.
+Fixed:    If the AI considers whom to go to war with, it considers humans and
+          robots alike.
+Fixed:    The AI unloads cargo from transport helicopters when it is at an army
+          grouping point, so that the cargo units can be grouped.
+Fixed:    The AI does not try to group land units into sea transporters anymore.
+Changed:  Removed the CD-check, so that the retail version from gog.com runs
+          with the Apolyton Edition.
+
 2010-20-02 (Revision 1055)
 Fixed:    The AI does not check its city limit, if city limit is disabled.
 Changed:  The new game rules screen has been cleaned up and enhanced with

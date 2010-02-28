@@ -165,6 +165,7 @@ public:
 	inline sint32 DisbandObsoleteUnits();
 
 	void MoveIntoTransport();
+	void UnloadCargo();
 	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
 	void PerformOrder(const OrderRecord * order_rec);
 	void WaitHere(const MapPoint & goal_pos);

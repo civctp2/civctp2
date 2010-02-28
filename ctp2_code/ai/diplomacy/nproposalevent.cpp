@@ -2089,11 +2089,11 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	NewProposal new_proposal;
 
 	
-	new_proposal.priority = priority;				
+	new_proposal.priority = priority;
 
 	
-	new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_CITY;	
-	new_proposal.detail.tone = tone;	   
+	new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_CITY;
+	new_proposal.detail.tone = tone;
 	
 	new_proposal.receiverId = receiver;
 	new_proposal.senderId = sender;
@@ -2261,13 +2261,13 @@ STDEHANDLER(RequestEndEmbargo_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = priority;				
+	new_proposal.priority = priority;
 	
 	
 	new_proposal.detail.first_type = PROPOSAL_REQUEST_END_EMBARGO;	
 	new_proposal.detail.first_arg.playerId = receiver; 
 	
-	new_proposal.detail.tone = tone;	   
+	new_proposal.detail.tone = tone;
 	
 	new_proposal.receiverId = receiver;
 	new_proposal.senderId = sender;

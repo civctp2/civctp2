@@ -154,7 +154,7 @@ ProfileDB::ProfileDB()
     m_useFingerprinting                 (FALSE),
     m_useRedbookAudio                   (FALSE),
     m_requireCD                         (FALSE),
-    m_protected                         (TRUE),
+    m_protected                         (FALSE),
     m_tryWindowsResolution              (TRUE),
     m_useDirectXBlitter                 (TRUE),
     m_screenResWidth                    (640),

@@ -2980,9 +2980,19 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 				order_rec = CtpAi::GetUnloadOrder();
 			}
 			
-			if(first_army->Get_Pos() == dest_pos
-			&& city.m_id != 0x0
-			){
+			if
+			  (
+			   (
+			        first_army->Get_Pos() == dest_pos
+			     && city.m_id != 0x0
+			   )
+			    ||
+			   (
+			        g_theWorld->HasCity(dest_pos)
+			     && g_theWorld->GetCity(dest_pos)->GetOwner() == first_army->Get_Army()->GetOwner()
+			   )
+			  )
+			{
 				order_rec = CtpAi::GetUnloadOrder();
 			}
 		}
@@ -3100,7 +3110,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 
 	case SUB_TASK_AIRLIFT:
 	{
-		MapPoint start_pos = the_army->Get_Pos(); 
+		MapPoint start_pos = the_army->Get_Pos();
 
 		sint16 cargo_cont = g_theWorld->GetContinent(start_pos); // Dangerous with transport target can be closer
 
@@ -3592,7 +3602,7 @@ void Goal::GroupTroops()
 
 		if
 		  (
-		        agent1_ptr->GetUnitsAtPos() == agent1_ptr->Get_Army()->Num()
+		        agent1_ptr->GetUnitsAtPos() == agent1_ptr->Get_Army()->Num() // Nothing to group here
 		    ||  agent1_ptr->Get_Is_Dead()
 		    || !agent1_ptr->Get_Can_Be_Executed()
 		  )
@@ -3618,7 +3628,16 @@ void Goal::GroupTroops()
 
 			if(agent1_ptr->Get_Pos() == agent2_ptr->Get_Pos())
 			{
-				agent1_ptr->Group_With(agent2_ptr);
+				if(agent1_ptr->Get_Army()->HasCargo())
+				{
+				}
+				else if(agent2_ptr->Get_Army()->HasCargo())
+				{
+				}
+				else
+				{
+					agent1_ptr->Group_With(agent2_ptr);
+				}
 			}
 		}
 	}
@@ -3657,8 +3676,10 @@ Agent_ptr Goal::GetRallyAgent() const
 {
 	MapPoint targetPos              = Get_Target_Pos();
 	Agent_ptr rallyAgent            = NULL;
+	Agent_ptr rallyAgentAtAll       = NULL;
 	Agent_ptr rallyFriendlyAgent    = NULL;
 	sint32 minDistance              = 0x7fffffff;
+	sint32 minDistanceAtAll         = 0x7fffffff;
 	sint32 minFriendlyDistance      = 0x7fffffff;
 
 	for
@@ -3677,10 +3698,20 @@ Agent_ptr Goal::GetRallyAgent() const
 
 		sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
 
-		if(distance < minDistance)
+		if(distance < minDistanceAtAll)
+		{
+			minDistanceAtAll = distance;
+			rallyAgentAtAll  = agent_ptr;
+		}
+
+		if
+		  (
+		       distance < minDistance
+		    && g_theWorld->IsOnSameContinent(agent_ptr->Get_Pos(), targetPos)
+		  )
 		{
 			minDistance = distance;
-			rallyAgent = agent_ptr;
+			rallyAgent  = agent_ptr;
 		}
 
 		if
@@ -3694,6 +3725,8 @@ Agent_ptr Goal::GetRallyAgent() const
 			rallyFriendlyAgent  = agent_ptr;
 		}
 	}
+
+	if(rallyAgent == NULL) rallyAgent = rallyAgentAtAll;
 
 	return (minFriendlyDistance < 0x7fffffff) ? rallyFriendlyAgent : rallyAgent;
 }

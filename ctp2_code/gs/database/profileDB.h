@@ -67,8 +67,11 @@
 // - Added show political map button options. (6-Jul-2009 EPW)
 // - Removed the AI specific rules from profile, since they already exist in
 //   difficultyDB. (25-Jul-2009 Maq)
-// -Added display capitol stuff (5-Jan-10 EPW)
-// -Added display relotionship options (7-Jan-10 EPW)
+// - Added display capitol stuff (5-Jan-10 EPW)
+// - Added display relotionship options (7-Jan-10 EPW)
+// - Disabled the CD-check in the retail version, so that the Apolyton Edition
+//   can be used with the good old games version. (27-Feb-2010 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -116,22 +119,22 @@ enum WORLD_SHAPE
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"			// Assert
-#include "c3types.h"			// MBCHAR, sint..., uint...
-#include "civarchive.h"			// CivArchive
-#include "Civilisation.h"		// GENDER
+#include "c3debug.h"            // Assert
+#include "c3types.h"            // MBCHAR, sint..., uint...
+#include "civarchive.h"         // CivArchive
+#include "Civilisation.h"       // GENDER
 #include "Globals.h"            // MAPSIZE
-#include "gstypes.h"			// PLAYER_INDEX
-#include "MapPoint.h"			// MapPoint
-#include "pointerlist.h"		// PointerList
-#include "SimpleDynArr.h"		// SimpleDynamicArray
-#include "gfx_options.h"		// for debugai
+#include "gstypes.h"            // PLAYER_INDEX
+#include "MapPoint.h"           // MapPoint
+#include "pointerlist.h"        // PointerList
+#include "SimpleDynArr.h"       // SimpleDynamicArray
+#include "gfx_options.h"        // for debugai
 
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
 
-class ProfileVar 
+class ProfileVar
 {
 public:
     ProfileVar(char *name, PROF_VAR_TYPE type, sint32 *numValue,
@@ -151,7 +154,7 @@ public:
     bool m_visible;
 };
 
-class ProfileDB 
+class ProfileDB
 {
 private:
     sint32 m_nPlayers;
@@ -199,7 +202,7 @@ private:
             m_fogOfWar,
             m_startType;
 
-    sint32	m_autoSave;
+    sint32  m_autoSave;
 
     PLAYER_INDEX	m_playerNumber;
 
@@ -320,20 +323,9 @@ private:
     sint32 m_displayFilter;
     sint32 m_displayTrade;
     sint32 m_displayTerrain;
-	sint32 m_displayPolitical;
-	sint32 m_displayCapitols;
-	sint32 m_displayRelations;
-
-
-
-
-
-
-
-
-
-
-
+    sint32 m_displayPolitical;
+    sint32 m_displayCapitols;
+    sint32 m_displayRelations;
 
     sint32 m_forest;
     sint32 m_grass;
@@ -417,10 +409,8 @@ private:
     sint32 m_spStartingAge;
 	/// Ending age in single player only
     sint32 m_spEndingAge;
-	/// Show what a city is producing under it's name
+    /// Show what a city is producing under it's name
     sint32 m_showCityProduction;
-
-
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -590,9 +580,9 @@ public:
     void SetDisplayFilter(BOOL on)                      { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on)                       { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on)                     { m_displayTerrain = on;}
-	void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
-	void SetDisplayCapitols(BOOL on)					{ m_displayCapitols = on;}
-	void SetDisplayRelations(BOOL on)                   { m_displayRelations = on;}
+    void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
+    void SetDisplayCapitols(BOOL on)                    { m_displayCapitols = on;}
+    void SetDisplayRelations(BOOL on)                   { m_displayRelations = on;}
     void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
     void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
@@ -710,15 +700,15 @@ public:
     BOOL        IsUseRedbookAudio() const       { return m_useRedbookAudio; }
 
 #ifdef _BFR_
-    BOOL        IsRequireCD() const             { return TRUE; }
+    BOOL        IsRequireCD() const             { return FALSE; }
 #else
     BOOL        IsRequireCD() const             { return m_requireCD; }
 #endif
 
 #ifdef _BFR_
-    BOOL        IsProtected() const             { return TRUE;}
+    BOOL        IsProtected() const             { return FALSE; }
 #else
-    BOOL        IsProtected() const             { return m_protected;}
+    BOOL        IsProtected() const             { return m_protected; }
 #endif
 
     BOOL        IsTryWindowsResolution() const  { return m_tryWindowsResolution; }
@@ -809,9 +799,9 @@ public:
     BOOL GetDisplayFilter()                     { return m_displayFilter; }
     BOOL GetDisplayTrade()                      { return m_displayTrade; }
     BOOL GetDisplayTerrain()                    { return m_displayTerrain; }
-	BOOL GetDisplayPolitical()                  { return m_displayPolitical; }
-	BOOL GetDisplayCapitols()                   { return m_displayCapitols; }
-	BOOL GetDisplayRelations()                  { return m_displayRelations; }
+    BOOL GetDisplayPolitical()                  { return m_displayPolitical; }
+    BOOL GetDisplayCapitols()                   { return m_displayCapitols; }
+    BOOL GetDisplayRelations()                  { return m_displayRelations; }
     BOOL GetEnableLogs()                        { return m_enableLogs; }
     MBCHAR const *  GetRuleSets(void) const     { return m_ruleSets; };
 

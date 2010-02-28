@@ -1965,68 +1965,6 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 	}
 }
 
-#if 0
-//PFT 12 apr 05: no longer used
-void CtpAi::BombardAdjacentEnemies(const Army & army)
-{
-	if (!army->CanBombard())
-		return;
-
-	if (!army->CanPerformSpecialAction())
-		return;
-
-	sint8 dir;
-	MapPoint adj;
-	Unit city;
-	PLAYER_INDEX playerId = army.GetOwner();
-	MapPoint pos = army->RetPos();
-	
-	
-	for (dir = 0; dir < (sint8) NOWHERE; dir++)
-	{
-		if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
-		{
-			city = g_theWorld->GetCity(adj);
-
-			if(city.m_id != 0x0
-			&& army->CanBombard(adj)
-			&& g_player[playerId]->HasWarWith(city.GetOwner())
-			){
-				g_gevManager->AddEvent( GEV_INSERT_Tail, 
-										GEV_BombardOrder,
-										GEA_Army, army.m_id,
-										GEA_MapPoint, adj,
-										GEA_End);
-							
-				return;
-			}
-		}
-	}
-
-	CellUnitList enemy_army;
-	for (dir = 0; dir < (sint8) NOWHERE; dir++)
-	{
-		if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
-		{
-			g_theWorld->GetArmy(adj, enemy_army);
-			if(enemy_army.Num() > 0
-			&& army->CanBombard(adj)
-			&& enemy_army.IsVisible(army.GetOwner())
-			&& g_player[playerId]->HasWarWith(enemy_army[0].GetOwner())
-			){
-				g_gevManager->AddEvent( GEV_INSERT_Tail, 
-										GEV_BombardOrder,
-										GEA_Army, army.m_id,
-										GEA_MapPoint, adj,
-										GEA_End);
-
-				return;
-			}
-		}
-	}
-}
-#endif
-
 bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance)
 {
 	Player *player_ptr = g_player[army->GetOwner()];
@@ -2514,10 +2452,17 @@ void CtpAi::BombardNearbyEnemies(const Army & army, const sint32 & max_rge)
 	// Bombard all including barbs
 	for(sint32 foreigner = 0; foreigner < CtpAi::s_maxPlayers; foreigner++) 
 	{
-		if(playerId != foreigner
-		&& g_player[foreigner]
-		&& g_player[playerId]->HasWarWith(foreigner)
-		){  //try to bombard one of his armies or cities within max range
+		if
+		  (
+		           playerId != foreigner
+		   &&      g_player[foreigner]
+		   &&
+		      (
+		           g_player[playerId]->HasWarWith(foreigner)
+		        || Diplomat::GetDiplomat(playerId).DesireWarWith(foreigner)
+		      )
+		  )
+		{  //try to bombard one of his armies or cities within max range
 
 			Player *foreigner_ptr = g_player[foreigner];
 
