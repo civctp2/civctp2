@@ -31,6 +31,7 @@
 //   58 the missing player colors are filled with the map colors at that 
 //   like in the original version. (Oct 22nd 2005 Martin Gühmann)
 // - Relaxed the above to allow more than 74 color entries in the future.
+// - Added check for invalid/unassigned player index in ComputePlayerColor.
 //
 //----------------------------------------------------------------------------
  
@@ -48,7 +49,11 @@ extern sint32 g_is565Format;
 namespace
 {
 
+/// Color for invalid players
+COLOR const  COLOR_PLAYER_INVALID   = COLOR_BLACK;
+/// Number of colors in the original Activision set
 size_t const OLD_COLOR_NUMBER       = 58;
+/// Expected minimal number of colors in the Apolyton source code edition
 size_t const NEW_COLOR_NUMBER_MIN   = 74;
 
 ColorSet     s_theUniqueColorSet;
@@ -271,9 +276,14 @@ Pixel16 ColorSet::GetColor(COLOR color) const
     return (index < m_colors.size()) ? m_colors[index] : (Pixel16) 0;
 }
 
+/// Get the color of a player
+/// \param playerNum Index of the player
+/// \remarks Validity of the player index is tested partially.
 COLOR ColorSet::ComputePlayerColor(sint32 playerNum) const
 {
-	return (COLOR)(COLOR_PLAYER1 + playerNum);
+	return (playerNum >= 0)
+	       ? static_cast<COLOR>(COLOR_PLAYER1 + playerNum)
+	       : COLOR_PLAYER_INVALID;
 }
 
 Pixel16 ColorSet::GetPlayerColor(sint32 playerNum) const

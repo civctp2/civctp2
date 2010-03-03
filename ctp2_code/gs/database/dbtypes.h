@@ -30,10 +30,13 @@
 #pragma once
 #endif
 
-#ifndef DB_TYPES_H__
-#define DB_TYPES_H__
+#ifndef DB_TYPES_H_
+#define DB_TYPES_H_
+
+#include "ctp2_inttypes.h"  // sint32
 
 typedef sint32 StringId; 
+StringId const STRING_INDEX_INVALID = -1;
 typedef sint32 PopDBIndex;
 
 #define k_MAX_TEXT_LEN 16384

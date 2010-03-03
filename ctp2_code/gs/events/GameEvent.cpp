@@ -27,6 +27,7 @@
 // - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
 // - An event is not executed if its arguments became invalid during
 //   code execution. (7-Nov-2007 Martin Gühmann)
+// - Corrected delete operator use in destructor.
 //
 //----------------------------------------------------------------------------
 
@@ -58,7 +59,10 @@ GameEvent::GameEvent
 	m_file              (NULL),
 	m_contextName       (NULL)
 {
-//	DPRINTF(k_DBG_GAMESTATE, ("Added Event: %s\n", g_gevManager->GetEventName(type))); // Needed for debugging but it isn't worth to have it always on.
+	/// @todo Improve code style
+	// Instead of accessing global variables (which may or may not exist),
+	// better pass the data as arguments.
+
 	if(g_slicEngine->GetContext())
 	{
 		m_line = g_slicEngine->GetContext()->GetFrame()->GetCurrentLine();
@@ -93,13 +97,15 @@ GameEvent::GameEvent
 GameEvent::~GameEvent()
 {
 	delete m_argList;
-	delete m_file;
-	delete m_contextName;
+	delete [] m_file;
+	delete [] m_contextName;
 }
 
 GAME_EVENT_ERR GameEvent::Process()
 {
-	/// @ToDo check whether there are valid situations when the data became invalid.
+	/// @todo Check whether there are valid situations when the data became invalid.
+	// When a unit is killed or consumed in the main execution phase of the event,
+	// its ID may have become invalid when reaching the 'post' execution phase.
 	if(m_argList->TestArgs(m_type, this))
 	{
 		return g_gevManager->ActivateHook

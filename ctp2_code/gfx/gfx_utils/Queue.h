@@ -34,15 +34,15 @@
 #pragma once
 #endif
 
-#ifndef QUEUE_H__
-#define QUEUE_H__
+#ifndef QUEUE_H_
+#define QUEUE_H_
 
-#include <algorithm>
 //----------------------------------------------------------------------------
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// None
+#include <algorithm>    // std::copy
+#include <cstring>      // memcpy
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -54,7 +54,7 @@ template <class T> class Queue;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-// None
+#include "c3debug.h"    // Assert
 
 //----------------------------------------------------------------------------
 // Class declarations

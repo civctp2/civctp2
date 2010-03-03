@@ -234,7 +234,9 @@ extern C3UI           *g_c3ui;
 
 extern BOOL           g_powerPointsMode;
 
+#if defined(_DEBUG) && defined(CELL_COLOR)
 sint32                g_is_debug_map_color;
+#endif
 BOOL                  g_show_ai_dbg;
 BOOL                  g_doingFastRounds = FALSE;
 
@@ -2512,7 +2514,7 @@ void YumCommand::Execute(sint32 argc, char **argv)
 
 void ToggleMapColorCommand::Execute(sint32 argc, char **argv)
 {
-	
+#if defined(_DEBUG) && defined(CELL_COLOR)
     g_is_debug_map_color++;
 	if(g_is_debug_map_color > 2 || g_is_debug_map_color < 0)
 		g_is_debug_map_color = 0;
@@ -2535,6 +2537,7 @@ void ToggleMapColorCommand::Execute(sint32 argc, char **argv)
 	}
 
     WhackScreen();
+#endif
 }
 
 bool g_old_heuristic = false; 

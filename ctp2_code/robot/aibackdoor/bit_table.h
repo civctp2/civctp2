@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Bit table
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Prevented memory leak when loading from file.
+// - Corrected handling of "no data" when reading from file
 //
 //----------------------------------------------------------------------------
 
@@ -32,14 +33,14 @@
 #pragma once 
 #endif
 
-#ifndef __BIT_TABLE_H__
-#define __BIT_TABLE_H__ 1
+#ifndef BIT_TABLE_H_
+#define BIT_TABLE_H_
 
 //----------------------------------------------------------------------------
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include <algorithm>    // std::copy
+#include <algorithm>    // std::copy, std::fill_n
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -115,13 +116,13 @@ public:
 		max_y       = 0;
 	}
 
-	void Resize(const sint32 mx, const sint32 my, const bool start_val)
+	void Resize(sint32 mx, sint32 my, bool start_val)
 	{
 		y_col_len = 1 + (my>>5);
 		m_total_len = mx * y_col_len;
 
 		delete [] m_data;
-		if (m_total_len)
+		if (m_total_len > 0)
 			m_data = new sint32[m_total_len];
 		else
 			m_data = NULL;
@@ -132,15 +133,11 @@ public:
 		Reset(start_val);
 	}
 
-	void Reset(const bool start_val)
+	void Reset(bool start_val)
 	{
-		if (start_val)
+		if (m_total_len > 0)
 		{
-			memset(m_data, 0xffff, m_total_len * sizeof(sint32));
-		}
-		else
-		{
-			memset(m_data, 0x0, m_total_len * sizeof(sint32));
+			std::fill_n(m_data, m_total_len, (start_val) ? 0xffff : 0);
 		}
 	}
 
@@ -153,7 +150,10 @@ public:
 			archive << max_x;
 			archive << max_y;
 
-			archive.Store((uint8*)m_data, m_total_len *sizeof(sint32));
+			if (m_total_len > 0)
+			{
+				archive.Store((uint8*)m_data, m_total_len *sizeof(sint32));
+			}
 		}
 		else
 		{
@@ -163,13 +163,19 @@ public:
 			archive >> max_y;
 
 			delete [] m_data;
-			m_data = new sint32[m_total_len]; 
-
-			archive.Load((uint8*)m_data, m_total_len *sizeof(sint32));
+			if (m_total_len > 0)
+			{
+				m_data = new sint32[m_total_len]; 
+				archive.Load((uint8*)m_data, m_total_len * sizeof(sint32));
+			}
+			else
+			{
+				m_data = NULL;
+			}
 		}
 	}
 
-	BOOL Get(const sint32 x, const sint32 y) const
+	BOOL Get(sint32 x, sint32 y) const
 	{
 		Assert(0 <= x);
 		Assert(x < max_x);
@@ -179,7 +185,7 @@ public:
 		return m_data[y_col_len * x + (y>>5)] &  (0x1<<(y & 0x1f)); // @ToDo: Check wether this is used outside as a bool
 	}
 
-	void Set(const sint32 x, const sint32 y, const BOOL v)
+	void Set(sint32 x, sint32 y, BOOL v)
 	{
 		Assert(0 <= x);
 		Assert(x < max_x);
@@ -198,9 +204,17 @@ public:
 
 	Bit_Table& operator=(const Bit_Table& rhs) 
 	{
-		Assert(m_total_len == rhs.m_total_len); 
-		Assert(y_col_len == rhs.y_col_len); 
-		memcpy (m_data, rhs.m_data, m_total_len * sizeof(sint32));
+		if (this != &rhs)
+		{
+			/// @todo Add delete+new for m_data when this assert fails
+			Assert(m_total_len == rhs.m_total_len); 
+			Assert(y_col_len == rhs.y_col_len);
+			if (m_total_len > 0)
+			{
+				std::copy(rhs.m_data, rhs.m_data + static_cast<size_t>(m_total_len), m_data);
+			}
+		}
+
 		return *this; 
 	}
 };

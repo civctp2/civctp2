@@ -164,7 +164,7 @@ void  DebugMemory_GuardedFree    (const char *file, int line, void **memory_bloc
 	#define STRDUP(str)         DebugMemory_FastStrdup  (str)
 	#define FREE(ptr)           DebugMemory_FastFree    ((void**)&(ptr))
 
-#else if MEMORY_LOGGED
+#else /* if MEMORY_LOGGED */
 
 	#define MALLOC(size)        DebugMemory_GuardedMalloc  ((__FILE__), (__LINE__), (size))
 	#define CALLOC(count,size)  DebugMemory_GuardedCalloc  ((__FILE__), (__LINE__), (count) * (size))
@@ -217,7 +217,7 @@ void DebugMemoryHeap_GuardedClose    (const char *file, int line, MemoryHeap hea
 	#define HEAP_OPEN(name,s_i,s_m)       DebugMemoryHeap_FastOpen    (name, s_i, s_m)
 	#define HEAP_CLOSE(heap)              DebugMemoryHeap_FastClose   (heap)
 
-#else if MEMORY_LOGGED
+#else /* if MEMORY_LOGGED */
 
 	#define HEAP_MALLOC(heap,size)        DebugMemoryHeap_GuardedMalloc  ((__FILE__), (__LINE__), heap, (size))
 	#define HEAP_CALLOC(heap,count,size)  DebugMemoryHeap_GuardedCalloc  ((__FILE__), (__LINE__), heap, (count) * (size))

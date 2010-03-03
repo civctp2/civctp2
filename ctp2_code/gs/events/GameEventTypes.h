@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C/C++ header
 // Description  : Game event types
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -31,8 +31,8 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __GAME_EVENT_TYPES_H__
-#define __GAME_EVENT_TYPES_H__
+#ifndef GAME_EVENT_TYPES_H_
+#define GAME_EVENT_TYPES_H_
 
 
 #include "GameEventDescription.h"
@@ -107,9 +107,15 @@ enum GAME_EVENT_ARGUMENT {
 #define GEAC_IMPROVEMENT 'I'
 #define GEAC_TRADEROUTE 't'
 
+/// Execution stage of an event
 enum GAME_EVENT_PRIORITY {
-	GEV_PRI_Pre,
+	/// SLIC 'pre' handler stage, executed before the event has taken place.
+	/// At this stage, the actual processing can be prevented by returning a 
+	/// stop code.
+	GEV_PRI_Pre, 
+	/// Source code handler stage, doing the actual processing.
 	GEV_PRI_Primary,
+	/// SLIC 'post' handler stage, signalling that the event has been executed.
 	GEV_PRI_Post
 };
 

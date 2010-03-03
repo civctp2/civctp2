@@ -1713,7 +1713,7 @@ sint32 TiledMap::CalculateWrap
 		}
 	}
 
-#ifdef _PLAYTEST
+#if defined(_DEBUG) && defined(CELL_COLOR)
 	
 	if (g_is_debug_map_color)
 	{

@@ -31,6 +31,7 @@
 //   - JJB 2005/06/28
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - Added setting up of single-player start and end age values. (11-Apr-2009 Maq)
+// - Ensure agesscreen::s_numAges is set when selecting a scenario directly.
 //
 //----------------------------------------------------------------------------
 
@@ -338,6 +339,7 @@ void SPNewGameWindow::Update( void )
 		// Reset failsafe start/end age.
 		g_theProfileDB->SetSPStartingAge(0);
 		g_theProfileDB->SetSPEndingAge(ages - 1);
+		agesscreen_Initialize();
 		agesscreen_setStartAge(0);
 		agesscreen_setEndAge(ages - 1);
 

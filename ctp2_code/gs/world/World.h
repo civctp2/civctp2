@@ -511,7 +511,7 @@ public:
 	    const MapPoint &pnt,
 	    uint8 *array = NULL,
 	    uint32 *cursize = NULL) const;
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(CELL_COLOR)
 	sint32 GetColor(const MapPoint &pos) const; 
 #endif
 

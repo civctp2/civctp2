@@ -4,6 +4,8 @@
 #ifndef __IC3RAND_H__
 #define __IC3RAND_H__
 
+#include "ctp2_inttypes.h"  // sint32
+
 #if !defined(USE_COM_REPLACEMENT)
 #include <OBJBASE.H>
 
