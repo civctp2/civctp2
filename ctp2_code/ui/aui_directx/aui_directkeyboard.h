@@ -42,6 +42,7 @@ public:
 	virtual AUI_ERRCODE GetInput( void );
 };
 
+typedef aui_DirectKeyboard aui_NativeKeyboard;
 
 #endif 
 

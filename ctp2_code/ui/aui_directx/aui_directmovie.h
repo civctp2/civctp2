@@ -61,6 +61,7 @@ protected:
 	uint32						m_endOfMovieTickCount;
 };
 
+typedef aui_DirectMovie aui_NativeMovie;
 
 #endif 
 

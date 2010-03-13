@@ -43,6 +43,7 @@ protected:
 	HANDLE				m_inputEvent;	
 };
 
+typedef aui_DirectInput aui_NativeInput;
 
 #endif 
 

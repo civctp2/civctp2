@@ -48,7 +48,7 @@ bootstrap-anet: ctp2_code/libs/anet ctp2_code/libs/anet/Makefile
 	$(MAKE) -C $< bootstrap
 	
 bootstrap: bootstrap-anet
-	@echo "Bootstraping Civilization Call to Power"
+	@echo "Bootstraping Civilization Call to Power 2"
 	@echo " "
 	@echo "This is no official release by activision."
 	@echo " "

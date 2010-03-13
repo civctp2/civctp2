@@ -53,7 +53,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -78,7 +78,7 @@ class Governor;
 
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "StrategyRecord.h" // StrategyRecord
-#include "SettleMap.h"
+#include "settlemap.h"
 
 class Path;
 class CivArchive;

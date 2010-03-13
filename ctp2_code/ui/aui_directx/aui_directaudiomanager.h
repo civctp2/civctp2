@@ -122,6 +122,7 @@ protected:
 	BOOL InitDS( HWND hwnd );
 };
 
+typedef aui_DirectAudioManager aui_NativeAudioManager;
 
 #endif // __AUI_USE_DIRECTX__
 

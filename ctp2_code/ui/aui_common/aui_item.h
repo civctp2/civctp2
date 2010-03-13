@@ -26,9 +26,9 @@ public:
 		uint32 id,
 		MBCHAR const *ldlBlock )
 		:
-		aui_Control( retval, id, (MBCHAR *) ldlBlock ),
 		aui_ImageBase( ldlBlock ),
-		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ) {}
+		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+		aui_Control( retval, id, (MBCHAR *) ldlBlock ) {}
 	aui_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,

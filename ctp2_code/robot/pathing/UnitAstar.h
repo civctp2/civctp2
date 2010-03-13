@@ -39,7 +39,7 @@
 
 #include "Astar.h"
 #include "Army.h"
-#include "squad_strength.h"
+#include "squad_Strength.h"
 
 class Cell;
 class CityData;

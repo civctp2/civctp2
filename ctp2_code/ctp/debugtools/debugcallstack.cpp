@@ -47,10 +47,16 @@
 
 #include "log.h"
 #include "debugcallstack.h"
-#include <windows.h>		
+#ifdef WIN32
+#include <windows.h>
+#else
+#include "windows.h"
+#endif
 #include <string.h>
 #include <stdio.h>
+#ifdef WIN32
 #include <imagehlp.h>      
+#endif
 
 #ifndef _DEBUG
 #include "log_off.h"
@@ -65,6 +71,7 @@ static bool debug_dump_whole_stack = false;
 void Debug_FunctionNameInit (void);
 int Debug_FunctionNameOpen (char *map_file_name);
 
+#ifdef WIN32
 
 #if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
 BOOL CALLBACK	Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
@@ -74,6 +81,8 @@ BOOL CALLBACK	Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, U
 
 BOOL CALLBACK	Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext);
 int				Debug_FunctionNameOpenFromPDB(void);
+
+#endif // WIN32
 
 
 void Debug_FunctionNameClose (void);
@@ -157,7 +166,7 @@ void DebugCallStack_Close (void)
 
 
 
-
+#ifdef WIN32
 
 static LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 {
@@ -174,7 +183,7 @@ static LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
   return (EXCEPTION_CONTINUE_SEARCH);
 }
 
-
+#endif
 
 
 
@@ -385,7 +394,7 @@ static HANDLE	hProc,
 				hThread;				
 
 
-
+#ifdef WIN32
 
 BOOL CALLBACK Debug_EnumSymbolsCallback
 (
@@ -414,18 +423,21 @@ BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID 
 	#ifndef _BFR_
 		int					err;
 		
+		// Seems that SysEnumerateSymbols changed???
+#if defined(_MSC_VER) && (_MSC_VER < 1400)
 		if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
 			err = GetLastError();
 			LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
 		
 			return FALSE;
 		}
+#endif
 	#endif
 	
 	return TRUE;
 }
 
-
+#endif // WIN32
 
 
 
@@ -610,12 +622,13 @@ void DebugCallStack_DumpAddress (LogClass log_class, unsigned address)
 
 void DebugCallStack_Dump (LogClass log_class)
 {
-	
+#ifdef WIN32
 	unsigned base_pointer;   
 	__asm mov base_pointer, ebp;
 
 	
 	DebugCallStack_DumpFrom (log_class, base_pointer);
+#endif // WIN32
 }
 
 
@@ -625,6 +638,7 @@ void DebugCallStack_Dump (LogClass log_class)
 
 void DebugCallStack_DumpFrom (LogClass log_class, unsigned base_pointer)
 {
+#ifdef WIN32
   unsigned frame_limit;    
   unsigned frame_pointer;  
   unsigned caller;         
@@ -738,6 +752,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, unsigned base_pointer)
       base_pointer = frame_limit;
     }
   }
+#endif // WIN32
 }
 
 
@@ -759,6 +774,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, unsigned base_pointer)
 
 void DebugCallStack_Save  (unsigned *call_stack, int number, unsigned long Ebp)
 {
+#ifdef WIN32
   unsigned base_pointer;   
   unsigned caller;         
   int finished;            
@@ -825,6 +841,7 @@ void DebugCallStack_Save  (unsigned *call_stack, int number, unsigned long Ebp)
 
     index ++;
   }
+#endif // WIN32
 }
 
 
@@ -836,6 +853,7 @@ void DebugCallStack_Save  (unsigned *call_stack, int number, unsigned long Ebp)
 
 void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number)
 {
+#ifdef WIN32
   unsigned caller;         
   char *caller_name;       
   int index;               
@@ -861,6 +879,7 @@ void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number)
 
     index ++;
   }
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -883,6 +902,7 @@ void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number)
 //----------------------------------------------------------------------------
 void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file)
 {
+#ifdef WIN32
 	unsigned caller;         
 	char *caller_name;       
 	int index;               
@@ -912,6 +932,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int n
 	}
 
 	fprintf(file, "\t%s\n", allocator_name);
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -1010,6 +1031,7 @@ char * c3debug_StackTrace(void)
 	return s_stackTraceString;
 }
 
+#ifdef WIN32
 char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 {
 	if(!function_name_open) {
@@ -1067,6 +1089,7 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 	
 	return s_stackTraceString;
 }
+#endif // WIN32
  
 char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 {

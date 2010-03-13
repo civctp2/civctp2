@@ -47,6 +47,7 @@ public:
 	virtual AUI_ERRCODE GetInput( void );
 };
 
+typedef aui_DirectMouse aui_NativeMouse;
 
 #endif 
 

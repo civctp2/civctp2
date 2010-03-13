@@ -36,6 +36,8 @@ public:
 	virtual AUI_ERRCODE GetInput();
 };
 
+typedef aui_SDLKeyboard aui_NativeKeyboard;
+
 #endif // defined(__AUI_USE_SDL__)
 
 #endif

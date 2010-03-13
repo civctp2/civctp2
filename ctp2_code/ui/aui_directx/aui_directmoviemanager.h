@@ -50,6 +50,7 @@ protected:
 	aui_Resource<aui_DirectMovie>	*m_directMovieResource;
 };
 
+typedef aui_DirectMovieManager aui_NativeMovieManager;
 
 #endif 
 

@@ -14,9 +14,9 @@
 #define _BMH_GW_DLL_TYPES_H_
 
 
-
+#ifdef _MSC_VER
 #pragma warning(disable:4251)
-
+#endif
 
 
 

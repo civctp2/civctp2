@@ -23,6 +23,8 @@ protected:
 	virtual AUI_ERRCODE GetInput();	
 };
 
+typedef aui_SDLMouse aui_NativeMouse;
+
 #endif // defined(__AUI_USE_SDL__)
 
 #endif

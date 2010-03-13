@@ -60,6 +60,7 @@ protected:
 	sint32	m_playFlags;
 }; 
 
+typedef aui_DirectSound aui_NativeSound;
 
 #endif 
 

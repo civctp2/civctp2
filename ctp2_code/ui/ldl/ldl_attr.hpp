@@ -38,7 +38,7 @@ class ldl_attribute {
 
 	ATTRIBUTE_TYPE GetType() { return m_type; }
 	char *GetName() { return m_name; }
-	char *GetTypeName() {
+	const char *GetTypeName() {
 		switch(m_type) {
 			case ATTRIBUTE_TYPE_BOOL: return "bool";
 			case ATTRIBUTE_TYPE_INT:  return "int";

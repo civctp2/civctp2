@@ -119,12 +119,12 @@ protected:
 		m_stringTable       (NULL),
 		m_allocatedTip      (false),
 		m_statusText        (NULL),
+		m_statusTextCopy    (NULL),
 		m_numberOfLayers    (0),
 		m_imagesPerLayer    (0),
 		m_imageLayerList    (NULL),
 		m_layerRenderFlags  (NULL),
-		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-		m_statusTextCopy    (NULL)
+		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 	{};
 
 	AUI_ERRCODE InitCommonLdl(

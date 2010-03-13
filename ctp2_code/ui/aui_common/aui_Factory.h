@@ -33,7 +33,7 @@
 
 #include "aui_surface.h"
 #include "aui_mouse.h"
-#include "aui_Keyboard.h"
+#include "aui_keyboard.h"
 
 class aui_Factory {
 public:

@@ -84,6 +84,7 @@ protected:
 	bool                m_isCoinitialized;
 };
 
+typedef aui_DirectUI aui_NativeUI;
 
 #endif 
 

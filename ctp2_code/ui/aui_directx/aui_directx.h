@@ -70,6 +70,7 @@ private:
 #define IID_IDirectDrawSurface3 IID_IDirectDrawSurface2
 #endif
 
+typedef aui_DirectX aui_Native;
 
 #endif 
 

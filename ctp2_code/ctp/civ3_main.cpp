@@ -73,7 +73,7 @@
 #include "appstrings.h"
 #include "aui.h"
 #include "aui_directmoviemanager.h"
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "background.h"
 #include "backgroundwin.h"

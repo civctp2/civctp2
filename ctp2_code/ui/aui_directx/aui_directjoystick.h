@@ -48,6 +48,8 @@ protected:
 
 };
 
+typedef aui_DirectJoystick aui_NativeJoystick;
+
 #endif 
 
 #endif 

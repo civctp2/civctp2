@@ -569,8 +569,9 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 	for (sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetHP() > 0 &&
 			m_array[i].GetDBRec()->GetVictoryEnslavement()) {
-	
+#ifdef WIN32	
 			if(!m_array[i].GetDBRec()->GetVictoryEnslavementChance(success))
+#endif
 				success = 1.0;
 
 			if(g_rand->Next(100) < sint32(success * 100.0)) {
