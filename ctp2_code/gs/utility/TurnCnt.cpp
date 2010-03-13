@@ -47,6 +47,7 @@
 #include "citydata.h"
 #include "civarchive.h"
 #include "CivPaths.h"               // g_civPaths
+#include "colorset.h"
 #include "ConstRecord.h"            // g_theConstDB 
 #include "DB.h"
 #include "debugmemory.h"

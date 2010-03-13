@@ -96,6 +96,7 @@
 #include <clocale>
 #include "colorset.h"
 #include "controlpanelwindow.h"         // g_controlPanel
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 #include "ctp2_menubar.h"
 #include "ctp2_Window.h"
@@ -159,9 +160,23 @@
 #include "videoutils.h"
 #endif
 
+#ifdef LINUX
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 #if defined(USE_SDL)
 #include <SDL.h>
 #include <SDL_mixer.h>
+#endif
+#ifdef HAVE_X11
+#include <X11/Xlib.h>
+#endif
+#ifdef USE_GTK
+#include <gtk/gtk.h>
 #endif
 
 #if defined(_DEBUG)
@@ -298,6 +313,28 @@ namespace Os
 		DWORD   filepathLength      = GetModuleFileName(NULL, filepath, MAX_PATH);
 
         return std::basic_string<TCHAR>(filepath, filepathLength);
+#elif defined(HAVE_UNISTD_H) && defined(LINUX)
+	char szLink[MAX_PATH] = { 0 };
+	char szTemp[MAX_PATH] = { 0 };
+	struct stat st = { 0 };
+	pid_t pid = getpid();
+	if (pid < 0)
+	    return std::basic_string<TCHAR>();
+
+	snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", static_cast<long int>(pid));
+	int rc = lstat(szLink, &st);
+	if (rc != 0)
+	    return std::basic_string<TCHAR>();
+
+	if (!S_ISLNK(st.st_mode))
+	    return std::basic_string<TCHAR>();
+
+	int size = readlink(szLink, szTemp, sizeof(szTemp));
+	if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
+	    return std::basic_string<TCHAR>();
+	szTemp[size] = 0;
+
+	return std::basic_string<TCHAR>(szTemp, size);
 #else
         return std::basic_string<TCHAR>();
 #endif
@@ -336,6 +373,17 @@ namespace Os
 
 			CloseHandle(fileHandle);
 		}
+#elif defined(LINUX)
+		struct stat st = { 0 };
+		int rc = stat(Os::GetExeName().c_str(), &st);
+			if (rc != 0)
+		return exeVersion.str();
+
+		struct tm *t = localtime(&st.st_mtime);
+		exeVersion << std::setfill('0')
+                           << std::setw(4) << (t->tm_year + 1900)  << '-'
+                           << std::setw(2) << (t->tm_mon + 1)    << '-'
+                           << std::setw(2) << (t->tm_mday);
 #endif  // WIN32
 
 		return exeVersion.str();
@@ -433,13 +481,58 @@ int ui_Initialize(void)
         }
     }
 
+#ifdef WIN32
 	if (!GetWindowsDirectory(s, _MAX_PATH)) {
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_FONTS), 
 								appstrings_GetString(APPSTR_NOWINDOWSDIR));
 	}
 	strcat(s, FILE_SEP "fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
-
+#elif defined(HAVE_X11)
+	Display *display = g_c3ui->getDisplay();
+	int ndirs;
+	bool noPath = true;
+	char **fontpaths = XGetFontPath(display, &ndirs);
+	if (fontpaths) {
+		struct stat st = { 0 };
+		for (int i = 0; i < ndirs; i++) {
+			int rc = stat(fontpaths[i], &st);
+			if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+				g_c3ui->AddBitmapFontSearchPath(fontpaths[i]);
+				// Make some default paths get added, too
+				//noPath = false;
+			}
+		}
+		XFreeFontPath(fontpaths);
+	}
+	// Fontpath just contains server(s)?
+	if (noPath) {
+		const int maxPaths = 3;
+		const char* fontPaths[maxPaths] = {
+			"/usr/share/fonts",
+			"/usr/X11R6/lib/X11/fonts",
+			"/usr/lib/X11/fonts"
+		};
+		const int maxDirs = 4;
+		const char* fontDirs[maxDirs] = {
+			"TTF",
+			"corefonts",
+			"truetype",
+			"truetype/msttcorefonts"
+		};
+		for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
+			for (int dIdx = 0; dIdx < maxDirs; dIdx++) {
+				struct stat st = { 0 };
+				snprintf(s, sizeof(s), "%s/%s",
+					fontPaths[pIdx], fontDirs[dIdx]);
+				int rc = stat(s, &st);
+				if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+					g_c3ui->AddBitmapFontSearchPath(s);
+				}
+			}
+		}
+	}
+#endif
 	
     for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
     {
@@ -469,9 +562,12 @@ int ui_Initialize(void)
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if ( auiErr != AUI_ERRCODE_OK ) return 14;
 
-	
+
+#ifdef WIN32	
 	while ( ShowCursor( FALSE ) >= 0 )
 	;
+#endif
+
 
 	return AUI_ERRCODE_OK;
 }
@@ -927,6 +1023,7 @@ static HWND s_taskBar   = NULL;
 
 void main_HideTaskBar(void)
 {
+#ifndef __AUI_USE_SDL__
 	if (g_hideTaskBar)
 	{
 		s_taskBar = FindWindow("Shell_TrayWnd", NULL);
@@ -936,14 +1033,17 @@ void main_HideTaskBar(void)
 			ShowWindow(s_taskBar, SW_HIDE);
 		}
 	}
+#endif // !__AUI_USE_SDL__
 }
 
 void main_RestoreTaskBar(void)
 {
+#ifndef __AUI_USE_SDL__
 	if (s_taskBar)
 	{
 		ShowWindow(s_taskBar, SW_SHOWDEFAULT);
 	}
+#endif
 }
 
 void ui_CivAppProcess(void)
@@ -987,8 +1087,13 @@ BOOL g_launchScenario = FALSE;
 char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 #endif
 
-void ParseCommandLine(PSTR szCmdLine)
+#ifdef __GNUC__
+void ParseCommandLine(int argc, char **argv)
+#else
+void ParseCommandLine(PSTR *szCmdLine)
+#endif
 {
+#ifdef WIN32
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
 		FILE *txt = fopen("crashmap.txt", "w");
@@ -996,7 +1101,18 @@ void ParseCommandLine(PSTR szCmdLine)
 		fclose(txt);
 		exit(0);
 	}
-#endif
+#endif // _BFR_
+#else // WIN32
+#define k_MAX_CMD_LINE 2048
+	char szCmdLine[k_MAX_CMD_LINE] = { '\0' };
+	char tmp[k_MAX_CMD_LINE] = { '\0' };
+	for (int i=1; i<argc; i++) {
+		strncpy(tmp, szCmdLine, k_MAX_CMD_LINE-1);
+		snprintf(szCmdLine, k_MAX_CMD_LINE-1, "%s %s", tmp, argv[i]);
+	}
+	szCmdLine[k_MAX_CMD_LINE-1]='\0';
+#endif // WIN32
+
 
 	char * archive_file = strstr(szCmdLine, "-l");
 
@@ -1109,10 +1225,13 @@ void ParseCommandLine(PSTR szCmdLine)
 
 	if (g_noAssertDialogs)
 	{
+#ifdef WIN32
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
+#endif
 	}
 }
 
+#ifdef WIN32
 int WINAPI main_filehelper_GetOS(void)
 {
 	OSVERSIONINFO osvi;
@@ -1123,7 +1242,9 @@ int WINAPI main_filehelper_GetOS(void)
 
 	return osvi.dwPlatformId;
 }
+#endif // WIN32
 
+#ifdef WIN32
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -1184,7 +1305,9 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 
 #endif // _DEBUG
 }
+#endif // WIN32
 
+#ifdef __AUI_USE_DIRECTX__
 BOOL main_CheckDirectX(void)
 {
 	BOOL found = FALSE;
@@ -1213,6 +1336,7 @@ BOOL main_CheckDirectX(void)
 
 	return found;
 }
+#endif // __AUI_USE_DIRECTX__
 
 void main_InitializeLogs(void)
 {
@@ -1220,6 +1344,7 @@ void main_InitializeLogs(void)
 	time(&ltime);
 	struct tm * now = localtime(&ltime);
 
+#ifdef WIN32
 #if defined(_DEBUG) && defined(_DEBUGTOOLS)
 	Debug_Open();
 #endif
@@ -1323,6 +1448,7 @@ void main_InitializeLogs(void)
 
 	DPRINTF(k_DBG_FIX, ("**  Direct X Version: 0x%x\n", g_dxver));
 	DPRINTF(k_DBG_FIX, ("**    Cur ScreenSize: %d x %d\n", g_ScreenWidth, g_ScreenHeight));
+#endif
 }
 
 #if defined(__GNUC__)

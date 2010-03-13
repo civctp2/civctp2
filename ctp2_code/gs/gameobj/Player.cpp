@@ -170,6 +170,7 @@
 #include "CivPaths.h"                   // g_civPaths
 #include "ConstRecord.h"                // g_theConstDB
 #include "controlpanelwindow.h"         // g_controlPanel
+#include "colorset.h"
 #include "CreateUnit.h"
 #include "ctpai.h"
 #include "ctp2_Window.h"

@@ -29,6 +29,7 @@
 #include "c3.h"
 #include "SlicEyePoint.h"
 #include "civarchive.h"
+#include "colorset.h"
 #include "radarmap.h"
 #include "message.h"
 #include "tiledmap.h"

@@ -25,6 +25,7 @@
 
 #include "network.h"
 #include "net_info.h"
+#include "colorset.h"
 #include "radarmap.h"
 #include "trademanager.h"
 

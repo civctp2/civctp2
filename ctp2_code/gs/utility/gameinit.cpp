@@ -72,6 +72,7 @@
 #include "Cell.h"
 #include "civ3_main.h"
 #include "CivilisationPool.h"
+#include "colorset.h"
 #include "ConstRecord.h"
 #include "controlpanelwindow.h"
 #include "CriticalMessagesPrefs.h"
