@@ -151,7 +151,7 @@ void Squad_Strength::Remove_Agent_Strength(const Agent_ptr & agent)
 	Assert(m_transport >= 0);
 }
 
-void Squad_Strength::Set_Army_Strength(const Army & army)
+void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 {
 	Assert(army.IsValid());
 
@@ -170,8 +170,8 @@ void Squad_Strength::Set_Army_Strength(const Army & army)
 	                      m_water_bombard_str,
 	                      m_air_bombard_str,
 	                      m_value,
-	                      true
-	                     );
+	                      true,
+	                      noCargo);
 
 	m_agent_count       = static_cast<sint16>(army.Num());
 

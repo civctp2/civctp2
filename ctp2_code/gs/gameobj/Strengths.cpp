@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Player strength history
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -89,9 +89,10 @@ void Strengths::Serialize(CivArchive &archive)
 
 void Strengths::Calculate()
 {
-	sint32 i;
-	for(i = STRENGTH_CAT_NONE + 1; i < STRENGTH_CAT_MAX; i++) {
-		switch(i) {
+	for(sint32 i = STRENGTH_CAT_NONE + 1; i < STRENGTH_CAT_MAX; i++)
+	{
+		switch(i)
+		{
 			case STRENGTH_CAT_KNOWLEDGE:
 				m_strengthRecords[i].Insert(g_player[m_owner]->GetKnowledgeStrength());
 				break;
@@ -155,7 +156,7 @@ sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 	
 	
 	
-	
+	if (turn < 0) turn = m_strengthRecords[category].Num() -1;
 	
 	if (turn >= m_strengthRecords[category].Num()) return 0;
 

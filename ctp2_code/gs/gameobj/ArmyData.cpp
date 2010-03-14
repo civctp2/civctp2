@@ -5251,36 +5251,6 @@ void ArmyData::MinMovementPoints(double &cur) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : ArmyData::CanBombardTargetType
-//
-// Description: Returns true if some member of this army can bombard some member
-//              of the CellUnitList units.
-//
-// Parameters : CellUnitList & units  : the list of units on the defending cell
-//
-// Globals    : -
-//
-// Returns    : bool
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool ArmyData::CanBombardTargetType(const CellUnitList & units) const
-{
-	for(sint32 i = m_nElements - 1; i>= 0; i--)
-	{
-		for(sint32 j = 0; j < units.Num(); j++)
-		{
-			if (m_array[i]->CanBombardType(units[j]))
-				return true;
-		}
-	}
-
-	return false;
-}
-
-//----------------------------------------------------------------------------
-//
 // Name       : ArmyData::GetBombardRange
 //
 // Description: Test if this army can bombard. Fill in min_rge and max_rge.
@@ -10070,31 +10040,6 @@ void ArmyData::CharacterizeCargo
 			}
 		}
 	}
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : ArmyData::IsCivilian
-//
-// Description: Returns true if all units are civilians 
-//
-// Parameters : - 
-//
-// Globals    : -
-//
-// Returns    : bool
-//
-// Remark(s)  : -
-//
-//---------------------------------------------------------------------------- 
-bool ArmyData::IsCivilian() const
-{
-	for(sint32 i = 0; i < m_nElements; i++) 
-	{
-		if (!m_array[i].GetDBRec()->GetCivilian())
-			return false;
-	}
-	return true;
 }
 
 //----------------------------------------------------------------------------

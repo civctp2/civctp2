@@ -118,7 +118,7 @@ public:
 
     bool InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
-    bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
+    bool CheckIsDangerForPos(const MapPoint & myPos);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
         bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
@@ -138,13 +138,13 @@ public:
     const MapPoint &dest, Path &good_path, bool &is_broken_path, Path &bad_path);
 
     bool EnterPathPoints(Path &a_path, MapPoint &old);
-    bool FindVisionEdge(Path &a_path, MapPoint &old);
+    bool FindVisionEdge (Path &a_path, MapPoint &old);
 
-    bool PretestDest_Enterable(const MapPoint &start, const MapPoint &dest);
-    bool PretestDest_HasRoom(const MapPoint &start, const MapPoint &dest);
-    bool PretestDest_SameLandContinent(const MapPoint &start, const MapPoint &dest);
+    bool PretestDest_Enterable         (const MapPoint &start, const MapPoint &dest);
+    bool PretestDest_HasRoom           (const MapPoint &start, const MapPoint &dest);
+    bool PretestDest_SameLandContinent (const MapPoint &start, const MapPoint &dest);
     bool PretestDest_SameWaterContinent(const MapPoint &start, const MapPoint &dest);
-    bool PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &dest);
+    bool PretestDest_ZocEnterable      (const MapPoint &start, const MapPoint &dest);
 
     bool PretestDest(const MapPoint &start, const MapPoint &dest);
 
@@ -186,7 +186,7 @@ public:
 
     bool IsBeachLanding(const MapPoint &prev,
                         const MapPoint &pos,
-                        const uint32 &m_move_intersection);
+                        const uint32   &m_move_intersection);
     void ClearMem();
     bool VerifyMem() const;
 };

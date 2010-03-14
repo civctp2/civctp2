@@ -510,15 +510,16 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 	}
 
 	MBCHAR * imageName = NULL;
-	if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK) imageName = sm_strengthImages->GetString(0);
-	else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE) imageName = sm_strengthImages->GetString(1);
-	else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG) imageName = sm_strengthImages->GetString(2);
-	else imageName = sm_strengthImages->GetString(3);
-											   
+	if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK)            imageName = sm_strengthImages->GetString(0);
+	else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE)     imageName = sm_strengthImages->GetString(1);
+	else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG)      imageName = sm_strengthImages->GetString(2);
+	else if(relativeStrength < DIPLOMATIC_STRENGTH_VERY_STRONG) imageName = sm_strengthImages->GetString(3);
+	else if(sm_strengthImages->GetNumStrings() == 5)            imageName = sm_strengthImages->GetString(4);
+	else                                                        imageName = sm_strengthImages->GetString(3);
 	
-	if (imageName) 
-    {
-	    aui_Image * image = g_c3ui->LoadImage(imageName);
+	if (imageName)
+	{
+		aui_Image * image = g_c3ui->LoadImage(imageName);
 
 		if(image) {
 			
@@ -556,51 +557,57 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 {
 	sint32 p = (sint32)cookie;
 
-	
-
-
-
-
-
-
-	if(!sm_embassyImages) {
+	if(!sm_embassyImages)
+	{
 		InitImageTables();
 	}
 
-	if (g_player[g_selected_item->GetVisiblePlayer()]->HasEmbassyWith(p)) 
-    {
-	    MBCHAR *imageName = sm_embassyImages->GetString(0);
+	MBCHAR *imageName = NULL;
 
-		if(imageName) {
-			aui_Image *image = g_c3ui->LoadImage(imageName);
-			if(image) {
-				
-				rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
-				rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
-				
-				RECT srcRect = {
-					0, 0,
-					image->TheSurface()->Width(),
-					image->TheSurface()->Height()
-				};
-				
-				
-				image->SetChromakey(255,0,255);
-				
-				g_c3ui->TheBlitter()->Blt(
-					surface,
-					rect.left,
-					rect.top,
-					image->TheSurface(),
-					&srcRect,
-					k_AUI_BLITTER_FLAG_CHROMAKEY
-					);
-				g_c3ui->UnloadImage(image);
-			}
-		}
-	} else {
-		
+#if defined(_DEBUG)
+	if(sm_embassyImages->GetNumStrings() > 1 && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DesireWarWith(p))
+	{
+		imageName = sm_embassyImages->GetString(1);
 	}
+	else
+#endif
+	if (g_player[g_selected_item->GetVisiblePlayer()]->HasEmbassyWith(p))
+	{
+		imageName = sm_embassyImages->GetString(0);
+	}
+	else
+	{
+	}
+
+	if(imageName != NULL)
+	{
+		aui_Image *image = g_c3ui->LoadImage(imageName);
+
+		if(image)
+		{
+			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
+			rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
+
+			RECT srcRect = {
+				0, 0,
+				image->TheSurface()->Width(),
+				image->TheSurface()->Height()
+			};
+
+			image->SetChromakey(255,0,255);
+
+			g_c3ui->TheBlitter()->Blt(
+				surface,
+				rect.left,
+				rect.top,
+				image->TheSurface(),
+				&srcRect,
+				k_AUI_BLITTER_FLAG_CHROMAKEY
+				);
+			g_c3ui->UnloadImage(image);
+		}
+	}
+
 	return AUI_ERRCODE_OK;
 }
 

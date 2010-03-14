@@ -1148,6 +1148,8 @@ void CityWindow::CopyCitiesBack()
 				CityData *copiedCityData = walk.Remove();
 				if(copiedCityData->GetHomeCity().IsValid()) {
 					CityData *realCityData = copiedCityData->GetHomeCity().CD();
+
+					// ToDo: Just copy the build queues
 					realCityData->Copy(copiedCityData);
 				}
 				delete copiedCityData;

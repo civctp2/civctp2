@@ -137,6 +137,7 @@
 #include "gamesounds.h"
 #include "soundmanager.h"
 #include "CityAstar.h"
+#include "Agent.h"
 
 extern ControlPanelWindow       *g_controlPanel;
 extern WorkWindow               *g_workWindow;
@@ -1701,14 +1702,19 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 
 		float total_cost;
 		Assert(g_theUnitAstar);
-		bool r = g_theUnitAstar->FindPath(a, start,
-											player, m_cur_mouse_tile,
-											*m_good_path, m_is_broken_path,
-											m_bad_path,
-											total_cost);
-		Assert(r);
-
-		m_is_pathing = r;
+		if(g_player[player]->IsHuman())
+		{
+			m_is_pathing = g_theUnitAstar->FindPath(a, start,
+												player, m_cur_mouse_tile,
+												*m_good_path, m_is_broken_path,
+												m_bad_path,
+												total_cost);
+			Assert(m_is_pathing);
+		}
+		else // For debugging the AI
+		{
+			m_is_pathing = Agent::FindPath(a, m_cur_mouse_tile, true, *m_good_path, total_cost);
+		}
 	}
 	else if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY_UNLOADING)
 	{

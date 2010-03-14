@@ -7520,15 +7520,13 @@ void Player::SetAttitude(PLAYER_INDEX player, ATTITUDE_TYPE attitude)
 
 DIPLOMATIC_STRENGTH Player::GetRelativeStrength(PLAYER_INDEX him) const 
 {
-	
 	if(!g_player[him])
 	{
-		return DIPLOMATIC_STRENGTH_VERY_WEAK;
+		return DIPLOMATIC_STRENGTH_VERY_STRONG;
 	}
 
 	double my_str =0.0;
-	sint32 turn   = GetCurRound();
-
+	const sint32 turn   = -1;
 	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS,      turn);
 	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD,       turn);
 	my_str += m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS,  turn);
@@ -7542,17 +7540,26 @@ DIPLOMATIC_STRENGTH Player::GetRelativeStrength(PLAYER_INDEX him) const
 	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,    turn);
 	his_str += g_player[him]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, turn);
 
-    if ((2.0 * my_str) < his_str) {
-        return DIPLOMATIC_STRENGTH_VERY_WEAK;
-    } else if ((1.5 * my_str) < his_str) {
-        return DIPLOMATIC_STRENGTH_WEAK;
-    } else if (my_str > (2.0 * his_str)) {
-        return DIPLOMATIC_STRENGTH_VERY_STRONG;
-    } else if (my_str > (1.5 * his_str)) {
-        return DIPLOMATIC_STRENGTH_STRONG;
-    } else {
-        return DIPLOMATIC_STRENGTH_AVERAGE;
-    }
+	if ((2.0 * my_str) < his_str)
+	{
+		return DIPLOMATIC_STRENGTH_VERY_WEAK;
+	}
+	else if ((1.5 * my_str) < his_str)
+	{
+		return DIPLOMATIC_STRENGTH_WEAK;
+	}
+	else if (my_str > (2.0 * his_str))
+	{
+		return DIPLOMATIC_STRENGTH_VERY_STRONG;
+	}
+	else if (my_str > (1.5 * his_str))
+	{
+		return DIPLOMATIC_STRENGTH_STRONG;
+	}
+	else
+	{
+		return DIPLOMATIC_STRENGTH_AVERAGE;
+	}
 }
 
 ATTITUDE_TYPE Player::GetAttitude(PLAYER_INDEX him) const
@@ -7652,7 +7659,6 @@ ATTITUDE_TYPE Player::GetAttitude(PLAYER_INDEX him) const
 
 sint32 Player::GetKnowledgeStrength() const
 {
-	
 	return m_advances->GetCostOfWhatHeKnows();
 }
 
@@ -7668,9 +7674,6 @@ sint32 Player::GetMilitaryStrength() const
 
 sint32 Player::GetTradeStrength() const
 {
-	
-	
-
 	return MapAnalysis::GetMapAnalysis().GetTotalTrade(m_owner);
 }
 
@@ -9783,4 +9786,5 @@ void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 	GetCapitolPos(p);
 	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY);
 	u.SetPosition(p, revealed);
+}
 */

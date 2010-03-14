@@ -192,7 +192,8 @@ public:
 						 double & water_bombard,
 						 double & air_bombard,
 						 double & total_value,
-						 const bool terrainIndependent) const;
+						 const bool terrainIndependent,
+						 bool noCargo = false) const;
 
 
 	double  GetAverageHealthPercentage() const;
@@ -200,6 +201,10 @@ public:
 	{
 		return m_flags;
 	};
+
+	bool IsCivilian() const;
+
+	bool CanBombardTargetType(const CellUnitList & units) const;
 
 protected:
 	/// List of units - implemented as a fixed size array

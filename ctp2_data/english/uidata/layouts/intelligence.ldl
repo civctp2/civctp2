@@ -148,10 +148,11 @@ StrengthImages {
 }
 
 EmbassyImages {
-	int numstrings 1
+	int numstrings 2
 	bool nodatabase true
 #	string string0 "upic30.tga"
 	string string0 "updi01.tga"
+	string string1 "updi22.tga"
 }
 
 IntelTreatyDetail:CTP2_TITLE_WINDOW {

@@ -346,7 +346,6 @@ public:
 
 
 
-    bool CanBombardTargetType(const CellUnitList & units) const;
     bool GetBombardRange(sint32 & min_rge, sint32 & max_rge);
     bool CanBombard(const MapPoint &point) const;
     bool CanBombard() const;
@@ -524,9 +523,6 @@ public:
                            bool & haszoc,
                            bool & canbombard
                           ) const;
-
-
-    bool IsCivilian() const;
 
     bool CanPerformSpecialAction() const;
     void CheckAddEventOrder();

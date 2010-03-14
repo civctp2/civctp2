@@ -936,12 +936,13 @@ void CellUnitList::UpdateMoveIntersection()
 //              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard sea
 //              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard air
 //              sint32 & total_value       : sum of units ShieldCost
+//              bool     noCargo           : Does not count strength from cargo
 //
 // Globals    : -
 //
 // Returns    : -
 //
-// Remark(s)  : includes units in transports
+// Remark(s)  : includes units in transports if noCargo is false
 //
 //----------------------------------------------------------------------------
 void CellUnitList::ComputeStrength(double & attack,
@@ -953,7 +954,8 @@ void CellUnitList::ComputeStrength(double & attack,
                                    double & water_bombard,
                                    double & air_bombard,
                                    double & total_value,
-                                   const bool terrainIndependent) const
+                                   const bool terrainIndependent,
+                                   bool noCargo) const
 {
 	attack            = 0.0;
 	defense           = 0.0;
@@ -1028,6 +1030,9 @@ void CellUnitList::ComputeStrength(double & attack,
 
 		total_value += static_cast<double>(rec->GetShieldCost());
 
+		if(noCargo)
+			continue;
+
 		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
 		sint32             cargoCount = cargo_list ? cargo_list->Num() : 0;
 
@@ -1097,4 +1102,59 @@ double CellUnitList::GetAverageHealthPercentage() const
     }
 
     return (m_nElements) ? (totalRatio / m_nElements) : 0.0;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::IsCivilian
+//
+// Description: Returns true if all units are civilians 
+//
+// Parameters : - 
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//---------------------------------------------------------------------------- 
+bool CellUnitList::IsCivilian() const
+{
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
+		if (!m_array[i].GetDBRec()->GetCivilian())
+			return false;
+	}
+	return true;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::CanBombardTargetType
+//
+// Description: Returns true if some member of this army can bombard some member
+//              of the CellUnitList units.
+//
+// Parameters : CellUnitList & units  : the list of units on the defending cell
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool CellUnitList::CanBombardTargetType(const CellUnitList & units) const
+{
+	for(sint32 i = m_nElements - 1; i>= 0; i--)
+	{
+		for(sint32 j = 0; j < units.Num(); j++)
+		{
+			if (m_array[i]->CanBombardType(units[j]))
+				return true;
+		}
+	}
+
+	return false;
 }

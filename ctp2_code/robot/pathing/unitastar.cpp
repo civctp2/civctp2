@@ -95,7 +95,7 @@ namespace
 
 UnitAstar::UnitAstar()
 {
-    ClearMem();
+	ClearMem();
 }
 
 //----------------------------------------------------------------------------
@@ -118,8 +118,8 @@ UnitAstar::UnitAstar()
 //----------------------------------------------------------------------------
 bool UnitAstar::StraightLine
 (
-	const MapPoint &		start, 
-	const MapPoint &		dest, 
+    const MapPoint &		start,
+    const MapPoint &		dest,
     Path &					a_path
 ) const
 {
@@ -191,16 +191,18 @@ float UnitAstar::ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell)
 
 bool UnitAstar::CanMoveIntoTransports(const MapPoint &pos) 
 {
-	
 	static CellUnitList tmp_transports;
-    if (m_army.m_id == (0)) { 
-        return false;
-    } else { 
-        return m_army.CanMoveIntoTransport(m_dest, tmp_transports);
-    }
+	if (m_army.m_id == (0))
+	{
+		return false;
+	}
+	else
+	{
+		return m_army.CanMoveIntoTransport(m_dest, tmp_transports);
+	}
 }
 
-bool UnitAstar::CanSpaceLaunch() 
+bool UnitAstar::CanSpaceLaunch()
 {
 	return false;
 }
@@ -209,7 +211,6 @@ bool UnitAstar::CanSpaceLand()
 {
 	return false;
 }
-
 
 bool UnitAstar::CheckUnexplored(const MapPoint &prev, const MapPoint &pos,   
      Cell *the_prev_cell, Cell *the_pos_cell,                                 
@@ -332,24 +333,18 @@ bool UnitAstar::CheckUnits
 		}
 	}
 
-#if 0
-// Removed by Martin Gühmann should be reconsidered
-// Maybe a special avoid danger astar
-// Added by Calvitix
-	MapPoint start;
-	m_army->GetPos(start);
-	if (pos != start && pos != m_dest)
+	if(m_is_robot && pos != m_army->RetPos() && pos != m_dest)
 	{
-		if (CheckIsDangerForPos(pos, m_army->IsCivilian()))
+		if(CheckIsDangerForPos(pos))
 		{
-			if (cost < 1) cost = 1;
-			cost *= k_MOVE_ISDANGER_COST; 
-			can_enter = true;
-			entry = ASTAR_CAN_ENTER; 
-			return true; 
+			if(cost < 1) cost = 1;
+
+			cost      *= k_MOVE_ISDANGER_COST;
+			can_enter  = true;
+			entry      = ASTAR_CAN_ENTER;
+			return true;
 		}
 	}
-#endif
 
 	return false;
 }
@@ -398,8 +393,6 @@ bool UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
 bool UnitAstar::CheckHeight(const MapPoint &prev, const MapPoint &pos, Cell *the_prev_cell, 
     Cell *the_pos_cell, float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
-
-
 	return false;
 }
 
@@ -418,10 +411,6 @@ bool UnitAstar::CheckMyCity(const MapPoint &prev, const MapPoint &pos,
 	}
 	return false;
 }
-
-
-
-
 
 bool UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *the_prev_cell, 
     Cell *the_pos_cell, float &cost, bool &is_zoc, const bool can_be_zoc,  
@@ -553,7 +542,6 @@ bool UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
 
 	return true;
 }
-
 
 bool UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,
     Cell *the_prev_cell, Cell *the_pos_cell, float &cost, bool &is_zoc, const bool can_be_zoc, 
@@ -696,8 +684,6 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	entry = ASTAR_BLOCKED;
     return false;
 }
-
-
 
 bool UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point, 
                           const MapPoint &pos, 
@@ -1450,27 +1436,27 @@ bool UnitAstar::FindPath(Army army,
                          const bool no_straight_lines, 
                          const bool check_units_in_cell)
 {
-    if (start == dest) {
-        return false;
-    }
+	if (start == dest)
+	{
+		return false;
+	}
 
-	m_army_strength.Set_Army_Strength(army);
-    m_army = army; 
-    m_nUnits = nUnits; 
-    m_move_intersection = move_intersection;
-    m_move_union = move_union;
-    m_pretty_path = pretty_path; 
-	m_check_dest = check_dest;
-    m_check_units_in_cell = check_units_in_cell; 
+	m_army_strength.Set_Army_Strength(army, m_isTransporter);
+	m_army                 = army;
+	m_nUnits               = nUnits;
+	m_move_intersection    = move_intersection;
+	m_move_union           = move_union;
+	m_pretty_path          = pretty_path; 
+	m_check_dest           = check_dest;
+	m_check_units_in_cell  = check_units_in_cell; 
 
-	m_can_be_cargo_podded = FALSE;
-    
-    m_check_rail_launchers = check_rail_launcher; 
-	m_ignore_zoc = (m_army.m_id != (0) && m_army.IsIgnoresZOC());
-    if (!check_units_in_cell)
-        m_ignore_zoc = true;
+	m_can_be_cargo_podded  = FALSE;
 
-    m_no_bad_path = no_bad_path; 
+	m_check_rail_launchers = check_rail_launcher; 
+	m_no_bad_path          = no_bad_path;
+	m_ignore_zoc           = (m_army.m_id != (0) && m_army.IsIgnoresZOC());
+	if (!check_units_in_cell)
+		m_ignore_zoc = true;
 
     InitSearch(start, owner, dest, good_path, is_broken_path, bad_path);
 
@@ -1620,22 +1606,23 @@ bool UnitAstar::IsBeachLanding(const MapPoint &prev,
 
 void UnitAstar::ClearMem()
 {
-    m_move_union          = MARK_UNUSED;
-    m_move_intersection   = MARK_UNUSED;
-    m_max_dir             = MARK_UNUSED;
-    m_mask_alliance       = MARK_UNUSED;
-    m_dest.x              = MARK_UNUSED16;
-    m_dest.y              = MARK_UNUSED16;
-	m_start.x             = MARK_UNUSED16;
-	m_start.y             = MARK_UNUSED16;
-    m_owner               = MARK_UNUSED;
-    m_nUnits              = MARK_UNUSED;
-    m_army.m_id           = MARK_UNUSED;
-    m_army_minmax_move    = -9999999.0f;
-    m_can_space_launch    = 0x0;
-    m_can_space_land      = 0x0;
-	m_can_be_cargo_podded = MARK_UNUSED;
-	m_army_strength       = Squad_Strength();
+	m_move_union                  = MARK_UNUSED;
+	m_move_intersection           = MARK_UNUSED;
+	m_max_dir                     = MARK_UNUSED;
+	m_mask_alliance               = MARK_UNUSED;
+	m_dest.x                      = MARK_UNUSED16;
+	m_dest.y                      = MARK_UNUSED16;
+	m_start.x                     = MARK_UNUSED16;
+	m_start.y                     = MARK_UNUSED16;
+	m_owner                       = MARK_UNUSED;
+	m_nUnits                      = MARK_UNUSED;
+	m_army.m_id                   = MARK_UNUSED;
+	m_army_minmax_move            = -9999999.0f;
+	m_can_space_launch            = 0x0;
+	m_can_space_land              = 0x0;
+	m_can_be_cargo_podded         = MARK_UNUSED;
+	m_army_strength               = Squad_Strength();
+	m_isTransporter               = false;
 }
 
 
@@ -1660,69 +1647,47 @@ bool UnitAstar::VerifyMem() const
     return true;
 }
 
-bool UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian)
+bool UnitAstar::CheckIsDangerForPos(const MapPoint & pos)
 {
 	Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
 	ai::Regard baseRegard = NEUTRAL_REGARD;
 
-	MapPoint neighbor;
-	MapPoint start;
-	m_army->GetPos(start);
+	const bool isCivilian = m_army->IsCivilian();
 
-	for (int i = 0; i <= SOUTH; i++)
+	MapPoint neighbor;
+	MapPoint start = m_army->RetPos();
+
+	for(sint32 i = 0; i <= SOUTH; i++)
 	{
-		if (!myPos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
+		if (!pos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
 
 		if (neighbor == start || neighbor == m_dest)
 		{
 			continue;
 		}
-		
+
 		//Check for hostile army
 		CellUnitList *  the_army = g_theWorld->GetArmyPtr(neighbor);
 		Unit            the_city = g_theWorld->GetCity(neighbor);
 
-		if (the_army || the_city.IsValid()) 
+		if (the_army && !the_army->IsCivilian())
 		{
-			PLAYER_INDEX owner = 
-			    (the_army) ? the_army->GetOwner() : the_city.GetOwner();
-
+			const PLAYER_INDEX owner     = the_army->GetOwner();
+			const bool         isVisible = m_army->IsVisible(owner);
 			if (m_owner != owner)
 			{
 				baseRegard = diplomat.GetBaseRegard(owner);
 				sint32 turnsatwar = AgreementMatrix::s_agreements.TurnsAtWar(m_owner, owner);
 				if (baseRegard <= NEUTRAL_REGARD || turnsatwar >= 0)
 				{
-					if (the_city.IsValid()) //TO DO : Add conditions (in danger only if the_army not civilian
+					if((isCivilian && isVisible) || (!m_army_strength.HasEnough(Squad_Strength(pos)) && isVisible) || the_army->CanBombardTargetType(*m_army.GetData()))
 					{
-					/*	DPRINTF(k_DBG_MAPANALYSIS, 
-						("\t Danger for Pos (%3d,%3d) : City (%3d,%3d)\n",
-						myPos.x,
-						myPos.y,
-						neighbor.x,
-						neighbor.y));*/
 						return true;
-					}
-				
-					if (the_army->Num() > g_theWorld->GetArmyPtr(start)->Num() || IsCivilian)
-					{
-					/*	DPRINTF(k_DBG_MAPANALYSIS, 
-						("\t Danger for Pos (%3d,%3d) : Bigger Army at (%3d,%3d)\n",
-						myPos.x,
-						myPos.y,
-						neighbor.x,
-						neighbor.y));
-						return true;*/
 					}
 				}
 			}
 		}
 	}
-	/*DPRINTF(k_DBG_MAPANALYSIS, 
-	("\t No Danger for Pos (%3d,%3d)\n",
-	myPos.x,
-	myPos.y));*/
+
 	return false;
 }
-
-

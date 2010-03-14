@@ -604,6 +604,7 @@ void Diplomat::Load(CivArchive & archive)
 	
 	m_desireWarWith.resize(m_foreigners.size());
 	ComputeAllDesireWarWith();
+	ComputeIncursionPermission();
 }
 
 
@@ -715,10 +716,10 @@ void Diplomat::Initialize()
 	m_threats.clear();
 	
 	Assert(g_thePersonalityDB);
-	m_nuclearAttackTarget = -1;
-	m_lastParty = -1;
-	m_launchedNukes = false;
-	m_launchedNanoAttack = false;
+	m_nuclearAttackTarget         = -1;
+	m_lastParty                   = -1;
+	m_launchedNukes               = false;
+	m_launchedNanoAttack          = false;
 	m_diplomcyVictoryCompleteTurn = -1;
 
 	ClearEffectiveRegardCache();
@@ -5038,10 +5039,10 @@ void Diplomat::AddNewNegotiationEvent(const PLAYER_INDEX foreignerId, const Nego
 	m_foreigners[foreignerId].AddNewNegotiationEvent(negotiation_event);
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewNegotiationEvent,
-						   GEA_Player, m_playerId,
-						   GEA_Player, foreignerId,
-						   GEA_End
-                          );
+	                       GEA_Player, m_playerId,
+	                       GEA_Player, foreignerId,
+	                       GEA_End
+	                      );
 }
 
 
@@ -5053,14 +5054,14 @@ void Diplomat::ComputeIncursionPermission()
 	Assert(player_ptr);
 	AgreementMatrix const & agreements = AgreementMatrix::s_agreements;
 	
-	for 
-    ( 
-        size_t  foreignerIndex = 1; 
-        foreignerIndex < s_theDiplomats.size(); 
-        ++foreignerIndex
-    )
+	for
+	(
+	    size_t  foreignerIndex = 1;
+	    foreignerIndex < s_theDiplomats.size();
+	    ++foreignerIndex
+	)
 	{
-        PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
+		PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
 
 		if (    (foreignerId == m_playerId)                 // own territory
             ||  !player_ptr->HasContactWith(foreignerId)    // never met

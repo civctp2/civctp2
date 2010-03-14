@@ -80,7 +80,7 @@ public:
 
 
 	void Set_Pos_Strength       (const MapPoint & pos);
-	void Set_Army_Strength      (const Army & army);
+	void Set_Army_Strength      (const Army & army, bool noCargo = false);
 	void Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
 
 	double Get_Attack      () const { return m_attack_str;        };

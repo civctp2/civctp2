@@ -129,7 +129,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 #if defined(WIN32) && !defined(USE_SDL)
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
-	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD)&mp);
+	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mp);
 	if (iRet) 
     {
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: failed to set time format.\n" ));
@@ -140,7 +140,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	
 	memset(&msp, 0, sizeof(msp));
 	msp.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
-	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp );
+	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp );
 	if (iRet) 
 	{
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to read # of tracks\n"));
@@ -170,7 +170,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		memset(&msp, 0, sizeof(msp));
 		msp.dwItem = MCI_STATUS_LENGTH;
 		msp.dwTrack = i;
-		iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM | MCI_TRACK, (DWORD)&msp );
+		iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM | MCI_TRACK, (DWORD_PTR)&msp );
 		if ( iRet ) {
 			tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: can't get track %d len\n", i));
 			DMCIError( iRet );
@@ -191,7 +191,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	}
 #if defined(WIN32) && !defined(USE_SDL)
 	msp.dwItem = MCI_STATUS_LENGTH;
-	iRet = mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp);
+	iRet = mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp);
 	if( iRet ) {
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: Can't get disc len.\n" ));
 		DMCIError( iRet );
@@ -254,7 +254,7 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	iRet = mciSendCommand
                     (0, MCI_OPEN, 
                      MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE, 
-                     (DWORD) &mop
+                     (DWORD_PTR) &mop
                     );
 	if (iRet)
 #elif defined(USE_SDL)
