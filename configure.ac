@@ -62,6 +62,15 @@ AC_WORDS_BIGENDIAN
 AC_OS_DEFINES
 AC_OS_PATHNAMES
 
+if test "x$ac_OpSystem" != "xWIN32"
+then
+	PKG_CHECK_MODULES(GTK, gtk+-2.0)
+	AC_DEFINE(USE_GTK,1,[Use gtk+ for native dialogs])
+	AC_SUBST(USE_GTK)
+	AC_SUBST(GTK_CFLAGS)
+	AC_SUBST(GTK_LIBS)
+fi
+
 AC_CHECK_HEADERS(limits.h sys/param.h)
 case $host in
 *-cygwin*)

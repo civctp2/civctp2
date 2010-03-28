@@ -41,7 +41,7 @@
 
 class aui_SwitchGroup;
 class aui_Static;
-#ifdef WIN32
+#ifdef __AUI_USE_DIRECTX__
 class DirectVideo;
 #endif
 class Chart;
@@ -72,7 +72,9 @@ public:
 	};
 	void SetTechHistoricalText( ctp2_HyperTextBox *text ) { m_techHistoricalText = text; };
 	void SetTechGameplayText( ctp2_HyperTextBox *text ) { m_techGameplayText = text; };
+#ifdef __AUI_USE_DIRECTX__
 	void SetTechMovie( DirectVideo *movie ) { m_techMovie = movie; };
+#endif
 	void SetTechRequirementsText( ctp2_HyperTextBox *text ) 
 	{ 
 		m_techRequirementsText = text; 
@@ -127,7 +129,9 @@ private:
 	ctp2_HyperTextBox		*m_techGameplayText;
 	ctp2_HyperTextBox		*m_techRequirementsText;
 	ctp2_HyperTextBox		*m_techVariablesText;
+#ifdef __AUI_USE_DIRECTX__
 	DirectVideo				*m_techMovie;
+#endif
 };
 
 

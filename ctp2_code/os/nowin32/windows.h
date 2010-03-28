@@ -108,6 +108,7 @@ typedef struct hwnd_t* HWND;
 #define _MAX_FNAME 256
 #define _MAX_DIR _MAX_FNAME
 #define _MAX_PATH PATH_MAX
+#define DBL_MAX        1.7976931348623158e+308
 #define MAX_PATH PATH_MAX
 #define IDNO      7
 #define MB_OK     0

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Single player new game civ selection screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -50,7 +50,7 @@ extern sint32 const         INDEX_TRIBE_INVALID;
 #include "aui_control.h"    // aui_Control
 #include "c3types.h"        // MBCHAR, sint32, uint32
 #include "Civilisation.h"   // GENDER
-#include "ctp2_ListItem.h"
+#include "ctp2_listitem.h"
 
 //----------------------------------------------------------------------------
 // Declarations

@@ -89,6 +89,11 @@ struct aui_MouseEvent
 
 #define k_MOUSE_DEFAULTANIMDELAY	100
 
+#ifdef USE_SDL
+// HACK: Use this global variable to halt mouse event handling
+// thread on game exit
+extern BOOL g_mouseShouldTerminateThread;
+#endif
 
 class aui_Mouse : public aui_Base, public virtual aui_Input
 {
@@ -194,8 +199,11 @@ public:
 		RECT *imageRect,
 		aui_DirtyList *imageAreas );
 
+#ifdef __AUI_USE_SDL__
+	SDL_mutex *LPCS(void) const { return m_lpcs; }
+#else
 	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
-
+#endif
 	
 	
 	AUI_ERRCODE CreatePrivateBuffers( void );
@@ -206,7 +214,11 @@ public:
 
 protected:
 	static sint32 m_mouseRefCount;
+#ifdef __AUI_USE_SDL__
+	static SDL_mutex* m_lpcs;
+#else
 	static LPCRITICAL_SECTION m_lpcs;
+#endif
 
 	
 	virtual AUI_ERRCODE Erase( void );
@@ -248,8 +260,11 @@ protected:
 
 
 
-
+#ifdef __AUI_USE_SDL__
+int MouseThreadProc(void *param);
+#else
 DWORD WINAPI MouseThreadProc( LPVOID lpVoid );
+#endif
 
 
 #endif 

@@ -32,7 +32,7 @@
 #include "RoboInit.h"
 
 #include "UnitAstar.h"
-#include "CtpAi.h"
+#include "ctpai.h"
 #include "AgreementMatrix.h"
 #include "mapanalysis.h"
 

@@ -171,6 +171,7 @@
 #if defined(USE_SDL)
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include "aui_sdlkeyboard.h"
 #endif
 #ifdef HAVE_X11
 #include <X11/Xlib.h>
@@ -264,6 +265,10 @@ CivApp                              *g_civApp = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
+#ifdef __AUI_USE_SDL__
+int SDLMessageHandler(const SDL_Event &event);
+#endif
+
 #if defined(__GNUC__)
 int CivMain(int argc, char **argv);
 #else
@@ -323,19 +328,26 @@ namespace Os
 
 	snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", static_cast<long int>(pid));
 	int rc = lstat(szLink, &st);
+	// szLink must be a link...
 	if (rc != 0)
 	    return std::basic_string<TCHAR>();
 
 	if (!S_ISLNK(st.st_mode))
 	    return std::basic_string<TCHAR>();
 
-	int size = readlink(szLink, szTemp, sizeof(szTemp));
+	ssize_t size = readlink(szLink, szTemp, sizeof(szTemp));
 	if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
 	    return std::basic_string<TCHAR>();
 	szTemp[size] = 0;
 
 	return std::basic_string<TCHAR>(szTemp, size);
 #else
+	//#ifdef HAVE_UNISTD_H
+	// Copy argv[0] and getwd() to global buffer within main(),
+	// recursively readlink() path to executable until last link reached
+	// concat cwd and path found to return an absolute path, if needed
+	// return absolute path to executable
+	//#endif
         return std::basic_string<TCHAR>();
 #endif
     }
@@ -376,8 +388,8 @@ namespace Os
 #elif defined(LINUX)
 		struct stat st = { 0 };
 		int rc = stat(Os::GetExeName().c_str(), &st);
-			if (rc != 0)
-		return exeVersion.str();
+		if (rc != 0)
+			return exeVersion.str();
 
 		struct tm *t = localtime(&st.st_mtime);
 		exeVersion << std::setfill('0')
@@ -1066,6 +1078,13 @@ void AtExitProc(void)
     // What about this?
     Mix_CloseAudio();
 # endif
+	g_mouseShouldTerminateThread = TRUE;
+	
+	// Destroy the mutex used for the secondary keyboard event queue
+#ifdef __AUI_USE_SDL__
+	SDL_DestroyMutex(g_secondaryKeyboardEventQueueMutex);
+	g_secondaryKeyboardEventQueueMutex = NULL;
+#endif
 
     SDL_Quit();
 #endif
@@ -1544,10 +1563,11 @@ void main_DisplayPatchDisclaimer()
 int CivMain
 (
 	int		    iCmdShow,   // argc 
-	char *	    szCmdLine   // argv
+	char **	    pSzCmdLine   // argv
 )
 {
-	void *      hInstance   = NULL;
+// FIXME: Remove unneeded arguments.
+	HINSTANCE hInstance = NULL;
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
@@ -1564,6 +1584,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	}
 #endif // __GNUC__
 	
+#ifdef WIN32
 	char exepath[_MAX_PATH];
 	if (GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) 
 	{
@@ -1591,16 +1612,23 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			SetCurrentDirectory(exepath);
 		}
 	}
+#endif
 
 	appstrings_Initialize();
 
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
+#ifdef USE_GTK
+	gtk_set_locale();
+	gtk_init(&iCmdShow, &pSzCmdLine);
+#endif
 
+#ifdef __AUI_USE_DIRECTX__
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
 		                     appstrings_GetString(APPSTR_NEEDDIRECTX));
 	}
+#endif
 
 	
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -1617,7 +1645,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	CreateDirectory((LPCTSTR)"logs", &sa);
 #endif
 
+#ifdef __GNUC__
+	ParseCommandLine(iCmdShow, pSzCmdLine);
+#else
 	ParseCommandLine(szCmdLine);
+#endif
 
 	allocated::reassign(g_civApp, new CivApp());
 
@@ -1680,12 +1712,55 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
+#ifdef __AUI_USE_SDL__
+	g_secondaryKeyboardEventQueueMutex = SDL_CreateMutex();
+#endif
+#ifdef __AUI_USE_DIRECTX__
 	MSG			msg;
 	msg.wParam  = 0;
+#endif
 
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
+                //printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+
+#ifdef __AUI_USE_SDL__
+		SDL_Event event;
+		while (1) { //there is a break;)
+			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+                            ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+			if (0 > n) {
+                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+                            printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+
+				break;
+			}
+			if (0 == n) {
+				// other events are handled in other threads
+				// or no more events
+				break;
+			}
+			if (SDL_QUIT == event.type)
+				gDone = TRUE;
+			
+			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
+			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
+					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
+					break;
+				}
+				
+				g_secondaryKeyboardEventQueue.push(event);
+				
+				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
+					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
+					break;
+				}
+			}
+			
+			SDLMessageHandler(event);
+#else // __AUI_USE_SDL__
 
 		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 		{
@@ -1698,12 +1773,17 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
+#endif // __AUI_USE_SDL__
 		}
 
 		g_letUIProcess = FALSE;
 	}
 
+#ifdef __AUI_USE_SDL__
+	return 0;
+#else
 	return msg.wParam;
+#endif
 }
 
 void DoFinalCleanup(int exitCode)
@@ -1715,7 +1795,9 @@ void DoFinalCleanup(int exitCode)
 
 	static bool s_cleaningUpTheApp = false;
 
+#ifdef WIN32
 	ShowWindow(gHwnd, SW_HIDE);
+#endif
 
 	if (!s_cleaningUpTheApp)
 	{
@@ -1741,6 +1823,292 @@ void DoFinalCleanup(int exitCode)
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
+#ifdef __AUI_USE_SDL__
+int SDLMessageHandler(const SDL_Event &event)
+{
+	// Merge into WndProc with keycode converter and
+	// unchanged ui_HandleKeypress(wParam, lParam)
+#ifndef __AUI_USE_SDL__
+	if (!gDone && g_c3ui)
+	{
+		(void) g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
+	}
+#endif
+
+	static bool swallowNextChar = false;
+//could not find ui_HandleKeypress(wParam, lParm)! Could this mean this code was under reconstruction in trunk when the clone for linux was made???
+
+	switch(event.type) {
+	case SDL_KEYDOWN:
+		{
+                	SDLKey key = event.key.keysym.sym;
+			SDLMod mod = event.key.keysym.mod;
+			WPARAM wp = '\0';
+			switch (key) {
+
+//for the keys below check swallowNextChar if char should be ignored
+
+#define SDLKCONV(sdl_name, char) \
+			case (sdl_name): \
+				wp = (char); \
+                                if(!swallowNextChar) \
+				  ui_HandleKeypress(wp, 0);	\
+                                swallowNextChar = false; \
+				break;
+#define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
+                                if(!swallowNextChar) \
+				  ui_HandleKeypress(wp, 0);	\
+                                swallowNextChar = false; \
+				break;
+// For the purposes of this macro, shift is ignored when ctrl is pressed
+#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
+						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+					); \
+                                if(!swallowNextChar) \
+				  ui_HandleKeypress(wp, 0);	\
+                                swallowNextChar = false; \
+				break;
+//                         SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
+//                         SDLKCONV(SDLK_TAB, '\t' + 128);
+//                         SDLKCONV(SDLK_RETURN, '\r' + 128);
+			SDLKCONV(SDLK_ESCAPE, SDLK_ESCAPE + 256);
+			SDLKCONV(SDLK_SPACE, ' ');
+			SDLKCONV(SDLK_EXCLAIM, '!');
+			SDLKCONV(SDLK_QUOTEDBL, '"');
+			SDLKCONVSHIFT(SDLK_HASH, '#', '~');
+			SDLKCONV(SDLK_DOLLAR, '$');
+			SDLKCONV(SDLK_AMPERSAND, '&');
+			SDLKCONVSHIFT(SDLK_QUOTE, '\'', '@');
+			SDLKCONV(SDLK_LEFTPAREN, '(');
+			SDLKCONV(SDLK_RIGHTPAREN, ')');
+			SDLKCONV(SDLK_ASTERISK, '*');
+			SDLKCONV(SDLK_PLUS, '+');
+			SDLKCONVSHIFT(SDLK_COMMA, ',', '<');
+			SDLKCONVSHIFT(SDLK_MINUS, '-', '_');
+			SDLKCONVSHIFT(SDLK_PERIOD, '.', '>');
+			SDLKCONVSHIFT(SDLK_SLASH, '/', '?');
+			SDLKCONV(SDLK_COLON, ':');
+			SDLKCONVSHIFT(SDLK_SEMICOLON, ';', ':');
+			SDLKCONV(SDLK_LESS, '<');
+			SDLKCONVSHIFT(SDLK_EQUALS, '=', '+');
+			SDLKCONV(SDLK_GREATER, '>');
+			SDLKCONV(SDLK_QUESTION, '?');
+			SDLKCONV(SDLK_AT, '@');
+			SDLKCONVSHIFT(SDLK_LEFTBRACKET, '[', '{');
+			SDLKCONVSHIFT(SDLK_RIGHTBRACKET, ']', '}');
+			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
+			SDLKCONV(SDLK_CARET, '^');
+			SDLKCONV(SDLK_UNDERSCORE, '_');
+			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '%G�%@');
+//  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+//  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+//  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+//  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+//  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+			// Given the bizarre choices for F11 and F12, I am reluctant to
+			// extrapolate to F15
+			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
+			//SDLKCONVSHIFT(SDLK_F14, '' + 128, '\0');
+			//SDLKCONVSHIFT(SDLK_F15, '' + 128, '\0');
+			SDLKCONV(SDLK_KP0, '0');
+			SDLKCONV(SDLK_KP1, '1');
+			SDLKCONV(SDLK_KP2, '2');
+			SDLKCONV(SDLK_KP3, '3');
+			SDLKCONV(SDLK_KP4, '4');
+			SDLKCONV(SDLK_KP5, '5');
+			SDLKCONV(SDLK_KP6, '6');
+			SDLKCONV(SDLK_KP7, '7');
+			SDLKCONV(SDLK_KP8, '8');
+			SDLKCONV(SDLK_KP9, '9');
+			SDLKCONV(SDLK_KP_PERIOD, '.');
+			SDLKCONV(SDLK_KP_DIVIDE, '/');
+			SDLKCONV(SDLK_KP_MULTIPLY, '*');
+			SDLKCONV(SDLK_KP_MINUS, '-');
+			SDLKCONV(SDLK_KP_PLUS, '+');
+			SDLKCONV(SDLK_KP_ENTER, '\r' + 128);
+			SDLKCONV(SDLK_KP_EQUALS, '=');
+			SDLKCONVSHIFT(SDLK_1, '1', '!');
+			SDLKCONVSHIFT(SDLK_2, '2', '"');
+			SDLKCONVSHIFT(SDLK_3, '3', '%G�%@');
+			SDLKCONVSHIFT(SDLK_4, '4', '$');
+			SDLKCONVSHIFT(SDLK_5, '5', '%');
+			SDLKCONVSHIFT(SDLK_6, '6', '^');
+			SDLKCONVSHIFT(SDLK_7, '7', '&');
+			SDLKCONVSHIFT(SDLK_8, '8', '*');
+			SDLKCONVSHIFT(SDLK_9, '9', '(');
+			SDLKCONVSHIFT(SDLK_0, '0', ')');
+			SDLKCONVSHIFTCTRL(SDLK_a, 'a', 'A', 'a'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_b, 'b', 'B', 'b'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_c, 'c', 'C', 'c'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_d, 'd', 'D', 'd'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_e, 'e', 'E', 'e'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_f, 'f', 'F', 'f'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_g, 'g', 'G', 'g'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_h, 'h', 'H', 'h'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_i, 'i', 'I', 'i'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_j, 'j', 'J', 'j'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_k, 'k', 'K', 'k'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_l, 'l', 'L', 'l'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_m, 'm', 'M', 'm'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_n, 'n', 'N', 'n'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_o, 'o', 'O', 'o'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_p, 'p', 'P', 'p'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_q, 'q', 'Q', 'q'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_r, 'r', 'R', 'r'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_s, 's', 'S', 's'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_t, 't', 'T', 't'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_u, 'u', 'U', 'u'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_v, 'v', 'V', 'v'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z'-'a'+1);
+#undef SDLKCONV
+#undef SDLKCONVSHIFT
+#undef SDLKCONVSHIFTCTRL
+
+//for the keys below set swallowNextChar
+
+                        case SDLK_BACKSPACE: 
+				wp = '\b' + 128;
+                                ui_HandleKeypress(wp, 0);
+                                swallowNextChar = TRUE;
+				break;
+                        case SDLK_TAB: 
+				wp = '\t' + 128;
+                                ui_HandleKeypress(wp, 0);
+                                swallowNextChar = TRUE;
+				break;
+                        case SDLK_RETURN: 
+				wp = '\r' + 128;
+                                ui_HandleKeypress(wp, 0);
+                                swallowNextChar = TRUE;
+				break;
+
+//for the keys below don't regard swallowNextChar
+
+#define SDLKCONV(sdl_name, char) \
+			case (sdl_name): \
+				wp = (char); \
+			ui_HandleKeypress(wp, 0); \
+				break;
+#define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
+			ui_HandleKeypress(wp, 0);				\
+				break;
+// For the purposes of this macro, shift is ignored when ctrl is pressed
+#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
+						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+					); \
+			ui_HandleKeypress(wp, 0); \
+				break;
+
+  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+
+#undef SDLKCONV
+#undef SDLKCONVSHIFT
+#undef SDLKCONVSHIFTCTRL
+
+			default:
+				break;
+			}
+// 			if (wp != '\0') {
+//                             ui_HandleKeypress(wp, 0);
+// 			}
+			break;
+		}
+	case SDL_QUIT:
+		gDone = TRUE;
+
+		
+		DoFinalCleanup();
+
+#ifndef __AUI_USE_SDL__
+		DestroyWindow( hwnd );
+		gHwnd = NULL;
+#endif
+
+		return 0;
+#ifndef __AUI_USE_SDL__
+	case k_MSWHEEL_ROLLMSG :
+		{
+			sint16 dir = HIWORD(wParam);
+			if (dir >= 0) dir = 1;
+			if (dir < 0) dir = -1;
+			ui_HandleMouseWheel(dir);
+		}
+
+	case WM_VSCROLL: 
+		{
+		sint16 scrollCode = LOWORD(wParam);
+		if (scrollCode == SB_LINEDOWN) {
+			ui_HandleMouseWheel((sint16)-1);
+		}
+		else
+			if (scrollCode == SB_LINEUP) {
+				ui_HandleMouseWheel((sint16)1);
+			}
+		}
+ 		break;
+	case WM_MOUSEWHEEL:
+		ui_HandleMouseWheel((sint16)HIWORD(wParam));
+		break;
+	}
+
+	return DefWindowProc(hwnd, iMsg, wParam, lParam);
+#else
+// this event is handled in aui_sdlmouse.cpp
+//          case SDL_MOUSEBUTTONDOWN:
+//              if (event.button.button == SDL_BUTTON_WHEELUP){
+//                   printf("%s L%d: Mouse wheel up handled!\n", __FILE__, __LINE__);
+//                   ui_HandleMouseWheel((sint16)1);
+//                  }
+//              else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+//  			ui_HandleMouseWheel((sint16)-1);
+        
+             break;
+	}
+	
+        //lynx: is a last default handling missing here??? DefWindowProc()
+ 
+	return 0;
+#endif
+}
+
+#elif defined(__AUI_USE_DIRECTX__)
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (!gDone && g_c3ui)
@@ -1853,9 +2221,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		ui_HandleMouseWheel((sint16)HIWORD(wParam));
 		break;
 	}
-
+#ifdef WIN32
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
+#endif
 }
+#endif// else: Compilation error
 
 void DisplayFrame(aui_Surface *surf)
 {
@@ -1882,5 +2252,15 @@ void DisplayFrame(aui_Surface *surf)
 
 BOOL ExitGame(void)
 {
+#if defined(__AUI_USE_SDL__)
+	static SDL_Event quit = { 0 };
+	quit.type = SDL_QUIT;
+	quit.quit.type = SDL_QUIT;
+	int e = SDL_PushEvent(&quit);
+	return (e != 0);
+#elif defined(WIN32)
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
+#else
+	return TRUE;
+#endif
 }
