@@ -8055,7 +8055,7 @@ bool Player::HasContactWith(PLAYER_INDEX pl) const
 	
 	return ((m_contactedPlayers & (1 << pl)) != 0)
 	    && ((g_player[pl]->m_contactedPlayers & (1 << m_owner)) != 0);
-	}
+}
 
 	
 bool Player::HasSeen(PLAYER_INDEX pl)

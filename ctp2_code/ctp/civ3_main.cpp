@@ -1109,7 +1109,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 #ifdef __GNUC__
 void ParseCommandLine(int argc, char **argv)
 #else
-void ParseCommandLine(PSTR *szCmdLine)
+void ParseCommandLine(PSTR szCmdLine)
 #endif
 {
 #ifdef WIN32

@@ -287,9 +287,9 @@ void aui_DirectSurface::Flip()
 	{
 		m_lpdds->Flip(m_back, DDFLIP_WAIT);
 	}
-	else
+	else if(m_back != NULL)
 	{
-		m_lpdds->Blt(NULL,m_back,NULL,0,NULL);
+		m_lpdds->Blt(NULL, m_back, NULL, 0, NULL);
 	}
 }
 

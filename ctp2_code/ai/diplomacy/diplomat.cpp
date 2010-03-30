@@ -572,12 +572,12 @@ void Diplomat::Load(CivArchive & archive)
 			ai_state.dbIndex = -1;
 		}
 		
-        PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+		PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
 
 		if (    g_player[m_playerId] 
-             && g_player[foreigner] 
-             && (m_playerId != foreignerId)
-            )
+		     && g_player[foreigner] 
+		     && (m_playerId != foreignerId)
+		    )
 		{
 			ChangeDiplomacy(foreignerId, ai_state.dbIndex);
 			UpdateRegard(foreignerId);
@@ -603,6 +603,12 @@ void Diplomat::Load(CivArchive & archive)
 
 	
 	m_desireWarWith.resize(m_foreigners.size());
+
+	// Diplomats even exist for dead players.
+	// Nothing to do if we are already dead.
+	if(g_player[m_playerId] == NULL)
+		return;
+
 	ComputeAllDesireWarWith();
 	ComputeIncursionPermission();
 }
@@ -5691,7 +5697,7 @@ bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 
 bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 {
-	if (!g_player[m_playerId]) 
+	if (!g_player[m_playerId])
 		return false;
 	sint32 const		turns_at_peace		= 
 		AgreementMatrix::s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);

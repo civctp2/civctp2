@@ -127,7 +127,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 
 	HRESULT hr;
 
-	uint32 coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
+	uint32 coopFlags = (m_exclusiveMode) ? (DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT) : DDSCL_NORMAL;
 
 	if (g_createDirectDrawOnSecondary)
 	{
@@ -156,9 +156,17 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	DDSURFACEDESC ddsd;
 	memset( &ddsd, 0, sizeof( ddsd ) );
 	ddsd.dwSize = sizeof( ddsd );
-	ddsd.dwFlags = DDSD_CAPS|DDSD_BACKBUFFERCOUNT;
-	ddsd.dwBackBufferCount = 1;
-	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE|DDSCAPS_COMPLEX|DDSCAPS_FLIP;
+	if(m_exclusiveMode)
+	{
+		ddsd.dwFlags = DDSD_CAPS|DDSD_BACKBUFFERCOUNT;
+		ddsd.dwBackBufferCount = 1;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE|DDSCAPS_COMPLEX|DDSCAPS_FLIP;
+	}
+	else
+	{
+		ddsd.dwFlags = DDSD_CAPS;
+		ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+	}
 
 	hr = m_lpdd->CreateSurface( &ddsd, &lpdds, NULL );
 	Assert( hr == DD_OK || hr == DDERR_PRIMARYSURFACEALREADYEXISTS );
@@ -175,20 +183,15 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	else
 	{
 		m_lpdds = lpdds;
+	}
+	
+	if(m_exclusiveMode)
+	{
 		ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
 
 		hr = m_lpdds->GetAttachedSurface(&ddsd.ddsCaps, &m_back);
 		Assert( hr == DD_OK );
 		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
-	}
-
-	if ( !m_exclusiveMode )
-	{
-		// Changed if command line argument: nonexclusive is present
-		coopFlags = DDSCL_NORMAL;
-		hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
-		Assert( hr == DD_OK );
-		if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 	}
 
 	delete m_primary;
