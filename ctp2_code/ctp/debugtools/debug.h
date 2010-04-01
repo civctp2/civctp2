@@ -45,9 +45,12 @@ extern "C" {
 void Debug_Open (void);
 void Debug_Close (void);
 
-#if defined(WIN32)
+#ifdef WIN32
 void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID);
 #endif // WIN32
+#ifdef LINUX
+void Debug_SetProcessName(char const * szProcessName);
+#endif
 
 #ifdef __cplusplus
 } // extern "C"
@@ -58,6 +61,8 @@ namespace Os
     {
 #if defined(WIN32)
         Debug_SetThreadName((LPCSTR) szThreadName, (DWORD) -1);
+#elif defined(LINUX)
+        Debug_SetProcessName(szThreadName);
 #endif
     };
 } // namespace Os
