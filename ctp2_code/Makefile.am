@@ -139,7 +139,6 @@ ctp2_SOURCES = \
 	robot/pathing/AVLHeap.cpp \
 	robot/pathing/CityAstar.cpp \
 	robot/pathing/Path.cpp \
-	robot/pathing/RobotAstar.cpp \
 	robot/pathing/robotastar2.cpp \
 	robot/pathing/TradeAstar.cpp \
 	robot/pathing/unitastar.cpp \

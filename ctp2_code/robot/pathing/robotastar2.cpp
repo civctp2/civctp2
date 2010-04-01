@@ -36,7 +36,7 @@
 
 #include "c3math.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 

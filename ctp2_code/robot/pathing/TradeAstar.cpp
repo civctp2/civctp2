@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star Trade route pathing algorithm
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,7 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 #include "TradeAstar.h"
 #include "XY_Coordinates.h"
 #include "World.h"

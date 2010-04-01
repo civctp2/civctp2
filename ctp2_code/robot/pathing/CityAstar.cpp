@@ -50,7 +50,7 @@
 #include "Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
 #include "c3errors.h"
 #include "Diplomat.h"           // To be able to retrieve the current strategy
-#include "globals.h"
+#include "Globals.h"
 #include "MoveFlags.h"
 #include "Path.h"
 #include "player.h"             // g_player
