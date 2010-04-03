@@ -41,17 +41,25 @@
 
 #include "civarchive.h"
 
+#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP CivArchive::QueryInterface(REFIID riid, void **obj)
 {
 	return E_NOINTERFACE;
 }
 
 STDMETHODIMP_(ULONG) CivArchive::AddRef()
+#else
+uint32 CivArchive::AddRef()
+#endif
 {
 	return ++m_refCount;
 }
 
+#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP_(ULONG) CivArchive::Release()
+#else
+uint32 CivArchive::Release()
+#endif
 {
 	--m_refCount;
 	if(m_refCount)

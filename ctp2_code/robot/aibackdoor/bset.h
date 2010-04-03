@@ -17,7 +17,7 @@ enum BSET_STACK
 }; 
 
 #include "ctp2_inttypes.h"
-struct IC3CivArchive; 
+#include "Ic3CivArchive.h" // struct IC3CivArchive; 
 class CivArchive; 
 
 
