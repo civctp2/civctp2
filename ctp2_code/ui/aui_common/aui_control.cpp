@@ -197,7 +197,11 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 			else
 				m_actionKey = '^';
 		} else if(stricmp(shortcut, "ESC") == 0) {
+#ifdef WIN32
 			m_actionKey = VK_ESCAPE;
+#else
+			m_actionKey = AUI_KEYBOARD_KEY_ESCAPE;
+#endif
 		} else {
 			m_actionKey = shortcut[0];
 		}
@@ -629,7 +633,12 @@ AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 
     if (g_ui)
     {
+#ifdef WIN32
 	    SetFocus(g_ui->TheHWND());
+#else
+        extern class aui_Win* g_winFocus;
+        g_winFocus = 0;
+#endif
     }
 
     return AUI_ERRCODE_OK;

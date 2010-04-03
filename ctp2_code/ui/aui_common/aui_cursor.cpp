@@ -30,7 +30,7 @@
 
 #include "c3.h"
 
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_cursor.h"
 
 aui_Cursor::aui_Cursor(

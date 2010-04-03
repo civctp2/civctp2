@@ -10,8 +10,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AVL_H__
 #define __AVL_H__ 1
 
@@ -100,8 +101,10 @@ template <class T> void AVL<T>::InitAVL() {
     
     m_balance = AVL_MID;
     m_ptr[0] = NULL; 
-    m_ptr[1] = NULL; 
-    m_queue_idx = -1; 
+    m_ptr[1] = NULL;
+#ifdef _DEBUG
+    m_queue_idx = -1;
+#endif
 }
 
 

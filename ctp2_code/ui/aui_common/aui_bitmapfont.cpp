@@ -187,7 +187,7 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
-		
+#ifdef WIN32
 		static MBCHAR fontdir[ MAX_PATH + 1 ];
 		sint32 last = GetWindowsDirectory( fontdir, MAX_PATH ) - 1;
 		if (last > 1)
@@ -199,6 +199,7 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 
 			g_ui->GetBitmapFontResource()->AddSearchPath( fontdir );
 		}
+#endif // WIN32
 	}
 	return AUI_ERRCODE_OK;
 }
