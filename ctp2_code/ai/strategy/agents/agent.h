@@ -172,24 +172,26 @@ public:
 	void ClearOrders();
 	bool HasMovePoints() const;
 
+	bool IsNeededForGarrison() const { return m_neededForGarrison; };
+	void SetIsNeededForGarrison(bool neededForGarrison) { m_neededForGarrison = neededForGarrison; };
+
 #ifdef _DEBUG_SCHEDULER
 	bool ContainsArmyIn(const Agent_ptr agent) const { return Get_Army() == agent->Get_Army(); };
 #endif
 
-	bool           m_neededForGarrison;
-
 private:
 
+	Squad_Strength m_squad_strength;
+	Goal_ptr       m_goal;
+	Army           m_army;
+	sint32         m_playerId;
+	sint32         m_targetOrder;
+	MapPoint       m_targetPos;
 	SQUAD_CLASS    m_squad_class;
 	sint16         m_agent_type;
-	Goal_ptr       m_goal;
-	Squad_Strength m_squad_strength;
 	bool           m_can_be_executed;
 	bool           m_detached;
-	Army           m_army;
-	sint32         m_targetOrder;
-	sint32         m_playerId;
-	MapPoint       m_targetPos;
+	bool           m_neededForGarrison;
 };
 
 #endif // __AGENT_H__

@@ -74,7 +74,7 @@ public:
 		void *	data;
 	};
 
-    std::vector<Struct>	list;
+	std::vector<Struct>	list;
 
 	ns_Accessor()
 	:	list()
@@ -96,7 +96,7 @@ public:
 		void *b = p->data(i);
 		switch(t) {
 		case INT:
-			return (int)a - (int)b;
+			return int((size_t)a - (size_t)b);
 		case STRING:
 		case ICON:
 			if(a) {

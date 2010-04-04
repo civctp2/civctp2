@@ -136,41 +136,41 @@ const Utility Goal::MAX_UTILITY =  99999999;
 
 Goal::Goal()
 :
-    m_goal_type                     (GOAL_TYPE_NULL),
-    m_raw_priority                  (BAD_UTILITY),
-    m_removal_time                  (DONT_REMOVE),
     m_current_needed_strength       (),
     m_current_attacking_strength    (),
     m_current_projected_strength    (),
     m_matches                       (),
     m_agents                        (),
+    m_removal_time                  (DONT_REMOVE),
     m_playerId                      (PLAYER_UNASSIGNED),
+    m_raw_priority                  (BAD_UTILITY),
     m_combinedUtility               (0),
-    m_needs_sorting                 (false),
     m_target_pos                    (),
     m_target_city                   (),
     m_target_army                   (),
-    m_sub_task                      (SUB_TASK_GOAL)
+    m_sub_task                      (SUB_TASK_GOAL),
+    m_goal_type                     (GOAL_TYPE_NULL),
+    m_needs_sorting                 (false)
 {
 }
 
 Goal::Goal(const Goal &goal)
 :
-    m_goal_type                     (goal.m_goal_type),
-    m_raw_priority                  (goal.m_raw_priority),
-    m_removal_time                  (goal.m_removal_time),
     m_current_needed_strength       (goal.m_current_needed_strength),
     m_current_attacking_strength    (0),                         // Nothing since the agent list is not copied
     m_current_projected_strength    (0),                         // Nothing since the agent list is not copied
     m_matches                       (),                          // Contains refernces that are invalid after copy
     m_agents                        (),                          // Agents are just pointers, which are changed on copy
+    m_removal_time                  (goal.m_removal_time),
     m_playerId                      (goal.m_playerId),
+    m_raw_priority                  (goal.m_raw_priority),
     m_combinedUtility               (goal.m_combinedUtility),
-    m_needs_sorting                 (goal.m_needs_sorting),
     m_target_pos                    (goal.m_target_pos),
     m_target_city                   (goal.m_target_city),
     m_target_army                   (goal.m_target_army),
-    m_sub_task                      (goal.m_sub_task)
+    m_sub_task                      (goal.m_sub_task),
+    m_goal_type                     (goal.m_goal_type),
+    m_needs_sorting                 (goal.m_needs_sorting)
 {
 }
 
@@ -247,7 +247,7 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
 	MapPoint curr_pos = agent->Get_Pos();
 
-	if(agent->m_neededForGarrison && dest_pos != curr_pos)
+	if(agent->IsNeededForGarrison() && dest_pos != curr_pos)
 	{
 		return;
 	}
@@ -1459,7 +1459,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
 	MapPoint curr_pos = agent_ptr->Get_Pos();
 
-	if(agent_ptr->m_neededForGarrison && dest_pos != curr_pos)
+	if(agent_ptr->IsNeededForGarrison() && dest_pos != curr_pos)
 	{
 		return Goal::BAD_UTILITY;
 	}
@@ -2944,7 +2944,7 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 	{
 		if(first_army->Get_Pos() != dest_pos)
 		{
-			if(first_army->m_neededForGarrison)
+			if(first_army->IsNeededForGarrison())
 			{
 				Assert(false);
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, first_army->Get_Army().m_id,

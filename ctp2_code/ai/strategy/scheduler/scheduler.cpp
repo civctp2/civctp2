@@ -1902,7 +1902,7 @@ void Scheduler::Assign_Garrison()
 	{
 		Agent_ptr agent = (*agent_iter);
 
-		agent->m_neededForGarrison = false;
+		agent->SetIsNeededForGarrison(false);
 
 		Army army = agent->Get_Army();
 
@@ -1993,7 +1993,7 @@ void Scheduler::Assign_Garrison()
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
 
-				agent_iter->second->m_neededForGarrison = true;
+				agent_iter->second->SetIsNeededForGarrison(true);
 
 				if(agent_iter->second->Has_Any_Goal())
 				{

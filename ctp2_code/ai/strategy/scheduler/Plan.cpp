@@ -143,8 +143,8 @@ Plan::Plan()
 //----------------------------------------------------------------------------
 Plan::Plan(Agent_ptr agent, bool needsCargo)
 :
-    m_matching_value    (Goal::BAD_UTILITY),
     m_the_agent         (agent),
+    m_matching_value    (Goal::BAD_UTILITY),
     m_needs_cargo       (needsCargo),
     m_needs_transporter (false),
     m_cannot_be_used    (false)
@@ -168,8 +168,8 @@ Plan::Plan(Agent_ptr agent, bool needsCargo)
 //----------------------------------------------------------------------------
 Plan::Plan(Plan const & a_Original)
 :
-    m_matching_value    (a_Original.m_matching_value),
     m_the_agent         (a_Original.m_the_agent),
+    m_matching_value    (a_Original.m_matching_value),
     m_needs_cargo       (a_Original.m_needs_cargo),
     m_needs_transporter (a_Original.m_needs_transporter),
     m_cannot_be_used    (a_Original.m_cannot_be_used)

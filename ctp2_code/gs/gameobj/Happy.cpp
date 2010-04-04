@@ -938,10 +938,11 @@ double Happy::CalcFeats(Player *p)
 //----------------------------------------------------------------------------
 void Happy::Copy(Happy *copy)
 {
-	memcpy(&m_happiness, &copy->m_happiness, (uint32)&m_crime + sizeof(m_crime) - (uint32)&m_happiness);
+	memcpy(&m_happiness, &copy->m_happiness, (size_t)&m_crime + sizeof(m_crime) - (size_t)&m_happiness);
 	m_timedChanges = copy->m_timedChanges;
 
-	for (size_t i = 0; i < static_cast<size_t>(HAPPY_REASON_MAX); ++i){
+	for (size_t i = 0; i < static_cast<size_t>(HAPPY_REASON_MAX); ++i)
+	{
 		double      data;
 		StringId    name;
 		copy->m_tracker->GetHappiness(static_cast<HAPPY_REASON>(i), data, name);

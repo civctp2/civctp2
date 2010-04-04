@@ -48,17 +48,17 @@ class Squad_Strength
 {
 public:
 	Squad_Strength(sint16 agent_count = 0)
-	: m_agent_count      (agent_count),
-	  m_attack_str       (0.0),
+	: m_attack_str       (0.0),
 	  m_defense_str      (0.0),
 	  m_ranged_str       (0.0),
 	  m_value            (0),
-	  m_transport        (0),
-	  m_defenders        (0),
-	  m_ranged           (0),
 	  m_land_bombard_str (0.0),
 	  m_water_bombard_str(0.0),
-	  m_air_bombard_str  (0.0)
+	  m_air_bombard_str  (0.0),
+	  m_agent_count      (agent_count),
+	  m_transport        (0),
+	  m_defenders        (0),
+	  m_ranged           (0)
 	{ ; };
 
 	Squad_Strength(const Army& army);
@@ -121,20 +121,18 @@ public:
 
 protected:
 
-	sint16 m_agent_count;
-
 	double m_attack_str;
 	double m_defense_str;
 	double m_ranged_str;
-	double m_value;
-
-	sint16 m_transport;
-	sint16 m_defenders;
-	sint16 m_ranged;
-
 	double m_land_bombard_str;
 	double m_water_bombard_str;
 	double m_air_bombard_str;
+	double m_value;
+
+	sint16 m_agent_count;
+	sint16 m_transport;
+	sint16 m_defenders;
+	sint16 m_ranged;
 };
 
 #endif // __AGENT_STRENGTH_H__

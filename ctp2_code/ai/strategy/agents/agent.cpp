@@ -85,34 +85,34 @@ Agent::Agent()
 
 Agent::Agent(const Army & army)
 :
-    m_squad_class       (SQUAD_CLASS_DEFAULT),
-    m_agent_type        (-1),
-    m_goal              (NULL),
     m_squad_strength    (0),
-    m_can_be_executed   (true),
-    m_detached          (false),
-    m_neededForGarrison (false),
+    m_goal              (NULL),
     m_army              (army),
     m_playerId          (army->GetOwner()),
     m_targetOrder       (OrderRecord::INDEX_INVALID),
-    m_targetPos         ()
+    m_targetPos         (),
+    m_squad_class       (SQUAD_CLASS_DEFAULT),
+    m_agent_type        (-1),
+    m_can_be_executed   (true),
+    m_detached          (false),
+    m_neededForGarrison (false)
 {
 	Compute_Squad_Strength();
 }
 
 Agent::Agent(const Agent & an_Original)
 :
-    m_squad_class       (an_Original.m_squad_class),
-    m_agent_type        (an_Original.m_agent_type),
-    m_goal              (NULL),                            // Pointer reference, different after a scheduler copy
     m_squad_strength    (an_Original.m_squad_strength),
-    m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
-    m_detached          (an_Original.m_detached),
-    m_neededForGarrison (an_Original.m_neededForGarrison), // Depends on location
+    m_goal              (NULL),                            // Pointer reference, different after a scheduler copy
     m_army              (an_Original.m_army),
     m_playerId          (an_Original.m_playerId),
     m_targetOrder       (an_Original.m_targetOrder),
-    m_targetPos         (an_Original.m_targetPos)
+    m_targetPos         (an_Original.m_targetPos),
+    m_squad_class       (an_Original.m_squad_class),
+    m_agent_type        (an_Original.m_agent_type),
+    m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
+    m_detached          (an_Original.m_detached),
+    m_neededForGarrison (an_Original.m_neededForGarrison)  // Depends on location
 {
 }
 

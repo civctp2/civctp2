@@ -771,9 +771,9 @@ void World::GenerateGoods()
 
 	sint32 x, y; 
 	for (x = 0; x < m_size.x; x++) 
-    {
+	{
 		for (y = 0; y < m_size.y; y++) 
-        {
+		{
 			MapPoint center(x, y);
 			Cell *centerCell = GetCell(center);
 

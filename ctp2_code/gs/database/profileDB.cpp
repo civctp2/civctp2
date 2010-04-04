@@ -405,6 +405,7 @@ ProfileDB::ProfileDB()
 	Var("ShowCityInfluence"          , PV_BOOL  , &m_showCityInfluence          , NULL, false);
 	Var("ShowPoliticalBorders"       , PV_BOOL  , &m_showPoliticalBorders       , NULL, false);
 
+	Var("GoodRichness"               , PV_NUM   , &m_richness                   , NULL, false);
 	Var("EndTurnSound"               , PV_BOOL  , &m_endTurnSound               , NULL);
 	Var("EnableLogs"                 , PV_BOOL  , &m_enableLogs                 , NULL, false);
 	Var("DisplayUnits"               , PV_BOOL  , &m_displayUnits               , NULL, false);
