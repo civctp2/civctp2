@@ -83,51 +83,51 @@ public:
 	void Set_Army_Strength      (const Army & army, bool noCargo = false);
 	void Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
 
-	double Get_Attack      () const { return m_attack_str;        };
-	double Get_Defense     () const { return m_defense_str;       };
-	double Get_Ranged      () const { return m_ranged_str;        };
-	double Get_Bombard_Land() const { return m_land_bombard_str;  };
-	double Get_Bombard_Sea () const { return m_water_bombard_str; };
-	double Get_Bombard_Air () const { return m_air_bombard_str;   };
-	double Get_Value       () const { return m_value;             };
+	float Get_Attack      () const { return m_attack_str;        };
+	float Get_Defense     () const { return m_defense_str;       };
+	float Get_Ranged      () const { return m_ranged_str;        };
+	float Get_Bombard_Land() const { return m_land_bombard_str;  };
+	float Get_Bombard_Sea () const { return m_water_bombard_str; };
+	float Get_Bombard_Air () const { return m_air_bombard_str;   };
+	float Get_Value       () const { return m_value;             };
 	sint16 Get_Transport   () const { return m_transport;         };
 	sint16 Get_Defenders   () const { return m_defenders;         };
 	sint16 Get_Ranged_Units() const { return m_ranged;            };
 
-	void Set_Attack       (const double & attack)  { m_attack_str        = attack;  };
-	void Set_Defense      (const double & defense) { m_defense_str       = defense; };
-	void Set_Ranged       (const double & ranged)  { m_ranged_str        = ranged;  };
-	void Set_Bombard_Land (const double & land)    { m_land_bombard_str  = land;    };
-	void Set_Bombard_Sea  (const double & sea)     { m_water_bombard_str = sea;     };
-	void Set_Bombard_Air  (const double & air)     { m_air_bombard_str   = air;     };
-	void Set_Value        (const double & value)   { m_value             = value;   };
+	void Set_Attack       (const float & attack)  { m_attack_str        = attack;  };
+	void Set_Defense      (const float & defense) { m_defense_str       = defense; };
+	void Set_Ranged       (const float & ranged)  { m_ranged_str        = ranged;  };
+	void Set_Bombard_Land (const float & land)    { m_land_bombard_str  = land;    };
+	void Set_Bombard_Sea  (const float & sea)     { m_water_bombard_str = sea;     };
+	void Set_Bombard_Air  (const float & air)     { m_air_bombard_str   = air;     };
+	void Set_Value        (const float & value)   { m_value             = value;   };
 	void Set_Transport    (const sint16 & slots)   { m_transport         = slots;    Assert(slots >= 0); };
 	void Set_Defenders    (const sint16 & units)   { m_defenders         = units;   };
 	void Set_Ranged_Units (const sint16 & units)   { m_ranged            = units;   };
 
 
-	void Set_Force_Matching( const double attack_ratio,
-							 const double defense_ratio,
-							 const double ranged_ratio,
-							 const double bombard_ratio,
-							 const double value_ratio );
+	void Set_Force_Matching( const float attack_ratio,
+							 const float defense_ratio,
+							 const float ranged_ratio,
+							 const float bombard_ratio,
+							 const float value_ratio );
 	void Set_To_The_Maximum(Squad_Strength);
 
 
 	bool NothingNeeded() const;
 	void Log_Debug_Info(const int & log, sint32 playerId, char * text) const;
 	bool HasEnough(const Squad_Strength & otherStrength) const;
-	double GetTotalMissing(const Squad_Strength & otherStrength) const;
+	float GetTotalMissing(const Squad_Strength & otherStrength) const;
 
 protected:
 
-	double m_attack_str;
-	double m_defense_str;
-	double m_ranged_str;
-	double m_land_bombard_str;
-	double m_water_bombard_str;
-	double m_air_bombard_str;
-	double m_value;
+	float m_attack_str;
+	float m_defense_str;
+	float m_ranged_str;
+	float m_land_bombard_str;
+	float m_water_bombard_str;
+	float m_air_bombard_str;
+	float m_value;
 
 	sint16 m_agent_count;
 	sint16 m_transport;

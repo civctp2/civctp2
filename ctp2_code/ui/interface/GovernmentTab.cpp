@@ -48,7 +48,7 @@ template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 }
 
 
-template <class type> const COLORREF *ComparisonColor(type left, type right)
+template <class type> COLORREF ComparisonColor(type left, type right)
 {
 	
 	static const sint32 LESS_THAN_CHARACTER = 0;
@@ -57,13 +57,13 @@ template <class type> const COLORREF *ComparisonColor(type left, type right)
 
 	
 	if(left < right)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_RED));
+		return(g_colorSet->GetColorRef(COLOR_RED));
 	if(right < left)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_DARK_GREEN));
-	return((const COLORREF *)g_colorSet->GetColorRef(COLOR_BLACK));
+		return(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
+	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
-template <class type> const COLORREF *ComparisonColorOpposite(type left, type right)
+template <class type> COLORREF ComparisonColorOpposite(type left, type right)
 {
 	
 	static const sint32 LESS_THAN_CHARACTER = 0;
@@ -72,10 +72,10 @@ template <class type> const COLORREF *ComparisonColorOpposite(type left, type ri
 
 	
 	if(left > right)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_RED));
+		return(g_colorSet->GetColorRef(COLOR_RED));
 	if(right > left)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_DARK_GREEN));
-	return((const COLORREF *)g_colorSet->GetColorRef(COLOR_BLACK));
+		return(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
+	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
 
@@ -362,75 +362,75 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 
 
 
-	m_currentInformation[GII_CITIES]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_CITIES]->SetTextColor(ComparisonColor(
 		currentGovernment->GetTooManyCitiesThreshold(),
 		compareGovernment->GetTooManyCitiesThreshold()));
-	m_compareInformation[GII_CITIES]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_CITIES]->SetTextColor(ComparisonColor(
 		compareGovernment->GetTooManyCitiesThreshold(),
 		currentGovernment->GetTooManyCitiesThreshold()));
 
-	m_currentInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_GROWTH]->SetTextColor(ComparisonColor(
 		(100.0 * currentGovernment->GetFoodCoef()),
 		(100.0 * compareGovernment->GetFoodCoef())));
-	m_compareInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_GROWTH]->SetTextColor(ComparisonColor(
 		(100.0 * compareGovernment->GetFoodCoef()),
 		(100.0 * currentGovernment->GetFoodCoef())));
 
-	m_currentInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_PRODUCTION]->SetTextColor(ComparisonColor(
 		(100.0 * currentGovernment->GetProductionCoef()),
 		(100.0 * compareGovernment->GetProductionCoef())));
-	m_compareInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_PRODUCTION]->SetTextColor(ComparisonColor(
 		(100.0 * compareGovernment->GetProductionCoef()),
 		(100.0 * currentGovernment->GetProductionCoef())));
 
-	m_currentInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_RESEARCH]->SetTextColor(ComparisonColor(
 		(100.0 * (currentGovernment->GetMaxScienceRate() * currentGovernment->GetMaxScienceRate())),
 		(100.0 * (compareGovernment->GetMaxScienceRate() * compareGovernment->GetMaxScienceRate()))));
-	m_compareInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_RESEARCH]->SetTextColor(ComparisonColor(
 		(100.0 * (compareGovernment->GetMaxScienceRate() * compareGovernment->GetMaxScienceRate())),
 		(100.0 * (currentGovernment->GetMaxScienceRate() * currentGovernment->GetMaxScienceRate()))));
 
-	m_currentInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_ECONOMIC]->SetTextColor(ComparisonColor(
 		(100.0 * currentGovernment->GetGoldCoef()),
 		(100.0 * compareGovernment->GetGoldCoef())));
-	m_compareInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_ECONOMIC]->SetTextColor(ComparisonColor(
 		(100.0 * compareGovernment->GetGoldCoef()),
 		(100.0 * currentGovernment->GetGoldCoef())));
 
 	//higher crime = red
-	m_currentInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColorOpposite(
+	m_currentInformation[GII_COMMERCE]->SetTextColor(ComparisonColorOpposite(
 		(100.0 * currentGovernment->GetCrimeCoef()),
 		(100.0 * compareGovernment->GetCrimeCoef())));
-	m_compareInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColorOpposite(
+	m_compareInformation[GII_COMMERCE]->SetTextColor(ComparisonColorOpposite(
 		(100.0 * compareGovernment->GetCrimeCoef()),
 		(100.0 * currentGovernment->GetCrimeCoef())));
 
 	//higher support = red
-	m_currentInformation[GII_MILITARY]->SetTextColor((long)ComparisonColorOpposite(
+	m_currentInformation[GII_MILITARY]->SetTextColor(ComparisonColorOpposite(
 		(100.0 * currentGovernment->GetSupportCoef()),
 		(100.0 * compareGovernment->GetSupportCoef())));
-	m_compareInformation[GII_MILITARY]->SetTextColor((long)ComparisonColorOpposite(
+	m_compareInformation[GII_MILITARY]->SetTextColor(ComparisonColorOpposite(
 		(100.0 * compareGovernment->GetSupportCoef()),
 		(100.0 * currentGovernment->GetSupportCoef())));
 
-	m_currentInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_LOYALTY]->SetTextColor(ComparisonColor(
 		(10.0 * currentGovernment->GetWarDiscontentMaxUnits()),
 		(10.0 * compareGovernment->GetWarDiscontentMaxUnits())));
-	m_compareInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_LOYALTY]->SetTextColor(ComparisonColor(
 		(10.0 * compareGovernment->GetWarDiscontentMaxUnits()),
 		(10.0 * currentGovernment->GetWarDiscontentMaxUnits())));
 
-	m_currentInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_MARTIAL_LAW]->SetTextColor(ComparisonColor(
 		(currentGovernment->GetMaxMartialLawUnits() * currentGovernment->GetMartialLawEffect()),
 		(compareGovernment->GetMaxMartialLawUnits() * compareGovernment->GetMartialLawEffect())));
-	m_compareInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_MARTIAL_LAW]->SetTextColor(ComparisonColor(
 		(compareGovernment->GetMaxMartialLawUnits() * compareGovernment->GetMartialLawEffect()),
 		(currentGovernment->GetMaxMartialLawUnits() * currentGovernment->GetMartialLawEffect())));
 
-	m_currentInformation[GII_ANTI_POLLUTION]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_ANTI_POLLUTION]->SetTextColor(ComparisonColor(
 		currentGovernment->GetPollutionRank(),
 		compareGovernment->GetPollutionRank()));
-	m_compareInformation[GII_ANTI_POLLUTION]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_ANTI_POLLUTION]->SetTextColor(ComparisonColor(
 		compareGovernment->GetPollutionRank(),
 		currentGovernment->GetPollutionRank()));
 }

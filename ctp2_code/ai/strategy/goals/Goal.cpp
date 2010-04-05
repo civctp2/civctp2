@@ -1172,8 +1172,8 @@ sint32 Goal::Get_Target_Value() const
 	){
 		const Army &    army = Get_Target_Army();
 		sint16          tmpCount;
-		double          tmp;
-		double          tmpValue;
+		float           tmp;
+		float           tmpValue;
 		army->ComputeStrength(tmp,tmp,tmp,tmpCount,tmpCount,tmp,tmp,tmp,tmpValue, false);
 		value = static_cast<sint32>(tmpValue);
 	}
