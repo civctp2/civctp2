@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Line graph
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -138,7 +138,7 @@ public:
 
 	aui_Surface	*   GetGraphSurface(void) const { return m_surface; }
 
-	void LineGraph::GenrateGraph(sint32     &infoXCount,
+	void GenrateGraph(sint32     &infoXCount,
 	                             sint32     &infoYCount,
 	                             double ***  infoGraphData,
 	                             sint32      category);

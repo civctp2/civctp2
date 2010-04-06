@@ -36,6 +36,22 @@
 
 #include "aui_movie.h"
 
+#ifdef __AUI_USE_SDL__
+#include <SDL.h>
+#ifdef USE_SDL_FFMPEG
+#include <SDL_ffmpeg.h>
+#endif
+#include <SDL_mixer.h>
+#include <SDL_syswm.h>
+#include "soundmanager.h"		// g_soundManager
+#include "aui_sdlsurface.h"
+#ifdef USE_SDL_FFMPEG
+SDL_ffmpegFile* film;
+#endif
+Mix_Chunk achunk;
+
+int m_moviechannel;
+#endif
 
 
 WNDPROC aui_Movie::m_windowProc = NULL;
@@ -71,18 +87,23 @@ AUI_ERRCODE aui_Movie::InitCommon( MBCHAR const * filename )
 	memset( &m_rect, 0, sizeof( m_rect ) );
 	memset(&m_windowRect, 0, sizeof(m_windowRect));
 
+#ifdef __AUI_USE_DIRECTX__
 	m_aviFile = NULL;
 	m_aviStream = NULL;
 	memset( &m_aviFileInfo, 0, sizeof( m_aviFileInfo ) );
 	memset( &m_aviStreamInfo, 0, sizeof( m_aviStreamInfo ) );
 	m_getFrame = NULL;
+#endif
 	m_curFrame = 0;
+
 
 	AUI_ERRCODE errcode = SetFilename( filename );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
+#ifdef __AUI_USE_DIRECTX__
 	AVIFileInit();
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -93,7 +114,9 @@ aui_Movie::~aui_Movie()
 {
 	Unload();
 
+#ifdef __AUI_USE_DIRECTX__
 	AVIFileExit();
+#endif
 }
 
 
@@ -240,7 +263,7 @@ AUI_ERRCODE aui_Movie::Open(
 			SetDestRect( rect );
 
 		uint32 err;
-
+#ifdef __AUI_USE_DIRECTX__
 		err = AVIFileOpen(
 			&m_aviFile,
 			m_filename,
@@ -300,7 +323,7 @@ AUI_ERRCODE aui_Movie::Open(
 		
 		m_rect.right = m_rect.left + m_aviStreamInfo.rcFrame.right;
 		m_rect.bottom = m_rect.top + m_aviStreamInfo.rcFrame.bottom;
-
+#endif
 		m_isOpen = TRUE;
 		m_isPlaying = FALSE;
 		m_isPaused = FALSE;
@@ -318,6 +341,7 @@ AUI_ERRCODE aui_Movie::Close( void )
 		
 		Stop();
 
+#ifdef __AUI_USE_DIRECTX__
 		if ( m_getFrame )
 		{
 			AVIStreamGetFrameClose( m_getFrame );
@@ -335,6 +359,7 @@ AUI_ERRCODE aui_Movie::Close( void )
 			AVIFileRelease( m_aviFile );
 			m_aviFile = NULL;
 		}
+#endif
 
 		m_isOpen = FALSE;
 	}
@@ -351,6 +376,7 @@ AUI_ERRCODE aui_Movie::Play( void )
 		
 		Open();
 
+#ifdef __AUI_USE_DIRECTX__
 		uint32 err = AVIStreamBeginStreaming(
 			m_aviStream,
 			0,
@@ -358,7 +384,7 @@ AUI_ERRCODE aui_Movie::Play( void )
 			1000 );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
-
+#endif
 		m_isPlaying = TRUE;
 		m_isPaused = FALSE;
 
@@ -394,29 +420,32 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 		mouse->Hide();
 	}
 
-	
+#ifdef __AUI_USE_DIRECTX__
 	MSG msg;
 	m_windowProc = (WNDPROC)GetWindowLong( g_ui->TheHWND(), GWL_WNDPROC );
 	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)OnScreenMovieWindowProc );
+#endif
 
 	m_onScreenMovie = this;
 
 	
 	while ( !m_isFinished && m_isPlaying )
 	{
-		
+#ifdef __AUI_USE_DIRECTX__
 		while ( ShowCursor( FALSE ) >= 0 )
 			;
+#endif
 
 		Process();
 
 		
-		
+#ifdef __AUI_USE_DIRECTX__
 		if ( PeekMessage( &msg, g_ui->TheHWND(), 0, 0, PM_REMOVE ) )
 		{
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
+#endif
 
 		
 		if (mouse) {
@@ -436,8 +465,10 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 
 	m_onScreenMovie = NULL;
 
+#ifdef __AUI_USE_DIRECTX__
 	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc );
 	m_windowProc = NULL;
+#endif
 
 	if (mouse)
 		mouse->Show();
@@ -455,9 +486,11 @@ AUI_ERRCODE aui_Movie::Stop( void )
 {
 	if ( m_isPlaying )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		uint32 err = AVIStreamEndStreaming( m_aviStream );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
+#endif
 
 		m_isPlaying = FALSE;
 		m_isPaused = FALSE;
@@ -506,7 +539,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 				( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
 				g_ui->Secondary() :
 				m_surface;
-
+#ifdef __AUI_USE_DIRECTX__
 			uint8 *frame = (uint8 *)AVIStreamGetFrame( m_getFrame, m_curFrame );
 			Assert( frame != NULL );
 			if ( !frame ) return AUI_ERRCODE_HACK;
@@ -566,6 +599,9 @@ AUI_ERRCODE aui_Movie::Process( void )
 				if ( !(m_flags & k_AUI_MOVIE_PLAYFLAG_LOOP) )
 					m_isFinished = TRUE;
 			}
+#else
+			m_isFinished = TRUE;
+#endif
 
 			m_lastFrameTime = time;
 
@@ -607,17 +643,20 @@ LRESULT CALLBACK OnScreenMovieWindowProc(
 			
 			aui_Movie::m_onScreenMovie->Close();
 
-			
+#ifdef __AUI_USE_DIRECTX__
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
+#endif
 
 			
 			return 0;
 		}
 	}
-
-	LRESULT lr = CallWindowProc(
+	LRESULT lr = 0;
+#ifdef __AUI_USE_DIRECTX__
+        lr = CallWindowProc(
 		(long(__stdcall *)(HWND, unsigned int, unsigned int, long))aui_Movie::m_windowProc,
 		hwnd, message, wParam, lParam );
+#endif
 
 	return lr;
 }

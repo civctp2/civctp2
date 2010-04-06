@@ -111,8 +111,8 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 
 
 AUI_ERRCODE aui_TextField::InitCommon(
-	MBCHAR *text,
-	MBCHAR *font,
+	const MBCHAR *text,
+	const MBCHAR *font,
 	sint32 fontheight,
 	BOOL multiLine,
 	BOOL autovscroll,
@@ -350,8 +350,11 @@ AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 }
 
 
-
+#ifdef __AUI_USE_DIRECTX__
 void aui_TextField::HitEnter( HWND hwnd )
+#else
+void aui_TextField::HitEnter();
+#endif / __AUI_USE_DIRECTX__
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );
 	Assert( textfield != NULL );

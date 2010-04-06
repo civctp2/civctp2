@@ -151,7 +151,7 @@ protected:
 	uint32		m_timePerFrame;
 	uint32		m_lastFrameTime;
 
-#if defined(WIN32)	
+#if defined(__AUI_USE_DIRECTX__)	
 	PAVIFILE			m_aviFile;
 	PAVISTREAM			m_aviStream;
 	AVIFILEINFO			m_aviFileInfo;
