@@ -72,20 +72,20 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	// Equal transport strength: test the battle strength
 
 	// Attack difference
-	double const attack_cpr  = (m_attack_str  - squad_strength.m_attack_str );
+	float const attack_cpr  = (m_attack_str  - squad_strength.m_attack_str );
 	// Defense difference
-	double const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+	float const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
 	// ranged difference
-	double const ranged_cpr  = (m_ranged_str  - squad_strength.m_ranged_str );
+	float const ranged_cpr  = (m_ranged_str  - squad_strength.m_ranged_str );
 	// value difference
-	double const value_cpr   = (m_value       - squad_strength.m_value      );
+	float const value_cpr   = (m_value       - squad_strength.m_value      );
 
-	double const battle_cpr  = attack_cpr + defense_cpr + ranged_cpr + value_cpr;
-	if (battle_cpr > 0)
+	float const battle_cpr  = attack_cpr + defense_cpr + ranged_cpr + value_cpr;
+	if (battle_cpr > 0.0f)
 	{
 		return true;
 	}
-	else if (battle_cpr < 0)
+	else if (battle_cpr < 0.0f)
 	{
 		return false;
 	}
@@ -175,7 +175,7 @@ void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 
 	m_agent_count       = static_cast<sint16>(army.Num());
 
-	m_value = 0.0;
+	m_value = 0.0f;
 	m_transport = 0;
 	for(sint32 i = m_agent_count; i > 0; --i)
 	{
@@ -250,11 +250,11 @@ void Squad_Strength::Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 
 	m_value             = MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos);
 }
 
-void Squad_Strength::Set_Force_Matching( const double attack_ratio,
-                                         const double defense_ratio,
-                                         const double ranged_ratio,
-                                         const double bombard_ratio,
-                                         const double value_ratio )
+void Squad_Strength::Set_Force_Matching( const float attack_ratio,
+                                         const float defense_ratio,
+                                         const float ranged_ratio,
+                                         const float bombard_ratio,
+                                         const float value_ratio )
 {
 	m_attack_str        *= attack_ratio;
 	m_defense_str       *= defense_ratio;
@@ -282,39 +282,39 @@ void Squad_Strength::Set_To_The_Maximum(Squad_Strength otherStrength)
 
 bool Squad_Strength::NothingNeeded() const
 {
-	return m_air_bombard_str   >= 0
-	    && m_land_bombard_str  >= 0
-	    && m_water_bombard_str >= 0
-	    && m_attack_str        >= 0
-	    && m_defense_str       >= 0
-	    && m_ranged_str        >= 0
-	    && m_value             >= 0
+	return m_air_bombard_str   >= 0.0f
+	    && m_land_bombard_str  >= 0.0f
+	    && m_water_bombard_str >= 0.0f
+	    && m_attack_str        >= 0.0f
+	    && m_defense_str       >= 0.0f
+	    && m_ranged_str        >= 0.0f
+	    && m_value             >= 0.0f
 	    && m_agent_count       >= 0
 	    && m_transport         >= 0
 	    && m_defenders         >= 0
 	    && m_ranged            >= 0;
 }
 
-double Squad_Strength::GetTotalMissing(const Squad_Strength & otherStrength) const
+float Squad_Strength::GetTotalMissing(const Squad_Strength & otherStrength) const
 {
-	double attack        = m_attack_str        - otherStrength.m_attack_str;
-	double defense       = m_defense_str       - otherStrength.m_defense_str;
-	double ranged        = m_ranged_str        - otherStrength.m_ranged_str;
-	double value         = m_value             - otherStrength.m_value;
-	double land_bombard  = m_land_bombard_str  - otherStrength.m_land_bombard_str;
-	double water_bombard = m_water_bombard_str - otherStrength.m_water_bombard_str;
-	double air_bombard   = m_air_bombard_str   - otherStrength.m_air_bombard_str;
+	float attack        = m_attack_str        - otherStrength.m_attack_str;
+	float defense       = m_defense_str       - otherStrength.m_defense_str;
+	float ranged        = m_ranged_str        - otherStrength.m_ranged_str;
+	float value         = m_value             - otherStrength.m_value;
+	float land_bombard  = m_land_bombard_str  - otherStrength.m_land_bombard_str;
+	float water_bombard = m_water_bombard_str - otherStrength.m_water_bombard_str;
+	float air_bombard   = m_air_bombard_str   - otherStrength.m_air_bombard_str;
 
 	sint16 count         = m_agent_count       - otherStrength.m_agent_count;
 
-	return std::max(0.0, attack)
-	     + std::max(0.0, defense)
-	     + std::max(0.0, ranged)
-	     + std::max(0.0, value)
-	     + std::max(0.0, land_bombard)
-	     + std::max(0.0, water_bombard)
-	     + std::max(0.0, air_bombard)
-	     + std::max(0.0, static_cast<double>(count));
+	return std::max(0.0f, attack)
+	     + std::max(0.0f, defense)
+	     + std::max(0.0f, ranged)
+	     + std::max(0.0f, value)
+	     + std::max(0.0f, land_bombard)
+	     + std::max(0.0f, water_bombard)
+	     + std::max(0.0f, air_bombard)
+	     + std::max(0.0f, static_cast<float>(count));
 }
 
 bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength) const

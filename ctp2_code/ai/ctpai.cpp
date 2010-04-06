@@ -1538,8 +1538,8 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 
 						sint16 defense_count;
 						sint16 tmp_count;
-						double tmp;
-						double defense_strength;
+						float  tmp;
+						float defense_strength;
 						move_army->ComputeStrength(tmp,
 						                           defense_strength,
 						                           tmp,
@@ -1942,8 +1942,8 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 
 		sint16 defense_count;
 		sint16 tmp_count;
-		double tmp;
-		double defense_strength;
+		float  tmp;
+		float  defense_strength;
 		army->ComputeStrength(tmp,
 		                      defense_strength,
 		                      tmp,

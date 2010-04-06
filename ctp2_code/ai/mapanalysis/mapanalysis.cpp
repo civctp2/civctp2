@@ -279,13 +279,13 @@ void MapAnalysis::BeginTurn()
 
             sint16 defense_count;
             sint16 ranged_count;
-            double attack_strength;
-            double defense_strength;
-            double ranged_strength;
-            double bombard_land_strength;
-            double bombard_sea_strength;
-            double bombard_air_strength;
-            double total_value;
+            float  attack_strength;
+            float  defense_strength;
+            float  ranged_strength;
+            float  bombard_land_strength;
+            float  bombard_sea_strength;
+            float  bombard_air_strength;
+            float  total_value;
 			army->ComputeStrength(attack_strength,
 			                      defense_strength,
 			                      ranged_strength,

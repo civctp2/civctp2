@@ -945,28 +945,28 @@ void CellUnitList::UpdateMoveIntersection()
 // Remark(s)  : includes units in transports if noCargo is false
 //
 //----------------------------------------------------------------------------
-void CellUnitList::ComputeStrength(double & attack,
-                                   double & defense,
-                                   double & ranged,
+void CellUnitList::ComputeStrength(float & attack,
+                                   float & defense,
+                                   float & ranged,
                                    sint16 & defend_unit_count,
                                    sint16 & ranged_unit_count,
-                                   double & land_bombard,
-                                   double & water_bombard,
-                                   double & air_bombard,
-                                   double & total_value,
+                                   float & land_bombard,
+                                   float & water_bombard,
+                                   float & air_bombard,
+                                   float & total_value,
                                    const bool terrainIndependent,
                                    bool noCargo) const
 {
-	attack            = 0.0;
-	defense           = 0.0;
-	ranged            = 0.0;
+	attack            = 0.0f;
+	defense           = 0.0f;
+	ranged            = 0.0f;
 	defend_unit_count = 0;
 	ranged_unit_count = 0;
 	
-	land_bombard      = 0.0;
-	water_bombard     = 0.0;
-	air_bombard       = 0.0;
-	total_value       = 0.0;
+	land_bombard      = 0.0f;
+	water_bombard     = 0.0f;
+	air_bombard       = 0.0f;
+	total_value       = 0.0f;
 	
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -982,53 +982,53 @@ void CellUnitList::ComputeStrength(double & attack,
 		if (rec->GetZBRangeAttack() > 0)
 			ranged_unit_count++;
 
-		double firepower = static_cast<double>(rec->GetFirepower());
-		double hitpoints = static_cast<double>(m_array[i]->CalculateTotalHP());//rec->GetMaxHP());
+		float firepower = static_cast<float>(rec->GetFirepower());
+		float hitpoints = static_cast<float>(m_array[i]->CalculateTotalHP());//rec->GetMaxHP());
 
-		attack   +=   rec->GetAttack()
-		            * hitpoints
-		            * firepower;
+		attack   += static_cast<float>(  rec->GetAttack()
+		                               * hitpoints
+		                               * firepower);
 
 		if(terrainIndependent)
 		{
-			defense  +=   rec->GetDefense()
-			            * hitpoints
-			            * firepower;
+			defense  += static_cast<float>(  rec->GetDefense()
+			                               * hitpoints
+			                               * firepower);
 		}
 		else
 		{
-			defense  +=   m_array[i]->GetPositionDefense(Unit()) // Expensive
-			            * hitpoints
-			            * firepower;
+			defense  += static_cast<float>(  m_array[i]->GetPositionDefense(Unit()) // Expensive
+			                               * hitpoints
+			                               * firepower);
 		}
 
-		ranged   += static_cast<double>(rec->GetZBRangeAttack()
-		                              * hitpoints
-		                              * firepower);
+		ranged   += static_cast<float>(  rec->GetZBRangeAttack()
+		                               * hitpoints
+		                               * firepower);
 
 		if(rec->GetCanBombardLand()
 		|| rec->GetCanBombardMountain()
 		){
-			land_bombard +=   rec->GetAttack()
-			                * hitpoints
-			                * firepower;
+			land_bombard += static_cast<float>(  rec->GetAttack()
+			                                   * hitpoints
+			                                   * firepower);
 		}
 
 		if(rec->GetCanBombardWater())
 		{
-			water_bombard +=   rec->GetAttack()
-			                 * hitpoints
-			                 * firepower;
+			water_bombard += static_cast<float>(  rec->GetAttack()
+			                                    * hitpoints
+			                                    * firepower);
 		}
 
 		if(rec->GetCanBombardAir())
 		{
-			air_bombard +=   rec->GetAttack()
-			               * hitpoints
-			               * firepower;
+			air_bombard += static_cast<float>(  rec->GetAttack()
+			                                  * hitpoints
+			                                  * firepower);
 		}
 
-		total_value += static_cast<double>(rec->GetShieldCost());
+		total_value += static_cast<float>(rec->GetShieldCost());
 
 		if(noCargo)
 			continue;
@@ -1041,8 +1041,8 @@ void CellUnitList::ComputeStrength(double & attack,
 			rec = cargo_list->Access(j)->GetDBRec();
 			if (!rec) continue;
 
-			firepower = static_cast<double>(rec->GetFirepower());
-			hitpoints = static_cast<double>(cargo_list->Access(j)->CalculateTotalHP());//rec->GetMaxHP());
+			firepower = static_cast<float>(rec->GetFirepower());
+			hitpoints = static_cast<float>(cargo_list->Access(j)->CalculateTotalHP());//rec->GetMaxHP());
 
 			if (rec->GetDefense() > 0.0)
 				defend_unit_count++;
@@ -1050,39 +1050,39 @@ void CellUnitList::ComputeStrength(double & attack,
 			if (rec->GetZBRangeAttack() > 0)
 				ranged_unit_count++;
 
-			attack   +=   rec->GetAttack()
-			            * hitpoints
-			            * firepower;
-			defense  +=   rec->GetDefense()
-			            * hitpoints
-			            * firepower;
-			ranged   += static_cast<double>(rec->GetZBRangeAttack()
-			                              * hitpoints
-			                              * firepower);
+			attack   += static_cast<float>(  rec->GetAttack()
+			                               * hitpoints
+			                               * firepower);
+			defense  += static_cast<float>(  rec->GetDefense()
+			                               * hitpoints
+			                               * firepower);
+			ranged   += static_cast<float>(  rec->GetZBRangeAttack()
+			                               * hitpoints
+			                               * firepower);
 
 			if(rec->GetCanBombardLand()
 			|| rec->GetCanBombardMountain()
 			){
-				land_bombard  +=   rec->GetAttack()
-				                 * hitpoints
-				                 * firepower;
+				land_bombard  += static_cast<float>(  rec->GetAttack()
+				                                    * hitpoints
+				                                    * firepower);
 			}
 
 			if(rec->GetCanBombardWater())
 			{
-				water_bombard  +=   rec->GetAttack()
-				                  * hitpoints
-				                  * firepower;
+				water_bombard  += static_cast<float>(  rec->GetAttack()
+				                                     * hitpoints
+				                                     * firepower);
 			}
 
 			if(rec->GetCanBombardAir())
 			{
-				air_bombard    +=   rec->GetAttack()
-				                  * hitpoints
-				                  * firepower;
+				air_bombard    += static_cast<float>(  rec->GetAttack()
+				                                     * hitpoints
+				                                     * firepower);
 			}
 
-			total_value += static_cast<double>(rec->GetShieldCost());
+			total_value += static_cast<float>(rec->GetShieldCost());
 		}
 	}
 }

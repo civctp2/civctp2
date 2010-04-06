@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AVL-Heap
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -155,7 +155,7 @@ void AVLHeap::Validate()
             } 
 
             for (s=m_block_list; searching && s; s = s->m_next) { 
-                if ((uint32(&s[0]) <= uint32(test)) && (uint32(test) <= uint32(&s[AVLHEAP_SIZE-1]))) { 
+                if ((size_t(&s[0]) <= size_t(test)) && (size_t(test) <= size_t(&s[AVLHEAP_SIZE-1]))) { 
                     searching = FALSE; 
                 } 
             } 

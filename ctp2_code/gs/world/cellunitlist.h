@@ -183,15 +183,15 @@ public:
 	void UpdateMoveIntersection();
 
 	
-	void ComputeStrength(double & attack,
-						 double & defense,
-						 double & ranged,
+	void ComputeStrength(float & attack,
+						 float & defense,
+						 float & ranged,
 						 sint16 & defend_unit_count,
 						 sint16 & ranged_unit_count,
-						 double & land_bombard,
-						 double & water_bombard,
-						 double & air_bombard,
-						 double & total_value,
+						 float & land_bombard,
+						 float & water_bombard,
+						 float & air_bombard,
+						 float & total_value,
 						 const bool terrainIndependent,
 						 bool noCargo = false) const;
 

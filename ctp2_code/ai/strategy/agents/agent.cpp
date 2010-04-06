@@ -85,34 +85,34 @@ Agent::Agent()
 
 Agent::Agent(const Army & army)
 :
-    m_squad_class       (SQUAD_CLASS_DEFAULT),
-    m_agent_type        (-1),
-    m_goal              (NULL),
     m_squad_strength    (0),
-    m_can_be_executed   (true),
-    m_detached          (false),
-    m_neededForGarrison (false),
+    m_goal              (NULL),
     m_army              (army),
     m_playerId          (army->GetOwner()),
     m_targetOrder       (OrderRecord::INDEX_INVALID),
-    m_targetPos         ()
+    m_targetPos         (),
+    m_squad_class       (SQUAD_CLASS_DEFAULT),
+    m_agent_type        (-1),
+    m_can_be_executed   (true),
+    m_detached          (false),
+    m_neededForGarrison (false)
 {
 	Compute_Squad_Strength();
 }
 
 Agent::Agent(const Agent & an_Original)
 :
-    m_squad_class       (an_Original.m_squad_class),
-    m_agent_type        (an_Original.m_agent_type),
-    m_goal              (NULL),                            // Pointer reference, different after a scheduler copy
     m_squad_strength    (an_Original.m_squad_strength),
-    m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
-    m_detached          (an_Original.m_detached),
-    m_neededForGarrison (an_Original.m_neededForGarrison), // Depends on location
+    m_goal              (NULL),                            // Pointer reference, different after a scheduler copy
     m_army              (an_Original.m_army),
     m_playerId          (an_Original.m_playerId),
     m_targetOrder       (an_Original.m_targetOrder),
-    m_targetPos         (an_Original.m_targetPos)
+    m_targetPos         (an_Original.m_targetPos),
+    m_squad_class       (an_Original.m_squad_class),
+    m_agent_type        (an_Original.m_agent_type),
+    m_can_be_executed   (true),                            // Bound to a goal, which is just a reference
+    m_detached          (an_Original.m_detached),
+    m_neededForGarrison (an_Original.m_neededForGarrison)  // Depends on location
 {
 }
 
@@ -226,13 +226,13 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 
 	sint16 defense_count;
 	sint16 ranged_count;
-	double attack_strength;
-	double defense_strength;
-	double ranged_strength;
-	double bombard_land_strength;
-	double bombard_sea_strength;
-	double bombard_air_strength;
-	double total_value;
+	float  attack_strength;
+	float  defense_strength;
+	float  ranged_strength;
+	float  bombard_land_strength;
+	float  bombard_sea_strength;
+	float  bombard_air_strength;
+	float  total_value;
 	m_army->ComputeStrength(attack_strength,
 	                        defense_strength,
 	                        ranged_strength,

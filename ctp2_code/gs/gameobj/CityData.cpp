@@ -1106,8 +1106,8 @@ void CityData::Copy(CityData *copy)
 		}
 	}
 
-	Assert((uint32)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (uint32)&copy->m_owner == (uint32)&m_is_rioting + sizeof(m_is_rioting) - (uint32)&m_owner);
-	memcpy(&m_owner, &copy->m_owner, (uint32)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (uint32)&copy->m_owner);
+	Assert((size_t)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (size_t)&copy->m_owner == (size_t)&m_is_rioting + sizeof(m_is_rioting) - (size_t)&m_owner);
+	memcpy(&m_owner, &copy->m_owner, (size_t)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (size_t)&copy->m_owner);
 
 	m_min_turns_revolt = copy->m_min_turns_revolt;
 

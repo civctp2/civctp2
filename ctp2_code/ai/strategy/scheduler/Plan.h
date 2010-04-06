@@ -92,8 +92,8 @@ public:
 
 protected:
 
-	Utility          m_matching_value;
 	Agent_ptr        m_the_agent;
+	Utility          m_matching_value;
 	bool             m_needs_cargo;
 	bool             m_cannot_be_used;
 	bool             m_needs_transporter;

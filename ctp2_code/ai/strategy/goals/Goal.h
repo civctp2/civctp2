@@ -299,21 +299,21 @@ private:
 
     inline void Sort_Matches(Plan_List & matches);
 
-    GOAL_TYPE                         m_goal_type;
-    Utility                           m_raw_priority;
-    REMOVAL_TIME                      m_removal_time;
     Squad_Strength                    m_current_needed_strength;
     Squad_Strength                    m_current_attacking_strength;
     Squad_Strength                    m_current_projected_strength;
     Plan_List                         m_matches;
     Agent_List                        m_agents;
+    REMOVAL_TIME                      m_removal_time;
     PLAYER_INDEX                      m_playerId;
+    Utility                           m_raw_priority;
     Utility                           m_combinedUtility;
-    bool                              m_needs_sorting;
     MapPoint                          m_target_pos;
     Unit                              m_target_city;
     Army                              m_target_army;
     SUB_TASK_TYPE                     m_sub_task;
+    GOAL_TYPE                         m_goal_type;
+    bool                              m_needs_sorting;
 };
 
 namespace std {
