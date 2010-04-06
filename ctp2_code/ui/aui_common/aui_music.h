@@ -125,7 +125,12 @@ protected:
 
 protected:
 
+#ifdef __AUI_USE_DIRECTX__
 	sint32 m_cd_device_id;
+#elif defined(__AUI_USE_SDL__)
+	SDL_CD*m_cd_device_id;
+#endif
+	int    m_cd_drive_num;
 	MBCHAR m_cd_drive_letter;
 	sint32 m_cd_drive_index;
 	BOOL m_cd_ok;

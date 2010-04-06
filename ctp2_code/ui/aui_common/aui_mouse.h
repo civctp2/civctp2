@@ -247,13 +247,18 @@ protected:
 	sint32		m_showCount;	
 	BOOL		m_reset;		
 
-	HANDLE		m_thread;		
-	DWORD		m_threadId;		
-	HANDLE		m_threadEvent;	
-	HANDLE		m_terminateEvent; 
-	HANDLE		m_suspendEvent;	
-	HANDLE		m_resumeEvent;	
-	HANDLE		m_replyEvent;	
+#ifdef __AUI_USE_SDL__
+	SDL_Thread     *m_thread;
+	uint32          m_threadId;
+#elif defined(__AUI_USE_DIRECTX__)
+	HANDLE		m_thread;
+	DWORD		m_threadId;
+	HANDLE		m_threadEvent;
+	HANDLE		m_terminateEvent;
+	HANDLE		m_suspendEvent;
+	HANDLE		m_resumeEvent;
+	HANDLE		m_replyEvent;
+#endif
 
 	uint32		m_flags;		
 };

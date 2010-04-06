@@ -63,7 +63,11 @@ aui_Music::SetVolume( uint8 volume )
 
 
 aui_Redbook::aui_Redbook() :
+#ifdef __AUI_USE_DIRECTX__
 m_cd_device_id(-1),
+#elif defined(__AUI_USE_SDL__)
+m_cd_device_id(0),
+#endif
 m_cd_drive_letter(0),
 m_cd_drive_index(0),
 m_cd_ok(FALSE),
@@ -75,7 +79,11 @@ m_aux_cdrom_id(-1)
 
 aui_Redbook::~aui_Redbook()
 {
+#ifdef __AUI_USE_DIRECTX__
 	m_cd_device_id = -1;
+#elif defined(__AUI_USE_SDL__)
+	m_cd_device_id = 0;
+#endif
 	m_cd_drive_letter = 0;
 	m_cd_drive_index = 0;
 	m_aux_cdrom_id = -1;
@@ -86,6 +94,7 @@ aui_Redbook::~aui_Redbook()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Init()
 {
+#ifdef __AUI_USE_DIRECTX__
 	MCIERROR returnVal;
 	MCI_OPEN_PARMS mciOpenParms;
 	MCI_SET_PARMS mciSetParms;
@@ -93,11 +102,11 @@ aui_Redbook::Init()
 	MCI_STATUS_PARMS mciStatusParms;
 	long numCDDrives;
 	char devName[32];
-
+#endif
 	
 	GetCDIndex();
 
-	
+#ifdef __AUI_USE_DIRECTX__
 	if( m_cd_drive_index == 0 )
 		return AUI_MUSIC_ERRCODE_NOCDDRIVE;
 
@@ -152,6 +161,7 @@ aui_Redbook::Init()
 
 	
 	m_ntracks = mciStatusParms.dwReturn;
+#endif
 	m_first_track = 1;
 	m_last_track = m_ntracks;
 
@@ -175,9 +185,12 @@ aui_Redbook::Close()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Pause()
 {
+	sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
 	MCI_GENERIC_PARMS mciPauseParms;
 
-	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_PAUSE, 0, (DWORD)&mciPauseParms );
+	mci_retval = mciSendCommand( m_cd_device_id, MCI_PAUSE, 0, (DWORD)&mciPauseParms );
+#endif
 	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
@@ -185,9 +198,12 @@ aui_Redbook::Pause()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Resume()
 {
+	sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
 	MCI_GENERIC_PARMS mciResumeParms;
 
-	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_RESUME, 0, (DWORD)&mciResumeParms );
+	mci_retval = mciSendCommand( m_cd_device_id, MCI_RESUME, 0, (DWORD)&mciResumeParms );
+#endif
 	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
 }
 
@@ -195,9 +211,12 @@ aui_Redbook::Resume()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Stop()
 {
+	sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
 	MCI_GENERIC_PARMS mciStopParms;
 
-	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_STOP, 0, (DWORD)&mciStopParms );
+        mci_retval = mciSendCommand( m_cd_device_id, MCI_STOP, 0, (DWORD)&mciStopParms );
+#endif
 	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
@@ -205,16 +224,19 @@ aui_Redbook::Stop()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play( sint32 itrack )
 {
+	sint32 mci_retval = 0;
 	if( (itrack < m_first_track) || (itrack > m_last_track) )
 		return AUI_MUSIC_ERRCODE_INVALID_TRACKNUMBER;
 
+#ifdef __AUI_USE_DIRECTX__
 	int playFlags = MCI_FROM;
 	MCI_PLAY_PARMS mciPlayParms;
 	mciPlayParms.dwFrom = (ULONG)itrack;
 
-	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, playFlags, (DWORD)&mciPlayParms );
+	mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, playFlags, (DWORD)&mciPlayParms );
 	if( mci_retval == MMSYSERR_NOERROR)
 		m_ctrack = itrack;
+#endif
 
 	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
@@ -223,9 +245,13 @@ aui_Redbook::Play( sint32 itrack )
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play()
 {
+	sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
 	MCI_PLAY_PARMS mciPlayParms;
 
-	sint32 mci_retval = mciSendCommand(m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms); 
+	mci_retval = mciSendCommand(m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms); 
+#endif
+
 	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
@@ -233,6 +259,7 @@ aui_Redbook::Play()
 AUI_MUSIC_ERRCODE
 aui_Redbook::SetVolume( uint8 volume )
 {
+	sint32 mci_retval = 0;
 	m_volume = volume;
 	
 	if (m_aux_cdrom_id == -1)
@@ -243,7 +270,9 @@ aui_Redbook::SetVolume( uint8 volume )
 	DWORD CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
 	CDvolume |= ( CDvolume << 16 );								
 
-    sint32 mci_retval = auxSetVolume(m_aux_cdrom_id, CDvolume);
+#ifdef __AUI_USE_DIRECTX__
+    mci_retval = auxSetVolume(m_aux_cdrom_id, CDvolume);
+#endif
     return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
@@ -253,6 +282,7 @@ sint32
 aui_Redbook::CDInitVolume()
 {
     int     CDRomID = -1;
+#ifdef __AUI_USE_DIRECTX__
 	int     HowManyAuxDevices = auxGetNumDevs();
 
 	if (HowManyAuxDevices > 0)
@@ -302,6 +332,7 @@ aui_Redbook::CDInitVolume()
 			}
 		}
 	}
+#endif
 
    return( CDRomID );
 
@@ -312,7 +343,8 @@ aui_Redbook::CDInitVolume()
 AUI_MUSIC_ERRCODE
 aui_Redbook::GetCDIndex()
 {
-	LPSTR   driveMap    = (LPSTR) calloc(105, sizeof(char));	
+#ifdef __AUI_USE_DIRECTX__
+	LPSTR   driveMap    = (LPSTR) calloc(105, sizeof(char));
 	GetLogicalDriveStrings(105, driveMap);
 
 	LPSTR   driveName   = driveMap;
@@ -334,6 +366,7 @@ aui_Redbook::GetCDIndex()
 		m_cd_drive_index = 0;
 
 	free(driveMap); 
+#endif
 
 	return AUI_MUSIC_ERRCODE_OK;
 }
@@ -342,10 +375,17 @@ aui_Redbook::GetCDIndex()
 AUI_MUSIC_ERRCODE
 aui_Redbook::CDDone()
 {
+	sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
 	MCI_GENERIC_PARMS mciCloseParms;
 
 	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_CLOSE, 0, (DWORD)(&mciCloseParms) );
+#ifdef __AUI_USE_DIRECTX__
 	m_cd_device_id = -1;
+#elif defined(__AUI_USE_SDL__)
+	m_cd_device_id = 0;
+#endif
+#endif
 
 	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
@@ -355,12 +395,14 @@ aui_Redbook::CDDone()
 AUI_MUSIC_CODE
 aui_Redbook::Status()
 {
+    sint32 mci_retval = 0;
+#ifdef __AUI_USE_DIRECTX__
     if (m_cd_ok)
     {
         MCI_STATUS_PARMS mciStatusParms;
         mciStatusParms.dwItem = MCI_STATUS_MODE;
 
-        sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&mciStatusParms );
+        mci_retval = mciSendCommand( m_cd_device_id, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&mciStatusParms );
 
         if (mci_retval)
         {
@@ -388,6 +430,7 @@ aui_Redbook::Status()
             }
         }
     }
-    
+#endif
+
     return AUI_MUSIC_CODE_UNKNOWN;
 }

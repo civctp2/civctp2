@@ -118,6 +118,41 @@ typedef struct hwnd_t* HWND;
 #define SND_FILENAME 0x00020000L
 #define SND_NOWAIT   0x00002000L
 
+#define VK_BACK   0x08
+#define VK_TAB    0x09
+#define VK_RETURN 0x0D
+#define VK_SHIFT  0x10
+#define VK_ESCAPE 0x1B
+#define VK_LEFT   0x25
+#define VK_UP     0x26
+#define VK_RIGHT  0x27
+#define VK_DOWN   0x28
+#define VK_F1     0x70
+#define VK_F2     0x71
+#define VK_F3     0x72
+#define VK_F4     0x73
+#define VK_F5     0x74
+#define VK_F6     0x75
+#define VK_F7     0x76
+#define VK_F8     0x77
+#define VK_F9     0x78
+#define VK_F10    0x79
+#define VK_F11    0x7A
+#define VK_F12    0x7B
+
+#define WM_CLOSE       0x0010
+#define WM_QUIT        0x0012
+#define WM_KEYDOWN     0x0100
+#define WM_KEYUP       0x0101
+#define WM_CHAR        0x0102
+#define WM_SYSKEYDOWN  0x0104
+#define WM_SYSKEYUP    0x0105
+#define WM_LBUTTONDOWN 0x0201
+#define WM_LBUTTONUP   0x0202
+#define WM_RBUTTONDOWN 0x0204
+#define WM_RBUTTONUP   0x0205
+#define WM_MBUTTONDOWN 0x0207
+#define WM_MBUTTONUP   0x0208
 /* Makros */
 #define _ASSERTE(x) assert(x)
 #define CALLBACK
@@ -130,6 +165,8 @@ typedef struct hwnd_t* HWND;
 #endif
 #define RGB(r,g,b) ((BYTE)(b) << 16 | (BYTE)(g) << 8 | (BYTE)(r))
 #define WINAPI
+
+
 
 /* stub functions */
 char* _fullpath(char*, const char*, size_t);

@@ -66,7 +66,7 @@ private:
 
 	
 	
-	friend ctp2_TabGroup;
+	friend class ctp2_TabGroup;
 };
 
 #endif 

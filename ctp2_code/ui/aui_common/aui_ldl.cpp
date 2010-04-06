@@ -53,18 +53,23 @@
 #include "ctp2_hypertextbox.h"
 #include "c3_hypertextbox.h"
 #include "aui_switch.h"
+#include "colorset.h"
 #include "ctp2_Switch.h"
 #include "ctp2_textfield.h"
 #include "ctp2_MenuButton.h"
-#include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
+#include "ctp2_Tab.h"
 #include "ctp2_TabButton.h"
+#include "ctp2_TabGroup.h"
 #include "radarmap.h"
 #include "linegraph.h"
 #include "AvlTree.h"
 
 #include "ldl_user.h"
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 ldl *aui_Ldl::s_ldl = NULL;
 
@@ -137,7 +142,11 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 	}
 
 	MBCHAR outDir[ MAX_PATH + 1 ];
+#ifdef HAVE_UNISTD_H
+	getcwd(outDir, MAX_PATH);
+#else
 	GetCurrentDirectory( MAX_PATH, outDir );
+#endif
 	strcat(outDir, FILE_SEP "ldl_out");
 
     delete s_ldl;

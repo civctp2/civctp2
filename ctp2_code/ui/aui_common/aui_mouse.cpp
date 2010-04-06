@@ -34,7 +34,7 @@
 #include "c3.h"
 #include "aui_mouse.h"
 
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_ui.h"
 
 #include "aui_blitter.h"
@@ -53,12 +53,21 @@
 #include "ldl_file.hpp"
 
 sint32 aui_Mouse::m_mouseRefCount = 0;
+#ifdef __AUI_USE_DIRECTX__
 LPCRITICAL_SECTION aui_Mouse::m_lpcs = NULL;
+#elif defined(__AUI_USE_SDL__)
+SDL_mutex *aui_Mouse::m_lpcs = NULL;
+#endif
 
 #define k_AUI_MOUSE_THREAD_SLEEP_TIME	10
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
+
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
 
 
 aui_Mouse::aui_Mouse
@@ -96,6 +105,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	m_suspendCount = 0;
 	m_showCount = 0;
 	m_reset = TRUE;
+#ifndef __AUI_USE_SDL__
 	m_thread = NULL;
 	m_threadId = 0;
 	m_threadEvent = NULL;
@@ -103,7 +113,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	m_suspendEvent = NULL;
 	m_resumeEvent = NULL;
 	m_replyEvent = NULL;
-
+#endif
 	m_flags = 0;
 
 	memset( m_cursors, 0, sizeof( m_cursors ) );
@@ -111,16 +121,31 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	memset( m_inputs, 0, sizeof( m_inputs ) );
 
 	SetClip( NULL );
+#ifdef __AUI_USE_DIRECTX__
 	GetCursorPos( &m_data.position );
+#elif defined(__AUI_USE_SDL__)
+        int x = 0, y = 0;
+        Uint8 state = SDL_GetMouseState(&x, &y);
+        m_data.position.x = x;
+        m_data.position.y = y;
+#endif
 
 	
 	if ( !m_mouseRefCount++ )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		m_lpcs = new CRITICAL_SECTION;
+#elif defined(__AUI_USE_SDL__)
+		m_lpcs = SDL_CreateMutex();
+#endif
 		Assert( m_lpcs != NULL );
+#ifdef __AUI_USE_DIRECTX__
 		if ( m_lpcs )
 			InitializeCriticalSection( m_lpcs );
 		else
+#elif defined(__AUI_USE_SDL__)
+		if (!m_lpcs)
+#endif
 			return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
@@ -256,8 +281,13 @@ aui_Mouse::~aui_Mouse()
 	{
 		if ( m_lpcs )
 		{
+#ifdef __AUI_USE_SDL__
+			SDL_DestroyMutex(m_lpcs);
+#elif defined(__AUI_USE_DIRECTX__)
+
 			DeleteCriticalSection( m_lpcs );
 			delete m_lpcs;
+#endif
 			m_lpcs = NULL;
 		}
 	}
@@ -388,9 +418,14 @@ AUI_ERRCODE aui_Mouse::Start( void )
 
 	CreatePrivateBuffers();
 
-	
+#ifdef __AUI_USE_DIRECTX__
 	m_thread =
 		CreateThread( NULL, 0, MouseThreadProc, (LPVOID)this, 0, &m_threadId );
+#elif defined(__AUI_USE_SDL__)
+	m_thread =
+                SDL_CreateThread(MouseThreadProc, this);
+	m_threadId = SDL_GetThreadID(m_thread);
+#endif
 
 	
 	m_curCursor = m_cursors + m_firstIndex;
@@ -398,15 +433,15 @@ AUI_ERRCODE aui_Mouse::Start( void )
 	if ( m_thread )
 	{
 		
-
+#ifdef __AUI_USE_DIRECTX__
 		SetThreadPriority( m_thread, THREAD_PRIORITY_NORMAL );
-
 		
 		m_threadEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_terminateEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_suspendEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_resumeEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_replyEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
+#endif
 
 		
 		Acquire();
@@ -457,6 +492,7 @@ AUI_ERRCODE aui_Mouse::End( void )
 
 	if ( m_thread )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		if ( m_threadEvent && m_terminateEvent )
 		{
 			SetEvent( m_terminateEvent );
@@ -473,9 +509,13 @@ AUI_ERRCODE aui_Mouse::End( void )
 		}
 		else
 			TerminateThread( m_thread, 1 );
+#elif defined(__AUI_USE_SDL__)
+		SDL_KillThread(m_thread);
+#endif
 
 		Erase();
 
+#ifdef __AUI_USE_DIRECTX__
 		if ( m_suspendEvent )
 		{
 			CloseHandle( m_suspendEvent );
@@ -495,11 +535,14 @@ AUI_ERRCODE aui_Mouse::End( void )
 		}
 
 		CloseHandle( m_thread );
+#endif
 		m_thread = NULL;
 		m_threadId = 0;
 	}
 
+#ifdef __AUI_USE_DIRECTX__
 	SetCursorPos( m_data.position.x, m_data.position.y );
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -513,7 +556,9 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 		m_suspendCount++;
 		return AUI_ERRCODE_OK;
 	}
-
+#ifdef __AUI_USE_SDL__
+	return AUI_ERRCODE_OK;
+#elif defined(__AUI_USE_DIRECTX__)
 	SetEvent( m_suspendEvent );
 	SetEvent( m_threadEvent );
 
@@ -535,7 +580,7 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 			return AUI_ERRCODE_OK;
 		}
 	}
-
+#endif
 	return AUI_ERRCODE_SUSPENDFAILED;
 }
 
@@ -555,7 +600,9 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 		return AUI_ERRCODE_OK;
 	}
 
-	
+#ifdef __AUI_USE_SDL__
+	return AUI_ERRCODE_OK;
+#elif defined(__AUI_USE_DIRECTX__)
 	if ( ResumeThread( m_thread ) != 0xffffffff )
 	{
 		
@@ -571,7 +618,7 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 
 		return AUI_ERRCODE_OK;
 	}
-
+#endif
 	return AUI_ERRCODE_RESUMEFAILED;
 }
 
@@ -579,7 +626,7 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 
 inline BOOL aui_Mouse::ShouldTerminateThread( void )
 {
-	
+#ifdef __AUI_USE_DIRECTX__	
 	if ( WaitForSingleObject( m_threadEvent, 0 ) == WAIT_OBJECT_0 )
 	{
 		ResetEvent( m_threadEvent );
@@ -602,17 +649,26 @@ inline BOOL aui_Mouse::ShouldTerminateThread( void )
 			ResetEvent( m_resumeEvent );
 		}
 	}
-
+#elif defined(__AUI_USE_SDL__)
+	return g_mouseShouldTerminateThread;
+#endif
 	return FALSE;
 }
-
+#ifdef __AUI_USE_SDL__
+int MouseThreadProc(void *param)
+#elif defined(__AUI_USE_DIRECTX__)
 DWORD WINAPI MouseThreadProc( LPVOID param )
+#endif
 {
 	aui_Mouse *mouse = (aui_Mouse *)param;
 
 	while ( !mouse->ShouldTerminateThread()  )
 	{
+#ifdef WIN32
 		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
+#elif defined(LINUX)
+		usleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
+#endif
 
 		mouse->HandleAnim();
 
@@ -905,7 +961,7 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 	sint32 windowX = window->X();
 	sint32 windowY = window->Y();
 	aui_Surface *windowSurface = window->TheSurface();
-	aui_DirtyList *windowDirtyList = window->m_dirtyList;
+	aui_DirtyList *windowDirtyList = window->GetDirtyList();
 
 	
 	ListPos position = windowDirtyList->GetHeadPosition();
@@ -992,7 +1048,12 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 				&screenDirtyRect,
 				RGB(255,255,255),
 				0 );
+#ifdef WIN32
 			Sleep( 20 ); 
+#elif defined(LINUX)
+			struct timespec t = { 0, 20000000L };
+			nanosleep(&t, NULL);
+#endif
 			fclose(f);
 		}
 #endif 
@@ -1150,7 +1211,12 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 				&screenDirtyRect,
 				RGB(255,255,255),
 				0 );
-			Sleep( 20 ); 
+#ifdef WIN32
+			Sleep( 20 );
+#elif defined(LINUX)
+			struct timespec t = { 0, 20000000L };
+			nanosleep(&t, NULL);
+#endif
 		}
 #endif 
 
@@ -1519,7 +1585,12 @@ sint32 aui_Mouse::ManipulateInputs( aui_MouseEvent *data, BOOL add )
 	sint32 numManipulated = 0;
 	static sint32 index = 0;
 
+#ifdef __AUI_USE_DIRECTX__
 	EnterCriticalSection( m_lpcs );
+#elif defined(__AUI_USE_SDL__)
+	SDL_mutexP(m_lpcs);
+#endif
+
 
 	if ( add )
 	{
@@ -1559,7 +1630,11 @@ sint32 aui_Mouse::ManipulateInputs( aui_MouseEvent *data, BOOL add )
 		index = 0;
 	}
 
+#ifdef __AUI_USE_DIRECTX__
 	LeaveCriticalSection( m_lpcs );
+#elif defined(__AUI_USE_SDL__)
+	SDL_mutexV(m_lpcs);
+#endif
 
 	return numManipulated;
 }
