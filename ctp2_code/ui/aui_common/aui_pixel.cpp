@@ -49,6 +49,7 @@ uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
 
 uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPALETTE *hpal)
 {
+#ifdef __AUI_USE_DIRECTX__
 	PALETTEENTRY *  pe              = new PALETTEENTRY[256];
 	size_t const    paletteCount    = 
         static_cast<size_t>(GetPaletteEntries(*hpal, 0, 256, pe));
@@ -72,7 +73,11 @@ uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPAL
 
 	delete [] pe;
 	return color;
-
+#else
+	// TODO: 8bit modes wanted?
+	Assert(0);
+	return 0;
+#endif
 }
 
 uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGBQUAD *rgbq )
