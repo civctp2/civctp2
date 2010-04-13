@@ -325,8 +325,12 @@ AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
 	buff[255]='\0';
 
 	
-    va_start(v_args, fmt);    
-    _vsnprintf(buff,255,fmt,v_args);
+    va_start(v_args, fmt);
+#ifdef WIN32
+    _vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
+#else
+    vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
+#endif
     va_end( v_args );         
 
 	
@@ -473,6 +477,7 @@ uint32 aui_TextBase::FindNextWordBreak
 	uint32 totalLength = 0;	
 	sint32 totalSize = 0;	
 
+#ifdef __AUI_USE_DIRECTX__
 	MBCHAR const *  word = text;
 	while (MBCHAR const * token = FindNextToken(word, " \t\n", 1 ))
 	{
@@ -507,6 +512,9 @@ uint32 aui_TextBase::FindNextWordBreak
 	if ( (totalSize += wordSize.cx) < width )
 		totalLength += wordLength;
 
+#else
+	// TODO?
+#endif
 	return totalLength;
 }
 
