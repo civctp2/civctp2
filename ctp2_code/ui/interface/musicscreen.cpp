@@ -31,32 +31,32 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "ctp2_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3_switch.h"
-#include "c3_checkbox.h"
-#include "c3ui.h"
-#include "profileDB.h"
-#include "spnewgamewindow.h"
-#include "musictrackscreen.h"
 #include "musicscreen.h"
-#include "aui_uniqueid.h"
+
 #include "aui_stringtable.h"
-
+#include "aui_uniqueid.h"
+#include "c3_button.h"
+#include "c3_checkbox.h"
+#include "c3_dropdown.h"
+#include "c3_listitem.h"
+#include "c3_popupwindow.h"
+#include "c3_static.h"
+#include "c3_switch.h"
+#include "c3slider.h"
+#include "c3ui.h"
+#include "c3window.h"
+#include "ctp2_button.h"
+#include "Globals.h"            // allocated::clear
 #include "keypress.h"
+#include "musictrackscreen.h"
+#include "profileDB.h"          // g_theProfileDB
+#include "soundmanager.h"       // g_soundManager
+#include "spnewgamewindow.h"
 
-extern C3UI					*g_c3ui;
-extern ProfileDB			*g_theProfileDB;
+extern C3UI *   g_c3ui;
+extern BOOL     g_musicTrackChosen;
 
 static c3_PopupWindow	*s_musicScreen	= NULL;
-static c3_Button		*s_accept		= NULL;
-
 static ctp2_Button		*s_selectTrack	= NULL;
 
 static c3_Switch		*s_autoRepeat	= NULL,
@@ -69,26 +69,18 @@ static BOOL				s_useAutoRepeat = FALSE;
 static BOOL				s_useRandomOrder = FALSE;
 static BOOL				s_useMusicOn = FALSE;
 
-extern BOOL				g_musicTrackChosen;
-
-#include "soundmanager.h"
-extern SoundManager		*g_soundManager;
-
 
 
 
 sint32	musicscreen_displayMyWindow()
 {
-	sint32 retval=0;
-	if(!s_musicScreen) { retval = musicscreen_Initialize(); }
-
-	AUI_ERRCODE auiErr;
+	sint32 retval = (s_musicScreen) ? 0 : musicscreen_Initialize();
 
 	s_autoRepeat->SetState(s_useAutoRepeat);
 	s_randomOrder->SetState(s_useRandomOrder);
 	s_musicOn->SetState(s_useMusicOn);
 
-	auiErr = g_c3ui->AddWindow(s_musicScreen);
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(s_musicScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
 	keypress_RegisterHandler(s_musicScreen);
 
@@ -98,9 +90,7 @@ sint32 musicscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( s_musicScreen->Id() );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(s_musicScreen->Id());
 	Assert( auiErr == AUI_ERRCODE_OK );
 	keypress_RemoveHandler(s_musicScreen);
 
@@ -111,17 +101,19 @@ sint32 musicscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE musicscreen_Initialize( void )
 {
+	if ( s_musicScreen ) return AUI_ERRCODE_OK;
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-	if ( s_musicScreen ) return AUI_ERRCODE_OK; 
 
 	strcpy(windowBlock, "MusicScreen");
 	{ 
 		s_musicScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicScreen, errcode) );
-		if ( !AUI_NEWOK(s_musicScreen, errcode) ) errcode;
-
+		if ( !AUI_NEWOK(s_musicScreen, errcode) )
+		{
+			return errcode;
+		}
 		
 		s_musicScreen->Resize(s_musicScreen->Width(),s_musicScreen->Height());
 		s_musicScreen->GrabRegion()->Resize(s_musicScreen->Width(),s_musicScreen->Height());
@@ -155,9 +147,8 @@ AUI_ERRCODE musicscreen_Initialize( void )
 
 
 
-AUI_ERRCODE musicscreen_Cleanup()
+void musicscreen_Cleanup()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 	musictrackscreen_Cleanup();
 
 	if (s_musicScreen)
@@ -166,29 +157,15 @@ AUI_ERRCODE musicscreen_Cleanup()
 		keypress_RemoveHandler(s_musicScreen);
 	}
 
-	mycleanup(s_musicString);
-
-
-	mycleanup(s_accept);
-
-	mycleanup(s_selectTrack);
-
-	mycleanup(s_autoRepeat);
-	mycleanup(s_randomOrder);
-	mycleanup(s_musicOn);
-
-	delete s_musicScreen;
-	s_musicScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
+	allocated::clear(s_musicString);
+	allocated::clear(s_selectTrack);
+	allocated::clear(s_autoRepeat);
+	allocated::clear(s_randomOrder);
+	allocated::clear(s_musicOn);
+	allocated::clear(s_musicScreen);
 }
 
 
-#ifdef WIN32
-static
-#endif
 void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	c3_Switch *musicSwitch = (c3_Switch *)control;

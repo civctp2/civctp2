@@ -33,8 +33,8 @@
 #pragma once
 #endif
 
-#ifndef __POLLUTION_H__
-#define __POLLUTION_H__
+#ifndef POLLUTION_H_
+#define POLLUTION_H_
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -44,8 +44,6 @@
 // Exported names
 //----------------------------------------------------------------------------
 
-class CivArchive;
-class MapPoint;
 class Pollution;
 
 #define k_TREND_DOWNWARD    -1
@@ -62,6 +60,8 @@ class Pollution;
 
 #include "player.h"
 #include "PollutionConst.h"
+class CivArchive;
+class MapPoint;
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -127,4 +127,4 @@ private:
 
 };
 
-#endif // __POLLUTION_H__
+#endif

@@ -40,6 +40,7 @@
 //   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 // - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
+// - Reported failure to create a (writable) destination file in copy_file
 //
 //----------------------------------------------------------------------------
 
@@ -79,9 +80,24 @@ RecordDescription * g_record = NULL;
 #define FREAD_BUF_SIZE 16384
 #endif
 
-static char s_output_dir[1 + PATH_MAX];
+namespace
+{
+char s_output_dir[1 + PATH_MAX];
 
-static int copy_file(char *srcFName, char *dstFName)
+/// Report a problem with file handling
+/// \param a_FileName The name of the file causing the problem
+/// \param a_Reason   Description of the problem
+/// \remarks Assumption: Both \a a_FileName and \a a_Reason are non-NULL
+void ReportFileError(char const * a_FileName, char const * a_Reason)
+{
+	fprintf(stderr, "\ndbgen: file '%s' %s. ", a_FileName, a_Reason);
+}
+
+/// Copy the contents of one file to another
+/// \param srcFName The name of the file to copy from
+/// \param dstFName The name of the file to copy to
+/// \return Indication whether copying succeeded
+bool copy_file(char const * srcFName, char const * dstFName)
 {
 	Assert(srcFName);
 	Assert(dstFName);
@@ -90,20 +106,21 @@ static int copy_file(char *srcFName, char *dstFName)
 	Assert(inFile);
 	if (!inFile)
 	{
-		fprintf(stderr, "\ndbgen: file '%s' not found. ", srcFName);
-		return -1;
+		ReportFileError(srcFName, "not found");
+		return false;
 	}
 
 	FILE *outFile = fopen(dstFName, "w");
 	Assert(outFile);
 	if (!outFile) {
 		fclose(inFile);
-		return -1;
+		ReportFileError(dstFName, "could not be created");
+		return false;
 	}
 
 	char buf[FREAD_BUF_SIZE];
 	size_t read;
-	size_t wrote;
+	size_t wrote = 0;
 
 	while ((read = fread((void *)&buf, sizeof(char),
 	                     sizeof(buf) / sizeof(char), inFile
@@ -117,14 +134,11 @@ static int copy_file(char *srcFName, char *dstFName)
 	fclose(outFile);
 	fclose(inFile);
 
-	if (static_cast<size_t>(-1) == read)
-		return -1;
-
-	if (static_cast<size_t>(-1) == wrote)
-		return -1;
-
-	return 0;
+	return (static_cast<size_t>(-1) != read)
+	    && (static_cast<size_t>(-1) != wrote);
 }
+
+} // namespace
 
 void db_set_output_dir(char *dir)
 {
@@ -155,7 +169,7 @@ FILE *db_open_file(const char *filename)
 
 	if (!outfile)
     {
-        fprintf(stderr, "\ndbgen: file '%s' could not be created", filename);
+		ReportFileError(filename, "could not be created");
 		return NULL;
     }
 
@@ -167,7 +181,7 @@ FILE *db_open_file(const char *filename)
 	return outfile;
 }
 
-bool db_files_differ(char *newFilePath, char *oldFilePath)
+bool db_files_differ(char const * newFilePath, char const * oldFilePath)
 {
 	FILE * n = fopen(newFilePath, "r");
 	if (!n) return true;
@@ -182,8 +196,8 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 
 	while(!feof(n) && !feof(o)) {
 		char nb[DIFF_SIZE], ob[DIFF_SIZE];
-		int const	nr      = fread(nb, 1, DIFF_SIZE, n);
-		int const	oldr	= fread(ob, 1, DIFF_SIZE, o);
+		size_t const    nr      = fread(nb, 1, DIFF_SIZE, n);
+		size_t const    oldr    = fread(ob, 1, DIFF_SIZE, o);
 
 		if (nr != oldr) {
 			fclose(n);
@@ -191,7 +205,7 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 			return true;
 		}
 
-		for (sint32 i = 0; i < nr; i++) 
+		for (size_t i = 0; i < nr; i++)
 		{
 			if(nb[i] != ob[i]) {
 				fclose(n);
@@ -239,7 +253,7 @@ void db_maybe_copy(char * newFilePath)
 #ifdef _DEBUG
 			printf("%s -> %s\n", oldFilePath, backupPath);
 #endif
-			if (0 != copy_file(oldFilePath, backupPath)) 
+			if (!copy_file(oldFilePath, backupPath))
 			{
 			    fprintf(stderr, "%s\n", strerror(errno));
 			}
@@ -252,7 +266,7 @@ void db_maybe_copy(char * newFilePath)
 #ifdef _DEBUG
 		printf("%s -> %s\n", newFilePath, oldFilePath);
 #endif
-		if (0 != copy_file(newFilePath, oldFilePath)) 
+		if (!copy_file(newFilePath, oldFilePath))
 		{
 		    fprintf(stderr, "%s\n", strerror(errno));
 		}

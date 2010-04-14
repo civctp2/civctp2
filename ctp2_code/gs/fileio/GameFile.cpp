@@ -152,7 +152,11 @@ struct MagicValue {
 	sint32 version;
 };
 
+#if USE_FORMAT_67
+#define k_NUM_MAGIC_VALUES 19
+#else
 #define k_NUM_MAGIC_VALUES 18
+#endif
 MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0049", 49},
 	{ "CTP0050", 50},
@@ -168,12 +172,12 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0060", 60},
 	{ "CTP0061", 61},
 	{ "CTP0062", 62},
-	{ "CTP0063", 63},
+	{ "CTP0063", 63},   // Activision Alexander the Great scenario
 	{ "CTP0064", 64},
-	{ "CTP0065", 65},
+	{ "CTP0065", 65},   // Activision CTP2 unpatched
 #if USE_FORMAT_67
-	{ "CTP0066", 66},
-	{ "CTP0067", 67}
+	{ "CTP0066", 66},   // Activision CTP2 patched
+	{ "CTP0067", 67},   // Apolyton
 #else
 	{ "CTP0066", 66}
 #endif
@@ -308,7 +312,9 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 {
+#if defined(_DEBUG)
 	clock_t start = clock();
+#endif
 
 	CivArchive	archive;
 	archive.SetStore();
@@ -484,8 +490,14 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 320 );
 
 	
-
+	if (g_exclusions)
+	{
 		g_exclusions->Serialize(archive);
+	}
+	else
+	{
+		Exclusions().Serialize(archive);
+	}
 	
 	PROGRESS( 330 );
 
@@ -575,7 +587,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	
 	bool createInfo = (info == NULL);
 	if (createInfo) 
-    {
+	{
 		info = new SaveInfo();
 		GetExtendedInfoFromProfile(info);
 	}
@@ -589,7 +601,10 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	if (createInfo)
 		delete info;
 	
-	size_t ulLen = archive.StreamLen();
+	size_t       realSize = archive.StreamLen();
+	Assert(realSize <= 0xffffffffu);
+	/// \todo Generate error when file is too large
+	uint32       ulLen    = static_cast<uint32>(realSize);
 	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
 	{
@@ -615,8 +630,8 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 510 );
 
-	
-	n = c3files_fwrite(&compressedSize, sizeof(compressedSize), 1, fpSave);
+	uint32      saveSize = static_cast<uint32>(compressedSize);
+	n = c3files_fwrite(&saveSize, sizeof(saveSize), 1, fpSave);
 	if (n!=1)
 		{
 		c3files_fclose(fpSave);
@@ -675,7 +690,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 uint32 GameFile::Restore(const MBCHAR *filepath)
 {
+#if defined(_DEBUG)
 	clock_t start = clock();
+#endif
 
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -1957,30 +1974,23 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 {
 	PointerList<GameInfo> * list = new PointerList<GameInfo>;
 
-#ifdef WIN32	
-	WIN32_FIND_DATA		fileData;
-	HANDLE				lpDirList;
-#else
-	DIR			*d;
-	struct stat		tmpstat;
-	struct dirent		*dent = 0;
-#endif
-	MBCHAR				dirPath[_MAX_PATH],
-						path[_MAX_PATH];
-
-	
+	MBCHAR  dirPath[_MAX_PATH];
+	MBCHAR  path[_MAX_PATH];
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
 	
 #ifdef WIN32
 	sprintf(path, "%s%s*.*", dirPath, FILE_SEP);
-	lpDirList = FindFirstFile(path, &fileData);
 
-	
+	WIN32_FIND_DATA fileData;
+	HANDLE lpDirList = FindFirstFile(path, &fileData);
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
 #else
-	d = opendir(dirPath);
+	DIR * d = opendir(dirPath);
 	if (!d) return list;
+
+	struct stat     tmpstat;
+	struct dirent * dent = 0;
 #endif
 
 	GameInfo			*gameInfo;
@@ -2096,6 +2106,23 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 //
 //----------------------------------------------------------------------------
 SaveInfo::SaveInfo()
+:
+	radarMapWidth       (0),
+	radarMapHeight      (0),
+	radarMapData        (NULL),
+	powerGraphWidth     (0),
+	powerGraphHeight    (0),
+	powerGraphData      (0),
+	numCivs             (0),
+// nf_GameSetup gameSetup; 
+// struct OptionScreenSettings options
+	isScenario          (false),
+	startInfoType       (STARTINFOTYPE_NONE),
+	numPositions        (0),
+	loadType            (SAVEINFOLOAD_NONE),
+	scenarioName        (NULL),
+	showLabels          (false),
+	startingPlayer      (CIV_INDEX_VANDALS)
 {
 	gameName[0] = '\0';
 	fileName[0] = '\0';
@@ -2104,41 +2131,12 @@ SaveInfo::SaveInfo()
 	civName[0] = '\0';
 	note[0] = '\0';
 
-	radarMapWidth = 0;
-	radarMapHeight = 0;
-	radarMapData = NULL;
-
-	powerGraphWidth = 0;
-	powerGraphHeight = 0;
-	powerGraphData = NULL;
-
-	numCivs = 0;
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 		civList[i][0] = '\0';
 		memset(&networkGUID[i], 0, sizeof(CivGuid));
-		
-		
-		playerCivIndexList[i] = 0;
 	}
 
-	
-	
-	
-
-	
-	
-	
-	
-	isScenario = FALSE;
-	startInfoType = STARTINFOTYPE_NONE;
-	numPositions = 0;
-
-	loadType = SAVEINFOLOAD_NONE;
-
-	
-	
-	scenarioName = NULL;
-
+	std::fill_n(playerCivIndexList, k_MAX_PLAYERS, CIV_INDEX_VANDALS);
 }
 
 //----------------------------------------------------------------------------
@@ -2243,15 +2241,15 @@ GameInfo::~GameInfo()
 
 
 SaveMapInfo::SaveMapInfo()
+:
+	radarMapWidth    (0),
+	radarMapHeight   (0),
+	radarMapData     (NULL)
 {
 	gameMapName[0] = '\0';
 	fileName[0] = '\0';
 	pathName[0] = '\0';
 	note[0] = '\0';
-
-	radarMapWidth = 0;
-	radarMapHeight = 0;
-	radarMapData = NULL;
 }
 
 GameMapInfo::GameMapInfo()
@@ -2282,7 +2280,9 @@ GameMapFile::GameMapFile(void)
 
 uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 {
+#if defined(_DEBUG)
 	clock_t start = clock();
+#endif
 	
     CivArchive	archive;
 	archive.SetStore();
@@ -2372,7 +2372,9 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 
 uint32 GameMapFile::Restore(const MBCHAR *filepath)
 {
+#if defined(_DEBUG)
 	clock_t start   = clock();
+#endif
 	FILE *  fpLoad  = c3files_fopen(C3DIR_DIRECT, filepath, "rb");
 	if (fpLoad == NULL) {
 		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME");	
@@ -2398,17 +2400,12 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 		return GAMEFILE_ERR_LOAD_FAILED;
 	}
 
-	
-
-	SaveMapInfo *info = new SaveMapInfo();
-
-	LoadExtendedGameMapInfo(fpLoad, info);
-
-	
-	SetProfileFromExtendedInfo(info);
-
-	
-	delete info;
+	{
+		SaveMapInfo * info = new SaveMapInfo();
+		LoadExtendedGameMapInfo(fpLoad, info);
+		SetProfileFromExtendedInfo(info);
+		delete info;
+	}
 
 	uint32 ulLen;
 	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad);
@@ -2446,11 +2443,8 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 		return GAMEFILE_ERR_LOAD_FAILED;
 	}
 
-
-	
-    allocated::reassign(g_theWorld, new World(archive, TRUE));
-	Assert(g_theWorld);
-	if (!g_theWorld) return FALSE;  /// @todo Check GAMEFILE_ERR_LOAD_OK == FALSE == 0
+	delete g_theWorld;
+	g_theWorld = new World(archive, true);
 
 	DPRINTF(k_DBG_FILE, 
             ("Time to load gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
@@ -2504,8 +2498,8 @@ bool GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 
 void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 {
-	MBCHAR		*functionName = "GameMapFile::SaveExtendedGameMapInfo";
-	MBCHAR		*errorString = "Unable to write savemap file.";
+	MBCHAR const functionName[] = "GameMapFile::SaveExtendedGameMapInfo";
+	MBCHAR const errorString[]  = "Unable to write savemap file.";
 
 	sint32		n;
 
@@ -2592,31 +2586,22 @@ bool GameMapFile::ValidateGameMapFile(MBCHAR const * path, SaveMapInfo *info)
 PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 {
 	PointerList<GameMapInfo> * list = new PointerList<GameMapInfo>;
-
-#ifdef WIN32	
-	WIN32_FIND_DATA		fileData;
-	HANDLE				lpDirList;
-#else
-	DIR			*d;
-	struct stat		tmpstat;
-	struct dirent		*dent = 0;
-#endif
-	MBCHAR				dirPath[_MAX_PATH],
-						path[_MAX_PATH];
-
-	
+	MBCHAR dirPath[_MAX_PATH];
+	MBCHAR path[_MAX_PATH];
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
 #ifdef WIN32
 	sprintf(path, "%s%s*.*", dirPath, FILE_SEP);
 	
-	lpDirList = FindFirstFile(path, &fileData);
-
-	
+	WIN32_FIND_DATA fileData;
+	HANDLE          lpDirList = FindFirstFile(path, &fileData);
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
 #else
-	d = opendir(dirPath);
+	DIR * d = opendir(dirPath);
 	if (!dir) return list;
+
+	struct stat     tmpstat;
+	struct dirent * dent = 0;
 #endif
 
 	GameMapInfo			*gameInfo;
