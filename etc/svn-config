@@ -93,21 +93,31 @@ enable-auto-props = yes
 [auto-props]
 
 configure.in = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+GNUmakefile.am = svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+Makefile = svn:mime-type=text/x-makefile;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+Makefile.am = svn:mime-type=text/x-makefile;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.cpp = svn:mime-type=text/x-c++src;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.csh = svn:mime-type=text/x-csh;svn:eol-style=native;svn:executable;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.c = svn:mime-type=text/x-csrc;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+*.cdb = svn:eol-style=native
+*.dll = svn:mime-type=application/x-msdos-program
 *.dsp = svn:eol-style=CRLF
 *.dsw = svn:eol-style=CRLF
-GNUmakefile.am = svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+*.exe = svn:mime-type=application/x-msdos-program
 *.hpp = svn:mime-type=text/x-c++hdr;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.h = svn:mime-type=text/x-c++hdr;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.java = svn:mime-type=text/x-java;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.jpg = svn:mime-type=image/jpeg
+*.l = svn:eol-style=native
+*.ldl = svn:eol-style=native
+*.map = svn:eol-style=native
 *.m4 = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
-Makefile.am = svn:mime-type=text/x-makefile;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
-Makefile = svn:mime-type=text/x-makefile;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.pas = svn:mime-type=text/x-pascal;svn:eol-style=native;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
 *.png = svn:mime-type=image/png
 *.sh = svn:mime-type=text/x-sh;svn:eol-style=native;svn:executable;svn:keywords="HeadURL Id LastChangedBy LastChangedDate LastChangedRevision"
+*.slc = svn:eol-style=native
 *.tex = svn:mime-type=text/x-tex;svn:eol-style=native
-*.txt = svn:eol-style=native
+*.txt = svn:eol-style=native;svn:mime-type=text/plain
+*.y = svn:eol-style=native
+
+

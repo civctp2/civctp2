@@ -42,6 +42,7 @@
 // - Old default string skip token does not prevent loading default strings
 //   in scenarios anymore. (9-Apr-2007 Martin Gühmann)
 // - Scenario path can now be ignored. (9-Apr-2007 Martin Gühmann)
+// - Improved handling of "unexpected" EOF, caused by incorrect input.
 //
 //----------------------------------------------------------------------------
 
@@ -331,7 +332,7 @@ void Token::NextNumber()
 	m_val_number = atof(m_buf); 
 }
 
-bool Token::IsWhitespace(char c)
+bool Token::IsWhitespace(int c)
 {   
     return (c == ' ') || (c == '\t') || (c == 13) || (c == 10); 
 } 
@@ -412,7 +413,8 @@ sint32 Token::Next()
 	while (1) { 
 		
 		
-		for ( ; (m_cur != EOF) && IsWhitespace(m_cur) ; m_cur = getc(m_fin)) {  
+		for ( ; IsWhitespace(m_cur) ; m_cur = getc(m_fin))
+		{
 			if ((m_cur == 13) || (m_cur == 10)) { 
 				g_parse_line++;
 			}
@@ -477,6 +479,10 @@ sint32 Token::Next()
 			} else if((m_cur == '\\')) {
 				m_cur = getc(m_fin);
 				switch(m_cur) {
+				case EOF:
+					m_current_type = TOKEN_MISSING_QUOTE;
+					m_val_string[m_val_string_len] = 0;
+					return m_current_type;
 				case 'n':
 					m_val_string[m_val_string_len] = 10;
 					break;
@@ -487,7 +493,7 @@ sint32 Token::Next()
 					m_val_string[m_val_string_len] = 8;
 					break;
 				default:
-					m_val_string[m_val_string_len] = m_cur;
+					m_val_string[m_val_string_len] = static_cast<char>(m_cur);
 					break;
 				}
 				m_val_string_len++;
@@ -499,7 +505,7 @@ sint32 Token::Next()
 					return m_current_type; 
 				} 
 				
-				m_val_string[m_val_string_len] = m_cur; 
+				m_val_string[m_val_string_len] = static_cast<char>(m_cur); 
 				m_val_string_len++;
 #if defined(_JAPANESE)
 				 // japanese sjis-code
@@ -521,11 +527,19 @@ sint32 Token::Next()
 		m_val_string[m_val_string_len] = 0; 
 		m_cur = ' ';
 	} else  { 
-		m_buf[0] = m_cur;
+		m_buf[0] = static_cast<char>(m_cur);
 		m_index = 0; 
 		do { 
-			m_index++;
-			m_buf[m_index] = getc(m_fin); 
+			m_cur = getc(m_fin);
+			if (EOF == m_cur)
+			{
+				break;
+			}
+			else
+			{
+				m_index++;
+				m_buf[m_index] = static_cast<char>(m_cur); 
+			}
 		} while ((m_buf[m_index] == '_') || (m_buf[m_index] == '.') || isalnum(m_buf[m_index])); 
 		
 		m_cur = m_buf[m_index]; 

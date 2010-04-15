@@ -38,7 +38,6 @@ aui_TextField::aui_TextField(
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -50,7 +49,7 @@ aui_TextField::aui_TextField(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	MBCHAR const * text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -63,7 +62,6 @@ aui_TextField::aui_TextField(
 
 	*retval = InitCommon( text, NULL, 0, FALSE );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -103,9 +101,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 		maxFieldLen,
 		passwordReady );
 	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return errcode;
-
-	return AUI_ERRCODE_OK;
+	return errcode;
 }
 
 
@@ -316,10 +312,14 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 {
 	sint32 prevMaxFieldLen = m_maxFieldLen;
 
-	if ( (m_maxFieldLen = maxFieldLen) != prevMaxFieldLen )
+	m_maxFieldLen = maxFieldLen;
+
+#if 0 // not doing anything
+	if (m_maxFieldLen != prevMaxFieldLen)
 	{
 		
 	}
+#endif
 
 	return prevMaxFieldLen;
 }
@@ -353,7 +353,7 @@ AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 #ifdef __AUI_USE_DIRECTX__
 void aui_TextField::HitEnter( HWND hwnd )
 #else
-void aui_TextField::HitEnter();
+void aui_TextField::HitEnter()
 #endif / __AUI_USE_DIRECTX__
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );

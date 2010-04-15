@@ -30,6 +30,7 @@
 // - Removed unused tokens. (July 15th 2006 Martin Gühmann)
 // - Added new token so that the loading of default strings in scenarios
 //   can be skipped. (9-Apr-2007 Martin Gühmann)
+// - Improved handling of "unexpected" EOF, caused by incorrect input.
 //
 //----------------------------------------------------------------------------
 
@@ -158,7 +159,7 @@ public:
 	~Token(); 
 
     static char const * GetKeyword(sint32 tok);
-    static bool IsWhitespace(char c);
+    static bool IsWhitespace(int c);
     static bool IsNumber(char const * str);
     static bool ValidateAllTokens();
 
@@ -180,14 +181,15 @@ public:
 private:	
 	FILE			*m_fin;
 	char			m_filename[_MAX_PATH];
-	char			m_buf[k_MAX_TOKEN_LEN]; 
+	char 			m_buf[k_MAX_TOKEN_LEN]; 
 	sint32			m_len, 
 					m_index, 
 					m_val_string_len, 
 					m_current_type; 
 	double			m_val_number ;
 	char			m_val_string[k_MAX_TEXT_LEN]; 
-	char			m_cur; 
+	/// Last read character (or EOF)
+	int 			m_cur; 
 	char			m_estr[_MAX_PATH + 10];
 	
 	sint32			m_num_it; 

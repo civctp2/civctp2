@@ -32,8 +32,8 @@
 #pragma once
 #endif
 
-#ifndef __GAME_EVENT_H__
-#define __GAME_EVENT_H__
+#ifndef GAME_EVENT_H_
+#define GAME_EVENT_H_
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -83,6 +83,13 @@ public:
 	GAME_EVENT          AddedDuring()    const   { return m_addedDuring; };
 
 	GAME_EVENT_ERR      Process();
+
+	/// Check whether an event type is valid
+	/// \remarks GEA_End is considered invalid
+	static bool IsTypeValid(GAME_EVENT a_Type)
+	{
+		return (a_Type >= (GAME_EVENT) 0) && (a_Type < GEV_MAX);
+	}
 
 private:
 	GAME_EVENT          m_type;
