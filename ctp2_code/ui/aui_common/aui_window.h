@@ -264,6 +264,8 @@ protected:
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
+
+	friend class aui_UI;
 };
 
 
