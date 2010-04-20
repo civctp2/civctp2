@@ -94,7 +94,7 @@ aui_Factory::new_Keyboard(AUI_ERRCODE &retval)
 #if defined(__AUI_USE_SDL__)
 	aui_SDLKeyboard *keyboard = 0;
 
-	keyboard = new aui_SDLMouse(&retval);
+	keyboard = new aui_SDLKeyboard(&retval);
 #elif defined(__AUI_USE_DIRECTX__)
 	aui_DirectKeyboard *keyboard = 0;
 

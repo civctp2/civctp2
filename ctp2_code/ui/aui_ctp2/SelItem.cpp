@@ -83,11 +83,11 @@
 #include "ArmyPool.h"
 #include "Army.h"
 #include "cellunitlist.h"
-#include "order.h"
+#include "Order.h"
 #include "battleorderbox.h"
 
 
-#include "aicause.h"
+#include "AICause.h"
 
 
 
@@ -137,7 +137,7 @@
 #include "gamesounds.h"
 #include "soundmanager.h"
 #include "CityAstar.h"
-#include "Agent.h"
+#include "agent.h"
 
 extern ControlPanelWindow       *g_controlPanel;
 extern WorkWindow               *g_workWindow;

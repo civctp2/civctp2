@@ -74,7 +74,7 @@
 #include "SelItem.h"
 #include "newturncount.h"
 #include "TurnCnt.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "radarmap.h"
 #include "DataCheck.h"
 
@@ -84,7 +84,7 @@
 #include "resourcemap.h"
 
 #include "civapp.h"
-#include "order.h"
+#include "Order.h"
 
 #include "controlpanelwindow.h"
 #include "c3_listbox.h"
@@ -211,7 +211,14 @@ PointerList<KeyboardHandler> g_keyboardHandlers;
 void keypress_QuitCallback( sint32 val )
 {
 	if ( val ) {
+#ifdef __AUI_USE_DIRECTX__
         PostMessage(gHwnd, WM_CLOSE, 0, 0);
+#elif defined(__AUI_USE_SDL__)
+	static SDL_Event quit = { 0 };
+        quit.type = SDL_QUIT;
+        quit.quit.type = SDL_QUIT;
+        int e = SDL_PushEvent(&quit);
+#endif
 	}
 }
 

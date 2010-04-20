@@ -73,6 +73,7 @@ sint32 textutils_GetWidth(
 		const MBCHAR *pString					
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	TEXTMETRIC tm;
@@ -95,6 +96,9 @@ sint32 textutils_GetWidth(
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
 	return size.cx;
+#else // __AUI_USE_DIRECTX__
+	return 0;
+#endif
 }
 
 
@@ -108,6 +112,7 @@ sint32 textutils_GetHeight(
 		const MBCHAR *pString					
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	TEXTMETRIC tm;
@@ -128,6 +133,9 @@ sint32 textutils_GetHeight(
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
 	return tm.tmHeight+tm.tmExternalLeading;
+#else // __AUI_USE_DIRECTX__
+	return 0;
+#endif // __AUI_USE_DIRECTX__
 }
 
 
@@ -136,6 +144,7 @@ sint32 textutils_GetFontHeight(
 		uint32 size							
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	TEXTMETRIC tm;
@@ -158,6 +167,9 @@ sint32 textutils_GetFontHeight(
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
 	return tm.tmHeight+tm.tmExternalLeading;
+#else
+	return 0;
+#endif
 }
 
 
@@ -181,10 +193,13 @@ RECT textutils_GetBounds(
 		const MBCHAR *pString					
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
+#endif // __AUI_USE_DIRECTX__
 
 	RECT rect = {0,0,0,0};
+#ifdef __AUI_USE_DIRECTX__
 	SIZE size;
 
 	Assert(pDirectSurface);
@@ -204,47 +219,9 @@ RECT textutils_GetBounds(
 	
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return rect;
+#endif // __AUI_USE_DIRECTX__
 
 	return rect;  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -313,10 +290,12 @@ void textutils_AddFont(
 		const MBCHAR *szFileName	
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	sint32 i = AddFontResource(szFileName);
 	Assert(i);
 	if (i==NULL) return;
 	SendMessage(HWND_BROADCAST, WM_FONTCHANGE, NULL, NULL);
+#endif
 }
 
 
@@ -329,10 +308,12 @@ void textutils_RemoveFont(
 		const MBCHAR *szFileName		
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	sint32 i = RemoveFontResource(szFileName);
 	Assert(i);
 	if (i==NULL) return;
 	SendMessage(HWND_BROADCAST, WM_FONTCHANGE, NULL, NULL);
+#endif
 }
 
 
@@ -351,6 +332,7 @@ HFONT textutils_CreateFont(
 		BOOL fLogRes					
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	FLOAT		cxDpi, cyDpi;
 	HFONT		hFont;
 	LOGFONT		lf;
@@ -439,6 +421,9 @@ HFONT textutils_CreateFont(
 		pDirectSurface->Lock(NULL, (VOID **)&buffer, 0);
 	}
 	return hFont;
+#else // __AUI_USE_DIRECTX__
+	return 0;
+#endif // __AUI_USE_DIRECTX__
 }
 
 
@@ -473,7 +458,11 @@ void textutils_DeleteFont(
 {
 	Assert(hFont);
 	if (hFont==NULL) return;
+#ifdef __AUI_USE_DIRECTX__
 	DeleteObject(hFont);
+#else
+	delete hFont;
+#endif // __AUI_USE_DIRECTX__
 }
 
 
@@ -595,7 +584,7 @@ void textutils_TestFonts(
 		aui_Surface *pDirectSurface	
 		)
 {
-
+#ifdef __AUI_USE_DIRECTX__
 	MBCHAR l[80];
 
 	textutils_AddFont("../Fusion/Fonts/BickleyScript.ttf");
@@ -653,5 +642,6 @@ void textutils_TestFonts(
 	textutils_RemoveFont("../Fusion/Fonts/JohnHandy.ttf");
 	textutils_RemoveFont("../Fusion/Fonts/RageItalic.ttf");
 	textutils_RemoveFont("../Fusion/Fonts/Symbol.ttf");
+#endif // __AUI_USE_DIRECTX__
 }
 

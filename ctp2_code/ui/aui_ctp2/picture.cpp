@@ -14,7 +14,7 @@
 #include "c3.h"
 
 #include "aui.h"
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "c3blitter.h"
 #include "c3ui.h"
 

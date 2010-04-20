@@ -74,7 +74,7 @@
 #include "UnitData.h"
 #include "UnseenCell.h"         // Unseen cell info is needed
 #include "gfx_options.h"        // g_graphicsOptions
-#include "ProfileDB.h"          // g_theProfileDB
+#include "profileDB.h"          // g_theProfileDB
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;

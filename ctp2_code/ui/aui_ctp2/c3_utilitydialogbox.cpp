@@ -49,6 +49,7 @@
 #include "c3windows.h"
 #include "citydata.h"
 #include "ctp2_button.h"
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 #include "Globals.h"                // allocated::...
 #include "keypress.h"

@@ -35,7 +35,7 @@
 
 #include "c3math.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "aui.h"
 #include "aui_surface.h"
@@ -1059,6 +1059,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1088,6 +1089,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1103,16 +1105,19 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 		BOOL bg							
 		)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
 	sint32 oldMode = 0;
+#endif // __AUI_USE_DIRECTX__
 
 	Assert(pDirectSurface);
 	if (pDirectSurface==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	hr = pDirectSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -1150,6 +1155,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1176,6 +1182,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1219,6 +1226,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#endif
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1244,6 +1252,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1287,6 +1296,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1313,6 +1323,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1357,6 +1368,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1375,6 +1387,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
@@ -1425,6 +1438,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1444,6 +1458,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC			hdc;
 	HRESULT		hr;
 	COLORREF	oldColor;
@@ -1495,6 +1510,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
@@ -1522,6 +1538,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
+#ifdef __AUI_USE_DIRECTX__
 	HDC hdc;
 	HRESULT hr;
 	COLORREF oldColor;
@@ -1583,6 +1600,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
 }
