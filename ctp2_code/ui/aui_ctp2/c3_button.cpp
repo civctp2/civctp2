@@ -353,7 +353,7 @@ AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
 	m_val = val;
 
 	MBCHAR text[ 50 ];
-	itoa( m_val, text, 10 );
+	sprintf( text, "%d", m_val ); // itoa( m_val, text, 10 );
 	SetText( text );
 
 	if ( changed ) DoCallback();
@@ -395,11 +395,14 @@ void c3_EditButton::DoCallback( void )
 	
 	if ( !GetActionFunc() && !GetAction() ) return;
 
-	if ( !HandleGameSpecificLeftClick( this ) )
-	if ( m_origCallback )
-		m_origCallback( this, AUI_BUTTON_ACTION_EXECUTE, 0, m_origCookie );
-	else if ( m_origAction )
-		m_origAction->Execute( this, AUI_BUTTON_ACTION_EXECUTE, 0 );
+	if ( !HandleGameSpecificLeftClick( this ) ) {
+		if ( m_origCallback ) {
+			m_origCallback( this, AUI_BUTTON_ACTION_EXECUTE, 0, m_origCookie );
+		}
+		else if ( m_origAction ) {
+			m_origAction->Execute( this, AUI_BUTTON_ACTION_EXECUTE, 0 );
+		}
+	}
 }
 
 
@@ -415,7 +418,7 @@ void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 	button->GetParent()->RemoveChild( button->Id() );
 
 	MBCHAR text[ 50 ];
-	itoa( button->GetValue(), text, 10 );
+	sprintf(text, "%d", button->GetValue()); // itoa( button->GetValue(), text, 10 );
 
 	field->SetFieldText( text );
 	field->SetKeyboardFocus();

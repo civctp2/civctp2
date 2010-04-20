@@ -28,8 +28,8 @@ SDL_mutex* g_secondaryKeyboardEventQueueMutex = NULL;
 aui_SDLKeyboard::aui_SDLKeyboard(
 	AUI_ERRCODE *retval )
 	:
-	aui_Input( retval ),
-	aui_Keyboard( retval ),
+	aui_Input(),
+	aui_Keyboard(),
 	aui_SDLInput( retval, FALSE )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -128,9 +128,9 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 				case SDLK_LEFT:
 				case SDLK_RIGHT:
 					if (event.key.state & SDL_PRESSED) {
-						g_civApp->BeginKeyboardScrolling(convertSDLKey(event.key.keysym.sym));
+						g_civApp->BeginKeyboardScrolling(convertSDLKey(event.key.keysym));
 					} else {
-						g_civApp->StopKeyboardScrolling(convertSDLKey(event.key.keysym.sym));
+						g_civApp->StopKeyboardScrolling(convertSDLKey(event.key.keysym));
 					}
 					break;
 			}
@@ -147,14 +147,14 @@ void aui_SDLKeyboard::convertSDLKeyboardEvent(SDL_KeyboardEvent &sdlevent,
                                       aui_KeyboardEvent &auievent)
 {
 	auievent.down = (sdlevent.state & SDL_PRESSED) ? TRUE : FALSE;
-	auievent.key = convertSDLKey(sdlevent.keysym.sym);
-	printf("convertSDLKeyboardEvent(): %08x %08x %c\n", auievent.key, 
+	auievent.key = convertSDLKey(sdlevent.keysym);
+	printf("convertSDLKeyboardEvent(): %08x %08x %c\n", auievent.key,
                sdlevent.keysym.sym, sdlevent.keysym.sym);
 }
 
-uint32 aui_SDLKeyboard::convertSDLKey(SDLKey k)
+uint32 aui_SDLKeyboard::convertSDLKey(SDL_keysym keysym)
 {
-	switch (k) {
+	switch (keysym.sym) {
 		case SDLK_ESCAPE:
 			return AUI_KEYBOARD_KEY_ESCAPE;
 		case SDLK_RETURN:
@@ -171,10 +171,11 @@ uint32 aui_SDLKeyboard::convertSDLKey(SDLKey k)
 			return AUI_KEYBOARD_KEY_LEFTARROW;
 		case SDLK_RIGHT:
 			return AUI_KEYBOARD_KEY_RIGHTARROW;
-		default:
-			// It might look bad to scrap all other keys, but in fact all other keys are handled elsewhere
-			return AUI_KEYBOARD_KEY_INVALID;
 	}
+	if ((keysym.unicode & 0xFF80) == 0) {
+		return (keysym.unicode & 0x7F);
+	}
+	return AUI_KEYBOARD_KEY_INVALID;
 }
 
 AUI_ERRCODE aui_SDLKeyboard::Acquire()

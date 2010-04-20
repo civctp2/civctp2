@@ -17,6 +17,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
+#ifdef __AUI_USE_DIRECTX__
+
+
 #include "directvideo.h"
 
 #include "aui.h"
@@ -349,3 +353,4 @@ void DirectVideo::Resume(void)
 	}
 }
 
+#endif // __AUI_USE_DIRECTX__

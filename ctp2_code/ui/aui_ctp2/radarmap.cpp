@@ -45,14 +45,14 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "colorset.h"               // g_colorSet
 #include "radarmap.h"
 
 #include <algorithm>
 
 
 #include "aui.h"
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
@@ -66,7 +66,6 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
 #include "SelItem.h"                // g_selected_item
 #include "tiledmap.h"               // g_tiledMap
 #include "director.h"
@@ -746,8 +745,8 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+	tileRectangle.right		= std::max<sint32>(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.bottom	= std::max<sint32>(tileRectangle.top, (tileRectangle.bottom - 1L));
 	
 	if(borderFlags & k_WEST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
@@ -828,8 +827,8 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 		static_cast<LONG>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
+	tileRectangle.right		= std::max<sint32>(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.bottom	= std::max<sint32>(tileRectangle.top, (tileRectangle.bottom - 1L));
 	LONG    middle			= 
         std::min<LONG>(static_cast<LONG>(ceil(xPosition + m_tilePixelWidth/2)), 
                        tileRectangle.right

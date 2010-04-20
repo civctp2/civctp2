@@ -46,7 +46,7 @@ class Agent;
 
 #include "c3.h"
 
-#include "goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
 #include "scheduler_types.h"
 #include "squad_Strength.h"
 #include "Army.h"               // Army

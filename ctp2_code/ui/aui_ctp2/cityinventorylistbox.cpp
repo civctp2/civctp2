@@ -49,7 +49,7 @@
 #include "UnitData.h"
 #include "citydata.h"
 #include "Advances.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "BldQue.h"
 #include "ObjPool.h"

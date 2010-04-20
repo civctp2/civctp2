@@ -29,7 +29,7 @@
 #include "c3.h"                     // Pre-compiled header
 #include "c3imageformats.h"         // Own declarations: consistency check
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <io.h>
 #else
 #include <sys/types.h>
@@ -102,10 +102,15 @@ AUI_ERRCODE TiffImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 
 AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 {
-    if (_access(filename, 0) != 0) 
+#ifdef WIN32
+    if (_access(filename, 0) != 0)
+#else
+    struct stat st;
+    if (stat(filename, &st) != 0)
+#endif
     {
 		return LoadRIM(filename, image);
-    }        
+    }
 
 	int		width;
     int     height;

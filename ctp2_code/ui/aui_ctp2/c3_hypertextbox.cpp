@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctp2_listitem.h"
 #include "c3_hypertextbox.h"
 
 #include "aui.h"

@@ -33,6 +33,8 @@
 
 #include "aui.h"
 #include "aui_surface.h"
+#include "aui_sdlsurface.h"
+#include "aui_directsurface.h"
 #include "aui_rectangle.h"
 
 #include "c3blitter.h"
@@ -77,7 +79,7 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
 	} else {	
 		if (g_useDDBlit)
-			return aui_DirectBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
+			return aui_NativeBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
 		   	return aui_Blitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 	}
@@ -90,7 +92,7 @@ AUI_ERRCODE C3Blitter::ColorBlt16(
 	uint32 flags )
 {
 	if (g_useDDBlit) 
-		return aui_DirectBlitter::ColorBlt16(destSurf, destRect, color, flags);
+		return aui_NativeBlitter::ColorBlt16(destSurf, destRect, color, flags);
 	else
 		return aui_Blitter::ColorBlt16(destSurf, destRect, color, flags);
 }
@@ -114,7 +116,7 @@ AUI_ERRCODE C3Blitter::StretchBlt16To16(
 	uint32 flags )
 {
 	if (g_useDDBlit) 
-		return aui_DirectBlitter::StretchBlt16To16(destSurf, destRect, srcSurf, srcRect, flags);
+		return aui_NativeBlitter::StretchBlt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 	else
 		return aui_Blitter::StretchBlt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 }
@@ -181,6 +183,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 
 					
 					destBuf += destPitch;
+#ifdef _MSC_VER
 					__asm {
 			  		
 
@@ -227,6 +230,9 @@ L1:
 							mov		[edi], ax
 L2:
 					}
+#else // _MSC_VER
+					assert(0);
+#endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
 			else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
@@ -361,7 +367,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 
 					destBuf += destPitch;
 					
-					
+#ifdef _MSC_VER
 					_asm
 					{
 						mov eax, scanWidth
@@ -390,7 +396,41 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	   					shr ecx,1
 	   					rep movsw
 					}	
+#else // _MSCVER
+//					assert(0);
+                    //printf("%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
+                    __asm__ (
+                        //"movl $scanWidth, %eax       \n\t"
+                        //"movl $srcBuf, %esi          \n\t"
+                        //"movl $destBuf, %edi         \n\t"
+                        "movl %%eax,%%ecx              \n\t"
+                        "movl $8,%%edx                \n\t"
+                        "shrl $3,%%eax                \n\t"
+                        "andl $0x7,%%ecx              \n\t"
+                        "addl $0,%%eax                \n\t"
+                        "jz  MMXCopyDone             \n\t"
 
+                        "_CopyMMX:                   \n\t"
+                        "movq (%%esi),%%mm0            \n\t"
+                        "movq %%mm0,(%%edi)            \n\t"
+                        "addl %%edx,%%esi              \n\t"
+                        "addl %%edx,%%edi              \n\t"
+                        "decl %%eax                   \n\t"
+                        "jnz  _CopyMMX               \n\t"
+
+                        "emms                        \n\t"
+
+                        "MMXCopyDone:                \n\t"
+
+
+                        "shrl %%ecx                   \n\t"
+                        "rep movsw                        \n\t"
+
+                        : 
+                        : "a" (scanWidth), "S" (srcBuf), "D" (destBuf)
+                        : "%edx", "%ecx", "cc"
+                        );
+#endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
 			else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
@@ -522,7 +562,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 					
 					destBuf += destPitch;
-	
+#ifdef _MSC_VER
 					_asm
 			  		{
 						mov eax, scanWidth
@@ -548,7 +588,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 					   	shr ecx,1
 					   	rep movsw
 					}
-
+#else // _MSC_VER
+					assert(0);
+#endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
 			else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
@@ -617,6 +659,7 @@ bool C3Blitter::CheckMMXTechnology(void)
     bool retval = true;
     DWORD RegEDX = 0;
 
+#ifdef _MSC_VER
     __try {
             _asm {
                     mov eax, 1      
@@ -635,7 +678,36 @@ bool C3Blitter::CheckMMXTechnology(void)
        __try { _asm emms }          
        __except(EXCEPTION_EXECUTE_HANDLER) { retval = false; }
     }
+#else // _MSC_VER
+    try {
+        __asm__ ( // what's this good for??? Setting an opcode?
+            "movl $1,%%eax                \n\t"
+            ".byte 0x0f		         \n\t"
+            ".byte 0xa2                  \n\t"
+            : "=d" (RegEDX)
+            :
+            : "%eax", "memory"
+            );
+        } 
+    catch(...) {
+        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);	
+        retval = false; 
+        }
 
+    if(retval == false)
+       return false;           
+
+    if (RegEDX & 0x800000)          
+    {
+    try { __asm__ (" emms            \n\t"); }          
+    catch(...) {
+        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);	
+        retval = false; 
+        }
+    }
+    
+    printf("%s L%d: MMX-Test succeded!\n", __FILE__, __LINE__);	
+#endif // _MSC_VER
     
     
     return retval;
@@ -643,6 +715,7 @@ bool C3Blitter::CheckMMXTechnology(void)
 
 void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 {
+#ifdef _MSC_VER
 	__asm {
 		mov		esi, src
 		mov		edi, dest
@@ -662,4 +735,7 @@ void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 End:	add		ecx, eax
 	rep movsb
 	}
+#else // _MSC_VER
+	assert(0);
+#endif // _MSC_VER
 }

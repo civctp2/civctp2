@@ -37,7 +37,7 @@
 
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_stringtable.h"
 #include "aui_window.h"
 
@@ -54,6 +54,10 @@
 
 #include "EventTracker.h"
 #include "Strengths.h"
+
+#ifdef LINUX
+#include <memory>
+#endif
 
 extern C3UI                    *g_c3ui;
 extern PointerList<Player>     *g_deadPlayer;

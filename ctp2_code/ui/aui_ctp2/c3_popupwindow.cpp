@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -230,12 +230,12 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 		m_title = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupTitle");
 		TestControl(m_title);
-
+		char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
 		m_titleText = 
 			new c3_Static
 		        (&errcode, 
 		         aui_UniqueId(), 
-		         (titleBlock) ? titleBlock : "c3_PopupTitle.c3_PopupTitleText"
+		         (titleBlock) ? titleBlock : ldlBlock
 		        );
 		TestControl(m_titleText);
 

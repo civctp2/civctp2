@@ -20,7 +20,7 @@
 
 #include "primitives.h"
 
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "CivPaths.h"
 #include "c3ui.h"
 #include "directvideo.h"
