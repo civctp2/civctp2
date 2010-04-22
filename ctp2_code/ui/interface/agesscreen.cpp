@@ -36,7 +36,7 @@
 #include "c3.h"
 #include "agesscreen.h"
 
-#include "agerecord.h"
+#include "AgeRecord.h"
 #include "aui_stringtable.h"
 #include "c3_button.h"
 #include "c3_listitem.h"

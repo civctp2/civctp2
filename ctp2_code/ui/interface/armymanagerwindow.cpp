@@ -53,12 +53,12 @@
 #include "UnitRecord.h"
 #include "ctp2_Switch.h"
 #include "SelItem.h"
-#include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "ctp2_listbox.h"
 #include "ctp2_Static.h"
 #include "ctp2_button.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "pointerlist.h"
 
@@ -74,7 +74,7 @@
 #include "network.h"
 
 #include "UnitPool.h"
-#include "ProfileDB.h"          // g_theProfileDB
+#include "profileDB.h"          // g_theProfileDB
 #include "UnitData.h"
 
 extern C3UI *g_c3ui;

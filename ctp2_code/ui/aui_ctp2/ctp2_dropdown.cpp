@@ -40,7 +40,7 @@
 #include "c3ui.h"
 #include "c3_button.h"
 #include "c3_static.h"
-
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 
 #include "pattern.h"
