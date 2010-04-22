@@ -190,7 +190,7 @@
 #include "aui_progressbar.h"
 #include "aui_tipwindow.h"
 
-#include "order.h"
+#include "Order.h"
 
 #include "soundmanager.h"
 #include "gamesounds.h"
@@ -262,7 +262,11 @@ void UnitPanelListBoxCallback (aui_Control *control, uint32 action, uint32 data,
 #define k_CPW_THOUSAND  1000
 #define k_CPW_MILLION   1000000
 #define k_CPW_BILLION   1000000000
+#ifdef _MSC_VER
 #define k_CPW_TRILLION  1000000000000
+#elif defined(__GNUC__)
+#define k_CPW_TRILLION  1000000000000ULL
+#endif
 
 void TurnNextUnitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {

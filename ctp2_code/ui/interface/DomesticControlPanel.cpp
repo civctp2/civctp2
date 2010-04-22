@@ -44,7 +44,7 @@
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 #include "ctp2_Static.h"
-#include "aui_Surface.h"
+#include "aui_surface.h"
 #include "IconRecord.h"
 #include "player.h"
 #include "sci_advancescreen.h"

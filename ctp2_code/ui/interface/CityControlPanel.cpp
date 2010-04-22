@@ -64,6 +64,7 @@
 #include "UnitRecord.h"
 #include "WonderRecord.h"
 #include "World.h"
+#include "colorset.h"
 #include "radarmap.h"
 #include "UnitData.h"
 #include "tiledmap.h"

@@ -47,6 +47,7 @@
 #include "c3_ranger.h"
 #include "c3ui.h"
 #include "colorset.h"
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 #include "greatlibrary.h"
 #include "CTPRecord.h"

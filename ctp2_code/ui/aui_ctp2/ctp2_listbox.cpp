@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 
 #include "aui.h"
