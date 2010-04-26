@@ -235,6 +235,7 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 	char name[BUFFER_SIZE];
 	unsigned address;
 	unsigned prefadr = 0;
+	char *dummy;
 #ifdef REQUIRE_CORRECT_LOG
 	int log_correct;
 #endif
@@ -258,7 +259,7 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 	aehDPRINT(("call aeh_map_Load time %d\n", GetTickCount()));
 	done = 0;
 	while (!done) {
-		fgets (buffer, BUFFER_SIZE, fp);
+		dummy = fgets (buffer, BUFFER_SIZE, fp);
 		if (feof (fp))
 			done = 1;
 		if (strncmp(buffer, " Preferred", strlen(" Preferred")-1) == 0) {
@@ -278,11 +279,11 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 		aehDPRINT(("didn't get preferred adr\n"));
 	}
 	aehmap->load_addr = prefadr;
-	fgets (buffer, BUFFER_SIZE, fp);  /* ignore single blank line */
+	dummy = fgets (buffer, BUFFER_SIZE, fp);  /* ignore single blank line */
 
 	/* get every line containing a function name and an address */
 	while (!done) {
-		fgets (buffer, BUFFER_SIZE, fp);
+		dummy = fgets (buffer, BUFFER_SIZE, fp);
 
 		/* line must start with ' 0nnn:' where n is a number */
 		if ((buffer[0] == ' ') && (buffer[1] == '0') && (buffer[5] == ':') &&
