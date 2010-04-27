@@ -34,26 +34,38 @@
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
+#if defined(WIN32)
 #include <windows.h>	/* LPCSTR, DWORD */
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
-
 void Debug_Open (void);
 void Debug_Close (void);
-void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID);
 
+#ifdef WIN32
+void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID);
+#endif // WIN32
+#ifdef LINUX
+void Debug_SetProcessName(char const * szProcessName);
+#endif
 
 #ifdef __cplusplus
-}
+} // extern "C"
 
-inline void SetThreadName(LPCSTR szThreadName, DWORD dwThreadID = -1)
+namespace Os
 {
-    Debug_SetThreadName(szThreadName, dwThreadID);
-};
+    inline void SetThreadName(char const * szThreadName)
+    {
+#if defined(WIN32)
+        Debug_SetThreadName((LPCSTR) szThreadName, (DWORD) -1);
+#elif defined(LINUX)
+        Debug_SetProcessName(szThreadName);
+#endif
+    };
+} // namespace Os
 
 #endif /* __cplusplus */
 

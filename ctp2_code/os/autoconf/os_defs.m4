@@ -20,6 +20,6 @@ AC_DEFUN([AC_OS_DEFINES],[
    esac
 
    AC_SUBST(CTP2_NOWIN32_INC)
-   AM_CONDITIONAL(WIN32, test x$ac_OpSystem = xWIN32)
-   AM_CONDITIONAL(LINUX, test x$ac_OpSystem = xLINUX)
+   AM_CONDITIONAL(WIN32, test "x$ac_OpSystem" = "xWIN32")
+   AM_CONDITIONAL(LINUX, test "x$ac_OpSystem" = "xLINUX")
 ])

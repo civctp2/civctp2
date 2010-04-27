@@ -107,6 +107,9 @@
 #ifdef HAVE_X11
 #include <X11/Xlib.h>
 #endif
+#ifdef USE_GTK
+#include <gtk/gtk.h>
+#endif
 
 #include "radarmap.h"
 #include "statswindow.h"
@@ -1953,6 +1956,10 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	appstrings_Initialize();
 	
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
+#ifdef USE_GTK
+	gtk_set_locale();
+	gtk_init(&argc, &argv);
+#endif
 
 #ifdef __AUI_USE_DIRECTX__
 	if (!main_CheckDirectX()) {

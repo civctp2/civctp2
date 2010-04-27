@@ -21,6 +21,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef USE_GTK
+#include <gtk/gtk.h>
+#endif
+
 char*
 _fullpath(char* absolute, const char* relative, size_t bufsize)
 {
@@ -81,11 +85,39 @@ GetTickCount()
 	return SDL_GetTicks();
 }
 
+namespace {
+	int mbRetVal = 0;
+}
+
 sint32
 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
 	fprintf(stderr, "Messagebox(%s): %s\n",
 	        (title ? title : "null"), (msg ? msg : "null"));
+#ifdef USE_GTK
+	GtkWidget *dialog;
+	dialog = gtk_message_dialog_new(
+		NULL,
+		GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_ERROR,
+		GTK_BUTTONS_NONE,
+		"%s\n\n%s",
+		title,
+		msg
+	);
+	if ((flags & MB_YESNO) == MB_YESNO) {
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			GTK_STOCK_YES,
+			GTK_STOCK_NO,
+			NULL);
+	} else {
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			GTK_STOCK_OK,
+			NULL);
+	}
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+#endif
 	
 	return 0;
 }

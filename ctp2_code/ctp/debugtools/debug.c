@@ -38,7 +38,10 @@
 #include "debug.h"  // Own declarations: consistency check
 
 #include <stdio.h>
-
+#ifdef LINUX
+#include <linux/prctl.h>
+#include <linux/version.h>
+#endif
 
 #include "debugassert.h"
 #include "debugcallstack.h"
@@ -108,6 +111,7 @@ void Debug_Close (void)
  *
  *----------------------------------------------------------------------------
  */
+#ifdef WIN32
 void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 {
     THREADNAME_INFO info;
@@ -126,6 +130,30 @@ void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
     }
 #endif
 }
+#endif // WIN32
+
+/*----------------------------------------------------------------------------
+ *
+ * Name       : Debug_SetProcessName
+ *
+ * Description: Add a name to a process to display in the debugger.
+ *
+ * Parameters : szProcessName    : name of the process
+ *
+ * Globals    : -
+ *
+ * Returns    : -
+ *
+ *----------------------------------------------------------------------------
+ */
+#ifdef LINUX
+void Debug_SetProcessName(char const * szProcessName)
+{
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 9)
+	int rc = prctl(PR_SET_NAME, szProcessName);
+#endif
+}
+#endif
 
 #endif // def _DEBUG
 

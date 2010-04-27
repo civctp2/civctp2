@@ -571,9 +571,11 @@ ui/ldl/ldl.tab.c: $(ctp2_code)/ui/ldl/ldl.y ui/ldl
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -bui/ldl/ldl $<
 
 AM_CFLAGS=\
+	$(CTP2_CPPFLAGS) \
 	$(CTP2_CFLAGS)
 
 AM_CXXFLAGS=\
+	$(CTP2_CPPFLAGS) \
 	$(CTP2_CXXFLAGS)
 
 AM_CPPFLAGS=\
