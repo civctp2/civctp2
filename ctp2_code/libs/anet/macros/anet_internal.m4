@@ -36,10 +36,10 @@ dnl         AC_DEFINE(__NO_ANONYMOUS_UNIONS__,1,[Define to 1 if anonymous unions
 	 ac_OpClass="UNIX"
    esac
 
-   ANET_CFLAGS_NORMAL="-DNDEBUG -O3 -Werror"
-   ANET_CFLAGS_DEBUG="-DDEBUG -g -Werror"
-   ANET_CFLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Werror"
-   ANET_CFLAGS_LOG="-DNDEBUG -DPRNT -O3 -Werror"
+   ANET_CFLAGS_NORMAL="-DNDEBUG -O3 -Wall"
+   ANET_CFLAGS_DEBUG="-DDEBUG -g -Wall"
+   ANET_CFLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Wall"
+   ANET_CFLAGS_LOG="-DNDEBUG -DPRNT -O3 -Wall"
 
    AM_CONDITIONAL(UNIX, test x$ac_OpClass = xUNIX)
    AM_CONDITIONAL(LINUX, test x$ac_OpSystem = xLINUX)
