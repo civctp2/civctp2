@@ -91,9 +91,10 @@ namespace
         size_t const            Count;
 
     private:
+#ifdef _MSC_VER
         // Not used. Defined to prevent compiler warning.
         TabDescriptor & TabDescriptor::operator = (TabDescriptor const &);
-
+#endif
     };
 
     TabDescriptor const TAB_INVALID ("", 0);

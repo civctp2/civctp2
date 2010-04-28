@@ -47,9 +47,9 @@
 #include "c3_dropdown.h"
 #include "c3_listitem.h"
 #include "CivPaths.h"           // g_civPaths
+#include "ctp2_listitem.h"
 #include "ctp2_dropdown.h"
 #include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
 #include "ctp2_Static.h"
 #include "gameinit.h"
 #include "loadsavewindow.h"

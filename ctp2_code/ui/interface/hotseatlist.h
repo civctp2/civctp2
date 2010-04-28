@@ -43,7 +43,7 @@ class HotseatList;
 #include "c3_popupwindow.h"     // c3_PopupWindow
 #include "aui_action.h"
 #include "keyboardhandler.h"
-#include "Player.h"             // PLAYER_INDEX
+#include "player.h"             // PLAYER_INDEX
 
 typedef void (HotseatListCallback)(sint32 launch, 
 								   sint32 player, 

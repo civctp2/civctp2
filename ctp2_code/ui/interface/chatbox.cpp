@@ -287,6 +287,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) 
 	{
 		extern BOOL gDone;
+#ifdef __AUI_USE_DIRECTX__
 		MSG	msg;
 
 		MBCHAR * temp = s+4;
@@ -331,6 +332,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			      && !gDone
 			     );
 		}
+#endif
 
 		return TRUE;
 	}

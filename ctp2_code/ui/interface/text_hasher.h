@@ -172,7 +172,11 @@ DATA_TYPE Text_Hasher<DATA_TYPE>::Look_Up_Data
 	const _TCHAR * key
 )
 {
+#ifdef WIN32
     size_t      keyLength       = _tcslen(key);
+#else
+    size_t      keyLength       = strlen(key);
+#endif
 	_TCHAR *    lowerCaseKey    = new _TCHAR[keyLength + 1];
     std::transform(key, key + keyLength, lowerCaseKey, tolower);
     lowerCaseKey[keyLength]     = _TCHAR(0);
@@ -184,7 +188,11 @@ DATA_TYPE Text_Hasher<DATA_TYPE>::Look_Up_Data
         translation = translation->m_next
     )
 	{
+#ifdef WIN32
 		if (!_tcsncmp(key, translation->m_key, MAX_KEY_CHARS))
+#else
+		  if (!strncmp(key, translation->m_key, MAX_KEY_CHARS))
+#endif // WIN32
 		{
             delete [] lowerCaseKey;
 			return translation->m_data;

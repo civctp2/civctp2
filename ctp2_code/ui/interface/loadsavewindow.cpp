@@ -875,8 +875,9 @@ BOOL LoadSaveWindow::GetNote(MBCHAR *note)
 
 void LoadSaveWindow::SetGameInfo(GameInfo *info) 
 { 
-	m_gameInfo = info; 
-    SetGameName(info ? info->name : "");
+	m_gameInfo = info;
+	MBCHAR *noname = "";
+    SetGameName(info ? info->name : noname);
 	FillListTwo(info);
 }
 

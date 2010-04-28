@@ -59,13 +59,17 @@
 #include "CivilisationRecord.h"
 #include "civscenarios.h"               // g_civScenarios
 #include "ctp2_button.h"
-#include "direct.h"
+#ifdef WIN32
+#include <direct.h>
+#endif // WIN32
 #include "gamefile.h"                   // SAVE_LEADER_NAME_SIZE	
 #include "gameinit.h"
 #include "Globals.h"                    // allocated::reassign
 #include "hotseatlist.h"
 #include "initialplaywindow.h"
-#include "io.h"
+#ifdef WIN32
+#include <io.h>
+#endif // WIN32
 #include "keypress.h"
 #include "loadsavewindow.h"
 #include "MessageBoxDialog.h"
@@ -79,6 +83,15 @@
 #include "spnewgametribescreen.h"
 #include "StrDB.h"                      // g_theStringDB
 #include "TurnYearStatus.h"
+
+#ifndef WIN32
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#endif // !WIN32
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif // HAVE_UNISTD_H
 
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
@@ -1119,7 +1132,11 @@ void loadsavescreen_delete( void )
 
 		sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
+#ifdef WIN32
 		if ( DeleteFile( path ) )
+#elif defined(HAVE_UNISTD_H)
+		if ( !unlink( path ) )
+#endif
 		{
 			// FIXME ? Do we want to worry about deleting .gw files?
 
@@ -1149,6 +1166,7 @@ void loadsavescreen_delete( void )
 	}
 	else
 	{
+#ifdef WIN32
 		MBCHAR		path[_MAX_PATH];
 		sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
@@ -1169,6 +1187,7 @@ void loadsavescreen_delete( void )
 		assert(!retval);
 		g_loadsaveWindow->FillListTwo(NULL);
 		g_loadsaveWindow->SetType(g_loadsaveWindow->GetType());
+#endif // WIN32
 	}
 }
 

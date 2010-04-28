@@ -732,7 +732,9 @@ GreatLibrary::GreatLibrary(sint32 theMode)
     m_techTree                  (NULL),
     m_techRequirementsText      (NULL),
     m_techVariablesText         (NULL),
+#ifdef __AUI_USE_DIRECTX__
     m_techMovie                 (NULL),
+#endif // __AUI_USE_DIRECTX__
     m_techStillShot             (NULL),
     m_string                    (NULL),
     m_buttonString              (LIB_STRING_INDEX),
@@ -792,7 +794,9 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_window->SetTechStillShot ( m_techStillShot );
 	m_window->SetTechHistoricalText ( m_techHistoricalText );
 	m_window->SetTechGameplayText ( m_techGameplayText );
+#ifdef __AUI_USE_DIRECTX__
 	m_window->SetTechMovie ( m_techMovie );
+#endif // __AUI_USE_DIRECTX__
 	m_window->SetTechRequirementsText ( m_techRequirementsText );
 	m_window->SetTechVariablesText ( m_techVariablesText );
 
@@ -814,9 +818,11 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		m_techStillShot->Hide();
+#ifdef __AUI_USE_DIRECTX__
 		if (m_techMovie) {
 			if (m_techMovie->Open()) m_techMovie->CloseStream();
 		}
+#endif
 		if (!m_window->LoadTechMovie()) {
 			m_techStillShot->ShouldDraw();
 			m_techStillShot->Show();
@@ -887,9 +893,11 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 
 		GetWindow()->SetDynamic(FALSE);
 
+#ifdef __AUI_USE_DIRECTX__
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
+#endif
 	}
 
 
@@ -990,7 +998,9 @@ GreatLibrary::~GreatLibrary( void )
     delete m_window;
     delete m_techTree;
     delete m_string;
+#ifdef __AUI_USE_DIRECTX__
     delete m_techMovie;
+#endif // __AUI_USE_DIRECTX__
 }
 
 void GreatLibrary::Display( void )
@@ -1145,12 +1155,13 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	
 
 	
-	
+#ifdef __AUI_USE_DIRECTX__
 	if (m_techMovie) {
 		if (m_techMovie->Open()) m_techMovie->CloseStream();
 		delete m_techMovie;
 		m_techMovie = NULL;
 	}
+#endif
 
 	RECT rect = {
 		k_VIDEO_X,
@@ -1159,9 +1170,11 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		k_VIDEO_Y + k_VIDEO_HEIGHT};
 
 	if ( g_theProfileDB->IsLibraryAnim() ) {
+#ifdef __AUI_USE_DIRECTX__
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
+#endif
 
 	}
 	else {
@@ -1170,8 +1183,10 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	}
 
 	m_window->SetTechTree(m_techTree);
+#ifdef __AUI_USE_DIRECTX__
 	m_window->SetTechMovie(m_techMovie);
-    m_window->LoadGameplayText(so);
+#endif // __AUI_USE_DIRECTX__
+	m_window->LoadGameplayText(so);
 	int const text_load_result = m_window->LoadHistoricalText(so);
 	m_historicalTab->Enable
         (text_load_result != GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK);
@@ -1181,12 +1196,14 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	m_window->LoadVariablesText(so);
 
 	if ( g_theProfileDB->IsLibraryAnim() ) {
+#ifdef __AUI_USE_DIRECTX__
 		if (m_techMovie) {
 			if (m_techMovie->Open()) 
 				m_techMovie->CloseStream();
 		}
 		if (!g_greatLibrary->m_window->LoadTechMovie()) {
 		}
+#endif // __AUI_USE_DIRECTX__
 		if ( m_window->LoadTechStill() ) {
 			m_techStillShot->Show();
 			GetWindow()->ShouldDraw();

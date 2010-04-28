@@ -80,7 +80,7 @@
 
 #include "DiplomacyDetails.h"
 #include "AgreementMatrix.h"
-#include "gold.h"
+#include "Gold.h"
 
 #include "network.h"
 #include "UnitData.h"

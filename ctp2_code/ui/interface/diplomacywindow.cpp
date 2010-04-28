@@ -66,7 +66,7 @@
 #include "SlicObject.h"
 #include "stringutils.h"
 
-#include "gold.h"
+#include "Gold.h"
 
 #include "ctp2_spinner.h"
 

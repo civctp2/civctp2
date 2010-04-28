@@ -52,6 +52,10 @@
 #include "initialplaywindow.h"
 #include "spnewgamewindow.h"
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
 extern nf_GameSetup			g_gamesetup;
@@ -267,8 +271,11 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 	MBCHAR		path[_MAX_PATH];
 
 	sprintf(path, "%s\\%s", gameMapInfo->path, saveMapInfo->fileName);
-
+#ifdef WIN32
 	if ( DeleteFile( path ) )
+#else // WIN32
+	if (!unlink(path))
+#endif // WIN32
 	{
 		
 
