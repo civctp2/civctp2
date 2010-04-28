@@ -3,8 +3,8 @@
 #include "FileDialog.h"
 #include "aui_ldl.h"
 #include "ctp2_Window.h"
-#include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "ctp2_listbox.h"
 #include "c3ui.h"
 #include "ctp2_Static.h"
 #include "ctp2_button.h"
@@ -108,9 +108,10 @@ void FileDialog::AddFile(const MBCHAR *path, void *cookie)
 
 void FileDialog::Fill()
 {
+	MBCHAR pattern[_MAX_PATH];
+#ifdef WIN32
 	HANDLE				lpFileList;
 	WIN32_FIND_DATA		fileData;
-	MBCHAR pattern[_MAX_PATH];
 
 	sprintf(pattern, "%s%s*.*", m_dirPath, FILE_SEP);
 
@@ -118,8 +119,13 @@ void FileDialog::Fill()
 
 	Assert(lpFileList != INVALID_HANDLE_VALUE);
 	if(lpFileList == INVALID_HANDLE_VALUE) return;
-
+#else
+	DIR *dir = opendir(m_dirPath);
+	if (!dir) return;
+	struct dirent *dent = 0;
+#endif // WIN32
 	m_list->Clear();
+#ifdef WIN32
 	do {
 		if(!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 			AddFile(fileData.cFileName, NULL);
@@ -127,7 +133,17 @@ void FileDialog::Fill()
 	} while(FindNextFile(lpFileList, &fileData));
 
 	FindClose(lpFileList);
-			
+#else
+	struct stat st;
+	while ((dent = readdir(dir))) {
+		snprintf(pattern, sizeof(pattern), "%s%s%s", m_dirPath, FILE_SEP, dent->d_name);
+		int rc = stat(pattern, &st);
+		if (!S_ISDIR(st.st_mode)) {
+			AddFile(dent->d_name, NULL);
+		}
+	}
+	closedir(dir);
+#endif
 }
 
 const MBCHAR *FileDialog::GetSelectedFile()

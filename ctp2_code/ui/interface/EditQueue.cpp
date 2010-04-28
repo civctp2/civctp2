@@ -51,11 +51,11 @@
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "ctp2_Window.h"
+#include "ctp2_listitem.h"
 #include "ctp2_listbox.h"
 #include "citydata.h"
 #include "c3_static.h"
 #include "ctp2_button.h"
-#include "ctp2_listitem.h"
 #include "aui_ranger.h"
 #include "ctp2_dropdown.h"
 #include "MessageBoxDialog.h"
@@ -81,16 +81,16 @@
 
 #include "UnitDynArr.h"
 
-#include "gold.h"
+#include "Gold.h"
 
 #include "network.h"
 #include "IconRecord.h"
 #include "NationalManagementDialog.h"
 #include "Globals.h"
-#include "Governor.h"
+#include "governor.h"
 #include "buildingutil.h"
 #include "wonderutil.h"
-#include "MapAnalysis.h"
+#include "mapanalysis.h"
 
 static EditQueue *s_editQueue = NULL;
 

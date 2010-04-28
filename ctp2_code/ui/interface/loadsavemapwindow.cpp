@@ -49,6 +49,7 @@
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "c3textfield.h"
+#include "colorset.h"
 #include "texttab.h"
 #include "pointerlist.h"
 

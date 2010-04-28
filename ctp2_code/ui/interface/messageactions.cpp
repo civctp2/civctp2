@@ -36,6 +36,7 @@
 
 #include "SlicButton.h"
 
+#include "colorset.h"
 #include "pixelutils.h"
 #include "radarmap.h"
 #include "c3_dropdown.h"

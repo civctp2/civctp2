@@ -40,21 +40,21 @@
 #include "c3ui.h"               // C3UI
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "citywindow.h"         // InventoryItemInfo
 #include "ctp2_button.h"
-#include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "ctp2_listbox.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "gstypes.h"            // k_MAX_ARMY_SIZE
-#include "iconrecord.h"
+#include "IconRecord.h"
 #include "SlicObject.h"
 #include "StrDB.h"              // g_theStringDB
 #include "stringutils.h"
 #include "Unit.h"
-#include "unitrecord.h"
-#include "wonderrecord.h"       // g_theWonderDB
+#include "UnitRecord.h"
+#include "WonderRecord.h"       // g_theWonderDB
 #include "World.h"              // g_theWorld
 
 extern C3UI *   g_c3ui;

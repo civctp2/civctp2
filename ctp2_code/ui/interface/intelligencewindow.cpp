@@ -44,8 +44,8 @@
 #include "colorset.h"               // g_colorSet
 #include "ctp2_button.h"
 #include "ctp2_hypertextbox.h"
-#include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "ctp2_listbox.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "DiplomacyDetails.h"

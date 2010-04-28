@@ -37,7 +37,7 @@
 #include "aui_action.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "aui_static.h"
