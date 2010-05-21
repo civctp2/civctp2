@@ -482,7 +482,7 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 
 	
 	if (regard >= NEUTRAL_REGARD)
-		max_cost  = proposal_sender_result.science * 0.8;
+		max_cost  = static_cast<sint32>(proposal_sender_result.science * 0.8);
 	else if (regard >= FRIEND_REGARD)
 		max_cost = proposal_sender_result.science;
 	else if (regard >= ALLIED_REGARD)
@@ -495,13 +495,13 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
 		
-		min_cost = proposal_sender_result.science * 0.5;
-        max_cost = std::min(max_cost, proposal_sender_result.science * 3);
+		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.5);
+		max_cost = std::min(max_cost, proposal_sender_result.science * 3);
 	}
 	else
 	{
 		
-		min_cost = proposal_sender_result.science * 0.8;
+		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.8);
 		max_cost = std::min(max_cost, proposal_sender_result.science * 2);
 	}
 	sint32 desired_advance = receiver_diplomat.GetDesiredAdvanceFrom(sender, min_cost, max_cost);
@@ -579,13 +579,13 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
 		
-		min_cost = proposal_sender_result.science * 0.5;
+		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.5);
 		max_cost = proposal_sender_result.science * 2;
 	}
 	else
 	{
 		
-		min_cost = proposal_sender_result.science * 0.8;
+		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.8);
 		max_cost = proposal_sender_result.science * 3;
 	}
 
@@ -969,7 +969,7 @@ STDEHANDLER(CeasefireForGold_ProposalResponseEvent)
 
 	
 	sint32 extort_gold = 
-        std::min(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
+	    std::min(3 * g_player[receiver]->m_gold->GetIncome(), static_cast<sint32>(g_player[receiver]->GetGold() * 0.85));
 
 	
 	if (sender_proposal.detail.first_arg.gold > extort_gold)
@@ -1319,7 +1319,7 @@ STDEHANDLER(ReducePollution_ProposalResponseEvent)
 
 	
 	DiplomacyArg arg;
-	arg.pollution = (1.0 - reduce_percent) * sender_pollution;
+	arg.pollution = static_cast<sint32>((1.0 - reduce_percent) * sender_pollution);
 	receiver_diplomat.ConsiderCounterResponse(
 		sender, 
 		PROPOSAL_OFFER_REDUCE_POLLUTION, 
@@ -1512,7 +1512,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 			double percent = ((double)sender_pollution - sender_promised_pollution) / sender_pollution;
 			percent = ProposalAnalysis::RoundPercentReduction(percent);
 
-			arg.pollution = ((1.0 - percent) * sender_pollution);
+			arg.pollution = static_cast<sint32>((1.0 - percent) * sender_pollution);
 			arg.pollution = ProposalAnalysis::RoundGold(arg.pollution);
 			if (arg.pollution <= 0)
 				return GEV_HD_Continue;
@@ -1579,7 +1579,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 		
 		percent = ProposalAnalysis::RoundPercentReduction(percent);
 
-		arg.pollution = (percent * sender_pollution);
+		arg.pollution = static_cast<sint32>(percent * sender_pollution);
 		arg.pollution = ProposalAnalysis::RoundGold(arg.pollution);
 		if (arg.pollution <= 0)
 			return GEV_HD_Continue;

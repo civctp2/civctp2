@@ -1552,7 +1552,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 						                           false
 						                          );
 
-						defense_strength -= city.GetDefendersBonus() * static_cast<double>(defense_count);
+						defense_strength -= static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
 
 						double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 						city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );
@@ -1956,7 +1956,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		                      false
 		                     );
 
-		defense_strength += city.GetDefendersBonus() * static_cast<double>(defense_count);
+		defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
 
 		double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 		city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );

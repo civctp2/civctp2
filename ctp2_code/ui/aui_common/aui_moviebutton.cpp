@@ -186,15 +186,17 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 			}
 		}
 
-		if (m_movie) {
-			if ( !m_movie->IsPlaying() && !m_movie->IsFinished()) {
+		if (m_movie)
+		{
+			if ( !m_movie->IsPlaying() && !m_movie->IsFinished())
+			{
 				m_movie->Play();
 			}
 
 			(void) m_movie->Process();
 
 			if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) 
-            {
+			{
 				if (m_ActionFunc)
 					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 			}

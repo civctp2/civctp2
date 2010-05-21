@@ -116,6 +116,12 @@ AUI_ERRCODE aui_DirectUI::DestroyDirectScreen(void)
 		m_lpdds     = NULL;
 	}
 
+	if(m_secondary)
+	{
+		delete m_secondary;
+		m_secondary = NULL;
+	}
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -139,7 +145,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
-	// With nonexclusive windows collor depth must be 16 bit otherwise the game will crash.
+	// With nonexclusive windows color depth must be 16 bit otherwise the game will crash.
 	hr = m_lpdd->SetDisplayMode( m_width, m_height, m_bpp );
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
@@ -184,7 +190,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	{
 		m_lpdds = lpdds;
 	}
-	
+
 	if(m_exclusiveMode)
 	{
 		ddsd.ddsCaps.dwCaps = DDSCAPS_BACKBUFFER;
@@ -192,6 +198,10 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		hr = m_lpdds->GetAttachedSurface(&ddsd.ddsCaps, &m_back);
 		Assert( hr == DD_OK );
 		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
+	}
+	else
+	{
+		m_lpdds->Restore();
 	}
 
 	delete m_primary;
@@ -208,16 +218,10 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	if(m_secondary == NULL)
-	{
-		AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-		HDC hdc;
-		m_primary->GetDC(&hdc);
-		m_secondary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, FALSE, hdc );
-		m_primary->ReleaseDC(hdc);
-		Assert( AUI_NEWOK(m_secondary,retcode) );
-		if ( !AUI_NEWOK(m_secondary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
-	}
+	delete m_secondary;
+	m_secondary = new aui_DirectSurface( &errcode, m_width, m_height, m_bpp, m_lpdd, 0, FALSE, TRUE );
+	Assert( AUI_NEWOK(m_secondary,errcode) );
+	if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_pixelFormat = m_primary->PixelFormat();
 
@@ -226,9 +230,12 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 
 aui_DirectUI::~aui_DirectUI( void )
 {
+	// First end mouse, so that the mouse thread does not interfere anymore
+	m_mouse->End();
 	if (m_lpdds)
 	{
 		m_lpdds->Release();
+		m_lpdds = NULL; // Set to be zero, since mouse thread may be still active when the program is shut down, well that was before mouse end
 	}
 
 	if (m_lpdd)

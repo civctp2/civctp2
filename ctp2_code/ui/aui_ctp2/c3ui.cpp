@@ -104,13 +104,6 @@ C3UI::~C3UI()
         (*p)();
     }
 
-    // TODO: move to lower class later (aui_ui?)
-	delete TheMovieManager();
-	delete TheKeyboard();
-	delete TheMouse();
-	delete TheBlitter();
-	delete TheMemMap();
-
     delete m_patternResource;
     delete m_iconResource;
     delete m_pictureResource;

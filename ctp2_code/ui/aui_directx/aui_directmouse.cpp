@@ -158,8 +158,8 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 		
 		case DIMOFS_X:
 			m_data.position.x += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.x >= g_ui->PrimaryWidth() )
-				m_data.position.x = g_ui->PrimaryWidth() - 1;
+			if ( m_data.position.x >= g_ui->SecondaryWidth() )
+				m_data.position.x = g_ui->SecondaryWidth() - 1;
 			else if ( m_data.position.x < 0 )
 				m_data.position.x = 0;
 			m_data.flags = m_flags;
@@ -169,8 +169,8 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 		
 		case DIMOFS_Y:
 			m_data.position.y += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.y >= g_ui->PrimaryHeight() )
-				m_data.position.y = g_ui->PrimaryHeight() - 1;
+			if ( m_data.position.y >= g_ui->SecondaryHeight() )
+				m_data.position.y = g_ui->SecondaryHeight() - 1;
 			else if ( m_data.position.y < 0 )
 				m_data.position.y = 0;
 			m_data.flags = m_flags;

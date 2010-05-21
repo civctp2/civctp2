@@ -48,7 +48,7 @@ DirectVideo::DirectVideo()
 	m_streamSample              (NULL),
 	m_flags                     (0),
 	m_window                    (NULL),
-    m_timePerFrame              (0),
+	m_timePerFrame              (0),
 	m_lastFrameTime             (0)
 {
 	RECT emptyRect  = {0,0,0,0};
@@ -72,7 +72,7 @@ HRESULT DirectVideo::Initialize(aui_DirectUI *ui)
 	if (dd == NULL) return -1;
 	m_dd = dd;
 
-	LPDIRECTDRAWSURFACE		primarySurface = ((aui_DirectSurface *)ui->Primary())->DDS();
+	LPDIRECTDRAWSURFACE		primarySurface = ((aui_DirectSurface *)ui->Secondary())->BUFFER();
 
 	Assert(primarySurface != NULL);
 	if (primarySurface == NULL) return -1;
@@ -102,12 +102,13 @@ HRESULT DirectVideo::Initialize(aui_DirectUI *ui, aui_Window *window, BOOL modal
 
 	LPDIRECTDRAWSURFACE		primarySurface;
 
-	if (m_isModal) {
-		
-		primarySurface = ((aui_DirectSurface *)ui->Primary())->DDS();
-	} else {
-		
-		primarySurface = ((aui_DirectSurface *)window->TheSurface())->DDS();
+	if (m_isModal)
+	{
+		primarySurface = ((aui_DirectSurface *)ui->Primary())->BUFFER();
+	}
+	else
+	{
+		primarySurface = ((aui_DirectSurface *)window->TheSurface())->BUFFER();
 	}
 
 	Assert(primarySurface != NULL);
@@ -119,12 +120,11 @@ HRESULT DirectVideo::Initialize(aui_DirectUI *ui, aui_Window *window, BOOL modal
 
 HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 {
-
-    IAMMultiMediaStream *pAMStream;
-    HRESULT hr;
+	IAMMultiMediaStream *pAMStream;
+	HRESULT hr;
 	TCHAR	errorText[_MAX_PATH];
 
-    hr = CoCreateInstance(CLSID_AMMultiMediaStream, NULL, CLSCTX_INPROC_SERVER,
+	hr = CoCreateInstance(CLSID_AMMultiMediaStream, NULL, CLSCTX_INPROC_SERVER,
 				 IID_IAMMultiMediaStream, (void **)&pAMStream);
 	if (FAILED(hr)) {
 		AMGetErrorText(hr, errorText, _MAX_PATH);
@@ -132,13 +132,13 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 		goto Exit;
 	}
 
-    hr = pAMStream->Initialize(STREAMTYPE_READ, 0, NULL);
+	hr = pAMStream->Initialize(STREAMTYPE_READ, 0, NULL);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Could not initialize IAMMultiMediaStream.  Error#%d.", hr);
 		goto Exit;
 	}
 
-    hr = pAMStream->AddMediaStream(m_dd, &MSPID_PrimaryVideo, 0, NULL);
+	hr = pAMStream->AddMediaStream(m_dd, &MSPID_PrimaryVideo, 0, NULL);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Could not add primary video stream to AMStream.  Error#%d.", hr);
 		goto Exit;
@@ -147,28 +147,29 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	hr = pAMStream->AddMediaStream(NULL, &MSPID_PrimaryAudio, AMMSF_ADDDEFAULTRENDERER, NULL);
 	(void) hr;  // Ignore failures: display video without sound. 
 	
-    WCHAR       wPath[_MAX_PATH];
+	WCHAR       wPath[_MAX_PATH];
 	MultiByteToWideChar(CP_ACP, 0, name, -1, wPath, sizeof(wPath)/sizeof(wPath[0]));
 
-    hr = pAMStream->OpenFile(wPath, 0);
+	hr = pAMStream->OpenFile(wPath, 0);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Unable to open the file.  Error#%d.", hr);
 		goto Exit;
 	}
 
-    m_mmStream = pAMStream;
+	m_mmStream = pAMStream;
 
 	
 	
 
-    hr = m_mmStream->GetMediaStream(MSPID_PrimaryVideo, &m_primaryVidStream);
-	if (FAILED(hr)) {
+	hr = m_mmStream->GetMediaStream(MSPID_PrimaryVideo, &m_primaryVidStream);
+	if (FAILED(hr))
+	{
 		c3errors_ErrorDialog("Video", "Couldn't access the primary video stream.  Error#%d.", hr);
 		goto Exit;
 	}
 
 	
-    hr = m_primaryVidStream->QueryInterface(IID_IDirectDrawMediaStream, (void **)&m_ddStream);
+	hr = m_primaryVidStream->QueryInterface(IID_IDirectDrawMediaStream, (void **)&m_ddStream);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw media stream.  Error#%d.", hr);
 		goto Exit;
@@ -181,14 +182,14 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	m_timePerFrame = (uint32)(streamTime / (UNITS / MILLISECONDS));
 
 	
-    hr = m_ddStream->CreateSample(NULL, NULL, 0, &m_streamSample);
+	hr = m_ddStream->CreateSample(NULL, NULL, 0, &m_streamSample);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw stream sample.  Error#%d.", hr);
 		goto Exit;
 	}
 
 	
-    hr = m_streamSample->GetSurface(&m_streamSurface, &m_surfaceRect);
+	hr = m_streamSample->GetSurface(&m_streamSurface, &m_surfaceRect);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw sample surface.  Error#%d.", hr);
 		goto Exit;
@@ -210,7 +211,7 @@ Exit:
 
 	CloseStream();
 
-    return hr;
+	return hr;
 }
 
 HRESULT	DirectVideo::PlayAll(void)
@@ -222,12 +223,14 @@ HRESULT	DirectVideo::PlayAll(void)
 	m_isFinished = false;
 
 	
-    while (true) {
-		if (m_streamSample->Update(0, NULL, NULL, 0) != S_OK) {
-		    break;
+	while (true)
+	{
+		if (m_streamSample->Update(0, NULL, NULL, 0) != S_OK)
+		{
+			break;
 		}
 		hr = m_primarySurface->Blt(&m_destRect, m_streamSurface, &m_surfaceRect, DDBLT_WAIT, NULL);
-    }
+	}
 
 	return hr;
 }

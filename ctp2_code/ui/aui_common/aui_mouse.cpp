@@ -664,12 +664,6 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 
 	while ( !mouse->ShouldTerminateThread()  )
 	{
-#ifdef WIN32
-		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
-#elif defined(LINUX)
-		usleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
-#endif
-
 		mouse->HandleAnim();
 
 		(void) mouse->GetInput();
@@ -677,6 +671,12 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 		mouse->ReactToInput();
 
 		mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
+
+#ifdef WIN32
+		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
+#elif defined(LINUX)
+		usleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
+#endif
 	}
 
 	return 0;

@@ -375,16 +375,14 @@ aui_Redbook::GetCDIndex()
 AUI_MUSIC_ERRCODE
 aui_Redbook::CDDone()
 {
-	sint32 mci_retval = 0;
 #ifdef __AUI_USE_DIRECTX__
 	MCI_GENERIC_PARMS mciCloseParms;
 
 	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_CLOSE, 0, (DWORD)(&mciCloseParms) );
-#ifdef __AUI_USE_DIRECTX__
 	m_cd_device_id = -1;
 #elif defined(__AUI_USE_SDL__)
+	sint32 mci_retval = 0;
 	m_cd_device_id = 0;
-#endif
 #endif
 
 	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;

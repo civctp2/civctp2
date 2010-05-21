@@ -299,6 +299,14 @@ aui_UI::~aui_UI()
 		SetEditMode(FALSE);
 	}
 
+	delete m_mouse;
+	delete m_audioManager;
+	delete m_movieManager;
+	delete m_keyboard;
+	delete m_blitter;
+	delete m_memmap;
+	delete m_joystick;
+
 	delete m_primary;
 	delete m_secondary;
 	delete m_colorAreas;

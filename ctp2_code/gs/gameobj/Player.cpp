@@ -8872,7 +8872,8 @@ bool Player::HasWarWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner <= 0
 	    ||  otherPlayer <= 0
-	    || AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
+	    ||  g_player[otherPlayer] != NULL
+	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
 }
 
 bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
@@ -8884,6 +8885,7 @@ bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_ALLIANCE);
 }
 
@@ -8896,6 +8898,7 @@ bool Player::HasPeaceTreatyWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_PEACE);
 }
 //True if player has at least one of trade/military/research/pollution pact with other player
@@ -8908,6 +8911,7 @@ bool Player::HasAnyPactWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && (AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_TRADE_PACT)
 		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_RESEARCH_PACT)
 		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_MILITARY_PACT)

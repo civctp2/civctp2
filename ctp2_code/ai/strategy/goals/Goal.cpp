@@ -1233,14 +1233,14 @@ void Goal::Compute_Needed_Troop_Flow()
 {
 	MapAnalysis &  mapAnalysis = MapAnalysis::GetMapAnalysis();
 	const MapPoint pos         = Get_Target_Pos();
-	const double   threat      = static_cast<double>(mapAnalysis.GetThreat          (m_playerId, pos));
-	const double   attack      = static_cast<double>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
-	const double   defense     = static_cast<double>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
-	const double   ranged      = static_cast<double>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
-	const double   bombardLand = static_cast<double>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
-	const double   bombardSea  = static_cast<double>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
-	const double   bombardAir  = static_cast<double>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
-	const double   value       = static_cast<double>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
+	const float   threat      = static_cast<float>(mapAnalysis.GetThreat          (m_playerId, pos));
+	const float   attack      = static_cast<float>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
+	const float   defense     = static_cast<float>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
+	const float   ranged      = static_cast<float>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
+	const float   bombardLand = static_cast<float>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
+	const float   bombardSea  = static_cast<float>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
+	const float   bombardAir  = static_cast<float>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
+	const float   value       = static_cast<float>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
 
 	m_current_needed_strength   = Squad_Strength(1);
 		// why only one unit ? Why then zero units? - Martin Gühmann
@@ -1251,20 +1251,20 @@ void Goal::Compute_Needed_Troop_Flow()
 	if(goal_record->GetTargetTypeChokePoint())
 	{
 		// Need also attack and ranged strength - Calvitix
-		m_current_needed_strength.Set_Attack      (attack       * 0.5);
-		m_current_needed_strength.Set_Defense     (defense      * 0.5);
-		m_current_needed_strength.Set_Ranged      (ranged       * 0.5);
-		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5);
-		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5);
-		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5);
-		m_current_needed_strength.Set_Value       (value        * 0.5);
+		m_current_needed_strength.Set_Attack      (attack       * 0.5f);
+		m_current_needed_strength.Set_Defense     (defense      * 0.5f);
+		m_current_needed_strength.Set_Ranged      (ranged       * 0.5f);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5f);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5f);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5f);
+		m_current_needed_strength.Set_Value       (value        * 0.5f);
 	}
 	else if(goal_record->GetTargetTypeImprovement()
 	     || goal_record->GetTargetTypeTradeRoute()
 	     ){
 
-		m_current_needed_strength.Set_Attack(attack  * 0.5);
-		m_current_needed_strength.Set_Ranged(defense * 0.5);
+		m_current_needed_strength.Set_Attack(attack  * 0.5f);
+		m_current_needed_strength.Set_Ranged(defense * 0.5f);
 		m_current_needed_strength.Set_Value(value);
 	}
 	else if(goal_record->GetTargetTypeEndgame())
@@ -1360,13 +1360,13 @@ void Goal::Compute_Needed_Troop_Flow()
 	else if(goal_record->GetTargetTypeBorder())
 	{
 		// assuming threat is the global strength to use (to be coherent with other changes) - Calvitix
-		m_current_needed_strength.Set_Attack      (attack       * 0.5);
-		m_current_needed_strength.Set_Defense     (defense      * 0.5);
-		m_current_needed_strength.Set_Ranged      (ranged       * 0.5);
-		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5);
-		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5);
-		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5);
-		m_current_needed_strength.Set_Value       (value        * 0.5); // Actually this stuff should go to the force matches
+		m_current_needed_strength.Set_Attack      (attack       * 0.5f);
+		m_current_needed_strength.Set_Defense     (defense      * 0.5f);
+		m_current_needed_strength.Set_Ranged      (ranged       * 0.5f);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  * 0.5f);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   * 0.5f);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   * 0.5f);
+		m_current_needed_strength.Set_Value       (value        * 0.5f); // Actually this stuff should go to the force matches
 	}
 	else if (   goal_record->GetTargetTypeSettleLand()
 	        ||  goal_record->GetTargetTypeSettleSea()
@@ -1411,11 +1411,11 @@ void Goal::Compute_Needed_Troop_Flow()
 
 	Assert(force_match);
 	m_current_needed_strength.Set_Force_Matching(
-		force_match->GetAttackMatch(),
-		force_match->GetDefenseMatch(),
-		force_match->GetRangedMatch(),
-		force_match->GetBombardMatch(),
-		force_match->GetValueMatch());
+		static_cast<float>(force_match->GetAttackMatch()),
+		static_cast<float>(force_match->GetDefenseMatch()),
+		static_cast<float>(force_match->GetRangedMatch()),
+		static_cast<float>(force_match->GetBombardMatch()),
+		static_cast<float>(force_match->GetValueMatch()));
 
 	if (Needs_Transporter())
 	{
