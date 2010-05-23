@@ -607,16 +607,25 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	if(update)
 	{
 		m_combinedUtility = combinedUtility;
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
+
+		return Get_Matching_Value();
 	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
 
-	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
-
-	return combinedUtility;
+		return (  !g_theGoalDB->Get(m_goal_type)->GetIsGlobalGoal()
+		        || combinedUtility == Goal::BAD_UTILITY) ?
+		           combinedUtility : m_raw_priority;
+	}
 }
 
 Utility Goal::Get_Matching_Value() const
 {
-	return m_combinedUtility;
+	return (  !g_theGoalDB->Get(m_goal_type)->GetIsGlobalGoal()
+	        || m_combinedUtility == Goal::BAD_UTILITY) ?
+	           m_combinedUtility : m_raw_priority;
 }
 
 void Goal::Set_Matching_Value(Utility combinedUtility)
@@ -1581,8 +1590,8 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
 	     && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeAttackUnit()
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity())
-	     ){  //For Attack goals (unit or city)
-
+	     )  //For Attack goals (unit or city)
+	{
 		if(agent_ptr->Get_Army()->CanSettle())
 		{
 			if
@@ -1611,7 +1620,17 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
 	}
-
+	else if((g_theGoalDB->Get(m_goal_type)->GetTargetOwnerColdEnemy()
+	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
+		 && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeTradeRoute())
+	     )  // For trade routes
+	{
+		if(agent_ptr->Get_Army()->CanSettle())
+		{
+			// If there is a settler in the army...
+			return Goal::BAD_UTILITY;
+		}
+	}
 #if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_wounded = bonus;
 #endif //_DEBUG

@@ -41,6 +41,7 @@ Goal {
 	Bit UnGroupFirst
 	Bit NoRollback
 	Bit HasTransportersOrNoCoastalCities    // The AI has to own transporters to persue this goal and needs coastal cities
+	Bit IsGlobalGoal
 
 	Bits SquadClass {
 		CanExplore,

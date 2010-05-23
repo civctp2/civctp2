@@ -1403,20 +1403,17 @@ ai::Regard Diplomat::GetBaseRegard(const PLAYER_INDEX foreignerId) const
 
 void Diplomat::RecomputeRegard() 
 {
-	
 	sint32 wonder_regard = wonderutil_GetIncreaseRegard(g_player[m_playerId]->GetBuiltWonders());
 
-	
- 	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner) 
-    {
-        PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner) 
+	{
+		PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
 		
 		if (    (m_playerId != foreignerId) 
-             && g_player[m_playerId]->HasContactWith(foreignerId)
-           )
+		     && g_player[foreignerId] != NULL
+		     && g_player[m_playerId]->HasContactWith(foreignerId)
+		   )
 		{
-
-			
 			if (wonder_regard != 0)
 			{
 				StringId strId;
@@ -5750,7 +5747,8 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 	{
 		if ((last_hotwar_attack > 10) &&
 			(GetEffectiveRegard(foreignerId) > HOTWAR_REGARD) &&
-			(GetTrust(foreignerId) > COLDWAR_REGARD))
+			(GetTrust(foreignerId) > COLDWAR_REGARD) &&
+			g_player[foreignerId]->GetNumCities() > 1 ) // Don't protect small empires
 			return false;
 	}
 

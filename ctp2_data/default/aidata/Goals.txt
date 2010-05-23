@@ -70,6 +70,7 @@ GOAL_DEFEND {
 GOAL_SEIGE {
   RallyFirst
   NeverSatisfied
+  IsGlobalGoal
 
   SquadClass:CanAttack
   SquadClass:CanDefend

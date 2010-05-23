@@ -8366,8 +8366,6 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 								to_pt.x,
 								to_pt.y);
 		}
-
-		Assert(!g_player[m_owner]->IsRobot());
 	}
 
 	return unitUnloadDone;
