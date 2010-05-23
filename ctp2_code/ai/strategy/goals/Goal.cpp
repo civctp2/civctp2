@@ -3167,6 +3167,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 
 			the_transport->Set_Can_Be_Executed(false);
 
+			pos = dest_pos;
 			return true;
 		}
 
@@ -4204,11 +4205,13 @@ bool Goal::LoadTransporters(Agent_ptr agent_ptr)
 
 		success = true;
 
+		Assert(pos != MapPoint(-1, -1));
+
 		sint32 transporters = 0;
 		sint32 max          = 0;
 		sint32 empty        = 0;
 
-		agent_ptr->Get_Army()->GetCargo(transporters, max, empty);
+		transport_ptr->Get_Army()->GetCargo(transporters, max, empty);
 
 		foundSlots += empty;
 
@@ -4218,6 +4221,13 @@ bool Goal::LoadTransporters(Agent_ptr agent_ptr)
 
 	if (success)
 	{
+		Assert(foundSlots != 0);
+
+		if(foundSlots == 0)
+		{
+			return false;
+		}
+
 		Agent_ptr transport_ptr = transporter_list.begin()->second;
 		Set_Sub_Task(SUB_TASK_CARGO_TO_BOARD);
 		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, pos);
