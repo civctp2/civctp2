@@ -1,3 +1,12 @@
+#######################################
+# File: scenarioeditor.ldl
+# Last Access:
+# -------------------------------------
+# 
+# - Fixed debugAI button (10-Apr-2009 Maq)
+#
+#######################################
+
 template SCEN_TOGGLE_SWITCH:CTP2_SWITCH
 {
 #	string	image0	"upbt12aX.tga"
@@ -474,6 +483,29 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				string statustext "str_SE_Special"
 				string tipwindow "str_SE_Special"
 			}
+			#EMOD
+			#ShowEnemyHealth:CTP2_CHECKBOX { #CTP2_BUTTON_SMALL {#SCEN_TOGGLE_SWITCH { #SCEN_BUTTON { #CTP2_BUTTON_SMALL {
+			#	int xpix 65
+			#	int ypix 230
+			#	int widthpix 110
+			#	string statustext "str_SE_ShowEnemyHealth"
+			#	string tipwindow "str_SE_ShowEnemyHealth"
+			
+			#	stringtable {
+			#		string	string0	"str_ldl_ShowEnemyHealth_Off"
+			#		string	string1	"str_ldl_ShowEnemyHealth_On"
+			#	}
+			#}
+			DebugAI:SCEN_TOGGLE_SWITCH {
+				int xpix 2
+				int ypix 228
+				int widthpix 110
+				int heightpix 24
+
+				string text "str_ldl_DebugAI"
+				string statustext "str_SE_DebugAI"
+				string tipwindow "str_SE_DebugAI"
+			} 
 		}
 
 		City:SCEN_TAB {
@@ -501,8 +533,9 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				int xpix 58
 				int ypix 63
 				int widthpix 90
-				int minxval 0
-				int maxxval 200
+				int minxval 1
+				# Set maxxval from 200 to 999 by Martin Gühmann
+				int maxxval 999
 				int incxval 1
 				int xval 1
 				string statustext "str_SE_PopSpinner"
@@ -613,7 +646,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 			AddPWLabel:CTP2_STATIC_BASE {
 				int xpix 4
-				int ypix 170
+				int ypix 178
 				int widthpix 130
 				string text "str_ldl_AddPW"
 			}
@@ -629,7 +662,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 			AddGoldLabel:CTP2_STATIC_BASE {
 				int xpix 4
-				int ypix 198
+				int ypix 206
 				int widthpix 130
 				string text "str_ldl_AddGold"
 			}
@@ -643,7 +676,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				string tipwindow "str_SE_AddGold"
 			}
 		}
-}
+	}
 	UniversalControls:SCEN_UNIVERSAL_CONTROLS_BOX {
 
 		SelectButton:SCEN_BUTTON {
@@ -672,7 +705,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			string tipwindow "str_SE_ClearWorld"
 		}
 		ReloadSlicButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-			int	xpix 100	
+			int	xpix 10	
 			int	ypix 42
 			string text "str_ldl_reloadSlic"
 			string statustext "str_SE_ReloadSlic"
@@ -913,6 +946,19 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			string statustext "str_SE_Nation"
 			string tipwindow "str_SE_Nation"
 		}
+		CityStyleSpinner:CTP2_SPINNER {
+			int xpix 6
+			int ypix 150
+			int widthpix 180
+			int heightpix 30
+
+			int minxval 0
+			int maxxval 900
+			int incxval 1
+			int xval 0
+			string statustext "str_ldl_0"
+			string tipwindow "str_ldl_0"
+		}
 	}
 
 	CivExtraControls:SCEN_EXTRA_CONTROLS_BOX {
@@ -978,7 +1024,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 		}
 		FindPosXLabel:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_Static"
-			int xpix 103
+			int xpix 106
 			int ypix 3 
 			int widthpix 20
 			int heightpix 20
@@ -997,7 +1043,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 		}
 		FindPosYLabel:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_Static"
-			int xpix 163
+			int xpix 166
 			int ypix 3
 			int widthpix 20
 			int heightpix 20

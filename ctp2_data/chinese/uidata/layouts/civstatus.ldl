@@ -27,6 +27,121 @@ GovernmentListItem:CTP2_LIST_ITEM {
 # Templates
 ################################################################################
 
+#Change image 00,01, and 07,08 in dialog box ldl's to show custom edge art
+template CTP2_EMPIRE_MANAGER_BG:CTP2_STATIC_IMAGE {
+	#set backgrounmd size
+	int	widthpix	800 #576
+	int	heightpix	558 #384
+
+	# Image layout.
+	int		numberoflayers		1
+	int		imagesperlayer		9
+	
+	# Background.
+	bool	layeralways0		true
+	string	imagebltflag00	"chromakey"	
+	string	image00		"uptg20a.tga"
+	
+	bool	imagestretchx01		true
+	string  imageblttype01      "tile"
+	string	image01				"uptg20b.tga"
+	
+	string	imagebltflag02	"chromakey"
+	string	image02				"uptg20c.tga"
+	
+	bool	imagenextrow03		true
+	#bool	imagestretchy03		true
+	string	image03				"uptg20d.tga"
+	
+	bool	imagestretchx04		true
+	bool	imagestretchy04		true
+	string	image04				"uptg20e.tga"
+	
+	#bool	imagestretchy05		true
+	string	image05				"uptg20f.tga"
+	
+	string	imagebltflag06	"chromakey"
+	bool	imagenextrow06		true
+	string	image06				"uptg20g.tga"
+	
+	bool	imagestretchx07		true
+	string	image07				"uptg20h.tga"
+	
+	string	imagebltflag08	"chromakey"
+	string	image08				"uptg20i.tga"
+}
+
+### CTP2_EMPIRE_MANAGER_WINDOW ###
+# Generic dialog window in standard format.
+template CTP2_EMPIRE_MANAGER_WINDOW {
+	# Runtime type.
+	string objecttype "ctp2_Window"
+	bool centeredwindow true
+
+	# Location.
+	int		xpix		28 #200
+	int		ypix		28
+	int		widthpix	800 #576
+	int		heightpix	558 #384
+
+	Background:CTP2_EMPIRE_MANAGER_BG {
+	# Grabable title bar.
+		TitleBar:CTP_GREY_TITLE_FONT:CTP2_STATIC_IMAGE {
+			# Background.
+			int 	widthpix 704 #480
+			int 	heightpix 29
+			int	xpix	48		
+		}
+	}
+}
+
+### CTP2_2TAB_EMPIRE_MANAGER_WINDOW ###
+# Generic dialog window with two tab panels.
+template CTP2_2TAB_EMPIRE_MANAGER_WINDOW:CTP2_EMPIRE_MANAGER_WINDOW {
+
+	# Primary tab group.
+	TabGroup:CTP2_TAB_GROUP {
+		# Location.
+		int		xpix		35
+		int		ypix		31
+		int		widthpix	730 #750 #506
+		int		heightpix	490 #500 #324
+
+		# First tab.
+		Tab1:CTP2_TAB {
+			# Tab.
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				# Background.
+				string	image00		"em_ltaboff.tga"#"upct21ul.tga"
+				string	image10		"em_ltabon.tga"#"upct21u.tga"
+				string	image20		"em_ltaboff.tga"#"upct21ul.tga"
+			}
+
+			# Panel.
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+			}
+		}
+
+		# Second tab.
+		Tab2:CTP2_TAB {
+			# Tab.
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				# Location.
+				int		xpix		353 #365 #343 #242
+
+				# Background.
+				string image00 "em_rtaboff.tga"#"upct22ul.tga"
+				string image10 "em_rtabon.tga"#"upct22u.tga"
+				string image20 "em_rtaboff.tga"#"upct22ul.tga"
+			}
+
+			# Panel.
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+			}
+		}
+	}
+}
+
 # Cause and Effect Value and Label
 template NEGATIVE_EFFECT_LABEL:CTP2_STATIC_GROUP {
 	# Location
@@ -41,7 +156,9 @@ template NEGATIVE_EFFECT_LABEL:CTP2_STATIC_GROUP {
 		# Location
 		int		xpix		85
 		int		ypix		8
-		int		widthpix	71
+		int		widthpix	71 #94 #71
+		string	just		"right"
+		bool	vertcenter	true
 	}
 }
 
@@ -60,7 +177,9 @@ template DD_CAUSE_AND_EFFECT_LABEL:CTP2_STATIC_GROUP {
 		# Location
 		int		xpix		85
 		int		ypix		8
-		int		widthpix	71
+		int		widthpix	71 #94 #71
+		string	just		"right"
+		bool	vertcenter	true
 	}
 }
 
@@ -69,7 +188,11 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 	# Location.
 	int		ypix		50
 	int		widthpix	164
-	int		heightpix	238
+	int		heightpix	414 #410 #238
+	#string	pattern		"cw_TEST.tga"
+	#string	pattern		"uptg03e.tga"
+	#string	pattern		"uptg29e.tga"
+	string	pattern		"uptg20e.tga"
 
 	# Bevel around group.
 	int		beveltype		1
@@ -79,7 +202,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
 		int		ypix		2
-		int		widthpix	160
+		int		widthpix	192 #160
 		int		heightpix	12
 
 		# Background. - David Dalzell Changeme
@@ -90,7 +213,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
 		int		ypix		16
-		int		widthpix	160
+		int		widthpix	192 #160
 		int		heightpix	2
 
 		# Bevel around group.
@@ -102,15 +225,15 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
 		int		ypix		19
-		int		widthpix	160
-		int		heightpix	86
+		int		widthpix	192 #160
+		int		heightpix	58 #86
 
 		# Background. - David Dalzell Changeme
 		string	pattern		"uptg20e2.tga"
 
 		Primary:CTP2_STATIC_GROUP {
 			# Location.
-			int		widthpix	164
+			int		widthpix	196 #164
 			int		heightpix	50
 
 			Label:CTP2_STATIC_BACKGROUND {
@@ -127,7 +250,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 
 			Icon:CTP2_STATIC_IMAGE {
 				# Location.
-				int		xpix		120
+				int		xpix		152 #120
 				int		ypix		-3
 				# was 140
 				string	image00		"updi41.tga"
@@ -136,38 +259,38 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 			Value:CTP2_STATIC_BASE {
 			# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
 				# Location.
-				int		xpix		140
+				int		xpix		172 #140
 				# was 116
 				int		ypix		8
 				int		widthpix	24
 			}
 
 			SlideLabel1:CTP2_STATIC_BASE {
-				int		xpix		20
+				int		xpix		22 #34 #20
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel2:CTP2_STATIC_BASE {
-				int		xpix		50
+				int		xpix		57 #55 #64 #50
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel3:CTP2_STATIC_BASE {
-				int		xpix		80
+				int		xpix		90 #86 #94 #80
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel4:CTP2_STATIC_BASE {
-				int		xpix		110
+				int		xpix		125 #119 #124 #110
 				int		ypix		22
 				int		fontsize	8
 			}
 
 			SlideLabel5:CTP2_STATIC_BASE {
-				int		xpix		140
+				int		xpix		160 #152 #154 #140
 				int		ypix		22
 				int		fontsize	8
 			}
@@ -186,7 +309,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 				# Location.
 				int		xpix		20
 				int		ypix		33
-				int		widthpix	124
+				int		widthpix	152 #124
 				int		heightpix	20
 
 				# Background.
@@ -213,19 +336,19 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 		Secondary:CTP2_STATIC_GROUP {
 			# Location.
 			int		ypix		55
-			int		widthpix	164
+			int		widthpix	196 #239 #164
 			int		heightpix	30
 
 			Label:CTP2_STATIC_BACKGROUND {
 				# Location.
-				int		xpix		4
+				int		xpix		2 #4
 				int		widthpix	64
 				int		heightpix	30
 
 				# Format.
 				string	just		"left"
-				bool	vertcenter	false
-				bool	wordwrap	true
+				bool	vertcenter	true #false
+				#bool	wordwrap	true
 			}
 		}
 	}
@@ -233,8 +356,8 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 	Separator2:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
-		int		ypix		105
-		int		widthpix	160
+		int		ypix		77 #105
+		int		widthpix	192 #160
 		int		heightpix	2
 
 		# Bevel around group.
@@ -245,22 +368,16 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 	InformationDetails:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
-		int		ypix		110
-		int		widthpix	160
+		int		ypix		82 #110
+		int		widthpix	192 #160
 		int		heightpix	126
-		Collected:DD_CAUSE_AND_EFFECT_LABEL {
-			int		ypix		2
-			
-			Label {
-				string	text		"str_ldl_DD_COLLECTED_LABEL"
-			}
-		}
+		#string	pattern		"cw_TEST.tga"
 
 		Separator1:CTP2_STATIC_BACKGROUND {
 			# Location.
-			int		xpix		2
-			int		ypix		20
-			int		widthpix	160
+			int		xpix		0 #2
+			int		ypix		229 #223 #195 #175 #170 #120 #20
+			int		widthpix	192 #160
 			int		heightpix	2
 
 			# Bevel around group.
@@ -269,7 +386,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 		}
 
 		Crime:NEGATIVE_EFFECT_LABEL {
-			int		ypix		27
+			int		ypix		268 #264 #236 #192 #27
 			Label {
 				string	text		"str_ldl_DD_CRIME_LABEL"
 			}
@@ -284,9 +401,9 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 
 		Separator2:CTP2_STATIC_BACKGROUND {
 			# Location.
-			int		xpix		2
-			int		ypix		84
-			int		widthpix	160
+			int		xpix		0 #2
+			int		ypix		285 #282 #254 #249 #84
+			int		widthpix	192 #160
 			int		heightpix	2
 
 			# Bevel around group.
@@ -297,14 +414,21 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 	InformationSummary:CTP2_STATIC_BACKGROUND {
 		# Location.
 		int		xpix		2
-		int		ypix		110
-		int		widthpix	164
+		int		ypix		82 #110
+		int		widthpix	196 #164
 		int		heightpix	126
 		Collected:DD_CAUSE_AND_EFFECT_LABEL {
-			int		ypix		26
+			int		ypix		54 #26
 			
 			Label {
-				string	text		"str_ldl_DD_COLLECTED_LABEL"
+				string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+			}
+		}
+
+		Crime:NEGATIVE_EFFECT_LABEL {
+			int		ypix		268 #264 #236 #192 #27
+			Label {
+				string	text		"str_ldl_DD_CRIME_LABEL"
 			}
 		}
 
@@ -319,6 +443,7 @@ template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
 #			int		beveltype		0
 #			int		bevelwidth		2
 #		}
+
 #
 #		Crime:NEGATIVE_EFFECT_LABEL {
 #			int		ypix		20
@@ -385,21 +510,23 @@ template DD_GOVERNMENT_COMPARISON:CTP2_STATIC_GROUP {
 ################################################################################
 
 # Domestic Management dialog definition.
-DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
+DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
 	# Title string.
 	string	title	"str_ldl_DOMESTIC_DIALOG_TITLE"
 
 	# Close button.
 	CloseButton:CTP2_STANDARD_CLOSE{
-	int focusindex 10
+		int xpix 676 #522
+		int ypix 528
+
+		int focusindex 10
 	}
 
-	# Build Queue button.
-	DetailsButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-		# Location
-		int		xpix		208
-		int		ypix		354
-		int		widthpix	160
+	# Details button.
+	DetailsButton:CTP2_POSITION_12_BUTTON {
+		int xpix 443 #326
+		int ypix 528
+
 		int focusindex 9
 		
 		string	image00				"upbt16aX.tga"
@@ -409,6 +536,14 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 
 		# Label
 		string	text	"str_ldl_DD_DETAILS"
+	}
+
+	OptimizeSlidersButton:CTP2_POSITION_22_BUTTON {
+		int xpix 200 #127
+		int ypix 528
+
+		# Label
+		string	text	"str_ldl_DD_OPTIMIZE_SLIDERS"
 	}
 
 	# Tabs...
@@ -424,37 +559,51 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 ################################################################################
 				CitiesIcon:CTP2_STATIC_IMAGE {
 					# Location
-					int		xpix		6
-					int		ypix		12
-#					string	image00		"upic04.tga"
-					string	text		"str_ldl_Cities_"
+					int		xpix		12
+					int		ypix		6 #12
+					string	image00		"upic04.tga"
+#					string	text		"str_ldl_Cities_"
+	#string	pattern		"cw_TEST.tga"
 				}
 				CitiesValue:CTP2_STATIC_BASE {
 				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14
 					# Location
-					int		xpix		36
+					int		xpix		42
 					int		ypix		17
 					int		widthpix	120
 				}
 				PopulationIcon:CTP2_STATIC_IMAGE {
 					# Location
-					int		xpix		6
-					int		ypix		32
-					string	text		"str_ldl_People_"
-#					string	image00		"upic03.tga"
+					int		xpix		12
+					int		ypix		27 #32
+#					string	text		"str_ldl_People_"
+					string	image00		"upic03.tga"
+	#string	pattern		"cw_TEST.tga"
 				}
 				PopulationValue:CTP2_STATIC_BASE {
 				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14
 					# Location
-					int		xpix		36
+					int		xpix		42
 					int		ypix		37
 					int		widthpix	120
+				}
+
+				PWTaxLabel:CTP2_STATIC_BACKGROUND {
+					int		xpix		186 #212 #250
+					int		ypix		9
+					string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+				}
+				PWSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+					int		xpix		186 #212 #112
+					int		ypix		21 #23 #14
+					int		widthpix	78
+					int		incxval		10
 				}
 
 				# Current Happiness
 				HappinessLabel:CTP2_STATIC_BACKGROUND {
 					# Location
-					int		xpix		170
+					int		xpix		301 #327 #293 #170
 					int		ypix		9
 					# Label
 					string	text		"str_ldl_DD_HAPPINESS"
@@ -462,13 +611,13 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 				HappinessValue:CTP2_STATIC_BASE {
 				# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
 					# Location
-					int		xpix		280
+					int		xpix		411 #437 #403 #280
 					int		ypix		14
 					int		widthpix	30
 				}
 				HappinessBar:CTP2_STATIC_BACKGROUND {
 					# Location
-					int		xpix		170
+					int		xpix		301 #327 #293 #170
 					int		ypix		23
 					int		widthpix	140
 					int		heightpix	20
@@ -478,10 +627,22 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 					int		bevelwidth		2
 				}
 
+				ScieTaxLabel:CTP2_STATIC_BACKGROUND {
+					int		xpix		470 #496 #514
+					int		ypix		9
+					string	text	"str_ldl_DD_SCIENCE_TAX_LABEL"
+				}
+				ScieTaxSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+					int		xpix		470 #496 #514
+					int		ypix		21
+					int		widthpix	78
+					int		incxval		10
+				}
+
 				# Current Government
 				CurrentGovernmentLabel:CTP2_STATIC_BACKGROUND {
 					# Location
-					int		xpix		334
+					int		xpix		551 #577 #522 #334
 					int		ypix		14
 					int 		widthpix	164
 					# Label
@@ -493,7 +654,7 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 				CurrentGovernment:CTP2_STATIC_BASE {
 				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20
 					# Location
-					int		xpix		334
+					int		xpix		551 #577 #522 #334
 					int		ypix		34
 					# was 23
 					int		widthpix	164
@@ -507,7 +668,8 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 ################################################################################
 				Food:DD_CAUSE_AND_EFFECT_GROUP {
 					# Location
-					int		xpix		6
+					int		xpix		5 #6
+					int		widthpix	196 #164
 
 					Title {
 						string	text		"str_ldl_DD_FOOD_TITLE"
@@ -550,43 +712,111 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 								}
 							}
 						}
-						Secondary {
-							Label {
-								int		ypix		8
-								string	text	"str_ldl_DD_REQUIRED_LABEL"
-
-								# Tooltip
-								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
-							}
-							Value:CTP2_STATIC_BASE {
-							#Changed from CTP2_GENERIC_TEXT_DISPLAY_20 {
-								int		xpix		88
-								int		ypix		16
-								int		widthpix	71
-
-								# Tooltip
-								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
-							}
-						}
+#						Secondary {
+#							Label {
+#								int		ypix		8
+#								string	text	"str_ldl_DD_REQUIRED_LABEL"
+#
+#								bool	vertcenter	false
+#
+#								# Tooltip
+#								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
+#							}
+#							Value:CTP2_STATIC_BASE {
+#							#Changed from CTP2_GENERIC_TEXT_DISPLAY_20 {
+#								int		xpix		88
+#								int		ypix		16
+#								int		widthpix	71
+#
+#								string	just		"right"
+#								bool	vertcenter	true
+#
+#								# Tooltip
+#								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
+#							}
+#						}
 					}
 
 					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+						}
+						Buildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		19
+							
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+						Farmers:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		36
+							
+							Label {
+								string	text		"str_ldl_DD_FARMERS_LABEL"
+							}
+						}
+						FeatsWonders:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+						FoodGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
 						Consumed:NEGATIVE_EFFECT_LABEL {
-							int		ypix		44
+							int		ypix		251 #247 #219 #209 #44
 							Label {
 								string	text		"str_ldl_DD_CONSUMED_LABEL"
 							}
 						}
 						Remainder:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		100
+							int		ypix		301 #298 #270 #265 #100
 							Label {
 								string	text		"str_ldl_DD_STORED_LABEL"
 							}
 						}
 					}
 					InformationSummary {
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #223 #195 #175 #170 #120 #20
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
 						Consumed:NEGATIVE_EFFECT_LABEL {
-							int		ypix		65
+							int		ypix		251 #247 #219 #65
 							Label {
 								string	text		"str_ldl_DD_CONSUMED_LABEL"
 
@@ -594,8 +824,21 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 								string	statustext	"STATUSBAR_DOMADV_FOOD_CONSUMED_BUTTON"
 							}
 						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
 						Remainder:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		85
+							int		ypix		301 #298 #270 #85
 							Label {
 								string	text		"str_ldl_DD_STORED_LABEL"
 
@@ -613,7 +856,9 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 ################################################################################
 				Production:DD_CAUSE_AND_EFFECT_GROUP {
 					# Location
-					int		xpix		170
+					int		xpix		201 #170 #245 #170
+					int		widthpix	196 #164
+
 
 					Title {
 						string	text		"str_ldl_DD_PRODUCTION_TITLE"
@@ -656,22 +901,81 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 								}
 							}
 						}
-						Secondary {
-							Label {
-								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
-							}
-							Spinner:CTP2_GENERIC_SIZABLE_SPINNER {
-								int		xpix		79
-								int		ypix		2
-								int		widthpix	78
-								int		incxval		10
-							}
-						}
+#						Secondary {
+#							Label {
+#								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+#							}
+#							PWSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+#								int		xpix		112 #79
+#								int		ypix		2
+#								int		widthpix	78
+#								int		incxval		10
+#							}
+#						}
 					}
 
 					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+						}
+						Workday:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		19
+							
+							Label {
+								string	text		"str_ldl_DD_WORKDAY_LABEL"
+							}
+						}
+						ProdBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		36 #19
+							
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+						Laborers:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53 #36
+							
+							Label {
+								string	text		"str_ldl_DD_LABORERS_LABEL"
+							}
+						}
+						FeatsWonders:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		70 #53
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+						ProdGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		ypix		234 #230 #202 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+#							Value:CTP2_STATIC_BASE {
+#								int fontcolorred 245
+#								#int		widthpix	203
+#							}
+						}
 						Upkeep:NEGATIVE_EFFECT_LABEL {
-							int		ypix		44
+							int		ypix		251 #247 #219 #209 #44
 							Label {
 								string	text	"str_ldl_DD_UNIT_UPKEEP_LABEL"
 
@@ -680,7 +984,7 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 							}
 						}
 						CityUse:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		91
+							int		ypix		293 #290 #262 #261 #256 #91
 							Label {
 								string	text	"str_ldl_DD_CITY_USE_LABEL"
 
@@ -689,27 +993,76 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 							}
 						}
 						PublicWorks:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		110
+							int		ypix		310 #307 #279 #280 #275 #110
 							Label {
 								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
 							}
 						}
 					}
 					InformationSummary {
-#						Upkeep:NEGATIVE_EFFECT_LABEL {
-#							int		ypix		36
-#							Label {
-#								string	text	"str_ldl_DD_UNIT_UPKEEP_LABEL"
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #223 #195 #175 #170 #120 #20
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		ypix		234 #230 #202 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+#							Value:CTP2_STATIC_BASE {
+#								int fontcolorred 245
+#								#int		widthpix	203
 #							}
-#						}
+						}
+
+						Upkeep:NEGATIVE_EFFECT_LABEL {
+							int		ypix		251 #247 #219 #209 #44
+							Label {
+								string	text	"str_ldl_DD_UNIT_UPKEEP_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_PROD_MILUPKEEP_BUTTON"
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
 						CityUse:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		65
+							int		ypix		293 #290 #262 #65
 							Label {
 								string	text	"str_ldl_DD_CITY_USE_LABEL"
 							}
 						}
+
 						PublicWorks:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		85
+							int		ypix		310 #307 #279 #85
 							Label {
 								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
 							}
@@ -724,83 +1077,336 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 ################################################################################
 				Commerce:DD_CAUSE_AND_EFFECT_GROUP {
 					# Location
-					int		xpix		334
+					int		xpix		397 #334 #484 #334
+					int		widthpix	328 #239 #164
+					string	pattern		"em_bg.tga"
 
 					Title {
+						int		widthpix	324 #235 #160
 						string	text		"str_ldl_DD_COMMERCE_TITLE"
 					}
 
+					Separator1 {
+						int		widthpix	324 #235 #160
+					}
+
 					Modify {
+						int		widthpix	324 #235 #160
 						Primary {
+							int		widthpix	328 #239 #164
 							Label {
+								int		xpix		2
 								string	text	"str_ldl_DD_WAGES_LABEL"
 							}
 
 							CurValue {
 								int		xpix		57
 							}
-							
+
+							Icon:CTP2_STATIC_IMAGE {
+								int		xpix		284 #152 #120
+							}
+
+							Value:CTP2_STATIC_BASE {
+								int		xpix		304 #172 #140
+							}
+
 							SlideLabel1 {
+								int		xpix		88
 								string	text		"EMPIRE_COMMERCE_AMOUNT_0"
 							}
 
 							SlideLabel2 {
+								int		xpix		123 #121
 								string	text		"EMPIRE_COMMERCE_AMOUNT_1"
 							}
 
 							SlideLabel3 {
+								int		xpix		158 #156 #152
 								string	text		"EMPIRE_COMMERCE_AMOUNT_2"
 							}
 
 							SlideLabel4 {
+								int		xpix		195 #191 #185
 								string	text		"EMPIRE_COMMERCE_AMOUNT_3"
 							}
 
 							SlideLabel5 {
+								int		xpix		232 #226 #218
 								string	text		"EMPIRE_COMMERCE_AMOUNT_4"
 							}
 							
 							Slider {
+								int		xpix		86 #20
 								thumb {
 									# Tooltip
 									string	statustext	"STATUSBAR_DOMADV_MAIN_WAGES_SLIDER"
 								}
 							}
 						}
-						Secondary {
-							Label {
-								string	text	"str_ldl_DD_SCIENCE_TAX_LABEL"
-							}
-							Spinner:CTP2_GENERIC_SIZABLE_SPINNER {
-								int		xpix		79
-								int		ypix		2
-								int		widthpix	78
-								int		incxval		10
-							}
-						}
+#						Secondary {
+#							int		widthpix	328 #239 #164
+#							Label {
+#								string	text	"str_ldl_DD_SCIENCE_TAX_LABEL"
+#							}
+#							Spinner:CTP2_GENERIC_SIZABLE_SPINNER {
+#								int		xpix		244 #112 #162 #79
+#								int		ypix		2
+#								int		widthpix	78
+#								int		incxval		10
+#							}
+#						}
+					}
+
+					Separator2:CTP2_STATIC_BACKGROUND {
+						int		widthpix	324 #235 #160
 					}
 
 					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
 						Upkeep:NEGATIVE_EFFECT_LABEL {
-							int		ypix		44
+							int		ypix		19 #209 #44
 							Label {
 								string	text "str_ldl_DD_BUILDING_UPKEEP_LABEL"
 
 								# Tooltip
 								string	statustext	"STATUSBAR_DOMADV_COMM_UPKEEP_BUTTON"
 							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								int		widthpix	203
+							}
 						}
 						Wages:NEGATIVE_EFFECT_LABEL {
-							int		ypix		62
+							int		ypix		36
 							Label {
-								string	text	"str_ldl_DD_WAGES_LABEL"
+								string	text	"str_ldl_DD_WAGES_EFFECT_LABEL"
 
 								# Tooltip
 								string	statustext	"STATUSBAR_DOMADV_COMM_WAGES_BUTTON"
 							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								int		widthpix	203
+							}
 						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
+						Separator1:CTP2_STATIC_BACKGROUND {
+							int		ypix		229 #223 #195 #212 #175 #85
+							int		widthpix	324
+						}
+
+						ScienceTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_SCIENCE_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						BasicScience:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		92 #125
+							Label {
+								string	text		"str_ldl_DD_TCOMMERCE_LABEL"
+							}
+						}
+
+						ScienceBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		109 #142
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+
+						Scientists:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		126 #159
+							Label {
+								string	text		"str_ldl_DD_SCIENTISTS_LABEL"
+							}
+						}
+
+						FeatsWondersScie:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+
+						ScieGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+
+						ScieSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						GoldTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		162
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_GOLD_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						BasicGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		92 #125
+							Label {
+								string	text		"str_ldl_DD_TCOMMERCE_LABEL"
+							}
+						}
+
+						GoldBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		109 #142
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+
+						Merchants:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		126 #159
+							Label {
+								string	text		"str_ldl_DD_MERCHANTS_LABEL"
+							}
+						}
+
+						FeatsWondersGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+
+						TradeGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		160 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_TRADE_LABEL"
+							}
+						}
+
+						GoldGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+
+						GoldSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							int		ypix		285 #282 #254
+							int		widthpix	324
+						}
+
+						ScieCrime:NEGATIVE_EFFECT_LABEL {
+							#int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		234 #230 #202 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						UnitWages:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		251 #247 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_UNIT_SUPPORT_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						GoldCrime:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
 						Science:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		91
+							int		ypix		301 #298 #270
 							Label {
 								string	text	"str_ldl_DD_SCIENCE_LABEL"
 
@@ -809,13 +1415,160 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 							}
 						}
 						Savings:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		110
+							int		xpix		165
+							int		ypix		293 #302 #299 #271
 							Label {
 								string	text	"str_ldl_DD_SAVINGS_LABEL"
 							}
 						}
+
+						ConversionsGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		310 #177 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_CONVERSIONS_LABEL"
+							}
+						}
 					}
 					InformationSummary {
+						int		widthpix	324
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
+
+						ScienceTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_SCIENCE_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						GoldTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		162
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_GOLD_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						ScieSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						GoldSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #226 #223 #195 #175 #170 #120 #20
+							int		widthpix	324 #192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		234 #230 #202 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						UnitWages:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		251 #247 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_UNIT_SUPPORT_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						ScieCrime:NEGATIVE_EFFECT_LABEL {
+							#int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						GoldCrime:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	324 #192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+
 #						Upkeep:NEGATIVE_EFFECT_LABEL {
 #							int		ypix		36
 #							Label {
@@ -829,15 +1582,24 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 #							}
 #						}
 						Science:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		65
+							int		ypix		301 #298 #270 #65
 							Label {
 								string	text	"str_ldl_DD_SCIENCE_LABEL"
 							}
 						}
 						Savings:DD_CAUSE_AND_EFFECT_LABEL {
-							int		ypix		85
+							int		xpix		165
+							int		ypix		293 #302 #299 #271 #85
 							Label {
 								string	text	"str_ldl_DD_SAVINGS_LABEL"
+							}
+						}
+						ConversionsGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		310 #177 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_CONVERSIONS_LABEL"
 							}
 						}
 					}
@@ -1004,11 +1766,11 @@ DomesticDialog:CTP2_2TAB_DIALOG_WINDOW {
 	}
 
 	# Background image.
-	Background:CTP2_DIALOG_BG {
+	Background:CTP2_EMPIRE_MANAGER_BG {
 		string image00 "uptg22a.tga"
 		string image02 "uptg22c.tga"
-		string image03 "uptg22d.tga"
-		string image05 "uptg22f.tga"
+		string image03 "em_lb.tga"#"uptg22d.tga"
+		string image05 "em_rb.tga"#"uptg22f.tga"
 	}
 }
 

@@ -1,6 +1,13 @@
 #######################################
 # File: gameplayoptions.ldl
 # Last Access: Mon Apr 26 16:31:06 1999
+#
+#
+#
+#
+# - increased size by 200 ypix
+# - added citycapture option
+# - removed city capture and debugAI (10-Apr-2009 Maq)
 #######################################
 
 ##-----------------------------------##
@@ -34,7 +41,7 @@ GamePlayOptionsWindow {
 	string	xanchor	"center"
 	string	yanchor	"center"
 	int	widthpix	560
-	int	heightpix	250
+	int	heightpix	450 #250
 	int	xpix	528
 	int	ypix	451
 	Name:CTP_GREY_TITLE_FONT  {
@@ -105,9 +112,16 @@ GamePlayOptionsWindow {
 			string	string1	"str_ldl_Auto_Tab_Select_On"
 		}
 	}
-
+	EnemyHealthButton:GAMEPLAY_CHECKBOX {
+		int	ypix	200
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_ShowEnemyHealth_Off"
+			string	string1	"str_ldl_ShowEnemyHealth_On"
+		}
+	}
 	
-	#RIGHT COLUMN BUTTONS
+#######RIGHT COLUMN BUTTONS
 
 	AutoSaveButton:GAMEPLAY_CHECKBOX {
 		int	ypix	50
@@ -151,10 +165,10 @@ GamePlayOptionsWindow {
 	}
 
 
-
+#SLIDER AT BOTTOM
 	MouseSpeedSlider {
 		int	xpix	196
-		int	ypix	195
+		int	ypix	395 #195
 		int	widthpix	160
 		int	heightpix	38
 		int	maxxval	15
@@ -179,7 +193,7 @@ GamePlayOptionsWindow {
 	}
 	MouseSpeedName:CTP2_STANDARD_FONT {
 		int	xpix	93
-		int	ypix	206
+		int	ypix	406
 		int	widthpix	102
 		int	heightpix	20
 		string	just	"right"

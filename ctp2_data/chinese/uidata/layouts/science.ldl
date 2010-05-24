@@ -1,5 +1,24 @@
 ################################################################################
-# Science and advance dialogs.
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Science and advance dialogs
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Hypertext size set to 8192, to match the buffer size of the executable.
+# 
 ################################################################################
 
 ################################################################################
@@ -122,6 +141,7 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 
 	# Advisor button.
 	AdvisorButton:CTP2_STANDARD_ADVISOR {
+	int xpix -100
 	}
 
 	# Change Research.
@@ -171,6 +191,9 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 		Description:CTP2_HYPER_TEXT_BOX {
 			# Runtime instantiation type.
 			string	objecttype	"ctp2_hypertextbox"
+#not ACTIVISION_ORIGINAL
+			int             hypermaxlength          8192
+#end ACTIVISION_ORIGINAL
 
 			# Background.
 			string pattern "uptg06e.tga"
@@ -351,12 +374,12 @@ SciAdvanceScreen {
 
 	# Size.
 	int	widthpix	449
-	int	heightpix	352
+	int	heightpix	552 #352
 
 	Background:CTP2_STANDARD_DIALOG_PATTERN {	
 		# Size.
 		int	widthpix	449
-		int	heightpix	352
+		int	heightpix	552 #352
 
 
 		# Title.
@@ -379,7 +402,7 @@ SciAdvanceScreen {
 			int	xpix	33
 			int	ypix	165
 			int	widthpix	160
-			int	heightpix	114
+			int	heightpix	314 #114
 			bool 	alwaysranger FALSE
 
 			# Thumb control should be at least 6 high.
@@ -389,7 +412,7 @@ SciAdvanceScreen {
 		# Accept change and return to previous screen.
 		GoalButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	33
-			int	ypix	307
+			int	ypix	508 #307
 			int	heightpix	20
 			int	widthpix	160
 			string	text	"str_ldl_ASP_GOAL"	
@@ -398,7 +421,7 @@ SciAdvanceScreen {
 		# Accept change and return to previous screen.
 		BackButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	342
-			int	ypix	308
+			int	ypix	508 #308
 			int	heightpix	20
 			int	widthpix	71
 			string	text	"str_ldl_CAPS_OK"	
@@ -407,7 +430,7 @@ SciAdvanceScreen {
 		# Cancel change.
 		CancelButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	258
-			int	ypix	308
+			int	ypix	508 #308
 			int	heightpix	20
 			int	widthpix	71
 			string	text	"str_ldl_CAPS_CANCEL"
@@ -434,7 +457,7 @@ SciAdvanceScreen {
 		# Label for turns until advance complete.
 		TurnsLabel:CTP2_STANDARD_FONT {
 			int	xpix	205
-			int	ypix	282
+			int	ypix	482 #282
 			int	widthpix	156
 			int	heightpix	14
 			string	text	"str_ldl_TURNS_TO_ADVANCE_COLON"
@@ -443,7 +466,7 @@ SciAdvanceScreen {
 		# Turns until advance complete.
 		TurnsBox:CTP2_GENERIC_TEXT_DISPLAY_14 {
 			int	xpix	355
-			int	ypix	282
+			int	ypix	482 #282
 			int	widthpix	40
 		}
 
@@ -461,7 +484,7 @@ SciAdvanceScreen {
 
 		ResearchGoal:CTP2_STANDARD_FONT {
 			int xpix		33
-			int ypix		280
+			int ypix		480 #280
 			int widthpix	160
 			int heightpix	20
 			string text "str_ldl_ResearchGoal"
@@ -472,7 +495,7 @@ SciAdvanceScreen {
 			int	xpix	210
 			int	ypix	170
 			int	widthpix	186
-			int	heightpix	104
+			int	heightpix	304 #104
 #			string	pattern	"uptg10.tga"
 		}
 	}

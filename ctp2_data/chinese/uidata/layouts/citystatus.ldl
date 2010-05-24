@@ -1,3 +1,29 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Main ldl file
+#  Id           : $Id$
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+#
+# - Added a city manager button. - July 24th 2005 Martin Gühmann
+# - Added conversion loss and franchise loss column to the resource list
+#   tab. (Aug 14th 2005 Martin Gühmann)
+# 
+################################################################################
+
 # citystatus.ldl
 
 #################
@@ -13,31 +39,72 @@ template CITY_LIST_COLUMN:CTP2_STATIC_BACKGROUND {
 # Item for use in city resource list.
 NationalResourceListItem:CTP2_LIST_ITEM {
 	column0:CITY_LIST_COLUMN {
-		int		widthpix	160
+		int		widthpix	149
+	}
+	column1:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column2:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column3:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column4:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column5:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column6:CITY_LIST_COLUMN {
+		int		widthpix	32
+	}
+	column7:CITY_LIST_COLUMN {
+		int     widthpix    32
+	}
+	column8:CITY_LIST_COLUMN {
+		int     widthpix    32
+	}
+	column9:CITY_LIST_COLUMN {
+		int     widthpix    32
+	}
+	column10:CITY_LIST_COLUMN {
+		int     widthpix    32
+	}
+	
+}
+
+# Item for use in city specialist list.
+NationalSpecialistListItem:CTP2_LIST_ITEM {
+	column0:CITY_LIST_COLUMN {
+		int		widthpix	165
 	}
 	column1:CITY_LIST_COLUMN {
 		int		widthpix	68
 	}
 	column2:CITY_LIST_COLUMN {
-		int		widthpix	35
+		int		widthpix	30
 	}
 	column3:CITY_LIST_COLUMN {
-		int		widthpix	35
+		int		widthpix	30
 	}
 	column4:CITY_LIST_COLUMN {
-		int		widthpix	35
+		int		widthpix	30
 	}
 	column5:CITY_LIST_COLUMN {
-		int		widthpix	35
+		int		widthpix	30
 	}
 	column6:CITY_LIST_COLUMN {
-		int		widthpix	35
+		int		widthpix	30
 	}
 	column7:CITY_LIST_COLUMN {
-		int     widthpix    35
+		int     widthpix    30
 	}
 	column8:CITY_LIST_COLUMN {
-		int     widthpix    35
+		int     widthpix    30
+	}
+	column9:CITY_LIST_COLUMN {
+		int     widthpix    30
 	}
 	
 }
@@ -81,7 +148,7 @@ NationalGovernorListItem:CTP2_LIST_ITEM {
 	}
 }
 
-# Item type for governor pulldown.
+# Item type for BuildQueue ListItem.
 NationalBuildQueueListItem:CTP2_LIST_ITEM {
 	# Size.
 	int	widthpix	90
@@ -120,7 +187,7 @@ template NATIONAL_GOVERNOR_PULLDOWN_TOGGLE:CTP2_STATIC_GROUP {
 		int		heightpix	29
 		bool	inverted	true
 		# Tooltip
-		string	statustext	"STATUSBAR_CITYMAN_MAIN_GOVPRIORITY_BUTTON"
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_GOVPRIORITY_MENU"
 	}
 
 	# On/Off Toggle.
@@ -155,7 +222,7 @@ template CITY_STATUS_HEADER:CTP2_HEADER_FONT {
 # CityStatusWin
 #################
 
-CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
+CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 	# Title string.
 	string	title	"str_ldl_NATIONAL_DIALOG_TITLE"
 
@@ -172,15 +239,23 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 #	}
 
 	# Build queue button.
-	BuildQueueButton:CTP2_POSITION_12_BUTTON {
+	BuildQueueButton:CTP2_POSITION_13_BUTTON {
 		# Label
 		string	text	"str_ldl_ND_BUILD_QUEUE"
 		# Tooltip
 		string	statustext	"STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON"
 	}
 
+	# City manager button.
+	CityManagerButton:CTP2_POSITION_23_BUTTON {
+		# Label
+		string	text	"str_ldl_CITY_MANAGER"
+		# Tooltip
+		string	statustext	"STATUSBAR_SHORTCUTPAD_GOTO_CITYSCR_BUTTON"
+	}
+
 	# Disband button.
-	DisbandButton:CTP2_POSITION_22_BUTTON {
+	DisbandButton:CTP2_POSITION_33_BUTTON {
 		# Label
 		string	text	"str_ldl_ND_DISBAND"
 		# Tooltip
@@ -221,21 +296,21 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 					# match the item widths in order to appear correctly.
 					header {
 						switch0:CITY_STATUS_HEADER {
-							int		widthpix	156
+							int widthpix 149
 							string	text		"str_ldl_ND_RTL_CITY_NAME"
 							# Tooltip
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
 						}
 						# Population
 						switch1:CITY_STATUS_HEADER {
-							int		widthpix	68
+							int widthpix 32
 							string	text		"str_ldl_ND_RTL_POPULATION"
 							# Tooltip
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
 						}
 						# Happiness
 						switch2:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic10.tga"
 							string image1 "upic10.tga"
 							string image2 "upic10.tga"
@@ -245,7 +320,7 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Food
 						switch3:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic05.tga"
 							string image1 "upic05.tga"
 							string image2 "upic05.tga"
@@ -255,7 +330,7 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Production
 						switch4:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic06.tga"
 							string image1 "upic06.tga"
 							string image2 "upic06.tga"
@@ -265,7 +340,7 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Gold
 						switch5:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic09.tga"
 							string image1 "upic09.tga"
 							string image2 "upic09.tga"
@@ -275,7 +350,7 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Science
 						switch6:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic07.tga"
 							string image1 "upic07.tga"
 							string image2 "upic07.tga"
@@ -285,7 +360,7 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Pollution
 						switch7:CITY_STATUS_HEADER {
-							int		widthpix	35
+							int widthpix 32
 							string image0 "upic12.tga"
 							string image1 "upic12.tga"
 							string image2 "upic12.tga"
@@ -295,14 +370,34 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 						}
 						# Crime
 						switch8:CITY_STATUS_HEADER {
-							int widthpix 35
-							# FIXME - this is also the PW icon, don't have crime either
+							int widthpix 32
 							string image0 "upic11.tga"
 							string image1 "upic11.tga"
 							string image2 "upic11.tga"
 							# Tooltip
 							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON"
+						}
+						# Conversion
+						switch9:CITY_STATUS_HEADER {
+							int widthpix 32
+							string image0 "upic26.tga"
+							string image1 "upic26.tga"
+							string image2 "upic26.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCONV_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCONV_BUTTON"
+						}
+						# Franchise
+						switch10:CITY_STATUS_HEADER {
+							int widthpix 32
+							# FIXME - this is also the 03 icon, don't have franchise either
+							string image0 "upic27.tga"
+							string image1 "upic27.tga"
+							string image2 "upic27.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON"
 						}
 					}
 				}
@@ -388,30 +483,35 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 							int		widthpix	149
 							string	text		"str_ldl_ND_STL_CITY_NAME"
 							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
 						}
 						switch1:CITY_STATUS_HEADER {
 							int		widthpix	50
 							string	text		"str_ldl_ND_STL_MAYOR"
 							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON"
 						}
 						switch2:CITY_STATUS_HEADER {
 							int		widthpix	90
 							string	text		"str_ldl_ND_STL_PRIORITY"
 							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
 						}
 						switch3:CITY_STATUS_HEADER {
 							int		widthpix	90
 							string	text		"str_ldl_ND_STL_BUILDING"
 							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
 						}
 						switch4:CITY_STATUS_HEADER {
 							int		widthpix	90
 							string	text		"str_ldl_ND_STL_TIME"
 							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTTIME_BUTTON"
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTTIME_BUTTON"
 						}
 					}
@@ -421,6 +521,126 @@ CityStatusWin:CTP2_2TAB_DIALOG_WINDOW {
 ################################################################################
 			}
 		}
+		Tab3 {
+			TabButton {
+				string	text	"str_ldl_CityWinSpecialistTab"
+			}
+
+			TabPanel {
+################################################################################
+# Start SpecialistTab...
+################################################################################
+				SpecialistList:CTP2_LISTBOX {
+					# Location
+					int		xpix		11
+					int		ypix		37
+					int		widthpix	469
+					int		heightpix	238
+
+					header {
+						switch0:CITY_STATUS_HEADER {
+							int		widthpix	161
+							string	text		"str_ldl_ND_RTL_CITY_NAME"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
+						}
+						# Population
+						switch1:CITY_STATUS_HEADER {
+							int		widthpix	68
+							string	text		"str_ldl_ND_RTL_POPULATION"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
+						}
+						# Worker
+						switch2:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic08.tga"
+							string image1 "upic08.tga"
+							string image2 "upic08.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON"
+						}
+						# Slaves
+						switch3:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upc039.tga"
+							string image1 "upc039.tga"
+							string image2 "upc039.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON"
+						}
+						# Entertainer
+						switch4:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic10.tga"
+							string image1 "upic10.tga"
+							string image2 "upic10.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON"
+						}
+						# Farmer
+						switch5:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic05.tga"
+							string image1 "upic05.tga"
+							string image2 "upic05.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON"
+						}
+						# Laborer
+						switch6:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic06.tga"
+							string image1 "upic06.tga"
+							string image2 "upic06.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON"
+						}
+						# Merchant
+						switch7:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic09.tga"
+							string image1 "upic09.tga"
+							string image2 "upic09.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON"
+						}
+						# Scientist
+						switch8:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upic07.tga"
+							string image1 "upic07.tga"
+							string image2 "upic07.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON"
+						}
+						# Military Units
+						switch9:CITY_STATUS_HEADER {
+							int		widthpix	30
+							string image0 "upc040.tga"
+							string image1 "upc040.tga"
+							string image2 "upc040.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON"
+							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON"
+						}
+					}
+				}
+			}
+################################################################################
+# End Specialist Tab
+################################################################################
+		}
+
 	}
 
 	# Background image.

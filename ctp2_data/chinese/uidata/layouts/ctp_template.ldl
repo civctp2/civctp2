@@ -593,7 +593,7 @@ template CTP2_POSITION_12_BUTTON:CTP2_NAV_BUTTON_152 {
 }
 
 
-# button for position 2 of 3 button set-up.
+# button for position 2 of 2 button set-up.
 template CTP2_POSITION_22_BUTTON:CTP2_NAV_BUTTON_152 {
 		# Location
 		int		xpix		293

@@ -133,7 +133,7 @@ IntelligenceListItem:CTP2_LIST_ITEM {
 }
 
 StrengthImages {
-	int numstrings 4
+	int numstrings 5
 	bool nodatabase true
 
 #	string string0 "strength_low.tga"
@@ -144,13 +144,15 @@ StrengthImages {
 	string string1 "updi11.tga"
 	string string2 "updi12.tga"
 	string string3 "updi13.tga"
+	string string4 "updi14.tga"
 }
 
 EmbassyImages {
-	int numstrings 1
+	int numstrings 2
 	bool nodatabase true
 #	string string0 "upic30.tga"
 	string string0 "updi01.tga"
+	string string1 "updi22.tga"
 }
 
 IntelTreatyDetail:CTP2_TITLE_WINDOW {

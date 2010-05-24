@@ -1,3 +1,28 @@
+################################################################################
+#
+# Project      : Call To Power 2
+# File type    : LDL layout description 
+# Description  : Main ldl file
+# Id           : $Id:$
+#
+################################################################################
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+################################################################################
+#
+# Modifications from the original Activision code:
+#
+# - Added the refuel mouse cursor. - April 30th 2005 Martin Gühmann
+# - mywindow can now be loaded. (Aug 22nd 2005 Martin Gühmann)
+#
+################################################################################
+
 #######################################
 # File: C:\civ3_project\civ3_data\english\uidata\layouts\civ3.ldl
 # Last Access: Mon Jun 01 13:01:30 1998
@@ -162,7 +187,7 @@ OldCityViewWindow {
 mywindow {
 	string	xanchor	"center"
 	string	yanchor	"center"
-	string	pattern	"patternl.tga"
+	string	pattern	"pattern.tga"
 	int	widthpct	75
 	int	heightpct	75
 	mybutton {
@@ -172,7 +197,7 @@ mywindow {
 		int	ypct	10
 		int	widthpct	20
 		int	heightpct	10
-		string	pattern	"patternd.tga"
+		string	pattern	"pattern.tga"
 		string	text	"str_ldl_Exit"
 	}
 	myspinner {
@@ -183,7 +208,7 @@ mywindow {
 		int	widthpct	10
 		int	heightpix	0
 		bool	vertical	TRUE
-		string	pattern	"patternd.tga"
+		string	pattern	"pattern.tga"
 	}
 	mytabgroup {
 		string	xanchor	"left"
@@ -195,7 +220,7 @@ mywindow {
 		sadtab {
 			string	parent	"mywindow"
 			int	heightpct	5
-			string	pattern	"patternd.tga"
+			string	pattern	"pattern.tga"
 			string	text	"str_ldl_Sad"
 			pane {
 				string	parent	"mywindow"
@@ -206,7 +231,7 @@ mywindow {
 					int	ypix	50
 					int	widthpix	150
 					int	heightpix	30
-					string	pattern	"upba3010.t"
+					string	pattern	"upba3010.tga"
 					string	text	"str_ldl_Add_Tab"
 				}
 				dragcheckbox {
@@ -427,7 +452,8 @@ RangerRight {
 CivMouse {
 	# for telling the mouse you will eventually have more
 	# cursors than what's listed here.
-	int numcursors 90
+	# Actual should go into a cursor database like the message icons.
+	int numcursors 92
 		
 	# C_DEFAULT
 	string cursor0	"uc001.tga"
@@ -885,7 +911,7 @@ CivMouse {
 	int hotspotx87 13
 	int hotspoty87 13
 
-	# 	Clear Target Cursor
+	# 	Clear Target Cursor not Clear target
 	string cursor88 "UC086.TGA"
 	int hotspotx88 13
 	int hotspoty88 13
@@ -894,6 +920,16 @@ CivMouse {
 	string cursor89 "UC087.TGA"
 	int hotspotx89 13
 	int hotspoty89 13
+
+	# 	Refuel Cursor
+	string cursor90 "UC088.TGA"
+	int hotspotx90 13
+	int hotspoty90 13
+
+	# 	Refuel Invalid Cursor
+	string cursor91 "UC089.TGA"
+	int hotspotx91 13
+	int hotspoty91 13
 
 
 	# number of miliseconds between animation frames.
