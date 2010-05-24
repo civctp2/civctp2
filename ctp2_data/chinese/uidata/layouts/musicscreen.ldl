@@ -1,0 +1,189 @@
+#	musicscreen.ldl
+
+template MS_BUTTON:CTP2_STANDARD_FONT{
+	bool	shadowfont	true
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	int	widthpix	123
+	int	heightpix	21
+	int	bevelwidth	0
+	string	imagebltflag	"chromakey"
+}
+
+
+# EAS011599 - added this for use w/ switches that shouldn't be checkboxes.
+template MS_TOGGLESWITCH:CTP2_STANDARD_FONT {
+
+#	string	image0	"error.tga"
+#	string	image1	"error.tga"
+#	string	disabledimage0	"error.tga"
+#	string	disabledimage1	"error.tga"
+
+
+# for now, put the toggle button art here
+# for now, put the toggle button art here
+	string	image0	"upba2317.tga"
+	string	image1	"upba2318.tga"
+	string	disabledimage0	"upba2323.tga"
+	string	disabledimage1	"upba2324.tga"
+
+	string	xanchor		"center"
+
+	int	widthpix	146
+
+	int	heightpix	24
+
+}
+
+
+MusicScreen {
+#	string	pattern	"error.tga"
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int	widthpix	260
+	int	heightpix	260
+	Name:CTP_GREY_TITLE_FONT {
+		string	parent	"c3_PopupTitle"
+		string xanchor "center"
+#		string yanchor "top"
+		int	ypix	22
+		int widthpct 50
+		int heightpix 20
+		string	text	"str_ldl_CAPS_MUSIC"
+	}
+
+#	SelectTrackButton:MS_BUTTON {
+	SelectTrackButton:SP_BUTTON_SMALL {
+		bool	shadowfont	false
+		int	xpix	46
+		int	ypix	47
+
+	int	widthpix	146
+	int	heightpix	24
+
+		string	xanchor "center"
+		string	text	"str_ldl_Select_Track"
+	}
+	AutoRepeatSwitch:MS_TOGGLESWITCH {
+		int	ypix	100
+	}
+	RandomOrderSwitch:MS_TOGGLESWITCH {
+		int	ypix	130
+	}
+	MusicOnSwitch:MS_TOGGLESWITCH {
+		int	ypix	160
+		stringtable {
+			string	string0	"str_ldl_Music_Off"
+			string	string1	"str_ldl_Music_On"
+		}
+	}
+}
+
+MusicTrackScreen {
+#	string	pattern	"error.tga"
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		316
+#	int 	ypix		185
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int	widthpix	235
+	int	heightpix	194
+	Name:CTP2_STANDARD_FONT {
+		string	parent	"c3_PopupTitle"
+		string	pattern	"uptg20e.tga"
+
+		string xanchor "center"
+		string yanchor "top"
+		int widthpct 50
+		int heightpix 20
+		int ypix 20
+		string	text	"str_ldl_CAPS_SELECT_TRACK"
+	}
+
+	TrackList:CTP2_STANDARD_FONT {
+		bool	shadowfont	true
+		int	xpix	21
+#		int	ypix	35
+		int	ypix	45
+		int	widthpix	177
+		int	heightpix	100
+		int columns		1
+		int bevelwidth	1
+		int beveltype	2
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	19
+		int	srcypix	33
+		int	srcwidthpix	181
+		int	srcheightpix	93
+		header {
+			switch0 {
+				int	heightpix	0
+				int	widthpix	177
+			}
+		}
+		bool alwaysranger	true
+		rangery {
+			int	widthpix	15
+			int	heigthpix	15
+			string	type	"scroller"
+			string	orientation	"vertical"
+#			string	pattern	"error.tga"
+			string	pattern	"uptg20e.tga"
+
+			incy {
+				int	widthpix	15
+				int	heightpix	15
+#				string	pattern	"error.tga"
+				string	pattern	"uptg20e.tga"
+			}
+			decy {
+				int	widthpix	15
+				int	heightpix	15
+#				string	pattern	"error.tga"
+				string	pattern	"uptg20e.tga"
+
+			}
+#			thumb {
+#				string	image0	"error.tga"
+#				string	imagebltflag	"chromakey"
+#			}
+		}
+	}
+	TrackNames {
+		int numstrings	10
+		string	string0	"str_tbl_ldl_Music_Track_1"
+		string	string1	"str_tbl_ldl_Music_Track_2"
+		string	string2	"str_tbl_ldl_Music_Track_3"
+		string	string3	"str_tbl_ldl_Music_Track_4"
+		string	string4	"str_tbl_ldl_Music_Track_5"
+		string	string5	"str_tbl_ldl_Music_Track_6"
+		string	string6	"str_tbl_ldl_Music_Track_7"
+		string	string7	"str_tbl_ldl_Music_Track_8"
+		string	string8	"str_tbl_ldl_Music_Track_9"
+		string	string9	"str_tbl_ldl_Music_Track_10"
+	}
+	
+	MusicTrackListItem {
+		int widthpix	177
+		int heightpix	20
+		TrackName:CTP2_STANDARD_FONT {
+			int widthpix	177
+			int heightpix	20
+		}
+	}
+}
+
+MS_Strings {
+	int	numstrings	4
+	string	string0	"str_tbl_ldl_Auto_Repeat_On"
+	string	string1	"str_tbl_ldl_Auto_Repeat_Off"
+	string	string2	"str_tbl_ldl_Random_Order_On"
+	string	string3 "str_tbl_ldl_Random_Order_Off"
+}
+
+$

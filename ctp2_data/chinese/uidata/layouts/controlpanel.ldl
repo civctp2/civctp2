@@ -1,32 +1,4 @@
 ################################################################################
-#
-#  Project      : Call To Power 2
-#  File type    : LDL layout description 
-#  Description  : Main ldl file
-#  Id           : $Id$
-#
-################################################################################
-#
-#  Disclaimer
-# 
-#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
-#  This material has been developed at apolyton.net by the Apolyton CtP2 
-#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-#
-################################################################################
-#
-#  Modifications from the original Activision code:
-#
-# - Added to the tileimp tracker popup window a construction time line.
-#   (Aug 15th 2005 Martin Gühmann)
-# - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
-# - Added political map button - 6-Jul-2009 EPW
-# -Added view capital button -5-Jan-2009 EPW
-# -Added view relations button -7-Jan-10 EPW
-################################################################################
-
-################################################################################
 # File: controlpanel.ldl
 # Last Access: Mon Jun 01 13:01:31 1998
 ################################################################################
@@ -80,7 +52,7 @@ template ICON_VALUE_PAIR:CTP2_STATIC_GROUP {
 		int		heightpix	18
 		
 		bool shadowfont			TRUE
-		int fontshadowcolorred 		255
+		int fontshadowcolorred 		255			
 		int fontshadowcolorgreen 	245
 		int fontshadowcolorblue 	245
 		
@@ -1335,14 +1307,8 @@ ControlPanelWindow:CTP2_WINDOW {
 
 					}
 
-					#UnitOrderButtonGrid:ORDER_BUTTON_PANEL {
-					#}
-					#UnitActionButtonGrid:ORDER_BUTTON_PANEL {
-					#}
-
 					# Background for unit order buttons.
 					UnitOrderButtonGrid:CTP2_STATIC_BACKGROUND {
-					#### EMOD make into a template like tile imp?
 						# Location.
 						int		xpix	175
 						int		ypix	10
@@ -1477,43 +1443,37 @@ ControlPanelWindow:CTP2_WINDOW {
 					LandImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 12 #17
+						int ypix 17
 						string text "str_ldl_ImproveLand"
 					}
 
 					OceanImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 32 #37
+						int ypix 37
 						string text "str_ldl_ImproveOcean"
 					}
 
 					SpecialImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 52 #57
+						int ypix 57
 						string text "str_ldl_ImproveSpecial"
 					}
 
 					TerraformLandButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 72 #77
+						int ypix 77
 						string text "str_ldl_ImproveTerraformLand"
 					}
 
-					TerraformOceanButton:CTP2_TILE_RADIO_BUTTON 
-					{
-						int xpix 18
-						int ypix 92 #90
-						string text "str_ldl_ImproveTerraformOcean"
-					}
-					#TerraformExtraButton:CTP2_TILE_RADIO_BUTTON 
-					#{
-					#	int xpix 18
-					#	int ypix 102
-					#	string text "str_ldl_ImproveExtra"
-					#}
+#					TerraformOceanButton:CTP2_TILE_RADIO_BUTTON 
+#					{
+#						int xpix 18
+#						int ypix 90
+#						string text "str_ldl_ImproveTerraformOcean"
+#					}
 					tiLandButtonBank:TILE_IMP_BUTTON_PANEL {
 					}
 					tiOceanButtonBank:TILE_IMP_BUTTON_PANEL {
@@ -1522,10 +1482,8 @@ ControlPanelWindow:CTP2_WINDOW {
 					}
 					tfLandButtonBank:TILE_IMP_BUTTON_PANEL {
 					}
-					tfOceanButtonBank:TILE_IMP_BUTTON_PANEL {
-					}
-					#tfExtraButtonBank:TILE_IMP_BUTTON_PANEL {
-					#}
+#					tfOceanButtonBank:TILE_IMP_BUTTON_PANEL {
+#					}
 
 ################################################################################
 # End Tiles Tab Panel
@@ -2356,31 +2314,15 @@ TrackerFont:CTP2_STANDARD_FONT {
 SpecialAttackWindow {
 	int	xpix	0
 	int	ypix	0
-	int	widthpix	120
-	int	heightpix	26
+	int	widthpix	70
+	int	heightpix	30
 	
-	SpecialAttackCostN:TrackerFont {
-		int	xpix	7
+	SpecialAttackCost:TrackerFont {
+		int	xpix	5
 		int	ypix	5
 		int	widthpix	60
 		int	heightpix	20
 		string text "str_ldl_Cost_"
-		string textblttype "fill"
-	}
-	SpecialAttackCostV:TrackerFont {
-		int	xpix	80
-		int	ypix	5
-		int	widthpix	30
-		int	heightpix	20
-		string textblttype "right"
-	}
-
-	Background {
-		int xpix 1
-		int ypix 1
-		int widthpix 118
-		int heightpix 24
-		string pattern "uptg04e.tga"
 	}
 }
 
@@ -2388,104 +2330,104 @@ cp_tileimp_tracker {
 	int	xpix	0
 	int	ypix	0
 	int	widthpix	115
-	int	heightpix	98
+	int	heightpix	78
 	TimeN:TrackerFont {
-		int	xpix	7
-		int	ypix	5
-		int	widthpix	70
-		int	heightpix	20
-		string text "str_ldl_Time_"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	5
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Time_ "
+			string textblttype "fill"
 	}
 	TimeV:TrackerFont {
-		int	xpix	80
-		int	ypix	5
-		int	widthpix	20
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	62
+			int	ypix	5
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
 	}
 	AdvN:TrackerFont {
-		int	xpix	7
-		int	ypix	40
-		int	widthpix	60
-		int	heightpix	20
-		string text "str_ldl_Advance_"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	40
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Advance_"
+			string textblttype "fill"
 	}
 	AdvV:TrackerFont {
-		int	xpix	62
-		int	ypix	40
-		int	widthpix	100
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	62
+			int	ypix	40
+			int	widthpix	100
+			int	heightpix	20
+			string textblttype "fill"
 	}
 	
 	MatN:TrackerFont {
-		int	xpix	7
-		int	ypix	22
-		int	widthpix	60
-		int	heightpix	20
-		string text "str_ldl_Cost_"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	5
+			int	widthpix	60
+			int	heightpix	20
+			string text "str_ldl_Cost_"
+			string textblttype "fill"
 	}
 	MatV:TrackerFont {
-		int	xpix	80
-		int	ypix	22
-		int	widthpix	20
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	80
+			int	ypix	5
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
 	}
 	FoodN:TrackerFont {
-		int	xpix	7
-		int	ypix	40
-		int	widthpix	70
-		int	heightpix	20
-		string text "str_ldl_Food_"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	22
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Food_"
+			string textblttype "fill"
 	}
 	FoodV:TrackerFont {
-		int	xpix	80
-		int	ypix	40
-		int	widthpix	20
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	80
+			int	ypix	22
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
 	}
 	ProductionN:TrackerFont {
-		int	xpix	7
-		int	ypix	58
-		int	widthpix	70
-		int	heightpix	20
-		string text "str_ldl_Production_"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	40
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Production_"
+			string textblttype "fill"
 	}
 	ProductionV:TrackerFont {
-		int	xpix	80
-		int	ypix	58
-		int	widthpix	20
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	80
+			int	ypix	40
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
 	}
 	GoldN:TrackerFont {
-		int	xpix	7
-		int	ypix	76
-		int	widthpix	70
-		int	heightpix	20
-		string text "str_ldl_Goldy"
-		string textblttype "fill"
+			int	xpix	7
+			int	ypix	58
+			int	widthpix	70
+			int	heightpix	20
+			string text "str_ldl_Goldy"
+			string textblttype "fill"
 	}
 	GoldV:TrackerFont {
-		int	xpix	80
-		int	ypix	76
-		int	widthpix	20
-		int	heightpix	20
-		string textblttype "fill"
+			int	xpix	80
+			int	ypix	58
+			int	widthpix	20
+			int	heightpix	20
+			string textblttype "fill"
 	}
 
 	Background {
 		int xpix 1
 		int ypix 1
 		int widthpix 113
-		int heightpix 96
+		int heightpix 76
 		string pattern "uptg04e.tga"
 	}
 }
@@ -2948,7 +2890,7 @@ RadarWindow {
 ################################################################################
 	TopBorder:CTP2_STATIC_BACKGROUND {	
 		# Size.
-		int		heightpix			54
+		int		heightpix			36
 
 		# Image layout.
 		int		numberoflayers		1
@@ -3052,6 +2994,7 @@ RadarWindow {
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON"
 		}
+
 		#Minimize/Maximize Button  -- not yet enabled		
 		Button7:RADARWINDOW_TOGGLE_BUTTON {
 			# Location.
@@ -3072,45 +3015,6 @@ RadarWindow {
 
 			# Tooltip
 			string	statustext	"STATUSBAR_MINIMAP_MINIMIZE"
-		}		
-		Button8:RADARWINDOW_TOGGLE_BUTTON {
-			# Location.
-			int		xpix			14
-			int		ypix			14
-#			# Label.
-#			string	text			"str_ldl_RADAR_MAP_POLITICAL"
-			# Icon for button
-			string 	image0 		"upcb28u.tga"
-			string 	image1 		"upcb28.tga"
-			# Tooltip
-			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON"
-			string	statustext	"STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON"
-		}
-		Button9:RADARWINDOW_TOGGLE_BUTTON {
-			# Location.
-			int		xpix			36
-			int		ypix			14
-#			# Label.
-#			string	text			"str_ldl_RADAR_MAP_CAPITOLS"
-			# Icon for button
-			string 	image0 		"upcb29u.tga"
-			string 	image1 		"upcb29.tga"
-			# Tooltip
-			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON"
-			string	statustext	"STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON"
-		}
-		Button10:RADARWINDOW_TOGGLE_BUTTON {
-			# Location.
-			int		xpix			38
-			int		ypix			14
-#			# Label.
-#			string	text			"str_ldl_RADAR_MAP_RELATIONS"
-			# Icon for button
-			string 	image0 		"upcb30u.tga"
-			string 	image1 		"upcb30.tga"
-			# Tooltip
-			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON"
-			string	statustext	"STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON"
 		}
 
 	}

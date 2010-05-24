@@ -1,0 +1,654 @@
+BUTTON_GREAT_LIBRARY "大图书馆" 
+
+BUTTON_TRADE "贸易" 
+
+BUTTON_CIV "文明" 
+
+BUTTON_CITY "城市"  
+
+BUTTON_SCIENCE "科技" 
+
+BUTTON_UNITS "部队" 
+
+BUTTON_DIPLOMACY "外交" 
+
+BUTTON_REFORM "改革" 
+
+BUTTON_NEXT_MESSAGE "下个讯息"
+
+BUTTON_BYE "再会！"
+
+BUTTON_END_TUTORIAL "结束教学模式"
+
+BUTTON_LOAD "读取"
+
+TITLE_SCIENCE_RATE_TOO_HIGH "科技预算过高！"
+TUT16A_SCIENCE_RATE_TOO_HIGH "科技预算编列过高。高额度的科技预算，虽然能加速科技发展，但会同时出现黄金存量减少及政府无法负担人民薪资问题。"
+
+TITLE_BUILD_BUILDING "[city.1.name]正在兴建城市设施"
+TITLE_BUILD_CAPITOL "[city.1.name]正在兴建国都"
+TUT30_BUILD_CAPITOL "你正在[city.1.name]兴建国都。国家只能有一个国都，新都竣工时，旧都会折为现金。请确定你要把国都建在[city.1.name]，或是你可考虑兴建其它的城市设施。"
+
+TITLE_CHANGE_GOVT1 "政体改变"
+TUT78_CHANGE_GOVT1 "政体改变是非常危险的动作，但有时是不可免的。政体改变会变动全国性设定的参数，会让国家短时间内陷入一切停摆的无政府状态（最多四回合）。"
+
+TITLE_CHANGE_GOVT2 "仍不足以改变政体"
+TUT79_CHANGE_GOVT2 "必须先使得文明卷标内的各项指数，能够满足新政体的条件（红色部分表示不足）。可以透过工时、薪资、粮给的调整，来满足条件。"
+
+TITLE_CHANGE_GOVT3 "政体比较"
+TUT80_CHANGE_GOVT3 "打开文明卷标（点选下方文明按钮）接着点选改变按钮。唯有已发明的政体，才会出现在比较名单中。"
+
+TITLE_ANARCHY1 "无政府时期！"
+TUT80A_ANARCHY1  "国家进入无政府状态，政府瓦解、政治失序，国家成长及科技发展停止，此时国家非常脆弱，必须加倍重视国防安全。"
+
+TITLE_ANARCHY2 "无政府时期结束！"
+TUT80B_ANARCHY2 "新政体已掌控大局，人民已接纳新的政体，工时、薪资、粮给等设定都有标准。点选文明卷标，检视新的文明设定等指数。"
+
+TITLE_GOT_ADVANCE "科技上有了新发现！"
+TUT138_GOT_ADVANCE "科技研究发现了[advance.name]。窗口会显示新的研究项目，选取后按下确定。"
+
+TITLE_TRADE_ROUTE_NO_PROFIT "[good.1.name]的贸易无利可图"
+TUT142A_TRADE_ROUTE_NO_PROFIT "[city.1.name]与[city.2.name]间的[good.1.name]贸易利润为[gold.amount]。这条不赚钱的贸易路线须重新考虑，可以在贸易画面点选贸易评估，以比较各个贸易路线。"
+
+TITLE_TRADE_ROUTE2 "与[player.2.civ_name_plural]进行[good.1.name]贸易"
+TUT143_TRADE_ROUTE2 "[player.2.civ_name_plural]同意你的[good.1.name]贸易要求，目前正从[city.1.name]运送[good.1.name]到[city.2.name]，这项贸易利润为[gold.1.amount]。"
+
+TITLE_TRADE_ROUTE3 "与[player.2.civ_name_plural]进行[good.1.name]贸易"
+TUT144_TRADE_ROUTE3 "[good.1.name]正从[city.1.name]运往[player.2.civ_name_singular]的[city.2.name]，预计收入为[gold.amount]。可以在贸易画面点选贸易评估，在不同的贸易路线间做比较。"
+
+TITLE_PILLAGED "敌国[unit.1.name]正进行掠夺"
+TUT145_PILLAGED "[player.1.civ_name_singular] [unit.1.name]正掠夺家园。必须阻止他们的掠夺。当部队做好驱逐敌人的准备时，透过外交向[player.1.leader_name]要求离境！"
+
+TITLE_PIRATED "[unit.1.name]正进行抢劫"
+TUT146_PIRATED "[city.1]与[city.2]间的[good.1]贸易路线，正遭受[player.3.civ_name_singular][unit.1.name]的抢劫，检视贸易画面，查看遭受多少损失。当部队做好交战准备时，透过外交向[player.3.civ_name_plural]要求停止抢劫。"
+
+TITLE_RUSH_BUY "快速购买" 
+TUT147_RUSH_BUY "国库有足够的预算买下[city.1.name]兴建中的城市设施。当你计划在下回合完成某项城市设施时，可以在该座城市画面的物资卷标中，按下快速购买按钮。" 
+
+TITLE_RUSH_BUY2 "比较快速购买的价钱"
+TUT147B_RUSH_BUY2 "可以在黄金存量（位于回合数下方，小地图旁）与城市设施的快速购买经费（物资卷标内的快速购买上方）做个比较。" 
+
+TITLE_UNHAPPY_CITY "[city.1.name]市民不满！"
+TUT148A_UNHAPPY_CITY_SMALL "可透过各项设定的调整让[city.1.name]市民愉快。先点选文明卷标，接着调整文明相关设定，直到市民感到愉快。"
+
+TITLE_UNHAPPY_CITY2 "让[city.1.name]市民愉快"
+TUT148B_UNHAPPY_CITY_LARGE "由于[city.1.name]拥有较多人口，可以让一些市民成为演艺人员，一名演艺人员可以减少一个不满的市民。可在[city.1.name]的劳工卷标中，以箭头调整演艺人员数目，同时要保留必要的工作人口维持市政建设。"
+
+TUT148C_UNHAPPY_CITY_RELIGION "[city.1.name]市民不满。如果拥有宗教知识，可以透过寺庙建筑来增加市民快乐度。有了寺庙存在的话，可以在文明卷标中调整其设定值让市民愉快。"
+
+TUT148D_UNHAPPY_CITY_PERSPECTIVE "[city.1.name]市民不满。如果拥有洞察能力，可以兴建大教堂来增加市民快乐度。有了大教堂的话，可以在文明卷标中调整其设定值让市民愉快。" 
+
+TUT148E_UNHAPPY_CITY_SMALL_ANCIENT "[city.1.name]市民不满。可以派驻军队以维持治安，让市民愉快。"
+
+TITLE_FOG1 "未知地"
+TUT154_FOG1 "地图上的黑色部分，是未曾探索的地方。要等到部队探索之后，才能得到当地地形情报。"      
+
+TITLE_OUT_OF_GAS "[unit.1.name]燃油耗尽坠毁"
+TUT156_OUT_OF_GAS "[unit.1.name]燃油耗尽坠毁。可以在城市兴建机场或着在郊外兴建空军基地，飞机在这些地方补充油料。"
+
+TITLE_NO_SUPPORT "[unit.1.name]军费用尽解散"
+TUT157_NO_SUPPORT "[unit.1.name]军费用尽解散。养军队是要花钱的，越多的军事部队需要越多的经费支持，平时可在部队窗口检视军事预算的支出。"
+
+TITLE_RANDOM_DEATH "意外死亡"
+TUT158_RANDOM_DEATH "[unit.1.name]遭到狐猴攻击身亡"
+
+TITLE_HIGH_CITY_POLLUTION "高度污染"
+TUT159_HIGH_CITY_POLLUTION "[city.1.name]是个巨大的污染源，破坏着当地生态环境，请在市内兴建污染防治设备以减少污染。"
+
+TITLE_CITY_POLLUTION "城市污染"
+TUT160_CITY_POLLUTION "[city.1.name]的污染破坏环境，多多留意这些生态灾害，提防当地区块变成黑色。"
+  
+TITLE_SLOW_SCIENCE1 "科技水平过低"
+TUT164A_SLOW_SCIENCE "得加速国家科技发展，可以在几个城市点选极大化卷标，再按下科技极大化按钮，以加速科技发展。"
+
+TITLE_SLOW_SCIENCE2 "提高科技水平"
+TUT164B_SLOW_SCIENCE2 "提高科技预算。如果巳是预算最大值了，再想法子提高工时减少薪资，以便增加科技预算。"
+
+TITLE_SLOW_CITIES "城市过少"
+TUT165_SLOW_CITIES "派出开拓队建立新城市吧，城市越多国力越强，一切建设速度也将因此加快。"
+
+TITLE_ZOC "军事管制区"
+TUT168_ZOC "部队无法直接穿越敌军部队停留时的周边区块，只能从旁绕过。"      
+
+TITLE_SLOW_CITY "城市不够多"
+TUT180_SLOW_CITY "扩张国力需要更多的城市，再派出更多的开拓队或是派遣部队攻占更多的城市。"
+
+TITLE_SLOW_SCIENCE "科技水平不高"
+TUT185_SLOW_SCIENCE "请加速科技发展"
+
+TITLE_CITY_TAKEN "[city.1.name]遭到外敌占领"
+TUT190_CITY_TAKEN "[player.1.civ_name_plural]占领了[city.1.name]！所有城市得要加强戒备，防止敌军再度得逞。"
+
+TITLE_CITY_CAPTURED "攻占[city.1.name]"
+TUT191_CITY_CAPTURED "奋力一战之后，终于击败[player.1.civ_name_plural]，并攻下[city.1.name]，提高戒备防止敌军任何可能性的反击。"
+
+TITLE_CITY_CONVERTED "[city.1.name]改信异教"
+TUT193_CITY_CONVERTED "[city.1.name]受到异教感化并开始缴税给外国。请派遣军队进驻[city.1.name]，重整秩序，并提防其它城市也受到异教感化。"
+
+TITLE_REFORM_CITY "如何重整异教感化的城市"
+TUT194_REFORM_CITY "先派军队进入异教城市，接着在部队卷标中点选重整城市指令。"
+
+TITLE_I_CONVERT "成功感化了[city.1.name]!"
+TUT195_I_CONVERT "[player.1.civ_name_singular] [city.1.name]改信我国信仰。我国将获得到该城的宗教税金。让[unit.1.name]继续四处传教感化城市。越多的城市服膺于我国的教义，会带来越多的宗教税收。"
+
+TITLE_TERRORIST "恐怖分子攻击事件"
+TUT196_TERRORIST "[city.1.name]发生恐怖分子攻击事件。其原因不明，请提高国内军备做好防范措施。"
+
+TITLE_ENSLAVED "[player.1.civ_name_singular]发生奴隶贩子抓人事件"
+TUT197_ENSLAVED "[city.1.name]发生奴隶贩子抓人事件，请兴建城墙，提高城市警备，避免这种事情再度发生。"
+
+TITLE_I_ENSLAVE "成功的逮到奴隶"
+TUT198_I_ENSLAVE "[city.1.name]的一位市民巳成了我国奴仆，目前正在工作中。再派奴隶贩子去抓更多的奴隶来工作吧。"
+
+TITLE_CANT_SETTLE_NOW "无法建立城市"
+TUT203_CANT_SETTLE_NOW "开拓队此回合的机动力巳用完，下个回合才有能力建立城市。"
+
+TITLE_VICTORY_ENSLAVEMENT "奴役敌军俘虏"
+TUT205_VICTORY_ENSLAVEMENT "当奴隶贩子也在军团组合中，在战胜之后，幸存的敌军俘虏将会被成为我国奴隶。"
+
+TITLE_PLAYER_SETTLER_ENSLAVED "开拓队被奴隶贩子抓走"
+TUT206_PLAYER_SETTLER_ENSLAVED "开拓队被敌国奴隶贩子抓走，成了外国奴仆，现已无法救出。平时指派部队随行就能避免。方法是将部队与开拓队停在同一方格中，再点选部队卷标中的锁定图标，军队就会与开拓队合并成同一军队，沿途护卫开拓队。"
+
+TITLE_ENSLAVED_SETTLER "逮捕了外国开拓队"
+TUT207_ENSLAVED_SETTLER "捕获[player.2.civ_name_singular]开拓队。奴隶贩子可以就地捕抓路上见到的外国开拓队，或直接对外国城市进行捕抓奴隶的攻击行为。"
+  
+################
+##NEW TUTORIAL##
+################
+
+TITLE_WELCOME_CTP "欢迎来到《文明帝国之权倾天下》"
+TUT500_WELCOME_CTP "经过未知世界的探索、城邦的开拓、国家间的交涉，达成游戏的最终目的，建立世界首屈一指的文明帝国。"
+
+TITLE_THE_TUTORIAL "教学模式"
+TUT500A_THE_TUTORIAL "讯息会在游戏过程中出现指导玩家。如果想要回顾过去的讯息，可以按下在画面最上方的<c:180,0,0>回顾教学讯息<e>按钮。如果要结束教学模式，请按下回顾教学讯息开启讯息列后，再按下<c:180,0,0>结束教学模式<e>按钮。该按钮在讯息列的右下方。"
+
+TITLE_MAP_SCROLL "讯息挡到画面了吗？"
+TUT500B_MAP_SCROLL "移动鼠标光标到 <c:180,0,0>屏幕边缘<e>，画面就会朝该方向移动。或是点击画面左下方小地图中的<c:0,180,0>彩色区域<e>，画面将会以那片区域为中心。"
+
+TITLE_GOAL_1 "目标一：建立一座城市"
+TUT501_GOAL_1 "第一个任务是建立一座城市，借着开拓队的移动找寻建城地点，<c:0,180,0>最好的建城地点是在河流之上，其中以河流经过的草地地形尤佳<e>。当开拓队无法移动时，按下键盘上的<c:180,0,0>N<e>键结束回合，或是点选下个讯息以学习如何建立一座城市。"
+
+TITLE_THIS_IS_SETTLER "教学模式等级一"
+TUT502_THIS_IS_SETTLER "在教学模式等级一，将学习部队移动及生产建造等基本操作，我们将从开拓队的操作开始介绍。"
+
+TITLE_SELECT_SETTLER "选取开拓队"
+TUT502A_SELECT_SETTLER "游戏由<c:0,180,0>选取<e>开拓队开始。选取后，将出现<c:0,180,0>绿色方框<e>及许多<c:0,180,0>绿色格子<e>在他四周。要<c:180,0,0>取消选取<e>开拓队的话，就用鼠标<c:180,0,0>右键<e>点在别处，要再<c:0,180,0>选取<e>开拓队的话，就用鼠标<c:0,180,0>左键<e>点选开拓队即可。"
+
+TITLE_MOVE_YOUR_SETTLER "移动开拓队"
+TUT503_MOVE_YOUR_SETTLER "开拓队被<c:0,180,0>选取<e>之后，移动鼠标光标，将会拉出一条<c:0,180,0>绿<e> 线，那表示这回合能够到达的路径，按下鼠标<c:180,0,0>左键<e>就可以移动到目的地去。"
+
+TITLE_CANT_MOVE_MORE "结束这回合"
+TUT503A_CANT_MOVE_MORE "开拓队的机动力巳用完，无法移动或建城，要结束这回合，请按下键盘上的<c:180,0,0>N<e>键，或是点选画面右下的<c:180,0,0>结束<e>按钮。"
+
+TITLE_ON_RIVER "河流地形"
+TUT503B_ON_RIVER "所有部队沿着河流移动比没有沿河移动还来的快速。开拓队在河流上可以一回合移动两格，而其它地形则只能一格。河流地形也是建立城市的最佳地点。"
+
+TUT503C_RIVER_2 "按下<c:180,0,0>N<e>键可以结束本回合。当开拓队已经走到理想的建城地点时，也可以按下<c:180,0,0>N<e>键，等下个回合开始建立城市。"
+
+TITLE_HOW_TO_BUILD_CITY "如何建立城市"
+TUT504_HOW_TO_BUILD_CITY "在<c:0,180,0>选取<e>开拓队后，按下键盘上的<c:0,180,0>B<e>键，或是点击部队卷标内的铲土图标就可以建立城市。" 
+				
+TITLE_GOAL_1_ACCOMPLISHED "目标一完成了！城市建立了！"
+TUT505_GOAL_1_ACCOMPLISHED "开拓队会在地图上消失，并住进[city.1.name]中。新城市可以生产新部队出城探索，或是生产新的开拓队兴建更多城市。"
+
+TITLE_GOAL_2 "目标二：生产部队"
+TUT506_GOAL_2 "选取城市之后，将会有个<c:180,0,0>红色<e>方框围绕，此时点选下方<c:0,180,0>物资<e>卷标，再按下<c:0,180,0>建造<e>按钮，卷动并选取到<c:180,0,0>战士<e>选项，再按下<c:0,180,0>建造<e>按钮即可生产战士。"
+
+TITLE_TURNS_TO_COMPLETE "离完成还要多少回合"
+TUT507_TURNS_TO_COMPLETE "在物资卷标下，战士图片右下可看到建造所需的回合数，可以一直按下<c:180,0,0>N<e>键直到完工。"
+
+TITLE_KEEP_HITTING_N "持续按下N键"
+TUT507A_KEEP_HITTING_N "按下键盘<c:180,0,0>N<e>键，直到物品建造完成。或以鼠标<c:180,0,0>左键<e>点选城市，之后再点选物资卷标，就能观察到城市的工作情形，建造物品下方有代表进度的色棒及建造所需的回合数。"
+
+TITLE_BUILD_PROGRESS "建造进度"
+TUT508_BUILD_PROGRESS "持续按下<c:180,0,0>N<e>键，直到城市完成建造工作。或以鼠标<c:180,0,0>左键<e>点选城市，之后再点选物资卷标，就能观察到城市的工作情形。建造物品下方有代表进度的色棒及建造所需的回合数。"
+
+TITLE_GOAL_2_ACCOMPLISHED "目标二完成了！部队生产完成！"
+TUT509_GOAL_2_ACCOMPLISHED "战士已经完成，可以指派战士在地图上进行探索。"
+
+TITLE_EXPLORE_THE_MAP "探索地图"
+TUT510_EXPLORE_THE_MAP "点选画面右下的<c:0,180,0>绿色人形<e>按钮。当部队的<c:0,0,180>色盾<e>闪烁时，表示该部队被选取中。移动鼠标所带出的<c:0,180,0>绿线<e>即移动路径，按下鼠标<c:180,0,0>左键<e>就可以移动到目的地去。"
+
+TITLE_GOAL_3 "目标三：建设城市"
+TUT511_GOAL_3  "谷仓能加快城市人口成长的速度。以鼠标<c:180,0,0>左键<e>点选一个城市后，再点选<c:0,180,0>物资<e>卷标内的<c:0,180,0>建造<e>按钮，再卷动并选取到<c:180,0,0>谷仓<e>选项，再按下<c:0,180,0>建造<e>按钮，即可开始建造谷仓。"
+
+TITLE_CONTINUE_EXPLORING "持续探索"
+TUT512_CONTINUE_EXPLORING "距离<c:0,180,0>谷仓<e>完成还有一段时间，这时候，可以让战士继续进行探索。要结束回合的话，按下键盘上的<c:180,0,0>N<e>键；要移动部队的话，以鼠标<c:180,0,0>左键<e>点选部队，再用<c:180,0,0>左键<e>点击目的地，部队就会移到到该地。" 
+
+TUT512A_CONTINUE_EXPLORING "距离<c:0,180,0>开拓队<e>完成还有一段时间，可以让战士继续探索地图。要结束回合的话，按下键盘上的<c:180,0,0>N<e>键；要移动部队的话，以鼠标<c:180,0,0>左键<e>点选部队，再用<c:180,0,0>左键<e>点击目的地，部队就会移到到该地。"
+
+TITLE_CANT_GO_ON "无法进行下一步"
+TUT513_CANT_GO_ON "还没达成目标时，教学模式不会有新的讯息。"
+
+TITLE_INTERIM "关于城市的建设"
+TUT513A_INTERIM_SCIENCE "科技研发是不可或缺的，唯有藉由科技研发取得技术，才能生产新兵种、建造新工程、甚至建造世界奇观。当你发现一项新科技时，游戏将会跳出讯息提醒你。"
+
+TUT513B_INTERIM_TURNS "按下<c:180,0,0>N<e>键结束之后，游戏年份的方格会以不同颜色变换，不同的颜色表示不同的国家正在调度部队及建设城市当中。"
+
+TUT513C_INTERIM_X "可以按下教学讯息右上的<c:180,0,0>－<e>按钮，将讯息最小化。要回复讯息的话，按下画面左侧的<c:0,80,180>？<e>键即可。"
+
+TUT513D_INTERIM_Y "开拓队生产完成时，城市人口(城市右下方的数字)将会减一，因为市民变成了开拓队。"
+
+TUT513E_INTERIM_Z "每个部队都有个<c:0,0,180>色盾<e>，表示他的国家，玩家的色盾为蓝。同样地，城市名称及城市人口也以颜色代表所属国家。 "
+
+TUT513F_CHECK_PROGRESS "以鼠标<c:180,0,0>左键<e>点选城市后，再点选<c:0,180,0>物资<e>卷标，将看到建造物品的图片下方，有个代表进度的色棒，右边为建造所需回合数。"
+
+TITLE_GOAL_3_ACCOMPLISHED "目标三完成了，谷仓巳完工"
+TUT514_GOAL_3_ACCOMPLISHED "谷仓能有助于食粮储存，进而提高人口成长。"
+
+TITLE_GOAL_4 "目标四：建立第二座城市"
+TUT515_GOAL_4 "更多的城市建构更强大的国家。先在<c:0,180,0>物资<e>卷标内，点选<c:0,180,0>建造<e>按钮。再选取<c:180,0,0>开拓队<e>选项，接着按下<c:0,180,0>建造<e>，开始生产建立城市所需的开拓队。"
+
+TITLE_SETTLER_BUILT "开拓队完成了"
+TUT516_SETTLER_BUILT "点选<c:0,180,0>绿色人形<e>按钮，当开拓队的<c:0,0,180>色盾<e>闪砾时，表示开拓队巳被选取。此时移动鼠标带出<c:0,180,0>绿线<e>，再按鼠标<c:180,0,0>左键<e>点击目的地，即可命令开拓队移动到该地。"
+
+TITLE_FIND_G_SPOT "最好的建城地点" 
+TUT518_FIND_G_SPOT "地图上有各式各样的地形。其中以烟草、珍珠、鳄鱼等奇珍异兽的产地附近，同时还位在草地、河流、森林等地形上的地理环境最棒，这类地形拥有为数可观的天然资源。"
+
+TITLE_REMEMBER_N "B键为建城快键"
+TUT518A_REMEMBER_N "当部队无法移动时，按下<c:0,180,0>N<e>键结束回合。当开拓队要建立城市时，按下<c:0,180,0>B<e>键即可建城。"
+
+TITLE_GOOD_PLACES_TO_SETTLE "寻找建城好地点"
+TUT518B_GOOD_PLACES_TO_SETTLE "多留意河流、草地、森林等地形。当部队移动完毕时，按下<c:0,180,0>N<e>键结束回合。当开拓队打算建立城市时，按下<c:0,180,0>B<e>键即可建城。"
+
+TITLE_BUILD_SECOND_CITY "继续目标四：建立第二座城市"
+TUT519_BUILD_SECOND_CITY "当开拓队被选取时，围绕他的旗盘式<c:0,180,0>绿色<e>线框代表建城后的城市范围，当开拓队决定建立城市时，按下<c:0,180,0>B<e>键或是按下<c:0,180,0>铲土图标<e>即可建城。"
+
+TITLE_LEVEL_2 "教学模式等级二"
+TUT519A_LEVEL_2 "恭喜你进入教学模式<c:180,0,0>等级二<e>。"
+
+TITLE_SAVE "储存进度"
+TUT519B_SAVE "按下键盘的<c:180,0,0>'ESC'<e>键，在游戏选项中按下储存游戏，即可储存游戏进度。"
+
+TITLE_GOAL_4_ACCOMPLISHED "目标四完成，第二座城市巳建立"
+TUT520_GOAL_4_ACCOMPLISHED "每个城市都需要军队保护。选取一座城市，而后在物资卷标中按下<c:0,180,0>建造<e>按钮， 再选择重装步兵，而后按下<c:0,180,0>建造<e>。" 
+
+TITLE_2_GOAL_1 "目标一：管理概念"
+TUT521_2_GOAL_1 "在学会生产、建造、移动部队等基本操作之后，接着要学习如何治理国家。"
+
+TITLE_RESOURCES "资源：食物、物资、黄金"
+TUT522_RESOURCES "资源管理是治国之本。食物产量攸关国家人口成长，物资则用在城市设施及部队的生产上，黄金可用于科技研发的预算上。"
+
+TITLE_GET_RESOURCES "资源的取得"
+TUT523_GET_RESOURCES "资源来自于工人在城市内的工作所得，城市所在的中心区块以一个工作人口计算，工人可以放置在市区内的工作区块，或着是担任科技家、商人、演艺人员等专职。" 
+
+TITLE_WORK_VIEW "工作画面"
+TUT524_WORK_VIEW "先按<c:180,0,0>左键<e>选取城市，再按<c:0,180,0>右键<e>于城市区块，会跳出工作窗口，可以按住窗口上缘进行拖曳，拖移到其它地方。"
+
+TITLE_WORK_VIEW_ICONS "工作画面的图标意义"
+TUT524A_WORK_VIEW_ICONS "画面中的工人都在城市半径内卖力耕作，工人身旁分别有三种图标，吐司代表食物、齿轮代表物资、金币代表黄金，图标中的数字代表工人产量。"
+
+TITLE_MOVING_WORKERS "工作画面中调动工人"
+TUT525_MOVING_WORKERS "要移动工人，用鼠标<c:180,0,0>左键<e>点选工人，再按下鼠标<c:180,0,0>左键<e>指定地点。可以察看小图标中的数目来评估好坏。要关闭工作情形，只要按下右上角的 X 钮即可。" 
+
+TITLE_GET_FOOD_PRODUCTION "物资及食物的取得"
+TUT526_GET_FOOD_PRODUCTION "取得食物让城市成长，取得物资以建造物品，为国家大事。"
+
+TITLE_RULING "统治文明帝国"
+TUT527_RULING "游戏中有两套设定规则，全国性设定适用于国内所有城市，地方性设定仅适用于各个城市本身。"
+
+TITLE_MAINTAIN_HAPPY "让帝国人民感到快乐"
+TUT528_MAINTAIN_HAPPY "让人民能快乐又能维持一定的生产力，是治理帝国的一大挑战。"
+
+TITLE_GLOBAL_RULES "全国性设定"
+TUT529_GLOBAL_RULES "决定人民快乐度的三个指针，分别是工时、薪资、粮给。" 
+
+TITLE_OPEN_CIV_TAB "开启文明卷标"
+TUT530_OPEN_CIV_TAB "以鼠标<c:180,0,0>左键<e>点选城市后，再点画面下方的文明卷标。"
+
+TITLE_THE_CIV_TAB "文明卷标：调整总体政策"
+TUT531_THE_CIV_TAB "以横杠调整全国性设定的三项指针，分别是决定工作时数的工时指针，决定工作所得的薪资指针，及决定食物配给额度的粮给指针。"
+
+TITLE_HAPPINESS_IS "快乐在于拥有食物、金钱与休闲"
+TUT532_HAPPINESS_IS "当人民在工作上感到压力沉重、薪资不足时，人民的快乐度将会下滑，可以从文明卷标内的<c:0,200,0>快乐度指针<e>，看出人民的快乐度。"
+
+TITLE_UNHAPPINESS_IS "人民感到不满，有导致暴动与革命的可能"
+TUT533_UNHAPPINESS_IS "当人民处于不满的状态，有引发暴动及革命的可能，进而损害国家发展。文明卷标内的<c:180,0,0>暴动<e>与<c:180,0,0>革命<e>代表国内陷入动乱的城市数目，数目 0 表示国泰民安。"
+
+TITLE_RESEARCH_SCIENCE "科技发展是迈向先进国家之路"
+TUT534_RESEARCH_SCIENCE "科技研发是国家能否进步的关键，透过科技研发，能够得到军事科技、城市设施及世界奇观的建造技术。科技的成本是黄金。" 
+
+TITLE_SETTING_SCIENCE "科技税率的设定"
+TUT535_SETTING_SCIENCE "在文明卷标的科技设定，以加减符号调整科技税率的高低。因应不同的政体，科技税率有不同的上限额度，为了加速文明进步，多半是调到最高值。"
+
+TITLE_PUBLIC_WORKS "公共建设"
+TUT536_PUBLIC_WORKS "公共建设即农田、道路、矿山等市郊地形工程，有提高产量加速交通的效果。公共建设的成本是物资。"
+
+TITLE_SETTING_PUBLIC_WORKS "公共建设的设定"
+TUT537_SETTING_PUBLIC_WORKS "试着累积公共建设物资到<c:0,180,0>200<e>单位为止。你可以从年份下方的方框中得知目前所拥有的公共建设数目。"
+
+TITLE_2_GOAL_2 "目标二：建造农田或道路"
+TUT538_2_GOAL_2 "当你将文明卷标的建设指数调成<c:0,180,0>70%<e>，每回合就会有<c:0,180,0>70%<e>物资产量用在公共建设上。<c:180,0,0>警告：<e>，一旦建设指数高于<c:180,0,0>30%<e>时，将连带减缓城市本身的一切建造。因此，建设指数不宜高过<c:180,0,0>30%<e> 。"
+
+TITLE_GETTING_PUBLIC_WORKS "公共建设需要时间"
+TUT539_GETTING_PUBLIC_WORKS "可以从年份下方的方框，见到公共建设物资的累积值，随着时间累积每个回合各个城市的物资缴纳。"
+
+TITLE_DECREASE_PW "调降公共建设额度"
+TUT539A_DECREASE_PW "以鼠标<c:180,0,0>左键<e>-点选城市，再点选文明卷标，将建设指数调到<c:180,0,0>20%<e>。由于调降了物资的上限，使得城市本身物资产量提高，进而加快了城市的物品建造速度。"
+
+TITLE_USING_PW "建造公共建设"
+TUT540_USING_PW "按下画面右下的槌子按钮。再选择农田或道路。<c:180,0,0>农田只能建在邻接水源的草原及平原地形。<e> 建立道路连结农田与城市。光标为<c:0,180,0>绿色<e>代表你可以兴建该项公共建设，<c:180,0,0>红色<e>则表示不可以。如果光标是<c:0,180,0>绿色<e>，点击鼠标于目的地就可以兴建完成。"
+
+TITLE_GOAL_FARM "兴建农田需要两回合"
+TUT542_GOAL_FARM "再按一下锤子按钮，就可以关闭公共建设选项。兴建农场需要花费<c:180,0,0>2<e>回合。按下键盘<c:180,0,0>N<e>键结束该回合。"
+
+TITLE_GOAL_ROAD "兴建道路需要两回合"
+TUT543_GOAL_ROAD "再按一下锤子按钮，就可以关闭公共建设选项。兴建道路需要花费<c:180,0,0>2<e>回合。按下键盘<c:180,0,0>N<e>键结束该回合。"
+
+
+TITLE_MINE "兴建矿山"
+TUT543A_MINE "盖错位置的话，可能要重新开始教学模式才能挽回。"
+
+TITLE_2_GOAL_2_ACCOMPLISHED_FARM "目标二完成了！农田兴建完成！"
+TUT544_2_GOAL_2_ACCOMPLISHED_FARM "以<c:180,0,0>左键<e>点选城市，再按<c:0,180,0>右键<e>点选城市打开工作窗口，如果目前没有工人在农田工作，可以用<c:180,0,0>左键<e>点选一个工人，再按<c:180,0,0>左键<e>到农田区块，将工人调到农田工作。"
+
+TITLE_2_GOAL_2_ACCOMPLISHED_ROAD "目标二完成了！道路兴建完成！"
+TUT545_2_GOAL_2_ACCOMPLISHED_ROAD "可以继续兴建道路，与建好的道路相连，成为公路网。"
+
+TITLE_OPEN_WORK_VIEW_2 "将工人移到农田" # not used anymore
+TUT546_OPEN_WORK_VIEW_2 "以<c:180,0,0>左键<e>点选城市，再按<c:0,180,0>右键<e>点选城市，打开工作窗口，如果目前没有工人在农田工作，可以用<c:180,0,0>左键<e>点选一个工人，再按<c:180,0,0>左键<e>到农田区块，将工人调到农田工作。"
+
+TITLE_WAIT_FOR_PW "公共建设物资累积中"
+TUT549_WAIT_FOR_PW "还得再等一会，目前的公共建设物资存量不足，继续部队的探索工作。"
+
+TITLE_DUMBASS "笨蛋"
+TUT550_DUMBASS "<c:180,0,0>你真笨。<e>"
+
+TITLE_DESELECT "取消选择某部队"
+TUT550A_DESELECT "当你已经选取某部队时，只需在地图上的任何地方按下<c:0,180,0>右键<e>，就可以取消选择状态"
+
+TITLE_LEVEL_3 "教学模式等级三"
+TUT551_LEVEL_3 "学会内政上的操作之后，等级三是开始学习如何与外国打交道，学习有关外交及战争等事务。"
+
+TITLE_CIV_INTERACTION "国家间的互动"
+TUT552_CIV_INTERACTION "国际互动是游戏中不可少的一部分，国家与国家之间，可能是同盟关系，也可能是交战关系。"
+
+TITLE_3_GOAL_1 "目标一：找寻其它文明"
+TUT553_3_GOAL_1 "发现异国<c:180,0,0>战士<e>接近[city.1.name]中。该名战士的色盾<c:220,96,0>非蓝色<e>。发现时，他正在探索[city.1.name]周围。即刻派出部队和异国战士接触。"
+
+TITLE_MOUNTAIN_WARRIOR "异国战士进入山区"
+TUT553A_MOUNTAIN_WARRIOR "异国<c:180,0,0>战士<e>进入山区。由于骑乘类部队无法进入山区，派遣战士或方阵兵把他找出来。"
+
+TITLE_BE_PATIENT_3 "耐心点"
+TUT554_BE_PATIENT_3 "耐心点，找寻其它文明也许要花点时间。弓骑虽然是优秀的侦察部队，可惜的是，骑乘类部队不能跨越山区。"
+
+TITLE_BUILD_UNITS "建造部队"
+TUT555_BUILD_UNITS "进行探索的同时，记得继续建造部队。必要时，回顾教学讯息，温习一些基本操作。"
+
+TITLE_3_GOAL_1_ACCOMPLISHED "目标一完成！与外国接触"
+TUT556_3_GOAL_1_ACCOMPLISHED "首次接触到其它文明，友善地对待他，别把部队移往异国战士的区块，那将变成攻击。"
+
+#TITLE_DIPLOMACY_MESSAGE_SYS "外交对谈方式"
+#TUT557_DIPLOMACY_MESSAGE_SYS "移动部队到外国部队旁边去。"
+
+TITLE_GREETINGS "你好"
+TUT558_GREETINGS "初次见到其它文明时，都会先说几句问候语，一个附有卷轴图标的小方框会出现在画面左边。" 
+
+TITLE_OPEN_GREETINGS "开启外交讯息"
+TUT559_OPEN_GREETINGS "用鼠标点击卷轴图标会自动开启外交讯息。在开启该讯息后，选择<c:180,0,0>接受<e>表示你的友善。"
+
+TITLE_COVER_YOUR_BACK "防人之心不可无"
+TUT560_COVER_YOUR_BACK "留意些，虽然目前是友善关系，难保未来不会出现变化。"
+
+TITLE_NO_STACKED_BATTLE "单一部队作战"
+TUT560A_NO_STACKED_BATTLE "只有军团间的作战才会出现战斗窗口，下次你可以试试用军团攻击敌人。"
+
+TITLE_3_GOAL_2 "目标二：组成一个军团"
+TUT561_3_GOAL_2 "将多种部队合给成一个军团，在战场上是很有威力的。[city.1.name]出现<c:180,0,0>战士<e>和<c:180,0,0>弓箭手<e> 。点击此讯息左下的<c:0,180,0>眼球<e>，画面会移成以这些部队为中心。"
+
+TITLE_MAKING_ARMY "组成一个军团"
+TUT562_MAKING_ARMY "将战士和弓箭手移到同一方格。先<c:180,0,0>左键<e>-点选，再按 <c:180,0,0>左键<e>移动部队。当战士和弓箭手叠在一块时，上面只会呈现其中一个兵种，但色盾的数字会变多了个2在里面。"
+
+TITLE_KEEP_MOVING "继续移在一块"
+TUT563_KEEP_MOVING "继续把战士和弓箭手移到同一方格。"
+
+TITLE_LOCK_DISPLAY "军团的部队卷标显示方式"
+TUT564_LOCK_DISPLAY "用鼠标<c:180,0,0>左键<e>点选<c:180,0,0>两个或多个单位在一块的地方<e>。在下方的部队卷标中，如果只有一个部队为<c:180,0,0>红线<e>所围绕，就代表目前只有这一个部队被选择到，尚未锁定成一个军团。"
+
+TITLE_LOCK_STACK "从部队卷标锁定军团"
+TUT565_LOCK_STACK "当有<c:0,0,180>二个或多个<e>以上的单位在同一个区域之中，亦即<c:0,180,0>盾牌<e>上看到多个部队的数目。点选这群部队后再用鼠标点击<c:0,180,0>锁定<e>按钮，就可以将所有部队锁定成单一行动的军团了。" 
+
+TITLE_STACK_HERALD "军团的色盾"
+TUT566_STACK_HERALD "当多个部队锁定成一支军团时。只会见到军团中最顶端的部队，事实上所有部队都是在一块。一个军团最多可以并入九个部队。"
+
+TITLE_MOVE_STACK "军团移动"
+TUT567_MOVE_STACK "用鼠标<c:180,0,0>左键<e>选择军团。再用鼠标<c:180,0,0>左键<e>选择目的地。如果单位不能再移动了，按下键盘的<c:180,0,0>N<e>键做结束。"
+
+TITLE_ATTACK_NEIGHBOUR "目标三：攻击邻国"
+TUT568_ATTACK_NEIGHBOUR "攻击在[city.1.name]附近的敌人战士。按下鼠标<c:180,0,0>左键<e>来选取你的军队，再用<c:180,0,0>左键<e>选择攻击对象。如果军队不能再移动了，记得按下键盘的<c:180,0,0>N<e>键做结束。"
+
+#TITLE_FORTIFICATION "建筑防御工事"
+#TUT569_FORTIFICATION "当敌军四周出现矮墙围绕时，表示他筑有防御工事，拥有较高的防护能力，较能抵挡外来攻击。"
+
+#TITLE_ATTACK "攻击"
+#TUT570_ATTACK "按下鼠标<c:180,0,0>左键<e>点选你的军队，而后再用<c:180,0,0>左键<e>攻击敌军。"
+
+TITLE_BATTLE_VIEW "战场窗口"
+TUT571_BATTLE_VIEW "从窗口中可以检视军团的作战情形，画面中的地形反映着战场地理位置。我军位于画面的左方，敌军则是在右方。"
+
+TITLE_DEFENSIVE_BONUS "防守加分"
+TUT572_DEFENSIVE_BONUS "守方的防守加分会出现在画面的右上方。当防守的一方，处在城市、防御工事、或是山脉或丘陵等地形中，就会获得提高防备的防守加分值。"
+
+TITLE_MIXED_FORCES "混合军团"
+TUT573_MIXED_FORCES "最佳混合军团，就是军队中掺杂有防御力高的战士、攻击力高的武士及远距攻击能力的弓箭手。" 
+
+TITLE_CLOSE_BATTLE_VIEW "关闭战场窗口"
+TUT574_CLOSE_BATTLE_VIEW "按下窗口右上角的X按钮，关闭战场窗口。"
+
+TITLE_MAKE_PEACE "试着寻求和平之道"
+TUT575_MAKE_PEACE "我们巳经历练过战争，尝试透过外交途径来结束这场战争吧！"
+
+TITLE_OPEN_DIPLOMACY "开启外交画面"
+TUT576_OPEN_DIPLOMACY "按下屏幕右边<c:180,0,0>画面<e>面板。再按下<c:0,180,0>外交<e>按钮，即可打开外交画面。" 
+
+#TITLE_THE_DIPLOMACY_SCREEN "外交画面"
+#TUT577_THE_DIPLOMACY_SCREEN "透过外交画面从事各类外交行动。"
+
+TITLE_3_GOAL_3 "目标三：和平协议" 
+TUT578_3_GOAL_3 "在外交名单中<c:180,0,0>选择国家<e>之后，而后再按下派遣使节按钮。"
+
+TITLE_UNIT_DESELECTED "取消选取"
+TUT579_UNIT_DESELECTED "用鼠标右键可以解除部队或城市的选取状态。<c:0,180,0>绿色<e>方框表示被选取的部队还有行动能力；被<c:180,0,0>红色<e>方框表示移动终了。而城市被选取时，则永远都是<c:18,0,0>红色<e>的方框围绕。"
+
+TITLE_PSEUDO_GREETINGS "欢迎你"
+TUT580_PSEUDO_GREETINGS "我们非常欢迎你，并祝福你永远快乐！"
+
+TITLE_SEND_EMISSARY "签署和平协议"
+TUT581_SEND_EMISSARY "在外交名单中选取<c:180,0,0>国家<e>之后，再按下派遣使节按钮。"
+
+TITLE_GREET_EMISSARY "外国使节来访"
+TUT582_GREET_EMISSARY "外国特使巳到达，外国元首的讯息会出现在图片上方。请点选下一步。"
+
+TITLE_MAKE_REQUEST "提出要求"
+TUT583_MAKE_REQUEST "在外交要求选单中，请点选提议建立协议按钮。"
+
+TITLE_PEACE_TREATY "建立和平协议"
+TUT584_PEACE_TREATY "可以提议三种协议，请点选其中的和平协议。"
+
+TITLE_CEASE_BUTTON "停止交战"
+TUT584A_CEASE_BUTTON "按下<c:180,0,0>送出<e>按钮。本次送出的文件内容呈现在按钮上方."
+
+TITLE_RESPONSE "响应"
+TUT585_RESPONSE "外国特使表示，其元首不接受我国提出的和平协议要求，按下<c:180,0,0>不是<e>按钮关闭外交窗口。"
+
+TITLE_3_GOAL_3_ACCOMPLISHED "目标三巳完成，取得外交经验"
+TUT586_3_GOAL_3_ACCOMPLISHED "恭喜你！接着进入教学等级等级四。"
+
+TITLE_LEVEL_4 "等级四：贸易与黄金"
+TUT587_LEVEL_4 "接下来要学着如何通过特产贸易增加黄金收入，帝国的科技预算金额也将因此增加。"
+
+TITLE_GOODS "特产"
+TUT588_GOODS "贸易能带来金钱收入，地图上的鳄鱼、海獭、珍珠、胡椒都是可以用来贸易的特产。"
+
+TITLE_4_GOAL_1 "目标一：取得专卖权"
+TUT589_4_GOAL_1 "贸易的建立来自于城市对特产的专卖权，取得越多的专卖权，便能为城市带来更多黄金收入，一个城市最多可以拥有四项特产的专卖权。"
+
+TITLE_LOOK_FOR_CITIES "城市与当地物产的关系"
+TUT590_LOOK_FOR_CITIES "地图上出现两座新城市，分别为[city.1.name]和[city.2.name]，两地都拥有海獭特产。请按下教学讯息中的<c:0,180,0>眼球<e>按钮，按下后画面会切换到[city.1.name]。"
+
+TITLE_MOVE_TO_GOOD_1 "调动[city.1.name]的工人到产地工作"
+TUT591_MOVE_TO_GOOD_1 "以鼠标<c:180,0,0>左键<e>点选[city.1.name]，再点击<c:0,180,0>右键<e>展开工作窗口，在工作窗口中，以<c:180,0,0>左键<e>点选一位工人，再用<c:180,0,0>左键<e>将他移到海獭产地上工作。"
+
+TITLE_MOVE_TO_GOOD_2 "调动[city.2.name]的工人到产地工作"
+TUT592_MOVE_TO_GOOD_2 "再将[city.2.name]的一位工人调派到海獭产地工作，两座城市将收集<c:180,0,0>同个特产<>。"
+
+TITLE_CARAVANS "商队"
+TUT595_CARAVANS "为了从事贸易活动，必须拥有商队负责城市间的货物往来。当你拥有贸易科技后，便可以在城市生产商队，不过商队的移动方式不同于一般部队，商队只能在贸易路线上往来。"
+
+TITLE_FREE_CARAVAN "直接得到一个商队"
+TUT596_FREE_CARAVAN "教学模式中，你将直接拥有一个商队，不同于其它部队，商队并不会在地图上显示。至于有多少商队可以动用，数量会显示在贸易窗口中的骆驼图片旁"
+
+TITLE_CREATE_MONOPOLY "开始经营专卖权"
+TUT593_CREATE_MONOPOLY "由于国内不只一个地方生产海獭，因此你可以在[city.1.name]经营海獭专卖。请先点选屏幕右边的  <c:180,0,0>画面<e>面板，接着按下<c:0,180,0>贸易<e>按钮。" 
+
+TITLE_THE_TRADE_SCREEN "贸易窗口"
+TUT594_THE_TRADE_SCREEN "可以透过贸易窗口操控国内外贸易事务，请按下<c:180,0,0>送出<e>按钮。"
+
+TITLE_SELECT_BEAVER "选取海獭"
+TUT595_SELECT_BEAVER "从窗口中可以看出帝国的贸易物产。选取海獭接着按下<c:0,180,0>下一步<e>。"
+
+TITLE_PICK_DESTINATION "选择目的城市"
+TUT596_PICK_DESTINATION "在利润电子表格中，选择将海獭运往[city.2.name]的话能得到最大利润，按下 <c:180,0,0>送出<e>按钮建立[city.2.name]到[city.1.name]的贸易路线。" 
+
+TITLE_4_GOAL_1_ACCOMPLISHED"目标一完成了，建立贸易路线"
+TUT597_4_GOAL_1_ACCOMPLISHED "恭喜你！你巳建立贸易路线，将可获得[gold.amount]黄金。城市间的<c:0,0,200>蓝线<e>就是特产贸易路线。<c:180,0,0>警告<e>：外敌可以在贸易路线上进行抢夺。"
+
+TITLE_LEVEL_5 "等级五：城市管理"
+TUT598_LEVEL_5 "帝国正在成长中，为了加速帝国的成长，你可以学着如何管理各个城市，把每个城市的资源都发挥到极致。"
+
+TITLE_5_GOAL_1 "目标一：调整城市的科技预算设定"
+TUT599_5_GOAL_1 "游戏中有许多策略可以应用，其中一项就是致力于科技发展，这可以让你在科技上凌驾其它文明。"
+
+TITLE_MAX_TAB "最大化卷标"
+TUT600_MAX_TAB "以鼠标<c:180,0,0>左键<e>点选城市，后再选择最大化卷标。<c:180,0,0>生产最大化<e>下的各项资源按钮，能使城市工人随着按钮类别，自动排列出该项资源的最大产出。"
+
+TITLE_MAXIMIZE_SCIENCE "科技资源最大化"
+TUT601_MAXIMIZE_SCIENCE "先以<c:180,0,0>左键<e>点选城市，再按下<c:0,180,0>右键<e>带出工作窗口，接着按下生产最大化中的科技按钮，工人将自动移到最有力于科技发展的工作区块上。" 
+
+TITLE_5_GOAL_1_ACCOMPLISHED "目标一完成了，了解如何调整城市科技设定"
+TUT602_5_GOAL_1_ACCOMPLISHED "科技巳设成最大产值，整个城市的优先任务是帮助国家的科技发展。"
+
+TITLE_SPECIALISTS "专业人士"
+TUT603_SPECIALISTS "除了调整工人的工作区域外，城市内还有其它方式的调整，可以用来强化特定资源的生产，强化快乐度、黄金、科技及物资的产出。"
+
+TITLE_SPECIALIST_WARNING "专业人士的人口条件"
+TUT604_SPECIALIST_WARNING "<c:180,0,0>注意<e>：城市人口至少要达到<c:180,0,0> 8 <e>以上，才能开始雇用专业人士。"
+
+TITLE_LABOR_TAB "劳工卷标"
+TUT605_LABOR_TAB "以左键点选[city.1.name]或是按下教学讯息的<c:0,180,0>眼球<e>，接着点选<c:180,0,0>劳工<e>卷标，工人与奴隶会出现在左边的面板上，而你雇用的专业人士则会出现在右边。"
+
+TITLE_ENTERTAINER "演艺人员"
+TUT606_ENTERTAINER "以鼠标点选演艺人员的<c:0,180,0>右箭头<e>，可增加一名演艺人员，提高城市快乐度一点。"
+
+TITLE_SCIENTIST "科学家"
+TUT607_SCIENTIST "以鼠标点选科学家的<c:0,180,0>右箭头<e>，可增加一名科学家，提高城市的科技贡献十点。"
+
+TITLE_BUILD_QUEUE "建设排程"
+TUT608_BUILD_QUEUE "除了雇用专业人士之外，微调城市的方法还有建设排程。亦即排定一个物品生产的清单，你的城市将会依序执行命令。这些设定就是建设排程。"
+
+TITLE_5_GOAL_2 "目标二：安排建设排程"
+TUT609_5_GOAL_2 "教学等级等级一时，我们曾试着生产战士、谷仓、开拓队。现在可以把这顺序安排在新建城市的建设排程中，或着在你现在的城市里，安排城市未来的建设排程。"
+
+TITLE_QUEUE_HELP "安排建设排程"
+TUT610_QUEUE_HELP "选择城市，移到<c:0,180,0>物资<e>卷标，再按下<c:180,0,0>建设排程<e>按钮，即可开始安排建设排程。"
+
+TITLE_ADD_ITEMS_TO_QUEUE "修改建设排程"
+TUT610A_ADD_ITEMS_TO_QUEUE "可生产的物品会列在左边。建设排程则会列在右边。从左边名单选择欲生产的物品，再按下<c:180,0,0>新增箭头<e>就可将物品加入建设排程中。"
+
+TITLE_5_GOAL_2_ACCOMPLISHED "目标二完成了，学会建设排程安排"
+TUT611_5_GOAL_2_ACCOMPLISHED "每座城市都可以开始安排建设排程。当建设排程完成第一项物品后，会自动开始制造下一个物品。"
+
+TITLE_5_GOAL_3 "目标三：操作城市总览"
+TUT612_5_GOAL_3 "用鼠标点选<c:180,0,0>画面<e>按钮，面板展开后再点选<c:180,0,0>城市<e>按钮，在此你也可以下达建筑指令。"
+
+TITLE_CITY_STATUS "城市总览" 
+TUT613_CITY_STATUS "这里会列出所有城市的相关信息。可以由此看到目前各个城市正在生产何种物品，以及生产所需的回合数等信息。"
+
+TITLE_ORDER_2_CITIES "同时让两个城市进行建造"
+TUT615_ORDER_2_CITIES "在城市总览中，选择一个城市后，按住<c:180,0,0> Ctrl <e>键不放，再点选第二个城市，当两个城市都被选择时，接着选取物品，再按<c:0,180,0>建造<e>进行生产。"
+
+TITLE_CITIES_NOT_BUILDING "城市没有进行建造"
+TUT615A_CITIES_NOT_BUILDING "尚未命令城市进行任何建造，你可以从城市的物资卷标或城市总览的画面中，分别处理每个城市的物品建造。"
+
+TITLE_5_GOAL_3_ACCOMPLISHED "目标三完成，学会透过城市总览进行建造"
+TUT616_5_GOAL_3_ACCOMPLISHED "你所选择的两个城市正在制造相同的物品。你也可以利用城市总览设计每个城市的建设排程。"
+
+TITLE_DEFENDING_CITIES "捍卫城市"
+TUT617_DEFENDING_CITIES "将部队放在城市内部有助于城市防御。另外，防御工事的兴建，将有助于部队防御值的提升。"
+
+TITLE_5_GOAL_4 "目标四：部队兴建防御工事"
+TUT618_5_GOAL_4 "部队防御工事的兴建需要两回合的时间，防御工事给予部队额外的防御能力，使敌人更不易击倒他。选择部队之后，再按下<c:180,0,0>F<e>键，或着是点选部队卷标的砖墙图标，便能开始兴建防御工事。"
+
+TITLE_FORTIFY_IN_FIELD "防御工事"
+TUT619_FORTIFY_IN_FIELD "当部队花费两回合的时间，完成防御工事时，部队四周会围起矮墙。可以让驻扎在城市或战略要地的部队筑起防御工事，加强防卫能力。"
+
+TITLE_LEVEL_5_COMPLETE "目标五完成了！"
+TUT620_LEVEL_5_COMPLETE "恭喜你！你已经学会了解如何设定专业人士、建设排程、以及各项城市工作的细节。"
+
+TITLE_LEVEL_6 "目标六：扩张与胜利"
+TUT621_LEVEL_6 "在了解如何管理城市之后，开始藉由征服或是扩大开垦，拓展帝国疆界，取得最终的胜利。"
+
+TITLE_VICTORY_CONDITIONS "胜利条件"
+TUT622_VICTORY_CONDITIONS "有三种方法可以取得胜利：(1)征服所有国家，(2)先合成出外星人生命，或是(3)到公元3000年时拥有最高的分数。"
+
+TITLE_DIFFERENT_STRATEGIES "各式各样的策略"
+TUT623_DIFFERENT_STRATEGIES "游戏的进行，可以采取不同的策略。你可以穷兵赎武，也可以只求和平与科技成长，一切都由你决定。"
+
+TITLE_EXPLORE_THE_WORLD "探索世界"
+TUT624_EXPLORE_THE_WORLD "无论采用何种策略求胜，都需要去探索世界。其中有个好方法是，派遣船只搭载部队到世界各地进行探险。"
+
+TITLE_FREE_BOAT "直接得到一条船！"
+TUT625_FREE_BOAT "滨海城市[city.1.name]直接获得三桅战船和弓骑。请按下教学讯息中的<c:0,180,0>眼球<e>按钮，将画面带到弓骑身上。"
+ 
+TUT626_FREE_BOAT_AND_CITY "除了获得滨海城市[city.1.name]，还获得一艘三桅战船，请点选教学讯息中的<c:0,180,0>眼球<e>按钮。"
+
+TITLE_LOADING_UNITS "部队登舰"
+TUT627_LOADING_UNITS "以鼠标<c:180,0,0>左键<e>选择部队，再按<c:180,0,0>左键<e>点在船舰上，即可让部队登入舰内。"
+
+TITLE_MOVING_THE_BOAT "舰队航行"
+TUT628A_MOVING_THE_BOAT "先以鼠标<c:180,0,0>左键<e>点选三桅战船，再按<c:180,0,0>左键<e>决定航行的目的地。"
+
+TITLE_6_GOAL_1 "目标一：部队登陆"
+TUT628_6_GOAL_1 "按下<c:180,0,0>N<e>键结束该回合。<c:180,0,0>将三桅战船航行于到岸边<e>，以<c:180,0,0>左键<e>点选船舰之后，再点选部队卷标内的<c:180,0,0>木箱图标<e>按钮，接着点击于船舰旁的陆地，部队即完成登陆动作。"
+
+TITLE_6_GOAL_1_ACCOMPLISHED "目标一完成了！部队登陆成功！"
+TUT629_6_GOAL_1_ACCOMPLISHED "你现在巳学会登舰与登陆动作。让我们扬起船帆，航向大洋！"
+
+TITLE_END_OF_TUTORIAL "不错唷！完成教学课程了"
+TUT631_END_OF_TUTORIAL "恭喜你！当你看到这个讯息，表示你巳结束教学课程，现在你可以结束游戏，或着从一般模式玩起。谢谢你的参与！"
+
+#TITLE_SPECIAL_UNITS "特殊部队"
+#TUT630_SPECIAL_UNITS "除了探索和战斗，还有一种部队可以透过其它方式削弱敌国，例如奴隶贩子。"
+
+TITLE_DUMBASS_SORT_BUTTONS "类别按钮"
+TUT631_DUMBASS_SORT_BUTTONS "你可以在建造物品选项中，点击类别按钮，可以由此区别部队、城市设施、世界奇观等物品类别。例如你只打算生产部队，点击类别按钮后，你只会见到部队类别供你选择而巳。"
+
+TITLE_ALERT_SAVE "自动储存"
+TUT632_ALERT_SAVE "教学模式中的每个等级，会在过关后储存进度，等级三到等级六过关时，屏幕左边会出现数字，你可以点选对应于教学等级的数字，回顾先前的教学课程。"
+
+TUT632_ALERT_SAVE_NEW "教学模式在每个等级完成后，会自动储存游戏进度。藉由点选画面左边的对应数字，回到你想要重玩的教学等级。如果要重玩等级一的话，重新开始教学模式即可。"
+
+TITLE_LEVEL_2 "等级二"
+TUT633_LEVEL_2 "你要重玩教学模式等级二吗？等级二是资源管理、公共建设、全国性设定等课程。"
+
+TITLE_LEVEL_3 "等级三"
+TUT634_LEVEL_3 "你要重玩教学模式等级三吗？等级三是外交与战斗的课程。"
+
+TITLE_LEVEL_4 "等级四"
+TUT635_LEVEL_4 "你要重玩教学模式等级四吗？等级四是贸易与黄金的课程。"
+
+TITLE_LEVEL_5 "等级五"
+TUT636_LEVEL_5 "你要重玩教学模式等级五吗？等级五教导城市管理、专业人士设定、防御工事兴建等。"
+
+TITLE_LEVEL_6 "等级六"
+TUT637_LEVEL_6 "你要重玩教学模式等级六吗？等级六教导运输部队的搭载与卸载。"
+
+TITLE_ALERT_QUEUE "建设排程教学提示"
+TUT638_ALERT_QUEUE "在安排建设排程的时候，按下建造按钮，即可回到建造清单。"
+
+TITLE_RIGHT_CLICK "请使用鼠标左键！"
+TUT639_RIGHT_CLICK "教学模式是以鼠标<c:0,180,0>左键<e>使用者的角度设计，要继续教学模式的话，请先回到选项将鼠标设定改为<c:0,180,0>左键<e>决定模式，否则就只能结束教学模式。"
+
+
+
+

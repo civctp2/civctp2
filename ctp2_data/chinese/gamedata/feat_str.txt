@@ -1,0 +1,25 @@
+## FEATS OF WONDER STRINGS
+
+FEAT_ACCOMPISHED_TITLE		"奇观竣工之功绩"
+
+## ADVANCE-RELATED FEATS
+FEAT_GOT_CONCRETE		"恭喜！我国率先发明混凝土！混凝土兼具便利、低价的优点，是最理想的建材。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的生产力将提升+ {FeatDB(Value[0]).EffectIncreaseProduction}%！"  
+FEAT_GOT_GUNPOWDER		"恭喜！我国率先发明火药。这是武器领域极富意义的发明，其它国家若想抵抗我军，势将十分辛苦。接下来的 {FeatDB(Value[0]).Duration} 回合中，其它国家所属城市之城墙在抵抗我军攻击时防御力会下降。"
+FEAT_GOT_MASS_PRODUCTION	"恭喜！我国率先发明大量生产。从现在起，我国的生产作业将得装配线、输送带及专职劳工之助。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的生产力将提升+ {FeatDB(Value[0]).EffectIncreaseProduction}%！"
+FEAT_GOT_COMPUTER		"恭喜！我国率先发明计算机。我国的研究机构从现在起能计算更大的数字，执行更多的实验，工作效率也能有所提升。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的科学研究将提升+ {FeatDB(Value[0]).EffectIncreaseScience}%！"  
+FEAT_GOT_ROBOTICS		"恭喜！我国率先发明机器人。由于机器人所提升的效率及生产力，接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的生产力将提升+ {FeatDB(Value[0]).EffectIncreaseProduction}%！"  
+FEAT_GOT_LIFE_EXTENSION		"恭喜！我国率先发明延寿科技。从现在起，我国人民藉由将老弱的身体换成全新年轻健康的身体，而能实质达到永生不死的境界！在接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的整体幸福度将提升+ {FeatDB(Value[0]).EffectIncreaseHappiness}。"  
+
+## CONSTRUCTION-RELATED FEATS
+
+FEAT_BUILT_THEATERS		"我国境内兴建了为数众多的剧场，人民演出的戏剧水准也已获得全球认可。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的幸福度将+ {FeatDB(Value[0]).EffectIncreaseHappiness}，以反映人民对传承给子孙的文化遗产的自豪。"
+FEAT_BUILT_BROKERAGES		"我国境内兴建了为数众多的交易所，更加巩固我国的全球经济竞争力。世界各地的商人、银行家莫不钦佩我国经济的蓬勃发展。我国将在接下来的 {FeatDB(Value[0]).Duration} 回合中，黄金+ {FeatDB(Value[0]).EffectIncreaseCommerce}"
+FEAT_BUILT_INTERNET		"我国境内的几座城市里兴建了计算机中心，军事设施、大学及私人研究中心藉由超级计算机所构成的全国网络连结了起来。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的科学研究将增加+ {FeatDB(Value[0]).EffectIncreaseScience}。"
+FEAT_BUILT_SYNDICATE		"您兴建了数座电视设施，建立了第一个电视网。人们将电视当作他们最主要的情报及娱乐来源。我国在接下来的 {FeatDB(Value[0]).Duration} 回合中，幸福度将+ {FeatDB(Value[0]).EffectIncreaseHappiness}"  
+FEAT_BUILT_ORBITAL_LABS		"您建立轨道实验室的研究网络，实现了世界级的集体研究理想。由于您对国家科学研究计划的杰出管理，接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的科学研究将会+ {FeatDB(Value[0]).EffectIncreaseScience}。"  
+
+## ACTION-RELATED FEATS
+FEAT_SAILED_AROUND_THE_WORLD	"我国成功完成了航行世界一周的伟业！航遍五洋四海的我国海军，对海洋可说是了若指掌，也在航海图上准确绘制出许多航道。因此，我国所有海军舰艇在接下来的 {FeatDB(Value[0]).Duration} 回合中，航行速度将可+ {FeatDB(Value[0]).EffectBoatMovement/100}。"  
+FEAT_CONQUERED_BY_FORCE		"您是不折不扣的征服者！凭借着军事上的英勇、无畏、果断，您征服了一个强大的国家！"  
+FEAT_RECAPTURED_CITY 		"您收复了昔日隶属我国的城市！收复失土提振了人民的士气，让他们在面临敌国外患时，对国家更怀抱着信心及希望。接下来的 {FeatDB(Value[0]).Duration} 回合中，我国的幸福度将能+ {FeatDB(Value[0]).EffectIncreaseHappiness}。"  
+

@@ -1,0 +1,161 @@
+# SpriteEditor.ldl
+
+SpriteEditor {
+
+	string	xanchor	"left"
+	string	yanchor	"top"
+
+	int	xpix	0
+	int	ypix	0
+
+	int	widthpix	800
+	int	heightpix	232
+
+	# File Controls
+	STLoadButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	200
+		int	ypix	170
+		
+		string text "str_SprEd_Load"
+	}
+
+	STSaveButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	300
+		int	ypix	170
+		string text "str_SprEd_Save"
+	}
+
+	# Filename handling
+	Name:CTP2_STANDARD_FONT {
+		string	image0	"error.tga"
+		int	xpix	200
+		int	ypix	152
+		int	widthpix	200
+		int	heightpix	22
+	}
+
+	# Animation Selection
+	STMOVEAnim:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	0
+		string text "str_SprEd_Move"
+
+	}
+
+	STATTACKAnim:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	22
+		string text "str_SprEd_Attack"
+	}
+
+	STIDLEAnim:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	44
+		string text "str_SprEd_Idle"
+	}
+
+	STVICTORYAnim:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	66
+		string text "str_SprEd_Victory"
+	}
+
+	STWORKAnim:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	88
+		string text "str_SprEd_Work"
+	}
+	
+	STPlayStepPlus:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	0
+		string text "str_SprEd_StepPlus"
+	}
+
+	STPlayStepMinus:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	22
+		string text "str_SprEd_StepMinus"
+	}
+
+
+	STPlayOnce:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	44
+		string text "str_SprEd_PlayOnce"
+	}
+	
+	STPlayLoop:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	66
+		string text "str_SprEd_Loop"
+	}
+
+	STFacingPlus:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	88
+		string text "str_SprEd_FacingPlus"
+	}
+
+	STFacingMinus:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	375
+		int	ypix	110
+		string text "str_SprEd_FacingMinus"
+	}
+	# Coords of the current hotspot
+	CoordsHotSpot:CIV_BOX {
+		int	xpix	700
+		int	ypix	20
+		int	widthpix	100
+		int	heightpix	22
+	}
+	# Coords of the cursor on the large window
+	CoordsCursor:CIV_BOX {
+		int	xpix	700
+		int	ypix	50
+		int	widthpix	100
+		int	heightpix	22
+	}
+	CoordsHerald:CIV_BOX {
+		int xpix 700
+		int ypix 80
+		int widthpix 100
+		int heightpix 22
+	}
+}
+
+STLargeImage {
+
+	int	xpix	475
+	int	ypix	0
+
+	int	widthpix	225
+	int	heightpix	225
+}
+$

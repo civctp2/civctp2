@@ -1,0 +1,1474 @@
+#######################################
+# File: citywindow.ldl
+# Last Access: Tue Apr 04 12:50:44 2000
+#######################################
+
+################################################################################
+# List Items
+################################################################################
+
+cw_GovernorPriorityItem:CTP2_LIST_ITEM {
+	int	widthpix	118
+	int	heightpix	20
+	StaticThing:CTP2_STANDARD_FONT {
+		string	objecttype	"ctp2_static"
+		string	just	"center"
+		bool	vertcenter	TRUE
+		int	widthpix	118
+		int	heightpix	20
+	}
+}
+cw_CityItem:CTP2_LIST_ITEM {
+	int	widthpix	180
+	int	heightpix	22
+	StaticThing:CTP2_STANDARD_FONT {
+		string	objecttype	"ctp2_static"
+		string	just	"center"
+		bool	vertcenter	TRUE
+		int	widthpix	180
+		int	heightpix	22
+	}
+}
+
+cw_HappyListItem:CTP2_LIST_ITEM {
+	int widthpix 320
+	int heightpix 20
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 320
+		int heightpix 18
+
+		UnhappyAmount:CTP2_STATIC_BASE {
+			int widthpix 90
+			int heightpix 18
+			int xpix 0
+			int ypix 0
+		}
+#		UnhappyReason:CTP2_STANDARD_FONT {
+#			string objecttype "ctp2_static"
+#			int widthpix 115
+#			int heightpix 18
+#			int xpix 0
+#			int fontcolorred 255
+#			int fontcolorgreen 0
+#			int fontcolorblue 0
+#			bool shadowfont true
+#			string just "left"
+#		}
+#		UnhappyAmount:CTP2_STANDARD_FONT {
+#			string objecttype "ctp2_static"
+#			int widthpix 40
+#			int heightpix 18
+#			int xpix 80
+#		}	
+#		HappyAmount:CTP2_STANDARD_FONT {
+#			string objecttype "ctp2_static"
+#			int widthpix 40
+#			int heightpix 18
+#			int xpix 120
+#		}
+		HappyReason:CTP2_STANDARD_FONT {
+			string objecttype "ctp2_static"
+			int widthpix 100
+			int heightpix 18
+			int xpix 90
+#			int fontcolorred 0
+#			int fontcolorgreen 255
+#			int fontcolorblue 0
+#			bool shadowfont true
+			string just "center"
+		}
+		HappyAmount:CTP2_STATIC_BASE {
+			int widthpix 90
+			int heightpix 18
+			int xpix 190
+			int ypix 0
+		}
+		Numeric:CTP2_STATIC_BASE {
+			int widthpix 40
+			int heightpix 18
+			int xpix 280
+			int ypix 0
+			string text "str_ldl_0"
+		}
+	}
+}
+
+cw_PollutionListItem:CTP2_LIST_ITEM {
+	int widthpix 320
+	int heightpix 20
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 320
+		int heightpix 18
+
+		PollutionReason:CTP2_STANDARD_FONT {
+			string objecttype "ctp2_static"
+			int widthpix 277
+			int heightpix 18
+			int xpix 3
+#			int fontcolorred 255
+#			int fontcolorgreen 0
+#			int fontcolorblue 0
+#			bool shadowfont true
+			string just "left"
+		}
+#		UnhappyAmount:CTP2_STANDARD_FONT {
+#			string objecttype "ctp2_static"
+#			int widthpix 40
+#			int heightpix 18
+#			int xpix 80
+#		}	
+#		HappyAmount:CTP2_STANDARD_FONT {
+#			string objecttype "ctp2_static"
+#			int widthpix 40
+#			int heightpix 18
+#			int xpix 120
+#		}
+		PollutionAmount:CTP2_STANDARD_FONT {
+			string objecttype "ctp2_static"
+			int widthpix 37
+			int heightpix 18
+			int xpix 280
+#			int fontcolorred 0
+#			int fontcolorgreen 255
+#			int fontcolorblue 0
+#			bool shadowfont true
+			string just "right"
+		}
+	}
+}
+
+
+cw_InventoryListItem:CTP2_LIST_ITEM {
+	int	widthpix	320
+	int	heightpix	16
+	StaticThing:CTP2_STATIC_BASE {
+		int xpix 4
+		Label:CTP2_STATIC_BASE {
+			int	xpix	0
+			string	just	"left"
+			bool	vertcenter	TRUE
+			int	widthpix	276
+			int	heightpix	16
+		}
+		Turns:CTP2_STATIC_BASE {
+			int xpix 276
+			string just "right"
+			int widthpix 36
+			int heightpix 16
+			string text "str_ldl_0"
+		}
+	}
+}
+
+################################################################################
+# Templates
+################################################################################
+
+# Label for worker allocation.
+template CITY_WORKER_INFO_LABEL:CTP2_STATIC_BACKGROUND {
+	# Location.
+	int xpix		140
+	string	just	"left"
+	int widthpix 60
+	int heightpix 18
+}
+
+template CITY_WORKER_ALLOCATION_LABEL:CTP2_STATIC_BACKGROUND {
+	# Location.
+	int xpix		2
+}
+
+# Text box information for worker allocation.
+template CITY_WORKER_ALLOCATION_TEXT_BOX:CTP2_STATIC_BASE {
+	# Location.
+	int xpix		156
+	# Size.
+	int	widthpix	28
+	int heightpix   16
+}
+
+# Spinner for changing city worker allocation.
+template CITY_WORKER_ALLOCATION_SPINNER:CTP2_GENERIC_SIZABLE_SPINNER {
+	# Location.
+	int xpix		88
+
+	# Size.
+	int	widthpix	76
+
+	# Default value and range.
+	int	xval		0
+	int	minxval		0
+	int	maxxval		10000
+
+	# Default increments.
+	int	incxval		1
+	int	pagexval	5
+	int focusindex 20
+
+}
+
+template CITY_WORKER_ICON:CTP2_STATIC_BACKGROUND {
+	int xpix 190
+	int widthpix 30
+	int heightpix 30
+	string imageblttype "chroma"
+	bool centerimage true
+}
+
+template CITY_WORKER_ICON_VALUE:CTP2_STATIC_BASE {
+	int xpix 225
+	int widthpix 50
+	int heightpix 30
+}
+
+template CITY_WIN_GLOBAL_ICON:CTP2_STATIC_BASE {
+	int widthpix 25
+	int heightpix 25
+	string imagebltflag "chromakey"
+	bool centerimage true
+}
+
+template CITY_WIN_GLOBAL_ICON_VALUE:CTP2_STATIC_BASE {
+	int widthpix 40
+	int heightpix 25
+	string just "left"
+}
+ 
+# City selection.
+template CITY_WINDOW_PULLDOWN_SPINNER:CTP2_STATIC_GROUP {
+	# Size
+	int		widthpix		228
+	int		heightpix		29
+
+	# Pulldown.
+	Pulldown:CTP2_DROPDOWN {
+		# Location.
+		int		xpix		24
+		int		ypix		0
+		int		widthpix	180
+		int		heightpix	29
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_CURRCITY_DISPLAY"		
+	}
+
+	# Previous.
+	Previous:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+		int		xpix		0
+		int		ypix		0
+
+		# Background.
+		string	image00				"upsp01au.tga"
+		string	image10				"upsp01ah.tga"
+		string	image20				"upsp01ad.tga"
+		string	image30				"upsp01ax.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_PREVCITY_BUTTON"
+	}
+
+	# Next.
+	Next:CTP2_GENERIC_ARROW_BUTTON {
+		# Location.
+		int		xpix		204
+		int		ypix		0
+
+		# Background.
+		string	image00				"upsp01cu.tga"
+		string	image10				"upsp01ch.tga"
+		string	image20				"upsp01cd.tga"
+		string	image30				"upsp01cx.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_NEXTCITY_BUTTON"
+	}
+}
+
+# Governor selection.
+template CITY_GOVERNOR_PULLDOWN_TOGGLE:CTP2_STATIC_GROUP {
+	# Size
+	int		widthpix		180
+	int		heightpix		29
+
+	# Pulldown.
+	Pulldown:CTP2_DROPDOWN {
+		# Location.
+		int		xpix		24
+		int		ypix		0
+		int		widthpix	156
+		int		heightpix	29
+	}
+
+	# On/Off Toggle.
+	Toggle:CTP2_BUTTON_ICONIC {
+		# Two images per layer.
+		int		imagesperlayer		3
+
+		# Background.
+		string	image00				"upbt01aX.tga"
+		string	image01				"upbt01cX.tga"
+		string	image10				"upbt01aU.tga"
+		string	image11				"upbt01cU.tga"
+		string	image20				"upbt01aD.tga"
+		string	image21				"upbt01cD.tga"
+		string	image30				"upbt01aH.tga"
+		string	image31				"upbt01cH.tga"
+	}
+}
+
+#template CITY_WIN_STAT_TAB_PANEL:CTP2_TABBG  {
+#	string objecttype "ctp2_Static"
+#	int xpix 0
+#	int ypix 15
+#	int widthpix 280
+#	int heightpix 260
+#}
+
+#template CITY_WIN_BUILD_TAB_PANEL:CTP2_TABBG  {
+#	string objecttype "ctp2_Static"
+#	int xpix 0
+#	int ypix 15
+#	int widthpix 196
+#	int heightpix 240
+#}
+
+template CITY_WIN_TAB_PANEL:CTP2_TABBG {
+	string objecttype "ctp2_Static"
+	int xpix 121
+	int ypix 15
+	int widthpix 360
+	int heightpix 260
+
+	string	image00	"uptg04b.tga"
+	string	image03	"uptg04e.tga"
+	string	image06	"uptg04h.tga"
+
+}
+
+template CITY_UNIT_BUTTON:CTP2_STATIC_GROUP {
+	int widthpix 86
+	int heightpix 65
+
+	IconBorder:CTP2_STATIC_IMAGE {
+		int xpix 0
+		int ypix 0
+		string image00 "upfg40.tga"
+		int widthpix00 86
+		int heightpix00 65
+		string imageblttype00 "stretch"
+		Button:CTP2_BUTTON_ICONIC_OVERLAY {
+			int numberoflayers 6
+			bool togglebutton true
+			int xpix 3
+			int ypix 3
+			# Background.
+			string	image00		"upcb16X.tga"
+			string	image10		"upcb16U.tga"
+			string	image20		"upcb16D.tga"
+			string	image30		"upcb16H.tga"
+			string  image40     "upcb16D.tga"
+
+			string imageblttype00 "stretch"
+			string imageblttype10 "stretch"
+			string imageblttype20 "stretch"
+			string imageblttype30 "stretch"
+			string imageblttype40 "stretch"
+			string imageblttype50 "stretch"
+
+			int xpix50 2
+			int ypix50 2
+			string imageblttype40 "stretch"
+			int widthpix00 80
+			int widthpix10 80
+			int widthpix20 80
+			int widthpix30 80
+			int widthpix40 80
+			int widthpix50 76
+			int heightpix00 59
+			int heightpix10 59
+			int heightpix20 59
+			int heightpix30 59
+			int heightpix40 59
+			int heightpix50 55
+
+			bool layerupon4 true			
+			bool layeralways4 false
+			bool layeralways5 true
+
+			int focusindex 20
+		}
+	}	
+}
+
+################################################################################
+# Windows
+################################################################################
+
+# City Management dialog definition.
+CityWindow:CTP2_DIALOG_WINDOW {
+	# Title string.
+	string	title	"str_ldl_City_Manager_Title"
+
+	# Close button.
+	CloseButton:CTP2_STANDARD_CLOSE {
+		string shortcut "ESC"
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_EXIT_BUTTON"
+		int focusindex 1
+	}
+
+	EditQueueButton:CTP2_NAV_BUTTON_152 {
+		string	text	"str_ldl_EditQueue"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON"
+		int focusindex 2
+	}
+
+	# advisor button.
+	ShowStatisticsButton:CTP2_STANDARD_ADVISOR {
+
+		# Tooltip
+		string	statustext	"STATUSBAR_CITYMAN_MAIN_SHOWSTATSWIN_BUTTON"
+		int focusindex 3
+	}
+
+################################################################################
+# Start Controls
+################################################################################
+	# City Selection.
+	CityList:CITY_WINDOW_PULLDOWN_SPINNER {
+		# Location.
+		int		xpix	43
+		int		ypix	35
+	}
+
+	# Governor Selection
+	GovernorBox {
+		string	objecttype	"ctp2_static"
+		int	xpix	285
+		int	ypix	36
+		int	widthpix	248
+		int	heightpix	32
+#		int	bevelwidth	1
+		# On/Off Toggle.
+		Label:CITY_WORKER_INFO_LABEL {
+			int xpix 46
+			int ypix 3
+			int widthpix 90
+			int heightpix 20
+			string text "str_ldl_Mayor"
+		}
+
+		Toggle:CTP2_BUTTON_ICONIC {
+			int xpix 101
+			# Two images per layer.
+			int		imagesperlayer		3
+	
+			# Background.
+			string	image00				"upbt01aX.tga"
+			string	image01				"upbt01cX.tga"
+			string	image10				"upbt01aU.tga"
+			string	image11				"upbt01cU.tga"
+			string	image20				"upbt01aD.tga"
+			string	image21				"upbt01cD.tga"
+			string	image30				"upbt01aH.tga"
+			string	image31				"upbt01cH.tga"
+			int focusindex 4
+		}
+		Pulldown:CTP2_DROPDOWN {
+			int	xpix	125
+			int	ypix	0			
+			int	widthpix	118
+			int heightpix 29
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_GOVPRIORITY_MENU"
+			int focusindex 5
+		}
+	}
+
+	Globals:CTP2_STATIC_BASE:CTP2_TABBG {
+		int xpix 48
+		int ypix 85
+		int widthpix 120
+		int heightpix 260
+		# cahnge end art
+		string	image02	"uptg04b.tga"
+		string	image05	"uptg04e.tga"
+		string	image08	"uptg04h.tga"
+
+		# Resource map
+		ResourceMap {
+			string objecttype "ctp2_static"
+			int xpix 6
+			int ypix 6
+			int widthpix 106
+			int heightpix 97
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_CITYLAYOUT_DISPLAY"
+			string	tipwindow	"TOOLTIP_CITYMAN_STATS_CITYLAYOUT_DISPLAY"
+		}
+
+		PopulationLabel:CTP2_STATIC_BASE {
+			int xpix 6
+			int ypix 104
+			int heightpix 16
+			int widthpix 112
+			string text "str_ldl_Population"
+			string just "left"
+		}
+		PopulationValue:CTP2_STATIC_BASE {
+			int xpix 6
+			int ypix 122
+			int heightpix 16
+			int widthpix 112
+			string text "str_ldl_0"
+			string just "left"
+		}
+
+		# Icons...
+		FoodIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix 135
+			int xpix 4
+			string image0 "upic05.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMFOOD_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
+		}
+		ProductionIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix 160
+			int xpix 4
+			string image0 "upic06.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMPROD_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+		}
+		TradeIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix 135
+			int xpix 60
+			string image0 "upic09.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMCOMM_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+		}
+		ScienceIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix 160
+			int xpix 60
+			string image0 "upic07.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMSCI_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+		}
+
+		# Numbers...
+		FoodValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 140
+			int xpix 29
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
+		}
+		ProductionValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 165
+			int xpix 29
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+		}
+		TradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 140
+			int xpix 85
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+		}
+		ScienceValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 165
+			int xpix 85
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+		}
+
+		# Funky bars
+		GrowthBar {
+			string	objecttype	"ctp2_Static"
+			int	xpix	6
+			int	ypix	203
+			int	widthpix	108
+			int	heightpix	16
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_GROWTHRATE_DISPLAY"
+		}
+		GrowthLabel:CTP2_STATIC_BASE {
+			int xpix 6
+			int ypix 185
+			int widthpix 50
+			int heightpix 18
+			string text "str_ldl_CityWinGrowth"
+			string just "left"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_GROWTHRATE_DISPLAY"
+		}
+		GrowthDelta:CTP2_STATIC_BASE {
+			int xpix 60
+			int ypix 185
+			int heightpix 18
+			int widthpix 52
+			string just "right"
+			string text "str_ldl_0"
+		}
+
+		# Groovy bars
+		HappinessBar {
+			string	objecttype	"ctp2_Static"
+			int	xpix	6
+			int	ypix	239
+			int	widthpix	108
+			int	heightpix	16
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_HAPPY_DISPLAY"
+		}
+		HappinessLabel:CTP2_STATIC_BASE {
+			int xpix 6
+			int ypix 221
+			int widthpix 50
+			int heightpix 18
+			string text "str_ldl_CityWinHappiness"
+			string just "left"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_HAPPY_DISPLAY"
+
+		}
+		HappinessValue:CTP2_STATIC_BASE {
+			int xpix 60
+			int ypix 221
+			int heightpix 18
+			int widthpix 52
+			string just "right"
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_HAPPY_DISPLAY"
+
+		}
+	}
+
+	Tabs:CTP2_TAB_GROUP {
+		int xpix 45
+		int ypix 70
+		int widthpix 485
+		int heightpix 260
+		
+		QueueTab:CTP2_TAB {
+			TabButton:CTP2_SMALL_TAB_BUTTON {
+				int xpix 3
+				string text "str_ldl_CityWinProductionTab"
+				int focusindex 6
+			}
+			TabPanel:CITY_WIN_TAB_PANEL {
+				
+				ItemProgress:CTP2_NO_TITLE_PROGRESS_DISPLAY {
+					int xpix 5
+					int ypix 5
+				}
+
+				ItemDescription:CTP2_HYPER_TEXT_BOX {
+					int	xpix	115
+					int	ypix	10
+					int	widthpix	215
+					int	heightpix	53
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_CURRITEM_DISPLAY"
+				}
+				RushBuyButton:CTP2_BUTTON_SMALL {
+					int	xpix	110
+					int	ypix	72
+					string	text	"str_ldl_RushBuy"
+					int	widthpix	110
+					int	heightpix	24
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_RUSHBUY_BUTTON"
+					int focusindex 20
+				}
+				CostsValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+					int	xpix	221
+					int	ypix	73
+					int	widthpix	90
+					string	text	"str_ldl_0"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_RUSHCOST_DISPLAY"
+					string	tipwindow	"TOOLTIP_CITYMAN_MAIN_RUSHCOST_DISPLAY"
+				}
+				ASillyIcon:CTP2_STATIC_BASE {
+					int xpix 311
+					int ypix 73
+					int widthpix 20
+					int heightpix 20
+					string image0 "upic09.tga"
+					string imagebltflag "chromakey"
+				}
+				List:CTP2_LISTBOX {
+					int	xpix	10
+					int	ypix	110
+					int	widthpix	320
+					int	heightpix	130
+					bool 	alwaysranger TRUE
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_QUEUELIST_BUTTON"
+					int focusindex 20
+				}
+			}
+		}
+		InventoryTab:CTP2_TAB {
+			TabButton:CTP2_SMALL_TAB_BUTTON {
+				int xpix 78
+				string text "str_ldl_CityWinInventoryTab"
+				int focusindex 7
+			}
+			TabPanel:CITY_WIN_TAB_PANEL {
+				ItemImage:CTP2_PLAIN_BUILD_BUTTON {
+					int	xpix	244
+					int	ypix	5
+				}
+				ItemDescription:CTP2_HYPER_TEXT_BOX {
+					int	xpix	10
+					int	ypix	10
+					int	widthpix	218
+					int	heightpix	53
+				}
+				SellButton:CTP2_BUTTON_SMALL {
+					int	xpix	6
+					int	ypix	72
+					int	widthpix	110
+					int	heightpix	24
+					string	text	"str_ldl_Sell"
+					int focusindex 20
+				}
+				GivesValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+					int	xpix	119
+					int	ypix	73
+					int	widthpix	90
+					string	text	"str_ldl_0"
+				}
+				ASillyIcon:CTP2_STATIC_BASE {
+					int xpix 213
+					int ypix 73
+					int widthpix 20
+					int heightpix 20
+					string image0 "upic09.tga"
+					string imagebltflag "chromakey"
+				}
+				UpkeepLabel:CTP2_STATIC_BASE {
+					int xpix 228
+					int ypix 90
+					int widthpix 84
+					int heightpix 16
+					string just "right"
+					string text "str_ldl_CityWindowUpkeep"
+				}
+				Icon:CTP2_STATIC_IMAGE {
+					int xpix 314 
+					int ypix 88
+					int widthpix 16
+					int heightpix 16
+					string	image00	"upic09.tga"
+				}
+				List:CTP2_LISTBOX {
+					int	xpix	10
+					int	ypix	110
+					int	widthpix	320
+					int	heightpix	130
+					int focusindex 20
+					bool	alwaysraner TRUE
+				}
+			}
+		}
+
+		Specialists:CTP2_TAB {
+			TabButton:CTP2_SMALL_TAB_BUTTON {
+				int xpix 145
+				string text "str_ldl_CityWinSpecialistTab"
+				int focusIndex 8
+			}
+			TabPanel:CITY_WIN_TAB_PANEL {
+				# Text boxes...
+				TotalCount:CITY_WORKER_ALLOCATION_TEXT_BOX {
+					int	xpix	135					
+					int	ypix	8
+					int	widthpix	80
+					int	heightpix	16
+					string	text	"str_ldl_0"
+				}
+				WorkersCount:CITY_WORKER_ALLOCATION_TEXT_BOX {
+					int	xpix	135
+					int	widthpix	80
+					int	ypix	36
+					string	text	"str_ldl_0"
+					int	heightpix	16
+				}			
+				SlaveCount:CITY_WORKER_ALLOCATION_TEXT_BOX {
+					int	xpix	135
+					int	widthpix	80
+					int	ypix	64
+					string	text	"str_ldl_0"
+					int	heightpix	16
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALSLAVES_DISPLAY"
+				}
+				Total:CITY_WORKER_INFO_LABEL {
+					int	xpix	50
+					int	widthpix	80
+					int	ypix	8
+					string	text	"str_ldl_Citizens"
+				}
+				Workers:CITY_WORKER_INFO_LABEL {
+					int	xpix	50
+					int	widthpix	80
+					int	ypix	36
+					string	text	"str_ldl_Workers"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALWORKERS_DISPLAY"
+				}
+				Slaves:CITY_WORKER_INFO_LABEL {
+					int	xpix	50
+					int	widthpix	80
+					int	ypix	64
+					string	text	"str_ldl_Slaves"
+				}
+				EfficiencyBar {
+					string objecttype "ctp2_Static"
+					int xpix 135
+					int ypix 94
+					int widthpix 175
+					int heightpix 12
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
+				}					
+				EfficiencyLabel:CITY_WORKER_INFO_LABEL {
+					string objecttype "ctp2_Static"
+					int xpix 50
+					int ypix 92
+					int widthpix 80
+					int heightpix 18
+					string text "str_ldl_CityWinEfficiency"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
+				}
+				# Worker Allocation.
+				WorkerBox:CTP2_STATIC_GROUP {
+					# Location.
+					int	xpix		48
+					int	ypix		115
+					int	widthpix	228
+					int	heightpix	145
+			
+					# Labels...
+					Entertainers:CITY_WORKER_ALLOCATION_LABEL {
+						int	ypix	7
+						string	text	"str_ldl_Entertainers"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALENTR_BUTTON"
+					}
+					Farmers:CITY_WORKER_ALLOCATION_LABEL {
+						int	ypix	35
+						string	text	"str_ldl_Farmers"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALFARM_BUTTON"
+					}
+					Laborers:CITY_WORKER_ALLOCATION_LABEL {
+						int	ypix	63
+						string	text	"str_ldl_Laborers"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALLABR_BUTTON"
+					}
+					Merchants:CITY_WORKER_ALLOCATION_LABEL {
+						int	ypix	91
+						string	text	"str_ldl_Merchants"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALMRCH_BUTTON"
+					}
+					Scientists:CITY_WORKER_ALLOCATION_LABEL {
+						int	ypix	119
+						string	text	"str_ldl_Scientists"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALSCI_BUTTON"
+					}
+					# Spinners...
+					EntertainersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
+						int	ypix	0
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALENTR_BUTTON"
+					}
+					FarmersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
+						int	ypix	28
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALFARM_BUTTON"
+					}
+					LaborersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
+						int	ypix	56
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALLABR_BUTTON"
+					}
+					MerchantsSpinner:CITY_WORKER_ALLOCATION_SPINNER {
+						int	ypix	84
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALMRCH_BUTTON"
+					}
+					ScientistsSpinner:CITY_WORKER_ALLOCATION_SPINNER {
+						int	ypix	112
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALSCI_BUTTON"
+					}
+
+					# Icons...
+					HappyIcon:CITY_WORKER_ICON {
+						int ypix 0
+						string image0 "upic10.tga"
+
+						# Tooltip
+						string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMHAPP_DISPLAY"
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMHAPP_DISPLAY"
+					}
+					FoodIcon:CITY_WORKER_ICON {
+						int ypix 28
+						string image0 "upic05.tga"
+
+						# Tooltip
+						string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMFOOD_DISPLAY"
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
+					}
+					ProductionIcon:CITY_WORKER_ICON {
+						int ypix 56
+						string image0 "upic06.tga"
+
+						# Tooltip
+						string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMPROD_DISPLAY"
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+					}
+					TradeIcon:CITY_WORKER_ICON {
+						int ypix 84
+						string image0 "upic09.tga"
+
+						# Tooltip
+						string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMCOMM_DISPLAY"
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+					}
+					ScienceIcon:CITY_WORKER_ICON {
+						int ypix 112
+						string image0 "upic07.tga"
+
+						# Tooltip
+						string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMSCI_DISPLAY"
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+					}
+
+					# Numbers...
+					HappyValue:CITY_WORKER_ICON_VALUE {
+						int ypix 0
+						string text "str_ldl_0"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMHAPP_DISPLAY"
+					}
+					FoodValue:CITY_WORKER_ICON_VALUE {
+						int ypix 28
+						string text "str_ldl_0"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
+					}
+					ProductionValue:CITY_WORKER_ICON_VALUE {
+						int ypix 56
+						string text "str_ldl_0"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+					}
+					TradeValue:CITY_WORKER_ICON_VALUE {
+						int ypix 84
+						string text "str_ldl_0"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+					}
+					ScienceValue:CITY_WORKER_ICON_VALUE {
+						int ypix 112
+						string text "str_ldl_0"
+
+						# Tooltip
+						string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+					}
+				}
+			}
+		}
+
+		Statistics:CTP2_TAB {
+			TabButton:CTP2_SMALL_TAB_BUTTON {
+				int xpix 221
+				string text "str_ldl_CityWinStatisticsTab"
+				int focusindex 9
+			}
+			TabPanel:CITY_WIN_TAB_PANEL {
+
+				#Happiness data
+				HappinessLabel:CTP2_STATIC_BASE {
+					int widthpix 155
+					int xpix 10
+					int ypix 5
+					int heightpix 16
+					string just "right"
+					string pattern "uptg04e.tga"
+					string text "str_ldl_CityWinHappiness"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_STATS_HAPPY_DISPLAY"
+				}
+		
+				HappinessTotalLabel:CTP2_STATIC_BASE {
+					int xpix 175
+					int ypix 5
+					int heightpix 16
+					int widthpix 155
+					string pattern "uptg04e.tga"
+					string text "str_ldl_CityWinTotalHappinessFormat"
+					string just "left"
+				}
+
+				HappinessList:CTP2_LISTBOX {
+					int widthpix 320
+					int heightpix 80
+					int xpix 10
+					int ypix 26
+					int focusindex 20
+				}
+
+				# Pollution data
+				PollutionLabel:CTP2_STATIC_BASE {
+					int widthpix 155
+					int ypix 126
+					int xpix 10
+					int heightpix 16
+					string pattern "uptg04e.tga"
+					string just "right"
+					string text "str_ldl_CityWinPollution"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_CITYMAN_STATS_POLLUTION_DISPLAY"
+				}
+
+				PollutionTotalLabel:CTP2_STATIC_BASE {
+					int xpix 175
+					int ypix 126
+					int heightpix 16
+					int widthpix 155
+					string pattern "uptg04e.tga"
+					string text "str_ldl_TotalPollutionFormat"
+					string just "left"
+				}
+
+				PollutionList:CTP2_LISTBOX {
+					int widthpix 320
+					int heightpix 80
+					int xpix 10
+					int ypix 147
+				}
+
+				# Crime data
+				Crime:CTP2_STATIC_BASE {
+					int xpix 61
+					int ypix 234	
+					int widthpix 190
+					int heightpix 18
+					string text "str_ldl_CityWinCrimeFormat"
+					string pattern "uptg04e.tga"
+				}
+			}
+		}
+
+		Units:CTP2_TAB {
+			TabButton:CTP2_SMALL_TAB_BUTTON {
+				int xpix 272
+				string text "str_ldl_CityWinUnitsTab"
+				int focusIndex 10
+			}
+			TabPanel:CITY_WIN_TAB_PANEL {
+				Label:CTP2_STATIC_BASE {
+					int xpix 6
+					int ypix 6
+					int widthpix 348
+					int heightpix 18
+					string text "str_ldl_UnitsGarrisonedInCity"
+				}
+				UnitButtons:CTP2_STATIC_BASE {
+					int ypix 24
+					b00:CITY_UNIT_BUTTON {
+						int xpix 6
+						int ypix 6
+						int bevelwidth 10
+					}
+					b10:CITY_UNIT_BUTTON {
+						int xpix 92
+						int ypix 6
+					}
+					b20:CITY_UNIT_BUTTON {
+						int xpix 178
+						int ypix 6
+					}
+					b30:CITY_UNIT_BUTTON {
+						int xpix 264
+						int ypix 6
+					}
+
+					b01:CITY_UNIT_BUTTON {
+						int xpix 6
+						int ypix 73
+					}
+					b11:CITY_UNIT_BUTTON {
+						int xpix 92
+						int ypix 73
+					}
+					b21:CITY_UNIT_BUTTON {
+						int xpix 178
+						int ypix 73
+					}
+					b31:CITY_UNIT_BUTTON {
+						int xpix 264
+						int ypix 73
+					}
+
+					b02:CITY_UNIT_BUTTON {
+						int xpix 6
+						int ypix 140
+					}
+					b12:CITY_UNIT_BUTTON {
+						int xpix 92
+						int ypix 140
+					}
+					b22:CITY_UNIT_BUTTON {
+						int xpix 178
+						int ypix 140
+					}
+					b32:CITY_UNIT_BUTTON {
+						int xpix 264
+						int ypix 140
+					}
+
+					ActivateButton:CTP2_BUTTON_SMALL {
+						int xpix 10
+						int ypix 207
+						int widthpix 166
+						int heightpix 18
+						string text "str_ldl_ActivateUnit"
+						int focusindex 20
+					}
+
+					DisbandButton:CTP2_BUTTON_SMALL {
+						int xpix 181
+						int ypix 207
+						int widthpix 166
+						int heightpix 18
+						string text "str_ldl_DisbandUnit"
+						int focusindex 20
+					}
+				}
+			}
+		}
+	}
+		
+################################################################################
+# End Controls
+################################################################################
+
+	# Background image.
+	Background:CTP2_DIALOG_BG {
+		string image00 "uptg20a.tga"
+		string image02 "uptg20c.tga"
+		string image03 "uptg20d.tga"
+		string image05 "uptg20f.tga"
+	}
+}
+
+
+CITY_WINDOW_DATA_LABEL:CTP2_STANDARD_FONT {
+	string	objecttype	"ctp2_static"
+	int	heightpix	24
+	bool	multiimagestatic	TRUE
+	string	image0	"UPFT01A.tga"
+	string	image1	"UPTT01B.tga"
+	string	image2	"UPFT01C.tga"
+	string	imageblttype	"tile"
+	string	imagebltflag	"copy"
+}
+
+CityStatisticsWindow:CTP2_WINDOW {
+	int	xpix	0
+	int	ypix	25
+	int	widthpix	224
+	int	heightpix	350
+#	string	title	"str_ldl_Statistics"
+	Advice:CTP2_HYPER_TEXT_BOX {
+		int xpix 34
+		int ypix 78
+		int widthpix 159
+		int heightpix 222
+		string pattern "uptg20e.tga"
+	}
+		
+	Title:CTP2_STATIC_BASE:CTP_GREY_TITLE_FONT {
+		int xpix 33
+		int ypix 48
+		int widthpix 161
+		int heightpix 16
+		int fontsize 10
+		string text "str_ldl_CityAdvisor"
+	}
+#	ResourceButton:CTP2_BUTTON_SMALL {
+#		string	text	"str_ldl_ShowResourceMap"
+#		int	xpix	25
+#		int	ypix	168
+#		int	widthpix	149
+#		int	heightpix	24
+#	}
+#	Map {
+#		string	objecttype	"ctp2_static"
+#		int	xpix	3
+#		int	ypix	23
+#		int	widthpix	194
+#		int	heightpix	141
+#		string	pattern	"cloudmap.tga"
+#	}
+#	ResourceBox {
+#		string	objecttype	"ctp2_static"
+#		int	xpix	28
+#		int	ypix	78
+#		int	widthpix	97
+#		int	heightpix	136
+#		FoodIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	2
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_F"
+#		}
+#		FoodValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	2
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#		FarmsIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	24
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_F"
+#		}
+#		FarmsValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	24
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#		ProdIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	46
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_P"
+#		}
+#		ProdValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	46
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#		MinesIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	68
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_M"
+#		}
+#		MinesValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	68
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#		CommerceIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	90
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_C"
+#		}
+#		CommerceValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	90
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#		ATMIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	112
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_A"
+#		}
+#		ATMValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	42
+#			int	ypix	112
+#			int	widthpix	50
+#			string	text	"str_ldl_0"
+#		}
+#	}
+#	StatBox {
+#		string	objecttype	"ctp2_static"
+#		int	xpix	28
+#		int	ypix	78
+#		int	widthpix	99
+#		int	heightpix	129
+#		HappyIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	4
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_H"
+#		}
+#		HappyValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	44
+#			int	ypix	4
+#			int	widthpix	50
+#			string	text	"str_ldl_CityHack_HVal"
+#		}
+#		FoodIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	29
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_F"
+#		}
+#		FoodValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	44
+#			int	ypix	29
+#			int	widthpix	50
+#			string	text	"str_ldl_CityHack_FVal"
+#		}
+#		ProdIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	54
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_P"
+#		}
+#		ProdValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	44
+#			int	ypix	54
+#			int	widthpix	50
+#			string	text	"str_ldl_CityHack_PVal"
+#		}
+#		GoldIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	79
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_G"
+#		}
+#		GoldValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	44
+#			int	ypix	79
+#			int	widthpix	50
+#			string	text	"str_ldl_CityHack_GVal"
+#		}
+#		SciIcon:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	5
+#			int	ypix	104
+#			int	widthpix	20
+#			string	text	"str_ldl_CityHack_S"
+#		}
+#		SciValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#			int	xpix	44
+#			int	ypix	104
+#			int	widthpix	50
+#			string	text	"str_ldl_CityHack_SVal"
+#		}
+#	}
+#	Percent:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	heightpix	20
+#		int	xpix	115
+#		int	ypix	325
+#		int	widthpix	55
+#		string	text	"str_ldl_percent"
+#	}
+#	Efficiency:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	xpix	29
+#		int	ypix	325
+#		int	widthpix	80
+#		string	text	"str_ldl_0"
+#	}
+#	PopulationLabel:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	heightpix	20
+#		int	xpix	29
+#		int	ypix	374
+#		int	widthpix	80
+#		string	text	"str_ldl_Population"
+#	}
+#	PopulationValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	heightpix	20
+#		int	xpix	115
+#		int	ypix	374
+#		int	widthpix	55
+#		string	text	"str_ldl_0"
+#	}
+#	GrowthLabel:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	heightpix	20
+#		int	xpix	29
+#		int	ypix	349
+#		int	widthpix	80
+#		string	text	"str_ldl_Growth"
+#	}
+#	GrowthValue:CTP2_GENERIC_TEXT_DISPLAY_20 {
+#		int	heightpix	20
+#		int	xpix	115
+#		int	ypix	350
+#		int	widthpix	55
+#		string	text	"str_ldl_0"
+#	}
+	Background {
+		string	objecttype	"ctp2_static"
+		string	pattern	"UPfg400.tga"
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	224
+		int	heightpix	350
+	}
+}
+
+$
+
