@@ -117,6 +117,7 @@ public:
 
 	
 	MapPoint SnipEndUntilCanEnter(const Army & army);
+	MapPoint SnipEndUntilCannotEnter(const Army & army);
 
 };
 

@@ -162,6 +162,7 @@
 #include "c3ui.h"
 #include "Cell.h"
 #include "cellunitlist.h"
+#include "CityAstar.h"
 #include "citydata.h"
 #include "CityInfluenceIterator.h"
 #include "civapp.h"
@@ -289,6 +290,7 @@ extern BOOL                     g_powerPointsMode;
 extern sint32                   g_tileImprovementMode;
 extern sint32                   g_isTileImpPadOn;
 extern sint32                   g_isCheatModeOn;
+extern CityAstar                g_city_astar;
 #ifdef _DEBUG
 extern BOOL                     g_ai_revolt;
 #endif
@@ -6396,12 +6398,11 @@ double Player::GetAtHomeRadius() const
 {
     return g_theGovernmentDB->Get(m_government_type)->GetAtHomeRadius();
 }
-         
+
 double Player::GetOverseasCoef() const
 {
     return g_theGovernmentDB->Get(m_government_type)->GetOverseasCoef();
 }
-     
 
 double Player::GetOverseasDefeatDecay() const
 {
@@ -9775,6 +9776,23 @@ bool Player::HasTransporters() const
 	{
 		if(m_all_units->Access(i)->GetMaxCargoCapacity() > 0)
 			return true;
+	}
+
+	return false;
+}
+
+bool Player::IsLandConnected(MapPoint const & center, sint32 squaredDistance) const
+{
+	for(sint32 i = 0; i < m_all_cities->Num(); ++i)
+	{
+		if(MapPoint::GetSquaredDistance(m_all_cities->Get(i)->GetPos(), center) <= squaredDistance)
+		{
+			float cost = 0.0;
+			if(g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, squaredDistance))
+			{
+				return true;
+			}
+		}
 	}
 
 	return false;

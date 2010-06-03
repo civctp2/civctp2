@@ -474,3 +474,35 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 
 	return last;
 }
+
+MapPoint Path::SnipEndUntilCannotEnter(const Army & army)
+{
+	sint32   i;
+	MapPoint end            = m_start;
+	MapPoint next;
+	sint32   first_cannot_enter = -1;
+
+	for(i = 0; i < m_step.Num(); i++)
+	{
+		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next))
+		{
+			end                = next;
+			first_cannot_enter = i;
+			if(!army.CanEnter(next))
+			{
+				break;
+			}
+		}
+		else
+		{
+			Assert(false);
+		}
+	}
+
+	for(i = m_step.Num() - 1; i > first_cannot_enter; i--)
+	{
+		m_step.DelIndex(i);
+	}
+
+	return end;
+}

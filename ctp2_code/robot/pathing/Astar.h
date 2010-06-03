@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -69,15 +69,18 @@ protected:
                  AstarPoint *best,
                  AstarPoint *cost_tree);
 
+	sint32 m_maxSquaredDistance;
+
 public:
 
 	bool m_pretty_path; 
 
 	Astar()
+	: m_maxSquaredDistance (-1),
+	  m_pretty_path        (false)
 	{
-		
-		m_pretty_path = false;
-	}
+	};
+
 	virtual ~Astar() { };
 
 	virtual float EstimateFutureCost(const MapPoint &pos, const MapPoint &dest);

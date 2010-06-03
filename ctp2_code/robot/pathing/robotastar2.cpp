@@ -38,9 +38,6 @@
 #include "c3errors.h"
 #include "Globals.h"
 
-
-
-
 #include "dynarr.h"
 #include "Path.h"
 #include "UnitAstar.h"
@@ -141,12 +138,9 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 	pos_owner = g_theWorld->GetCell(pos)->GetOwner();
 	if (can_enter)
 	{
-		
 		if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
 			return true;
-			
-		
-		
+
 		prev_owner = g_theWorld->GetCell(prev)->GetOwner();
 		if ((prev_owner == pos_owner) &&
 			!(m_incursionPermission & (0x1 << prev_owner)))
@@ -161,39 +155,36 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 	return false;
 }
 
-
-bool RobotAstar2::FindPath( const PathType & pathType, 
+bool RobotAstar2::FindPath( const PathType & pathType,
 							const Army & army,
-							const uint32 & army_move_type, 
-							const MapPoint & start, 
-							const MapPoint & dest, 
+							const uint32 & army_move_type,
+							const MapPoint & start,
+							const MapPoint & dest,
 							const bool & check_dest,
 							const sint32 & trans_dest_cont,
 							const float & trans_max_r,
 							Path & new_path,
-							float & total_cost ) 
-						   
+							float & total_cost )
 {
 	sint32 cutoff = 20000;
 
 	sint32 nodes_opened = 0;
 	const bool no_straight_lines = false;
 	const bool check_units_in_cell = true;
-	bool is_broken_path = false; 
+	bool is_broken_path = false;
 	const bool pretty_path = false;
 	Path bad_path;
 
-	m_pathType = pathType; 
+	m_pathType = pathType;
 	m_transDestCont = trans_dest_cont;
 	m_transMaxR = trans_max_r;
 	m_owner = g_theWorld->GetOwner(start);
 
-	sint32 nUnits; 
-	uint32 move_intersection; 
-	uint32 move_union; 
-	m_is_robot = true; 
-	
-	
+	sint32 nUnits;
+	uint32 move_intersection;
+	uint32 move_union;
+	m_is_robot = true;
+
 	bool isspecial, cancapture, haszoc, canbombard;
 	bool isstealth;
 	sint32 maxattack, maxdefense;
@@ -217,7 +208,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	
 	if (army_move_type != 0x0)
 	{
-		
 		nUnits = 1;
 		move_intersection = army_move_type;
 		move_union = 0;
@@ -226,11 +216,10 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	}
 	else
 	{
-		
 		UnitAstar::InitArmy (army, nUnits, move_intersection, move_union,  
 			m_army_minmax_move);
 	}
-	
+
 	if(!UnitAstar::FindPath(army,
 	                        nUnits,
 	                        move_intersection,
@@ -256,10 +245,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	return !is_broken_path;
 }
 
-
-
-
-
 bool RobotAstar2::EntryCost( const MapPoint &prev, 
 							   const MapPoint &pos,
 							   float & cost, 
@@ -275,7 +260,7 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 		m_isTransporter = false;
 	}
 
-	bool r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
+	bool r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry);
 
 	if (r)
 	{
@@ -287,6 +272,14 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 		case PATH_TYPE_DEFENSIVE:
 			r = DefensivePathCallback(r, prev, pos, is_zoc, cost, entry);
 			break;
+		}
+
+		if(m_is_robot && pos != m_army->RetPos() && pos != m_dest && cost < k_ASTAR_BIG)
+		{
+			if(CheckIsDangerForPos(pos))
+			{
+				cost      *= k_MOVE_ISDANGER_COST;
+			}
 		}
 
 		if (cost < 1.0)
@@ -313,19 +306,18 @@ void RobotAstar2::RecalcEntryCost(AstarPoint *parent,
 							   new_is_zoc, 
 							   new_entry);
 
-	if ((new_entry_cost < k_ASTAR_BIG) && (new_entry == ASTAR_CAN_ENTER)) 
+	if ((new_entry_cost < k_ASTAR_BIG) && (new_entry == ASTAR_CAN_ENTER))
+	{
+		switch (m_pathType)
 		{
-			switch (m_pathType) 
-				{
-				case PATH_TYPE_TRANSPORT:
-					TransportPathCallback(true, parent->m_pos, node->m_pos, new_is_zoc, 
-										  new_entry_cost, new_entry);
-					break;
-				case PATH_TYPE_DEFENSIVE:
-					DefensivePathCallback(true, parent->m_pos, node->m_pos, new_is_zoc, 
-										  new_entry_cost, new_entry);
-					break;
-				}
+			case PATH_TYPE_TRANSPORT:
+				TransportPathCallback(true, parent->m_pos, node->m_pos, new_is_zoc,
+									  new_entry_cost, new_entry);
+				break;
+			case PATH_TYPE_DEFENSIVE:
+				DefensivePathCallback(true, parent->m_pos, node->m_pos, new_is_zoc,
+									  new_entry_cost, new_entry);
+				break;
 		}
+	}
 }
-

@@ -116,7 +116,7 @@ public:
 
 	bool NothingNeeded() const;
 	void Log_Debug_Info(const int & log, sint32 playerId, char * text) const;
-	bool HasEnough(const Squad_Strength & otherStrength) const;
+	bool HasEnough(const Squad_Strength & otherStrength, bool ignoreBombard = false) const;
 	float GetTotalMissing(const Squad_Strength & otherStrength) const;
 
 protected:

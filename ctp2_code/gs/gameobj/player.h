@@ -1069,6 +1069,8 @@ public:
 	bool HasCostalCities() const;
 	bool HasTransporters() const;
 
+	bool IsLandConnected(MapPoint const & center, sint32 size) const;
+
 private:
 	/// @ToDo: This is a copy from governor, merge both.
 	struct CityDist

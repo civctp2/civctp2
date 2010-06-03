@@ -144,6 +144,13 @@ bool CityAstar::EntryCost
 	}
 	else
 	{
+		if(m_pathLand && g_theWorld->IsWater(pos))
+		{
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
+			return false;
+		}
+
 		Cell *  entryCell   = g_theWorld->GetCell(pos);
 
 		cost  = static_cast<float>(entryCell->GetMoveCost());
@@ -171,6 +178,27 @@ sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 	return SOUTH;
 }
 
+bool CityAstar::IsLandConnected
+(
+    PLAYER_INDEX        owner,
+    MapPoint const &    start,
+    MapPoint const &    dest,
+    float &             cost,
+    sint32              maxSquaredDistance
+)
+{
+	m_alliance_mask      = g_player[m_owner]->GetMaskAlliance();
+	m_pathRoad           = true;
+	m_owner              = owner;
+	m_pathLand           = true;
+	m_maxSquaredDistance = maxSquaredDistance;
+
+	Path    tmp_path;
+	sint32  nodes_opened    = 0;
+
+	return FindPath(start, dest, tmp_path, cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
+}
+
 void CityAstar::FindCityDist
 (
     PLAYER_INDEX        owner,
@@ -179,9 +207,11 @@ void CityAstar::FindCityDist
     float &             cost
 )
 {
-	m_alliance_mask     = g_player[m_owner]->GetMaskAlliance();
-	m_pathRoad          = false;
-	m_owner             = owner;
+	m_alliance_mask      = g_player[m_owner]->GetMaskAlliance();
+	m_pathRoad           = false;
+	m_owner              = owner;
+	m_pathLand           = false;
+	m_maxSquaredDistance = -1;
 
 	Path    tmp_path; 
 	sint32  nodes_opened    = 0;
@@ -201,14 +231,17 @@ bool CityAstar::FindRoadPath
 	float &             total_cost
 )
 {
-	m_alliance_mask     = 0x0;
-	m_pathRoad          = true;
-	m_owner             = owner;
+	m_alliance_mask      = 0x0;
+	m_pathRoad           = true;
+	m_owner              = owner;
+	m_pathLand           = false;
+	m_maxSquaredDistance = -1;
 
 	total_cost          = 0.0;
 
 	sint32 nodes_opened = 0;
 
-	return FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
-}
+	FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 
+	return total_cost > 0.0;
+}

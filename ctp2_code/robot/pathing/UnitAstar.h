@@ -45,6 +45,7 @@ class Cell;
 class CityData;
 class UnitAstar : public Astar
 {
+protected:
     uint32 m_move_union;
     uint32 m_move_intersection;
     sint32 m_max_dir;
@@ -58,7 +59,6 @@ class UnitAstar : public Astar
    
     sint32 m_nUnits;
 
-protected:
     Army m_army;
 
     float m_army_minmax_move;

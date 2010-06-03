@@ -102,6 +102,7 @@ using namespace std;
 const Utility Goal::BAD_UTILITY = -99999999;
 const Utility Goal::MAX_UTILITY =  99999999;
 
+#include "ConstRecord.h"
 #include "GoalRecord.h"
 #include "OrderRecord.h"
 #include "StrategyRecord.h"
@@ -132,7 +133,6 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "World.h"
 
 #include "ctpaidebug.h"
-#include "GoalRecord.h"
 
 Goal::Goal()
 :
@@ -360,10 +360,6 @@ void Goal::Set_Needs_Transporter(const bool needs_transporter)
 
 void Goal::Set_Needs_Transporter(Agent_ptr agent_ptr)
 {
-
-	SQUAD_CLASS squadClass = agent_ptr->Get_Squad_Class();
-	sint32 cont = g_theWorld->GetContinent(agent_ptr->Get_Pos());
-
 	for
 	(
 	    Plan_List::iterator match_iter  = m_matches.begin();
@@ -371,14 +367,8 @@ void Goal::Set_Needs_Transporter(Agent_ptr agent_ptr)
 	                      ++match_iter
 	)
 	{
-		if
-		  (
-		       squadClass == match_iter->Get_Agent()->Get_Squad_Class()
-		    && cont       == g_theWorld->GetContinent(match_iter->Get_Agent()->Get_Pos())
-		  )
-		{
+		if(agent_ptr == match_iter->Get_Agent())
 			match_iter->Set_Needs_Transporter(true);
-		}
 	}
 }
 
@@ -1255,6 +1245,8 @@ void Goal::Compute_Needed_Troop_Flow()
 		// why only one unit ? Why then zero units? - Martin Gühmann
 		// by bringing a real army to pirate or pillage, it can be ready for seige or attack
 		// a single unit is quite defenseless - Calvitix
+		// A real army may not be ready for siege but a few turns later some more units would be
+		// there and in the meantime the army was dissolved
 
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	if(goal_record->GetTargetTypeChokePoint())
@@ -1426,31 +1418,9 @@ void Goal::Compute_Needed_Troop_Flow()
 		static_cast<float>(force_match->GetBombardMatch()),
 		static_cast<float>(force_match->GetValueMatch()));
 
-	if (Needs_Transporter())
-	{
-		sint16 const    dest_cont       = 
-		    g_theWorld->GetContinent(pos);
-		bool            need_transport  = false;
-
-		for
-		(
-		    Agent_List::iterator agent_iter  = m_agents.begin(); 
-		                         agent_iter != m_agents.end() && !need_transport;
-		                       ++agent_iter
-		)
-		{
-			Assert(*agent_iter);
-
-			need_transport = 
-			    dest_cont != g_theWorld->GetContinent((*agent_iter)->Get_Pos());
-		}
-
-		if (!need_transport)
-		{
-			// Has to be modified
-			m_current_needed_strength.Set_Transport(0);
-		}
-	}
+	// Set_Pos_Strength also retrieves the transport capacity at pos
+	// which of course need not be matched
+	m_current_needed_strength.Set_Transport(0);
 }
 
 Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
@@ -1844,7 +1814,7 @@ Utility Goal::Compute_Raw_Priority()
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 
-	//alway compute a foreign center (even if the target is owned by the player
+	// Allways compute a foreign center (even if the target is owned by the player
 	// otherwise it compute with coords (0,0) !!
 	MapPoint empire_center         = map.GetEmpireCenter(m_playerId);
 	MapPoint foreign_empire_center = (target_owner > 0 && m_playerId != target_owner) ? map.GetEmpireCenter(target_owner) : map.GetNearestForeigner(m_playerId, target_pos);
@@ -1875,6 +1845,8 @@ Utility Goal::Compute_Raw_Priority()
 	double report_cell_InEnemyTerritory = 0.0;
 	double report_cell_SlaveryProtection= 0.0;
 	double report_cell_SmallCitySize    = 0.0;
+	double report_cell_CityConnected    = 0.0;
+	double report_cell_SmallEmpireBonus = 0.0;
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
@@ -2059,6 +2031,30 @@ Utility Goal::Compute_Raw_Priority()
 		report_cell_SmallCitySize = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue     = cell_value;
 #endif //_DEBUG
+
+	if
+	  (
+	      goal_rec->GetLandToCloseCityConnectionBonus() != 0
+	   && player_ptr->IsLandConnected(target_pos, 2 * g_theConstDB->Get(0)->GetBorderSquaredRadius())
+	  )
+	{
+		cell_value += goal_rec->GetLandToCloseCityConnectionBonus();
+	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		report_cell_CityConnected = cell_value - report_cell_lastvalue;
+		report_cell_lastvalue     = cell_value;
+#endif //_DEBUG
+
+		if(target_owner != m_playerId && g_player[target_owner]->GetNumCities() < goal_rec->GetSmallTargetEmpireSize())
+		{
+			cell_value += goal_rec->GetSmallTargetEmpireBonus();
+		}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		report_cell_SmallEmpireBonus = cell_value - report_cell_lastvalue;
+		report_cell_lastvalue        = cell_value;
+#endif //_DEBUG
 	}
 
 	sint32 threaten_bonus = GetThreatenBonus();
@@ -2076,7 +2072,7 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[1024];
-		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t\t%8f,\t%8f,",
 		        this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
@@ -2103,7 +2099,7 @@ Utility Goal::Compute_Raw_Priority()
 		        threaten_bonus
 		       );
 
-		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%s\n", buff, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
+		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t%8f,\t%s\n", buff, report_cell_CityConnected, report_cell_SmallEmpireBonus, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:
 /*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
@@ -2147,20 +2143,46 @@ GOAL_RESULT Goal::Execute_Task()
 
 	Assert(m_agents.begin() != m_agents.end());
 
-	      Agent_ptr agent_ptr = (Agent_ptr) *m_agents.begin();
-	      MapPoint     goto_pos     = Get_Target_Pos(agent_ptr->Get_Army());
 	const GoalRecord * goal_record  = g_theGoalDB->Get(m_goal_type);
 	      sint32       cells;
 
 	Set_Sub_Task(SUB_TASK_GOAL);
 
-	// Add this condition to avoid that a 12 units army with SEIGE goal retreat 
-	// at 1 tile near the city, because it has left 1 unit and has to group with 
-	// another one. I Think it is better to go on an seige the city (if there is 
-	// more than 2/3 left, if more than 8 units).
-	/// @ToDo: Reconsider NeverSatisfied
-	bool hastogowithoutgrouping = (goal_record->GetNeverSatisfied() && agent_ptr->GetRounds(goto_pos,cells) <= 1)
-	                              && m_current_attacking_strength.Get_Agent_Count() > (2*k_MAX_ARMY_SIZE/3);
+	bool hastogowithoutgrouping = false;
+
+	if(goal_record->GetNeverSatisfied())
+	{
+		for
+		(
+		    Agent_List::iterator agent_iter  = m_agents.begin();
+		                         agent_iter != m_agents.end();
+		                       ++agent_iter
+		)
+		{
+			Agent_ptr    agent_ptr       = (Agent_ptr) *agent_iter;
+
+			// Add this condition to avoid that a 12 units army with SEIGE goal retreat 
+			// at 1 tile near the city, because it has left 1 unit and has to group with 
+			// another one. I Think it is better to go on an seige the city (if there is 
+			// more than 2/3 left, if more than 8 units).
+			/// @ToDo: Reconsider NeverSatisfied
+			MapPoint     target__pos     = Get_Target_Pos(agent_ptr->Get_Army());
+			MapPoint     current_pos     = agent_ptr->Get_Pos();
+
+			if
+			  (
+			      MapPoint::GetSquaredDistance(target__pos, current_pos) <= 1
+			   && (
+			           agent_ptr->Get_Army()->Num() > (2*k_MAX_ARMY_SIZE/3)
+			        || agent_ptr->Get_Army()->Num() > m_current_attacking_strength.Get_Agent_Count()
+			      )
+			  )
+			{
+				hastogowithoutgrouping = true;
+				break;
+			}
+		}
+	}
 
 	if(Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping)
 	{
@@ -2232,7 +2254,7 @@ GOAL_RESULT Goal::Execute_Task()
 		                       ++agent_iter
 		)
 		{
-			agent_ptr = (Agent_ptr) *agent_iter;
+			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
 			if(agent_ptr->Get_Is_Dead())
 				continue;
@@ -2240,7 +2262,7 @@ GOAL_RESULT Goal::Execute_Task()
 			if(!agent_ptr->Get_Can_Be_Executed())
 				continue;
 
-			if(!GotoGoalTaskSolution(agent_ptr, goto_pos))
+			if(!GotoGoalTaskSolution(agent_ptr, Get_Target_Pos(agent_ptr->Get_Army())))
 			{
 				if(Needs_Transporter() && Get_Transporters_Num() < 1)
 				{
@@ -3663,6 +3685,36 @@ void Goal::GroupTroops()
 	}
 }
 
+MapPoint Goal::MoveToTarget(Agent_ptr rallyAgent)
+{
+	bool check_dest;
+	const GoalRecord * goal_rec = g_theGoalDB->Get(m_goal_type);
+	sint32 range = 0;
+	(void) goal_rec->GetExecute()->GetRange(range);
+	if (range > 0  || 
+		goal_rec->GetExecute()->GetTargetPretestAttackPosition() ||
+		(goal_rec->GetTargetTypeCity() && goal_rec->GetTargetOwnerSelf()))
+		check_dest = false;
+	else
+		check_dest = true;
+
+	Path found_path;
+	bool found = Agent::FindPath(rallyAgent->Get_Army(), Get_Target_Pos(rallyAgent->Get_Army()), check_dest, found_path);
+
+	Assert(found);
+
+	if(!found)
+	{
+		return rallyAgent->Get_Pos();
+	}
+
+	MapPoint rallyPos = found_path.SnipEndUntilCannotEnter(rallyAgent->Get_Army());
+
+	FollowPathToTask(rallyAgent, NULL, rallyPos, found_path);
+
+	return rallyPos;
+}
+
 MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 {
 	MapPoint rallyPos = rallyAgent->Get_Pos();
@@ -3700,7 +3752,8 @@ Agent_ptr Goal::GetRallyAgent() const
 	Agent_ptr rallyFriendlyAgent    = NULL;
 	sint32 minDistance              = 0x7fffffff;
 	sint32 minDistanceAtAll         = 0x7fffffff;
-	sint32 minFriendlyDistance      = 0x7fffffff;
+//	sint32 minFriendlyDistance      = 0x7fffffff;
+	bool   hasCargo                 = false;
 
 	for
 	(
@@ -3711,44 +3764,71 @@ Agent_ptr Goal::GetRallyAgent() const
 	{
 		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
-		if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
+		if(agent_ptr->Get_Army()->HasCargo())
 		{
-			continue;
+			hasCargo = true;
+			break;
 		}
+	}
 
-		sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
-
-		if(distance < minDistanceAtAll)
+	if(hasCargo)
+	{
+		for
+		(
+		    Agent_List::const_iterator agent_iter  = m_agents.begin();
+		                               agent_iter != m_agents.end();
+		                             ++agent_iter
+		)
 		{
-			minDistanceAtAll = distance;
-			rallyAgentAtAll  = agent_ptr;
+			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
+			sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
+
+			if(agent_ptr->Get_Army()->HasCargo() && distance < minDistanceAtAll)
+			{
+				minDistanceAtAll = distance;
+				rallyAgentAtAll  = agent_ptr;
+			}
 		}
-
-		if
-		  (
-		       distance < minDistance
-		    && g_theWorld->IsOnSameContinent(agent_ptr->Get_Pos(), targetPos)
-		  )
+	}
+	else
+	{
+		for
+		(
+		    Agent_List::const_iterator agent_iter  = m_agents.begin();
+		                               agent_iter != m_agents.end();
+		                             ++agent_iter
+		)
 		{
-			minDistance = distance;
-			rallyAgent  = agent_ptr;
-		}
+			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
-		if
-		  (
-		       distance < minFriendlyDistance
-		    && g_theWorld->IsOnSameContinent(agent_ptr->Get_Pos(), targetPos)
-		    && g_theWorld->GetOwner(agent_ptr->Get_Pos()) == agent_ptr->Get_Player_Number()
-		  )
-		{
-			minFriendlyDistance = distance;
-			rallyFriendlyAgent  = agent_ptr;
+			if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
+			{
+				continue;
+			}
+
+			sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
+
+			if(distance < minDistanceAtAll)
+			{
+				minDistanceAtAll = distance;
+				rallyAgentAtAll  = agent_ptr;
+			}
+
+			if
+			  (
+			       distance < minDistance
+			    && g_theWorld->IsOnSameContinent(agent_ptr->Get_Pos(), targetPos)
+			  )
+			{
+				minDistance = distance;
+				rallyAgent  = agent_ptr;
+			}
 		}
 	}
 
 	if(rallyAgent == NULL) rallyAgent = rallyAgentAtAll;
 
-	return (minFriendlyDistance < 0x7fffffff) ? rallyFriendlyAgent : rallyAgent;
+	return rallyAgent;
 }
 
 MapPoint Goal::GetFreeNeighborPos(MapPoint pos) const
@@ -3791,7 +3871,7 @@ bool Goal::RallyTroops()
 		return true;
 	}
 
-	MapPoint     rallyPos   = MoveOutOfCity(rallyAgent);
+	MapPoint     rallyPos   = rallyAgent->Get_Army()->HasCargo() ? MoveToTarget(rallyAgent) : MoveOutOfCity(rallyAgent);
 
 	rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
 
@@ -4091,11 +4171,6 @@ bool Goal::TryTransport(Agent_ptr agent_ptr, const MapPoint & goal_pos)
 	if (g_theGoalDB->Get(m_goal_type)->GetNoTransport())
 		return false;
 
-	// Not so easy, what if a tranport is a shortcut?
-	if ( g_theWorld->GetContinent( goal_pos ) == 
-		 g_theWorld->GetContinent(agent_ptr->Get_Pos()) )
-		return false;
-
 	return LoadTransporters(agent_ptr);
 }
 
@@ -4104,7 +4179,6 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 	std::pair<Utility, Agent_ptr> transporter;
 
 	double          max_utility         = Goal::BAD_UTILITY;
-	sint16 const    dest_cont           = g_theWorld->GetContinent(Get_Target_Pos());
 
 	for
 	(

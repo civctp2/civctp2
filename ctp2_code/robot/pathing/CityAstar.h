@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding for City
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -44,9 +44,8 @@ class CityAstar : public Astar {
                             float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
     sint32 GetMaxDir(MapPoint &pos) const;
 
-     
 public:
-	CityAstar() 
+	CityAstar()
 	: 
 		Astar			(),
 		m_owner			(PLAYER_UNASSIGNED),
@@ -55,18 +54,21 @@ public:
 	{ ; }
 
 
-    void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
-      float &cost);
+	void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+	  float &cost);
+	bool IsLandConnected(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+	  float &cost, sint32 maxSquaredDistance = -1);
 
-	
 	bool FindRoadPath(const MapPoint & start, 
 					  const MapPoint & dest,
 					  PLAYER_INDEX owner,
 					  Path & new_path,
-					  float & total_cost);
+					  float & total_cost
+					 );
 
 private:
 	bool m_pathRoad;
+	bool m_pathLand;
 };
 
 #endif
