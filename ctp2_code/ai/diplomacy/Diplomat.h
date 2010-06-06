@@ -668,6 +668,7 @@ public:
 
 	
 	bool IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const;
+	sint32 GetWeakestEnemy() const;
 
 	
 	bool CanFormAlliance(const PLAYER_INDEX foreignerId);

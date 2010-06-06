@@ -423,9 +423,9 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 			if(m_displayRelations)
 			{
 				if(m_displayPolitical && unit.GetOwner() == owner) 
-					return RadarTileRelationsDarkColor(position, player, unit.GetOwner());
+					return RadarTileRelationsDarkColor(worldpos, player, unit.GetOwner());
 				else
-					return RadarTileRelationsColor(position, player, unit.GetOwner());
+					return RadarTileRelationsColor(worldpos, player, unit.GetOwner());
 			}
 			else
 			{
@@ -439,7 +439,7 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 		if(m_displayPolitical && owner >= 0 && !g_theWorld->IsWater(worldpos) )
 		{
 			if(m_displayRelations)
-				return RadarTileRelationsColor(position, player);
+				return RadarTileRelationsColor(worldpos, player);
 			else
 				return g_colorSet->GetPlayerColor(g_tiledMap->GetVisibleCellOwner(worldpos));
 		}
@@ -1294,7 +1294,7 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
 MapPoint RadarMap::CenterMap(MapPoint const & pos)
 {
 	MapPoint LastPT = m_lastCenteredPoint;
-	if(LastPT.x == 0 && LastPT.y == 0)
+	if(!LastPT.IsValid())
 		LastPT = pos;
 
 	m_lastCenteredPoint = pos;

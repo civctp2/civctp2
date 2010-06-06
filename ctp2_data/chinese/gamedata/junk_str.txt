@@ -1,3 +1,27 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains strings that were/are suppoesed to be removed. (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved risk strings to gl_str.txt. (Aug 31st 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
 # UNIT DESCRIPTIONS #	
 ITEM_OBSOLETE_CIVWIDE 	"junkstring_ITEM_OBSOLETE_CIVWIDE "
 DEFAULT_DESCRIPTION 	"junkstring_DEFAULT_DESCRIPTION "
@@ -161,13 +185,6 @@ DESCRIPTION_WONDER_GLOBAL_SURVEILLANCE_CENTER   "junkstring_DESCRIPTION_WONDER_G
 DESCRIPTION_WONDER_GLOBAL_NANO_CLEANER          "junkstring_DESCRIPTION_WONDER_GLOBAL_NANO_CLEANER"
 DESCRIPTION_WONDER_NATIONAL_SHIELD              "junkstring_DESCRIPTION_WONDER_NATIONAL_SHIELD"
 DESCRIPTION_WONDER_INTERNATIONAL_HUMAN_RIGHTS   "junkstring_DESCRIPTION_WONDER_INTERNATIONAL_HUMAN_RIGHTS"
-
-##Risk##	
-RISK_VILLAGES_ONLY 	"RISK_VILLAGES_ONLY "
-RISK_BORING_HORDES 	"RISK_BORING_HORDES "
-RISK_DECENT_HORDES 	"RISK_DECENT_HORDES "
-RISK_RAGING_HORDES 	"RISK_RAGING_HORDES "
-
 
 ### Placeholder GL Desc Strings ###
 IMPROVE_ACADEMY_PREREQ 				"需要联接到大图书馆"

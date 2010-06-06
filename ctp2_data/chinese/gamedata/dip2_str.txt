@@ -1,4 +1,47 @@
-	## New DIPLOMACY strings ##
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains diplomacy and advisor strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the diplomacy and advisor strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Sychronized files between languages.
+#
+#----------------------------------------------------------------------------
+
+## New DIPLOMACY strings ##
 
 ##
 ## Regard Events
@@ -49,7 +92,8 @@ REGARD_EVENT_ENEMY_NANO_INFECTED_CITY "ÎÒ¹ú¶Ô{player[0].civ_name_singular}½øÐÐÄÎ
 REGARD_EVENT_ENEMY_CREATED_PARK "ÓÉÓÚÎÒ¹ú½øÐÐÄÎÃ×Î¢Ï¸¿Æ¼¼µÄ»ÙÃðÐÔ¹¥»÷£¬Ê¹µÃ{player[0].civ_name_plural}¶ÔÎÒ¹ú¼´º¦ÅÂÓÖÑá¶ñ¡£"
 REGARD_EVENT_ENEMY_INJOINED_CITY "¶ÔÓÚÎÒ¹ú½åÓÉ¿ØËßµÄÌáÊ¾£¬Ñ¹ÖÆÁË{player[0].civ_name_singular}³ÇÊÐÉú²úÒ»ÊÂ£¬Ôì³ÉÁËÁ½¹ú¼äµÄÐ¡Ä¦²Á¡£"
 REGARD_EVENT_ENEMY_PILLAGED "¶ÔÓÚÎÒ¹úÇ¿ÂÓÆäµØÉÏÉèÊ©£¬¸Ã¹úÏàµ±·ß¿®¡£" 
-
+REGARD_EVENT_UNITS_GIFTED				"ÄúµÄ¿¶¿®Î´±»ÒÅÍü¡£"
+REGARD_EVENT_WONDER					"{player[0].civ_name_plural}¶ÔÎÒ¹úËùÓµÓÐµÄÖÚ¶àÆæ¹Û¸Ðµ½Ó¡ÏóÉî¿Ì¡£"
 
 ##
 ## Motivations
@@ -59,13 +103,13 @@ MOTIVATION_ENLIST_FRIENDS_ADVICE "ÎÒÃÇÓ¦ºÅÕÙÓÑ°î£¬Ð­ÖúÎÒÃÇÕ÷·þÍâµÐ¡£"
 MOTIVATION_FEAR_SCIENCE_ADVICE "¿Æ¼¼´´ÐÂµÄ²»×ã£¬Ê´È¥ÁËÎÒ¾üµÄÓ¢ÓÂ¡£ÒªÊ¹¾ü¶ÓÔÚÕ½³¡ÉÏÄÜÁ¢ÓÚ²»°Ü£¬±ØÐëÔö¼Ó¿Æ¼¼ÑÐ·¢µÄÍ¶Èë¡£"
 MOTIVATION_FEAR_MILITARY_ADVICE "Ä¿Ç°ÎÒ¹ú¾üÊÂÁ¦Á¿Æ£Èõ£¬¿ÉÄÜÎÞ·¨µÖµ²ÍâµÐÀ´Ï®¡£¿ÉÍ¸¹ýÁªÃËÌõÔ¼µÄ½¨Á¢£¬À´¹®¹Ì¹ú¼Ò°²È«¡£"
 MOTIVATION_FEAR_TRADE_ADVICE "Îª±£ÓÐ¹ú¼Ò¾ºÕùÁ¦£¬Ó¦µ±ÕñÐËÎÒ¹ú¾­¼Ã¡£¿ÉÍ¸¹ýÃ³Ò×Â·ÏßµÄÍØÕ¹¼°Ã³Ò×Ð­ÒéµÄ½¨Á¢£¬ÒÔ´ø¶¯ÉÌÒµ·¢Õ¹¡£"
+MOTIVATION_FEAR_TECHNOLOGY_ADVICE			"Èô²»¼ÌÐø¿Æ¼¼·¢Õ¹£¬ÎÒ¹úµÄ¾ü¶Ó·¢Õ¹½«ºÜ¿ìÈÕÄºÍ¾Çî"
 MOTIVATION_STOP_PIRACY_ADVICE "ÎÒÃ³Ò×Â·ÏßÕýÔâÊÜÍâ¹úÇ¿ÂÓ£¬Ó¦¼´¿Ì²ÉÈ¡Íâ½»ÐÐ¶¯£¬É¨³ýÕâÏî·×ÈÅ¡£"
 MOTIVATION_MAKE_FRIEND_ADVICE "Ó¦ÊÔ×ÅÓëÇ¿¹ú½¨Á¢»ï°é¹ØÏµ£¬½«ÓÐÒæÓÚ¹ú¼Ò·¢Õ¹¡£"
 MOTIVATION_DESIRE_SCIENCE_ADVICE "ÎÒ¹ú¿Æ¼¼½øÕ¹ÂäºóÓÚµÐ¹ú£¬ÕæÁîÈË¸Ðµ½ÓÇÐÄ¡£¿ÉÊÔ×ÅÍ¸¹ýÍâ½»¹ÜµÀ£¬Òý½ø¿Æ¼¼ÏîÄ¿¡£" MOTIVATION_DESIRE_GOLD_ADVICE "Ó¦Ôö¼Ó»Æ½ðÊÕÈë£¬ÒÔ±ãÄÜ¿ìËÙÍê³ÉÊµÊ±·½°¸¡£"
 MOTIVATION_DESIRE_GOLD_ADVICE "We could use some more gold in our coffers, so that we can better achieve our immediate pursuits."
 MOTIVATION_FEAR_CITY_DEFENSE_ADVICE " ²»ÐÒµØ£¬{city[0].name}ËÆºõ¿ìÂäÈëµÐÈËÊÖÖÐ£¬Ò²ÐíÄÜ½åÓÉÌ¸ÅÐÀ´±ÜÃâ¸Ã³ÇÂÙÏÝ¡£"
 MOTIVATION_FEAR_POLLUTION_ADVICE "ÎÛÈ¾²»½ö»áÔì³ÉÈ«ÇòÅ¯»¯£¬»¹»á´øÀ´ÉúÌ¬ÔÖº¦£¬ÊµÔÚÁîÈËÓÇÐÄ¡£ÎÒÃÇÓ¦ÖÂÁ¦ÓÚÎÛÈ¾¼õÁ¿£¬²¢ºôÓõÊÀ½ç¸÷¹úÒ»Í¬×ö»·±£¡£"
-
 
 ##
 ##  Miscellaneous Diplomacy Strings
@@ -91,6 +135,10 @@ DIP_OFFER_GIVE_CITY "ÔùËÍ³ÇÊÐ"
 DIP_REQUEST_GIVE_CITY "Ë÷ÌÖ³ÇÊÐ"
 DIP_OFFER_WITHDRAW_TROOPS "Ö÷¶¯³·Àë²¿¶Ó"
 DIP_REQUEST_WITHDRAW_TROOPS "ÒªÇó¸Ã¹ú²¿¶Ó³·Àë"
+##DIP_OFFER_WITHDRAW_TROOPS_FROM_ALLIE			"Ö÷¶¯³·³öÃË¹ú"
+##DIP_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE		"ÒªÇóÃË¹ú³·Àë"
+##DIP_OFFER_INVADE					"ÈëÇÖ"
+##DIP_REQUEST_INVADE					"ÒªÇó¸Ã¹úÈëÇÖ"
 DIP_OFFER_STOP_PIRACY "Ö÷¶¯Í£Ö¹Ç¿ÂÓ"
 DIP_REQUEST_STOP_PIRACY "ÒªÇó¸Ã¹úÍ£Ö¹Ç¿ÂÓ"
 DIP_OFFER_BREAK_AGREEMENT "ÖÐÖ¹Ð­Òé"
@@ -107,6 +155,8 @@ DIP_OFFER_GIVE_ADVANCE "ÔùËÍ¿Æ¼¼"
 DIP_REQUEST_GIVE_ADVANCE "Ë÷Çó¿Æ¼¼"
 DIP_OFFER_GIVE_GOLD "ÔùËÍ»Æ½ð"
 DIP_REQUEST_GIVE_GOLD "Ë÷Çó»Æ½ð"
+##DIP_OFFER_GIVE_ANNUAL_GOLD				"Ìá¹©Ëê¹±»Æ½ð"
+##DIP_REQUEST_GIVE_ANNUAL_GOLD				"ÒªÇóËê¹±»Æ½ð"
 DIP_OFFER_REDUCE_POLLUTION "ÎÛÈ¾¼õÁ¿"
 DIP_REQUEST_REDUCE_POLLUTION "ÒªÇóÎÛÈ¾¼õÁ¿"
 DIP_OFFER_MAP "Ìá¹©µØÍ¼"
@@ -139,6 +189,7 @@ DIP_DETAILS_NONE_EX_1 "ÎÞ"
 DIP_DETAILS_NONE_EX_2 "ÎÞ"
 DIP_DETAILS_NONE_EX_3 "ÎÞ"
 DIP_DETAILS_NONE_EX_4 "ÎÞ"
+
 DIP_DETAILS_OFFER_GIVE_CITY_0 "ÓÉÓÚ¹ó¹úÈç´ËÊÜÈË×ð³ç£¬ÎÒÃÇÔ¸Òâ½«{city[0].name}ÓÉ¹ó¹úÍ³ÖÎ¡£"
 DIP_DETAILS_OFFER_GIVE_CITY_1 "»ùÓÚÓÑÒê¹ØÏµ£¬½÷½«{city[0].name}½»ÓÉ¹ó¹úÖÎÀí¡£"
 DIP_DETAILS_OFFER_GIVE_CITY_2 "ÎÒÃÇ±°ÏÂµØ½»³ö{city[0].name}¸ø¹ó¹ú¡£"
@@ -159,6 +210,7 @@ DIP_DETAILS_REQUEST_GIVE_CITY_EX_1 "×÷Îª½»»»Ìõ¼þ£¬ºÃÒâµØ¸æËß¹ó¹ú£¬½»³ö{city[0].n
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_2 "×÷Îª½»»»Ìõ¼þ£¬¿ÒÇë¹ó¹ú½«{city[0].name}½»ÓÉÎÒ¹úÍ³ÖÎ¡£"
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_3 "×÷Îª½»»»Ìõ¼þ£¬ÈôÒªÎÒ¾ü²»ÔÙ²ÉÈ¡½øÒ»²½¶¯×÷µÄ»°£¬¼´¿Ì½»³ö{city[0].name}£¬²»µÃÑÓ³Ù¡£"
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_4 "×÷Îª½»»»Ìõ¼þ£¬ÂíÉÏ¸îÈÃ{city[0].name}°É¡£"
+
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_0 "ÎÒÃÇÖ÷¶¯½«²¿¶Ó³·Àë¹ó¹ú£¬Î¬³ÖÁ½¹ú¼äµÄºÍÆ½¡£"
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_1 "»ùÓÚºÃÒâ£¬ÎÒÃÇÔ¸Òâ½«²¿¶Ó³·Àë¹ó¹ú¡£"
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_2 "ÎÒÃÇÎÞÒâÃ°·¸¹ó¹ú£¬¼´¿Ì½«³·³öÖÍÁô¹ó¹úµÄ²¿¶Ó¡£"
@@ -179,6 +231,7 @@ DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_1 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇÏ£Íû¹ó¹ú²¿¶ÓÈ«Êý³·Àë
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_2 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇÆòÇó¹ó¹ú²¿¶Ó³·³öÎÒ¹ú¾³ÄÚ£¬ÒÔ±£³ÖË«·½ºÍÆ½¡£"
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_3 "×÷Îª½»»»Ìõ¼þ£¬°ÑÄãµÄ²¿¶Ó¼´¿Ì³·³öÎÒ¹ú£¬ÄãÃÇÐÐÎª±ðÌ«ÏùÕÅ¡£"
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_4 "×÷Îª½»»»Ìõ¼þ£¬°ÑÄãµÄ²¿¶Ó¼´¿Ì³·³öÎÒ¹ú£¬²»Òª²»ÖªËÀ»î¡£"
+
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_0 "ÎÒÃÇ»á½«²¿¶Ó³·ÀëÄãµÄÃË¹ú£¬{player[2].country_name}ÈËÃñ½«²»ÔÙÊÜµ½ÎÒÃÇµÄÉ§ÈÅ¡£"
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_1 "ÎÒÃÇ¼´¿Ì½«²¿¶Ó³·Àë{player[2].country_name}¡£"
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_2 "ÎÒÃÇ¼´¿Ì¿ìËÙ³·Àë{player[2].country_name}¡£ÎÒÃÇÎÞÒâÃ°·¸¹ó¹ú¡£"
@@ -199,6 +252,7 @@ DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_1 "×÷Îª½»»»Ìõ¼þ£¬½åÓÉ¹ó¹ú²¿¶Ó´
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_2 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇ½«Ê®·Ö¸ÐÐ»¹ó¹ú²¿¶Ó³·³ö{player[2].country_name}¾³ÄÚ¡£"
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_3 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇÒªÇóÄãÃÇ¼´¿Ì½«²¿¶Ó³·Àë{player[2].country_name}¡£"
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_4 "×÷Îª½»»»Ìõ¼þ£¬ÇëÈ«Êý³·³ö{player[2].country_name}¾³ÄÚ¾ü¶Ó¡£¸Ã¹úÎªÎÒ¹úÃË°î£¬ÎÒ¹úÓÐ¹²Í¬·ÀÓùµÄÒåÎñ¡£"
+
 DIP_DETAILS_OFFER_INVADE_0 "ÎÒ¹ú½«È«ËÙµØ¶Ô{player[2].country_name}·¢¶¯¹¥ÊÆ¡£"
 DIP_DETAILS_OFFER_INVADE_1 "¼ÈÈ»Í¬ÎªÕýÒåµÄÒ»·½£¬ÎÒÃÇÒ²½«¶ÔÄúµÄµÐ¹ú{player[2].civ_name_plural}·¢¶¯¹¥»÷¡£"
 DIP_DETAILS_OFFER_INVADE_2 "ÎÒ¹úÒàÉÔ¾¡ÃÞ±¡Ö®Á¦¶Ô{player[2].country_name}ÐûÕ½£¬Ò²ÐíÄÜ°ïÉÏÒ»µãÃ¦¡£"
@@ -219,6 +273,7 @@ DIP_DETAILS_REQUEST_INVADE_EX_1 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇÇë¹ó¹ú°ï¸öÃ¦£¬³ö±ø{player[2].
 DIP_DETAILS_REQUEST_INVADE_EX_2 "×÷Îª½»»»Ìõ¼þ£¬ÎÒ¹ú¿ÒÇó¹ó¹úÔÚÎÒ¾üÓë{player[2].country_name}µÄÕ½ÕùÖÐ£¬³öÒ»±ÛÖ®Á¦¡£"
 DIP_DETAILS_REQUEST_INVADE_EX_3 "×÷Îª½»»»Ìõ¼þ£¬ÇëÄãÃÇ¾¡¿ì³ö±ø{player[2].country_name}£¬±ðÁôÏÂ»î¿Ú¡£"
 DIP_DETAILS_REQUEST_INVADE_EX_4 "×÷Îª½»»»Ìõ¼þ£¬ÄãÃÇµÃ¼´¿Ì³ö±ø{player[2].country_name}¡£"
+
 DIP_DETAILS_OFFER_STOP_PIRACY_0 "ÎªÁË·¢Õ¹Á¼ºÃ¹ØÏµ£¬ÎÒÃÇÔ¸ÒâÍ£Ö¹¶Ô¹ó¹úÃ³Ò×Â·ÏßµÄÇ¿ÂÓÐÐ¶¯¡£"
 DIP_DETAILS_OFFER_STOP_PIRACY_1 "ÎªÁËÎ¬³ÖË«·½ÓÑºÃ¹ØÏµ£¬ÎÒÃÇ½«ÖÕÖ¹¶Ô¹ó¹úÃ³Ò×Â·ÏßµÄÇ¿ÂÓÐÐÎª¡£"
 DIP_DETAILS_OFFER_STOP_PIRACY_2 "ÎÒÃÇ¼´¿ÌÍ£Ö¹¶Ô¹ó¹úÃ³Ò×Â·ÏßµÄÇ¿ÂÓÐÐÎª¡£¶ÔÓÚÕâÏîÃ°·¸£¬ÎÒ¹úÉî¸Ð±§Ç¸¡£"
@@ -239,6 +294,7 @@ DIP_DETAILS_REQUEST_STOP_PIRACY_EX_1 "×÷Îª½»»»Ìõ¼þ£¬ÇëÄãÃÇÍ£Ö¹Ç¿ÂÓÎÒ¹úÃ³Ò×Â·Ïß£¬
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_2 "×÷Îª½»»»Ìõ¼þ£¬ÇëÄãÃÇÍ£Ö¹Ç¿ÂÓÎÒ¹úÃ³Ò×Â·Ïß¡£"
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_3 "×÷Îª½»»»Ìõ¼þ£¬ÎÒ¹ú¼á³ÖÄãÃÇµÃÍ£Ö¹ÄÇ±°±ÉµÄÇ¿ÂÓÐÐÎª¡£"
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_4 "×÷Îª½»»»Ìõ¼þ£¬Í£Ö¹ÄãÃÇÄÇÎÞ³ÜµÄÇ¿ÂÓÐÐÎª£¬Ò²±ðÌìÕæµØÒÔÎªÇ¿ÂÓ¾ÍÄÜÖØ´´ÎÒ¹ú¡£"
+
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_0 "ÎªÁËµÃµ½¹ó¹úµÄºÃ¸Ð£¬ÎÒÃÇ½«ÖÐÖ¹Óë{player[2].country_name}µÄÒ»ÇÐÐ­Òé¡£"
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_1 "ÎªÁËÕ¹Ê¾Ë«±ßµÄÓÑºÃ¹ØÏµ£¬ÎÒÃÇ½«ÖÐÖ¹Óë{player[2].country_name}µÄÒ»ÇÐÐ­Òé¡£"
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_2 "ÎÒÃÇ·¢ÊÄ¾¡¿ìÖÐÖ¹Óë{player[2].country_name}µÄÒ»ÇÐÐ­Òé¡£"
@@ -259,6 +315,7 @@ DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_1 "×÷Îª½»»»Ìõ¼þ£¬ÇëÉíÎªÓÑ°îµÄ¹ó¹ú£¬ÄÜ¼´¿Ì
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_2 "×÷Îª½»»»Ìõ¼þ£¬ÎÒÃÇ¿ÒÇó¹ó¹úÖÐÖ¹Óë{player[2].country_name}µÄÒ»ÇÐÐ­Òé¡£"
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_3 "×÷Îª½»»»Ìõ¼þ£¬ÎªÁËÄãÃÇµÄÎ´À´×ÅÏë£¬×îºÃÊÇÖÕÖ¹Óë{player[2].country_name}±£ÓÐµÄÒ»ÇÐÐ­Òé¡£"
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_4 "×÷Îª½»»»Ìõ¼þ£¬·ÏÆúÒ»ÇÐÓë{player[2].country_name}Ç©ÓÐµÄÐ­Òé°É£¬±£ÓÐÄÇÐ©Ð­Òé£¬¶ÔÄãÃ»Ê²Ã´ºÃ´¦¡£"
+
 DIP_DETAILS_OFFER_STOP_RESEARCH_0 "ÎÒÃÇÐûÊÄ·ÅÆú{advance[0].name}µÄÑÐ¾¿¡£"
 DIP_DETAILS_OFFER_STOP_RESEARCH_1 "Îª±£ÓÐË«·½ÓÑºÃ¹ØÏµ£¬ÎÒ¹úÍ¬ÒâÍ£Ö¹¶Ô{advance[0].name}Ëù½øÐÐµÄÑÐ¾¿¡£"
 DIP_DETAILS_OFFER_STOP_RESEARCH_2 "ÎÒÃÇ¼´¿ÌÍ£Ö¹ÑÐ¾¿{advance[0].name}¡£"
@@ -279,6 +336,7 @@ DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_1 "´ËÍâ£¬Çë¹ó¹úÍ£Ö¹ÔÚ{advance[0].name}ÉÏµÄÑ
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_2 "´ËÍâ£¬ÆòÇó¹ó¹úÍ£Ö¹ÔÚ{advance[0].name}ÉÏµÄÑÐ¾¿¡£"
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_3 "´ËÍâ£¬ÇëÄãÃÇÍ£Ö¹ÔÚ{advance[0].name}ÉÏµÄÑÐ¾¿°É£¬²»Òª²»Öª·Ö´ç¡£"
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_4 "´ËÍâ£¬ÂíÉÏÍ£Ö¹ÄãÃÇÔÚ{advance[0].name}ÉÏµÄÑÐ¾¿¡£"
+
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_0 "ÎªÁËÊÀ½çºÍÆ½£¬ÎÒ¹ú½«»á²Ã¼õ{value[0].value}%µÄºËÎäÊýÁ¿¡£"
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_1 "¶ÔÓÚ±¸ÊÜ×ð¾´µÄ¹ó¹ú¶øÑÔ£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄºËÎäÊýÁ¿¡£"
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_2 "ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄºËÎäÊýÁ¿£¬Ï£Íû¹ó¹úÄÜÂúÒâ¡£"
@@ -299,11 +357,11 @@ DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_1 "´ËÍâ£¬Çë¹ó¹úÒÀÕÕÁ½¹úÓÑºÃµÄ½»Çé£
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_2 "´ËÍâ£¬Ö£ÖØµØÇëÇó¹ó¹ú²Ã¼õºËÎäÊýÁ¿ÖÁ{value[0].value}%£¬ÎÒ¹úÈËÃñÒ»Ö±Éú»îÔÚ¿Ö¾åÖÐ¡£"
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_3 "´ËÍâ£¬ÎÒ¹ú¼á³ÖÄãÃÇ±ØÐë²Ã¼õ{value[0].value}%µÄºËÎäÊýÁ¿£¬±ð²»ÖªºÃ´õ¡£"
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_4 "´ËÍâ£¬½«ÄãÃÇ{value[0].value}%µÄºËÎä³ýÒÛ£¬Ï£ÍûÄãÃÇÄÜºÏ×÷µã¡£"
+
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_0 "ÉíÎªµØÇòµÄÒ»·Ý×Ó£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_1 "»ùÓÚÓÑºÃÁ¢³¡£¬ÎÒ¹úÍ¬Òâ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_2 "ÎªÁËµÃµ½¹ó¹úµÄÔÞÑï£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
-DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_3 "ÎªÁË¼õÇáÄãÃÇµÄº¦ÅÂ³Ì¶È£¬ÎÒ¹ú½«»á²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
-DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_4 "ÎÒ¹ú½«»á²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷£¬ÏàÐÅÕâÃ´×ö£¬ÄÜÖÎÁÆÄãÃÇµÄ¿Ö¾åÖ¢¡£"
+DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_3 "ÎªÁË¼õÇáÄãÃÇµÄº¦ÅÂ³Ì¶È£¬ÎÒ¹ú½«»á²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_4 "ÎÒ¹ú½«»á²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷£¬ÏàÐÅÕâÃ´×ö£¬ÄÜÖÎÁÆÄãÃÇµÄ¿Ö¾åÖ¢¡£"
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_0 "´ËÍâ£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_1 "´ËÍâ£¬ÎÒ¹úÀÖÒâ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_EX_2 "´ËÍâ£¬ÎÒ¹úÔ¸ÒÔ²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷ÎªÊ¹Ãü¡£"
@@ -319,6 +377,7 @@ DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_1 "´ËÍâ£¬ÎÒ¹úÀÖÒâ¼ûµ½¹ó¹ú²Ã¼õ{value[0]
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_2 "´ËÍâ£¬ÎÒÃÇÆòÇó¹ó¹ú²Ã¼õ{value[0].value}%µÄÉú»¯ÎäÆ÷£¬Çë¼õÉÙÎÒÃÇµÄ¿Ö¾å¡£"
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_3 "´ËÍâ£¬ÎÒ¹ú¼á³ÖÄãÃÇµÃ²Ã¼õÉú»¯ÎäÆ÷ÊýÁ¿ÖÁ{value[0].value}%¡£"
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_4 "´ËÍâ£¬²Ã¼õÄãÃÇµÄÉú»¯ÎäÆ÷ÊýÁ¿ÖÁ{value[0].value}%£¬²»µÃÔÙÒé¡£"
+
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_0 "ÎªÁË×·ÇóºÍÆ½£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄÄÎÃ×Î¢¾úÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_1 "ÎªÁË¹®¹Ì°îÒê£¬ÎÒ¹úÔ¸Òâ²Ã¼õ{value[0].value}%µÄÄÎÃ×Î¢¾úÎäÆ÷¡£"
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_2 "ÎÒÃÇÔ¸Òâ²Ã¼õ{value[0].value}%µÄÄÎÃ×Î¢¾úÎäÆ÷£¬Ï£ÍûÎ´ÔøÈÃ¹ó¹úÎª´Ë²ÙÐÄ¡£"
@@ -339,6 +398,7 @@ DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_1 "´ËÍâ£¬»ùÓÚÓÑºÃÁ¢³¡£¬Çë¹ó¹ú²Ã¼õ{val
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_2 "´ËÍâ£¬ÆòÇóÈÊ´ÈµÄ¹ó¹ú£¬²Ã¼õ{value[0].value}%µÄÄÎÃ×Î¢¾úÎäÆ÷¡£"
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_3 "´ËÍâ£¬ÎÒÃÇ¼á³ÖÄãÃÇµÃ²Ã¼õ{value[0].value}%µÄÄÎÃ×Î¢¾úÎäÆ÷£¬±ð²»Öª·Ö´ç¡£"
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_4 "´ËÍâ£¬ÂíÉÏ²Ã¼õÄãÃÇµÄÄÎÃ×Î¢¾úÎäÆ÷ÖÁ{value[0].value}%£¬¸øÎÒ±íÏÖºÃÒ»µã¡£"
+
 DIP_DETAILS_OFFER_GIVE_ADVANCE_0 "Ìá¹©¹ó¹úÓÐ¹Ø{advance[0].name}µÄÖªÊ¶£¬ÀñÇáÇéÒâÖØ¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_1 "ÉíÎªÓÑºÃ¹ú¼Ò£¬ÎÒ¹úÔ¸Ìá¹©ÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸ø¹ó¹ú¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_2 "·îÉÏÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¡£Ï£ÍûÄÜÈ¡ÔÃ¹ó¹ú¡£"
@@ -346,8 +406,7 @@ DIP_DETAILS_OFFER_GIVE_ADVANCE_3 "¿¶¿®µØÊ©ÉáÄãÃÇÓÐ¹Ø{advance[0].name}µÄÖªÊ¶°É¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_4 "Ê©ÉáÄãÃÇÓÐ¹Ø{advance[0].name}µÄÖªÊ¶°É¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_0 "´ËÍâ£¬ÎÒ¹ú½«ÔùËÍ¹ó¹úÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_1 "´ËÍâ£¬ÎÒ¹ú½«·ÖÏíÓÐ¹Ø{advance[0].name}µÄÖªÊ¶Óè¹ó¹ú£¬Ï£ÍûÄÜÒ»Í¬½ø²½¡£"
-DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_2 "´ËÍâ£¬ÎÒÃÇ½«·îÉÏÓÐ¹Ø{advance[0].name}µÄÖªÊ¶£¬±íÊ¾ÎÒÃÇ¶Ô¹ó¹úµÄ×ð¾´¡£"
-DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_3 "´ËÍâ£¬ÎÒ¹ú½«Í¸Â¶ÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸øÄãÃÇ£¬ÕâÏîÖªÊ¶³¬³öÄãÃÇºÃ¼¸´ú¡£"
+DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_2 "´ËÍâ£¬ÎÒÃÇ½«·îÉÏÓÐ¹Ø{advance[0].name}µÄÖªÊ¶£¬±íÊ¾ÎÒÃÇ¶Ô¹ó¹úµÄ×ð¾´¡£"DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_3 "´ËÍâ£¬ÎÒ¹ú½«Í¸Â¶ÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸øÄãÃÇ£¬ÕâÏîÖªÊ¶³¬³öÄãÃÇºÃ¼¸´ú¡£"
 DIP_DETAILS_OFFER_GIVE_ADVANCE_EX_4 "´ËÍâ£¬ÎÒ¹ú½«Ê©ÉáÓÐ¹Ø{advance[0].name}µÄÃØÃÜ¸øÄãÃÇ¡£"
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_0 "ÎÒÏë¹ó¹ú²»»áÊÇÄÇÖÖÐ¡Æø°ÍÀ­µÄ¹ú¼Ò£¬Çë·ÖÏíÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸øÎÒ¹ú¡£"
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_1 "ÉíÎªÓÑ°î£¬Ó¦²»ÁßÏ§ÓÚ°ïÖú±Ë´Ë¡£ÄÜ·ñ·ÖÏíÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸øÎÒ¹ú£¿"
@@ -359,6 +418,7 @@ DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_1 "´ËÍâ£¬ÉíÎªÓÑ°î£¬Çë·ÖÏí¹ó¹úÓÐ¹Ø{advance[0]
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_2 "´ËÍâ£¬Ï£ÍûÖîÈç¹ó¹úÈç´ËµÄ´ó¹ú£¬ÄÜ¹»ÎÞË½µÄÔùËÍÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¸øÎÒÃÇ¡£"
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_3 "´ËÍâ£¬ÇëÁ¢¿Ì½»³öÓÐ¹Ø{advance[0].name}µÄÖªÊ¶¡£"
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_4 "´ËÍâ£¬ÎÒÃÇ¼á³ÖÄãÃÇµÃ½»³öÓÐ¹Ø{advance[0].name}µÄÖªÊ¶£¬ÄãÃÇ¼ÈÎÞÁ¦´ÓÊÂÕâÀàÑÐ¾¿£¬Ò²²»Åå²ØÓÐÕâÀàÖªÊ¶¡£"
+
 DIP_DETAILS_OFFER_GIVE_GOLD_0 "ÎÒ¹úÔ¸ÒâÌá¹©{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬·ÖÏíÎÒ¹úµÄ·±ÈÙ¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_1 "ÎÒ¹úÔ¸Òâ×ÊÖú{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬Õ¹ÏÖÎÒÃÇµÄÓÑÒê¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_2 "ÎÒ¹úÀÖÒâÏ×ÉÏ{gold[0].value}»Æ½ð¸ø¹ó¹ú¡£"
@@ -366,8 +426,7 @@ DIP_DETAILS_OFFER_GIVE_GOLD_3 "ÎÒ¹ú¾ö¶¨·Ö³ö{gold[0].value}»Æ½ð¸øÄãÃÇ¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_4 "ÎÒ¹ú¾ö¶¨¿¶¿®µØ·Ö³ö{gold[0].value}»Æ½ð¸øÄãÃÇ¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_EX_0 "´ËÍâ£¬ÎÒ¹úÔ¸ÒâÔùËÍ{gold[0].value}»Æ½ð¸ø¹ó¹ú¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_EX_1 "´ËÍâ£¬ÓÐÄÑÍ¬µ±£¬ÓÐ¸£Í¬Ïí£¬ÎÒ¹úÔ¸Òâ×ÊÖú{gold[0].value}»Æ½ð¸ø¹ó¹ú¡£"
-DIP_DETAILS_OFFER_GIVE_GOLD_EX_2 "´ËÍâ£¬ÎÒÃÇÇ«±°µØÏ×ÉÏ{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬Ï£Íû¹ó¹úÂúÒâ¡£"
-DIP_DETAILS_OFFER_GIVE_GOLD_EX_3 "´ËÍâ£¬ÎÒ¹ú¾ö¶¨¾è³ö{gold[0].value}»Æ½ð¸øÄãÃÇ¡£"
+DIP_DETAILS_OFFER_GIVE_GOLD_EX_2 "´ËÍâ£¬ÎÒÃÇÇ«±°µØÏ×ÉÏ{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬Ï£Íû¹ó¹úÂúÒâ¡£"DIP_DETAILS_OFFER_GIVE_GOLD_EX_3 "´ËÍâ£¬ÎÒ¹ú¾ö¶¨¾è³ö{gold[0].value}»Æ½ð¸øÄãÃÇ¡£"
 DIP_DETAILS_OFFER_GIVE_GOLD_EX_4 "´ËÍâ£¬ÎÒ¹ú½«¾è³ö{gold[0].value}»Æ½ð¸øÄãÃÇ¡£"
 DIP_DETAILS_REQUEST_GIVE_GOLD_0 "ÈçÍ¬¹ó¹úÄÇÑù¸»Ô£ÓÖ¿¶¿®µÄ´ó¹ú£¬ÄÜ·ñÌá¹©{gold[0].value}»Æ½ð¸øÎÒ¹ú£¿µ±ÎÒÃÇ¶È¹ý¾­¼ÃÉÏµÄº®¶¬"
 DIP_DETAILS_REQUEST_GIVE_GOLD_1 "ÄÜ·ñÌá¹©{gold[0].value}»Æ½ð¸øÎÒ¹ú£¿ÕâÍ¬Ê±Ò²¿¼Ñé×ÅÎÒÃÇÖ®¼äµÄ½»Çé¡£"
@@ -379,6 +438,7 @@ DIP_DETAILS_REQUEST_GIVE_GOLD_EX_1 "´ËÍâ£¬ÇëËÍ³ö{gold[0].value}»Æ½ð¸øÎÒ¹ú£¬×öÎªÓ
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_2 "´ËÍâ£¬ÆòÇó¹ó¹ú¾èÔù{gold[0].value}»Æ½ð¸øÎÒÃÇ£¬ÈÃÎÒÃÇµÄÐ¡º¢²»ÔÙ°¤¶ö¡£"
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_3 "´ËÍâ£¬Çë½»³ö{gold[0].value}»Æ½ð¸øÎÒ¹ú£¬ËäÈ»ºÍÄãÃÇÌ¸ÅÐ£¬ÈÃÈË¸Ðµ½²»Öµ¡£"
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_4 "´ËÍâ£¬½»³ö{gold[0].value}»Æ½ð¸øÎÒ¹ú£¬Ö¤Ã÷ÄãµÄ³ÏÒâ¡£"
+
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_0 "ÎÒ¹úÔ¸ÒâÃ¿»ØºÏ²¦³ö{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬ÒÔ×ÊÖú¹ó¹ú·¢Õ¹¡£"
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_1 "»ùÓÚÓÑ°î¹ØÏµ£¬ÎÒ¹úÔ¸ÒâÃ¿»ØºÏ²¦³ö{gold[0].value}»Æ½ð¸ø¹ó¹ú¡£"
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_2 "ÎÒÃÇÔ¸ÒâÃ¿»ØºÏ·îÉÏ{gold[0].value}»Æ½ð¸ø¹ó¹ú£¬Ï£ÍûÄÜµÃµ½¹ó¹ú³ÆÐí¡£"
@@ -399,6 +459,7 @@ DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_1 "´ËÍâ£¬ÇëÇó¹ó¹úÃ¿»ØºÏ²¦³ö{gold[0].valu
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_2 "´ËÍâ£¬ÎÒÃÇ²»µÃ²»ÆòÇó¹ó¹úÃ¿»ØºÏ¾èÔù{gold[0].value}»Æ½ð¸øÎÒÃÇ"
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_3 "´ËÍâ£¬ÄãÃÇ×îºÃÃ¿»ØºÏ½»³ö{gold[0].value}»Æ½ð¸øÎÒ¹ú£¬²ÅÄÜÃâÓÚÍö¹úµÄ¿ÉÄÜ¡£"
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_4 "´ËÍâ£¬Ã¿»ØºÏ½»³ö{gold[0].value}»Æ½ð¸øÎÒ¹ú£¬ÎÒ¹ú»áÁôÒâÄãÃÇµÄ±íÏÖµÄ¡£"
+
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_0 "ÎªÁË»·¾³Çå½à£¬ÎÒ¹úÔ¸Òâ½«ÎÛÈ¾³Ì¶È¼õµÍÓÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_1 "ÎªÁË×·Çó¸üºÃµÄÉú»î»·¾³ÎÒ¹úÔ¸Òâ½«ÎÛÈ¾³Ì¶È¼õµÍÓÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_2 "ÎÒÃÇÊÄÑÔ½«ÎÛÈ¾³Ì¶È¼õµÍÓÚ{value[0].value}ÒÔÏÂ¡£"
@@ -419,6 +480,7 @@ DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_1 "´ËÍâ£¬Õ¾ÔÚÓÑ°îµÄÁ¢³¡£¬Çë¹ó¹ú½µµÍÎÛÈ¾³
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_2 "´ËÍâ£¬¿ÒÇë¹ó¹ú½µµÍÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}ÒÔÏÂ£¬×ÓËïºó´ú»á¸ÐÐ»¹ó¹úµÄ¡£"
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_3 "´ËÍâ£¬ÎÒ¹ú¼á³ÖÄãÃÇµÃ½µµÍÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}ÒÔÏÂ£¬·ñÔòÄãÃÇ²»»áÓÐºÃÏÂ³¡µÄ¡£"
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_4 "´ËÍâ£¬½µµÍÄãÃÇµÄÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}ÒÔÏÂ¡£"
+
 DIP_DETAILS_OFFER_MAP_0 "ÎÒ¹úÔ¸ÒâÌá¹©¹ó¹úµØÍ¼£¬ÈÃ¹ó¹ú·ÖÏíÎÒ¹úÌ½Ë÷µÄ³É¹û¡£"
 DIP_DETAILS_OFFER_MAP_1 "»ùÓÚÓÑ°î¹ØÏµ£¬ÎÒ¹úÔ¸ÒâÌá¹©¹ó¹úµØÍ¼¡£"
 DIP_DETAILS_OFFER_MAP_2 "ÎÒÃÇÔ¸Òâ·îÉÏµØÍ¼£¬Ï£Íû¹ó¹úÄÜ¸Ðµ½Âú×ã¡£"
@@ -439,6 +501,7 @@ DIP_DETAILS_REQUEST_MAP_EX_1 "´ËÍâ£¬Çë¹ó¹úµØÍ¼¸øÓèÎÒ¹ú£¬ÒÔ·ÖÏí¹ó¹úµÄ³É¾Í¡£"
 DIP_DETAILS_REQUEST_MAP_EX_2 "´ËÍâ£¬ÆòÇó¹ó¹ú½«µØÍ¼¸øÓèÎÒ¹ú£¬ÈÃÎÒÃÇÖªµÀÊÀ½çÓÐ¶à´ó¡£"
 DIP_DETAILS_REQUEST_MAP_EX_3 "´ËÍâ£¬½»³öÄãÃÇµÄµØÍ¼£¬ÈÃÎÒÃÇÁË½âÄãÃÇµÄÄÜÄÍ¡£"
 DIP_DETAILS_REQUEST_MAP_EX_4 "´ËÍâ£¬½»³öÄãÃÇµÄµØÍ¼£¬²»µÃµ¡Âý¡£"
+
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_0 "ÎÒ¹ú²¢ÎÞ´òÆÆ³ÐÅµµÄÒâÍ¼£¬ÎÒÃÇ½«»á×ñÊØ¾üÊÂÍ¬ÃËÐ­Òé£¬²¢³ö±ø{player[2].country_name}¡£"
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_1 "ÎÒ¹ú½«»á×ñÊØ¾üÊÂÍ¬ÃËÐ­Òé£¬³ö±ø{player[2].country_name}Óë¹ó¹úÍ¬Ò»ÕóÏß¡£"
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_2 "ÎÒÃÇ½«»á×ñÕÕ¾üÊÂÍ¬ÃËÐ­Òé£¬³ö±ø{player[2].country_name}¡£"
@@ -459,6 +522,7 @@ DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_1 "´ËÍâ£¬ÇëÇó¹ó¹ú×ñÊØË«±ß¾üÊÂÍ¬Ã
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_2 "´ËÍâ£¬ÆòÇó¹ó¹ú×ñÊØ¾üÊÂÍ¬ÃËÐ­Òé£¬³ö±ø{player[2].country_name}¡£"
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_3 "´ËÍâ£¬ÇëÄãÃÇ×ñÊØÐÅÓÃ£¬¼´¿ÌÒÀÕÕ¾üÊÂÍ¬ÃËÐ­Òé£¬³ö±ø{player[2].civ_name_plural}¡£"
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_4 "´ËÍâ£¬ÇëÒÀÕÕ¾üÊÂÍ¬ÃËÐ­Òé£¬¼´¿Ì³ö±ø{player[2].country_name}£¬±³ÅÑ½«²»»áÓÐºÃÏÂ³¡¡£"
+
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_0 "ÎÒ¹ú½«»á×ñÊØÎÛÈ¾·ÀÖÆÐ­Òé£¬½«ÎÛÈ¾³Ì¶È¿ØÖÆÔÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_1 "ÉíÎªÓÑ°î£¬ÎÒ¹úÍ¬Òâ×ñÊØÎÛÈ¾·ÀÖÆÐ­Òé£¬½«ÎÛÈ¾³Ì¶È¿ØÖÆÔÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_2 "ÎÒÃÇÔ¸Òâ×ñÊØÎÛÈ¾·ÀÖÆÐ­Òé£¬¿ØÖÆÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}Ö®ÏÂ¡£"
@@ -479,11 +543,7 @@ DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_1 "´ËÍâ£¬ÇëÇó¹ó¹ú×ñÊØÎÛÈ¾·ÀÖÆÐ­
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_2 "´ËÍâ£¬ÆòÇó¹ó¹ú×ñÊØÎÛÈ¾·ÀÖÆÐ­Òé¡£¹ó¹úÒÑÍ¬Òâ¿ØÖÆÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}Ö®ÏÂ£¬Ï£Íû¹ó¹úÑÔ¶øÓÐÐÅ¡£"
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_3 "´ËÍâ£¬ÎÒ¹ú¼á³ÖÄãÃÇµÃ×ñÊØÐ­Òé£¬¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}Ö®ÏÂ¡£²»¿É³ö¶û·´¶û¡£"
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_4 "´ËÍâ£¬×ñÊØÎÛÈ¾·ÀÖÆÐ­Òé£¬¿ØÖÆÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}ÒÔÏÂ£¡"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_0 "´ËÍâ£¬ÎÒÃÇÔ¸Òâ¿ØÖÆÎÒ¹úÎÛÈ¾³Ì¶ÈÓÚ{value[0].value}Ö®ÏÂ¡£"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_1 "´ËÍâ£¬ÎÒ¹úÂÄÐÐÎÛÈ¾·ÀÖÆÐ­ÒéÇ©¶©µÄ³ÐÅµ¡£½«ÎÛÈ¾³Ì¶È¿ØÖÆÔÚ{value[0].value}Ö®ÏÂ¡£"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_2 "´ËÍâ£¬ÎÒÃÇÊÄÑÔ·îÐÐÎÛÈ¾·ÀÖÆÐ­Òé£¬½«ÎÛÈ¾³Ì¶È¿ØÖÆÔÚ{value[0].value}Ö®ÏÂ¡£"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_3 "´ËÍâ£¬ÎÒ¹ú»áÖ´ÐÐÎÛÈ¾·ÀÖÆÐ­Òé£¬ËäÈ»¶ÔÎÒÃÇÕâÀà´ó¹úÀ´Ëµ¸ºµ£½Ï´ó£¬È»¶øÎÛÈ¾³Ì¶ÈÈÔ»á±£³ÖÔÚ{value[0].value}Ö®ÏÂ¡£"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_4 "´ËÍâ£¬ÎÒ¹ú»áÑÔ¶øÓÐÐÅ¡£ÎÛÈ¾³Ì¶È»á±£³ÖÔÚ{value[0].value}Ö®ÏÂ¡£"
+
 DIP_DETAILS_OFFER_END_EMBARGO_0 "ÎÒ¹ú½«½áÊø¶Ô¹ó¹úµÄÃ³Ò×½ûÔË£¬ÎÒ¹úÏ£ÍûÄÜÔÚ¾­¼ÃÉÏÈ¡µÃ»¥»Ý¡£"
 DIP_DETAILS_OFFER_END_EMBARGO_1 "ÎÒ¹úÀÖÓÚ½áÊø¶Ô¹ó¹úµÄÃ³Ò×½ûÔË¡£"
 DIP_DETAILS_OFFER_END_EMBARGO_2 "ÎÒÃÇ¼´¿Ì½áÊø¶Ô¹ó¹úµÄÃ³Ò×½ûÔË£¬ÎÒÃÇÎÞÒâÃ°·¸¹ó¹ú¡£"
@@ -504,6 +564,7 @@ DIP_DETAILS_REQUEST_END_EMBARGO_EX_1 "´ËÍâ£¬ÇëÇó¹ó¹úÖÕÖ¹¶ÔÎÒ¹úµÄÃ³Ò×½ûÔË¡£"
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_2 "´ËÍâ£¬¿ÒÇó¹ó¹úÖÕÖ¹¶ÔÎÒÃÇµÄÃ³Ò×½ûÔË¡£"
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_3 "´ËÍâ£¬ÎÒ¹ú¼á³ÖÄãÃÇµÃÖÕÖ¹¶ÔÎÒ¹úµÄÃ³Ò×½ûÔË£¬ÎÞÓ¹ÖÃÒÉ¡£"
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_4 "´ËÍâ£¬¼´¿ÌÍ£Ö¹¶ÔÎÒ¹úµÄÃ³Ò×½ûÔË£¬ÓÞ´ÀÖ®ÊÂ²»¿ÉÎªÖ®£¡"
+
 DIP_DETAILS_TREATY_DECLARE_WAR_0 "½¨Òé¹ó¹úÓëÎÒ¹úÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£"
 DIP_DETAILS_TREATY_DECLARE_WAR_1 "½¨Òé¹ó¹úÓëÎÒ¹úÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£Ò»Í¬¼ßµÐ¡£"
 DIP_DETAILS_TREATY_DECLARE_WAR_2 "½¨ÒéÁ½¹úÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£"
@@ -514,6 +575,7 @@ DIP_DETAILS_TREATY_DECLARE_WAR_EX_1 "´ËÍâ£¬½¨Òé¹ó¹úÓëÎÒ¹úÒ»Í¬¶Ô{player[2].civ_na
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_2 "´ËÍâ£¬½¨Çë¹ó¹úÓëÎÒÃÇÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£"
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_3 "´ËÍâ£¬È°¸æÄãÃÇÓëÎÒ¹úÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£»áÈ°¸æÄãÃÇÊÇºÃÐÄÖ¸ÒýÄãÃÇÑ¡ÔñÕýÈ·µÄÒ»·½¡£"
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_4 "´ËÍâ£¬Çë¹ó¹úÓëÎÒÃÇÒ»Í¬¶Ô{player[2].civ_name_plural}ÐûÕ½¡£"
+
 DIP_DETAILS_TREATY_CEASEFIRE_0 "Õ½ÕùÉËº¦¹ú¼ÆÃñÉú£¬¿öÇÒÏÖ½ñ¾ÖÊÆËÈÎÞÕ½ÕùµÄ±ØÒª£¬Çë¹²Í¬Ç©ÊðÍ£»ðÐ­Òé¡£"
 DIP_DETAILS_TREATY_CEASEFIRE_1 "ÎÒÃÇÁ½¹úÄ¿±êÒ»ÖÂ£¬Ó¦¼´¿ÌÇ©ÊðÍ£»ðÐ­Òé£¬½¨Á¢ÓÑºÃ¹ØÏµ¡£"
 DIP_DETAILS_TREATY_CEASEFIRE_2 "½¨ÒéÁ½¹úÇ©ÊðÍ£»ðÐ­Òé£¬Ï£Íû¹ó¹úÄÜÕ¹ÏÖÈÊ´ÈµÄÒ»Ãæ¡£"
@@ -524,6 +586,7 @@ DIP_DETAILS_TREATY_CEASEFIRE_EX_1 "´ËÍâ£¬Ï£Íû¹ó¹úÄÜÇ©ÊðÍ£»ðÐ­Òé£¬ºÏÁ¦´Ù³ÉË«·½¹ØÏ
 DIP_DETAILS_TREATY_CEASEFIRE_EX_2 "´ËÍâ£¬¿ÒÇó¹ó¹úÄÜÇ©ÊðÍ£»ðÐ­Òé£¬ÎÒÃÇ²»ÏëÔÙÓë¹ó¹úÎªµÐ¡£"
 DIP_DETAILS_TREATY_CEASEFIRE_EX_3 "´ËÍâ£¬Çë±£³ÖÀä¾²£¬½ÓÊÜÇ©ÊðÍ£»ðÐ­ÒéµÄÇëÇó¡£"
 DIP_DETAILS_TREATY_CEASEFIRE_EX_4 "´ËÍâ£¬Çë¼´¿ÌÇ©ÊðÍ£»ðÐ­Òé¡£"
+
 DIP_DETAILS_TREATY_PEACE_0 "ÎªÁË²»ÔÙÖÆÔìÈËÀàµÄ·×Æç£¬ÎªÁËÈ·±£ºó´ú×ÓËïµÄÆ½°²£¬Çë¹²Í¬Ç©ÊðºÍÆ½ÌõÔ¼¡£"
 DIP_DETAILS_TREATY_PEACE_1 "»ùÓÚÓÑ°î¹ØÏµ£¬ÎÒ¹ú½¨ÒéË«·½Ç©ÊðºÍÆ½ÌõÔ¼£¬ÒÔÉî»¯Ë«±ß¹ØÏµÓë¹²Í¬ÀûÒæ¡£"
 DIP_DETAILS_TREATY_PEACE_2 "½¨Çë¹ó¹úÓëÎÒÇ©ÊðºÍÆ½ÌõÔ¼£¬³ýÁË±£Ö¤ÎÒ¹úÄÜÓë¹ó¹ú¹²´æ£¬Ò²¸øÁËÎÒ¹úÑ§Ï°¹ó¹úµÄ»ú»á¡£"
@@ -534,6 +597,7 @@ DIP_DETAILS_TREATY_PEACE_EX_1 "´ËÍâ£¬ÈÃÎÒÃÇ·ÅÏÂÎäÆ÷£¬¹²Í¬Ç©ÊðºÍÆ½ÌõÔ¼¡£"
 DIP_DETAILS_TREATY_PEACE_EX_2 "´ËÍâ£¬ÄÜ·ñÒ»Í¬Ç©ÊðºÍÆ½ÌõÔ¼£¿"
 DIP_DETAILS_TREATY_PEACE_EX_3 "´ËÍâ£¬ºôÓõÇ©ÊðºÍÆ½ÌõÔ¼£¬ÈÃË«·½²»ÔÙ³ÉÌì´¦ÓÚ´óÕ½µÄÒõÓ°ÖÐ¡£"
 DIP_DETAILS_TREATY_PEACE_EX_4 "´ËÍâ£¬ÇëÒ»Í¬Ç©ÊðºÍÆ½ÌõÔ¼¡£"
+
 DIP_DETAILS_TREATY_TRADE_PACT_0 "½¨ÒéÇ©ÊðÃ³Ò×Ð­Òé£¬Á½¹ú¾­¼Ã½«ÄÜÒò´Ë¿ìËÙ·¢Õ¹¡£"
 DIP_DETAILS_TREATY_TRADE_PACT_1 "ÎÒÃÇÀÖÓÚºÍÓÑºÃµÄ¹ó¹ú£¬Ç©ÓÐÃ³Ò×Ð­Òé¡£"
 DIP_DETAILS_TREATY_TRADE_PACT_2 "ÄÜ·ñÍ¸¹ýË«·½Ç©ÊðÃ³Ò×Ð­Òé£¬ÈÃÎÒÃÇÄÜÏíÊÜµ½¹ó¹ú´øÀ´µÄÅÓ´ó¾­Ã³ÀûÈó£¿"
@@ -544,6 +608,7 @@ DIP_DETAILS_TREATY_TRADE_PACT_EX_1 "´ËÍâ£¬»ùÓÚÓÑ°î¹ØÏµ£¬½¨ÒéÇ©ÊðÃ³Ò×Ð­Òé£¬ÒÔ»ñµÃ
 DIP_DETAILS_TREATY_TRADE_PACT_EX_2 "´ËÍâ£¬½¨ÒéÇ©ÊðÃ³Ò×Ð­Òé£¬Ï£Íû¹ó¹úÄÜÍ¬Òâ¡£"
 DIP_DETAILS_TREATY_TRADE_PACT_EX_3 "´ËÍâ£¬ÄãÃÇ×îºÃÄÜÓëÎÒ¹úÇ©ÊðÃ³Ò×Ð­Òé£¬±ð´íÊ§Õâ´Î»ú»á¡£"
 DIP_DETAILS_TREATY_TRADE_PACT_EX_4 "´ËÍâ£¬ÇëÇ©ÊðÃ³Ò×Ð­Òé£¬ÓëÎÒ¹ú±£ÓÐÁ¼ºÃ¹ØÏµ£¬ÊÇÄãÃÇÄÜµÃµ½µÄ×î´óºÃ´¦¡£"
+
 DIP_DETAILS_TREATY_RESEARCH_PACT_0 "½¨Òé¹ó¹ú¹²Í¬Ç©Êð¿Æ¼¼Ð­Òé£¬½«ÄÜÇ¿»¯Ë«±ßÖªÊ¶ÉçÈºµÄ·¢Õ¹¡£"
 DIP_DETAILS_TREATY_RESEARCH_PACT_1 "ÎÒ¹ú½¨Òé¹²Í¬Ç©Êð¿Æ¼¼Ð­Òé£¬ÄÜÊ¹Ë«·½¹²Ïí½áºÏÖ®ºóµÄ×¿Ô½¿Æ¼¼³É¾Í¡£"
 DIP_DETAILS_TREATY_RESEARCH_PACT_2 "½¨Çë¹ó¹úÇ©Êð¿Æ¼¼Ð­Òé£¬¶ÔÎÒÃÇÁ½¹úµÄ¿Æ¼¼·¢Õ¹×ÜÓÐ°ÙÀû¶øÎÞÒ»º¦º¦¡£"
@@ -554,6 +619,7 @@ DIP_DETAILS_TREATY_RESEARCH_PACT_EX_1 "´ËÍâ£¬½¨Òé¹²Í¬Ç©Êð¿Æ¼¼Ð­Òé£¬ÈÃÎÒÃÇÁ½¹úµÄ¿
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_2 "´ËÍâ£¬ÇëÇó¹²Í¬Ç©Êð¿Æ¼¼Ð­Òé£¬ÈôÊÇ¹ó¹úÄÜÍ¬ÒâÇ©Êð£¬ÎÒÃÇ»áÍò·Ö¸ÐÐ»ÓÚ¹ó¹úËù´Ù³ÉµÄ¿Æ¼¼Ô¾½ø¡£"
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_3 "´ËÍâ£¬Ç¿ÁÒ½¨ÒéÄãÃÇÍ¬ÎÒ¹úÇ©Êð¿Æ¼¼Ð­Òé£¬´ÏÃ÷µÄ¹ú¼ÒÒ»¶¨»áÍ¬ÒâÕâÏîÔÌº¬Ðí¶àÀûÒæµÄÒªÇó¡£"
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_4 "´ËÍâ£¬½¨Òé¹²Í¬Ç©Êð¿Æ¼¼Ð­Òé£¬±ðÓÞ±¿µ½´íÊ§Á¼»ú¡£"
+
 DIP_DETAILS_TREATY_MILITARY_PACT_0 "½¨ÒéÇ©Êð¾üÊÂÐ­Òé£¬Ò»ÈÕÔâÊÜÍâµÐ¹¥»÷£¬Á½¹ú½«»á±Ë´ËÕÕÓ¦£¬Ò»Í¬×÷Õ½¡£"
 DIP_DETAILS_TREATY_MILITARY_PACT_1 "½¨ÒéÇ©Êð¾üÊÂÐ­Òé£¬ÕýµÀ¹ú¼ÒÖ®¼ä£¬¸üÓ¦¸ÃÒª±Ë´ËÎ¬»¤¶Ô·½°²È«¡£"
 DIP_DETAILS_TREATY_MILITARY_PACT_2 "¿ÒÇóÇ©Êð¾üÊÂÐ­Òé£¬ÎÒÃÇØ½Ðè¹ó¹ú±£»¤£¬Ï£Íû¹ó¹úÄÜ¹»Í¬Òâ¡£"
@@ -564,6 +630,7 @@ DIP_DETAILS_TREATY_MILITARY_PACT_EX_1 "´ËÍâ£¬½¨ÒéÇ©Êð¾üÊÂÐ­Òé£¬»ùÓÚÓÑºÃ¹ØÏµ£¬ÓÑ°
 DIP_DETAILS_TREATY_MILITARY_PACT_EX_2 "´ËÍâ£¬¿ÒÇóÇ©Êð¾üÊÂÐ­Òé£¬ÒÔ±ãÎÒÃÇÊÜµ½ÇÖÂÔÊ±£¬»¹ÄÜµÃµ½¹ó¹úµÄÖ§³Ö¡£"
 DIP_DETAILS_TREATY_MILITARY_PACT_EX_3 "´ËÍâ£¬½¨ÒéÇ©Êð¾üÊÂÐ­Òé£¬ÒÔÈ·±£Á½¹úÃâÓÚÍö¹úµÄ¶òÔË¡£"
 DIP_DETAILS_TREATY_MILITARY_PACT_EX_4 "´ËÍâ£¬ÇëÇ©Êð¾üÊÂÐ­Òé¡£"
+
 DIP_DETAILS_TREATY_POLLUTION_PACT_0 "»ùÓÚ°®»¤»·¾³µÄ¾«Éñ£¬½¨ÒéÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬ÈÃË«·½ÎÛÈ¾³Ì¶È¶¼ÄÜ¿ØÖÆÔÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_TREATY_POLLUTION_PACT_1 "½¨ÒéÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬Ò»Í¬¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_TREATY_POLLUTION_PACT_2 "½¨ÇëÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬ÎÒÃÇ´òËã¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}ÒÔÏÂ£¬Ï£Íû¹ó¹úÒ»Í¬²ÎÓë¡£"
@@ -574,6 +641,7 @@ DIP_DETAILS_TREATY_POLLUTION_PACT_EX_1 "´ËÍâ£¬½¨ÒéÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬Ò»Í¬¿ØÖÆÎÛÈ¾
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_2 "´ËÍâ£¬½¨ÇëÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬ÎÒÃÇ½«¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}ÒÔÏÂ£¬Ï£Íû¹ó¹úÒàÈç´Ë´òËã¡£"
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_3 "´ËÍâ£¬È°¸æÄãÃÇÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬Ï£ÍûÄãÃÇÒ²ÄÜ¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}ÒÔÏÂ¡£"
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_4 "´ËÍâ£¬ÇëÇ©ÊðÎÛÈ¾·ÀÖÆÐ­Òé£¬¿ØÖÆÎÛÈ¾³Ì¶ÈÔÚ{value[0].value}ÒÔÏÂ¡£"
+
 DIP_DETAILS_TREATY_ALLIANCE_0 "ÎÒÃÇÁ½¹úÓÐ¹²Í¬ÀûÒæÓëÄ¿±ê£¬½¨ÒéÇ©ÊðÁªÃËÌõÔ¼£¬¹²Í¬ÖÎÀíÌìÏÂ¡£"
 DIP_DETAILS_TREATY_ALLIANCE_1 "½¨ÒéÇ©ÊðÁªÃËÌõÔ¼£¬ÈÃË«·½ÓÑÒêÓÀ¹Ì¡£"
 DIP_DETAILS_TREATY_ALLIANCE_2 "½¨Çë¹ó¹úÇ©ÊðÁªÃËÌõÔ¼£¬ÓÀ±£Ë«·½ºÍÆ½¡£"

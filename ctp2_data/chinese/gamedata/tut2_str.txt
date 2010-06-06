@@ -1,3 +1,46 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : CTP2 tutorial strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the CTP2 tutorial strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
 T_BUTTON_OK "确认"
 T_BUTTON_DONT_SHOW "不再显示此讯息"
 T_BUTTON_YES "是"
@@ -166,6 +209,9 @@ T_SP_SCIENCE "您可以查看一下我国科学研究上的进度。有特别需要的话，也可以变更研究
 T_SP_GREAT_LIBRARY "大图书馆是游戏世界中最核心的知识来源。在大图书馆中收录了游戏中所有事物的知识，从部队到奇观，由观念到科技，兼容并备，无所不包。阅读「游戏操作」项目下的所有知识，您就能学会游戏中各项事物的运行原理。此外，在「史实」项目下，您也可以读读各项事物的历史资料，学习事物的起源、发展及在人类历史上所造成的影响。"
 T_SP_TRADE "发明贸易科技，也在我方城市内建造了一些商队之后，您就能开始出售特产。不过您无法将特产卖给与我国交战的国家。"
 T_SP_NATL_MGMT "国政官窗口里有我国所有城市的概要报告。您可以利用标题按钮，分类排列城市清单。"
+
+
+## ADDED 10-07-00 ###
 T_CITY_TOO_SMALL_TITLE "城市规模太小！"
 T_CITY_TOO_SMALL "建造一名开拓队需要部分城市市民加入。城市最少得为规模2以上才能在不解散城市的情况下，建造开拓队。您可以等到城市规模拓张之后，再来建造开拓队。"
 T_TOO_MANY_UNITS_TITLE "已达最大容纳量！"

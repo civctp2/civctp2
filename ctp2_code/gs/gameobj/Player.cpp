@@ -1343,6 +1343,12 @@ void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
 	// Edit this so that the cargo is registered
 }
 
+sint32 Player::GetWeakestEnemy() const
+{
+	return Diplomat::GetDiplomat(m_owner).GetWeakestEnemy();
+}
+
+
 Unit Player::CreateCity(
                         const sint32 t,
                         const MapPoint &pos,
@@ -1527,6 +1533,8 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 
 	m_maxCityCount = std::max(m_maxCityCount, m_all_cities->Num());
 
+	MapAnalysis::GetMapAnalysis().CalcEmpireCenter(m_owner);
+
 	return true;
 }
 
@@ -1585,6 +1593,8 @@ bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 	{
 		m_first_city = TRUE;
 	}
+
+	MapAnalysis::GetMapAnalysis().CalcEmpireCenter(m_owner);
 
 	if(CheckPlayerDead())
 	{
@@ -9788,7 +9798,8 @@ bool Player::IsLandConnected(MapPoint const & center, sint32 squaredDistance) co
 		if(MapPoint::GetSquaredDistance(m_all_cities->Get(i)->GetPos(), center) <= squaredDistance)
 		{
 			float cost = 0.0;
-			if(g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, squaredDistance))
+			sint32 distance;
+			if(g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, distance, squaredDistance))
 			{
 				return true;
 			}
@@ -9797,6 +9808,41 @@ bool Player::IsLandConnected(MapPoint const & center, sint32 squaredDistance) co
 
 	return false;
 }
+
+MapPoint Player::CalcEmpireCenter() const
+{
+	if(m_all_cities->Num() == 0)
+	{
+		if(m_all_armies->Num() > 0)
+		{
+			return m_all_armies->Get(0)->RetPos();
+		}
+		else
+		{
+			return MapPoint();
+		}
+	}
+
+	sint32 cityNum = 1;
+
+	MapPoint empireCenter = m_all_cities->Get(0)->GetPos();
+
+	for(sint32 i = 1; i < m_all_cities->Num(); ++i)
+	{
+		cityNum++;
+
+		float costs = 0.0f;
+		Path path;
+
+		g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs);
+
+		path.RestoreIndexAndCurrentPos(path.Num()/cityNum);
+		path.GetCurrentPoint(empireCenter);
+	}
+
+	return empireCenter;
+}
+
 
 /*
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)

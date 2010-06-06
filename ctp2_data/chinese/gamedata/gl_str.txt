@@ -1,3 +1,50 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains the records localized names (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized names of the database records.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added CityMod2 age concept strings.
+# - Added new age strings.
+# - Added new city style strings.
+# - Moved build list sequence strings from ldl_str.txt and add_str.txt.
+#   - Mar. 7th 2005 Martin Gühmann 
+# - Moved risk strings from junk_str.txt. (Aug 31st 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
 
 #### ADVANCE STRINGS ####
 ADVANCE_TOOLMAKING				"制造工具"
@@ -248,7 +295,14 @@ UNIT_DREADNAUGHT				"无畏号潜艇"
 UNIT_CITY					"城市"
 UNIT_OCEAN_CITY					"海洋殖民地"
 UNIT_SPACE_CITY					"太空殖民地"
-
+UNIT_ELEPHANT_WARRIOR				"象兵"
+UNIT_SCOUT					"斥候"
+UNIT_LEGION					"罗马军团"
+UNIT_GUERRILLA					"游击队"
+UNIT_SWORDSMAN					"剑士"
+UNIT_PIRATE_SHIP				"私掠船"
+UNIT_TRADER					"商船"
+UNIT_LONGBOWMAN 				"长弓兵"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"无政府"
@@ -379,6 +433,48 @@ TERRAIN_WATER_DEEP_GOOD_TWO			"大乌贼"
 #TERRAIN_WATER_SHELF_GOOD_TWO			"珍珠"
 TERRAIN_DUMMY_GOOD				"无用货物"
 
+###Added for goodmod###   fix walrus, too many (actual these aren't used)
+
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE		"Bauxite"
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR		"Emeralds"
+TERRAIN_MOUNTAIN_GOOD_THREE			"Coal"
+TERRAIN_MOUNTAIN_GOOD_FOUR			"Gold"
+TERRAIN_DESERT_GOOD_THREE			"Dates"
+TERRAIN_DESERT_GOOD_FOUR			"Camels"
+TERRAIN_FOREST_GOOD_THREE			"Apples"
+TERRAIN_FOREST_GOOD_FOUR			"Beavers"
+TERRAIN_GLACIER_GOOD_TWO			"Walrus"
+TERRAIN_GLACIER_GOOD_THREE			"Walrus"
+TERRAIN_GLACIER_GOOD_FOUR			"Walrus"
+TERRAIN_GRASSLAND_GOOD_THREE			"Potatoes"
+TERRAIN_GRASSLAND_GOOD_FOUR			"Poppies"
+TERRAIN_HILL_GOOD_THREE				"Uranium"
+TERRAIN_HILL_GOOD_FOUR				"Olives"
+TERRAIN_JUNGLE_GOOD_THREE			"Bananas"
+TERRAIN_JUNGLE_GOOD_FOUR			"Sugar"
+TERRAIN_PLAINS_GOOD_THREE			"Wheat"
+TERRAIN_PLAINS_GOOD_FOUR			"Buffalo"
+TERRAIN_SWAMP_GOOD_TWO				"Rice"
+TERRAIN_SWAMP_GOOD_THREE			"Chilli"
+TERRAIN_SWAMP_GOOD_FOUR				"Peat"
+TERRAIN_TUNDRA_GOOD_TWO				"Oil"
+TERRAIN_TUNDRA_GOOD_THREE			"Caribou"
+TERRAIN_TUNDRA_GOOD_FOUR			"Caribou"
+TERRAIN_WATER_SHALLOW_GOOD_THREE		"Salmon"
+TERRAIN_WATER_SHALLOW_GOOD_FOUR			"Lobster"
+TERRAIN_WATER_DEEP_GOOD_THREE			"Tuna"
+TERRAIN_WATER_DEEP_GOOD_FOUR			"Giant Squid"
+TERRAIN_WATER_BEACH_GOOD_THREE			"Dye"
+TERRAIN_WATER_BEACH_GOOD_FOUR			"Pearls"
+TERRAIN_WATER_SHELF_GOOD_THREE			"Dye"
+TERRAIN_WATER_SHELF_GOOD_FOUR			"Pearls"
+#TERRAIN_DUMMY_GOOD				"Dumb Good"
+TERRAIN_BROWN_HILL_GOOD_ONE			"Copper"
+TERRAIN_BROWN_HILL_GOOD_TWO			"Silver"
+TERRAIN_BROWN_MOUNTAIN_GOOD_ONE			"Iron Ore"
+TERRAIN_BROWN_MOUNTAIN_GOOD_TWO			"Silver"
+TERRAIN_WHITE_HILL_GOOD_ONE			"Sapphires"
+TERRAIN_WHITE_HILL_GOOD_TWO			"Emeralds"
 
 #### CONCEPT STRINGS ####
 #CONCEPT_DIAMONDS				"钻石"
@@ -434,7 +530,9 @@ CONCEPT_ATROCITY				"暴政"
 CONCEPT_BARBARIANS				"蛮族"
 CONCEPT_CAPITALIZATION				"资本化"
 CONCEPT_CITY					"城市"
+CONCEPT_CLASSIC_AGE				"古典时代"
 CONCEPT_COMMERCE				"贸易"
+CONCEPT_COMPUTER_AGE				"信息时代"
 CONCEPT_CRIME					"犯罪"
 CONCEPT_DEFENSE					"防御"
 CONCEPT_DIAMOND_AGE				"钻石时代"
@@ -444,6 +542,7 @@ CONCEPT_EMBARGO					"禁运"
 CONCEPT_EMPIRE_SIZE				"帝国规模"
 CONCEPT_FOOD					"食物"
 CONCEPT_FUEL					"燃料"
+CONCEPT_FUTURE_AGE				"无限未来"
 CONCEPT_GENETIC_AGE				"基因时代"
 CONCEPT_GOLD					"黄金"
 CONCEPT_GOODS					"特产"
@@ -451,8 +550,10 @@ CONCEPT_GOVERNMENTS				"政府"
 CONCEPT_GROWTH					"人口成长"
 CONCEPT_HAPPINESS				"幸福度"
 CONCEPT_IMPROVEMENTS				"设施"
+CONCEPT_INDUSTRIAL_AGE				"工业时代"
 CONCEPT_INFRASTRUCTURE				"基础建设"
 CONCEPT_MAINTENANCE_COST			"维持费"
+CONCEPT_MEDIEVAL_AGE				"中世纪"
 CONCEPT_MILITARY_READINESS			"军事整备"
 CONCEPT_MODERN_AGE				"现代"
 CONCEPT_OFFER					"提供"
@@ -580,14 +681,14 @@ ORDER_ATTACK					"攻击"
 ORDER_BIO_INFECT				"感染此城"
 ORDER_BOARD_TRANSPORT				"装载"
 ORDER_BOMBARD					"炮击"
+ORDER_CLEAR_TARGET				"清除目标"
 ORDER_CONVERT					"感化城市"
 ORDER_CREATE_PARK				"微菌净化"
-ORDER_CLEAR_TARGET				"清除目标"
 ORDER_DISBAND_ARMY				"解散部队"
 ORDER_ESTABLISH_EMBASSY				"建立大使馆"
 ORDER_EXPEL					"驱逐部队"
-ORDER_FORTIFY					"驻防"
 ORDER_FAITH_HEALING				"信仰疗法"
+ORDER_FORTIFY					"驻防"
 ORDER_FRANCHISE					"专卖店"
 ORDER_INCITE_REVOLUTION				"煽动革命"
 ORDER_INCITE_UPRISING				"煽起暴动"
@@ -605,6 +706,7 @@ ORDER_RANGED_ATTACK				"远距攻击"
 ORDER_REFORM					"改革城市"
 ORDER_REFUEL					"补给燃料"
 ORDER_SETTLE					"定居"
+ORDER_SETTLE_IN_CITY				"定居于该城"
 ORDER_SLAVE_RAID				"俘虏奴隶"
 ORDER_SLEEP					"哨戒"
 ORDER_SOOTHSAY					"负面预言"
@@ -615,6 +717,7 @@ ORDER_TARGET					"锁定核武"
 ORDER_THROW_PARTY				"举办接待会"
 ORDER_UNDERGROUND_RAILWAY			"释放奴隶"
 ORDER_UNLOAD					"卸载"
+ORDER_UPGRADE					"提升"
 
 PERSONALITY_KAHN_DESCRIPTION			"凶残嗜血的屠夫"
 PERSONALITY_GHANDI_DESCRIPTION			"化干戈为玉帛的和平主义者"
@@ -625,3 +728,71 @@ PERSONALITY_MEDICI_DESCRIPTION			"精明的国际贸易家"
 PERSONALITY_TELLER_DESCRIPTION			"侵略性思想的学究"
 PERSONALITY_STRANGELOVE_DESCRIPTION		"邪恶的天才"
 PERSONALITY_CALLENBACH_DESCRIPTION		"民粹主义坚贞信徒"
+
+### Age Strings ###
+
+AGE_ONE						"上古时代"
+AGE_TWO						"古典时代"
+AGE_THREE					"中世纪"
+AGE_FOUR					"文艺复兴"
+AGE_FIVE					"工业时代"
+AGE_SIX						"现代文明"
+AGE_SEVEN					"信息时代"
+AGE_EIGHT					"基因时代"
+AGE_NINE					"钻石纪元"
+AGE_TEN						"无限未来"
+
+### City Style Strings ###
+
+CITY_STYLE_ROMAN				"罗马风格"
+CITY_STYLE_ARAB					"阿拉伯风格"
+CITY_STYLE_ASIAN				"亚洲风格"
+CITY_STYLE_AMERICAN				"美洲风格"
+CITY_STYLE_CASTLE				"城堡式样"
+CITY_STYLE_EGYPTAIN				"埃及风格"
+CITY_STYLE_PALACE				"宫廷风格"
+
+### Build Sequences from ldl_str.txt ###
+
+BUILD_LIST_SEQUENCE_PRODUCTION                  "生产"
+BUILD_LIST_SEQUENCE_GROWTH                      "成长"
+BUILD_LIST_SEQUENCE_OFFENSE                     "攻势"
+BUILD_LIST_SEQUENCE_DEFENSE                     "守势"
+BUILD_LIST_SEQUENCE_SCIENCE                     "科学"
+BUILD_LIST_SEQUENCE_GOLD                        "商业"
+BUILD_LIST_SEQUENCE_WONDERS                     "奇观"
+BUILD_LIST_SEQUENCE_HAPPINESS                   "幸福度"
+BUILD_LIST_SEQUENCE_DEFAULT			"预设"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"奇迹 (科技)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"奇迹 (军事)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"奇迹 (经济)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"奇迹 (环保)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"奇迹 (外交)"
+BUILD_LIST_SEQUENCE_BARBARIAN			"单位"
+BUILD_LIST_SEQUENCE_SMALL_CITIES		"小城市"
+BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE		"最大规模城市"
+BUILD_LIST_SEQUENCE_DIRTY_CITIES		"污染"
+
+##Risk strings moved from junk_str.txt ##
+RISK_NO_DANGER_HERE				"此处安全"
+RISK_VILLAGES_ONLY				"唯余废墟"
+RISK_BORING_HORDES				"盗匪"
+RISK_DECENT_HORDES				"突袭者"
+RISK_RAGING_HORDES				"劫掠者"
+
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"新手"
+DIFFICULTY_1					"容易"
+DIFFICULTY_2					"一般"
+DIFFICULTY_3					"较难"
+DIFFICULTY_4					"极难"
+DIFFICULTY_5					"神人"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"移民"
+DIFFICULTY_CHIEFTAIN				"酋长"
+DIFFICULTY_WARLORD				"军阀"
+DIFFICULTY_PRINCE				"王子"
+DIFFICULTY_KING					"国王"
+DIFFICULTY_EMPEROR				"帝皇"
+DIFFICULTY_DEITY				"天神"

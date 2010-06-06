@@ -125,6 +125,7 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "mapanalysis.h"
 #include "settlemap.h"
 #include "AgreementMatrix.h"
+#include "CityAstar.h"
 
 #include "debugassert.h"
 
@@ -133,6 +134,8 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "World.h"
 
 #include "ctpaidebug.h"
+
+extern CityAstar g_city_astar;
 
 Goal::Goal()
 :
@@ -1129,13 +1132,7 @@ const MapPoint & Goal::Get_Target_Pos() const
 		return m_target_pos;
 	}
 
-	if (pos.x == -1 || pos.y == -1)
-	{
-		Assert(0); // For some reason I had removed this.
-
-		pos.x = 0;
-		pos.y = 0;
-	}
+	Assert(pos.IsValid());
 
 	return pos;
 }
@@ -1637,7 +1634,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		point = dest_pos;
 	}
 
-	point = (point == MapPoint(-1, -1)) ? dest_pos : point;
+	point = (!point.IsValid()) ? dest_pos : point;
 
 	sint32 squared_distance = 0;
 	double eta = agent_ptr->GetRoundsPrecise(point, squared_distance);
@@ -1828,25 +1825,26 @@ Utility Goal::Compute_Raw_Priority()
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-	double report_cell_initvalue        = cell_value;
-	double report_cell_lastvalue        = cell_value;
-	double report_cell_threat           = 0.0;
-	double report_cell_EnemyValue       = 0.0;
-	double report_cell_AlliedValue      = 0.0;
-	double report_cell_HomeDistance     = 0.0;
-	double report_cell_EnemyDistance    = 0.0;
-	double report_cell_Settle           = 0.0;
-	double report_cell_Chokepoint       = 0.0;
-	double report_cell_MaxPower         = 0.0;
-	double report_cell_Unexplored       = 0.0;
-	double report_cell_NotVisible       = 0.0;
-	double report_cell_NoOwnerTerritory = 0.0;
-	double report_cell_InHomeTerritory  = 0.0;
-	double report_cell_InEnemyTerritory = 0.0;
-	double report_cell_SlaveryProtection= 0.0;
-	double report_cell_SmallCitySize    = 0.0;
-	double report_cell_CityConnected    = 0.0;
-	double report_cell_SmallEmpireBonus = 0.0;
+	double report_cell_initvalue         = cell_value;
+	double report_cell_lastvalue         = cell_value;
+	double report_cell_threat            = 0.0;
+	double report_cell_EnemyValue        = 0.0;
+	double report_cell_AlliedValue       = 0.0;
+	double report_cell_HomeDistance      = 0.0;
+	double report_cell_EnemyDistance     = 0.0;
+	double report_cell_Settle            = 0.0;
+	double report_cell_Chokepoint        = 0.0;
+	double report_cell_MaxPower          = 0.0;
+	double report_cell_Unexplored        = 0.0;
+	double report_cell_NotVisible        = 0.0;
+	double report_cell_NoOwnerTerritory  = 0.0;
+	double report_cell_InHomeTerritory   = 0.0;
+	double report_cell_InEnemyTerritory  = 0.0;
+	double report_cell_SlaveryProtection = 0.0;
+	double report_cell_SmallCitySize     = 0.0;
+	double report_cell_CityConnected     = 0.0;
+	double report_cell_SmallEmpireBonus  = 0.0;
+	double report_cell_WeakestEnemyBonus = 0.0;
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
@@ -1905,8 +1903,31 @@ Utility Goal::Compute_Raw_Priority()
 #endif //_DEBUG
 	}
 
-	cell_value += sqrt(static_cast<double>
-	(MapPoint::GetSquaredDistance(target_pos, empire_center))) * goal_rec->GetDistanceToHomeBonus();
+#if 0
+	if(!goal_rec->GetIsGlobalGoal())
+	{
+		cell_value += sqrt(static_cast<double>
+		(MapPoint::GetSquaredDistance(target_pos, empire_center))) * goal_rec->GetDistanceToHomeBonus();
+	}
+	else
+	{
+		if(g_theWorld->IsOnSameContinent(target_pos, empire_center))
+		{
+			sint32 distance;
+			float costs = 0.0f;
+			g_city_astar.IsLandConnected(m_playerId, target_pos, empire_center, costs, distance);
+
+			cell_value += static_cast<double>(distance * goal_rec->GetDistanceToHomeBonus());
+		}
+		else
+		{
+			sint32 distance;
+			float costs = 0.0f;
+			g_city_astar.FindCityDist(m_playerId, target_pos, empire_center, costs, distance);
+
+			cell_value += static_cast<double>(distance * goal_rec->GetDistanceToHomeBonus());
+		}
+	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_HomeDistance = cell_value - report_cell_lastvalue;
@@ -1915,9 +1936,48 @@ Utility Goal::Compute_Raw_Priority()
 
 	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)//Dangerious if the empire center has coords (0,0)
 	{
+		if(!goal_rec->GetIsGlobalGoal())
+		{
+			cell_value += sqrt(static_cast<double>
+			(MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
+		}
+		else
+		{
+			if(g_theWorld->IsOnSameContinent(target_pos, foreign_empire_center))
+			{
+				sint32 distance;
+				float costs = 0.0f;
+				g_city_astar.IsLandConnected(m_playerId, target_pos, foreign_empire_center, costs, distance);
+
+				cell_value += static_cast<double>(distance * goal_rec->GetDistanceToEnemyBonus());
+			}
+			else
+			{
+				sint32 distance;
+				float costs = 0.0f;
+				g_city_astar.FindCityDist(m_playerId, target_pos, foreign_empire_center, costs, distance);
+
+				cell_value += static_cast<double>(distance * goal_rec->GetDistanceToEnemyBonus());
+			}
+		}
+	}
+
+#else
+	cell_value += sqrt(static_cast<double>
+	(MapPoint::GetSquaredDistance(target_pos, empire_center))) * goal_rec->GetDistanceToHomeBonus();
+
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+	report_cell_HomeDistance = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue    = cell_value;
+#endif //_DEBUG
+
+//	if (foreign_empire_center.IsValid()) // Replace when default values of MapPoint are invalid
+	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)//Dangerious if the empire center has coords (0,0)
+	{
 		cell_value += sqrt(static_cast<double>
 		(MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
 	}
+#endif
 
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_EnemyDistance = cell_value - report_cell_lastvalue;
@@ -2031,31 +2091,56 @@ Utility Goal::Compute_Raw_Priority()
 		report_cell_SmallCitySize = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue     = cell_value;
 #endif //_DEBUG
+	}
 
 	if
 	  (
 	      goal_rec->GetLandToCloseCityConnectionBonus() != 0
-	   && player_ptr->IsLandConnected(target_pos, 2 * g_theConstDB->Get(0)->GetBorderSquaredRadius())
+	   && player_ptr->IsLandConnected(target_pos, 4 * g_theConstDB->Get(0)->GetBorderSquaredRadius())
 	  )
 	{
 		cell_value += goal_rec->GetLandToCloseCityConnectionBonus();
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		report_cell_CityConnected = cell_value - report_cell_lastvalue;
-		report_cell_lastvalue     = cell_value;
+	report_cell_CityConnected = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue     = cell_value;
 #endif //_DEBUG
 
-		if(target_owner != m_playerId && g_player[target_owner]->GetNumCities() < goal_rec->GetSmallTargetEmpireSize())
-		{
-			cell_value += goal_rec->GetSmallTargetEmpireBonus();
-		}
+	if
+	  (
+	       goal_rec->GetSmallTargetEmpireBonus() != 0
+	    && target_owner != m_playerId
+	    && target_owner > -1
+	    && g_player[target_owner]->GetNumCities() < goal_rec->GetSmallTargetEmpireSize()
+	  )
+	{
+		cell_value += goal_rec->GetSmallTargetEmpireBonus();
+	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		report_cell_SmallEmpireBonus = cell_value - report_cell_lastvalue;
-		report_cell_lastvalue        = cell_value;
+	report_cell_SmallEmpireBonus = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
+
+	if
+	  (
+	       target_owner != m_playerId
+	    && goal_rec->GetWeakestEnemyBonus() != 0
+	    && target_owner > -1
+	    && (
+	            g_player[m_playerId]->GetWeakestEnemy() == target_owner
+	         || target_owner == 0
+	       )
+	  )
+	{
+		cell_value += goal_rec->GetWeakestEnemyBonus();
 	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	report_cell_WeakestEnemyBonus = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue         = cell_value;
+#endif //_DEBUG
 
 	sint32 threaten_bonus = GetThreatenBonus();
 
@@ -2099,7 +2184,7 @@ Utility Goal::Compute_Raw_Priority()
 		        threaten_bonus
 		       );
 
-		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t%8f,\t%s\n", buff, report_cell_CityConnected, report_cell_SmallEmpireBonus, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
+		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t%8f,\t%8f,\t%s\n", buff, report_cell_CityConnected, report_cell_SmallEmpireBonus, report_cell_WeakestEnemyBonus, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:
 /*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
@@ -3214,7 +3299,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 	}
 	case SUB_TASK_TRANSPORT_TO_BOARD:
 	{
-		if(pos == MapPoint(-1, -1))
+		if(!pos.IsValid())
 		{
 			dest_pos = the_army->Get_Pos();
 			check_dest = false;
@@ -3228,7 +3313,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		if(dest_pos == the_transport->Get_Pos()
 		|| the_transport->Get_Army()->CheckValidDestination(dest_pos)
 		){
-			if(pos == MapPoint(-1, -1))
+			if(!pos.IsValid())
 			{
 				pos = dest_pos;
 			}
@@ -3263,7 +3348,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 				 !FollowPathToTask(the_transport, the_army, last, found_path) )
 				return false;
 
-			if(pos == MapPoint(-1, -1))
+			if(!pos.IsValid())
 			{
 				pos = last;
 			}
@@ -3278,7 +3363,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		dest_pos = pos;
 		MapPoint start_pos = the_army->Get_Pos();
 
-		Assert(pos != MapPoint(-1, -1));
+		Assert(pos.IsValid());
 
 		if (dest_pos == start_pos)
 		{
@@ -3850,7 +3935,7 @@ MapPoint Goal::GetFreeNeighborPos(MapPoint pos) const
 	}
 
 	// Could happen in that case we have to find something else
-	// Assert(nextPos != MapPoint(-1, -1));
+	// Assert(nextPos.IsValid());
 
 	return nextPos;
 }
@@ -3933,7 +4018,7 @@ bool Goal::RallyTroops()
 			{
 				rallyPos = GetFreeNeighborPos(rallyPos);
 
-				if(rallyPos == MapPoint(-1, -1))
+				if(!rallyPos.IsValid())
 				{
 					Assert(false);
 					// Find another rally point
@@ -4279,7 +4364,7 @@ bool Goal::LoadTransporters(Agent_ptr agent_ptr)
 
 		success = true;
 
-		Assert(pos != MapPoint(-1, -1));
+		Assert(pos.IsValid());
 
 		sint32 transporters = 0;
 		sint32 max          = 0;

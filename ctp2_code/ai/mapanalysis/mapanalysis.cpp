@@ -305,6 +305,11 @@ void MapAnalysis::BeginTurn()
 			m_nanoWeapons[player]    += army->CountNanoUnits();
 
 
+			if(m_empireCenter[player] == MapPoint())
+			{
+				CalcEmpireCenter(player);
+			}
+
 			if(!m_empireBoundingRect[player].IsValid())
 			{
 				UpdateBoundingRectangle(army);
@@ -728,6 +733,18 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
     return (max_power > 0.0) ? (power / max_power) : 0.0;
 }
 
+void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
+{
+	// For now disabled
+//	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
+
+	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
+	        playerId,
+	        m_empireCenter[playerId].x,
+	        m_empireCenter[playerId].y));
+}
+
+
 void MapAnalysis::UpdateBoundingRectangle(const Army & army)
 {
     const PLAYER_INDEX player = army.GetOwner();
@@ -750,8 +767,8 @@ void MapAnalysis::UpdateBoundingRectangle(const Army & army)
     bool added = m_empireBoundingRect[player].Add(armyRect);
     Assert(added);
 
-    m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
-    DPRINTF(k_DBG_MAPANALYSIS, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
+	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
+	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 		player,
 		m_empireCenter[player].x,
 		m_empireCenter[player].y));
@@ -789,8 +806,8 @@ void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
     bool added = m_empireBoundingRect[player].Add(cityRect);
     Assert(added);
 
-    m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
-    DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
+	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
+	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 		player,
 		m_empireCenter[player].x,
 		m_empireCenter[player].y));

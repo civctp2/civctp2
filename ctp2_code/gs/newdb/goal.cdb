@@ -101,7 +101,8 @@ Goal {
 	Int SmallCitySizeBonus             = 0
 	Int LandToCloseCityConnectionBonus = 0
 	Int SmallTargetEmpireBonus         = 0
-	Int SmallTargetEmpireSize          = 2
+	Int SmallTargetEmpireSize          = 0
+	Int WeakestEnemyBonus              = 0
 
 	Int ChokePointBonus
 	Int UnexploredBonus

@@ -319,13 +319,14 @@ bool MapPoint::IsNextTo(MapPoint const & neighbor) const
 //
 // Returns    : bool	: point is valid
 //
-// Remark(s)  : -
+// Remark(s)  : A MapPoint is valid if its coordinates are in the 
+//              World::m_map array.
 //
 //----------------------------------------------------------------------------
 bool MapPoint::IsValid(void) const
 {
-	return (g_theWorld->IsXwrap() || ((x >= 0) && (x < g_mp_size.x)))
-	    && (g_theWorld->IsYwrap() || ((y >= 0) && (y < g_mp_size.y)))
+	return ((x >= 0) && (x < g_mp_size.x))
+	    && ((y >= 0) && (y < g_mp_size.y))
 #if !defined(_SMALL_MAPPOINTS)
 	    && (z >= 0) && (z < g_mp_size.z)
 #endif

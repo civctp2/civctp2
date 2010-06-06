@@ -103,6 +103,7 @@ GOAL_SEIGE {
   LandToCloseCityConnectionBonus 500
   SmallTargetEmpireSize          3
   SmallTargetEmpireBonus         100
+  WeakestEnemyBonus              200
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000

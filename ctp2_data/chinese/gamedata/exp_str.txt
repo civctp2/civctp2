@@ -1,3 +1,47 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Happy reasons and score catergory strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the happiness and score category related strings.
+#   names, city names, emissary photos and diplomacy flags.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved HAPPY_REASON_FEATS from add_str.txt.
+#
+#----------------------------------------------------------------------------
+
 ##Happiness Lines##
 HAPPY_REASON_CITY_SIZE "城市规模"
 HAPPY_REASON_DISTANCE_FROM_CAPITOL "首都距离"
@@ -29,6 +73,8 @@ HAPPY_REASON_ATTACKED_CONVERTER "攻击感化者"
 HAPPY_REASON_ASSASSINATION "内阁遭炸弹攻击"
 HAPPY_REASON_NUM_CITIES "帝国规模"
 HAPPY_REASON_CONQUEST_DISTRESS "平息民众不满"
+HAPPY_REASON_SECTHAPPY			"教派的福音"
+HAPPY_REASON_FEATS			"惊人的壮举"
 
 SCORE_CAT_FEATS "功绩："
 SCORE_CAT_ADVANCES "科技："

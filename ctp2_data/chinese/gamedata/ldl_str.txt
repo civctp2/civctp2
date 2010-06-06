@@ -1,16 +1,64 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
+# - Added strings for political map - 6-Jul-2009 EPW
+# - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
+# -Added strings for view capital buttons - 4-Jan-EPW
+# -Added string for relationships 7-Jan-EPW
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"已提供特产，要变更吗？"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为[player.1.leader_name]已经完成了外星人生命计画。"
+ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为 {player[1].leader_name} 已经完成了外星人生命计划。"
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"，"
-
-###Strings Moved Over from Junk###
-
-CAPITALIZATION 	"资本化"
-INFRASTRUCTURE 	"基础建设"
 
 #Age Names#	
 AGE_NAME_ANCIENT	"上古"
@@ -19,12 +67,15 @@ AGE_NAME_MODERN		"现代"
 AGE_NAME_GENETIC	"基因"
 AGE_NAME_DIAMOND	"钻石"
 
-YOU_BROKE_ALLIANCE "你打破了与[player.1.civ_name_plural]的联盟关系。"
-YOU_BROKE_CEASE_FIRE "你打破了与[player.1.civ_name_plural]的和平协议。"
-DIPxxx3_AGREEMENT_END_POLLUTION "环保协议"
-CANT_ATTACK_ALLIES "我国与[player.1.civ_name_plural]有邦交，在未破弃盟约之前，不得攻击对方。想立即破弃盟约吗？"
-X_LAB "外星人实验室"
-GENE_SEQUENCER "基因排列器"
+###Strings Moved Over from Junk###
+
+CAPITALIZATION 	"资本化"
+INFRASTRUCTURE 	"基础建设"
+BUILDINGNONE					"空白"
+
+DIPxxx3_AGREEMENT_END_POLLUTION			"环保协议"
+X_LAB						"外星人实验室"
+GENE_SEQUENCER					"基因排列器"
 
 ###END EX_JUNK STRINGS###
 
@@ -41,7 +92,6 @@ str_ldl_CANCEL_OFFER_CAPS	"取消提议"
 str_ldl_No_item_selected_in_list	"清单中未选取特产！"
 str_ldl_Foreign_Attitude	"外国态度"
 str_ldl_Local	"本地"
-str_ldl_Neutral	"中立"
 str_ldl_mp_dbase_out_of_synch	"数据库出问题。回到大厅。"
 
 ##This is the latest batch from Add_str.txt 02-26-99##
@@ -53,10 +103,6 @@ str_ldl_nodialup		"需先拨接上网，始可连上网络"
 str_ldl_connectionerr	"网络连接发生错误"
 str_ldl_Enemy_Moves_Off		"关闭敌人动态画面"
 str_ldl_Enemy_Moves_On		"激活敌人动态画面"
-NETWORK_PLAYER_STATUS_HUMAN "本地"
-NETWORK_PLAYER_STATUS_CONNECTED "联机成功."
-NETWORK_PLAYER_STATUS_AI_OPEN "人工智能（开启）"
-NETWORK_PLAYER_STATUS_AI_CLOSED "人工智能（关闭）"
 KEY_NAME_TAB "TAB键"
 KEY_NAME_ENTER "Enter键"
 KEY_NAME_SPACE "空格键"
@@ -70,7 +116,6 @@ str_tbl_ldl_Close_Message "关闭讯息"
 str_tbl_ldl_Yes "是的"
 str_tbl_ldl_No  "不是"
 str_tbl_ldl_Quit "结束"
-
 
 
 str_tbl_ldl_Next_Round "下回合"
@@ -96,7 +141,6 @@ str_tbl_ldl_Save_World "快速存盘"
 str_tbl_ldl_Load_World "快速读取存盘"
 
 
-
 SAVE_OVERWRITE	"你要把存盘覆盖在以前的储存程序上。\n你还要继续吗？"
 
 str_ldl_Expectations	"期望"
@@ -109,12 +153,6 @@ POLLUTION_TOXIC	"剧毒的"
 
 str_ldl_Total_City_Pollution	"城市污染总量"
 str_ldl_Pollution_Level	"污染等级"
-
-
- 
-CANT_ATTACK_HAVE_TREATY "这项行动将会破坏我与[player.1.civ_name_plural]的外交协议。你还要继续吗？"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "[player.1.civ_name_plural]无法立即将所有部队撤离我领，但承诺将尽快撤军。"
-
 
 str_ldl_RES_CHANGE_BUTTON	"屏幕大小"
 str_ldl_RES_TITLE			"屏幕大小"
@@ -151,12 +189,9 @@ str_ldl_Turns	"回合"
 
 DELETE_QUEUE	"你要删除这条建筑程序吗？"
 str_tbl_ldl_Ongoing	"前进"
-BUTTON_CONTINUE "继续"
-BUTTON_END_GAME "结束游戏"
 LOADING	"加载中..."
 
 str_ldl_Server_Name_COLON "服务器名称："
-
 
 ## rsh012799 - added for city tab pollution
 str_tbl_ldl_Light	"轻的"
@@ -195,9 +230,6 @@ str_ldl_AFB_ECD		"额外行星通讯装置的（建造/下个阶段/最后）："
 str_ldl_AFB_FIELD		"力场（建造/下个阶段/最后）："
 str_ldl_AFB_CHANCE	"失败机率："
 
-
-BUTTON_EXPEL "驱逐"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title			"纪念馆"
 str_ldl_Monument_Upgrade_Available	"选择一项纪念物来改造。"
@@ -226,10 +258,6 @@ str_ldl_CAPS_EXPEL "驱逐"
 str_ldl_CAPS_CANCEL_MOVE "取消移动"
 str_ldl_END_TUTORIAL "结束教学模式"
 
-
-CANT_ATTACK_ALLIES_CAN_EXPEL "你要破坏与[player.1.civ_name_plural]之间的外交协议吗？你可以在不破坏协议之下驱赶他们的。"
-
-
 str_tbl_ldl_You_Need_Embassy_To_Demand	"你需要一栋大使馆来要求科技。"
 str_tbl_ldl_GIFT_MAP	"赠与地图"
 
@@ -239,9 +267,6 @@ str_tbl_ldl_FAIR		"糟糕的"
 str_tbl_ldl_AVERAGE		"平均的"
 str_tbl_ldl_GOOD		"好的"
 str_tbl_ldl_EXCELLENT	"精良的"
-##
-
-## rsh011899 - added for civ status screen str_ldl_CAPS_GOVERNMENT	"政府"
 ##
 
 str_ldl_POPSCIENCE "将黄金转换成科技研发"
@@ -265,6 +290,7 @@ str_ldl_Config_Header "设定"
 str_ldl_Game_Header "游戏"
 str_ldl_Map_Header "地图"
 str_ldl_QUITTOSHELL "结束"
+
 str_ldl_Tutorial_Advice_Off "教学指示关闭"
 str_ldl_Tutorial_Advice_On "教学指示激活"
 str_ldl_Right_Click_Move "鼠标右键为预设键"
@@ -366,61 +392,14 @@ str_ldl_Specforce "特殊部队"
 str_ldl_Bomb "轰炸攻击能力"
 str_ldl_Supp "# 正在建造之部队"
 
-str_ldl_AdvisorYear "Year"
-str_ldl_AdvisorTurn "Turn"
+str_ldl_AdvisorYear "年份"
+str_ldl_AdvisorTurn "回合"
 
 ### New Stuff -Probably not implemented ###
 
 #Barbarian Threat
 #Rename City
 #Delete
-
-#### TILE IMPROVEMENT DESCRIPTIONS #######
-DESCRIPTION_TILEIMP_FARMS	"农田。成本为200单位的公共建设。"
-DESCRIPTION_TILEIMP_ADVANCED_FARMS	"改良田。成本为500单位的公共建设。"
-DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"水栽田。成本为1400单位的公共建设。"
-DESCRIPTION_TILEIMP_MINES	"矿场。最低成本为300单位的公共建设。"
-DESCRIPTION_TILEIMP_ADVANCED_MINES	"改良矿场。最低成本为800单位的公共建设。"
-DESCRIPTION_TILEIMP_MEGA_MINES	"先进矿场。最低成本为1600单位的公共建设。"
-DESCRIPTION_TILEIMP_UNDERSEA_MINES	"海底矿场。最低成本为400单位的公共建设。"
-DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"海底改良矿场。最低成本为1000单位的公共建设。"
-DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"海底先进矿场。最低成本为2200单位的公共建设。"
-DESCRIPTION_TILEIMP_NETS	"定置网。最低成本为200单位的公共建设。"
-DESCRIPTION_TILEIMP_FISHERIES	"渔场。最低成本为500单位的公共建设。"
-DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"自动化渔场。最低成本为1400单位的公共建设。"
-DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"组装舱。成本为600单位的公共建设。"
-DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"先进组装舱。成本为1400单位的公共建设。"
-DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"组装舱群。成本为2200单位的公共建设。"
-DESCRIPTION_TILEIMP_FOOD_PODS	"食物舱。成本为600单位的公共建设。"
-DESCRIPTION_TILEIMP_FOOD_MODULES	"食物样板。成本为1400单位的公共建设。"
-DESCRIPTION_TILEIMP_FOOD_TANKS	"食物储存槽。成本为2200单位的公共建设。"
-DESCRIPTION_TILEIMP_RUINS	"废墟"
-DESCRIPTION_TILEIMP_ROAD	"道路。最低成本为60单位的公共建设。"
-DESCRIPTION_TILEIMP_RAILROAD	"铁路。最低成本为120单位的公共建设。"
-DESCRIPTION_TILEIMP_MAGLEV	"磁浮列车。最低成本为240单位的公共建设。"
-DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"海底隧道。最低成本为1200单位的公共建设。"
-
-
-#### installation DESCRIPTIONS ####
-DESCRIPTION_INSTALLATION_LISTENING_POSTS	"情报站。成本为1000单位的公共建设。"
-DESCRIPTION_INSTALLATION_RADAR_STATIONS	"雷达站。成本为1000单位的公共建设。"
-DESCRIPTION_INSTALLATION_AIR_BASES	"空军基地。成本为1000单位的公共建设。"
-DESCRIPTION_INSTALLATION_FORTIFICATIONS	"防御工事。成本为1000单位的公共建设。"
-DESCRIPTION_INSTALLATION_SONAR_BUOYS	"声纳浮标。成本为150单位的公共建设。"
-
-#### terrain transform DESCRIPTIONS	"####"
-DESCRIPTION_DESERTS	"沙漠"
-DESCRIPTION_FORESTS	"森林"
-DESCRIPTION_GLACIERS	"冰河"
-DESCRIPTION_GRASSLAND	"草原"
-DESCRIPTION_HILLS	"丘陵"
-DESCRIPTION_RAINFOREST	"丛林"
-DESCRIPTION_ALPINE	"山脉"
-DESCRIPTION_SAVANNAH	"平原"
-DESCRIPTION_SWAMPS	"沼泽"
-DESCRIPTION_TUNDRA	"冻原"
-
-
 
 ###Keeper Stuff###
 
@@ -449,11 +428,6 @@ str_tbl_ldl_Civ_Score_Colon		"文明积分："
 
 #Who knows where this goes?#
 UNIT_ORDER_TRANSPORTED "正在传送"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY "{city[0].name}"
-
-str_tbl_ldl_The_Diplomats	"我们的领袖目前公务繁忙，我们并没有兴趣与贵国在此时商谈任何事务。"
-str_tbl_ldl_Select_a_new	"请选择一项新科技来进行研发。"
-str_ldl_Review_Tutorial_Messages	"重看『教学模式』的讯息"
 str_ldl_END	"结束"
 str_ldl_End_Tutorial_Dialog	"你确定要结束教学模式了吗？"
 str_ldl_Skill_Level	"技术等级"
@@ -468,8 +442,6 @@ str_ldl_Power_Graph		"权力图"
 str_ldl_Civ_Score		"文明积分"
 str_ldl_Year_Founded_COLON	"你找到了："
 str_ldl_Turns_to_Next_Disaster	"离发生下次灾害的回合数"
-
-
 
 str_ldl_CAPS_MAKE_QUEUE	"建立程序"
 str_ldl_CAPS_LOAD_QUEUE "加载程序"
@@ -488,22 +460,6 @@ str_ldl_CAPS_FOREIGN	"国外的"
 
 str_ldl_NEXT	"下一步"
 
-# Age Names
-AGE_NAME_ANCIENT  "上古时代"
-AGE_NAME_RENAISS  "文艺复兴时代"
-AGE_NAME_MODERN   "现代"
-AGE_NAME_GENETIC  "基因时代"
-AGE_NAME_DIAMOND  "钻石时代"
-
-
-
-
-
-
-
-
-
-
 # strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"你的文明积分是："
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"你的名字在历史编年上将会被形容成"
@@ -511,6 +467,7 @@ str_ldl_POPULATION_COLON	"人口数："
 str_ldl_CIV_SCORE			"文明积分"
 str_ldl_POWER_GRAPH			"权力图"
 str_ldl_DEFEAT				"击败"
+
 str_ldl_THE_DESTITUTE			"穷困的人"
 str_ldl_THE_SQUIRREL_HEARTED	"胆小如鼠的人"
 str_ldl_THE_RED_FACED			"红脸的人"
@@ -524,7 +481,6 @@ str_ldl_THE_LION_HEARTED		"有雄才大略心的人"
 str_ldl_THE_INDOMITABLE			"不屈不挠的人"
 str_ldl_THE_CIV_LORD			"具有文明霸主相的人"	
 
-str_ldl_CAPS_TRADE				"贸易"
 str_ldl_Small_Type				"类别"
 str_ldl_Caravans_COLON			"商队："
 str_ldl_Gold_From_Trade_COLON	"贸易收入："
@@ -537,44 +493,6 @@ str_tbl_ldl_Destination			"目的地"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
 
-
-##Network Game Messages##
-
-NETWORK_PLAYER_LEFT "[action.1.name]已经离开游戏。计算机将接管那位玩家的文明帝国。"
-NETWORK_PLAYER_JOINED "[action.1.name]已经接手[player.1.civ_name_plural]。"
-NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name]加入游戏成为[player.1.civ_name_plural]，不过该文明原本是属于别人的。你希望放弃他们吗？"
-BUTTON_EJECT "放弃"
-BUTTON_LET_THEM_STAY "让他们待下来"
-NETWORK_YOU_ARE_NOW_HOST "你现在是游戏的主机。"
-NETWORK_NEW_HOST "[action.1.name]现在是游戏的主机。"
-NETWORK_YOU_ARE_NOW_HOST "你现在是游戏的主机。"
-NETWORK_NEW_HOST "[action.1.name]现在是游戏的主机。"
-NETWORK_SESSION_LOST "与主机失去联机，回到大厅。"
-NETWORK_WAITING_ON_PLAYERS "等候其它玩家"
-NETWORK_WAITING_FOR_DATA "等待数据传输"
-NETWORK_RESYNCING "同步化中"
-
-
-# Button label strings
-BUTTON_ACCEPT       "接受"
-BUTTON_CANCEL       "取消"
-BUTTON_CLOSE        "关闭"
-BUTTON_GOAL         "目的"
-BUTTON_LIBRARY      "图书馆"
-BUTTON_MAYBE        "Maybe"
-BUTTON_NO           "不是"
-BUTTON_OK           "关闭"
-BUTTON_RANDOM       "随机"
-BUTTON_READY        "准备"
-BUTTON_REJECT       "拒绝"
-BUTTON_RESEARCH     "研究"
-BUTTON_SET_PRICE    "订定价格"
-BUTTON_STEAL_THIS          "<- 偷这个"
-BUTTON_YES          "是的"
-ACCEPT  "同意"
-REJECT  "拒绝"
-YES		"是的"
-NO 		"不是"
 str_ldl_Abort	"忽略"
 str_ldl_Open	"开启"
 str_ldl_Close	"关闭"
@@ -638,6 +556,7 @@ str_ldl_Buy_Now	"现在购买"
 str_ldl_BY_YOU	"由你"
 str_ldl_Cancel	"取消"
 str_ldl_Cancel_Route	"取消贸易路线"
+
 str_ldl_CAPS_ACTION	"行动"
 str_ldl_CAPS_ADVANCE	"科技"
 str_ldl_CAPS_ADVANCES	"科技"
@@ -665,15 +584,12 @@ str_ldl_CAPS_GOLD2	"黄金"
 str_ldl_CAPS_GOLD	"黄金"
 str_ldl_CAPS_GOLD_COLON	"黄金："
 str_ldl_CAPS_GOODS	"货物"
-# Spacing changed - updated string in add_ldl
-str_ldl_CAPS_GREAT_LIBRARY	"大图书馆"
 str_ldl_CAPS_HAPPINESS	"快乐度"
 str_ldl_CAPS_HAPPY	"快乐"
 str_ldl_CAPS_HEALTH	"健康"
 str_ldl_CAPS_INFO	"排名"
 str_ldl_CAPS_INTELLIGENCE	"智能"
 str_ldl_CAPS_LAND	"陆地"
-str_ldl_CAPS_LOAD_QUEUE	"加载程序"
 str_ldl_CAPS_LOCK	"锁定"
 str_ldl_CAPS_MALE	"男性"
 str_ldl_CAPS_MAP	"地图"
@@ -741,10 +657,13 @@ str_ldl_Choose_Map_Size	"改变世界规模"
 str_ldl_Choose_Risk_Level	"改变困难度"
 str_ldl_Choose_World_Shape	"改变世界形状"
 str_ldl_Choose_World_Type	"改变世界型态"
-str_ldl_Cities	"城市"
-str_ldl_CITIES_COLON	"城市"
+str_ldl_Cities	"城市群"
+str_ldl_CITIES_COLON	"C城市"
 str_ldl_City	"城市"
 str_ldl_City_Bonus_COLON	"城市防卫："
+str_ldl_City_Air_Attack_Bonus_COLON		"城市空中攻击："
+str_ldl_City_Land_Attack_Bonus_COLON		"城市陆上攻击："
+str_ldl_City_Sea_Attack_Bonus_COLON		"城市海上攻击："
 str_ldl_City_Builder	"城市建造者"
 str_ldl_CITY_ESPIONAGE	"城市谍报任务"
 str_ldl_CITY_GOLD	"城市黄金数"
@@ -847,7 +766,6 @@ str_ldl_Few_Goods	"较少货物"
 str_ldl_File_Injunction	"强制执行。成本为300单位的黄金"
 str_ldl_Fog_Of_War_Off	"战争迷雾关闭"
 str_ldl_Folder_COLON	"资料夹："
-str_ldl_Food	"食物"
 str_ldl_Food_	"食物 "
 str_ldl_Food_COLON	"食物："
 str_ldl_Food_Eaten	"食用的食物"
@@ -1189,7 +1107,8 @@ str_ldl_Small_24_x_48	"小的"
 str_ldl_Soothsay	"预言。成本为500单位的黄金"
 str_ldl_SOUND	"音效"
 str_ldl_SOUND_OPTIONS	"音效"
-str_ldl_Space	"太空"
+str_ldl_Music					"音乐"
+str_ldl_MUSIC_OPTIONS				"音乐"
 str_ldl_Special	"特殊"
 str_ldl_SPECIAL_ABILITIES	"特殊能力"
 str_ldl_SPECIAL_ATTACKS	"特殊攻击"
@@ -1225,7 +1144,6 @@ str_ldl_This_is_a_scenario_game	"这是个关卡游戏。"
 str_ldl_This_is_not_a_scenario_game	"这不是关卡游戏。"
 str_ldl_This_is_the_continuation_of_a_saved_game	"这是个接续上次存盘进度的游戏。"
 str_ldl_Throw_Party	"开舞会"
-str_ldl_Tile	"区域"
 str_ldl_Tile_Imp	"区域增强设施"
 str_ldl_To	"到"
 str_ldl_TO_COLON	"到："
@@ -1305,7 +1223,6 @@ str_tbl_ldl_Arabian	"阿拉伯的"
 str_tbl_ldl_Asian	"亚洲的"
 str_tbl_ldl_AT_PEACE	"平时"
 str_tbl_ldl_AT_WAR	"战时"
-str_tbl_ldl_Average	"一般的"
 str_tbl_ldl_Bioinfect	"对城市施行生化攻击"
 str_tbl_ldl_Blow_Up_Cabinet	"炸毁政府组织"
 str_tbl_ldl_Bombard	"轰炸攻击"
@@ -1504,7 +1421,32 @@ str_tbl_ldl_Random_Order_On	"随机模式开启"
 str_tbl_ldl_Random_Order_Off  "随机模式关闭"
 str_ldl_Fuel_COLON  "燃料："
 
+### New World Shape Strings ###
 
+str_tbl_ldl_North_South_Wrap_Only			"南北连通"
+str_ldl_North_and_South_edges_of_the_map_connect	"地图的南北边缘相连接"
+str_ldl_Uranus_World					"天王星世界"
+str_tbl_ldl_Uranus_World				"天王星的世界"
+
+### New Single Player Game Player Screen Strings ###
+
+str_ldl_SPNGPS_NumPlayerSpinner			"玩家数量"
+str_ldl_SPNGPS_MaxPlayerSpinner			"最大玩家数量"
+str_ldl_SPNGPS_PlayerSpinner			"起始玩家"
+
+str_ldl_SPNGPS_NumPlayerText			"设定新游戏中玩家的数量"
+str_ldl_SPNGPS_MaxPlayerText			"设定游戏中同时出现玩家的最大数量"
+str_ldl_SPNGPS_PlayerText			"设定起始玩家，决定派系颜色"
+
+### Added Disclaimer Strings ###
+
+str_ldl_Disclaimer1				"此版本非由ACTIVISION开发，亦无支持"
+str_ldl_Disclaimer2				"此版本的权倾天下2由 http://apolyton.net 开发"
+str_ldl_Disclaimer3				"作者电邮 ctp2source@apolyton.net"
+
+### Version String ###
+
+str_ldl_version					"2004-07-26"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -1534,7 +1476,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES "[player.1.leader_name]是你的队友，你不能攻击他。"
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -1549,8 +1490,6 @@ str_tbl_ldl_upk108.tga	"upk108.tga"
 str_tbl_ldl_upk109.tga	"upk109.tga"
 str_tbl_ldl_upk110.tga	"upk110.tga"
 str_tbl_ldl_upk111.tga	"upk111.tga"
-
-
 
 
 # Junk 1 #
@@ -1605,52 +1544,10 @@ str_ldl_Current_Setting	"目前设定"
 str_ldl_Current_Supply	"目前支持"
 str_ldl_demand_a_map	"你要求一张你尚未踏经的陆地地图"
 str_ldl_Deplorable	"可悲的"
-str_ldl_DESCRIPTION_INSTALLATION_X_RAY_MINES	"DESCRIPTION_INSTALLATION_X_RAY_MINES"
 str_ldl_Debug_version	"最后版本里并不包含侦错版本。"
 str_ldl_Defense_COLON	"防御："
 str_ldl_d	"d"
-str_ldl_DESCRIPTION_ALPINE	"DESCRIPTION_ALPINE"
 str_ldl_Description_COLON	"描述："
-str_ldl_DESCRIPTION_DESERTS	"DESCRIPTION_DESERTS"
-str_ldl_DESCRIPTION_FORESTS	"DESCRIPTION_FORESTS"
-str_ldl_DESCRIPTION_GLACIERS	"DESCRIPTION_GLACIERS"
-str_ldl_DESCRIPTION_GRASSLAND	"DESCRIPTION_GRASSLAND"
-str_ldl_DESCRIPTION_HILLS	"DESCRIPTION_HILLS"
-str_ldl_DESCRIPTION_INSTALLATION_AIR_BASES	"DESCRIPTION_INSTALLATION_AIR_BASES"
-str_ldl_DESCRIPTION_INSTALLATION_DRYDOCK	"DESCRIPTION_INSTALLATION_DRYDOCK"
-str_ldl_DESCRIPTION_INSTALLATION_FORTIFICATIONS	"DESCRIPTION_INSTALLATION_FORTIFICATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_LAND_MINES	"DESCRIPTION_INSTALLATION_LAND_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_LISTENING_POSTS	"DESCRIPTION_INSTALLATION_LISTENING_POSTS"
-str_ldl_DESCRIPTION_INSTALLATION_MAGNETIC_MINES	"DESCRIPTION_INSTALLATION_MAGNETIC_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_RADAR_STATIONS	"DESCRIPTION_INSTALLATION_RADAR_STATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_SONAR_BUOYS	"DESCRIPTION_INSTALLATION_SONAR_BUOYS"
-str_ldl_DESCRIPTION_INSTALLATION_SPACEDOCK	"DESCRIPTION_INSTALLATION_SPACEDOCK"
-str_ldl_DESCRIPTION_RAINFOREST	"DESCRIPTION_RAINFOREST"
-str_ldl_DESCRIPTION_SAVANNAH	"DESCRIPTION_SAVANNAH"
-str_ldl_DESCRIPTION_SWAMPS	"DESCRIPTION_SWAMPS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_FARMS	"DESCRIPTION_TILEIMP_ADVANCED_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_MINES	"DESCRIPTION_TILEIMP_ADVANCED_MINES"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FARMS	"DESCRIPTION_TILEIMP_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_FISHERIES	"DESCRIPTION_TILEIMP_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_MODULES	"DESCRIPTION_TILEIMP_FOOD_MODULES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_PODS	"DESCRIPTION_TILEIMP_FOOD_PODS"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_TANKS	"DESCRIPTION_TILEIMP_FOOD_TANKS"
-str_ldl_DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"DESCRIPTION_TILEIMP_HYDROPONIC_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MAGLEV	"DESCRIPTION_TILEIMP_MAGLEV"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MINES	"DESCRIPTION_TILEIMP_MEGA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MINES	"DESCRIPTION_TILEIMP_MINES"
-str_ldl_DESCRIPTION_TILEIMP_NETS	"DESCRIPTION_TILEIMP_NETS"
-str_ldl_DESCRIPTION_TILEIMP_RAILROAD	"DESCRIPTION_TILEIMP_RAILROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROAD	"DESCRIPTION_TILEIMP_ROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL"
-str_ldl_DESCRIPTION_TUNDRA	"DESCRIPTION_TUNDRA"
 str_ldl_DF	"DF"
 str_ldl_DISCONTENT	"不满意的"
 str_ldl_Dumb	"驽钝的"
@@ -2009,19 +1906,19 @@ GRAMMAR_FEMALE_WINNER_RANK_5  "不屈不挠的人"
 GRAMMAR_MALE_WINNER_RANK_6    "具有文明霸主相的人"
 GRAMMAR_FEMALE_WINNER_RANK_6  "具有文明霸主相的人"
 
-PLAYER_DESCRIPTION_LOSER_RANK_1 "[player.leader_nocolor] [player.gender.loser_rank_1]"
-PLAYER_DESCRIPTION_LOSER_RANK_2 "[player.leader_nocolor] [player.gender.loser_rank_2]"
-PLAYER_DESCRIPTION_LOSER_RANK_3 "[player.leader_nocolor] [player.gender.loser_rank_3]"
-PLAYER_DESCRIPTION_LOSER_RANK_4 "[player.leader_nocolor] [player.gender.loser_rank_4]"
-PLAYER_DESCRIPTION_LOSER_RANK_5 "[player.leader_nocolor] [player.gender.loser_rank_5]"
-PLAYER_DESCRIPTION_LOSER_RANK_6 "[player.leader_nocolor] [player.gender.loser_rank_6]"
+PLAYER_DESCRIPTION_LOSER_RANK_1			"{player[0].leader_name}"
+PLAYER_DESCRIPTION_LOSER_RANK_2			"{player[0].leader_name}"
+PLAYER_DESCRIPTION_LOSER_RANK_3			"{player[0].leader_name}"
+PLAYER_DESCRIPTION_LOSER_RANK_4			"{player[0].leader_name}"
+PLAYER_DESCRIPTION_LOSER_RANK_5			"{player[0].leader_name}"
+PLAYER_DESCRIPTION_LOSER_RANK_6			"{player[0].leader_name}"
 
-PLAYER_DESCRIPTION_WINNER_RANK_1 "[player.leader_nocolor] [player.gender.winner_rank_1]"
-PLAYER_DESCRIPTION_WINNER_RANK_2 "[player.leader_nocolor] [player.gender.winner_rank_2]"
-PLAYER_DESCRIPTION_WINNER_RANK_3 "[player.leader_nocolor] [player.gender.winner_rank_3]"
-PLAYER_DESCRIPTION_WINNER_RANK_4 "[player.leader_nocolor] [player.gender.winner_rank_4]"
-PLAYER_DESCRIPTION_WINNER_RANK_5 "[player.leader_nocolor] [player.gender.winner_rank_5]"
-PLAYER_DESCRIPTION_WINNER_RANK_6 "[player.leader_nocolor] [player.gender.winner_rank_6]"
+PLAYER_DESCRIPTION_WINNER_RANK_1		"{player[0].leader_name}"
+PLAYER_DESCRIPTION_WINNER_RANK_2		"{player[0].leader_name}"
+PLAYER_DESCRIPTION_WINNER_RANK_3		"{player[0].leader_name}"
+PLAYER_DESCRIPTION_WINNER_RANK_4		"{player[0].leader_name}"
+PLAYER_DESCRIPTION_WINNER_RANK_5		"{player[0].leader_name}"
+PLAYER_DESCRIPTION_WINNER_RANK_6		"{player[0].leader_name}"
 
 str_tbl_ldl_upba0504_tga	"upba0504.tga"
 str_tbl_ldl_upba0511_tga	"upba0511.tga"
@@ -2081,24 +1978,6 @@ str_SprEd_PlayOnce " 播放一次"
 str_SprEd_Loop " 循环"
 str_SprEd_FacingPlus " 面向+"
 str_SprEd_FacingMinus " 面向-"
-
-# MDS 091300
-# Added for Scenario Editor buttons
-#
-str_tbl_ldl_XWrap		"X轴"
-str_tbl_ldl_YWrap		"Y轴"
-str_tbl_ldl_Cut			"切除选定区域"
-str_tbl_ldl_Copy		"复制选定区域"
-str_tbl_ldl_Paste		"贴上区域"
-str_tbl_ldl_SmallBrush	"小毛刷"
-str_tbl_ldl_MedBrush	"中毛刷"
-str_tbl_ldl_LargeBrush	"大毛刷"
-str_tbl_ldl_SaveClip	"储存回纹针"
-str_tbl_ldl_LoadClip	"加载回纹针"
-str_tbl_ldl_Explore		"将地图设定为已探索"
-str_tbl_ldl_Unexplore	"将地图设定为未探索"
-str_tbl_ldl_Fog			"开启战场迷雾"
-
 
 
 
@@ -2254,6 +2133,8 @@ str_ldl_ShowQueue     			"显示排程"
 str_ldl_EditQueue 			"建造"
 str_ldl_HideQueue 			"隐藏排程"
 
+str_ldl_OptimizeSpecialists			"优选专家"
+
 str_ldl_Costs 				"费用"
 str_ldl_Gives 				"给与"
 str_ldl_YouHave 			"您拥有"
@@ -2264,6 +2145,11 @@ str_ldl_Sell 				"变卖"
 str_ldl_Population 			"人口："
 str_ldl_Growth 				"成长："
 str_ldl_CityList 			"城市列表"
+
+str_ldl_ConversionLoss				"失去信仰"
+str_ldl_FranchiseLoss				"失去公民权"
+
+str_ldl_GrowthTurns				"成长轮回"
 
 str_ldl_DipProposalsReceived 		"接获之提议"
 str_ldl_DipProposalsMade     		"送出之提议"
@@ -2372,6 +2258,7 @@ str_ldl_Gameplay			"游戏操作"
 str_ldl_MapFilters			"地图滤镜"	
 str_ldl_Graphics			"画面"		
 str_ldl_Sound				"音效"			
+str_ldl_Music				"音乐"
 str_ldl_Advanced			"进阶"      
 str_ldl_SaveGame			"储存游戏"		
 str_ldl_LoadGame			"加载游戏"		
@@ -2385,6 +2272,11 @@ str_ldl_NewArmy 			"新军队"
 str_ldl_SingleUnits 			"其它部队"
 str_ldl_ArmyCount 			"在军队中：%d"
 str_ldl_Armies 				"军队"
+
+
+##
+## Scenario Editor strings
+##
 
 str_ldl_ScenYear 			"年代"
 str_ldl_NumPlayers 			"# 玩家"
@@ -2424,6 +2316,28 @@ str_ldl_FileName 			"档案："
 str_ldl_Leader 				"领袖姓名："
 str_ldl_CityName 			"城市名称："
 
+# MDS 091300
+# Added for Scenario Editor buttons
+#
+str_tbl_ldl_XWrap		"X轴"
+str_tbl_ldl_YWrap		"Y轴"
+str_tbl_ldl_Cut			"切除选定区域"
+str_tbl_ldl_Copy		"复制选定区域"
+str_tbl_ldl_Paste		"贴上区域"
+str_tbl_ldl_SmallBrush	"小毛刷"
+str_tbl_ldl_MedBrush	"中毛刷"
+str_tbl_ldl_LargeBrush	"大毛刷"
+str_tbl_ldl_SaveClip	"储存回纹针"
+str_tbl_ldl_LoadClip	"加载回纹针"
+str_tbl_ldl_Explore		"将地图设定为已探索"
+str_tbl_ldl_Unexplore	"将地图设定为未探索"
+str_tbl_ldl_Fog			"开启战场迷雾"
+
+
+##
+## Order Strings
+##
+
 str_ldl_order_attack 			"攻击"
 str_ldl_order_move 			"移动"
 str_ldl_order_paradrop 			"空降"
@@ -2461,10 +2375,12 @@ str_ldl_order_pillage 			"掠夺"
 str_ldl_order_advertise 		"广告"
 str_ldl_order_conduct_hit 		"指导攻击"
 str_ldl_order_settle 			"定居"
+str_ldl_order_settle_in_city		"定居于城市"
 str_ldl_order_nuke_city 		"核弹攻击城市"
 str_ldl_order_disband_army 		"解散军队"
 str_ldl_order_board_transport 		"登上运输部队"
 str_ldl_order_unload 			"卸载"
+str_ldl_order_upgrade			"升级"
 str_ldl_order_launch 			"太空发射"
 str_ldl_order_target 			"设定目标"
 str_ldl_order_clear_target 		"清除目标"
@@ -2555,14 +2471,13 @@ str_ldl_PERCENT_SYMBOL	"%"
 # Generic close button label
 str_ldl_CLOSE_BUTTON	"关闭"
 
-# <changeme> New control panel strings.
+# New control panel strings.
 str_ldl_CP_CITIES			"城市"
 str_ldl_CP_TOT_POP			"人口"
 str_ldl_CP_CUR_GOVT			"政体"
 str_ldl_CP_PUBLIC_WORKS		"公共建设"
 str_ldl_CP_SCIENCE			"科学"
 str_ldl_CP_POLLUTION		"污染"
-# end <changeme> block.  The rest of these are old strings.
 str_ldl_CP_GOVERNOR			"市长"
 str_ldl_CP_IMPROVEMENTS		"设施"
 str_ldl_CP_TERRAFORM		"改造地形"
@@ -2592,10 +2507,27 @@ str_ldl_DD_CONSUMED_LABEL			"消耗："
 str_ldl_DD_STORED_LABEL				"贮存："
 str_ldl_DD_UNIT_UPKEEP_LABEL		"部队维持费："
 str_ldl_DD_CITY_USE_LABEL			"城市使用："
-str_ldl_DD_BUILDING_UPKEEP_LABEL	"维修费："
+str_ldl_DD_BUILDING_UPKEEP_LABEL	"城市建筑维修费："
 str_ldl_DD_SCIENCE_LABEL			"科学："
 str_ldl_DD_SAVINGS_LABEL			"结余："
 str_ldl_DD_DETAILS					"细节"
+str_ldl_DD_OPTIMIZE_SLIDERS			"优选滑块"
+str_ldl_DD_TERRAIN_LABEL			"地形："
+str_ldl_DD_TCOMMERCE_LABEL			"商业："
+str_ldl_DD_BUILDINGS_LABEL			"建筑："
+str_ldl_DD_FARMERS_LABEL			"农业："
+str_ldl_DD_LABORERS_LABEL			"劳力："
+str_ldl_DD_GOVERNMENT_LABEL			"政府："
+str_ldl_DD_WAGES_EFFECT_LABEL			"工资："
+str_ldl_DD_SCIENTISTS_LABEL			"科学家："
+str_ldl_DD_MERCHANTS_LABEL			"商人："
+str_ldl_DD_FEATS_AND_WONDERS_LABEL		"奇观和壮举："
+str_ldl_DD_TRADE_LABEL				"贸易："
+str_ldl_DD_CONVERSIONS_LABEL			"转变信仰："
+str_ldl_DD_UNIT_SUPPORT_LABEL			"供给："
+str_ldl_DD_ENEMY_LABEL				"敌人："
+str_ldl_DD_SCIENCE_TITLE			"科技"
+str_ldl_DD_GOLD_TITLE				"黄金"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT				"目前政体"
 str_ldl_DD_GOV_COMPARE				"比较"
@@ -2721,6 +2653,7 @@ str_ldl_BuildManagerTitle "建设官"
 #str_ldl_CityWinPollution "污染"
 ######
 
+str_ldl_SendMessage				"发送"
 str_ldl_CreateProposal "提议"
 str_ldl_Details "细节"
 
@@ -2760,6 +2693,9 @@ str_ldl_HappyPositive "正面因素"
 str_ldl_Polluters "污染源"
 str_ldl_Cleaners "处理污染设施"
 
+str_ldl_CityWinSpecTabPollutionLabel		"污染"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"犯罪"
 str_ldl_CityWinCrimeFormat "犯罪：%d%%"
 str_ldl_IW_CONFIRM_WAR "对{player[0].country_name}宣战吗？"
 
@@ -2794,7 +2730,10 @@ str_tbl_ldl_InProgress			"游戏进行中："
 str_tbl_ldl_Defeat				"灭国："
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY			"大图书馆"
 str_ldl_GreatLibraryGoalSetTo "目标设定为：%s"
+str_ldl_GreatLibraryGoalKnown			"我们已经研发了 %s ，未设定下一个目标"
+str_ldl_GreatLibraryNoGoalPossible		"%s 尚未研发。"
 str_ldl_SEARCH_WORD "搜索："
 str_ldl_TECH_TREE "科技树"
 str_ldl_SET_GOAL	"设定目标"
@@ -2807,8 +2746,10 @@ str_ldl_RANKING_MILITARY "军事"
 str_ldl_RANKING_ECONOMIC "经济"
 str_ldl_RANKING_SCIENTIFIC "科技"
 str_ldl_RANKING_OVERALL "整体"
+str_ldl_RANKING_POLLUTION			"污染"
+str_ldl_RANKING_WONDERS				"奇迹"
+str_ldl_RANKING_RANK "名次："
 str_ldl_INFO_RANKING_TAB "排名"
-str_ldl_RANKING_RANK "名次： "
 str_ldl_LINE_BUTTON "线图"
 str_ldl_ZEROSUM_BUTTON "零和图"
 
@@ -2839,6 +2780,7 @@ str_ldl_DipDetails_LeaderPersonality	"领袖性格： {player[0].leaderperonality}"
 str_ldl_DipDetails_EmbassyMsg			"* 大使馆需可接触特许情报。"
 str_ldl_DipDetails_NoEmbassy			"<无大使馆>"
 
+# Tile improvent panel
 str_ldl_ImproveLand "陆地"
 str_ldl_ImproveOcean "海洋"
 str_ldl_ImproveSpecial "特殊"
@@ -2849,6 +2791,9 @@ str_ldl_ImproveTerraformOcean "改造海洋"
 str_ldl_RADAR_MAP_UNITS		"部队"
 str_ldl_RADAR_MAP_CITIES	"城市"
 str_ldl_RADAR_MAP_BORDERS	"国界"
+str_ldl_RADAR_MAP_POLITICAL			"政体"
+str_ldl_RADAR_MAP_CAPITOLS			"国会"
+str_ldl_RADAR_MAP_RELATIONSHIPS		"关系"
 
 str_ldl_BV_RETREAT "撤退"
 
@@ -2873,13 +2818,7 @@ AUTOSAVE_NAME				"自动记录"
 
 TRADE_ROUTE_RESET 			"重设贸易路线！"
 
-VICTORY_ENSLAVEMENT_CITY 		"我国的{unit[0].name}新俘虏了一名奴隶，将他送到{city[0].name}。"
-
-HOTSEAT_HUMAN "人类"
-HOTSEAT_AI "计算机"
-
 SHOW_ME "示范"
-BUTTON_QUIT_GAME "退出游戏"
 
 TEST_BEGIN_TURN "myValue's value is {myValue}"
 TEST_UNIT_KILLED "{unit[0].name}遇害了 "
@@ -2887,19 +2826,6 @@ TEST_UNIT_KILLED "{unit[0].name}遇害了 "
 INFOBAR_UNITS "部队： "
 INFOBAR_CITY "城市： "
 INFOBAR_UNEXPLORED "未探索"
-
-UNIT_HOPLITE_NEW "重装步兵"
-
-BUILD_LIST_SEQUENCE_PRODUCTION "生产"
-BUILD_LIST_SEQUENCE_GROWTH "成长"
-BUILD_LIST_SEQUENCE_OFFENSE "攻势"
-BUILD_LIST_SEQUENCE_DEFENSE "守势"
-BUILD_LIST_SEQUENCE_SCIENCE "科学"
-BUILD_LIST_SEQUENCE_GOLD "商业"
-BUILD_LIST_SEQUENCE_WONDERS "奇观"
-BUILD_LIST_SEQUENCE_HAPPINESS "幸福度"
-
-MOVED_ALL_ARMIES_GENIUS "所有部队调度完毕，您可真称得上是不世出的军事奇才！"
 
 UNIT_CATEGORY_GENERIC "总类"
 UNIT_CATEGORY_SETTLER "开拓队"
@@ -2914,10 +2840,7 @@ UNIT_CATEGORY_SPECIAL "特殊"
 
 UNIT_LOCATION_IN_FIELD "野战"
 UNIT_LOCATION_IN_SPACE "太空"
-
-T_TURN0 "这是第0回合"
-
-T_CREATE_CITY "设立一座城市了"
+UNIT_ORDER_TRANSPORTED				"运载中"
 
 ARMY_NAME_PREFIX "军队 #"
 
@@ -2939,11 +2862,11 @@ LEADER_ADDRESS_MALE_CAP "阁下"
 LEADER_ADDRESS_FEMALE_CAP "女士"
 
 # Empire Level Description Strings
-EMPIRE_RATIONS_AMOUNT_0		"2"
-EMPIRE_RATIONS_AMOUNT_1		"4"
-EMPIRE_RATIONS_AMOUNT_2		"5"
-EMPIRE_RATIONS_AMOUNT_3		"7"
-EMPIRE_RATIONS_AMOUNT_4		"10"
+EMPIRE_RATIONS_AMOUNT_0				"6"
+EMPIRE_RATIONS_AMOUNT_1				"9"
+EMPIRE_RATIONS_AMOUNT_2				"12"
+EMPIRE_RATIONS_AMOUNT_3				"15"
+EMPIRE_RATIONS_AMOUNT_4				"18"
 EMPIRE_RATIONS_AMOUNT_UNIT	"公斤"
 
 EMPIRE_WORKDAY_AMOUNT_0		"6"
@@ -2953,11 +2876,11 @@ EMPIRE_WORKDAY_AMOUNT_3		"12"
 EMPIRE_WORKDAY_AMOUNT_4		"14"
 EMPIRE_WORKDAY_AMOUNT_UNIT	"小时"
 
-EMPIRE_COMMERCE_AMOUNT_0	"4"
-EMPIRE_COMMERCE_AMOUNT_1	"8"
-EMPIRE_COMMERCE_AMOUNT_2	"12"
-EMPIRE_COMMERCE_AMOUNT_3	"16"
-EMPIRE_COMMERCE_AMOUNT_4	"20"
+EMPIRE_COMMERCE_AMOUNT_0			"2"
+EMPIRE_COMMERCE_AMOUNT_1			"3"
+EMPIRE_COMMERCE_AMOUNT_2			"4"
+EMPIRE_COMMERCE_AMOUNT_3			"5"
+EMPIRE_COMMERCE_AMOUNT_4			"6"
 EMPIRE_COMMERCE_AMOUNT_UNIT	"黄金"
 
 EMPIRE_VALUE_DESC_GROWTH_0		"无政府"
@@ -3056,6 +2979,7 @@ str_ldl_EditQueueBuildings "建物"
 str_ldl_EditQueueWonders "奇观"
 str_ldl_EditQueueAppend "新增 >"
 str_ldl_EditQueueInsert ">插入<"
+str_ldl_EditQueueSuggest			"建议"
 
 str_ldl_EditQueueAttack "攻击"
 str_ldl_EditQueueDefense "防守"
@@ -3083,11 +3007,16 @@ str_ldl_Remove "移除 >"
 str_ldl_AddAll "<< 全部增加"
 str_ldl_RemoveAll "全部移除 >>"
 
+
 # # END OF STUFF ADDED 9/5/00
 
 #Disbanding Cities Strings
 str_ldl_CantDisbandCitySize		"不能解散规模超过3的城市。"
 str_ldl_CantDisbandLastCity		"不能解散最后一座城市。"
+
+# Stuff added 20-Nov-2007 # I have no idea were else to put it
+str_FileDoesNotExist                            "文件不存在："
+str_MapSizesDiffer                              "新地图尺寸与已载入的不符，\n 重定义地图尺寸，旧/新："
 
 # Profile strings (Advanced options list)
 str_profile_UnitAnim 				"开启部队动画"
@@ -3135,4 +3064,129 @@ str_profile_AutoOpenCityWindow 			"城市设立时开启建设官"
 str_profile_ShowEnemyHealth 			"显示敌军的生命值"
 str_profile_ShowCityInfluence 			"显示城市的影响范围"
 str_profile_ShowPoliticalBorders 		"显示国界"
+str_profile_EndTurnSound                        "回合结束提示音"
+str_profile_CloseOnEyepoint                     "点击眼球时关闭信息"
+str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
+str_profile_ShowOrderUnion                      "显示所有军队命令" 
+str_profile_RecentAtTop                         "新信息顶部显示"
+str_profile_CityClick                           "点选城市而非军队"
+str_profile_DebugSlic                           "逐步调试信息"
+str_profile_DebugSlicEvents                     "逐步事件调试信息"
+str_profile_EndTurnWithEmptyBuildQueues         "建筑排程为空结束回合"
+str_profile_RunInBackground                     "允许后台结束回合"
+str_profile_Upgrade                             "单位升级中"
+str_profile_SmoothBorders                       "平滑帝国边界"
+str_profile_CivFlags                            "显示文明单位旗帜"
+str_profile_NoAIProductionDeficit               "AI无生产赤字"
+str_profile_NoAIGoldDeficit                     "AI城市不匮乏黄金"                              # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI城市防御加权"                                # AI population adds to city defenses
+str_profile_BarbarianCities                     "允许野蛮人移居城市"                            # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "城市风格抵触导致不开心"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "城市暴乱损失人口"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "城市暴乱产生野蛮人"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "允许野蛮人建造设施"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "允许野蛮人繁衍"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI船只不会沉没"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI无城市上限"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1单位耗费1金币"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "1城市2金币 x 城市上限"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI生产力充足"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI单位不耗费用"                     # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI免费升级"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI免费军事单位"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "一城挑战"                            # One city challenge
+str_profile_CityCaptureOptions                  "征服城市选项"                          # Captured city options
+str_profile_DebugCityAstar                      "调试路径点"
+str_profile_NewCombat                           "新战斗"
 
+# Added for extended keyboard mapping options keys 6/2004 L. Hirth
+str_tbl_ldl_Music_Options			"音乐选项"
+str_tbl_ldl_Decend				"减弱"
+str_tbl_ldl_Execute_Eyepoint			"对象聚焦"
+str_tbl_ldl_Move_Order				"移动命令"
+str_tbl_ldl_End_Unit_Turn			"结束回合"
+str_tbl_ldl_Process_Unit_Orders			"持续给单位命令"
+str_tbl_ldl_Group_Army				"编组单位为军队"
+str_tbl_ldl_Ungroup_Army			"解散军队"
+str_tbl_ldl_Gamestate_Debug			"调试状态 (playtest)"
+str_tbl_ldl_Rand_Test				"边缘测试 (playtest)"
+str_tbl_ldl_Command_Enter			"输入命令 (playtest)"
+str_tbl_ldl_Command_Enter_Alternate		"改变输入命令 (playtest)"
+
+# New gamesetting options
+#implemented
+str_ldl_Army_Names_On				"显示军队名称"
+str_ldl_Army_Names_Off				"隐藏军队名称"
+str_ldl_Civ_Flags_On				"显示国家旗帜"
+str_ldl_Civ_Flags_Off				"隐藏国家旗帜"
+str_ldl_Show_City_Prod_Off			"隐藏城市生产"
+str_ldl_Show_City_Prod_On			"显示城市生产"
+str_ldl_SmoothBorders_On			"平滑图标边缘"
+str_ldl_SmoothBorders_Off			"锐化像素边缘"
+str_ldl_Good_Animations_Off			"高质量动画关"
+str_ldl_Good_Animations_On			"高质量动画开"
+
+str_tbl_ldl_CityCaptureOptions_On		"征服城市选项 - 开"
+str_tbl_ldl_CityCaptureOptions_Off		"征服城市选项 - 关"
+str_tbl_ldl_OneCityChallenge_On			"一城挑战 - 开"
+str_tbl_ldl_OneCityChallenge_Off		"一城挑战 - 关"
+str_tbl_ldl_RevoltCasualties_On			"城市暴乱损失人口 - 开"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"城市暴乱损失人口 - 关"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"城市暴乱产生野蛮人 - 开"			# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"城市暴乱产生野蛮人 - 关"			# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"允许野蛮人繁衍 - 开"		# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"允许野蛮人繁衍 - 关"		# Entrenched barbs create more barbs
+str_tbl_ldl_GoldPerUnitSupport_On		"部队耗费 - 开"				# All pay gold hunger unit support.
+str_tbl_ldl_GoldPerUnitSupport_Off		"部队耗费 - 关"				# 
+str_tbl_ldl_GoldPerCity_On			"城市维护费 - 开"			# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"城市维护费 - 关"			# AI pays gold amount per city
+str_tbl_ldl_Upgrade_On				"单位升级 - 开"				# Units can be upgraded
+str_tbl_ldl_Upgrade_Off				"单位升级 - 关"				# Units cannot be upgraded
+
+str_ldl_DebugAI					"调试AI"
+str_ldl_ShowEnemyHealth_On			"显示敌人血值"
+str_ldl_ShowEnemyHealth_Off			"隐藏敌人血值"
+str_ldl_Debug_AI_On				"显示调试AI文本"
+str_ldl_Debug_AI_Off				"隐藏调试AI文本"
+str_tbl_ldl_NonRandomCivs_On			"禁止随机AI国家 - 开"
+str_tbl_ldl_NonRandomCivs_Off			"禁止随机AI国家 - 关"
+str_tbl_ldl_NoCityLimit_On			"无城市限制 - 开"				# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"无城市限制 - 关"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"新战斗 - 关"
+str_tbl_ldl_NewCombat_On			"新战斗 - 凯"
+str_tbl_ldl_NoGoodyHuts_Off			"没有遗迹 - 关"
+str_tbl_ldl_NoGoodyHuts_On			"没有遗迹 - 开"
+# Custom map window (wet/dry etc.)
+str_tbl_ldl_RandomCustomMap_Off			"自定义设置"
+str_tbl_ldl_RandomCustomMap_On			"随机设置"
+
+# Rules window description strings.
+str_tbl_ldl_RuleDetail_Bloodlust		"嗜血\n 为了胜利，你要击败所有敌人。"
+str_tbl_ldl_RuleDetail_Pollution		"污染\n 污染降低城市幸福度，严重污染的城市会出现死地，极端时会导致世界范围的洪水泛滥与土地沙漠化。"
+str_tbl_ldl_RuleDetail_CityCaptureOptions	"征服城市选项\n 当征服一座城市会出现三个选项 - 废弃：将城市留给野蛮人, 毁灭：将城市付之一炬， and 占据：占领这座城市。"
+str_tbl_ldl_RuleDetail_OneCityChallenge		"一城挑战\n 人类玩家无法建造城市。"
+str_tbl_ldl_RuleDetail_RiotsCreateBarbarians	"城市暴乱产生野蛮人 \n 当城市暴乱时有机会在附近生成野蛮人，野蛮人的实力随着你的市民对城市风格或文化的不满而增长。"
+str_tbl_ldl_RuleDetail_RiotsKillPopulation	"城市暴乱损失人口\n 规模为10或更大的城市暴乱时有几率损失人口。"
+str_tbl_ldl_RuleDetail_BarbsSpawnBarbs		"允许野蛮人繁衍\n 提高野蛮人出没的几率。"
+str_tbl_ldl_RuleDetail_NonRandomCivs		"禁止随机AI国家\n AI的文明将从文明数据库中选择 (而非随机) 。参见civilisation.txt。"
+str_tbl_ldl_RuleDetail_Upgrade			"单位升级\n 允许玩家使用黄金储备升级单位。参考大图书馆中单位升级的类型，以及更多关于升级和花费的意见。"
+str_tbl_ldl_RuleDetail_NewCombat		"新战斗\n 战斗中防御部队的第一排仅使用其防御率，攻击部队的第一排仅使用其攻击率，资深部队也会有防御加权。"
+str_tbl_ldl_RuleDetail_NoGoodyHuts		"没有遗迹\n 新游戏的地图上将不会有遗迹。"
+str_tbl_ldl_RuleDetail_UnitGold			"单位维护费\n 除了生产所需费用，单位还需要动用黄金储备以维护，参考大图书馆中不同单位的维护费用。"
+str_tbl_ldl_RuleDetail_CityMaintenance		"城市维护费\n 每座城市都视其贸易规模来维护。"
+str_tbl_ldl_RuleDetail_NoCityLimit		"无城市限制\n 无城市限制允许玩家多建城市而无视快乐度惩罚。"
+str_tbl_ldl_RuleDetail_Ages			"自定义年代\n 一旦进入了更高的时代，新建城市自动拥有所有该时代的起始设施而无需从头建设。"
+
+# Not Implemented
+str_tbl_ldl_SectarianHappiness_On		"城市风格抵触导致不开心 - 开"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"城市风格抵触导致不开心 - 关"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_SE_DebugAI					"调试"
+str_SE_ShowEnemyHealth				"显示"
+str_tbl_ldl_AICityDefenderBonus_Off		"AI城市防御加权 - 关"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"允许野蛮人移居城市 - 关"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"允许野蛮人建造设施 - 关"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"AI城市防御加权 - 开"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"允许野蛮人移居城市 - 开"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"允许野蛮人建造设施 - 开"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"AI船只沉没 - 开 "				# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"AI船只沉没 - 关"				# AI ships don't sink

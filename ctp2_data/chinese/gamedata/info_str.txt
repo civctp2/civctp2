@@ -1,3 +1,50 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains main info meassage strings in Chinese Simple
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized strings for the messages including buttons.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
+#   cut_str.txt and updated by PFT before. - Mar. 25th 2005 Martin G╗╧hmann
+# - Moved and updated the rest of the diplomacy messages from cut_str.txt 
+#   for later reimplementation. - Mar. 25th 2005 Martin G╗╧hmann
+# - Merged in trust loss strings from add_str.txt. (Aug 31rd 2005 Martin G╗╧hmann)
+#
+#----------------------------------------------------------------------------
+
 #### General Message Strings ####
 
 ## Instant Action Messages ##
@@ -29,6 +76,7 @@ IA_WAR_DISCONTENT_RISING  		"{player[0].sir_cap}ё╛╧Щ╤Ю╣д╬Эхкт╤юК╪рт╟ё╛й╧╣ц╪роГ╣д
 
 
 ## Diplomacy Messages ##
+TREATY_TO_EXPIRE			"нрцгсК {player[0].civ_name_plural} ╣д╨мт╪╪╢╫╚фзбЗак║ё"
 BROKE_TREATY 				"{player[0].civ_name_plural}кхжуж╧сК{player[1].civ_name_plural}╣длУт╪║ё"
 NO_PIRACY_BROKEN 			"кх╥╒ож{player[0].civ_name_plural}гю╫ынр╧ЗцЁрвб╥оъ║ё"
 ECOPACT_BROKEN 				"{player[0].civ_name_plural}кхн╔╥╢сКнрг╘йП╣дншх╬╥южфп╜рИё╛яожьфф╩╣х╚гРиЗл╛║ё"
@@ -41,11 +89,32 @@ ALLIANCE_BROKEN 			"п╟╤Я╣д{player[1].civ_name_plural}╧╔╩Внр╧Зё╛отх╩кх╠ЁфЗа╫╧З╪Д╣
 ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}ё╛нрцгн╔╠ЁсК{player[1].country_name}╣да╙цклУт╪ё╛{player[1].country_name}╪╚╤х╡╩бЗуБппн╙║ё"
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}ё╛{player[1].civ_name_plural}кхжуж╧сК{player[2].civ_name_plural}╣да╙цк╧ьо╣║ё"
 ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name}спя╤о╒╦Ьнрцгё╛{player[0].sir}ё╨╪ЬсзмБтзгИйф╠Д╩╞ё╛{player[2].country_name}╡╩тысКдЦрБ╪Шр╩жбё╛р╩гппнй╫╣длУт╪п╜рИ╫╚пнм╛╬ънд║ё"
+YOU_BROKE_ALLIANCE                      "дЦ╢РффаксК {player[0].civ_name_plural} ╣да╙цк╧ьо╣║ё"
+YOU_BROKE_CEASE_FIRE                    "дЦ╢РффаксК {player[0].civ_name_plural} ╣д╨мф╫п╜рИ║ё"
+CANT_ATTACK_ALLIES                      "нр╧ЗсК {player[0].civ_name_plural} сп╟Н╫╩ё╛тзн╢фффЗцкт╪ж╝г╟ё╛╡╩╣ц╧╔╩В╤т╥╫║ёоКа╒╪╢фффЗцкт╪бПё©"
+CANT_ATTACK_ALLIES_CAN_EXPEL            "дЦр╙фф╩╣сК {player[0].civ_name_plural} ж╝╪Д╣дмБ╫╩п╜рИбПё©дЦ©ирттз╡╩фф╩╣п╜рИж╝обгЩ╦окШцг╣д║ё"
+CANT_ATTACK_HAVE_TREATY                 "уБоНпп╤╞╫╚╩Афф╩╣нрсК {player[0].civ_name_plural} ╣дмБ╫╩п╜рИ║ёдЦ╩╧р╙╪лпЬбПё©"
+CANT_ATTACK_TEAMMATES                   "{player[0].leader_name} йгдЦ╣д╤ссяё╛дЦ╡╩дэ╧╔╩ВкШ║ё"
+
+## Useful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN			"©иЁэ╣д {player[0].civ_name_plural} к╨╩ыак╨мф╫лУт╪ё╛╨╥х╩╤тнрцг╥╒╤╞╧╔╩Вё║"
+LEAVE_OUR_LANDS_BROKEN			"{player[0].civ_name_plural} фф╩╣ак╡╩©и╢╘т╫╠ъ╬Ёп╜рИ║ё"
+LEAVE_OUR_LANDS_BROKEN_BY_YOU		"дЦря╬╜н╔╠Ёакп╜рИё╛╫╚╡©╤сеижа {player[0].civ_name_singular} ╣даЛ╣ь║ё"
+REDUCE_POLLUTION_BROKEN			"{player[0].civ_name_plural} н╔╥╢ак╪Уиыншх╬п╜╤╗║ё"
+REDUCE_POLLUTION_BROKEN_BY_YOU		"дЦн╔╥╢аксК {player[0].civ_name_plural} ╣ч╫А╣д╪Уиыншх╬п╜╤╗║ё"
+STOP_TRADE_WITH_BROKEN			"дггАнЙ╣д {player[0].civ_name_plural} н╔╠Ёакп╜╤╗ё╛жпж╧аксК {player[1].civ_name_plural} ╣дцЁрв║ё"
+STOP_TRADE_WITH_BROKEN_BY_YOU		"дЦфф╩╣аксК {player[0].civ_name_plural} ╣дп╜╤╗ё╛жпж╧ак╨м {player[1].civ_name_plural} ╣дцЁрв║ё"
+END_POLLUTION_BROKEN			"{player[0].civ_name_plural} н╔╠Ёакжпж╧ншх╬╣д╨от╪║ё"
+END_POLLUTION_BROKEN_BY_YOU		"дЦфф╩╣аксК {player[0].civ_name_plural} г╘╤╘╣джпж╧ншх╬╣д╨от╪║ё"
+ATTACK_ENEMY_BROKEN			"{player[0].civ_name_plural} н╔╥╢акп╜рИё╛©╙й╪╫Ь╧╔ {player[1].civ_name_plural} ё║"
+ATTACK_ENEMY_BROKEN_BY_YOU		"дЦн╔╥╢аксК {player[0].civ_name_plural} ╣дп╜рИ╡╒©╙й╪╫Ь╧╔ {player[1].civ_name_plural}ё║"
+
 
 ## Empire & City Related ##
 UNIT_COMPLETED 				"{city[0].name}╣д{unit[0].name}╫╗тЛмЙЁи║ё"
 NEW_UNIT_COMPLETED 			"{city[0].name}╣д{unit[0].name}╫╗тЛмЙЁиё╛об╦ЖоНд©н╙{action[0].name}║ё"
 CITY_BUILD_QUEUE_IS_EMPTY 		"{city[0].name}╣д╫╗тЛееЁлд©г╟©у╟в║ё"
+TITLE_CITY_BUILD_QUEUE_IS_EMPTY		"{city[0].name}"
 UNIT_COMPLETED_QUEUE_EMPTY 		"{city[0].name}╣д{unit[0].name}╫╗тЛмЙЁиё╛╫╗тЛееЁлд©г╟©у╟в║ё"
 BUILDING_BUILT 				"{city[0].name}╣д{building[0].name}╫╗тЛмЙЁиё╛об╦ЖоНд©н╙{action[0].name}║ё"
 BUILDING_BUILT_QUEUE_EMPTY 		"{city[0].name}╣д{building[0].name}╫╗тЛмЙЁиё╛╫╗тЛееЁлд©г╟©у╟в║ё"
@@ -85,6 +154,7 @@ WAR_OVER 				"{player[0].civ_name_plural}сК{player[1].civ_name_plural}у╫уЫ╫АйЬ║ё
 TRADE_PIRATED 				"{player[0].sir_cap}ё╛нр{city[0].name}жа{city[1].name}╣дцЁрвб╥оътБ╣╫{player[1].civ_name_plural}╣дгю╫ы║ё"
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}ё╛{player[1].civ_name_plural}╤тнр╡их║цЁрв╫Шткё╛м╗мЫ{player[1].country_name}╣дцЁрвб╥оъ╧ь╠уё╛ил╤со╓йЩтБ╣╫ц╩йу║ё"
 TRADE_ROUTES_BROKEN_BY_WAR		"╠╗╦Фр╩╦Ж╩╣оШо╒ё╛{player[0].sir}║ёсисзнр╧ЗсК{player[1].country_name}╥╒иЗаЦпгЁЕм╩ё╛м╗мЫ{player[1].civ_name_singular}╣дцЁрвб╥оъ╧ь╠уё╛ил╤со╓йЩтБц╩йу║ё"
+SENDER_KILLED_TRADE_ROUTE               "{player[0].leader_name}х║оШак╢с{city[0].name}╣╫{city[1].name}╣д{good[0].name}цЁрвб╥оъ║ё"
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE 			"╫╚{good[0].name}ткмЫ{city[1].name}╥╥бТё╛пХр╙{value[0].value}╦Жил╤сё╛©и╣ц{gold[0].value}╩ф╫П║ё"
@@ -138,8 +208,7 @@ DISCOVERED_ANCIENT_TREASURE 		"тз╧ендцВ╣дреж╥жпё╛нрцгмз╬Р╣╫{gold[0].value}╩ф╫П."
 BESET_BY_VANDALS 			"лА╦ъ╫Д╠╦ё║╡©╤стБ╣╫р╟бЫхк╣д╥Э╩В║ё"
 BESET_BY_NOTHING 			"кя╡И╧е╢Зреж╥╨Сё╛н╢╥╒ожхн╨ннОф╥║ё"
 
-## Government ##
-CANT_CHANGE_GOV 			"н╢╥╒ожпбуЧлЕг╟ё╛дЗнч╥╗╠Д╦ЭуЧлЕ║ё"
+## Government ##CANT_CHANGE_GOV 			"н╢╥╒ожпбуЧлЕг╟ё╛дЗнч╥╗╠Д╦ЭуЧлЕ║ё"
 CHANGE_GOV_WARNING 			"╦д╠ДуЧлЕйф╠ь╩А╬╜юЗ╤лтщ╣днчуЧ╦╝в╢л╛ё╛дЗх╥╤╗р╙╠Д╦Эн╙{government[0].name}?"
 PLAYER_DISCOVERS_NEW_GOVERNMENT 	"╥╒ожак{GovernmentDB(government[0].type)}║ё╠Д╦Эн╙пбуЧлЕбПё©"
 
@@ -151,6 +220,7 @@ UNIT_OBSOLETE_CIVWIDE 			"{advance[0].name}╣д╥╒ожё╛й╧╣цр╩п╘╡©╤срР╤Ьлтл╜║ё"
 NO_SUPPORT 				"сисз╥ясц╡╩вЦё╛╫Би╒╦ц╡©╤с║ё"
 ONE_OR_MORE_UNITS_WILL_CRASH 		"ты╡╩╫╣бДсзЁгйп╩Р©у╬Э╩Ы╣ь╡╧╦Ьсмаоё╛{unit[1].name}╫╚сзоб╦Ж╩ь╨орРсмао╨д╬║в╧╩ы║ё"
 UNIT_EXPELLED 				"{player[0].civ_name_plural}кхЁи╧╕╩Вмкнр╬Э╣дхКгж║ё"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED        "[player.1.civ_name_plural]нч╥╗а╒╪╢╫╚кЫсп╡©╤сЁ╥юКнраЛё╛╣╚Ёпе╣╫╚╬║©ЛЁ╥╬Э║ё"
 
 ## Warfare ##
 CITIES_CAPTURED_VICTIM 			"{city[0].name>тБ╣п╬Эу╪аЛё║"
@@ -158,16 +228,21 @@ CAPITAL_CITY_CAPTURED_VICTIM 		"нр╧Зйв╤╪{city[0].name}ощхК╣п╬Э╣дйжюОё║"
 CAPITAL_CITY_CAPTURED_ATTACKER 		"╬Ж╤╗пт╣дй╓юШё║нр╬Эу╪аЛак{player[0].civ_name_singular}йв╤╪║ё"
 CIV_STARTED_WAR 			"{player[0].civ_name_plural}сК{player[1].civ_name_plural}©╙у╫."
 ADVANCE_FROM_CAPTURING_CITY 		"тзо╢╫ыак╦уу╪аЛ╣д{city[0].name}╨Сё╛╥╒ожак{advance[0].name}║ё"
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}ё╛нр╩л©ж╣доРдЗ╠╗╦Фё╨{player[1].civ_name_plural} ╡╩╫Жу╪аЛак {city[0].name}ё╛╩╧гтх║ак {advance[0].name} ╣дцьцэё║"
 
 ## Combat ##
 UNIT_VETERAN 				"у╫╤╥жп╣дс╒сб╠Можё╛{unit[0].name}╫ЗиЩн╙щ╪с╒╡©╤с║ё"
 
-## Age Change Messages ##
-AGE_ONE_ENTERED 			"пб╣ш╧ЗтзжП╡╫╥╒у╧обё╛╫ЬхКакио╧ей╠╢З║ё"
-AGE_TWO_ENTERED 			"╣ш╧З©╙й╪ак©фя╖сКхкнд╣д╥╒у╧ё╛╫ЬхКндру╦╢пкй╠╢З║ё"
-AGE_THREE_ENTERED 			"тзс╣сп╤тйю╫ГмРнО╣дЁД╥жак╫Б╨Сё╛╫ЬхКакож╢З║ё"
-AGE_FOUR_ENTERED 			"╫р©╙иЗцЭ╣д╟бцьё╛©╙фТ©фя╖пб╪мт╙║ё╫ЬхКак╩ЫрРй╠╢З║ё"
-AGE_FIVE_ENTERED 			"нрцгкх╣╫╢ОхкюЮЁи╬м╣д╤╔╣Цё╛╣ш╧З╫ЬхКаквЙй╞й╠╢З║ё"
+## Age Change Messages ##AGE_ONE_ENTERED 			"пб╣ш╧ЗтзжП╡╫╥╒у╧обё╛╫ЬхКакио╧ей╠╢З║ё"
+AGE_TWO_ENTERED 			"ндвжйИп╢лФ╢Зак©з©зоЮ╢╚ё╛╫ЬхК╧е╣Дй╠╢З"
+AGE_THREE_ENTERED 			"тз╧ебчбМ╣д╥опФжпё╛нрцг╣д╣ш╧ЗмГг©ЁиЁ╓ё╛╫ЬхКжпйю╪м║ё"
+AGE_FOUR_ENTERED 			"╣ш╧З©╙й╪ак©фя╖сКхкнд╣д╥╒у╧ё╛╫ЬхКндру╦╢пкй╠╢З║ё"
+AGE_FIVE_ENTERED 			"╧╓р╣╦ОцЭ╣дфТ╤╞аНнрцг╣диЗ╡За╕Ёйж╦йЩтЖЁ╓ё║╫ЬхК╧╓р╣й╠╢З║ё"
+AGE_SIX_ENTERED				"тзс╣сп╤тйю╫ГмРнО╣дЁД╥жак╫Б╨Сё╛╫ЬхКож╢ЗндцВ║ё" 
+AGE_SEVEN_ENTERED			"м╗╧Щ╤т╪фкЦ╩З©фя╖╟бць╣дяп╬©ё╛нрцг╣дхкцЯ╟змяакпео╒╥жоМ╣дуо╟╜ё╛╫ЬхКпео╒й╠╢З" 
+AGE_EIGHT_ENTERED			"╫р©╙иЗцЭ╣д╟бцьё╛©╙фТ©фя╖пб╪мт╙║ё╫ЬхК╩ЫрРй╠╢З║ё"
+AGE_NINE_ENTERED			"нрцгкх╣╫╢ОхкюЮЁи╬м╣д╤╔╣Цё╛╣ш╧З╫ЬхКаквЙй╞╪мт╙ё║"
+AGE_TEN_ENTERED				"©ф╪╪╣двЙяпря╬╜жу╫Аё╨нрцгуЩбУоРнчоч╣дн╢ю╢║╜║╜"
 
 ##                 ##
 ## Special Actions ##
@@ -205,9 +280,12 @@ PROTECTED_FROM_CONVERSION_BY_WONDER 	"сисз{wonder[0].name#ARTICLE}{wonder[0].nam
 SLAVERY_COMPLETE_ATTACKER 		"{player[0].sir_cap}ё╛в╔е╚пп╤╞Ёи╧╕ё╛╡╤╩Я╣де╚а╔кхсз{city[0].name}╧╓вВ"
 SLAVE_COMPLETE_VICTIM 			"мБ╧Зе╚а╔╥╥встз{city[0].name}в╔е╚║ёкхсп╡╩иыйпцЯ╠╩в╔вЖе╚а╔║ё"
 SLAVE_FAILED_VICTIM 			"ню╤с╢Ч╡╤тз{city[0].name}ате╚жп╣де╚а╔╥╥вс║ё"
+SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}ё╛нрцг╣дате╚пп╤╞тз {city[0].name} й╖╟эакё╛е╚а╔╥╥вс╫дпрлсмя║ё"
+SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}ё╛нрцг╣дате╚пп╤╞тз {city[0].name} й╖╟эакё╛е╚а╔╥╥вср╡╠╩╢╕кюак║ё"
 PROTECTED_FROM_SLAVERY_VICTIM 		"╨цоШо╒ё╛Ёгг╫вХж╧аке╚а╔╥╥вс╤т{city[0].name}╣диЬм╦║ё"
 PROTECTED_FROM_SLAVERY_ATTACKER 	"{city[0].name}Ёгг╫вХж╧акнре╚а╔╥╥всиЬхК╦цйпв╔е╚а╔║ё"
 SETTLER_SLAVED_VICTIM 			"уФ©иеб║ёнрцг╣д©╙мь╤снчиЫнчо╒╣ьй╖выакё╛мБ╧Зе╚а╔╥╥всйгвНсп©идэ╦иЁЖуБжжаНхк╥╒ж╦╣дппн╙║ё"
+VICTORY_ENSLAVEMENT_CITY 		"нр╧З╣д{unit[0].name}пб╥Щб╡акр╩цШе╚а╔ё╛╡╒╫╚кШкмжа{city[0].name}║ё"
 
 ## Establish Embassy ##
 ## Diplomat Action ##
@@ -256,10 +334,14 @@ IMMUNE_TO_BIOINFECT_VICTIM 		"{player[0].sir_cap}ё╛нрцг╤т╥юж╧иЗ╩╞╧╔╩В╣дсцпдкхх║╣
 INFECTED_VIA_TRADE 			"╢╚х╬╡║╡║╤╬уЩтз{city[0].name}и╒╡╔║ёуБ╡║╤╬кф╨Уйгю╢втЁгйп╪Д╣дцЁрвб╥оъ║ё"
 
 ## Investigate City ##
-## Spy Attack ##
+## Spy Attack ##
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"нрцг╤тсз╥╢гИ╠╗╩Н╤╞╣де╛а╕кхх║╣цЁи╧Ш║ёЁи╧╕╣ь╢Ч╡╤ак╢лл╫{city[0].name}гИ╠╗╣дмБ╧З╪Д╣Щ."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"нр╧З{unitrecord[0].name}сз{city[0].name}л╫╡ЛгИ╠╗й╠ё╛тБ╣╫╢Ч╡╤║ё"
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"нрцг╤тсз╥╢гИ╠╗╩Н╤╞╣де╛а╕кхх║╣цЁи╧Ш║ёЁи╧╕╣двХж╧акмБ╧З╪Д╣Щ╤т {city[0].name} ╣д╢лл╫ё╛╣╚╨эре╨╤ц╩дэв╔╣╫кШ║ё"
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR	"нр╧З {unitrecord[0].name} тз╢лл╫ {city[0].name} гИ╠╗й╠тБ╣╫в╥╡╤ё╛╣╚кШпрткмялсак║ё"
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##
@@ -267,13 +349,6 @@ NANITE_CLEANSE_COMPLETE_VICTIM 		"аНхк╨╕ебё╛{player[0].sir}║ёмБ╧ЗиЗл╛снфО╠Ь╤т{ci
 NANITE_CLEANSE_FAILED_VICTIM 		"{player[0].sir_cap}ё╛нрцг╠э©╙акр╩Ё║╨ф╫ы║ё{city[0].name}Ёи╧╕вХж╧акиЗл╛снфО╠Ь╣дн╒╬Зн╒╬З╬╩╩╞╧╔╩В║ё"
 NANITE_CLEANSE_COMPLETE_ATTACK 		"мРкЙё║нр╧ЗиЗл╛снфО╠ЬЁи╧╕╣ь╢ОЁин╒╬Зн╒╬З╬╩╩╞╧╔╩Вё╛рдф╫ак{city[0].name}║ё╣╠╣ь╩╧т╜ЁихкюЮн╢©╙╥╒й╠╣двтх╩в╢л╛║ё"
 NANITE_CLEANSE_FAILED_ATTACK 		"нр╧ЗиЗл╛снфО╠Ьтзн╒╬Зн╒╬З╬╩╩╞╧╔╩В{city[0].name}й╠й╖╟э║ё"
-
-#Nano-Terror#
-IMMUNE_TO_NANO_TERROR_VICTIM		"хкцЯ©ирт╟╡пд╣дк╞акё╛рРн╙{city[0].name}кх╬ъсп╣ж©╧н╒╬З╧╔╩В╣ддэа╕║ё"
-NANO_TERROR_FAILED_VICTIM		"©фя╖╪рвХж╧ак╣пхкртн╒пмнДфВфф╩╣{city[0].name}╧╓р╣╣дфСм╪║ё"
-NANO_TERROR_COMPLETE_VICTIM		"мБ╧З╧╥тз{city[0].name}йм╥ен╒иЗнО╡║╤╬║ё"
-NANO_TERROR_FAILED_AGRESSOR		"╫Б╬х╣ьгР╣д╪ф╩╝ощхКю╖╬Ёё╛дЦ╣дн╒╬З╧╔╩Впп╤╞й╖╟э║ё"
-IMMUNE_TO_NANO_TERROR_AGRESSOR		"╣пхкйбох╣цж╙нрцг╣дфСм╪ё╛т╓╤╘╫Ьппн╒╬З╧╔╩В╣дЁгйпё╛ожряс╣спцБръдэа╕║ё"
 
 ## Nuclear Missile ##
 ## Nuke Attack ##
@@ -384,7 +459,155 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"{player[0].civ_name_plural}╣д╦гяг©ьжффВ╪╓╩
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
+NETWORK_PLAYER_LEFT			"{action[0].name} юК©╙аксно╥ё╛AI╫╚╫с╧экШаТоб╣д╣ш╧З║ё"
+NETWORK_PLAYER_JOINED			"{action[0].name} ╫с╧эак {player[0].civ_name_plural}"
+NETWORK_DIFFERENT_PLAYER_JOINED		"{action[0].name} рт {player[0].civ_name_plural} ╣диМ╥щ╪схКё╛╣╚╣ш╧З╩╧╠╩фДкШхк©ьжфвеё╛дЗр╙лчЁЩкШцгбПё©"
+NETWORK_YOU_ARE_NOW_HOST		"дЗожтзжВЁжуБ╦Жсно╥"
+NETWORK_NEW_HOST			"{action[0].name} йгсно╥жВ╩З"
+NETWORK_SESSION_LOST			"╣╫жВ╩За╛╫сжп╤оё╛╥╣╩ьсно╥╢СлЭ║ё"
+NETWORK_ACTIVENET_LOST			"╣╫╩Н╤╞╥ЧнЯфВа╛╫сжп╤оё╛Ё╒йт╥╣╩ьсно╥╢СлЭ║ё"
+NETWORK_WAITING_ON_PLAYERS		"╣х╨РмФ╪р"
+NETWORK_WAITING_FOR_DATA		"╣х╨РйЩ╬щ"
+NETWORK_RESYNCING			"тым╛╡╫"
+NETWORK_SENDER_SYSTEM			"о╣мЁ"			# Used as the "sender" of chat messages that are sent by the engine, not another player.
+NETWORK_TIME_LEFT			"й╠╪ДйёсЮ"
+NETWORK_CURRENT_PLAYER			"д©г╟╣дмФ╪р"
+NETWORK_PLAYER_STATUS_HUMAN		"╠╬╣ь"
+NETWORK_PLAYER_STATUS_CONNECTED		"ряа╛╫с"
+NETWORK_PLAYER_STATUS_AI_OPEN		"AI (©╙фТ)"
+NETWORK_PLAYER_STATUS_AI_CLOSED		"AI (╧ь╠у)"
+
 NEXT_HOT_SEAT_PLAYER 			"{player[0].civ_name_plural}╣даЛпД{player[0].leader_name}ё╛ожтзбж╣╫дЦак║ё"
-#NEXT_EMAIL_PLAYER 			"гКсзвюцФио╫╚сно╥╢Фел╪д╦Ь{player[0].civ_name_plural}╣д{player[0].leader_name}({string[0].name})║ё"
+NEXT_EMAIL_PLAYER 			"гКсзвюцФио╫╚сно╥╢Фел╪д╦Ь{player[0].civ_name_plural}╣д{player[0].leader_name}({string[0].name})║ё"
 HOTSEAT_CITY_ATTACKED 			"{player[0].civ_name_plural}╣д{unit[0].name}╧╔╩В{city[0].name}║ё"
 HOTSEAT_ARMY_ATTACKED 			"{player[0].civ_name_plural}╣д{unit[0].name}╧╔╩ВдЦ╣д{unit[1].name}║ё"
+HOTSEAT_HUMAN				"Human"
+HOTSEAT_AI				"Computer"
+
+### Trust Warning Messages ###
+### Global Trust Loss ###
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}ё╛нрцги╠╨╕ак{player[1].civ_name_singular}╣дф╫цЯ╟ыпуё║уБтз╧З╪йиГ╩Аяшжп╣хм╛сзу╫╥╦ппн╙║ёнрцг╡╩╫Ж╪╓е╜ак[1].civ_name_plural}ё╛м╛й╠р╡рЩфПфДкЭ╦В╧З╣д╡╩бЗ║ё"
+TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}ё╛нрцгн╢ох╬╞╦Фё╛р╡н╢тБлТпф╬м╬╤пп╧╔╩В{player[1].civ_name_plural}ё║╤т╥╫╤тнр╧Зн╔╥╢╧З╪йЁёюМ╣дппн╙╦п╬УиНйэ╠Ёея║ёхцйбл╛╠Д╣ц╦Эяожь╣дйг╧З╪йиГ╩А©╙й╪жйринр╧З╣дЁопе║ё"
+TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}ё╛сисз╧╔╩Вак{player[1].civ_name_plural}ё╛нрцгн╔╥╢аксК╤т╥╫кЫг╘╤╘╣д╨мф╫лУт╪ё║кШцг╪╚н╙╥ъе╜ё╛р╡р╩╤╗╩А╬╞╦ФйюиофДкЭ╧З╪ррт╨С╤тнр╧Зр╙╤Ю╪слА╥ю║ё"
+TRUST_LOSS_VIOLATED_MILITARY_PACT	""
+TRUST_LOSS_VIOLATED_ALLIANCE		""
+
+### Nation-specific Trust Loss ###
+TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}ё╛нрцгн╢дэхГфз╢с{player[1].civ_name_singular}аЛмаЁ╥╩ь╡©╤с║ё╤т╥╫╤тнр╧Зспак╫Дпдё╛мЫ╨Ср╙сКнр╧З╢ОЁип╜рИебйг╡╩дгц╢хщрвак║ё"
+TRUST_LOSS_FAIL_TO_STOP_PIRACY		"сисзнр╧ЗЁжпЬг©бс{player[1].civ_name_singular}╣дцЁрвб╥оъё╛кШцг╪╚н╙╧Б╩П║ё{player[1].civ_name_plural}мЫ╨С╡╩╩Атыпехннр╧Зак║ё"
+TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS	""
+TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION	""
+TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}ё╛нрцгн╔╥╢аксК{player[1].civ_name_plural}г╘╤╘╣дмёу╫п╜рИ║ё╤т╥╫╤тнр╧З╪╚╤х╡╩бЗё╛╢РкЦ╡╩тыпехннр╧З║ё"
+TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}ё╛нр╧ЗвН╫Э╣д╬ы╤╞н╔╥╢аксК{player[1].civ_name_plural}кЫг╘╤╘╣д╧╡м╛яп╬©п╜рИ║ё╤т╥╫©╙й╪лА╥юнр╧Зё╛р╡жйринр╧З╣дрБм╪║ё"
+TRUST_LOSS_VIOLATED_POLLUTION_PACT	""
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}ё╛нр╧ЗвН╫Э╣д╬ы╤╞╠ЁфЗаксК{player[1].civ_name_plural}г╘╤╘╣дцЁрвп╜рИ║ёсисзнр╧Зй╖петзг╟ё╛оК╠ь╤т╥╫╡╩╩Адгц╢©Л╣╜мЭё║"
+
+#Nano-Terror#
+IMMUNE_TO_NANO_TERROR_VICTIM		"хкцЯ©ирт╟╡пд╣дк╞акё╛рРн╙{city[0].name}кх╬ъсп╣ж©╧н╒╬З╧╔╩В╣ддэа╕║ё"
+NANO_TERROR_FAILED_VICTIM		"©фя╖╪рвХж╧ак╣пхкртн╒пмнДфВфф╩╣{city[0].name}╧╓р╣╣дфСм╪║ё"
+NANO_TERROR_COMPLETE_VICTIM		"мБ╧З╧╥тз{city[0].name}йм╥ен╒иЗнО╡║╤╬║ё"
+NANO_TERROR_FAILED_AGRESSOR		"╫Б╬х╣ьгР╣д╪ф╩╝ощхКю╖╬Ёё╛дЦ╣дн╒╬З╧╔╩Впп╤╞й╖╟э║ё"
+IMMUNE_TO_NANO_TERROR_AGRESSOR		"╣пхкйбох╣цж╙нрцг╣дфСм╪ё╛т╓╤╘╫Ьппн╒╬З╧╔╩В╣дЁгйпё╛ожряс╣спцБръдэа╕║ё"
+
+### From the tutorial moved to the common game
+T_NO_KILL_CIVILIAN                      "╧╔╩В{player[0].civ_name_singular} {unitrecord[0].name} тЛЁиакмБ╫╩ио╣д╫Туе╬жйф║ё\n\n╤Ш╨СдЗ©иртгЩжПоЯ{unitrecord[0].name}уБюЮ╣дцЯ╪Д╦ЖлЕё╛╤Ь╡╩╠ь╣ёпди╔й╖фДкЭ╧З╪р╣дпехн║ёгКя║тЯхнр╩╡©╤сё╛тыж╢пп<c:0,50,200>гЩжП<e>ж╦аН║ё" 
+
+#Miscellaneous
+MOVED_ALL_ARMIES_GENIUS                 "кЫсп╡©╤с╣В╤хмЙ╠оё╛дЗ©иуФЁф╣циойг╡╩йюЁЖ╣д╬ЭйбфФ╡её║"
+
+########################################
+### New City Capture Option strings 2.0
+########################################
+
+DESTROY_CITY_TITLE			"╨о╡╒╩Р╢щ╩ыЁгйпё©"
+DESTROY_CITY				"{player[0].leader_name#SIR_CAP}ё╛нрцгряуВ╥Ч {city[0].name}║ёйЩртг╖╪ф╣дйпцЯуЩи╙и╙╥╒╤╤╣д╣х╨РдЗ╣д╥╒бДё╨дЗ©ирте╚рш╣╠╣ькЫспхк╡╒╫╚Ёгйпрдн╙ф╫╣ьё╛рЮ©итз╬║гИгюбсж╝╨С╢С©╙и╠╫Дё╛╣╚мюи╠╩АаНнрцги╔й╖кШ╧З╬╢рБ║ё╩Р©имЬ©╙р╩цФё╛╫╚фДдихКнрцг╣ш╧Зжноб║ё"
+DESTROY_CITY2				"{player[0].leader_name#SIR_CAP}ё╛нрцгряуВ╥Ч {city[0].name}║ёйЩртг╖╪ф╣дйпцЯуЩи╙и╙╥╒╤╤╣д╣х╨РдЗ╣д╥╒бДё╨дЗ©иртг╗АЦ╣╠╣ькЫспхк╡╒╫╚Ёгйпрдн╙ф╫╣ьё╛рЮ©итз╬║гИгюбсж╝╨С╢С©╙и╠╫Дё╛╣╚мюи╠╩АаНнрцги╔й╖кШ╧З╬╢рБ║ё╩Р©имЬ©╙р╩цФё╛╫╚фДдихКнрцг╣ш╧Зжноб║ё"
+EXTEND_EMPIRE				"ю╘уе╣д╣ш╧З"
+BLOODBATH				"╢Смюи╠"
+REGARD_EVENT_BLOODBATH			"{player[0].civ_name_plural} йснр╧Зн╙╡пхл╣д╧Твсйжё║╫трРвН╫ЭуВ╥Ч╣дЁгжп╥╒иЗак╢Смюи╠║ё"
+ENSLAVE					"е╚рш"
+REGARD_EVENT_ENSLAVE			"{player[0].civ_name_plural} ╡╩тыпехннр╧Зё╛рРн╙нрцг╫╚вН╫ЭуВ╥ЧЁгйп╣дйпцЯ╫т╪ЗбТн╙е╚║ё"
+EVACUATE				"г╗АЦйпцЯ" 
+BLOODBATH_MSG_TITLE			"╢Смюи╠╠╛╥╒ё║"
+BLOODBATH_MSG				"тз╠╩ {player[0].civ_name_plural} уВ╥Ч╣д {city[0].name} жп╥╒иЗак╢Смюи╠ё║╫ж╣юя╙аВЁи╨сё╛╬щгИ╠╗нчхк╢суБЁ║╡р╬ГжплсиЗ║ё"
+ENSLAVE_MSG_TITLE			"╢С╧Фдёе╚ршё║"
+ENSLAVE_MSG				"╬щвН╫ЭгИ╠╗ {player[0].civ_name_plural} ╫╚ {city[0].name} ╫ыбср╩©у╨Ссж╫╚х╚╡©йпцЯ╪ЗбТн╙е╚ё║"
+EVACUATE_MSG_TITLE			"ЁгйпйХи╒ё║"
+EVACUATE_MSG				"{player[0].civ_name_plural} уВ╥Ч {city[0].name} ╨Сг╗АЦ╡╒йХи╒аккЫспЁгжп╬сцЯ║ё"
+HUGE_SLAVE_UPRISING_TITLE		"╢С╧Фдёе╚а╔╠╘╤╞ё║"
+HUGE_SLAVE_UPRISING			"{player[0].leader_name#SIR_CAP}ё╛нрцгвН╫Этз {city[0].name} Ёгжп╣де╚ршрЩ╥╒акяожьнйлБё║рРн╙пбе╚а╔л╚╤Юё╛пМ╤ЮхкЁцбрлсвъакё╛кШцгЁцнр╬Эк╞╬Уж╝й╠м╩о╝ак╬Эс╙ё╛╪ъцПакнр╬Э╡╒б╟въакх╚╡©в╟╠╦"
+HUGE_SLAVE_UPRISING_OTHERS_TITLE	"╢С╧Фдёе╚а╔╠╘╤╞ё║"
+HUGE_SLAVE_UPRISING_OTHERS		"отх╩ {player[0].civ_name_plural} вН╫Э╣де╚рш╬ы╤╞╣╪жбакпМ╤ЮнйлБё╛{city[0].name} ╪╟йп╫╪╤╪бДхКакдгп╘е╚а╔ж╝йж║ё"
+EVACUATE_UNHAPPINESS_TITLE		"г╗АЦ╣╪жбпр╦ё╦поб╫╣ё║"
+EVACUATE_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}ё╛сисзвН╫Э╣дг╗АЦнрцг╣дЁгйпхк©з╬ЦспцВоттЖЁ╓ё╛╡╩╧ЩрфцЯ╤т╩ы╡фГё╪р╠Ё╬╝юКоГ╥гЁё╡╩бЗё╛╫Эр╩╤нй╠╪Днрцг╤╪╠ьпК╫сйэ╣╫рфцЯ╣╪жбпр╦ё╦поб╫╣╣дйбй╣║ё"
+BLOODBATH_UNHAPPINESS_TITLE		"мюи╠╣╪жбпр╦ё╦поб╫╣ё║"
+BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}ё╛{city[0].name} ╥╒иЗ╢Смюи╠╣доШо╒╣╪жбнрцг╣ш╧З╬сцЯ╣даВй╖ё╛нрцг╠ьпК╫сйэпр╦ё╤хоб╫╣╣дожй╣ё╛м╛й╠й╖х╔╣д╩╧спжН╧З╤тнрцг╣двПжь║ё"
+
+#New Messages#
+CAPTURED_CITY_OPTIONS			"{city[0].name} ря╬╜бДхКнрцгуфжпё║╦цЁгуЩфз╢Щнрцг╣д©Мк║ё╛дЗ╣дж╦й╬йгё©"
+LOST_AT_SEA				"нрцг╣д {unitrecord[0].name} тз╨ёжпй╖выакё║пХж╙спп╘╣╔н╩тзиН╨ёхщрвЁац╩ё╛м╛й╠а╛юшкЭцгткть╣д╣╔н╩р╩м╛Ёац╩║ё"
+UNIT_UPGRADED				"нрцг {unitrecord[0].name} жьпбйэя╣ё╛иЩ╪╤н╙ {unitrecord[1].name}! "
+HOSTILE_TERRAIN				"╪╚╤клЛфЬаН {unitrecord[0].name} йэкПё║"
+INSURGENT_SPAWN				"ея╬Этз {city[0].name} ЁгмБеябрё║"
+GUERRILLA_SPAWN				"нрцг╣д {unitrecord[0].name} Ёин╙аксн╩В╤сё╛╣х╨Рнрцг╣д╣Вг╡║ё"
+
+# New Messages # Belong to somewhere else
+# Doves and hawks there are better names for them
+ATTACK_WARNING				"уБяЫвЖнчрЛсзпШу╫ё║дЗх╥╤╗р╙оР {player[0].civ_name_plural} пШу╫ц╢ё©"
+CIV2DOVES				"╦Кеи©ьжфакрИ╩Аё║кШцг╥Я╬ЖакхКгж╬Ж╤╗║ё"
+CIV2HAWKS				"с╔еи╬Ж╤╗ж╖Ёж╤тп╟╤ЯжАпд╣ду╫уЫё║"
+BARBWAR					"уБп╘р╟бЫхк©жоенрцг╣дхкцЯё╛╠ьпК©╙й╪╫╡╨мак║ё"
+
+#New Messages#
+UNIT_ELITE				"{unit[0].name} ╢О╣╫╬╚с╒в╢л╛║ё"
+UNIT_LEADER				"╢сй╓юШжпс©ожакр╩н╩н╟╢С╣даЛ╣╪уъю╢ж╦╩су╫уЫ║ё"
+RIOT_CASUALTIES				"{city[0].name} ╣д╫ж╣юя╙╪ё╟ъ╟ъё║ ╡╩╥╗╥жвсоРйпцЯу╔х║ак {gold[0].value}ё║нрцгдэпДйжет╧шбПё©"
+
+
+###############
+##           ##
+##  Buttons  ##
+##           ##
+###############
+
+# Common buttons
+BUTTON_ACCEPT				"╫сйэ"
+BUTTON_CANCEL				"х║оШ"
+BUTTON_CLOSE				"╧ь╠у"
+BUTTON_GOAL				"д©╣д"
+BUTTON_LIBRARY				"м╪йИ╧щ"
+BUTTON_MAYBE				"©идэ"
+BUTTON_YES				"йг"
+BUTTON_NO				"╥Я"
+BUTTON_OK				"╧ь╠у"
+BUTTON_RANDOM				"кФ╩З"
+BUTTON_READY				"в╪╠╦"
+BUTTON_REJECT				"╬э╬Ь"
+BUTTON_RESEARCH				"яп╬©"
+BUTTON_SET_PRICE			"╤╗╪ш"
+BUTTON_STEAL_THIS			"<- гтх║уБ╦Ж"
+BUTTON_EXPEL				"гЩжП"
+
+# Network buttons
+BUTTON_EJECT				"╬э╬Ь"
+BUTTON_LET_THEM_STAY			"хцкШцг╣х╩А"
+
+# Buttons for quitting the game
+BUTTON_CONTINUE				"╪лпЬ"
+BUTTON_END_GAME				"╫АйЬсно╥"
+BUTTON_QUIT_GAME			"юК©╙сно╥"
+
+# Buttons razing, enslaving etc. of cities
+BUTTON_RAZE				"╩ыцП"
+BUTTON_PLUNDER				"╣агт"
+BUTTON_PILLAGE				"бс╤А"
+BUTTON_LIBERATE				"йм╥е"
+BUTTON_ENSLAVE				"е╚рш"
+BUTTON_FREESLAVES			"╫Б╥ее╚а╔"
+BUTTON_OCCUPY				"у╪╬щ"
+
+# Some odd buttons, are those actually used?
+ACCEPT					"╫сйэ"
+REJECT					"╬э╬Ь"
+YES					"йг"
+NO 					"╥Я"

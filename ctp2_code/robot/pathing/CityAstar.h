@@ -35,31 +35,42 @@
 #include "gstypes.h"
 #include "Astar.h"
 
-class CityAstar : public Astar { 
-
-    PLAYER_INDEX m_owner; 
-    uint32 m_alliance_mask; 
+class CityAstar : public Astar
+{
+	PLAYER_INDEX m_owner; 
+	uint32 m_alliance_mask; 
 
 	bool EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-                            float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
-    sint32 GetMaxDir(MapPoint &pos) const;
+	                        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
+	sint32 GetMaxDir(MapPoint &pos) const;
 
 public:
 	CityAstar()
-	: 
-		Astar			(),
-		m_owner			(PLAYER_UNASSIGNED),
-		m_alliance_mask	(0),
-		m_pathRoad		(false)
+	:
+	    Astar            (),
+	    m_owner          (PLAYER_UNASSIGNED),
+	    m_alliance_mask  (0),
+	    m_pathRoad       (false),
+	    m_pathLand       (false),
+	    m_simpleDistance (false),
+	    m_start          (),
+	    m_dest           ()
 	{ ; }
 
 
 	void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
-	  float &cost);
+	  float &cost, sint32 &distance);
 	bool IsLandConnected(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
-	  float &cost, sint32 maxSquaredDistance = -1);
+	  float &cost, sint32 &distance, sint32 maxSquaredDistance = -1);
+	
+	bool FindSimpleDistancePath(const MapPoint & start,
+					  const MapPoint & dest,
+					  PLAYER_INDEX owner,
+					  Path & new_path,
+					  float & total_cost
+					 );
 
-	bool FindRoadPath(const MapPoint & start, 
+	bool FindRoadPath(const MapPoint & start,
 					  const MapPoint & dest,
 					  PLAYER_INDEX owner,
 					  Path & new_path,
@@ -69,6 +80,9 @@ public:
 private:
 	bool m_pathRoad;
 	bool m_pathLand;
+	bool m_simpleDistance;
+	MapPoint m_start;
+	MapPoint m_dest;
 };
 
 #endif

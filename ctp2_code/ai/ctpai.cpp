@@ -1029,7 +1029,7 @@ void CtpAi::Initialize()
 #if defined (_DEBUG) || defined(USE_LOGGING)
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(8);
+	CtpAiDebug::SetDebugPlayer(3);
 	CtpAiDebug::SetDebugGoalType(-1);
 	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
@@ -1048,6 +1048,8 @@ void CtpAi::Load(CivArchive & archive)
 		Player *    player_ptr  = g_player[playerId];
 		if (player_ptr == NULL)
 			continue;
+
+		MapAnalysis::GetMapAnalysis().CalcEmpireCenter(playerId);
 
 		sint32      num_cities  = player_ptr->m_all_cities->Num();
 		for (sint32 cityIndex = 0; cityIndex < num_cities; ++cityIndex)

@@ -5775,6 +5775,33 @@ void Diplomat::ComputeAllDesireWarWith()
 	}
 }
 
+sint32 Diplomat::GetWeakestEnemy() const
+{
+	sint32 weakestEnemy    = -1;
+	sint32 weakestStrength = 0x7fffffff;
+
+	for(size_t i = 1; i < m_foreigners.size(); ++i)
+	{
+		Player *    other_ptr = g_player[i];
+		if (other_ptr == NULL)
+			continue;
+
+		if(m_playerId == i)
+			continue;
+
+		if(!g_player[m_playerId]->HasWarWith(i)) // Only take those we are at war with not those we desire war with
+			continue;
+
+		if(other_ptr->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) < weakestStrength)
+		{
+			weakestStrength = other_ptr->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
+			weakestEnemy    = i;
+		}
+	}
+
+	return weakestEnemy;
+}
+
 bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 {
 	Player *    foreigner_ptr = g_player[foreignerId];

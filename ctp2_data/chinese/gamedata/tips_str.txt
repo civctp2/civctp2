@@ -1,3 +1,51 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Tooltip and status bar strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized strings for tooltips and the status bar.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings from add_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Added strings for political map - 6-Jul-2009 EPW
+# - Added strings for capitol button -5-Jan-10 EPW
+# - Added strings for relationship button -7-Jan-10 EPW
+#
+#----------------------------------------------------------------------------
 # Control Panel
 STATUSBAR_END_TURN_BUTTON	"完成一切动作时，请按结束回合钮"
 TOOLTIP_END_TURN_BUTTON		"结束此回合"
@@ -250,6 +298,12 @@ STATUSBAR_MINIMAP_SHOW_TRADE_BUTTON 		"按此钮以决定显示或隐藏贸易路线。"
 TOOLTIP_MINIMAP_SHOW_TRADE_BUTTON		"显示/隐藏贸易路线"
 STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON 		"按此钮以决定显示或隐藏代表不同地形的色彩。"
 TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON		"显示/隐藏地形样式"
+STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON			"按此钮以决定显示或隐藏政治地图。"
+TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON			"显示/隐藏政治地图"
+STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON			"按此钮以决定显示或隐藏城市议会。"
+TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON			"显示/隐藏议会"
+STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON			"按此钮以决定显示或隐藏关系。"
+TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON			"显示/隐藏关系"
 
 # Empire Manager Screen
 #
@@ -540,6 +594,7 @@ TOOLTIP_CITYMAN_MAIN_TOTALSCI_BUTTON		"科学家人数"
 STATUSBAR_CITYMAN_MAIN_INCRSCI_BUTTON		"按此钮以增加城市科学家人数。"
 TOOLTIP_CITYMAN_MAIN_INCRSCI_BUTTON			"增加科学家"
 STATUSBAR_CITYMAN_MAIN_DECRSCI_BUTTON		"按此钮以减少城市科学家人数。"
+TOOLTIP_CITYMAN_MAIN_DECRSCI_BUTTON			"减少科学家"
 STATUSBAR_CITYMAN_MAIN_TOTALWORKERS_DISPLAY	"显示城市工人数目。"
 TOOLTIP_CITYMAN_MAIN_TOTALWORKERS_DISPLAY		"工人数目"
 STATUSBAR_CITYMAN_MAIN_TOTALSLAVES_DISPLAY	"显示城市奴隶数目。"
@@ -548,10 +603,14 @@ STATUSBAR_CITYMAN_MAIN_CITYPOP_DISPLAY		"显示城市污染数量。"
 TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"污染数量"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"按此钮以安排城市建造排程。"
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"建造排程"
+STATUSBAR_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON		"将专家最优分布在各城市中"
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON		"优选专家"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"检索大图书馆。"
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"大图书馆"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"将建造排程插入选取城市的建造排程中。"
 TOOLTIP_CITYMAN_MAIN_INSERT_BUTTON		"插入建造排程"
+STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON			"点击添加城市建设官建议的工程"
+TOOLTIP_CITYMAN_MAIN_SUGGEST_BUTTON			"添加建议建筑"
 STATUSBAR_CITYMAN_MAIN_APPEND_BUTTON		"将建造排程添加于选取城市的建造排程之后。"
 TOOLTIP_CITYMAN_MAIN_APPEND_BUTTON		"增加建造排程"
 STATUSBAR_CITYMAN_MAIN_OVERWRITE_BUTTON		"更换成选取中的建造排程。"
@@ -584,7 +643,27 @@ STATUSBAR_CITYMAN_NATL_SUMM_SORTPOLL_BUTTON	"以城市污染程度排列顺序。"
 TOOLTIP_CITYMAN_NATL_SUMM_SORTPOLL_BUTTON	"依污染程度排序"
 STATUSBAR_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON	"以城市犯罪程度排列顺序。"
 TOOLTIP_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON	"依犯罪率排序"
-STATUSBAR_CITYMAN_NATL_SUMM_EXIT_BUTTON       	"按此钮以结束国政官窗口。"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTCONV_BUTTON		"以改宗黄金流失排列顺序。"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCONV_BUTTON		"依改宗排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON		"以公民权导致生产力流失排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON		"以民权损失排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON		"以工人数量排列顺序。"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTWORKER_BUTTON		"以工人数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON		"以奴隶数量排列顺序。"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSLAVE_BUTTON		"以奴隶数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"以艺人数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTENTERTAINER_BUTTON	"以艺人数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"以农民数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"以农民数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"以劳工数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"以劳工数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"以商人数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"以商人数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON	"以科学家数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"以科学家数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"以军事单位数量排列顺序"
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"以军事单位数量排序"
+STATUSBAR_CITYMAN_NATL_SUMM_EXIT_BUTTON			"按此钮以结束国政官窗口。"
 TOOLTIP_CITYMAN_NATL_SUMM_EXIT_BUTTON       	"关闭"
 STATUSBAR_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON	"以委托市长管理与否排列顺序。"
 TOOLTIP_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON	"依市长托管排序"
@@ -706,6 +785,10 @@ STATUSBAR_DIPMAN_TABLE_CLOSE_BUTTON			"按此钮以结束谈判画面。"
 TOOLTIP_DIPMAN_TABLE_CLOSE_BUTTON			"结束谈判"
 STATUSBAR_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON	"双击以回顾协议全文内容。"
 TOOLTIP_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON		"协议回顾"
+
+# Diplomacy Manager Embargo Button
+TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON			"Declare an Embargo"
+STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON			"Click here to prevent a foreign nation from trading with you."
 
 #	Respond To Proposal Window
 STATUSBAR_DIPMAN_RESPOND_REJECT_BUTTON		"拒绝这项提议。"
@@ -927,5 +1010,3 @@ STATUSBAR_RANKSCRN_SELECT_MEASURE_DISPLAY		"选择排名标准，观看各文明的排行先后。
 TOOLTIP_RANKSCRN_SELECT_MEASURE_DISPLAY		"排名标准"
 STATUSBAR_RANKSCRN_CLOSE_BUTTON			"按此钮以结束排行榜。"
 TOOLTIP_RANKSCRN_CLOSE_BUTTON				"关闭"
-
-

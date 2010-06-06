@@ -1,6 +1,7 @@
 #### Please add to info_str.txt ####
 
 
+
 ### New Strings ###
 ECOPACT_BROKEN_BY_3RD 			"{player[0].sir_cap}，{player[0].civ_name_plural}违反了与{player[1].civ_name_plural}所签定的反污染协议。"
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}，我们接获通知， {player[1].civ_name_plural}背弃了与{player[2].civ_name_plural}的盟约。"
