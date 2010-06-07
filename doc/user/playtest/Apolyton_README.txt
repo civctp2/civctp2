@@ -28,8 +28,15 @@ a previous version. All you need to do - after loading your save game - is to
 open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
+For Chinese gamers: If you use a Chinese version of the game you have to
+                    first rename your ..\ctp2_data\english\ folder to
+                    ..\ctp2_data\chinese\, then unzip the Apolyton Edition
+                    over your CTP2 installation, and then edit your
+                    ..\ctp2_program\ctp\civpath.txt. This file contains a line
+                    saying "english", change it to "chinese".
+
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
+http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revision 1097 (07-Jun-2010)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -40,6 +47,7 @@ http://apolyton.net/forums/showthread.php?t=161726 "PROJECT: Playtest (Thread No
 http://apolyton.net/forums/showthread.php?t=172035 "PROJECT: Playtest (Thread No. 6)"
 http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
 http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
+http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
@@ -50,6 +58,40 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Changelog (Well, you don't have to read the full thing. ;)):
+2010-07-06 (Revision 1097)
+Fixed:    The AI handles incursion permission correctly even directly after a
+          reload.
+Fixed:    The AI now ranks correctly its opponents by their strength.
+Changed:  If the visible player is a robot, then the displayed unit path is
+          those for robots, this is useful for AI testing.
+Added:    The inteligence window now shows opponent as very strong.
+Added:    The AI avoids danger on the way of its units.
+Fixed:    Games with a dead player in can be loaded again.
+Fixed:    The scenario editor generates goods even if no new game was created
+          during the active session.
+Fixed:    A memory leak in the AI code does not eat all the memory in the
+          system anymore, so that the game does not crash, because there is 
+          no memory left.
+Fixed:    The wonder movies play again, without crashing the game.
+Changed:  The AI now conquers cities according to a global plan instead of
+          picking those first that are closest to most of its units.
+Fixed:    Upgraded units get room for cargo if the original unit had no cargo
+          and the upgraded unit should be able to carry cargo.
+Added:    Added Chinese text files.
+Fixed:    The AI uses transporters even if a target is on the same continet
+          but cannot reached, because for instance the way is blocked.
+Fixed:    The AI conqueres cities if it has a big stack adjacent to that city
+          representing 2/3 of the needed power. This is no problem since the
+          needed power is calculated with some buffer.
+Changed:  The AI gives for conquest higher priority to cities that have a land
+          connection to the existing AI empire.
+Changed:  The AI gives for conquest higher priority to cities of empires with
+          less than three cities.
+Fixed:    The minimap shows the diplomatic relationships correctly even if you
+          recenter the minimeap.
+Changed:  The AI prioritizes for conquest cities of its weakest enemy.
+
+
 2010-28-02 (Revision 1056)
 Fixed:    If the AI runs into a foreigner and if it desires war, it goes to
           battle.
