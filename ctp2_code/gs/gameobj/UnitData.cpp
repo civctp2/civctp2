@@ -1200,8 +1200,9 @@ bool UnitData::CanRustle(CellUnitList const & defender) const
 
 bool UnitData::CanConvertCity(Unit city) const 
 {
-	return (city.GetOwner() != GetOwner())
-	    && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
+	return GetDBRec()->HasConvertCities()
+	    && city.GetOwner() != GetOwner()
+	    && GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost();
 }
 
 //----------------------------------------------------------------------------
