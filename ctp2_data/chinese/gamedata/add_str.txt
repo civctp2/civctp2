@@ -1,0 +1,365 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+# # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
+# # Please add all new strings below here - with note 
+# # explaining where they should go eventually.
+
+# More Stuff for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision建议多人联机模式最多四位玩家。"
+
+## Stuff for LDL_STR.txt
+str_ldl_AutoCenter_On	"开启自动置中选项"
+str_ldl_AutoCenter_Off	"关闭自动置中选项"
+
+str_ldl_ShowPoliticalBorders_On		"显示国界"
+str_ldl_ShowPoliticalBorders_Off	"隐藏国界"
+
+str_ldl_ShowTradeRoutes_On			"显示贸易路线"
+str_ldl_ShowTradeRoutes_Off			"隐藏贸易路线"
+
+# Got lost somehow, City manager button.
+str_ldl_DisbandUnit                 "解散"
+
+# City advisor
+# str_ldl_CityAdvisor "市政顾问"
+
+# City Window
+str_ldl_CityWindowUpkeep "维修费"
+
+# Dip wizard strings
+# Gets displayed on the "Accept" button depending on context
+str_ldl_DipWizardClose "关闭" 
+str_ldl_DipWizardCheckIntelligence "查看情报"
+
+# Empire Manager
+str_ldl_People_ "人民："
+str_ldl_Cities_ "城市："
+
+# Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
+# here for someone who does.
+str_ldl_SCORE_VALUE "计算结果："
+str_ldl_SCORE_TOTAL "分数："
+
+# List headers on wonder tab of info screen
+str_ldl_InfoScreenWonder "奇观"
+str_ldl_InfoScreenYear "年代"
+str_ldl_InfoScreenCity "城市"
+str_ldl_InfoScreenPlayer "玩家"
+str_ldl_INFO_WONDER_TAB "奇观"
+
+
+str_ldl_DipDetails_EmbassyReq			"需要大使馆"
+str_ldl_RADAR_MAP_FILTER	"已过滤"
+
+# Replaces string in ldl_str.txt, changed to Status from Modifiers
+str_ldl_CityWinStatisticsTab "情况"
+
+#revised below
+# Added
+#str_code_CityWinTotalHappinessFormat "汇总：%d"
+
+str_code_QueryRebuildCapitol "确定要另立新都吗？"
+str_code_QuerySwitchProduction "确定要更改生产？ (城市将损失 %d%% 点生产力)"
+
+# Trade manager strings
+str_ldl_TradeManagerCities "显示城市："
+str_ldl_TradeManagerOwnCities "己国"
+str_ldl_TradeManagerFriendlyCities "友邦"
+str_ldl_TradeManagerAllCities "全部"
+str_ldl_TradeManagerCitiesPerGood "每项特产可贸易城市："
+
+# Added strings for the science screen.
+str_ldl_ResearchGoal		"* 目标科技："
+
+# TURN in all caps for control panel close button lable
+str_ldl_endbuttonTURN	"回合"
+
+# String for not showing dialogs again.
+str_ldl_DontShowAgain		"勿再显示此段讯息。"
+
+# In science picker, when the advance gives you tile improvements:
+ADVANCE_GIVES_TILE_IMPROVEMENTS "改良地形："
+
+str_ldl_RADAR_MAP_TRADE "贸易"
+str_ldl_RADAR_MAP_TERRAIN "地形"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/18/00
+##############################################
+
+BC_YEAR_FORMAT "公元前%d"
+AD_YEAR_FORMAT "公元%d"
+
+
+# Advanced Options Title
+str_ldl_AdvancedOptions "进阶选项"
+
+#updated from ldl_str
+str_ldl_INFORMATION_DIALOG_TITLE 			"统计数据"
+
+str_COMPUTER_TURNS		"计算机回合数……"
+
+#revised from ldl_str.txt
+str_code_TotalPollutionFormat "%d"
+str_ldl_CityWinHappiness "幸福度："
+str_ldl_CityWinPollution "污染："
+
+#revised from above to eliminate phrase 'Total: '
+str_code_CityWinTotalHappinessFormat "%d"
+
+str_ldl_Starving "饥饿"
+
+str_ldl_reloadSlic "重新加载 SLIC"
+str_ReloadSlic_OK "重新加载 SLIC 完成!"
+str_ReloadSlic_Fail "重新加载 SLIC 错误! ( 语法错误 )"
+str_ldl_scen_notes "注："
+
+#Unit Manager Advisor Window Title -- this is completely new
+str_ldl_MilitaryAdvisor "军事顾问"
+
+#Trade Manager Advisor Window Title -- this is completely new
+str_ldl_TradeAdvisor	"贸易顾问"
+
+#City Manager Advisor Window Title -- this is a revision from title to ALL CAPS
+# the original can be found in add_str, above.
+str_ldl_CityAdvisor	"市政顾问"
+str_ldl_DeclareEmbargo "禁运"
+str_ldl_IW_CONFIRM_EMBARGO "对{player[0].country_name}宣布禁运吗？"
+str_Goods_Generated "创造特产完成！"
+str_Goods_All_Gone "移除特产完成！"
+str_ldl_RemoveGoods "移除所有特产"
+str_ldl_GenerateGoods "创造特产"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/26/00
+##############################################
+
+str_ldl_AddStuff "增加对象"
+str_ldl_SelectCity "选择城市！ "
+str_ldl_AddPW "增加公共建设："
+str_ldl_AddGold "增加黄金："
+
+# in Build Queue Editor Laod Screen
+str_ldl_LoadQueueColon "加载排程："
+
+#Main title for Intelligence Dialog box
+str_ldl_IntelligenceTitle "情报"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/01/00
+##############################################
+str_ldl_PosField "Pos:"
+
+str_ldl_CityEspionage "城市谍报"
+str_ldl_NatlManagerHotKey "F1"
+str_ldl_EmpireManagerHotKey "F2"
+str_ldl_ScienceHotKey "F3"
+str_ldl_UnitManagerHotKey "F4"
+str_ldl_TradeScreenHotKey "F5"
+str_ldl_IntelligenceHotKey "F6"
+str_ldl_ScoreHotKey "F7"
+str_ldl_GreatLibraryHotKey "F8"
+str_ldl_AdvancedHotKey "F9"
+str_ldl_ArmyManagementHotKey "G"
+str_ldl_Cheat_Mode_CaseHotKey "ctl+s"
+str_ldl_QuitHotKey "Q"
+str_ldl_SaveGameHotKey "!"
+str_ldl_LoadGameHotKey "@"
+
+str_ldl_TradeSummaryHotKey "ctl+t"
+str_ldl_GaiaHotkey "ctl+g"
+str_ldl_BuildQueueHotKey "ctl+b"
+str_ldl_CityManagementHotKey "ctl+i"
+str_ldl_NewProposalHotKey "ctl+d"
+
+str_ldl_TimelineHotKey "ctl+l"
+str_ldl_RankHotKey "ctl+k"
+str_ldl_RestartHotKey "ctl+z"
+
+str_ldl_NewGameHotKey "ctl+x"
+str_ldl_SoundHotKey "ctl+v"
+str_ldl_MusicHotKey "ctl+m"
+str_ldl_GraphicsHotKey "ctl+f"
+str_ldl_GameplayHotKey "ctl+p"
+str_ldl_CityEspionageHotKey "ctl+e"
+str_ldl_FindMeButton "查找!"
+str_ldl_FindX "X"
+str_ldl_FindY "Y"
+str_ldl_FindPosLabel "查找定位:"
+str_ldl_CityManager "市政官"
+
+# Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
+str_tbl_ldl_Open_City_Management "城市管理"
+str_tbl_ldl_Open_Build_Queue "城市建设排程"
+str_tbl_ldl_Open_Trade_Summary "贸易概况"
+str_tbl_ldl_Open_Dip_Wizard "新协议"
+str_tbl_ldl_Gaia "盖亚"
+str_tbl_ldl_Open_Wonders "奇观"
+str_tbl_ldl_Open_Ranking "等级"
+str_tbl_ldl_Msg_Tab "讯息页面"
+str_tbl_ldl_TileImp_Tab "地表设施"
+str_tbl_ldl_Open_Scenario_Editor "剧情关卡编辑器"
+str_tbl_ldl_Sound_Options "音效选项"
+str_tbl_ldl_Graphics_Options "图形选项"
+str_tbl_ldl_Gameplay_Options "游戏操作选项"
+str_tbl_ldl_Restart_Game "游戏重新开始"
+str_tbl_ldl_New_Game "新游戏"
+str_tbl_ldl_Toggle_Radar "隐藏/显示雷达"
+str_tbl_ldl_Toggle_Ctl_Panel "隐藏/显示控制表"
+str_tbl_ldl_Toggle_All "全隐藏/显示"
+str_tbl_ldl_Open_Army_Mgmt "开启军务官"
+str_ldl_UNIT_CONTROLS "部队操控"
+str_ldl_GreatLibrary "大图书馆"
+str_control_key "ctrl"
+
+str_ldl_EnableAllMessages "显示所有讯息"
+
+
+#################################
+#status text for scenario editor#
+#################################
+str_SE_MapSize "改变地图尺寸会加载新地图"
+str_SE_YearSpinner "回合数–参考想查对的时年"
+str_SE_YearDisplay "时年"
+str_SE_Difficulty "选择游戏困难度"
+str_SE_Barbarians "选择蛮族威胁"
+str_SE_SaveMap "仅储存地图"
+str_SE_LoadMap "仅加载地图"
+str_SE_SaveScenario "将剧情关卡当作游戏储存"
+str_SE_LoadScenario "加载剧情关卡"
+str_SE_WorldTab "世界页面–所有全球设定"
+str_SE_UnitTab "部队页面–布置玩家的部队"
+str_SE_CityTab "城市页面–设立/改变玩家的城市"
+str_SE_Civ_Button "帝国页面–改变每位玩家的设定"
+str_SE_Hut "布置/移除遗迹"
+str_SE_River "布置/移除河流"
+str_SE_Good1 "布置/移除特产1"
+str_SE_Good2 "布置/移除特产2"
+str_SE_Good3 "*布置/移除特产3–您得先在terrain.txt中界定"
+str_SE_Good4 "*布置/移除特产4–您得先在terrain.txt中界定"
+str_SE_Pollution "开启/关闭污染设定"
+str_SE_Land "显示陆上部队"
+str_SE_Sea "显示海上部队"
+str_SE_Air "显示空中部队"
+str_SE_Special "显示新规/特殊部队"
+str_SE_PopSpinner "设定选择城市的人口数"
+str_SE_AddBuildings "在选定城市中新增建物"
+str_SE_AddWonders "在选定城市中新建奇观"
+str_SE_PlayerSelect "选择玩家"
+str_SE_FullMode "所有国家起始位置，以玩家别及玩家所选国家来决定。"
+str_SE_NoCiv "依玩家别来设定起始位置，不论所选国家"
+str_SE_WithCiv "依玩家所选国别来设定起始位置"
+str_SE_JustCiv "依所选国别来设定起始位置，不论玩家别"
+str_SE_AddPW "增加公共建设–输入数目再按Enter按键"
+str_SE_AddGold "增加黄金–输入数目再按Enter按键"
+str_SE_Erase "移除任何部队、城市"
+str_SE_ClearWorld "清除世界中所有陆地方格"
+str_SE_ReloadSlic "重新加载SLIC档案"
+str_SE_Fog "开启/关闭战场迷闭"
+str_SE_Copy "复制模式设定为开–鼠标点选再拖曳以选择区域"
+str_SE_Paste "贴上模式设定为开–将光标移到选取区左上角"
+str_SE_SaveClip "再将选取区储存于剪贴区"
+str_SE_SmallBrush "布置单一方格"
+str_SE_MedBrush "布置2x2方格"
+str_SE_LargeBrush "布置8x8方格"
+str_SE_LoadClip "从剪贴区加载选取区"
+str_SE_Explore "将整个世界设定为已探索"
+str_SE_Unexplore "将整个世界设定为未探索"
+str_SE_XWrap "开启/关闭X轴"
+str_SE_YWrap "开启/关闭Y轴"
+str_SE_Pos "目前光标位置"
+str_SE_LegalOnly "只布置玩家已发明科技能生产的部队"
+str_SE_ShowLabels "开启/关闭卷标"
+str_SE_AddAdvances "增加/移除玩家科技"
+str_SE_Nation "选择玩家的国家"
+str_SE_LeaderName "显示/改变领袖姓名"
+str_SE_CityName "显示/改变选定城市的名称"
+str_SE_FindPosX "输入X轴坐标"
+str_SE_FindPosY "输入Y轴坐标"
+str_SE_FindMe "点选一下，将X、Y轴坐标置中"
+str_SE_RemoveGoods "从地图上移除所有特产"
+str_SE_GenerateGoods "在地图上增加特产"
+str_SE_DebugAI "显示AI军队目的地"
+
+# Filename prefix for quicksaves.
+QUICKSAVE_NAME "快速储存"
+
+# Scenario editor <CHANGEME>
+str_ldl_Confirm_Restart		"这样做游戏会重新开始，您确定吗？"
+
+# for the keymap screen
+str_tbl_ldl_Advanced_Options "进阶选项"
+
+# Two items on the options menu
+str_ldl_ZoomOut "画面放大"
+str_ldl_ZoomIn "画面缩小"
+
+# Added for network games, there are more restrictions on when you can initiate diplomacy
+str_code_CantInitiateDiplomacyNow "不是自己的回合或您还在等待先前提议的回音时，不能提出新提议。"
+
+# Status text for minimize button on radar map
+STATUSBAR_MINIMAP_MINIMIZE "点选此处将此窗口缩到最小/放到最大"
+str_player_choice "选择玩家"
+
+# Entry on right click menu for the cargo view
+CONTEXT_VIEW_CARGO "观看装载部队"
+
+# For netshell list header
+str_ldl_Settlers "开拓队"
+
+# When units will be disbanded due to a government change, ask first:
+str_code_GovernmentChangeDisbandsUnits "变更成此政体则得解散一些部队，确定要变更政体吗？"
+
+# For the science picker
+ADVANCE_GIVES_GOVS "政体："
+
+# New Status text strings
+STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER			"用此滚动条设定每个特产可供应的城市。"
+STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON	"点选此处排列获得特产的国家。"
+STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON				"点选此钮清除建造排程中所有项目。"
+STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON		"点选此钮向外国宣战。"
+STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON		"点选此钮查看此国情报。"
+STATUSBAR_ARMYMAN_ADD_BUTTON					"点选此钮将选定部队编入本军队。"
+STATUSBAR_ARMYMAN_ADD_ALL_BUTTON				"点选此钮将所有部队编入本军队。"
+STATUSBAR_ARMYMAN_REMOVE_BUTTON					"点选此钮将选定部队自本军队移除。"
+STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"点选此钮将所有部队自本军队移除。"
+STATUSBAR_ARMYMAN_CLOSE_BUTTON					"点选此钮关闭军务官。"
+STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"点选此钮设立新军。"
+
+# For the context menu, lets you get the tile info window for squares with cities/units.
+CONTEXT_TILE_INFO "地图情报"
+
+

@@ -312,7 +312,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 {
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	clock_t start = clock();
 #endif
 
@@ -545,15 +545,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 350 );
 
-	
-	
-	
-
-	
-
-
-
-
 	if(saveEverything)
 		CtpAi::Save(archive);
 
@@ -664,33 +655,20 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 #endif
 
 	DPRINTF(k_DBG_FILE, 
-            ("Time to save game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
-           );
+	        ("Time to save game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
+	       );
 	
 	if (showProgress) 
-    { 
+	{
 		ProgressWindow::EndProgress(g_theProgressWindow);
 	}
 
 	return GAMEFILE_ERR_STORE_OK;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 uint32 GameFile::Restore(const MBCHAR *filepath)
 {
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	clock_t start = clock();
 #endif
 
@@ -1027,8 +1005,8 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 #endif
 
 	DPRINTF(k_DBG_FILE, 
-            ("Time to load game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
-           );
+	        ("Time to load game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
+	       );
 	
 	ProgressWindow::EndProgress(g_theProgressWindow);
 
@@ -2280,11 +2258,11 @@ GameMapFile::GameMapFile(void)
 
 uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 {
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	clock_t start = clock();
 #endif
 	
-    CivArchive	archive;
+	CivArchive	archive;
 	archive.SetStore();
 
 	
@@ -2305,7 +2283,7 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	}
 
 
-    size_t  n;
+	size_t  n;
 	MBCHAR	sHeader[_MAX_PATH];
 	strcpy(sHeader, k_GAMEMAP_MAGIC_VALUE);
 	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpSave);
@@ -2317,20 +2295,9 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 		return GAMEFILE_ERR_STORE_FAILED;
 	}
 
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
 	bool createInfo = (info == NULL);
 	if (createInfo) 
-    {
+	{
 		info = new SaveMapInfo();
 		GetExtendedInfoFromProfile(info);
 	}
@@ -2363,8 +2330,8 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	c3files_fclose(fpSave);										
 
 	DPRINTF(k_DBG_FILE,
-            ("Time to save gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
-           );
+	        ("Time to save gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
+	       );
 	
 	return GAMEFILE_ERR_STORE_OK;
 }
@@ -2372,7 +2339,7 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 
 uint32 GameMapFile::Restore(const MBCHAR *filepath)
 {
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	clock_t start   = clock();
 #endif
 	FILE *  fpLoad  = c3files_fopen(C3DIR_DIRECT, filepath, "rb");
@@ -2447,8 +2414,8 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	g_theWorld = new World(archive, true);
 
 	DPRINTF(k_DBG_FILE, 
-            ("Time to load gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
-           );
+	        ("Time to load gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
+	       );
 	
 	return GAMEFILE_ERR_LOAD_OK;
 }

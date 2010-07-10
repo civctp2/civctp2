@@ -1,0 +1,99 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Happy reasons and score catergory strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the happiness and score category related strings.
+#   names, city names, emissary photos and diplomacy flags.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved HAPPY_REASON_FEATS from add_str.txt.
+#
+#----------------------------------------------------------------------------
+
+##Happiness Lines##
+HAPPY_REASON_CITY_SIZE "城市规模"
+HAPPY_REASON_DISTANCE_FROM_CAPITOL "首都距离"
+
+HAPPY_REASON_ENEMY_ACTION "敌人行动"
+HAPPY_REASON_POLLUTION "污染"
+HAPPY_REASON_STARVATION "饥饿"
+HAPPY_REASON_PEACE_MOVEMENT "厌战"
+HAPPY_REASON_WORKDAY "工时"
+HAPPY_REASON_WAGES "工资"
+HAPPY_REASON_RATIONS "粮给"
+HAPPY_REASON_MARTIAL_LAW "戒严令"
+HAPPY_REASON_ENTERTAINERS "艺人"
+HAPPY_REASON_BUILDINGS "建物"
+HAPPY_REASON_WONDERS "奇观"
+HAPPY_REASON_CRIME "犯罪"
+HAPPY_REASON_HAPPINESS_ATTACK "幸福度下降"
+HAPPY_REASON_SLAVES_TAKEN "掳获奴隶"
+HAPPY_REASON_INDULGENCES "赎罪券"
+HAPPY_REASON_BIO_INFECTION "生化感染"
+HAPPY_REASON_REFORMATION "社会革新"
+HAPPY_REASON_POP_TYPE_REMOVED "人口下降"
+HAPPY_REASON_POP_TYPE_ADDED "人口上升"
+HAPPY_REASON_SOOTHSAY "负面预言"
+HAPPY_REASON_POST_REVOULTION_BLISS "革命之乐"
+HAPPY_REASON_EMANCIPATION "解放运动"
+HAPPY_REASON_WONDER_TURNS_REMAINING "奇观竣工时间"
+HAPPY_REASON_ATTACKED_CONVERTER "攻击感化者"
+HAPPY_REASON_ASSASSINATION "内阁遭炸弹攻击"
+HAPPY_REASON_NUM_CITIES "帝国规模"
+HAPPY_REASON_CONQUEST_DISTRESS "平息民众不满"
+HAPPY_REASON_SECTHAPPY			"教派的福音"
+HAPPY_REASON_FEATS			"惊人的壮举"
+
+SCORE_CAT_FEATS "功绩："
+SCORE_CAT_ADVANCES "科技："
+SCORE_CAT_WONDERS "奇观："
+SCORE_CAT_POPULATION "人口："
+SCORE_CAT_RANK "整体排名："
+SCORE_CAT_OPPONENTS_CONQUERED "倾灭帝国："
+SCORE_CAT_CITIES0TO30 "城市 < 30,000"
+SCORE_CAT_CITIES30TO100 "30,000 <= 城市 < 100,000"
+SCORE_CAT_CITIES100TO500 "100,000 <= 城市 < 500,000"
+SCORE_CAT_CITIES500PLUS "城市 > 500,000"
+SCORE_CAT_CITIES_RECAPTURED "遭攻陷城市重新收复："
+SCORE_CAT_IN_PROGRESS "游戏进行中："
+SCORE_CAT_DEFEAT "亡国！"
+SCORE_CAT_WONDER_VICTORY "因奇观致胜！"
+SCORE_CAT_ALLIED_VICTORY "同盟胜利！"
+SCORE_CAT_SOLO_VICTORY "单独胜利！"
+SCORE_CAT_UNKNOWN "***未知***"
+
+
+
+SET_PRICE "设定价格"

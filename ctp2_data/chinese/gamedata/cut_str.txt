@@ -1,0 +1,499 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains strings that were supposed to be cut (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains strings that should have been removed.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved diplomacy message strings to info_str.txt and updated them
+#   to CTP2 format. - Mar. 25th 2005 Martin Gühmann 
+# 
+#----------------------------------------------------------------------------
+
+### Obsolete, irrelevant, inconsequential ###
+### or otherwise needless strings that we ###
+### should cut from the game with all speed. ###
+
+### Obsolete Instant Action Messages gleaned from INFO_STR.TXT ##
+IA_BREAK_NO_TRADING "{player[0].sir_cap}, creating this trade route will mean breaking our agreement with the [Player.2.civ]? Should we create the route anyway?"
+IA_TOO_MANY_TRADE_ROUTES "{city[0].name} is already the destination of four trade routes. Our merchants cannot receive anymore commercial traffic. Find another city to send your goods."
+IA_LAND_IN_OCEAN    "Stellar Star Commander, our soldiers will not survive an ocean landing. Are you sure you wish to drown them?"
+IA_SEND_GOOD_TIP  "You can send a good that your people are working to another of your cities by double clicking on the good and selecting a destination.  This message will appear once."
+IA_BUY_GOOD_TIP  "You can offer to purchase a good being worked by another Civilization by double-clicking on the good and entering a purchase price.  This message will appear once."
+IA_AIRPORT_TIP "You now have the technology to construct airports in your cities.  You will need airports to build and refuel aircraft.  This message will appear once."
+IA_BREAK_ROUTE "If you stop working this good, you will break a trade route."
+IA_SPACE_ENGINEER_TIP "The Space Engineer must be launched into space by a Rail Launcher or carried aboard a Space Plane.  This message will appear once."
+IA_SPACE_BOMBARDMENT_TIP  "Your Commanders report enemy fire raining down with deadly accuracy from a clear blue sky.  Orbital bombardment is suspected.  This message will appear once."
+IA_LEFT_LANDS  "Your Units have returned to the nearest City in compliance with the stop trespassing agreement."
+IA_YOU_WILL_BREAK_ROUTE  "You have stopped collecting the [good.name] at {city[0].name}. If you do not collect this good, your trade route to [city.2.name] will be broken. End turn?"
+
+### Instant Action Messages that shouldn't be in the game anymore ###
+### If a programmer can verify that the code does not call them, they can delete them ###
+IA_BREAK_NO_TRADING "{player[0].sir_cap}, creating this trade route will mean breaking our agreement with the [Player.2.civ]? Should we create the route anyway?"
+IA_TOO_MANY_TRADE_ROUTES "{city[0].name} is already the destination of four trade routes. Our merchants cannot receive anymore commercial traffic. Find another city to send your goods."
+IA_LAND_IN_OCEAN    "Stellar Star Commander, our soldiers will not survive an ocean landing. Are you sure you wish to drown them?"
+IA_SEND_GOOD_TIP  "You can send a good that your people are working to another of your cities by double clicking on the good and selecting a destination.  This message will appear once."
+IA_BUY_GOOD_TIP  "You can offer to purchase a good being worked by another Civilization by double-clicking on the good and entering a purchase price.  This message will appear once."
+IA_AIRPORT_TIP "You now have the technology to construct airports in your cities.  You will need airports to build and refuel aircraft.  This message will appear once."
+IA_BREAK_ROUTE "If you stop working this good, you will break a trade route."
+IA_SPACE_ENGINEER_TIP "The Space Engineer must be launched into space by a Rail Launcher or carried aboard a Space Plane.  This message will appear once."
+IA_SPACE_BOMBARDMENT_TIP  "Your Commanders report enemy fire raining down with deadly accuracy from a clear blue sky.  Orbital bombardment is suspected.  This message will appear once."
+IA_LEFT_LANDS  "Your Units have returned to the nearest City in compliance with the stop trespassing agreement."
+IA_YOU_WILL_BREAK_ROUTE  "You have stopped collecting the [good.name] at {city[0].name}. If you do not collect this good, your trade route to [city.2.name] will be broken. End turn?"
+
+### Instant Action Messages that seem a lot like they should be in the tutorial #
+IA_TILE_IMP_TIP     "Tile improvements must be placed within three tiles of a friendly city, or next to another of your tile improvements. Each tile improvement has a cost that must be paid from the pool of Public Works.  This message will appear once."
+IA_SPECIAL_INVASION_TIP   "Only Marines may make amphibious assault attacks.  This message will appear once."
+IA_NOMOUNTAIN_UNIT_TIP   "Artillery, Tanks, and mounted units are unable to move through mountain tiles without a road, railroad, or maglev.  This message will appear once."
+IA_TRIREME_DEEPWATER_TIP  "This unit must stay within two tiles of a coastline.  This message will appear once."
+
+### Civ/City Related Strings that are no longer needed ###
+CITY_STARVING "{city[0].name} is not producing enough food to feed it's citizens"
+CRISIS_CITY_IS_STARVING "With sunken cheeks and quivering limbs, your people bury their dead and pray for better times. Your citizens in [city.name] are starving."
+SPACE_CITY_BUILDER "Our technological accomplishments have opened a new frontier to explore and conquer. The city of {city[0].name} offers humanity the first permanent colony in space."
+SPACE_CITY_OTHERS "Rumor has it that the [player.1.civ_name_plural] have established the first city in space. "
+AI_ENTITY_REVOLT "The AI Entity has overthrown its human masters and established a new civilization ruled by intelligent machines!"
+
+### Trade Messages that should be cut ###
+MONOPOLY_DETECTED "Beware the barons of business. [player.leader_name] is trying to corner the market in [good.name] at [city.name]."
+TRADE_OFFER_ACCEPTED "Foreigners wisely acknowledge the wisdom of your trade. [player.leader_name] has accepted your kind offer of [good.name] and will begin transporting it from your city of {city[0].name} to their city of [city.2.name]."
+RECEIVING_FROM_TRADE_ROUTE_AFFECTED "Your supplier of [good.name] in [city.name] of the [player.1.civ_name_plural] has ordered his people to stop sending you goods. If he does not change his mind, your route will be terminated."
+ACCEPT_TRADE_OFFER "The [player.1.civ_name_plural] have shown an interest in your offer of [good.1.name] from {city[0].name}.  Shall we sell the Goods?"
+OFFER_REJECTED "[player.1.leader_name] has rejected your offer to buy Goods."
+TRADE_PIRATED_UNKOWN "Our trade route from {city[0].name} to [city.2.name] has been pirated and the Caravan destroyed."
+BID_ACCEPTED  "The [player.1.civ_name_plural] have accepted your offer to buy goods. Trade route created."
+BID_REJECTED	  "The [player.1.civ_name_plural] have rejected your offer to buy goods."
+FOREIGN_ROUTE_BROKEN  "The [player.1.civ_name_plural] have stopped sending [good.name] to the city of {city[0].name}. Trade route broken."
+TRADER_GREETING	"Trader at your service. What would you like to do today?"
+SELL_GOODS	" I recommend that you sell your goods."
+SEND_GOODS	" I recommend that you send goods within your Civilization."
+BUY_GOODS	" I recommend that you buy goods from another Civilization."
+RECOMMEND_SELECT_SEND	"This is our inventory of trade goods. I recommend that we send [good.name] from {city[0].name} to [city.2.name]."
+RECOMMEND_NO_SEND	"This is our inventory of trade goods. I recommend that we send nothing at this time."
+ROUTE_DETAILS_SEND_POP_UP	"[good.name] will be sent from {city[0].name} to [city.2.name]."
+VERIFICATION_TRADE_ROUTE_POP_UP	"[good.name] has been sent from {city[0].name} to [city.2.name]. Trade route created."
+NO_CARAVAN	"You have no free Caravan to transport the goods! Trade route could not be created."
+RECOMMENDATION_SELL	"This is our inventory of trade goods. I recommend that we sell [good.name] on the open market."
+SELECT_CITY_SELL	"From what city would you like to sell [good.name]?"
+REJECTION_POP_UP	"No one is interested in purchasing our goods at this time."
+BUY_OFFER_POP_UP	"The [player.1.civ_name_plural] would like to take you up on your offer to sell [good.name]. Create trade route?"
+TURN_DOWN_OFFER_POP_UP	"The [player.1.civ_name-singular] offer has been declined."
+RECOMMEND_BUY	"These goods are for sale on the open market. I recommend that we buy [good.name] and transport the goods to {city[0].name}."
+RECOMMEND_NO_DEAL	"These goods are for sale on the open market, but will not return a profit. I recommend that we buy nothing at this time."
+SELECT_BUY_DESTINATION	"To what city should we transport the [good.name]?"
+SALE_REJECTION_POP_UP	"The [player.1.civ_name_plural] have rejected your offer to buy their goods!"
+REVIEW_TRADE	"Great leader, we have collected this trade information for your review."
+MAX_TRADE_DEALS_POP_UP	"Our merchants are exhausted. We can make no further offers to the [player.1.civ_name_plural] right now."
+MULTI_REJECTION_POP_UP	"Your offer has been sent out to the nations of the world. You will be informed if someone would like to purchase your goods."
+REDUNDANT_OFFER_POP_UP	"You are already offering this good at a different price. Replace old offer?"
+MULTI_PURCHASE_OFFER_SENT	"Your offer has been sent to the [player.1.civ_name_plural]."
+CANCEL_OFFER	"Your offer has been withdrawn."
+TRADE_BID_SET_PRICE "You will offer [player.1.leader_name] of the [player.1.civ_name_plural] [gold.1.amount] gold for [good.1.name] from {city[0].name} to [city.2.name]."
+TRADE_BID "[player.1.leader_name] of the [player.1.civ_name_plural] offers you [gold.1.amount] gold every turn in exchange for [good.1.name] from {city[0].name} to [city.2.name]."
+TRADE_BID_ACCEPTED "[player.1.leader_name] of the [player.1.civ_name_plural] accepts your offer of [gold.1.amount] gold for [good.1.name] from {city[0].name} to [city.2.name]. Trade route created."
+TRADE_BID_REJECTED "[player.1.leader_name] has rejected your offer of [gold.1.amount] for [good.1.name] from {city[0].name} to [city.2.name]."
+BUILD_CARAVANS	" I recommend that you build more Caravans."
+RESEARCH_TRADE " I recommend that you research Trade."
+BREAK_ROUTE_WARNING_POP_UP "Breaking a foreign trade route may have diplomatic consequences. Proceed?"
+BROKEN_ROUTE_POP_UP	"Trade route broken. You now have one additional Caravan available."
+RECOMMEND_SEND_CITY "I recommend that we send [good.name] to {city[0].name}."
+NO_TRADERS "You do not have any available Caravans. You cannot create a trade route until you build another Caravan or cancel an existing route."
+RECOMMEND_SEND_CITY "I recommend that we send [good.name] to {city[0].name}."
+RECOMMENDATION_NO_SELL "I recommend that you sell nothing at this time"
+OFFER_ACCEPTED "The [player.1.civ_name_plural] would like to accept our offer of [good.name]. Create trade route? Yes or no."
+
+### Advances - what the hell do these mean? ###
+SPECIAL_DISCOVERY_PLAYER "You have brought new wisdom into the world, changing forever the way that people think about their lives. You have discovered a special Advance."
+SPECIAL_DISCOVERY_OTHER "Despite your leadership, other nations have taken the lead in expanding human culture. A Player has discovered a special Advance."
+IMPROVEMENT_OBSOLETE_CIVWIDE "The discovery of {advance[0].name} has rendered the [Improvement.name] obsolete."
+DISCOVERY_FOUND "Your scientific wisdom has led your culture to ever greater heights. An Advance has been found."
+
+## Assassination ##
+ASSASSINATION_FAILED_VICTIM "Foreign dogs tried to bomb the government, but your watchful guards found and defused the bomb in time."
+ASSASSINATION_FAILED_AGRESSOR "Foreign agents uncovered your attempt to destroy their government. Rumors swirl over your possible involvement."
+ASSASSINATION_COMPLETE_VICTIM "A bomb has killed many cabinet ministers in the capitol. The government is in shambles. Chaos has broken out."
+ASSASSINATION_COMPLETE_AGGRESSOR "How unfortunate... a terrorist bomb has destroyed the [player.1.civ_name_singular] cabinet building.  Without a functioning government, the [player.1.civ_name_plural] have fallen into a state of anarchy."
+
+#Terror Hack#
+TERRORHACK_COMPLETE_ATTACKER "Our terror hack has taken down the data-web in {city[0].name}, spreading fear and confusion through the enemy city."
+TERRORHACK_COMPLETE_VICTIM "Terror and confusion have overtaken our people of {city[0].name} as information networks crash citywide. Our spies suspect the handiwork of a Cyber Ninja."
+TERRORHACK_FAILED_ATTACKER "The enemy's computer security overcame our Cyber Ninja's bravest efforts. Terror hack unsuccessful."
+TERRORHACK_FAILED_VICTIM "Your information security system is formidable. You have foiled a computer terrorist plot in {city[0].name}."
+
+#Hear Gossip#
+GOSSIP_WARTIME_READINESS "The [player.1.civ_name_plural] are at wartime readiness"
+GOSSIP_ALERT_READINESS "The [player.1.civ_name_plural] are on alert"
+GOSSIP_PEACETIME_READINESS "The [player.1.civ_name_plural] are at peacetime readiness"
+GOSSIP_CAPTION "Gossip"
+GOSSIP_BORING "The [player.1.civ_name_plural] are a remarkably boring people, and have nothing worth gossiping about"
+GOSSIP_MAP "We have gleaned knowledge of the world map from the [player.1.civ_name_plural]"
+GOSSIP_COMPLETE_ATTACKER "Our Diplomats have overheard gossip. We have gained [advance.1.name]."
+
+### Alien Endgame stuff that don't apply no mo' ###
+ALIEN_ALMOST_DONE "The alien embryo has entered the final stage of its development. Soon the world shall bow before your accomplishment, unless someone kills you or beats you to it first. "
+ALIEN_ALMOST_DONE_OTHERS "Spies report that the [player.1.civ_name_plural] have almost completed their work on the Alien Life Project. We must act fast or all will be lost."
+EMBRYO_STAGE_2 "The alien embryo has entered the second stage of its development. Our scientists report of the creature's stirring intelligence and its unfathomable powers."
+EMBRYO_STAGE_3 "The alien embryo has entered the third stage of its development. Our scientists watch nervously while force fields strain to contain the creature's blossoming psychic energy."
+NEED_ECD "Our scientists advise that we build additional ECD's to continue work on the Alien Life Project."
+NEED_FIELD "The alien's psychic energy is too much for unprotected minds. Our scientists report bouts of madness and refuse to continue work on the Alien Life Project until another Containment Field has been installed. "
+SHOULD_BUILD_SPLICER "Our scientists advise that we build a gene splicer to speed up development of the alien embryo. "
+CAN_DISCOVER_ALIENLIFE	"Your Civilization has entered a new era of scientific exploration.  You may now research Alien Archaeology."
+MUST_DISCOVER_ALIENLIFE	"The embryo's development cannot be completed until we have achieved a scientific understanding of the alien species. We must delve into the secrets of Alien Archaeology."
+END_GAME_RECOVERED_PROBE  "Your probe has returned from its mission, carrying with it the secret of an ancient alien race.  You may now begin construction of the Xenoform Laboratory."
+END_GAME_PROBE_RETURNED "Our Probe has emerged from the Wormhole.  We must bring it into safety before our enemies can strike."
+END_GAME_CATACLYSM_OTHER_CIV "Spies report that a cataclysmic explosion has destroyed the [player.1.civ_name_singular] Alien Life Project."
+END_GAME_CATACLYSM "Disaster strikes! A faulty containment field unleashed madness in the Xenoform Laboratory. Our chief scientist has initiated the self-destruct mechanism. All our work is lost."
+END_GAME_X_LAB_CAPTURED  "[player.1.civ_name_singular] forces have captured and destroyed the [player.2.civ_name_singular] Xenoform Laboratory in the city of {city[0].name}."
+END_GAME_OTHER_CIV_BUILT_LAB "Spies report that the [player.1.civ_name_plural] have begun work on the Alien Life Project at a secret location."
+END_GAME_OTHER_CIV_STARTED_SEQUENCE "Rumor has it that the [player.1.civ_name_plural] have managed to create a living alien embryo."
+END_GAME_YOU_CAPTURED_X_LAB "Our strike against {city[0].name} uncovered a secret laboratory where the enemy was conducting horrible experiments with some sort of alien being. The laboratory and the alien being have been obliterated."
+END_GAME_FINISHED_X_LAB  "Our secret Xenoform Laboratory has been completed! Now we will need to construct an Embryo Tank to house the alien creature."
+ALIEN_SCRAPPED_OWNER "Rumor has it that the [player.1.civ_name_plural] have completed Stage 2 of the Alien Life Project."
+
+### Advances messages that are cut ###
+EDISON_DISCOVERY "Researchers at Edison's Lab have made a major breakthrough. [advance.name] has been discovered."
+INTERNET_DISCOVERY "Our scientists have downloaded the secret of [advance.name] from the Internet."
+
+### Time ###
+NEW_AGE_FIRST "You have led the world into a new era of scientific and cultural thought. Our people marvel at the wonders of the [age.name] age."
+NEW_AGE_OTHERS "The [player.1.civ_name_plural] have led the world into a new era of scientific and cultural thought. Our people marvel at the wonders of the [age.name] age."
+
+
+### Obsolete Throne Room Messages from INFO_STR.TXT ###
+##	Age 1##
+MONUMENT_AGE_1_REGION_1_ROMAN_BUILDING  "Our finest craftsmen have constructed this palace to honor your prosperous reign."
+MONUMENT_AGE_1_REGION_2_ARENA  "Hail our champion, [player.leader_nocolor]. We celebrate your power  by holding Olympic Games in your honor."
+MONUMENT_AGE_1_REGION_3_FOUNTAIN  "We celebrate your magnificent reign with this wondrous fountain.  May its waters flow for a thousand years."
+MONUMENT_AGE_1_REGION_4_ROMAN_STATUE "Glorious ruler, we trumpet your military cunning with a statue of finest marble.  	"
+MONUMENT_AGE_1_REGION_5_ROMAN_TEMPLE "The mysteries of the universe open beneath the gaze of your wisdom. Our new Temple shall spread wisdom through the land. 	"
+#	Age 2##
+MONUMENT_AGE_2_REGION_1_CASTLE	"Let each stone we lay in this fine Castle be a testament to your greatness. "
+MONUMENT_AGE_2_REGION_2_CONCERT_HALL 	"The master musician, Mozart, dedicates his finest symphony to your glory. Let this symphony hall herald the dawn of a glowing new age. "
+MONUMENT_AGE_2_REGION_3_BETTER_FOUNTAIN	"Generous protector, we celebrate our years beneath your rule. Let this fountain represent the glory which spills from our empire. "
+MONUMENT_AGE_2_REGION_4_BETTER_STATUE  "Great general, to honor your might, we have commissioned this work of art from the genius Italian master. "
+MONUMENT_AGE_2_REGION_5_CATHEDRAL 	"Great leader,  the heavens have blessed us with so fine a leader as yourself. In thanks, we consecrate this Cathedral. "
+##	Age 3##
+MONUMENT_AGE_3_REGION_1_STATE_HOUSE  "Such a sophisticated leader as yourself requires a fitting office from which to conduct business.  Look now upon this magnificent tower of the modern
+age. "
+MONUMENT_AGE_3_REGION_MOVIE_THEATRE  "Great Leader, we hail  the prosperity you have brought to our Empire. The legendary Charlie Chaplin dedicates this theater to your greatness. 	"
+MONUMENT_AGE_3_REGION_3_TRIUMPH	"Let none doubt the rulership prowess of [player.leader_nocolor].  This archway symbolizes the doorway to the prosperity we now enjoy. "
+MONUMENT_AGE_3_REGION_4_COOL_CAR  "Great general, in celebration of our freedom and prosperity, we have constructed the Statue of Liberty! "
+MONUMENT_AGE_3_REGION_5_UNKNOWN	"Let this incredible bridge stand as a symbol of [player.leader_nocolor]'s industriousness and technological mastery."
+##	Age 4##
+MONUMENT_AGE_4_REGION_1_ARCOLOGICAL  "Our wealth rises on the tide of your intelligence. We honor you with a summer palace. "
+MONUMENT_AGE_4_REGION_2_ZOO "Your research grants have opened new worlds of genetic understanding. In celebration, we have created this public science center. "
+MONUMENT_AGE_4_REGION_3_HOLOGRAPHIC	"Your genius protects and nourishes our people.  Let this holofountain stand as a permanent record of your reign. 	"
+MONUMENT_AGE_4_REGION_4_COOLER_CAR	"Oh great military genius. We reward your victories with this statue of pure synthetic ruby. 	"
+MONUMENT_AGE_4_REGION_5_CLONING_CENTER  "Under your rule, we have seen the finest scientific minds born, grow old, and die. Now, with this cloning center we will never need to lose another of our living treasures."
+##	Age 5##
+MONUMENT_AGE_5_REGION_1_SPACE_CASTLE	"Oh Greatest of all Leaders, your people are grateful for your wisdom. In thanks, we present to you this Space Castle. "
+MONUMENT_AGE_5_REGION_2_SPACE_HOLODECK  "Your enlightened rule has ushered in a second Renaissance. We celebrate your vision by dedicating this private holodeck to the fulfillment of all your fantasies. "
+MONUMENT_AGE_5_REGION_3_DNA		"Your greatness outshines the brightest nova. To protect our future, we enshrine your DNA in this sculpture of living energy."
+MONUMENT_AGE_5_REGION_4_SPACE_CRAFT   "The conquest of Space will be the next step in ascension of the [player.1.civ_name_singular_nocolor] people.  We dedicate this monument to all those who have lived and died for your glory. "
+MONUMENT_AGE_5_REGION_5_WE_LOVE_YOU  "Space calls out for your enlightened rule.  We christen this spaceship, The [player.leader_nocolor].  May it bear your light to every corner of the galaxy."
+
+
+#### Cut from gl_str.txt ####
+#### OLD STRINGS (TO BE CUT) ####
+X_LAB                       "Xenoform Lab"
+EMBRYO_TANK                 "Embryo Tank"
+CONTAINMENT_FIELD           "Containment Field"
+GENE_SEQUENCER              "Gene Splicer"
+ET_COMMUNICATION_DEVICE     "ECD"
+
+#### THRONE STRINGS (TO BE CUT) ####
+THRONE_CASTLE_STONEAGE              "Stone Age Castle"
+THRONE_ENTERTAINMENT_STONEAGE       "Stone Age Entertainment"
+THRONE_FOUNTAIN_STONEAGE            "Stone Age Fountain"
+THRONE_STATUE_STONEAGE              "Stone Age Statue"
+THRONE_RELIGIOUS_STONEAGE           "Stone Age Religious"
+THRONE_CASTLE_ANCIENT               "Ancient Castle"
+THRONE_ENTERTAINMENT_ANCIENT        "Ancient Entertainment"
+THRONE_FOUNTAIN_ANCIENT             "Ancient Fountain"
+THRONE_STATUE_ANCIENT               "Ancient Statue"
+THRONE_RELIGIOUS_ANCIENT            "Ancient Religious"
+THRONE_CASTLE_RENAISSANCE           "Renaissance Castle"
+THRONE_ENTERTAINMENT_RENAISSANCE    "Renaissance Entertainment"
+THRONE_FOUNTAIN_RENAISSANCE         "Renaissance Fountain"
+THRONE_STATUE_RENAISSANCE           "Renaissance Statue"
+THRONE_RELIGIOUS_RENAISSANCE        "Renaissance Religious"
+THRONE_CASTLE_MODERN                "Modern Castle"
+THRONE_ENTERTAINMENT_MODERN         "Modern Entertainment"
+THRONE_FOUNTAIN_MODERN              "Modern Fountain"
+THRONE_STATUE_MODERN                "Modern Statue"
+THRONE_RELIGIOUS_MODERN             "Modern Religious"
+THRONE_CASTLE_GENETIC               "Genetic Castle"
+THRONE_ENTERTAINMENT_GENETIC        "Genetic Entertainment"
+THRONE_FOUNTAIN_GENETIC             "Genetic Fountain"
+THRONE_STATUE_GENETIC               "Genetic Statue"
+THRONE_RELIGIOUS_GENETIC            "Genetic Religious"
+THRONE_CASTLE_DIAMOND               "Diamond Castle"
+THRONE_ENTERTAINMENT_DIAMOND        "Diamond Entertainment"
+THRONE_FOUNTAIN_DIAMOND             "Diamond Fountain"
+THRONE_STATUE_DIAMOND               "Diamond Statue"
+THRONE_RELIGIOUS_DIAMOND            "Diamond Religious"
+
+### Cut from tips_str.txt ###
+
+## Control Panel Strings That Have Been Cut (and should be deleted eventually)
+##STATUSBAR_ZOOM_IN_BUTTON	"Zoom in on the main view to see more detail."
+##TOOLTIP_ZOOM_IN_BUTTON		"Zoom In"
+##STATUSBAR_ZOOM_OUT_BUTTON	"Zoom out on the main view to see a larger area."
+##TOOLTIP_ZOOM_OUT_BUTTON		"Zoom Out"
+
+## Civ Tab Strings That Have Been Cut (and should be deleted at some point)
+##STATUSBAR_CIV_GOTO_SCIENCE_BUTTON	"Click to consult the Science Advisor."
+##TOOLTIP_CIV_GOTO_SCIENCE_BUTTON		"Go to Science Screen"
+
+# City Tab Strings That Have Been Cut
+##STATUSBAR_CITY_HAPPINESS_DISPLAY	"The citizens of [CityNameVariable] begrudgingly tolerate your government."
+##TOOLTIP_CITY_HAPPINESS_DISPLAY		"City-wide happiness"
+##STATUSBAR_CITY_RIOT_BUTTON		"The citizens of City3 are extremely unhappy!!  Click here to open the City Management Screen."
+##TOOLTIP_CITY_RIOT_BUTTON		"Open City Manager"
+
+## Helm Strings that are most likely cut
+##STATUSBAR_SHORTCUTPAD_GOTO_RANKINGSCR_BUTTON	"Click to access the game ranking screen."
+##TOOLTIP_SHORTCUTPAD_GOTO_RANKINGSCR_BUTTON	"Ranking Screen"
+
+## Minimap Strings that are most likely cut
+##STATUSBAR_MINIMAP_ZOOM_TOGGLE_BUTTON		"Click to zoom in and out of the map."
+##TOOLTIP_MINIMAP_ZOOM_TOGGLE_BUTTON		"Zoom In/Out"
+
+## Should be cut ##
+STATUSBAR_SCIADV_MAIN_TREE_INTEL_TOGGLE_BUTTON	"Click here to switch between the Tech Tree and your Science Intelligence brief."
+TOOLTIP_SCIADV_MAIN_TREE_INTEL_TOGGLE_BUTTON	"Tech Tree/Science Intel"
+
+### These strings are redundant ###
+#	Create Queue Window
+STATUSBAR_CITYMAN_ADDQ_SHOW_UNIT_BUTTON		"Click here to show available units to build."
+TOOLTIP_CITYMAN_ADDQ_SHOW_UNIT_BUTTON		"Show Avail. Units"
+STATUSBAR_CITYMAN_ADDQ_SHOW_IMP_BUTTON		"Click here to show available improvements to build."
+TOOLTIP_CITYMAN_ADDQ_SHOW_IMP_BUTTON		"Show Avail. Improvements"
+STATUSBAR_CITYMAN_ADDQ_SHOW_WOND_BUTTON		"Click here to show available wonders to build."
+TOOLTIP_CITYMAN_ADDQ_SHOW_WOND_BUTTON		"Show Avail. Wonders"
+STATUSBAR_CITYMAN_ADDQ_ALL_ITEMS_DISPLAY		"To add an item to the build queue, either drag the item and drop it into the next column over or double click it."
+TOOLTIP_CITYMAN_ADDQ_ALL_ITEMS_DISPLAY		"Avail. Items"
+STATUSBAR_CITYMAN_ADDQ_ADD_BUTTON			"Select an item from the left column and click here to add it to the build queue."
+TOOLTIP_CITYMAN_ADDQ_ADD_BUTTON			"Add to Queue"
+STATUSBAR_CITYMAN_ADDQ_MOVEUP_BUTTON		"Select an item from the right column and click here to move it up in the build queue."
+TOOLTIP_CITYMAN_ADDQ_MOVEUP_BUTTON			"Move item up in priority"
+STATUSBAR_CITYMAN_ADDQ_MOVEDN_BUTTON		"Select an item from the right column and click here to move it down in the build queue."
+TOOLTIP_CITYMAN_ADDQ_MOVEDN_BUTTON			"Move item down in priority"
+STATUSBAR_CITYMAN_ADDQ_REM_BUTTON			"Select an item from the right column and click here to remove it from the build queue."
+TOOLTIP_CITYMAN_ADDQ_REM_BUTTON			"Remove from Queue"
+STATUSBAR_CITYMAN_ADDQ_CLEAR_BUTTON			"Click here to delete all items from the build queue."
+TOOLTIP_CITYMAN_ADDQ_CLEAR_BUTTON			"Clear Current Queue"
+STATUSBAR_CITYMAN_ADDQ_DELETE_BUTTON		"Click here to delete queue."
+TOOLTIP_CITYMAN_ADDQ_DELETE_BUTTON			"Delete Queue"
+STATUSBAR_CITYMAN_ADDQ_SAVE_BUTTON			"Click here to save queue."
+TOOLTIP_CITYMAN_ADDQ_SAVE_BUTTON			"Save Queue"
+STATUSBAR_CITYMAN_ADDQ_CLOSE_BUTTON			"Click here to close the Build Queue Creator."
+TOOLTIP_CITYMAN_ADDQ_CLOSE_BUTTON			"Close"
+
+#### Cut from dip2_str.txt ####
+
+EXPLAIN_TRADE_CITY_FOR_PEACE "EXPLAIN_TRADE_CITY_FOR_PEACE"
+NEWS_TRADE_CITY_FOR_PEACE "NEWS_TRADE_CITY_FOR_PEACE"
+EXPLAIN_BUY_SAFETY_COUNTER "We will gladly remove our troops if you agree to fund a yearly tribute of {gold[0].value} gold per year to show your respect for our mighty nation."
+NEWS_BUY_SAFETY_COUNTER "{player[0].country_name} troops have withdrawn from the territory of {player[1].country_name}; in unrelated news, {player[1].country_name} has begun paying a yearly tribute to {player[1].country_name} as a token of respect."
+EXPLAIN_ACCEPT_PAY_FOR_ADVANCE "We will happily give you the {advance[0].name} advance since you have agreed to help defray our research expenses by paying us {gold[0].value} gold."
+NEWS_ACCEPT_PAY_FOR_ADVANCE "The {player[1].civ_name_plural} have convinced the {player[1].civ_name_plural} to purchase some of their advanced technology."
+EXPLAIN_PAY_FOR_ADVANCE_COUNTER "We will happily give you the {advance[0].name} advance if you agree to help defray our research expenses by paying us {gold[0].value} gold."
+NEWS_PAY_FOR_ADVANCE_COUNTER "The {player[1].civ_name_plural} have convinced the {player[0].civ_name_plural} to purchase some of their advanced technology."
+EXPLAIN_ADVANCE_FOR_GOLD_COUNTER "We will happily give you {gold[0].value} gold if you agree share with us the advance {advance[0].name}."
+NEWS_ADVANCE_FOR_GOLD_COUNTER "The {player[1].civ_name_plural} have convinced the {player[0].civ_name_plural} to sell some of their advanced technology."
+EXPLAIN_ADVANCE_SWAP_COUNTER "We will happily give you the {advance[0].name} advance if you agree share with us the advance {advance[1].name}."
+NEWS_ADVANCE_SWAP_COUNTER "The {player[1].civ_name_plural} have convinced the {player[0].civ_name_plural} to exchange some of their advanced technology."
+
+EXPLAIN_THREATEN_ATTACK_CITY "EXPLAIN_THREATEN_ATTACK_CITY"
+NEWS_THREATEN_ATTACK_CITY "NEWS_THREATEN_ATTACK_CITY"
+EXPLAIN_THREATEN_ATTACK_CITY2 "We should remind you that we are fully prepared to attack the city of {city[0].name} if you do not comply with our proposal."
+NEWS_THREATEN_ATTACK_CITY2 "Inside sources report that [player.1.name_plural] diplomats have used belligerent threats to browbeat [player.2.name] into submission."
+EXPLAIN_NO_THREAT "EXPLAIN_NO_THREAT"
+NEWS_NO_THREAT "NEWS_NO_THREAT"
+EXPLAIN_SCENARIO_FORCE_PEACE "EXPLAIN_SCENARIO_FORCE_PEACE"
+NEWS_SCENARIO_FORCE_PEACE "NEWS_SCENARIO_FORCE_PEACE"
+
+EXPLAIN_CAVE_IN_TO_THREAT "Your warlike threats make it clear that you have misconstrued our intentions; in the name of peace we will agree to your proposal."
+NEWS_CAVE_IN_TO_THREAT "War has been averted as [player.2.name] diplomats hastily backdown from their demands and agree to [player.1.name_plural] proposal to [proposal.description]."
+EXPLAIN_REJECT_THREAT "EXPLAIN_REJECT_THREAT"
+NEWS_REJECT_THREAT "NEWS_REJECT_THREAT"
+
+
+##
+## Strategic States
+##
+
+SPY_FULL_ATTACK_SS ""
+ADVICE_FULL_ATTACK_SS ""
+NEWS_FULL_ATTACK_SS ""
+SPY_REGROUP_SS ""
+ADVICE_REGROUP_SS ""
+NEWS_REGROUP_SS ""
+
+##
+## Diplomatic States
+##
+
+SPY_PROVOKE_WAR_DS ""
+ADVICE_PROVOKE_WAR_DS ""
+NEWS_PROVOKE_WAR_DS ""
+
+SPY_MAKE_FRIEND_DS ""
+ADVICE_MAKE_FRIEND_DS ""
+NEWS_MAKE_FRIEND_DS ""
+
+SPY_STAY_AT_WAR_DS ""
+ADVICE_STAY_AT_WAR_DS ""
+NEWS_STAY_AT_WAR_DS ""
+
+##
+## For Assesment Demo
+##
+
+ACTION_STRING "{action[0].text}"
+
+#### We will use these later.  Just not now.  ####
+## 
+## Diplomacy Advice
+##
+
+ADVICE_TRADE_CITY_FOR_PEACE "You should consider offering "
+ADVICE_BUY_SAFETY_COUNTER "You should demand a yearly tribute of {gold[0].value} gold from your weak neighbor before withdrawing your troops."
+ADVICE_ACCEPT_PAY_FOR_ADVANCE "It only seems fair that {player[1].country_name} should request {gold[0].value} gold from the {player[0].civ_name_plural} for your advance."
+ADVICE_PAY_FOR_ADVANCE_COUNTER "It only seems fair that you should request {gold[0].value} gold from the {player[0].civ_name_plural} for your advance."
+ADVICE_ADVANCE_FOR_GOLD_COUNTER "It only seems fair that you should request the {advance[0].name} advance from the {player[0].civ_name_plural} in exchange for the gold they have requested."
+ADVICE_ADVANCE_SWAP_COUNTER "It only seems fair that you should request the {advance[0].name} advance from the {player[0].civ_name_plural} in exchange for your advance."
+ADVICE_CEASEFIRE_FOR_GOLD_COUNTER "As your diplomatic advisor, I strongly suggest we give them the tribute they request.  In exchange, we should ask that they sign a cease-fire treaty."
+ADVICE_THREATEN_ATTACK_CITY "Your advisors recommend that you threaten to attack their city."
+ADVICE_THREATEN_ATTACK_CITY2 "{player[0].country_name} can ill afford to make war with us; perhaps a threat to attack {city[0].name} might convince them to agree to our proposal."
+ADVICE_NO_THREAT "Your advisors recommend you do not threaten this nation."
+ADVICE_SCENARIO_FORCE_PEACE "Your advisors recommend that you try to force a peace treaty."
+ADVICE_CAVE_IN_TO_THREAT "The {player[0].civ_name_plural} are much too strong to fight.  You should acquiesce to their demands if it will avoid a war."
+ADVICE_REJECT_THREAT "Your advisors recommend you reject this threat."
+
+##DIP_OFFER_STAND_DOWN "Offer to stand down"
+##DIP_REQUEST_STAND_DOWN "Request they stand down"
+##DIP_OFFER_MASS_TROOPS "Offer to mass troops..."
+##DIP_REQUEST_MASS_TROOPS "Request they mass troops..."
+
+##DIP_DETAILS_OFFER_STAND_DOWN_0 "We will swiftly remove our troops from your nation's border.  We do not want to provoke you."
+##DIP_DETAILS_OFFER_STAND_DOWN_1 "We will remove our troops massed at your borders, in the interest of preserving peace."
+##DIP_DETAILS_OFFER_STAND_DOWN_2 "We will stand down immediately.  We hope that we have not upset you."
+##DIP_DETAILS_OFFER_STAND_DOWN_3 "We offer to stand down by withdrawing our troops from your nation's border."
+##DIP_DETAILS_OFFER_STAND_DOWN_4 "We are willing to pull our forces back from your borders without delay."
+##DIP_DETAILS_OFFER_STAND_DOWN_EX_0 "In exchange, we will stand down from your borders, withdrawing all of our troops amassed there."
+##DIP_DETAILS_OFFER_STAND_DOWN_EX_1 "In exchange, we will stand down from your borders, as long as it preserves the goodwill between our nations."
+##DIP_DETAILS_OFFER_STAND_DOWN_EX_2 "In exchange, we will stand down from your border.  We do not want to anger a nation as powerful as yours!"
+##DIP_DETAILS_OFFER_STAND_DOWN_EX_3 "In exchange, we're willing to withdraw our troops from your borders if it makes you feel safer."
+##DIP_DETAILS_OFFER_STAND_DOWN_EX_4 "In exchange, we will stand down from your borders."
+##DIP_DETAILS_REQUEST_STAND_DOWN_0 "Please withdraw your forces from our border as soon as possible."
+##DIP_DETAILS_REQUEST_STAND_DOWN_1 "Friendship is a precious commodity in times like these.  Withdraw your troops from our border and preserve our good relations."
+##DIP_DETAILS_REQUEST_STAND_DOWN_2 "We hope that you will withdraw your forces massed at our border soon."
+##DIP_DETAILS_REQUEST_STAND_DOWN_3 "Although it may not seem immediately apparent to one as dim-witted as you, your best course of action is to withdraw your troops from our border at once."
+##DIP_DETAILS_REQUEST_STAND_DOWN_4 "Your forces massed at my border have sparked the ire of my people!!  Withdraw them at once!!"
+##DIP_DETAILS_REQUEST_STAND_DOWN_EX_0 "In exchange, we recommend that you take the high road.  Withdraw your troops from our border and put an end to the threat they represent."
+##DIP_DETAILS_REQUEST_STAND_DOWN_EX_1 "In exchange, we strongly urge you to preserve the peace and goodwill that our nations share.  Withdraw your troops from our border."
+##DIP_DETAILS_REQUEST_STAND_DOWN_EX_2 "In exchange, we implore you:  withdraw your troops from our border.   We ask only for peace."
+##DIP_DETAILS_REQUEST_STAND_DOWN_EX_3 "In exchange, we emphatically request that you call off your forces from our border.  This is not a time to test our patience!"
+##DIP_DETAILS_REQUEST_STAND_DOWN_EX_4 "In exchange, we demand that you remove your forces from our border at once!!"
+##DIP_DETAILS_OFFER_MASS_TROOPS_0 "We are willing to send our troops to the border between our empire and {player[2].country_name}."
+##DIP_DETAILS_OFFER_MASS_TROOPS_1 "As a favor to you, we will mass our troops at the border of {player[2].country_name}."
+##DIP_DETAILS_OFFER_MASS_TROOPS_2 "We offer to place our troops at our border with {player[2].country_name}.  We hope this pleases you."
+##DIP_DETAILS_OFFER_MASS_TROOPS_3 "We offer to mass forces at our border with {player[2].country_name}, so that they may gaze in awe at our armed forces."
+##DIP_DETAILS_OFFER_MASS_TROOPS_4 "We will mass troops at our border with {player[2].country_name} as a show of force."
+##DIP_DETAILS_OFFER_MASS_TROOPS_EX_0 "In exchange, we will aid you in a show-of-force by massing troops at the {player[2].country_name} border."
+##DIP_DETAILS_OFFER_MASS_TROOPS_EX_1 "In exchange, we offer to mass armed forces at our border with {player[2].country_name}."
+##DIP_DETAILS_OFFER_MASS_TROOPS_EX_2 "In exchange, we will quickly mass our troops on our border with {player[2].country_name}."
+##DIP_DETAILS_OFFER_MASS_TROOPS_EX_3 "In exchange, we will mass our troops on our border with {player[2].country_name}.  All will bask in the glory of our fearsome armies!"
+##DIP_DETAILS_OFFER_MASS_TROOPS_EX_4 "In exchange, we will mass our troops on our border with {player[2].country_name}.  We hope you will recognize the selflessness of this gesture."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_0 "We require your empire's strength in our time of need.  Mass your forces at your border with {player[2].country_name} and force them to face our combined might."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_1 "We call upon a fellow empire to aid us in a show of force.  Please mass your forces at your border with {player[2].country_name}.  We would be eternally grateful."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_2 "We need a strong ally in times such as these.  Would you be so kind as to mass your armed forces at your border with {player[2].country_name}?"
+##DIP_DETAILS_REQUEST_MASS_TROOPS_3 "We are having trouble influencing the leaders of {player[2].country_name}.  We ask that you mass your troops at your border with them.  We feel that it will help them make up their minds."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_4 "We demand a show of force to help sway an errant empire.  Mass your troops at your border with {player[2].country_name} at our behest."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_EX_0 "In exchange, we find it necessary to request a show of force.  Mass your troops at your border with {player[2].country_name}."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_EX_1 "In exchange, we ask for a display of armed forces at your border with {player[2].country_name}."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_EX_2 "In exchange, we beg you to aid us in our time of dire need.  Please mass your troops at your border with {player[2].country_name}.  Thank you."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_EX_3 "In exchange, we strongly urge you to mass your troops at the border between {player[2].country_name} and your own nation.  A show of force is imperative to our diplomatic efforts."
+##DIP_DETAILS_REQUEST_MASS_TROOPS_EX_4 "In exchange, we must insist that you mass forces at your border with {player[2].country_name}."
+
+
+#### CONCEPT STRINGS ####
+#CONCEPT_DIAMONDS				"Diamonds"
+#CONCEPT_RUBIES					"Rubies"
+#CONCEPT_OIL					"Oil"
+#CONCEPT_BEAVER					"Beaver"
+#CONCEPT_TOBACCO				"Tobacco"
+#CONCEPT_POPPIES				"Poppies"
+#CONCEPT_COFFEE					"Coffee"
+#CONCEPT_COCOA					"Grapes"
+#CONCEPT_SUGAR					"Sugar"
+#CONCEPT_JADE					"Jade"
+#CONCEPT_ELEPHANT				"Elephant"
+#CONCEPT_ALLIGATOR				"Alligator"
+#CONCEPT_CARIBOU				"Caribou"
+#CONCEPT_CRABS					"Crab"
+#CONCEPT_PEARLS					"Pearls"
+#CONCEPT_WHALES					"Whale"
+#CONCEPT_GIANT_SQUID				"Giant Squid"
+#CONCEPT_WORMHOLE				"Wormhole"
+#CONCEPT_ATTACK_ENEMY				"Attack Enemy"
+#CONCEPT_CAPTURE_CITY				"000"
+#CONCEPT_CEASE_FIRE				"Peace Treaty"
+#CONCEPT_CIV_POINTS				"Civilization Points"
+#CONCEPT_C_FIELD				"Containment Field"
+#CONCEPT_DEMANDS				"Demand"
+#CONCEPT_ECD					"ECD"
+#CONCEPT_ECO_PACT				"Eco Pact"
+#CONCEPT_ENTERTAINER				"Entertainer"
+#CONCEPT_EXCHANGES				"Exchange"
+#CONCEPT_E_TANK					"Embyro Tank"
+#CONCEPT_GIFTS					"Gifts"
+#CONCEPT_G_SPLICER				"Gene Splicer"
+#CONCEPT_INCITE					"Incite"
+#CONCEPT_LARORER				"Laborer"
+#CONCEPT_LEAVE_MY_LANDS				"Stop Trespass"
+#CONCEPT_MAINTENANCE_COST			"Maintenance Cost"
+#CONCEPT_MERCHANT				"Merchant"
+#CONCEPT_MONUMENT_SCREEN			"Monument Screen"
+#CONCEPT_NO_PIRACY				"Stop Piracy"
+#CONCEPT_REDUCE_POLLUTION			"Reduce Pollution"
+#CONCEPT_RUSTLE					"r77"
+#CONCEPT_SCIENTIST				"Scientist"
+#CONCEPT_SPACE_COLONIES				"Space	Colony"
+#CONCEPT_STOP_TRADE				"Stop Trade"
+#CONCEPT_TRADE_UNITS				"Stealth Units"
+#CONCEPT_X_LAB					"X-Lab"

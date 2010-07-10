@@ -1,0 +1,206 @@
+#######################################
+# File: gameplayoptions.ldl
+# Last Access: Mon Apr 26 16:31:06 1999
+#
+#
+#
+#
+# - increased size by 200 ypix
+# - added citycapture option
+# - removed city capture and debugAI (10-Apr-2009 Maq)
+#######################################
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+GAMEPLAY_CHECKBOX:CTP2_STANDARD_FONT {
+
+
+# for now, put the toggle button art here
+	string	image0	"upbt11u0.tga"
+	string	image1	"upbt11u1.tga"
+	string	disabledimage0	"upbt11x0.tga"
+	string	disabledimage1	"upbt11x1.tga"
+
+
+	int	widthpix	230
+	string	imageblttype	"stretch"
+	int	heightpix	24
+
+
+
+}
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+GamePlayOptionsWindow {
+#	string	pattern	"upba6417.tga"
+	string	pattern	"uptg20e.tga"
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	560
+	int	heightpix	450 #250
+	int	xpix	528
+	int	ypix	451
+	Name:CTP_GREY_TITLE_FONT  {
+		string	parent	"c3_PopupTitle"
+		string	xanchor	"center"
+		string	yanchor	"top"
+		int	widthpct	50
+		int	heightpix	25
+		int ypix		20
+
+		string	text	"str_ldl_GAMEPLAY_OPTIONS"
+	}
+	Background {
+		string	image0	"upba2710.tga"
+		int	xpix	93
+		int	ypix	0
+	}
+	AcceptButton {
+		int	xpix	404
+		int	ypix	217
+		int	widthpix	48
+		int	heightpix	19
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+		string	image0	"upbb2303.tga"
+	}
+
+
+	#LEFT COLUMN BUTTONS
+	
+	TutorialButton:GAMEPLAY_CHECKBOX {
+		int	ypix	50
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_Tutorial_Advice_Off"
+			string	string1	"str_ldl_Tutorial_Advice_On"
+		}
+	}
+	AutoCycleTurnButton:GAMEPLAY_CHECKBOX {
+		int	ypix	80
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_Auto_Cycle_Turn_Off"
+			string	string1	"str_ldl_Auto_Cycle_Turn_On"
+		}
+	}
+	AutoCycleUnitsButton:GAMEPLAY_CHECKBOX {
+		int	ypix	110
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_Auto_Cycle_Units_Off"
+			string	string1	"str_ldl_Auto_Cycle_Units_On"
+		}
+	}
+	AutoCenterButton:GAMEPLAY_CHECKBOX {
+		int	ypix	140
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_AutoCenter_Off"
+			string	string1	"str_ldl_AutoCenter_On"
+		}
+	}
+	AutoTabSelectButton:GAMEPLAY_CHECKBOX {
+		int	ypix	170
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_Auto_Tab_Select_Off"
+			string	string1	"str_ldl_Auto_Tab_Select_On"
+		}
+	}
+	EnemyHealthButton:GAMEPLAY_CHECKBOX {
+		int	ypix	200
+		int	xpix	30
+		stringtable {
+			string	string0	"str_ldl_ShowEnemyHealth_Off"
+			string	string1	"str_ldl_ShowEnemyHealth_On"
+		}
+	}
+	
+#######RIGHT COLUMN BUTTONS
+
+	AutoSaveButton:GAMEPLAY_CHECKBOX {
+		int	ypix	50
+		int	xpix	280
+		stringtable {
+			string	string0	"str_ldl_Autosave_Off"
+			string	string1	"str_ldl_Autosave_On"
+		}
+	}
+	BattleViewButton:GAMEPLAY_CHECKBOX {
+		int	ypix	80
+		int	xpix	280
+		stringtable {
+			string	string0	"str_ldl_Battle_View_Off"
+			string	string1	"str_ldl_Battle_View_On"
+		}
+	}
+	BattleViewAlwaysButton:GAMEPLAY_CHECKBOX {
+		int	ypix	110
+		int	xpix	280
+		stringtable {
+			string	string0	"str_ldl_Show_All_Battles_Off"
+			string	string1	"str_ldl_Show_All_Battles_On"
+		}
+	}
+	EnemyMovesButton:GAMEPLAY_CHECKBOX {
+		int	ypix	140
+		int	xpix	280
+		stringtable {
+			string	string0	"str_ldl_Enemy_Moves_Off"
+			string	string1	"str_ldl_Enemy_Moves_On"
+		}
+	}
+	LeftHandedMouseButton:GAMEPLAY_CHECKBOX {
+		int	ypix	170
+		int	xpix	280
+		stringtable {
+			string	string0	"str_ldl_Left_Handed_Mouse_Off"
+			string	string1	"str_ldl_Left_Handed_Mouse_On"
+		}
+	}
+
+
+#SLIDER AT BOTTOM
+	MouseSpeedSlider {
+		int	xpix	196
+		int	ypix	395 #195
+		int	widthpix	160
+		int	heightpix	38
+		int	maxxval	15
+		int	maxyval	0
+		int	pagexval	1
+		int	pageyval	1
+		int	xval	5
+#		string	pattern	"upba6417.tga"
+		string	pattern	"uptg20e.tga"
+		string	type	"slider"
+		string	orientation	"horizontal"
+		bool	rigidthumb	TRUE
+		bool	quantizedrag	TRUE
+		int	minthumbsize	9
+		int	ticks	0
+		thumb {
+			int	widthpix	94
+			int	heightpix	40
+			string	image0	"upba2513.tga"
+			string	imagebltflag	"chromakey"
+		}
+	}
+	MouseSpeedName:CTP2_STANDARD_FONT {
+		int	xpix	93
+		int	ypix	406
+		int	widthpix	102
+		int	heightpix	20
+		string	just	"right"
+		string	pattern	"uptg20e.tga"
+		string	text	"str_ldl_Mouse_Speed"
+	}
+}
+
+
+$

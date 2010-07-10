@@ -291,6 +291,9 @@ public:
 
 	void Cleanup();
 
+
+	void CalcEmpireCenter(const PLAYER_INDEX playerId);
+
 private:
 	static MapAnalysis s_mapAnalysis;
 
@@ -362,6 +365,7 @@ private:
 	DoubleVector m_productionHandicapRatio;
 	DoubleVector m_goldHandicapRatio;
 	DoubleVector m_scienceHandicapRatio;
+
 };
 
 #endif // __MAP_ANALYSIS_H__

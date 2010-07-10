@@ -33,7 +33,7 @@
 
 
 #ifdef __AUI_USE_DIRECTX__
-
+#include "c3ui.h"
 
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
@@ -41,6 +41,7 @@
 #include "aui_directsurface.h"
 
 
+extern C3UI		*g_c3ui;
 
 uint32 aui_DirectSurface::m_directSurfaceClassId = aui_UniqueId();
 
@@ -283,13 +284,15 @@ BOOL aui_DirectSurface::IsOK( void ) const
 
 void aui_DirectSurface::Flip()
 {
-	if(m_exclusiveMode)
+	if(g_c3ui->GetExclusiveMode())
 	{
-		m_lpdds->Flip(m_back, DDFLIP_WAIT);
+		HRESULT err = m_lpdds->Flip(m_back, DDFLIP_WAIT);
+		Assert(err == DD_OK);
 	}
 	else if(m_back != NULL)
 	{
-		m_lpdds->Blt(NULL, m_back, NULL, 0, NULL);
+		HRESULT err = m_lpdds->Blt(NULL, m_back, NULL, DDBLT_WAIT, NULL);
+		Assert(err == DD_OK);
 	}
 }
 

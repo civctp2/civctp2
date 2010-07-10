@@ -1,0 +1,142 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : CTP1 cheat editor strings (Chinese Simple)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - Probably the content of this file is unused
+#
+# - This file contains all the CTP1 cheat editor strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"激活编辑器"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"领土"
+str_ldl_Civ						"文明"
+str_ldl_Edit_City				"编辑城市"
+str_ldl_Unit_City				"部队/城市"
+
+str_ldl_Toolbar_Title			"权倾天下作弊模式"
+str_ldl_World_Settings			"世界设定"
+str_ldl_Player_Settings			"玩家设定"
+str_ldl_Player_Static_Text		"玩家："
+str_ldl_Player_Name_Text		"PNT"
+str_ldl_Year_Static_Text		"游戏年代："
+str_ldl_Year_Text				"YT"
+str_ldl_Num_Players_Static_Text	"玩家人数："
+str_ldl_Num_Players_Text		"NPT"
+str_ldl_Map_Size_Static_Text	"地图尺寸："
+str_ldl_Map_Size_Text			"MST"
+str_ldl_Difficulty_Static_Text	"困难度："
+str_ldl_Difficulty_Text			"DT"
+str_ldl_Save_As_SP				"储存为SP"
+str_ldl_Save_As_MP				"储存为MP"
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"重新设定视线"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"森林"
+str_ldl_Plains					"平原"
+str_ldl_Tundra					"冻原"
+str_ldl_Glacier					"冰河"
+str_ldl_Grassland				"草地"
+str_ldl_Desert					"沙漠"
+str_ldl_Swamp					"沼泽"
+str_ldl_Jungle					"丛林"
+str_ldl_Mountain				"山脉"
+str_ldl_Hills					"丘陵"
+str_ldl_ShallowWater			"浅海"
+str_ldl_DeepWater				"深海"
+str_ldl_Volcano					"海底火山"
+str_ldl_Space					"太空"
+str_ldl_Beach					"海滩"
+str_ldl_Shelf					"大陆架"
+str_ldl_Trench					"海沟"
+str_ldl_Rift					"深海裂口"
+str_ldl_Dead					"毁坏地"
+str_ldl_BrownHill				"沙丘"
+str_ldl_BrownMountain			"沙漠山脉"
+str_ldl_WhiteHill				"极地丘陵"
+str_ldl_WhiteMountain			"极地山脉"
+str_ldl_Goody					"遗迹"
+str_ldl_River					"河流"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"开启城市输入区之后，您就能利用控制表里的生产页面，快速购买选定城市的设施及奇观。"
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"世界总体污染程度"
+str_ldl_Ozone_Damage			"臭氧层破坏程度"
+str_ldl_Flooding				"洪灾"
+str_ldl_never					"无"
+str_ldl_O						"O"
+str_ldl_F						"F"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"杀害数"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"开启地上设施输入区之后，您就能利用控制表来任意摆设地上设施，改良地形，开荒辟路。"

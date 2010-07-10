@@ -87,6 +87,10 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 		return true;
 	}
 
+	Assert(point.IsValid());
+
+	if(!point.IsValid()) return false;
+
 	Cell * cell = g_theWorld->GetCell(point);
 	if (!cell) return false;
 

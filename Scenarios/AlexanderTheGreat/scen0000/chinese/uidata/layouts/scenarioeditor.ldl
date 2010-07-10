@@ -1,0 +1,1206 @@
+template SCEN_TOGGLE_SWITCH : CTP2_SWITCH {
+		string	image0	"upba2317.tga"
+		string	image1	"upba2318.tga"
+		string	disabledimage0	"upba2323.tga"
+		string	disabledimage1	"upba2324.tga"
+
+		int widthpix 145
+		int heightpix 24
+		string	pattern	"uptg20e.tga"
+}
+
+template SCEN_TAB_BUTTON:CTP2_GENERIC_SIZABLE_TEXT_BUTTON { #CTP2_BUTTON_NODULE_ONLY_LARGE {
+	int	widthpix	70
+}
+
+template SCEN_VERT_TAB_BUTTON:CTP2_BUTTON_NODULE_ONLY_LARGE {
+}
+
+template SCEN_CONTROLS_BOX {
+	string objecttype "ctp2_Static"
+	int xpix 18
+	int ypix 58
+	int widthpix 135
+	int heightpix 187
+
+#	int beveltype 2
+#	int bevelwidth 1
+}
+
+template SCEN_EXTRA_CONTROLS_BOX {
+	string objecttype "ctp2_Static"
+	int xpix 18
+	int ypix 245
+	int heightpix 60
+	int widthpix 484
+
+	int beveltype 2
+	int bevelwidth 1
+}
+
+template SCEN_TAB {
+	string objecttype "ctp2_Static"
+	int xpix 2
+	int ypix 15
+	int widthpix 350
+	int heightpix 220
+}
+
+template SCEN_BUTTON:CTP2_BUTTON_NODULE_ONLY_LARGE {
+	string image00 "scen_button_up.tga"
+	string image10 "scen_button_hilite.tga"
+	string image20 "scen_button_down.tga"
+}
+
+ScenMapSizeItem:CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
+	int widthpix 80
+	int heightpix 22
+
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		string textblttype "center"
+		string just        "center"
+		bool vertcenter    true
+		int widthpix 80
+		int heightpix 22
+	}
+}
+
+
+ScenNationItem:CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
+	int widthpix 120
+	int heightpix 22
+
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		string textblttype "center"
+		string just        "center"
+		bool vertcenter    true
+		int widthpix 120
+		int heightpix 22
+	}
+}
+
+ScenBarbarianItem:CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
+	int widthpix 170
+	int heightpix 22
+
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		string textblttype "center"
+		string just        "center"
+		bool vertcenter    true
+		int widthpix 140
+		int heightpix 22
+	}
+}
+
+ScenDifficultyItem:CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
+	int widthpix 80
+	int heightpix 22
+
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		string textblttype "center"
+		string just        "center"
+		bool vertcenter    true
+		int widthpix 80
+		int heightpix 22
+	}
+}
+	
+ScenarioEditor:CTP2_TITLE_WINDOW {
+	int xpix 0
+	int ypix 50
+	int widthpix 600
+	int heightpix 420
+	string title "str_ldl_ScenarioEditor"
+
+	string	pattern	"uptg20e.tga"
+
+	Globals {
+		string objecttype "ctp2_Static"
+		int xpix 20
+		int ypix 300
+		int widthpix 496
+		int heightpix 98
+
+		MapSizeLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 2
+			int widthpix 60
+			int heightpix 25
+			string text "str_ldl_MapSize"
+		}
+
+		MapSize:CTP2_DROPDOWN {
+			int xpix 62
+			int ypix 2
+			int widthpix 90
+			int heightpix 24
+		}
+
+		YearLabel:CTP2_TEXT_BOX {
+			int xpix 165
+			int ypix 2
+			int widthpix 40
+			int heightpix 25
+			string text "str_ldl_ScenYear"
+		}
+
+		YearSpinner:CTP2_SPINNER {
+			int xpix 210
+			int widthpix 100
+			int heightpix 25
+	
+#			int minxval -4000
+			int minxval 0
+			int maxxval 2300
+			int incxval 50
+			int xval -4000
+		}
+			
+		BarbariansLabel:CTP2_TEXT_BOX {
+			int xpix 320
+			int ypix 2
+			int widthpix 70
+			int heightpix 25
+			string text "str_ldl_Barbarians"
+		}
+
+		Barbarians:CTP2_DROPDOWN {
+			int xpix 390
+			int ypix 2
+			int widthpix 140
+		}
+
+		PlayersLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 30
+			int widthpix 60
+			int heightpix 25
+			string text "str_ldl_NumPlayers"
+		}
+
+		Players:CTP2_TEXT_BOX {
+			int xpix 82
+			int ypix 30
+			int widthpix 60
+			int heightpix 25
+			string text "str_ldl_0"
+		}
+
+		DifficultyLabel:CTP2_TEXT_BOX {
+			int xpix 165
+			int ypix 30
+			int widthpix 80
+			int heightpix 25
+			string text "str_ldl_Difficulty"
+		}
+
+		Difficulty:CTP2_DROPDOWN {
+			int xpix 245
+			int widthpix 75
+			int ypix 30
+		}
+
+		Pollution:SCEN_TOGGLE_SWITCH {
+			int xpix 385
+			int ypix 30
+			string text "str_ldl_Pollution"
+		}
+
+		SaveMapButton:CTP2_BUTTON_SMALL {
+			int xpix 2
+			int ypix 70
+			int widthpix 95
+			string text "str_ldl_SaveMap"
+		}
+
+		LoadMapButton:CTP2_BUTTON_SMALL {
+			int xpix 102
+			int ypix 70
+			int widthpix 95
+			string text "str_ldl_LoadMap"
+		}
+
+		SaveScenarioButton:CTP2_BUTTON_SMALL {
+			int xpix 217
+			int ypix 70
+			int widthpix 95
+			string text "str_ldl_SaveScenario"
+		}
+
+		LoadScenarioButton:CTP2_BUTTON_SMALL {
+			int xpix 317
+			int ypix 70
+			int widthpix 95
+			string text "str_ldl_LoadScenario"
+		}
+
+		ExitButton:CTP2_BUTTON_SMALL {
+			int xpix 435
+			int ypix 70
+			int widthpix 95
+			string text "str_ldl_Exit"
+		}
+			
+	}
+
+	TabGroup {
+		string objecttype "ctp2_Static"
+		int xpix 200
+		int ypix 45
+		int widthpix 353
+		int heightpix 220
+	
+		WorldButton:SCEN_TAB_BUTTON {
+			int xpix 1
+			int ypix 0
+			string text "str_ldl_World"
+		}
+
+		UnitButton:SCEN_TAB_BUTTON {
+			int xpix 72
+			int ypix 0
+			string text "str_ldl_Unit"
+		}
+	
+		CityButton:SCEN_TAB_BUTTON {
+			int xpix 144
+			int ypix 0
+			string text "str_ldl_City"
+		}
+
+		CivButton:SCEN_TAB_BUTTON {
+			int xpix 216
+			int ypix 0
+			string text "str_ldl_Civ"
+		}
+
+		ScriptButton:SCEN_TAB_BUTTON {
+			int xpix 288
+			int ypix 0
+			string text "str_ldl_Script"
+		}
+
+		World:SCEN_TAB {
+			List:CTP2_LISTBOX {
+				int xpix 0
+				int ypix 30
+				int widthpix 330
+				int heightpix 162
+			}
+			HutSwitch:CTP2_SWITCH {
+				int xpix 2
+				int ypix 210
+				int widthpix 40
+				int heightpix 24
+				string text "str_ldl_ScenHut"
+			}
+			RiverSwitch:CTP2_SWITCH {
+				int xpix 44
+				int ypix 210
+				int widthpix 40
+				int heightpix 24
+				string text "str_ldl_ScenRiver"
+			}
+			GoodLabel:CTP2_STATIC_BASE {
+				int xpix 88
+				int ypix 210
+				int widthpix 40
+				int heightpix 20
+				string text "str_ldl_ScenGoods"
+			}
+			Good1Switch:CTP2_SWITCH {
+				int xpix 132
+				int ypix 210
+				int widthpix 20
+				int heightpix 20
+				string text "str_ldl_Scen1"
+			}
+			Good2Switch:CTP2_SWITCH {
+				int xpix 154
+				int ypix 210
+				int widthpix 20
+				int heightpix 20
+				string text "str_ldl_Scen2"
+			}
+			Good3Switch:CTP2_SWITCH {
+				int xpix 176
+				int ypix 210
+				int widthpix 20
+				int heightpix 20
+				string text "str_ldl_Scen3"
+			}
+			Good4Switch:CTP2_SWITCH {
+				int xpix 198
+				int ypix 210
+				int widthpix 20
+				int heightpix 20
+				string text "str_ldl_Scen4"
+			}
+
+		}
+
+		Unit:SCEN_TAB {
+			List:CTP2_LISTBOX {
+				int xpix 50
+				int ypix 20
+				int widthpix 275
+				int heightpix 212
+			}
+	
+			LandButton:SCEN_VERT_TAB_BUTTON {
+				int xpix 0
+				int ypix 26
+				string text "str_ldl_ScenLand"
+			}
+			SeaButton:SCEN_VERT_TAB_BUTTON {
+				int xpix 0
+				int ypix 72
+				string text "str_ldl_ScenSea"
+			}
+			AirButton:SCEN_VERT_TAB_BUTTON {
+				int xpix 0
+				int ypix 118
+				string text "str_ldl_ScenAir"
+			}
+			SpecialButton:SCEN_VERT_TAB_BUTTON {
+				int xpix 0
+				int ypix 164
+				string text "str_ldl_ScenSpecial"
+			}
+		}
+
+		City:SCEN_TAB {
+			# Shows city styles
+			List:CTP2_LISTBOX {
+				int xpix 8
+				int ypix 30
+				int widthpix 335
+				int heightpix 42
+			}
+			PopLabel:CTP2_TEXT_BOX {
+				int xpix 2
+				# MDS 08/2000
+				# int ypix 112
+				int ypix 85
+				#int widthpix 60
+				int widthpix 30
+				string text "str_ldl_Size"
+			}
+	
+			Pop:CTP2_SPINNER {
+				# MDS 08/2000
+				# int xpix 70
+				# int ypix 112
+				int xpix 38
+				int ypix 82
+				int widthpix 60
+				int minxval 0
+				int maxxval 200
+				int incxval 1
+				int xval 1
+			}
+
+			AddBuildings:CTP2_BUTTON_SMALL {
+				# MDS 08/2000
+				# int xpix 220
+				# int ypix 112
+				int xpix 2
+				int ypix 115
+				string text "str_ldl_AddBuildings"
+			}
+			AddWonders:CTP2_BUTTON_SMALL {
+				# MDS 08/2000 
+				# int xpix 220
+				# int ypix 136
+				int xpix 2
+				int ypix 141
+				string text "str_ldl_AddWonders"
+			}
+
+			#
+			# MDS 08/2000 - listbox for adding terrain improvements
+			#
+			TerrainImprovementList:CTP2_LISTBOX {
+				int xpix 122
+				int ypix 86
+				int widthpix 220
+				int heightpix 80
+			}
+	
+
+
+		}
+
+		Civ:SCEN_TAB {
+			SetGovernment:CTP2_DROPDOWN {
+				int	xpix	-168
+				int	ypix	65
+				int widthpix 140
+				int heightpix 24
+			}
+			PlayerSelect:CTP2_DROPDOWN {
+				int	xpix		-168
+				int	ypix		95
+				int	widthpix	140
+				int	heightpix	24
+			}
+			
+			ModeLabel:CTP2_STANDARD_FONT {
+				string objecttype "ctp2_Static"
+				int xpix 8
+				int ypix 34
+				int widthpix 40
+				int heightpix 20
+				string text "str_ldl_ScenMode"
+#				string pattern "uptg02.tga"
+			}
+
+			FullModeSwitch:CTP2_SWITCH {
+				int xpix 42
+				int ypix 34
+				int widthpix 70
+				int heightpix 20
+				string text "str_ldl_ScenModeFull"
+#				string pattern "uptg02.tga"
+			}
+
+			PlayerNoCivSwitch:CTP2_SWITCH {
+				int xpix 117
+				int ypix 34
+				int widthpix 70
+				int heightpix 20
+				string text "str_ldl_ScenModePlayerNoCiv"
+#				string pattern "uptg02.tga"
+			}
+
+			PlayerWithCivSwitch:CTP2_SWITCH {
+				int xpix 192
+				int ypix 34
+				int widthpix 70
+				int heightpix 20
+				string text "str_ldl_ScenModePlayerWithCiv"
+#				string pattern "uptg02.tga"
+			}
+
+			JustCivSwitch:CTP2_SWITCH {
+				int xpix 267
+				int ypix 34
+				int widthpix 70
+				int heightpix 20
+				string text "str_ldl_ScenModeJustCivs"
+#				string pattern "uptg02.tga"
+			}
+
+			WithPlayerGroup {
+				string objecttype "ctp2_static"
+				int xpix 0
+				int ypix 42
+				int widthpix 350
+				int heightpix 175
+
+				AddAdvances:CTP2_BUTTON_SMALL {
+					int xpix 2
+					int ypix 40
+					int widthpix 120
+					string text "str_ldl_AddAdvances"
+				}
+
+# MDS - 08/2000 The remove player functionality is more complicated than it's worth, so we just removed
+#				the button
+#				AddRemovePlayer:CTP2_BUTTON_SMALL {
+#					int xpix 140
+#					int ypix 40
+#					int widthpix 120
+#					string text "str_ldl_RemovePlayer"
+#				}
+
+				Nation:CTP2_DROPDOWN {
+					int xpix 2
+					int ypix 72
+					int widthpix 120
+					int heightpix 24
+				}
+
+#				Background {
+#					string objecttype "ctp2_static"
+#					int xpix 0
+#					int ypix 0
+#					int widthpix 350
+#					int heightpix 160
+#					string pattern "uptg02.tga"
+#				}
+			}
+
+			JustCivGroup {
+				string objecttype "ctp2_static"
+				
+				int xpix 0
+				int ypix 32
+				int widthpix 350
+				int heightpix 160
+
+				Nation: CTP2_DROPDOWN {
+					int xpix 2
+					int ypix 0
+					int widthpix 120
+					int heightpix 24
+				}
+#				Background {
+#					string objecttype "ctp2_static"
+#					int xpix 0
+#					int ypix 0
+#					int widthpix 350
+#					int heightpix 160
+#					string pattern "uptg02.tga"
+#				}
+			}
+			
+		}
+
+		Script:SCEN_TAB {
+			string objecttype "ctp2_Static"
+
+			int xpix 0
+			int ypix 60
+
+			Background {
+				string objecttype "ctp2_static"
+				int xpix 0
+				int ypix 0
+				int widthpix 150
+				int heightpix 71
+#				string imagebltflag "chromakey"
+				string pattern "hee.tga"
+			}			
+		}
+	}
+
+	SelectButton:SCEN_BUTTON {
+		int xpix 26
+		int ypix 34
+		string image40 "scen_button_select.tga"
+	}
+	EraseButton:SCEN_BUTTON {
+		string objecttype "ctp2_Switch"
+		int xpix 70
+		int ypix 34
+		string image40 "scen_button_erase.tga"
+		string image0 "scen_button_erase.tga"		
+		string image1 "scen_button_erase.tga"
+	}
+	ClearWorldButton:SCEN_BUTTON {
+		int xpix 114
+		int ypix 34
+		string image40 "scen_button_new.tga"
+		}
+
+	WorldControls:SCEN_CONTROLS_BOX {
+#		int xpix 6
+#		int ypix 78
+
+		CutButton:SCEN_BUTTON {
+			int xpix 8
+			int ypix 56
+	
+			string image40 "scen_button_cut.tga"
+		}
+		CopyButton:SCEN_BUTTON {
+			int xpix 52
+			int ypix 56
+
+			string image40 "scen_button_copy.tga"
+		}
+		PasteButton:SCEN_BUTTON {
+			int xpix 96
+			int ypix 56
+			string image40 "scen_button_paste.tga"
+		}
+
+		SmallBrushButton:SCEN_BUTTON {
+			int xpix 8
+			int ypix 146
+			string image40 "scen_button_sm_brush.tga"
+		}
+		MedBrushButton:SCEN_BUTTON {
+			int xpix 52
+			int ypix 146
+			string image40 "scen_button_med_brush.tga"
+		}
+		LargeBrushButton:SCEN_BUTTON {
+			int xpix 96
+			int ypix 146
+			string image40 "scen_button_lg_brush.tga"
+		}
+
+		SaveClipButton:SCEN_BUTTON {
+			int xpix 8
+			int ypix 102
+			string image40 "scen_button_to_disk.tga"
+		}
+
+		LoadClipButton:SCEN_BUTTON {
+			int xpix 52
+			int ypix 102
+			string image40 "scen_button_from_disk.tga"
+		}
+
+		ExploreButton:SCEN_BUTTON {
+			int	xpix	8
+			int	ypix	190
+			string image40 "scen_button_expl.tga"
+		}
+
+		UnexploreButton:SCEN_BUTTON {
+			int	xpix	52
+			int	ypix	190
+			string image40 "scen_button_unexpl.tga"
+		}
+
+		FogButton:SCEN_BUTTON {
+			int xpix 96
+			int ypix 190
+			string image40 "scen_button_fog.tga"
+		}
+	}
+
+	UnitControls:SCEN_CONTROLS_BOX {
+		PlayerLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 30
+			int widthpix 40
+			string text "str_ldl_Player"
+		}
+
+		Player:CTP2_SPINNER {
+			int xpix 57
+			int ypix 30
+			int widthpix 70
+#			int minxval 1
+			int minxval 0
+			int maxxval 42
+			int incxval 1
+			int xval 1
+		}			
+
+# MDS 07/2000 - took out, since there is already a global erase button
+#		KillButton:SCEN_BUTTON {
+#			int xpix 50
+#			int ypix 87
+#			string image40 "scen_button_erase.tga"
+#		}
+
+		Legal:SCEN_TOGGLE_SWITCH {
+			int xpix 2
+			int ypix 165
+
+			string text "str_ldl_LegalOnly"
+		}
+
+		LabelToggle:SCEN_TOGGLE_SWITCH {
+			int	xpix	2
+			int	ypix	195
+
+			string	text	"str_ldl_ShowLabels"
+		}
+
+	}
+		
+	CityControls:SCEN_CONTROLS_BOX {
+		PlayerLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 30
+			int widthpix 40
+			string text "str_ldl_Player"
+		}
+
+		Player:CTP2_SPINNER {
+			int xpix 57
+			int ypix 30
+			int widthpix 70
+#			int minxval 1
+			int minxval 0
+			int maxxval 42
+			int incxval 1
+			int xval 1
+		}			
+
+# MDS 07/2000 - took out, since there is already a global erase button
+#		KillButton:SCEN_BUTTON {
+#			int xpix 50
+#			int ypix 87
+#			string image40 "scen_button_erase.tga"
+#		}
+
+	}
+
+	CivControls:SCEN_CONTROLS_BOX {
+		PlayerLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 30
+			int widthpix 40
+			string text "str_ldl_Player"
+		}
+
+		Player:CTP2_SPINNER {
+			int xpix 57
+			int ypix 30
+			int widthpix 70
+#			int minxval 1
+			int minxval 0
+			int maxxval 42
+			int incxval 1
+			int xval 1
+		}			
+	}
+
+	CivExtraControls:SCEN_EXTRA_CONTROLS_BOX {
+		LeaderNameLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 18
+			int widthpix 100
+			string text "str_ldl_Leader"
+		}
+		LeaderField:CTP2_TEXT_FIELD {
+			int xpix 110
+			int ypix 20
+			int widthpix 370
+		}
+	}
+
+	CityExtraControls:SCEN_EXTRA_CONTROLS_BOX {
+		CityNameLabel:CTP2_TEXT_BOX {
+			int xpix 2
+			int ypix 18
+			int widthpix 100
+			string text "str_ldl_CityName"
+		}
+		CityField:CTP2_TEXT_FIELD {
+			int xpix 110
+			int ypix 20
+			int widthpix 370
+		}
+	}
+	
+	ScriptControls:SCEN_CONTROLS_BOX {
+	}
+
+#	Background {
+#		string objecttype "ctp2_Static"
+#		int widthpix 600
+#		int heightpix 420
+#		string pattern "uptg20e.tga"
+#	}
+	SCEN_UL {
+
+		string objecttype "ctp2_Static"
+		string	image0	"uptg03a.tga"
+		string	imagebltflag	"chromakey"
+
+		int xpix	0
+		int	ypix	0
+		int heightpix 17
+		int widthpix 17
+
+	}
+
+	SCEN_UR {
+
+		string objecttype "ctp2_Static"
+		string	imagebltflag	"chromakey"
+		string  image0 "uptg03c.tga"
+
+		int xpix	583
+		int	ypix	0
+
+		int heightpix 17
+		int widthpix 17
+
+	}
+
+	SCEN_LL {
+
+		string objecttype "ctp2_Static"
+		string	imagebltflag	"chromakey"
+		string image0 "uptg03g.tga"
+
+		int xpix	0
+		int	ypix	403
+
+		int heightpix 17
+		int widthpix 17
+
+	}
+
+	SCEN_LR {
+
+		string objecttype "ctp2_Static"
+		string image0 "uptg03i.tga"
+		string	imagebltflag	"chromakey"
+
+		int xpix	583
+		int	ypix	403
+
+		int heightpix 17
+		int widthpix 17
+
+	}
+
+
+
+	SCEN_PopupLeft {
+
+		string objecttype "ctp2_Static"
+		string pattern "uptg03d.tga"
+
+		int	xpix	0
+		int	ypix	17
+
+		int	widthpix	17
+		int	heightpix	386
+
+	}
+
+	SCEN_PopupTop {
+
+		string objecttype "ctp2_Static"
+		string	pattern	"uptg03b.tga"
+
+		int	xpix	17
+		int	ypix	0
+		
+		int	widthpix	566
+		int	heightpix	17
+
+	}
+
+	SCEN_PopupRight {
+
+		string objecttype "ctp2_Static"
+		string pattern "uptg03f.tga"
+
+		int	xpix	583
+		int	ypix	17
+
+		int	widthpix	17
+		int	heightpix	386
+
+	}
+
+	SCEN_PopupBottom {
+
+		string objecttype "ctp2_Static"
+		string pattern "uptg03h.tga"
+
+		int	xpix	17
+		int	ypix	403
+
+		int	widthpix	566
+		int	heightpix	17
+
+	}
+
+
+}
+
+template TERRAIN_BUTTON:CTP2_SWITCH {
+	int widthpix 52
+	int heightpix 40
+	int beveltype 1
+	int bevelwidth 2
+	
+	string imagebltflag "chromakey"
+
+	string image0 "upt001b.tga"
+	string image1 "upt001b.tga"
+
+	string tipwindow "--"
+}
+
+ScenTerrainItem:CTP2_LIST_ITEM {
+	int widthpix 330
+	int heightpix 40
+
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 330    # 6 buttons per row * room for 55 pixels
+		int heightpix 40
+		
+		b0:TERRAIN_BUTTON {
+			int xpix 0
+			int ypix 0
+		}
+		b1:TERRAIN_BUTTON {
+			int xpix 55
+			int ypix 0
+		}
+		b2:TERRAIN_BUTTON {
+			int xpix 110
+			int ypix 0
+		}
+		b3:TERRAIN_BUTTON {
+			int xpix 165
+			int ypix 0
+		}
+		b4:TERRAIN_BUTTON {
+			int xpix 220
+			int ypix 0
+		}
+		b5:TERRAIN_BUTTON {
+			int xpix 275
+			int ypix 0
+		}
+	}
+}
+
+template UNIT_EXCLUDE_SWITCH:CTP2_SWITCH:CTP2_STANDARD_FONT {
+	int widthpix 55
+	int heightpix 12
+	string text "str_ldl_Exclude"
+#	string pattern "uptg02.tga"
+}
+	
+
+
+#
+# MDS 08/2000 - this is for terrain improvements 
+#
+ScenTerrainImprovementItem:CTP2_LIST_ITEM {
+	int widthpix 220
+	int heightpix 40
+
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 220    # 4 buttons per row * room for 55 pixels
+		int heightpix 40
+		
+		b0:TERRAIN_BUTTON {
+			int xpix 0
+			int ypix 0
+		}
+		b1:TERRAIN_BUTTON {
+			int xpix 55
+			int ypix 0
+		}
+		b2:TERRAIN_BUTTON {
+			int xpix 110
+			int ypix 0
+		}
+		b3:TERRAIN_BUTTON {
+			int xpix 165
+			int ypix 0
+		}
+	}
+}
+
+
+
+ScenUnitItem:CTP2_LIST_ITEM {
+	int widthpix 275
+	int heightpix 52
+
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 275    # 5 buttons per row * room for 55 pixels
+		int heightpix 52
+		
+		b0:TERRAIN_BUTTON {
+			int xpix 0
+			int ypix 0
+		}
+		b0exclude:UNIT_EXCLUDE_SWITCH {
+			int xpix 0
+			int ypix 40 
+		}
+		b1:TERRAIN_BUTTON {
+			int xpix 55
+			int ypix 0
+		}
+		b1exclude:UNIT_EXCLUDE_SWITCH {
+			int xpix 55
+			int ypix 40
+		}
+		b2:TERRAIN_BUTTON {
+			int xpix 110
+			int ypix 0
+		}
+		b2exclude:UNIT_EXCLUDE_SWITCH {
+			int xpix 110
+			int ypix 40
+		}
+		b3:TERRAIN_BUTTON {
+			int xpix 165
+			int ypix 0
+		}
+		b3exclude:UNIT_EXCLUDE_SWITCH {
+			int xpix 165
+			int ypix 40
+		}
+		b4:TERRAIN_BUTTON {
+			int xpix 220
+			int ypix 0
+		}
+		b4exclude:UNIT_EXCLUDE_SWITCH {
+			int xpix 220
+			int ypix 40
+		}
+	}
+}
+
+ScenAddStuffWindow:CTP2_WINDOW {
+	int xpix 200
+	int ypix 200
+	int widthpix 430
+	int heightpix 225
+
+	Left:CTP2_LISTBOX {
+		int xpix 12
+		int ypix 12
+		int widthpix 155
+		int heightpix 196
+	}
+
+	Right:CTP2_LISTBOX {
+		int xpix 248
+		int ypix 12
+		int widthpix 155
+		int heightpix 196
+	}
+
+	AddButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
+		int xpix 200
+		int ypix 50
+		string	image40	"UPIC14.TGA"
+		int xpix40 7
+		int ypix40 10
+	}
+
+	RemoveButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
+		int xpix 200
+		int ypix 100
+		string	image40	"UPIC13.TGA"
+		int xpix40 7
+		int ypix40 10
+	}
+
+	CloseButton:CTP2_BUTTON_SMALL {
+		int xpix 200
+		int ypix 200
+		string text "str_ldl_Ok"
+	}
+}
+
+ScenAddStuffItem:CTP2_LIST_ITEM {
+	int widthpix 155
+	int heightpix 20
+	text:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_Static"
+		int widthpix 155
+		int heightpix 20
+		string textblttype "center"
+		string just        "center"
+		bool vertcenter    true
+	}
+}
+
+ScenCityItem:CTP2_LIST_ITEM {
+	int widthpix 330
+	int heightpix 40
+
+	box {
+		string objecttype "ctp2_Static"
+		int widthpix 330    # 6 buttons per row * room for 55 pixels
+		int heightpix 40
+		
+		b0:TERRAIN_BUTTON {
+			int xpix 0
+			int ypix 0
+		}
+		b1:TERRAIN_BUTTON {
+			int xpix 55
+			int ypix 0
+		}
+		b2:TERRAIN_BUTTON {
+			int xpix 110
+			int ypix 0
+		}
+		b3:TERRAIN_BUTTON {
+			int xpix 165
+			int ypix 0
+		}
+		b4:TERRAIN_BUTTON {
+			int xpix 220
+			int ypix 0
+		}
+		b5:TERRAIN_BUTTON {
+			int xpix 275
+			int ypix 0
+		}
+	}
+}
+
+GenericFileDialog:CTP2_WINDOW {
+	int widthpix 224
+	int heightpix 210
+	int xpix 100
+	int xpix 100
+
+	List:CTP2_LISTBOX {
+		int xpix 8
+		int ypix 8
+		int widthpix 192
+		int heightpix 140		
+	}
+	
+	NameLabel:CTP2_TEXT_BOX {
+		int xpix 4
+		int ypix 150
+		int widthpix 60
+		int heightpix 20
+		string text "str_ldl_FileName"
+	}
+
+	NameField:CTP2_TEXT_FIELD {
+		int xpix 70
+		int ypix 150
+		int widthpix 132
+	}
+
+	LoadButton:CTP2_BUTTON_SMALL {
+		int xpix 70
+		int ypix 180	
+		int widthpix 60
+		string text "str_ldl_Load"
+	}
+
+	SaveButton:CTP2_BUTTON_SMALL {
+		int xpix 70
+		int ypix 180
+		int widthpix 60
+		string text "str_ldl_Save"
+	}
+
+	CancelButton:CTP2_BUTTON_SMALL {
+		int xpix 136
+		int ypix 180
+		int widthpix 60
+		string text "str_ldl_Cancel"
+	}
+
+}
+
+GenericFileItem:CTP2_LIST_ITEM {
+	int widthpix 192
+	int heighpix 20
+
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		int widthpix 192
+		int heightpix 20
+	}
+}
+
+$

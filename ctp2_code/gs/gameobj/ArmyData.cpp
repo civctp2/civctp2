@@ -1031,7 +1031,7 @@ bool ArmyData::IsAsleep() const
 	return m_array[0].IsAsleep();
 }
 
-// Put this army on sentinal duty or upgrade it.
+// Put this army on sentinal duty.
 void ArmyData::Sleep()
 {
 	for(sint32 i = m_nElements - 1; i >= 0; i--)
@@ -8366,8 +8366,6 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 								to_pt.x,
 								to_pt.y);
 		}
-
-		Assert(!g_player[m_owner]->IsRobot());
 	}
 
 	return unitUnloadDone;

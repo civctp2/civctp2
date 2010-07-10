@@ -248,19 +248,19 @@ public:
 	void            Start();
 	void            Next();
 	bool            End() const;
-	const MapPoint&       Pos() const;
+	const MapPoint& Pos() const;
 
 protected:
 	MapPoint        m_center;
 	MapPoint        m_cur;
 	MapPoint        m_wrappedCur;
 	sint16          m_startX;
-    sint16          m_endX;
+	sint16          m_endX;
 	sint16          m_row;
 	sint16          m_intRadius;
 	OrthogonalPoint m_testXY;
 
-    virtual bool    IsIncluded();
+	virtual bool    IsIncluded();
 };
 
 class RadiusIterator : public SquareIterator 
@@ -272,7 +272,7 @@ public:
 protected:
 	double          m_squaredRadius;
 
-    virtual bool    IsIncluded();
+	virtual bool    IsIncluded();
 };
 
 class CircleIterator : public RadiusIterator 
@@ -284,7 +284,7 @@ public:
 protected:
 	double          m_innerSquaredRadius;
 
-    virtual bool    IsIncluded();
+	virtual bool    IsIncluded();
 };
 
 #endif

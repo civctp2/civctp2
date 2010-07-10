@@ -162,6 +162,8 @@ void SettleMap::Initialize()
 	}
 }
 
+//void SettleMap::HandleCityStarvation(const Unit & city)
+
 /// Update the settle target information when a city grows
 /// \param city The city
 void SettleMap::HandleCityGrowth(const Unit & city)
@@ -416,7 +418,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 				else
 				{
 					iter = targets.erase(iter);
-y					--iter;
+					--iter;
 					break;
 				}
 			}

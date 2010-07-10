@@ -1,0 +1,511 @@
+
+template CUSTOMMAP_LABEL_LEFT:CTP2_STANDARD_FONT {
+
+	string	pattern	"uptg20e.tga"
+
+	int 	xpix		17 #10
+
+	int	widthpix	80
+
+	int	heightpix	20
+}
+
+template CUSTOMMAP_LABEL_RIGHT:CTP2_STANDARD_FONT {
+
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor "right"
+
+	int 	xpix		20
+
+	int	widthpix	80
+
+	int	heightpix	20
+}
+
+GAMEPLAY_CHECKBOX_CUSTOMMAP:CTP2_STANDARD_FONT {
+
+	string	image0	"upbt11u0.tga"
+	string	image1	"upbt11u1.tga"
+	string	disabledimage0	"upbt11x0.tga"
+	string	disabledimage1	"upbt11x1.tga"
+
+
+	int	widthpix	230
+	string	imageblttype	"stretch"
+	int	heightpix	24
+}
+
+CustomMapWindow {
+
+	string	pattern	"uptg20e.tga"
+
+#	int 	xpix		506
+
+#	int 	ypix		130
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	450
+
+	int	heightpix	336
+
+	Name:CTP_GREY_TITLE_FONT  {
+
+		string	parent	"c3_PopupTitle"
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		int	ypix	20
+
+		string	text	"str_ldl_Map"
+#		string	pattern	"error.tga"
+
+	}
+
+	BackButton:CTP2_STANDARD_FONT {
+
+		int	xpix	370
+
+		int	ypix	275
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+		string	text	"str_ldl_BACK"
+	}
+
+	AcceptButton:CTP2_STANDARD_FONT {
+
+		int	xpix	182
+
+		int	ypix	364
+
+		int	widthpix	95
+
+		int	heightpix	57
+
+		string	imagebltflag	"chromakey"
+
+		string	image0		"error.tga"
+
+	}
+
+	CancelButton:CTP2_STANDARD_FONT  {
+
+		int	xpix	443
+
+		int	ypix	364
+
+		int	widthpix	95
+
+		int	heightpix	57
+
+		string	imagebltflag	"chromakey"
+
+		string	image0		"error.tga"
+
+	}
+
+	WetDrySlider {
+
+		string xanchor "center"
+
+		int ypix		40
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Wet:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	50
+
+		string text	 "str_ldl_Wet"
+	}
+
+	Dry:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	50
+
+		string text	 "str_ldl_Dry"
+	}
+
+	WarmColdSlider {
+
+		string xanchor "center"
+
+		int ypix		80
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+	string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Warm:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	90
+
+		string text	 "str_ldl_Warm"
+	}
+
+	Cold:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	90
+
+		string text	 "str_ldl_Cold"
+	}
+
+	OceanLandSlider {
+
+		string xanchor "center"
+
+		int ypix		120
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+		string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Ocean:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	130
+
+		string text	 "str_ldl_Ocean"
+	}
+
+	Land:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	130
+
+		string text	 "str_ldl_Land"
+	}
+
+	IslandContinentSlider {
+
+		string xanchor "center"
+
+		int ypix		160
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+		string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Island:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	170
+
+		string text	 "str_ldl_Island"
+	}
+
+	Continent:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	170
+
+		string text	 "str_ldl_Continent"
+	}
+
+	HomoDiverseSlider {
+
+		string xanchor "center"
+
+		int ypix		200
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+		string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Homo:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	210
+
+		string text	 "str_ldl_Homogeneous"
+	}
+
+	Diverse:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	210
+
+		string text	 "str_ldl_Diverse"
+	}
+
+	GoodCountSlider {
+
+		string xanchor "center"
+
+		int ypix		240
+
+		int widthpix	250
+
+		int heightpix	40
+
+		int	maxxval		10
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		5
+
+		string	pattern	"uptg20e.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		int	ticks	1
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	40
+
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+	}
+
+	Poor:CUSTOMMAP_LABEL_LEFT {
+
+		int ypix	250
+
+		string text	 "str_ldl_Few_Goods"
+	}
+
+	Rich:CUSTOMMAP_LABEL_RIGHT {
+
+		int ypix	250
+
+		string text	 "str_ldl_Many_Goods"
+	}
+
+	RandomCustomMap:GAMEPLAY_CHECKBOX_CUSTOMMAP {
+
+		int	xpix		110
+		int	ypix		295
+
+		int	widthpix	230
+
+		stringtable {
+			string	string0	"str_tbl_ldl_RandomCustomMap_Off"
+			string	string1	"str_tbl_ldl_RandomCustomMap_On"
+		}
+	}
+
+	CloseButtonStrings {
+		string	string0	"str_ldl_CLOSE"
+		string	string1	"str_ldl_LAUNCH"
+	}
+}
+
+$

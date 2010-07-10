@@ -273,6 +273,7 @@ private:
 
     bool RallyComplete() const;
 
+    MapPoint MoveToTarget(Agent_ptr rallyAgent);
     MapPoint MoveOutOfCity(Agent_ptr rallyAgent);
     Agent_ptr GetRallyAgent() const;
     MapPoint GetFreeNeighborPos(MapPoint pos) const;

@@ -1,0 +1,334 @@
+DiplomacyDetailsListItem:CTP2_LIST_ITEM {
+	int widthpix 450
+	int heightpix 25 #35
+
+	Flag:INTEL_COLUMN {
+		int	widthpix	40
+	}
+	Nation:INTEL_COLUMN {
+		int widthpix 150
+	}
+	Regard:INTEL_COLUMN {
+		int widthpix 50
+		string tipwindow "--"
+	}
+	Strength:INTEL_COLUMN {
+		int widthpix 50
+		string tipwindow "--"
+	}
+	Embassy:INTEL_COLUMN {
+		int widthpix 50
+	}
+	Treaties:INTEL_COLUMN {
+		int widthpix 110
+	}
+	
+}
+
+ForAdvancesItem:CTP2_LIST_ITEM {
+	int widthpix 200
+	int heightpix 20
+
+	Data:CTP2_STANDARD_FONT{
+		string objecttype "ctp2_Static"
+		int heightpix 20
+		int widthpix 200
+	}
+}
+
+YourAdvancesItem:CTP2_LIST_ITEM {
+	int widthpix 200
+	int heightpix 20
+
+	Data:CTP2_STANDARD_FONT{
+		string objecttype "ctp2_Static"
+		int heightpix 20
+		int widthpix 200
+	}
+}
+
+DipDetWondersItem:CTP2_LIST_ITEM {
+	int widthpix 170
+	int heightpix 20
+
+	Dtat:CTP2_STANDARD_FONT{
+		string objecttype "ctp2_Static"
+		int heightpix 20
+		int widthpix 170
+	}
+}
+
+DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
+
+	string title "str_ldl_IntelligenceTitle"
+
+	CloseButton:CTP2_STANDARD_CLOSE {
+		# Tooltip
+		string	statustext	"STATUSBAR_DIPMAN_TABLE_CLOSE_BUTTON"
+	}
+
+	IntelReportLabel:CTP2_STATIC_BASE {
+		int xpix 150
+		int ypix 35
+		int widthpix 300
+		string pattern "uptg20e.tga"
+		int heightpix 15
+		string just "center"
+		string text "str_ldl_DipDetails_IntelReport"
+	}
+
+	LeaderNameLabel:CTP2_STATIC_BASE {
+		int xpix 50
+		int ypix 50
+		string pattern "uptg20e.tga"
+		string just "left"
+		string text "str_ldl_DipDetails_LeaderName"
+	}
+
+	LeaderPersonalityLabel:CTP2_STATIC_BASE {
+		int xpix 50
+		int ypix 65
+		string pattern "uptg20e.tga"
+		string just "left"
+		string text "str_ldl_DipDetails_LeaderPersonality"
+	}
+
+	EmbassyMsgLabel:CTP2_STATIC_BASE:CTP2_HYPER_TEXT_BOX {
+		int xpix 50
+		int ypix 80
+		int heightpix 36
+		int widthpix 475
+		int bevelwidth 0
+		string pattern "uptg20e.tga"
+		bool	wordwrap TRUE
+		string just "left"
+		string text "str_ldl_DipDetails_EmbassyMsg"
+	}
+
+	TabGroup {
+		# Location.
+		int		xpix		35
+		int		ypix		120
+		int		widthpix	506
+		int		heightpix	223
+		Tab1 {
+			TabButton {
+				int xpix 2
+				string	text	"str_ldl_INTELDET_FOREIGNRELATIONS_TAB"
+			}
+			TabPanel {
+				# Location.
+				int		xpix		0
+				int		ypix		23
+				int		widthpix	506
+				int		heightpix	200
+
+################################################################################
+# Start Foreign Relations Tab...
+################################################################################
+				List:CTP2_LISTBOX {
+					int xpix 20
+					int ypix 30
+					int widthpix 450
+					int heightpix 160
+					header {
+						# MDS 090600  Added flag
+						switch0:DIP_INTEL_HEADER {
+							int	widthpix	40
+						}
+						switch1:DIP_INTEL_HEADER {
+							int widthpix 150
+							string text "str_ldl_Nation"
+						}
+						switch2:DIP_INTEL_HEADER {
+							int widthpix 50
+							string text "str_ldl_Regard"
+						}
+						switch3:DIP_INTEL_HEADER {
+							int widthpix 50
+							string text "str_ldl_Strength"
+						}
+						switch4:DIP_INTEL_HEADER {
+							int widthpix 50
+							string text "str_ldl_Embassy"
+						}
+
+						switch5:DIP_INTEL_HEADER {
+							int widthpix 110
+							string text "str_ldl_AlliancesTreaties"
+						}
+					}
+				}
+################################################################################
+# End Foreign Relations Tab
+################################################################################
+			}
+		}
+		Tab2 {
+			TabButton {
+				int xpix 146
+				string	text	"str_ldl_INTELDET_DOMESTIC_TAB"
+			}
+			TabPanel {
+				# Location.
+				int		xpix		0
+				int		ypix		23
+				int		widthpix	506
+				int		heightpix	200
+################################################################################
+# Start Domestic Tab...
+################################################################################
+				PriveledgedLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 25
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_Priveledged"
+				}
+				EmpireSizeLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 55
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_EmpireSize"
+				}
+				PopulationLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					string pattern "uptg20e.tga"
+					int ypix 70
+					string just "left"
+					string text "str_ldl_DipDetails_Population"
+				}
+				PollutionLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					string pattern "uptg20e.tga"
+					int ypix 85
+					string just "left"
+					string text "str_ldl_DipDetails_Pollution"
+				}
+				CapitalLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 105
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_Capital"
+				}
+				LargestCityLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 120
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_LargestCity"
+				}
+				GovTypeLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 155
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_GovType"
+				}
+				MilStateLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 170
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_MilitaryState"
+				}
+				WonderListLabel:CTP2_STATIC_BASE {
+					int xpix 288
+					int ypix 7
+					int widthpix 200
+					int heightpix 12
+					string pattern "uptg20e.tga"
+					string just "center"
+					string text "str_ldl_Cities"
+				}
+				WonderList:CTP2_LISTBOX {
+					int	xpix	300
+					int	ypix	30
+					int	widthpix	170
+					int	heightpix	160
+					bool 	alwaysranger TRUE
+				}
+###############################################################################
+# End Domestic Tab
+################################################################################
+			}
+		}
+		Tab3 {
+			TabButton {
+				string	text	"str_ldl_INTELDET_SCIENCE_TAB"
+			}
+			TabPanel {
+				# Location.
+				int		xpix		0
+				int		ypix		23
+				int		widthpix	506
+				int		heightpix	200
+################################################################################
+# Start Science Tab...
+################################################################################
+				PriveledgedLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 25
+					string pattern "uptg20e.tga"
+					int	heightpix	12
+					string just "left"
+					string text "str_ldl_DipDetails_Priveledged"
+				}
+				NowResearchLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 55
+					int	heightpix	12
+					string pattern "uptg20e.tga"
+					string just "left"
+					string text "str_ldl_DipDetails_NowResearching"
+ 				}
+				KnownToGovLabel:CTP2_STATIC_BASE {
+					int xpix 25
+					int ypix 75
+					string pattern "uptg20e.tga"
+					int	heightpix	12
+					int	widthpix	200
+					string just "left"
+					string text "str_ldl_DipDetails_KnownToGov"
+				}
+				KnownToYouLabel:CTP2_STATIC_BASE {
+					int xpix 265
+					int ypix 75
+					string pattern "uptg20e.tga"
+					int	heightpix	12
+					int	widthpix	200
+					string just "left"
+					string text "str_ldl_DipDetails_KnownToYou"
+				}
+				ForAdvancesList:CTP2_LISTBOX {
+					int	xpix	25
+					int	ypix	100
+					int	widthpix	200
+					int	heightpix	90
+					bool 	alwaysranger TRUE
+				}
+				YourAdvancesList:CTP2_LISTBOX {
+					int	xpix	265
+					int	ypix	100
+					int	widthpix	200
+					int	heightpix	90
+					bool 	alwaysranger TRUE
+				}
+
+###############################################################################
+# End Science Tab
+################################################################################
+			}
+		}
+	}
+
+	Background:CTP2_DIALOG_BG {
+		string image00 "uptg23a.tga"
+		string image02 "uptg23c.tga"
+		string image03 "uptg23d.tga"
+		string image05 "uptg23f.tga"
+	}
+
+}

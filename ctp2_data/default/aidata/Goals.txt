@@ -70,6 +70,7 @@ GOAL_DEFEND {
 GOAL_SEIGE {
   RallyFirst
   NeverSatisfied
+  IsGlobalGoal
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -94,10 +95,15 @@ GOAL_SEIGE {
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
   NotVisibleBonus           0
-  ChokePointBonus         500
+  ChokePointBonus           0 // Choke points are not well selected, so they are irrelevant
   UnexploredBonus     -999999
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
+
+  LandToCloseCityConnectionBonus 500
+  SmallTargetEmpireSize          3
+  SmallTargetEmpireBonus         100
+  WeakestEnemyBonus              200
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000

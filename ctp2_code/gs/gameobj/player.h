@@ -368,7 +368,6 @@ public:
 	sint16                            m_cargoCapacity;            // Not serialized possibly used.
 
 
-
 	friend class NetInfo;
 	friend class NetDifficulty;
 	friend class NetPlayer;
@@ -396,7 +395,7 @@ public:
 	sint32 FindArmyIndex(const Unit &unit) const;
 	sint32 FindArmyIndex(const Army &army) const;
 	sint32 FindCityIndex(const Unit &find) const;
-
+	sint32 GetWeakestEnemy() const;
 
 
 
@@ -463,7 +462,7 @@ public:
 
 	void Entrench(sint32 idx);
 	void Detrench(sint32 idx);
-    void AddFeatHPBonus(sint32 hpBonus);
+	void AddFeatHPBonus(sint32 hpBonus);
 	void Sleep(sint32 idx);
 	void WakeUp(sint32 idx);
 
@@ -1068,6 +1067,10 @@ public:
 
 	bool HasCostalCities() const;
 	bool HasTransporters() const;
+
+	bool IsLandConnected(MapPoint const & center, sint32 size) const;
+
+	MapPoint CalcEmpireCenter() const;
 
 private:
 	/// @ToDo: This is a copy from governor, merge both.

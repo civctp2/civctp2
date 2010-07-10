@@ -246,7 +246,7 @@ AUI_ERRCODE aui_DirectMovie::TargetSurface(aui_DirectSurface *surface)
 
 	
 	hr = m_ddStream->CreateSample(
-		surface->DDS(),
+		surface->BUFFER(),
 		NULL,
 		0,
 		&m_streamSample );
@@ -429,7 +429,7 @@ AUI_ERRCODE aui_DirectMovie::Stop( void )
 				Assert(!FAILED(hr));
 
 				LPDIRECTDRAWSURFACE lpdds =
-					((aui_DirectSurface *)m_windowSurface)->DDS();
+					((aui_DirectSurface *)m_windowSurface)->BUFFER();
 
 				hr = lpdds->Blt(
 					&m_windowRect,
@@ -503,13 +503,9 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 
 	if ( m_isPlaying && !m_isPaused && !m_isFinished )
 	{
-
-		sint32	r;
-
-		
 		if (!m_streamSample) return AUI_ERRCODE_UNHANDLED;
 
-		r = m_streamSample->Update(
+		sint32 r = m_streamSample->Update(
 			SSUPDATE_CONTINUOUS,
 			NULL,
 			NULL,
@@ -530,16 +526,14 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 		}
 
 		
-		if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) {
-			
-			
+		if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)
+		{
 			if (!g_ui) return AUI_ERRCODE_UNHANDLED;
-			if (!g_ui->HasPrimary()) return AUI_ERRCODE_UNHANDLED;
 
-			LPDIRECTDRAWSURFACE lpdds =
-					((aui_DirectSurface *)g_ui->Primary())->DDS();
+			LPDIRECTDRAWSURFACE lpdds = 
+					((aui_DirectSurface *)g_ui->Secondary())->BUFFER();
 
-			RECT surfRect = {0, 0, g_ui->PrimaryWidth(), g_ui->PrimaryHeight()};
+			RECT surfRect = {0, 0, g_ui->SecondaryWidth(), g_ui->SecondaryHeight() };
 			RECT destRect = {0, 0, m_streamRect.right * 2, m_streamRect.bottom * 2};
 
 			OffsetRect(&destRect, 
@@ -556,16 +550,19 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 				&m_streamRect,
 				DDBLT_WAIT,
 				NULL );
-			if(FAILED(hr)) {
 
+			g_ui->BltSecondaryToPrimary(k_AUI_BLITTER_FLAG_COPY);
+
+			if(FAILED(hr))
+			{
+				Stop();
 			}
 			Assert( !FAILED(hr) );
-		} else {
-			
-			
-			
+		}
+		else
+		{
 			LPDIRECTDRAWSURFACE lpdds =
-					((aui_DirectSurface *)m_surface)->DDS();
+					((aui_DirectSurface *)m_surface)->BUFFER();
 
 			HRESULT hr = lpdds->Blt(
 				&m_rect,
@@ -574,6 +571,8 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 				DDBLT_WAIT,
 				NULL );
 			Assert( !FAILED(hr) );
+
+			g_ui->BltSecondaryToPrimary(k_AUI_BLITTER_FLAG_COPY);
 		}
 
 		

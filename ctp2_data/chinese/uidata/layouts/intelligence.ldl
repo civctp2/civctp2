@@ -1,0 +1,188 @@
+
+template INTEL_HEADER:CTP2_STANDARD_FONT {
+	int heightpix 20
+	string pattern "uptg04e.tga"
+	int bevelwidth 1
+	int numimagegroups 3
+}
+
+IntelligenceWindow:CTP2_TITLE_WINDOW {
+	int xpix 200
+	int ypix 28
+	int widthpix 600
+	int heightpix 420
+	
+	string title "str_ldl_Intelligence"
+	
+	List:CTP2_LISTBOX {
+		int xpix 4
+		int ypix 50
+		int widthpix 450
+		int heightpix 330
+		header {
+			# MDS 090600  Added flag
+			switch0:INTEL_HEADER {
+				int	widthpix	40
+			}
+			switch1:INTEL_HEADER {
+				int widthpix 150
+				string text "str_ldl_Nation"
+			}
+			switch2:INTEL_HEADER {
+				int widthpix 50
+				string text "str_ldl_Regard"
+			}
+			switch3:INTEL_HEADER {
+				int widthpix 50
+				string text "str_ldl_Strength"
+			}
+			switch4:INTEL_HEADER {
+				int widthpix 50
+				string text "str_ldl_Embassy"
+			}
+
+			switch5:INTEL_HEADER {
+				int widthpix 110
+				string text "str_ldl_AlliancesTreaties"
+			}
+		}
+	}
+
+	ShowHistoryButton:CTP2_BUTTON_SMALL {
+		int xpix 10
+		int ypix 390
+		int widthpix 90
+		string text "str_ldl_ShowHistory"
+	}
+
+	NegotiationButton:CTP2_BUTTON_SMALL {
+		int xpix 110
+		int ypix 390
+		int widthpix 190
+		string text "str_ldl_Negotiations"
+	}
+
+	CloseButton:CTP2_BUTTON_SMALL {
+		int xpix 500
+		int ypix 390
+		int widthpix 90
+		string text "str_ldl_Close"
+	}
+
+	Background {
+		string objecttype "ctp2_Static"
+		int widthpix 600
+		int heightpix 420
+		string pattern "uptg02.tga"
+	}
+
+}
+
+IntelligenceAdvice:CTP2_TITLE_WINDOW {
+	int xpix 0
+	int ypix 28
+	int widthpix 200
+	int heightpix 300
+	string title "str_ldl_Advice"
+
+	Advice:CTP2_HYPER_TEXT_BOX {
+		int xpix 34
+		int ypix 78
+		int widthpix 159
+		int heightpix 222
+	}
+
+	Background {
+		string objecttype "ctp2_Static"
+		int widthpix 200
+		int heightpix 300
+		string pattern "uptg02.tga"
+	}
+}
+
+template INTEL_COLUMN:CTP2_STANDARD_FONT{
+	string objecttype "ctp2_Static"
+	int heightpix 35
+}
+
+IntelligenceListItem:CTP2_LIST_ITEM {
+	int widthpix 450
+	int heightpix 25 #35
+
+	Flag:INTEL_COLUMN {
+		int	widthpix	40
+	}
+	Nation:INTEL_COLUMN {
+		int widthpix 120
+	}
+	Regard:INTEL_COLUMN {
+		int widthpix 50
+		string tipwindow "--"
+	}
+	Strength:INTEL_COLUMN {
+		int widthpix 50
+		string tipwindow "--"
+	}
+	Embassy:INTEL_COLUMN {
+		int widthpix 50
+	}
+	Treaties:INTEL_COLUMN {
+		int widthpix 110 #212
+	}
+	
+}
+
+StrengthImages {
+	int numstrings 5
+	bool nodatabase true
+
+#	string string0 "strength_low.tga"
+#	string string1 "strength_midlow.tga"
+#	string string2 "strength_midhigh.tga"
+#	string string3 "strength_high.tga"
+	string string0 "updi10.tga"
+	string string1 "updi11.tga"
+	string string2 "updi12.tga"
+	string string3 "updi13.tga"
+	string string4 "updi14.tga"
+}
+
+EmbassyImages {
+	int numstrings 2
+	bool nodatabase true
+#	string string0 "upic30.tga"
+	string string0 "updi01.tga"
+	string string1 "updi22.tga"
+}
+
+IntelTreatyDetail:CTP2_TITLE_WINDOW {
+	string title "str_ldl_Treaty"
+	int xpix 500
+	int ypix 100
+	int widthpix 200
+	int heightpix 72
+	
+	Text:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		int xpix 2
+		int ypix 22
+		int widthpix 196
+		int heightpix 48
+		string just "left"
+		string textblttype "fill"
+		string pattern "uptg13.tga"
+		int beveltype 1
+		int bevelwidth 2
+	}
+
+	Background {
+		string objecttype "ctp2_Static"
+		int xpix 0
+		int ypix 0
+		int widthpix 200
+		int heightpix 72
+		string pattern "uptg02.tga"
+	}
+}
+	
+$

@@ -1029,7 +1029,7 @@ void CtpAi::Initialize()
 #if defined (_DEBUG) || defined(USE_LOGGING)
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(8);
+	CtpAiDebug::SetDebugPlayer(3);
 	CtpAiDebug::SetDebugGoalType(-1);
 	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
@@ -1048,6 +1048,8 @@ void CtpAi::Load(CivArchive & archive)
 		Player *    player_ptr  = g_player[playerId];
 		if (player_ptr == NULL)
 			continue;
+
+		MapAnalysis::GetMapAnalysis().CalcEmpireCenter(playerId);
 
 		sint32      num_cities  = player_ptr->m_all_cities->Num();
 		for (sint32 cityIndex = 0; cityIndex < num_cities; ++cityIndex)
@@ -1552,7 +1554,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 						                           false
 						                          );
 
-						defense_strength -= city.GetDefendersBonus() * static_cast<double>(defense_count);
+						defense_strength -= static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
 
 						double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 						city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );
@@ -1956,7 +1958,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		                      false
 		                     );
 
-		defense_strength += city.GetDefendersBonus() * static_cast<double>(defense_count);
+		defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
 
 		double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 		city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );

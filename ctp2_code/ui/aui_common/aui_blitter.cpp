@@ -322,13 +322,11 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 			{
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
 
-				const uint16 *stop = srcBuf +
-					srcPitch * ( srcRect->bottom - srcRect->top );
+				const uint16*     stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 				destBuf -= destPitch;
 
 				do
 				{
-					
 					memcpy( destBuf += destPitch, srcBuf, scanWidth );
 				} while ( (srcBuf += srcPitch) != stop );
 			}
@@ -2272,7 +2270,7 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 				double(srcRect->bottom - srcRect->top) /
 				double(destRect->bottom - destRect->top);
 
-			double srcPtr = (double)uint32(srcBuf);
+			double srcPtr = (double)size_t(srcBuf);
 			double srcLine = 0.0;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -2284,12 +2282,12 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 						*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint8 *)uint32((srcPtr += stepHorizontal) + 0.5);
+							(uint8 *)size_t((srcPtr += stepHorizontal) + 0.5);
 
 					} while ( ++destBuf != stopHorizontal );
 
-					srcPtr = (double)uint32(origSrcBuf +
-						uint32((srcLine += stepVertical) + 0.5) * srcPitch);
+					srcPtr = (double)size_t(origSrcBuf +
+						size_t((srcLine += stepVertical) + 0.5) * srcPitch);
 
 					stopHorizontal += destPitch;
 
@@ -2312,11 +2310,11 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 							*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint8 *)uint32((srcPtr += stepHorizontal) + 0.5);
+							(uint8 *)size_t((srcPtr += stepHorizontal) + 0.5);
 
 					} while ( ++destBuf != stopHorizontal );
 
-					srcPtr = (double)uint32(srcBuf = origSrcBuf +
+					srcPtr = (double)size_t(srcBuf = origSrcBuf +
 						uint32((srcLine += stepVertical) + 0.5) * srcPitch); 
 
 					stopHorizontal += destPitch;
@@ -2411,7 +2409,7 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 				double(srcRect->bottom - srcRect->top) /
 				double(destRect->bottom - destRect->top);
 
-			double srcPtr = (double)(uint32)srcBuf;
+			double srcPtr = (double)(size_t)srcBuf;
 			double srcLine = 0.0;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -2423,16 +2421,16 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 						*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint16 *)uint32((srcPtr += stepHorizontal) + 0.0);
+							(uint16 *)size_t((srcPtr += stepHorizontal) + 0.0);
 
-						if ( (uint32)srcBuf & 0x1 )
-							srcBuf = (uint16 *)(uint32(srcBuf) - 1);
+						if ( (size_t)srcBuf & 0x1 )
+							srcBuf = (uint16 *)(size_t(srcBuf) - 1);
 
 					} while ( ++destBuf != stopHorizontal );
 
 					srcBuf = (uint16 *)(origSrcBuf +
 						sint32((srcLine += stepVertical) + 0.0) * srcPitch); 
-					srcPtr = (double)(uint32)srcBuf;
+					srcPtr = (double)(size_t)srcBuf;
 					
 					stopHorizontal += destPitch;
 
@@ -2455,17 +2453,17 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 							*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint16 *)uint32((srcPtr += stepHorizontal) + 0.0);
+							(uint16 *)size_t((srcPtr += stepHorizontal) + 0.0);
 
 						
-						if ( (uint32)srcBuf & 0x1 )
-							srcBuf = (uint16 *)(uint32(srcBuf) - 1);
+						if ( (size_t)srcBuf & 0x1 )
+							srcBuf = (uint16 *)(size_t(srcBuf) - 1);
 
 					} while ( ++destBuf != stopHorizontal );
 
 					srcBuf = (uint16 *)(origSrcBuf +
 						sint32((srcLine += stepVertical) + 0.0) * srcPitch); 
-					srcPtr = (double)(uint32)srcBuf;
+					srcPtr = (double)(size_t)srcBuf;
 
 					stopHorizontal += destPitch;
 

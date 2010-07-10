@@ -162,6 +162,7 @@
 #include "c3ui.h"
 #include "Cell.h"
 #include "cellunitlist.h"
+#include "CityAstar.h"
 #include "citydata.h"
 #include "CityInfluenceIterator.h"
 #include "civapp.h"
@@ -289,6 +290,7 @@ extern BOOL                     g_powerPointsMode;
 extern sint32                   g_tileImprovementMode;
 extern sint32                   g_isTileImpPadOn;
 extern sint32                   g_isCheatModeOn;
+extern CityAstar                g_city_astar;
 #ifdef _DEBUG
 extern BOOL                     g_ai_revolt;
 #endif
@@ -1341,6 +1343,12 @@ void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
 	// Edit this so that the cargo is registered
 }
 
+sint32 Player::GetWeakestEnemy() const
+{
+	return Diplomat::GetDiplomat(m_owner).GetWeakestEnemy();
+}
+
+
 Unit Player::CreateCity(
                         const sint32 t,
                         const MapPoint &pos,
@@ -1525,6 +1533,8 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 
 	m_maxCityCount = std::max(m_maxCityCount, m_all_cities->Num());
 
+	MapAnalysis::GetMapAnalysis().CalcEmpireCenter(m_owner);
+
 	return true;
 }
 
@@ -1583,6 +1593,8 @@ bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 	{
 		m_first_city = TRUE;
 	}
+
+	MapAnalysis::GetMapAnalysis().CalcEmpireCenter(m_owner);
 
 	if(CheckPlayerDead())
 	{
@@ -6396,12 +6408,11 @@ double Player::GetAtHomeRadius() const
 {
     return g_theGovernmentDB->Get(m_government_type)->GetAtHomeRadius();
 }
-         
+
 double Player::GetOverseasCoef() const
 {
     return g_theGovernmentDB->Get(m_government_type)->GetOverseasCoef();
 }
-     
 
 double Player::GetOverseasDefeatDecay() const
 {
@@ -8872,7 +8883,8 @@ bool Player::HasWarWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner <= 0
 	    ||  otherPlayer <= 0
-	    || AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
+	    ||  g_player[otherPlayer] != NULL
+	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_DECLARE_WAR);
 }
 
 bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
@@ -8884,6 +8896,7 @@ bool Player::HasAllianceWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_ALLIANCE);
 }
 
@@ -8896,6 +8909,7 @@ bool Player::HasPeaceTreatyWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_PEACE);
 }
 //True if player has at least one of trade/military/research/pollution pact with other player
@@ -8908,6 +8922,7 @@ bool Player::HasAnyPactWith(PLAYER_INDEX otherPlayer) const
 	// Everyone is always at war with the barbarians.
 	return      m_owner > 0
 	    &&  otherPlayer > 0
+	    &&  g_player[otherPlayer] != NULL
 	    && (AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_TRADE_PACT)
 		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_RESEARCH_PACT)
 		|| AgreementMatrix::s_agreements.HasAgreement(m_owner, otherPlayer, PROPOSAL_TREATY_MILITARY_PACT)
@@ -9775,6 +9790,59 @@ bool Player::HasTransporters() const
 
 	return false;
 }
+
+bool Player::IsLandConnected(MapPoint const & center, sint32 squaredDistance) const
+{
+	for(sint32 i = 0; i < m_all_cities->Num(); ++i)
+	{
+		if(MapPoint::GetSquaredDistance(m_all_cities->Get(i)->GetPos(), center) <= squaredDistance)
+		{
+			float cost = 0.0;
+			sint32 distance;
+			if(g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, distance, squaredDistance))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+MapPoint Player::CalcEmpireCenter() const
+{
+	if(m_all_cities->Num() == 0)
+	{
+		if(m_all_armies->Num() > 0)
+		{
+			return m_all_armies->Get(0)->RetPos();
+		}
+		else
+		{
+			return MapPoint();
+		}
+	}
+
+	sint32 cityNum = 1;
+
+	MapPoint empireCenter = m_all_cities->Get(0)->GetPos();
+
+	for(sint32 i = 1; i < m_all_cities->Num(); ++i)
+	{
+		cityNum++;
+
+		float costs = 0.0f;
+		Path path;
+
+		g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs);
+
+		path.RestoreIndexAndCurrentPos(path.Num()/cityNum);
+		path.GetCurrentPoint(empireCenter);
+	}
+
+	return empireCenter;
+}
+
 
 /*
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)

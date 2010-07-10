@@ -186,6 +186,7 @@ public:
 	                           uint32       flags
 	                          )
 	{
+		Assert(m_secondary);
 		return m_blitter->Blt(m_secondary, destx, desty, srcSurf, srcRect, flags);
 	};
 
@@ -208,7 +209,8 @@ public:
 	sint32 PrimaryWidth()   { return m_primary->Width(); };
 	sint32 SecondaryHeight(){ return m_secondary->Height(); };
 	sint32 SecondaryWidth() { return m_secondary->Width(); };
-	bool HasPrimary()       { return m_primary != NULL; };
+	bool HasPrimary()       { return m_primary   != NULL; };
+	bool HasSecondary()     { return m_secondary != NULL; };
 
 	AUI_ERRCODE BlackScreen()
 	{

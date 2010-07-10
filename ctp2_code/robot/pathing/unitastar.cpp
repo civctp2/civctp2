@@ -277,8 +277,10 @@ bool UnitAstar::CheckUnits
 					{
 						return false;
 					}
-					else if(m_is_robot && (g_player[m_owner]->HasWarWith(dest_owner) || Diplomat::GetDiplomat(m_owner).DesireWarWith(dest_owner)) && m_army_strength.HasEnough(Squad_Strength(pos)))
+					else if(m_is_robot && (g_player[m_owner]->HasWarWith(dest_owner) || Diplomat::GetDiplomat(m_owner).DesireWarWith(dest_owner)) && m_army_strength.HasEnough(Squad_Strength(pos), true))
 					{
+						can_enter = true;
+						can_be_zoc = false;
 						return false;
 					}
 					else
@@ -321,7 +323,7 @@ bool UnitAstar::CheckUnits
 				     &&  pos != m_dest
 				       )
 				   )
-				&&  k_MAX_ARMY_SIZE - dest_army->Num() < m_nUnits
+				&&  k_MAX_ARMY_SIZE - dest_army->Num() < m_nUnits && pos != m_army->RetPos()
 				  )
 				{
 					cost = k_ASTAR_BIG;
@@ -330,19 +332,6 @@ bool UnitAstar::CheckUnits
 					return true;
 				}
 			}
-		}
-	}
-
-	if(m_is_robot && pos != m_army->RetPos() && pos != m_dest)
-	{
-		if(CheckIsDangerForPos(pos))
-		{
-			if(cost < 1) cost = 1;
-
-			cost      *= k_MOVE_ISDANGER_COST;
-			can_enter  = true;
-			entry      = ASTAR_CAN_ENTER;
-			return true;
 		}
 	}
 
@@ -1319,54 +1308,91 @@ bool UnitAstar::PretestDest_SameWaterContinent(const MapPoint &start, const MapP
 
 bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &dest)
 {
-    if (m_ignore_zoc) return true; 
+	if (m_ignore_zoc) return true;
 
-    MapPoint neighbor;
+	MapPoint neighbor;
 
-    for (int i = 0; i <= SOUTH; i++) 
-    { 
-        if (!dest.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
+	for (sint32 i = 0; i <= SOUTH; i++)
+	{
+		if (!dest.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
 
-       
-        if ((start.x == neighbor.x) && (start.y == neighbor.y)) { 
-            return true;
-        } 
+		if ((start.x == neighbor.x) && (start.y == neighbor.y))
+		{
+			return true;
+		}
 
-       
-       
+		if (!PretestDest_Enterable(start, neighbor)) continue;
 
-        if (!PretestDest_Enterable(start, neighbor)) continue; 
+		CellUnitList * the_army = g_theWorld->GetArmyPtr(neighbor);
+		
+		if (the_army)
+		{
+			if (m_owner !=  the_army->GetOwner())
+			{
+				if
+				  (
+				       m_is_robot
+				    &&
+				       (
+				            g_player[m_owner]->HasWarWith(the_army->GetOwner())
+				         || Diplomat::GetDiplomat(m_owner).DesireWarWith(the_army->GetOwner())
+				       )
+				    && m_army_strength.HasEnough(Squad_Strength(dest), true)
+				  )
+				{
+					return true;
+				}
+				else
+				{
+					continue;
+				}
+			}
 
-       
-       CellUnitList * the_army = g_theWorld->GetArmyPtr(neighbor);
-       if (the_army) {
-    		if (m_owner !=  the_army->GetOwner()) continue; 
+			if ((m_nUnits + the_army->Num()) <= k_MAX_ARMY_SIZE)
+			{
+				return true;
+			}
+			else
+			{
+				continue;
+			}
+		}
 
-            if ((m_nUnits + the_army->Num()) <= k_MAX_ARMY_SIZE)  { 
-                return true; 
-            } else { 
-                continue; 
-            }
- 	    }
+		if(g_theWorld->HasCity(neighbor))
+		{
+			if (g_theWorld->GetCity(neighbor).GetOwner() == m_owner)
+			{
+				return true;
+			}
+			else
+			{
+				if
+				  (
+				       m_is_robot
+				    &&
+				       (
+				            g_player[m_owner]->HasWarWith(g_theWorld->GetCity(neighbor).GetOwner())
+				         || Diplomat::GetDiplomat(m_owner).DesireWarWith(g_theWorld->GetCity(neighbor).GetOwner())
+				       )
+				    && m_army_strength.HasEnough(Squad_Strength(dest), true)
+				  )
+				{
+					return true;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
 
-        
-       if(g_theWorld->HasCity(neighbor)) { 
-           if (g_theWorld->GetCity(neighbor).GetOwner() == m_owner) { 
-                return true; 
-           } else { 
-               continue; 
-           } 
+		if (!g_theWorld->IsMoveZOC (m_owner, neighbor, dest, true))
+		{
+			return true;
+		}
+	}
 
-       }
-
-       
-       if (!g_theWorld->IsMoveZOC (m_owner, neighbor, dest, true)) { 
-           return true; 
-       } 
-
-    }
-
-    return false; 
+	return false;
 }
 
 bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
@@ -1573,8 +1599,8 @@ bool UnitAstar::FindPath(Army army,
     r = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
     is_broken_path = true; // That should depend on r
 
-    ClearMem(); 
-    return r; 
+    ClearMem();
+    return r;
 }
 
 
@@ -1582,7 +1608,6 @@ bool UnitAstar::IsBeachLanding(const MapPoint &prev,
 							   const MapPoint &pos,
 							   const uint32 &m_move_intersection)
 {
-	
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit)
 		return false;
 
@@ -1598,7 +1623,7 @@ bool UnitAstar::IsBeachLanding(const MapPoint &prev,
 			 prev_move & k_Unit_MovementType_ShallowWater_Bit) &&
 			(pos_move & k_Unit_MovementType_Land_Bit ||
 			 pos_move & k_Unit_MovementType_Mountain_Bit))
-			return TRUE;
+			return true;
 	}
 	return false;
 }
@@ -1628,23 +1653,23 @@ void UnitAstar::ClearMem()
 
 bool UnitAstar::VerifyMem() const
 {
-    if (m_move_union          == MARK_UNUSED)   return false;
-    if (m_move_intersection   == MARK_UNUSED)   return false;
-    if (m_max_dir             == MARK_UNUSED)   return false;
-    if (m_mask_alliance       == MARK_UNUSED)   return false;
-    if (m_dest.x              == MARK_UNUSED16) return false;
-    if (m_dest.y              == MARK_UNUSED16) return false;
-    if (m_start.x             == MARK_UNUSED16) return false;
-    if (m_start.y             == MARK_UNUSED16) return false;
-    if (m_owner               == MARK_UNUSED)   return false;
-    if (m_nUnits              == MARK_UNUSED)   return false;
-    if (m_army.m_id           == MARK_UNUSED)   return false;
-    if (m_army_minmax_move    == -9999999.0f)   return false;
-    if (m_can_space_launch    == MARK_UNUSED)   return false;
-    if (m_can_space_land      == MARK_UNUSED)   return false;
-    if (m_can_be_cargo_podded == MARK_UNUSED)   return false;
+	if (m_move_union          == MARK_UNUSED)   return false;
+	if (m_move_intersection   == MARK_UNUSED)   return false;
+	if (m_max_dir             == MARK_UNUSED)   return false;
+	if (m_mask_alliance       == MARK_UNUSED)   return false;
+	if (m_dest.x              == MARK_UNUSED16) return false;
+	if (m_dest.y              == MARK_UNUSED16) return false;
+	if (m_start.x             == MARK_UNUSED16) return false;
+	if (m_start.y             == MARK_UNUSED16) return false;
+	if (m_owner               == MARK_UNUSED)   return false;
+	if (m_nUnits              == MARK_UNUSED)   return false;
+	if (m_army.m_id           == MARK_UNUSED)   return false;
+	if (m_army_minmax_move    == -9999999.0f)   return false;
+	if (m_can_space_launch    == MARK_UNUSED)   return false;
+	if (m_can_space_land      == MARK_UNUSED)   return false;
+	if (m_can_be_cargo_podded == MARK_UNUSED)   return false;
 
-    return true;
+	return true;
 }
 
 bool UnitAstar::CheckIsDangerForPos(const MapPoint & pos)
@@ -1680,7 +1705,7 @@ bool UnitAstar::CheckIsDangerForPos(const MapPoint & pos)
 				sint32 turnsatwar = AgreementMatrix::s_agreements.TurnsAtWar(m_owner, owner);
 				if (baseRegard <= NEUTRAL_REGARD || turnsatwar >= 0)
 				{
-					if((isCivilian && isVisible) || (!m_army_strength.HasEnough(Squad_Strength(pos)) && isVisible) || the_army->CanBombardTargetType(*m_army.GetData()))
+					if((isCivilian && isVisible) || (!m_army_strength.HasEnough(Squad_Strength(neighbor)) && isVisible) || the_army->CanBombardTargetType(*m_army.GetData()))
 					{
 						return true;
 					}

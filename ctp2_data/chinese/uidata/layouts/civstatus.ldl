@@ -1,0 +1,4817 @@
+#######################################
+# File: civstatus.ldl
+# Last Access: Mon Jun 01 13:01:31 1998
+#######################################
+
+################################################################################
+# List Items
+################################################################################
+
+GovernmentListItem:CTP2_LIST_ITEM {
+	# Size.
+	int	widthpix	120
+	int heightpix	20
+
+	Label:CTP2_STATIC_BACKGROUND {
+		# Size.
+		int	widthpix	120
+		int heightpix	20
+
+		# Left justify.
+		string 	just 		"center"
+		bool	vertcenter	true
+	}
+}
+
+################################################################################
+# Templates
+################################################################################
+
+#Change image 00,01, and 07,08 in dialog box ldl's to show custom edge art
+template CTP2_EMPIRE_MANAGER_BG:CTP2_STATIC_IMAGE {
+	#set backgrounmd size
+	int	widthpix	800 #576
+	int	heightpix	558 #384
+
+	# Image layout.
+	int		numberoflayers		1
+	int		imagesperlayer		9
+	
+	# Background.
+	bool	layeralways0		true
+	string	imagebltflag00	"chromakey"	
+	string	image00		"uptg20a.tga"
+	
+	bool	imagestretchx01		true
+	string  imageblttype01      "tile"
+	string	image01				"uptg20b.tga"
+	
+	string	imagebltflag02	"chromakey"
+	string	image02				"uptg20c.tga"
+	
+	bool	imagenextrow03		true
+	#bool	imagestretchy03		true
+	string	image03				"uptg20d.tga"
+	
+	bool	imagestretchx04		true
+	bool	imagestretchy04		true
+	string	image04				"uptg20e.tga"
+	
+	#bool	imagestretchy05		true
+	string	image05				"uptg20f.tga"
+	
+	string	imagebltflag06	"chromakey"
+	bool	imagenextrow06		true
+	string	image06				"uptg20g.tga"
+	
+	bool	imagestretchx07		true
+	string	image07				"uptg20h.tga"
+	
+	string	imagebltflag08	"chromakey"
+	string	image08				"uptg20i.tga"
+}
+
+### CTP2_EMPIRE_MANAGER_WINDOW ###
+# Generic dialog window in standard format.
+template CTP2_EMPIRE_MANAGER_WINDOW {
+	# Runtime type.
+	string objecttype "ctp2_Window"
+	bool centeredwindow true
+
+	# Location.
+	int		xpix		28 #200
+	int		ypix		28
+	int		widthpix	800 #576
+	int		heightpix	558 #384
+
+	Background:CTP2_EMPIRE_MANAGER_BG {
+	# Grabable title bar.
+		TitleBar:CTP_GREY_TITLE_FONT:CTP2_STATIC_IMAGE {
+			# Background.
+			int 	widthpix 704 #480
+			int 	heightpix 29
+			int	xpix	48		
+		}
+	}
+}
+
+### CTP2_2TAB_EMPIRE_MANAGER_WINDOW ###
+# Generic dialog window with two tab panels.
+template CTP2_2TAB_EMPIRE_MANAGER_WINDOW:CTP2_EMPIRE_MANAGER_WINDOW {
+
+	# Primary tab group.
+	TabGroup:CTP2_TAB_GROUP {
+		# Location.
+		int		xpix		35
+		int		ypix		31
+		int		widthpix	730 #750 #506
+		int		heightpix	490 #500 #324
+
+		# First tab.
+		Tab1:CTP2_TAB {
+			# Tab.
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				# Background.
+				string	image00		"em_ltaboff.tga"#"upct21ul.tga"
+				string	image10		"em_ltabon.tga"#"upct21u.tga"
+				string	image20		"em_ltaboff.tga"#"upct21ul.tga"
+			}
+
+			# Panel.
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+			}
+		}
+
+		# Second tab.
+		Tab2:CTP2_TAB {
+			# Tab.
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				# Location.
+				int		xpix		353 #365 #343 #242
+
+				# Background.
+				string image00 "em_rtaboff.tga"#"upct22ul.tga"
+				string image10 "em_rtabon.tga"#"upct22u.tga"
+				string image20 "em_rtaboff.tga"#"upct22ul.tga"
+			}
+
+			# Panel.
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+			}
+		}
+	}
+}
+
+# Cause and Effect Value and Label
+template NEGATIVE_EFFECT_LABEL:CTP2_STATIC_GROUP {
+	# Location
+	int		xpix		2
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location
+		int		ypix		2
+	}
+	Value:CTP2_STATIC_BASE {
+	#Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+		int fontcolorred 245
+		# Location
+		int		xpix		85
+		int		ypix		8
+		int		widthpix	71 #94 #71
+		string	just		"right"
+		bool	vertcenter	true
+	}
+}
+
+
+
+# Cause and Effect Value and Label
+template DD_CAUSE_AND_EFFECT_LABEL:CTP2_STATIC_GROUP {
+	# Location
+	int		xpix		2
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location
+		int		ypix		2
+	}
+	Value:CTP2_STATIC_BASE {
+	# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+		# Location
+		int		xpix		85
+		int		ypix		8
+		int		widthpix	71 #94 #71
+		string	just		"right"
+		bool	vertcenter	true
+	}
+}
+
+# Cause and Effect Column Group
+template DD_CAUSE_AND_EFFECT_GROUP:CTP2_STATIC_BACKGROUND {
+	# Location.
+	int		ypix		50
+	int		widthpix	164
+	int		heightpix	414 #410 #238
+	#string	pattern		"cw_TEST.tga"
+	#string	pattern		"uptg03e.tga"
+	#string	pattern		"uptg29e.tga"
+	string	pattern		"uptg20e.tga"
+
+	# Bevel around group.
+	int		beveltype		1
+	int		bevelwidth		2
+
+	Title:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		2
+		int		widthpix	192 #160
+		int		heightpix	12
+
+		# Background. - David Dalzell Changeme
+		string	pattern		"uptg20e3.tga"
+	}
+
+	Separator1:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		16
+		int		widthpix	192 #160
+		int		heightpix	2
+
+		# Bevel around group.
+		int		beveltype		0
+		int		bevelwidth		2
+	}
+
+	Modify:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		19
+		int		widthpix	192 #160
+		int		heightpix	58 #86
+
+		# Background. - David Dalzell Changeme
+		string	pattern		"uptg20e2.tga"
+
+		Primary:CTP2_STATIC_GROUP {
+			# Location.
+			int		widthpix	196 #164
+			int		heightpix	50
+
+			Label:CTP2_STATIC_BACKGROUND {
+				# Location.
+				int		xpix		4
+				int		ypix		2
+			}
+
+			CurValue:CTP2_STATIC_BASE {
+				# Location.
+				int		ypix		8
+				int		widthpix	24
+			}
+
+			Icon:CTP2_STATIC_IMAGE {
+				# Location.
+				int		xpix		152 #120
+				int		ypix		-3
+				# was 140
+				string	image00		"updi41.tga"
+			}
+
+			Value:CTP2_STATIC_BASE {
+			# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+				# Location.
+				int		xpix		172 #140
+				# was 116
+				int		ypix		8
+				int		widthpix	24
+			}
+
+			SlideLabel1:CTP2_STATIC_BASE {
+				int		xpix		22 #34 #20
+				int		ypix		22
+				int		fontsize	8
+			}
+
+			SlideLabel2:CTP2_STATIC_BASE {
+				int		xpix		57 #55 #64 #50
+				int		ypix		22
+				int		fontsize	8
+			}
+
+			SlideLabel3:CTP2_STATIC_BASE {
+				int		xpix		90 #86 #94 #80
+				int		ypix		22
+				int		fontsize	8
+			}
+
+			SlideLabel4:CTP2_STATIC_BASE {
+				int		xpix		125 #119 #124 #110
+				int		ypix		22
+				int		fontsize	8
+			}
+
+			SlideLabel5:CTP2_STATIC_BASE {
+				int		xpix		160 #152 #154 #140
+				int		ypix		22
+				int		fontsize	8
+			}
+
+			Slider:CTP2_STANDARD_FONT {
+				# Runtime type.
+				string	objecttype		"C3Slider"
+				bool	atomic			true
+
+				# Format.
+				string	type			"slider"
+				string	orientation		"horizontal"
+				bool	rigidthumb		TRUE
+				bool	quantizedrag	TRUE
+
+				# Location.
+				int		xpix		20
+				int		ypix		33
+				int		widthpix	152 #124
+				int		heightpix	20
+
+				# Background.
+				string	pattern		"uptg20e.tga"
+
+				# Values.
+				int		xval		0
+				int		maxxval		4
+				int		maxyval		0
+				int		pagexval	1
+				int		pageyval	1
+
+				# Thumb button.
+				int		minthumbsize	9
+				thumb {
+					int		widthpix		9
+					int		heightpix		20
+					string	image0			"upba2512.tga"
+					string	imagebltflag	"chromakey"
+				}
+			}
+		}
+
+		Secondary:CTP2_STATIC_GROUP {
+			# Location.
+			int		ypix		55
+			int		widthpix	196 #239 #164
+			int		heightpix	30
+
+			Label:CTP2_STATIC_BACKGROUND {
+				# Location.
+				int		xpix		2 #4
+				int		widthpix	64
+				int		heightpix	30
+
+				# Format.
+				string	just		"left"
+				bool	vertcenter	true #false
+				#bool	wordwrap	true
+			}
+		}
+	}
+
+	Separator2:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		77 #105
+		int		widthpix	192 #160
+		int		heightpix	2
+
+		# Bevel around group.
+		int		beveltype		0
+		int		bevelwidth		2
+	}
+
+	InformationDetails:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		82 #110
+		int		widthpix	192 #160
+		int		heightpix	126
+		#string	pattern		"cw_TEST.tga"
+
+		Separator1:CTP2_STATIC_BACKGROUND {
+			# Location.
+			int		xpix		0 #2
+			int		ypix		229 #223 #195 #175 #170 #120 #20
+			int		widthpix	192 #160
+			int		heightpix	2
+
+			# Bevel around group.
+			int		beveltype		0
+			int		bevelwidth		2
+		}
+
+		Crime:NEGATIVE_EFFECT_LABEL {
+			int		ypix		268 #264 #236 #192 #27
+			Label {
+				string	text		"str_ldl_DD_CRIME_LABEL"
+			}
+		}
+
+#		SubTotal:NEGATIVE_EFFECT_LABEL {
+#			int		ypix		73
+#			Label {
+#				string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+#			}
+#		}
+
+		Separator2:CTP2_STATIC_BACKGROUND {
+			# Location.
+			int		xpix		0 #2
+			int		ypix		285 #282 #254 #249 #84
+			int		widthpix	192 #160
+			int		heightpix	2
+
+			# Bevel around group.
+			int		beveltype		0
+			int		bevelwidth		2
+		}
+	}
+	InformationSummary:CTP2_STATIC_BACKGROUND {
+		# Location.
+		int		xpix		2
+		int		ypix		82 #110
+		int		widthpix	196 #164
+		int		heightpix	126
+		Collected:DD_CAUSE_AND_EFFECT_LABEL {
+			int		ypix		54 #26
+			
+			Label {
+				string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+			}
+		}
+
+		Crime:NEGATIVE_EFFECT_LABEL {
+			int		ypix		268 #264 #236 #192 #27
+			Label {
+				string	text		"str_ldl_DD_CRIME_LABEL"
+			}
+		}
+
+#		Separator1:CTP2_STATIC_BACKGROUND {
+#			# Location.
+#			int		xpix		2
+#			int		ypix		16
+#			int		widthpix	160
+#			int		heightpix	2
+#
+#			# Bevel around group.
+#			int		beveltype		0
+#			int		bevelwidth		2
+#		}
+
+#
+#		Crime:NEGATIVE_EFFECT_LABEL {
+#			int		ypix		20
+#			Label {
+#				string	text		"str_ldl_DD_CRIME_LABEL"
+#			}
+#		}
+#
+#		SubTotal:NEGATIVE_EFFECT_LABEL {
+#			int		ypix		68
+#			Label {
+#				string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+#			}
+#		}
+#
+#		Separator2:CTP2_STATIC_BACKGROUND {
+#			# Location.
+#			int		xpix		2
+#			int		ypix		84
+#			int		widthpix	160
+#			int		heightpix	2
+#
+#			# Bevel around group.
+#			int		beveltype		0
+#			int		bevelwidth		2
+#		}
+	}
+}
+
+# Government Comparison line.
+template DD_GOVERNMENT_COMPARISON:CTP2_STATIC_GROUP {
+	# Location
+	int		xpix		35
+
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location
+		int		ypix		2
+	}
+	CurrentValue:CTP2_STATIC_BASE {
+	# changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14
+		# Location
+		int		xpix		190
+		int		widthpix	120
+		int		ypix		8
+	}
+	Comparison:CTP2_STATIC_BASE {
+	# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+		# Location
+		int		xpix		288
+		int		ypix		8
+		int		widthpix	40
+	}
+	CompareValue:CTP2_STATIC_BASE {
+	# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+		# Location
+		int		xpix		338
+		int		ypix		8
+		int		widthpix	120
+	}
+}
+
+################################################################################
+# Windows
+################################################################################
+
+# Domestic Management dialog definition.
+DomesticDialog:CTP2_2TAB_EMPIRE_MANAGER_WINDOW {
+	# Title string.
+	string	title	"str_ldl_DOMESTIC_DIALOG_TITLE"
+
+	# Close button.
+	CloseButton:CTP2_STANDARD_CLOSE{
+		int xpix 676 #522
+		int ypix 528
+
+		int focusindex 10
+	}
+
+	# Details button.
+	DetailsButton:CTP2_POSITION_12_BUTTON {
+		int xpix 443 #326
+		int ypix 528
+
+		int focusindex 9
+		
+		string	image00				"upbt16aX.tga"
+		string	image10				"upbt16aU.tga"
+		string	image20				"upbt16aD.tga"
+		string	image30				"upbt16aH.tga"
+
+		# Label
+		string	text	"str_ldl_DD_DETAILS"
+	}
+
+	OptimizeSlidersButton:CTP2_POSITION_22_BUTTON {
+		int xpix 200 #127
+		int ypix 528
+
+		# Label
+		string	text	"str_ldl_DD_OPTIMIZE_SLIDERS"
+	}
+
+	# Tabs...
+	TabGroup {
+		Tab1 {
+			TabButton {
+				int focusindex 1
+				string	text	"str_ldl_DD_CNE_TAB"
+			}
+			TabPanel {
+################################################################################
+# Start Cause And Effect Tab Panel
+################################################################################
+				CitiesIcon:CTP2_STATIC_IMAGE {
+					# Location
+					int		xpix		12
+					int		ypix		6 #12
+					string	image00		"upic04.tga"
+#					string	text		"str_ldl_Cities_"
+	#string	pattern		"cw_TEST.tga"
+				}
+				CitiesValue:CTP2_STATIC_BASE {
+				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14
+					# Location
+					int		xpix		42
+					int		ypix		17
+					int		widthpix	120
+				}
+				PopulationIcon:CTP2_STATIC_IMAGE {
+					# Location
+					int		xpix		12
+					int		ypix		27 #32
+#					string	text		"str_ldl_People_"
+					string	image00		"upic03.tga"
+	#string	pattern		"cw_TEST.tga"
+				}
+				PopulationValue:CTP2_STATIC_BASE {
+				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_14
+					# Location
+					int		xpix		42
+					int		ypix		37
+					int		widthpix	120
+				}
+
+				PWTaxLabel:CTP2_STATIC_BACKGROUND {
+					int		xpix		186 #212 #250
+					int		ypix		9
+					string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+				}
+				PWSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+					int		xpix		186 #212 #112
+					int		ypix		21 #23 #14
+					int		widthpix	78
+					int		incxval		10
+				}
+
+				# Current Happiness
+				HappinessLabel:CTP2_STATIC_BACKGROUND {
+					# Location
+					int		xpix		301 #327 #293 #170
+					int		ypix		9
+					# Label
+					string	text		"str_ldl_DD_HAPPINESS"
+				}
+				HappinessValue:CTP2_STATIC_BASE {
+				# Changed from CTP2_GENERIC_TEXT_DISPLAY_14
+					# Location
+					int		xpix		411 #437 #403 #280
+					int		ypix		14
+					int		widthpix	30
+				}
+				HappinessBar:CTP2_STATIC_BACKGROUND {
+					# Location
+					int		xpix		301 #327 #293 #170
+					int		ypix		23
+					int		widthpix	140
+					int		heightpix	20
+
+					# Bevel around group.
+					int		beveltype		1
+					int		bevelwidth		2
+				}
+
+				ScieTaxLabel:CTP2_STATIC_BACKGROUND {
+					int		xpix		470 #496 #514
+					int		ypix		9
+					string	text	"str_ldl_DD_SCIENCE_TAX_LABEL"
+				}
+				ScieTaxSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+					int		xpix		470 #496 #514
+					int		ypix		21
+					int		widthpix	78
+					int		incxval		10
+				}
+
+				# Current Government
+				CurrentGovernmentLabel:CTP2_STATIC_BACKGROUND {
+					# Location
+					int		xpix		551 #577 #522 #334
+					int		ypix		14
+					int 		widthpix	164
+					# Label
+					string	text		"str_ldl_DD_GOV_CURRENT"
+
+					# Tooltip
+					string	statustext	"STATUSBAR_DOMADV_MAIN_GOVT_DISPLAY"
+				}
+				CurrentGovernment:CTP2_STATIC_BASE {
+				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20
+					# Location
+					int		xpix		551 #577 #522 #334
+					int		ypix		34
+					# was 23
+					int		widthpix	164
+
+					# Tooltip
+					string	statustext	"STATUSBAR_DOMADV_MAIN_GOVT_DISPLAY"
+				}
+
+################################################################################
+# Start Cause And Effect Tab Panel -- FOOD
+################################################################################
+				Food:DD_CAUSE_AND_EFFECT_GROUP {
+					# Location
+					int		xpix		5 #6
+					int		widthpix	196 #164
+
+					Title {
+						string	text		"str_ldl_DD_FOOD_TITLE"
+					}
+					
+					Modify {
+						Primary {
+							Label {
+								string	text	"str_ldl_DD_RATIONS_LABEL"
+							}
+
+							CurValue {
+								int		xpix		58
+							}
+							
+							SlideLabel1 {
+								string	text		"EMPIRE_RATIONS_AMOUNT_0"
+							}
+
+							SlideLabel2 {
+								string	text		"EMPIRE_RATIONS_AMOUNT_1"
+							}
+
+							SlideLabel3 {
+								string	text		"EMPIRE_RATIONS_AMOUNT_2"
+							}
+
+							SlideLabel4 {
+								string	text		"EMPIRE_RATIONS_AMOUNT_3"
+							}
+
+							SlideLabel5 {
+								string	text		"EMPIRE_RATIONS_AMOUNT_4"
+							}
+							
+							Slider {
+								thumb {
+									# Tooltip
+									string	statustext	"STATUSBAR_DOMADV_MAIN_RATIONS_SLIDER"
+								}
+							}
+						}
+#						Secondary {
+#							Label {
+#								int		ypix		8
+#								string	text	"str_ldl_DD_REQUIRED_LABEL"
+#
+#								bool	vertcenter	false
+#
+#								# Tooltip
+#								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
+#							}
+#							Value:CTP2_STATIC_BASE {
+#							#Changed from CTP2_GENERIC_TEXT_DISPLAY_20 {
+#								int		xpix		88
+#								int		ypix		16
+#								int		widthpix	71
+#
+#								string	just		"right"
+#								bool	vertcenter	true
+#
+#								# Tooltip
+#								string	statustext	"STATUSBAR_DOMADV_FOOD_REQUIRED_BUTTON"
+#							}
+#						}
+					}
+
+					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+						}
+						Buildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		19
+							
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+						Farmers:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		36
+							
+							Label {
+								string	text		"str_ldl_DD_FARMERS_LABEL"
+							}
+						}
+						FeatsWonders:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+						FoodGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+						Consumed:NEGATIVE_EFFECT_LABEL {
+							int		ypix		251 #247 #219 #209 #44
+							Label {
+								string	text		"str_ldl_DD_CONSUMED_LABEL"
+							}
+						}
+						Remainder:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		301 #298 #270 #265 #100
+							Label {
+								string	text		"str_ldl_DD_STORED_LABEL"
+							}
+						}
+					}
+					InformationSummary {
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #223 #195 #175 #170 #120 #20
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Consumed:NEGATIVE_EFFECT_LABEL {
+							int		ypix		251 #247 #219 #65
+							Label {
+								string	text		"str_ldl_DD_CONSUMED_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_FOOD_CONSUMED_BUTTON"
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Remainder:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		301 #298 #270 #85
+							Label {
+								string	text		"str_ldl_DD_STORED_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_FOOD_STORED_BUTTON"
+							}
+						}
+					}
+				}
+################################################################################
+# End Cause And Effect Tab Panel -- FOOD
+################################################################################
+################################################################################
+# Start Cause And Effect Tab Panel -- PRODUCTION
+################################################################################
+				Production:DD_CAUSE_AND_EFFECT_GROUP {
+					# Location
+					int		xpix		201 #170 #245 #170
+					int		widthpix	196 #164
+
+
+					Title {
+						string	text		"str_ldl_DD_PRODUCTION_TITLE"
+					}
+
+					Modify {
+						Primary {
+							Label {
+								string	text	"str_ldl_DD_WORKDAY_LABEL"
+							}
+
+							CurValue {
+								int		xpix		67
+							}
+							
+							SlideLabel1 {
+								string	text		"EMPIRE_WORKDAY_AMOUNT_0"
+							}
+
+							SlideLabel2 {
+								string	text		"EMPIRE_WORKDAY_AMOUNT_1"
+							}
+
+							SlideLabel3 {
+								string	text		"EMPIRE_WORKDAY_AMOUNT_2"
+							}
+
+							SlideLabel4 {
+								string	text		"EMPIRE_WORKDAY_AMOUNT_3"
+							}
+
+							SlideLabel5 {
+								string	text		"EMPIRE_WORKDAY_AMOUNT_4"
+							}
+							
+							Slider {
+								thumb {
+									# Tooltip
+									string	statustext	"STATUSBAR_DOMADV_MAIN_WORKDAY_SLIDER"
+								}
+							}
+						}
+#						Secondary {
+#							Label {
+#								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+#							}
+#							PWSpinner:CTP2_GENERIC_SIZABLE_SPINNER {
+#								int		xpix		112 #79
+#								int		ypix		2
+#								int		widthpix	78
+#								int		incxval		10
+#							}
+#						}
+					}
+
+					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+						}
+						Workday:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		19
+							
+							Label {
+								string	text		"str_ldl_DD_WORKDAY_LABEL"
+							}
+						}
+						ProdBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		36 #19
+							
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+						Laborers:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53 #36
+							
+							Label {
+								string	text		"str_ldl_DD_LABORERS_LABEL"
+							}
+						}
+						FeatsWonders:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		70 #53
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+						ProdGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		ypix		234 #230 #202 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+#							Value:CTP2_STATIC_BASE {
+#								int fontcolorred 245
+#								#int		widthpix	203
+#							}
+						}
+						Upkeep:NEGATIVE_EFFECT_LABEL {
+							int		ypix		251 #247 #219 #209 #44
+							Label {
+								string	text	"str_ldl_DD_UNIT_UPKEEP_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_PROD_MILUPKEEP_BUTTON"
+							}
+						}
+						CityUse:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		293 #290 #262 #261 #256 #91
+							Label {
+								string	text	"str_ldl_DD_CITY_USE_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_PROD_CITYUSE_BUTTON"
+							}
+						}
+						PublicWorks:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		310 #307 #279 #280 #275 #110
+							Label {
+								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+							}
+						}
+					}
+					InformationSummary {
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #223 #195 #175 #170 #120 #20
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		ypix		234 #230 #202 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+#							Value:CTP2_STATIC_BASE {
+#								int fontcolorred 245
+#								#int		widthpix	203
+#							}
+						}
+
+						Upkeep:NEGATIVE_EFFECT_LABEL {
+							int		ypix		251 #247 #219 #209 #44
+							Label {
+								string	text	"str_ldl_DD_UNIT_UPKEEP_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_PROD_MILUPKEEP_BUTTON"
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						CityUse:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		293 #290 #262 #65
+							Label {
+								string	text	"str_ldl_DD_CITY_USE_LABEL"
+							}
+						}
+
+						PublicWorks:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		310 #307 #279 #85
+							Label {
+								string	text	"str_ldl_DD_PUBLIC_WORKS_LABEL"
+							}
+						}
+					}
+				}
+################################################################################
+# End Cause And Effect Tab Panel -- PRODUCTION
+################################################################################
+################################################################################
+# Start Cause And Effect Tab Panel -- COMMERCE
+################################################################################
+				Commerce:DD_CAUSE_AND_EFFECT_GROUP {
+					# Location
+					int		xpix		397 #334 #484 #334
+					int		widthpix	328 #239 #164
+					string	pattern		"em_bg.tga"
+
+					Title {
+						int		widthpix	324 #235 #160
+						string	text		"str_ldl_DD_COMMERCE_TITLE"
+					}
+
+					Separator1 {
+						int		widthpix	324 #235 #160
+					}
+
+					Modify {
+						int		widthpix	324 #235 #160
+						Primary {
+							int		widthpix	328 #239 #164
+							Label {
+								int		xpix		2
+								string	text	"str_ldl_DD_WAGES_LABEL"
+							}
+
+							CurValue {
+								int		xpix		57
+							}
+
+							Icon:CTP2_STATIC_IMAGE {
+								int		xpix		284 #152 #120
+							}
+
+							Value:CTP2_STATIC_BASE {
+								int		xpix		304 #172 #140
+							}
+
+							SlideLabel1 {
+								int		xpix		88
+								string	text		"EMPIRE_COMMERCE_AMOUNT_0"
+							}
+
+							SlideLabel2 {
+								int		xpix		123 #121
+								string	text		"EMPIRE_COMMERCE_AMOUNT_1"
+							}
+
+							SlideLabel3 {
+								int		xpix		158 #156 #152
+								string	text		"EMPIRE_COMMERCE_AMOUNT_2"
+							}
+
+							SlideLabel4 {
+								int		xpix		195 #191 #185
+								string	text		"EMPIRE_COMMERCE_AMOUNT_3"
+							}
+
+							SlideLabel5 {
+								int		xpix		232 #226 #218
+								string	text		"EMPIRE_COMMERCE_AMOUNT_4"
+							}
+							
+							Slider {
+								int		xpix		86 #20
+								thumb {
+									# Tooltip
+									string	statustext	"STATUSBAR_DOMADV_MAIN_WAGES_SLIDER"
+								}
+							}
+						}
+#						Secondary {
+#							int		widthpix	328 #239 #164
+#							Label {
+#								string	text	"str_ldl_DD_SCIENCE_TAX_LABEL"
+#							}
+#							Spinner:CTP2_GENERIC_SIZABLE_SPINNER {
+#								int		xpix		244 #112 #162 #79
+#								int		ypix		2
+#								int		widthpix	78
+#								int		incxval		10
+#							}
+#						}
+					}
+
+					Separator2:CTP2_STATIC_BACKGROUND {
+						int		widthpix	324 #235 #160
+					}
+
+					InformationDetails {
+						Terrain:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		2
+							Label {
+								string	text		"str_ldl_DD_TERRAIN_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
+						Upkeep:NEGATIVE_EFFECT_LABEL {
+							int		ypix		19 #209 #44
+							Label {
+								string	text "str_ldl_DD_BUILDING_UPKEEP_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_COMM_UPKEEP_BUTTON"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								int		widthpix	203
+							}
+						}
+						Wages:NEGATIVE_EFFECT_LABEL {
+							int		ypix		36
+							Label {
+								string	text	"str_ldl_DD_WAGES_EFFECT_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_COMM_WAGES_BUTTON"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								int		widthpix	203
+							}
+						}
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
+						Separator1:CTP2_STATIC_BACKGROUND {
+							int		ypix		229 #223 #195 #212 #175 #85
+							int		widthpix	324
+						}
+
+						ScienceTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_SCIENCE_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						BasicScience:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		92 #125
+							Label {
+								string	text		"str_ldl_DD_TCOMMERCE_LABEL"
+							}
+						}
+
+						ScienceBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		109 #142
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+
+						Scientists:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		126 #159
+							Label {
+								string	text		"str_ldl_DD_SCIENTISTS_LABEL"
+							}
+						}
+
+						FeatsWondersScie:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+
+						ScieGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+
+						ScieSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						GoldTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		162
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_GOLD_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						BasicGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		92 #125
+							Label {
+								string	text		"str_ldl_DD_TCOMMERCE_LABEL"
+							}
+						}
+
+						GoldBuildings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		109 #142
+							Label {
+								string	text		"str_ldl_DD_BUILDINGS_LABEL"
+							}
+						}
+
+						Merchants:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		126 #159
+							Label {
+								string	text		"str_ldl_DD_MERCHANTS_LABEL"
+							}
+						}
+
+						FeatsWondersGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_FEATS_AND_WONDERS_LABEL"
+							}
+						}
+
+						TradeGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		160 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_TRADE_LABEL"
+							}
+						}
+
+						GoldGovBonus:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		194 #188 #160 #136
+							
+							Label {
+								string	text		"str_ldl_DD_GOVERNMENT_LABEL"
+							}
+						}
+
+						GoldSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							int		ypix		285 #282 #254
+							int		widthpix	324
+						}
+
+						ScieCrime:NEGATIVE_EFFECT_LABEL {
+							#int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		234 #230 #202 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						UnitWages:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		251 #247 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_UNIT_SUPPORT_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						GoldCrime:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						Science:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		301 #298 #270
+							Label {
+								string	text	"str_ldl_DD_SCIENCE_LABEL"
+
+								# Tooltip
+								string	statustext	"STATUSBAR_DOMADV_COMM_SCIENCE_BUTTON"
+							}
+						}
+						Savings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		293 #302 #299 #271
+							Label {
+								string	text	"str_ldl_DD_SAVINGS_LABEL"
+							}
+						}
+
+						ConversionsGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		310 #177 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_CONVERSIONS_LABEL"
+							}
+						}
+					}
+					InformationSummary {
+						int		widthpix	324
+
+						Collected:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		53
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int		widthpix	203
+							}
+						}
+
+						ScienceTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_SCIENCE_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						GoldTitle:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		162
+							int		ypix		73 #74 #108
+							int		widthpix	162
+							int		heightpix	14
+
+							string	text		"str_ldl_DD_GOLD_TITLE"
+
+							# Background. - David Dalzell Changeme
+							string	pattern		"uptg20e3.tga"
+
+							# Bevel around group.
+							int		beveltype		1
+							int		bevelwidth		1
+						}
+
+						ScieSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						GoldSubTotal:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		211 #205 #177 #155 #2
+							
+							Label {
+								string	text		"str_ldl_DD_SUBTOTAL_LABEL"
+							}
+						}
+
+						Separator1:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		229 #226 #223 #195 #175 #170 #120 #20
+							int		widthpix	324 #192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+						Enemy:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		234 #230 #202 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_ENEMY_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						UnitWages:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		251 #247 #219 #236 #192
+							Label {
+								string	text		"str_ldl_DD_UNIT_SUPPORT_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						ScieCrime:NEGATIVE_EFFECT_LABEL {
+							#int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						GoldCrime:NEGATIVE_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		268 #264 #236 #192
+							Label {
+								string	text		"str_ldl_DD_CRIME_LABEL"
+							}
+							Value:CTP2_STATIC_BASE {
+								int fontcolorred 245
+								#int		widthpix	203
+							}
+						}
+
+						Separator2:CTP2_STATIC_BACKGROUND {
+							# Location.
+							int		xpix		0 #2
+							int		ypix		285 #282 #254 #249 #84
+							int		widthpix	324 #192 #160
+							int		heightpix	2
+
+							# Bevel around group.
+							int		beveltype		0
+							int		bevelwidth		2
+						}
+
+
+#						Upkeep:NEGATIVE_EFFECT_LABEL {
+#							int		ypix		36
+#							Label {
+#								string	text "str_ldl_DD_BUILDING_UPKEEP_LABEL"
+#							}
+#						}
+#						Wages:NEGATIVE_EFFECT_LABEL {
+#							int		ypix		52
+#							Label {
+#								string	text	"str_ldl_DD_WAGES_LABEL"
+#							}
+#						}
+						Science:DD_CAUSE_AND_EFFECT_LABEL {
+							int		ypix		301 #298 #270 #65
+							Label {
+								string	text	"str_ldl_DD_SCIENCE_LABEL"
+							}
+						}
+						Savings:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		293 #302 #299 #271 #85
+							Label {
+								string	text	"str_ldl_DD_SAVINGS_LABEL"
+							}
+						}
+						ConversionsGold:DD_CAUSE_AND_EFFECT_LABEL {
+							int		xpix		165
+							int		ypix		310 #177 #143 #136
+							
+							Label {
+								string	text		"str_ldl_DD_CONVERSIONS_LABEL"
+							}
+						}
+					}
+				}
+################################################################################
+# End Cause And Effect Tab Panel -- COMMERCE
+################################################################################
+################################################################################
+# End Cause And Effect Tab Panel
+################################################################################
+			}
+		}
+		Tab2 {
+			TabButton {
+				int focusindex 1
+				string	text	"str_ldl_DD_GOVERNMENT_TAB"
+			}
+			TabPanel {
+################################################################################
+# Start Government Tab Panel
+################################################################################
+				# Enact New Government
+				EnactGovernment:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+					# Location
+					int		xpix		22
+					int		ypix		12
+					int		widthpix	160
+					# Old Location
+#					int		xpix		293
+#					int		ypix		22
+#					int		widthpix	80
+
+					# Label
+					string	text		"str_ldl_DD_GOV_ENACT"
+					# Tooltip
+					string	statustext	"STATUSBAR_DOMADV_MAIN_CHANGE_GOVT_BUTTON"
+				}
+
+				# Current Government
+				CurrentGovernmentLabel:CTP2_STATIC_BACKGROUND {
+					# Location
+					int		xpix		225
+					int		ypix		12
+					int		widthpix	98
+					# Label
+					string	text		"str_ldl_DD_GOV_CURRENT"
+					# Tooltip
+					string	statustext	"STATUSBAR_DOMADV_MAIN_GOVT_DISPLAY"
+				}
+				CurrentGovernment:CTP2_STATIC_BASE {
+				# Changed from CTP2_GENERIC_DARKENED_TEXT_DISPLAY_20
+					# Location
+					int		xpix		225
+					int		ypix		33
+					# was 25
+					int		widthpix	120
+					# Tooltip
+					string	statustext	"STATUSBAR_DOMADV_MAIN_GOVT_DISPLAY"
+				}
+
+				# Compare To Government
+				CompareGovernmentLabel:CTP2_STATIC_BACKGROUND {
+					# Location
+					int		xpix		353
+					int		ypix		7
+					int focusindex 1
+					# Label
+					string	text		"str_ldl_DD_GOV_COMPARE"
+				}
+				CompareGovernment:CTP2_DROPDOWN {
+					# Location
+					int		xpix		373
+					int		ypix		22
+					int		widthpix	120
+					int focusindex 12
+				}
+
+				# Comparison
+				Cities:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		51
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_CITIES"
+					}
+				}
+				Growth:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		75
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_GROWTH"
+					}
+				}
+				Production:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		99
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_PRODUCTION"
+					}
+				}
+				Research:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		123
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_RESEARCH"
+					}
+				}
+				Economic:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		147
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_ECONOMIC"
+					}
+				}
+				Commerce:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		171
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_COMMERCE"
+					}
+				}
+				Military:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		195
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_MILITARY"
+					}
+				}
+				Loyalty:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		219
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_LOYALTY"
+					}
+				}
+				MartialLaw:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		243
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_MARTIAL_LAW"
+					}
+				}
+				AntiPollution:DD_GOVERNMENT_COMPARISON {
+					# Location
+					int		ypix		267
+					# Label
+					Label {
+						string	text		"str_ldl_DD_GOV_ANTI_POLLUTION"
+					}
+				}
+################################################################################
+# End Government Tab Panel
+################################################################################
+			}
+		}
+	}
+
+	# Background image.
+	Background:CTP2_EMPIRE_MANAGER_BG {
+		string image00 "uptg22a.tga"
+		string image02 "uptg22c.tga"
+		string image03 "em_lb.tga"#"uptg22d.tga"
+		string image05 "em_rb.tga"#"uptg22f.tga"
+	}
+}
+
+#######################################
+#######################################
+#######################################
+
+template CIV_STATUS_MARKER {
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	4
+	int	heightpix	4
+}
+
+template civstatus_button : CTP2_STANDARD_FONT {
+
+	int bevelwidth	0
+
+	int beveltype	0
+
+	string imagebltflag	"chromakey"
+
+}
+
+
+
+template civstatus_textbox : CTP2_STANDARD_FONT{
+
+	int bevelwidth	1
+
+	int beveltype	2
+
+}
+
+
+
+template civstatus_header : CTP2_STANDARD_FONT {
+
+	int	heightpix	20
+
+	string	pattern	"uptg20e.tga"
+
+	int	bevelwidth	1
+
+}
+
+
+
+template civstatus_slider {
+
+	int	widthpix	86
+
+	int	heightpix	20
+
+	int	srcwidthpix		113
+
+	int	srcheightpix	20	
+
+	int	maxxval		4
+
+	int	maxyval		0
+
+	int	pagexval	1
+
+	int	pageyval	1
+
+	int xval		0
+
+	string	type	"slider"
+
+	string	orientation	"horizontal"
+
+	bool	rigidthumb	TRUE
+
+	bool	quantizedrag	TRUE
+
+	int		minthumbsize	9
+
+	thumb {
+
+		int	widthpix	9
+
+		int heightpix	20
+
+		string	image0	"uptg20e.tga"
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	string	pattern	"error.tga"
+
+}
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+CivStatusMainWindow {
+
+	string	pattern	"error.tga"
+
+	int	xpix	30
+
+	string	yanchor	"center"
+
+	int	widthpix	388
+
+	int	heightpix	395
+
+	CloseButton:CTP_CLOSE_BUTTON {
+		int	xpix	317
+		int	ypix	357
+		int focusindex 10
+	}
+
+
+	WorkdayMarker:CIV_MARKER {
+	}
+	RationsMarker:CIV_MARKER {
+	}
+	WagesMarker:CIV_MARKER {
+	}
+	HappyMarker:CIV_MARKER {
+	}
+	c3_FancyTop {
+
+		string	image0	"error.tga"
+
+		int 	xpix		0
+
+		int 	ypix		-8
+
+		int	widthpix	399
+
+		int	heightpix	8
+
+	}
+
+
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	115
+
+		int	ypix	1
+
+		int	widthpix	158
+
+		int	heightpix	13	
+
+		string	text	"str_ldl_CIV_STATUS"
+	}
+
+# prod button
+
+	button0 : civstatus_button {
+
+		int xpix		45
+
+		int ypix		60
+
+		int widthpix	57
+
+		int heightpix	25
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+	}
+
+# gold button
+
+	button1 : civstatus_button {
+
+		int xpix		45
+
+		int ypix		159
+
+		int widthpix	57
+
+		int heightpix	25
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+	}
+
+# food button
+
+	button2 : civstatus_button {
+
+		int xpix		46
+
+		int ypix		273
+
+		int widthpix	56
+
+		int heightpix	26
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+	}
+
+# pw plus button
+
+	button3 : civstatus_button {
+
+		int xpix		337
+
+		int ypix		111
+
+		int widthpix	22
+
+		int heightpix	18
+
+		int focusindex   4
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_MAIN_PW_INCR_BUTTON"
+
+	}
+
+# pw minus button
+
+	button4 : civstatus_button {
+
+		int xpix		279
+
+		int ypix		111
+
+		int widthpix	22
+
+		int heightpix	18
+
+		int focusindex   5
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_MAIN_PW_DECR_BUTTON"
+
+	}
+
+# sci plus button
+
+	button5 : civstatus_button {
+
+		int xpix		337
+
+		int ypix		206
+
+		int widthpix	22
+
+		int heightpix	18
+
+		int focusindex   7
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+	}
+
+# sci minus button
+
+	button6 : civstatus_button {
+
+		int xpix		279
+
+		int ypix		206
+
+		int widthpix	22
+
+		int heightpix	18
+
+		int focusindex   8
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+	}
+
+# change gov button
+
+	button7 : civstatus_button {
+
+		int xpix		253
+
+		int ypix		290
+
+		int widthpix	92
+
+		int heightpix	27
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+		string	text			"str_ldl_CAPS_CHANGE"
+	}
+
+# prod slider
+
+	slider0 : civstatus_slider {
+
+		int	xpix	64
+
+		int	ypix	110
+
+		int	percent	75
+
+		int focusindex 3
+
+		int	srcxpix	64
+
+		int	srcypix 110
+
+
+
+#		string pattern	"uptg20e.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_MAIN_WORKDAY_SLIDER"
+
+	}
+
+# gold slider
+
+	slider1 : civstatus_slider {
+
+		int	xpix	64
+
+		int	ypix	205
+
+		int	percent	75
+
+		int focusindex 6
+
+		int	srcxpix	64
+
+		int	srcypix 205
+
+
+
+#		string pattern	"uptg20e.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_MAIN_WAGES_SLIDER"
+
+
+
+	}
+
+# food slider
+
+	slider2 : civstatus_slider {
+
+		int	xpix	64
+
+		int	ypix	320
+
+		int	percent	75
+
+		int focusindex 2
+
+		int	srcxpix	64
+
+		int	srcypix 320
+
+
+
+#		string pattern	"uptg20e.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_MAIN_RATIONS_SLIDER"
+
+
+
+	}
+
+
+
+# happiness thermometer
+
+	Therm {
+
+		int	xpix	120
+
+		int	ypix	47
+
+		int	widthpix	100
+
+		int	heightpix	13
+
+
+
+		int	srcxpix	120
+
+		int	srcypix 47
+
+		int	srcwidthpix		100
+
+		int	srcheightpix	13	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+
+
+# pop label
+
+	text0 : CTP2_STANDARD_FONT {
+
+		int	xpix	12
+
+		int	ypix	21
+
+		int	widthpix	40
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CITIES_COLON"
+	}
+
+# pop box
+
+	text1 : civstatus_textbox {
+
+		int	xpix	56
+
+		int	ypix	21
+
+		int	widthpix	36
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	55
+
+		int	srcypix 20
+
+		int	srcwidthpix		38
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# happy label
+
+	text2 : CTP2_STANDARD_FONT {
+
+		int	xpix	120
+
+		int	ypix	30
+
+		int	widthpix	100
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_HAPPINESS"
+	}
+
+# happy box
+
+	text3 : civstatus_textbox {
+
+		int	xpix	225
+
+		int	ypix	43
+
+		int	widthpix	32
+
+		int	heightpix	20
+
+
+
+		int	srcxpix	224
+
+		int	srcypix 42
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	22	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# riot label
+
+	text4 : CTP2_STANDARD_FONT {
+
+		int	xpix	298
+
+		int	ypix	21
+
+		int	widthpix	40
+
+		int	heightpix	15
+
+		string	text	"str_ldl_RIOT_COLON"
+	}
+
+# riot box
+
+	text5 : civstatus_textbox {
+
+		int	xpix	340
+
+		int	ypix	21
+
+		int	widthpix	30
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	334
+
+		int	srcypix 22
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# rev label
+
+	text6 : CTP2_STANDARD_FONT {
+
+		int	xpix	298
+
+		int	ypix	40
+
+		int	widthpix	40
+
+		int	heightpix	15
+
+		string	text	"str_ldl_REV_COLON"
+	}
+
+# rev box
+
+	text7 : civstatus_textbox {
+
+		int	xpix	340
+
+		int	ypix	40
+
+		int	widthpix	30
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	334
+
+		int	srcypix 43
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# celeb label
+
+	text8 : CTP2_STANDARD_FONT {
+
+		int	xpix	298
+
+		int	ypix	59
+
+		int	widthpix	40
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CELEB_COLON"
+	}
+
+# celeb box
+
+	text9 : civstatus_textbox {
+
+		int	xpix	340
+
+		int	ypix	59
+
+		int	widthpix	30
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	334
+
+		int	srcypix 62
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# prod box
+
+	text10 : civstatus_textbox {
+
+		int	xpix	105
+
+		int	ypix	68
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	104
+
+		int	srcypix 67
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# workday label
+
+	text11 : CTP2_STANDARD_FONT {
+
+		int	xpix	64
+
+		int	ypix	85
+
+		int	widthpix	86
+
+		int	heightpix	20
+
+		string	text	"str_ldl_CAPS_WORKDAY"
+	}
+
+# workday box
+
+	text12 : civstatus_textbox {
+
+		int	xpix	158
+
+		int	ypix	112
+
+		int	widthpix	35
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	158
+
+		int	srcypix 112
+
+		int	srcwidthpix		35
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# pw label
+
+	text13 : CTP2_STANDARD_FONT {
+
+		int	xpix	303
+
+		int	ypix	87
+
+		int	widthpix	32
+
+		int	heightpix	20
+
+		string	text	"str_ldl_PW"
+	}
+
+# pw box
+
+	text14 : civstatus_textbox {
+
+		int	xpix	303
+
+		int	ypix	112
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	303
+
+		int	srcypix 112
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# pw cost label
+
+	text15 : CTP2_STANDARD_FONT {
+
+		int	xpix	258
+
+		int	ypix	131
+
+		int	widthpix	40
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_COST"
+	}
+
+# pw cost box
+
+	text16 : civstatus_textbox {
+
+		int	xpix	303
+
+		int	ypix	130
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	303
+
+		int	srcypix 130
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# gold box
+
+	text17 : civstatus_textbox {
+
+		int	xpix	105
+
+		int	ypix	163
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+	
+
+		int	srcxpix	104
+
+		int	srcypix 162
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# wages label
+
+	text18 : CTP2_STANDARD_FONT {
+
+		int	xpix	64
+
+		int	ypix	180
+
+		int	widthpix	86
+
+		int	heightpix	20
+
+		string	text	"str_ldl_CAPS_WAGES"
+	}
+
+# wages box
+
+	text19 : civstatus_textbox {
+
+		int	xpix	158
+
+		int	ypix	206
+
+		int	widthpix	35
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	158
+
+		int	srcypix 206
+
+		int	srcwidthpix		35
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_DOMADV_COMM_WAGES_BUTTON"
+
+	}
+
+# science label
+
+	text20 : CTP2_STANDARD_FONT {
+
+		int	xpix	303
+
+		int	ypix	185
+
+		int	widthpix	32
+
+		int	heightpix	20
+
+		string	text	"str_ldl_CAPS_SCIENCE"
+	}
+
+# science box
+
+	text21 : civstatus_textbox {
+
+		int	xpix	303
+
+		int	ypix	206
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+	
+
+		int	srcxpix	303
+
+		int	srcypix 206
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# science cost label
+
+	text22 : CTP2_STANDARD_FONT {
+
+		int	xpix	261
+
+		int	ypix	223
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+		string	text	"str_ldl_CAPS_COST"
+	}
+
+# science cost box
+
+	text23 : civstatus_textbox {
+
+		int	xpix	303
+
+		int	ypix	225
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	270
+
+		int	srcypix 225
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# paid label
+
+	text24 : CTP2_STANDARD_FONT {
+
+		int	xpix	49
+
+		int	ypix	234
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+		string	text	"str_ldl_SURPLUS"
+	}
+
+# paid box
+
+	text25 : civstatus_textbox {
+
+		int	xpix	109
+
+		int	ypix	234
+
+		int	widthpix	42
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	108
+
+		int	srcypix 233
+
+		int	srcwidthpix		44
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# food box
+
+	text26 : civstatus_textbox {
+
+		int	xpix	105
+
+		int	ypix	278
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	104
+
+		int	srcypix 277
+
+		int	srcwidthpix		34
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# rations label
+
+	text27 : CTP2_STANDARD_FONT {
+
+		int	xpix	64
+
+		int	ypix	295
+
+		int	widthpix	86
+
+		int	heightpix	20
+
+		string	text	"str_ldl_CAPS_RATIONS"
+	}
+
+# rations box
+
+	text28 : civstatus_textbox {
+
+		int	xpix	158
+
+		int	ypix	322
+
+		int	widthpix	35
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	158
+
+		int	srcypix 322
+
+		int	srcwidthpix		35
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# eaten label
+
+	text29 : CTP2_STANDARD_FONT {
+
+		int	xpix	49
+
+		int	ypix	348
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+		string	text	"str_ldl_STORED"
+	}
+
+# eaten box
+
+	text30 : civstatus_textbox {
+
+		int	xpix	109
+
+		int	ypix	348
+
+		int	widthpix	42
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	108
+
+		int	srcypix 347
+
+		int	srcwidthpix		44
+
+		int	srcheightpix	17	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# gov box
+
+	text31 : CTP2_STANDARD_FONT {
+
+		int	xpix	236
+
+		int	ypix	271
+
+		int	widthpix	119
+
+		int	heightpix	17
+
+		int bevelwidth	1
+
+		int beveltype	2
+
+	}
+
+# gov label
+
+	text32 : CTP2_STANDARD_FONT {
+
+		int	xpix	220
+
+		int	ypix	253
+
+		int	widthpix	152
+
+		int	heightpix	20
+
+		int bevelwidth	0
+
+		string	text	"str_ldl_CAPS_GOVERNMENT"
+
+
+	}
+
+# per turn food label
+
+	text33 : CTP2_STANDARD_FONT {
+
+		int	xpix	195
+
+		int	ypix	322
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		int bevelwidth	0
+
+		string	text	"str_ldl_CAPS_PER_TURN"
+
+
+	}
+
+# per turn gold label
+
+	text34 : CTP2_STANDARD_FONT {
+
+		int	xpix	195
+
+		int	ypix	206
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		int bevelwidth	0
+
+		string	text	"str_ldl_CAPS_PER_TURN"
+
+
+	}
+
+# per turn workday label
+
+	text35 : CTP2_STANDARD_FONT {
+
+		int	xpix	195
+
+		int	ypix	112
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		int bevelwidth	0
+
+		string	text	"str_ldl_CAPS_PER_TURN"
+
+
+	}
+
+# for building label
+
+	text36 : CTP2_STANDARD_FONT {
+
+		int	xpix	49
+
+		int	ypix	134
+
+		int	widthpix	40
+
+		int	heightpix	20
+
+		string	text	"str_ldl_FOR_BUILDING"
+	}
+
+# for building box
+
+	text37 : civstatus_textbox {
+
+		int	xpix	109
+
+		int	ypix	137
+
+		int	widthpix	42
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	109
+
+		int	srcypix 137
+
+		int	srcwidthpix		42
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+}
+
+
+
+CivStatusEnactWindow {
+
+	string	pattern	"error.tga"
+
+	string	xanchor	"center"
+
+	string	yanchor	"center"
+
+	int	widthpix	449
+
+	int	heightpix	308
+
+	
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	145
+
+		int	ypix	5
+
+		int	widthpix	158
+
+		int	heightpix	13	
+
+		string	text	"str_ldl_GOVERNMENTS"
+	}
+
+# current gov label
+
+	text0 : CTP2_STANDARD_FONT {
+
+		int	xpix	188
+
+		int	ypix	51
+
+		int	widthpix	145
+
+		int	heightpix	14
+
+		string	text	"str_ldl_CURRENT_GOVERNMENT_COLON"
+	}
+
+# current gov box
+
+	text1 : civstatus_textbox {
+
+		int	xpix	210
+
+		int	ypix	67
+
+		int	widthpix	110
+
+		int	heightpix	22
+
+
+
+		int	srcxpix	204
+
+		int	srcypix 67
+
+		int	srcwidthpix		110
+
+		int	srcheightpix	22	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# change gov label
+
+	text2 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	51
+
+		int	widthpix	73
+
+		int	heightpix	14
+
+		string	text	"str_ldl_CHANGE_TO_COLON"
+	}
+
+# change gov box
+
+	text3 : civstatus_textbox {
+
+		int	xpix	324
+
+		int	ypix	67
+
+		int	widthpix	110
+
+		int	heightpix	22
+
+
+
+		int	srcxpix	324
+
+		int	srcypix 67
+
+		int	srcwidthpix		110
+
+		int	srcheightpix	22	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# current gov grow label
+
+	text4 : CTP2_STANDARD_FONT {
+
+		int	xpix	150
+
+		int	ypix	101
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_GROWTH_COLON"
+	}
+
+# current gov grow box
+
+	text5 : CTP2_STANDARD_FONT {
+
+		int	xpix	228
+
+		int	ypix	101
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	234
+
+		int	srcypix 101
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# current gov prod label
+
+	text6 : CTP2_STANDARD_FONT {
+
+		int	xpix	150
+
+		int	ypix	129
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_PRODUCTION_COLON"
+	}
+
+# current gov prod box
+
+	text7 : CTP2_STANDARD_FONT {
+
+		int	xpix	228
+
+		int	ypix	129
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	234
+
+		int	srcypix 129
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# current gov sci label
+
+	text8 : CTP2_STANDARD_FONT {
+
+		int	xpix	150
+
+		int	ypix	152
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_SCIENCE_COLON"
+	}
+
+# current gov sci box
+
+	text9 : CTP2_STANDARD_FONT {
+
+		int	xpix	228
+
+		int	ypix	152
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	234
+
+		int	srcypix 152
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# current gov gold label
+
+	text10 : CTP2_STANDARD_FONT {
+
+		int	xpix	150
+
+		int	ypix	178
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_GOLD_COLON"
+	}
+
+# current gov gold box
+
+	text11 : CTP2_STANDARD_FONT {
+
+		int	xpix	228
+
+		int	ypix	178
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	234
+
+		int	srcypix 178
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# current gov military label
+
+	text12 : CTP2_STANDARD_FONT {
+
+		int	xpix	150
+
+		int	ypix	204
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_MILITARY_COLON"
+	}
+
+# current gov military box
+
+	text13 : CTP2_STANDARD_FONT {
+
+		int	xpix	228
+
+		int	ypix	204
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	234
+
+		int	srcypix 204
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# change gov grow box
+
+	text14 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	101
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	351
+
+		int	srcypix 101
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# change gov prod box
+
+	text15 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	129
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	351
+
+		int	srcypix 129
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# change gov sci box
+
+	text16 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	152
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	351
+
+		int	srcypix 152
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15
+
+
+
+		string pattern	"error.tga"
+
+	
+
+	}
+
+# change gov gold box
+
+	text17 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	178
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	351
+
+		int	srcypix 178
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# change gov military box
+
+	text18 : CTP2_STANDARD_FONT {
+
+		int	xpix	341
+
+		int	ypix	204
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	351
+
+		int	srcypix 204
+
+		int	srcwidthpix		80
+
+		int	srcheightpix	15
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# change gov button
+
+	ChangeButton : civstatus_button {
+		bool	shadowfont	false
+
+		int xpix		33
+
+		int ypix		235
+
+		int widthpix	89
+
+		int heightpix	21
+
+		string	image0			"error.tga"
+
+		string	image1			"error.tga"
+
+		string	text			"str_ldl_ENACT"
+		string	imagebltflag	"chromakey"
+	}
+
+	OkButton : CTP_CLOSE_BUTTON {
+
+		int xpix		378
+
+		int ypix		270
+
+		int focusindex 10
+	}
+
+
+# text box
+
+	InfoText : CTP2_STANDARD_FONT {
+
+		int xpix		254
+
+		int ypix		44
+
+		int widthpix	146
+
+		int heightpix	124
+
+		int bevelwidth	1
+
+		int beveltype	2
+
+
+
+		int	srcxpix	253
+
+		int	srcypix 43
+
+		int	srcwidthpix		148
+
+		int	srcheightpix	126	
+
+
+
+		string pattern	"error.tga"
+
+		bool alwaysranger	TRUE
+
+		rangery {
+
+			int	widthpix	15
+
+			int	heigthpix	15
+
+			string	type	"scroller"
+
+			string	orientation	"vertical"
+
+			string	pattern	"error.tga"
+
+			incy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"error.tga"
+
+			}
+
+			decy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"error.tga"
+
+			}
+
+		}
+
+	}
+
+# list box
+
+	ListBox {
+
+		int	xpix	19
+
+		int	ypix	69
+
+		int	widthpix	116
+
+		int	heightpix	155
+
+		int columns		1
+
+		int bevelwidth	2
+
+		int beveltype	2
+
+		bool alwaysranger	TRUE
+
+		string	pattern	"error.tga"
+
+		int	srcxpix	17
+
+		int	srcypix 67
+
+		int	srcwidthpix		120
+
+		int	srcheightpix	179	
+
+		rangery {
+
+			int	widthpix	15
+
+			int	heigthpix	15
+
+			string	type	"scroller"
+
+			string	orientation	"vertical"
+
+			string	pattern	"error.tga"
+
+			incy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"error.tga"
+
+			}
+
+			decy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"error.tga"
+
+			}
+
+		}
+
+		header {
+
+			switch0 : civstatus_header {
+
+				int	widthpix	116
+
+				string	text	"str_ldl_GOVERMENTS"
+			}
+
+		}
+
+	}
+
+}
+
+
+
+
+
+CivStatusProdWindow {
+
+#	int 	xpix		515
+
+#	int 	ypix		187
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int		endPosX		706
+
+	int		endPosY		187
+
+	int		widthpix	191
+
+	int		heightpix	129
+
+	string	pattern	"error.tga"
+
+# title
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	25
+
+		int	ypix	4
+
+		int	widthpix	159
+
+		int	heightpix	16	
+
+		string	text	"str_ldl_CAPS_PRODUCTION"
+	}
+
+
+
+# per turn label
+
+	text0 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	25
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_PER_TURN"
+	}
+
+# per turn box
+
+	text1 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	25
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 25
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# gov bonus label
+
+	text2 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	73
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_GOV_nBONUS"
+	}
+
+#XXX
+
+# gov bonus box
+
+	text3 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	74
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 74
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# crime label
+
+	text4 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	24
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CRIME"
+	}
+
+# crime box
+
+	text5 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	24
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 24
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# support label
+
+	text6 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	41
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_SUPPORT"
+	}
+
+# support box
+
+	text7 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	41
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 41
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# enemy label
+
+	text8 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	58
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_ENEMY"
+	}
+
+# enemy box
+
+	text9 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	58
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 58
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# pw label
+
+	text10 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	75
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_PW"
+	}
+
+# pw box
+
+	text11 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	75
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 75
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# building label
+
+	text12 : CTP2_STANDARD_FONT {
+
+		int	xpix	7
+
+		int	ypix	104
+
+		int	widthpix	90
+
+		int	heightpix	15
+
+		string	text	"str_ldl_FOR_BUILDING"
+	}
+
+# building box
+
+	text13 : CTP2_STANDARD_FONT {
+
+		int	xpix	98
+
+		int	ypix	104
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	98
+
+		int	srcypix 104
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# workday bonus label
+
+	text14 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	47
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_WORKDAY"
+	}
+
+# workday bonus box
+
+	text15 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	49                                      
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 49
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+
+
+
+}
+
+
+
+CivStatusGoldWindow {
+
+#	int 	xpix		515
+
+#	int 	ypix		316
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int		endPosX		706
+
+	int		endPosY		316
+
+	int		widthpix	191
+
+	int		heightpix	129
+
+	string	pattern	"error.tga"
+
+# title
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	25
+
+		int	ypix	4
+
+		int	widthpix	159
+
+		int	heightpix	16	
+
+		string	text	"str_ldl_CAPS_GOLD"
+	}
+
+# per turn label
+
+	text0 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	32
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_PER_nTURN"
+	}
+
+# per turn box
+
+	text1 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	32
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 32
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# gov bonus label
+
+	text2 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	65
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_GOV_nBONUS"
+	}
+
+# gov bonus box
+
+	text3 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	65
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 65
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# crime label
+
+	text4 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	24
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CRIME"
+	}
+
+# crime box
+
+	text5 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	24
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 24
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# maint label
+
+	text6 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	58
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_MAINT"
+	}
+
+# maint box
+
+	text7 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	58
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 41
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# enemy label
+
+	text8 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	75
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_ENEMY"
+	}
+
+# enemy box
+
+	text9 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	75
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 58
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# paid label
+
+	text10 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	41
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_PAID"
+	}
+
+# paid box
+
+	text11 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	41
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 75
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# savings label
+
+	text12 : CTP2_STANDARD_FONT {
+
+		int	xpix	132
+
+		int	ypix	94
+
+		int	widthpix	80
+
+		int	heightpix	15
+
+		string	text	"str_ldl_SAVINGS"
+	}
+
+# savings box
+
+	text13 : CTP2_STANDARD_FONT {
+
+		int	xpix	140
+
+		int	ypix	109
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+		int	srcxpix	59
+
+		int	srcypix 32
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+		string pattern	"error.tga"
+
+	}
+
+# science label
+
+	text14 : CTP2_STANDARD_FONT {
+
+		int	xpix	74
+
+		int	ypix	94
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CAPS_SCIENCE"
+	}
+
+# science box
+
+	text15 : CTP2_STANDARD_FONT {
+
+		int	xpix	82
+
+		int	ypix	109
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+		int	srcxpix	59
+
+		int	srcypix 32
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+		string pattern	"error.tga"
+
+	}
+
+# surplus label
+
+	text16 : CTP2_STANDARD_FONT {
+
+		int	xpix	3
+
+		int	ypix	94
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_SURPLUS"
+	}
+
+# surplus box
+
+	text17 : CTP2_STANDARD_FONT {
+
+		int	xpix	21
+
+		int	ypix	109
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+		int	srcxpix	59
+
+		int	srcypix 32
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+		string pattern	"error.tga"
+
+	}
+
+# plus box
+
+	text18 : CTP2_STANDARD_FONT {
+
+		int	xpix	53
+
+		int	ypix	109
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+		string	text	"str_ldl_PLUS"
+	}
+
+# equal box
+
+	text19 : CTP2_STANDARD_FONT {
+
+		int	xpix	109
+
+		int	ypix	109
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+		string	text	"str_ldl_EQUAL"
+
+	}
+
+
+
+}
+
+
+
+CivStatusFoodWindow {
+
+#	int 	xpix		515
+
+#	int 	ypix		445
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int		endPosX		706
+
+	int		endPosY		445
+
+	int		widthpix	191
+
+	int		heightpix	108
+
+	string	pattern	"error.tga"
+
+# title
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	25
+
+		int	ypix	4
+
+		int	widthpix	159
+
+		int	heightpix	16	
+
+		string	text	"str_ldl_CAPS_FOOD"
+	}
+
+# per turn label
+
+	text0 : CTP2_STANDARD_FONT {
+
+		int	xpix	2
+
+		int	ypix	24
+
+		int	widthpix	60
+
+		int	heightpix	15
+
+		string	text	"str_ldl_PER_nTURN"
+	}
+
+# per turn box
+
+	text1 : CTP2_STANDARD_FONT {
+
+		int	xpix	59
+
+		int	ypix	24
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	59
+
+		int	srcypix 24
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+
+
+	}
+
+# crime label
+
+	text2 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	24
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_CRIME"
+	}
+
+# crime box
+
+	text3 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	24
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 24
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# eaten label
+
+	text4 : CTP2_STANDARD_FONT {
+
+		int	xpix	100
+
+		int	ypix	41
+
+		int	widthpix	50
+
+		int	heightpix	15
+
+		string	text	"str_ldl_EATEN"
+	}
+
+# eaten box
+
+	text5 : CTP2_STANDARD_FONT {
+
+		int	xpix	151
+
+		int	ypix	41
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	151
+
+		int	srcypix 41
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+# store label
+
+	text6 : CTP2_STANDARD_FONT {
+
+		int	xpix	4
+
+		int	ypix	83
+
+		int	widthpix	90
+
+		int	heightpix	15
+
+		string	text	"str_ldl_STORED"
+	}
+
+# store box
+
+	text7 : CTP2_STANDARD_FONT {
+
+		int	xpix	95
+
+		int	ypix	83
+
+		int	widthpix	32
+
+		int	heightpix	15
+
+
+
+		int	srcxpix	95
+
+		int	srcypix 83
+
+		int	srcwidthpix		32
+
+		int	srcheightpix	15	
+
+
+
+		string pattern	"error.tga"
+
+	}
+
+}
+
+
+
+
+
+
+
+CivStatusEnactListItem {
+
+	Name:CTP2_STANDARD_FONT{
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		116
+
+		int		heightpix		20
+
+	}
+
+}
+
+GovStrings {
+	int	numStrings	6
+
+	string	string0	"str_tbl_ldl_POOR"
+	string	string1	"str_tbl_ldl_POOR"
+	string	string2	"str_tbl_ldl_FAIR"
+	string	string3	"str_tbl_ldl_AVERAGE"
+	string	string4	"str_tbl_ldl_GOOD"
+	string	string5	"str_tbl_ldl_EXCELLENT"
+}
+
+$

@@ -336,21 +336,17 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 		event_iter = m_regardEventList[type].begin();
 		while (event_iter != m_regardEventList[type].end()) 
 		{
-
-			
-			
-			
-			
 			if (event_iter->turn < decayRound)
 			{
 				
-				if (event_iter->regard == 0 ) {
+				if (event_iter->regard == 0 )
+				{
 					event_iter = m_regardEventList[type].erase(event_iter);
 					continue;
 				}
 
 				
-				if (event_iter->duration <= 0) 
+				if (event_iter->duration <= 0 && regard_decay != NULL)
 				{
 					if (event_iter->regard > 0)
 						event_iter->regard *= regard_decay->GetPositiveDecay();
@@ -367,12 +363,6 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 
 			}
 
-			
-			
-			
-			
-
-			
 			if (m_regard[type] + event_iter->regard > (NEUTRAL_REGARD - MAX_REGARD) &&
 				m_regard[type] + event_iter->regard < (NEUTRAL_REGARD + MAX_REGARD))
 			{

@@ -317,11 +317,11 @@ float Squad_Strength::GetTotalMissing(const Squad_Strength & otherStrength) cons
 	     + std::max(0.0f, static_cast<float>(count));
 }
 
-bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength) const
+bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength, bool ignoreBombard) const
 {
-	return m_air_bombard_str   >= otherStrength.m_air_bombard_str
-	    && m_land_bombard_str  >= otherStrength.m_land_bombard_str
-	    && m_water_bombard_str >= otherStrength.m_water_bombard_str
+	return (m_air_bombard_str   >= otherStrength.m_air_bombard_str   || ignoreBombard)
+	    && (m_land_bombard_str  >= otherStrength.m_land_bombard_str  || ignoreBombard)
+	    && (m_water_bombard_str >= otherStrength.m_water_bombard_str || ignoreBombard)
 	    && m_attack_str        >= otherStrength.m_attack_str
 	    && m_defense_str       >= otherStrength.m_defense_str
 	    && m_ranged_str        >= otherStrength.m_ranged_str

@@ -1403,20 +1403,17 @@ ai::Regard Diplomat::GetBaseRegard(const PLAYER_INDEX foreignerId) const
 
 void Diplomat::RecomputeRegard() 
 {
-	
 	sint32 wonder_regard = wonderutil_GetIncreaseRegard(g_player[m_playerId]->GetBuiltWonders());
 
-	
- 	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner) 
-    {
-        PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner) 
+	{
+		PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
 		
 		if (    (m_playerId != foreignerId) 
-             && g_player[m_playerId]->HasContactWith(foreignerId)
-           )
+		     && g_player[foreignerId] != NULL
+		     && g_player[m_playerId]->HasContactWith(foreignerId)
+		   )
 		{
-
-			
 			if (wonder_regard != 0)
 			{
 				StringId strId;
@@ -5750,7 +5747,8 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 	{
 		if ((last_hotwar_attack > 10) &&
 			(GetEffectiveRegard(foreignerId) > HOTWAR_REGARD) &&
-			(GetTrust(foreignerId) > COLDWAR_REGARD))
+			(GetTrust(foreignerId) > COLDWAR_REGARD) &&
+			g_player[foreignerId]->GetNumCities() > 1 ) // Don't protect small empires
 			return false;
 	}
 
@@ -5775,6 +5773,33 @@ void Diplomat::ComputeAllDesireWarWith()
 		m_desireWarWith[foreignerId] =
 			(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
 	}
+}
+
+sint32 Diplomat::GetWeakestEnemy() const
+{
+	sint32 weakestEnemy    = -1;
+	sint32 weakestStrength = 0x7fffffff;
+
+	for(size_t i = 1; i < m_foreigners.size(); ++i)
+	{
+		Player *    other_ptr = g_player[i];
+		if (other_ptr == NULL)
+			continue;
+
+		if(m_playerId == i)
+			continue;
+
+		if(!g_player[m_playerId]->HasWarWith(i)) // Only take those we are at war with not those we desire war with
+			continue;
+
+		if(other_ptr->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) < weakestStrength)
+		{
+			weakestStrength = other_ptr->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
+			weakestEnemy    = i;
+		}
+	}
+
+	return weakestEnemy;
 }
 
 bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const

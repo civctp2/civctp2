@@ -1200,8 +1200,9 @@ bool UnitData::CanRustle(CellUnitList const & defender) const
 
 bool UnitData::CanConvertCity(Unit city) const 
 {
-	return (city.GetOwner() != GetOwner())
-	    && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
+	return GetDBRec()->HasConvertCities()
+	    && city.GetOwner() != GetOwner()
+	    && GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost();
 }
 
 //----------------------------------------------------------------------------
@@ -5475,6 +5476,13 @@ void UnitData::SetType(sint32 type)
 	//		now this is ignored
 	//	}
 	}
+	else if(rec->GetCanCarry()
+	     && rec->GetCargoDataPtr()
+	     && 0 < rec->GetCargoDataPtr()->GetMaxCargo()
+	       )
+	{
+		m_cargo_list = new UnitDynamicArray(rec->GetCargoDataPtr()->GetMaxCargo());
+	}
 
 	// Some more stuff has to be done like we have in CreateUnit
 	m_sprite_state->SetIndex(rec->GetDefaultSprite()->GetValue());
@@ -5485,7 +5493,7 @@ void UnitData::SetType(sint32 type)
 		m_army->UpdateMoveIntersection();
 	}
 
-	if (g_selected_item) 
+	if (g_selected_item)
 	{
 		g_selected_item->Refresh();
 	}

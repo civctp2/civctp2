@@ -1,0 +1,115 @@
+#### Please add to info_str.txt ####
+
+
+
+### New Strings ###
+ECOPACT_BROKEN_BY_3RD 			"{player[0].sir_cap}，{player[0].civ_name_plural}违反了与{player[1].civ_name_plural}所签定的反污染协议。"
+ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}，我们接获通知， {player[1].civ_name_plural}背弃了与{player[2].civ_name_plural}的盟约。"
+MILITARY_PACT_BROKEN_BY_AI 		"{player[0].sir_cap}，{player[1].civ_name_plural}违反了在我国有急难之时派出援军的协议。"
+MILITARY_PACT_BROKEN_BY_3RD 		"{player[0].sir_cap}，{player[1].country_name} 背弃了与{player[2].civ_name_plural}所签订的军事协议。"
+ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name}遣人传讯，{player[0].sir}：由于他国势力影响及客观环境的变化，{player[2].country_name}不再重视与您所签订的协议。决定将与我国所签订的所有协议、条约、协议即日起失效。"
+IA_CITY_WILL_STARVE_INITIAL_WARNING 	"{player[0].sir_cap}，{city[0].name}所生产的食物无法供应市民所需。很快他们就得动用到贮备食粮才能生存下去了。"
+IA_CITY_WILL_STARVE_FOOD_STORES_LOW 	"{player[0].sir_cap}，{city[0].name}的贮粮几近见底。若市民再不生产多一点的食物，很快他们就会陷入饥荒。"
+CRISIS_CITY_IS_NANO_INFECTED 		"{player[0].sir_cap}，{city[0].name}经生化特务散播病毒。我们应该立即关闭贸易路线，免得其它城市也受到感染。"
+NANITE_CLEANSE_COMPLETE_VICTIM 		"大事不妙，{player[0].sir}。他国的生态游骑兵以毁灭性的微菌净化攻击完全完全抹杀了{city[0].name}。"
+NANITE_CLEANSE_FAILED_VICTIM 		"{player[0].sir_cap}，我们得以避开一次暴行！我国的城市，{city[0].name}，成功避开他国的生态游骑兵发动微菌净化攻击。"
+NANITE_CLEANSE_COMPLETE_ATTACK 		"打胜仗了，大胜仗！我国的生态游骑兵成功以微菌净化攻击将{city[0].name}夷为平地。这块土地又重新回复到自然应有的面貌。"
+NANITE_CLEANSE_FAILED_ATTACK 		"我国的生态游骑兵无法对{city[0].name}发动微菌净化攻击。"
+CITY_NEW_OWNER 				"{player[0].civ_name_plural}攻占了{player[1].civ_name_singular}的{city[0].name}市。"
+FAITH_HEAL_VICTIM 			"{city[0].name}的市民屈服于外国的宗教劝说之下，在电视布道师一场信仰疗法中挑空了腰包。"
+FAITH_HEAL_ATTACKER 			"我国的一位电视布道师在{player[0].civ_name_singular}的{city[0].name}举办了一场信仰疗法。这次疗法获利颇丰。"
+INJUNCTION_COMPLETE_ATTACK 		"我国的律师在{city[0].name}吁请禁令，强制他们停止生产。"
+NUKE_COMPLETE_AGRESSOR 			"{unitrecord[0].name}在敌国城市{city[0].name}装置了核弹。损伤极为惨重。"
+FORBIDDEN_CITY_PEACE                    "您兴建了紫禁城。"
+CIV_STATUS_DISABLED  			"您得先设立一座城市，才能开启这个窗口。"
+SCIENCE_STATUS_DISABLED  		"您得先设立一座城市，才能开启这个窗口。"
+CITY_STATUS_DISABLED   			"您得先设立一座城市，才能开启这个窗口。"
+DIPLOMACY_STATUS_DISABLED  		"您得先与其它帝国接触，才能开启这个窗口。"
+UNIT_STATUS_DISABLED  			"您得先拥有部队，才能开启这个窗口。"
+TRADE_STATUS_DISABLED  			"您得先设立一座城市，才能开启这个窗口。"
+DIP_OFFER_ADVANCE_NONE 			"没有可提供的科技。"
+
+ADVERTISE_COMPLETE_ATTACKER		"我国的广告宣传极为成功。我们开始从外国的{city[0].name}赚取利润。"
+
+CONDUCTHIT_COMPLETE_VICTIM 		"{city[0].name}有著名的公众人物遇刺。刺客是他国的生态恐怖分子，显然是对我国的环保政策不满。我国人民极为愤怒、恐惧且陷于不满情绪。"
+CONDUCTHIT_FAILED_VICTIM		"我们阻止了他国的生态恐怖分子暗杀{city[0].name}的一位知名公众人物。"
+CONDUCTHIT_COMPLETE_ATTACKER		"我国的一位生态恐怖分子成功暗杀了{city[0].name}的公众人物。很庆幸的是此国人民归疚于自国领袖事先防备不足，而将怒气出在他们身上。"
+CONDUCTHIT_FAILED_ATTACK		"{player[0].sir}，情况不妙。我国的生态恐怖分子在{city[0].name}行刺时失风被捕。"
+
+INDULGENCE_COMPLETE_VICTIM 		"外国牧师凭着市民对自己的内疚不安大卖赎罪券，从{city[0].name}的市民身上赚进大把大把钞票。"
+INDULGENCE_FAILED_VICTIM 		"{city[0].name}的市民识破了外国牧师想藉赎罪券大发其财的企图。"
+INDULGENCE_COMPLETE_ATTACKER 		"我国的圣战获利丰厚。我国牧师靠着卖赎罪券给{city[0].name}那些悲惨的罪民，赚了不少钱。"
+INDULGENCE_FAILED_ATTACKER 		"我国牧师无法在外国城市{city[0].name}卖出赎罪券。"
+
+SOOTHSAY_COMPLETE_VICTIM 		"外国的{unitrecord[0].name}在我国城市{city[0].name}散布负面预言。市民极端不满，对未来不抱持希望。"
+SOOTHSAY_FAILED_VICTIM 			"我们逮捕了企图在{city[0].name}散布负面预言的外国{unitrecord[0].name}。我们已经处理了这个不速之客。"
+SOOTHSAY_COMPLETE_ATTACKER 		"{unitrecord[0].name}在外国城市{city[0].name}散布负面预言，降低了居民的幸福度。"
+SOOTHSAY_FAILED_ATTACKER 		"我国的{unitrecord[0].name}企图在{city[0].name}散布负面预言。但不幸失败被捕。"
+
+SUE_COMPLETE_VICTIM 			"我们被告了。一名外国律师告赢了我们的一个{unitrecord[0].name}。"
+SUE_FAILED_VICTIM 			"一名外国律师控告我国的一个{unitrecord[0].name}，不过失败了。正义的一方胜利了。"
+SUE_COMPLETE_ATTACKER 			"我国律师成功告倒了他国的{unitrecord[0].name}。"
+SUE_FAILED_ATTACKER 			"我国律师告不赢他国的{unitrecord[0].name}。"
+
+SUE_FRANCHISE_COMPLETE_VICTIM 		"外国的法律行动迫使我国{city[0].name}的经销商关闭商店结束营业。"
+SUE_FRANCHISE_FAILED_VICTIM 		"虽然外国的律师尽了全力，我国{city[0].name}的经销商仍能正常营业。"
+SUE_FRANCHISE_COMPLETE_ATTACKER 	"我国一名律师成功控告了我国城市{city[0].name}里的他国经销商，迫使他们结束营业。"
+SUE_FRANCHISE_FAILED_ATTACKER 		"虽然我国的律师在法庭上表现杰出，{city[0].name}里的外国经销商仍然不断从我国市民口袋里掏出大把大把的钞票。"
+
+PARTY_COMPLETE_VICTIM 			"{player[0].civ_name_singular}的 {unitrecord[0].name}在我国的{city[0].name}举办了一场招待会。最上乘的娱乐，最美味的食物，所有人都渡过了极为美好的一个晚上。我国许多官员对{player[0].civ_name_plural}留下了好印象，认为我国应该尽力摒除两国之间的歧异，与对方建立起合作伙伴关系。"
+PARTY_COMPLETE_ATTACKER 		"我国的{unitrecord[0].name}在他国城市{city[0].name}举办了一场招待会。{player[0].civ_name_singular}的达官显要纷纷到场，招待会也办的很成功。我们可以预期将来{player[0].civ_name_plural}会与我国加强合作。"
+
+## Gaia Controller Endgame ##
+GC_DISCOVERED_SOLARIS_PROJECT_US 	"大好消息，{player[0].sir}！！我们完成了太阳能计划！我们可以开始着手盖亚控制器了。"
+GC_DISCOVERED_SOLARIS_PROJECT_THEM 	"国外传来的消息证实{player[0].country_name}的太阳能计划竣工了。无庸置疑的是他们一定开始着手建造盖亚控制器了。我们应当将注意力转移到建造盖亚控制器上。绝对不能让他们抢在前头！！"
+GC_MUST_DISCOVER_GAIA_CONTROLLER 	"最令人头痛的消息，{player[0].sir}。{player[1].civ_name_plural}完成了太阳能计划。我们得立即着手研发盖亚控制器科技，才能开始自行建造。我们绝不容许盖亚控制器所带来的力量落入他人手中！！时间就是关键！！"
+GC_MIN_CORES_REACHED_US 		"我们打下了建造盖亚控制器的地基了。我们建造了控制器核心组件的最低数量。"
+GC_MIN_CORES_REACHED_THEM 		"{player[0].civ_name_plural}达到建造盖亚控制器的里程碑。他们建好了控制器核心组件的最低数量。"
+GC_MIN_SATS_REACHED_US 			"{player[0].sir}，我们在完成盖亚控制器的目标上一直有稳定的进展。我们已经建造了所需最低数量的盖亚卫星。虽然不是那么必要，不过再多建一座卫星不仅能扩大盖亚控制器的影响范围，还能增加成功率。"
+GC_MAX_SATS_REACHED 			"{player[0].sir_cap}我们建造了最大数量的盖亚卫星。再多建其它卫星对盖亚控制器的运作不会有加成的效果。"
+GC_MIN_SATS_REACHED_THEM 		"回报证实{player[0].civ_name_plural}已经建造了盖亚控制器最少必备数量的卫星。看来他们有具体进展。"
+GC_MIN_OBELISKS_REACHED_US 		"我们成功建造了盖亚控制器所需最低数量的方尖塔。我们离盖亚控制器完工又靠近了一步！"
+GC_MIN_OBELISKS_REACHED_THEM 		"{player[0].sir_cap}， {player[1].civ_name_plural}建造了盖亚控制器所需最低数量的方尖塔。虽然不确定他们的进度是否比我国快，但可以确定的是：我们没有时间可以浪费了。"
+GC_READY_TO_ACTIVATE_US 		"{player[0].sir_cap}，我们即将创造历史。我们已经建好了盖亚控制器所有必备组件！！所有系统就绪。我们随时都能激活盖亚控制器。"
+GC_READY_TO_ACTIVATE_THEM 		"{player[0].sir_cap}，{player[1].civ_name_plural}完成了一座盖亚控制器。他们随时都有可能加以激活。我们得采取激烈手段破坏他们的好事。 "
+GC_HALFWAY_TO_WIN_US 			"{player[0].sir_cap}，我国的盖亚控制器起动程序已完成一半！很很我们就能统治整个世界了！"
+GC_HALFWAY_TO_WIN_THEM 			"{player[0].sir_cap}，{player[1].civ_name_singular}的盖亚控制器很快就能完全运转了。{player[1].country_name}过不了多久就能控制整个世界。我们绝对不能坐视不管！！"
+GC_OBELISKS_DESTROYED 			"{player[0].sir}，传来不幸消息。外国派来的破坏份子摧毁了一处盖亚控制器的方尖塔。起动程序只好暂时中断。我们得立即再重新建造盖亚控制器！！"
+GC_CORES_DESTROYED 			"敌人最近攻击{city[0].name}摧毁了对我国的盖亚控制器操作上来说极其重要的核心组件。我们得重建盖亚控制器，还得预防未来再遭受攻击。"
+GC_COMPLETED_FIRST_CORE_THEM 		"{player[0].civ_name_plural}的盖亚控制器有所进展。他们完成了第一个控制器核心组件。"
+GC_COMPLETED_FIRST_SAT_THEM 		"{player[0].civ_name_plural}完成了第一座盖亚卫星。"
+GC_COMPLETED_FIRST_OBELISK_THEM 	"{player[0].country_name}建造了他们的第一座盖亚方尖塔。"
+GC_ENEMY_ACTIVATION_STOPPED_BY_US 	"{player[0].sir_cap}，我们有效破坏了{player[1].civ_name_singular}的盖亚控制器，迫使他们放弃起动程序。我们得好好善用这次机会。"
+GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"我们刚刚接获通知， {player[0].civ_name_plural}意外地停止了盖亚控制器的起动程序。虽然不晓得是谁干下的勾当，但可以推测应该是敌对国家摧毁了其中一项以上的重要零件。"
+
+58UnitObsoleteCivwide                   UNIT_OBSOLETE_CIVWIDE                   "发明{advance[0].name}使得下列的部队过时。"
+362IAOneOrMoreUnitsWillCrash            ONE_OR_MORE_UNITS_WILL_CRASH            "{unit[0].name}在回合结束时若未停留在城市或基地，则将因燃料耗尽而坠毁。"
+18IASellImprovement                     IA_SELL_IMPROVEMENT                     "变卖这座城市的{building[0].name}能替您带来{gold[0].value}的黄金。确定吗？"
+029NoMaint                              NO_MAINT                                "{city[0].name}中的{building[0].name}已经变卖。我们缺乏营运经费。"
+10IABreakTreaty                         IA_BREAK_TREATY                         "要是我们违反与{player[1].civ_name_plural}的条约，不仅会激怒对方，也得承担失去世上其它各国领袖的尊重之风险。您确定要这样做吗，{player[0].sir}？"
+11IABreakCeaseFire                      IA_BREAK_CEASE_FIRE                     "{player[0].sir_cap}，您确定要破弃与{player[1].civ_name_plural}的和平协议吗？"
+25IABreakEcopact                        IA_BREAK_ECOPACT                        "{player[0].sir_cap}，我国城市造成太严重的污染了。很快我们就会违反与{player[1].civ_name_plural}所签订的反污染协议。"
+31CrisisCitiesInRevolt                  CRISIS_CITIES_IN_REVOLT                 "{player[0].sir_cap}，从{city[0].name}发来了不幸的消息。市民受够了您的统治，起而叛变了。"
+045TradePirated                         TRADE_PIRATED                           "{player[0].sir_cap}，我们从{city[0].name}到{city[1].name}的贸易路线被{player[1].civ_name_plural}抢劫了。"
+002BrokeTreaty                          BROKE_TREATY                            "{player[0].civ_name_plural}破弃了与{player[1].civ_name_plural}所签订的条约。"
+005EcopactBroken                        ECOPACT_BROKEN                          "{player[0].civ_name_plural}违反了与我国签订的反污染协议。他们的城市所产生的污染正在摧毁地球！"
+007AllianceBroken                       ALLIANCE_BROKEN                         "穷凶恶极的{player[1].civ_name_plural}攻击了我国，不折不扣的撕毁了与我国的盟约！！"
+39CitiesInefficient                     CITY_INEFFICIENCY                       "{city[0].name}的人民在建造不能再建造的项目。我们得向他们下达新的指示。"
+033BarbarianWarning                     BARBARIAN_WARNING                       "{city[0].name}附近发现蛮族。"
+266CityDestroyedByWar                   CITY_DESTROYED_BY_WAR                   "{city[0].name}遭敌军摧毁。这场战役没有市民幸存。"
+209UprisingFailedAttacker               UPRISING_FAILED_ATTACKER                "我国的废奴主义者无法在{city[0].name}搧动奴隶暴动。"
+210UprisingFailedVictim                 UPRISING_FAILED_VICTIM                  "我方机警忠诚的部队成功阻止了他国废奴主义者煽起{city[0].name}的奴隶暴动。"
+19IACertainRevolution                   IA_CERTAIN_REVOLUTION                   "{player[0].sir_cap}，我国人民濒临叛变边缘。现在就结束回合，事态可能会变得更糟。您确定不先处理好这个情况就要结束回合吗？" 
+37IACannotCaptureCity                   IA_CANNOT_CAPTURE_CITY                  "唯有攻击能力大于零的陆上部队才能占领敌方城市。"
+45IATerraformDeadTile                   IA_TERRAFORM_DEAD_TILE                  "您得先发明节约科技才能改良毁坏地形。"
+74EndOfGameOutOfTime                    END_OF_GAME_OUT_OF_TIME                 "时年公元2300年，没有时间了。再继续下去也不会记录分数。"
+48WorldPollutionSpaceLaunch             WORLD_POLLUTION_SPACE_LAUNCH            "我国的卫星侦测到太空航行所引起的大气层污染问题。"
+149PartyCompleteVictim                  PARTY_COMPLETE_VICTIM                   "[player.1.civ_name_singular]的外交官为我国政府官员举办了一场奢华的宴会。要是我们与这些哗众取宠的人开战，人民将更为反对。"
+
+
+### Changed Strings
+## add {city[0].name}
+IA_SETTLING_TOO_CLOSE   		"我们无法在{city[0].name}城市界限内设立新城市。所以我们应该另择对国土扩张更有助益的地点。"
+
+## others ##
+UNIT_DISBANDED_ON_GOV_CHANGE can we have the unitname in there?

@@ -2185,6 +2185,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	if (&archive && loadEverything) 
 	{
+		g_theWorld->SetAllMoveCost();
+		g_theWorld->A_star_heuristic->Update();
 		SPLASH_STRING("Load AI data elements...");
 		
 		CtpAi::Load(archive);

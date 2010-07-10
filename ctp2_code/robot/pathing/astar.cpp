@@ -400,39 +400,17 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
 						g_propagate_depth--;
 					}
 				}
-			} 
+			}
 		}
-    } 
-    
+	}
 }
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef A_STAR_TRACK_CALLSTACK
 #include "debugcallstack.h"
 
 cDebugCallStackSet g_astarCallStackSet(5);
 #endif
-
 
 bool Astar::FindPath
 (
@@ -444,74 +422,76 @@ bool Astar::FindPath
     const sint32        cutoff, 
     sint32 &            nodes_opened
 )
-{   
+{
 #ifdef A_STAR_TRACK_CALLSTACK
 	g_astarCallStackSet.Add();
 #endif
 
 #ifdef SUPER_DEBUG_HEURISTIC
-    MapPoint    tmp; 
-    MapPoint *  size    = g_theWorld->GetSize(); 
-    for (tmp.x = 0; tmp.x < size->x; tmp.x++) 
-    { 
-        for (tmp.y = 0; tmp.y < size->y; tmp.y++) 
-        { 
-            g_theWorld->SetColor(tmp, 0); 
-        } 
-    } 
+	MapPoint    tmp;
+	MapPoint *  size    = g_theWorld->GetSize();
+	for (tmp.x = 0; tmp.x < size->x; tmp.x++)
+	{
+		for (tmp.y = 0; tmp.y < size->y; tmp.y++)
+		{
+			g_theWorld->SetColor(tmp, 0);
+		}
+	}
 #endif
 
-    m_priority_queue.Clear(); 
-    g_search_count++;
- 
-    AstarPoint *    best        = NULL; 
-    AstarPoint *    cost_tree   = NULL;
+	m_priority_queue.Clear();
+	g_search_count++;
 
-    if (start == dest) 
-    {
-        return Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
-    } 
-    
-    Cell *          c           = g_theWorld->GetCell(start); 
-    Assert(c);
-    if (!c) 
-        return false; 
-    
-    nodes_opened++;
+	AstarPoint *    best        = NULL;
+	AstarPoint *    cost_tree   = NULL;
+
+	if (start == dest)
+	{
+		return Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+	}
+
+	Cell *          c           = g_theWorld->GetCell(start);
+	Assert(c);
+	if (!c)
+		return false;
+
+	nodes_opened++;
 
 #ifdef TRACK_ASTAR_NODES
 	g_nodes_inserted++;
 	g_nodes_opened++;
 #endif
 
-    c->m_point = g_astar_mem.GetNew();
-    c->m_search_count = g_search_count; 
-    
-    if (!InitPoint(NULL, c->m_point, start, 0.0, dest)) 
-    { 
-        return Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
-    }
-    
-    best = c->m_point; 
-    
-    sint32  count       = 0;
-    sint32  loop_count  = 0; 
-    bool    searching   = true;
+	c->m_point = g_astar_mem.GetNew();
+	c->m_search_count = g_search_count; 
 
-    do 
-    {  
-        loop_count++; 
-        Assert(loop_count < 1400000); // Ultra Gigantic problem
-        
-        float past_cost = best->m_past_cost + best->m_entry_cost; 
-        best->SetExpanded(TRUE); 
-        
-        sint32 max_dir = GetMaxDir(best->m_pos);
+	if (!InitPoint(NULL, c->m_point, start, 0.0, dest)) 
+	{
+		return Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+	}
+
+	best = c->m_point;
+
+	sint32  count       = 0;
+	sint32  loop_count  = 0;
+	bool    searching   = true;
+
+	do
+	{
+		loop_count++; 
+		Assert(loop_count < 1400000); // Ultra Gigantic problem
+
+		float past_cost = best->m_past_cost + best->m_entry_cost;
+		best->SetExpanded(TRUE);
+
+		sint32 max_dir = GetMaxDir(best->m_pos);
 
 		for (sint32 i = 0; i <= max_dir; ++i)
 		{
 			static MapPoint next_pos;
 			if (!best->m_pos.GetNeighborPosition(WORLD_DIRECTION(i), next_pos)) continue;
+
+			if(m_maxSquaredDistance > -1 && MapPoint::GetSquaredDistance(start, next_pos) > m_maxSquaredDistance) continue;
 
 			c = g_theWorld->GetCell(next_pos);
 
@@ -588,85 +568,84 @@ bool Astar::FindPath
 #ifdef TRACK_ASTAR_NODES
 				g_nodes_opened++;
 
-#endif 
-                c->m_point = g_astar_mem.GetNew(); 
-                c->m_search_count = g_search_count;               
+#endif
+				c->m_point = g_astar_mem.GetNew();
+				c->m_search_count = g_search_count;
 
-                if (InitPoint(best, c->m_point, next_pos, past_cost, dest)) 
-                {  
+				if (InitPoint(best, c->m_point, next_pos, past_cost, dest))
+				{
 #ifdef TRACK_ASTAR_NODES
 					g_nodes_inserted++;
-#endif 
+#endif
 
-					if (c->m_point->GetEntry() == ASTAR_CAN_ENTER) 
-                    { 
-	                    m_priority_queue.Insert(c->m_point); 
+					if (c->m_point->GetEntry() == ASTAR_CAN_ENTER)
+					{
+						m_priority_queue.Insert(c->m_point);
 					}
+				}
+			}
+		}
 
-				} 
-            } 
-        } 
+		count++;
 
-        count++;
-        
-        if (m_priority_queue.Len() < 1) 
-        { 
-            break; 
-        } 
-        else 
-        { 
-            if (0 < m_priority_queue.Len()) 
-            { 
-                best = m_priority_queue.Remove(1); 
+		if (m_priority_queue.Len() < 1)
+		{
+			break;
+		}
+		else
+		{
+			if (0 < m_priority_queue.Len())
+			{
+				best = m_priority_queue.Remove(1);
 
 #ifdef TRACK_ASTAR_NODES
 				g_closed_nodes++;
 #endif 
-                Assert(best->m_queue_idx < 0); 
-            } 
-            else 
-            { 
-                best = NULL; 
-            }
-        }
-        
-        if (best) 
-        { 
-            if (best->m_pos == dest) 
-            { 
-                float               cost; 
-                ASTAR_ENTRY_TYPE    entry   = ASTAR_CAN_ENTER;
-                bool                is_zoc  = false; 
+				Assert(best->m_queue_idx < 0);
+			}
+			else
+			{
+				best = NULL;
+			}
+		}
 
-                if (EntryCost(best->m_parent->m_pos, best->m_pos,
-                              cost, is_zoc, entry
-                             )
-                   ) 
-                { 
-                    searching = (entry != ASTAR_CAN_ENTER);
-                } 
-            } 
-            // keep searching
-        } 
-        else 
-        { 
-            searching = false; 
-        }
-        
-    } while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
+		if (best)
+		{
+			if (best->m_pos == dest)
+			{
+				float               cost;
+				ASTAR_ENTRY_TYPE    entry   = ASTAR_CAN_ENTER;
+				bool                is_zoc  = false; 
+
+				if (EntryCost(best->m_parent->m_pos, best->m_pos,
+				              cost, is_zoc, entry
+				             )
+				   )
+				{
+					searching = (entry != ASTAR_CAN_ENTER);
+				}
+			}
+			// keep searching
+		}
+		else
+		{
+			searching = false;
+		}
+
+	} while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
 
 #ifdef SUPER_DEBUG_HEURISTIC
-    WhackScreen();  
+	WhackScreen();
 #endif
 
-    bool const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+	bool const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
 
 #ifdef TRACK_ASTAR_NODES
 	g_paths_found++;
 	g_paths_lengths += a_path.Num();
 #endif 
 
-    return r; 
+	return r;
 }
 
 bool Astar::Cleanup(const MapPoint &dest,

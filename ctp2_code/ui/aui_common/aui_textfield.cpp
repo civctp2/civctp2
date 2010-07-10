@@ -32,7 +32,9 @@ aui_TextField::aui_TextField(
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_Win( retval, id, ldlBlock, ActionFunc, cookie ),
-        m_Font( NULL ),
+#ifndef __AUI_USE_DIRECTX__
+	m_Font( NULL ),
+#endif
 	m_holdfont( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -58,7 +60,9 @@ aui_TextField::aui_TextField(
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
 	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie ),
+#ifndef __AUI_USE_DIRECTX__
 	m_Font( NULL ),
+#endif
 	m_holdfont( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );

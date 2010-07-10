@@ -3421,11 +3421,11 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 
 				if (Bvar < 0) {
 					Bvar += Bainc;
-					mid_addr = (uint8 *)((sint32)mid_addr + addr_ainc);
+					mid_addr = (uint8 *)((size_t)mid_addr + addr_ainc);
 					Pmid += Painc;
 				} else {
 					Bvar += Bdinc;
-					mid_addr = (uint8 *)((sint32)mid_addr + addr_dinc);
+					mid_addr = (uint8 *)((size_t)mid_addr + addr_dinc);
 					Pmid += Pdinc;
 				}
 
@@ -3548,11 +3548,11 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 
 				if (Bvar < 0) {
 					Bvar += Bainc;
-					mid_addr = (uint8 *)((sint32)mid_addr + addr_ainc);
+					mid_addr = (uint8 *)((size_t)mid_addr + addr_ainc);
 					Pmid += Painc;
 				} else {
 					Bvar += Bdinc;
-					mid_addr = (uint8 *)((sint32)mid_addr + addr_dinc);
+					mid_addr = (uint8 *)((size_t)mid_addr + addr_dinc);
 					Pmid += Pdinc;
 				}
 

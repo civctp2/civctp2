@@ -41,6 +41,7 @@ Goal {
 	Bit UnGroupFirst
 	Bit NoRollback
 	Bit HasTransportersOrNoCoastalCities    // The AI has to own transporters to persue this goal and needs coastal cities
+	Bit IsGlobalGoal
 
 	Bits SquadClass {
 		CanExplore,
@@ -88,16 +89,20 @@ Goal {
 	Int PowerBonus
 	Int DistanceToHomeBonus
 	Int DistanceToEnemyBonus
-	Int InHomeTerritoryBonus   = 0
-	Int NoOwnerTerritoryBonus  = 0
-	Int InEnemyTerritoryBonus  = 0
-	Int WoundedArmyBonus       = 0
-	Int NotVisibleBonus        = 0
-	Int InVisionRangeBonus     = 0
-	Int NoBarbarianBonus       = 0
-	Int CanAttackBonus         = 0
-	Int SlaveryProtectionBonus = 0
-	Int SmallCitySizeBonus     = 0
+	Int InHomeTerritoryBonus           = 0
+	Int NoOwnerTerritoryBonus          = 0
+	Int InEnemyTerritoryBonus          = 0
+	Int WoundedArmyBonus               = 0
+	Int NotVisibleBonus                = 0
+	Int InVisionRangeBonus             = 0
+	Int NoBarbarianBonus               = 0
+	Int CanAttackBonus                 = 0
+	Int SlaveryProtectionBonus         = 0
+	Int SmallCitySizeBonus             = 0
+	Int LandToCloseCityConnectionBonus = 0
+	Int SmallTargetEmpireBonus         = 0
+	Int SmallTargetEmpireSize          = 0
+	Int WeakestEnemyBonus              = 0
 
 	Int ChokePointBonus
 	Int UnexploredBonus

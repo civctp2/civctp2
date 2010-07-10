@@ -43,20 +43,21 @@ TradeAstar g_theTradeAstar;
 extern Player **g_player; 
 
 
-bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-     float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry) 
-
+bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
+     float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry)
 {
 	is_zoc = false;
 	entry = ASTAR_CAN_ENTER;
 
-    if (!g_player[m_owner]->IsExplored(pos)) { 
-        cost = k_ASTAR_BIG; 
+	if (!g_player[m_owner]->IsExplored(pos))
+	{
+		cost = k_ASTAR_BIG;
 		entry = ASTAR_BLOCKED; 
-        return false;
-    }
+		return false;
+	}
 	
-	if(!g_theWorld->IsXwrap()) {
+	if(!g_theWorld->IsXwrap())
+	{
 		sint16 w = (sint16)g_theWorld->GetXWidth();
 
 		sint32 adjX1 = (prev.x + (prev.y / 2)) % w;
@@ -77,19 +78,16 @@ bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 sint32 TradeAstar::GetMaxDir(MapPoint &pos) const
 {
-    return SOUTH; 
+	return SOUTH;
 }
 
 bool TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
                       Path &a_path, float &total_cost, const bool isunit)
-
 {
-    sint32 cutoff = 2000000000; 
-    sint32 nodes_opened=0;
-    m_owner = owner; 
+	sint32 cutoff = 2000000000;
+	sint32 nodes_opened=0;
+	m_owner = owner;
 
-    return Astar::FindPath(start, dest, a_path, total_cost, isunit, 
-            cutoff, nodes_opened);
-
+	return Astar::FindPath(start, dest, a_path, total_cost, isunit,
+	        cutoff, nodes_opened);
 }
-

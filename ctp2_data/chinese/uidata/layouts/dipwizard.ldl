@@ -1,0 +1,561 @@
+
+template CTP2_PARCHMENT_FONT {
+	# Times New Roman Bold
+	string fontname 			"timesbi.ttf" #"timesbd.ttf"
+
+	# 10 point
+	int fontsize				10
+
+	# Dark Grey
+	int fontcolorred			50
+	int fontcolorgreen			50
+	int fontcolorblue			50
+}
+
+template DIP_WIZARD_STAGE {
+	string objecttype "ctp2_Static"
+	int xpix 42
+	int ypix 32
+	int widthpix 232 #240
+	int heightpix 282 #280
+	string	pattern	 "uptg20e.tga"
+	#string	pattern	"cw_TEST2.tga"
+}
+
+template DIP_WIZARD_TONE_BUTTON:CTP2_BUTTON_ICONIC {
+		int xpix 40
+
+		# Two images per layer.
+		int		imagesperlayer		3
+
+		# Background.
+		string	image00				"upbt01aX.tga"
+		string	image01				"upbt01cX.tga"
+		string	image10				"upbt01aU.tga"
+		string	image11				"upbt01cU.tga"
+		string	image20				"upbt01aD.tga"
+		string	image21				"upbt01cD.tga"
+		string	image30				"upbt01aH.tga"
+		string	image31				"upbt01cH.tga"
+}
+
+template DIP_WIZARD_TONE_LABEL:CTP2_STATIC_BASE {
+	int xpix 70
+}
+
+template DIP_WIZARD_TAB_BUTTON:CTP2_SMALL_TAB_BUTTON {
+}
+
+
+template DIP_WIZARD_LIST_TAB_PANEL:CTP2_TABBG {
+	string objecttype "ctp2_Static"
+	int xpix 0
+	int ypix 15
+	int widthpix 222
+	int heightpix 236				
+	List:CTP2_LISTBOX {
+		int xpix 9
+		int ypix 24
+		int widthpix 190
+		int heightpix 200
+	}
+}
+
+template DIP_WIZARD_TONE_ICON:CTP2_STATIC_BASE {
+	int xpix 10
+	int widthpix 20
+	int heightpix 20
+	string imagebltflag "chromakey"
+}
+
+DipWizard:CTP2_DIALOG_WINDOW {
+
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	int	widthpix	800 #576
+	int	heightpix	558
+
+	string title "str_ldl_DiplomacyWizardTitle"
+
+	Details {
+		string objecttype "ctp2_Static"
+		int xpix 275 #282 #290
+		int ypix 40 #29
+		int widthpix 250
+		int heightpix 483 #320
+		string	pattern	"uptg20e.tga"
+		#string	pattern	"cw_TEST.tga"
+
+		Picture:CTP2_STATIC_IMAGE {
+			int xpix 0 #29
+			int ypix 0 #25 #2 #12
+			int widthpix 139 #20 #64
+			int heightpix 170 #150 #48
+		#	string image00 "updf01.tga"
+			string image00 "error.tga"
+		}
+
+		Year:CTP2_STATIC_BASE {
+			int xpix 57
+			int ypix 172
+			int widthpix 140
+			int heightpix 20
+			string text "str_ldl_DipWizYear"
+		}
+
+		ToneIcon:CTP2_STATIC_BASE {
+			int xpix 225
+			int ypix 177
+			string image0 "updi39.tga"
+			string imagebltflag "chromakey"
+		}
+
+		Recipient:CTP2_STATIC_BASE {
+			int xpix 70
+			int ypix 191
+			int widthpix 170
+			int heightpix 32
+			string text "str_ldl_DipWizRecipient"
+
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+		}
+
+		#Proposal:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Proposal:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
+			int xpix 15
+			int ypix 245
+			int widthpix 222
+			int heightpix 80
+		
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+			string text "str_ldl_DipWizProposal"
+		}
+
+		#Exchange:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Exchange:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
+			int xpix 15
+			int ypix 329
+			int widthpix 222
+			int heightpix 80
+		
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+			string text "str_ldl_DipWizExchange"
+		}
+
+		#Response:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		Response:CTP2_PARCHMENT_FONT:CTP2_STATIC_BASE {
+			int xpix 15
+			int ypix 413
+			int widthpix 222
+			int heightpix 50
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+			string text "str_ldl_DipWizResponse"
+		}
+
+		Parchment:CTP2_STATIC_IMAGE {			
+			int xpix 0
+			int ypix 163
+			int widthpix 250
+			int heightpix 320
+			string image00 "updg01.tga"
+		}
+	}
+	
+	Stage0:DIP_WIZARD_STAGE {
+		NationsLabel:CTP2_STATIC_BASE {
+			int xpix 14
+			int ypix 7
+			string just "left"
+			string text "str_ldl_DipWizSelectNation"
+			
+		}
+
+		Nations:CTP2_DROPDOWN {
+			int widthpix 150
+			int xpix 40
+			int ypix 40
+			int heightpix 29
+			# Tooltip
+			string	statustext	"STATUSBAR_DIPMAN_CREATE_SELECTCIV_BUTTON"
+		}
+
+		SelectToneLabel:CTP2_STATIC_BASE {
+			int xpix 14
+			int ypix 73
+			string just "left"
+			string text "str_ldl_DipWizSelectTone"
+		}
+
+		Tones:CTP2_STATIC_BASE {
+			int xpix 0
+			int ypix 100
+			int widthpix 232 #240
+			int heightpix 130
+			
+			ToneIcon0:DIP_WIZARD_TONE_ICON {
+				int ypix 0
+				string image0 "updi39.tga"
+			}
+			ToneIcon1:DIP_WIZARD_TONE_ICON {
+				int ypix 25
+				string image0 "updi40.tga"
+			}
+			ToneIcon2:DIP_WIZARD_TONE_ICON {
+				int ypix 50
+				string image0 "updi41.tga"
+			}
+			ToneIcon3:DIP_WIZARD_TONE_ICON {
+				int ypix 75
+				string image0 "updi42.tga"
+			}
+			ToneIcon4:DIP_WIZARD_TONE_ICON {
+				int ypix 100
+				string image0 "updi43.tga"
+			}
+	
+			Tone0:DIP_WIZARD_TONE_BUTTON {
+				int ypix 0
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_MAGN_BUTTON"
+			}
+			Tone1:DIP_WIZARD_TONE_BUTTON {
+				int ypix 25
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_FRND_BUTTON"
+			}
+			Tone2:DIP_WIZARD_TONE_BUTTON {
+				int ypix 50
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_OBSQ_BUTTON"
+			}
+			Tone3:DIP_WIZARD_TONE_BUTTON {
+				int ypix 75
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_HAUG_BUTTON"
+			}
+			Tone4:DIP_WIZARD_TONE_BUTTON {
+				int ypix 100
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_HOST_BUTTON"
+			}
+	
+			ToneLabel0:DIP_WIZARD_TONE_LABEL {
+				int ypix 7
+				string text "str_ldl_DipTone0"
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_MAGN_BUTTON"
+			}
+			ToneLabel1:DIP_WIZARD_TONE_LABEL {
+				int ypix 32
+				string text "str_ldl_DipTone1"
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_FRND_BUTTON"
+			}
+			ToneLabel2:DIP_WIZARD_TONE_LABEL {
+				int ypix 57
+				string text "str_ldl_DipTone2"
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_OBSQ_BUTTON"
+			}
+			ToneLabel3:DIP_WIZARD_TONE_LABEL {
+				int ypix 82
+				string text "str_ldl_DipTone3"
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_HAUG_BUTTON"
+			}
+			ToneLabel4:DIP_WIZARD_TONE_LABEL {
+				int ypix 107
+				string text "str_ldl_DipTone4"
+				# Tooltip
+				string	statustext	"STATUSBAR_DIPMAN_COUNTER_TONE_HOST_BUTTON"
+			}
+		}
+		
+	}
+#################EMOD - Diplomacy Request/Offer/Treaty tab info is here
+	Stage1:DIP_WIZARD_STAGE {
+	int xpix 42 #523
+	int ypix 32
+
+		Label:CTP2_STATIC_BASE {
+			int xpix 14
+			int ypix 7
+			int widthpix 222
+			int heightpix 14
+			bool wordwrap TRUE
+			bool vertcenter TRUE
+			string textblttype "fill"
+			string just "left"
+			string text "str_ldl_DipWizSelectRequestOfferTreaty"
+			
+		}
+
+		Tabs:CTP2_TAB_GROUP {
+			int xpix 5
+			int ypix 30
+			int widthpix 222
+			int heightpix 260
+
+			Request:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					int xpix 0
+					string text "str_ldl_DipWizardRequest"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+			Offer:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					int xpix 57
+					string text "str_ldl_DipWizardOffer"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+			Treaty:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					int xpix 100
+					string text "str_ldl_DipWizardTreaty"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+		}
+	}
+	Stage2:DIP_WIZARD_STAGE {
+
+		Label:CTP2_STATIC_BASE {
+			int xpix 14
+			int ypix 7
+			int widthpix 222
+			int heightpix 14
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+			bool vertcenter true
+			string text "str_ldl_DipWizSelectRequestTreaty"
+		}
+
+		Tabs:CTP2_TAB_GROUP {
+			int xpix 5
+			int ypix 30
+			int widthpix 222
+			int heightpix 260
+
+			Request:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					string text "str_ldl_DipWizardRequest"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+			Offer:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					int xpix 57
+					string text "str_ldl_DipWizardOffer"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+			Treaty:CTP2_TAB {
+				TabButton:DIP_WIZARD_TAB_BUTTON {
+					int xpix 100
+					string text "str_ldl_DipWizardTreaty"
+				}
+				TabPanel:DIP_WIZARD_LIST_TAB_PANEL {
+				}
+			}
+		}
+	}
+##################### End EMOD
+
+	# View stage
+	Stage3:DIP_WIZARD_STAGE:CTP2_STATIC_BASE {
+		int xpix	42 #32 #39
+		int ypix	32 #57 #93
+		#string pattern	"updg99.tga"   #response parchment - gold plate thing
+		string pattern	"updg99small.tga"
+		#string	pattern	"cw_TEST2.tga"
+		int widthpix 232 #250
+		int heightpix 142 #153
+		
+		Text:CTP2_STATIC_BASE {
+			int xpix 24 #29
+			int ypix 60 #66 #76
+			int heightpix 60
+			int widthpix 200
+			bool wordwrap TRUE
+			string textblttype "fill"
+			string just "left"
+			bool vertcenter TRUE
+		}
+
+		Diplomat:CTP2_STATIC_IMAGE {
+			int xpix 17 #29
+			int ypix 39 #29
+			int widthpix 200
+			int heightpix 6
+		}
+	}
+
+	# Threat stage
+	Stage4:DIP_WIZARD_STAGE {
+	
+		List:CTP2_LISTBOX {
+			int xpix 5 #8
+			int ypix 13 #38 #10 #30
+			int heightpix 250 #250
+			int widthpix 203 #212
+		}
+	}
+
+	CheckIntelligenceButton:CTP2_BUTTON_SMALL {
+		string text "str_ldl_DipWizardCheckIntelligence"
+		int xpix 42
+		int ypix 492
+		int widthpix 232
+		int heightpix 24
+		string	statustext	"STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON"
+	}
+
+	CreateButtons:CTP2_STATIC_BASE {
+		int xpix 42
+		int ypix 417 #442
+		int widthpix 232 #240
+		int heightpix 74
+		#string	pattern	 "cw_TEST3.tga"
+
+		BackButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_Back"
+			int xpix 0
+			int ypix 0
+			int widthpix 115 #120
+		}
+	
+		NextButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_Next"
+			int xpix 117 #125
+			int ypix 0
+			int widthpix 115
+		}
+	
+		CancelButton:CTP2_STANDARD_CLOSE { 
+			# Tooltip
+			int xpix	0 #46
+			int ypix 	25 #34
+			int widthpix 232 #240
+			string	text	"str_ldl_Cancel"
+			string	statustext	"STATUSBAR_DIPMAN_CREATE_EXIT_DIP_BUTTON"
+		}
+	
+		SendButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_DipWizSend"
+			int xpix 0 #290
+			int ypix 50 #34
+			int widthpix 232 #240
+			# Tooltip
+			string	statustext	"STATUSBAR_DIPMAN_CREATE_SENDPROP_BUTTON"
+		}
+	}
+
+	ViewButtons:CTP2_STATIC_BASE {
+		int xpix 526 #546 #0
+		int ypix 467 #356
+		int widthpix 232 #210 #560
+		int heightpix 49 #30
+		#string	pattern	 "cw_TEST4.tga"
+
+	#	CloseButton:CTP2_BUTTON_SMALL {
+	#		string text "str_ldl_Close"
+	#		int xpix 50 #302
+	#		int ypix 50 #0
+	#		int widthpix 232 #210 #80
+	#	}
+		AcceptButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_DipWizAccept"
+			int xpix 117 #0 #470
+			int ypix 25 #0
+			int widthpix 115 #104
+			# Tooltip
+			string	statustext	"STATUSBAR_DIPMAN_RESPOND_ACCEPT_BUTTON"
+		}
+
+		RejectButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_DipWizReject"
+			int xpix 0 #117 #386
+			int ypix 25 #0
+			int widthpix 115
+			# Tooltip
+			string	statustext	"STATUSBAR_DIPMAN_RESPOND_REJECT_BUTTON"
+		}
+		CounterOrThreatenButton:CTP2_BUTTON_SMALL {
+			string text "str_ldl_DipWizThreaten"
+			int xpix 0 #302
+			int ypix 0 #25
+			int widthpix 232 #210 #80
+		}
+	}
+
+	Background:CTP2_DIALOG_BG {
+		int	widthpix	800
+		int	heightpix	558
+		string image00 "uptg23a.tga"
+		string image02 "uptg23c.tga"
+		string image03 "dw_lb.tga" #"uptg23d.tga"
+		string image05 "dw_rb.tga" #"uptg23f.tga"
+	}
+
+}
+
+DipWizNationItem:CTP2_LIST_ITEM {
+	int widthpix 150
+	int heightpix 22
+	label:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_Static"
+		string just "center"
+		bool vertcenter TRUE
+		int widthpix 150
+		int heightpix 22
+	}
+}
+
+DipWizProposalItem:CTP2_LIST_ITEM {
+	int widthpix 190
+	int heightpix 22
+	#label:CTP2_HEADER_FONT {
+	label:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter TRUE
+		int widthpix 190
+		int heightpix 22
+	}
+}
+
+
+DipWizThreatItem:CTP2_LIST_ITEM {
+	int widthpix 212
+	int heightpix 22
+	#label:CTP2_HEADER_FONT {
+	label:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter TRUE
+		int widthpix 212
+		int heightpix 22
+	}
+}
+
+$
