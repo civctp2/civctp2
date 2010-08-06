@@ -49,6 +49,7 @@
 
 #include "gfx_options.h"
 #include "robotastar2.h"
+#include "CityAstar.h"
 #include "Cell.h"
 #include "Unit.h"
 #include "player.h"
@@ -65,7 +66,8 @@
 #include "GoalRecord.h"
 #include "Goal.h"
 
-extern MapPoint g_mp_size;
+extern MapPoint  g_mp_size;
+extern CityAstar g_city_astar;
 
 Agent::Agent()
 :
@@ -416,6 +418,22 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 		return 0.0;
 	}
 
+#if 0
+	// This would care about shallow water and the like but it is too slow.
+	uint32 move_union = m_army->GetMovementType();
+	if(m_army->HasCargo()
+	&&!m_army->GetMovementTypeAir()
+	){
+		move_union |= m_army->GetCargoMovementType();
+	}
+
+	float cost = 0.0f;
+	g_city_astar.FindCantEnterPenaltyDistance(m_playerId, Get_Pos(), pos, cost, cells, move_union);
+	
+	move_point_cost = static_cast<double>(cost);
+	cells *= cells;
+#endif
+
 	cells = MapPoint::GetSquaredDistance(Get_Pos(), pos);
 	if (cells > 0)
 	{
@@ -429,7 +447,7 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 		// is slow.
 		//  std::min(myCell->GetMoveCost(), otherCell->GetMoveCost());
 
-		//To DO : instead of 100.0, compute the min of terraint cost (with implementation)
+		//ToDo : instead of 100.0, compute the min of terrain costs (with implementation)
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0
 	}
 

@@ -206,6 +206,7 @@
 #include "installation.h"
 #include "installationpool.h"
 #include "installationtree.h"           // g_theInstallationTree
+#include "limits"
 #include "MainControlPanel.h"
 #include "mapanalysis.h"
 #include "MaterialPool.h"
@@ -9791,22 +9792,27 @@ bool Player::HasTransporters() const
 	return false;
 }
 
-bool Player::IsLandConnected(MapPoint const & center, sint32 squaredDistance) const
+bool Player::IsLandConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance) const
 {
+	distance = std::numeric_limits<sint32>::max();
 	for(sint32 i = 0; i < m_all_cities->Num(); ++i)
 	{
-		if(MapPoint::GetSquaredDistance(m_all_cities->Get(i)->GetPos(), center) <= squaredDistance)
+		if(MapPoint::GetSquaredDistance(m_all_cities->Get(i)->GetPos(), center) <= maxSquaredDistance)
 		{
 			float cost = 0.0;
-			sint32 distance;
-			if(g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, distance, squaredDistance))
+			sint32 newDistance = std::numeric_limits<sint32>::max();
+			if
+			  (
+			       g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, newDistance, maxSquaredDistance)
+			    && newDistance < distance
+			)
 			{
-				return true;
+				distance = newDistance;
 			}
 		}
 	}
 
-	return false;
+	return distance != std::numeric_limits<sint32>::max();
 }
 
 MapPoint Player::CalcEmpireCenter() const

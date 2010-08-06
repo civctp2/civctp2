@@ -1147,7 +1147,7 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-			("\t %9x,\tGOAL\t\t,\tRAW_PRIORITY,\tCOORDS\t,\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   )\t,\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN\n",
+			("\t %9x,\tGOAL,\t\tRAW_PRIORITY,\t\tCOORDS,\t\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   ),\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tIN_HOME_TER,\tIN_ENEMY_TER,\tON_NEUT_TER,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN,\tCONNECTED,\tSMALL_EMP,\tWEAKEST\n",
 		this));
 
 		      sorted_goal_iter  = m_goals_of_type[goal_type].begin();
@@ -2002,7 +2002,7 @@ void Scheduler::Assign_Garrison()
 					MapPoint dest_pos = goal_ptr->Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
 					MapPoint curr_pos = agent_iter->second->Get_Pos();
 
-					if(dest_pos != curr_pos)
+					if(dest_pos != curr_pos) // Agents with other goals have to be freed
 					{
 						goal_ptr->Rollback_Agent(agent_iter->second);
 					}
@@ -2010,6 +2010,19 @@ void Scheduler::Assign_Garrison()
 			}
 			else
 			{
+				if(agent_iter->second->Has_Any_Goal())
+				{
+					Goal_ptr goal_ptr = agent_iter->second->Get_Goal();
+
+					MapPoint dest_pos = goal_ptr->Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
+					MapPoint curr_pos = agent_iter->second->Get_Pos();
+
+					if(dest_pos == curr_pos) // Agents with goals here have to be freed
+					{
+						goal_ptr->Rollback_Agent(agent_iter->second);
+					}
+				}
+
 				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s (Not needed for city garrison)\n", agent_iter->second, agent_iter->second->Get_Army(), city.GetName()));
 			}
 		}

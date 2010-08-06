@@ -99,10 +99,16 @@ Goal {
 	Int CanAttackBonus                 = 0
 	Int SlaveryProtectionBonus         = 0
 	Int SmallCitySizeBonus             = 0
-	Int LandToCloseCityConnectionBonus = 0
-	Int SmallTargetEmpireBonus         = 0
-	Int SmallTargetEmpireSize          = 0
-	Int WeakestEnemyBonus              = 0
+
+	struct LandConnectionBoni
+	{
+		Int LandToCloseCityConnectionBonus = 0
+		Int SmallTargetEmpireBonus         = 0
+		Int SmallTargetEmpireSize          = 0
+		Int WeakestEnemyBonus              = 0
+	}
+	
+	Bit(struct LandConnectionBoni) LandConnectionBoni
 
 	Int ChokePointBonus
 	Int UnexploredBonus

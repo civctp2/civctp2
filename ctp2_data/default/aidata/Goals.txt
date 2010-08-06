@@ -100,10 +100,13 @@ GOAL_SEIGE {
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
 
-  LandToCloseCityConnectionBonus 500
-  SmallTargetEmpireSize          3
-  SmallTargetEmpireBonus         100
-  WeakestEnemyBonus              200
+  LandConnectionBoni
+  {
+    LandToCloseCityConnectionBonus 1000
+    SmallTargetEmpireSize             3
+    SmallTargetEmpireBonus          100
+    WeakestEnemyBonus               200
+  }
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -128,21 +131,22 @@ GOAL_ATTACK {
 
   Execute   ORDER_ATTACK
 
-  ThreatBonus             100
-  EnemyValueBonus        -250
-  AlliedValueBonus       1500
-  PowerBonus              500
-  DistanceToHomeBonus       0
-  DistanceToEnemyBonus      0
-  InHomeTerritoryBonus  10000
-  NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0
-  WoundedArmyBonus     -10000
-  NotVisibleBonus     -500000
-  ChokePointBonus         250
-  UnexploredBonus     -999999
-  ObsoleteArmyBonus       100
-  TreaspassingArmyBonus     0
+  ThreatBonus               100
+  EnemyValueBonus          -250
+  AlliedValueBonus         1500
+  PowerBonus                500
+  DistanceToHomeBonus         0
+  DistanceToEnemyBonus        0
+  InHomeTerritoryBonus    10000
+  NoOwnerTerritoryBonus -200000
+  InEnemyTerritoryBonus -200000
+  WoundedArmyBonus       -10000
+  NotVisibleBonus       -500000
+  ChokePointBonus           250
+  UnexploredBonus       -999999
+  ObsoleteArmyBonus         100
+  TreaspassingArmyBonus       0
+  InVisionRangeBonus     200000
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000

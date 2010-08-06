@@ -46,6 +46,7 @@ class MapAnalysis;
 #include "boundingrect.h"
 #include "bit_table.h"
 
+#define SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS
 
 class MapAnalysis
 {
@@ -113,7 +114,7 @@ public:
 	sint32 GetMaxEnemyBombardSea  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardSeaGrid,  player); };
 	sint32 GetMaxEnemyBombardAir  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardAirGrid,  player); };
 #if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
-	sint32 GetMaxEnemyValue       (const sint32 & player) const { return GetMaxEnemyGrid(m_threatGrid,      player); };
+	sint32 GetMaxEnemyValue       (const sint32 & player) const { return GetMaxEnemyGrid(m_valueGrid,      player); };
 #endif
 
 	//     The allied grids
@@ -141,7 +142,7 @@ public:
 	sint32 GetMaxAlliedBombardSea (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardSeaGrid,  player); };
 	sint32 GetMaxAlliedBombardAir (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardAirGrid,  player); };
 #if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
-	sint32 GetMaxAlliedValue      (const sint32 & player) const { return GetMaxAlliedGrid(m_threatGrid,      player); };
+	sint32 GetMaxAlliedValue      (const sint32 & player) const { return GetMaxAlliedGrid(m_valueGrid,      player); };
 #endif
 
 	void DebugLog() const;

@@ -967,7 +967,7 @@ void CtpAi::Cleanup()
 	AgreementMatrix::Cleanup();
 }
 
-void CtpAi::Initialize()
+void CtpAi::Initialize(bool initDiplomat)
 {
 	Resize();
 
@@ -980,8 +980,11 @@ void CtpAi::Initialize()
 		Player *player_ptr = g_player[player];
 		if(player_ptr == NULL) continue;
 
-		Diplomat::GetDiplomat(player).Initialize();
-		Diplomat::GetDiplomat(player).InitStrategicState();
+		if(initDiplomat)
+		{
+			Diplomat::GetDiplomat(player).Initialize();
+			Diplomat::GetDiplomat(player).InitStrategicState();
+		}
 		Governor::GetGovernor(player).Resize( (sint16) g_theWorld->GetWidth(),
 											  (sint16) g_theWorld->GetHeight(),
 											  1 );
@@ -1029,7 +1032,7 @@ void CtpAi::Initialize()
 #if defined (_DEBUG) || defined(USE_LOGGING)
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(3);
+	CtpAiDebug::SetDebugPlayer(8);
 	CtpAiDebug::SetDebugGoalType(-1);
 	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
@@ -1037,7 +1040,7 @@ void CtpAi::Initialize()
 
 void CtpAi::Load(CivArchive & archive)
 {
-	Initialize();
+	Initialize(false);
 
 	Diplomat::LoadAll(archive);
 

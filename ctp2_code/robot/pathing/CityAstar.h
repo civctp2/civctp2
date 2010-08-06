@@ -37,10 +37,10 @@
 
 class CityAstar : public Astar
 {
-	PLAYER_INDEX m_owner; 
-	uint32 m_alliance_mask; 
+	PLAYER_INDEX m_owner;
+	uint32 m_alliance_mask;
 
-	bool EntryCost(const MapPoint &prev, const MapPoint &pos,                           
+	bool EntryCost(const MapPoint &prev, const MapPoint &pos,
 	                        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
 	sint32 GetMaxDir(MapPoint &pos) const;
 
@@ -53,14 +53,17 @@ public:
 	    m_pathRoad       (false),
 	    m_pathLand       (false),
 	    m_simpleDistance (false),
+	    m_pathPenalizeCantEnter(0x0),
 	    m_start          (),
 	    m_dest           ()
 	{ ; }
 
 
-	void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+	void FindCantEnterPenaltyDistance(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
+	  float &cost, sint32 &distance, uint32 & pathPenalizeCantEnter);
+	void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
 	  float &cost, sint32 &distance);
-	bool IsLandConnected(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+	bool IsLandConnected(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
 	  float &cost, sint32 &distance, sint32 maxSquaredDistance = -1);
 	
 	bool FindSimpleDistancePath(const MapPoint & start,
@@ -80,6 +83,7 @@ public:
 private:
 	bool m_pathRoad;
 	bool m_pathLand;
+	uint32 m_pathPenalizeCantEnter;
 	bool m_simpleDistance;
 	MapPoint m_start;
 	MapPoint m_dest;

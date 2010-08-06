@@ -545,12 +545,11 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 			else
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-							("\t\t[%3d]First match with bad utility for goal %s, stop matching\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+					("\t\t[%3d]First match with bad utility for goal %s, stop matching, last match in list: %i\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText(), matches.rbegin()->Get_Matching_Value()));
 				if(count == 0)
 				{
 					Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 				}
-
 				break;
 			}
 		}
@@ -563,20 +562,17 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	if(update && show_strength)
+	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
-		if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
-		{
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-			m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
-			m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
-			Squad_Strength strength;
-			strength.Set_Pos_Strength(Get_Target_Pos());
-			strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
-			Squad_Strength grid_strength;
-			grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
-			grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
-		}
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
+		m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
+		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
+		Squad_Strength strength;
+		strength.Set_Pos_Strength(Get_Target_Pos());
+		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
+		Squad_Strength grid_strength;
+		grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
+		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
 	}
 #endif
 
@@ -596,7 +592,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		combinedUtility /= count;
 	}
 
-	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,("\tMatch value: %i\n", combinedUtility));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,("\tMatch value combined utility: %i, raw priority: %i\n", combinedUtility, m_raw_priority));
 	if(update)
 	{
 		m_combinedUtility = combinedUtility;
@@ -2093,13 +2089,23 @@ Utility Goal::Compute_Raw_Priority()
 #endif //_DEBUG
 	}
 
-	if
-	  (
-	      goal_rec->GetLandToCloseCityConnectionBonus() != 0
-	   && player_ptr->IsLandConnected(target_pos, 4 * g_theConstDB->Get(0)->GetBorderSquaredRadius())
-	  )
+	const sint32 doubleDistanceFactor = 4;
+	sint32 distance;
+	bool isLandConnected = goal_rec->HasLandConnectionBoni() && player_ptr->IsLandConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
+
+	const GoalRecord::LandConnectionBoni* cbRec = isLandConnected ? goal_rec->GetLandConnectionBoniPtr() : NULL;
+
+	// A little ugly but this way I don't have to mess with the debug reports
+	if(cbRec)
 	{
-		cell_value += goal_rec->GetLandToCloseCityConnectionBonus();
+		double value  =      -static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus() * distance);
+		       value /= sqrt( static_cast<double>(doubleDistanceFactor * doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius())); // Maybe this factor is not the possible maximum
+		       value += static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus());
+
+		if(value > 0)
+		{
+			cell_value += value;
+		}
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -2109,13 +2115,14 @@ Utility Goal::Compute_Raw_Priority()
 
 	if
 	  (
-	       goal_rec->GetSmallTargetEmpireBonus() != 0
+	       cbRec != NULL
+	    && cbRec->GetSmallTargetEmpireBonus() != 0
 	    && target_owner != m_playerId
 	    && target_owner > -1
-	    && g_player[target_owner]->GetNumCities() < goal_rec->GetSmallTargetEmpireSize()
+	    && g_player[target_owner]->GetNumCities() < cbRec->GetSmallTargetEmpireSize()
 	  )
 	{
-		cell_value += goal_rec->GetSmallTargetEmpireBonus();
+		cell_value += cbRec->GetSmallTargetEmpireBonus();
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -2126,7 +2133,8 @@ Utility Goal::Compute_Raw_Priority()
 	if
 	  (
 	       target_owner != m_playerId
-	    && goal_rec->GetWeakestEnemyBonus() != 0
+	    && cbRec
+	    && cbRec->GetWeakestEnemyBonus() != 0
 	    && target_owner > -1
 	    && (
 	            g_player[m_playerId]->GetWeakestEnemy() == target_owner
@@ -2134,7 +2142,7 @@ Utility Goal::Compute_Raw_Priority()
 	       )
 	  )
 	{
-		cell_value += goal_rec->GetWeakestEnemyBonus();
+		cell_value += cbRec->GetWeakestEnemyBonus();
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -2157,7 +2165,7 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[1024];
-		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t\t%8f,\t%8f,",
+		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
 		        this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
@@ -2179,12 +2187,20 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_Chokepoint,
 		        report_cell_Unexplored,
 		        report_cell_NotVisible,
-		        report_cell_SlaveryProtection,
-		        report_cell_SmallCitySize,
-		        threaten_bonus
+		        report_cell_InHomeTerritory,
+		        report_cell_InEnemyTerritory,
+		        report_cell_NoOwnerTerritory
 		       );
 
-		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t%8f,\t%8f,\t%s\n", buff, report_cell_CityConnected, report_cell_SmallEmpireBonus, report_cell_WeakestEnemyBonus, (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
+		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t\t%8f,\t%i,\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		                                 buff,
+		                                 report_cell_SlaveryProtection,
+		                                 report_cell_SmallCitySize,
+		                                 threaten_bonus,
+		                                 report_cell_CityConnected,
+		                                 report_cell_SmallEmpireBonus,
+		                                 report_cell_WeakestEnemyBonus,
+		                                 (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:
 /*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
@@ -2229,7 +2245,6 @@ GOAL_RESULT Goal::Execute_Task()
 	Assert(m_agents.begin() != m_agents.end());
 
 	const GoalRecord * goal_record  = g_theGoalDB->Get(m_goal_type);
-	      sint32       cells;
 
 	Set_Sub_Task(SUB_TASK_GOAL);
 
@@ -3542,8 +3557,8 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 			if (!found)
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-				           ("GOAL %x (%s): GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_GOAL):\n",
-				            this, g_theGoalDB->Get(m_goal_type)->GetNameText(), goal_pos.x, goal_pos.y));
+				           ("GOAL %x (%s): GotoGoalTaskSolution: No path found from army (x=%d,y=%d) to goal (x=%d,y=%d) (SUB_TASK_GOAL):\n",
+				            this, g_theGoalDB->Get(m_goal_type)->GetNameText(), the_army->Get_Pos().x, the_army->Get_Pos().y, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
 				MBCHAR * myString = new MBCHAR[256];
@@ -3572,8 +3587,8 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 			if (!found)
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_RALLY):\n",
-				           this, m_goal_type, goal_pos.x, goal_pos.y));
+				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army (x=%d,y=%d) to goal (x=%d,y=%d) (SUB_TASK_RALLY):\n",
+				           this, m_goal_type, the_army->Get_Pos().x, the_army->Get_Pos().y, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
 				MBCHAR * myString = new MBCHAR[256];
@@ -3589,8 +3604,8 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
 			if (!found)
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT):\n",
-				           this, m_goal_type, goal_pos.x, goal_pos.y));
+				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army (x=%d,y=%d) to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT):\n",
+				           this, m_goal_type, the_army->Get_Pos().x, the_army->Get_Pos().y, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
 				MBCHAR * myString = new MBCHAR[256];
@@ -3822,7 +3837,7 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 			}
 		}
 
-		if(!GotoGoalTaskSolution(rallyAgent, rallyPos)) // Problem units are lost to garrison
+		if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
 			Assert(false);
 	}
 
@@ -3833,12 +3848,7 @@ Agent_ptr Goal::GetRallyAgent() const
 {
 	MapPoint targetPos              = Get_Target_Pos();
 	Agent_ptr rallyAgent            = NULL;
-	Agent_ptr rallyAgentAtAll       = NULL;
-	Agent_ptr rallyFriendlyAgent    = NULL;
 	sint32 minDistance              = 0x7fffffff;
-	sint32 minDistanceAtAll         = 0x7fffffff;
-//	sint32 minFriendlyDistance      = 0x7fffffff;
-	bool   hasCargo                 = false;
 
 	for
 	(
@@ -3849,69 +3859,21 @@ Agent_ptr Goal::GetRallyAgent() const
 	{
 		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
-		if(agent_ptr->Get_Army()->HasCargo())
+		if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
 		{
-			hasCargo = true;
-			break;
+			continue;
+		}
+
+		sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
+
+		if(distance < minDistance)
+		{
+			minDistance = distance;
+			rallyAgent  = agent_ptr;
 		}
 	}
 
-	if(hasCargo)
-	{
-		for
-		(
-		    Agent_List::const_iterator agent_iter  = m_agents.begin();
-		                               agent_iter != m_agents.end();
-		                             ++agent_iter
-		)
-		{
-			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
-			sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
-
-			if(agent_ptr->Get_Army()->HasCargo() && distance < minDistanceAtAll)
-			{
-				minDistanceAtAll = distance;
-				rallyAgentAtAll  = agent_ptr;
-			}
-		}
-	}
-	else
-	{
-		for
-		(
-		    Agent_List::const_iterator agent_iter  = m_agents.begin();
-		                               agent_iter != m_agents.end();
-		                             ++agent_iter
-		)
-		{
-			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
-
-			if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
-			{
-				continue;
-			}
-
-			sint32 distance = MapPoint::GetSquaredDistance(agent_ptr->Get_Pos(), targetPos);
-
-			if(distance < minDistanceAtAll)
-			{
-				minDistanceAtAll = distance;
-				rallyAgentAtAll  = agent_ptr;
-			}
-
-			if
-			  (
-			       distance < minDistance
-			    && g_theWorld->IsOnSameContinent(agent_ptr->Get_Pos(), targetPos)
-			  )
-			{
-				minDistance = distance;
-				rallyAgent  = agent_ptr;
-			}
-		}
-	}
-
-	if(rallyAgent == NULL) rallyAgent = rallyAgentAtAll;
+	Assert(rallyAgent == NULL);
 
 	return rallyAgent;
 }
@@ -3975,9 +3937,14 @@ bool Goal::RallyTroops()
 
 		if( agent_ptr->Get_Is_Dead()
 		|| !agent_ptr->Get_Can_Be_Executed()
-		|| !agent_ptr->CanMove()
+		){
+			continue;
+		}
+
+		if(!agent_ptr->CanMove()
 		||  agent_ptr == rallyAgent
 		){
+			agent_ptr->Set_Can_Be_Executed(false);
 			continue;
 		}
 

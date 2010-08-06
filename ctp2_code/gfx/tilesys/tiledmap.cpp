@@ -68,7 +68,6 @@
 #include "aui_stringtable.h"
 #include "background.h"
 #include "BaseTile.h"
-#include "buttonbank.h"
 #include "c3errors.h"
 #include "c3_popupwindow.h"
 #include "c3ui.h"

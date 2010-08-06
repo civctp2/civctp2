@@ -1068,7 +1068,7 @@ public:
 	bool HasCostalCities() const;
 	bool HasTransporters() const;
 
-	bool IsLandConnected(MapPoint const & center, sint32 size) const;
+	bool IsLandConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance) const;
 
 	MapPoint CalcEmpireCenter() const;
 

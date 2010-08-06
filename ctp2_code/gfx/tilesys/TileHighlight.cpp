@@ -58,7 +58,6 @@
 #include "tiledmap.h"
 #include "colorset.h"       // g_colorSet
 #include "director.h"
-#include "buttonbank.h"
 #include "textutils.h"
 #include "MoveFlags.h"
 #include "ArmyData.h" 

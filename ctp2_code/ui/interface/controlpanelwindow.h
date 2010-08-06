@@ -159,7 +159,6 @@ class BattleOrderBox;
 class CellUnitList;
 class Army;
 class CityInventoryListBox;
-class ButtonBank;
 class TextTab;
 class c3_Static;
 class ctp2_Static;

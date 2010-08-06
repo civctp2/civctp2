@@ -57,8 +57,6 @@
 
 #include "c3textfield.h"
 
-#include "buttonbank.h"
-
 #include "c3listbox.h"
 #include "cityinventorylistbox.h"
 

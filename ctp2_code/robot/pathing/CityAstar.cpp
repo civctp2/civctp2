@@ -144,6 +144,7 @@ bool CityAstar::EntryCost
 	}
 	else
 	{
+		///ToDo: Cleanup this mess
 		if(m_pathLand && g_theWorld->IsWater(pos))
 		{
 			cost = k_ASTAR_BIG;
@@ -151,7 +152,25 @@ bool CityAstar::EntryCost
 			return false;
 		}
 
-		if(m_simpleDistance)
+		if(m_pathPenalizeCantEnter != 0)
+		{
+			Cell *  entryCell   = g_theWorld->GetCell(pos);
+
+			cost  = static_cast<float>(entryCell->GetMoveCost());
+			entry = ASTAR_CAN_ENTER;
+
+			if(g_theWorld->CanEnter(pos, m_pathPenalizeCantEnter))
+			{
+				return true;
+			}
+			else
+			{
+				cost *= 10000.0;
+				return true;
+			}
+		}
+
+		if(m_pathLand || m_simpleDistance)
 		{
 			cost = sqrt(static_cast<float>(MapPoint::GetSquaredDistance(m_start, pos)))
 				 + sqrt(static_cast<float>(MapPoint::GetSquaredDistance(m_dest,  pos)));
@@ -196,12 +215,15 @@ bool CityAstar::IsLandConnected
     sint32              maxSquaredDistance
 )
 {
-	m_alliance_mask      = g_player[m_owner]->GetMaskAlliance();
-	m_pathRoad           = true;
-	m_owner              = owner;
-	m_pathLand           = true;
-	m_maxSquaredDistance = maxSquaredDistance;
-	m_simpleDistance     = false;
+	m_pathRoad              = true;
+	m_owner                 = owner;
+	m_pathLand              = true;
+	m_maxSquaredDistance    = maxSquaredDistance;
+	m_simpleDistance        = false;
+	m_start                 = start;
+	m_dest                  = dest;
+	m_pathPenalizeCantEnter = 0x0;
+	m_alliance_mask         = g_player[m_owner]->GetMaskAlliance();
 
 	Path    tmp_path;
 	sint32  nodes_opened    = 0;
@@ -220,14 +242,51 @@ void CityAstar::FindCityDist
     sint32 &            distance
 )
 {
-	m_alliance_mask      = g_player[m_owner]->GetMaskAlliance();
-	m_pathRoad           = false;
-	m_owner              = owner;
-	m_pathLand           = false;
-	m_maxSquaredDistance = -1;
-	m_simpleDistance     = false;
+	m_pathRoad              = false;
+	m_owner                 = owner;
+	m_pathLand              = false;
+	m_maxSquaredDistance    = -1;
+	m_simpleDistance        = false;
+	m_start                 = start;
+	m_dest                  = dest;
+	m_pathPenalizeCantEnter = 0x0;
+	m_alliance_mask         = g_player[m_owner]->GetMaskAlliance();
 
-	Path    tmp_path; 
+	Path    tmp_path;
+	sint32  nodes_opened    = 0;
+
+	if (!FindPath(start, dest, tmp_path, cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened))
+	{
+		cost     = static_cast<float>(g_player[m_owner]->GetMaxEmpireDistance());
+		distance = 0x7fffffff;
+	}
+	else
+	{
+		distance = tmp_path.Num();
+	}
+}
+
+void CityAstar::FindCantEnterPenaltyDistance
+(
+    PLAYER_INDEX        owner,
+    MapPoint const &    start,
+    MapPoint const &    dest,
+    float &             cost,
+    sint32 &            distance,
+    uint32 &            pathPenalizeCantEnter
+)
+{
+	m_pathRoad              = false;
+	m_owner                 = owner;
+	m_pathLand              = false;
+	m_maxSquaredDistance    = -1;
+	m_simpleDistance        = false;
+	m_start                 = start;
+	m_dest                  = dest;
+	m_pathPenalizeCantEnter = pathPenalizeCantEnter;
+	m_alliance_mask         = g_player[m_owner]->GetMaskAlliance();
+
+	Path    tmp_path;
 	sint32  nodes_opened    = 0;
 
 	if (!FindPath(start, dest, tmp_path, cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened))
@@ -250,18 +309,19 @@ bool CityAstar::FindSimpleDistancePath
     float &             total_cost
 )
 {
-	m_alliance_mask      = 0x0;
-	m_pathRoad           = false;
-	m_owner              = owner;
-	m_pathLand           = false;
-	m_maxSquaredDistance = -1;
-	m_simpleDistance     = true;
-	m_start              = start;
-	m_dest               = dest;
+	m_pathRoad              = false;
+	m_owner                 = owner;
+	m_pathLand              = false;
+	m_maxSquaredDistance    = -1;
+	m_simpleDistance        = true;
+	m_start                 = start;
+	m_dest                  = dest;
+	m_pathPenalizeCantEnter = 0x0;
+	m_alliance_mask         = 0x0;
 
-	total_cost          = 0.0;
+	total_cost              = 0.0;
 
-	sint32 nodes_opened = 0;
+	sint32 nodes_opened     = 0;
 
 	FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 
@@ -277,16 +337,19 @@ bool CityAstar::FindRoadPath
     float &             total_cost
 )
 {
-	m_alliance_mask      = 0x0;
-	m_pathRoad           = true;
-	m_owner              = owner;
-	m_pathLand           = false;
-	m_maxSquaredDistance = -1;
-	m_simpleDistance     = false;
+	m_pathRoad              = true;
+	m_owner                 = owner;
+	m_pathLand              = false;
+	m_maxSquaredDistance    = -1;
+	m_simpleDistance        = false;
+	m_start                 = start;
+	m_dest                  = dest;
+	m_pathPenalizeCantEnter = 0x0;
+	m_alliance_mask         = 0x0;
 
-	total_cost          = 0.0;
+	total_cost              = 0.0;
 
-	sint32 nodes_opened = 0;
+	sint32 nodes_opened     = 0;
 
 	FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 

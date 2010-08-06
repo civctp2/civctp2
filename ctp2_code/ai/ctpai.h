@@ -63,7 +63,7 @@ public:
 	static void InitializeEvents();
 
 	
-	static void Initialize();
+	static void Initialize(bool initDiplomat = true);
 
 	
 	static void Load(CivArchive & archive);

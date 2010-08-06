@@ -501,9 +501,12 @@ sint32 MapAnalysis::GetEnemyGrid(const MapGridVector & gridVector, const sint32 
 
 	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
 	{
-		if( Scheduler::CachedHasContactWithExceptSelf(player, i)
-		&& !Scheduler::CachedIsNeutralRegard(player, i)
-		){
+		if
+		  (
+		        player != i
+		    && !Scheduler::CachedIsNeutralRegard(player, i)
+		  )
+		{
 			value += gridVector[i].GetGridValue(pos);
 		}
 	}
@@ -517,14 +520,20 @@ sint32 MapAnalysis::GetMaxEnemyGrid(const MapGridVector & gridVector, const sint
 
 	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
 	{
-		if( Scheduler::CachedHasContactWithExceptSelf(player, i)
-		&& !Scheduler::CachedIsNeutralRegard(player, i))
+		if
+		  (
+		        player != i
+		    && !Scheduler::CachedIsNeutralRegard(player, i)
+		  )
 		{
 			value += gridVector[i].GetMaxGridValue();
 		}
 	}
+
 	return value;
 }
+
+#if !defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
 
 sint32 MapAnalysis::GetThreat(const PLAYER_INDEX & player, const MapPoint & pos) const
 {
@@ -645,6 +654,8 @@ sint32 MapAnalysis::GetMaxEnemyValue(const PLAYER_INDEX & player) const
 
 	return value;
 }
+
+#endif // SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS
 
 double MapAnalysis::GetProductionRank(const CityData * city) const
 {

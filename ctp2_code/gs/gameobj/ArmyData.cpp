@@ -970,21 +970,20 @@ bool ArmyData::CanSettle(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 bool ArmyData::CanSettle() const
 {
-    for(sint32 i = 0; i < m_nElements; i++) 
-    {
-        Assert(m_array[i].IsValid());
-        if (    m_array[i].IsValid()
-             && (   m_array[i].GetDBRec()->GetSettle()
-                 || m_array[i].GetDBRec()->GetNumCanSettleOn() > 0
-                )
-             && m_array[i].CanPerformSpecialAction()
-           )
-        {
-            return true;
-        }
-    }
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
+		Assert(m_array[i].IsValid());
+		if (    m_array[i].IsValid()
+		     && (   m_array[i].GetDBRec()->GetSettle()
+		         || m_array[i].GetDBRec()->GetNumCanSettleOn() > 0
+		        )
+		   )
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
