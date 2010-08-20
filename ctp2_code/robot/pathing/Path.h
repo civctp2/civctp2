@@ -115,7 +115,7 @@ public:
 	sint32 GetNextIndex() const;
 	void RestoreIndexAndCurrentPos(const sint32 & index);
 
-	
+	MapPoint SnipEndUntilCargoCanEnter(const Army & army);
 	MapPoint SnipEndUntilCanEnter(const Army & army);
 	MapPoint SnipEndUntilCannotEnter(const Army & army);
 

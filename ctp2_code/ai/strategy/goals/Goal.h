@@ -258,14 +258,14 @@ private:
 
     bool FollowPathToTask(Agent_ptr first_army,
                           Agent_ptr second_army,
-                          const MapPoint & dest_pos,
-                          const Path & path);
+                          MapPoint & dest_pos,
+                          Path & path);
 
 
     bool GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport, MapPoint & pos);
 
 
-    bool GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos);
+    bool GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos);
 
 
     bool Ok_To_Rally() const;

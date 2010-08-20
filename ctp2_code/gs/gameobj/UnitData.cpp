@@ -6473,3 +6473,31 @@ void UnitData::UnElite()  //copy and make for elite units  UnVeteran
 	if (Flag(k_UDF_IS_ELITE)) 
 		ClearFlag(k_UDF_IS_ELITE);
 }
+
+bool UnitData::HasAdjacentFreeLand() const
+{
+	MapPoint neighbor;
+	for(sint16 dir = 0; dir < NOWHERE; ++dir)
+	{
+		if(this->m_pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), neighbor))
+		{
+			if
+			  (
+			   (
+			        g_theWorld->IsLand(neighbor)
+			     || g_theWorld->IsMountain(neighbor)
+			   )
+			   &&
+			   (
+			        g_theWorld->GetCell(neighbor)->GetNumUnits() == 0
+			     || g_theWorld->GetCell(neighbor)->AccessUnit(0)->GetOwner() == m_owner
+			   )
+			  )
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

@@ -10267,6 +10267,36 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 	return orderValid;
 }
 
+bool ArmyData::TestCargoOrderAny(OrderRecord const * order_rec) const
+{
+	if (order_rec->GetUnitPretest_CanPlantNuke() &&
+		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	   )
+	{
+		return false;
+	}
+
+	bool		orderValid	= false;
+
+	for
+	(
+		sint32 i = 0; 
+		!orderValid && (i < m_nElements);
+		++i
+	)
+	{
+		if(m_array[i]->GetNumCarried() > 0)
+		{
+			for(sint32 j = 0; !orderValid && (i < m_array[i]->GetNumCarried()); ++j)
+			{
+				orderValid = m_array[i]->GetCargoList()->Get(i).UnitValidForOrder(order_rec);
+			}
+		}
+	}
+
+	return orderValid;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::TestOrderUnit

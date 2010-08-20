@@ -149,6 +149,27 @@ bool MapPoint::operator!= (const MapPoint &test_me) const
 	return ((x != test_me.x) || (y != test_me.y));
 }
 
+WORLD_DIRECTION MapPoint::GetOppsositeDirection(WORLD_DIRECTION const & direction)
+{
+	switch (direction)
+	{
+		default:         return NOWHERE;
+		case NORTH:      return SOUTH;
+		case NORTHEAST:  return SOUTHWEST;
+		case EAST:       return WEST;
+		case NORTHWEST:  return SOUTHEAST;
+		case SOUTHEAST:  return NORTHWEST;
+		case WEST:       return EAST;
+		case SOUTHWEST:  return NORTHEAST;
+		case SOUTH:      return NORTH;
+		case NOWHERE:    return NOWHERE;
+#if !defined(_SMALL_MAPPOINTS)
+		case DOWN:       return UP;
+		case UP:         return DOWN;
+#endif
+	}
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : MapPoint::HasUnexploredNeighbor

@@ -38,6 +38,7 @@
 #include "Cell.h"
 #include "World.h"
 #include "Army.h"
+#include "ArmyData.h"
 
 void Direction::Serialize(CivArchive &archive)
 
@@ -436,6 +437,46 @@ void Path::RestoreIndexAndCurrentPos(const sint32 & index)
 	{
 		Next(m_current);
 	}
+}
+
+MapPoint Path::SnipEndUntilCargoCanEnter(const Army & army)
+{
+	if(army->GetCargoNum() <= 0)
+		return GetEnd();
+
+	sint32   i;
+	MapPoint end            = GetEnd();
+	MapPoint last           = end;
+	MapPoint next;
+	sint32   last_can_enter = m_step.Num();
+
+	for(i = m_step.Num() - 1; i >= 0; i--)
+	{
+		if(end.GetNeighborPosition(MapPoint::GetOppsositeDirection(WORLD_DIRECTION(m_step[i].dir)), next))
+		{
+			end = next;
+			if(army->CargoCanEnter(next))
+			{
+				last_can_enter = i;
+				last           = end;
+			}
+			else
+			{
+				break;
+			}
+		}
+		else
+		{
+			Assert(false);
+		}
+	}
+
+	for(i = m_step.Num() - 1; i >= last_can_enter; i--)
+	{
+		m_step.DelIndex(i);
+	}
+
+	return last;
 }
 
 MapPoint Path::SnipEndUntilCanEnter(const Army & army)

@@ -3993,7 +3993,7 @@ UNIT_TANK {
    CanAttack: Land
    CanSee: Standard
    MovementType: Land
-   Size: Medium #Small
+   Size: Medium
    VisionClass: Standard
 
    CanReform {

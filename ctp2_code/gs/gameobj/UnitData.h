@@ -734,6 +734,8 @@ public:
 	sint32 CalculateTotalHP() const;
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
+	bool HasAdjacentFreeLand() const;
+
 //emod
 	bool IsElite() const { return Flag(k_UDF_IS_ELITE); };
 	void SetElite();

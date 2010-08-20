@@ -535,6 +535,7 @@ GOAL_PATROL {
 ## 13 ##########################################################
 
 GOAL_CONVERT_CITY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -573,6 +574,7 @@ GOAL_CONVERT_CITY {
 ## 14 ##########################################################
 
 GOAL_BIOTERROR_CITY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -608,6 +610,7 @@ GOAL_BIOTERROR_CITY {
 ## 15 ##########################################################
 
 GOAL_NANOATTACK_CITY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -935,6 +938,7 @@ GOAL_PLANT_NUKE {
 ## 24 ##########################################################
 
 GOAL_CREATE_PARK {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 
@@ -970,6 +974,7 @@ GOAL_CREATE_PARK {
 ## 25 ##########################################################
 
 GOAL_SOOTHSAY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1044,6 +1049,7 @@ GOAL_ESTABLISH_EMBASSY {
 ## 27 ##########################################################
 
 GOAL_FRANCHISING {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 
@@ -1079,6 +1085,7 @@ GOAL_FRANCHISING {
 ## 28 ##########################################################
 
 GOAL_STEAL_TECHNOLOGY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1116,6 +1123,7 @@ GOAL_STEAL_TECHNOLOGY {
 ## 29 ##########################################################
 
 GOAL_INVESTIGATE_CITY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1153,6 +1161,7 @@ GOAL_INVESTIGATE_CITY {
 ## 30 ##########################################################
 
 GOAL_INCITE_REVOLUTION {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1188,6 +1197,7 @@ GOAL_INCITE_REVOLUTION {
 ## 31 ##########################################################
 
 GOAL_INJOIN {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 
@@ -1222,6 +1232,7 @@ GOAL_INJOIN {
 ## 32 ##########################################################
 
 GOAL_ASSASSINATE {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1257,6 +1268,7 @@ GOAL_ASSASSINATE {
 ## 33 ##########################################################
 
 GOAL_UNDERGROUND_RAILWAY {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 
@@ -1620,6 +1632,7 @@ GOAL_PROTECT_ENDGAME
 ## 43 ##########################################################
 
 GOAL_ADVERTISING {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1657,6 +1670,7 @@ GOAL_ADVERTISING {
 ## 44 ##########################################################
 
 GOAL_INCITE_UPRISING {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1693,6 +1707,7 @@ GOAL_INCITE_UPRISING {
 ## 45 ##########################################################
 
 GOAL_POISON_CITY {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1769,6 +1784,7 @@ GOAL_THROW_PARTY {
 ## 47 ##########################################################
 
 GOAL_SUE {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 
@@ -1805,6 +1821,7 @@ GOAL_SUE {
 ## 48 ##########################################################
 
 GOAL_INDULGENCE {
+  UnGroupFirst
   AvoidWatchfulCity
 
   SquadClass:Special
@@ -1842,6 +1859,7 @@ GOAL_INDULGENCE {
 ## 49 ##########################################################
 
 GOAL_FAITH_HEALING {
+  UnGroupFirst
   SquadClass:Special
   SquadClass:Stealth
 

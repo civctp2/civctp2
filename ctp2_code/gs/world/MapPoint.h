@@ -174,6 +174,8 @@ public:
 		MapPoint & 				pos
 	) const;
 
+	static WORLD_DIRECTION GetOppsositeDirection(WORLD_DIRECTION const & direction);
+
     WORLD_DIRECTION GetNeighborDirection(MapPoint const & neighbor) const;
     MapPointData    NormalizedSubtract(MapPoint const & dest) const;
 	sint32 NormalizedDistance(const MapPoint &dest) const;

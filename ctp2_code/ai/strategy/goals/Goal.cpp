@@ -1510,10 +1510,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 			Utility match = (transport_utility / count);
 			return match + Get_Raw_Priority();
 		}
-		else
-		{
-			return Goal::BAD_UTILITY;
-		}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 // Maybe this is of some use later
@@ -1572,6 +1568,22 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 				return Goal::BAD_UTILITY;
 			}
 		}
+
+		if(m_target_army.IsValid() && !agent_ptr->Get_Army()->CanFight(*m_target_army.AccessData()))
+		{
+			return Goal::BAD_UTILITY;
+		}
+
+		if
+		  (
+		        m_target_city.IsValid()
+		    && !m_target_city->HasAdjacentFreeLand()
+		    &&  g_theWorld->GetCell(m_target_city->GetPos())->GetNumUnits() != 0
+		    && !agent_ptr->Get_Army()->CanBeachAssault()
+		  )
+		{
+			return Goal::BAD_UTILITY;
+		}
 		
 		if(agent_ptr->Get_Army()->IsWounded() && !agent_ptr->Get_Army()->IsObsolete())
 		{
@@ -1585,7 +1597,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	}
 	else if((g_theGoalDB->Get(m_goal_type)->GetTargetOwnerColdEnemy()
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
-		 && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeTradeRoute())
+	     && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeTradeRoute())
 	     )  // For trade routes
 	{
 		if(agent_ptr->Get_Army()->CanSettle())
@@ -2250,6 +2262,25 @@ GOAL_RESULT Goal::Execute_Task()
 
 	bool hastogowithoutgrouping = false;
 
+	for
+	(
+	    Agent_List::reverse_iterator agent_iter  = m_agents.rbegin();
+	                                 agent_iter != m_agents.rend();
+	                               ++agent_iter
+	)
+	{
+		Agent_ptr    agent_ptr       = (Agent_ptr) *agent_iter;
+
+		sint32 transporters = 0;
+		sint32 max = 0;
+		sint32 empty = 0;
+		if(agent_ptr->Get_Army()->GetCargo(transporters, max, empty) && empty > 0)
+		{
+			m_agents.remove(agent_ptr);
+			m_agents.push_back(agent_ptr);
+		}
+	}
+
 	if(goal_record->GetNeverSatisfied())
 	{
 		for
@@ -2362,7 +2393,9 @@ GOAL_RESULT Goal::Execute_Task()
 			if(!agent_ptr->Get_Can_Be_Executed())
 				continue;
 
-			if(!GotoGoalTaskSolution(agent_ptr, Get_Target_Pos(agent_ptr->Get_Army())))
+			MapPoint pos = Get_Target_Pos(agent_ptr->Get_Army());
+
+			if(!GotoGoalTaskSolution(agent_ptr, pos))
 			{
 				if(Needs_Transporter() && Get_Transporters_Num() < 1)
 				{
@@ -3077,8 +3110,8 @@ void Goal::Log_Debug_Info(const int &log) const
 
 bool Goal::FollowPathToTask( Agent_ptr first_army,
                                 Agent_ptr second_army,
-                                const MapPoint &dest_pos,
-                                const Path &found_path)
+                                MapPoint &dest_pos,
+                                Path &found_path)
 {
 	Unit city = g_theWorld->GetCity(first_army->Get_Pos());
 	if(city.m_id != 0)
@@ -3116,12 +3149,17 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 		{
 			test = first_army->Get_Army()->CargoTestOrderHere(order_rec, dest_pos );
 
-			if(first_army->Get_Army()->GetMovementTypeAir())
+			if
+			  (
+			       first_army->Get_Army()->GetMovementTypeAir()
+			   && !first_army->Get_Army()->TestOrderAny(order_rec)
+			   &&  first_army->Get_Army()->TestCargoOrderAny(order_rec)
+			  )
 			{
 				order_rec = CtpAi::GetUnloadOrder();
+				dest_pos  = found_path.SnipEndUntilCargoCanEnter(first_army->Get_Army());
 			}
-			
-			if
+			else if
 			  (
 			   (
 			        first_army->Get_Pos() == dest_pos
@@ -3325,6 +3363,13 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			check_dest = true;
 		}
 
+		if(!the_transport->Get_Can_Be_Executed())
+		{
+			pos = the_transport->Get_Target_Pos();
+			Assert(pos.IsValid());
+			return true;
+		}
+
 		if(dest_pos == the_transport->Get_Pos()
 		|| the_transport->Get_Army()->CheckValidDestination(dest_pos)
 		){
@@ -3334,13 +3379,14 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			}
 
 			the_transport->Set_Target_Pos(dest_pos);
+			the_transport->Set_Can_Be_Executed(false);
 			return true;
 		}
 
-			uint32 move_intersection = 
-				the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
+		uint32 move_intersection = 
+			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-			found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
+		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
 
 		if (!found)
 		{
@@ -3366,6 +3412,12 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			if(!pos.IsValid())
 			{
 				pos = last;
+			}
+
+			if(found_path.GetMovesRemaining() == 0)
+			{
+				the_transport->Set_Can_Be_Executed(false);
+				the_transport->Set_Target_Pos(pos);
 			}
 
 			return true;
@@ -3457,7 +3509,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 	return false;
 }
 
-bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, const MapPoint & goal_pos)
+bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 {
 	if(the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
 		return true;
@@ -3770,11 +3822,16 @@ void Goal::GroupTroops()
 
 			if(agent1_ptr->Get_Pos() == agent2_ptr->Get_Pos())
 			{
-				if(agent1_ptr->Get_Army()->HasCargo())
+				ORDER_TEST test1 = agent1_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent1_ptr->Get_Pos());
+				ORDER_TEST test2 = agent2_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent2_ptr->Get_Pos());
+
+				if(agent1_ptr->Get_Army()->HasCargo() && test1 != ORDER_TEST_ILLEGAL)
 				{
+					agent1_ptr->UnloadCargo();
 				}
-				else if(agent2_ptr->Get_Army()->HasCargo())
+				else if(agent2_ptr->Get_Army()->HasCargo() && test2 != ORDER_TEST_ILLEGAL)
 				{
+					agent2_ptr->UnloadCargo();
 				}
 				else
 				{
@@ -3873,7 +3930,7 @@ Agent_ptr Goal::GetRallyAgent() const
 		}
 	}
 
-	Assert(rallyAgent == NULL);
+	Assert(rallyAgent != NULL);
 
 	return rallyAgent;
 }
@@ -4259,14 +4316,6 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 
 		if(max_slots != empty_slots && ((goal_squad_class & possible_transport->Get_Squad_Class()) != goal_squad_class))
 			continue;
-
-		if(!possible_transport->Get_Can_Be_Executed())
-		{
-			MapPoint target_pos = possible_transport->Get_Target_Pos();
-			MapPoint army_pos = agent_ptr->Get_Army()->RetPos();
-			if (!target_pos.IsNextTo(army_pos))
-				continue;
-		}
 
 		if(!possible_transport->CanReachTargetContinent(Get_Target_Pos()))
 		{

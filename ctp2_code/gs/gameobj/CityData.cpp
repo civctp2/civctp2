@@ -1266,8 +1266,6 @@ void CityData::AddShields(sint32 s)
 //----------------------------------------------------------------------------
 bool CityData::ShouldRevolt(const sint32 inciteBonus)
 {
-	
-	
 	if(g_slicEngine->GetTutorialActive() &&
 	   m_owner == g_slicEngine->GetTutorialPlayer()) {
 		return false;

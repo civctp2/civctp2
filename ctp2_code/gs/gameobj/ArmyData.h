@@ -553,6 +553,7 @@ public:
 
     bool TestOrderAll(const OrderRecord *order_rec) const;
     bool TestOrderAny(const OrderRecord * order_rec) const;
+    bool TestCargoOrderAny(const OrderRecord *order_rec) const;
 
 
     bool TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const;
