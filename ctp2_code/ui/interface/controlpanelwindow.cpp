@@ -2734,6 +2734,7 @@ ControlPanelWindow::CreateTileImpBanks()
 			switch(theClass)
 			{
 			case    k_TerrainImprovement_Class_Terraform_Bit    :
+			case    k_TerrainImprovement_Class_Oceanform_Bit    :
 					timpRec->GetColumn((sint32 &)column);
 					break;
 			case	k_TerrainImprovement_Class_Farm_Bit			:
@@ -2767,8 +2768,11 @@ ControlPanelWindow::CreateTileImpBanks()
 
 		if (theClass>k_TerrainImprovement_Class_ATM_Bit)       
 		{
-			if (theClass>k_TerrainImprovement_Class_OceanRoad_Bit &&
-				theClass != k_TerrainImprovement_Class_Terraform_Bit) 
+			if(
+			       theClass >  k_TerrainImprovement_Class_OceanRoad_Bit
+			    && theClass != k_TerrainImprovement_Class_Terraform_Bit
+			    && theClass != k_TerrainImprovement_Class_Oceanform_Bit
+			  )
 			{
 				thePaneLDL="tiSpecialButtonBank"; 
 				group_id  = CP_TILEIMP_SPECIAL;
@@ -2778,11 +2782,20 @@ ControlPanelWindow::CreateTileImpBanks()
 				sint32 terrain;
 				timpRec->GetTerraformTerrainIndex(terrain);
 
+				thePaneLDL = "tfLandButtonBank";
+				group_id = CP_TERRAFORM_LAND;
 
+				sint32 col;
+				timpRec->GetColumn(col);
+				column = (uint32)col;
+			}
+			else if(theClass == k_TerrainImprovement_Class_Oceanform_Bit)
+			{
+				sint32 terrain;
+				timpRec->GetTerraformTerrainIndex(terrain);
 
-
-					thePaneLDL = "tfLandButtonBank";
-					group_id = CP_TERRAFORM_LAND;
+				thePaneLDL = "tfOceanButtonBank";
+				group_id = CP_TERRAFORM_OCEAN;
 
 				sint32 col;
 				timpRec->GetColumn(col);
@@ -2945,30 +2958,25 @@ ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 		
 		m_tileImpPanes[group_id]->Hide();
 
-	} else 
+	}
+	else
 	{
 		for(uint32 index=0;index<CP_TILEIMP_MAX;index++)
 		{
 			if (m_tileImpPanes[index]==NULL)
 				continue;
 
-			if (index!=group_id) {
-				
+			if (index!=group_id)
+			{
 				m_activatorButtons[index]->SetToggleState(0);
 				m_tileImpPanes[index]->Hide();
-			} else {
-				
-				
-				
-				
-				
-					
-					
+			}
+			else
+			{
 				if (!m_activatorButtons[index]->GetToggleState())
 					m_activatorButtons[index]->SetToggleState(1);
 				m_tileImpPanes[index]->Show();
 			}
-
 		}
 	}
 
@@ -2984,34 +2992,22 @@ ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
 //void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
 
 {
-	
 	if ((a_List==NULL)||(string==NULL))
 		return;
 
-	
 	ctp2_ListItem *item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("ControlPopupItem");
-	 
+
 	if (item==NULL)
 		return;
-
-	
-	
-	
-	
-	
 	c3_Static *staticThing = (c3_Static *)item->GetChildByIndex(0);
 
-	
 	if (staticThing==NULL)
 		return;
 
-	
 	staticThing->SetText(string);
 
-	
 	a_List->AddItem(item);
 }
-
 
 void
 ControlPanelWindow::BuildUnitList ()
@@ -3754,38 +3750,44 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	if (button>=CP_MAX_TILEIMPBUTTONS)
 		return;
 
-   	if (m_tileImpButtons[button]==NULL)
-   		return;
+	if (m_tileImpButtons[button]==NULL)
+		return;
 
 	const	TerrainImprovementRecord *rec;
 	bool	show_button,grey_button;
 
-   	rec = g_theTerrainImprovementDB->Get((sint32)m_tileImpButtons[button]->GetCookie());
-   		
-   	Assert(rec != NULL);
-   	
-   	if (rec==NULL) {
-   		m_tileImpButtons[button]->Enable(false);
-   		return;
+	rec = g_theTerrainImprovementDB->Get((sint32)m_tileImpButtons[button]->GetCookie());
+
+	Assert(rec != NULL);
+
+	if (rec==NULL)
+	{
+		m_tileImpButtons[button]->Enable(false);
+		return;
 	}
 
 	bool const	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
-   	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, hideExpensive);
+	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, hideExpensive);
 	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);  //emod this needs to see obsolete tileimps
 
 	aui_TipWindow *tipwin = (aui_TipWindow *)m_tileImpButtons[button]->GetTipWindow();
 
-	if(!show_button) {
+	if(!show_button)
+	{
 		m_tileImpButtons[button]->ExchangeImage(4, 0, NULL);
 		if(tipwin)
 			tipwin->SetTipText("");
-	} else if(!rec->GetClassTerraform()) {
+	}
+	else if(!rec->GetClassTerraform() || !rec->GetClassOceanform())
+	{
 		const IconRecord *irec = rec->GetIcon();
 		m_tileImpButtons[button]->ExchangeImage(4, 0, irec->GetIcon()); 
 		if(tipwin)
 			tipwin->SetTipText((char *)g_theStringDB->GetNameStr(rec->GetTooltip()));
-	} else {
+	}
+	else
+	{
 		MBCHAR iconName[30];
 		sint32 terrain;
 		rec->GetTerraformTerrainIndex(terrain);
@@ -3794,6 +3796,7 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 		if(tipwin)
 			tipwin->SetTipText((char *)g_theStringDB->GetNameStr(rec->GetTooltip()));
 	}
+
 	m_tileImpButtons[button]->Enable(!grey_button);
 }
 
@@ -3845,9 +3848,6 @@ ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
 void
 ControlPanelWindow::TileImpPanelRedisplay()
 {
-	
-
- 
 	ctp2_Static *tileImpPanel = static_cast<ctp2_Static*>(
 		aui_Ldl::GetObject(
 		"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel"));
@@ -3855,7 +3855,6 @@ ControlPanelWindow::TileImpPanelRedisplay()
 	if(tileImpPanel->IsHidden())
 		return;
 
-	
 	if ((g_selected_item==NULL)||(m_currentTerrainSelection>=CP_TILEIMP_MAX))
 		return;
 
@@ -3864,20 +3863,24 @@ ControlPanelWindow::TileImpPanelRedisplay()
 		if (m_tileImpPanes[index]==NULL)
 			continue;
 
-		if (index!=m_currentTerrainSelection) {
-			if(!m_tileImpPanes[index]->IsHidden()) {
+		if (index!=m_currentTerrainSelection)
+		{
+			if(!m_tileImpPanes[index]->IsHidden())
+			{
 				m_tileImpPanes[index]->Hide();
 				m_activatorButtons[index]->SetToggleState(FALSE);
 			}
-		} else {
-			if(m_tileImpPanes[index]->IsHidden()) {
+		}
+		else
+		{
+			if(m_tileImpPanes[index]->IsHidden())
+			{
 				m_tileImpPanes[index]->Show();
 				m_activatorButtons[index]->SetToggleState(TRUE);
 			}
 		}
 	}
 
-	
 	uint32	start=(m_currentTerrainSelection*CP_MAX_BUTTONS_PER_BANK);
 	uint32	end	=(start+CP_MAX_BUTTONS_PER_BANK);
 	sint32	p1	= g_selected_item->GetVisiblePlayer();
@@ -3885,9 +3888,6 @@ ControlPanelWindow::TileImpPanelRedisplay()
 	
 	for (button=start;button<end;button++)
 	{
-		
-		
-		
 		TileImpButtonRedisplay(p1,button);
 	}
 

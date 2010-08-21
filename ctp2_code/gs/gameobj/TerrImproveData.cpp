@@ -98,9 +98,12 @@ BOOL TerrainImprovementData::Complete(void)
 							  m_type, m_point.x, m_point.y));
 
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(m_type);
-	if(!rec->GetClassTerraform()) {
+	if(!rec->GetClassTerraform() && !rec->GetClassOceanform())
+	{
 		theCell->InsertDBImprovement(m_type);
-	} else {
+	}
+	else
+	{
 		sint32 terr;
 		if(rec->GetTerraformTerrainIndex(terr)) {
 			g_theWorld->ClearGoods(m_point.x, m_point.y);
@@ -109,7 +112,9 @@ BOOL TerrainImprovementData::Complete(void)
 	}
 	theCell->RemoveImprovement(imp);
 
-	if(rec->GetClassTerraform()) {
+	if(rec->GetClassTerraform() || rec->GetClassOceanform())
+	{
+		// Questionable, since we have the exclude classes anyway
 		g_theWorld->CutImprovements(m_point);
 	}
 

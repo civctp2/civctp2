@@ -4603,9 +4603,9 @@ TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 		return;
 
 	const TerrainImprovementRecord::Effect * effect = 
-        (m_overlayRec->GetClassTerraform()) 
-        ? m_overlayRec->GetTerrainEffect(0)
-        : terrainutil_GetTerrainEffect(m_overlayRec, m_overlayPos);
+	    (m_overlayRec->GetClassTerraform() || m_overlayRec->GetClassOceanform())
+	    ? m_overlayRec->GetTerrainEffect(0)
+	    : terrainutil_GetTerrainEffect(m_overlayRec, m_overlayPos);
 
 	if (effect==NULL)
 		return;
@@ -4637,12 +4637,6 @@ TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 	}
 	AddDirtyToMix(x, y, destWidth, destHeight);
 }
-
-
-
-
-
-
 
 void
 TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip)

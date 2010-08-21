@@ -5454,32 +5454,39 @@ bool Player::CanCreateImprovement(sint32 type,
 		return false;
 
 	sint32 i;
-	for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-		if(cell->GetDBImprovement(i) == type) {
+	for(i = 0; i < cell->GetNumDBImprovements(); i++)
+	{
+		if(cell->GetDBImprovement(i) == type)
+		{
 			
 			return false;
 		}
 	}
 
-	for(i = 0; i < cell->GetNumImprovements(); i++) {
-		if(cell->AccessImprovement(i).GetType() == type) {
+	for(i = 0; i < cell->GetNumImprovements(); i++)
+	{
+		if(cell->AccessImprovement(i).GetType() == type)
+		{
 			
 			return false;
 		}
 	}
 
-	if(!terrainutil_CanPlayerBuildAt(rec, m_owner, point)) {
+	if(!terrainutil_CanPlayerBuildAt(rec, m_owner, point))
+	{
 		return false;
 	}	
 
-	if(!rec->GetClassTerraform()) {
+	if(!rec->GetClassTerraform() && !rec->GetClassOceanform())
+	{
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, point);
 		if(!effect)
 			return false;
 	}
 
 	
-	if(check_materials) {		
+	if(check_materials)
+	{
 		if(m_materialPool->GetMaterials() < terrainutil_GetProductionCost(rec->GetIndex(), point, 0)) {
 			return false;
 		}

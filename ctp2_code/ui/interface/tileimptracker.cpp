@@ -246,11 +246,11 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(s_tileImprovementNum);
 		Cell *cell = g_theWorld->GetCell(p);
 
-		if(rec->GetClassTerraform())
+		if(rec->GetClassTerraform() || rec->GetClassOceanform())
 		{
-//			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
 			sint32 t;
-			if(rec->GetTerraformTerrainIndex(t)) {
+			if(rec->GetTerraformTerrainIndex(t))
+			{
 				const TerrainRecord *newT = g_theTerrainDB->Get(t);
 				sint32 oldFood = cell->GetFoodProduced();
 				sint32 oldProd = cell->GetShieldsProduced();
@@ -260,17 +260,19 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 				sint32 newProd = newT->GetEnvBase()->GetShield();
 				sint32 newGold = newT->GetEnvBase()->GetGold();
 
-				if (cell->HasRiver() && newT->HasEnvRiver()) 
-                {
+				if (cell->HasRiver() && newT->HasEnvRiver())
+				{
 					newFood += newT->GetEnvRiverPtr()->GetFood();
 					newProd += newT->GetEnvRiverPtr()->GetShield();
 					newGold += newT->GetEnvRiverPtr()->GetGold();
 				}
 				
-				food = newFood - oldFood;
+				food       = newFood - oldFood;
 				production = newProd - oldProd;
-				gold = newGold - oldGold;
-			} else {
+				gold       = newGold - oldGold;
+			}
+			else
+			{
 				Assert(false);
 				food = 0;
 				production = 0;
@@ -279,21 +281,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		}
 		else
 		{
-			
-
-
-
-
-
-
-
-
-
-			
-			
-			
-			
-			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(g_theTerrainImprovementDB->Get(s_tileImprovementNum), p);
 			
 			sint32 dFood = 0;
@@ -311,7 +298,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 			gold = dGold + cell->GetGoldFromTerrain();
 		}
 
-
 		sprintf(mytext,"%d", (sint32)time);
 		s_trackerTimeV->SetText(mytext);
 		sprintf(mytext,"%d", (sint32)mat);
@@ -324,8 +310,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		sprintf(mytext,"%d", gold);
 		s_trackerGoldV->SetText(mytext);
 
-
-		ERR_BUILD_INST err; 
+		ERR_BUILD_INST err;
 		bool const	checkMaterials	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
 		if (g_player[visPlayer]->CanCreateImprovement
@@ -349,7 +334,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
 		}
 		g_tileImpTrackerWindow->ShouldDraw();
-		
 
 		return;
 	}

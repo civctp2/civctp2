@@ -93,9 +93,9 @@ TerrainImprovementPool::Create
 	TerrainImprovementRecord const *	dbTerrainImprovement	= 
 		g_theTerrainImprovementDB->Get(type);
 
-	if ((!dbTerrainImprovement) ||
+	if((!dbTerrainImprovement) ||
 	    (!terrainutil_GetTerrainEffect(dbTerrainImprovement, point) &&
-	     !dbTerrainImprovement->GetClassTerraform()
+	     !dbTerrainImprovement->GetClassTerraform() && !dbTerrainImprovement->GetClassOceanform()
 	    )
 	   )
 	{

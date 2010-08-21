@@ -317,7 +317,8 @@ sint32 terrainutil_GetProductionTime(sint32 impType, const MapPoint &pos, sint32
 	if(!rec)
 		return -1;
 
-	if(rec->GetClassTerraform()) {
+	if(rec->GetClassTerraform() || rec->GetClassOceanform())
+	{
 		sint32 toterrain;
 		if(!rec->GetTerraformTerrainIndex(toterrain))
 			return -1;
@@ -347,7 +348,8 @@ sint32 terrainutil_GetProductionCost(sint32 impType, const MapPoint &pos, sint32
 	if(!rec)
 		return -1;
 
-	if(rec->GetClassTerraform()) {
+	if(rec->GetClassTerraform() || rec->GetClassOceanform())
+	{
 		sint32 toterrain;
 		if(!rec->GetTerraformTerrainIndex(toterrain))
 			return -1;
@@ -469,10 +471,12 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 	if(!g_player[pl])
 		return false;
 
-	if(rec->GetClassTerraform()) {
+	if(rec->GetClassTerraform() || rec->GetClassOceanform())
+	{
 		sint32 t;
-		if(rec->GetTerraformTerrainIndex(t)) {
-			const TerrainRecord *terrToRec = g_theTerrainDB->Get(t);
+		if(rec->GetTerraformTerrainIndex(t))
+		{
+			const TerrainRecord *terrToRec   = g_theTerrainDB->Get(t);
 			const TerrainRecord *terrFromRec = g_theTerrainDB->Get(terr);
 
 			if(!g_player[pl]->HasAdvance(terrToRec->GetAddAdvanceIndex()) ||
@@ -482,20 +486,26 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 			return true;
 		}
 		return false;
-	} else {
+	}
+	else
+	{
 		const TerrainImprovementRecord::Effect *eff;
 		eff = terrainutil_GetTerrainEffect(rec, terr);
-		if(eff) {
-			if(g_player[pl]->HasAdvance(eff->GetEnableAdvanceIndex())) {
-				sint32 a;
+		if(eff)
+		{
+			if(g_player[pl]->HasAdvance(eff->GetEnableAdvanceIndex()))
+			{
 				bool haveObsolete = false;
-				for(a = 0; a < eff->GetNumObsoleteAdvance(); a++) {
-					if(g_player[pl]->HasAdvance(eff->GetObsoleteAdvanceIndex(a))) {
+				for(sint32 a = 0; a < eff->GetNumObsoleteAdvance(); a++)
+				{
+					if(g_player[pl]->HasAdvance(eff->GetObsoleteAdvanceIndex(a)))
+					{
 						haveObsolete = true;  //emod is this source of defect
 					}
 				}
 
-				if(!haveObsolete) {
+				if(!haveObsolete)
+				{
 					return true;
 				}
 			}
@@ -561,11 +571,13 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	}
 
 // Added by E - Compares Improvement's GovernmentType to the Player's Government
-	if(rec->GetNumGovernmentType() > 0) {
-		sint32 i;
+	if(rec->GetNumGovernmentType() > 0)
+	{
 		bool found = false;
-		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
-			if(rec->GetGovernmentTypeIndex(i) == g_player[pl]->GetGovernmentType()) {
+		for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++)
+		{
+			if(rec->GetGovernmentTypeIndex(i) == g_player[pl]->GetGovernmentType())
+			{
 				found = true;
 				break;
 			}
@@ -575,33 +587,36 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	}
 
 // Added by E - Compares Improvement's CultureOnly to the Player's CityStyle
-	if(rec->GetNumCultureOnly() > 0) {
-		sint32 s;
+	if(rec->GetNumCultureOnly() > 0)
+	{
 		bool found = false;
-		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
-			if(rec->GetCultureOnlyIndex(s) == g_player[pl]->GetCivilisation()->GetCityStyle()) {
+		for(sint32 s = 0; s < rec->GetNumCultureOnly(); s++)
+		{
+			if(rec->GetCultureOnlyIndex(s) == g_player[pl]->GetCivilisation()->GetCityStyle())
+			{
 				found = true;
 				break;
 			}
 		}
 		if(!found)
 			return false;
-	
 	}
 
 	//if(rec->GetOnlySpecialBuild()) {
 	//	return false;
 	//}
 
-	if(terrainutil_PlayerHasAdvancesFor(rec, pl)) {
-		
+	if(terrainutil_PlayerHasAdvancesFor(rec, pl))
+	{
 		if(!checkMaterials)
 			return true;
 
-		sint32 i;
-		for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
-			if(terrainutil_PlayerHasAdvancesForTerrain(rec, pl, i)) {
-				if(rec->GetClassTerraform()) {
+		for(sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
+		{
+			if(terrainutil_PlayerHasAdvancesForTerrain(rec, pl, i))
+			{
+				if(rec->GetClassTerraform() || rec->GetClassOceanform())
+				{
 					sint32 toterrain;
 					if(!rec->GetTerraformTerrainIndex(toterrain))
 						return false;
@@ -612,11 +627,15 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 					if(g_player[pl]->m_materialPool->GetMaterials() >= tfrom->GetMaterials() + tto->GetMaterials()) {
 						return true;
 					}
-				} else {
+				}
+				else
+				{
 					const TerrainImprovementRecord::Effect *eff;
 					eff = terrainutil_GetTerrainEffect(rec, i);
-					if(eff) {
-						if(g_player[pl]->m_materialPool->GetMaterials() >= eff->GetProductionCost()) {
+					if(eff)
+					{
+						if(g_player[pl]->m_materialPool->GetMaterials() >= eff->GetProductionCost())
+						{
 							return true;
 						}
 					}
@@ -716,7 +735,8 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 	if(g_theWorld->GetCity(pos).IsValid())
 		return false;
 
-	if(rec->GetClassTerraform()) {
+	if(rec->GetClassTerraform() || rec->GetClassOceanform())
+	{
 		sint32 terr;
 		if(!rec->GetTerraformTerrainIndex(terr))
 			return false;

@@ -60,6 +60,7 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform,
+		Oceanform,
 		Wonder,             // For visible wonders (E)
 		Urban               // For future Urban Sprawl (E)
 	}
@@ -78,6 +79,7 @@ TerrainImprovement {
 		LandDetector,
 		OceanDetector,
 		Terraform,
+		Oceanform,
 		Wonder,            // For visible wonders (E)
 		Urban              // For future Urban Sprawl (E)
 	}
