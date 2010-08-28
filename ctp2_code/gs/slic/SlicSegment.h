@@ -149,7 +149,7 @@ public:
 	SlicConditional *GetConditional(sint32 line);
 	SlicConditional *NewConditional(sint32 line, const char *expression);
 
-    static void Cleanup(void);
+	static void Cleanup(void);
 };
 
 class SlicSegmentHash : public StringHash<SlicSegment>

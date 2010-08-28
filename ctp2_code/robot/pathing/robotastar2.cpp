@@ -47,13 +47,14 @@
 #include "player.h"
 #include "RandGen.h"
 #include "UnitRec.h"
+#include "Unit.h"
 #include "civarchive.h"
 #include "UnitRecord.h"
 #include "ArmyData.h"
 #include "Cell.h"
 #include "Diplomat.h"
 #include "profileDB.h"      // g_theProfileDB
-
+#include "ctpaidebug.h"
 
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
 
@@ -113,6 +114,55 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 			}
 
 			cost *= float(m_transMaxR);
+		}
+
+		return true;
+	}
+	else
+	{
+		cost = k_ASTAR_BIG;
+		entry = ASTAR_BLOCKED;
+		return false;
+	}
+}
+
+bool RobotAstar2::AirliftPathCallback (const bool & can_enter, 
+									   const MapPoint & prev,  
+									   const MapPoint & pos, 
+									   const bool & is_zoc, 
+									   float & cost, 
+									   ASTAR_ENTRY_TYPE & entry )
+{
+	if (can_enter)
+	{
+		if
+		  (
+		        pos == m_dest
+		    &&
+		   (
+		        g_theWorld->GetCell(pos)->GetNumUnits() > 0
+		    &&  g_theWorld->GetArmyPtr(pos)->GetOwner() != m_army->GetOwner()
+		    && !m_army->CanFight(*g_theWorld->GetArmyPtr(pos))
+		   )
+		    ||
+		   (
+		        g_theWorld->HasCity(pos)
+		    &&  g_theWorld->GetCity(pos).GetOwner() != m_army->GetOwner()
+		    && !m_army->CanAtLeastOneCaptureCity()
+		   )
+		  )
+		{
+			bool occupied = (m_army->HasCargo() && !m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot));
+
+			if(occupied)
+			{
+				if(!m_army.CanAtLeastOneCargoUnloadAt(prev, prev, false, !m_is_robot))
+				{
+					cost = k_ASTAR_BIG;
+					entry = ASTAR_RETRY_DIRECTION;
+					return false;
+				}
+			}
 		}
 
 		return true;
@@ -220,6 +270,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 			m_army_minmax_move);
 	}
 
+	AI_DPRINTF(k_DBG_ASTAR, -1, -1, -1,("\n"));
 	if(!UnitAstar::FindPath(army,
 	                        nUnits,
 	                        move_intersection,
@@ -251,7 +302,7 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 							   bool &is_zoc, 
 							   ASTAR_ENTRY_TYPE &entry )
 {
-	if(m_pathType == PATH_TYPE_TRANSPORT)
+	if(m_pathType == PATH_TYPE_TRANSPORT || m_pathType == PATH_TYPE_AIRLIFT)
 	{
 		m_isTransporter = true;
 	}
@@ -269,6 +320,9 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 		case PATH_TYPE_TRANSPORT:
 			r = TransportPathCallback(r, prev, pos, is_zoc, cost, entry);
 			break;
+		case PATH_TYPE_AIRLIFT:
+			r = AirliftPathCallback  (r, prev, pos, is_zoc, cost, entry);
+			break;
 		case PATH_TYPE_DEFENSIVE:
 			r = DefensivePathCallback(r, prev, pos, is_zoc, cost, entry);
 			break;
@@ -278,9 +332,11 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 		{
 			if(CheckIsDangerForPos(pos))
 			{
-				cost      *= k_MOVE_ISDANGER_COST;
+				cost      += k_MOVE_ISDANGER_COST;
 			}
 		}
+
+		DPRINTF(k_DBG_ASTAR,("\tCheckEnter, ThisPos: (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
 
 		if (cost < 1.0)
 		{
@@ -312,6 +368,10 @@ void RobotAstar2::RecalcEntryCost(AstarPoint *parent,
 		{
 			case PATH_TYPE_TRANSPORT:
 				TransportPathCallback(true, parent->m_pos, node->m_pos, new_is_zoc,
+									  new_entry_cost, new_entry);
+				break;
+			case PATH_TYPE_AIRLIFT:
+				AirliftPathCallback  (true, parent->m_pos, node->m_pos, new_is_zoc,
 									  new_entry_cost, new_entry);
 				break;
 			case PATH_TYPE_DEFENSIVE:

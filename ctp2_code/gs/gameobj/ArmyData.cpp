@@ -10287,9 +10287,9 @@ bool ArmyData::TestCargoOrderAny(OrderRecord const * order_rec) const
 	{
 		if(m_array[i]->GetNumCarried() > 0)
 		{
-			for(sint32 j = 0; !orderValid && (i < m_array[i]->GetNumCarried()); ++j)
+			for(sint32 j = 0; !orderValid && (j < m_array[i]->GetNumCarried()); ++j)
 			{
-				orderValid = m_array[i]->GetCargoList()->Get(i).UnitValidForOrder(order_rec);
+				orderValid = m_array[i]->GetCargoList()->Get(j).UnitValidForOrder(order_rec);
 			}
 		}
 	}

@@ -370,16 +370,15 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 	RobotAstar2::PathType path_type;
 	uint32 move_union;
 
-	if(army->HasCargo()
-	&&!army->GetMovementTypeAir()
-	){
+	if(army->HasCargo())
+	{
 		uint32 move_intersection1 = army->GetMovementType();
 		uint32 move_intersection2 = army->GetCargoMovementType();
 
 		move_union = move_intersection1 | move_intersection2;
 
 		tmp_check_dest = false;
-		path_type = RobotAstar2::PATH_TYPE_TRANSPORT;
+		path_type = !army->GetMovementTypeAir() ? RobotAstar2::PATH_TYPE_TRANSPORT : RobotAstar2::PATH_TYPE_AIRLIFT;
 	}
 	else
 	{

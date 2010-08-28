@@ -302,7 +302,6 @@ private:
 
     Squad_Strength                    m_current_needed_strength;
     Squad_Strength                    m_current_attacking_strength;
-    Squad_Strength                    m_current_projected_strength;
     Plan_List                         m_matches;
     Agent_List                        m_agents;
     REMOVAL_TIME                      m_removal_time;

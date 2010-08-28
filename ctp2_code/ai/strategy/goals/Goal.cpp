@@ -141,7 +141,6 @@ Goal::Goal()
 :
     m_current_needed_strength       (),
     m_current_attacking_strength    (),
-    m_current_projected_strength    (),
     m_matches                       (),
     m_agents                        (),
     m_removal_time                  (DONT_REMOVE),
@@ -161,7 +160,6 @@ Goal::Goal(const Goal &goal)
 :
     m_current_needed_strength       (goal.m_current_needed_strength),
     m_current_attacking_strength    (0),                         // Nothing since the agent list is not copied
-    m_current_projected_strength    (0),                         // Nothing since the agent list is not copied
     m_matches                       (),                          // Contains refernces that are invalid after copy
     m_agents                        (),                          // Agents are just pointers, which are changed on copy
     m_removal_time                  (goal.m_removal_time),
@@ -190,7 +188,6 @@ Goal& Goal::operator= (const Goal &goal)
 	m_removal_time               = goal.m_removal_time;
 	m_current_needed_strength    = goal.m_current_needed_strength;
 	m_current_attacking_strength = goal.m_current_attacking_strength;
-	m_current_projected_strength = goal.m_current_projected_strength;
 	m_matches                    = goal.m_matches;
 	m_agents                     = goal.m_agents;
 	m_combinedUtility            = goal.m_combinedUtility;
@@ -513,7 +510,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	Utility combinedUtility = 0;
 
 	sint32 count = 0;
-	m_current_projected_strength = Squad_Strength();
+	Squad_Strength projected_strength;
 	for
 	(
 	    Plan_List::iterator
@@ -528,14 +525,14 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		if(match_iter->Get_Needs_Cargo())
 			continue;
 
-		if(!m_current_projected_strength.HasEnough(m_current_needed_strength)
+		if(!projected_strength.HasEnough(m_current_needed_strength)
 //		||  goal_record->GetNeverSatisfied() // Should be considered in Commit_Agents
 		){
 			Utility matchUtility = match_iter->Get_Matching_Value();
 
 			if(matchUtility > Goal::BAD_UTILITY)
 			{
-				m_current_projected_strength += match_iter->Get_Agent()->Get_Squad_Strength();
+				projected_strength += match_iter->Get_Agent()->Get_Squad_Strength();
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
@@ -565,7 +562,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-		m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
+		projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
 		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
 		Squad_Strength strength;
 		strength.Set_Pos_Strength(Get_Target_Pos());
@@ -579,7 +576,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	if
 	  (
 	       (
-	            !m_current_projected_strength.HasEnough(m_current_needed_strength)
+	            !projected_strength.HasEnough(m_current_needed_strength)
 	         && !goal_record->GetExecuteIncrementally()
 	       )
 	    || count == 0
@@ -2262,6 +2259,7 @@ GOAL_RESULT Goal::Execute_Task()
 
 	bool hastogowithoutgrouping = false;
 
+	Agent_List tmpTransporters;
 	for
 	(
 	    Agent_List::reverse_iterator agent_iter  = m_agents.rbegin();
@@ -2277,9 +2275,11 @@ GOAL_RESULT Goal::Execute_Task()
 		if(agent_ptr->Get_Army()->GetCargo(transporters, max, empty) && empty > 0)
 		{
 			m_agents.remove(agent_ptr);
-			m_agents.push_back(agent_ptr);
+			tmpTransporters.push_back(agent_ptr);
 		}
 	}
+
+	m_agents.splice(m_agents.end(), tmpTransporters);
 
 	if(goal_record->GetNeverSatisfied())
 	{

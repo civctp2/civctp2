@@ -41,6 +41,7 @@ public:
 	enum PathType {
 		PATH_TYPE_DEFAULT,
 		PATH_TYPE_TRANSPORT,
+		PATH_TYPE_AIRLIFT,
 		PATH_TYPE_DEFENSIVE
 	};
 
@@ -61,6 +62,13 @@ public:
 private:
 
 	bool TransportPathCallback (const bool & can_enter,
+								const MapPoint & prev,
+								const MapPoint & pos,
+								const bool & is_zoc,
+								float & cost,
+								ASTAR_ENTRY_TYPE & entry);
+
+	bool AirliftPathCallback   (const bool & can_enter,
 								const MapPoint & prev,
 								const MapPoint & pos,
 								const bool & is_zoc,

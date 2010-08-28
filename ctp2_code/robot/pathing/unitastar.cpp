@@ -575,6 +575,11 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 	bool can_be_zoc = !m_ignore_zoc;
 
+	if(m_ignore_zoc)
+	{
+		is_zoc = false;
+	}
+
 	if(!g_theWorld->IsXwrap()) {
 		sint16 w = (sint16)g_theWorld->GetXWidth();
 

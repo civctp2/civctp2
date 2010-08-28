@@ -50,7 +50,6 @@
 #include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
 
-
 extern World *g_theWorld; 
 extern RandomGenerator *g_rand; 
 
@@ -209,7 +208,7 @@ bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 #endif 
 
        return true; 
-    } else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry)){         
+    } else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry)){
 
         d->SetEntry(entry); 
         d->SetZoc(is_zoc); 
@@ -504,7 +503,6 @@ bool Astar::FindPath
 				float				bMove;		// entry cost from best
 				bool				bZoc;		// zone of control from best
 				ASTAR_ENTRY_TYPE	bType;		// entry type from best
-
 				if (EntryCost(best->m_pos, next_pos, bMove, bZoc, bType))
 				{
 					DecayOrtho(best, c->m_point, bMove);	
@@ -515,7 +513,7 @@ bool Astar::FindPath
 
 					if (bestG < oldG)
 					{
-						if (c->m_point->GetExpanded())	
+						if (c->m_point->GetExpanded())
 						{
 							// The node has already been expanded: propagate the 
 							// change.
@@ -611,6 +609,7 @@ bool Astar::FindPath
 
 		if (best)
 		{
+			DPRINTF(k_DBG_ASTAR,("\tCheckBest , BestPos: (%d, %d), DestPos (%d, %d)\n", best->m_pos.x, best->m_pos.y, dest.x, dest.y));
 			if (best->m_pos == dest)
 			{
 				float               cost;
