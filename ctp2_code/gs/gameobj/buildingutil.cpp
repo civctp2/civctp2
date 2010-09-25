@@ -544,14 +544,14 @@ bool buildingutil_GetProductionPercent(const uint64 built_improvements,
 bool buildingutil_GetFoodPercent(const uint64 built_improvements,
                                  double &percent, const sint32 owner)
 {
-	percent = 0;
+	percent = 0.0;
 	FOREACH_BUILT(HasFoodPercent, owner)
 	{
 		double p;
 		rec->GetFoodPercent(p);
 		percent += p;
 	}
-	return percent > 0;
+	return percent > 0.0;
 }
 
 bool buildingutil_GetCommercePercent(const uint64 built_improvements,

@@ -862,8 +862,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		
 
 		// Worker wages - deducted from commerce.
-		sint32 commerceWages = cityData->CalcWages(
-			static_cast<sint32>(player->GetWagesPerPerson()));
+		sint32 commerceWages = cityData->CalcWages();
 
 
 		// Building and city maintenance - deducted from commerce.
@@ -934,7 +933,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 
 		// Specialists.
-        sint32 scientistsScie = 0;
+		sint32 scientistsScie = 0;
 		if (cityData->ScientistCount() > 0)
 		{
 			double popWonderModifier = 
@@ -953,7 +952,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 				g_thePopDB->Get(bestScientist, player->GetGovernmentType())->GetScience();
 		}
 
-        sint32 merchantsGold = 0;
+		sint32 merchantsGold = 0;
 		if (cityData->MerchantCount() > 0)
 		{
 			merchantsGold = cityData->MerchantCount() *
@@ -966,9 +965,9 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 
 		// Government modifiers to science and savings.
-        sint32 totalScieWithoutGov = scienceFromCommerce + scienceBuildingsBonus +
+		sint32 totalScieWithoutGov = scienceFromCommerce + scienceBuildingsBonus +
 			featWonderScie + scientistsScie;
-        sint32 totalGoldWithoutGov = goldFromCommerce + goldBuildingsBonus +
+		sint32 totalGoldWithoutGov = goldFromCommerce + goldBuildingsBonus +
 			featGold + merchantsGold + goldTradeRoutes;
 
 		sint32 scienceGov = static_cast<sint32>(ceil(totalScieWithoutGov 
@@ -1026,10 +1025,10 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		totalCommerceScieCrime += commerceScieCrime;
 		totalCommerceGoldCrime += commerceGoldCrime;
 
-        totalScienceFromCommerce += scienceFromCommerce;
+		totalScienceFromCommerce += scienceFromCommerce;
 		totalGoldFromCommerce += goldFromCommerce;
-        totalScienceFromBuildings += scienceBuildingsBonus;
-        totalGoldFromBuildings += goldBuildingsBonus;
+		totalScienceFromBuildings += scienceBuildingsBonus;
+		totalGoldFromBuildings += goldBuildingsBonus;
 		totalCommerceScience += cityData->GetScience(); //commerceScience;
 		totalCommerceSavings += commerceSavings;
 	}
@@ -1074,10 +1073,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		}
 	}
 
-
-
-
-	
 	static char stringBuffer[16];
 	static char formatBuffer[64];
 
@@ -1197,11 +1192,8 @@ void CauseAndEffectTab::SetHappinessIcon(ctp2_Static *control,
 		Assert(false);
 	}
 
-	
 	control->ShouldDraw();
 }
-
-
 
 void CauseAndEffectTab::UpdateCities()
 {
@@ -1215,7 +1207,6 @@ void CauseAndEffectTab::UpdateCities()
 		cityData->UpdateSprite();
 	}
 }
-
 
 AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
                                                           aui_Surface *surface, 

@@ -603,8 +603,8 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 							 m_owner);
 	m_readiness->SetLevel(m_government_type, *m_all_armies, READINESS_LEVEL_WAR);
 
-	if(i >= g_theGovernmentDB->NumRecords()) {
-		
+	if(i >= g_theGovernmentDB->NumRecords())
+	{
 		m_set_government_type = 0;
 		m_government_type = 0;
 	}
@@ -612,6 +612,9 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_age = 0;
 	m_researchGoal = -1;
 	m_endingTurn = FALSE;
+
+	m_energysupply = 0.0;
+	m_breadbasket  = 0.0;
 }
 
 Player::Player(CivArchive &archive)
@@ -654,7 +657,10 @@ Player::Player(CivArchive &archive)
 	m_goodSalePrices = new sint32[g_theResourceDB->NumRecords()];
 	m_descrip_string[0] = 0;
 
-	Serialize(archive) ;
+	Serialize(archive);
+
+	m_energysupply = 0.0;
+	m_breadbasket  = 0.0;
 }
 
 Player::~Player()
@@ -1786,6 +1792,8 @@ void Player::BeginTurnProduction()
 	sint32 mat_total=0;
 	sint32 delta;
 	sint32 materialsFromFranchise = 0;
+
+	g_player[m_owner]->PreResourceCalculation();
 
 	m_total_production = 0;
 	for (i=0; i<n; i++) { 
@@ -6360,9 +6368,24 @@ double Player::GetRationsLevel() const
 	return m_global_happiness->GetUnitlessRations();
 }
 
+double Player::GetFoodCoef() const
+{
+	return g_theGovernmentDB->Get(m_government_type)->GetFoodCoef();
+}
+
+double Player::GetProdCoef() const
+{
+	return g_theGovernmentDB->Get(m_government_type)->GetProductionCoef();
+}
+
+double Player::GetGoldCoef() const
+{
+	return g_theGovernmentDB->Get(m_government_type)->GetGoldCoef();
+}
+
 double Player::GetKnowledgeCoef() const
 {
-    return g_theGovernmentDB->Get(m_government_type)->GetKnowledgeCoef(); 
+	return g_theGovernmentDB->Get(m_government_type)->GetKnowledgeCoef(); 
 }
 
 double Player::GetPollutionCoef() const
@@ -9300,76 +9323,87 @@ bool Player::HasFreeUnitUpgrades() const
 //	    || Whatever
 }
 
-
 double Player::EnergySupply()
 {
 	if(!m_all_cities)
 		return 0;
+
 	double civenergy = 0.0;
 	double civdemand = 0.0;
-	sint32 n = m_all_cities->Num();
+
 	//get from city data all energy from cities
-	for(sint32 i = 0; i < n; i++) {
+	for(sint32 i = 0; i < m_all_cities->Num(); i++)
+	{
 		civenergy += m_all_cities->Access(i).AccessData()->GetCityData()->ProduceEnergy();
 		civdemand += m_all_cities->Access(i).AccessData()->GetCityData()->ConsumeEnergy();
 	}
-    //get from all units energy capabilities
-	//sint32 eu;
-	for(sint32 u = 0; u < m_all_units->Num(); u++) {
+
+	//get from all units energy capabilities
+	for(sint32 u = 0; u < m_all_units->Num(); u++)
+	{
 		civenergy += m_all_units->Access(u).GetDBRec()->GetEnergyHunger();
 		civdemand += m_all_units->Access(u).GetDBRec()->GetProducesEnergy();
 	}
 
 	//get from all installations energy production
-	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+	if ((0 < m_allInstallations->Num()) && (0 < m_all_cities->Num()))
+	{
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++)
+		{
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
+
 			/*
 			sint32 bpe;
-			if (rec->GetProducesEnergy(bpe)) {
+			if (rec->GetProducesEnergy(bpe))
+			{
 				civenergy += bpe;		// i.e. allows oil to give PW
 			}
 	
 			sint32 bge;
-			if (rec->GetEnergyHunger(bge)) {
+			if (rec->GetEnergyHunger(bge))
+			{
 				civdemand += bpe;					// i.e. allows for colonies to generate gold
 			}
 			*/
 			
-			if(rec->HasIntBorderRadius()){ //have all energy producers require a radius - determines ownership
-				// i don't thinnk this iterator is needed
+			if(rec->HasIntBorderRadius())
+			{
+				// have all energy producers require a radius - determines ownership
+				// I don't think this iterator is needed
 				sint32 radius;
 				rec->GetIntBorderRadius(radius);
 				CityInfluenceIterator it(inst.RetPos(), radius);
-				for(it.Start(); !it.End(); it.Next()) {
+				for(it.Start(); !it.End(); it.Next())
+				{
 					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-	
-					//sint32 bp;
-					if (rec->GetProducesEnergy()) {
-						civenergy += rec->GetProducesEnergy();		
+
+					if (rec->GetProducesEnergy())
+					{
+						civenergy += rec->GetProducesEnergy();
 					}
-	
-					//sint32 bg;
-					if (rec->GetEnergyHunger()) {
-						civdemand += rec->GetEnergyHunger();					
+
+					if (rec->GetEnergyHunger())
+					{
+						civdemand += rec->GetEnergyHunger();
 					}
 				}
 			}
 		}
 	}
 
-	double energysupply;
-	if (civdemand > 0) {
-/// @todo Check whether you really want an integer division here.
-		energysupply = (static_cast<double> (civenergy) / static_cast<double> (civdemand));
-	} else {
-		energysupply = 0;
+	if (civdemand > 0)
+	{
+		m_energysupply = civenergy / civdemand;
 	}
-	return energysupply;
+	else
+	{
+		m_energysupply = 0.0;
+	}
+
+	return m_energysupply;
 
 //add profiledb option for energy market report
-
 }
 
 
@@ -9389,28 +9423,31 @@ sint32 Player::CommodityMarket()
 {
 	if(!m_all_cities)
 		return 0;
+
 	sint32 comgold = 0;
 	sint32 n = m_all_cities->Num();
-	MapPoint pos;
 
-    	//get from all installations goldexportbonus
-		// varied installations the better
-	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+	//get from all installations goldexportbonus
+	// varied installations the better
+	if ((0 < m_allInstallations->Num()) && (0 < n))
+	{
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++)
+		{
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
-			inst.GetPos(pos); 
+			MapPoint pos = inst.RetPos();
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-			if(rec->HasIntBorderRadius()){ //have all commodity colonies require a radius - determines ownership
+			if(rec->HasIntBorderRadius())
+			{ //have all commodity colonies require a radius - determines ownership
 				sint32 bge;
-				if (effect->GetBonusGoldExport(bge)) { // i.e. allows for colonies to generate gold
-					comgold += g_rand->Next(bge); //randomizes the return per installation
-								
+				if (effect->GetBonusGoldExport(bge))
+				{ // i.e. allows for colonies to generate gold
+					comgold += bge;
 				}
 			}
 		}
 	}
-					
+
 	return comgold;
 
 //add profiledb option for commodity market slic report?
@@ -9427,39 +9464,64 @@ get total food produce and divide by city population and add to citydata::proces
 this will allow the player to make places like Algeria&Egypt in Ancient Rome, or the Midwest for America, or Ukraine for Russia where a large ag area supports the empire
 A build option not to exceed city limit
 */
-sint32 Player::BreadBasket()  //allows for food outside the empire to contribute to all cities
+double Player::BreadBasket()  //allows for food outside the empire to contribute to all cities
 {
 	if(!m_all_cities)
 		return 0;
-	sint32 breadbasket = 0;
-	sint32 comfood = 0;
-	sint32 n = m_all_cities->Num();
-	MapPoint pos;
 
-    	//get from all installations goldexportbonus
-		// varied installations the better
-	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+	double comfood = 0.0;
+
+	//get from all installations goldexportbonus
+	// varied installations the better
+	if (0 < m_allInstallations->Num() && 0 < m_all_cities->Num())
+	{
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++)
+		{
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
-			inst.GetPos(pos); 
+			MapPoint pos = inst.RetPos();
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-			if(rec->HasIntBorderRadius()){ //have all farm colonies require a radius - determines ownership
+			if(rec->HasIntBorderRadius())
+			{ //have all farm colonies require a radius - determines ownership
 				sint32 bge;
-				if (effect->GetBonusFoodExport(bge)) { // i.e. allows for colonies to generate food modifier
-					comfood += g_rand->Next(bge); //randomizes the return per installation
-								
+				if (effect->GetBonusFoodExport(bge))
+				{ // i.e. allows for colonies to generate food modifier
+					comfood += static_cast<double>(bge);
 				}
 			}
 		}
 	}
-	if (comfood > 0 && GetTotalPopulation() > 0) {			
-		breadbasket = comfood / GetTotalPopulation();
+
+	if (comfood > 0.0 && GetTotalPopulation() > 0)
+	{
+		m_breadbasket = comfood / static_cast<double>(GetTotalPopulation());
+	}
+	else
+	{
+		m_breadbasket = 0.0;
 	}
 
-	return breadbasket;
+	return m_breadbasket;
 
 //add profiledb option for commodity market slic report?
+}
+
+void Player::PreResourceCalculation(CityData* city)
+{
+	EnergySupply();
+	BreadBasket();
+
+	if(city != NULL)
+	{
+		city->PreResourceCalculation();
+	}
+	else
+	{
+		for(sint32 i = 0; i < m_all_cities->Num(); ++i)
+		{
+			m_all_cities->Access(i).CD()->PreResourceCalculation();
+		}
+	}
 }
 
 // DRUG TRADE code?

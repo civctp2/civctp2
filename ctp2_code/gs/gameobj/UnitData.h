@@ -411,7 +411,6 @@ public:
 	UnitActor * GetActor() const { return m_actor; };
 
 	bool IsCity() const { return m_city_data != NULL; }
-	void GetConsumptionStats(sint32 &foodConsumed) const;
 	void GetPop(sint32 &p)const; 
 	void GetTurnsToNextPop(sint32 &p)const; //PFT 29 mar 05, show # turns until city grows
 
@@ -666,9 +665,6 @@ public:
 	void ExitWormhole(MapPoint &pos);
 	bool HasLeftMap() const;
 
-	void ContributeScience(double incomePercent,
-	                       double &addscience,
-	                       double &subgold);
 	sint32 FreeSlaves();
 
 	void SetArmy(const Army &army);

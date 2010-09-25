@@ -91,6 +91,7 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DBG_DIPLOMACY         0x00002000
 #define k_DBG_MAPANALYSIS       0x00004000
 #define k_DBG_ASTAR             0x00008000
+#define k_DBG_GOVERNOR          0x00010000
 
 
 #define k_DEBUG_OWNER_NONE          0

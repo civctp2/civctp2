@@ -321,6 +321,15 @@ private:
 	double    m_science_lost_to_crime;
 #endif
 
+	double    m_bonusFoodCoeff;
+	double    m_bonusFood;
+	double    m_bonusProdCoeff;
+	double    m_bonusProd;
+	double    m_bonusGoldCoeff;
+	double    m_bonusGold;
+	double    m_bonusScieCoeff;
+	double    m_bonusScie;
+
 	RADIUS_OP m_cityRadiusOp;
 	UnitDynamicArray *m_killList;
 	sint32    m_radiusNewOwner;
@@ -391,8 +400,7 @@ public:
 	void AddShields(sint32 s);
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	sint32 ComputeGrossProduction( double workday_per_person, sint32 collected_production, sint32 & crime_loss, sint32 & franchise_loss, bool considerOnlyFromTerrain = false ) const;
-	sint32 ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain = false) const;
+	sint32 ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain = false); // const;
 	sint32 ProcessProduction(bool projectedOnly);
 #endif
 	
@@ -436,12 +444,24 @@ public:
 
 
 	void   CollectResources();
+	void   CollectResourcesFinally();
 
 #if !defined(NEW_RESOURCE_PROCESS)
 	sint32 ProcessFood();
 	void   ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain = false) const;
 	double ProcessFinalFood(double &foodLossToCrime, double &grossFood) const;
+
+	void   CalculateBonusFood();
+	void   CalculateCoeffFood();
+	void   CalculateBonusProd();
+	void   CalculateCoeffProd();
+	void   CalculateBonusGold();
+	void   CalculateCoeffGold();
+	void   CalculateBonusScie();
+	void   CalculateCoeffScie();
 #endif
+
+	sint32 GetSpecialistsResources(POP_TYPE pop) const;
 	void   EatFood();
 	bool   FoodSupportTroops();
 
@@ -499,7 +519,7 @@ public:
 	sint32 GetLocalResourceCount(sint32 resource);
 #endif
 
-	sint32 CalcWages(sint32 wage) const;
+	sint32 CalcWages() const;
 	sint32 GetWagesNeeded(const sint32 & wages_per_person) const;
 	sint32 GetWagesNeeded();
 
@@ -762,9 +782,6 @@ public:
 	void SetFullHappinessTurns(sint32 turns);
 
 	sint32 GetHappinessFromPops() const;
-#if !defined(NEW_RESOURCE_PROCESS)
-	sint32 GetScienceFromPops(bool considerOnlyFromTerrain = false) const;
-#endif
 
 	sint32 GetIncomingTrade() const;
 	sint32 GetOutgoingTrade() const;
@@ -1041,6 +1058,8 @@ public:
 	sint32 GetSlumTileAvailable(const MapPoint pos) const;
 	sint32 GetUrbanTileAvailable(const MapPoint pos) const;
 	bool IsCoastal() const;
+
+	void PreResourceCalculation();
 
 private:
 	bool    IsBankrupting(void) const;

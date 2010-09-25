@@ -2091,15 +2091,6 @@ bool Unit::HasLeftMap() const
 	return GetData()->HasLeftMap();
 }
 
-void Unit::ContributeScience(double incomePercent,
-                             double &addscience,
-                             double &subgold)
-{
-	AccessData()->ContributeScience(incomePercent,
-	                                addscience,
-	                                subgold);
-}
-
 sint32 Unit::FreeSlaves()
 {
 	return AccessData()->FreeSlaves();

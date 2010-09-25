@@ -142,6 +142,8 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "ArmyPool.h"	// g_armyPool
 #include "buildingutil.h"
 
+#include "Timer.h"
+
 extern C3UI                         *g_c3ui;
 
 static CityWindow                   *s_cityWindow = NULL;
@@ -1475,7 +1477,20 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	Governor & governor = Governor::GetGovernor(playerId);
 
+	Timer t;
+	t.start();
+
+	DPRINTF(k_DBG_AI, ("\n"));
+	DPRINTF(k_DBG_AI, ("// ADJUST SPECIALIST SETTINGS -- Turn %d\n",   g_player[playerId]->GetCurRound()));
+	DPRINTF(k_DBG_AI, ("//                               Player %d\n", playerId));
+
+	g_player[playerId]->PreResourceCalculation(s_cityWindow->m_cityData);
 	governor.AssignPopulation(s_cityWindow->m_cityData);
+
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %f ms\n", t.getElapsedTimeInMilliSec()));
+	DPRINTF(k_DBG_AI, ("\n"));
+
+	t.stop();
 
 	s_cityWindow->Project();
 

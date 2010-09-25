@@ -298,6 +298,7 @@ Strategy {
 		Bit (StringId) Advice        // Advice to give player if selected
 		Bit (Int) SmallCitiesMaxSize // For cities up to this size
 		Bit (Int) MinNumUnits        // Minimum number of units inside of city
+		Bit (Int) MinNumCities       // Minimum number of cities an empire has to have
 		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
 		Bit (Record BuildingBuildList) HasBuildingsThenStop // Don't use this entry if the city has all the buildings on this list.
 		Bit (Int) MinPollution       // Minimum Pollution needed to use this list

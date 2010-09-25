@@ -274,19 +274,10 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 	}
 }
-
 void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 {
-	Assert(agent_ptr);
-
-	if(!agent_ptr->Get_Is_Dead()
-	&&  g_player[m_playerId]
-	&&  g_player[m_playerId]->IsRobot()
-	){
-		agent_ptr->ClearOrders();
-	}
-
-	m_current_attacking_strength.Remove_Agent_Strength(agent_ptr);
+	if(m_agents.size() == 0)
+		return;
 
 	Agent_List::iterator next_agent_iter;
 	for
@@ -304,7 +295,30 @@ void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 
 	Assert(next_agent_iter != m_agents.end());
 
-	next_agent_iter = m_agents.erase(next_agent_iter);
+	if(next_agent_iter == m_agents.end())
+	{
+		return;
+	}
+
+	Rollback_Agent(next_agent_iter);
+}
+
+void Goal::Rollback_Agent(Agent_List::iterator & agent_iter)
+{
+	Agent_ptr agent_ptr = *agent_iter;
+
+	Assert(agent_ptr);
+
+	if(!agent_ptr->Get_Is_Dead()
+	&&  g_player[m_playerId]
+	&&  g_player[m_playerId]->IsRobot()
+	){
+		agent_ptr->ClearOrders();
+	}
+
+	m_current_attacking_strength.Remove_Agent_Strength(agent_ptr);
+
+	agent_iter = m_agents.erase(agent_iter);
 
 	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 
@@ -684,18 +698,17 @@ bool Goal::Commited_Agents_Need_Orders() const
 
 void Goal::Rollback_All_Agents()
 {
+	if(m_agents.size() == 0)
+		return;
+
+	Agent_List::iterator agent_iter;
 	for
 	(
-	    Plan_List::iterator
-	      match_iter  = m_matches.begin();
-	      match_iter != m_matches.end();
-	    ++match_iter
+	      agent_iter  = m_agents.begin();
+	      agent_iter != m_agents.end();
+	      Rollback_Agent(agent_iter)
 	)
 	{
-		if(match_iter->Get_Agent()->Has_Goal(this))
-		{
-			Rollback_Agent(match_iter->Get_Agent());
-		}
 	}
 
 	Assert(m_current_attacking_strength.NothingNeeded());
@@ -780,24 +793,7 @@ void Goal::Commit_Transport_Agents()
 
 void Goal::Remove_Matches()
 {
-	for
-	(
-	    Plan_List::iterator match_iter  = m_matches.begin();
-	                        match_iter != m_matches.end();
-	                      ++match_iter
-	)
-	{
-		Agent_ptr agent_ptr = match_iter->Get_Agent();
-
-		Assert(agent_ptr);
-		if(agent_ptr)
-		{
-			if(agent_ptr->Has_Goal(this))
-			{
-				Rollback_Agent(agent_ptr);
-			}
-		}
-	}
+	Rollback_All_Agents();
 
 	m_matches.clear();
 }
@@ -826,35 +822,35 @@ void Goal::Remove_Match(const Agent_ptr & agent)
 }
 void Goal::Rollback_Emptied_Transporters()
 {
+	if(m_agents.size() == 0)
+		return;
+
+	Agent_List::iterator agent_iter;
 	for
 	(
-	    Plan_List::iterator
-	      match_iter  = m_matches.begin();
-	      match_iter != m_matches.end();
-	    ++match_iter
+	      agent_iter  = m_agents.begin();
+	      agent_iter != m_agents.end();
+	    ++agent_iter
 	)
 	{
-		Agent_ptr agent_ptr = match_iter->Get_Agent();
+		Agent_ptr agent_ptr = *agent_iter;
+		const MapPoint pos     = agent_ptr->Get_Target_Pos();
+		MapPoint goalPos(-1,-1);
 
-		if(agent_ptr->Has_Goal(this))
+		if(Get_Target_Army().m_id == 0 || Get_Target_Army().IsValid())
 		{
-			const MapPoint pos     = agent_ptr->Get_Target_Pos();
-			MapPoint goalPos(-1,-1);
+			goalPos = Get_Target_Pos();
+		}
 
-			if(Get_Target_Army().m_id == 0 || Get_Target_Army().IsValid())
+		if(pos == goalPos)
+		{
+			if(!Pretest_Bid(agent_ptr, goalPos))
 			{
-				goalPos = Get_Target_Pos();
-			}
+				AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), Get_Goal_Type(), -1, 
+					("\t\tTransporter not needed anymore, removing from goal\n"));
 
-			if(pos == goalPos)
-			{
-				if(!Pretest_Bid(agent_ptr, goalPos))
-				{
-					AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), Get_Goal_Type(), -1, 
-						("\t\tTransporter not needed anymore, removing from goal\n"));
-
-					Rollback_Agent(agent_ptr);
-				}
+				Rollback_Agent(agent_iter); // increases the agent iterator
+				--agent_iter;
 			}
 		}
 	}

@@ -1869,13 +1869,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	
 	sint32 i, j;
 	if (&archive) 
-    {
+	{
 		for (i = 0; i < k_MAX_PLAYERS; i++) 
-        {
+		{
 			archive >> playerAlive;
 			if (playerAlive) 
-            { 
+			{
 				g_player[i] = new Player(archive);
+
 				numPlayersLoaded++;
 			}
 		}
@@ -1883,7 +1884,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		sint32 num;
 		archive >> num;
 		for (i = 0; i < num; i++) 
-        {
+		{
 			g_deadPlayer->AddTail(new Player(archive));
 		}
 

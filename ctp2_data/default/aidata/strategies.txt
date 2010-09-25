@@ -419,6 +419,7 @@ STRATEGY_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -1587,6 +1588,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2088,6 +2090,7 @@ STRATEGY_MILITARIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2597,6 +2600,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -3097,6 +3101,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -3597,6 +3602,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
         MinNumUnits 2
+	MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE

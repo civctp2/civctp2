@@ -76,6 +76,7 @@ class Governor;
 // Project dependencies
 //----------------------------------------------------------------------------
 
+#include "citydata.h"
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "StrategyRecord.h" // StrategyRecord
 #include "settlemap.h"
@@ -297,7 +298,7 @@ public:
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
 
-	sint32 ComputeMinimumWorkers(const CityData *city, 
+	sint32 ComputeMinimumWorkers(CityData *city, 
 	                           sint32 &farmers, 
 	                           sint32 &laborers, 
 	                           sint32 &merchants, 

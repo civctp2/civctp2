@@ -172,6 +172,7 @@ class ID;
 class Throne;
 class EndGame;
 class GaiaController;
+class CityData;
 
 struct PSlicComplexRegion;
 
@@ -358,15 +359,11 @@ public:
 #endif
 
 	MBCHAR                            m_descrip_string[256];      // Not serialized, maybe used
-
 	sint32                            m_starting_index;           // Not serialzed and unused
-
-
 	sint32                            m_governorPwReserve;        // Not serialied, maybe used
-
-
 	sint16                            m_cargoCapacity;            // Not serialized possibly used.
-
+	double                            m_energysupply;
+	double                            m_breadbasket;
 
 	friend class NetInfo;
 	friend class NetDifficulty;
@@ -853,7 +850,11 @@ public:
 	double GetRationsExpectation() const;
 	double GetRationsLevel() const;
 
+	double GetFoodCoef()      const;
+	double GetProdCoef()      const;
+	double GetGoldCoef()      const;
 	double GetKnowledgeCoef() const;
+
 	double GetPollutionCoef() const;
 	double GetPollutionUnhappyCoef() const;
 
@@ -1058,9 +1059,7 @@ public:
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);
 	bool HasFreeUnitUpgrades() const;
-	double EnergySupply(); //EMOD
 	sint32 CommodityMarket(); //EMOD
-	sint32 BreadBasket(); //EMOD
 	void CreateLeader(); //EMOD
 	bool CanBuildLeader(const sint32 type) const;
 	void MergeCivs(sint32 Merger, sint32 Mergee);
@@ -1071,6 +1070,14 @@ public:
 	bool IsLandConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance) const;
 
 	MapPoint CalcEmpireCenter() const;
+
+	double EnergySupply(); // Probably make return type void
+	double GetEnergySupply() const { return m_energysupply; };
+
+	double BreadBasket();
+	double GetBreadBasket() const  { return m_breadbasket;  };
+
+	void   PreResourceCalculation(CityData* city = NULL);
 
 private:
 	/// @ToDo: This is a copy from governor, merge both.

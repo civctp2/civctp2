@@ -250,6 +250,8 @@ public:
 
 private:
 
+    void Rollback_Agent(Agent_List::iterator & agent_iter);
+
     bool Get_Totally_Complete() const;
 
     bool FindPathToTask(Agent_ptr the_army,

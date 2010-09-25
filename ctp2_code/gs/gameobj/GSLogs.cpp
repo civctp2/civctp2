@@ -189,18 +189,17 @@ void gslog_LogPlayerStats(sint32 player)
 
 	
 	
-    sint32  personWages     = static_cast<sint32>(pl->GetWagesPerPerson());
-    sint32  wonderReduction = wonderutil_GetDecreaseMaintenance(pl->GetBuiltWonders());
+	sint32  wonderReduction = wonderutil_GetDecreaseMaintenance(pl->GetBuiltWonders());
 	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
-    {
+	{
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
 		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep
-            (cityData->GetImprovements(), wonderReduction, cityData->GetOwner()); //EMOD added owner
+		    (cityData->GetImprovements(), wonderReduction, cityData->GetOwner()); //EMOD added owner
 
 		totalCommerce               += cityData->GetGrossCityGold();
 		totalCommerceCrime          += cityData->GetTradeCrime();
-		totalCommerceWages          += cityData->CalcWages(personWages);
+		totalCommerceWages          += cityData->CalcWages();
 		totalCommerceBuildingUpkeep += commerceBuildingUpkeep;
 		totalCommerceScience        += cityData->GetScience();
 		totalTrade                  += cityData->GetNetCityGold();

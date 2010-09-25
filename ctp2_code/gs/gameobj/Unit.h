@@ -549,9 +549,6 @@ public:
 	void ExitWormhole(MapPoint &pos);
 	bool HasLeftMap() const;
 
-	void ContributeScience(double incomePercent,
-	                       double &addscience,
-	                       double &subgold);
 	sint32 FreeSlaves();
 
 	void SetArmy(const Army &army);

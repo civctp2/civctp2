@@ -152,7 +152,8 @@ void Player::BeginTurn()
 		                       GEA_End);
 
 		sint32 n = m_all_cities->Num();
-		for(i = 0; i < n; i++) {
+		for(i = 0; i < n; i++)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 			                       GEV_CityTurnPreProduction,
 			                       GEA_City, m_all_cities->Access(i),
@@ -164,7 +165,8 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		for(i = 0; i < n; i++) {
+		for(i = 0; i < n; i++)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 			                       GEV_CityBeginTurn,
 			                       GEA_City, m_all_cities->Access(i),
@@ -234,4 +236,6 @@ void Player::BeginTurn()
 	}
 
 	g_thePollution->BeginTurn();
+
+	g_player[m_owner]->PreResourceCalculation();
 }

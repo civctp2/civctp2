@@ -325,13 +325,13 @@ double Happy::CalcEnemyAction()
 }
 
 double Happy::CalcPeaceMovement(CityData &cd, Player *p)
-{ 
+{
 	double overseas_defeat, home_defeat, overseas; 
 	double prev_peace = m_peace;
 
 	p->GetPeaceMovement(overseas_defeat, home_defeat, overseas);
 	
-    sint32 numCities = std::max<sint32>(1, p->m_all_cities->Num());
+	sint32 numCities = std::max<sint32>(1, p->m_all_cities->Num());
 	
 	overseas_defeat /= numCities;
 	home_defeat /= numCities;
@@ -369,6 +369,24 @@ double Happy::CalcPollution(CityData &cd, Player *p)
 	return m_pollution;
 }
 
+void Happy::RecalcPollutionHappiness(CityData &cd, Player *p)
+{
+	m_happiness -= m_pollution;
+	m_happiness += CalcPollution(cd, p);
+
+	m_happiness -= m_pop_ent;
+	m_happiness += CalcPopEntertain(cd, p);
+
+#if 0
+	double saveHappiness = m_happiness;
+	sint32 delta;
+
+	CalcHappiness(cd, true, delta, false);
+	Assert(ceil(saveHappiness) == ceil(m_happiness));
+#endif
+
+	CalcCrime(cd, p);
+}
 
 double Happy::CalcCityIndependentWorkday(Player *player)
 {
@@ -492,9 +510,12 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 {
 	double threshold = p->GetCrimeOffset();
 
-	if (m_happiness > threshold) {
-		m_crime = 0.0; 
-	} else { 
+	if (m_happiness > threshold)
+	{
+		m_crime = 0.0;
+	}
+	else
+	{
 		double base_crime = threshold - m_happiness;
 		double cops = cd.GetImprovementCrimeMod() - 
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
@@ -505,11 +526,10 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 			m_crime = 0.0;
 	}
 
-	
 	m_tracker->SetHappiness(HAPPY_REASON_CRIME, 0);
 	return m_crime;
 }
- 
+
 double Happy::CalcTimedChanges(CityData &cd, Player *p, bool projectedOnly,
                                bool isFirstPass)
 {
@@ -629,27 +649,13 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	if(isFirstPass)
 	{
 		m_happiness += CalcTooManyCities(p);
-	}
-	else
-	{
-		m_happiness += m_too_many_cities;
-	}
-
-	if(isFirstPass)
-	{
 		m_happiness += CalcConquestDistress(cd, p);
-	}
-	else
-	{
-		m_happiness += m_conquest_distress;
-	}
-
-	if(isFirstPass)
-	{
 		m_happiness += CalcDistanceFromCapitol(cd, p);
 	}
 	else
 	{
+		m_happiness += m_too_many_cities;
+		m_happiness += m_conquest_distress;
 		m_happiness += m_empire_dist;
 	}
 

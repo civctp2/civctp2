@@ -144,6 +144,7 @@ class Happy
 		double CalcSize(CityData &cd, Player *p);
 		double CalcTooManyCities(Player *p); 
 		double CalcPollution(CityData &cd, Player *p);
+		void RecalcPollutionHappiness(CityData &cd, Player *p);
 		void ResetConquestDistress(double new_distress);
 		double CalcConquestDistress(CityData &cd, Player *p);
 		double CalcDistanceFromCapitol(CityData &cd, Player *p);

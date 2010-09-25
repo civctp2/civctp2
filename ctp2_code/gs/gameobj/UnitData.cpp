@@ -2402,12 +2402,6 @@ uint32 UnitData_UnitData_GetVersion(void)
 	return (k_UNITDATA_VERSION_MAJOR<<16 | k_UNITDATA_VERSION_MINOR);
 }
 
-void UnitData::GetConsumptionStats(sint32 &foodConsumed) const 
-{
-	Assert(m_city_data) ;
-	m_city_data->GetConsumptionStats(foodConsumed) ;
-}
-
 //----------------------------------------------------------------------------
 //
 // Name       : UnitData::GetPop
@@ -5854,18 +5848,6 @@ void UnitData::ExitWormhole(MapPoint &pos)
 bool UnitData::HasLeftMap() const
 {
 	return Flag(k_UDF_HAS_LEFT_MAP);
-}
-
-//not used
-void UnitData::ContributeScience(double incomePercent,
-								 double &addscience,
-								 double &subgold)
-{
-	Assert(m_city_data);
-	if(m_city_data) {
-		m_city_data->ContributeScience(incomePercent,
-									   addscience, subgold);
-	}
 }
 
 sint32 UnitData::FreeSlaves()
