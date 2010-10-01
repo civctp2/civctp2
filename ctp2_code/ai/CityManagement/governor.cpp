@@ -3234,7 +3234,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_FARMER);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popFood = popResources * part_size_pop;
+			popFood = popResources * part_size_pop * city->GetBonusFoodCoeff();
 	//		DPRINTF(k_DBG_GAMESTATE, ("popFood: %f\n", popFood));
 			grossFood = popFood;
 			popFood = city->ProcessFinalFood(crimeLossFood, grossFood);
@@ -3258,7 +3258,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_LABORER);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popProd = popResources * part_size_pop;
+			popProd = popResources * part_size_pop * city->GetBonusProdCoeff();
 			popProd = city->ComputeProductionLosses(popProd, crimeLoss, specialLoss);
 			popProd -= (crimeLoss + specialLoss);
 			if(part_radii_prod <= popProd)
@@ -3277,8 +3277,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_MERCHANT);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popGold = popResources * part_size_pop;
-			city->ApplyGoldCoeff(popGold);
+			popGold = popResources * part_size_pop * city->GetBonusGoldCoeff();
 			city->CalcGoldLoss(true, popGold, specialLoss, crimeLoss);
 
 			if(part_radii_gold <= popGold)
@@ -3297,8 +3296,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_SCIENTIST);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popScience = popResources * part_size_pop;
-			popScience = static_cast<sint32>(ceil(popScience * g_player[city->GetOwner()]->GetKnowledgeCoef()));
+			popScience = popResources * part_size_pop * city->GetBonusScieCoeff();
 			popScience -= city->CrimeLoss(popScience);
 
 			if(part_radii_science <= popScience)
@@ -3723,20 +3721,22 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_FREIGHT:
 			if (best_unit_type >= 0)
 			{
+				m_buildUnitList[list_num].m_maximumCount = desired_count;
 				m_buildUnitList[list_num].m_desiredCount = 
-					static_cast<sint16>(desired_count 
-                                        - m_currentUnitCount[best_unit_type]
-                                       );
+				    static_cast<sint16>(desired_count 
+				                        - m_currentUnitCount[best_unit_type]
+				                       );
 			}
 			break;
 		case BUILD_UNIT_LIST_SEA_TRANSPORT:
 			if (best_unit_type >= 0)
 			{
+				m_buildUnitList[list_num].m_maximumCount = desired_count + needed_transport;
 				m_buildUnitList[list_num].m_desiredCount = 
-					static_cast<sint16>(desired_count 
-                                        + needed_transport 
-                                        - m_currentUnitCount[best_unit_type]
-                                       );
+				    static_cast<sint16>(desired_count 
+				                        + needed_transport 
+				                        - m_currentUnitCount[best_unit_type]
+				                       );
 			}
 			break;
 
@@ -3745,6 +3745,7 @@ void Governor::ComputeDesiredUnits()
 			{
 				if (m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount == 0) 
 				{
+					m_buildUnitList[list_num].m_maximumCount = desired_count;
 					m_buildUnitList[list_num].m_desiredCount = 
 					    static_cast<sint16>(desired_count
 					                        - m_currentUnitCount[best_unit_type]
@@ -4403,8 +4404,9 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			        static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
 			   )
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER)
+			   // This does not work so well yet
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
 			  )
 			{
 				if(canBuildTransporters)
@@ -4615,8 +4617,9 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			      || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
 			   )
 			   && garrisonPercent > build_transport_production_level // This may be exposed extra
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER)
+			   // This does not work so well yet
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
 			  )
 			{
 				needed_production = 
@@ -4710,8 +4713,9 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			         static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 			      || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
 			   )
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)
-			   && PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER)
+			   // This does not work so well yet
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
+//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
 			  )
 			{
 				if(garrisonComplte >= 1.0) // Don't merge this part, since it may be exposed for the three types

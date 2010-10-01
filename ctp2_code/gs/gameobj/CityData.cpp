@@ -1795,30 +1795,6 @@ void CityData::DoLocalPollution()
 #if !defined(NEW_RESOURCE_PROCESS)
 //----------------------------------------------------------------------------
 //
-// Name       : CityData::ComputeGrossProduction
-//
-// Description: Calculates the production of the city for this turn and the 
-//              losses to crime and franchise dependent on workday.
-//
-// Parameters : workday_per_person:      The workday length (g_player[m_owner]->GetWorkdayPerPerson() )
-//              collectedProduction:     Filled with the net production (m_collected_production_this_turn).
-//              crime_loss:              Filled with the loss due to crime (m_production_lost_to_crime).
-//              franchise_loss:          Filled with the loss to franchise (m_productionLostToFranchise).
-//              considerOnlyFromTerrain: Whether labors should be considered.
-//
-// Globals    : g_player:                The list of players
-//              g_theGovernmentDB:       The government database
-//              g_thePopDB:              The pop database
-//              g_theConstDB:            The constant database
-//
-// Returns    : sint32: The gross production including losses due bioinfection
-//
-// Remark(s)  : Use this method for estimation.
-//
-//----------------------------------------------------------------------------
-
-//----------------------------------------------------------------------------
-//
 // Name       : CityData::ComputeProductionLosses
 //
 // Description: Calculates the production of the city for this turn and the 
@@ -1907,7 +1883,6 @@ sint32 CityData::ProcessProduction(bool projectedOnly)
 sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain)// const
 {
 	double gross_production  = collectedProduction;
-	gross_production *= m_bonusProdCoeff;
 	gross_production += m_bonusProd;
 
 	// end EMOD
@@ -1917,17 +1892,7 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 		gross_production += LaborerCount() * GetSpecialistsResources(POP_LABORER);
 	}
 
-	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
-	{
-		double energysupply = g_player[m_owner]->GetEnergySupply();
-		if ((energysupply < 1.0) && (energysupply > 0.0))
-		{ //if greater than 1 no change because industrial capacity is maximized however in the processgold method you'll get extra gold
-			gross_production *= energysupply;
-		}
-	}
-
-	gross_production *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef();
+	gross_production *= GetBonusProdCoeff();
 
 	grossProduction = static_cast<sint32>(gross_production);
 	CalcPollution();
@@ -2972,13 +2937,14 @@ sint32 CityData::ProcessFood()
 //----------------------------------------------------------------------------
 void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain) const
 {
-	grossFood *= m_bonusFoodCoeff;
 	grossFood += m_bonusFood;
 
 	if(!considerOnlyFromTerrain)
 	{
 		grossFood += FarmerCount() * GetSpecialistsResources(POP_FARMER);
 	}
+
+	grossFood *= GetBonusFoodCoeff();
 
 	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 }
@@ -3003,7 +2969,6 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 //----------------------------------------------------------------------------
 double CityData::ProcessFinalFood(double &foodLossToCrime, double &grossFood) const
 {
-	grossFood = ceil(grossFood * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetFoodCoef());
 	foodLossToCrime = CrimeLoss(grossFood);
 
 	return grossFood - foodLossToCrime;
@@ -3098,7 +3063,7 @@ void CityData::CalculateBonusFood()
 //----------------------------------------------------------------------------
 void CityData::CalculateCoeffFood()
 {
-	m_bonusFoodCoeff = 1.0;
+	m_bonusFoodCoeff = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetFoodCoef();
 
 	double foodBonus;
 	buildingutil_GetFoodPercent(GetEffectiveBuildings(), foodBonus, m_owner);
@@ -3211,8 +3176,7 @@ void CityData::CalculateBonusProd()
 //----------------------------------------------------------------------------
 void CityData::CalculateCoeffProd()
 {
-	m_bonusProdCoeff  = 0.0;
-	m_bonusProdCoeff += g_player[m_owner]->GetWorkdayPerPerson();
+	m_bonusProdCoeff  = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetProductionCoef() - 1.0;
 
 	double prodBonus;
 	buildingutil_GetProductionPercent(GetEffectiveBuildings(), prodBonus, m_owner);
@@ -3253,6 +3217,16 @@ void CityData::CalculateCoeffProd()
 					m_bonusProdCoeff += bonus;
 				}
 			}
+		}
+	}
+
+	//emod for energy impacts
+	if(g_theProfileDB->IsNRG())
+	{
+		double energysupply = g_player[m_owner]->GetEnergySupply();
+		if ((energysupply < 1.0) && (energysupply > 0.0))
+		{ //if greater than 1 no change because industrial capacity is maximized however in the processgold method you'll get extra gold
+			m_bonusProdCoeff += energysupply;
 		}
 	}
 }
@@ -3361,7 +3335,7 @@ void CityData::CalculateBonusGold()
 //----------------------------------------------------------------------------
 void CityData::CalculateCoeffGold()
 {
-	m_bonusGoldCoeff  = 1.0;
+	m_bonusGoldCoeff  = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetGoldCoef();
 
 	double bonus;
 	buildingutil_GetCommercePercent(GetEffectiveBuildings(), bonus, m_owner);
@@ -3399,6 +3373,16 @@ void CityData::CalculateCoeffGold()
 					m_bonusGoldCoeff += bonus;
 				}
 			}
+		}
+	}
+
+	//emod for energy impacts
+	if(g_theProfileDB->IsNRG())
+	{
+		double energysupply = g_player[m_owner]->GetEnergySupply();
+		if(energysupply > 0.0)
+		{  //&& profile energy
+			m_bonusGoldCoeff += energysupply;  // if greater than one that is additional wealth
 		}
 	}
 }
@@ -3492,7 +3476,7 @@ void CityData::CalculateBonusScie()
 //----------------------------------------------------------------------------
 void CityData::CalculateCoeffScie()
 {
-	m_bonusScieCoeff  = 1.0;
+	m_bonusScieCoeff  = g_player[m_owner]->GetKnowledgeCoef();
 
 	double bonus;
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), bonus, m_owner);
@@ -3621,15 +3605,16 @@ void CityData::EatFood()
 	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
 	sint32 maxSurplusFood = rec->GetMaxSurplusFood();
 
-	if(m_food_delta < 0) {
+	if(m_food_delta < 0)
+	{
 		if(m_food_delta < -maxSurplusFood)
 			m_food_delta = -maxSurplusFood;
 	}
-	else{
+	else
+	{
 		if(m_food_delta > maxSurplusFood)
 			m_food_delta = maxSurplusFood;
 	}
-
 }
 
 sint32 CityData::GetBuildingOvercrowdingBonus() const
@@ -3827,11 +3812,8 @@ bool CityData::GrowOrStarve()
 				UpdateSprite();
 
 				return true;
-
-			} 
-
+			}
 			else m_partialPopulation -= k_PEOPLE_PER_POPULATION;
-
 		}
 
 		m_partialPopulation += m_growth_rate;
@@ -8993,7 +8975,6 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 	science = static_cast<sint32>(ceil(baseGold * s));
 	gold -= science;
 
-	science  = static_cast<sint32>(science * m_bonusScieCoeff);
 	science += static_cast<sint32>(m_bonusScie);
 
 	if(!considerOnlyFromTerrain)
@@ -9001,7 +8982,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 		science += ScientistCount() * GetSpecialistsResources(POP_SCIENTIST);
 	}
 
-	science = static_cast<sint32>(ceil(science * g_player[m_owner]->GetKnowledgeCoef()));
+	science  = static_cast<sint32>(science * GetBonusScieCoeff());
 
 	scieCrime = CrimeLoss(science);
 	science -= scieCrime;
@@ -9035,21 +9016,26 @@ void CityData::CollectOtherTrade(const bool projectedOnly, bool changeResources)
 {
 	ProcessGold(m_net_gold);
 	
-	if(changeResources) {
+	if(changeResources)
+	{
 		m_net_gold += CalculateTradeRoutes(projectedOnly);
-	} else {
+	}
+	else
+	{
+		// Move Trade route calculation to bonusGold
 		m_goldFromTradeRoutes = 0;
 		m_goldLostToPiracy = 0;
+		sint32 tmp_gold = CalculateGoldFromResources();
+		tmp_gold = static_cast<sint32>(tmp_gold * this->GetBonusGoldCoeff());
 		m_net_gold += CalculateGoldFromResources();
 	}
-
-	ApplyGoldCoeff(m_net_gold);
 
 	m_net_gold += m_gold_from_capitalization;
 
 	CalcGoldLoss(projectedOnly, m_net_gold, m_convertedGold, m_gold_lost_to_crime);
 
-	if(!projectedOnly) {
+	if(!projectedOnly)
+	{
 		g_player[m_owner]->m_gold->AddIncome(m_net_gold);
 	}
 }
@@ -9079,7 +9065,6 @@ void CityData::CollectOtherTrade(const bool projectedOnly, bool changeResources)
 void CityData::CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain) const
 {
 	ProcessGold(gold, considerOnlyFromTerrain);
-	ApplyGoldCoeff(gold);
 	CalcGoldLoss(true, gold, convertedGold, crimeLost);
 }
 
@@ -9101,17 +9086,7 @@ void CityData::CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLos
 //----------------------------------------------------------------------------
 void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 {
-	gold *= static_cast<sint32>(m_bonusGoldCoeff);
 	gold += static_cast<sint32>(m_bonusGold);
-
-	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
-	{
-		double energysupply = g_player[m_owner]->GetEnergySupply();
-		if (energysupply > 0.0) {  //&& profile energy
-			gold = static_cast<sint32>(ceil(gold * energysupply));  //if greater than one that is additional wealth
-		}
-	}
 
 	//EMOD to assist AI
 	if(gold < 0){
@@ -9126,30 +9101,8 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	{
 		gold += MerchantCount() * GetSpecialistsResources(POP_MERCHANT);
 	}
-}
 
-//----------------------------------------------------------------------------
-//
-// Name       : CityData::ApplyGoldCoeff
-//
-// Description: Modifys the given amount of gold by the player's government
-//              gold coeffiecient.
-//
-// Parameters : gold:         Amount of gross gold.
-//
-// Globals    : g_player:            List of players
-//              g_theGovernmentDB:   The government databse
-//
-// Returns    : -
-//
-// Remark(s)  : gold is modified by this method.
-//
-//----------------------------------------------------------------------------
-void CityData::ApplyGoldCoeff(sint32 &gold) const
-{
-	if(gold > 0) {
-		gold = static_cast<sint32>(gold * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetGoldCoef());
-	}
+	gold = static_cast<sint32>(gold * GetBonusGoldCoeff());
 }
 
 //----------------------------------------------------------------------------

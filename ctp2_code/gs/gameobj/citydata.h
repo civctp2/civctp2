@@ -533,7 +533,6 @@ public:
 #if !defined(NEW_RESOURCE_PROCESS)
 	void CollectGold(sint32 &gold, sint32 &convertedGold, sint32 &crimeLost, bool considerOnlyFromTerrain = false) const;
 	void ProcessGold(sint32 &gold, bool considerOnlyFromTerrain = false) const;
-	void ApplyGoldCoeff(sint32 &gold) const;
 	void CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &convertedGold, sint32 &crimeLost) const;
 #endif
 
@@ -1060,6 +1059,12 @@ public:
 	bool IsCoastal() const;
 
 	void PreResourceCalculation();
+
+	double  GetBonusFoodCoeff() const { return m_bonusFoodCoeff; };
+	double  GetBonusProdCoeff() const { return m_bonusProdCoeff + g_player[m_owner]->GetWorkdayPerPerson(); };
+	double  GetBonusGoldCoeff() const { return m_bonusGoldCoeff; };
+	double  GetBonusScieCoeff() const { return m_bonusScieCoeff; };
+
 
 private:
 	bool    IsBankrupting(void) const;
