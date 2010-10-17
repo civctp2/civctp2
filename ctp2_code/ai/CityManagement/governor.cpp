@@ -2667,12 +2667,12 @@ void Governor::AssignPopulation(CityData *city) const
 		city->ChangeSpecialists(POP_MERCHANT, count);
 #else
 		tmp_city->CollectResourcesFinally();
-		tmp_city->CollectOtherTrade(TRUE, FALSE);
+		tmp_city->CollectOtherTrade(TRUE);
 		prev_result = tmp_city->GetGrossCityGold();
 
 		tmp_city->ChangeSpecialists(POP_MERCHANT, count);
 		tmp_city->CollectResourcesFinally();
-		tmp_city->CollectOtherTrade(TRUE, FALSE);
+		tmp_city->CollectOtherTrade(TRUE);
 		
 		if(tmp_city->GetGrossCityGold() > prev_result)
 		{

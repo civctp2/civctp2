@@ -1904,9 +1904,12 @@ void Player::BeginTurnProduction()
 	
 	double p;
 	sint32 roundedCost = 0;
-	if (mil_total < 1) { 
+	if (mil_total < 1)
+	{
 		p = 0;
-	} else {
+	}
+	else
+	{
 		roundedCost = (sint32)(m_readiness->GetCost() + 0.0000001) - m_productionFromFranchises;
 		p = double(roundedCost)/double(mil_total);
 	}
@@ -1916,7 +1919,7 @@ void Player::BeginTurnProduction()
 							  m_productionFromFranchises,
 							  m_total_production));
 
-	m_readiness->SetPecentLastTurn(p); 
+	m_readiness->SetPecentLastTurn(p);
 	
 	Assert (p <= 1.000001);
 	
@@ -1924,12 +1927,15 @@ void Player::BeginTurnProduction()
 	sint32 mil_paid_total=0; 
 	sint32 r; 
 	
-	if (0 < n) { 
-		for (i=0; i<(n-1); i++) { 
+	if (0 < n)
+	{
+		for (i=0; i<(n-1); i++)
+		{
 			m_all_cities->Access(i).PayFederalProduction (p, mil_paid, m_materialsTax, mat_paid);
 			mil_paid_total += mil_paid;
 			m_materialPool->AddMaterials(mat_paid);
 		}
+
 		r = roundedCost - mil_paid_total;
 		
 		m_all_cities->Access(i).PayFederalProductionAbs (r, 
@@ -9513,7 +9519,7 @@ void Player::PreResourceCalculation(CityData* city)
 
 	if(city != NULL)
 	{
-		city->PreResourceCalculation();
+		city->PreResourceCalculation(); // Get this out
 	}
 	else
 	{

@@ -1303,22 +1303,13 @@ sint32 Advances::GetProjectedScience() const
 {
 	UnitDynamicArray *  cities  = g_player[m_owner]->m_all_cities;
 	sint32 s = 0, i;
-	for(i = 0; i < cities->Num(); i++) {
-		
-			
-			
-		
-		
-		
-		
-
-		
-		
+	for(i = 0; i < cities->Num(); i++)
+	{
 		s += cities->Access(i).CD()->GetProjectedScience();
-		
 	}
 
-	if(m_owner == g_selected_item->GetVisiblePlayer() && !g_network.IsClient()) {
+	if(m_owner == g_selected_item->GetVisiblePlayer() && !g_network.IsClient())
+	{
 		MainControlPanel::SelectedCity();
 	}
 

@@ -2339,7 +2339,7 @@ void Unit::CheckVisionRadius()
 }
 
 bool UnitCanCarry(sint32 dest, sint32 src, sint32 government)
-{ 
+{
 	const UnitRecord *drec = g_theUnitDB->Get(dest, government);
 	const UnitRecord *srec = g_theUnitDB->Get(src, government);
 

@@ -501,7 +501,7 @@ public:
 	bool AdjustedBestTile(const double foodCoef, const double productionCoef, const double resourceCoef, MapPoint &bestPos);
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	void CollectOtherTrade(const bool projectedOnly, bool changeResources = true); // changeResources check must be implemented
+	void CollectOtherTrade(const bool projectedOnly);
 #endif
 	void CheckTopTen();
 	sint32 SupportBuildings(bool projectedOnly);
@@ -511,7 +511,7 @@ public:
 	void AddTradeRoute(TradeRoute &route, bool fromNetwork);
 	void DelTradeRoute(TradeRoute route);
 	sint32 IsUsedInTradeRoute(const MapPoint &qpos);
-	sint32 CalculateTradeRoutes(bool projectedOnly);
+	void CalculateTradeRoutes(bool projectedOnly);
 	sint32 CalculateGoldFromResources();
 	void AddTradeResource(ROUTE_TYPE type, sint32 resource);
 #ifdef CTP1_TRADE

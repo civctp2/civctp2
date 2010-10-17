@@ -532,11 +532,10 @@ void CauseAndEffectTab::UpdateFoodValues()
 	
 	
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
-	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
+	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
+	{
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
-		sint32 bestSpecialist = cityData->GetBestSpecialist(POP_FARMER);
-		
+
 		// Required.
 		double foodRequired = cityData->GetFoodRequired();
 
@@ -550,19 +549,14 @@ void CauseAndEffectTab::UpdateFoodValues()
 		double foodBuildingBonus = noBonusesGrossFood * foodBonus;
 
 		// Farmer specialists.
-        double farmersFood = 0.0;
-		if (cityData->FarmerCount() > 0)
-		{
-			farmersFood = static_cast<double>(cityData->FarmerCount() *
-				g_thePopDB->Get(bestSpecialist, player->GetGovernmentType())->GetFood());
-		}
+		double farmersFood = cityData->GetSpecialistsResources(POP_FARMER) * cityData->FarmerCount();
 
 		// Feats & Wonder bonuses (no food feat ability yet - 13-Jul-2009-Maq)
 		double featWonderFood = static_cast<double>(wonderutil_GetIncreaseFoodAllCities(
 			player->m_builtWonders));
 
 		// Gov bonus.
-        double totalFoodWithoutGov = noBonusesGrossFood + foodBuildingBonus
+		double totalFoodWithoutGov = noBonusesGrossFood + foodBuildingBonus
 			+ farmersFood + featWonderFood;
 		double foodGovBonus = ceil(totalFoodWithoutGov 
 			* g_theGovernmentDB->Get(player->m_government_type)->GetFoodCoef());
@@ -578,9 +572,9 @@ void CauseAndEffectTab::UpdateFoodValues()
 
 		// TOTALS
 		totalTerrainFood += noBonusesGrossFood;
-        totalFoodFromBuildings += foodBuildingBonus;
+		totalFoodFromBuildings += foodBuildingBonus;
 		totalFoodFarmers += farmersFood;
-        totalFoodGovBonus += foodGovBonus;
+		totalFoodGovBonus += foodGovBonus;
 		totalFoodRequired += foodRequired;
 		totalFood += food;
 		totalFeatWonderFood += featWonderFood;
@@ -662,10 +656,9 @@ void CauseAndEffectTab::UpdateProductionValues()
 	
 	
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
-	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
+	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
+	{
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
-		sint32 bestSpecialist = cityData->GetBestSpecialist(POP_LABORER);
 
 		// Gross production.
 		double production = static_cast<double>(cityData->GetGrossCityProduction());
@@ -692,20 +685,15 @@ void CauseAndEffectTab::UpdateProductionValues()
 		sint32 featPercent = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_PRODUCTION, cityData->GetOwner());
 		featProd = ceil(buildingsWorkdayAndBaseProd * (static_cast<double>(featPercent) / 100.0));
 		wonderProd = ceil((buildingsWorkdayAndBaseProd + featProd) *
-	                        (wonderutil_GetIncreaseProduction(player->m_builtWonders) * 0.01));
+		                    (wonderutil_GetIncreaseProduction(player->m_builtWonders) * 0.01));
 
 		featWonderProd = (featProd + wonderProd);
 		
 		// Labourers bonus.
-        double laborersProd = 0.0;
-		if (cityData->LaborerCount() > 0)
-		{
-			laborersProd = static_cast<double>(cityData->LaborerCount() *
-				g_thePopDB->Get(bestSpecialist, player->GetGovernmentType())->GetProduction());
-		}
+		double laborersProd = cityData->GetSpecialistsResources(POP_LABORER) * cityData->LaborerCount();
 
 		// Gov bonus.
-        double totalProdWithoutGov = prodNoBonuses + workdayBonus
+		double totalProdWithoutGov = prodNoBonuses + workdayBonus
 			+ prodBuildingBonus + laborersProd + featWonderProd;
 		double prodGovBonus = ceil(totalProdWithoutGov 
 			* g_theGovernmentDB->Get(player->m_government_type)->GetProductionCoef());
@@ -739,7 +727,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 
 		totalTerrainProd += prodNoBonuses;
 		totalWorkdayBonus += workdayBonus;
-        totalProdFromBuildings += prodBuildingBonus;
+		totalProdFromBuildings += prodBuildingBonus;
 		totalLaborersProd += laborersProd;
 		totalFeatWonderProd += featWonderProd;
 		totalProdGovBonus += prodGovBonus;
@@ -852,14 +840,11 @@ void CauseAndEffectTab::UpdateCommerceValues()
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
-	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
+	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
+	{
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
-		sint32 bestScientist = cityData->GetBestSpecialist(POP_SCIENTIST);
-		sint32 bestMerchant = cityData->GetBestSpecialist(POP_MERCHANT);
 
 		sint32 commerceTerrain = static_cast<sint32>(cityData->GetGrossCityGold());
-		
 
 		// Worker wages - deducted from commerce.
 		sint32 commerceWages = cityData->CalcWages();
@@ -934,34 +919,20 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Specialists.
 		sint32 scientistsScie = 0;
-		if (cityData->ScientistCount() > 0)
+		if(cityData->ScientistCount() > 0)
 		{
-			double popWonderModifier = 
-				static_cast<double>(wonderutil_GetIncreaseScientists(cityData->GetBuiltWonders()));
-			popWonderModifier += 
-				static_cast<double>(wonderutil_GetIncreaseSpecialists(player->GetBuiltWonders()));
-			
-			if(popWonderModifier && bestScientist >= 0 
-				&& bestScientist < g_thePopDB->NumRecords())
-			{
-				scientistsScie += static_cast<sint32>(popWonderModifier * 
-							 g_thePopDB->Get(bestScientist, player->GetGovernmentType())->GetScience());
-			}
-
-			scientistsScie += cityData->ScientistCount() *
-				g_thePopDB->Get(bestScientist, player->GetGovernmentType())->GetScience();
+			scientistsScie = cityData->ScientistCount() * cityData->GetSpecialistsResources(POP_SCIENTIST);
 		}
 
 		sint32 merchantsGold = 0;
-		if (cityData->MerchantCount() > 0)
+		if(cityData->MerchantCount() > 0)
 		{
-			merchantsGold = cityData->MerchantCount() *
-				g_thePopDB->Get(bestMerchant, player->GetGovernmentType())->GetCommerce();
+			merchantsGold = cityData->MerchantCount() * cityData->GetSpecialistsResources(POP_MERCHANT);
 		}
 
-
 		// Savings from trade routes.
-		sint32 goldTradeRoutes = cityData->CalculateTradeRoutes(true);
+		cityData->CalculateTradeRoutes(true); // Update trade routes
+		sint32 goldTradeRoutes = cityData->CalculateGoldFromResources();
 
 
 		// Government modifiers to science and savings.
