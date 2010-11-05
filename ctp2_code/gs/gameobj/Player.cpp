@@ -6530,7 +6530,7 @@ void Player::SetCapitol(const Unit &c)
 {
 	
 	if (m_capitol->m_id != (0)) {
-		m_capitol->RemoveCapitol(); 
+		m_capitol->DestroyCapitol();
 	} 
 	c.GetCityData()->SetCapitol();
 	g_theWorld->SetCapitolDistanceDirtyFlags(1<<m_owner);

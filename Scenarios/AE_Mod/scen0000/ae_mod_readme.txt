@@ -24,8 +24,6 @@ GENERAL CHANGES:
 ================
 
 modified turn lengths to match scientific timeline better.
-diplomacy has been made slightly harder for human-to-AI, and slightly easier between AI's.
-AI now builds more commerce improvements and farms, and no mines on flat land.
 trade is slightly more profitable and less caravans are required, like SAP2.
 
 
@@ -101,7 +99,7 @@ UNITS:
 
 att/def/ran/damage/armour - moves/vision(cost/support) - advance - catagory
 
-changed:
+misc changes:
 
 aircraft carrier - carry small or medium air > carry only medium air, so it can't carry missiles and nukes, otherwise a bunch of other units are obsolete.
 cargo helicopter - now transports only small rather than medium land units.
@@ -113,6 +111,7 @@ mobile SAM - bombards land, sea and air (not just air).
 sea engineer - settle size 1 > 3, now creates the buildings in a new city (like urban planner).
 spy plane - size medium > size large so it can't land on (and enable anti-air defence on) aircraft carriers.
 Televangelist - can be built by any government (before was just in Theocracy, and never got built).
+
 
 
 Upgrade paths:
@@ -196,8 +195,10 @@ Zero Crime Bill - -60% crime > -30% crime, obsolete at Neural Reprogramming
 version history:
 ================
 
-0.03:
+0.04:
+- removed a lot of AI slic and text tweaks now the AI has been improved at source level, this way it will be easier to keep the mod up to date too.
 
+0.03:
 - fixed aircraft carrier carrying missiles
 - fixed cargo helicopter carrying medium sized units
 - fixed coracle reforming cities, and carrying medium sized units, also now carries 2
@@ -208,12 +209,10 @@ version history:
 - many updates to the great library (english only)
 
 0.02:
-
 - added upgrade paths from Apolyton Pack 2.0
 - tweaked wonders some more
 - given drug store and hospital overcrowding and max city size powers
 - moved fascism further in tech tree
 
 0.01:
-
 - modified mainly wonders and terrain

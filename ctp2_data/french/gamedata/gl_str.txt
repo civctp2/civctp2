@@ -781,12 +781,12 @@ RISK_DECENT_HORDES				"Tribus insoumises"
 RISK_RAGING_HORDES				"Hordes déchaînées"
 
 ## Generic difficulty strings for compatibility reasons ##
-DIFFICULTY_0					"Débutant"
-DIFFICULTY_1					"Facile"
-DIFFICULTY_2					"Moyen"
-DIFFICULTY_3					"Difficile"
-DIFFICULTY_4					"Très difficile"
-DIFFICULTY_5					"Impossible"
+DIFFICULTY_0					"Chef"
+DIFFICULTY_1					"Seigneur de Guerre"
+DIFFICULTY_2					"Prince"
+DIFFICULTY_3					"Roi"
+DIFFICULTY_4					"Empereur"
+DIFFICULTY_5					"Divinité"
 
 ## Civlike difficulty strings ##
 DIFFICULTY_SETTLER				"Colon"

@@ -781,12 +781,12 @@ RISK_DECENT_HORDES				"Rastlose Stämme"
 RISK_RAGING_HORDES				"Wütende Horden"
 
 ## Generic difficulty strings for compatibility reasons ##
-DIFFICULTY_0					"Sehr leicht"
-DIFFICULTY_1					"Leicht"
-DIFFICULTY_2					"Mittel"
-DIFFICULTY_3					"Schwer"
-DIFFICULTY_4					"Sehr schwer"
-DIFFICULTY_5					"Unmöglich"
+DIFFICULTY_0					"Häuptling"
+DIFFICULTY_1					"Kriegsherr"
+DIFFICULTY_2					"Prinz"
+DIFFICULTY_3					"König"
+DIFFICULTY_4					"Kaiser"
+DIFFICULTY_5					"Gottheit"
 
 ## Civlike difficulty strings ##
 DIFFICULTY_SETTLER				"Siedler"

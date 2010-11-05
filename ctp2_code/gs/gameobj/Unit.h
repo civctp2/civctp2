@@ -296,7 +296,6 @@ public:
 	uint64 GetImprovements() const;
 
 	void DestroyCapitol();
-	void RemoveCapitol();
 	void DestroyImprovement(sint32 type);
 	void NewGovernment(sint32 type);
 

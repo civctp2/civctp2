@@ -4834,7 +4834,7 @@ Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_STATISTICS]
 Gives:
--{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Crime<e>
+{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Crime<e>
 [END]
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_GAMEPLAY]
@@ -6937,6 +6937,7 @@ Undersea tunnels enable travel between land-based <L:DATABASE_CONCEPTS,CONCEPT_C
 [UNIT_ABOLITIONIST_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CLASSICAL_EDUCATION>Classical Education<e>
+No <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e> or <L:DATABASE_CONCEPTS,CONCEPT_SLAVE>Slaves<e> owned
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_UNDERGROUND_RAILWAY>Frees Slaves<e>
@@ -9086,6 +9087,7 @@ Ships of the line varied widely in strength and size.  First-raters carried as m
 [UNIT_SLAVER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SLAVE_LABOR>Slave Labor<e>
+No <L:DATABASE_UNITS,UNIT_ABOLITIONIST>Abolitionists<e> owned
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_SLAVE_RAID>Slave Raids<e>
@@ -10637,7 +10639,7 @@ Costs:
 
 [WONDER_THE_EDEN_PROJECT_STATISTICS]
 Gives:
-Destroys the most <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Polluting<e> <L:DATABASE_CONCEPTS,CONCEPT_CITY>City on the map<e>
+Destroys the most <L:DATABASE_CONCEPTS,CONCEPT_POLLUTION>Polluting<e> <L:DATABASE_CONCEPTS,CONCEPT_CITY>City<e> on the map
 Allows <L:DATABASE_GOVERNMENTS,GOVERNMENT_ECOTOPIA>Ecotopian<e> empires to make <L:DATABASE_UNITS,UNIT_ECO_RANGER>Eco-Rangers<e>
 [END]
 

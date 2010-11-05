@@ -358,8 +358,7 @@ public:
 	bool HaveImprovement(const sint32 type) const;
 	uint64 GetImprovements() const;
 
-	void DestroyCapitol(); 
-	void RemoveCapitol(); 
+	void DestroyCapitol();
 	void DestroyImprovement(sint32 type);
 	void NewGovernment(sint32 type);
 	double GetDefendersBonus() const; 

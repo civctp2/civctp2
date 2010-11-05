@@ -73,7 +73,7 @@ RISK_BORING_HORDES {
 	BarbarianUnitRankMax 15
 	BarbarianUnitRankMin 25
 	MaxSpontaniousBarbarians 1
-	BarbarianFirstTurn 35
+	BarbarianFirstTurn 20
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }
@@ -96,7 +96,7 @@ RISK_DECENT_HORDES {
 	BarbarianUnitRankMax 10
 	BarbarianUnitRankMin 20
 	MaxSpontaniousBarbarians 2
-	BarbarianFirstTurn 35
+	BarbarianFirstTurn 20
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }
@@ -119,7 +119,7 @@ RISK_RAGING_HORDES {
 	BarbarianUnitRankMax 8
 	BarbarianUnitRankMin 15
 	MaxSpontaniousBarbarians 3
-	BarbarianFirstTurn 30
+	BarbarianFirstTurn 20
 	BarbarianLastTurn 350
 	BarbarianMinimumDistance 5
 }

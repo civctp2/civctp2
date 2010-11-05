@@ -5230,25 +5230,6 @@ void CityData::DestroyCapitol()
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
-// This is the same as DestroyCapitol
-void CityData::RemoveCapitol()
-{
-	if(buildingutil_GetDesignatesCapitol(m_built_improvements, m_owner))
-	{
-		for(uint64 i = 0; i < g_theBuildingDB->NumRecords(); i++)
-		{
-			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
-			   m_built_improvements & uint64((uint64)1 << i), m_owner)
-			{
-				m_built_improvements &= ~((uint64)1 << i);
-			}
-		}
-	}
-
-	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
-}
-
-
 void CityData::DestroyImprovement(sint32 imp)
 {
 	if(!(m_built_improvements & ((uint64)1 << uint64(imp))))

@@ -574,7 +574,6 @@ public:
 	bool HasCityWonder(sint32 wonder) const { return (m_builtWonders & (static_cast<uint64>(1) << static_cast<uint64>(wonder))) != 0; }
 
 	void DestroyCapitol(); 
-	void RemoveCapitol(); 
 	void DestroyOnePerCiv(); //emod destroy small wonders
 	void SetCapitol();
 	void DestroyImprovement(sint32 type);

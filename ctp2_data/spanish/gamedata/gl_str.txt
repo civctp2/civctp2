@@ -781,21 +781,21 @@ RISK_DECENT_HORDES				"Tribus inquietas"
 RISK_RAGING_HORDES				"Hordas"
 
 ## Generic difficulty strings for compatibility reasons ##
-DIFFICULTY_0					"Principiante"
-DIFFICULTY_1					"Fácil"
-DIFFICULTY_2					"Medio"
-DIFFICULTY_3					"Difícil"
-DIFFICULTY_4					"Muy difícil"
-DIFFICULTY_5					"Imposible"
+DIFFICULTY_0					"Cacique"
+DIFFICULTY_1					"Jefe militar"
+DIFFICULTY_2					"Príncipe"
+DIFFICULTY_3					"Rey"
+DIFFICULTY_4					"Emperador"
+DIFFICULTY_5					"Deidad"
 
 ## Civlike difficulty strings ##
 DIFFICULTY_SETTLER				"Colono"
-DIFFICULTY_CHIEFTAIN				"Chieftain"
-DIFFICULTY_WARLORD				"Warlord"
-DIFFICULTY_PRINCE				"Prince"
-DIFFICULTY_KING					"King"
-DIFFICULTY_EMPEROR				"Emperor"
-DIFFICULTY_DEITY				"Deity"
+DIFFICULTY_CHIEFTAIN				"Cacique"
+DIFFICULTY_WARLORD				"Jefe militar"
+DIFFICULTY_PRINCE				"Príncipe"
+DIFFICULTY_KING					"Rey"
+DIFFICULTY_EMPEROR				"Emperador"
+DIFFICULTY_DEITY				"Deidad"
 
 ###Removed TileImp Strings###
 #TILEIMP_ROBOTIC_DOCKS				"Naves ensamblaje"
