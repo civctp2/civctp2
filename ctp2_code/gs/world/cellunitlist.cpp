@@ -563,7 +563,7 @@ void CellUnitList::ForceVisibleThisTurn(const PLAYER_INDEX to_me)
 
 double CellUnitList::GetHPModifier() const
 {
-    return (m_nElements > 0) ? m_array[0].GetHPModifier() : 0.0; 
+	return (m_nElements > 0) ? m_array[0].GetHPModifier() : 0.0;
 }
 
 void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
@@ -610,17 +610,50 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 		}
 	}
 }
-	
+
 bool CellUnitList::ExertsZOC() const
 {
-	for(sint32 i = 0; i < m_nElements; i++) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
 		if(!m_array[i].IsNoZoc())
 			return true;
 	}
 	return false;
 }
 
+bool CellUnitList::CanSee(const Army & army) const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].CanSee(army))
+			return true;
+	}
+	return false;
+}
 
+uint32 CellUnitList::GetVisionClass() const
+{
+	uint32 visionClass = 0;
+
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		visionClass |= m_array[i]->GetDBRec()->GetVisionClass();
+	}
+
+	return visionClass;
+}
+
+uint32 CellUnitList::GetCanSee() const
+{
+	uint32 canSee = 0;
+
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		canSee |= m_array[i]->GetDBRec()->GetCanSee();
+	}
+
+	return canSee;
+}
 
 bool CellUnitList::CanMoveIntoCell(const MapPoint &pos, 
 								   bool &zocViolation,
@@ -1047,6 +1080,110 @@ void CellUnitList::ComputeStrength(float & attack,
 
 			firepower = static_cast<float>(rec->GetFirepower());
 			hitpoints = static_cast<float>(cargo_list->Access(j)->CalculateTotalHP());//rec->GetMaxHP());
+
+			if (rec->GetDefense() > 0.0)
+				defend_unit_count++;
+
+			if (rec->GetZBRangeAttack() > 0)
+				ranged_unit_count++;
+
+			attack   += static_cast<float>(  rec->GetAttack()
+			                               * hitpoints
+			                               * firepower);
+			defense  += static_cast<float>(  rec->GetDefense()
+			                               * hitpoints
+			                               * firepower);
+			ranged   += static_cast<float>(  rec->GetZBRangeAttack()
+			                               * hitpoints
+			                               * firepower);
+
+			if(rec->GetCanBombardLand()
+			|| rec->GetCanBombardMountain()
+			){
+				land_bombard  += static_cast<float>(  rec->GetAttack()
+				                                    * hitpoints
+				                                    * firepower);
+			}
+
+			if(rec->GetCanBombardWater())
+			{
+				water_bombard  += static_cast<float>(  rec->GetAttack()
+				                                     * hitpoints
+				                                     * firepower);
+			}
+
+			if(rec->GetCanBombardAir())
+			{
+				air_bombard    += static_cast<float>(  rec->GetAttack()
+				                                     * hitpoints
+				                                     * firepower);
+			}
+
+			total_value += static_cast<float>(rec->GetShieldCost());
+		}
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::ComputeStrength
+//
+// Description: Get data for army and fill in given parameters.
+//
+// Parameters : sint32 & attack            : sum of units Attack * hitpoints * fire_power
+//              sint32 & defense           : sum of units Defense * hitpoints * fire_power
+//              sint32 & ranged            : sum of units ZBRangeAttack * hitpoints * fire_power
+//              sint32 & defend_unit_count : how many defenders (Defense>0)
+//              sint32 & ranged_unit_count : how many ranged (ZBRangeAttack>0)
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard land or mountain
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard sea
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard air
+//              sint32 & total_value       : sum of units ShieldCost
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : includes units in transports if noCargo is false
+//
+//----------------------------------------------------------------------------
+void CellUnitList::ComputeCargoStrength(float & attack,
+                                        float & defense,
+                                        float & ranged,
+                                        sint16 & defend_unit_count,
+                                        sint16 & ranged_unit_count,
+                                        float & land_bombard,
+                                        float & water_bombard,
+                                        float & air_bombard,
+                                        float & total_value,
+                                        const bool terrainIndependent) const
+{
+	attack            = 0.0f;
+	defense           = 0.0f;
+	ranged            = 0.0f;
+	defend_unit_count = 0;
+	ranged_unit_count = 0;
+	
+	land_bombard      = 0.0f;
+	water_bombard     = 0.0f;
+	air_bombard       = 0.0f;
+	total_value       = 0.0f;
+	
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if (!m_array[i].IsValid())
+			continue;
+
+		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
+		sint32             cargoCount = cargo_list ? cargo_list->Num() : 0;
+
+		for(sint32 j = 0; j < cargoCount; j++)
+		{
+			const UnitRecord* rec = cargo_list->Access(j)->GetDBRec();
+			if (!rec) continue;
+
+			float firepower = static_cast<float>(rec->GetFirepower());
+			float hitpoints = static_cast<float>(cargo_list->Access(j)->CalculateTotalHP());//rec->GetMaxHP());
 
 			if (rec->GetDefense() > 0.0)
 				defend_unit_count++;

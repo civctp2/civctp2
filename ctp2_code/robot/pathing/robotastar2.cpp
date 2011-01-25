@@ -113,7 +113,7 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 				return false;
 			}
 
-			cost *= float(m_transMaxR);
+			cost *= m_transMaxR;
 		}
 
 		return true;

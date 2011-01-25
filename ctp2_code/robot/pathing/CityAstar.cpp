@@ -205,19 +205,20 @@ sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 	return SOUTH;
 }
 
-bool CityAstar::IsLandConnected
+bool CityAstar::IsConnected
 (
     PLAYER_INDEX        owner,
     MapPoint const &    start,
     MapPoint const &    dest,
     float &             cost,
     sint32 &            distance,
-    sint32              maxSquaredDistance
+    sint32              maxSquaredDistance,
+    bool                isLand
 )
 {
 	m_pathRoad              = true;
 	m_owner                 = owner;
-	m_pathLand              = true;
+	m_pathLand              = isLand;
 	m_maxSquaredDistance    = maxSquaredDistance;
 	m_simpleDistance        = false;
 	m_start                 = start;

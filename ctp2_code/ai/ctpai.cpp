@@ -680,6 +680,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	scheduler.Sort_Goals();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
+	Scheduler::s_needAnotherCycle = false;
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 						   GEA_Player, playerId,
 						   GEA_Int, 0, 
@@ -717,6 +718,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	scheduler.Process_Agent_Changes();
 	scheduler.Assign_Garrison();
 	scheduler.Rollback_Emptied_Transporters();
+	scheduler.ResetTransport();
 	scheduler.Reset_Agent_Execution();
 	scheduler.Compute_Agent_Strength();
 	scheduler.Recompute_Goal_Strength();
@@ -734,8 +736,9 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	// Modified by Martin Gühmann so that this can be exposed to const.txt
-	if ( cycle < g_theConstDB->Get(0)->GetMaxMatchListCycles() + diff_cycles)
+	if ( cycle < g_theConstDB->Get(0)->GetMaxMatchListCycles() + diff_cycles || Scheduler::s_needAnotherCycle)
 	{
+		Scheduler::s_needAnotherCycle = false;
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 							   GEA_Player, playerId,
 							   GEA_Int, cycle,

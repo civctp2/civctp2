@@ -161,6 +161,9 @@ public:
 	
 	bool CanBeSued() const;
 	bool ExertsZOC() const;
+	bool CanSee(const Army & army) const;
+	uint32 GetVisionClass() const;
+	uint32 GetCanSee() const;
 
 	void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 	double GetHPModifier() const;
@@ -182,7 +185,7 @@ public:
 
 	void UpdateMoveIntersection();
 
-	
+
 	void ComputeStrength(float & attack,
 						 float & defense,
 						 float & ranged,
@@ -194,6 +197,18 @@ public:
 						 float & total_value,
 						 const bool terrainIndependent,
 						 bool noCargo = false) const;
+
+
+	void ComputeCargoStrength(float & attack,
+							  float & defense,
+							  float & ranged,
+							  sint16 & defend_unit_count,
+							  sint16 & ranged_unit_count,
+							  float & land_bombard,
+							  float & water_bombard,
+							  float & air_bombard,
+							  float & total_value,
+							  const bool terrainIndependent) const;
 
 
 	double  GetAverageHealthPercentage() const;

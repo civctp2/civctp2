@@ -852,7 +852,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Building and city maintenance - deducted from commerce.
 		sint32 commerceCityBuildingUpkeep = cityData->GetSupportBuildingsCost();
-		commerceCityBuildingUpkeep += cityData->GetSupportCityCost();
 
 
 		// Sub Total commerce, just before splitting to science and savings.

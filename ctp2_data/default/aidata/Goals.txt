@@ -100,9 +100,10 @@ GOAL_SEIGE {
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
 
-  LandConnectionBoni
+  ConnectionBoni
   {
     LandToCloseCityConnectionBonus 1000
+    CloseCityConnectionBonus        500
     SmallTargetEmpireSize             3
     SmallTargetEmpireBonus          100
     WeakestEnemyBonus               200

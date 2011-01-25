@@ -2784,13 +2784,14 @@ extern sint32 g_god;
 
 uint32 UnitData::GetVisibility() const 
 {
-	if (g_fog_toggle) { 
-		return 0xffffffff; 
+	if (g_fog_toggle)
+	{
+		return 0xffffffff;
 	}
 	
 	if (g_god) return 0xFFFFFFFF;
 
-	return m_visibility | m_temp_visibility; 
+	return m_visibility | m_temp_visibility;
 }
 
 void UnitData::UndoVision()

@@ -1860,8 +1860,8 @@ SFN_ERROR Slic_GetPollutionLevelPromisedTo::Call(SlicArgList *args)
 // INT GetPiracyIncomeFrom(player,foreigner)
 // Returns the amount of piracy income that player gets from foreigner
 SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
-{   
-    if (args->Count() != 2)
+{
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1876,7 +1876,7 @@ SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
 
 	m_result.m_int = MapAnalysis::GetMapAnalysis().GetPiracyIncomeByPlayer(player,foreigner);
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetPiracyIncome:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetPiracyIncome:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1885,11 +1885,11 @@ SFN_ERROR Slic_GetPiracyIncomeFrom::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
 {
-    if(args->Count() != 1)
+	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
-    Unit         city;
+	Unit         city;
 
 	if(args->GetPlayer(0, player)){
 		m_result.m_int = MapAnalysis::GetMapAnalysis().GetProjectedScience(player);
@@ -1908,7 +1908,7 @@ SFN_ERROR Slic_GetProjectedScience::Call(SlicArgList *args)
 // Returns 1 if player and foreigner can form an alliance, else 0
 SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1923,7 +1923,7 @@ SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 
 	m_result.m_int = Diplomat::GetDiplomat(player).CanFormAlliance(foreigner);
 
-    DPRINTF(k_DBG_SLIC, ("Slic_CanFormAlliance:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_CanFormAlliance:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1932,7 +1932,7 @@ SFN_ERROR Slic_CanFormAlliance::Call(SlicArgList *args)
 // Returns the stop advance database index, -1 if there is no such advance for whatever reason
 SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1955,7 +1955,7 @@ SFN_ERROR Slic_GetStopResearchingAdvance::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
 {
-    if (args->Count() != 1)
+	if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1973,7 +1973,7 @@ SFN_ERROR Slic_GetNanoWeaponsCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
 {
-    if (args->Count() != 1)
+	if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -1991,7 +1991,7 @@ SFN_ERROR Slic_GetBioWeaponsCount::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetNuclearWeaponsCount::Call(SlicArgList *args)
 {
-    if (args->Count() != 1)
+	if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;
@@ -2014,7 +2014,7 @@ SFN_ERROR Slic_FindCityToExtortFrom::Call(SlicArgList *args)
 // Returns 1 if foreigner has an embargo on player, else 0 (or -1 if no contact ?)
 SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -2029,7 +2029,7 @@ SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
 
 	m_result.m_int = Diplomat::GetDiplomat(player).GetEmbargo(foreigner);
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetEmbargo:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetEmbargo:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -2040,7 +2040,7 @@ SFN_ERROR Slic_GetEmbargo::Call(SlicArgList *args)
 // Toggle player to have an embargo against foreigner using 1=on, 0=off
 SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
 {
-    if (args->Count() != 3)
+	if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -2054,12 +2054,12 @@ SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if(!args->GetInt(argNum++, state))
+	if(!args->GetInt(argNum++, state))
 		return SFN_ERROR_TYPE_ARGS;
 
-    Diplomat::GetDiplomat(player).SetEmbargo(foreigner, (state==1 ? true:false));//convert state to bool
+	Diplomat::GetDiplomat(player).SetEmbargo(foreigner, (state==1 ? true:false));//convert state to bool
 
-    DPRINTF(k_DBG_SLIC, ("Slic_SetEmbargo:player %d, foreigner %d, state $d, returns %d\n",player,foreigner,state, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_SetEmbargo:player %d, foreigner %d, state $d, returns %d\n",player,foreigner,state, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -2068,7 +2068,7 @@ SFN_ERROR Slic_SetEmbargo::Call(SlicArgList *args)
 // see mapgrid.h and mapanalysis
 SFN_ERROR Slic_GetTotalValue::Call(SlicArgList *args)
 {
-    if (args->Count() != 1)
+	if (args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
 	PLAYER_INDEX player;

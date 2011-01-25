@@ -192,6 +192,7 @@
 #include "radarmap.h"
 #include "RandGen.h"                    // g_rand
 #include "RiskRecord.h"
+#include "Scheduler.h"
 #include "SelItem.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -7872,6 +7873,11 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 						ClearOrders();
 					}
 				}
+				else if(g_player[m_owner]->IsRobot())
+				{
+					ClearOrders();
+					Scheduler::s_needAnotherCycle = true;
+				}
 			}
 
 			if(m_array[i].HasLeftMap())
@@ -9697,25 +9703,43 @@ void ArmyData::GetCurrentHP
 
 bool ArmyData::IsWounded() const
 {
-	sint32 nb;
-	sint32 unittypes[MAX_UNIT_COUNT];
-	sint32 unithp[MAX_UNIT_COUNT];
-	sint32 totalcurrentHP = 0;
-	sint32 totalHP = 0;
+	sint32 totalCurrentHP = 0;
+	sint32 totalHP        = 0;
 
-	GetCurrentHP(nb, unittypes, unithp);
-	for(sint32 i = 0 ; i < nb ; i ++)
+	for(sint32 i = 0 ; i < m_nElements ; i ++)
 	{
-		totalcurrentHP += unithp[i];
+		totalCurrentHP += std::max<sint32>(static_cast<sint32>(m_array[i].GetHP()), 0);
 		totalHP += m_array[i]->CalculateTotalHP();
-		//totalHP+= g_theUnitDB->Get(unittypes[i], g_player[GetOwner()]->GetGovernmentType())->GetMaxHP();
 	}
-	return (totalcurrentHP < totalHP/2);
+
+	return (totalCurrentHP < totalHP/2);
 	//criterion can be changed, but seems relevant. Even if support isn't
 	//determined as full, it will be wise not to attack with a unit that has 
 	//half than its normal HPs.
 }
 
+bool ArmyData::IsCargoWounded() const
+{
+	sint32 totalCurrentHP = 0;
+	sint32 totalHP        = 0;
+
+	for(sint32 i = 0 ; i < m_nElements ; i++)
+	{
+		UnitDynamicArray* cargoList = m_array[i]->GetCargoList();
+		sint32 n = cargoList != NULL ? cargoList->Num() : 0;
+
+		for(sint32 j = 0; j < n; j++)
+		{
+			totalCurrentHP += std::max<sint32>(static_cast<sint32>((*cargoList)[j].GetHP()), 0);
+			totalHP        += (*cargoList)[j]->CalculateTotalHP();
+		}
+	}
+
+	return (totalCurrentHP < totalHP/2);
+	//criterion can be changed, but seems relevant. Even if support isn't
+	//determined as full, it will be wise not to attack with a unit that has 
+	//half than its normal HPs.
+}
 
 bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 {
@@ -10497,7 +10521,7 @@ ORDER_TEST ArmyData::CargoTestOrderHere(const OrderRecord * order_rec, const Map
 			{
 				order_valid = cargo->Access(cargo_index).UnitValidForOrder(order_rec);
 				if(order_valid)
-					{
+				{
 					if(range > 0 && pos == m_pos)
 					{
 						return ORDER_TEST_NEEDS_TARGET;
@@ -10848,15 +10872,41 @@ bool ArmyData::IsObsolete() const
 {
 	Assert(g_player[m_owner] != NULL);
 
-	for (sint32 i = 0; i < m_nElements; i++) 
+	for (sint32 i = 0; i < m_nElements; i++)
 	{
 		const UnitRecord * rec = m_array[i].GetDBRec();
 		
-		for (sint32 a = 0; a < rec->GetNumObsoleteAdvance(); a++) 
+		for (sint32 a = 0; a < rec->GetNumObsoleteAdvance(); a++)
 		{
 			if (g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvance(a)->GetIndex()))
 			{
 				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool ArmyData::IsCargoObsolete() const
+{
+	Assert(g_player[m_owner] != NULL);
+
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		UnitDynamicArray* cargoList = m_array[i]->GetCargoList();
+		sint32 n = cargoList != NULL ? cargoList->Num() : 0;
+
+		for(sint32 j = 0; j < n; j++)
+		{
+			const UnitRecord * rec = cargoList->Get(j).GetDBRec();
+		
+			for(sint32 a = 0; a < rec->GetNumObsoleteAdvance(); a++)
+			{
+				if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvance(a)->GetIndex()))
+				{
+					return true;
+				}
 			}
 		}
 	}

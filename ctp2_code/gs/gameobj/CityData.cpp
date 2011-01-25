@@ -4139,25 +4139,6 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 {
 	sint32     buildingUpkeep = GetSupportBuildingsCost();
 
-	// City maintenance cost.
-	buildingUpkeep += GetSupportCityCost();
-
-	//EMOD notadd upkeep per city
-	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(GetEffectiveBuildings(), m_owner);
-	buildingUpkeep += UpkeepPerCity * g_player[m_owner]->m_all_cities->Num();
-
-	///////////////////////////////////////////////
-	// EMOD - Add upkeep per unit
-	sint32 UpkeepPerUnit = buildingutil_GetUpkeepPerUnit(GetEffectiveBuildings(), m_owner);
-	buildingUpkeep += UpkeepPerUnit * g_player[m_owner]->m_all_units->Num();
-
-	///////////////////////////////////////////////
-	// EMOD - upkeep per unit and multiplied by readiness level
-	sint32 upkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(GetEffectiveBuildings(), m_owner);
-	buildingUpkeep += static_cast<sint32>(upkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
-	
-	//end EMOD
-
 	m_net_gold   -= buildingUpkeep;
 
 	if (!projectedOnly)
@@ -4261,9 +4242,29 @@ sint32 CityData::GetSupportCityCost() const
 //----------------------------------------------------------------------------
 sint32 CityData::GetSupportBuildingsCost() const
 {
-	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
+	sint32 wonderLevel    = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
+	sint32 buildingUpkeep = buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel, m_owner);
+
+	// City maintenance cost.
+	buildingUpkeep += GetSupportCityCost();
+
+	//EMOD notadd upkeep per city
+	sint32 UpkeepPerCity = buildingutil_GetUpkeepPerCity(m_built_improvements, m_owner);
+	buildingUpkeep += UpkeepPerCity * g_player[m_owner]->m_all_cities->Num();
+
+	///////////////////////////////////////////////
+	// EMOD - Add upkeep per unit
+	sint32 UpkeepPerUnit = buildingutil_GetUpkeepPerUnit(m_built_improvements, m_owner);
+	buildingUpkeep += UpkeepPerUnit * g_player[m_owner]->m_all_units->Num();
+
+	///////////////////////////////////////////////
+	// EMOD - upkeep per unit and multiplied by readiness level
+	sint32 upkeepPerUnitWagesReadiness = buildingutil_GetUpkeepPerUnitWagesReadiness(m_built_improvements, m_owner);
+	buildingUpkeep += static_cast<sint32>(upkeepPerUnitWagesReadiness * g_player[m_owner]->m_all_units->Num() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
 	
-	return buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel, m_owner);
+	//end EMOD
+
+	return buildingUpkeep;
 }
 
 //----------------------------------------------------------------------------
@@ -8929,14 +8930,13 @@ void CityData::DoSupport(bool projectedOnly)
 	}
 }
 
-// Added possible city maintenance.-Maq
 sint32 CityData::GetSupport() const
 {
 	Assert(g_player[m_owner]);
 	if (g_player[m_owner] == NULL)
 		return 0;
 
-	return CalcWages() + GetSupportBuildingsCost() + GetSupportCityCost();
+	return CalcWages() + GetSupportBuildingsCost();
 }
 
 #if !defined(NEW_RESOURCE_PROCESS)
@@ -8987,7 +8987,8 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 		return;
 
 	sint32 baseGold = gold;
-	if(baseGold <= 0) {
+	if(baseGold <= 0)
+	{
 		baseGold = 0;
 	}
 

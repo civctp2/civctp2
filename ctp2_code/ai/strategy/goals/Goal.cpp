@@ -274,6 +274,7 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 	}
 }
+
 void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 {
 	if(m_agents.size() == 0)
@@ -1447,13 +1448,28 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		bool isspecial, cancapture, haszoc, canbombard;
 		bool isstealth;
 		sint32 maxattack, maxdefense;
-		agent_ptr->Get_Army()->CharacterizeArmy( isspecial,
-			isstealth,
-			maxattack,
-			maxdefense,
-			cancapture,
-			haszoc,
-			canbombard);
+
+		if(!agent_ptr->Get_Army()->HasCargo())
+		{
+			agent_ptr->Get_Army()->CharacterizeArmy( isspecial,
+				isstealth,
+				maxattack,
+				maxdefense,
+				cancapture,
+				haszoc,
+				canbombard);
+		}
+		else
+		{
+			agent_ptr->Get_Army()->CharacterizeCargo( isspecial,
+				isstealth,
+				maxattack,
+				maxdefense,
+				cancapture,
+				haszoc,
+				canbombard);
+		}
+
 		if (!isspecial || maxattack > 0 || haszoc)
 		{
 			return Goal::BAD_UTILITY;
@@ -1527,9 +1543,16 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
 	){
 		// For Defend or Retreat goals
-		if(agent_ptr->Get_Army()->IsWounded()
-		&&!agent_ptr->Get_Army()->IsObsolete()
-		){
+		if
+		  (
+		        agent_ptr->Get_Army()->HasCargo()
+		    &&  agent_ptr->Get_Army()->IsCargoWounded()
+		    && !agent_ptr->Get_Army()->IsCargoObsolete()
+		    || !agent_ptr->Get_Army()->HasCargo()
+		    &&  agent_ptr->Get_Army()->IsWounded()
+		    && !agent_ptr->Get_Army()->IsObsolete()
+		  )
+		{
 			bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
 		}
 		if(PosOwner != m_playerId
@@ -1577,8 +1600,16 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		{
 			return Goal::BAD_UTILITY;
 		}
-		
-		if(agent_ptr->Get_Army()->IsWounded() && !agent_ptr->Get_Army()->IsObsolete())
+
+		if
+		  (
+		        agent_ptr->Get_Army()->HasCargo()
+		    &&  agent_ptr->Get_Army()->IsCargoWounded()
+		    && !agent_ptr->Get_Army()->IsCargoObsolete()
+		    || !agent_ptr->Get_Army()->HasCargo()
+		    &&  agent_ptr->Get_Army()->IsWounded()
+		    && !agent_ptr->Get_Army()->IsObsolete()
+		  )
 		{
 			bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
 		}
@@ -1593,7 +1624,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	     && (g_theGoalDB->Get(m_goal_type)->GetTargetTypeTradeRoute())
 	     )  // For trade routes
 	{
-		if(agent_ptr->Get_Army()->CanSettle())
+		if(agent_ptr->Get_Army()->CanSettle()) // CargoCanSettle
 		{
 			// If there is a settler in the army...
 			return Goal::BAD_UTILITY;
@@ -1603,7 +1634,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	double report_wounded = bonus;
 #endif //_DEBUG
 	
-	if(agent_ptr->Get_Army()->IsObsolete())
+	if(agent_ptr->Get_Army()->HasCargo() ? agent_ptr->Get_Army()->IsCargoObsolete() : agent_ptr->Get_Army()->IsObsolete())
 		bonus += g_theGoalDB->Get(m_goal_type)->GetObsoleteArmyBonus();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
@@ -1661,13 +1692,19 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		}
 	}
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers)
-	double report_Treaspassing = bonus - report_obsolete;
+	double report_Treaspassing   = bonus - report_obsolete;
+	double report_InVisionRange  = 0.0;
+	double report_NoBarbsPresent = 0.0;
 #endif //_DEBUG
 
 	if(agent_ptr->Get_Army()->IsInVisionRangeAndCanEnter(dest_pos))
 	{
 		/// @ToDo: Use the actual path cost, to check whether the goody hut is really so close.
 		bonus += g_theGoalDB->Get(m_goal_type)->GetInVisionRangeBonus();
+
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers)
+		report_InVisionRange  = bonus - report_Treaspassing;
+#endif //_DEBUG
 
 		if (!Barbarians::InBarbarianPeriod()
 		||  wonderutil_GetProtectFromBarbarians(g_player[agent_ptr->Get_Army()->GetOwner()]->m_builtWonders)
@@ -1678,11 +1715,10 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		{
 			bonus += g_theGoalDB->Get(m_goal_type)->GetCanAttackBonus();
 		}
-	}
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers)
-	double report_InVisionRange  = bonus - report_Treaspassing;
-	double report_NoBarbsPresent = bonus - report_InVisionRange;
+		report_NoBarbsPresent = bonus - report_InVisionRange;
 #endif //_DEBUG
+	}
 
 	if(!agent_ptr->Get_Army()->HasCargo())
 	{
@@ -1701,7 +1737,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	Utility tieBreaker = 0;
 
-	for(sint32 i = 0; i < army->Num(); ++i)
+	for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
 	{
 		const UnitRecord* rec = army->Get(i)->GetDBRec();
 
@@ -2096,20 +2132,36 @@ Utility Goal::Compute_Raw_Priority()
 
 	const sint32 doubleDistanceFactor = 4;
 	sint32 distance;
-	bool isLandConnected = goal_rec->HasLandConnectionBoni() && player_ptr->IsLandConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
+	bool isLandConnected = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
+	bool isConnected     = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance, false);
 
-	const GoalRecord::LandConnectionBoni* cbRec = isLandConnected ? goal_rec->GetLandConnectionBoniPtr() : NULL;
+	const GoalRecord::ConnectionBoni* cbRec = isLandConnected || isConnected ? goal_rec->GetConnectionBoniPtr() : NULL;
 
 	// A little ugly but this way I don't have to mess with the debug reports
-	if(cbRec)
+	if(cbRec != NULL)
 	{
-		double value  =      -static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus() * distance);
-		       value /= sqrt( static_cast<double>(doubleDistanceFactor * doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius())); // Maybe this factor is not the possible maximum
-		       value += static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus());
-
-		if(value > 0)
+		if(isLandConnected)
 		{
-			cell_value += value;
+			double value  =      -static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus() * distance);
+			       value /= sqrt( static_cast<double>(doubleDistanceFactor * doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius())); // Maybe this factor is not the possible maximum
+			       value += static_cast<double>(cbRec->GetLandToCloseCityConnectionBonus());
+
+			if(value > 0)
+			{
+				cell_value += value;
+			}
+		}
+
+		if(isConnected)
+		{
+			double value  =      -static_cast<double>(cbRec->GetCloseCityConnectionBonus() * distance);
+			       value /= sqrt( static_cast<double>(doubleDistanceFactor * doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius())); // Maybe this factor is not the possible maximum
+			       value += static_cast<double>(cbRec->GetCloseCityConnectionBonus());
+
+			if(value > 0)
+			{
+				cell_value += value;
+			}
 		}
 	}
 
@@ -3254,7 +3306,7 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 		const char * myText = goal_rec->GetNameText();
 		MBCHAR * myString = new MBCHAR[strlen(myText) + 80];
 		memset(myString, 0, strlen(myText) + 80);
-		sprintf(myString, "%s failed at (%d, %d)", goal_rec->GetNameText(), dest_pos.x, dest_pos.y);
+		sprintf(myString, "%s failed at (%d, %d), order: %s", goal_rec->GetNameText(), dest_pos.x, dest_pos.y, order_rec->GetNameText());
 
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), myString, 0, m_goal_type);
 		delete[] myString;
@@ -3577,7 +3629,14 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 
 		if (found)
 		{
-			Set_Sub_Task(SUB_TASK_TRANSPORT_TO_GOAL);
+			if(Get_Target_Pos(the_army->Get_Army()) == goal_pos)
+			{
+				Set_Sub_Task(SUB_TASK_TRANSPORT_TO_GOAL);
+			}
+			else
+			{
+				Set_Sub_Task(SUB_TASK_RALLY);
+			}
 		}
 		else
 		{
@@ -3861,7 +3920,8 @@ MapPoint Goal::MoveToTarget(Agent_ptr rallyAgent)
 		return rallyAgent->Get_Pos();
 	}
 
-	MapPoint rallyPos = found_path.SnipEndUntilCannotEnter(rallyAgent->Get_Army());
+//	MapPoint rallyPos = found_path.SnipEndUntilCannotEnter(rallyAgent->Get_Army());
+	MapPoint rallyPos = found_path.SnipEndUntilCargoCanEnter(rallyAgent->Get_Army());
 
 	FollowPathToTask(rallyAgent, NULL, rallyPos, found_path);
 
@@ -3995,6 +4055,7 @@ bool Goal::RallyTroops()
 		}
 
 		if(!agent_ptr->CanMove()
+		&& !agent_ptr->Get_Army()->HasCargo()
 		||  agent_ptr == rallyAgent
 		){
 			agent_ptr->Set_Can_Be_Executed(false);
@@ -4523,4 +4584,9 @@ MapPoint Goal::GetClosestCargoPos(const Agent_ptr agent_ptr) const
 	}
 
 	return best_target_pos;
+}
+
+void Goal::ResetNeededTransport()
+{
+	m_current_needed_strength.Set_Transport(0);
 }

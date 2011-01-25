@@ -248,6 +248,8 @@ public:
 
     bool CanReachTargetContinent(Agent_ptr agent_ptr) const;
 
+    void ResetNeededTransport();
+
 private:
 
     void Rollback_Agent(Agent_List::iterator & agent_iter);

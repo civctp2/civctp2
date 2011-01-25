@@ -175,6 +175,7 @@ public:
 
     bool CanTransport() const;
     bool IsWounded() const;
+    bool IsCargoWounded() const;
 
     bool IsAsleep() const;
     void Sleep();
@@ -575,6 +576,7 @@ public:
 
 
     bool IsObsolete() const;
+    bool IsCargoObsolete() const;
 
     void StopPirating();
 

@@ -1796,7 +1796,8 @@ void Player::BeginTurnProduction()
 	g_player[m_owner]->PreResourceCalculation();
 
 	m_total_production = 0;
-	for (i=0; i<n; i++) { 
+	for(i=0; i<n; i++)
+	{
 		m_all_cities->Access(i).CD()->CollectResources();
 #if defined(NEW_RESOURCE_PROCESS)
 		m_all_cities->Access(i).CD()->ProcessResources();
@@ -1880,24 +1881,20 @@ void Player::BeginTurnProduction()
 		}
 	}
 	//////////////////END EMOD
-	
-	
-	
+
 	// #01 Recalculating military support costs after government change
 	// this fixes the costs for old save games 
 	m_readiness->RecalcCost();
-	
-	
-	
-	if(m_productionFromFranchises > m_readiness->GetCost()) {
+
+	if(m_productionFromFranchises > m_readiness->GetCost())
+	{
 		materialsFromFranchise = (sint32)(m_productionFromFranchises - m_readiness->GetCost());
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("Cost before killing units: %lf\n", m_readiness->GetCost()));
 
-	if(!m_first_city) {
-		
-		
+	if(!m_first_city)
+	{
 		m_readiness->KillUnitsOverBudget(m_government_type, *m_all_armies, int(mil_total) + m_productionFromFranchises);
 	}
 	
@@ -2094,22 +2091,11 @@ sint32 Player::CalcTotalBuildingUpkeep()
 	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(m_builtWonders);
 
 	n = m_all_cities->Num();
-	for(i = 0; i < n; i++) {
+	for(i = 0; i < n; i++)
+	{
 		Unit *c = &(m_all_cities->Access(i));
 		bu += buildingutil_GetTotalUpkeep(c->GetImprovements(),
 		                                  wonderLevel, m_owner);
-
-		// Add city maintenance to this projection.
-		bu += c->CD()->GetSupportCityCost();
-
-		/* Why did E apply the support modifier to building maintenance projections?
-		Removed for now until there is good reason to put it back.-Maq
-
-		// EMOD add new readiness modifier for buildings here?
- 		bu *= GetSupportModifier();
-
-		*/
-
 	}
 
 	return(bu);
@@ -9867,7 +9853,7 @@ bool Player::HasTransporters() const
 	return false;
 }
 
-bool Player::IsLandConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance) const
+bool Player::IsConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance, bool isLandOnly) const
 {
 	distance = std::numeric_limits<sint32>::max();
 	for(sint32 i = 0; i < m_all_cities->Num(); ++i)
@@ -9878,7 +9864,7 @@ bool Player::IsLandConnected(MapPoint const & center, sint32 maxSquaredDistance,
 			sint32 newDistance = std::numeric_limits<sint32>::max();
 			if
 			  (
-			       g_city_astar.IsLandConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, newDistance, maxSquaredDistance)
+			       g_city_astar.IsConnected(m_owner, center, m_all_cities->Get(i)->GetPos(), cost, newDistance, maxSquaredDistance, isLandOnly)
 			    && newDistance < distance
 			)
 			{

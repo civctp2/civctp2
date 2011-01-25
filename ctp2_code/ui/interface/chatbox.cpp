@@ -65,6 +65,7 @@
 #include "World.h"                  // g_theWorld;
 #include "tiledmap.h"               // g_tiledMap
 #include "gfx_options.h"
+#include "GameEventManager.h"
 
 #if defined (_DEBUG) || defined(USE_LOGGING)
 #include "ctpaidebug.h"
@@ -502,10 +503,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					
 					DispatchMessage(&msg);
 				}
-				
-				
-				
-				
 
 			} while (g_selected_item && !gDone &&
 					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())); 
@@ -564,6 +561,36 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		else
 		{
 			g_graphicsOptions->CellTextOn();
+		}
+	}
+
+	else if(!strncmp(s, "/beginscheduler", 15)  && !g_network.IsActive())
+	{
+		MBCHAR *arg = s + 15;
+		while(isspace(*arg))
+			arg++;
+
+		if (isdigit(*arg))
+		{
+			sint32 player = atoi(arg);
+			if(g_network.IsActive()) {
+				Assert(g_network.IsLocalPlayer(player));
+				if(!g_network.IsLocalPlayer(player))
+					return FALSE;
+				
+				if(g_network.IsClient() && !g_network.IsMyTurn())
+					return FALSE;
+			}
+			
+			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
+			{
+				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
+				g_gevManager->Pause();
+				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginScheduler,
+				                       GEA_Player, player,
+				                       GEA_End);
+				g_gevManager->Resume();
+			}
 		}
 	}
 

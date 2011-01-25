@@ -215,6 +215,9 @@ public:
 	void Rollback_Emptied_Transporters();
 	void Sort_Goal_Matches_If_Necessary();
 	void Assign_Garrison();
+	void ResetTransport();
+
+	static bool                  s_needAnotherCycle;
 
 protected:
 

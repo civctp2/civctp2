@@ -175,7 +175,6 @@ void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 
 	m_agent_count       = static_cast<sint16>(army.Num());
 
-	m_value = 0.0f;
 	m_transport = 0;
 	for(sint32 i = m_agent_count; i > 0; --i)
 	{
@@ -193,6 +192,35 @@ void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 			--m_agent_count;
 		}
 	}
+}
+
+void Squad_Strength::Set_Cargo_Strength(const Army & army)
+{
+	Assert(army.IsValid());
+
+	if(!army.IsValid())
+	{
+		*this           = Squad_Strength(1);
+		return;
+	}
+	else if(!army->HasCargo())
+	{
+		*this           = Squad_Strength(0);
+		return;
+	}
+
+	army->ComputeCargoStrength(m_attack_str,
+	                           m_defense_str,
+	                           m_ranged_str,
+	                           m_defenders,
+	                           m_ranged,
+	                           m_land_bombard_str,
+	                           m_water_bombard_str,
+	                           m_air_bombard_str,
+	                           m_value,
+	                           true);
+
+	m_agent_count       = static_cast<sint16>(army->GetCargoNum());
 }
 
 void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)

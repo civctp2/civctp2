@@ -122,6 +122,8 @@ uint32 Scheduler::m_neutralRegardCache        =  0;
 sint32 Scheduler::m_allyRegardCachedPlayer    = -1;
 uint32 Scheduler::m_allyRegardCache           =  0;
 
+bool   Scheduler::s_needAnotherCycle          =  false;
+
 void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
 	s_theSchedulers.resize(newMaxPlayerId);
@@ -1886,6 +1888,19 @@ void Scheduler::Sort_Goal_Matches_If_Necessary()
 	}
 }
 
+void Scheduler::ResetTransport()
+{
+	for
+	(
+	    Goal_List::iterator goal_iter  = m_goals.begin();
+	                        goal_iter != m_goals.end();
+	                      ++goal_iter
+	)
+	{
+		(*goal_iter)->ResetNeededTransport();
+	}
+}
+
 void Scheduler::Assign_Garrison()
 {
 	sint32 cityNum = g_player[m_playerId]->GetNumCities();
@@ -1909,8 +1924,8 @@ void Scheduler::Assign_Garrison()
 		if(!army.IsValid())
 			continue;
 
-		if(army->NumOrders() > 0)
-			continue;
+//		if(army->NumOrders() > 0) // ToDo: Add orders for armies that came from grouping ungrouping and unload or target is not here
+//			continue;
 
 		if((army->GetMovementType() &
 		     (k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit)) == 0)
@@ -1922,6 +1937,9 @@ void Scheduler::Assign_Garrison()
 		Unit city = g_theWorld->GetCity(pos);
 		if(city.m_id == 0)
 			continue;
+
+//		if(agent->Has_Any_Goal() && agent->Get_Goal()->Get_Target_Pos() != pos)
+//			continue;
 
 		sint32 transports,max,empty;
 		if(army->GetCargo(transports, max, empty))
