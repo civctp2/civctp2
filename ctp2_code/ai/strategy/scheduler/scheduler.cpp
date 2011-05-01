@@ -138,7 +138,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::LoadAll(CivArchive & archive)
 {
-	DPRINTF(k_DBG_AI, ("\n\ncalling Scheduler::LoadAll\n\n"));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("\n\ncalling Scheduler::LoadAll\n\n"));
 	for(size_t i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Load(archive);
@@ -379,7 +379,7 @@ void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
 //////////////////////////////////////////////////////////////////////////
 void Scheduler::Process_Agent_Changes()
 {
-	DPRINTF(k_DBG_AI, ("//       Change agent matches\n"));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//       Change agent matches\n"));
 	time_t t1 = GetTickCount();
 
 	Agent_List::iterator agent_ptr_iter = m_agents.begin();
@@ -407,7 +407,7 @@ void Scheduler::Process_Agent_Changes()
 		agent_ptr_iter++;
 	}
 
-	DPRINTF(k_DBG_AI, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//       elapsed time = %d ms\n", (GetTickCount() - t1)));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -524,7 +524,6 @@ void Scheduler::Sort_Goals()
 	time_t t2 = GetTickCount();
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
 		("//  %d goals sorted = %d ms, Player %d\n\n\n", m_goals.size(), (t2 - t1), m_playerId));
-	DPRINTF(k_DBG_AI,("//  %d goals sorted = %d ms, Player %d\n\n\n", m_goals.size(), (t2 - t1), m_playerId));
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
@@ -577,8 +576,8 @@ void Scheduler::Sort_Goals()
 		if (value > Goal::BAD_UTILITY)
 		{
 			GOAL_TYPE goal_type = goal->Get_Goal_Type();
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
 				("\t[%d] goal_prioriry=%d %s\n",
 					count++, value, g_theGoalDB->Get(goal_type)->GetNameText()));
 
@@ -588,8 +587,8 @@ void Scheduler::Sort_Goals()
 		else
 		{
 			GOAL_TYPE goal_type = goal->Get_Goal_Type();
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
 				("\t[%d] goal_bad_prioriry=%d %s, %d\n",
 					count++, value, g_theGoalDB->Get(goal_type)->GetNameText(), Goal::BAD_UTILITY));
 
@@ -1211,8 +1210,8 @@ bool Scheduler::Prioritize_Goals()
 #if defined(_DEBUG)
 	time_t t = t2 - t1;
 #endif
-	DPRINTF(k_DBG_AI, ("//  Raw goal priorities calculated:\n"));
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  Raw goal priorities calculated:\n"));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 	t1 = GetTickCount();
 
 	Goal_Vector::iterator generic_goal_iter = m_generic_goals.begin();
@@ -1279,8 +1278,8 @@ bool Scheduler::Prioritize_Goals()
 	}
 
 	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  Goals sorted:\n"));
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  Goals sorted:\n"));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 
 #if defined(_DEBUG)
 	t = t2 - t1;
@@ -1405,8 +1404,8 @@ bool Scheduler::Prune_Goals()
 		}
 	}
 
-	DPRINTF(k_DBG_AI, ("//  PRUNE goals based on max eval and max exec:\n"));
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", GetTickCount() - t1 ));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  PRUNE goals based on max eval and max exec:\n"));
+	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  elapsed time = %d ms\n\n", GetTickCount() - t1 ));
 
 	return true;
 }

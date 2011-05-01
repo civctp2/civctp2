@@ -464,8 +464,9 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 {
 	AI_DPRINTF
 	          (
-	           k_DBG_SCHEDULER_ALL, m_playerId,
-	           -1,
+	           k_DBG_SCHEDULER_ALL,
+	           m_playerId,
+	           m_goal_type,
 	           -1,
 	           (
 	            "\tCompute Matching Value for goal: %s, raw_match: %i (%s)\n",
@@ -502,11 +503,17 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 
 		if(update)
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-						("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+			if(matchUtility > Goal::BAD_UTILITY)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
+							("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+			}
 		}
 		++count;
 	}
+
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
+			("\t\tThere were %3d matches\n", count));
 
 	Sort_Matches(matches);
 	return Recompute_Matching_Value(matches, update);
@@ -516,7 +523,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 {
 	if(!update)
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
 					("\tCompute Matching Value for goal: %x, %s, raw_match: %i\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(), m_raw_priority));
 	}
 
@@ -550,13 +557,13 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 				projected_strength += match_iter->Get_Agent()->Get_Squad_Strength();
 
 				combinedUtility += matchUtility;
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
 							("\t\t[%3d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 				++count;
 			}
 			else
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
 					("\t\t[%3d]First match with bad utility for goal %s, stop matching, last match in list: %i\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText(), matches.rbegin()->Get_Matching_Value()));
 				if(count == 0)
 				{
@@ -567,7 +574,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		}
 		else
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
 						("\t\t[%3d] Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 			break;
 		}
@@ -576,15 +583,15 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
-		projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
-		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1, ("\n"));
+		projected_strength          .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Projected Strength:  ");
+		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Needed Strength:     ");
 		Squad_Strength strength;
 		strength.Set_Pos_Strength(Get_Target_Pos());
-		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
+		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Pos Strength: ");
 		Squad_Strength grid_strength;
 		grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
-		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
+		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Grid Strength:");
 	}
 #endif
 
@@ -604,17 +611,17 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		combinedUtility /= count;
 	}
 
-	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,("\tMatch value combined utility: %i, raw priority: %i\n", combinedUtility, m_raw_priority));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,("\tMatch value combined utility: %i, raw priority: %i\n", combinedUtility, m_raw_priority));
 	if(update)
 	{
 		m_combinedUtility = combinedUtility;
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1, ("\t\n"));
 
 		return Get_Matching_Value();
 	}
 	else
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1, ("\t\n"));
 
 		return (  !g_theGoalDB->Get(m_goal_type)->GetIsGlobalGoal()
 		        || combinedUtility == Goal::BAD_UTILITY) ?
@@ -730,13 +737,13 @@ void Goal::Commit_Agents()
 		}
 		else if(Is_Satisfied() || Get_Totally_Complete())
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tNO AGENTS COMMITTED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
 		else
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tAGENTS CAN BE COMMITTED:       (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 
 			if(!match_iter->Get_Needs_Cargo())
@@ -771,7 +778,7 @@ void Goal::Commit_Transport_Agents()
 		}
 		else if(!Needs_Transporter() || Get_Totally_Complete())
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
@@ -781,7 +788,7 @@ void Goal::Commit_Transport_Agents()
 		}
 		else if(match_iter->Get_Needs_Cargo())
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 
 			if(match_iter->Get_Agent()->Get_Army()->CanTransport())
@@ -847,7 +854,7 @@ void Goal::Rollback_Emptied_Transporters()
 		{
 			if(!Pretest_Bid(agent_ptr, goalPos))
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), Get_Goal_Type(), -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_goal_type, -1, 
 					("\t\tTransporter not needed anymore, removing from goal\n"));
 
 				Rollback_Agent(agent_iter); // increases the agent iterator
@@ -1754,7 +1761,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 #if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	MapPoint target_pos = Get_Target_Pos();
 
-	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d,\t%9x,\t%s \n",
 	this,                                          // This goal
 	agent_ptr->Get_Army().m_id,                    // The army
@@ -1819,7 +1826,7 @@ Utility Goal::Compute_Raw_Priority()
 	if(!player_ptr->CanUseSeaTab()
 	&& (g_theWorld->IsWater(target_pos) || g_theWorld->IsShallowWater(target_pos))
 	){
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1, ("\t  No sea tab\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t  No sea tab\n"));
 		m_raw_priority = Goal::BAD_UTILITY;
 		return m_raw_priority;
 	}
@@ -1840,7 +1847,7 @@ Utility Goal::Compute_Raw_Priority()
 	       )
 	  )
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1, ("\t  No sea tab\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t  No sea tab\n"));
 		m_raw_priority = Goal::BAD_UTILITY;
 		return m_raw_priority;
 	}
@@ -2249,7 +2256,7 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_NoOwnerTerritory
 		       );
 
-		DPRINTF(k_DBG_SCHEDULER_DETAIL,("%s\t%8f,\t\t%8f,\t%i,\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("%s\t%8f,\t\t%8f,\t%i,\t\t%8f,\t%8f,\t%8f,\t%s\n",
 		                                 buff,
 		                                 report_cell_SlaveryProtection,
 		                                 report_cell_SmallCitySize,
@@ -2260,7 +2267,7 @@ Utility Goal::Compute_Raw_Priority()
 		                                 (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:
-/*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
+/*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 	("\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%s \n",
 	this,
 	goal_rec->GetNameText(),
@@ -3041,7 +3048,7 @@ void Goal::Log_Debug_Info(const int &log) const
 		          (
 		           log,
 		           m_playerId,
-		           -1,
+		           m_goal_type,
 		           -1,
 		           (
 		                "\tGoal %9x,\t%s,\tRaw priority: %8d,\t(%3d,%3d) (%s)\n",
@@ -3062,7 +3069,7 @@ void Goal::Log_Debug_Info(const int &log) const
 		          (
 		           log,
 		           m_playerId,
-		           -1,
+		           m_goal_type,
 		           -1,
 		           (
 		                "\tGoal %9x,\t%s,\tBAD_UTILITY,\t(%d,%d) (%s)\n",
@@ -3090,7 +3097,7 @@ void Goal::Log_Debug_Info(const int &log) const
 		if(value > Goal::BAD_UTILITY)
 		{
 			SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(m_goal_type)->GetSquadClass();
-			AI_DPRINTF(log, m_playerId, -1, -1,
+			AI_DPRINTF(log, m_playerId, m_goal_type, -1,
 				("\t\t[%3d] match=%d %s (agent: %10x), goal class=%3x, squad class=%3x, test class=%d\t",
 					count++, value, g_theGoalDB->Get(m_goal_type)->GetNameText(), agent, goal_squad_class, agent->Get_Squad_Class(), ((goal_squad_class & agent->Get_Squad_Class()) == goal_squad_class)));
 
@@ -3102,7 +3109,7 @@ void Goal::Log_Debug_Info(const int &log) const
 			          (
 			           log,
 			           m_playerId,
-			           -1,
+			           m_goal_type,
 			           -1,
 			             (
 			              "\t\t[%3d] First match with bad utility: In all, there were %d matches with bad utility.\n",
@@ -3143,7 +3150,7 @@ void Goal::Log_Debug_Info(const int &log) const
 	}
 
 	if (m_agents.size() > 0)
-		DPRINTF(log,("\t\t\tCommitted Agents (%d):\n", m_agents.size()));
+		AI_DPRINTF(log,  m_playerId, m_goal_type, -1, ("\t\t\tCommitted Agents (%d):\n", m_agents.size()));
 
 	for( agent_iter  = m_agents.begin();
 		 agent_iter != m_agents.end();

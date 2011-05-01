@@ -6055,7 +6055,9 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 							 const MapPoint &point, sint32 argument)
 {
 	if(!g_useOrderQueues)
+	{
 		ClearOrders();
+	}
 
 	m_orders->AddTail(new Order(order, path, point, argument));
 	StopPirating();
@@ -6168,10 +6170,14 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 		
 		m_orders->AddTail(attackOrder);
 		execute = false;
-	} else {
+	}
+	else
+	{
 		if(g_network.IsActive() && order == UNIT_ORDER_ADD_EVENT) {
 			
-		} else {
+		}
+		else
+		{
 			ClearOrders();
 		}
 
@@ -6250,15 +6256,18 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 //---------------------------------------------------------------------------- 
 void ArmyData::ClearOrders()
 {
-	if(m_orders->GetHead()) {
+	if(m_orders->GetHead())
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clearing orders\n", m_id));
-		
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			g_network.Block(m_owner);
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_CLEAR_ORDERS,
 										  (uint32)m_id));
 			g_network.Unblock(m_owner);
-		} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+		}
+		else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+		{
 			g_network.SendAction(new NetAction(NET_ACTION_CLEAR_ORDERS,
 											   (uint32)m_id));
 		}
@@ -7774,7 +7783,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 	UnitDynamicArray revealedUnits;
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	bool notReported = true;
 #endif
 
@@ -7842,7 +7851,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			if( revealedUnits.Num() > 0
 			&& !m_array[i].GetDBRec()->GetSingleUse()
 			){
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 				if(notReported)
 				{
 					DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx revealed %d units during move:\n", m_id, revealedUnits.Num()));
@@ -9745,10 +9754,19 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	if (cell->GetCity().IsValid()) 
+	if (cell->GetCity().IsValid())
 	{
-		return (cell->GetCity().GetVisibility() & (1 << m_owner)) != 0;
+		bool visible = (cell->GetCity().GetVisibility() & (1 << m_owner)) != 0;
+
+		if(!visible)
+		{
+			cell->GetCity().SetVisible(m_owner);
+		}
+
+		return visible;
 	}
+
+	bool visible = false;
 
 	CellUnitList * defender = cell->UnitArmy();
 	if (defender)
@@ -9758,11 +9776,12 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 		{
 			if (defender->Access(i).GetVisibility() & (1 << m_owner))
 			{
-				return true;
+				visible = true;
+				break;
 			}
 		}
 
-		if (!justCheck) 
+		if (!justCheck)
 		{
 			for (i = 0; i < defender->Num(); i++) 
 			{
@@ -9771,12 +9790,12 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 		}
 	}
 	
-	if (!justCheck && (m_owner == g_selected_item->GetVisiblePlayer())) 
+	if (!justCheck && (m_owner == g_selected_item->GetVisiblePlayer()))
 	{
 		g_selected_item->ForceDirectorSelect(Army(m_id));
 	}
 
-	return false;
+	return visible;
 }
 
 bool ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost )

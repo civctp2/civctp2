@@ -775,30 +775,29 @@ STDEHANDLER(ArmyMoveEvent)
 				return GEV_HD_Continue;
 			}
 
-			bool wasVisible = armyData->CheckWasEnemyVisible(newPos);
-			if(!wasVisible) {
-
+			if(!armyData->CheckWasEnemyVisible(newPos))
+			{
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_ContactMade,
 									   GEA_Player, owner,
 									   GEA_Player, defender->GetOwner(),
 									   GEA_End);
 
-			}
+				if(order == UNIT_ORDER_MOVE ||
+				   order == UNIT_ORDER_MOVE_TO)
+				{
+					DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clear orders, was not visible\n", army.m_id));
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+										   GEV_ClearOrders,
+										   GEA_Army, army,
+										   GEA_End);
 
-			if (order == UNIT_ORDER_MOVE || 
-			    ((order == UNIT_ORDER_MOVE_TO) && !wasVisible)) 
-			{
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-									   GEV_ClearOrders,
-									   GEA_Army, army,
-									   GEA_End);
-				
-				if(!extra)
-					return GEV_HD_Continue;
+					if(!extra)
+						return GEV_HD_Continue;
 
-				if (newPos != extraOrderPos)
-					return GEV_HD_Continue;
+					if (newPos != extraOrderPos)
+						return GEV_HD_Continue;
+				}
 			}
 
 			if (order == UNIT_ORDER_MOVE_THEN_UNLOAD)

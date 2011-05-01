@@ -357,11 +357,12 @@ bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength, bool ignore
 	    && m_agent_count       >= otherStrength.m_agent_count;
 }
 
-void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, char * text) const
+void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, char * text) const
 {
 	AI_DPRINTF
 	          (
-	           k_DBG_SCHEDULER_ALL, playerId, -1, -1, ("\t\t%s"
+	           k_DBG_SCHEDULER_ALL, playerId, goalType,
+	                                                -1, ("\t\t%s"
 	                                                     "\tm_air_bombard_str   %f"
 	                                                     "\tm_land_bombard_str  %f"
 	                                                     "\tm_water_bombard_str %f"

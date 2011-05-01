@@ -88,6 +88,7 @@ public:
 	Goal_ptr Get_Goal()                        const { return m_goal; };
 	bool     Has_Any_Goal()                    const { return m_goal != NULL; };
 	bool     Has_Goal(const Goal * const goal) const { return m_goal == goal; };
+	sint32   Get_Goal_Type()                   const { return Has_Any_Goal() ? m_goal->Get_Goal_Type() : -1; }
 
 	bool Get_Is_Dead() const { return !m_army.IsValid() || m_army->GetOwner() != m_playerId; }
 ;

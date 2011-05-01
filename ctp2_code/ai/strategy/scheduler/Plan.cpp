@@ -351,10 +351,10 @@ void Plan::Commit_Agent_Common(Goal_ptr goal_ptr)
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
 
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x agent: %x, id: 0%x)\n", goal_ptr, m_the_agent, m_the_agent->Get_Army().m_id));
+		AI_DPRINTF(mask, m_the_agent->Get_Player_Number(), goal_ptr->Get_Goal_Type(), -1, ("\t\tEXECUTING GOAL:                (goal: %x agent: %x, id: 0%x)\n", goal_ptr, m_the_agent, m_the_agent->Get_Army().m_id));
 
 		m_the_agent->Log_Debug_Info(mask, goal_ptr);
-		DPRINTF(mask, ("\t\t\t\n"));
+		AI_DPRINTF(mask, m_the_agent->Get_Player_Number(), goal_ptr->Get_Goal_Type(), -1, ("\t\t\t\n"));
 	}
 #endif // _DEBUG
 }

@@ -266,7 +266,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 {
 	if (!m_army.IsValid())
 	{
-		AI_DPRINTF(log, m_playerId, -1, m_army.m_id, ("   Object Destroyed"));
+		AI_DPRINTF(log, m_playerId, goal->Get_Goal_Type(), m_army.m_id, ("   Object Destroyed"));
 		return;
 	}
 
@@ -275,7 +275,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 
 	AI_DPRINTF(log,
 	           m_playerId,
-	           -1,
+	           goal->Get_Goal_Type(),
 	           -1,
 	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d) \t (by_this=%d) \t (in %s)\n",
 	            m_army.m_id,
@@ -288,7 +288,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	           )
 	          );
 	
-	AI_DPRINTF(log, -99, -1, m_army.m_id,
+	AI_DPRINTF(log, -99, goal->Get_Goal_Type(), m_army.m_id,
 		("\t\t   -------\n")); 
 }
 
@@ -532,7 +532,7 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	utility = move_type_bonus + (trans_rounds * -100) - tile_count;
 
-	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), -1, -1,
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
 	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
@@ -721,7 +721,7 @@ void Agent::Ungroup_Order()
 
 	MBCHAR * myString = new MBCHAR[256];
 	sprintf(myString, "Ungrouping at (%d,%d)", pos.x, pos.y);
-	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
+	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, Get_Goal_Type());
 	delete[] myString;
 }
 
@@ -788,7 +788,7 @@ sint32 Agent::DisbandObsoleteArmies()
 
 	if (count > 0)
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER, m_army.GetOwner(), -1, -1, ("*** Disbanding Army:\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_army.GetOwner(), Get_Goal_Type(), -1, ("*** Disbanding Army:\n"));
 		Log_Debug_Info(k_DBG_SCHEDULER, Get_Goal());
 	}
 
@@ -854,7 +854,7 @@ sint32 Agent::DisbandObsoleteUnits()
 			const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 
 			PerformOrderHere(order_rec, &found_path);
-			g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
+			g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, Get_Goal_Type());
 		}
 		return 0;
 	}
@@ -873,7 +873,7 @@ sint32 Agent::DisbandObsoleteUnits()
 	if(order_rec)
 	{
 		PerformOrder(order_rec);
-		g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
+		g_graphicsOptions->AddTextToArmy(m_army, "DISBAND", 255, Get_Goal_Type());
 	}
 
 	return unit_count;
@@ -912,7 +912,7 @@ void Agent::WaitHere(const MapPoint & goal_pos)
 		m_army->GetPos(pos);
 		MBCHAR * myString = new MBCHAR[255];
 		sprintf(myString, "Waiting GROUP @ (%d,%d) to GO (%d,%d)", pos.x, pos.y, goal_pos.x, goal_pos.y);
-		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
+		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, Get_Goal_Type());
 		delete[] myString;
 	}
 }
