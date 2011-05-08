@@ -661,9 +661,9 @@ public:
 	bool DesireWarWith(const PLAYER_INDEX foreignerId) const;
 
 	
-	bool ComputeDesireWarWith(const PLAYER_INDEX foreignerId);
+	bool ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const;
 
-	
+	void ComputeIncursionPermission();
 	void ComputeAllDesireWarWith();
 
 	
@@ -743,8 +743,6 @@ private:
 	void ComputeTradeRoutePiracyRisk();
 
 	
-	void ComputeIncursionPermission();
-
 	
 	bool LaunchNuclearAttackOnCity(const Unit & city);
 

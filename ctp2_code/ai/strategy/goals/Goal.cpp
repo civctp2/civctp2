@@ -143,7 +143,6 @@ Goal::Goal()
     m_current_attacking_strength    (),
     m_matches                       (),
     m_agents                        (),
-    m_removal_time                  (DONT_REMOVE),
     m_playerId                      (PLAYER_UNASSIGNED),
     m_raw_priority                  (BAD_UTILITY),
     m_combinedUtility               (0),
@@ -162,7 +161,6 @@ Goal::Goal(const Goal &goal)
     m_current_attacking_strength    (0),                         // Nothing since the agent list is not copied
     m_matches                       (),                          // Contains refernces that are invalid after copy
     m_agents                        (),                          // Agents are just pointers, which are changed on copy
-    m_removal_time                  (goal.m_removal_time),
     m_playerId                      (goal.m_playerId),
     m_raw_priority                  (goal.m_raw_priority),
     m_combinedUtility               (goal.m_combinedUtility),
@@ -185,7 +183,6 @@ Goal& Goal::operator= (const Goal &goal)
 	m_goal_type                  = goal.m_goal_type;
 	m_playerId                   = goal.m_playerId;
 	m_raw_priority               = goal.m_raw_priority;
-	m_removal_time               = goal.m_removal_time;
 	m_current_needed_strength    = goal.m_current_needed_strength;
 	m_current_attacking_strength = goal.m_current_attacking_strength;
 	m_matches                    = goal.m_matches;
@@ -499,7 +496,7 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 			continue;
 		}
 
-		match_iter->Compute_Matching_Value(this);
+		Utility matchUtility = match_iter->Compute_Matching_Value(this);
 
 		if(update)
 		{
@@ -1164,7 +1161,7 @@ sint32 Goal::Get_Target_Value() const
 	|| rec->GetTargetTypeSpecialUnit()
 	){
 		const Army &    army = Get_Target_Army();
-		sint16          tmpCount;
+		sint8           tmpCount;
 		float           tmp;
 		float           tmpValue;
 		army->ComputeStrength(tmp,tmp,tmp,tmpCount,tmpCount,tmp,tmp,tmp,tmpValue, false);
@@ -1310,8 +1307,8 @@ void Goal::Compute_Needed_Troop_Flow()
 
 			//not used for the moment (only attack or defense strength is considerated
 			//(see army_strength > operator) - Calvitix
-			m_current_needed_strength.Set_Defenders(static_cast<sint16>(defensive_garrison + offensive_garrison));
-			m_current_needed_strength.Set_Ranged_Units(static_cast<sint16>(ranged_garrison));
+			m_current_needed_strength.Set_Defenders(static_cast<sint8>(defensive_garrison + offensive_garrison));
+			m_current_needed_strength.Set_Ranged_Units(static_cast<sint8>(ranged_garrison));
 		}
 	}
 	else if
@@ -4397,7 +4394,7 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 	}
 
 	// Probably more stuff needs to be done here
-	m_current_needed_strength.Set_Transport(static_cast<sint16>(agent_ptr->Get_Army()->Num()));
+	m_current_needed_strength.Set_Transport(static_cast<sint8>(agent_ptr->Get_Army()->Num()));
 
 	transporter_list.sort(std::greater<std::pair<Utility,class Agent *> >());
 	return transporter_list.size() > 0;

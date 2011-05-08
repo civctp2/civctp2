@@ -138,6 +138,7 @@
 #include "TurnCnt.h"                        // g_turn
 #include "ConstRecord.h"
 #include "DifficultyRecord.h"
+#include "splash.h"
 
 PLAYER_INDEX CtpAi::s_maxPlayers = 0;
 
@@ -867,6 +868,17 @@ STDEHANDLER(CtpAi_ImprovementComplete)
 	return GEV_HD_Continue;
 }
 
+STDEHANDLER(CtpAi_BeginMapAnalysis)
+{
+	PLAYER_INDEX playerId;
+	if (!args->GetPlayer(0, playerId))
+		return GEV_HD_Continue;
+
+	CtpAi::BeginMapAnalysis(playerId);
+
+	return GEV_HD_Continue;
+}
+
 STDEHANDLER(CtpAi_BeginTurnEvent)
 {
 	PLAYER_INDEX playerId;
@@ -897,6 +909,10 @@ void CtpAi::InitializeEvents()
 	g_gevManager->AddCallback(GEV_AiBeginTurn,
 		GEV_PRI_Primary,
 		&s_CtpAi_BeginTurnEvent);
+
+	g_gevManager->AddCallback(GEV_AiBeginMapAnalysis,
+		GEV_PRI_Primary,
+		&s_CtpAi_BeginMapAnalysis);
 
 	g_gevManager->AddCallback(GEV_StartNegotiations,
 		GEV_PRI_Primary,
@@ -1036,7 +1052,7 @@ void CtpAi::Initialize(bool initDiplomat)
 	CellUnitList unit_list;
 	
 	CtpAiDebug::SetDebugPlayer(8);
-	CtpAiDebug::SetDebugGoalType(-1);
+	CtpAiDebug::SetDebugGoalType(-1); // GOAL_SIEGE = 1, all goals = -1
 	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
 }
@@ -1045,10 +1061,13 @@ void CtpAi::Load(CivArchive & archive)
 {
 	Initialize(false);
 
+	SPLASH_STRING("Load Diplomacy...");
 	Diplomat::LoadAll(archive);
 
+	SPLASH_STRING("Compute good values...");
 	g_theWorld->ComputeGoodsValues();
 
+	SPLASH_STRING("Assign goals...");
 	for (PLAYER_INDEX playerId = 0; playerId < s_maxPlayers; playerId++)
 	{
 		Player *    player_ptr  = g_player[playerId];
@@ -1087,6 +1106,7 @@ void CtpAi::Load(CivArchive & archive)
 		}
 	}
 
+	SPLASH_STRING("Analyse Map...");
 	MapAnalysis::GetMapAnalysis().BeginTurn();
 }
 
@@ -1156,6 +1176,30 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 	}
 }
 
+void CtpAi::BeginMapAnalysis(const PLAYER_INDEX player)
+{
+	if(s_maxPlayers <= 0)
+		return;
+
+	Assert(player < s_maxPlayers);
+	Assert(player == g_selected_item->GetCurPlayer());
+	Player * player_ptr = g_player[player];
+
+	if(player_ptr == NULL)
+		return;
+
+	sint32 round = player_ptr->GetCurRound();
+	uint32 t1 = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
+	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn   %d\n", round));
+	DPRINTF(k_DBG_AI, ("//                 Player %d\n", player));
+
+	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
+
+	MapAnalysis::GetMapAnalysis().BeginTurn();
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
+}
+
 void CtpAi::BeginTurn(const PLAYER_INDEX player)
 {
 	if(s_maxPlayers <= 0)
@@ -1191,6 +1235,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	sint32 round = player_ptr->GetCurRound();
 
 	uint32 t1 = GetTickCount();
+
 	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// CHANGE GOVERNMENT -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//					    Player %d\n", player));
@@ -1301,16 +1346,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
-
-	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
-	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn %d\n", round));
-	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
-
-	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
-
-	MapAnalysis::GetMapAnalysis().BeginTurn();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	AddSettleTargets (player);
 	AddExploreTargets(player);
@@ -1544,9 +1579,9 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 
 						g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
 
-						sint16 defense_count;
-						sint16 tmp_count;
-						float  tmp;
+						sint8 defense_count;
+						sint8 tmp_count;
+						float tmp;
 						float defense_strength;
 						move_army->ComputeStrength(tmp,
 						                           defense_strength,
@@ -1948,10 +1983,10 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (army->GetCargo(transports, max, empty))
 			continue;
 
-		sint16 defense_count;
-		sint16 tmp_count;
-		float  tmp;
-		float  defense_strength;
+		sint8 defense_count;
+		sint8 tmp_count;
+		float tmp;
+		float defense_strength;
 		army->ComputeStrength(tmp,
 		                      defense_strength,
 		                      tmp,

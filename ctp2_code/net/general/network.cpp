@@ -3178,27 +3178,6 @@ void Network::TurnSync()
 	if(IsLocalPlayer(g_selected_item->GetCurPlayer())) {
 		SetMyTurn(TRUE);
 
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		m_turnStartedAt = time(0);
 		if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 			ResetTurnEndsAt();
@@ -3209,14 +3188,13 @@ void Network::TurnSync()
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_FinishBeginTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
 							   GEA_End);
-		if(g_player[g_selected_item->GetCurPlayer()]->IsRobot()) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsRobot())
+		{
+			CtpAi::BeginMapAnalysis(g_selected_item->GetCurPlayer());
 			CtpAi::BeginTurn(g_selected_item->GetCurPlayer());
 		}
 	}
 }
-
-
-
 
 void Network::EnterSetupMode()
 {

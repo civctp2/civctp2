@@ -113,6 +113,8 @@ void Player::BeginTurn()
 		g_network.Unblock(m_owner);
 	}
 
+	DPRINTF(k_DBG_GAMESTATE, ("\n"));
+
 	if(!g_network.IsActive() || g_network.IsHost() || (m_owner == g_network.GetPlayerIndex()))
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: running\n", m_owner));

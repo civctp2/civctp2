@@ -226,15 +226,15 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
 
-	sint16 defense_count;
-	sint16 ranged_count;
-	float  attack_strength;
-	float  defense_strength;
-	float  ranged_strength;
-	float  bombard_land_strength;
-	float  bombard_sea_strength;
-	float  bombard_air_strength;
-	float  total_value;
+	sint8 defense_count;
+	sint8 ranged_count;
+	float attack_strength;
+	float defense_strength;
+	float ranged_strength;
+	float bombard_land_strength;
+	float bombard_sea_strength;
+	float bombard_air_strength;
+	float total_value;
 	m_army->ComputeStrength(attack_strength,
 	                        defense_strength,
 	                        ranged_strength,
@@ -247,17 +247,17 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 	                        true
 	                       );
 
-	m_squad_strength.Set_Agent_Count (m_army.Num()                    );
-	m_squad_strength.Set_Attack      (attack_strength                 );
-	m_squad_strength.Set_Defense     (defense_strength                );
-	m_squad_strength.Set_Defenders   (defense_count                   );
-	m_squad_strength.Set_Ranged      (ranged_strength                 );
-	m_squad_strength.Set_Ranged_Units(ranged_count                    );
-	m_squad_strength.Set_Bombard_Land(bombard_land_strength           );
-	m_squad_strength.Set_Bombard_Sea (bombard_sea_strength            );
-	m_squad_strength.Set_Bombard_Air (bombard_air_strength            );
-	m_squad_strength.Set_Value       (total_value                     );
-	m_squad_strength.Set_Transport   (static_cast<sint16>(empty_slots));
+	m_squad_strength.Set_Agent_Count (m_army.Num()                   );
+	m_squad_strength.Set_Attack      (attack_strength                );
+	m_squad_strength.Set_Defense     (defense_strength               );
+	m_squad_strength.Set_Defenders   (defense_count                  );
+	m_squad_strength.Set_Ranged      (ranged_strength                );
+	m_squad_strength.Set_Ranged_Units(ranged_count                   );
+	m_squad_strength.Set_Bombard_Land(bombard_land_strength          );
+	m_squad_strength.Set_Bombard_Sea (bombard_sea_strength           );
+	m_squad_strength.Set_Bombard_Air (bombard_air_strength           );
+	m_squad_strength.Set_Value       (total_value                    );
+	m_squad_strength.Set_Transport   (static_cast<sint8>(empty_slots));
 
 	return m_squad_strength;
 }
@@ -275,7 +275,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 
 	AI_DPRINTF(log,
 	           m_playerId,
-	           goal->Get_Goal_Type(),
+	           goal != NULL ? goal->Get_Goal_Type() : -1,
 	           -1,
 	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d) \t (by_this=%d) \t (in %s)\n",
 	            m_army.m_id,
@@ -288,7 +288,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	           )
 	          );
 	
-	AI_DPRINTF(log, -99, goal->Get_Goal_Type(), m_army.m_id,
+	AI_DPRINTF(log, -99, goal != NULL ? goal->Get_Goal_Type() : -1, m_army.m_id,
 		("\t\t   -------\n")); 
 }
 

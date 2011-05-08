@@ -66,9 +66,18 @@ STDEHANDLER(BeginTurnEvent)
 	
 	g_player[player]->m_current_round = round;
 
+	g_director->NextPlayer();
+
+	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
+	{
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AiBeginMapAnalysis,
+		                       GEA_Player,      player,
+		                       GEA_End
+		                      );
+	}
+
 	CtpAi::BeginDiplomacy(player, round);
 
-	g_director->NextPlayer();
 	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AiBeginTurn,

@@ -218,6 +218,7 @@ bool Diplomat::HasDiplomat(const PLAYER_INDEX & playerId)
 {
 	return (playerId >= 0
 	&&      static_cast<size_t>(playerId) < s_theDiplomats.size()
+	&&      g_player[playerId] != NULL
 	&&      playerId == s_theDiplomats[playerId].GetPlayerId());
 }
 
@@ -5685,6 +5686,7 @@ bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
 	Assert(foreignerId >= 0);
 	Assert(static_cast<size_t>(foreignerId) < m_desireWarWith.size());
+	Assert(m_desireWarWith[foreignerId] == ComputeDesireWarWith(foreignerId))
 
 	if (foreignerId >= 0 && static_cast<size_t>(foreignerId) < m_desireWarWith.size())
 		return m_desireWarWith[foreignerId];
@@ -5692,7 +5694,7 @@ bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 	return false;
 }
 
-bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
+bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const
 {
 	if (!g_player[m_playerId])
 		return false;

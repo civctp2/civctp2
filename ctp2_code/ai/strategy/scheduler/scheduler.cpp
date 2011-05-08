@@ -1951,10 +1951,10 @@ void Scheduler::Assign_Garrison()
 		  )
 		{
 
-			sint16 defense_count;
-			sint16 tmp_count;
-			float  tmp;
-			float  defense_strength;
+			sint8 defense_count;
+			sint8 tmp_count;
+			float tmp;
+			float defense_strength;
 			army->ComputeStrength(tmp,
 			                      defense_strength,
 			                      tmp,

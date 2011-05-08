@@ -142,9 +142,6 @@ public:
     bool Get_Removal_Time() const;
 
 
-    void Set_Removal_Time(const REMOVAL_TIME & removal_time) { m_removal_time = removal_time; };
-
-
     bool Can_Be_Executed() const;
 
 
@@ -308,7 +305,6 @@ private:
     Squad_Strength                    m_current_attacking_strength;
     Plan_List                         m_matches;
     Agent_List                        m_agents;
-    REMOVAL_TIME                      m_removal_time;
     PLAYER_INDEX                      m_playerId;
     Utility                           m_raw_priority;
     Utility                           m_combinedUtility;

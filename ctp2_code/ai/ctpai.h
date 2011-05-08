@@ -77,7 +77,7 @@ public:
 	
 	static void AddPlayer(const PLAYER_INDEX newPlayerId);
 
-	
+	static void BeginMapAnalysis(const PLAYER_INDEX player);
 	static void BeginTurn(const PLAYER_INDEX player);
 	static void BeginDiplomacy(const PLAYER_INDEX player, sint32 round);
 

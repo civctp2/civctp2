@@ -277,15 +277,15 @@ void MapAnalysis::BeginTurn()
             Assert(army.IsValid());
             army->GetPos(pos);
 
-            sint16 defense_count;
-            sint16 ranged_count;
-            float  attack_strength;
-            float  defense_strength;
-            float  ranged_strength;
-            float  bombard_land_strength;
-            float  bombard_sea_strength;
-            float  bombard_air_strength;
-            float  total_value;
+            sint8 defense_count;
+            sint8 ranged_count;
+            float attack_strength;
+            float defense_strength;
+            float ranged_strength;
+            float bombard_land_strength;
+            float bombard_sea_strength;
+            float bombard_air_strength;
+            float total_value;
 			army->ComputeStrength(attack_strength,
 			                      defense_strength,
 			                      ranged_strength,
@@ -434,13 +434,19 @@ void MapAnalysis::BeginTurn()
         m_bombardSeaGrid  [player].Relax(cycles, coef);
         m_bombardAirGrid  [player].Relax(cycles, coef);
         m_valueGrid       [player].Relax(cycles, coef);
-#if 0
-// Should be in but for now waiting for further testing
     }
+
+	for (player = 0; player < m_threatGrid.size(); player++)
+	{
+		if(Diplomat::HasDiplomat(player))
+		{
+			Diplomat::GetDiplomat(player).ComputeAllDesireWarWith();
+			Diplomat::GetDiplomat(player).ComputeIncursionPermission();
+		}
+	}
 
     for (player = 0; player < m_threatGrid.size(); player++)
     {
-#endif
         Player * player_ptr = g_player[player];
         if (player_ptr == NULL)
             continue;

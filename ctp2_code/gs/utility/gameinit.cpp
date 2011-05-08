@@ -2171,20 +2171,20 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 #ifdef _DEBUG
 	if (g_theProfileDB->IsDiplomacyLogOn()) 
-    {
+	{
 		g_theDiplomacyLog = new Diplomacy_Log;
 	}
 
-    verifyYwrap();
+	verifyYwrap();
 #endif
 
 	bool createRobotInterface = true;
 	
 	SPLASH_STRING("Initializing A-star Pathing...");
-	roboinit_Initalize(archive); 
-    CtpAi::Cleanup();
+	roboinit_Initalize(archive);
+	CtpAi::Cleanup();
 
-	if (&archive && loadEverything) 
+	if (&archive && loadEverything)
 	{
 		g_theWorld->SetAllMoveCost();
 		g_theWorld->A_star_heuristic->Update();
@@ -2207,41 +2207,35 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		CtpAi::Initialize();
 	}
 
-	
-	if(createRobotInterface) {
-		if(g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch() ) {
-			
-			
-			
-			
+	SPLASH_STRING("Load AI data elements done...");
+
+	if(createRobotInterface)
+	{
+		SPLASH_STRING("Create Robot Interface...");
+
+		if(g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch() )
+		{
 			PLAYER_INDEX ai_players[k_MAX_PLAYERS]; 
-		
-			
+
 			sint32 next = 0;
 		
-			for (i=0; i< k_MAX_PLAYERS; i++) { 
-				if(g_player[i] && g_player[i]->IsRobot()) {
+			for (i=0; i< k_MAX_PLAYERS; i++)
+			{
+				if(g_player[i] && g_player[i]->IsRobot())
+				{
 					ai_players[next++] = PLAYER_INDEX(i);
 				}
 			}
-		
-			
-			
 
-
-
-
-
-
-			
-			
-			
-
-			if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch()) {
+			if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch())
+			{
 				g_theProfileDB->SetAI(TRUE);
 			}
-		} else {
-			for(i = 0; i < k_MAX_PLAYERS; i++) {
+		}
+		else
+		{
+			for(i = 0; i < k_MAX_PLAYERS; i++)
+			{
 				if(g_player[i])
 					g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
@@ -2249,12 +2243,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 	g_theTradeOfferPool->ReRegisterOffers();
-
-
-
-
-
-
 
 	if (!(&archive))
 	{
@@ -2272,7 +2260,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			numPlaced = gameinit_PlaceInitalUnits(g_theProfileDB->GetNPlayers(), g_player_start_list);
 		}
 #else
-    
 		numPlaced = gameinit_PlaceInitalUnits(g_theProfileDB->GetNPlayers(), g_player_start_list);
 #endif
 		if(numPlaced < g_theProfileDB->GetNPlayers() - 1) { 
@@ -2325,16 +2312,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_director->AddCopyVision();
 	}
 
-
-
-
-
-
-
-
-
-
-	if(&archive) {
+	if(&archive)
+	{
+		SPLASH_STRING("Set all move costs...");
 		g_theWorld->SetAllMoveCost();
 
   #if defined(USE_TEST_MP_AS_SP)
@@ -2400,15 +2380,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		!g_turn->IsHotSeat()
 	   )
 	{
-		
-			
-		
 		g_selected_item->Refresh();
 	}
 
-	
-	g_theWorld->A_star_heuristic->Update();
+	SPLASH_STRING("Update World stats...");
 
+	g_theWorld->A_star_heuristic->Update();
 	g_theWorld->RecalculateZOC();
 
 #ifdef _DEBUG
@@ -2427,7 +2404,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 #endif
 
-	
+	SPLASH_STRING("Calculate good distances...");
+
 	for(i=0; i<k_MAX_PLAYERS; i++)
 	{
 		if (g_player[i])
@@ -2439,20 +2417,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 	}
 
-
-	
-	
+	SPLASH_STRING("Reset vision...");
 	if(&archive && loadEverything) {
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i]) {
 				g_player[i]->ResetVision();
 
-
-				
-				
-				
-				
-				
 				if (g_player[i]->m_isDead &&
 					g_player[i]->m_all_cities->Num() > 0) {
 					g_player[i]->m_isDead = FALSE;
@@ -2462,10 +2432,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 	g_director->AddCopyVision();
 
-	
-	if(!g_network.IsActive() && !g_network.IsNetworkLaunch()) {
-		if(strcmp(g_theProfileDB->GetLeaderName(), "Leemur") == 0) {
-		
+	if(!g_network.IsActive() && !g_network.IsNetworkLaunch())
+	{
+		SPLASH_STRING("Check for Lemur...");
+
+		if(strcmp(g_theProfileDB->GetLeaderName(), "Leemur") == 0)
+		{
 			g_player[1]->m_gold->SetLevel(1000000);
 
 			g_player[1]->m_materialPool->AddMaterials(1000000);

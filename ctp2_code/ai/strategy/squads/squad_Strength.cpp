@@ -173,10 +173,10 @@ void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 	                      true,
 	                      noCargo);
 
-	m_agent_count       = static_cast<sint16>(army.Num());
+	m_agent_count       = static_cast<sint8>(army.Num());
 
 	m_transport = 0;
-	for(sint32 i = m_agent_count; i > 0; --i)
+	for(sint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
 		
@@ -220,7 +220,7 @@ void Squad_Strength::Set_Cargo_Strength(const Army & army)
 	                           m_value,
 	                           true);
 
-	m_agent_count       = static_cast<sint16>(army->GetCargoNum());
+	m_agent_count       = static_cast<sint8>(army->GetCargoNum());
 }
 
 void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
@@ -249,7 +249,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	m_value = 0.0;
 	m_transport = 0;
-	for(sint32 i = m_agent_count; i > 0; --i)
+	for(sint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
 		
@@ -333,7 +333,7 @@ float Squad_Strength::GetTotalMissing(const Squad_Strength & otherStrength) cons
 	float water_bombard = m_water_bombard_str - otherStrength.m_water_bombard_str;
 	float air_bombard   = m_air_bombard_str   - otherStrength.m_air_bombard_str;
 
-	sint16 count         = m_agent_count       - otherStrength.m_agent_count;
+	sint8 count         = m_agent_count       - otherStrength.m_agent_count;
 
 	return std::max(0.0f, attack)
 	     + std::max(0.0f, defense)

@@ -37,7 +37,7 @@
 #if defined(_PLAYTEST) || defined(USE_LOGGING)
 
 PLAYER_INDEX CtpAiDebug::s_debugPlayer = 8;
-sint32 CtpAiDebug::s_debugGoalType = -1;
+sint32 CtpAiDebug::s_debugGoalType = -1; // GOAL_SIEGE = 1, all goals = -1
 sint32 CtpAiDebug::s_debugArmies[k_MAX_ARMY_SIZE];
 
 bool CtpAiDebug::DebugLogCheck(const sint32 player, const sint32 goal_type, const sint32 army_id)

@@ -47,7 +47,7 @@ class MapPoint;
 class Squad_Strength
 {
 public:
-	Squad_Strength(sint16 agent_count = 0)
+	Squad_Strength(sint8 agent_count = 0)
 	: m_attack_str       (0.0),
 	  m_defense_str      (0.0),
 	  m_ranged_str       (0.0),
@@ -91,9 +91,9 @@ public:
 	float Get_Bombard_Sea () const { return m_water_bombard_str; };
 	float Get_Bombard_Air () const { return m_air_bombard_str;   };
 	float Get_Value       () const { return m_value;             };
-	sint16 Get_Transport   () const { return m_transport;         };
-	sint16 Get_Defenders   () const { return m_defenders;         };
-	sint16 Get_Ranged_Units() const { return m_ranged;            };
+	sint8 Get_Transport   () const { return m_transport;         };
+	sint8 Get_Defenders   () const { return m_defenders;         };
+	sint8 Get_Ranged_Units() const { return m_ranged;            };
 
 	void Set_Attack       (const float & attack)  { m_attack_str        = attack;  };
 	void Set_Defense      (const float & defense) { m_defense_str       = defense; };
@@ -102,9 +102,9 @@ public:
 	void Set_Bombard_Sea  (const float & sea)     { m_water_bombard_str = sea;     };
 	void Set_Bombard_Air  (const float & air)     { m_air_bombard_str   = air;     };
 	void Set_Value        (const float & value)   { m_value             = value;   };
-	void Set_Transport    (const sint16 & slots)   { m_transport         = slots;    Assert(slots >= 0); };
-	void Set_Defenders    (const sint16 & units)   { m_defenders         = units;   };
-	void Set_Ranged_Units (const sint16 & units)   { m_ranged            = units;   };
+	void Set_Transport    (const sint8 & slots)   { m_transport         = slots;    Assert(slots >= 0); };
+	void Set_Defenders    (const sint8 & units)   { m_defenders         = units;   };
+	void Set_Ranged_Units (const sint8 & units)   { m_ranged            = units;   };
 
 
 	void Set_Force_Matching( const float attack_ratio,
@@ -130,10 +130,10 @@ protected:
 	float m_air_bombard_str;
 	float m_value;
 
-	sint16 m_agent_count;
-	sint16 m_transport;
-	sint16 m_defenders;
-	sint16 m_ranged;
+	sint8 m_agent_count;
+	sint8 m_transport;
+	sint8 m_defenders;
+	sint8 m_ranged;
 };
 
 #endif // __AGENT_STRENGTH_H__
