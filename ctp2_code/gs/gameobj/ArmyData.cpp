@@ -3008,7 +3008,6 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	    target_is_city, target_city, home_city))
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("!IsSlaveRaidPossible()\n"));
-		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -3016,7 +3015,6 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	GetPos(mypos);
 	if(!point.IsNextTo(mypos))
 	{
-		ERROR_SOUND
 		DPRINTF(k_DBG_GAMESTATE, ("!IsNextTo in SlaveRaid\n"));
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -3293,13 +3291,11 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 	Assert(n > 0);
 	if(n != 1)
 	{
-		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
 	}
 	
 	if(!cell->AccessUnit(0).GetDBRec()->GetSettle())
 	{
-		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -5913,11 +5909,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						m_owner, 
 						PROPOSAL_OFFER_STOP_PIRACY))
 					{
-						/// @todo Check what is missing here. turnBuf is never
-						///       initialised, so the effect of so->AddAction
-						///       is unpredictable.
-						char turnBuf[32];
-						
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
 						so->AddCivilisation(m_owner);
@@ -5925,7 +5916,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						so->AddUnit(m_array[i]);
 						so->AddLocation(m_pos);
 						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
-						so->AddAction(turnBuf);
 						g_slicEngine->Execute(so);
 
 						g_selected_item->ForceDirectorSelect(Army(m_id));
@@ -8373,8 +8363,8 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if(visiblePlayer == m_array[0].GetOwner()
-		|| (m_array[0].GetVisibility() & (1 << visiblePlayer))
-		){
+		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
 								m_array[0].GetCantMoveSoundID(),
 								to_pt.x,
@@ -8387,8 +8377,8 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 
 void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 {
-	if(debark.Num() <= 0) {
-		
+	if(debark.Num() <= 0)
+	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_array[0].GetOwner()) || 
 			(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
@@ -8461,15 +8451,16 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 				}
 			}
 		}
-		if (0 < debark.Num()) { 
-			
-			
-			if (debark.IsValid()) 
+		if (0 < debark.Num())
+		{
+			if (debark.IsValid())
 			{
 				sint32 i;
-				for(i = 0; i < debark.Num(); i++) {
+				for(i = 0; i < debark.Num(); i++)
+				{
 					if(!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL) &&
-					   !debark[i].GetMovementTypeAir()) {
+					   !debark[i].GetMovementTypeAir())
+					{
 						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SetUnloadMovementUnit,
 											   GEA_Unit, debark[i].m_id,
 											   GEA_End);
@@ -9208,8 +9199,6 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 		if(soundID != -1)
 		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == m_owner) ||
-				(unit.GetVisibility() & (1 << visiblePlayer)))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
 			}
@@ -9581,7 +9570,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 			if(g_selected_item->IsAutoCenterOn()
 			&&!g_director->TileWillBeCompletelyVisible(order->m_point.x, order->m_point.y)
-			&& g_player[g_selected_item->GetVisiblePlayer()]->m_vision->IsVisible(order->m_point)
+			&& g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(order->m_point)
 			){
 				g_director->AddCenterMap(m_pos);
 			}
@@ -9593,7 +9582,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		case ORDER_RESULT_SUCCEEDED_INCOMPLETE:
 			deduct = true;
 
-			if (useDefaultSuccessSound) {
+			if (useDefaultSuccessSound)
+			{
 				if(g_selected_item->IsAutoCenterOn()
 				&&!g_director->TileWillBeCompletelyVisible(order->m_point.x, order->m_point.y)
 				&& g_player[g_selected_item->GetVisiblePlayer()]->m_vision->IsVisible(order->m_point)
@@ -9603,13 +9593,18 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 				sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_SUCCESS"))->GetValue();
 				sint32 soundID;
-				if(!order_rec->GetSound(soundID)) {
+				if(!order_rec->GetSound(soundID))
+				{
 					soundID = 0;
 				}
 				
-
-				g_director->AddSpecialEffect(order->m_point, spriteID, soundID);
-			} else {
+				if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(order->m_point))
+				{
+					g_director->AddSpecialEffect(order->m_point, spriteID, soundID);
+				}
+			}
+			else
+			{
 			}
 			break;
 		case ORDER_RESULT_INCOMPLETE:
@@ -9757,7 +9752,6 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 	if (cell->GetCity().IsValid())
 	{
 		bool visible = (cell->GetCity().GetVisibility() & (1 << m_owner)) != 0;
-
 		if(!visible)
 		{
 			cell->GetCity().SetVisible(m_owner);

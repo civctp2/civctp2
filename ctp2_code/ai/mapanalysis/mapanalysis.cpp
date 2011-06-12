@@ -423,7 +423,7 @@ void MapAnalysis::BeginTurn()
     DPRINTF(k_DBG_MAPANALYSIS, ("\n"));
 
     const sint8 cycles = 1;
-    const float coef = 0.8f;
+    const float coef = 0.95f;
     for (player = 0; player < m_threatGrid.size(); player++)
     {
         m_threatGrid      [player].Relax(cycles, coef);

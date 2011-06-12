@@ -144,10 +144,4 @@ sint32 gamesounds_GetGameSoundID(sint32 gamesound);
 void gamesounds_WindowOpened(void);
 void gamesounds_WindowClosed(void);
 
-#define ERROR_SOUND  { if (g_soundManager) { \
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, \
-				gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),\
-				0, 0);\
-} } \
-
 #endif

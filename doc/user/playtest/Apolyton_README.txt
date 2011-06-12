@@ -36,7 +36,7 @@ For Chinese gamers: If you use a Chinese version of the game you have to
                     saying "english", change it to "chinese".
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revision 1097 (07-Jun-2010)"
+http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -48,6 +48,7 @@ http://apolyton.net/forums/showthread.php?t=172035 "PROJECT: Playtest (Thread No
 http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revision 990 (01-Jun-2009)"
 http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
+http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revision 1097 (07-Jun-2010)"
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
@@ -58,7 +59,65 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Changelog (Well, you don't have to read the full thing. ;)):
-2010-07-06 (Revision 1097)
+2011-06-12 (Revision 1111)
+Fixed:    The game does not crash, if a city is supposed to be converted and the
+          converting unit was killed the turn before.
+Fixed:    The AI does not try to disband settlers anymore.
+Fixed:    After a reload, the correct strategy is loaded for the AI.
+Fixed:    The AI does not use units for garrison if they are not needed. This
+          frees troops for other tasks.
+Fixed:    Thread and power calculation have been corrected so that the AI does
+          not waste ressources to fullfil its tasks.
+Fixed:    The AI does not hunt enemy units far away from home, just because one
+          has been seen by a spy.
+Fixed:    The AI uses the nearest unit as rally point for rallying troops. This
+          way the AI does not get distracted.
+Fixed:    When the AI is rallying armies, it marks all armies as being used,
+          even so they are not used. This prevents the AI from assigning those
+          armies to other tasks, so that the original task can still be
+          fullfilled.
+Fixed:    The AI ungroups stealth units from non-stealth units if their goal
+          is a stealth goal.
+Fixed:    The AI does not move ships before all passangers are on board.
+Fixed:    The AI does not use units for beach assault that cannot beach assault.
+Fixed:    The AI unloads cargo helicopters if they reached land, and there is
+          only land up to the target.
+Fixed:    Finished the Oceanforming tab for modders.
+Changed:  Reduced memory requirements for the AI and sped up the AI.
+Fixed:    Fixed inccorect calculation of ZOC.
+Fixed:    The AI unloads its cargo from helicopters in front of the target city
+          instead of flyring there with the helicopter.
+Fixed:    Fixed city happiness calculation so that it depends correctly on crime
+          and pollution. This way the numbers are the same if an entertainer has
+          been added and then removed.
+Changed:  The AI waits with building wonders until it has four cities or no
+          space for more cities.
+Changed:  The userprofile options crash logging, show city production, civ flags,
+          enemy health, and new combat have been enabled by default. The
+          userprofile option scroll delay has been disabled by default.
+Changed:  The difficulty were renamed to classic civ difficulty names.
+Updated:  The AE mod to the current state of the Apolyton Edition.
+Changed:  The AI reconsideres the plans for its units like their paths if they
+          reveal foreign units.
+Fixed:    The calculates the strengths of its units correctly even if they are
+          transported.
+Changed:  The AI is more likely to conquer cities that are on another continent
+          but on another side of a strait the AI has access to.
+Changed:  The AI does not try to use its transporters as attackers, so that
+          their goal does not fail.
+Fixed:    The AI recalculates the needed numbers of transporters for it goals
+          after a process match cycle, this prevents the goal from failing.
+Fixed:    The AI continues on a goal even after grouping in a city.
+Fixed:    Fixed city support cost calculation.
+Added:    Added /beginscheduler command to the chat window. This way the AI
+          unit movement can be tested without waiting on the other AIs.
+Fixed:    When the AI steps on an invisible unit it is revealed to the AI so
+          the Ai can bypass this unit or kill it.
+Fixed:    Fixed the AI desire war calculation.
+Fixed:    If a slave raid fails, because the slaver has not enough movement
+          the victim does not hear that.
+
+2010-06-07 (Revision 1097)
 Fixed:    The AI handles incursion permission correctly even directly after a
           reload.
 Fixed:    The AI now ranks correctly its opponents by their strength.
@@ -92,7 +151,7 @@ Fixed:    The minimap shows the diplomatic relationships correctly even if you
 Changed:  The AI prioritizes for conquest cities of its weakest enemy.
 
 
-2010-28-02 (Revision 1056)
+2010-02-28 (Revision 1056)
 Fixed:    If the AI runs into a foreigner and if it desires war, it goes to
           battle.
 Fixed:    The honor pollution agreement request does not set an embargo if
@@ -105,7 +164,7 @@ Fixed:    The AI does not try to group land units into sea transporters anymore.
 Changed:  Removed the CD-check, so that the retail version from gog.com runs
           with the Apolyton Edition.
 
-2010-20-02 (Revision 1055)
+2010-02-20 (Revision 1055)
 Fixed:    The AI does not check its city limit, if city limit is disabled.
 Changed:  The new game rules screen has been cleaned up and enhanced with
           discriptions of what the single rules are good for.
