@@ -964,7 +964,11 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 {
 	
 	Unit unit;
+#if defined(__LP64__)
+	unit.m_id = (uint64)(cookie);
+#else
 	unit.m_id = (uint32)(cookie);
+#endif
 
 	
 	AUI_ERRCODE errorCode =
@@ -1009,7 +1013,11 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static *control,
  												  aui_Surface *surface, RECT &rect, void *cookie)
 {
+#if defined(__LP64__)
+	Unit u; u.m_id = (uint64)cookie;
+#else
 	Unit u; u.m_id = (uint32)cookie;
+#endif
 
 	AUI_ERRCODE errCode = g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 	if(errCode != AUI_ERRCODE_OK)
@@ -1146,7 +1154,11 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static *control,
 										 RECT &rect, 
 										 void *cookie)
 {
-	Unit theTransport;  theTransport.m_id = uint32(cookie);
+#if defined(__LP64__)
+    Unit theTransport;  theTransport.m_id = (uint64)(cookie);
+#else
+	Unit theTransport;  theTransport.m_id = (uint32)(cookie);
+#endif
 	if(!theTransport.IsValid())
 		return AUI_ERRCODE_OK;
 

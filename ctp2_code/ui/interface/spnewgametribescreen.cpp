@@ -677,10 +677,15 @@ void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint3
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
+#if defined(__LP64__)
+	if ( (sint64) cookie < 0 ) return;
+	CIV_INDEX	civ = static_cast<CIV_INDEX>((sint64) cookie);
+#else
 	if ( (sint32) cookie < 0 ) return;
+	CIV_INDEX	civ = static_cast<CIV_INDEX>((sint32) cookie);
+#endif
 
 	
-	CIV_INDEX	civ = static_cast<CIV_INDEX>((sint32) cookie);
 	StringId nameString;
 	if ( s_maleRadio->GetState() )
 		nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();

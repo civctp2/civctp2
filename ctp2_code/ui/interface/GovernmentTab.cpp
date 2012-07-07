@@ -499,8 +499,11 @@ std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 			currentSelection.first = true;
 
 			
-			currentSelection.second = reinterpret_cast<sint32 >
-				(currentItem->GetUserData());
+#if defined(__LP64__)
+			currentSelection.second = reinterpret_cast<sint64 >(currentItem->GetUserData());
+#else
+			currentSelection.second = reinterpret_cast<sint32 >(currentItem->GetUserData());
+#endif
 		}
 	}
 

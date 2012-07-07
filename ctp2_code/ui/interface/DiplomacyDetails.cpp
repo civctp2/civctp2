@@ -648,7 +648,11 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerColor(ctp2_Static *control,
 												 void *cookie)
 {
 	
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -666,7 +670,11 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerFlag(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -706,7 +714,11 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 	
 
 
@@ -765,7 +777,11 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 {
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[detailPlayer]) return AUI_ERRCODE_OK;
@@ -833,7 +849,11 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 {
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 
 	
 
@@ -886,7 +906,11 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 											 RECT &rect,
 											 void *cookie)
 {
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
 	

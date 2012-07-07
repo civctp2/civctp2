@@ -440,7 +440,11 @@ TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void 
 		return;
 
 	
+#if defined(__LP64__)
+	uint32 index=(uint64)cookie;
+#else
 	uint32 index=(uint32)cookie;
+#endif
 
 	
 	if (index>=CP_TILEIMP_MAX)
@@ -474,7 +478,11 @@ TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *c
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	
+#if defined(__LP64__)
+	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint64(cookie));
+#else
 	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint32(cookie));
+#endif
 
 	
 	if (rec==NULL)
@@ -513,7 +521,11 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 	
 	if (item)
 	{
+#if defined(__LP64__)
+		Message theMessage((uint64)item->GetCookie());
+#else
 		Message theMessage((uint32)item->GetCookie());
+#endif
 
 		if (g_theMessagePool->IsValid(theMessage))
 		{ 
@@ -617,7 +629,11 @@ void controlpanelwindow_DisbandCity(bool response, void *userData)
 		return;
 
 	if(response) {
+#if defined(__LP64__)
+		Unit city(reinterpret_cast<uint64>(userData));
+#else
 		Unit city(reinterpret_cast<uint32>(userData));
+#endif
 		if(city.IsValid()) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}
@@ -647,7 +663,11 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		}
 	}
 	
+#if defined(__LP64__)
+	switch((sint64)cookie) {
+#else
 	switch((sint32)cookie) {
+#endif
 		case k_CONTEXT_CITY_VIEW:
 			if(haveCity) CityWindow::Display(city.CD());
 			break;
@@ -702,7 +722,11 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				}
 			}
 
+#if defined(__LP64__)
+			sint64 orderIndex = (sint64)cookie;
+#else
 			sint32 orderIndex = (sint32)cookie;
+#endif
 			if(orderIndex >= 0 && orderIndex < g_theOrderDB->NumRecords()) {
 				const OrderRecord *order=g_theOrderDB->Get(orderIndex);
 				g_controlPanel->BeginOrderDelivery((OrderRecord *)order);
@@ -1023,7 +1047,11 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		return;
 
 	
+#if defined(__LP64__)
+	switch ((sint64)cookie)
+#else
 	switch ((sint32)cookie)
+#endif
 	{
    	case	CP_MENU_ITEM_0:
 			gameplayoptions_displayMyWindow();
@@ -2548,7 +2576,11 @@ void ControlPanelWindow::SetMessageRead(const Message &msg)
 
 		if(!item)
 			break;
+#if defined(__LP64__)
+		Message imsg; imsg.m_id = (uint64)item->GetCookie();
+#else
 		Message imsg; imsg.m_id = (uint32)item->GetCookie();
+#endif
 		if(imsg.m_id == msg.m_id) {
 			ctp2_Static *staticContainer = (ctp2_Static *)item->GetChildByIndex(0);
 			if(!staticContainer)
@@ -3879,7 +3911,11 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	const	TerrainImprovementRecord *rec;
 	bool	show_button,grey_button;
 
+#if defined(__LP64__)
+   	rec = g_theTerrainImprovementDB->Get((sint64)m_tileImpButtons[button]->GetCookie());
+#else
    	rec = g_theTerrainImprovementDB->Get((sint32)m_tileImpButtons[button]->GetCookie());
+#endif
    		
    	Assert(rec != NULL);
    	
@@ -3931,7 +3967,11 @@ ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
 	const	IconRecord *irec;
 
 
+#if defined(__LP64__)
+   	rec = g_theTerrainDB->Get(sint64(m_terraFormButtons[button]->GetCookie()));
+#else
    	rec = g_theTerrainDB->Get(sint32(m_terraFormButtons[button]->GetCookie()));
+#endif
    		
    	Assert(rec != NULL);
    	
@@ -4084,7 +4124,11 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 void ControlPanelWindow::TabCallback(aui_Control *control, uint32 action,
 									 uint32 data, void *cookie)
 {
+#if defined(__LP64__)
+	CP_TAB tab = (CP_TAB)(sint64)cookie;
+#else
 	CP_TAB tab = (CP_TAB)(sint32)cookie;
+#endif
 
 	if(action == ctp2_Tab::ACTION_ACTIVATED) {
 		

@@ -2387,94 +2387,94 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 
 
 
-void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
-//#ifndef WIN32
-//	memcpy(pDst, pSrc, copylength * sizeof(uint16));
-    if (((uint32 )pDst) & 2) {
-        *pDst = *pSrc;
-        pDst++, pSrc++, copylength--;
-        }
-#ifndef WIN32
-    //printf("%s L%d: BlockCopy16 with asm used!\n", __FILE__, __LINE__);
-    __asm__ (
-        //"movl            $copylength, %ecx \n\t"
-        //"movl            $pSrc, %esi \n\t"
-        "movl    %0,%3           \n\t"
-        "shrl    $2,%0             \n\t"
-        //"movl            $pDst, %2 \n\t"
-        "testl   %0,%0           \n\t"
-        "jz .lable3                      \n\t"
+// void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
+// //#ifndef WIN32
+// //	memcpy(pDst, pSrc, copylength * sizeof(uint16));
+//     if (((uint32 )pDst) & 2) {
+//         *pDst = *pSrc;
+//         pDst++, pSrc++, copylength--;
+//         }
+// #ifndef WIN32
+//     //printf("%s L%d: BlockCopy16 with asm used!\n", __FILE__, __LINE__);
+//     __asm__ (
+//         //"movl            $copylength, %ecx \n\t"
+//         //"movl            $pSrc, %esi \n\t"
+//         "movl    %0,%3           \n\t"
+//         "shrl    $2,%0             \n\t"
+//         //"movl            $pDst, %2 \n\t"
+//         "testl   %0,%0           \n\t"
+//         "jz .lable3                      \n\t"
 
-        ".lable0:                                             \n\t"
-        "movl            (%1),%4 \n\t"
-        "movl            4(%1),%5 \n\t"
-        "movl            %4,(%2) \n\t"
-        "movl            %5,4(%2) \n\t"
-        "addl            $8,%1     \n\t"
-        "addl            $8,%2     \n\t"
-        "decl            %0        \n\t"
-        "jnz .lable0                     \n\t"
-        ".lable3:                        \n\t"
+//         ".lable0:                                             \n\t"
+//         "movl            (%1),%4 \n\t"
+//         "movl            4(%1),%5 \n\t"
+//         "movl            %4,(%2) \n\t"
+//         "movl            %5,4(%2) \n\t"
+//         "addl            $8,%1     \n\t"
+//         "addl            $8,%2     \n\t"
+//         "decl            %0        \n\t"
+//         "jnz .lable0                     \n\t"
+//         ".lable3:                        \n\t"
 
-        "testl   $2,%3             \n\t"
-        "jz .lable1                      \n\t"
+//         "testl   $2,%3             \n\t"
+//         "jz .lable1                      \n\t"
 
-        "movl            (%1),%4 \n\t"
-        "movl            %4,(%2) \n\t"
-        "addl            $4,%1     \n\t"
-        "addl            $4,%2     \n\t"
-        ".lable1:                        \n\t"
+//         "movl            (%1),%4 \n\t"
+//         "movl            %4,(%2) \n\t"
+//         "addl            $4,%1     \n\t"
+//         "addl            $4,%2     \n\t"
+//         ".lable1:                        \n\t"
 
-        "testl   $1,%3             \n\t"
-        "jz .lable2                      \n\t"
-        "movw            (%1),%w4  \n\t"
-        "movw            %w4,(%2)  \n\t"
-        ".lable2:                        \n\t"
+//         "testl   $1,%3             \n\t"
+//         "jz .lable2                      \n\t"
+//         "movw            (%1),%w4  \n\t"
+//         "movw            %w4,(%2)  \n\t"
+//         ".lable2:                        \n\t"
 
-        : 
-        : "q" (copylength), "r" (pSrc), "r" (pDst), "r" (0), "r" (0), "r" (0)
-        : "cc"
-        );
+//         : 
+//         : "q" (copylength), "r" (pSrc), "r" (pDst), "r" (0), "r" (0), "r" (0)
+//         : "cc"
+//         );
 
-#else
-__asm 
-	{
-		mov		ecx, copylength
-		mov		esi, pSrc
-		mov     edx, ecx
-		shr     ecx, 2
-		mov		edi, pDst
-		test	ecx, ecx
-		jz		L3
+// #else
+// __asm 
+// 	{
+// 		mov		ecx, copylength
+// 		mov		esi, pSrc
+// 		mov     edx, ecx
+// 		shr     ecx, 2
+// 		mov		edi, pDst
+// 		test	ecx, ecx
+// 		jz		L3
 		
-	L0:						
-		mov		eax, [esi]
-		mov		ebx, [esi+4]
-		mov		[edi], eax
-		mov		[edi+4], ebx
-		add		esi, 8
-		add		edi, 8
-		dec		ecx
-		jnz		L0
-	L3:
+// 	L0:						
+// 		mov		eax, [esi]
+// 		mov		ebx, [esi+4]
+// 		mov		[edi], eax
+// 		mov		[edi+4], ebx
+// 		add		esi, 8
+// 		add		edi, 8
+// 		dec		ecx
+// 		jnz		L0
+// 	L3:
 		
-		test	edx, 2
-		jz		L1
+// 		test	edx, 2
+// 		jz		L1
 
-		mov		eax, [esi]
-		mov		[edi], eax
-		add		esi, 4
-		add		edi, 4
-	L1:
+// 		mov		eax, [esi]
+// 		mov		[edi], eax
+// 		add		esi, 4
+// 		add		edi, 4
+// 	L1:
 		
-		test	edx, 1
-		jz		L2
-		mov		ax, [esi]
-		mov		[edi], ax
-	L2:
-	}
-#endif
-}
+// 		test	edx, 1
+// 		jz		L2
+// 		mov		ax, [esi]
+// 		mov		[edi], ax
+// 	L2:
+// 	}
+// #endif
+// }
 
 
 AUI_ERRCODE aui_Blitter::StencilMixBlt16(
@@ -2539,7 +2539,8 @@ AUI_ERRCODE aui_Blitter::StencilMixBlt16(
 					if (pos > start)
 					{
 						if (srcBuf != NULL)
-							BlockCopy16(&destBuf[start], &srcBuf[start], pos-start);
+						  //BlockCopy16(&destBuf[start], &srcBuf[start], pos-start);
+						  std::copy(srcBuf + start, srcBuf + pos, destBuf + start);
 						start = pos;
 					}
 				}
@@ -2768,7 +2769,7 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 				double(srcRect->bottom - srcRect->top) /
 				double(destRect->bottom - destRect->top);
 
-			double srcPtr = (double)uint32(srcBuf);
+			double srcPtr = (double)size_t(srcBuf);
 			double srcLine = 0.0;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -2784,8 +2785,8 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 
 					} while ( ++destBuf != stopHorizontal );
 
-					srcPtr = (double)uint32(origSrcBuf +
-						uint32((srcLine += stepVertical) + 0.5) * srcPitch);
+					srcPtr = (double)size_t(origSrcBuf +
+						size_t((srcLine += stepVertical) + 0.5) * srcPitch);
 
 					stopHorizontal += destPitch;
 
@@ -2810,11 +2811,11 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 							*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint8 *)uint32((srcPtr += stepHorizontal) + 0.5);
+							(uint8 *)size_t((srcPtr += stepHorizontal) + 0.5);
 
 					} while ( ++destBuf != stopHorizontal );
 
-					srcPtr = (double)uint32(srcBuf = origSrcBuf +
+					srcPtr = (double)size_t(srcBuf = origSrcBuf +
 						uint32((srcLine += stepVertical) + 0.5) * srcPitch); 
 
 					stopHorizontal += destPitch;
@@ -2937,7 +2938,7 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 				double(srcRect->bottom - srcRect->top) /
 				double(destRect->bottom - destRect->top);
 
-			double srcPtr = (double)(uint32)srcBuf;
+			double srcPtr = (double)(size_t)srcBuf;
 			double srcLine = 0.0;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -2949,16 +2950,16 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 						*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint16 *)uint32((srcPtr += stepHorizontal) + 0.0);
+							(uint16 *)size_t((srcPtr += stepHorizontal) + 0.0);
 
-						if ( (uint32)srcBuf & 0x1 )
-							srcBuf = (uint16 *)(uint32(srcBuf) - 1);
+						if ( (size_t)srcBuf & 0x1 )
+							srcBuf = (uint16 *)(size_t(srcBuf) - 1);
 
 					} while ( ++destBuf != stopHorizontal );
 
 					srcBuf = (uint16 *)(origSrcBuf +
 						sint32((srcLine += stepVertical) + 0.0) * srcPitch); 
-					srcPtr = (double)(uint32)srcBuf;
+					srcPtr = (double)(size_t)srcBuf;
 					
 					stopHorizontal += destPitch;
 
@@ -2983,17 +2984,17 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 							*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint16 *)uint32((srcPtr += stepHorizontal) + 0.0);
+							(uint16 *)size_t((srcPtr += stepHorizontal) + 0.0);
 
 						
-						if ( (uint32)srcBuf & 0x1 )
-							srcBuf = (uint16 *)(uint32(srcBuf) - 1);
+						if ( (size_t)srcBuf & 0x1 )
+							srcBuf = (uint16 *)(size_t(srcBuf) - 1);
 
 					} while ( ++destBuf != stopHorizontal );
 
 					srcBuf = (uint16 *)(origSrcBuf +
 						sint32((srcLine += stepVertical) + 0.0) * srcPitch); 
-					srcPtr = (double)(uint32)srcBuf;
+					srcPtr = (double)(size_t)srcBuf;
 
 					stopHorizontal += destPitch;
 

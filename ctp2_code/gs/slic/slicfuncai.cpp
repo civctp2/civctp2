@@ -1865,7 +1865,8 @@ SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
     if(player < 0 || player >= k_MAX_PLAYERS)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-	m_result.m_int =(sint32) Diplomat::GetDiplomat(player).GetPersonality();
+    //m_result.m_int = static_cast<sint32> (Diplomat::GetDiplomat(player).GetPersonality());
+    m_result.m_int = Diplomat::GetDiplomat(player).GetPersonality()->GetIndex();
 	return SFN_ERROR_OK;
 }
 

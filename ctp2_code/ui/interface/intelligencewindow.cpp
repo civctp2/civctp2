@@ -403,7 +403,11 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerColor(ctp2_Static *control,
 												 void *cookie)
 {
 	
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -421,7 +425,11 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerFlag(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -459,7 +467,11 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 
 	
 
@@ -518,7 +530,11 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 {
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) return AUI_ERRCODE_OK;
@@ -587,7 +603,11 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 {
 	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 
 	
 
@@ -640,7 +660,11 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 											 RECT &rect,
 											 void *cookie)
 {
+#if defined(__LP64__)
+	sint32 p = (sint64)cookie;
+#else
 	sint32 p = (sint32)cookie;
+#endif
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
 	
@@ -803,7 +827,11 @@ void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 
 		DiplomacyWindow::EnableButtons(FALSE);
 	} else {
 		sm_list->SelectItem(item);
+#if defined(__LP64__)
+		DiplomacyWindow::EnableButtons( TRUE, (sint64)item->GetUserData() );
+#else
 		DiplomacyWindow::EnableButtons( TRUE, (sint32)item->GetUserData() );
+#endif
 	}
 	
 	
@@ -815,9 +843,15 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 {
 	if(response) {
 		if(g_network.IsClient()) {
+#if defined(__LP64__)
+			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint64)cookie));
+		}
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint64)cookie);
+#else
 			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint32)cookie));
 		}
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint32)cookie);
+#endif
 		DiplomacyWindow::EnableButtons(TRUE, *reinterpret_cast<sint32 *>(cookie));
 	}
 }
@@ -825,7 +859,11 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 void intelligence_DeclarEmbargoCallback(bool response, void *cookie)
 {
 	if(response) {
+#if defined(__LP64__)
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint64)cookie, 1);
+#else
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint32)cookie, 1);
+#endif
 		DiplomacyWindow::EnableButtons(TRUE, *reinterpret_cast<sint32 *>(cookie));
 	}
 }
@@ -838,7 +876,11 @@ void IntelligenceWindow::DeclareWarOnSelected()
 
 	if(!item) return;
 
+#if defined(__LP64__)
+	sint32 player = (sint64)item->GetUserData();
+#else
 	sint32 player = (sint32)item->GetUserData();
+#endif
 
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
@@ -861,7 +903,11 @@ void IntelligenceWindow::DeclareEmbargoOnSelected()
 
 	if(!item) return;
 
+#if defined(__LP64__)
+	sint32 player = (sint64)item->GetUserData();
+#else
 	sint32 player = (sint32)item->GetUserData();
+#endif
 
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
@@ -883,7 +929,11 @@ void IntelligenceWindow::SendMessageToSelected()
 
 	if(!item) return;
 
+#if defined(__LP64__)
+	sint32 player = (sint64)item->GetUserData();
+#else
 	sint32 player = (sint32)item->GetUserData();
+#endif
 
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
@@ -906,7 +956,11 @@ void IntelligenceWindow::DisplayDetailsOfSelected()
 
 	if(!item) return;
 
+#if defined(__LP64__)
+	sint32 player = (sint64)item->GetUserData();
+#else
 	sint32 player = (sint32)item->GetUserData();
+#endif
 
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
@@ -941,7 +995,11 @@ void IntelligenceWindow::UpdateAdviceText()
 		adviceId = Diplomat::GetDiplomat(visP).GetDiplomacyAdvice(sc);
 	}
 	else {
+#if defined(__LP64__)
+		PLAYER_INDEX player = (sint64)item->GetUserData();
+#else
 		PLAYER_INDEX player = (sint32)item->GetUserData();
+#endif
 
 		adviceId = Diplomat::GetDiplomat(visP). Diplomat::GetDiplomacyAdvice(sc, player);
 	}

@@ -659,8 +659,12 @@ void  UnitManager::UpdateAdviceText()
 
 sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	sint32 idx1 = (sint32)item1->GetUserData(), 
-		idx2 = (sint32)item2->GetUserData();
+#if defined(__LP64__)
+	sint32 idx1 = (sint64)item1->GetUserData(), idx2 = (sint64)item2->GetUserData();
+#else
+	sint32 idx1 = (sint32)item1->GetUserData(), idx2 = (sint32)item2->GetUserData();
+#endif
+
 	const UnitRecord *rec1 = g_theUnitDB->Get(idx1);
 	const UnitRecord *rec2 = g_theUnitDB->Get(idx2);
 
@@ -713,8 +717,13 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
+#if defined(__LP64__)
+	Unit u1; u1.m_id = (uint64)item1->GetUserData();
+	Unit u2; u2.m_id = (uint64)item2->GetUserData();
+#else
 	Unit u1; u1.m_id = (uint32)item1->GetUserData();
 	Unit u2; u2.m_id = (uint32)item2->GetUserData();
+#endif
 	if(!u1.IsValid() || !u2.IsValid())
 		return 0;
 
@@ -812,7 +821,11 @@ sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item
 AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie)
 {
+#if defined(__LP64__)
+	Unit u; u.m_id = (uint64)cookie;
+#else
 	Unit u; u.m_id = (uint32)cookie;
+#endif
 	
 	
 	RECT destRect = {
@@ -1027,7 +1040,11 @@ void UnitManager::DisbandSelected()
 		
 		if(theList == m_tacticalList) {
 			
+#if defined(__LP64__)
+			Unit u; u.m_id = (uint64)item->GetUserData();
+#else
 			Unit u; u.m_id = (uint32)item->GetUserData();
+#endif
 			
 			m_lastDisbandedUnit = u.m_id;
 			if(g_network.IsClient()) {
@@ -1038,7 +1055,11 @@ void UnitManager::DisbandSelected()
 								   GEA_End);
 		} else if(theList == m_statsList) {
 			
+#if defined(__LP64__)
+			sint32 unitType = (sint64)item->GetUserData();
+#else
 			sint32 unitType = (sint32)item->GetUserData();
+#endif
 			sint32 i;
 			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 			Assert(pl);

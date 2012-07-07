@@ -490,7 +490,11 @@ void NationalManagementDialog::UpdateGovernor()
 	{
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -636,7 +640,11 @@ void NationalManagementDialog::UpdateRushBuy()
 	
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1116,7 +1124,11 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1185,8 +1197,13 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
+#if defined(__LP64__)
+	city1.m_id = reinterpret_cast<uint64 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint64 >(item2->GetUserData());
+#else
 	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
 	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
+#endif
 
 	
 	Assert(city1.IsValid());
@@ -1272,8 +1289,13 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
+#if defined(__LP64__)
+	city1.m_id = reinterpret_cast<uint64 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint64 >(item2->GetUserData());
+#else
 	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
 	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
+#endif
 
 	
 	Assert(city1.IsValid());
@@ -1341,8 +1363,13 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
+#if defined(__LP64__)
+	city1.m_id = reinterpret_cast<uint64 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint64 >(item2->GetUserData());
+#else
 	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
 	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
+#endif
 
 	
 	Assert(city1.IsValid());
@@ -1447,7 +1474,11 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 			static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1512,7 +1543,11 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 	if(selectedList->L() == 1) {
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 		    selectedList->GetAtIndex(0)
 		    ))->GetUserData());
@@ -1561,7 +1596,11 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 
 			
 			Unit city;
+#if defined(__LP64__)
+			city.m_id = reinterpret_cast<uint64 >(item->GetUserData());
+#else
 			city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
+#endif
 
 			
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
@@ -1593,7 +1632,11 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64>(
+#else
 		city.m_id = reinterpret_cast<uint32>(
+#endif
 			static_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1616,7 +1659,11 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64 >(item->GetUserData());
+#else
 		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
+#endif
 
 		
 		city.GetCityData()->SetUseGovernor(!governorStatus);
@@ -1654,7 +1701,11 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64 >(item->GetUserData());
+#else
 		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
+#endif
 
 		
 		city.GetCityData()->SetBuildListSequenceIndex(
@@ -1708,7 +1759,11 @@ void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *contro
 
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64 >(item->GetUserData());
+#else
 		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
+#endif
 
 		
 		city.GetCityData()->InsertBuildItem(
@@ -1745,7 +1800,11 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 
 		
 		Unit city;
+#if defined(__LP64__)
+		city.m_id = reinterpret_cast<uint64 >(item->GetUserData());
+#else
 		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
+#endif
 
 		// JJB removed the following:
 		// and replaced it with the following:
@@ -1892,7 +1951,11 @@ Unit NationalManagementDialog::GetSelectedCity()
 
 	if(!item) return city;
 
+#if defined(__LP64__)
+	city.m_id = (uint64)item->GetUserData();
+#else
 	city.m_id = (uint32)item->GetUserData();
+#endif
 	return city;
 }
 
@@ -1965,7 +2028,11 @@ void NationalManagementDialog::MirrorSelectedCities()
 	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
 		
+#if defined(__LP64__)
+		uint32 cityId   = reinterpret_cast<uint64>
+#else
 		uint32 cityId   = reinterpret_cast<uint32>
+ #endif
                             (static_cast<ctp2_ListItem*>
                                 (visList->GetItemByIndex
                                     (selectedList->GetAtIndex(selectIndex))
@@ -1981,7 +2048,11 @@ void NationalManagementDialog::MirrorSelectedCities()
         {
 		    for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
             {
+#if defined(__LP64__)
+			    uint32 invisId  = reinterpret_cast<uint64>
+#else
 			    uint32 invisId  = reinterpret_cast<uint32>
+ #endif
                                     (static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))
                                         ->GetUserData()
                                     );

@@ -920,10 +920,17 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 {
 	sint32 width,hpwidth,maxhp,curhp;
 	
+#if defined(__LP64__)
+	if(s_armyWindow->m_inArmy[(sint64)cookie].IsValid())
+	{
+		maxhp=s_armyWindow->m_inArmy[(sint64)cookie].GetDBRec()->GetMaxHP();
+		curhp=(sint32) s_armyWindow->m_inArmy[(sint64)cookie].GetHP();
+#else
 	if(s_armyWindow->m_inArmy[(int)cookie].IsValid())
 	{
 		maxhp=s_armyWindow->m_inArmy[(int)cookie].GetDBRec()->GetMaxHP();
 		curhp=(sint32) s_armyWindow->m_inArmy[(int)cookie].GetHP();
+#endif
 		width=rect.right-rect.left;
 		hpwidth=width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
@@ -941,10 +948,17 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control,
 {
 	sint32 width,hpwidth,maxhp,curhp;
 	
+#if defined(__LP64__)
+	if(s_armyWindow->m_outOfArmy[(sint64)cookie].IsValid())
+	{
+		maxhp=s_armyWindow->m_outOfArmy[(sint64)cookie].GetDBRec()->GetMaxHP();
+		curhp=(sint32) s_armyWindow->m_outOfArmy[(sint64)cookie].GetHP();
+#else
 	if(s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
 	{
 		maxhp=s_armyWindow->m_outOfArmy[(int)cookie].GetDBRec()->GetMaxHP();
 		curhp=(sint32) s_armyWindow->m_outOfArmy[(int)cookie].GetHP();
+#endif
 		width=rect.right-rect.left;
 		hpwidth=width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):

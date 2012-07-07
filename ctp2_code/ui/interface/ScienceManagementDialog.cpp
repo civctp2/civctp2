@@ -503,7 +503,11 @@ AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control
 
 	
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
+#if defined(__LP64__)
+		g_colorSet->GetPlayerColor(reinterpret_cast<sint64 >(cookie)), 0));
+#else
 		g_colorSet->GetPlayerColor(reinterpret_cast<sint32 >(cookie)), 0));
+#endif
 }
 
 
@@ -518,7 +522,11 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 	colorRect.bottom	-= 1;
 
 	
+#if defined(__LP64__)
+	sint32 index = reinterpret_cast<sint64 >(cookie);
+#else
 	sint32 index = reinterpret_cast<sint32 >(cookie);
+#endif
 
 	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -544,9 +552,15 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
+#if defined(__LP64__)
+		reinterpret_cast<sint64 >(item1->GetUserData()));
+	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
+		reinterpret_cast<sint64 >(item2->GetUserData()));
+#else
 		reinterpret_cast<sint32 >(item1->GetUserData()));
 	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
 		reinterpret_cast<sint32 >(item2->GetUserData()));
+#endif
 
 	
 	
@@ -596,7 +610,11 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	item = (ctp2_ListItem *)listbox->GetSelectedItem();
 	if (!item) return;
 
+#if defined(__LP64__)
+	sint32 index =  (sint64)item->GetUserData();
+#else
 	sint32 index =  (sint32)item->GetUserData();
+#endif
 
 
 	

@@ -173,7 +173,11 @@ void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 	
 	g_spriteEditWindow->m_loopInProgress = false;
 
-   	if ((int)cookie)
+#if defined(__LP64__)
+   	if ((sint64)cookie)
+#else
+   	if ((sint32)cookie)
+#endif
 		g_spriteEditWindow->LoadSprite();
 	else
 		g_spriteEditWindow->SaveSprite();
@@ -187,7 +191,11 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+#if defined(__LP64__)
+	g_spriteEditWindow->SetAnimation((sint64)cookie);
+#else
 	g_spriteEditWindow->SetAnimation((sint32)cookie);
+#endif
 
 	g_spriteEditWindow->m_frame=0;
 	g_spriteEditWindow->m_facing=3;
@@ -208,7 +216,11 @@ void StepCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+#if defined(__LP64__)
+	g_spriteEditWindow->AddFrame((sint64)cookie); 
+#else
 	g_spriteEditWindow->AddFrame((sint32)cookie); 
+#endif
 	g_spriteEditWindow->m_loopInProgress = false;
 
    
@@ -226,7 +238,11 @@ void PlayCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	g_spriteEditWindow->m_loopInProgress = !g_spriteEditWindow->m_loopInProgress;
 	g_spriteEditWindow->m_stopAfterLoop  = false;
 
-	if ((int)cookie)
+#if defined(__LP64__)
+	if ((sint64)cookie)
+#else
+	if ((sint32)cookie)
+#endif
 		g_spriteEditWindow->m_stopAfterLoop = true;
 
 	if (g_spriteEditWindow->m_loopInProgress)
@@ -241,7 +257,11 @@ void FacingCallback( aui_Control *control, uint32 action, uint32 data, void *coo
 	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+#if defined(__LP64__)
+	g_spriteEditWindow->AddFacing((sint64)cookie);
+#else
 	g_spriteEditWindow->AddFacing((sint32)cookie);
+#endif
 
 	
 }

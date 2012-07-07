@@ -598,7 +598,11 @@ sint32 sci_advancescreen_loadList( void )
 		s_advanceList->SelectItem(index);
 		ctp2_ListItem *	item = 
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
+#if defined(__LP64__)
+		isIndexOk = (research == reinterpret_cast<sint64>(item->GetUserData()));
+#else
 		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
+#endif
 	}
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);
@@ -646,7 +650,11 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 
 
 
+#if defined(__LP64__)
+	advanceTurns = p->m_advances->TurnsToNextAdvance((uint64)item->GetUserData());
+#else
 	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
+#endif
 
 	
 	if ( advanceTurns == -1 ) {

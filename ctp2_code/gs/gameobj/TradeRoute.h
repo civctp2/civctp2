@@ -46,6 +46,8 @@ public:
 	TradeRoute () : ID() { return; } ;
 	TradeRoute (sint32 val) : ID (val) { return; };
 	TradeRoute (uint32 val) : ID (val) { return; };
+	TradeRoute (sint64 val) : ID (val) { return; };
+	TradeRoute (uint64 val) : ID (val) { return; };
 
 #if defined WIN32
 	TradeRoute (const int val) : ID (val) { return; };

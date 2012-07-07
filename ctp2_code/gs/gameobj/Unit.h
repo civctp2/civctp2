@@ -89,11 +89,9 @@ public:
 	Unit () : ID() { return; } ;
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
+	Unit (sint64 val) : ID (val) { return; };
+	Unit (uint64 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
-#if defined(WIN32)
-	Unit (const int val) : ID (val) { return; };
-	Unit (const unsigned int val) : ID (val) { return; };
-#endif
 	
 	UnitData *operator -> () const { return AccessData(); }
 #ifdef _DEBUG

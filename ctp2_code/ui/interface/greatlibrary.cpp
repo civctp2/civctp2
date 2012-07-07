@@ -2343,7 +2343,11 @@ sint32 GreatLibrary::HandleListButton
 			return 0;
 
 		
+#if defined(__LP64__)
+		index = (sint64) item->GetUserData();
+#else
 		index = (int) item->GetUserData();
+#endif
 
 		
 		SetLibrary( GetIndexFromAlpha(index, m_listDatabase), m_listDatabase );

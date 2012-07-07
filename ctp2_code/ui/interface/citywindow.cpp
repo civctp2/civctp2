@@ -2274,7 +2274,11 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 								  RECT &rect,
 								  void *cookie )
 {
+#if defined(__LP64__)
+	sint32 amount = (sint64)cookie;
+#else
 	sint32 amount = (sint32)cookie;
+#endif
 	aui_Image *im = s_cityWindow->m_unhappyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2316,7 +2320,11 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 {
 	
 	
+#if defined(__LP64__)
+	sint32 amount = (sint64)cookie;
+#else
 	sint32 amount = (sint32)cookie;
+#endif
 	aui_Image *im = s_cityWindow->m_happyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2354,7 +2362,11 @@ static int cw_comparePollutionItems(const void *item1, const void *item2)
 	ctp2_ListItem *i1 = *(ctp2_ListItem **)item1;
 	ctp2_ListItem *i2 = *(ctp2_ListItem **)item2;
 
+#if defined(__LP64__)
+	return (sint64)i1->GetUserData() - (sint64)i2->GetUserData();
+#else
 	return (sint32)i1->GetUserData() - (sint32)i2->GetUserData();
+#endif
 }
 
 void CityWindow::FillPollutionList()
@@ -2531,7 +2543,11 @@ void CityWindow::UnitButtonCallback(aui_Control *control, uint32 action, uint32 
 	Assert(s_cityWindow);
 	if(!s_cityWindow) return;
 
+#if defined(__LP64__)
+	sint32 which = (sint64)cookie;
+#else
 	sint32 which = (sint32)cookie;
+#endif
 	ctp2_Button *button = s_cityWindow->m_unitButtons[which];
 	Assert(button);
 	if(button) {
