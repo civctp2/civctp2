@@ -4,7 +4,7 @@
 
 #include "c3window.h"
 
-extern g_bpp;
+extern sint32 g_bpp;
 
 class MapPoint;
 

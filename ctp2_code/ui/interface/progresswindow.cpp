@@ -38,7 +38,7 @@
 
 extern C3UI *g_c3ui;
 extern sint32 g_ScreenWidth;
-extern g_bpp;
+extern sint32 g_bpp;
 
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,

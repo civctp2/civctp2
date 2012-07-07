@@ -153,7 +153,7 @@ public:
 
     
     void Clear() { m_nElements = 0; }
-    void DelUpToIndex(const m_index);
+    void DelUpToIndex(const sint32 m_index);
     sint32 DelIndex(const sint32 index);
     sint32 Del(const T &delme);
     sint32 DelIndexFlat(const sint32 index);
@@ -468,7 +468,7 @@ template <class T> void DynamicArray<T>::InsertFlat(const T &addme)
     m_array[m_nElements-1] = addme; 
 }
 
-template <class T> void DynamicArray<T>::DelUpToIndex(const index)
+template <class T> void DynamicArray<T>::DelUpToIndex(const sint32 index)
 
 {
     Assert(0 <= index);

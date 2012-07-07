@@ -67,7 +67,7 @@
 #include "linegraph.h"
 #include "AvlTree.h"
 
-extern g_bpp;
+extern sint32 g_bpp;
 
 
 ldl *aui_Ldl::m_ldl = NULL;

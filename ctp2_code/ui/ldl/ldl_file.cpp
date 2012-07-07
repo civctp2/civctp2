@@ -38,14 +38,7 @@ ldl::~ldl( void )
 
 BOOL ldl::ReadData( const char *fname )
 {
-	char *name = strrchr(fname, FILE_SEPC);
-	if (NULL == name) {
-		name = const_cast<char *>(fname);
-	} else {
-		name++;
-	}
-	
-	ldlif_parse(name);
+	ldlif_parse(strrchr(fname, FILE_SEPC) + 1);
 
 	return TRUE;
 	

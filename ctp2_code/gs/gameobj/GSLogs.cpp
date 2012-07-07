@@ -44,10 +44,10 @@
 #include "profileDB.h"
 #include "c3math.h"		// AsPercentage
 
-static s_initialized = 0;
-static s_dip_initialized = 0;
+static bool s_initialized = 0;
+static bool s_dip_initialized = 0;
 
-static s_populationHack[k_MAX_PLAYERS];
+static int s_populationHack[k_MAX_PLAYERS];
 
 void gslog_print(char *fmt, ...)
 {

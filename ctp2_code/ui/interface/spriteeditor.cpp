@@ -103,7 +103,7 @@
 #include "Actor.h"
 
 
-extern g_bpp;
+extern sint32 g_bpp;
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;

@@ -3170,8 +3170,8 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
 				aui_SpanList *curSpanList = srcSpanListArray;
-				const height = srcSurf->Height();
-				const aui_SpanList *stopSpanList = curSpanList + height;
+				const aui_SpanList *    stopSpanList = curSpanList + srcSurf->Height();
+
 
 				do
 				{

@@ -333,24 +333,18 @@ public:
 
 	
 	
-	
 	_Ty GetGridValueXY(const MapPoint &xy_pos) const
 	{
-		if (m_resolution==1) {
-			const elem = (xy_pos.y*m_xGridSize) + xy_pos.x;
-			Assert(elem >= 0);
-			Assert(elem < m_values.size());
-			return m_values[elem];
-		}
-
-		
-		const elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
-				(xy_pos.x / m_resolution);
+		int const elem = 
+			(1 == m_resolution)
+			? (xy_pos.y * m_xGridSize) + xy_pos.x
+			: ((xy_pos.y / m_resolution) * m_xGridSize) + (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(elem < m_values.size());
+		Assert(static_cast<size_t>(elem) < m_values.size());
 
 		return m_values[elem];
 	}
+
 
 	
 	
