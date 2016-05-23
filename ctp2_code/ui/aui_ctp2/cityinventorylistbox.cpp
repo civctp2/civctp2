@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Made government modified for units work here even if the class is not
-//   used. (July 29th 2006 Martin Gühmann)
+//   used. (July 29th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ extern	DebugWindow			*g_debugWindow;
 
 CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			uint32 id,
-			MBCHAR *ldlBlock,
+			const MBCHAR *ldlBlock,
 			ControlActionCallback *ActionFunc,
 			void *cookie )
 	:
@@ -86,7 +86,7 @@ CityInventoryListBox::CityInventoryListBox (
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc,
 		void *cookie):
 	aui_ImageBase( (sint32)0 ),
@@ -100,7 +100,7 @@ CityInventoryListBox::~CityInventoryListBox()
 {
 }
 
-AUI_ERRCODE CityInventoryListBox::InitCommon(MBCHAR *ldlBlock)
+AUI_ERRCODE CityInventoryListBox::InitCommon(const MBCHAR *ldlBlock)
 {
 	m_buildMode = 0;
 	return AUI_ERRCODE_OK;
@@ -232,7 +232,6 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theUnitDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -262,7 +261,6 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -292,7 +290,6 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -345,9 +342,6 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 	}
 
 	else if (bn) {
-
-
-		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
 		if (bn->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
 			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type)->m_name));

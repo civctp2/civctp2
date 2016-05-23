@@ -24,14 +24,14 @@ extern ColorSet		*g_colorSet;
 TextTable::TextTable(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	aui_Surface *surface)
 	:
-	aui_ListBox(retval, id, ldlBlock, ActionFunc, cookie),
+	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_ImageBase( ldlBlock )
+	aui_ListBox(retval, id, ldlBlock, ActionFunc, cookie)
 {
 
 
@@ -72,15 +72,15 @@ TextTable::TextTable(
 	sint32 width,
 	sint32 height,
 	sint32 columns,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	uint32 size,
 	aui_Surface *surface)
 	:
-	aui_ListBox(),
+	aui_ImageBase(0),
 	aui_TextBase(NULL, k_TEXTTABLE_MAXTEXT * k_TEXTTABLE_MAXITEMS),
-	aui_ImageBase( (sint32)0 )
+	aui_ListBox()
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -94,7 +94,7 @@ TextTable::TextTable(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -115,7 +115,7 @@ TextTable::TextTable(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE TextTable::InitCommon( MBCHAR *ldlBlock, aui_Surface *surface )
+AUI_ERRCODE TextTable::InitCommon(const MBCHAR *ldlBlock, aui_Surface *surface)
 {
 
 	uint32 columns = 0;
@@ -166,13 +166,13 @@ AUI_ERRCODE TextTable::InitCommon( uint32 columns, aui_Surface *surface )
 	if (surface)
 	{
 		textHeight = textutils_GetFontHeight(
-			(aui_DirectSurface *)surface, m_fontsize );
+			surface, m_fontsize );
 	}
 	else
 	{
 
 		textHeight = textutils_GetHeight(
-			(aui_DirectSurface *)g_c3ui->Primary(), "Wj" );
+			g_c3ui->Primary(), "Wj" );
 	}
 
 	m_item_height = textHeight;

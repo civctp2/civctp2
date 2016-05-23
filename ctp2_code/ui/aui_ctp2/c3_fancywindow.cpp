@@ -25,10 +25,10 @@ extern C3UI						*g_c3ui;
 c3_FancyWindow::c3_FancyWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	MBCHAR ldlBorder[k_NUM_C3_FANCYBORDERS][ k_AUI_LDL_MAXBLOCK + 1 ],
-	MBCHAR *ldlTitle,
+	const MBCHAR *ldlTitle,
 	AUI_WINDOW_TYPE type,
 	bool bevel,
 	void (*exitCallBack)( aui_Control *, uint32, uint32, void *))
@@ -207,15 +207,9 @@ AUI_ERRCODE	c3_FancyWindow::Resize( sint32 width, sint32 height )
 {
 	C3Window::Resize(width,height);
 
-	sint32 dw = width - m_originalDimensions.x,
-			dh = height - m_originalDimensions.y;
+	sint32 dw = width - m_originalDimensions.x;
 
-
-
-
-
-	sint32 lx =0, cx = dw/2, rx = dw,
-			ty = 0, cy = dh/2, by = dh;
+	sint32 lx =0, rx = dw, ty = 0;
 
 #if 0
 	m_border[C3_FANCYBORDER_TL]->Offset(lx,ty);

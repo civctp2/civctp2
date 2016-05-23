@@ -366,12 +366,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 	assert(0);
 	SDL_Surface *bmp = SDL_LoadBMP(filename);
 	SDL_Surface *surf = NULL;
-	SDL_PixelFormat fmt = { 0 };
-//#if 0
-//	if (aui_image_SDLPixelFormat(image, &fmt)) {
-//		surf = SDL_ConvertSurface(bmp, &fmt, 0);
-//	}
-//#endif
 
         printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename);
         if (g_ui->Primary()->BitsPerPixel() != 16)

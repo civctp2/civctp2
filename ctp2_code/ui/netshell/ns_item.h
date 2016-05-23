@@ -31,7 +31,7 @@ public:
 	ns_ListItem(
 		AUI_ERRCODE *retval,
 		const MBCHAR *name,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 	~ns_ListItem() {}
 
 	virtual void Update(void) {}
@@ -42,7 +42,7 @@ protected:
 
 	AUI_ERRCODE InitCommonLdl(
 		const MBCHAR *name,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 };
 
 
@@ -53,7 +53,7 @@ public:
 		AUI_ERRCODE *retval,
 		void *player,
 		BOOL isAI,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 
 	~ns_HPlayerItem();
 
@@ -96,7 +96,7 @@ protected:
 	AUI_ERRCODE InitCommonLdl(
 		void *player,
 		BOOL isAI,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 
 	void *m_player;
 	BOOL m_isAI;
@@ -129,7 +129,7 @@ public:
 	ns_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		T *object = NULL );
 	ns_Item(
 		AUI_ERRCODE *retval,
@@ -143,14 +143,14 @@ public:
 
 protected:
 	ns_Item() : aui_Item() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateNetShellObject( T *object );
 
 public:
 	NetShellT	*GetNetShellObject( void ) const { return m_netShellT; }
 
-	AUI_ERRCODE	SetIcon( MBCHAR *icon );
+	AUI_ERRCODE	SetIcon(const MBCHAR *icon);
 	aui_Image	*GetIcon( void ) const { return m_icon; }
 
 	virtual AUI_ERRCODE DrawThis(
@@ -171,7 +171,7 @@ template<class T,class NetShellT>
 ns_Item<T,NetShellT>::ns_Item(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	T *object )
 	:
 	aui_ImageBase( ldlBlock ),
@@ -219,7 +219,7 @@ ns_Item<T,NetShellT>::ns_Item(
 
 
 template<class T,class NetShellT>
-AUI_ERRCODE ns_Item<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Item<T,NetShellT>::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	return InitCommon();
@@ -275,7 +275,7 @@ ns_Item<T,NetShellT>::~ns_Item()
 
 
 template<class T,class NetShellT>
-AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon( MBCHAR *icon )
+AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon(const MBCHAR *icon)
 {
 	aui_Image *prevImage = m_icon;
 

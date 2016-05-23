@@ -99,7 +99,7 @@ public:
 
 	virtual ~ThumbnailMap();
 
-	void		InitCommonLdl(MBCHAR *ldlBlock);
+	void		InitCommonLdl(const MBCHAR *ldlBlock);
 	void		InitCommon(void);
 	virtual		AUI_ERRCODE	Resize( sint32 width, sint32 height );
 

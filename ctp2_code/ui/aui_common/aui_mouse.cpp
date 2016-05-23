@@ -82,7 +82,7 @@ extern CivApp		*g_civApp;
 
 aui_Mouse::aui_Mouse(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_Input( retval )
 {
@@ -135,7 +135,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	GetCursorPos( &m_data.position );
 #else
 	int x = 0, y = 0;
-	Uint8 state = SDL_GetMouseState(&x, &y);
+	SDL_GetMouseState(&x, &y);
 	m_data.position.x = x;
 	m_data.position.y = y;
 #endif
@@ -162,7 +162,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 }
 
 
-AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Mouse::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = InitCommon();
 	Assert( AUI_SUCCESS(errcode) );
@@ -194,7 +194,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 
 				sprintf( temp, k_MOUSE_LDL_CURSOR "%d", i );
 
-				MBCHAR *filename = block->GetString( temp );
+				const MBCHAR *filename = block->GetString(temp);
 				if ( filename )
 				{
                                         cursor = g_ui->LoadCursor( filename );
@@ -330,7 +330,7 @@ aui_MouseEvent *aui_Mouse::GetLatestMouseEvent( void )
 	return &m_data;
 }
 
-void aui_Mouse::SetCursor( sint32 index, MBCHAR *cursor )
+void aui_Mouse::SetCursor( sint32 index, const MBCHAR *cursor )
 {
 	Assert( index >= 0 && index < k_MOUSE_MAXNUMCURSORS );
 	if ( index < 0 || index >= k_MOUSE_MAXNUMCURSORS ) return;
@@ -790,7 +790,7 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 #endif
 		mouse->HandleAnim();
 
-		AUI_ERRCODE err = mouse->GetInput();
+		mouse->GetInput();
 
 		mouse->ReactToInput();
 

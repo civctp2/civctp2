@@ -64,7 +64,7 @@ void StatusBar::SetText(const MBCHAR *text, const aui_Control *owner)
 		(*i)->Update();
 }
 
-StatusBar::StatusBar(MBCHAR *ldlBlock) :
+StatusBar::StatusBar(const MBCHAR *ldlBlock) :
 m_statusBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock, "StatusBar")))
 {
 

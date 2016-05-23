@@ -85,9 +85,6 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		m_mapeditor(NULL),
 		m_background(NULL)
 {
-	ctp2_Static *testBox=new ctp2_Static(retval, aui_UniqueId(),"InitPlayWindow.TestTextBox");
-
-
  	m_spriteTest = spNew_ctp2_Button(retval,
 		   							ldlBlock,
 		   							"SpriteTestButton",

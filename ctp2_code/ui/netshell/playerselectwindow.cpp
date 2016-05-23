@@ -237,7 +237,6 @@ void PlayerSelectWindow::Update(void)
 {
 	ns_PlayerSetupListBox *listbox = (ns_PlayerSetupListBox *)(FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX ));
 	ns_PlayerSetupItem *item = (ns_PlayerSetupItem *)listbox->GetSelectedItem();
-	c3_Button *b_ok = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_OKBUTTON ));
 	c3_Button *b_edit = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_EDITBUTTON ));
 	c3_Button *b_del = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_DELETEBUTTON ));
 
@@ -309,7 +308,6 @@ void PlayerSelectWindow::PlayerListBoxAction::Execute(
 
 AUI_ERRCODE PlayerSelectWindow::SetParent( aui_Region *region )
 {
-	PlayerEditWindow *p = (PlayerEditWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYEREDIT );
 	AUI_ERRCODE r = ns_Window::SetParent( region );
 
 	if ( region ) {

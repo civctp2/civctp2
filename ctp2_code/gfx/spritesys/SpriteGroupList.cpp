@@ -223,7 +223,7 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
 	Assert(index >= 0);
 	Assert(index < k_MAX_SPRITES);
 
-	if((index < 0) || (index >= k_MAX_SPRITES))
+	if (index >= k_MAX_SPRITES)
 		index = 0;
 
 	SpriteGroup *group = m_spriteList[index];
@@ -281,7 +281,7 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 	Assert(index >= 0);
 	Assert(index < k_MAX_SPRITES);
 
-	if (index < 0 || index >= k_MAX_SPRITES)
+	if (index >= k_MAX_SPRITES)
 		return SPRITELISTERR_NOTFOUND;
 
 	if (m_spriteList[index] == NULL) return SPRITELISTERR_NOTFOUND;
@@ -353,8 +353,7 @@ void SpriteGroupList::RefreshBasicLoads(GROUPTYPE groupType)
 		"InitProgressWindow",
 		k_MAX_SPRITES-1 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	for (sint32 i=0; i<k_MAX_SPRITES; i++)
 	{

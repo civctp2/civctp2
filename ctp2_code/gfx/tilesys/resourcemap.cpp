@@ -119,7 +119,7 @@ extern StringDB			*g_theStringDB;
 
 ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -137,7 +137,7 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -156,7 +156,7 @@ ResourceMap::~ResourceMap()
 	delete m_updateAction;
 }
 
-void ResourceMap::InitCommonLdl(MBCHAR *ldlBlock)
+void ResourceMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	sint32 scale = k_RESOURCEMAP_DEFAULT_SCALE;
 	aui_Ldl *theLdl = g_c3ui->GetLdl();

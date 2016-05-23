@@ -275,7 +275,7 @@ void Diplomacy_Log::LogMakeAgreement(const sint32 owner, const sint32 recipient,
     if (-1 == thirdParty) {
         fprintf (fout, "player %d makes agreement with %d that %s\n", owner, recipient, astr);
     } else {
-        fprintf (fout, "player %d makes agreement with %d that %s about\n", owner, recipient, astr, thirdParty);
+        fprintf (fout, "player %d makes agreement with %d that %s about %d\n", owner, recipient, astr, thirdParty);
     }
 
     fclose(fout);
@@ -322,7 +322,7 @@ void Diplomacy_Log::LogBrokenAgreement(const sint32 owner, const sint32 recipien
     if (-1 == thirdParty) {
         fprintf (fout, "sombody? has broken player %d agreement with %d that %s\n", owner, recipient, astr);
     } else {
-        fprintf (fout, "sombody? has broken player %d agreement with %d that %s about\n", owner, recipient, astr, thirdParty);
+        fprintf (fout, "sombody? has broken player %d agreement with %d that %s about %d\n", owner, recipient, astr, thirdParty);
     }
 
     fclose(fout);

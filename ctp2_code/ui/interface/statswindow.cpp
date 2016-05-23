@@ -92,7 +92,6 @@ extern C3Window		*g_turnWindow;
 
 StatsWindow *g_statsWindow = NULL;
 
-
 #define k_STATS_SCROLL		197
 #define k_STATS_SCROLL_OFFSET	5
 #define k_TURN_WINDOW_HEIGHT	181
@@ -101,9 +100,8 @@ StatsWindow *g_statsWindow = NULL;
 #define k_TURN_WINDOW_HEIGHT640	135
 
 static ctp2_Button **s_statsButton = NULL;
-static c3_Switch *s_screensSwitch;
 
-static MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
+static const MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
 	"CivButton",
 	"TradeButton",
 	"SciButton",
@@ -112,165 +110,9 @@ static MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
 	"DipButton",
 	"OptionsButton",
 	"CityButton",
-
 };
 
 static aui_StringTable *s_statsString;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void statswindow_HideButtons( void )
 {
@@ -370,114 +212,30 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-int StatsWindow_Initialize( void )
+int
+StatsWindow_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32		i;
 
 	if ( g_statsWindow ) return 0;
 
-	sint32 controlWidth = 99;
-	sint32 controlHeight = 20;
-	sint32 controlX = 293;
-	sint32 controlY = 4;
-
-	strcpy(windowBlock, "StatsWindow");
-
-	g_statsWindow = new StatsWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
+	g_statsWindow = new StatsWindow(&errcode, aui_UniqueId(), "StatsWindow", 16 );
 	Assert( AUI_NEWOK(g_statsWindow, errcode) );
 	if ( !AUI_NEWOK(g_statsWindow, errcode) ) return -1;
 
 	g_statsWindow->SetTransparent( TRUE );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	sprintf( controlBlock, "%s.%s", windowBlock, "ScreensSwitch" );
-
-
-
-
-
 	s_statsButton = new ctp2_Button*[k_STATS_NUM_BUTTONS];
 
 	for ( i = 0;i < k_STATS_NUM_BUTTONS;i++ )
 	{
-		sprintf( controlBlock, "%s.%s", windowBlock, s_buttonName[i] );
-
-
  		s_statsButton[i] = spNew_ctp2_Button(&errcode,
-		   									windowBlock,
-		   									s_buttonName[i],
-		   									s_buttonName[i],
-		   									StatsButtonActionCallback,
-											"CTP2_BUTTON_TITLE_BAR");
+		    "StatsWindow",
+		    s_buttonName[i],
+		    s_buttonName[i],
+		    StatsButtonActionCallback,
+		    "CTP2_BUTTON_TITLE_BAR");
 
 		Assert( AUI_NEWOK(s_statsButton[i], errcode) );
 		if ( !AUI_NEWOK(s_statsButton[i], errcode) ) return -10;
@@ -487,77 +245,14 @@ int StatsWindow_Initialize( void )
 	s_statsString = new aui_StringTable( &errcode, "StatsStrings" );
 	TestControl( s_statsString );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
+	errcode = aui_Ldl::SetupHeirarchyFromRoot("StatsWindow");
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
-
-
-
-	if ( g_ScreenWidth >= 1024 || g_ScreenHeight >= 768 )
-	{
-
-
-	}
-	else
-	{
-
-
-	}
-
 	statswindow_ShowButtons();
-
-
-
-
-
-
 
 	return 0;
 }
-
 
 int StatsWindow_Cleanup( void )
 {
@@ -604,7 +299,7 @@ int StatsWindow_Cleanup( void )
 StatsWindow::StatsWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -624,7 +319,7 @@ StatsWindow::StatsWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type)
 	:
 	C3Window( retval, id, x, y, width, height, bpp, pattern, type )
@@ -645,7 +340,7 @@ AUI_ERRCODE StatsWindow::InitCommon(void)
 }
 
 
-AUI_ERRCODE StatsWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE StatsWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	InitCommon();
 	return C3Window::InitCommon();
@@ -721,110 +416,6 @@ BOOL StatsWindow::CheckDiplomacy( void )
 	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, NULL, "str_ldl_MB_OK", false);
 	return FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 AUI_ERRCODE StatsWindow::Idle( void )
 {

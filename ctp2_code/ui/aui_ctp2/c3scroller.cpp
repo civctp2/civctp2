@@ -22,7 +22,7 @@ extern C3UI *g_c3ui;
 C3Scroller::C3Scroller(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -68,7 +68,7 @@ C3Scroller::C3Scroller(
 	sint32 width,
 	sint32 height,
 	BOOL isVertical,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -88,7 +88,7 @@ C3Scroller::C3Scroller(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **) NULL);
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **) NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -106,7 +106,7 @@ C3Scroller::C3Scroller(
 }
 
 
-AUI_ERRCODE C3Scroller::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE C3Scroller::InitCommon(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 

@@ -123,7 +123,7 @@ c3_ListBox::c3_ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -159,7 +159,6 @@ c3_ListBox::~c3_ListBox()
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;
 	}
@@ -167,7 +166,7 @@ c3_ListBox::~c3_ListBox()
 }
 
 
-AUI_ERRCODE c3_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ListBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	sint32		bevelWidth=0, bevelType=0;
 	aui_Ldl		*theLdl = g_ui->GetLdl();
@@ -332,7 +331,6 @@ void c3_ListBox::Clear(void)
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
 		RemoveItem(item->Id());

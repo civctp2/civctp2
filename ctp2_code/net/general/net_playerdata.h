@@ -16,7 +16,7 @@ class UnitDynamicArray;
 class PlayerData
 {
 public:
-	PlayerData(char* name, uint16 id);
+	PlayerData(const char* name, uint16 id);
 
 	~PlayerData();
 

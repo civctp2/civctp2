@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#ifdef LINUX
+#ifndef WIN32
 #include <string.h>
 #endif
 
@@ -35,19 +35,14 @@ typedef struct
 
 static user_t verify_user;
 
-
-
-
-
-
-
 /*--------------------------------------------------------------------------
  Compares the values in 'szUsername' and 'szPassword' against the list in
  'szListFile.'
  Returns TRUE if a match is found.
  Returnf FALSE otherwise.
 --------------------------------------------------------------------------*/
-BOOL IsValidUser( char *szListFile )
+BOOL
+IsValidUser(const char *szListFile)
 {
 	BOOL bFoundUser = FALSE;	// Return value.
 	FILE *file;					// Used to get the BITMAPFILEHEADER.
@@ -67,7 +62,7 @@ BOOL IsValidUser( char *szListFile )
 			shroud_seek( sfile, bfh.bfSize, SEEK_SET );
 
 			/* Loop until we find one or reach the end. */
-			while( !bFoundUser && shroud_read( sfile, (char *)&ValidUser, sizeof(user_t) ) == sizeof(user_t) )
+			while( !bFoundUser && shroud_read(sfile, &ValidUser, sizeof(user_t) ) == sizeof(user_t))
 			if ( strcmp( verify_user.szUsername, ValidUser.szUsername ) == 0
 			&&   strcmp( verify_user.szPassword, ValidUser.szPassword ) == 0 )
 				bFoundUser = TRUE;
@@ -84,7 +79,8 @@ BOOL IsValidUser( char *szListFile )
  Returns TRUE on success.
  Returns FALSE otherwise.
 --------------------------------------------------------------------------*/
-BOOL GetInfoFromFingerprint( char *szFingerprintFile )
+BOOL
+GetInfoFromFingerprint(const char *szFingerprintFile)
 {
 	BOOL bGotFingerprint = FALSE;	// Return value.
 	shroud_t *sfile;				// Used to read the hidden and shrouded data.
@@ -102,8 +98,8 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 		/* Get the hidden shrouded username. */
 		for ( i = 0; bGotFingerprint && i <= MAX_USERNAME; i++ )
 		{
-			if ( shroud_seek( sfile, offset, SEEK_CUR ) != 0
-			||   shroud_read( sfile, verify_user.szUsername + i, 1 ) != 1 )
+			if (shroud_seek(sfile, offset, SEEK_CUR ) != 0
+			||  shroud_read(sfile, verify_user.szUsername + i, 1 ) != 1)
 				bGotFingerprint = FALSE;
 			else
 				offset = (size_t)verify_user.szUsername[ i ];
@@ -112,8 +108,8 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 		/* Get the hidden shrouded password. */
 		for ( i = 0; bGotFingerprint && i <= MAX_PASSWORD; i++ )
 		{
-			if ( shroud_seek( sfile, offset, SEEK_CUR ) != 0
-			||   shroud_read( sfile, verify_user.szPassword + i, 1 ) != 1 )
+			if ( shroud_seek(sfile, offset, SEEK_CUR ) != 0
+			||   shroud_read(sfile, verify_user.szPassword + i, 1 ) != 1)
 				bGotFingerprint = FALSE;
 			else
 				offset = (size_t)verify_user.szPassword[ i ];

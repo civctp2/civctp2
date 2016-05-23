@@ -101,31 +101,9 @@ extern ConceptDB					*g_theConceptDB;
 extern ProjectFile                  *g_GreatLibPF;
 extern SoundManager					*g_soundManager;
 
-static MBCHAR *s_libraryWindowBlock = "GreatLibrary";
-static GreatLibraryWindow	*s_libraryWindow;
+static const MBCHAR *s_libraryWindowBlock = "GreatLibrary";
 
 extern  C3UI				*g_c3ui;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 GreatLibraryWindow::GreatLibraryWindow(AUI_ERRCODE *err)
 {
@@ -469,18 +447,17 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 		break;
 
 	default:
-		BOOL InvalidDatabase = FALSE;
-		Assert(InvalidDatabase);
+		Assert(!"InvalidDatabase");
 		break;
 	}
 
 	if(iconRec) {
-		sprintf( m_still_file, iconRec->GetFirstFrame());
-		sprintf( m_movie_file, iconRec->GetMovie());
-		sprintf( m_gameplay_file, iconRec->GetGameplay());
-		sprintf( m_history_file, iconRec->GetHistorical());
-		sprintf( m_requirement_file, iconRec->GetPrereq());
-		sprintf( m_variable_file, iconRec->GetVari());
+		strcpy(m_still_file, iconRec->GetFirstFrame());
+		strcpy(m_movie_file, iconRec->GetMovie());
+		strcpy(m_gameplay_file, iconRec->GetGameplay());
+		strcpy(m_history_file, iconRec->GetHistorical());
+		strcpy(m_requirement_file, iconRec->GetPrereq());
+		strcpy(m_variable_file, iconRec->GetVari());
 	}
 
 	return TRUE;
@@ -543,8 +520,7 @@ char * GreatLibraryWindow::GetIconRecText
 		break;
 
 	default:
-		BOOL InvalidDatabase = FALSE;
-		Assert(InvalidDatabase);
+		Assert(!"InvalidDatabase");
 		break;
 	}
 

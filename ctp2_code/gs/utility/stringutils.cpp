@@ -161,11 +161,13 @@ void stringutils_Interpret
 	*output = '\0';
 }
 
-void stringutils_SetStaticStringId(StringId & stringId, char * stringName)
+void stringutils_SetStaticStringId(StringId & stringId, const char * stringName)
 {
 	if (stringId < 0)
 		{
+#ifdef _DEBUG
 			BOOL found =
+#endif
 				g_theStringDB->GetStringID(stringName, stringId);
 			Assert(found);
 		}

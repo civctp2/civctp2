@@ -40,6 +40,8 @@
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
+#include <err.h>
+
 #include <stdio.h>
 #include <string.h>
 #if defined(WIN32)
@@ -63,7 +65,7 @@ void Datum::SetValue(union dbvalue &v)
 
 void Datum::ExportBitGroupParser(FILE *outfile, char *recordName)
 {
-	fprintf(outfile, "static char *s_%s_%s_BitNames[] = {\n", recordName, m_name);
+	fprintf(outfile, "static const char *s_%s_%s_BitNames[] = {\n", recordName, m_name);
 	sint32 numBits = 0;
 	struct namelist *node = m_groupList;
 	while(node) {
@@ -162,7 +164,7 @@ void Datum::ExportRangeDefines(FILE *outfile)
 
 void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recordName)
 {
-	char *ind = "";
+	const char *ind = "";
 	if(indent) {
 		ind = "    ";
 	}
@@ -253,7 +255,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 
 void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 {
-	char *ind = "";
+	const char *ind = "";
 	if(indent) {
 		ind = "    ";
 	}
@@ -506,7 +508,7 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 			if(!m_hasValue) {
 				fprintf(outfile, "    m_%s = NULL;\n", m_bitPairDatum->m_name);
 			} else {
-				fprintf(outfile, "    m_%s = new char[%d];\n", m_bitPairDatum->m_name, strlen(val.textValue) + 1);
+				fprintf(outfile, "    m_%s = new char[%zd];\n", m_bitPairDatum->m_name, strlen(val.textValue) + 1);
 				fprintf(outfile, "    strcpy(m_%s, \"%s\");\n", m_bitPairDatum->m_name, val.textValue);
 			}
 			break;
@@ -608,7 +610,7 @@ void Datum::ExportInitialization(FILE *outfile)
 				if(!m_hasValue) {
 					fprintf(outfile, "    m_%s = NULL;\n", m_name);
 				} else {
-					fprintf(outfile, "    m_%s = new char[%d];\n", m_name, strlen(val.textValue) + 1);
+					fprintf(outfile, "    m_%s = new char[%zd];\n", m_name, strlen(val.textValue) + 1);
 					fprintf(outfile, "    strcpy(m_%s, \"%s\");\n", m_name, val.textValue);
 				}
 				break;
@@ -634,6 +636,12 @@ void Datum::ExportSerializationStoring(FILE *outfile){
 
 	const char *typestring = "";
 	switch(m_type) {
+		case DATUM_NONE:
+			errx(1, "%s: Don't know, how to serialize %s %s",
+			    __func__, "DATUM_NONE", m_name);
+		case DATUM_BIT_PAIR:
+			warnx("%s: Don't know, how to serialize %s %s",
+			    __func__, "DATUM_BIT_PAIR", m_name);
 		case DATUM_INT:
 		case DATUM_STRINGID:
 			typestring = "sint32";
@@ -729,6 +737,12 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 {
 	const char *typestring = "";
 	switch(m_type) {
+		case DATUM_NONE:
+			errx(1, "%s: Don't know, how to serialize %s %s",
+			    __func__, "DATUM_NONE", m_name);
+		case DATUM_BIT_PAIR:
+			warnx("%s: Don't know, how to serialize %s %s",
+			    __func__, "DATUM_BIT_PAIR", m_name);
 		case DATUM_INT:
 		case DATUM_STRINGID:
 			typestring = "sint32";

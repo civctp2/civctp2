@@ -34,7 +34,7 @@ public:
 	aui_TabGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_TabGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -48,7 +48,7 @@ public:
 
 protected:
 	aui_TabGroup() : aui_SwitchGroup() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(
 		AUI_TABGROUP_ALIGNMENT alignment,
 		BOOL autoArrange,

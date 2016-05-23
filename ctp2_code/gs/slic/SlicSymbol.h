@@ -130,7 +130,7 @@ public:
 	BOOL GetUnitType(sint32 &type) const;
 	BOOL GetRegion(struct PSlicRegion &region) const;
 	BOOL GetComplexRegion(const struct PSlicComplexRegion *&region) const;
-	void GetDebugText(MBCHAR *text, sint32 len) const;
+	void GetDebugText(MBCHAR *text, size_t len) const;
 
 	BOOL ArrayLookup(sint32 index, SS_TYPE &retType, SlicStackValue &retValue);
 	BOOL SetArrayValue(sint32 index, SS_TYPE insType, SlicStackValue insValue);

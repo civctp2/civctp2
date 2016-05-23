@@ -669,7 +669,7 @@ void LobbyWindow::JoinButtonAction::Execute(
 	}
 }
 
-void LobbyWindow::PasswordScreenDone( MBCHAR *password )
+void LobbyWindow::PasswordScreenDone(const MBCHAR *password)
 {
 	ns_GameListBox *listbox = (ns_GameListBox *)
 		FindControl( LobbyWindow::CONTROL_GAMESLISTBOX );

@@ -23,7 +23,7 @@ private:
 class NetAddPlayer : public Packetizer
 {
 public:
-	NetAddPlayer(uint16 id, char *name) {
+	NetAddPlayer(uint16 id, const char *name) {
 		m_id = id;
 		m_name = name;
 	}
@@ -33,7 +33,7 @@ public:
 	void Unpacketize(uint16 id, uint8 *buf, uint16 size);
 private:
 	uint16 m_id;
-	char *m_name;
+	const char *m_name;
 };
 
 #else

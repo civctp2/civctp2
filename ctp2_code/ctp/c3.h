@@ -113,7 +113,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <malloc.h>
 #include <ctype.h>
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>

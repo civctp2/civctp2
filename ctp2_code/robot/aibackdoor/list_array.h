@@ -96,11 +96,11 @@ list_array<LIST_DATA_TYPE>::list_array
 	int i_max_chunks
 
 )
-:   data_list       (),
-    chunk_size      ((i_chunk_size == -1) ? i_size : i_chunk_size),
-    max_chunks      (i_max_chunks),
+:   chunk_size      ((i_chunk_size == -1) ? i_size : i_chunk_size),
     initial_size    (i_size),
-    chunks          (0)
+    max_chunks      (i_max_chunks),
+    chunks          (0),
+    data_list       ()
 { ; }
 
 template <typename LIST_DATA_TYPE>

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -75,9 +75,6 @@
 
 extern C3UI *g_c3ui;
 extern StringDB *g_theStringDB;
-
-static sint32			s_currentWonderDisplay;
-static c3_Button		*s_eventsInfoButton[17];
 
 extern DifficultyDB *g_theDifficultyDB;
 extern PointerList<Player>      *g_deadPlayer;
@@ -156,7 +153,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 					st->SetText("error");
 				}
 
-				item->SetUserData((void*)turn);
+				item->SetUserData((void*)(intptr_t)turn);
 			}
 
 			st = (ctp2_Static *)box->GetChildByIndex(3);

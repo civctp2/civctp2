@@ -80,7 +80,7 @@
 #include "IconRecord.h"
 
 static CityEspionage *s_CityEspionage;
-static MBCHAR *s_CityEspionageBlock = "CityEspionage";
+static const MBCHAR *s_CityEspionageBlock = "CityEspionage";
 
 extern C3UI *g_c3ui;
 ctp2_Button	*CityEspionage::m_cancelButton = NULL;

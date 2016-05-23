@@ -28,14 +28,14 @@ class KeyListItem : public c3_ListItem
 {
 public:
 
-	KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock);
+	KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
 
 	void UpdateKey( uint32 keycode );
 
-	MBCHAR	*GetName(void) { return m_name; }
+	const MBCHAR	*GetName(void) { return m_name; }
 	sint32	GetKey(void) { return m_index; }
 	sint32	GetKeycode(void) { return m_keycode; }
 
@@ -44,15 +44,14 @@ public:
 protected:
 	KeyListItem() : c3_ListItem() {}
 
-
-	AUI_ERRCODE InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 index, uint32 keycode, const MBCHAR *ldlBlock);
 
 public:
 
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
-	MBCHAR	*m_name;
+	const MBCHAR	*m_name;
 	sint32	m_index;
 	uint32	m_keycode;
 };

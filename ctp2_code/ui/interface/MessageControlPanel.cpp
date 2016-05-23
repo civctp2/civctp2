@@ -5,6 +5,6 @@
 
 
 
-MessageControlPanel::MessageControlPanel(MBCHAR *ldlBlock)
+MessageControlPanel::MessageControlPanel(const MBCHAR *ldlBlock)
 {
 }

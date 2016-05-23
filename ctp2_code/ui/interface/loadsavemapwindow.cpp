@@ -70,17 +70,8 @@ extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
 extern sint32						g_is565Format;
 
-
-
-
-
-
-
-
-
-
 LoadSaveMapWindow::LoadSaveMapWindow(AUI_ERRCODE *retval, uint32 id,
-		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
+		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 		: c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 {
 	m_fileList = NULL;
@@ -94,7 +85,7 @@ LoadSaveMapWindow::LoadSaveMapWindow(AUI_ERRCODE *retval, uint32 id,
 	InitCommonLdl(ldlBlock);
 }
 
-AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			tabGroupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -493,7 +484,6 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	delete radarMap;
 }
 
-
 void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 {
 
@@ -554,42 +544,29 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
 
-
-
-
-
-
-
-
-
-
 		radarDataPtr += width;
 	}
 
 	surface->Unlock(buffer);
 }
 
-void LoadSaveMapWindow::SetGameMapName(MBCHAR *name)
+void LoadSaveMapWindow::SetGameMapName(const MBCHAR *name)
 {
 	if (!m_gameMapTextBox) return;
 	m_gameMapTextBox->SetFieldText(name);
 }
 
-void LoadSaveMapWindow::SetSaveMapName(MBCHAR *name)
+void LoadSaveMapWindow::SetSaveMapName(const MBCHAR *name)
 {
 	if (!m_saveMapTextBox) return;
 	m_saveMapTextBox->SetFieldText(name);
 }
 
-void LoadSaveMapWindow::SetNote(MBCHAR *note)
+void LoadSaveMapWindow::SetNote(const MBCHAR *note)
 {
 	if (!m_noteTextBox) return;
 	m_noteTextBox->SetFieldText(note);
 }
-
-
-
-
 
 BOOL LoadSaveMapWindow::GetGameMapName(MBCHAR *name)
 {
@@ -670,7 +647,7 @@ void LoadSaveMapWindow::SetSaveMapInfo(SaveMapInfo *info)
 	m_tabGroup->ShouldDraw(TRUE);
 }
 
-void LoadSaveMapWindow::BuildDefaultSaveMapName(MBCHAR *gameMapName, MBCHAR *name)
+void LoadSaveMapWindow::BuildDefaultSaveMapName(const MBCHAR *gameMapName, MBCHAR *name)
 {
 	MBCHAR		saveMapName[_MAX_PATH];
 	MBCHAR		theGameMapName[_MAX_PATH];
@@ -701,16 +678,7 @@ void LoadSaveMapWindow::EnableFields( BOOL enable )
 	m_noteTextBox->Enable( enable );
 }
 
-
-
-
-
-
-
-
-
-
-LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameMapInfo *info)
+LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameMapInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -740,18 +708,16 @@ LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, 
 
 LSMGameMapsListItem::~LSMGameMapsListItem()
 {
-
 }
 
 sint32 LSMGameMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSMGameMapsListItem *item = (LSMGameMapsListItem *)item2;
 
 	return 0;
 }
 
 
-LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveMapInfo *info)
+LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveMapInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -781,12 +747,10 @@ LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, 
 
 LSMSaveMapsListItem::~LSMSaveMapsListItem()
 {
-
 }
 
 sint32 LSMSaveMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSMSaveMapsListItem *item = (LSMSaveMapsListItem *)item2;
 
 	return 0;
 }

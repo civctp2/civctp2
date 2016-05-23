@@ -122,8 +122,8 @@ void NetMessage::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 }
 
 NetInfoMessage::NetInfoMessage(NET_MSG_TYPE msg,
-							   MBCHAR *playerName,
-							   sint32 index)
+    const MBCHAR *playerName,
+    sint32 index)
 {
 	m_msg = msg;
 	m_name = playerName;

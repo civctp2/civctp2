@@ -13,18 +13,17 @@
 
 #include "ldlif.h"
 
-
-ldl::ldl(const char *fname, const char *outputDir, BOOL bUseInternalMemmap )
+ldl::ldl(const char *fname, const char *, BOOL)
 {
-	ReadData( fname );
+	ReadData(fname);
 }
 
-ldl::~ldl( void )
+ldl::~ldl(void)
 {
 	ldlif_deallocate_stuff();
 }
 
-BOOL ldl::ReadData( const char *fname )
+BOOL ldl::ReadData(const char *fname)
 {
 	ldlif_parse(strrchr(fname, FILE_SEPC) + 1);
 
@@ -32,7 +31,7 @@ BOOL ldl::ReadData( const char *fname )
 
 }
 
-ldl_datablock *ldl::FindDataBlock( char *szName, ldl_datablock *dbParent )
+ldl_datablock *ldl::FindDataBlock(const char *szName, ldl_datablock *)
 {
 	return ldlif_find_block(szName);
 }

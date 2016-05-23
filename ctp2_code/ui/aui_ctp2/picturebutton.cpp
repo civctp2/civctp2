@@ -17,8 +17,8 @@ PictureButton::PictureButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *upPicture,
-	MBCHAR *downPicture,
+	const MBCHAR *upPicture,
+	const MBCHAR *downPicture,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -35,12 +35,12 @@ PictureButton::PictureButton(
 PictureButton::PictureButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	aui_Button(retval, id, ldlBlock, ActionFunc, cookie)
 {
 	m_upPicture = NULL;
@@ -49,10 +49,10 @@ PictureButton::PictureButton(
 	InitCommon(ldlBlock, NULL, TRUE);
 }
 
-AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BOOL isLDL)
+AUI_ERRCODE PictureButton::InitCommon(const MBCHAR *upPicture, const MBCHAR *downPicture, BOOL isLDL)
 {
-	MBCHAR		*ldlBlock;
-	MBCHAR		*upName, *downName;
+	const MBCHAR	*ldlBlock;
+	const MBCHAR	*upName, *downName;
 	MBCHAR		path[_MAX_PATH];
 
 	if (isLDL) {

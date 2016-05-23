@@ -125,7 +125,7 @@ public:
 
 	sint32 Find(const T &me) ;
 
-	inline const sint32 Num() const  { if(!this) return 0; return m_nElements; }
+	inline const sint32 Num() const  { return m_nElements; }
     inline const sint32 ArraySize() const { return m_maxElements; }
 
     void Concat(const DynamicArray<T> & addme);

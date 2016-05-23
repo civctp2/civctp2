@@ -7,7 +7,7 @@
 
 c3_Image::c3_Image(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename )
 	:
 	aui_Image( retval, filename )
 {

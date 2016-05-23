@@ -161,7 +161,6 @@ STDEHANDLER(Accept_ProposalResponseEvent)
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
-	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	sint32 accept_priority =
 		receiver_diplomat.GetAcceptPriority( sender, proposal.detail.first_type);
@@ -186,12 +185,6 @@ STDEHANDLER(Accept_ProposalResponseEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
-
-
-
 
 STDEHANDLER(Reject_ProposalResponseEvent)
 {
@@ -750,14 +743,8 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	sint32 accept_priority =
 		receiver_diplomat.GetAcceptPriority( sender, sender_proposal.detail.first_type);
 
-	sint32 reject_priority =
-		receiver_diplomat.GetRejectPriority( sender, sender_proposal.detail.first_type);
-
 	if (accept_priority <= 0)
 		return GEV_HD_Continue;
-
-
-
 
 	if ((!receiver_diplomat.GetPersonality()->GetConquestAgressive() ||
 		 receiver_diplomat.GetPersonality()->GetDiscoveryDiplomatic()) &&
@@ -1241,7 +1228,6 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 
 	Player *sender_ptr = g_player[sender];
 	Player *receiver_ptr = g_player[receiver];
-	Player *foreigner_ptr = g_player[foreigner];
 	Assert(sender_ptr);
 	Assert(receiver_ptr);
 	if (sender_ptr == NULL || receiver_ptr == NULL)
@@ -1357,7 +1343,6 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 	uint32 sender_pollution = sender_ptr->GetPollutionLevel();
 
 	sint32 receiver_promised_pollution = receiver_agreement.proposal.first_arg.pollution;
-	double receiver_pollution_ratio = (double) receiver_pollution / receiver_promised_pollution;
 	sint32 requested_pollution = sender_proposal.detail.first_arg.pollution;
 
 	if (requested_pollution > receiver_promised_pollution * 1.3)

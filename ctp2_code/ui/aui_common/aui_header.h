@@ -15,7 +15,7 @@ public:
 	aui_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -27,9 +27,9 @@ public:
 
 protected:
 	aui_Header() : aui_SwitchGroup() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateSwitches( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateSwitches(const MBCHAR *ldlBlock= NULL );
 
 public:
 	virtual AUI_ERRCODE	AddChild( aui_Region *child );

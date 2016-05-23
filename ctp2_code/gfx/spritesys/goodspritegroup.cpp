@@ -211,7 +211,7 @@ void GoodSpriteGroup::RunBenchmark(aui_Surface *surf)
 	exit(0);
 }
 
-void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
+void GoodSpriteGroup::LoadBasic(const char *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
@@ -226,7 +226,7 @@ void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
 	delete file;
 }
 
-void GoodSpriteGroup::LoadFull(MBCHAR *filename)
+void GoodSpriteGroup::LoadFull(const char *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
@@ -241,7 +241,7 @@ void GoodSpriteGroup::LoadFull(MBCHAR *filename)
 	delete file;
 }
 
-void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
+void GoodSpriteGroup::Save(const char *filename,unsigned version_id,unsigned compression_mode)
 {
 	SpriteFile *file = new SpriteFile(filename);
 
@@ -274,9 +274,9 @@ void GoodSpriteGroup::DeallocateFullLoadAnims(void)
 	}
 }
 
-void GoodSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
+void GoodSpriteGroup::DrawText(sint32 x, sint32 y, const char *s)
 {
-	primitives_DrawText(g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, 0, 0);
 }
 
 sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
@@ -355,7 +355,7 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	return TRUE;
 }
 
-void GoodSpriteGroup::ExportScript(MBCHAR *name)
+void GoodSpriteGroup::ExportScript(const char *name)
 {
 	FILE				*file;
 	extern TokenData	g_allTokens[];

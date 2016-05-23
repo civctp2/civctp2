@@ -1179,8 +1179,7 @@ void WorkMap::DrawLabels( aui_Surface *surface )
 		offsetHeight += prodHeight;
 		DrawALabel( surface, goldStr, k_OFFSET_WIDTH, offsetHeight, goldWidth, goldHeight );
 
-		MBCHAR tiStr[_MAX_PATH];
-		sprintf( tiStr, g_theStringDB->GetNameStr("str_ldl_TILE_RESOURCES_Colon") );
+		const char *tiStr = g_theStringDB->GetNameStr("str_ldl_TILE_RESOURCES_Colon");
 		sint32 tiLabelWidth = g_tiledMap->GetFont()->GetStringWidth(tiStr);
 		RECT rect = {0, 0, tiLabelWidth, g_tiledMap->GetFont()->GetMaxHeight()};
 
@@ -1248,7 +1247,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", prod);
+	sprintf(str, "%d", prod);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);
@@ -1282,7 +1281,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", food);
+	sprintf(str, "%d", food);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);

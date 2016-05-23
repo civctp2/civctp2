@@ -900,7 +900,7 @@ void TurnCount::SendMsgEndOfGameEarlyWarning(void)
 	}
 }
 
-void TurnCount::SendMsgToAllPlayers(MBCHAR *s)
+void TurnCount::SendMsgToAllPlayers(const MBCHAR *s)
 	{
 	sint32	i ;
 

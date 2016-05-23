@@ -56,7 +56,7 @@ void sliccmd_arg_exp(int value)
 	yyscerror("arguments not implemented");
 }
 
-void sliccmd_arg_id(char *id)
+void sliccmd_arg_id(const char *id)
 {
 	yyscerror("arguments not implemented");
 }
@@ -66,12 +66,12 @@ void sliccmd_arg_stringid(int id)
 	yyscerror("arguments not implemented");
 }
 
-void sliccmd_arg_string(char *string)
+void sliccmd_arg_string(const char *string)
 {
 	yyscerror("arguments not implemented");
 }
 
-int sliccmd_get_int_value(char *symName)
+int sliccmd_get_int_value(const char *symName)
 {
 	char errbuf[1024];
 
@@ -92,13 +92,13 @@ int sliccmd_get_int_value(char *symName)
 	return value;
 }
 
-int sliccmd_call(char *funcName)
+int sliccmd_call(const char *funcName)
 {
 	yyscerror("Function calls not implemented");
 	return 0;
 }
 
-int sliccmd_ref_has_int_value(char *structName, char *memberName)
+int sliccmd_ref_has_int_value(const char *structName, const char *memberName)
 {
 
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
@@ -135,7 +135,7 @@ int sliccmd_ref_has_int_value(char *structName, char *memberName)
 	return 1;
 }
 
-int sliccmd_get_ref_value(char *structName, char *memberName)
+int sliccmd_get_ref_value(const char *structName, const char *memberName)
 {
 	char errbuf[1024];
 
@@ -177,7 +177,7 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 	return value;
 }
 
-void *sliccmd_get_ref_sym(char *structName, char *memberName)
+void *sliccmd_get_ref_sym(const char *structName, const char *memberName)
 {
 	char errbuf[1024];
 
@@ -213,7 +213,7 @@ void *sliccmd_get_ref_sym(char *structName, char *memberName)
 	return member;
 }
 
-int sliccmd_array_lookup(char *arrayName, int index)
+int sliccmd_array_lookup(const char *arrayName, int index)
 {
 	char errbuf[1024];
 
@@ -254,7 +254,7 @@ int sliccmd_array_lookup(char *arrayName, int index)
 	return 0;
 }
 
-void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberName)
+void *sliccmd_array_lookup_reference(const char *arrayName, int index, const char *memberName)
 {
 	char errbuf[1024];
 
@@ -304,7 +304,7 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 	return member;
 }
 
-void sliccmd_error(char *s)
+void sliccmd_error(const char *s)
 {
 	if(sliccmd_use_dialogs) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
@@ -315,7 +315,7 @@ void sliccmd_error(char *s)
 	}
 }
 
-int sliccmd_has_int_value(char *symName)
+int sliccmd_has_int_value(const char *symName)
 {
 	SlicSymbolData *sym = sliccmd_get_symbol(symName);
 	if(!sym)
@@ -331,9 +331,9 @@ int sliccmd_has_int_value(char *symName)
 		return 0;
 }
 
-int sliccmd_sym_has_int_value(void *vsym, int *value)
+int sliccmd_sym_has_int_value(const void *vsym, int *value)
 {
-	SlicSymbolData *sym = (SlicSymbolData *)vsym;
+	const SlicSymbolData *sym = (SlicSymbolData *)vsym;
 
 	// Added by Martin Gühmann
 	if( sym->GetIntValue((sint32 &)*value)
@@ -343,7 +343,7 @@ int sliccmd_sym_has_int_value(void *vsym, int *value)
 	return 0;
 }
 
-int sliccmd_array_has_int_value(char *symName, int index)
+int sliccmd_array_has_int_value(const char *symName, int index)
 {
 	SlicSymbolData *sym = sliccmd_get_symbol(symName);
 	if(!sym)
@@ -366,7 +366,7 @@ int sliccmd_array_has_int_value(char *symName, int index)
 	return 0;
 }
 
-void *sliccmd_lookup_sym(char *name)
+void *sliccmd_lookup_sym(const char *name)
 {
 	char errbuf[1024];
 	SlicSymbolData *sym = sliccmd_get_symbol(name);
@@ -378,13 +378,13 @@ void *sliccmd_lookup_sym(char *name)
 	return sym;
 }
 
-void *sliccmd_maybe_lookup_sym(char *name)
+void *sliccmd_maybe_lookup_sym(const char *name)
 {
 	SlicSymbolData *sym = sliccmd_get_symbol(name);
 	return sym;
 }
 
-void *sliccmd_array_lookup_sym(char *arrayName, int index)
+void *sliccmd_array_lookup_sym(const char *arrayName, int index)
 {
 	char errbuf[1024];
 
@@ -533,7 +533,7 @@ void sliccmd_add_watch(SlicSymbolWatchCallback *watch)
 }
 
 
-SlicSymbolData *sliccmd_get_symbol(char *name)
+SlicSymbolData *sliccmd_get_symbol(const char *name)
 {
 	SlicSymbolData *sym = g_slicEngine->GetSymbol(name);
 	if(sym) {
@@ -559,7 +559,7 @@ void *sliccmd_get_db_name_sym(void *dbptr, const char *name)
 		SlicSymbolData *sym = new SlicSymbolData(SLIC_SYM_STRING);
 
 		const MBCHAR *str = conduit->GetRecordName(name);
-		sym->SetString((char *)str);
+		sym->SetString((const char *)str);
 		return sym;
 	}
 }
@@ -579,7 +579,7 @@ void *sliccmd_get_db_name_sym_by_index(void *dbptr, int index)
 	} else {
 		SlicSymbolData *sym = new SlicSymbolData(SLIC_SYM_STRING);
 		const MBCHAR *str = conduit->GetRecordNameByIndex((sint32)index);
-		sym->SetString((char *)str);
+		sym->SetString((const char *)str);
 		return sym;
 	}
 }

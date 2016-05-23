@@ -49,7 +49,7 @@ public:
 
 	virtual ~MessageAdvice();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock);
 
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
@@ -61,9 +61,9 @@ protected:
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDragAway(aui_MouseEvent * data);
 
-	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateTextBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateDismissButton( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateWindowEdges(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateTextBox(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateDismissButton(const MBCHAR *ldlBlock);
 
 private:
 	aui_Static						*m_leftBar;

@@ -119,7 +119,6 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	{
 		s_musicScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicScreen, errcode) );
-		if ( !AUI_NEWOK(s_musicScreen, errcode) ) errcode;
 
 		s_musicScreen->Resize(s_musicScreen->Width(),s_musicScreen->Height());
 		s_musicScreen->GrabRegion()->Resize(s_musicScreen->Width(),s_musicScreen->Height());
@@ -147,9 +146,8 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-	return AUI_ERRCODE_OK;
+	return errcode;
 }
-
 
 AUI_ERRCODE musicscreen_Cleanup()
 {

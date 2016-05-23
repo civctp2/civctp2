@@ -28,7 +28,7 @@ public:
 	BattleOrderBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	BattleOrderBox(
@@ -38,11 +38,11 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock);
 
 	virtual ~BattleOrderBox();
 

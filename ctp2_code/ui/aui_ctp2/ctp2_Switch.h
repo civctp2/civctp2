@@ -44,7 +44,7 @@ public:
 	ctp2_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ctp2_Switch(
@@ -54,7 +54,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		sint32 state = 0,
@@ -65,7 +65,7 @@ public:
 	sint32 BevelWidth( void ) const { return m_bevelWidth; }
 protected:
 	ctp2_Switch() : aui_Switch() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
 public:

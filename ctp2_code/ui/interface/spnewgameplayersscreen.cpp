@@ -97,10 +97,6 @@ void CleanupControl(T * & a_Control)
 
 } // namespace
 
-static c3_Button	*s_back				= NULL;
-
-static c3_Static	*s_name				= NULL;
-
 //Added by Martin Gühmann
 static ctp2_Spinner *s_num_player_spinner = NULL;
 static ctp2_Spinner *s_max_player_spinner = NULL;
@@ -233,7 +229,6 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	{
 		s_spNewGamePlayersScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGamePlayersScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGamePlayersScreen, errcode) ) errcode;
 
 		s_spNewGamePlayersScreen->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());
 		s_spNewGamePlayersScreen->GrabRegion()->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());

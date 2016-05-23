@@ -177,7 +177,7 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
     {
         if (walk->m_cb == cb)
         {
-            walk == m_callbacks.erase(walk);
+            walk = m_callbacks.erase(walk);
         }
         else
         {

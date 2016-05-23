@@ -38,21 +38,17 @@ template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 	return(compareCharacter[EQUAL_CHARACTER]);
 }
 
-template <class type> const COLORREF *ComparisonColor(type left, type right)
+template <class type> const COLORREF ComparisonColor(type left, type right)
 {
 
-	static const sint32 LESS_THAN_CHARACTER = 0;
-	static const sint32 EQUAL_CHARACTER = 1;
-	static const sint32 GREATER_THAN_CHARACTER = 2;
-
 	if(left < right)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_RED));
+		return(g_colorSet->GetColorRef(COLOR_RED));
 	if(right < left)
-		return((const COLORREF *)g_colorSet->GetColorRef(COLOR_DARK_GREEN));
-	return((const COLORREF *)g_colorSet->GetColorRef(COLOR_BLACK));
+		return(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
+	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
-GovernmentTab::GovernmentTab(MBCHAR *ldlBlock) :
+GovernmentTab::GovernmentTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_enactButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"EnactGovernment"))),
@@ -290,73 +286,73 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 		currentGovernment->GetPollutionRank(),
 		compareGovernment->GetPollutionRank()));
 
-	m_currentInformation[GII_CITIES]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_CITIES]->SetTextColor(ComparisonColor(
 		currentGovernment->GetTooManyCitiesThreshold(),
 		compareGovernment->GetTooManyCitiesThreshold()));
-	m_compareInformation[GII_CITIES]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_CITIES]->SetTextColor(ComparisonColor(
 		compareGovernment->GetTooManyCitiesThreshold(),
 		currentGovernment->GetTooManyCitiesThreshold()));
 
-	m_currentInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_GROWTH]->SetTextColor(ComparisonColor(
 		currentGovernment->GetGrowthRank(),
 		compareGovernment->GetGrowthRank()));
-	m_compareInformation[GII_GROWTH]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_GROWTH]->SetTextColor(ComparisonColor(
 		compareGovernment->GetGrowthRank(),
 		currentGovernment->GetGrowthRank()));
 
-	m_currentInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_PRODUCTION]->SetTextColor(ComparisonColor(
 		currentGovernment->GetProductionRank(),
 		compareGovernment->GetProductionRank()));
-	m_compareInformation[GII_PRODUCTION]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_PRODUCTION]->SetTextColor(ComparisonColor(
 		compareGovernment->GetProductionRank(),
 		currentGovernment->GetProductionRank()));
 
-	m_currentInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_RESEARCH]->SetTextColor(ComparisonColor(
 		currentGovernment->GetScienceRank(),
 		compareGovernment->GetScienceRank()));
-	m_compareInformation[GII_RESEARCH]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_RESEARCH]->SetTextColor(ComparisonColor(
 		compareGovernment->GetScienceRank(),
 		currentGovernment->GetScienceRank()));
 
-	m_currentInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_ECONOMIC]->SetTextColor(ComparisonColor(
 		currentGovernment->GetGoldRank(),
 		compareGovernment->GetGoldRank()));
-	m_compareInformation[GII_ECONOMIC]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_ECONOMIC]->SetTextColor(ComparisonColor(
 		compareGovernment->GetGoldRank(),
 		currentGovernment->GetGoldRank()));
 
-	m_currentInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_COMMERCE]->SetTextColor(ComparisonColor(
 		currentGovernment->GetCommerceRank(),
 		compareGovernment->GetCommerceRank()));
-	m_compareInformation[GII_COMMERCE]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_COMMERCE]->SetTextColor(ComparisonColor(
 		compareGovernment->GetCommerceRank(),
 		currentGovernment->GetCommerceRank()));
 
-	m_currentInformation[GII_MILITARY]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_MILITARY]->SetTextColor(ComparisonColor(
 		currentGovernment->GetMilitaryRank(),
 		compareGovernment->GetMilitaryRank()));
-	m_compareInformation[GII_MILITARY]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_MILITARY]->SetTextColor(ComparisonColor(
 		compareGovernment->GetMilitaryRank(),
 		currentGovernment->GetMilitaryRank()));
 
-	m_currentInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_LOYALTY]->SetTextColor(ComparisonColor(
 		currentGovernment->GetLoyaltyRank(),
 		compareGovernment->GetLoyaltyRank()));
-	m_compareInformation[GII_LOYALTY]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_LOYALTY]->SetTextColor(ComparisonColor(
 		compareGovernment->GetLoyaltyRank(),
 		currentGovernment->GetLoyaltyRank()));
 
-	m_currentInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_MARTIAL_LAW]->SetTextColor(ComparisonColor(
 		currentGovernment->GetMartialLawRank(),
 		compareGovernment->GetMartialLawRank()));
-	m_compareInformation[GII_MARTIAL_LAW]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_MARTIAL_LAW]->SetTextColor(ComparisonColor(
 		compareGovernment->GetMartialLawRank(),
 		currentGovernment->GetMartialLawRank()));
 
-	m_currentInformation[GII_ANTI_POLLUTION]->SetTextColor((long)ComparisonColor(
+	m_currentInformation[GII_ANTI_POLLUTION]->SetTextColor(ComparisonColor(
 		currentGovernment->GetPollutionRank(),
 		compareGovernment->GetPollutionRank()));
-	m_compareInformation[GII_ANTI_POLLUTION]->SetTextColor((long)ComparisonColor(
+	m_compareInformation[GII_ANTI_POLLUTION]->SetTextColor(ComparisonColor(
 		compareGovernment->GetPollutionRank(),
 		currentGovernment->GetPollutionRank()));
 }

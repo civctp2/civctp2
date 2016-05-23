@@ -31,7 +31,7 @@ public:
 	c3_PopupWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true );
@@ -43,7 +43,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true );
 
@@ -58,27 +58,27 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	sint32 AddTitle( MBCHAR *titleBlock = NULL );
+	sint32 AddTitle(const MBCHAR *titleBlock = NULL);
 	sint32 AddCancel(
 		void (*actionFunc)( aui_Control *, uint32, uint32, void *) = NULL,
 		void *cookie = NULL,
-		MBCHAR *buttonBlock = "c3_PopupCancel" );
+		const MBCHAR *buttonBlock = "c3_PopupCancel" );
 	sint32 AddOk(
 		void (*actionFunc)( aui_Control *, uint32, uint32, void *) = NULL,
 		void *cookie = NULL,
-		MBCHAR *buttonBlock = "c3_PopupOk" );
+		const MBCHAR *buttonBlock = "c3_PopupOk" );
 	sint32 AddYes(
 		void (*actionFunc)( aui_Control *, uint32, uint32, void *) = NULL,
 		void *cookie = NULL,
-		MBCHAR *buttonBlock = "c3_PopupYes" );
+		const MBCHAR *buttonBlock = "c3_PopupYes" );
 	sint32 AddClose(
 		void (*actionFunc)( aui_Control *, uint32, uint32, void *) = NULL,
 		void *cookie = NULL,
-		MBCHAR *buttonBlock = "c3_PopupClose" );
+		const MBCHAR *buttonBlock = "c3_PopupClose" );
 	sint32 AddNo(
 		void (*actionFunc)( aui_Control *, uint32, uint32, void *) = NULL,
 		void *cookie = NULL,
-		MBCHAR *buttonBlock = "c3_PopupNo" );
+		const MBCHAR *buttonBlock = "c3_PopupNo" );
 
 	c3_Static	*TitleText( void ) { return m_titleText; }
 	c3_Static	*Title( void ) { return m_title; }

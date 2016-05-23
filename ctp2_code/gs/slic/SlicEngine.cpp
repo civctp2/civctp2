@@ -3127,6 +3127,9 @@ sint32 SlicEngine::CallMod(const MOD_FUNC modFunc, const sint32 def, const void*
 				sym->SetArmy(a);
 				slicArgs->AddArg(SA_TYPE_INT_VAR, sym);
 				break;
+			default:
+				fprintf(stderr, "Unexpected enum value %d!\n",
+				    mf->GetArg(arg));
 		}
 	}
 

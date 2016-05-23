@@ -12,13 +12,13 @@ class DialogBoxWindow : public ns_Window
 public:
 	DialogBoxWindow(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		aui_Action **actions );
 
 	virtual ~DialogBoxWindow();
 
 	static DialogBoxWindow *PopUp(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		aui_Action **actions );
 
 	static void PopDown(
@@ -60,7 +60,7 @@ protected:
 
 	AUI_ERRCODE	InitCommon( void );
 	AUI_ERRCODE CreateControls(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		aui_Action **actions );
 
 	sint32		m_numButtons;

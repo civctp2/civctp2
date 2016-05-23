@@ -657,16 +657,13 @@ int GreatLibrary::Get_Object_Index_From_Name
 		break;
 
 	default:
-		BOOL InvalidDatabase = FALSE;
 		DPRINTF(k_DBG_GAMESTATE, ("DB: %i\n", which_database));
-		Assert(InvalidDatabase);
+		Assert(!"InvalidDatabase");
 		break;
 	}
 
-	bool bad_object_name = false;
-
 	DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
-	Assert(bad_object_name);
+	Assert(!"bad_object_name");
 
 	return 0;
 }
@@ -956,16 +953,13 @@ void TechListItem::Update(void)
 		break;
 
 	default:
-		BOOL invalidDatabase = FALSE;
-		Assert( invalidDatabase );
+		Assert(!"invalidDatabase");
 	}
 }
 
 sint32 TechListItem::Compare(ctp2_ListItem *item2, uint32 column)
 {
 	sint32	val1, val2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:
@@ -1141,14 +1135,14 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 
 
 	if ( g_theProfileDB->IsLibraryAnim() ) {
+		GetWindow()->SetDynamic(FALSE);
+
+#ifdef WIN32
 		RECT rect = {
 			k_VIDEO_X,
 			k_VIDEO_Y,
 			k_VIDEO_X + k_VIDEO_WIDTH,
 			k_VIDEO_Y + k_VIDEO_HEIGHT};
-
-		GetWindow()->SetDynamic(FALSE);
-#ifdef WIN32
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
@@ -1316,24 +1310,10 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	m_selectedIndex = theMode;
 
-	bool there_is_a_gameplay_panel = true;
-
-	bool there_is_an_historical_panel = true;
-
 	enum DATABASE real_database = theDatabase;
 	int real_index = theMode;
 
 	if (!g_greatLibrary || !g_greatLibrary->m_window) return 0;
-
-	sint32 videoWidth = 242;
-	sint32 videoHeight = 182;
-	sint32 videoX = 382;
-	sint32 videoY = 316;
-
-	sint32 windowWidth = g_ScreenWidth;
-	sint32 windowHeight = g_ScreenHeight;
-	sint32 windowX = 0;
-	sint32 windowY = 0;
 
 	sint32 hidden;
 
@@ -1484,14 +1464,14 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	}
 #endif
 
-	RECT rect = {
-		k_VIDEO_X,
-		k_VIDEO_Y,
-		k_VIDEO_X + k_VIDEO_WIDTH,
-		k_VIDEO_Y + k_VIDEO_HEIGHT};
-
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 #ifdef WIN32
+		RECT rect = {
+			k_VIDEO_X,
+			k_VIDEO_Y,
+			k_VIDEO_X + k_VIDEO_WIDTH,
+			k_VIDEO_Y + k_VIDEO_HEIGHT};
+
 		m_techMovie = new DirectVideo();
 		m_techMovie->Initialize((aui_DirectUI *)g_c3ui, (aui_Window *)GetWindow(), FALSE);
 		m_techMovie->SetDestRect(&rect);
@@ -2710,7 +2690,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 )
 {
 
-	void *cookie = (void *) index;
+	void *cookie = (void *)(intptr_t)index;
 
 	Assert(m_topics_list);
 	if(!m_topics_list) return;

@@ -65,7 +65,8 @@
 #endif
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
+int yysllex(void);
 
 #ifdef _DEBUG
 FILE *debuglog;
@@ -450,7 +451,7 @@ arrayref: NAME { $$.name = $1.name; slicif_add_op(SOP_PUSHA, $1.name); } '[' exp
 extern FILE *yyslin;
 int yyparse();
 
-SLIC_ERROR slicif_run_parser(char* filename, int symStart)
+SLIC_ERROR slicif_run_parser(const char* filename, int symStart)
 {
 #ifdef _DEBUG
 	static int debug_opened = 0;
@@ -492,7 +493,7 @@ const char *slicif_get_filename()
 	return include_filename_stack[include_stack_ptr];
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
     extern int line;
 #ifdef _DEBUG

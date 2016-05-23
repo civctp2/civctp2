@@ -1851,7 +1851,7 @@ SpriteFile::ReadIndexed_v20(UnitSpriteGroup *s,GAME_ACTION action)
 {
 	uint16	i;
 	uint16	data16;
-	int     offsets[ACTION_MAX];
+	int     offsets[ACTION_MAX + 1];
 
     ReadData((void *)offsets, sizeof(int) * (ACTION_MAX+1));
 
@@ -2193,7 +2193,7 @@ size_t SpriteFile::GetFilePos(void)
 	err = c3files_fgetpos(m_file, &pos);
 	Assert(err == 0);
 	return  pos;
-#elif defined(LINUX)
+#else
 //	return pos.__pos;
         return ftell(m_file);
 #endif
@@ -2207,7 +2207,7 @@ void SpriteFile::SetFilePos(size_t pos)
 #ifdef WIN32
 	filePos = pos;
 	err = c3files_fsetpos(m_file, &filePos);
-#elif defined(LINUX)
+#else
 //	err = c3files_fgetpos(m_file, &filePos); //is this because fpos_t may be more complex on some systems than size_t and needs to be properly initialized?
 //	Assert(err == 0);
 //	filePos.__pos = pos;

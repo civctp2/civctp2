@@ -45,8 +45,8 @@ void CityManagerWindow::Cleanup()
 }
 
 CityManagerWindow::CityManagerWindow(AUI_ERRCODE *retval,
-									 uint32 id,
-									 MBCHAR *ldlBlock)
+				 uint32 id,
+				 const MBCHAR *ldlBlock)
 	: aui_Window(retval, id,
 				 uiutils_ChooseLdl(ldlBlock, "CITY_MANAGER_WINDOW"),
 				 16,
@@ -85,7 +85,7 @@ void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32
 		s_cityManagerWindow->Hide();
 }
 
-AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE CityManagerWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	ldl_datablock *theBlock = NULL;

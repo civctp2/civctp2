@@ -428,7 +428,7 @@ public:
 	Civilisation *GetCivilisation(void) const { return (m_civilisation) ; }
 	void GetPluralCivName(MBCHAR *s) ;
 	void GetSingularCivName(MBCHAR *s) ;
-	MBCHAR *GetLeaderName(void) ;
+	const MBCHAR *GetLeaderName(void) ;
 
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);

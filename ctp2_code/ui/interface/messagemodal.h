@@ -59,14 +59,14 @@ public:
 	MessageModal(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		Message data,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_FLOATING );
 
 	virtual ~MessageModal();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, Message data );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, Message data);
 
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
@@ -78,14 +78,14 @@ protected:
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 
-	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateResponses( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardTextBox( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateWindowEdges(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateResponses(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateStandardTextBox(const MBCHAR *ldlBlock);
 
-	AUI_ERRCODE CreateEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateDropdownEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateListboxEyePointBox( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateEyePointBox(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateStandardEyePointBox(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateDropdownEyePointBox(const MBCHAR *ldlBlock);
+	AUI_ERRCODE CreateListboxEyePointBox(const MBCHAR *ldlBlock);
 
 private:
 	aui_HyperTextBox						*m_messageText;

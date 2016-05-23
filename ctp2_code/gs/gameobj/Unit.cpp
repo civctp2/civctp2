@@ -1138,19 +1138,19 @@ sint32 Unit::Settle()
 
 #ifdef _DEBUG
 
-char * Unit::GetText()
+const char * Unit::GetText()
 {
 
 
 	if (g_isScenario)
 	{
-		return (char *) GetName();
+		return GetName();
 	}
 	else
 		return g_theUnitPool->GetUnit(m_id)->GetText();
 }
 
-void Unit::SetText(char *str)
+void Unit::SetText(const char *str)
 {
 	AccessData()->SetText(str);
 }

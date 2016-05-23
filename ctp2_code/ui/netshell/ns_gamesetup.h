@@ -68,14 +68,6 @@ public:
 	void SetPlayStyleValue( int playstylevalue )
 	{ m_playstylevalue = playstylevalue; }
 
-
-
-
-
-
-
-
-
 	char GetHandicapping() const { return m_handicapping; }
 	void SetHandicapping( char handicapping )
 	{ m_handicapping = handicapping; }
@@ -84,25 +76,9 @@ public:
 	void SetDynamicJoin( char dynamicJoin )
 	{ m_dynamicJoin = dynamicJoin; }
 
-
-
-
-
 	char GetBloodlust() const { return m_bloodlust; }
 	void SetBloodlust( char bloodlust )
 	{ m_bloodlust = bloodlust; }
-
-
-
-
-
-
-
-
-
-
-
-
 
 	char GetPollution() const { return m_pollution; }
 	void SetPollution( char pollution )
@@ -273,7 +249,7 @@ public:
 	ns_GameSetup(nf_GameSetup * gamesetup);
 	void Update( nf_GameSetup *gamesetup );
 
-	char *m_name;
+	const char *m_name;
 };
 
 #endif

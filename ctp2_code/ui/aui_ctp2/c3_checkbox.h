@@ -17,7 +17,7 @@ public:
 	c3_CheckBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	c3_CheckBox(
@@ -27,8 +27,8 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text,
-		MBCHAR *pattern,
+		const MBCHAR *text,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		sint32 state = 0,
@@ -38,7 +38,7 @@ public:
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
 protected:
 	c3_CheckBox() : aui_Switch() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
 public:

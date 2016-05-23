@@ -5,6 +5,6 @@
 
 
 
-TilesControlPanel::TilesControlPanel(MBCHAR *ldlBlock)
+TilesControlPanel::TilesControlPanel(const MBCHAR *ldlBlock)
 {
 }

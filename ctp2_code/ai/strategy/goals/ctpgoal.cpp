@@ -208,8 +208,7 @@ const MapPoint CTPGoal::Get_Target_Pos(const Army & army) const
 				return best_target_pos;
 			else
 			{
-				bool NO_TRADE_ROUTE_TARGET_POS_FOUND = true;
-				Assert(NO_TRADE_ROUTE_TARGET_POS_FOUND);
+				Assert(!"NO_TRADE_ROUTE_TARGET_POS_FOUND");
 			}
 		}
 	}
@@ -249,8 +248,7 @@ const MapPoint CTPGoal::Get_Target_Pos(const Army & army) const
 				return best_target_pos;
 			else
 			{
-				bool NO_TILE_IMPROVEMENT_TARGET_POS_FOUND = true;
-				Assert(NO_TILE_IMPROVEMENT_TARGET_POS_FOUND);
+				Assert(!"NO_TILE_IMPROVEMENT_TARGET_POS_FOUND");
 			}
 		}
 	}
@@ -617,8 +615,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
 
-	Player *player_ptr = g_player[ m_playerId ];
-	Assert(player_ptr != NULL);
+	Assert(g_player[m_playerId] != NULL);
 
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
@@ -1104,7 +1101,6 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *m_agents.begin();
 	MapPoint goto_pos = Get_Target_Pos(ctpagent_ptr->Get_Army());
 	MapPoint my_pos;
-	bool rally_complete = true;
 	Set_Sub_Task(SUB_TASK_GOAL);
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	sint32 cells;
@@ -1935,7 +1931,6 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 							    const MapPoint &dest_pos,
 								const Path &found_path)
 {
-    bool did_move = false;
 
 	Unit city = g_theWorld->GetCity( first_army->Get_Pos() );
 	if (city.m_id != 0)

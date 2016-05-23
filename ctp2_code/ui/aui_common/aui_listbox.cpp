@@ -57,7 +57,7 @@ aui_DragDropWindow *aui_ListBox::m_dragDropWindow = NULL;
 aui_ListBox::aui_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -105,7 +105,7 @@ aui_ListBox::aui_ListBox(
 }
 
 
-AUI_ERRCODE aui_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ListBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -213,7 +213,7 @@ AUI_ERRCODE aui_ListBox::InitCommon( void )
 }
 
 
-AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -910,7 +910,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		if ( j + 1 > m_numColumns ) m_numColumns = j + 1;
 
 		ListPos subPosition = item->ChildList()->GetHeadPosition();
-		for ( j; j; j-- )
+		while (j--)
 		{
 			aui_Item *subItem =
 				(aui_Item *)item->ChildList()->GetNext( subPosition );

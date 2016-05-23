@@ -6,7 +6,7 @@
 aui_Static::aui_Static(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -44,7 +44,7 @@ aui_Static::aui_Static(
 }
 
 
-AUI_ERRCODE aui_Static::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Static::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon();
 }

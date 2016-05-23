@@ -267,10 +267,13 @@ DPRINTF(k_DBG_SLIC, ("ParseResponseSlicArgs: type= %d\n", response.type));
 			break;
 
 		case THREAT_DESTROY_CITY:
-            if(!args->GetCity(argNum++, city))
+			if(!args->GetCity(argNum++, city))
 				return false;
 			response.threat.arg.cityId = city.m_id;
 			break;
+		default:
+			fprintf(stderr, "Unexpected threat-type %d!\n",
+			    response.threat.type);
 		}
 	}
 	return true;
@@ -781,7 +784,7 @@ SFN_ERROR Slic_ConsiderResponse::Call(SlicArgList *args)
 	Response response;
 
 	if (!ParseResponseSlicArgs(args, argNum, response))
-		SFN_ERROR_TYPE_ARGS;
+		return SFN_ERROR_TYPE_ARGS;
 
 	if (Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId))
 		Diplomat::GetDiplomat(response.receiverId).
@@ -806,7 +809,7 @@ SFN_ERROR Slic_SetResponse::Call(SlicArgList *args)
 	Response response;
 
 	if (!ParseResponseSlicArgs(args, argNum, response))
-		SFN_ERROR_TYPE_ARGS;
+		return SFN_ERROR_TYPE_ARGS;
 
 	if (Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId))
 		Diplomat::GetDiplomat(response.receiverId).
@@ -891,6 +894,9 @@ SFN_ERROR Slic_ConsiderMotivation::Call(SlicArgList *args)
 			return SFN_ERROR_TYPE_ARGS;
 		motivation.arg.advanceType = value;
 		break;
+	default:
+		fprintf(stderr, "Unexpected motivation.type %d\n",
+		    motivation.type);
 	}
 
 	Diplomat::GetDiplomat(player).ConsiderMotivation( motivation );

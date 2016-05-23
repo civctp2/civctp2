@@ -14,7 +14,7 @@
 
 class aui_SDLMouse : public aui_Mouse, public aui_SDLInput {
 public:
-	aui_SDLMouse(AUI_ERRCODE *retval, MBCHAR *ldlBlock,
+	aui_SDLMouse(AUI_ERRCODE *retval, const MBCHAR *ldlBlock,
 	             BOOL useExclusiveMode = FALSE);
 	virtual ~aui_SDLMouse();
 

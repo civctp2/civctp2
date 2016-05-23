@@ -423,8 +423,6 @@ void SelectedItem::NextItem()
 		default:
 			return;
 	}
-
-	sint32 tried = 1;
 }
 
 void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
@@ -434,7 +432,6 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 	if(!p)
 		return;
 
-	sint32 tried = 1;
 	sint32 numArmies = p->m_all_armies->Num();
 	sint32 i;
 	sint32 found = FALSE;
@@ -928,10 +925,11 @@ void SelectedItem::Refresh()
 		if (!Player::IsThisPlayerARobot(GetVisiblePlayer())) {
 			GetTopCurItem(s_player, s_item, s_state);
 
-			if(s_state == SELECT_TYPE_LOCAL_CITY) {
-				Unit u = s_item;
-
-			} else if(s_state == SELECT_TYPE_LOCAL_ARMY) {
+			switch (s_state) {
+			case SELECT_TYPE_LOCAL_CITY:
+				break;
+			case SELECT_TYPE_LOCAL_ARMY:
+			{
 				Army a = s_item;
 				MapPoint pos;
 				a.GetPos(pos);
@@ -941,14 +939,13 @@ void SelectedItem::Refresh()
 				} else {
 					SetSelectUnit(Unit(0));
 				}
+				break;
 			}
+			default:
 #if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling
-			  else {
-				m_ignoreCitySelect = TRUE;
-
 				m_ignoreCitySelect = FALSE;
-			}
 #endif
+			}
 
 		}
 	}
@@ -1268,10 +1265,6 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 {
     MapPoint		army_pos;
 
-    BOOL			is_transported = FALSE;
-
-    BOOL			i_died = FALSE;
-
 	BOOL			moved = FALSE;
 
     m_selected_army[player].GetPos(army_pos);
@@ -1314,7 +1307,6 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 
 		if(goodPath) {
 
-			sint32 origCurPlayer = m_current_player;
 			m_selected_army[player].ClearOrders();
 
 			goodPath->JustSetStart(m_selected_army[player]->RetPos());
@@ -1418,14 +1410,8 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 								 bool leftDrag, bool leftDrop)
 
 {
-	PLAYER_INDEX	player = GetVisiblePlayer();
     Unit			top;
-    BOOL			is_transported = FALSE;
-    BOOL			i_died = FALSE;
     MapPoint		army_pos;
-
-	BOOL			leftClick = data->lbutton;
-	BOOL			rightClick = data->rbutton;
 
 	m_gotClickSinceLastAutoEnd = TRUE;
 
@@ -1566,7 +1552,6 @@ void SelectedItem::AddWaypoint(const MapPoint &pos)
 
 	PLAYER_INDEX player = GetVisiblePlayer();
     Army a = m_selected_army[player];
-	uint32 movementFlags = a.GetMovementType();
 	static CellUnitList transports;
 
     m_waypoints.Insert(pos);
@@ -2402,11 +2387,11 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 	Path *good_path = new Path, bad_path;
 	sint32 is_broken;
 	float cost;
-	sint32 r = g_theUnitAstar->FindPath(army, src,
-										owner, dest,
-										*good_path, is_broken,
-										bad_path,
-										cost);
+
+	g_theUnitAstar->FindPath(army, src,
+	    owner, dest, *good_path, is_broken,
+	    bad_path, cost);
+
 	if(is_broken) {
 		delete good_path;
 		return;
@@ -2618,13 +2603,9 @@ void SelectedItem::UpdateSelectedItem( void )
 		if (!Player::IsThisPlayerARobot(GetVisiblePlayer())) {
 			GetTopCurItem(s_player, s_item, s_state);
 
-			if(s_state == SELECT_TYPE_LOCAL_CITY) {
-				Unit u = s_item;
-			} else if(s_state == SELECT_TYPE_LOCAL_ARMY) {
+			if (s_state == SELECT_TYPE_LOCAL_ARMY) {
 				Army a = s_item;
 				SetSelectUnit( a.GetTopVisibleUnit(GetVisiblePlayer() ) );
-			} else {
-
 			}
 		}
 	}

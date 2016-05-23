@@ -12,9 +12,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <err.h>
 #endif
 
-static MBCHAR *s_block = "GenericFileDialog";
+static const MBCHAR *s_block = "GenericFileDialog";
 extern C3UI *g_c3ui;
 
 FileDialog::FileDialog()
@@ -137,7 +138,8 @@ void FileDialog::Fill()
 	struct stat st;
 	while ((dent = readdir(dir))) {
 		snprintf(path, sizeof(path), "%s%s%s", m_dirPath, FILE_SEP, dent->d_name);
-		int rc = stat(path, &st);
+		if (!stat(path, &st))
+			warn("%s", path);
 		if (!S_ISDIR(st.st_mode)) {
 			AddFile(dent->d_name, NULL);
 		}

@@ -101,19 +101,19 @@ protected:
 
 public:
 
-	static BOOL			IsValid( MBCHAR *ldlBlock );
+	static BOOL			IsValid(const MBCHAR *ldlBlock);
 
 	static ldl			*GetLdl( void ) { return m_ldl; }
 
-	static AUI_ERRCODE	Associate( void *object, MBCHAR *ldlBlock );
+	static AUI_ERRCODE	Associate( void *object, const MBCHAR *ldlBlock );
 	static AUI_ERRCODE	Remove( void *object );
-	static AUI_ERRCODE	Remove( MBCHAR *ldlBlock );
+	static AUI_ERRCODE	Remove(const MBCHAR *ldlBlock);
 	static MBCHAR		*GetBlock( void *object );
 	static void			*GetObject(const MBCHAR *ldlBlock);
 	static void			*GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock);
 
-	static AUI_ERRCODE	SetupHeirarchyFromRoot( MBCHAR *rootBlock );
-	static AUI_ERRCODE	SetupHeirarchyFromLeaf( MBCHAR *leafBlock, aui_Region *object );
+	static AUI_ERRCODE	SetupHeirarchyFromRoot(const MBCHAR *rootBlock);
+	static AUI_ERRCODE	SetupHeirarchyFromLeaf(const MBCHAR *leafBlock, aui_Region *object);
 
 
 
@@ -121,7 +121,7 @@ public:
 
 
 
-	static aui_Region	*BuildHierarchyFromRoot(MBCHAR *rootBlock);
+	static aui_Region	*BuildHierarchyFromRoot(const MBCHAR *rootBlock);
 
 
 
@@ -135,15 +135,15 @@ public:
 
 
 
-	static AUI_ERRCODE	BuildObjectFromType(MBCHAR *typeString, MBCHAR *ldlName,
-											aui_Region **theObject);
+	static AUI_ERRCODE	BuildObjectFromType(const MBCHAR *typeString,
+	    const MBCHAR *ldlName, aui_Region **theObject);
 
 
 
 
 
 
-	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR *rootBlock);
+	static AUI_ERRCODE	DeleteHierarchyFromRoot(const MBCHAR *rootBlock);
 
 
 
@@ -160,12 +160,12 @@ public:
 
 
 
-	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *ldlBlock,
-												aui_Control::ControlActionCallback *actionFunc,
-												void *cookie = NULL);
-	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *parentBlock, MBCHAR *regionBlock,
-												aui_Control::ControlActionCallback *actionFunc,
-												void *cookie = NULL);
+	static AUI_ERRCODE  SetActionFuncAndCookie(const MBCHAR *ldlBlock,
+	    aui_Control::ControlActionCallback *actionFunc,
+	    void *cookie = NULL);
+	static AUI_ERRCODE  SetActionFuncAndCookie(const MBCHAR *parentBlock, const MBCHAR *regionBlock,
+	    aui_Control::ControlActionCallback *actionFunc,
+	    void *cookie = NULL);
 
 
 
@@ -174,15 +174,15 @@ public:
 
 	static AUI_ERRCODE	DetachHierarchy(aui_Region *root);
 
-	static void			ModifyAttributes( MBCHAR *ldlBlock, aui_Dimension *dimension );
+	static void			ModifyAttributes(const MBCHAR *ldlBlock, aui_Dimension *dimension );
 
 
-	static sint32		GetIntDependent( MBCHAR *strPtr );
+	static sint32		GetIntDependent(const MBCHAR *strPtr);
 
 protected:
 	static void			DeleteLdlObject( aui_LdlObject *ldlObject );
 
-	static AUI_ERRCODE	MakeSureBlockExists( MBCHAR *ldlBlock );
+	static AUI_ERRCODE	MakeSureBlockExists(const MBCHAR *ldlBlock);
 	static AUI_ERRCODE	MakeSureDefaultTemplateExists( void );
 
 	static AUI_ERRCODE	AppendLdlObject(aui_LdlObject *object);

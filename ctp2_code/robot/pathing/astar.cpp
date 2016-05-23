@@ -208,7 +208,6 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     const MapPoint &pos, const float pc, const MapPoint &dest)
 
 {
-    BOOL is_ortho = FALSE;
     AstarPoint *d = point;
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
     BOOL is_zoc=FALSE;

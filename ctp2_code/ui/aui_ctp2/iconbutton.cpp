@@ -29,8 +29,8 @@ IconButton::IconButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *icon,
+	const MBCHAR *pattern,
+	const MBCHAR *icon,
 	uint16 color,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
@@ -48,7 +48,7 @@ IconButton::IconButton(
 IconButton::IconButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -61,9 +61,9 @@ IconButton::IconButton(
 
 }
 
-AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
+AUI_ERRCODE IconButton::InitCommon(const MBCHAR *ldlBlock,BOOL isLDL)
 {
-	MBCHAR		*name;
+	const MBCHAR		*name;
 
 	if (isLDL) {
 		aui_Ldl *theLdl = g_c3ui->GetLdl();

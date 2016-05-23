@@ -23,7 +23,7 @@ public:
 							  uint8* buf,
 							  sint32 size) = 0;
 	virtual void AddPlayer(uint16 id,
-							char* name) = 0;
+						const char* name) = 0;
 	virtual void RemovePlayer(uint16 id) = 0;
 	virtual void SetToHost() = 0;
 	virtual void ChangeHost(uint16 id) = 0;
@@ -38,7 +38,7 @@ public:
 	virtual NET_ERR EnumTransports();
 	virtual NET_ERR EnumSessions();
 	virtual NET_ERR SetTransport(sint32 idx);
-	virtual NET_ERR Host(char* sessionName);
+	virtual NET_ERR Host(const char* sessionName);
 	virtual NET_ERR Join(sint32 index);
 	virtual NET_ERR GetMyId(uint16& id);
 	virtual NET_ERR GetHostId(uint16& id);
@@ -46,8 +46,8 @@ public:
 	virtual NET_ERR Send(uint16 id, sint32 flags, uint8* buf, sint32 len);
 	virtual NET_ERR SendCompressed(uint16 id, sint32 flags, uint8* buf, sint32 len);
 	virtual NET_ERR Idle() = 0;
-	virtual NET_ERR SetName(char*);
-	virtual NET_ERR SetLobby(char*);
+	virtual NET_ERR SetName(const char*);
+	virtual NET_ERR SetLobby(const char*);
 	virtual BOOL ReadyForData() = 0;
 	virtual NET_ERR SetMaxPlayers(uint16 players, bool lock) = 0;
 	virtual NET_ERR KickPlayer(uint16 player) = 0;

@@ -49,7 +49,7 @@
 
 DialogBoxWindow::DialogBoxWindow(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 	:
 	ns_Window(
@@ -85,7 +85,7 @@ AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 }
 
 AUI_ERRCODE DialogBoxWindow::CreateControls(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -341,7 +341,7 @@ DialogBoxWindow::~DialogBoxWindow()
 }
 
 DialogBoxWindow *DialogBoxWindow::PopUp(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;

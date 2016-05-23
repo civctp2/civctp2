@@ -691,7 +691,7 @@ return TRUE;
 
 Token::Token
 (
-    char *      fn,
+    const char *      fn,
     C3DIR       dir
 )
 :	m_fin		        (c3files_fopen(dir, fn, "r")),
@@ -727,7 +727,7 @@ Token::Token
 
 Token::Token
 (
-	 char *         fn,
+	 const char *         fn,
 	 sint32         n,
 	 TokenData *    it,
 	 C3DIR	        dir
@@ -797,7 +797,7 @@ Token::~Token()
 
 
 
-sint32 Token::IsNumber(char *str)
+sint32 Token::IsNumber(const char *str) const
 {
 
 
@@ -828,7 +828,7 @@ sint32 Token::IsNumber(char *str)
 	return (TRUE) ;
 }
 
-sint32 Token::GetType ()
+sint32 Token::GetType () const
 
 {
 	return m_current_type;
@@ -841,7 +841,7 @@ void Token::NextNumber()
 	m_val_number = atof(m_buf);
 }
 
-sint32 Token::IsWhitespace(const char c)
+sint32 Token::IsWhitespace(const char c) const
 
 {   return (c == ' ') || (c == '\t') || (c == 13) || (c == 10);
 }
@@ -922,7 +922,6 @@ sint32 Token::CloseImport(void)
 }
 
 sint32 Token::Next()
-
 {
 	while (1) {
 
@@ -986,7 +985,7 @@ sint32 Token::Next()
 				m_cur = getc(m_fin);
 				g_parse_line++;
 
-			} else if((m_cur == '\\')) {
+			} else if (m_cur == '\\') {
 				m_cur = getc(m_fin);
 				switch(m_cur) {
 				case 'n':
@@ -1101,14 +1100,14 @@ void Token::GetNumber (sint32 &n)
 	n = (sint32)m_val_number;
 }
 
-char * Token::ErrStr()
+const char * Token::ErrStr()
 
 {
 	sprintf (m_estr, "%s line %d:", m_filename, g_parse_line);
 	return m_estr;
 }
 
-char * Token::GetKeyword(const sint32 tok) const
+const char * Token::GetKeyword(const sint32 tok) const
 
 {  return g_allTokens[tok].keyword;
 }

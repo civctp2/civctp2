@@ -93,7 +93,7 @@
 #include "wonderutil.h"
 
 extern ControlPanelWindow  *g_controlPanel;
-extern CivPaths            *g_civPaths ;
+extern CivPaths            *g_civPaths;
 extern SoundManager        *g_soundManager;
 extern DifficultyDB        *g_theDifficultyDB;
 

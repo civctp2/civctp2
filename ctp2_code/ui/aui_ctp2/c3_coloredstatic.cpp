@@ -59,7 +59,7 @@ c3_ColoredStatic::c3_ColoredStatic(
 }
 
 
-AUI_ERRCODE c3_ColoredStatic::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ColoredStatic::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon();
 }

@@ -2367,7 +2367,6 @@ dptab_update_send_delete(
 	size_t hdrlen;
 	dp_packetType_t *tag = (dp_packetType_t *)buf;
 	dptab_delete_packet_t *body = (dptab_delete_packet_t *)(buf + sizeof(dp_packetType_t));
-	void *payload = body->key + xfer->subkeylen + xfer->table->keylen;
 	dp_result_t err;
 
 	DPRINT(("dptab_update_send_delete: id %d key %s subkey %s\n",

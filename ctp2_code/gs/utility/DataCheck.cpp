@@ -642,7 +642,7 @@ sint32 DataCheck::IsChanged(sint32 t) const
 
 
 
-void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, sint32 y) const
+void DataCheck::draw_crc(aui_Surface *surf, const char *str1, sint32 t, sint32 x, sint32 y) const
 {
 	MBCHAR	str2[80];
 
@@ -759,7 +759,7 @@ void DataCheck::DisplayCRC(aui_Surface *surf) const
 	draw_time(surf, x, y);
 }
 
-void DataCheck::DumpSingleCRC(MBCHAR *grp, sint32 t)
+void DataCheck::DumpSingleCRC(const MBCHAR *grp, sint32 t)
 {
 	DPRINTF(k_DBG_INFO, ("%s     %08X %08X %08X %08X  %4.2lf\n", grp, m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC));
 }

@@ -102,7 +102,7 @@ public:
 	virtual SlicSymbolData *CreateDataSymbol();
 
 	friend class SlicStructInstance;
-	friend slicsymbol_Load(CivArchive &archive);
+	friend SlicSymbolData *slicsymbol_Load(CivArchive &archive);
 private:
 	char *m_name;
 	SLIC_BUILTIN m_type;
@@ -164,11 +164,11 @@ public:
 
 
 	SlicSymbolData *GetMemberSymbol(sint32 memberIndex);
-	SlicSymbolData *GetMemberSymbolByName(char *name);
+	SlicSymbolData *GetMemberSymbolByName(const char *name);
 
 	SlicStructDescription *GetDescription() { return m_description; }
 	SlicSymbolData *GetDataSymbol();
-	sint32 GetMemberSymbolIndex(SlicStructMemberData *memb);
+	sint32 GetMemberSymbolIndex(const SlicStructMemberData *memb);
 
 private:
 	void CreateMember(sint32 index);

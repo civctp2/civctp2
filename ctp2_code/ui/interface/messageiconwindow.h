@@ -38,13 +38,13 @@ public:
 	MessageIconWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		Message data,
 		sint32 bpp,
 		MessageList *messagelist,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 
-	virtual AUI_ERRCODE	InitCommon( Message *data, MBCHAR *ldlBlock, MessageList *messagelist );
+	virtual AUI_ERRCODE	InitCommon( Message *data, const MBCHAR *ldlBlock, MessageList *messagelist );
 
 	virtual ~MessageIconWindow( void );
 
@@ -65,8 +65,8 @@ public:
 	AUI_ERRCODE SetupAnimation( uint32 position );
 	void	StopAnimation( void );
 
-	void SetTipWindowText( MBCHAR *text );
-	void ChangeIcon( const MBCHAR *image, const MBCHAR *image2 = NULL );
+	void SetTipWindowText(const MBCHAR *text);
+	void ChangeIcon(const MBCHAR *image, const MBCHAR *image2 = NULL);
 
 	void SetCurrentIconButton( MessageIconButton *iconButton );
 	MessageIconWindow *GetCurrentMessageIconWindow( void ) { return m_currentIconWindow; }

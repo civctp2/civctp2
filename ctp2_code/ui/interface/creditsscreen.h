@@ -28,7 +28,7 @@ public:
 	CreditsWindow(
 		AUI_ERRCODE *retval,
 		sint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD, bool bevel = true );
 
@@ -40,7 +40,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD, bool bevel = true );
 
 	virtual ~CreditsWindow();
@@ -56,7 +56,7 @@ protected:
 
 	CreditsWindow() : C3Window() {}
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void CleanPointers();
 

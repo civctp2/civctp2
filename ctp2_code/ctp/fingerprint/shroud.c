@@ -54,7 +54,8 @@
  Uses fopen().
  Returns NULL on error.
 --------------------------------------------------------------------------*/
-shroud_t *shroud_readopen( char *filename )
+shroud_t *
+shroud_readopen(const char *filename)
 {
 	/* Allocate memory for the new shroud_t. */
 	shroud_t *sfile = (shroud_t *) malloc( sizeof( shroud_t ) );
@@ -80,7 +81,8 @@ shroud_t *shroud_readopen( char *filename )
  Uses fopen().
  Returns NULL on error.
 --------------------------------------------------------------------------*/
-shroud_t *shroud_writeopen( char *filename )
+shroud_t *
+shroud_writeopen(const char *filename)
 {
 	/* Allocate memory for the new shroud_t. */
 	shroud_t *sfile = (shroud_t *) malloc( sizeof( shroud_t ) );
@@ -110,7 +112,8 @@ shroud_t *shroud_writeopen( char *filename )
  not be of much use.
  Returns NULL on error.
 --------------------------------------------------------------------------*/
-shroud_t *shroud_appendopen( char *filename )
+shroud_t *
+shroud_appendopen(const char *filename)
 {
 	/* Allocate memory for the new shroud_t. */
 	shroud_t *sfile = (shroud_t *) malloc( sizeof( shroud_t ) );
@@ -138,7 +141,8 @@ shroud_t *shroud_appendopen( char *filename )
  Uses fopen().
  Returns NULL on error.
 --------------------------------------------------------------------------*/
-shroud_t *shroud_updateopen( char *filename )
+shroud_t *
+shroud_updateopen(const char *filename)
 {
 	/* Allocate memory for the new shroud_t. */
 	shroud_t *sfile = (shroud_t *) malloc( sizeof( shroud_t ) );
@@ -164,15 +168,16 @@ shroud_t *shroud_updateopen( char *filename )
  Uses fread().
  Returns the number of bytes successfully read.
 --------------------------------------------------------------------------*/
-size_t shroud_read( shroud_t *sfile, unsigned char * buffer, size_t length )
+size_t
+shroud_read(shroud_t *sfile, void *buffer, size_t length)
 {
 	size_t size; /* Number of bytes successfully read. */
 
 	/* Read encoded bytes into 'buffer.' */
-	size = fread( buffer, 1, length, sfile->file );
+	size = fread(buffer, 1, length, sfile->file);
 
 	/* Decode the bytes in 'buffer.' */
-	shroud_decode( buffer, size, sfile->curpos );
+	shroud_decode(buffer, size, sfile->curpos);
 
 	/* Update 'curpos.' */
 	sfile->curpos += size;
@@ -186,7 +191,8 @@ size_t shroud_read( shroud_t *sfile, unsigned char * buffer, size_t length )
  The elements of 'buffer' will remain unaltered.
  Returns the number of bytes successfully written.
 --------------------------------------------------------------------------*/
-size_t shroud_write( shroud_t *sfile, unsigned char *buffer, size_t length )
+size_t
+shroud_write(shroud_t *sfile, const void *buffer, size_t length)
 {
 	size_t bytecount = 0;										/* Number of bytes successfully written. */
 	unsigned char encodedbuffer[ shroud_BLOCKSIZE ];			/* temporary buffer to store encoded blocks of 'buffer.' */

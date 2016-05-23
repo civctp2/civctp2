@@ -36,8 +36,8 @@ public:
 	ns_Lobby(NETFunc::Lobby * lobby);
 	void Update( NETFunc::Lobby *lobby );
 
-	char *m_closed;
-	char *m_name;
+	const char *m_closed;
+	const char *m_name;
 	int m_players;
 };
 

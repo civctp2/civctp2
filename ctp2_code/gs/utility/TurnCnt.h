@@ -30,7 +30,7 @@ class TurnCount {
 	private :
 		void RunNewYearMessages(void) ;
 		void SendMsgEndOfGameEarlyWarning(void) ;
-		void SendMsgToAllPlayers(MBCHAR *s) ;
+		void SendMsgToAllPlayers(const MBCHAR *s) ;
 		static sint32 sm_the_stop_player;
 
 public:

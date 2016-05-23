@@ -18,10 +18,10 @@ extern ColorSet		*g_colorSet;
 c3_Static::c3_Static(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_Static( retval, id, ldlBlock ),
 	PatternBase(ldlBlock, NULL)
 {
@@ -41,8 +41,8 @@ c3_Static::c3_Static(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 bevelWidth,
 	uint32 bevelType)
@@ -61,7 +61,7 @@ c3_Static::c3_Static(
 }
 
 
-AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Static::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 

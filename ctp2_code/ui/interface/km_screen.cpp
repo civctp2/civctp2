@@ -143,7 +143,6 @@ AUI_ERRCODE km_screen_Initialize( void )
 	{
 		s_km_screen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING );
 		Assert( AUI_NEWOK(s_km_screen, errcode) );
-		if ( !AUI_NEWOK(s_km_screen, errcode) ) errcode;
 
 		s_km_screen->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->GrabRegion()->Resize(s_km_screen->Width(),s_km_screen->Height());
@@ -303,7 +302,6 @@ sint32 km_screen_loadKeyList( void )
 	MBCHAR ldl[_MAX_PATH];
 
 	sint32 i;
-	sint32 keycode = 0;
 
 	s_keyList->Clear();
 
@@ -370,7 +368,7 @@ sint32 km_screen_loadKeyList( void )
 	return 0;
 }
 
-KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock)
+KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -384,7 +382,7 @@ KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCH
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock)
+AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -473,8 +471,6 @@ MBCHAR *KeyListItem::GetKeyFromKMScreen(uint32 keycode)
 sint32 KeyListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	c3_Static		*i1, *i2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:

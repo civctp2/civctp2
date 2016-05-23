@@ -87,7 +87,7 @@ AUI_ERRCODE TileControl::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	primitives_PaintRect16( surface, &rect, 0x0000 );
 
-	sint32 i,jukeY(7),jukeX(0);
+	sint32 i;
 	maputils_MapX2TileX(m_currentTile.x, m_currentTile.y, &i);
 
 

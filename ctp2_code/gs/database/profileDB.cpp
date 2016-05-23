@@ -626,7 +626,7 @@ void ProfileDB::SetMusicVolume(sint32 vol)
 void ProfileDB::SetDifficulty(uint32 x)
 {
 	Assert((x>=0) && (x<7));
-	if(x >= 0 && x < 7) {
+	if (x < 7) {
 		m_difficulty = x;
 		if(g_player) {
 			sint32 p;
@@ -642,7 +642,7 @@ void ProfileDB::SetDifficulty(uint32 x)
 	}
 }
 
-void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
+void ProfileDB::Var(const char *name, PROF_VAR_TYPE type, sint32 *numValue,
                     char *stringValue, bool visible)
 {
 	m_vars->AddTail(new ProfileVar(name, type, numValue, stringValue, visible));

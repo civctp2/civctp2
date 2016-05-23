@@ -25,7 +25,7 @@ class CellUnitList;
 class UnitControlPanel {
 public:
 
-	UnitControlPanel(MBCHAR *ldlBlock);
+	UnitControlPanel(const MBCHAR *ldlBlock);
 
 	void Update();
 

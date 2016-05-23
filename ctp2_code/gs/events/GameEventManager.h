@@ -171,7 +171,7 @@ public:
 
 
 
-	char *ArgCharToName(char want);
+	const char *ArgCharToName(char want);
 
 	void NotifyResync();
 

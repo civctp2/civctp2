@@ -289,53 +289,41 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 void CTPAgent::Log_Debug_Info(const int & log) const
 {
 
-    int row = 0;
-	int column = 0;
+	if(!g_theArmyPool->IsValid(m_army))
+	{
+		AI_DPRINTF(log, m_playerId, -1, m_army.m_id, ("   Object Destroyed"));
+		return;
+	}
 
-    if(!g_theArmyPool->IsValid(m_army))
-    {
-        AI_DPRINTF(log, m_playerId, -1, m_army.m_id, ("   Object Destroyed"));
-        return;
-    }
-
-    MapPoint pos;
+	MapPoint pos;
 	m_army->GetPos(pos);
 
-
-
-
-    AI_DPRINTF(log, m_playerId, -1, -1,
-		("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d)\n",
-		m_army.m_id,
-		m_squad_class,
-		pos.x,
-		pos.y,
-		(m_is_used ? 1 : 0)));
+	AI_DPRINTF(log, m_playerId, -1, -1,
+	    ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d)\n",
+	    m_army.m_id,
+	    m_squad_class,
+	    pos.x,
+	    pos.y,
+	    (m_is_used ? 1 : 0)));
 
 	AI_DPRINTF(log, -99, -1, m_army.m_id,
 		("\t\t   -------\n"));
 }
 
-
-
-
-
-
 bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path )
 {
 
 	MapPoint start_pos;
-    m_army->GetPos(start_pos);
+	m_army->GetPos(start_pos);
 
-    float total_cost;
+	float total_cost;
 
-    if ( start_pos == dest_pos)
-	{
-        found_path.Clear();
+	if ( start_pos == dest_pos) {
+		found_path.Clear();
 		found_path.JustSetStart( start_pos );
 		found_path.Restart( start_pos );
-        return true;
-    }
+		return true;
+	}
 
 	double move_points;
 	m_army->MinMovementPoints(move_points);
@@ -344,25 +332,14 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 	sint32 cont = g_theWorld->GetContinent(dest_pos);
 
 	if (RobotAstar2::s_aiPathing.FindPath( RobotAstar2::PATH_TYPE_TRANSPORT,
-										   m_army,
-										   move_intersection,
-										   start_pos,
-										   dest_pos,
-										   check_dest,
-										   cont,
-										   trans_max_r,
-										   found_path,
-										   total_cost ))
-		{
-			Assert(0 < found_path.Num());
-
-			found_path.Start(start_pos);
-			return true;
-		}
-
-    return false;
+	    m_army, move_intersection, start_pos, dest_pos, check_dest,
+	    cont, trans_max_r, found_path, total_cost)) {
+		Assert(0 < found_path.Num());
+		found_path.Start(start_pos);
+		return true;
+	}
+	return false;
 }
-
 
 bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path )
 {
@@ -375,67 +352,42 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 	RobotAstar2::PathType path_type;
 	uint32 move_union;
 
-    if ( start_pos == target_pos)
-	{
-        found_path.Clear();
+	if (start_pos == target_pos) {
+		found_path.Clear();
 		found_path.JustSetStart( start_pos );
 		found_path.Restart( start_pos );
-        return true;
-    }
+		return true;
+	}
 
 	sint32 cont = g_theWorld->GetContinent(target_pos);
 
+	if (army->HasCargo() && !army->GetMovementTypeAir()) {
+		tmp_check_dest = false;
+		path_type = RobotAstar2::PATH_TYPE_TRANSPORT;
+	} else {
+		move_union = 0x0;
+		path_type = RobotAstar2::PATH_TYPE_DEFENSIVE;
+	}
 
-
-
-    if (army->HasCargo() &&
-		!army->GetMovementTypeAir())
-		{
-
-			uint32 move_intersection1 = army->GetMovementType();
-			uint32 move_intersection2 = army->GetCargoMovementType();
-			uint32 move_union = move_intersection1 | move_intersection2;
-
-			tmp_check_dest = false;
-			path_type = RobotAstar2::PATH_TYPE_TRANSPORT;
-		}
-	else
-		{
-
-			move_union = 0x0;
-			path_type = RobotAstar2::PATH_TYPE_DEFENSIVE;
-		}
-
-	if (RobotAstar2::s_aiPathing.FindPath( path_type,
-										   army,
-										   move_union,
-										   start_pos,
-										   target_pos,
-										   tmp_check_dest,
-										   cont,
-										   trans_max_r,
-										   found_path,
-										   total_cost ))
-		{
-            Assert(0 < found_path.Num());
-
-			found_path.Start(start_pos);
-            return true;
+	if (RobotAstar2::s_aiPathing.FindPath(path_type,
+	    army, move_union, start_pos, target_pos, tmp_check_dest,
+	    cont, trans_max_r, found_path, total_cost)) {
+		Assert(0 < found_path.Num());
+		found_path.Start(start_pos);
+		return true;
         }
-
-    return false;
+	return false;
 }
 
 sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 {
-    sint32 rounds = 0;
-    double move_point_cost = 0.0;
+	double move_point_cost = 0.0;
 	double min_move;
 
 	cells = 0;
 
-    if (Get_Pos() == pos)
-        return 0;
+	if (Get_Pos() == pos)
+		return 0;
 
 	cells = MapPoint::GetSquaredDistance(Get_Pos(), pos);
 	if (cells > 0)
@@ -451,7 +403,7 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0
 	}
 
-    Get_Army()->MinMovementPoints(min_move);
+	Get_Army()->MinMovementPoints(min_move);
 
 	if (move_point_cost <= min_move)
 		return 1;
@@ -459,37 +411,30 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 		return sint32(ceil(move_point_cost/min_move));
 }
 
-
 bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & utility) const
 {
-    Assert(transport);
+	Assert(transport);
 	utility = 0.0;
 
-    if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->Get_Army().GetData()) <= 0)
+	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->Get_Army().GetData()) <= 0)
 		return false;
 
-    BOOL check_continents = !transport->Get_Army().GetMovementTypeAir();
+	BOOL check_continents = !transport->Get_Army().GetMovementTypeAir();
 	BOOL is_land;
 
 	sint32 my_continent;
 	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
 
-    MapPoint trans_pos = transport->Get_Pos();
-    if (check_continents)
-	{
+	MapPoint trans_pos = transport->Get_Pos();
+	if (check_continents) {
 		sint32 trans_cont;
 
 		g_theWorld->GetContinent( trans_pos, trans_cont, is_land );
 
-		if ( is_land )
-		{
-
+		if (is_land) {
 			if ( g_theWorld->LandShareWater( trans_cont, my_continent ) == FALSE )
 				return false;
-		}
-		else
-		{
-
+		} else {
 			if ( g_theWorld->IsLandNextTooWater(my_continent, trans_cont) == FALSE)
 				return false;
 		}
@@ -497,7 +442,6 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 
 	sint32 tile_count;
 	sint32 trans_rounds = GetRounds(trans_pos, tile_count);
-
 
 	double move_type_bonus = 0.0;
 	move_type_bonus +=
@@ -507,11 +451,6 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 
 	return true;
 }
-
-
-
-
-
 
 void CTPAgent::Set_Target_Order(const sint32 target_order)
 {
@@ -535,13 +474,6 @@ const MapPoint & CTPAgent::Get_Target_Pos() const
 
 bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 {
-
-
-
-
-
-
-
 
 	Path *tmpPath = new Path(found_path);
 	MapPoint target_pos = tmpPath->GetEnd();

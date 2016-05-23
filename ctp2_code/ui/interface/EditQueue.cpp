@@ -84,7 +84,7 @@
 
 static EditQueue *s_editQueue = NULL;
 
-static MBCHAR *s_editQueueBlock = "BuildEditorWindow";
+static const MBCHAR *s_editQueueBlock = "BuildEditorWindow";
 
 extern C3UI *g_c3ui;
 
@@ -961,7 +961,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(pl->m_all_cities->Access(i).GetName());
-			item->SetUserData((void *)pl->m_all_cities->Access(i).m_id);
+			item->SetUserData((void *)(uintptr_t)pl->m_all_cities->Access(i).m_id);
 			m_cityDropDown->AddItem(item);
 
 			if(m_cityData && pl->m_all_cities->Access(i).m_id == m_cityData->GetHomeCity().m_id)
@@ -985,7 +985,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(walk.GetObj()->m_cityData->GetName());
-			item->SetUserData((void *)walk.GetObj()->m_cityData->GetHomeCity().m_id);
+			item->SetUserData((void *)(uintptr_t)walk.GetObj()->m_cityData->GetHomeCity().m_id);
 
 			m_multiCityList->AddItem(item);
 			walk.Next();
@@ -1551,8 +1551,7 @@ void EditQueue::ShowSelectedInfo()
 				type = bn->m_type;
 			}
 		} else {
-			EditItemInfo *info = (EditItemInfo *)item->GetUserData();
-			Assert(info);
+			Assert(item->GetUserData());
 		}
 
 	} else {
@@ -1570,7 +1569,7 @@ void EditQueue::ShowSelectedInfo()
 		type = info->m_type;
 	}
 
-	if(category < 0 || type < 0) {
+	if (type < 0) {
 		s_editQueue->m_itemCategory = -1;
 		s_editQueue->m_itemType = -1;
 		CityWindow::SetItemDescription(NULL, sc, NULL, s_editQueue->m_itemDescription,
@@ -1640,12 +1639,6 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
-#if defined(__LP64__)
-	sint32 saveMode = (sint64)cookie;
-#else
-	sint32 saveMode = (sint32)cookie;
-#endif
-
 	Assert(s_editQueue->m_itemsBox);
 	Assert(s_editQueue->m_loadBox);
 	if(s_editQueue->m_itemsBox && s_editQueue->m_loadBox) {
@@ -1654,14 +1647,6 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 		} else {
 			s_editQueue->m_listBeforeLoadSaveMode = s_editQueue->GetVisibleItemList();
 			s_editQueue->m_loadBox->Show();
-
-
-
-
-
-
-
-
 
 			s_editQueue->m_itemsBox->Hide();
 		}

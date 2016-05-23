@@ -45,18 +45,19 @@
 #endif
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
+int yysclex(void);
 
 char *sliccmd_output;
 int sliccmd_output_len;
-char *sliccmd_input;
-char *sliccmd_input_ptr;
+const char *sliccmd_input;
+const char *sliccmd_input_ptr;
 int sliccmd_input_len;
 int sliccmd_first_token;
 int sliccmd_done;
 int sliccmd_parse_failed;
 int sliccmd_use_dialogs;
-char *sliccmd_cat_string;
+const char *sliccmd_cat_string;
 
 %}
 
@@ -400,7 +401,8 @@ int yyparse();
 
 extern char *yysctext;
 
-int sliccmd_parse(int action, char *cmd, char *output, int outputlen, int useDialogs, char *catString)
+int
+sliccmd_parse(int action, const char *cmd, char *output, int outputlen, int useDialogs, const char *catString)
 {
 	sliccmd_output = output;
 	sliccmd_output_len = outputlen;
@@ -427,7 +429,7 @@ int sliccmd_parse(int action, char *cmd, char *output, int outputlen, int useDia
 	return sliccmd_parse_failed;
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
 	sliccmd_error(s);
 	sliccmd_parse_failed = 1;

@@ -67,7 +67,6 @@ void CivPaths_InitCivPaths()
 	}
 }
 
-
 void CivPaths_CleanupCivPaths()
 {
 	if (g_civPaths)
@@ -105,7 +104,7 @@ CivPaths::CivPaths (AUI_ERRCODE &errcode)
 			fin = fopen(tempname, "r");
 		}
 	}
-#ifdef LINUX
+#ifndef WIN32
 	if (!fin) {
 		fin = fopen(PACKAGE_DATADIR FILE_SEP FILE_CIVPATHS_TXT, "r");
 	}
@@ -116,6 +115,7 @@ CivPaths::CivPaths (AUI_ERRCODE &errcode)
 	Assert(fin);
 	if (!fin) {
 		errcode = AUI_ERRCODE_LOADFAILED;
+		m_assetPaths[0] = NULL;
 		return;
 	}
 
@@ -169,7 +169,6 @@ CivPaths::CivPaths (AUI_ERRCODE &errcode)
 	errcode = AUI_ERRCODE_OK;
 }
 
-
 CivPaths::~CivPaths()
 {
 	ResetExtraDataPaths();
@@ -190,8 +189,10 @@ CivPaths::~CivPaths()
 	delete [] m_saveMapPath;
 	delete [] m_saveClipsPath;
 
-	for (size_t dir = 0; dir < C3DIR_MAX; ++dir)
-    {
+	if (m_assetPaths[0] == NULL)
+		return;
+
+	for (size_t dir = 0; dir < C3DIR_MAX; ++dir) {
 		delete [] m_assetPaths[dir];
 	}
 }
@@ -202,17 +203,17 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 
 	c3files_CreateDirectory(path);
 
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveGamePath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveGamePath);
 	c3files_CreateDirectory(path);
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveQueuePath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveQueuePath);
 	c3files_CreateDirectory(path);
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveMPPath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveMPPath);
 	c3files_CreateDirectory(path);
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveSCENPath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveSCENPath);
 	c3files_CreateDirectory(path);
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveMapPath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveMapPath);
 	c3files_CreateDirectory(path);
-	sprintf(subFolderPath, "%s%s%s", path, FILE_SEP, m_saveClipsPath);
+	sprintf(subFolderPath, "%s" FILE_SEP "%s", path, m_saveClipsPath);
 	c3files_CreateDirectory(path);
 }
 
@@ -244,7 +245,6 @@ void CivPaths::InitCDPath(void)
 	strcat(tempPath, m_cdPath);
 	strcpy(m_cdPath, tempPath);
 }
-
 
 MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3)
 {
@@ -712,10 +712,6 @@ void CivPaths::ClearCurScenarioPackPath(void)
 	delete[] m_curScenarioPackPath;
 	m_curScenarioPackPath = NULL;
 }
-
-
-
-
 
 MBCHAR *CivPaths::GetDesktopPath(void)
 {

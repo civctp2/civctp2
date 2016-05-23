@@ -19,16 +19,16 @@ class PatternBase
 public:
 
 	PatternBase(
-		MBCHAR *pattern );
+		const MBCHAR *pattern);
 	PatternBase(
-		MBCHAR *ldlBlock,
-		MBCHAR *pattern );
+		const MBCHAR *ldlBlock,
+		const MBCHAR *pattern);
 	virtual ~PatternBase();
 
 protected:
 	PatternBase() {}
-	AUI_ERRCODE InitCommon( MBCHAR *pattern );
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock, MBCHAR *pattern );
+	AUI_ERRCODE InitCommon(const MBCHAR *pattern);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock, const MBCHAR *pattern);
 
 public:
 

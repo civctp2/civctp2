@@ -10,7 +10,7 @@
 
 extern SoundManager		*g_soundManager;
 
-MBCHAR *aui_SoundBase::m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ] =
+const MBCHAR *aui_SoundBase::m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ] =
 {
 	"activatesound",
 	"deactivatesound",
@@ -21,19 +21,19 @@ MBCHAR *aui_SoundBase::m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ] =
 };
 
 
-aui_SoundBase::aui_SoundBase( MBCHAR *ldlBlock )
+aui_SoundBase::aui_SoundBase(const MBCHAR *ldlBlock)
 {
 	InitCommonLdl( ldlBlock );
 }
 
 
-aui_SoundBase::aui_SoundBase( MBCHAR **soundNames )
+aui_SoundBase::aui_SoundBase(const MBCHAR **soundNames)
 {
 	InitCommon( soundNames );
 }
 
 
-AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_SoundBase::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -45,7 +45,7 @@ AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *soundNames[ AUI_SOUNDBASE_SOUND_LAST ];
+	const MBCHAR *soundNames[ AUI_SOUNDBASE_SOUND_LAST ];
 	for ( sint32 i = 0; i < AUI_SOUNDBASE_SOUND_LAST; i++ )
 		soundNames[ i ] = block->GetString( m_soundLdlKeywords[ i ] );
 
@@ -57,7 +57,7 @@ AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE aui_SoundBase::InitCommon( MBCHAR **soundNames )
+AUI_ERRCODE aui_SoundBase::InitCommon(const MBCHAR *soundNames[])
 {
 	memset( m_sounds, 0, sizeof( m_sounds ) );
 
@@ -92,7 +92,7 @@ aui_Sound *aui_SoundBase::GetSound( AUI_SOUNDBASE_SOUND sound ) const
 
 aui_Sound *aui_SoundBase::SetSound(
 	AUI_SOUNDBASE_SOUND sound,
-	MBCHAR *soundName )
+	const MBCHAR *soundName)
 {
 	aui_Sound *prevSound = GetSound( sound );
 

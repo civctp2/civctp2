@@ -627,82 +627,86 @@ BOOL SlicSymbolData::GetText(MBCHAR *text, sint32 maxLen) const
 	return TRUE;
 }
 
-void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
+void SlicSymbolData::GetDebugText(MBCHAR *text, size_t len) const
 {
 	SlicSymbolData *dataSym;
 	sint32 ival;
+	size_t alen;
 	MapPoint pos;
 	Unit u;
 	Unit city;
 	Army army;
 
 	switch(GetType()) {
-		case SLIC_SYM_IVAR:
-			GetIntValue(ival);
-			sprintf(text, "%d", ival);
-			break;
-		case SLIC_SYM_SVAR:
-			sprintf(text, "\"%s\"", m_val.m_hard_string);
-			break;
-		case SLIC_SYM_ID:
-			sprintf(text, "'%s'", GetName());
-			break;
-		case SLIC_SYM_FUNC:
-			sprintf(text, "%s()", GetName());
-			break;
-		case SLIC_SYM_STRING:
-			sprintf(text, "<%d> ID_%s: \"%s\"", m_val.m_string_value,
-					g_theStringDB->GetIdStr(m_val.m_string_value),
-					g_theStringDB->GetNameStr(m_val.m_string_value));
-			break;
-		case SLIC_SYM_CITY:
-			if(GetCity(city)) {
-				sprintf(text, "City %lx: %s", city.m_id,
-						city.GetName());
-			} else {
-				sprintf(text, "Invalid city (%lx?)", m_val.m_city_id);
-			}
-			break;
-		case SLIC_SYM_UNIT:
-			if(GetUnit(u)) {
+	case SLIC_SYM_IVAR:
+		GetIntValue(ival);
+		alen = snprintf(text, len, "%d", ival);
+		break;
+	case SLIC_SYM_SVAR:
+		alen = snprintf(text, len, "\"%s\"", m_val.m_hard_string);
+		break;
+	case SLIC_SYM_ID:
+		alen = snprintf(text, len, "'%s'", GetName());
+		break;
+	case SLIC_SYM_FUNC:
+		alen = snprintf(text, len, "%s()", GetName());
+		break;
+	case SLIC_SYM_STRING:
+		alen = snprintf(text, len, "<%d> ID_%s: \"%s\"", m_val.m_string_value,
+				g_theStringDB->GetIdStr(m_val.m_string_value),
+				g_theStringDB->GetNameStr(m_val.m_string_value));
+		break;
+	case SLIC_SYM_CITY:
+		if(GetCity(city)) {
+			alen = snprintf(text, len, "City %x: %s", city.m_id,
+					city.GetName());
+		} else {
+			alen = snprintf(text, len, "Invalid city (%x?)", m_val.m_city_id);
+		}
+		break;
+	case SLIC_SYM_UNIT:
+		if(GetUnit(u)) {
 
-				sprintf(text, "Unit %lx: %s", u.m_id,
-						u.IsValid() ? u.GetName() : "<DEAD>");
-			} else {
-				sprintf(text, "Invalid unit (%lx?)", m_val.m_unit_id);
-			}
-			break;
-		case SLIC_SYM_ARMY:
-			if(GetArmy(army)) {
-				sprintf(text, "Army %lx", army.m_id);
-			} else {
-				sprintf(text, "Invalid army (%lx?)", m_val.m_army_id);
-			}
-			break;
-		case SLIC_SYM_LOCATION:
-			if(GetPos(pos)) {
-				sprintf(text, "Location: %d,%d",
-						pos.x,
-						pos.y);
-			} else {
-				sprintf(text, "Invalid location (%x,%x)?",
-						m_val.m_location.x,
-						m_val.m_location.y);
-			}
-			break;
-		case SLIC_SYM_ARRAY:
-			sprintf(text, "Array");
-			break;
-		case SLIC_SYM_STRUCT:
-			dataSym = m_val.m_struct->GetDataSymbol();
-			dataSym->GetDebugText(text, len);
-			break;
-		case SLIC_SYM_PLAYER:
-			sprintf(text, "Player");
-			break;
-		default:
-			sprintf(text, "???");
+			alen = snprintf(text, len, "Unit %x: %s", u.m_id,
+					u.IsValid() ? u.GetName() : "<DEAD>");
+		} else {
+			alen = snprintf(text, len, "Invalid unit (%x?)", m_val.m_unit_id);
+		}
+		break;
+	case SLIC_SYM_ARMY:
+		if(GetArmy(army)) {
+			alen = snprintf(text, len, "Army %x", army.m_id);
+		} else {
+			alen = snprintf(text, len, "Invalid army (%x?)", m_val.m_army_id);
+		}
+		break;
+	case SLIC_SYM_LOCATION:
+		if(GetPos(pos)) {
+			alen = snprintf(text, len, "Location: %d,%d",
+					pos.x,
+					pos.y);
+		} else {
+			alen = snprintf(text, len, "Invalid location (%x,%x)?",
+					m_val.m_location.x,
+					m_val.m_location.y);
+		}
+		break;
+	case SLIC_SYM_ARRAY:
+		alen = snprintf(text, len, "Array");
+		break;
+	case SLIC_SYM_STRUCT:
+		dataSym = m_val.m_struct->GetDataSymbol();
+		dataSym->GetDebugText(text, len);
+		return;
+	case SLIC_SYM_PLAYER:
+		alen = snprintf(text, len, "Player");
+		break;
+	default:
+		alen = snprintf(text, len, "???");
 	}
+	if (alen > len)
+		fprintf(stderr, "%s: Provided text-size %zd is too short, "
+		    "need at least %zd", __func__, len, alen);
 }
 
 const char *SlicSymbolData::GetName() const
@@ -783,7 +787,7 @@ void SlicSymbolData::SetType(SLIC_SYM type)
     m_type = type;
 	sint32 res;
 
-	switch(GetType()) {
+	switch((type = GetType())) {
 		case SLIC_SYM_ARRAY:
             Assert(!m_val.m_array);
 			m_val.m_array = new SlicArray(SS_TYPE_SYM, SLIC_SYM_UNDEFINED);
@@ -795,6 +799,8 @@ void SlicSymbolData::SetType(SLIC_SYM type)
 			res = g_theStringDB->GetStringID(GetName(), m_val.m_string_value);
 			Assert(res);
 			break;
+		default:
+			fprintf(stderr, "%s: Unexpected type %d\n", __func__, type);
 	}
 }
 
@@ -1012,6 +1018,8 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 			case SLIC_SYM_UNDEFINED:
 
 				break;
+			default:
+				fprintf(stderr, "%s: type %d not handled\n", __func__, GetType());
 		}
 	} else {
 
@@ -1086,6 +1094,8 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 			case SLIC_SYM_UNDEFINED:
 
 				break;
+			default:
+				fprintf(stderr, "%s: type %d not handled\n", __func__, GetType());
 		}
 	}
 

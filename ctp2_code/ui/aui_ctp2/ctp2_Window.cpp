@@ -25,7 +25,7 @@ extern C3UI *g_c3ui;
 ctp2_Window::ctp2_Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
@@ -54,7 +54,7 @@ ctp2_Window::ctp2_Window(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
 	:
@@ -155,22 +155,22 @@ AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-	ctp2_Static *background = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "Background");
+	ctp2_Static *background = (ctp2_Static *)aui_Ldl::GetObject(ldlBlock, "Background");
 	if(background) {
 		background->Enable(FALSE);
 	}
 
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock((MBCHAR *)ldlBlock);
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock(ldlBlock);
 	if(block) {
-		MBCHAR *title = block->GetString("title");
+		const MBCHAR *title = block->GetString("title");
 		if(title) {
-			ctp2_Static *titleBar = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "TitleBar");
+			ctp2_Static *titleBar = (ctp2_Static *)aui_Ldl::GetObject(ldlBlock, "TitleBar");
 			if(!titleBar) {
-				titleBar = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "Background.TitleBar");
+				titleBar = (ctp2_Static *)aui_Ldl::GetObject(ldlBlock, "Background.TitleBar");
 			}
 			if(titleBar) {
 				if(g_theStringDB->GetNameStr(title)) {
-					titleBar->SetText((MBCHAR *)g_theStringDB->GetNameStr(title));
+					titleBar->SetText(g_theStringDB->GetNameStr(title));
 				}
 				SetDraggable(TRUE);
 				titleBar->Move(0, 0);

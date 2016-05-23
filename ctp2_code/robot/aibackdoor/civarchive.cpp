@@ -355,20 +355,15 @@ void CivArchive::PerformMagic(uint32 id)
 
 
 void CivArchive::TestMagic(uint32 id)
-	{
+{
 	if (GetUINT32() == k_ARCHIVE_MAGIC_VALUE_1)
 		if (GetUINT32() == k_ARCHIVE_MAGIC_VALUE_2)
 			if (GetUINT32() == id)
 				return ;
 
-
-    {
-       BOOL ARCHIVE_MAGIC_DUD=0;
-       Assert(ARCHIVE_MAGIC_DUD);
-    }
-        exit(0);
-
-	}
+	Assert("!ARCHIVE_MAGIC_DUD");
+	exit(0);
+}
 
 void CivArchive::PutDoubleString(const double &val)
 {

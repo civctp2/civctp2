@@ -52,7 +52,7 @@
 c3_PopupWindow::c3_PopupWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type,
 	bool bevel )
@@ -73,7 +73,7 @@ c3_PopupWindow::c3_PopupWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
 	:
@@ -88,7 +88,6 @@ c3_PopupWindow::c3_PopupWindow(
 AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
 	for ( i = 0;i < POPUP_BORDER_MAX;i++ ) {
@@ -100,29 +99,25 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_cancel = NULL;
 	m_ok = NULL;
 
-	sprintf( ldlBlock, "c3_PopupUL" );
-	m_border[POPUP_BORDER_UL] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_UL] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupUL");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_UL], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_UL], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_UL]->Move( 0, 0 );
 
-	sprintf( ldlBlock, "c3_PopupUR" );
-	m_border[POPUP_BORDER_UR] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_UR] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupUR");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_UR], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_UR], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_UR]->Move( m_width - m_border[POPUP_BORDER_UR]->Width(), 0 );
 
-	sprintf( ldlBlock, "c3_PopupLL" );
-	m_border[POPUP_BORDER_LL] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_LL] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupLL");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LL], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_LL], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_LL]->Move( 0, m_height - m_border[POPUP_BORDER_LL]->Height() );
 
-	sprintf( ldlBlock, "c3_PopupLR" );
-	m_border[POPUP_BORDER_LR] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_LR] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupLR");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) ) return errcode;
 
@@ -132,32 +127,28 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	sint32 cornerHeight = m_border[POPUP_BORDER_UL]->Height();
 	sint32 cornerWidth = m_border[POPUP_BORDER_UL]->Width();
 
-	sprintf( ldlBlock, "c3_PopupLeft" );
-	m_border[POPUP_BORDER_LEFT] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_LEFT] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupLeft");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LEFT], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_LEFT], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_LEFT]->Move( 0, cornerHeight );
 	m_border[POPUP_BORDER_LEFT]->Resize( m_border[POPUP_BORDER_LEFT]->Width(), m_height - cornerHeight * 2 );
 
-	sprintf( ldlBlock, "c3_PopupTop" );
-	m_border[POPUP_BORDER_TOP] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_TOP] = new c3_Static( &errcode, aui_UniqueId(), "c3_PopupTop");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_TOP], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_TOP], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_TOP]->Move( cornerWidth, 0 );
 	m_border[POPUP_BORDER_TOP]->Resize( m_width - cornerWidth * 2, m_border[POPUP_BORDER_TOP]->Height() );
 
-	sprintf( ldlBlock, "c3_PopupRight" );
-	m_border[POPUP_BORDER_RIGHT] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_RIGHT] = new c3_Static( &errcode, aui_UniqueId(), "c3_PopupRight");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_RIGHT], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_RIGHT], errcode) ) return errcode;
 
 	m_border[POPUP_BORDER_RIGHT]->Move( m_width - m_border[POPUP_BORDER_RIGHT]->Width(), cornerHeight );
 	m_border[POPUP_BORDER_RIGHT]->Resize( m_border[POPUP_BORDER_RIGHT]->Width(), m_height - cornerHeight * 2 );
 
-	sprintf( ldlBlock, "c3_PopupBottom" );
-	m_border[POPUP_BORDER_BOTTOM] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_border[POPUP_BORDER_BOTTOM] = new c3_Static( &errcode, aui_UniqueId(), "c3_PopupBottom");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_BOTTOM], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_BOTTOM], errcode) ) return errcode;
 
@@ -241,24 +232,21 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 }
 
 
-sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
+sint32 c3_PopupWindow::AddTitle(const MBCHAR *titleBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_title ) return 1;
 
-	sprintf( ldlBlock, "c3_PopupTitle" );
-	m_title = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+	m_title = new c3_Static( &errcode, aui_UniqueId(), "c3_PopupTitle");
 	TestControl( m_title );
 
 	if ( !titleBlock ) {
-		sprintf( ldlBlock, "c3_PopupTitle.c3_PopupTitleText" );
-		m_titleText = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
+		m_titleText = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupTitle.c3_PopupTitleText");
 		TestControl( m_titleText );
 	}
 	else {
-		m_titleText = new c3_Static( &errcode, aui_UniqueId(), titleBlock );
+		m_titleText = new c3_Static(&errcode, aui_UniqueId(), titleBlock);
 		TestControl( m_titleText );
 	}
 
@@ -277,15 +265,13 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 sint32 c3_PopupWindow::AddCancel(
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock )
+	const MBCHAR *buttonBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_cancel ) return 1;
 
-	sprintf( ldlBlock, buttonBlock );
-	m_cancel = new c3_Button( &errcode, aui_UniqueId(), ldlBlock, actionFunc, cookie );
+	m_cancel = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, actionFunc, cookie );
 	TestControl( m_cancel );
 
 	m_cancel->Move( 17, m_height - m_cancel->Height() - 17);
@@ -300,15 +286,13 @@ sint32 c3_PopupWindow::AddCancel(
 sint32 c3_PopupWindow::AddOk(
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock )
+	const MBCHAR *buttonBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_ok ) return 1;
 
-	sprintf( ldlBlock, buttonBlock );
-	m_ok = new ctp2_Button( &errcode, aui_UniqueId(), ldlBlock, actionFunc, cookie );
+	m_ok = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock, actionFunc, cookie );
 	TestControl( m_ok );
 
 	m_ok->Move( m_width - m_ok->Width() - 17, m_height - m_ok->Height() -17);
@@ -323,15 +307,13 @@ sint32 c3_PopupWindow::AddOk(
 sint32 c3_PopupWindow::AddClose(
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock )
+	const MBCHAR *buttonBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_ok ) return 1;
 
-	sprintf( ldlBlock, buttonBlock );
-	m_ok = new ctp2_Button( &errcode, aui_UniqueId(), ldlBlock, actionFunc, cookie );
+	m_ok = new ctp2_Button(&errcode, aui_UniqueId(), buttonBlock, actionFunc, cookie);
 	TestControl( m_ok );
 
 	m_ok->Move( m_width - m_ok->Width()- 17, m_height - m_ok->Height() - 17);
@@ -346,15 +328,13 @@ sint32 c3_PopupWindow::AddClose(
 sint32 c3_PopupWindow::AddYes(
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock )
+	const MBCHAR *buttonBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_ok ) return 1;
 
-	sprintf( ldlBlock, buttonBlock );
-	m_ok = new ctp2_Button( &errcode, aui_UniqueId(), ldlBlock, actionFunc, cookie );
+	m_ok = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock, actionFunc, cookie );
 	TestControl( m_ok );
 
 	m_ok->Move( m_width - m_ok->Width(), m_height - m_ok->Height() );
@@ -369,15 +349,13 @@ sint32 c3_PopupWindow::AddYes(
 sint32 c3_PopupWindow::AddNo(
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock )
+	const MBCHAR *buttonBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( m_cancel ) return 1;
 
-	sprintf( ldlBlock, buttonBlock );
-	m_cancel = new c3_Button( &errcode, aui_UniqueId(), ldlBlock, actionFunc, cookie );
+	m_cancel = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, actionFunc, cookie );
 	TestControl( m_cancel );
 
 	m_cancel->Move( 0, m_height - m_cancel->Height() );

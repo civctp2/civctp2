@@ -22,22 +22,22 @@ public:
 
 	aui_HyperTextBase(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock);
 	aui_HyperTextBase(
 		AUI_ERRCODE *retval,
-		MBCHAR *hyperText,
+		const MBCHAR *hyperText,
 		uint32 hyperMaxLen );
 	virtual ~aui_HyperTextBase();
 
 protected:
 	aui_HyperTextBase() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(
-		MBCHAR *hyperText,
+		const MBCHAR *hyperText,
 		uint32 hyperMaxLen );
 
 public:
-	MBCHAR *GetHyperText( void ) const { return (MBCHAR *)m_hyperText; }
+	const MBCHAR *GetHyperText( void ) const { return m_hyperText; }
 	virtual AUI_ERRCODE	SetHyperText(
 		const MBCHAR *hyperText,
 		uint32 maxlen = 0xffffffff );

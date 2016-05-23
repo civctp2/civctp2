@@ -46,7 +46,7 @@ C3UI::C3UI(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *ldlFilename,
+	const MBCHAR *ldlFilename,
 	BOOL useExclusiveMode )
 	:
 	aui_NativeUI( retval, hinst, hwnd, width, height, bpp, ldlFilename, useExclusiveMode )

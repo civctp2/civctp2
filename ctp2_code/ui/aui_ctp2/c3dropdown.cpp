@@ -53,7 +53,7 @@ C3DropDown::C3DropDown(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
@@ -65,7 +65,7 @@ C3DropDown::C3DropDown(
 	PatternBase(pattern)
 {
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -77,7 +77,7 @@ C3DropDown::C3DropDown(
 C3DropDown::C3DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -120,7 +120,6 @@ AUI_ERRCODE C3DropDown::CreateComponents( void )
 
 	m_listBox->SetForceSelect( TRUE );
 
-	errcode;
 	m_listBoxWindow = new aui_Window(
 		&errcode,
 		aui_UniqueId(),

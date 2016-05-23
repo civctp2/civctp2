@@ -663,7 +663,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				}
 				else
 				{
-					MessageBoxDialog::Query("str_ldl_ND_VERIFY_DISBAND", "VerifyDisbandCity", controlpanelwindow_DisbandCity, (void *)city.m_id);
+					MessageBoxDialog::Query("str_ldl_ND_VERIFY_DISBAND", "VerifyDisbandCity", controlpanelwindow_DisbandCity, (void *)(uintptr_t)city.m_id);
 				}
 				break;
 			}
@@ -1107,7 +1107,7 @@ controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, void *
 ControlPanelWindow::ControlPanelWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type ) :
 m_mainWindow(NULL),
@@ -1155,7 +1155,7 @@ m_terraFormMode(false)
 
 	m_currentProgress = 0;
 
-	static MBCHAR *ldlControlBlock = "ControlPanelWindow.ControlPanel";
+	static const MBCHAR *ldlControlBlock = "ControlPanelWindow.ControlPanel";
 	MainControlPanel::Initialize(ldlControlBlock);
 
 
@@ -1967,7 +1967,6 @@ ControlPanelWindow::TileImpUpdate()
 	}
 }
 
-
 void
 ControlPanelWindow::TerraFormUpdate()
 {
@@ -1975,47 +1974,10 @@ ControlPanelWindow::TerraFormUpdate()
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 		return;
 
-	sint32 player_id =g_selected_item->GetVisiblePlayer();
-
-
-		ClearTargetingMode();
-		return;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	ClearTargetingMode();
+	return;
 
 }
-
-
-
 
 bool
 ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
@@ -2034,9 +1996,6 @@ ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
 	}
 	return false;
 }
-
-
-
 
 bool
 ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
@@ -2188,21 +2147,6 @@ ControlPanelWindow::TerraFormClick(const MapPoint &pos)
 		return true;
 	}
 
-	sint32 player=g_selected_item->GetVisiblePlayer();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2231,7 +2175,7 @@ void ControlPanelWindow::ClearTargetingMode()
 }
 
 void
-ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
+ControlPanelWindow::CreateTabGroup(const MBCHAR *ldlBlock)
 {
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab", TabCallback, (void *)CP_TAB_CIV);
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab",     TabCallback, (void *)CP_TAB_CITY);
@@ -2254,7 +2198,7 @@ ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
 }
 
 void
-ControlPanelWindow::CreateTab(sint32 which,MBCHAR *name)
+ControlPanelWindow::CreateTab(sint32 which, const MBCHAR *name)
 {
 
 	if ((which<0)||(which>=CP_TAB_LAST)||(name==NULL))
@@ -2352,7 +2296,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 
 	ctp2_Static *staticThing = (ctp2_Static *)staticContainer->GetChildByIndex(0);
 
-	MBCHAR *iconName = g_theMessageIconFileDB->GetFilename(message.GetMsgType());
+	const MBCHAR *iconName = g_theMessageIconFileDB->GetFilename(message.GetMsgType());
 	if(!iconName)
 		iconName = k_MESSAGE_ICON_PICTURE_WARNING;
 	staticThing->SetImage(iconName);
@@ -2405,7 +2349,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	tabLabel->ShouldDraw(TRUE);
 
 
-	item->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, (void *)(uint32)message);
+	item->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, (void *)(uintptr_t)message);
 
 
 
@@ -2473,7 +2417,7 @@ void ControlPanelWindow::RemoveMessage(Message &message)
 
 	for (i=0; i<numItems; i++) {
 		listItem = (ctp2_ListItem *)m_messageList->GetItemByIndex(i);
-		if (listItem->GetCookie() == (void *)(uint32)message) {
+		if (listItem->GetCookie() == (void *)(uintptr_t)message) {
 			m_messageList->RemoveItemByIndex(i);
 			delete listItem;
 			break;
@@ -2642,7 +2586,7 @@ ControlPanelWindow::CreateTileImpBanks()
 	for	(i=0;i<CP_TILEIMP_MAX;i++)
 	{
 		if ((m_activatorButtons[i]!=NULL)&&(i<CP_TILEIMP_MAX))
-			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback,(void *)i);
+			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback,(void *)(intptr_t)i);
 
 		if (m_tileImpPanes[i]!=NULL)
 			m_tileImpPanes[i]->Hide();
@@ -2656,7 +2600,7 @@ ControlPanelWindow::CreateTileImpBanks()
 
 	sint32		index;
 	MBCHAR		button_id[256];
-	MBCHAR		*thePaneLDL;
+	const MBCHAR	*thePaneLDL;
 	ctp2_Button	*a_button;
 	const	TerrainImprovementRecord *timpRec;
 
@@ -2667,7 +2611,7 @@ ControlPanelWindow::CreateTileImpBanks()
 
 
 
-	char *panels[CP_TILEIMP_MAX] = {
+	const char *panels[CP_TILEIMP_MAX] = {
 			"tiLandButtonBank",
 			"tiSpecialButtonBank",
 			"tiOceanButtonBank",
@@ -2786,7 +2730,7 @@ ControlPanelWindow::CreateTileImpBanks()
 			}
 			else
 			{
-				a_button->SetActionFuncAndCookie(TileImpButtonCallback2,(void *)current);
+				a_button->SetActionFuncAndCookie(TileImpButtonCallback2, (void *)(intptr_t)current);
 
 				irec = timpRec->GetIcon();
 
@@ -2938,7 +2882,7 @@ ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 }
 
 void
-ControlPanelWindow::AppendItem(ctp2_ListBox *list,MBCHAR *string)
+ControlPanelWindow::AppendItem(ctp2_ListBox *list, const MBCHAR *string)
 {
 
 	if ((list==NULL)||(string==NULL))
@@ -3047,7 +2991,7 @@ ControlPanelWindow::BuildUnitList ()
 				strcpy(order, "  ");
 				strcat(order, g_theStringDB->GetNameStr(string_index));
 
-				m_contextMenu->AddItem(order, NULL,(void *)i);
+				m_contextMenu->AddItem(order, NULL, (void *)(intptr_t)i);
 			}
 		}
 	}
@@ -3329,7 +3273,7 @@ ControlPanelWindow::AdjustToScreen()
 }
 
 void
-ControlPanelWindow::SetControlText(aui_Control *control,MBCHAR *fmt,...)
+ControlPanelWindow::SetControlText(aui_Control *control, const MBCHAR *fmt, ...)
 {
 
 	if ((control==NULL)||(fmt==NULL))
@@ -3339,7 +3283,7 @@ ControlPanelWindow::SetControlText(aui_Control *control,MBCHAR *fmt,...)
 	char			 text[512];
 
     va_start(v_args, fmt);
-    vsprintf(text,fmt,v_args);
+    vsnprintf(text, sizeof text, fmt,v_args);
     va_end( v_args );
 
 	control->SetText(text);
@@ -3394,9 +3338,6 @@ ControlPanelWindow::PollTILEIMPStatus()
 
 	if (current==NULL)
 		return;
-
-	sint32		pw=current->GetMaterialsStored();
-
 
 }
 
@@ -3538,7 +3479,7 @@ ControlPanelWindow::CityPanelRedisplay()
 	SetControlText((aui_Control *)m_cityHappiness  ,"%3.2f",happiness);
 	SetControlText((aui_Control *)m_cityPopulation ,"%d",pop);
 	SetControlText((aui_Control *)m_cityGrowth	   ,"%d",growth);
-	SetControlText((aui_Control *)m_buildingItem   ,buildName);
+	SetControlText((aui_Control *)m_buildingItem   , "%s", buildName);
 	SetControlText((aui_Control *)m_turnsRemaining ,"%d",buildRemaining);
 
 }
@@ -3864,7 +3805,7 @@ void controlpanelwindow_Update(Unit *city)
 
 void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 {
-	uint64 temp = number;
+	intmax_t temp = number;
 	sint32 trillion = (sint32)(temp / k_CPW_TRILLION);
 	temp -= (uint64)trillion * k_CPW_TRILLION;
 	sint32 billion = (sint32)(temp / k_CPW_BILLION);
@@ -3874,23 +3815,22 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 	sint32 thousand = (sint32)(temp / k_CPW_THOUSAND);
 	temp -= (uint64)thousand * k_CPW_THOUSAND;
 
-	MBCHAR c[_MAX_PATH];
-	sprintf( c, g_theStringDB->GetNameStr("str_ldl_comma") );
+	const char *c = g_theStringDB->GetNameStr("str_ldl_comma");
 
 	if ( trillion ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld%s%.3ld", trillion, c, billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3d%s%.3d%s%.3jd", trillion, c, billion, c, million, c, thousand, c, temp );
 	}
 	else if ( billion ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld", billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3d%s%.3jd", billion, c, million, c, thousand, c, temp );
 	}
 	else if ( million ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld", million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3jd", million, c, thousand, c, temp );
 	}
 	else if ( thousand ) {
-		sprintf( s, "%ld%s%.3ld", thousand, c, temp );
+		sprintf( s, "%d%s%.3jd", thousand, c, temp );
 	}
 	else {
-		sprintf( s, "%ld", temp );
+		sprintf( s, "%jd", temp );
 	}
 }
 

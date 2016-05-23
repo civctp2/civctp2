@@ -73,11 +73,11 @@ public:
 	SpriteGroup(GROUPTYPE type);
 	virtual ~SpriteGroup();
 
-	virtual void	LoadBasic   (char *filename){};
-	virtual void	LoadFull    (char *filename){};
-	virtual void	LoadIndexed (char *filename,GAME_ACTION action){};
+	virtual void	LoadBasic   (const char *filename){};
+	virtual void	LoadFull    (const char *filename){};
+	virtual void	LoadIndexed (const char *filename,GAME_ACTION action){};
 
-	virtual void	Save(char *filename,unsigned version_id,unsigned compression_mode){};
+	virtual void	Save(const char *filename,unsigned version_id,unsigned compression_mode){};
 	virtual sint32	Parse(uint16 id,GROUPTYPE group){ return FALSE;};
 
 	virtual void	DeallocateStorage(void);
@@ -85,7 +85,7 @@ public:
 
 	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags);
-	virtual void	DrawText(sint32 x, sint32 y, char *s);
+	virtual void	DrawText(sint32 x, sint32 y, const char *s);
 
 	virtual void	AddRef(void);
 	virtual void	Release(void);

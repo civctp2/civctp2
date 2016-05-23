@@ -10,7 +10,7 @@ public:
 	ns_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock);
 	ns_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -22,9 +22,9 @@ public:
 
 protected:
 	ns_Header() : aui_Header() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateSwitches( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateSwitches(const MBCHAR *ldlBlock= NULL );
 };
 
 #endif

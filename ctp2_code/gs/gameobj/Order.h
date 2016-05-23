@@ -14,7 +14,7 @@ class OrderRecord;
 
 struct OrderInfo {
 	UNIT_ORDER_TYPE m_type;
-	char *m_name;
+	const char *m_name;
 	sint32 m_goldCost;
 	sint32 m_moveCost;
 	sint32 m_failSound;

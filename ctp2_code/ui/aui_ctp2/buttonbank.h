@@ -79,7 +79,7 @@ public:
 	ButtonBank(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ButtonBank(
@@ -89,12 +89,12 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ButtonBank();
 
-	AUI_ERRCODE InitCommon(MBCHAR *bankBlock);
+	AUI_ERRCODE InitCommon(const MBCHAR *bankBlock);
 
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL,
 								sint32 x = 0,

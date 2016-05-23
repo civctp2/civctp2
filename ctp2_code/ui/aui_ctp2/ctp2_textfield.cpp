@@ -17,7 +17,7 @@ extern C3UI			*g_c3ui;
 ctp2_TextField::ctp2_TextField(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -41,8 +41,8 @@ ctp2_TextField::ctp2_TextField(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -59,10 +59,9 @@ ctp2_TextField::ctp2_TextField(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE ctp2_TextField::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_TextField::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH,
-				bevelType=0;
+	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
 	BOOL valid = theLdl->IsValid( ldlBlock );

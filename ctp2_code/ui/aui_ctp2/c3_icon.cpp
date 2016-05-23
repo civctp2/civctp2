@@ -64,7 +64,7 @@ c3_Icon::c3_Icon(
 }
 
 
-AUI_ERRCODE c3_Icon::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Icon::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon();
 }

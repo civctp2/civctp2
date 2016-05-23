@@ -49,10 +49,10 @@ class ctp2_ListBox : public aui_ListBox, public PatternBase
 {
 public:
 	ctp2_ListBox() : aui_ListBox() {}
-	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, MBCHAR *ldlBlock,
+	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
 	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-							MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
+							const MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
 							ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
 
 	virtual ~ctp2_ListBox();
@@ -63,9 +63,9 @@ public:
 		return classId == m_ctp2_listboxClassId;
 	}
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(sint32 bevelWidth, sint32 bevelType );
-	AUI_ERRCODE CreateRangersAndHeader( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateRangersAndHeader(const MBCHAR *ldlBlock = NULL);
 
 	void Clear(void);
 

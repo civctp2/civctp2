@@ -577,7 +577,7 @@ void Network::InitFromNetFunc()
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
-                              char *name,
+                              const char *name,
                               int civ,
                               int group,
                               int civpoints,
@@ -1062,7 +1062,7 @@ void Network::PacketReady(sint32 from,
 }
 
 void Network::AddPlayer(uint16 id,
-                        char* name)
+                        const char* name)
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -1329,7 +1329,6 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(0);
 
-	uint16 cells = 0;
 	NetCellList* cellList = NULL;
 
 	double percentMap = 0;
@@ -1947,8 +1946,7 @@ Network::QueuePacketBookmark(uint16 id,
 		return;
 
 	if(m_playerData[index]->m_frozen <= 0) {
-		BOOL NetworkProgrammerSmokingCrackPleaseIgnore = FALSE;
-		Assert(NetworkProgrammerSmokingCrackPleaseIgnore);
+		Assert(!"NetworkProgrammerSmokingCrackPleaseIgnore");
 		QueuePacket(id, packet);
 		return;
 	}
@@ -2327,7 +2325,6 @@ Network::ProcessNewPlayer(uint16 id)
 		Assert(g_player[newslot]->GetPlayerType() != PLAYER_TYPE_NETWORK);
 
 
-		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
 		if(player->m_id != m_pid) {
 			g_player[newslot]->SetPlayerType(PLAYER_TYPE_NETWORK);
 		} else {
@@ -2389,7 +2386,7 @@ Network::ProcessNewPlayer(uint16 id)
 }
 
 extern sint32 g_debugOwner;
-void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
+void Network::AddChatText(const MBCHAR *str, sint32 len, uint8 from, BOOL priv)
 {
 
 
@@ -2422,7 +2419,7 @@ void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
 	m_chatList->AddLine((sint32)from, m_chatStr);
 }
 
-void Network::SendChatText(MBCHAR *str, sint32 len)
+void Network::SendChatText(const MBCHAR *str, sint32 len)
 {
 	if(str[0] == '/') {
 		if(stricmp(str, "/rules") == 0) {
@@ -2469,7 +2466,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 			char destination[256];
 			sint32 dest = -1;
 			sint32 d = 0;
-			char *c = &str[4];
+			const char *c = &str[4];
 			while(*c && isspace(*c))
 				c++;
 
@@ -2487,7 +2484,8 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 								continue;
 
 							char name[256];
-							char *n, *ln;
+							char *n;
+							const char *ln;
 
 							for(n = &name[0], ln = g_player[p]->m_civilisation->GetLeaderName();
 							*ln && !isspace(*ln); ln++, n++)
@@ -2816,7 +2814,7 @@ void Network::TogglePacketLog()
 
 #endif
 
-PlayerData::PlayerData(char* name, uint16 id) :
+PlayerData::PlayerData(const char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),
@@ -3649,7 +3647,7 @@ void Network::SetReadyToStart(BOOL ready)
 	}
 }
 
-void Network::SendJoinedMessage(MBCHAR *name, sint32 player)
+void Network::SendJoinedMessage(const MBCHAR *name, sint32 player)
 {
 	if(g_slicEngine && player != m_playerIndex && name) {
 		SlicObject *so = new SlicObject("351NetworkPlayerJoined");
@@ -3671,7 +3669,7 @@ void Network::SendJoinedMessage(MBCHAR *name, sint32 player)
 	}
 }
 
-void Network::SendWrongPlayerJoinedMessage(MBCHAR *name, sint32 player)
+void Network::SendWrongPlayerJoinedMessage(const MBCHAR *name, sint32 player)
 {
 	if(g_slicEngine) {
 		SlicObject *so = new SlicObject("352DifferentPlayerJoined");
@@ -3682,7 +3680,7 @@ void Network::SendWrongPlayerJoinedMessage(MBCHAR *name, sint32 player)
 	}
 }
 
-void Network::SendLeftMessage(MBCHAR *name, sint32 player)
+void Network::SendLeftMessage(const MBCHAR *name, sint32 player)
 {
 	if(g_slicEngine) {
 		SlicObject *so;
@@ -3704,7 +3702,7 @@ void Network::SendLeftMessage(MBCHAR *name, sint32 player)
 	}
 }
 
-void Network::SendNewHostMessage(MBCHAR *name, sint32 player)
+void Network::SendNewHostMessage(const MBCHAR *name, sint32 player)
 {
 	if(g_slicEngine) {
 		SlicObject *so;

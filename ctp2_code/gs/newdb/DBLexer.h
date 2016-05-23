@@ -59,10 +59,10 @@ public:
 class DBCustomTokens
 {
 public:
-	char **m_tokens;
+	const char **m_tokens;
 	sint32 m_numTokens;
 
-	DBCustomTokens(char **tokens, sint32 numTokens) {
+	DBCustomTokens(const char **tokens, sint32 numTokens) {
 		m_tokens = tokens;
 		m_numTokens = numTokens;
 	}
@@ -91,7 +91,7 @@ public:
 	bool GetStringIdAssignment(sint32 &strId);
 	bool GetFileAssignment(char *&filename);
 
-	void SetTokens(char **tokens, sint32 maxToken);
+	void SetTokens(const char **tokens, sint32 maxToken);
 	void RestoreTokens();
 
 	sint32 GetToken();
@@ -101,7 +101,7 @@ public:
 
 	const char *GetTokenText();
 
-	void ReportError(char *fmt, ...);
+	void ReportError(const char *fmt, ...);
 	sint32 GetLineNumber();
 	const char *GetFilename();
 };

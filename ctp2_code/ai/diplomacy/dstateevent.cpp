@@ -187,8 +187,6 @@ STDEHANDLER(MakeFriend_NextDStateEvent)
 
 	const PersonalityRecord * personality = diplomat.GetPersonality();
 
-	ai::Regard regard = diplomat.GetEffectiveRegard(foreignerId);
-
 	bool personality_match = (personality->GetConquestPassive() &&
 			personality->GetAlignmentGood() &&
 			personality->GetTrustworthinessLawful());
@@ -198,7 +196,6 @@ STDEHANDLER(MakeFriend_NextDStateEvent)
 		personality_match = (personality->GetDiscoveryDiplomatic() ||
 			 personality->GetDiscoveryEconomic());
 	}
-
 
 	if (!personality_match && personality->GetTrustworthinessChaotic())
 	{

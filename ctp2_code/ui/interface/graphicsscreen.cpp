@@ -42,10 +42,6 @@ static C3Slider		*s_bright			= NULL,
 static c3_Static	*s_unitSpeedN		 = NULL;
 static C3Slider		*s_unitSpeed		 = NULL;
 
-static c3_Static	*s_brightN			= NULL,
-					*s_gammaN			= NULL,
-					*s_colorN			= NULL,
-					*s_contrastN		= NULL;
 static aui_Switch			*s_walk		= NULL,
 
 							*s_trade	= NULL,
@@ -153,7 +149,6 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_graphicsWindow, errcode) );
-	if ( !AUI_NEWOK(s_graphicsWindow, errcode) ) errcode;
 
 	s_graphicsWindow->SetStronglyModal(TRUE);
 

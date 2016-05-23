@@ -41,7 +41,7 @@ public:
 	aui_Win(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_Win(
@@ -57,12 +57,12 @@ public:
 
 protected:
 	aui_Win() : aui_Control() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 public:
 	BOOL	IsRegistered( void ) const { return m_registered; }
-	MBCHAR	*GetWindowClass( void ) const { return m_windowClass; }
+	const MBCHAR	*GetWindowClass( void ) const { return m_windowClass; }
 
 	HWND	TheHWND( void ) const { return m_hwnd; }
 
@@ -77,7 +77,7 @@ public:
 
 protected:
 	static BOOL		m_registered;
-	static MBCHAR	*m_windowClass;
+	static const MBCHAR	*m_windowClass;
 	static sint32	m_winRefCount;
 
 	HWND			m_hwnd;

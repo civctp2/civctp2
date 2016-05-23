@@ -19,7 +19,7 @@ StaticTextItem::StaticTextItem(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 size,
 	sint32 textId,

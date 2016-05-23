@@ -93,7 +93,9 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	if (adviceId < 0)
 		{
 			char motivation_name[] = "MOTIVATION_DESIRE_GOLD_ADVICE";
+#ifdef _DEBUG
 			BOOL found =
+#endif
 				g_theStringDB->GetStringID(motivation_name, adviceId);
 			Assert(found);
 		}
@@ -104,7 +106,6 @@ STDEHANDLER(DesireGold_MotivationEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	const Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	Motivation motivation;
 
 	Assert(g_player[playerId]);
@@ -248,7 +249,6 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	Motivation motivation;
 
-	sint8 friends = diplomat.GetFriendCount();
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
@@ -368,7 +368,6 @@ STDEHANDLER(FearPollution_MotivationEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
 	sint32 next_disaster = g_thePollution->GetRoundsToNextDisaster();
-	bool fear_pollution = false;
 
 	if (diplomat.GetPersonality()->GetDiscoveryEcotopian() &&
 		next_disaster > 200)

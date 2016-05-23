@@ -81,7 +81,7 @@ public:
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_Control(
@@ -119,7 +119,7 @@ protected:
 	{};
 
 	AUI_ERRCODE InitCommonLdl(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie );
 	AUI_ERRCODE InitCommon(
@@ -169,7 +169,7 @@ public:
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		return aui_TextBase::SetText( text, maxlen );
 	}
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text )
+	virtual AUI_ERRCODE	AppendText(const MBCHAR *text)
 	{
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		return aui_TextBase::AppendText( text );

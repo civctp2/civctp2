@@ -20,7 +20,7 @@ extern SlicEngine	*g_slicEngine;
 ctp2_Switch::ctp2_Switch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -45,7 +45,7 @@ ctp2_Switch::ctp2_Switch(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	sint32 state,
@@ -65,10 +65,9 @@ ctp2_Switch::ctp2_Switch(
 }
 
 
-AUI_ERRCODE ctp2_Switch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_Switch::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-	sint32		bevelWidth=k_CTP2_SWITCH_DEFAULT_BEVELWIDTH,
-				bevelType=0;
+	sint32		bevelWidth=k_CTP2_SWITCH_DEFAULT_BEVELWIDTH;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
 	BOOL valid = theLdl->IsValid( ldlBlock );

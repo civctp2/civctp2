@@ -117,7 +117,6 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 	{
 		s_spNewGameRandomCustomScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) ) errcode;
 
 		s_spNewGameRandomCustomScreen->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());
 		s_spNewGameRandomCustomScreen->GrabRegion()->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());
@@ -179,9 +178,6 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Cleanup()
 #undef mycleanup
 }
 
-
-
-
 void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -194,10 +190,6 @@ void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, 
 		{
 			g_spNewGameWindow->m_useCustomMap = true;
 		}
-		else
-		{
-
-		}
 
 		loadsavemapscreen_displayMyWindow(0);
 	}
@@ -208,10 +200,6 @@ void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, 
 		{
 			g_spNewGameWindow->m_useCustomMap = false;
 			spnewgamescreen_update();
-		}
-		else
-		{
-
 		}
 	}
 }

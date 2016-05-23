@@ -19,9 +19,9 @@ public:
 		uint32 id,
 		sint32 x,
 		sint32 y,
-		MBCHAR *pattern = NULL,
+		const MBCHAR *pattern = NULL,
 		Icon *icon = NULL,
-		uint16 color = NULL,
+		uint16 color = 0,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		BOOL selected = FALSE );

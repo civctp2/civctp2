@@ -50,7 +50,6 @@ public:
 private:
     bool                      m_armyTextOn;
     bool                      m_cellTextOn;
-    bool                      m_armyNameOn;
     AvlTree<CellText *> *     m_cellAVL;
 };
 

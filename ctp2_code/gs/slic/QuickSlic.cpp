@@ -8,7 +8,7 @@
 
 
 
-void QuickSlic(char *id, sint32 recipient, BOOL one_shot)
+void QuickSlic(const char *id, sint32 recipient, BOOL one_shot)
 {
 
     if (one_shot) {

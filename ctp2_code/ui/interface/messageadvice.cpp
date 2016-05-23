@@ -73,7 +73,7 @@ MessageAdvice::MessageAdvice(
 }
 
 
-AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::InitCommon(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -102,7 +102,7 @@ AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateWindowEdges(const MBCHAR *ldlBlock)
 {
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -163,7 +163,7 @@ AUI_ERRCODE MessageAdvice::AppendText( MBCHAR *text )
 }
 
 
-AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateDismissButton(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -187,7 +187,7 @@ AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageAdvice::CreateTextBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateTextBox(const MBCHAR *ldlBlock)
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;

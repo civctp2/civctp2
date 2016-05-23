@@ -383,7 +383,7 @@ uint32 TellEricAboutThisBug( aui_Window *w )
 	return id;
 }
 
-void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
+void GameSelectWindow::PasswordScreenDone(const MBCHAR *password)
 {
 
 	AllinoneWindow *w = g_allinoneWindow;
@@ -765,7 +765,7 @@ void StartSelectingWindow::NewButtonAction::Execute(
 					((ns_GameSetupItem *)listbox->GetItemByIndex( i ))->
 					GetNetShellObject()->GetNETFuncObject();
 
-				char *existing = game->GetName();
+				const char *existing = game->GetName();
 				if ( strnicmp( test, existing, dp_SNAMELEN ) == 0 )
 					break;
 			}
@@ -889,7 +889,7 @@ void gameselectwindow_scenarioExitCallback(aui_Control *control,
 					((ns_GameSetupItem *)listbox->GetItemByIndex( i ))->
 					GetNetShellObject()->GetNETFuncObject();
 
-				char *existing = game->GetName();
+				const char *existing = game->GetName();
 				if ( strnicmp( test, existing, dp_SNAMELEN ) == 0 )
 					break;
 			}

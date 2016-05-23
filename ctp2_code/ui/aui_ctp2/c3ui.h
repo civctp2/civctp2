@@ -51,7 +51,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *ldlFilename = NULL,
+		const MBCHAR *ldlFilename = NULL,
 		BOOL useExclusiveMode = FALSE );
 	virtual ~C3UI();
 

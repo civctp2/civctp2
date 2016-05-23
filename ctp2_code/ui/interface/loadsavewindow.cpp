@@ -91,17 +91,8 @@ extern SelectedItem					*g_selected_item;
 
 #define k_LOADSAVE_AUTOSORT_COL		-2
 
-
-
-
-
-
-
-
-
-
 LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
-		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
+		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 		: c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 {
 	m_fileList = NULL;
@@ -117,7 +108,7 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 	InitCommonLdl(ldlBlock);
 }
 
-bool LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
+bool LoadSaveWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			tabGroupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -913,31 +904,31 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 	surface->Unlock(buffer);
 }
 
-void LoadSaveWindow::SetGameName(MBCHAR *name)
+void LoadSaveWindow::SetGameName(const MBCHAR *name)
 {
 	if (!m_gameTextBox) return;
 	m_gameTextBox->SetFieldText(name);
 }
 
-void LoadSaveWindow::SetSaveName(MBCHAR *name)
+void LoadSaveWindow::SetSaveName(const MBCHAR *name)
 {
 	if (!m_saveTextBox) return;
 	m_saveTextBox->SetFieldText(name);
 }
 
-void LoadSaveWindow::SetLeaderName(MBCHAR *name)
+void LoadSaveWindow::SetLeaderName(const MBCHAR *name)
 {
 	if (!m_playerText) return;
 	m_playerText->SetText(name);
 }
 
-void LoadSaveWindow::SetCivName(MBCHAR *name)
+void LoadSaveWindow::SetCivName(const MBCHAR *name)
 {
 	if (!m_civText) return;
 	m_civText->SetText(name);
 }
 
-void LoadSaveWindow::SetNote(MBCHAR *note)
+void LoadSaveWindow::SetNote(const MBCHAR *note)
 {
 	if (!m_noteTextBox) return;
 	m_noteTextBox->SetFieldText(note);
@@ -967,7 +958,7 @@ BOOL LoadSaveWindow::GetSaveName(MBCHAR *name)
 	return TRUE;
 }
 
-MBCHAR *LoadSaveWindow::GetLeaderName(void)
+const MBCHAR *LoadSaveWindow::GetLeaderName(void)
 {
 	Assert(m_playerText);
 	if (!m_playerText) return NULL;
@@ -975,7 +966,7 @@ MBCHAR *LoadSaveWindow::GetLeaderName(void)
 	return m_playerText->GetText();
 }
 
-MBCHAR *LoadSaveWindow::GetCivName(void)
+const MBCHAR *LoadSaveWindow::GetCivName(void)
 {
 	Assert(m_civText);
 	if (!m_civText) return NULL;
@@ -1061,7 +1052,7 @@ void LoadSaveWindow::SetSaveInfo(SaveInfo *info)
 }
 
 
-void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
+void LoadSaveWindow::BuildDefaultSaveName(const MBCHAR *gameName, MBCHAR *name)
 {
 	MBCHAR		civName[k_MAX_NAME_LEN];
 
@@ -1073,7 +1064,6 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 #if !defined(_JAPANESE)
 	civName[4] = 0;
 #endif
-
 
 	c3files_StripSpaces(civName);
 
@@ -1104,7 +1094,7 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 		} else {
 			yearStringIndex = 1;
 		}
-		sprintf(theYear, "%ld%s", abs(year), table->GetString(yearStringIndex));
+		sprintf(theYear, "%d%s", abs(year), table->GetString(yearStringIndex));
 		delete table;
 	}
 
@@ -1203,7 +1193,7 @@ bool LoadSaveWindow::NoName( void )
 
 
 
-LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCHAR *name)
+LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1235,13 +1225,12 @@ LSCivsListItem::~LSCivsListItem()
 
 sint32 LSCivsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSCivsListItem *item = (LSCivsListItem *)item2;
 
 	return 0;
 }
 
 
-LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameInfo *info)
+LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1292,13 +1281,11 @@ LSGamesListItem::~LSGamesListItem()
 
 sint32 LSGamesListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSGamesListItem *item = (LSGamesListItem *)item2;
 
 	return 0;
 }
 
-
-LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo *info)
+LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),

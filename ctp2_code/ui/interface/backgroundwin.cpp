@@ -273,9 +273,9 @@ void DumpSpanList(aui_DirtyList *list)
 	for (i=0; i<list->GetHeight(); i++) {
 		curSpanList = (spanList + i);
 		if (curSpanList->num > 0) {
-			fprintf(outFile, "Line %#.3d", i);
+			fprintf(outFile, "Line %.3d", i);
 			for (j=0; j<curSpanList->num; j++) {
-				fprintf(outFile, " Run %#.3d Len %#.3d", curSpanList->spans[j].run,
+				fprintf(outFile, " Run %.3d Len %.3d", curSpanList->spans[j].run,
 						curSpanList->spans[j].length);
 			}
 			fprintf(outFile, "\n");

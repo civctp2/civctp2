@@ -41,7 +41,7 @@
 aui_Header::aui_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -85,7 +85,7 @@ aui_Header::aui_Header(
 }
 
 
-AUI_ERRCODE aui_Header::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Header::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon();
 }
@@ -97,7 +97,7 @@ AUI_ERRCODE aui_Header::InitCommon( void )
 }
 
 
-AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Header::CreateSwitches(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

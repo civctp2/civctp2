@@ -324,12 +324,12 @@ dp_result_t dp_handleExceptionRecords(unsigned char *buf, unsigned int buflen, u
 	int aehlog_tag;
 #endif
 	int err;
-	unsigned char *ptr = buf;
 	if (!aehlog || !buf) return dp_RES_BAD;
 	err = aehlog_appendMultExceptionRecords(aehlog, buf, buflen, fmaxsize);
 	if (err == aeh_RES_BUG)
 		aehlog_delete(aehlog);
 #if 0
+	unsigned char *ptr = buf;
 	while (ptr < buf + buflen) {
 		readSwap((void**)&ptr, &aehlog_tag, sizeof(aehlog_tag));
 		readSwap((void**)&ptr, &ninst, sizeof(ninst));

@@ -153,7 +153,7 @@ public:
 	int m_group;
 	int m_civpoints;
 	int m_settlers;
-	NSPlayerInfo(uint16 id, char *name, int civ, int group, int civpoints,
+	NSPlayerInfo(uint16 id, const char *name, int civ, int group, int civpoints,
 				 int settlers)
 	{
 		m_id = id;
@@ -203,7 +203,7 @@ public:
 	void SetLaunchFromNetFunc(BOOL fromSave);
 	void InitFromNetFunc();
 	void SetNSPlayerInfo(uint16 id,
-						 char *name,
+						 const char *name,
 						 int civ,
 						 int group,
 						 int civpoints,
@@ -241,7 +241,7 @@ public:
 					  uint8* buf,
 					  sint32 size);
 	void AddPlayer(uint16 id,
-					char* name);
+				const char* name);
 	void RemovePlayer(uint16 id);
 	void SetToHost();
 	void ChangeHost(uint16 id);
@@ -329,9 +329,9 @@ public:
 	void HandleObjectACK(uint32 id);
 	void HandleObjectNAK(uint32 myId, uint32 realId);
 	void CheckReceivedObject(uint32 id);
-	void AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv);
+	void AddChatText(const MBCHAR *str, sint32 len, uint8 from, BOOL priv);
 	void SetChatMask(uint32 mask) { m_chatMask = mask; }
-	void SendChatText(MBCHAR *str, sint32 len);
+	void SendChatText(const MBCHAR *str, sint32 len);
 
 	void AddCivilization(sint32 index, PLAYER_TYPE pt, sint32 civ);
 
@@ -427,10 +427,10 @@ public:
 
 	BOOL TeamsEnabled() { return m_teamsEnabled; }
 
-	void SendJoinedMessage(MBCHAR *name, sint32 player);
-	void SendWrongPlayerJoinedMessage(MBCHAR *name, sint32 player);
-	void SendLeftMessage(MBCHAR *name, sint32 player);
-	void SendNewHostMessage(MBCHAR *name, sint32 player);
+	void SendJoinedMessage(const MBCHAR *name, sint32 player);
+	void SendWrongPlayerJoinedMessage(const MBCHAR *name, sint32 player);
+	void SendLeftMessage(const MBCHAR *name, sint32 player);
+	void SendNewHostMessage(const MBCHAR *name, sint32 player);
 
 	void ProcessNewPlayer(uint16 id);
 

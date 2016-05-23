@@ -17,7 +17,7 @@ public:
 	c3_HyperTipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	c3_HyperTipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -25,18 +25,18 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern );
+		const MBCHAR *pattern );
 	virtual ~c3_HyperTipWindow();
 
 protected:
 	c3_HyperTipWindow() : aui_TipWindow() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 public:
 
 	aui_HyperTextBox *GetHyperTip( void ) const { return m_hyperTip; }
-	AUI_ERRCODE SetHyperTipText(MBCHAR *text);
+	AUI_ERRCODE SetHyperTipText(const MBCHAR *text);
 
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,

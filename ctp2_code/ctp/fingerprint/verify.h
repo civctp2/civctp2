@@ -5,21 +5,9 @@
 extern "C" {
 #endif
 
+BOOL IsValidUser(const char *szListFile);
 
-
-
-
-
-
-BOOL IsValidUser( char *szListFile );
-
-
-
-
-
-
-
-BOOL GetInfoFromFingerprint( char *szFingerprintFile );
+BOOL GetInfoFromFingerprint(const char *szFingerprintFile);
 
 #ifdef __cplusplus
 }

@@ -94,8 +94,8 @@ int		c3debug_dprintf(char const * format, ...);
 int		c3debug_dprintfPrefix(int mask, char const * file, int line);
 void	c3debug_SetDebugMask(int mask, int set);
 #if defined(WIN32)
-char	*c3debug_StackTrace(void);
-char	*c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
+const char	*c3debug_StackTrace(void);
+const char	*c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers);
 #endif
 void	c3debug_ExceptionExecute(CivExceptionFunction function);

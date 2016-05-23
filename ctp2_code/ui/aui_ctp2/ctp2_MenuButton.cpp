@@ -13,7 +13,7 @@ uint32 ctp2_MenuButton::m_menuButtonClassId = aui_UniqueId();
 
 ctp2_MenuButton::ctp2_MenuButton(AUI_ERRCODE *retval,
 								 uint32 id,
-								 MBCHAR *ldlBlock,
+								 const MBCHAR *ldlBlock,
 								 ControlActionCallback *ActionFunc,
 								 void *cookie)
 	:

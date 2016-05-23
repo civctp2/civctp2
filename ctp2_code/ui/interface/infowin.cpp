@@ -145,8 +145,6 @@ extern CivilisationPool			*g_theCivilisationPool;
 
 ctp2_Window			*g_infoWindow = NULL;
 
-static c3_Button	*s_exitButton;
-
 static sint32		s_infoSetting;
 static sint32		s_infoDataSetting;
 
@@ -183,14 +181,15 @@ static LineGraph		*s_pollutionGraph;
 
 static Thermometer		*s_pollutionTherm;
 
-static c3_Button		*s_returnButton;
 static c3_Button		*s_bigButton;
 static c3_Button		*s_wonderButton;
 static c3_Button		*s_strengthButton;
 static c3_Button		*s_scoreButton;
 static c3_Button		*s_pollutionButton;
 
+#if 0
 static c3_Button		*s_eventsInfoButton[17];
+#endif
 static c3_Button		*s_eventsInfoButtonLeft,*s_eventsInfoButtonRight;
 static sint32			s_currentWonderDisplay;
 
@@ -203,6 +202,22 @@ static c3_Static		*s_bottomRightBox;
 static c3_Static		*s_bottomRightImage;
 
 static sint32			s_minRound = 0;
+
+static void infowin_UpdateCivData(void);
+static sint32 infowin_ChangeDataSetting(sint32 type);
+static void infowin_UpdateBigList(void);
+static void infowin_UpdateScoreList(void);
+static void infowin_UpdateWonderList(void);
+static void infowin_UpdatePlayerList(void);
+static void infowin_UpdateCivData(void);
+static void infowin_UpdatePollutionGraph(LineGraph *infoGraph,
+    sint32 &infoXCount,
+    sint32 &infoYCount,
+    double ***infoGraphData);
+static void infowin_UpdatePollutionData(void);
+static sint32 infowin_LabReady(void);
+static sint32 infowin_ChangeSetting(sint32);
+static void infowin_DisplayLab(void);
 
 void InfoCleanupAction::Execute(aui_Control *control,
 									uint32 action,
@@ -523,7 +538,9 @@ void infowin_Cleanup_Controls( void )
 #undef mycleanup
 }
 
-sint32 infowin_Init_Controls( MBCHAR *windowBlock )
+#if 0
+static sint32
+infowin_Init_Controls(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -700,15 +717,16 @@ sint32 infowin_Init_Controls( MBCHAR *windowBlock )
 
 	return 0;
 }
+#endif
 
 void infowin_SetMinRoundForGraphs(sint32 minRound)
 {
 	s_minRound = minRound;
 }
 
-sint32 infowin_LoadData( void )
+void
+infowin_LoadData(void)
 {
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
 
 	infowin_UpdateBigList();
 
@@ -726,12 +744,12 @@ sint32 infowin_LoadData( void )
 
 	infowin_UpdatePollutionData();
 
-	if (!infowin_LabReady()) s_labButton->Hide();
-
-	return 0;
+	if (!infowin_LabReady())
+		s_labButton->Hide();
 }
 
-sint32 infowin_UpdateCivData( void )
+void
+infowin_UpdateCivData(void)
 {
 	MBCHAR strbuf[256];
 
@@ -742,65 +760,56 @@ sint32 infowin_UpdateCivData( void )
 
 	Player *p = g_player[curPlayer];
 
-	if (!p) return 0;
+	if (!p)
+		return;
 
-	if (!s_infoBigList) return 0;
+	if (!s_infoBigList)
+		return;
 
 	InfoBigListItem *item = (InfoBigListItem *) s_infoBigList->GetSelectedItem();
-	if (!item) return 0;
-	else {
+	if (!item)
+		return;
 
-		Unit *unit = item->GetCity();
+	Unit *unit = item->GetCity();
 
-		sint32 turnFounded = unit->GetData()->GetCityData()->GetTurnFounded();
+	sint32 turnFounded = unit->GetData()->GetCityData()->GetTurnFounded();
 
-		const char *yearStr = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
+	const char *yearStr = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
 
 #if 0
-		sint32 yearFounded = g_theDifficultyDB->GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
+	sint32 yearFounded = g_theDifficultyDB->GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
 
-		if (yearFounded > 0)
-		{
-			sprintf(strbuf,"%d AD",yearFounded);
-		}
-		else
-		{
-
-			yearFounded *= -1;
-			sprintf(strbuf,"%d BC",yearFounded);
-		}
-#endif
-		s_foundedBox->SetText(yearStr);
-
-		sint32 turnsOld = g_turn->GetRound() - turnFounded;
-		sprintf(strbuf,"%d",turnsOld);
-		s_turnsBox->SetText(strbuf);
-
+	if (yearFounded > 0)
+	{
+		sprintf(strbuf,"%d AD",yearFounded);
 	}
+	else
+	{
 
+		yearFounded *= -1;
+		sprintf(strbuf,"%d BC",yearFounded);
+	}
+#endif
+	s_foundedBox->SetText(yearStr);
 
+	sint32 turnsOld = g_turn->GetRound() - turnFounded;
+	sprintf(strbuf,"%d",turnsOld);
+	s_turnsBox->SetText(strbuf);
 
-
-
-
-
-
-	return 0;
 }
 
-sint32 infowin_UpdateBigList( void )
+void
+infowin_UpdateBigList(void)
 {
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-	uint64 wonders = 0;
-	sint32 firstIndex = -1;
 	sint32 i;
 
 	Unit unit;
 
-	if (!g_theTopTen) return 0;
+	if (!g_theTopTen)
+		return;
 
 	g_theTopTen->CalculateBiggestCities();
 
@@ -819,11 +828,10 @@ sint32 infowin_UpdateBigList( void )
 			s_infoBigList->AddItem((c3_ListItem *)bItem);
 		}
 	}
-
-	return 0;
 }
 
-sint32 infowin_UpdateScoreList( void )
+void
+infowin_UpdateScoreList(void)
 {
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -841,9 +849,9 @@ sint32 infowin_UpdateScoreList( void )
 			walk.Next();
 		}
 	}
-	if(!pl)
-		return 0;
 
+	if(!pl)
+		return;
 
 	s_infoScoreList->Clear();
 	strcpy(ldlBlock,"InfoScoreListItem");
@@ -957,11 +965,10 @@ sint32 infowin_UpdateScoreList( void )
 	sprintf(strbuf,"%d%%",civScore);
 	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(5), strbuf, ldlBlock);
 	s_infoScoreList->AddItem((c3_ListItem *)label);
-
-	return 0;
 }
 
-sint32 infowin_UpdateWonderList( void )
+void
+infowin_UpdateWonderList(void)
 {
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -987,8 +994,6 @@ sint32 infowin_UpdateWonderList( void )
 			}
 		}
 	}
-
-	return 0;
 }
 
 
@@ -1161,19 +1166,18 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	return 0;
 }
 
-
-
-
-sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
-							sint32 &infoXCount,
-							sint32 &infoYCount,
-							double ***infoGraphData)
+void
+infowin_UpdatePollutionGraph( LineGraph *infoGraph,
+    sint32 &infoXCount,
+    sint32 &infoYCount,
+    double ***infoGraphData)
 {
 	sint32 i = 0;
 	sint32 j = 0;
 	sint32 color[k_MAX_PLAYERS];
 
-	if (!infoGraph) return 0;
+	if (!infoGraph)
+		return;
 
 	infoYCount = 0;
 	infoXCount = 0;
@@ -1210,7 +1214,7 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 	if (!infoXCount)
 	{
 		infoGraph->RenderGraph();
-		return 0;
+		return;
 	}
 
 	Assert(!*infoGraphData);
@@ -1253,11 +1257,10 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 	infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
 
 	infoGraph->RenderGraph();
-
-	return 0;
 }
 
-sint32 infowin_UpdatePlayerList( void )
+void
+infowin_UpdatePlayerList(void)
 {
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1266,7 +1269,6 @@ sint32 infowin_UpdatePlayerList( void )
 	s_infoPlayerList->Clear();
 	strcpy(ldlBlock,"InfoPlayerListItem");
 	InfoPlayerListItem *pItem = NULL;
-
 
 	sint32 color = 0;
 
@@ -1320,11 +1322,10 @@ sint32 infowin_UpdatePlayerList( void )
 		}
 		walk.Next();
 	}
-
-	return 0;
 }
 
-sint32 infowin_UpdatePollutionData( void )
+void
+infowin_UpdatePollutionData(void)
 {
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1383,11 +1384,10 @@ sint32 infowin_UpdatePollutionData( void )
 	s_pollutionBox->SetText(strbuf);
 	s_pollutionTherm->SetPercentFilled(percent);
 
-	return 0;
 }
 
-
-sint32 infowin_ChangeSetting( sint32 type )
+sint32
+infowin_ChangeSetting( sint32 type )
 {
 	sint32 oldType = s_infoSetting;
 
@@ -1524,13 +1524,10 @@ sint32 infowin_ChangeSetting( sint32 type )
 	return oldType;
 }
 
-sint32 infowin_ChangeDataSetting( sint32 type )
+sint32
+infowin_ChangeDataSetting( sint32 type )
 {
 	sint32 oldType = s_infoDataSetting;
-
-
-
-
 
 	s_infoDataSetting = type;
 
@@ -1601,11 +1598,11 @@ sint32 infowin_GetCivScore( sint32 player )
 	return result = (totalValue+baseValue);
 }
 
-sint32 infowin_DisplayLab()
+void
+infowin_DisplayLab()
 {
 
 	open_EndGame();
-	return 0;
 }
 
 
@@ -1633,13 +1630,6 @@ sint32 infowin_LabReady()
 		if(!p)
 			return FALSE;
 	}
-	EndGame *endGame = p->m_endGame;
-
-//	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++)
-//	{
-
-
-//	}
 
 	return FALSE;
 }
@@ -1662,13 +1652,7 @@ sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name)
 	return 0;
 }
 
-
-
-
-
-
-
-InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, MBCHAR *ldlBlock)
+InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1703,7 +1687,7 @@ InfoBigListItem::~InfoBigListItem()
 	m_childList->DeleteAll();
 }
 
-AUI_ERRCODE InfoBigListItem::InitCommonLdl(Unit *city, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoBigListItem::InitCommonLdl(Unit *city, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			subBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1804,8 +1788,6 @@ void InfoBigListItem::Update(void)
 	CityData *cd = m_city.GetData()->GetCityData();
 	cd->GetPop(cityPop);
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-
 	subItem = (c3_Static *)GetChildByIndex(0);
 
 	MBCHAR name[ 80 + 1 ];
@@ -1828,7 +1810,6 @@ void InfoBigListItem::Update(void)
 	subItem->SetText(strbuf);
 
 	uint64 wonders = cd->GetBuiltWonders();
-	sint32 obsolete = 0;
 	sint32 ageCount = g_theAgeDB->NumRecords();
 
 	Assert(ageCount == 5);
@@ -1876,17 +1857,11 @@ void InfoBigListItem::Update(void)
 
 sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	sint32 result = 0;
-
-	if (column < 0) return 0;
 
 	return 0;
 }
 
-
-
-
-InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
+InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1900,11 +1875,10 @@ InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint3
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE InfoWonderListItem::InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoWonderListItem::InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
-
 
 	m_city.m_id = (0);
 	m_index = index;
@@ -1964,8 +1938,6 @@ sint32 InfoWonderListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	c3_Static		*i1, *i2;
 
-	if (column < 0) return 0;
-
 	switch (column) {
 	case 0:
 	case 1:
@@ -1984,7 +1956,7 @@ sint32 InfoWonderListItem::Compare(c3_ListItem *item2, uint32 column)
 
 
 
-InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
+InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1998,7 +1970,7 @@ InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE InfoScoreListItem::InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoScoreListItem::InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -2065,7 +2037,8 @@ sint32 InfoScoreListItem::Compare(c3_ListItem *item2, uint32 column)
 
 
 
-InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
+InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval,
+    const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -2079,7 +2052,8 @@ InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *labe
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE InfoScoreLabelListItem::InitCommonLdl(MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoScoreLabelListItem::InitCommonLdl(
+    const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -2123,11 +2097,7 @@ sint32 InfoScoreLabelListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-
-
-
-
-InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -2141,7 +2111,7 @@ InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE InfoPlayerListItem::InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoPlayerListItem::InitCommonLdl(const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -2177,8 +2147,6 @@ void InfoPlayerListItem::Update(void)
 sint32 InfoPlayerListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	c3_Static		*i1, *i2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:

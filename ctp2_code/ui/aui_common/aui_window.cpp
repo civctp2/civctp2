@@ -52,7 +52,7 @@ uint32 aui_Window::m_windowClassId = aui_UniqueId();
 aui_Window::aui_Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:

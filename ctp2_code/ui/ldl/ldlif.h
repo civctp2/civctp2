@@ -11,7 +11,7 @@
 #if defined(__cplusplus)
 class ldl_datablock;
 
-ldl_datablock *ldlif_find_block(char *name);
+ldl_datablock *ldlif_find_block(const char *name);
 void ldlif_add_block_to_tree(ldl_datablock *block);
 void ldlif_remove_block_from_tree(ldl_datablock *block);
 
@@ -42,7 +42,11 @@ void ldlif_add_string_attribute(const char *name, const char *val);
 
 void ldlif_indent_log(int indent);
 void ldlif_init_log();
-void ldlif_log(const char *fmt, ...);
+void ldlif_log(const char *fmt, ...)
+#ifdef __GNUC__
+	__attribute__((__format__ (__printf__, 1, 2)))
+#endif
+	;
 
 void ldlif_allocate_stuff();
 void ldlif_deallocate_stuff();

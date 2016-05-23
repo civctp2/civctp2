@@ -22,7 +22,7 @@ extern aui_UI *g_ui;
 c3_HeaderSwitch::c3_HeaderSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -56,8 +56,8 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
-	MBCHAR *pattern,
+	const MBCHAR *text,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	sint32 state,
@@ -91,7 +91,7 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 }
 
 
-AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 

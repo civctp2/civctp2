@@ -573,7 +573,7 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 			break ;
 
 		case 4 :
-			sprintf(sExpanded, "%ld", g_player[civ->GetOwner()]->GetGold()) ;
+			sprintf(sExpanded, "%d", g_player[civ->GetOwner()]->GetGold()) ;
 			break ;
 
 		default :
@@ -789,12 +789,10 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 	{
 #define MAX_MEMBERS	15
-	struct
-		{
-		MBCHAR	*sClass ;
-
-		MBCHAR	*sMember[MAX_MEMBERS] ;
-		} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
+	struct {
+		const char	*sClass ;
+		const char	*sMember[MAX_MEMBERS] ;
+	} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
 						{ "gold",		{ "amount", NULL } },
 						{ "player",		{ "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "gold", NULL } },
 						{ "advance",	{ "name", "index", "prerequisites", "leadsto", NULL } },
@@ -1514,7 +1512,7 @@ void AgreementData::BeginTurnRecipient()
 
 
 
-			return;
+		return;
 	}
 }
 

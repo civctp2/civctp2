@@ -178,6 +178,12 @@
 #include "ctp2_menubar.h"
 
 #include <locale.h>
+#if !defined(WIN32) && !defined(LINUX)
+#	include <sys/types.h>
+#	include <sys/time.h>
+#	include <sys/resource.h>
+#	include <err.h>
+#endif
 
 #include "civscenarios.h"
 extern CivScenarios     *g_civScenarios;
@@ -1049,7 +1055,9 @@ int main_Restart()
 	return g_civApp->RestartGame();
 }
 
+#ifndef __AUI_USE_SDL__
 static HWND s_taskBar;
+#endif
 
 void main_HideTaskBar(void)
 {
@@ -1304,8 +1312,14 @@ DWORD main_GetRemainingSwapSpace(void)
 
 	fclose(meminfo);
 	return totalsize;
+#else
+	struct rlimit	rl;
+	if (getrlimit(RLIMIT_DATA, &rl)) {
+		warn("getrlimit(RLIMIT_DATA)");
+		return 0;
+	}
+	return rl.rlim_cur / 1024;
 #endif
-// Compiler error on other systems due to missing return.
 }
 
 BOOL main_VerifyRAMToRun(void)
@@ -1462,8 +1476,6 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 	}
 #endif
 }
-
-static uint32 s_guid = 0;
 
 #ifdef WIN32
 #ifndef _DEBUG
@@ -2092,12 +2104,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 int SDLMessageHandler(const SDL_Event &event)
 #endif
 {
-	AUI_ERRCODE errcode;
 
 	if ( gDone )
 		return 0;
 
 #ifndef __AUI_USE_SDL__
+	AUI_ERRCODE errcode;
 	if (g_c3ui != NULL) {
 		errcode = g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
 
@@ -2466,7 +2478,6 @@ void DisplayFrame (aui_Surface *surf)
 	char str[80];
 
 	if (is_init) {
-		g_old_last_tick;
 		is_init = 0;
 	}
 

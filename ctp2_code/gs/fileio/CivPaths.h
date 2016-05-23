@@ -110,17 +110,7 @@ public:
 
 	void	ClearCurScenarioPackPath(void);
 
-
-
-
-
-
-
-
-
-
-
-    BOOL        FindPath(C3DIR dir, int num, MBCHAR *path);
+	BOOL        FindPath(C3DIR dir, int num, MBCHAR *path);
 
 	MBCHAR *    GetSavePathString(void) const { return m_savePath; }
 

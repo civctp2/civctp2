@@ -92,12 +92,12 @@ public:
 
 	aui_Mouse(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	virtual ~aui_Mouse();
 
 protected:
 	aui_Mouse() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 	sint32 FindNumCursorsFromLdl( ldl_datablock *block );
@@ -132,7 +132,7 @@ public:
 	double		&Sensitivity( void );
 
 	aui_Cursor *GetCursor( sint32 index ) const;
-	void SetCursor( sint32 index, MBCHAR *cursor );
+	void SetCursor( sint32 index, const MBCHAR *cursor );
 
 	aui_Cursor *GetCurrentCursor( void ) const;
 	sint32		GetCurrentCursorIndex(void) ;

@@ -374,8 +374,8 @@ if ( !m_isOpen )
     if ( rect )
         SetDestRect( rect );
 
-    uint32 err;
 #ifndef USE_SDL
+    uint32 err;
     err = AVIFileOpen(
         &m_aviFile,
         m_filename,

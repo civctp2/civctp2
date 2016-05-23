@@ -206,10 +206,8 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-
-
-
-sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequence *seq )
+sint32
+sci_advancescreen_displayMyWindow(const MBCHAR *messageText, sint32 from, Sequence *seq)
 {
 	extern bool g_e3Demo;
 	if(g_e3Demo) return 0;
@@ -285,8 +283,8 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
-
-AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
+AUI_ERRCODE
+sci_advancescreen_Initialize(const MBCHAR *messageText)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -302,7 +300,8 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	{
 		s_sci_advanceScreen = new C3Window( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_STANDARD, false);
 		Assert( AUI_NEWOK(s_sci_advanceScreen, errcode) );
-		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) errcode;
+		if (!AUI_NEWOK(s_sci_advanceScreen, errcode))
+			return errcode;
 
 		s_sci_advanceScreen->Resize(s_sci_advanceScreen->Width(),s_sci_advanceScreen->Height());
 		s_sci_advanceScreen->GrabRegion()->Resize(s_sci_advanceScreen->Width(),20);
@@ -557,7 +556,7 @@ sint32 sci_advancescreen_loadList( void )
 			{
 				child->SetText(str);
 			}
-			item->SetUserData((void*)i);
+			item->SetUserData((void*)(intptr_t)i);
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
@@ -591,7 +590,8 @@ sint32 sci_advancescreen_loadList( void )
 	return 0;
 }
 
-sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
+sint32
+sci_advancescreen_updateData(const MBCHAR *messageText, BOOL defaultMessage)
 {
 	MBCHAR str[_MAX_PATH];
 	sint32 advanceTurns;

@@ -10,7 +10,7 @@
 
 ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   uint32 id,
-					   MBCHAR *ldlBlock,
+					   const MBCHAR *ldlBlock,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
@@ -30,7 +30,7 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   sint32 y,
 					   sint32 width,
 					   sint32 height,
-					   MBCHAR *pattern,
+					   const MBCHAR *pattern,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:

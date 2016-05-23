@@ -35,7 +35,7 @@ class InfoBigListItem : public c3_ListItem
 {
 public:
 
-	InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, MBCHAR *ldlBlock);
+	InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, const MBCHAR *ldlBlock);
 	~InfoBigListItem();
 
 
@@ -48,7 +48,7 @@ protected:
 	InfoBigListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(Unit *city, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(Unit *city, sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -72,20 +72,20 @@ class InfoPlayerListItem : public c3_ListItem
 {
 public:
 
-	InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
+	InfoPlayerListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
 
 	sint32	GetIndex( void ) { return m_index; }
-	MBCHAR	*GetName( void ) { return m_name; }
+	const MBCHAR	*GetName( void ) { return m_name; }
 	void	SetIndex( sint32 index ) { m_index = index; }
 
 protected:
 	InfoPlayerListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -100,7 +100,7 @@ class InfoWonderListItem : public c3_ListItem
 {
 public:
 
-	InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock);
+	InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -113,7 +113,7 @@ protected:
 	InfoWonderListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -129,7 +129,7 @@ class InfoScoreListItem : public c3_ListItem
 {
 public:
 
-	InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock);
+	InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -142,7 +142,7 @@ protected:
 	InfoScoreListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -158,7 +158,7 @@ class InfoScoreLabelListItem : public c3_ListItem
 {
 public:
 
-	InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock);
+	InfoScoreLabelListItem(AUI_ERRCODE *retval, const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -167,7 +167,7 @@ protected:
 	InfoScoreLabelListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock);
 
 public:
 
@@ -185,34 +185,13 @@ sint32  infowin_Initialize( void );
 void    infowin_Cleanup(void);
 void    infowin_Cleanup_Controls(void);
 
-sint32 infowin_Init_Controls( MBCHAR *windowBlock );
-
 void infowin_SetMinRoundForGraphs(sint32 minRound);
-
-sint32 infowin_LoadData( void );
-sint32 infowin_UpdateBigList( void );
-sint32 infowin_UpdateScoreList( void );
-sint32 infowin_UpdateWonderList( void );
-
-sint32 infowin_UpdatePlayerList( void );
-sint32 infowin_UpdateCivData( void );
-sint32 infowin_UpdatePollutionData( void );
 
 sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 							sint32 &infoXCount,
 							sint32 &infoYCount,
 							double ***infoGraphData);
 
-sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
-							sint32 &infoXCount,
-							sint32 &infoYCount,
-							double ***infoGraphData);
-
-sint32 infowin_ChangeSetting( sint32 type );
-sint32 infowin_ChangeDataSetting( sint32 type );
-sint32 infowin_DisplayLab( void );
 sint32 infowin_GetCivScore( sint32 player );
-sint32 infowin_LabReady( void );
-sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name);
 
 #endif

@@ -106,22 +106,13 @@ extern sint32				g_difficultyToSetUponLaunch;
 extern BOOL					g_setBarbarianRiskUponLaunch;
 extern sint32				g_barbarianRiskUponLaunch;
 
-
-
-
 SaveInfo					*g_savedGameRequest = NULL;
 
 LoadSaveWindow				*g_loadsaveWindow = NULL;
 
 #include "hotseatlist.h"
-
 #include "MessageBoxDialog.h"
-
 #include "TurnYearStatus.h"
-
-static uint32 s_type = LSS_TOTAL;
-static c3_Static					*s_name					= NULL;
-static aui_StringTable				*s_nameString			= NULL;
 
 void loadsavescreen_setMyType(uint32 type);
 
@@ -132,14 +123,10 @@ void loadsavescreen_deleteDialog( bool response, void *data )
 	loadsavescreen_delete();
 }
 
-
-
-
 sint32	loadsavescreen_displayMyWindow(uint32 type)
 {
 	sint32 retval=0;
 	if(!g_loadsaveWindow) { retval = loadsavescreen_Initialize(); }
-
 
 	g_loadsaveWindow->CleanUpSaveInfo();
 
@@ -618,26 +605,15 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 	}
 }
 
-void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
+void
+loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, const MBCHAR *directoryPath)
 {
-
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
-
-
-
-
-
+	sprintf(path, "%s" FILE_SEP "%s", directoryPath, saveInfo->fileName);
 
 	if (saveInfo->startInfoType != STARTINFOTYPE_NONE) {
-
-
-
-
-
-
 
 		if (saveInfo->scenarioName != NULL && strlen(saveInfo->scenarioName) > 0) {
 
@@ -654,7 +630,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 			} else {
 
 				MBCHAR tempStr[_MAX_PATH];
-				sprintf(tempStr, "%s%s", (MBCHAR *)g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
+				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
 
 				MessageBoxDialog::Information(tempStr,"CantLoadScenario",NULL, NULL, "str_ldl_MB_OK", false);
 				return;
@@ -761,7 +737,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		}
 
 		MBCHAR overridePath[_MAX_PATH];
-		sprintf(overridePath, "%s%s%s", g_civPaths->GetCurScenarioPath(), FILE_SEP, "turnlength.txt");
+		sprintf(overridePath, "%s" FILE_SEP "%s", g_civPaths->GetCurScenarioPath(), "turnlength.txt");
 
 		g_useCustomYear = false;
 
@@ -793,7 +769,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 				rewind(fp);
 				for (int i = 0; i < count; i++)
 				{
-					fscanf(fp, "%d,%[^'\n']\n", &(g_pTurnLengthOverride[i].turn), &dummy);
+					fscanf(fp, "%d,%[^'\n']\n", &(g_pTurnLengthOverride[i].turn), dummy);
 					memset(g_pTurnLengthOverride[i].text, 0, 32);
 					strncpy(g_pTurnLengthOverride[i].text, dummy, 31);
 				}
@@ -832,70 +808,9 @@ void loadsavescreen_LoadGame(void)
 	}
 
 	loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
-void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
+void loadsavescreen_SaveGame(const MBCHAR *usePath, const MBCHAR *useName)
 {
 
 	SaveInfo		*saveInfo = g_loadsaveWindow->GetSaveInfoToSave();
@@ -965,7 +880,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 
 	if(!useName) {
 
-		char *testchars="\\*\"/:|?<>";
+		const char *testchars="\\*\"/:|?<>";
 		bool charschanged=false;
 		for(i=0; (unsigned) i<strlen(saveInfo->gameName); i++)
 		{
@@ -1397,8 +1312,7 @@ void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM") );
+	const char *s = g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM");
 
 	if(g_loadsaveWindow->GetGameInfo()) {
 		MessageBoxDialog::Query( s, "ConfirmLoadSaveDelete", loadsavescreen_deleteDialog );
@@ -1585,8 +1499,7 @@ BOOL loadsavescreen_CheckOverwrite( void )
 		while (walker->IsValid()) {
 			SaveInfo *info = walker->GetObj();
 			if ( !strcmp(info->fileName, saveInfo->fileName) ) {
-				MBCHAR s[_MAX_PATH];
-				sprintf( s, g_theStringDB->GetNameStr("SAVE_OVERWRITE") );
+				const char *s = g_theStringDB->GetNameStr("SAVE_OVERWRITE");
 				//c3_TextMessage( s, k_UTILITY_TEXTMESSAGE_YESNO, loadsavescreen_OverwriteCallback );
 				MessageBoxDialog::Query( s, "ConfirmSaveOverwrite", loadsavescreen_OverwriteCallback );
 				delete walker;

@@ -65,22 +65,14 @@ public:
 
 	MBCHAR m_lname[ 101 ];
 
-
 	tech_WLList<nf_AIPlayer *> *m_aiplayerList;
 
 	bool m_receivedGuids;
 	CivGuid m_civGuids[k_MAX_PLAYERS];
 
-
-
-
 	BOOL WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
 
-
-
-
 	sint32 FindTribe( uint16 key, BOOL isAI, BOOL *isFemale = NULL );
-
 
 	BOOL AssignTribe(
 		sint32 index,
@@ -88,10 +80,6 @@ public:
 		BOOL isAI,
 		BOOL isFemale,
 		BOOL unassign );
-
-
-
-
 
 	void RequestTribe( sint32 index );
 
@@ -138,7 +126,6 @@ public:
 
 	void EnableButtonsForUnlaunch();
 
-
 	enum CONTROL
 	{
 		CONTROL_FIRST = 0,
@@ -157,13 +144,6 @@ public:
 		CONTROL_PPTSWITCH,
 		CONTROL_REVIEWBUTTON,
 
-
-
-
-
-
-
-
 		CONTROL_PLAYERSTITLESTATICTEXT,
 		CONTROL_PLAYERSSHEET,
 
@@ -176,25 +156,17 @@ public:
 		CONTROL_RULESBUTTON,
 		CONTROL_EXCLUSIONSBUTTON,
 
-
-
-
-
 		CONTROL_AGESBUTTON,
 		CONTROL_MAPSIZEBUTTON,
 		CONTROL_WORLDTYPEBUTTON,
 		CONTROL_WORLDSHAPEBUTTON,
 		CONTROL_DIFFICULTYBUTTON,
 
-
-
-
 		CONTROL_RULESTITLESTATICTEXT,
 		CONTROL_RULESTITLESTATICTEXT2,
 		CONTROL_RULESSHEET,
 
 		CONTROL_BLOODLUSTSWITCH,
-
 
 		CONTROL_POLLUTIONSWITCH,
 
@@ -203,7 +175,6 @@ public:
 		CONTROL_HANDICAPPINGSWITCH,
 		CONTROL_GOLDSTATICTEXT,
 		CONTROL_PWSTATICTEXT,
-
 
 		CONTROL_CIVPOINTSBUTTON,
 		CONTROL_PWPOINTSBUTTON,
@@ -223,13 +194,6 @@ public:
 
 		CONTROL_EXCLUSIONSOKBUTTON,
 
-
-
-
-
-
-
-
 		CONTROL_OKBUTTON,
 		CONTROL_CANCELBUTTON,
 		CONTROL_LAST,
@@ -243,7 +207,6 @@ public:
 
 	void	UpdateTribeSwitches( void );
 
-
 protected:
 	void	UpdateConfig( void );
 	void	UpdateDisplay( void );
@@ -252,12 +215,6 @@ protected:
 
 	Mode m_mode;
 	BOOL m_isScenarioGame;
-
-
-
-
-
-
 
 	uint32 m_tickGame;
 	uint32 m_tickPlayer;
@@ -293,42 +250,37 @@ protected:
 
 	ns_ScenarioInfo m_scenInfo;
 
-
 	friend class PlayStyleDropDownAction;
-
-
-
 
 	static void PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-
-    AUI_ACTION_BASIC(GameNameTextFieldAction);
-    AUI_ACTION_BASIC(PPTSwitchAction);
+	AUI_ACTION_BASIC(GameNameTextFieldAction);
+	AUI_ACTION_BASIC(PPTSwitchAction);
 	AUI_ACTION_BASIC(KickButtonAction);
-    AUI_ACTION_BASIC(InfoButtonAction);
-    AUI_ACTION_BASIC(OKButtonAction);
+	AUI_ACTION_BASIC(InfoButtonAction);
+	AUI_ACTION_BASIC(OKButtonAction);
 	AUI_ACTION_BASIC(CancelButtonAction);
-    AUI_ACTION_BASIC(ReviewButtonAction);
+	AUI_ACTION_BASIC(ReviewButtonAction);
 	AUI_ACTION_BASIC(LockSwitchAction);
-    AUI_ACTION_BASIC(AddAIButtonAction);
-    AUI_ACTION_BASIC(DialogBoxPopDownAction);
-    AUI_ACTION_BASIC(PlayersListBoxAction);
+	AUI_ACTION_BASIC(AddAIButtonAction);
+	AUI_ACTION_BASIC(DialogBoxPopDownAction);
+	AUI_ACTION_BASIC(PlayersListBoxAction);
 	AUI_ACTION_BASIC(PlayStyleDropDownAction);
 	AUI_ACTION_BASIC(RulesButtonAction);
-    AUI_ACTION_BASIC(ExclusionsButtonAction);
+	AUI_ACTION_BASIC(ExclusionsButtonAction);
 	AUI_ACTION_BASIC(RulesOKButtonAction);
-    AUI_ACTION_BASIC(ExclusionsOKButtonAction);
-    AUI_ACTION_BASIC(DynamicJoinSwitchAction);
-    AUI_ACTION_BASIC(HandicappingSwitchAction);
+	AUI_ACTION_BASIC(ExclusionsOKButtonAction);
+	AUI_ACTION_BASIC(DynamicJoinSwitchAction);
+	AUI_ACTION_BASIC(HandicappingSwitchAction);
 	AUI_ACTION_BASIC(BloodlustSwitchAction);
-    AUI_ACTION_BASIC(PollutionSwitchAction);
-    AUI_ACTION_BASIC(CivPointsButtonAction);
-    AUI_ACTION_BASIC(PwPointsButtonAction);
+	AUI_ACTION_BASIC(PollutionSwitchAction);
+	AUI_ACTION_BASIC(CivPointsButtonAction);
+	AUI_ACTION_BASIC(PwPointsButtonAction);
 	AUI_ACTION_BASIC(AgesButtonAction);
-    AUI_ACTION_BASIC(MapSizeButtonAction);
-    AUI_ACTION_BASIC(WorldTypeButtonAction);
-    AUI_ACTION_BASIC(WorldShapeButtonAction);
-    AUI_ACTION_BASIC(DifficultyButtonAction);
+	AUI_ACTION_BASIC(MapSizeButtonAction);
+	AUI_ACTION_BASIC(WorldTypeButtonAction);
+	AUI_ACTION_BASIC(WorldShapeButtonAction);
+	AUI_ACTION_BASIC(DifficultyButtonAction);
 
 	class UnitExclusionAction : public aui_Action
 	{
@@ -386,41 +338,32 @@ void AllinoneAgesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	void* cookie);
 void AllinoneMapSizeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	void* cookie);
 void AllinoneWorldShapeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	void* cookie);
 void AllinoneTribeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
-
-
-
-
-
-
-
-
-
+	void* cookie);
 
 void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	void* cookie);
 void AllinoneWorldTypeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	void* cookie);
 
 #endif

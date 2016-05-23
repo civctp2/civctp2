@@ -164,7 +164,7 @@ void ProfileEdit::FillList()
 			continue;
 		}
 
-		char *itemname = NULL;
+		const char *itemname = NULL;
 		switch(walk.GetObj()->m_type) {
 			case PV_NUM:
 				itemname = "ProfileEditNumItem";

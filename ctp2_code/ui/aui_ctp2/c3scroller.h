@@ -18,7 +18,7 @@ public:
 	C3Scroller(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	C3Scroller(
@@ -29,14 +29,14 @@ public:
 		sint32 width,
 		sint32 height,
 		BOOL isVertical,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~C3Scroller() {}
 
 protected:
 	C3Scroller() : aui_Ranger() {}
-	AUI_ERRCODE	InitCommon( MBCHAR *ldlBlock );
+	AUI_ERRCODE	InitCommon(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( BOOL isVertical );
 	AUI_ERRCODE CreateButtonsAndThumb( void );
 

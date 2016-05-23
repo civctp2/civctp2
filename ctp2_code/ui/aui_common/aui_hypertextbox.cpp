@@ -11,7 +11,7 @@
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -61,7 +61,7 @@ aui_HyperTextBox::aui_HyperTextBox(
 }
 
 
-AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -109,7 +109,7 @@ AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 }
 
 
-AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBox::CreateRanger(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

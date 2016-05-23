@@ -104,7 +104,7 @@ void victorymoviewin_Initialize(Sequence *seq)
 
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 {
-	MBCHAR		*whichMovie;
+	const MBCHAR		*whichMovie;
 
 	Assert(g_victoryMovieWindow != NULL);
 	if (g_victoryMovieWindow == NULL) return;
@@ -138,8 +138,7 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 
     default:
         {
-            BOOL I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE=0;
-            Assert(I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE);
+            Assert(!"I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE");
             whichMovie = "VICTORY_LOST_INEPT";
         }
 	}
@@ -152,7 +151,7 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 	sint32 index = g_theVictoryMovieDB->FindTypeIndex(whichMovie);
 	Assert(index >= 0);
 
-	MBCHAR *filename = g_theVictoryMovieDB->GetMovieFilename(index);
+	const MBCHAR *filename = g_theVictoryMovieDB->GetMovieFilename(index);
 	g_victoryMovieWindow->SetMovie(filename);
 
 	AUI_ERRCODE		errcode;

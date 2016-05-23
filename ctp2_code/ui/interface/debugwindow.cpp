@@ -19,7 +19,7 @@ extern ColorSet *g_colorSet;
 DebugWindow::DebugWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -42,7 +42,7 @@ DebugWindow::DebugWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type)
 	:
 	C3Window( retval, id, x, y, width, height, bpp, pattern, type )
@@ -80,29 +80,13 @@ AUI_ERRCODE DebugWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
-void DebugWindow::AddText(MBCHAR *text)
-{
-
-
-	if (GetParent() == NULL) return;
-
-
-
-
-
-	if (m_textBox)
-		m_textBox->AppendText( text , g_colorSet->GetColorRef(COLOR_BLACK),
-            FALSE, FALSE);
-}
-
 void DebugWindow::SetDebugMask(uint32 m)
 
 {
     m_debug_mask = m;
 }
 
-void DebugWindow::AddText(const uint32 m, MBCHAR *text)
+void DebugWindow::AddText(const uint32 m, const MBCHAR *text)
 
 {
     if (m & m_debug_mask) {

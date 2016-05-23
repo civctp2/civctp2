@@ -1093,9 +1093,6 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
 
-	CityData *cityData1 = city1.GetCityData();
-	CityData *cityData2 = city2.GetCityData();
-
 	sint32 result = 0;
 
 	ctp2_Static *column1 = GetListItemColumn(item1, column);
@@ -1250,9 +1247,6 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
 
-	CityData *cityData1 = city1.GetCityData();
-	CityData *cityData2 = city2.GetCityData();
-
 	sint32 result = 0;
 
 	ctp2_Static *column1 = GetListItemColumn(item1, column);
@@ -1325,8 +1319,6 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 
 	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
 
-	bool governorStatus = false;
-
 	ctp2_ListBox *visibleList = dialog->m_resourceList;
 	if(visibleList->IsHidden())
 		visibleList = dialog->m_statusList;
@@ -1392,8 +1384,6 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 		return;
 
 	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
-
-	bool governorStatus = false;
 
 	ctp2_ListBox *visibleList = dialog->m_resourceList;
 	if(visibleList->IsHidden())

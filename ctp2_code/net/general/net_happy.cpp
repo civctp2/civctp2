@@ -284,7 +284,11 @@ NetPlayerHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	m_playerHappiness = g_player[m_owner]->m_global_happiness;
 	PULLBYTE(m_isInitialPacket);
 
+#ifdef _DEBUG
 #define PDCHK2(x) {double tmp = x; PULLDOUBLE(x); if((m_owner == g_network.GetPlayerIndex()) && !m_isInitialPacket) { Assert(tmp == x); }}
+#else
+#define PDCHK2(x)
+#endif
 
     PDCHK2(m_playerHappiness->m_workday_per_person);
     PULLLONG(m_playerHappiness->m_unitless_workday);

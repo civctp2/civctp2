@@ -11,7 +11,7 @@
 class MessageControlPanel {
 public:
 
-	MessageControlPanel(MBCHAR *ldlBlock);
+	MessageControlPanel(const MBCHAR *ldlBlock);
 };
 
 #endif

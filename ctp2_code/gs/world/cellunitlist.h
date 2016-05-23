@@ -73,7 +73,7 @@ public:
 	CellUnitList(const DynamicArray<Unit> &copyme);
 	void Serialize(CivArchive &archive);
 
-	virtual sint32 Insert(Unit id);
+	virtual BOOL Insert(const Unit &id);
 	sint32 Del(const Unit &delme);
 	sint32 DelIndex(const sint32 index);
 
@@ -103,7 +103,7 @@ public:
 
 	void Clear() { m_nElements = 0; }
 
-	const sint32 Num() const { if(!this) return 0; else return m_nElements; }
+	const sint32 Num() const { return m_nElements; }
 	void KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 	sint32 IsPresent(const Unit &u);
 

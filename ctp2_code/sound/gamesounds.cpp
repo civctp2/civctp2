@@ -39,7 +39,7 @@
 
 extern SoundManager	*g_soundManager;
 
-GameSoundData g_gameSounds[] = {
+static GameSoundData g_gameSounds[] = {
 	{GAMESOUNDS_SPACE_LAUNCH,		"SOUND_ID_SPACE_LAUNCH"},
 
 	{GAMESOUNDS_BUILDING_STARTED,	"SOUND_ID_BUILDING_STARTED"},

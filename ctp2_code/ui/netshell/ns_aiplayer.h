@@ -37,9 +37,9 @@ public:
 
 	void Update( NETFunc::AIPlayer *aiplayer );
 
-	char *m_name;
+	const char *m_name;
 
-	char *m_tribe;
+	const char *m_tribe;
 
 	int m_civpoints;
 	int m_pwpoints;

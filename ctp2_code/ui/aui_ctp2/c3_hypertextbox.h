@@ -64,7 +64,7 @@ public:
 	c3_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		bool draw_frame = true
@@ -76,7 +76,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~c3_HyperTextBox();
@@ -84,9 +84,9 @@ public:
 protected:
 	bool m_draw_frame;
 	c3_HyperTextBox() : aui_HyperTextBox() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateRanger( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateRanger(const MBCHAR *ldlBlock = NULL);
 
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);

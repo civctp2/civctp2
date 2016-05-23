@@ -36,7 +36,7 @@ public:
 	ns_Server(NETFunc::Server * server);
 	void Update( NETFunc::Server *server );
 
-	char *m_name;
+	const char *m_name;
 	int m_players;
 	int m_ping;
 };

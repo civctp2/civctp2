@@ -32,7 +32,8 @@ extern uint8 g_messageRespButtonWidth;
 extern uint8 g_messageRespDropPadding;
 
 
-MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval,
+    const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -46,7 +47,8 @@ MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *na
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE MessageResponseListItem::InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE MessageResponseListItem::InitCommonLdl(
+    const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -98,7 +100,7 @@ sint32 MessageResponseListItem::Compare(c3_ListItem *item2, uint32 column)
 
 MessageResponseStandard::MessageResponseStandard(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	MessageWindow *window )
 {
 	*retval = InitCommon( ldlBlock, window );
@@ -107,14 +109,13 @@ MessageResponseStandard::MessageResponseStandard(
 }
 
 
-AUI_ERRCODE MessageResponseStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow *window )
+AUI_ERRCODE MessageResponseStandard::InitCommon(const MBCHAR *ldlBlock, MessageWindow *window )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	ctp2_Button		*button, *lastbutton = NULL;
 	MessageResponseAction	*action = NULL;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	const MBCHAR	*text = NULL;
-	sint32			count = 0;
 	sint32			responseCount = 0;
 	SlicButton		*sButton = NULL;
 
@@ -277,7 +278,7 @@ MessageResponseStandard::~MessageResponseStandard()
 
 MessageResponseDropdown::MessageResponseDropdown(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	MessageWindow *window )
 {
 	*retval = InitCommon( ldlBlock, window );
@@ -286,12 +287,11 @@ MessageResponseDropdown::MessageResponseDropdown(
 }
 
 
-AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow *window )
+AUI_ERRCODE MessageResponseDropdown::InitCommon(const MBCHAR *ldlBlock, MessageWindow *window )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	SlicButton		*sButton = NULL;
-	c3_Static		*item = NULL;
 	uint32			i = 0;
 	const MBCHAR	*text;
 
@@ -316,7 +316,7 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	m_submitButton->TextReloadFont();
 
-	if ( const MBCHAR *submitText = window->GetMessage()->AccessData()->GetSubmitString() )
+	if (const MBCHAR *submitText = window->GetMessage()->AccessData()->GetSubmitString())
 		m_submitButton->SetText( submitText );
 
 	m_submitButton->SetAction( m_action );

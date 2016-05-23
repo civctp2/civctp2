@@ -199,7 +199,7 @@ class CityWindow {
 	void Project();
 	void SetValueBox(MBCHAR *component, sint32 val);
 
-	static void PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlock);
+	static void PopulateQueueList(CityData *cd, ctp2_ListBox *lb, const char *itemBlock);
 
 	static void SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, ctp2_HyperTextBox *hyperTextBox, aui_Region *parent,
 								   ctp2_Button *itemButton = NULL);

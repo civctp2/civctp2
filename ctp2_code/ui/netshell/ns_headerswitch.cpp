@@ -17,7 +17,7 @@
 ns_HeaderSwitch::ns_HeaderSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -78,8 +78,7 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -91,7 +90,7 @@ AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *icon = block->GetString( k_NS_HEADERSWITCH_LDL_ICON );
+	const MBCHAR *icon = block->GetString(k_NS_HEADERSWITCH_LDL_ICON);
 
 	AUI_ERRCODE errcode = InitCommon( icon );
 	Assert( AUI_SUCCESS(errcode) );
@@ -100,8 +99,7 @@ AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE ns_HeaderSwitch::InitCommon( MBCHAR *icon )
+AUI_ERRCODE ns_HeaderSwitch::InitCommon(const MBCHAR *icon)
 {
 	m_icon = NULL;
 
@@ -112,7 +110,6 @@ AUI_ERRCODE ns_HeaderSwitch::InitCommon( MBCHAR *icon )
 	return AUI_ERRCODE_OK;
 }
 
-
 ns_HeaderSwitch::~ns_HeaderSwitch()
 {
 	if ( m_icon )
@@ -122,8 +119,7 @@ ns_HeaderSwitch::~ns_HeaderSwitch()
 	}
 }
 
-
-AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
+AUI_ERRCODE ns_HeaderSwitch::SetIcon(const MBCHAR *icon)
 {
 	Assert( icon != NULL );
 	if ( !icon ) return AUI_ERRCODE_INVALIDPARAM;
@@ -138,7 +134,6 @@ AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ns_HeaderSwitch::DrawThis(
 	aui_Surface *surface,

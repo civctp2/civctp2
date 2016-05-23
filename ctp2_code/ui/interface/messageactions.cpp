@@ -64,8 +64,6 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 	if ( action != 0) return;
 
 	Message *message;
-	MessageList *messagelist = NULL;
-	tech_WLList<MessageIconWindow *>	*windowlist = NULL;
 
 	if ( !(message = m_iconWindow->GetMessage( ))) return;
 
@@ -329,7 +327,7 @@ void MessageResponseSubmitAction::Execute( aui_Control *control, uint32 action, 
 {
 	if ( action != ( uint32 )AUI_LISTBOX_ACTION_SELECT ) return;
 
-	Message *message = m_window->GetMessage();
+	m_window->GetMessage();
 
 	sint32 index = ((aui_ListBox *)m_dropdown)->GetSelectedItemIndex();
 
@@ -364,7 +362,6 @@ void ChangeOffsetMessageIconButtonAction::Execute( aui_Control *control, uint32 
 		m_messagelist->ChangeOffset( m_offset, m_offsetflag );
 };
 
-
 void ChangeOffsetDestroyButtonAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 
@@ -374,7 +371,6 @@ void ChangeOffsetDestroyButtonAction::Execute( aui_Control *control, uint32 acti
 		messagewin_LessMessagesIcon( FALSE );
 };
 
-
 void MessageAdviceDismissAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -382,7 +378,6 @@ void MessageAdviceDismissAction::Execute( aui_Control *control, uint32 action, u
 	g_c3ui->AddAction( new MessageAdviceDestroyAction( ) );
 
 }
-
 
 void MessageAdviceDestroyAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {

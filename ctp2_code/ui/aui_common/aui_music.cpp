@@ -273,14 +273,13 @@ aui_Redbook::SetVolume( uint8 volume )
 	return retval;
 }
 
-
 sint32
 aui_Redbook::CDInitVolume()
 {
+#ifndef USE_SDL
 	int     HowManyAuxDevices;
 	BOOL    FoundCDRom = FALSE;
 	int     i;
-#ifndef USE_SDL
 	AUXCAPS AuxDeviceCapabilities;
 #endif
 	int     CDRomID = -1;

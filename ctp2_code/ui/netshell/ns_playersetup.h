@@ -127,7 +127,7 @@ public:
 	ns_PlayerSetup(nf_PlayerSetup * playersetup);
 	void Update( nf_PlayerSetup *playersetup );
 
-	char *m_name;
+	const char *m_name;
 };
 
 #endif

@@ -77,7 +77,7 @@ class MainControlPanel;
 class MainControlPanel {
 public:
 
-	static void Initialize(MBCHAR *ldlBlock);
+	static void Initialize(const MBCHAR *ldlBlock);
 
 	static void InitializeEvents();
 
@@ -106,7 +106,7 @@ public:
 
 	static aui_ProgressBar* GetProgressBar();
 
-	MainControlPanel(MBCHAR *ldlBlock);
+	MainControlPanel(const MBCHAR *ldlBlock);
 
 	virtual ~MainControlPanel();
 

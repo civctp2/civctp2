@@ -2276,7 +2276,7 @@ char * UnitData::GetText()
     return m_text;
 }
 
-void UnitData::SetText(char *str)
+void UnitData::SetText(const char *str)
 {
     strcpy(m_text, str);
 }
@@ -4667,7 +4667,7 @@ double UnitData::GetDistanceToCapitol() const
 
 BOOL UnitData::GetCurrentOrderString(StringId &id) const
 {
-	char *name = NULL;
+	const char *name = NULL;
 
 	if(Flag(k_UDF_IS_ENTRENCHED) || Flag(k_UDF_IS_ENTRENCHING)) {
 		name = "UNIT_ORDER_ENTRENCH";

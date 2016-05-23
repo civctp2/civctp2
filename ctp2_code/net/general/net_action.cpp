@@ -391,7 +391,6 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				break;
 			}
 
-			PLAYER_INDEX owner = unit.GetOwner();
 			if(g_selected_item->GetCurPlayer() == index) {
 				g_network.Bookmark(id);
 				unit.Settle();

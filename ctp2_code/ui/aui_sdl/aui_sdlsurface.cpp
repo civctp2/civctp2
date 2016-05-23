@@ -116,9 +116,8 @@ BOOL aui_SDLSurface::IsOK( void ) const
 
 
 
-AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){
-
-    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
+{
 
     // must lock the mutex first!
     SDL_LockMutex(m_bltMutex);

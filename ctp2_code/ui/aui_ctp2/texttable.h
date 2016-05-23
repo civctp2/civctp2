@@ -24,7 +24,7 @@ public:
 	TextTable(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		aui_Surface *surface = NULL);
@@ -36,7 +36,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 columns,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		uint32 size = 0,
@@ -46,7 +46,7 @@ public:
 protected:
 	TextTable() : aui_ListBox() {}
 	AUI_ERRCODE InitCommon( uint32 columns = 0, aui_Surface *surface = NULL );
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, aui_Surface *surface = NULL );
+	AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, aui_Surface *surface = NULL);
 	AUI_ERRCODE	CreateRangers( void );
 
 public:

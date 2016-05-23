@@ -14,7 +14,7 @@ class c3_ListItem : public aui_Item, public PatternBase
 {
 public:
 
-	c3_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
+	c3_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock);
 
 	virtual ~c3_ListItem();
 
@@ -46,7 +46,7 @@ protected:
 
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 	c3_ListItem() : aui_Item() {}
 
@@ -56,19 +56,19 @@ class SingleListItem : public c3_ListItem
 {
 public:
 
-	SingleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *ldlBlock);
+	SingleListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 value, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
 
-	MBCHAR	*GetName( void ) { return m_name; }
+	const MBCHAR	*GetName( void ) { return m_name; }
 	sint32	GetValue( void ) { return m_value; }
 
 protected:
 	SingleListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *name,sint32 value, const MBCHAR *ldlBlock);
 
 public:
 

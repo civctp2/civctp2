@@ -54,7 +54,6 @@ extern C3UI				*g_c3ui;
 extern ProfileDB		*g_theProfileDB;
 
 static c3_PopupWindow	*s_musicTrackScreen	= NULL;
-static c3_Button		*s_accept			= NULL;
 static c3_ListBox		*s_trackList		= NULL;
 static aui_StringTable	*s_trackNames		= NULL;
 static sint32			s_trackNum			= -1;
@@ -127,7 +126,6 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	{
 		s_musicTrackScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicTrackScreen, errcode) );
-		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) errcode;
 
 		s_musicTrackScreen->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
 		s_musicTrackScreen->GrabRegion()->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
@@ -153,8 +151,8 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "MusicTrackListItem");
 	for (sint32 i=0; i<s_trackNames->GetNumStrings(); i++) {
-		MBCHAR					*s = s_trackNames->GetString(i);
-		MusicTrackListItem		*item = new MusicTrackListItem(&errcode, i, s, controlBlock);
+		const MBCHAR		*s = s_trackNames->GetString(i);
+		MusicTrackListItem	*item = new MusicTrackListItem(&errcode, i, s, controlBlock);
 		Assert(item);
 		if (item) {
 			s_trackList->AddItem((aui_Item *)item);
@@ -163,9 +161,6 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
 
 AUI_ERRCODE musictrackscreen_Cleanup()
 {
@@ -205,11 +200,8 @@ void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 da
 	}
 }
 
-
-
-
-
-MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
+MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval,
+    sint32 trackNum, const MBCHAR *name, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -220,10 +212,10 @@ MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBC
 
 	*retval = InitCommonLdl(trackNum, name, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
+AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum,
+    const MBCHAR *name, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

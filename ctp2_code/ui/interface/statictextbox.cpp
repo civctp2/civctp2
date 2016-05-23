@@ -25,7 +25,7 @@ StaticTextBox::StaticTextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 size,
 	sint32 bevel)
@@ -36,15 +36,13 @@ StaticTextBox::StaticTextBox(
 {
 
 
-
-
 	m_bevel = bevel;
 }
 
 StaticTextBox::StaticTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -67,12 +65,8 @@ StaticTextBox::StaticTextBox(
 	}
 }
 
-
 AUI_ERRCODE StaticTextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 

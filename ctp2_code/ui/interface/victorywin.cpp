@@ -141,25 +141,13 @@ static ctp2_Static              **s_staticControls;
 static aui_StringTable          *s_stringTable;
 
 static HighScoreWindowPopup     *s_highScoreWin;
-
-
-
-
-
-
 static LineGraph                *s_graph;
 static ctp2_ListBox             *s_graphList;
 static ctp2_Button              *s_lineOrZeroSumButton;
 static BOOL                     s_lineGraph;
 static ctp2_ListBox             *s_scoreList;
-
 static ctp2_ListBox             *s_wonderList;
-
-static ctp2_Static              *s_wonderBlock;
-
-
 static ctp2_Static              **s_wonderIcons;
-
 
 void VictoryWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -259,39 +247,24 @@ sint32 victorywin_SetLineGraph( BOOL lineGraph)
 	return 0;
 }
 
-
-
-
-
-sint32 victorywin_Initialize( sint32 type )
+sint32
+victorywin_Initialize(sint32 type)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_victoryWindow )
 	{
-
 		victorywin_UpdateData(type);
-
 		return 0;
 	}
-
-	strcpy(windowBlock, "VictoryWindow");
 
 	g_victoryWindow = new VictoryWindow(&errcode);
 	Assert( AUI_NEWOK(g_victoryWindow, errcode) );
 	if ( !AUI_NEWOK(g_victoryWindow, errcode) ) return -1;
 
-
-
-
-
-
-
 	g_victoryWindow->m_window->SetStronglyModal(TRUE);
 
-	victorywin_Init_Controls(windowBlock);
-
+	victorywin_Init_Controls("VictoryWindow");
 
 	s_highScoreWin = new HighScoreWindowPopup(type);
 
@@ -299,7 +272,7 @@ sint32 victorywin_Initialize( sint32 type )
 	Assert( AUI_NEWOK(s_stringTable, errcode) );
 	if ( !AUI_NEWOK(s_stringTable, errcode) ) return -2;
 
-	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
+	errcode = aui_Ldl::SetupHeirarchyFromRoot("VictoryWindow");
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
@@ -334,38 +307,6 @@ sint32 victorywin_RemoveWindow( void )
 void victorywin_Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
-	sint32 i = 0;
-
-	if ( !g_victoryWindow );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	mycleanup( s_highScoreWin );
 
@@ -377,31 +318,17 @@ void victorywin_Cleanup( void )
 #undef mycleanup
 }
 
-sint32 victorywin_AddWonders( MBCHAR *windowBlock )
+sint32
+victorywin_AddWonders(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	int i = 0;
-	int j = 0;
+	int i;
 
 	sint32 iconNum = k_VICWIN_WONDERICON_MAX;
 	s_wonderIcons = new ctp2_Static *[iconNum];
 
-
-
-
-
-	sint32 xPos = 10;
-	sint32 yPos = 5;
-
-	sint32 wonderCount = 0;
-
-	sprintf( controlBlock, "%s", "TabGroup.Tab1.TabPanel.WonderList" );
-	s_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
-
-
-
+	s_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, "TabGroup.Tab1.TabPanel.WonderList");
 
 
 	s_wonderList->SetAbsorbancy( FALSE );
@@ -447,10 +374,11 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	return 0;
 
 }
-sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
+
+sint32
+victorywin_Init_Controls(const MBCHAR *windowBlock)
 {
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sint32 i = 0;
 
@@ -462,158 +390,34 @@ sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
 
 	s_staticControls[k_VICWIN_MAIN_TITLE] = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Title");
 
-	sprintf(tabBlock, "%s", "TabGroup.Tab2.TabPanel");
-
 	for ( i = 0 ; i < k_VICWIN_STATIC_MAX - 1; i++ )
 	{
-		sprintf( controlBlock, "%s.StaticText%d", tabBlock, i );
+		sprintf(controlBlock, "TabGroup.Tab2.TabPanel.StaticText%d", i);
 		s_staticControls[i] = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, controlBlock);
 	}
 
-	sprintf(controlBlock, "%s.%s", tabBlock, "ScoreList");
-	s_scoreList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
+	s_scoreList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, "TabGroup.Tab2.TabPanel.ScoreList");
 
-	sprintf(tabBlock, "%s", "TabGroup.Tab3.TabPanel");
-	sprintf(controlBlock, "%s.%s", tabBlock, "Graph");
-	s_graph = (LineGraph *)aui_Ldl::GetObject(windowBlock, controlBlock);
+	s_graph = (LineGraph *)aui_Ldl::GetObject(windowBlock, "TabGroup.Tab3.TabPanel.Graph");
 
-	sprintf(controlBlock, "%s.%s", tabBlock, "LineOrZeroSum");
-	s_lineOrZeroSumButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, controlBlock);
+	s_lineOrZeroSumButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "TabGroup.Tab3.TabPanel.LineOrZeroSum");
 	s_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, NULL);
 
 	victorywin_SetLineGraph( false );
 	s_graph->EnableYNumber(FALSE);
 	s_graph->EnablePrecision(FALSE);
 
+	s_graphList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, "TabGroup.Tab3.TabPanel.GraphList");
 
-	sprintf(controlBlock, "%s.%s", tabBlock, "GraphList");
-	s_graphList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
-
-	sprintf(controlBlock, "%s.%s", windowBlock, "TabGroup");
+	sprintf(controlBlock, "%s.TabGroup", windowBlock);
 	ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(controlBlock);
-	sprintf(controlBlock, "%s.%s", controlBlock, "Tab2");
+	sprintf(controlBlock, "%s.Tab2", controlBlock);
 	tabGroup->SelectTab((ctp2_Tab *)aui_Ldl::GetObject(controlBlock));
 
 	victorywin_AddWonders(windowBlock);
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 sint32 victorywin_UpdateData( sint32 type )
 {
@@ -787,8 +591,6 @@ void HighScoreListItem::Update(void)
 sint32 HighScoreListItem::Compare(ctp2_ListItem *item2, uint32 column)
 {
 	c3_Static		*i1, *i2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:

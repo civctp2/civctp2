@@ -122,7 +122,7 @@ public:
 	aui_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_Ranger(
@@ -140,7 +140,7 @@ public:
 
 protected:
 	aui_Ranger() : aui_Control() {}
-	AUI_ERRCODE	InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE	InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(
 		AUI_RANGER_TYPE type,
 		AUI_RANGER_ORIENTATION orientation,
@@ -239,7 +239,7 @@ protected:
 	aui_Button *CreateArrowButton(const MBCHAR *ldlBlock,
 		const MBCHAR *autoLdlName, const MBCHAR *ldlName);
 
-	AUI_ERRCODE CreateButtonsAndThumb(MBCHAR *ldlBlock = NULL);
+	AUI_ERRCODE CreateButtonsAndThumb(const MBCHAR *ldlBlock= NULL);
 
 	AUI_RANGER_TYPE			m_type;
 	AUI_RANGER_ORIENTATION	m_orientation;

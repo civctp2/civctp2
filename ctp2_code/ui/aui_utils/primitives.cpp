@@ -115,8 +115,6 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	uint16 *pDest;
@@ -330,8 +328,6 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 		pSurfBase = pSurface->Buffer();
 	}
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	uint16 *pDestPixel;
@@ -401,8 +397,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -623,9 +617,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
 
-
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -837,10 +828,7 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
-
 
 	uint16 *pDestPixel;
 
@@ -975,8 +963,6 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	uint16 *pDest;
@@ -1759,8 +1745,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -1931,8 +1915,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2088,8 +2070,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2252,8 +2232,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2337,8 +2315,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2425,8 +2401,6 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2615,8 +2589,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2790,8 +2762,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -2995,8 +2965,6 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -3117,8 +3085,6 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -3305,8 +3271,6 @@ void primitives_HackTileDraw(aui_Surface *pSurface)
 	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	Pixel16 srcPixel;
@@ -3383,8 +3347,6 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 		errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 		if ( errcode != AUI_ERRCODE_OK ) return;
 
-		sint32 surfWidth = pSurface->Width();
-		sint32 surfHeight = pSurface->Height();
 		sint32 surfPitch = pSurface->Pitch();
 
 		Pixel16 srcPixel;
@@ -3497,8 +3459,6 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	if (x1 > x2) {
@@ -3602,8 +3562,6 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	if (x1 > x2) {
@@ -3753,16 +3711,10 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 		pDstBase = pDstSurface->Buffer();
 	}
 
-	sint32 oldSurfWidth = pOldSurface->Width();
-	sint32 oldSurfHeight = pOldSurface->Height();
 	sint32 oldSurfPitch = pOldSurface->Pitch();
 
-	sint32 newSurfWidth = pNewSurface->Width();
-	sint32 newSurfHeight = pNewSurface->Height();
 	sint32 newSurfPitch = pNewSurface->Pitch();
 
-	sint32 dstSurfWidth = pDstSurface->Width();
-	sint32 dstSurfHeight = pDstSurface->Height();
 	sint32 dstSurfPitch = pDstSurface->Pitch();
 
 	uint16 *pDestPixel;
@@ -3883,8 +3835,6 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 		pBase = pSurface->Buffer();
 	}
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	uint16 *pDestPixel;

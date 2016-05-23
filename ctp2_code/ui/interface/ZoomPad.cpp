@@ -6,7 +6,7 @@
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 
-ZoomPad::ZoomPad(MBCHAR *ldlBlock) :
+ZoomPad::ZoomPad(const MBCHAR *ldlBlock) :
 m_zoomIn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "ZoomPad.ZoomInButton"))),
 m_zoomOut(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "ZoomPad.ZoomOutButton")))
 {

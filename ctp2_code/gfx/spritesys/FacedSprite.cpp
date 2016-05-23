@@ -138,7 +138,7 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 				spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 
 				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &(m_framesSizes[facing][i])); //battlebug?never called!
-                                printf("%s L%d: m_frames[facing][i] = %#X\n", __FILE__, __LINE__, m_frames[facing][i]);
+                                printf("%s L%d: m_frames[facing][i] = %p\n", __FILE__, __LINE__, m_frames[facing][i]);
 
 				if (shadow)
 					spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
@@ -234,7 +234,7 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
                                                  //in Sprite.cpp L415 it is used as a double pointer!
 
     if (!frame) {
-        printf("%s L%d: frames = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
+        printf("%s L%d: frames = %p. This shouldn't happen!\n", __FILE__, __LINE__, frame);
         return;
         }
 
@@ -341,7 +341,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
         : m_frames[facingIndex][m_currentFrame];
 
     if (!frame) {
-        printf("%s L%d: frame = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
+        printf("%s L%d: frame = %p. This shouldn't happen!\n", __FILE__, __LINE__, frame);
         return;
         }
 
@@ -414,7 +414,7 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
         : m_frames[facingIndex][m_currentFrame];
 
     if (!frame) {
-        printf("%s L%d: frame = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
+        printf("%s L%d: frame = %p. This shouldn't happen!\n", __FILE__, __LINE__, frame);
         return;
         }
 
@@ -571,7 +571,7 @@ void FacedSprite::Export(FILE *file)
 
 	fprintf(file, "\t{\n");
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
+	fprintf(file, "\t\t%s\t%zd\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
 
 	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
 
@@ -581,7 +581,7 @@ void FacedSprite::Export(FILE *file)
 
 	fprintf(file, "\t\t%s\n", g_allTokens[TOKEN_SPRITE_HOT_POINTS].keyword);
 	for (i=0; i<k_NUM_FACINGS; i++) {
-		fprintf(file, "\t\t\t%ld %ld\n", m_hotPoints[i].x, m_hotPoints[i].y);
+		fprintf(file, "\t\t\t%d %d\n", m_hotPoints[i].x, m_hotPoints[i].y);
 	}
 
 	fprintf(file, "\t}\n\n");

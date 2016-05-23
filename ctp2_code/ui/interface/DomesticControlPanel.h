@@ -51,7 +51,7 @@ class ctp2_Static;
 class DomesticControlPanel {
 public:
 
-	DomesticControlPanel(MBCHAR *ldlBlock);
+	DomesticControlPanel(const MBCHAR *ldlBlock);
 
 	void Blank();
 

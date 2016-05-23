@@ -360,8 +360,6 @@ void test1(dynatab_t *pt)
 	dynatab_destroy(th);
 }
 
-#include <malloc.h>		/* for _heapchk() */
-
 #define NTABS 100
 main()
 {

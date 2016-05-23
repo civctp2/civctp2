@@ -59,7 +59,7 @@ class ctp2_Menu {
 	aui_Region *m_siblingArea;
 
 	void Reformat(ctp2_Menu::Item *item);
-	ctp2_Menu::Item *CreateItem(MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut, const MBCHAR *icon, void *cookie);
+	ctp2_Menu::Item *CreateItem(const MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut, const MBCHAR *icon, void *cookie);
 	void Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callback);
 
 	void ListCallback(aui_Control *control, uint32 action, uint32 data);

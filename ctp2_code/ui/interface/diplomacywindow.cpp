@@ -80,17 +80,17 @@
 #include "DiplomacyDetails.h"
 #include "Diplomat.h"
 
-static MBCHAR                 *s_dipWindowBlock = "DiplomacyWindow";
+static const MBCHAR           *s_dipWindowBlock = "DiplomacyWindow";
 static DiplomacyWindow        *s_dipWindow;
 extern C3UI                   *g_c3ui;
 extern ColorSet               *g_colorSet;
-static MBCHAR                 *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
+static const MBCHAR           *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
 
 #define k_INTELLIGENCE_TAB    0
 #define k_NEGOTIATION_TAB     1
 #define k_CREATE_PROPOSAL_TAB 2
 
-char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
+const char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
 	"updi39.tga",
 	"updi40.tga",
 	"updi41.tga",
@@ -692,7 +692,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 						}
 					}
 
-					item->SetUserData((void *)i);
+					item->SetUserData((void *)(intptr_t)i);
 					propList->AddItem(item);
 
 					if(oldSelectedPlayer == i) {
@@ -2269,7 +2269,7 @@ void DiplomacyWindow::AddCityItems(ctp2_Menu *menu, sint32 player)
 	sint32 i;
 	for(i = 0; i < g_player[player]->m_all_cities->Num(); i++) {
 		Unit city = g_player[player]->m_all_cities->Access(i);
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, (void *)(uintptr_t)city.m_id);
 	}
 }
 
@@ -2305,7 +2305,7 @@ void DiplomacyWindow::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 rec
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)(intptr_t)a);
 	}
 }
 
@@ -2321,7 +2321,7 @@ void DiplomacyWindow::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, (void *)(intptr_t)p);
 	}
 }
 
@@ -2863,8 +2863,6 @@ void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 
 		Response response;
 		response.senderId = s_dipWindow->m_viewResponseSender;
 		response.receiverId = s_dipWindow->m_viewResponseReceiver;
-
-		RESPONSE_TYPE typeRespondingTo = Diplomat::GetDiplomat(s_dipWindow->m_viewResponseReceiver).GetResponsePending(s_dipWindow->m_viewResponseSender).type;
 
 		response.type = RESPONSE_REJECT;
 

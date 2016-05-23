@@ -127,8 +127,6 @@ class CivArchive;
 
 class GameFile
 	{
-	private:
-		FILE	*m_ds ;
 
 	public:
 
@@ -180,8 +178,6 @@ public:
 
 class GameMapFile
 	{
-	private:
-		FILE	*m_ds ;
 
 	public:
 

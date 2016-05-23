@@ -71,7 +71,7 @@ class DiplomacyWindow {
 	sint32 m_sendThreat;
 	DiplomacyArg m_threatArg;
 
-	static char *sm_toneIcons[DIPLOMATIC_TONE_MAX];
+	static const char *sm_toneIcons[DIPLOMATIC_TONE_MAX];
 	bool m_selectingProgramatically;
 
   public:
@@ -179,7 +179,7 @@ class DiplomacyWindow {
 	static void TabPanelActionCallback(aui_Control *control, uint32 action,
 		uint32 data, void *cookie);
 
-	static char **GetToneIcons() { return sm_toneIcons; }
+	static const char **GetToneIcons() { return sm_toneIcons; }
 
 	void SetSendProposal(sint32 prop);
 	void EnableRequests(bool enable);

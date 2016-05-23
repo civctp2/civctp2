@@ -60,7 +60,7 @@ public:
 	aui_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *StateFunc = NULL,
 		void *cookie = NULL );
 	aui_Switch(
@@ -78,7 +78,7 @@ public:
 
 protected:
 	aui_Switch() : aui_Control () {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 state, sint32 numStates );
 
 public:

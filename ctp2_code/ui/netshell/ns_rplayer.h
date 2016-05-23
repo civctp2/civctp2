@@ -36,7 +36,7 @@ public:
 	ns_RPlayer(NETFunc::Player * player);
 	void Update( NETFunc::Player *player );
 
-	char *m_name;
+	const char *m_name;
 	int m_ping;
 };
 

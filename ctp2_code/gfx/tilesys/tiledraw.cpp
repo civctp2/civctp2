@@ -1011,7 +1011,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 		pDestPixel += (end-start);
 
 		if(!west) {
-			*pDestPixel = 0; selectColorPixel;
+			*pDestPixel = 0;
 			*(pDestPixel - 1) = selectColorPixel;
 			*(pDestPixel - 2) = selectColorPixel;
 		}
@@ -1689,10 +1689,6 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 		errcode = surface->Unlock((LPVOID)pSurfBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 	}
-
-	len;
-	vstart;
-	accumTable;
 }
 
 sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
@@ -3928,11 +3924,7 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 	sint32 surfPitch = m_surfPitch;
 
 	Pixel16 srcPixel, transPixel = 0;
-#ifdef _MSC_VER
         uint16 *pDestPixel = (Pixel16 *)(pSurfBase + ypos * surfPitch + 2 * xpos);
-#else  //use this if __asm__ is NOT used
-	uint16 *pDestPixel = (Pixel16 *)(pSurfBase + (y+ypos) * surfPitch + 2 * (x+xpos));
-#endif
 	{
 		for (y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
 			if (y<=23) {

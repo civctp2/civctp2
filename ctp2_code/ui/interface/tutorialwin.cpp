@@ -215,7 +215,10 @@ TutorialWin::~TutorialWin( void )
 
 void TutorialWin::Display( void )
 {
-	AUI_ERRCODE errcode = g_c3ui->AddWindow( m_window );
+#ifdef _DEBUG
+	AUI_ERRCODE errcode =
+#endif
+	g_c3ui->AddWindow(m_window);
 	Assert( errcode == AUI_ERRCODE_OK );
 
 
@@ -223,10 +226,11 @@ void TutorialWin::Display( void )
 
 void TutorialWin::Remove( void )
 {
-	AUI_ERRCODE errcode = g_c3ui->RemoveWindow( m_window->Id() );
+#ifdef _DEBUG
+	AUI_ERRCODE errcode =
+#endif
+	g_c3ui->RemoveWindow(m_window->Id());
 	Assert( errcode == AUI_ERRCODE_OK );
-
-
 }
 
 sint32 TutorialWin::UpdateData( void )

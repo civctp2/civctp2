@@ -127,7 +127,7 @@ void BattleViewWindow::Cleanup(void)
 
 BattleViewWindow::BattleViewWindow(	AUI_ERRCODE *retval,
 									uint32 id,
-									MBCHAR *ldlBlock,
+									const MBCHAR *ldlBlock,
 									sint32 bpp,
 									AUI_WINDOW_TYPE type)
 
@@ -206,7 +206,7 @@ BattleViewWindow::~BattleViewWindow()
 }
 
 
-AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE BattleViewWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode;
@@ -381,7 +381,7 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	aui_StringTable	*table = new aui_StringTable(&errcode, "BattleViewTerrainTable");
 	Assert(errcode == AUI_ERRCODE_OK);
 	Assert(table);
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 
 	const TerrainRecord *defTerrRec = g_theTerrainDB->Get(terrainType);
 	const TerrainRecord *attackTerrRec = g_theTerrainDB->Get(attackerTerrain);
@@ -412,24 +412,16 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 		Assert(errcode == AUI_ERRCODE_OK);
 		Assert(cityTable);
 
-
-
-
-
 		aui_Image *cityImage = g_c3ui->LoadImage(useSplit ? "UPBO006.tga" : cityTable->GetString(terrainType));
 		m_battleView->SetCityImage(cityImage);
-
 
 		delete cityTable;
 
 		m_cityName->SetText(battle->GetCityName());
 
 		m_cityName->Show();
-
 	} else {
-
 		m_cityName->Hide();
-
 	}
 
 	bonus = battle->GetCityBonus();

@@ -650,12 +650,12 @@ class Token {
 
 public:
 
-	Token(char *fn, C3DIR dir);
-	Token(char *fn, sint32, TokenData *il, C3DIR dir);
+	Token(const char *fn, C3DIR dir);
+	Token(const char *fn, sint32, TokenData *il, C3DIR dir);
 	~Token();
-	sint32 IsWhitespace(const char c);
-	sint32 IsNumber(char *str);
-	sint32 GetType ();
+	sint32 IsWhitespace(const char c) const;
+	sint32 IsNumber(const char *str) const;
+	sint32 GetType () const;
 	void NextNumber();
 	void NextString();
 
@@ -667,11 +667,11 @@ public:
 	void GetNumber (sint32 &n);
 	void GetFloat(double &n);
 
-	char * ErrStr();
+	const char * ErrStr();
 
 	sint32 ValidateAllTokens();
 
-	char * GetKeyword(const sint32 tok) const;
+	const char * GetKeyword(const sint32 tok) const;
 
 	friend sint32 token_ParseValNext(Token *aToken, const sint32 t, sint32 &val);
 	friend sint32 token_ParseFloatNext(Token *aToken, const sint32 t, double &val);

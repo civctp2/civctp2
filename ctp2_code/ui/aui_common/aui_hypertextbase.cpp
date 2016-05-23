@@ -39,7 +39,7 @@
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -49,7 +49,7 @@ aui_HyperTextBase::aui_HyperTextBase(
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
-	MBCHAR *hyperText,
+	const MBCHAR *hyperText,
 	uint32 hyperMaxLen )
 {
 	*retval = InitCommon( hyperText, hyperMaxLen );
@@ -58,7 +58,7 @@ aui_HyperTextBase::aui_HyperTextBase(
 }
 
 
-AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBase::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -81,7 +81,7 @@ AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 
 
 AUI_ERRCODE aui_HyperTextBase::InitCommon(
-	MBCHAR *hyperText,
+	const MBCHAR *hyperText,
 	uint32 hyperMaxLen )
 {
 	m_hyperText = NULL,
@@ -226,7 +226,6 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 
 void aui_HyperTextBase::RemoveHyperStatics( void )
 {
-	ListPos position = m_hyperStaticList->GetHeadPosition();
 	for ( sint32 i = m_hyperStaticList->L(); i; i-- )
 		DestroyHyperStatic( m_hyperStaticList->RemoveTail() );
 }

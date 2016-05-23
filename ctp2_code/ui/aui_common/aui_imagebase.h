@@ -96,7 +96,7 @@ class aui_ImageBase
 public:
 
 	aui_ImageBase(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		bool loadOnDemand = false );
 	aui_ImageBase(
 		sint32 numStateImageGroups    = 0,
@@ -107,7 +107,7 @@ public:
 
 protected:
 	AUI_ERRCODE InitCommonLdl(
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(
 		sint32 numImageGroups,
 		AUI_IMAGEBASE_BLTTYPE blttype,
@@ -126,7 +126,7 @@ public:
 	AUI_IMAGEBASE_BLTTYPE SetImageBltType( AUI_IMAGEBASE_BLTTYPE imageblttype );
 	AUI_IMAGEBASE_BLTFLAG SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG imagebltflag );
 	aui_Image *SetImage(
-		MBCHAR *image,
+		const MBCHAR *image,
 		sint32 state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE );
 
@@ -144,13 +144,13 @@ protected:
 	AUI_IMAGEBASE_BLTFLAG	m_imagebltflag;
 
 
-	aui_Image	*LoadTheImage( MBCHAR *name );
+	aui_Image	*LoadTheImage(const MBCHAR *name);
 
 	sint32					m_numStateImageGroups;
 	aui_StateImageGroup		*m_stateImageGroups;
 
 
-	static MBCHAR *m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ];
+	static const MBCHAR *m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 
 	bool m_loadOnDemand;
 

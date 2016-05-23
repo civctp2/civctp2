@@ -29,6 +29,9 @@ extern int ldl_include_stack_ptr;
 extern int g_ldlWarnUndeclared;
 extern int ldl_parse_error;
 
+#define YY_NO_UNPUT
+#define YY_NO_INPUT
+
 %}
 
 string 		\"[^\"\n]*[\"\r\n]

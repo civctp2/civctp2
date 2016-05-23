@@ -54,7 +54,7 @@ public:
 	ns_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_ListBox();
@@ -65,7 +65,7 @@ protected:
 	aui_Image *m_itemsSelectImage;
 
 	ns_ListBox() : ns_CivListBox() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 public:
@@ -185,7 +185,7 @@ template<class T,class NetShellT>
 ns_ListBox<T,NetShellT>::ns_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -203,7 +203,7 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 
 
 template<class T,class NetShellT>
-AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -220,7 +220,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 	m_artXOffset = block->GetInt( "xoffset" );
 	m_artYOffset = block->GetInt( "yoffset" );
 
-	char *image = block->GetString( "selectimage" );
+	const char *image = block->GetString("selectimage");
 	if(image)
 		m_itemsSelectImage = g_ui->LoadImage( image );
 
@@ -388,7 +388,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 	sint32 i )
 {
 
-	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
 	NetShellT *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<T,NetShellT> *)item->GetParent())->

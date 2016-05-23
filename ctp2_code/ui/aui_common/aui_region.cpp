@@ -48,7 +48,7 @@
 
 extern SoundManager		*g_soundManager;
 
-static MBCHAR *k_AUI_REGION_LDL_BLINDNESS	=	"mouseblind";
+static const MBCHAR *k_AUI_REGION_LDL_BLINDNESS	=	"mouseblind";
 
 aui_Region *aui_Region::m_whichSeesMouse = NULL;
 aui_Region *aui_Region::m_editChild = NULL;
@@ -62,7 +62,7 @@ uint32 aui_Region::m_regionClassId = aui_UniqueId();
 aui_Region::aui_Region(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 {
 	*retval = InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -141,7 +141,7 @@ AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width,
 }
 
 
-AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Region::InitCommonLdl(uint32 id, const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = InitCommon( id, 0, 0, 0, 0 );
 	Assert( AUI_SUCCESS(errcode) );
@@ -203,13 +203,10 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 
 	m_dim->SetParent( parent );
 
-
-
-
 	if(block->GetAttributeType(k_AUI_REGION_LDL_BLINDNESS))
 		m_blind = block->GetBool(k_AUI_REGION_LDL_BLINDNESS);
 
-	MBCHAR *anchor;
+	const MBCHAR *anchor;
 
 	if ((anchor = block->GetString( k_AUI_LDL_HANCHOR )))
 	{

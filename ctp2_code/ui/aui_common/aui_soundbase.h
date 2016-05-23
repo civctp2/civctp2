@@ -21,24 +21,24 @@ class aui_SoundBase
 {
 public:
 
-	aui_SoundBase( MBCHAR *ldlBlock );
-	aui_SoundBase( MBCHAR **soundNames );
+	aui_SoundBase(const MBCHAR *ldlBlock);
+	aui_SoundBase(const MBCHAR **soundNames);
 	virtual ~aui_SoundBase();
 
 protected:
 	aui_SoundBase() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( MBCHAR **soundNames );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommon(const MBCHAR *soundNames[]);
 
 public:
 	aui_Sound	*GetSound( AUI_SOUNDBASE_SOUND sound ) const;
-	aui_Sound	*SetSound( AUI_SOUNDBASE_SOUND sound, MBCHAR *soundName );
+	aui_Sound	*SetSound( AUI_SOUNDBASE_SOUND sound, const MBCHAR *soundName);
 
 	AUI_ERRCODE	PlaySound( AUI_SOUNDBASE_SOUND sound );
 
 protected:
 	aui_Sound		*m_sounds[ AUI_SOUNDBASE_SOUND_LAST ];
-	static MBCHAR	*m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ];
+	static const MBCHAR	*m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ];
 };
 
 #endif

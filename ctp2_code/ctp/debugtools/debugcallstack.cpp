@@ -60,10 +60,7 @@
 #include "log_off.h"
 #endif
 
-static bool debug_dump_whole_stack = false;
-
-void Debug_FunctionNameInit (void);
-int Debug_FunctionNameOpen (char *map_file_name);
+static int Debug_FunctionNameOpen (const char *map_file_name);
 
 #if defined(WIN32)
 BOOL CALLBACK	Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
@@ -71,8 +68,7 @@ BOOL CALLBACK	Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID u
 int				Debug_FunctionNameOpenFromPDB(void);
 #endif
 
-void Debug_FunctionNameClose (void);
-char *Debug_FunctionNameGet (unsigned address);
+static void Debug_FunctionNameClose (void);
 
 #define DEBUG_CODE_LIMIT 0x80000000
 #define BUFFER_SIZE      (2000)
@@ -87,14 +83,11 @@ char *Debug_FunctionNameGet (unsigned address);
 #endif
 #endif
 
-
-
-
-
-
 #define k_STACK_TRACE_LEN 32768
 
+#ifdef WIN32
 const int k_CALL_STACK_SIZE = 29;
+#endif
 
 static MBCHAR s_stackTraceString[k_STACK_TRACE_LEN];
 
@@ -123,8 +116,8 @@ static LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 }
 #endif
 
-static char *unknown = "(unknown)";
-static char *kernel  = "(kernel)";
+static const char *unknown = "(unknown)";
+static const char *kernel  = "(kernel)";
 static int function_name_open = 0;
 
 typedef struct tagFUNCTION_ADDRESS {
@@ -209,12 +202,7 @@ void Debug_AddFunction (char *name, unsigned address)
   last->next = new_function;
 }
 
-void Debug_FunctionNameInit (void)
-{
-	fa_first = NULL;
-}
-
-int Debug_FunctionNameOpen (char *map_file_name)
+int Debug_FunctionNameOpen (const char *map_file_name)
 {
   FILE *fp;
   char buffer[BUFFER_SIZE];
@@ -277,14 +265,9 @@ int Debug_FunctionNameOpen (char *map_file_name)
 }
 
 
-static HANDLE	hProc,
-				hThread;
-
-
-
-
-
 #ifdef WIN32
+static HANDLE	hProc, hThread;
+
 BOOL CALLBACK Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress,
 								ULONG symbolSize, PVOID userContext)
 {
@@ -341,37 +324,8 @@ void Debug_FunctionNameClose (void)
 #endif
 }
 
-char *Debug_FunctionNameGet (unsigned address)
-{
-  FUNCTION_ADDRESS *pointer;
-
-  if (address > DEBUG_CODE_LIMIT)
-  {
-    return (kernel);
-  }
-
-  if (!function_name_open)
-  {
-    return (unknown);
-  }
-  else
-  {
-
-    pointer = fa_first;
-
-    while (pointer) {
-      if (address >= pointer->address)
-        return (pointer->name);
-
-      pointer = pointer->next;
-    }
-
-    return (unknown);
-  }
-}
-
-
-char *Debug_FunctionNameAndOffsetGet (unsigned address, int *offset)
+static const char *
+Debug_FunctionNameAndOffsetGet (unsigned address, int *offset)
 {
 	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
@@ -696,7 +650,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int n
 void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file)
 {
 	unsigned caller;
-	char *caller_name;
+	const char *caller_name;
 	int index = 3;
 
 	char buff[8196];
@@ -705,7 +659,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, in
 	caller = call_stack[index];
 	int offset;
 	caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
-	sprintf(buff, "[%s]", caller_name, buff);
+	sprintf(buff, "[%s]", caller_name);
 	index++;
 
 	while ((index < number) && (call_stack[index] != 0)) {
@@ -725,10 +679,12 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, in
 	fprintf(file, "\n");
 }
 
-char * c3debug_StackTrace(void)
+#ifdef WIN32
+const char *
+c3debug_StackTrace(void)
 {
 	unsigned caller;
-	char *caller_name;
+	const char *caller_name;
 	int index;
 	MBCHAR function_name[16384];
 
@@ -758,8 +714,9 @@ char * c3debug_StackTrace(void)
 
 	return s_stackTraceString;
 }
-#ifdef WIN32
-char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
+
+const char *
+c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 {
 	if(!function_name_open) {
 		DebugCallStack_Open();
@@ -815,7 +772,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 
 	unsigned caller;
 	char line[1024];
-	char *caller_name;
+	const char *caller_name;
 
 	int offset;
 

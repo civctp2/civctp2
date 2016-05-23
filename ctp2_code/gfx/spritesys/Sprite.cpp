@@ -208,7 +208,7 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 	*imageData = new Pixel32[w*h];
 
 	Load_TGA_File_Simple(imageFiles[index],(unsigned char *)*imageData,w*sizeof(Pixel32),w,h);
-        printf("%s L%d: Load_TGA_File_Simple %s\n", __FILE__, __LINE__, imageFiles[0][0]);
+        printf("%s L%d: Load_TGA_File_Simple %s\n", __FILE__, __LINE__, imageFiles[0]);
 	m_width  = (uint16)w;
 	m_height = (uint16)h;
 
@@ -348,28 +348,28 @@ void Sprite::InitializeDrawLow()
 {
 	if (g_is565Format)
 	{
-		_DrawLowClipped        	= &DrawLowClipped565		;
-		_DrawLow               	= &DrawLow565			;
-		_DrawLowReversedClipped	= &DrawLowReversedClipped565	;
-		_DrawLowReversed       	= &DrawLowReversed565		;
-		_DrawReflectionLow     	= &DrawReflectionLow565		;
-		_DrawFlashLow          	= &DrawFlashLow565		;
-		_DrawFlashLowReversed  	= &DrawFlashLowReversed565	;
-		_DrawScaledLow		= &DrawScaledLow565		;
-		_DrawFlashScaledLow	= &DrawFlashScaledLow565	;
+		_DrawLowClipped        	= &Sprite::DrawLowClipped565		;
+		_DrawLow               	= &Sprite::DrawLow565			;
+		_DrawLowReversedClipped	= &Sprite::DrawLowReversedClipped565	;
+		_DrawLowReversed       	= &Sprite::DrawLowReversed565		;
+		_DrawReflectionLow     	= &Sprite::DrawReflectionLow565		;
+		_DrawFlashLow          	= &Sprite::DrawFlashLow565		;
+		_DrawFlashLowReversed  	= &Sprite::DrawFlashLowReversed565	;
+		_DrawScaledLow		= &Sprite::DrawScaledLow565		;
+		_DrawFlashScaledLow	= &Sprite::DrawFlashScaledLow565	;
 	}
 	else
 	{
 	printf("%s L%d: g_is555Format!\n", __FILE__, __LINE__);
-		_DrawLowClipped        	= &DrawLowClipped555		;
-		_DrawLow               	= &DrawLow555			;
-		_DrawLowReversedClipped	= &DrawLowReversedClipped555	;
-		_DrawLowReversed       	= &DrawLowReversed555		;
-		_DrawReflectionLow     	= &DrawReflectionLow555		;
-		_DrawFlashLow          	= &DrawFlashLow555		;
-		_DrawFlashLowReversed  	= &DrawFlashLowReversed555	;
-		_DrawScaledLow		= &DrawScaledLow555		;
-		_DrawFlashScaledLow	= &DrawFlashScaledLow555	;
+		_DrawLowClipped        	= &Sprite::DrawLowClipped555		;
+		_DrawLow               	= &Sprite::DrawLow555			;
+		_DrawLowReversedClipped	= &Sprite::DrawLowReversedClipped555	;
+		_DrawLowReversed       	= &Sprite::DrawLowReversed555		;
+		_DrawReflectionLow     	= &Sprite::DrawReflectionLow555		;
+		_DrawFlashLow          	= &Sprite::DrawFlashLow555		;
+		_DrawFlashLowReversed  	= &Sprite::DrawFlashLowReversed555	;
+		_DrawScaledLow		= &Sprite::DrawScaledLow555		;
+		_DrawFlashScaledLow	= &Sprite::DrawFlashScaledLow555	;
 	}
 }
 

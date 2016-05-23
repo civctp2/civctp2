@@ -14,7 +14,7 @@
 aui_Switch::aui_Switch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -64,7 +64,7 @@ aui_Switch::aui_Switch(
 }
 
 
-AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Switch::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 

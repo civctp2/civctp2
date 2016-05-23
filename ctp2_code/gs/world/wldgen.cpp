@@ -377,15 +377,6 @@ void World::AllocateMap()
     m_land_size = new DynamicArray<sint32>;
 }
 
-
-
-
-
-
-
-
-
-
 void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 {
@@ -396,7 +387,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	}
 
 	sint8 *map = new sint8[m_size.y * m_size.x];
-	sint32 totalsize = m_size.y * m_size.x;
 	sint32 histogramarray[256];
 	sint32 *histogram = &histogramarray[128];
 	sint32 x, y;
@@ -1286,8 +1276,6 @@ void World::GenerateDeepWater()
 {
 	sint32 i, j;
 
-	sint32 cur = -1;
-
 	MapPoint tmp;
 	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k;
 	BOOL find;
@@ -1877,7 +1865,6 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
     MapPoint    start(maxx, maxy);
 
     float s;
-    float r = 2.0f * float(d) + 1.0f;   // unused?
 
 	SquareIterator  it  (start, d);
     for (it.Start(); !it.End(); it.Next())
@@ -2592,7 +2579,6 @@ void World::Serialize(CivArchive &archive)
 		archive >> m_num_civ_starts;
 		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
-		g_numGoods;
 		archive >> g_numGoods;
 		if(g_numGoods == g_theResourceDB->NumRecords()){
 			m_goodValue = new double[g_numGoods];
@@ -2689,8 +2675,6 @@ TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 	if (m_tileInfoStorage == NULL) return NULL;
 
 	sint32			width = m_size.x;
-	sint32			height = m_size.y;
-	sint32			area = m_size.x * m_size.y;
 
 	info = &m_tileInfoStorage[pos.x + pos.y * width];
 
@@ -3005,7 +2989,6 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 				sint32 lowx = 0x7fffffff, lowy = 0x7fffffff;
 				CHKCOORD(x, y);
 
-				sint32 curheight = map[y * m_size.x + x];
 				sint32 left;
 				if(y & 1) {
 					left = x;
@@ -3289,7 +3272,7 @@ void World::DeleteStartingPoint(sint32 index)
 
 
 
-BOOL World::ExportMap(MBCHAR *filename)
+BOOL World::ExportMap(const MBCHAR *filename)
 {
 	FILE	*outfile;
 
@@ -3325,7 +3308,7 @@ BOOL World::ExportMap(MBCHAR *filename)
 			BOOL hasGood = GetGood(pos, good);
 			uint32 env = cell->GetEnv();
 
-			fprintf(outfile, "%d,%d,%d,%d,%ld\t",
+			fprintf(outfile, "%d,%d,%d,%d,%u\t",
 					cell->GetTerrain(),
 					hasHut,
 					hasRiver,
@@ -3340,7 +3323,7 @@ BOOL World::ExportMap(MBCHAR *filename)
 	return TRUE;
 }
 
-BOOL World::ImportMap(MBCHAR *filename)
+BOOL World::ImportMap(const MBCHAR *filename)
 {
 	FILE *infile;
 
@@ -3390,7 +3373,7 @@ BOOL World::ImportMap(MBCHAR *filename)
 			sint32 terrainType;
 			uint32 env;
 
-			fscanf(infile, "%d,%d,%d,%d,%ld\t",
+			fscanf(infile, "%d,%d,%d,%d,%ud\t",
 					&terrainType,
 					&hasHut,
 					&hasRiver,
@@ -3715,13 +3698,6 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 }
 
 #ifdef _DEBUG
-
-
-
-
-
-
-
 
 void World::WholePlayerLandArea(int *array) const
 {

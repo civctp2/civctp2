@@ -30,8 +30,8 @@ ColorIconButton::ColorIconButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *icon,
+	const MBCHAR *pattern,
+	const MBCHAR *icon,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -50,7 +50,7 @@ ColorIconButton::ColorIconButton(
 ColorIconButton::ColorIconButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -122,7 +122,7 @@ void ColorIconButton::ResizePictureRect(void)
 	}
 }
 
-void ColorIconButton::SetIcon(MBCHAR *name)
+void ColorIconButton::SetIcon(const MBCHAR *name)
 {
 	if (name == NULL) return;
 
@@ -150,9 +150,9 @@ void ColorIconButton::SetIcon(MBCHAR *name)
 	ResizePictureRect();
 }
 
-AUI_ERRCODE ColorIconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
+AUI_ERRCODE ColorIconButton::InitCommon(const MBCHAR *ldlBlock,BOOL isLDL)
 {
-	MBCHAR		*name;
+	const MBCHAR		*name;
 
 	if (isLDL) {
 		aui_Ldl *theLdl = g_c3ui->GetLdl();

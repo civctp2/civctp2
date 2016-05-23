@@ -32,15 +32,15 @@ PointerList<ldl_datablock> *s_blockStack = NULL;
 AvlTree<ldl_datablock *> *s_blockTree = NULL;
 PointerList<ldl_datablock> *s_topLevelList = NULL;
 
-extern "C" { void ldlif_report_error(char *text); }
+extern "C" { void ldlif_report_error(const char *text); }
 
-void ldlif_report_error(char *text)
+void ldlif_report_error(const char *text)
 {
 	fprintf(stderr, "%s\n", text);
 	c3errors_ErrorDialog("LDL", text);
 }
 
-ldl_datablock *ldlif_find_block(char *name)
+ldl_datablock *ldlif_find_block(const char *name)
 {
 	Comparable<ldl_datablock *> *myKey;
 	ldl_datablock dummy(aui_UI::CalculateHash(name));

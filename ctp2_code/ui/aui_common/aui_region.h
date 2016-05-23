@@ -115,7 +115,7 @@ public:
 	aui_Region(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_Region(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -133,7 +133,7 @@ public:
 
 protected:
 	aui_Region() : aui_Base() {}
-	AUI_ERRCODE InitCommonLdl( uint32 id, MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(uint32 id, const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(
 		uint32 id,
 		sint32 x,

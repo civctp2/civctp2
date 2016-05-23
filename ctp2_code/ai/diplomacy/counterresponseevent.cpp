@@ -63,7 +63,6 @@ STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & response = receiver_diplomat.GetMyLastResponse(sender);
 
 	if ( AgreementMatrix::s_agreements.HasAgreement(sender,
@@ -202,14 +201,8 @@ STDEHANDLER(PayForGiveCity_CounterResponseEvent)
 		 response.counter.first_type != PROPOSAL_REQUEST_GIVE_CITY )
 		return GEV_HD_Continue;
 
-
-
-
 	sint32 at_risk_value_percent =
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(receiver,sender);
-
-	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
-		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
 
 	sint32 accept_priority =
 		sender_diplomat.GetAcceptPriority(receiver, response.counter.second_type);
@@ -351,7 +344,6 @@ STDEHANDLER(AdvanceForGold_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	if ( receiver_response.type != RESPONSE_COUNTER ||
@@ -435,7 +427,6 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	sint32 turns_since_last_war = AgreementMatrix::s_agreements.TurnsSinceLastWar(sender, receiver);
@@ -542,7 +533,6 @@ STDEHANDLER(ReciprocateAction_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	if ( receiver_response.type != RESPONSE_COUNTER ||

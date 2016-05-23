@@ -31,7 +31,7 @@ public:
 	c3_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	c3_Button(
@@ -41,7 +41,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~c3_Button() {}
@@ -49,7 +49,7 @@ public:
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
 protected:
 	c3_Button() : aui_Button() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
 public:
@@ -71,7 +71,7 @@ public:
 	c3_EditButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	c3_EditButton(
@@ -81,16 +81,16 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~c3_EditButton();
 
 protected:
 	c3_EditButton() : c3_Button() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 val, sint32 min, sint32 max );
-	AUI_ERRCODE CreateFieldAndActions( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateFieldAndActions(const MBCHAR *ldlBlock = NULL);
 
 public:
 	sint32		GetValue( void ) const { return m_val; }

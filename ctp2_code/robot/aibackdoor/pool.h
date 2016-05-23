@@ -118,11 +118,11 @@ Pool<DATA_TYPE>::Pool
 	int i_chunk_size,
 	int i_max_chunks
 )
-:   count                   (0),
-    chunks                  (INITIAL_CHUNK_LIST_SIZE),
-    chunk_size              (i_chunk_size),
+:   chunk_size              (i_chunk_size),
     max_chunks              (i_max_chunks),
+    count                   (0),
     next_element            (0),
+    chunks                  (INITIAL_CHUNK_LIST_SIZE),
     next_free_element_list  (i_chunk_size, i_chunk_size, i_max_chunks)
 {
 	_ASSERTE(chunk_size > 0);

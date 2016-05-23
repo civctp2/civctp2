@@ -29,8 +29,8 @@
 // Modifications from the original Activision code:
 //
 // - added linux specific code
-// - Added some casts. (Aug 7th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added some casts. (Aug 7th 2005 Martin G"uhmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -441,11 +441,11 @@ bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND
 MBCHAR	VolumeName[33] = { 0 };
 int 	WhichCD = -1;
 int	CDDrivesCnt = 0;
-const int kMAX_NUM_CDDRIVES = 26;
 sint32	CDIndex = 0;
 BOOL	g_hasCD = FALSE;
 
 #if defined(WIN32) && !defined(USE_SDL)
+const int kMAX_NUM_CDDRIVES = 26;
 typedef MBCHAR win32_drive_name[3];
 win32_drive_name CDDrivesNames[kMAX_NUM_CDDRIVES] = { 0 };
 #endif
@@ -781,6 +781,10 @@ const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size,
 		fulllink = 0;
 	}
 	return NULL;
+#else
+	/* Seriously? A game mounting a filesystem? */
+	strlcpy(buf, cdDriveName, size);
+	return buf;
 #endif
 }
 
@@ -886,6 +890,8 @@ MBCHAR const * c3files_GetVolumeName(int cdIndex)
 		VolumeName[i+1] = '\0';
 
 	return VolumeName;
+#else
+	return NULL;
 #endif
 }
 

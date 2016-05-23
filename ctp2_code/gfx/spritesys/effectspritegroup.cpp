@@ -129,7 +129,7 @@ void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint3
 	}
 }
 
-void EffectSpriteGroup::Load(MBCHAR *filename)
+void EffectSpriteGroup::Load(const char *filename)
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 	SPRITEFILETYPE				type;
@@ -142,7 +142,7 @@ void EffectSpriteGroup::Load(MBCHAR *filename)
 	}
 }
 
-void EffectSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
+void EffectSpriteGroup::Save(const char *filename,unsigned version_id,unsigned compression_mode)
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
@@ -304,7 +304,7 @@ POINT EffectSpriteGroup::GetHotPoint(EFFECTACTION action, sint32 facing)
 	return nullPoint;
 }
 
-void EffectSpriteGroup::ExportScript(MBCHAR *name)
+void EffectSpriteGroup::ExportScript(const char *name)
 {
 	FILE				*file;
 	extern TokenData	g_allTokens[];

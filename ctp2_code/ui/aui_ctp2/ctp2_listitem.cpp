@@ -11,7 +11,7 @@
 
 
 
-ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
+ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -43,7 +43,7 @@ ctp2_ListItem::~ctp2_ListItem()
 }
 
 
-AUI_ERRCODE ctp2_ListItem::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE ctp2_ListItem::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return AUI_ERRCODE_OK;
 }

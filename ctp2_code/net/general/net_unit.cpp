@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -210,8 +210,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 								oldowner, m_unitData->m_owner));
 			if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
 				DPRINTF(k_DBG_NET, ("But it's a city and I'm going to assert and ignore it.\n"));
-				BOOL ahaSoItDoesHappen = FALSE;
-				Assert(ahaSoItDoesHappen);
+				Assert(FALSE);
 			} else {
 				g_player[oldowner]->RemoveUnitReference(uid, CAUSE_REMOVE_ARMY_UNKNOWN, m_unitData->m_owner);
 				g_player[m_unitData->m_owner]->InsertUnitReference(uid, CAUSE_NEW_ARMY_UNKNOWN, Unit(0));
@@ -473,7 +472,6 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
-	Cell *theCell = g_theWorld->GetCell(ud->m_pos);
 
 	sint32 numRevealed = revealed.Num();
 	UnitActor **revealedActors = new UnitActor*[numRevealed];

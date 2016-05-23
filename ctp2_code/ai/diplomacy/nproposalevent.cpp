@@ -72,29 +72,17 @@ STDEHANDLER(NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & newProposal = sender_diplomat.GetMyLastNewProposal(receiver);
 
 	if ( newProposal == Diplomat::s_badNewProposal ) {
-
 		sender_diplomat.ContinueDiplomacy(receiver);
 	}
 	else {
-
-
-
-
-
-
-
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewProposalReady,
 						   GEA_Player, sender,
 						   GEA_Player, receiver,
 						   GEA_End);
-
-
-
 
 		bool execute = false;
 		if(sender != g_selected_item->GetVisiblePlayer()) {
@@ -126,11 +114,6 @@ STDEHANDLER(NewProposalEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
-
-
 
 STDEHANDLER(Scenario_NewProposalEvent) {
 	sint32 motivation_type;
@@ -303,9 +286,7 @@ STDEHANDLER(ExchangeMaps_NewProposalEvent) {
 	if (sender_diplomat.GetTrust(receiver) < NEUTRAL_REGARD)
 		return GEV_HD_Continue;
 
-	Player *player_ptr = g_player[sender];
-	Assert(player_ptr != NULL);
-
+	Assert(g_player[sender] != NULL);
 
 	sint32 offer_priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_OFFER_MAP);
@@ -381,8 +362,6 @@ STDEHANDLER(MakePeace_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_TREATY_PEACE);
@@ -561,8 +540,6 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_REDUCE_POLLUTION);
@@ -641,8 +618,6 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT);
@@ -685,8 +660,6 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 			receiver_pollution <= (unsigned) half_promised_pollution)
 			return GEV_HD_Continue;
 	}
-
-	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 
 	NewProposal new_proposal;
 
@@ -823,8 +796,6 @@ STDEHANDLER(ResearchPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_TREATY_RESEARCH_PACT);
@@ -910,11 +881,9 @@ STDEHANDLER(MilitaryPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_MILITARY_PACT))
 		return GEV_HD_Continue;
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_TREATY_MILITARY_PACT);
@@ -978,7 +947,6 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_POLLUTION_PACT))
 		return GEV_HD_Continue;
@@ -1075,11 +1043,9 @@ STDEHANDLER(Alliance_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE))
 		return GEV_HD_Continue;
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_TREATY_ALLIANCE);
@@ -1233,13 +1199,10 @@ STDEHANDLER(StopPiracy_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_STOP_PIRACY);
-
 
 	sint32 turns_since_last_war = AgreementMatrix::s_agreements.TurnsSinceLastWar(sender, receiver);
 	if ( (map.GetPiracyIncomeByPlayer(receiver, sender) > 0) &&
@@ -1852,10 +1815,6 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
 	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_ANGRY;
-	sint32 gold = 0;
-
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-
 
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_CITY);
@@ -1878,10 +1837,8 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	sint32 at_risk_value = sint32(((double)at_risk_value_percent / 100.0) *
 		MapAnalysis::GetMapAnalysis().TotalValue(receiver));
 
-
 	if (at_risk_value_percent < 75)
 		return GEV_HD_Continue;
-
 
 	if ((double) MapAnalysis::GetMapAnalysis().TotalThreat(receiver) /
 		MapAnalysis::GetMapAnalysis().TotalThreat(sender) > 1.25)
@@ -1903,7 +1860,7 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	new_proposal.detail.first_arg.cityId = city.m_id;
 
 	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ))
-		GEV_HD_Continue;
+		return GEV_HD_Continue;
 
 	sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
 
@@ -2032,7 +1989,6 @@ STDEHANDLER(RequestEndEmbargo_NewProposalEvent)
 		tone = DIPLOMATIC_TONE_ANGRY;
 	}
 
-
 	sint32 priority =
 		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_END_EMBARGO);
 
@@ -2069,16 +2025,9 @@ void NewProposalEventCallbacks::AddCallbacks()
 							  GEV_PRI_Primary,
 							  &s_NewProposalEvent);
 
-
-
-
-
 	g_gevManager->AddCallback(GEV_ReactionMotivation,
 							  GEV_PRI_Pre,
 							  &s_LeaveOurBorders_NewProposalEvent);
-
-
-
 
 	g_gevManager->AddCallback(GEV_FearMotivation,
 							  GEV_PRI_Pre,
@@ -2108,14 +2057,9 @@ void NewProposalEventCallbacks::AddCallbacks()
 							  GEV_PRI_Pre,
 							  &s_HonorPollutionAgreement_NewProposalEvent);
 
-
-
-
-
 	g_gevManager->AddCallback(GEV_DesireMotivation,
 							  GEV_PRI_Pre,
 							  &s_Scenario_NewProposalEvent);
-
 
 	g_gevManager->AddCallback(GEV_DesireMotivation,
 							  GEV_PRI_Pre,
@@ -2172,5 +2116,4 @@ void NewProposalEventCallbacks::AddCallbacks()
 	g_gevManager->AddCallback(GEV_DesireMotivation,
 							  GEV_PRI_Pre,
 							  &s_RequestEndEmbargo_NewProposalEvent);
-
 }

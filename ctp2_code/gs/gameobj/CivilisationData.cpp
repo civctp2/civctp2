@@ -341,7 +341,7 @@ sint32 CivilisationData::GetUseCount(const sint32 name) const
 	return (m_cityname_count[name]) ;
 }
 
-MBCHAR *CivilisationData::GetLeaderName(void)
+const MBCHAR *CivilisationData::GetLeaderName(void)
 {
 	if (m_leader_name[0]) {
 		return (m_leader_name);
@@ -365,7 +365,7 @@ void CivilisationData::SetPersonalityDescription(const MBCHAR* s)
 	strcpy(m_personality_description, s) ;
 }
 
-MBCHAR* CivilisationData::GetPersonalityDescription(void)
+const MBCHAR* CivilisationData::GetPersonalityDescription(void)
 {
 	return m_personality_description;
 }

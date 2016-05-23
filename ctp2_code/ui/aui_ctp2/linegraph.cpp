@@ -55,7 +55,7 @@ extern C3UI			*g_c3ui;
 
 LineGraph::LineGraph(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie,
 							EventTracker *events)
@@ -78,7 +78,7 @@ LineGraph::LineGraph(AUI_ERRCODE *retval,
 							void *cookie)
 	:
 		aui_ImageBase((sint32)0),
-		aui_TextBase((MBCHAR *)NULL),
+		aui_TextBase((const MBCHAR *)NULL),
 		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie)
 {
 	m_events=NULL;
@@ -118,7 +118,7 @@ LineGraph::~LineGraph()
 	}
 }
 
-void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
+void LineGraph::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
@@ -177,7 +177,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	if ( !m_draw )
 		m_draw = k_AUI_REGION_DRAWFLAG_UPDATE;
 
-	if (!(m_draw && k_AUI_REGION_DRAWFLAG_UPDATE)) return AUI_ERRCODE_OK;
+	if (!(m_draw & k_AUI_REGION_DRAWFLAG_UPDATE)) return AUI_ERRCODE_OK;
 
 	if ( !surface )
 		surface = m_window->TheSurface();
@@ -449,7 +449,7 @@ void LineGraph::SetGraphBounds(double minx, double maxx, double miny, double max
 	m_ymax = maxy;
 }
 
-void LineGraph::SetXAxisName(MBCHAR *name)
+void LineGraph::SetXAxisName(const MBCHAR *name)
 {
 	Assert(name);
 	if (!name) return;
@@ -461,7 +461,7 @@ void LineGraph::SetXAxisName(MBCHAR *name)
 	strcpy(m_xAxisName, name);
 }
 
-void LineGraph::SetYAxisName(MBCHAR *name)
+void LineGraph::SetYAxisName(const MBCHAR *name)
 {
 	Assert(name);
 	if (!name) return;

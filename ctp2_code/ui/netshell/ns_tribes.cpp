@@ -92,7 +92,7 @@ ns_Tribes::~ns_Tribes()
 
 ns_TribesDropDown::ns_TribesDropDown(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -113,7 +113,7 @@ ns_TribesDropDown::ns_TribesDropDown(
 	sint32 numCivs = g_nsTribes->GetStrings()->GetNumStrings();
 	for ( sint32 i = 0; i < numCivs; i++ )
 	{
-		MBCHAR *name = g_nsTribes->GetStrings()->GetString( i );
+		const MBCHAR *name = g_nsTribes->GetStrings()->GetString(i);
 
 		ns_ListItem *item = new ns_ListItem(
 			retval,
@@ -125,7 +125,6 @@ ns_TribesDropDown::ns_TribesDropDown(
 		AddItem( (aui_Item *)item );
 	}
 }
-
 
 ns_TribesDropDown::~ns_TribesDropDown()
 {

@@ -57,7 +57,7 @@
 
 extern sint32 g_fog_toggle;
 
-sint32 CellUnitList::Insert(Unit id)
+BOOL CellUnitList::Insert(const Unit &id)
 {
 	Assert(m_nElements < k_MAX_ARMY_SIZE);
 	if(m_nElements < k_MAX_ARMY_SIZE) {

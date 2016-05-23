@@ -21,7 +21,7 @@ NetIO::EnumTransports()
 }
 
 NET_ERR
-NetIO::Host(char* sessionName)
+NetIO::Host(const char* sessionName)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }
@@ -69,7 +69,7 @@ NetIO::SendCompressed(uint16 id, sint32 flags, uint8* buf, sint32 len)
 }
 
 NET_ERR
-NetIO::SetName(char* name)
+NetIO::SetName(const char* name)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }
@@ -81,7 +81,7 @@ NetIO::SetTransport(sint32 idx)
 }
 
 NET_ERR
-NetIO::SetLobby(char*)
+NetIO::SetLobby(const char*)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }

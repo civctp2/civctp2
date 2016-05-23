@@ -16,8 +16,8 @@ public:
 	StaticPicture(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
-		MBCHAR *picture );
+		const MBCHAR *ldlBlock,
+		const MBCHAR *picture );
 	StaticPicture(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -25,13 +25,13 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *picture );
+		const MBCHAR *picture );
 	virtual ~StaticPicture();
 
 protected:
 	StaticPicture() : aui_Static() {}
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MBCHAR *picture );
-	AUI_ERRCODE InitCommon( MBCHAR *picture );
+	AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, const MBCHAR *picture );
+	AUI_ERRCODE InitCommon(const MBCHAR *picture);
 
 public:
 	virtual AUI_ERRCODE DrawThis(

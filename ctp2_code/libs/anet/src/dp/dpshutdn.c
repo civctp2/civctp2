@@ -54,7 +54,6 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 
 	case 1:
 		if (dp->myplayers) {
-			dpid_t id;
 			int i;
 
 			DPRINT(("dpShutdown: deleting my players.\n"));

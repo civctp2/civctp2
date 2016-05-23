@@ -18,7 +18,7 @@ public:
 	DebugWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND );
 	DebugWindow(
@@ -29,7 +29,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND );
 
 	virtual ~DebugWindow() {}
@@ -48,13 +48,16 @@ public:
 
 	void SetTextBox(TextBox *box) { m_textBox = box; }
 	TextBox *GetTextBox(void) const { return m_textBox; }
-	void AddText(MBCHAR *text);
 
     void SetDebugMask(uint32 m);
-    void AddText(const uint32 m, MBCHAR *text);
+    void AddText(const uint32 m, const MBCHAR *text);
 
     void AddMask(uint32 m);
-    void AddText(const char *err, ...);
+    void AddText(const char *err, ...)
+#ifdef __GNUC__
+	__attribute__((__format__ (__printf__, 2, 3)))
+#endif
+	;
 
 private:
 		TextBox				*m_textBox;

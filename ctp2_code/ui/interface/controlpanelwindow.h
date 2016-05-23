@@ -234,7 +234,7 @@ public:
 	ControlPanelWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND );
 
@@ -267,7 +267,7 @@ public:
 	void    BuildUnitList();
 	void    BuildUnitListBox();
 	void    BuildCityList(const MapPoint &pos);
-	void    AppendItem(ctp2_ListBox *,MBCHAR *string);
+	void    AppendItem(ctp2_ListBox *, const MBCHAR *string);
 
 	void    Select  ();
 	void    Deselect();
@@ -289,8 +289,8 @@ public:
 	static void RebuildMenus  ();
 
 	void    ResetTabGroup();
-	void    CreateTabGroup(MBCHAR *ldlBlock);
-	void    CreateTab(sint32 which,MBCHAR *name);
+	void    CreateTabGroup(const MBCHAR *ldlBlock);
+	void    CreateTab(sint32 which, const MBCHAR *name);
 
 	void    CreateTileImpBanks ();
 	void    ActivateTileImpBank(unsigned int group_id);
@@ -387,7 +387,11 @@ private:
 
 	BOOL    CursorOverControlPanel();
 
-	void    SetControlText(aui_Control *control,MBCHAR *fmt,...);
+	void    SetControlText(aui_Control *control, const MBCHAR *fmt, ...)
+#ifdef __GNUC__
+		__attribute__((format(__printf__, 3, 4)))
+#endif
+	    ;
 
 	ctp2_MenuBar    *m_mainMenuBar;
 
@@ -456,7 +460,7 @@ private:
 	aui_ProgressBar     *m_progressBar;
 };
 
-void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
+void ThrowPartyUtilityDialogBoxCallback(const MBCHAR *text, sint32 val2, void *data);
 void GotoCityUtilityDialogBoxCallback  (Unit city, sint32 val2);
 
 void controlpanelwindow_Update(Unit *city = NULL);

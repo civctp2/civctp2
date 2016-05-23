@@ -278,7 +278,7 @@ ActivNetIO::SessionReadyCallback(dp_session_t *ps,
 }
 
 NET_ERR
-ActivNetIO::Host(char* sessionName)
+ActivNetIO::Host(const char* sessionName)
 {
 	dp_session_t sess;
 	dp_result_t res;
@@ -754,7 +754,7 @@ ActivNetIO::Idle()
 }
 
 NET_ERR
-ActivNetIO::SetName(char* name)
+ActivNetIO::SetName(const char* name)
 {
 	m_name = new char[strlen(name) + 1];
 	strcpy(m_name, name);
@@ -762,7 +762,7 @@ ActivNetIO::SetName(char* name)
 }
 
 NET_ERR
-ActivNetIO::SetLobby(char* serverName)
+ActivNetIO::SetLobby(const char* serverName)
 {
 	Assert(m_dp);
 	dp_result_t res;

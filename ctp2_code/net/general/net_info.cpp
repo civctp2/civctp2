@@ -1004,8 +1004,10 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 			if(g_theArmyPool->IsValid(army)) {
 				g_gevManager->Pause();
-				BOOL res = army->ExecuteOrders();
-
+#ifdef _DEBUG
+				BOOL res =
+#endif
+				    army->ExecuteOrders();
 				Assert(res);
 				g_gevManager->Resume();
 			} else {
@@ -1684,7 +1686,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_BEGIN_SCHEDULER:
 		{
 			DPRINTF(k_DBG_NET, ("Server says ok to begin scheduler for player %d now\n", m_data));
-			if(m_data >= 0 && m_data < k_MAX_PLAYERS && g_player[m_data] && g_network.IsLocalPlayer(m_data)) {
+			if (m_data < k_MAX_PLAYERS && g_player[m_data] && g_network.IsLocalPlayer(m_data)) {
 				g_director->AddBeginScheduler(m_data);
 			}
 			break;
@@ -1771,7 +1773,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_GAME_OVER:
 		{
 			DPRINTF(k_DBG_NET, ("Server says game over for player %d, reason %d (%d)\n", m_data2, m_data, m_data3));
-			if(m_data >= 0 && m_data < k_MAX_PLAYERS) {
+			if (m_data < k_MAX_PLAYERS) {
 				if(g_player[m_data2]) {
 					g_player[m_data2]->GameOver((GAME_OVER)m_data, m_data3);
 				}

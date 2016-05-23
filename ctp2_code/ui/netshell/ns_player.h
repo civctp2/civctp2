@@ -37,8 +37,8 @@ public:
 
 	void Update( NETFunc::Player *player );
 
-	char *m_mute;
-	char *m_name;
+	const char *m_mute;
+	const char *m_name;
 	int m_ping;
 };
 

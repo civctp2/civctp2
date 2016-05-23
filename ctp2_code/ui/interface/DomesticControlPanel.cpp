@@ -149,7 +149,7 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 }
 
 
-DomesticControlPanel::DomesticControlPanel(MBCHAR *ldlBlock) :
+DomesticControlPanel::DomesticControlPanel(const MBCHAR *ldlBlock) :
 m_scienceLabel(static_cast<ctp2_Static*>(
                aui_Ldl::GetObject(ldlBlock,
                "DomesticTab.TabPanel.AdvanceProgress.Title"))),

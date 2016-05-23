@@ -83,7 +83,7 @@ void gslog_print(char *fmt, ...)
 #endif
 }
 
-void gslog_dipprint(char *fmt, ...)
+void gslog_dipprint(const char *fmt, ...)
 {
 #ifndef _BFR_
 	if(!g_theProfileDB->GetEnableLogs())

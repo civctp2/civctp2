@@ -23,7 +23,7 @@ extern ColorSet		*g_colorSet;
 c3_ColoredSwitch::c3_ColoredSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -48,7 +48,7 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	sint32 state,
@@ -68,10 +68,9 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 }
 
 
-AUI_ERRCODE c3_ColoredSwitch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ColoredSwitch::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH,
-				bevelType=0;
+	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
 	BOOL valid = theLdl->IsValid( ldlBlock );

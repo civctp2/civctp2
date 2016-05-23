@@ -12,7 +12,7 @@ public:
 	virtual ~ldl_MemMap() {}
 
 	virtual unsigned char *GetFileBits(
-		char *filename,
+		const char *filename,
 		unsigned long *filesize = NULL );
 	virtual void ReleaseFileBits( unsigned char *&bits );
 };

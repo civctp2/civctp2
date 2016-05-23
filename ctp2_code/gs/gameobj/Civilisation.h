@@ -92,7 +92,7 @@ class Civilisation : public ID
 		CIV_INDEX GetCivilisation(void) const { return (GetData()->GetCivilisation()) ; }
 		GENDER GetGender(void) const { return (GetData()->GetGender()); }
 
-		MBCHAR *GetLeaderName(void) { return (AccessData()->GetLeaderName()) ; }
+		const MBCHAR *GetLeaderName(void) { return (AccessData()->GetLeaderName()) ; }
 		void GetPluralCivName(MBCHAR *s) { AccessData()->GetPluralCivName(s) ; }
 		void GetCountryName(MBCHAR *s) { AccessData()->GetCountryName(s) ; }
 		void GetSingularCivName(MBCHAR *s) { AccessData()->GetSingularCivName(s) ; }
