@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,7 +61,6 @@ extern SelectedItem		*g_selected_item;
 extern ColorSet			*g_colorSet;
 extern World			*g_theWorld;
 
-
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							sint32 id,
 							MBCHAR *ldlBlock,
@@ -75,7 +74,6 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 {
 	InitCommonLdl(ldlBlock);
 }
-
 
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							uint32 id,
@@ -92,7 +90,7 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
-	InitCommon();	
+	InitCommon();
 }
 
 ThumbnailMap::~ThumbnailMap()
@@ -106,32 +104,26 @@ ThumbnailMap::~ThumbnailMap()
 	}
 }
 
-
 void ThumbnailMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
 
 
-
 	InitCommon();
 }
-
 
 void ThumbnailMap::InitCommon(void)
 {
 	AUI_ERRCODE			errcode;
 
-	
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
 
@@ -159,20 +151,15 @@ void ThumbnailMap::InitCommon(void)
 
 	m_cityFilterProc = NULL;
 
-	
 	m_mapSurface = aui_Factory::new_Surface(errcode, m_width, m_height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
-	
 	CalculateMetrics();
 
-	
 	BuildCityList();
 
-	
 	RenderMap(m_mapSurface);
 }
-
 
 
 void ThumbnailMap::BuildCityList(void)
@@ -208,14 +195,14 @@ void ThumbnailMap::BuildCityList(void)
 			}
 
 			info.city = cities->Access(i);
-			
+
 			MapPoint cityPos = info.city.RetPos();
 			pt = MapToPixel(&cityPos);
-			
+
 			SetRect(&cityRect, pt.x, pt.y, (sint32)(pt.x + m_tilePixelWidth), (sint32)(pt.y + m_tilePixelHeight));
 			OffsetRect(&cityRect, (sint32)(m_tilePixelWidth/2), (sint32)(m_tilePixelHeight/2));
 			InflateRect(&cityRect, (sint32)(2*m_tilePixelHeight), (sint32)(2*m_tilePixelHeight));
-			
+
 			if (cityRect.left < 0) OffsetRect(&cityRect, -cityRect.left, 0);
 			if (cityRect.top < 0) OffsetRect(&cityRect, 0, -cityRect.top);
 			if (cityRect.right >= m_width) OffsetRect(&cityRect, -(m_width - cityRect.right), 0);
@@ -231,7 +218,6 @@ void ThumbnailMap::BuildCityList(void)
 		}
 	}
 }
-
 
 void ThumbnailMap::SetCityBlink(Unit city, BOOL blink, COLOR blinkColor)
 {
@@ -254,13 +240,11 @@ void ThumbnailMap::SetCityBlink(Unit city, BOOL blink, COLOR blinkColor)
 	info.cityBlinkColor = blinkColor;
 }
 
-
 void ThumbnailMap::ClearMapOverlay(void)
 {
 	delete[] m_mapOverlay;
 	m_mapOverlay = NULL;
 }
-
 
 void ThumbnailMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 {
@@ -268,14 +252,12 @@ void ThumbnailMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 		sint32 len = m_mapSize->x * m_mapSize->y;
 		m_mapOverlay = new COLOR[len];
 
-		
-		for (sint32 i=0; i<len; i++) 
+		for (sint32 i=0; i<len; i++)
 			m_mapOverlay[i] = COLOR_MAX;
 	}
 
 	m_mapOverlay[pos.x + (pos.y * m_mapSize->x)] = color;
 }
-
 
 
 AUI_ERRCODE	ThumbnailMap::Resize( sint32 width, sint32 height )
@@ -288,41 +270,37 @@ AUI_ERRCODE	ThumbnailMap::Resize( sint32 width, sint32 height )
 	if (m_mapSurface)
 		delete m_mapSurface;
 
-	
 	m_mapSurface = aui_Factory::new_Surface(errcode, width, height, 16);
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	CalculateMetrics();
 
-	
 	RenderMap(m_mapSurface);
 
 	return errcode;
 }
 
-
 void ThumbnailMap::CalculateMetrics(void)
 {
-    Assert(g_theWorld); 
+    Assert(g_theWorld);
 	m_mapSize = g_theWorld->GetSize();
 	double		mapRatio;
 	double		controlRatio;
 
-    Assert(0 < m_mapSize->x); 
-    Assert(0 < m_mapSize->y); 
+    Assert(0 < m_mapSize->x);
+    Assert(0 < m_mapSize->y);
 
-	
 
 	mapRatio = (double)(m_mapSize->x * 2) / (double)m_mapSize->y;
 	controlRatio = (double)m_width / (double)m_height;
 
 	if (mapRatio > controlRatio) {
-		
-		m_tilePixelWidth = ((double)(m_width-1) / (double)(m_mapSize->x+1));	
-		m_tilePixelWidth -= ((m_tilePixelWidth / 2.0) / (double)(m_width));			
+
+		m_tilePixelWidth = ((double)(m_width-1) / (double)(m_mapSize->x+1));
+		m_tilePixelWidth -= ((m_tilePixelWidth / 2.0) / (double)(m_width));
 		m_tilePixelHeight = m_tilePixelWidth / 2.0;
 	} else {
-		
+
 		m_tilePixelHeight = ((double)(m_height-1) / (double)(m_mapSize->y+1));
 		m_tilePixelWidth = m_tilePixelHeight * 2.0;
 	}
@@ -331,10 +309,9 @@ void ThumbnailMap::CalculateMetrics(void)
 	m_centerY = (sint32) (((double)(m_height)/2.0) - (m_tilePixelHeight * ((double)m_mapSize->y))/2.0);
 }
 
-
 POINT ThumbnailMap::MapToPixel(sint32 x, sint32 y)
 {
-    Assert(0 < m_mapSize->x); 
+    Assert(0 < m_mapSize->x);
 	sint32 const	k = ((y / 2) + x) % m_mapSize->x;
 	POINT			pt;
 
@@ -344,16 +321,14 @@ POINT ThumbnailMap::MapToPixel(sint32 x, sint32 y)
 	return pt;
 }
 
-
 POINT ThumbnailMap::MapToPixel(MapPoint *pos)
 {
 	return MapToPixel(pos->x, pos->y);
 }
 
-
 void ThumbnailMap::RenderMap(aui_Surface *surf)
 {
-	sint32			i, j, k; 
+	sint32			i, j, k;
 	sint32			terrainType;
 	Pixel16			color;
 	double			xPos, yPos;
@@ -372,7 +347,7 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 			if (i&1) {
 				nudge = m_tilePixelWidth / 2.0;
 			}
-			
+
 			xPos = (sint32)(k * m_tilePixelWidth);
 			yPos = (sint32)(i * m_tilePixelHeight);
 
@@ -382,17 +357,16 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 			UnseenCellCarton	cellCarton;
 			Unit				top;
 
-			
 			if (vision->IsExplored(pos)) {
-				
+
 				if(m_displayOverlay && m_mapOverlay && m_mapOverlay[i*m_mapSize->x + j] != COLOR_MAX) {
 					color = m_mapOverlay[i*m_mapSize->x + j];
 				} else {
 					if(m_displayUnits && g_theWorld->GetTopRadarUnit(pos, top)) {
 						color = g_colorSet->GetPlayerColor(top.GetOwner());
 					} else {
-						Cell *theLandCell = g_theWorld->GetCell(j, i);			
-						if (theLandCell->IsAnyUnitInCell()) { 
+						Cell *theLandCell = g_theWorld->GetCell(j, i);
+						if (theLandCell->IsAnyUnitInCell()) {
 						}
 
 						if (vision->GetLastSeen(pos, cellCarton)) {
@@ -403,14 +377,12 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 
 						color = g_colorSet->GetColor((COLOR)(COLOR_TERRAIN_0 + terrainType));
 
-
-						if (g_theWorld->IsGood(j,i)) { 
+						if (g_theWorld->IsGood(j,i)) {
 						}
 
-						if (g_theWorld->IsRiver(j,i)) { 
+						if (g_theWorld->IsRiver(j,i)) {
 						}
 
-						
 						if (m_displayLandOwnership) {
 							PLAYER_INDEX	owner = theLandCell->GetOwner();
 							if (owner != -1)
@@ -428,7 +400,7 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 			yPos2 = (sint32)ceil(yPos + m_tilePixelHeight);
 
 			RECT tileRect = {xPos1, yPos1, xPos2, yPos2};
-			
+
 			Assert(tileRect.right < surf->Width());
 			Assert(tileRect.bottom < surf->Height());
 
@@ -436,11 +408,9 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 
 			primitives_PaintRect16(surf, &tileRect, color);
 
-			
 		}
 	}
 }
-
 
 void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 {
@@ -451,14 +421,12 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 	Pixel16		blackColor = g_colorSet->GetColor(COLOR_BLACK);
 
 	const DynamicArray<MapPoint> *path = route->GetPath();
-	
-	
-	if (route == m_selectedRoute) 
+
+	if (route == m_selectedRoute)
 		color = g_colorSet->GetColor(COLOR_SELECT_1);
-	else 
+	else
 		color = (Pixel16)route->GetColor();
 
-	
 	pt = path->Get(0);
 	p1 = MapToPixel(&pt);
 	p1.x += (sint32)(m_tilePixelWidth/2);
@@ -483,8 +451,8 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 			if (p2.x <= 0) p2.x = 1;
 			if (p2.y <= 0) p2.y = 1;
 
-			
-			
+
+
 
 			primitives_DrawAALine16(surf, p1.x, p1.y, p2.x, p2.y, blackColor);
 			primitives_DrawAALine16(surf, p1.x-1, p1.y-1, p2.x-1, p2.y-1, color);
@@ -493,7 +461,6 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 		}
 	}
 }
-
 
 void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 {
@@ -511,7 +478,6 @@ void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 		CityData			*cityData = cities->Get(i).GetData()->GetCityData();
 		TradeDynamicArray	*source = cityData->GetTradeSourceList();
 
-		
 		for (j=0; j<source->Num(); j++) {
 			TradeRoute route = source->Access(j);
 
@@ -520,11 +486,9 @@ void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 	}
 }
 
-
 void ThumbnailMap::RenderUnitMovement(aui_Surface *surf)
 {
 }
-
 
 void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 {
@@ -539,11 +503,10 @@ void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 
 	for (i=0; i<m_cityList->Num(); i++) {
 		info = m_cityList->Access(i);
-		
+
 		rect = info.cityRect;
 		OffsetRect(&rect, x, y);
 
-		
 		primitives_FrameRect16(surf, &rect, g_colorSet->GetColor(COLOR_BLACK));
 		InflateRect(&rect, -1, -1);
 		if (info.cityBlink && GetTickCount() > info.cityBlinkTime) {
@@ -560,23 +523,19 @@ void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 		primitives_PaintRect16(surf, &rect, color);
 		primitives_BevelRect16(surf, &rect, 2, 0, 16, 16);
 
-		
 		if (m_displayCityNames) {
 		}
 	}
 }
 
-
 void ThumbnailMap::RenderAll(aui_Surface *surf)
 {
-	
+
 	RenderMap(surf);
-	
-	
+
 	if (m_displayTradeRoutes) RenderTradeRoutes(surf);
 	if (m_displayUnitMovement) RenderUnitMovement(surf);
 }
-
 
 
 void ThumbnailMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
@@ -585,25 +544,24 @@ void ThumbnailMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 
 
 
-	
+
 	g_c3ui->TheBlitter()->Blt(surf, x, y, m_mapSurface, &rect, k_AUI_BLITTER_FLAG_COPY);
 
 
-	
-	
-	
+
+
+
 	if (m_displayCities)
 		UpdateCities(surf, x, y);
 
 }
 
-
 AUI_ERRCODE ThumbnailMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
-	if ( !surface ) 
+	if ( !surface )
 		surface = m_window->TheSurface();
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -618,7 +576,6 @@ AUI_ERRCODE ThumbnailMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 void ThumbnailMap::MouseLGrabInside(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
@@ -632,19 +589,16 @@ void ThumbnailMap::MouseLGrabInside(aui_MouseEvent *data)
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
-	
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	
 	CityInfo	info;
 	for (i=0; i<m_cityList->Num(); i++) {
 		info = m_cityList->Access(i);
 		if (PtInRect(&info.cityRect, data->position)) {
-			
+
 			m_selectedCity = info.city;
 
-			
 			if ( m_ActionFunc )
 				m_ActionFunc( this, C3_THUMBNAIL_ACTION_SELECTEDCITY, 0, m_cookie );
 			else if ( m_action )
@@ -655,13 +609,12 @@ void ThumbnailMap::MouseLGrabInside(aui_MouseEvent *data)
 		}
 	}
 
-	
+
 
 
 	if (doRender)
 		RenderMap(m_mapSurface);
 }
-
 
 void ThumbnailMap::MouseRGrabInside(aui_MouseEvent *data)
 {
@@ -673,12 +626,10 @@ void ThumbnailMap::MouseRGrabInside(aui_MouseEvent *data)
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
-	
 	data->position.x -= X();
 	data->position.y -= Y();
 
 }
-
 
 BOOL ThumbnailMap::ShowTipWindow( aui_MouseEvent *mouseData )
 {
@@ -686,18 +637,15 @@ BOOL ThumbnailMap::ShowTipWindow( aui_MouseEvent *mouseData )
 	{
 		PlaySound( AUI_SOUNDBASE_SOUND_TIP );
 
-		
 		m_showingTip = g_c3ui->AddWindow( m_tip ) == AUI_ERRCODE_OK;
 
 		RECT rect = { mouseData->position.x, mouseData->position.y, 0, 0 };
 		ToWindow( &rect );
 
-		
 		m_tip->Move(
 			m_window->X() + rect.left - m_tip->Width() / 2,
 			m_window->Y() + rect.top - m_tip->Height() );
 
-		
 		if ( m_tip->X() < 0 ) m_tip->Move( 0, m_tip->Y() );
 		if ( m_tip->Y() < 0 ) m_tip->Move( m_tip->X(), 0 );
 		sint32 adjustX = m_tip->X() + m_tip->Width() - g_c3ui->Width();
@@ -712,7 +660,6 @@ BOOL ThumbnailMap::ShowTipWindow( aui_MouseEvent *mouseData )
 }
 
 
-
 void ThumbnailMap::MouseNoChange( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -722,22 +669,21 @@ void ThumbnailMap::MouseNoChange( aui_MouseEvent *mouseData )
 	if ( !mouseData->lbutton && !mouseData->rbutton )
 	if ( mouseData->time - m_noChangeTime > m_timeOut )
 	{
-		
+
 		POINT		pos = mouseData->position;
 
 		pos.x -= X();
 		pos.y -= Y();
 
-		
 		CityInfo	info;
 		sint32		i;
 
 		for (i=0; i<m_cityList->Num(); i++) {
 			info = m_cityList->Access(i);
 			if (PtInRect(&info.cityRect, pos)) {
-				
 
-				
+
+
 
 				SetWhichSeesMouse( this );
 
@@ -752,7 +698,6 @@ void ThumbnailMap::MouseNoChange( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void ThumbnailMap::MouseMoveInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -763,24 +708,20 @@ void ThumbnailMap::MouseMoveInside( aui_MouseEvent *mouseData )
 }
 
 
-
 AUI_ERRCODE ThumbnailMap::Idle( void )
 {
-	
-	ShouldDraw(TRUE) ;
 
+	ShouldDraw(TRUE) ;
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 void ThumbnailMap::UpdateAll( void )
 {
-	
+
 	m_mapSize = g_theWorld->GetSize();
 
 	BuildCityList();
 	if (m_mapSurface) RenderAll(m_mapSurface);
 }
-

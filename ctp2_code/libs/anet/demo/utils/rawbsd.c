@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -146,11 +146,10 @@ void raw_get_term_dimensions(cols, rows)
     int *rows;
 {
     struct winsize wind_struct;
-      
+
    ioctl(2,TIOCGWINSZ,&wind_struct);
    *cols = (int) wind_struct.ws_col;
    *rows = (int) wind_struct.ws_row;
    if (*rows <= 0) *rows = 24;
    if (*cols <= 0) *cols = 80;
 }
-

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_window.h"
@@ -20,7 +9,6 @@
 
 #include "soundmanager.h"
 #include "gamesounds.h"
-
 
 
 aui_Switch::aui_Switch(
@@ -45,7 +33,6 @@ aui_Switch::aui_Switch(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Switch::aui_Switch(
@@ -77,17 +64,14 @@ aui_Switch::aui_Switch(
 }
 
 
-
 AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -103,7 +87,6 @@ AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_Switch::InitCommon( sint32 state, sint32 numStates )
 {
 	SetNumStates( numStates ? numStates : k_AUI_SWITCH_DEFAULTNUMSTATES );
@@ -113,16 +96,13 @@ AUI_ERRCODE aui_Switch::InitCommon( sint32 state, sint32 numStates )
 }
 
 
-
 sint32 aui_Switch::SetState( sint32 state )
 {
 	sint32 prevState = m_state;
 
-	
 	if ((m_state = state))
 	{
-		
-		
+
 		if ( m_numStates == 2 ) m_state = 1;
 
 		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
@@ -130,7 +110,6 @@ sint32 aui_Switch::SetState( sint32 state )
 	else
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ON;
 
-	
 	m_state = Mod(m_state,m_numStates);
 
 	if ( m_ActionFunc )
@@ -145,13 +124,11 @@ sint32 aui_Switch::SetState( sint32 state )
 			m_state ? AUI_SWITCH_ACTION_ON : AUI_SWITCH_ACTION_OFF,
 			(uint32)m_state );
 
-	
 	if ( prevState != m_state )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return prevState;
 }
-
 
 
 sint32 aui_Switch::SetNumStates( sint32 numStates )
@@ -165,7 +142,6 @@ sint32 aui_Switch::SetNumStates( sint32 numStates )
 }
 
 
-
 AUI_ERRCODE aui_Switch::ResetThis( void )
 {
 	if ( GetState() )
@@ -177,13 +153,12 @@ AUI_ERRCODE aui_Switch::ResetThis( void )
 }
 
 
-
 AUI_ERRCODE aui_Switch::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -196,11 +171,11 @@ AUI_ERRCODE aui_Switch::DrawThis(
 		if (m_window)
 			if ( surface == m_window->TheSurface() )
 				m_window->AddDirtyRect( &rect );
-		return m_drawFunc(this, surface, rect, m_drawCookie);		
+		return m_drawFunc(this, surface, rect, m_drawCookie);
 	}
 
-	if((m_drawFunc)&&(!m_drawCallbackExclusive)) 
-		m_drawFunc(this, surface, rect, m_drawCookie);		
+	if((m_drawFunc)&&(!m_drawCallbackExclusive))
+		m_drawFunc(this, surface, rect, m_drawCookie);
 
 	DrawThisStateImage(
 		m_state ? m_state : IsOn() ? 1 : 0,
@@ -211,7 +186,7 @@ AUI_ERRCODE aui_Switch::DrawThis(
 
 
 
-	
+
 	RECT down = rect;
 	down.left += 2;
 	down.top += 2;
@@ -219,7 +194,6 @@ AUI_ERRCODE aui_Switch::DrawThis(
 	DrawThisText(
 		surface,
 		IsOn() ? &down : &rect );
-
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );
@@ -240,7 +214,6 @@ void aui_Switch::SetDrawCallbackAndCookie(SwitchDrawCallback *func, void *cookie
 }
 
 
-
 void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -248,12 +221,10 @@ void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -279,16 +250,14 @@ void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Switch::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == this )
 	{
 		PlaySound( AUI_SOUNDBASE_SOUND_DISENGAGE );
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -311,7 +280,6 @@ void aui_Switch::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Switch::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) {
@@ -324,16 +292,13 @@ void aui_Switch::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
@@ -353,7 +318,6 @@ void aui_Switch::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Switch::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -361,34 +325,28 @@ void aui_Switch::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 			if ( !HandleGameSpecificLeftClick( this ) )
 			SetState( Mod(m_state+1,m_numStates) );
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 		else
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
@@ -410,21 +368,18 @@ void aui_Switch::MouseLDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Switch::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == this )
 	{
-		
+
 		ReleaseMouseOwnership();
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 
 		if ( m_ActionFunc )
@@ -441,7 +396,6 @@ void aui_Switch::MouseLDropOutside( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Switch::MouseRDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -455,4 +409,3 @@ void aui_Switch::MouseRDropInside( aui_MouseEvent *mouseData )
 		MouseRDropOutside( mouseData );
 	}
 }
-

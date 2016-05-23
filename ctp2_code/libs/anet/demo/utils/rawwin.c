@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ void raw_set_stdio( int raw ) { (void) raw; }
 /* Check for char on stdin.  Returns nonzero if one is waiting, 0 if not. */
 int raw_kbhit(/* void */) { return kbhit(); }
 
-/* Return -1 if no char available, otherwise return char. 
+/* Return -1 if no char available, otherwise return char.
  * Return 3 if user hits the interrupt key (usually ^C, hence 3)
  */
 int raw_getc(/* void */) { return getch(); }

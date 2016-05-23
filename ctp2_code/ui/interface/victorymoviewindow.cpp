@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Victory movie window (win lose video)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,6 @@
 #include "victorymoviewin.h"
 
 
-
 VictoryMovieWindow::VictoryMovieWindow(
 									 AUI_ERRCODE *retval,
 									 uint32 id,
@@ -59,7 +58,6 @@ C3Window(retval, id, ldlBlock, bpp, type)
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 VictoryMovieWindow::VictoryMovieWindow(
@@ -81,7 +79,6 @@ C3Window( retval, id, x, y, width, height, bpp, pattern, type )
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
 }
-
 
 
 VictoryMovieWindow::~VictoryMovieWindow()
@@ -120,12 +117,10 @@ AUI_ERRCODE VictoryMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return InitCommon();
 }
 
-
 AUI_ERRCODE VictoryMovieWindow::InitCommon(void)
-{		
+{
 	return C3Window::InitCommon();
 }
-
 
 
 void VictoryMovieWindow::SetMovie(MBCHAR *filename)
@@ -136,7 +131,6 @@ void VictoryMovieWindow::SetMovie(MBCHAR *filename)
 }
 
 
-
 void VictoryMovieWindow::SetVictoryName(MBCHAR *name)
 {
 	if (m_wonderName)
@@ -144,27 +138,24 @@ void VictoryMovieWindow::SetVictoryName(MBCHAR *name)
 }
 
 
-
 AUI_ERRCODE VictoryMovieWindow::Idle()
 {
-	
-	
+
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE VictoryMovieWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
-	
 
-	
 
-	
-	
 
-	
+
+
+
+
+
 	return AUI_ERRCODE_OK;
 }

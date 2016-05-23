@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
@@ -11,7 +9,7 @@
 #include "ctp2_listitem.h"
 
 
-    
+
 
 ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	:
@@ -28,7 +26,7 @@ ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 
 	*retval = InitCommonLdl(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 /*
@@ -39,11 +37,10 @@ ctp2_ListItem::ctp2_ListItem() : aui_Item() {
     }
 */
 
-ctp2_ListItem::~ctp2_ListItem()  
+ctp2_ListItem::~ctp2_ListItem()
 {
 	DeleteChildren();
 }
-
 
 
 AUI_ERRCODE ctp2_ListItem::InitCommonLdl(MBCHAR *ldlBlock)

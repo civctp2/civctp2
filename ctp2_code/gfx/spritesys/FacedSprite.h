@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -63,7 +63,7 @@ class Token;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class FacedSprite : public Sprite 
+class FacedSprite : public Sprite
 {
 public:
 	FacedSprite();
@@ -74,14 +74,14 @@ public:
 
 	void			Load(char *filename);
 
-	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 	virtual void	DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags);
-	virtual void	DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	virtual void	DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
-	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
 	Pixel16			*GetFrameData(uint16 facing, uint16 frame) { return m_frames[facing][frame]; }

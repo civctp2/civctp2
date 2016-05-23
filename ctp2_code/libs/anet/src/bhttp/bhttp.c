@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -109,9 +109,9 @@ bhttp_t *bhttp_create(unsigned short port, bhttp_url2buf_t url2buf_cb, void *url
 
 	DPRINT(("bhttp_create: binding socket:%d\n", sockin));
 	memset(&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET; 
-	addr.sin_port = htons(port); 
-	addr.sin_addr.s_addr = htons(INADDR_ANY); 
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(sockin, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 		DPRINT(("bhttp_create: bind error:%d\n", errno));
 		return NULL;
@@ -156,7 +156,7 @@ void bhttp_destroy(bhttp_t *bhttp)
 	for (i = 0; i < bhttp->conns->n_used; i++) {
 		assoctab_item_t *pi = assoctab_getkey(bhttp->conns, i);
 		close(pi->key);
-	}	
+	}
 	assoctab_destroy(bhttp->conns);
 	memset(bhttp, 0, sizeof(bhttp_t));
 	free(bhttp);
@@ -207,7 +207,7 @@ bufgets( bhttp_conn_t *pc )
 		if ( c == '\n' || c == '\r' ) {
 			pc->ibuf[pc->ipos] = '\0';
 			++pc->ipos;
-			if ( c == '\r' && pc->ipos < pc->ilen 
+			if ( c == '\r' && pc->ipos < pc->ilen
 			&&   pc->ibuf[pc->ipos] == '\n' ) {
 				pc->ibuf[pc->ipos] = '\0';
 				++pc->ipos;
@@ -440,7 +440,7 @@ static void bhttp_handleClosed(bhttp_t *bhttp, int h)
 }
 
 /*------------------------------------------------------------------------
- Gets the set of sockets that need reading into *rfds, and writing 
+ Gets the set of sockets that need reading into *rfds, and writing
  into *wfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
@@ -523,14 +523,14 @@ static int bhttp_formatOutputBuffer(bhttp_t *bhttp, int h, int status, char *typ
 
 /*------------------------------------------------------------------------
  Handle any new connections, data, or handle state changes.
- rfds and wfds should be the same fd_set*'s that were passed to select 
+ rfds and wfds should be the same fd_set*'s that were passed to select
  as it's second and third parameters.
  nsocks is the return value of select.
 
  Call this once after each select, regardless of whether select times out.
 
  Returns 0 upon success.
- Returns -1 on error; detailed error message is printed to log file if 
+ Returns -1 on error; detailed error message is printed to log file if
  this is a debug build.
 ------------------------------------------------------------------------*/
 int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
@@ -599,7 +599,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 				int buflen;
 				bhttp_url2buf_result_t urlResult;
 #ifdef VERBOSE
-				DPRINT(("bhttp_poll: h:%d finished receiving data\n", h)); 
+				DPRINT(("bhttp_poll: h:%d finished receiving data\n", h));
 #endif
 				memset(&urlResult, 0, sizeof(urlResult));
 				buflen = bhttp->url2buf_cb(bhttp->url2buf_context, pc->purl, buf, sizeof(buf), &urlResult);
@@ -613,7 +613,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 #endif
 			}
 			used = TRUE;
-		} 
+		}
 		if (FD_ISSET(h, wfds)
 		&&  FD_ISSET(h, &bhttp->wfds)) {
 			if (!pc) pc = (bhttp_conn_t *)assoctab_subscript(bhttp->conns, h);
@@ -629,7 +629,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 				/* silently fails */
 			} else if (len > 0) {
 #ifdef VERBOSE
-				DPRINT(("bhttp_poll: h:%d finished sending data\n", h)); 
+				DPRINT(("bhttp_poll: h:%d finished sending data\n", h));
 #endif
 				bhttp_handleClosed(bhttp, h);
 				if (-1 == close(h)) {
@@ -668,7 +668,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 			return -1;
 		}
 		h = pi->key;
-		pc = (bhttp_conn_t *)pi->value;	
+		pc = (bhttp_conn_t *)pi->value;
 		if (!pc) {
 			DPRINT(("bhttp_poll: conns[%d] == NULL?\n", i));
 			return -1;

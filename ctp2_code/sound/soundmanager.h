@@ -10,17 +10,17 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 // USE_SDL
@@ -96,7 +96,7 @@ public:
                             sint32 &soundX, sint32 &soundY, sint32 &soundZ);
 	void ProcessRedbook(void);
 	void Process(const uint32 &target_milliseconds, uint32 &used_milliseconds);
-	
+
 	void AddGameSound(const GAMESOUNDS &sound);
 	void AddSound(const SOUNDTYPE &type, const uint32 &associatedObject,
                   const sint32 &soundID, sint32 x=0, sint32 y=0);
@@ -113,12 +113,12 @@ public:
 	void SetMasterVolume(const uint32 &volume);
 	CivSound *FindSound(const SOUNDTYPE &type,
                         const uint32 &associatedObject);
-	CivSound *FindLoopingSound(const SOUNDTYPE &type, 
+	CivSound *FindLoopingSound(const SOUNDTYPE &type,
                                const uint32 &associatedObject);
 	void SetPosition(const SOUNDTYPE &type,
                      const uint32 &associatedObject,
                      const sint32 &x, const sint32 &y);
-	
+
 	void		StartMusic();
 	void		StartMusic(const sint32 &trackNum);
 	void		TerminateMusic();
@@ -141,7 +141,6 @@ public:
 	const sint32     GetLastTrack() const;
 	void             SetLastTrack(const sint32 &track);
 
-	
 	void StupidPlaySound(const sint32 &soundID);
 	void PlaySound(const MBCHAR *fullFilename, const bool &bNoWait);
 
@@ -155,7 +154,7 @@ public:
         struct Data;
 private:
 	Data *m_pData;
-	
+
 	PointerList<CivSound>	*m_sfxSounds;
 	PointerList<CivSound>	*m_voiceSounds;
 
@@ -186,7 +185,7 @@ private:
 	sint32					m_playListPosition;
 	sint32					m_userTrack;
 	BOOL					m_autoRepeat;
-	
+
 	BOOL					m_stopRedbookTemporarily;
 };
 

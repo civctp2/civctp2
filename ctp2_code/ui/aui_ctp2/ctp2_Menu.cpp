@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "ctp2_Menu.h"
 #include "aui_ldl.h"
@@ -43,9 +42,9 @@ ctp2_Menu::ctp2_Menu(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 class CleanupMenuWindowAction : public aui_Action
 {
 public:
-	CleanupMenuWindowAction(aui_Window * window) 
+	CleanupMenuWindowAction(aui_Window * window)
     :   aui_Action  (),
-        m_window    (window) 
+        m_window    (window)
     { ; };
 
 	virtual void	Execute
@@ -66,20 +65,18 @@ protected:
 	aui_Window *    m_window;
 };
 
-
 ctp2_Menu::~ctp2_Menu()
 {
 	Close();
 
 	if(m_window) {
-		
-		
+
 		g_c3ui->AddAction(new CleanupMenuWindowAction(m_window));
 	}
 
 	if(m_items) {
 		if(!m_resized) {
-			
+
 			PointerList<Item>::Walker walk(m_items);
 			for(; walk.IsValid(); walk.Next()) {
 				delete walk.GetObj()->m_item;
@@ -92,7 +89,7 @@ ctp2_Menu::~ctp2_Menu()
 	}
 }
 
-void 
+void
 ctp2_Menu::SetCallback(CTP2MenuCallback *callback)
 {
 	m_callback = callback;
@@ -112,7 +109,6 @@ void ctp2_Menu::Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 	m_atMouse = atMouse;
 	m_siblingArea = NULL;
 
-	
 	MBCHAR dammit[k_MAX_NAME_LEN];
 	strcpy(dammit, block);
 
@@ -133,7 +129,6 @@ void ctp2_Menu::Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 		m_list->SetIgnoreOutsideDrops(true);
 	}
 
-	
 	if (atMouse)
 		m_window->Move(g_c3ui->TheMouse()->X(), g_c3ui->TheMouse()->Y());
 
@@ -142,16 +137,14 @@ void ctp2_Menu::Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 
 void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 {
-	
-	
-	
+
+
 	ctp2_Static *box = (ctp2_Static *)menuItem->m_item->GetChildByIndex(0);
 	Assert(box);
 	if(!box)
 		return;
 
-	
-	
+
 	ctp2_Static *textBox = (ctp2_Static *)box->GetChildByIndex(0);
 	Assert(textBox);
 	if(!textBox)
@@ -159,8 +152,7 @@ void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 
 	textBox->Resize(m_maxTextWidth, m_maxItemHeight);
 	textBox->Move(m_maxIconWidth + k_EXTRA_LEFT_SPACE, textBox->Y());
-	
-	
+
 	ctp2_Static *shortcutBox = (ctp2_Static *)box->GetChildByIndex(1);
 	Assert(shortcutBox);
 	if(shortcutBox) {
@@ -168,7 +160,6 @@ void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 		shortcutBox->Resize(m_maxShortcutWidth, m_maxItemHeight);
 	}
 
-	
 	if(box->NumChildren() > 2) {
 		ctp2_Static *iconBox = (ctp2_Static *)box->GetChildByIndex(2);
 		Assert(iconBox);
@@ -178,12 +169,11 @@ void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 		}
 	}
 
-	
 	box->Resize(m_maxIconWidth + textBox->Width() + m_maxShortcutWidth + k_RIGHT_ITEM_MARGIN + k_EXTRA_LEFT_SPACE, m_maxItemHeight);
 	menuItem->m_item->Resize(box->Width(), box->Height());
 }
 
-ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut, 
+ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut,
 									   const MBCHAR *icon, void *cookie)
 {
 	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot(block);
@@ -191,7 +181,6 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 	if(!item)
 		return NULL;
 
-	
 	ctp2_Menu::Item *menuItem = new ctp2_Menu::Item;
 	menuItem->m_item = item;
 	if(!shortcut) {
@@ -202,8 +191,7 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 	strcpy(menuItem->m_shortcut, shortcut);
 	menuItem->m_cookie = cookie;
 
-	
-	
+
 	item->SetUserData(menuItem);
 
 	ctp2_Static *box = (ctp2_Static *)menuItem->m_item->GetChildByIndex(0);
@@ -211,7 +199,6 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 	if(!box)
 		return menuItem;
 
-	
 	ctp2_Static *textBox = (ctp2_Static *)box->GetChildByIndex(0);
 	Assert(textBox);
 	if(!textBox)
@@ -219,7 +206,6 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 
 	textBox->SetText(text);
 
-	
 	ctp2_Static *shortcutBox = (ctp2_Static *)box->GetChildByIndex(1);
 	Assert(shortcutBox);
 	if(!shortcutBox)
@@ -227,10 +213,8 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 
 	shortcutBox->SetText(shortcut);
 
-	
 	m_items->AddTail(menuItem);
 
-	
 	if(!textBox->GetTextFont()) {
 		textBox->TextReloadFont();
 	}
@@ -239,7 +223,6 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 		shortcutBox->TextReloadFont();
 	}
 
-	
 	if(icon) {
 		Assert(box->NumChildren() > 2);
 		ctp2_Static *iconBox = (ctp2_Static *)box->GetChildByIndex(2);
@@ -259,7 +242,6 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 		}
 	}
 
-	
 	Assert(textBox->GetTextFont());
 	if(textBox->GetTextFont()) {
 		sint32 width = textBox->GetTextFont()->GetStringWidth(text);
@@ -270,16 +252,15 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 
 		sint32 iconWidth = 0;
 		sint32 iconHeight = 0;
-		
+
 		if(box->NumChildren() > 2) {
 			ctp2_Static *iconBox = (ctp2_Static *)box->GetChildByIndex(2);
 			Assert(iconBox);
 			iconWidth = iconBox->GetImage()->TheSurface()->Width() + k_LEFT_ITEM_MARGIN;
 			iconHeight = iconBox->GetImage()->TheSurface()->Width();
 		}
-		
-		
-		
+
+
 		if(iconWidth > m_maxIconWidth) {
 			m_maxIconWidth = iconWidth;
 			resizedSomething = true;
@@ -290,26 +271,25 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(MBCHAR *block, const MBCHAR *text, const 
 			resizedSomething = true;
 		}
 	}
-		
+
 	if(item->Height() > m_maxItemHeight) {
 		m_maxItemHeight = item->Height();
 	}
 
 	if(resizedSomething) {
-		
+
 		PointerList<Item>::Walker walk(m_items);
 		while(walk.IsValid()) {
 			Reformat(walk.GetObj());
 			walk.Next();
 		}
 	} else {
-		
+
 		Reformat(menuItem);
 	}
 
 	return menuItem;
 }
-
 
 void ctp2_Menu::AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie)
 {
@@ -317,24 +297,21 @@ void ctp2_Menu::AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie
 	Assert(item);
 }
 
-
 void ctp2_Menu::AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, void *cookie)
 {
 	ctp2_Menu::Item *item = CreateItem("IconMenuListItem", text, shortcut, icon, cookie);
-	
+
 	Assert(item);
 }
 
-
 void ctp2_Menu::Resize()
 {
-	
-	m_window->Resize(m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN + k_EXTRA_WINDOW_WIDTH + k_EXTRA_LEFT_SPACE, 
+
+	m_window->Resize(m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN + k_EXTRA_WINDOW_WIDTH + k_EXTRA_LEFT_SPACE,
 					 m_items->GetCount() * m_maxItemHeight + k_EXTRA_WINDOW_HEIGHT);
 	m_list->Resize(m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN + k_LIST_WIDTH_DELTA + k_EXTRA_LEFT_SPACE,
 				   m_window->Height() + k_LIST_HEIGHT_DELTA);
 
-	
 	PointerList<Item>::Walker walk(m_items);
 	m_list->BuildListStart();
 	while(walk.IsValid()) {
@@ -348,15 +325,15 @@ void ctp2_Menu::Resize()
 
 void ctp2_Menu::Open()
 {
-	
+
 	if (m_atMouse)
 		m_window->Move(g_c3ui->TheMouse()->X(), g_c3ui->TheMouse()->Y());
 
 	Assert(m_window);
-	
-	if(!m_window) 
+
+	if(!m_window)
 	{
-		
+
 		Init("CTP2_MENU", true, NULL);
 		Assert(m_window);
 		if(!m_window)
@@ -368,7 +345,6 @@ void ctp2_Menu::Open()
 
 	m_window->SetWeaklyModal(TRUE);
 
-	
 	if(m_window->X() + m_window->Width() >= g_ScreenWidth) {
 		Move(g_ScreenWidth - m_window->Width(), m_window->Y());
 	}
@@ -384,10 +360,10 @@ void ctp2_Menu::Open()
 	g_c3ui->AddWindow(m_window);
 	m_window->ResetCurrentMouseState();
 
-	
-	
-	
-	
+
+
+
+
 }
 
 void ctp2_Menu::Close()
@@ -408,9 +384,8 @@ void ctp2_Menu::Move(sint32 x, sint32 y)
 	m_window->Move(x, y);
 }
 
-
 void ctp2_Menu::ListCallback(aui_Control *control, uint32 action, uint32 data)
-{	
+{
 	if(action != AUI_LISTBOX_ACTION_SELECT)
 		return;
 
@@ -434,12 +409,10 @@ void ctp2_Menu::ListCallback(aui_Control *control, uint32 action, uint32 data)
 			m_callback(this, CTP2_MENU_ACTION_CANCEL, -1, NULL);
 		}
 	}
-	
-	
-	
+
+
 	inCallback = false;
 }
-
 
 void ctp2_Menu::StaticListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -468,7 +441,7 @@ const MBCHAR *ctp2_Menu::GetShortcutString(sint32 index)
 
 bool ctp2_Menu::HandleShortcut(const MBCHAR *shortcut)
 {
-	
+
 	sint32 index = 0;
 	PointerList<Item>::Walker walk(m_items);
 	while(walk.IsValid()) {
@@ -476,15 +449,13 @@ bool ctp2_Menu::HandleShortcut(const MBCHAR *shortcut)
 			if(m_callback) {
 				m_callback(this, CTP2_MENU_ACTION_SELECT, index, walk.GetObj()->m_cookie);
 			}
-			
-			
+
 			return true;
 		}
 		index++;
 		walk.Next();
 	}
 
-	
 	return false;
 }
 
@@ -492,7 +463,7 @@ void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, vo
 {
 	ctp2_Menu *menu = (ctp2_Menu *)cookie;
 	Assert(menu);
-	
+
 	if(menu) {
 		if(menu->m_siblingArea) {
 			if((event->position.x >= menu->m_siblingArea->X()) &&
@@ -505,27 +476,25 @@ void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, vo
 
 		if(menu->m_callback) {
 			menu->m_callback(menu, CTP2_MENU_ACTION_CANCEL, -1, NULL);
-			
+
 		}
 	}
-	
+
 }
 
 
 
 
-void	
+void
 ctp2_Menu::Clear()
 {
-	
+
 	if (m_items!=NULL)
 		m_items->DeleteAll();
 
-	
 	if (m_list!=NULL)
 		m_list->Clear();
 
-	
 	m_maxTextWidth	= k_MINIMUM_TEXT_WIDTH;
 	m_maxIconWidth	= 0;
 	m_maxItemHeight = 0;

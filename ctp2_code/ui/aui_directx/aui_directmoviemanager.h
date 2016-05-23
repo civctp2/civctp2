@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -16,13 +7,11 @@
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-
 #include "aui_moviemanager.h"
 #include "aui_directmovie.h"
 #include "aui_resource.h"
 
 #include "c3files.h"
-
 
 class aui_DirectMovieManager : public aui_MovieManager
 {
@@ -50,7 +39,6 @@ protected:
 	aui_Resource<aui_DirectMovie>	*m_directMovieResource;
 };
 
+#endif
 
-#endif 
-
-#endif 
+#endif

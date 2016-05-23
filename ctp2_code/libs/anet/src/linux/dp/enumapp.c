@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,9 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.1  1997/07/22 18:17:08  anitalee
  Initial revision
 --------------------------------------------------------------------------*/
- 
-#include "dp.h"
 
+#include "dp.h"
 
 #if defined(dp_ANET2)
 
@@ -44,7 +43,7 @@ dp_freezeAppsList(
 }
 
 /*----------------------------------------------------------------------
-Subscribe to the server's table. 
+Subscribe to the server's table.
 ----------------------------------------------------------------------*/
 dp_result_t			/* status */
 dp_subscribeAppsList(
@@ -55,7 +54,7 @@ dp_subscribeAppsList(
 }
 
 /*----------------------------------------------------------------------
- Determine the current application's version, and whether it needs to be 
+ Determine the current application's version, and whether it needs to be
  updated.
  Returns info about the current app in *app.  Strings are allocated with
  strdup.

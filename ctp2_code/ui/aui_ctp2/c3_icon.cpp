@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
@@ -22,7 +20,6 @@ extern ColorSet		*g_colorSet;
 extern TiledMap		*g_tiledMap;
 extern TileSet		*g_tileSet;
 
-
 c3_Icon::c3_Icon(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -39,7 +36,6 @@ c3_Icon::c3_Icon(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Icon::c3_Icon(
@@ -68,12 +64,10 @@ c3_Icon::c3_Icon(
 }
 
 
-
 AUI_ERRCODE c3_Icon::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE c3_Icon::InitCommon()
@@ -83,13 +77,12 @@ AUI_ERRCODE c3_Icon::InitCommon()
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_Icon::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -98,24 +91,20 @@ AUI_ERRCODE c3_Icon::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if ( m_pattern ) 
+	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
-	
 	DrawThisStateImage(
 		0,
 		surface,
 		&rect );
 
-	
 	if (m_mapIcon != MAPICON_MAX) {
 		if (m_color != COLOR_MAX) {
 			POINT where;
 			TileSet		*tileSet = g_tiledMap->GetTileSet();
 			POINT iconDim = tileSet->GetMapIconDimensions( m_mapIcon );
 
-			
 			where.x = ( m_width - iconDim.x ) / 2;
 			if (where.x < 0) where.x = 0;
 			where.y = ( m_height - iconDim.y ) / 2;
@@ -123,24 +112,21 @@ AUI_ERRCODE c3_Icon::DrawThis(
 
 			where.x += rect.left;
 			where.y += rect.top;
-			
-			
+
 			Pixel16 *icon;
 
 			icon = tileSet->GetMapIconData( m_mapIcon );
-			Assert(icon); 
+			Assert(icon);
 			if (!icon) return AUI_ERRCODE_OK;
 
 			g_tiledMap->DrawColorizedOverlay( icon, surface, where.x, where.y, g_colorSet->GetColor(m_color) );
 		}
 	}
 
-	
 	if (m_bevelWidth > 0) {
 		primitives_BevelRect16( surface, &rect, m_bevelWidth, m_bevelType, 16, 16 );
 	}
 
-	
 	DrawThisText(
 		surface,
 		&rect );
@@ -150,4 +136,3 @@ AUI_ERRCODE c3_Icon::DrawThis(
 
 	return AUI_ERRCODE_OK;
 }
-

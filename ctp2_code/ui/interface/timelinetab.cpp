@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_ldl.h"
@@ -17,29 +6,21 @@
 #include "c3ui.h"
 #include "ctp2_Static.h"
 
-
 #include "StrDB.h"
-
 
 #include "timelinetab.h"
 
-
 #include "linegraph.h"
-
 
 #include "aui_uniqueid.h"
 
-
 #include "aui_stringtable.h"
 
-
 #include "colorset.h"
-
 
 #include "rankingtab.h"
 
 #include "EventTracker.h"
-
 
 
 #include "c3_button.h"
@@ -59,36 +40,31 @@ TimelineTab::TimelineTab(ctp2_Window *parent) :
 		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab2.TabPanel.InfoGraph")))
 {
 
-	
 	m_info_window = parent;
 
 	m_infoGraphData = NULL;
 
-	
 	m_infoYCount = 0;
 
 	m_infoGraph->SetEventTracker(g_eventTracker);
 
-	
 	m_infoGraph->EnableYNumber(FALSE);
 	m_infoGraph->EnablePrecision(FALSE);
 
 
-	
 	m_leftButton->SetActionFuncAndCookie(EventsInfoButtonActionCallback, this);
 	m_rightButton->SetActionFuncAndCookie(EventsInfoButtonActionCallback, this);
 
-	
-	
-	
+
+
+
 	Assert( m_infoGraph );
 
-	
 	m_infoGraph->Show();
 
-	
-	
-	
+
+
+
 	LoadData();
 
 	m_currentWonderDisplay=0;
@@ -96,7 +72,7 @@ TimelineTab::TimelineTab(ctp2_Window *parent) :
 
 void TimelineTab::EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	TimelineTab *tab = (TimelineTab *)cookie;
@@ -124,27 +100,23 @@ void TimelineTab::doButtonCallback(ctp2_Button *button)
 }
 
 
-
 void TimelineTab::Show()
 {
 }
-
 
 void TimelineTab::Hide()
 {
 }
 
-
 void TimelineTab::LoadData()
 {
-	
+
 	UpdateGraph();
 }
 
-
 void TimelineTab::CleanupGraph()
 {
-	
+
 	if (m_infoGraphData)
 	{
 		for( sint32 i = 0 ; i < m_infoYCount ; i++ )
@@ -156,7 +128,6 @@ void TimelineTab::CleanupGraph()
 		m_infoGraphData = NULL;
 	}
 }
-
 
 void TimelineTab::UpdateGraph()
 {

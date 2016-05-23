@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -22,8 +13,7 @@ class Agreement : public ID
 	{
 	public:
 
-		
-		
+
 		Agreement() : ID() { return ; }
 		Agreement(sint32 val) : ID(val) { return ; }
 		Agreement(uint32 val) : ID(val) { return ; }
@@ -46,12 +36,11 @@ class Agreement : public ID
 		PLAYER_INDEX GetThirdParty(void) const { return (GetData()->GetThirdParty()) ; }
 		AGREEMENT_TYPE GetAgreement(void) const { return (GetData()->GetAgreement()) ; }
 
-
 		void SetExpires(const sint32 turns) { AccessData()->SetExpires(turns) ; }
 		BOOL IsExpired(void) const { return (GetData()->IsExpired()) ; }
 		BOOL DoesExpire(void) const { return (GetData()->DoesExpire()) ; }
 		sint32 GetTurns(void) const { return (GetData()->GetTurns()) ; }
-		
+
 
 
 
@@ -67,7 +56,6 @@ class Agreement : public ID
 		void BeginTurnRecipient();
 
 		void Dump(const sint32 i) { AccessData()->Dump(i) ; }
-
 
 	} ;
 

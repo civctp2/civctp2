@@ -4,7 +4,6 @@
 #ifndef __GAME_EVENT_TYPES_H__
 #define __GAME_EVENT_TYPES_H__
 
-
 #include "GameEventDescription.h"
 
 enum GAME_EVENT_INSERT {
@@ -25,15 +24,15 @@ enum GAME_EVENT_ERR {
 };
 
 enum GAME_EVENT_HOOK_DISPOSITION {
-	GEV_HD_Continue,      
-	GEV_HD_Stop,          
-	GEV_HD_NeedUserInput, 
+	GEV_HD_Continue,
+	GEV_HD_Stop,
+	GEV_HD_NeedUserInput,
 
 	GEV_HD_MAX
 };
 
 enum GAME_EVENT_ARGUMENT {
-	GEA_Null, 
+	GEA_Null,
 
 	GEA_Army,
 	GEA_Unit,
@@ -50,7 +49,7 @@ enum GAME_EVENT_ARGUMENT {
 	GEA_Improvement,
 	GEA_TradeRoute,
 
-	GEA_End, 
+	GEA_End,
 };
 
 
@@ -63,10 +62,10 @@ enum GAME_EVENT_ARGUMENT {
 #define GEAC_ARMY 'a'
 #define GEAC_UNIT 'u'
 #define GEAC_CITY 'c'
-#define GEAC_POP 'C' 
+#define GEAC_POP 'C'
 #define GEAC_GOLD 'g'
 #define GEAC_PATH 'p'
-#define GEAC_MAPPOINT 'l' 
+#define GEAC_MAPPOINT 'l'
 #define GEAC_PLAYER 'P'
 #define GEAC_INT 'i'
 #define GEAC_DIRECTION 'd'

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ typedef struct {
 } PACK hkeytab_item_t;
 #define sizeof_hkeytab_item_t(n) (sizeof(char) + hkeytab_MAXLEN + (n))
 
-typedef 
+typedef
 	dynatab_t
 hkeytab_t;
 

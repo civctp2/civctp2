@@ -1,7 +1,6 @@
 #ifndef PRJFILE_H
 #define PRJFILE_H
 
-
 #include "c3files.h"
 #ifndef WIN32
 #include <stdio.h>
@@ -17,9 +16,9 @@ struct ZFS_DTABLE;
 
 enum PRJFILE_PATH_TYPE {
     PRJFILE_PATH_NULL,
-    PRJFILE_PATH_DOS,                   
-    PRJFILE_PATH_ZFS,                   
-    PRJFILE_PATH_ZMS                    
+    PRJFILE_PATH_DOS,
+    PRJFILE_PATH_ZFS,
+    PRJFILE_PATH_ZMS
 };
 
 struct PFPath {
@@ -71,7 +70,7 @@ private:
     void *getData_DOS(PFEntry *entry, size_t *size, C3DIR dir = C3DIR_DIRECT);
     void *getData_ZFS(PFEntry *entry, size_t *size);
     void *getData_ZMS(PFEntry *entry, size_t *size);
-    void *getData_ZMS(PFEntry *entry, size_t *size, 
+    void *getData_ZMS(PFEntry *entry, size_t *size,
                       HANDLE *hFileMap, long *offset);
 
     char m_error_string[256];
@@ -80,25 +79,18 @@ public:
     ProjectFile();
     ~ProjectFile();
 
-    
     int addPath(char *path, int use_filemapping = 0);
 
-    
     void *getData(char *rname, size_t *size, C3DIR dir = C3DIR_DIRECT);
 
-    
-    
+
     void *getData(char *rname, size_t *size, HANDLE *hFileMap, long *offset);
 
-    
     void freeData(void *);
 
-    
     int exists(char *fname);
 
-    
-    char *getError() { return m_error_string; } 
+    char *getError() { return m_error_string; }
 };
-
 
 #endif

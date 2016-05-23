@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,7 +26,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -53,7 +52,6 @@
 
 #include "c3slider.h"
 #include "thermometer.h"
-
 
 #include "textbutton.h"
 #include "textswitch.h"
@@ -90,9 +88,7 @@
 
 #include "chart.h"
 
-
 #include "pixelutils.h"
-
 
 #include "kss_advancescreen.h"
 
@@ -102,17 +98,15 @@
 #include "knowledgewindow.h"
 #include "knowledgewin.h"
 
-
 extern C3UI					*g_c3ui;
 extern Player				**g_player;
-extern SelectedItem			*g_selected_item; 
+extern SelectedItem			*g_selected_item;
 extern DebugWindow			*g_debugWindow;
 extern StringDB				*g_theStringDB;
 extern GreatLibraryWindow	*g_greatLibrary;
 extern ColorSet				*g_colorSet;
 
 extern aui_Surface			*g_sharedSurface;
-
 
 KnowledgeWindow		*g_knowledgeWindow = NULL;
 
@@ -124,12 +118,10 @@ KnowledgeWindow		*g_knowledgeWindow = NULL;
 
 static c3_Button		*s_returnButton;
 
-
 static c3_Button		*s_libraryButton;
 
 static c3_Static		*s_researchBox;
 static c3_Static		*s_researchText;
-
 
 static c3_Static		*s_turnsText;
 static c3_Static		*s_turnsNumText;
@@ -203,7 +195,6 @@ static c3_Static	*s_listbr;
 static c3_Static	*s_titleText;
 
 
-
 #define	k_PLAYERS		7
 
 static sint32		s_playerSwitch[k_PLAYERS];
@@ -236,12 +227,11 @@ static c3_Switch		**s_playerText;
 static c3_Icon			**s_playerFlag;
 static c3_ListBox		*s_advanceList;
 
-
 extern sint32			g_modalWindow;
 
 void knowledgewin_ReturnButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -250,22 +240,20 @@ void knowledgewin_ReturnButtonActionCallback( aui_Control *control, uint32 actio
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 
-	
 	g_modalWindow--;
 }
 
 void knowledgewin_LibraryButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
-	
+
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	sint32 curIndex = g_player[curPlayer]->m_advances->GetResearching();
 
 	if (!g_greatLibrary) GreatLibraryWindow_Initialize( curIndex );
-		
 
 	auiErr = g_c3ui->AddWindow( g_greatLibrary );
 	Assert( auiErr == AUI_ERRCODE_OK );
@@ -274,7 +262,7 @@ void knowledgewin_LibraryButtonActionCallback( aui_Control *control, uint32 acti
 
 void knowledgewin_ChangeButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	kss_advancescreen_displayMyWindow();
@@ -288,10 +276,10 @@ void knowledgewin_PlayerActionCallback( aui_Control *control, uint32 action, uin
 		break;
 
 	case AUI_SWITCH_ACTION_OFF:
-		
+
 		if ( s_advanceList ) {
 			BOOL otherSwitchIsOn = FALSE;
-			
+
 			for ( sint32 i = 0;i < k_PLAYERS;i++ ) {
 				if ( s_playerText[i]->IsOn() )
 					otherSwitchIsOn = TRUE;
@@ -310,39 +298,33 @@ void knowledgewin_PlayerActionCallback( aui_Control *control, uint32 action, uin
 
 void knowledgewin_SciButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
 	if ( (c3_Button *)control == s_plusButton ) {
-		
+
 		s_scienceTax += 10;
-		
-		
+
 		if ( s_scienceTax > 100 )
 			s_scienceTax = 100;
-		
-		
+
 		double taxRate = (double)s_scienceTax / 100;
 		p->SetTaxes( taxRate );
 
-		
 		knowledgewin_UpdateData(1);
 	}
 	else if ( (c3_Button *)control == s_minusButton ) {
-		
+
 		s_scienceTax -= 10;
-		
-		
+
 		if ( s_scienceTax < 0 )
 			s_scienceTax = 0;
 
-		
 		double taxRate = (double)s_scienceTax / 100;
 		p->SetTaxes( taxRate );
 
-		
 		knowledgewin_UpdateData(1);
 	}
 }
@@ -368,7 +350,7 @@ void knowledgewin_SciButtonActionCallback( aui_Control *control, uint32 action, 
 
 void knowledgewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -386,7 +368,7 @@ void knowledgewin_PrereqActionCallback( aui_Control *control, uint32 action, uin
 
 void knowledgewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -404,7 +386,7 @@ void knowledgewin_LeadsToActionCallback( aui_Control *control, uint32 action, ui
 
 void knowledgewin_AdvanceListActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 	if ( !s_advanceList ) return;
 
@@ -426,18 +408,17 @@ sint32 knowledgewin_UpdateFromSwitch( void )
 	sint32		curPlayer = g_selected_item->GetVisiblePlayer();
 	sint32		num = g_theAdvanceDB->NumRecords();
 
-	
 	s_advanceList->Clear();
 
 	sprintf( ldlBlock, "AdvanceListItem" );
 
 	for ( sint32 i = 0;i < num;i++ ) {
 		for ( sint32 k = 0;k < k_PLAYERS;k++ ) {
-			
+
 			if ( s_playerText[k]->IsOn() ) {
 				if ( g_player[s_playerSwitch[k]]->HasAdvance(i) ) {
 					AdvanceListItem *item = new AdvanceListItem( &errcode, i, ldlBlock );
-					s_advanceList->AddItem( (c3_ListItem *)item );	
+					s_advanceList->AddItem( (c3_ListItem *)item );
 					break;
 				}
 			}
@@ -456,7 +437,6 @@ sint32 knowledgewin_UpdateList( void )
 
 	sint32		num = g_theAdvanceDB->NumRecords();
 
-	
 	s_advanceList->Clear();
 
 	sprintf( ldlBlock, "AdvanceListItem" );
@@ -465,14 +445,14 @@ sint32 knowledgewin_UpdateList( void )
 
 		if ( g_player[curPlayer]->HasAdvance(i) ) {
 			AdvanceListItem *item = new AdvanceListItem( &errcode, i, ldlBlock );
-			s_advanceList->AddItem( (c3_ListItem *)item );	
+			s_advanceList->AddItem( (c3_ListItem *)item );
 		}
 		else {
 			for ( sint32 j = 0;j < k_MAX_PLAYERS;j++ ) {
 				if ( j != curPlayer && g_player[j]) {
 					if ( g_player[curPlayer]->HasEmbassyWith(j) && g_player[j]->HasAdvance(i) ) {
 						AdvanceListItem *item = new AdvanceListItem( &errcode, i, ldlBlock );
-						s_advanceList->AddItem( (c3_ListItem *)item );	
+						s_advanceList->AddItem( (c3_ListItem *)item );
 						break;
 					}
 				}
@@ -549,29 +529,24 @@ sint32 knowledgewin_UpdateData( sint32 flag )
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 researching = g_player[curPlayer]->m_advances->GetResearching();
 
 	sprintf( str, "%s", g_theAdvanceDB->GetNameStr(researching) );
 	s_researchBox->SetText( str );
 
-	
 	sint32 sciLevel = p->GetCurrentScienceLevel();
 	sint32 advanceCost = p->GetCurrentScienceCost();
 
-	
 	s_barThermometer->SetPercentFilled( (sciLevel * 100) / advanceCost );
 
-	
 	sprintf( str, "%d", advanceCost );
 	s_costBox->SetText( str );
 
-	
 	sprintf( str, "%d", sciLevel );
 	s_sciBox->SetText( str );
-		
+
 	double scienceTax;
-	
+
 	p->GetScienceTaxRate( scienceTax );
 	s_scienceTax = AsPercentage(scienceTax);
 
@@ -580,7 +555,6 @@ sint32 knowledgewin_UpdateData( sint32 flag )
 
 	sint32 advanceTurns = p->m_advances->TurnsToNextAdvance();
 
-	
 	if ( advanceTurns == -1 ) {
 		sprintf( str, "-" );
 	}
@@ -590,17 +564,16 @@ sint32 knowledgewin_UpdateData( sint32 flag )
 
 	s_turnsNumText->SetText( str );
 
-	if ( flag == 1) return 0;	
+	if ( flag == 1) return 0;
 
 	s_scrollingChart->Update(researching );
 
 	g_knowledgeWindow->SetTechMode( researching, DATABASE_ADVANCES );
 
-	
 	g_knowledgeWindow->LoadGivesText();
 
-	if ( flag == 2 ) return 0;	
-	
+	if ( flag == 2 ) return 0;
+
 	knowledgewin_UpdateList();
 
 	sint32 x = 0;
@@ -642,10 +615,9 @@ sint32 knowledgewin_Initialize( void )
 		g_modalWindow++;
 
 		knowledgewin_UpdateData(0);
-		return 0; 
+		return 0;
 	}
 
-	
 	strcpy(windowBlock, "KnowledgeScreen");
 
 	g_knowledgeWindow = new KnowledgeWindow(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING );
@@ -676,7 +648,7 @@ sint32 knowledgewin_Initialize( void )
 
 
 
-	
+
 	sprintf( buttonBlock, "%s.%s", windowBlock, "ReturnButton" );
 	s_returnButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, knowledgewin_ReturnButtonActionCallback );
 	Assert( AUI_NEWOK(s_returnButton, errcode) );
@@ -688,19 +660,17 @@ sint32 knowledgewin_Initialize( void )
 
 
 
-	
+
 	sprintf( buttonBlock, "%s.%s", windowBlock, "LibraryButton" );
 	s_libraryButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, knowledgewin_LibraryButtonActionCallback );
 	Assert( AUI_NEWOK(s_libraryButton, errcode) );
 	if ( !AUI_NEWOK(s_libraryButton, errcode) ) return -2;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "ResearchBox" );
 	s_researchBox = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_researchBox, errcode) );
 	if ( !AUI_NEWOK(s_researchBox, errcode) ) return -4;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "ResearchText" );
 	s_researchText = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_researchText, errcode) );
@@ -718,73 +688,62 @@ sint32 knowledgewin_Initialize( void )
 
 
 
-	
+
 	sprintf( buttonBlock, "%s.%s", windowBlock, "TurnsText" );
 	s_turnsText = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_turnsText, errcode) );
 	if ( !AUI_NEWOK(s_turnsText, errcode) ) return -3;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "TurnsNumText" );
 	s_turnsNumText = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_turnsNumText, errcode) );
 	if ( !AUI_NEWOK(s_turnsNumText, errcode) ) return -4;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "BarThermometer" );
 	s_barThermometer = new Thermometer( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_barThermometer, errcode) );
 	if ( !AUI_NEWOK(s_barThermometer, errcode) ) return -3;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "ChangeButton" );
 	s_changeButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, knowledgewin_ChangeButtonActionCallback );
 	Assert( AUI_NEWOK(s_changeButton, errcode) );
 	if ( !AUI_NEWOK(s_changeButton, errcode) ) return -4;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "CostLabel" );
 	s_costLabel = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_costLabel, errcode) );
 	if ( !AUI_NEWOK(s_costLabel, errcode) ) return -5;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "CostBox" );
 	s_costBox = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_costBox, errcode) );
 	if ( !AUI_NEWOK(s_costBox, errcode) ) return -5;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "SciLabel" );
 	s_sciLabel = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_sciLabel, errcode) );
 	if ( !AUI_NEWOK(s_sciLabel, errcode) ) return -5;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "SciBox" );
 	s_sciBox = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_sciBox, errcode) );
 	if ( !AUI_NEWOK(s_sciBox, errcode) ) return -5;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "PlusButton" );
 	s_plusButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, knowledgewin_SciButtonActionCallback, s_plusButton );
 	Assert( AUI_NEWOK(s_plusButton, errcode) );
 	if ( !AUI_NEWOK(s_plusButton, errcode) ) return -4;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "MinusButton" );
 	s_minusButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, knowledgewin_SciButtonActionCallback, s_minusButton );
 	Assert( AUI_NEWOK(s_minusButton, errcode) );
 	if ( !AUI_NEWOK(s_minusButton, errcode) ) return -4;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "SciPercentLabel" );
 	s_sciPercentLabel = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_sciPercentLabel, errcode) );
 	if ( !AUI_NEWOK(s_sciPercentLabel, errcode) ) return -5;
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "SciPercentBox" );
 	s_sciPercentBox = new c3_Static( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK(s_sciPercentBox, errcode) );
@@ -926,7 +885,6 @@ sint32 knowledgewin_Initialize( void )
 	if ( !AUI_NEWOK(s_scrollingChart, errcode) ) return -7;
 	s_scrollingChart->Update(0);
 
-	
 	sint32 i;
 	for ( i = 0;i < k_MAX_ADVANCE_PREREQ;i++ ) {
 		s_scrollingChart->GetPreReqButton(i)->SetActionFuncAndCookie( knowledgewin_PrereqActionCallback, s_scrollingChart );
@@ -982,19 +940,15 @@ sint32 knowledgewin_Initialize( void )
 	Assert( AUI_NEWOK(s_titleText, errcode ) );
 	if ( !AUI_NEWOK(s_titleText, errcode) ) return -23;
 
-	
 	knowledgewin_InitGraphicTrim( windowBlock );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
 	g_knowledgeWindow->SetGivesText ( s_givesBox );
 
-	
 	g_modalWindow++;
-
 
 	knowledgewin_UpdateData(0);
 
@@ -1101,7 +1055,7 @@ sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock )
 
 sint32 knowledgewin_Cleanup( void )
 {
-	if ( !g_knowledgeWindow ) return 0; 
+	if ( !g_knowledgeWindow ) return 0;
 
 	g_c3ui->RemoveWindow( g_knowledgeWindow->Id() );
 
@@ -1225,8 +1179,8 @@ sint32 knowledgewin_Cleanup( void )
 
 
 
-	
-	
+
+
 	delete s_givesBox;
 	s_givesBox = NULL;
 	delete s_civBox;
@@ -1255,7 +1209,6 @@ sint32 knowledgewin_Cleanup( void )
 	delete s_titleText;
 	s_titleText = NULL;
 
-	
 	delete s_lt;
 	s_lt = NULL;
 	delete s_ct;
@@ -1286,7 +1239,6 @@ sint32 knowledgewin_Cleanup( void )
 	return 0;
 }
 
-
 KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
 	c3_ListItem( retval, ldlBlock),
@@ -1298,9 +1250,8 @@ KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 {
@@ -1323,10 +1274,8 @@ AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 void KnowledgeListItem::Update(void)
 {
 
-
 	c3_Static *subItem;
 
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText( g_theAdvanceDB->GetNameStr(m_index) );
 }
@@ -1339,7 +1288,7 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((KnowledgeListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1350,7 +1299,6 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
 
 EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
@@ -1363,9 +1311,8 @@ EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 {
@@ -1393,7 +1340,6 @@ void EmbassyListItem::Update(void)
 
 	g_player[m_index]->GetPluralCivName( name );
 
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText( name );
 }
@@ -1406,7 +1352,7 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((EmbassyListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1417,7 +1363,6 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
 
 AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
@@ -1430,9 +1375,8 @@ AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 {
@@ -1499,7 +1443,6 @@ void AdvanceListItem::Update(void)
 
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 
-	
 	subIcon = (c3_Icon*)GetChildByIndex(0);
 	if ( g_player[curPlayer]->HasAdvance(m_index) ) {
 		subIcon->SetColor( g_colorSet->ComputePlayerColor(curPlayer) );
@@ -1509,32 +1452,28 @@ void AdvanceListItem::Update(void)
 		subIcon->SetMapIcon( MAPICON_MAX );
 	}
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(2);
 	subItem->SetText( g_theAdvanceDB->GetNameStr(m_index) );
 
-	
 	subItem = (c3_Static *)GetChildByIndex(3);
 
 	sint32 i,x = 0;
 
-	
 	for ( i = 0;i < k_MAX_PLAYERS;i++ ) {
 		if ( i != curPlayer && g_player[i]) {
-			
+
 			if (g_player[i] != 0) {
 				if ( g_player[curPlayer]->HasEmbassyWith(i) ) {
 					subIcon = (c3_Icon *)GetChildByIndex(x+4);
 					x++;
-					
+
 					if ( g_player[i]->HasAdvance(m_index) ) {
 						subIcon->SetColor( g_colorSet->ComputePlayerColor(i) );
 						subIcon->SetMapIcon( MAPICON_FLAG );
 					}
-					
+
 					else {
 						subIcon->SetMapIcon( MAPICON_MAX );
 					}
@@ -1543,7 +1482,6 @@ void AdvanceListItem::Update(void)
 		}
 	}
 
-	
 	while ( x < k_PLAYERS ) {
 		subIcon = (c3_Icon *)GetChildByIndex(x+4);
 		subIcon->SetMapIcon( MAPICON_MAX );
@@ -1559,7 +1497,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1567,7 +1505,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 1:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1575,7 +1513,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 2:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1583,7 +1521,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 3:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1591,7 +1529,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 4:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1599,7 +1537,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 5:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1607,7 +1545,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 6:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1615,7 +1553,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 7:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1623,7 +1561,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 8:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1631,7 +1569,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 9:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1639,7 +1577,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 10:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1650,4 +1588,3 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-

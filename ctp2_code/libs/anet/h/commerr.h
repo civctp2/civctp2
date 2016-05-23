@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /*--------------------------------------------------------------------------
  Uniform error codes for all modules obeying the interface defined
- in commapi.h.  
+ in commapi.h.
 
  $Log: commerr.h $
  Revision 1.3  1997/08/22 23:13:36  lbennett
@@ -67,6 +67,5 @@ typedef long comm_status_t;
 #define comm_STATUS_OK_AM_MASTER	102	/* please host the session */
 /* Used by commPlayerInfo */
 #define comm_STATUS_DUAL_ADDRESS	103 /* used to inform dpio about dual addresses */
-
 
 #endif

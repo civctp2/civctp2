@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -48,9 +48,7 @@
 
 extern SoundManager		*g_soundManager;
 
-
 static MBCHAR *k_AUI_REGION_LDL_BLINDNESS	=	"mouseblind";
-
 
 aui_Region *aui_Region::m_whichSeesMouse = NULL;
 aui_Region *aui_Region::m_editChild = NULL;
@@ -59,7 +57,6 @@ uint32 aui_Region::m_editSelectionCurrent = 0;
 uint32 aui_Region::m_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
 tech_WLList<aui_Undo *> *aui_Region::m_undoList = NULL;
 uint32 aui_Region::m_regionClassId = aui_UniqueId();
-
 
 
 aui_Region::aui_Region(
@@ -71,7 +68,6 @@ aui_Region::aui_Region(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Region::aui_Region(
@@ -88,7 +84,6 @@ aui_Region::aui_Region(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width, sint32 height )
@@ -115,7 +110,6 @@ AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width,
 	m_doubleRClickStartWaitTime = 0,
 	m_doubleClickingInside = TRUE,
 
-	
 	m_showCallback = NULL;
 	m_hideCallback = NULL;
 	m_showCallbackData = NULL;
@@ -123,7 +117,7 @@ AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width,
 
 #ifdef USE_SDL
 	m_doubleClickTimeOut = 375;
-#else	
+#else
 	m_doubleClickTimeOut = GetDoubleClickTime();
 #endif
 
@@ -133,22 +127,18 @@ AUI_ERRCODE aui_Region::InitCommon( uint32 id, sint32 x, sint32 y, sint32 width,
 	m_editGrabPoint.y = -1;
 	m_editGrabPointAttributes = 0;
 
-	
 	memset( &m_mouseState, 0, sizeof( m_mouseState ) );
 
-	
 	m_childList = new tech_WLList<aui_Region *>;
 	Assert( m_childList != NULL );
 	if ( !m_childList ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_dim = new aui_Dimension;
 	Assert( m_dim != NULL );
 	if ( !m_dim ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
@@ -161,17 +151,14 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 
 	SetLdlBlock(ldlBlock);
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	aui_Region *parent = NULL;
 
 	if ( block->GetAttributeType( k_AUI_LDL_PARENT ) == ATTRIBUTE_TYPE_STRING )
@@ -180,23 +167,20 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		Assert( parent != NULL );
 	}
 
-	
 	if ( !parent )
 	{
-		
+
 		MBCHAR *lastDot = strrchr( ldlBlock, '.' );
 		if ( lastDot )
 		{
 
 			MBCHAR tempStr[k_AUI_LDL_MAXBLOCK];
-			
+
 			strncpy(tempStr, ldlBlock, (lastDot - ldlBlock));
 			tempStr[lastDot - ldlBlock ] = '\0';
 
 			parent = (aui_Region *)aui_Ldl::GetObject( tempStr );
 
-			
-			
 
 
 
@@ -206,28 +190,27 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 
 
 
-			
+
+
+
 		}
 		else
 		{
-			
+
 			parent = g_ui;
 		}
 	}
 
-	
 	m_dim->SetParent( parent );
 
-	
 
-	
+
+
 	if(block->GetAttributeType(k_AUI_REGION_LDL_BLINDNESS))
 		m_blind = block->GetBool(k_AUI_REGION_LDL_BLINDNESS);
 
-	
 	MBCHAR *anchor;
 
-	
 	if ((anchor = block->GetString( k_AUI_LDL_HANCHOR )))
 	{
 		if ( stricmp( anchor, "right" ) == 0 ) {
@@ -242,7 +225,6 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 	else
 		m_dim->AnchorLeft();
 
-	
 	if ((anchor = block->GetString( k_AUI_LDL_VANCHOR )))
 	{
 		if ( stricmp( anchor, "bottom" ) == 0 )
@@ -255,7 +237,6 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 	else
 		m_dim->AnchorTop();
 
-	
 	if ( block->GetAttributeType( k_AUI_LDL_HRELPOSITION ) == ATTRIBUTE_TYPE_INT )
 	{
 		m_dim->HorizontalPositionData() = block->GetInt( k_AUI_LDL_HRELPOSITION );
@@ -267,7 +248,6 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AbsoluteHorizontalPosition( TRUE );
 	}
 
-	
 	if ( block->GetAttributeType( k_AUI_LDL_VRELPOSITION ) == ATTRIBUTE_TYPE_INT )
 	{
 		m_dim->VerticalPositionData() = block->GetInt( k_AUI_LDL_VRELPOSITION );
@@ -279,7 +259,6 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AbsoluteVerticalPosition( TRUE );
 	}
 
-	
 	if ( block->GetAttributeType( k_AUI_LDL_HRELSIZE ) == ATTRIBUTE_TYPE_INT )
 	{
 		m_dim->HorizontalSizeData() = block->GetInt( k_AUI_LDL_HRELSIZE );
@@ -291,7 +270,6 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AbsoluteHorizontalSize( TRUE );
 	}
 
-	
 	if ( block->GetAttributeType( k_AUI_LDL_VRELSIZE ) == ATTRIBUTE_TYPE_INT )
 	{
 		m_dim->VerticalSizeData() = block->GetInt( k_AUI_LDL_VRELSIZE );
@@ -303,17 +281,14 @@ AUI_ERRCODE aui_Region::InitCommonLdl( uint32 id, MBCHAR *ldlBlock )
 		m_dim->AbsoluteVerticalSize( TRUE );
 	}
 
-	
 	m_dim->CalculateAll( &m_x, &m_y, &m_width, &m_height );
 
-	
 	errcode = aui_Ldl::Associate( this, ldlBlock );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_HACK;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Region::~aui_Region()
@@ -324,7 +299,7 @@ aui_Region::~aui_Region()
 	delete m_childList;
 	delete [] m_ldlBlock;
 
-	if (g_attractWindow && CanAttract()) 
+	if (g_attractWindow && CanAttract())
 	{
 		g_attractWindow->RemoveRegion(this);
 	}
@@ -342,7 +317,6 @@ void aui_Region::DeleteChildren()
 }
 
 
-
 aui_Region *aui_Region::SetWhichSeesMouse( aui_Region *region, BOOL force )
 {
 	aui_Region *prevRegion = GetWhichSeesMouse();
@@ -352,20 +326,18 @@ aui_Region *aui_Region::SetWhichSeesMouse( aui_Region *region, BOOL force )
 		if ( !region || !region->IsBlind() ) m_whichSeesMouse = region;
 
 #if FALSE
-		
+
 #ifdef _DEBUG
-		
-		
+
 #define STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 #ifdef STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 		StatusBar::SetText(aui_Ldl::GetBlock(GetWhichSeesMouse()));
-#endif	
-#endif	
+#endif
+#endif
 #endif
 
 	return prevRegion;
 }
-
 
 
 BOOL aui_Region::SetBlindness( BOOL blind )
@@ -376,10 +348,9 @@ BOOL aui_Region::SetBlindness( BOOL blind )
 }
 
 
-
 AUI_ERRCODE aui_Region::Move( sint32 x, sint32 y )
 {
-	
+
 	if ( m_parent && ( m_x != x || m_y != y ) ) m_parent->ShouldDraw();
 
 	m_x = x, m_y = y;
@@ -387,10 +358,9 @@ AUI_ERRCODE aui_Region::Move( sint32 x, sint32 y )
 }
 
 
-
 AUI_ERRCODE aui_Region::Offset( sint32 dx, sint32 dy )
 {
-	
+
 	if ( m_parent && ( dx || dy ) ) m_parent->ShouldDraw();
 
 	m_x += dx, m_y += dy;
@@ -398,14 +368,13 @@ AUI_ERRCODE aui_Region::Offset( sint32 dx, sint32 dy )
 }
 
 
-
 AUI_ERRCODE aui_Region::Resize( sint32 width, sint32 height )
 {
-	
 
 
 
-	
+
+
 	if ( m_parent && ( width < m_width || height < m_height ) )
 		m_parent->ShouldDraw();
 
@@ -416,14 +385,12 @@ AUI_ERRCODE aui_Region::Resize( sint32 width, sint32 height )
 }
 
 
-
 AUI_ERRCODE aui_Region::Adjust( void )
 {
 	if ( m_dim->GetParent() )
 	{
 		m_dim->CalculateAll( &m_x, &m_y, &m_width, &m_height );
 
-		
 		ListPos position = m_childList->GetHeadPosition();
 		for ( sint32 i = m_childList->L(); i; i-- )
 		{
@@ -436,19 +403,16 @@ AUI_ERRCODE aui_Region::Adjust( void )
 }
 
 
-
 BOOL aui_Region::IsInside( DWORD point ) const
 {
 	return IsInside( LOWORD(point), HIWORD(point) );
 }
 
 
-
 BOOL aui_Region::IsInside( LPPOINT point ) const
 {
 	return point ? IsInside( point->x, point->y ) : FALSE;
 }
-
 
 
 BOOL aui_Region::IsInside( LONG x, LONG y ) const
@@ -458,7 +422,6 @@ BOOL aui_Region::IsInside( LONG x, LONG y ) const
 }
 
 
-
 AUI_ERRCODE aui_Region::SetParent( aui_Region *region )
 {
 	m_parent = region;
@@ -466,23 +429,19 @@ AUI_ERRCODE aui_Region::SetParent( aui_Region *region )
 }
 
 
-
 AUI_ERRCODE aui_Region::AddChild( aui_Region *child )
 {
 	Assert( child != NULL );
 	if ( !child ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if ( !GetChild( child->Id() ) )
 	{
 		m_childList->AddTail( child );
 		m_childListChanged = TRUE;
 	}
 
-	
 	child->SetParent( this );
 
-	
 	BOOL anscestorHidden = FALSE;
 	aui_Region *anscestor = this;
 	while ( anscestor && !anscestorHidden )
@@ -491,15 +450,14 @@ AUI_ERRCODE aui_Region::AddChild( aui_Region *child )
 		anscestor = anscestor->GetParent();
 	};
 	if ( anscestorHidden )
-		
+
 		child->Hide();
 	else
-		
+
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::InsertChild( aui_Region *child, sint32 index )
@@ -512,27 +470,23 @@ AUI_ERRCODE aui_Region::InsertChild( aui_Region *child, sint32 index )
 	if ( index == (sint32)m_childList->L() )
 		return AddChild( child );
 
-	
 	if ( !GetChild( child->Id() ) )
 	{
 		m_childList->InsertBefore( m_childList->FindIndex( index ), child );
 		m_childListChanged = TRUE;
 	}
 
-	
 	child->SetParent( this );
 
-	
 	if ( IsHidden() )
-		
+
 		child->Hide();
 	else
-		
+
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::RemoveChild( uint32 regionId )
@@ -546,7 +500,6 @@ AUI_ERRCODE aui_Region::RemoveChild( uint32 regionId )
 		{
 			region->SetParent( NULL );
 
-			
 			m_childList->DeleteAt( prevPos );
 
 			m_childListChanged = TRUE;
@@ -555,12 +508,10 @@ AUI_ERRCODE aui_Region::RemoveChild( uint32 regionId )
 		}
 	}
 
-	
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Region *aui_Region::GetChild( uint32 regionId )
@@ -605,14 +556,12 @@ sint32 aui_Region::NumChildren(void)
 }
 
 
-
 BOOL aui_Region::IgnoreEvents( BOOL ignore )
 {
 	BOOL wasIgnoring = m_ignoreEvents;
 	m_ignoreEvents = ignore;
 	return wasIgnoring;
 }
-
 
 
 uint32 aui_Region::ShouldDraw( uint32 draw )
@@ -623,7 +572,6 @@ uint32 aui_Region::ShouldDraw( uint32 draw )
 }
 
 
-
 uint32 aui_Region::SetDrawMask( uint32 drawMask )
 {
 	uint32 prevDrawMask = m_drawMask;
@@ -632,13 +580,11 @@ uint32 aui_Region::SetDrawMask( uint32 drawMask )
 }
 
 
-
 AUI_ERRCODE aui_Region::Show( void )
 {
 	ShowThis();
 	ShowChildren();
 
-	
 	if(m_showCallback)
 		m_showCallback(this, m_showCallbackData);
 
@@ -646,13 +592,11 @@ AUI_ERRCODE aui_Region::Show( void )
 }
 
 
-
 AUI_ERRCODE aui_Region::Hide( void )
 {
 	HideChildren();
 	HideThis();
 
-	
 	if(m_hideCallback)
 		m_hideCallback(this, m_hideCallbackData);
 
@@ -660,10 +604,9 @@ AUI_ERRCODE aui_Region::Hide( void )
 }
 
 
-
 AUI_ERRCODE aui_Region::ShowThis( void )
 {
-	if ( IsHidden() ) 
+	if ( IsHidden() )
 	{
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		m_attributes &= ~k_REGION_ATTRIBUTE_HIDDEN;
@@ -675,14 +618,12 @@ AUI_ERRCODE aui_Region::ShowThis( void )
 }
 
 
-
 AUI_ERRCODE aui_Region::HideThis( void )
 {
 	if ( !IsHidden() )
 	{
 		m_attributes |= k_REGION_ATTRIBUTE_HIDDEN;
 
-		
 		if ( m_parent ) m_parent->ShouldDraw();
 
 		return ResetThis();
@@ -690,7 +631,6 @@ AUI_ERRCODE aui_Region::HideThis( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::ShowChildren( void )
@@ -706,7 +646,6 @@ AUI_ERRCODE aui_Region::ShowChildren( void )
 }
 
 
-
 AUI_ERRCODE aui_Region::HideChildren( void )
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -718,7 +657,6 @@ AUI_ERRCODE aui_Region::HideChildren( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::Enable( BOOL enable )
@@ -743,7 +681,7 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 	}
 
 	if(m_childList) {
-		
+
 		ListPos position = m_childList->GetHeadPosition();
 		for ( sint32 i = m_childList->L(); i; i-- )
 		{
@@ -754,7 +692,7 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 
 	if ( changed )
 	{
-		
+
 		ShouldDraw();
 
 		return Reset();
@@ -764,12 +702,10 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 }
 
 
-
 AUI_ERRCODE aui_Region::Reset( void )
 {
 	ResetThis();
 
-	
 	ListPos position = m_childList->GetHeadPosition();
 	for ( sint32 i = m_childList->L(); i; i-- )
 	{
@@ -777,12 +713,10 @@ AUI_ERRCODE aui_Region::Reset( void )
 		region->Reset();
 	}
 
-	
 	ShouldDraw();
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::ResetThis( void )
@@ -791,7 +725,6 @@ AUI_ERRCODE aui_Region::ResetThis( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Region::EnableDragDrop( BOOL enable )
@@ -803,7 +736,6 @@ AUI_ERRCODE aui_Region::EnableDragDrop( BOOL enable )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 BOOL aui_Region::IsDescendent( aui_Region *region )
@@ -821,14 +753,12 @@ BOOL aui_Region::IsDescendent( aui_Region *region )
 }
 
 
-
 inline BOOL aui_Region::HasHeirarchyChanged( void ) const
 {
 	if ( m_childListChanged ) return TRUE;
 	if ( !m_parent ) return this != g_ui;
 	return m_parent->HasHeirarchyChanged();
 }
-
 
 
 void aui_Region::ResetHeirarchyChanged( void )
@@ -838,21 +768,18 @@ void aui_Region::ResetHeirarchyChanged( void )
 }
 
 
-
 AUI_ERRCODE aui_Region::HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt )
 {
-	
+
 	m_mouseCode = AUI_ERRCODE_UNHANDLED;
 
-	
-	
+
 	if ( handleIt ) PreChildrenCallback( input );
 
-	
 	ListPos position = m_childList->GetHeadPosition();
 	if ( position )
 	{
-		
+
 		aui_MouseEvent localInput;
 		memcpy( &localInput, input, sizeof( localInput ) );
 		localInput.position.x -= m_x;
@@ -868,71 +795,61 @@ AUI_ERRCODE aui_Region::HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt )
 			if ( m_mouseCode < errcode )
 				m_mouseCode = errcode;
 
-			
 			if ( HasHeirarchyChanged() )
 			{
-				
-				
+
 				m_childListChanged = FALSE;
 				return m_mouseCode;
 			}
 		}
 	}
 
-	
 	if ( handleIt ) PostChildrenCallback( input );
 
-	
 
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	if ( IsHidden() || IgnoringEvents() ) handleIt = FALSE;
 
-	
 	if ( g_ui->GetEditMode() )
 		MouseDispatchEdit( input, handleIt );
 	else
 		MouseDispatch( input, handleIt );
 
-	
 	memcpy( &m_mouseState, input, sizeof( aui_MouseEvent ) );
 
 	m_xLastTime = m_x;
 	m_yLastTime = m_y;
 
-	
 	if ( HasHeirarchyChanged() )
 	{
 		m_childListChanged = FALSE;
 		return m_mouseCode;
 	}
 
-	
-	
+
 	if ( !input->framecount && m_draw ) Draw();
 
-	
 	return m_mouseCode;
 }
-
 
 
 aui_DragDropWindow *aui_Region::CreateDragDropWindow( aui_Control *dragDropItem )
 {
 	if ( !IsDragDrop() ) return NULL;
 
-	
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_DragDropWindow *ddw = new aui_DragDropWindow(
 		&errcode,
-		dragDropItem,	
-		this,			
-		0, 0, m_width, m_height ); 
+		dragDropItem,
+		this,
+		0, 0, m_width, m_height );
 	Assert( AUI_NEWOK(ddw,errcode) );
 	if ( !AUI_NEWOK(ddw,errcode) ) return NULL;
 
@@ -940,7 +857,6 @@ aui_DragDropWindow *aui_Region::CreateDragDropWindow( aui_Control *dragDropItem 
 
 	return ddw;
 }
-
 
 
 void aui_Region::DestroyDragDropWindow( aui_DragDropWindow *ddw )
@@ -955,38 +871,33 @@ void aui_Region::DestroyDragDropWindow( aui_DragDropWindow *ddw )
 }
 
 
-
 AUI_ERRCODE aui_Region::Draw( aui_Surface *surface, sint32 x, sint32 y )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	if ( !IsHidden() )
 		errcode = DrawThis( surface, x, y );
 
-	
-	
-	
+
+
+
 	if ( errcode == AUI_ERRCODE_OK )
 		DrawChildren( surface, x, y );
 
-	
 	m_draw = 0;
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE aui_Region::DrawChildren( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	ListPos position = m_childList->GetTailPosition();
 	for ( sint32 i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetPrev( position );
 
-		
 		region->ShouldDraw( m_draw );
 
 		region->Draw( surface, x, y );
@@ -1009,13 +920,11 @@ void aui_Region::MouseMoveOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseMoveInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Region::MouseLDragOver( aui_MouseEvent *mouseData )
@@ -1025,13 +934,11 @@ void aui_Region::MouseLDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseLDragInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Region::MouseRDragOver( aui_MouseEvent *mouseData )
@@ -1041,13 +948,11 @@ void aui_Region::MouseRDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseRDragInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Region::MouseLGrabInside( aui_MouseEvent *mouseData )
@@ -1057,13 +962,11 @@ void aui_Region::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Region::MouseRGrabInside( aui_MouseEvent *mouseData )
@@ -1073,13 +976,11 @@ void aui_Region::MouseRGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseRDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 }
-
 
 
 void aui_Region::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
@@ -1089,13 +990,11 @@ void aui_Region::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseLDoubleClickOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	MouseLGrabOutside( mouseData );
 }
-
 
 
 void aui_Region::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
@@ -1105,13 +1004,11 @@ void aui_Region::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseRDoubleClickOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	MouseRGrabOutside( mouseData );
 }
-
 
 
 void aui_Region::MouseNoChange( aui_MouseEvent *mouseData )
@@ -1126,9 +1023,8 @@ void aui_Region::MouseNoChange( aui_MouseEvent *mouseData )
 
 AUI_ERRCODE aui_Region::AddUndo( void )
 {
-	
-	
-	
+
+
 	if ( !m_undoList )
 	{
 		m_undoList = new tech_WLList<aui_Undo *>;
@@ -1145,10 +1041,9 @@ AUI_ERRCODE aui_Region::AddUndo( void )
 	if ( !undo ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_undoList->AddHead( undo );
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_Region::PurgeUndoList( void )
 {
@@ -1165,24 +1060,22 @@ AUI_ERRCODE aui_Region::PurgeUndoList( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_Region::UndoEdit( void ) 
+AUI_ERRCODE aui_Region::UndoEdit( void )
 {
 	if ( m_undoList ) {
 		ListPos position = m_undoList->GetHeadPosition();
 		aui_Undo *undo = m_undoList->GetNext( position );
-		
-		
-		
+
+
 		aui_Region *region = undo->GetUndoRegion();
-		RECT regionRect = { region->X(), region->Y(), 
-			region->X() + region->Width(), 
+		RECT regionRect = { region->X(), region->Y(),
+			region->X() + region->Width(),
 			region->Y() + region->Height() };
 		RECT rect = undo->GetUndoRect();
-		
+
 		if ( region->GetParent() != g_ui )
 			(( aui_Control *)region)->ToScreen( &regionRect );
-		
+
 		if ( rect.left != regionRect.left ) {
 			region->Offset( rect.left - regionRect.left, 0 );
 			region->GetDim()->SetHorizontalPosition( region->X() );
@@ -1191,7 +1084,7 @@ AUI_ERRCODE aui_Region::UndoEdit( void )
 			region->Offset( 0, rect.top - regionRect.top );
 			region->GetDim()->SetVerticalPosition( region->Y() );
 		}
-		if ( ( rect.right - rect.left ) != 
+		if ( ( rect.right - rect.left ) !=
 			( regionRect.right - regionRect.left ) ) {
 			region->Resize( ( rect.right - rect.left ), region->Height() );
 			region->GetDim()->SetHorizontalSize( region->Width() );
@@ -1202,11 +1095,11 @@ AUI_ERRCODE aui_Region::UndoEdit( void )
 			region->GetDim()->SetVerticalSize( region->Height() );
 		}
 		g_ui->SetEditRegion( region );
-		
+
 		region->GetParent()->ShouldDraw();
-		
+
 		m_undoList->RemoveHead( );
-		
+
 		if ( !m_undoList->L() )
 			m_undoList = NULL;
 	}
@@ -1214,8 +1107,7 @@ AUI_ERRCODE aui_Region::UndoEdit( void )
 
 }
 
-
-AUI_ERRCODE aui_Region::ExpandRect( RECT *rect ) 
+AUI_ERRCODE aui_Region::ExpandRect( RECT *rect )
 {
 	ListPos position = m_childList->GetHeadPosition();
 	for ( sint32 i = m_childList->L(); i; i-- )
@@ -1224,11 +1116,9 @@ AUI_ERRCODE aui_Region::ExpandRect( RECT *rect )
 		RECT crect = { child->X(), child->Y(),
 					  child->X() + child->Width(),
 					  child->Y() + child->Height() };
-		
-		
+
 		(( aui_Control *)child)->ToScreen( &crect );
 
-		
 		if ( crect.left < rect->left ) rect->left = crect.left;
 		if ( crect.top < rect->top ) rect->top = crect.top;
 		if ( crect.right > rect->right ) rect->right = crect.right;
@@ -1239,18 +1129,15 @@ AUI_ERRCODE aui_Region::ExpandRect( RECT *rect )
 	return AUI_ERRCODE_OK;
 }
 
-
 void aui_Region::MouseLGrabInsideEdit( aui_MouseEvent *mouseData )
 {
 	MouseLGrabEditMode( mouseData );
 }
 
-
 void aui_Region::MouseLGrabOutsideEdit( aui_MouseEvent *mouseData )
 {
 	MouseLGrabEditMode( mouseData );
 }
-
 
 void aui_Region::MouseLDragAwayEdit( aui_MouseEvent *mouseData )
 {
@@ -1263,12 +1150,10 @@ void aui_Region::MouseLDragOverEdit( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Region::MouseLDragInsideEdit( aui_MouseEvent *mouseData )
 {
 	MouseLDragEditMode( mouseData );
 }
-
 
 
 void aui_Region::MouseLDragOutsideEdit( aui_MouseEvent *mouseData )
@@ -1276,28 +1161,24 @@ void aui_Region::MouseLDragOutsideEdit( aui_MouseEvent *mouseData )
 	MouseLDragEditMode( mouseData );
 }
 
-
 void aui_Region::MouseLDropInsideEdit( aui_MouseEvent *mouseData )
 {
 	MouseLDropEditMode( mouseData );
 }
-
 
 void aui_Region::MouseLDropOutsideEdit( aui_MouseEvent *mouseData )
 {
 	MouseLDropEditMode( mouseData );
 }
 
-
 void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )
 {
 	if ( m_editModeStatus == AUI_EDIT_MODE_CHOOSE_REGION ) {
-		
+
 		if ( this == m_editChild ) {
-			m_editModeStatus = AUI_EDIT_MODE_CHOOSE_PARENT_REGION;				
+			m_editModeStatus = AUI_EDIT_MODE_CHOOSE_PARENT_REGION;
 		} else if ( m_editChild ) {
-			
-			
+
 			POINT point = { mouseData->position.x, mouseData->position.y };
 			if ( m_parent != g_ui )
 				(( aui_Control *)this)->ToScreen( &point );
@@ -1309,19 +1190,18 @@ void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )
 			}
 		}
 	}
-	
+
 	if ( !m_editChild ) {
 		m_editChild = this;
-		m_editModeStatus = AUI_EDIT_MODE_REGION_SELECTED;				
+		m_editModeStatus = AUI_EDIT_MODE_REGION_SELECTED;
 		m_editSelectionCount = 0;
 		m_editSelectionCurrent = 0;
 	}
 
-	
 	if ( m_editModeStatus == AUI_EDIT_MODE_CHOOSE_PARENT_REGION ) {
 		if ( m_editSelectionCurrent < m_editSelectionCount ) {
 			m_editSelectionCurrent++;
-			
+
 			if ( m_parent == g_ui ) {
 				m_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
 				m_editSelectionCount = 0;
@@ -1333,8 +1213,8 @@ void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )
 				g_ui->SetEditRegion( NULL );
 				if ( m_editChild )
 					m_editChild->MouseRGrabInsideEdit( mouseData );
-			
-			} else 
+
+			} else
 				m_parent->MouseRGrabInsideEdit( mouseData );
 
 			return;
@@ -1357,7 +1237,7 @@ void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )
 			g_ui->TheEditRegion()->ShouldDraw( TRUE );
 
 		if ( m_editChild ) {
-			if ( m_editChild->m_parent == g_ui ) 
+			if ( m_editChild->m_parent == g_ui )
 				m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 			else
 				( ( aui_Control * )m_editChild )->GetParentWindow()->ShouldDraw( TRUE );
@@ -1369,15 +1249,14 @@ void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Region::MouseRGrabOutsideEdit( aui_MouseEvent *mouseData )
 {
 	if ( this == m_editChild ) {
-		if ( m_editChild->m_parent == g_ui ) 
+		if ( m_editChild->m_parent == g_ui )
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		else
 			( ( aui_Control * )m_editChild )->GetParentWindow()->ShouldDraw( TRUE );
-		
+
 		g_ui->SetEditRegion( NULL );
 		m_editGrabPointAttributes = k_REGION_GRAB_NONE;
 		m_editChild = NULL;
@@ -1387,13 +1266,11 @@ void aui_Region::MouseRGrabOutsideEdit( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Region::MouseRDropInsideEdit( aui_MouseEvent *mouseData )
 {
 	m_editSelectionCurrent = 0;
 	m_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
 }
-
 
 void aui_Region::MouseRDropOutsideEdit( aui_MouseEvent *mouseData )
 {
@@ -1401,47 +1278,44 @@ void aui_Region::MouseRDropOutsideEdit( aui_MouseEvent *mouseData )
 	m_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
 }
 
-
 void aui_Region::MouseLGrabEditMode( aui_MouseEvent *mouseData )
 {
 	if ( this == g_ui->TheEditRegion() ) {
 		RECT grabRect = g_ui->TheEditRect();
 
 		AddUndo();
-		
+
 		m_editGrabPoint = mouseData->position;
-		
+
 		if ( m_parent != g_ui )
 			( ( aui_Control * )this)->ToScreen( &m_editGrabPoint );
-		
+
 		m_editGrabPointAttributes = k_REGION_GRAB_NONE;
-		
+
 		m_editModeStatus = AUI_EDIT_MODE_MODIFY;
 
-		
 		if ( ( ( m_editGrabPoint.x - grabRect.left ) < k_REGION_GRAB_SIZE ) &&
 			( ( m_editGrabPoint.x - grabRect.left ) > 0 ) )
 			m_editGrabPointAttributes |= k_REGION_GRAB_LEFT;
 		else if ( ( ( grabRect.right - m_editGrabPoint.x ) < k_REGION_GRAB_SIZE ) &&
 			( ( grabRect.right - m_editGrabPoint.x ) > 0 ) )
 			m_editGrabPointAttributes |= k_REGION_GRAB_RIGHT;
-		
+
 		if ( ( ( m_editGrabPoint.y - grabRect.top ) < k_REGION_GRAB_SIZE ) &&
 			( ( m_editGrabPoint.y - grabRect.top ) > 0 ) )
 			m_editGrabPointAttributes |= k_REGION_GRAB_TOP;
 		else if ( ( ( grabRect.bottom - m_editGrabPoint.y ) < k_REGION_GRAB_SIZE ) &&
 			( ( grabRect.bottom - m_editGrabPoint.y ) > 0 ) )
 			m_editGrabPointAttributes |= k_REGION_GRAB_BOTTOM;
-		
+
 		if ( ( m_editGrabPointAttributes == k_REGION_GRAB_NONE ) &&
 			( ( m_editGrabPoint.x - grabRect.left ) > 0 ) &&
 			( ( grabRect.right - m_editGrabPoint.x ) > 0 ) &&
 			( ( m_editGrabPoint.y - grabRect.top ) > 0 ) &&
-			( ( grabRect.bottom - m_editGrabPoint.y ) > 0 ) ) 
+			( ( grabRect.bottom - m_editGrabPoint.y ) > 0 ) )
 			m_editGrabPointAttributes |= k_REGION_GRAB_INSIDE;
 	}
 }
-
 
 void aui_Region::MouseLDragEditMode( aui_MouseEvent *mouseData )
 {
@@ -1454,26 +1328,25 @@ void aui_Region::MouseLDragEditMode( aui_MouseEvent *mouseData )
 
 			if ( m_parent != g_ui )
 				( ( aui_Control * )this)->ToScreen( &point );
-			
+
 			dx = point.x - dx;
 			dy = point.y - dy;
 
 			if ( m_editGrabPointAttributes & k_REGION_GRAB_INSIDE )
 				Offset( dx, dy );
-				
-			
-			
+
+
 			if ( m_editGrabPointAttributes & k_REGION_GRAB_LEFT ) {
 				if ( Width() - dx < ( k_REGION_GRAB_SIZE << 1 ) ) return;
 				Offset( dx, 0 );
 				Resize( Width() - dx, Height() );
 			}
-			
+
 			if ( m_editGrabPointAttributes & k_REGION_GRAB_RIGHT ) {
 				if ( Width() + dx < ( k_REGION_GRAB_SIZE << 1 ) ) return;
 				Resize( Width() + dx, Height() );
 			}
-			
+
 			if ( m_editGrabPointAttributes & k_REGION_GRAB_TOP ) {
 				if ( Height() - dy < ( k_REGION_GRAB_SIZE << 1 ) ) return;
 				Offset( 0, dy );
@@ -1497,7 +1370,6 @@ void aui_Region::MouseLDragEditMode( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Region::MouseLDropEditMode( aui_MouseEvent *mouseData )
 {
 
@@ -1507,8 +1379,7 @@ void aui_Region::MouseLDropEditMode( aui_MouseEvent *mouseData )
 		aui_Ldl *theLdl = g_ui->GetLdl();
 		if ( theLdl ) {
 			MBCHAR	*ldlBlock = theLdl->GetBlock( this );
-			
-			
+
 			if ( m_editGrabPointAttributes & k_REGION_GRAB_INSIDE ) {
 				m_dim->SetHorizontalPosition( X() );
 				m_dim->SetVerticalPosition( Y() );
@@ -1526,7 +1397,6 @@ void aui_Region::MouseLDropEditMode( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Region::EditModeModifyRegion( RECT rect )
 {
 	aui_Region *region = g_ui->TheEditRegion( );
@@ -1540,7 +1410,7 @@ void aui_Region::EditModeModifyRegion( RECT rect )
 				dim->SetHorizontalPosition( region->X() );
 				dim->SetVerticalPosition( region->Y() );
 			}
-		
+
 			if ( ( rect.right - rect.left != 0 ) ||
 				 ( rect.bottom - rect.top != 0 ) ) {
 				region->Resize( region->Width() + rect.right - rect.left,
@@ -1563,37 +1433,32 @@ void aui_Region::EditModeModifyRegion( RECT rect )
 }
 
 
-
 AUI_ERRCODE aui_Region::DoneInstantiating()
 {
-	
+
 	ListPos position = m_childList->GetTailPosition();
 	for(sint32 i = m_childList->L(); i; i-- ) {
 		aui_Region *region = m_childList->GetPrev( position );
 
-		
 		AUI_ERRCODE errcode = region->DoneInstantiating();
 		if(errcode != AUI_ERRCODE_OK)
 			return(errcode);
 	}
 
-	
 	const MBCHAR *ldlBlock = aui_Ldl::GetBlock(this);
 	if(ldlBlock) {
 		AUI_ERRCODE errcode = DoneInstantiatingThis(ldlBlock);
 		if(errcode != AUI_ERRCODE_OK)
 			return(errcode);
 	} else
-		return(AUI_ERRCODE_OK);	
+		return(AUI_ERRCODE_OK);
 
-	
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_Region::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
-	
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -1614,4 +1479,3 @@ void aui_Region::SetLdlBlock(const MBCHAR *ldlblock)
 	m_ldlBlock = new MBCHAR[strlen(ldlblock) + 1];
 	strcpy(m_ldlBlock, ldlblock);
 }
-

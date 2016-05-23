@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -27,9 +14,7 @@
 
 #include "c3listbox.h"
 
-
 extern ColorSet		*g_colorSet;
-
 
 C3ListBox::C3ListBox(
 	AUI_ERRCODE *retval,
@@ -66,13 +51,11 @@ C3ListBox::C3ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDOUBLECLICKINSIDE;
 }
-
 
 
 C3ListBox::C3ListBox(
@@ -114,13 +97,11 @@ C3ListBox::C3ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDOUBLECLICKINSIDE;
 }
-
 
 
 AUI_ERRCODE C3ListBox::CreateRangers( void )
@@ -156,7 +137,6 @@ AUI_ERRCODE C3ListBox::CreateRangers( void )
 }
 
 
-
 AUI_ERRCODE C3ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 	if ( !surface ) surface = m_window->TheSurface();
@@ -167,18 +147,17 @@ AUI_ERRCODE C3ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
 
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-		
+
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 
 
-	
+
 
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
@@ -200,11 +179,10 @@ AUI_ERRCODE C3ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				selectRect.bottom = selectRect.top + m_maxItemHeight - 4;
 				primitives_FrameRect16( surface, &selectRect, g_colorSet->GetColor(COLOR_SELECT_0));
 				primitives_BevelRect16( surface, &selectRect, 1, 1, 10, 10 );
-	
+
 			}
 		}
 	}
-
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );

@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,7 +51,6 @@ const SpecialAttackInfoRecord *unitutil_GetSpecialAttack(SPECATTACK attack);
 
 void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers, const CellUnitList &defenders, double & city_bonus, double & entrenched_bonus);
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index);
-
 
 void unitutil_ExecuteMadLaunch(Unit & unit);
 

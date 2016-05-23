@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,7 +57,6 @@ public:
 		sint32 y = 0 );
 
 
-
 };
 
 sint32 specialAttackWindow_Initialize();
@@ -65,4 +64,3 @@ void specialAttackWindow_DisplayData(MapPoint &p, sint32 type);
 sint32 specialAttackWindow_Cleanup();
 
 #endif // __SPECIAL_ATTACK_WINDOW__H__
-

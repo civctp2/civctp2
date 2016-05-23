@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,41 +70,40 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_curAction = NULL;
 	m_animPos = 0;
 
-
 	m_routeID = newRoute;
 	m_routePath = m_routeID.GetPath();
 	m_routeID.GetSourceResource(m_routeType, m_routeResource);
 
-	m_sourcePosID = 0; 
-	m_currentPosID = m_sourcePosID+1; 
-	m_destPosID = m_routePath->Num()-1; 
+	m_sourcePosID = 0;
+	m_currentPosID = m_sourcePosID+1;
+	m_destPosID = m_routePath->Num()-1;
 
 	type = GROUPTYPE_GOOD;
-	
+
 	Assert(g_goodSpriteGroupList);
-	
+
 	sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
 
 	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, LOADTYPE_BASIC,(GAME_ACTION)0);
 
-	m_currentPos = m_sourcePos = m_routePath->Get(m_currentPosID); 
-	m_destPos = m_routePath->Get(m_destPosID); 
-				
+	m_currentPos = m_sourcePos = m_routePath->Get(m_currentPosID);
+	m_destPos = m_routePath->Get(m_destPosID);
+
 	m_x = 0;
 	m_y = 0;
 
 	m_facing = 0;
 	m_frame = 0;
-	
+
 	AddIdle();
-	
+
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 }
 
 TradeActor::TradeActor(TradeActor *copy)
 {
 	*this = *copy;
-	m_curAction	= new Action(m_curAction); 
+	m_curAction	= new Action(m_curAction);
 }
 
 TradeActor::~TradeActor()
@@ -122,7 +121,7 @@ void TradeActor::AddIdle(void)
 
 MapPoint TradeActor::GetNextPos(void)
 {
-	
+
 	if(++m_currentPosID >= m_destPosID)
 		m_currentPosID = m_sourcePosID;
 
@@ -131,29 +130,25 @@ MapPoint TradeActor::GetNextPos(void)
 
 MapPoint TradeActor::LookAtNextPos(void)
 {
-	
-	
+
 	if(m_currentPosID+1 >= m_destPosID)
 		return m_routePath->Get(m_destPosID);
 	else
 		return m_routePath->Get(m_currentPosID+1);
 }
 
-
 void TradeActor::Process(void)
 {
-	
 
- 	if (m_curAction) 
+ 	if (m_curAction)
 	{
 		m_curAction->Process();
 
-		
-		if (m_curAction->Finished()) 
+		if (m_curAction->Finished())
 		{
 			MapPoint  end;
 			m_curAction->GetEndMapPoint(end);
-			if (end.x != 0 || end.y != 0) 
+			if (end.x != 0 || end.y != 0)
 			{
 				m_currentPos = end;
 			}
@@ -165,56 +160,51 @@ void TradeActor::Process(void)
 	if (m_curAction != NULL) {
 		sint32 x, y;
 
-		
-		
-		
-	
+
+
+
+
 		if(m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT && 	m_curAction->LoopAnimHasCycled())
 		{
 			m_curAction->ResetAnimLoop();
 			m_curAction->SetCurActionCounter(0);
 			m_currentPos = GetNextPos();
 
-			
-			
-			
-			
-			
+
+
+
+
+
 			MapPoint tempDestPos = LookAtNextPos();
 			MapPoint tempCurPos = m_currentPos;
 
-			
 			m_curAction->CreatePath(m_currentPos.x, m_currentPos.y, tempDestPos.x, tempDestPos.y);
 
 		}
-		
+
 		maputils_MapXY2PixelXY(m_currentPos.x, m_currentPos.y, &x, &y);
-		
+
 		m_x = x;
 		m_y = y;
 
-		
 		m_frame = m_curAction->GetSpriteFrame();
 
-		
 		m_transparency = m_curAction->GetTransparency();
 
 		POINT curPt;
 
-		
 		if (m_curAction->GetPath() != NULL) {
 
-			
 			curPt = m_curAction->GetPosition();
 
-			
+
 
 
 
 			m_x = curPt.x;
 			m_y = curPt.y;
 		}
-		
+
 		m_facing = m_curAction->GetFacing();
 	}
 }
@@ -234,21 +224,19 @@ void TradeActor::GetNextAction(void)
 			Assert(FALSE);
 		}
 	} else {
-		
+
 		AddIdle();
 	}
 }
-
 
 void TradeActor::AddAction(Action *actionObj)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return;
-	
+
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
-	
 
 	m_actionQueue.Enqueue(actionObj);
 
@@ -264,11 +252,10 @@ Anim *TradeActor::CreateAnim(GOODACTION action)
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return NULL;
 
-	
 	Anim	*origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)action);
-	if (origAnim == NULL) 
+	if (origAnim == NULL)
 	{
-		
+
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 		Assert(origAnim != NULL);
 		return NULL;
@@ -286,13 +273,13 @@ void TradeActor::Draw(Vision *tileLocalVision)
 	{
 		POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 		double	scale = g_tiledMap->GetScale();
-		sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+		sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 				yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 		xoff = k_ACTOR_CENTER_OFFSET_X;
 		yoff = k_ACTOR_CENTER_OFFSET_Y;
 
-		m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoff, m_y+yoff, m_facing, 
+		m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoff, m_y+yoff, m_facing,
 									g_tiledMap->GetScale(), m_transparency, color, flags);
 	}
 }
@@ -304,7 +291,7 @@ void TradeActor::DrawText(sint32 x, sint32 y, MBCHAR *goodText)
 
 BOOL TradeActor::IsAnimating(void)
 {
-	
+
 	return FALSE;
 }
 
@@ -345,7 +332,7 @@ void TradeActor::GetBoundingRect(RECT *rect)
 
 	POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	double	scale = g_tiledMap->GetScale();
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 	rect->left = 0;
@@ -355,4 +342,3 @@ void TradeActor::GetBoundingRect(RECT *rect)
 
 	OffsetRect(rect, m_x+xoff, m_y+yoff);
 }
-

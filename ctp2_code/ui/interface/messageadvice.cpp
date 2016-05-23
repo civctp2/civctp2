@@ -1,14 +1,4 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #include "aui.h"
 #include "c3ui.h"
@@ -19,11 +9,9 @@
 
 #include "c3listbox.h"
 
-
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "messageadvice.h"
-
 
 extern C3UI			*g_c3ui;
 
@@ -37,39 +25,37 @@ int messageadvice_AddText( MBCHAR *text )
 	if ( !g_adviceMessageWindow ) {
 		strcpy( windowBlock, "AdviceWindow" );
 
-		g_adviceMessageWindow = new MessageAdvice( &errcode, aui_UniqueId(), 
+		g_adviceMessageWindow = new MessageAdvice( &errcode, aui_UniqueId(),
 											windowBlock, 16 );
 		Assert( AUI_NEWOK( g_adviceMessageWindow, errcode ));
 		if ( !AUI_NEWOK( g_adviceMessageWindow, errcode )) return -1;
 		g_adviceMessageWindow->SetDraggable( TRUE );
 
 		g_c3ui->AddWindow( g_adviceMessageWindow );
-		
+
 		g_adviceMessageWindow->AddBordersToUI();
 	}
-		
+
 	g_adviceMessageWindow->AppendText( text );
 
 	return 1;
 }
 
-
 int messageadvice_DestroyWindow( void )
 {
-	if ( g_adviceMessageWindow ) 
+	if ( g_adviceMessageWindow )
 	{
 		if ( g_c3ui->GetWindow( g_adviceMessageWindow->Id() ))
 			g_c3ui->RemoveWindow( g_adviceMessageWindow->Id() );
 
 		g_adviceMessageWindow->RemoveBordersFromUI();
-		
+
 		delete g_adviceMessageWindow;
 		g_adviceMessageWindow = NULL;
 	}
 
 	return 1;
 }
-
 
 
 MessageAdvice::MessageAdvice(
@@ -85,7 +71,6 @@ MessageAdvice::MessageAdvice(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
@@ -113,10 +98,9 @@ AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
 
 	SetDraggable( TRUE );
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
 {
@@ -136,7 +120,7 @@ AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
 	if ( !AUI_NEWOK( m_rightBar, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
 	m_rightBar->SetImageBltType( AUI_IMAGEBASE_BLTTYPE_TILE );
 	AddControl( m_rightBar );
-	
+
 	strcpy( imageBlock, "FancyAdviceTopBar" );
 	m_topBar = new C3Window( &errcode, aui_UniqueId(), imageBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 	Assert( AUI_NEWOK( m_topBar, errcode ));
@@ -161,7 +145,6 @@ AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE MessageAdvice::AppendText( MBCHAR *text )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -180,8 +163,7 @@ AUI_ERRCODE MessageAdvice::AppendText( MBCHAR *text )
 }
 
 
-
-AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -205,7 +187,6 @@ AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE MessageAdvice::CreateTextBox( MBCHAR *ldlBlock )
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -220,13 +201,12 @@ AUI_ERRCODE MessageAdvice::CreateTextBox( MBCHAR *ldlBlock )
 	m_listBox->SetMultiSelect( FALSE );
 
 	AddControl( m_listBox );
-	
+
 	return AUI_ERRCODE_OK;
 }
 
 
-
-MessageAdvice::~MessageAdvice() 
+MessageAdvice::~MessageAdvice()
 {
 	if ( m_leftBar ) {
 		delete m_leftBar;
@@ -242,19 +222,19 @@ MessageAdvice::~MessageAdvice()
 		delete m_rightBar;
 		m_rightBar = NULL;
 	}
-	
+
 	if ( m_bottomBar ) {
 		delete m_bottomBar;
 		m_bottomBar = NULL;
 	}
-	
+
 	if ( m_listBox ) {
 		aui_Static *item = NULL;
 		sint32 count = m_listBox->NumItems();
 
 		for ( sint32 i = 0; i < count; i++ ) {
 			item = (aui_Static *)m_listBox->GetItemByIndex( i );
-			
+
 			if ( item ) {
 				delete item;
 				item = NULL;
@@ -268,16 +248,14 @@ MessageAdvice::~MessageAdvice()
 }
 
 
-
 void MessageAdvice::MouseLGrabInside (aui_MouseEvent *mouseData)
 {
 	if ( IsDisabled() ) return;
 	C3Window::MouseLGrabInside(mouseData);
-	
+
 	BringBorderToTop();
 
 }
-
 
 
 void MessageAdvice::MouseLDragAway (aui_MouseEvent *mouseData)
@@ -285,7 +263,6 @@ void MessageAdvice::MouseLDragAway (aui_MouseEvent *mouseData)
 	if ( IsDisabled() ) return;
 	C3Window::MouseLDragAway(mouseData);
 
-	
 	if ( m_topBar )
 		m_topBar->Move( m_offsetTop.x + m_x, m_offsetTop.y + m_y );
 
@@ -293,7 +270,6 @@ void MessageAdvice::MouseLDragAway (aui_MouseEvent *mouseData)
 		m_bottomBar->Move( m_offsetBottom.x + m_x, m_offsetBottom.y + m_y );
 
 }
-
 
 
 void MessageAdvice::BringBorderToTop()
@@ -306,11 +282,10 @@ void MessageAdvice::BringBorderToTop()
 }
 
 
-
 AUI_ERRCODE MessageAdvice::AddBordersToUI()
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	
+
 	if ( m_topBar )
 	{
 		errcode = g_c3ui->AddWindow( m_topBar );
@@ -327,7 +302,6 @@ AUI_ERRCODE MessageAdvice::AddBordersToUI()
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE MessageAdvice::RemoveBordersFromUI()

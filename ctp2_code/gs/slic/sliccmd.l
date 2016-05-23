@@ -1,7 +1,7 @@
 %{
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
-#include "sliccmd.h" 
+#include "sliccmd.h"
 #include "ysc.tab.h"
 #include <stdlib.h>
 #include <string.h>
@@ -39,9 +39,9 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 					return tok;
 				}
 			}
-	
+
 {stringid}  { yysclval.v.value = slicif_find_string(yytext); return STRINGID; }
-{name}		{ 
+{name}		{
 			    int value;
                 void *dbptr;
 				if(slicif_find_const(yytext, &value)) {
@@ -58,13 +58,13 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 				}
 			}
 [0-9]+		{ yysclval.v.type = EXP_VAL_INT; yysclval.v.value = atoi(yytext); return NUMBER; }
-{slicid}	{ 
+{slicid}	{
                 yysclval.v.type = EXP_VAL_SYM;
 				strncpy(yysclval.v.name, yytext + 1, strlen(yytext) - 2);
 				yysclval.v.name[strlen(yytext) - 2] = 0;
-				return IDENTIFIER; 
+				return IDENTIFIER;
 			}
-{string}    { 
+{string}    {
                 yysclval.v.type = EXP_VAL_SYM;
 				strncpy(yysclval.v.name, yytext + 1, strlen(yytext) - 2);
 				yysclval.v.name[strlen(yytext) - 2] = 0;

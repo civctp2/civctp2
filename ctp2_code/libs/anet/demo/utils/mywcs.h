@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ int mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const int maxlen)
 
 /*--------------------------------------------------------------------------
   Return the length of a null terminated UCS2 string (of either byte order),
-  up to length maxlen. 
+  up to length maxlen.
 --------------------------------------------------------------------------*/
 int mywcs_lenn(const short *ucs2, const int maxlen);
 
@@ -82,11 +82,11 @@ int mywcs_swabncpy0(short *to, const short *from, const int maxlen);
 
  Return Value
 
- If mywcs_frommbs successfully converts the source string, it returns the 
+ If mywcs_frommbs successfully converts the source string, it returns the
  number of OUTPUT characters used, not including the terminating NUL.
  If mywcs_frommbs encounters an invalid multibyte character, it returns -1.
 
- Note: this is different in several ways from the standard C function 
+ Note: this is different in several ways from the standard C function
  mbstowcs().
 --------------------------------------------------------------------------*/
 int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr);
@@ -104,12 +104,12 @@ int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr);
 
  Return Value
 
- If mywcs_tombs successfully converts the source string, it returns the number 
+ If mywcs_tombs successfully converts the source string, it returns the number
  of OUTPUT bytes used, not including the terminating NUL.
  If mywcs_tombs encounters an invalid Unicode character, or one that
  could not be converted, it returns -1.
 
- Note: this is different in several ways from the standard C function 
+ Note: this is different in several ways from the standard C function
  wcstombs().
 --------------------------------------------------------------------------*/
 int mywcs_tombs(char *buf, int buflen, const wchar_t *wstr);

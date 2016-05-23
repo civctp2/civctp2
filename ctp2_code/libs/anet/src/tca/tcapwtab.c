@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -104,13 +104,13 @@ static int tcapwtab_thaw_header(tcapwtab_header_t *head, FILE *fp)
 	head->lastuid = dpMAKELONG(pbuf[0], pbuf[1], pbuf[2], pbuf[3]);
 	pbuf += 4;
 	assert((pbuf - buf) == tcapwtab_LEN_HEADER);
-	return 0;	
+	return 0;
 }
 
 /*-------------------------------------------------------------------------
  Write the dynatab to the given file in a format encrypted with key,
  suitable for restoration with tcapwtab_thaw_encrypted.
- Saves the wmq position (timestamp, offset) and lastuid in the header.   
+ Saves the wmq position (timestamp, offset) and lastuid in the header.
 -------------------------------------------------------------------------*/
 void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t timestamp, long offset, dp_uid_t lastuid)
 {
@@ -122,7 +122,7 @@ void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key
 	char buf[tcapwtab_RW_BUFFER_SIZE];
 	char *pbuf;
 	char unitbuf[tcapwtab_RW_BUFFER_SIZE];
-	
+
 	d.magic = (short)tcapwtab_MAGIC;
 	d.n_used = tab->n_used;
 	d.unit = tab->unit;
@@ -139,7 +139,7 @@ void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key
 		DPRINT(("tcapwtab_freeze_encrypted: Error writing header.\n"));
 		return;
 	}
-	
+
 	pbuf = buf;
 	memset(unitbuf, 0, encrypted_unit);
 	deskey(key, EN0);
@@ -160,7 +160,7 @@ void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key
 		for (chunk = 0; chunk < encrypted_unit; chunk += 8, pbuf += 8)
 			des(unitbuf + chunk, pbuf);
 	}
-	
+
 	/* Write the last partial buffer to disk */
 	nwritten = fwrite(buf, (pbuf - buf), 1, fp);
 	if (nwritten != 1) {
@@ -198,7 +198,7 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 	/* round up to nearest multiple of 8 */
 	encrypted_unit = d.unit + 7 - (d.unit + 7) % 8;
 	assert(encrypted_unit <= tcapwtab_RW_BUFFER_SIZE);
-	
+
 	DPRINT(("tcapwtab_thaw_encrypted: Reading %d elements of size %d (%d encrypted).\n", d.n_used, d.unit, encrypted_unit));
 	tab->unit = d.unit;
 	if (d.n_used != 0) {
@@ -208,7 +208,7 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 		char buf[tcapwtab_RW_BUFFER_SIZE];
 		char *pbuf;
 		char unitbuf[tcapwtab_RW_BUFFER_SIZE];
-		
+
 		p = dynatab_subscript_grow(tab, d.n_used-1);
 		if (!p) {
 			DPRINT(("tcapwtab_thaw_encrypted: Could not allocate %d elements\n", d.n_used));
@@ -217,7 +217,7 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 		n = 0;
 		memset(unitbuf, 0, encrypted_unit);
 		deskey(key, DE1);
-		while (n < d.n_used) { 
+		while (n < d.n_used) {
 			n_end = n + tcapwtab_RW_BUFFER_SIZE / encrypted_unit;
 			if (n_end > d.n_used)
 				n_end = d.n_used;
@@ -243,9 +243,8 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 	*offset = d.offset;
 	*lastuid = d.lastuid;
 	DPRINT(("tcapwtab_thaw_encrypted: successful.\n"));
-	return (void *) tab->buf;	
+	return (void *) tab->buf;
 }
-
 
 #if defined(tcapwtab_UNITTEST)
 
@@ -389,7 +388,7 @@ main()
 		}
 		test1(pt[i]);
 	}
-	for (i=0;i<NTABS;i++) 
+	for (i=0;i<NTABS;i++)
 		dynatab_destroy(pt[i]);
 	printf("test okay\n");
 	return 0;

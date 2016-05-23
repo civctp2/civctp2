@@ -1,28 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef NEW_TURN_COUNT_H__
 #define NEW_TURN_COUNT_H__
 
-class NewTurnCount 
+class NewTurnCount
 {
 public:
 	NewTurnCount();
 	static sint32 GetStopPlayer();
 	static void SetStopPlayer(const sint32 &player_index);
 
-	
 	static void StartNextPlayer(bool stop);
 
 	static sint32 GetCurrentYear(sint32 player = -1);
@@ -32,15 +17,13 @@ public:
 	static void SendMsgToAllPlayers(MBCHAR *s);
 	static BOOL VerifyEndTurn(BOOL force);
 
-	static void ClientStartNewYear(); 
+	static void ClientStartNewYear();
  private:
-	
+
 	static void ChooseNextActivePlayer();
 
-	
 	static void StartNewYear();
 
-	
 	static sint32 sm_the_stop_player;
 
 	static bool m_sentGameAlmostOverMessage;

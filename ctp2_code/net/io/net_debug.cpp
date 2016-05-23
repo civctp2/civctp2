@@ -18,7 +18,7 @@ char* netdebug_NetErrToString(NET_ERR err)
 	case NET_ERR_NOMORESESSIONS: return "NET_ERR_NOMORESESSIONS";
 	case NET_ERR_UNKNOWN: return "NET_ERR_UNKNOWN";
 	default:
-	{ 
+	{
 		static char str[80];
 		sprintf(str, "NET_ERR_IHADSOMEBADCLAMS(%d)\n", err);
 		return str;

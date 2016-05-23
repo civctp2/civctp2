@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,7 +70,6 @@ void				display_EnumerateDisplayModes(void);
 BOOL				display_IsLegalResolution(sint32 width, sint32 height);
 
 BOOL				display_InitWindow(HINSTANCE hinst, int cmdshow);
-
 
 int					display_Initialize(HINSTANCE hInstance, int iCmdShow);
 

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * This material has been modified by the Apolyton CtP2 Source Code Project.
  * Contact the authors at ctp2source@apolyton.net.
  *
  * Modifications from the Activision Anet 0.10 code:
@@ -71,7 +71,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.1  1997/06/21 02:23:09  anitalee
  Initial revision
 --------------------------------------------------------------------------*/
- 
+
 #ifdef WIN32
  /* Enumerates applications in the registry specified by SubKey */
 
@@ -87,7 +87,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "dp.h"
 #include "portable.h"
 #include "contract.h"
-
 
 /**
 * Constants
@@ -107,7 +106,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* Maximum length of name of a registry value */
 #define MAX_VALUE_NAME              128
-
 
 /**
 * Methods
@@ -167,7 +165,6 @@ dp_freezeAppsList(
 	return err;
 }
 
-
 /*----------------------------------------------------------------------
 Create the apps table.  If we can, read the table from disk;
 otherwise, create a new table.
@@ -221,9 +218,8 @@ dp_createAppsList(
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
-Subscribe to the server's table. 
+Subscribe to the server's table.
 ----------------------------------------------------------------------*/
 dp_result_t			/* status */
 dp_subscribeAppsList(
@@ -263,7 +259,6 @@ dp_subscribeAppsList(
 	}
 	return dp_RES_OK;
 }
-
 
 /*----------------------------------------------------------------------
  Gets latest version info from server's table.
@@ -342,14 +337,14 @@ DP_API dp_result_t DP_APIX dpCheckAppVersion(
 		return dp_RES_EMPTY;
 	}
 
-	DPRINT(("dpCheckAppVersion: app needs updating: version cur %d/%d < latest %d/%d\n", 
+	DPRINT(("dpCheckAppVersion: app needs updating: version cur %d/%d < latest %d/%d\n",
 			app->current.major, app->current.minor,
 			app->latest.major, app->latest.minor));
 	return dp_RES_OK;
 }
 
 /*----------------------------------------------------------------------
- Determine the current application's version, and whether it needs to be 
+ Determine the current application's version, and whether it needs to be
  updated.
  Returns info about the current app in *app.  Strings are allocated with
  strdup.
@@ -383,7 +378,7 @@ dpGetAppVersion(
 		return dp_RES_BUG;
 	len = strlen(cwd);
 	if ((len > 3) && (cwd[len - 1] == '\\'))
-		cwd[len - 1] = 0;							
+		cwd[len - 1] = 0;
 
 	memset(&appParam, 0, sizeof(*app));
 	appParam.name = GameName;
@@ -409,15 +404,15 @@ dpGetAppVersion(
 static void showErr()
 {
 	LPVOID lpMsgBuf;
-	 
-	FormatMessage( 
+
+	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		NULL,
 		GetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 		(LPTSTR) &lpMsgBuf,
 		0,
-		NULL 
+		NULL
 	);
 
 	// Display the string.
@@ -425,10 +420,9 @@ static void showErr()
 
 	// Free the buffer.
 	LocalFree( lpMsgBuf );
-	 
+
 }
 #endif
-
 
 /*-------------------------------------------------------------------------
  Call to download the patch corresponding to the given product,
@@ -481,7 +475,7 @@ DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 	(void) dp;
 	/*sprintf(productCode,"http://updater.activision.com/updater/%d.%d.%d/Version.txt", app->sessionType, app->platform, app->language);*/
 	sprintf(productCode,"%d.%d.%d", app->sessionType, app->platform, app->language);
-	DPRINT(("dpDownloadUpdate: productCode %s, cur version %d, build %d\n", 
+	DPRINT(("dpDownloadUpdate: productCode %s, cur version %d, build %d\n",
 			productCode, app->current.major, app->current.minor));
 	res = DownloadPatch4(GetForegroundWindow(), productCode, app->current.major, app->current.minor, 0, dp_dprintf);
 	DPRINT(("dpDownloadUpdate: DownloadUpdate returns %d\n", res));
@@ -498,7 +492,6 @@ DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 	return dp_RES_EMPTY;
 }
 #endif
-
 
 /*----------------------------------------------------------------------
  Enumerate applications installed on this machine.
@@ -527,7 +520,7 @@ dpEnumApp(
 	DWORD    dwcMaxValueData;          /* Longest Value data. */
 	DWORD    dwcSecDesc;               /* Security descriptor. */
 	FILETIME ftLastWriteTime;          /* Last write time. */
-	
+
 	HKEY   hKeyApp;				/* Key handle of SubKey. */
 	HKEY   hKeyVal;				/* Key handle of specific application. */
 	CHAR   AppName[MAX_PATH];	/* Name of specific application. */
@@ -637,7 +630,7 @@ dpEnumApp(
 			ValueName[0] = '\0';
 			cbData = dwcMaxValueData;
 			cbValueName = MAX_VALUE_NAME;
-			
+
 			/* Enumerate the key values. */
 			retCodeVal = RegEnumValue(hKeyVal, loopVal, ValueName,
 								&cbValueName, NULL, &dwType, bData, &cbData);
@@ -659,7 +652,7 @@ dpEnumApp(
 						strcpy(appParam.cwd, bData);
 						/* remove trailing slashes */
 						if ((len > 3) && (appParam.cwd[len - 1] == '\\')) {
-							appParam.cwd[len - 1] = 0;							
+							appParam.cwd[len - 1] = 0;
 						}
 //					} else if (!strcmp("name", Param)) {
 //						strcpy(appParam.name, bData);

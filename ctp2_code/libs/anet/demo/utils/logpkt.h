@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ void logPkt_getFilename(char *filename);
 /*------------------------------------------------------------------------------
  Open a log file and return it's file pointer - must be used before logPkt().
  Uses filenames of the form "output#.#" beginning with "output0.0".
- If there are output files from a previous process, up to 9 backup sets are 
+ If there are output files from a previous process, up to 9 backup sets are
  kept by incrementing the first number from 0 to 1, 1 to 2, etc.
  If called multiple times within one process, the second number is incremented
  once per call (from 0 to 4999).

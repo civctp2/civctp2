@@ -19,11 +19,10 @@ public:
 	}
 	void Convert(MapPoint &pos) {}
 	void Clear();
-	
-	
+
 	~UnseenCellQuadTree()
 	{
-		
+
 	}
 };
 
@@ -39,4 +38,3 @@ void UnseenCellQuadTree::Clear()
 }
 
 #endif
-

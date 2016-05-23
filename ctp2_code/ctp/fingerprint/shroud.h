@@ -1,52 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef shroud_h
 #define shroud_h
-
 
 #include <stdio.h>
 
@@ -206,6 +159,5 @@ void shroud_encode( unsigned char *bytes, size_t length, size_t operand );
 
 
 void shroud_decode( unsigned char *bytes, size_t length, size_t operand );
-
 
 #endif

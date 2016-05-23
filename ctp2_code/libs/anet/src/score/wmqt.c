@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -188,7 +188,6 @@ int test_wmq(int write)
 	return 0;
 }
 
-
 int main(int argc, char *argv[])
 {
 	int ret;
@@ -202,7 +201,7 @@ Usage: %s (1|0) [dir] [tag]\n\
 	serverTag [tag] defaults to 0.0.0.0\n", argv[0], WMQDir);
 		return 1;
 	}
-	 
+
 	write = atoi(argv[1]);
 	if (argc > 2) {
 		strncpy(WMQDir, argv[2], wmq_DIR_MAXLEN);
@@ -214,7 +213,7 @@ Usage: %s (1|0) [dir] [tag]\n\
 			&(temp[0]), &(temp[1]), &(temp[2]), &(temp[3])) != 4)
 		||  ((temp[0] & 0xff) != temp[0]) || ((temp[1] & 0xff) != temp[1])
 		||  ((temp[2] & 0xff) != temp[2]) || ((temp[3] & 0xff) != temp[3])) {
-			printf("invalid tag %s; should look like an ipaddress\n", argv[3]);	
+			printf("invalid tag %s; should look like an ipaddress\n", argv[3]);
 			return 1;
 		}
 		ServerTag[0] = (char)(temp[0] & 0xff);
@@ -229,4 +228,3 @@ Usage: %s (1|0) [dir] [tag]\n\
 		printf("wmq test failed\n");
 	return ret;
 }
-

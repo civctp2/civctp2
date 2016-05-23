@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -97,7 +97,6 @@ typedef struct {
 	clock_t last_max_ping;  /* last maximum ping he reported seeing */
 } playerInfo_t;
 
-
 /*-----------------------------------------------------------------------------
   The information about each packet sent needed to match it with a ping reply
   and calculate the round trip ping.
@@ -113,7 +112,7 @@ typedef struct {
 #define SENT_LIST_LENGTH 200
 
 /*-----------------------------------------------------------------------------
-  State of the bandwidth testing algorithm is stored here (globally)  
+  State of the bandwidth testing algorithm is stored here (globally)
 -----------------------------------------------------------------------------*/
 struct {
 	int pkt_interval;           /* interval in ms between band packets */
@@ -131,8 +130,8 @@ struct {
 	dp_t *dp;                   /* the network transport object */
 	dpid_t myid;                /* my dp id */
 	dpid_t hostid;              /* the hosts dp id */
-	clock_t next_send_time;     /* time to send next band packet */ 
-	clock_t next_round_time;    /* time to end this test round (host only) */ 
+	clock_t next_send_time;     /* time to send next band packet */
+	clock_t next_round_time;    /* time to end this test round (host only) */
 	clock_t next_ping_time;     /* time to send next ping reply */
 	clock_t next_update_time;   /* time to send next interval update, used when
 								 * pkt_interval = -1 indicates host should
@@ -149,13 +148,12 @@ struct {
 	int replyto_idx;            /* index of replytoid in *ids */
 	int quitState;              /* state var handling behavior at quit time */
 	clock_t tfinish;            /* time to really exit, used at quit time */
-	FILE *infp;                 /* pointer to test parameters input file */ 
+	FILE *infp;                 /* pointer to test parameters input file */
 	sentList_entry_t sentList[SENT_LIST_LENGTH];
 	                            /* list of info about recently sent packets
 								 * used to match ping replies to find pings.
 								 */
 } band;
-
 
 void quit(int errcode)
 {
@@ -164,7 +162,6 @@ void quit(int errcode)
 	getch();
 	exit(errcode);
 }
-
 
 void print_usage(char *errmsg)
 {
@@ -189,7 +186,6 @@ Usage: band [-h] [-f infile]\n\
 	quit(1);
 }
 
-
 /*-----------------------------------------------------------------------------
   Send the current test parameters over the net to one or all other players.
 -----------------------------------------------------------------------------*/
@@ -205,7 +201,6 @@ int send_testParams(dp_t *dp, dpid_t myid, dpid_t dest, int pkt_interval, int pk
 				 sizeof(pkt.u.testParams) + sizeof(pkt.type));
 	return err;
 }
-
 
 /*-----------------------------------------------------------------------------
  Call this in between each simulation cycle of the game.
@@ -262,7 +257,7 @@ int band_poll()
 							band.I_am_host = TRUE;
 							printf("band: I am the host, reading params\n");
 						}
-					} 
+					}
 					if (pkt.u.objectDelta.flags & dp_OBJECTDELTA_FLAG_ISHOST) {
 						band.hostid = pkt.u.objectDelta.data.p.id;
 						printf("band: host id is %d\n", band.hostid);
@@ -284,16 +279,16 @@ int band_poll()
 			}
 			break;
 		case LOGIN_PACKET_ID:
-			/* Gotcha #1: 
-			 * External launchers eat even reliable packets received 
+			/* Gotcha #1:
+			 * External launchers eat even reliable packets received
 			 * before we were launched (or before dpCreate returns).
-			 * To avoid losing any packets, don't send game stuff until 
+			 * To avoid losing any packets, don't send game stuff until
 			 * the client notifies us that he has entered the game proper,
 			 * and is ready to receive.
 			 */
 			assert(band.I_am_host && band.round_duration != 0);
 			printf("band: player %d logged in, sending params\n", idFrom);
-			
+
 			/* Send them a <dll>.ini packet so everyone's net parameters agree */
 			{
 				pkt_t dllinipkt;
@@ -301,13 +296,13 @@ int band_poll()
 				dllinipkt.type = DLLINI_PACKET_ID;
 				dllinipkt.u.dllIni.LimitLowNPPI = band.LimitLowNPPI;
 				dllinipkt.u.dllIni.LimitHiNPPI = band.LimitHiNPPI;
-				dllinipkt.u.dllIni.DivisorPing2NPPI = band.DivisorPing2NPPI;	
+				dllinipkt.u.dllIni.DivisorPing2NPPI = band.DivisorPing2NPPI;
 				err = dpSend(band.dp, band.myid, idFrom, dp_SEND_RELIABLE, &dllinipkt,
 							 sizeof(pkt.type) + sizeof(dllIni_packet_t));
 				if (err != dp_RES_OK)
 					printf("band: warning: dpSend returned %d on <dll>.ini packet\n", err);
 			}
-			
+
 			/* send them test parameters, to bring them into the current test round */
 			err = send_testParams(band.dp, band.myid, idFrom, band.pkt_interval, band.pkt_size);
 			if (err != dp_RES_OK)
@@ -317,14 +312,14 @@ int band_poll()
 			assert(!band.I_am_host);
 			band.pkt_interval = pkt.u.testParams.pkt_interval;
 			band.pkt_size = pkt.u.testParams.pkt_size;
-			printf("band: received new test params: interval %d size %d\n", ECLOCKS2MS(band.pkt_interval), band.pkt_size); 
+			printf("band: received new test params: interval %d size %d\n", ECLOCKS2MS(band.pkt_interval), band.pkt_size);
 			band.pkt_round++;
 			break;
 		case DLLINI_PACKET_ID:
 			assert(!band.I_am_host);
 			band.LimitLowNPPI = pkt.u.dllIni.LimitLowNPPI;
 			band.LimitHiNPPI = pkt.u.dllIni.LimitHiNPPI;
-			band.DivisorPing2NPPI = pkt.u.dllIni.DivisorPing2NPPI; 
+			band.DivisorPing2NPPI = pkt.u.dllIni.DivisorPing2NPPI;
 			printf("band: received <dll>.ini params: LLNPPI %d LHNPPI %d DP2N %.2f\n",
 				   ECLOCKS2MS(band.LimitLowNPPI), ECLOCKS2MS(band.LimitHiNPPI), (float)band.DivisorPing2NPPI/16.0);
 			break;
@@ -332,8 +327,8 @@ int band_poll()
 			band.last_receive_time = now;
 			if ((band.replytoid != dp_ID_NONE) && (idFrom == band.replytoid)) {
 				pkt_t replypkt;
-					
-				memset(&replypkt, 0, dp_MAXLEN_UNRELIABLE);					
+
+				memset(&replypkt, 0, dp_MAXLEN_UNRELIABLE);
 				/*printf("band: sending a reply packet to %d.\n", band.replytoid);*/
 				replypkt.type = LATENCY_PACKET_ID;
 				replypkt.u.latency.pkt_num = pkt.u.band.pkt_num;
@@ -357,7 +352,7 @@ int band_poll()
 
 				p = (playerInfo_t *)assoctab_subscript(band.ids, idFrom);
 				p->last_max_ping = pkt.u.latency.max_ping;
-				
+
 				/* Look up the packet he replied to */
 				sent_idx = pkt.u.latency.pkt_num % SENT_LIST_LENGTH;
 				if (pkt.u.latency.pkt_num == band.sentList[sent_idx].pkt_num) {
@@ -390,7 +385,7 @@ int band_poll()
 					   idFrom, ECLOCKS2MS(ping), ECLOCKS2MS(band.max_local_ping), ECLOCKS2MS(max_global_ping));
 				DPRINT(("band: id:%d ping:%d max_local_ping:%d, max_global_ping:%d\n",
 						idFrom, ECLOCKS2MS(ping), ECLOCKS2MS(band.max_local_ping), ECLOCKS2MS(max_global_ping)));
-				
+
 				if (band.pkt_interval == 0) {
 					/* special case, band.pkt_interval == 0 means
 					 * band.pkt_interval == max_global_ping*16/DivisorPing2NPPI
@@ -415,9 +410,9 @@ int band_poll()
 			break;
 		}
 	}
-	
+
 	if (band.quitState == 1) {
-		/* Somebody decided we should quit.  Leave the session, 
+		/* Somebody decided we should quit.  Leave the session,
 		 * then start waiting for network traffic to finish.
 		 */
 		printf("band: Now Quitting\n");
@@ -432,7 +427,7 @@ int band_poll()
 		/* Has network traffic finished yet? */
 		if (dpReadyToFreeze(band.dp) != dp_RES_BUSY) {
 			clock_t t_wait;
-			
+
 		    t_wait = ECLOCKS_PER_SEC + band.max_local_ping * 3;
 			if (t_wait > 10*ECLOCKS_PER_SEC)
 				t_wait = 10*ECLOCKS_PER_SEC;
@@ -451,7 +446,7 @@ int band_poll()
 	/* Can't send without knowing myid */
 	if (band.myid == dp_ID_NONE)
 		return 0;
-	
+
 	if (((long)(now - band.next_ping_time) >= 0) &&
 		(band.ids->n_used > 1)) {
 		assoctab_item_t *pe;
@@ -485,7 +480,7 @@ int band_poll()
 	if (band.I_am_host && ((long)(now - band.next_round_time) >= 0)) {
 		char input[256];
 		int temp_interval, temp_duration;
-		
+
 		if (fgets(input, 256, band.infp) &&
 			sscanf(input, "%d %d %d", &temp_interval, &band.pkt_size, &temp_duration) == 3 &&
 			temp_interval >= -1 && band.pkt_size >= 0 && temp_duration > 0) {
@@ -534,9 +529,9 @@ int band_poll()
 			printf("band: warning: send_testParams returned %d\n", err);
 		band.next_update_time = now + 2*ECLOCKS_PER_SEC;
   	}
-	
-	/* Gotcha #1: 
-	 * External launchers eat even reliable packets received 
+
+	/* Gotcha #1:
+	 * External launchers eat even reliable packets received
 	 * before we were launched (or before dpCreate returns).
 	 * To avoid losing any packets, notify the host that this player
 	 * has entered the game proper, and is ready to receive.
@@ -553,7 +548,7 @@ int band_poll()
 		int sent_idx;
 		pkt_t pkt;
 		clock_t dt;
-			
+
 		memset(&pkt, 0, dpio_MAXLEN_UNRELIABLE);
 		pkt.type = BAND_PACKET_ID;
 		pkt.u.band.pkt_round = band.pkt_round;
@@ -582,7 +577,6 @@ int band_poll()
 	return 0;
 }
 
-
 void __cdecl main(int argc, char **argv)
 {
 	int i;
@@ -590,15 +584,15 @@ void __cdecl main(int argc, char **argv)
 	dp_result_t err;
 	dp_session_t sess;
 	size_t size = sizeof(sess);
-	char key[dp_KEY_MAXLEN+1];	
+	char key[dp_KEY_MAXLEN+1];
 	int keylen;
 	dp_transport_t dllname;
 	comm_driverInfo_t dllinfo;
-	
+
 	band.replyto_idx = 0;
 	band.infp = stdin;
 	memset(band.sentList, 0, SENT_LIST_LENGTH * sizeof(sentList_entry_t));
-	
+
 	for (i=1; i < argc; i++) {
 		if (argv[i][0] == '-') {
 			switch (argv[i][1]) {
@@ -641,7 +635,7 @@ void __cdecl main(int argc, char **argv)
 	DPRINT(("band: dpGetCurrentTransportInfo returns %d\n", err));
 	if (err == dp_RES_OK) {
 		char *dot = strrchr(dllname.fname, '.');
-		
+
 		DPRINT(("band: dpGetCurrentTransportInfo says fname %s\n", dllname.fname));
 		if (dot) {
 			strcpy(dot, ".ini");
@@ -654,7 +648,7 @@ void __cdecl main(int argc, char **argv)
 			band.LimitHiNPPI = MS2ECLOCKS(band.LimitHiNPPI);
 			/* Divisors are in 100ths (i.e. 300 -> 3.00), but 16ths are used internally */
 			band.DivisorPing2NPPI = (band.DivisorPing2NPPI * 4) / 25;
-			
+
 			DPRINT(("band: loaded tuning data from %s; LLNPPI %d, LHNPPI %d, DP2NPPI %.2f\n", dllname.fname, ECLOCKS2MS(band.LimitLowNPPI), ECLOCKS2MS(band.LimitHiNPPI),  (float)band.DivisorPing2NPPI/16.0));
 			printf("band: loaded tuning data from %s; LLNPPI %d, LHNPPI %d, DP2NPPI %.2f\n", dllname.fname, ECLOCKS2MS(band.LimitLowNPPI), ECLOCKS2MS(band.LimitHiNPPI), (float)band.DivisorPing2NPPI/16.0);
 		}
@@ -673,8 +667,8 @@ void __cdecl main(int argc, char **argv)
 		printf("band: dpGetSessionId returns error %d\n", err);
 		quit(1);
 	}
-	
-	err = dpRequestObjectDeltas(band.dp, TRUE, key, keylen);	
+
+	err = dpRequestObjectDeltas(band.dp, TRUE, key, keylen);
 	if (err != dp_RES_OK) {
 		printf("band: error %d from dpRequestObjectDeltas\n", err);
 		quit(1);

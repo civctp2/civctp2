@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "diplomacyutil.h"
 #include "DiplomacyProposalRecord.h"
@@ -12,17 +11,16 @@ THREAT_TYPE s_db_to_threat_map[THREAT_MAX];
 
 void diplomacyutil_Initialize()
 {
-	
+
 	Assert(g_theDiplomacyProposalDB->NumRecords() == PROPOSAL_MAX);
 
 	sint32 i, j;
-	
+
 	for(i = 0; i < sint32(PROPOSAL_MAX); i++) {
 		s_proposal_to_db_map[i] = -1;
 		s_db_to_proposal_map[i] = PROPOSAL_NONE;
 	}
 
-	
 	for(i = 0; i < g_theDiplomacyProposalDB->NumRecords(); i++) {
 		const DiplomacyProposalRecord *rec = g_theDiplomacyProposalDB->Get(i);
 		for(j = sint32(PROPOSAL_NONE); j < sint32(PROPOSAL_MAX); j++) {
@@ -34,7 +32,6 @@ void diplomacyutil_Initialize()
 		}
 	}
 
-	
 	Assert(g_theDiplomacyThreatDB->NumRecords() == THREAT_MAX);
 	for(i = 0; i < sint32(THREAT_MAX); i++) {
 		s_threat_to_db_map[i] = -1;
@@ -53,7 +50,6 @@ void diplomacyutil_Initialize()
 	}
 }
 
-
 const DiplomacyProposalRecord *diplomacyutil_GetRecord(PROPOSAL_TYPE type)
 {
 	return g_theDiplomacyProposalDB->Get(s_proposal_to_db_map[type]);
@@ -67,13 +63,11 @@ sint32 diplomacyutil_GetDBIndex(PROPOSAL_TYPE type)
 PROPOSAL_TYPE diplomacyutil_GetProposalType(sint32 dbIndex)
 {
 	if(dbIndex < 0 || dbIndex >= PROPOSAL_MAX) {
-		
-		
+
 		return PROPOSAL_NONE;
 	}
 	return s_db_to_proposal_map[dbIndex];
 }
-
 
 const DiplomacyThreatRecord *diplomacyutil_GetRecord(THREAT_TYPE type)
 {

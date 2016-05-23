@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -78,11 +78,11 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 	Cell *cell = g_theWorld->GetCell(curPos);
     Assert(cell);
 
-	if (cell->GetScratch() != 0) return false; 
+	if (cell->GetScratch() != 0) return false;
 
 	cell->SetScratch(1);
 
-	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false; 
+	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false;
 	if(UnitData::GetDistance(center, curPos, 0) > squaredRadius) return false;
 
 	cell->SetOwner(player);
@@ -97,7 +97,7 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 
 	bool redrawMe = false;
 
-	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
+	if(curPos.GetNeighborPosition(NORTHEAST, nextPos))
 		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
 			redrawMe = true;
 		}
@@ -129,7 +129,7 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 	if(cell->GetScratch() != 0) return false;
 	if(cell->GetCityOwner().m_id != 0 && cell->GetCityOwner().m_id != city.m_id) return false;
 	if(UnitData::GetDistance(centerPos, curPos, 0) > rec->GetSquaredRadius()) return false;
-	
+
 	cell->SetCityOwner(city);
 	sint32 newOwner = -1;
 	if (city.m_id == 0x0)
@@ -150,7 +150,7 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 
 	bool redrawMe = false;
 
-	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
+	if(curPos.GetNeighborPosition(NORTHEAST, nextPos))
 		if(!ExpandInfluence(city, centerPos, nextPos, rec)) {
 			redrawMe = true;
 		}
@@ -187,10 +187,10 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 // Returns    : radius belonging to the give sizeIndex
 //
 // Remark(s)  : - Assumption: the city size database exists.
-//              - When the sizeIndex is larger than the number of entries in 
+//              - When the sizeIndex is larger than the number of entries in
 //                the city size database, the maximum available entry is used.
 //              - When no valid entry is found, 0 is returned.
-//              
+//
 //
 //----------------------------------------------------------------------------
 sint32 RadiusFromIndex(sint32 sizeIndex)
@@ -201,9 +201,9 @@ sint32 RadiusFromIndex(sint32 sizeIndex)
     {
         sizeIndex = g_theCitySizeDB->NumRecords() - 1;
     }
-    
+
     CitySizeRecord const *  citySizeData    = g_theCitySizeDB->Get(sizeIndex);
-    
+
     return citySizeData ? citySizeData->GetIntRadius() : 0;
 }
 
@@ -239,7 +239,7 @@ CityInfluenceIterator::CityInfluenceIterator(MapPoint const & center, sint32 siz
 // Description: Determine whether the current prospect is a valid location for
 //              the iterator.
 //
-// Parameters : - 
+// Parameters : -
 //				size			: size of city (as index in city size database)
 //
 // Globals    : g_theWorld
@@ -320,4 +320,3 @@ void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint
 	    g_tiledMap->RedrawTile(&cpos);
     }
 }
-

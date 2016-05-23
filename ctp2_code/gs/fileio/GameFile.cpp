@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -116,9 +116,7 @@
 
 #include "FeatTracker.h"
 
-
 #include "EventTracker.h"
-
 
 #include "civ3_main.h"
 
@@ -126,15 +124,13 @@
 
 #include "GameWatch.h"
 
-
 extern int g_gameWatchID;
-#endif 
+#endif
 
 #ifndef WIN32
 #include <sys/types.h>
 #include <dirent.h>
 #endif
-
 
 sint32 g_showUnitLabels = FALSE;
 
@@ -190,7 +186,7 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0066", 66}
 };
 
-sint32 gamefile_CurrentVersion() 
+sint32 gamefile_CurrentVersion()
 {
 	return s_magicValue[k_NUM_MAGIC_VALUES - 1].version;
 }
@@ -207,8 +203,8 @@ extern  ConstDB                     *g_theConstDB;
 extern  ThroneDB                    *g_theThroneDB;
 extern  DifficultyDB                *g_theDifficultyDB;
 extern  RandomGenerator             *g_rand;
-extern  TurnCount                   *g_turn; 
-extern  SelectedItem                *g_selected_item; 
+extern  TurnCount                   *g_turn;
+extern  SelectedItem                *g_selected_item;
 extern  PollutionDatabase           *g_thePollutionDB;
 extern  GlobalWarmingDatabase       *g_theGWDB;
 extern  OzoneDatabase               *g_theUVDB;
@@ -217,13 +213,13 @@ extern  TopTen                      *g_theTopTen;
 
 extern  TerrainImprovementPool      *g_theTerrainImprovementPool;
 extern  InstallationPool            *g_theInstallationPool;
-extern  TurnCount                   *g_turn; 
+extern  TurnCount                   *g_turn;
 extern  DiplomaticRequestPool       *g_theDiplomaticRequestPool;
 extern  CivilisationPool            *g_theCivilisationPool;
 extern  AgreementPool               *g_theAgreementPool;
 extern  MessagePool                 *g_theMessagePool;
 
-extern  ProfileDB                   *g_theProfileDB; 
+extern  ProfileDB                   *g_theProfileDB;
 extern  nf_GameSetup                g_gamesetup;
 
 extern sint32                       g_is565Format;
@@ -232,7 +228,6 @@ sint32 g_saveFileVersion = -1;
 sint32 g_startInfoType = STARTINFOTYPE_NONE;
 sint32 g_isScenario = FALSE;
 sint32 g_useScenarioCivs = 2;
-
 
 MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
@@ -249,7 +244,6 @@ void GameFile::RestoreGame(const MBCHAR *filename)
 	delete game;
 }
 
-
 void GameFile::RestoreScenarioGame(MBCHAR *name)
 {
 	GameFile *game;
@@ -265,17 +259,15 @@ void GameFile::SaveGame(const MBCHAR *filename, SaveInfo *info)
 
 	game = new GameFile;
 	game->Save(filename, info);
-	
+
 	delete game;
 }
-
 
 
 GameFile::GameFile(void)
 {
 
 }
-
 
 static uint32 CompressData(uint8 *inbuf, size_t insize,
                            uint8 **outbuf, size_t *outsize)
@@ -284,13 +276,12 @@ static uint32 CompressData(uint8 *inbuf, size_t insize,
 	uLong tsize = (uLong)(((double)insize * 1.01) + 12.5);
 
 	*outbuf = new uint8[tsize];
-	
+
 	err = compress2(*outbuf, &tsize, inbuf, insize, Z_DEFAULT_COMPRESSION);
 	*outsize = tsize;
-	
+
 	return(err == Z_OK);
 }
-
 
 uint32 GameFile::SaveDB(CivArchive &archive)
 {
@@ -299,75 +290,60 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 		"InitProgressWindow",
 		330 );
 
-	
 	MBCHAR s[_MAX_PATH];
 	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
-	
-	
+
+
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 30 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 40 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 50 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 60 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 70 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 80 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 90 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 100 );
 
-
 	g_theProgressWindow->StartCountingTo( 110 );
 
-	
-	
+
+
 
 
 
 
 	g_theProgressWindow->StartCountingTo( 120 );
 
-
 	g_theProgressWindow->StartCountingTo( 130 );
-
 
 	g_theProgressWindow->StartCountingTo( 140 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 160 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 170 );
 
@@ -379,7 +355,6 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 190 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 200 );
 
@@ -391,18 +366,14 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 220 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 230 );
-
 
 
 	g_theProgressWindow->StartCountingTo( 240 );
 
 
-
 	g_theProgressWindow->StartCountingTo( 250 );
-
 
 	g_theProgressWindow->StartCountingTo( 260 );
 
@@ -427,16 +398,13 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 310 );
 
-	
 
 	g_theProgressWindow->StartCountingTo( 320 );
-
 
 	g_theProgressWindow->StartCountingTo( 330 );
 
 	g_theProgressWindow->StartCountingTo( 340 );
 
-	
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
 
@@ -445,7 +413,6 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 {
-
 
 	FILE	*fpSave = NULL;
 
@@ -473,7 +440,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 		return (GAMEFILE_ERR_STORE_FAILED);
 	}
 
-	
 	bool showProgress = !strstr(filepath, "AUTOSAVE");
 
 #define PROGRESS(i) if(showProgress) { g_theProgressWindow->StartCountingTo(i); }
@@ -490,17 +456,15 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	if(showProgress)
 		g_theProgressWindow->StartCountingTo( 100, s );
 
-	
 	if (g_civApp->SaveDBInGameFile())
 		SaveDB(archive);
 
-	
-	
+
 	archive<<World_World_GetVersion();
 	archive<<Player_Player_GetVersion();
-	archive<<SelectedItem_GetVersion(); 
+	archive<<SelectedItem_GetVersion();
 	archive<<Advances_Advances_GetVersion();
-	
+
 	archive<<BldQue_BuildQueue_GetVersion();
 	archive<<CityData_CityData_GetVersion();
 	archive<<Diffcly_Difficulty_GetVersion();
@@ -516,28 +480,26 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	archive<<Cell_CELL_GetVersion();
 	archive<<MapPoint_MapPoint_GetVersion();
 
-	
 
 	g_rand->Serialize(archive);
 
 	PROGRESS( 110 );
 
-	
-	g_theGameSettings->Serialize(archive);                          
+	g_theGameSettings->Serialize(archive);
 
 	PROGRESS( 120 );
 
 	BOOL saveEverything = TRUE;
 
-	
-	
+
+
 
 	if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) {
 		saveEverything = FALSE;
 	}
 
 #if 0
-	
+
 	g_theWorld->ClearStartingPoints();
 	for(i = 1; i < k_MAX_PLAYERS; i++) {
 		if(g_player[i] && g_player[i]->m_all_units->Num() > 0) {
@@ -578,9 +540,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 190 );
 
-	
-	
-	
+
+
+
 
 	PROGRESS( 200 );
 
@@ -589,9 +551,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 210 );
 
-	
-	
-	
+
+
+
 
 	PROGRESS( 220 );
 
@@ -604,9 +566,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 240 );
 
-	
-	
-	
+
+
+
 
 	PROGRESS( 250 );
 
@@ -615,9 +577,9 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 260 );
 
-	
-	
-	
+
+
+
 
 	PROGRESS( 270 );
 
@@ -629,17 +591,16 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	if(saveEverything)
 		g_theInstallationPool->Serialize(archive);
 
-
 	PROGRESS( 290 );
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 
 	PROGRESS( 300 );
 
@@ -648,35 +609,32 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 310 );
 
-	
-	
-	
+
+
+
 
 	PROGRESS( 320 );
 
-	
 
 		g_exclusions->Serialize(archive);
-	
+
 	PROGRESS( 330 );
 
 	if(saveEverything)
 		g_featTracker->Serialize(archive);
 
-	
-	
-	
+
+
+
 
 	if(saveEverything)
 		g_eventTracker->Serialize(archive);
 
 	PROGRESS( 340 );
 
-	
 
 	for (i=0; i<k_MAX_PLAYERS; i++) {
 		sint32 playerAlive = g_player[i] != NULL;
-
 
 		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) {
 
@@ -686,7 +644,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 		if(playerAlive)
 			g_player[i]->Serialize(archive);
 	}
-
 
 	if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) {
 
@@ -704,11 +661,11 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 350 );
 
-	
-	
-	
 
-	
+
+
+
+
 
 
 
@@ -718,13 +675,12 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 360 );
 
-	
 	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb");
 	if (fpSave == NULL)
 	{
 		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE");
 
-		if(showProgress) { 
+		if(showProgress) {
 			ProgressWindow::EndProgress( g_theProgressWindow );
 		}
 		return (GAMEFILE_ERR_STORE_FAILED);
@@ -732,7 +688,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 370 );
 
-	
 	strcpy(sHeader, k_GAME_MAGIC_VALUE);
 	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpSave);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE))
@@ -743,17 +698,17 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 		return (GAMEFILE_ERR_STORE_FAILED);
 	}
 
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	BOOL createdInfo = FALSE;
 	if (info == NULL) {
 		createdInfo = TRUE;
@@ -765,12 +720,12 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 380 );
 
 	SaveExtendedGameInfo(fpSave, info);
-	
+
 	PROGRESS( 390 );
 
 	if (createdInfo)
 		delete info;
-	
+
 	ulLen = archive.StreamLen();
 	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
@@ -783,8 +738,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 500 );
 
-
-	if (!CompressData(archive.GetStream(), ulLen, 
+	if (!CompressData(archive.GetStream(), ulLen,
 					  &compressedData, &compressedSize))
 	{
 		c3files_fclose(fpSave);
@@ -795,7 +749,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 510 );
 
-	
 	n = c3files_fwrite(&compressedSize, sizeof(compressedSize), 1, fpSave);
 	if (n!=1)
 		{
@@ -807,7 +760,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	PROGRESS( 520 );
 
-	
 	n = c3files_fwrite(compressedData, sizeof(uint8), compressedSize, fpSave);
 	if (n != compressedSize)
 		{
@@ -822,20 +774,18 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	c3files_fclose(fpSave);
 
 #ifndef _NO_GAME_WATCH
-	
-	
+
 	char gameWatchFilename[1024];
 	sprintf(gameWatchFilename, "%s.gw", filepath);
 
-	
-	
+
 	gameWatch.SaveGame(g_gameWatchID, gameWatchFilename);
 #endif
 
 	finish = clock();
 	DPRINTF(k_DBG_FILE, ("Time to save game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
-	
-	if(showProgress) { 
+
+	if(showProgress) {
 		ProgressWindow::EndProgress( g_theProgressWindow );
 	}
 
@@ -874,13 +824,11 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	start = clock();
 
-	
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
 		"InitProgressWindow",
 		1090 );
 
-	
 	MBCHAR s[_MAX_PATH];
 	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
 
@@ -985,7 +933,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	tlen = ulLen;
 	int q;
-	if (((q = uncompress(archive.GetStream(), &tlen, compressedData, compressedSize)) != Z_OK) || 
+	if (((q = uncompress(archive.GetStream(), &tlen, compressedData, compressedSize)) != Z_OK) ||
 		(tlen != ulLen)) {
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_FILE_SIZE");
 		return (GAMEFILE_ERR_LOAD_FAILED);
@@ -1015,7 +963,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
-	archive>>ver; 
+	archive>>ver;
 	if (ver != SelectedItem_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
@@ -1061,7 +1009,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=CityData_CityData_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1074,7 +1022,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
-	
+
 	g_theProgressWindow->StartCountingTo( 210 );
 
 	archive>>ver;
@@ -1084,14 +1032,14 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
-	
+
 	g_theProgressWindow->StartCountingTo( 220 );
 
 	archive>>ver;
 	if (ver!=Gold_Gold_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1101,7 +1049,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=ID_ID_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1111,7 +1059,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=ObjPool_ObjPool_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1121,7 +1069,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=Sci_Science_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1131,7 +1079,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=TaxRate_TaxRate_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1141,7 +1089,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=Unit_Unit_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1151,7 +1099,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=UnitData_UnitData_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1161,7 +1109,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=UnitPool_UnitPool_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1171,7 +1119,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	if (ver!=Cell_CELL_GetVersion())
 	{
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_INCORRECT_VERSION_INFO");
-	
+
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
@@ -1185,31 +1133,24 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
-
 	g_theProgressWindow->StartCountingTo( 1080 );
 
-	
 	g_civApp->InitializeGame(archive);
 
 	g_theProgressWindow->StartCountingTo( 1090 );
 
-
 #ifndef _NO_GAME_WATCH
-	
-	
+
 	char gameWatchFilename[1024];
 	sprintf(gameWatchFilename, "%s.gw", filepath);
 
-	
 	g_gameWatchID = gameWatch.LoadGame(gameWatchFilename);
 #endif
 
 	finish = clock();
 	DPRINTF(k_DBG_FILE, ("Time to load game data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
-	
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
-
 
 	return (GAMEFILE_ERR_LOAD_OK);
 }
@@ -1223,28 +1164,24 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 {
 	sint32		n;
 
-	
 	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
@@ -1258,7 +1195,6 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->radarMapData = NULL;
 	}
 
-	
 	n = c3files_fread(&info->radarMapWidth, sizeof(uint8), sizeof(info->radarMapWidth), saveFile);
 	if (n != sizeof(info->radarMapWidth)) {
 		c3files_fclose(saveFile);
@@ -1272,13 +1208,13 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 
 	if (info->radarMapHeight > 0 && info->radarMapWidth > 0) {
 		info->radarMapData = new Pixel16[info->radarMapWidth * info->radarMapHeight];
-		n = c3files_fread(info->radarMapData, sizeof(uint8), 
+		n = c3files_fread(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight, saveFile);
 		if (n != (sint32)(info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16))) {
 			c3files_fclose(saveFile);
 			return FALSE;
 		}
-		
+
 		if (!g_is565Format) {
 			for (sint32 i=0; i<info->radarMapWidth * info->radarMapHeight; i++) {
 				info->radarMapData[i] = pixelutils_Convert565to555(info->radarMapData[i]);
@@ -1293,7 +1229,6 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->powerGraphData = NULL;
 	}
 
-	
 	n = c3files_fread(&info->powerGraphWidth, sizeof(uint8), sizeof(info->powerGraphWidth), saveFile);
 	if (n != sizeof(info->powerGraphWidth)) {
 		c3files_fclose(saveFile);
@@ -1307,14 +1242,13 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 
 	if (info->powerGraphHeight > 0 && info->powerGraphWidth > 0) {
 		info->powerGraphData = new Pixel16[info->powerGraphWidth * info->powerGraphHeight];
-		n = c3files_fread(info->powerGraphData, sizeof(uint8), 
+		n = c3files_fread(info->powerGraphData, sizeof(uint8),
 							sizeof(Pixel16) * info->powerGraphWidth * info->powerGraphHeight, saveFile);
 		if (n != (sint32)(info->powerGraphWidth * info->powerGraphHeight * sizeof(Pixel16))) {
 			c3files_fclose(saveFile);
 			return FALSE;
 		}
 
-		
 		if (!g_is565Format) {
 			for (sint32 i=0; i<info->powerGraphWidth * info->powerGraphHeight; i++) {
 				info->powerGraphData[i] = pixelutils_Convert565to555(info->powerGraphData[i]);
@@ -1322,7 +1256,6 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 	}
 
-	
 	sint32 numPlayers;
 	n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile);
 	if (n != sizeof(sint32)) {
@@ -1331,18 +1264,17 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	}
 	info->numCivs = numPlayers;
 
-    
-    sint32 has_robot; 
+    sint32 has_robot;
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
         c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile);
 
-        if (has_robot) { 
+        if (has_robot) {
 		    n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 		    if (n != k_MAX_NAME_LEN) {
 			    c3files_fclose(saveFile);
 			    return FALSE;
 		    }
-        } else { 
+        } else {
             info->civList[i][0] = '\0';
         }
 
@@ -1364,18 +1296,16 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->networkGUID[i].guid = guid;
 	}
 
-	
 	n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
 	if (n != 1) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
-	
+
 	NETFunc::Session *s = (NETFunc::Session *)&info->gameSetup;
 	dp_session_t *sess =
 		(dp_session_t *)((uint8*)s + sizeof(NETFunc::Key));
 	sess->sessionType = GAMEID;
-	
 
 	n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile);
 	if (n != 1) {
@@ -1383,11 +1313,9 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return FALSE;
 	}
 
-	
 	info->loadType = SAVEINFOLOAD_EXTENDED;
-	
-	
-	
+
+
 	n = c3files_fread(&info->isScenario, sizeof(info->isScenario), 1, saveFile);
 	if(n != 1) {
 		c3files_fclose(saveFile);
@@ -1412,9 +1340,9 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return FALSE;
 	}
 
-	
-	
-	
+
+
+
 	MBCHAR name[k_SCENARIO_NAME_MAX];
 	n = c3files_fread(name, sizeof(MBCHAR), k_SCENARIO_NAME_MAX, saveFile);
 	if(n != k_SCENARIO_NAME_MAX) {
@@ -1422,32 +1350,27 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return FALSE;
 	}
 
-	
 	if (info->scenarioName) {
 		delete[] info->scenarioName;
 		info->scenarioName = NULL;
 	}
 
-	
-	
+
 	if (strlen(name) > 0) {
 		info->scenarioName = new MBCHAR[strlen(name)+1];
 		strcpy(info->scenarioName, name);
 	}
 
-	
-	
+
 	if (g_saveFileVersion >= 47) {
-		
-		
-		
+
+
 		n = c3files_fread(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
 		if(n != k_MAX_PLAYERS) {
 			return FALSE;
 		}
 	}
-	
-	
+
 	if (g_saveFileVersion >= 50) {
 		n = c3files_fread(&info->showLabels, sizeof(info->showLabels), 1, saveFile);
 		if(n != 1) {
@@ -1455,7 +1378,6 @@ BOOL GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 			return FALSE;
 		}
 
-		
 		n = c3files_fread(&info->startingPlayer, sizeof(info->startingPlayer), 1, saveFile);
 		if(n != 1) {
 			c3files_fclose(saveFile);
@@ -1479,28 +1401,24 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 {
 	sint32		n;
 
-	
 	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->leaderName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->civName, sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
@@ -1509,13 +1427,12 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 
 	info->loadType = SAVEINFOLOAD_BASIC;
 
-	
-	
-	
-	if (g_saveFileVersion >= 42) {
-		
 
-		
+
+
+	if (g_saveFileVersion >= 42) {
+
+
 		n = c3files_fread(&info->radarMapWidth, sizeof(uint8), sizeof(info->radarMapWidth), saveFile);
 		if (n != sizeof(info->radarMapWidth)) {
 			c3files_fclose(saveFile);
@@ -1529,12 +1446,11 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 
 		if (info->radarMapHeight > 0 && info->radarMapWidth > 0) {
-			c3files_fseek(saveFile, 
-						sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight, 
+			c3files_fseek(saveFile,
+						sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight,
 						SEEK_CUR);
 		}
 
-		
 		n = c3files_fread(&info->powerGraphWidth, sizeof(uint8), sizeof(info->powerGraphWidth), saveFile);
 		if (n != sizeof(info->powerGraphWidth)) {
 			c3files_fclose(saveFile);
@@ -1547,12 +1463,11 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 
 		if (info->powerGraphHeight > 0 && info->powerGraphWidth > 0) {
-			c3files_fseek(saveFile, 
-						sizeof(Pixel16) * info->powerGraphWidth * info->powerGraphHeight, 
+			c3files_fseek(saveFile,
+						sizeof(Pixel16) * info->powerGraphWidth * info->powerGraphHeight,
 						SEEK_CUR);
 		}
 
-		
 		sint32 numPlayers;
 		n = c3files_fread(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile);
 		if (n != sizeof(sint32)) {
@@ -1561,18 +1476,17 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 		info->numCivs = numPlayers;
 
-		
-		sint32 has_robot; 
+		sint32 has_robot;
 		for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 			c3files_fread(&has_robot, sizeof(uint8), sizeof(sint32), saveFile);
 
-			if (has_robot) { 
+			if (has_robot) {
 				n = c3files_fread(info->civList[i], sizeof(uint8), k_MAX_NAME_LEN, saveFile);
 				if (n != k_MAX_NAME_LEN) {
 					c3files_fclose(saveFile);
 					return FALSE;
 				}
-			} else { 
+			} else {
 				info->civList[i][0] = '\0';
 			}
 
@@ -1594,7 +1508,6 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			info->networkGUID[i].guid = guid;
 		}
 
-		
 		n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
 		if (n != 1) {
 			c3files_fclose(saveFile);
@@ -1607,9 +1520,9 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			return FALSE;
 		}
 
-		
-		
-		
+
+
+
 		n = c3files_fread(&info->isScenario, sizeof(info->isScenario), 1, saveFile);
 		if(n != 1) {
 			c3files_fclose(saveFile);
@@ -1623,11 +1536,11 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 	}
 
-	
-	
-	
+
+
+
 	if (g_saveFileVersion >= 46) {
-		
+
 		MBCHAR name[k_SCENARIO_NAME_MAX];
 		n = c3files_fread(name, sizeof(MBCHAR), k_SCENARIO_NAME_MAX, saveFile);
 		if(n != k_SCENARIO_NAME_MAX) {
@@ -1635,26 +1548,22 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			return FALSE;
 		}
 
-		
 		if (info->scenarioName) {
 			delete[] info->scenarioName;
 			info->scenarioName = NULL;
 		}
 
-		
-		
+
 		if (strlen(name) > 0) {
 			info->scenarioName = new MBCHAR[strlen(name)+1];
 			strcpy(info->scenarioName, name);
 		}
 	}
 
-	
-	
+
 	if (g_saveFileVersion >= 47) {
-		
-		
-		
+
+
 		n = c3files_fread(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
 		if(n != k_MAX_PLAYERS) {
                     c3files_fclose(saveFile);
@@ -1678,37 +1587,33 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 
 	sint32		n;
 
-	
 
-	
+
+
 	n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(info->leaderName, sizeof(MBCHAR), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(info->civName, sizeof(MBCHAR), k_MAX_NAME_LEN, saveFile);
 	if (n != k_MAX_NAME_LEN) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(info->note, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(&info->radarMapWidth, sizeof(uint8), sizeof(info->radarMapWidth), saveFile);
 	if (n != sizeof(info->radarMapWidth)) {
 		c3errors_FatalDialog(functionName, errorString);
@@ -1720,7 +1625,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 	if (info->radarMapWidth > 0 && info->radarMapHeight > 0) {
-		
+
 		if (!g_is565Format) {
 			for (sint32 i=0; i<info->radarMapWidth * info->radarMapHeight; i++) {
 				Pixel16		pixel = info->radarMapData[i];
@@ -1729,8 +1634,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 			}
 		}
 
-		n = c3files_fwrite(info->radarMapData, sizeof(uint8), 
-							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth, 
+		n = c3files_fwrite(info->radarMapData, sizeof(uint8),
+							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth,
 							saveFile);
 		if (n != (sint32)(sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth)) {
 			c3errors_FatalDialog(functionName, errorString);
@@ -1738,7 +1643,6 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 	}
 
-	
 	n = c3files_fwrite(&info->powerGraphWidth, sizeof(uint8), sizeof(info->powerGraphWidth), saveFile);
 	if (n != sizeof(info->powerGraphWidth)) {
 		c3errors_FatalDialog(functionName, errorString);
@@ -1751,7 +1655,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	}
 
 	if (info->powerGraphHeight > 0 && info->powerGraphWidth > 0) {
-		
+
 		if (!g_is565Format) {
 			for (sint32 i=0; i<info->powerGraphWidth * info->powerGraphHeight; i++) {
 				Pixel16		pixel = info->powerGraphData[i];
@@ -1759,8 +1663,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 			}
 		}
 
-		n = c3files_fwrite(info->powerGraphData, sizeof(uint8), 
-							sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth, 
+		n = c3files_fwrite(info->powerGraphData, sizeof(uint8),
+							sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth,
 							saveFile);
 		if (n != (sint32)(sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth)) {
 			c3errors_FatalDialog(functionName, errorString);
@@ -1768,7 +1672,6 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 	}
 
-	
 	sint32		numPlayers = k_MAX_PLAYERS;
 
 	n = c3files_fwrite(&numPlayers, sizeof(uint8), sizeof(sint32), saveFile);
@@ -1777,7 +1680,6 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-    
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 		MBCHAR civName[k_MAX_NAME_LEN];
 
@@ -1785,8 +1687,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		GUID guid;
 		sint32 civindex;
 		if (g_player[i]) {
-            has_player = 1; 
-            c3files_fwrite(&has_player, sizeof(uint8), sizeof(sint32), saveFile); 
+            has_player = 1;
+            c3files_fwrite(&has_player, sizeof(uint8), sizeof(sint32), saveFile);
 
 		    g_player[i]->GetPluralCivName(civName);
 
@@ -1797,9 +1699,9 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		    }
 			guid = g_player[i]->m_networkGuid;
 			civindex = g_player[i]->m_civilisation->GetCivilisation();
-        } else { 
-            has_player = 0; 
-            c3files_fwrite(&has_player, sizeof(uint8), sizeof(sint32), saveFile); 
+        } else {
+            has_player = 0;
+            c3files_fwrite(&has_player, sizeof(uint8), sizeof(sint32), saveFile);
 			memset(&guid, 0, sizeof(guid));
 			civindex = -1;
         }
@@ -1807,7 +1709,6 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		c3files_fwrite(&guid, 1, sizeof(GUID), saveFile);
 	}
 
-	
 	n = c3files_fwrite(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
 	if (n != 1) {
 		c3errors_FatalDialog(functionName, errorString);
@@ -1820,9 +1721,9 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	
-	
-	
+
+
+
 	n = c3files_fwrite(&info->isScenario, sizeof(info->isScenario), 1, saveFile);
 	if(n != 1) {
 		c3errors_FatalDialog(functionName, errorString);
@@ -1847,9 +1748,9 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	
-	
-	
+
+
+
 	MBCHAR name[k_SCENARIO_NAME_MAX];
 	memset(name, 0, k_SCENARIO_NAME_MAX);
 
@@ -1863,32 +1764,31 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	
-	
-	
+
+
+
 	n = c3files_fwrite(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
 	if(n != k_MAX_PLAYERS) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
-	
-	
-	
+
+
+
+
 	n = c3files_fwrite(&info->showLabels, sizeof(info->showLabels), 1, saveFile);
 	if(n != 1) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
-	
+
 	n = c3files_fwrite(&info->startingPlayer, sizeof(info->startingPlayer), 1, saveFile);
 	if(n != 1) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 }
-
 
 void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 {
@@ -1909,8 +1809,7 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 		g_theProfileDB->SetGameName(name);
 	}
 
-	
-	
+
 	if (info->startInfoType != STARTINFOTYPE_CIVS &&
 		info->startInfoType != STARTINFOTYPE_POSITIONSFIXED) {
 		g_theProfileDB->SetLeaderName(info->leaderName);
@@ -1918,16 +1817,14 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 		g_theProfileDB->SetSaveNote(info->note);
 	}
 
-	
 	nf_GameSetup temp = g_gamesetup;
 	g_gamesetup = info->gameSetup;
-	
+
 	memcpy(
 		g_gamesetup.GetTribeSlots(),
 		temp.GetTribeSlots(),
 		8  * sizeof( TribeSlot ) );
 
-	
 	g_gamesetup.SetLaunched(true);
 	g_gamesetup.Pack();
 
@@ -1979,7 +1876,7 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 		g_isScenario = FALSE;
 		g_startInfoType = STARTINFOTYPE_NONE;
 	}
-	
+
 	if (g_saveFileVersion >= 50)
 	{
 		g_showUnitLabels = info->showLabels;
@@ -1989,7 +1886,6 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 		g_startingPlayer = -1;
 	}
 }
-
 
 void GameFile::GetExtendedInfoFromProfile(SaveInfo *info)
 {
@@ -2004,21 +1900,18 @@ void GameFile::GetExtendedInfoFromProfile(SaveInfo *info)
 	strcpy(info->civName, g_theProfileDB->GetCivName());
 	strcpy(info->note, g_theProfileDB->GetSaveNote());
 
-	
 	info->gameSetup = g_gamesetup;
-	
+
 	memset(
 		info->gameSetup.GetTribeSlots(),
 		0,
 		8  * sizeof( TribeSlot ) );
 
-	
 	if(g_isScenario) {
 		memset(info->gameSetup.GetSavedTribeSlots(),
 			   0,
 			   8 * sizeof(TribeSlot));
 	}
-
 
 	info->options.tutorialadvice = g_theProfileDB->IsTutorialAdvice();
 	info->options.leftrightclickmove = g_theProfileDB->IsUseLeftClick();
@@ -2027,8 +1920,7 @@ void GameFile::GetExtendedInfoFromProfile(SaveInfo *info)
 	info->options.battleview = g_theProfileDB->IsZoomedCombatAlways();
 	info->options.monument = g_theProfileDB->IsThroneRoom();
 
-	
-	
+
 	info->options.walk = g_theProfileDB->IsUnitAnim();
 	info->options.goods = g_theProfileDB->IsGoodAnim();
 
@@ -2052,11 +1944,11 @@ void GameFile::GetExtendedInfoFromProfile(SaveInfo *info)
 	info->options.randomOrder = g_soundManager->GetMusicStyle() == MUSICSTYLE_RANDOM;
 	info->options.musicOn = g_soundManager->IsMusicEnabled();
 
-	
-	
-	
 
-	
+
+
+
+
 	info->isScenario = g_isScenario;
 	info->startInfoType = (STARTINFOTYPE)g_startInfoType;
 
@@ -2071,7 +1963,6 @@ void GameFile::GetExtendedInfoFromProfile(SaveInfo *info)
 		}
 	}
 
-	
 	info->showLabels = g_showUnitLabels;
 	info->startingPlayer = g_startingPlayer;
 }
@@ -2094,17 +1985,15 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
         //printf("%s %dL: filepath %s", __FILE__, __LINE__, filepath);
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
-	if (saveFile == NULL) 
+	if (saveFile == NULL)
 		return FALSE;
 
-	
 	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE)) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	g_saveFileVersion = -1;
 
 	sint32 i;
@@ -2120,7 +2009,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 		return FALSE;
 	}
 
-	
+
 
 
 
@@ -2146,17 +2035,15 @@ BOOL GameFile::FetchExtendedSaveInfo(MBCHAR *fullPath, SaveInfo *info)
 	sint32		n;
 
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)fullPath, "rb");
-	if (saveFile == NULL) 
+	if (saveFile == NULL)
 		return FALSE;
 
-	
 	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE)) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	g_saveFileVersion = -1;
 
 	sint32 i;
@@ -2172,7 +2059,6 @@ BOOL GameFile::FetchExtendedSaveInfo(MBCHAR *fullPath, SaveInfo *info)
 		return FALSE;
 	}
 
-	
 
 	BOOL success = LoadExtendedGameInfo(saveFile, info);
 
@@ -2187,7 +2073,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 
 	list = new PointerList<GameInfo>;
 
-#ifdef WIN32	
+#ifdef WIN32
 	WIN32_FIND_DATA		fileData;
 	HANDLE				lpDirList;
 #else
@@ -2198,15 +2084,12 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 	MBCHAR				dirPath[_MAX_PATH],
 					path[_MAX_PATH];
 
-	
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
-	
 #ifdef WIN32
 	sprintf(path, "%s%s*.*", dirPath);
 	lpDirList = FindFirstFile(path, &fileData);
 
-	
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
 #else
 	d = opendir(dirPath);
@@ -2219,11 +2102,11 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 #ifndef WIN32
 		dent = readdir(d);
 		if (!dent) continue;
-		
+
 		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
 		if (stat(path, &tmpstat))
 			continue;
-		
+
 		if (S_ISDIR(tmpstat.st_mode)) {
 			MBCHAR *name = dent->d_name;
 #else
@@ -2233,64 +2116,56 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 			if (!strcmp(name, ".")) continue;
 			if (!strcmp(name, "..")) continue;
 
-			
 			gameInfo = new GameInfo();
 
-			
 			strcpy(gameInfo->name, name);
 
-			
 			sprintf(gameInfo->path, "%s%s%s", dirPath, FILE_SEP, name);
 
-			
 			gameInfo->files = new PointerList<SaveInfo>;
 
 			list->AddTail(gameInfo);
 
-#ifdef WIN32			
+#ifdef WIN32
 			WIN32_FIND_DATA		fileData2;
 			HANDLE				lpFileList;
 
 			sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
-			
 			lpFileList = FindFirstFile(path, &fileData2);
 			if (lpFileList == INVALID_HANDLE_VALUE) continue;
 #else
 			DIR *dir2 = opendir(path);
 			struct dirent *dent2 = 0;
-			
+
 			if (!dir2) continue;
 #endif
 			do {
 #ifndef WIN32
 				dent2 = readdir(dir2);
 				if (!dent2) continue;
-				
+
 				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
 				if (stat(path, &tmpstat)) continue;
-				
+
 				if (!S_ISDIR(tmpstat.st_mode)) {
 					name = dent2->d_name;
 #else
 				if (!(fileData2.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 					name = fileData2.cFileName;
 #endif
-					
+
 					SaveInfo		*saveInfo = new SaveInfo();
 
-					
 					strcpy(saveInfo->fileName, name);
 
-					
 					sprintf(saveInfo->pathName, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
-					
 					if (!ValidateGameFile(gameInfo->path, saveInfo)) {
 						delete saveInfo;
 						continue;
 					}
-					
+
 					gameInfo->files->AddTail(saveInfo);
 				}
 #ifdef WIN32
@@ -2314,7 +2189,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 //
 // Name       : SaveInfo::SaveInfo
 //
-// Description: Constructor 
+// Description: Constructor
 //
 // Parameters : -
 //
@@ -2346,27 +2221,25 @@ SaveInfo::SaveInfo()
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 		civList[i][0] = '\0';
 		memset(&networkGUID[i], 0, sizeof(CivGuid));
-		
-		
+
 		playerCivIndexList[i] = (CIV_INDEX)0;
 	}
 
-	
-	
-	
 
-	
-	
-	
-	
+
+
+
+
+
+
+
 	isScenario = FALSE;
 	startInfoType = STARTINFOTYPE_NONE;
 	numPositions = 0;
 
 	loadType = SAVEINFOLOAD_NONE;
 
-	
-	
+
 	scenarioName = NULL;
 
 }
@@ -2375,7 +2248,7 @@ SaveInfo::SaveInfo()
 //
 // Name       : SaveInfo::SaveInfo
 //
-// Description: Copy constructor 
+// Description: Copy constructor
 //
 // Parameters : copyMe			: pointer to object to copy
 //
@@ -2383,7 +2256,7 @@ SaveInfo::SaveInfo()
 //
 // Returns    : -
 //
-// Remark(s)  : * The pointer data in copyMe that has been allocated on the 
+// Remark(s)  : * The pointer data in copyMe that has been allocated on the
 //                heap is not shared, but freshly allocated. This enables
 //                both objects to be deallocated independently.
 //
@@ -2394,22 +2267,21 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 
 	sint32 numPixels, numBytes;
 
-	
-	if (copyMe->radarMapWidth > 0 && 
-		copyMe->radarMapHeight > 0 && 
+	if (copyMe->radarMapWidth > 0 &&
+		copyMe->radarMapHeight > 0 &&
 		copyMe->radarMapData != NULL) {
 
 		numPixels = copyMe->radarMapWidth * copyMe->radarMapHeight;
 		numBytes = numPixels * sizeof(Pixel16);
-		
+
 		radarMapData = new Pixel16[numPixels];
 		memcpy(radarMapData, copyMe->radarMapData, numBytes);
 	}
 
-	if (copyMe->powerGraphWidth > 0 && 
+	if (copyMe->powerGraphWidth > 0 &&
 		copyMe->powerGraphHeight > 0 &&
 		copyMe->powerGraphData != NULL) {
-		
+
 		numPixels = copyMe->powerGraphWidth * copyMe->powerGraphHeight;
 		numBytes = numPixels * sizeof(Pixel16);
 
@@ -2438,7 +2310,7 @@ SaveInfo::SaveInfo(SaveInfo *copyMe)
 // Returns    : -
 //
 // Remark(s)  : * powerGraphData, radarMapData, and scenarioName are allocated
-//                with new [] in GameFile::LoadBasicGameInfo and 
+//                with new [] in GameFile::LoadBasicGameInfo and
 //                GameFile::LoadBasicGameInfo.
 //
 //----------------------------------------------------------------------------
@@ -2490,7 +2362,6 @@ GameMapInfo::GameMapInfo()
 }
 
 
-
 #define k_GAMEMAP_MAGIC_VALUE		"CTPMAP__"
 
 void GameMapFile::RestoreGameMap(const MBCHAR *filename)
@@ -2498,11 +2369,11 @@ void GameMapFile::RestoreGameMap(const MBCHAR *filename)
 	GameMapFile	*gameMap;
 
     gameMap = new GameMapFile;
-	
+
 	gameMap->Restore(filename);
 
 	delete gameMap;
-	} 
+	}
 
 void GameMapFile::SaveGameMap(const MBCHAR *filename, SaveMapInfo *info)
 	{
@@ -2522,7 +2393,7 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	{
 
 	FILE	*fpSave = NULL;
-    
+
 	uint32	ulLen,
 			n;
 
@@ -2536,25 +2407,22 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 
 	archive.SetStore();
 
-	
 	archive<<World_World_GetVersion();
 
-	
-
-	
-	g_theWorld->SerializeJustMap(archive);								
 
 
-	
-	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb");	
-	if (fpSave == NULL)												
+
+	g_theWorld->SerializeJustMap(archive);
+
+
+	fpSave=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "wb");
+	if (fpSave == NULL)
 		{
-		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE");	
+		c3errors_ErrorDialogFromDB("SAVE_ERROR", "SAVE_FAILED_TO_SAVE");
 
 		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-	
 	strcpy(sHeader, k_GAMEMAP_MAGIC_VALUE);
 	n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpSave);
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE))
@@ -2565,17 +2433,17 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	BOOL createdInfo = FALSE;
 	if (info == NULL) {
 		createdInfo = TRUE;
@@ -2585,10 +2453,10 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	}
 
 	SaveExtendedGameMapInfo(fpSave, info);
-	
+
 	if (createdInfo)
 		delete info;
-	
+
 	ulLen = archive.StreamLen();
 	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
@@ -2599,7 +2467,6 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-	
 	n = c3files_fwrite(archive.GetStream(), sizeof(uint8), ulLen, fpSave);
 	if (n != ulLen)
 		{
@@ -2609,14 +2476,13 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 		return (GAMEFILE_ERR_STORE_FAILED);
 		}
 
-	c3files_fclose(fpSave);										
+	c3files_fclose(fpSave);
 
 	finish = clock();
 	DPRINTF(k_DBG_FILE, ("Time to save gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
-	
+
 	return (GAMEFILE_ERR_STORE_OK);
 	}
-
 
 uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	{
@@ -2634,14 +2500,13 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 
 	start = clock();
 
-	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");			
+	fpLoad=c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
 	if (fpLoad == NULL) {
-		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME");	
+		c3errors_ErrorDialog("LOAD_ERROR", "LOAD_FAILED_TO_LOAD_GAME");
 		return (GAMEFILE_ERR_LOAD_FAILED);
 	}
 
 
-	
 	n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), fpLoad);
 	Assert(n==sizeof(k_GAMEMAP_MAGIC_VALUE));
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE))
@@ -2660,19 +2525,15 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 		return (GAMEFILE_ERR_LOAD_FAILED);
 		}
 
-	
 
 	SaveMapInfo *info = new SaveMapInfo();
 
 	LoadExtendedGameMapInfo(fpLoad, info);
 
-	
 	SetProfileFromExtendedInfo(info);
 
-	
 	delete info;
 
-	
 	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad);
 	Assert(n==1);
 	if (n!=1)
@@ -2686,7 +2547,6 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 	archive.SetSize(ulLen);
 	archive.SetLoad();
 
-	
 	n = c3files_fread(archive.GetStream(), sizeof(uint8), ulLen, fpLoad);
 	if (n!=ulLen)
 		{
@@ -2698,7 +2558,6 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 
 	c3files_fclose(fpLoad);
 
-	
 	archive>>ver;
 	if (ver!=World_World_GetVersion())
 		{
@@ -2708,16 +2567,14 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 		}
 
 
-	
 	if ( g_theWorld ) delete g_theWorld;
 	g_theWorld = new World( archive, TRUE );
 	Assert( g_theWorld != NULL );
 	if ( !g_theWorld ) return FALSE;
 
-
 	finish = clock();
 	DPRINTF(k_DBG_FILE, ("Time to load gamemap data = %4.2f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC));
-	
+
 	return (GAMEFILE_ERR_LOAD_OK);
 }
 
@@ -2725,21 +2582,18 @@ BOOL GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 {
 	sint32		n;
 
-	
 	n = c3files_fread(info->gameMapName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(info->note, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	n = c3files_fread(&info->radarMapWidth, sizeof(uint8), sizeof(info->radarMapWidth), saveFile);
 	if (n != sizeof(info->radarMapWidth)) {
 		c3files_fclose(saveFile);
@@ -2753,7 +2607,7 @@ BOOL GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 
 	if (info->radarMapHeight > 0 && info->radarMapWidth > 0) {
 		info->radarMapData = new Pixel16[info->radarMapWidth * info->radarMapHeight];
-		n = c3files_fread(info->radarMapData, sizeof(uint8), 
+		n = c3files_fread(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight, saveFile);
 		if (n != (sint32)(info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16))) {
 			c3files_fclose(saveFile);
@@ -2771,23 +2625,21 @@ void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 
 	sint32		n;
 
-	
 
-	
+
+
 	n = c3files_fwrite(info->gameMapName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(info->note, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	
 	n = c3files_fwrite(&info->radarMapWidth, sizeof(uint8), sizeof(info->radarMapWidth), saveFile);
 	if (n != sizeof(info->radarMapWidth)) {
 		c3errors_FatalDialog(functionName, errorString);
@@ -2799,8 +2651,8 @@ void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 		return;
 	}
 	if (info->radarMapWidth > 0 && info->radarMapHeight > 0) {
-		n = c3files_fwrite(info->radarMapData, sizeof(uint8), 
-							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth, 
+		n = c3files_fwrite(info->radarMapData, sizeof(uint8),
+							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth,
 							saveFile);
 		if (n != (sint32)(sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth)) {
 			c3errors_FatalDialog(functionName, errorString);
@@ -2841,7 +2693,6 @@ void GameMapFile::GetExtendedInfoFromProfile(SaveMapInfo *info)
 }
 
 
-
 BOOL GameMapFile::ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info)
 {
 	FILE		*saveFile = NULL;
@@ -2852,23 +2703,20 @@ BOOL GameMapFile::ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info)
 	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
 
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
-	if (saveFile == NULL) 
+	if (saveFile == NULL)
 		return FALSE;
 
-	
 	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE)) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 	if (strcmp(header, k_GAMEMAP_MAGIC_VALUE)) {
 		c3files_fclose(saveFile);
 		return FALSE;
 	}
 
-	
 
 	BOOL success = LoadExtendedGameMapInfo(saveFile, info);
 
@@ -2884,8 +2732,7 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 
 	list = new PointerList<GameMapInfo>;
 
-	
-#ifdef WIN32	
+#ifdef WIN32
 	WIN32_FIND_DATA		fileData;
 	HANDLE				lpDirList;
 #else
@@ -2896,15 +2743,13 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 	MBCHAR				dirPath[_MAX_PATH],
 						path[_MAX_PATH];
 
-	
 	if (!g_civPaths->GetSavePath(dir, dirPath)) return list;
 
 #ifdef WIN32
 	sprintf(path, "%s%s*.*", dirPath, FILE_SEP);
-	
+
 	lpDirList = FindFirstFile(path, &fileData);
 
-	
 	if (lpDirList == INVALID_HANDLE_VALUE) return list;
 #else
 	d = opendir(dirPath);
@@ -2917,11 +2762,11 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 #ifndef WIN32
 		dent = readdir(d);
 		if (!dent) continue;
-		
+
 		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
 		if (!stat(path, &tmpstat))
 			continue;
-		
+
 		if (S_ISDIR(tmpstat.st_mode)) {
 			MBCHAR *name = dent->d_name;
 #else
@@ -2931,37 +2776,35 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 			if (!strcmp(name, ".")) continue;
 			if (!strcmp(name, "..")) continue;
 
-			
 			gameInfo = new GameMapInfo();
 			strcpy(gameInfo->name, name);
 			sprintf(gameInfo->path, "%s%s%s", dirPath, FILE_SEP, name);
 			gameInfo->files = new PointerList<SaveMapInfo>;
-			
+
 			list->AddTail(gameInfo);
 
-#ifdef WIN32			
+#ifdef WIN32
 			WIN32_FIND_DATA		fileData2;
 			HANDLE				lpFileList;
 
 			sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
-			
 			lpFileList = FindFirstFile(path, &fileData2);
 			if (lpFileList == INVALID_HANDLE_VALUE) continue;
 #else
 			DIR *dir2 = opendir(path);
 			struct dirent *dent2 = 0;
-			
+
 			if (!dir2) continue;
 #endif
 			do {
 #ifndef WIN32
 				dent2 = readdir(dir2);
 				if (!dent2) continue;
-				
+
 				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
 				if (!stat(path, &tmpstat)) continue;
-				
+
 				if (!S_ISDIR(tmpstat.st_mode)) {
 					name = dent2->d_name;
 #else
@@ -2970,19 +2813,15 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 #endif
 					SaveMapInfo		*saveInfo = new SaveMapInfo();
 
-					
 					strcpy(saveInfo->fileName, name);
 
-					
 					sprintf(saveInfo->pathName, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
-					
 					if (!ValidateGameMapFile(gameInfo->path, saveInfo)) {
 						delete saveInfo;
 						continue;
 					}
 
-					
 					gameInfo->files->AddTail(saveInfo);
 				}
 #ifdef WIN32

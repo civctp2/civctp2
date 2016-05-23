@@ -22,55 +22,52 @@ public:
 
 	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
 
-	
 	virtual ~ctp2_ListItem();
 
-	
-	
-	
-	
+
+
+
+
 	virtual void Update(void) {}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
-	
-	
+
 	void SetUserData(void *data) { m_userData = data; }
 	void *GetUserData() {
             if (!m_userData)
                 printf("ctp2_listitem.h L54: m_userData == NULL!\n");
-            return m_userData; 
+            return m_userData;
             }
-	
+
 	void SetCompareCallback(CTP2ItemCompareCallback *cb) {
-            if (!cb) 
+            if (!cb)
                 printf("ctp2_listitem.h L56: cb is NULL!\n)");
-            m_compareCallback = cb; 
+            m_compareCallback = cb;
             }
 
 protected:
-	
-	
-	
-	
-	
+
+
+
+
+
 	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
 
 	ctp2_ListItem() : aui_Item() {}
 
 };
-
 
 #endif

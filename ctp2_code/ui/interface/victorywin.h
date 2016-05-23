@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -25,7 +14,7 @@ class c3_Static;
 class ctp2_ListBox;
 class HighScoreDB;
 
-class ctp2_Button;	
+class ctp2_Button;
 
 #define k_VICWIN_DEFEAT		0
 #define k_VICWIN_VICTORY	1
@@ -34,7 +23,6 @@ class ctp2_Button;
 #define k_VICWIN_WONDER_COL_MAX	7
 
 #define k_VICWIN_WONDERICON_MAX (k_VICWIN_WONDER_ROW_MAX * k_VICWIN_WONDER_COL_MAX)
-
 
 enum {
 	k_VICWIN_SCORE_LABEL,
@@ -54,26 +42,22 @@ enum {
 class WonderIconListItem : public ctp2_ListItem
 {
 public:
-	
-	
+
 	WonderIconListItem(AUI_ERRCODE *retval, sint32 age, sint32 *array, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32	*GetArray( void ) { return m_array; }
 
 protected:
 	WonderIconListItem() : ctp2_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 age, sint32 *array, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
 private:
@@ -98,27 +82,23 @@ protected:
 class HighScoreListItem : public ctp2_ListItem
 {
 public:
-	
-	
+
 	HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 score, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	MBCHAR	*GetName( void ) { return m_name; }
 	sint32	GetScore( void ) { return m_score; }
 
 protected:
 	HighScoreListItem() : ctp2_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 score, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
 private:
@@ -176,7 +156,6 @@ sint32 victorywin_GetWonderFilename( sint32 index, MBCHAR *name );
 sint32 victorywin_LoadGraphData( void );
 sint32 victorywin_LoadScoreData( void );
 sint32 victorywin_LoadWonderData( void );
-
 
 sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult );
 bool   victorywin_IsOnScreen();

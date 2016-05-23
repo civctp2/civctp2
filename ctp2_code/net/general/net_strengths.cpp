@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "net_strengths.h"
 #include "net_util.h"
@@ -119,7 +118,7 @@ void NetScores::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
 	PUSHID(k_PACKET_SCORES_ID);
-	
+
 	Score *sc = g_player[m_player]->m_score;
 	Assert(sc);
 
@@ -137,7 +136,7 @@ void NetScores::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_SCORES_ID);
-	
+
 	PULLLONG(m_player);
 	Assert(m_player >= 0);
 	Assert(m_player < k_MAX_PLAYERS);
@@ -156,4 +155,3 @@ void NetScores::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLLONG(sc->m_victory_type);
 	PULLLONG(sc->m_feats);
 }
-

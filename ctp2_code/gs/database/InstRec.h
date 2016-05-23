@@ -6,7 +6,6 @@
 
 #include "Rec.h"
 
-
 #include "gstypes.h"
 
 class CivArchive;
@@ -33,14 +32,13 @@ public:
 	double m_defenseBonus;
 	sint32 m_firepower;
 	uint32 m_flags;
-	sint32 m_buildSoundID;	
+	sint32 m_buildSoundID;
 
 	sint32 m_terrainMaterialCost[TERRAIN_MAX];
 	sint32 m_terrainTimeCost[TERRAIN_MAX];
 
 	uint32 m_visibilityClasses;
 
-	
 	uint32 m_visibilityAbilities;
 
 	InstallationRecord();

@@ -16,14 +16,14 @@ private:
 	SlicSegment *m_segment;
 
 public:
-	SlicRecord(sint32 owner, MBCHAR *title, MBCHAR *text, 
+	SlicRecord(sint32 owner, MBCHAR *title, MBCHAR *text,
 			   SlicSegment *segment);
 	SlicRecord(CivArchive &archive);
 	~SlicRecord();
 	void Serialize(CivArchive &archive);
 
 	const MBCHAR *GetTitle() { return m_title; }
-	
+
 	MBCHAR *AccessTitle() { return m_title; }
 	const MBCHAR *GetText() { return m_text; }
 	SlicSegment *GetSegment() { return m_segment; }

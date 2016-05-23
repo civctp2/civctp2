@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "installation.h"
 #include "installationpool.h"
@@ -38,13 +29,13 @@ Installation::RemoveAllReferences()
 {
 	MapPoint pos;
 	GetPos(pos);
-	
+
 	if(GetOwner() >= 0 && g_player[GetOwner()]) {
 		g_player[GetOwner()]->RemoveInstallationReferences(*this);
 	}
 	g_theWorld->RemoveInstallation(*this, pos);
 	if(GetOwner() >= 0 && g_player[GetOwner()]) {
-		
+
 		double myVisionRange = terrainutil_GetVisionRange(GetType(), RetPos());
 		if(myVisionRange > 0) {
 			g_player[GetOwner()]->RemoveUnitVision(pos, myVisionRange);

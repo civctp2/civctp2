@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,12 +37,9 @@
 
 #include "ns_improvements.h"
 
-
 ns_Improvements *g_nsImprovements = NULL;
 
-
 extern StringDB *g_theStringDB;
-
 
 
 ns_Improvements::ns_Improvements()
@@ -52,7 +49,6 @@ ns_Improvements::ns_Improvements()
 	{
 		sint32 numImprovements = g_theBuildingDB->NumRecords();
 
-		
 		Assert( numImprovements <= k_IMPROVEMENTS_MAX );
 		if ( numImprovements > k_IMPROVEMENTS_MAX )
 			numImprovements = k_IMPROVEMENTS_MAX;
@@ -64,7 +60,7 @@ ns_Improvements::ns_Improvements()
 
 		for ( sint32 i = 0; i < numImprovements; i++ )
 		{
-			
+
 			StringId stringNum = g_theBuildingDB->GetName(i);
 			const MBCHAR *name = g_theStringDB->GetNameStr( stringNum );
 
@@ -74,7 +70,6 @@ ns_Improvements::ns_Improvements()
 		g_nsImprovements = this;
 	}
 }
-
 
 
 ns_Improvements::~ns_Improvements()

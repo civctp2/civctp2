@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <winreg.h>
 
-
 HKEY MyRegOpenKey( HKEY base, LPCSTR szSubKey )
 {
 	HKEY hKey;
@@ -33,7 +32,6 @@ HKEY MyRegOpenKey( HKEY base, LPCSTR szSubKey )
 	else
 		return NULL;
 }
-	
 
 char *MyRegQueryValueMalloc( HKEY hKey, LPCSTR szValueName, LPDWORD pType, LPDWORD pSize )
 {
@@ -46,13 +44,12 @@ char *MyRegQueryValueMalloc( HKEY hKey, LPCSTR szValueName, LPDWORD pType, LPDWO
 	pData = (unsigned char *)malloc( dwSize );
 	if( RegQueryValueEx( hKey, szValueName, 0, pType, pData, &dwSize ) != ERROR_SUCCESS )
 		return NULL;
-	
+
 	if( pSize )
 		*pSize = dwSize;
 
 	return (char *)pData;
 }
-
 
 char *MyRegQuickQueryMalloc( HKEY hKey, LPCSTR szSubKey, LPCSTR szValueName, LPDWORD pType, LPDWORD pSize )
 {
@@ -69,7 +66,6 @@ char *MyRegQuickQueryMalloc( HKEY hKey, LPCSTR szSubKey, LPCSTR szValueName, LPD
 }
 
 
-
 BOOL MyRegSetValue( HKEY hKey, LPCSTR szName, DWORD dwType, char *pData, DWORD cData )
 {
 	if( RegSetValueEx( hKey, szName, 0, dwType, (unsigned char *)pData, cData ) == ERROR_SUCCESS )
@@ -77,7 +73,6 @@ BOOL MyRegSetValue( HKEY hKey, LPCSTR szName, DWORD dwType, char *pData, DWORD c
 	else
 		return FALSE;
 }
-
 
 
 HKEY MyRegCreateKey( HKEY base, LPCSTR szSubKey, DWORD *pDisposition )
@@ -89,7 +84,6 @@ HKEY MyRegCreateKey( HKEY base, LPCSTR szSubKey, DWORD *pDisposition )
 	else
 		return hKey;
 }
-
 
 
 char *MyRegEnumKeyMalloc( HKEY hKey, DWORD dwIndex )
@@ -105,10 +99,9 @@ char *MyRegEnumKeyMalloc( HKEY hKey, DWORD dwIndex )
 
 	pData = (char *)malloc( dwSize + 1 );
 	strcpy( pData, szTemp );
-	
+
 	return pData;
 }
-
 
 
 char *MyRegEnumValueMalloc( HKEY hKey, DWORD dwIndex )
@@ -124,7 +117,6 @@ char *MyRegEnumValueMalloc( HKEY hKey, DWORD dwIndex )
 
 	pData = (char *)malloc( dwSize + 1 );
 	strcpy( pData, szTemp );
-	
+
 	return pData;
 }
-

@@ -1,33 +1,18 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_TEXTBOX_H__
 #define __AUI_TEXTBOX_H__
 
-
 #include "aui_listbox.h"
 
+class aui_Static;
 
-class aui_Static;	
-
-
-#define k_AUI_TEXTBOX_MAXTEXT		256		
-#define k_AUI_TEXTBOX_MAXITEMS		100		
-
+#define k_AUI_TEXTBOX_MAXTEXT		256
+#define k_AUI_TEXTBOX_MAXITEMS		100
 
 
 class aui_TextBox : public aui_ListBox
 {
 public:
-	
+
 	aui_TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -57,7 +42,6 @@ public:
 		uint32 maxlen = 0xffffffff );
 	virtual AUI_ERRCODE	AppendText( MBCHAR *text );
 
-	
 	virtual AUI_ERRCODE AppendText(
 		MBCHAR *text,
 		COLORREF color,
@@ -69,23 +53,21 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	virtual void SetTextFont( MBCHAR *ttffile );
 	virtual void SetTextFontSize( sint32 pointSize );
 
 protected:
-	
+
 	AUI_ERRCODE	CalculateItems( MBCHAR *text = NULL );
 	AUI_ERRCODE	CalculateAppendedItems( MBCHAR *text = NULL );
 
-	sint32		m_numItems;		
-	sint32		m_curItem;		
+	sint32		m_numItems;
+	sint32		m_curItem;
 	aui_Static	*m_items[ k_AUI_TEXTBOX_MAXITEMS ];
-								
-	COLORREF	m_curColor;		
-	sint32		m_curBold;		
-	sint32		m_curItalic;	
+
+	COLORREF	m_curColor;
+	sint32		m_curBold;
+	sint32		m_curItalic;
 };
 
-
-#endif 
+#endif

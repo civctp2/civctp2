@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "network.h"
 #include "net_agreement.h"
@@ -60,7 +50,7 @@ void NetAgreement::UnpacketizeData(AgreementData *data,
 	PULLLONG(data->m_recipientPollution);
 
 	PULLLONGTYPE(data->m_targetCity, Unit);
-	
+
 	sint32 goldLevel;
 	PULLLONG(goldLevel);
 }
@@ -81,11 +71,11 @@ void NetAgreement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_AGREEMENT_ID);
-	
+
 	Agreement ag;
 
 	PULLLONGTYPE(ag, Agreement);
-	
+
 	g_network.CheckReceivedObject((uint32)ag);
 	if(!g_theAgreementPool->IsValid(ag)) {
 		m_data = new AgreementData(ag);
@@ -147,7 +137,6 @@ void NetClientAgreement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 											  uint32(ag), uint32(createdAgreement)));
 	}
 
-
 	AgreementData *cdata = createdAgreement.AccessData();
 	cdata->m_owner = m_data->m_owner;
 	cdata->m_recipient = m_data->m_recipient;
@@ -157,9 +146,7 @@ void NetClientAgreement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	cdata->m_round = m_data->m_round;
 	cdata->m_expires = m_data->m_expires;
 
-
 	cdata->m_targetCity = m_data->m_targetCity;
-
 
 
 	g_network.Enqueue(cdata);

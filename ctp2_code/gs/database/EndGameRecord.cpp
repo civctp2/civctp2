@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "EndGameDB.h"
 #include "Token.h"
@@ -148,7 +146,6 @@ BOOL EndGameRecord::ParseRecord(Token *token)
 		return FALSE;
 	}
 
-	
 	token->GetString(str);
 	i = g_theIconDB->FindTypeIndex(str);
 	if (i == -1) {
@@ -169,8 +166,8 @@ BOOL EndGameRecord::ParseFlags(Token *token)
 {
 	sint32 tokenval = token->Next();
 	char str[k_MAX_NAME_LEN];
-	StringId str_id; 
-	
+	StringId str_id;
+
 	switch(tokenval) {
 		case TOKEN_CLOSE_BRACE:
 			return FALSE;
@@ -262,25 +259,22 @@ BOOL EndGameRecord::ParseFlags(Token *token)
 			return TRUE;
 		case TOKEN_ENDGAME_SOUND_ID:
 			{
-				
+
 				if(token->Next() != TOKEN_STRING) {
-					c3errors_ErrorDialog(token->ErrStr(), "Expected string after SOUND_ID"); 
+					c3errors_ErrorDialog(token->ErrStr(), "Expected string after SOUND_ID");
 					s_abort_endgame_parse = TRUE;
-					return FALSE; 
+					return FALSE;
 				}
 
-				
-				token->GetString(str); 
+				token->GetString(str);
 
-				
 				sint32 snd_id = g_theSoundDB->FindTypeIndex(str);
-				if(snd_id == -1) { 
-					c3errors_ErrorDialog(token->ErrStr(), "Could not find %s in sound database", str); 
+				if(snd_id == -1) {
+					c3errors_ErrorDialog(token->ErrStr(), "Could not find %s in sound database", str);
 					s_abort_endgame_parse = TRUE;
-					return FALSE; 
+					return FALSE;
 				}
 
-				
 				m_soundID = snd_id;
 			}
 			return TRUE;
@@ -317,6 +311,6 @@ sint32 EndGameRecord::RequiredToAdvanceFromStage(sint32 stage) const
 	if(stage < 0 || stage >= m_numStages) {
 		return 0x7fffffff;
 	}
-	
+
 	return m_requiredForStage[stage];
 }

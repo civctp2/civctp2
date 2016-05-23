@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "net_util.h"
 #include "net_report.h"
@@ -31,7 +21,7 @@ void NetReport::Packetize(uint8 *buf, uint16 &size)
 void NetReport::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	Assert(MAKE_CIV3_ID(buf[0], buf[1]) == k_PACKET_REPORT_ID);
-	
+
 	sint32 pos = 2;
 
 	PULLBYTETYPE(m_type,NET_REPORT);
@@ -41,9 +31,9 @@ void NetReport::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 			BOOL wasReady = g_network.ReadyToStart();
 
 			g_network.ProcessNewPlayer(id);
-			
-			
-			
+
+
+
 
 			if(!wasReady && g_network.ReadyToStart()) {
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_ALL_PLAYERS_READY));
@@ -56,10 +46,9 @@ void NetReport::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d acks resync\n", g_network.IdToIndex(id)));
 			g_network.AckResync(g_network.IdToIndex(id));
 			break;
-		}			
+		}
 		default:
 			Assert(FALSE);
 			break;
 	}
 }
-

@@ -1,5 +1,3 @@
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -17,7 +15,7 @@
 #endif
 
 #define k_MAX_NETWORK_PLAYERS 32
-	
+
 #define k_RPC_ID 0
 
 #define k_RPC_SESSION_READY 1
@@ -48,7 +46,7 @@ public:
 				uint8 *header, uint16 headerlen);
 
 	~TPacketData();
-	
+
 	void Append(uint8 *buf, sint32 len);
 	void RemoveSplitInfo();
 
@@ -58,7 +56,7 @@ public:
 	uint8 *m_actualBuf;
 	sint32 m_len;
 };
-		
+
 class NetThread : public NetIO, public NetIOResponse
 {
 private:
@@ -92,9 +90,9 @@ public:
 
 	void SetDP(dp_t *dp);
 
-	
-	
-	
+
+
+
 	NET_ERR Init(NetIOResponse *response);
 	NET_ERR EnumTransports();
 	NET_ERR SetTransport(sint32 trans_id);
@@ -114,15 +112,14 @@ public:
 	NET_ERR Reset();
 	BOOL    ReadyForData();
 
-	
 	TPacketData *FindSplitStart(uint16 from);
 
-	
-	
-	
-	void EnumTransport(NET_ERR result, 
+
+
+
+	void EnumTransport(NET_ERR result,
 					   sint32 index,
-					   const char* transname, 
+					   const char* transname,
 					   void* transdata);
 	void EnumSession(NET_ERR result,
 					 sint32 index,
@@ -140,8 +137,7 @@ public:
 	void ChangeHost(uint16 id);
 	void SessionLost();
 
-	
-	
+
 	bool ReadyForPackets() { return true; }
 };
 

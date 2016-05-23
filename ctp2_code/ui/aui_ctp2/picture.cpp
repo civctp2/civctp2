@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -40,10 +27,9 @@ Picture::Picture(
 }
 
 
-
 AUI_ERRCODE Picture::MakeMipmap( void )
 {
-	
+
 	if ( m_surface->BitsPerPixel() != 16 ) return AUI_ERRCODE_INVALIDPARAM;
 
 	BYTE *pDestBuffer;
@@ -56,24 +42,19 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 
 	sint32 errcode;
 
-	
 	aui_Surface *pMipmap = NULL;
 
-	
 	errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
 	if ( errcode == AUI_ERRCODE_OK )
 	{
 
-		
 		sint32 srcWidth = pSrcSurf->Width();
 		sint32 srcHeight = pSrcSurf->Height();
 		sint32 srcPitch = pSrcSurf->Pitch();
 
-		
 		uint16 *pSrcPixel;
 		uint16 *pDestPixel;
 
-		
 		sint32 mipWidth = srcWidth >> 1;
 		sint32 mipHeight = srcHeight >> 1;
 		sint32 mipBpp = 16;
@@ -84,7 +65,7 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 		Assert(pMipmap);
 		if (pMipmap != NULL)
 		{
-			
+
 			errcode = pMipmap->Lock(NULL, (LPVOID *)&pDestBuffer, 0);
 			if (errcode == AUI_ERRCODE_OK)
 			{
@@ -102,7 +83,6 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 					}
 				}
 
-				
 				errcode = pMipmap->Unlock((LPVOID)pDestBuffer);
 			}
 		}
@@ -114,7 +94,6 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 Pixel16 Picture::AveragePixels( uint16 *pBuffer, sint32 width )
@@ -182,7 +161,6 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 {
 	Assert(m_surface->BitsPerPixel() == 16 );
 
-	
 	Assert(pDestRect);
 	if (pDestRect==NULL) return AUI_ERRCODE_INVALIDPARAM;
 	Assert(pDestRect->left<=pDestRect->right);
@@ -190,20 +168,17 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 	Assert(pDestRect->top<=pDestRect->bottom);
 	if (pDestRect->top>pDestRect->bottom) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	sint32 x = pDestRect->left;
 	sint32 y = pDestRect->top;
 	sint32 width = pDestRect->right - pDestRect->left;
 	sint32 height = pDestRect->bottom - pDestRect->top;
 
-	
 	if (width == m_surface->Width() && height == m_surface->Height()) {
 		RECT srcRect = {0, 0, m_surface->Width(), m_surface->Height()};
 		g_c3ui->TheBlitter()->Blt(pDestSurf, pDestRect->left, pDestRect->top, m_surface, &srcRect, k_AUI_BLITTER_FLAG_COPY);
 		return AUI_ERRCODE_OK;
 	}
 
-	
 	if (width == m_mipmap->Width() && height == m_mipmap->Height()) {
 		RECT srcRect = {0, 0, m_mipmap->Width(), m_mipmap->Height()};
 		g_c3ui->TheBlitter()->Blt(pDestSurf, pDestRect->left, pDestRect->top, m_mipmap, &srcRect, k_AUI_BLITTER_FLAG_COPY);
@@ -226,7 +201,6 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 
 	sint32 errcode;
 
-	
 	errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode == AUI_ERRCODE_OK)
@@ -238,7 +212,6 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 			if (errcode == AUI_ERRCODE_OK)
 			{
 
-				
 				sint32 srcWidth = pSrcSurf->Width();
 				sint32 srcHeight = pSrcSurf->Height();
 				sint32 srcPitch = pSrcSurf->Pitch();
@@ -247,13 +220,12 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 				sint32 mipHeight = pMipSurf->Height();
 				sint32 mipPitch = pSrcSurf->Pitch();
 
-			
-			
+
 				sint32 destPitch = pDestSurf->Pitch();
 
-				
-			
-			
+
+
+
 				uint16 *pDestPixel;
 				sint32 inc = (destPitch >> 1) - width;
 
@@ -286,11 +258,10 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 
 					for (sint32 j=0;j < width;j++)
 					{
-						
+
 						left = (double)j * srcWidth / width;
 						right = ((double)j+1.0)* srcWidth / width;
 
-						
 						centerX = (left+right)/2;
 						cX = (sint32)centerX;
 						srcPixel = ((uint16 *)pSrcBuffer)[ySrcIndex + (sint32)centerX];
@@ -300,11 +271,9 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 
 						distCenter = sqrt((xSquared+ySquared));
 
-						
 						mipX = (double)j*mipWidth / width;
 						mipPixel = ((uint16 *)pMipBuffer)[yMipIndex + (sint32)mipX];
 
-						
 						sint16 srcR,srcG,srcB;
 						double tempsrcR,tempsrcG,tempsrcB;
 						sint16 mipR,mipG,mipB;
@@ -357,7 +326,6 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 					pDestPixel += inc;
 				}
 
-				
 				errcode = pDestSurf->Unlock((LPVOID)pDestBuffer);
 			}
 

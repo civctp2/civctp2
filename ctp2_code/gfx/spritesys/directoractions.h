@@ -51,7 +51,7 @@ public:
 	sint32						projectile_path;
 };
 
-class DQActionSpecialEffect : public DQAction 
+class DQActionSpecialEffect : public DQAction
 {
 public:
 	DQActionSpecialEffect() {}
@@ -357,7 +357,6 @@ public:
 
 	MBCHAR						*message;
 };
-
 
 class DQActionBeginScheduler : public DQAction
 {

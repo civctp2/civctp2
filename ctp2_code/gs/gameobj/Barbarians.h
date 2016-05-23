@@ -6,7 +6,6 @@
 #define __BARBARIANS_H__
 
 
-
 class MapPoint;
 
 typedef sint32 PLAYER_INDEX;
@@ -18,5 +17,5 @@ public:
 							  BOOL fromGoodyHut);
 	static void BeginYear();
 };
-	
+
 #endif

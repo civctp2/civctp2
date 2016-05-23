@@ -27,12 +27,12 @@
 //   - Bypassing of unexplored tiles
 //   - Linking cities on different continents.
 //   - Building of undersea tunnels
-// - Added owner argument to to FindRoadPath function so that m_owner 
+// - Added owner argument to to FindRoadPath function so that m_owner
 //   can be set in that function. The result is that the path finding
 //   routine takes unexplored tiles into consideration, by Martin Gühmann.
 // - Road path generation is no more dependent on tile move costs for units,
 //   but on pw costs per tile.
-// - Road path may go through foreign territory but is even more expensive 
+// - Road path may go through foreign territory but is even more expensive
 //   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,6 @@
 #include "c3.h"
 #include "c3errors.h"
 #include "Globals.h"
-
 
 #include "CityAstar.h"
 #include "dynarr.h"
@@ -61,30 +60,29 @@
 #include "StrategyRecord.h"  // For accessing the strategy database
 #include "Diplomat.h"        // To be able to retrieve the current strategy
 
-CityAstar g_city_astar; 
+CityAstar g_city_astar;
 
-
-sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-                            float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
+sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
+                            float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry)
 
 {
 	sint32 i;
 
 	if(m_pathRoad){
-		
+
 		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
-		if(g_player[m_owner]->IsExplored(pos) == FALSE 
+		if(g_player[m_owner]->IsExplored(pos) == FALSE
 		|| !rec
-		){ 
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
+		){
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
 			return FALSE;
 		}
-		
+
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
 		if(!effect){
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
 			return FALSE;
 		}
 
@@ -105,7 +103,6 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 		double roadCostsPercent;
 		strategy.GetRoadAlreadyThereCostsCoefficient(roadCostsPercent);
-
 
 		for(i = 0; i < g_theWorld->AccessCell(pos)->GetNumDBImprovements(); ++i){
 			rec = g_theTerrainImprovementDB->Get(g_theWorld->AccessCell(pos)->GetDBImprovement(i));
@@ -137,47 +134,45 @@ sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 {
-    return SOUTH; 
+    return SOUTH;
 }
-    
 
 
-void CityAstar::FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+void CityAstar::FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
       float &cost)
 
 {
-    Path tmp_path; 
+    Path tmp_path;
 
-    m_owner = owner; 
-    m_alliance_mask = g_player[m_owner]->GetMaskAlliance(); 
+    m_owner = owner;
+    m_alliance_mask = g_player[m_owner]->GetMaskAlliance();
 	m_pathRoad = false;
 
-    sint32 cutoff = 2000000000; 
+    sint32 cutoff = 2000000000;
     sint32 nodes_opened=0;
 
-    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened)) { 
-         cost = float(g_player[m_owner]->GetMaxEmpireDistance()); 
+    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened)) {
+         cost = float(g_player[m_owner]->GetMaxEmpireDistance());
     }
 }
 
-bool CityAstar::FindRoadPath(const MapPoint & start, 
+bool CityAstar::FindRoadPath(const MapPoint & start,
 							 const MapPoint & dest,
 							 PLAYER_INDEX owner,
 							 Path & new_path,
 							 float & total_cost)
 {
-    m_alliance_mask = 0x0; 
+    m_alliance_mask = 0x0;
 	m_pathRoad = true;
 	total_cost = 0.0;
 
-    sint32 cutoff = 2000000000; 
+    sint32 cutoff = 2000000000;
     sint32 nodes_opened=0;
 
 	m_owner = owner;
 
-    if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) { 
+    if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) {
         return true;
     }
 	return false;
 }
-

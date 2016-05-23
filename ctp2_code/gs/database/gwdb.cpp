@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -28,8 +16,7 @@
 
 	extern	sint32	g_parse_gw_abort ;
 
-
-#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))		
+#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))
 
 
 
@@ -53,7 +40,7 @@ GlobalWarmingDatabase::GlobalWarmingDatabase()
 
 sint32 GlobalWarmingDatabase::Initialise(char *filename, C3DIR dir)
 	{
-	
+
 	g_parse_gw_abort = FALSE ;
 	if(!ParseGlobalWarmingDatabase(filename, dir))
 		return (FALSE) ;
@@ -62,7 +49,7 @@ sint32 GlobalWarmingDatabase::Initialise(char *filename, C3DIR dir)
 	return (TRUE) ;
 	}
 
-	
+
 
 
 
@@ -131,14 +118,14 @@ TokenData	g_GWDB_token_data[TOKEN_GW_POLLUTION_MAX_VAL] =
 sint32 GlobalWarmingDatabase::ParseGlobalWarmingDatabase(char *filename, C3DIR dir)
 	{
 	Token	*gwToken = new Token(filename,	TOKEN_GW_POLLUTION_MAX_VAL - TOKEN_MAX, g_GWDB_token_data, dir) ;
-	
+
 	SetSize(1) ;
 
 	ParseAGlobalWarming(gwToken) ;
 
 	delete gwToken ;
 
-	if (g_parse_gw_abort) 
+	if (g_parse_gw_abort)
 		return (FALSE) ;
 
 	return (TRUE) ;
@@ -158,10 +145,9 @@ sint32 GlobalWarmingDatabase::ParseAGlobalWarming(Token *gwToken)
 	{
 	sint32	rec ;
 
-	
 	if (gwToken->GetType() == TOKEN_EOF)
 		return (FALSE) ;
-	
+
 	switch (gwToken->GetType())
 		{
 		case TOKEN_GLOBAL_WARMING_TRIGGER :
@@ -174,8 +160,7 @@ sint32 GlobalWarmingDatabase::ParseAGlobalWarming(Token *gwToken)
 			break ;
 
 		}
-	
-	
+
 	}
 
 
@@ -193,7 +178,7 @@ double GlobalWarmingDatabase::ChangeProbability(const TERRAIN_TYPES terrain, TER
 	sint32	found ;
 
 	for (found=0; (found<m_rec[0].m_changes) && (m_rec[0].m_original[found] != terrain); found++) ;
-	
+
 	if (found < m_rec[0].m_changes)
 		{
 		newtype = m_rec[0].m_flip[found] ;
@@ -229,7 +214,7 @@ TERRAIN_TYPES GlobalWarmingDatabase::Change(const double baseProb, const TERRAIN
 	newTerrainType = terrain ;
 	for (i=0; i<m_rec[0].m_changes; i++)
 		{
-		if (terrain == m_rec[0].m_original[i]) 
+		if (terrain == m_rec[0].m_original[i])
 			if (m_rec[0].m_prob[i] < lastChance)
 				if (probability < (m_rec[0].m_prob[i] + baseProb))
 					{
@@ -242,7 +227,7 @@ TERRAIN_TYPES GlobalWarmingDatabase::Change(const double baseProb, const TERRAIN
 	return (newTerrainType) ;
 	}
 
-	
+
 
 
 
@@ -253,39 +238,3 @@ TERRAIN_TYPES GlobalWarmingDatabase::Change(const double baseProb, const TERRAIN
 GlobalWarmingDatabase::~GlobalWarmingDatabase()
 	{
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

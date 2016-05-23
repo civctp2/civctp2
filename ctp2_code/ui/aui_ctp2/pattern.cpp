@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -22,9 +9,7 @@
 
 #include "pattern.h"
 
-
 extern C3UI *g_c3ui;
-
 
 
 Pattern::Pattern(
@@ -90,7 +75,7 @@ AUI_ERRCODE Pattern::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 		0,
 		0,
 		k_AUI_BLITTER_FLAG_COPY );
-	
+
 
 
 
@@ -229,7 +214,7 @@ AUI_ERRCODE Pattern::DrawDither( aui_Surface *pDestSurf, RECT *pDestRect, BOOL f
 		0,
 		0,
 		k_AUI_BLITTER_FLAG_COPY );
-	
+
 
 
 
@@ -389,11 +374,11 @@ AUI_ERRCODE Pattern::DrawDither( aui_Surface *pDestSurf, RECT *pDestRect, BOOL f
 
 
 AUI_ERRCODE Pattern::DrawDither(
-	aui_Surface *pDestSurf,		
-	RECT *pDestRect,		
-	BOOL flag,				
-	sint32 lighten,			
-	sint32 darken			
+	aui_Surface *pDestSurf,
+	RECT *pDestRect,
+	BOOL flag,
+	sint32 lighten,
+	sint32 darken
 	)
 {
 	RECT rect = { 0, 0, m_surface->Width(), m_surface->Height() };
@@ -405,7 +390,7 @@ AUI_ERRCODE Pattern::DrawDither(
 		0,
 		0,
 		k_AUI_BLITTER_FLAG_COPY );
-	
+
 
 
 

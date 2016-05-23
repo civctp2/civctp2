@@ -11,7 +11,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ names: names ',' name
 			newnode->next = NULL;
 			$$.list = newnode;
 		}
-		
+
 		;
 
 name: NAME
@@ -190,7 +190,7 @@ name: NAME
 		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_FLOAT);
 		$$.nameValue.v.floatValue = $3.fval;
 	}
-		
+
 	| NAME '=' STRINGVALUE
 	{
 		$$.nameValue.name = $1.name;
@@ -223,7 +223,7 @@ name: NAME
 		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_FLOAT);
 		$$.nameValue.v.floatValue = $3.fval;
 	}
-		
+
 	| NAME '=' STRINGVALUE AKA NAME
 	{
 		$$.nameValue.name = $1.name;
@@ -289,5 +289,3 @@ int main(int argc, char **argv)
 	}
 	exit(errorFound);
 }
-
-		

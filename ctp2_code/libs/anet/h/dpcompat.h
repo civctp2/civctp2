@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -63,38 +63,38 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* IDirectPlay2 methods */
 #define DP2_AddPlayerToGroup(p,a,b)        IDirectPlay2_AddPlayerToGroup(p,a,b)
-#define DP2_AddRef(p)                      IDirectPlay2_AddRef(p)                      
-#define DP2_Close(p)                       IDirectPlay2_Close(p)                       
-#define DP2_CreateGroup(p,a,b,c,d,e)       IDirectPlay2_CreateGroup(p,a,b,c,d,e)       
-#define DP2_CreatePlayer(p,a,b,c,d,e,f)    IDirectPlay2_CreatePlayer(p,a,b,c,d,e,f)    
-#define DP2_DeletePlayerFromGroup(p,a,b)   IDirectPlay2_DeletePlayerFromGroup(p,a,b)   
-#define DP2_DestroyGroup(p,a)              IDirectPlay2_DestroyGroup(p,a)              
-#define DP2_DestroyPlayer(p,a)             IDirectPlay2_DestroyPlayer(p,a)             
-#define DP2_EnableNewPlayers(p,a)          IDirectPlay2_EnableNewPlayers(p,a)          
-#define DP2_EnumGroupPlayers(p,a,b,c,d,e)  IDirectPlay2_EnumGroupPlayers(p,a,b,c,d,e)  
-#define DP2_EnumGroups(p,a,b,c,d)          IDirectPlay2_EnumGroups(p,a,b,c,d)          
-#define DP2_EnumPlayers(p,a,b,c,d)         IDirectPlay2_EnumPlayers(p,a,b,c,d)         
+#define DP2_AddRef(p)                      IDirectPlay2_AddRef(p)
+#define DP2_Close(p)                       IDirectPlay2_Close(p)
+#define DP2_CreateGroup(p,a,b,c,d,e)       IDirectPlay2_CreateGroup(p,a,b,c,d,e)
+#define DP2_CreatePlayer(p,a,b,c,d,e,f)    IDirectPlay2_CreatePlayer(p,a,b,c,d,e,f)
+#define DP2_DeletePlayerFromGroup(p,a,b)   IDirectPlay2_DeletePlayerFromGroup(p,a,b)
+#define DP2_DestroyGroup(p,a)              IDirectPlay2_DestroyGroup(p,a)
+#define DP2_DestroyPlayer(p,a)             IDirectPlay2_DestroyPlayer(p,a)
+#define DP2_EnableNewPlayers(p,a)          IDirectPlay2_EnableNewPlayers(p,a)
+#define DP2_EnumGroupPlayers(p,a,b,c,d,e)  IDirectPlay2_EnumGroupPlayers(p,a,b,c,d,e)
+#define DP2_EnumGroups(p,a,b,c,d)          IDirectPlay2_EnumGroups(p,a,b,c,d)
+#define DP2_EnumPlayers(p,a,b,c,d)         IDirectPlay2_EnumPlayers(p,a,b,c,d)
 #define DP2_EnumSessions(p,a,b,c,d,e)      IDirectPlay2_EnumSessions(p,a,b,c,d,e)
-#define DP2_GetCaps(p,a,b)                 IDirectPlay2_GetCaps(p,a,b)                 
-#define DP2_GetGroupData(p,a,b,c,d)        IDirectPlay2_GetGroupData(p,a,b,c,d)        
-#define DP2_GetGroupName(p,a,b,c)          IDirectPlay2_GetGroupName(p,a,b,c)          
-#define DP2_GetMessageCount(p,a,b)         IDirectPlay2_GetMessageCount(p,a,b)         
-#define DP2_GetPlayerAddress(p,a,b,c)      IDirectPlay2_GetPlayerAddress(p,a,b,c)      
-#define DP2_GetPlayerCaps(p,a,b,c)         IDirectPlay2_GetPlayerCaps(p,a,b,c)         
-#define DP2_GetPlayerData(p,a,b,c,d)       IDirectPlay2_GetPlayerData(p,a,b,c,d)       
-#define DP2_GetPlayerName(p,a,b,c)         IDirectPlay2_GetPlayerName(p,a,b,c)         
-#define DP2_GetSessionDesc(p,a,b)          IDirectPlay2_GetSessionDesc(p,a,b)          
-#define DP2_Initialize(p,a)                IDirectPlay2_Initialize(p,a)                
-#define DP2_Open(p,a,b)                    IDirectPlay2_Open(p,a,b)                    
-#define DP2_QueryInterface(p,a,b)          IDirectPlay2_QueryInterface(p,a,b)          
-#define DP2_Receive(p,a,b,c,d,e)           IDirectPlay2_Receive(p,a,b,c,d,e)           
-#define DP2_Release(p)                     IDirectPlay2_Release(p)                     
-#define DP2_Send(p,a,b,c,d,e)              IDirectPlay2_Send(p,a,b,c,d,e)              
-#define DP2_SetGroupData(p,a,b,c,d)        IDirectPlay2_SetGroupData(p,a,b,c,d)        
-#define DP2_SetGroupName(p,a,b,c)          IDirectPlay2_SetGroupName(p,a,b,c)          
-#define DP2_SetPlayerData(p,a,b,c,d)       IDirectPlay2_SetPlayerData(p,a,b,c,d)       
-#define DP2_SetPlayerName(p,a,b,c)         IDirectPlay2_SetPlayerName(p,a,b,c)         
-#define DP2_SetSessionDesc(p,a,b)          IDirectPlay2_SetSessionDesc(p,a,b)          
+#define DP2_GetCaps(p,a,b)                 IDirectPlay2_GetCaps(p,a,b)
+#define DP2_GetGroupData(p,a,b,c,d)        IDirectPlay2_GetGroupData(p,a,b,c,d)
+#define DP2_GetGroupName(p,a,b,c)          IDirectPlay2_GetGroupName(p,a,b,c)
+#define DP2_GetMessageCount(p,a,b)         IDirectPlay2_GetMessageCount(p,a,b)
+#define DP2_GetPlayerAddress(p,a,b,c)      IDirectPlay2_GetPlayerAddress(p,a,b,c)
+#define DP2_GetPlayerCaps(p,a,b,c)         IDirectPlay2_GetPlayerCaps(p,a,b,c)
+#define DP2_GetPlayerData(p,a,b,c,d)       IDirectPlay2_GetPlayerData(p,a,b,c,d)
+#define DP2_GetPlayerName(p,a,b,c)         IDirectPlay2_GetPlayerName(p,a,b,c)
+#define DP2_GetSessionDesc(p,a,b)          IDirectPlay2_GetSessionDesc(p,a,b)
+#define DP2_Initialize(p,a)                IDirectPlay2_Initialize(p,a)
+#define DP2_Open(p,a,b)                    IDirectPlay2_Open(p,a,b)
+#define DP2_QueryInterface(p,a,b)          IDirectPlay2_QueryInterface(p,a,b)
+#define DP2_Receive(p,a,b,c,d,e)           IDirectPlay2_Receive(p,a,b,c,d,e)
+#define DP2_Release(p)                     IDirectPlay2_Release(p)
+#define DP2_Send(p,a,b,c,d,e)              IDirectPlay2_Send(p,a,b,c,d,e)
+#define DP2_SetGroupData(p,a,b,c,d)        IDirectPlay2_SetGroupData(p,a,b,c,d)
+#define DP2_SetGroupName(p,a,b,c)          IDirectPlay2_SetGroupName(p,a,b,c)
+#define DP2_SetPlayerData(p,a,b,c,d)       IDirectPlay2_SetPlayerData(p,a,b,c,d)
+#define DP2_SetPlayerName(p,a,b,c)         IDirectPlay2_SetPlayerName(p,a,b,c)
+#define DP2_SetSessionDesc(p,a,b)          IDirectPlay2_SetSessionDesc(p,a,b)
 
 /* New structures needed to be able to compile for either library. */
 typedef GUID     DP_TRANSPORT_GUID;	/* Use for GUID's that identify service providers. */
@@ -130,37 +130,37 @@ typedef HRESULT DP_HRESULT;
 //QueryInterface reallocates, too different for a mere macro.
 
 /* IDirectPlay2 methods */
-#define DP2_AddPlayerToGroup(p,a,b)        dpAddPlayerToGroup(p,a,b)        
+#define DP2_AddPlayerToGroup(p,a,b)        dpAddPlayerToGroup(p,a,b)
 #define DP2_AddRef(p)                      dpUnsupported(p)
-#define DP2_Close(p)                       dpClose(p)                       
+#define DP2_Close(p)                       dpClose(p)
 #define DP2_CreateGroup(p,pid,pname,dat,siz,flags) dpCreateGroup(p,pid,pname)
 //#define DP2_CreatePlayer(p,pid,pn,hev,len,buf,flags) dpCreatePlayer(p,cb,cont,pn)
 //CreatePlayer uses a callback, too different for a mere macro.
-#define DP2_DeletePlayerFromGroup(p,a,b)   dpDeletePlayerFromGroup(p,a,b)   
-#define DP2_DestroyGroup(p,a)              dpDestroyGroup(p,a)              
-#define DP2_DestroyPlayer(p,a)             dpDestroyPlayer(p,a)             
-#define DP2_EnableNewPlayers(p,a)          dpEnableNewPlayers(p,a)          
+#define DP2_DeletePlayerFromGroup(p,a,b)   dpDeletePlayerFromGroup(p,a,b)
+#define DP2_DestroyGroup(p,a)              dpDestroyGroup(p,a)
+#define DP2_DestroyPlayer(p,a)             dpDestroyPlayer(p,a)
+#define DP2_EnableNewPlayers(p,a)          dpEnableNewPlayers(p,a)
 #define DP2_EnumGroupPlayers(p,id,sessguid,cb,cont,flags) dpEnumGroupPlayers(p,id,sessguid,cb,cont,1000)
-#define DP2_EnumGroups(p,a,b,c,d)          dpEnumGroups(p,a,b,c,d)          
-#define DP2_EnumPlayers(p,a,b,c,d)         dpEnumPlayers(p,a,b,c,d)         
+#define DP2_EnumGroups(p,a,b,c,d)          dpEnumGroups(p,a,b,c,d)
+#define DP2_EnumPlayers(p,a,b,c,d)         dpEnumPlayers(p,a,b,c,d)
 #define DP2_EnumSessions(p,desc,timeout,cb,cont,flags)  dpEnumSessions(p,desc,NULL,timeout,cb,cont)
 #define DP2_GetCaps(p,a,b)                 dpGetCaps(p,a,b)
-#define DP2_GetGroupData(p,a,b,c,d)        dpGetGroupData(p,a,b,c,d)        
-#define DP2_GetGroupName(p,a,b,c)          dpGetGroupName(p,a,b,c)          
+#define DP2_GetGroupData(p,a,b,c,d)        dpGetGroupData(p,a,b,c,d)
+#define DP2_GetGroupName(p,a,b,c)          dpGetGroupName(p,a,b,c)
 #define DP2_GetMessageCount(p,a,b)         dpUnsupported(p,a,b)
 #define DP2_GetPlayerAddress(p,a,b,c)      dpUnsupported(p,a,b,c)
 #define DP2_GetPlayerCaps(p,a,b,c)         dpUnsupported(p,a,b,c)
-#define DP2_GetPlayerData(p,a,b,c,d)       dpGetPlayerData(p,a,b,c,d)       
-#define DP2_GetPlayerName(p,a,b,c)         dpGetPlayerName(p,a,b,c)         
-#define DP2_GetSessionDesc(p,a,b)          dpGetSessionDesc(p,a,b)          
+#define DP2_GetPlayerData(p,a,b,c,d)       dpGetPlayerData(p,a,b,c,d)
+#define DP2_GetPlayerName(p,a,b,c)         dpGetPlayerName(p,a,b,c)
+#define DP2_GetSessionDesc(p,a,b)          dpGetSessionDesc(p,a,b)
 #define DP2_Initialize(p,a)                dpUnsupported(p,a)
 //#define DP2_Open(p,sess,flags)             ((sess->flags |= b), dpOpen(p,a,b)
 //Open uses a callback, too different for a mere macro.
-#define DP2_Receive(p,a,b,c,d,e)           dpReceive(p,a,b,c,d,e)           
+#define DP2_Receive(p,a,b,c,d,e)           dpReceive(p,a,b,c,d,e)
 #define DP2_Release(p)                     dpDestroy(p, 0)
-#define DP2_Send(p,a,b,c,d,e)              dpSend(p,a,b,c,d,e)              
+#define DP2_Send(p,a,b,c,d,e)              dpSend(p,a,b,c,d,e)
 #define DP2_SetGroupData(p,a,b,c,d)        dpSetGroupData(p,a,0,b,c,d)
-#define DP2_SetGroupName(p,a,b,c)          dpSetGroupName(p,a,b,c)          
+#define DP2_SetGroupName(p,a,b,c)          dpSetGroupName(p,a,b,c)
 #define DP2_SetPlayerData(p,a,b,c,d)       dpSetPlayerData(p,a,0,b,c,d)
 #define DP2_SetPlayerName(p,a,b,c)         dpSetPlayerName(p,a,b,c)
 #define DP2_SetSessionDesc(p,a,b)          dpSetSessionDesc(p,a,b)
@@ -241,7 +241,7 @@ typedef dp_result_t DP_HRESULT;
 
 /* Special dpid_t's */
 #define DPID_SYSMSG     dp_ID_NAMESERVER
-#define DPID_ALLPLAYERS dp_ID_BROADCAST	
+#define DPID_ALLPLAYERS dp_ID_BROADCAST
 
 /* System messages */
 typedef struct {

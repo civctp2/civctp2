@@ -29,9 +29,9 @@ private:
 class NetCity2 : public Packetizer
 {
 public:
-	NetCity2(CityData *cd, uint8 isInitialPacket = 0) 
-	{ 
-		m_data = cd; 
+	NetCity2(CityData *cd, uint8 isInitialPacket = 0)
+	{
+		m_data = cd;
 		m_isInitialPacket = isInitialPacket;
 	}
 	NetCity2() {}

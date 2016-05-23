@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  This file is intended for use only with the win32dirent.h interface.
 
  Created 17-Nov-98 by Jason Scanlin (jscanlin@activision.com).
- 
+
  Copyright 1998 by Activision.
- This source code is free and may be used or redistributed under the 
+ This source code is free and may be used or redistributed under the
  terms GNU General Public Licence.
 ------------------------------------------------------------------------*/
 
@@ -42,14 +42,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 typedef struct dirent {
 	WIN32_FIND_DATA file;	/* File data returned by Win32 Find*File */
-	HANDLE handle;			/* WIN32 Find*File handle. */ 
+	HANDLE handle;			/* WIN32 Find*File handle. */
 	char *d_name;			/* This is the only POSIX guaranteed field */
 							/* It points to cFileName in WIN32_FIND_DATA,
 							 * provided the FIND_ functions below are used.
 							 */
 };
 
-/* (un)defines of POSIX options - perhaps we could add these at some point */ 
+/* (un)defines of POSIX options - perhaps we could add these at some point */
 #undef _DIRENT_HAVE_D_NAMELEN
 #undef _DIRENT_HAVE_D_RECLEN
 #undef _DIRENT_HAVE_D_OFF

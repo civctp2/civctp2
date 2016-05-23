@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -32,7 +20,6 @@ enum POLLUTION_DISASTER_TYPE
 #define MAX_POLLUTION_TRIGGERS 20
 
 
-
 class CivArchive ;
 
 class Token ;
@@ -40,21 +27,20 @@ class Token ;
 class PollutionRecord : public Record
 	{
 	public :
-		
-		
-		
+
+
 		sint32	m_numTriggers;
 		sint32	m_triggerLevel[MAX_POLLUTION_TRIGGERS];
 		sint32	m_triggerType[MAX_POLLUTION_TRIGGERS];
 
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
 
 		PollutionRecord() ;
 

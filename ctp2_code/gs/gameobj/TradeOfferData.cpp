@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TradeOfferData.h"
 #include "civarchive.h"
@@ -57,7 +48,7 @@ void TradeOfferData::Serialize(CivArchive &archive)
 	}
 }
 
-BOOL TradeOfferData::Accept(PLAYER_INDEX player, 
+BOOL TradeOfferData::Accept(PLAYER_INDEX player,
                             const Unit &sourceCity,
                             const Unit &destCity)
 {
@@ -101,8 +92,7 @@ BOOL TradeOfferData::Accept(PLAYER_INDEX player,
 
 	if(m_offerType == ROUTE_TYPE_RESOURCE &&
 	   !m_fromCity.HasResource(m_offerResource)) {
-		
-		
+
 		return TRUE;
 	}
 

@@ -2,7 +2,6 @@
 #pragma once
 #endif
 
-
 #ifndef __GRAPHICSRESSCREEN_H__
 #define __GRAPHICSRESSCREEN_H__
 
@@ -19,12 +18,10 @@ struct CTPDisplayMode;
 class ScreenResListItem : public c3_ListItem
 {
 public:
-	
-	
+
 	ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, MBCHAR *ldlBlock);
-	
-	
-	
+
+
 	virtual void Update(void) {}
 
 	CTPDisplayMode *GetDisplayMode(void) { return m_mode; }

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,13 +41,11 @@
 #include "ns_chatbox.h"
 #include "ns_customlistbox.h"
 
-
 #include "c3_button.h"
 
 #include "dialogboxwindow.h"
 
 #include "spnewgamewindow.h"
-
 
 DialogBoxWindow::DialogBoxWindow(
 	AUI_ERRCODE *retval,
@@ -73,7 +71,6 @@ DialogBoxWindow::DialogBoxWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -81,13 +78,11 @@ AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 	if ( !m_controls ) return AUI_ERRCODE_MEMALLOCFAILED;
 	memset( m_controls, 0, m_numControls * sizeof( aui_Control *) );
 
-	
 	m_numButtons = 0;
 	m_buttons = NULL;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE DialogBoxWindow::CreateControls(
 	MBCHAR *ldlBlock,
@@ -101,7 +96,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
 
-	
 	aui_Control *control;
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -273,7 +267,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 		control = NULL;
 	m_controls[ CONTROL_PROGRESSBAR ] = control;
 
-	
 	do
 	{
 		sprintf( block, "%s.button%d", ldlBlock, m_numButtons );
@@ -291,7 +284,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 		Assert( m_buttons != NULL );
 		if ( !m_buttons ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-		
 		memset( m_buttons, 0, m_numButtons * sizeof( aui_Button * ) );
 
 		for ( sint32 i = 0; i < m_numButtons; i++ )
@@ -302,7 +294,7 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 			m_buttons[ i ] = spNew_ctp2_Button(
 				&errcode,
 				ldlBlock,
-				block, 
+				block,
 				NULL);
 
 			Assert( AUI_NEWOK(m_buttons[i],errcode) );
@@ -315,24 +307,18 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 	}
 
 
-	
 	aui_Ldl::SetupHeirarchyFromRoot( ldlBlock );
 
 
-	
 	aui_Action *action;
 
-	
 	action = NULL;
 
 
-	
 	SetStronglyModal( TRUE );
-
 
 	return AUI_ERRCODE_OK;
 }
-
 
 DialogBoxWindow::~DialogBoxWindow()
 {
@@ -353,7 +339,6 @@ DialogBoxWindow::~DialogBoxWindow()
 
 	m_numButtons = 0;
 }
-
 
 DialogBoxWindow *DialogBoxWindow::PopUp(
 	MBCHAR *ldlBlock,
@@ -379,7 +364,6 @@ DialogBoxWindow *DialogBoxWindow::PopUp(
 	return dbw;
 }
 
-
 void DialogBoxWindow::PopDown( DialogBoxWindow *dbw, aui_Button *button )
 {
 	Assert( dbw != NULL );
@@ -397,7 +381,6 @@ void DialogBoxWindow::PopDown( DialogBoxWindow *dbw, aui_Button *button )
 
 	g_ui->AddAction( new SafeDeleteAction( dbw ) );
 }
-
 
 void DialogBoxWindow::SafeDeleteAction::Execute(
 	aui_Control *control,

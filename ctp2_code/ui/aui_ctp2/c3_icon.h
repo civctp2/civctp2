@@ -1,5 +1,3 @@
-
-
 #ifndef __C3_ICON_H__
 #define __C3_ICON_H__
 
@@ -27,7 +25,6 @@ public:
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(void);
 
@@ -43,6 +40,5 @@ private:
 	COLOR	m_color;
 	MAPICON	m_mapIcon;
 };
-
 
 #endif

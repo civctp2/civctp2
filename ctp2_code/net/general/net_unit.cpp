@@ -53,7 +53,7 @@
 extern UnitPool* g_theUnitPool;
 extern World* g_theWorld;
 extern Player   **g_player;
-extern SelectedItem *g_selected_item; 
+extern SelectedItem *g_selected_item;
 extern Director *g_director;
 
 //----------------------------------------------------------------------------
@@ -72,8 +72,8 @@ extern Director *g_director;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-NetUnit::NetUnit(UnitData* unit, Unit useActor) : 
-	m_unitData(unit) 
+NetUnit::NetUnit(UnitData* unit, Unit useActor) :
+	m_unitData(unit)
 {
 	m_unitId = 0;
 	m_actorId = useActor;
@@ -139,13 +139,12 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	g_network.CheckReceivedObject((uint32)uid);
 
 	if(g_theUnitPool->IsValid(uid)) {
-		
+
 		m_unitData = g_theUnitPool->AccessUnit((const Unit)getlong(&buf[2]));
 		MapPoint pnt = m_unitData->m_pos;
 		PLAYER_INDEX oldowner = m_unitData->m_owner;
 		uint32 oldFlags = m_unitData->m_flags;
 
-		
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
 		bool revealed_unexplored;
@@ -172,7 +171,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 
-			
 			if(m_unitData->m_visibility & (1 << g_selected_item->GetVisiblePlayer())) {
 				sint32 numRevealed = revealed.Num();
 				UnitActor **revealedActors;
@@ -184,8 +182,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					revealedActors = NULL;
 				}
 
-				
-				
 
 
 
@@ -194,10 +190,12 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 
 
-				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors, 
-										0, NULL, FALSE, uid.GetMoveSoundID()); 
+
+
+				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors,
+										0, NULL, FALSE, uid.GetMoveSoundID());
 			}
-		} 
+		}
 #if 0
 		else if(oldVisionRange != m_unitData->m_vision_range) {
 			g_player[m_unitData->GetOwner()]->RemoveUnitVision(m_unitData->m_pos, oldVisionRange);
@@ -225,25 +223,24 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 	} else {
 		if(g_network.DeadUnit(uint32(uid))) {
-			
-			
-			
 
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
 			return;
 		}
-		
+
 		PLAYER_INDEX unitOwner = (PLAYER_INDEX)getshort(&buf[10]);
 		uint32 unitType = getlong(&buf[12]);
 		MapPoint unitPos((sint32)getshort(&buf[16]),
 						 (sint32)getshort(&buf[18]));
 		uint32 flags = getlong(&buf[20]);
 
-		
 		g_theUnitPool->HackSetKey(((uint32)uid & k_ID_KEY_MASK) + 1);
 
 		sint32 trans_t = g_theUnitDB->Get(unitType)->GetTransType();
@@ -261,12 +258,12 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 										  uid, unitOwner, unitPos);
 			}
 		}
-		
+
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
 
 		g_theUnitPool->Insert(m_unitData);
-		
+
 #if 0
 		if(m_unitData->m_vision_range != oldVisionRange) {
 			double newRange = m_unitData->m_vision_range;
@@ -284,21 +281,20 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			g_player[m_unitData->m_owner]->AddCityReferenceToPlayer(
 				uid, CAUSE_NEW_CITY_UNKNOWN);
 			g_theWorld->InsertCity(m_unitData->m_pos, uid);
-			
-			
+
 			for(sint32 p = 0; p < CtpAi::s_maxPlayers; p++) {
 				if(p == uid.GetOwner()) continue;
 
 				CtpAi::AddForeignerGoalsForCity(uid, p);
 			}
 			CtpAi::AddOwnerGoalsForCity(uid, uid.GetOwner());
-			
+
 		} else if(g_theUnitDB->Get(m_unitData->m_type)->GetIsTrader()) {
 			g_player[m_unitData->m_owner]->AddTrader(uid);
 		} else {
 			UnitDynamicArray revealed;
 			if(m_unitData->IsBeingTransported()) {
-				
+
 			} else if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 			}
@@ -310,7 +306,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	}
 	Assert(pos == size);
 }
-
 
 void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 {
@@ -329,9 +324,8 @@ void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	memcpy(ptr, &unitData->m_movement_points, sizeof(double)); ptr += sizeof(double);
 
 
-
 	putlong(ptr, unitData->m_temp_visibility_array.m_array_index); ptr += sizeof(unitData->m_temp_visibility_array.m_array_index);
-	
+
 #if 0
 	uint32 mask = 0;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
@@ -355,7 +349,6 @@ void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	putlong(ptr, (uint32)unitData->m_temp_visibility); ptr += 4;
 	putlong(ptr, (uint32)unitData->m_radar_visibility); ptr += 4;
 	putlong(ptr, (uint32)unitData->m_ever_visible); ptr += 4;
-
 
 
 	putlong(ptr, (uint32)unitData->m_transport); ptr += 4;
@@ -384,13 +377,12 @@ void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	unitData->m_type = getlong(ptr); ptr += 4;
 	unitData->m_pos.x = getshort(ptr); ptr += 2;
 	unitData->m_pos.y = getshort(ptr); ptr += 2;
-	
+
 	unitData->m_flags = getlong(ptr); ptr += 4;
 
 	unitData->m_fuel = getlong(ptr); ptr += 4;
 	unitData->m_hp = getdouble(ptr); ptr += 8;
 	memcpy(&unitData->m_movement_points, ptr, sizeof(double)); ptr += sizeof(double);
-	
 
 	unitData->m_temp_visibility_array.m_array_index = getlong(ptr); ptr += sizeof(unitData->m_temp_visibility_array.m_array_index);
 #if 0
@@ -410,14 +402,12 @@ void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	unitData->m_radar_visibility = getlong(ptr); ptr += 4;
 	unitData->m_ever_visible = getlong(ptr); ptr += 4;
 
-	
-	
+
 	if (unitData->m_actor) {
 		g_director->AddSetVisibility(unitData->m_actor, unitData->GetVisibility());
 	}
 
 
-	
 	unitData->m_transport = Unit(getlong(ptr)); ptr += 4;
 
 	uint8 canHaveCargo = getbyte(ptr); ptr++;
@@ -460,7 +450,7 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_UNIT_MOVE_ID);
-	
+
 	PULLLONG(m_id);
 	PULLSHORT(m_point.x);
 	PULLSHORT(m_point.y);
@@ -484,8 +474,7 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
 	Cell *theCell = g_theWorld->GetCell(ud->m_pos);
-	
-	
+
 	sint32 numRevealed = revealed.Num();
 	UnitActor **revealedActors = new UnitActor*[numRevealed];
 	for (sint32 i=0; i<numRevealed; i++)
@@ -498,8 +487,8 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 
-	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors, 
-							0, NULL, FALSE, u.GetMoveSoundID()); 
+	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors,
+							0, NULL, FALSE, u.GetMoveSoundID());
 }
 
 void NetUnitHP::Packetize(uint8 *buf, uint16 &size)
@@ -516,7 +505,7 @@ void NetUnitHP::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 pos = 0;
 	PULLID(packid);
 	Assert(packid == k_PACKET_UNIT_HP_ID);
-		
+
 	PULLLONGTYPE(m_unit, Unit);
 	PULLDOUBLE(m_hp);
 	Assert(g_theUnitPool->IsValid(m_unit));
@@ -525,4 +514,3 @@ void NetUnitHP::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		m_unit.SetHP(m_hp);
 	}
 }
-

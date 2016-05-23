@@ -1,19 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #include "profileai.h"
 
@@ -40,28 +25,23 @@
 #include "pollution.h"
 extern Pollution *g_thePollution;
 
-
 STDEHANDLER(MotivationEvent)
 {
 	sint32 playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
-	
 	diplomat.SortMotivations();
 
-	
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartNegotiations,
 						   GEA_Player, playerId,
 						   GEA_End);
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(ThreatenedCity_MotivationEvent)
 {
@@ -70,13 +50,11 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	sint32 defend_goal_type = CtpAi::GetGoalDefendIndex();
 	Assert(defend_goal_type >= 0);
 	if (defend_goal_type < 0)
 		return GEV_HD_Continue;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -84,10 +62,9 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 	const Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	Motivation motivation;
 
-	
-	sint32 at_risk_value = 
+	sint32 at_risk_value =
 		scheduler.GetValueUnsatisfiedGoals(defend_goal_type);
-	CTPGoal_ptr ctp_goal_ptr = 
+	CTPGoal_ptr ctp_goal_ptr =
 		(CTPGoal_ptr) scheduler.GetHighestPriorityGoal(defend_goal_type, false);
 
 	sint32 cityId = 0;
@@ -96,8 +73,7 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	sint32 total_value = MapAnalysis::GetMapAnalysis().TotalValue(playerId);
 
-	
-	
+
 	if (at_risk_value > total_value * 0.10) {
 		sint32 priority;
 		diplomat.GetCurrentStrategy().GetFearCityDefense(priority);
@@ -106,12 +82,10 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 		motivation.arg.cityId = cityId;
 		motivation.adviceStrId = adviceId;
 		diplomat.ConsiderMotivation(motivation);
-			
-		
+
 	}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(DesireGold_MotivationEvent)
 {
@@ -119,14 +93,13 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	if (adviceId < 0)
 		{
 			char motivation_name[] = "MOTIVATION_DESIRE_GOLD_ADVICE";
-			BOOL found = 
+			BOOL found =
 				g_theStringDB->GetStringID(motivation_name, adviceId);
 			Assert(found);
 		}
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -134,7 +107,6 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	const Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	Motivation motivation;
 
-	
 	Assert(g_player[playerId]);
 	sint32 rank = g_player[playerId]->GetRank(STRENGTH_CAT_GOLD);
 	sint32 priority;
@@ -154,7 +126,6 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(DesireMakeFriend_MotivationEvent)
 {
 	static StringId adviceId = -1;
@@ -162,7 +133,6 @@ STDEHANDLER(DesireMakeFriend_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -171,19 +141,18 @@ STDEHANDLER(DesireMakeFriend_MotivationEvent)
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	Motivation motivation;
-	
+
 	sint8 friends = diplomat.GetFriendCount();
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
-	bool friendly_personality = 
+	bool friendly_personality =
 		diplomat.GetPersonality()->GetDiscoveryDiplomatic() ||
 		diplomat.GetPersonality()->GetConquestPassive();
 
 	sint32 priority;
 
-	
-	
+
 	if ( (friendly_personality && friends == 0) || (((friend_power + our_power) * 1.5 ) < enemy_threat))
 		{
 			diplomat.GetCurrentStrategy().GetDesireMakeFriend(priority);
@@ -195,7 +164,6 @@ STDEHANDLER(DesireMakeFriend_MotivationEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(StopPiracy_MotivationEvent)
 {
 	static StringId adviceId = -1;
@@ -203,7 +171,6 @@ STDEHANDLER(StopPiracy_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -216,13 +183,12 @@ STDEHANDLER(StopPiracy_MotivationEvent)
 
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr != NULL);
-	
+
 	sint32 piracy_loss = map.TotalPiracyLoss(playerId);
 	sint32 income = player_ptr->m_gold->GetIncome();
-	
+
 	sint32 priority;
 
-	
 	if ( piracy_loss > income * 0.2)
 		{
 			diplomat.GetCurrentStrategy().GetFearPiracy(priority);
@@ -234,7 +200,6 @@ STDEHANDLER(StopPiracy_MotivationEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(EnlistFriends_MotivationEvent)
 {
 	static StringId adviceId = -1;
@@ -242,7 +207,6 @@ STDEHANDLER(EnlistFriends_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -255,11 +219,10 @@ STDEHANDLER(EnlistFriends_MotivationEvent)
 	sint32 friends = diplomat.GetFriendCount();
 	sint32 enemies = diplomat.GetEnemyCount();
 
-	
 	if ( friends > 0 && enemies > 0 )
 	{
 		Motivation motivation;
-		
+
 		diplomat.GetCurrentStrategy().GetDesireEnlistFriend(priority);
 		motivation.priority = (sint16) priority;
 		motivation.type = MOTIVATION_DESIRE_ENLIST_FRIEND;
@@ -269,7 +232,6 @@ STDEHANDLER(EnlistFriends_MotivationEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(PressAdvantage_MotivationEvent)
 {
 	static StringId adviceId = -1;
@@ -277,7 +239,6 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -286,27 +247,25 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	Motivation motivation;
-	
+
 	sint8 friends = diplomat.GetFriendCount();
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
-	bool agressive_personality = 
+	bool agressive_personality =
 		diplomat.GetPersonality()->GetAlignmentEvil() ||
 		diplomat.GetPersonality()->GetDiscoveryMilitary() ||
 		diplomat.GetPersonality()->GetConquestAgressive();
 
-	bool friendly_personality = 
+	bool friendly_personality =
 		diplomat.GetPersonality()->GetDiscoveryDiplomatic() ||
 		diplomat.GetPersonality()->GetConquestPassive();
 
-	
 	double ratio = (agressive_personality ? 1.2 : 1.5);
 
 	sint32 priority;
 
-	
-	
+
 	if (!friendly_personality && ((friend_power + our_power) > (enemy_threat * ratio)))
 		{
 			diplomat.GetCurrentStrategy().GetDesireAttack(priority);
@@ -317,7 +276,6 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 		}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(FearRank_MotivationEvent)
 {
@@ -331,7 +289,6 @@ STDEHANDLER(FearRank_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -346,7 +303,6 @@ STDEHANDLER(FearRank_MotivationEvent)
 	sint32 priority;
 	Motivation motivation;
 
-	
 	if ( enemies > 0 || rank < 75  ||
 		 (rank < 50 && diplomat.GetPersonality()->GetDiscoveryScientist()) )
 	{
@@ -368,11 +324,9 @@ STDEHANDLER(FearRank_MotivationEvent)
 		diplomat.ConsiderMotivation(motivation);
 	}
 
-	
 	rank = g_player[playerId]->GetRank(STRENGTH_CAT_TRADE);
 
-	
-	if ( rank < 75 || 
+	if ( rank < 75 ||
 		 (rank < 50 && diplomat.GetPersonality()->GetDiscoveryEconomic()) )
 	{
 		diplomat.GetCurrentStrategy().GetFearTradeRank(priority);
@@ -382,22 +336,21 @@ STDEHANDLER(FearRank_MotivationEvent)
 		diplomat.ConsiderMotivation(motivation);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(FearPollution_MotivationEvent)
 {
@@ -406,7 +359,6 @@ STDEHANDLER(FearPollution_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -417,25 +369,24 @@ STDEHANDLER(FearPollution_MotivationEvent)
 
 	sint32 next_disaster = g_thePollution->GetRoundsToNextDisaster();
 	bool fear_pollution = false;
-	
-	
+
 	if (diplomat.GetPersonality()->GetDiscoveryEcotopian() &&
 		next_disaster > 200)
 		return GEV_HD_Continue;
-	
+
 	else if (diplomat.GetPersonality()->GetDiscoveryDiplomatic() &&
 		next_disaster > 150)
 		return GEV_HD_Continue;
-	
+
 	else if (diplomat.GetPersonality()->GetDiscoveryScientist() &&
 		next_disaster > 100)
 		return GEV_HD_Continue;
-	
+
 	else if (next_disaster > 50)
 		return GEV_HD_Continue;
 
 	Motivation motivation;
-	
+
 	sint32 priority;
 	diplomat.GetCurrentStrategy().GetFearPollution(priority);
 	motivation.priority = (sint16) priority;
@@ -447,45 +398,42 @@ STDEHANDLER(FearPollution_MotivationEvent)
 }
 
 
-
-void MotivationEventCallbacks::AddCallbacks() 
+void MotivationEventCallbacks::AddCallbacks()
 {
 
-	
-	g_gevManager->AddCallback(GEV_ComputeMotivations, 
-							  GEV_PRI_Primary, 
+	g_gevManager->AddCallback(GEV_ComputeMotivations,
+							  GEV_PRI_Primary,
 							  &s_MotivationEvent);
 
-    
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_ThreatenedCity_MotivationEvent);
 
     g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_DesireGold_MotivationEvent);
 
     g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_DesireMakeFriend_MotivationEvent);
 
     g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_StopPiracy_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_EnlistFriends_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_PressAdvantage_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_FearRank_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_FearPollution_MotivationEvent);
 }

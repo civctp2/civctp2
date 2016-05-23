@@ -11,7 +11,6 @@ class Message;
 class MessageIconWindow;
 class MessageWindow;
 
-
 class MessageList
 {
 public:
@@ -26,7 +25,7 @@ public:
 
 	void HideVisibleWindows( void );
 	void CheckVisibleMessages( void );
-	void CheckMaxMessages( void ); 
+	void CheckMaxMessages( void );
 	void ChangeOffset( sint32 offset, int flag );
 	void Remove( MessageIconWindow *iconWindow, MessageWindow *window );
 
@@ -35,11 +34,11 @@ public:
 private:
 	PLAYER_INDEX							m_player;
 	tech_WLList<MessageIconWindow *>		*m_iconList;
-	uint32									m_offset;  
-	
+	uint32									m_offset;
+
 };
 
 
 
 
-#endif 
+#endif

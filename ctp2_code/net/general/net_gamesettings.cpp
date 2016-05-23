@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_gamesettings.h"
 #include "net_util.h"
@@ -56,7 +54,7 @@ void NetGameSettings::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
 	PUSHID(k_PACKET_GAME_SETTINGS_ID);
-	
+
 	PUSHLONG(m_x);
 	PUSHLONG(m_y);
 	PUSHLONG(m_numPlayers);
@@ -67,7 +65,7 @@ void NetGameSettings::Packetize(uint8 *buf, uint16 &size)
 	PUSHLONG(m_cityTime);
 	uint32 playerMask = 0;
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i]) 
+		if(g_player[i])
 			playerMask |= (1 << i);
 	}
 	PUSHLONG(playerMask);
@@ -136,15 +134,15 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	g_network.ClearDeadUnits();
 
-	
-	
-	
-	
 
-	
-	
 
-	
+
+
+
+
+
+
+
 
 
 
@@ -158,7 +156,6 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 	delete [] g_player;
 
-
 	g_player = new Player *[k_MAX_PLAYERS];
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		g_player[i] = NULL;
@@ -166,15 +163,15 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(playerMask & (1 << i)) {
-			g_player[i] = new Player(i, 0, PLAYER_TYPE_HUMAN); 
+			g_player[i] = new Player(i, 0, PLAYER_TYPE_HUMAN);
 		}
 	}
 
 	delete g_selected_item;
 	g_selected_item = new SelectedItem(m_numPlayers);
 
-	g_theUnitTree = new QuadTree<Unit>((sint16)g_theWorld->GetXWidth(), 
-									   (sint16)g_theWorld->GetYHeight(), 
+	g_theUnitTree = new QuadTree<Unit>((sint16)g_theWorld->GetXWidth(),
+									   (sint16)g_theWorld->GetYHeight(),
 									   g_theWorld->IsYwrap());
 	g_theInstallationTree = new InstallationQuadTree((sint16)g_theWorld->GetXWidth(),
 													 (sint16)g_theWorld->GetYHeight(),

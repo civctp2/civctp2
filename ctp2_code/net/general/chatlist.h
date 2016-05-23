@@ -1,4 +1,3 @@
-
 #ifndef xCHAT_LIST_H__
 #define xCHAT_LIST_H__
 
@@ -25,7 +24,6 @@ class ChatText
 	}
 };
 
-	
 class ChatList
 {
   public:

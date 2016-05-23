@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Copyright (C) 1992-1994 Novell, Inc.
  * All rights reserved.
  */
- 
+
 /*
  * Include files
  */
@@ -60,7 +60,7 @@ pascal short
 MacIPXCreateConnectionWithServer(unsigned char *serverAddress)
 {
 	Binderypb	bindery_pb;
-	
+
 	bindery_pb.csCode = BINDERY_ATTACH;
 	bindery_pb.csParams.CreateConn.serverAddress = serverAddress;
 	return (call_bindery(&bindery_pb));
@@ -70,7 +70,7 @@ pascal short
 MacIPXDestroyConnectionWithServer()
 {
 	Binderypb	bindery_pb;
-	
+
 	bindery_pb.csCode = BINDERY_DETACH;
 	return (call_bindery(&bindery_pb));
 }
@@ -81,7 +81,7 @@ MacIPXReadPropertyValue(char *objectName, unsigned short objectType, char *prope
 					unsigned char *moreSegments, unsigned char *propertyFlags)
 {
 	Binderypb	bindery_pb;
-	
+
 	if ((strlen(objectName) > 47) || (strlen(propertyName) > 15)) {
 		return (ERR_INVALID_NAME);
 	}
@@ -105,7 +105,7 @@ MacIPXScanBinderyObject(char *searchObjectName, unsigned short searchObjectType,
 					char *objectFlag, char *objectSecurity)
 {
 	Binderypb	bindery_pb;
-	
+
 	if (strlen(searchObjectName) > 47) {
 		return (ERR_INVALID_NAME);
 	}
@@ -130,7 +130,7 @@ call_bindery(Binderypb *pb)
 	short			status;
 	Binderypb		bindery_pb;
 	char			binderyDrvrName[11];
-	
+
 	binderyDrvrName[0] = 0x0A;
 	binderyDrvrName[1] = '.';
 	*(long *)&binderyDrvrName[2] = 'NVL_';
@@ -150,7 +150,7 @@ call_bindery(Binderypb *pb)
 	} else {
 		status = pb->NCPCompletionCode & 0x00FF;
 	}
-	
+
 Exit0:
 	return (status);
 }
@@ -161,7 +161,7 @@ bindery_strlen(char *s)
 {
 	size_t	string_len;
 	char	*string;
-	
+
 	string_len = 0;
 	string = s;
 	while (*string) {

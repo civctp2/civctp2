@@ -95,7 +95,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(BattleAftermath, "Clean up the battlefield", "%a%l%u%u%P%P%i")
 	EVENT(KillUnit, "Kill a unit", "%u%i%P")
 	EVENT(KillCity, "Kill a city", "%c%i%P")
-	
+
 	EVENT(LaunchUnit, "Launch this unit into space", "%u%l")
 	EVENT(Reentry, "Bring this army back to earth", "%a")
 
@@ -125,7 +125,7 @@ GameEventDescription g_eventDescriptions[] =
 
 	EVENT(UnitBeginTurnVision, "Begin vision phase for enemy units", "%u%P")
 	EVENT(BeginTurnUnit, "Begin turn for own unit", "%u")
-	
+
 	EVENT(CityTurnPreProduction, "Early begin turn phase, before production", "%c")
 	EVENT(CityBeginTurn, "Main city begin turn event", "%c")
 	EVENT(CityBeginTurnVision, "Vision phase for enemy cities", "%c%P")
@@ -141,7 +141,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(ZeroProduction, "Set a city's stored production to 0", "%c")
 
 	EVENT(Settle, "Found a city with a settler", "%a&i")
-	EVENT(CreateCity, "Create a city (first int is cause, second int is unit type that settled (-1 if not from unit)", "%P%l%i%i&c") 
+	EVENT(CreateCity, "Create a city (first int is cause, second int is unit type that settled (-1 if not from unit)", "%P%l%i%i&c")
 
 	EVENT(CreateImprovement, "Start building a terrain improvement", "%P%l%i%i")
 	EVENT(ImprovementAddTurn, "Add a turn to an improvement", "%I")
@@ -172,7 +172,6 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(GiveMap, "Give map from first player to second player", "%P%P")
 	EVENT(GiveCity,"Give a city to a foreign player", "%c%P")
 
-	
 	EVENT(SleepUnit, "Put a unit to sleep", "%u")
 	EVENT(WakeUnit, "Wake a unit", "%u")
 	EVENT(EntrenchUnit, "Entrench a unit", "%u")
@@ -228,11 +227,9 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(BuyFront, "Rush buy an item in a city", "%c")
 	EVENT(SellBuilding, "Sell a building from a city", "%c%i")
 
-	
 	EVENT(BorderIncursion, "Occurs when army first crosses foreign border.", "%P%P")
 	EVENT(BorderPullout, "Occurs when army leaves foreign border.", "%P%P")
 
-	
 	EVENT(ComputeMotivations, "Determine fears and desires", "%P")
 	EVENT(ReactionMotivation, "Find new proposals motivated as reactions to game events", "%P%P")
 	EVENT(FearMotivation, "Find new proposal for fear motivation", "%P%P%i")
@@ -252,27 +249,24 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(InitDiplomaticState, "Initialize Diplomatic state", "%P%P")
 	EVENT(NextDiplomaticState, "Determine next diplomatic state", "%P%P")
 
-	
 	EVENT(StartNegotiations, "After computing motivations, select new proposals", "%P")
 	EVENT(BeginScheduler, "Match all armies with goals.","%P")
 	EVENT(ProcessMatches, "Perform one pass through match list, executing matches.","%P%i")
-	
+
 	EVENT(NewNegotiationEvent, "A new negotiation history event has been added", "%P%P")
 
 	EVENT(DisbandUnit, "Disband one unit", "%u")
 	EVENT(DisbandCity, "Disband one city", "%c")
 
-	
 	EVENT(TimerExpired, "Triggered when a timer expires.", "%i")
-	
-	
+
 	EVENT(ArmyClicked, "Triggered when the user clicks an army with the mouse.", "%a")
 	EVENT(ArmySelected, "Triggered when the user selects an army.", "%a")
 	EVENT(ArmyDeselected, "Triggered when the user deselects an army.", "%a")
 	EVENT(CityClicked, "Triggered when the user clicks a city with the mouse.", "%c")
 	EVENT(CitySelected, "Triggered when the user selects a city.", "%c")
 	EVENT(CityDeselected, "Triggered when the user deselects a city.", "%c")
-	
+
 	EVENT(AccomplishFeat, "Someone has accomplished a feat (int = feat DB index)", "%i%P")
 
 	EVENT(MADLaunch, "A targetted launches towards its target.", "%u")
@@ -292,13 +286,12 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(BeginTurnExecute, "Call ExecuteOrders on an Army for a begin turn (normally AI only)", "%a")
 
 	EVENT(KillPlayer, "A player has died (all cities gone)", "%P%i%P")
-	
+
 	EVENT(EndTurn, "End a player's turn.", "%P")
 	EVENT(VictoryMoveOrder, "The move into an attacked square after winning a battle", "%a%l")
 
 	EVENT(OpenInitialCityInterface, "Generated when a city is initialized, after all population is added.", "%c")
 
-	
 	EVENT(MAX, "This is not a real event, it marks the end of the list", "")
 };
 

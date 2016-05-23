@@ -14,8 +14,8 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
@@ -79,8 +79,8 @@ char *sliccmd_cat_string;
 %nonassoc UMINUS '!'
 
 %%
-command: SLICCMD_WATCH expression 
-         { 			 
+command: SLICCMD_WATCH expression
+         {
 			 sliccmd_parse_done(&$2.v, SLICCMD_WATCH);
 			 sliccmd_done = 1;
 		 }
@@ -101,7 +101,7 @@ command: SLICCMD_WATCH expression
 		 }
          ;
 
-lvalue: NAME 
+lvalue: NAME
 		{
 			$$.v.type = EXP_VAL_SYM;
 			$$.v.sym = sliccmd_lookup_sym($1.v.name);
@@ -138,24 +138,24 @@ argument: expression { sliccmd_arg_exp($1.v.value); }
 	| STRING { sliccmd_arg_string($1.v.name); }
 	;
 
-expression: expression '+' expression 
-    { 
+expression: expression '+' expression
+    {
 		if($1.v.type != EXP_VAL_INT ||
 		   $3.v.type != EXP_VAL_INT) {
 			sliccmd_type_error();
 		} else {
 			$$.v.type = EXP_VAL_INT;
-			$$.v.value = $1.v.value + $3.v.value; 
+			$$.v.value = $1.v.value + $3.v.value;
 		}
 	}
-	|   expression '-' expression 
+	|   expression '-' expression
         {
 			if($1.v.type != EXP_VAL_INT ||
 			   $3.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value - $3.v.value; 
+				$$.v.value = $1.v.value - $3.v.value;
 			}
 		}
 	|   expression '*' expression
@@ -165,7 +165,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value * $3.v.value; 
+				$$.v.value = $1.v.value * $3.v.value;
 			}
 		}
 	|   expression '/' expression
@@ -175,7 +175,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value / $3.v.value; 
+				$$.v.value = $1.v.value / $3.v.value;
 			}
 		}
 	|   expression EXP expression
@@ -185,7 +185,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = (int)pow($1.v.value, $3.v.value); 
+				$$.v.value = (int)pow($1.v.value, $3.v.value);
 			}
 		}
 	|   expression LT  expression
@@ -195,7 +195,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value < $3.v.value; 
+				$$.v.value = $1.v.value < $3.v.value;
 			}
 		}
 	|   expression GT  expression
@@ -205,7 +205,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value > $3.v.value; 
+				$$.v.value = $1.v.value > $3.v.value;
 			}
 		}
 	|   expression GTE expression
@@ -215,7 +215,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value >= $3.v.value; 
+				$$.v.value = $1.v.value >= $3.v.value;
 			}
 		}
 	|   expression LTE expression
@@ -225,7 +225,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value <= $3.v.value; 
+				$$.v.value = $1.v.value <= $3.v.value;
 			}
 		}
 	|   expression EQ  expression
@@ -235,7 +235,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value == $3.v.value; 
+				$$.v.value = $1.v.value == $3.v.value;
 			}
 		}
 	|   expression NEQ expression
@@ -245,7 +245,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value != $3.v.value; 
+				$$.v.value = $1.v.value != $3.v.value;
 			}
 		}
 	|	expression AND expression
@@ -255,7 +255,7 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value && $3.v.value; 
+				$$.v.value = $1.v.value && $3.v.value;
 			}
 		}
 	|	expression OR  expression
@@ -265,10 +265,10 @@ expression: expression '+' expression
 				sliccmd_type_error();
 			} else {
 			$$.v.type = EXP_VAL_INT;
-				$$.v.value = $1.v.value || $3.v.value; 
+				$$.v.value = $1.v.value || $3.v.value;
 			}
 		}
-	|  	'!' expression %prec '!' 
+	|  	'!' expression %prec '!'
         {
 			if($2.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
@@ -277,7 +277,7 @@ expression: expression '+' expression
 				$$.v.value = !($2.v.value);
 			}
 		}
-	|   '-' expression %prec UMINUS 
+	|   '-' expression %prec UMINUS
         {
 			if($2.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
@@ -286,7 +286,7 @@ expression: expression '+' expression
 				$$.v.value = -($2.v.value);
 			}
 		}
-	|   '(' expression ')' 
+	|   '(' expression ')'
         {
 			if($2.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
@@ -295,60 +295,60 @@ expression: expression '+' expression
 				$$.v.value = $2.v.value;
 			}
 		}
-	|   NUMBER 
-        { 
+	|   NUMBER
+        {
 			$$.v.type = EXP_VAL_INT;
-			$$.v.value = $1.v.value; 
+			$$.v.value = $1.v.value;
 		}
-	|   NAME 
-        { 			
+	|   NAME
+        {
 			if(sliccmd_has_int_value($1.v.name)) {
 				$$.v.type = EXP_VAL_INT;
-				$$.v.value = sliccmd_get_int_value($1.v.name); 
+				$$.v.value = sliccmd_get_int_value($1.v.name);
 			} else if(($$.v.sym = sliccmd_maybe_lookup_sym($1.v.name)) != NULL) {
 				$$.v.type = EXP_VAL_SYM;
 				$$.v.sym = sliccmd_lookup_sym($1.v.name);
 			} else {
 				$$.v.type = EXP_VAL_SYM;
 				strcpy($$.v.name, $1.v.name);
-			}				
+			}
 		}
-	|   NAME '(' arguments ')' 
-		{ 
+	|   NAME '(' arguments ')'
+		{
 		    $$.v.value = sliccmd_call($1.v.name);
 		}
-	|   NAME REF NAME 
-        { 
+	|   NAME REF NAME
+        {
 			if(sliccmd_ref_has_int_value($1.v.name, $3.v.name)) {
 				$$.v.type = EXP_VAL_INT;
-				$$.v.value = sliccmd_get_ref_value($1.v.name, $3.v.name); 
+				$$.v.value = sliccmd_get_ref_value($1.v.name, $3.v.name);
 			} else {
 				$$.v.type = EXP_VAL_SYM;
 				$$.v.sym = sliccmd_get_ref_sym($1.v.name, $3.v.name);
 			}
 		}
-    |   NAME '[' expression ']' 
-		{ 
+    |   NAME '[' expression ']'
+		{
 			if($3.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
 			} else {
 				if(sliccmd_array_has_int_value($1.v.name, $3.v.value)) {
 					$$.v.type = EXP_VAL_INT;
-					$$.v.value = sliccmd_array_lookup($1.v.name, $3.v.value); 
+					$$.v.value = sliccmd_array_lookup($1.v.name, $3.v.value);
 				} else {
 					$$.v.type = EXP_VAL_SYM;
 					$$.v.sym = sliccmd_array_lookup_sym($1.v.name, $3.v.value);
 				}
 			}
-		} 
-    |   NAME '[' expression ']' REF NAME 
-		{ 
+		}
+    |   NAME '[' expression ']' REF NAME
+		{
 			if($3.v.type != EXP_VAL_INT) {
 				sliccmd_type_error();
-			} else {				
+			} else {
 				int val;
 				$$.v.type = EXP_VAL_SYM;
-				$$.v.sym = sliccmd_array_lookup_reference($1.v.name, $3.v.value, $6.v.name); 
+				$$.v.sym = sliccmd_array_lookup_reference($1.v.name, $3.v.value, $6.v.name);
 				if(($$.v.sym) && (sliccmd_sym_has_int_value($$.v.sym, &val))) {
 					$$.v.type = EXP_VAL_INT;
 					$$.v.value = val;
@@ -417,7 +417,6 @@ int sliccmd_parse(int action, char *cmd, char *output, int outputlen, int useDia
 
 	sliccmd_clear_symbols();
 
-
     do {
 		yyparse();
     } while(!sliccmd_done);
@@ -434,4 +433,3 @@ void yyerror(char *s)
 	sliccmd_parse_failed = 1;
 	sliccmd_done = 1;
 }
-

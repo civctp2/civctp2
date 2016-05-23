@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "SlicRecord.h"
 #include "SlicEngine.h"
@@ -107,7 +105,7 @@ void SlicRecord::Reconstitute()
 {
 	sint32 i;
 	for(i = g_player[m_owner]->m_messages->Num() - 1; i >= 0; i--) {
-		if(g_player[m_owner]->m_messages->Access(i).GetClass() == 
+		if(g_player[m_owner]->m_messages->Access(i).GetClass() ==
 		   k_HACK_RECONSTITUTED_CLASS) {
 			g_player[m_owner]->m_messages->Access(i).Kill();
 		}
@@ -120,4 +118,3 @@ void SlicRecord::Reconstitute()
 		msg.Show();
 	}
 }
-

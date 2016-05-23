@@ -4,25 +4,21 @@
 #ifndef __NS_CIVLISTBOX__
 #define __NS_CIVLISTBOX__
 
-
 #include "patternbase.h"
 #include "aui_listbox.h"
-
 
 #define k_NS_CIVLISTBOX_LDL_BEVELWIDTH		"bevelwidth"
 #define k_NS_CIVLISTBOX_LDL_BEVELTYPE		"beveltype"
 
-
 class aui_Surface;
 
-
-class ns_CivListBox : public aui_ListBox, public PatternBase 
+class ns_CivListBox : public aui_ListBox, public PatternBase
 {
 public:
 	ns_CivListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock, 
+		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ns_CivListBox(
@@ -31,7 +27,7 @@ public:
 		sint32 x,
 		sint32 y,
 		sint32 width,
-		sint32 height, 
+		sint32 height,
 		MBCHAR *pattern,
 		sint32 bevelwidth = 0,
 		sint32 beveltype = 0,
@@ -67,14 +63,13 @@ private:
 	sint32 m_bevelType;
 };
 
-
 class ns_HPlayerListBox : public ns_CivListBox
 {
 public:
 	ns_HPlayerListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock, 
+		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ns_HPlayerListBox(
@@ -83,7 +78,7 @@ public:
 		sint32 x,
 		sint32 y,
 		sint32 width,
-		sint32 height, 
+		sint32 height,
 		MBCHAR *pattern,
 		sint32 bevelwidth = 0,
 		sint32 beveltype = 0,
@@ -98,5 +93,4 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 };
 
-
-#endif 
+#endif

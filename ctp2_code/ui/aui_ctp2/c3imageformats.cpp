@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -56,7 +56,6 @@
 #include "tiffutils.h"
 #include "targautils.h"
 #include "rimutils.h"
-
 
 #include "prjfile.h"
 extern ProjectFile *g_ImageMapPF;
@@ -114,7 +113,7 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
-	
+
 	uint16  *buffer;
 
 	int		width, height;
@@ -127,7 +126,7 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 	if (stat(filename, &st) != 0) {
 #endif
 		return LoadRIM(filename, image);
-	}        
+	}
 
 	if (!Get_TGA_Dimension(filename, width, height, bpp)) {
 		return AUI_ERRCODE_LOADFAILED;
@@ -173,13 +172,13 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 /*#else // !__AUI_USE_SDL__
         //OK, this here causes the green artefacts!!!!!!!!!!!!!!!!
         //so use orig code which calls Load_TGA_File that converts 555to565!!!!!!
-	SDL_Surface *s = IMG_Load(filename); 
+	SDL_Surface *s = IMG_Load(filename);
         printf("%s %dL: Loaded tga %s\n", __FILE__, __LINE__, filename);
 	if (s != NULL) {
 		aui_Surface *as = new aui_SDLSurface(&retcode, 0, 0, 0, s, FALSE, FALSE, TRUE);
 		Assert ( AUI_NEWOK(as, retcode));
 		image->AttachSurface(as);
-	} 
+	}
         else {
 		fprintf(stderr, "aui_Image: Failed to load %s\n", filename);
 		retcode = AUI_ERRCODE_LOADFAILED;
@@ -220,7 +219,7 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
     } else {
         basename++;
     }
-    
+
     strcpy(rname, basename);
     rlen = strlen(rname);
     if (rlen < 3) {
@@ -231,17 +230,15 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
     rname[rlen - 2] = 'i';
     rname[rlen - 1] = 'm';
 
-    
     void * buffer = g_ImageMapPF ? g_ImageMapPF->getData(rname, &size) : NULL;
 
     if (buffer == NULL) {
 		c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", rname);
         return AUI_ERRCODE_LOADFAILED;
     }
-    
+
     image_data = (uint8 *)buffer + sizeof(RIMHeader);
 
-    
     rhead = (RIMHeader *)buffer;
     if ((rhead->tag[0] != 'R') ||
         (rhead->tag[1] != 'I') ||
@@ -291,4 +288,3 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
 
 	return errcode;
 }
-

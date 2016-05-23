@@ -1,4 +1,3 @@
-
 %{
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
@@ -64,16 +63,16 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 				strcpy(ldl_include_filename_stack[ldl_include_stack_ptr],
 					   buf);
 			    yyin = fopen( buf, "r" );
-			  
+
 			    if ( ! yyin ) {
 				    ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
 					yyterminate();
 				} else {
 					yy_switch_to_buffer(
 						yy_create_buffer( yyin, YY_BUF_SIZE ) );
-					
+
 					g_ldlLineNumber = 1;
-					BEGIN(INITIAL);	
+					BEGIN(INITIAL);
 				}
 			}
 		}

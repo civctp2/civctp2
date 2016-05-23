@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ GoodSpriteGroup::~GoodSpriteGroup()
 {
 }
 
-void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > GOODACTION_NONE &&
@@ -82,7 +82,7 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 		m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
 }
 
-void GoodSpriteGroup::DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+void GoodSpriteGroup::DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > GOODACTION_NONE &&
@@ -104,9 +104,8 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 			return m_sprites[action]->GetHotPoint();
 	}
 
-	return nullPoint;	
+	return nullPoint;
 }
-
 
 #define kBenchIterations		10000
 
@@ -212,7 +211,6 @@ void GoodSpriteGroup::RunBenchmark(aui_Surface *surf)
 	exit(0);
 }
 
-
 void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
@@ -247,7 +245,7 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 {
 	SpriteFile *file = new SpriteFile(filename);
 
-	if (SPRITEFILEERR_OK == 
+	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
        )
 	{
@@ -260,7 +258,7 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 
 void GoodSpriteGroup::DeallocateStorage(void)
 {
-	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
 	{
 	    delete m_sprites[i];
 		m_sprites[i] = NULL;
@@ -269,7 +267,7 @@ void GoodSpriteGroup::DeallocateStorage(void)
 
 void GoodSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
 	{
 		delete m_anims[i];
 		m_anims[i] = NULL;
@@ -283,7 +281,7 @@ void GoodSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 
 sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 {
-	Token			*theToken=NULL; 
+	Token			*theToken=NULL;
 	MBCHAR			name[k_MAX_NAME_LENGTH];
 	MBCHAR			scriptName[k_MAX_NAME_LENGTH];
 
@@ -297,19 +295,17 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 	sprintf(scriptName, "GG%.2d.txt", id);
 
+	theToken = new Token(scriptName, C3DIR_SPRITES);
+	Assert(theToken);
 
-	theToken = new Token(scriptName, C3DIR_SPRITES); 
-	Assert(theToken); 
-	
-	if (!theToken) return FALSE; 
-	
+	if (!theToken) return FALSE;
+
 	sint32 tmp;
 
 	if (!token_ParseKeywordNext(theToken, TOKEN_GOOD_SPRITE)) {
 
-		
 		delete theToken;
-		return k_NOT_GOOD; 
+		return k_NOT_GOOD;
 	}
 
 	printf("Good Processing '%s'\n", scriptName);
@@ -348,7 +344,6 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		m_anims[GOODACTION_IDLE] = idleAnim;
 	}
 
-	
 
 	delete theToken;
 
@@ -385,13 +380,12 @@ void GoodSpriteGroup::ExportScript(MBCHAR *name)
 	fprintf(file, "# %s\n", timebuf);
 	fprintf(file, "#\n\n");
 
-
 	fprintf(file, "%d # %s\n\n", 0, name);
 	fprintf(file, "%s\n", g_allTokens[TOKEN_GOOD_SPRITE].keyword);
 	fprintf(file, "{\n");
 
 	ExportSpriteGroup(file,(GAME_ACTION)GOODACTION_IDLE,TOKEN_UNIT_SPRITE_IDLE,TOKEN_MAX);
-  
+
 
 
 

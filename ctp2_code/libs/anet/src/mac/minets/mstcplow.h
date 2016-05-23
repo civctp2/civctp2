@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -26,6 +26,5 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 void TCPLow_Destroy(TCPINSTANCE* pTcp);
 int TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len);
 int TCPLow_GetPacket(TCPINSTANCE* tcp,void* bufptr,ULONG* pLen,TCPPEER* addr);
-
 
 #endif

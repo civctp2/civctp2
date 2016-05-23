@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -45,17 +45,16 @@ typedef struct {                /* I/O status block     */
         short i_xfer;           /* Transfer count     */
         long  i_info;           /* Device information     */
 } iosb;
- 
+
 typedef struct {                /* Terminal characteristics   */
         char  t_class;          /* Terminal class     */
         char  t_type;           /* Terminal type      */
         short t_width;          /* Terminal width in characters   */
         long  t_mandl;          /* Terminal's mode and length   */
         long  t_extend;         /* Extended terminal characteristics  */
-}  termchar;                    
+}  termchar;
 
 short TTY_CHANNEL_GLOBAL;
-
 
 /*
  *      Exit Handler Control Block
@@ -68,7 +67,7 @@ static struct argument_block
       int *status_address;
       int exit_status;
   }
-exit_block = 
+exit_block =
   {
       0,
       NULL,
@@ -99,33 +98,32 @@ int getkey_ast(int x)
 
    if (waiting_for_ast)  SYS$SETEF (vms_event_flag);
    waiting_for_ast = 0;
-   
+
    if (vms_ast_iosb.offset)
      {
 	c = vms_input_buffer;
      }
-   
+
    if (c >= 0) {
 	if (c == 7) {
 	     KeyBoard_Quit = 1;
 	}
-	 
+
 	INPUT_BUFFER[INPUT_BUFFER_LEN++] = c;
    }
    vms_que_key_ast();
 }
 
-
 void vms_que_key_ast()
 {
    static int trmmsk [2] = { 0, 0 };
    int status;
-    
+
    if (ast_stop_input) return;
    status = SYS$QIO (0, TTY_CHANNEL_GLOBAL,
 		     IO$_READVBLK + IO$M_NOECHO | IO$_TTYREADALL,
 		     &vms_ast_iosb, getkey_ast, 1,
-		     &vms_input_buffer, 1, 0, trmmsk, 0, 0);    
+		     &vms_input_buffer, 1, 0, trmmsk, 0, 0);
 }
 
 /* needed for callback.  hmm.  */
@@ -133,7 +131,6 @@ void reset_tty()
 {
     raw_end();
 }
-
 
 /*--------------------------------------------------------------------------
  Call with 1 to install, 0 to deinstall raw mode
@@ -152,10 +149,10 @@ void raw_set_stdio(init)
 	    fprintf(stderr,"Unable to assign input channel\n");
 	    exit(0);
 	 }
-		    
+
 	if (NULL == exit_block.exit_routine)
 	 {
-	    
+
 	    exit_block.exit_routine = reset_tty;
 	    SYS$DCLEXH(&exit_block);
 	 }
@@ -196,7 +193,7 @@ static char getkey()
 int raw_getc()
 {
    char c;
-   
+
    if (KeyBoard_Quit) {
 	KeyBoard_Quit = 0;
 	return 3;
@@ -205,10 +202,10 @@ int raw_getc()
    waiting_for_ast = 0;
    if (INPUT_BUFFER_LEN) return(getkey());
    SYS$CLREF (vms_event_flag);
-   
+
    /* set up a flag for the ast so it knows to set the event flag */
    waiting_for_ast = 1;
-   
+
    while (!INPUT_BUFFER_LEN)
      {
 	/* this will return when ast does its job */
@@ -219,7 +216,6 @@ int raw_getc()
    return(c);
 }
 
-    
 /*--------------------------------------------------------------------------
  Return 0 if no key ready, 1 if key ready.
 --------------------------------------------------------------------------*/
@@ -250,14 +246,14 @@ void raw_get_term_dimensions(cols, rows)
 	int *col_bufadr;
 	short *col_retlen;
 	int listend;
-     } 
+     }
    itmlst =
      {
 	sizeof(*rows), DVI$_TT_PAGE, rows, 0,
 	sizeof(*cols), DVI$_DEVBUFSIZ, cols, 0,
 	0
      };
-    
+
    /* Get current terminal characteristics */
    status = sys$getdviw(0,           /* Wait on event flag zero  */
 			0,           /* Channel to input terminal  */
@@ -266,7 +262,7 @@ void raw_get_term_dimensions(cols, rows)
 			&iostatus,   /* Status after operation */
 			0, 0,        /* No AST service   */
 			0);          /* nullarg */
-			
+
    if (status&1) status = iostatus.i_cond;
    /* Jump out if bad status */
    if ((status & 1) == 0) exit(status);

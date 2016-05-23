@@ -1,5 +1,3 @@
-
-
 #ifndef __BATTLEVIEWWINDOW_H__
 #define __BATTLEVIEWWINDOW_H__
 
@@ -33,10 +31,9 @@ public:
 
 	virtual ~BattleViewWindow();
 
-	
-	void SetupBattle(Battle *battle);	
-	void UpdateBattle(Battle *battle);	
-	void EndBattle();					
+	void SetupBattle(Battle *battle);
+	void UpdateBattle(Battle *battle);
+	void EndBattle();
 
 	void RemoveActor(BattleViewActor *actor);
 
@@ -48,8 +45,7 @@ public:
 	void SetSequence(Sequence *seq) { m_sequence = seq; }
 	Sequence *GetSequence(void) { return m_sequence; }
 
-	
-	
+
 	const BattleView *GetBattleView() const { return(m_battleView); }
 
 protected:
@@ -63,12 +59,11 @@ public:
 	virtual AUI_ERRCODE Idle(void);
 
 private:
-	
+
 	BattleView				*m_battleView;
-	
+
 	RECT					m_battleViewRect;
 
-	
 
 	ctp2_Static				*m_topBorder,
 							*m_leftBorder,
@@ -89,10 +84,10 @@ private:
 
 	ctp2_Static				*m_terrainBonusText;
 	ctp2_Static				*m_terrainBonusValue;
-	
+
 	ctp2_Static				*m_cityBonusText;
 	ctp2_Static				*m_cityBonusValue;
-	
+
 	ctp2_Static				*m_cityName;
 
 	ctp2_Static				*m_fortBonusText;
@@ -107,11 +102,10 @@ private:
 };
 
 
-
 class RemoveBattleViewAction : public aui_Action
 {
 public:
-	RemoveBattleViewAction(bool kill) 
+	RemoveBattleViewAction(bool kill)
     :   aui_Action      (),
         m_killBattle    (kill)
     { ; };
@@ -129,4 +123,4 @@ private:
 
 extern BattleViewWindow *g_battleViewWindow;
 
-#endif 
+#endif

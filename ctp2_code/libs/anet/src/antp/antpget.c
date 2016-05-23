@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define DPRINT(a)
 #endif
 
-#define antpget_BUFLEN 1000	/* Length of IO buffer - must be at least 
+#define antpget_BUFLEN 1000	/* Length of IO buffer - must be at least
 							 * antpget_URL_MAXLEN + 20ish.
 							 */
 #define antpget_TIMEOUT 5	/* Timeout on socket operations (secs).
@@ -196,7 +196,7 @@ int antpget_setHost(antpget_t *antpget, const char *host, int port)
 
 	DPRINT(("antpget_setHost: sockfd %d -> %u.%u.%u.%u:%u\n", antpget->sockfd,
 		(unsigned char)he->h_addr[0], (unsigned char)he->h_addr[1],
-		(unsigned char)he->h_addr[2], (unsigned char)he->h_addr[3], 
+		(unsigned char)he->h_addr[2], (unsigned char)he->h_addr[3],
 		antpget->url.port));
 
 	return antpget->sockfd;
@@ -230,7 +230,7 @@ static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
 	char buf[antpget_URL_MAXLEN + 40];
 	int nbytes;
 	int len;
-	
+
 	if (!antpget)
 		return dp_RES_BUG;
 
@@ -241,7 +241,7 @@ static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
 #endif
 	nbytes = write(antpget->sockfd, buf, len);
 	if (nbytes != len) {
-		DPRINT(("antpget_sendCommand: write error:%d\n", errno)); 
+		DPRINT(("antpget_sendCommand: write error:%d\n", errno));
 		close(antpget->sockfd);
 		antpget->sockfd = -1;
 		return dp_RES_HOST_NOT_RESPONDING;
@@ -252,7 +252,7 @@ static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
 	len = strlen(buf);
 	nbytes = write(antpget->sockfd, buf, len);
 	if (nbytes != len) {
-		DPRINT(("antpget_sendCommand: write error:%d\n", errno)); 
+		DPRINT(("antpget_sendCommand: write error:%d\n", errno));
 		close(antpget->sockfd);
 		antpget->sockfd = -1;
 		return dp_RES_HOST_NOT_RESPONDING;
@@ -266,7 +266,7 @@ static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
 	antpget->pbuf = antpget->header.buf;
 	antpget->header.line[0] = antpget->header.buf;
 	antpget->header.nlines = 0;
-	
+
 	/* Start count of bytes received over */
 	antpget->readLength = 0;
 
@@ -408,7 +408,7 @@ static dp_result_t antpget_parseStatusLine(antpget_t *antpget, const char *line)
 		antpget->header.length = -1;
 		return dp_RES_BADSIZE;
 	}
-	
+
 	return dp_RES_OK;
 }
 
@@ -434,7 +434,7 @@ static dp_result_t antpget_parseHeaderLine(antpget_t *antpget, const char *line)
  before calling again.  dp_RES_EMPTY indicates parsing is done and the
  caller can move on to calling antpget_readData.
  On dp_RES_EMPTY, a pointer to the parsed header is returned in phdr.
- 
+
  In normal usage, returns:
 	dp_RES_OK if any more of the header was processed,
 	dp_RES_AGAIN if not, but the header has yet to be terminated,
@@ -474,7 +474,7 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr)
 			/* Oops, we managed to look for non-existant data */
 			return dp_RES_AGAIN;
 		}
-		DPRINT(("antpget_readHeader: read error:%d\n", errno)); 
+		DPRINT(("antpget_readHeader: read error:%d\n", errno));
 		close(antpget->sockfd);
 		return dp_RES_HOST_NOT_RESPONDING;
 	}
@@ -576,7 +576,7 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr)
 	dp_RES_EMPTY if the current response's data is finished
 		(the last of the data, if any, is returned as well),
 	dp_RES_HOST_NOT_RESPONDING if the antp connection was lost.
- Abnormal returns include the standard dp_RES_BAD and dp_RES_BUG and: 
+ Abnormal returns include the standard dp_RES_BAD and dp_RES_BUG and:
 	dp_RES_NOTYET if the header has not been parsed,
 	dp_RES_BADSIZE if the antp server returned an invalid header.
 --------------------------------------------------------------------------*/

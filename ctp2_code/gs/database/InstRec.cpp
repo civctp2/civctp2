@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "InstRec.h"
@@ -56,15 +46,14 @@ void InstallationRecord::Serialize(CivArchive &archive)
 		archive.PutDoubleString( m_defenseBonus);
 		archive << m_firepower;
 		archive << m_flags;
-		archive << m_buildSoundID;	
-		
+		archive << m_buildSoundID;
+
 		archive.StoreArray(m_terrainMaterialCost, TERRAIN_MAX);
 		archive.StoreArray(m_terrainTimeCost, TERRAIN_MAX);
-		
+
 		archive << m_visibilityClasses;
-		
-		
+
 		archive << m_visibilityAbilities;
 	} else {
 	}
-}	
+}

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -43,7 +43,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if !defined(_DP_CONTRACT_H)
 #define _DP_CONTRACT_H 1
 
-
 /* Select how to enforce preconditions, conditions, and postconditions */
 /* Preconditions should be used to handle calling requirements (e.g., never
    call this function with a NULL first parameter).  Postconditions should
@@ -81,4 +80,3 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define precondition(x)		precondition_r(x, dp_RES_BAD)
 #endif /* _DP_CONTRACT_H */
-

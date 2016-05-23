@@ -7,15 +7,13 @@
 #include "Civilisation.h"
 #include "dynarr.h"
 
-
 class CivilisationDynamicArray : public DynamicArray<Civilisation> {
-
 
 public:
 
-    CivilisationDynamicArray(); 
-    CivilisationDynamicArray(const sint32 size); 
-    CivilisationDynamicArray (const DynamicArray<Civilisation> &copyme); 
+    CivilisationDynamicArray();
+    CivilisationDynamicArray(const sint32 size);
+    CivilisationDynamicArray (const DynamicArray<Civilisation> &copyme);
 
 };
 

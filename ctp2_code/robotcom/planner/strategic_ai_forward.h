@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __Strategic_AI_Forward_h__
 #define __Strategic_AI_Forward_h__
 
@@ -24,7 +11,6 @@
 
 
 class AIP;
-
 
 
 typedef class Planner * Planner_ptr;
@@ -53,10 +39,8 @@ typedef class Mapgrid_Goal * Mapgrid_Goal_ptr;
 
 typedef struct tag_strategy_map * strategy_map_ptr;
 
-
 class Squad;
 typedef class Squad * squad_ptr;
-
 
 typedef class Plan * Plan_ptr;
 
@@ -68,7 +52,6 @@ template <class T> class semi_dynamic_array;
 
 #include "Squad_And_Goal_Types.h"
 
-
 #include "dr_debug.h"
 #include "common.h"
 #include "linked_list.h"
@@ -76,27 +59,19 @@ template <class T> class semi_dynamic_array;
 #include "sorted_array.h"
 #include "matrix.h"
 
-
 #include "unitflow.h"
-
 
 #include "aip.h"
 
-
 #include "squad.h"
-
 
 #include "goal.h"
 
-
 #include "Plan.h"
-
 
 #include "Scheduler.h"
 
-
 #include "planner.h"
-
 
 #include "ailog.h"
 

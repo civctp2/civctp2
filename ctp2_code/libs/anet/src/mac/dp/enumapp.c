@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,7 +46,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Where we store the apps list */
 #define APPS_CACHE_FILE "feif.dat"
 
-
 /*----------------------------------------------------------------------
 Pascal/nonstandard string utilities -- might want to stick into another file.
 ----------------------------------------------------------------------*/
@@ -84,7 +83,7 @@ static dp_result_t fullpathfromid(FSSpec spec, char *fullpath)
 	CInfoPBRec myCPB;
 	char directoryName[FILENAME_MAX];
 	OSErr err;
-	
+
 	pStrcpy(fullpath, spec.name);
 	myCPB.dirInfo.ioNamePtr = &directoryName[0];
 	myCPB.dirInfo.ioDrParID = spec.parID;
@@ -118,7 +117,7 @@ DP_API dp_result_t dpReadAnetInf(const char *path, dp_appParam_t *pAppParam)
     char oldinibuf[FILENAME_MAX];
 	const char *oldini;
 	char *pbuf;
-	
+
 	/* Locate the directory containing the .ini file */
 	strcpy(ini, path);
 	pbuf = strrchr(ini, ':');
@@ -182,7 +181,6 @@ DP_API dp_result_t dpReadAnetInf(const char *path, dp_appParam_t *pAppParam)
 	return err;
 }
 
-
 #if defined(dp_ANET2)
 
 /*--------------------------------------------------------------------------
@@ -223,7 +221,6 @@ dp_freezeAppsList(
 	fclose(fp);
 	return err;
 }
-
 
 /*----------------------------------------------------------------------
 Create the apps table.  If we can, read the table from disk;
@@ -273,9 +270,8 @@ dp_createAppsList(
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
-Subscribe to the server's table. 
+Subscribe to the server's table.
 ----------------------------------------------------------------------*/
 dp_result_t			/* status */
 dp_subscribeAppsList(
@@ -315,7 +311,6 @@ dp_subscribeAppsList(
 	}
 	return dp_RES_OK;
 }
-
 
 /*----------------------------------------------------------------------
  Gets latest version info from server's table.
@@ -367,7 +362,6 @@ getLatest(
 
 #endif /* dp_ANET2 */
 
-
 /*-------------------------------------------------------------------------
  Callback triggered by listing applications.
 -------------------------------------------------------------------------*/
@@ -400,9 +394,8 @@ void dp_PASCAL dp_appVersion_cb(dp_appParam_t *app, void *context)
 	result->shellOpts = strdup(app->shellOpts);
 }
 
-
 /*----------------------------------------------------------------------
- Determine the current application's version, and whether it needs to be 
+ Determine the current application's version, and whether it needs to be
  updated.
  Returns info about the current app in *app.  Strings are allocated with
  strdup.
@@ -431,7 +424,7 @@ dpGetAppVersion(
 		return dp_RES_BUG;
 	app->cwd = cwd;			/* so callback can compare */
 	err = dpEnumApp(dp, dp_appVersion_cb, app);
-	if (err != dp_RES_OK) 
+	if (err != dp_RES_OK)
 		return err;
 	if (app->path == NULL) {
 		DPRINT(("dpGetAppVersion: no info available for this app?\n"));
@@ -453,7 +446,6 @@ dpGetAppVersion(
 	return dp_RES_OK;
 }
 
-
 /*-------------------------------------------------------------------------
  Call to download the patch corresponding to the given product,
  but only if dpGetAppVersion says you need to.
@@ -471,7 +463,6 @@ DP_API dp_result_t dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
     /* UNDONE: Implement for Macintosh. */
     return dp_RES_BAD;
 }
-
 
 /*----------------------------------------------------------------------
  Enumerate applications installed on this machine.
@@ -495,13 +486,13 @@ DP_API dp_result_t dpEnumApp(dp_t *dp, dpEnumAppCallback_t cb, void *context)
 	char args[FILENAME_MAX];
 	char cwd[FILENAME_MAX];
 	char shellOpts[FILENAME_MAX];
-	
+
 	appParam.path = &path[0];
 	appParam.name = &name[0];
 	appParam.args = &args[0];
 	appParam.cwd = &cwd[0];
 	appParam.shellOpts = &shellOpts[0];
-	
+
 	/* find Activenet Preferences folder */
 	err = FindFolder(kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder, &myVRef, &myDirID);
 	if (err != noErr) {

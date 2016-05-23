@@ -11,9 +11,7 @@
 #include "Unit.h"
 #include "unittabbutton.h"
 
-
 #define k_MAX_BOB_UNITS		9
-
 
 class Army;
 class CellUnitList;
@@ -27,7 +25,6 @@ class BattleOrderBox : public ControlSheet
 {
 public:
 
-	
 	BattleOrderBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -49,7 +46,6 @@ public:
 
 	virtual ~BattleOrderBox();
 
-	
 	virtual AUI_ERRCODE	Show( void );
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL,
 								sint32 x = 0,
@@ -64,7 +60,6 @@ public:
 
 	BOOL	GetStackDisplay( void ) { return m_stackDisplay; }
 
-
 private:
 	RECT			m_unitRect[k_MAX_BOB_UNITS];
 	UnitTabButton	*m_unitControls[k_MAX_BOB_UNITS];
@@ -75,8 +70,8 @@ private:
 	BOOL			m_stackDisplay;
 
 	c3_ColorIconButton	*m_unitImage;
-	c3_Static		*m_unitFortify;			
-	c3_Static		*m_unitVeteran;			
+	c3_Static		*m_unitFortify;
+	c3_Static		*m_unitVeteran;
 
 	c3_Static		*m_unitARD;
 	c3_Static		*m_unitMovement;
@@ -96,5 +91,4 @@ private:
 
 };
 
-
-#endif 
+#endif

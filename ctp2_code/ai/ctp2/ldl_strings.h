@@ -1,24 +1,13 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __LDL_STRINGS_H__
 #define __LDL_STRINGS_H__
 
-
 extern string ID_LOST_BATTLE;
 extern string ID_ATTACKED_CIVILIANS;
 extern string ID_UNPROVOKED_ATTACK;
 extern string ID_ACCIDENTAL_ATTACK;
-
 
 extern string ID_EXPLAIN_TRADE_CITY_FOR_PEACE;
 extern string ID_ADVICE_TRADE_CITY_FOR_PEACE;
@@ -60,14 +49,12 @@ extern string ID_EXPLAIN_ACCEPT_COUNTER;
 extern string ID_ADVICE_ACCEPT_COUNTER;
 extern string ID_NEWS_ACCEPT_COUNTER;
 
-
 extern string ID_SPY_FULL_ATTACK_SS;
 extern string ID_ADVICE_FULL_ATTACK_SS;
 extern string ID_NEWS_FULL_ATTACK_SS;
 extern string ID_SPY_REGROUP_SS;
 extern string ID_ADVICE_REGROUP_SS;
 extern string ID_NEWS_REGROUP_SS;
-
 
 extern string ID_SPY_PROVOKE_WAR_DS;
 extern string ID_ADVICE_PROVOKE_WAR_DS;

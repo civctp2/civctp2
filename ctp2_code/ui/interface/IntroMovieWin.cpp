@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The intro movie window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -56,7 +56,6 @@ extern SoundManager		*g_soundManager;
 IntroMovieWindow		*g_introMovieWindow = NULL;
 
 
-
 void intromoviewin_Initialize(void)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -69,7 +68,6 @@ void intromoviewin_Initialize(void)
 		Assert(g_introMovieWindow != NULL);
 	}
 }
-
 
 
 void intromoviewin_DisplayIntroMovie(void)
@@ -86,7 +84,7 @@ void intromoviewin_DisplayIntroMovie(void)
 
 	MBCHAR *filename = g_theVictoryMovieDB->GetMovieFilename(index);
 	g_introMovieWindow->SetMovie(filename);
-	
+
 	AUI_ERRCODE		errcode;
 
 	errcode = g_c3ui->AddWindow(g_introMovieWindow);
@@ -95,18 +93,16 @@ void intromoviewin_DisplayIntroMovie(void)
 }
 
 
-
 void intromoviewin_Cleanup()
 {
 	if (g_introMovieWindow) {
-		
+
 		g_c3ui->RemoveWindow(g_introMovieWindow->Id());
 
 		delete g_introMovieWindow;
 		g_introMovieWindow = NULL;
 	}
 }
-
 
 
 void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
@@ -117,10 +113,9 @@ void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint
 }
 
 
-
 void CloseIntroMovieAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
-	
+
 	intromoviewin_Cleanup();
 
 	AUI_ERRCODE errcode;
@@ -137,4 +132,3 @@ void CloseIntroMovieAction::Execute(aui_Control *control, uint32 action, uint32 
 	initialplayscreen_displayMyWindow();
 
 }
-

@@ -10,18 +10,18 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
+// - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be
 //   modifiable in const.txt.
 // - Added compatibility handling to solve database out of synch problems.
 // - Removed temporary compatibility, to force const.txt cleanup.
@@ -37,7 +37,7 @@
 #include "c3errors.h"
 #include "Globals.h"
 
-extern ConstDB *g_theConstDB; 
+extern ConstDB *g_theConstDB;
 
 extern sint32		g_abort_parse;
 extern TokenData	g_const_token_data[];
@@ -71,9 +71,9 @@ int const	DEFAULT_MIN_TURNS_BETWEEN_REVOLT	= 1;
 
 bool ParseOptional
 (
-	Token *			aToken, 
-	sint32 const	t, 
-	sint32 &		val, 
+	Token *			aToken,
+	sint32 const	t,
+	sint32 &		val,
 	sint32 const	defaultVal
 )
 {
@@ -86,27 +86,26 @@ bool ParseOptional
 			return true;
 		}
 		else
-		{ 
+		{
 			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
-			g_abort_parse = TRUE; 
-		} 
-	} 
+			g_abort_parse = TRUE;
+		}
+	}
 
-	val = defaultVal; 
+	val = defaultVal;
 	return false;
 }
-
 
 } // namespace
 
 ConstDB::ConstDB ()
 
-{ 
+{
 	memset(this, 0, sizeof(*this));
 
 	sint32 i ;
 
-	for (i=0; i<k_NUM_MERIDIANS; i++) { 
+	for (i=0; i<k_NUM_MERIDIANS; i++) {
 		m_merid[i] = 11 * (i + 1) ;
 	}
 
@@ -126,12 +125,11 @@ ConstDB::ConstDB ()
 	m_monopolyThreshold = 0 ;
 	m_veryHappyThreshold = 0 ;
 
-
 	m_discoveries_pollution_size_modifier=0.0 ;
 	m_discoveries_pollution_production_modifier=0.0 ;
-    m_base_workday = 0.0; 
-    m_base_rations = 0.0; 
-    m_base_wages = 0.0; 
+    m_base_workday = 0.0;
+    m_base_rations = 0.0;
+    m_base_wages = 0.0;
 	m_no_piracy_expires=0;
 	m_end_of_game_year_early_warning = 0 ;
 	m_end_of_game_year = 0 ;
@@ -152,7 +150,7 @@ ConstDB::ConstDB ()
 	m_caravan_coef = 0.02;
 	m_max_match_list_cycles		= DEFAULT_MAX_MATCH_LIST_CYCLES;
 	m_min_turns_between_revolt	= DEFAULT_MIN_TURNS_BETWEEN_REVOLT;
-	} 
+	}
 
 
 
@@ -198,30 +196,30 @@ void ConstDB::Serialize(CivArchive &archive)
 	if (archive.IsStoring())
 		{
 		archive.PerformMagic(CONSTDB_MAGIC) ;
-	archive.PutDoubleString(	m_land); 
-	archive.PutDoubleString(	m_continent); 
-	archive.PutDoubleString(	m_homogenous); 
-	archive.PutDoubleString(	m_mountain); 
-	archive.PutDoubleString(	m_hills); 
-	archive <<	m_mountain_spread; 
+	archive.PutDoubleString(	m_land);
+	archive.PutDoubleString(	m_continent);
+	archive.PutDoubleString(	m_homogenous);
+	archive.PutDoubleString(	m_mountain);
+	archive.PutDoubleString(	m_hills);
+	archive <<	m_mountain_spread;
 	archive <<	m_mountain_length;
 	archive <<	m_glacier;
-	archive <<	m_volcano; 
-	archive.PutDoubleString(	m_trench); 
-	archive <<	m_mount_cell; 
-	archive <<  m_forest; 
-	archive <<  m_grass;  
-	archive <<  m_plains; 
-	archive <<  m_desert; 
+	archive <<	m_volcano;
+	archive.PutDoubleString(	m_trench);
+	archive <<	m_mount_cell;
+	archive <<  m_forest;
+	archive <<  m_grass;
+	archive <<  m_plains;
+	archive <<  m_desert;
 	archive <<  m_whitePercent;
 	archive <<  m_brownPercent;
 	archive <<  m_temperatureRangeAdjust;
-	
+
 	archive.StoreArray(m_merid, k_NUM_MERIDIANS);
 	 archive.StoreArrayString(m_meridf, k_NUM_MERIDIANS);
-	
+
 	 archive.StoreArrayString(m_hlevelf, 4);
-	
+
 	archive <<	m_forestWet;
 	archive <<	m_forestDry;
 	archive <<	m_grassWet;
@@ -245,84 +243,82 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive <<	m_riverCellHeightFewgoods;
 	archive <<	m_riverCellHeightManygoods;
 
-	archive <<	m_nice_r; 
+	archive <<	m_nice_r;
 	archive.PutDoubleString(	m_river);
 	archive <<	m_river_len;
-	archive <<	m_richness; 
+	archive <<	m_richness;
 	archive <<	m_lost_at_sea;
-	archive.PutDoubleString(	m_vet_coef); 
-	
+	archive.PutDoubleString(	m_vet_coef);
+
 	archive <<	m_average_pollution_turns ;
-	
+
 	archive <<	m_revolution_level ;
 	archive <<	m_tariff_reduction <<
 		m_revolt_influence_distance ;
-	
 
 
 	archive.PutDoubleString(	m_discoveries_pollution_size_modifier );
 	archive.PutDoubleString(	m_discoveries_pollution_production_modifier );
-	
+
     archive.PutDoubleString(	m_max_empire_dist_cost);
     archive.PutDoubleString(	m_happiness_launch_cost);
-	
+
     archive.PutDoubleString(	m_unit_workday);
     archive.PutDoubleString(  m_base_workday);
     archive.PutDoubleString(	m_unit_wages);
     archive.PutDoubleString(  m_base_wages);
     archive.PutDoubleString(	m_unit_rations);
-    archive.PutDoubleString(  m_base_rations); 
+    archive.PutDoubleString(  m_base_rations);
 	archive.PutDoubleString(	m_food_to_pollution_coef );
 
 	archive <<	m_monopolyThreshold <<
-		m_veryHappyThreshold <<									
+		m_veryHappyThreshold <<
 		m_populationPollutionWarningThreshold <<
 		m_industrialPollutionWarningThreshold <<
 		m_pact_capture_city_expires <<
-		
+
 		m_cease_fire_expires <<
 		m_short_cease_fire_expires <<
 		m_pact_end_pollution_expires <<
 		m_leave_our_lands_expires <<
 		m_reduce_pollution_expires <<
-		
+
 		m_capture_city_for_gold_multiplier <<
 		m_patience_lost_per_request <<
 		m_patience_regained_per_round <<
 		m_patience_lost_threshold <<
 		m_end_of_game_year_early_warning <<
 		m_end_of_game_year ;
-	
 
 	archive <<	m_pollution_forces_government_collapse ;
-	
+
 	archive.PutDoubleString(	m_patience_regain_probability );
-	
-    archive << m_goal_time_slice; 
-    archive << m_max_time_slice; 
-    archive << m_total_time_slice; 
-	
+
+    archive << m_goal_time_slice;
+    archive << m_max_time_slice;
+    archive << m_total_time_slice;
+
 	archive.PutDoubleString( m_entrenchment_bonus);
 	archive << m_paradrop_distance;
 	archive << m_paradrop_success_percentage;
 	archive.PutDoubleString( m_elite_spy_bonus);
 	archive.PutDoubleString( m_city_second_attempt_spy_bonus);
-	
+
 	archive << m_assasination_happiness_effect;
 	archive << m_assasination_happiness_effect_timer;
-	
+
 	archive << m_spied_upon_wariness_timer;
 	archive << m_maximum_party_cost;
 	archive.PutDoubleString( m_maximum_party_chance);
 	archive << m_gossip_map_radius;
 	archive.PutDoubleString( m_hear_gossip_chance);
-	
+
 	archive.PutDoubleString( m_franchise_effect);
 	archive <<	m_turns_to_sue_franchise;
-	
+
 	archive.PutDoubleString(	m_elite_slaver_bonus);
 	archive.PutDoubleString(	m_slaver_elite_chance);
-	
+
 	archive.PutDoubleString(m_elite_abolitionist_bonus);
 	archive.PutDoubleString(m_abolitionist_elite_chance);
 	archive.PutDoubleString(m_watchful_city_success_modifier);
@@ -332,17 +328,17 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive <<	m_nano_infection_turns;
 	archive.PutDoubleString(m_bio_infection_spread_chance);
 	archive.PutDoubleString(m_nano_infection_spread_chance);
-	
+
 	archive.PutDoubleString( m_elite_terrorist_bonus);
 	archive.PutDoubleString( m_terrorist_elite_chance);
 	archive.PutDoubleString( m_nuke_population_percentage);
 	archive.PutDoubleString( m_bio_terror_kill_percentage);
-	
+
 	archive.PutDoubleString( m_special_action_move_cost);
-	
+
 	archive.PutDoubleString( m_cleric_conversion_factor);
 	archive.PutDoubleString( m_televangelist_conversion_factor);
-	
+
 	archive.PutDoubleString(m_reformation_chance);
 	archive.PutDoubleString(m_reformation_death_chance);
 	archive.PutDoubleString(m_reformation_happiness_time);
@@ -352,20 +348,20 @@ void ConstDB::Serialize(CivArchive &archive)
 		m_converted_indulgence_gold << m_converted_indulgence_happiness <<
 		m_other_faith_indulgence_gold << m_other_faith_indulgence_happiness;
 	archive << m_soothsay_happy_amount;
-	
+
 	archive << m_hut_box_width << m_hut_box_height;
 	archive.PutDoubleString( m_hut_chance_per_box);
 	archive << m_max_goody_hut_gold;
 	archive << m_max_goody_hut_advance;
 	archive << m_max_goody_hut_unit;
-	
+
 	archive.PutDoubleString( m_unit_rush_modifier);
 	archive.PutDoubleString( m_improvement_rush_modifier);
 	archive.PutDoubleString( m_wonder_rush_modifier);
 
-    archive.PutDoubleString( m_change_currently_building_item_penalty); 
+    archive.PutDoubleString( m_change_currently_building_item_penalty);
 	archive.PutDoubleString( m_building_production_to_value_modifier);
-	
+
 	archive.PutDoubleString( m_city_growth_coefficient);
 	archive.PutDoubleString( m_power_points_to_materials);
 	archive << m_max_airlift_stack_size;
@@ -467,7 +463,7 @@ void ConstDB::Serialize(CivArchive &archive)
 
 	archive.PutDoubleString( m_ai_cheat_eco_pact_min);
 	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
-	
+
 	archive << m_riot_level;
 	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) &&
 		(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
@@ -488,52 +484,50 @@ void ConstDB::Serialize(CivArchive &archive)
 
 	}
 
-
 void ConstDB::y2meridian(const sint32 j, sint32 &k) const
 
 {
-   sint32 i; 
+   sint32 i;
 
-   for (i=0; i<k_NUM_MERIDIANS; i++) { 
-      if (j < m_merid[i]) { 
+   for (i=0; i<k_NUM_MERIDIANS; i++) {
+      if (j < m_merid[i]) {
          k = i;
          return;
-      } 
-   } 
+      }
+   }
    k = i;
-   return; 
+   return;
 }
 
-void ConstDB::CalcMer(sint32 v) 
+void ConstDB::CalcMer(sint32 v)
 
-{  sint32 i; 
-   for (i=0; i<k_NUM_MERIDIANS; i++) { 
-      m_merid[i] = sint32 (m_meridf[i] * double(v)); 
+{  sint32 i;
+   for (i=0; i<k_NUM_MERIDIANS; i++) {
+      m_merid[i] = sint32 (m_meridf[i] * double(v));
    }
-} 
+}
 
 
+enum TOKEN_CONST {
+    TOKEN_CONST_FIRST = TOKEN_MAX+1,
+    TOKEN_CONST_PERCENT_LAND,
+    TOKEN_CONST_PERCENT_CONTINENT,
 
-enum TOKEN_CONST { 
-    TOKEN_CONST_FIRST = TOKEN_MAX+1, 
-    TOKEN_CONST_PERCENT_LAND, 
-    TOKEN_CONST_PERCENT_CONTINENT,  
-            
     TOKEN_CONST_PERCENT_HOMOGENOUS,
-    TOKEN_CONST_WET_LEVEL, 
-    TOKEN_CONST_DRY_LEVEL, 
+    TOKEN_CONST_WET_LEVEL,
+    TOKEN_CONST_DRY_LEVEL,
     TOKEN_CONST_MERIDIAN0,
-    TOKEN_CONST_MERIDIAN1, 
+    TOKEN_CONST_MERIDIAN1,
     TOKEN_CONST_MERIDIAN2,
     TOKEN_CONST_MERIDIAN3,
     TOKEN_CONST_MERIDIAN4,
     TOKEN_CONST_MERIDIAN5,
-            
-    TOKEN_CONST_HLEVELA, 
-    TOKEN_CONST_HLEVELB, 
-    TOKEN_CONST_HLEVELC, 
-    TOKEN_CONST_HLEVELD, 
-            
+
+    TOKEN_CONST_HLEVELA,
+    TOKEN_CONST_HLEVELB,
+    TOKEN_CONST_HLEVELC,
+    TOKEN_CONST_HLEVELD,
+
 	TOKEN_CONST_FORESTWET,
 	TOKEN_CONST_FORESTDRY,
 	TOKEN_CONST_GRASSWET,
@@ -563,7 +557,7 @@ enum TOKEN_CONST {
     TOKEN_CONST_MOUNTAIN_SPREAD,
     TOKEN_CONST_MOUNTAIN_LENGTH,
     TOKEN_CONST_GLACIER_EXTENT,
-    TOKEN_CONST_PERCENT_VOLCANO, 
+    TOKEN_CONST_PERCENT_VOLCANO,
     TOKEN_CONST_PERCENT_TRENCH,
 	TOKEN_CONST_PERCENT_FOREST,
 	TOKEN_CONST_PERCENT_GRASS,
@@ -572,32 +566,31 @@ enum TOKEN_CONST {
 	TOKEN_CONST_PERCENT_WHITE,
 	TOKEN_CONST_PERCENT_BROWN,
 	TOKEN_CONST_TEMPERATURE_RANGE_ADJUST,
-    TOKEN_CONST_NICE_RADIUS, 
+    TOKEN_CONST_NICE_RADIUS,
     TOKEN_CONST_PERCENT_RIVER,
     TOKEN_CONST_RIVER_LEN,
 	TOKEN_CONST_RIVER_CELL_WIDTH,
 	TOKEN_CONST_RIVER_CELL_HEIGHT,
-    TOKEN_CONST_RICHNESS, 
-    TOKEN_CONST_CHANCE_LOST_AT_SEA, 
-    TOKEN_CONST_VET_COEF, 
-
+    TOKEN_CONST_RICHNESS,
+    TOKEN_CONST_CHANCE_LOST_AT_SEA,
+    TOKEN_CONST_VET_COEF,
 
 	TOKEN_CONST_DISCOVERIES_POLLUTION_SIZE_MODIFIER,
 	TOKEN_CONST_DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER,
 	TOKEN_CONST_AVERAGE_POLLUTION_TURNS,
-	TOKEN_CONST_REVOLUTION_LEVEL, 
+	TOKEN_CONST_REVOLUTION_LEVEL,
 	TOKEN_CONST_REVOLT_INFLUENCE_DISTANCE,
 	TOKEN_CONST_TARIFF_REDUCTION,
 
     TOKEN_CONST_MAX_EMPIRE_DIST_COST,
-    TOKEN_CONST_HAPPINESS_LAUNCH_COST, 
+    TOKEN_CONST_HAPPINESS_LAUNCH_COST,
     TOKEN_CONST_UNIT_WORKDAY,
     TOKEN_CONST_UNIT_WAGES,
     TOKEN_CONST_UNIT_RATIONS,
 
-    TOKEN_CONST_BASE_WORKDAY, 
-    TOKEN_CONST_BASE_WAGES, 
-    TOKEN_CONST_BASE_RATIONS, 
+    TOKEN_CONST_BASE_WORKDAY,
+    TOKEN_CONST_BASE_WAGES,
+    TOKEN_CONST_BASE_RATIONS,
 
 	TOKEN_CONST_POPULATION_PRODUCES_POLLUTION_THRESHOLD,
 	TOKEN_CONST_PRODUCTION_PRODUCES_POLLUTION_THRESHOLD,
@@ -615,13 +608,12 @@ enum TOKEN_CONST {
 	TOKEN_CONST_LEAVE_OUR_LANDS_EXPIRES,
 	TOKEN_CONST_REDUCE_POLLUTION_EXPIRES,
 
-
 	TOKEN_CONST_PATIENCE_LOST_PER_REQUEST,
 	TOKEN_CONST_PATIENCE_REGAINED_PER_ROUND,
 	TOKEN_CONST_REGAIN_PATIENCE_PROBABILITY,
 	TOKEN_CONST_PATIENCE_LOST_THRESHOLD,
 
-    TOKEN_GOAL_TIME_SLICE,     
+    TOKEN_GOAL_TIME_SLICE,
     TOKEN_MAX_TIME_SLICE,
     TOKEN_TOTAL_TIME_SLICE,
 
@@ -652,7 +644,6 @@ enum TOKEN_CONST {
 	TOKEN_WATCHFUL_CITY_DEATH_MODIFIER,
 	TOKEN_WATCHFUL_CITY_TURNS,
 
-
 	TOKEN_BIO_INFECTION_TURNS,
 	TOKEN_NANO_INFECTION_TURNS,
 	TOKEN_BIO_INFECTION_SPREAD_CHANCE,
@@ -661,7 +652,7 @@ enum TOKEN_CONST {
 
 	TOKEN_ELITE_TERRORIST_BONUS,
 	TOKEN_TERRORIST_ELITE_CHANCE,
-	
+
 	TOKEN_NUKE_POPULATION_PERCENTAGE,
 
 	TOKEN_SPECIAL_ACTION_MOVE_COST,
@@ -679,13 +670,13 @@ enum TOKEN_CONST {
 	TOKEN_CONVERTED_INDULGENCE_HAPPINESS,
 	TOKEN_OTHER_FAITH_INDULGENCE_GOLD,
 	TOKEN_OTHER_FAITH_INDULGENCE_HAPPINESS,
-	
+
 	TOKEN_SOOTHSAY_HAPPY_AMOUNT,
 
 	TOKEN_RUINS_BOX_WIDTH,
 	TOKEN_RUINS_BOX_HEIGHT,
 	TOKEN_RUINS_CHANCE_PER_BOX,
-	
+
 	TOKEN_MAX_RUINS_GOLD,
 	TOKEN_MAX_RUINS_ADVANCE,
 	TOKEN_MAX_RUINS_UNIT,
@@ -825,54 +816,53 @@ enum TOKEN_CONST {
 	// Modified by kaan to address bug # 12
 	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
 
-    TOKEN_CONST_MAX 
+    TOKEN_CONST_MAX
 
 };
 
 
-
-TokenData g_const_token_data [] = { 
+TokenData g_const_token_data [] = {
 	{TOKEN_CONST_FIRST, "CONST_DO_NOT_USE_FIRST"},
-	{TOKEN_CONST_PERCENT_LAND, "PERCENT_LAND"}, 
-	{TOKEN_CONST_PERCENT_CONTINENT, "PERCENT_CONTINENT"}, 
+	{TOKEN_CONST_PERCENT_LAND, "PERCENT_LAND"},
+	{TOKEN_CONST_PERCENT_CONTINENT, "PERCENT_CONTINENT"},
 
 	{TOKEN_CONST_PERCENT_HOMOGENOUS,"PERCENT_HOMOGENOUS"},
-	{TOKEN_CONST_WET_LEVEL, "WET_LEVEL"}, 
-	{TOKEN_CONST_DRY_LEVEL, "DRY_LEVEL"}, 
+	{TOKEN_CONST_WET_LEVEL, "WET_LEVEL"},
+	{TOKEN_CONST_DRY_LEVEL, "DRY_LEVEL"},
 	{TOKEN_CONST_MERIDIAN0,"MERIDIANA"},
-	{TOKEN_CONST_MERIDIAN1, "MERIDIANB"}, 
+	{TOKEN_CONST_MERIDIAN1, "MERIDIANB"},
 	{TOKEN_CONST_MERIDIAN2, "MERIDIANC"},
 	{TOKEN_CONST_MERIDIAN3, "MERIDIAND"},
 	{TOKEN_CONST_MERIDIAN4, "MERIDIANE"},
 	{TOKEN_CONST_MERIDIAN5, "MERIDIANF"},
 
-	{TOKEN_CONST_HLEVELA, "HLEVELA"}, 
-	{TOKEN_CONST_HLEVELB, "HLEVELB"}, 
-	{TOKEN_CONST_HLEVELC, "HLEVELC"}, 
-	{TOKEN_CONST_HLEVELD, "HLEVELD"}, 
+	{TOKEN_CONST_HLEVELA, "HLEVELA"},
+	{TOKEN_CONST_HLEVELB, "HLEVELB"},
+	{TOKEN_CONST_HLEVELC, "HLEVELC"},
+	{TOKEN_CONST_HLEVELD, "HLEVELD"},
 
-	{TOKEN_CONST_FORESTWET, "FORESTWET"}, 
-	{TOKEN_CONST_FORESTDRY, "FORESTDRY"}, 
-	{TOKEN_CONST_GRASSWET, "GRASSWET"}, 
-	{TOKEN_CONST_GRASSDRY, "GRASSDRY"}, 
-	{TOKEN_CONST_PLAINSWET, "PLAINSWET"}, 
-	{TOKEN_CONST_PLAINSDRY, "PLAINSDRY"}, 
-	{TOKEN_CONST_DESERTWET, "DESERTWET"}, 
-	{TOKEN_CONST_DESERTDRY, "DESERTDRY"}, 
+	{TOKEN_CONST_FORESTWET, "FORESTWET"},
+	{TOKEN_CONST_FORESTDRY, "FORESTDRY"},
+	{TOKEN_CONST_GRASSWET, "GRASSWET"},
+	{TOKEN_CONST_GRASSDRY, "GRASSDRY"},
+	{TOKEN_CONST_PLAINSWET, "PLAINSWET"},
+	{TOKEN_CONST_PLAINSDRY, "PLAINSDRY"},
+	{TOKEN_CONST_DESERTWET, "DESERTWET"},
+	{TOKEN_CONST_DESERTDRY, "DESERTDRY"},
 
-	{TOKEN_CONST_WHITEWARM, "WHITEWARM"}, 
-	{TOKEN_CONST_WHITECOLD, "WHITECOLD"}, 
-	{TOKEN_CONST_BROWNWARM, "BROWNWARM"}, 
-	{TOKEN_CONST_BROWNCOLD, "BROWNCOLD"}, 
-	{TOKEN_CONST_TEMPERATURERANGEADJUSTWARM, "TEMPERATURERANGEADJUSTWARM"}, 
-	{TOKEN_CONST_TEMPERATURERANGEADJUSTCOLD, "TEMPERATURERANGEADJUSTCOLD"}, 
+	{TOKEN_CONST_WHITEWARM, "WHITEWARM"},
+	{TOKEN_CONST_WHITECOLD, "WHITECOLD"},
+	{TOKEN_CONST_BROWNWARM, "BROWNWARM"},
+	{TOKEN_CONST_BROWNCOLD, "BROWNCOLD"},
+	{TOKEN_CONST_TEMPERATURERANGEADJUSTWARM, "TEMPERATURERANGEADJUSTWARM"},
+	{TOKEN_CONST_TEMPERATURERANGEADJUSTCOLD, "TEMPERATURERANGEADJUSTCOLD"},
 
-	{TOKEN_CONST_RICHNESSFEWGOODS, "RICHNESSFEWGOODS"}, 
-	{TOKEN_CONST_RICHNESSMANYGOODS, "RICHNESSMANYGOODS"}, 
-	{TOKEN_CONST_RIVERCELLWIDTHFEWGOODS, "RIVERCELLWIDTHFEWGOODS"}, 
-	{TOKEN_CONST_RIVERCELLWIDTHMANYGOODS, "RIVERCELLWIDTHMANYGOODS"}, 
-	{TOKEN_CONST_RIVERCELLHEIGHTFEWGOODS, "RIVERCELLHEIGHTFEWGOODS"}, 
-	{TOKEN_CONST_RIVERCELLHEIGHTMANYGOODS, "RIVERCELLHEIGHTMANYGOODS"}, 
+	{TOKEN_CONST_RICHNESSFEWGOODS, "RICHNESSFEWGOODS"},
+	{TOKEN_CONST_RICHNESSMANYGOODS, "RICHNESSMANYGOODS"},
+	{TOKEN_CONST_RIVERCELLWIDTHFEWGOODS, "RIVERCELLWIDTHFEWGOODS"},
+	{TOKEN_CONST_RIVERCELLWIDTHMANYGOODS, "RIVERCELLWIDTHMANYGOODS"},
+	{TOKEN_CONST_RIVERCELLHEIGHTFEWGOODS, "RIVERCELLHEIGHTFEWGOODS"},
+	{TOKEN_CONST_RIVERCELLHEIGHTMANYGOODS, "RIVERCELLHEIGHTMANYGOODS"},
 
 	{TOKEN_CONST_PERCENT_MOUNTAIN, "PERCENT_MOUNTAIN"},
 	{TOKEN_CONST_MOUNTAIN_CELL, "MOUNTAIN_CELL"},
@@ -881,8 +871,8 @@ TokenData g_const_token_data [] = {
 	{TOKEN_CONST_MOUNTAIN_SPREAD, "MOUNTAIN_SPREAD"},
 	{TOKEN_CONST_MOUNTAIN_LENGTH, "MOUNTAIN_LENGTH"},
 	{TOKEN_CONST_GLACIER_EXTENT, "GLACIER_EXTENT"},
-	{TOKEN_CONST_PERCENT_VOLCANO, "PERCENT_VOLCANO"}, 
-	{TOKEN_CONST_PERCENT_TRENCH, "PERCENT_TRENCH"}, 
+	{TOKEN_CONST_PERCENT_VOLCANO, "PERCENT_VOLCANO"},
+	{TOKEN_CONST_PERCENT_TRENCH, "PERCENT_TRENCH"},
 	{TOKEN_CONST_PERCENT_FOREST, "PERCENT_FOREST"},
 	{TOKEN_CONST_PERCENT_GRASS, "PERCENT_GRASS"},
 	{TOKEN_CONST_PERCENT_PLAINS, "PERCENT_PLAINS"},
@@ -890,7 +880,7 @@ TokenData g_const_token_data [] = {
 	{TOKEN_CONST_PERCENT_WHITE, "PERCENT_WHITE"},
 	{TOKEN_CONST_PERCENT_BROWN, "PERCENT_BROWN"},
 	{TOKEN_CONST_TEMPERATURE_RANGE_ADJUST, "TEMPERATURE_RANGE_ADJUST"},
-	{TOKEN_CONST_NICE_RADIUS, "NICE_RADIUS"}, 
+	{TOKEN_CONST_NICE_RADIUS, "NICE_RADIUS"},
 	{TOKEN_CONST_PERCENT_RIVER, "PERCENT_RIVER"},
 	{TOKEN_CONST_RIVER_LEN, "RIVER_LENGTH"},
 	{TOKEN_CONST_RIVER_CELL_WIDTH, "RIVER_CELL_WIDTH"},
@@ -900,28 +890,27 @@ TokenData g_const_token_data [] = {
 	{TOKEN_CONST_VET_COEF, "VETERAN_COEF"},
 
 
-
 	{TOKEN_CONST_DISCOVERIES_POLLUTION_SIZE_MODIFIER, "DISCOVERIES_POLLUTION_SIZE_MODIFIER"},
 	{TOKEN_CONST_DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER, "DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER"},
 	{TOKEN_CONST_AVERAGE_POLLUTION_TURNS, "AVERAGE_POLLUTION_TURNS"},
 	{TOKEN_CONST_REVOLUTION_LEVEL, "REVOLUTION_LEVEL"},
 	{TOKEN_CONST_TARIFF_REDUCTION, "TARIFF_REDUCTION"},
-	{TOKEN_CONST_REVOLT_INFLUENCE_DISTANCE, "REVOLT_INFLUENCE_DISTANCE"},		
+	{TOKEN_CONST_REVOLT_INFLUENCE_DISTANCE, "REVOLT_INFLUENCE_DISTANCE"},
 
 	{TOKEN_CONST_MAX_EMPIRE_DIST_COST, "MAX_EMPIRE_DIST_COST"},
-	{TOKEN_CONST_HAPPINESS_LAUNCH_COST, "HAPPINESS_LAUNCH_COST"}, 
+	{TOKEN_CONST_HAPPINESS_LAUNCH_COST, "HAPPINESS_LAUNCH_COST"},
 	{TOKEN_CONST_UNIT_WORKDAY, "UNIT_WORKDAY"},
 	{TOKEN_CONST_UNIT_WAGES, "UNIT_WAGES"},
 	{TOKEN_CONST_UNIT_RATIONS,"UNIT_RATIONS"},
 
-    {TOKEN_CONST_BASE_WORKDAY, "BASE_WORKDAY"}, 
-    {TOKEN_CONST_BASE_WAGES, "BASE_WAGES"}, 
-    {TOKEN_CONST_BASE_RATIONS, "BASE_RATIONS"}, 
+    {TOKEN_CONST_BASE_WORKDAY, "BASE_WORKDAY"},
+    {TOKEN_CONST_BASE_WAGES, "BASE_WAGES"},
+    {TOKEN_CONST_BASE_RATIONS, "BASE_RATIONS"},
 
 	{TOKEN_CONST_POPULATION_PRODUCES_POLLUTION_THRESHOLD, "POPULATION_PRODUCES_POLLUTION_THRESHOLD"},
 	{TOKEN_CONST_PRODUCTION_PRODUCES_POLLUTION_THRESHOLD, "PRODUCTION_PRODUCES_POLLUTION_THRESHOLD"},
 
-    {TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, "CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY" }, 
+    {TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, "CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY" },
 
 	{TOKEN_CONST_PACT_CAPTURE_CITY_EXPIRES, "PACT_CAPTURE_CITY_EXPIRES"},
 
@@ -939,7 +928,7 @@ TokenData g_const_token_data [] = {
 	{TOKEN_CONST_REGAIN_PATIENCE_PROBABILITY, "REGAIN_PATIENCE_PROBABILITY"},
 	{TOKEN_CONST_PATIENCE_LOST_THRESHOLD, "PATIENCE_LOST_THRESHOLD"},
 
-    {TOKEN_GOAL_TIME_SLICE, "AI_GOAL_TIME_SLICE"},     
+    {TOKEN_GOAL_TIME_SLICE, "AI_GOAL_TIME_SLICE"},
     {TOKEN_MAX_TIME_SLICE, "AI_MAX_TIME_SLICE"},
     {TOKEN_TOTAL_TIME_SLICE, "AI_TOTAL_TIME_SLICE"},
 
@@ -1009,7 +998,7 @@ TokenData g_const_token_data [] = {
 	{TOKEN_IMPROVEMENT_RUSH_MODIFIER, "IMPROVEMENT_RUSH_MODIFIER"},
 	{TOKEN_WONDER_RUSH_MODIFIER, "WONDER_RUSH_MODIFIER"},
 	{TOKEN_BUILDING_PRODUCTION_TO_VALUE_MODIFIER, "BUILDING_PRODUCTION_TO_VALUE_MODIFIER"},
-	
+
 	{TOKEN_MONOPOLY_THRESHOLD, "MONOPOLY_THRESHOLD"},
 	{TOKEN_POPULATION_POLLUTION_WARNING_THRESHOLD, "POPULATION_POLLUTION_WARNING_THRESHOLD"},
 	{TOKEN_INDUSTRIAL_POLLUTION_WARNING_THRESHOLD, "INDUSTRIAL_POLLUTION_WARNING_THRESHOLD"},
@@ -1116,7 +1105,7 @@ TokenData g_const_token_data [] = {
 	// Modified by kaan to address bug # 12
 	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
 };
-	
+
 
 
 
@@ -1149,157 +1138,146 @@ TokenData g_const_token_data [] = {
 
 
 sint32 ConstDB::ParseConstDB(Token *const_token)
-{ 
-	
-	Assert(const_token); 	
-	sint32 tmp; 
-	
-	if (const_token->GetType() != TOKEN_CONST_PERCENT_LAND) { 
-		c3errors_ErrorDialog  (const_token->ErrStr(), "Expected a value");
-		return FALSE; 
-	} else { 
-		if (const_token->Next() != TOKEN_NUMBER) {  
-			c3errors_ErrorDialog  (const_token->ErrStr(), "Expected a value"); 
-			return FALSE; 
-		} else { 
-			const_token->GetNumber(tmp); 
-		} 
-	} 
+{
 
-    if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;	
+	Assert(const_token);
+	sint32 tmp;
+
+	if (const_token->GetType() != TOKEN_CONST_PERCENT_LAND) {
+		c3errors_ErrorDialog  (const_token->ErrStr(), "Expected a value");
+		return FALSE;
+	} else {
+		if (const_token->Next() != TOKEN_NUMBER) {
+			c3errors_ErrorDialog  (const_token->ErrStr(), "Expected a value");
+			return FALSE;
+		} else {
+			const_token->GetNumber(tmp);
+		}
+	}
+
+    if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_land = tmp * 0.01f;
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_CONTINENT, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_CONTINENT, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_continent = tmp * 0.01f;
-	
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_HOMOGENOUS, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_HOMOGENOUS, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_homogenous = tmp * 0.01f;
-	
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN0, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN0, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_meridf[0] = tmp * 0.01f;
 
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN1, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN1, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_meridf[1] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN2, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN2, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_meridf[2] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN3, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN3, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_meridf[3] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN4, tmp)) return FALSE;            
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN4, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_meridf[4] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN5, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MERIDIAN5, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_meridf[5] = tmp * 0.01f;
-	
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELA, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELA, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_hlevelf[0] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELB, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELB, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_hlevelf[1] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELC, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELC, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_hlevelf[2] = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELD, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_HLEVELD, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_hlevelf[3] = tmp * 0.01f;
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_FORESTWET, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_FORESTWET, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_forestWet = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_GRASSWET, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_GRASSWET, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_grassWet = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PLAINSWET, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PLAINSWET, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_plainsWet = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_DESERTWET, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_DESERTWET, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_desertWet = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_FORESTDRY, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_FORESTDRY, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_forestDry = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_GRASSDRY, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_GRASSDRY, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_grassDry = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PLAINSDRY, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PLAINSDRY, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_plainsDry = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_DESERTDRY, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_DESERTDRY, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_desertDry = (sint8)tmp;
 
-	if (!token_ParseValNext(const_token, TOKEN_CONST_WHITEWARM, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_WHITEWARM, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_whiteWarm = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_BROWNWARM, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_BROWNWARM, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_brownWarm = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_TEMPERATURERANGEADJUSTWARM, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_TEMPERATURERANGEADJUSTWARM, tmp)) return FALSE;
 
     m_temperatureRangeAdjustWarm = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_WHITECOLD, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_WHITECOLD, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_whiteCold = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_BROWNCOLD, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_BROWNCOLD, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_brownCold = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_TEMPERATURERANGEADJUSTCOLD, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_TEMPERATURERANGEADJUSTCOLD, tmp)) return FALSE;
 
     m_temperatureRangeAdjustCold = (sint8)tmp;
 
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESSFEWGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESSFEWGOODS, tmp)) return FALSE;
 
     m_richnessFewgoods = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLWIDTHFEWGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLWIDTHFEWGOODS, tmp)) return FALSE;
 
     m_riverCellWidthFewgoods = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLHEIGHTFEWGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLHEIGHTFEWGOODS, tmp)) return FALSE;
 
     m_riverCellHeightFewgoods = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESSMANYGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESSMANYGOODS, tmp)) return FALSE;
 
     m_richnessManygoods = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLWIDTHMANYGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLWIDTHMANYGOODS, tmp)) return FALSE;
 
     m_riverCellWidthManygoods = (sint8)tmp;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLHEIGHTMANYGOODS, tmp)) return FALSE;    
-
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVERCELLHEIGHTMANYGOODS, tmp)) return FALSE;
 
     m_riverCellHeightManygoods = (sint8)tmp;
 
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_MOUNTAIN, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_MOUNTAIN, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_mountain = tmp * 0.01f;
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_CELL, m_mount_cell)) return FALSE;    
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_HILLS, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_CELL, m_mount_cell)) return FALSE;
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_HILLS, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_hills = tmp * 0.01;
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_SPREAD, m_mountain_spread)) return FALSE;    
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_LENGTH, m_mountain_length)) return FALSE;    
-	if (!token_ParseValNext(const_token, TOKEN_CONST_GLACIER_EXTENT, m_glacier)) return FALSE;    
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_VOLCANO, m_volcano)) return FALSE;    
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_TRENCH, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_SPREAD, m_mountain_spread)) return FALSE;
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_MOUNTAIN_LENGTH, m_mountain_length)) return FALSE;
+	if (!token_ParseValNext(const_token, TOKEN_CONST_GLACIER_EXTENT, m_glacier)) return FALSE;
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_VOLCANO, m_volcano)) return FALSE;
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_TRENCH, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
 	m_trench = tmp * 0.01;
 	if(!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_FOREST, m_forest)) return FALSE;
@@ -1309,31 +1287,29 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_WHITE, m_whitePercent)) return FALSE;
 	if(!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_BROWN, m_brownPercent)) return FALSE;
 	if(!token_ParseValNext(const_token, TOKEN_CONST_TEMPERATURE_RANGE_ADJUST, m_temperatureRangeAdjust)) return FALSE;
-	
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_NICE_RADIUS, m_nice_r)) return FALSE;    
-	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_RIVER, tmp)) return FALSE;    
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_NICE_RADIUS, m_nice_r)) return FALSE;
+	if (!token_ParseValNext(const_token, TOKEN_CONST_PERCENT_RIVER, tmp)) return FALSE;
     if ((tmp < 0) || (100 < tmp)) c3errors_ErrorDialog  (const_token->ErrStr(), "invalid range for percent") ;
     m_river = tmp * 0.01f;
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVER_LEN, m_river_len)) return FALSE;    
-	
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RIVER_LEN, m_river_len)) return FALSE;
+
 	if(!token_ParseValNext(const_token, TOKEN_CONST_RIVER_CELL_WIDTH, m_river_cell_width)) return FALSE;
 	if(!token_ParseValNext(const_token, TOKEN_CONST_RIVER_CELL_HEIGHT, m_river_cell_height)) return FALSE;
 
-	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESS, m_richness)) return FALSE;    
-	
-	if (!token_ParseValNext(const_token, TOKEN_CONST_CHANCE_LOST_AT_SEA, m_lost_at_sea)) return FALSE;    
-	if (!token_ParseValNext(const_token, TOKEN_CONST_VET_COEF, tmp)) return FALSE;    
+	if (!token_ParseValNext(const_token, TOKEN_CONST_RICHNESS, m_richness)) return FALSE;
+
+	if (!token_ParseValNext(const_token, TOKEN_CONST_CHANCE_LOST_AT_SEA, m_lost_at_sea)) return FALSE;
+	if (!token_ParseValNext(const_token, TOKEN_CONST_VET_COEF, tmp)) return FALSE;
 	m_vet_coef = tmp * 0.01f;
 
-	
 	if (!token_ParseValNext(const_token, TOKEN_CONST_REVOLUTION_LEVEL, m_revolution_level)) return FALSE ;
 
-	
 
 
-	
-	
+
+
+
 	if (!token_ParseFloatNext(const_token, TOKEN_CONST_DISCOVERIES_POLLUTION_SIZE_MODIFIER, m_discoveries_pollution_size_modifier)) return FALSE ;
 	if (!token_ParseFloatNext(const_token, TOKEN_CONST_DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER, m_discoveries_pollution_production_modifier)) return FALSE ;
 
@@ -1353,24 +1329,22 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
     if (!token_ParseFloatNext(const_token, TOKEN_CONST_MAX_EMPIRE_DIST_COST, m_max_empire_dist_cost)) return FALSE ;
     if (!token_ParseFloatNext(const_token, TOKEN_CONST_HAPPINESS_LAUNCH_COST, m_happiness_launch_cost)) return FALSE ;
     if (!token_ParseFloatNext(const_token, TOKEN_CONST_UNIT_WORKDAY, m_unit_workday)) return FALSE ;
-    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_WORKDAY, m_base_workday)) return FALSE ;        
+    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_WORKDAY, m_base_workday)) return FALSE ;
 
     if (!token_ParseFloatNext(const_token, TOKEN_CONST_UNIT_WAGES, m_unit_wages)) return FALSE ;
-    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_WAGES, m_base_wages)) return FALSE ;        
+    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_WAGES, m_base_wages)) return FALSE ;
 
-    if (!token_ParseFloatNext(const_token, TOKEN_CONST_UNIT_RATIONS, m_unit_rations)) return FALSE ;        
-    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_RATIONS, m_base_rations)) return FALSE ;        
+    if (!token_ParseFloatNext(const_token, TOKEN_CONST_UNIT_RATIONS, m_unit_rations)) return FALSE ;
+    if (!token_ParseFloatNext(const_token, TOKEN_CONST_BASE_RATIONS, m_base_rations)) return FALSE ;
 
     if (!token_ParseFloatNext(const_token, TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, m_change_currently_building_item_penalty)) return FALSE ;
 
-    m_change_currently_building_item_penalty = min(1.0, max(0.0, 1.0 - m_change_currently_building_item_penalty * 0.01)); 
+    m_change_currently_building_item_penalty = min(1.0, max(0.0, 1.0 - m_change_currently_building_item_penalty * 0.01));
 
-	
 	if (!token_ParseValNext(const_token, TOKEN_CONST_TARIFF_REDUCTION, m_tariff_reduction)) return FALSE ;
-	
+
 	if (!token_ParseValNext(const_token, TOKEN_CONST_REVOLT_INFLUENCE_DISTANCE, m_revolt_influence_distance)) return FALSE ;
 
-	
 	if (!token_ParseValNext(const_token, TOKEN_CONST_PACT_CAPTURE_CITY_EXPIRES, m_pact_capture_city_expires)) return (FALSE) ;
 
 	if (!token_ParseValNext(const_token, TOKEN_CONST_CEASE_FIRE_EXPIRES, m_cease_fire_expires)) return (FALSE) ;
@@ -1382,26 +1356,25 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if (!token_ParseValNext(const_token, TOKEN_CONST_LEAVE_OUR_LANDS_EXPIRES, m_leave_our_lands_expires)) return (FALSE) ;
 	if (!token_ParseValNext(const_token, TOKEN_CONST_REDUCE_POLLUTION_EXPIRES, m_reduce_pollution_expires)) return (FALSE) ;
 
-
 	if (!token_ParseValNext(const_token, TOKEN_CONST_PATIENCE_LOST_PER_REQUEST, m_patience_lost_per_request)) return (FALSE) ;
 	if (!token_ParseValNext(const_token, TOKEN_CONST_PATIENCE_REGAINED_PER_ROUND, m_patience_regained_per_round)) return (FALSE) ;
 	if (!token_ParseFloatNext(const_token, TOKEN_CONST_REGAIN_PATIENCE_PROBABILITY, m_patience_regain_probability)) return (FALSE) ;
 	if (!token_ParseValNext(const_token, TOKEN_CONST_PATIENCE_LOST_THRESHOLD, m_patience_lost_threshold)) return (FALSE) ;
 
-    sint32 utmp; 
+    sint32 utmp;
 
   	if (!token_ParseValNext(const_token, TOKEN_GOAL_TIME_SLICE, utmp)) return (FALSE) ;
-    m_goal_time_slice = uint32(utmp); 
+    m_goal_time_slice = uint32(utmp);
    	if (!token_ParseValNext(const_token, TOKEN_MAX_TIME_SLICE, utmp)) return (FALSE) ;
-    m_max_time_slice = uint32(utmp); 
+    m_max_time_slice = uint32(utmp);
    	if (!token_ParseValNext(const_token, TOKEN_TOTAL_TIME_SLICE, utmp)) return (FALSE) ;
-    m_total_time_slice = uint32(utmp); 
+    m_total_time_slice = uint32(utmp);
 
 	if(!token_ParseFloatNext(const_token, TOKEN_ENTRENCHMENT_BONUS, m_entrenchment_bonus)) return (FALSE);
-	
+
 	if(!token_ParseValNext(const_token, TOKEN_PARADROP_DISTANCE, utmp)) return (FALSE);
 	m_paradrop_distance = uint32(utmp);
-	
+
 	if(!token_ParseValNext(const_token, TOKEN_PARADROP_SUCCESS_PERCENT, utmp)) return FALSE;
 	m_paradrop_success_percentage = uint32(utmp);
 
@@ -1465,7 +1438,7 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 
 	if(!token_ParseValNext(const_token, TOKEN_NANO_INFECTION_TURNS,
 						   m_nano_infection_turns)) return FALSE;
-	
+
 	if(!token_ParseFloatNext(const_token, TOKEN_BIO_INFECTION_SPREAD_CHANCE,
 							 m_bio_infection_spread_chance)) return FALSE;
 	if(!token_ParseFloatNext(const_token, TOKEN_NANO_INFECTION_SPREAD_CHANCE,
@@ -1538,7 +1511,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseFloatNext(const_token, TOKEN_WONDER_RUSH_MODIFIER,
 							 m_wonder_rush_modifier)) return FALSE;
 
-
 	if(!token_ParseFloatNext(const_token, TOKEN_BUILDING_PRODUCTION_TO_VALUE_MODIFIER,
 							 m_building_production_to_value_modifier)) return FALSE;
 
@@ -1551,7 +1523,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_INDUSTRIAL_POLLUTION_WARNING_THRESHOLD, m_industrialPollutionWarningThreshold))
 		return (FALSE) ;
 
-
 	if (!token_ParseValNext(const_token, TOKEN_VERY_HAPPY_THRESHOLD, m_veryHappyThreshold))
 		return (FALSE) ;
 
@@ -1561,8 +1532,8 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 							m_riot_level)) return FALSE;
 
 	if (!token_ParseFloatNext
-            (const_token, 
-             TOKEN_POWER_POINTS_TO_MATERIALS, 
+            (const_token,
+             TOKEN_POWER_POINTS_TO_MATERIALS,
 			 m_power_points_to_materials
             )
        )
@@ -1574,7 +1545,7 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 
 	if(!token_ParseValNext(const_token, TOKEN_GOLD_FROM_PIRACY,
 						   m_gold_from_piracy)) return FALSE;
-	
+
 	if(!token_ParseValNext(const_token, TOKEN_NO_PIRACY_EXPIRES, m_no_piracy_expires))
 		return (FALSE) ;
 
@@ -1604,10 +1575,8 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 
 	m_pollution_forces_government_collapse = utmp ;
 
-
 	if (!token_ParseFloatNext(const_token, TOKEN_FOOD_TO_POLLUTION_COEF, m_food_to_pollution_coef))
 		return (FALSE) ;
-
 
 	if(!token_ParseValNext(const_token, TOKEN_EMANCIPATION_UNHAPPINESS_TURNS,
 							 m_emancipation_unhappiness_turns))
@@ -1619,7 +1588,6 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseFloatNext(const_token, TOKEN_CAPTURE_CITY_ADVANCE_CHANCE,
 							  m_capture_city_advance_chance))
 		return FALSE;
-
 
 	if(!token_ParseFloatNext(const_token, TOKEN_CITY_HEAL_RATE,
 							 m_city_heal_rate))
@@ -1710,11 +1678,10 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 						   m_slaves_per_military_unit))
 		return FALSE;
 
-	if(!token_ParseValNext(const_token, TOKEN_MIN_ABSOLUTE_START_DISTANCE, 
+	if(!token_ParseValNext(const_token, TOKEN_MIN_ABSOLUTE_START_DISTANCE,
 							m_min_absolute_start_distance))
 		return FALSE;
 
-	
 	if (const_token->Next() != TOKEN_MAP_SIZE_SMALL) return FALSE;
 	if (!ParseMapSize(const_token, m_small_map_size)) return FALSE;
 
@@ -1809,18 +1776,18 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_POLLUTION_CAUSED_BY_NUKE,
 						   m_pollution_caused_by_nuke)) return FALSE;
 
-	(void) ParseOptional(const_token, 
-		                 TOKEN_MAX_MATCH_LIST_CYCLES, 
-		                 m_max_match_list_cycles, 
+	(void) ParseOptional(const_token,
+		                 TOKEN_MAX_MATCH_LIST_CYCLES,
+		                 m_max_match_list_cycles,
                          DEFAULT_MAX_MATCH_LIST_CYCLES
 					    );
-    (void) ParseOptional(const_token, 
+    (void) ParseOptional(const_token,
 		        		 TOKEN_MIN_TURNS_BETWEEN_REVOLT,
 				         m_min_turns_between_revolt,
 					     DEFAULT_MIN_TURNS_BETWEEN_REVOLT
 					    );
 
-	return TRUE; 	
+	return TRUE;
 }
 
 sint32 ConstDB::ParseMapSize(Token *const_token, MapPoint &size)
@@ -1863,8 +1830,7 @@ void ConstDB::GetMapSizeMapPoint(MAPSIZE size, MapPoint &mapPoint)
 sint32 ConstDB_Parse(char *filename, C3DIR dir)
 {
     Token *const_token = new Token(filename, TOKEN_CONST_MAX - TOKEN_MAX, g_const_token_data, dir);
-    sint32 r = g_theConstDB->ParseConstDB(const_token); 
-    delete const_token; 
-    return r; 
+    sint32 r = g_theConstDB->ParseConstDB(const_token);
+    delete const_token;
+    return r;
 }
-

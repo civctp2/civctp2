@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -73,7 +73,7 @@ void sbdserv_destroy(sbdserv_t *sbdserv);
 int sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds);
 
 /*------------------------------------------------------------------------
- Initialize sbdserv for a set of calls to sbdserv_poll. 
+ Initialize sbdserv for a set of calls to sbdserv_poll.
  nsocks is the return value of select.
 
  Call once after each select and before calling sbdserv_poll.
@@ -82,11 +82,11 @@ void sbdserv_startRead(sbdserv_t *sbdserv, int nsocks);
 
 /*------------------------------------------------------------------------
  Handle any new connections, data, or handle state changes.
- rfds should be the same fd_set* that was passed to select as it's 
+ rfds should be the same fd_set* that was passed to select as it's
  second parameter.
 
  After a select (and regardless of whether select times out), call this
- repeatedly until it returns no data or an error. 
+ repeatedly until it returns no data or an error.
 
  Returns the length of data received if any, and returns the data in buf.
  		The caller should call sbdserv_poll again, since multiple handles

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -19,7 +9,6 @@
 #include "c3imageformats.h"
 
 #include "c3memmap.h"
-
 
 
 aui_FileFormat *C3MemMap::GetFileFormat( MBCHAR *filename )

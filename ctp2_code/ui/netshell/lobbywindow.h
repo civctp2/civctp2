@@ -1,38 +1,23 @@
-
-
-
-
-
-
-
-
-
-
- 
 #ifndef __LOBBYWINDOW_H__
 #define __LOBBYWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 #include "ns_string.h"
-
 
 class aui_StringTable;
 class LobbyWindow;
 extern LobbyWindow *g_lobbyWindow;
 
 
-
 #define k_PP_PUBLIC		0
 #define k_PP_PRIVATE	1
-
 
 
 class LobbyWindow : public ns_Window
 {
 public:
-	
+
 	LobbyWindow( AUI_ERRCODE *retval );
 	virtual ~LobbyWindow();
 
@@ -49,7 +34,7 @@ public:
 	void PasswordScreenDone( MBCHAR *password );
 
 
-	
+
 
 	enum CONTROL
 	{
@@ -94,19 +79,16 @@ public:
 
 	friend class WhisperSwitchAction;
 
-
 protected:
 	ns_String	*m_messageLobbyEnter;
 
 	aui_StringTable *m_PPStrings;
 
 	bool wait;
-	
 
-	aui_Action *m_dbActionArray[ 1 ]; 
+	aui_Action *m_dbActionArray[ 1 ];
 
 	AUI_ACTION_BASIC(ChangeButtonAction);
 };
 
-
-#endif 
+#endif

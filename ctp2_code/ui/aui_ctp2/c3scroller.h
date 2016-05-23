@@ -5,19 +5,16 @@
 #ifndef __C3SCROLLER_H__
 #define __C3SCROLLER_H__
 
-
 #include "aui_ranger.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
-
 
 
 class C3Scroller : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	C3Scroller(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -52,8 +49,7 @@ public:
 	BOOL	IsVertical( void ) const { return m_isVertical; }
 
 protected:
-	BOOL	m_isVertical;	
+	BOOL	m_isVertical;
 };
 
-
-#endif 
+#endif

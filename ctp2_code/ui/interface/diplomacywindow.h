@@ -1,4 +1,3 @@
-
 #ifndef DIPLOMACY_WINDOW_H__
 #define DIPLOMACY_WINDOW_H__
 
@@ -12,14 +11,11 @@ class SlicObject;
 class ctp2_TabGroup;
 class ctp2_Tab;
 
-
 class ctp2_Button;
 
 typedef sint32 StringId;
 
-
 #include "diplomattypes.h"
-
 
 #include "ctp2_Menu.h"
 
@@ -31,7 +27,6 @@ enum DW_CREATE_MODE {
 	DW_CREATE_MODE_TREATY,
 	DW_CREATE_MODE_GIFT,
 };
-
 
 
 #define k_DIPWIN_PROPOSALS_RECEIVED      0x001
@@ -59,16 +54,15 @@ class DiplomacyWindow {
 
 	ctp2_TabGroup *m_tabGroup;
 
-	
 	static ctp2_Button	*sm_detailsButton;
 	static ctp2_Button	*sm_warButton;
 	static ctp2_Button	*sm_embargoButton;
 	static ctp2_Button	*sm_messageButton;
 
-	bool m_getRequest; 
-	sint32 m_sendProposal; 
+	bool m_getRequest;
+	sint32 m_sendProposal;
 	DiplomacyArg m_proposalArg;
-	sint32 m_sendExchange; 
+	sint32 m_sendExchange;
 	DiplomacyArg m_exchangeArg;
 	bool m_sendCounter;
 
@@ -89,14 +83,13 @@ class DiplomacyWindow {
 	static AUI_ERRCODE Display();
 	static AUI_ERRCODE Hide();
 
-	
 	static void GotoTab(sint32 tab);
 
 	static bool IsShown();
 
 	void ShowInitialSections();
 	void ShowSection(MBCHAR *section, bool show);
-	
+
 	void ShowSections(uint32 sections);
 
 	void Update();
@@ -116,7 +109,6 @@ class DiplomacyWindow {
 	StringId GetProposalSummaryText(sint32 proposal, DIPLOMATIC_TONE tone, bool isExchange, bool useReciprocal);
 	static bool AddProposalData(SlicObject &so, sint32 proposal, DiplomacyArg arg);
 	static bool AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg);
-
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ProposalsReceived(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -184,7 +176,6 @@ class DiplomacyWindow {
 	static void SendMessage(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Details(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	
 	static void TabPanelActionCallback(aui_Control *control, uint32 action,
 		uint32 data, void *cookie);
 
@@ -195,7 +186,6 @@ class DiplomacyWindow {
 
 	void SetCreateMode(DW_CREATE_MODE mode);
 
-	
 	static void EnableButtons(BOOL enable, sint32 player = 0);
 };
 

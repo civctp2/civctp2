@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
@@ -73,7 +73,6 @@
 
 #include "MoveFlags.h"
 
-
 #include "ResourceRecord.h"
 
 #include "terrainutil.h"
@@ -113,15 +112,15 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 extern MapPoint g_mp_size;
 
 World::World(const MapPoint m, const int xw, const int yw)
-:   
+:
     m_isYwrap               (yw),
     m_isXwrap               (xw),
     m_mapGenerator          (MAP_GENERATOR_PLUGIN),
     m_size                  (m),
-    m_map                   (NULL), 
-    m_water_next_too_land   (NULL), 
-    m_land_next_too_water   (NULL),  
-    m_water_size            (NULL), 
+    m_map                   (NULL),
+    m_water_next_too_land   (NULL),
+    m_land_next_too_water   (NULL),
+    m_water_size            (NULL),
     m_land_size             (NULL),
     m_cellArray             (NULL),
     m_tmpx                  (NULL),
@@ -131,9 +130,9 @@ World::World(const MapPoint m, const int xw, const int yw)
     m_current_plugin        (NULL),
     m_distanceQueue         (NULL),
     A_star_heuristic        (NULL)
-{ 
-    Assert(0 < m_size.x); 
-    Assert(0 < m_size.y); 
+{
+    Assert(0 < m_size.x);
+    Assert(0 < m_size.y);
 	AllocateMap();
 
     // Ugly
@@ -152,33 +151,32 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 	BOOL worldIsGood = TRUE;
 
 	do {
-		
+
 		GenerateRandMap(player_start_list);
-		
+
 		SetAllMoveCost();
-		
-		
+
 		XY_Coords.Init(m_size.y, m_size.x);
 
         delete A_star_heuristic;
 		A_star_heuristic = new A_Star_Heuristic_Cost
-								(m_size.y, 
-								 m_size.x, 
-								 m_isYwrap ? true : false, 
+								(m_size.y,
+								 m_size.x,
+								 m_isYwrap ? true : false,
 								 m_isXwrap ? true : false
 								);
-		m_continents_are_numbered= FALSE; 
-	
-		NumberContinents(); 
-		
+		m_continents_are_numbered= FALSE;
+
+		NumberContinents();
+
 		CalcChokePoints();
-		
+
 		sint32 numFound;
 		FindPlayerStart(player_start_list, numFound, ignoreTutorialRules, player_start_score);
-		
+
 		worldIsGood = TRUE;
 
-		if(numFound < 3 || 
+		if(numFound < 3 ||
 		   (g_network.IsNetworkLaunch() && g_network.IsLaunchHost() &&
 			numFound < g_network.GetNumHumanPlayers())) {
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules) {
@@ -199,7 +197,7 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 			}
 		}
 
-		if (worldIsGood) 
+		if (worldIsGood)
         {
             if (0 == s_randomGenerator->Release())
             {
@@ -217,18 +215,16 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 		}
 	} while(!worldIsGood);
 
-   
 	ClearScratch();
 }
 
-
 World::World(CivArchive &archive, BOOL fromMapFile)
-:   
+:
     m_mapGenerator          (MAP_GENERATOR_PLUGIN),
-    m_map                   (NULL), 
-    m_water_next_too_land   (NULL), 
-    m_land_next_too_water   (NULL),  
-    m_water_size            (NULL), 
+    m_map                   (NULL),
+    m_water_next_too_land   (NULL),
+    m_land_next_too_water   (NULL),
+    m_water_size            (NULL),
     m_land_size             (NULL),
     m_cellArray             (NULL),
     m_tmpx                  (NULL),
@@ -245,30 +241,28 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	else
 	    Serialize(archive) ;
 
-	
 	g_mp_size = m_size;
 
-	
 	XY_Coords.Init(m_size.y, m_size.x);
 
 	A_star_heuristic = new A_Star_Heuristic_Cost
-							(m_size.y, 
-							 m_size.x, 
-							 m_isYwrap, 
+							(m_size.y,
+							 m_size.x,
+							 m_isYwrap,
 							 m_isXwrap
 							);
 }
 
 World::~World()
 {
-	FreeMap();  // m_map, m_tmpx, m_cellArray, m_water_next_too_land, 
+	FreeMap();  // m_map, m_tmpx, m_cellArray, m_water_next_too_land,
                 // m_land_next_too_water, m_water_size, m_land_size,
                 // m_tileInfoStorage
 	delete m_distanceQueue;
 	delete A_star_heuristic;
 
 	delete [] m_goodValue;
-	
+
 	if (m_current_plugin)
 	{
 #ifndef USE_COM_REPLACEMENT
@@ -289,7 +283,7 @@ void World::FreeMap()
 		else
 			delete [] m_map[x];
 	}
-	
+
 	delete [] m_tmpx;
     m_tmpx      = NULL;
 	delete [] m_cellArray;
@@ -302,10 +296,10 @@ void World::FreeMap()
     m_water_next_too_land = NULL;
     delete m_land_next_too_water;
     m_land_next_too_water = NULL;
-    delete m_water_size; 
-    m_water_size = NULL; 
-    delete m_land_size; 
-    m_land_size = NULL; 
+    delete m_water_size;
+    m_water_size = NULL;
+    delete m_land_size;
+    m_land_size = NULL;
 }
 
 void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
@@ -313,7 +307,7 @@ void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
 	FreeMap();
 	m_size.x = sx;
 	m_size.y = sy;
-    g_mp_size = m_size; 
+    g_mp_size = m_size;
 	BOOL yWrapOk = sy % sx == 0;
 	m_isYwrap = yWrapOk ? yWrap : FALSE;
 	m_isXwrap = xWrap;
@@ -323,66 +317,64 @@ void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
 void World::AllocateMap()
 {
     sint32 i, x, y;
-    CellYarray *tmpx; 
+    CellYarray *tmpx;
     CellPtr *tmpy;
-    
+
     AllocateTileInfoStorage();
 
 	m_cellArray = new Cell[m_size.x * m_size.y];
 
-	
 
-    
-    Assert (2 * k_MAP_WRAPAROUND <= m_size.x); 
-    Assert (2 * k_MAP_WRAPAROUND <= m_size.y); 
 
-	tmpx = new CellYarray[m_size.x + 2 * k_MAP_WRAPAROUND]; 
+
+    Assert (2 * k_MAP_WRAPAROUND <= m_size.x);
+    Assert (2 * k_MAP_WRAPAROUND <= m_size.y);
+
+	tmpx = new CellYarray[m_size.x + 2 * k_MAP_WRAPAROUND];
 	m_tmpx = tmpx;
 
-	m_map = &(tmpx[k_MAP_WRAPAROUND]); 
+	m_map = &(tmpx[k_MAP_WRAPAROUND]);
 	Assert(m_map);
-        
-	
-	for(x=0; x<m_size.x; x++) { 
-		if (m_isYwrap) { 
+
+	for(x=0; x<m_size.x; x++) {
+		if (m_isYwrap) {
 			tmpy = new CellPtr[m_size.y + 2 * k_MAP_WRAPAROUND];
-			Assert(tmpy); 
+			Assert(tmpy);
 			m_map[x] = &(tmpy[k_MAP_WRAPAROUND]);
-		} else { 
+		} else {
 			m_map[x] = new CellPtr[m_size.y];
 		}
-		
-		for (y=0; y<m_size.y; y++) { 
+
+		for (y=0; y<m_size.y; y++) {
 			m_map[x][y] = &m_cellArray[y * m_size.x + x];
-			
-			
+
 		}
-    }  
-    
-	for (i=0; i< k_MAP_WRAPAROUND; i++)  { 
-		m_map[m_size.x + i] = m_map[i]; 
-	} 
-	
-	for (i=-1; - k_MAP_WRAPAROUND <= i; i--) { 
-		m_map[i] = m_map[m_size.x + i]; 
+    }
+
+	for (i=0; i< k_MAP_WRAPAROUND; i++)  {
+		m_map[m_size.x + i] = m_map[i];
 	}
-	
-	if (m_isYwrap) { 
-		for (x=0; x<m_size.x; x++) { 
-			for (i=0; i< k_MAP_WRAPAROUND; i++)  { 
-				m_map[x][m_size.y + i] = m_map[x][i]; 
-			} 
-			
-			for (i=-1; - k_MAP_WRAPAROUND <= i; i--) { 
-				m_map[x][i] = m_map[x][m_size.y + i]; 
+
+	for (i=-1; - k_MAP_WRAPAROUND <= i; i--) {
+		m_map[i] = m_map[m_size.x + i];
+	}
+
+	if (m_isYwrap) {
+		for (x=0; x<m_size.x; x++) {
+			for (i=0; i< k_MAP_WRAPAROUND; i++)  {
+				m_map[x][m_size.y + i] = m_map[x][i];
+			}
+
+			for (i=-1; - k_MAP_WRAPAROUND <= i; i--) {
+				m_map[x][i] = m_map[x][m_size.y + i];
 			}
 		}
 	}
 
     m_water_next_too_land = new DynamicArray<DAsint32>;
     m_land_next_too_water = new DynamicArray<DAsint32>;
-    m_water_size = new DynamicArray<sint32>; 
-    m_land_size = new DynamicArray<sint32>; 
+    m_water_size = new DynamicArray<sint32>;
+    m_land_size = new DynamicArray<sint32>;
 }
 
 
@@ -394,7 +386,7 @@ void World::AllocateMap()
 
 
 
-void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS]) 
+void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 {
 	IMapGenerator *firstPass = LoadMapPlugin(0);
@@ -402,14 +394,14 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	if(!firstPass) {
 		return;
 	}
-	
+
 	sint8 *map = new sint8[m_size.y * m_size.x];
 	sint32 totalsize = m_size.y * m_size.x;
 	sint32 histogramarray[256];
 	sint32 *histogram = &histogramarray[128];
 	sint32 x, y;
 	sint32 h;
-			
+
 	sint32 numSettings;
 	const double *settings;
 	const MapRecord *mapRec = g_theMapDB->FindBestMapSizeMatch(m_size.x, m_size.y);
@@ -428,8 +420,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 	IMapGenerator *filterPass = LoadMapPlugin(1);
 	if(filterPass) {
-		
-		
+
 		double pass1Settings[2] = {100.0, 5.0};
 		filterPass->Generate(map, m_size.x, m_size.y, s_randomGenerator,
 							 &pass1Settings[0], 2);
@@ -459,7 +450,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-	
 	for(h = 127, count = 0; h > waterLevel; h--) {
 		count += histogram[h];
 		if(count > ((totalCells * landPercent) * mountainPercent) / 10000) {
@@ -483,14 +473,13 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		for(x = 0; x < m_size.x; x++) {
 			MapPoint from(x,y);
 			MapPoint to;
-			
+
 			{
 				to.y = from.y;
 				to.x = from.x - from.y/2;
 				while(to.x<0)
 					to.x+=m_size.x;
 			}
-			
 
 			m_map[to.x][to.y]->m_env = 0;
 			if(map[from.y * m_size.x + from.x] >= mountainLevel) {
@@ -509,8 +498,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-			
-	
+
 	IMapGenerator *secondPass = LoadMapPlugin(2);
 	if(!secondPass) {
 		delete [] map;
@@ -522,7 +510,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	sint8 *wetmap = new sint8[m_size.y * m_size.x];
 	sint32 wethistogramarray[256];
 	sint32 *wethistogram = &wethistogramarray[128];
-	
+
 	double homogeneity = 0.9 * g_theProfileDB->PercentHomogenous() + 0.05;
 	GetMapAndHistogram(secondPass, wetmap, wethistogram,
 					   &homogeneity, 1);
@@ -547,13 +535,12 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-	
-	
+
 	sint32 forestPercent = g_theProfileDB->PercentForest();
 	sint32 grassPercent  = g_theProfileDB->PercentGrass();
 	sint32 plainsPercent = g_theProfileDB->PercentPlains();
 	sint32 desertPercent = g_theProfileDB->PercentDesert();
-			
+
 #define k_INVALID_LEVEL -1000
 	sint32 forestLevel = k_INVALID_LEVEL,
 		grassLevel = k_INVALID_LEVEL,
@@ -597,14 +584,13 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		for(x = 0; x < m_size.x; x++) {
 			MapPoint from(x,y);
 			MapPoint to;
-			
+
 			{
 				to.y = from.y;
 				to.x = from.x - from.y/2;
 				while(to.x<0)
 					to.x+=m_size.x;
 			}
-			
 
 			if(m_map[to.x][to.y]->m_terrain_type == TERRAIN_PLAINS) {
 				if(wetmap[from.y * m_size.x + from.x] >= forestLevel) {
@@ -642,12 +628,12 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	sint8* temperatureMap = new sint8[m_size.y * m_size.x];
 	sint32 temperatureHistArray[256];
 	sint32 *temperatureHist = &temperatureHistArray[128];
-	
+
 	double pass3Settings[1] = { 0.5 };
 	GetMapAndHistogram(thirdPass, temperatureMap, temperatureHist,
 					   &pass3Settings[0], 1);
 	TemperatureFilter(temperatureMap, temperatureHist);
-			
+
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 	MapDump ("logs" FILE_SEP "TempMap.bmp", temperatureMap, m_size.x, m_size.y);
 #endif
@@ -677,19 +663,17 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	Assert(brownLevel != k_INVALID_LEVEL);
 	Assert(whiteLevel < brownLevel);
 
-			
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			MapPoint from(x,y);
 			MapPoint to;
-			
+
 			{
 				to.y = from.y;
 				to.x = from.x - from.y/2;
 				while(to.x<0)
 					to.x+=m_size.x;
 			}
-			
 
 			if(temperatureMap[y * m_size.x + x] <= whiteLevel) {
 				sint32 tt = m_map[to.x][to.y]->m_terrain_type;
@@ -714,9 +698,9 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 					m_map[to.x][to.y]->m_terrain_type = TERRAIN_BROWN_HILL;
 				} else if(tt == TERRAIN_MOUNTAIN) {
 					m_map[to.x][to.y]->m_terrain_type = TERRAIN_BROWN_MOUNTAIN;
-				} 
+				}
 			} else {
-				
+
 				if(m_map[to.x][to.y]->m_terrain_type == TERRAIN_DESERT) {
 					m_map[to.x][to.y]->m_terrain_type = TERRAIN_PLAINS;
 				}
@@ -724,11 +708,10 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-	
 	RemoveIsolatedWater();
 
 #define IS_SHALLOW(x) ( ((x) == TERRAIN_WATER_SHALLOW) || ((x) == TERRAIN_WATER_KELP) || ((x) == TERRAIN_WATER_REEF) )
-	
+
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(IS_SHALLOW(m_map[x][y]->m_terrain_type) && IsNextToLand(x,y)) {
@@ -739,14 +722,12 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 	MapPoint neighbor, curpos;
 
-	
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(IS_SHALLOW(m_map[x][y]->m_terrain_type) &&
 			   !IsNextTo(TERRAIN_WATER_BEACH, x, y)) {
 
-				
-				
+
 				curpos.x = x;
 				curpos.y = y;
 				sint32 d;
@@ -767,7 +748,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-	
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(IS_SHALLOW(m_map[x][y]->m_terrain_type) &&
@@ -778,7 +758,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 	NewGenerateRivers(map, wetmap);
 	GenerateDeepWater();
-	
+
 	GenerateVolcano();
 
 	thirdPass->Release();
@@ -789,7 +769,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	delete [] temperatureMap;
 
     GenerateGoodyHuts();
-    GenerateGoods(); 
+    GenerateGoods();
 }
 
 
@@ -825,14 +805,13 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 void World::GenerateGoods()
 
 {
-	sint32 x, y; 
-	sint32 ox, oy;    
+	sint32 x, y;
+	sint32 ox, oy;
 	sint32 b, a;
 	sint32 c;
-   
+
 	ClearScratch();
 
-   
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			MapPoint center(x, y);
@@ -850,74 +829,71 @@ void World::GenerateGoods()
 		}
 	}
 
-	if (90 < g_theProfileDB->PercentRichness()) { 
-		b = 1; 
-		a = 2; 
-	} else if (80 < g_theProfileDB->PercentRichness()) { 
-		b = 2; 
-		a = 3; 
-	} else if (65 < g_theProfileDB->PercentRichness()) { 
-		b = 2; 
-		a = 4; 
-	} else if (45 < g_theProfileDB->PercentRichness()) { 
-		b = 2; 
-		a = 5; 
-	} else if (35 < g_theProfileDB->PercentRichness()) { 
-		b = 3; 
-		a = 6; 
+	if (90 < g_theProfileDB->PercentRichness()) {
+		b = 1;
+		a = 2;
+	} else if (80 < g_theProfileDB->PercentRichness()) {
+		b = 2;
+		a = 3;
+	} else if (65 < g_theProfileDB->PercentRichness()) {
+		b = 2;
+		a = 4;
+	} else if (45 < g_theProfileDB->PercentRichness()) {
+		b = 2;
+		a = 5;
+	} else if (35 < g_theProfileDB->PercentRichness()) {
+		b = 3;
+		a = 6;
 	} else if (20 < g_theProfileDB->PercentRichness()) {
-		b = 3; 
-		a = 7; 
-	} else if (2 < g_theProfileDB->PercentRichness()){ 
-		b = 4; 
+		b = 3;
+		a = 7;
+	} else if (2 < g_theProfileDB->PercentRichness()){
+		b = 4;
 		a = 8;
-	} else { 
-		return; 
-	} 
-   
-	c = b + a; 
+	} else {
+		return;
+	}
+
+	c = b + a;
 
 	sint32 minAdjacent = g_theConstDB->GetMinLikeTilesForGood();
 
 	for (ox = b; ox + a < m_size.x ; ox += c) {
 		for (oy = b; oy + a < m_size.y ; oy += c) {
-			x = ox + g_rand->Next(a); 
-			y = oy + g_rand->Next(a); 
-		   
+			x = ox + g_rand->Next(a);
+			y = oy + g_rand->Next(a);
+
 			if(GetCell(x, y)->GetScratch() >= minAdjacent) {
-				SetRandomGood(x, y); 
+				SetRandomGood(x, y);
 			}
 		}
-	   
-		
-		if (oy < m_size.y) { 
+
+		if (oy < m_size.y) {
 			x = ox + g_rand->Next(a);
 			y = oy + g_rand->Next(m_size.y - oy);
 			if(GetCell(x, y)->GetScratch() >= minAdjacent) {
-				SetRandomGood(x, y); 
+				SetRandomGood(x, y);
 			}
 		}
 	}
-   
+
 	sint32 r;
-	r = m_size.x - ox; 
-	if (0 < r) { 
-      
-		
+	r = m_size.x - ox;
+	if (0 < r) {
+
 		for (oy = b; oy + a < m_size.y ; oy += c) {
-			x = ox + g_rand->Next(r); 
+			x = ox + g_rand->Next(r);
 			y = oy + g_rand->Next(a);
 			if(GetCell(x, y)->GetScratch() >= minAdjacent) {
-				SetRandomGood(x, y); 
+				SetRandomGood(x, y);
 			}
 		}
-	   
-		
-		if (oy < m_size.y) { 
+
+		if (oy < m_size.y) {
 			x = ox + g_rand->Next(r);
 			y = oy + g_rand->Next(m_size.y - oy);
 			if(GetCell(x, y)->GetScratch() >= minAdjacent) {
-				SetRandomGood(x, y); 
+				SetRandomGood(x, y);
 			}
 		}
 	}
@@ -957,7 +933,6 @@ void World::ComputeGoodsValues()
 
 	sint32 i;
 
-	
 	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
 		if(goodCounts[i] > maxCount) {
 			maxCount = goodCounts[i];
@@ -967,7 +942,7 @@ void World::ComputeGoodsValues()
 		if((goodCounts[i] > 0) && (goodCounts[i] < minCount)) {
 			minCount = goodCounts[i];
 			minGood = i;
-		}		
+		}
 	}
 
 	double valueDiff = g_theConstDB->GetMaxGoodValue() - g_theConstDB->GetMinGoodValue();
@@ -977,12 +952,12 @@ void World::ComputeGoodsValues()
 
 	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
 		if(goodCounts[i] <= 0) {
-			
+
 			m_goodValue[i] = g_theConstDB->GetMaxGoodValue() + 1;
 		} else {
             // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
 			double percent = double(goodCounts[i]) / double(maxCount);
-			
+
 			m_goodValue[i] = g_theConstDB->GetMinGoodValue() +
 				((1.0 - percent) * double(valueDiff));
 		}
@@ -1004,118 +979,117 @@ void World::ComputeGoodsValues()
 
 
 
-sint32 World::IsNextToLand(const sint32 i, const sint32 j) 
+sint32 World::IsNextToLand(const sint32 i, const sint32 j)
 
-{  
-    
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
+{
+
+    MapPoint pos, n;
+
+    pos.Set(i, j);
+
     if(pos.GetNeighborPosition(NORTH, n)) {
-	   if (IsLand(n) || IsMountain(n)) { 
-		   return TRUE; 
+	   if (IsLand(n) || IsMountain(n)) {
+		   return TRUE;
 	   }
 	}
-	
+
     if(pos.GetNeighborPosition(NORTHWEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
 	if(pos.GetNeighborPosition(NORTHEAST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTH, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTHWEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTHEAST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(WEST, n)) {
-		if (IsLand(n) || IsMountain(n)) { 
-			return TRUE; 
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(EAST, n)) {
 		if (IsLand(n) || IsMountain(n)) {
-			return TRUE; 
+			return TRUE;
 		}
 	}
 
-    return FALSE; 
+    return FALSE;
 }
 
-BOOL World::GetAdjacentLand(MapPoint &pos, MapPoint &land) 
-{  
+BOOL World::GetAdjacentLand(MapPoint &pos, MapPoint &land)
+{
     if(pos.GetNeighborPosition(NORTH, land)) {
-	   if (IsLand(land) || IsMountain(land)) { 
-		   return TRUE; 
+	   if (IsLand(land) || IsMountain(land)) {
+		   return TRUE;
 	   }
 	}
-	
+
     if(pos.GetNeighborPosition(NORTHWEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
 	if(pos.GetNeighborPosition(NORTHEAST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTH, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTHWEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(SOUTHEAST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(WEST, land)) {
-		if (IsLand(land) || IsMountain(land)) { 
-			return TRUE; 
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE;
 		}
 	}
 
     if(pos.GetNeighborPosition(EAST, land)) {
 		if (IsLand(land) || IsMountain(land)) {
-			return TRUE; 
+			return TRUE;
 		}
 	}
 
-    return FALSE; 
+    return FALSE;
 }
-
 
 BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
@@ -1123,16 +1097,16 @@ BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 	for (sint16 dir = 0; dir < NOWHERE; dir++) {
 		if(pos.GetNeighborPosition((WORLD_DIRECTION) dir, water)) {
-			if (IsWater(water)) { 
+			if (IsWater(water)) {
 				water_cont = GetCell(water)->GetContinent();
-				
-				if (GetWaterContinentSize(water_cont) > 25) 
-					return TRUE; 
+
+				if (GetWaterContinentSize(water_cont) > 25)
+					return TRUE;
 			}
 		}
 	}
 
-    return FALSE; 
+    return FALSE;
 }
 
 
@@ -1147,51 +1121,51 @@ BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 
 
-sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y) 
-	{  
+sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y)
+	{
     MapPoint	pos,
 				n ;
-    
+
 	pos.Set(x, y) ;
     if(pos.GetNeighborPosition(NORTH, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(NORTHWEST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(NORTHEAST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(SOUTH, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(SOUTHWEST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(SOUTHEAST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(WEST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	if(pos.GetNeighborPosition(EAST, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
-		
+
 	}
 	return (TRUE) ;
 	}
@@ -1204,39 +1178,39 @@ sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y)
 
 
 
-sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
+sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j)
 
-{ 
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
+{
+    MapPoint pos, n;
+
+    pos.Set(i, j);
+
     if(pos.GetNeighborPosition(NORTH, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTH, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(WEST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
     if(pos.GetNeighborPosition(EAST, n))
-		if (GetCell(n)->m_terrain_type == t) return TRUE; 
+		if (GetCell(n)->m_terrain_type == t) return TRUE;
 
-    return FALSE; 
-  
+    return FALSE;
+
 }
 
 
@@ -1251,76 +1225,74 @@ sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j)
 
 
 
-sint32 World::IsNextToWater(const sint32 i, const sint32 j) 
-{  
-    
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
+sint32 World::IsNextToWater(const sint32 i, const sint32 j)
+{
+
+    MapPoint pos, n;
+
+    pos.Set(i, j);
+
     if(pos.GetNeighborPosition(NORTH, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTH, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(WEST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(EAST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
-    return FALSE; 
+    return FALSE;
 }
 
-sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
-{  
-    
-    MapPoint pos, n; 
-    
-    pos.Set(i, j); 
-   
+sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j)
+{
+
+    MapPoint pos, n;
+
+    pos.Set(i, j);
+
     if(pos.GetNeighborPosition(NORTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(NORTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHWEST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
     if(pos.GetNeighborPosition(SOUTHEAST, n))
-		if (IsWater(n)) return TRUE; 
+		if (IsWater(n)) return TRUE;
 
-    return FALSE; 
+    return FALSE;
 }
-
 
 void World::GenerateDeepWater()
 
-{  
-	sint32 i, j; 
+{
+	sint32 i, j;
 
-	
 	sint32 cur = -1;
 
-	MapPoint tmp; 
-	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k; 
-	BOOL find; 
-	sint32 radius = 2; 
-	sint32 delta = 1; 
+	MapPoint tmp;
+	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k;
+	BOOL find;
+	sint32 radius = 2;
+	sint32 delta = 1;
 
 	sint32 cellWidth, cellHeight;
 	cellWidth = g_theConstDB->RiverCellWidth();
@@ -1333,157 +1305,155 @@ void World::GenerateDeepWater()
 
 			minx += g_rand->Next(cellWidth);
 			miny += g_rand->Next(cellHeight);
-			if (m_map[minx][miny]->m_terrain_type == TERRAIN_WATER_DEEP)  { 
+			if (m_map[minx][miny]->m_terrain_type == TERRAIN_WATER_DEEP)  {
 				m_map[minx][miny]->m_terrain_type = TERRAIN_WATER_RIFT;
-			} 
+			}
 		}
 	}
 
 	ClearScratch();
 
 	find = TRUE;
-	sint32 rcount = 0;  
-	sint32 x, y; 
-	BOOL hot; 
+	sint32 rcount = 0;
+	sint32 x, y;
+	BOOL hot;
 	sint32 oldval;
 	MapPoint pos;
 
-	for (k=0; k<500 && find; k++) { 
+	for (k=0; k<500 && find; k++) {
 
-		find = FALSE; 
-		rmin = -2; 
+		find = FALSE;
+		rmin = -2;
 
-		for (i=0; i<m_size.x; i++) { 
-			for (j=0; j<m_size.y; j++) { 
-				if (m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) { 
+		for (i=0; i<m_size.x; i++) {
+			for (j=0; j<m_size.y; j++) {
+				if (m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) {
 
-					hot = TRUE; 
-					for (x = std::max<sint32>(i-(radius-delta), 0); 
-						 hot &&  x <= std::min<sint32>(m_size.x-1, (i+(radius-delta))); 
+					hot = TRUE;
+					for (x = std::max<sint32>(i-(radius-delta), 0);
+						 hot &&  x <= std::min<sint32>(m_size.x-1, (i+(radius-delta)));
 						 ++x
-						) 
-					{ 
-						for (y = std::max<sint32>(j-(radius-delta), 0); 
-							 hot && y <= std::min<sint32>(m_size.y-1, (j+(radius-delta))); 
+						)
+					{
+						for (y = std::max<sint32>(j-(radius-delta), 0);
+							 hot && y <= std::min<sint32>(m_size.y-1, (j+(radius-delta)));
 							 ++y
 							)
 						{
 
 							if (m_map[x][y]->m_search_count != m_map[i][j]->m_search_count) {
-								hot = FALSE; 
+								hot = FALSE;
 								break;
 							}
-						} 
+						}
 					}
 					if (!hot) {
-						continue; 
+						continue;
 					}
-					pos.Set(i, j); 
+					pos.Set(i, j);
 
 					ocount=0;
-					dcount = 0; 					
+					dcount = 0;
 					if(pos.GetNeighborPosition(NORTH, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++;
 					if(pos.GetNeighborPosition(SOUTH, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++;
 					if(pos.GetNeighborPosition(WEST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++;
 					if(pos.GetNeighborPosition(EAST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) dcount++;
 
 					if(pos.GetNeighborPosition(NORTHEAST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
 					if(pos.GetNeighborPosition(SOUTHEAST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
 					if(pos.GetNeighborPosition(NORTHWEST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
 					if(pos.GetNeighborPosition(SOUTHWEST, tmp))
-						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++; 
+						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
 
-					if ((ocount == 1) && (dcount < 2)){                 
-						rmin = m_map[i][j]->m_terrain_type; 
-						minx = i; 
-						miny = j; 
-						find = TRUE; 
+					if ((ocount == 1) && (dcount < 2)){
+						rmin = m_map[i][j]->m_terrain_type;
+						minx = i;
+						miny = j;
+						find = TRUE;
 					}
 
 				}
 			}
 		}
 
-		if (find) { 
-			m_map[minx][miny]->m_terrain_type = TERRAIN_WATER_RIFT; 
+		if (find) {
+			m_map[minx][miny]->m_terrain_type = TERRAIN_WATER_RIFT;
 
-			oldval =   m_map[minx][miny]->m_search_count; 
+			oldval =   m_map[minx][miny]->m_search_count;
 
-			rcount++; 
-			for (i = std::max<sint32>(minx-(radius), 0); 
-				 i <= std::min<sint32>(m_size.x-1, (minx+(radius))); 
+			rcount++;
+			for (i = std::max<sint32>(minx-(radius), 0);
+				 i <= std::min<sint32>(m_size.x-1, (minx+(radius)));
 				 ++i
-				) 
-			{ 
-				for (j = std::max<sint32>(miny-(radius), 0); 
-					 j <= std::min<sint32>(m_size.y-1, (miny+(radius))); 
+				)
+			{
+				for (j = std::max<sint32>(miny-(radius), 0);
+					 j <= std::min<sint32>(m_size.y-1, (miny+(radius)));
 					 ++j
-					) 
-				{ 
-					if ((m_map[i][j]->m_search_count == oldval) || 
-						(m_map[i][j]->m_search_count == 0)) { 
+					)
+				{
+					if ((m_map[i][j]->m_search_count == oldval) ||
+						(m_map[i][j]->m_search_count == 0)) {
 						m_map[i][j]->m_search_count = rcount;
-					}       else if (g_rand->Next(100) < 95) { 
+					}       else if (g_rand->Next(100) < 95) {
 						m_map[i][j]->m_search_count = rcount;
 					}
-  
-				} 
-			}
-                
 
-		} 
+				}
+			}
+
+		}
 
 	}
 }
-
 
 void World::GenerateTrenches()
 
 {
     sint32 i, j;
     sint32 tcount = 0;
-    sint32 m = sint32(g_theConstDB->PercentTrench() * m_size.x * m_size.y); 
+    sint32 m = sint32(g_theConstDB->PercentTrench() * m_size.x * m_size.y);
 
-    if (m < 1) 
-        return ; 
-    
-    MapPoint pos; 
-    sint32 searching = TRUE; 
+    if (m < 1)
+        return ;
+
+    MapPoint pos;
+    sint32 searching = TRUE;
     MapPoint tmp;
-    
-    sint32 ocount; 
-    sint32 sdcount, socount; 
-    
-    for (i=0; i<m_size.x; i++) { 
-        for (j=0; j<m_size.y; j++) { 
-            if ((m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF) && 
+
+    sint32 ocount;
+    sint32 sdcount, socount;
+
+    for (i=0; i<m_size.x; i++) {
+        for (j=0; j<m_size.y; j++) {
+            if ((m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF) &&
                 IsNextTo(TERRAIN_WATER_DEEP, i, j))
-            { 
-                
-                if (g_rand->Next(100) < 20) { 
-                    
-                    pos.Set(i, j); 
-                    sdcount= 0; 
-                    socount= 0; 
+            {
+
+                if (g_rand->Next(100) < 20) {
+
+                    pos.Set(i, j);
+                    sdcount= 0;
+                    socount= 0;
 					if(pos.GetNeighborPosition(NORTHWEST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
+
                     if(pos.GetNeighborPosition(NORTHEAST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
+
                     if(pos.GetNeighborPosition(SOUTHEAST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
+
                     if(pos.GetNeighborPosition(SOUTHWEST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
-                    
+
                     if(pos.GetNeighborPosition(SOUTH,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
                     if(pos.GetNeighborPosition(NORTH,tmp))
@@ -1492,56 +1462,54 @@ void World::GenerateTrenches()
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
                     if(pos.GetNeighborPosition(EAST,tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
-                    
-                    
-                    if (((sdcount == 2) && (socount == 0)) || 
-                        ((sdcount == 0) && (socount == 2))) { 
-                        
-                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH; 
-                        tcount++; 
-                        if (m <= tcount) 
-                            return; 
+
+                    if (((sdcount == 2) && (socount == 0)) ||
+                        ((sdcount == 0) && (socount == 2))) {
+
+                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH;
+                        tcount++;
+                        if (m <= tcount)
+                            return;
                     }
                 }
-                
+
             }
         }
     }
-    
-    
-    searching = TRUE; 
-    
-    while (searching && ( tcount < m)) { 
-        searching = FALSE; 
-        for (i=0; i<m_size.x; i++) { 
-            for (j=0; j<m_size.y; j++) { 
-                if ((m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF) && 
+
+    searching = TRUE;
+
+    while (searching && ( tcount < m)) {
+        searching = FALSE;
+        for (i=0; i<m_size.x; i++) {
+            for (j=0; j<m_size.y; j++) {
+                if ((m_map[i][j]->m_terrain_type == TERRAIN_WATER_SHELF) &&
                 IsNextTo(TERRAIN_WATER_DEEP, i, j)){
-                    
-                    pos.Set(i, j); 
+
+                    pos.Set(i, j);
                     ocount = 0;
-                    sdcount = 0; 
-                    socount = 0; 
+                    sdcount = 0;
+                    socount = 0;
                     if(pos.GetNeighborPosition(NORTHWEST, tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
 					}
-                    
+
                     if(pos.GetNeighborPosition(NORTHEAST,tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
 					}
-                    
+
                     if(pos.GetNeighborPosition(SOUTHEAST, tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
 					}
-                    
+
                     if(pos.GetNeighborPosition(SOUTHWEST,tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) socount++;
 					}
-                    
+
                     if(pos.GetNeighborPosition(SOUTH,tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
 					}
@@ -1554,28 +1522,28 @@ void World::GenerateTrenches()
                     if(pos.GetNeighborPosition(EAST,tmp)) {
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_SHELF) sdcount++;
 					}
-                    
-                    if ((0 < ocount) && (socount == 1)  && ((sdcount == 0) || (sdcount == 1))){ 
-                        searching = TRUE; 
-                        
-                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH; 
+
+                    if ((0 < ocount) && (socount == 1)  && ((sdcount == 0) || (sdcount == 1))){
+                        searching = TRUE;
+
+                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_TRENCH;
                         tcount++;
                     }
                 }
             }
         }
     }
-    
-    sint32 dcount; 
-    searching = TRUE; 
-    while (searching) { 
-        searching = FALSE; 
-        for (i=0; i<m_size.x; i++) { 
-            for (j=0; j<m_size.y; j++) { 
-                if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_TRENCH) { 
-                    pos.Set(i, j); 
-                    dcount=0; 
-                    ocount=0; 
+
+    sint32 dcount;
+    searching = TRUE;
+    while (searching) {
+        searching = FALSE;
+        for (i=0; i<m_size.x; i++) {
+            for (j=0; j<m_size.y; j++) {
+                if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_TRENCH) {
+                    pos.Set(i, j);
+                    dcount=0;
+                    ocount=0;
                     if(pos.GetNeighborPosition(NORTH, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) dcount++;
                     if(pos.GetNeighborPosition(SOUTH, tmp))
@@ -1584,7 +1552,7 @@ void World::GenerateTrenches()
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) dcount++;
                     if(pos.GetNeighborPosition(WEST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) dcount++;
-                    
+
                     if(pos.GetNeighborPosition(SOUTHWEST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
                     if(pos.GetNeighborPosition(SOUTHEAST, tmp))
@@ -1593,34 +1561,34 @@ void World::GenerateTrenches()
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
                     if(pos.GetNeighborPosition(NORTHEAST, tmp))
 						if (GetCell(tmp)->m_terrain_type == TERRAIN_WATER_TRENCH) ocount++;
-                    
-                    switch(ocount) { 
-                    case 0: 
-                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF; 
-                        searching = TRUE; 
-                        break; 
-                    case 1: 
+
+                    switch(ocount) {
+                    case 0:
+                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF;
+                        searching = TRUE;
+                        break;
+                    case 1:
                     case 2:
-                        if (3 <= dcount) { 
-                            m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF; 
-                            
-                            searching = TRUE; 
+                        if (3 <= dcount) {
+                            m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF;
+
+                            searching = TRUE;
                         }
-                        break; 
-                        
-                    case 3: 
+                        break;
+
+                    case 3:
                     case 4:
-                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF; 
-                        searching = TRUE; 
-                        break; 
+                        m_map[i][j]->m_terrain_type = TERRAIN_WATER_SHELF;
+                        searching = TRUE;
+                        break;
                     default:
-                        break; 
+                        break;
                     }
                 }
-                
-            } 
-        } 
-}   
+
+            }
+        }
+}
 }
 
 
@@ -1634,41 +1602,40 @@ void World::GenerateVolcano()
 
 {
 	sint32 i, j;
-   
-	for (i=0; i<m_size.x; i++) { 
+
+	for (i=0; i<m_size.x; i++) {
 		for (j=0; j<m_size.y; j++) {
 			if(m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) {
-				if (g_rand->Next(100) < g_theConstDB->PercentVolcano()) { 
-					m_map[i][j]->m_terrain_type = TERRAIN_WATER_VOLCANO; 
+				if (g_rand->Next(100) < g_theConstDB->PercentVolcano()) {
+					m_map[i][j]->m_terrain_type = TERRAIN_WATER_VOLCANO;
 				}
 			}
 		}
 	}
-	
-    for (i=0; i<m_size.x; i++) { 
-		for (j=0; j<m_size.y; j++) { 
+
+    for (i=0; i<m_size.x; i++) {
+		for (j=0; j<m_size.y; j++) {
 			if (m_map[i][j]->m_terrain_type == TERRAIN_WATER_RIFT) {
 
 				if (IsNextTo(TERRAIN_WATER_SHELF, i, j) ||
 					IsNextTo(TERRAIN_WATER_TRENCH, i, j)) {
-					m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
+					m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
 				}
 			}
 		}
     }
 
-    sint32 ocount; 
+    sint32 ocount;
     sint32 searching = TRUE;
-    MapPoint pos, tmp, n, e, s, w, ne, nw, sw, se; 
+    MapPoint pos, tmp, n, e, s, w, ne, nw, sw, se;
 
-	while (searching) { 
-		searching = FALSE; 
-		for (i=0; i<m_size.x; i++) { 
-			for (j=0; j<m_size.y; j++) { 
-				if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_RIFT) { 
-					pos.Set(i, j); 
-					ocount=0; 
-
+	while (searching) {
+		searching = FALSE;
+		for (i=0; i<m_size.x; i++) {
+			for (j=0; j<m_size.y; j++) {
+				if  (m_map[i][j]->m_terrain_type == TERRAIN_WATER_RIFT) {
+					pos.Set(i, j);
+					ocount=0;
 
 					if(pos.GetNeighborPosition(SOUTHWEST, sw))
 						if (GetCell(sw)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
@@ -1682,55 +1649,55 @@ void World::GenerateVolcano()
 					if(pos.GetNeighborPosition(NORTHEAST, ne))
 						if (GetCell(ne)->m_terrain_type == TERRAIN_WATER_RIFT) ocount++;
 
-					if (ocount == 0) { 
-						m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
-						searching = TRUE; 
-						continue; 
+					if (ocount == 0) {
+						m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
+						searching = TRUE;
+						continue;
 					}
 
 					if(pos.GetNeighborPosition(NORTH, n)) {
-						if (GetCell(n)->m_terrain_type == TERRAIN_WATER_RIFT) { 
-							if ((GetCell(ne)->m_terrain_type == TERRAIN_WATER_RIFT) && 
-								(GetCell(nw)->m_terrain_type == TERRAIN_WATER_RIFT)) { 
-								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
-								searching = TRUE; 
-								continue; 
+						if (GetCell(n)->m_terrain_type == TERRAIN_WATER_RIFT) {
+							if ((GetCell(ne)->m_terrain_type == TERRAIN_WATER_RIFT) &&
+								(GetCell(nw)->m_terrain_type == TERRAIN_WATER_RIFT)) {
+								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
+								searching = TRUE;
+								continue;
 							}
-						} 
+						}
 					}
 					if(pos.GetNeighborPosition(SOUTH, s)) {
-						if (GetCell(s)->m_terrain_type == TERRAIN_WATER_RIFT) { 
-							if ((GetCell(se)->m_terrain_type == TERRAIN_WATER_RIFT) && 
-								(GetCell(sw)->m_terrain_type == TERRAIN_WATER_RIFT)) { 
-								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
-								searching = TRUE; 
-								continue; 
+						if (GetCell(s)->m_terrain_type == TERRAIN_WATER_RIFT) {
+							if ((GetCell(se)->m_terrain_type == TERRAIN_WATER_RIFT) &&
+								(GetCell(sw)->m_terrain_type == TERRAIN_WATER_RIFT)) {
+								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
+								searching = TRUE;
+								continue;
 							}
-						} 
+						}
 					}
 					if(pos.GetNeighborPosition(EAST, e)) {
-						if (GetCell(e)->m_terrain_type == TERRAIN_WATER_RIFT) { 
-							if ((GetCell(ne)->m_terrain_type == TERRAIN_WATER_RIFT) && 
-								(GetCell(se)->m_terrain_type == TERRAIN_WATER_RIFT)) { 
-								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
-								searching = TRUE; 
-								continue; 
+						if (GetCell(e)->m_terrain_type == TERRAIN_WATER_RIFT) {
+							if ((GetCell(ne)->m_terrain_type == TERRAIN_WATER_RIFT) &&
+								(GetCell(se)->m_terrain_type == TERRAIN_WATER_RIFT)) {
+								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
+								searching = TRUE;
+								continue;
 							}
-						} 
+						}
 					}
 					if(pos.GetNeighborPosition(WEST, w)) {
-						if (GetCell(w)->m_terrain_type == TERRAIN_WATER_RIFT) { 
-							if ((GetCell(sw)->m_terrain_type == TERRAIN_WATER_RIFT) && 
-								(GetCell(nw)->m_terrain_type == TERRAIN_WATER_RIFT)) { 
-								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP; 
-								searching = TRUE; 
-								continue; 
+						if (GetCell(w)->m_terrain_type == TERRAIN_WATER_RIFT) {
+							if ((GetCell(sw)->m_terrain_type == TERRAIN_WATER_RIFT) &&
+								(GetCell(nw)->m_terrain_type == TERRAIN_WATER_RIFT)) {
+								m_map[i][j]->m_terrain_type = TERRAIN_WATER_DEEP;
+								searching = TRUE;
+								continue;
 							}
-						} 
+						}
 					}
 				}
-			} 
-		} 
+			}
+		}
 	}
 }
 
@@ -1744,15 +1711,15 @@ extern uint16 myRGB(sint32 r,  sint32 g, sint32 b);
 
 
 void World::CalcRawScore(const sint32 x, const sint32 y, float &score)
-{ 
-    if (!IsLand(x, y)) { 
-       score = 0.0; 
-    } else { 
+{
+    if (!IsLand(x, y)) {
+       score = 0.0;
+    } else {
 		score = (float)m_map[x][y]->GetScore();
 #if 0
        if (m_map[x][y]->m_terrain_type == TERRAIN_GRASSLAND)
-            score += 1.0; 
-   
+            score += 1.0;
+
 	   if(m_map[x][y]->m_terrain_type == TERRAIN_FOREST ||
 		  m_map[x][y]->m_terrain_type == TERRAIN_JUNGLE)
 		   score += 1.0;
@@ -1760,18 +1727,18 @@ void World::CalcRawScore(const sint32 x, const sint32 y, float &score)
 	   if(m_map[x][y]->m_terrain_type == TERRAIN_PLAINS)
 		   score += 0.5;
 
-       if (IsGood(x,y, 0)) 
-            score += 5.0; 
-   
-       if (IsRiver(x,y)) 
-            score += 1.5; 
+       if (IsGood(x,y, 0))
+            score += 5.0;
+
+       if (IsRiver(x,y))
+            score += 1.5;
 #endif
     }
 }
 
 sint32 s_actualMinContinentStartSize = 0;
 
-void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y, 
+void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
     float &cum_score, float **raw_score)
 {
     sint32 numCounted[TERRAIN_MAX];
@@ -1781,31 +1748,31 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 	}
 	sint32 maxToCount = g_theConstDB->MaxSameTiles();
 
-	MapPoint pos(x, y);   
+	MapPoint pos(x, y);
 	sint32 cont;
 	BOOL is_land;
 	GetContinent(pos, cont, is_land);
     cum_score   = 0.0;
 	if (is_land &&
-        (m_land_size->Access(cont) >= s_actualMinContinentStartSize) 
-       ) 
+        (m_land_size->Access(cont) >= s_actualMinContinentStartSize)
+       )
     {
 		MapPoint        start   (x, y);
         RadiusIterator  it      (start, d);
-        
+
 		for (it.Start(); !it.End(); it.Next())
-        { 
+        {
             MapPoint pos     = it.Pos();
 			Cell *cell = m_map[pos.x][pos.y];
 			if ((numCounted[cell->m_terrain_type] < maxToCount) ||
 			    IsRiver(pos) || IsGood(pos)
-               ) 
+               )
             {
-				cum_score += raw_score[pos.x][pos.y]; 
+				cum_score += raw_score[pos.x][pos.y];
 				numCounted[cell->m_terrain_type]++;
 			}
 		}
-	} 
+	}
 	m_map[x][y]->m_color = sint32(cum_score);
 }
 
@@ -1814,17 +1781,17 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 							sint32 minDist, sint32 maxDist,
 							BOOL ignoreTutorialRules)
 
-{ 
-    float max = -1.0; 
-    sint32 searching; 
+{
+    float max = -1.0;
+    sint32 searching;
 	MapPoint chk;
 	sint32 s;
 	sint32 badx = 0, bady = 0;
 	float badmax = -1.0;
 
-    maxx = 0; 
-    maxy = 0; 
-    searching = TRUE; 
+    maxx = 0;
+    maxy = 0;
+    searching = TRUE;
 	sint32 topY = 0, botY = m_size.y;
 	if(!m_isYwrap) {
 		topY += 4;
@@ -1837,12 +1804,11 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	} else {
 		playerContinent = 0;
 	}
-    for (chk.x=0; chk.x<m_size.x; chk.x++) { 
-        for (chk.y=sint16(topY); chk.y<botY; chk.y++) { 
+    for (chk.x=0; chk.x<m_size.x; chk.x++) {
+        for (chk.y=sint16(topY); chk.y<botY; chk.y++) {
 			BOOL dontUse = FALSE;
 			sint32 minrel = maxDist;
 
-			
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules && index != 0) {
 				sint32 cont;
 				BOOL is_land;
@@ -1877,15 +1843,15 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 						bady = chk.y;
 					}
 				}
-				
+
 				continue;
 			}
-            if (max < cum_score[chk.x][chk.y]) { 
-                max = cum_score[chk.x][chk.y]; 
-                maxx = chk.x; 
-                maxy = chk.y; 
-                searching = FALSE; 
-            } 
+            if (max < cum_score[chk.x][chk.y]) {
+                max = cum_score[chk.x][chk.y];
+                maxx = chk.x;
+                maxy = chk.y;
+                searching = FALSE;
+            }
         }
     }
 
@@ -1896,11 +1862,11 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 		searching = FALSE;
 	}
 	if(max < 0.00001) {
-		
+
 		searching = TRUE;
 	}
-	return !searching; 
-} 
+	return !searching;
+}
 
 // Not a clue what this - apparenly unused - function is supposed to do.
 // Just replaced the flawed iterator with a working one.
@@ -1909,47 +1875,46 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
 
 {
     MapPoint    start(maxx, maxy);
-   
-    float s; 
+
+    float s;
     float r = 2.0f * float(d) + 1.0f;   // unused?
 
 	SquareIterator  it  (start, d);
     for (it.Start(); !it.End(); it.Next())
-    {		
+    {
         MapPoint pos = it.Pos();
-		sint32 dist = start.NormalizedDistance(pos);		  
+		sint32 dist = start.NormalizedDistance(pos);
 		s = float(d - dist) / (float(d) +1.0f);   // unused?
-		cum_score[pos.x][pos.y] = -50000.0f; 
+		cum_score[pos.x][pos.y] = -50000.0f;
     }
 
     cum_score[start.x][start.y] = -60000.0f;
 }
 
-
 uint16 myRGB(sint32 r,  sint32 g, sint32 b)
 
-{ 
-    uint16 val = 0; 
+{
+    uint16 val = 0;
 
-    val = (r & 0x1f) << 11; 
-    val |= (g & 0x1f) <<  5; 
-    val |= (b & 0x1f); 
+    val = (r & 0x1f) << 11;
+    val |= (g & 0x1f) <<  5;
+    val |= (b & 0x1f);
 
-    return val; 
-} 
+    return val;
+}
 
-void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS], 
+void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 							sint32 &numStartsFound,
 							BOOL ignoreTutorialRules,
 							sint32 player_start_score[k_MAX_PLAYERS])
 
 {
-    float **raw_score, **cum_score; 
-    sint32 x, y, i, j; 
-    sint32 maxx, maxy; 
+    float **raw_score, **cum_score;
+    sint32 x, y, i, j;
+    sint32 maxx, maxy;
 
-    raw_score = new float*[m_size.x]; 
-    cum_score = new float*[m_size.x]; 
+    raw_score = new float*[m_size.x];
+    cum_score = new float*[m_size.x];
 
 	sint32 maxContinentSize = 0;
 	for(i = 0; i < m_land_size->Num(); i++) {
@@ -1963,34 +1928,33 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 		s_actualMinContinentStartSize = g_theConstDB->MinContinentStartSize();
 	}
 
-    
-    for (x=0; x<m_size.x; x++) { 
-        raw_score[x] = new float [m_size.y]; 
-        cum_score[x] = new float [m_size.y]; 
-        for (y=0; y<m_size.y; y++) { 
+    for (x=0; x<m_size.x; x++) {
+        raw_score[x] = new float [m_size.y];
+        cum_score[x] = new float [m_size.y];
+        for (y=0; y<m_size.y; y++) {
             CalcRawScore(x, y, raw_score[x][y]);
         }
     }
 
     sint32 d=2;
-    
-    for (x=0; x<m_size.x; x++) { 
-        for (y=0; y<m_size.y; y++) { 
-            CalcCumScore(d, x, y, cum_score[x][y], raw_score);
-        } 
-    } 
 
-    for (x=0; x<m_size.x; x++) { 
-        for (y=0; y<m_size.y; y++) { 
-             if (!IsLand(x, y)) { 
+    for (x=0; x<m_size.x; x++) {
+        for (y=0; y<m_size.y; y++) {
+            CalcCumScore(d, x, y, cum_score[x][y], raw_score);
+        }
+    }
+
+    for (x=0; x<m_size.x; x++) {
+        for (y=0; y<m_size.y; y++) {
+             if (!IsLand(x, y)) {
                   cum_score[x][y] = -100000.0;
              }
         }
     }
 
 	sint32 maxSize = max(m_size.x, m_size.y);
-	double const someNumber = 
-		sqrt(static_cast<double>(maxSize * maxSize) / 
+	double const someNumber =
+		sqrt(static_cast<double>(maxSize * maxSize) /
 			 (2 * g_theProfileDB->GetNPlayers())
 			);
 	sint32 minDistance = sint32(g_theConstDB->MinStartDistanceCoefficient() * someNumber);
@@ -2000,21 +1964,20 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 	if(maxDistance < minDistance)
 		maxDistance = minDistance;
 
-    double third = min(m_size.x, m_size.y) * 0.33; 
-    if (third < minDistance) { 
-        minDistance = (sint32)third; 
-    } 
+    double third = min(m_size.x, m_size.y) * 0.33;
+    if (third < minDistance) {
+        minDistance = (sint32)third;
+    }
 
 
-
-    if (15 < g_theProfileDB->GetNPlayers()) { 
-        if (8 < minDistance)  { 
-            minDistance = 8; 
-        } 
-    } else if (9 < g_theProfileDB->GetNPlayers()) { 
-        if (12 < minDistance)  { 
-            minDistance = 12; 
-        } 
+    if (15 < g_theProfileDB->GetNPlayers()) {
+        if (8 < minDistance)  {
+            minDistance = 8;
+        }
+    } else if (9 < g_theProfileDB->GetNPlayers()) {
+        if (12 < minDistance)  {
+            minDistance = 12;
+        }
     }
 
     d = g_theProfileDB->SetupRadius() * 2 - 1;
@@ -2029,34 +1992,32 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 			break;
 		}
 		player_start_score[i] = sint32(cum_score[maxx][maxy]);
-        player_start[i].Set(maxx, maxy);  
+        player_start[i].Set(maxx, maxy);
 		numStartsFound++;
-		
-        
-    }                                     
-                                          
 
-    for (i=0; i<numStartsFound; i++) { 
-        for (j=i+1; j<numStartsFound; j++) { 
-            if (player_start[i] == player_start[j]) { 
-                c3errors_FatalDialog("WldGen", "Duplicate player start positions %d %d", i, j); 
-            } 
-        } 
-    } 
+    }
 
-    for (x=0; x<m_size.x; x++) { 
-        delete[] cum_score[x]; 
-        delete[] raw_score[x]; 
-    } 
-    delete[] cum_score; 
-    delete[] raw_score; 
+    for (i=0; i<numStartsFound; i++) {
+        for (j=i+1; j<numStartsFound; j++) {
+            if (player_start[i] == player_start[j]) {
+                c3errors_FatalDialog("WldGen", "Duplicate player start positions %d %d", i, j);
+            }
+        }
+    }
+
+    for (x=0; x<m_size.x; x++) {
+        delete[] cum_score[x];
+        delete[] raw_score[x];
+    }
+    delete[] cum_score;
+    delete[] raw_score;
 }
 
-double World::CalcTerrainFreightCost(const MapPoint &pos) 
+double World::CalcTerrainFreightCost(const MapPoint &pos)
 
 {
 //Added by Martin Gühmann
-	
+
 	return AccessCell(pos)->CalcTerrainFreightCost();
 
 }
@@ -2064,17 +2025,16 @@ double World::CalcTerrainFreightCost(const MapPoint &pos)
 void World::SetAllMoveCost()
 
 {
-   MapPoint pos; 
+   MapPoint pos;
 
-   for (pos.x=0; pos.x<m_size.x; pos.x++) { 
-      for (pos.y=0; pos.y<m_size.y; pos.y++) { 
+   for (pos.x=0; pos.x<m_size.x; pos.x++) {
+      for (pos.y=0; pos.y<m_size.y; pos.y++) {
 		 Cell *cell = GetCell(pos);
 		 cell->CalcTerrainMoveCost();
 		 cell->CalcMovementType();
       }
    }
 }
-
 
 void World::MapDump(MBCHAR *mapName, sint8 *mapData, sint16 width, sint16 height)
 {
@@ -2088,7 +2048,7 @@ void World::MapDump(MBCHAR *mapName, sint8 *mapData, sint16 width, sint16 height
 		for (int a=0; a<y_scale; a++) {
 			for (int x=0; x<width*x_scale; x+=x_scale) {
 				for (int b=0; b<x_scale; b++) {
-					mapColor[((y+a)*(width*x_scale))+(x+b)] = 
+					mapColor[((y+a)*(width*x_scale))+(x+b)] =
 						mapData[(((height-1)-(y/y_scale))*width)+(x/x_scale)] + 127;
 				}
 			}
@@ -2101,8 +2061,8 @@ void World::MapDump(MBCHAR *mapName, sint8 *mapData, sint16 width, sint16 height
 #endif
 }
 
-void World::TerrainDump (MBCHAR *mapName, sint8 *mapData, sint16 width, 
-						 sint16 height, sint32 waterLevel, 
+void World::TerrainDump (MBCHAR *mapName, sint8 *mapData, sint16 width,
+						 sint16 height, sint32 waterLevel,
 						 sint32 mountainLevel, sint32 hillLevel)
 {
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
@@ -2145,78 +2105,77 @@ void World::Dump(FILE *fout)
 
 {
 #if 0
-   sint32 i, j, k; 
-   
-   fprintf (fout, "dsafdsfdsfddfdsfdddddd\n"); 
-   fprintf (fout, "F - forest\n"); 
+   sint32 i, j, k;
+
+   fprintf (fout, "dsafdsfdsfddfdsfdddddd\n");
+   fprintf (fout, "F - forest\n");
    fprintf (fout, "p - plains\n");
    fprintf (fout, "t - tundra\n");
    fprintf (fout, "G - grassland\n");
    fprintf (fout, "d - deasert\n");
    fprintf (fout, "S - swamp\n");
-   fprintf (fout, "j - jungle\n"); 
-   fprintf (fout, "h - hill\n"); 
-   fprintf (fout, "g - glacier\n"); 
-   fprintf (fout, ". - shallow water\n"); 
-   fprintf (fout, "; - deep water\n"); 
-   
-   fprintf (fout, "u - water rift\n"); 
-   fprintf (fout, "# - water trench\n"); 
-   fprintf (fout, "X - water volcano\n"); 
-   fprintf (fout, "/ - water current\n"); 
-   fprintf (fout, "? - error unknown tile\n"); 
-   fprintf (fout, "+ - resources"); 
-   fprintf (fout, "* - river"); 
-   fprintf (fout, "XX - g_player start point\n"); 
-   
+   fprintf (fout, "j - jungle\n");
+   fprintf (fout, "h - hill\n");
+   fprintf (fout, "g - glacier\n");
+   fprintf (fout, ". - shallow water\n");
+   fprintf (fout, "; - deep water\n");
+
+   fprintf (fout, "u - water rift\n");
+   fprintf (fout, "# - water trench\n");
+   fprintf (fout, "X - water volcano\n");
+   fprintf (fout, "/ - water current\n");
+   fprintf (fout, "? - error unknown tile\n");
+   fprintf (fout, "+ - resources");
+   fprintf (fout, "* - river");
+   fprintf (fout, "XX - g_player start point\n");
+
    sint32 found, u;
-   for (i=0; i<m_size.y; i++){ 
-      
-      if (i % 2) 
-         fprintf (fout, " "); 
-      
-      for (j=0; j<m_size.x; j++) { 
+   for (i=0; i<m_size.y; i++){
+
+      if (i % 2)
+         fprintf (fout, " ");
+
+      for (j=0; j<m_size.x; j++) {
          k = sint32(m_size.y - ceil(i/2) + j) % m_size.x;
-         
-         
-         found = FALSE;         
-         for (u=0; u<8; u++) { 
-            if ((m_player_start_list[u][0] == k) && (m_player_start_list[u][1] == i))  { 
-               found = TRUE; 
+
+         found = FALSE;
+         for (u=0; u<8; u++) {
+            if ((m_player_start_list[u][0] == k) && (m_player_start_list[u][1] == i))  {
+               found = TRUE;
             }
          }
-         
-         if (found) { 
-            fprintf (fout, "XX"); 
-         } else { 
-            
-            if (IsGood(k,i, 0)) { 
-               fprintf(fout, "+"); 
-            } else { 
-               
-               if (IsRiver(k,i)) { 
-                  fprintf (fout, "*"); 
-               } else { 
-                  
+
+         if (found) {
+            fprintf (fout, "XX");
+         } else {
+
+            if (IsGood(k,i, 0)) {
+               fprintf(fout, "+");
+            } else {
+
+               if (IsRiver(k,i)) {
+                  fprintf (fout, "*");
+               } else {
+
                   switch (m_map[k][i]->m_terrain_type) {
-                  case TERRAIN_NULL: 
-                     fprintf (fout, "@"); 
-                     break; 
-                     
+                  case TERRAIN_NULL:
+                     fprintf (fout, "@");
+                     break;
+
                   case TERRAIN_FOREST:
-                     fprintf (fout , "F"); 
-                     break; 
+                     fprintf (fout , "F");
+                     break;
                   case TERRAIN_PLAINS:
-                     fprintf (fout, "p"); 
-                     break; 
+                     fprintf (fout, "p");
+                     break;
                   case TERRAIN_TUNDRA:
-                     fprintf (fout, "t"); 
+                     fprintf (fout, "t");
                      break;
                   case TERRAIN_GRASSLAND:
-                     fprintf (fout, "G"); 
+                     fprintf (fout, "G");
                      break;
                   case TERRAIN_DESERT:
-                     fprintf (fout, "d"); 
+                     fprintf (fout, "d");
                      break;
                   case TERRAIN_SWAMP:
                      fprintf (fout, "S");
@@ -2233,170 +2192,158 @@ void World::Dump(FILE *fout)
                   case TERRAIN_GLACIER:
                      fprintf (fout, "g");
                      break;
-                     
+
                   case TERRAIN_WATER_SHALLOW:
-                     fprintf (fout, "."); 
-                     break; 
+                     fprintf (fout, ".");
+                     break;
                   case TERRAIN_WATER_DEEP:
-                     if (IsCurrent(k,i)) { 
-                        fprintf (fout, "/"); 
-                     } else { 
-                        fprintf (fout, ";"); 
+                     if (IsCurrent(k,i)) {
+                        fprintf (fout, "/");
+                     } else {
+                        fprintf (fout, ";");
                      }
-                     break; 
+                     break;
                   case TERRAIN_WATER_RIFT:
-                     fprintf (fout, "u"); 
-                     break; 
+                     fprintf (fout, "u");
+                     break;
                   case TERRAIN_WATER_TRENCH:
-                     fprintf (fout, "#"); 
-                     break; 
+                     fprintf (fout, "#");
+                     break;
                   case TERRAIN_WATER_VOLCANO:
-                     fprintf (fout, "v"); 
+                     fprintf (fout, "v");
                      break;
                   default:
-                     fprintf (fout, "%d", m_map[j][i]->m_terrain_type);     
-                     break; 
+                     fprintf (fout, "%d", m_map[j][i]->m_terrain_type);
+                     break;
                   }
-                  
+
                }
             }
             fprintf(fout, " ");
          }
-         
+
       }
       fprintf (fout, "\n");
    }
-   
-   
-   sint32 count[17]; 
+
+   sint32 count[17];
    double total1=0.0f, total2=0.0f, total3=0.0f;
-   for (i=0; i<17; i++) { 
-      count[i] = 0; 
-   } 
-   
+   for (i=0; i<17; i++) {
+      count[i] = 0;
+   }
+
    sint32 mc[7][17];
    double mtot[7];
-   
-   for (i=0; i<7; i++) { 
+
+   for (i=0; i<7; i++) {
       mtot[i] = 0.0f;
-      for (j=0; j<17; j++) { 
-         mc[i][j] = 0; 
-      } 
+      for (j=0; j<17; j++) {
+         mc[i][j] = 0;
+      }
    }
-   
+
    sint32 t;
-   for (i=0; i<m_size.x; i++) { 
-      for (j=0; j<m_size.y; j++) { 
+   for (i=0; i<m_size.x; i++) {
+      for (j=0; j<m_size.y; j++) {
          t = m_map[i][j]->m_terrain_type;
-         Assert(0 <= t); 
-         Assert(t < 17); 
-         count[t]++; 
+         Assert(0 <= t);
+         Assert(t < 17);
+         count[t]++;
          total1 += 1.0f;
-         if (t <= TERRAIN_HILL) { 
-            total2 += 1.0f; 
-         } else { 
-            total3 += 1.0f; 
+         if (t <= TERRAIN_HILL) {
+            total2 += 1.0f;
+         } else {
+            total3 += 1.0f;
          }
-         
-         g_theConstDB->y2meridian(j, k); 
-         if (t <= TERRAIN_HILL) { 
-            mtot[k] += 1.0f; 
+
+         g_theConstDB->y2meridian(j, k);
+         if (t <= TERRAIN_HILL) {
+            mtot[k] += 1.0f;
          }
-         
-         mc[k][t]++; 
-         
-      } 
-   } 
-   
-   total1 = total1/100.0f; 
-   total2 = total2/100.0f; 
+
+         mc[k][t]++;
+
+      }
+   }
+
+   total1 = total1/100.0f;
+   total2 = total2/100.0f;
    total3 = total3/100.0f;
-   
-   
-   for (i=0; i<7; i++) { 
-      mtot[i] = mtot[i]/100.0f; 
-   } 
-   
-   
-   fprintf (fout, "\n"); 
+
+   for (i=0; i<7; i++) {
+      mtot[i] = mtot[i]/100.0f;
+   }
+
+   fprintf (fout, "\n");
    fprintf (fout, "                      tot  totp  landp   npol   mil   dry   eqa   dry   mil   spol\n");
    fprintf (fout, "TERRAIN_NULL          %4d %5.2f %5.2f ", count[0], float(count[0])/total1, float(count[0])/total2);
-   
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][0]/mtot[i]); 
+
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][0]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_GLACIER       %4d %5.2f %5.2f ", count[4], float(count[4])/total1, float(count[4])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][1]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][1]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "\n");
    fprintf (fout, "TERRAIN_FOREST        %4d %5.2f %5.2f ", count[1], float(count[1])/total1, float(count[1])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][2]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][2]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_PLAINS        %4d %5.2f %5.2f ", count[2], float(count[2])/total1, float(count[2])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][3]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][3]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_TUNDRA        %4d %5.2f %5.2f ", count[3], float(count[3])/total1, float(count[3])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][4]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][4]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_GRASSLAND     %4d %5.2f %5.2f ", count[5], float(count[5])/total1, float(count[5])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][5]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][5]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_DESERT        %4d %5.2f %5.2f ", count[6], float(count[6])/total1, float(count[6])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][6]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][6]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_SWAMP         %4d %5.2f %5.2f ", count[7], float(count[7])/total1, float(count[7])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][7]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][7]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_JUNGLE        %4d %5.2f %5.2f ", count[8], float(count[8])/total1, float(count[8])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][8]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][8]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "\n");
    fprintf (fout, "TERRAIN_MOUNTAIN      %4d %5.2f %5.2f ", count[9], float(count[9])/total1, float(count[9])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][9]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][9]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
-   
-   
+   fprintf (fout, "\n");
+
    fprintf (fout, "TERRAIN_HILL          %4d %5.2f %5.2f ", count[10], float(count[10])/total1, float(count[10])/total2);
-   for (i=0; i<7; i++) { 
-      fprintf (fout, " %5.2f", mc[i][10]/mtot[i]); 
+   for (i=0; i<7; i++) {
+      fprintf (fout, " %5.2f", mc[i][10]/mtot[i]);
    }
-   fprintf (fout, "\n"); 
+   fprintf (fout, "\n");
    fprintf (fout, "\n");
    fprintf (fout, "TERRAIN_WATER_SHALLOW %4d %5.2f %5.2f\n", count[11], float(count[11])/total1, float(count[11])/total3);
    fprintf (fout, "TERRAIN_WATER_DEEP    %4d %5.2f %5.2f\n", count[12], float(count[12])/total1, float(count[12])/total3);
@@ -2418,60 +2365,59 @@ void World::Mdump(FILE *fout)
 
 {
 #if 0
-	sint32 i, j, k; 
+	sint32 i, j, k;
 	sint32 found, u;
-	
-	Assert(0 < m_size.x); 
-	for (i=0; i<m_size.y; i++){ 
-		
-		if (i & 0x01) 
-			fprintf (fout, " "); 
-		
-		for (j=0; j<m_size.x; j++) { 
+
+	Assert(0 < m_size.x);
+	for (i=0; i<m_size.y; i++){
+
+		if (i & 0x01)
+			fprintf (fout, " ");
+
+		for (j=0; j<m_size.x; j++) {
 			k = sint32(m_size.y - ceil(i/2) + j) % m_size.x;
-			
-			
-			found = FALSE;         
-			for (u=0; u<8; u++) { 
-				if ((m_player_start_list[u][0] == k) && (m_player_start_list[u][1] == i))  { 
-					found = TRUE; 
+
+			found = FALSE;
+			for (u=0; u<8; u++) {
+				if ((m_player_start_list[u][0] == k) && (m_player_start_list[u][1] == i))  {
+					found = TRUE;
 				}
 			}
-			
-			if (found) { 
-				fprintf (fout, "XX"); 
-			} else { 
-				
-				if (m_map[k][i]->IsAnyUnitInCell()) { 
-					fprintf (fout, "@"); 
-				} else { 
-					if (IsGood(k,i, 0)) { 
-						fprintf(fout, "+"); 
-					} else { 
-						
-						if (IsRiver(k,i)) { 
-							fprintf (fout, "*"); 
-						} else { 
-							
+
+			if (found) {
+				fprintf (fout, "XX");
+			} else {
+
+				if (m_map[k][i]->IsAnyUnitInCell()) {
+					fprintf (fout, "@");
+				} else {
+					if (IsGood(k,i, 0)) {
+						fprintf(fout, "+");
+					} else {
+
+						if (IsRiver(k,i)) {
+							fprintf (fout, "*");
+						} else {
+
 							switch (m_map[k][i]->m_terrain_type) {
-							case TERRAIN_NULL: 
-								fprintf (fout, "@"); 
-								break; 
-								
+							case TERRAIN_NULL:
+								fprintf (fout, "@");
+								break;
+
 							case TERRAIN_FOREST:
-								fprintf (fout , "F"); 
-								break; 
+								fprintf (fout , "F");
+								break;
 							case TERRAIN_PLAINS:
-								fprintf (fout, "p"); 
-								break; 
+								fprintf (fout, "p");
+								break;
 							case TERRAIN_TUNDRA:
-								fprintf (fout, "t"); 
+								fprintf (fout, "t");
 								break;
 							case TERRAIN_GRASSLAND:
-								fprintf (fout, "G"); 
+								fprintf (fout, "G");
 								break;
 							case TERRAIN_DESERT:
-								fprintf (fout, "d"); 
+								fprintf (fout, "d");
 								break;
 							case TERRAIN_SWAMP:
 								fprintf (fout, "S");
@@ -2488,45 +2434,45 @@ void World::Mdump(FILE *fout)
 							case TERRAIN_GLACIER:
 								fprintf (fout, "g");
 								break;
-								
+
 							case TERRAIN_WATER_SHALLOW:
-								fprintf (fout, "."); 
-								break; 
+								fprintf (fout, ".");
+								break;
 							case TERRAIN_WATER_DEEP:
-								if (IsCurrent(k,i)) { 
-									fprintf (fout, "/"); 
-								} else { 
-									fprintf (fout, ";"); 
+								if (IsCurrent(k,i)) {
+									fprintf (fout, "/");
+								} else {
+									fprintf (fout, ";");
 								}
-								break; 
+								break;
 							case TERRAIN_WATER_RIFT:
-								fprintf (fout, "u"); 
-								break; 
+								fprintf (fout, "u");
+								break;
 							case TERRAIN_WATER_TRENCH:
-								fprintf (fout, "#"); 
-								break; 
+								fprintf (fout, "#");
+								break;
 							case TERRAIN_WATER_VOLCANO:
-								fprintf (fout, "v"); 
+								fprintf (fout, "v");
 								break;
 							case TERRAIN_WATER_BEACH :
-								fprintf (fout, "B"); 
+								fprintf (fout, "B");
 								break;
 							case TERRAIN_WATER_SHELF :
-								fprintf (fout, "S"); 
+								fprintf (fout, "S");
 								break;
 							case TERRAIN_DEAD :
-								fprintf (fout, "D"); 
+								fprintf (fout, "D");
 								break;
 							default:
-								fprintf (fout, "%d", m_map[j][i]->m_terrain_type);     
-								break; 
+								fprintf (fout, "%d", m_map[j][i]->m_terrain_type);
+								break;
 							}
-							
+
 						}
 					}
 				}
 				fprintf(fout, " ");
-				
+
 			}
 		}
 		fprintf (fout, "\n");
@@ -2580,7 +2526,6 @@ void World::Serialize(CivArchive &archive)
 
 		m_size.Serialize(archive) ;
 
-		
 		w = GetWidth() ;
 		h = GetHeight() ;
 
@@ -2594,8 +2539,7 @@ void World::Serialize(CivArchive &archive)
 				GetCell(x,y)->Serialize(archive) ;
 			}
 		}
-		
-		
+
 		archive << m_num_civ_starts;
 		archive.Store((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
@@ -2620,7 +2564,6 @@ void World::Serialize(CivArchive &archive)
 
 		m_size.Serialize(archive) ;
 
-
 		AllocateMap();
 
 		w = GetWidth();
@@ -2634,7 +2577,7 @@ void World::Serialize(CivArchive &archive)
 		for (i=0; i<len; i++) {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
-		
+
 		for (x=0; x<w; x++) {
 			for (y=0; y<h; y++) {
 				Cell		*theCell;
@@ -2642,10 +2585,10 @@ void World::Serialize(CivArchive &archive)
 
 				theCell = GetCell(x, y);
 				theCell->Serialize(archive);
-				
+
 			}
 		}
-		
+
 		archive >> m_num_civ_starts;
 		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
@@ -2664,7 +2607,6 @@ void World::Serialize(CivArchive &archive)
 		}
 	}
 }
-
 
 void World::SerializeJustMap(CivArchive &archive)
 {
@@ -2696,19 +2638,18 @@ uint32 World_World_GetVersion(void)
 	return (k_WORLD_VERSION_MAJOR<<16 | k_WORLD_VERSION_MINOR) ;
 	}
 
-
 sint32 World::Verify1()
 
 {
     sint32 x, y;
 
-    for (x=0; x<m_size.x; x++) { 
-        for (y=0; y<m_size.y; y++) { 
-            if (m_map[x][y]->m_terrain_type < 0) { 
+    for (x=0; x<m_size.x; x++) {
+        for (y=0; y<m_size.y; y++) {
+            if (m_map[x][y]->m_terrain_type < 0) {
                 Assert((m_map[x][y]->m_env  & k_MASK_ENV_MOVEMENT_TYPE) == 0);
             }
-        } 
-    } 
+        }
+    }
     return TRUE;
 }
 
@@ -2726,10 +2667,10 @@ sint32 World::Verify3()
 
 
 void World::AllocateTileInfoStorage(void)
-{	
+{
 	sint32			width = m_size.x;
 	sint32			height = m_size.y;
-    
+
     delete [] m_tileInfoStorage;
 	m_tileInfoStorage = new TileInfo[width*height];
 }
@@ -2746,7 +2687,7 @@ TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 
 	Assert(m_tileInfoStorage != NULL);
 	if (m_tileInfoStorage == NULL) return NULL;
-		
+
 	sint32			width = m_size.x;
 	sint32			height = m_size.y;
 	sint32			area = m_size.x * m_size.y;
@@ -2759,7 +2700,7 @@ TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 void World::GenerateGoodyHuts()
 {
 	if(g_theProfileDB->IsTutorialAdvice()) {
-		
+
 		return;
 	}
 
@@ -2781,7 +2722,7 @@ void World::GenerateGoodyHuts()
 				sint32 celly = y * hutBoxSize.y + coffy;
 				Cell * cell = GetCell(cellx, celly);
 				if(cell->m_env & (k_BIT_MOVEMENT_TYPE_LAND)) {
-					
+
 					cell->m_jabba = new GoodyHut();
 
 				}
@@ -2804,7 +2745,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 		return NULL;
 	if(stricmp(name, "none") == 0)
 		return NULL;
-	
+
 	char szTemp[MAX_PATH] = { 0 };
 #ifdef _DEBUG
 	getcwd(szTemp, MAX_PATH);
@@ -2890,7 +2831,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #endif
 		return NULL;
 	}
-#ifndef USE_COM_REPLACEMENT	
+#ifndef USE_COM_REPLACEMENT
 	IMapGenerator *generator;
 	if(unknown->QueryInterface(CLSID_MapGenerator, (void **)&generator) != S_OK) {
 		c3errors_ErrorDialog("Map Generator", "Plugin does not have map generator interface");
@@ -2905,7 +2846,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #endif
 	return generator;
 }
-	
+
 void World::FreeMapPlugin()
 {
 #ifndef USE_COM_REPLACEMENT
@@ -2952,7 +2893,7 @@ void World::GetMapAndHistogram(IMapGenerator *mapgen,
 	GetHeightMap(mapgen, map, settings, numSettings);
 	GetHistogram(map, histogram);
 }
-			
+
 void World::FlatToIso(const MapPoint &flat, MapPoint &iso)
 {
 	iso.y = flat.y;
@@ -2963,14 +2904,13 @@ void World::FlatToIso(const MapPoint &flat, MapPoint &iso)
 
 static DynamicArray<MapPoint> *s_visited;
 
-
 BOOL World::IsNextToOldRiver(const MapPoint &newpoint, const MapPoint &lastpoint)
 {
 	sint32 xc, yc;
 	sint32 left;
-	if(newpoint.y & 1) { 
+	if(newpoint.y & 1) {
 		left = newpoint.x;
-	} else { 
+	} else {
 		left = newpoint.x - 1;
 	}
 	for(xc = left; xc < left+2; xc++) {
@@ -2987,7 +2927,7 @@ BOOL World::IsNextToOldRiver(const MapPoint &newpoint, const MapPoint &lastpoint
 		}
 	}
 
-	return FALSE;	
+	return FALSE;
 }
 
 void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
@@ -3002,13 +2942,13 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 	sint32 maxx = 0, maxy = 0;
 
 	BOOL atMouth;
-	
+
 	cellwidth = g_theConstDB->RiverCellWidth();
 	cellheight = g_theConstDB->RiverCellHeight();
 
 #define CHKPOINT(p) Assert(p.x >= 0 && p.x < m_size.x && p.y >= 0 && p.y < m_size.y)
 #define CHKCOORD(xxx,yyy) Assert(xxx >= 0 && xxx < m_size.x && yyy >= 0 && yyy < m_size.y)
-			
+
 	for(xcell = 0; xcell < cellwidth; xcell++) {
 		for(ycell = 0; ycell < cellheight; ycell++) {
 			xsrch = xcell * (m_size.x / cellwidth);
@@ -3038,14 +2978,14 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			}
 			if(maxheight == -1000)
 				continue;
-			
+
 			x = maxx;
 			y = maxy;
 			MapPoint from(x,y);
 			MapPoint to;
-			
+
 			FlatToIso(from, to);
-			
+
 			CHKPOINT(from);
 			CHKPOINT(to);
 			CHKCOORD(x, y);
@@ -3053,7 +2993,7 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			if(IsRiver(to) || !IsLand(to) || IsNextToWater(to.x,to.y)) {
 				continue;
 			}
-		
+
 			SetRiver(to);
 			atMouth = FALSE;
 
@@ -3067,18 +3007,18 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 
 				sint32 curheight = map[y * m_size.x + x];
 				sint32 left;
-				if(y & 1) { 
+				if(y & 1) {
 					left = x;
-					
-					
-					
-					
-				} else { 
+
+
+
+
+				} else {
 					left = x - 1;
-					
-					
-					
-					
+
+
+
+
 				}
 				for(xc = left; xc < left+2; xc++) {
 					if(xc < 0 || xc >= m_size.x)
@@ -3101,11 +3041,11 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 						if(ax >= m_size.x) ax -= m_size.x;
 						if(ay < 0) ay += m_size.y;
 						if(ay >= m_size.y) ay -= m_size.y;
-					
+
 						MapPoint flat(ax,ay);
 						MapPoint iso;
 						FlatToIso(flat,iso);
-					
+
 						sint32 checkheight = map[ay * m_size.x + ax];
 						if(checkheight > lowest)
 							continue;
@@ -3146,8 +3086,7 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 
 	s_visited->Clear();
 
-	
-	
+
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(!IsRiver(x,y))
@@ -3179,14 +3118,12 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 void TemperatureFilter(sint8 *map, sint32 *histogram)
 {
 	sint32 x, y;
-	
 
 
 	MapPoint	mapSize;
 	g_theConstDB->GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
-	
-	
+
 	sint32 range = g_theProfileDB->TemperatureRangeAdjust();
 	sint32 val;
 	sint32 dist;
@@ -3246,7 +3183,7 @@ void World::ClearScratch()
 {
 	sint32 size = m_size.x * m_size.y;
 	Cell *pCell = &m_cellArray[0];
-	do 
+	do
 	{
 #if defined(_DEBUG) && defined(CELL_COLOR)
 		pCell->m_color = pCell->m_search_count & 0x7fffffff;
@@ -3278,7 +3215,7 @@ void World::RemoveIsolatedWater()
 							d = NORTHWEST;
 							break;
 					}
-					
+
 					p.Set(x,y);
 					count++;
 				} while (!p.GetNeighborPosition((WORLD_DIRECTION)d, n) && count < 10);
@@ -3341,7 +3278,7 @@ void World::DeleteStartingPoint(sint32 index)
 	Assert(index < m_num_civ_starts);
 	if(index >= 0 && index < m_num_civ_starts) {
 		if(index < m_num_civ_starts - 1) {
-			memmove(&m_civ_starts[index], &m_civ_starts[index + 1], 
+			memmove(&m_civ_starts[index], &m_civ_starts[index + 1],
 					sizeof(StartingPosition) * m_num_civ_starts - index - 1);
 		}
 		m_num_civ_starts--;
@@ -3369,8 +3306,7 @@ BOOL World::ExportMap(MBCHAR *filename)
 	fprintf(outfile, "%d,%d\n", m_size.x, m_size.y);
 
 	sint32		x, y, z;
-	
-	
+
 	z = 0;
 
 	for (y=0; y<m_size.y; y++) {
@@ -3389,14 +3325,14 @@ BOOL World::ExportMap(MBCHAR *filename)
 			BOOL hasGood = GetGood(pos, good);
 			uint32 env = cell->GetEnv();
 
-			fprintf(outfile, "%d,%d,%d,%d,%ld\t", 
+			fprintf(outfile, "%d,%d,%d,%d,%ld\t",
 					cell->GetTerrain(),
 					hasHut,
 					hasRiver,
 					hasGood,
 					env);
 		}
-		fprintf(outfile, "\n");		
+		fprintf(outfile, "\n");
 	}
 
 	fclose(outfile);
@@ -3431,8 +3367,7 @@ BOOL World::ImportMap(MBCHAR *filename)
 	}
 
 	sint32		x, y;
-	
-	
+
 	Reset(m_size.x, m_size.y, m_isYwrap, m_isXwrap);
 
 	for(x = 0; x < m_size.x; x++) {
@@ -3445,7 +3380,7 @@ BOOL World::ImportMap(MBCHAR *filename)
 		for (x=0; x<m_size.x; x++) {
 			MapPoint	pos;
 			Cell	*cell;
-		
+
 			pos.x = x;
 			pos.y = y;
 
@@ -3454,44 +3389,40 @@ BOOL World::ImportMap(MBCHAR *filename)
 			BOOL hasGood;
 			sint32 terrainType;
 			uint32 env;
-			
-			fscanf(infile, "%d,%d,%d,%d,%ld\t", 
+
+			fscanf(infile, "%d,%d,%d,%d,%ld\t",
 					&terrainType,
 					&hasHut,
 					&hasRiver,
 					&hasGood,
 					&env);
-			
+
 			cell = GetCell(pos);
 
-			
 
 
-			
+
+
 
 			if(terrainType < 0 || terrainType >= g_theTerrainDB->NumRecords())
 				terrainType = 0;
 
-			
 			cell->SetEnvFast(env);
 			cell->SetTerrain(terrainType);
 
-			
 			cell->DeleteGoodyHut();
 			if (hasHut) {
 				cell->CreateGoodyHut();
 			}
 
-			
 			if (hasRiver) {
 				SetRiver(pos);
 			}
 
-			
 			if (hasGood) {
 				SetRandomGood(pos.x, pos.y);
 			}
-		
+
 		}
 		fscanf(infile, "\n");
 	}
@@ -3509,10 +3440,9 @@ BOOL World::ImportMap(MBCHAR *filename)
 		}
 	}
 
-	
 	SetAllMoveCost();
-	m_continents_are_numbered= FALSE; 
-	NumberContinents(); 
+	m_continents_are_numbered= FALSE;
+	NumberContinents();
 	CalcChokePoints();
 	ClearScratch();
 
@@ -3530,10 +3460,10 @@ void World::SmartSetTerrain(const MapPoint &pos, sint32 terr, sint32 radius)
 	if(radius > 0) {
 		SquareIterator it(pos, radius);
 		for(it.Start(); !it.End(); it.Next()) {
-			
-			
-			
-			
+
+
+
+
 			for(x = 0; x < GetXWidth(); x++) {
 				for(y = 0; y < GetYHeight(); y++) {
 					MapPoint pos(x,y);
@@ -3541,7 +3471,7 @@ void World::SmartSetTerrain(const MapPoint &pos, sint32 terr, sint32 radius)
 					cell->SetScratch(cell->GetScratch() & (~(k_SMART_SET_HIT)));
 				}
 			}
-			
+
 			SmartSetOneCell(it.Pos(), terr);
 		}
 	} else {
@@ -3572,12 +3502,11 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	if(!thisCell) return;
 
 	if(thisCell->GetScratch() & k_SMART_SET_HIT)
-		
+
 		return;
 
 	thisCell->SetScratch(thisCell->GetScratch() | k_SMART_SET_HIT);
 
-	
 	rec = g_theTerrainDB->Get(terr);
 	const TerrainRecord *neighborRec;
 
@@ -3590,7 +3519,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	thisCell->SetTerrain(terr);
 
 	if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
-		
+
 		RadiusIterator it(pos, 1);
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
@@ -3606,7 +3535,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 			}
 		}
 	} else if(rec->GetMovementTypeShallowWater()) {
-		
+
 		RadiusIterator it(pos, 1);
 		bool nextToLand = false;
 		for(it.Start(); !it.End(); it.Next()) {
@@ -3629,7 +3558,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		if(oldTerr != terr) {
 			for(it.Start(); !it.End(); it.Next()) {
 				if(it.Pos() == pos) continue;
-				
+
 				Cell *cell = GetCell(it.Pos());
 				Assert(cell);
 				if(!cell) continue;
@@ -3638,16 +3567,15 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 				neighborRec = g_theTerrainDB->Get(ntype);
 
 				if(neighborRec->GetMovementTypeShallowWater() && oldTerr != terr) {
-					
+
 					if (ntype != TERRAIN_WATER_KELP && ntype != TERRAIN_WATER_REEF) {
 						SmartSetOneCell(it.Pos(), TERRAIN_WATER_SHALLOW);
-					} 
-
+					}
 
 				} else if(neighborRec->GetMovementTypeSea()) {
 					if((ntype != TERRAIN_WATER_SHELF) &&
 					   (ntype != TERRAIN_WATER_TRENCH)) {
-						
+
 						cell->SetTerrain(TERRAIN_WATER_SHELF);
 					}
 				}
@@ -3663,7 +3591,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		bool nextToShallow = false;
 		bool nextToBeach = false;
 		bool nextToShelf = false;
-		
+
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
 
@@ -3681,7 +3609,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		}
 
 		if(!nextToLand) {
-			
+
 			for(it.Start(); !it.End(); it.Next()) {
 				if(it.Pos() == pos) continue;
 
@@ -3703,11 +3631,10 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 			if(!nextToShallow && ((terr == TERRAIN_WATER_SHELF) ||
 								  (terr == TERRAIN_WATER_TRENCH))) {
-				
-				
+
 				thisCell->SetTerrain(TERRAIN_WATER_DEEP);
 				terr = TERRAIN_WATER_DEEP;
-			}									 
+			}
 
 			if(nextToBeach) {
 				thisCell->SetTerrain(TERRAIN_WATER_SHELF);
@@ -3730,14 +3657,14 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 					if(it.Pos() == pos) continue;
 					sint32 ntype = GetCell(it.Pos())->GetTerrainType();
 					if(ntype == TERRAIN_WATER_SHELF ||
-					   ntype == TERRAIN_WATER_TRENCH) {							
+					   ntype == TERRAIN_WATER_TRENCH) {
 						SmartSetOneCell(it.Pos(), ntype);
 					}
 				}
 			}
 
 		} else {
-			
+
 			for(it.Start(); !it.End(); it.Next()) {
 				if(it.Pos() == pos) continue;
 				Cell *cell = GetCell(it.Pos());
@@ -3752,7 +3679,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 				} else if(neighborRec->GetMovementTypeSea()) {
 					if((ntype != TERRAIN_WATER_SHELF) &&
 					   (ntype != TERRAIN_WATER_TRENCH)) {
-						
+
 						SmartSetOneCell(it.Pos(), TERRAIN_WATER_SHELF);
 					}
 				}
@@ -3761,21 +3688,20 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	}
 
 	if(terr != oldTerr) {
-		
+
 		bool terrIsLand = g_theTerrainDB->Get(terr)->GetMovementTypeLand() || g_theTerrainDB->Get(terr)->GetMovementTypeMountain();
 		bool oldTerrIsLand = g_theTerrainDB->Get(oldTerr)->GetMovementTypeLand() || g_theTerrainDB->Get(oldTerr)->GetMovementTypeMountain();
 		if(oldTerrIsLand != terrIsLand) {
 			if(thisCell->UnitArmy()) {
 				thisCell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
 			}
-			
-			if(thisCell->GetCity().IsValid()) {				
+
+			if(thisCell->GetCity().IsValid()) {
 				thisCell->GetCity().CD()->UpdateSprite();
 			}
 		}
 
-		
-		
+
 		RadiusIterator it(pos, 1);
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *cell = GetCell(it.Pos());
@@ -3787,7 +3713,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		}
 	}
 }
-	
+
 #ifdef _DEBUG
 
 

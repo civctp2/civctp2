@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -42,7 +42,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <string.h>
 #include "assoctab.h"
 
-
 /*-----------------------------------------------------------------------
  Create a table whose elements all have the given size.
  Element size is the size of the value; it doesn't include the size of
@@ -52,10 +51,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 assoctab_t *assoctab_create(size_t element_size)
 {
 	/*assoctab_item_t *pi; */
-	
+
 	return (assoctab_t *)dynatab_create(element_size + sizeof(int /*pi->key*/));
 }
-
 
 /*-----------------------------------------------------------------------
  Destroy a table.
@@ -125,7 +123,7 @@ void *assoctab_subscript(assoctab_t *tab, int key)
 	}
 	return NULL;
 }
-	
+
 /*-----------------------------------------------------------------------
  Delete the given key from the table, shifts higher keys down
  (in the assoctab_getkey sense).
@@ -150,7 +148,7 @@ int assoctab_subscript_delete(assoctab_t *tab, int key)
 	}
 	return 1;
 }
-	
+
 #if defined(assoctab_UNITTEST)
 
 #include <stdio.h>
@@ -291,10 +289,9 @@ main()
 		test1(pt[i], 2);
 		test1(pt[i], 3);
 	}
-	for (i=0;i<NTABS;i++) 
+	for (i=0;i<NTABS;i++)
 		assoctab_destroy(pt[i]);
 	printf("test okay\n");
 	return 0;
 }
 #endif
-

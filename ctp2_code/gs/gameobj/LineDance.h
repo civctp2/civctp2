@@ -27,7 +27,7 @@ private:
 
 	void SortAttackers(CellUnitList &attackers);
 	void SortDefenders(CellUnitList &defenders);
-	
+
 	void RemoveDeadDefender(sint32 index);
 	void RemoveDeadAttacker(sint32 index);
 
@@ -47,8 +47,6 @@ public:
 	Unit &GetAttacker(sint32 index);
 	Unit &GetDefender(sint32 index);
 
-	
 };
 
-		
 #endif

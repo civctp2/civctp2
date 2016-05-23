@@ -18,7 +18,6 @@
 #include "ctp2_config.h"
 #include "c3types.h"
 
-
 static MBCHAR **    s_appStrings        = NULL;
 static size_t      s_numAppStrings     = 0;
 
@@ -56,7 +55,7 @@ void appstrings_Cleanup(void)
 		if (s_appStrings[i])
 			delete[] s_appStrings[i];
 	}
-	
+
 	delete[] s_appStrings;
 	s_appStrings    = NULL;
 	s_numAppStrings = 0;

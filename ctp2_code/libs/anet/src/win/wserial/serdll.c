@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,64 +29,63 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 // Wrapper to adapt the simple packetizing serial driver to Zobel's comm API.
 //
-// $Log: serdll.c $ 
-// Revision 1.7  1997/10/01 22:05:19  anitalee 
-// took out DPRINT redefinition 
-// Revision 1.6  1997/10/01 21:43:42  dkegel 
-// return ser error codes 
-// Revision 1.5  1997/03/10 06:08:15  dkegel 
-// 1. Jerry's unified serial/modem driver code. 
-// 2. Dan hardcoded serial driver to ignore baud rate, always use 38400. 
-// Revision 1.4  1997/01/31 02:50:03  dkegel 
-// Switched to ddprint.h 
-// Revision 1.3  1996/12/13 23:17:14  jgraebner 
-// Fixed invalid pointer reference. 
-// Revision 1.2  1996/12/13 00:16:28  dkegel 
-// nodeID now a byte array instead of a structure.  Not used, just zero. 
-// Revision 1.1  1996/12/12 22:09:44  dkegel 
-// Initial revision 
-// Revision 1.15  1996/09/06 23:05:24  dkegel 
-// Replaced commGroupSubtract with commSetParam. 
-// Revision 1.14  1996/07/01 20:52:18  dkegel 
-// Check sessionID during ramp check; catches open cables. 
-// Revision 1.13  1996/06/30 22:22:22  dkegel 
-// Loopback test now triggered by -Ktest 
-// Revision 1.12  1996/06/30 21:38:18  dkegel 
-// If -Kpulse is given, call exchange_ramp to do a loopback test.  Kludge. 
-// Both sides must click on 'accept' at same time for test to work. 
-// Test takes two seconds. 
-// Revision 1.11  1996/06/29 18:02:25  dkegel 
-// Support nonstandard IRQ's and base addresses. 
-// Revision 1.10  1996/06/29 00:58:40  dkegel 
-// 1. Added better status value and log message if request wrong size. 
-// 2. Turn log on. 
-// Revision 1.9  1996/06/26 20:37:28  dkegel 
-// Added log file (serial.log), but left it disabled. 
-// I will hand compile it for the few people who need it. 
-// Revision 1.8  1996/05/29 00:44:11  dkegel 
-// 1. Pass addresses to and from ser_put and ser_get. 
-// 2. Use ser handles wherever possible directly as player handles. 
-// 3. Finally implemented commSayBye. 
-// Revision 1.7  1996/05/22 00:46:49  dkegel 
-// Removed the word "driver" from dll description. 
-// Revision 1.6  1996/05/15 02:11:53  dkegel 
-// Use standard comm_STATUS codes in commInit. 
-// Revision 1.5  1996/05/14 03:06:04  dkegel 
-// Minor dprint's added. 
-// Revision 1.4  1996/04/30 21:00:12  dkegel 
-// Added "comm_DRIVER_IS_FAST" to capabilities on theory that 
-// speed will always be 19200 and there will only be two users. 
-// Revision 1.3  1996/03/06 23:46:38  dkegel 
-// Shell can't handle drivers that don't need phone numbers and don't allow 
-// gamelists, so turn on the allows_gamelist bit. 
-// Revision 1.2  1996/02/29 01:36:48  dkegel 
-// 1. Implemented commSayHi etc. 
-// 2. Implemented new dpEnumTransports capabilities signature. 
-// 3. Implemented new parameters to commInit. 
-// Revision 1.1  1996/02/25 04:50:57  dkegel 
-// Initial revision 
+// $Log: serdll.c $
+// Revision 1.7  1997/10/01 22:05:19  anitalee
+// took out DPRINT redefinition
+// Revision 1.6  1997/10/01 21:43:42  dkegel
+// return ser error codes
+// Revision 1.5  1997/03/10 06:08:15  dkegel
+// 1. Jerry's unified serial/modem driver code.
+// 2. Dan hardcoded serial driver to ignore baud rate, always use 38400.
+// Revision 1.4  1997/01/31 02:50:03  dkegel
+// Switched to ddprint.h
+// Revision 1.3  1996/12/13 23:17:14  jgraebner
+// Fixed invalid pointer reference.
+// Revision 1.2  1996/12/13 00:16:28  dkegel
+// nodeID now a byte array instead of a structure.  Not used, just zero.
+// Revision 1.1  1996/12/12 22:09:44  dkegel
+// Initial revision
+// Revision 1.15  1996/09/06 23:05:24  dkegel
+// Replaced commGroupSubtract with commSetParam.
+// Revision 1.14  1996/07/01 20:52:18  dkegel
+// Check sessionID during ramp check; catches open cables.
+// Revision 1.13  1996/06/30 22:22:22  dkegel
+// Loopback test now triggered by -Ktest
+// Revision 1.12  1996/06/30 21:38:18  dkegel
+// If -Kpulse is given, call exchange_ramp to do a loopback test.  Kludge.
+// Both sides must click on 'accept' at same time for test to work.
+// Test takes two seconds.
+// Revision 1.11  1996/06/29 18:02:25  dkegel
+// Support nonstandard IRQ's and base addresses.
+// Revision 1.10  1996/06/29 00:58:40  dkegel
+// 1. Added better status value and log message if request wrong size.
+// 2. Turn log on.
+// Revision 1.9  1996/06/26 20:37:28  dkegel
+// Added log file (serial.log), but left it disabled.
+// I will hand compile it for the few people who need it.
+// Revision 1.8  1996/05/29 00:44:11  dkegel
+// 1. Pass addresses to and from ser_put and ser_get.
+// 2. Use ser handles wherever possible directly as player handles.
+// 3. Finally implemented commSayBye.
+// Revision 1.7  1996/05/22 00:46:49  dkegel
+// Removed the word "driver" from dll description.
+// Revision 1.6  1996/05/15 02:11:53  dkegel
+// Use standard comm_STATUS codes in commInit.
+// Revision 1.5  1996/05/14 03:06:04  dkegel
+// Minor dprint's added.
+// Revision 1.4  1996/04/30 21:00:12  dkegel
+// Added "comm_DRIVER_IS_FAST" to capabilities on theory that
+// speed will always be 19200 and there will only be two users.
+// Revision 1.3  1996/03/06 23:46:38  dkegel
+// Shell can't handle drivers that don't need phone numbers and don't allow
+// gamelists, so turn on the allows_gamelist bit.
+// Revision 1.2  1996/02/29 01:36:48  dkegel
+// 1. Implemented commSayHi etc.
+// 2. Implemented new dpEnumTransports capabilities signature.
+// 3. Implemented new parameters to commInit.
+// Revision 1.1  1996/02/25 04:50:57  dkegel
+// Initial revision
 //
-
 
 /*************************************************************************************
 
@@ -120,7 +119,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define PLAYER_YOU 0      // What we translate ser_HDL_YOU to.
 
-
 /*************************************************************************************
 
                                     Globals
@@ -128,7 +126,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 **************************************************************************************/
 
 static ser_t *ser = NULL;
-
 
 #ifdef DRIVER_LOG
 static int logfd = __ERROR;
@@ -142,18 +139,18 @@ static int logfd = __ERROR;
 static ser_hdl_t commHdlser(playerHdl_t h)
 
 {
-  switch (h) 
+  switch (h)
   {
-    case PLAYER_NONE:   
+    case PLAYER_NONE:
     return ser_HDL_NONE;
 
-    case PLAYER_ME:     
+    case PLAYER_ME:
     return ser_HDL_ME;
 
-    case PLAYER_BROADCAST:  
+    case PLAYER_BROADCAST:
     return ser_HDL_BROADCAST;
 
-    case PLAYER_UNKNOWN:  
+    case PLAYER_UNKNOWN:
     return ser_HDL_NONE;
 
     default:
@@ -162,7 +159,6 @@ static ser_hdl_t commHdlser(playerHdl_t h)
 
   return ((ser_hdl_t) h);
 }
-
 
 /*************************************************************************************
 
@@ -186,7 +182,6 @@ void fdprint(char *msg)
   if (logfd != __ERROR)  write(logfd, msg, strlen(msg));
 }
 #endif
-
 
 /*************************************************************************************
 
@@ -220,14 +215,14 @@ static int commPortIsAvailable(const char *name)
 	HANDLE h;
 
 	memset(&SecurityAttributes, 0, sizeof(SECURITY_ATTRIBUTES));
-	SecurityAttributes.nLength = sizeof( SECURITY_ATTRIBUTES ); 
+	SecurityAttributes.nLength = sizeof( SECURITY_ATTRIBUTES );
 
 	h = CreateFile(name, GENERIC_READ | GENERIC_WRITE,
 		0,                    // exclusive access
 		&SecurityAttributes,
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL, NULL);
-	
+
 	if (INVALID_HANDLE_VALUE != h) {
 		CloseHandle(h);
 		return TRUE;
@@ -286,7 +281,7 @@ commEnumPorts(
 	DPRINT(("commEnumPorts: %d port(s) found.\n", nports));
 	return TRUE;
 }
-		
+
 /*************************************************************************************
 
                                     commInit()
@@ -294,7 +289,7 @@ commEnumPorts(
 **************************************************************************************/
 
 /*
- *  Initialize the communications driver.  
+ *  Initialize the communications driver.
  *
  *  Return FALSE on error.
  */
@@ -340,7 +335,6 @@ int cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
 }
 
 
-
 /*************************************************************************************
 
                                     commTerm()
@@ -348,7 +342,7 @@ int cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
 **************************************************************************************/
 
 /*
- *  Tear down the communications driver.  
+ *  Tear down the communications driver.
  *
  *  Return FALSE on error.
  */
@@ -356,7 +350,7 @@ int cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
 int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 
 {
-  if (ser) 
+  if (ser)
   {
     ser_destroy(ser);
     ser = NULL;
@@ -366,7 +360,6 @@ int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
   (void) resp;
   return(TRUE);
 }
-
 
 
 /*************************************************************************************
@@ -414,7 +407,6 @@ int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
   return (TRUE);
 }
 
-
 /*************************************************************************************
 
                               commPlayerInfo()
@@ -444,7 +436,7 @@ int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 
   if (req->player == PLAYER_ME)
 	  h = ser_HDL_ME;
-  else if (req->player == PLAYER_YOU) 
+  else if (req->player == PLAYER_YOU)
 	  h = ser_HDL_YOU;
   else
   {
@@ -452,7 +444,7 @@ int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 	  return FALSE;
   }
   // index into nodes table and fill in response
-  if ((resp->status = ser_hdl2adr(ser, h, &kludgeAdr)) != ser_RES_OK) 
+  if ((resp->status = ser_hdl2adr(ser, h, &kludgeAdr)) != ser_RES_OK)
   {
     return FALSE;
   }
@@ -465,7 +457,6 @@ int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 
   return(TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -494,7 +485,6 @@ int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
   return(FALSE);
 }
 
-
 /*************************************************************************************
 
                                    commTxPkt()
@@ -515,14 +505,14 @@ int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
   commTxPktResp_t   respDummy;
 
   if (resp == NULL) resp = &respDummy;
-  if (req == NULL) 
+  if (req == NULL)
   {
     resp->status = 3;
     return FALSE;
   }
 
   // Abort if no good place to send packet.
-  if (req->dest == PLAYER_ME) 
+  if (req->dest == PLAYER_ME)
   {
     resp->status = 1;
     return FALSE;
@@ -532,7 +522,6 @@ int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
 
   return(resp->status == ser_RES_OK);
 }
-
 
 /*************************************************************************************
 
@@ -552,14 +541,12 @@ int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
   commPeekPktReq_t  reqDummy;
   commPeekPktResp_t respDummy;
 
-
   if (req == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
 
   resp->status = 1;
   return(FALSE);
 }
-
 
 /*************************************************************************************
 
@@ -592,7 +579,6 @@ int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
   return (resp->status == ser_RES_OK);
 }
 
-
 /*************************************************************************************
 
                               commScanAddr()
@@ -613,7 +599,6 @@ int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
   commScanAddrResp_t respDummy;
   ser_adr_t          adr;
 
-
   if (req  == NULL) req  = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
 
@@ -627,7 +612,6 @@ int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
   resp->status = 0;
   return (TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -649,11 +633,10 @@ int cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
   commPrintAddrResp_t respDummy;
   char printable[50];
 
-
   if (req  == NULL)  req  = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL)  resp = &respDummy;
 
-  if ((req->length != sizeof(ser_adr_t)) || (req->address == NULL)) 
+  if ((req->length != sizeof(ser_adr_t)) || (req->address == NULL))
   {
     DPRINT(("length != sizeof(ser_adr_t) or req-address == NULL\n"));
     resp->status = 1;
@@ -662,9 +645,9 @@ int cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
 
   sprintf(printable, "SERIAL:%x", *(ser_adr_t *) req->address);
 
-  if (req->printable != NULL) 
+  if (req->printable != NULL)
   {
-    if (req->size < strlen(printable) + 1) 
+    if (req->size < strlen(printable) + 1)
     {
       resp->status = 2;
       return(FALSE);
@@ -676,7 +659,6 @@ int cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
   resp->status = 0;
   return(TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -700,7 +682,6 @@ int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
   return(FALSE);
 }
 
-
 /*************************************************************************************
 
                               commGroupFree()
@@ -722,7 +703,6 @@ int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
   return (FALSE);
 }
 
-
 /*************************************************************************************
 
                               commGroupAdd()
@@ -743,7 +723,6 @@ int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
 
   return(FALSE);
 }
-
 
 /*************************************************************************************
 
@@ -778,7 +757,6 @@ int cdecl commSetParam(commSetParamReq_t * req,  commSetParamResp_t *resp)
 	return TRUE;
 }
 
-
 /*************************************************************************************
 
                                commSayHi()
@@ -795,13 +773,11 @@ int cdecl commSetParam(commSetParamReq_t * req,  commSetParamResp_t *resp)
  *
  */
 
-
 int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 {
   commSayHiReq_t  reqDummy;
   commSayHiResp_t respDummy;
   ser_hdl_t       h;
-
 
   if (req == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
@@ -812,14 +788,14 @@ int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 	  return FALSE;
   }
   h = ser_adr2hdl(ser, req->address, TRUE);
-  if (h == ser_HDL_ME) 
+  if (h == ser_HDL_ME)
   {
     resp->player = PLAYER_ME;
     resp->status = 0;
     return TRUE;
   }
 
-  if (h == ser_HDL_YOU) 
+  if (h == ser_HDL_YOU)
   {
     resp->player = PLAYER_YOU;
     resp->status = 0;
@@ -829,7 +805,6 @@ int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 
   return FALSE;
 }
-
 
 /*************************************************************************************
 
@@ -875,17 +850,17 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
     case DLL_PROCESS_ATTACH:
       // do any startup stuff here
     return(TRUE);
- 
+
     case DLL_PROCESS_DETACH:
       // do any shutdown stuff here
     return(TRUE);
 
     case DLL_THREAD_ATTACH:
     return(TRUE);
- 
+
     case DLL_THREAD_DETACH:
     return(TRUE);
   }
- 
+
   return(TRUE);
 }

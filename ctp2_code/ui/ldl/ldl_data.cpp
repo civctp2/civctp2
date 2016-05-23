@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "ldl_file.hpp"
@@ -23,12 +12,10 @@ ldl_datablock::ldl_datablock(PointerList<char> *templateNames)
 
 	m_parent = NULL;
 
-	
 	Assert(walk.IsValid());
 	m_name = walk.GetObj();
 	walk.Next();
 
-	
 	while(walk.IsValid()) {
 		ldl_datablock *temp = ldlif_find_block(walk.GetObj());
 		if(temp) {
@@ -62,8 +49,8 @@ ldl_datablock::ldl_datablock(ldl_datablock *copy)
 }
 
 ldl_datablock::ldl_datablock(sint32 hash)
-{ 
-	m_hash = hash; 
+{
+	m_hash = hash;
 	m_parent = NULL;
 	m_name = NULL;
 }
@@ -82,10 +69,9 @@ ldl_datablock::~ldl_datablock()
 		ldlif_remove_block_from_tree(this);
 }
 
-
 char *ldl_datablock::GetFullName(char *output)
 {
-	
+
 	if(m_parent) {
 		m_parent->GetFullName(output);
 		strcat(output, ".");
@@ -97,29 +83,25 @@ char *ldl_datablock::GetFullName(char *output)
 	}
 }
 
-BOOL ldl_datablock::ContstructFullName( 
-		char *szName, 
-		ldl_datablock *dbParent, 
+BOOL ldl_datablock::ContstructFullName(
+		char *szName,
+		ldl_datablock *dbParent,
 		char *result )
 {
 	GetFullName(result);
 
-	
 	return TRUE;
 }
-
 
 ldl_attribute *ldl_datablock::GetLastAttribute( void )
 {
 	return m_attributes.GetTail();
 }
 
-
 ldl_attribute *ldl_datablock::GetAttribute( const char *szName )
 {
 	ldl_attribute *atr;
 
-	
 	const char *strPtr = ldlif_getnameptr(szName);
 
 	for (atr = m_attributes.GetHead(); atr; atr = m_attributes.GetNext(atr)) {
@@ -131,12 +113,10 @@ ldl_attribute *ldl_datablock::GetAttribute( const char *szName )
 	return NULL;
 }
 
-
 int ldl_datablock::GetAttributeType(const char *szName)
 {
 	ldl_attribute *atr;
 
-	
 	const char *strPtr = ldlif_getnameptr(szName);
 
 	for (atr = m_attributes.GetHead(); atr; atr = m_attributes.GetNext(atr)) {
@@ -149,19 +129,17 @@ int ldl_datablock::GetAttributeType(const char *szName)
 }
 
 void ldl_datablock::Dump(sint32 indent) {
-	
+
 	PointerList<ldl_datablock>::Walker bwalk;
 	ldlif_indent_log(indent);
-	
+
 	ldlif_log("%s", m_name);
-	
-	
+
 	for(bwalk.SetList(&m_templates); bwalk.IsValid(); bwalk.Next()) {
 		ldlif_log(":%s", bwalk.GetObj()->GetName());
 	}
 	ldlif_log(" {\n");
-	
-	
+
 	ldl_attribute *attr = m_attributes.GetHead();
 	for(; attr ; attr = m_attributes.GetNext(attr)) {
 		ldlif_indent_log(indent);
@@ -169,12 +147,11 @@ void ldl_datablock::Dump(sint32 indent) {
 				  attr->GetName(),
 				  attr->GetValueText());
 	}
-	
-	
+
 	for(bwalk.SetList(&m_children); bwalk.IsValid(); bwalk.Next()) {
 		bwalk.GetObj()->Dump(indent + 1);
 	}
-	
+
 	ldlif_indent_log(indent);
 	ldlif_log("}\n");
 }
@@ -204,25 +181,23 @@ void ldl_datablock::AddTemplateChildren()
 
 void ldl_datablock::AddTemplateChildrenTo(ldl_datablock *block)
 {
-	
+
 	PointerList<ldl_datablock>::Walker bwalk;
 	for(bwalk.SetList(&m_children); bwalk.IsValid(); bwalk.Next()) {
-		
+
 		PointerList<ldl_datablock>::Walker chwalk(&block->m_children);
 		bool alreadyHaveIt = false;
 		for(;chwalk.IsValid(); chwalk.Next()) {
-			
+
 			if(chwalk.GetObj()->GetName() == bwalk.GetObj()->GetName()) {
-				
+
 				chwalk.GetObj()->CopyAttributesFrom(bwalk.GetObj());
 
-				
 				PointerList<ldl_datablock>::Walker twalk(&bwalk.GetObj()->m_templates);
 				for(; twalk.IsValid(); twalk.Next()) {
 					chwalk.GetObj()->m_templates.AddTail(twalk.GetObj());
 				}
 
-				
 				chwalk.GetObj()->AddTemplateChildren();
 
 				alreadyHaveIt = true;
@@ -247,7 +222,6 @@ void ldl_datablock::CopyAttributesFrom(ldl_datablock *templ)
 		}
 	}
 
-	
 	PointerList<ldl_datablock>::Walker tcwalk(&templ->m_children);
 	for(; tcwalk.IsValid(); tcwalk.Next()) {
 		PointerList<ldl_datablock>::Walker cwalk(&m_children);

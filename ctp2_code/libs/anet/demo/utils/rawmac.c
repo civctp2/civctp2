@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  calling program a chance to unload network drivers
  (and the responsibility to check for this special return value).
  Revision 1.3  1997/05/31 22:48:12  dkegel
- Works better with gtest now.  Mouse events serviced even if no 
+ Works better with gtest now.  Mouse events serviced even if no
  keystrokes detected.
  Revision 1.2  1997/05/30 21:26:12  dkegel
  raw_set_stdio's argument is mandatory.
@@ -59,7 +59,7 @@ int raw_kbhit(void)
 	return EventAvail(keyDownMask, &event);
 }
 
-/* Return -1 if no char available, otherwise return char. 
+/* Return -1 if no char available, otherwise return char.
  * Return 3 if user hits the interrupt key (usually ^C, hence 3)
  *
  * Bug: This version does not set unbuffered mode on stdout,
@@ -82,7 +82,7 @@ int raw_getc(void)
 			return 3;
 			//exit(1);
 		}
-	  
+
 		return c;
 	}
 

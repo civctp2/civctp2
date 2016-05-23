@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,16 +31,13 @@
 
 #include "c3.h"
 
-
 #include "aui_screen.h"
 #include "aui_button.h"
-
 
 #include "connectionselectwindow.h"
 #include "serverselectwindow.h"
 #include "playerselectwindow.h"
 #include "playereditwindow.h"
-
 
 #include "lobbywindow.h"
 #include "lobbychangewindow.h"
@@ -57,7 +54,6 @@
 #include "ns_tribes.h"
 #include "passwordscreen.h"
 
-
 #include "ctp2_button.h"
 
 NetShell *g_netshell = NULL;
@@ -68,14 +64,13 @@ nf_PlayerSetup g_rplayersetup;
 
 extern MBCHAR g_serverName[ 100 + 1 ];
 
-
 AUI_ERRCODE NetShell::Enter( uint32 flags )
 {
 	if ( (flags & k_NS_FLAGS_CREATE) || !g_netshell || !g_netfunc )
 	{
 		if ( !g_netfunc )
 		{
-			
+
 			g_netfunc = new NETFunc();
 			Assert( g_netfunc != NULL );
 			if ( !g_netfunc ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -83,7 +78,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 
 		if ( !g_netshell )
 		{
-			
+
 			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 			g_netshell = new NetShell( &errcode );
@@ -94,12 +89,11 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 
 	LeaveMainMenu();
 
-
 	g_ui->SetBackgroundColor( RGB(0,0,0) );
 	aui_Control *bg = g_netshell->m_bg;
 	if ( bg )
 	{
-		
+
 		aui_Image * image    = g_ui->LoadImage(bg->GetImage()->GetFilename());
 		aui_Image *	oldImage = g_ui->SetBackgroundImage
 			(image,
@@ -112,7 +106,6 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 		}
 	}
 
-	
 	g_ui->Invalidate();
 
 
@@ -129,11 +122,10 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 
 	if(flags & k_NS_FLAGS_CREATE3P) {
 		if(g_netfunc->Connect("freeze.dat") == NETFunc::OK) {
-			
+
 			if(g_netfunc->IsHost()) {
 				GameSelectWindow *sw = (GameSelectWindow *)(g_netshell->FindWindow(NetShell::WINDOW_GAMESELECT));
 				g_gamesetup = *sw->GetGameSetup(g_netfunc->GetSession());
-
 
 				AllinoneWindow *w = (AllinoneWindow *)(g_netshell->FindWindow(NetShell::WINDOW_ALLINONE));
 				g_netshell->GotoScreen( SCREEN_ALLINONE );
@@ -149,7 +141,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 #endif
 		}
 	} else
-	
+
 		g_netshell->GotoScreen( SCREEN_CONNECTIONSELECT );
 
 	return AUI_ERRCODE_OK;
@@ -173,12 +165,11 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 {
 	if ( g_netshell )
 	{
-		
+
 		g_ui->Draw();
 		g_ui->SetBackgroundColor( k_AUI_UI_NOCOLOR );
 		aui_Image *prev = g_ui->SetBackgroundImage( NULL );
 		g_ui->UnloadImage(prev);
-
 
 
 		g_netshell->LeaveCurrentScreen();
@@ -193,18 +184,16 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 		}
 	}
 
-	
 	if ( flags & k_NS_FLAGS_DESTROYNETFUNC )
 		DestroyNETFunc();
 
-	
 	if ( flags & ( k_NS_FLAGS_DESTROYNETSHELL | k_NS_FLAGS_LAUNCH ) )
 	{
 		aui_Action *action = new DestroyAction;
 		if ( safe )
 		{
 			g_ui->AddAction( action );
-			
+
 		}
 		else
 		{
@@ -213,13 +202,11 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 		}
 	}
 
-	
 	if ( flags & k_NS_FLAGS_LAUNCH ) {
-		
+
 		LaunchGame();
 	}
 }
-
 
 
 NetShell::NetShell(
@@ -240,7 +227,6 @@ NetShell::NetShell(
 }
 
 
-
 AUI_ERRCODE NetShell::InitCommon( void )
 {
 	if ( !g_netshell ) g_netshell = this;
@@ -250,11 +236,9 @@ AUI_ERRCODE NetShell::InitCommon( void )
 
 	m_wasMinimizing = FALSE;
 
-	
 	m_truebmp = new ns_String( "strings.truebmp" );
 	Assert( m_truebmp != NULL );
 	if ( !m_truebmp ) return AUI_ERRCODE_MEMALLOCFAILED;
-
 
 	m_tribes = new ns_Tribes;
 	g_nsUnits = new ns_Units;
@@ -270,12 +254,10 @@ AUI_ERRCODE NetShell::InitCommon( void )
 	Assert( AUI_NEWOK(m_bg,errcode) );
 	if ( !AUI_NEWOK(m_bg,errcode) ) return errcode;
 
-	
 	strncpy( g_serverName, "", 100 );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE NetShell::CreateScreens( void )
@@ -286,7 +268,7 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	aui_Window *window;
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_PLAYERSELECT );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -294,21 +276,19 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_PLAYERSELECT ] = screen;
 
 	{
-		
 
 		window = new PlayerSelectWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_PLAYERSELECT ] = window;
 
-		
 
 		m_screens[ SCREEN_PLAYERSELECT ]->
 			AddWindow( m_windows[ WINDOW_PLAYERSELECT ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_CONNECTIONSELECT );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -316,27 +296,25 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_CONNECTIONSELECT ] = screen;
 
 	{
-		
 
 		window = new ConnectionSelectWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_CONNECTIONSELECT ] = window;
 
-		
-		
-		
+
+
+
 		MoveButton(window, "connectionselectwindow", "cancelbutton", true);
 		MoveButton(window, "connectionselectwindow", "okbutton", false);
 
 
-		
 		m_screens[ SCREEN_CONNECTIONSELECT ]->
 			AddWindow( m_windows[ WINDOW_CONNECTIONSELECT ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_SERVERSELECT );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -344,26 +322,25 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_SERVERSELECT ] = screen;
 
 	{
-		
 
 		window = new ServerSelectWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_SERVERSELECT ] = window;
 
-		
-		
 
 
 
-		
+
+
+
 
 		m_screens[ SCREEN_SERVERSELECT ]->
 			AddWindow( m_windows[ WINDOW_SERVERSELECT ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_PLAYEREDIT );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -371,26 +348,25 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_PLAYEREDIT ] = screen;
 
 	{
-		
 
 		window = new PlayerEditWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_PLAYEREDIT ] = window;
 
-		
-		
 
 
 
-		
+
+
+
 
 		m_screens[ SCREEN_PLAYEREDIT ]->
 			AddWindow( m_windows[ WINDOW_PLAYEREDIT ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_LOBBY );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -398,26 +374,23 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_LOBBY ] = screen;
 
 	{
-		
 
 		window = new LobbyWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_LOBBY ] = window;
 
-		
-		
+
 		MoveButton(window, "lobbywindow", "backbutton", true);
 		MoveButton(window, "lobbywindow", "closebutton", false);
 
-		
 
 		m_screens[ SCREEN_LOBBY ]->
 			AddWindow( m_windows[ WINDOW_LOBBY ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_LOBBYCHANGE );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -425,26 +398,25 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_LOBBYCHANGE ] = screen;
 
 	{
-		
 
 		window = new LobbyChangeWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_LOBBYCHANGE ] = window;
 
-		
-		
 
 
 
-		
+
+
+
 
 		m_screens[ SCREEN_LOBBYCHANGE ]->
 			AddWindow( m_windows[ WINDOW_LOBBYCHANGE ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_GAMESELECT );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -452,26 +424,25 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_GAMESELECT ] = screen;
 
 	{
-		
 
 		window = new GameSelectWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_GAMESELECT ] = window;
 
-		
-		
 
 
 
-		
+
+
+
 
 		m_screens[ SCREEN_GAMESELECT ]->
 			AddWindow( m_windows[ WINDOW_GAMESELECT ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_STARTSELECTING );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -479,26 +450,24 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_STARTSELECTING ] = screen;
 
 	{
-		
 
 		window = new StartSelectingWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_STARTSELECTING ] = window;
 
-		
-		
+
 		MoveButton(window, "startselectingwindow", "cancelbutton", true);
 
 
-		
+
 
 		m_screens[ SCREEN_STARTSELECTING ]->
 			AddWindow( m_windows[ WINDOW_STARTSELECTING ] );
 	}
 
 
-	
+
 
 	screen = new aui_Screen( &errcode, SCREEN_ALLINONE );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -506,25 +475,24 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	m_screens[ SCREEN_ALLINONE ] = screen;
 
 	{
-		
 
 		window = new AllinoneWindow( &errcode );
 		Assert( AUI_NEWOK(window,errcode) );
 		if ( !AUI_NEWOK(window,errcode) ) return errcode;
 		m_windows[ WINDOW_ALLINONE ] = window;
 
-		
-		
 
 
 
-		
+
+
+
 
 		m_screens[ SCREEN_ALLINONE ]->
 			AddWindow( m_windows[ WINDOW_ALLINONE ] );
 	}
 
-	
+
 
 
 
@@ -539,16 +507,13 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 
 	passwordscreen_Initialize();
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 NetShell::~NetShell()
 {
 	DestroyScreens();
-
 
 	if ( m_truebmp )
 	{
@@ -595,20 +560,17 @@ NetShell::~NetShell()
 }
 
 
-
 void NetShell::DestroyScreens( void )
 {
-	
+
 	SavePlayerSetupList();
 	SaveGameSetupList();
-
 
 	sint32 i;
 	for ( i = 0; i < (sint32)SCREEN_MAX; i++ )
 		if ( m_screens[ i ] ) delete m_screens[ i ];
 	memset( m_screens, 0, sizeof( m_screens ) );
 
-	
 	for ( i = 0; i < (sint32)WINDOW_MAX; i++ )
 		if ( m_windows[ i ] ) delete m_windows[ i ];
 	memset( m_windows, 0, sizeof( m_windows ) );
@@ -617,25 +579,22 @@ void NetShell::DestroyScreens( void )
 }
 
 
-
 void NetShell::SavePlayerSetupList( void )
 {
-	
+
 	PlayerSelectWindow *pw = (PlayerSelectWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYERSELECT );
 	ns_PlayerSetupListBox *pl = (ns_PlayerSetupListBox *)(pw->FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX ));
 	pl->Save();
 }
 
 
-
 void NetShell::SaveGameSetupList( void )
 {
-	
+
 	GameSelectWindow *gw = (GameSelectWindow *)g_netshell->FindWindow( NetShell::WINDOW_GAMESELECT );
 	ns_GameSetupListBox *gl = (ns_GameSetupListBox *)(gw->FindControl( GameSelectWindow::CONTROL_GAMENAMELISTBOX ));
 	gl->Save();
 }
-
 
 
 void NetShell::SaveAiSetupList( void )
@@ -649,10 +608,8 @@ void NetShell::SaveAiSetupList( void )
 }
 
 
-
 void NetShell::DestroyNETFunc( void )
 {
-	
 
 	if(g_netfunc) {
 
@@ -694,7 +651,6 @@ aui_Screen *NetShell::FindScreen( uint32 id )
 }
 
 
-
 aui_Window *NetShell::FindWindow( uint32 id )
 {
 	Assert( id < (uint32)WINDOW_MAX );
@@ -733,7 +689,6 @@ void NetShell::DestroyAction::Execute(
 		g_netshell = NULL;
 	}
 }
-
 
 void NetShell::MoveButton(aui_Window *window, const MBCHAR *parentBlock, const MBCHAR *regionBlock, BOOL left)
 {

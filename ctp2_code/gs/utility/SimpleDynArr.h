@@ -78,30 +78,28 @@ template <class T> void SimpleDynamicArray<T>::DelIndex(sint32 i)
 {
 	Assert(i >= 0);
 	Assert(i < m_nElements);
-	
+
 	memmove(&m_array[i], &m_array[i+1], m_nElements - i - 1);
 	m_nElements--;
 }
-
 
 template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
 		archive << m_nElements;
 		archive << m_arraySize;
-        if (0 < m_nElements) { 
+        if (0 < m_nElements) {
     		archive.Store((uint8*)m_array, m_nElements * sizeof(T));
         }
 	} else {
 		archive >> m_nElements;
 		archive >> m_arraySize;
 
-		
 		if (m_array)
 			delete [] m_array;
 
 		m_array = new T[m_arraySize];
-        if (0 < m_nElements) { 
+        if (0 < m_nElements) {
     		archive.Load((uint8*)m_array, m_nElements * sizeof(T));
         }
 	}

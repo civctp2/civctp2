@@ -1,27 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include <windows.h>
 
 #include "ear_util.h"
@@ -47,7 +23,7 @@ BOOL gbAUDIO_OFF = FALSE;
 
 
 
-extern BOOL gbEarLoadedPDS;	
+extern BOOL gbEarLoadedPDS;
 
 
 
@@ -58,7 +34,7 @@ extern BOOL gbEarLoadedPDS;
 
 
 VOID EU_Debug(char *format, ...)
- {	
+ {
 #ifdef _DEBUG
 	#define EAR_DEBUG_MESSAGE_LENGTH 256
 
@@ -70,10 +46,10 @@ VOID EU_Debug(char *format, ...)
 	va_end(list);
 
 	OutputDebugString(messageString);
-	
+
 #endif
 
- } 
+ }
 
 
 
@@ -142,19 +118,18 @@ VOID EU_Debug(char *format, ...)
 
 
 BOOL EU_StartUpEar(VOID)
- {	
+ {
+
+	BOOL result;
+	char message[256] = "Unknown Error.\n\n";
+	char title[64] = "Fatal Audio Error:";
 
 
-	BOOL result;								
-	char message[256] = "Unknown Error.\n\n";	
-	char title[64] = "Fatal Audio Error:";		
-
-	
 
 
 	DWORD EAR_STARTUP_FLAGS = EAR_INIT_MUSTBEEAR | EAR_INIT_QUERYUSER;
 
-	
+
 
 
 
@@ -172,7 +147,7 @@ registration_start:
 
 	result = EP_RegisterEarServiceTable(load_earpds);
 
-	
+
 
 
 
@@ -185,20 +160,19 @@ registration_start:
 
 
 	if (result == FALSE)
-	 {	
+	 {
 		if (EAR_DLL == 0)
-		 {	
+		 {
 			EU_Debug("FATAL AUDIO ERROR: No EAR DLL found!\n");
-			
+
 			strcpy(message,
 				   "You need to install the EAR audio engine onto your system\n"\
 				   "(check your manual for instructions).");
 
-		 } 
+		 }
 
-		
 		else
-		 { 
+		 {
 
 
 
@@ -215,10 +189,9 @@ registration_start:
 					   "The EAR audio engine components on your system"\
 					   " are corrupt;\n try re-installing the audio package"\
 					   " that came with your hardware.");
-				
-			 } 
 
-			
+			 }
+
 			else
 			 {	EU_Debug("FATAL AUDIO ERROR: EAR DLL found, but PROC handles in ear.h/ear_proc.cpp "\
 				         "not match those in the dll!\n");
@@ -228,17 +201,13 @@ registration_start:
 					   " and the audio engine on your system. Check your"\
 					   " manual for the right version numbers.");
 
-			 } 
+			 }
 
-		 } 
+		 }
 
-		
 		goto startup_failed;
 
-	 } 
-
-
-	
+	 }
 
 
 
@@ -247,12 +216,14 @@ registration_start:
 
 
 
-	
+
+
+
+
 	result = EAR_AAA_Validate(EAR_VALIDATION_NUMBER);
 
-	
 	if (result == 0)
-	 {	
+	 {
 
 
 
@@ -262,18 +233,17 @@ registration_start:
 #ifdef _DEBUG
 		EAR_InitializeEar(EAR_INIT_DEBUGNORMAL);
 		EAR_AAA_Validate(EAR_VALIDATION_NUMBER);
-#endif 
+#endif
 
-		
 		strcpy(message,
 			   "This program is unable to validate the audio engine"\
 			   " on your machine.");
 
 		goto startup_failed;
 
-	 } 
+	 }
 
-	
+
 
 
 
@@ -283,7 +253,7 @@ registration_start:
 	result = EAR_AssignHwnd((DWORD)AfxGetApp()->GetMainWnd()->GetSafeHwnd());
 
 	if (result == FALSE)
-	 {	
+	 {
 
 
 
@@ -294,12 +264,12 @@ registration_start:
 
 		strcpy(message, "The audio engine cannot find the program's main window.\n"\
 			   "Try closing other applications and restarting.");
-		
-		goto startup_failed;
-	 
-	 } 
 
-	
+		goto startup_failed;
+
+	 }
+
+
 
 
 
@@ -311,7 +281,7 @@ registration_start:
 	result = EAR_InitializeEar(EAR_STARTUP_FLAGS);
 
 	if (result == FALSE)
-	 {	
+	 {
 
 
 
@@ -328,14 +298,14 @@ registration_start:
 
 
 
-		
 
 
 
 
 
 
-		
+
+
 
 
 
@@ -343,38 +313,35 @@ registration_start:
 		if (gbEarLoadedPDS)
 			goto pass_two;
 
-		
+
 
 
 		if (!load_earpds)
 		 {	result = EAR_GetLastError();
 
-			
 			if (result == EAR_ERR_USERWANTSSTEREO)
 			 {	goto pass_two;
 			 }
 
-			
 			else if (result == EAR_ERR_USERCANCELLED)
 			 {	strcpy(message, "Audio engine did not load.");
 				goto startup_failed;
 			 }
 
-			
 			else
 			 {	goto pass_two;
 			 }
 
-		 } 
+		 }
 
-		
+
 
 
 		else
 		 {	strcpy(message, "Some unknown error occurred while loading the audio engine.");
 			goto startup_failed;
 
-		 } 
+		 }
 
 
 
@@ -382,26 +349,22 @@ registration_start:
 
 pass_two:
 
-		
 		EAR_STARTUP_FLAGS &= ~EAR_INIT_MUSTBEEAR;
 
-		
 
 
 
 
-		
+
+
 		load_earpds = TRUE;
 
-		
 		EP_ClearEarServiceTable();
 
-		
 		goto registration_start;
 
-	 } 
+	 }
 
-	
 	goto startup_succeeded;
 
 
@@ -411,11 +374,10 @@ pass_two:
 
 startup_failed:
 
-		
 		gbAUDIO_OFF = TRUE;
 
 #if EU_SUE_TELL_USER_KILL
-	
+
 	strcat(message, "\n\nProgram will terminate.");
 	MessageBox(NULL, message, title, MB_OK | MB_ICONSTOP);
 
@@ -424,24 +386,23 @@ startup_failed:
 	strcat(message, "\n\nDo you want to run the program without audio?");
 
 	if (MessageBox(NULL, message, title, MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
-	 {	
+	 {
 		MessageBox(NULL, "Audio turned off.", title, MB_OK | MB_ICONEXCLAMATION);
-		
-		
+
 		return FALSE;
 
-	 } 
+	 }
 
 	else
-	 {	
+	 {
 		MessageBox(NULL, "Program will terminate.", title, MB_OK | MB_ICONSTOP);
 
-	 } 
-			
-#endif 
+	 }
+
+#endif
 
 #if EU_SUE_EAR_POST_QUIT
-	
+
 	PostQuitMessage(0xFFFF);
 
 #endif
@@ -456,7 +417,7 @@ startup_succeeded:
 
 	return TRUE;
 
- } 
+ }
 
 
 
@@ -470,10 +431,9 @@ startup_succeeded:
 
 
 VOID EU_TearDownEar(VOID)
- {	
+ {
 	EAR_ShutDownEar();
 
-	
 	EP_ClearEarServiceTable();
 
- } 
+ }

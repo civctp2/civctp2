@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ int adialup_is_active(void);
 
 /*--------------------------------------------------------------------------
  Return TRUE if Internet activity is likely to trigger an autodial.
- This is same as 
+ This is same as
     adialup_autodial_enabled() && !adialup_is_active()
 --------------------------------------------------------------------------*/
 int adialup_willdial(void);

@@ -45,7 +45,7 @@ aka           { return AKA; }
 				  yydblval.val = atoi(yytext);
 				  return NUMBER;
 			  }
-\.\.          { return RANGE; }					
+\.\.          { return RANGE; }
 #.*\n         { g_line_number++; }
 \/\/.*\n	  { g_line_number++; }
 [ \t]         {}

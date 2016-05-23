@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,19 +18,18 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Increased k_MOUSE_MAXNUMCURSORS to allow some additional cursors. 
+// - Increased k_MOUSE_MAXNUMCURSORS to allow some additional cursors.
 //   - April 30th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
 #ifndef __AUI_MOUSE_H__
 #define __AUI_MOUSE_H__
-
 
 #include "aui_base.h"
 #include "aui_input.h"
@@ -62,20 +61,18 @@ class ldl_datablock;
 #define k_MOUSE_EVENT_FLAG_LCONTROL		0x00000004
 #define k_MOUSE_EVENT_FLAG_RCONTROL		0x00000008
 
-
 struct aui_MouseEvent
 {
-	POINT	position;	
-	BOOL	lbutton;	
-	BOOL	rbutton;	
-	BOOL    mbutton;    
-	BOOL    tbutton;    
-	uint32	time;		
-	sint32	movecount;	
-	sint32	framecount;	
-	uint32	flags;		
+	POINT	position;
+	BOOL	lbutton;
+	BOOL	rbutton;
+	BOOL    mbutton;
+	BOOL    tbutton;
+	uint32	time;
+	sint32	movecount;
+	sint32	framecount;
+	uint32	flags;
 };
-
 
 #define k_MOUSE_MAXINPUT			48
 
@@ -92,7 +89,7 @@ extern BOOL g_mouseShouldTerminateThread;
 class aui_Mouse : public aui_Base, public virtual aui_Input
 {
 public:
-	
+
 	aui_Mouse(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock );
@@ -106,7 +103,7 @@ protected:
 	sint32 FindNumCursorsFromLdl( ldl_datablock *block );
 
 public:
-	
+
 	AUI_ERRCODE Start( void );
 	AUI_ERRCODE End( void );
 	AUI_ERRCODE Suspend( BOOL eraseCursor );
@@ -118,7 +115,6 @@ public:
 	BOOL IsSuspended( void ) const;
 	BOOL IsHidden( void ) const;
 
-	
 	sint32	X( void );
 	sint32	Y( void );
 
@@ -130,11 +126,9 @@ public:
 	AUI_ERRCODE SetPosition( sint32 x, sint32 y );
 	AUI_ERRCODE SetPosition( POINT *point );
 
-	
 	AUI_ERRCODE	GetHotspot( sint32 *x, sint32 *y, sint32 index = 0 );
 	AUI_ERRCODE	SetHotspot( sint32 x, sint32 y, sint32 index = 0 );
 
-	
 	double		&Sensitivity( void );
 
 	aui_Cursor *GetCursor( sint32 index ) const;
@@ -152,19 +146,14 @@ public:
 
 	void SetAnim( sint32 anim );
 
-	
 	virtual AUI_ERRCODE ReactToInput( void );
 
-	
 	BOOL	ShouldTerminateThread( void );
 
-	
 	sint32	ManipulateInputs( aui_MouseEvent *data, BOOL add );
 
-	
 	AUI_ERRCODE HandleAnim( void );
 
-	
 	AUI_ERRCODE	BltWindowToPrimary( aui_Window *window );
 	AUI_ERRCODE BltDirtyRectInfoToPrimary( void );
 	AUI_ERRCODE	BltBackgroundColorToPrimary(
@@ -181,8 +170,7 @@ public:
 	LPCRITICAL_SECTION LPCS( void ) const;
 #endif
 
-	
-	
+
 	AUI_ERRCODE CreatePrivateBuffers( void );
 	void DestroyPrivateBuffers( void );
 
@@ -197,12 +185,10 @@ protected:
 	static LPCRITICAL_SECTION m_lpcs;
 #endif
 
-	
 	virtual AUI_ERRCODE Erase( void );
 
-
-	aui_MouseEvent	m_data;			
-	double			m_sensitivity;	
+	aui_MouseEvent	m_data;
+	double			m_sensitivity;
 
 	aui_MouseEvent	m_inputs[ k_MOUSE_MAXINPUT ];
 	aui_Surface		*m_privateMix;
@@ -211,31 +197,31 @@ protected:
 
 	RECT		m_clip;
 	aui_Cursor	*m_cursors[ k_MOUSE_MAXNUMCURSORS ];
-	aui_Cursor	**m_curCursor;	
-	sint32		m_firstIndex;	
-	sint32		m_lastIndex;	
-	uint32		m_animDelay;	
+	aui_Cursor	**m_curCursor;
+	sint32		m_firstIndex;
+	sint32		m_lastIndex;
+	uint32		m_animDelay;
 	uint32		m_time;
 
 	tech_WLList<POINT>	m_animIndexList;
 	tech_WLList<sint32> m_animDelayList;
 
-	sint32		m_suspendCount;	
-	sint32		m_showCount;	
-	BOOL		m_reset;		
+	sint32		m_suspendCount;
+	sint32		m_showCount;
+	BOOL		m_reset;
 
 #ifdef USE_SDL
 	SDL_Thread     *m_thread;
 #else
 	HANDLE		m_thread;
 	DWORD		m_threadId;
-	HANDLE		m_threadEvent;	
-	HANDLE		m_terminateEvent; 
-	HANDLE		m_suspendEvent;	
-	HANDLE		m_resumeEvent;	
-	HANDLE		m_replyEvent;	
+	HANDLE		m_threadEvent;
+	HANDLE		m_terminateEvent;
+	HANDLE		m_suspendEvent;
+	HANDLE		m_resumeEvent;
+	HANDLE		m_replyEvent;
 #endif
-	uint32		m_flags;		
+	uint32		m_flags;
 };
 
 #ifdef USE_SDL
@@ -244,5 +230,4 @@ int MouseThreadProc(void *param);
 DWORD WINAPI MouseThreadProc( LPVOID lpVoid );
 #endif
 
-
-#endif 
+#endif

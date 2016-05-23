@@ -62,9 +62,7 @@ void DebugMemory_Open (void);
 
 void DebugMemory_Close (void);
 
-
 void DebugMemory_LeaksShow(int turn_count);
-
 
 void DebugMemory_LeaksClear(void);
 
@@ -88,8 +86,8 @@ int DebugMemory_GetTotalFromDLL(void);
 
 
 
-struct MemoryHeapDescriptor;						
-typedef struct MemoryHeapDescriptor *MemoryHeap;	
+struct MemoryHeapDescriptor;
+typedef struct MemoryHeapDescriptor *MemoryHeap;
 
 
 
@@ -192,7 +190,6 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr);
 MemoryHeap DebugMemoryHeap_FastOpen (const char *name, unsigned size_initial, unsigned size_maximum);
 void DebugMemoryHeap_FastClose    (MemoryHeap heap);
 
-
 void *DebugMemoryHeap_GuardedMalloc  (const char *file, int line, MemoryHeap heap, unsigned size);
 void *DebugMemoryHeap_GuardedCalloc  (const char *file, int line, MemoryHeap heap, unsigned size);
 void *DebugMemoryHeap_GuardedRealloc (const char *file, int line, MemoryHeap heap, void *memory_block, int size);
@@ -224,16 +221,15 @@ void DebugMemoryHeap_GuardedClose    (const char *file, int line, MemoryHeap hea
 #endif
 
 
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif 
+#endif
 
 
 
 
-#endif 
+#endif
 
 #endif // WIN32

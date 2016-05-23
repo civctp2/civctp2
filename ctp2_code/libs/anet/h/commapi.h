@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -188,7 +188,6 @@ extern "C" {
  */
 #include "dppack1.h"
 
-
 typedef	unsigned short	version_t;			/* Version number (major.minor) */
 #define VERSION(maj,min)	((unsigned short)(unsigned char)(maj)<<8 | (unsigned char) (min))
 
@@ -212,7 +211,6 @@ typedef unsigned long	playerHdl_t;		/* Handle for a player or group */
 #define COMM_3RDPARAM
 #endif
 
-
 /* Values for status field of result structures. */
 #include "commerr.h"
 
@@ -221,7 +219,6 @@ typedef unsigned long	playerHdl_t;		/* Handle for a player or group */
 
 /* The largest possible address */
 #define comm_MAX_ADR_LEN 10	/*  Size of ipx's fullNetworkAddr_t. */
-
 
 /*
  * commAlloc
@@ -322,7 +319,6 @@ typedef struct {
 #define comm_INIT_DIALING_METHOD_PULSE 0
 #define comm_INIT_DIALING_METHOD_TONE  1
 
-
 typedef struct {			/* Request (filled in by caller) */
 	size_t	reqLen;			/* Sizeof(commInitReq_t) */
 	long 	sessionId;		/* Random number chosen by stub, same for shell and sim. */
@@ -342,10 +338,8 @@ typedef struct {
 	char name[64];			/* Name to present to user (e.g. COM1) */
 } commPortName_t;
 
-
 /* Warning: anet.h includes a copy of the above information */
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 
 /*----------------- commapi function parameters ---------------------------*/
 /* If using Mac shared library, declare function pointer type and
@@ -421,7 +415,6 @@ commEnumPorts(
 ;
 #endif
 
-
 /*
  *	Initialize the communications driver.
  *  The pre-executable chooses the sessionId, and passes it to both the shell
@@ -455,7 +448,6 @@ commInit(
 ;
 #endif
 
-
 /*
  *	Tear down the communications driver.
  *
@@ -486,7 +478,6 @@ commTerm(
 	COMM_3RDPARAM)					/* comm context pointer */
 ;
 #endif
-
 
 /*
  *	Retrieve info about the communications driver.
@@ -519,7 +510,6 @@ commDriverInfo(
 	COMM_3RDPARAM)		 		  	/* comm context pointer */
 ;
 #endif
-
 
 /*
  *	Retrieve info about a player, including ourselves.
@@ -561,7 +551,6 @@ commPlayerInfo(
 ;
 #endif
 
-
 /*
  *	Find out whether the transmit queue is full.
  *
@@ -594,7 +583,6 @@ commTxFull(
 ;
 #endif
 
-
 /*
  *	Send a packet.  Upon return, the buffer can be discarded, although the
  *	packet may not be sent until later.
@@ -614,7 +602,6 @@ typedef struct {			/* Response (filled in by routine) */
 	comm_status_t		status;		/* Command status */
 } commTxPktResp_t;
 
-
 #if COMM_FNPTRS
 typedef int
 (*COMMTXPKT)(
@@ -631,7 +618,6 @@ commTxPkt(
 	COMM_3RDPARAM)					/* comm context pointer */
 ;
 #endif
-
 
 
 /*
@@ -668,7 +654,6 @@ commPeekPkt(
 ;
 #endif
 
-
 /*
  *	Retrieve a pending incoming packet.
  *
@@ -704,7 +689,6 @@ commRxPkt(
 ;
 #endif
 
-
 /*
  *	Attempt to parse a NUL-terminated address string into a free-format
  *	buffer.
@@ -739,7 +723,6 @@ commScanAddr(
 	COMM_3RDPARAM)						/* comm context pointer */
 ;
 #endif
-
 
 /*
  *	Attempt to format an (in format returned by commScanAddr) address buffer into a NUL-terminated
@@ -777,7 +760,6 @@ commPrintAddr(
 #endif
 
 
-
 /*
  *	Generate a pseudo-player handle referring to a group of players.  Handy
  *	for multicasting.  A group can have zero players.
@@ -812,7 +794,6 @@ commGroupAlloc(
 ;
 #endif
 
-
 /*
  *	Invalidate a pseudo-player handle referring to a group of players.
  *
@@ -843,7 +824,6 @@ commGroupFree(
 	COMM_3RDPARAM)						/* comm context pointer */
 ;
 #endif
-
 
 
 /*
@@ -879,7 +859,6 @@ commGroupAdd(
 	COMM_3RDPARAM)						/* comm context pointer */
 ;
 #endif
-
 
 #if 0
 /*
@@ -1032,7 +1011,6 @@ commSayHi(
 ;
 #endif
 
-
 /*
  *	Tear down a data link to a player.  The link or the player may already be
  *	down, so don't shake hands.
@@ -1067,7 +1045,6 @@ commSayBye(
 
 /* Undo effect of previous #pragma. */
 #include "dpunpack.h"
-
 
 /*-------------- Mac Stuff ------------------------*/
 #ifdef __MWERKS__

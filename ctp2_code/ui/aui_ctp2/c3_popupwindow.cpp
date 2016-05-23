@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 popup window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,6 @@
 #include "keypress.h"
 
 
-
 c3_PopupWindow::c3_PopupWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -64,7 +63,6 @@ c3_PopupWindow::c3_PopupWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_PopupWindow::c3_PopupWindow(
@@ -87,9 +85,8 @@ c3_PopupWindow::c3_PopupWindow(
 }
 
 
-
 AUI_ERRCODE c3_PopupWindow::InitCommon(void)
-{		
+{
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
@@ -103,7 +100,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_cancel = NULL;
 	m_ok = NULL;
 
-	
 	sprintf( ldlBlock, "c3_PopupUL" );
 	m_border[POPUP_BORDER_UL] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_UL], errcode) );
@@ -111,7 +107,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 
 	m_border[POPUP_BORDER_UL]->Move( 0, 0 );
 
-	
 	sprintf( ldlBlock, "c3_PopupUR" );
 	m_border[POPUP_BORDER_UR] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_UR], errcode) );
@@ -119,7 +114,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 
 	m_border[POPUP_BORDER_UR]->Move( m_width - m_border[POPUP_BORDER_UR]->Width(), 0 );
 
-	
 	sprintf( ldlBlock, "c3_PopupLL" );
 	m_border[POPUP_BORDER_LL] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LL], errcode) );
@@ -127,19 +121,17 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 
 	m_border[POPUP_BORDER_LL]->Move( 0, m_height - m_border[POPUP_BORDER_LL]->Height() );
 
-	
 	sprintf( ldlBlock, "c3_PopupLR" );
 	m_border[POPUP_BORDER_LR] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) ) return errcode;
 
-	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(), 
+	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(),
 		m_height - m_border[POPUP_BORDER_LR]->Height() );
 
 	sint32 cornerHeight = m_border[POPUP_BORDER_UL]->Height();
 	sint32 cornerWidth = m_border[POPUP_BORDER_UL]->Width();
 
-	
 	sprintf( ldlBlock, "c3_PopupLeft" );
 	m_border[POPUP_BORDER_LEFT] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LEFT], errcode) );
@@ -148,7 +140,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_border[POPUP_BORDER_LEFT]->Move( 0, cornerHeight );
 	m_border[POPUP_BORDER_LEFT]->Resize( m_border[POPUP_BORDER_LEFT]->Width(), m_height - cornerHeight * 2 );
 
-	
 	sprintf( ldlBlock, "c3_PopupTop" );
 	m_border[POPUP_BORDER_TOP] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_TOP], errcode) );
@@ -157,7 +148,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_border[POPUP_BORDER_TOP]->Move( cornerWidth, 0 );
 	m_border[POPUP_BORDER_TOP]->Resize( m_width - cornerWidth * 2, m_border[POPUP_BORDER_TOP]->Height() );
 
-	
 	sprintf( ldlBlock, "c3_PopupRight" );
 	m_border[POPUP_BORDER_RIGHT] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_RIGHT], errcode) );
@@ -166,7 +156,6 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_border[POPUP_BORDER_RIGHT]->Move( m_width - m_border[POPUP_BORDER_RIGHT]->Width(), cornerHeight );
 	m_border[POPUP_BORDER_RIGHT]->Resize( m_border[POPUP_BORDER_RIGHT]->Width(), m_height - cornerHeight * 2 );
 
-	
 	sprintf( ldlBlock, "c3_PopupBottom" );
 	m_border[POPUP_BORDER_BOTTOM] = new c3_Static( &errcode, aui_UniqueId(), ldlBlock );
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_BOTTOM], errcode) );
@@ -183,48 +172,38 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	return C3Window::InitCommon();
 }
 
-
 AUI_ERRCODE c3_PopupWindow::Resize( sint32 width, sint32 height )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	errcode = C3Window::Resize( width, height );
 
-	
 	m_border[POPUP_BORDER_UL]->Move( 0, 0 );
 
-	
 	m_border[POPUP_BORDER_UR]->Move( m_width - m_border[POPUP_BORDER_UR]->Width(), 0 );
 
-	
 	m_border[POPUP_BORDER_LL]->Move( 0, m_height - m_border[POPUP_BORDER_LL]->Height() );
 
-	
-	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(), 
+	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(),
 		m_height - m_border[POPUP_BORDER_LR]->Height() );
 
 	sint32 cornerHeight = m_border[POPUP_BORDER_UL]->Height();
 	sint32 cornerWidth = m_border[POPUP_BORDER_UL]->Width();
 
-	
 	m_border[POPUP_BORDER_LEFT]->Move( 0, cornerHeight );
 	m_border[POPUP_BORDER_LEFT]->Resize( m_border[POPUP_BORDER_LEFT]->Width(), m_height - cornerHeight * 2 );
 
-	
 	m_border[POPUP_BORDER_TOP]->Move( cornerWidth, 0 );
 	m_border[POPUP_BORDER_TOP]->Resize( m_width - cornerWidth * 2, m_border[POPUP_BORDER_TOP]->Height() );
 
-	
 	m_border[POPUP_BORDER_RIGHT]->Move( m_width - m_border[POPUP_BORDER_RIGHT]->Width(), cornerHeight );
 	m_border[POPUP_BORDER_RIGHT]->Resize( m_border[POPUP_BORDER_RIGHT]->Width(), m_height - cornerHeight * 2 );
 
-	
 	m_border[POPUP_BORDER_BOTTOM]->Move( cornerWidth, m_height - m_border[POPUP_BORDER_BOTTOM]->Height() );
 	m_border[POPUP_BORDER_BOTTOM]->Resize( m_width - cornerWidth * 2, m_border[POPUP_BORDER_BOTTOM]->Height() );
 
 	return errcode;
 }
-
 
 
 c3_PopupWindow::~c3_PopupWindow( void )
@@ -242,10 +221,9 @@ c3_PopupWindow::~c3_PopupWindow( void )
 }
 
 
-
 AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -253,15 +231,14 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if (m_pattern)
 		m_pattern->Draw( m_surface, &rect );
 
-	
 
 
-	
+
+
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
@@ -269,7 +246,6 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_title ) return 1;
 
 	sprintf( ldlBlock, "c3_PopupTitle" );
@@ -290,14 +266,12 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 
 	m_title->Move( (m_width - m_title->Width()) / 2, 0 );
 
-	
 	InsertChild( (aui_Region *)m_title, 0 );
 	m_title->SetParentWindow( this );
 
 	m_title->SetBlindness( TRUE );
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddCancel(
@@ -308,7 +282,6 @@ sint32 c3_PopupWindow::AddCancel(
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_cancel ) return 1;
 
 	sprintf( ldlBlock, buttonBlock );
@@ -317,13 +290,11 @@ sint32 c3_PopupWindow::AddCancel(
 
 	m_cancel->Move( 17, m_height - m_cancel->Height() - 17);
 
-	
 	InsertChild( (aui_Region *)m_cancel, 0 );
 	m_cancel->SetParentWindow( this );
 
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddOk(
@@ -334,7 +305,6 @@ sint32 c3_PopupWindow::AddOk(
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_ok ) return 1;
 
 	sprintf( ldlBlock, buttonBlock );
@@ -343,13 +313,11 @@ sint32 c3_PopupWindow::AddOk(
 
 	m_ok->Move( m_width - m_ok->Width() - 17, m_height - m_ok->Height() -17);
 
-	
 	InsertChild( (aui_Region *)m_ok, 0 );
 	m_ok->SetParentWindow( this );
 
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddClose(
@@ -360,7 +328,6 @@ sint32 c3_PopupWindow::AddClose(
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_ok ) return 1;
 
 	sprintf( ldlBlock, buttonBlock );
@@ -369,13 +336,11 @@ sint32 c3_PopupWindow::AddClose(
 
 	m_ok->Move( m_width - m_ok->Width()- 17, m_height - m_ok->Height() - 17);
 
-	
 	InsertChild( (aui_Region *)m_ok, 0 );
 	m_ok->SetParentWindow( this );
 
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddYes(
@@ -386,7 +351,6 @@ sint32 c3_PopupWindow::AddYes(
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_ok ) return 1;
 
 	sprintf( ldlBlock, buttonBlock );
@@ -395,13 +359,11 @@ sint32 c3_PopupWindow::AddYes(
 
 	m_ok->Move( m_width - m_ok->Width(), m_height - m_ok->Height() );
 
-	
 	InsertChild( (aui_Region *)m_ok, 0 );
 	m_ok->SetParentWindow( this );
 
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddNo(
@@ -412,7 +374,6 @@ sint32 c3_PopupWindow::AddNo(
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	if ( m_cancel ) return 1;
 
 	sprintf( ldlBlock, buttonBlock );
@@ -421,7 +382,6 @@ sint32 c3_PopupWindow::AddNo(
 
 	m_cancel->Move( 0, m_height - m_cancel->Height() );
 
-	
 	InsertChild( (aui_Region *)m_cancel, 0 );
 	m_cancel->SetParentWindow( this );
 

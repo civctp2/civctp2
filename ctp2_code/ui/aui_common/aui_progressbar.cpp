@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -36,7 +36,6 @@
 #include "aui_progressbar.h"
 
 
-
 aui_ProgressBar::aui_ProgressBar(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -53,7 +52,6 @@ aui_ProgressBar::aui_ProgressBar(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_ProgressBar::aui_ProgressBar(
@@ -84,22 +82,18 @@ aui_ProgressBar::aui_ProgressBar(
 }
 
 
-
 AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	AUI_PROGRESSBAR_ORIENTATION orientation;
 	MBCHAR *keyword = block->GetString( k_AUI_PROGRESSBAR_LDL_ORIENTATION );
 	if ( !keyword )
@@ -112,7 +106,6 @@ AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 			orientation = AUI_PROGRESSBAR_ORIENTATION_HORIZONTAL;
 	}
 
-	
 	COLORREF color = k_AUI_PROGRESSBAR_DEFAULT_COLOR;
 	if ( block->GetAttributeType( k_AUI_PROGRESSBAR_LDL_BARRED )
 			== ATTRIBUTE_TYPE_INT
@@ -125,7 +118,6 @@ AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 			block->GetInt( k_AUI_PROGRESSBAR_LDL_BARGREEN ),
 			block->GetInt( k_AUI_PROGRESSBAR_LDL_BARBLUE ));
 
-	
 	AUI_PROGRESSBAR_TYPE type;
 	keyword = block->GetString( k_AUI_PROGRESSBAR_LDL_TYPE );
 	if ( !keyword )
@@ -159,7 +151,6 @@ AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_ProgressBar::InitCommon(
 	AUI_PROGRESSBAR_ORIENTATION orientation,
 	AUI_PROGRESSBAR_TYPE type,
@@ -187,7 +178,6 @@ AUI_ERRCODE aui_ProgressBar::InitCommon(
 }
 
 
-
 aui_ProgressBar::~aui_ProgressBar()
 {
 	if ( m_barImage )
@@ -196,7 +186,6 @@ aui_ProgressBar::~aui_ProgressBar()
 		m_barImage = NULL;
 	}
 }
-
 
 
 AUI_PROGRESSBAR_ORIENTATION aui_ProgressBar::SetOrientation(
@@ -211,7 +200,6 @@ AUI_PROGRESSBAR_ORIENTATION aui_ProgressBar::SetOrientation(
 }
 
 
-
 AUI_PROGRESSBAR_TYPE aui_ProgressBar::SetProgressType(
 	AUI_PROGRESSBAR_TYPE type )
 {
@@ -221,14 +209,12 @@ AUI_PROGRESSBAR_TYPE aui_ProgressBar::SetProgressType(
 }
 
 
-
 sint32 aui_ProgressBar::SetValuesPerSecond( sint32 vps )
 {
 	sint32 prevVps = m_vps;
 	m_vps = vps;
 	return prevVps;
 }
-
 
 
 sint32 aui_ProgressBar::SetCurValue( sint32 value )
@@ -245,7 +231,6 @@ sint32 aui_ProgressBar::SetCurValue( sint32 value )
 }
 
 
-
 sint32 aui_ProgressBar::SetMaxValue( sint32 value )
 {
 	if ( value < m_curValue ) value = m_curValue;
@@ -257,7 +242,6 @@ sint32 aui_ProgressBar::SetMaxValue( sint32 value )
 
 	return prevValue;
 }
-
 
 
 aui_Image *aui_ProgressBar::SetBarImage( MBCHAR *image )
@@ -283,7 +267,6 @@ aui_Image *aui_ProgressBar::SetBarImage( MBCHAR *image )
 }
 
 
-
 COLORREF aui_ProgressBar::SetBarColor( COLORREF color )
 {
 	COLORREF prevColor = m_barColor;
@@ -294,20 +277,19 @@ COLORREF aui_ProgressBar::SetBarColor( COLORREF color )
 }
 
 
-
 AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 {
 	double x = (double)m_curValue / (double)m_maxValue;
 
-	
 
 
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	static POINT startKeyFrames[ 5 ] =
 	{
 		{ 0, 0 },
@@ -338,7 +320,6 @@ AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 }
 
 
-
 AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 {
 	if (!(g_ui && g_ui->TheBlitter()))
@@ -351,13 +332,12 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 	RECT destRect = *bound;
 	double dimension = 0.0;
 
-	
-	
-	
+
+
+
 	double start, stop;
 	CalculateIntervals( &start, &stop );
 
-	
 	if ( start < 0.0 ) start = 0.0;
 	if ( start >= 1.0 ) start = 1.0;
 	if ( stop < 0.0 ) stop = 0.0;
@@ -368,7 +348,7 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 	{
 	default:
 	case AUI_PROGRESSBAR_ORIENTATION_HORIZONTAL:
-		
+
 		dimension = bound->right - bound->left;
 		destRect.left += sint32(start * dimension + 0.5);
 		destRect.right = bound->left + sint32(stop * dimension + 0.5);
@@ -406,7 +386,7 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 		break;
 
 	case AUI_PROGRESSBAR_ORIENTATION_VERTICAL:
-		
+
 		dimension = bound->bottom - bound->top;
 		destRect.bottom -= sint32(start * dimension + 0.5);
 		destRect.top = bound->bottom - sint32(stop * dimension + 0.5);
@@ -448,14 +428,12 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 }
 
 
-
 AUI_ERRCODE aui_ProgressBar::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
-	
+
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 

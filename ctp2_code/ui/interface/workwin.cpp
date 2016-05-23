@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Worker window (Possibly unsued)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,20 +30,16 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 
-
 #include "c3_button.h"
-
 
 #include "c3windows.h"
 #include "workwindow.h"
-
 
 
 #include "SelItem.h"
@@ -53,31 +49,25 @@
 
 #include "workwin.h"
 
-
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI			*g_c3ui;
 
-
 WorkWindow			*g_workWindow = NULL;
 ResourceMap				*g_resourceMap = NULL;
 
-
 WorkMap *g_workMap = NULL;
-
 
 static c3_Button			*s_exitButton;
 
 
-
 extern SelectedItem			*g_selected_item;
-
 
 void WorkWinCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
-	
+
 	workwin_Cleanup();
 }
 
@@ -102,7 +92,6 @@ void WorkExitButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 {
 	if (!g_workWindow) return;
 
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -115,7 +104,6 @@ void WorkExitButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 	g_c3ui->AddAction( tempAction );
 }
 
-
 sint32 workwin_Initialize( void )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -126,7 +114,7 @@ sint32 workwin_Initialize( void )
 		if ( g_resourceMap ) {
 			g_resourceMap->DrawSurface();
 		}
-		return 0; 
+		return 0;
 	}
 
 
@@ -150,7 +138,7 @@ sint32 workwin_Initialize( void )
 
 
 
-	
+
 
 
 	strcpy(windowBlock, "WorkWindow");
@@ -168,12 +156,12 @@ sint32 workwin_Initialize( void )
 	Assert( AUI_NEWOK(g_resourceMap, errcode) );
 	if ( !AUI_NEWOK(g_resourceMap, errcode) ) return -3;
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 
 
@@ -182,7 +170,6 @@ sint32 workwin_Initialize( void )
 	Assert( AUI_NEWOK(s_exitButton, errcode) );
 	if ( !AUI_NEWOK(s_exitButton, errcode) ) return -5;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
@@ -192,13 +179,13 @@ sint32 workwin_Initialize( void )
 
 sint32 workwin_Cleanup( void )
 {
-	if ( !g_workWindow ) return 0; 
-	
+	if ( !g_workWindow ) return 0;
+
 	g_c3ui->RemoveWindow( g_workWindow->Id() );
 
 	delete s_exitButton;
 	s_exitButton = NULL;
-	
+
 	delete g_workWindow;
 	g_workWindow = NULL;
 

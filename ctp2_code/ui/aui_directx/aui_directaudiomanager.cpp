@@ -1,35 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
-
 
 #include "aui_ui.h"
 
 #include "aui_directaudiomanager.h"
 
-
 DS3DLISTENER	listenerTemplate;
 DS3DBUFFER		ds3dBufferTemplate;
-
 
 
 aui_DirectAudioManager::aui_DirectAudioManager( sint32 maxNumSounds )
 {
 	InitCommon( maxNumSounds );
 }
-
 
 
 AUI_ERRCODE aui_DirectAudioManager::InitCommon( sint32 maxNumOfActiveSounds )
@@ -47,9 +31,8 @@ AUI_ERRCODE aui_DirectAudioManager::InitCommon( sint32 maxNumOfActiveSounds )
 
 	m_primaryBuffer = NULL;
 
-	
 	m_dsHandle = NULL;
-	m_bA3DAvailable = FALSE; 
+	m_bA3DAvailable = FALSE;
 
 	m_numberOfActiveSounds = maxNumOfActiveSounds ?
 		maxNumOfActiveSounds :
@@ -63,16 +46,14 @@ AUI_ERRCODE aui_DirectAudioManager::InitCommon( sint32 maxNumOfActiveSounds )
 	Assert( m_inactiveSoundResource != NULL );
 	if ( !m_inactiveSoundResource ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	if ( InitDS( g_ui->TheHWND() ) )
 	{
-		m_useAudio = FALSE;	
+		m_useAudio = FALSE;
 		return AUI_ERRCODE_NODSAUDIO;
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_DirectAudioManager::~aui_DirectAudioManager()
@@ -97,23 +78,20 @@ aui_DirectAudioManager::~aui_DirectAudioManager()
 }
 
 
-
 BOOL aui_DirectAudioManager::CreateDSInterface( HWND hwnd )
 {
 	HRESULT hr;
 	DSCAPS	SoundDeviceCaps;
 
-	if( DirectSoundCreate(NULL, &m_dsHandle, NULL) < DS_OK) 
+	if( DirectSoundCreate(NULL, &m_dsHandle, NULL) < DS_OK)
 		return ( 1 );
 
 
-	
 	if( (hr = m_dsHandle->SetCooperativeLevel( hwnd, DSSCL_NORMAL ) ) < DS_OK)
 	{
 		return ( 1 );
 	}
 
-	
 	memset(&SoundDeviceCaps,0,sizeof(DSCAPS));
 	SoundDeviceCaps.dwSize = sizeof(DSCAPS);
 	m_dsHandle->GetCaps( &SoundDeviceCaps );
@@ -125,7 +103,6 @@ BOOL aui_DirectAudioManager::CreateDSInterface( HWND hwnd )
 	return( 0 );
 }
 
-
 BOOL aui_DirectAudioManager::CreatePrimaryBuffer()
 {
 	DSBUFFERDESC	dsbd;
@@ -134,17 +111,13 @@ BOOL aui_DirectAudioManager::CreatePrimaryBuffer()
 	dsbd.dwSize	= sizeof(dsbd);
 	dsbd.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRL3D;
 
-	
 	if (m_dsHandle->CreateSoundBuffer(&dsbd, &m_primaryBuffer, NULL) < DS_OK)
 		return( 1 );
 
-	
 	m_dsHandle->SetSpeakerConfig( DSSPEAKER_QUAD );
-
 
 	return( 0 );
 }
-
 
 BOOL aui_DirectAudioManager::SetDSoundRate(DWORD newRate)
 {
@@ -162,7 +135,7 @@ BOOL aui_DirectAudioManager::SetDSoundRate(DWORD newRate)
 
 		if (m_primaryBuffer->SetFormat((WAVEFORMATEX *)&pcmwf) != DS_OK)
 		{
-			
+
 			return 1;
 		}
 	}
@@ -170,14 +143,12 @@ BOOL aui_DirectAudioManager::SetDSoundRate(DWORD newRate)
 	return ( 0 );
 }
 
-
 BOOL aui_DirectAudioManager::InitDS( HWND hwnd )
 {
-	
+
 	if( CreateDSInterface( hwnd ) )
 		return ( 1 );
 
-	
 	if( CreatePrimaryBuffer() )
 		return ( 1 );
 
@@ -201,12 +172,10 @@ aui_Sound *aui_DirectAudioManager::AttachSound( MBCHAR *fileName, sint32 flag )
 	return newSoundObject;
 }
 
-
 aui_Sound *aui_DirectAudioManager::Load( MBCHAR *filename )
 {
 	return AttachSound( filename, 0 );
 }
-
 
 
 AUI_ERRCODE aui_DirectAudioManager::DetachSound( MBCHAR *fileName )
@@ -214,12 +183,10 @@ AUI_ERRCODE aui_DirectAudioManager::DetachSound( MBCHAR *fileName )
 	return Unload( fileName );
 }
 
-
 LPDIRECTSOUND aui_DirectAudioManager::GetdDSHandle()
 {
 	return m_dsHandle;
 }
-
 
 
 AUI_ERRCODE aui_DirectAudioManager::PlaySound( MBCHAR *name )
@@ -244,5 +211,4 @@ AUI_ERRCODE aui_DirectAudioManager::PlaySound( MBCHAR *name )
 	return AUI_ERRCODE_OK;
 }
 
-
-#endif 
+#endif

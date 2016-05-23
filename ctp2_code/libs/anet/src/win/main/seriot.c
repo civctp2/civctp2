@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -51,8 +51,8 @@ void oneWayTestTx(serio_t *serio, int packetLen, int packetCnt)
 		if (serio_write(serio, buf, packetLen) == serio_RES_OK) {
 			now = clock();
 			txrxok++;
-			/* print out how long since last send, and how long 
-			 * this commTxPkt() took 
+			/* print out how long since last send, and how long
+			 * this commTxPkt() took
 			 */
 			printf("txrxok %d txrx %d interval %d duration %d\n",txrxok, txrx, now - last, now - before_send);
 			last = now;
@@ -96,7 +96,7 @@ void oneWayTestRx(serio_t *serio, int packetLen, int packetCnt)
 			}
 		}
 		txrxok++;
-		/* print out how long since last read, and how long 
+		/* print out how long since last read, and how long
 		 * it took to read the packet
 		 */
 		printf("txrxok %d txrx %d interval %d\n",txrxok, txrx, now - last);
@@ -130,7 +130,7 @@ void main(int argc, char **argv)
 	strcpy(portname, "COM1");
 
 	for (i = 1; i < argc; ++i) {
-		if (argv[i][0] != '-') { 
+		if (argv[i][0] != '-') {
 			command = argv[i];
 			continue;
 		}
@@ -149,12 +149,12 @@ void main(int argc, char **argv)
 			printf("Setting packetLen to %s\n", argv[i]+3);
 			packetLen = atoi(argv[i]+3);
 			break;
-			
+
 		case 'M':
 			printf("Setting number of packet to %d\n", argv[i]+3);
 			packetCnt = atoi(argv[i]+3);
 			break;
-			
+
 		case 'Y':   /*  Set comm port */
 			sscanf(argv[i]+3, "%s", portname);
 			break;

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,10 +40,9 @@
 
 extern sint32   g_abort_parse;
 
-
 namespace
 {
-	
+
 	StringId const          INDEX_INVALID   = -1;
 	unsigned short const    STRDB_NUM_HEADS = 547; // hash table size
 
@@ -66,7 +65,7 @@ size_t ComputeHashIndex(MBCHAR const * id)
 {
 		unsigned short hash;
 #ifdef WIN32
-		__asm 
+		__asm
 		{
 			push eax              ; save registers
 			push ecx
@@ -99,12 +98,11 @@ size_t ComputeHashIndex(MBCHAR const * id)
 				hash <<= 1, ++hash;
 		}
 #endif
-		
+
 		return static_cast<size_t>(hash % STRDB_NUM_HEADS);
 	}
 
 } // namespace
-
 
 
 StringDB::StringDB()
@@ -113,10 +111,9 @@ StringDB::StringDB()
 {
 }
 
-
 StringDB::~StringDB()
 {
-	for 
+	for
 	(
 		std::vector<StringRecord *>::iterator p	= m_all.begin();
 		p != m_all.end();
@@ -158,7 +155,7 @@ StringRecord * & StringDB::GetHead(MBCHAR const * id)
 //----------------------------------------------------------------------------
 bool StringDB::InsertStr
 (
-	MBCHAR const *			add_id, 
+	MBCHAR const *			add_id,
 	MBCHAR const *			new_text
 )
 {
@@ -234,26 +231,26 @@ bool StringDB::AddStrNode
 	{
 		// At a branch: traverse the tree to find the right place to add.
 		int const	r	= strcmp(add_id, ptr->m_id);
-		if (r < 0) 
-		{ 
+		if (r < 0)
+		{
 			return AddStrNode(ptr->m_lesser, add_id, new_text, newPtr);
-		} 
-		else if (0 < r) 
-		{ 
+		}
+		else if (0 < r)
+		{
 			return AddStrNode(ptr->m_greater, add_id, new_text, newPtr);
-		} 
-		else 
-		{ 
+		}
+		else
+		{
 			// Key exists: do not add
 			return false;
 		}
 	}
 	else
-	{ 
+	{
 		// At a leaf: add here.
 		ptr				= new StringRecord();
 		ptr->m_id		= new char[strlen(add_id) + 1];
-		strcpy(ptr->m_id, add_id); 
+		strcpy(ptr->m_id, add_id);
 		ptr->m_text		= new char[strlen(new_text) + 1];
 		strcpy(ptr->m_text, new_text);
 		AssignIndex(ptr);
@@ -288,7 +285,7 @@ bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 //
 //----------------------------------------------------------------------------
 MBCHAR * StringDB::GetIdStr(StringId const & index) const
-{ 
+{
 	Assert(0 <= index);
 	Assert(index < (signed) m_all.size());
 	return (index < 0) || (index >= static_cast<sint32>(m_all.size())) ? NULL : m_all[index]->m_id;
@@ -309,11 +306,11 @@ bool StringDB::GetStrNode
 	if (ptr)
 	{
 		int const r	= strcmp(add_id, ptr->m_id);
-		if (r < 0) 
+		if (r < 0)
 		{
 			return GetStrNode(ptr->m_lesser, add_id, new_text);
 		}
-		else if (0 < r) 
+		else if (0 < r)
 		{
 			return GetStrNode(ptr->m_greater, add_id, new_text);
 		}
@@ -369,25 +366,25 @@ void StringDB::Btree2Array(void)
 //
 // Returns    : -
 //
-// Remark(s)  : Appends the - flattened - tree node references at the end of 
+// Remark(s)  : Appends the - flattened - tree node references at the end of
 //              m_all.
 //
 //----------------------------------------------------------------------------
 void StringDB::AssignIndex(StringRecord * & ptr)
 
 {
-	if (ptr->m_lesser) 
-	{ 
-		AssignIndex(ptr->m_lesser); 
-	} 
-	
+	if (ptr->m_lesser)
+	{
+		AssignIndex(ptr->m_lesser);
+	}
+
 	ptr->m_index = m_all.size();
 	m_all.push_back(ptr);
-	
-	if (ptr->m_greater) 
-	{ 
-		AssignIndex(ptr->m_greater); 
-	} 
+
+	if (ptr->m_greater)
+	{
+		AssignIndex(ptr->m_greater);
+	}
 }
 
 
@@ -397,7 +394,7 @@ void StringDB::AssignIndex(StringRecord * & ptr)
 
 bool StringDB::GetStringID(MBCHAR const * str_id, StringId & index) const
 {
-	return GetIndexNode(GetHead(str_id), str_id, index); 
+	return GetIndexNode(GetHead(str_id), str_id, index);
 }
 
 
@@ -414,12 +411,12 @@ bool StringDB::GetIndexNode
 {
 
 	sint32 r;
-	
+
 	if (ptr == NULL) {
 		index = INDEX_INVALID; // fill index to prevent crash
 		return false;
 	} else {
-		
+
 		r = strcmp(str_id, ptr->m_id);
 		if (r < 0) {
 			return GetIndexNode(ptr->m_lesser, str_id, index);
@@ -471,9 +468,8 @@ MBCHAR const * StringDB::GetNameStr(MBCHAR const * s) const
 	} else {
 		return NULL;
 	}
-	
-}
 
+}
 
 sint32 StringDB::ParseAStringEntry(Token *strToken)
 
@@ -484,7 +480,7 @@ sint32 StringDB::ParseAStringEntry(Token *strToken)
 	if (strToken->GetType() == TOKEN_EOF) {
 		return FALSE;
 	}
-	
+
 	if (strToken->GetType() != TOKEN_STRING) {
 		c3errors_ErrorDialog (strToken->ErrStr(), "Missing string id");
 		g_abort_parse = TRUE;
@@ -493,14 +489,13 @@ sint32 StringDB::ParseAStringEntry(Token *strToken)
 		strToken->GetString(id);
 	}
 
-
 	strToken->Next();
 
 	if ( strToken->GetType() == TOKEN_MISSING_QUOTE)  {
 		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find end quote for id %s", id);
 		g_abort_parse = TRUE;
 		return FALSE;
-	} else if ( strToken->GetType() != TOKEN_QUOTED_STRING) { 
+	} else if ( strToken->GetType() != TOKEN_QUOTED_STRING) {
 		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find text for id %s", id);
 		g_abort_parse = TRUE;
 		return FALSE;
@@ -513,10 +508,10 @@ sint32 StringDB::ParseAStringEntry(Token *strToken)
 	if (!InsertStr(id, text)) {
 			c3errors_ErrorDialog (strToken->ErrStr(), "Could not inset string into string db");
 			g_abort_parse = TRUE;
-			return FALSE; 
+			return FALSE;
 	}
 
-	return TRUE; 
+	return TRUE;
 }
 
 //----------------------------------------------------------------------------

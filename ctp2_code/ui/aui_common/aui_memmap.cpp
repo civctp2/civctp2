@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -34,7 +34,6 @@
 #include "aui_memmap.h"
 
 
-
 aui_FileFormat *aui_MemMap::GetFileFormat( MBCHAR *filename )
 {
 	MBCHAR extension[ 8 ];
@@ -50,7 +49,6 @@ aui_FileFormat *aui_MemMap::GetFileFormat( MBCHAR *filename )
 
 	return NULL;
 }
-
 
 //Added by Martin Gühmann
 

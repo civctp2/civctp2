@@ -1,7 +1,3 @@
-
-
-
-
 #include "c3.h"
 #include "GameEvent.h"
 #include "GameEventArgList.h"
@@ -39,4 +35,3 @@ GAME_EVENT_ERR GameEvent::Process(BOOL &complete)
 
 	return err;
 }
-

@@ -48,4 +48,3 @@ typedef uint64_t             uint64;
 #endif// !defined(_MSCVER)
 
 #endif
-

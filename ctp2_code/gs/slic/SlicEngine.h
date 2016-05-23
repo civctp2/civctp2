@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -40,7 +40,7 @@ class SlicEngine;
 #define VA_ARG_SLIC_TAG SLIC_TAG
 #endif
 
-enum SLIC_TAG 
+enum SLIC_TAG
 {
 	ST_NONE,
 	ST_UNIT,
@@ -69,7 +69,6 @@ enum SLIC_TAG
 #define k_MAX_TRIGGER_KEYS 10
 
 extern SlicEngine *g_slicEngine;
-
 
 class SlicObject;
 class CivArchive;
@@ -144,7 +143,6 @@ private:
 
 	StringHash<SlicConst> *m_constHash;
 
-	
 	SlicSymbolData const **     m_builtins;
 	SlicStructDescription **m_builtin_desc;
 
@@ -218,7 +216,7 @@ public:
 
 	void SetEyepointMessage(Message &msg) { m_eyepointMessage = msg; }
 	Message &GetEyepointMessage() { return m_eyepointMessage; }
-	
+
 	void ProcessUITriggers();
 
 	void BlankScreen(BOOL blank);
@@ -251,14 +249,14 @@ public:
 	void RunAutoArrangeOffTriggers();
 	void RunBombardmentTriggers(const Unit &attacker, const Unit &defender);
 	void RunCounterBombardmentTriggers(const Unit &bombarder, const Unit &counterbombarder);
-	
+
 	void RunActiveDefenseTriggers(const Unit &defender, const Unit &aggressor);
 	void RunIndulgenceTriggers(const Unit &cleric, const Unit &city);
 	void RunTerrorismTriggers(const Unit &terrorist, const Unit &target);
 	void RunConversionTriggers(const Unit &cleric, const Unit &city);
 	void RunWonderStartedTriggers(const Unit &city, sint32 wondertype);
 	void RunWonderFinishedTriggers(const Unit &city, sint32 wondertype);
-	
+
 	void RunUnitLaunchedTriggers(const Unit &launchee);
 	void RunEnslavementTriggers(const Unit &slaver, const Unit &city);
 	void RunSettlerEnslavedTriggers(const Unit &slaver, sint32 settlerOwner);
@@ -277,7 +275,7 @@ public:
 	void RunBuildTransformTriggers(sint32 owner, const MapPoint &point,
 								   sint32 type);
 	void RunScienceRateTriggers(sint32 owner);
-	void RunCityCapturedTriggers(sint32 newoner, sint32 oldowner, 
+	void RunCityCapturedTriggers(sint32 newoner, sint32 oldowner,
 								 const Unit &city);
 	void RunTradeOfferTriggers(const TradeOffer &offer);
 	void RunTreatyBrokenTriggers(sint32 pl1, sint32 pl2, const Agreement &a);
@@ -330,7 +328,7 @@ public:
 	BOOL RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
-	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);	
+	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);
 
 	SlicSymbolData *CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index);
 

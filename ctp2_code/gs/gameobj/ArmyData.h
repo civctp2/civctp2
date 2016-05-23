@@ -96,7 +96,6 @@ private:
 
     UnitDynamicArray *m_tempKillList;
 
-
     UnitDynamicArray *m_attackedByDefenders;
     PointerList<Order> *m_orders;
     PLAYER_INDEX m_owner;
@@ -109,9 +108,7 @@ private:
     sint32 m_reentryTurn;
     MapPoint m_reentryPos;
 
-
     uint8 m_debugStringColor;
-
 
     PointerList<KillRecord> *m_killMeSoon;
     Army m_debarked;
@@ -121,7 +118,6 @@ private:
 
     uint8 m_dontKillCount;
     BOOL m_needToKill;
-
 
     MBCHAR *m_debugString;
 
@@ -142,7 +138,6 @@ public:
 
     PLAYER_INDEX GetOwner() const { return m_owner; }
     void SetOwner(PLAYER_INDEX p);
-
 
 
     BOOL Insert(const Unit &id);
@@ -245,7 +240,6 @@ public:
     BOOL CanInciteUprising(sint32 &uindex) const;
     ORDER_RESULT InciteUprising(const MapPoint &point);
 
-
     BOOL CanEstablishEmbassy(sint32 &uindex) const;
     BOOL CanEstablishEmbassy() const;
     ORDER_RESULT EstablishEmbassy(const MapPoint &point);
@@ -331,7 +325,6 @@ public:
     void ThisMeansWAR(PLAYER_INDEX denfender);
 
 
-
     BOOL CanBombardTargetType(const CellUnitList & units) const;
     bool GetBombardRange(sint32 & min_rge, sint32 & max_rge);
     BOOL CanBombard(const MapPoint &point) const;
@@ -396,7 +389,6 @@ public:
     void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const;
 
     BOOL CanMove();
-
 
     BOOL CanBeachAssault() const;
     BOOL CanHearGossip() const;
@@ -486,7 +478,6 @@ public:
 
     Path *RemovePathedOrder();
 
-
     void CharacterizeArmy( bool & isspecial,
                            bool & isstealth,
                            sint32 & maxattack,
@@ -495,9 +486,7 @@ public:
                            bool & haszoc,
                            bool & canbombard) const;
 
-
     BOOL IsCivilian() const;
-
 
     void GetArmyStrength( sint32 & hitpoints,
                           sint32 & defense_count,
@@ -519,12 +508,9 @@ public:
 
     bool CheckValidDestination(const MapPoint &dest) const;
 
-
     bool AtEndOfPath() const;
 
-
     bool GetNextPathPoint(MapPoint & next_pos) const;
-
 
 
     MBCHAR const * GetDebugString(void) const;
@@ -533,61 +519,43 @@ public:
     void SetDebugStringColor(uint8 color) { m_debugStringColor = color; }
 
 
-
     bool TestOrderAll(const OrderRecord *order_rec) const;
     bool TestOrderAny(const OrderRecord * order_rec) const;
 
-
     bool TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const;
-
 
     ORDER_TEST TestOrder(const OrderRecord * order_rec) const;
 
-
     ORDER_TEST TestOrderHere(const OrderRecord * order_rec, const MapPoint & pos) const;
-
 
     ORDER_TEST CargoTestOrderHere(const OrderRecord * order_rec, const MapPoint & pos) const;
 
-
     void PerformOrder(const OrderRecord * order_rec);
 
-
     void PerformOrderHere(const OrderRecord * order_rec, const Path *path);
-
 
     bool IsObsolete() const;
 
     void StopPirating();
 
-
     const MBCHAR *GetName() const;
     void SetName(const MBCHAR *name);
 
-
     bool PlayerCanSee(const PLAYER_INDEX playerId) const;
-
 
     sint16 CountNuclearUnits() const;
 
-
     sint16 CountBioUnits() const;
-
 
     sint16 CountNanoUnits() const;
 
-
     sint16 DisbandNuclearUnits(const sint16 count);
-
 
     sint16 DisbandBioUnits(const sint16 count);
 
-
     sint16 DisbandNanoUnits(const sint16 count);
 
-
     static bool TargetValidForOrder(const OrderRecord * order_rec, const MapPoint &pos);
-
 
     bool HasVeterans() const;
 
@@ -598,12 +566,9 @@ public:
 
 private:
 
-
     static sint32 *s_orderDBToEventMap;
-
 
     static void AssociateEventsWithOrdersDB();
 };
 
 #endif
-

@@ -12,8 +12,7 @@ class Unit;
 class WonderTracker {
 private:
 	uint64 m_builtWonders;
-	
-	
+
     uint64 m_buildingWonders[k_MAX_PLAYERS];
 	uint32 m_globeSatFlags;
 
@@ -34,10 +33,8 @@ public:
     void ClearBuildingWonder(sint32 which, PLAYER_INDEX who);
     BOOL IsBuildingWonder(sint32 which, PLAYER_INDEX who);
 
-	
 	void RecomputeIsBuilding(const PLAYER_INDEX who);
 
-	
 	uint32 GlobeSatFlags() { return m_globeSatFlags; }
 	void SetGlobeSatFlags(uint32 flags) { m_globeSatFlags = flags; }
 };

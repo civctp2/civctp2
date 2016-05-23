@@ -10,26 +10,24 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected the bounding Rec computation (problem with wraping)
-// 
+//
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 
 #include "boundingrect.h"
-
 
 void BoundingRect::Initialize(const MapPoint & xy_center,
 const sint16 radius,
@@ -42,18 +40,14 @@ const bool & y_wrap_ok)
     m_yWrapOk = y_wrap_ok;
     m_mapSize = map_size;
 
-
     m_upperLeft.x = xy_center.x - radius;
     m_upperLeft.y = xy_center.y - radius;
-
 
     m_lowerRight.x = xy_center.x + radius;
     m_lowerRight.y = xy_center.y + radius;
 
 
-	
     m_ul_x_wrap = m_lr_x_wrap = m_ul_y_wrap = m_lr_y_wrap = false;
-
 
     m_isValid = Normalize();
 }
@@ -78,7 +72,6 @@ bool BoundingRect::Normalize()
             m_ul_x_wrap = false;
     }
 
-
     if (m_upperLeft.y < 0)
     {
         m_ul_y_wrap = m_yWrapOk;
@@ -95,7 +88,6 @@ bool BoundingRect::Normalize()
             m_ul_y_wrap = false;
     }
 
-
     if (m_lowerRight.x > m_mapSize.x)
     {
         m_lr_x_wrap = m_xWrapOk;
@@ -109,7 +101,6 @@ bool BoundingRect::Normalize()
         if (m_lowerRight.x > m_upperLeft.x)
             m_lr_x_wrap = false;
     }
-
 
     if (m_lowerRight.y > m_mapSize.y)
     {
@@ -126,17 +117,17 @@ bool BoundingRect::Normalize()
     }
 
 
-	
-	
-	
-	
-	
+
+
+
+
+
     Assert(!((m_ul_x_wrap || m_lr_x_wrap) && (!m_xWrapOk)));
     Assert(!((m_ul_y_wrap || m_lr_y_wrap) && (!m_yWrapOk)));
 
 
-	
-	
+
+
     if (((m_lr_x_wrap == false && m_ul_x_wrap == false) &&
     (m_lowerRight.x < m_upperLeft.x)) ||
     ((m_lr_y_wrap == false && m_ul_y_wrap == false) &&
@@ -148,7 +139,6 @@ bool BoundingRect::Normalize()
     }
     return true;
 }
-
 
 bool BoundingRect::Add(const BoundingRect & add_rect)
 {
@@ -163,7 +153,6 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
         return false;
 
 
-
 	bool is_add_rect_ul_xWrapOk = false;
 	bool is_add_rect_ul_yWrapOk = false;
 	bool is_add_rect_lr_xWrapOk = false;
@@ -176,7 +165,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 
 		is_add_rect_lr_xWrapOk= ((min(m_lowerRight.x,add_rect.m_lowerRight.x)+m_mapSize.x-max(m_lowerRight.x,add_rect.m_lowerRight.x))
 			< (max(m_lowerRight.x,add_rect.m_lowerRight.x)-min(m_lowerRight.x,add_rect.m_lowerRight.x)));
-	
+
 	}
 
 	if (m_yWrapOk)
@@ -186,10 +175,9 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 
 		is_add_rect_lr_yWrapOk= ((min(m_lowerRight.y,add_rect.m_lowerRight.y)+m_mapSize.y-max(m_lowerRight.y,add_rect.m_lowerRight.y))
 			< (max(m_lowerRight.y,add_rect.m_lowerRight.y)-min(m_lowerRight.y,add_rect.m_lowerRight.y)));
-	
+
 	}
 
-	
 	if ((m_ul_x_wrap != add_rect.m_ul_x_wrap) || (is_add_rect_ul_xWrapOk && (m_ul_x_wrap == add_rect.m_ul_x_wrap)))
     {
         if (add_rect.m_upperLeft.x > m_upperLeft.x)
@@ -198,7 +186,6 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 
     else if (add_rect.m_upperLeft.x < m_upperLeft.x)
     { m_upperLeft.x = add_rect.m_upperLeft.x; }
-
 
     if ((m_ul_y_wrap != add_rect.m_ul_y_wrap) || (is_add_rect_ul_yWrapOk && (m_ul_y_wrap == add_rect.m_ul_y_wrap)))
     {
@@ -209,7 +196,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     else if (add_rect.m_upperLeft.y < m_upperLeft.y)
     { m_upperLeft.y = add_rect.m_upperLeft.y; }
 
-    if ((m_lr_x_wrap != add_rect.m_lr_x_wrap) || (is_add_rect_lr_xWrapOk && (m_lr_x_wrap == add_rect.m_lr_x_wrap))) 
+    if ((m_lr_x_wrap != add_rect.m_lr_x_wrap) || (is_add_rect_lr_xWrapOk && (m_lr_x_wrap == add_rect.m_lr_x_wrap)))
     {
         if (add_rect.m_lowerRight.x < m_lowerRight.x)
         { m_lowerRight.x = add_rect.m_lowerRight.x; }
@@ -218,8 +205,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     else if (add_rect.m_lowerRight.x > m_lowerRight.x)
     { m_lowerRight.x = add_rect.m_lowerRight.x; }
 
-
-    if ((m_lr_y_wrap != add_rect.m_lr_y_wrap) || (is_add_rect_lr_yWrapOk && (m_lr_y_wrap == add_rect.m_lr_y_wrap))) 
+    if ((m_lr_y_wrap != add_rect.m_lr_y_wrap) || (is_add_rect_lr_yWrapOk && (m_lr_y_wrap == add_rect.m_lr_y_wrap)))
     {
         if (add_rect.m_lowerRight.y < m_lowerRight.y)
         { m_lowerRight.y = add_rect.m_lowerRight.y; }
@@ -228,14 +214,13 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     else if (add_rect.m_lowerRight.y > m_lowerRight.y)
     { m_lowerRight.y = add_rect.m_lowerRight.y; }
 
-
     m_ul_x_wrap |= add_rect.m_ul_x_wrap || is_add_rect_ul_xWrapOk;
     m_ul_y_wrap |= add_rect.m_ul_y_wrap || is_add_rect_ul_yWrapOk;
     m_lr_x_wrap |= add_rect.m_lr_x_wrap || is_add_rect_lr_xWrapOk;
     m_lr_y_wrap |= add_rect.m_lr_y_wrap || is_add_rect_lr_yWrapOk;
 
 
-	
+
 
 
 
@@ -247,14 +232,12 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
     (m_lowerRight.y < m_upperLeft.y)))
         return false;
 
-
     if ((m_lr_x_wrap || m_ul_x_wrap) && (m_lowerRight.x > m_upperLeft.x))
     {
 
         m_upperLeft.x = 0;
         m_lowerRight.x = m_mapSize.x;
     }
-
 
     if ((m_lr_y_wrap || m_ul_y_wrap) && (m_lowerRight.y > m_upperLeft.y))
     {
@@ -310,17 +293,14 @@ void BoundingRect::Get(sint16 row, sint16 col, MapPoint & pos)
     if (pos.y >= m_mapSize.y) pos.y -= m_mapSize.y;
 }
 
-
 bool BoundingRect::Get(const sint32 & index, MapPoint & pos, const sint32 & max_rows, const sint32 & max_columns) const
 {
 
     pos.y = (sint16)(index / max_columns);
     pos.x = (sint16)(index - (pos.y * max_columns));
 
-
     if (pos.y >= max_columns)
         return false;
-
 
     pos.y = ((pos.y + m_upperLeft.y) % m_mapSize.y);
     pos.x = ((pos.x + m_upperLeft.x) % m_mapSize.x);
@@ -341,15 +321,12 @@ bool BoundingRect::Get(const sint32 & index, MapPoint & pos, const sint32 & max_
     }
 #endif // _DEBUG
 
-
     return true;
 }
-
 
 bool BoundingRect::Expand(const sint16 & size)
 {
     bool err;
-
 
     if (m_upperLeft.y != 0 ||
     m_lowerRight.y != m_mapSize.y)
@@ -357,7 +334,6 @@ bool BoundingRect::Expand(const sint16 & size)
         m_upperLeft.y -= size;
         m_lowerRight.y += size;
     }
-
 
     if (m_upperLeft.x != 0 ||
     m_lowerRight.x != m_mapSize.x)
@@ -372,7 +348,6 @@ bool BoundingRect::Expand(const sint16 & size)
     return err;
 }
 
-
 bool BoundingRect::IsMaxRect() const
 {
     return (m_upperLeft.y == 0 &&
@@ -381,12 +356,10 @@ bool BoundingRect::IsMaxRect() const
     m_lowerRight.x == m_mapSize.x);
 }
 
-
 MapPoint BoundingRect::GetCenter() const
 {
     MapPoint center;
     sint16 width;
-
 
     if ((m_lowerRight.x > m_upperLeft.x))
     {
@@ -400,7 +373,6 @@ MapPoint BoundingRect::GetCenter() const
 
         center.x = (center.x > m_mapSize.x ? center.x - m_mapSize.x : center.x);
     }
-
 
     if ((m_lowerRight.y > m_upperLeft.y))
     {
@@ -417,7 +389,6 @@ MapPoint BoundingRect::GetCenter() const
 
     return center;
 }
-
 
 bool BoundingRect::WithinRectangle(const MapPoint & pos) const
 {

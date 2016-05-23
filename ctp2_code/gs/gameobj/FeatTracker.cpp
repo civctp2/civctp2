@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ FeatTracker *g_featTracker = NULL;
 //
 // Returns    : -
 //
-// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
@@ -79,8 +79,8 @@ Feat::Feat(sint32 type, sint32 player, sint32 round)
 :	m_type		(type),
 	m_player	(player)
 {
-	m_round	= (USE_CURRENT_ROUND == round) 
-		      ? NewTurnCount::GetCurrentRound() 
+	m_round	= (USE_CURRENT_ROUND == round)
+		      ? NewTurnCount::GetCurrentRound()
 			  : round;
 }
 
@@ -107,7 +107,7 @@ FeatTracker::FeatTracker()
 	m_activeList = new PointerList<Feat>;
 	sint32 i;
 	for(i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++) {
-		
+
 		m_effectList[i] = NULL;
 	}
 
@@ -116,7 +116,7 @@ FeatTracker::FeatTracker()
 
 	m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 	memset(m_buildingFeat, 0, sizeof(bool) * g_theBuildingDB->NumRecords());
-	
+
 	FindBuildingFeats();
 }
 
@@ -126,10 +126,9 @@ FeatTracker::FeatTracker(CivArchive &archive)
 
 	sint32 i;
 	for(i = FEAT_EFFECT_NONE + 1; i < FEAT_EFFECT_MAX; i++) {
-		
+
 		m_effectList[i] = NULL;
 	}
-
 
 	Serialize(archive);
 }
@@ -208,7 +207,6 @@ void FeatTracker::Serialize(CivArchive & archive)
 			memset(m_buildingFeat, 0, g_theBuildingDB->NumRecords() * sizeof(bool));
 		}
 
-		
 		PointerList<Feat>::Walker walk(m_activeList);
 		while(walk.IsValid()) {
 			Feat *feat = walk.GetObj();
@@ -292,7 +290,7 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 //
 // Returns    : -
 //
-// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
@@ -302,14 +300,14 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 	const FeatRecord *rec = g_theFeatDB->Get(type);
 	Assert(rec);
 	if(!rec) return;
-	
+
 	if(m_achieved[type]) {
-		
+
 		return;
 	}
 
 	if(rec->GetNumExcludeAdvance() > 0) {
-		
+
 		sint32 a, p;
 		for(a = 0; a < rec->GetNumExcludeAdvance(); a++) {
 			for(p = 0; p < k_MAX_PLAYERS; p++) {
@@ -321,7 +319,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 	}
 
 	if(rec->GetNumExcludeWonder() > 0) {
-		
+
 		sint32 w;
 		for(w = 0; w < rec->GetNumExcludeWonder(); w++) {
 			if(g_theWonderTracker->HasWonderBeenBuilt(rec->GetExcludeWonderIndex(w)))
@@ -330,7 +328,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 	}
 
 	if(rec->GetNumExcludeFeat() > 0) {
-		
+
 		sint32 f;
 		for(f = 0; f < rec->GetNumExcludeFeat(); f++) {
 			if(m_achieved[rec->GetExcludeFeatIndex(f)])
@@ -338,13 +336,11 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 		}
 	}
 
-	
 	const MBCHAR *slicFunc;
 	if(rec->GetExcludeFunction(slicFunc)) {
 		if(g_slicEngine->CallExcludeFunc(slicFunc, type, player))
 			return;
 	}
-
 
 	m_achieved[type] = true;
 
@@ -383,7 +379,7 @@ void FeatTracker::AddFeat(const MBCHAR *name, sint32 player)
 						   GEA_Int, featIndex,
 						   GEA_Player, player,
 						   GEA_End);
-	
+
 }
 
 sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
@@ -408,10 +404,9 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 				case FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY:  rec->GetEffectEliminateDistancePenalty(sub);break;
 				case FEAT_EFFECT_INCREASE_BOAT_VISION:        rec->GetEffectIncreaseBoatVision(sub);break;
 				case FEAT_EFFECT_INCREASE_SCIENCE:            rec->GetEffectIncreaseScience(sub);break;
-				
+
 				case FEAT_EFFECT_INCREASE_HIT_POINTS:         rec->GetEffectIncreaseHitPoints(sub);break;
-				
-				
+
 				default:
 					Assert(FALSE);
 					break;
@@ -442,14 +437,14 @@ void FeatTracker::BeginTurn(sint32 player)
 	while(walk.IsValid()) {
 		Feat *feat = walk.GetObj();
 		if(feat->GetPlayer() == player) {
-			
+
 			const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
 			if(rec->GetDuration() + feat->GetRound() <= NewTurnCount::GetCurrentRound()) {
-				
+
 				walk.Remove();
 				RemoveFeatFromEffectLists(feat);
 				delete feat;
-				continue; 
+				continue;
 			}
 		}
 		walk.Next();
@@ -470,20 +465,18 @@ void FeatTracker::FindBuildingFeats()
 
 void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 {
-	
+
 	if(!m_buildingFeat[building]) return;
 
-	
 	sint32 f;
 	for(f = 0; f < g_theFeatDB->NumRecords(); f++) {
 		const FeatRecord *rec = g_theFeatDB->Get(f);
 		const FeatRecord::BuildingFeat *bf;
 
-		
 		if(rec->GetBuilding(bf)) {
-			
+
 			if(bf->GetBuildingIndex() == building) {
-				
+
 				sint32 numCities = 0;
 				sint32 c;
 				for(c = 0; c < g_player[city.GetOwner()]->m_all_cities->Num(); c++) {
@@ -491,12 +484,12 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 					if(aCity.CD()->HaveImprovement(building))
 						numCities++;
 				}
-				
+
 				sint32 num, percent;
-				
+
 				if(bf->GetNum(num)) {
 					if(numCities >= num) {
-						
+
 						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 											   GEA_Int, f,
 											   GEA_Player, city.GetOwner(),
@@ -505,7 +498,7 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 				} else if(bf->GetPercentCities(percent)) {
 					sint32 havePercent = (numCities * 100) / g_player[city.GetOwner()]->m_all_cities->Num();
 					if(havePercent >= percent) {
-						
+
 						AddFeat(f, city.GetOwner());
 						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 											   GEA_Int, f,
@@ -515,15 +508,15 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 				}
 			}
 		}
-	}	
+	}
 }
 
 void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 {
 	sint32 featIndex;
-	if(g_theFeatDB->GetNamedItem("FEAT_CONQUERED_BY_FORCE", featIndex)) 
+	if(g_theFeatDB->GetNamedItem("FEAT_CONQUERED_BY_FORCE", featIndex))
 	{
-		
+
 		sint32 minCityCount;
 		if(g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv())
 		{
@@ -552,7 +545,7 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 // Description: Handler for GEV_AccomplishFeat events.
 //
 // Parameters : gameEventType	: should be GEV_AccomplishFeat
-//				args			: list of arguments				
+//				args			: list of arguments
 //
 // Globals    : -
 //
@@ -565,21 +558,21 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 
 STDEHANDLER(AccomplishFeat)
 {
-	
+
 	sint32 player, featIndex;
 	if(!args->GetInt(0, featIndex)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
 	g_featTracker->AddFeat(featIndex, player);
 
-	if (g_network.IsHost()) 
+	if (g_network.IsHost())
 	{
 		// Propagate the information to the clients.
 		// Remark: g_player[player] has been verified in GetPlayer.
 		g_network.Block(player);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ACCOMPLISHED_FEAT,
-									  featIndex, 
-									  player, 
+									  featIndex,
+									  player,
 									  g_player[player]->GetCurRound()
 									 )
 						 );
@@ -588,7 +581,6 @@ STDEHANDLER(AccomplishFeat)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(FeatBeginTurn)
 {

@@ -7,7 +7,6 @@
 #include "Unit.h"
 #include "EmptyTile.h"
 
-
 #define k_MAX_TILES_IN_LIST	22
 
 enum
@@ -17,7 +16,6 @@ enum
 	DOMINANT_GOLD,
 	} ;
 
-
 class UnoccupiedTiles
 	{
 	private :
@@ -25,8 +23,8 @@ class UnoccupiedTiles
 
 		MapPoint	m_pos ;
 
-		sint32	m_numUnoccupiedTiles,								
-				m_numTilesFound,									
+		sint32	m_numUnoccupiedTiles,
+				m_numTilesFound,
 				m_numBestFoodTiles,
 				m_numBestProductionTiles,
 				m_numBestGoldTiles,
@@ -39,7 +37,7 @@ class UnoccupiedTiles
 					m_bestGoldTiles[k_MAX_TILES_IN_LIST];
 
 		BOOL CompareTiles(sint32 *list, const sint32 first, const sint32 second, const sint32 dominant) ;
-		void ObtainItemValues(const sint32 idx, const sint32 dominant, sint32 &a, sint32 &b, 
+		void ObtainItemValues(const sint32 idx, const sint32 dominant, sint32 &a, sint32 &b,
             sint32 &c);
 		void SortList(sint32 *list, sint32 numItems, sint32 dominant) ;
 		void SwitchTiles(sint32 *list, sint32 numItems, const sint32 idxA, const sint32 idxB) ;

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_window.h"
@@ -18,13 +7,11 @@
 #include "aui_win.h"
 
 
-
 BOOL aui_Win::m_registered = FALSE;
 MBCHAR *aui_Win::m_windowClass = "aui_Win";
 sint32 aui_Win::m_winRefCount = 0;
 tech_WLList<aui_Win *> *aui_Win::m_winList = 0;
 aui_Win *g_winFocus = 0;
-
 
 aui_Win::aui_Win(
 	AUI_ERRCODE *retval,
@@ -44,7 +31,6 @@ aui_Win::aui_Win(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Win::aui_Win(
@@ -70,12 +56,10 @@ aui_Win::aui_Win(
 }
 
 
-
 AUI_ERRCODE aui_Win::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE aui_Win::InitCommon( void )
@@ -86,7 +70,6 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 	m_hbitmapOld = NULL;
 	memset( &m_offscreen, 0, sizeof( m_offscreen ) );
 
-	
 	if ( !m_registered )
 	{
 #ifdef __AUI_USE_DIRECTX__
@@ -108,30 +91,25 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 #ifdef __AUI_USE_DIRECTX
 	HDC hdc = GetDC( g_ui->TheHWND() );
 
-	
 	m_memdc = CreateCompatibleDC( hdc );
 	Assert( m_memdc != NULL );
 	if ( !m_memdc ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_hbitmap = CreateCompatibleBitmap( hdc, m_width, m_height );
 	Assert( m_hbitmap != NULL );
 	if ( !m_hbitmap ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	ReleaseDC( g_ui->TheHWND(), hdc );
 
-	
 	m_hbitmapOld = (HBITMAP)SelectObject( m_memdc, m_hbitmap );
 
-	
 	RECT rect = { 0, 0, m_width, m_height };
 	FillRect( m_memdc, &rect, GetSysColorBrush( COLOR_WINDOW ) );
 #endif // __AUI_USE_DIRECTX__
-	
-	m_offscreen.x = g_ui->Width() + 1;	
-	m_offscreen.y = 0;					
 
-	
+	m_offscreen.x = g_ui->Width() + 1;
+	m_offscreen.y = 0;
+
 	RECT playground;
 	if ( !m_winRefCount++ )
 	{
@@ -162,7 +140,6 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 	BOOL clipped = ClipCursor( &playground );
 	Assert( clipped );
 
-	
 	MoveWindow(
 		g_ui->TheHWND(),
 		playground.left, playground.top, playground.right, playground.bottom,
@@ -170,7 +147,6 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 #endif // __AUI_USE_DIRECTX__
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Win::~aui_Win()
@@ -193,10 +169,10 @@ aui_Win::~aui_Win()
 		DestroyWindow( m_hwnd );
 		m_hwnd = NULL;
 	}
-#endif // __AUI_USE_DIRECTX__	
-	
+#endif // __AUI_USE_DIRECTX__
+
 	ListPos position = m_winList->Find( GetWinFromHWND(m_hwnd) );
-	if ( position ) 
+	if ( position )
 		m_winList->DeleteAt( position );
 
 	if ( !--m_winRefCount )
@@ -217,7 +193,6 @@ aui_Win::~aui_Win()
 }
 
 
-
 aui_Control *aui_Win::SetKeyboardFocus( void )
 {
 	if ( !IsDisabled() )
@@ -229,7 +204,6 @@ aui_Control *aui_Win::SetKeyboardFocus( void )
 
 	return aui_Control::SetKeyboardFocus();
 }
-
 
 
 aui_Win *aui_Win::GetWinFromHWND( HWND hwnd )
@@ -248,10 +222,9 @@ aui_Win *aui_Win::GetWinFromHWND( HWND hwnd )
 }
 
 
-
 AUI_ERRCODE aui_Win::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -272,7 +245,7 @@ AUI_ERRCODE aui_Win::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 		if ( destDC )
 		{
-			
+
 			BitBlt(
 				destDC,
 				rect.left,
@@ -315,15 +288,13 @@ void aui_Win::MouseMoveInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseMoveOver( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	aui_Control::MouseMoveOver( mouseData );
 	if ( GetWhichSeesMouse() == this ) WinMouseMove( mouseData );
 }
-
 
 
 void aui_Win::MouseMoveAway( aui_MouseEvent *mouseData )
@@ -334,13 +305,11 @@ void aui_Win::MouseMoveAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseMoveOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
-}
 
+}
 
 
 void aui_Win::WinMouseMove( aui_MouseEvent *mouseData )
@@ -350,7 +319,7 @@ void aui_Win::WinMouseMove( aui_MouseEvent *mouseData )
 	POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
 
-#ifdef __AUI_USE_DIRECTX__	
+#ifdef __AUI_USE_DIRECTX__
 	SendMessage(
 		m_hwnd,
 		WM_NCHITTEST,
@@ -368,13 +337,11 @@ void aui_Win::WinMouseMove( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseLDragOver( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	WinMouseLDrag( mouseData );
 }
-
 
 
 void aui_Win::MouseLDragAway( aui_MouseEvent *mouseData )
@@ -384,7 +351,6 @@ void aui_Win::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseLDragInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -392,13 +358,11 @@ void aui_Win::MouseLDragInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseLDragOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	WinMouseLDrag( mouseData );
 }
-
 
 
 void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
@@ -414,7 +378,6 @@ void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
 		WPARAM wParam = MK_LBUTTON;
 		if ( mouseData->rbutton ) wParam |= MK_RBUTTON;
 
-		
 		SendMessage(
 			m_hwnd,
 			WM_MOUSEMOVE,
@@ -429,13 +392,11 @@ void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRDragOver( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	WinMouseRDrag( mouseData );
 }
-
 
 
 void aui_Win::MouseRDragAway( aui_MouseEvent *mouseData )
@@ -445,7 +406,6 @@ void aui_Win::MouseRDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRDragInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -453,13 +413,11 @@ void aui_Win::MouseRDragInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRDragOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	WinMouseRDrag( mouseData );
 }
-
 
 
 void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
@@ -475,7 +433,6 @@ void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
 		WPARAM wParam = MK_RBUTTON;
 		if ( mouseData->lbutton ) wParam |= MK_LBUTTON;
 
-		
 		SendMessage(
 			m_hwnd,
 			WM_MOUSEMOVE,
@@ -489,7 +446,6 @@ void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -499,10 +455,8 @@ void aui_Win::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		SetMouseOwnership();
 
-		
 		SetKeyboardFocus();
 
 		POINT local =
@@ -528,7 +482,7 @@ void aui_Win::MouseLGrabInside( aui_MouseEvent *mouseData )
 			WM_MOUSEACTIVATE,
 			(WPARAM)g_ui->TheHWND(),
 			HTCLIENT + ( WM_LBUTTONDOWN << 16 ) );
-		
+
 		SendMessage(
 			m_hwnd,
 			WM_LBUTTONDOWN,
@@ -562,14 +516,12 @@ void aui_Win::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetKeyboardFocus() == this ) ReleaseKeyboardFocus();
 }
-
 
 
 void aui_Win::MouseLDropInside( aui_MouseEvent *mouseData )
@@ -592,7 +544,7 @@ void aui_Win::MouseLDropInside( aui_MouseEvent *mouseData )
 
 		WPARAM wParam = 0;
 		if ( mouseData->rbutton ) wParam |= MK_RBUTTON;
-		
+
 		SendMessage(
 			m_hwnd,
 			WM_LBUTTONUP,
@@ -611,11 +563,10 @@ void aui_Win::MouseLDropInside( aui_MouseEvent *mouseData )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
-		
+
 		HandleGameSpecificLeftClick( this );
 	}
 }
-
 
 void aui_Win::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
@@ -624,19 +575,16 @@ void aui_Win::MouseLDropOutside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 }
 
 
-
 void aui_Win::MouseRGrabOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 }
-
 
 
 void aui_Win::MouseRDropInside( aui_MouseEvent *mouseData )
@@ -654,12 +602,10 @@ void aui_Win::MouseRDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRDropOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 }
-
 
 
 void aui_Win::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
@@ -671,7 +617,6 @@ void aui_Win::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		SetMouseOwnership();
 
 		POINT local =
@@ -697,7 +642,7 @@ void aui_Win::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 			WM_MOUSEACTIVATE,
 			(WPARAM)g_ui->TheHWND(),
 			HTCLIENT + ( WM_LBUTTONDOWN << 16 ) );
-		
+
 		SendMessage(
 			m_hwnd,
 			WM_LBUTTONDBLCLK,
@@ -713,7 +658,6 @@ void aui_Win::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Win::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -723,7 +667,6 @@ void aui_Win::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		SetMouseOwnership();
 
 		POINT local =
@@ -749,7 +692,7 @@ void aui_Win::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
 			WM_MOUSEACTIVATE,
 			(WPARAM)g_ui->TheHWND(),
 			HTCLIENT + ( WM_LBUTTONDOWN << 16 ) );
-		
+
 		SendMessage(
 			m_hwnd,
 			WM_RBUTTONDBLCLK,

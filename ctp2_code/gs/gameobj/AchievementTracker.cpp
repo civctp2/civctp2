@@ -1,31 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "AchievementTracker.h"
 #include "civarchive.h"
@@ -41,7 +13,7 @@ AchievementTracker *g_theAchievementTracker = NULL;
 void AchievementTracker::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
-		
+
 	} else {
 		if(g_saveFileVersion < 55) {
 			archive >> m_achievements;

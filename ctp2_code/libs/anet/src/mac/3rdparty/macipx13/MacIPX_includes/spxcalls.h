@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * This include file defines SPX constants, macros, and types.
  */
- 
+
 #ifndef __SPXCALLS_INCLUDED__
 #define __SPXCALLS_INCLUDED__
 
@@ -155,7 +155,6 @@ typedef struct {
 #define SPX_SSTATUS_TERMINATING  		0x04
 #define SPX_SSTATUS_ROUTE_LOOKUP		0x05
 #define SPX_SSTATUS_CONNECT_NO_ROUTE	0x06
-
 
 /*
  * SPX APIs

@@ -1,4 +1,3 @@
-
 #ifndef __GAME_EVENT_H__
 #define __GAME_EVENT_H__
 
@@ -17,7 +16,7 @@ public:
 	GAME_EVENT GetType() { return m_type; }
 
 	GAME_EVENT_ERR Process(BOOL &complete);
-	
+
 	sint32 GetSerial() { return m_serial; }
 private:
 	GAME_EVENT m_type;
@@ -27,5 +26,5 @@ private:
 
 	sint32 m_serial;
 };
-	
+
 #endif

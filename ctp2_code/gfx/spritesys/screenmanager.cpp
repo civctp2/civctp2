@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_surface.h"
@@ -59,4 +57,3 @@ void ScreenManager::UnlockSurface(void)
 	m_surfPitch = 0;
 	m_isLocked = FALSE;
 }
-

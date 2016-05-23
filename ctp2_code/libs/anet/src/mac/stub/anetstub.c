@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ pascal OSErr myHandleAppDied(AppleEvent *event, AppleEvent *reply, long refcon)
 //	DescType dType;
 //	Size size;
 //	OSErr err, status;
-	
+
 //	err = AEGetParamPtr(event, keyErrorNumber, typeLongInteger, &dType, &status, sizeof(OSErr), &size);
 //	if (err == noErr) {
 //		exitcode = status;
@@ -146,7 +146,7 @@ void main(void)
 	FSSpec ShellFSSpec;
 	LaunchParamBlockRec launchShellParams;
 	AEEventHandlerUPP myHandleAppDiedUPP;
-	
+
 	DPRINT(("this is your stub speaking; please fasten your seat belts and enjoy the ride\n"));
 	myHandleAppDiedUPP = NewAEEventHandlerProc(myHandleAppDied);
 	err = AEInstallEventHandler(kCoreEventClass, kAEApplicationDied, myHandleAppDiedUPP, 0L, false);

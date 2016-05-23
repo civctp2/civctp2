@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -47,7 +47,6 @@ int logprint_setFile(const char *file)
 		return -1;
 	return 0;
 }
-
 
 /*--------------------------------------------------------------------------
  Print to log file set by logprint_setFile or stdout if logprint_setFile

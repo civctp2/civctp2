@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -23,7 +10,6 @@
 #include "colorset.h"
 
 #include "tipwindow.h"
-
 
 extern C3UI *g_c3ui;
 extern ColorSet *g_colorSet;
@@ -41,8 +27,7 @@ TipWindow::TipWindow(
 	FitWindowToText();
 }
 
-
-TipWindow::TipWindow(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, sint32 bpp, 
+TipWindow::TipWindow(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, sint32 bpp,
 					 MBCHAR *pattern, MBCHAR *text)
 		:
 		C3Window( retval, id, x, y, width, height, bpp, pattern, AUI_WINDOW_TYPE_TIP ),
@@ -62,11 +47,9 @@ AUI_ERRCODE TipWindow::FitWindowToText( void )
 		rect.right += 10;
 		rect.bottom += 10;
 
-		
 		if ( rect.right > m_surface->Width() ) rect.right = m_surface->Width();
 		if ( rect.bottom > m_surface->Height() ) rect.bottom = m_surface->Height();
 
-		
 		Resize( rect.right, rect.bottom );
 	}
 
@@ -74,10 +57,9 @@ AUI_ERRCODE TipWindow::FitWindowToText( void )
 }
 
 
-
 AUI_ERRCODE TipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if (surface == NULL) surface = m_surface;
@@ -86,12 +68,11 @@ AUI_ERRCODE TipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	m_pattern->Draw( surface, &rect );
 
-	
 	primitives_BevelRect16( surface, &rect, 1, 0, 16, 16 );
 
 	if ( m_text )
 	{
-		
+
 		textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
 	}
 

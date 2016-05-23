@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -74,15 +74,14 @@ class TechListItem;
 #define k_VIDEO_WIDTH	160
 #define k_VIDEO_HEIGHT	120
 
-#define k_GL_NUM_BUTTONS		18	
+#define k_GL_NUM_BUTTONS		18
 #define k_GL_NUM_COLS			1
 #define k_GL_BUTTONS_PER_COL	18
 
 #define k_GL_INDEX_INVALID		-1
 
 size_t const	k_MAX_GL_ENTRY		= 8192;
-size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
-
+size_t const	GL_MAX_DB_NAME_SIZE	= 30;
 
 enum LIB_STRING {
 	LIB_STRING_INDEX,
@@ -147,7 +146,7 @@ public:
 
 	static int Get_Object_Index_From_Name
 	(
-		int which_database,				
+		int which_database,
 		char * object_name
 	);
 
@@ -176,25 +175,18 @@ protected:
 	ctp2_HyperTextBox	*m_techHistoricalText;
 	ctp2_HyperTextBox	*m_techGameplayText;
 
-	
 	ctp2_Button		*m_okButton;
 
-	
 	ctp2_Button		*m_backButton;
 
-	
 	ctp2_Button		*m_forwardButton;
 
-	
 	ctp2_Static		*m_categoryText;
 
-	
 	ctp2_Static		*m_searchLabel;
 
-	
 	ctp2_TextField *m_search_word;
 
-	
 	aui_SwitchGroup *m_indexButtonSwitchGroup;
 	ctp2_Button		*m_searchButton;
 	ctp2_Button		*m_unitsButton;
@@ -216,7 +208,7 @@ protected:
 	sint32			m_page;
 	BOOL			m_maxPage;
 	DATABASE		m_database;
-	DATABASE    m_listDatabase; 
+	DATABASE    m_listDatabase;
 	sint32			m_selectedIndex;
 	sint32			m_maxIndex;
 
@@ -225,19 +217,15 @@ protected:
 	ctp2_Static *m_itemLabel;
 
 public:
-	
+
 	std::vector<Great_Library_Item> m_search_results;
 
-	
 	std::vector<Great_Library_Item> m_history;
 
-	
 	int m_history_position;
 
-	
 	void Back();
 
-	
 	void Forward();
 
 	void Display( void );
@@ -246,7 +234,6 @@ public:
 
 	sint32 SetLibrary( sint32 theMode, DATABASE theDatabase,
 		bool add_to_history = true);
-
 
 
 	sint32 ClearHistory( void );
@@ -263,11 +250,11 @@ public:
 
 	sint32 HandleIndexButton( ctp2_Button *button );
 	sint32 HandleListButton
-	( 
-		aui_Control *control, 
-		uint32 action, 
-		uint32 data, 
-		void *cookie 
+	(
+		aui_Control *control,
+		uint32 action,
+		uint32 data,
+		void *cookie
 	);
 
 	sint32 UpdateList( DATABASE database );
@@ -280,16 +267,13 @@ public:
 
 
 
-	
+
 	int Get_Database_Size(int the_database);
 
-	
 	void Search_Great_Library();
 
-	
 	void Force_A_Search();
 
-	
 	void Add_Item_To_Topics_List
 	(
 		const MBCHAR *name,
@@ -308,34 +292,29 @@ public:
 class TechListItem: public ctp2_ListItem
 {
 public:
-	
-	
+
 	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32	GetIndex(void) { return m_index; }
 	DATABASE GetDatabase(void) { return m_database; }
 
 protected:
 	TechListItem() : ctp2_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 index, DATABASE database, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
 private:
 	sint32		m_index;
-	DATABASE	m_database;     
+	DATABASE	m_database;
 };
-
 
 
 sint32 greatlibrary_UpdateList( DATABASE database );

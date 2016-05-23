@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return (EXCEPTION_CONTINUE_SEARCH);
 	}
-	
+
 	/* if access violation, simply have guarded handler return 'FALSE' */
 	if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -186,7 +186,7 @@ static int aehmod_add(char *mName, char *path, HMODULE hMod)
 			modbuf = modbuf->next;
 		} while (modbuf != NULL);
 		aeh_SetCurrent(__LINE__, __FILE__);
-		if (modbuf == NULL) {	
+		if (modbuf == NULL) {
 			modprev->next = modentry;
 			modentry->next = NULL;
 		}
@@ -515,7 +515,7 @@ static int aeh_setStackandModInfo(aeh_t *aeh)
 				}
 			}
 			aeh_SetCurrent(__LINE__, __FILE__);
-			
+
 			if ((aeh->nmod + 1) * sizeof(aeh_modfile_t) > aeh_BUF_MAXLEN)
 				break;
 		}
@@ -629,7 +629,7 @@ void getExceptionInstruction(long segreg, long pinstr, unsigned char *instr)
 		push gs
 		push edi
 		push esi
-		mov cx, aeh_NINSTB 
+		mov cx, aeh_NINSTB
 		mov esi, pinstr
 		mov edi, instr
 		mov eax, segreg
@@ -685,7 +685,7 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 			aeh_SetCurrent(__LINE__, __FILE__);
 			return aeh_RES_OK;
 		} else {
-			aeh_SetCurrent(__LINE__, __FILE__);		
+			aeh_SetCurrent(__LINE__, __FILE__);
 			return aeh_RES_ALREADY;
 		}
 	}
@@ -772,7 +772,7 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 #if 0
 		__try {
 			unsigned char *temp;
-			
+
 			aeh_SetCurrent(__LINE__, __FILE__);
 			aeh->info[infoind].id = aeh_WIN32inst_ID;
 			temp = (unsigned char *)malloc(aeh_NINSTB * sizeof(unsigned char));
@@ -923,7 +923,7 @@ void aeh_Destroy(aeh_t *aeh)
 					free(aeh->info[i].data);
 					break;
 				default:
-					aehDPRINT(("aeh_Destroy: unknown info id %d", aeh->info[i].id));	
+					aehDPRINT(("aeh_Destroy: unknown info id %d", aeh->info[i].id));
 					break;
 			}
 		}
@@ -1130,7 +1130,6 @@ int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 	return aeh_RES_OK;
 }
 
-
 static int parseDispCardInfo(const char *dispCard, char *szName, char *szDriver, unsigned long *VersionMS, unsigned long *VersionLS)
 {
 	const char *pbuf = dispCard;
@@ -1158,7 +1157,7 @@ static int parseDispCardInfo(const char *dispCard, char *szName, char *szDriver,
 	aeh_SetCurrent(__LINE__, __FILE__);
 	return aeh_RES_OK;
 }
-	
+
 static char *parseSystemInfo(const char *sysDesc, char **crshtxt)
 {
 	unsigned long VersionMS, VersionLS;
@@ -1416,7 +1415,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
 							aeh->modfunc[i].name, aeh->modfunc[i].mappath);
 			} else {
 				if (strlen(stkmodname) + 44 + strlen(tmp) > BUFFER_SIZE) break;
-				if (stkmodcrc) 
+				if (stkmodcrc)
 					sprintf(&tmp[strlen(tmp)], " %8x %8lx %8x  %s(crc:%8lx)\n",
 							0, stkoffsetaddr, 0, stkmodname, stkmodcrc);
 				else
@@ -1522,7 +1521,7 @@ static int putStreamErrFull(unsigned char *p, aeh_buf_t *aehbuf)
 
 /*--------------------------------------------------------------------------
  Convert crash info from an object format (aeh_t) to a binary stream
-  format (aeh_buf_t). Call this to put crash info into a compact form 
+  format (aeh_buf_t). Call this to put crash info into a compact form
   for doing network or file operations.
  Input: aeh
  Output: aehbuf (preallocated)
@@ -1691,7 +1690,7 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 				}
 				break;
 			default:
-				aehDPRINT(("aeh_writeOutputStream: unknown info id %d", aeh->info[i].id));	
+				aehDPRINT(("aeh_writeOutputStream: unknown info id %d", aeh->info[i].id));
 				break;
 		}
 	}
@@ -1789,7 +1788,7 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 	if (getStream(&pread, &aeh->nmod, sizeof(aeh->nmod), pend)) return err1;
 	if (aeh->nmod > 0) {
 		if (!(aeh->mod = (aeh_modfile_t*)malloc(aeh->nmod * sizeof(aeh_modfile_t)))) {
-			aeh_SetCurrent(__LINE__, __FILE__);		
+			aeh_SetCurrent(__LINE__, __FILE__);
 			return aeh_RES_NOMEM;
 		}
 		memset(aeh->mod, 0, aeh->nmod * sizeof(aeh_modfile_t));
@@ -1917,7 +1916,7 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 					}
 					break;
 				default:
-					aehDPRINT(("aeh_writeOutputStream: unknown info id %d", aeh->info[i].id));	
+					aehDPRINT(("aeh_writeOutputStream: unknown info id %d", aeh->info[i].id));
 					break;
 			}
 		}
@@ -1966,7 +1965,7 @@ int aeh_stripSysDesc(aeh_t *aeh)
 int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[])
 {
 	unsigned int n, n_left;
-	
+
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !nids || !stripIds) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -2016,7 +2015,7 @@ int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[])
 --------------------------------------------------------------------------*/
 int aeh_stripExceptionAddress(aeh_t *aeh)
 {
-	if (!aeh) 
+	if (!aeh)
 		return aeh_RES_BAD;
 	aeh->retaddr = 0;
 	return aeh_RES_OK;

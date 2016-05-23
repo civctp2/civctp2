@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -213,4 +213,3 @@ raw_getc()
 #endif
 	return (0xff & regs.h.al);
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -116,7 +116,7 @@ static const char *status2a(dp_result_t status)
 /*-------------------------------------------------------------------------
  cd to the directory of the executable.  Web browsers start
  helper apps in a random directory, which makes the helper app very unhappy
- if it expected to find its own data files in the current working 
+ if it expected to find its own data files in the current working
  directory.  Call this function at the beginning of a helper app to fix
  this.
  Returns 0 on error
@@ -129,7 +129,7 @@ static int cdToAppDir(void)
 
 	if (!GetModuleFileName(NULL, dir, sizeof(dir)))
 			return 0;
-	
+
 	chop = strrchr(dir, '\\');
 	if (chop)
 		*chop = 0;
@@ -148,7 +148,7 @@ static int getargv(char argv[][MAX_PATH], int maxargc)
 {
 	char	*p, *q;
 	int		argc;
-	
+
 	p = GetCommandLine();
 	printf("Command line:%s\n", p);
 	for (argc = 0; (argc < maxargc) && *p; argc++) {
@@ -193,7 +193,7 @@ int chat(int sysargc, char **sysargv)
 	char key[dp_MAX_ADR_LEN + 3];
 	dp_session_t sess;
 	char cwdbuf[MAX_PATH];
-	
+
 	argc = getargv(argv, MAX_ARGS);
 	raw_init();
 	if (argc == 1)
@@ -220,7 +220,7 @@ int chat(int sysargc, char **sysargv)
 		printf("error %d requesting latency deltas\n", err);
 		quit(myDP, 1);
 	}
-#endif	
+#endif
 	keylen = 1;
 	key[0] = dp_KEY_SESSIONS;
 	err = dpRequestObjectDeltas(myDP, TRUE, key, keylen);
@@ -262,13 +262,13 @@ int chat(int sysargc, char **sysargv)
 			printf("%x.", key[i] & 0xFF);
 		}
 		printf(")");
-	}		
+	}
 #endif
 	if (dpGetGameServerEx(myDP, masterHostName, sizeof(masterHostName), NULL) ==dp_RES_OK) {
 		printf(", on server %s", masterHostName);
 	}
 	printf("\n");
-	printf("To leave this session, press ^D.\n"); 
+	printf("To leave this session, press ^D.\n");
 	printf("To force a divide-by-zero crash, press ^X.\n");
 
 	while(1) {			/* input and receive loop */
@@ -310,7 +310,7 @@ int chat(int sysargc, char **sysargv)
 			}
 			if (ch == 4) {		/* ^D */
 				printf("\nquitting ....\n");
-				
+
 				quitState = 1;
 				if (ch == 17) {
 					exitCode = 1;			/* if stub exists, tell it to die */
@@ -343,12 +343,12 @@ int chat(int sysargc, char **sysargv)
 			/* Process the keyboard buffer. */
 			if (!kbuf[0])
 				continue;
-	
+
 			err = chat_broadcast(myDP, kbuf);
 			if (err != dp_RES_OK) {
 				printf("chat: error %d sending message.\n", err);
 			}
-	
+
 			/* Empty it. */
 			kbuf[0] = 0;
 		}
@@ -377,18 +377,18 @@ int chat(int sysargc, char **sysargv)
 			if (pkt.u.delta.key[0] == dp_KEY_PLAYERS) {
 				dp_objectDelta_packet_t *delta = &pkt.u.delta;
 				const char *op;
-					
+
 				op = status2a(delta->status);
 				if (dp_OBJECTDELTA_FLAG_LOCAL & delta->flags) {
 					char *msg = "";
 					if (dp_OBJECTDELTA_FLAG_ISHOST & delta->flags)
 						msg = " -- and you're the host";
-					printf("***: Player id:%d %s %s -- and it's you%s!\n", 
+					printf("***: Player id:%d %s %s -- and it's you%s!\n",
 							delta->data.p.id, delta->data.p.name, op, msg);
 					my_id = delta->data.p.id;
 				} else {
 					printf("***: Player id:%d %s %s: latency:%dms, loss:%d%%, flags:%lx\n",
-						delta->data.p.id, delta->data.p.name, op, 
+						delta->data.p.id, delta->data.p.name, op,
 						delta->latency, delta->pktloss, delta->flags);
 				}
 			} else if (pkt.u.delta.key[0] == dp_KEY_SESSIONS) {
@@ -398,7 +398,7 @@ int chat(int sysargc, char **sysargv)
 				op = status2a(delta->status);
 				printf("session %s (sessType %d, k%d u%x f%x, cur %d, max %d) %s\n",
 					delta->data.sess.sessionName, delta->data.sess.sessionType,
-					delta->data.sess.karma, delta->data.sess.dwUser1, 
+					delta->data.sess.karma, delta->data.sess.dwUser1,
 					delta->data.sess.flags,
 					delta->data.sess.currentPlayers,
 					delta->data.sess.maxPlayers, op);

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -145,23 +145,21 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 	if(g_network.IsActive()) {
 		g_network.AddCivilization(pi, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM);
 	}
-	
+
 	g_player[pi] = new Player(PLAYER_INDEX(pi), 0, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM, GENDER_RANDOM) ;
-			
+
 	g_selected_item->AddPlayer(pi);
-			
-			
+
 	if (g_theProfileDB->IsAIOn()) {
 	}
-	
+
 	Assert(g_player[pi]);
 
-	if(pi != PLAYER_INDEX_VANDALS && g_player[pi] && 
+	if(pi != PLAYER_INDEX_VANDALS && g_player[pi] &&
 	   (old_owner >= 0) && g_player[old_owner]) {
 		g_player[pi]->m_advances->Copy(g_player[old_owner]->m_advances);
 		g_player[pi]->m_advances->SetOwner(pi);
 
-		
 		g_player[old_owner]->GiveMap(pi);
 
 	}
@@ -171,7 +169,7 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 	if(g_network.IsHost()) {
 		g_network.Block(old_owner);
 		g_network.QueuePacketToAll(new NetPlayer(g_player[pi]));
-		
+
 		uint16 y;
 		for(y = 0; y < g_theWorld->GetYHeight(); y += k_VISION_STEP) {
 			g_network.QueuePacketToAll(new NetVision(pi, y, k_VISION_STEP));

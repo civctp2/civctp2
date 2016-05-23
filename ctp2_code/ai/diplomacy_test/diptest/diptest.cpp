@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include <string>
 #include <vector>
 #include <list>
@@ -17,12 +5,10 @@
 #include <iostream>
 using namespace std;
 
-
 string ID_LOST_BATTLE("ID_LOST_BATTLE");
 string ID_ATTACKED_CIVILIANS("ID_ATTACKED_CIVILIANS");
 string ID_UNPROVOKED_ATTACK("ID_UNPROVOKED_ATTACK");
 string ID_ACCIDENTAL_ATTACK("ID_ACCIDENTAL_ATTACK");
-
 
 string ID_EXPLAIN_TRADE_CITY_FOR_PEACE("ID_EXPLAIN_TRADE_CITY_FOR_PEACE");
 string ID_ADVICE_TRADE_CITY_FOR_PEACE("ID_ADVICE_TRADE_CITY_FOR_PEACE");
@@ -64,14 +50,12 @@ string ID_EXPLAIN_ACCEPT_COUNTER("ID_EXPLAIN_ACCEPT_COUNTER");
 string ID_ADVICE_ACCEPT_COUNTER("ID_ADVICE_ACCEPT_COUNTER");
 string ID_NEWS_ACCEPT_COUNTER("ID_NEWS_ACCEPT_COUNTER");
 
-
 string ID_SPY_FULL_ATTACK_SS("ID_SPY_FULL_ATTACK_SS");
 string ID_ADVICE_FULL_ATTACK_SS("ID_ADVICE_FULL_ATTACK_SS");
 string ID_NEWS_FULL_ATTACK_SS("ID_NEWS_FULL_ATTACK_SS");
 string ID_SPY_REGROUP_SS("ID_SPY_REGROUP_SS");
 string ID_ADVICE_REGROUP_SS("ID_ADVICE_REGROUP_SS");
 string ID_NEWS_REGROUP_SS("ID_NEWS_REGROUP_SS");
-
 
 string ID_SPY_PROVOKE_WAR_DS("ID_SPY_PROVOKE_WAR_DS");
 string ID_ADVICE_PROVOKE_WAR_DS("ID_ADVICE_PROVOKE_WAR_DS");
@@ -84,11 +68,9 @@ string ID_NEWS_MAKE_FRIEND_DS("ID_NEWS_MAKE_FRIEND_DS");
 #include "Diplomat.h"
 #include "mapanalysis.h"
 
-
 vector<Player> Player::s_players(g_numPlayers);
 vector<Scheduler> Scheduler::s_scheduler(g_numPlayers);
 vector<AIP> AIP::s_AIP(g_numPlayers);
-
 
 sint32 MapAnalysis::m_atRiskCitiesValue = 10;
 sint32 MapAnalysis::m_cityValue = 11;
@@ -103,7 +85,6 @@ int main(int argc, char* argv[])
 	static PLAYER_INDEX humanId = 0;
 	static PLAYER_INDEX robotId = 1;
 
-	
 	Diplomat &robot = Diplomat::GetDiplomat(robotId);
 	robot.SetPlayerId(robotId);
 	AIP::GetAIP(robotId).SetPersonality("Homicidal_Scoundral");
@@ -114,20 +95,18 @@ int main(int argc, char* argv[])
 	AIP::GetAIP(humanId ).SetPersonality("Homicidal_Scoundral");
 	human.IsAiControlled(false);
 
-	
 	robot.InitStrategicState();
 	robot.InitDiplomaticState(humanId);
 
 	human.InitStrategicState();
 	human.InitDiplomaticState(robotId);
 
-	
 	MapAnalysis::m_atRiskCitiesValue = 20;
 	MapAnalysis::m_militaryPower = 10;
 
 
-	
-	
+
+
 	Diplomat::DebugStatusAll();
 
 	string choice;
@@ -136,7 +115,6 @@ int main(int argc, char* argv[])
 	PLAYER_INDEX current_player = robotId;
 	while ( choice != "q") {
 
-		
 
 		cout << endl;
 		choice = "";
@@ -144,18 +122,16 @@ int main(int argc, char* argv[])
 		cout << " command? (next, propose, event, help, quit)";
 		cin >> choice;
 		switch (tolower(choice[0])) {
-		case 'n': 
+		case 'n':
 			current_player = !current_player;
 			Diplomat::GetDiplomat(current_player).BeginTurn();
-		
-			
+
 			Diplomat::DebugStatusAll();
 
 			break;
 		case 'p':
 			Diplomat::GetDiplomat(current_player).BeginTurn();
 
-			
 			Diplomat::DebugStatusAll();
 
 			break;
@@ -165,17 +141,14 @@ int main(int argc, char* argv[])
 			cout << " has attacked a unit owned by " << (int) !current_player;
 			cout << endl << endl;
 
-			
-			u = Unit(!current_player,1,10); 
-			args.SetUnit(0,u); 
-			args.SetInt(0,static_cast<sint32>(CAUSE_REMOVE_ARMY_ATTACKED)); 
-			args.SetPlayer(0,current_player); 
-			
-			
+			u = Unit(!current_player,1,10);
+			args.SetUnit(0,u);
+			args.SetInt(0,static_cast<sint32>(CAUSE_REMOVE_ARMY_ATTACKED));
+			args.SetPlayer(0,current_player);
+
 			Diplomat::GetDiplomat(!current_player).LogEvent(GEV_KillUnit, &args);
 			Diplomat::GetDiplomat(!current_player).RecomputeRegard();
 
-			
 			Diplomat::DebugStatusAll();
 
 			break;

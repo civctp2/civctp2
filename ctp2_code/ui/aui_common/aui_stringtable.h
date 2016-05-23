@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -13,26 +5,21 @@
 #ifndef __AUI_STRINGTABLE_H__
 #define __AUI_STRINGTABLE_H__
 
-
 #include "aui_base.h"
-
 
 
 #define k_AUI_STRINGTABLE_LDL_NUMSTRINGS		"numstrings"
 #define k_AUI_STRINGTABLE_LDL_STRING			"string"
 
-
 #define k_AUI_STRINGTABLE_LDL_NODATABASE		"nodatabase"
 
-
 class ldl_datablock;
-
 
 
 class aui_StringTable : aui_Base
 {
 public:
-	
+
 	aui_StringTable(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock );
@@ -59,5 +46,4 @@ protected:
 	MBCHAR	**m_strings;
 };
 
-
-#endif 
+#endif

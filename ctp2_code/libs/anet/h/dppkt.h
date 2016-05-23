@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Private packet definitions for the dp multiplayer networking layer.
  $Log: dppkt.h $
  Revision 1.31  1997/08/23 20:47:01  dkegel
- 1. Added dp_LEAVE_PACKET_ID 
+ 1. Added dp_LEAVE_PACKET_ID
  2. Added dpSendLeaveSession() and dpHandleLeaveSession()
  3. Added code in dpClose() to more thoroughly undo dpOpen()
  Revision 1.30  1997/08/19 22:04:57  dkegel
@@ -72,9 +72,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  them.
  2. Added a few more aliases to support porting from the other library.
  Revision 1.13  1997/01/31 07:47:41  dkegel
- Settled the structure packing question by using 
+ Settled the structure packing question by using
  #pragma pack(x) / #pragma pack() pairs at top and bottom of
- all .h files that declare structures.  Was careful to put 
+ all .h files that declare structures.  Was careful to put
  #pragma pack(x) after last #include (to avoid wierd nesting effects
  due to lack of #pragma pack(pop).
  Revision 1.12  1997/01/30 01:58:25  dkegel
@@ -241,12 +241,11 @@ typedef struct {
 	(dpio_MAXLEN_UNRELIABLE-sizeof_dp_playerList_packet_t(0)-sizeof(dp_packetType_t)) \
 	/sizeof(dp_playerId_t))
 
-
 /*
  * This packet gets is from a game server to a session host requesting
  * that a connection be opened to that specified address pair
  *
- * This packet should only be accepted by clients if it comes from a 
+ * This packet should only be accepted by clients if it comes from a
  * game server and should be discarded otherwise.
  *
  * The reason for this packets existence is allow people behind firewalls
@@ -260,18 +259,17 @@ typedef struct {
  */
 #define dp_REQUEST_OPEN_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE, 'X')
 
-typedef struct 
+typedef struct
 {
 	unsigned char	adr[dp_MAX_ADR_LEN];
 	unsigned char	adr2[dp_MAX_ADR_LEN];
 } PACK dp_request_open_packet_t;
 
-
 /*
  * This packets is sent from a player to a game server when that player
  * wishes to join a session.  This is done so that the game server can
  * then send the REQUEST_OPEN packet to the host so that if the host is
- * behind a Firewall then they will initiate the connection allowing 
+ * behind a Firewall then they will initiate the connection allowing
  * communication to commence.
  *
  * Note: The size of sessionId should be [dptab_KEY_MAXLEN] but dependencies
@@ -286,7 +284,7 @@ typedef struct
 typedef struct
 {
 	unsigned char	chunk1;
-	unsigned char	sessionId[dp_MAX_ADR_LEN + sizeof (dp_karma_t)];  
+	unsigned char	sessionId[dp_MAX_ADR_LEN + sizeof (dp_karma_t)];
 } PACK dp_indirect_join_packet_t;
 #endif
 
@@ -297,7 +295,6 @@ typedef struct
  * for this stream (TCP/IP Illustrated, Volume 1, pg. 231)
  */
 #define dpio_SYN_PACKET_ID			dppt_MAKE(dp_PACKET_INITIALBYTE,'Y')
-
 
 /*
  * A packet used to actively close a connection
@@ -396,7 +393,7 @@ typedef struct dp_host_s {
 } PACK dp_host_t;
 
 /*
- * Request to join a particular session 
+ * Request to join a particular session
  *
  * The first karma identifies the act of joining this host to this session;
  * the second karma identifies the session.
@@ -441,8 +438,7 @@ typedef struct {
 	unsigned char	iadr2[dp_MAX_ADR_LEN]; /* NOT present in old clients */
 } PACK dp_join_packet_t;
 
-
-/* Request to leave a particular session 
+/* Request to leave a particular session
  * joinKarma and iadr are ignored. This is a rather silly packet.
  */
 #define dp_LEAVE_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'Q')
@@ -468,8 +464,8 @@ typedef struct{
  */
 #define dp_VICTORY_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'W')
 
-/* Request to log in to a server.  
- * Note: does not start with dp_PACKET_INITIALBYTE!  
+/* Request to log in to a server.
+ * Note: does not start with dp_PACKET_INITIALBYTE!
  * The first version of this packet had no body, and caused the client
  * to automatically be subscribed to the global session table.
  * The second version has a body which specifies which sessionType to listen

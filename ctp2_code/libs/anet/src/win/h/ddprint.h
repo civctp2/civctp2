@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /*--------------------------------------------------------------------------
  DDPrint.h
- 
+
  Debug printing for ActiveNet Windows drivers, where it's not clear how to
  give them access to the full services in dprint.h.  For now, only log to
  the Windows debug system.
@@ -52,13 +52,13 @@ typedef int (FAR PASCAL *dp_dprintf_t) (
 dp_dprintf_t dp_dprintf;
 
 /*-------------------------------------------------------------------------
- Call this to specify a dp_dprintf compatible function to call instead of 
+ Call this to specify a dp_dprintf compatible function to call instead of
  the default dp_dprintf.
 -------------------------------------------------------------------------*/
 #define dp_dprintf_set(fn) { dp_dprintf = fn; }
 
 /*--------------------------------------------------------------------------
- Print a debug string to the debugging console. 
+ Print a debug string to the debugging console.
  Returns the number of characters sent.
  Don't use dp_dprintf directly; use the DPRINT macro instead for lower overhead.
 --------------------------------------------------------------------------*/

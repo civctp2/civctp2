@@ -1,5 +1,3 @@
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -23,7 +21,6 @@ enum ANET_STATE {
 	ANET_STATE_CONTACTING_LOBBY,
 };
 
-	
 class AnetPlayerData {
 public:
 	AnetPlayerData(dpid_t id, char* name) :
@@ -110,7 +107,6 @@ private:
 	void PlayerReady(dpid_t id, dp_char_t *name, sint32 flags);
 	friend void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
 							long flags, void *context);
-
 
 	void PlayerCallback(dpid_t id, dp_char_t *name,	long flags);
 	friend void dp_PASCAL anet_EnumPlayers(dpid_t id,

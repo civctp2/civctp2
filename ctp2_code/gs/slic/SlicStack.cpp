@@ -10,18 +10,18 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Prevented random memory access and NULL-dereferencing crashes. 
+// - Prevented random memory access and NULL-dereferencing crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -76,7 +76,6 @@ sint32 SlicStack::Pop(SS_TYPE &type, SlicStackValue &value)
 	return m_sptr;
 }
 
-
 SlicSymbolData *SlicStack::GetSymbol(SS_TYPE symType, SlicStackValue symVal)
 {
 	if(symType == SS_TYPE_VAR) {
@@ -122,7 +121,6 @@ BOOL SlicStack::GetCity(SS_TYPE type, SlicStackValue symVal, Unit &city)
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetCity(city) : FALSE;
 }
-
 
 BOOL SlicStack::GetPos(SS_TYPE type, SlicStackValue symVal, MapPoint &pos)
 {

@@ -4,19 +4,16 @@
 #ifndef __C3LISTBOX_H__
 #define __C3LISTBOX_H__
 
-
 #include "aui_listbox.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
-
 
 
 class C3ListBox : public aui_ListBox, public PatternBase
 {
 public:
-	
+
 	C3ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -46,5 +43,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

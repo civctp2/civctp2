@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,15 +31,13 @@
 #ifndef __AUI_DRAGDROPWINDOW_H__
 #define __AUI_DRAGDROPWINDOW_H__
 
-
 #include "aui_window.h"
-
 
 
 class aui_DragDropWindow : public aui_Window
 {
 public:
-	
+
 	aui_DragDropWindow(
 		AUI_ERRCODE *retval,
 		aui_Control *dragDropItem,
@@ -57,7 +55,7 @@ protected:
 		aui_Region *launchPad );
 
 public:
-	
+
 	void StartDragging( sint32 localX, sint32 localY );
 
 	aui_Region *GetLaunchPad( void ) const { return m_launchPad; }
@@ -74,12 +72,11 @@ public:
 		sint32 y = 0 );
 
 protected:
-	
+
 	aui_Control *m_dragDropItem;
 	aui_Region *m_launchPad;
 
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -51,7 +51,7 @@ World::InsertInstallation(Installation &inst, MapPoint &pnt)
 	g_theInstallationTree->Insert(inst);
 }
 
-void 
+void
 World::RemoveInstallation(Installation &inst, MapPoint &pnt)
 {
 	g_theInstallationTree->Remove(inst);
@@ -80,7 +80,6 @@ sint32 World::CountImprovements(const MapPoint & pos)
 
 }
 
-
 sint32 World::GetMaxFoodFromTerrain()
 {
 	sint32 food;
@@ -102,7 +101,6 @@ sint32 World::GetMaxFoodFromTerrain()
 	return max_food;
 }
 
-
 sint32 World::GetMaxShieldsFromTerrain()
 {
 	sint32 prod;
@@ -122,7 +120,6 @@ sint32 World::GetMaxShieldsFromTerrain()
 	}
 	return max_prod;
 }
-
 
 sint32 World::GetAvgFoodFromTerrain()
 {
@@ -146,7 +143,6 @@ sint32 World::GetAvgFoodFromTerrain()
 	return avg_food;
 }
 
-
 sint32 World::GetAvgShieldsFromTerrain()
 {
 	sint32 prod;
@@ -167,7 +163,6 @@ sint32 World::GetAvgShieldsFromTerrain()
 
 	return avg_prod;
 }
-
 
 sint32 World::GetAvgGoldFromTerrain()
 {

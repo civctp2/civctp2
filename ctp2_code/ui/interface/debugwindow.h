@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
- 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __DEBUGWINDOW_H__
 #define __DEBUGWINDOW_H__
-
 
 #include "c3window.h"
 
@@ -23,11 +10,10 @@ class TextBox;
 
 class aui_TabGroup;
 
-
-class DebugWindow : public C3Window 
+class DebugWindow : public C3Window
 {
-    uint32 m_debug_mask; 
-    BOOL m_allow_next; 
+    uint32 m_debug_mask;
+    BOOL m_allow_next;
 public:
 	DebugWindow(
 		AUI_ERRCODE *retval,
@@ -55,11 +41,11 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
-	
-	
 
-	
+
+
+
+
 	void SetTextBox(TextBox *box) { m_textBox = box; }
 	TextBox *GetTextBox(void) const { return m_textBox; }
 	void AddText(MBCHAR *text);
@@ -67,7 +53,7 @@ public:
     void SetDebugMask(uint32 m);
     void AddText(const uint32 m, MBCHAR *text);
 
-    void AddMask(uint32 m); 
+    void AddMask(uint32 m);
     void AddText(const char *err, ...);
 
 private:
@@ -80,4 +66,4 @@ private:
 #define WPRINTF(wmask, warg)
 #endif
 
-#endif 
+#endif

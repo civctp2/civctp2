@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_input.h"
-
 
 
 aui_Input::aui_Input(
@@ -23,7 +11,6 @@ aui_Input::aui_Input(
 }
 
 
-
 AUI_ERRCODE aui_Input::InitCommon( void )
 {
 	m_acquired = FALSE;
@@ -32,12 +19,10 @@ AUI_ERRCODE aui_Input::InitCommon( void )
 }
 
 
-
 aui_Input::~aui_Input()
 {
 	Unacquire();
 }
-
 
 
 AUI_ERRCODE aui_Input::Acquire( void )
@@ -46,7 +31,6 @@ AUI_ERRCODE aui_Input::Acquire( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Input::Unacquire( void )

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -143,14 +143,14 @@ dp_result_t dpio_get(
 	size_t *psize,
 	int *flags)
 {
-	(void) dpio; 
+	(void) dpio;
 	if (simnetbuf[sim_my_rx].len) {
 		*psrc = 1 - sim_my_rx;
 		memcpy(buffer, simnetbuf[sim_my_rx].buf, simnetbuf[sim_my_rx].len);
 		*psize = simnetbuf[sim_my_rx].len;
 		simnetbuf[sim_my_rx].len = 0;
-		printf("sim dpio_get: %d got packet of size %d from %d: %s\n", sim_my_rx, *psize, *psrc, hexstring((unsigned char *)buffer, *psize));		
-		
+		printf("sim dpio_get: %d got packet of size %d from %d: %s\n", sim_my_rx, *psize, *psrc, hexstring((unsigned char *)buffer, *psize));
+
 		if (flags)
 			*flags = dpio_GET_RELIABLE;
 		return dp_RES_OK;
@@ -192,7 +192,7 @@ dp_result_t dpio_put_reliable2(
 			printf("sim dpio_put: output buffer full\n");
 			exit(1);
 		}
-		retry_sum += retry_fraction;	
+		retry_sum += retry_fraction;
 		if (retry_sum >= 100) {
 			retry_sum -= 100;
 			printf("sim dpio_put: full queue simulated\n");
@@ -226,7 +226,7 @@ dp_result_t dpio_put_unreliable(
 	return dpio_put_reliable(dpio, dests, nDests, buffer, size, errDest);
 }
 
-playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2) 
+playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 {
 	/* Should return *adr, but let's be paranoid */
 	if (sim_my_rx != SIMNET_H_CLIENT) {
@@ -283,14 +283,14 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	commInitReq_t *commInitReq, const clock_t *now, FILE *thawfp)
 {
 	static dpio_t dummy;
-	
+
 	memset(&dummy, 0, sizeof(dpio_t));
 	dummy.now = now;  /* needed by dptab */
 	*pdpio = &dummy;
 	return dp_RES_OK;
 }
 
-#define dpio_destroy(dpio, flags) 
+#define dpio_destroy(dpio, flags)
 
 dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char *buf, size_t buflen)
 {
@@ -349,7 +349,7 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
 
 #define dpReadyToFreeze(dp) dp_RES_OK
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) 
+dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -405,7 +405,7 @@ DP_API dp_result_t dpCreate(
 	dp->hMaster = PLAYER_NONE;
 	dp->hGameServer = PLAYER_NONE;
 	dp->ping_dest = PLAYER_NONE;
-	
+
 	DPRINT(("dpCreate: Creating new dp from scratch\n"));
 
 	/* Initialize the transport layer.
@@ -432,7 +432,7 @@ DP_API dp_result_t dpCreate(
 	dp->defaultSessionType = dpscoret_SESSTYPE;
 	dp->sess_subkeylen = dpscoret_SESSIDLEN;
 	memcpy(dp->sess_subkey, dpscoret_SESSID, dpscoret_SESSIDLEN);
-	
+
 	/* Success. */
 	*pdp = dp;
 	if (dpio_err == comm_STATUS_OK_AM_MASTER)
@@ -474,12 +474,12 @@ DP_API dp_result_t DP_APIX dpReceive(
 	playerHdl_t src;
 	char *pktbuf = (char *)buffer;
 	tserv_event_t result;
-	
+
 	err = dpio_get(dp->dpio, &src, pktbuf, size, &get_flags);
 	assert(err != dp_RES_BAD);
 	assert(err != dp_RES_BUG);
 	*idTo = (dpid_t)PLAYER_ME;
-	*idFrom = (dpid_t)src; 
+	*idFrom = (dpid_t)src;
 	if (err != dp_RES_OK) {
 		playerHdl_t h;
 
@@ -526,7 +526,7 @@ DP_API dp_result_t DP_APIX dpReceive(
 			}
 			err = tserv_handle_packet(dp->tserv, *idFrom, get_flags, (tserv_packet_t *)(pktbuf+2), &result);
 			assert(err == dp_RES_OK || err == dp_RES_EMPTY);
-			if (err == dp_RES_OK) {				
+			if (err == dp_RES_OK) {
 				dp_account_packet_t *pkt = (dp_account_packet_t *)(pktbuf + sizeof(dp_packetType_t));
 				*((dp_packetType_t *)pktbuf) = dp_ACCOUNT_PACKET_ID;
 				*size = sizeof(dp_packetType_t) + sizeof(dp_account_packet_t);
@@ -592,7 +592,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(dp_t *dp, char *masterHostName, dp_
 			printf("Can't init tserv\n");
 			exit(1);
 		}
-		
+
 		addrlen = dpio_scanAdr(dp->dpio, (char *)masterHostName, serveraddr, dp_MAX_ADR_LEN);
 		if (addrlen == 0) {
 			printf("sim dpSetGameServerEx: dpio_scanAdr(%s) failed\n", masterHostName);
@@ -751,7 +751,7 @@ void ProcessCommandLine(int argc, char **argv)
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
 			/* deal with args that start with - or / */
@@ -767,7 +767,7 @@ void ProcessCommandLine(int argc, char **argv)
 			switch(toupper(argv[i][1])) {
 			case 'D':
 				/*  Turn on some sort of debugging mode */
-				break;				
+				break;
 			case 'I':   /*  Set modem init string */
 				strncpy(modeministr, chptr+1, sizeof(modeministr));
 				modeministr[sizeof(modeministr)-1] = '\0';
@@ -896,7 +896,7 @@ void client_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *conte
 	dp_result_t dptab_err;
 	dp_t *dp = context;
 	if (!context) return;
-	
+
 	if (err == dp_RES_OPENED) {
 		n_connects++;
 	} else if (err == dp_RES_CLOSED) {
@@ -967,7 +967,7 @@ void server_poll(dp_t *myDP, int init)
 	tserv_event_t event;
 
 	myDP->now = eclock();
-	
+
 	assert(myDP);
 	if (init) {
 		printf("Server initializing...\n");
@@ -1013,7 +1013,7 @@ void server_poll(dp_t *myDP, int init)
 					event.reason == dp_RES_CREATED) {
 					tcapw_entry_t entry;
 					dp_netchar_t ncs[tcapw_LEN_PW];
-					
+
 					/* An email request just came in, pull the secret code out
 					 * of the database and "email" it.
 					 */
@@ -1062,9 +1062,9 @@ int client_poll(dp_t *myDP, int init)
 	static long oldscoreVal[6];
 	static int got_scoreval[6];
 	static int got_oldmax[2];
-	
+
 	myDP->now = eclock();
-	
+
 	if (init) {
 		client_state = 0;
 		secretcode[0] = 0;
@@ -1133,7 +1133,7 @@ int client_poll(dp_t *myDP, int init)
 		err = dpAccountLogin(myDP, "user1", "pass1");
 		assert(!err);
 		client_state += 10;
-		printf("client: going to state %d\n", client_state);			
+		printf("client: going to state %d\n", client_state);
 		break;
 
 	case 120:  /* (tserv) Wait for user1 authorization */
@@ -1146,7 +1146,7 @@ int client_poll(dp_t *myDP, int init)
 			if (result.reason != dp_RES_OK) {
 				printf("CLIENT: fail: expected result.reason ok, got %d\n", result.reason);
 				exit(1);
-			}	
+			}
 			uid = result.uid;
 			assert(uid != dp_UID_NONE);
 #ifdef SIMNET
@@ -1199,7 +1199,7 @@ int client_poll(dp_t *myDP, int init)
 		printf("CLIENT: going to state %d\n", client_state);
 		break;
 
-	case 150:  /* (dp) wait for create player callback */ 
+	case 150:  /* (dp) wait for create player callback */
 		if (!got_callback)
 			break;
 #ifdef dpscoret_DPOPEN
@@ -1297,7 +1297,7 @@ int client_poll(dp_t *myDP, int init)
 		{
 			int scoreId;
 			long scoreVal;
-			/* Send the previous max - 10 and + 10 */ 
+			/* Send the previous max - 10 and + 10 */
 			for (scoreId = 1; scoreId < 3; scoreId++) {
 				scoreVal = oldscoreVal[scoreId-1 + 4] + (long)scoreId * 20 - 30;
 				err = dpReportScore2(myDP, id, scoreId, scoreVal);
@@ -1352,16 +1352,16 @@ int client_poll(dp_t *myDP, int init)
 			scorerep_buf_t repbuf;
 			dp_uid_t delta_uid;
 			int i;
-			
+
 			/* delta packet:
 			 *  flags:  dp_OBJECTDELTA_FLAG_LOCAL/INOPENSESS/ISHOST;
 			 *  status: dp_RES_CREATED/CHANGED/DELETED;
 			 *  keylen:                3
 			 *  key[dp_KEY_MAXLEN]:    dp_KEY_SCORES, sessType;
-			 *  subkeylen:             4  
+			 *  subkeylen:             4
 			 *  subkey[dp_KEY_MAXLEN]: uid;
 			 *  data:   scorerep_buf_t(scorerep_player_t);
-			 */			
+			 */
 			delta_uid = dpMAKELONG(delta->subkey[0], delta->subkey[1], delta->subkey[2], delta->subkey[3]);
 			DPRINT(("CLIENT: got delta, flags:%d status:%d key:%s subkey:%s (uid:%d)\n", delta->flags, delta->status, key2a(delta->key, delta->keylen), key2a2(delta->subkey, delta->subkeylen), delta_uid));
 			assert(uid != dp_UID_NONE);
@@ -1431,7 +1431,7 @@ int client_poll(dp_t *myDP, int init)
 		}
 #endif
 		client_state++;
-		printf("CLIENT: going to state %d\n", client_state);		
+		printf("CLIENT: going to state %d\n", client_state);
 		break;
 
 	case 297:  /* Wait for network traffic to finish */
@@ -1488,7 +1488,7 @@ void create_db()
 	tcapw_uname_t uname1;
 	tcapw_uid_t uid1;
 	wchar_t wcbuf[256];
-	
+
 	dp_result_t res;
 
 	memset(&entry1, 0, sizeof(entry1));
@@ -1541,7 +1541,7 @@ int dpscore_test()
 
 	memset(&transport, 0, sizeof(transport));
 	strcpy(transport.fname, commDLLName);
-	
+
 #ifndef SIMNET
 	if (!server)
 #endif
@@ -1591,7 +1591,7 @@ int dpscore_test()
 		server_poll(serverDP, 1);  /* initialize */
 #endif
 	}
-	
+
 	raw_init();
 	while (1) {
 		int charFromUser = 0;
@@ -1622,7 +1622,7 @@ int dpscore_test()
 #endif
 	}
 	raw_end();
-	
+
 	printf("dpDestroy unloading comm drivers...");
 #ifndef SIMNET
 	if (!server)
@@ -1671,7 +1671,7 @@ connect to.\n");
 	strcpy(user1, "user1");
 	strcpy(pass1, "pass1");
 	commDLLName[0] = 0;
-	
+
 	ProcessCommandLine(argc, argv);
 
 	if (!commDLLName[0]) {

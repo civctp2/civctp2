@@ -6,7 +6,7 @@
 
 #include "IC3Rand.h"
 
-class CivArchive; 
+class CivArchive;
 class RandomGenerator;
 
 class C3Rand : public IC3Rand
@@ -28,7 +28,7 @@ public:
 	virtual uint32 Release();
 #endif
 
-	C3Rand(CivArchive &archive); 
+	C3Rand(CivArchive &archive);
 	void Serialize(CivArchive &archive);
 
 #ifndef USE_COM_REPLACEMENT

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Moved PBEM save file generation to the FinishBeginTurn event (by JJB).
-// - Moved the autosave file generation to just before the StartMovePhase 
+// - Moved the autosave file generation to just before the StartMovePhase
 //   event, to prevent losing the advance that just was completed.
 // - Corrected GrantAdvanceEvent input handling.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
@@ -56,7 +56,6 @@
 #include "EndGame.h"
 #include "TurnCnt.h"
 #include "Score.h"
-
 
 #include "profileDB.h"
 #include "civapp.h"
@@ -127,7 +126,6 @@ STDEHANDLER(PatienceEvent)
 	if(!args->GetPlayer(0, player))
 		return GEV_HD_Continue;
 
-	
 	return GEV_HD_Continue;
 }
 
@@ -143,14 +141,12 @@ STDEHANDLER(PeaceMovementEvent)
 	                                                        *g_player[player]->m_all_armies,
 	                                                        *g_player[player]->m_all_cities);
 
-	
-	
+
 	if(p->m_assasinationTimer > 0) {
 		p->m_assasinationTimer--;
 		if(p->m_assasinationTimer <= 0)
 			p->m_assasinationModifier = 0;
 	}
-
 
 	return GEV_HD_Continue;
 }
@@ -178,7 +174,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	p->m_gold->SetSavings();
 
-
 	p->m_readiness->BeginTurn(p->m_government_type);
 
 	if(p->m_capitol && g_theUnitPool->IsValid(p->m_capitol->m_id)) {
@@ -191,7 +186,7 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
 		SlicSegment *       seg  = g_slicEngine->GetSegment("GCReadyToActivateUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			SlicObject *    so   = new SlicObject("GCReadyToActivateUs");
 			so->AddPlayer(player);
@@ -214,8 +209,7 @@ STDEHANDLER(BeginTurnProductionEvent)
 	if(!args->GetPlayer(0, player))
 		return GEV_HD_Continue;
 
-	
-	
+
 	g_player[player]->BeginTurnProduction();
 	return GEV_HD_Continue;
 }
@@ -228,9 +222,7 @@ STDEHANDLER(BeginTurnSupportEvent)
 
 	Player *p = g_player[player];
 
-	
 	p->BeginTurnWonders();
-
 
 	p->BeginTurnScience();
 
@@ -306,7 +298,6 @@ STDEHANDLER(BeginTurnGovernmentEvent)
 		p->m_changed_government_this_turn = FALSE;
 	}
 
-	
 	g_slicEngine->RunPlayerTriggers(player);
 
 	return GEV_HD_Continue;
@@ -319,12 +310,11 @@ STDEHANDLER(FinishBeginTurnEvent)
 		return GEV_HD_Continue;
 
 	Player *p = g_player[player];
-	
+
 	BOOL atPeace = TRUE;
 
 	sint32 i;
 
-	
 	for(i = 1; i < k_MAX_PLAYERS; i++) {
 		if(p->m_contactedPlayers & (1 << i) && g_player[i]) {
 			if(p->m_diplomatic_state[i] == DIPLOMATIC_STATE_WAR) {
@@ -334,17 +324,16 @@ STDEHANDLER(FinishBeginTurnEvent)
 		}
 	}
 
-
 	if(atPeace) {
 		p->m_score->AddYearAtPeace();
 	}
 
 	if (!p->m_isDead) {
-		
-		
-		
-		
-		
+
+
+
+
+
 	}
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", p->m_owner, p->GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
@@ -357,16 +346,14 @@ STDEHANDLER(FinishBeginTurnEvent)
 	  PLAYER_TYPE_ROBOT) {
 		g_turn->SendNextPlayerMessage();
 	}
-	
 
 
-	
+
+
 	if ( p->m_owner == g_selected_item->GetVisiblePlayer() ) {
 
 
-
 		g_c3ui->AddAction( new SW_UpdateAction );
-
 
 
 	}
@@ -393,9 +380,8 @@ STDEHANDLER(FinishBeginTurnEvent)
 	}
 
 	if(g_network.IsHost()) {
-		
-		
-		
+
+
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_TURN_SYNC));
 	}
@@ -409,7 +395,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	return GEV_HD_Continue;
 }
 
-STDEHANDLER(CreateUnitEvent) 
+STDEHANDLER(CreateUnitEvent)
 {
 	MapPoint pos;
 	sint32 utype;
@@ -419,7 +405,7 @@ STDEHANDLER(CreateUnitEvent)
 	sint32 pl;
 
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
-	args->GetCity(0, homeCity); 
+	args->GetCity(0, homeCity);
 	if(!args->GetInt(0, utype)) return GEV_HD_Continue;
 	if(!args->GetInt(1, cause)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
@@ -441,14 +427,13 @@ STDEHANDLER(SettleEvent)
 {
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
-	
+
 	if(g_player[a.GetOwner()]) {
 		if(g_player[a.GetOwner()]->Settle(a)) {
 			args->Add(new GameEventArgument(GEA_Int, 1));
 		}
 	}
 
-	
 	return GEV_HD_Continue;
 }
 
@@ -468,30 +453,30 @@ STDEHANDLER(CreateCityEvent)
 		sint32 cityType = unitutil_GetCityTypeFor(pos);
 		Unit city = g_player[pl]->CreateCity(cityType, pos, (CAUSE_NEW_CITY)cause, NULL, unitType);
 		if(city.IsValid()) {
-			args->Add(new GameEventArgument(GEA_City, city));    
+			args->Add(new GameEventArgument(GEA_City, city));
 
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 			if(cause == CAUSE_NEW_CITY_GOODY_HUT) {
 				SlicObject *so = new SlicObject("80RuinBecomesCity") ;
 				so->AddRecipient(pl) ;
 				so->AddCity(city);
 				g_slicEngine->Execute(so) ;
 				DPRINTF(k_DBG_GAMESTATE, ("You get a city!\n"));
-				
-				
-				
-				
-				
+
+
+
+
+
 
 				if (g_soundManager) {
 					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 					if (visiblePlayer == pl) {
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 						                         gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_CITY),
 						                         pos.x,
 						                         pos.y);
@@ -519,11 +504,10 @@ STDEHANDLER(CreateImprovementEvent)
 	if(!args->GetInt(0, imptype)) return GEV_HD_Continue;
 
 	g_player[pl]->CreateImprovement(imptype, pos, 0);
-	
 
 	if(g_player[pl] && g_player[pl]->GetGaiaController()->HasMinTowersBuilt()) {
-		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
-		if (seg && !seg->TestLastShown(pl, 10000)) 
+		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");
+		if (seg && !seg->TestLastShown(pl, 10000))
 		{
 			SlicObject *	so = new SlicObject("GCMinObelisksReachedUs");
 			so->AddRecipient(pl);
@@ -590,8 +574,7 @@ STDEHANDLER(TradeBidEvent)
 
 STDEHANDLER(CreatedArmyEvent)
 {
-	
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -641,9 +624,9 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	sint32 player;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
-	if (g_player[player] && !Player::IsThisPlayerARobot(player)) 
+	if (g_player[player] && !Player::IsThisPlayerARobot(player))
 	{
-		if (g_theProfileDB->IsAutoSave() && 
+		if (g_theProfileDB->IsAutoSave() &&
 			(!g_network.IsActive() || g_network.IsHost())
 		   )
 		{
@@ -657,18 +640,16 @@ STDEHANDLER(FinishBuildPhaseEvent)
 			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
 		}
 	}
-	
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
 		                       GEA_Player, player,
 		                       GEA_End);
-	
 
 	if(g_network.IsActive()) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NetworkTurnSync,
 		                       GEA_Player, player,
 		                       GEA_End);
 	}
-
 
 	return GEV_HD_Continue;
 }
@@ -680,33 +661,30 @@ STDEHANDLER(StartMovePhaseEvent)
 
 	if(g_player[pl]->m_playerType == PLAYER_TYPE_ROBOT &&
 	   (!g_network.IsActive() || g_network.IsHost())) {
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
+
 	}
 
 	if(!g_network.IsClient()) {
-		
 
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AIFinishBeginTurn,
 		                       GEA_Player, pl,
 		                       GEA_End);
 	}
 
-	
 
 #ifndef _BFR_
 	gslog_LogPlayerStats(g_selected_item->GetCurPlayer());
 
-	
 	Diplomat::GetDiplomat(pl).LogDebugStatus(1);
 #endif
 
@@ -732,22 +710,20 @@ STDEHANDLER(AIFinishBeginTurnEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(GiveMapEvent)
 {
 	sint32 from_player;
 	sint32 to_player;
-	if(!args->GetPlayer(0, from_player)) 
-		return GEV_HD_Continue;	
-	if(!args->GetPlayer(1, to_player)) 
-		return GEV_HD_Continue;	
+	if(!args->GetPlayer(0, from_player))
+		return GEV_HD_Continue;
+	if(!args->GetPlayer(1, to_player))
+		return GEV_HD_Continue;
 
 	Assert(g_player[from_player] != NULL);
 	g_player[from_player]->GiveMap(to_player);
 
-	return GEV_HD_Continue;	
+	return GEV_HD_Continue;
 }
-
 
 
 STDEHANDLER(GiveCityEvent)
@@ -796,7 +772,6 @@ void playerevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_ContactMade, GEV_PRI_Primary, &s_ContactMadeEvent);
 
-	
 	g_gevManager->AddCallback(GEV_WormholeTurn, GEV_PRI_Primary, &s_WormholeEvent);
 	g_gevManager->AddCallback(GEV_PlayerPatience, GEV_PRI_Primary, &s_PatienceEvent);
 	g_gevManager->AddCallback(GEV_PeaceMovement, GEV_PRI_Primary, &s_PeaceMovementEvent);
@@ -811,7 +786,6 @@ void playerevent_Initialize()
 	g_gevManager->AddCallback(GEV_BeginTurnEndGame, GEV_PRI_Primary, &s_BeginTurnEndGameEvent);
 	g_gevManager->AddCallback(GEV_BeginTurnGovernment, GEV_PRI_Primary, &s_BeginTurnGovernmentEvent);
 	g_gevManager->AddCallback(GEV_FinishBeginTurn, GEV_PRI_Primary, &s_FinishBeginTurnEvent);
-	
 
 	g_gevManager->AddCallback(GEV_CreateUnit, GEV_PRI_Primary, &s_CreateUnitEvent);
 

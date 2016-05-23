@@ -14,7 +14,7 @@
 class aui_SDL
 {
 public:
-	
+
 	aui_SDL() { m_SDLRefCount++; m_exclusiveMode = FALSE; }
 	virtual ~aui_SDL();
 

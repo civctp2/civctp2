@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_screen.h"
 
 #include "aui_shell.h"
-
 
 
 aui_Shell::aui_Shell(
@@ -23,7 +11,6 @@ aui_Shell::aui_Shell(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE aui_Shell::InitCommon( void )
@@ -38,7 +25,6 @@ AUI_ERRCODE aui_Shell::InitCommon( void )
 }
 
 
-
 aui_Shell::~aui_Shell()
 {
 	if ( m_screenHistory )
@@ -47,7 +33,6 @@ aui_Shell::~aui_Shell()
 		m_screenHistory = NULL;
 	}
 }
-
 
 
 aui_Screen *aui_Shell::LeaveCurrentScreen( void )
@@ -62,7 +47,6 @@ aui_Screen *aui_Shell::LeaveCurrentScreen( void )
 
 	return prevCurScreen;
 }
-
 
 
 AUI_ERRCODE aui_Shell::GotoScreen( uint32 id )
@@ -81,12 +65,10 @@ AUI_ERRCODE aui_Shell::GotoScreen( uint32 id )
 }
 
 
-
 aui_Screen *aui_Shell::GoBackScreen( void )
 {
 	aui_Screen *prevScreen = m_curScreen;
 
-	
 	if ( m_screenHistory->L() >= 2 )
 	{
 		m_screenHistory->RemoveTail();

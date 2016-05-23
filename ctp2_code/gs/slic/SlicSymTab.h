@@ -10,14 +10,12 @@
 class SlicSymTab : public StringHash<SlicNamedSymbol>
 {
 private:
-	
+
 	sint32 m_arraySize;
 	sint32 m_numEntries;
-	
-	
-	
+
+
 	SlicNamedSymbol **m_array;
-	
 
 public:
 	SlicSymTab(sint32 size);

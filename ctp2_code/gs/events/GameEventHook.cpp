@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // Generate extra debugging output.
 //
@@ -57,7 +57,7 @@ class DumpToFile : public std::unary_function<GameEventHook::Node const &, void>
 {
 public:
     DumpToFile(FILE * f) : m_file(f) { ; };
-    
+
     void operator () (GameEventHook::Node const & object)
     {
         char str[1024];
@@ -125,8 +125,8 @@ GameEventHook::~GameEventHook()
 //
 // Returns    : -       : may throw std::bad_alloc when no more memory
 //
-// Remark(s)  : * The new (Node) pair will be inserted before the first Node 
-//                - if any - with higher or equal priority, so the list will 
+// Remark(s)  : * The new (Node) pair will be inserted before the first Node
+//                - if any - with higher or equal priority, so the list will
 //                stay ordered when it was ordered when entering this function.
 //              * NULL-callbacks will not be entered in the list, so we don't
 //                have to check this later.
@@ -149,7 +149,7 @@ void GameEventHook::AddCallback
             ++walk;
         }
 
-        m_callbacks.insert(walk, Node(cb, pri)); 
+        m_callbacks.insert(walk, Node(cb, pri));
     }
 }
 
@@ -172,10 +172,10 @@ void GameEventHook::AddCallback
 void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 {
     std::list<Node>::iterator   walk = m_callbacks.begin();
-    
+
     while (walk != m_callbacks.end())
     {
-        if (walk->m_cb == cb)   
+        if (walk->m_cb == cb)
         {
             walk == m_callbacks.erase(walk);
         }
@@ -196,7 +196,7 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 //
 // Globals    : -
 //
-// Returns    : resumeIndex     : the index of the first event handler that 
+// Returns    : resumeIndex     : the index of the first event handler that
 //                                has not been executed yet.
 //              GAME_EVENT_ERR  : result of execution
 //
@@ -205,13 +205,12 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 //----------------------------------------------------------------------------
 GAME_EVENT_ERR GameEventHook::Activate
 (
-    GameEventArgList *  args, 
+    GameEventArgList *  args,
     sint32 &            resumeIndex
 )
 {
     return Resume(args, 0, resumeIndex);
 };
-
 
 //----------------------------------------------------------------------------
 //
@@ -220,12 +219,12 @@ GAME_EVENT_ERR GameEventHook::Activate
 // Description: Resume executing the event handlers in the list in sequence.
 //
 // Parameters : args            : parameters to pass to the event handlers
-//              startIndex      : the index of the first event handler to 
+//              startIndex      : the index of the first event handler to
 //                                execute
 //
 // Globals    : -
 //
-// Returns    : resumeIndex     : the index of the first event handler that 
+// Returns    : resumeIndex     : the index of the first event handler that
 //                                has not been executed yet.
 //              GAME_EVENT_ERR  : result of execution
 //
@@ -234,8 +233,8 @@ GAME_EVENT_ERR GameEventHook::Activate
 //----------------------------------------------------------------------------
 GAME_EVENT_ERR GameEventHook::Resume
 (
-    GameEventArgList *  args, 
-    sint32              startIndex, 
+    GameEventArgList *  args,
+    sint32              startIndex,
     sint32 &            resumeIndex
 )
 {
@@ -263,9 +262,9 @@ GAME_EVENT_ERR GameEventHook::Resume
 //
 // Globals    : -
 //
-// Returns    : walk            : first event handler that has not been 
+// Returns    : walk            : first event handler that has not been
 //                                executed yet.
-//              resumeIndex     : the index of the first event handler that 
+//              resumeIndex     : the index of the first event handler that
 //                                has not been executed yet.
 //              GAME_EVENT_ERR  : result of execution
 //
@@ -293,10 +292,10 @@ GAME_EVENT_ERR GameEventHook::Run
 		}
 #endif //_DEBUG
 
-		GAME_EVENT_HOOK_DISPOSITION const disp = 
+		GAME_EVENT_HOOK_DISPOSITION const disp =
             running.m_cb->GEVHookCallback(m_type, args);
 
-		switch (disp) 
+		switch (disp)
         {
 		default:
 			Assert(disp == GEV_HD_Continue);
@@ -313,7 +312,7 @@ GAME_EVENT_ERR GameEventHook::Run
         } // switch
     } // for
 
-    return GEV_ERR_OK;	
+    return GEV_ERR_OK;
 }
 
 #if defined(_DEBUG)

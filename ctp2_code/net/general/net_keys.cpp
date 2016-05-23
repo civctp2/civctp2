@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_keys.h"
 #include "net_util.h"
@@ -15,7 +13,6 @@
 #include "AICause.h"
 #include "ArmyPool.h"
 #include "AgreementPool.h"
-
 
 void NetKeys::Packetize(uint8 *buf, uint16 &size)
 {
@@ -48,7 +45,7 @@ void NetKeys::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLLONG(key); g_theInstallationPool->HackSetKey(key);
 	PULLLONG(key); g_theCivilisationPool->HackSetKey(key);
 	PULLLONG(key); g_theDiplomaticRequestPool->HackSetKey(key);
-	PULLLONG(key); g_theMessagePool->HackSetKey(key);	
+	PULLLONG(key); g_theMessagePool->HackSetKey(key);
 	PULLLONG(key); g_theArmyPool->HackSetKey(key);
 	PULLLONG(key); g_theAgreementPool->HackSetKey(key);
 

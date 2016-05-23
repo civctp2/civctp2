@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -39,22 +32,20 @@ enum MESSAGE_RESPONSE_TYPE
 	MESSAGE_RESPONSE_TYPE_MAX,
 	} ;
 
-
 #if 0
 enum MESSAGE_TYPE
 	{
-	MESSAGE_TYPE_EVENT,												
-	MESSAGE_TYPE_DIPLOMATIC,										
+	MESSAGE_TYPE_EVENT,
+	MESSAGE_TYPE_DIPLOMATIC,
 	MESSAGE_TYPE_TRADE,
 	MESSAGE_TYPE_MILITARY,
 	MESSAGE_TYPE_KNOWLEDGE,
-	MESSAGE_TYPE_WONDER,  
+	MESSAGE_TYPE_WONDER,
 	MESSAGE_TYPE_NULL,
 	MESSAGE_TYPE_MAX
 	} ;
 #endif
 typedef sint32 MESSAGE_TYPE;
-
 
 enum MESSAGE_EYEPOINT_STYLE
 	{
@@ -71,21 +62,19 @@ enum MESSAGE_RESPONSE_STYLE
 	MESSAGE_RESPONSE_STYLE_SUBMIT
 	} ;
 
-
 class MessageData : public GAMEOBJ
 	{
 	private:
-		
-		PLAYER_INDEX	m_owner,									
-						m_sender ;									
 
-		
-		
+		PLAYER_INDEX	m_owner,
+						m_sender ;
+
+
 		BOOL m_isRead;
-		MESSAGE_TYPE	m_msgType ;									
+		MESSAGE_TYPE	m_msgType ;
 		MESSAGE_TYPE    m_msgSelectedType;
 
-		sint32			m_timestamp ;								
+		sint32			m_timestamp ;
 		AdvanceType     m_advance;
 
 		BOOL m_advanceSet;
@@ -98,27 +87,23 @@ class MessageData : public GAMEOBJ
 		BOOL m_isDiplomaticResponse;
 		BOOL m_useDirector;
 
-		
 		MBCHAR  m_caption[k_MAX_MSG_LEN];
-		
 
-		
-		MBCHAR	*m_text;								
-		UnitDynamicArray *m_cityList ;								
 
-		
-		ID	m_request ;								
+		MBCHAR	*m_text;
+		UnitDynamicArray *m_cityList ;
+
+		ID	m_request ;
 		ID  m_tradeOffer;
 
 		PointerList<SlicButton> *m_buttonList;
 		PointerList<SlicEyePoint> *m_eyePoints;
 
-		MessageWindow *m_window;									
+		MessageWindow *m_window;
 
 		SlicSegment *m_slicSegment;
 		MBCHAR *m_title;
 
-		
 
 		friend class NetMessage;
 		friend class SlicFrame;
@@ -135,18 +120,18 @@ class MessageData : public GAMEOBJ
 
 
 
-		
+
 	public:
 		MessageData(const ID id) ;
-		MessageData(CivArchive &archive);  
+		MessageData(CivArchive &archive);
 		MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX sender, const MESSAGE_TYPE type, MBCHAR *s) ;
 		MessageData(const ID id, MessageData *copy);
 		~MessageData();
 
-		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }	
+		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }
 		void SetOwner(PLAYER_INDEX o) { m_owner = o; }
 
-		PLAYER_INDEX GetSender(void) const { return (m_sender) ; }	
+		PLAYER_INDEX GetSender(void) const { return (m_sender) ; }
 		MESSAGE_TYPE GetMsgType(void) const { return (m_msgType) ; }
 		void SetMsgType(MESSAGE_TYPE type) { m_msgType = type; }
 		MESSAGE_TYPE GetSelectedMsgType(void) const { return m_msgSelectedType; }
@@ -155,7 +140,7 @@ class MessageData : public GAMEOBJ
 		void ToString(MBCHAR *s) ;
 		MBCHAR *GetMsgText(void) { return (m_text) ; }
 
-		
+
 
 
 
@@ -170,29 +155,23 @@ class MessageData : public GAMEOBJ
 		MESSAGE_RESPONSE_TYPE Reject(void) ;
 		MESSAGE_RESPONSE_TYPE Accept(void) ;
 
-		
 		MESSAGE_EYEPOINT_STYLE GetEyePointStyle(void);
 		const MBCHAR *GetEyePointName( sint32 index );
 		BOOL GetEyePointMapPosition( sint32 index, MapPoint &point );
 
-		
 		MESSAGE_RESPONSE_STYLE GetResponseStyle(void);
-		
-		
+
 		void SetMessageWindow( MessageWindow *window ) { m_window = window; }
 		MessageWindow *GetMessageWindow( void ) { return m_window; }
 		void KillMessageWindow( void );
-	
-		
-		
+
+
 		void IgnoreMessage( );
 
-		
 		const MBCHAR *GetMsgOpenSound( void ) { return NULL; }
 		const MBCHAR *GetMsgSound( void ) { return NULL; }
 
 
-		
 		sint32 GetNumEyePoints() const;
 		void EyePointCallback( sint32 index );
 		void EyeDropdownCallback( sint32 index );
@@ -203,10 +182,8 @@ class MessageData : public GAMEOBJ
 		BOOL GetGreatLibraryButton( void ) { return FALSE; }
 		void GreatLibraryCallback( void ) { ; }
 
-		
 		sint32 GetTimeStamp( void ) { return m_timestamp; }
-		
-		
+
 		void AddButton(SlicButton *button);
 		sint32 GetNumButtons() const;
 		SlicButton *GetButton(sint32 index);
@@ -244,7 +221,7 @@ class MessageData : public GAMEOBJ
 
 		MBCHAR *GetTitle() { return m_title; }
 		void SetTitle(MBCHAR *title);
-		
+
 		void DisableClose(BOOL dis) { m_closeDisabled = dis; }
 		BOOL IsCloseDisabled() const { return m_closeDisabled; }
 
@@ -258,4 +235,3 @@ class MessageData : public GAMEOBJ
 	} ;
 
 #endif
-

@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #ifdef _PLAYTEST
 #include "network.h"
@@ -23,14 +21,14 @@ extern Player **g_player;
 extern World *g_theWorld;
 
 const uint32 NetCheat::m_args[NET_CHEAT_MAX] = {
-	5, 
-	2, 
-	1, 
-	1, 
-	2, 
-	1, 
-	0, 
-	2, 
+	5,
+	2,
+	1,
+	1,
+	2,
+	1,
+	0,
+	2,
 };
 
 NetCheat::NetCheat(NET_CHEAT cheat, ...) :
@@ -52,7 +50,7 @@ NetCheat::NetCheat(NET_CHEAT cheat, ...) :
 		m_data = NULL;
 	}
 }
-	
+
 NetCheat::~NetCheat()
 {
 	if(m_data)
@@ -81,7 +79,7 @@ NetCheat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		return;
 
 	PULLBYTETYPE(m_cheat, NET_CHEAT);
-	if(m_args[m_cheat] > 0) 
+	if(m_args[m_cheat] > 0)
 		m_data = new uint32[m_args[m_cheat]];
 	for(uint32 i = 0; i < m_args[m_cheat]; i++) {
 		PULLLONG(m_data[i]);
@@ -103,8 +101,8 @@ NetCheat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 				city.m_id = (0);
 			}
 			MapPoint pos(m_data[3], m_data[4]);
-			Unit newu = g_player[m_data[2]]->CreateUnit(m_data[1], pos, city, 
-													 FALSE, 
+			Unit newu = g_player[m_data[2]]->CreateUnit(m_data[1], pos, city,
+													 FALSE,
 													 CAUSE_NEW_ARMY_INITIAL);
 			break;
 		}
@@ -159,4 +157,4 @@ NetCheat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 }
 
-#endif 
+#endif

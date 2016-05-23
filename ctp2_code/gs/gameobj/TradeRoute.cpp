@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TradeRoute.h"
 #include "XY_Coordinates.h"
@@ -49,15 +39,14 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 	g_director->TradeActorDestroy(*this);
 	TradeRouteData* data = AccessData();
 
-	
-	
-	
-	
+
+
+
+
 
 	Unit source(data->GetSource()), dest(data->GetDestination());
 
-	
-	
+
 	if(g_theUnitPool->IsValid(source))
 		source.DelTradeRoute(*this);
 	if(g_theUnitPool->IsValid(dest))
@@ -88,35 +77,32 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 	data->RemoveFromCells();
 
 #ifdef RECIPROCAL_ROUTES
-	
+
 	if(GetRecip() != TradeRoute(0)) {
-		
-		
-		
+
+
 		AccessRecip().SetRecip(TradeRoute(0));
 		AccessRecip().KillRoute();
 	}
 #endif
-	
-	
-	
-	
+
+
+
+
 	if(g_network.IsHost()) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_KILL_TRADE_ROUTE, (uint32)*this, (uint32)cause));
 	} else if(g_network.IsClient()) {
 		g_network.AddDeadUnit(m_id);
 	}
-	
 
 	g_theTradePool->Remove(*this);
 
-	
 	TradeManager::Notify();
 }
 
 Unit TradeRoute::GetSource() const
-{ 
-	return GetData()->GetSource(); 
+{
+	return GetData()->GetSource();
 }
 
 PLAYER_INDEX TradeRoute::GetOwner() const
@@ -142,13 +128,13 @@ TradeRouteData* TradeRoute::AccessData() const
 }
 
 Unit TradeRoute::GetDestination() const
-{ 
-	return GetData()->GetDestination(); 
+{
+	return GetData()->GetDestination();
 }
 
 double TradeRoute::GetCost() const
-{ 
-	return GetData()->GetCost(); 
+{
+	return GetData()->GetCost();
 }
 
 const DynamicArray<MapPoint>* TradeRoute::GetPath() const
@@ -230,7 +216,6 @@ void TradeRoute::SetOutlineColor( uint32 color )
 {
 	 AccessData()->SetOutlineColor(color);
 }
-
 
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 							DynamicArray<MapPoint> &fullpath,

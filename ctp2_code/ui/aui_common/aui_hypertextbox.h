@@ -1,29 +1,14 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_HYPERTEXTBOX_H__
 #define __AUI_HYPERTEXTBOX_H__
-
 
 #include "aui_hypertextbase.h"
 #include "aui_control.h"
 
-
 class aui_Ranger;
-
 
 
 #define k_AUI_HYPERTEXTBOX_LDL_RANGERY			"rangery"
 #define k_AUI_HYPERTEXTBOX_LDL_ALWAYSRANGER		"alwaysranger"
-
 
 
 enum AUI_HYPERTEXTBOX_ACTION
@@ -34,11 +19,10 @@ enum AUI_HYPERTEXTBOX_ACTION
 };
 
 
-
 class aui_HyperTextBox : public aui_Control, public aui_HyperTextBase
 {
 public:
-	
+
 	aui_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -74,7 +58,6 @@ public:
 		{ m_rangerSize = rangerSize; return RepositionRanger(); }
 	void		SetAlwaysRanger( BOOL always ) { m_alwaysRanger = always; }
 
-	
 	AUI_ERRCODE	RangerMoved( void );
 
 	virtual AUI_ERRCODE DrawThis(
@@ -101,8 +84,6 @@ protected:
 };
 
 
-
 aui_Control::ControlActionCallback HyperTextBoxRangerActionCallback;
 
-
-#endif 
+#endif

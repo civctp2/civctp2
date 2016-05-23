@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,7 +57,6 @@ WNDPROC aui_Movie::m_windowProc = NULL;
 aui_Movie *aui_Movie::m_onScreenMovie = NULL;
 
 
-
 aui_Movie::aui_Movie(
 	AUI_ERRCODE *retval,
 	const MBCHAR *filename )
@@ -67,7 +66,6 @@ aui_Movie::aui_Movie(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE aui_Movie::InitCommon( const MBCHAR *filename )
@@ -108,7 +106,6 @@ AUI_ERRCODE aui_Movie::InitCommon( const MBCHAR *filename )
 }
 
 
-
 aui_Movie::~aui_Movie()
 {
 	Unload();
@@ -119,10 +116,9 @@ aui_Movie::~aui_Movie()
 }
 
 
-
 AUI_ERRCODE aui_Movie::SetFilename( const MBCHAR *filename )
 {
-	
+
 	Unload();
 
 	memset( m_filename, '\0', sizeof( m_filename ) );
@@ -131,25 +127,22 @@ AUI_ERRCODE aui_Movie::SetFilename( const MBCHAR *filename )
 
 	strncpy( m_filename, filename, MAX_PATH );
 
-	
 	m_format = (aui_MovieFormat *)
 		g_ui->TheMemMap()->GetFileFormat( m_filename );
 	Assert( m_format != NULL );
 	if ( !m_format ) return AUI_ERRCODE_MEMALLOCFAILED;
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Movie::Load( void )
 {
 	Assert( m_format != NULL );
-	if ( !m_format ) 
+	if ( !m_format )
             return AUI_ERRCODE_INVALIDPARAM;
 	return m_format->Load( m_filename, this );
 }
-
 
 
 AUI_ERRCODE aui_Movie::Unload( void )
@@ -164,7 +157,6 @@ AUI_ERRCODE aui_Movie::Unload( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
@@ -188,7 +180,6 @@ aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
 }
 
 
-
 void aui_Movie::SetDestRect( RECT *rect )
 {
 	if ( rect )
@@ -196,7 +187,6 @@ void aui_Movie::SetDestRect( RECT *rect )
 	else
 		SetDestRect( 0, 0, 0, 0 );
 }
-
 
 
 void aui_Movie::SetDestRect(
@@ -225,7 +215,6 @@ void aui_Movie::SetDestRect(
 }
 
 
-
 void aui_Movie::GetDestRect(
 	sint32 *left,
 	sint32 *top,
@@ -237,7 +226,6 @@ void aui_Movie::GetDestRect(
 	*right = m_rect.right;
 	*bottom = m_rect.bottom;
 }
-
 
 
 uint32 aui_Movie::SetTimePerFrame( uint32 timePerFrame )
@@ -255,7 +243,7 @@ void reload_audio(int channel){
 
     if(channel == m_moviechannel){
         if(film){
- 
+
             while(!aframe)
                 aframe= SDL_ffmpegGetAudioFrame(film);
             //if(aframe){
@@ -274,22 +262,22 @@ void reload_audio(int channel){
             m_moviechannel= Mix_PlayChannel(channel, &achunk , 0);
             if(m_moviechannel < 0)
                 printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
-            //else 
+            //else
             //    Mix_ChannelFinished(reload_audio);
             SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
             }
         }
     else
-        printf("%s L%d: Not a movie audio channel!\n", __FILE__, __LINE__);      
-    
+        printf("%s L%d: Not a movie audio channel!\n", __FILE__, __LINE__);
+
     return;
     }
 */
 
-/* sdl_ffmpeg <= 0.7.1 
+/* sdl_ffmpeg <= 0.7.1
 void audioCallback(void *udata, Uint8 *stream, int len) {
 
-    // unpack our void pointer 
+    // unpack our void pointer
     SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
 
     int bytesUsed;
@@ -299,23 +287,23 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
 
     while(len > 0) {
 
-        // check if we need a new frame 
+        // check if we need a new frame
         if(!frame->size) {
             frame = SDL_ffmpegGetAudioFrame(file);
             if(!frame) return;
         }
 
         if(frame->size <= len) {
-            // this frame is smaller or equal to the amount of data needed. 
+            // this frame is smaller or equal to the amount of data needed.
             bytesUsed = frame->size;
         } else {
-            // this frame has more data than needed 
+            // this frame has more data than needed
             bytesUsed = len;
         }
 
-        // copy the correct amount of data 
+        // copy the correct amount of data
         memcpy(stream+offset, frame->buffer, bytesUsed);
-        // adjust the needed length accordingly 
+        // adjust the needed length accordingly
         len -= bytesUsed;
         offset += bytesUsed;
 
@@ -328,41 +316,41 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
 /* sdl_ffmpeg > 0.7.1*/
 void audioCallback(void *udata, Uint8 *stream, int len) {
 
-    // unpack our void pointer 
+    // unpack our void pointer
     SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
 
     int bytesUsed;
 
     SDL_ffmpegAudioFrame *frame;
-	
+
     while(len > 0) {
 
-        // try to get a new frame 
+        // try to get a new frame
         frame = SDL_ffmpegGetAudioFrame(file);
 
-        // we could not receive a new frame, break from loop 
+        // we could not receive a new frame, break from loop
         if(!frame) break;
 
         if(frame->size <= len) {
-            // this frame is smaller or equal to the amount of data needed. 
+            // this frame is smaller or equal to the amount of data needed.
             bytesUsed = frame->size;
             } else {
-                // this frame has more data than needed 
+                // this frame has more data than needed
                 bytesUsed = len;
                 }
 
-        // copy the correct amount of data 
+        // copy the correct amount of data
         memcpy(stream, frame->buffer, bytesUsed);
 
-        // adjust the needed length accordingly 
+        // adjust the needed length accordingly
         len -= bytesUsed;
-		
-        // adjust stream offset 
+
+        // adjust stream offset
         stream += bytesUsed;
 
-        // adjust size of frame to prevent reusing the same data 
+        // adjust size of frame to prevent reusing the same data
         frame->size -= bytesUsed;
-		
+
         // adjust buffer of frame for the same reason
         frame->buffer += bytesUsed;
         }
@@ -370,9 +358,7 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
     return;
     }
 
-
 #endif
-
 
 AUI_ERRCODE aui_Movie::Open(
 	uint32 flags,
@@ -398,7 +384,6 @@ if ( !m_isOpen )
     Assert( err == 0 );
     if ( err ) return AUI_ERRCODE_HACK;
 
-		
 
     err = AVIFileInfo(
         m_aviFile,
@@ -415,7 +400,6 @@ if ( !m_isOpen )
     Assert( err == 0 );
     if ( err ) return AUI_ERRCODE_HACK;
 
-		
 
     err = AVIStreamInfo(
         m_aviStream,
@@ -439,14 +423,11 @@ if ( !m_isOpen )
     Assert( m_getFrame != NULL );
     if ( !m_getFrame ) return AUI_ERRCODE_HACK;
 
-		
     m_timePerFrame =
         m_aviStreamInfo.dwScale * 1000 / m_aviStreamInfo.dwRate;
 
-		
     m_curFrame = m_aviStreamInfo.dwStart;
 
-		
     m_rect.right = m_rect.left + m_aviStreamInfo.rcFrame.right;
     m_rect.bottom = m_rect.top + m_aviStreamInfo.rcFrame.bottom;
 #elif defined(USE_SDL_FFMPEG) //replaces a aui_sdlmovie::Open(
@@ -471,8 +452,8 @@ if ( !m_isOpen )
             m_rect.bottom = m_rect.top + h;
             //printf("%s L%d: Movie size: %dx%d!\n", __FILE__, __LINE__, w, h);
             }
-        //m_timePerFrame = 
-        //m_curFrame = 
+        //m_timePerFrame =
+        //m_curFrame =
         }
     else
         printf("%s L%d: Could not open %s!\n", __FILE__, __LINE__, m_filename);
@@ -481,17 +462,16 @@ if ( !m_isOpen )
     m_isPlaying = FALSE;
     m_isPaused = FALSE;
     }
-	
+
 return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Movie::Close( void )
 {
 	if ( m_isOpen )
 	{
-		
+
 		Stop();
 
 #ifndef USE_SDL
@@ -536,11 +516,10 @@ AUI_ERRCODE aui_Movie::Close( void )
 }
 
 
-
 AUI_ERRCODE aui_Movie::Play( void ){
     if ( !m_isPlaying )
         {
-		
+
         Open();
 
 #ifndef USE_SDL
@@ -566,16 +545,16 @@ else
 snprintf(cmd, sizeof(cmd), "mplayer -vo sdl /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", m_filename);
 printf("%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
 printf("%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
-g_soundManager->ReleaseSoundDriver(); 
+g_soundManager->ReleaseSoundDriver();
 system(cmd);
 g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.cpp
 */
 
         // we start our decode thread, this always tries to buffer in some frames
-        // so we can enjoy smooth playback 
+        // so we can enjoy smooth playback
         if(film){
             Mix_HookMusic(audioCallback, film);
-//            if(Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 512)==-1) 
+//            if(Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 512)==-1)
 //                printf("%s L%d: Mix_OpenAudio: %s\n", __FILE__, __LINE__, Mix_GetError());
 
             SDL_ffmpegStartDecoding(film); //returns always 0!
@@ -600,13 +579,12 @@ g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.
             m_moviechannel= Mix_PlayChannel(-1, &achunk , 0);
             if(m_moviechannel < 0)
                 printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
-            else 
+            else
                 Mix_ChannelFinished(reload_audio);
             SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
 */
             }
 
-       
 #endif
         if ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN )
             PlayOnScreenMovie();
@@ -629,10 +607,9 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	aui_MouseEvent *mouseState = NULL;
 
 	if (mouse) {
-		
-	
+
 		numEvents = mouse->ManipulateInputs( mouseEvents, FALSE );
-			
+
 		mouseState = numEvents ?
 			mouseEvents + numEvents - 1 :
 			mouse->GetLatestMouseEvent();
@@ -647,24 +624,21 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 
 	m_onScreenMovie = this;
 
-	
 	while ( !m_isFinished && m_isPlaying )
 	{
-		
+
 		while ( ShowCursor( FALSE ) >= 0 )
 			;
 
 		Process();
 
-		
-		
+
 		if ( PeekMessage( &msg, g_ui->TheHWND(), 0, 0, PM_REMOVE ) )
 		{
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
 
-		
 		if (mouse) {
 			numEvents = mouse->ManipulateInputs( mouseEvents, FALSE );
 			aui_MouseEvent *curEvent = mouseEvents;
@@ -688,7 +662,6 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
         printf("%s L%d: SDL mouse code is missing here!\n", __FILE__, __LINE__);
 	//m_onScreenMovie = this;
 
-	
 	while ( !m_isFinished && m_isPlaying ){
             Process();
             }
@@ -699,13 +672,10 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	if (mouse)
 		mouse->Show();
 
-	
 	g_ui->AddDirtyRect( &m_rect ); //does this set the rect that needs to be repainted later on?
 
-	
 	return Stop();
 }
-
 
 
 AUI_ERRCODE aui_Movie::Stop( void ){
@@ -731,7 +701,6 @@ AUI_ERRCODE aui_Movie::Stop( void ){
     }
 
 
-
 AUI_ERRCODE aui_Movie::Pause( void )
 {
 	if ( m_isPlaying && !m_isPaused )
@@ -746,7 +715,6 @@ AUI_ERRCODE aui_Movie::Pause( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Movie::Resume( void )
@@ -765,7 +733,6 @@ AUI_ERRCODE aui_Movie::Resume( void )
 }
 
 
-
 AUI_ERRCODE aui_Movie::Process( void ){
     AUI_ERRCODE retval = AUI_ERRCODE_UNHANDLED;
 
@@ -775,7 +742,7 @@ AUI_ERRCODE aui_Movie::Process( void ){
         uint32 time = GetTickCount();
         if ( time - m_lastFrameTime > m_timePerFrame )
             {
-			
+
             aui_Surface *surface =
                 ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
                 g_ui->Primary() :
@@ -791,10 +758,8 @@ AUI_ERRCODE aui_Movie::Process( void ){
             sint32 bmpByteWidth = bih->biWidth * ( bih->biBitCount >> 3 );
             sint32 bmpPitch = bmpByteWidth + ( uint32(-bmpByteWidth) & 0x3 );
 
-			
             frame += sizeof( BITMAPINFOHEADER );
 
-			
             uint8 *buffer = NULL;
             AUI_ERRCODE errcode = surface->Lock( &m_rect, (LPVOID *)&buffer, 0 );
             Assert( AUI_SUCCESS(errcode) );
@@ -803,7 +768,6 @@ AUI_ERRCODE aui_Movie::Process( void ){
             const uint8 *origBuffer = buffer;
             const sint32 pitch = surface->Pitch();
 
-			
             if ( bmpHeight > 0 )
                 {
                 frame += bmpPitch * ( bmpHeight - 1 );
@@ -817,8 +781,7 @@ AUI_ERRCODE aui_Movie::Process( void ){
                 }
             else
                 {
-				
-				
+
 
                 bmpHeight = -bmpHeight;
 
@@ -861,7 +824,7 @@ AUI_ERRCODE aui_Movie::Process( void ){
             SDL_ffmpegStream *str;
 
 /*
-// print some info on detected stream to output 
+// print some info on detected stream to output
 for(s = 0; s<film->AStreams; s++) {
 str = SDL_ffmpegGetAudioStream(film, s);
 
@@ -870,7 +833,6 @@ printf("\tChannels: %i\n",      str->channels);
 if(strlen(str->language)) printf("\tLanguage: %s\n",      str->language);
 printf("\tSampleRate: %i\n",    str->sampleRate);
 }
-
 
 
 for(s = 0; s<film->VStreams; s++) {
@@ -888,9 +850,8 @@ printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]))
             SDL_Rect sdl_rect = { m_rect.left, m_rect.top, m_rect.right-m_rect.left, m_rect.bottom-m_rect.top };
             aui_SDLSurface* sdl_surf = static_cast<aui_SDLSurface*>(surface);
 
-
             int64_t duration= SDL_ffmpegGetDuration(film);
-           
+
             //if(!m_isFinished) {//don't wait until frame is ready to be shown
             while(!frame && !m_isFinished){ //wait until there is a frame to be shown
                 frame = SDL_ffmpegGetVideoFrame(film);
@@ -899,21 +860,21 @@ printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]))
                 if(frame){
                     //printf("%s L%d: Got frame!\n", __FILE__, __LINE__);
 
-                    // we got a frame, so we better show this one 
+                    // we got a frame, so we better show this one
                     SDL_BlitSurface(frame->buffer, 0, sdl_surf->DDS(), &sdl_rect);
 
-                    // After releasing this frame, you can no longer use it. 
-                    // you should call this function every time you get a frame! 
+                    // After releasing this frame, you can no longer use it.
+                    // you should call this function every time you get a frame!
                     //not in sdl_ffmpeg > 0.7.1!!!
                     //SDL_ffmpegReleaseVideo(film, frame);
 
-                    // we flip the double buffered screen so we might actually see something 
+                    // we flip the double buffered screen so we might actually see something
                     SDL_Flip(sdl_surf->DDS());
                     }
                 m_isFinished= SDL_ffmpegGetPosition(film) >= duration;
                 //m_isFinished= film->playing;
                 }
-            
+
             if(m_isFinished){
                 //printf("%s L%d: Done displaying movie!\n", __FILE__, __LINE__);
                 m_isPlaying= FALSE;
@@ -929,7 +890,6 @@ printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]))
     }
 
 
-
 #ifndef USE_SDL
 LRESULT CALLBACK OnScreenMovieWindowProc(
 	HWND hwnd,
@@ -943,7 +903,7 @@ LRESULT CALLBACK OnScreenMovieWindowProc(
 
 		switch ( message )
 		{
-		
+
 		case WM_LBUTTONUP:
 		case WM_MBUTTONUP:
 		case WM_RBUTTONUP:
@@ -957,11 +917,10 @@ LRESULT CALLBACK OnScreenMovieWindowProc(
 		case WM_CLOSE:
 			if ( hwnd != g_ui->TheHWND() ) break;
 
-			
 			aui_Movie::m_onScreenMovie->Close();
 
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
-			
+
 			return 0;
 		}
 	}

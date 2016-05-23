@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -91,10 +91,10 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
  network.
 
  Flags is 0 or a bitwise combination of scorerep_FLAGS_*.
- If scorerep_FLAGS_SELFEXIT, everyone's score is output; else 
+ If scorerep_FLAGS_SELFEXIT, everyone's score is output; else
  only reports on score for us (i.e. the id we reported via setSelf) and the
  given id.
- Other flags are simply stored in the report for interpretation by the 
+ Other flags are simply stored in the report for interpretation by the
  receiver.
 --------------------------------------------------------------------------*/
 dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorerep_buf_t *repbuf);

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -144,7 +144,7 @@ long GS_BEACON_INTERVAL()
 		return (3600 * (ECLOCKS_PER_SEC / GS_SLICE_PERHOUR));
 	else
 		return (3600 / (GS_SLICE_PERHOUR / ECLOCKS_PER_SEC));
-		
+
 /*
 #if ECLOCKS_PER_SEC > GS_SLICE_PERHOUR
 #define GS_BEACON_INTERVAL 3600 * (ECLOCKS_PER_SEC / GS_SLICE_PERHOUR)
@@ -243,7 +243,7 @@ char Hostname[128];		/* Hostname of this host */
 #endif
 
 /*----------------------------------------------------------------------
- Debugging routine. 
+ Debugging routine.
 ----------------------------------------------------------------------*/
 #if 1
 static void printAdr(
@@ -387,7 +387,6 @@ char *FindTag(const char *inp, FILE *out, char **tagname, int *arg)
 	return NULL;
 }
 
-
 #define tagcompare(x, y) !strnicmp(x, y, strlen(y))
 
 /* get the next line from input string */
@@ -415,11 +414,11 @@ void makeSessionTableCell(dp_session_t *s, FILE *out)
 		char idstr[64];
 
 		sprintf(idstr, "%02x.%02x.%02x.%02x.%02x.%02x.%02x.%02x",
-			id[0], id[1], id[2], id[3], id[4], id[5], id[6], id[7]); 
+			id[0], id[1], id[2], id[3], id[4], id[5], id[6], id[7]);
 
 		fprintf(out, "\
 <A HREF=\"http://%s:%d/s/%s.anet%d\"><IMG ALIGN=LEFT SRC=/join.gif  ALT=Join></A>\
-<A HREF=\"http://%s:%d/d/%s.anet%d\"><IMG ALIGN=LEFT SRC=/djoin.gif ALT=DJoin></A>\n", 
+<A HREF=\"http://%s:%d/d/%s.anet%d\"><IMG ALIGN=LEFT SRC=/djoin.gif ALT=DJoin></A>\n",
 		Hostname, 8080, idstr, s->sessionType,
 		Hostname, 8080, idstr, s->sessionType);
 	}
@@ -451,8 +450,8 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 	  int gameservcount = 0;
 	  HTML += strlen(linebuf);
 	  /* Ignore this line if printing GAMESDAY and there are no current
-	   *  games, or games served in past 24 hrs. is too few. 
-	   *  ***WARNING*** assumption is made that the GAMESDAY keyword 
+	   *  games, or games served in past 24 hrs. is too few.
+	   *  ***WARNING*** assumption is made that the GAMESDAY keyword
 	   *  occurs at most once per line of the template file.
 	   * Note: you can force print of games served in past 24 hrs.
 	   *  regardless of its value by using tag PRINTGAMESDAY.
@@ -468,9 +467,9 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 				int i;
 				gameserv = (int *)assoctab_subscript(GamesServedSlice, value);
 				if (gameserv) {
-					for (gameservcount = 0, i = 0; i < GSMAX; i++) 
+					for (gameservcount = 0, i = 0; i < GSMAX; i++)
 						gameservcount += gameserv[i];
-					if (gameservcount < OUTPUT_MIN_GAMES) 
+					if (gameservcount < OUTPUT_MIN_GAMES)
 						bSkipLine = 1;
 					if (gameservcount == 0)
 						assoctab_subscript_delete(GamesServedSlice, value);
@@ -621,26 +620,26 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			dp_stats_t stats60;
 			dp_stats_t max1;
 			dp_stats_t max60;
-			
+
 			dp_avgstat_poll(dp, &avgstat, &stats1, &stats60, &max1, &max60);
 
 			/* kludge: output to stdout, too */
 #if 0
-			statprint_fn("average for last minute", stdout);				
-			dp_avgstat_print(dp, &stats1, statprint_fn, stdout);	
-			statprint_fn("worst minute so far", stdout);	
-			dp_avgstat_print(dp, &max1, statprint_fn, stdout);	
+			statprint_fn("average for last minute", stdout);
+			dp_avgstat_print(dp, &stats1, statprint_fn, stdout);
+			statprint_fn("worst minute so far", stdout);
+			dp_avgstat_print(dp, &max1, statprint_fn, stdout);
 #endif
 
 			/* output to the html file */
-			statprint_fn("average for last minute", out);				
-			dp_avgstat_print(dp, &stats1, statprint_fn, out);	
+			statprint_fn("average for last minute", out);
+			dp_avgstat_print(dp, &stats1, statprint_fn, out);
 			statprint_fn("average for last hour (units per minute)", out);
-			dp_avgstat_print(dp, &stats60, statprint_fn, out);	
-			statprint_fn("worst minute so far", out);				
-			dp_avgstat_print(dp, &max1, statprint_fn, out);	
-			statprint_fn("worst hour so far (units per minute)", out);	
-			dp_avgstat_print(dp, &max60, statprint_fn, out);	
+			dp_avgstat_print(dp, &stats60, statprint_fn, out);
+			statprint_fn("worst minute so far", out);
+			dp_avgstat_print(dp, &max1, statprint_fn, out);
+			statprint_fn("worst hour so far (units per minute)", out);
+			dp_avgstat_print(dp, &max60, statprint_fn, out);
 		}
 #endif
 		/* Wrap around and search again */
@@ -675,11 +674,11 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 				/* See if this was a completed game */
 				if (sessions[i].max_activePlayers > 1) {
 					/* FIXME: Shouldn't be including chat rooms in game count */
-					int *count = assoctab_subscript_grow(GamesServed, 
+					int *count = assoctab_subscript_grow(GamesServed,
 							sessions[i].s.sessionType);
 					if (count) {
 						(*count)++;
-						DPRINT(("SERVER: Count for type %d now %d\n", 
+						DPRINT(("SERVER: Count for type %d now %d\n",
 							sessions[i].s.sessionType, *count));
 					} else {
 						DPRINT(("SERVER: bug: can't grow GamesServed\n"));
@@ -700,7 +699,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 				n_sessions--;
 			} else if (!sessions[i].notseen) {
 				act_sessions++;
-				
+
 				/* Increment counts for ping info */
 				sessinfo.players[sessions[i].s.sessionType] += sessions[i].s.currentPlayers;
 				sessinfo.cur_players += sessions[i].s.currentPlayers;
@@ -742,7 +741,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 	if (!(sDesc->flags & dp_SESSION_FLAGS_ISLOBBY)) {
 		int *count = assoctab_subscript_grow(
 				GamesActive, sDesc->sessionType);
-		if (count) 
+		if (count)
 			count[0]++;
 		/*DPRINT(("SERVER: listSessions_cb: GamesActive{%d}=%d\n", sDesc->sessionType, count[0]));*/
 	}
@@ -845,8 +844,8 @@ int dp_PASCAL mysessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t sr
 
 #if 0	/* now in dp */
 /*-------------------------------------------------------------------------
- When a new client comes online, 
- send it our SESSIONS table, 
+ When a new client comes online,
+ send it our SESSIONS table,
  and when it sends us its MYSESSIONS table, put it in our MYSESSIONS table.
  (If we're the master gameserver, dump it into the sessions table
  instead.)
@@ -975,7 +974,7 @@ int SetHTMLFile(char *tplFile)
 		printf("Too many template files (%s)\n", tplFile);
 		return FALSE;
 	}
-		
+
 	/* Allocate memory for the HTML template */
 	if (stat(tplFile, &statbuf)) {
 		printf("Error %d accessing HTML template file %s\n", errno, tplFile);
@@ -1046,7 +1045,6 @@ static void updateHTMLFile()
 	fclose(fp);
 }
 
-
 /*-------------------------------------------------------------------------
  Read commandline arguments into globals.  Return 0 on success.
 -------------------------------------------------------------------------*/
@@ -1062,7 +1060,7 @@ int ProcessCommandLine(int argc, char **argv) {
 	SessionType = DP_ILLEGAL_SPECIES;
 
 	for (i = 1; i < argc; ++i) {
-		if (argv[i][0] == '-') { 
+		if (argv[i][0] == '-') {
 			char *val = strchr(argv[i], '=');
 
 			if (val) val++;
@@ -1607,7 +1605,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 	int j, gsmax, bufGsInd, gsTimeLeft;
 	char magic[9];
 	time_t bufStartTime;
-	fread(magic, 9, 1, fp);	
+	fread(magic, 9, 1, fp);
 	if (memcmp(magic, "serverdat", 9)) {
 		printf("Bad freeze header\n");
 		fclose(fp);
@@ -1619,7 +1617,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 		fclose(fp);
 		return 1;
 	}
-	fread(magic, 9, 1, fp);	
+	fread(magic, 9, 1, fp);
 	if (memcmp(magic, "serverend", 9)) {
 		printf("Bad freeze trailer\n");
 		fclose(fp);
@@ -1646,7 +1644,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 		GamesServedSlice = assoctab_create(GSMAX * sizeof(int));
 		return 1;
 	}
-	fread(magic, 10, 1, fp);	
+	fread(magic, 10, 1, fp);
 	if (memcmp(magic, "serverend2", 9)) {
 		printf("Bad freeze trailer2\n");
 		fclose(fp);
@@ -1721,7 +1719,7 @@ int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf
 		if (!strlen(sessname)) {
 			urlResult->httpResultCode = 400;
 			return sprintf(buf, "Error: no session name specified");
-		} 
+		}
 		if (!strlen(playername)) {
 			urlResult->httpResultCode = 400;
 			return sprintf(buf, "Error: no player name specified");
@@ -1752,7 +1750,7 @@ int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf
 	if (reftype == 'd') {
 		char adrMasterAscii[64];
 		err = dpio_printAdr(dp->dpio, sess.adrMaster, dp->dpio->myAdrLen, adrMasterAscii, sizeof(adrMasterAscii));
-		if (err != dp_RES_OK) 
+		if (err != dp_RES_OK)
 			return sprintf(buf, "Error %d getting address of master", err);
 
 		/* Direct join using ip addresses */
@@ -1889,7 +1887,7 @@ int main( int argc, char *argv[] )
 	printf("dpGetParameterLong returns dpio filedesc:%d\n", dpiofd);
 
 #ifdef dp_STATS
-	dp_avgstat_init(dp, &avgstat);	
+	dp_avgstat_init(dp, &avgstat);
 #endif
 
 #ifdef dp_ANET2
@@ -1930,7 +1928,7 @@ int main( int argc, char *argv[] )
 			/* if no -S given, -R arg must be a filename */
 			if (updateRoom(dp, RoomName) != 0)
 				exit(1);
-		} 
+		}
 	}
 
 	/* Set the sessinfo pointer in uudps for pinging */
@@ -2040,7 +2038,7 @@ int main( int argc, char *argv[] )
 		FD_SET(dpiofd, &rfds);
 		if (dpiofd > sockmax)
 			sockmax = dpiofd;
-		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);		
+		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);
 		if (nsocks < 0) {
 			DPRINT(("SERVER: bug: select error:%d\n", errno));
 			break;
@@ -2172,7 +2170,7 @@ int main( int argc, char *argv[] )
 					pkt.u.account.reason == dp_RES_HELP) {
 					tcapw_entry_t entry;
 					dp_result_t res;
-					
+
 					/* send secret code email on account creation or request */
 					res = tserv_uid2info(dp->tserv, pkt.u.account.uid, &entry);
 					if (res == dp_RES_OK) {
@@ -2180,7 +2178,7 @@ int main( int argc, char *argv[] )
 						dp_netchar_t secretcode[tcapw_LEN_PW];
 						wchar_t wsecretcode[tcapw_LEN_PW];
 						char asecretcode[tcapw_LEN_PW];
-						
+
 						res = tcapw_get_secretcode(&entry, secretcode);
 						if (res == dp_RES_OK) {
 							mywcs_netchar2wchar(wsecretcode, secretcode, tcapw_LEN_PW);
@@ -2225,7 +2223,7 @@ int main( int argc, char *argv[] )
 	/* If there is a freeze file specified, freeze before exiting */
 	if (FreezeFile[0] && dp) {
 		FILE *fp;
-		
+
 		err = dpFreeze(dp, FreezeFile);
 		if (err != dp_RES_OK) {
 			printf("Error %d freezing communications.\n", err);
@@ -2234,17 +2232,17 @@ int main( int argc, char *argv[] )
 		if ((fp = fopen(FreezeFile2, "wb")) != NULL) {
 			int j, gsmax, gsTimeLeft;
 
-			fwrite("serverdat", 9, 1, fp);	
+			fwrite("serverdat", 9, 1, fp);
 			fwrite(&StartTime, sizeof(StartTime), 1, fp);
 			assoctab_freeze(GamesServed, fp);
-			fwrite("serverend", 9, 1, fp);	
+			fwrite("serverend", 9, 1, fp);
 			fwrite(&gsindex, sizeof(gsindex), 1, fp);
 			gsmax = GSMAX;
 			fwrite(&gsmax, sizeof(gsmax), 1, fp);
 			gsTimeLeft = gsBeacon - eclock();
 			fwrite(&gsTimeLeft, sizeof(gsTimeLeft), 1, fp);
 			assoctab_freeze(GamesServedSlice, fp);
-			fwrite("serverend2", 10, 1, fp);	
+			fwrite("serverend2", 10, 1, fp);
 			fclose(fp);
 		} else {
 			printf("Error: fail to write to %s\n", FreezeFile2);

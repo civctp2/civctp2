@@ -1,8 +1,6 @@
-
 //building.cpp
 //Fixed buildingutil_GetOffenseBonusAir and buildingutil_GetOffenseBonusWater
 //Fix by NelsonAndBronte on 04-11-2003
-
 
 #include "c3.h"
 #include "c3errors.h"
@@ -21,12 +19,12 @@
 
 #include "FeatTracker.h"
 
-extern StringDB *g_theStringDB; 
+extern StringDB *g_theStringDB;
 extern sint32 g_parse_improve_abort;
 
 extern Player **g_player;
 
-#define shiftbit(i) uint64(uint64(0x01) << uint64(i))		
+#define shiftbit(i) uint64(uint64(0x01) << uint64(i))
 
 
 
@@ -49,7 +47,6 @@ uint64 cur_built; \
 for (i=0,cur_built=built_improvements;cur_built!=0;cur_built>>=1,i++) \
 	if ((cur_built&1) && \
 		(rec = g_theBuildingDB->Get(i))->recordFunc())
-
 
 
 void buildingutil_Initialize()
@@ -85,7 +82,7 @@ sint32 buildingutil_GetBlgUpkeep(const sint32 building_type)
     return g_theBuildingDB->Get(building_type)->GetUpkeep();
 }
 
-sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements, 
+sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
 												sint32 wonderLevel)
 {
 	sint32 lowcost = 0x7fffffff;
@@ -108,10 +105,10 @@ sint32 buildingutil_GetDesignatesCapitol(const uint64 built_improvements)
 	FOREACH_BUILT(GetCapitol) {
 		return TRUE;
 	}
-    return FALSE;  
+    return FALSE;
 }
 
-void buildingutil_GetDefendersBonus(const uint64 built_improvements, 
+void buildingutil_GetDefendersBonus(const uint64 built_improvements,
      double &bonus)
 
 {
@@ -123,11 +120,10 @@ void buildingutil_GetDefendersBonus(const uint64 built_improvements,
 	}
 }
 
-void buildingutil_GetHappinessIncrement(const uint64 built_improvements, 
+void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
      sint32 &bonus, sint32 owner)
 
 {
-
 
 
 	double wonderCathedralIncrease = 0;
@@ -141,7 +137,7 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 		sint32 inc;
 		rec->GetHappyInc(inc);
 		if(rec->GetIsReligious())
-			inc -= sint32(double(inc) * 0); 
+			inc -= sint32(double(inc) * 0);
 
 		if(rec->GetCathedral()) {
 			inc += sint32(double(inc * wonderCathedralIncrease));
@@ -154,13 +150,12 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 void buildingutil_GetDoubleTelevangelism(uint64 built_improvements, sint32 &is_dbl_tel)
 
 {
-    is_dbl_tel = FALSE; 
+    is_dbl_tel = FALSE;
 	FOREACH_BUILT(GetDoubleTelevangelists) {
-		is_dbl_tel = TRUE; 
+		is_dbl_tel = TRUE;
 		return;
 	}
 }
-
 
 sint32 buildingutil_GetNoUnhappyPeople(const uint64 built_improvements)
 
@@ -169,9 +164,8 @@ sint32 buildingutil_GetNoUnhappyPeople(const uint64 built_improvements)
 		return TRUE;
 	}
 
-    return FALSE; 
+    return FALSE;
 }
-
 
 double buildingutil_GetLowerCrime(const uint64 built_improvements)
 {
@@ -267,7 +261,6 @@ BOOL buildingutil_GetTelevision(const uint64 built_improvements)
 	return FALSE;
 }
 
-
 BOOL buildingutil_GetCityWalls(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetCityWalls) {
@@ -279,7 +272,7 @@ BOOL buildingutil_GetCityWalls(const uint64 built_improvements)
 double buildingutil_GetCityWallsDefense(const uint64 built_improvements)
 {
 	double val=0.0, temp=0.0;
-	FOREACH_BUILT(GetCityWalls) 
+	FOREACH_BUILT(GetCityWalls)
 	{
 		if(g_theBuildingDB->Get(i)->GetDefendersPercent(temp))
 		{
@@ -297,7 +290,7 @@ BOOL buildingutil_GetAirport(const uint64 built_improvements)
 	return FALSE;
 }
 
-BOOL buildingutil_HaveFoodVat(const uint64 built_improvements, 
+BOOL buildingutil_HaveFoodVat(const uint64 built_improvements,
 									  double &food_to_pollution_coef)
 {
 	BOOL atLeastOne = FALSE;
@@ -354,7 +347,6 @@ double buildingutil_GetIncreaseSciencePerPop(const uint64 built_improvements)
 	}
 	return sci;
 }
-
 
 BOOL buildingutil_GetForceField(const uint64 built_improvements)
 {

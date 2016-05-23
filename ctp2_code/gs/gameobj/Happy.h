@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ class HappyTimer;
 #include "HappyTracker.h"   // HAPPY_REASON, HappyTracker
 #include "player.h"         // PLAYER_INDEX, Player
 
-class CityData; 
+class CityData;
 class CivArchive;
 
 //----------------------------------------------------------------------------
@@ -83,7 +83,6 @@ public:
 	    m_adjustment        (adjust),
 	    m_reason            (reason)
 	{ ; };
-	
 
 	void Serialize(CivArchive &archive);
 };
@@ -91,9 +90,9 @@ public:
 class Happy
 	{
 	private:
-		
+
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -122,7 +121,7 @@ class Happy
 		double m_too_many_cities;
 		double m_timed;
 		double m_crime;
-		
+
 //----------------------------------------------------------------------------
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
@@ -140,19 +139,18 @@ class Happy
 		void SaveTracker();
 		void RestoreTracker();
 
-		void DecayConquestDistress(); 
+		void DecayConquestDistress();
 
 		sint32 ShouldRevolt(const sint32 incite_bonus) const ;
 		double CalcBase(Player *p);
 		double CalcSize(CityData &cd, Player *p);
-		double CalcTooManyCities(Player *p); 
+		double CalcTooManyCities(Player *p);
 		double CalcPollution(CityData &cd, Player *p);
 		void ResetConquestDistress(double new_distress);
 		double CalcConquestDistress(CityData &cd, Player *p);
 		double CalcDistanceFromCapitol(CityData &cd, Player *p);
-		double CalcEnemyAction(); 
+		double CalcEnemyAction();
 
-		
 		static double CalcCityIndependentWorkday(Player *player);
 		static double CalcCityIndependentWages(Player *player);
 		static double CalcCityIndependentRations(Player *player);
@@ -170,7 +168,7 @@ class Happy
 		double CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
 		                        BOOL isFirstPass);
 		double CalcStarvation(CityData &cd, Player *p);
-		
+
 		void CalcHappiness(CityData &cd, BOOL projectedOnly,
 		                   sint32 &delta_martial_law,
 		                   BOOL isFirstPass);
@@ -179,7 +177,7 @@ class Happy
 
 		double CalcFeats(Player *p);
 
-		void AddTimer(sint32 turns, double adjust, 
+		void AddTimer(sint32 turns, double adjust,
 		              HAPPY_REASON reason);
 		void RemoveTimerReason(HAPPY_REASON reason);
 		void ClearTimedChanges();
@@ -203,7 +201,7 @@ class Happy
 		double GetPopEntertainment() const { return m_pop_ent; }
 		double GetImprovement() const { return m_improvement; }
 		double GetWonders() const { return m_wonders; }
-		double GetCrime() const { return m_crime; }  
+		double GetCrime() const { return m_crime; }
 		double GetTooManyCities() const { return m_too_many_cities; }
 		BOOL IsVeryHappy(void) const ;
 
@@ -213,7 +211,6 @@ class Happy
 		void SetFullHappinessTurns(sint32 turns);
 		void Serialize(CivArchive &archive);
 
-		
 		void ForceRevolt(void);
 		void CountAffectivePop(CityData &cd);
 		HappyTracker *GetHappyTracker() { return m_tracker; }

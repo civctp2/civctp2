@@ -4,16 +4,14 @@
 #ifndef __RADIOGROUP_H__
 #define __RADIOGROUP_H__
 
-
 #include "aui_switchgroup.h"
 #include "patternbase.h"
-
 
 
 class RadioGroup : public aui_SwitchGroup, public PatternBase
 {
 public:
-	
+
 	RadioGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -39,5 +37,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

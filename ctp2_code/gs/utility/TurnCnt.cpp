@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,11 +31,9 @@
 //----------------------------------------------------------------------------
 #include "c3.h"
 
-
 #include "director.h"
 
 #include "tiledmap.h"
-
 
 
 #include "dynarr.h"
@@ -69,9 +67,7 @@
 #include "net_ready.h"
 #include "radarmap.h"
 
-
 #include "director.h"
-
 
 #include "messagewin.h"
 
@@ -114,7 +110,7 @@
 // Propagate PW each turn update
 #include "MaterialPool.h"
 
-extern World *g_theWorld; 
+extern World *g_theWorld;
 
 extern SelectedItem             *g_selected_item;
 extern DiplomaticRequestPool    *g_theDiplomaticRequestPool;
@@ -124,7 +120,6 @@ extern Pollution                *g_thePollution;
 extern Player                   **g_player;
 extern Network                  g_network;
 extern TiledMap                 *g_tiledMap;
-
 
 extern ProfileDB                *g_theProfileDB;
 extern RadarMap                 *g_radarMap;
@@ -153,7 +148,6 @@ TurnCount::TurnCount()
 	m_sliceList = new SimpleDynamicArray<sint32>;
 	Init();
 }
-
 
 TurnCount::TurnCount(CivArchive &archive)
 {
@@ -196,7 +190,7 @@ void TurnCount::SkipToRound(sint32 round)
 	m_year = g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 }
 
-void TurnCount::Serialize(CivArchive &archive) 
+void TurnCount::Serialize(CivArchive &archive)
 
 {
 	sint32 sim;
@@ -273,9 +267,9 @@ void TurnCount::InformNetwork()
 			                                          g_player[g_selected_item->GetCurPlayer()]->m_materialPool->GetMaterials()));
 		}
 		g_network.BeginTurn(g_selected_item->GetCurPlayer());
-		NetInfo* netInfo = new NetInfo(NET_INFO_CODE_BEGIN_TURN, 
+		NetInfo* netInfo = new NetInfo(NET_INFO_CODE_BEGIN_TURN,
 		                               g_selected_item->GetCurPlayer());
-		g_network.QueuePacketToAll(netInfo);          
+		g_network.QueuePacketToAll(netInfo);
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
 		   PLAYER_TYPE_NETWORK) {
 			g_network.SetMyTurn(FALSE);
@@ -325,13 +319,13 @@ void TurnCount::ChooseNextActivePlayer()
 			(g_player[g_selected_item->GetCurPlayer()]->IsTurnOver() &&
 			g_player[g_selected_item->GetCurPlayer()]->GetCurRound() == m_round &&
 			count <= k_MAX_PLAYERS));
-	
+
 	Assert(count <= k_MAX_PLAYERS);
 
 }
 
 void TurnCount::EndThisTurn()
-{ 
+{
 	PLAYER_INDEX curPlayer = g_selected_item->GetCurPlayer();
 	PLAYER_INDEX visPlayer = g_selected_item->GetVisiblePlayer();
 
@@ -354,7 +348,7 @@ void TurnCount::EndThisTurn()
 		Player::RemoveDeadPlayers();
 	}
 
-	while((m_activePlayers > 0) && 
+	while((m_activePlayers > 0) &&
 		  (g_player[g_selected_item->GetCurPlayer()]->IsTurnOver() &&
 		   g_player[g_selected_item->GetCurPlayer()]->GetCurRound() == m_round)) {
 
@@ -377,15 +371,14 @@ void TurnCount::BeginNewRound()
 {
 	Assert(m_activePlayers == 0);
 	m_activePlayers = 0;
-	sint32 i; 
+	sint32 i;
 
 	m_round++;
 
-	
 	g_theWorld->A_star_heuristic->Update();
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
+    if (g_theDiplomacyLog) {
         g_theDiplomacyLog->BeginRound();
     }
 #endif // _DEBUG
@@ -394,7 +387,6 @@ void TurnCount::BeginNewRound()
 
 	ChooseHappinessPlayer();
 
-	
 	m_year += g_theDifficultyDB->GetYearIncrementFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 
 	RunNewYearMessages() ;
@@ -439,7 +431,7 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 		case 1:
 			m_round = 124;
 			for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) {
-				 if (g_player[player_idx]) { 
+				 if (g_player[player_idx]) {
 					for(sint32 i = 0; i < 20; i++) {
 						g_player[player_idx]->m_advances->GiveAdvance(i, CAUSE_SCI_UNKNOWN);
 					}
@@ -474,7 +466,7 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 		case 4:
 			m_round = 449;
 			for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) {
-				 if (g_player[player_idx]) { 
+				 if (g_player[player_idx]) {
 					for(sint32 i = 0; i < 80; i++) {
 						g_player[player_idx]->m_advances->GiveAdvance(i, CAUSE_SCI_UNKNOWN);
 					}
@@ -497,17 +489,17 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 #endif // _DEBUG
 
 	if(g_network.IsHost()) {
-		
-		
-		
-		
-		
+
+
+
+
+
 		if(!clientVerification) {
 			InformNetwork();
 		}
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
 			if(!clientVerification)
-				return;	
+				return;
 			DPRINTF(k_DBG_NET, ("Client %d acknowledes begin turn %d\n", g_selected_item->GetCurPlayer(),
 								m_round));
 		}
@@ -527,7 +519,7 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 
 
 #ifdef _DEBUG
-	
+
 	if (g_theProfileDB->LogPlayerStats()) {
 		LogPlayerStats();
 	}
@@ -542,9 +534,9 @@ void TurnCount::EndThisTurnBeginNewTurn (BOOL clientRequest)
 			return;
 		}
 
-		
-		
-		
+
+
+
 		PLAYER_INDEX start_player = g_selected_item->GetCurPlayer();
 
 
@@ -565,7 +557,6 @@ void TurnCount::EndThisTurnBeginNewTurn (BOOL clientRequest)
 		BeginNewTurn(FALSE);
 	}
 
-	
 	if(!g_network.IsActive() || g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
 
 
@@ -601,7 +592,7 @@ BOOL TurnCount::BeginNewSlice()
 
 	if(g_player[curPlayer]->GetCurRound() != m_round) {
 		BeginNewTurn(FALSE);
-	} else if(g_network.IsHost() && 
+	} else if(g_network.IsHost() &&
 	          g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
 
 
@@ -609,19 +600,18 @@ BOOL TurnCount::BeginNewSlice()
 
 
 		if (g_soundManager)
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 										gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
 										0,
 										0);
 	}
-
 
 	if(g_player[curPlayer]->m_end_turn_soon) {
 		return FALSE;
 	}
 
 	if(m_simultaneousMode) {
-		if((g_network.IsHost() && g_player[curPlayer]->GetPlayerType() != PLAYER_TYPE_NETWORK) || 
+		if((g_network.IsHost() && g_player[curPlayer]->GetPlayerType() != PLAYER_TYPE_NETWORK) ||
 		   g_network.GetPlayerIndex() == curPlayer) {
 			g_player[curPlayer]->ProcessUnitOrders(TRUE);
 		}
@@ -647,11 +637,10 @@ BOOL TurnCount::BeginNewSlice()
 				g_selected_item->GetCurPlayer()),
 								  new NetInfo(NET_INFO_CODE_REQUEST_SLICE));
 		}
-			
-	}	
 
-	
-	
+	}
+
+
 	if(g_network.IsActive()) {
 		g_network.UnitsMoved(-g_network.GetUnitMovesUsed());
 	}
@@ -706,20 +695,17 @@ void TurnCount::SetSimultaneousMode(BOOL on)
 }
 
 
-
 BOOL TurnCount::VerifyEndTurn(BOOL force)
 {
 	Player *player = g_player[g_selected_item->GetCurPlayer()];
-
 
 	if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
 		return(TRUE);
 	}
 
 	if (g_modalMessage && !force)
-		
-		return FALSE;
 
+		return FALSE;
 
 	if (g_slicEngine->GetSegment("16IAOutOfFuel")->TestLastShown(player->m_owner, 1)) {
 		int i;
@@ -742,11 +728,10 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if (g_slicEngine->GetSegment("23IACityWillStarve")->TestLastShown(player->m_owner, 1)) {
 		int i;
-		int n = player->GetAllCitiesList()->Num(); 
-		for (i=0; i<n; i++) { 
+		int n = player->GetAllCitiesList()->Num();
+		for (i=0; i<n; i++) {
 			double tmp;
 			Unit *unit = &(player->GetAllCitiesList()->Access(i));
 			if (!(unit->IsCity()))
@@ -767,7 +752,6 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if (g_slicEngine->GetSegment("21IACannotAffordMaintenance")->TestLastShown(player->m_owner, 1)) {
 		if (player->m_gold->BankruptcyImminent() &&
 			(player->CalcTotalBuildingUpkeep() > 0)) {
@@ -779,13 +763,12 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if (g_slicEngine->GetSegment("22IACannotAffordSupport")->TestLastShown(player->m_owner, 1)) {
 		int i;
 		int n = player->GetAllCitiesList()->Num();
 		double prod_total = 0.0;
 		double fudge = (double)(g_theConstDB->SupportWarningFudgeFactor()) / 100.0;
-		for (i=0; i<n; i++) { 
+		for (i=0; i<n; i++) {
 			Unit *unit = &(player->GetAllCitiesList()->Access(i));
 			if (!(unit->IsCity()))
 				continue;
@@ -802,11 +785,9 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 			return(FALSE);
 		}
 	}
-		
 
 	return(TRUE);
 }
-
 
 
 void TurnCount::NetworkEndTurn(BOOL force)
@@ -827,7 +808,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		return;
 	}
 
-	return;	
+	return;
 	{
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
 			for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
@@ -846,19 +827,18 @@ void TurnCount::NetworkEndTurn(BOOL force)
 	EndThisTurnBeginNewTurn(FALSE);
 
 
-
 #ifdef _DEBUG
 	extern BOOL g_doingFastRounds;
 
 	if (!g_doingFastRounds) {
-		
+
 		g_tiledMap->InvalidateMix();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
 		g_radarMap->Update();
 	}
 #else
-	
+
 	g_tiledMap->InvalidateMix();
 	g_tiledMap->InvalidateMap();
 	g_tiledMap->Refresh();
@@ -869,11 +849,11 @@ void TurnCount::NetworkEndTurn(BOOL force)
 
 void TurnCount::RunNewYearMessages(void)
 {
-	
+
 	if (GetYear() >= g_theConstDB->GetEndOfGameYearEarlyWarning()) {
 		if(!m_sentGameAlmostOverMessage) {
 			m_sentGameAlmostOverMessage = TRUE;
-			
+
 			SendMsgEndOfGameEarlyWarning() ;
 		}
 	}
@@ -912,7 +892,6 @@ void TurnCount::RunNewYearMessages(void)
 	}
 }
 
-
 void TurnCount::SendMsgEndOfGameEarlyWarning(void)
 {
 	SendMsgToAllPlayers("73EndOfGameTimeIsRunningOut") ;
@@ -920,7 +899,6 @@ void TurnCount::SendMsgEndOfGameEarlyWarning(void)
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_TIMES_ALMOST_UP));
 	}
 }
-
 
 void TurnCount::SendMsgToAllPlayers(MBCHAR *s)
 	{
@@ -938,13 +916,12 @@ void TurnCount::SendMsgToAllPlayers(MBCHAR *s)
 	g_slicEngine->Execute(so) ;
 	}
 
-
 void TurnCount::CountActivePlayers()
 {
 	sint32 i;
 	m_activePlayers = 0;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && 
+		if(g_player[i] &&
 		   ((!g_player[i]->IsTurnOver()) ||
 			g_player[i]->GetCurRound() != m_round)) {
 			m_activePlayers++;
@@ -987,8 +964,8 @@ BOOL useProfileNextRound = FALSE;
 void TurnCount::ProfileNextRound()
 {
 
-	Assert(0); 
-	
+	Assert(0);
+
 	g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayer());
 
 	sint32 oldPlayer = g_selected_item->GetCurPlayer();
@@ -1001,26 +978,25 @@ void TurnCount::ProfileNextRound()
 
 		g_keypress_stop_player = g_selected_item->GetCurPlayer();
 	}
-	
+
 	BOOL once_around = FALSE;
 	for (j=0; j<(k_MAX_PLAYERS+1); j++) {
 		EndThisTurnBeginNewTurn();
 		if (g_selected_item->GetCurPlayer() == g_keypress_stop_player) {
 			once_around = TRUE;
 			break;
-		} 
+		}
 	}
 	Assert(once_around);
 
 	if(m_isHotSeat || m_isEmail) {
 		if(m_isEmail) {
-			
-			
+
 			g_isScenario = FALSE;
 
 			GameFile::SaveGame("egame.ctp", NULL);
 		}
-		
+
 		SlicObject *so;
 		if(m_isHotSeat) {
 			so = new SlicObject("104NextHotSeatPlayer");
@@ -1035,7 +1011,6 @@ void TurnCount::ProfileNextRound()
 
 	}
 
-	
 	g_tiledMap->InvalidateMix();
 	g_tiledMap->InvalidateMap();
 	g_tiledMap->Refresh();
@@ -1043,7 +1018,6 @@ void TurnCount::ProfileNextRound()
 
 	g_selected_item->SetPlayerOnScreen((PLAYER_INDEX)-1);
 }
-
 
 sint32 g_noai_stop_player = 1;
 
@@ -1059,8 +1033,8 @@ void TurnCount::NextRound(BOOL fromDirector, BOOL force)
 	if (!g_selected_item)
 		return;
 
-	if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
-		return; 
+	if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
+		return;
 
 	if(!fromDirector) {
 		g_selected_item->RegisterManualEndTurn();
@@ -1068,9 +1042,8 @@ void TurnCount::NextRound(BOOL fromDirector, BOOL force)
 
 	if (g_theProfileDB->IsAIOn()) {
 
-
 		TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
-	} else { 
+	} else {
 		g_noai_stop_player = g_selected_item->GetCurPlayer();
 	}
 
@@ -1080,8 +1053,7 @@ sint32 finite_count=0;
 
 	do {
 
-		Assert(finite_count++ < 100); 
-
+		Assert(finite_count++ < 100);
 
 		sint32 curPlayer = g_selected_item->GetCurPlayer();
 		if((g_player[curPlayer]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
@@ -1113,9 +1085,8 @@ sint32 finite_count=0;
 
 
 		g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayer());
-		if (g_theProfileDB->IsAIOn()) { 
-		
-		
+		if (g_theProfileDB->IsAIOn()) {
+
 			TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 		}
 
@@ -1127,22 +1098,20 @@ sint32 finite_count=0;
 			if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
 			   PLAYER_TYPE_ROBOT) {
 				g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
-				
-				
-				
+
+
 				TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 			}
 
-			
 			if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
 			   PLAYER_TYPE_ROBOT) {
 				SendNextPlayerMessage();
 			}
 
 			g_director->NextPlayer();
-			
+
 			g_director->AddCopyVision();
-			
+
 			g_tiledMap->InvalidateMix();
 			g_tiledMap->InvalidateMap();
 			g_tiledMap->Refresh();
@@ -1198,8 +1167,7 @@ void TurnCount::ChooseHappinessPlayer()
 			continue;
 		break;
 	}
-	
-	
+
 }
 
 #ifdef _DEBUG
@@ -1233,12 +1201,10 @@ void TurnCount::LogPlayerStats(void)
 	PLAYER_INDEX    playerNum;
 	sint32          i;
 
-	
 	playerNum = g_selected_item->GetCurPlayer();
 
-	
 	UnitDynamicArray    *cityList = g_player[playerNum]->GetAllCitiesList();
-	sint32              citySize, 
+	sint32              citySize,
 	                    maxCitySize = -1;
 	sint32              numCitiesRioting = 0;
 	sint32              totalPop = 0;
@@ -1258,24 +1224,18 @@ void TurnCount::LogPlayerStats(void)
 
 		cityData->GetPop(citySize);
 
-		
 		totalPop += citySize;
 
-		
-		if (citySize > maxCitySize) 
+		if (citySize > maxCitySize)
 			maxCitySize = citySize;
 
-		
 		if (cityData->GetIsRioting())
 			numCitiesRioting++;
 
-		
 		totalFood += g_player[playerNum]->CityGetNetFood(cityIndex, &unknown);
 
-		
 		totalProduction += g_player[playerNum]->CityGetNetProduction(cityIndex, &unknown);
 
-		
 		totalGold += g_player[playerNum]->CityGetNetGold(cityIndex, &unknown);
 
 	}
@@ -1285,7 +1245,7 @@ void TurnCount::LogPlayerStats(void)
 	if (!logfile) {
 		logfile = fopen(filename, "wt");
 		if (!logfile) return;
-		
+
 		fprintf(logfile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
 		        "Turn #",
 		        "# Cities",
@@ -1315,70 +1275,50 @@ void TurnCount::LogPlayerStats(void)
 	}
 	if (!logfile) return;
 
-	
 	fprintf(logfile, "%d\t", m_round);
-	
-	
+
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumCities());
 
-	
 	fprintf(logfile, "%d\t", totalProduction);
 
-	
 	fprintf(logfile, "%d\t", totalFood);
 
-	
 	fprintf(logfile, "%d\t", totalGold);
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->m_gold->GetScience());
 
-	
 	fprintf(logfile, "%d\t", numCitiesRioting);
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumRevolted());
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetGovernmentType());
 
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWorkdayPerPerson());
 
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWagesPerPerson());
 
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetRationsPerPerson());
 
-	
 	double taxRate;
 	g_player[playerNum]->GetScienceTaxRate(taxRate);
 	fprintf(logfile, "%#.2f\t", taxRate);
 
-	
 	fprintf(logfile, "%#.2f\t", g_player[playerNum]->m_materialsTax);
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetAllUnitList()->Num());
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetReadinessCost());
 
-	
 	fprintf(logfile, "%d\t", totalPop);
-	
-	
+
 	fprintf(logfile, "%d\t", maxCitySize);
 
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
 
 	double incomepercent = g_player[playerNum]->GetIncomePercent();
-	
+
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
-	
-	
+
 	sint32 numAdvances = 0;
 	for (sint32 adv=0; adv<g_player[playerNum]->NumAdvances(); adv++)
 		if (g_player[playerNum]->HasAdvance(adv)) {
@@ -1386,9 +1326,9 @@ void TurnCount::LogPlayerStats(void)
 		}
 	fprintf(logfile, "%d\t", numAdvances);
 
-	
-	
-	
+
+
+
 
 	fprintf(logfile, "\n");
 
@@ -1411,15 +1351,14 @@ void TurnCount::SendNextPlayerMessage()
 		return;
 
 	if(m_isEmail) {
-		
-		
+
 		g_isScenario = FALSE;
-		
+
 		MBCHAR fullPath[_MAX_PATH], *c, *startc, *fc;
 		strcpy(fullPath, g_civPaths->GetDesktopPath());
 		// JJB changed this from CTP to CTP2 to avoid confusion between the two games
 		strcat(fullPath, FILE_SEP "CTP2 Email To ");
-		
+
 		startc = g_player[g_selected_item->GetCurPlayer()]->m_email;
 		c = startc;
 		fc = &fullPath[strlen(fullPath)];
@@ -1450,7 +1389,7 @@ void TurnCount::SendNextPlayerMessage()
 	} else {
 		so = new SlicObject("105NextEmailPlayer");
 	}
-	
+
 	so->AddRecipient(g_selected_item->GetCurPlayer());
 	so->AddCivilisation(g_selected_item->GetCurPlayer());
 	if(m_isEmail)

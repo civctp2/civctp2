@@ -7,42 +7,41 @@
 
 #include "ic3UnitDB.h"
 
-class Player; 
-class CivArchive; 
+class Player;
+class CivArchive;
 
 class C3UnitDB : public IC3UnitDB
 {
 	ULONG m_refCount;
-	
-	
-    Player *m_player; 
+
+    Player *m_player;
 
 public:
-	
+
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-    C3UnitDB(Player *p); 
+    C3UnitDB(Player *p);
     C3UnitDB(Player *p, CivArchive &archive);
     void Serialize(CivArchive &archive);
 
-    STDMETHODIMP_(sint32) GetNumUnitTypes ();    
+    STDMETHODIMP_(sint32) GetNumUnitTypes ();
 	STDMETHODIMP_ (BOOL) IsUnitObsolete(sint32 type_unit);
     STDMETHODIMP_ (BOOL) CityCanBuildUnit(sint32 type_unit);
 
     STDMETHODIMP_ (double) UnitTypeMovementPoints(sint32 type_unit);
-    STDMETHODIMP_ (uint32) GetMovementType(sint32 type_unit); 
+    STDMETHODIMP_ (uint32) GetMovementType(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetProductionCost(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetAttack(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetDefense(sint32 type_unit);
-    STDMETHODIMP_ (sint32) GetFirepower(sint32 type_unit); 
+    STDMETHODIMP_ (sint32) GetFirepower(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetHP(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetHP_WithReadiness(sint32 unit_type);
 
     STDMETHODIMP_ (double) GetEntrenchmentBonus();
 
-    STDMETHODIMP_ (BOOL) IsSettler(sint32 type_unit); 
+    STDMETHODIMP_ (BOOL) IsSettler(sint32 type_unit);
     STDMETHODIMP_ (BOOL) CanSettleHere(sint32 type_unit, MapPointData *dest_pos);
 
 	STDMETHODIMP_ (BOOL) CanSettleSpace(sint32 type_unit) ;
@@ -81,9 +80,9 @@ public:
 
     STDMETHODIMP_ (sint32) GetZBRange(sint32 type_unit);
     STDMETHODIMP_ (BOOL) IsFlanker(sint32 type_unit);
-    STDMETHODIMP_ (BOOL) GetIsTrader(sint32 type_unit); 
-    STDMETHODIMP_ (BOOL) IsTransport(sint32 type_unit); 
-    STDMETHODIMP_ (sint32) GetMaxCargo(sint32 type_unit); 
+    STDMETHODIMP_ (BOOL) GetIsTrader(sint32 type_unit);
+    STDMETHODIMP_ (BOOL) IsTransport(sint32 type_unit);
+    STDMETHODIMP_ (sint32) GetMaxCargo(sint32 type_unit);
 
     STDMETHODIMP_ (BOOL) UsesFuel(sint32 type_unit);
     STDMETHODIMP_ (BOOL) GetMaxFuel(sint32 type_unit);
@@ -95,7 +94,6 @@ public:
     STDMETHODIMP_ (sint32) Unittype_String_To_Int(char * unittype_string);
     STDMETHODIMP_ (char *) Unittype_Int_To_String(sint32 index);
 
-	
 	STDMETHODIMP_ (BOOL) CanConvertCity( sint32 type_unit);
     STDMETHODIMP_ (BOOL) IsNoZoc( sint32 type_unit);
     STDMETHODIMP_ (BOOL) IsIgnoresZoc( sint32 type_unit);
@@ -151,7 +149,6 @@ public:
 	STDMETHODIMP_ (BOOL) IsShallowWaterAttack( sint32 type_unit);
 	STDMETHODIMP_ (BOOL) IsUnderwaterAttack( sint32 type_unit);
 
-	
 	STDMETHODIMP_ (double) GetConvertCityChance(sint32 type_unit);
 	STDMETHODIMP_ (double) GetConvertCityDeathChance(sint32 type_unit);
     STDMETHODIMP_ (sint32) GetZBRangeAttack( sint32 type_unit);
@@ -162,15 +159,14 @@ public:
     STDMETHODIMP_ (sint32) GetBombardRange( sint32 type_unit);
 	STDMETHODIMP_ (sint32) GetBonusFood( sint32 type_unit);
 
-	
 
 	STDMETHODIMP_ (BOOL) CanBeachAssault( sint32 type_unit, MapPointData *point);
 
     STDMETHODIMP_ (BOOL) CanAttackFromSpaceShip(sint32 type_unit);
     STDMETHODIMP_ (BOOL) CanBeachAssaultAtAll(sint32 type_unit);
 
-    STDMETHODIMP_ (BOOL) CanNanoattackCity (sint32 unit_type); 
-    STDMETHODIMP_ (BOOL) CanBioterrorCity (sint32 unit_type); 
+    STDMETHODIMP_ (BOOL) CanNanoattackCity (sint32 unit_type);
+    STDMETHODIMP_ (BOOL) CanBioterrorCity (sint32 unit_type);
     STDMETHODIMP_ (BOOL) IsParatrooper(sint32 unit_type);
 	STDMETHODIMP_ (BOOL) IsWormholeProbe (sint32 unit_type);
 };

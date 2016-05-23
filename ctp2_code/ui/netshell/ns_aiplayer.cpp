@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -35,9 +35,8 @@
 #include "ns_aiplayersetup.h"
 
 
-
-ns_AIPlayer::ns_AIPlayer(NETFunc::AIPlayer * player) 
-:	ns_Object<NETFunc::AIPlayer, ns_AIPlayer>(player) 
+ns_AIPlayer::ns_AIPlayer(NETFunc::AIPlayer * player)
+:	ns_Object<NETFunc::AIPlayer, ns_AIPlayer>(player)
 {
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(STRING,	&m_tribe));
@@ -45,10 +44,8 @@ ns_AIPlayer::ns_AIPlayer(NETFunc::AIPlayer * player)
 	list.push_back(Struct(INT,		&m_pwpoints));
 };
 
-
 void ns_AIPlayer::Update( NETFunc::AIPlayer *aiplayer ) {
 	m_name = aiplayer->GetName();
-
 
 
 	nf_AIPlayer aiplayersetup( aiplayer );

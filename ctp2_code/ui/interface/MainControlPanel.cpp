@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,39 +49,33 @@
 #include "aui_uniqueid.h"
 #include "aui_progressbar.h"
 
-
 MainControlPanel *g_mainControlPanel = NULL;
 static aui_ProgressBar	*s_progressBar;
 
 STDEHANDLER(MainControlPanel_BeginTurn)
 {
-	
+
 	PLAYER_INDEX player = 0;
 	if(!args->GetPlayer(0, player))
 		return(GEV_HD_Continue);
 
-	
 	MainControlPanel::UpdatePlayer(player);
 
-	
 	return(GEV_HD_Continue);
 }
 
-
 void MainControlPanel::InitializeEvents()
 {
-	
+
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Post, &s_MainControlPanel_BeginTurn);
 }
 
-
 void MainControlPanel::Initialize(MBCHAR *ldlBlock)
 {
-	
+
 	if(g_mainControlPanel)
 		return;
 
-	
 	g_mainControlPanel = new MainControlPanel(ldlBlock);
 }
 
@@ -111,40 +105,36 @@ void MainControlPanel::Blank()
 
 void MainControlPanel::CleanUp()
 {
-	
+
 	delete g_mainControlPanel;
 	g_mainControlPanel = NULL;
 }
 
-
 void MainControlPanel::Update()
 {
-	
+
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->Update();
 	}
 }
 
-
 void MainControlPanel::UpdateCityList()
 {
-	
+
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->UpdateCityList();
 	}
 }
 
-
 void MainControlPanel::UpdatePlayer(PLAYER_INDEX player)
 {
-	
+
 	if(g_mainControlPanel) {
-		
+
 		g_mainControlPanel->m_endTurnButton->UpdatePlayer(player);
 		g_mainControlPanel->m_turnYearStatus->UpdatePlayer(player);
 	}
 }
-	
 
 void MainControlPanel::UpdateZoom()
 {
@@ -156,14 +146,12 @@ void MainControlPanel::UpdateZoom()
 
 }
 
-
 void MainControlPanel::SelectedCity()
 {
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->SelectedCity();
 	}
 }
-
 
 void MainControlPanel::SelectedUnit()
 {
@@ -191,7 +179,6 @@ aui_ProgressBar* MainControlPanel::GetProgressBar()
 	return s_progressBar;
 }
 
-
 MainControlPanel::MainControlPanel(MBCHAR *ldlBlock) :
 m_controlTabPanel(new ControlTabPanel(ldlBlock)),
 m_endTurnButton(new EndTurnButton(ldlBlock)),
@@ -199,7 +186,7 @@ m_shortcutPad(new ShortcutPad(ldlBlock)),
 m_statusBar(new StatusBar(ldlBlock)),
 m_turnYearStatus(new TurnYearStatus(ldlBlock))
 
-{	
+{
 
 
 

@@ -1,7 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __MESSAGE_H__ 
+#ifndef __MESSAGE_H__
 #define __MESSAGE_H__
 
 #include "ID.h"
@@ -14,8 +14,7 @@ class Message : public ID
 	{
 	public:
 
-		
-		
+
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }

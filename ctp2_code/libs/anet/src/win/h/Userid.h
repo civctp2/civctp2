@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,9 +17,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-/* ***********************************************************************  
- *                               RCS HEADER  
- * $Locker: $  
+/* ***********************************************************************
+ *                               RCS HEADER
+ * $Locker: $
  * $Log: Userid.h $
  * Revision 1.1  1996/12/13 23:24:44  jgraebner
  * Initial revision
@@ -27,8 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Initial revision
  * Revision 1.1  1995/11/10 21:50:02  dkegel
  * Initial revision
- *   
- * *********************************************************************** */ 
+ *
+ * *********************************************************************** */
 
 /*
  *	UserID.h
@@ -45,7 +45,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma	pack(1)			// Don't pad or align structures
 
-
 /*
  *	The user ID is a value which is guaranteed to be unique for each player
  *	in a game.  It has a value between 0 and n-1, where n is the number of
@@ -56,7 +55,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 typedef unsigned char	userID_t;			// User ID
 
-
 /*
  *	The node ID is any value which is pretty much guaranteed to be unique
  *	for each node in the world.  It can change from game to game.
@@ -66,7 +64,6 @@ typedef struct {							// Node ID
 	unsigned long	_0,
 					_1;
 } nodeID_t;
-
 
 /*
  *	Reserve a few special node IDs.  Whenever we generate a legitimate node
@@ -84,7 +81,6 @@ extern nodeID_t	nodeID_NONE;
 #define NODEID_UNKNOWN_1	  1					// Suffix
 extern nodeID_t	nodeID_UNKNOWN;
 
-
 /*
  *	Return our user ID, or -1 on error.
  */
@@ -93,7 +89,6 @@ userID_t
 myUserID(
 	void)
 ;
-
 
 /*
  *	Generate what we hope is a globally unique identifier for this node.

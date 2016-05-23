@@ -14,11 +14,10 @@ template <class T> class DynamicArray;
 class TradeOfferPool : public ObjPool
 {
 private:
-	
-	DynamicArray<TradeOffer> *m_all_offers;
-	
 
-	
+	DynamicArray<TradeOffer> *m_all_offers;
+
+
 public:
 	TradeOfferPool();
 	TradeOfferPool(CivArchive &archive);
@@ -39,7 +38,7 @@ public:
 					  ROUTE_TYPE askingType, sint32 askingResource,
 					  Unit toCity);
 	void Remove(TradeOffer offer);
-	
+
 	sint32 GetNumTradeOffers();
 	TradeOffer GetTradeOffer(sint32 index);
 	void ReRegisterOffers();

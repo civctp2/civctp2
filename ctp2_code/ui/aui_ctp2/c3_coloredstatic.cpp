@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
@@ -17,7 +15,6 @@
 extern aui_UI		*g_ui;
 extern ColorSet		*g_colorSet;
 
-
 c3_ColoredStatic::c3_ColoredStatic(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -34,7 +31,6 @@ c3_ColoredStatic::c3_ColoredStatic(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_ColoredStatic::c3_ColoredStatic(
@@ -63,12 +59,10 @@ c3_ColoredStatic::c3_ColoredStatic(
 }
 
 
-
 AUI_ERRCODE c3_ColoredStatic::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE c3_ColoredStatic::InitCommon()
@@ -78,13 +72,12 @@ AUI_ERRCODE c3_ColoredStatic::InitCommon()
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_ColoredStatic::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -93,11 +86,9 @@ AUI_ERRCODE c3_ColoredStatic::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if ( m_pattern ) 
+	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
-	
 	DrawThisStateImage(
 		0,
 		surface,
@@ -107,12 +98,10 @@ AUI_ERRCODE c3_ColoredStatic::DrawThis(
 		primitives_PaintRect16(surface, &rect, g_colorSet->GetColor(m_color));
 	}
 
-	
 	if (m_bevelWidth > 0) {
 		primitives_BevelRect16( surface, &rect, m_bevelWidth, m_bevelType, 16, 16 );
 	}
 
-	
 	DrawThisText(
 		surface,
 		&rect );
@@ -122,4 +111,3 @@ AUI_ERRCODE c3_ColoredStatic::DrawThis(
 
 	return AUI_ERRCODE_OK;
 }
-

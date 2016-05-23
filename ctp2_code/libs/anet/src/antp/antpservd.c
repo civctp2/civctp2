@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,13 +17,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-#include <stdio.h> 
+#include <stdio.h>
 #include <time.h>
-#include <sys/types.h> 
-#include <sys/socket.h> 
-#include <sys/wait.h> 
-#include <netinet/in.h> 
-#include <arpa/inet.h> 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/wait.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <errno.h>
 #include "anet.h"
 #include "antpserv.h"
@@ -70,8 +70,8 @@ static int antpservd_validateAddr(struct sockaddr_in addr)
 
 void main(int argc, char *argv[])
 {
-	int sockfd; 
-	struct sockaddr_in my_addr; 
+	int sockfd;
+	struct sockaddr_in my_addr;
 	int MyPort;
 	char BaseDir[antpserv_MAXPATH];
 	int pid;
@@ -112,7 +112,6 @@ Usage: %s <Port> <BaseDir>\n\
 
 	close(0);		/* close stdin */
 
-
 	/* PARENT handles accept */
 	DPRINT(("antpservd: creating socket\n"));
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -122,9 +121,9 @@ Usage: %s <Port> <BaseDir>\n\
 
 	DPRINT(("antpservd: binding my local socket\n"));
 	memset(&my_addr, 0, sizeof(my_addr));
-	my_addr.sin_family = AF_INET; 
-	my_addr.sin_port = htons(MyPort); 
-	my_addr.sin_addr.s_addr = htons(INADDR_ANY); 
+	my_addr.sin_family = AF_INET;
+	my_addr.sin_port = htons(MyPort);
+	my_addr.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
 		DPRINT(("antpservd: bind error:%d\n", errno));
 		exit(1);
@@ -141,8 +140,8 @@ Usage: %s <Port> <BaseDir>\n\
 		struct sockaddr_in client_addr;
 		int client_addrlen;
 
-		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */ 
-		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */ 
+		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */
+		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */
 		DPRINT(("antpservd: starting accept\n"));
 		newsock = accept(sockfd, (struct sockaddr *)&client_addr, &client_addrlen);
 		if (newsock < 0) {
@@ -157,7 +156,7 @@ Usage: %s <Port> <BaseDir>\n\
 				exit(1);
 
 			case 0:
-				/* CHILD PROCESS */ 
+				/* CHILD PROCESS */
 				close(sockfd);	/* child only uses newsock */
 #ifndef _DEBUG
 				/* set our process group ID to 0, so init will handle cleanup */
@@ -179,8 +178,8 @@ Usage: %s <Port> <BaseDir>\n\
 #else
 				/* _DEBUG - only one at a time, CHILD handles connection */
 #endif
-				antpserv_handleRequest(newsock, BaseDir, NULL); 
-				close(newsock); 
+				antpserv_handleRequest(newsock, BaseDir, NULL);
+				close(newsock);
 				exit(0);
 				break;
 

@@ -1,5 +1,3 @@
-
-
 #ifndef __FLAT_PTR_H__
 #define __FLAT_PTR_H__ 1
 
@@ -12,7 +10,6 @@ ptr_zero_me::ptr_zero_me() { \
 ptr_zero_me::~ptr_zero_me() { \
     memset(this, 0, sizeof(ptr_zero_me)); \
 }; \
-
 
 #define PTRSERIALIZE(ptr_serialize_class_name) \
 void ptr_serialize_class_name::Serialize(CivArchive &archive) \
@@ -55,7 +52,6 @@ void ptr_serialize_class_name::Serialize(CivArchive &archive) \
     } \
 }
 
-     
 #define FLATSERIALIZE(flat_serialize_class_name) \
 void flat_serialize_class_name::Serialize(CivArchive &archive) \
 { \
@@ -67,103 +63,4 @@ void flat_serialize_class_name::Serialize(CivArchive &archive) \
 }
 
 
-
 #endif __FLAT_PTR_H__
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

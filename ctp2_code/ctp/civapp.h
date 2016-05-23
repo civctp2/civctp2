@@ -15,7 +15,6 @@ public:
 	CivApp();
 	~CivApp();
 
-	
 	sint32		InitializeAppUI(void);
 	sint32		InitializeAppDB(CivArchive &archive);
 	sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
@@ -24,7 +23,6 @@ public:
 	sint32		CleanupAppDB(void);
 	sint32		CleanupApp(void);
 
-	
 	sint32		InitializeGameUI(void);
 	sint32		InitializeGame(CivArchive &archive);
 	sint32		InitializeSpriteEditor(CivArchive &archive);
@@ -40,7 +38,6 @@ public:
 	BOOL		IsKeyboardScrolling(void) { return m_isKeyboardScrolling; }
 	sint32		GetKeyboardScrollingKey(void) { return m_keyboardScrollingKey; }
 
-	
 	sint32      ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds);
 	sint32      ProcessAI();
 	sint32      ProcessRobot(const uint32 target_milliseconds, uint32 &used_milliseconds);
@@ -50,17 +47,15 @@ public:
 	sint32		ProcessProfile(void);
 	sint32		Process(void);
 
-	
 	sint32		StartSpriteEditor(void);
 	sint32		StartGame(void);
 	sint32		EndGame(void);
 
 	sint32		LoadSavedGame(MBCHAR *name);
-	sint32		LoadSavedGameMap(MBCHAR *name); 
+	sint32		LoadSavedGameMap(MBCHAR *name);
 	sint32		LoadScenarioGame(MBCHAR *name);
 	sint32		RestartGame(void);
 
-	
 	sint32		RestartGameSameMap(void);
 	sint32		QuitToSPShell(void);
 	sint32		QuitToLobby(void);
@@ -70,19 +65,16 @@ public:
 	void		AutoSave(PLAYER_INDEX player, bool isQuickSave = false);
 	void		RestoreAutoSave(PLAYER_INDEX player);
 
-	
 	BOOL		SaveDBInGameFile(void) { return m_saveDBInGameFile; }
 
-	
 	void		PostStartGameAction(void);
 	void		PostSpriteTestAction(void);
 	void		PostLoadSaveGameAction(MBCHAR *);
 	void        PostLoadQuickSaveAction(PLAYER_INDEX player);
 
-	void		PostLoadSaveGameMapAction(MBCHAR *); 
+	void		PostLoadSaveGameMapAction(MBCHAR *);
 	void		PostRestartGameAction(void);
 
-	
 	void		PostRestartGameSameMapAction(void);
 	void		PostQuitToSPShellAction(void);
 	void		PostQuitToLobbyAction(void);
@@ -111,7 +103,6 @@ private:
 	sint32		m_keyboardScrollingKey;
 };
 
-
 AUI_ACTION_BASIC(EndGameAction);
 AUI_ACTION_BASIC(QuitToSPShellAction);
 AUI_ACTION_BASIC(QuitToLobbyAction);
@@ -121,12 +112,11 @@ AUI_ACTION_BASIC(StartGameAction);
 AUI_ACTION_BASIC(SpriteTestAction);
 
 
-
 class LoadSaveGameAction : public aui_Action
 {
 	MBCHAR m_filename[ k_AUI_LDL_MAXBLOCK + 1 ];
 public:
-	
+
 	LoadSaveGameAction() : aui_Action() {}
 	LoadSaveGameAction(MBCHAR *name) : aui_Action() { strncpy(m_filename,name,k_AUI_LDL_MAXBLOCK );}
 	virtual void	Execute
@@ -137,12 +127,11 @@ public:
 	);
 };
 
-
 class LoadSaveGameMapAction : public aui_Action
 {
 	MBCHAR m_filename[ k_AUI_LDL_MAXBLOCK + 1 ];
 public:
-	
+
 	LoadSaveGameMapAction() : aui_Action() {}
 	LoadSaveGameMapAction(MBCHAR *name) : aui_Action() { strncpy(m_filename,name,k_AUI_LDL_MAXBLOCK );}
 	virtual void	Execute

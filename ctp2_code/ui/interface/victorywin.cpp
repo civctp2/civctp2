@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,7 +31,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
@@ -41,7 +40,6 @@
 #include "c3_static.h"
 #include "ctp2_Static.h"
 
-
 #include "textbutton.h"
 #include "c3_button.h"
 
@@ -50,21 +48,17 @@
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 
-
 #include "c3listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
 
-
 #include "c3_dropdown.h"
-
 
 #include "texttab.h"
 #include "aui_tabgroup.h"
 
 #include "ctp2_TabGroup.h"
 #include "ctp2_Tab.h"
-
 
 #include "c3window.h"
 #include "c3windows.h"
@@ -75,7 +69,6 @@
 #include "aui_stringtable.h"
 #include "c3_popupwindow.h"
 #include "screenutils.h"
-
 
 #include "CivPaths.h"
 #include "ObjPool.h"
@@ -90,7 +83,6 @@
 #include "Strengths.h"
 #include "UnitPool.h"
 #include "Score.h"
-
 
 #include "pixelutils.h"
 #include "radarmap.h"
@@ -115,7 +107,6 @@
 #include "highscoredb.h"
 #include "GameSettings.h"
 
-
 #include "Civilisation.h"
 #include "CivilisationData.h"
 
@@ -129,7 +120,6 @@
 #include "wonderutil.h"
 #include "IconRecord.h"
 
-
 extern sint32                   g_ScreenWidth;
 extern sint32                   g_ScreenHeight;
 extern C3UI                     *g_c3ui;
@@ -138,16 +128,13 @@ extern CivPaths                 *g_civPaths;
 extern TopTen                   *g_theTopTen;
 extern CivApp                   *g_civApp;
 
-
 extern PointerList<Player>      *g_deadPlayer;
 
 extern sint32                   g_modalWindow;
 
 #include "network.h"
 
-
 VictoryWindow                   *g_victoryWindow = NULL;
-
 
 static ctp2_Button              *s_okButton;
 static ctp2_Static              **s_staticControls;
@@ -171,58 +158,54 @@ static ctp2_ListBox             *s_wonderList;
 static ctp2_Static              *s_wonderBlock;
 
 
-
 static ctp2_Static              **s_wonderIcons;
-
 
 
 void VictoryWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
 
 	if ((ctp2_Button*)control == s_okButton)
 	{
-		
+
 		auiErr = g_c3ui->RemoveWindow( g_victoryWindow->m_window->Id() );
 		Assert( auiErr == AUI_ERRCODE_OK );
 		if ( auiErr != AUI_ERRCODE_OK ) return;
 
 		g_modalWindow--;
 
-		
 		s_highScoreWin->DisplayWindow();
 	}
 }
 
 void LineOrZeroSumButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	victorywin_SetLineGraph( s_lineGraph ? false : true);
 
 	s_graph->RenderGraph();
 	g_victoryWindow->m_window->Draw();
-	
+
 }
 
 void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-	
+
 	HighScoreWindowPopup *popup = (HighScoreWindowPopup *)cookie;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_continueButton)
 	{
-		
+
 		popup->RemoveWindow();
-		
+
 		if(g_turn->IsHotSeat() || g_turn->IsEmail()) {
 			if(!g_player[g_selected_item->GetVisiblePlayer()] ||
 				g_player[g_selected_item->GetVisiblePlayer()]->m_isDead) {
@@ -237,12 +220,12 @@ void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint
 	}
 	else if ((ctp2_Button*)control == popup->m_creditsButton)
 	{
-		
+
 		open_CreditsScreen();
 	}
 	else if ((ctp2_Button*)control == popup->m_quitButton)
 	{
-		
+
 		popup->RemoveWindow();
 		if (g_network.IsActive() || g_network.IsNetworkLaunch()) {
 			g_civApp->PostQuitToLobbyAction();
@@ -256,25 +239,22 @@ sint32 victorywin_SetLineGraph( BOOL lineGraph)
 {
 	s_lineGraph = lineGraph;
 
-	
 	if (s_lineGraph)
 	{
-		
+
 		s_graph->SetGraphType(GRAPH_TYPE_LINE);
 
-		
 		s_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_ZEROSUM_BUTTON"));
 
-	} 
+	}
 	else
 	{
-		
+
 		s_graph->SetGraphType(GRAPH_TYPE_ZEROSUM);
 
-		
 		s_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
 
-	} 
+	}
 
 	return 0;
 }
@@ -288,12 +268,12 @@ sint32 victorywin_Initialize( sint32 type )
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( g_victoryWindow ) 
+	if ( g_victoryWindow )
 	{
-		
+
 		victorywin_UpdateData(type);
 
-		return 0; 
+		return 0;
 	}
 
 	strcpy(windowBlock, "VictoryWindow");
@@ -306,23 +286,19 @@ sint32 victorywin_Initialize( sint32 type )
 
 
 
-	
-	
+
+
 	g_victoryWindow->m_window->SetStronglyModal(TRUE);
 
-	
 	victorywin_Init_Controls(windowBlock);
 
 
-	
 	s_highScoreWin = new HighScoreWindowPopup(type);
 
-	
 	s_stringTable = new aui_StringTable( &errcode, "VictoryStrings" );
 	Assert( AUI_NEWOK(s_stringTable, errcode) );
 	if ( !AUI_NEWOK(s_stringTable, errcode) ) return -2;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
@@ -360,7 +336,7 @@ void victorywin_Cleanup( void )
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 	sint32 i = 0;
 
-	if ( !g_victoryWindow ); 
+	if ( !g_victoryWindow );
 
 
 
@@ -390,7 +366,7 @@ void victorywin_Cleanup( void )
 
 
 
-	
+
 	mycleanup( s_highScoreWin );
 
 	mycleanup( s_stringTable );
@@ -412,10 +388,10 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	sint32 iconNum = k_VICWIN_WONDERICON_MAX;
 	s_wonderIcons = new ctp2_Static *[iconNum];
 
-	
-	
-	
-	
+
+
+
+
 	sint32 xPos = 10;
 	sint32 yPos = 5;
 
@@ -424,7 +400,7 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	sprintf( controlBlock, "%s", "TabGroup.Tab1.TabPanel.WonderList" );
 	s_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
 
-	
+
 
 
 
@@ -476,12 +452,10 @@ sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-
 	sint32 i = 0;
 
 	sint32 staticNum = k_VICWIN_STATIC_MAX;
 	s_staticControls = new ctp2_Static *[staticNum];
-
 
 	s_okButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "CloseButton");
 	s_okButton->SetActionFuncAndCookie(VictoryWindowButtonActionCallback, NULL);
@@ -489,8 +463,8 @@ sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
 	s_staticControls[k_VICWIN_MAIN_TITLE] = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Title");
 
 	sprintf(tabBlock, "%s", "TabGroup.Tab2.TabPanel");
-	
-	for ( i = 0 ; i < k_VICWIN_STATIC_MAX - 1; i++ ) 
+
+	for ( i = 0 ; i < k_VICWIN_STATIC_MAX - 1; i++ )
 	{
 		sprintf( controlBlock, "%s.StaticText%d", tabBlock, i );
 		s_staticControls[i] = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, controlBlock);
@@ -499,7 +473,6 @@ sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
 	sprintf(controlBlock, "%s.%s", tabBlock, "ScoreList");
 	s_scoreList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
 
-	
 	sprintf(tabBlock, "%s", "TabGroup.Tab3.TabPanel");
 	sprintf(controlBlock, "%s.%s", tabBlock, "Graph");
 	s_graph = (LineGraph *)aui_Ldl::GetObject(windowBlock, controlBlock);
@@ -508,17 +481,14 @@ sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
 	s_lineOrZeroSumButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, controlBlock);
 	s_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, NULL);
 
-	
 	victorywin_SetLineGraph( false );
 	s_graph->EnableYNumber(FALSE);
 	s_graph->EnablePrecision(FALSE);
 
 
-	
 	sprintf(controlBlock, "%s.%s", tabBlock, "GraphList");
 	s_graphList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
 
-	
 	sprintf(controlBlock, "%s.%s", windowBlock, "TabGroup");
 	ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(controlBlock);
 	sprintf(controlBlock, "%s.%s", controlBlock, "Tab2");
@@ -649,7 +619,6 @@ sint32 victorywin_UpdateData( sint32 type )
 {
 	MBCHAR strbuf[256];
 
-	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	Player *pl = g_player[curPlayer];
 	if(!pl) {
@@ -670,61 +639,54 @@ sint32 victorywin_UpdateData( sint32 type )
 		sint32 i;
 		for(i = 1; i < k_MAX_PLAYERS; i++) {
 			if(i != curPlayer &&
-			   g_player[i] && 
+			   g_player[i] &&
 			   g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
 				disableContinue = FALSE;
 			}
 		}
 	} else if(disableContinue && g_player[curPlayer] && !g_player[curPlayer]->m_isDead) {
-		
-		
+
 		disableContinue = FALSE;
 	}
 
-	
-	
+
 	if(type == k_VICWIN_DEFEAT) {
-		
+
 		s_staticControls[k_VICWIN_MAIN_TITLE]->SetText(s_stringTable->GetString(1));
 	} else {
 		s_staticControls[k_VICWIN_MAIN_TITLE]->SetText(s_stringTable->GetString(0));
 	}
 
-	
 	if (disableContinue)
 	{
-		
+
 		s_highScoreWin->m_continueButton->Enable(FALSE);
 
-	}	
-	else 
+	}
+	else
 	{
 		if((g_player[g_selected_item->GetVisiblePlayer()] &&
 			!g_player[g_selected_item->GetVisiblePlayer()]->m_isDead) ||
 		   g_turn->IsEmail() || g_turn->IsHotSeat()) {
 			s_highScoreWin->m_continueButton->Enable(TRUE);
 		} else {
-			
-			
+
 			s_highScoreWin->m_continueButton->Enable(FALSE);
 		}
 	}
 
 
-	
 	sprintf(strbuf,"%d",pl->GetTotalPopulation());
 	s_staticControls[k_VICWIN_POP_BOX]->SetText(strbuf);
 
-	
 	sprintf(strbuf,"%d",pl->GetNumCities());
 	s_staticControls[k_VICWIN_CITY_BOX]->SetText(strbuf);
 
-	
 	sint32 curScore = infowin_GetCivScore(curPlayer);
 	sprintf(strbuf,"%s %d", s_stringTable->GetString(8),curScore);
 	s_staticControls[k_VICWIN_SCORE_LABEL]->SetText(strbuf);
 
-	
+
 
 
 
@@ -733,29 +695,24 @@ sint32 victorywin_UpdateData( sint32 type )
 	strcpy(strbuf, pl->GetDescriptionString());
 
 
-	
 	if (s_highScoreWin) {
 		if(g_theGameSettings && g_theGameSettings->GetKeeppScore()) {
 			s_highScoreWin->m_highScoreDB->AddHighScore(strbuf,curScore);
 		}
 	}
 
-	
 	victorywin_LoadWonderData();
 
-	
 	victorywin_LoadGraphData();
 
-	
 	victorywin_LoadScoreData();
 
-	
+
 
 
 
 	return 0;
 }
-
 
 sint32 victorywin_DisplayHighScore( void )
 {
@@ -786,19 +743,16 @@ HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 s
 
 	*retval = InitCommonLdl(name, score, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE HighScoreListItem::InitCommonLdl(MBCHAR *name, sint32 score, MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
 
-	
 	m_score = score;
 
-	
 	strcpy(m_name,name);
 
 	c3_Static		*subItem;
@@ -818,16 +772,13 @@ AUI_ERRCODE HighScoreListItem::InitCommonLdl(MBCHAR *name, sint32 score, MBCHAR 
 
 void HighScoreListItem::Update(void)
 {
-	
 
 	c3_Static *subItem;
 	MBCHAR	strbuf[256];
-	
-	
+
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText(m_name);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 	sprintf(strbuf,"%d",m_score);
 	subItem->SetText(strbuf);
@@ -842,7 +793,7 @@ sint32 HighScoreListItem::Compare(ctp2_ListItem *item2, uint32 column)
 	switch (column) {
 	case 0:
 	case 1:
-		
+
 		i1 = (c3_Static *)this->GetChildByIndex(column);
 		i2 = (c3_Static *)item2->GetChildByIndex(column);
 
@@ -869,19 +820,16 @@ HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 
 	strcpy(windowBlock, "HighScoreWindowPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_continueButton = NULL;
 	m_quitButton = NULL;
 	m_creditsButton = NULL;
@@ -889,10 +837,8 @@ HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 	m_list = NULL;
 	m_title = NULL;
 
-	
 	m_highScoreDB = new HighScoreDB();
 
-	
 	Initialize( windowBlock );
 
 	if (g_player[g_selected_item->GetVisiblePlayer()] == NULL) {
@@ -908,26 +854,24 @@ sint32 HighScoreWindowPopup::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ContinueButton" );
 	m_continueButton = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, HighScoreWinButtonActionCallback, this);
 
 	Assert( AUI_NEWOK(m_continueButton, errcode) );
 	if ( !AUI_NEWOK(m_continueButton, errcode) ) return -1;
 
-	
-	
 
-	
-	
+
+
+
+
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "QuitButton" );
 	m_quitButton = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, HighScoreWinButtonActionCallback, this);
-	
+
 	Assert( AUI_NEWOK(m_quitButton, errcode) );
 	if ( !AUI_NEWOK(m_quitButton, errcode) ) return -1;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "HighScoreList" );
 	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
 	Assert( AUI_NEWOK(m_list, errcode) );
@@ -941,7 +885,7 @@ sint32 HighScoreWindowPopup::Initialize( MBCHAR *windowBlock )
 
 
 
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -977,7 +921,6 @@ void HighScoreWindowPopup::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
 
 	g_modalWindow++;
@@ -1003,7 +946,6 @@ sint32 HighScoreWindowPopup::UpdateData( void )
 
 	AUI_ERRCODE		retval;
 
-	
 	m_list->Clear();
 	strcpy(ldlBlock,"HighScoreListItem");
 	HighScoreListItem *item = NULL;
@@ -1012,11 +954,10 @@ sint32 HighScoreWindowPopup::UpdateData( void )
 	for ( sint32 i = 0; i < m_highScoreDB->m_nHighScores ; i++ )
 	{
 		info = m_highScoreDB->GetHighScoreInfo(i);
-		
-		item = new HighScoreListItem(&retval, info->m_name, info->m_score, ldlBlock); 
+
+		item = new HighScoreListItem(&retval, info->m_name, info->m_score, ldlBlock);
 		m_list->AddItem((ctp2_ListItem *)item);
 	}
-
 
 	return 0;
 }
@@ -1034,13 +975,10 @@ sint32 victorywin_GetWonderFilename( sint32 index, MBCHAR *name )
 	MBCHAR filename[80];
 	MBCHAR strbuf[_MAX_PATH];
 
-	
 	if ( index < 0 ) return FALSE;
 
-	
 	strcpy(filename,g_theWonderDB->Get(index)->GetDefaultIcon()->GetIcon());
 
-	
 	if (g_civPaths->FindFile(C3DIR_PICTURES, filename, strbuf))
 	{
 		strcpy(name, filename);
@@ -1049,7 +987,6 @@ sint32 victorywin_GetWonderFilename( sint32 index, MBCHAR *name )
 
 	return FALSE;
 }
-
 
 sint32 victorywin_LoadGraphData( void )
 {
@@ -1060,40 +997,32 @@ sint32 victorywin_LoadGraphData( void )
 	double		**graphData;
 	sint32		xCount, yCount;
 
-	
 	if (!s_graph) return -1;
 
-	
 	graphData = NULL;
 	infowin_UpdateGraph(s_graph, xCount, yCount, &graphData);
 
-	
-	
+
 	s_graphList->Clear();
 	strcpy(ldlBlock,"VictoryPlayerListItem");
 	InfoPlayerListItem *pItem = NULL;
 
-	
-	
+
 	sint32 color = 0;
 
-	
 	LineGraphData *myData = s_graph->GetData();
 
-	
 	sint32 lineIndex = 0;
 
-	
 	Player *p = NULL;
 	Civilisation *civ = NULL;
 
-	
 	for ( sint32 i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
-		
+
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
 		{
-			
+
 			if (!myData)
 				color = (sint32)g_colorSet->ComputePlayerColor(i);
 			else color = myData[lineIndex++].color;
@@ -1106,16 +1035,15 @@ sint32 victorywin_LoadGraphData( void )
 				strbuf[0] = 0;
 			}
 
-			pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
+			pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock);
 			s_graphList->AddItem((ctp2_ListItem *)pItem);
 		}
 	}
 
-	
 	PointerList<Player>::Walker walk(g_deadPlayer);
 
 	while(walk.IsValid()) {
-		
+
 		if (!myData)
 			color = (sint32)g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
 		else color = myData[lineIndex++].color;
@@ -1128,11 +1056,10 @@ sint32 victorywin_LoadGraphData( void )
 			strbuf[0] = 0;
 		}
 
-		pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
+		pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock);
 		s_graphList->AddItem((ctp2_ListItem *)pItem);
 		walk.Next();
 	}
-
 
 	return 0;
 }
@@ -1146,7 +1073,6 @@ void CloseVictoryWindowAction::Execute(aui_Control *control, uint32 action, uint
 	victorywin_Cleanup();
 }
 
-
 sint32 victorywin_LoadScoreData( void )
 {
 	AUI_ERRCODE	retval;
@@ -1155,7 +1081,6 @@ sint32 victorywin_LoadScoreData( void )
 
 	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
 
-	
 	s_scoreList->Clear();
 	strcpy(ldlBlock,"VictoryScoreListItem");
 	InfoScoreListItem *item = NULL;
@@ -1164,28 +1089,26 @@ sint32 victorywin_LoadScoreData( void )
 	sint32 posValue = 0;
 	sint32 negValue = 0;
 
-	
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(2), NULL, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(2), NULL, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
 
 
 
 
-	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_ADVANCES, ldlBlock); 
+	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_ADVANCES, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 	posValue += item->GetValue();
 
-	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_WONDERS, ldlBlock); 
+	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_WONDERS, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 	posValue += item->GetValue();
 
-	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_POPULATION, ldlBlock); 
+	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_POPULATION, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 	posValue += item->GetValue();
 
-	
-	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_FEATS, ldlBlock); 
+	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_FEATS, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 	posValue += item->GetValue();
 
@@ -1215,21 +1138,18 @@ sint32 victorywin_LoadScoreData( void )
 
 
 
-	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_TYPE_OF_VICTORY, ldlBlock); 
+	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_TYPE_OF_VICTORY, ldlBlock);
 	s_scoreList->AddItem((c3_ListItem *)item);
 	posValue += item->GetValue();
 
-
 	sprintf(strbuf,"%d",posValue);
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(3), strbuf, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(3), strbuf, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
-	
-	item = new InfoScoreListItem(&retval, -1, 0, ldlBlock); 
+	item = new InfoScoreListItem(&retval, -1, 0, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 
-	
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(4), NULL, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(4), NULL, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
 
@@ -1250,14 +1170,12 @@ sint32 victorywin_LoadScoreData( void )
 
 
 	sprintf(strbuf,"%d",negValue);
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(5), strbuf, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(5), strbuf, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
-	
-	item = new InfoScoreListItem(&retval, -1, 0, ldlBlock); 
+	item = new InfoScoreListItem(&retval, -1, 0, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 
-	
 	Player *pl = g_player[curPlayer];
 	if(!pl) {
 		PointerList<Player>::Walker walk(g_deadPlayer);
@@ -1275,39 +1193,33 @@ sint32 victorywin_LoadScoreData( void )
 	Score *score = pl->m_score;
 	sint32 totalValue = score->GetTotalScore();
 	sprintf(strbuf,"%d",totalValue);
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(6), strbuf, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(6), strbuf, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
-	
 	sint32 civScore = infowin_GetCivScore(curPlayer);
 	sprintf(strbuf,"%d",civScore);
-	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(7), strbuf, ldlBlock); 
+	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(7), strbuf, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
 	return 0;
 }
 
-
 sint32 victorywin_LoadWonderData( void )
 {
 	MBCHAR strbuf[256];
 
-	
 	Assert(g_theWonderDB->NumRecords() <= (k_VICWIN_WONDER_COL_MAX * k_VICWIN_WONDER_ROW_MAX));
 
-	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-	
-	
+
 	for ( sint32 i = 0; i < g_theWonderDB->NumRecords() ; i++ )
 	{
-		
+
 		if (curPlayer == wonderutil_GetOwner(i))
 		{
-			
+
 			victorywin_GetWonderFilename(i,strbuf);
 
-			
 			s_wonderIcons[i]->SetImage(strbuf);
 		}
 	}
@@ -1315,21 +1227,18 @@ sint32 victorywin_LoadWonderData( void )
 	return 0;
 }
 
-
 sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult )
 {
-	
+
 	MBCHAR strbuf[256];
-	
+
 	strcpy(strbuf,"NULL");
 
-	
 	sint32 curScore = infowin_GetCivScore(player);
 
-	
 	if (gameResult == k_VICWIN_DEFEAT)
 	{
-		
+
 		if (curScore <= 5) strcpy(strbuf,s_stringTable->GetString(9));
 		else if ((curScore > 5) && (curScore <= 10)) strcpy(strbuf,s_stringTable->GetString(10));
 		else if ((curScore > 10) && (curScore <= 15)) strcpy(strbuf,s_stringTable->GetString(11));
@@ -1339,7 +1248,7 @@ sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult )
 	}
 	else
 	{
-		
+
 		if (curScore <= 20) strcpy(strbuf,s_stringTable->GetString(15));
 		else if ((curScore > 20) && (curScore <= 40)) strcpy(strbuf,s_stringTable->GetString(16));
 		else if ((curScore > 40) && (curScore <= 60)) strcpy(strbuf,s_stringTable->GetString(17));
@@ -1351,7 +1260,6 @@ sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult )
 	strcpy(name, strbuf);
 	return 0;
 }
-
 
 
 bool victorywin_IsOnScreen()

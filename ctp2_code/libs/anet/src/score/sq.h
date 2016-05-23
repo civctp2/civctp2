@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,13 +46,13 @@ void sq_destroy();
 
 /*--------------------------------------------------------------------------
  Get a score report message from the web message queue if one is waiting.
- Puts the submitting player's session id, and session type into the 
+ Puts the submitting player's session id, and session type into the
  spaces pointed to by sessid, and sessType.
  The sessid returned will have length no greater than dp_KEY_MAXLEN;
  The length used is returned in sessidlen.
 
- Messages are returned in an sq_message_t struct pointed to by msg. 
- 
+ Messages are returned in an sq_message_t struct pointed to by msg.
+
  Returns dp_RES_OK if there is a scorerep_buf to process,
  		 dp_RES_AGAIN if there was a non-score wmq entry,
          dp_RES_EMPTY if there is nothing there.

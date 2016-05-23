@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,6 @@ extern World		*g_theWorld;
 extern ColorSet		*g_colorSet;
 extern Player		**g_player;
 
-
 Battle::Battle() :
 m_eventQueue(new PointerList<BattleEvent>),
 m_cityBonus(0.0),
@@ -65,25 +64,23 @@ m_terrainType(0),
 m_fortBonus(0.0),
 m_fortifiedBonus(0.0)
 {
-	
+
 	m_attackersName[0] = '\0';
 	m_defendersName[0] = '\0';
 
-	
 	for(sint32 index=0; index < k_MAX_UNITS_PER_SIDE; index++) {
 		m_attackers[index] = NULL;
 		m_defenders[index] = NULL;
 	}
 }
 
-
 Battle::~Battle()
 {
-	
-	
-	
-	
-	
+
+
+
+
+
 	if(m_eventQueue)
 		delete m_eventQueue;
 }
@@ -95,27 +92,22 @@ Battle::~Battle()
 
 PointerList<BattleEvent> *Battle::GrabEventQueue()
 {
-	
+
 	PointerList<BattleEvent> *eventQueue = m_eventQueue;
 
-	
 	m_eventQueue = new PointerList<BattleEvent>;
 
-	
 	return(eventQueue);
 }
-
 
 void Battle::Initialize(const Army &attackers, CellUnitList &defenders)
 {
 	m_numAttackers = attackers.Num();
 	m_numDefenders = defenders.Num();
 
-	
 	MakeAttackers(m_numAttackers, attackers);
 	MakeDefenders(m_numDefenders, defenders);
 
-	
 	MapPoint		defPos;
 	defenders.GetPos(defPos);
 
@@ -124,7 +116,6 @@ void Battle::Initialize(const Army &attackers, CellUnitList &defenders)
 	unitutil_GetAverageDefenseBonus(defPos, attackers, defenders, m_cityBonus, m_fortifiedBonus);
 	unitutil_GetCityInfo(defPos, m_cityName, m_cityImage);
 
-	
 	MapPoint pos = defenders[0].RetPos();
 	Cell *cell = g_theWorld->GetCell(pos);
 	m_terrainType = cell->GetTerrainType();
@@ -278,7 +269,6 @@ void Battle::MakeAttackers(sint32 numAttackers, const Army &attackers)
 }
 
 
-
 void Battle::MakeDefenders(sint32 numDefenders, CellUnitList &defenders)
 {
 	sint32			i;
@@ -294,7 +284,6 @@ void Battle::MakeDefenders(sint32 numDefenders, CellUnitList &defenders)
 		DPRINTF(k_DBG_FIX, ("MakeDefenders: Actor with Unit id: %.8lx\n", m_defenders[i]->GetUnitID().m_id));
 	}
 }
-
 
 
 BattleViewActor *Battle::ActorFromUnit(BOOL isDefender, Unit theUnit)
@@ -317,17 +306,17 @@ BattleViewActor *Battle::ActorFromUnit(BOOL isDefender, Unit theUnit)
 			}
 		}
 	}
-	
+
 	Assert(actor);
 
 	if (!actor) {
 		DPRINTF(k_DBG_FIX, ("ActorFromUnit: Unit %.8lx not found in Actor lists\n", theUnit.m_id));
 		for (i=0; i<m_numAttackers; i++) {
-			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Attacker Actor with id: %.8lx\n", 
+			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Attacker Actor with id: %.8lx\n",
 			        m_attackers[i] ? m_attackers[i]->GetUnitID().m_id : 0xabcdef12));
 		}
 		for (i=0; i<m_numDefenders; i++) {
-			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Defender Actor with id: %.8lx\n", 
+			DPRINTF(k_DBG_FIX, ("ActorFromUnit: Defender Actor with id: %.8lx\n",
 			        m_defenders[i] ? m_defenders[i]->GetUnitID().m_id : 0xfedcba21));
 		}
 	}
@@ -349,14 +338,13 @@ void Battle::PositionUnit(BattleEvent *event, BOOL isDefender, Unit theUnit, sin
 	}
 
 	if (isDefender) {
-		event->AddPositionData(actor, column, row, k_BATTLEVIEW_DEFAULT_DEFENDER_FACING, 
+		event->AddPositionData(actor, column, row, k_BATTLEVIEW_DEFAULT_DEFENDER_FACING,
 								theUnit.GetHP(), isDefender);
 	} else {
-		event->AddPositionData(actor, column, row, k_BATTLEVIEW_DEFAULT_ATTACKER_FACING, 
+		event->AddPositionData(actor, column, row, k_BATTLEVIEW_DEFAULT_ATTACKER_FACING,
 								theUnit.GetHP(), isDefender);
 	}
 }
-
 
 
 void Battle::AddUnitAttack(BattleEvent *event, BOOL isDefender, Unit theUnit)
@@ -374,7 +362,6 @@ void Battle::AddUnitAttack(BattleEvent *event, BOOL isDefender, Unit theUnit)
 }
 
 
-
 void Battle::AddUnitExplosion(BattleEvent *event, BOOL isDefender, Unit theUnit)
 {
 	BattleViewActor		*actor;
@@ -388,7 +375,6 @@ void Battle::AddUnitExplosion(BattleEvent *event, BOOL isDefender, Unit theUnit)
 	if(theUnit.IsValid() && !theUnit.GetDBRec()->GetExplodes())
 		return;
 
-	
 
 	EffectActor		*explodeActor = NULL;
 	SpriteState		*explosionState = new SpriteState(g_theSpecialEffectDB->Get(
@@ -400,10 +386,9 @@ void Battle::AddUnitExplosion(BattleEvent *event, BOOL isDefender, Unit theUnit)
 		explodeActor = new EffectActor(explosionState, pos);
 	}
 
-	event->AddExplosionData(actor, explodeActor, gamesounds_GetGameSoundID(GAMESOUNDS_EXPLOSION), 
+	event->AddExplosionData(actor, explodeActor, gamesounds_GetGameSoundID(GAMESOUNDS_EXPLOSION),
 							theUnit.GetHP());
 }
-
 
 
 void Battle::AddUnitDeath(BattleEvent *event, BOOL isDefender, Unit theUnit)
@@ -413,13 +398,12 @@ void Battle::AddUnitDeath(BattleEvent *event, BOOL isDefender, Unit theUnit)
 	DPRINTF(k_DBG_FIX, ("Add Death for %s %d (%d)\n", theUnit.GetName(), theUnit.GetOwner(), int(theUnit) & 0xFFF));
 
 	actor = ActorFromUnit(isDefender, theUnit);
-	
+
 	Assert(actor);
 	if (!actor) return;
 
 	event->AddDeathData(actor, theUnit.GetDeathSoundID(), theUnit.GetHP());
 }
-
 
 
 void Battle::AddEvent(BattleEvent *event)
@@ -429,13 +413,12 @@ void Battle::AddEvent(BattleEvent *event)
 
 
 
-	
+
 
 	Assert(m_eventQueue);
 	if (m_eventQueue)
 		m_eventQueue->AddTail(event);
 }
-
 
 
 void Battle::ShowEvent(BattleEvent *event)
@@ -504,7 +487,6 @@ void Battle::ShowEvent(BattleEvent *event)
 }
 
 
-
 void Battle::RemoveAttacker(BattleViewActor *actor)
 {
 	sint32 i;
@@ -522,4 +504,3 @@ void Battle::RemoveDefender(BattleViewActor *actor)
 			m_defenders[i] = NULL;
 	}
 }
-

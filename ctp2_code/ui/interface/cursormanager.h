@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,7 +43,7 @@ enum CURSORINDEX {
 	CURSORINDEX_NOBOMBARD,
 	CURSORINDEX_SPECIAL_ACTION,
 	CURSORINDEX_NOSPECIAL_ACTION,
-	
+
 	CURSORINDEX_ZOOMIN,
 	CURSORINDEX_ZOOMOUT,
 
@@ -137,8 +137,7 @@ enum CURSORINDEX {
 	CURSORINDEX_MAX
 };
 
-
-class CursorManager 
+class CursorManager
 {
 public:
 	CursorManager();

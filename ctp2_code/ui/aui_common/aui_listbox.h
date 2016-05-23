@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -32,15 +32,12 @@
 #ifndef __AUI_LISTBOX_H__
 #define __AUI_LISTBOX_H__
 
-
 #include "aui_control.h"
 #include "aui_header.h"
-
 
 class aui_Item;
 class aui_Ranger;
 class aui_DropDown;
-
 
 
 #define k_AUI_LISTBOX_LDL_HEADER			"header"
@@ -57,7 +54,6 @@ class aui_DropDown;
 #define k_AUI_LISTBOX_LDL_ITEMHEIGHT		"itemheight"
 #define k_AUI_LISTBOX_LDL_SENDRIGHTCLICKS   "sendrightclicks"
 
-
 enum AUI_LISTBOX_ACTION
 {
 	AUI_LISTBOX_ACTION_FIRST = 0,
@@ -69,23 +65,21 @@ enum AUI_LISTBOX_ACTION
 };
 
 
-
 enum AUI_LISTBOX_SELECTSTATUS
 {
 	AUI_LISTBOX_SELECTSTATUS_FIRST = 0,
 	AUI_LISTBOX_SELECTSTATUS_NONE = 0,
 	AUI_LISTBOX_SELECTSTATUS_SELECTING,
 	AUI_LISTBOX_SELECTSTATUS_DESELECTING,
-	AUI_LISTBOX_SELECTSTATUS_INVERTING, 
+	AUI_LISTBOX_SELECTSTATUS_INVERTING,
 	AUI_LISTBOX_SELECTSTATUS_LAST,
 };
-
 
 
 class aui_ListBox : public aui_Control
 {
 public:
-	
+
 	aui_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -135,8 +129,7 @@ public:
 	aui_Item	*GetItem( uint32 itemId ) const
 		{ return (aui_Item *)m_pane->GetChild( itemId ); }
 
-	
-	
+
 	void RemoveItems( BOOL destroy = FALSE, BOOL destroyAction = FALSE );
 
 	AUI_ERRCODE	RemoveItemByIndex( sint32 index );
@@ -147,7 +140,6 @@ public:
 	aui_Switch	*GetHeaderSwitch( uint32 switchId )
 		{ return (aui_Switch *)m_header->GetChild( switchId ); }
 
-	
 	aui_Switch	*GetHeaderSwitchByIndex( sint32 index );
 
 	AUI_ERRCODE	SelectItem( sint32 index, uint32 data = 0 );
@@ -155,14 +147,12 @@ public:
 	AUI_ERRCODE	DeselectItem( sint32 index, uint32 data = 0 );
 	AUI_ERRCODE	DeselectItem( aui_Item *item, uint32 data = 0 );
 
-	
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending )
 	{
-		
+
 		if ( column == -1 ) return AUI_ERRCODE_OK;
 
-		
-		if ( column != -2 ) 
+		if ( column != -2 )
 		{
 			Assert( 0 <= column && column < m_numColumns );
 			if ( 0 > column || column >= m_numColumns )
@@ -180,26 +170,23 @@ public:
 	tech_WLList<sint32>	*GetSelectedListLastTime( void ) const
 		{ return m_selectedListLastTime; }
 
-	
 	aui_Item	*GetSelectedItem( void ) const;
 	sint32		GetSelectedItemIndex( void ) const;
 
 
-	
 
 
 
 
 
-	
+
+
 	sint32 ExtractDoubleClickedItem( uint32 data ) const
 	{ return (sint32)data; }
 
-	
-	
+
 	BOOL ExtractEndUserTriggeredEvent( uint32 data ) const
 	{ return (data & 0x1) == 0; }
-
 
 	BOOL		IsMultiSelect( void ) const { return m_multiSelect; }
 	BOOL		SetMultiSelect( BOOL multiSelect );
@@ -212,15 +199,12 @@ public:
 
 	sint32		NumItems( void ) const { return m_numRows; }
 
-	
 	BOOL		IsItem( aui_Region *region );
 
-	
 	void WhatsChanged(
 		tech_WLList<sint32> &selectedList,
 		tech_WLList<sint32> &deselectedList );
 
-	
 	AUI_ERRCODE	RangerMoved( void );
 
 	virtual AUI_ERRCODE Draw(
@@ -232,26 +216,23 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 ) { return aui_Control::DrawThis( surface, x, y ); }
 
-
 	sint32 GetSortColumn( void ) const { return m_sortColumn; }
 	BOOL GetSortAscending( void ) const { return m_sortAscending; }
 
-	
-	
-	
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
+
 	void BuildListStart(void);
 
-	
 	void BuildListEnd(bool isAddBottom = false);
 
-    
-    
+
 	aui_Item *ConstructAndAddTextItem(const MBCHAR *ldlblock, const MBCHAR *text, void *userData);
 
 	void SetIgnoreOutsideDrops(bool ignore) { m_ignoreOutsideDrops = ignore; }
@@ -273,24 +254,20 @@ protected:
 	sint32		ColumnWidth( sint32 column );
 	sint32		HorizontalRangerPositionCount( void );
 
-	
 	AUI_ERRCODE SwitchItems( sint32 indexA, sint32 indexB );
 
 	AUI_ERRCODE	CalculateScroll( sint32 x, sint32 y );
 	AUI_ERRCODE	ScrollList( void );
 
-	
 	AUI_ERRCODE	DragSelect( sint32 y );
 
 	void SendSelectCallback(
 		AUI_LISTBOX_ACTION action = AUI_LISTBOX_ACTION_SELECT,
 		uint32 data = 0 );
 
-	
 	AUI_ERRCODE	StartSelecting( void );
 	friend class aui_DropDown;
 
-	
 	static aui_DragDropWindow *m_dragDropWindow;
 
 	aui_Control	*m_pane;
@@ -308,24 +285,24 @@ protected:
 
 	sint32		m_rangerSize;
 
-	BOOL		m_multiSelect;		
-	BOOL		m_forceSelect;		
-	BOOL		m_absorbEvents;		
-	BOOL		m_absorbed;			
+	BOOL		m_multiSelect;
+	BOOL		m_forceSelect;
+	BOOL		m_absorbEvents;
+	BOOL		m_absorbed;
 
 	AUI_LISTBOX_SELECTSTATUS
-				m_selectStatus;		
+				m_selectStatus;
 
-	sint32		m_dragIndex;		
+	sint32		m_dragIndex;
 
-	tech_WLList<sint32>				
-				*m_selectedList;	
-	tech_WLList<sint32>				
-				*m_selectedListLastTime;	
-	tech_WLList<sint32>				
+	tech_WLList<sint32>
+				*m_selectedList;
+	tech_WLList<sint32>
+				*m_selectedListLastTime;
+	tech_WLList<sint32>
 				*m_visualSelectedList;
 
-	BOOL		m_scrolling;		
+	BOOL		m_scrolling;
 	sint32		m_scrollDx;
 	sint32		m_scrollDy;
 
@@ -338,24 +315,24 @@ protected:
 
 	BOOL		m_alwaysRanger;
 
-	sint32		m_sortColumn;		
-	BOOL		m_sortAscending;	
+	sint32		m_sortColumn;
+	BOOL		m_sortAscending;
 
-	BOOL		m_buildingTheList;	
-									
-									
-									
-									
-									
-									
-	BOOL		m_savedForceSelect; 
-									
-	bool        m_ignoreOutsideDrops; 
-                                      
-	aui_Control *m_keyboardActionControl; 
+	BOOL		m_buildingTheList;
+
+
+
+
+
+
+	BOOL		m_savedForceSelect;
+
+	bool        m_ignoreOutsideDrops;
+
+	aui_Control *m_keyboardActionControl;
 
 	bool        m_sendRightClicks;
-	
+
 	virtual void	PreChildrenCallback	(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
@@ -370,16 +347,14 @@ protected:
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
-	
+
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
-	
+
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
 
-
 aui_Control::ControlActionCallback ListBoxRangerActionCallback;
 
-
-#endif 
+#endif

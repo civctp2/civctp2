@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
@@ -23,7 +12,6 @@
 #include "primitives.h"
 #include "colorset.h"
 extern ColorSet *g_colorSet;
-
 
 c3_HyperTipWindow::c3_HyperTipWindow(
 	AUI_ERRCODE *retval,
@@ -40,7 +28,6 @@ c3_HyperTipWindow::c3_HyperTipWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_HyperTipWindow::c3_HyperTipWindow(
@@ -64,17 +51,14 @@ c3_HyperTipWindow::c3_HyperTipWindow(
 }
 
 
-
 AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -83,11 +67,9 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	MBCHAR tipBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( tipBlock, "%s.%s", ldlBlock, k_C3_HYPERTIPWINDOW_LDL_TIP );
 
-	
 	Assert( theLdl->GetLdl()->FindDataBlock( tipBlock ) );
 	if ( theLdl->GetLdl()->FindDataBlock( tipBlock ) )
 	{
@@ -102,7 +84,6 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 
 		m_hyperTip->TextReloadFont();
 
-		
 		aui_Ldl::Remove( m_hyperTip );
 		m_allocatedHyperTip = TRUE;
 		AddChild( m_hyperTip );
@@ -123,10 +104,9 @@ AUI_ERRCODE c3_HyperTipWindow::SetHyperTipText(MBCHAR *text)
 	sint32			height = font->GetMaxHeight();
 
 
-
 	width += 10;
 	height += 2;
-	
+
 	Resize(width, height);
 
 	m_hyperTip->Resize(m_width - 2, m_height);
@@ -134,7 +114,6 @@ AUI_ERRCODE c3_HyperTipWindow::SetHyperTipText(MBCHAR *text)
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE c3_HyperTipWindow::InitCommon( void )
 {
@@ -145,7 +124,6 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 c3_HyperTipWindow::~c3_HyperTipWindow()
@@ -160,7 +138,7 @@ c3_HyperTipWindow::~c3_HyperTipWindow()
 
 AUI_ERRCODE c3_HyperTipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;

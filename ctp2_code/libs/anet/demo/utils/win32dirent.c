@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  This file is intended for use only with the win32dirent.h interface.
 
  Created 17-Nov-98 by Jason Scanlin (jscanlin@activision.com).
- 
+
  Copyright 1998 by Activision.
- This source code is free and may be used or redistributed under the 
+ This source code is free and may be used or redistributed under the
  terms GNU General Public Licence.
 ------------------------------------------------------------------------*/
 
@@ -114,7 +114,7 @@ DIR *opendir(const char *dir)
  Returns 0 on success or -1 on failure.
 
  dirent_errno is set to 0 on success or to one of the following on error:
-	EINVAL - Bad dirp, probably not opened or already closed. 
+	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
 int closedir(DIR *dirp)
 {
@@ -135,7 +135,7 @@ int closedir(DIR *dirp)
  Returns 0 on success or -1 on failure.
 
  dirent_errno is set to 0 on success or to one of the following on error:
-	EINVAL - Bad dirp, probably not opened or already closed. 
+	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
 int rewinddir(DIR *dirp)
 {
@@ -226,7 +226,7 @@ struct dirent *readdir(DIR *dirp)
  sorted using qsort with <cmp>, and collected in a malloc'd array in
  *<namelist>.
  A null <selector> selects all files.  A null <cmp> does no sorting.
- 
+
  Returns the number of entries selected, or -1 on error.
 
  dirent_errno is set to 0 on success or to one of the following on error:
@@ -265,7 +265,7 @@ printf("scandir: readdir(%s[%d]) err:%d\n", dirp->d_name, n, dirent_errno);
 			struct dirent **temp;
 			if (0 == n_match)
 				temp = (struct dirent **)malloc(sizeof(struct dirent *));
-			else 
+			else
 				temp = (struct dirent **)realloc(*namelist,
 					(n_match + 1)*sizeof(struct dirent *));
 			if (NULL == temp) {

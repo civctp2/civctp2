@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -56,10 +56,9 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
+static HANDLE hAlarmThread = 0;
 
-static HANDLE hAlarmThread = 0; 
-
-static DWORD WINAPI ThreadFunc(LPDWORD lpdwParam) 
+static DWORD WINAPI ThreadFunc(LPDWORD lpdwParam)
 {
 	int sec = (int) lpdwParam;
 
@@ -92,14 +91,14 @@ unsigned alarm(unsigned sec)
 
 	/* Set new alarm, if desired */
 	if (sec > 0) {
-		hAlarmThread = CreateThread( 
-			NULL,                        // no security attributes 
-			0,                           // use default stack size  
-			ThreadFunc, // thread function 
+		hAlarmThread = CreateThread(
+			NULL,                        // no security attributes
+			0,                           // use default stack size
+			ThreadFunc, // thread function
 			(void *)sec,
-			0,                           // use default creation flags 
-			&dwThreadId);                // returns the thread identifier 
-	 
+			0,                           // use default creation flags
+			&dwThreadId);                // returns the thread identifier
+
 	   assert(hAlarmThread);
 	}
 	return 0;

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,12 +28,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifdef dp_ANET2
 
 /*----------------------------------------------------------------------
-Subscribe to the server's table. 
+Subscribe to the server's table.
 (Called when the server changes)
 ----------------------------------------------------------------------*/
 dp_result_t dp_subscribeAppsList(dp_t *dp);
 
-                    
 /*--------------------------------------------------------------------------
 Save the apps list to disk.
 (Called at quit time to provide quick info on next startup).

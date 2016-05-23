@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "EndGame.h"
 #include "civarchive.h"
@@ -61,8 +60,7 @@ void EndGame::Serialize(CivArchive &archive)
 	} else {
 		archive.LoadChunk((uint8*)&m_owner, (uint8*)&m_currentStageBegan + sizeof(m_currentStageBegan));
 
-		
-		
+
 		if (m_numBuilt)
 			delete [] m_numBuilt;
 		if (m_savedNumBuilt)
@@ -82,9 +80,9 @@ void EndGame::Init()
 	m_numBuilt = new sint32[g_theEndGameDB->m_nRec];
 	m_savedNumBuilt = new sint32[g_theEndGameDB->m_nRec];
 
-    sint32 i; 
-    for (i=0; i < g_theEndGameDB->m_nRec; i++) { 
-        m_numBuilt[i] = 0; 
+    sint32 i;
+    for (i=0; i < g_theEndGameDB->m_nRec; i++) {
+        m_numBuilt[i] = 0;
 		m_savedNumBuilt[i] = 0;
     }
 }
@@ -104,7 +102,7 @@ void EndGame::AddObject(sint32 type)
 										  m_owner));
 			g_network.Unblock(m_owner);
 		}
-			
+
 		so = new SlicObject("308EndGameFinishedXLab");
 		so->AddRecipient(m_owner);
 		g_slicEngine->Execute(so);
@@ -118,10 +116,8 @@ void EndGame::AddObject(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	
 	if(m_owner == g_selected_item->GetVisiblePlayer()) {
-		
-		
+
 		if(g_endgameWindow) g_endgameWindow->Update(this);
 		else open_EndGame();
 	}
@@ -140,12 +136,11 @@ void EndGame::ClearAll()
 	}
 }
 
-
 BOOL EndGame::BeginSequence()
 {
 	sint32 i;
 	for(i = 0; i < g_theEndGameDB->m_nRec; i++) {
-		
+
 		if(g_theEndGameDB->Get(i)->ExactlyOneRequired() &&
 		   m_numBuilt[i] < 1)
 			return FALSE;
@@ -155,20 +150,17 @@ BOOL EndGame::BeginSequence()
 	so->AddAllRecipientsBut(m_owner);
 	so->AddCivilisation(m_owner);
 	g_slicEngine->Execute(so);
-	
+
 	if(g_network.IsHost()) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_OTHER_CIV_SEQUENCE_MSG,
 									  m_owner));
 	}
 
-
 	m_currentStage = 0;
 	m_currentStageBegan = g_turn->GetRound();
 
-	
 	if(m_owner == g_selected_item->GetVisiblePlayer()) {
-		
-		
+
 		if(g_endgameWindow) g_endgameWindow->Update(this);
 		else open_EndGame();
 	}
@@ -183,7 +175,6 @@ void EndGame::BeginTurn()
 	if(m_currentStage < 0 || m_currentStage >= g_theEndGameDB->GetNumStages())
 		return;
 
-	
 	if(GetCataclysmChance() > 0) {
 		double cataclysm_chance = GetCataclysmChance();
 		cataclysm_chance /= GetTurnsForNextStage();
@@ -195,7 +186,7 @@ void EndGame::BeginTurn()
 	}
 
 	sint32 turnsForNextStage = GetTurnsForNextStage();
-    if ((turnsForNextStage >= 0) &&	   
+    if ((turnsForNextStage >= 0) &&
         (g_turn->GetRound() > m_currentStageBegan + turnsForNextStage)) {
         if (MetRequirementsForNextStage()) {
             AdvanceStage();
@@ -221,9 +212,9 @@ void EndGame::BeginTurn()
 				g_slicEngine->Execute(so);
 			}
 		}
-	} else if(m_currentStage == 2 && 
+	} else if(m_currentStage == 2 &&
 			  turnsForNextStage >= 0 &&
-			  (((m_currentStageBegan + turnsForNextStage) - 
+			  (((m_currentStageBegan + turnsForNextStage) -
 				g_turn->GetRound()) < 5)) {
 		if(g_slicEngine->GetSegment("053AlienAlmostDone")->TestLastShown(m_owner, 5)) {
 			so = new SlicObject("053AlienAlmostDone");
@@ -253,12 +244,11 @@ void EndGame::AdvanceStage()
 {
 	SlicObject *so;
 
-	
-	
+
+
 
 #if 0
-	
-	
+
 	sint32 cataclysm_chance = GetCataclysmChance();
 	if(cataclysm_chance > 0) {
 		if(g_rand->Next(100) < cataclysm_chance) {
@@ -269,10 +259,10 @@ void EndGame::AdvanceStage()
 #endif
 
 	bool openScreen = true;
-	
+
 	m_currentStage++;
 	if(m_currentStage >= g_theEndGameDB->GetNumStages()) {
-		
+
 		SlicObject *so = new SlicObject("309EndGameWon");
 		so->AddAllRecipientsBut(m_owner);
 		so->AddCivilisation(m_owner);
@@ -305,9 +295,9 @@ void EndGame::AdvanceStage()
 		  so->AddRecipient(m_owner);
 		  g_slicEngine->Execute(so);
 
-		  
-		  
-		  
+
+
+
 		  so = new SlicObject("058AlienScrappedOwner");
 		  so->AddAllRecipientsBut(m_owner);
 		  so->AddCivilisation(m_owner);
@@ -327,10 +317,8 @@ void EndGame::AdvanceStage()
 	  }
 	}
 
-    
 	if(openScreen && m_owner == g_selected_item->GetVisiblePlayer()) {
-		
-		
+
 		if(g_endgameWindow) g_endgameWindow->Update(this);
 		else open_EndGame();
 	}
@@ -338,9 +326,8 @@ void EndGame::AdvanceStage()
 
 sint32 EndGame::GetCataclysmChance()
 {
-	
-	
-	
+
+
 	sint32 i;
 	sint32 maxChance = 0;
 
@@ -357,15 +344,14 @@ sint32 EndGame::GetCataclysmChance()
 
 sint32 EndGame::GetTurnsForNextStage()
 {
-	
-	
+
 	sint32 i;
 	sint32 min = -1;
 	for(i = 0; i < g_theEndGameDB->m_nRec; i++) {
 		const EndGameRecord *egrec = g_theEndGameDB->Get(i);
 		if(egrec->ControlsSpeed()) {
 			if(m_numBuilt[i] < 0) {
-				
+
 				continue;
 			}
 			if(min < 0 || egrec->GetTurnsPerStage(m_numBuilt[i]) < min) {
@@ -384,7 +370,6 @@ BOOL EndGame::HaveEnoughECDs()
 		if(strcmp(g_theStringDB->GetIdStr(egrec->m_name), "ET_COMMUNICATION_DEVICE"))
 			continue;
 
-        
         if(egrec->RequiredToAdvanceFromStage(m_currentStage) > m_numBuilt[i]) {
             return FALSE;
         }
@@ -400,7 +385,6 @@ BOOL EndGame::HaveEnoughFields()
 		if(strcmp(g_theStringDB->GetIdStr(egrec->m_name), "CONTAINMENT_FIELD"))
 			continue;
 
-        
         if(egrec->RequiredToAdvanceFromStage(m_currentStage) > m_numBuilt[i]) {
             return FALSE;
         }
@@ -416,7 +400,6 @@ BOOL EndGame::HaveMaxSplicers()
 		if(strcmp(g_theStringDB->GetIdStr(egrec->m_name), "GENE_SEQUENCER"))
 			continue;
 
-        
         if(m_numBuilt[i] < egrec->GetMaxAllowed()) {
             return FALSE;
         } else {
@@ -431,7 +414,7 @@ BOOL EndGame::HaveAllPrerequisites()
     sint32 i;
     for(i = 0; i < g_theEndGameDB->m_nRec; i++) {
         const EndGameRecord *egrec = g_theEndGameDB->Get(i);
-        
+
         if(egrec->RequiredToAdvanceFromStage(m_currentStage) > m_numBuilt[i]) {
             return FALSE;
         }
@@ -441,17 +424,15 @@ BOOL EndGame::HaveAllPrerequisites()
 
 BOOL EndGame::MetRequirementsForNextStage()
 {
-	
-	
+
 
 	if(m_currentStage >= g_theEndGameDB->GetNumStages()) {
-		
+
 		return TRUE;
 	}
 
 	if(m_currentStage >= g_theEndGameDB->GetNumStages() - 1) {
-		
-		
+
 		if(!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetAlienLifeAdvance())) {
 			return FALSE;
 		}
@@ -466,7 +447,7 @@ BOOL EndGame::MetRequirementsForNextStage()
 
 void EndGame::Cataclysm()
 {
-	
+
 	SlicObject *so = new SlicObject("300EndGameCataclysm");
 	so->AddRecipient(m_owner);
 	g_slicEngine->Execute(so);
@@ -487,9 +468,8 @@ void EndGame::Cataclysm()
 	for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
 		g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->RemoveEndGameObjects();
 	}
-	
 
-	
+
 	if(m_owner == g_selected_item->GetVisiblePlayer()) {
 		close_EndGame();
 	}
@@ -502,20 +482,17 @@ void EndGame::XLabCaptured()
 	for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
 		g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->RemoveEndGameObjects();
 	}
-	
 
-	
+
 	if(m_owner == g_selected_item->GetVisiblePlayer()) {
 		close_EndGame();
 	}
 }
 
-
 sint32 EndGame::GetTurnsSinceStageBegan()
 {
 	return(g_turn->GetRound() - m_currentStageBegan);
 }
-
 
 sint32 EndGame::GetStage()
 {
@@ -526,7 +503,6 @@ sint32 EndGame::GetNumberBuilt(sint32 type)
 {
 	return(m_numBuilt[type]);
 }
-
 
 sint32 EndGame::GetDisplayedStage()
 {
@@ -543,11 +519,11 @@ sint32 EndGame::GetNumberShown(sint32 type)
 
 void EndGame::UpdateDisplayState(void)
 {
-	sint32 i; 
-    
+	sint32 i;
+
 	m_savedCurrentStage = m_currentStage;
 
-	for (i=0; i < g_theEndGameDB->m_nRec; i++) { 
+	for (i=0; i < g_theEndGameDB->m_nRec; i++) {
 		m_savedNumBuilt[i] = m_numBuilt[i];
     }
 }

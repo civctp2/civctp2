@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.7  1997/05/31 22:42:23  dkegel
  Moved 'pragma pack' to dp*pack*.h for portability.
  Revision 1.6  1997/01/31 07:47:42  dkegel
- Settled the structure packing question by using 
+ Settled the structure packing question by using
  #pragma pack(x) / #pragma pack() pairs at top and bottom of
- all .h files that declare structures.  Was careful to put 
+ all .h files that declare structures.  Was careful to put
  #pragma pack(x) after last #include (to avoid wierd nesting effects
  due to lack of #pragma pack(pop).
  Revision 1.5  1996/12/18 18:20:29  administrator

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,69 +34,69 @@
 
 BSetID::BSetID ()
 
-{ 
-    val = 0; 
-} 
+{
+    val = 0;
+}
 
 #ifdef WIN32
 BSetID::BSetID (const int &copy_me)
-{ 
-    val = uint32(copy_me); 
+{
+    val = uint32(copy_me);
 }
 #endif
 
 BSetID::BSetID (const uint32 &copy_me)
-{ 
-    val = copy_me; 
-} 
+{
+    val = copy_me;
+}
 
 BSetID::BSetID (const sint32 &copy_me)
-{ 
-    val = uint32(copy_me); 
-} 
+{
+    val = uint32(copy_me);
+}
 
 BSetID::BSetID (const BSetID &copy_me)
-{ 
+{
     val = copy_me.val;
 }
 
 #ifdef WIN32
 BSetID& BSetID::operator = (const int &copy_me)
 {
-    val = uint32(copy_me); 
+    val = uint32(copy_me);
     return *this;
 }
 #endif
 
 BSetID& BSetID::operator= (const uint32 &copy_me)
 {
-    val = copy_me; 
-    return *this; 
+    val = copy_me;
+    return *this;
 }
 
 BSetID& BSetID::operator= (const sint32 &copy_me)
-{ 
-    val = uint32(copy_me); 
-    return *this; 
+{
+    val = uint32(copy_me);
+    return *this;
 
-} 
+}
 
 BSetID& BSetID::operator= (const BSetID &copy_me)
 {
-    val = copy_me.val; 
-    return *this; 
+    val = copy_me.val;
+    return *this;
 
 }
 
 BSetID& BSetID::operator-- ()
 
-{ 
-    val--; 
+{
+    val--;
     return *this;
 }
 
 BSetID& BSetID::operator++ ()
-{ 
+{
     val++;
     return *this;
 
@@ -104,68 +104,66 @@ BSetID& BSetID::operator++ ()
 
 BOOL BSetID::operator== (const BSetID &test_me) const
 {
-    return val == test_me.val; 
+    return val == test_me.val;
 }
 
 BOOL BSetID::operator!= (const BSetID &test_me) const
 {
-    return val != test_me.val; 
+    return val != test_me.val;
 }
 
 BOOL BSetID::operator< (const BSetID &test_me) const
-{ 
-    return val < test_me.val; 
-} 
+{
+    return val < test_me.val;
+}
 
 BOOL BSetID::operator<= (const BSetID &test_me) const
-{ 
+{
     return val <= test_me.val;
-} 
+}
 
 BOOL BSetID::operator> (const BSetID &test_me) const
-{ 
-    return val > test_me.val; 
+{
+    return val > test_me.val;
 }
 
 BOOL BSetID::operator>= (const BSetID &test_me) const
-{ 
-    return val >= test_me.val; 
-} 
+{
+    return val >= test_me.val;
+}
 
 void BSetID::Castrate()
-{ 
-    return ; 
-} 
+{
+    return ;
+}
 
 void BSetID::DelPointers()
 {
-    return; 
+    return;
 }
 
 BSetID::BSetID (IC3CivArchive *a)
 {
-    Serialize(a); 
+    Serialize(a);
 }
 
-
 void BSetID::Serialize(CivArchive &archive)
-{ 
-    if (archive.IsStoring()) { 
-        archive << val; 
-    } else { 
-        archive >> val; 
+{
+    if (archive.IsStoring()) {
+        archive << val;
+    } else {
+        archive >> val;
     }
-} 
-
+}
 
 void BSetID::Serialize(IC3CivArchive *archive)
-{ 
-    if (archive->IsStoring()) { 
-        archive->Store((uint8*)&val, sizeof(val)); 
-    } else { 
-        archive->Load((uint8*)&val, sizeof(val)); 
+{
+    if (archive->IsStoring()) {
+        archive->Store((uint8*)&val, sizeof(val));
+    } else {
+        archive->Load((uint8*)&val, sizeof(val));
     }
-} 
+}
 
 
 
@@ -431,13 +429,13 @@ uint32  g_bf_table[256] = {
 
 uint32 BitsFlip(uint32 val)
 
-{ 
-	uint32 tmp = 0; 
+{
+	uint32 tmp = 0;
 
 	tmp = g_bf_table[val & 0xff] << 24;
-	tmp |= g_bf_table[(val >> 8) & 0xff] << 16; 
-	tmp |= g_bf_table[(val >> 16) & 0xff] << 8; 
-	tmp |= g_bf_table[(val >> 24) & 0xff]; 
+	tmp |= g_bf_table[(val >> 8) & 0xff] << 16;
+	tmp |= g_bf_table[(val >> 16) & 0xff] << 8;
+	tmp |= g_bf_table[(val >> 24) & 0xff];
 
-	return tmp;  
+	return tmp;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -120,7 +120,7 @@ DP_API dp_result_t DP_APIX dpAccountActivateA(
  'password' is the password set with dpAccountCreate() (or the last
             dpChangePassword() call).
  'newpassword' is the new password desired.
- 'flags' is the new flags bit field desired. 
+ 'flags' is the new flags bit field desired.
  'email' is the new email address desired.
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpChangePasswordW(
@@ -157,7 +157,6 @@ DP_API dp_result_t DP_APIX dpRequestEmail(dp_t *dp)
 	return tserv_request_email(dp->tserv);
 }
 
-
 /*------------------------------------------------------------------------
  Convert a player id (dpid_t) to a user id (dp_uid_t).
  Returns dp_UID_NONE on any error.
@@ -185,7 +184,7 @@ DP_API dp_uid_t DP_APIX dpGetPlayerUid(dp_t *dp, dpid_t id)
 		DPRINT(("dpGetPlayerUid: player groups don't have UIDs\n"));
 		return dp_UID_NONE;
 	}
-	
+
 	err = dptab_get_bykey(dp->players, subkey, subkeylen, (void **)&playerbuf, &len);
 	if (err != dp_RES_OK) {
 		DPRINT(("dpGetPlayerUid: dptab_get_bykey(players, id:%d) returns err:%d\n", id, err));
@@ -201,7 +200,7 @@ DP_API dp_uid_t DP_APIX dpGetPlayerUid(dp_t *dp, dpid_t id)
 
 	if ((unsigned long)player.karma == dp_UID_NONE)
 		return dp_UID_NONE;  /* Better not let UID get to 131072! FIXME */
-	
+
 	/* Kludge: only the lower 16 bits of uid available at moment */
 	return (dp_uid_t)(0x10000 + (unsigned long)(player.karma));
 }

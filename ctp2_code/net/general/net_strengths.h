@@ -22,8 +22,8 @@ class NetFullStrengths : public Packetizer
 {
   public:
 	NetFullStrengths() {}
-	NetFullStrengths(sint32 player, sint32 startRound, sint32 endRound) { 
-		m_player = player; 
+	NetFullStrengths(sint32 player, sint32 startRound, sint32 endRound) {
+		m_player = player;
 		m_startRound = startRound;
 		m_endRound = endRound;
 	}

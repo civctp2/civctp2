@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TradeOfferPool.h"
 #include "player.h"
@@ -18,13 +8,12 @@
 
 extern Player **g_player;
 
-
 TradeOfferPool::TradeOfferPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_TRADE_OFFER)
 {
 	m_all_offers = new DynamicArray<TradeOffer>;
 }
 
-TradeOfferPool::TradeOfferPool(CivArchive &archive) 
+TradeOfferPool::TradeOfferPool(CivArchive &archive)
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TRADE_OFFER)
 {
 	m_all_offers = new DynamicArray<TradeOffer>;
@@ -37,17 +26,17 @@ TradeOfferPool::~TradeOfferPool()
 		delete m_all_offers;
 }
 
-TradeOffer TradeOfferPool::Create(Unit fromCity, 
-								  ROUTE_TYPE offerType, 
-								  sint32 offerResource, 
-								  ROUTE_TYPE askingType, 
-								  sint32 askingResource, 
-								  Unit toCity            
+TradeOffer TradeOfferPool::Create(Unit fromCity,
+								  ROUTE_TYPE offerType,
+								  sint32 offerResource,
+								  ROUTE_TYPE askingType,
+								  sint32 askingResource,
+								  Unit toCity
 								  )
 {
 	TradeOfferData* newData;
 	TradeOffer newOffer(NewKey(k_BIT_GAME_OBJ_TYPE_TRADE_OFFER));
-	
+
 	newData = new TradeOfferData(newOffer, fromCity,
 								 offerType, offerResource,
 								 askingType, askingResource,

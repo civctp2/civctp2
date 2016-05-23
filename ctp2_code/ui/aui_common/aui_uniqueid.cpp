@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_uniqueid.h"
-
 
 
 uint32 aui_UniqueId( void )
@@ -21,8 +9,7 @@ uint32 aui_UniqueId( void )
 
 	id--;
 
-	
-	
+
 	Assert( (sint32)id < 0 );
 
 	return id;

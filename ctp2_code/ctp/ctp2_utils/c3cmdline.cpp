@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source file
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -121,14 +121,12 @@
 
 #include "wonderutil.h"
 
-
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 
 #include "Globals.h"
 #include "cellunitlist.h"
 #include "ctpaidebug.h"
-
 
 #include "gfx_options.h"
 
@@ -138,7 +136,7 @@ extern MBCHAR g_stringdb_filename[_MAX_PATH];
 extern MBCHAR g_advancedb_filename[_MAX_PATH];
 extern MBCHAR g_terrain_filename[_MAX_PATH];
 extern MBCHAR g_unitdb_filename[_MAX_PATH];
-extern MBCHAR g_constdb_filename[_MAX_PATH]; 
+extern MBCHAR g_constdb_filename[_MAX_PATH];
 extern MBCHAR g_improve_filename[_MAX_PATH];
 extern MBCHAR g_wonder_filename[_MAX_PATH];
 extern MBCHAR g_installation_filename[_MAX_PATH];
@@ -158,7 +156,6 @@ extern MBCHAR g_advance_list_db_filename[_MAX_PATH];
 
 extern ConstDB              *g_theConstDB;
 
-
 extern Background           *g_background;
 extern ChatBox              *g_chatBox;
 extern StatsWindow          *g_statsWindow;
@@ -167,7 +164,6 @@ extern C3UI                 *g_c3ui;
 
 extern sint32               g_check_mem;
 extern sint32               g_robotMessages;
-
 
 #include "aui.h"
 #include "aui_surface.h"
@@ -203,7 +199,7 @@ extern sint32               g_robotMessages;
 
 #include "GameEventManager.h"
 
-extern TurnCount *g_turn; 
+extern TurnCount *g_turn;
 
 static sint32 s_helpLines = 15;
 
@@ -226,13 +222,11 @@ extern sint32         g_god;
 extern sint32         g_isGridOn;
 extern BOOL           g_showHeralds;
 
-
 extern BOOL           g_useDDBlit;
 
 extern CivApp         *g_civApp;
 
 extern C3UI           *g_c3ui;
-
 
 extern BOOL           g_powerPointsMode;
 
@@ -240,17 +234,15 @@ sint32                g_is_debug_map_color;
 BOOL                  g_show_ai_dbg;
 BOOL                  g_doingFastRounds = FALSE;
 
-
 extern BOOL           g_ai_revolt = TRUE;
 
 extern void WhackScreen();
 
 #include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog; 
+extern Diplomacy_Log *g_theDiplomacyLog;
 
 #include "director.h"
 extern Director *g_director;
-
 
 extern BOOL	g_drawArmyClumps;
 
@@ -396,7 +388,6 @@ CommandLine g_commandLine;
                       IsPollutionReducedCommand g_isPollutionReducedCommand;
                       IsViolatingBordersCommand g_isViolatingBordersCommand;
 
-
                       RequestExchangeMapCommand g_requestExchangeMapCommand;
                      SetMaterialsPercentCommand g_SetMaterialsPercentCommand;
                      RequestExchangeCityCommand g_requestExchangeCityCommand;
@@ -504,7 +495,7 @@ CommandLine g_commandLine;
                                 MainMenuCommand g_mainMenuCommand;
                                SetupModeCommand g_setupModeCommand;
                                    ReadyCommand g_readyCommand;
-                              DisplayMemCommand g_displayMemCommand; 
+                              DisplayMemCommand g_displayMemCommand;
                                UseDDBlitCommand g_useDDBlitCommand;
                                   LoadDBCommand g_loadDBCommand;
                         SellImprovementsCommand g_sellImprovementsCommand;
@@ -533,7 +524,7 @@ CommandLine g_commandLine;
                                  KillPopCommand g_killPopCommand;
                                    BoardCommand g_boardCommand;
                                AutoGroupCommand g_autoGroupCommand;
-                                  AddPopCommand g_addPopCommand; 
+                                  AddPopCommand g_addPopCommand;
                               CopyVisionCommand g_copyVisionCommand;
 
                                CombatLogCommand g_combatLogCommand;
@@ -552,10 +543,8 @@ CommandLine g_commandLine;
                              CleanScreenCommand g_cleanScreenCommand;
                              ResetVisionCommand g_resetVisionCommand;
 
-
                                ExportMapCommand g_exportMapCommand;
                                ImportMapCommand g_importMapCommand;
-
 
                      InitializeDiplomacyCommand g_initializeDiplomacyCommand;
                           BeginDiplomacyCommand g_beginDiplomacyCommand;
@@ -570,18 +559,14 @@ CommandLine g_commandLine;
                           SetPersonalityCommand g_setPersonalityCommand;
                               DeclareWarCommand g_declareWar;
 
-
                       SetGovernorForCityCommand g_setGovernorForCityCommand;
                     SetGovernorPwReserveCommand g_setGovernorPwReserveCommand;
-
 
                                  ToggleCellText g_toggleCellText;
                                  ToggleArmyText g_toggleArmyText;
                                  ToggleArmyText g_toggleArmyName;
 
-
                                      ArmyClumps g_armyClumps;
-
 
                                 SetGoodsCommand g_setGoodsCommand;
 
@@ -590,15 +575,11 @@ CommandLine g_commandLine;
                                DumpAstarCommand g_dumpAstarCommand;
 #endif
 
-
                                  AiDebugCommand g_aiDebugCommand;
-
 
                              ShowVictoryCommand g_showVictoryCommand;
 
-
                            ReloadSpritesCommand g_reloadSpritesCommand;
-
 
 COMMAND(ShowVisCommand);
 ShowVisCommand g_showVisCommand;
@@ -630,8 +611,8 @@ CommandRecord commands[] = {
 	{"whoami", &g_whoAmICommand, "whoami - what aip is loaded up"},
 	{"logai", &g_logAICommand,
 	"logai <log_level> <team_idx> - set AI's level of logging"},
-	{"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"}, 
-	{"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"}, 
+	{"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"},
+	{"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"},
 	{"restart", &g_restartCommand,
 	"restart - restart game (Rereading profile.txt)"},
 	{"improve", &g_improveCommand,
@@ -844,9 +825,9 @@ CommandRecord commands[] = {
 	"createimprovement <type> - instantly place a building in the selected city"},
 	{"setcityname", &g_setCityNameCommand,
 	"setcityname <name> - set name of city"},
-	{"setcitysize", &g_setCitySizeCommand, 
+	{"setcitysize", &g_setCitySizeCommand,
 	"setcitysize <size> - set the size of the selected city"},
-	{"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"}, 
+	{"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"},
 
 	{"investigatecity", &g_investigateCityCommand,
 	"investigatecity - use the selected secret agent to investigate the pointed at city"},
@@ -909,7 +890,6 @@ CommandRecord commands[] = {
 	{"soothsay", &g_soothsayCommand,
 	"soothsay - Say sooth. \"sooth! I say, SOOTH!\""},
 
-
 	{"cloak", &g_cloakCommand,
 	"cloak - cloak cloakable cloakers"},
 	{"uncloak", &g_uncloakCommand,
@@ -921,7 +901,7 @@ CommandRecord commands[] = {
 	{"createrift", &g_createRiftCommand,
 	"createrift - Open a rift gate to the pointed at location"},
 	{"rnd", &g_fastRoundCommand,
-	"rnd <num> - make num rounds pass"}, 
+	"rnd <num> - make num rounds pass"},
 	{"killtile", &g_killTileCommand,
 	"killtile - kills the tile under the mouse"},
 	{"throneupgrade", &g_throneRoomUpgradeCommand,
@@ -941,7 +921,7 @@ CommandRecord commands[] = {
 	 "giveswhat <num> - show what the advance will give you"},
 	{"howlong", &g_howLongCommand,
 	 "howlong - how long it will take the selected city to build the current item"},
-	{"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"}, 
+	{"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"},
 
 	{"slic", &g_slicCommand,
 	 "slic <expression> - add an expression to the watch window"},
@@ -951,7 +931,7 @@ CommandRecord commands[] = {
 	"bequeathgold <amount> - just give a player some gold"},
 	{"testmessage", &g_testMessageCommand,
 	"testmessage - send a test message -- do not use!!"},
-	{"tcolor", &g_toggleMapColorCommand, "toggle map debug color"}, 
+	{"tcolor", &g_toggleMapColorCommand, "toggle map debug color"},
 	{"theuristic",  &g_toggleHeuristicCommand, "toggle the old astar heuristic"},
 	{"yum", &g_yumCommand,
 	 "yum - show food, production, goods for the pointed at square"},
@@ -981,11 +961,11 @@ CommandRecord commands[] = {
 	"regard [civ] [regard] - set regard of current civ to other civ"},
 	{"attitude", &g_attitudeCommand,
 	"attitude [civ] [attitude] - set attitude of current civ to other civ"},
-	{"showregard", &g_dumpFZRegardCommand, 
+	{"showregard", &g_dumpFZRegardCommand,
 	    "showregard [player] - show the regard of the player to the screen"},
-	{"setregard", &g_setFZRegardCommand, 
+	{"setregard", &g_setFZRegardCommand,
 	    "setregard me him r - set the regard of player me to player him to r"},
-	{"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"}, 
+	{"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"},
 	{"unitmoves", &g_setUnitMovesStyleCommand,
 	 "unitmoves [nummoves] - set unit moves style game for network"},
 	{"classic", &g_setClassicStyleCommand,
@@ -1014,7 +994,7 @@ CommandRecord commands[] = {
 	 "ready - signal done setting up"},
 	{"ddblit", &g_useDDBlitCommand, "ddblit [on/off] - use Direct Draw for blitting"},
 	{"tmem", &g_displayMemCommand, "tmem - toggle memory display"},
-	{"loaddb", &g_loadDBCommand, 
+	{"loaddb", &g_loadDBCommand,
 	 "loaddb [dbname] - reload a database (string, advance, terrain, unit, const, improve, wonder, civ, inst, pop)"},
 	{"sellunits", &g_sellUnitsCommand,
 	 "sellunits - trade pointed at units for points (when in setup/points mode)"},
@@ -1022,7 +1002,7 @@ CommandRecord commands[] = {
 	 "sellimprovements - trade pointed at terrain improvements for points"},
 	{"robotmessages", &g_robotMessagesCommand,
 	 "robotmessages - toggle messages for robots on/off"},
-	{"fzcomment", &g_fzCommentCommand, 
+	{"fzcomment", &g_fzCommentCommand,
 	 "fzcomment - add a comment to this turn's fuzzy inputs log"},
 	{"descend", &g_descendCommand,
 	 "descend - descend from space"},
@@ -1034,7 +1014,7 @@ CommandRecord commands[] = {
 	 "forcerevolt - force pointed at city to revolt"},
 	{"toe", &g_toeCommand,
 	 "toe - Toe of Death"},
-	{"autosave", &g_autoSaveCommand, 
+	{"autosave", &g_autoSaveCommand,
 	"autosave - Toggle the auto-save-at-turn-start functionality"},
 	{"heaptotals", &g_heapTotalsCommand,
 	"heaptotals - Dump a heap status to the debug log file (CTP_debug.txt)"},
@@ -1066,11 +1046,10 @@ CommandRecord commands[] = {
 	{"autogroup", &g_autoGroupCommand,
 	 "autogroup - make the game a living hell"},
 
-	{"addpop", &g_addPopCommand, 
+	{"addpop", &g_addPopCommand,
 	    "addpop - add one or more new populations to the currently selected city"},
 	{"copyvision", &g_copyVisionCommand,
 	 "copyvision - copy gamestate vision to screen"},
-
 
 	{"combatlog", &g_combatLogCommand,
 	 "combatlog - turn on combat logging"},
@@ -1085,7 +1064,7 @@ CommandRecord commands[] = {
 	"leaksclear - reset the leak-watcher and begin watching for leaks again"},
 	{"leaksshow", &g_leaksShowCommand,
 	"leaksshow - dump all leaks to the debug file"},
-	
+
 	{"svariable", &g_slicVariableCommand,
 	 "svariable <name> - show the value of a slic variable"},
 
@@ -1107,13 +1086,11 @@ CommandRecord commands[] = {
 	{"resetvision", &g_resetVisionCommand,
 	 "Set all the non-visible tiles to unexplored for the current player"},
 
-	
 	{"exportmap", &g_exportMapCommand,
 	"Export the terrain, ruins, rivers, and goods for this map"},
 	{"importmap", &g_importMapCommand,
 	"Import the terrain, ruins, rivers, and goods into this map"},
 
-	
 	{"initdip", &g_initializeDiplomacyCommand,
 	"initdip <player1> <player2> - Initialize diplomatic states between two players."},
 	{"begindip", &g_beginDiplomacyCommand,
@@ -1142,8 +1119,7 @@ CommandRecord commands[] = {
 	"setgovernor <number> - set governor for selected city (-1 for no governor)."},
 	{"govpw", &g_setGovernorPwReserveCommand,
 	"govpw <reserve> - set how much pw the tile improvement governor should to reserve for the player  (-1 for no governor)."},
-	
-	
+
 
 	{"celltext", &g_toggleCellText,
 	"celltext - toggle the displaying of AI debug text for Cells on and off"},
@@ -1152,7 +1128,6 @@ CommandRecord commands[] = {
 	{"armyname", &g_toggleArmyName,
 	"armyname - toggle the displaying of name for Armies on and off"},
 
-	
 	{"armyclumps", &g_armyClumps,
 	"armyclumps - display armies as clumps of up to 3 small units"},
 
@@ -1167,11 +1142,9 @@ CommandRecord commands[] = {
 	{"aidebug", &g_aiDebugCommand,
 	"aidebug [<goal_type> <player>] - create AI debugging output for player that owns selected cell, specific army if selected or for goal and player if specified."},
 
-	
 	{"victory", &g_showVictoryCommand,
 	"victory - show the victory screen"},
 
-	
 	{"endturnsound", &g_endTurnSoundCommand, "toggle the end turn sound on/off lemur poo lemur poo"},
 
 	{"draytest", &g_DRayTestCode,
@@ -1219,7 +1192,6 @@ void InitializeDiplomacyCommand::Execute(sint32 argc, char **argv) {
 		player2 = atoi(argv[2]);
 	}
 
-	
 	if (player1 == player2)
 		return;
 
@@ -1233,13 +1205,13 @@ void BeginDiplomacyCommand::Execute(sint32 argc, char **argv) {
 	if(argc > 1) {
 		player = atoi(argv[1]);
 	}
-	
+
 	Diplomat::GetDiplomat(player).BeginTurn();
 }
 
 void ChooseNewProposalCommand::Execute(sint32 argc, char **argv) {
 	sint32 player = g_selected_item->GetVisiblePlayer();
-	sint32 foreigner; 
+	sint32 foreigner;
 	if (argc < 2)
 		return;
 	if(argc > 2) {
@@ -1250,11 +1222,9 @@ void ChooseNewProposalCommand::Execute(sint32 argc, char **argv) {
 		foreigner = atoi(argv[1]);
 	}
 
-	
 	if (player == foreigner)
 		return;
 
-	
 	Diplomat::GetDiplomat(player).ChooseNewProposal(foreigner);
 }
 
@@ -1270,10 +1240,9 @@ void SetNewProposalCommand::Execute(sint32 argc, char **argv) {
 	if (argc > 5)
 		arg = atoi(argv[5]);
 
-	
 	if (sender == receiver)
 		return;
-	
+
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
 	NewProposal new_proposal;
@@ -1285,7 +1254,7 @@ void SetNewProposalCommand::Execute(sint32 argc, char **argv) {
 	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;
 	new_proposal.priority = 9999;
 
-	sender_diplomat.SetMyLastNewProposal(receiver, new_proposal);	
+	sender_diplomat.SetMyLastNewProposal(receiver, new_proposal);
 }
 
 void SetHasInitiativeCommand::Execute(sint32 argc, char **argv) {
@@ -1296,10 +1265,9 @@ void SetHasInitiativeCommand::Execute(sint32 argc, char **argv) {
 	sint32 receiver= atoi(argv[2]);
 	bool has_initiative = (atoi(argv[3]) != 0);
 
-	
 	if (sender == receiver)
 		return;
-	
+
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	bool current_has_initiative = sender_diplomat.GetReceiverHasInitiative(receiver);
 	if (current_has_initiative != has_initiative)
@@ -1321,10 +1289,9 @@ void SetResponseCommand::Execute(sint32 argc, char **argv) {
 	sint32 proposal_arg = -1;
 	sint32 target;
 
-	
 	if (sender == receiver)
 		return;
-	
+
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	if (sender_diplomat.GetReceiverHasInitiative(receiver)) {
 		responder = receiver;
@@ -1335,7 +1302,6 @@ void SetResponseCommand::Execute(sint32 argc, char **argv) {
 		target = receiver;
 	}
 
-	
 	NewProposal new_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 
 	Response response;
@@ -1351,9 +1317,9 @@ void SetResponseCommand::Execute(sint32 argc, char **argv) {
 	if (argc > 5)
 		proposal_arg = atoi(argv[5]);
 
-	if (type == RESPONSE_COUNTER) 
+	if (type == RESPONSE_COUNTER)
 	{
-		
+
 		if (argc < 5 || proposal_type < 0)
 			return;
 		response.counter.first_type = new_proposal.detail.first_type;
@@ -1363,19 +1329,18 @@ void SetResponseCommand::Execute(sint32 argc, char **argv) {
 	}
 	else if (type == RESPONSE_THREATEN)
 	{
-		
+
 		if (argc < 5 || proposal_type == -1)
 			return;
 		response.threat.type = static_cast<THREAT_TYPE>(proposal_type);
-		
-		
+
 		if (proposal_arg != -1)
 			response.threat.arg.cityId = proposal_arg;
 	}
 
 	Diplomat &responder_diplomat = Diplomat::GetDiplomat(responder);
 
-	responder_diplomat.SetMyLastResponse(target, response);	
+	responder_diplomat.SetMyLastResponse(target, response);
 }
 
 void ExecuteNewProposalCommand::Execute(sint32 argc, char **argv) {
@@ -1384,11 +1349,10 @@ void ExecuteNewProposalCommand::Execute(sint32 argc, char **argv) {
 
 	sint32 sender = atoi(argv[1]);
 	sint32 receiver = atoi(argv[2]);
-	
-	
+
 	if (sender == receiver)
 		return;
-	
+
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	sender_diplomat.ExecuteNewProposal(receiver);
 }
@@ -1401,42 +1365,38 @@ void ExecuteResponseCommand::Execute(sint32 argc, char **argv) {
 	sint32 receiver = atoi(argv[2]);
 	sint32 responder;
 
-	
 	if (sender == receiver)
 		return;
 
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
-	
 
-	
-	
+
+
+
 
 	const Response & receiver_response_pending = receiver_diplomat.GetResponsePending(sender);
 	const Response & sender_response_pending = sender_diplomat.GetResponsePending(receiver);
 
-	
 	bool show_response;
 	if (sender_diplomat.GetReceiverHasInitiative(receiver))
 	{
-		show_response = 
+		show_response =
 		 ((receiver == g_selected_item->GetVisiblePlayer()) &&
 		 !(sender_response_pending == Diplomat::s_badResponse));
 	}
 	else
 	{
-		show_response = 
+		show_response =
 		 ((sender == g_selected_item->GetVisiblePlayer()) &&
 		 !(receiver_response_pending == Diplomat::s_badResponse));
 	}
 
-
 	if (show_response)
 	{
-		
-		
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResponseReady, 
+
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResponseReady,
 			GEA_Player, sender,
 			GEA_Player, receiver,
 			GEA_End);
@@ -1467,7 +1427,6 @@ void ShowDiplomacyCommand::Execute(sint32 argc, char **argv) {
 		Diplomat::DebugStatusAll();
 }
 
-
 void NextStateCommand::Execute(sint32 argc, char **argv) {
 
 	sint32 playerId     = PLAYER_INDEX_VANDALS;
@@ -1479,7 +1438,7 @@ void NextStateCommand::Execute(sint32 argc, char **argv) {
 
 	if(argc == 3 ) {
 		foreignerId = atoi(argv[2]);
-		Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);		
+		Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);
 	}
 	else {
 		for(foreignerId=0; foreignerId < k_MAX_PLAYERS; foreignerId++) {
@@ -1509,8 +1468,7 @@ void SetPersonalityCommand::Execute(sint32 argc, char **argv) {
 void DeclareWarCommand::Execute(sint32 argc, char **argv) {
 	if(argc < 2 )
 		return;
-	
-	
+
 	Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).
 		DeclareWar(atoi(argv[1]));
 }
@@ -1522,14 +1480,14 @@ void SetGovernorForCityCommand::Execute(sint32 argc, char **argv) {
 
     g_selected_item->GetTopCurItem(player, item, state);
 
-    if (state == SELECT_TYPE_LOCAL_CITY) { 
+    if (state == SELECT_TYPE_LOCAL_CITY) {
 
-        sint32 num; 
-        if (2 == argc) { 
+        sint32 num;
+        if (2 == argc) {
             num = atoi(argv[1]);
-        } else { 
-            num = -1; 
-        } 
+        } else {
+            num = -1;
+        }
 
         Unit city = item;
 		if (num == -1 || num >= g_theBuildListSequenceDB->NumRecords())
@@ -1546,19 +1504,18 @@ void SetGovernorPwReserveCommand::Execute(sint32 argc, char **argv) {
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
-	sint32 num; 
-	if (argc == 2) { 
+	sint32 num;
+	if (argc == 2) {
 		num = atoi(argv[1]);
-	} else { 
-		num = -1; 
-	} 
+	} else {
+		num = -1;
+	}
 
 	if (num >= 0)
 		g_player[player]->SetGovernorPwReserve(num);
 	else
 		g_player[player]->SetGovernorPwReserve(-1);
 }
-
 
 
 void ToggleCellText::Execute(sint32 argc, char **argv)
@@ -1569,7 +1526,6 @@ void ToggleCellText::Execute(sint32 argc, char **argv)
 		g_graphicsOptions->CellTextOn();
 	}
 }
-
 
 void ToggleArmyText::Execute(sint32 argc, char **argv)
 {
@@ -1602,7 +1558,6 @@ void ExportMapCommand::Execute(sint32 argc, char **argv)
 {
 	if (argc != 2) return;
 
-	
 	MapFile mf;
 	mf.Save(argv[1]);
 }
@@ -1611,7 +1566,6 @@ void ImportMapCommand::Execute(sint32 argc, char **argv)
 {
 	if (argc != 2) return;
 
-	
 	MapFile mf;
 	if(mf.Load(argv[1])) {
 		g_tiledMap->PostProcessMap(TRUE);
@@ -1626,16 +1580,15 @@ void ResetVisionCommand::Execute(sint32 argc, char **argv)
 	}
 }
 
-
 void SetGoodsCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
 
-    sint32 type; 
+    sint32 type;
 	if (argc < 2)
 		return;
-	
+
 	type= atoi(argv[1]);
 
 	g_theWorld->SetGood(point.x, point.y, type);
@@ -1662,7 +1615,6 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 	MapPoint pos;
 	g_tiledMap->GetMouseTilePos(pos);
 
-	
 	if (argc > 2)
 	{
 		goal_type = atoi(argv[1]);
@@ -1671,7 +1623,6 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 		CtpAiDebug::SetDebugGoalType(goal_type);
 		CtpAiDebug::SetDebugPlayer(debug_player);
 
-		
 		unit_list.Clear();
 		CtpAiDebug::SetDebugArmies(unit_list);
 
@@ -1686,15 +1637,15 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 
 	debug_player = cell->GetOwner();
 	g_theWorld->GetArmy(pos, unit_list);
-		
+
 	if (unit_list.Num() <= 0)
 	{
-		
+
 		CtpAiDebug::SetDebugPlayer(debug_player);
 	}
 	else
 	{
-		
+
 		CtpAiDebug::SetDebugPlayer(unit_list.Get(0).GetOwner());
 	}
 
@@ -1885,8 +1836,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 
 	MBCHAR *name;
 	MBCHAR saveName[_MAX_PATH];
- 
-	
+
 	for (i=0; i<numUnits; i++) {
 		usg = new UnitSpriteGroup(GROUPTYPE_UNIT);
 		name = unitFileNames[i];
@@ -1895,8 +1845,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 		usg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete usg;
 	}
-	
-	
+
 	for (i=0; i<numGoods; i++) {
 		gsg = new GoodSpriteGroup(GROUPTYPE_GOOD);
 		name = goodFileNames[i];
@@ -1906,7 +1855,6 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 		delete gsg;
 	}
 
-	
 	for (i=0; i<numCities; i++) {
 		usg = new UnitSpriteGroup(GROUPTYPE_CITY);
 		name = cityFileNames[i];
@@ -1927,13 +1875,13 @@ void CleanScreenCommand::Execute( sint32 argc, char **argv )
 		NationalManagementDialog::Cleanup();
 	}
 	else if ( !strcmp(argv[1], "unit") ) {
-		
+
 	}
 	else if ( !strcmp(argv[1], "sci") ) {
 		ScienceManagementDialog::Cleanup();
 	}
 	else if ( !strcmp(argv[1], "dip") ) {
-		
+
 	}
 	else if ( !strcmp(argv[1], "lib") ) {
 		greatlibrary_Cleanup();
@@ -1994,7 +1942,7 @@ void SlicVariableCommand::Execute(sint32 argc, char **argv)
 						strcat(buf, u.GetData()->GetCityData()->GetName());
 					}
 				} else if(sym->GetPos(pos)) {
-					sprintf(buf, "%s=Point   (%d,%d)", sym->GetName(), 
+					sprintf(buf, "%s=Point   (%d,%d)", sym->GetName(),
 							pos.x, pos.y);
 				} else {
 					sint32 value;
@@ -2038,7 +1986,7 @@ void CopyVisionCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->CopyVision();
 }
 
-void AutoGroupCommand::Execute(sint32 argc, char **argv) 
+void AutoGroupCommand::Execute(sint32 argc, char **argv)
 {
 	g_theProfileDB->SetAutoGroup(!g_theProfileDB->IsAutoGroup());
 }
@@ -2062,9 +2010,9 @@ void KillPopCommand::Execute(sint32 argc, char **argv)
 
 void AttachCommand::Execute(sint32 argc, char **argv)
 {
-	
-	
-	
+
+
+
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	if(argc > 1) {
@@ -2079,18 +2027,17 @@ void AttachCommand::Execute(sint32 argc, char **argv)
 		if(g_network.IsClient() && !g_network.IsMyTurn())
 			return;
 	}
-	
+
 	if (g_player[player])
 		g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
-	
-	
+
 }
 
 void DetachCommand::Execute(sint32 argc, char **argv)
 {
-	
-	
-	
+
+
+
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	if(argc > 1) {
@@ -2109,16 +2056,14 @@ void DetachCommand::Execute(sint32 argc, char **argv)
 		if(g_player[player])
 			g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
 	}
-	
-}
 
+}
 
 
 void ToggleShieldSupport::Execute(sint32 argc, char **argv)
 
-{ 
-    
-	
+{
+
 
 }
 
@@ -2158,7 +2103,7 @@ void SendSlaveCommand::Execute(sint32 argc, char **argv)
 		Cell *cell = g_theWorld->GetCell(pos);
 		Unit toCity = cell->GetCity();
 		Assert(toCity != Unit());
-		
+
 		if(toCity != Unit()) {
 			Assert(toCity.GetOwner() == fromCity.GetOwner());
 			if(toCity.GetOwner() != fromCity.GetOwner())
@@ -2168,7 +2113,7 @@ void SendSlaveCommand::Execute(sint32 argc, char **argv)
 		}
 	}
 }
-		
+
 void ScoreCommand::Execute(sint32 argc, char **argv)
 {
 	sint32 i;
@@ -2198,7 +2143,6 @@ void ToeCommand::Execute(sint32 argc, char **argv)
 {
 	g_toeMode = !g_toeMode;
 }
-
 
 void ForceRevoltCommand::Execute(sint32 argc, char **argv)
 {
@@ -2238,7 +2182,7 @@ void NearCityCommand::Execute(sint32 argc, char **argv)
 		aUnit.GiveCommand(UNIT_COMMAND_NEAREST_CITY);
 	}
 }
-	
+
 void DescendCommand::Execute(sint32 argc, char **argv)
 {
 	g_selected_item->Descend();
@@ -2259,9 +2203,9 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 	}
 	str[pos] = 0;
 
-	
-    
-	
+
+
+
 #endif
 }
 
@@ -2271,17 +2215,16 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 	if(argc != 2)
 		return;
 
-	
-	
+
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
-{ 
+{
 #if 0   /// @todo Find out what this code was supposed to do
-    Assert(argc == 2) 
-    if (argc != 2) return; 
+    Assert(argc == 2)
+    if (argc != 2) return;
 
-    PLAYER_INDEX p = atoi (argv[1]); 
+    PLAYER_INDEX p = atoi (argv[1]);
 #endif
 }
 
@@ -2341,7 +2284,7 @@ void SetTimedStyleCommand::Execute(sint32 argc, char **argv)
 		return;
 
 	sint32 m = atoi(argv[1]);
-	
+
 	sint32 s = 0;
 	if(argc >= 3) {
 		s = atoi(argv[2]);
@@ -2403,7 +2346,7 @@ void SimultaneousCommand::Execute(sint32 argc, char **argv)
 
 void TutorialCommand::Execute(sint32 argc, char **argv)
 {
-	
+
 	if(argc > 1) {
 		g_slicEngine->SetTutorialPlayer(atoi(argv[1]));
 		g_theProfileDB->SetTutorialAdvice( TRUE );
@@ -2449,33 +2392,33 @@ void HidePopCommand::Execute(sint32 argc, char **argv)
 
 void AddPopCommand::Execute(sint32 argc, char **argv)
 
-{ 
-    PLAYER_INDEX player; 
+{
+    PLAYER_INDEX player;
     ID item;
 	SELECT_TYPE state;
 
     g_selected_item->GetTopCurItem(player, item, state);
 
-    if (SELECT_TYPE_LOCAL_CITY == state) { 
+    if (SELECT_TYPE_LOCAL_CITY == state) {
 
-        sint32 num; 
-        if (2 == argc) { 
+        sint32 num;
+        if (2 == argc) {
             num = atoi(argv[1]);
-        } else { 
-            num = 1; 
-        } 
+        } else {
+            num = 1;
+        }
 
         Unit city = item;
-        MapPoint pos; 
+        MapPoint pos;
         sint32 i;
-        for (i=0; i<num; i++) { 
+        for (i=0; i<num; i++) {
             city.GetPos(pos);
             g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 								   GEA_City, city,
 								   GEA_End);
-			
+
         }
-		
+
 		for (i=0; i > num; i--) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillPop,
 								   GEA_City, city,
@@ -2487,12 +2430,12 @@ void AddPopCommand::Execute(sint32 argc, char **argv)
 		if ( total_pop + num <= 0) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
 								   GEA_City, city,
-								   GEA_Int, 0, 
-								   GEA_Player, -1, 
+								   GEA_Int, 0,
+								   GEA_Player, -1,
 								   GEA_End);
 		}
-    }    
-} 
+    }
+}
 
 void YumCommand::Execute(sint32 argc, char **argv)
 {
@@ -2512,7 +2455,7 @@ void YumCommand::Execute(sint32 argc, char **argv)
 
 void ToggleMapColorCommand::Execute(sint32 argc, char **argv)
 {
-	
+
     g_is_debug_map_color++;
 	if(g_is_debug_map_color > 2 || g_is_debug_map_color < 0)
 		g_is_debug_map_color = 0;
@@ -2520,26 +2463,26 @@ void ToggleMapColorCommand::Execute(sint32 argc, char **argv)
 	if(g_is_debug_map_color == 2) {
 		MapPoint pos;
 		MapPoint *size;
-		size = g_theWorld->GetSize(); 
+		size = g_theWorld->GetSize();
 		Cell *c;
-		for (pos.x = 0; pos.x < size->x; pos.x++) { 
-			for (pos.y=0; pos.y < size->y; pos.y++) { 
-				c = g_theWorld->AccessCell(pos); 
-				if (c->GetRawZoc()) { 
-					c->m_color = 1; 
-				} else { 
-					c->m_color = 0; 
-				} 
-			} 
+		for (pos.x = 0; pos.x < size->x; pos.x++) {
+			for (pos.y=0; pos.y < size->y; pos.y++) {
+				c = g_theWorld->AccessCell(pos);
+				if (c->GetRawZoc()) {
+					c->m_color = 1;
+				} else {
+					c->m_color = 0;
+				}
+			}
 		}
 	}
 
     WhackScreen();
 }
 
-bool g_old_heuristic = false; 
+bool g_old_heuristic = false;
 
-void ToggleHeuristicCommand::Execute(sint32 argc, char **argv) 
+void ToggleHeuristicCommand::Execute(sint32 argc, char **argv)
 {
 
     g_old_heuristic = !g_old_heuristic;
@@ -2576,7 +2519,7 @@ void SlicCommand::Execute(sint32 argc, char **argv)
 		DPRINTF(k_DBG_SLIC, ("%s\n", outputBuf));
 	}
 }
-	
+
 
 
 
@@ -2608,23 +2551,22 @@ void HowLongCommand::Execute(sint32 argc, char **argv)
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
 	if(state != SELECT_TYPE_LOCAL_CITY)
 		return;
-	
+
 	Unit c(item);
 	DPRINTF(k_DBG_GAMESTATE, ("Approximate turns remaining: %d\n",
 							  c.HowMuchLonger()));
 }
 
-
 void DebugCheckMemCommand::Execute(sint32 argc, char **argv)
-{ 
-    g_check_mem = !g_check_mem; 
+{
+    g_check_mem = !g_check_mem;
 
-    if (g_check_mem) { 
-        sint32 * tmp; 
-        tmp = new sint32 [10]; 
-        delete[] tmp; 
+    if (g_check_mem) {
+        sint32 * tmp;
+        tmp = new sint32 [10];
+        delete[] tmp;
 
-    } 
+    }
 }
 
 void PacCommand::Execute(sint32 argc, char **argv)
@@ -2634,12 +2576,12 @@ void PacCommand::Execute(sint32 argc, char **argv)
 	MapPoint pos;
 	g_tiledMap->GetMouseTilePos(pos);
 
-	Unit newu = g_player[player]->CreateUnit(g_theUnitDB->NumRecords() - 1, 
-											 pos, Unit(), 
+	Unit newu = g_player[player]->CreateUnit(g_theUnitDB->NumRecords() - 1,
+											 pos, Unit(),
 											 FALSE, CAUSE_NEW_ARMY_INITIAL);
 	newu.AccessData()->SetPacMan();
 }
-	
+
 void GivesWhatCommand::Execute(sint32 argc, char **argv)
 {
 	Assert(argc == 2);
@@ -2683,7 +2625,7 @@ void OvertimeCommand::Execute(sint32 argc, char **argv)
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
 	if(state != SELECT_TYPE_LOCAL_CITY)
 		return;
-	
+
 	Unit c(item);
 	c.BuyFront();
 }
@@ -2698,7 +2640,7 @@ void OvertimeCostCommand::Execute(sint32 argc, char **argv)
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
 	if(state != SELECT_TYPE_LOCAL_CITY)
 		return;
-	
+
 	Unit c(item);
 	DPRINTF(k_DBG_GAMESTATE, ("Overtime cost: %d\n", c.GetOvertimeCost()));
 }
@@ -2727,11 +2669,11 @@ void BuildWhatCommand::Execute(sint32 argc, char **argv)
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
 	if(state != SELECT_TYPE_LOCAL_CITY)
 		return;
-	
+
 	Unit c(item);
 	c.AccessData()->GetCityData()->BuildWhat();
 }
-	
+
 void CreateRiftCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
@@ -2755,7 +2697,7 @@ void RustleCommand::Execute(sint32 argc, char **argv)
 
 	g_selected_item->Rustle(point);
 }
-	
+
 void UncloakCommand::Execute(sint32 argc, char **argv)
 {
 	g_selected_item->Uncloak();
@@ -2789,7 +2731,7 @@ void IndulgenceCommand::Execute(sint32 argc, char **argv)
 
 	g_selected_item->IndulgenceSale(point);
 }
-	
+
 void ReformCityCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
@@ -2805,7 +2747,7 @@ void ConvertCityCommand::Execute(sint32 argc, char **argv)
 
 	g_selected_item->ConvertCity(point);
 }
-	
+
 void BioInfectCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
@@ -2869,7 +2811,7 @@ void CauseUnhappinessCommand::Execute(sint32 argc, char **argv)
 
 
 }
-	
+
 void ExpelCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
@@ -2885,7 +2827,7 @@ void SueCommand::Execute(sint32 argc, char **argv)
 
 	g_selected_item->Sue(point);
 }
-	
+
 void SueFranchiseCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
@@ -2898,7 +2840,7 @@ void FranchiseCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->Franchise(point);
 }
 
@@ -2955,13 +2897,12 @@ void GrantAllCommand::Execute(sint32 argc, char **argv)
 void GrantManyCommand::Execute(sint32 argc, char **argv)
 {
 	Assert(argc == 1);
-	
+
 	Assert(!g_network.IsActive());
 	if(g_network.IsActive())
 		return;
 
-	
-	
+
 	for(sint32 i = 0; i < 64; i++) {
 		g_player[g_selected_item->GetVisiblePlayer()]->m_advances->GiveAdvance(i, CAUSE_SCI_UNKNOWN);
 	}
@@ -2971,7 +2912,7 @@ void InvestigateCityCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->InvestigateCity(point);
 }
 
@@ -2979,15 +2920,15 @@ void NullifyWallsCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->NullifyWalls(point);
 }
-	
+
 void StealTechnologyCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->StealTechnology(point);
 }
 
@@ -2995,7 +2936,7 @@ void InciteRevolutionCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->InciteRevolution(point);
 }
 
@@ -3003,7 +2944,7 @@ void AssassinateRulerCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->AssassinateRuler(point);
 }
 
@@ -3011,11 +2952,10 @@ void InvestigateReadinessCommand::Execute(sint32 argc, char **argv)
 {
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
-	
+
 	g_selected_item->InvestigateReadiness(point);
 }
 
-	
 void CreateImprovementCommand::Execute(sint32 argc, char **argv)
 {
 	PLAYER_INDEX    player;
@@ -3029,7 +2969,7 @@ void CreateImprovementCommand::Execute(sint32 argc, char **argv)
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
 	if(state != SELECT_TYPE_LOCAL_CITY)
 		return;
-	
+
 	Unit c(item);
 	c.AccessData()->m_city_data->m_built_improvements |= ((uint64)1 << atoi(argv[1]));
 	if(g_network.IsClient()) {
@@ -3068,7 +3008,7 @@ void DebugMaskCommand::Execute(sint32 argc, char **argv)
 
 void ShowOwnerCommand::Execute(sint32 argc, char **argv)
 {
-	
+
 }
 
 void SetGovernmentCommand::Execute(sint32 argc, char **argv)
@@ -3182,12 +3122,10 @@ void TerrainImprovementCommand::Execute(sint32 argc, char **argv)
 		                       GEA_Int, imp,
 		                       GEA_Int, 0,
 		                       GEA_End);
-		
-		
-		
+
+
 	}
 }
-
 
 void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 {
@@ -3199,8 +3137,8 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 #endif
 
 	Cell *cell = g_theWorld->GetCell(point);
-	
-	for (sint32 i = 0; i < cell->GetNumImprovements(); i++) 
+
+	for (sint32 i = 0; i < cell->GetNumImprovements(); i++)
 		cell->AccessImprovement(i).Complete();
 }
 
@@ -3229,7 +3167,7 @@ void KillTileCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(pos);
 	c = g_theWorld->GetCell(pos.x, pos.y);
 	c->Kill();
-	
+
 	g_tiledMap->PostProcessMap();
 	g_tiledMap->Refresh();
 }
@@ -3254,7 +3192,6 @@ void SaveBuildQueueCommand::Execute(sint32 argc, char **argv)
 	ID              item;
 
 	SELECT_TYPE     state;
-
 
 	Assert(argc==2);
 	if (argc != 2)
@@ -3443,7 +3380,7 @@ void LoadBuildQueueCommand::Execute(sint32 argc, char **argv)
 	cityData->LoadQueue(argv[1]);
 }
 
-	
+
 
 
 
@@ -3501,7 +3438,6 @@ void SetCitySizeCommand::Execute(sint32 argc, char **argv)
 
 	sint32           size = atoi(argv[1]);
 
-
 	Unit city(item);
 	city.GetPos(pos);
 	g_tiledMap->RedrawTile(&pos);
@@ -3515,7 +3451,6 @@ void ToggleAIStr::Execute(sint32 argc, char** argv)
 }
 
 #if 0
-
 
 extern bool g_full_propagate_path;
 void FullPathToggle::Execute(sint32 argc, char** argv)
@@ -3552,7 +3487,7 @@ void RegardCommand::Execute(sint32 argc, char **argv)
 	g_player[g_selected_item->GetVisiblePlayer()]->GetRegard()->SetForPlayer(otherParty, (REGARD_TYPE)regard);
 }
 
-	
+
 
 
 
@@ -3583,7 +3518,6 @@ void AttitudeCommand::Execute(sint32 argc, char **argv)
 	DPRINTF(k_DBG_INFO, ("New attitude for player %d is %d\n", otherParty, attitude));
 }
 
-
 void DumpFZRegardCommand::Execute(sint32 argc, char **argv)
 {
 	sint32 p;
@@ -3591,59 +3525,57 @@ void DumpFZRegardCommand::Execute(sint32 argc, char **argv)
 		p = g_selected_item->GetCurPlayer();
 	} else if (argc == 2) {
 		p = atoi(argv[1]);
-	} else { 
+	} else {
 		Assert(argc <= 2);
 		return;
 	}
 
-	
-	
+
+
 
 	char out_str[80];
 	sint32 i;
 	sprintf (out_str, "Player %d regards", p);
 	g_chatBox->AddLine(g_selected_item->GetCurPlayer(), out_str);
-	
+
 	for (i=0; i<k_MAX_PLAYERS; i++) {
 		if (i == p )continue;
 		if (!g_player[i]) continue;
 
-		
 
-		
-		
+
+
+
 	}
 }
 
-
-void SetFZRegardCommand::Execute(sint32 argc, char **argv) 
-{ 
+void SetFZRegardCommand::Execute(sint32 argc, char **argv)
+{
 #if 0   /// @todo Find out what this code is supposed to do
     Assert(argc == 4)
-    if (argc != 4) return; 
+    if (argc != 4) return;
 
-    sint32 me = atoi(argv[1]); 
-    sint32 him = atoi(argv[2]); 
-    sint32 r = atoi(argv[3]); 
+    sint32 me = atoi(argv[1]);
+    sint32 him = atoi(argv[2]);
+    sint32 r = atoi(argv[3]);
 #endif
 }
 
 void TotalWarCommand::Execute(sint32 argc, char **argv)
-{ 
-    sint32 i, j; 
+{
+    sint32 i, j;
 
-    for (i=0; i<k_MAX_PLAYERS; i++) { 
+    for (i=0; i<k_MAX_PLAYERS; i++) {
 
-        
 
-        for (j=0; j<k_MAX_PLAYERS; j++) { 
-            if ((i != j) && g_player[i] && g_player[j]) { 
-                    
+        for (j=0; j<k_MAX_PLAYERS; j++) {
+            if ((i != j) && g_player[i] && g_player[j]) {
+
             }
         }
     }
 
-} 
+}
 
 
 
@@ -3844,7 +3776,6 @@ void RevoltCommand::Execute(sint32 argc, char **argv)
 	if (argc != 1)
 		return;
 
-
 	g_selected_item->GetTopCurItem(player, item, state);
 	if (state != SELECT_TYPE_LOCAL_CITY)
 		return;
@@ -4020,7 +3951,7 @@ void RequestGreetingCommand::Execute(sint32 argc, char **argv)
 	g_player[owner]->RequestGreeting(recipient);
 	}
 
-	
+
 
 
 
@@ -5135,19 +5066,19 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 			strcpy(terrainName, "Grassland");
 			break;
 
-		case TERRAIN_DESERT: 
+		case TERRAIN_DESERT:
 			strcpy(terrainName, "Desert");
 			break;
 
-		case TERRAIN_SWAMP: 
+		case TERRAIN_SWAMP:
 			strcpy(terrainName, "Swamp");
 			break;
 
-		case TERRAIN_JUNGLE: 
+		case TERRAIN_JUNGLE:
 			strcpy(terrainName, "Jungle");
 			break;
 
-		case TERRAIN_MOUNTAIN : 
+		case TERRAIN_MOUNTAIN :
 			strcpy(terrainName, "Mountain");
 			break;
 
@@ -5159,7 +5090,7 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 			strcpy(terrainName, "Shallow Water");
 			break;
 
-		case TERRAIN_WATER_DEEP : 
+		case TERRAIN_WATER_DEEP :
 			strcpy(terrainName, "Deep Water");
 			break;
 
@@ -5167,7 +5098,7 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 			strcpy(terrainName, "Water Volcano");
 			break;
 
-		case TERRAIN_SPACE : 
+		case TERRAIN_SPACE :
 			strcpy(terrainName, "Space");
 			break;
 
@@ -5175,7 +5106,7 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 			strcpy(terrainName, "Water Beach");
 			break;
 
-		case TERRAIN_WATER_SHELF : 
+		case TERRAIN_WATER_SHELF :
 			strcpy(terrainName, "Water Shelf");
 			break;
 
@@ -5213,11 +5144,9 @@ void TileTypeCommand::Execute(sint32 argc, char** argv)
 
 		}
 
-	
 	DPRINTF(k_DBG_INFO, ("Tile \"%s\" with environment 0x%x @ %d, %d, %d\n", terrainName, c->GetEnv(), pos.x, pos.y, pos.z));
 #endif
 	}
-
 
 void
 InterceptCommand::Execute(sint32 argc, char **argv)
@@ -5300,7 +5229,6 @@ AcceptOfferCommand::Execute(sint32 argc, char **argv)
 	g_player[g_selected_item->GetVisiblePlayer()]->AcceptTradeOffer(offer, city1, city2);
 }
 
-
 void ShowVictoryCommand::Execute(sint32 argc, char **argv)
 {
 	open_VictoryWindow();
@@ -5313,12 +5241,11 @@ ShowOffersCommand::Execute(sint32 argc, char **argv)
 	g_debugOwner = k_DEBUG_OWNER_COMMANDLINE;
 }
 
-void DisplayMemCommand::Execute(sint32 argc, char **argv) 
-{ 
-    g_commandLine.DisplayMem(); 
+void DisplayMemCommand::Execute(sint32 argc, char **argv)
+{
+    g_commandLine.DisplayMem();
 	g_debugOwner = k_DEBUG_OWNER_COMMANDLINE;
-} 
-
+}
 
 void
 CityResourcesCommand::Execute(sint32 argc, char **argv)
@@ -5379,7 +5306,6 @@ void ToggleFogCommand::Execute(sint32 argc, char **)
     WhackScreen();
 }
 
-
 void ToggleSmoothScrollCommand::Execute(sint32 argc, char **)
 
 {
@@ -5390,17 +5316,14 @@ void ToggleSmoothScrollCommand::Execute(sint32 argc, char **)
 void DumpCallStackCommand::Execute(sint32 argc, char **)
 
 {
-	
+
     FILE *callstack_file = fopen("CallStack.txt", "w");
 
-	
 	Assert(callstack_file);
 
-	
 	fprintf(callstack_file, "The Stack\n\n%s\n\n___________\n",
 		c3debug_StackTrace());
 
-	
 	fclose(callstack_file);
 }
 #endif
@@ -5414,12 +5337,11 @@ void ToggleQuitFastCommand::Execute(sint32 argc, char **)
 #endif
 }
 
-
 void SetAIRevoltCommand::Execute(sint32 argc, char **argv)
 {
-    BOOL val = TRUE; 
-    if (argc == 2) { 
-        val = (BOOL) atoi(argv[1]); 
+    BOOL val = TRUE;
+    if (argc == 2) {
+        val = (BOOL) atoi(argv[1]);
     }
 
     g_ai_revolt = val;
@@ -5462,7 +5384,6 @@ void ShowAdvancesCommand::Execute(sint32 argc, char **argv)
 void ToggleWaterCommand::Execute(sint32 argc, char **argv)
 {
 
-
 }
 
 void EndTurnSoundCommand::Execute(sint32 argc, char **argv)
@@ -5482,7 +5403,6 @@ void RandTestCommand::Execute(sint32 argc, char** argv)
     g_ai_rand_test_max = atoi(argv[1]);
     g_ai_rand_test_total = 0;
 }
-
 
 void StayOnCommand::Execute(sint32 argc, char** argv)
 {
@@ -5525,7 +5445,6 @@ void DisplayChecksumOffCommand::Execute(sint32 argc, char **argv)
 	}
 
 }
-
 
 void DumpChecksumCommand::Execute(sint32 argc, char **argv)
 {
@@ -5585,7 +5504,7 @@ void UpgradeCity::Execute(sint32 argc, char** argv)
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	Unit u = g_player[player]->GetCityFromIndex(city_idx);
 
-	SpriteState *newSS = new SpriteState(90+upgLevel); 
+	SpriteState *newSS = new SpriteState(90+upgLevel);
 
 	u.GetActor()->ChangeType(newSS, u.GetType(),  u, TRUE);
 }
@@ -5601,9 +5520,9 @@ void CreateCommand::Execute(sint32 argc, char** argv)
 
 	sint32 city_idx = 0;
 	sint32 num_new_units = atoi(argv[1]);
-    if (num_new_units < 1)  { 
-        num_new_units = 1; 
-    } 
+    if (num_new_units < 1)  {
+        num_new_units = 1;
+    }
 	sint32 type = atoi(argv[2]);
 	if(type >= g_theUnitDB->NumRecords())
 		return;
@@ -5629,9 +5548,9 @@ void CreateCommand::Execute(sint32 argc, char** argv)
 	if (type < 0 || type >= g_theUnitDB->NumRecords())
 		return;
 
-    sint32 i; 
+    sint32 i;
 
-    for (i=0; i<num_new_units; i++) { 
+    for (i=0; i<num_new_units; i++) {
         if(g_network.IsClient()) {
 	        g_network.SendCheat(new NetCheat(NET_CHEAT_CREATE_UNIT,
 									         city_idx, type, player,
@@ -5647,7 +5566,7 @@ void CreateCommand::Execute(sint32 argc, char** argv)
 	        city = Unit();
         }
 
-        Unit newu = g_player[player]->CreateUnit(type, pos, city, 
+        Unit newu = g_player[player]->CreateUnit(type, pos, city,
 										         FALSE, CAUSE_NEW_ARMY_INITIAL);
     }
 }
@@ -5676,8 +5595,8 @@ void SaveCommand::Execute(sint32 argc, char **argv)
 		return;
 
 
-	
-	
+
+
 	g_isScenario = FALSE;
 
 	GameFile::SaveGame(argv[1], NULL);
@@ -5701,12 +5620,11 @@ void LoadAIPCommand::Execute(sint32 argc, char **argv)
 
 	team_idx = atoi(argv[2]);
 
-	
-	
+
 }
 
 void WhoAmICommand::Execute(sint32 argc, char **argv)
-{ 
+{
 #if 0   /// @todo Find out what this was supposed to do
     Assert(argc==1)
 
@@ -5726,42 +5644,40 @@ void LogAICommand::Execute(sint32 argc, char **argv)
 	log_level = atoi(argv[1]);
 	team_idx = atoi(argv[2]);
 
-	
-	
+
 }
 
 void DipLogOnCommand::Execute (sint32 argc, char** argv)
-{ 
+{
 #ifdef _DEBUG
-    if (NULL == g_theDiplomacyLog) { 
-        g_theDiplomacyLog = new Diplomacy_Log(); 
-    } 
+    if (NULL == g_theDiplomacyLog) {
+        g_theDiplomacyLog = new Diplomacy_Log();
+    }
 
-    if (argc ==1) { 
-        g_theDiplomacyLog->LogAllPlayers(); 
-    } else { 
-        sint32 p = atoi(argv[1]); 
+    if (argc ==1) {
+        g_theDiplomacyLog->LogAllPlayers();
+    } else {
+        sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->LogPlayer(p);
-    } 
+    }
 #endif _DEBUG
-} 
+}
 
 void DipLogOffCommand::Execute (sint32 argc, char** argv)
-{ 
+{
 #ifdef _DEBUG
 
-    if (NULL == g_theDiplomacyLog) 
-        return; 
+    if (NULL == g_theDiplomacyLog)
+        return;
 
-    if (argc ==1) { 
-        g_theDiplomacyLog->UnlogAllPlayers(); 
-    } else { 
-        sint32 p = atoi(argv[1]); 
+    if (argc ==1) {
+        g_theDiplomacyLog->UnlogAllPlayers();
+    } else {
+        sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->UnlogPlayer(p);
-    } 
+    }
 #endif _DEBUG
-} 
-
+}
 
 void RestartCommand::Execute(sint32 argc, char** argv)
 {
@@ -5788,19 +5704,16 @@ void ImproveCommand::Execute(sint32 argc, char** argv)
 	}
 }
 
-
 void SeeWWRCommand::Execute(sint32 argc, char**argv)
 {
 
-	g_player[g_selected_item->GetVisiblePlayer()]->DisplayWWR(); 
+	g_player[g_selected_item->GetVisiblePlayer()]->DisplayWWR();
 }
-
 
 void SetWorkdayCommand::Execute(sint32 argc, char**argv)
 {
     if(argc > 2)
         return;
-
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
     g_player[g_selected_item->GetVisiblePlayer()]->SetWorkdayLevel(val);
@@ -5810,7 +5723,6 @@ void SetWagesCommand::Execute(sint32 argc, char** argv)
 {
    	if(argc > 2)
         return;
-
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
     g_player[g_selected_item->GetVisiblePlayer()]->SetWagesLevel(val);
@@ -5836,7 +5748,7 @@ void AddMaterialsCommand::Execute(sint32 argc, char **argv)
 										 g_selected_item->GetVisiblePlayer(),
 										 atoi(argv[1])));
 	}
-										 
+
 	g_player[g_selected_item->GetVisiblePlayer()]->m_materialPool->
 		AddMaterials(atoi(argv[1]));
 }
@@ -5857,11 +5769,11 @@ void ThroneRoomUpgradeCommand::Execute(sint32 argc, char** argv)
 
 void GiveMeProbeCommand::Execute(sint32 argc, char** argv)
 {
-	
-	
 
-	
-	
+
+
+
+
 }
 
 void SetReadinessCommand::Execute(sint32 argc, char** argv)
@@ -5896,13 +5808,12 @@ void FrameCommand::Execute(sint32 argc, char **argv)
         g_debugOwner = k_DEBUG_OWNER_NONE;
     }
 }
-extern BOOL gDone; 
+extern BOOL gDone;
 extern HWND	gHwnd;
 extern BOOL g_letUIProcess;
 
-void FastRoundCommand::Execute(sint32 argc, char **argv) 
-{ 
-
+void FastRoundCommand::Execute(sint32 argc, char **argv)
+{
 
 	if(g_doingFastRounds)
 		return;
@@ -5910,9 +5821,9 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 	if (g_statusWindow)
 		g_statusWindow->Hide();
 
-	sint32 i, n; 
+	sint32 i, n;
 
-	n = atoi(argv[1]); 
+	n = atoi(argv[1]);
 
 	sint32 t = GetTickCount();
 #ifdef __AUI_USE_SDL__
@@ -5924,10 +5835,9 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 	g_doingFastRounds = TRUE;
 
 	for (i=0; i<(n) && !gDone; i++) {
-		
+
 		NewTurnCount::StartNextPlayer(false);
-		
-		
+
 		g_director->NextPlayer();
 		do {
 			g_controlPanel->Idle();
@@ -5952,18 +5862,18 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 				if (SDL_QUIT == event.type)
 #else
 			while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
-			
+
 				if (msg.message == WM_QUIT)
 #endif
 					gDone = TRUE;
 #ifndef __AUI_USE_SDL__
 				TranslateMessage(&msg);
-				
+
 				if (msg.message == WM_CHAR) {
-					if ((MBCHAR)msg.wParam == 0x1B) 
+					if ((MBCHAR)msg.wParam == 0x1B)
 						i = n;
 				}
-				
+
 				DispatchMessage(&msg);
 #else
 				if (SDL_KEYDOWN == event.type)
@@ -5977,14 +5887,14 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 			g_letUIProcess = FALSE;
 
 		} while ((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) &&
-			    !gDone); 
-		
-	} 
+			    !gDone);
+
+	}
 
 	t = GetTickCount() - t;
 
-    if (0 < n){ 
-	    DPRINTF(k_DBG_UI, ("%d turns in %d seconds, %d ms/turn\n", 
+    if (0 < n){
+	    DPRINTF(k_DBG_UI, ("%d turns in %d seconds, %d ms/turn\n",
 				    n, t/100, t/n));
     }
 	g_tiledMap->InvalidateMix();
@@ -5992,18 +5902,17 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 	if (g_statusWindow)
 		g_statusWindow->Show();
 
-
-} 
+}
 
 void AiDumpCommand::Execute(sint32 argc, char **argv)
-{ 
-    
-} 
+{
+
+}
 
 void FastMoveCommand::Execute(sint32 argc, char **argv)
 {
 	g_theProfileDB->SetUnitAnim(!g_theProfileDB->IsUnitAnim());
-	
+
 }
 
 void MainMenuCommand::Execute(sint32 argc, char **argv)
@@ -6078,7 +5987,6 @@ void LeaksShowCommand::Execute(sint32 argc, char **argv)
 void SuperFastDebugModeCommand::Execute(sint32 argc, char **argv)
 {
 	BOOL		on;
-	
 
 	if(argc == 2) {
 		if (!strcmp(argv[1],"on")) {
@@ -6090,19 +5998,19 @@ void SuperFastDebugModeCommand::Execute(sint32 argc, char **argv)
 		}
 	}
 
-	
-		
-	
+
+
+
 }
 
 void LoadDBCommand::Execute(sint32 argc, char **argv)
 {
 	DBLexer *lex;
 	if (!strcmp(argv[1], "string")) {
-		
+
 		delete g_theStringDB;
 		g_theStringDB = new StringDB();
-		Assert(g_theStringDB); 
+		Assert(g_theStringDB);
 		if (g_theStringDB) {
 			if(!g_theStringDB->Parse(g_stringdb_filename)) {
 				Assert(FALSE);
@@ -6113,10 +6021,10 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 	} else
 	if (!strcmp(argv[1], "advance")) {
-		
+
 		delete g_theAdvanceDB;
         g_theAdvanceDB = new CTPDatabase<AdvanceRecord>;
-		Assert(g_theAdvanceDB); 
+		Assert(g_theAdvanceDB);
 		if (g_theAdvanceDB) {
 			if(!g_theAdvanceDB->Parse(C3DIR_GAMEDATA, g_advancedb_filename)) {
 				Assert(FALSE);
@@ -6127,7 +6035,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 	} else
 	if (!strcmp(argv[1], "terrain")) {
-		
+
 		delete g_theTerrainDB;
         g_theTerrainDB = new CTPDatabase<TerrainRecord>;
 		if (g_theTerrainDB) {
@@ -6138,15 +6046,14 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		} else {
 			return;
 		}
-		
-		
-		
+
+
 	} else
 	if (!strcmp(argv[1], "unit")) {
-		
+
 		delete g_theUnitDB;
-        g_theUnitDB = new CTPDatabase<UnitRecord>;     
-		Assert(g_theUnitDB); 
+        g_theUnitDB = new CTPDatabase<UnitRecord>;
+		Assert(g_theUnitDB);
 		if (g_theUnitDB) {
 			lex = new DBLexer(C3DIR_GAMEDATA, g_unitdb_filename);
 			if (!g_theUnitDB->Parse(lex)) {
@@ -6154,14 +6061,14 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 				return;
 			}
 			delete lex;
-			
+
 		} else {
 			return;
 		}
 
 	} else
 	if (!strcmp(argv[1], "const")) {
-		
+
 		delete g_theConstDB;
         g_theConstDB = new ConstDB();
 		if (g_theConstDB) {
@@ -6174,10 +6081,10 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 	} else
 	if (!strcmp(argv[1], "wonder")) {
-		
+
 		delete g_theWonderDB;
 		g_theWonderDB = new CTPDatabase<WonderRecord>;
-		
+
 		if (g_theWonderDB) {
 			if(!g_theWonderDB->Parse(C3DIR_GAMEDATA, g_wonder_filename)) {
 				Assert(FALSE);
@@ -6188,7 +6095,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 	} else
 	if (!strcmp(argv[1], "civ")) {
-		
+
 		delete g_theCivilisationDB;
 		g_theCivilisationDB = new CTPDatabase<CivilisationRecord>;
 		if (g_theCivilisationDB) {
@@ -6200,7 +6107,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 			return;
 		}
 	} else
-	
+
 
 
 
@@ -6211,14 +6118,13 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 
 	if (!strcmp(argv[1], "pop")) {
-		
+
 	} else
 
-	
 	if (!strcmp(argv[1], "ai")) {
 		delete g_theGoalDB;
 		g_theGoalDB = new CTPDatabase<GoalRecord>();
-		Assert(g_theGoalDB ); 
+		Assert(g_theGoalDB );
 		if (g_theGoalDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_goal_db_filename);
 			if (!g_theGoalDB->Parse(lex)) {
@@ -6231,7 +6137,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theUnitBuildListDB;
 		g_theUnitBuildListDB= new CTPDatabase<UnitBuildListRecord>();
-		Assert(g_theUnitBuildListDB); 
+		Assert(g_theUnitBuildListDB);
 		if (g_theUnitBuildListDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_unit_buildlist_db_filename);
 			if (!g_theUnitBuildListDB->Parse(lex)) {
@@ -6244,7 +6150,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theWonderBuildListDB;
 		g_theWonderBuildListDB= new CTPDatabase<WonderBuildListRecord>();
-		Assert(g_theWonderBuildListDB); 
+		Assert(g_theWonderBuildListDB);
 		if (g_theWonderBuildListDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_wonder_buildlist_db_filename);
 			if (!g_theWonderBuildListDB->Parse(lex)) {
@@ -6257,7 +6163,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theBuildingBuildListDB;
 		g_theBuildingBuildListDB= new CTPDatabase<BuildingBuildListRecord>();
-		Assert(g_theBuildingBuildListDB); 
+		Assert(g_theBuildingBuildListDB);
 		if (g_theBuildingBuildListDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_building_buildlist_db_filename);
 			if (!g_theBuildingBuildListDB->Parse(lex)) {
@@ -6270,7 +6176,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theImprovementListDB;
 		g_theImprovementListDB= new CTPDatabase<ImprovementListRecord>();
-		Assert(g_theImprovementListDB); 
+		Assert(g_theImprovementListDB);
 		if (g_theImprovementListDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_improvement_list_db_filename);
 			if (!g_theImprovementListDB->Parse(lex)) {
@@ -6283,7 +6189,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theStrategyDB;
 		g_theStrategyDB = new CTPDatabase<StrategyRecord>();
-		Assert(g_theStrategyDB); 
+		Assert(g_theStrategyDB);
 		if (g_theStrategyDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_strategy_db_filename);
 			if (!g_theStrategyDB->Parse(lex)) {
@@ -6296,7 +6202,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theBuildListSequenceDB;
 		g_theBuildListSequenceDB = new CTPDatabase<BuildListSequenceRecord>();
-		Assert(g_theBuildListSequenceDB); 
+		Assert(g_theBuildListSequenceDB);
 		if (g_theBuildListSequenceDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_buildlist_sequence_db_filename);
 			if (!g_theBuildListSequenceDB->Parse(lex)) {
@@ -6309,7 +6215,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theDiplomacyDB;
 		g_theDiplomacyDB= new CTPDatabase<DiplomacyRecord>();
-		Assert(g_theDiplomacyDB); 
+		Assert(g_theDiplomacyDB);
 		if (g_theDiplomacyDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_diplomacy_db_filename);
 			if (!g_theDiplomacyDB->Parse(lex)) {
@@ -6322,7 +6228,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 		}
 		delete g_theAdvanceListDB;
 		g_theAdvanceListDB= new CTPDatabase<AdvanceListRecord>();
-		Assert(g_theAdvanceListDB); 
+		Assert(g_theAdvanceListDB);
 		if (g_theAdvanceListDB) {
 			lex = new DBLexer(C3DIR_AIDATA, g_advance_list_db_filename);
 			if (!g_theAdvanceListDB->Parse(lex)) {
@@ -6346,9 +6252,8 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	return;
 }
 
-
 void DRayTestCode::Execute(sint32 argc, char **argv)
-{	
+{
 	int const curRound	= std::min<sint32>(NewTurnCount::GetCurrentRound(), 200);
 	int turnStrength[200];
 	int i;
@@ -6365,9 +6270,9 @@ CommandLine::CommandLine()
 	m_persistent = FALSE;
 	m_displayCityResources = FALSE;
 
-    m_display_mem = FALSE; 
-    m_flux=0; 
-    m_flux_decay = 0.85; 
+    m_display_mem = FALSE;
+    m_flux=0;
+    m_flux_decay = 0.85;
 
 }
 
@@ -6406,7 +6311,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
 		}
 		if(commands[i].m_name) {
-			
+
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
 			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)buf, 0, 0);
@@ -6427,7 +6332,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				sint32 rc;
 				for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++) {
 #ifdef CTP1_TRADE
-					if((rc = cityData->GetResourceCount(r)) > 0) 
+					if((rc = cityData->GetResourceCount(r)) > 0)
 #else
 					if((rc = (*cityData->GetCollectingResources())[r]) > 0)
 #endif
@@ -6489,62 +6394,59 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				l++;
 			}
 		}
-    } else if (m_display_mem) { 
+    } else if (m_display_mem) {
 #ifdef _DEBUG_MEMORY
-		
+
 		l=0;
-		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());       
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, 
+		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
 			k_TOP_EDGE + l * k_TEXT_SPACING, (MBCHAR *)buf, 0, 0);
-		
+
 		l++;
 		sprintf (buf, "DLL total bytes: %d", DebugMemory_GetTotalFromDLL());
 		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
-		
+
 		l++;
 		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
 		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 #elif defined(_DEBUG) && defined(WIN32)
-		
-		_CrtMemState new_state; 
+
+		_CrtMemState new_state;
        _CrtMemCheckpoint(&new_state);
 
        l = 0;
-       sprintf (buf, "call count %d", new_state.lCounts[1]);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+       sprintf (buf, "call count %d", new_state.lCounts[1]);
+	   primitives_DrawText((aui_DirectSurface *)surf,
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
         l++;
-       sprintf (buf, "currently allocated %d", new_state.lSizes[1]);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+       sprintf (buf, "currently allocated %d", new_state.lSizes[1]);
+	   primitives_DrawText((aui_DirectSurface *)surf,
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 
-
        l++;
        l++;
-       sprintf (buf, "cumlative total %d", new_state.lTotalCount);       
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+       sprintf (buf, "cumlative total %d", new_state.lTotalCount);
+	   primitives_DrawText((aui_DirectSurface *)surf,
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 
-       
        double raw_flux = new_state.lTotalCount - m_old_mem_count;
        m_old_mem_count = new_state.lTotalCount;
-       m_flux = m_flux_decay * m_flux + (1.0 - m_flux_decay) * raw_flux; 
-      
+       m_flux = m_flux_decay * m_flux + (1.0 - m_flux_decay) * raw_flux;
 
        l++;
-       sprintf (buf, "           flux %d", sint32(m_flux));  
+       sprintf (buf, "           flux %d", sint32(m_flux));
        sint32 color;
-       if (1000 < m_flux) { 
-          color = RGB(255,0, 0); 
-       } else { 
+       if (1000 < m_flux) {
+          color = RGB(255,0, 0);
+       } else {
            color = 0;
        }
-	   primitives_DrawText((aui_DirectSurface *)surf, 
+	   primitives_DrawText((aui_DirectSurface *)surf,
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, color , 0);
 #endif
@@ -6576,11 +6478,11 @@ void CommandLine::DisplayMem()
 	m_persistent = FALSE;
 	m_displayCityResources = FALSE;
 	m_displayOffers = FALSE;
-    m_display_mem = !m_display_mem; 
+    m_display_mem = !m_display_mem;
 
 #if defined(_DEBUG) && defined(WIN32)
-    if (m_display_mem) { 
-        _CrtMemState new_state; 
+    if (m_display_mem) {
+        _CrtMemState new_state;
         _CrtMemCheckpoint(&new_state);
 
         m_old_mem_count = new_state.lTotalCount;
@@ -6591,26 +6493,26 @@ void CommandLine::DisplayMem()
 BOOL
 CommandLine::AddKey(char c)
 {
-	
+
 	if(m_addingKey)
 		return FALSE;
 
 	m_addingKey = true;
-	
+
 	switch(c) {
 	case '\r':
 	case '\n':
 		m_buf[m_len] = 0;
-		m_displayHelp = FALSE; 
+		m_displayHelp = FALSE;
 		Execute();
 		Clear();
 		Draw();
-		if (!m_persistent) 
+		if (!m_persistent)
 			if (g_statusWindow)
 				g_statusWindow->Hide();
 		m_addingKey = false;
 		return m_persistent;
-	case 8: 
+	case 8:
 		if(m_len > 0) {
 			m_len--;
 		}
@@ -6618,7 +6520,7 @@ CommandLine::AddKey(char c)
 			g_statusWindow->Draw();
 		m_addingKey = false;
 		return TRUE;
-	case 27: 
+	case 27:
 		m_len = 0;
 		if (g_statusWindow)
 			g_statusWindow->Draw();
@@ -6706,17 +6608,15 @@ CommandLine::PartialMatch(const char* x, const char* y)
 {
 	while(*y && *x) {
 		if(*x != *y)
-			
+
 			return FALSE;
 		x++;
 		y++;
 	}
 	if(*y == 0)
-		
-		
+
 		return TRUE;
 
-	
 	return FALSE;
 }
 
@@ -6738,5 +6638,4 @@ CommandLine::Execute()
 }
 
 
-
-#endif 
+#endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 
 class aui_Surface;
 
-
 enum CRC_ARRAY
 {
 	CRC_ARRAY_0,
@@ -44,7 +43,6 @@ enum CRC_ARRAY
 	CRC_ARRAY_3,
 	CRC_ARRAY_MAX
 };
-
 
 
 enum CRC_TYPE
@@ -112,12 +110,11 @@ enum CRC_TYPE
 	CRC_TYPE_MAX,
 	};
 
-
 class DataCheck
 {
 	private:
 		sint32  m_is_display;
-	
+
 	public:
 		uint32  m_crc[CRC_TYPE_MAX][CRC_ARRAY_MAX],
 		        m_old_crc[CRC_TYPE_MAX][CRC_ARRAY_MAX],

@@ -1,20 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_PROGRESSBAR_H__
 #define __AUI_PROGRESSBAR_H__
 
-
 #include "aui_control.h"
-
 
 
 enum AUI_PROGRESSBAR_ORIENTATION
@@ -26,7 +13,6 @@ enum AUI_PROGRESSBAR_ORIENTATION
 };
 
 
-
 enum AUI_PROGRESSBAR_TYPE
 {
 	AUI_PROGRESSBAR_TYPE_FIRST = 0,
@@ -35,7 +21,6 @@ enum AUI_PROGRESSBAR_TYPE
 	AUI_PROGRESSBAR_TYPE_BACKANDFORTH,
 	AUI_PROGRESSBAR_TYPE_LAST
 };
-
 
 
 #define k_AUI_PROGRESSBAR_LDL_ORIENTATION	"orientation"
@@ -59,17 +44,15 @@ enum AUI_PROGRESSBAR_TYPE
 #define k_AUI_PROGRESSBAR_LDL_MAXVALUE		"maxvalue"
 
 
-
 #define k_AUI_PROGRESSBAR_DEFAULT_MAXVALUE	100
 #define k_AUI_PROGRESSBAR_DEFAULT_COLOR		(RGB(192,192,192))
 #define k_AUI_PROGRESSBAR_DEFAULT_VPS		50
 
 
-
 class aui_ProgressBar : public aui_Control
 {
 public:
-	
+
 	aui_ProgressBar(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -120,7 +103,6 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	virtual AUI_ERRCODE Idle( void );
 
 protected:
@@ -139,5 +121,4 @@ protected:
 	COLORREF	m_barColor;
 };
 
-
-#endif 
+#endif

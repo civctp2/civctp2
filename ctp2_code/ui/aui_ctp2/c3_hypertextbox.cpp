@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -50,7 +50,6 @@
 #include "colorset.h"
 #include "ctp2_listbox.h"
 
-
 #include "greatlibrary.h"
 
 extern C3UI			*g_c3ui;
@@ -61,7 +60,6 @@ extern ColorSet		*g_colorSet;
 #define k_C3_HYPERTEXTBOX_INSETWIDTH	5
 
 extern C3UI *g_c3ui;
-
 
 c3_HyperTextBox::c3_HyperTextBox(
 	AUI_ERRCODE *retval,
@@ -77,7 +75,7 @@ c3_HyperTextBox::c3_HyperTextBox(
 	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
-	
+
 	m_draw_frame = draw_frame;
 	m_bevelWidth = k_C3_HYPERTEXTBOX_BEVELWIDTH;
 
@@ -114,7 +112,6 @@ c3_HyperTextBox::c3_HyperTextBox(
 }
 
 
-
 c3_HyperTextBox::c3_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -131,7 +128,7 @@ c3_HyperTextBox::c3_HyperTextBox(
 	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
 	PatternBase(pattern)
 {
-	
+
 	m_draw_frame = false;
 
 	Assert( AUI_SUCCESS(*retval) );
@@ -147,17 +144,14 @@ c3_HyperTextBox::c3_HyperTextBox(
 }
 
 
-
 AUI_ERRCODE c3_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -176,7 +170,6 @@ AUI_ERRCODE c3_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_HyperTextBox::InitCommon( void )
 {
 	m_hyperLinkList = new tech_WLList<c3_HyperLink *>;
@@ -185,7 +178,6 @@ AUI_ERRCODE c3_HyperTextBox::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 c3_HyperTextBox::~c3_HyperTextBox()
 {
@@ -198,12 +190,10 @@ c3_HyperTextBox::~c3_HyperTextBox()
 }
 
 
-
 AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -211,7 +201,6 @@ AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_ranger = new c3_Ranger(
 				&errcode,
@@ -249,12 +238,11 @@ AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	return RepositionRanger();
 }
 
-
 AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
-		
+
 		RemoveHyperStatics();
 		RemoveHyperLinks();
 		m_curStaticPos.x = 0;
@@ -270,7 +258,6 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	const MBCHAR *stop = ptr + len;
 
 
-	
 	sint32 adjWidth = m_width;
 
 	sint32 hyperLinkDB = 0;
@@ -310,12 +297,10 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			}
 			break;
 
-			
 			case 's':
 				sscanf( ++ptr, ":%d>", &m_hyperShadow );
 				break;
 
-			
 			case 'h':
 			{
 				uint8 r, g, b;
@@ -328,13 +313,12 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				sscanf( ++ptr, ":%d>", &m_hyperUnderline );
 				break;
 
-			
 			case 'l':
 				sscanf( ++ptr, ":%d,%d>", &hyperLinkDB, &hyperLinkIndex );
-				
-				
-				
-				
+
+
+
+
 				oldUnderline = m_hyperUnderline;
 				oldColor = m_hyperColor;
 				m_hyperColorOld = m_hyperColor;
@@ -344,28 +328,21 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				isHyperLink = TRUE;
 				break;
 
-			
 			case 'L':
 				{
 
-				
 				char hyperLinkDB_name[255];
 				char hyperLinkIndex_name[255];
 
-				
 				char * copy_to = hyperLinkDB_name;
 
-				
 				ptr++;
 
-				
 				ptr++;
 
-				
 				while (!isalnum(*ptr))
 					ptr++;
 
-				
 				while (isalnum(*ptr) || (*ptr == '_'))
 				{
 					*copy_to = *ptr;
@@ -373,17 +350,13 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					copy_to++;
 				}
 
-				
 				*copy_to = 0;
 
-				
 				while (!isalnum(*ptr))
 					ptr++;
 
-				
 				copy_to = hyperLinkIndex_name;
 
-				
 				while (isalnum(*ptr) || (*ptr == '_'))
 				{
 					*copy_to = *ptr;
@@ -391,31 +364,29 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					copy_to++;
 				}
 
-				
 				*copy_to = 0;
 
-				
 				while (*ptr != '>' && *ptr)
 					ptr++;
 
-				
 
 
 
 
-				
 
 
-				
+
+
+
 				hyperLinkDB = GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
-				hyperLinkIndex = 
+				hyperLinkIndex =
 					GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
-		
 
-				
-				
-				
-				
+
+
+
+
+
 				oldUnderline = m_hyperUnderline;
 				oldColor = m_hyperColor;
 				m_hyperColorOld = m_hyperColor;
@@ -431,58 +402,54 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				break;
 
 			default:
-				
+
 				Assert( FALSE );
 				return AUI_ERRCODE_INVALIDPARAM;
 			}
 
-			
 			while ( *ptr != '>' && *ptr)
 				ptr++;
 
-			
 			ptr++;
 		}
 		else
 		{
-			
-			
-			
 
-			
-			
-			
+
+
+
+
+
+
 			const MBCHAR *nextCmd = strchr( ptr, '<' );
 			len = nextCmd ? nextCmd - ptr : strlen( ptr );
 
-			
-			
-			
-			
-			
+
+
+
+
+
 			const MBCHAR *nextLine = strchr( ptr, '\n' );
 			if ( nextLine && ( !nextCmd || nextLine < nextCmd ) )
 				len = nextLine - ptr + 1;
 
-			
-			
-			
+
+
+
 			const MBCHAR *subStop = ptr + len;
 
-			
 			while ( ptr != subStop )
 			{
-				
-				
-				
-				
+
+
+
+
 #if 0
-				
+
 				if (*ptr == '\n' && len == 1) {
 					ptr++;
-					
-					
-					
+
+
 					m_curStaticPos.x = 0;
 					sint32 offset = m_virtualHeight - m_curStaticPos.y;
 					m_curStaticPos.y += offset;
@@ -491,7 +458,6 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 #endif
 
-				
 				aui_Static *hs = CreateHyperStatic(
 					ptr,
 					len,
@@ -507,23 +473,20 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				Assert( hs != NULL );
 				if ( !hs ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-				
 				MBCHAR *cReturn = strrchr( hs->GetText(), '\r' );
 				if ( cReturn ) {
 					*cReturn = ' ';
 				}
 
-				
-				
+
 				m_hyperStaticList->AddTail( hs );
 
-				
-				
-				
+
+
+
 				sint32 nextX = m_curStaticPos.x + hs->Width();
 				sint32 nextY = m_curStaticPos.y + hs->Height();
 
-				
 				if ( nextX > adjWidth )
 				{
 					RECT wrap =
@@ -606,12 +569,10 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 				else
 				{
-					
-					
+
 					ptr = subStop;
 
-					
-					
+
 					hs->Move( m_curStaticPos.x, m_curStaticPos.y );
 
 					m_curStaticPos.x = nextX;
@@ -620,44 +581,38 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 						m_virtualHeight = nextY;
 				}
 
-				
-				
+
 				if ( *(ptr - 1) == '\n' )
 				{
 					m_curStaticPos.x = 0;
 					m_curStaticPos.y = m_virtualHeight;
-				} 
+				}
 
-				
-				
 
-				
-				
+
+
+
+
 				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
 				{
-					
+
 					DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
 
-					
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
-				
-					
+
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
 					for ( sint32 i = m_hyperStaticList->L()-1; i; i-- )
 						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
-					
-					
+
 					m_virtualHeight -= topY;
 					m_curStaticPos.y -= topY;
 				}
 
-				
 				if ( isHyperLink ) {
 					c3_HyperLink *hl;
 
 					hl = new c3_HyperLink;
 
-					
 					hl->m_static = hs;
 					hl->m_db = hyperLinkDB;
 					hl->m_index = hyperLinkIndex;
@@ -668,7 +623,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					m_hyperLinkList->AddTail( hl );
 				}
 			}
-			
+
 			if ( isHyperLink ) {
 				isHyperLink = FALSE;
 				m_hyperUnderline = oldUnderline;
@@ -690,7 +645,6 @@ void c3_HyperTextBox::RemoveHyperLinks( void )
 		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
 }
 
-
 void c3_HyperTextBox::DestroyHyperLink( c3_HyperLink *hl )
 {
 	Assert( hl != NULL );
@@ -699,13 +653,12 @@ void c3_HyperTextBox::DestroyHyperLink( c3_HyperLink *hl )
 	delete hl;
 }
 
-
 AUI_ERRCODE c3_HyperTextBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -714,7 +667,6 @@ AUI_ERRCODE c3_HyperTextBox::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	rect.left -= k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.top -= k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom += k_C3_HYPERTEXTBOX_INSETWIDTH;
@@ -731,7 +683,7 @@ AUI_ERRCODE c3_HyperTextBox::DrawThis(
 			primitives_BevelRect16( surface, &rect, m_bevelWidth, 1, 16, 16);
 		}
 
-		
+
 
 
 	}
@@ -744,7 +696,6 @@ AUI_ERRCODE c3_HyperTextBox::DrawThis(
 		surface,
 		&rect );
 
-	
 	rect.left += k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.top += k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom -= k_C3_HYPERTEXTBOX_INSETWIDTH;
@@ -770,7 +721,7 @@ AUI_ERRCODE c3_HyperTextBox::DrawThis(
 
 
 
-	
+
 	rect.left -= k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.top -= k_C3_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom += k_C3_HYPERTEXTBOX_INSETWIDTH;
@@ -784,7 +735,6 @@ AUI_ERRCODE c3_HyperTextBox::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
 void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -793,33 +743,29 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 
 
-			
-			
-			
+
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
 			POINT pos;
 			pos.x = mouseData->position.x - m_x;
 			pos.y = mouseData->position.y - m_y;
 
-			
 			pos.y += m_ranger->GetValueY();
 
-			
 			m_selectedHyperLink = NULL;
 
 			ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -843,10 +789,8 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			if ( m_selectedHyperLink ) {
 
-				
 				m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-				
 
 				if ( !HandleGameSpecificLeftClick( this ) )
 				if ( m_ActionFunc )
@@ -862,11 +806,9 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -875,12 +817,10 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 		MouseLDropOutside( mouseData );
 }
 
-
 void c3_HyperTextBox::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	m_selectedHyperLink = NULL;
 
 	ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -894,7 +834,6 @@ void c3_HyperTextBox::MouseLDropOutside( aui_MouseEvent *mouseData )
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 }
 
-
 void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -905,16 +844,13 @@ void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
@@ -923,10 +859,8 @@ void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		pos.x = mouseData->position.x - m_x;
 		pos.y = mouseData->position.y - m_y;
 
-		
 		pos.y += m_ranger->GetValueY();
 
-		
 		m_selectedHyperLink = NULL;
 
 		ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -948,7 +882,7 @@ void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				hl->m_static->SetTextColor( hl->m_oldColor );
 			}
 		}
-		
+
 
 
 
@@ -960,7 +894,3 @@ void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 	else
 		MouseLGrabOutside( mouseData );
 }
-
-
-
-

@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef __FS_WAR_H__
@@ -11,6 +9,6 @@ FRAMESTATE(FSBeginWar);
 FRAMESTATE(FSUpdateThreat);
 FRAMESTATE(FSRecruiteDefense);
 
-class ArmyAgent; 
-class CityAgent; 
+class ArmyAgent;
+class CityAgent;
 #endif __FS_WAR_H__

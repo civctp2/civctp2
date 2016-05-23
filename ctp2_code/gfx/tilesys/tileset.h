@@ -1,15 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-#ifdef HAVE_PRAGMA_ONCE 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __TILESET_H__
@@ -17,9 +6,7 @@
 
 typedef uint16		TILEINDEX;
 
-
 #include "gstypes.h"
-
 
 #define k_TILE_SKIP_PIXEL			0x0000
 #define k_TILE_COPY_RUN_ID			0x0C
@@ -33,12 +20,10 @@ typedef uint16		TILEINDEX;
 #define k_32_BIT_COLORIZE_PIXEL		0x00FFFF00
 #define k_32_BIT_RGB_MASK			0x00FFFFFF
 
-
 #define k_16_BIT_SHADOW_PIXEL		0x7C1F
 #define k_16_BIT_SKIP_PIXEL			0x0000
 #define k_16_BIT_COLORIZE_PIXEL		0x03FF
 #define k_16_BIT_RGB_MASK			0x7FFF
-
 
 #define k_TILE_GRID_HEIGHT		72
 #define k_TILE_GRID_WIDTH		94
@@ -47,26 +32,22 @@ typedef uint16		TILEINDEX;
 #define k_TILE_PIXEL_HEIGHT		48
 #define k_TILE_PIXEL_HEADROOM	24
 
-
 #define k_MAX_TRANSFORMS		300
 
-#define k_TRANSFORM_SIZE		15		
+#define k_TRANSFORM_SIZE		15
 #define k_TRANSFORM_TO_INDEX	9
 #define	k_TRANSFORM_TO_LIST_FIRST		10
 #define k_TRANSFORM_TO_LIST_ID			-1
 #define k_MAX_TRANSFORM_TO_LIST	5
-
 
 #define k_MAX_BASE_TILES		3000
 #define k_TRANSITIONS_PER_TILE	4
 #define k_FIRST_VARIATION		600
 #define k_FIRST_MEGATILE		700
 
-
 #define k_MAX_RIVERS			16
 #define k_MAX_RIVER_TRANSFORMS	32
 #define k_RIVER_TRANSFORM_SIZE	10
-
 
 #define k_MAX_MEGATILES			50
 #define k_MAX_MEGATILE_STEPS	5
@@ -83,19 +64,18 @@ typedef uint16		TILEINDEX;
 #define k_MEGATILE_DIRECTION_CHAR_W		'W'
 
 struct MegaTileStep{
-	uint32		direction:6,		
-				terrainType:10,		
-				tileNum:16;			
+	uint32		direction:6,
+				terrainType:10,
+				tileNum:16;
 };
-
 
 #define k_MAX_IMPROVEMENTS			600
 #define k_IMPROVEMENT_ROAD_BASE		200
 #define k_IMPROVEMENT_RR_BASE		300
 #define K_IMPROVEMENT_MAGLEV_BASE	400
 
-enum MAPICON { 
-	
+enum MAPICON {
+
 	MAPICON_BIODISEASE,
 	MAPICON_NANODISEASE,
 	MAPICON_CONVERSION,
@@ -107,7 +87,7 @@ enum MAPICON {
 	MAPICON_BRACKET1,
 	MAPICON_BRACKET2,
 	MAPICON_BRACKET3,
-	
+
 	MAPICON_BRACKET4,
 
 	MAPICON_HERALD2,
@@ -120,7 +100,7 @@ enum MAPICON {
 	MAPICON_HERALD9,
 
 	MAPICON_RESOURCE1,
-	
+
 	MAPICON_RESOURCE2,
 	MAPICON_RESOURCE3,
 
@@ -134,7 +114,7 @@ enum MAPICON {
 	MAPICON_UNKNOWN2,
 	MAPICON_UNKNOWN3,
 	MAPICON_UNKNOWN4,
-	
+
 	MAPICON_UNKNOWN5,
 	MAPICON_UNKNOWN6,
 	MAPICON_UNKNOWN7,
@@ -146,7 +126,7 @@ enum MAPICON {
 
 	MAPICON_SLAVE,
 	MAPICON_SLEEPINGUNITS,
-	
+
 	MAPICON_AIRPORT,
 	MAPICON_UPRISING,
 	MAPICON_WATCHFUL,
@@ -211,7 +191,7 @@ public:
 	POINT			GetMapIconDimensions(MAPICON icon) { return m_mapIconDimensions[icon]; }
 
 	uint8			ReverseDirection(sint32 dir);
-	
+
 	void			QuickLoadTransforms(uint8 **dataPtr);
 	void			QuickLoadTransitions(uint8 **dataPtr);
 	void			QuickLoadBaseTiles(uint8 **dataPtr);
@@ -224,7 +204,6 @@ public:
 	void			QuickLoadMapped(void);
 
 	BOOL			QuickLoaded(void) { return m_quick; }
-
 
 private:
 	uint16			m_numTransforms;
@@ -244,7 +223,7 @@ private:
 	uint16			m_numMegaTiles;
 	uint16			m_megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	m_megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
-	
+
 	Pixel16			*m_mapIcons[MAPICON_MAX];
 	POINT			m_mapIconDimensions[MAPICON_MAX];
 
@@ -259,6 +238,5 @@ private:
 	size_t			m_MMapSize;
 #endif
 };
-
 
 #endif

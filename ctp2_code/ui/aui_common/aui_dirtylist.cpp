@@ -35,7 +35,6 @@
 #include "aui_dirtylist.h"
 
 
-
 aui_DirtyList::aui_DirtyList(
 	BOOL useSpans,
 	sint32 width,
@@ -65,7 +64,6 @@ aui_DirtyList::aui_DirtyList(
 }
 
 
-
 aui_DirtyList::~aui_DirtyList()
 {
 	Flush();
@@ -84,14 +82,13 @@ aui_DirtyList::~aui_DirtyList()
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::AddRect(
 	sint32 left,
 	sint32 top,
 	sint32 right,
 	sint32 bottom )
 {
-	
+
 	if ( left < right && top < bottom )
 	{
 		RECT *rect = m_rectMemory->New();
@@ -113,7 +110,6 @@ AUI_ERRCODE aui_DirtyList::AddRect(
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::AddRect(
 	RECT *rect )
 {
@@ -128,7 +124,6 @@ AUI_ERRCODE aui_DirtyList::AddRect(
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::SubtractRect(
 	sint32 left,
 	sint32 top,
@@ -140,7 +135,6 @@ AUI_ERRCODE aui_DirtyList::SubtractRect(
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 {
 	AUI_ERRCODE alteredList = AUI_ERRCODE_UNHANDLED;
@@ -148,10 +142,9 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 	Assert( sub != NULL );
 	if ( !sub ) return alteredList;
 
-	
 	if ( sub->left < sub->right && sub->top < sub->bottom )
 	{
-		
+
 		ListPos position = GetHeadPosition();
 		for ( sint32 i = L(); i; i-- )
 		{
@@ -162,16 +155,13 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 			static sint32 num;
 			if ( (num = Rectangle_Subtract( rect, sub, moreRects )) > 0 )
 			{
-				
-				
+
 				if ( memcmp( rect, moreRects, sizeof( RECT ) ) )
 				{
 					alteredList = AUI_ERRCODE_HANDLED;
 
-					
 					CopyRect( rect, moreRects );
 
-					
 					ListPos insertPosition = prevPosition;
 					for ( sint32 j = 1; j < num; j++ )
 					{
@@ -193,7 +183,7 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 			}
 			else
 			{
-				
+
 			}
 		}
 	}
@@ -202,46 +192,38 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::Minimize( void )
 {
-	
+
 	BOOL shouldContinue = L() > 1;
 
-	
 	while ( shouldContinue )
 	{
-		
+
 		shouldContinue = FALSE;
 
-		
 		ListPos curPos = GetHeadPosition();
 
-		
 		for ( sint32 i = L() - 1; i; i-- )
 		{
-			
+
 			RECT *curRect = GetNext( curPos );
 
-			
 			ListPos nextPos = curPos;
 
-			
 			for ( sint32 j = i; j; j-- )
 			{
-				
+
 				ListPos prevPos = nextPos;
 				RECT *nextRect = GetNext( nextPos );
 
-				
 				RECT conRect;
 				if ( Rectangle_SmartConsolidate( &conRect, curRect, nextRect ) )
 				{
-					
+
 					m_rectMemory->Delete( nextRect );
 					DeleteAt( prevPos );
 
-					
 					CopyRect( curRect, &conRect );
 
 					shouldContinue = L() > 1;
@@ -257,17 +239,14 @@ AUI_ERRCODE aui_DirtyList::Minimize( void )
 }
 
 
-
 void aui_DirtyList::Flush( void )
 {
-	
-	
+
 	ListPos position = GetHeadPosition();
 	for ( sint32 i = L(); i; i-- )
 		m_rectMemory->Delete( GetNext( position ) );
 
-	
-	
+
 	DeleteAll();
 
 	if ( m_spanListArray )
@@ -275,7 +254,6 @@ void aui_DirtyList::Flush( void )
 
 	m_isEmpty = TRUE;
 }
-
 
 
 AUI_ERRCODE aui_DirtyList::SetSpans( aui_DirtyList *newDirtyList )
@@ -314,13 +292,11 @@ AUI_ERRCODE aui_DirtyList::SetSpans( aui_DirtyList *newDirtyList )
 }
 
 
-
 AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 {
 	Assert( newRect != NULL );
 	if ( !newRect ) return AUI_ERRCODE_HACK;
 
-	
 	if (newRect->top < 0) newRect->top = 0;
 	if (newRect->left < 0) newRect->left = 0;
 	if (newRect->bottom >= m_height) newRect->bottom = m_height-1;
@@ -335,7 +311,6 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 	Assert( newStart <= newStop );
 	if ( newStart > newStop ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if ( newStart == newStop ) return AUI_ERRCODE_OK;
 
 	sint32 h = newRect->bottom - newRect->top;
@@ -343,13 +318,12 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 	Assert( h >= 0 );
 	if ( h < 0 ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if ( !h ) return AUI_ERRCODE_OK;
 
 	aui_SpanList *curSpanList = m_spanListArray + newRect->top;
 	for ( ; h; h--, curSpanList++ )
 	{
-		
+
 		aui_Span *curSpan = curSpanList->spans;
 		BOOL consolidated = FALSE;
 
@@ -363,10 +337,9 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 		{
 			curStop = ( curStart = curStop + curSpan->run ) + curSpan->length;
 
-			
 			if ( newStart <= curStop )
 			{
-				
+
 				if ( newStop >= curStart )
 				{
 					newStart = newStart < curStart ? newStart : curStart;
@@ -387,18 +360,17 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 					Assert( curSpan->run >= 0 );
 					Assert( curSpan->length > 0 );
 				}
-				else 
+				else
 				{
-					
+
 					if ( consolidated )
 						break;
 
-					
-					
+
 					if ( curSpanList->num < k_DIRTYLIST_MAXSPANS )
 						memmove( curSpan + 1, curSpan, s * sizeof( aui_Span ) );
 
-					s = 0; 
+					s = 0;
 					break;
 				}
 			}
@@ -407,16 +379,14 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 				prevStop = curStop;
 		}
 
-		
 		if ( !s && !consolidated )
 		{
-			
+
 			if ( curSpanList->num == k_DIRTYLIST_MAXSPANS )
 			{
-				
+
 				curSpanList->num = 1;
 
-				
 				curSpan = curSpanList->spans;
 				if ( newStart < curSpan->run )
 					curSpan->run = (sint16)newStart;

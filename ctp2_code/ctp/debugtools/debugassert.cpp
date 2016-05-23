@@ -1,6 +1,5 @@
 #ifdef _DEBUG
 
-
 #include "debugassert.h"
 #include "debugcallstack.h"
 #include "breakpoint.h"
@@ -14,9 +13,8 @@
 
 struct DebugAssert
 {
-	
-	
-	
+
+
 	DebugAssertClientFunction DebugAssert_Enter;
 	DebugAssertClientFunction DebugAssert_Leave;
 };
@@ -59,7 +57,7 @@ void DebugAssert_Open (
 
 void DebugAssert_Close (void)
 {
-	
+
 }
 
 
@@ -80,30 +78,26 @@ void DebugAssert_Close (void)
 
 
 
-	
+
 void DebugAssert_Assert (const char *module_name, int module_line, const char *log_class, const char *condition_string)
 {
-	
+
 	Log_Enable (log_class);
 
-	
 	LOG_INDIRECT (module_name, module_line, (log_class, "ASSERT (%s)", condition_string));
 
-	
 	DebugCallStack_Dump (log_class);
 
-	
 	if (debug_assert.DebugAssert_Enter)
 	{
 		debug_assert.DebugAssert_Enter();
 	}
 
-	
-	Breakpoint();	
+	Breakpoint();
 
-	
-	
-	
+
+
+
 	if (debug_assert.DebugAssert_Leave)
 	{
 		debug_assert.DebugAssert_Leave();

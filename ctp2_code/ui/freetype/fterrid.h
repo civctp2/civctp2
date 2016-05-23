@@ -28,11 +28,9 @@
   /* 'level' at which the error happened.                          */
   /* The class is given by an error code's high byte.              */
 
-
   /* ------------- Success is always 0 -------- */
 
 #define TT_Err_Ok                       0
-
 
   /* -------- High-level API error codes ------ */
 
@@ -72,14 +70,12 @@
 #define TT_Err_Post_Table_Missing       0x088
 #define TT_Err_Glyf_Table_Missing       0x089
 
-
   /* -------- Memory component error codes ---- */
 
   /* this error indicates that an operation cannot */
   /* be performed due to memory exhaustion.        */
 
 #define TT_Err_Out_Of_Memory            0x100
-
 
   /* -------- File component error codes ------ */
 
@@ -91,7 +87,6 @@
 #define TT_Err_Invalid_File_Read        0x201
 #define TT_Err_Invalid_Frame_Access     0x202
 
-
   /* -------- Glyph loader error codes -------- */
 
   /* Produced only by the glyph loader, these error */
@@ -101,7 +96,6 @@
 #define TT_Err_Too_Many_Contours        0x301
 #define TT_Err_Invalid_Composite        0x302
 #define TT_Err_Too_Many_Ins             0x303
-
 
   /* --- bytecode interpreter error codes ----- */
 
@@ -129,7 +123,6 @@
 #define TT_Err_Invalid_Displacement     0x410
 #define TT_Err_Execution_Too_Long       0x411
 
-
   /* ------ internal failure error codes ----- */
 
   /* These error codes are produced when an incoherent */
@@ -141,7 +134,6 @@
 #define TT_Err_Invalid_Cache_List       0x501
 #define TT_Err_Could_Not_Find_Context   0x502
 #define TT_Err_Unlisted_Object          0x503
-
 
   /* ---- scan-line converter error codes ----- */
 
@@ -156,6 +148,5 @@
 #define TT_Err_Raster_Not_Initialized   0x603
 
 #endif /* FTERRID_H */
-
 
 /* END */

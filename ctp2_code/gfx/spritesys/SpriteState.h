@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -18,21 +6,20 @@
 
 class CivArchive ;
 
-class SpriteState { 
+class SpriteState {
 
 protected:
-    
-	
+
 	sint32 m_index;
-	
-	
 
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
 
 public:
 
@@ -46,4 +33,4 @@ public:
 
 };
 
-#endif 
+#endif

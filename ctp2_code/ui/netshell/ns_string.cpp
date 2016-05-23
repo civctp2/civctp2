@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_ui.h"
@@ -18,25 +8,21 @@
 
 extern StringDB	*g_theStringDB;
 
-
 ns_String::ns_String( char *ldlBlock ) {
 	m_string = NULL;
 
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	Assert( theLdl->IsValid( ldlBlock ) );
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
 
 	const char *string;
 
-	
 	if ( block->GetBool(k_NS_STRING_LDL_NODATABASE) || (!block->GetString("text"))) {
-		
+
 		string = block->GetString( "text" );
 	}
 	else {

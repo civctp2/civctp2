@@ -4,12 +4,10 @@
 #ifndef __VIDEOWINDOW_H__
 #define __VIDEOWINDOW_H__
 
-
 #include "c3window.h"
 
 
-
-class VideoWindow : public C3Window 
+class VideoWindow : public C3Window
 {
 public:
 	VideoWindow(
@@ -43,5 +41,4 @@ private:
 	BOOL			m_modal;
 };
 
-
-#endif 
+#endif

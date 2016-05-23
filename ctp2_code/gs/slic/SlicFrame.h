@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -45,23 +45,22 @@ enum SFN_ERROR;
 
 class SlicFrame {
 private:
-	
+
 	sint32 m_offset;
 	SLIC_RT m_error;
 	sint32 m_argStackPtr;
 	sint32 m_currentLine;
-	
 
-	
+
 	SlicSegment *m_segment;
 	SlicStack *m_stack;
-	SlicArgList m_argListArray[k_ARGLIST_STACK_SIZE];	
+	SlicArgList m_argListArray[k_ARGLIST_STACK_SIZE];
 	SlicArgList *m_argList;
 	SlicObject *m_resultObject;
-	
-	
 
-	
+
+
+
 	MessageData *m_messageData;
 
 public:

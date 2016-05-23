@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -37,11 +37,10 @@
 
 class aui_Surface;
 
-
 class ctp2_Switch : public aui_Switch, public PatternBase
 {
 public:
-	
+
 	ctp2_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -81,5 +80,4 @@ private:
 	sint32	m_bevelWidth;
 };
 
-
-#endif 
+#endif

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,15 +31,13 @@
 #ifndef __AUI_RADIO_H__
 #define __AUI_RADIO_H__
 
-
 #include "aui_switch.h"
-
 
 
 class aui_Radio : public aui_Switch
 {
 public:
-	
+
 	aui_Radio(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -63,10 +61,9 @@ protected:
 	aui_Radio() : aui_Switch() {}
 
 protected:
-	
+
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

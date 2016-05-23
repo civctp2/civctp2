@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 // - Removed an Assert which is annoyingly triggered all the time when having
 //   an improvement file without sound defintions.
 // - Removed some completely unused code.
-// - Modernised some code: e.g. implemented the modified records list as a 
+// - Modernised some code: e.g. implemented the modified records list as a
 //   std::vector, so we don't have to do the memory management ourselves.
 // - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
 //
@@ -90,7 +90,6 @@ public:
 	sint32 m_modifiedRecord;
 };
 
-
 template <class T> class CTPDatabase
 {
 protected:
@@ -115,15 +114,15 @@ public:
 	sint32 Parse(DBLexer *lex);
 	sint32 Parse(const C3DIR & c3dir, const char *filename);
 
-	
-	
-	
+
+
+
 	inline const T *Get(sint32 index)
 	{
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
 			return NULL;
-	
+
 		return m_records[index];
 	}
 
@@ -134,9 +133,9 @@ public:
 	sint32 GetName(sint32 index);
 	const char *GetNameStr(sint32 index);
 	void Add(T *obj);
-	inline sint32 NumRecords() const 
-	{ 
-		return m_numRecords; 
+	inline sint32 NumRecords() const
+	{
+		return m_numRecords;
 	}
 	bool GetNamedItem(sint32 name, sint32 &index);
 	bool GetNamedItemID(sint32 index, sint32 &name);

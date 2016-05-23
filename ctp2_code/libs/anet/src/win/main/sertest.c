@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ void quit(int i)
 	exit(i);
 }
 
-/* Get a packet. If one isn't ready right away, wait up to 1 second for 
- * a packet to arrive.  If none arrives, or if it isn't len_want bytes 
+/* Get a packet. If one isn't ready right away, wait up to 1 second for
+ * a packet to arrive.  If none arrives, or if it isn't len_want bytes
  * long, abort.
  */
 void ser_get_blocking(ser_t *ser, void *buf, size_t len, size_t len_want)
@@ -38,21 +38,21 @@ void ser_get_blocking(ser_t *ser, void *buf, size_t len, size_t len_want)
 	ser_result_t err;
 
 	for (i = 1; i <= 10; i++) {
-		
+
 		len_got = len;
 		err = ser_get( ser, buf, &len_got);
-		if (err == ser_RES_OK) 
+		if (err == ser_RES_OK)
 			break;
 		if (err != ser_RES_EMPTY) {
 			printf("ser_get_blocking: expected err 0, got err %d\n", err);
 			quit(1);
-		} 
+		}
 		Sleep(100);
 	}
 	if (err == ser_RES_EMPTY) {
 		printf("ser_get_blocking: ser_get did not get any packet\n");
 		quit(1);
-	} 
+	}
 	if (len_got != len_want) {
 		printf("ser_get_blocking: expected %d byte got %d\n", len, len_got);
 		quit(1);
@@ -90,7 +90,7 @@ void test1 (int portnum)
 		ser_put(ser,  "Test 6", 6 );
 		for (i=0; i < ser_USERMAXPACK; i++)
 			tbuf[i] = i;
-		ser_put(ser,  tbuf, ser_USERMAXPACK);	
+		ser_put(ser,  tbuf, ser_USERMAXPACK);
 
 		ser_get_blocking(ser, tbuf, sizeof(tbuf), 7 );
 		if (!strncmp(tbuf,"Test\160 7", 7))
@@ -126,7 +126,7 @@ void test1 (int portnum)
 		else
 			printf("big test fail\n");
 	}
-	
+
 	Sleep(1000);
 	ser_destroy(ser);
 
@@ -137,7 +137,7 @@ void main(int argc, char **argv)
 {
 	int i;
 	int portnum = 0;
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] != '-') {
 			printf("Options must start with -\n");
@@ -171,6 +171,3 @@ void main(int argc, char **argv)
 	printf("Pass\n");
 	quit(0);
 }
-
-
-

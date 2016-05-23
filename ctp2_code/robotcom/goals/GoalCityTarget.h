@@ -1,4 +1,3 @@
-
 #pragma once
 
 
@@ -15,44 +14,42 @@
 
 #include "ArmyGoal.h"
 
-
 #include "dynarr.h"
 
-enum GOAL_TYPE; 
-struct MapPointData; 
-class CivArchive; 
+enum GOAL_TYPE;
+struct MapPointData;
+class CivArchive;
 class GoalCityTarget;
 
-class GoalCityTarget : public ArmyGoal { 
+class GoalCityTarget : public ArmyGoal {
 public:
-	
+
 	static BOOL PretestDipState(AiMain *ai, const MapPointData & pos, const GOAL_TYPE & type);
 	static BOOL IsTargetType(AiMain *ai, MapPointData & pos, const GOAL_TYPE & type);
 	static void SetupCityTargetGoals(AiMain *ai);
 
-	
 
-	
+
+
 	GoalCityTarget
 	(
-		AiMain *init_ai,				
-		const MapPointData &target,		
-		const GOAL_TYPE &type,		
-		const BSetID &cityid,			
-		const PLAYER_INDEX foreign_player   
+		AiMain *init_ai,
+		const MapPointData &target,
+		const GOAL_TYPE &type,
+		const BSetID &cityid,
+		const PLAYER_INDEX foreign_player
 	);
-    GoalCityTarget(AiMain *ai, CivArchive &archive); 
+    GoalCityTarget(AiMain *ai, CivArchive &archive);
 	void Init();
-	~GoalCityTarget(); 
+	~GoalCityTarget();
 	BOOL operator==(const GoalCityTarget & ref) const;
 	BOOL operator!=(const GoalCityTarget & ref) const {return !operator==(ref);}
-	void DelPointers() {}; 
+	void DelPointers() {};
 
-    void Serialize(AiMain *ai,CivArchive &archive); 
-    BOOL Validate(AiMain *ai); 
+    void Serialize(AiMain *ai,CivArchive &archive);
+    BOOL Validate(AiMain *ai);
 
-	
-	
+
     GOAL_TYPE GetType () const;
 	const PLAYER_INDEX & GetPlayerIndex() const;
 	ForeignCity *GetTarget(AiMain *ai);
@@ -66,7 +63,7 @@ public:
 	virtual int Is_Unit_Appropriate(AiMain *ai,	Agent * unit_in_question);
 
 	void ExclusiveWinner(AiMain *ai, const MapPointData & target, const GOAL_TYPE &type);
-	BOOL WithinRange( AiMain *ai, Agent *agent, 
+	BOOL WithinRange( AiMain *ai, Agent *agent,
 					  const SUB_TASK_TYPE & sub_task );
 	void ArrivedAtTask(AiMain *ai, ArmyAgent *the_army, ArmyAgent *the_transport, SUB_TASK_TYPE sub_task);
 
@@ -80,19 +77,17 @@ public:
 	Goal_Result BuildTaskSolution(AiMain *ai, CityAgent *the_city, Plan *the_plan);
 
 	private:
-	
+
 	PLAYER_INDEX m_playerIndex;
 	PLAYER_INDEX m_foreignPlayer;
 	BSetID m_targetId;
 	AiMain *m_ai;
 
-	sint32 m_which_unit;					
-	
-	
+	sint32 m_which_unit;
+
 	BOOL m_rallying;
 
-	
-    GoalCityTarget();  
-}; 
+    GoalCityTarget();
+};
 
 #endif __GOAL_CITY_TARGET_H__

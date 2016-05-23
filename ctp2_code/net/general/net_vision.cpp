@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,8 +55,8 @@ extern RadarMap *g_radarMap;
 // Description: Constructor
 //
 // Parameters : sint32 owner:  First database to check
-//              uint16 row:    
-//              uint8 numRows: 
+//              uint16 row:
+//              uint8 numRows:
 //
 // Globals    : -
 //
@@ -122,7 +122,7 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 		}
 	}
 	if(bitPos != 0) {
-		
+
 		ptr++;
 	}
 	size = ptr - buf + 1;
@@ -182,7 +182,7 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 	if(bitPos != 0) {
-		
+
 		ptr++;
 	}
 	Assert(size == ptr - buf + 1);
@@ -196,7 +196,7 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 // Description: Constructor
 //
 // Parameters : UnseenCell *ucell: The unseen cell from/to the network
-//              uint8 owner:       
+//              uint8 owner:
 //
 // Globals    : -
 //
@@ -241,13 +241,12 @@ void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 
 	PUSHLONG(m_ucell->m_env);
 	PUSHBYTE(uint8(m_ucell->m_terrain_type));
-	
+
 	PUSHSHORT((uint16)m_ucell->m_point.x);
 	PUSHSHORT((uint16)m_ucell->m_point.y);
 	PUSHSHORT(m_ucell->m_move_cost);
 
-	
-	
+
 	PUSHSHORT((uint16)m_ucell->m_flags);
 
 
@@ -292,8 +291,7 @@ void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 
 		PUSHSTRING(m_ucell->m_cityName);
 
-		
-		
+
 		PUSHSHORT((uint16)m_ucell->m_actor->GetUnitDBIndex());
 	}
 
@@ -354,14 +352,14 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLLONG(m_ucell->m_env);
 	PULLBYTETYPE(m_ucell->m_terrain_type, TERRAIN_TYPES);
-	
+
 	PULLSHORT(m_ucell->m_point.x);
 	PULLSHORT(m_ucell->m_point.y);
 	PULLSHORT(m_ucell->m_move_cost);
 
-	
-	
-	
+
+
+
 	PULLSHORT(m_ucell->m_flags);
 
 
@@ -400,38 +398,33 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 		PULLNEWSTRING(m_ucell->m_cityName);
 
-		
-		
 
-		
-		
-		
+
+
+
+
+
 		SpriteState *ss = new SpriteState(0);
 		Unit		unitID = Unit(0);
-		
-		
+
 		uint16 dbIndex;
 		PULLSHORT(dbIndex);
 
-		
 		double		visionRange = g_theUnitDB->Get(dbIndex)->GetVisionRange();
 
-		
-		
-		m_ucell->m_actor = new UnitActor(ss, 
-											unitID, 
-											(sint32)dbIndex, 
-											m_ucell->m_point, 
-											m_ucell->m_cityOwner, 
-											TRUE, 
+
+		m_ucell->m_actor = new UnitActor(ss,
+											unitID,
+											(sint32)dbIndex,
+											m_ucell->m_point,
+											m_ucell->m_cityOwner,
+											TRUE,
 											visionRange,
 											m_ucell->m_citySpriteIndex);
 		m_ucell->m_actor->SetUnitVisibility(1 << m_owner);
 
-		
 		m_ucell->m_actor->SetSize(citySize);
 
-		
 		m_ucell->m_actor->ChangeImage(ss, dbIndex, unitID);
 	}
 	m_ucell->m_citySize = citySize;
@@ -447,7 +440,7 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		PULLBYTE(type);
 		PULLBYTE(percent);
 		m_ucell->m_improvements->AddTail(
-			new UnseenImprovementInfo((TERRAIN_IMPROVEMENT)type, 
+			new UnseenImprovementInfo((TERRAIN_IMPROVEMENT)type,
 									  (sint32)percent));
 	}
 

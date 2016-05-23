@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -24,7 +23,6 @@ enum POPUP_BORDER {
 class c3_Static;
 class c3_Button;
 class ctp2_Button;
-
 
 class c3_PopupWindow : public C3Window, public KeyboardHandler
 {
@@ -97,8 +95,6 @@ private:
 	c3_Button	*m_cancel;
 	ctp2_Button	*m_ok;
 
-
 };
 
-
-#endif 
+#endif

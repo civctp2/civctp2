@@ -1,4 +1,3 @@
-
 #ifndef DIPLOMACYDETAILS_H__
 #define DIPLOMACYDETAILS_H__
 
@@ -14,13 +13,12 @@ class Unit;
 
 #include "ctp2_Menu.h"
 
-
 #include "diplomattypes.h"
 
 class DiplomacyDetails
 {
   private:
-	
+
 	ctp2_Window *m_window;
 	static sint32 detailPlayer;
 
@@ -45,7 +43,7 @@ class DiplomacyDetails
 	static void SelectItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static AUI_ERRCODE DrawPlayerColor(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie);
-	
+
 	static AUI_ERRCODE DrawPlayerFlag(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie);
 	static sint32 GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer);

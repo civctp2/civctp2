@@ -165,7 +165,7 @@ void NetDipResponse::Packetize(uint8 *buf, uint16 &size)
 	PUSHLONG(m_resp.receiverId);
 	PUSHLONG(m_resp.type);
 	netdiplomacy_PacketizeProposalData(m_resp.counter, buf, size);
-	netdiplomacy_PacketizeThreatData(m_resp.threat, buf, size);	
+	netdiplomacy_PacketizeThreatData(m_resp.threat, buf, size);
 }
 
 void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
@@ -200,7 +200,7 @@ void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		execute = false;
 	}
 
-	if(g_network.IsClient() && 
+	if(g_network.IsClient() &&
 	   !g_network.IsLocalPlayer(m_resp.senderId) &&
 	   !g_network.IsLocalPlayer(m_resp.receiverId)) {
 		execute = false;
@@ -225,7 +225,7 @@ void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 	}
-	
+
 }
 
 void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
@@ -252,7 +252,7 @@ void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 					PUSHBYTE(p1);
 					PUSHBYTE(p2);
 					PUSHBYTE(prop);
-					
+
 					PUSHLONG(ag.id);
 					PUSHBYTE(ag.senderId);
 					PUSHBYTE(ag.receiverId);
@@ -265,7 +265,7 @@ void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 			}
 		}
 	}
-	
+
 	PUSHBYTE(0xff);
 }
 
@@ -306,5 +306,3 @@ void NetAgreementMatrix::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	} while(p1 != 0xff);
 }
-
-	

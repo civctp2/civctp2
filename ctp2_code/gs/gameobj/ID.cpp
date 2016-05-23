@@ -3,7 +3,6 @@
 #include "ID.h"
 #include "civarchive.h"
 
-
 void ID::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
@@ -11,7 +10,6 @@ void ID::Serialize(CivArchive &archive)
 	else
 		archive>>m_id ;
 }
-
 
 uint32 ID_ID_GetVersion(void)
 {

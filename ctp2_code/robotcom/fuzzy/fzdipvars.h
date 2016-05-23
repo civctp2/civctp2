@@ -4,23 +4,20 @@
 
 #include "diplomatictypes.h"
 
-
 extern double fz_war_with_him;
 extern double fz_cease_fire_with_him;
 extern double fz_alliance_with_him;
 extern double fz_neutral_with_him;
 
-
 extern double fz_turns_to_disaster;
 
-
-extern double fz_dip_regard_pirate_delta ; 
-extern double fz_dip_regard_attack_delta ; 
-extern double fz_dip_regard_incursion_delta ; 
-extern double fz_dip_regard_pillage_delta ; 
-extern double fz_dip_regard_message_delta ; 
-extern double fz_dip_regard_general_delta ; 
-extern double fz_dip_regard_strength_delta ; 
+extern double fz_dip_regard_pirate_delta ;
+extern double fz_dip_regard_attack_delta ;
+extern double fz_dip_regard_incursion_delta ;
+extern double fz_dip_regard_pillage_delta ;
+extern double fz_dip_regard_message_delta ;
+extern double fz_dip_regard_general_delta ;
+extern double fz_dip_regard_strength_delta ;
 
 extern double fz_accept_threshold;
 extern double fz_his_coldwar_attacked_me;
@@ -47,13 +44,12 @@ extern double fz_diplomatic_persistence;
 extern double fz_max_messages_considered_per_turn;
 extern double fz_length_of_war_with_him;
 extern double fz_num_he_is_at_war;
-extern double fz_he_shares_continent; 
-extern double fz_closest_capitol; 
+extern double fz_he_shares_continent;
+extern double fz_closest_capitol;
 
 extern double fz_he_built_space;
 extern double fz_he_built_wormhole;
 extern double fz_he_built_undersea;
-
 
 extern double fz_player_type;
 extern double fz_chase_the_rabbit;
@@ -71,8 +67,8 @@ extern double fz_diplomatic_regard_delta;
 extern double fz_unit_regard_towards_him;
 extern double fz_unit_regard_delta;
 
-extern double fz_best_friend; 
-extern double fz_worst_enemy; 
+extern double fz_best_friend;
+extern double fz_worst_enemy;
 extern double fz_my_strength;
 
 extern double fz_his_strength;
@@ -122,7 +118,6 @@ extern double fz_relative_strength;
 extern double fz_loyalty;
 extern double fz_loyalty_modifier;
 
-
 extern double fz_he_accepted_greetings;
 extern double fz_he_accepted_gold_demand;
 extern double fz_he_accepted_demand_map;
@@ -144,7 +139,6 @@ extern double fz_he_accepted_exchange_advance;
 extern double fz_he_accepted_exchange_city;
 extern double fz_he_accepted_exchange_map;
 extern double fz_he_accepted_demand_no_piracy;
-
 
 extern double fz_he_rejected_greetings;
 extern double fz_he_rejected_gold_demand;

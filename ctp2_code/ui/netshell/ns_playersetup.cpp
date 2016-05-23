@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,9 +29,7 @@
 
 #include "ns_playersetup.h"
 
-
 sint32 nf_PlayerSetup::m_version = 103;
-
 
 nf_PlayerSetup::nf_PlayerSetup(NETFunc::KeyStruct *k):NETFunc::PlayerSetup() {
 	SetKey(k);
@@ -86,13 +84,11 @@ void nf_PlayerSetup::Reset()
 }
 
 
-
-ns_PlayerSetup::ns_PlayerSetup(nf_PlayerSetup * player) 
-:	ns_Object<nf_PlayerSetup, ns_PlayerSetup>(player) 
+ns_PlayerSetup::ns_PlayerSetup(nf_PlayerSetup * player)
+:	ns_Object<nf_PlayerSetup, ns_PlayerSetup>(player)
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-
 
 void ns_PlayerSetup::Update( nf_PlayerSetup *playersetup ) {
 	SetMine(false);

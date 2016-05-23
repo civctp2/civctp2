@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ AdvertiseService(unsigned short serviceType, char *serviceName,
 	short				status;
 	unsigned int		i;
 	char				*tmp;
-	
+
 	*adv_handle = 0L;
 
 	if ((h = NewHandleClear(sizeof(T_AdvertisingStruct))) == (Handle)0) {
@@ -80,7 +80,7 @@ AdvertiseService(unsigned short serviceType, char *serviceName,
 	}
 	MoveHHi(h);
 	HLock(h);
-	
+
 	ASp = (T_AdvertisingStruct *)*h;
 	ASp->signature = ADVERTISING_SIGNATURE;
    	ASp->ASServerIDpacket.SAPPacketType = IntSwap( PERIODIC_ID_PACKET );
@@ -121,13 +121,13 @@ ShutdownAdvertising(unsigned long adv_handle)
 	if (adv_handle == 0L) {
 		return (SAP_SUCCESSFUL);
 	}
-		
+
 	h = (Handle)adv_handle;
 	ASp = (T_AdvertisingStruct *)*h;
 	if (ASp->signature != ADVERTISING_SIGNATURE) {
 		return (SAP_INVALID_ARG);
 	}
-	
+
    	ASp->ASServerIDpacket.interveningNetworks = IntSwap( 16 );
 	pb.csCode = SHUTDOWNADVERTISING;
 	pb.csParams.adv_service.h = h;
@@ -150,7 +150,7 @@ pascal short
 QueryServices(queryInfoPtr query_info, char async)
 {
 	SAPpb		pb;
-	
+
 	/*
 	 * Valid query?
 	 */
@@ -166,7 +166,7 @@ QueryServices(queryInfoPtr query_info, char async)
 	}
 
 	query_info->sap_entries = (SAP_RESPONSE_LIST_ENTRY *)0;
-	
+
 	pb.csCode = QUERYSERVICES;
 	pb.csParams.query_service.query_info = query_info;
 	pb.csParams.query_service.async = async;
@@ -174,7 +174,7 @@ QueryServices(queryInfoPtr query_info, char async)
 #if !defined(powerc) && !defined (__powerc)
 	pb.csParams.query_service.appA5 = IpxGetRegisterA5();
 #endif
-	
+
 	/*
 	 * Make a synchronous call to the driver.  An async QueryServices is
 	 * handled by the driver rather than by the Mac OS.
@@ -186,7 +186,7 @@ pascal short
 AbortQueryServices(queryInfoPtr query_info)
 {
 	SAPpb		pb;
-	
+
 	/*
 	 * Valid query?
 	 */
@@ -207,7 +207,7 @@ FreeQueryServicesList(SAP_RESPONSE_LIST_ENTRY *listP)
 	if (listP == (SAP_RESPONSE_LIST_ENTRY *)0) {
 		return (SAP_SUCCESSFUL);
 	}
-	
+
 	if (listP->signature != QUERY_LIST_SIGNATURE) {
 		return (SAP_INVALID_ARG);
 	}
@@ -223,7 +223,7 @@ pascal short
 SapRelinquishControl()
 {
 	SAPpb		pb;
-	
+
 	pb.csCode = SAPRELINQUISHCONTROL;
 	return (call_sap(&pb));
 }
@@ -234,7 +234,7 @@ call_sap(SAPpb *pb)
 	short	status;
 	SAPpb	sap_pb;
 	char	sapDrvrName[10];
-	
+
 	sapDrvrName[0] = 0x08;
 	sapDrvrName[1] = '.';
 	*(long *)&sapDrvrName[2] = 'NVL_';
@@ -249,7 +249,7 @@ call_sap(SAPpb *pb)
 	pb->ioCRefNum = sap_pb.ioCRefNum;
 	(void)PBControl((ParmBlkPtr)pb, FALSE);
 	status = pb->ioResult;
-	
+
 Exit0:
 	return (status);
 }
@@ -264,7 +264,7 @@ static char *
 sap_strncpy(char *dst, char *src, size_t n)
 {
 	char	*p;
-	
+
 	p = dst;
 	while (n--) {
 		*p++ = *src;

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -39,18 +39,15 @@
 
 #include "c3.h"
 
-
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_screen.h"
 #include "aui_button.h"
 
-
 #include "c3_button.h"
 #include "c3_static.h"
 #include "loadsavewindow.h"
-
 
 
 #include "netshell.h"
@@ -70,18 +67,15 @@
 
 #include "scenariowindow.h"
 
-
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 
 extern LoadSaveWindow *g_loadsaveWindow;
 
 #include "profileDB.h"
 #include "AgeRecord.h"
 
-
 GameSelectWindow *g_gameSelectWindow = NULL;
 StartSelectingWindow *g_startSelectingWindow = NULL;
-
 
 GameSelectWindow::GameSelectWindow(
 	AUI_ERRCODE *retval )
@@ -106,7 +100,6 @@ GameSelectWindow::GameSelectWindow(
 }
 
 
-
 AUI_ERRCODE GameSelectWindow::InitCommon( void )
 {
 	g_gameSelectWindow = this;
@@ -120,13 +113,12 @@ AUI_ERRCODE GameSelectWindow::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE GameSelectWindow::CreateControls( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-	
+
 
 	aui_Control *control;
 
@@ -188,12 +180,12 @@ AUI_ERRCODE GameSelectWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
 
-	
+
 
 	aui_Ldl::SetupHeirarchyFromRoot( "gameselectwindow" );
 
 
-	
+
 
 	aui_Action *action;
 
@@ -223,24 +215,21 @@ AUI_ERRCODE GameSelectWindow::CreateControls( void )
 	m_controls[ CONTROL_GAMENAMELISTBOX ]->SetAction( action );
 
 
-	
 
-	
+
+
 	((aui_ListBox *)m_controls[ CONTROL_GAMENAMELISTBOX ])->
 		SetForceSelect( TRUE );
 
 	Update();
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 GameSelectWindow::~GameSelectWindow()
 {
 	g_gameSelectWindow = NULL;
 }
-
 
 
 nf_GameSetup *GameSelectWindow::GetGameSetup(NETFunc::Session *session) {
@@ -261,7 +250,6 @@ nf_GameSetup *GameSelectWindow::GetGameSetup(NETFunc::Session *session) {
 	return s;
 }
 
-
 void GameSelectWindow::Update(void)
 {
 	ns_GameSetupListBox *listbox = (ns_GameSetupListBox *)
@@ -281,15 +269,13 @@ void GameSelectWindow::Update(void)
 	}
 }
 
-
 AUI_ERRCODE GameSelectWindow::Idle( void )
-{	
+{
 	NETFunc::Message *m;
-	
+
 	while((m = g_netfunc->GetMessage())) {
-		
-		
-		
+
+
 		g_netfunc->HandleMessage(m);
 
 		switch ( m->GetCode() )
@@ -306,7 +292,6 @@ AUI_ERRCODE GameSelectWindow::Idle( void )
 	}
 	return AUI_ERRCODE_OK;
 }
-
 
 void GameSelectWindow::GameListBoxAction::Execute(
 	aui_Control *control,
@@ -337,7 +322,6 @@ void GameSelectWindow::GameListBoxAction::Execute(
 	}
 }
 
-
 AUI_ERRCODE GameSelectWindow::SetParent( aui_Region *region )
 {
 
@@ -362,7 +346,6 @@ AUI_ERRCODE GameSelectWindow::SetParent( aui_Region *region )
 }
 
 
-
 void GameSelectWindow::DeleteButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -382,7 +365,6 @@ void GameSelectWindow::DeleteButtonAction::Execute(
 }
 
 
-
 void GameSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -394,7 +376,6 @@ void GameSelectWindow::OKButtonAction::Execute(
 }
 
 
-
 uint32 TellEricAboutThisBug( aui_Window *w )
 {
 	uint32 id = 0;
@@ -402,28 +383,23 @@ uint32 TellEricAboutThisBug( aui_Window *w )
 	return id;
 }
 
-
 void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 {
-	
-	AllinoneWindow *w = g_allinoneWindow;
-	AllinoneWindow::Mode mode = w->JOIN; 
 
-	
+	AllinoneWindow *w = g_allinoneWindow;
+	AllinoneWindow::Mode mode = w->JOIN;
+
 	TellEricAboutThisBug( g_loadsaveWindow );
 
-	
 	if ( g_loadsaveWindow && g_ui->GetChild( g_loadsaveWindow->Id() ) )
 	{
-		
-		
+
 		SaveInfo *saveInfo = g_loadsaveWindow->GetSaveInfo();
 		Assert( saveInfo != NULL );
 		if ( saveInfo )
 		{
 			loadsavescreen_removeMyWindow( AUI_BUTTON_ACTION_EXECUTE );
 
-			
 			g_gamesetup = saveInfo->gameSetup;
 
 			NETFunc::Session *s = (NETFunc::Session *)&g_gamesetup;
@@ -475,13 +451,13 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 
 
 			default:
-				
+
 				Assert( FALSE );
 				break;
 			}
 		}
 	}
-	
+
 	else
 	{
 		ns_GameSetupListBox *listbox = (ns_GameSetupListBox *)
@@ -489,7 +465,7 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 		ns_GameSetupItem *item = (ns_GameSetupItem *)listbox->GetSelectedItem();
 
 		if(item) {
-			
+
 			((aui_ListBox *)listbox)->RemoveItem( item->Id() );
 			((aui_ListBox *)listbox)->InsertItem( item, 0 );
 			listbox->SelectItem( (sint32)0 );
@@ -501,18 +477,16 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 		}
 	}
 
-	
 	if ( mode != w->JOIN )
 	{
-		
-		
+
 		MBCHAR temp[ dp_PASSWORDLEN + 1 ] = "";
 		if ( password )
 		{
 			strncpy( temp, password, dp_PASSWORDLEN );
 			for ( sint32 i = 0; (unsigned) i < strlen( temp ); i++ )
 			{
-				
+
 				temp[ i ] = tolower( temp[ i ] );
 			}
 		}
@@ -522,7 +496,6 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 		g_gamesetup.SetClosed( false );
 		g_gamesetup.SetSyncLaunch( true );
 
-		
 		PlayerSelectWindow *psw = (PlayerSelectWindow *)g_netshell->
 			FindWindow(NetShell::WINDOW_PLAYERSELECT);
 		psw->GetPlayerSetup(g_netfunc->GetPlayer())->Reset();
@@ -535,7 +508,6 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 		}
 	}
 }
-
 
 
 void GameSelectWindow::CancelButtonAction::Execute(
@@ -574,7 +546,6 @@ StartSelectingWindow::StartSelectingWindow(
 }
 
 
-
 AUI_ERRCODE StartSelectingWindow::InitCommon( void )
 {
 	g_startSelectingWindow = this;
@@ -586,10 +557,8 @@ AUI_ERRCODE StartSelectingWindow::InitCommon( void )
 
 	loadsavescreen_Initialize( StartSelectingLoadSaveCallback );
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE StartSelectingWindow::CreateControls( void )
@@ -597,7 +566,7 @@ AUI_ERRCODE StartSelectingWindow::CreateControls( void )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-	
+
 
 	aui_Control *control;
 
@@ -662,12 +631,12 @@ AUI_ERRCODE StartSelectingWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
 
-	
+
 
 	aui_Ldl::SetupHeirarchyFromRoot( "startselectingwindow" );
 
 
-	
+
 
 	aui_Action *action;
 
@@ -702,32 +671,28 @@ AUI_ERRCODE StartSelectingWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ]->SetAction( action );
 
 
-	
+
 
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 StartSelectingWindow::~StartSelectingWindow()
 {
 	loadsavescreen_Cleanup();
-
 
 	g_startSelectingWindow = NULL;
 }
 
 
-
 AUI_ERRCODE StartSelectingWindow::Idle( void )
-{	
+{
 	NETFunc::Message *m;
-	
+
 	while((m = g_netfunc->GetMessage())) {
-		
-		
-		
+
+
 		g_netfunc->HandleMessage(m);
 
 		switch ( m->GetCode() )
@@ -746,12 +711,10 @@ AUI_ERRCODE StartSelectingWindow::Idle( void )
 }
 
 
-
 AUI_ERRCODE StartSelectingWindow::SetParent( aui_Region *region )
 {
 	return ns_Window::SetParent( region );
 }
-
 
 
 void StartSelectingWindow::NewButtonAction::Execute(
@@ -790,7 +753,6 @@ void StartSelectingWindow::NewButtonAction::Execute(
 
 		sprintf( name, format.GetString(), truncname );
 
-		
 		char test[ dp_SNAMELEN + 1 ];
 		strncpy( test, name, dp_SNAMELEN );
 		sint32 num = 2;
@@ -820,7 +782,7 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		s->SetName( name );
 		//Special rules
 		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
-		s->SetPollution(g_theProfileDB->IsPollutionRule()); 
+		s->SetPollution(g_theProfileDB->IsPollutionRule());
 
 		//Ages
 		s->SetStartAge(0);
@@ -842,12 +804,10 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		listbox->InsertItem( s );
 		listbox->SelectItem(listbox->FindItem(s));
 
-		
 		c3_Button *button = (c3_Button *)w->FindControl( w->CONTROL_OKBUTTON );
 		button->GetAction()->Execute( button, AUI_BUTTON_ACTION_EXECUTE, 0 );
 	}
 }
-
 
 
 void StartSelectingWindow::GameSetupButtonAction::Execute(
@@ -859,7 +819,6 @@ void StartSelectingWindow::GameSetupButtonAction::Execute(
 
 	g_netshell->GotoScreen( NetShell::SCREEN_GAMESELECT );
 }
-
 
 
 void StartSelectingWindow::SavedButtonAction::Execute(
@@ -876,25 +835,21 @@ void StartSelectingWindow::SavedButtonAction::Execute(
 	{
 		if ( ((FakeTransport *)t)->GetSubType() == FakeTransport::EMAIL )
 		{
-			
-			
+
 
 		}
 	}
 
-	
 	loadsavescreen_Initialize( StartSelectingLoadSaveCallback );
 	loadsavescreen_displayMyWindow( type );
 }
 
-
-void gameselectwindow_scenarioExitCallback(aui_Control *control, 
-										   uint32 action, 
-										   uint32 data, 
+void gameselectwindow_scenarioExitCallback(aui_Control *control,
+										   uint32 action,
+										   uint32 data,
 										   void *cookie )
 {
-	
-	
+
 	GameSelectWindow *w = g_gameSelectWindow;
 	ns_GameSetupListBox *listbox = (ns_GameSetupListBox *)w->
 		FindControl( GameSelectWindow::CONTROL_GAMENAMELISTBOX );
@@ -922,7 +877,6 @@ void gameselectwindow_scenarioExitCallback(aui_Control *control,
 
 		sprintf( name, format.GetString(), truncname );
 
-		
 		char test[ dp_SNAMELEN + 1 ];
 		strncpy( test, name, dp_SNAMELEN );
 		sint32 num = 2;
@@ -953,14 +907,12 @@ void gameselectwindow_scenarioExitCallback(aui_Control *control,
 		listbox->InsertItem( s );
 		listbox->SelectItem(listbox->FindItem(s));
 
-		
 		c3_Button *button = (c3_Button *)w->FindControl( w->CONTROL_OKBUTTON );
 		button->GetAction()->Execute( button, AUI_BUTTON_ACTION_EXECUTE, 0 );
 	}
 	g_allinoneWindow->SetScenarioGame(TRUE);
 	passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_ASK);
 }
-
 
 void StartSelectingWindow::ScenarioButtonAction::Execute(
 	aui_Control *control,
@@ -969,17 +921,16 @@ void StartSelectingWindow::ScenarioButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 
-	
-	
 
-	
-	
+
+
+
+
+
 	scenarioscreen_displayMyWindow();
 	scenarioscreen_SetExitCallback(gameselectwindow_scenarioExitCallback);
 }
-
 
 
 void StartSelectingWindow::CancelButtonAction::Execute(
@@ -1003,24 +954,6 @@ void StartSelectingLoadSaveCallback(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	if ( g_loadsaveWindow->GetSaveInfo() )
 		passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_ASK );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

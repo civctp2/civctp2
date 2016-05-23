@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #01 Reordered the keymap to reflect the order needed for the display
-//   of the missing orders in the keyboard mapping options 
+//   of the missing orders in the keyboard mapping options
 //
 //----------------------------------------------------------------------------
 
@@ -34,11 +34,9 @@
 #define __KEYMAP_H__ 1
 
 
+enum KEY_FUNCTION {
+  KEY_FUNCTION_NOOP,
 
-enum KEY_FUNCTION { 
-  KEY_FUNCTION_NOOP,		
-									
-	
   KEY_FUNCTION_MOVE_NORTH,
   KEY_FUNCTION_MOVE_NORTHWEST,
   KEY_FUNCTION_MOVE_NORTHEAST,
@@ -46,23 +44,22 @@ enum KEY_FUNCTION {
   KEY_FUNCTION_MOVE_EAST,
   KEY_FUNCTION_MOVE_SOUTHWEST,
   KEY_FUNCTION_MOVE_SOUTH,
-  KEY_FUNCTION_MOVE_SOUTHEAST,	
+  KEY_FUNCTION_MOVE_SOUTHEAST,
   KEY_FUNCTION_UNIT_CITY_TOGGLE,
   KEY_FUNCTION_NEXT_ITEM,
   KEY_FUNCTION_KEYBOARD_SELECT_UNIT,
   KEY_FUNCTION_NEXT_ROUND,
-  KEY_FUNCTION_ENDTURN,					
+  KEY_FUNCTION_ENDTURN,
 
-		
   KEY_FUNCTION_OPEN_WORK_VIEW,
   KEY_FUNCTION_SLEEP,
   KEY_FUNCTION_ENTRENCH,
-  KEY_FUNCTION_SETTLE, 
+  KEY_FUNCTION_SETTLE,
   KEY_FUNCTION_PILLAGE,
   KEY_FUNCTION_BOMBARD,
   KEY_FUNCTION_REFORM,
   KEY_FUNCTION_EXPEL,
-  KEY_FUNCTION_UNLOAD_TRANS, 
+  KEY_FUNCTION_UNLOAD_TRANS,
   KEY_FUNCTION_INVESTIGATE_CITY,
   KEY_FUNCTION_PLANT_NUKE,
   KEY_FUNCTION_BIOINFECT,
@@ -71,14 +68,13 @@ enum KEY_FUNCTION {
   KEY_FUNCTION_SPACE_LAUNCH,
   KEY_FUNCTION_DESCEND,
   KEY_FUNCTION_PARADROP,
-  KEY_FUNCTION_GROUP_ARMY, 
-  KEY_FUNCTION_UNGROUP_ARMY, 
+  KEY_FUNCTION_GROUP_ARMY,
+  KEY_FUNCTION_UNGROUP_ARMY,
   KEY_FUNCTION_MOVE_ORDER,
   KEY_FUNCTION_END_UNIT_TURN,
   KEY_FUNCTION_EXECUTE_ORDERS,
   KEY_FUNCTION_PROCESS_UNIT_ORDERS,
 
-		
   KEY_FUNCTION_OPEN_CIV_STATUS,
   KEY_FUNCTION_OPEN_CITY_STATUS,
   KEY_FUNCTION_CITY_MANAGEMENT,
@@ -87,7 +83,7 @@ enum KEY_FUNCTION {
   KEY_FUNCTION_OPEN_SCIENCE_STATUS,
   KEY_FUNCTION_OPEN_UNIT_STATUS,
   KEY_FUNCTION_OPEN_TRADE_STATUS,
-  KEY_FUNCTION_TRADE_SUMMARY,    
+  KEY_FUNCTION_TRADE_SUMMARY,
   KEY_FUNCTION_OPEN_DIPLOMACY,
   KEY_FUNCTION_NEW_PROPOSAL,
   KEY_FUNCTION_OPEN_MESSAGE,
@@ -108,8 +104,7 @@ enum KEY_FUNCTION {
   KEY_FUNCTION_YES,
   KEY_FUNCTION_NO,
 
-		
-  KEY_FUNCTION_REMAP_KEYBOARD,			
+  KEY_FUNCTION_REMAP_KEYBOARD,
   KEY_FUNCTION_OPEN_OPTIONS_SCREEN,
   KEY_FUNCTION_SOUND_OPTIONS,
   KEY_FUNCTION_GRAPHICS_OPTIONS,
@@ -125,10 +120,9 @@ enum KEY_FUNCTION {
 // MUSIC added by ahenobarb
   KEY_FUNCTION_MUSIC_OPTIONS,
 
-		
   KEY_FUNCTION_TOGGLE_CITY_NAMES,
   KEY_FUNCTION_TOGGLE_TRADE_ROUTES,
-  KEY_FUNCTION_CENTER_MAP,				
+  KEY_FUNCTION_CENTER_MAP,
   KEY_FUNCTION_CLOSE,
   KEY_FUNCTION_TOGGLE_RADAR,
   KEY_FUNCTION_TOGGLE_CONTROL_PANEL,
@@ -143,7 +137,6 @@ enum KEY_FUNCTION {
 #endif
   KEY_FUNCTION_TOGGLE_SPACE,
 
-		
   KEY_FUNCTION_ZOOM_OUT2,
   KEY_FUNCTION_ZOOM_IN2,
   KEY_FUNCTION_HELP_MODE_TOGGLE,
@@ -152,38 +145,37 @@ enum KEY_FUNCTION {
   KEY_FUNCTION_CONTROL_BUILD,
   KEY_FUNCTION_CONTROL_NEXT,
   KEY_FUNCTION_CONTROL_PREV,
-  
-  KEY_FUNCTION_LAST_NOOP 
+
+  KEY_FUNCTION_LAST_NOOP
 
 };
 
 struct FUNC_TABLE {
-   unsigned long keycode; 
-   KEY_FUNCTION function; 
+   unsigned long keycode;
+   KEY_FUNCTION function;
    char str[80];
 };
 
-struct KEYPRESS_MAP { 
+struct KEYPRESS_MAP {
    unsigned long keycode;
-   KEY_FUNCTION function; 
+   KEY_FUNCTION function;
 };
 
 #define MAX_KEYPRESS_MAP 512
 #define MASK_MAX_KEYPRESS_MAP 0x01ff
 
-class KEYMAP { 
+class KEYMAP {
 
-	KEYPRESS_MAP key2func[MAX_KEYPRESS_MAP]; 
-   
+	KEYPRESS_MAP key2func[MAX_KEYPRESS_MAP];
 
    uint32 hash_32to16(uint32 val);
 
 public:
 	KEYMAP(BOOL useDefault);
-	KEY_FUNCTION get_function(unsigned long wParam); 
+	KEY_FUNCTION get_function(unsigned long wParam);
 	uint32 get_keycode( KEY_FUNCTION key );
 	sint32 remap_key( KEY_FUNCTION key, uint32 wParam, uint32 oldKeycode );
 	void save();
-}; 
+};
 
 #endif

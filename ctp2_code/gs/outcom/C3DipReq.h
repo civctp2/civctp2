@@ -25,12 +25,10 @@ public:
 	~C3DiplomaticRequest();
 	void Serialize(CivArchive &archive);
 
-	
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	
 	STDMETHODIMP_(PLAYER_INDEX)        GetOwner();
 	STDMETHODIMP_(PLAYER_INDEX)        GetRecipient();
 	STDMETHODIMP_(REQUEST_TYPE)        GetRequest();
@@ -42,15 +40,13 @@ public:
 	STDMETHODIMP_(REQUEST_RESPONSE_TYPE) GetResponse();
 
 
-
 	STDMETHODIMP_(uint32)              GetTarget();
 	STDMETHODIMP_(sint32)              GetGold();
-	
+
 	STDMETHODIMP_(void)                Reject();
 	STDMETHODIMP_(void)                Enact();
-	
-	STDMETHODIMP_(sint32)              GetTone();
 
+	STDMETHODIMP_(sint32)              GetTone();
 
 };
 

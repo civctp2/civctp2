@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -28,22 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
-
 #ifndef __AUI_SWITCHGROUP_H__
 #define __AUI_SWITCHGROUP_H__
 
-
 #include "aui_control.h"
 
-
 class aui_Switch;
-
 
 
 class aui_SwitchGroup : public aui_Control
 {
 public:
-	
+
 	aui_SwitchGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -63,7 +59,7 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	uint32	WhichIsSelected( void ) const { return m_whichIsSelected; }
 	sint32	WhichIndexIsSelected( void );
 
@@ -74,15 +70,14 @@ public:
 	virtual AUI_ERRCODE	RemoveChild( uint32 switchId );
 
 protected:
-	
+
 	BOOL	MakeSureOnlyOneIsSelected( void );
 
-	uint32	m_whichWasSelected;	
-	uint32	m_whichIsSelected;	
+	uint32	m_whichWasSelected;
+	uint32	m_whichIsSelected;
 
 	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
 #include "c3.h"
 
 #include "c3files.h"
@@ -43,15 +31,13 @@ BaseTile::BaseTile()
 	m_hatData = NULL;
 
 
-
 }
 
 BaseTile::~BaseTile()
 {
 	if (WasQuickLoaded()) {
-		
-	} else {
 
+	} else {
 
 
 		if (m_tileData)
@@ -60,7 +46,7 @@ BaseTile::~BaseTile()
 
 
 
-		if (m_hatData) 
+		if (m_hatData)
 			delete[] m_hatData;
 	}
 }
@@ -69,11 +55,9 @@ BOOL BaseTile::Read(FILE *file)
 {
 
 
-
 	Assert(file != NULL);
 	if (file == NULL) return FALSE;
 
-	
 	c3files_fread((void *)&m_tileNum, 1, sizeof(m_tileNum), file);
 	c3files_fread((void *)&m_baseType, 1, sizeof(m_baseType), file);
 
@@ -85,15 +69,14 @@ BOOL BaseTile::Read(FILE *file)
 
 
 
-	
-	
 
 
 
-	
+
+
+
 	c3files_fread((void *)&m_tileDataLen, 1, sizeof(m_tileDataLen), file);
 
-	
 	m_tileData = new Pixel16[m_tileDataLen/2];
 	c3files_fread((void *)m_tileData, 1, m_tileDataLen, file);
 
@@ -118,18 +101,17 @@ BOOL BaseTile::Read(FILE *file)
 
 
 
-	
+
 	Pixel16		*hatData;
 
 	uint16	size;
 	c3files_fread((void *)&size, 1, sizeof(size), file);
 
-
 	if (size > 0) {
 		hatData = new Pixel16[size/2];
 		c3files_fread((void *)hatData, 1, size, file);
 
-		
+
 
 
 	} else {
@@ -147,14 +129,13 @@ BOOL BaseTile::QuickRead(uint8 **dataPtr, BOOL mapped)
 
 
 
-	
+
 	m_tileNum = *(uint16 *)(*dataPtr);
 	(*dataPtr) += sizeof(uint16);
 
 	m_baseType = (*(uint8 *)(*dataPtr));
 	(*dataPtr) += sizeof(uint8);
 
-	
 	m_flags = (*(uint8 *)(*dataPtr));
 	(*dataPtr) += sizeof(uint8);
 
@@ -166,15 +147,14 @@ BOOL BaseTile::QuickRead(uint8 **dataPtr, BOOL mapped)
 
 
 
-	
 
 
 
-	
+
+
 	m_tileDataLen = (*(uint16 *)(*dataPtr));
 	(*dataPtr) += sizeof(uint16);
 
-	
 	m_tileData = (Pixel16 *)(*dataPtr);
 	(*dataPtr) += (m_tileDataLen);
 
@@ -204,13 +184,12 @@ BOOL BaseTile::QuickRead(uint8 **dataPtr, BOOL mapped)
 
 
 
-	
+
 	Pixel16		*hatData;
 
 	uint16 size;
 	size = *(uint16 *)(*dataPtr);
 	(*dataPtr) += sizeof(uint16);
-
 
 
 	if (size > 0) {
@@ -233,5 +212,3 @@ BOOL BaseTile::QuickRead(uint8 **dataPtr, BOOL mapped)
 
 	return TRUE;
 }
-
-

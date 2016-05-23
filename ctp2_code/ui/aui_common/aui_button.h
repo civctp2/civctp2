@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,14 +31,11 @@
 #ifndef __AUI_BUTTON_H__
 #define __AUI_BUTTON_H__
 
-
 #include "aui_control.h"
 #include "aui_keyboard.h"
 
-
 class aui_Surface;
 class aui_Image;
-
 
 
 enum AUI_BUTTON_ACTION
@@ -52,11 +49,10 @@ enum AUI_BUTTON_ACTION
 };
 
 
-
 class aui_Button : public aui_Control
 {
 public:
-	
+
 	aui_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -78,11 +74,10 @@ protected:
 	aui_Button() : aui_Control() {}
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
-	
+
 public:
 	virtual AUI_ERRCODE ResetThis( void );
 
-	
 	sint32 ExtractRepeatCount( uint32 data ) const { return (sint32)data; }
 
 	virtual AUI_ERRCODE DrawThis(
@@ -91,11 +86,11 @@ public:
 		sint32 y = 0 );
 
 protected:
-	BOOL	m_isRepeating;	
-	sint32	m_repeatCount;	
-							
+	BOOL	m_isRepeating;
+	sint32	m_repeatCount;
+
 	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
-	
+
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
@@ -106,5 +101,4 @@ protected:
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

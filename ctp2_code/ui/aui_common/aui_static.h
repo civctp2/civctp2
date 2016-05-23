@@ -1,26 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_STATIC_H__
 #define __AUI_STATIC_H__
 
-
 #include "aui_control.h"
-
 
 
 class aui_Static : public aui_Control
 {
 public:
-	
+
 	aui_Static(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -42,5 +29,4 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 };
 
-
-#endif 
+#endif

@@ -1,4 +1,3 @@
-
 #include "c3.h"
 
 #ifdef __AUI_USE_SDL__
@@ -18,7 +17,6 @@
 #define DDERR_WASSTILLDRAWING 4
 #endif
 
-
 AUI_ERRCODE aui_SDLBlitter::Blt16To16(
     aui_Surface *destSurf,
     RECT *destRect,
@@ -28,13 +26,12 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
 
     AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
         if ( !destSurf->Buffer()
          &&   !srcSurf->Buffer()
          &&   destSurf->IsThisA( aui_SDLSurface::m_SDLSurfaceClassId )
          &&   srcSurf->IsThisA( aui_SDLSurface::m_SDLSurfaceClassId )
          &&   (!flags || (flags & k_AUI_BLITTER_FLAG_COPY) || (flags & k_AUI_BLITTER_FLAG_CHROMAKEY)) )
-    
+
 	{
         AUI_ERRCODE err = AUI_ERRCODE_OK;
 
@@ -46,7 +43,7 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
         SDL_LockMutex(sdlDest->m_bltMutex); //http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fBlitSurface says don't lock surface! mutex lock OK but seems not needed
         SDL_LockMutex(sdlSrc->m_bltMutex);
         SDL_Rect ssrc = { srcRect->left, srcRect->top, srcRect->right-srcRect->left, srcRect->bottom-srcRect->top };
-        SDL_Rect sdst = { destRect->left, destRect->top, 0, 0 }; 
+        SDL_Rect sdst = { destRect->left, destRect->top, 0, 0 };
 
 /*        if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY ) { //is k_AUI_BLITTER_FLAG_CHROMAKEY in flags?
             //ChromaKey and SDL_SRCCOLORKEY  should be set with aui_SDLSurface::SetChromaKey on
@@ -60,15 +57,15 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
                 fprintf(stderr, "%s L%d: Blit failed: %s\n", __FILE__, __LINE__, SDL_GetError());
                 retcode = AUI_ERRCODE_BLTFAILED;
             }
-        
+
         // unlock in the opposite order
         SDL_UnlockMutex(sdlSrc->m_bltMutex);
         SDL_UnlockMutex(sdlDest->m_bltMutex);
-		
+
         if(err != AUI_ERRCODE_OK) {
             DPRINTF(k_DBG_UI, ("%s:%d: err = %d\n", __FILE__, __LINE__, err));
             }
-        if ( err != AUI_ERRCODE_OK ) 
+        if ( err != AUI_ERRCODE_OK )
             retcode = AUI_ERRCODE_BLTFAILED;
 	}
     else {
@@ -84,7 +81,6 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
     }
 
 
-
 AUI_ERRCODE aui_SDLBlitter::ColorBlt16(
     aui_Surface *destSurf,
     RECT *destRect,
@@ -93,8 +89,7 @@ AUI_ERRCODE aui_SDLBlitter::ColorBlt16(
     {
     AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
+
     if ( !destSurf->Buffer()
          &&   destSurf->IsThisA( aui_SDLSurface::m_SDLSurfaceClassId ) )
 	{
@@ -257,9 +252,9 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
     {
     AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
-	
+
+
+
     if ( !destSurf->Buffer()
          &&   !srcSurf->Buffer()
          &&   destSurf->IsThisA( aui_SDLSurface::m_SDLSurfaceClassId )
@@ -287,16 +282,16 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
                     fprintf(stderr, "StrechBlt failed: %s\n", SDL_GetError());
                     retcode = AUI_ERRCODE_BLTFAILED;
                     }
-                } 
+                }
             else {
                 //printf("%s L%d: Using V blit!\n", __FILE__, __LINE__);
                 retcode = SimpleVStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);
                 }
-            } 
+            }
         else if (ssrc.h == sdst.h) {
             //printf("%s L%d: Using H blit!\n", __FILE__, __LINE__);
             retcode = SimpleHStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);
-            } 
+            }
         else {
             //printf("%s L%d: Using HV blit!\n", __FILE__, __LINE__);
             retcode = SimpleHVStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);

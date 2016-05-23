@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,6 @@
 extern StringDB	*g_theStringDB;
 
 
-
 aui_TextBase::aui_TextBase(
 	MBCHAR *ldlBlock,
 	const MBCHAR *text )
@@ -53,7 +52,6 @@ aui_TextBase::aui_TextBase(
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return;
 }
-
 
 
 aui_TextBase::aui_TextBase(
@@ -78,24 +76,21 @@ aui_TextBase::aui_TextBase(
 }
 
 
-
 AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	sint32 fontsize = k_AUI_TEXTBASE_DEFAULT_FONTSIZE;
 	if ( block->GetAttributeType( k_AUI_TEXTBASE_LDL_FONTSIZE )
-			== ATTRIBUTE_TYPE_INT) 
+			== ATTRIBUTE_TYPE_INT)
 		fontsize = block->GetInt( k_AUI_TEXTBASE_LDL_FONTSIZE );
 	else if ( block->GetAttributeType( k_AUI_TEXTBASE_LDL_FONTSIZEDEPENDENT )
 			== ATTRIBUTE_TYPE_STRING)
@@ -135,7 +130,6 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	if ( !fontname )
 		fontname = k_AUI_TEXTBASE_DEFAULT_FONTNAME;
 
-	
 	uint32 flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
 		k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER;
 	MBCHAR *type = block->GetString( k_AUI_TEXTBASE_LDL_BLTTYPE );
@@ -163,7 +157,7 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	BOOL wordwrap = block->GetBool( k_AUI_TEXTBASE_LDL_WORDWRAP );
 	if ( type || vertcenter || wordwrap )
 	{
-		
+
 		flags = 0;
 
 		if ( type )
@@ -190,9 +184,9 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	if ( block->GetBool(k_AUI_TEXTBASE_LDL_NODATABASE) || !block->GetString(k_AUI_TEXTBASE_LDL_TEXT) ) {
 		InitCommon(
 			block->GetString( text ? text : k_AUI_TEXTBASE_LDL_TEXT ),
-			block->GetInt( k_AUI_TEXTBASE_LDL_MAXLENGTH ), 
-			fontname, 
-			fontsize, 
+			block->GetInt( k_AUI_TEXTBASE_LDL_MAXLENGTH ),
+			fontname,
+			fontsize,
 			color,
 			shadowcolor,
 			block->GetInt( k_AUI_TEXTBASE_LDL_BOLD ),
@@ -204,9 +198,9 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	else {
 		InitCommon(
 			g_theStringDB->GetNameStr( block->GetString(k_AUI_TEXTBASE_LDL_TEXT) ),
-			block->GetInt( k_AUI_TEXTBASE_LDL_MAXLENGTH ), 
-			fontname, 
-			fontsize, 
+			block->GetInt( k_AUI_TEXTBASE_LDL_MAXLENGTH ),
+			fontname,
+			fontsize,
 			color,
 			shadowcolor,
 			block->GetInt( k_AUI_TEXTBASE_LDL_BOLD ),
@@ -216,10 +210,8 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 			flags );
 	}
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_TextBase::InitCommon(
@@ -262,21 +254,19 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 		if ( m_curLength > m_maxLength )
 			m_curLength = m_maxLength;
 
-		
 		m_text = new MBCHAR[ m_maxLength + 1 ];
 		Assert( m_text != NULL );
 		if ( !m_text ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		memset( m_text, '\0', m_maxLength + 1 );
 
-		
 		strncpy( m_text, text, m_maxLength );
 	}
 	else
 	{
 		if ( m_maxLength )
 		{
-			
+
 			m_text = new MBCHAR[ m_maxLength + 1 ];
 			Assert( m_text != NULL );
 			if ( !m_text ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -287,7 +277,6 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_TextBase::~aui_TextBase()
@@ -301,7 +290,6 @@ aui_TextBase::~aui_TextBase()
 }
 
 
-
 AUI_ERRCODE aui_TextBase::SetText(
 	const MBCHAR *text,
 	uint32 maxlen )
@@ -309,10 +297,8 @@ AUI_ERRCODE aui_TextBase::SetText(
 	Assert( text != NULL );
 	if ( !text ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	memset( m_text, '\0', m_maxLength + 1 );
 
-	
 	if ( maxlen > m_maxLength ) maxlen = m_maxLength;
 	strncpy( m_text, text, maxlen );
 
@@ -321,32 +307,27 @@ AUI_ERRCODE aui_TextBase::SetText(
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
 {
-	
+
 	Assert(fmt != NULL );
-	if ( !fmt ) 
+	if ( !fmt )
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	
    	va_list          v_args;
 
 	MBCHAR			 buff[256];
 
-	
 	buff[sizeof(buff) - 1]='\0';
 
-	
     va_start(v_args, fmt);
 #ifdef WIN32
     _vsnprintf(buff, sizeof(buff) - 1,fmt,v_args);
 #else
 	vsnprintf(buff, sizeof(buff) - 1, fmt, v_args);
 #endif
-    va_end( v_args );         
+    va_end( v_args );
 
-	
 	SetText(buff);
 
 	return AUI_ERRCODE_OK;
@@ -361,7 +342,6 @@ AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
 	Assert( text != NULL );
 	if ( !text ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	Assert( m_curLength + strlen( text ) <= m_maxLength );
 	strncat( m_text, text, m_maxLength - m_curLength );
 
@@ -371,7 +351,6 @@ AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
 }
 
 
-
 void aui_TextBase::SetTextFont( MBCHAR *ttffile )
 {
 	if ( !ttffile ) return;
@@ -379,14 +358,12 @@ void aui_TextBase::SetTextFont( MBCHAR *ttffile )
 	m_textreload = TRUE;
 }
 
-	
 
 void aui_TextBase::SetTextFontSize( sint32 pointSize )
 {
 	m_textpointsize = pointSize;
 	m_textreload = TRUE;
 }
-
 
 
 void aui_TextBase::SetTextBold( sint32 bold )
@@ -396,13 +373,11 @@ void aui_TextBase::SetTextBold( sint32 bold )
 }
 
 
-
 void aui_TextBase::SetTextItalic( sint32 italic )
 {
 	m_textitalic = italic;
 	m_textreload = TRUE;
 }
-
 
 
 void aui_TextBase::TextReloadFont( void )
@@ -445,15 +420,13 @@ void aui_TextBase::TextReloadFont( void )
 }
 
 
-
 AUI_ERRCODE aui_TextBase::DrawThisText(
 	aui_Surface *destSurf,
 	RECT *destRect )
 {
-	
+
 	if ( !m_text ) return AUI_ERRCODE_OK;
 
-	
 	if ( m_textreload ) TextReloadFont();
 	assert(m_textfont!=NULL);
 
@@ -483,24 +456,22 @@ AUI_ERRCODE aui_TextBase::DrawThisText(
 		m_textunderline );
 }
 
-
 uint32 aui_TextBase::FindNextWordBreak(
 	MBCHAR *text, HDC hdc, sint32 width )
 {
 	Assert( text != NULL );
 	if ( !text ) return 0;
 
-	uint32 totalLength = 0;	
-	sint32 totalSize = 0;	
+	uint32 totalLength = 0;
+	sint32 totalSize = 0;
 #ifdef __AUI_USE_DIRECTX__
 	MBCHAR *token;
 	MBCHAR *word = text;
 	while ( token = FindNextToken( word, " \t\n", 1 ) )
 	{
-		SIZE wordSize = { 0, 0 };				
-		sint32 wordLength = token - word + 1;	
+		SIZE wordSize = { 0, 0 };
+		sint32 wordLength = token - word + 1;
 
-		
 		BOOL success = GetTextExtentPoint32( hdc, word, wordLength, &wordSize );
 		Assert( success );
 		if ( !success ) return totalLength + wordLength;
@@ -516,11 +487,9 @@ uint32 aui_TextBase::FindNextWordBreak(
 		word = token + 1;
 	}
 
-	
 	SIZE wordSize = { 0, 0 };
 	sint32 wordLength = strlen( word );
 
-	
 	BOOL success = GetTextExtentPoint32( hdc, word, wordLength, &wordSize );
 	Assert( success );
 	if ( !success ) return totalLength + wordLength;
@@ -530,7 +499,6 @@ uint32 aui_TextBase::FindNextWordBreak(
 #endif
 	return totalLength;
 }
-
 
 
 MBCHAR *aui_TextBase::FindNextToken(

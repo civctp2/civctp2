@@ -1,6 +1,3 @@
-
-
-
 #include "c3.h"
 #include "aui_window.h"
 #include "aui_surface.h"
@@ -9,7 +6,6 @@
 #include "primitives.h"
 
 #include "ns_spinner.h"
-
 
 
 ns_Spinner::ns_Spinner(
@@ -25,7 +21,6 @@ ns_Spinner::ns_Spinner(
 	PatternBase( ldlBlock, NULL )
 {
 }
-
 
 
 ns_Spinner::ns_Spinner(
@@ -50,10 +45,9 @@ ns_Spinner::ns_Spinner(
 }
 
 
-
 AUI_ERRCODE ns_Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -75,11 +69,9 @@ AUI_ERRCODE ns_Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		surface,
 		&rect );
 
-	
-	
+
 	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
 	{
-		
 
 		uint16 *pixel;
 
@@ -87,15 +79,13 @@ AUI_ERRCODE ns_Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
 		{
-			
+
 			uint16 *origPixel = pixel;
 
-			
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
 
-			
 			uint16 *stopHorizontal = pixel + width;
 			const uint16 *stopVertical = pixel +
 				pitch * ( rect.bottom - rect.top );
@@ -105,9 +95,9 @@ AUI_ERRCODE ns_Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				do
 				{
 					*pixel = pixelutils_BlendFast(
-						*pixel,	
-						0x0000,	
-						24 );	
+						*pixel,
+						0x0000,
+						24 );
 
 				} while ( ++pixel != stopHorizontal );
 

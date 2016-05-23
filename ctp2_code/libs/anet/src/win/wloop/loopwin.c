@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -54,7 +54,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <time.h>
 #include "dpmem.h"
-
 
 #include "loopwin.h"
 
@@ -130,12 +129,11 @@ static char		error_text[80];
 
 ******************************************************************************/
 
-static void getlooperror(void) 
+static void getlooperror(void)
 
 {
   DPRINT(("Loopback error: %s\n", error_text));
 }
-
 
 /*****************************************************************************
 
@@ -147,7 +145,7 @@ void printaddr(LOOPADDR *peer, char *string)
 
 {
   dp_dprintf("%s: %X\n", string, *peer);
-}                   
+}
 
 /*****************************************************************************
 
@@ -166,9 +164,7 @@ LOOPINSTANCE * LOOPWIN_Create(int *status, long sessionId)
   LOOPINSTANCE * loopptr;
 //  int           len;
 
-
   DPRINT(("LOOPWIN_Create() Called..\n"));
-
 
   // allocate an instance structure
   loopptr = (LOOPINSTANCE *) dp_MALLOC(sizeof(LOOPINSTANCE));
@@ -190,7 +186,6 @@ LOOPINSTANCE * LOOPWIN_Create(int *status, long sessionId)
 
   return(loopptr);
 }
-
 
 /*****************************************************************************
 
@@ -238,7 +233,7 @@ LOOPHANDLE LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, int insert)
   //printaddr(addr, "Address2Handle: ");
 
   // Search peer table and return handle if found
-  for (h = 0; h < loop->nexthandle; h++)  
+  for (h = 0; h < loop->nexthandle; h++)
   {
     if ( loop->peers[h].addr == addr) {
 	  //DPRINT(("Address2Handle: got %d\n", h));
@@ -260,7 +255,6 @@ LOOPHANDLE LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, int insert)
 	return(h);
 }
 
-
 /*****************************************************************************
 
                             LOOPWIN_Handle2Address()
@@ -278,7 +272,6 @@ int LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr
   return(loop_RES_OK);
 }
 
-
 /*****************************************************************************
 
                                   LOOPWIN_PutPacket()
@@ -294,7 +287,6 @@ int LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hd
 {
   int			nobytes;
   LOOPPEER		*peer;
-
 
 //  DPRINT(("LOOPWIN_PutPacket() Called..\n"));
 
@@ -318,7 +310,6 @@ int LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hd
 
   return(loop_RES_OK);
 }
-
 
 /*****************************************************************************
 
@@ -351,7 +342,6 @@ int LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *plen, LOOPHANDLE 
   int     addrlen;
   ULONG   nobytes;
   LOOPADDR addr;
-
 
 //  DPRINT(("LOOPWIN_GetPacket() Called..\n"));
 
@@ -452,7 +442,7 @@ static LOOPADDR		open_loopback(LOOPPEER *mypeer, long sessionId)
 
 	hDirFileMap = hDirMutex = dir = NULL;
 	hPbufFileMap = hPbufMutex = pbuffer = NULL;
-	
+
 // Create semaphore to synchronize access to the directory
 
 	hDirMutex = CreateMutex(NULL, FALSE, MUTEX_NAME);
@@ -585,7 +575,7 @@ static void			close_loopback(LOOPADDR myaddr)
 
 	ReleaseMutex(hDirMutex);
 	DPRINT(("close_loopback: released dir mutex\n"));
-	
+
 // Unmap the directory and close my handles to it
 
 	UnmapViewOfFile((LPVOID) dir);
@@ -656,7 +646,7 @@ static int			loopsend(LOOPADDR myaddr, char *buf, int len, int flags, LOOPPEER *
 
 // Get access to the receive buffer of the destination. If the destination has terminated and closed the buffer,
 // release our handle to it and exit.
-	
+
 	WaitForSingleObject(to->mutex, INFINITE);
 	DPRINT(("loopsend: got buffer mutex %x for dest %x\n", to->mutex, to->addr));
 	to_buf = (LOOP_PACKBUFFER *)to->pbuf;
@@ -722,7 +712,7 @@ static int			loopbroadcast(LOOPADDR myaddr, char *buf, int len, int flags)
 	DWORD		i;
 
 // Get access to the directory
-	
+
 	WaitForSingleObject(hDirMutex, INFINITE);
 	DPRINT(("loopbroadcast: got dir mutex\n"));
 
@@ -774,7 +764,7 @@ static int			looprecv(LOOPADDR myaddr, char *buf, int len, int flags, LOOPADDR *
 
 // Get access to our recieve buffer.
 // This shouldn't actually be necessary, since the receiver is the only one!! 5/20/97
-	
+
 //	WaitForSingleObject(hPbufMutex, INFINITE);
 
 // Return if our input buffer is empty

@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-	
+
 
 
 
@@ -74,4 +74,4 @@ void DebugException_Execute (DebugExceptionClientFunction function_monitored);
 
 #endif
 
-#endif 
+#endif

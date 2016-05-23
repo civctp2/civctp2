@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "globals.h"
@@ -61,9 +59,9 @@ C3String::C3String(CivArchive &archive)
 
 void C3String::Serialize(CivArchive &archive)
 {
-    if (archive.IsStoring()) { 
-        archive << m_refCount; 
-    } else { 
-        archive >> m_refCount; 
-    } 
+    if (archive.IsStoring()) {
+        archive << m_refCount;
+    } else {
+        archive >> m_refCount;
+    }
 }

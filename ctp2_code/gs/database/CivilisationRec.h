@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 #include "Rec.h"
 class Token;
 
-
 class CivArchive ;
 
 #define k_MAX_CITY_NAMES		500
@@ -45,8 +44,7 @@ class CivArchive ;
 class CivilisationRecord : public Record
 	{
 	public:
-	    
-		
+
 		StringId	m_leader_name,
 					m_leader_name_female,
                     m_personality_description,
@@ -56,23 +54,23 @@ class CivilisationRecord : public Record
 					m_emissary_photo;
 
 		sint32	m_capital,
-				m_cityStyle,		
+				m_cityStyle,
 				m_numCities,
-			    m_parchment;  
+			    m_parchment;
 
 		StringId	*m_cityname;
 
-		
-		
 
-		
-		
-		
+
+
+
+
+
 		char *m_personality_male, *m_personality_female;
-		
-		
-		
-   
+
+
+
+
 		CivilisationRecord() ;
 		~CivilisationRecord();
 		void Serialize(CivArchive &archive) ;
@@ -81,7 +79,7 @@ class CivilisationRecord : public Record
 		sint32 ParseCityList(Token *token) ;
 		StringId GetLeaderName(void) { return (m_leader_name) ; }
 		StringId GetLeaderNameFemale(void) { return (m_leader_name_female); }
-        StringId GetPersonalityDescription() { return m_personality_description; } 
+        StringId GetPersonalityDescription() { return m_personality_description; }
 		StringId GetPluralCivName(void) { return (m_plural_name) ; }
 		StringId GetCountryName(void) { return (m_country_name) ; }
 		StringId GetSingularCivName(void) { return (m_singular_name) ; }

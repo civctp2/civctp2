@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -58,12 +58,12 @@ void ProgressWindow::BeginProgress(
 
 		progwin->m_factorList.AddTail( 1.0 );
 
-		
-		
-		
+
+
+
 		g_c3ui->SetBackgroundColor( RGB(0,0,0) );
 
-		
+
 
 
 
@@ -82,20 +82,19 @@ void ProgressWindow::BeginProgress(
 
 	progwin->m_baseList.AddTail( progwin->m_pbar->GetCurValue() );
 
-	
 	progwin->StartCountingTo( 0 );
 }
 
 void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
 {
-	
+
 	if ( message )
 	{
 		m_message->SetText( message );
 	}
 	else
 	{
-		
+
 	}
 
 	m_pbar->SetCurValue(
@@ -105,7 +104,6 @@ void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
 	m_prevValList.GetTail() = m_nextValList.GetTail();
 	m_nextValList.GetTail() = val;
 
-	
 	Draw();
 	g_c3ui->Draw();
 }
@@ -114,7 +112,7 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 {
 	if ( progwin )
 	{
-		
+
 		progwin->StartCountingTo( progwin->m_pbar->GetMaxValue() );
 
 		progwin->m_prevValList.RemoveTail();
@@ -129,7 +127,6 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 			delete progwin;
 			progwin = NULL;
 
-			
 			g_c3ui->Draw();
 			g_c3ui->SetBackgroundColor( k_AUI_UI_NOCOLOR );
 		}
@@ -202,7 +199,6 @@ ProgressWindow::~ProgressWindow()
 }
 
 
-
 COLORREF ProgressWindow::SetBarColor(COLORREF color)
 {
 	return m_pbar->SetBarColor(color);
@@ -214,9 +210,9 @@ AUI_ERRCODE StandardProgressBar::CalculateIntervals(
 {
 	double x = (double)m_curValue / (double)m_maxValue;
 
-	
-	
-	
+
+
+
 	*start = 0.0;
 	*stop = x;
 

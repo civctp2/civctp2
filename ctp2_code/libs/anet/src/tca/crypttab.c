@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 	unsigned char buf[crypttab_RW_BUFFER_SIZE];
 	unsigned char *pbuf;
 	unsigned char unitbuf[crypttab_RW_BUFFER_SIZE];
-	
+
 	d.magic = dynatab_encrypted_MAGIC;
 	d.n_used = tab->n_used;
 	d.unit = tab->unit;
@@ -66,7 +66,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 		DPRINT(("dynatab_freeze_encrypted: Error writing info.\n"));
 		return;
 	}
-	
+
 	pbuf = buf;
 	memset(unitbuf, 0, encrypted_unit);
 	deskey(key, EN0);
@@ -87,7 +87,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 		for (chunk = 0; chunk < encrypted_unit; chunk += 8, pbuf += 8)
 			des(unitbuf + chunk, pbuf);
 	}
-	
+
 	/* Write the last partial buffer to disk */
 	nwritten = fwrite(buf, (pbuf - buf), 1, fp);
 	if (nwritten != 1) {
@@ -126,7 +126,7 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 	/* round up to nearest multiple of 8 */
 	encrypted_unit = d.unit + 7 - (d.unit + 7) % 8;
 	assert(encrypted_unit <= crypttab_RW_BUFFER_SIZE);
-	
+
 	DPRINT(("dynatab_thaw_encrypted: Reading %d elements of size %d (%d encrypted).\n", d.n_used, d.unit, encrypted_unit));
 	tab->unit = d.unit;
 	if (d.n_used != 0) {
@@ -136,7 +136,7 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 		unsigned char buf[crypttab_RW_BUFFER_SIZE];
 		unsigned char *pbuf;
 		unsigned char unitbuf[crypttab_RW_BUFFER_SIZE];
-		
+
 		p = dynatab_subscript_grow(tab, d.n_used-1);
 		if (!p) {
 			DPRINT(("dynatab_thaw_encrypted: Could not allocate %d elements\n", d.n_used));
@@ -145,7 +145,7 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 		n = 0;
 		memset(unitbuf, 0, encrypted_unit);
 		deskey(key, DE1);
-		while (n < d.n_used) { 
+		while (n < d.n_used) {
 			n_end = n + crypttab_RW_BUFFER_SIZE / encrypted_unit;
 			if (n_end > d.n_used)
 				n_end = d.n_used;
@@ -168,9 +168,8 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 	}
 	tab->n_used = d.n_used;
 	DPRINT(("dynatab_thaw_encrypted: successful.\n"));
-	return (void *) tab->buf;	
+	return (void *) tab->buf;
 }
-
 
 #if defined(crypttab_UNITTEST)
 
@@ -306,7 +305,7 @@ main()
 		}
 		test1(pt[i]);
 	}
-	for (i=0;i<NTABS;i++) 
+	for (i=0;i<NTABS;i++)
 		dynatab_destroy(pt[i]);
 	printf("test okay\n");
 	return 0;

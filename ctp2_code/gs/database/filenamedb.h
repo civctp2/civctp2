@@ -7,40 +7,39 @@
 class CivArchive ;
 class Token;
 
-struct FilenameNode { 
-                        
-	MBCHAR	m_name[_MAX_PATH]; 
+struct FilenameNode {
+
+	MBCHAR	m_name[_MAX_PATH];
 	MBCHAR	m_filename[_MAX_PATH];
 };
 
-class FilenameDB { 
-    
-	
-	
-	
+class FilenameDB {
+
+
+
+
     sint32 m_size;
-	
-	
 
-	
-	
-	
-	
 
-	FilenameNode *m_map; 
-	
-	
+
+
+
+
+
+
+	FilenameNode *m_map;
+
 
 public:
 	FilenameDB();
 	FilenameDB(CivArchive &archive);
 	~FilenameDB();
-	
+
 	void	SetSize(sint32 size);
 
-	sint32	FindTypeIndex(const char *str) const; 
-	MBCHAR	*GetFilename(sint32 index) const; 
-    void	SetName(sint32 count, char str[_MAX_PATH]); 
+	sint32	FindTypeIndex(const char *str) const;
+	MBCHAR	*GetFilename(sint32 index) const;
+    void	SetName(sint32 count, char str[_MAX_PATH]);
     void	SetFilename(sint32 count, MBCHAR *s);
 
 	void	Serialize(CivArchive &archive) ;

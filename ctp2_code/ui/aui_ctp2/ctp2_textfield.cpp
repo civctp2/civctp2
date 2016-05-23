@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -26,7 +13,6 @@
 #include "ctp2_textfield.h"
 
 extern C3UI			*g_c3ui;
-
 
 ctp2_TextField::ctp2_TextField(
 	AUI_ERRCODE *retval,
@@ -47,7 +33,6 @@ ctp2_TextField::ctp2_TextField(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 ctp2_TextField::ctp2_TextField(
 	AUI_ERRCODE *retval,
@@ -74,31 +59,27 @@ ctp2_TextField::ctp2_TextField(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE ctp2_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH, 
+	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH,
 				bevelType=0;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
+
 	if (block->GetAttributeType( k_CTP2_TEXTFIELD_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_CTP2_TEXTFIELD_LDL_BEVELWIDTH );
 	}
 
 	return InitCommon(bevelWidth);
 }
-
 
 
 AUI_ERRCODE ctp2_TextField::InitCommon( sint32 bevelWidth )
@@ -108,20 +89,17 @@ AUI_ERRCODE ctp2_TextField::InitCommon( sint32 bevelWidth )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE ctp2_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
 
-	
 	RECT rect = { 0, 0, m_width + 4, m_height + 4 };
 	OffsetRect( &rect, m_x + x - 2, m_y + y - 2 );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
 
 	if (m_bevelWidth > 0)
@@ -136,11 +114,9 @@ AUI_ERRCODE ctp2_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	aui_TextField::DrawThis( surface, x, y );
 
-	
-	
+
 	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
 	{
-		
 
 		uint16 *pixel;
 
@@ -148,15 +124,13 @@ AUI_ERRCODE ctp2_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
 		{
-			
+
 			uint16 *origPixel = pixel;
 
-			
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
 
-			
 			uint16 *stopHorizontal = pixel + width;
 			const uint16 *stopVertical = pixel +
 				pitch * ( rect.bottom - rect.top );
@@ -166,9 +140,9 @@ AUI_ERRCODE ctp2_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				do
 				{
 					*pixel = pixelutils_BlendFast(
-						*pixel,	
-						0x0000,	
-						24 );	
+						*pixel,
+						0x0000,
+						24 );
 
 				} while ( ++pixel != stopHorizontal );
 

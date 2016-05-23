@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,15 +24,15 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified ExportBitPairInitialization function to allow bit pairs to 
-//   have default values so that when two records are merged, only the bit 
+// - Modified ExportBitPairInitialization function to allow bit pairs to
+//   have default values so that when two records are merged, only the bit
 //   is merged in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Updated ExportBitPairAccessorProto function so that the default
 //   values of bits can be accesses if these bits have default values.
 // - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
 // - Output files only have spaces instead of tabs as indent and indetion
 //   was fixed. (Aug 25th 2005 Martin Gühmann)
-// - Added alias names and the possibility to have default values from 
+// - Added alias names and the possibility to have default values from
 //   other entries. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -92,7 +92,6 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 		return;
 	}
 
-	
 	char sizestring[50];
 	const char *typestring = "";
 	char comment[k_MAX_STRING];
@@ -117,7 +116,7 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 		case DATUM_BIT:
 			typestring = "uint8";
 			Assert(0);
-			break;			
+			break;
 		case DATUM_FLOAT:
 			typestring = "double";
 			break;
@@ -144,7 +143,6 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 	fprintf(outfile, "%s", indent ? "        " : "    ");
 	fprintf(outfile, "%-15s %c%cm_%s%s;%s\n", typestring, star, notFixedStar, m_name, sizestring, comment);
 
-	
 	if((m_maxSize > 0) || (m_maxSize == k_MAX_SIZE_VARIABLE)) {
 		fprintf(outfile, "%s", indent ? "        ": "    ");
 		fprintf(outfile, "sint32            m_num%s;\n", m_name);
@@ -228,7 +226,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 			fprintf(outfile,     "%s                         index = m_%s;\n", ind, m_bitPairDatum->m_name);
 			fprintf(outfile,     "%s                         return true;\n", ind);
 			fprintf(outfile,     "%s                     }\n", ind);
-			
+
 			fprintf(outfile,     "%s    bool             Get%s(const %sRecord *&rec) const;\n", ind, m_name, m_bitPairDatum->m_subType);
 			fprintf(outfile,     "%s    const %sRecord  *Get%sPtr() const;\n", ind, m_bitPairDatum->m_subType, m_name);
 			break;
@@ -273,7 +271,7 @@ void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 			case DATUM_BIT_PAIR:
 				ExportBitPairAccessorProto(outfile, indent, recordName);
 				break;
-				
+
 			case DATUM_FLOAT:
 				fprintf(outfile, "%s    double           Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				break;
@@ -346,8 +344,7 @@ void Datum::ExportRangeCheck(FILE *outfile)
 
 void Datum::ExportDataCode(FILE *outfile, char *recordName)
 {
-	
-	
+
 	if(m_maxSize <= 0) {
 		switch(m_type) {
 			case DATUM_RECORD:
@@ -400,7 +397,7 @@ void Datum::ExportDataCode(FILE *outfile, char *recordName)
 				ExportRangeCheck(outfile);
 				fprintf(outfile, "    return m_%s[index];\n", m_name);
 				fprintf(outfile, "}\n\n");
-				
+
 				fprintf(outfile, "const %sRecord *%sRecord::Get%s(sint32 index) const\n", m_subType, recordName, m_name);
 				fprintf(outfile, "{\n");
 				ExportRangeCheck(outfile);
@@ -832,10 +829,10 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 
 void Datum::ExportDestructor(FILE *outfile)
 {
-	
+
 	if (m_maxSize == k_MAX_SIZE_VARIABLE) {
 		fprintf(outfile, "    // free array %s\n", m_name);
-		switch (m_type) 
+		switch (m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -872,9 +869,9 @@ void Datum::ExportDestructor(FILE *outfile)
 		case DATUM_NONE:
 			break;
 		}
-	} else if ( m_type ==  DATUM_BIT_PAIR ) 
+	} else if ( m_type ==  DATUM_BIT_PAIR )
 	{
-		switch(m_bitPairDatum->m_type) 
+		switch(m_bitPairDatum->m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -907,10 +904,10 @@ void Datum::ExportDestructor(FILE *outfile)
 
 void Datum::ExportOperatorEqual(FILE *outfile)
 {
-	
+
 	if (m_maxSize == k_MAX_SIZE_VARIABLE) {
 		fprintf(outfile, "    // free array %s\n", m_name);
-		switch (m_type) 
+		switch (m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -952,7 +949,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "            // free string elements\n");
 			fprintf(outfile, "            delete m_%s[index];\n", m_name );
 			fprintf(outfile, "        }\n\n");
-			
+
 			fprintf(outfile, "    if (m_num%s > 0)\n", m_name );
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        delete[] m_%s;\n", m_name );
@@ -1005,7 +1002,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 	else if ( m_maxSize > 0 )
 	{
 		fprintf(outfile, "    // copy fixed sized array %s[]\n", m_name);
-		switch (m_type) 
+		switch (m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -1023,7 +1020,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "        // free string elements\n");
 			fprintf(outfile, "        delete m_%s[index];\n", m_name );
 			fprintf(outfile, "    }\n\n");
-			
+
 			fprintf(outfile, "    // copy string elements of %s[]\n",m_name);
 			fprintf(outfile, "    for (index = 0; index < rval.m_num%s; index++)\n", m_name );
 			fprintf(outfile, "    {\n");
@@ -1047,26 +1044,26 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			break;
 
 		}
-	} 
-	else if ( m_type ==  DATUM_BIT_PAIR ) 
+	}
+	else if ( m_type ==  DATUM_BIT_PAIR )
 	{
 		fprintf(outfile, "    m_flags%d = rval.m_flags%d;\n",
 			m_bitNum / 32, m_bitNum / 32);
-		switch(m_bitPairDatum->m_type) 
+		switch(m_bitPairDatum->m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
 		case DATUM_FLOAT:
 		case DATUM_RECORD:
 		case DATUM_STRUCT:
-			fprintf(outfile, "    m_%s = rval.m_%s;\n\n", 
+			fprintf(outfile, "    m_%s = rval.m_%s;\n\n",
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name );
-			fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n", 
+			fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n",
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 			fprintf(outfile, "        strcpy(m_%s, rval.m_%s);\n",
 				m_bitPairDatum->m_name, m_bitPairDatum->m_name );
@@ -1093,7 +1090,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "    }\n\n");
 	}
 	else {
-		switch(m_type) 
+		switch(m_type)
 		{
 		case DATUM_INT:
 		case DATUM_STRINGID:
@@ -1122,7 +1119,7 @@ void Datum::ExportResolver(FILE  *outfile)
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        sint32 i;\n");
 			fprintf(outfile, "        for(i = 0; i < m_num%s; i++) {\n", m_name);
-			fprintf(outfile, "            if(m_%s[i] & 0x80000000) {\n", m_name);		
+			fprintf(outfile, "            if(m_%s[i] & 0x80000000) {\n", m_name);
 			fprintf(outfile, "                sint32 id = m_%s[i] & 0x7fffffff;\n", m_name);
 			fprintf(outfile, "                if(!g_the%sDB->GetNamedItem(id, m_%s[i])) {\n", m_subType, m_name);
 			fprintf(outfile, "                    c3errors_ErrorDialog(\"DB\", \"%%s not found in %s database\", g_theStringDB->GetNameStr(id));\n",
@@ -1160,15 +1157,15 @@ void Datum::ExportResolver(FILE  *outfile)
 	}
 }
 
-void Datum::ExportMerge(FILE *outfile, char *recordName) 
+void Datum::ExportMerge(FILE *outfile, char *recordName)
 {
-	
+
 	if (m_maxSize > 0) {
-		switch (m_type) 
+		switch (m_type)
 			{
 			case DATUM_INT:
 			case DATUM_STRINGID:
-				
+
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
 					fprintf(outfile, "    // replace array m_%s\n", m_name);
@@ -1186,7 +1183,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "    }\n\n");
 				break;
 			case DATUM_FLOAT:
-				
+
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
 					fprintf(outfile, "    // replace array m_%s\n", m_name);
@@ -1204,7 +1201,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "    }\n\n");
 				break;
 			case DATUM_RECORD:
-				
+
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
 					fprintf(outfile, "    // resize m_%s if necessary\n",m_name);
@@ -1233,7 +1230,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "        if (m_%s[index])\n", m_name);
 				fprintf(outfile, "            delete m_%s[index];\n", m_name);
 				fprintf(outfile, "    }\n");
-				
+
 				if (m_maxSize == k_MAX_SIZE_VARIABLE)
 				{
 					fprintf(outfile, "    delete m_%s;\n", m_name);
@@ -1251,15 +1248,14 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "    for (index = 0; index < m_num%s; index++)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        // find matching struct element\n" );
-				
+
 				fprintf(outfile, "        for (int obj_index = 0; obj_index < rval.m_num%s; obj_index++)\n", m_name );
 				fprintf(outfile, "            if (m_%s[index] == rval.m_%s[obj_index]){\n", m_name, m_name );
 				fprintf(outfile, "                // replace struct element\n");
 				fprintf(outfile, "                m_%s[index] = rval.m_%s[obj_index];\n", m_name, m_name);
-				
+
 				fprintf(outfile, "                }\n");
-				
-				
+
 				fprintf(outfile, "    }\n");
 			case DATUM_BIT:
 			case DATUM_BIT_GROUP:
@@ -1280,14 +1276,14 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				case DATUM_FLOAT:
 				case DATUM_RECORD:
 				case DATUM_STRUCT:
-					fprintf(outfile, "    m_%s = rval.m_%s;\n\n", 
+					fprintf(outfile, "    m_%s = rval.m_%s;\n\n",
 							m_bitPairDatum->m_name, m_bitPairDatum->m_name );
 					break;
 				case DATUM_FILE:
 				case DATUM_STRING:
 					fprintf(outfile, "    {\n");
 					fprintf(outfile, "        delete m_%s;\n", m_bitPairDatum->m_name);
-					fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n", 
+					fprintf(outfile, "        m_%s = new char[strlen(rval.m_%s)+1];\n",
 							m_bitPairDatum->m_name, m_bitPairDatum->m_name);
 					fprintf(outfile, "        strcpy(m_%s, rval.m_%s);\n",
 							m_bitPairDatum->m_name, m_bitPairDatum->m_name);
@@ -1303,7 +1299,6 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 		fprintf(outfile, "    // only replace values that have been set\n");
 		fprintf(outfile, "    if(rval.m_%s != 0x0)\n", m_name);
 
-		
 		fprintf(outfile, "        m_%s = rval.m_%s;\n\n", m_name, m_name);
 	}
 }

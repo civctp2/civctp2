@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -31,8 +30,8 @@ class LineGraph : public aui_Control
 {
 public:
 
-	LineGraph(AUI_ERRCODE *retval, 
-					sint32 id, 
+	LineGraph(AUI_ERRCODE *retval,
+					sint32 id,
 					MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL,
@@ -75,9 +74,9 @@ public:
 	void		EnablePrecision( sint32 enable ) { m_enablePrecision = enable; };
 
 	void		SetGraphType(GRAPH_TYPE graphType) {m_graphType=graphType;};
-	void		SetEventTracker(EventTracker *events) 
+	void		SetEventTracker(EventTracker *events)
 	{
-		m_events = events; 
+		m_events = events;
 		if (m_events != NULL) SetGraphType(GRAPH_TYPE_ZEROSUM);
 	}
 
@@ -85,7 +84,6 @@ public:
 
 	virtual AUI_ERRCODE		DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
-	
 	aui_Surface	*GetGraphSurface(void) const { return m_surface; }
 
 private:

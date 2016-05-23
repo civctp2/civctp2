@@ -10,7 +10,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -20,7 +20,7 @@
  * _DEBUG
  * This code is only activated when this flag has been set.
  *
- * _MSC_VER		
+ * _MSC_VER
  * - Compiler version (for the Microsoft C++ compiler only).
  *
  *----------------------------------------------------------------------------
@@ -31,7 +31,6 @@
  *
  *----------------------------------------------------------------------------
  */
-
 
 #ifdef _DEBUG
 
@@ -76,14 +75,13 @@ void Debug_Open (void)
 	DebugCallStack_Open();
 
 	sprintf(name, "%s%#.3d.txt", "CivCTP_debug", 0);
-	
+
 	Log_Open ("CTP_debug.cfg", name);
 
 	DebugAssert_Open (Debug_SystemCleanup, Debug_SystemRestore);
 	DebugException_Open (Debug_SystemCleanup);
 	DebugMemory_Open();
 }
-
 
 //
 // Only close memory system ... logs asserts etc may be used in static desctructors
@@ -156,4 +154,3 @@ void Debug_SetProcessName(char const * szProcessName)
 #endif
 
 #endif // def _DEBUG
-

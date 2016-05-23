@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "mywcs.h"		/* extra wcs functions */
 #define D2DES
 #include "../3rdparty/d3des/d3des.h"
-#include "../3rdparty/md5/global.h"		/* for md5 */ 
+#include "../3rdparty/md5/global.h"		/* for md5 */
 #include "../3rdparty/md5/md5.h"
 
 /* Secret stuff the caller doesn't really need to know:
@@ -48,9 +48,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * DESn(k, d) takes a 8 byte key and an arbitrary length data block,
  * and divides up the data d into 8 byte chunks d1, d2... dn.
  * DESn(k, d) = concat(DES(k, d1), DES(k, d2), ... DES(k, dn)
- * 
+ *
  * A simple extension of DESn is TDESn.
- * TDESn(k, d) divides up the key k into 8 byte chunks k1, k2, ... 
+ * TDESn(k, d) divides up the key k into 8 byte chunks k1, k2, ...
  * plus a remainder kr, which is zero padded.
  * TDESn(k, d) = DES(kr, ... DES(k2, DES(k1, d))...)
  *
@@ -58,21 +58,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * TDESn, with a tcapw_hpw_t as key (i.e., the MD5 hash of the user's
  * password), then taking the MD5 hash of the result.
  * response(challenge) = MD5(TDESn(MD5(password), challenge))
- * 
+ *
  * A tca_pwchange_t is a challenge response concatenated with the MD5
  * hash of the new password, all encrypted with TDESn, with a tcapw_hpw_t
  * as key (i.e., the MD5 hash of the user's old password).
  * pwchange = TDESn(MD5(oldpasswd), concat(response(challenge),MD5(newpasswd)))
  *
  * A tca_newuser_t is a new username, the hash of a new password, and
- * a magic string encrypted with TDESn, with the hash of the challenge 
+ * a magic string encrypted with TDESn, with the hash of the challenge
  * plus a second magic string as the key.  This is not very secure, but
  * the new user does not have a password registered with the server to
- * encrypt with.  Until we can legally export a public key system, 
+ * encrypt with.  Until we can legally export a public key system,
  * the best we can do is security through obscurity.
  * newuser(challenge) = TDESn(MD5(concat(challenge, magic2)),
  *                            concat(username, MD5(password), magic));
- * 
+ *
  * End secret stuff.
  */
 
@@ -92,10 +92,9 @@ tca_t *tca_create(void)
 		free(tca);
 		return (tca_t *)NULL;
 	}
-	
+
 	return tca;
 }
-
 
 /*--------------------------------------------------------------------------
   Load a password database from disk.
@@ -108,7 +107,7 @@ tca_t *tca_create(void)
 dp_result_t tca_openpw(tca_t *tca, const char *fname)
 {
 	if (tca == NULL || fname == NULL)
-		return dp_RES_BAD;	
+		return dp_RES_BAD;
 	return tcapw_open(tca->tdb, fname);
 }
 
@@ -164,7 +163,7 @@ dp_result_t tca_Freeze(tca_t *tca, FILE *fp)
 dp_result_t tca_Thaw(tca_t *tca, FILE *fp)
 {
 	char filename[256];
-	
+
 	precondition(tca);
 	precondition(fp);
 
@@ -203,7 +202,7 @@ dp_result_t tca_uid2uname(tca_t *tca, tcapw_uid_t uid, tcapw_uname_t *uname)
 {
 	dp_result_t err;
 	tcapw_entry_t entry;
-	
+
 	if (tca == NULL)
 		return dp_RES_BAD;
 	if ((err = tcapw_entry_find_byid(tca->tdb, uid, &entry)) != dp_RES_OK)
@@ -232,7 +231,7 @@ dp_result_t tca_challenge_generate(tca_t *tca, tca_challenge_t *challenge)
 
 	if (tca == NULL || challenge == NULL)
 		return dp_RES_BAD;
-	
+
 	time(&ctime);             /* 32 bits, some very slow to change */
 	ptime = eclock();
 	ptime &= 0x000003ff;      /* smallest 10 bits (1024 ECLOCKS) are independant of ctime */
@@ -240,10 +239,10 @@ dp_result_t tca_challenge_generate(tca_t *tca, tca_challenge_t *challenge)
 	rnd[1] = rand() & 0x7f;   /* 7 bits */
 	rnd[2] = rand() & 0x7f;   /* 7 bits */
 	l = ((unsigned long)ptime) | (rnd[0] << 10) | (rnd[1] << 17) | (rnd[0] << 24);
-	
+
 	memcpy(c, &ctime, 4);  /* if time_t and long are not 4 bytes, this might lose important bits */
 	memcpy(&c[4], &l, 4);
-	
+
 	MD5Init(&context);
 	MD5Update(&context, c, 8);           /* MD5 the varying string */
 	MD5Update(&context, "n|jB^d7?", 8);  /* add constant string to confuse things further */
@@ -271,7 +270,7 @@ dp_result_t tca_response_validate(tca_t *tca, const tca_challenge_t *challenge, 
 	tcapw_entry_t entry;
 	unsigned char buf[tca_LEN_CHALLENGE];
 	char correct_response[tca_LEN_RESPONSE];
-	
+
 	if (tca == NULL || challenge == NULL || response == NULL || uid == NULL) {
 		DPRINT(("tca_response_validate: bad arguments\n"));
 		return dp_RES_BAD;
@@ -287,10 +286,10 @@ dp_result_t tca_response_validate(tca_t *tca, const tca_challenge_t *challenge, 
 	}
 	DPRINT(("tca_response_validate: hpw %s\n", tcapw_hexprint(entry.hpw.hpw, tcapw_LEN_HASHPW)));
 	DPRINT(("tca_response_validate: response %s\n", tcapw_hexprint(response->response, tca_LEN_RESPONSE)));
-	
+
 	desDkey(entry.hpw.hpw, EN0);
 	Ddes(challenge->challenge, buf);
-	
+
 	MD5Init(&context);
 	MD5Update(&context, buf, tca_LEN_CHALLENGE);
 	MD5Final(correct_response, &context);
@@ -351,29 +350,29 @@ dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, 
 	MD5_CTX context;
 	tca_response_t response;
 	unsigned char buf[tca_LEN_CHALLENGE];
-	
+
 	if (tca == NULL || challenge == NULL || oldhpw == NULL || newhpw == NULL || pwchange == NULL || email == NULL)
 		return dp_RES_BAD;
 
 	DPRINT(("tca_pwchange_generate: challenge %s flags %d email %s\n", tcapw_hexprint(challenge->challenge, tca_LEN_CHALLENGE), flags, email));
 	DPRINT(("tca_pwchange_generate: hpw %s\n", tcapw_hexprint(oldhpw->hpw, tcapw_LEN_HASHPW)));
 	DPRINT(("tca_pwchange_generate: newhpw %s\n", tcapw_hexprint(newhpw->hpw, tcapw_LEN_HASHPW)));
-	
+
 	pwchange->emaillen = strlen(email);
 	if (pwchange->emaillen > tcapw_MAXLEN_EMAIL)
 		pwchange->emaillen = tcapw_MAXLEN_EMAIL;
 	strncpy(pwchange->email, email, tcapw_MAXLEN_EMAIL);
 	pwchange->flags = flags;
-	
+
   	desDkey(oldhpw->hpw, EN0);
 	Ddes(challenge->challenge, buf);
 
 	MD5Init(&context);
 	MD5Update(&context, buf, tca_LEN_CHALLENGE);
 	MD5Final(response.response, &context);
-	
+
 	DPRINT(("tca_pwchange_generate: response %s\n", tcapw_hexprint(response.response, tca_LEN_RESPONSE)));
-	
+
 	D2des(response.response, pwchange->pwchange);
 	D2des(newhpw->hpw, &(pwchange->pwchange[tca_LEN_RESPONSE]));
 
@@ -402,8 +401,8 @@ dp_result_t tca_pwchange_validate(tca_t *tca, tcapw_uid_t uid, const tca_challen
 	unsigned char buf[tca_LEN_RESPONSE];  /* tca_LEN_RESPONSE >= tcapw_LEN_HASHPW */
 	char email[tcapw_MAXLEN_EMAIL];
 	int flags;
-	
-	if (tca == NULL || challenge == NULL || uid == tcapw_UID_NONE || pwchange == NULL)		
+
+	if (tca == NULL || challenge == NULL || uid == tcapw_UID_NONE || pwchange == NULL)
 		return dp_RES_BAD;
 	if((err = tcapw_entry_find_byid(tca->tdb, uid, &entry)) != dp_RES_OK)
 		return err;
@@ -412,20 +411,20 @@ dp_result_t tca_pwchange_validate(tca_t *tca, tcapw_uid_t uid, const tca_challen
 	/* construct the correct response */
 	desDkey(entry.hpw.hpw, EN0);
 	Ddes(challenge->challenge, buf);
-	
+
 	MD5Init(&context);
 	MD5Update(&context, buf, tca_LEN_CHALLENGE);
 	MD5Final(correct_response, &context);
 
 	/* decrypt his response */
 	memcpy(buf, pwchange->pwchange, tca_LEN_RESPONSE);
-	desDkey(entry.hpw.hpw, DE1); 
+	desDkey(entry.hpw.hpw, DE1);
 	D2des(buf, response.response);
 
 	DPRINT(("tca_pwchange_validate: challenge %s\n", tcapw_hexprint(challenge->challenge, tca_LEN_CHALLENGE)));
 	DPRINT(("tca_pwchange_validate: hpw %s\n", tcapw_hexprint(entry.hpw.hpw, tcapw_LEN_HASHPW)));
-	DPRINT(("tca_pwchange_validate: response %s\n", tcapw_hexprint(response.response, tca_LEN_RESPONSE)));	
-	
+	DPRINT(("tca_pwchange_validate: response %s\n", tcapw_hexprint(response.response, tca_LEN_RESPONSE)));
+
 	if (memcmp(response.response, correct_response, tca_LEN_RESPONSE)) {
 		DPRINT(("tca_pwchange_validate:       != %s\n", tcapw_hexprint(correct_response, tca_LEN_RESPONSE)));
 		return dp_RES_ACCESS;
@@ -436,11 +435,11 @@ dp_result_t tca_pwchange_validate(tca_t *tca, tcapw_uid_t uid, const tca_challen
 	/* caller can only set client settable flags, others are unchanged */
 	flags = ((pwchange->flags & tcapw_entry_CLIENT_SET_FLAGS) |
 			 (entry.flags & ~tcapw_entry_CLIENT_SET_FLAGS));
-	memcpy(buf, &(pwchange->pwchange[tca_LEN_RESPONSE]), tcapw_LEN_HASHPW);	
+	memcpy(buf, &(pwchange->pwchange[tca_LEN_RESPONSE]), tcapw_LEN_HASHPW);
 	D2des(buf, newhpw.hpw);
 
 	DPRINT(("tca_pwchange_validate: flags %d email %s newhpw %s\n", flags, email, tcapw_hexprint(newhpw.hpw, tcapw_LEN_HASHPW)));
-	
+
 	return tcapw_entry_change(tca->tdb, uid, &newhpw, flags, email);
 }
 
@@ -463,13 +462,13 @@ dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, c
 {
 	MD5_CTX context;
 	unsigned char buf[16];
-	
+
 	if (tca == NULL || challenge == NULL || newusername == NULL || newhpw == NULL || newuser == NULL || newuserlen == NULL || email == NULL)
 		return dp_RES_BAD;
 
 	DPRINT(("tca_newuser_generate: challenge %s uname %s flags %d email %s\n", tcapw_hexprint(challenge->challenge, tca_LEN_CHALLENGE), tcapw_u2ascii(newusername->uname, tcapw_LEN_USERNAME), flags, email));
 	DPRINT(("tca_newuser_generate: hpw %s\n", tcapw_hexprint(newhpw->hpw, tcapw_LEN_HASHPW)));
-	
+
 	/* Kludge for lack of a distributable PGP style public key system:
 	 * Just encrypt the MD5(newpassword) and a magic string with
 	 * MD5(another magic string + the challenge that the server just sent)
@@ -481,7 +480,7 @@ dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, c
 	if (newuser->emaillen > tcapw_MAXLEN_EMAIL)
 		newuser->emaillen = tcapw_MAXLEN_EMAIL;
 	strncpy(newuser->storage + newuser->unamelen * sizeof(short), email, tcapw_MAXLEN_EMAIL);
-	
+
 	MD5Init(&context);
 	MD5Update(&context, newuser_magic2, 8);
 	MD5Update(&context, challenge->challenge, tca_LEN_CHALLENGE);
@@ -518,13 +517,13 @@ dp_result_t tca_newuser_validate(tca_t *tca, const tca_challenge_t *challenge, t
 	unsigned char test_magic[8];
 	char email[tcapw_MAXLEN_EMAIL + 1];
 	int flags;
-	
+
 	if (tca == NULL || challenge == NULL || newuser == NULL || uid == NULL)
 		return dp_RES_BAD;
 
 	DPRINT(("tca_newuser_validate: challenge %s\n", tcapw_hexprint(challenge->challenge, tca_LEN_CHALLENGE)));
-	DPRINT(("tca_newuser_validate: newuser %s\n", tcapw_hexprint(newuser->newuser, tcapw_LEN_HASHPW)));	
-	
+	DPRINT(("tca_newuser_validate: newuser %s\n", tcapw_hexprint(newuser->newuser, tcapw_LEN_HASHPW)));
+
 	*uid = tcapw_UID_NONE;
 	MD5Init(&context);
 	MD5Update(&context, newuser_magic2, 8);
@@ -535,7 +534,7 @@ dp_result_t tca_newuser_validate(tca_t *tca, const tca_challenge_t *challenge, t
 	desDkey(buf, DE1);
 	D2des(newuser->newuser, hpw.hpw);
 	Ddes(&(newuser->newuser[tcapw_LEN_HASHPW]), test_magic);
-	
+
 	if (memcmp(test_magic, newuser_magic, 8)) {
 		DPRINT(("tca_newuser_validate: wrong magic %s \n", tcapw_hexprint(test_magic, 8)));
 		return dp_RES_ACCESS;
@@ -552,7 +551,7 @@ dp_result_t tca_newuser_validate(tca_t *tca, const tca_challenge_t *challenge, t
 
 	DPRINT(("tca_newuser_validate: uname %s flags %d email %s\n", tcapw_u2ascii(uname.uname, tcapw_LEN_USERNAME), flags, email));
 	DPRINT(("tca_newuser_generate: hpw %s\n", tcapw_hexprint(hpw.hpw, tcapw_LEN_HASHPW)));
-	
+
 	return tcapw_entry_create(tca->tdb, &uname, &hpw, flags, email, uid);
 }
 
@@ -574,7 +573,7 @@ dp_result_t tca_secretcode_validate(tca_t *tca, tcapw_uid_t uid, const tca_chall
 	char correct_response[tca_LEN_RESPONSE];
 	tcapw_pw_t pw;
 	tcapw_hpw_t hpw;
-	
+
 	if (tca == NULL || challenge == NULL || response == NULL || uid == tcapw_UID_NONE) {
 		DPRINT(("tca_secrecode_validate: bad arguments\n"));
 		return dp_RES_BAD;
@@ -594,7 +593,7 @@ dp_result_t tca_secretcode_validate(tca_t *tca, tcapw_uid_t uid, const tca_chall
 
 	desDkey(hpw.hpw, EN0);
 	Ddes(challenge->challenge, buf);
-	
+
 	MD5Init(&context);
 	MD5Update(&context, buf, tca_LEN_CHALLENGE);
 	MD5Final(correct_response, &context);

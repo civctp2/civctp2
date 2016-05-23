@@ -7,15 +7,13 @@
 #include "message.h"
 #include "dynarr.h"
 
-
 class MessageDynamicArray : public DynamicArray<Message> {
-
 
 public:
 
-    MessageDynamicArray(); 
-    MessageDynamicArray(const sint32 size); 
-    MessageDynamicArray (const DynamicArray<Message> &copyme); 
+    MessageDynamicArray();
+    MessageDynamicArray(const sint32 size);
+    MessageDynamicArray (const DynamicArray<Message> &copyme);
 
 };
 

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ void servscor_init(dp_t *dp);
 void servscor_poll(dp_t *dp);
 
 /*--------------------------------------------------------------------------
- Call when a new client connects to the server. 
+ Call when a new client connects to the server.
 --------------------------------------------------------------------------*/
 void servscor_addClient(dp_t *dp, playerHdl_t h);
 

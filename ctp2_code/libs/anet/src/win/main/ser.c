@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 **************************************************************************************/
 
 // modem signal when is no longer connected (translates to \r\nNO CARRIER\r\n)
-const unsigned char SIGNAL_HANGUP[] =  
+const unsigned char SIGNAL_HANGUP[] =
 							{0x0d, 0x0a, 0x4e, 0x4f, 0x20, 0x43, 0x41, 0x52,
                              0x52, 0x49, 0x45, 0x52, 0x0d, 0x0a};
 #if 0
@@ -102,7 +102,7 @@ const unsigned char SIGNAL_HANGUP[] =
 
 /* convert a serio_res_t to a  ser_result_t */
 /* KLUDGE: relies on both being the same as comm_error_t! */
-#define CONVERT_ERR(e) (ser_result_t)e	
+#define CONVERT_ERR(e) (ser_result_t)e
 
 #if 0
 /*-----------------------------------------------------------------------
@@ -119,13 +119,11 @@ void printbytes(void *buf, char *msg, long len)
 }
 #endif
 
-
 /*************************************************************************************
 
                                   ser_create()
 
 **************************************************************************************/
-
 
 /*-----------------------------------------------------------------------
  Create a serial driver.
@@ -146,12 +144,12 @@ ser_t *ser_create(void)
   ser_t *ser;
 
   ser = dp_MALLOC(sizeof(ser_t));
-  if (!ser) 
+  if (!ser)
     return NULL;
 
   ser->myAdr   = ser_ADR_NONE;
   ser->yourAdr = ser_ADR_NONE;  // no connection yet
-  
+
   ser->nextHdl = ser_HDL_ME;    // first adr2hdl sets my adr
 
 #if 0
@@ -172,7 +170,6 @@ ser_t *ser_create(void)
   return ser;
 }
 
-
 /*************************************************************************************
 
                                   ser_config()
@@ -187,7 +184,7 @@ ser_t *ser_create(void)
  baud = 19200, 38400, 57600?
 -----------------------------------------------------------------------*/
 ser_result_t ser_config(ser_t *ser, long baud, const char * szPort)
-{            
+{
 	serio_res_t	    err;
 
 	err = serio_open(&ser->serio, baud, szPort);
@@ -196,7 +193,6 @@ ser_result_t ser_config(ser_t *ser, long baud, const char * szPort)
 	DPRINT(("ser_config: error in serio_open %d\n", err));
 	return CONVERT_ERR(err);
 }
-
 
 /*************************************************************************************
 
@@ -214,7 +210,6 @@ void ser_destroy(ser_t *ser)
 		dp_FREE(ser);
 	}
 }
-
 
 /*************************************************************************************
 
@@ -246,19 +241,19 @@ ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert)
   if (*adr == ser->myAdr  ) return ser_HDL_ME;
   if (*adr == ser->yourAdr) return ser_HDL_YOU;
 
-  if (!insert) 
+  if (!insert)
   {
     return ser_HDL_NONE;
   }
 
-  if (ser->nextHdl == ser_HDL_ME) 
+  if (ser->nextHdl == ser_HDL_ME)
   {
     // Caller is setting this station's Adress.
     ser->myAdr = *adr;
     return ser->nextHdl++;
   }
 
-  if (ser->nextHdl == ser_HDL_YOU) 
+  if (ser->nextHdl == ser_HDL_YOU)
   {
     // Caller is setting other station's Adress.
     ser->yourAdr = *adr;
@@ -267,7 +262,6 @@ ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert)
 
   return ser_HDL_NONE;
 }
-
 
 /*************************************************************************************
 
@@ -288,10 +282,9 @@ ser_result_t ser_hdl2adr(ser_t *ser, ser_hdl_t hdl, ser_adr_t *adr)
 		*adr = ser->yourAdr;
 	else
 		*adr = ser_ADR_NONE;
-	
+
 	return (*adr != ser_ADR_NONE) ? ser_RES_OK : ser_RES_EMPTY;
 }
-
 
 /*************************************************************************************
 
@@ -309,7 +302,6 @@ ser_result_t ser_hdlDestroy(ser_t *ser, ser_hdl_t hdl)
     return ser_RES_OK;
 }
 
-
 /*************************************************************************************
 
                                      crc()
@@ -325,20 +317,19 @@ static unsigned char crc(unsigned char *ptr1, int len1)
 {
 	short crc = 0;
 	int i, j;
-	
-	for (i = 0; i < len1; i++) 
+
+	for (i = 0; i < len1; i++)
 	{
 		crc = crc ^ (int) ptr1[i] << 8;
-		
-		for (j = 0; j < 8; ++j) 
+
+		for (j = 0; j < 8; ++j)
 		{
 			if (crc & 0x8000) crc = crc << 1 ^ 0x1021;  else  crc = crc << 1;
 		}
 	}
-	
+
 	return crc & 0xff;
 }
-
 
 /*************************************************************************************
 
@@ -368,7 +359,7 @@ ser_result_t ser_put(ser_t *ser, void *buf, size_t len)
 
 	if (len > 255)
 		return ser_RES_FULL;
-	
+
 	hdr.frame0 = ser_HDR_FRAME0;
 	hdr.frame1 = ser_HDR_FRAME1;
 	hdr.bodylen = len;
@@ -508,7 +499,7 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 								return ser_RES_NO_RESPONSE;
 						} else if (pos) {
 							pos = 0;
-							if (*p == SIGNAL_HANGUP[pos]) 
+							if (*p == SIGNAL_HANGUP[pos])
 								pos++;
 						}
 					}
@@ -540,7 +531,7 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 
  Can only recieve from ser_HDL_YOU, so no source adr need be returned.
 
- CRC errors cause ser_RES_EMPTY rather than ser_RES_BAD, since 
+ CRC errors cause ser_RES_EMPTY rather than ser_RES_BAD, since
  ser_RES_BAD is reserved for caller brain damage errors.
 
  Strategy:

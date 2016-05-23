@@ -1,4 +1,3 @@
-
 #ifndef __SLIC_CONTEXT_H__
 #define __SLIC_CONTEXT_H__
 
@@ -21,7 +20,6 @@ enum UNIT_ORDER_TYPE;
 #include "diplomattypes.h"
 
 
-
 class SlicContext {
 private:
 	GameEventArgList *m_eventArgs;
@@ -31,8 +29,7 @@ private:
 	SimpleDynamicArray<Army> *m_armyList;
 	SimpleDynamicArray<sint32> *m_playerList;
 	SimpleDynamicArray<sint32> *m_advanceList;
-	
-	
+
 	SimpleDynamicArray<MapPoint> *m_locationList;
 	SimpleDynamicArray<ai::Agreement> *m_agreementList;
 	SimpleDynamicArray<sint32> *m_intList;
@@ -40,19 +37,19 @@ private:
 	SimpleDynamicArray<sint32> *m_goodList;
 	SimpleDynamicArray<sint32> *m_governmentList;
 
-	sint32 *m_calamityList; 
-	sint32 m_numCalamities; 
+	sint32 *m_calamityList;
+	sint32 m_numCalamities;
 
-	sint32 *m_goldList; 
+	sint32 *m_goldList;
 	sint32 m_numGolds;
-	
-	sint32 *m_rankList; 
+
+	sint32 *m_rankList;
 	sint32 m_numRanks;
 
-	sint32 *m_wonderList; 
+	sint32 *m_wonderList;
 	sint32 m_numWonders;
 
-	MBCHAR **m_actionList; 
+	MBCHAR **m_actionList;
 	sint32 m_numActions;
 
 
@@ -90,7 +87,6 @@ public:
 	virtual ~SlicContext();
 	void Serialize(CivArchive &archive);
 
-	
 #ifdef _DEBUG
 	void Dump();
 #endif
@@ -98,8 +94,8 @@ public:
 	void AddCity(const Unit &c);
 	void AddUnit(const Unit &u);
 	void AddArmy(const Army &a);
-	void AddPlayer(const PLAYER_INDEX player);	
-	void AddCivilisation(const PLAYER_INDEX player);	
+	void AddPlayer(const PLAYER_INDEX player);
+	void AddCivilisation(const PLAYER_INDEX player);
 	void AddPlayer(const Civilisation &civ);
 	void AddInt(const sint32 val);
 	void AddCivilisation(const Civilisation &civ);
@@ -148,7 +144,7 @@ public:
 	Unit GetUnit(sint32 index) const;
 	void SetUnit(sint32 index, Unit &unit);
 	sint32 GetNumUnits() const;
-	
+
 	Army GetArmy(sint32 index) const;
 	void SetArmy(sint32 index, Army &army);
 	sint32 GetNumArmies() const;
@@ -204,7 +200,7 @@ public:
 	sint32 GetNumTradeBids() const;
 	sint32 GetNumPops() const;
 	sint32 GetNumOrders() const;
-	sint32 GetNumUnitRecords() const; 
+	sint32 GetNumUnitRecords() const;
 
 	UNIT_ORDER_TYPE GetOrder(const sint32 index) const;
 	void SetOrder(sint32 index, UNIT_ORDER_TYPE order);

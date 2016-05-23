@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -59,7 +47,7 @@ enum ORDERMODE {
 	ORDERMODE_SUE,
 	ORDERMODE_FREESLAVE,
 	ORDERMODE_AIDUPRISING,
-	ORDERMODE_BOMBCABINET,		
+	ORDERMODE_BOMBCABINET,
 	ORDERMODE_PLANTNUKE,
 	ORDERMODE_SPY,
 	ORDERMODE_STEALDISCOVERY,
@@ -88,7 +76,6 @@ class ButtonBank : public ControlSheet
 {
 public:
 
-	
 	ButtonBank(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -122,7 +109,6 @@ public:
 
 	ORDERMODE ButtonToMode(ColorIconButton *button);
 
-
 private:
 	ColorIconButton		*m_bankButtons[k_BUTTON_BANK_MAX_BUTTONS];
 	RECT				m_bankButtonRects[k_BUTTON_BANK_MAX_BUTTONS];
@@ -136,10 +122,10 @@ private:
 	sint32				m_bankPage;
 
 	RECT				m_buttonBounds;
-	
+
 	ColorIconButton		*m_buttons[ORDERMODE_MAX];
 };
 
 AUI_ACTION_BASIC(BaseBankAction);
 
-#endif 
+#endif

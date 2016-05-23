@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -144,7 +144,7 @@ DP_API FILE * DP_APIX dp_getLogFP(void)
  (Note that dp_setLogFname closes the currently open log file, regardless
  of whether it was passed in via this function, or opened by dp.)
  WARNING: unless you're very sure your program is using the same C runtime
- library instance as does this code, only use the return value of 
+ library instance as does this code, only use the return value of
  dp_getLogFP().
 --------------------------------------------------------------------------*/
 DP_API void DP_APIX dp_setLogFP(FILE *_fp)
@@ -200,7 +200,6 @@ DP_API void dp_enableDebugPrint(int enable)
 		break;
 	}
 }
-
 
 /*
  *	Read a "[Debug]" section parameter from the .INI file.  Strip
@@ -355,7 +354,6 @@ dp_dprintf(
 
 	if (!writeMe)
 		return (0);
-
 
 	if (dprint.toNull) {	/* Do nothing */
 		;

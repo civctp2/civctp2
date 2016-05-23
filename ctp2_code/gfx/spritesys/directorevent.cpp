@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 {
 	Army a;
 	MapPoint from, to;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, from)) return GEV_HD_Continue;
 	if(!args->GetPos(1, to)) return GEV_HD_Continue;
@@ -65,43 +65,38 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 
 //	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(to.x, to.y);
 
-	
 	if (g_selected_item->GetPlayerOnScreen() != -1 &&
 		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer() &&
 		!g_network.IsActive())
-		
-		
+
 			return GEV_HD_Continue;
 
-	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());    
+	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 	if (top_src.m_id == 0)
 		top_src = a[0];
 
 	sint32 numRevealed = 0;
 
-	
-	UnitActor **restOfStack = NULL; 
+	UnitActor **restOfStack = NULL;
 	sint32 numRest = a->Num() - 1;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);  
+		restOfStack = new (UnitActor* [numRest]);
 		a->GetActors(top_src, restOfStack);
 	}
 
-	
 	UnitActor	**revealedActors = NULL;
-	
+
 	if (numRevealed > 0) {
-		
+
 		// Something missing here.
-			
-		
+
 	} else {
 		revealedActors = NULL;
 	}
-	
-	MapPoint newPos = to; 
-	
+
+	MapPoint newPos = to;
+
 	if(!g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y) &&
 	   (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
 	   (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer())) {
@@ -109,15 +104,14 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	}
 
 	if (!to.IsNextTo(from)) {
-		g_director->AddTeleport(top_src, from, newPos, numRevealed, revealedActors, 
+		g_director->AddTeleport(top_src, from, newPos, numRevealed, revealedActors,
 								numRest, restOfStack);
 	} else {
-		g_director->AddMove(top_src, from, newPos, numRevealed, revealedActors, 
-							numRest, restOfStack, FALSE, top_src.GetMoveSoundID());  
-		
+		g_director->AddMove(top_src, from, newPos, numRevealed, revealedActors,
+							numRest, restOfStack, FALSE, top_src.GetMoveSoundID());
+
 	}
-	
-	
+
 	if (top_src.GetData()->HasLeftMap())
 		g_director->AddHide(top_src);
 
@@ -132,7 +126,6 @@ STDEHANDLER(DirectorActionSuccessful)
 	MapPoint pos = unit.RetPos();
 	static MapPoint attackPos;
 
-	
 	if(!args->GetCity(0,c)) {
 		if(!args->GetUnit(1, c)) {
 			if(!args->GetPos(0, attackPos)) {
@@ -165,8 +158,7 @@ STDEHANDLER(DirectorActionSuccessful)
 		case GEV_CreateParkUnit: attack = SPECATTACK_CREATEPARK; break;
 		case GEV_InjoinUnit: attack = SPECATTACK_INJOIN; break;
 
-		
-		
+
 		case GEV_Lawsuit: attack = SPECATTACK_NONE; break;
 		case GEV_RemoveFranchise: attack = SPECATTACK_NONE; break;
 		case GEV_ExpelUnits: attack = SPECATTACK_NONE; break;
@@ -175,7 +167,7 @@ STDEHANDLER(DirectorActionSuccessful)
 
 		default:
 			attack = SPECATTACK_NONE;
-	}		
+	}
 
 	sint32 soundID, spriteID;
 	if(attack != SPECATTACK_NONE) {
@@ -186,14 +178,13 @@ STDEHANDLER(DirectorActionSuccessful)
 		if (spriteID != -1 && soundID != -1) {
 			if((((unit.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
 				 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) ||
-				g_theUnitPool->IsValid(c) && 
+				g_theUnitPool->IsValid(c) &&
 				((c.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
 				 (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))))) {
-				
-				
+
 				g_director->AddCenterMap(attackPos);
 			}
-			
+
 			if(c.IsValid())
 				g_director->AddSpecialAttack(unit, c, attack);
 			else
@@ -202,9 +193,9 @@ STDEHANDLER(DirectorActionSuccessful)
 		} else {
 			if (soundID != -1) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == unit.GetOwner()) || 
+				if ((visiblePlayer == unit.GetOwner()) ||
 					(unit.GetVisibility() & (1 << visiblePlayer))) {
-					
+
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, attackPos.x, attackPos.y);
 				}
 			}

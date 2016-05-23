@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 			usage();
 		}
 		if (c1 == 'u' && argc-argi < 2) {
-			PRINT(("Bad argument '%s'; -u requires 2 parameters\n", argv[argi])); 
+			PRINT(("Bad argument '%s'; -u requires 2 parameters\n", argv[argi]));
 		}
 
 		switch (c1) {
@@ -322,10 +322,10 @@ int main(int argc, char **argv)
 		clock_t deadline = dp->now + 5 * ECLOCKS_PER_SEC;
 		char key[dp_KEY_MAXLEN];
 		key[0] = dp_KEY_SCORES;
-		
+
 		err = dpRequestObjectDeltas(dp, TRUE, key, 1);
 		assert(!err);
-		
+
 		while (1) {
 			dpid_t idFrom, idTo;
 			char pktbuf[dpio_MAXLEN_UNRELIABLE];
@@ -349,8 +349,8 @@ int main(int argc, char **argv)
 			}
 			if (err == dp_RES_OK) {
 				dp_objectDelta_packet_t *delta;
-				
-				switch (*((dp_packetType_t *)pktbuf)) {	
+
+				switch (*((dp_packetType_t *)pktbuf)) {
 				case dp_OBJECTDELTA_PACKET_ID:
 					delta = (dp_objectDelta_packet_t *)(pktbuf + sizeof(dp_packetType_t));
 					if (delta->key[0] == dp_KEY_SCORES && delta->keylen == 3) {
@@ -369,7 +369,7 @@ int main(int argc, char **argv)
 						repbuf.len = sizeof(psi->nScoreTypes) + psi->nScoreTypes *
 							(sizeof(psi->scoreIds[0]) + sizeof(psi->scores[0]));
 						memcpy(repbuf.buf, psi, repbuf.len);
-						
+
 						err = scorerep_player_fromBuf(&player, &repbuf);
 						assert(!err);
 						assert(player.scores);
@@ -391,11 +391,11 @@ int main(int argc, char **argv)
 				break;
 			}
 
-#if 0			
+#if 0
 			if (!quitState && ((long)(eclock() - deadline) > 0))
 				quitState = 3;
 #endif
-			
+
 			/* no player to delete, so just close. */
 			if (quitState == 3) {
 				printf("scorsend: dpClose() closing session...\n");

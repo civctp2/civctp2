@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //
 //   * Added bool m_hasGovernmentsModified to the RecordDescription class
 // - Modified AddBitPair function to allow bit pairs to have default values
-//   so that when two records are merged, only the bit is merged 
+//   so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
 
 #if 0
 	void ExportDBHeader(FILE *outfile);
-	
+
 	void ExportDBCode(FILE *outfile);
 #endif
 

@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -35,7 +22,6 @@ extern C3UI *g_c3ui;
 #define k_STANDARD_MAIN_WINDOW_X 224
 #define k_STANDARD_MAIN_WINDOW_Y 28
 
-
 ctp2_Window::ctp2_Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -58,7 +44,6 @@ ctp2_Window::ctp2_Window(
 	m_dockedTo = NULL;
 	m_dock = NULL;
 }
-
 
 
 ctp2_Window::ctp2_Window(
@@ -89,23 +74,20 @@ ctp2_Window::ctp2_Window(
 }
 
 
-
 AUI_ERRCODE ctp2_Window::InitCommon( void )
 {
 	GrabRegion()->Move( 0, 0 );
 	GrabRegion()->Resize( m_width, 20 );
 
-	
 	SetDynamic(TRUE);
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE ctp2_Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -113,7 +95,6 @@ AUI_ERRCODE ctp2_Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if (m_pattern)
 		m_pattern->Draw( m_surface, &rect );
 
-	
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
@@ -149,9 +130,8 @@ void ctp2_Window::MouseLGrabOutside( aui_MouseEvent *mouseData )
 	if ( IsDisabled() ) return;
 	if ( IsWeaklyModal() )
 	{
-		
-		
-		
+
+
 		g_ui->AddAction(new WeaklyModalCloseAction(this));
 
 		bool passEventOn = false;
@@ -159,7 +139,7 @@ void ctp2_Window::MouseLGrabOutside( aui_MouseEvent *mouseData )
 			m_weaklyModalCancelCallback(mouseData, this, m_weaklyModalCancelCookie, passEventOn);
 		}
 		if ( !passEventOn && m_mouseCode == AUI_ERRCODE_UNHANDLED )
-			
+
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
 	}
@@ -169,7 +149,6 @@ void    ctp2_Window::ResetCurrentMouseState()
 {
 	m_mouseState = *g_ui->TheMouse()->GetLatestMouseEvent();
 }
-
 
 
 AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
@@ -224,7 +203,7 @@ AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 
 AUI_ERRCODE
 ctp2_Window::Move(sint32 x, sint32 y)
-{	
+{
 	sint32 oldx = X(), oldy = Y();
 
 	AUI_ERRCODE err = aui_Window::Move(x, y);
@@ -234,9 +213,8 @@ ctp2_Window::Move(sint32 x, sint32 y)
 		walk.Next();
 	}
 	return err;
-	
-}
 
+}
 
 AUI_ERRCODE
 ctp2_Window::Offset(sint32 dx, sint32 dy)
@@ -255,7 +233,7 @@ ctp2_Window::Offset(sint32 dx, sint32 dy)
 void ctp2_Window::AddDockedWindow(ctp2_Window *window)
 {
 	if(window->m_dockedTo) {
-		
+
 		window->m_dockedTo->RemoveDockedWindow(window);
 	}
 
@@ -294,7 +272,7 @@ void ctp2_Window::MouseLDropOutside(aui_MouseEvent *mouseData)
 			if(abs(m_dock->X() - (X() + Width())) < k_DOCK_SNAP_MARGIN) {
 				if((Y() + Height() >= m_dock->Y() - k_DOCK_SNAP_MARGIN) &&
 				   (Y() <= m_dock->Y() + m_dock->Height() + k_DOCK_SNAP_MARGIN)) {
-					
+
 					sint32 newy;
 					if(abs(Y() - m_dock->Y()) < k_DOCK_SNAP_MARGIN) {
 						newy = m_dock->Y();
@@ -309,7 +287,7 @@ void ctp2_Window::MouseLDropOutside(aui_MouseEvent *mouseData)
 			} else if(abs((m_dock->X() + m_dock->Width()) - X()) < k_DOCK_SNAP_MARGIN) {
 				if((Y() + Height() >= m_dock->Y() - k_DOCK_SNAP_MARGIN) &&
 				   (Y() <= m_dock->Y() + m_dock->Height() + k_DOCK_SNAP_MARGIN)) {
-					
+
 					sint32 newy;
 					if(abs(Y() - m_dock->Y()) < k_DOCK_SNAP_MARGIN) {
 						newy = m_dock->Y();
@@ -320,11 +298,11 @@ void ctp2_Window::MouseLDropOutside(aui_MouseEvent *mouseData)
 					Move(m_dock->X() + m_dock->Width(), newy);
 					m_dock->AddDockedWindow(this);
 					docked = true;
-				}				
+				}
 			} else if(abs((Y() + Height()) - m_dock->Y()) < k_DOCK_SNAP_MARGIN) {
 				if((X() + Width() >= m_dock->X() - k_DOCK_SNAP_MARGIN) &&
 				   (X() <= m_dock->X() + m_dock->Width())) {
-					
+
 					Move(X(), m_dock->Y() - Height());
 					m_dock->AddDockedWindow(this);
 					docked = true;
@@ -332,18 +310,16 @@ void ctp2_Window::MouseLDropOutside(aui_MouseEvent *mouseData)
 			} else if(abs(Y() - (m_dock->Y() + m_dock->Height())) < k_DOCK_SNAP_MARGIN) {
 				if((X() + Width() >= m_dock->X() - k_DOCK_SNAP_MARGIN) &&
 				   (X() <= m_dock->X() + m_dock->Width())) {
-					
+
 					Move(X(), m_dock->Y() + m_dock->Height());
 					m_dock->AddDockedWindow(this);
 					docked = true;
 				}
 			}
-					
 
 			if(!docked) {
 				m_dock->RemoveDockedWindow(this);
 			}
-
 
 		}
 	}
@@ -368,7 +344,6 @@ bool ctp2_Window::HandleKey(uint32 wParam)
 	if(m_dockedTo) {
 		return m_dockedTo->HandleKey(wParam);
 	}
-	
+
 	return false;
 }
-

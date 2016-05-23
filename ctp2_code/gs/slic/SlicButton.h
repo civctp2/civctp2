@@ -14,18 +14,16 @@ class Message;
 class SlicButton
 {
 private:
-	
+
 	StringId m_name;
 	sint32 m_isCloseEvent;
 	sint32 m_codeOffset;
-	
 
-	
+
 	Message *m_message;
 	SlicObject *m_context;
 	SlicSegment *m_segment;
 	char *m_segmentName;
-	
 
 public:
 	SlicButton(StringId name, SlicSegment *segment,

@@ -127,7 +127,6 @@ public:
 	: MapPointData(a_Data)
 	{ };
 
-
 #ifdef _SMALL_MAPPOINTS
 	MapPoint(const sint32 ix, const sint32 iy) {
 		x = (sint16)ix; y = (sint16)iy;
@@ -181,15 +180,11 @@ public:
 
 	void Serialize(CivArchive &archive) ;
 
-
 	static sint32 GetSquaredDistance(const MapPoint &uPos, const MapPoint &pos);
-
 
 	void xy2rc(const MapPoint & xy_pos, const MapPoint & map_size);
 
-
 	void rc2xy(const MapPoint & rc_pos, const MapPoint & map_size);
-
 
 	bool operator < (const MapPoint & rval) const
 		{return ((x< rval.x) && (y < rval.y)); }
@@ -230,7 +225,6 @@ private:
 	MapPoint			m_point;	// point in XY coordinates
 };
 
-
 class SquareIterator
 {
 public:
@@ -254,12 +248,12 @@ protected:
     virtual bool    IsIncluded();
 };
 
-class RadiusIterator : public SquareIterator 
+class RadiusIterator : public SquareIterator
 {
 public:
 	RadiusIterator(MapPoint const & center, sint32 size);
 	RadiusIterator(MapPoint const & center, sint32 size, double squaredSize);
-	
+
 protected:
 	double          m_squaredRadius;
 

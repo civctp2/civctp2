@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -21,7 +8,6 @@
 #include "primitives.h"
 
 #include "bevellesswindow.h"
-
 
 
 BevelLessWindow::BevelLessWindow(
@@ -38,7 +24,6 @@ BevelLessWindow::BevelLessWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 BevelLessWindow::BevelLessWindow(
@@ -60,7 +45,6 @@ BevelLessWindow::BevelLessWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-	
 
 AUI_ERRCODE BevelLessWindow::InitCommon( void )
 {
@@ -71,10 +55,9 @@ AUI_ERRCODE BevelLessWindow::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE BevelLessWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -83,14 +66,14 @@ AUI_ERRCODE BevelLessWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y 
 		m_pattern->Draw( m_surface, &rect );
 	}
 
-	
-
-
-	
 
 
 
-	
+
+
+
+
+
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;

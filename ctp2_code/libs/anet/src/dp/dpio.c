@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -420,10 +420,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.11  1997/02/18 00:18:20  dkegel
  Get packet loss from .ini file!
  Revision 1.10  1997/02/17 21:04:07  dkegel
- Adapted to new size limit defines. 
+ Adapted to new size limit defines.
  Revision 1.9  1997/02/17 06:08:48  dkegel
  dpio_put_unreliable had wrong upper bound on packet length.
- 
+
  Revision 1.8  1997/02/16 03:56:30  dkegel
  1. dpio_freeze / thaw more robust; checks for start and end tags.
  2. dpio_thaw now part of dpio_create so it can get transport DLL
@@ -438,7 +438,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  SYN acked and our SYN sent.
  3. Fixed protocol; now doesn't go whacko if later packet acked before
  windowBase.
- 4. Changed timeout scheme; caller no longer needs to call 
+ 4. Changed timeout scheme; caller no longer needs to call
  dpio_notePacketArrival to start timeout on a client.
  5. Major rewrite; now a single structure, dpio_conn_t, holds all
  info about a connection, rather than the info being spread out across
@@ -493,8 +493,7 @@ static dp_result_t dpio_put_unreliable_unbuffered(dpio_t *dpio, playerHdl_t dest
 #pragma warning( disable : 4514 )
 #endif
 
-
-/* Upper bound on retries.  
+/* Upper bound on retries.
  * Want 40 second timeout.
  * If the RTT is 50msec, and max retrans interval is 4 seconds,
  * retransmits will be at 50, 100, 200, 400, 800, 1600, 3200, 8000, 12000...
@@ -508,9 +507,9 @@ static dp_result_t dpio_put_unreliable_unbuffered(dpio_t *dpio, playerHdl_t dest
 
 #define dpio_keepaliveInterval(dpio) ((dpio)->maxRxInterval/8)
 
-/* Bogus upper limit on player handles due to dpio_put_reliable's 
- * temporary array 
- * See also bogus hard limit in Linux internet driver uudps.c 
+/* Bogus upper limit on player handles due to dpio_put_reliable's
+ * temporary array
+ * See also bogus hard limit in Linux internet driver uudps.c
  * and in call to setMaxHandles in linux/server.c
  */
 #define dpio_MAX_HANDLES 2000
@@ -530,7 +529,6 @@ static int dpio_log_dropped;
 #endif
 
 #define DP_MODEL_DELAY
-
 
 /* Function to dump a block of memory in hex */
 #ifdef VERYVERBOSE
@@ -753,7 +751,7 @@ static clock_t dpio_setNextTxTime(dpio_t *dpio, dpio_conn_t *pc)
 	/* RTO = RTT * backoff * beta, backoff = 2^ReTxFactor
 	 * beta = 5/4ths so 1st retry just past RTT */
 	nextRTO = ((pc->RTTime * (1 << pw->ReTxFactor)) * 5) >> 2;
-	
+
 	/* Don't let it get too large; this may need tuning */
 	if (nextRTO > dpio->maxTxInterval)
 		nextRTO = dpio->maxTxInterval;
@@ -801,7 +799,7 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls) {
 }
 
 /*-----------------------------------------------------------------------
- Given an ASCII network address and a buffer length, fill a buffer with the 
+ Given an ASCII network address and a buffer length, fill a buffer with the
  binary address.
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
@@ -884,7 +882,7 @@ playerHdl_t dpio_openHdlRaw(dpio_t *dpio, void *adr)
 
  Similar to dpio_openHdlRaw except that TWO addresses are supplied.
  Refer to dpio_openHdl2 for reasons why you would want to do this.
- 
+
  The flags can be a combination of:
 	dpio_OPENHDL_RAW_2NDLIVE: the second address is to be treated as LIVE
 -----------------------------------------------------------------------*/
@@ -892,7 +890,7 @@ playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags)
 {
 	commSayHiReq_t		cshReq;
 	commSayHiResp_t		cshResp;
-	playerHdl_t       h;    
+	playerHdl_t       h;
 
 	dpio_assertValid(dpio);
 
@@ -902,7 +900,7 @@ playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags)
 	cshReq.flags = 0;
 	cshReq.flags |= (flags & dpio_OPENHDL_RAW_2NDLIVE) ? comm_SAYHI_2NDLIVE : 0;
 
-	if (!commSayHi( &cshReq, &cshResp, dpio->commPtr )) 
+	if (!commSayHi( &cshReq, &cshResp, dpio->commPtr ))
 	{
 		DPRINT(("dpio_openHdlRaw: adr "));
 		dpio_dprintAdr(adr, dpio->myAdrLen);
@@ -942,7 +940,6 @@ dp_result_t dpio_closeHdlRaw(dpio_t *dpio, playerHdl_t h)
 	}
 	return dp_RES_OK;
 }
-
 
 /*-------------------------------------------------------------------------
 Freeze a player handle.
@@ -1016,7 +1013,6 @@ dpio_freezeHdl(
 	DPRINT((", flags=%d\n", resp.flags));
 	return dp_RES_OK;
 }
-
 
 /*-------------------------------------------------------------------------
 Thaw a player handle.
@@ -1102,7 +1098,6 @@ dpio_thawHdl(
 	return dp_RES_OK;
 }
 
-
 #define dpio_SIG_START "dpio\1\3"
 #define dpio_SIG_END   "\7\4dpio"
 
@@ -1137,7 +1132,7 @@ dp_result_t dpio_freeze(dpio_t *dpio, FILE *fp)
 	fwrite(&dpio->conns->n_used, sizeof (dpio->conns), 1, fp);
 
 	/*
-	 * Save the handles which are in the connection list 
+	 * Save the handles which are in the connection list
 	 * Write them in reverse order to swizzle them :)
 	 */
 	for (i = dpio->conns->n_used - 1; i >= 0; i--) {
@@ -1180,7 +1175,7 @@ dp_result_t dpio_freeze(dpio_t *dpio, FILE *fp)
  All reliable connections will pick up where they left off -
  but NOTE: handles may be swizzled around!  To establish the new
  mapping of handles to peers, call dpio_openHdl again with the
- address of each partner; this will return the new handle values. 
+ address of each partner; this will return the new handle values.
 
  Broken into thaw1 "before dploaddll" and thaw2 "after comminit".
 
@@ -1225,7 +1220,7 @@ static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
 	precondition(fp != NULL);
 
 	/*
-	 * Restore tables according to old handle values. 
+	 * Restore tables according to old handle values.
 	 */
 	if ((fread(&num, sizeof (num), 1, fp) != 1)) {
 		DPRINT(("dpio_thaw2: number of connections missing\n"));
@@ -1233,7 +1228,7 @@ static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
 	}
 
 	/*
-	 * Thaw out the handles that are in the connection table 
+	 * Thaw out the handles that are in the connection table
 	 * For each connection, open a comm handle and write over
 	 * the retrieved comm handle
 	 */
@@ -1270,13 +1265,13 @@ static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
 		dpio_pc(dpio, pc);
 
 		/*
-		 * Reset the timeout counter- else he'll time out on first check. 
+		 * Reset the timeout counter- else he'll time out on first check.
 		 */
 		pc->rx.PktTime = *dpio->now;
 	}
 
 	/*
-	 * Restore local queue. 
+	 * Restore local queue.
 	 */
 	if (q_thaw(dpio->localMsgQ, fp)) {
 		DPRINT(("dpio_thaw2: unable to restore local queue.\n"));
@@ -1296,7 +1291,6 @@ static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
 	return dp_RES_OK;
 }
 
-
 /*------------------------------------------------------------------------
  For debugging purposes only.
  Force dpio to drop a given percentage of all packets (randomly) on
@@ -1312,7 +1306,7 @@ void dpio_forceRxDropPercent(dpio_t *dpio, int rxDropPercent)
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
  If both intervals are 0, only ACKs of non-retransmitted reliable packets
-	will generate new measurements.  No extra bandwidth is used, but 
+	will generate new measurements.  No extra bandwidth is used, but
 	measurements may be infrequent if there are few reliable packets or
 	there is heavy packet loss.
  If piggbackPingInterval is set, additional small ping packets and
@@ -1326,7 +1320,7 @@ void dpio_forceRxDropPercent(dpio_t *dpio, int rxDropPercent)
 
  Pings will never be sent more than once per round trip time, regardless
  of the intervals requested, and are only sent to handles with the
- appropriate mode bit set (dpio_OPTION_PIGGYBACK_PING or 
+ appropriate mode bit set (dpio_OPTION_PIGGYBACK_PING or
  dpio_OPTION_FORCED_PING) using dpio_setHandleOptions().
 
  Regardless of round trip time or the parameters to this function, pings
@@ -1405,7 +1399,7 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
 		s = dpini_readParameter("timeout", FALSE);
 		if (s && *s) {
 			int timeout_value = atoi(s);
-			
+
 			if (timeout_value >= 10) {
 				dpio->maxRxInterval = clocksPerSec * timeout_value;
 			} else {
@@ -1429,7 +1423,6 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
 		clocksPerSec, dpio->minTxInterval, dpio->maxTxInterval, dpio->maxRxInterval, dpio->latency));
 }
 
-
 /*--------------------------------------------------------------------------
  This function has been superceeded by dpio_hdl2adr2 (below)
 --------------------------------------------------------------------------*/
@@ -1449,7 +1442,7 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
 
 	req.player = h;
 	memset(&resp, 0x00, sizeof (resp));
-	if (!commPlayerInfo(&req, &resp, dpio->commPtr)) 
+	if (!commPlayerInfo(&req, &resp, dpio->commPtr))
 	{
 		DPRINT(("dpio_hdl2adr: commPlayerInfo failed. status %d\n", resp.status));
 		return dp_RES_BAD;
@@ -1483,8 +1476,8 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
  "name" is a pointer to the buffer to copy the name to,
  "name_size" is the number of bytes available in that buffer.
  If name_size <= strlen(player name), returns dp_RES_FULL.
- Only supported by transports which have the comm_DRIVER_KNOWS_PLAYERLST 
- bit set in comm_driverInfo_t.capabilities,  
+ Only supported by transports which have the comm_DRIVER_KNOWS_PLAYERLST
+ bit set in comm_driverInfo_t.capabilities,
 --------------------------------------------------------------------------*/
 dp_result_t dpio_hdl2name(dpio_t *dpio, playerHdl_t h, char *name, size_t name_size)
 {
@@ -1685,7 +1678,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 #endif
 	DPRINT(("dpio_create: calling commInit. baud = %ld, portnum = %ld, sessionid = %x\n",
 		dpio->commInitReq.baud, dpio->commInitReq.portnum,dpio->commInitReq.sessionId));
-	/* tell driver where our dp_dprintf is.  It's a little weird to call 
+	/* tell driver where our dp_dprintf is.  It's a little weird to call
 	 * commSetParam before calling commInit, but it's the only way
 	 * to get DPRINTs in commInit to show up.
 	 */
@@ -1694,7 +1687,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		int ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
-		paramReq.param_value = (long)dp_dprintf; 
+		paramReq.param_value = (long)dp_dprintf;
 		paramReq.reqLen = sizeof(paramReq);
 		ok = commSetParam(&paramReq, NULL, dpio->commPtr);
 		DPRINT(("dpio_create: before commInit: commSetParam (comm_PARAM_DPRINTF,) returns ok=%d\n", ok));
@@ -1727,7 +1720,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		int ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
-		paramReq.param_value = (long)dp_dprintf; 
+		paramReq.param_value = (long)dp_dprintf;
 		paramReq.reqLen = sizeof(paramReq);
 		ok = commSetParam(&paramReq, NULL, dpio->commPtr);
 		DPRINT(("dpio_create: commSetParam (comm_PARAM_DPRINTF,) returns ok=%d\n", ok));
@@ -1742,7 +1735,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	if (!commDriverInfo(NULL, &commInfoResp, dpio->commPtr)) {
 		DPRINT(("dpio_create: Unable to get comm info, status:%d\n", commInfoResp.status));
 		return dp_RES_BUG;
-	} 
+	}
 	dpio->driverinfo = commInfoResp.info;
 
 	/* Set the throttling and timeout parameters for dpio_update */
@@ -1760,7 +1753,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	 * Save the detected address(es)
 	 */
 	dpio->myAdrLen = sizeof(dpio->myAdr);
-	if (dpio_hdl2adr2(dpio, PLAYER_ME, dpio->myAdr, dpio->myAdr2, &dpio->myAdrLen) != dp_RES_OK) 
+	if (dpio_hdl2adr2(dpio, PLAYER_ME, dpio->myAdr, dpio->myAdr2, &dpio->myAdrLen) != dp_RES_OK)
 	{
 		DPRINT(("dpio_create: Can't get me own address!\n"));
 		dpio_destroy(dpio, 0);
@@ -1797,7 +1790,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		s = dpini_readParameter("pktloss", FALSE);
 		if (s && *s) {
 			int percent;
-			
+
 			if ((1==sscanf(s, "%d", &percent))
 			&& (percent >= 0)
 			&& (percent <= 100))
@@ -1883,7 +1876,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	 * Yes, dpio is usig data intended for the comm layer
 	 */
 	if (commInitReq) {
-		/* 
+		/*
 		 * Are we being request to open connections to addresses ?
 		 */
 		if (commInitReq->flags & comm_INIT_FLAGS_CONN_ADDR)	{
@@ -2101,7 +2094,7 @@ clock_t dpio_getHdlAge(dpio_t *dpio, playerHdl_t h)
 	dpio_assertValid(dpio);
 
 	/* If it's a predefined handle, return an appropriate value */
-	if (h == PLAYER_ME) 
+	if (h == PLAYER_ME)
 		return 0;
 	if ((h == PLAYER_NONE) || (h == PLAYER_UNKNOWN)|| (h == PLAYER_BROADCAST))
 		return (clock_t)-1;
@@ -2140,7 +2133,6 @@ short dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h)
 }
 
 
-
 /*-----------------------------------------------------------------------
  This function has be superceeded by dpio_openHdl2 (below)
 -----------------------------------------------------------------------*/
@@ -2153,7 +2145,6 @@ playerHdl_t dpio_openHdl(dpio_t *dpio, void *adr, dpioOpenHdlCallback_t cb, void
   /* use enhanced function to do the work */
   return (dpio_openHdl2(dpio, adr, NULL));
 }
-
 
 /*-----------------------------------------------------------------------
  Given a network address, open a handle to it.
@@ -2229,7 +2220,7 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 			dpio_assertValid(dpio);
 			return PLAYER_NONE;
 		}
-	
+
 		pc = (dpio_conn_t *)assoctab_subscript_grow(dpio->conns, h);
 		if (!pc) {
 			DPRINT(("dpio_openHdl: error: out of memory\n"));
@@ -2288,7 +2279,7 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	memset(pw->pktQTime, 0, sizeof(pw->pktQTime));
 	memset(pw->nRetries, 0, sizeof(pw->nRetries));
 
-	/* Packet consists of 
+	/* Packet consists of
 	 *   data[0] = version = 5
 	 *   data[1] = adrlen
 	 *   data[2...adrlen+1] = sender's adr
@@ -2320,13 +2311,12 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 			h, err));
 	}
 
-
 #ifdef dp_STATS
 	dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].out++;
 	dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += pktlen;
 	dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting++;
 	dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += pktlen;
-	/*DPRINT(("dpio_openHdl: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", h, pktlen, (pc->tx.next_pktnum - 1)&0xffff, 
+	/*DPRINT(("dpio_openHdl: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", h, pktlen, (pc->tx.next_pktnum - 1)&0xffff,
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/
 #endif
@@ -2335,7 +2325,6 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	dpio_assertValid(dpio);
 	return h;
 }
-
 
 
 #ifdef dp_STATS
@@ -2357,7 +2346,7 @@ static void dpio_countHdlClosing(dpio_t *dpio, playerHdl_t h, dpio_conn_t *pc)
 			assert(dpio->stats[dp_STAT_DPIO_CONNECTED].waiting >= 0);
 		} else {
 			/* Leaving connecting state (because you disconnected before
-			 * finishing connecting) 
+			 * finishing connecting)
 			 */
 			dpio->stats[dp_STAT_DPIO_CONNECTING].out++;
 			dpio->stats[dp_STAT_DPIO_CONNECTING].waiting--;
@@ -2384,7 +2373,7 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 	dp_result_t err;
    	unsigned char data[4] = "FIN";
 	int oldstate;
-	
+
 	DPRINT(("dpio_closeHdl: h:%x\n", h));
 	precondition(dpio != NULL);
 	dpio_assertValid(dpio);
@@ -2424,16 +2413,16 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += pktlen;
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting++;
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += pktlen;
-		/*	DPRINT(("dpio_closeHdl: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", h, pktlen, (pc->tx.next_pktnum - 1)&0xffff, 
+		/*	DPRINT(("dpio_closeHdl: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", h, pktlen, (pc->tx.next_pktnum - 1)&0xffff,
 					dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 					dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/
 #endif
 		}
 	}
 
-	/* Call back with PEER_CLOSED to warn that handle is going down.  
-	 * Later, will call back with CLOSED when handle finishes going down.  
-	 * Do callback *after* work has been done, to make sure 
+	/* Call back with PEER_CLOSED to warn that handle is going down.
+	 * Later, will call back with CLOSED when handle finishes going down.
+	 * Do callback *after* work has been done, to make sure
 	 * any recursive dpio_closeHdl's it triggers do nothing.
 	 */
 	if (!(oldstate & (dpio_STATE_FIN_SENT|dpio_STATE_CLOSE_QFULL))) {
@@ -2482,8 +2471,8 @@ dp_result_t dpio_closeHdlImmed(dpio_t *dpio, playerHdl_t h)
 #ifdef dp_STATS
 	dpio_countHdlClosing(dpio, h, pc);
 	/* If we're closing the handle, its outstanding packet are being
-	 * discarded. 
-	 * Update count of packets and bytes waiting for transmission. 
+	 * discarded.
+	 * Update count of packets and bytes waiting for transmission.
 	 */
 	{
 		dpio_window_t *txw = &pc->tx;
@@ -2495,7 +2484,7 @@ dp_result_t dpio_closeHdlImmed(dpio_t *dpio, playerHdl_t h)
 			if (!txw->bAcked[winpos]) {
 				dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting--;
 				dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting -= txw->outstanding[winpos].body.len;
-				DPRINT(("dpio_closeHdlImmed: h:%x, discarding pktnum %d, at windo,Base %d; waiting %d %d\n", h, (txw->windowBase + winpos)&0xffff, txw->windowBase, 
+				DPRINT(("dpio_closeHdlImmed: h:%x, discarding pktnum %d, at windo,Base %d; waiting %d %d\n", h, (txw->windowBase + winpos)&0xffff, txw->windowBase,
 						dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 						dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));
 				assert(dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting >= 0);
@@ -2525,7 +2514,7 @@ dp_result_t dpio_ReadyToFreeze(
 	assoctab_item_t *pe;
 	int i;
 
-#ifdef VERYVERBOSE	
+#ifdef VERYVERBOSE
 	DPRINT(("dpio_ReadyToFreeze: conns->n_used:%d\n", dpio->conns->n_used));
 #endif
 	for (i=0; i<dpio->conns->n_used; i++) {
@@ -2539,7 +2528,7 @@ dp_result_t dpio_ReadyToFreeze(
 		pw = &pc->tx;
 #ifdef VERYVERBOSE
 		DPRINT(("dpio_ReadyToFreeze: checking %d: id %x, windowBase %d, next_Pktnum %d, h:%x state:%x\n", i, pe->key, pw->windowBase, pw->next_pktnum, pe->key, pc->state));
-#endif		
+#endif
 		if (pw->windowBase != pw->next_pktnum) {	/* no packets waiting */
 			playerHdl_t h = (playerHdl_t) pe->key;
 
@@ -2638,7 +2627,7 @@ static clock_t dpio_current_pingInterval(const dpio_t *dpio, const dpio_conn_t *
 	} else if (pc->options & dpio_OPTION_FORCED_PING) {
 		pingInterval = dpio->ping_forced_interval;
 	} else if (pc->options & dpio_OPTION_KEEPALIVE) {
-		pingInterval = dpio_keepaliveInterval(dpio); 
+		pingInterval = dpio_keepaliveInterval(dpio);
 	}
 	if (pingInterval < pc->RTTime)
 		pingInterval = pc->RTTime;
@@ -2675,7 +2664,7 @@ static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, play
 		if (timeSent == 0)
 			return dp_RES_EMPTY;	/* we don't remember sending this pktnum */
 		thisTrip = *dpio->now - timeSent;
-		DPRINT(("dpio_handle_ping_response: t:%d, h:%x, pktnum:%d, timeSent:%d, age_in_pktnums:%d, thisTrip %d\n", 
+		DPRINT(("dpio_handle_ping_response: t:%d, h:%x, pktnum:%d, timeSent:%d, age_in_pktnums:%d, thisTrip %d\n",
 				*dpio->now, h, pktnum, timeSent, age_in_pktnums, thisTrip));
 	} else {
 		/* Don't know round-trip time; estimate conservatively */
@@ -2724,7 +2713,7 @@ static dp_result_t dpio_gotAck(
 		DPRINT(("dpio_gotAck: got ack %d, at windowBase %d, beyond end of window\n",
 			pktnum, pw->windowBase));
 		dpio_assertValid(dpio);
-		return dp_RES_BUG; 
+		return dp_RES_BUG;
 	}
 	/* If the packet is within the window, note that it has been acked. */
 	/* If the packet is the earliest packet in the window, advance the window. */
@@ -2735,7 +2724,7 @@ static dp_result_t dpio_gotAck(
 #ifdef dp_STATS
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting--;
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting -= pw->outstanding[winpos].body.len;
-	/*		DPRINT(("dpio_gotAck: h:%x, got ack for pktnum %d, at windowBase %d; waiting %d %d\n", h, pktnum, pw->windowBase, 
+	/*		DPRINT(("dpio_gotAck: h:%x, got ack for pktnum %d, at windowBase %d; waiting %d %d\n", h, pktnum, pw->windowBase,
 					dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 					dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/
 			assert(dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting >= 0);
@@ -2746,9 +2735,9 @@ static dp_result_t dpio_gotAck(
 
 			/*DPRINT(("dpio_gotAck: got ack for pktnum %d, at windowBase %d\n", pktnum, pw->windowBase));*/
 			/* If this packet was not retried, adjust the round-trip time */
-			if ((pw->nRetries[winpos] == 1) 
+			if ((pw->nRetries[winpos] == 1)
 #ifndef OLD_ACK
-			&& !synthesized 	
+			&& !synthesized
 #endif
 			) {
 				dpio_update_RTT(dpio, pc, h, thisTrip);
@@ -2897,7 +2886,7 @@ dp_result_t dpio_higherLevelBlanketAck(
 			dpio_wrapped_data_packet_t *p;
 
 			/* Skip already ack'd packets */
-			if (pw->bAcked[winpos]) 
+			if (pw->bAcked[winpos])
 				continue;
 
 			/* Skip packets with wrong tag */
@@ -2945,11 +2934,11 @@ static dp_result_t dpio_sendAck(dpio_t *dpio, dpio_conn_t *conn, playerHdl_t h, 
 	oldest_nonrx_pktnum = rxw->windowBase;
 	windowUsed = (unsigned short) (rxw->next_pktnum - rxw->windowBase);
 	for (i=0; i<windowUsed; i++, oldest_nonrx_pktnum++) {
-		if (!rxw->bAcked[(oldest_nonrx_pktnum) % dpio_WINDOWSIZE]) 
+		if (!rxw->bAcked[(oldest_nonrx_pktnum) % dpio_WINDOWSIZE])
 			break;
 	}
 
-	/* if the offset can not be represented in 8 bits, 
+	/* if the offset can not be represented in 8 bits,
 	 * send 128.  The other end will know to ignore the offset then.
 	 */
 	offset = (oldest_nonrx_pktnum - last_rx_pktnum);
@@ -2979,11 +2968,11 @@ static void dpio_sendAckLater(dpio_t *dpio, dpio_conn_t *conn)
 	conn->ackNeeded = TRUE;
 	DPRINT(("dpio_sendAckLater\n"));
 }
- 
+
 /* simpler ping packet used to implement silent piggyback pings */
 #define sizeof_dpio_ping_packet_t (sizeof(unsigned char))
 #define sizeof_dpio_ping (sizeof(dp_packetType_t) + sizeof_dpio_ping_packet_t)
- 
+
 /*----------------------------------------------------------------------
  Send any outstanding packets or acks queued recently.
 ----------------------------------------------------------------------*/
@@ -2994,7 +2983,7 @@ dp_result_t dpio_flush(dpio_t *dpio)
 	dpio_conn_t     *pc;
 
 	DPRINT(("dpio_flush: ackNeeded:%d txGatherNeeded:%d\n", dpio->ackNeeded, dpio->txGatherNeeded));
-	if (!dpio->ackNeeded && !dpio->txGatherNeeded) 
+	if (!dpio->ackNeeded && !dpio->txGatherNeeded)
 		return dp_RES_OK;
 
 	/* Check all connections for ack flag and/or stored packets */
@@ -3074,10 +3063,10 @@ static dp_result_t dpio_getReliable(
 		if (err == dp_RES_OK) {
 			dpio->nextconncheck--;	/* give this one another go next time */
 			*pcallerSrc = pe->key;
-			if (*(dp_packetType_t *)callerBuf == dp_KEEPALIVE_PACKET_ID) { 
+			if (*(dp_packetType_t *)callerBuf == dp_KEEPALIVE_PACKET_ID) {
 				/* Just ignore keepalive packets at this level */
 #ifdef VERBOSE
-				DPRINT(("dpio_getReliable: t:%d keepalive tag %2.2s from h:%x, length %d, pktnum %d\n", 
+				DPRINT(("dpio_getReliable: t:%d keepalive tag %2.2s from h:%x, length %d, pktnum %d\n",
 					*dpio->now, callerBuf, *pcallerSrc, *pcallerBufLen, pc->rx.windowBase-1));
 #endif
 				;
@@ -3175,7 +3164,7 @@ static dp_result_t dpio_getRaw(
 		}
 
 		/* Drop packets if desired for debugging. */
-		if ((rxPktResp.status == comm_STATUS_OK) 
+		if ((rxPktResp.status == comm_STATUS_OK)
 		&&  dpio->rxDropPercent
 		&&  ((dpio->rxDropPercent*(int)(RAND_MAX / 100)) > rand())) {
 			DPRINT(("dpio_getRaw: t:%d Dropping tag %2.2s from h:%x, ln %d\n",
@@ -3323,7 +3312,7 @@ dp_result_t dpio_get(
 	dpio_assertValid(dpio);
 	if (flags)
 		*flags = 0;
-	
+
 	/* Check local message queue first. */
 	localMsgLen = 0;
 	localMsg = q_get(dpio->localMsgQ, &localMsgLen);
@@ -3344,7 +3333,7 @@ dp_result_t dpio_get(
 			dpio_assertValid(dpio);
 			return dp_RES_OK;
 		}
-	} 
+	}
 
 	/* Check reliable transport window buffers.  */
 	if (dpio->reliable_enabled) {
@@ -3428,7 +3417,7 @@ dp_result_t dpio_get(
 			DPRINT(("dpio_get: t:%d got ack: src h:%x, pktnum %d, len %d, ack correction %d\n", *dpio->now, h, pktnum, rxPktResp.length, pAck->gotAllUpTo_offset));
 #endif
 			/* synthesize any acks that were dropped */
-			if ((rxPktResp.length >= (sizeof_dpio_ack_packet_t + sizeof(dp_packetType_t))) 
+			if ((rxPktResp.length >= (sizeof_dpio_ack_packet_t + sizeof(dp_packetType_t)))
 			&& ((pAck->gotAllUpTo_offset&0xff) != 128)) {
 				int i;
 				unsigned short synpktnum = pw->windowBase;
@@ -3518,7 +3507,7 @@ dp_result_t dpio_get(
 				/* Driver only reports source address if no handle available.
 				 * Compare the source address embedded in the packet
 				 * with the one the comm layer reports for that packet.
-				 * If they're not equal, somebody's behind a firewall. 
+				 * If they're not equal, somebody's behind a firewall.
 				 */
 				if (PLAYER_NONE == h) {
 					if (srcAdr2 && memcmp(srcAdr, srcAdr2, dpio->myAdrLen)) {
@@ -3557,10 +3546,10 @@ dp_result_t dpio_get(
 			}
 
 			/* Must ignore bogus SYNs before opening handle and replying! */
-			if (rxPktResp.length >= sizeof(dp_packetType_t) + 
+			if (rxPktResp.length >= sizeof(dp_packetType_t) +
 				sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 				+ 2 + 2*dpio->myAdrLen) {
-				unsigned char *destAdr = (pDat->data+2+dpio->myAdrLen); 
+				unsigned char *destAdr = (pDat->data+2+dpio->myAdrLen);
 
 				if (memcmp(dpio->myAdr, destAdr, dpio->myAdrLen)) {
 					DPRINT(("dpio_get: SYN for wrong host received, ignoring\n"));
@@ -3604,7 +3593,7 @@ dp_result_t dpio_get(
 			 * 2. We have more than on address for the given interface
 			 * 3. We failed to detect our address
 			 * 4. Our address has changed
-			 *      (can occur when a connection goes down and comes back 
+			 *      (can occur when a connection goes down and comes back
 			 *       up with a different address)
 			 *
 			 * In the event that the addresses are different then we
@@ -3613,11 +3602,11 @@ dp_result_t dpio_get(
 			 * KLUDGE!
 			 *
 			 * The first SYN packet received (indicated by the number of
-			 * connection), is examined to determine if the detected 
+			 * connection), is examined to determine if the detected
 			 * local address is correct.
 			 *
 			 * If the interface detected a single local address it will
-			 * have placed that address in myadr and myadr2.  If the 
+			 * have placed that address in myadr and myadr2.  If the
 			 * embeded destination address is different then myadr is
 			 * replaced and myadr2 is untouched.  As a result myadr is
 			 * the externally detected address and myadr2 is the locally
@@ -3635,17 +3624,17 @@ dp_result_t dpio_get(
 			 * and the external address does not match either address.
 			 *
 			 * In this case myadr will be overwritten with the external
-			 * address and will be LOST.  This could prove troublesome if 
+			 * address and will be LOST.  This could prove troublesome if
 			 * there are other machines on the network who recognise this
 			 * machine by the LOST address.  It is further noted that this
 			 * is a very unlikely scenario.
-			 * 
-			 * Why all the fuss ? 
+			 *
+			 * Why all the fuss ?
 			 *
 			 * A very common case is that there are multiple IP
 			 * interfaces, e.g. modem and ethernet, and the one
 			 * the driver got the address for initially is the wrong one.
-			 * 
+			 *
 			 * Having myadr disagree is bad because the master
 			 * of a session copies myadr into his own host record,
 			 * and players who join his session will then not be
@@ -3659,13 +3648,13 @@ dp_result_t dpio_get(
 			 *
 			 */
 			DPRINT(("dpio_get: checking SYN for dest adr.  len %d, want %d\n",
-			rxPktResp.length, sizeof(dp_packetType_t) + 
+			rxPktResp.length, sizeof(dp_packetType_t) +
 				sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 				+ 2 + 2*dpio->myAdrLen));
-			if (rxPktResp.length >= sizeof(dp_packetType_t) + 
+			if (rxPktResp.length >= sizeof(dp_packetType_t) +
 				sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 				+ 2 + 2*dpio->myAdrLen) {
-				unsigned char *destAdr =(pDat->data+2+dpio->myAdrLen); 
+				unsigned char *destAdr =(pDat->data+2+dpio->myAdrLen);
 				DPRINT(("dpio_get: SYN has dest adr "));
 				dpio_dprintAdr(destAdr, dpio->myAdrLen);
 				DPRINT((" myAdr is "));
@@ -3694,7 +3683,7 @@ dp_result_t dpio_get(
 					 */
 					if (!memcmp(dpio->myAdr, dpio->myAdr2, dpio->myAdrLen)) {
 						DPRINT(("dpio_get: Overwriting myAdr!\n"));
-						memcpy(dpio->myAdr, destAdr, dpio->myAdrLen); 
+						memcpy(dpio->myAdr, destAdr, dpio->myAdrLen);
 					} else {
 						/*
 						 * If the destination matches our second address
@@ -3729,7 +3718,7 @@ dp_result_t dpio_get(
 							 */
 							DPRINT(("dpio_get: Got a third address ... trouble!\n"));
 							DPRINT(("dpio_get: Overwriting myAdr!\n"));
-							memcpy(dpio->myAdr, destAdr, dpio->myAdrLen); 
+							memcpy(dpio->myAdr, destAdr, dpio->myAdrLen);
 						}
 					}
 				}
@@ -3742,16 +3731,15 @@ dp_result_t dpio_get(
 		dpio->publicAddressKnown = TRUE;
 
 		/*
-		 * If the packet contains the sender's capabilities, store them 
+		 * If the packet contains the sender's capabilities, store them
 		 */
-		if (rxPktResp.length >= sizeof(dp_packetType_t) + 
-			sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE	
+		if (rxPktResp.length >= sizeof(dp_packetType_t) +
+			sizeof(dpio_data_packet_t) - dpio_MAXLEN_RELIABLE
 			+ 3 + 2 * dpio->myAdrLen) {
-			char *remcap =(char*)(pDat->data+2+2*dpio->myAdrLen); 
+			char *remcap =(char*)(pDat->data+2+2*dpio->myAdrLen);
 			DPRINT(("dpio_get: SYN has remcap %x\n", *remcap));
 			pc->remote_capabilities = *remcap;
 		}
-
 
 		pw = &pc->rx;
 		/* Accept the initial packet number from the SYN packet */
@@ -3774,7 +3762,7 @@ dp_result_t dpio_get(
 		&&   (((pw->windowBase-1)&0xffff) == pw->origWindowBase)
 		&&   (pw->origWindowBase == SwapBytes2(pDat->pktnum)))) {
 			/* No SYN received yet
-			 * or same SYN packet number but no data received yet, 
+			 * or same SYN packet number but no data received yet,
 			 * so just quietly accept new windowbase
 			 */
 			pw->origWindowBase = SwapBytes2(pDat->pktnum);
@@ -3931,7 +3919,7 @@ dp_result_t dpio_get(
 			 * they do not affect the client's current connection state.
 			 * This fixes a bug encountered by tservt's speed login test.
 			 */
-			return dp_RES_AGAIN;  
+			return dp_RES_AGAIN;
 		} else if ((unsigned short)(SwapBytes2(pDat->pktnum) - pw->windowBase) >= dpio_WINDOWSIZE) {
 			/* pktnum was beyond end of window! */
 			/* somehow the sender sent a packet we wasn't supposed to yet. */
@@ -4041,7 +4029,7 @@ dp_result_t dpio_get(
 		}
 /* define TICKLEFINBUG */
 #ifdef TICKLEFINBUG
-		/* To demonstrate the ACK for FIN bug, never acknowledge 
+		/* To demonstrate the ACK for FIN bug, never acknowledge
 		 * a DAT packet at the windowbase.  This forces us to
 		 * ACK the FIN packet before the DAT packet, which should
 		 * tickle the bug.  The DAT packet will get acked if it is
@@ -4068,7 +4056,7 @@ dp_result_t dpio_get(
 		*psrc = h;
 		err = dpio_window_get(pw, buffer, psize, h);
 		if (err == dp_RES_OK) {
-			if (*(dp_packetType_t *)buffer == dp_KEEPALIVE_PACKET_ID) { 
+			if (*(dp_packetType_t *)buffer == dp_KEEPALIVE_PACKET_ID) {
 				/* Just ignore keepalive packets at this level */
 				DPRINT(("dpio_get: reliable keepalive packet %2.2s from h:%x, length %d, pktnum %d\n", buffer, *psrc, *psize, pw->windowBase-1));
 				dpio_assertValid(dpio);
@@ -4259,7 +4247,7 @@ static dp_result_t dpio_put_unreliable_buffered(dpio_t *dpio, dpio_conn_t *pc, p
 
 	/* If no room for packet, flush */
 	DPRINT(("dpio_put_unreliable_buffered: h:%x gbl %d size %d sum %d\n",
-			dest, pc->txGatherBufLen, size, 
+			dest, pc->txGatherBufLen, size,
 			pc->txGatherBufLen + size + 1));
 	if (put_would_flush(pc, size)) {
 		err = dpio_flushPacketsForHandle(dpio, pc, dest);
@@ -4292,7 +4280,7 @@ static dp_result_t dpio_put_unreliable_buffered(dpio_t *dpio, dpio_conn_t *pc, p
     to address of array of playerHdl_t's (such as an array maintained
 	for a player list).
  2. Hardware broadcast.  Set nDests to 1, and nDests to the address
-    of a playerHdl_t holding PLAYER_BROADCAST.  
+    of a playerHdl_t holding PLAYER_BROADCAST.
 
  If the network driver supports vector sends, this routine will pass
  the vector send through to the driver to reduce network overhead.
@@ -4328,7 +4316,7 @@ dp_result_t dpio_put_unreliable(
 				if (errDest) *errDest = dests[i];
 				err=dp_RES_FULL;
 				break;
-			} 
+			}
 			continue;
 		}
 
@@ -4420,7 +4408,7 @@ dp_result_t dpio_put_reliable2(
 			dpio_assertValid(dpio);
 			return dp_RES_BUG;
 		}
-	
+
 		pc = (dpio_conn_t *) assoctab_subscript(dpio->conns, dests[i]);
 		cdests[i] = pc;
 		if (!pc) {
@@ -4455,11 +4443,11 @@ dp_result_t dpio_put_reliable2(
 				if (errDest) *errDest = dests[i];
 				dpio_assertValid(dpio);
 				return dp_RES_FULL;
-			} 
+			}
 			continue;
 		}
 		if (!cdests[i]) continue;
-	
+
 		err = dpio_q_packet(dpio, dests[i], cdests[i], dpio_DATA_PACKET_ID,
 			buffer, size);
 #ifdef dp_STATS
@@ -4468,7 +4456,7 @@ dp_result_t dpio_put_reliable2(
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += size;
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting++;
 			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += size;
-/*			DPRINT(("dpio_put_reliable: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", dests[i], size, (cdests[i]->tx.next_pktnum - 1)&0xffff, 
+/*			DPRINT(("dpio_put_reliable: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", dests[i], size, (cdests[i]->tx.next_pktnum - 1)&0xffff,
 					dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 					dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/
 		}
@@ -4494,7 +4482,6 @@ int dpio_localQ_npkts(dpio_t *dpio)
 {
 	return (q_MAXELS - 1 - q_nfree(dpio->localMsgQ));
 }
-
 
 /*--------------------------------------------------------------------------
  Get a list of currently active connection handles
@@ -4540,20 +4527,20 @@ int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls)
  on h in a long time, it calls
 	dpio->callback(h, ..., dp_RES_HOST_NOT_RESPONDING),
  and returns h.
- 
+
  2) If h has dpio_OPTION_KEEPALIVE set but no packet has been sent
  to h in a long time, it sends them a keepalive packet.
 
  3) Detects hosts which have actively reset the connection by
  sending us a new SYN with a new packetnumber.
  Also watches handles which dpio_closeHdl() has been called on;
- when their tx/rx buffers are empty, it declares them ready for 
+ when their tx/rx buffers are empty, it declares them ready for
  immediate closing by returning them to the caller.
 
  4) Detects hosts which have a packet waiting to be sent that
  has been retried too many times.
 
- On exit, returns handle of a player that needs immediate closing, 
+ On exit, returns handle of a player that needs immediate closing,
  or PLAYER_NONE.
 -----------------------------------------------------------------------*/
 playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
@@ -4644,7 +4631,7 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 #endif
 		/* If the user has asked for pings on a forced interval and we
 		 * haven't managed to piggyback on another packet within a
-		 * ping interval, then send it out now. 
+		 * ping interval, then send it out now.
 		 */
 		if (((pc->options & dpio_OPTION_FORCED_PING)
 			 && ((long)(*dpio->now - pc->ping_next_forced) > 0))
@@ -4698,17 +4685,17 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
  Supported options are one or more flag bits or'd together.
  Right now, there is only one flag bit:
 
- dpio_OPTION_KEEPALIVE 
-  If we have not received a packet on this handle in the last 
+ dpio_OPTION_KEEPALIVE
+  If we have not received a packet on this handle in the last
   dp_PLAYER_TIMEOUT seconds, declare the handle timed out
   (dpio_findTimedOutHost will find it on the next call after this happens).
 
-  If we have not received a packet on this handle in the last 
+  If we have not received a packet on this handle in the last
   dp_PLAYER_TIMEOUT/2 seconds, send a garbage packet to the host reliably,
   which should force it to ack the packet and reset the keepalive timer
   above.
 
- Returns 
+ Returns
    dp_RES_BAD if handle invalid,
    dp_RES_BUG if option invalid,
    dp_RES_OK on success.
@@ -4750,7 +4737,7 @@ dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, int options)
 	 */
 	if ((options & dpio_OPTION_KEEPALIVE)
 	&& (!(pc->options & dpio_OPTION_KEEPALIVE))) {
-		/* KLUDGE: Send keepalive immediately ; must match 
+		/* KLUDGE: Send keepalive immediately ; must match
 		 * constant in dpio_findTimedOutHost
 		 */
 		pc->rx.PktTime = *dpio->now - dpio_keepaliveInterval(dpio);
@@ -4886,7 +4873,6 @@ dp_result_t dpio_update(dpio_t *dpio)
 	dpio_assertValid(dpio);
 	return dp_RES_EMPTY;	/* No packets to transmit */
 }
-
 
 #if defined(dpio_LOG) && (defined(DEBUG) || defined(_DEBUG))
 #include <time.h>

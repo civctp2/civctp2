@@ -24,7 +24,7 @@ class SlicEyePoint
 public:
 	SlicEyePoint(const MapPoint &point, const MBCHAR *name,
 				 sint32 data, EYE_POINT_TYPE type,
-				 const Unit &unit, 
+				 const Unit &unit,
 				 sint32 recipient,
 				 SlicSegment *segment);
 

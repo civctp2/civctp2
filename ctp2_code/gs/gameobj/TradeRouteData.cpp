@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,17 +49,17 @@
 #include "tradeutil.h"
 
 extern ColorSet *g_colorSet;
-extern TradeAstar g_theTradeAstar; 
+extern TradeAstar g_theTradeAstar;
 
 TradeRouteData::TradeRouteData(
-	const TradeRoute route, 
-	const Unit source,      
-	const Unit dest,        
-	const PLAYER_INDEX owner, 
-	const ROUTE_TYPE sourceType,    
+	const TradeRoute route,
+	const Unit source,
+	const Unit dest,
+	const PLAYER_INDEX owner,
+	const ROUTE_TYPE sourceType,
 	const sint32 sourceResource,
 	PLAYER_INDEX paying_for,
-	sint32 gold_in_return):   
+	sint32 gold_in_return):
 	GameObj(route.m_id),
 	m_recip(0)
 {
@@ -85,15 +85,14 @@ TradeRouteData::TradeRouteData(
 	AddWayPoint(sPos);
 	AddWayPoint(dPos);
 
-	DPRINTF(k_DBG_GAMESTATE, 
-			("Creating route from city @ (%d,%d) to city @ (%d,%d)\n", 
+	DPRINTF(k_DBG_GAMESTATE,
+			("Creating route from city @ (%d,%d) to city @ (%d,%d)\n",
 			 sPos.x, sPos.y, dPos.x, dPos.y));
 
 	m_astarPath = new Path;
 
 	m_isActive = FALSE;
 
-	
 	m_color = g_colorSet->GetColor(COLOR_YELLOW);
 	m_outline = g_colorSet->GetColor(COLOR_BLACK);
 
@@ -124,7 +123,7 @@ TradeRouteData::TradeRouteData(CivArchive &archive) : GameObj(0)
 	Serialize(archive);
 }
 
-TradeRouteData::TradeRouteData(TradeRouteData* copyme, uint32 new_id) 
+TradeRouteData::TradeRouteData(TradeRouteData* copyme, uint32 new_id)
 	: GameObj(new_id)
 {
 	*this = *copyme;
@@ -132,8 +131,7 @@ TradeRouteData::TradeRouteData(TradeRouteData* copyme, uint32 new_id)
 	m_id = new_id;
 }
 
-
-TradeRouteData::TradeRouteData(const TradeRoute route) 
+TradeRouteData::TradeRouteData(const TradeRoute route)
 	: GAMEOBJ(route.m_id)
 {
 	m_astarPath = new Path;
@@ -177,7 +175,7 @@ TradeRoute TradeRouteData::AccessRecip()
 
 void TradeRouteData::SetRecip(TradeRoute route)
 {
-	
+
 	Assert(FALSE);
 
 	m_recip = route;
@@ -229,14 +227,14 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 	m_path.Clear();
 	Path partialAstarPath;
 	float cost;
-	
+
 	m_astarPath->Clear();
 
 	sint32 wp, nwp = m_wayPoints.Num();
 
 	m_transportCost = 0.0;
 
-	sint32 r; 
+	sint32 r;
 	for(wp = 0; wp < nwp - 1; wp++) {
 		if(wp == 0) {
 			r = g_theTradeAstar.FindPath(m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
@@ -253,11 +251,11 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 		m_transportCost += cost;
 	}
 
-	
 
-	
+
+
 	m_transportCost = (float)((int)tradeutil_GetNetTradeCosts(m_transportCost));
-	
+
 	if(m_transportCost < 1)
 		m_transportCost = 1;
 
@@ -285,7 +283,7 @@ BOOL TradeRouteData::GeneratePath(const PLAYER_INDEX owner)
 	ENQUEUE();
 	return TRUE;
 }
-	
+
 void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
                              DynamicArray<MapPoint> &waypoints)
 {
@@ -314,7 +312,7 @@ void TradeRouteData::BeginTurn()
 	}
 }
 
-void TradeRouteData::ReturnPath(const PLAYER_INDEX owner, 
+void TradeRouteData::ReturnPath(const PLAYER_INDEX owner,
     DynamicArray<MapPoint> &waypoints, DynamicArray<MapPoint> &fullpath,
 	double &cost)
 {
@@ -470,35 +468,28 @@ StringId TradeRouteData::GetResourceName() const
 }
 
 
-
 BOOL TradeRouteData::InitSelectedData()
 {
-	
+
 	if (m_selectedPath.Num()) return FALSE;
 
-	
 	m_selectedPath = m_path;
-	
-	
+
 	m_selectedWayPoints = m_wayPoints;
 
-	
 	return TRUE;
 }
-
 
 BOOL TradeRouteData::IsSelectedPathSame()
 {
-	
+
 	if (m_path.Num() != m_selectedPath.Num()) return FALSE;
 
-	
 	for ( sint32 i = 0 ; i < m_path.Num() ; i++ )
 		if (m_path[i] != m_selectedPath[i]) return FALSE;
-	
+
 	return TRUE;
 }
-
 
 sint32 TradeRouteData::AddSelectedWayPoint(const MapPoint &pos)
 {
@@ -506,34 +497,30 @@ sint32 TradeRouteData::AddSelectedWayPoint(const MapPoint &pos)
 	sint32 wpIndex = 0;
 	BOOL posIsWayPoint = FALSE;
 
-	
 	for ( i = 0 ; i < m_selectedWayPoints.Num() ; i++ )
-		if (pos == m_selectedWayPoints[i]) 
+		if (pos == m_selectedWayPoints[i])
 		{
 			posIsWayPoint = TRUE;
 			wpIndex = i;
 		}
 
-	
 	if (!posIsWayPoint)
 	{
-		
+
 		for ( i = 0 ; i < m_selectedPath.Num() ; i++ )
 		{
-			
+
 			if (pos == m_selectedPath[i])
 			{
-				
+
 				m_selectedWayPoints.InsertBefore(pos,wpIndex);
 				break;
 			}
 
-			
 			if (m_selectedPath[i] == m_selectedWayPoints[wpIndex]) wpIndex++;
 		}
 	}
 
-	
 	return m_selectedIndex = wpIndex;
 }
 
@@ -543,25 +530,20 @@ void TradeRouteData::GenerateSelectedPath(const MapPoint &pos)
 	DynamicArray<MapPoint> tempPath;
 	double cost;
 
-	
 	if ((m_selectedIndex == 0) || (m_selectedIndex == m_selectedWayPoints.Num())) return;
 
-	
 	tempWp = m_selectedWayPoints;
 
-	
 	tempWp[m_selectedIndex] = pos;
 
-	
 	ReturnPath(m_owner, tempWp,tempPath,cost);
 
-	
 
-	
+
+
 	m_selectedWayPoints = tempWp;
 	m_selectedPath = tempPath;
 }
-
 
 BOOL TradeRouteData::IsPosInSelectedPath(const MapPoint &pos)
 {
@@ -570,7 +552,6 @@ BOOL TradeRouteData::IsPosInSelectedPath(const MapPoint &pos)
 
 	return FALSE;
 }
-
 
 BOOL TradeRouteData::IsPosInPath(const MapPoint &pos)
 {
@@ -582,34 +563,34 @@ BOOL TradeRouteData::IsPosInPath(const MapPoint &pos)
 
 void TradeRouteData::UpdateSelectedCellData(TradeRoute &route)
 {
-	
+
 	for ( sint32 i = 0 ; i < m_selectedPath.Num() ; i++ )
 		g_theWorld->GetCell(m_selectedPath[i])->AddTradeRoute(route);
 }
 
 void TradeRouteData::ClearSelectedCellData(const TradeRoute &route)
 {
-	
+
 	for ( sint32 i = 0 ; i < m_selectedPath.Num() ; i++ )
 		g_theWorld->GetCell(m_selectedPath[i])->DelTradeRoute(route);
 }
 
 void TradeRouteData::SetSource(Unit source)
 {
-	m_sourceCity = source; 
+	m_sourceCity = source;
 	ENQUEUE();
 }
 
 void TradeRouteData::SetDestination(Unit dest)
-{ 
-	m_destinationCity = dest; 
-	ENQUEUE(); 
+{
+	m_destinationCity = dest;
+	ENQUEUE();
 }
 
 void TradeRouteData::SetCost(double cost)
-{ 
-	m_transportCost = cost; 
-	ENQUEUE(); 
+{
+	m_transportCost = cost;
+	ENQUEUE();
 }
 
 double TradeRouteData::GetCost() const
@@ -631,7 +612,6 @@ sint32 TradeRouteData::GetValue() const
 	if(m_sourceRouteType != ROUTE_TYPE_RESOURCE)
 		return 0;
 
-	
 	double baseValue = g_theWorld->GetGoodValue(m_sourceResource);
 	double distance = double(m_destinationCity->GetCityData()->GetDistanceToGood(m_sourceResource));
 	return sint32(baseValue * distance);
@@ -651,4 +631,3 @@ bool TradeRouteData::IsBeingPirated()
 {
 	return m_piratingArmy.IsValid();
 }
-

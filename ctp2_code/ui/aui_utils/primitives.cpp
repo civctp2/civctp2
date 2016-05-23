@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -59,11 +59,11 @@ extern C3UI			*g_c3ui;
 
 
 PRIMITIVES_ERRCODE primitives_SetRect(
-	RECT *rect,		
-	sint32 left,	
-	sint32 top,		
-	sint32 right,	
-	sint32 bottom	
+	RECT *rect,
+	sint32 left,
+	sint32 top,
+	sint32 right,
+	sint32 bottom
 	)
 {
 	Assert(rect);
@@ -84,9 +84,9 @@ PRIMITIVES_ERRCODE primitives_SetRect(
 
 
 PRIMITIVES_ERRCODE primitives_FrameRect16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	Pixel16 color			
+	aui_Surface *pSurface,
+	RECT *pRect,
+	Pixel16 color
 	)
 {
 	BOOL			wasUnlocked = FALSE;
@@ -115,17 +115,14 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	uint16 *pDest;
 	sint32 width, height;
 	sint32 inc1,inc2;
 
-	
 	width = right - left;
 	height = bottom - top;
 
@@ -151,7 +148,6 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 	for (i=width;i;i--)
 		*pDest++ = color;
 
-	
 	if (wasUnlocked) {
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 		Assert(errcode == AUI_ERRCODE_OK);
@@ -200,7 +196,7 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 
 	uint16 *pSrcBase;
 
-	if (pSrc->Buffer() == NULL) { 
+	if (pSrc->Buffer() == NULL) {
 		errcode = pSrc->Lock(NULL,(LPVOID *)&pSrcBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
@@ -211,7 +207,7 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 
 	uint16 *pDstBase;
 
-	if (pDst->Buffer() == NULL) { 
+	if (pDst->Buffer() == NULL) {
 		errcode = pDst->Lock(NULL,(LPVOID *)&pDstBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
@@ -220,11 +216,9 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 		pDstBase = (uint16 *)pDst->Buffer();
 	}
 
-	
 	sint32 srow = pSrc->Pitch()>>1;
 	sint32 drow = pDst->Pitch()>>1;
 
-	
 
 	sint32 dst_y0 = (sint32) ceil(dRect.top);
 	sint32 dst_x0 = (sint32) ceil(dRect.left);
@@ -246,8 +240,8 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 			if (!bFilter)
 			{
 				pDstPixel[i] = pSrcPixel[x];
-			} 
-			else 
+			}
+			else
 			{
 				uint16 c0 = pSrcPixel[x], c1 = pSrcPixel[x+1];
 				uint16 c2 = pSrcPixel[x + srow], c3 = pSrcPixel[x + srow + 1];
@@ -265,8 +259,8 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 					double green = f0 * GREEN565(c0) + f1 * GREEN565(c1) + f2 * GREEN565(c2) + f3 * GREEN565(c3);
 					double blue = f0 * BLUE565(c0) + f1 * BLUE565(c1) + f2 * BLUE565(c2) + f3 * BLUE565(c3);
 					pDstPixel[i] = ((sint32 )red) + (((sint32 )green)<<5) + (((sint32 )blue)<<11);
-				} 
-				else 
+				}
+				else
 				{
 					double red = f0 * RED555(c0) + f1 * RED555(c1) + f2 * RED555(c2) + f3 * RED555(c3);
 					double green = f0 * GREEN555(c0) + f1 * GREEN555(c1) + f2 * GREEN555(c2) + f3 * GREEN555(c3);
@@ -281,14 +275,14 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 	}
 
 	if (srcUnlocked) {
-		
+
 		errcode = pSrc->Unlock((LPVOID)pSrcBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 	}
 
 	if (dstUnlocked) {
-		
+
 		errcode = pDst->Unlock((LPVOID)pDstBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -305,9 +299,9 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 
 
 PRIMITIVES_ERRCODE primitives_PaintRect16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	Pixel16 color			
+	aui_Surface *pSurface,
+	RECT *pRect,
+	Pixel16 color
 	)
 {
 	BOOL			wasUnlocked = FALSE;
@@ -327,7 +321,7 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 
 	uint8 *pSurfBase;
 
-	if (pSurface->Buffer() == NULL) { 
+	if (pSurface->Buffer() == NULL) {
 		errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
@@ -336,15 +330,12 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 		pSurfBase = pSurface->Buffer();
 	}
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
@@ -359,7 +350,7 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 	}
 
 	if (wasUnlocked) {
-		
+
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -375,10 +366,10 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelRect16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
@@ -410,26 +401,22 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
-	if (width > height) 
+	if (width > height)
 	{
 		if (level > (height >> 1))
 			level = height >> 1;
 	}
-	else 
+	else
 	{
 		if (level > (width >> 1))
 			level = width >> 1;
@@ -449,7 +436,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -462,12 +449,11 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		tempWidth = width-1;
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
-		
 		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel-- = srcPixel;
 			}
@@ -478,7 +464,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
 		sint32 temp = top+1;
 		sint32 i;
 		for (i = 0;i < level;i++)
@@ -497,7 +482,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		tempHeight = height-1;
 
-		
 		temp = right - 1;
 		for (i = 0;i < level;i++)
 		{
@@ -511,7 +495,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 	else
 	{
@@ -520,7 +504,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -533,12 +517,11 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		tempWidth = width-1;
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
-		
 		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel-- = srcPixel;
 			}
@@ -549,7 +532,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
 		sint32 temp = top+1;
 		sint32 i;
 		for (i = 0;i < level;i++)
@@ -568,7 +550,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		tempHeight = height-1;
 
-		
 		temp = right - 1;
 		for (i = 0;i < level;i++)
 		{
@@ -582,10 +563,9 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 
-	
 	if(wasUnlocked) {
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 		Assert(errcode == AUI_ERRCODE_OK);
@@ -602,12 +582,12 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelRect16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag,				
-	sint32 blendLight,		
-	sint32 blendDark		
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag,
+	sint32 blendLight,
+	sint32 blendDark
 	)
 {
 	Assert(pSurface);
@@ -625,8 +605,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 	Assert(level >= 0);
 	if (level <= 0) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-
-	if ( left < 0 || top < 0 || right > pSurface->Width() || bottom > pSurface->Height() ) 
+	if ( left < 0 || top < 0 || right > pSurface->Width() || bottom > pSurface->Height() )
 		return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	uint8 *pSurfBase;
@@ -643,28 +622,24 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 	} else {
 		pSurfBase = (uint8 *)pSurface->Buffer();
 	}
-		
 
-	
+
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
-	if (width > height) 
+	if (width > height)
 	{
 		if (level > (height >> 1))
 			level = height >> 1;
 	}
-	else 
+	else
 	{
 		if (level > (width >> 1))
 			level = width >> 1;
@@ -684,7 +659,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel++ = srcPixel;
@@ -698,12 +672,10 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		tempWidth = width-1;
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
-		
 		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel-- = srcPixel;
@@ -715,7 +687,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
 		sint32 temp = top+1;
 		sint32 i;
 		for (i = 0;i < level;i++)
@@ -735,7 +706,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		tempHeight = height-1;
 
-		
 		temp = right - 1;
 		for (i = 0;i < level;i++)
 		{
@@ -750,7 +720,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 	else
 	{
@@ -759,7 +729,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel++ = srcPixel;
@@ -773,12 +742,10 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		tempWidth = width-1;
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
-		
 		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel-- = srcPixel;
@@ -790,7 +757,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
 		sint32 temp = top+1;
 		sint32 i;
 		for (i = 0;i < level;i++)
@@ -810,7 +776,6 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		tempHeight = height-1;
 
-		
 		temp = right - 1;
 		for (i = 0;i < level;i++)
 		{
@@ -825,11 +790,11 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 
 	if(wasUnlocked) {
-		
+
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -845,10 +810,10 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 
 PRIMITIVES_ERRCODE primitives_FrameThickRect16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
+	aui_Surface *pSurface,
+	RECT *pRect,
 	Pixel16 color,
-	sint32 level			
+	sint32 level
 	)
 {
 	Assert(pSurface);
@@ -872,26 +837,22 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
-	if (width > height) 
+	if (width > height)
 	{
 		if (level > (height >> 1))
 			level = height >> 1;
 	}
-	else 
+	else
 	{
 		if (level > (width >> 1))
 			level = width >> 1;
@@ -910,7 +871,6 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 
 				*pDestPixel++ = color;
@@ -924,12 +884,10 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 		tempWidth = width-1;
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
-		
 		for (j = level;j;j--)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
-				
 
 
 				*pDestPixel-- = color;
@@ -941,7 +899,6 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 		tempInc = (surfPitch >> 1) - 1;
 
-		
 		sint32 temp = top+1;
 		sint32 i;
 		for (sint32 i = 0;i < level;i++)
@@ -950,7 +907,6 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 			for (sint32 y=tempHeight;y;y--)
 			{
-
 
 				*pDestPixel++ = color;
 				pDestPixel += tempInc;
@@ -961,7 +917,6 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 		tempHeight = height-1;
 
-		
 		temp = right - 1;
 		for (i = 0;i < level;i++)
 		{
@@ -970,16 +925,14 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 			for (sint32 y=tempHeight;y;y--)
 			{
 
-
 				*pDestPixel++ = color;
 				pDestPixel += tempInc;
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -994,12 +947,12 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 
 PRIMITIVES_ERRCODE primitives_DrawLine16(
-	aui_Surface *pSurface,	
-	sint32 x1,				
-	sint32 y1,				
-	sint32 x2,				
-	sint32 y2,				
-	Pixel16 color			
+	aui_Surface *pSurface,
+	sint32 x1,
+	sint32 y1,
+	sint32 x2,
+	sint32 y2,
+	Pixel16 color
 	)
 {
 	Assert(pSurface);
@@ -1022,7 +975,6 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
@@ -1032,7 +984,7 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
 	*pDest = color;
 
-	if (absdx >= absdy)	
+	if (absdx >= absdy)
 	{
 		for (sint32 i=absdx;i;i--)
 		{
@@ -1048,7 +1000,7 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 			*pDest = color;
 		}
 	}
-	else			
+	else
 	{
 		for (sint32 i=absdy;i;i--)
 		{
@@ -1065,7 +1017,6 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -1266,7 +1217,7 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 
 
 PRIMITIVES_ERRCODE primitives_DrawText(
-	aui_Surface *pSurface,	
+	aui_Surface *pSurface,
 	sint32 x,
 	sint32 y,
 	const MBCHAR *pString,
@@ -1289,28 +1240,22 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, color);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1325,11 +1270,11 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawBoundedText(
-		aui_Surface *pSurface,	
-		RECT *bound,						
-		const MBCHAR *pString,				
-		COLORREF color,					
-		BOOL bg							
+		aui_Surface *pSurface,
+		RECT *bound,
+		const MBCHAR *pString,
+		COLORREF color,
+		BOOL bg
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -1348,14 +1293,11 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_DROP));
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
@@ -1368,14 +1310,11 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	OffsetRect(&bound2, -1, -1);
 	DrawText(hdc,pString,-1,&bound2,DT_WORDBREAK);
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1393,13 +1332,13 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawTextBatch(
-	aui_Surface *pSurface,	
-	sint32 x,							
-	sint32 y,							
-	const MBCHAR **pString,					
-	sint32 numStrings,					
-	COLORREF color,						
-	BOOL bg								
+	aui_Surface *pSurface,
+	sint32 x,
+	sint32 y,
+	const MBCHAR **pString,
+	sint32 numStrings,
+	COLORREF color,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1418,16 +1357,13 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
+
 	GetTextMetrics(hdc,&tm);
 
-	
 	oldColor = SetTextColor(hdc, color);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
@@ -1438,14 +1374,11 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 		y += tm.tmHeight + tm.tmExternalLeading;
 	}
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1463,12 +1396,12 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 
 
 PRIMITIVES_ERRCODE primitives_DropText(
-	aui_Surface *pSurface,	
-	sint32 x,							
-	sint32 y,							
-	const MBCHAR *pString,					
-	COLORREF color,						
-	BOOL bg								
+	aui_Surface *pSurface,
+	sint32 x,
+	sint32 y,
+	const MBCHAR *pString,
+	COLORREF color,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1486,19 +1419,15 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, 0);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
-	
 	COLORREF	dropTextColor = g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_DROP);
 
 	SetTextColor(hdc, dropTextColor);
@@ -1507,14 +1436,11 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	SetTextColor(hdc, color);
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1532,13 +1458,13 @@ PRIMITIVES_ERRCODE primitives_DropText(
 
 
 PRIMITIVES_ERRCODE primitives_ColoredDropText(
-	aui_Surface *pSurface,	
-	sint32 x,							
-	sint32 y,							
-	const MBCHAR *pString,					
-	COLORREF textColor,						
-	COLORREF dropColor,						
-	BOOL bg								
+	aui_Surface *pSurface,
+	sint32 x,
+	sint32 y,
+	const MBCHAR *pString,
+	COLORREF textColor,
+	COLORREF dropColor,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1556,19 +1482,16 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, 0);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
-	
+
 
 
 
@@ -1578,14 +1501,11 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	SetTextColor(hdc, textColor);
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1597,11 +1517,11 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 }
 
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
-	aui_Surface *pSurface,	
+	aui_Surface *pSurface,
 	RECT *destRect,
-	const MBCHAR *pString,					
-	COLORREF color,						
-	BOOL bg								
+	const MBCHAR *pString,
+	COLORREF color,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1621,19 +1541,15 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, 0);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
-	
 	COLORREF	dropTextColor = g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_DROP);
 
 	GetTextExtentPoint32(hdc, pString, strlen(pString),  &size);
@@ -1647,14 +1563,11 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	SetTextColor(hdc, color);
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1666,12 +1579,12 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 }
 
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
-	aui_Surface *pSurface,	
+	aui_Surface *pSurface,
 	RECT *destRect,
-	const MBCHAR *pString,					
-	COLORREF textColor,						
-	COLORREF dropColor,						
-	BOOL bg								
+	const MBCHAR *pString,
+	COLORREF textColor,
+	COLORREF dropColor,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1691,19 +1604,16 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
-	
+
 	oldColor = SetTextColor(hdc, 0);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
-	
+
 
 
 
@@ -1718,14 +1628,11 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	SetTextColor(hdc, textColor);
 	TextOut(hdc,x,y,pString,strlen(pString));
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1745,13 +1652,13 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 
 
 PRIMITIVES_ERRCODE primitives_DropTextBatch(
-	aui_Surface *pSurface,	
-	sint32 x,							
-	sint32 y,							
-	const MBCHAR **pString,					
-	sint32 numStrings,					
-	COLORREF color,						
-	BOOL bg								
+	aui_Surface *pSurface,
+	sint32 x,
+	sint32 y,
+	const MBCHAR **pString,
+	sint32 numStrings,
+	COLORREF color,
+	BOOL bg
 	)
 {
 	Assert(pSurface);
@@ -1771,26 +1678,22 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
-	
 	if (bg)
 		oldMode = SetBkMode(hdc,TRANSPARENT);
-	
+
 	GetTextMetrics(hdc,&tm);
 
-	
 	oldColor = SetTextColor(hdc, 0);
 
-	
 	HFONT hOldFont = NULL;
 	if (g_hFont)
 		hOldFont = (HFONT)SelectObject(hdc,g_hFont);
 
-	
 	COLORREF	dropTextColor = g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_DROP);
 
 	SetTextColor(hdc, dropTextColor);
 
-	sint32 i;	
+	sint32 i;
 	for (i=0;i < numStrings;i++)
 	{
 
@@ -1801,21 +1704,17 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	SetTextColor(hdc, color);
 	y = saveY;
 
-	
 	for (i=0;i < numStrings;i++)
 	{
 		TextOut(hdc,x,y,pString[i],strlen(pString[i]));
 		y += tm.tmHeight + tm.tmExternalLeading;
 	}
 
-	
 	if (g_hFont)
 		SelectObject(hdc,hOldFont);
 
-	
 	SetTextColor(hdc, oldColor);
 
-	
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
@@ -1833,10 +1732,10 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelPane16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
@@ -1860,20 +1759,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -1898,12 +1793,12 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 	if (flag)
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel-- = srcPixel;
 			}
@@ -1931,7 +1826,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 		tempHeight = height-1;
 
-		
 		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
@@ -1944,16 +1838,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
-	else	
+	else
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel-- = srcPixel;
 			}
@@ -1981,7 +1875,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 		tempHeight = height-1;
 
-		
 		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
@@ -1994,10 +1887,9 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2012,10 +1904,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
@@ -2039,20 +1931,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2074,12 +1962,12 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 
 	if (flag)
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2103,7 +1991,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 			}
 		}
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2114,16 +2001,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
-		}	
+		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2147,7 +2034,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 			}
 		}
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2158,10 +2044,9 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
-		}	
+		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2176,10 +2061,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
@@ -2203,20 +2088,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2237,12 +2118,12 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2269,7 +2150,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 		tempHeight = height-1;
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2281,16 +2161,16 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 				pDestPixel += tempInc;
 			}
 			tempHeight -= 1;
-		}	
+		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2317,7 +2197,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 		tempHeight = height-1;
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2329,10 +2208,9 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 				pDestPixel += tempInc;
 			}
 			tempHeight -= 1;
-		}	
+		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2347,19 +2225,18 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
-	aui_Surface *pSurface,	
-	sint32 xStart,			
-	sint32 xEnd,			
-	sint32 y,				
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	sint32 xStart,
+	sint32 xEnd,
+	sint32 y,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
 	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	
-	
+
 	Assert(xStart <= xEnd);
 	if (xStart >= xEnd) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -2375,12 +2252,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
@@ -2394,26 +2269,26 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
 		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2421,7 +2296,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2436,19 +2310,18 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 
 
 PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
-	aui_Surface *pSurface,	
-	sint32 xStart,			
-	sint32 xEnd,			
-	sint32 y,				
-	sint32 level,			
-	BOOL flag				
+	aui_Surface *pSurface,
+	sint32 xStart,
+	sint32 xEnd,
+	sint32 y,
+	sint32 level,
+	BOOL flag
 	)
 {
 	Assert(pSurface);
 	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	
-	
+
 	Assert(xStart <= xEnd);
 	if (xStart >= xEnd) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -2464,12 +2337,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
@@ -2483,26 +2354,26 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Shadow(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
 		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
+
 				srcPixel = pixelutils_Lightening(*pDestPixel);
 				*pDestPixel++ = srcPixel;
 			}
@@ -2510,7 +2381,6 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2525,10 +2395,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelPane16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag,				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag,
 	sint32 blendLight,
 	sint32 blendDark,
 	AUI_TABGROUP_ALIGNMENT a
@@ -2555,20 +2425,16 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2595,12 +2461,11 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 	{
 	if (flag)
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel-- = srcPixel;
@@ -2630,7 +2495,6 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 
 		tempHeight = height-1;
 
-		
 		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
@@ -2644,16 +2508,15 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
-	else	
+	else
 	{
 		sint32 j;
 		for (j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel-- = srcPixel;
@@ -2683,7 +2546,6 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 
 		tempHeight = height-1;
 
-		
 		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
@@ -2697,7 +2559,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			}
 
 			tempHeight -= 2;
-		}	
+		}
 	}
 	}
 	else if ( a == AUI_TABGROUP_ALIGNMENT_LEFT )
@@ -2705,11 +2567,10 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 	}
 	else
 	{
-		
+
 		Assert( FALSE );
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2724,10 +2585,10 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag,				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag,
 	sint32 blendLight,
 	sint32 blendDark,
 	AUI_TABGROUP_ALIGNMENT a
@@ -2754,20 +2615,16 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2791,12 +2648,11 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 	{
 	if (flag)
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel++ = srcPixel;
@@ -2822,7 +2678,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			}
 		}
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2834,16 +2689,15 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
-		}	
+		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = level;j;j--)
 		{
 			for (sint32 i = tempWidth;i;i--)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel++ = srcPixel;
@@ -2869,7 +2723,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			}
 		}
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -2881,7 +2734,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
-		}	
+		}
 	}
 	}
 	else if ( a == AUI_TABGROUP_ALIGNMENT_LEFT )
@@ -2889,11 +2742,10 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 	}
 	else
 	{
-		
+
 		Assert( FALSE );
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -2908,10 +2760,10 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
-	aui_Surface *pSurface,	
-	RECT *pRect,			
-	sint32 level,			
-	BOOL flag,				
+	aui_Surface *pSurface,
+	RECT *pRect,
+	sint32 level,
+	BOOL flag,
 	sint32 blendLight,
 	sint32 blendDark,
 	AUI_TABGROUP_ALIGNMENT a
@@ -2938,20 +2790,16 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2974,12 +2822,11 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 	{
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel++ = srcPixel;
@@ -3008,7 +2855,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 
 		tempHeight = height-1;
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -3021,16 +2867,15 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 				pDestPixel += tempInc;
 			}
 			tempHeight -= 1;
-		}	
+		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel++ = srcPixel;
@@ -3059,7 +2904,6 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 
 		tempHeight = height-1;
 
-		
 		for (i=0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
@@ -3072,7 +2916,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 				pDestPixel += tempInc;
 			}
 			tempHeight -= 1;
-		}	
+		}
 	}
 	}
 	else if ( a == AUI_TABGROUP_ALIGNMENT_LEFT )
@@ -3080,12 +2924,11 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 	}
 	else
 	{
-		
+
 		Assert( FALSE );
 	}
 
-	
-	
+
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -3100,11 +2943,11 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
-	aui_Surface *pSurface,	
+	aui_Surface *pSurface,
 	RECT *tab,
 	RECT *pane,
-	sint32 level,			
-	BOOL flag,				
+	sint32 level,
+	BOOL flag,
 	sint32 blendLight,
 	sint32 blendDark,
 	AUI_TABGROUP_ALIGNMENT a
@@ -3132,12 +2975,11 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 		break;
 
 	default:
-		
+
 		Assert( FALSE );
 	}
-	
-	
-	
+
+
 	Assert(xStart <= xEnd);
 	if (xStart >= xEnd) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -3153,12 +2995,10 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
@@ -3174,12 +3014,11 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	{
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel++ = srcPixel;
@@ -3187,14 +3026,13 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 			pDestPixel += tempInc;
 		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel++ = srcPixel;
@@ -3208,12 +3046,11 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	}
 	else
 	{
-		
+
 		Assert( FALSE );
 	}
 
-	
-	
+
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -3228,11 +3065,11 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 
 
 PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
-	aui_Surface *pSurface,	
+	aui_Surface *pSurface,
 	RECT *tab,
 	RECT *pane,
-	sint32 level,			
-	BOOL flag,				
+	sint32 level,
+	BOOL flag,
 	sint32 blendLight,
 	sint32 blendDark,
 	AUI_TABGROUP_ALIGNMENT a
@@ -3260,12 +3097,11 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 		break;
 
 	default:
-		
+
 		Assert( FALSE );
 	}
-	
-	
-	
+
+
 	Assert(xStart <= xEnd);
 	if (xStart >= xEnd) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
@@ -3281,12 +3117,10 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
@@ -3302,12 +3136,11 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	{
 	if (flag)
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
 				*pDestPixel++ = srcPixel;
@@ -3315,14 +3148,13 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 			pDestPixel += tempInc;
 		}
 	}
-	else 
+	else
 	{
-		
+
 		for (sint32 j = 0;j < level;j++)
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-				
 
 				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
 				*pDestPixel++ = srcPixel;
@@ -3336,13 +3168,13 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	}
 	else
 	{
-		
+
 		Assert( FALSE );
 	}
 
-	
 
-	
+
+
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
@@ -3357,16 +3189,16 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 
 
 PRIMITIVES_ERRCODE primitives_DrawFrame16(
-	aui_Surface *pSurface,			
-	aui_Image *pImageUpperLeft,		
-	aui_Image *pImageUpperRight,	
-	aui_Image *pImageLowerLeft,		
-	aui_Image *pImageLowerRight,	
-	Pattern *pPatternLeft,			
-	Pattern *pPatternTop,			
-	Pattern *pPatternRight,			
-	Pattern *pPatternBottom,		
-	RECT *pRect						
+	aui_Surface *pSurface,
+	aui_Image *pImageUpperLeft,
+	aui_Image *pImageUpperRight,
+	aui_Image *pImageLowerLeft,
+	aui_Image *pImageLowerRight,
+	Pattern *pPatternLeft,
+	Pattern *pPatternTop,
+	Pattern *pPatternRight,
+	Pattern *pPatternBottom,
+	RECT *pRect
 	)
 {
 	Assert(pSurface);
@@ -3380,7 +3212,7 @@ PRIMITIVES_ERRCODE primitives_DrawFrame16(
 	if (pImageLowerLeft==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 	Assert(pImageLowerRight);
 	if (pImageLowerRight==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
-	
+
 	Assert(pPatternLeft);
 	if (pPatternLeft==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 	Assert(pPatternTop);
@@ -3397,11 +3229,10 @@ PRIMITIVES_ERRCODE primitives_DrawFrame16(
 	Assert(pRect->top < pRect->bottom);
 	if ((pRect->left >= pRect->right) || (pRect->top >= pRect->bottom)) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	
 	sint32	imageWidth = pImageUpperLeft->TheSurface()->Width();
 	sint32	imageHeight = pImageUpperLeft->TheSurface()->Height();
 	RECT	srcRect = { 0, 0, imageWidth, imageHeight };
-	
+
 	sint32	x = pRect->left, y = pRect->top;
 
 	g_c3ui->TheBlitter()->Blt(pSurface, x, y, pImageUpperLeft->TheSurface(), &srcRect, k_AUI_BLITTER_FLAG_COPY);
@@ -3419,7 +3250,6 @@ PRIMITIVES_ERRCODE primitives_DrawFrame16(
 
 	g_c3ui->TheBlitter()->Blt(pSurface, x, y, pImageLowerRight->TheSurface(), &srcRect, k_AUI_BLITTER_FLAG_COPY);
 
-	
 	RECT rect;
 	rect.left = pRect->left + imageWidth;
 	rect.top = pRect->top;
@@ -3475,19 +3305,16 @@ void primitives_HackTileDraw(aui_Surface *pSurface)
 	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	Pixel16 srcPixel;
 	uint16 *pDestPixel;
 
 	sint32 yoffset = 300;
 
 	{
-
 
 		for (y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
 			if (y<=23) {
@@ -3512,19 +3339,15 @@ void primitives_HackTileDraw(aui_Surface *pSurface)
 		}
 	}
 
-	
 	errcode = pSurface->Unlock((LPVOID)pSurfBase);
 
-
 }
-
 
 
 #include "tiledmap.h"
 #include "tileset.h"
 
 extern TiledMap *g_tiledMap;
-
 
 void primitives_HackStencilDraw(aui_Surface *pSurface)
 {
@@ -3537,19 +3360,16 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 
 	if (g_tiledMap == NULL) return;
 
-
 	static uint16 from=4, to=14;
 
 	tileutils_LoadStencil();
 
 
-
 	Pixel16 *image = NULL;
 
-
 	TileSet *tileSet = g_tiledMap->GetTileSet();
-	
-	if (tileSet) 
+
+	if (tileSet)
 		image = tileSet->GetTransitionData(from, to, 0);
 
 	if (image != NULL) {
@@ -3563,12 +3383,10 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 		errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 		if ( errcode != AUI_ERRCODE_OK ) return;
 
-		
 		sint32 surfWidth = pSurface->Width();
 		sint32 surfHeight = pSurface->Height();
 		sint32 surfPitch = pSurface->Pitch();
 
-		
 		Pixel16 srcPixel;
 		uint16 *pDestPixel;
 
@@ -3592,13 +3410,13 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 
 				for (j=0; j<32; j++) {
 					if (accum & 1) {
-						
+
 						srcPixel = *srcPixelPtr;
 						srcPixelPtr++;
 						pDestPixel = (Pixel16 *)(pSurfBase + (y * surfPitch) + (x << 1));
 						*pDestPixel = srcPixel;
 					} else {
-						
+
 					}
 					accum>>=1;
 					x++;
@@ -3607,7 +3425,6 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 			}
 		}
 
-		
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 
 	}
@@ -3628,7 +3445,6 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 
 
 }
-
 
 
 #define DIR_STEEP		1
@@ -3673,7 +3489,6 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 	Assert(pSurface);
 	if (pSurface==NULL) return;
 
-	
 	if (x1 == x2 && y1 == y2) return;
 
 	uint8		*pSurfBase;
@@ -3715,7 +3530,7 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 	Poinc = SQRTFUNC(slope);
 	Painc = slope * Poinc;
 	Pdinc = Painc - Poinc;
-	
+
 	Pmid = 0;
 
 	Bainc = dy * 2;
@@ -3726,7 +3541,6 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 
 		*(Pixel16 *)mid_addr = pixelutils_Blend(color, *mid_addr, 13);
 
-		
 		for (
 				Pnow = Poinc - Pmid, now_addr = mid_addr + addr_oinc;
 				Pnow < Pmax;
@@ -3734,7 +3548,6 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 			)
 			*(Pixel16 *)now_addr =  pixelutils_Blend(color, *now_addr, COVERAGE(Pnow));
 
-		
 		for (
 				Pnow = Poinc + Pmid, now_addr = mid_addr - addr_oinc;
 				Pnow < Pmax;
@@ -3781,7 +3594,6 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 	Assert(pSurface);
 	if (pSurface==NULL) return;
 
-	
 	if (x1 == x2 && y1 == y2) return;
 
 	uint8		*pSurfBase;
@@ -3823,7 +3635,7 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 	Poinc = SQRTFUNC(slope);
 	Painc = slope * Poinc;
 	Pdinc = Painc - Poinc;
-	
+
 	Pmid = 0;
 
 	Bainc = dy * 2;
@@ -3849,7 +3661,6 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 			}
 		}
 
-		
 		for (
 				Pnow = Poinc - Pmid, now_addr = mid_addr + addr_oinc;
 				Pnow < Pmax;
@@ -3869,7 +3680,6 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 				}
 			}
 
-		
 		for (
 				Pnow = Poinc + Pmid, now_addr = mid_addr - addr_oinc;
 				Pnow < Pmax;
@@ -3916,7 +3726,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	uint8 *pNewBase;
 	uint8 *pDstBase;
 
-	if (pOldSurface->Buffer() == NULL) { 
+	if (pOldSurface->Buffer() == NULL) {
 		errcode = pOldSurface->Lock(NULL,(LPVOID *)&pOldBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -3925,7 +3735,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 		pOldBase = pOldSurface->Buffer();
 	}
 
-	if (pNewSurface->Buffer() == NULL) { 
+	if (pNewSurface->Buffer() == NULL) {
 		errcode = pNewSurface->Lock(NULL,(LPVOID *)&pNewBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -3934,7 +3744,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 		pNewBase = pNewSurface->Buffer();
 	}
 
-	if (pDstSurface->Buffer() == NULL) { 
+	if (pDstSurface->Buffer() == NULL) {
 		errcode = pDstSurface->Lock(NULL,(LPVOID *)&pDstBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -3943,7 +3753,6 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 		pDstBase = pDstSurface->Buffer();
 	}
 
-	
 	sint32 oldSurfWidth = pOldSurface->Width();
 	sint32 oldSurfHeight = pOldSurface->Height();
 	sint32 oldSurfPitch = pOldSurface->Pitch();
@@ -3956,19 +3765,16 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	sint32 dstSurfHeight = pDstSurface->Height();
 	sint32 dstSurfPitch = pDstSurface->Pitch();
 
-	
 	uint16 *pDestPixel;
 	uint16 *pOldSrc = (uint16 *)pOldBase;
 	uint16 *pNewSrc = (uint16 *)pNewBase;
 
-	
 	sint32 width = pDstRect->right - pDstRect->left;
 	sint32 height = pDstRect->bottom - pDstRect->top;
 
 	pDestPixel = (uint16 *)(pDstBase + pDstRect->top * dstSurfPitch + (pDstRect->left << 1));
 	sint32 dstInc = (dstSurfPitch >> 1) - width;
 
-	
 	sint32 oldInc = (oldSurfPitch >> 1) - width;
 	sint32 newInc = (newSurfPitch >> 1) - width;
 
@@ -3985,21 +3791,21 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	}
 
 	if ( oldWasUnlocked ) {
-		
+
 		errcode = pOldSurface->Unlock((LPVOID)pOldBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
 	}
 
 	if ( newWasUnlocked ) {
-		
+
 		errcode = pNewSurface->Unlock((LPVOID)pNewBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
 	}
 
 	if ( dstWasUnlocked ) {
-		
+
 		errcode = pDstSurface->Unlock((LPVOID)pDstBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -4015,7 +3821,7 @@ void primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten )
 
 	uint8 *pBase;
 
-	if (pSurface->Buffer() == NULL) { 
+	if (pSurface->Buffer() == NULL) {
 		errcode = pSurface->Lock(NULL,(LPVOID *)&pBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -4024,15 +3830,12 @@ void primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten )
 		pBase = pSurface->Buffer();
 	}
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	uint16 *pDestPixel;
 
-	
 	sint32 width = surfWidth;
 	sint32 height = surfHeight;
 
@@ -4055,7 +3858,7 @@ void primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten )
 	}
 
 	if ( wasUnlocked ) {
-		
+
 		errcode = pSurface->Unlock((LPVOID)pBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -4064,7 +3867,6 @@ void primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten )
 	return;
 }
 
-
 void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLighten)
 {
 	BOOL			wasUnlocked = FALSE;
@@ -4072,7 +3874,7 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 
 	uint8 *pBase;
 
-	if (pSurface->Buffer() == NULL) { 
+	if (pSurface->Buffer() == NULL) {
 		errcode = pSurface->Lock(NULL,(LPVOID *)&pBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -4081,15 +3883,12 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 		pBase = pSurface->Buffer();
 	}
 
-	
 	sint32 surfWidth = pSurface->Width();
 	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
 	uint16 *pDestPixel;
 
-	
 	sint32 width = rect.right - rect.left;
 	sint32 height = rect.bottom - rect.top;
 
@@ -4105,7 +3904,7 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 	}
 
 	if ( wasUnlocked ) {
-		
+
 		errcode = pSurface->Unlock((LPVOID)pBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __FLIIF_H__
@@ -11,7 +10,7 @@ extern "C" {
 enum  {
     SFTYPE_RIGHT,
     SFTYPE_LEFT,
-    SFTYPE_TRI, 
+    SFTYPE_TRI,
     SFTYPE_SPIKE
 };
 typedef int SFTYPE;
@@ -39,7 +38,7 @@ enum FLOP_TYPE{
 	FLOP_OUTPUT,
 	FLOP_ENDEXP,
 	FLOP_STOP
-	
+
 };
 
 enum {
@@ -56,9 +55,9 @@ typedef int BFLOP_TYPE;
 
 enum {
 	FLI_SECT_EVAL,
-    FLI_SECT_INIT, 
+    FLI_SECT_INIT,
 	FLI_SECT_BEGINTURN,
-    FLI_SECT_ENDTURN, 
+    FLI_SECT_ENDTURN,
 	FLI_SECT_PRE_INCOMING_DIPLOMACY,
 	FLI_SECT_POST_INCOMING_DIPLOMACY,
 	FLI_SECT_PRE_OUTGOING_DIPLOMACY,
@@ -66,7 +65,7 @@ enum {
 	FLI_SECT_BEGIN_DIPLOMACY,
 	FLI_SECT_REJECTED_MESSAGE,
 	FLI_SECT_ACCEPTED_MESSAGE,
-	FLI_SECT_MAX 
+	FLI_SECT_MAX
 };
 
 #ifdef PARSER_INTERFACE
@@ -84,7 +83,7 @@ void fli_AddInitializedInputSymbol(char *name, double value);
 void fli_AddOutputSymbol(char *name, double minValue, double maxValue);
 void fli_AddInitializedOutputSymbol(char *name, double value, double min, double max);
 FliSymbol *fli_LookupSymbol(char *name);
-void fli_AddSetFunction(char *range_name, char *symbolname, 
+void fli_AddSetFunction(char *range_name, char *symbolname,
 						SFTYPE sftype, double v1, double v2);
 
 int fli_RunParser(const char *topdir, const char *file);
@@ -112,7 +111,6 @@ void fli_EndWhen();
 
 void fli_ReportError(const char *s);
 
-
 void fli_DumpCode();
 void fli_DebugPrintf(char *fmt, ...);
 BOOL fli_GetFliLoggingEnabled(int owner);
@@ -128,5 +126,4 @@ void fli_SetCurrentPlayer(int owner);
 #endif
 
 
-
-#endif 
+#endif

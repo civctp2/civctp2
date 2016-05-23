@@ -49,12 +49,11 @@ bool CtpAiDebug::DebugLogCheck(const sint32 player, const sint32 goal_type, cons
 		{
 			if (s_debugArmies[i] == army_id)
 				return true;
-			
-			
+
 			if (s_debugArmies[i] != -1)
 				found = true;
 		}
-		
+
 		if (found)
 			return false;
 	}

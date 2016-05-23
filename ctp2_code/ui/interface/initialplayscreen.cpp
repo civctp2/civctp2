@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -52,7 +52,6 @@
 
 #include "screenutils.h"
 
-
 #include "loadsavewindow.h"
 #include "initialplaywindow.h"
 #include "scenariowindow.h"
@@ -73,7 +72,6 @@ extern  CivApp				*g_civApp;
 extern  CivPaths			*g_civPaths;
 extern	ProfileDB			*g_theProfileDB;
 
-
 static C3Window				*s_initplayWindow		= NULL;
 static MBCHAR				*s_initplayWindowLDLBlock = "InitPlayWindow";
 
@@ -92,7 +90,6 @@ sint32	initialplayscreen_displayMyWindow()
 
 	g_c3ui->AddWindow(s_initplayWindow);
 
-	
 	return retval;
 }
 sint32 initialplayscreen_removeMyWindow(uint32 action)
@@ -108,22 +105,19 @@ sint32 initialplayscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE initialplayscreen_Initialize( void )
 {
 	AUI_ERRCODE errcode;
 
-	if ( s_initplayWindow ) 
-		return AUI_ERRCODE_OK; 
+	if ( s_initplayWindow )
+		return AUI_ERRCODE_OK;
 
-	
 	s_initplayWindow = (C3Window *)aui_Ldl::BuildHierarchyFromRoot(s_initplayWindowLDLBlock);
 	Assert (s_initplayWindow != NULL);
-	if (s_initplayWindow == NULL) 
+	if (s_initplayWindow == NULL)
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SpriteTestButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SpriteTestButton",
 											spritetest_spPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
@@ -133,29 +127,27 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
  	spriteTest->Hide();
 #endif
 
-
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton",
 											initialplayscreen_emailPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "HotseatButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "HotseatButton",
 											initialplayscreen_hotseatPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "MPButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "MPButton",
 											initialplayscreen_mpPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "QuitButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "QuitButton",
 											initialplayscreen_quitPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "CreditsButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "CreditsButton",
 											initialplayscreen_creditsPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton", 
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton",
 											initialplayscreen_newgamePress, NULL);
 	if (errcode == AUI_ERRCODE_OK)
     {
@@ -183,15 +175,13 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 // This was completely excised by _MSV_VER anyway, and no longer exists.
 	}
 
-
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE initialplayscreen_Cleanup()
 {
-	if ( !s_initplayWindow  ) return AUI_ERRCODE_OK; 
+	if ( !s_initplayWindow  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_initplayWindow->Id() );
 
@@ -200,7 +190,6 @@ AUI_ERRCODE initialplayscreen_Cleanup()
 	errcode = aui_Ldl::DeleteHierarchyFromRoot(s_initplayWindowLDLBlock);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	
 	s_initplayWindow = NULL;
 
 	return errcode;
@@ -218,40 +207,34 @@ spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cooki
 
 	if(initialplayscreen_removeMyWindow(action))
 	{
-			
+
 			MBCHAR fieldText[k_MAX_NAME_LEN];
 
 			sprintf(fieldText,"Jerry");
-				
-			
-  
+
+
   			g_theProfileDB->SetLeaderName(fieldText);
-				
-			
+
 			g_theProfileDB->SetSaveNote("");
-				
-			
-			
+
+
 			g_theProfileDB->SetTutorialAdvice(FALSE);
-				
+
 			g_theProfileDB->SetFogOfWar(false);
 
 			g_civApp->PostSpriteTestAction();
-	} 
+	}
 }
-
 
 void
 initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	control->Enable(FALSE);
 
 	NetShell::Enter( k_NS_FLAGS_CREATE );
 }
-
 
 void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -271,13 +254,12 @@ void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 da
 		g_startEmailGame = TRUE;
 		spnewgamescreen_displayMyWindow();
 	}
-}	
+}
 
 void
 initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-
 
 		loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
@@ -306,7 +288,7 @@ initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, vo
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	initialplayscreen_removeMyWindow(action);
-	
+
 	ExitGame();
 }
 void
@@ -321,7 +303,7 @@ initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data,
 void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-	if(initialplayscreen_removeMyWindow(action)) 
+	if(initialplayscreen_removeMyWindow(action))
 		spnewgamescreen_displayMyWindow();
 }
 
@@ -335,7 +317,7 @@ void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32
 void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-	
+
 	if (c3files_HasLegalCD()) {
 		if(initialplayscreen_removeMyWindow(action)) {
 			g_theProfileDB->SetTutorialAdvice(TRUE);

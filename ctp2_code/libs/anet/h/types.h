@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -38,12 +38,9 @@ Initial revision
 #if !defined(_TYPES_H_)
 #define _TYPES_H_
 
-
 typedef unsigned char u_char;
 typedef unsigned short int u_short;
 typedef unsigned int u_int;
 typedef unsigned long int u_long;
 
-
 #endif /* Protect against double-inclusion */
-

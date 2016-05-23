@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __C3_H__
 #define __C3_H__ 1
@@ -22,12 +8,10 @@
 
 #pragma warning( error : 4700 )
 
-
 #include <limits.h>
 #include <crtdbg.h>
 #include <windows.h>
 #include <tchar.h>
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +23,6 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <time.h>
-
 
 #include "ctp-types.h"
 

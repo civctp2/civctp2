@@ -25,7 +25,7 @@ public:
 class NetCellList : public Packetizer
 {
 public:
-	NetCellList(sint32 x, sint32 y) 
+	NetCellList(sint32 x, sint32 y)
 	{
 		m_x = (uint16)x;
 		m_y = (uint16)y;
@@ -39,7 +39,6 @@ public:
 	uint16 m_x, m_y;
 	uint8 m_cells;
 };
-
 
 class NetCellUnitOrder : public Packetizer
 {

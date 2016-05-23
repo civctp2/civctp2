@@ -10,10 +10,10 @@ class Token;
 class EndGameRecord : public Record
 {
 private:
-	
+
 	sint32 m_cost;
-	sint32 m_numStages;	
-	sint32 m_soundID;			
+	sint32 m_numStages;
+	sint32 m_soundID;
 	BOOL m_exactlyOneRequired;
 	sint32 m_maxAllowed;
 	sint32 m_minRequired;
@@ -30,8 +30,7 @@ public:
 	sint32 m_iconDBIndex;
 private:
 	sint32 m_scoreBonusOverMinimum;
-	
-	
+
 	sint32 *m_requiredForStage;
 	sint32 *m_turnsPerStage;
 
@@ -56,7 +55,7 @@ public:
 	sint32 GetCataclysmNum() const { return m_cataclysm_num; }
 	sint32 GetCataclysmPercent() const { return m_cataclysm_percent; }
 	sint32 NotifyLabBuilt() const { return m_notify_lab_built; }
-	sint32 GetSoundID() const { return m_soundID; }	
+	sint32 GetSoundID() const { return m_soundID; }
 	sint32 StartsSequence() const { return m_starts_sequence; }
 	sint32 RequiresLab() const { return m_requiresLab; }
 	sint32 GetMaxAllowed() const { return m_maxAllowed; }

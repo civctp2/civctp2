@@ -61,18 +61,18 @@ class cDebugCallStackSet
 public:
 	cDebugCallStackSet(int depth);
 	~cDebugCallStackSet();
-	
+
 	void Add();
 	void Dump(const char *filename);
 
 private:
-	int m_maxNumStacks;	
-	unsigned m_caller;	
-	int m_depth;		
-	int m_blockSize;	
-	int m_numStacks;	
-	unsigned *m_stacks;	
-	unsigned *m_curStack;	
+	int m_maxNumStacks;
+	unsigned m_caller;
+	int m_depth;
+	int m_blockSize;
+	int m_numStacks;
+	unsigned *m_stacks;
+	unsigned *m_curStack;
 };
 #endif
 

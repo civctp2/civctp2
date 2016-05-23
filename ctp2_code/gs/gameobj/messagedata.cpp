@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -36,7 +28,6 @@
 #include "DiplomaticRequestPool.h"
 #include "controlpanelwindow.h"
 
-
 #include "aui.h"
 #include "messagewin.h"
 #include "messagemodal.h"
@@ -44,16 +35,14 @@
 extern FilenameDB *g_theMessageIconFileDB;
 extern DiplomaticRequestPool *g_theDiplomaticRequestPool;
 
-
 #define AND_I_AM_STEVE
-
 
 	extern	TurnCount	*g_turn ;
 
 	extern	Player	**g_player ;
 
 	extern	StringDB	*g_theStringDB ;
- 
+
 extern MessageModal *g_modalMessage;
 
 
@@ -66,29 +55,29 @@ extern MessageModal *g_modalMessage;
 
 MessageData::MessageData(CivArchive &archive) : GAMEOBJ(0)
 {
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
+    sint32 i;
+    for (i=0; i<k_MAX_MSG_LEN; i++) {
+        m_caption[i] = 0;
+    }
 
-    m_advance = -1; 
+    m_advance = -1;
     m_cityList = new UnitDynamicArray ;
 	m_buttonList = new PointerList<SlicButton>;
 	m_eyePoints = new PointerList<SlicEyePoint>;
-	m_window = NULL;  
-	m_slicSegment = NULL; 
-    Serialize(archive) ; 
+	m_window = NULL;
+	m_slicSegment = NULL;
+    Serialize(archive) ;
 }
 
 MessageData::MessageData(const ID id) : GAMEOBJ(id.m_id)
 	{
-	
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
 
-    m_advance = -1; 
+    sint32 i;
+    for (i=0; i<k_MAX_MSG_LEN; i++) {
+        m_caption[i] = 0;
+    }
+
+    m_advance = -1;
 	m_owner = PLAYER_INDEX_INVALID ;
 	m_sender = PLAYER_INDEX_INVALID ;
 	m_msgType = 0;
@@ -104,8 +93,8 @@ MessageData::MessageData(const ID id) : GAMEOBJ(id.m_id)
 	m_buttonList = new PointerList<SlicButton>;
 	m_eyePoints = new PointerList<SlicEyePoint>;
 	m_advanceSet = FALSE;
-	m_expiration = 0x10000000;  
-	m_window = NULL;  
+	m_expiration = 0x10000000;
+	m_window = NULL;
 	m_isHelpBox = FALSE;
 	m_isAlertBox = FALSE;
 	m_isInstant = FALSE;
@@ -128,24 +117,24 @@ MessageData::MessageData(const ID id) : GAMEOBJ(id.m_id)
 
 MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX sender, const MESSAGE_TYPE type, MBCHAR *s) : GAMEOBJ(id.m_id)
 	{
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
+    sint32 i;
+    for (i=0; i<k_MAX_MSG_LEN; i++) {
+        m_caption[i] = 0;
+    }
 
 	m_owner = owner ;
 	m_sender = sender ;
 	m_msgType = type ;
-	m_msgSelectedType = type; 
+	m_msgSelectedType = type;
 	m_cityList = new UnitDynamicArray ;
 	m_text = new char[strlen(s) + 1];
 	strcpy(m_text, s) ;
 	m_request = DiplomaticRequest(0) ;
 	m_timestamp = g_turn->GetYear() ;
 	m_advanceSet = FALSE;
-	m_window = NULL;  
+	m_window = NULL;
 	m_isHelpBox = FALSE;
-    m_advance = -1; 
+    m_advance = -1;
 	m_isInstant = FALSE;
 	m_slicSegment = NULL;
 	m_class = -1;
@@ -158,26 +147,24 @@ MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_IND
 	m_useDirector = FALSE;
 	}
 
-
 MessageData::MessageData(const ID id, MessageData *copy) : GAMEOBJ(id.m_id)
 {
-    m_advance = -1; 
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
+    m_advance = -1;
+    sint32 i;
+    for (i=0; i<k_MAX_MSG_LEN; i++) {
+        m_caption[i] = 0;
+    }
+
+	m_window = NULL;
 
 
-	m_window = NULL;	
-						
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 	memcpy(this, copy, (uint8*)&m_text - (uint8*)this);
 	m_id = id;
@@ -194,7 +181,7 @@ MessageData::MessageData(const ID id, MessageData *copy) : GAMEOBJ(id.m_id)
 		m_buttonList->GetTail()->SetMessage(Message(m_id));
 		bwalk.Next();
 	}
-		
+
 	m_eyePoints = new PointerList<SlicEyePoint>;
 	PointerList<SlicEyePoint>::Walker ewalk(copy->m_eyePoints);
 	while(ewalk.IsValid()) {
@@ -245,7 +232,7 @@ MessageData::~MessageData()
 {
 	if(m_cityList)
 		delete m_cityList;
-	
+
 	if(m_buttonList) {
 		SlicButton *butt;
 		while((butt = m_buttonList->RemoveHead())) {
@@ -291,7 +278,7 @@ MessageData::~MessageData()
 
 void MessageData::SetMsgText(MBCHAR *s)
 	{
-	if(m_text) 
+	if(m_text)
 		{
 		delete [] m_text;
 		}
@@ -318,7 +305,7 @@ void MessageData::Serialize(CivArchive &archive)
 	if (archive.IsStoring())
 	{
 		GAMEOBJ::Serialize(archive);
-		
+
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_caption)+sizeof(m_caption));
 
 		if(m_text) {
@@ -352,7 +339,6 @@ void MessageData::Serialize(CivArchive &archive)
 		for(i = 0; i < count && ewalk.IsValid(); i++, ewalk.Next()) {
 			ewalk.GetObj()->Serialize(archive);
 		}
-		
 
 		hasChild = m_lesser != NULL;
 		archive << hasChild;
@@ -365,12 +351,11 @@ void MessageData::Serialize(CivArchive &archive)
 			((MessageData *)(m_greater))->Serialize(archive) ;
 
 		}
-	else 
+	else
 	{
 		GAMEOBJ::Serialize(archive);
 
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_caption)+sizeof(m_caption));
-
 
 		archive >> count;
 		if(count > 0) {
@@ -1150,7 +1135,7 @@ MESSAGE_RESPONSE_TYPE MessageData::Accept(void)
 
 void MessageData::AddButton(SlicButton *button)
 {
-	
+
 
 
 
@@ -1224,7 +1209,6 @@ SlicEyePoint *MessageData::GetEyePoint(sint32 index)
 	return walk.GetObj();
 }
 
-
 BOOL MessageData::GetEyePointMapPosition( sint32 index, MapPoint &point )
 {
 	SlicEyePoint *ep = GetEyePoint(index);
@@ -1236,7 +1220,6 @@ BOOL MessageData::GetEyePointMapPosition( sint32 index, MapPoint &point )
 		return TRUE;
 	}
 }
-
 
 
 const MBCHAR *MessageData::GetEyePointName( sint32 index )
@@ -1276,8 +1259,8 @@ void MessageData::KillMessageWindow( void )
 
 		messagewin_PrepareDestroyWindow( m_window );
 	} else if(g_modalMessage && g_modalMessage->GetMessage()->m_id == m_id) {
-		messagemodal_PrepareDestroyWindow();		
-		
+		messagemodal_PrepareDestroyWindow();
+
 	}
 
 	m_window = NULL;
@@ -1285,7 +1268,7 @@ void MessageData::KillMessageWindow( void )
 
 void MessageData::IgnoreMessage( void )
 {
-	
+
 	if (m_window) {
 		messagewin_PrepareDestroyWindow( m_window );
 	}
@@ -1312,19 +1295,17 @@ MESSAGE_EYEPOINT_STYLE MessageData::GetEyePointStyle( void )
 
 }
 
-
 MESSAGE_RESPONSE_STYLE MessageData::GetResponseStyle( void )
 {
-	
-	
-	
+
+
 	sint32 count = GetNumButtons();
-	
+
 	if ( count == 0 )
 		return MESSAGE_RESPONSE_STYLE_NONE;
 	else if ( count > 4 )
 		return MESSAGE_RESPONSE_STYLE_SUBMIT;
-	else 
+	else
 		return MESSAGE_RESPONSE_STYLE_SELECT;
 }
 
@@ -1369,8 +1350,7 @@ void MessageData::ToString(MBCHAR *s)
 
 	}
 
-
-void MessageData::SetTitle(MBCHAR *title) 
+void MessageData::SetTitle(MBCHAR *title)
 {
 	if(m_title) {
 		delete [] m_title;
@@ -1393,7 +1373,7 @@ void MessageData::NotifySlicReload()
 }
 
 void MessageData::SetRead()
-{ 
-	m_isRead = TRUE; 
+{
+	m_isRead = TRUE;
 	g_controlPanel->SetMessageRead(Message(m_id));
 }

@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version when set.
 //
@@ -28,18 +28,18 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added terrain boni arguments to FindBestTileImprovement to record the 
+// - Added terrain boni arguments to FindBestTileImprovement to record the
 //   already given terrain boni for that city, by Martin Gühmann
 // - Added GetBestTerraformImprovement function to find the best terraform
-//   improvement. - Sep. 21st 2004 Martin Gühmann 
-// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
+//   improvement. - Sep. 21st 2004 Martin Gühmann
+// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann
 // - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
 //   - April 4th 2005 Martin Gühmann
 // - Made some methods const. - April 15th 2005 Martin Gühmann
 // - Added Cleanup to reduce memory leak reports.
 // - Merged with linux changes.
 // - Improved import structure, removed debug allocator versions.
-// - Added copy constructor to bypass a problem concerning memory 
+// - Added copy constructor to bypass a problem concerning memory
 //   allocation. - June 18th 2005 Martin Gühmann
 // - Added no test sliders struct.
 // - Added OptimizeSliders method to have a better routine for AI sliders
@@ -96,20 +96,17 @@ public:
 	typedef std::vector<sint16>     UnitCountVector;
 
 
-	
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
 	static void Cleanup(void);
-	
+
 	static void LoadAll(CivArchive & archive);
 	static void SaveAll(CivArchive & archive);
 
-	
 	static Governor & GetGovernor(const PLAYER_INDEX & playerId);
 
 	static Governor const &         INVALID;
 
-	
-	
+
 	enum BUILD_UNIT_LIST {
 		BUILD_UNIT_LIST_AIR,
 		BUILD_UNIT_LIST_SEA,
@@ -118,14 +115,13 @@ public:
 		BUILD_UNIT_LIST_SEA_TRANSPORT,
 		BUILD_UNIT_LIST_AIR_TRANSPORT,
 		BUILD_UNIT_LIST_SETTLER,
-		
-		BUILD_UNIT_LIST_RANGED,	  
+
+		BUILD_UNIT_LIST_RANGED,
 		BUILD_UNIT_LIST_OFFENSE,
 		BUILD_UNIT_LIST_DEFENSE,
 		BUILD_UNIT_LIST_MAX
 	};
 
-	
 	Governor(PLAYER_INDEX const & playerId = PLAYER_UNASSIGNED);
 	Governor(Governor const &copyme);
 	virtual ~Governor();
@@ -136,31 +132,28 @@ public:
 	             const sint16 & ySize,
 	             const sint16 & resolution );
 
-	
 	void Load(CivArchive & archive);
 
-	
 	void Save(CivArchive & archive) const;
 
 
-	
-	
-	
 
-	
+
+
+
+
 	sint32 ComputeBestGovernment() const;
 
-	
 	StringId GetGovernmentAdvice() const;
-	
-	
-	
-	
+
+
+
+
 
 	struct SlidersSetting {
-		SlidersSetting() 
+		SlidersSetting()
 		{
-			
+
 			m_deltaProduction = m_deltaGold = m_deltaFood = 0;
 			m_optimizeProduction = m_optimizeGold = m_optimizeFood = false;
 		}
@@ -186,11 +179,10 @@ public:
 			return !(*this==rval);
 		}
 
-		
-		sint32 m_deltaProduction;  
-		sint32 m_deltaGold;		   
-		sint32 m_deltaFood;		   
-		
+		sint32 m_deltaProduction;
+		sint32 m_deltaGold;
+		sint32 m_deltaFood;
+
 		bool m_optimizeProduction;
 		bool m_optimizeGold;
 		bool m_optimizeFood;
@@ -232,20 +224,15 @@ public:
 	// The sliders
 	void NormalizeSliders(SlidersSetting & sliders_setting) const;
 
-	
 	sint32 SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities) const;
 
-	
 	void GetSliders(SlidersSetting & sliders_setting) const;
 
-	
-	
+
 	bool ComputeMinimumSliders( SlidersSetting & sliders_setting ) const;
 
-	
 	bool ComputeBestSliders( SlidersSetting & sliders_setting ) const;
 
-	
 	StringId GetSlidersAdvice() const;
 
 	// New slider function
@@ -257,36 +244,31 @@ public:
 	bool FoodSliderReachedMin(SlidersSetting & sliders_setting) const;
 
 	// End of sliders
-	
-	
 
-	
+
+
+
 	void AddRoadPriority(Path & path, const double & priority_delta);
 
-	
 	void ComputeRoadPriorities();
 
-	
 	void PlaceTileImprovements();
 
-	
-	
-	
 
-	
+
+
+
+
 	void AssignPopulations();
 
-	
 	void AssignPopulation(CityData *city) const;
 
-	
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
-
-	sint32 ComputeMinimumWorkers(const CityData *city, 
-	                           sint32 &farmers, 
-	                           sint32 &laborers, 
-	                           sint32 &merchants, 
+	sint32 ComputeMinimumWorkers(const CityData *city,
+	                           sint32 &farmers,
+	                           sint32 &laborers,
+	                           sint32 &merchants,
 	                           sint32 &scientists,
 	                           sint32 &minFood,
 	                           sint32 &minProd,
@@ -300,45 +282,40 @@ public:
 	                           double &merchantsEff,
 	                           double &scientistsEff) const;
 #endif
-	
+
 	void ComputeDesiredUnits();
 
-	
 	void FillEmptyBuildQueues();
 
-	
 	double PercentUnbuilt(const BUILD_UNIT_LIST unit_list) const;
 
-	
 	StringId GetCityBuildQueueAdvice(const CityData *city) const;
 
-	
 	StringId GetUnitsAdvice(SlicContext & sc) const;
 
-	
-	
-	
 
-	
+
+
+
+
 	sint32 ComputeBestMilitaryReadiness() const;
 
-	
 	StringId GetTacticalAdvice(SlicContext & sc) const;
 
-	
-	
-	
 
-	
+
+
+
+
 	void ManageGoodsTradeRoutes();
 
 private:
-	
+
 	static GovernorVector s_theGovernors;
 
-	
-	
-	
+
+
+
 
 	struct BuildUnitList {
 		BuildUnitList() {
@@ -355,16 +332,12 @@ private:
 		sint16 m_perCityGarrison;
 	};
 
-	
 	sint32 m_maximumUnitShieldCost;
 
-	
 	sint32 m_currentUnitShieldCost;
 
-	
 	bool FitSlidersToCities( SlidersSetting & sliders_setting ) const;
 
-	
 	bool TestSliderSettings(const SlidersSetting & sliders_setting,
 	                        bool   & production_test,
 	                        bool   & gold_test,
@@ -385,45 +358,37 @@ private:
 		                          slider_tests.m_gold,
 		                          slider_tests.m_food);
 	}
-	
+
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;
 
-	
 	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const;
 
-	
 	sint32 GetNeededUnitType(const CityData *city, sint32 & list_num) const;
 
-	
 	const UnitBuildListRecord * GetBuildListRecord(const StrategyRecord & strategy, const BUILD_UNIT_LIST list_type) const;
 
-	
 	sint32 GetNeededGarrisonUnitType(const CityData * city, sint32 & list_num) const;
 
-	
 	sint32 GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec ) const;
 
-	
 	sint32 GetNeededWonderType(const CityData *city, const WonderBuildListRecord *build_list_rec ) const;
 
-	
 	sint32 GetNeededFreightType(sint32 & list_num) const;
 
-	
 	sint32 ComputeBestUnitType(const UnitBuildListRecord *build_list_rec, const CityData *city = NULL) const;
-	
-	
-	
-	
 
-	
+
+
+
+
+
 	const StrategyRecord::PopAssignmentElement *GetMatchingPopAssignment(const CityData *city) const;
 
-	
-	
-	
 
-	
+
+
+
+
 	struct TiGoal {
 		TiGoal() { utility = -1.0; }
 		bool operator>(const TiGoal & rval) const { return ( utility > rval.utility ); }
@@ -433,35 +398,28 @@ private:
 	};
 
 	typedef std::vector<TiGoal> TiGoalQueue;
-	
-	
+
 	static TiGoalQueue s_tiQueue;
 
-	
-	
+
 	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const;
 
-	
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;
 
-	
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
-	
-	
+
 	PLAYER_INDEX m_playerId;
 
-	
 	BuildUnitList m_buildUnitList[BUILD_UNIT_LIST_MAX];
 
-	
 	UnitCountVector m_currentUnitCount;
 
 #if defined(NEW_RESOURCE_PROCESS)
 	sint32 GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const;
 #endif
-	
+
 	double m_neededFreight;
 
 };

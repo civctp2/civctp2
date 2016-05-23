@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -21,7 +8,6 @@
 #include "primitives.h"
 
 #include "c3window.h"
-
 
 
 C3Window::C3Window(
@@ -41,7 +27,6 @@ C3Window::C3Window(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 C3Window::C3Window(
@@ -66,7 +51,6 @@ C3Window::C3Window(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-	
 
 AUI_ERRCODE C3Window::InitCommon( void )
 {
@@ -77,10 +61,9 @@ AUI_ERRCODE C3Window::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE C3Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -88,15 +71,14 @@ AUI_ERRCODE C3Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if (m_pattern)
 		m_pattern->Draw( m_surface, &rect );
 
-	
 	if(m_bevel)
 		primitives_BevelRect16( m_surface, &rect, 3, 0, 16, 16 );
 
-	
 
 
 
-	
+
+
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;

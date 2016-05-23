@@ -1,16 +1,7 @@
-
-
-
-
-
-
-
-
 #ifndef __DR_DEBUG_H
 #define __DR_DEBUG_H
 
 #include "debugmemory.h"
-
 
 
 #ifndef _DEBUG_MEMORY
@@ -35,9 +26,8 @@
 	#endif
 #endif
 
-
 #define FCLOSE(fp) fclose(fp)
 #define ATEXIT(func) atexit(func)
 #define ASSERT(x) Assert(x)
 
-#endif 
+#endif

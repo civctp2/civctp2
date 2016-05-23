@@ -1,19 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
-
 
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
@@ -21,9 +8,7 @@
 #include "aui_directsurface.h"
 
 
-
 uint32 aui_DirectSurface::m_directSurfaceClassId = aui_UniqueId();
-
 
 
 aui_DirectSurface::aui_DirectSurface(
@@ -78,7 +63,6 @@ aui_DirectSurface::aui_DirectSurface(
 			return;
 		}
 
-		
 		DDBLTFX ddbfx;
 		memset( &ddbfx, 0, sizeof( ddbfx ) );
 		ddbfx.dwSize = sizeof( ddbfx );
@@ -92,15 +76,14 @@ aui_DirectSurface::aui_DirectSurface(
 			&ddbfx );
 		Assert( hr == DD_OK );
 
-
 		if (hr != DD_OK) {
 			MBCHAR *s;
-			
+
 			switch (hr) {
-			case DDERR_GENERIC  :	
+			case DDERR_GENERIC  :
 				s = "Generic";
 				break;
-			case DDERR_INVALIDCLIPLIST:  
+			case DDERR_INVALIDCLIPLIST:
 				s = "Invalid Clip List";
 				break;
 			case DDERR_INVALIDOBJECT  :
@@ -160,8 +143,7 @@ aui_DirectSurface::aui_DirectSurface(
 			}
 		}
 	}
-	
-	
+
 	DDPIXELFORMAT pixelFormat;
 	memset( &pixelFormat, 0, sizeof( pixelFormat ) );
 	pixelFormat.dwSize = sizeof( pixelFormat );
@@ -173,7 +155,6 @@ aui_DirectSurface::aui_DirectSurface(
 		return;
 	}
 
-	
 	Assert( pixelFormat.dwFlags & DDPF_RGB );
 	if ( !( pixelFormat.dwFlags & DDPF_RGB ) )
 	{
@@ -181,7 +162,6 @@ aui_DirectSurface::aui_DirectSurface(
 		return;
 	}
 
-	
 	if ( bpp == 16 )
 	{
 		if ( pixelFormat.dwRBitMask == 0xF800 )
@@ -190,10 +170,8 @@ aui_DirectSurface::aui_DirectSurface(
 			m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
 	}
 
-	
 	SetChromaKey( m_chromaKey = 0x00000000 );
 
-	
 	DDSURFACEDESC ddsd;
 	memset( &ddsd, 0, sizeof( ddsd ) );
 	ddsd.dwSize = sizeof( ddsd );
@@ -218,14 +196,12 @@ aui_DirectSurface::aui_DirectSurface(
 }
 
 
-
 AUI_ERRCODE aui_DirectSurface::InitCommon( void )
 {
 	m_lpdds = NULL;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_DirectSurface::~aui_DirectSurface()
@@ -237,7 +213,6 @@ aui_DirectSurface::~aui_DirectSurface()
 		m_allocated = FALSE;
 	}
 }
-
 
 
 uint32 aui_DirectSurface::SetChromaKey( uint32 color )
@@ -253,7 +228,6 @@ uint32 aui_DirectSurface::SetChromaKey( uint32 color )
 	else
 		return (uint32)-1;
 }
-
 
 
 BOOL aui_DirectSurface::IsOK( void ) const
@@ -301,7 +275,7 @@ AUI_ERRCODE aui_DirectSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
 		errcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		break;
 	}
-	
+
 	return errcode;
 }
 
@@ -324,7 +298,6 @@ AUI_ERRCODE aui_DirectSurface::Unlock( LPVOID buffer )
 }
 
 
-
 AUI_ERRCODE aui_DirectSurface::GetDC( HDC *hdc )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -343,7 +316,6 @@ AUI_ERRCODE aui_DirectSurface::GetDC( HDC *hdc )
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_DirectSurface::ReleaseDC( HDC hdc )
@@ -365,5 +337,4 @@ AUI_ERRCODE aui_DirectSurface::ReleaseDC( HDC hdc )
 	return errcode;
 }
 
-
-#endif 
+#endif

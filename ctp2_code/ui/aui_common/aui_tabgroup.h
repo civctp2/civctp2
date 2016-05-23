@@ -1,35 +1,20 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_TABGROUP_H__
 #define __AUI_TABGROUP_H__
 
-
 #include "aui_switchgroup.h"
 
-
 class aui_Tab;
-
 
 
 enum AUI_TABGROUP_ALIGNMENT
 {
 	AUI_TABGROUP_ALIGNMENT_FIRST = 0,
-	AUI_TABGROUP_ALIGNMENT_LEFT = 0,	
-	AUI_TABGROUP_ALIGNMENT_TOP, 		
-	AUI_TABGROUP_ALIGNMENT_RIGHT,		
-	AUI_TABGROUP_ALIGNMENT_BOTTOM,		
+	AUI_TABGROUP_ALIGNMENT_LEFT = 0,
+	AUI_TABGROUP_ALIGNMENT_TOP,
+	AUI_TABGROUP_ALIGNMENT_RIGHT,
+	AUI_TABGROUP_ALIGNMENT_BOTTOM,
 	AUI_TABGROUP_ALIGNMENT_LAST
 };
-
 
 
 #define k_AUI_TABGROUP_LDL_AUTOARRANGE		"autoarrange"
@@ -42,11 +27,10 @@ enum AUI_TABGROUP_ALIGNMENT
 #define k_AUI_TABGROUP_LDL_BOTTOM			"bottom"
 
 
-
 class aui_TabGroup : public aui_SwitchGroup
 {
 public:
-	
+
 	aui_TabGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -84,7 +68,7 @@ public:
 		AUI_TABGROUP_ALIGNMENT alignment );
 
 protected:
-	
+
 	virtual AUI_ERRCODE	FormatTabs( void );
 
 	AUI_TABGROUP_ALIGNMENT	m_alignment;
@@ -94,5 +78,4 @@ protected:
 	sint32 m_paneOffsetY;
 };
 
-
-#endif 
+#endif

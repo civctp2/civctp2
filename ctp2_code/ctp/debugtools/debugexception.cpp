@@ -5,7 +5,7 @@
 #include "debugcallstack.h"
 #include "breakpoint.h"
 #include "log.h"
-#include <windows.h>		
+#include <windows.h>
 
 
 
@@ -16,9 +16,8 @@
 
 struct DebugException
 {
-	
-	
-	
+
+
 	DebugAssertClientFunction DebugException_Enter;
 };
 
@@ -62,7 +61,7 @@ void DebugException_Open (DebugExceptionClientFunction function_enter)
 
 void DebugException_Close (void)
 {
-	
+
 }
 
 
@@ -78,9 +77,9 @@ void DebugException_Close (void)
 
 inline static void DebugExceptionFilter_LogExceptionType (LPEXCEPTION_POINTERS ep)
 {
-	
-	
-	
+
+
+
 
 	switch(ep->ExceptionRecord->ExceptionCode)
 	{
@@ -172,9 +171,9 @@ inline static void DebugExceptionFilter_LogExceptionType (LPEXCEPTION_POINTERS e
 
 inline static void DebugExceptionFilter_LogRegisterState (LPEXCEPTION_POINTERS ep)
 {
-	
-	
-	
+
+
+
 
 	LOG ((LOG_EXCEPTION, "  EAX: %08xh      ESI: %08xh", (DWORD) ep->ContextRecord->Eax, (DWORD) ep->ContextRecord->Esi));
 	LOG ((LOG_EXCEPTION, "  EBX: %08xh      EDI: %08xh", (DWORD) ep->ContextRecord->Ebx, (DWORD) ep->ContextRecord->Edi));
@@ -196,24 +195,20 @@ inline static void DebugExceptionFilter_LogRegisterState (LPEXCEPTION_POINTERS e
 		(int) ep->ContextRecord->EFlags & 0x1000 ? 1 : 0));
 }
 
-
 static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointers)
 {
-	
+
 	DebugExceptionFilter_LogExceptionType (exception_pointers);
 	DebugExceptionFilter_LogRegisterState (exception_pointers);
 
-	
 	DebugCallStack_DumpAddress (LOG_EXCEPTION, exception_pointers->ContextRecord->Eip);
 	DebugCallStack_DumpFrom (LOG_EXCEPTION, exception_pointers->ContextRecord->Ebp);
 
-	
 	if (debug_exception.DebugException_Enter)
 	{
 		debug_exception.DebugException_Enter();
 	}
 
-	
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
 
@@ -231,18 +226,16 @@ static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointer
 
 void DebugException_Execute (DebugExceptionClientFunction function_monitored)
 {
-	
+
 	__try
 	{
 		function_monitored();
 	}
 
-	
 	__except (DebugException_Filter (GetExceptionInformation()))
 	{
 	}
 }
-
 
 
 #endif

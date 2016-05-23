@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -123,7 +123,6 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton", CreateRoute, (void *)1);
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, NULL);
-	
 
 	if(m_createList) {
 		m_createList->SetActionFuncAndCookie(ListSelect, NULL);
@@ -132,7 +131,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	if(m_summaryList) {
 		m_summaryList->SetActionFuncAndCookie(SummaryListSelect, NULL);
 	}
-	
+
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_tradeAdviceBlock);
 	Assert(m_adviceWindow);
 
@@ -157,7 +156,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	m_citiesSlider->SetActionFuncAndCookie(NumCitiesSlider, NULL);
 
 	m_numCitiesLabel = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.Filters.NumCities");
-	
+
 	SetNumCities(1);
 
 	*err = AUI_ERRCODE_OK;
@@ -229,12 +228,12 @@ AUI_ERRCODE TradeManager::Display()
 
 		ctp2_Tab *tab = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 		ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
-		
-		
-		
-		
 
-		
+
+
+
+
+
 		s_tradeManager->Update();
 	}
 	return err;
@@ -273,8 +272,8 @@ void TradeManager::SetMode(TRADE_MANAGER_MODE mode)
 			market->Activate();
 			summary->Deactivate();
 			group->SelectTab(market);
-			
-			
+
+
 
 
 
@@ -319,7 +318,7 @@ void TradeManager::Update()
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 {
 	ctp2_ListItem *item = NULL;
-	
+
 	Assert(player_id >= 0 && player_id < k_MAX_PLAYERS);
 	if(player_id < 0 || player_id >= k_MAX_PLAYERS) return;
 
@@ -331,20 +330,18 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 	Unit maxCity[k_MAX_CITIES_PER_GOOD];
 
 	m_createList->Clear();
-	
-	
-	
+
+
+
 
 	m_createData.DeleteAll();
 
-	
 	for(c = 0; c < p->m_all_cities->Num(); c++) {
 		Unit city = p->m_all_cities->Access(c);
-		
-		
+
 		for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
 			if(city.CD()->IsLocalResource(g)) {
-				
+
 				sint32 op;
 				sint32 maxPrice[k_MAX_CITIES_PER_GOOD];
 				sint32 sellingPrice = -1;
@@ -356,17 +353,16 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					maxPrice[i] = 0;
 				}
 
-				
-				
+
 				if(!city.CD()->HasResource(g) &&
 					city.CD()->IsSellingResourceTo(g, curDestCity) ) {
 					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
 
-					
-					
 
-					
-					
+
+
+
+
 				}
 				else {
 					curDestCity.m_id = 0;
@@ -377,13 +373,13 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					if(!g_player[op]) continue;
 					if(player_id != op && !p->HasContactWith(op)) continue;
 					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
-					if ((m_showCities == TRADE_CITIES_ALL)			&& 
+					if ((m_showCities == TRADE_CITIES_ALL)			&&
 						(op != g_selected_item->GetVisiblePlayer()) &&
 						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0)
 					   )
 						continue;
 
-					if ((m_showCities == TRADE_CITIES_FRIENDLY)		&& 
+					if ((m_showCities == TRADE_CITIES_FRIENDLY)		&&
 						(op != g_selected_item->GetVisiblePlayer()) &&
 						(!AgreementMatrix::s_agreements.HasAgreement
 							(player_id, op, PROPOSAL_TREATY_PEACE)
@@ -391,7 +387,6 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					   )
 						continue;
 
-					
 					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id))
 						continue;
 
@@ -401,8 +396,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						if(!(destCity.GetVisibility() & (1 << player_id))) continue;
 						if(destCity.m_id == city.m_id) continue;
 
-						
-						
+
 						if(curDestCity.m_id == destCity.m_id) continue;
 
 						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g);
@@ -422,17 +416,16 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 				for(i = 0; i < k_MAX_CITIES_PER_GOOD; i++) {
 					if(maxPrice[i] > 0) {
-						
+
 						if(maxCity[i].m_id == curDestCity.m_id)
 							continue;
 
-						
-						
+
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("CreateRouteItem");
 						Assert(item);
 						if(!item)
 							break;
-						
+
 						CreateListData *data = new CreateListData;
 						data->m_source = city;
 						data->m_resource = g;
@@ -443,7 +436,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 						m_createData.AddTail(data);
 						item->SetUserData(data);
-						
+
 						ctp2_Static *child;
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX))) {
 							MBCHAR name[501];
@@ -453,7 +446,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							child->GetTextFont()->TruncateString(name, child->Width());
 							child->SetText(name);
 						}
-						
+
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX))) {
 							const char *iconname = g_theResourceDB->Get(g)->GetIcon()->GetIcon();
 							if(stricmp(iconname, "NULL") == 0) {
@@ -461,14 +454,14 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							}
 							child->SetImage((char *)iconname);
 						}
-						
+
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX))) {
 							child->SetText(g_theResourceDB->Get(g)->GetNameText());
 							if(curDestCity.m_id != 0) {
 								child->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
 							}
 						}
-						
+
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX))) {
 							MBCHAR name[501];
 							strncpy(name, maxCity[i].GetName(), 500);
@@ -477,24 +470,24 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							child->GetTextFont()->TruncateString(name, child->Width());
 							child->SetText(name);
 						}
-						
+
 						MBCHAR buf[20];
 						sprintf(buf, "%d", maxPrice[i]);
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX))) {
 							child->SetText(buf);
 						}
-						
+
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX))) {
 							sprintf(buf, "%d", data->m_caravans);
 							child->SetText(buf);
 						}
-						
+
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))) {
 							child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)data->m_destination.GetOwner());
 						}
-						
+
 						item->SetCompareCallback(CompareCreateItems);
-						
+
 						m_createList->AddItem(item);
 					}
 				}
@@ -502,12 +495,12 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 		}
 	}
 
-	
-	
-	
 
-	
-	
+
+
+
+
+
 	m_createButton->Enable(FALSE);
 }
 
@@ -550,7 +543,7 @@ void TradeManager::UpdateAdviceWindow()
 			totalProfit += city.CD()->GetTradeSourceList()->Access(r)->GetValue();
 		}
 	}
-	
+
 	child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "Profit");
 	if(child) {
 		sprintf(buf, "%d", totalProfit);
@@ -572,9 +565,9 @@ void TradeManager::UpdateAdviceText()
 	Assert(advice);
 	if(advice) {
 		Assert(m_createList);
-		
+
 		SlicContext sc;
-		
+
 		Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
 		if(m_createList) {
@@ -586,10 +579,10 @@ void TradeManager::UpdateAdviceText()
 				sc.AddGood(data->m_resource);
 				sc.AddGold(data->m_price);
 				sc.AddInt(data->m_caravans);
-				
+
 				MBCHAR interp[k_MAX_NAME_LEN];
 				interp[0] = 0;
-				
+
 				stringutils_Interpret(g_theStringDB->GetNameStr("SELECTED_TRADE_ADVICE"),
 									  sc, interp);
 
@@ -607,14 +600,14 @@ void TradeManager::UpdateAdviceText()
 
 				advice->SetHyperText(interp);
 			} else {
-				
+
 				if(p) {
 					PointerList<CreateListData>::Walker walk(&m_createData);
 					CreateListData *maxData = NULL;
 					while(walk.IsValid()) {
 						CreateListData *data = walk.GetObj();
 						if(data->m_curDestination.m_id != 0) {
-							
+
 							walk.Next();
 							continue;
 						}
@@ -628,13 +621,13 @@ void TradeManager::UpdateAdviceText()
 
 					MBCHAR interp[k_MAX_NAME_LEN];
 					interp[0] = 0;
-						
+
 					if(maxData) {
 						SlicContext sc;
 						sc.AddCity(maxData->m_source);
 						sc.AddCity(maxData->m_destination);
 						sc.AddGood(maxData->m_resource);
-						
+
 						stringutils_Interpret(g_theStringDB->GetNameStr("CREATE_ROUTE_ADVICE"),
 											  sc, interp);
 					} else if(m_createData.GetCount() > 0) {
@@ -642,7 +635,7 @@ void TradeManager::UpdateAdviceText()
 					} else {
 						strcpy(interp, g_theStringDB->GetNameStr("MAXIMUM_TRADE_EFFICIENCY"));
 					}
-					
+
 					advice->SetHyperText(interp);
 				}
 			}
@@ -653,7 +646,7 @@ void TradeManager::UpdateAdviceText()
 void TradeManager::UpdateSummaryList()
 {
 	ctp2_ListItem *item = NULL;
-	
+
 	sint32 pl = g_selected_item->GetVisiblePlayer();
 	Assert(pl >= 0 && pl < k_MAX_PLAYERS);
 	if(pl < 0 || pl >= k_MAX_PLAYERS) return;
@@ -667,11 +660,9 @@ void TradeManager::UpdateSummaryList()
 
 	m_summaryList->Clear();
 
-	
 	for(c = 0; c < p->m_all_cities->Num(); c++) {
 		Unit city = p->m_all_cities->Access(c);
-		
-		
+
 		sint32 r;
 		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
 			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
@@ -705,7 +696,7 @@ void TradeManager::UpdateSummaryList()
 						child->SetImage((char *)g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
 					}
 				} else {
-					
+
 				}
 			}
 
@@ -726,7 +717,7 @@ void TradeManager::UpdateSummaryList()
 				child->GetTextFont()->TruncateString(name, child->Width());
 				child->SetText(name);
 			}
-	
+
 			if((child = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))) {
 				child->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
 			}
@@ -757,7 +748,7 @@ void TradeManager::UpdateSummaryList()
 			m_summaryList->AddItem(item);
 		}
 	}
-	
+
 	m_breakButton->Enable(FALSE);
 }
 
@@ -779,7 +770,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 #else
 	bool breakInstead = sint32(cookie) != 0;
 #endif
-		
+
 	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
 	if(!breakInstead) {
 		Assert(s_tradeManager->m_createList);
@@ -808,7 +799,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 							   GEA_City, data->m_destination,
 							   GEA_End);
 	} else {
-		
+
 		Assert(s_tradeManager->m_summaryList);
 		if(!s_tradeManager->m_summaryList) return;
 
@@ -925,7 +916,7 @@ sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *it
 #endif
 
 	Assert(route1.IsValid());
-	Assert(route2.IsValid());	
+	Assert(route2.IsValid());
 	if(!route1.IsValid() || !route2.IsValid()) {
 		return 0;
 	}
@@ -962,9 +953,9 @@ sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *it
 		case k_GOOD_COL_SUM_INDEX:
 		case k_GOODICON_COL_SUM_INDEX:
 		{
-			const MBCHAR *str1 = rtype1 == ROUTE_TYPE_RESOURCE ? g_theResourceDB->Get(resource1)->GetNameText() : 
+			const MBCHAR *str1 = rtype1 == ROUTE_TYPE_RESOURCE ? g_theResourceDB->Get(resource1)->GetNameText() :
 				g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD");
-			const MBCHAR *str2 = rtype2 == ROUTE_TYPE_RESOURCE ? g_theResourceDB->Get(resource2)->GetNameText() : 
+			const MBCHAR *str2 = rtype2 == ROUTE_TYPE_RESOURCE ? g_theResourceDB->Get(resource2)->GetNameText() :
 				g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD");
 			return stricmp(str1, str2);
 		}
@@ -1020,7 +1011,7 @@ AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
 	rect.right -= 8;
 	rect.bottom -= 2;
 
-	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);	
+	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);
 }
 
 AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
@@ -1079,7 +1070,7 @@ void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, 
 	s_tradeManager->m_createButton->Enable(canCreate);
 
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
-		
+
 		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
 }
@@ -1104,11 +1095,10 @@ void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32
 		s_tradeManager->m_breakButton->Enable(FALSE);
 	}
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
-		
+
 		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
 }
-
 
 STDEHANDLER(TradeManagerSendGoodEvent)
 {
@@ -1136,19 +1126,18 @@ void UpdateTradeAction::Execute(aui_Control *control, uint32 action, uint32 data
 		s_tradeManager->Update();
 	}
 }
-	
+
 STDEHANDLER(TradeManagerKillRouteEvent)
 {
 	if(!s_tradeManager) return GEV_HD_Continue;
-	
+
 	TradeRoute route;
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
 
 	if((route.GetSource().IsValid() && route.GetSource().GetOwner() == g_selected_item->GetVisiblePlayer()) ||
 	   (route.GetDestination().IsValid() && route.GetDestination().GetOwner() == g_selected_item->GetVisiblePlayer())) {
-		
-		
-		
+
+
 		g_c3ui->AddAction(new UpdateTradeAction);
 	}
 	return GEV_HD_Continue;
@@ -1182,7 +1171,7 @@ void TradeManager::FilterButtonActivated(aui_Control *control)
 		m_friendlyCitiesButton->SetToggleState(false);
 		m_allCitiesButton->SetToggleState(true);
 	} else {
-		
+
 		Assert(FALSE);
 	}
 

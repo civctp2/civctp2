@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,6 @@
 class CivArchive;
 
 
-
 #define k_BUILD_NODE_FLAG_ALREADY_BUILT 0x01
 #define k_BUILD_NODE_FLAG_ALMOST_DONE   0x02
 
@@ -47,10 +46,8 @@ struct BuildNode {
 	sint32 m_type;
 	sint32 m_category;
 	uint8 m_flags;
-	
-	
-};
 
+};
 
 enum CAUSE_REMOVE_BUILD_ITEM {
 	CAUSE_REMOVE_BUILD_ITEM_MANUAL,
@@ -58,7 +55,6 @@ enum CAUSE_REMOVE_BUILD_ITEM {
 	CAUSE_REMOVE_BUILD_ITEM_NETWORK,
 	CAUSE_REMOVE_BUILD_ITEM_BUILT,
 };
-
 
 
 class MapPoint;
@@ -69,20 +65,19 @@ template <class T> class PointerList;
 class BuildQueue {
 
 	PointerList<BuildNode> *m_list;
-	
+
 	PLAYER_INDEX m_owner;
 	Unit m_city;
 	sint32 m_wonderStarted, m_wonderStopped;
 	MBCHAR m_name[256];
 	sint32 m_wonderComplete;
-	
 
 
-	
+
+
 	BuildNode *m_frontWhenBuilt;
 	friend class NetCityBuildQueue;
 
-	
 private :
 	void SendMsgWormholeProbeStarted(void) ;
 	void SendMsgWonderStarted(sint32 type) ;
@@ -124,15 +119,13 @@ public:
 	void Serialize(CivArchive &archive);
 	void SerializeQueue(CivArchive &archive);
 
-	
 	BuildNode *GetHead(void);
 	PointerList<BuildNode> *GetList() const { return m_list; }
 
 	void ResetOwner(sint32 new_owner);
 	void Dump(const sint32 shieldstore, MBCHAR *s) ;
 	void RemoveHead();
-	
-	
+
 	sint32 RemoveNode(BuildNode *node, CAUSE_REMOVE_BUILD_ITEM cause);
 	sint32 RemoveNodeByIndex(sint32 index, CAUSE_REMOVE_BUILD_ITEM cause);
 	sint32 InsertAfter(BuildNode *targetNode, BuildNode *node);
@@ -146,7 +139,7 @@ public:
 	sint32 GetPercentCompleted(sint32 shieldstore) const;
 	sint32 GetFrontCost();
 
-	void RemoveObjectsOfType(sint32 cat, sint32 type, 
+	void RemoveObjectsOfType(sint32 cat, sint32 type,
 	                         CAUSE_REMOVE_BUILD_ITEM cause);
 	void RemoveIllegalItems(BOOL isClientAck = FALSE);
 
@@ -168,9 +161,6 @@ public:
 	BuildQueue & operator= (const BuildQueue &copy);
 };
 
-
 uint32 BldQue_BuildQueue_GetVersion(void) ;
 
 #endif
-
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,12 +53,11 @@ extern ScreenManager *g_screenManager;
 extern TiledMap		*g_tiledMap;
 
 
-
 Sprite::Sprite()
 {
 	m_width = 0;
 	m_height = 0;
-		
+
 	m_hotPoint.x = 0;
 	m_hotPoint.y = 0;
 
@@ -78,16 +77,14 @@ Sprite::Sprite()
 	m_surfHeight = 0;
 	m_surfPitch = 0;
 
-	
 	InitializeDrawLow();
 }
-
 
 
 Sprite::~Sprite()
 {
 	for (sint32 i = 0; i < m_numFrames; i++) {
-		if (m_frames) 
+		if (m_frames)
 			if (m_frames[i]) {
 				delete[] m_frames[i];
 				m_frames[i] = 0;
@@ -117,7 +114,6 @@ Sprite::~Sprite()
 }
 
 
-
 void Sprite::Load(char *filename)
 {
 printf("%s L%d: Sprite::Load doing nothing! Is this correct?\n", __FILE__, __LINE__);
@@ -144,34 +140,30 @@ void Sprite::Save(char *filename)
 
 void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData){
 
-    printf("%s L%d: ImportTIFF called!\n", __FILE__, __LINE__);		
+    printf("%s L%d: ImportTIFF called!\n", __FILE__, __LINE__);
 		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height);
 #if 0
-		
-		if (tif) 
+
+		if (tif)
 		{
 			uint16	width, height;
 
-			
 			spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
-			
-			
+
 			char *shadowTif = StripTIF2Mem(shadowFiles[index], &width, &height);
 
-			if (shadowTif) 
+			if (shadowTif)
 			{
-				
+
 				spriteutils_CreateQuarterSize((Pixel32 *)shadowTif, m_width, m_height, (Pixel32 **)&minishadow, FALSE);
 			}
 
-			
 			Pixel16 *frame = spriteutils_RGB32ToEncoded((Pixel32 *)tif, (Pixel32 *)shadowTif, m_width, m_height);
-			if (frame) 
+			if (frame)
 				m_frames[index] = frame;
 
-			
 			Pixel16	*miniframe = spriteutils_RGB32ToEncoded((Pixel32 *)minitif, (Pixel32 *)minishadow, m_width >> 1, m_height >> 1);
-			if (miniframe) 
+			if (miniframe)
 				m_miniframes[index] = miniframe;
 
 			if (shadowTif)  free (shadowTif);
@@ -179,8 +171,8 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData){
 
 			if (tif) free(tif);
 			if (minitif) free(minitif);
-		}  
-		else 
+		}
+		else
 		{
                 printf("Could not find %s.\n", imageFiles[index]);
 		}
@@ -192,11 +184,10 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData){
 
 void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 {
-	int		bpp; 
+	int		bpp;
 	int     w,h;
 
-	
-	if (!Get_TGA_Dimension(imageFiles[index], w, h, bpp)) 
+	if (!Get_TGA_Dimension(imageFiles[index], w, h, bpp))
 	{
 		printf("Bad TGA Sprite File(%s)\n",imageFiles[index]);
 		*imageData = NULL;
@@ -213,7 +204,7 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 		exit(0);
 		return;
 	}
-	
+
 	*imageData = new Pixel32[w*h];
 
 	Load_TGA_File_Simple(imageFiles[index],(unsigned char *)*imageData,w*sizeof(Pixel32),w,h);
@@ -221,7 +212,6 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 	m_width  = (uint16)w;
 	m_height = (uint16)h;
 
-	
 	TGA2RGB32((Pixel32 *)*imageData,w*h);
 }
 
@@ -230,48 +220,39 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 
 void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles){
-    
+
     //never called?
     printf("%s L%d: imageFiles[0][0] = %#X\n", __FILE__, __LINE__, imageFiles[0][0]);
     m_numFrames = nframes;
 
-	
-    if (m_frames != NULL) 
+    if (m_frames != NULL)
 	{
         free(m_frames);
 	}
 
-	
     m_frames = new Pixel16*[m_numFrames];
 
-	
-    if (m_frames == NULL) 
+    if (m_frames == NULL)
         return;
 
-	
-    if (m_miniframes != NULL) 
+    if (m_miniframes != NULL)
 	{
         free(m_miniframes);
 	}
 
-	
     m_miniframes = new Pixel16*[m_numFrames];
 
-	
-    if (m_miniframes == NULL) 
+    if (m_miniframes == NULL)
         return;
 
-	
     Pixel32 *image,*miniimage;
     Pixel32 *shadow,*minishadow;
 
-	
-    for (uint16 i=0; i<m_numFrames; i++) 
+    for (uint16 i=0; i<m_numFrames; i++)
 	{
         char ext[_MAX_DIR] = { 0 };
 
-		
-        image		= NULL;      
+        image		= NULL;
         miniimage	= NULL;
         shadow		= NULL;
         minishadow	= NULL;
@@ -319,7 +300,6 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles){
 	}
     }
 
-
 void Sprite::LockSurface(aui_Surface *surf)
 {
 	AUI_ERRCODE		errcode;
@@ -336,7 +316,6 @@ void Sprite::LockSurface(aui_Surface *surf)
 	m_surfPitch = surf->Pitch();
 }
 
-
 void Sprite::UnlockSurface(void)
 {
 	AUI_ERRCODE		errcode;
@@ -350,7 +329,6 @@ void Sprite::UnlockSurface(void)
 	m_surfHeight = 0;
 	m_surfPitch = 0;
 }
-
 
 void Sprite::SetSurface(void)
 {
@@ -394,7 +372,6 @@ void Sprite::InitializeDrawLow()
 		_DrawFlashScaledLow	= &DrawFlashScaledLow555	;
 	}
 }
-
 
 //Sprite::Draw seems to draw units, cities, goods...?
 void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags){
@@ -448,7 +425,7 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
                 }
             }
         else {
-			
+
             sint32 destWidth = (sint32)(m_width * scale);
             sint32 destHeight = (sint32)(m_height * scale);
 
@@ -489,12 +466,12 @@ sint32 Sprite::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 
 	switch (*mode) {
 		case k_CHROMAKEY_RUN_ID	:
-			len = tag & 0x00FF;				
-			break;
-		case k_COPY_RUN_ID			: 
 			len = tag & 0x00FF;
 			break;
-		case k_SHADOW_RUN_ID		: 
+		case k_COPY_RUN_ID			:
+			len = tag & 0x00FF;
+			break;
+		case k_SHADOW_RUN_ID		:
 			len = tag & 0x00FF;
 			break;
 		case k_FEATHERED_RUN_ID	:
@@ -507,8 +484,7 @@ sint32 Sprite::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 	return len;
 }
 
-
-BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, 
+BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency,
 					Pixel16 outlineColor, uint16 flags)
 {
 	if (facing < 5) {
@@ -538,7 +514,7 @@ else {
 			}
 		}
 else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -557,7 +533,7 @@ else {
 
 
 
-void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double scale,
 				  sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	BOOL wasNull = FALSE;
@@ -578,13 +554,12 @@ else {
 	}
 	drawY -= (sint32)((double)m_hotPoint.y * scale);
 
-	
-	
+
 	if (drawX > surf->Width() - 1 || drawX  < -(m_width*scale)) {
 		UnlockSurface();
 		return;
 	}
-	
+
 	if (drawY > surf->Height() - 1 || drawY  < -(m_height*scale)) {
 		UnlockSurface();
 		return;
@@ -628,7 +603,7 @@ else {
 			}
 		}
 else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -660,8 +635,7 @@ else {
 }
 
 
-
-void Sprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+void Sprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 				  sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	SetSurface();
@@ -677,8 +651,8 @@ else {
 
 
 
-	
-	
+
+
 	if (drawX > m_surfWidth - (m_width*scale) || drawX < 0) return;
 	if (drawY > m_surfHeight - (m_height*scale) || drawY < 0) return;
 
@@ -686,11 +660,11 @@ else {
 		if (facing < 4 && facing > 0)
 		{
 			(this->*_DrawLow)(m_frames[m_currentFrame], drawX, drawY,  m_width, m_height,transparency, outlineColor, flags);
-		} 
+		}
 		else if (facing == 4 || facing == 0)
 		{
 			(this->*_DrawLowReversed)(m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-		} 
+		}
 		else
 		{
 			(this->*_DrawLowReversed)(m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -701,8 +675,8 @@ else {
 			if (facing < 4 && facing > 0)
 			{
 				(this->*_DrawLow)(m_miniframes[m_currentFrame], drawX, drawY,  m_width>>1, m_height>>1,transparency, outlineColor, flags);
-			} 
-			else if (facing == 4 || facing == 0) 
+			}
+			else if (facing == 4 || facing == 0)
 			{
 				(this->*_DrawLowReversed)(m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
@@ -712,16 +686,16 @@ else
 			}
 		}
 else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 4 && facing > 0) 
+			if (facing < 4 && facing > 0)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 					transparency, outlineColor, flags, FALSE);
-			} 
-			else if (facing == 4 || facing == 0) 
+			}
+			else if (facing == 4 || facing == 0)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
@@ -734,7 +708,6 @@ else
 		}
 	}
 }
-
 
 
 Pixel16 *Sprite::GetFrameData(uint16 frameNum)
@@ -816,9 +789,9 @@ void Sprite::SetMiniFrameData(uint16 frameNum, Pixel16 *data)
 
 sint32 Sprite::ParseFromTokens(Token *theToken)
 {
-	sint32 tmp; 
+	sint32 tmp;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_NUM_FRAMES, tmp)) return FALSE;
 	m_numFrames = (uint16)tmp;
@@ -832,17 +805,16 @@ sint32 Sprite::ParseFromTokens(Token *theToken)
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_HEIGHT, tmp)) return FALSE;
 	m_height = (uint16)tmp;
 
-	
 	if (!token_ParseKeywordNext(theToken, TOKEN_SPRITE_HOT_POINT)) return FALSE;
 	{
 		POINT		p;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.x = tmp;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.y = tmp;
@@ -856,7 +828,6 @@ sint32 Sprite::ParseFromTokens(Token *theToken)
 }
 
 
-
 void Sprite::AllocateFrameArrays(size_t count)
 {
     Assert(!m_frames && !m_miniframes);
@@ -864,9 +835,8 @@ void Sprite::AllocateFrameArrays(size_t count)
 	m_frames        = new Pixel16*[count];
 	m_miniframes    = new Pixel16*[count];
         m_numFrames     = count;
-        
-}
 
+}
 
 
 void Sprite::AllocateFrameArraysBasic(void)
@@ -874,7 +844,6 @@ void Sprite::AllocateFrameArraysBasic(void)
 	m_frames = new Pixel16*[1];
 	m_miniframes = new Pixel16*[1];
 }
-
 
 void Sprite::Export(FILE *file)
 {
@@ -902,7 +871,7 @@ void Sprite::Export(FILE *file)
 
 inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4)
 {
-	uint16		r1, g1, b1, 
+	uint16		r1, g1, b1,
 				r2, g2, b2,
 				r3, g3, b3,
 				r4, g4, b4;
@@ -961,7 +930,7 @@ else {
 
 inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2)
 {
-	uint16		r1, g1, b1, 
+	uint16		r1, g1, b1,
 				r2, g2, b2;
 	uint16		r0, g0, b0;
 
@@ -996,6 +965,3 @@ else {
 		return (r0 << 10) | (g0 << 5) | b0;
 	}
 }
-
-
-

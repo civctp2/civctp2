@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
- 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __BEVELLESSWINDOW_H__
 #define __BEVELLESSWINDOW_H__
-
 
 #include "aui_window.h"
 #include "patternbase.h"
@@ -55,5 +42,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

@@ -4,11 +4,9 @@
 #ifndef __IC3UnitDB_H__
 #define __IC3UnitDB_H__ 1
 
+#include <OBJBASE.H>
 
-#include <OBJBASE.H>  
-
-
-DEFINE_GUID(CLSID_IC3UnitDB, 
+DEFINE_GUID(CLSID_IC3UnitDB,
     0x72498240,
     0xd2c7,
     0x11d1,
@@ -16,32 +14,30 @@ DEFINE_GUID(CLSID_IC3UnitDB,
 );
 
 
-
 #undef INTERFACE
 #define INTERFACE IC3UnitDB
 
 class MapPoint;
-struct MapPointData; 
+struct MapPointData;
 DECLARE_INTERFACE_(IC3UnitDB, IUnknown)
 {
- 	
 
     STDMETHOD_(sint32, GetNumUnitTypes) (THIS_ ) PURE;
 	STDMETHOD_ (BOOL, IsUnitObsolete) (THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, CityCanBuildUnit) (THIS_ sint32 type_unit) PURE;
-    
+
     STDMETHOD_ (double, UnitTypeMovementPoints(THIS_ sint32 type_unit)) PURE;
-    STDMETHOD_ (uint32, GetMovementType) (THIS_ sint32 type_unit) PURE; 
-    STDMETHOD_ (BOOL,  CanSettleHere) (THIS_ sint32 type_unit, MapPointData *dest_pos) PURE;    
+    STDMETHOD_ (uint32, GetMovementType) (THIS_ sint32 type_unit) PURE;
+    STDMETHOD_ (BOOL,  CanSettleHere) (THIS_ sint32 type_unit, MapPointData *dest_pos) PURE;
     STDMETHOD_ (sint32, GetProductionCost) (THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (sint32, GetAttack)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (sint32, GetDefense)(THIS_ sint32 type_unit) PURE;
-    STDMETHOD_ (sint32, GetFirepower)(THIS_ sint32 type_unit) PURE; 
+    STDMETHOD_ (sint32, GetFirepower)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (sint32, GetHP)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (sint32, GetHP_WithReadiness) (THIS_ sint32 unit_type)PURE;
-    STDMETHOD_ (double, GetEntrenchmentBonus) (THIS_) PURE; 
+    STDMETHOD_ (double, GetEntrenchmentBonus) (THIS_) PURE;
 
-    STDMETHOD_ (BOOL, IsSettler)(THIS_ sint32 type_unit) PURE; 
+    STDMETHOD_ (BOOL, IsSettler)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, CanSettleSpace)(THIS_ sint32 type_unit) PURE ;
     STDMETHOD_ (BOOL, CanSettleWater)(THIS_ sint32 type_unit) PURE ;
     STDMETHOD_ (BOOL, CanMoveSpace)(THIS_ sint32 type_unit) PURE ;
@@ -77,9 +73,9 @@ DECLARE_INTERFACE_(IC3UnitDB, IUnknown)
 
     STDMETHOD_ (sint32, GetZBRange)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, IsFlanker)(THIS_ sint32 type_unit) PURE;
-    STDMETHOD_ (BOOL, GetIsTrader)(THIS_ sint32 type_unit) PURE; 
-    STDMETHOD_ (BOOL, IsTransport)(THIS_ sint32 type_unit) PURE; 
-    STDMETHOD_ (sint32, GetMaxCargo)(THIS_ sint32 type_unit) PURE; 
+    STDMETHOD_ (BOOL, GetIsTrader)(THIS_ sint32 type_unit) PURE;
+    STDMETHOD_ (BOOL, IsTransport)(THIS_ sint32 type_unit) PURE;
+    STDMETHOD_ (sint32, GetMaxCargo)(THIS_ sint32 type_unit) PURE;
 
     STDMETHOD_ (BOOL, UsesFuel) (THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, GetMaxFuel) (THIS_ sint32 type_unit) PURE;
@@ -90,7 +86,6 @@ DECLARE_INTERFACE_(IC3UnitDB, IUnknown)
     STDMETHOD_ (sint32, Unittype_String_To_Int) (THIS_ char * unittype_string) PURE;
     STDMETHOD_ (char *, Unittype_Int_To_String) (THIS_ sint32 index) PURE;
 
-	
 	STDMETHOD_ (BOOL, CanConvertCity)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, IsNoZoc)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (BOOL, IsIgnoresZoc)(THIS_ sint32 type_unit) PURE;
@@ -146,7 +141,6 @@ DECLARE_INTERFACE_(IC3UnitDB, IUnknown)
 	STDMETHOD_ (BOOL, IsShallowWaterAttack)(THIS_ sint32 type_unit) PURE;
 	STDMETHOD_ (BOOL, IsUnderwaterAttack)(THIS_ sint32 type_unit) PURE;
 
-	
 	STDMETHOD_ (double, GetConvertCityChance)(THIS_ sint32 type_unit) PURE;
 	STDMETHOD_ (double, GetConvertCityDeathChance)(THIS_ sint32 type_unit) PURE;
     STDMETHOD_ (sint32, GetZBRangeAttack)(THIS_ sint32 type_unit) PURE;
@@ -157,15 +151,13 @@ DECLARE_INTERFACE_(IC3UnitDB, IUnknown)
     STDMETHOD_ (sint32, GetBombardRange)(THIS_ sint32 type_unit) PURE;
 	STDMETHOD_ (sint32, GetBonusFood)(THIS_ sint32 type_unit) PURE;
 
-	
 
 	STDMETHOD_ (BOOL, CanBeachAssault)(THIS_ sint32 type_unit, MapPointData *point) PURE;
     STDMETHOD_ (BOOL, CanAttackFromSpaceShip)(THIS_ sint32 type_unit)PURE;
     STDMETHOD_ (BOOL, CanBeachAssaultAtAll)(THIS_ sint32 type_unit)PURE;
 
-
-    STDMETHOD_ (BOOL, CanNanoattackCity) (THIS_ sint32 unit_type) PURE; 
-    STDMETHOD_ (BOOL, CanBioterrorCity) (THIS_ sint32 unit_type) PURE; 
+    STDMETHOD_ (BOOL, CanNanoattackCity) (THIS_ sint32 unit_type) PURE;
+    STDMETHOD_ (BOOL, CanBioterrorCity) (THIS_ sint32 unit_type) PURE;
     STDMETHOD_ (BOOL, IsParatrooper) (THIS_ sint32 unit_type) PURE;
 	STDMETHOD_ (BOOL, IsWormholeProbe) (THIS_ sint32 unit_type) PURE;
 };

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,7 +30,6 @@
 #include "aui_music.h"
 
 
-
 aui_Music::aui_Music() :
 m_first_track(-1),
 m_last_track(-1),
@@ -42,7 +41,6 @@ m_pause(FALSE)
 	return;
 }
 
-
 aui_Music::~aui_Music()
 {
 	m_first_track = -1;
@@ -53,14 +51,12 @@ aui_Music::~aui_Music()
 	m_pause = FALSE;
 }
 
-
 AUI_MUSIC_ERRCODE
 aui_Music::SetVolume( uint8 volume )
 {
 	m_volume = volume;
 	return AUI_MUSIC_ERRCODE_OK;
 }
-
 
 aui_Redbook::aui_Redbook() :
 #ifndef USE_SDL
@@ -76,7 +72,6 @@ m_aux_cdrom_id(-1)
 	return;
 }
 
-
 aui_Redbook::~aui_Redbook()
 {
 #ifndef USE_SDL
@@ -90,7 +85,6 @@ aui_Redbook::~aui_Redbook()
 	m_cd_ok = 0;
 }
 
-
 AUI_MUSIC_ERRCODE
 aui_Redbook::Init()
 {
@@ -103,48 +97,40 @@ aui_Redbook::Init()
 	long numCDDrives;
 	char devName[32];
 
-	
 	GetCDIndex();
 
-	
 	if( m_cd_drive_index == 0 )
 		return AUI_MUSIC_ERRCODE_NOCDDRIVE;
 
-	
 	mciSysInfoParms.wDeviceType = MCI_DEVTYPE_CD_AUDIO;
 	mciSysInfoParms.lpstrReturn = (LPSTR)&numCDDrives;
 	mciSysInfoParms.dwRetSize = sizeof(numCDDrives);
 	returnVal = mciSendCommand(0, MCI_SYSINFO, MCI_SYSINFO_QUANTITY, (DWORD)(&mciSysInfoParms));
-	
+
 	if( returnVal != 0 )
 		return AUI_MUSIC_ERRCODE_SYSINFOERROR;
 
-	
 	if( m_cd_drive_index > numCDDrives )
 		return AUI_MUSIC_ERRCODE_INVALID_DRIVE_INDEX;
 
-	
 	mciSysInfoParms.dwNumber = m_cd_drive_index;
 	mciSysInfoParms.lpstrReturn = devName;
 	mciSysInfoParms.dwRetSize = sizeof(devName);
 	returnVal = mciSendCommand(0, MCI_SYSINFO, MCI_SYSINFO_NAME, (DWORD)(&mciSysInfoParms));
-	
+
 	if( returnVal != 0 )
 	{
 		mciGetErrorString(returnVal, devName, sizeof(devName));
 		return AUI_MUSIC_ERRCODE_NODEVICE_NAME;
 	}
 
-	
 	mciOpenParms.lpstrDeviceType = devName;
 	returnVal = mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE, (DWORD)(&mciOpenParms));
  	if( returnVal != 0 )
 		return AUI_MUSIC_ERRCODE_OPENERR;
 
-	
 	m_cd_device_id = mciOpenParms.wDeviceID;
 
-	
 	mciSetParms.dwTimeFormat = MCI_FORMAT_TMSF;
 	if( mciSendCommand( m_cd_device_id, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD)&mciSetParms) )
 	{
@@ -159,20 +145,17 @@ aui_Redbook::Init()
 		return AUI_MUSIC_ERRCODE_STATUSERR;
 	}
 
-	
 	m_ntracks = mciStatusParms.dwReturn;
 #endif
 	m_first_track = 1;
 	m_last_track = m_ntracks;
 
-	
 	m_aux_cdrom_id = CDInitVolume();
 
 	m_cd_ok = TRUE;
-	
+
 	return AUI_MUSIC_ERRCODE_OK;
 }
-
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Close()
@@ -184,7 +167,6 @@ aui_Redbook::Close()
 #endif
 	return retval;
 }
-
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Pause()
@@ -199,7 +181,6 @@ aui_Redbook::Pause()
 #endif
 	return retval;
 }
-
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Resume()
@@ -216,7 +197,6 @@ aui_Redbook::Resume()
 
 }
 
-
 AUI_MUSIC_ERRCODE
 aui_Redbook::Stop()
 {
@@ -231,7 +211,6 @@ aui_Redbook::Stop()
 	return retval;
 }
 
-
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play( sint32 itrack )
 {
@@ -241,7 +220,6 @@ aui_Redbook::Play( sint32 itrack )
 	int playFlags = MCI_FROM;
 	MCI_PLAY_PARMS mciPlayParms;
 
-	
 	if( (itrack < m_first_track) || (itrack > m_last_track) )
 		return AUI_MUSIC_ERRCODE_INVALID_TRACKNUMBER;
 
@@ -256,7 +234,6 @@ aui_Redbook::Play( sint32 itrack )
 	return retval;
 }
 
-
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play()
 {
@@ -265,12 +242,11 @@ aui_Redbook::Play()
 	sint32 mci_retval = 0;
 	MCI_PLAY_PARMS mciPlayParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms ); 
+	mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms );
 	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
 #endif
 	return retval;
 }
-
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::SetVolume( uint8 volume )
@@ -280,9 +256,9 @@ aui_Redbook::SetVolume( uint8 volume )
 	sint32 mci_retval = 0;
 	DWORD CDvolume = 0;
 	m_volume = std::min(volume, (unsigned char) 0xff);
-	
-	CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
-	CDvolume |= ( CDvolume << 16 );								
+
+	CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );
+	CDvolume |= ( CDvolume << 16 );
 
 	if( m_aux_cdrom_id != -1 )
 	{
@@ -298,7 +274,6 @@ aui_Redbook::SetVolume( uint8 volume )
 }
 
 
-
 sint32
 aui_Redbook::CDInitVolume()
 {
@@ -308,26 +283,24 @@ aui_Redbook::CDInitVolume()
 #ifndef USE_SDL
 	AUXCAPS AuxDeviceCapabilities;
 #endif
-	int     CDRomID = -1; 
+	int     CDRomID = -1;
 
 #ifndef USE_SDL
 	HowManyAuxDevices = auxGetNumDevs();
 
-	
 	if(HowManyAuxDevices > 0)
 	{
-		
+
 		for( i=0; (i<HowManyAuxDevices) && (FoundCDRom == FALSE); i++ )
 		{
-			
-			if( auxGetDevCaps(i,             
-					&AuxDeviceCapabilities,    
-					sizeof(AUXCAPS) ) )        
+
+			if( auxGetDevCaps(i,
+					&AuxDeviceCapabilities,
+					sizeof(AUXCAPS) ) )
 			{
 				return( -1 );
 			}
 
-			
 			if( AuxDeviceCapabilities.wTechnology == AUXCAPS_CDAUDIO )
 			{
 				FoundCDRom = TRUE;
@@ -335,21 +308,19 @@ aui_Redbook::CDInitVolume()
 			}
 		}
 
-		
 		if( FoundCDRom == FALSE )
 		{
-			
+
 			for( i=0; (i<HowManyAuxDevices) && (FoundCDRom == FALSE); i++ )
 			{
-				
-				if( auxGetDevCaps(i,             
-						&AuxDeviceCapabilities,    
-						sizeof(AUXCAPS) ) )        
+
+				if( auxGetDevCaps(i,
+						&AuxDeviceCapabilities,
+						sizeof(AUXCAPS) ) )
 				{
 					return( -1 );
-				} 
+				}
 
-				
 				if( AuxDeviceCapabilities.wTechnology == AUXCAPS_AUXIN )
 				{
 					FoundCDRom = TRUE;
@@ -363,17 +334,15 @@ aui_Redbook::CDInitVolume()
 }
 
 
-
 AUI_MUSIC_ERRCODE
 aui_Redbook::GetCDIndex()
 {
 #ifndef USE_SDL
 	LPSTR driveMap;
 	LPSTR driveName;
-	
-	
-	
-	driveMap = (LPSTR)calloc(105, sizeof(char));	
+
+
+	driveMap = (LPSTR)calloc(105, sizeof(char));
 
 	GetLogicalDriveStrings(105, driveMap);
 
@@ -385,8 +354,8 @@ aui_Redbook::GetCDIndex()
 		if ( GetDriveType(driveName) ==	DRIVE_CDROM )
 		{
 			m_cd_drive_index++;
-			break ;	
-		}					
+			break ;
+		}
 		driveName += 4;
 	}
 
@@ -395,11 +364,10 @@ aui_Redbook::GetCDIndex()
 	else
 		m_cd_drive_index = 0;
 
-	free(driveMap); 
+	free(driveMap);
 #endif
 	return AUI_MUSIC_ERRCODE_OK;
 }
-
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::CDDone()
@@ -416,7 +384,6 @@ aui_Redbook::CDDone()
 #endif
   	return retval;
 }
-
 
 
 AUI_MUSIC_CODE
@@ -439,19 +406,19 @@ aui_Redbook::Status()
 
 	   switch ( mciStatusParms.dwReturn )
 		{
-			case MCI_MODE_PAUSE:		
-				return( AUI_MUSIC_CODE_PAUSE ); 
-			case MCI_MODE_PLAY:			
+			case MCI_MODE_PAUSE:
+				return( AUI_MUSIC_CODE_PAUSE );
+			case MCI_MODE_PLAY:
 				return( AUI_MUSIC_CODE_PLAY );
-			case MCI_MODE_STOP:			
+			case MCI_MODE_STOP:
 				return( AUI_MUSIC_CODE_STOP );
-			case MCI_MODE_OPEN:			
+			case MCI_MODE_OPEN:
 				return( AUI_MUSIC_CODE_EMPTY );
 
 			case MCI_MODE_RECORD:
 			case MCI_MODE_SEEK:
 			case MCI_MODE_NOT_READY:
-			default:					
+			default:
 				return( AUI_MUSIC_CODE_UNKNOWN );
 		}
 	}

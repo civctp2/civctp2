@@ -8,7 +8,6 @@ extern void BlockPop(MBCHAR *path) ;
 
 void ui_TruncateString( aui_Control *control, MBCHAR *str );
 
-
 MBCHAR *uiutils_ChooseLdl(MBCHAR *firstChoice, MBCHAR *fallback);
 
 

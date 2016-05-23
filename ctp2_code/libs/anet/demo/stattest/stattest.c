@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*-------------------------------------------------------------------------
  Network status test program.
  Launch using anetdrop.
- Sends a single packet, then makes sure that dpGetStats agrees with our 
+ Sends a single packet, then makes sure that dpGetStats agrees with our
  idea of how many bytes were sent.
 -------------------------------------------------------------------------*/
 #include <stdio.h>
@@ -96,7 +96,7 @@ void chat_welcome(dp_t *myDP)
 	char nameBuf[256];
 
 	printf("     &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&     \n");
-	printf("     &&&&&&&&&&&&&&            Chat Session            &&&&&&&&&&&&&&     \n"); 
+	printf("     &&&&&&&&&&&&&&            Chat Session            &&&&&&&&&&&&&&     \n");
 	printf("     &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&     \n\n");
 	my_Player[0] = dp_ID_NONE;
 	err = dpGetSessionDesc(myDP, &sDesc, &size);
@@ -123,7 +123,7 @@ void chat_welcome(dp_t *myDP)
 		printf("You are host.\n", nameBuf);
 	}
 	printf("Your user name is %s.\n", nameBuf);
-	printf("You can end this session by pressing ^D on a line by itself.\n"); 
+	printf("You can end this session by pressing ^D on a line by itself.\n");
 	printf("Chat away ...............\n\n");
 }
 
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 	clock_t tfinish = 0;
 	dp_stat_t before, after;
 	int bytes_sent;
-	
+
 	if (argc < 2) {
 		strcpy(freezefile, "freeze.dat");
 	} else {
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 		printf("stattest: error %d thawing %s.\n", err, freezefile);
 		exit(1);
 	}
-		
+
 	chat_welcome(myDP);
 	err = dpGetStats(myDP, dp_STAT_DPIO_TX_UNREL_BYTES, &before, sizeof(before));
 	if (err != dp_RES_OK) {
@@ -268,12 +268,12 @@ int main(int argc, char **argv)
 			/* Process the keyboard buffer. */
 			if (!kbuf[0])
 				continue;
-	
+
 			err = chat_broadcast(myDP, kbuf);
 			if (err != dp_RES_OK) {
 				printf("stattest: error %d sending message.\n", err);
 			}
-	
+
 			/* Empty it. */
 			kbuf[0] = 0;
 		}

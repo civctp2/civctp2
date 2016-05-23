@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // USE_STOP_ZERO_MOVEMENT
 // - When defined, prevents unit without movement points from moving.
 //
@@ -72,7 +72,7 @@ sint32 CellUnitList::Insert(Unit id)
 BOOL CellUnitList::CanEnter(const MapPoint &point) const
 {
 	if(m_nElements < 1) {
-		
+
 		return TRUE;
 	}
 
@@ -81,14 +81,14 @@ BOOL CellUnitList::CanEnter(const MapPoint &point) const
 	   cell->GetCity().GetOwner() == m_array[0].GetOwner()) {
 		return TRUE;
 	}
-	
+
 	uint32 env = cell->GetEnv();
 
 	if(m_moveIntersection) {
 		if((env & m_moveIntersection))
 			return TRUE;
 
-		if((m_moveIntersection & k_BIT_MOVEMENT_TYPE_AIR) && 
+		if((m_moveIntersection & k_BIT_MOVEMENT_TYPE_AIR) &&
 		   !(env & k_BIT_MOVEMENT_TYPE_SPACE)) {
 			return TRUE;
 		}
@@ -107,14 +107,14 @@ BOOL CellUnitList::CanEnter(const MapPoint &point) const
 
 		return FALSE;
 	} else {
-		
+
 		for(sint32 i = 0; i < m_nElements; i++) {
 			uint32 moveType = m_array[i].GetMovementType();
-			
+
 			if((env & (moveType << k_SHIFT_ENV_MOVEMENT_TYPE)) ||
 			   ((moveType & k_BIT_MOVEMENT_TYPE_AIR)) ||
 			   ((moveType & k_BIT_MOVEMENT_TYPE_LAND) && (env & k_MASK_ENV_ROAD))) {
-				
+
 				continue;
 			} else {
 				if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
@@ -146,16 +146,16 @@ BOOL CellUnitList::CanEnter(const MapPoint &point) const
 //
 //----------------------------------------------------------------------------
 
-bool CellUnitList::GetMovementTypeLand() const 
-{ 
-    for (int i = 0; i < m_nElements; ++i) 
-	{ 
-        if (!m_array[i].GetMovementTypeAir()) 
+bool CellUnitList::GetMovementTypeLand() const
+{
+    for (int i = 0; i < m_nElements; ++i)
+	{
+        if (!m_array[i].GetMovementTypeAir())
 		{
-            return false; 
+            return false;
         }
     }
-    
+
     return true;
 }
 
@@ -172,51 +172,50 @@ BOOL CellUnitList::HasWormholeProbe() const
 
 PLAYER_INDEX CellUnitList::GetOwner() const
 {
-    Assert (m_nElements > 0); 
+    Assert (m_nElements > 0);
     if(m_nElements <= 0)
 		return 0;
 
-    return m_array[0].GetOwner(); 
+    return m_array[0].GetOwner();
 }
 
 void CellUnitList::GetPos(MapPoint &pos) const
 {
-    Assert(0 < m_nElements); 
+    Assert(0 < m_nElements);
     if(m_nElements < 1) {
 		pos.x = -1;
 		pos.y = -1;
 		return;
 	}
-    m_array[0].GetPos(pos); 
+    m_array[0].GetPos(pos);
 }
 
 BOOL CellUnitList::IsAtLeastOneMoveLand() const
 
 {
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
-        if (m_array[i].GetMovementTypeLand()){
-            return TRUE; 
-        }
-    }
-    return FALSE; 
-}
 
-BOOL CellUnitList::IsAtLeastOneMoveWater() const
-{
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
-        if (m_array[i].GetMovementTypeSea()){
-            return TRUE; 
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
+        if (m_array[i].GetMovementTypeLand()){
+            return TRUE;
         }
     }
     return FALSE;
 }
 
+BOOL CellUnitList::IsAtLeastOneMoveWater() const
+{
+
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
+        if (m_array[i].GetMovementTypeSea()){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 BOOL CellUnitList::IsAtLeastOneMoveShallowWater() const
 {
@@ -232,45 +231,45 @@ BOOL CellUnitList::IsAtLeastOneMoveShallowWater() const
 BOOL CellUnitList::IsAtLeastOneMoveAir() const
 
 {
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
+
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
         if (m_array[i].GetMovementTypeAir()) {
-            return TRUE; 
+            return TRUE;
         }
     }
-    
+
     return FALSE;
 }
 
 BOOL CellUnitList::IsAtLeastOneMoveSpace() const
 
 {
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
+
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
         if (m_array[i].GetMovementTypeSpace()) {
-            return TRUE; 
+            return TRUE;
         }
     }
-    
+
     return FALSE;
 }
 
 BOOL CellUnitList::IsAtLeastOneMoveMountain() const
 
 {
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
+
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
         if (m_array[i].GetMovementTypeMountain()) {
-            return TRUE; 
+            return TRUE;
         }
     }
-    
+
     return FALSE;
 }
 
@@ -284,23 +283,23 @@ BOOL CellUnitList::IsEnemy(PLAYER_INDEX owner) const
 	}
 
     uint32 a, b;
-    a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance()); 
-    b = (0x00000001 << owner); 
-    
+    a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance());
+    b = (0x00000001 << owner);
+
     return a & b;
 }
 
 BOOL CellUnitList::IsEnemy( Unit defender) const
-{ 
+{
     return player_isEnemy(GetOwner(), defender.GetOwner());
 }
 
 BOOL CellUnitList::IsEnemy(CellUnitList &defender) const
-{ 
-    if (defender.Num() < 1) 
-        return FALSE; 
-    else 
-        return IsEnemy(defender[0]); 
+{
+    if (defender.Num() < 1)
+        return FALSE;
+    else
+        return IsEnemy(defender[0]);
 }
 
 BOOL CellUnitList::CanAtLeastOneCaptureCity() const
@@ -323,7 +322,6 @@ BOOL CellUnitList::IsVisible(sint32 player) const
 	return FALSE;
 }
 
-
 BOOL CellUnitList::CanBeExpelled()
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
@@ -332,7 +330,6 @@ BOOL CellUnitList::CanBeExpelled()
 	}
 	return TRUE;
 }
-
 
 extern sint32 g_god;
 
@@ -343,7 +340,7 @@ extern sint32 g_god;
 // Description: Determine which unit of a stack to display.
 //
 // Parameters : looker				: the observing player
-//              moveType			: a bit set of movement types 
+//              moveType			: a bit set of movement types
 //				isResyncReported	: invalid units do not have to be reported
 //
 // Globals    : g_selected_item		: currently selected item on screen
@@ -361,8 +358,8 @@ extern sint32 g_god;
 // Remark(s)  : - When returning false, the value of maxi has not been updated.
 //              - Units in a city are only visible when awake or currently
 //                selected.
-//              - When there are multiple units in a stack, the top unit is 
-//				  determined on either movement points (own unit) or 
+//              - When there are multiple units in a stack, the top unit is
+//				  determined on either movement points (own unit) or
 //                "visibility class" + strength (enemy unit).
 //
 //----------------------------------------------------------------------------
@@ -374,10 +371,10 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
 	sint32 &			maxi,
 	bool &				isResyncReported
 ) const
-{ 
-    bool	is_found_unit	= false; 
+{
+    bool	is_found_unit	= false;
 	double	maxStrength		= -100000.0;
-    uint32	min_vis			= 0xffffffff; 
+    uint32	min_vis			= 0xffffffff;
 	double	minmove			= -1;
 
 	Army	selectedArmy(0);
@@ -402,34 +399,34 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
 			    )
 			   )
 			{
-				if (u.GetOwner() == looker) 
+				if (u.GetOwner() == looker)
 				{
 					// Looking at own units: order on movement points
-					if (u.GetMovementPoints() > minmove) 
+					if (u.GetMovementPoints() > minmove)
 					{
 						maxi			= i;
 						minmove			= u.GetMovementPoints();
 						is_found_unit	= true;
 					}
-				} 
-				else 
+				}
+				else
 				{
-					// Looking at "enemy" units: order on visibility class, 
+					// Looking at "enemy" units: order on visibility class,
 					// with strength as tie-breaker.
 					uint32 const	vis = u.GetVisibilityClass();
-					
-					if (vis <= min_vis) 
-					{ 
-						double const	strength	= 
+
+					if (vis <= min_vis)
+					{
+						double const	strength	=
 							u.GetAttack() + u.GetDefense();
-					
-						if (strength > maxStrength) 
+
+						if (strength > maxStrength)
 						{
-							maxStrength		= strength; 
-							maxi			= i; 
-							min_vis			= vis; 
-							is_found_unit	= true; 
-						} 
+							maxStrength		= strength;
+							maxi			= i;
+							min_vis			= vis;
+							is_found_unit	= true;
+						}
 					}
 				}
 			}
@@ -439,8 +436,8 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
 			g_network.RequestResync(RESYNC_INVALID_UNIT);
 			isResyncReported = true;
 		}
-    }  
-	
+    }
+
 	return is_found_unit;
 }
 
@@ -458,91 +455,91 @@ Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
     uint32	move_union			= 0x0000;
 	bool	stopResyncReport	= !g_network.IsClient();
 
-    for (sint32 i = 0; i < m_nElements; ++i) 
-	{ 
+    for (sint32 i = 0; i < m_nElements; ++i)
+	{
 		if (m_array[i].IsValid())
 		{
-			move_union |= m_array[i].GetMovementType(); 
+			move_union |= m_array[i].GetMovementType();
 		}
-		else 
+		else
 		{
 			// Would like to do DelIndex(i), but this is a const method.
 
-			if (!stopResyncReport) 
+			if (!stopResyncReport)
 			{
 				g_network.RequestResync(RESYNC_INVALID_UNIT);
 				stopResyncReport = false;
 			}
 		}
-    } 
-    
-    sint32	maxi; 
+    }
+
+    sint32	maxi;
 
     if (move_union & k_Unit_MovementType_Space_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_Space_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
-    }        
-    if (move_union & k_Unit_MovementType_Air_Bit) 
+    }
+    if (move_union & k_Unit_MovementType_Air_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_Air_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
     }
-    if (move_union & k_Unit_MovementType_Sea_Bit) 
+    if (move_union & k_Unit_MovementType_Sea_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_Sea_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
     }
-    if (move_union & k_Unit_MovementType_ShallowWater_Bit) 
+    if (move_union & k_Unit_MovementType_ShallowWater_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_ShallowWater_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
     }
-    if (move_union & k_Unit_MovementType_Land_Bit) 
+    if (move_union & k_Unit_MovementType_Land_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_Land_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
-    }                        
-    if (move_union & k_Unit_MovementType_Mountain_Bit) 
+    }
+    if (move_union & k_Unit_MovementType_Mountain_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker,k_Unit_MovementType_Mountain_Bit, maxi, stopResyncReport)
-		   ) 
+		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
-    }                            
-    if (move_union & k_Unit_MovementType_Trade_Bit) 
+    }
+    if (move_union & k_Unit_MovementType_Trade_Bit)
 	{
         if (GetTopVisibleUnitOfMoveType
 				(looker, k_Unit_MovementType_Trade_Bit, maxi, stopResyncReport)
 		   )
 		{
-            return m_array[maxi]; 
+            return m_array[maxi];
         }
-    }                                
-    
-    return Unit(0); 
+    }
+
+    return Unit(0);
 }
 
 BOOL CellUnitList::CanBeSued() const
@@ -556,32 +553,31 @@ BOOL CellUnitList::CanBeSued() const
 
 void CellUnitList::ForceVisibleThisTurn(const PLAYER_INDEX to_me)
 {
-    sint32 i; 
+    sint32 i;
     for (i=0; i<m_nElements; i++) {
-        m_array[i].ForceVisibleThisTurn(to_me); 
+        m_array[i].ForceVisibleThisTurn(to_me);
     }
 }
 
 double CellUnitList::GetHPModifier()
 
 {
-    return m_array[0].GetHPModifier(); 
+    return m_array[0].GetHPModifier();
 }
 
 void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 {
 	sint32 i;
-	
+
 	for(i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetHP() > 0 &&
 		   m_array[i].GetDBRec()->GetVictoryEnslavement()) {
-			
-			
-			
+
+
 			Unit hc;
 			static MapPoint slpos;
 			GetPos(slpos);
-			
+
 
 
 
@@ -590,7 +586,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 
 			sint32 r = g_player[m_array[0].GetOwner()]->
 				GetSlaveCity(slpos, hc);
-			
+
 			Assert(hc.m_id != (0));
 			if(hc.m_id == (0))
 				break;
@@ -600,23 +596,22 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 			if(g_network.IsHost()) {
 				g_network.Block(hc.GetOwner());
 			}
-			
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 								   GEA_City, hc.m_id,
 								   GEA_Player, origOwner,
 								   GEA_End);
 
-			
 			g_slicEngine->RunVictoryEnslavementTriggers(m_array[i],
 														origOwner, hc);
 			if(g_network.IsHost()) {
 				g_network.Unblock(hc.GetOwner());
 			}
-			break;  
+			break;
 		}
 	}
 }
-	
+
 BOOL CellUnitList::ExertsZOC() const
 {
 	sint32 i;
@@ -628,8 +623,7 @@ BOOL CellUnitList::ExertsZOC() const
 }
 
 
-
-BOOL CellUnitList::CanMoveIntoCell(const MapPoint &pos, 
+BOOL CellUnitList::CanMoveIntoCell(const MapPoint &pos,
 								   BOOL &zocViolation,
 								   BOOL ignoreZoc,
 								   BOOL &alliedCity)
@@ -664,7 +658,7 @@ BOOL CellUnitList::CanMoveIntoCell(const MapPoint &pos,
 			if(m_flags & k_CULF_CANT_CAPTURE_CITY)
 				return FALSE;
 			sint32 cityOwner = cell->GetCity().GetOwner();
-			
+
 			if(myOwner == PLAYER_INDEX_VANDALS && wonderutil_GetProtectFromBarbarians(g_player[cityOwner]->m_builtWonders)) {
 				return FALSE;
 			}
@@ -688,7 +682,7 @@ BOOL CellUnitList::IsMovePointsEnough(const double cost) const
 	{
 		double const mp	= m_array[i].GetMovementPoints();
 
-		if ((mp == 0.0) || 
+		if ((mp == 0.0) ||
 		    ((mp < cost) && !m_array[i].GetFirstMoveThisTurn())
 		   )
 		{
@@ -697,54 +691,53 @@ BOOL CellUnitList::IsMovePointsEnough(const double cost) const
 		// else: unit has enough movement points
 	}
 #else
-    sint32 i; 
-    double mp; 
-    
-    for (i=0; i<m_nElements; i++) { 
-        
-		
+    sint32 i;
+    double mp;
+
+    for (i=0; i<m_nElements; i++) {
+
 		if(m_array[i].GetFirstMoveThisTurn())
 			continue;
 
-        mp = m_array[i].GetMovementPoints(); 
-        if (mp < cost) { 
-            return FALSE; 
+        mp = m_array[i].GetMovementPoints();
+        if (mp < cost) {
+            return FALSE;
         }
     }
 #endif
 
-    return TRUE; 
+    return TRUE;
 }
 
 BOOL CellUnitList::IsMovePointsEnough(const MapPoint &pos)
 {
 
-    double cost; 
-    
-    if (GetMovementTypeAir()) { 
-        cost = k_MOVE_AIR_COST; 
+    double cost;
+
+    if (GetMovementTypeAir()) {
+        cost = k_MOVE_AIR_COST;
 	// Prevent ships from diving under and using tunnels.
 	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
 		sint32 icost;
 		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 		cost = icost;
-    } else { 
-        cost = g_theWorld->GetMoveCost(pos); 
+    } else {
+        cost = g_theWorld->GetMoveCost(pos);
     }
 
-    return IsMovePointsEnough(cost); 
+    return IsMovePointsEnough(cost);
 }
- 
-BOOL CellUnitList::GetMovementTypeAir() const 
-{ 
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
+
+BOOL CellUnitList::GetMovementTypeAir() const
+{
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
         if (!m_array[i].GetMovementTypeAir()) {
-            return FALSE; 
+            return FALSE;
         }
     }
-    
+
     return TRUE;
 }
 
@@ -761,7 +754,7 @@ BOOL CellUnitList::CanBeCargoPodded() const
 	Assert(i < g_theUnitDB->NumRecords());
 	if(i >= g_theUnitDB->NumRecords())
 		return FALSE;
-	
+
 	const UnitRecord *cargoRec = g_theUnitDB->Get(cargoPodType);
 	extern BOOL UnitCanCarry(sint32 src, sint32 dest);
 	if(!cargoRec->GetCargoDataPtr())
@@ -778,45 +771,43 @@ BOOL CellUnitList::CanBeCargoPodded() const
 
 BOOL CellUnitList::CanSpaceLand() const
 {
-    sint32 i; 
+    sint32 i;
     const UnitRecord *rec;
-    for (i=0; i<m_nElements; i++) { 
+    for (i=0; i<m_nElements; i++) {
 		rec = g_theUnitDB->Get(m_array[i].GetType());
         if (!rec->GetSpaceLand()) {
-            return FALSE; 
+            return FALSE;
         }
     }
-    
+
     return TRUE;
 }
 
 BOOL CellUnitList::CanSpaceLaunch() const
 {
-    sint32 i; 
+    sint32 i;
     const UnitRecord *rec;
-    for (i=0; i<m_nElements; i++) { 
+    for (i=0; i<m_nElements; i++) {
 		rec = g_theUnitDB->Get(m_array[i].GetType());
         if (!rec->GetSpaceLaunch()) {
-            return FALSE; 
+            return FALSE;
         }
     }
-    
+
     return TRUE;
 }
 
-
 BOOL CellUnitList::IsIgnoresZOC() const
-{ 
-    
-    sint32 i; 
-    
-    for (i=0; i<m_nElements; i++) { 
-        if (!m_array[i].IsIgnoresZOC())
-            return FALSE; 
-    } 
-    return TRUE; 
-}
+{
 
+    sint32 i;
+
+    for (i=0; i<m_nElements; i++) {
+        if (!m_array[i].IsIgnoresZOC())
+            return FALSE;
+    }
+    return TRUE;
+}
 
 void CellUnitList::Serialize(CivArchive &archive)
 {
@@ -868,7 +859,6 @@ void CellUnitList::KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 {
 	sint32 i;
 
-	
 	Unit tmpArray[k_MAX_ARMY_SIZE];
 	for(i = m_nElements - 1; i >= 0; i--) {
 		tmpArray[i].m_id = m_array[i].m_id;
@@ -893,15 +883,15 @@ void CellUnitList::UpdateMoveIntersection()
 {
 	sint32 i;
 	m_moveIntersection = 0xffffffff;
-	m_flags = k_CULF_IGNORES_ZOC | 
-		k_CULF_CANT_CAPTURE_CITY | 
-		k_CULF_CAN_SPACE_LAUNCH | 
+	m_flags = k_CULF_IGNORES_ZOC |
+		k_CULF_CANT_CAPTURE_CITY |
+		k_CULF_CAN_SPACE_LAUNCH |
 		k_CULF_CAN_SPACE_LAND;
 	uint32 oldMoveBits;
 	uint32 newMoveBits;
 
 	for(i = 0; i < m_nElements; i++) {
-		
+
 		oldMoveBits = 0;
 		if(!m_array[i].IsValid()) {
 			continue;
@@ -909,7 +899,7 @@ void CellUnitList::UpdateMoveIntersection()
 		newMoveBits = m_array[i].GetMovementType();
 
 		if(newMoveBits & k_Unit_MovementType_Land_Bit)
-			oldMoveBits |= k_BIT_MOVEMENT_TYPE_LAND;	   
+			oldMoveBits |= k_BIT_MOVEMENT_TYPE_LAND;
 		if(newMoveBits & k_Unit_MovementType_Sea_Bit)
 			oldMoveBits |= k_BIT_MOVEMENT_TYPE_WATER;
 		if(newMoveBits & k_Unit_MovementType_Air_Bit)
@@ -923,12 +913,12 @@ void CellUnitList::UpdateMoveIntersection()
 		if(newMoveBits & k_Unit_MovementType_Space_Bit)
 			oldMoveBits |= k_BIT_MOVEMENT_TYPE_SPACE;
 
-		
-		
 
-		
-		
-		
+
+
+
+
+
 		if(g_theUnitPool->IsValid(m_array[i])) {
 			m_moveIntersection &= oldMoveBits;
 			if(!m_array[i].IsIgnoresZOC()) {
@@ -941,11 +931,10 @@ void CellUnitList::UpdateMoveIntersection()
 	}
 }
 
-
-void CellUnitList::ComputeStrength(double & attack, 
-								   double & defense, 
-								   double & ranged, 
-								   sint16 & defend_unit_count, 
+void CellUnitList::ComputeStrength(double & attack,
+								   double & defense,
+								   double & ranged,
+								   sint16 & defend_unit_count,
 								   sint16 & ranged_unit_count,
 								   double & land_bombard,
 								   double & water_bombard,
@@ -956,101 +945,97 @@ void CellUnitList::ComputeStrength(double & attack,
 	ranged = 0.0;
 	defend_unit_count = 0;
 	ranged_unit_count = 0;
-	
+
 	land_bombard = 0.0;
 	water_bombard = 0.0;
 	air_bombard = 0.0;
-	
+
 	double firepower;
 	double hitpoints;
-	
+
 	double r;
 	sint32 unit_type;
 	UnitDynamicArray* cargo_list;
 	int j;
 	const UnitRecord *rec;
-	
+
 	for(int i = 0; i < m_nElements; i++) {
 		if (!g_theUnitPool->IsValid(m_array[i]))
 			continue;
 		unit_type = m_array[i].GetType();
 		rec = g_theUnitDB->Get(unit_type);
 		firepower = double(g_theUnitDB->Get(unit_type)->GetFirepower());
-        attack += (double) (rec->GetAttack() 
-			* m_array[i].GetHP()
-			* firepower); 
-        defense += (double) (m_array[i]->GetPositionDefense(Unit(0)) 
+        attack += (double) (rec->GetAttack()
 			* m_array[i].GetHP()
 			* firepower);
-        r = rec->GetZBRangeAttack()	
+        defense += (double) (m_array[i]->GetPositionDefense(Unit(0))
+			* m_array[i].GetHP()
+			* firepower);
+        r = rec->GetZBRangeAttack()
 			* firepower;
-        if ( r > 0.0 ) { 
-            ranged +=  r; 
-            ranged_unit_count++; 
-        } 
-		
-		
+        if ( r > 0.0 ) {
+            ranged +=  r;
+            ranged_unit_count++;
+        }
+
 		if (rec->GetCanBombardLand() ||
 			rec->GetCanBombardMountain()) {
-			land_bombard += (double) (rec->GetAttack() 
+			land_bombard += (double) (rec->GetAttack()
 				* double(m_array[i].GetHP())
 				* firepower);
 		}
-		
+
 		if (rec->GetCanBombardWater()) {
-			water_bombard += (double) (rec->GetAttack() 
+			water_bombard += (double) (rec->GetAttack()
 				* double(m_array[i].GetHP())
 				* firepower);
 		}
-		
+
 		if (rec->GetCanBombardAir()) {
-			air_bombard += (double) (rec->GetAttack() 
+			air_bombard += (double) (rec->GetAttack()
 				* double(m_array[i].GetHP())
 				* firepower);
 		}
-		
-		
+
 		cargo_list = m_array[i]->GetCargoList();
-		
-		
+
 		if (cargo_list != NULL)
 		{
 			for (j = 0; j < cargo_list->Num(); j++) {
 				unit_type = cargo_list->Access(j).GetType();
 				rec = g_theUnitDB->Get(unit_type);
-				
+
 				firepower = double(rec->GetFirepower());
 				hitpoints = double(rec->GetMaxHP());
-				attack += (double) (rec->GetAttack() 
-					* hitpoints	* firepower); 
-				defense += (double) (rec->GetDefense()  
+				attack += (double) (rec->GetAttack()
+					* hitpoints	* firepower);
+				defense += (double) (rec->GetDefense()
 					* hitpoints	* firepower);
 				r = rec->GetZBRangeAttack()
 					* firepower;
-				if ( r > 0.0 ) { 
-					ranged +=  r; 
-					ranged_unit_count++; 
-				} 
-				
-				
+				if ( r > 0.0 ) {
+					ranged +=  r;
+					ranged_unit_count++;
+				}
+
 				if (rec->GetCanBombardLand() ||
 					rec->GetCanBombardMountain()) {
-					land_bombard += (double) (rec->GetAttack() 
+					land_bombard += (double) (rec->GetAttack()
 						* hitpoints	* firepower);
 				}
-				
+
 				if (rec->GetCanBombardWater()) {
-					water_bombard += (double) (rec->GetAttack() 
+					water_bombard += (double) (rec->GetAttack()
 						* hitpoints	* firepower);
 				}
-				
+
 				if (rec->GetCanBombardAir()) {
-					air_bombard += (double) (rec->GetAttack() 
+					air_bombard += (double) (rec->GetAttack()
 						* hitpoints	* firepower);
 				}
-			} 
+			}
 		}
-    } 
+    }
 }
 
 double CellUnitList::GetAverageHealthPercentage()

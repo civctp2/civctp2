@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "World.h"
 #include "Cell.h"
@@ -49,16 +48,16 @@ STDEHANDLER(CutImprovementsEvent)
         sint32 num_killed = 0;
 		if(!g_theWorld->CanEnter(pos, units[i].GetMovementType()) &&
 		   g_theWorld->GetCity(pos).m_id == 0) {
-			
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillUnit,
 								   GEA_Unit, units[i],
 								   GEA_Int, CAUSE_REMOVE_ARMY_ILLEGAL_CELL,
 								   GEA_Player, -1,
 								   GEA_End);
-			
+
             num_killed++;
 		}
-        if (num_killed > 0) {			
+        if (num_killed > 0) {
             SlicObject *so = new SlicObject("41IAPillageSuicide") ;
             so->AddRecipient(unitsOwner) ;
             g_slicEngine->Execute(so) ;

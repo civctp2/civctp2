@@ -1,15 +1,14 @@
-
 #pragma once
 
 #ifndef QUADEDGE_H
 #define QUADEDGE_H 1
 
 class QuadEdge;
-class FS_MinSpanTree; 
+class FS_MinSpanTree;
 
 class Edge {
 	friend QuadEdge;
-    friend FS_MinSpanTree; 
+    friend FS_MinSpanTree;
 	friend void Splice(Edge*, Edge*);
   private:
 	int num;
@@ -17,7 +16,7 @@ class Edge {
 	Point2d *data;
   public:
 	Edge()			{ data = 0; }
-    ~Edge() {} 
+    ~Edge() {}
 
 	Edge* Rot();
 	Edge* invRot();
@@ -40,7 +39,7 @@ class Edge {
 
 };
 
-class QuadEdge; 
+class QuadEdge;
 class FS_MinSpanTree;
 
 class QuadEdge {
@@ -50,13 +49,12 @@ class QuadEdge {
 
   private:
 	Edge e[4];
-    QuadEdge *m_qnext; 
+    QuadEdge *m_qnext;
   public:
 	QuadEdge();
-    ~QuadEdge() {} 
+    ~QuadEdge() {}
 
-    
-    void* operator new(size_t); 
+    void* operator new(size_t);
     void operator delete(void *);
 };
 
@@ -70,4 +68,4 @@ class Subdivision {
 	void Draw();
 };
 
-#endif 
+#endif

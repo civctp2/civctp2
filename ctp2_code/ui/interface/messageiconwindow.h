@@ -7,7 +7,6 @@
 #include "aui_window.h"
 #include "messagewindow.h"
 
-
 #define k_MESSAGE_ICON_PICTURE_WARNING		"ups001.tga"
 #define k_MESSAGE_ICON_PICTURE_DIPLOMATIC	"ups002.tga"
 #define k_MESSAGE_ICON_PICTURE_TRADE		"ups003.tga"
@@ -32,11 +31,10 @@ class MessageWindow;
 
 class MessageOpenAction;
 
-
 class MessageIconWindow : public aui_Window
 {
 public:
-	
+
 	MessageIconWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,9 +53,8 @@ public:
 
 	MessageIconButton		*GetIconButton( void ) { return m_icon; }
 
-	Message					*GetMessage( void ) 
+	Message					*GetMessage( void )
 				{ return ( m_messageWindow ? m_messageWindow->GetMessage() : NULL ); }
-
 
 	BOOL			IsMoving( void ) { return m_isMoving; }
 
@@ -65,8 +62,7 @@ public:
 
 	void			SetMoving( BOOL moving ) { m_isMoving = moving; }
 
-	
-	AUI_ERRCODE SetupAnimation( uint32 position ); 
+	AUI_ERRCODE SetupAnimation( uint32 position );
 	void	StopAnimation( void );
 
 	void SetTipWindowText( MBCHAR *text );
@@ -86,11 +82,10 @@ public:
 
 	BOOL	Animating( void ) { return m_isMoving; }
 
-	
 	virtual AUI_ERRCODE Idle( void );
-	
-	
-	
+
+
+
 
 
 protected:
@@ -100,12 +95,11 @@ protected:
 	static MessageIconWindow	*m_currentIconWindow;
 	MessageList				*m_messageList;
 
-	
-	BOOL					m_isMoving; 
+	BOOL					m_isMoving;
 	sint32					m_currentY;
 	sint32					m_targetY;
 	sint32					m_acceleration;
-	uint32					m_lastticks;	
+	uint32					m_lastticks;
 	MessageIconWindow		*m_prev;
 	MessageIconWindow		*m_next;
 
@@ -114,4 +108,4 @@ protected:
 
 class MessageIconWindow;
 
-#endif 
+#endif

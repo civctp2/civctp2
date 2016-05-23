@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -69,16 +69,15 @@ extern UnitPool					*g_theUnitPool;
 extern ControlPanelWindow	*g_controlPanel;
 extern World					*g_theWorld;
 
-
 extern Player				**g_player;
 extern SelectedItem			*g_selected_item;
 
-ButtonBank::ButtonBank(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   MBCHAR *ldlBlock, 
-					   ControlActionCallback *ActionFunc, 
+ButtonBank::ButtonBank(AUI_ERRCODE *retval,
+					   uint32 id,
+					   MBCHAR *ldlBlock,
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
-	: 
+	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie)
@@ -86,14 +85,14 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 	InitCommon(ldlBlock);
 }
 
-ButtonBank::ButtonBank(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   sint32 x, 
-					   sint32 y, 
-					   sint32 width, 
+ButtonBank::ButtonBank(AUI_ERRCODE *retval,
+					   uint32 id,
+					   sint32 x,
+					   sint32 y,
+					   sint32 width,
 					   sint32 height,
 					   MBCHAR *pattern,
-					   ControlActionCallback *ActionFunc, 
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
 	aui_ImageBase( (sint32)0 ),
@@ -115,7 +114,7 @@ ButtonBank::~ButtonBank()
 
 	for (i=0; i<ORDERMODE_MAX; i++) {
 		DISPOSE_BUTTON_BANK_BUTTON(m_buttons[i]);
-	
+
 	}
 }
 
@@ -135,8 +134,8 @@ ButtonBank::~ButtonBank()
 	action = (aui_Action *)new BaseBankAction();								\
 	Assert( AUI_NEWOK(action, errcode) );											\
 	if ( !AUI_NEWOK(action, errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;			\
-	m_buttons[mode]->SetAction(action);													
-		
+	m_buttons[mode]->SetAction(action);
+
 AUI_ERRCODE ButtonBank::InitCommon(MBCHAR *bankBlock)
 {
 	MBCHAR				buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -162,22 +161,19 @@ AUI_ERRCODE ButtonBank::InitCommon(MBCHAR *bankBlock)
 		return AUI_ERRCODE(-1);
 	}
 
-	
 	for (i=0; i<bankStringTable->GetNumStrings(); i++) {
 		MAKE_BUTTON_BANK_BUTTON(bankStringTable->GetString(i), (ORDERMODE)i);
 	}
 
-	
 	delete bankStringTable;
 
-	
 	m_bankWidth = 4;
 	m_bankHeight = 2;
 
 	m_buttonBorder = 3;
 
 	RECT		cellRect = { 0, 0, (Width()-m_buttonBorder*2)/m_bankWidth, (Height()-m_buttonBorder*2)/m_bankHeight };
-	
+
 	m_buttonBounds = cellRect;
 
 	OffsetRect(&cellRect, m_buttonBorder, m_buttonBorder);
@@ -196,7 +192,6 @@ AUI_ERRCODE ButtonBank::InitCommon(MBCHAR *bankBlock)
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ButtonBank::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
@@ -233,14 +228,13 @@ void ButtonBank::AddButton(ORDERMODE mode)
 	if (button == NULL) return;
 
 	aui_Image			 *image = button->GetImage();
-	
+
 	Assert(image);
 	if (image == NULL) return;
 
 	Assert(image->TheSurface());
 	if (image->TheSurface() == NULL) return;
 
-	
 	for (i=0; i<m_buttonsInBank; i++) {
 		if (m_bankButtons[i] == button) return;
 	}
@@ -248,12 +242,11 @@ void ButtonBank::AddButton(ORDERMODE mode)
 	Assert(m_buttonsInBank < k_BUTTON_BANK_MAX_BUTTONS);
 	if (m_buttonsInBank >= k_BUTTON_BANK_MAX_BUTTONS) return;
 
-
 	if (m_buttonsInBank == k_BUTTON_BANK_NEXT_PAGE_INDEX) {
 		ColorIconButton		*pageButton;
 
 		theRect = m_bankButtonRects[m_buttonsInBank];
-		
+
 		pageButton = m_buttons[ORDERMODE_NEXTPAGE];
 
 		sint32 width = image->TheSurface()->Width();
@@ -274,15 +267,14 @@ void ButtonBank::AddButton(ORDERMODE mode)
 		if (errcode != AUI_ERRCODE_OK) return;
 
 		m_bankButtons[m_buttonsInBank] = pageButton;
-		
-		
+
+
 
 
 		m_buttonsInBank++;
 
-		
 		theRect = m_bankButtonRects[m_buttonsInBank];
-		
+
 		pageButton = m_buttons[ORDERMODE_READ];
 
 		width = image->TheSurface()->Width();
@@ -304,14 +296,14 @@ void ButtonBank::AddButton(ORDERMODE mode)
 
 		m_bankButtons[m_buttonsInBank] = pageButton;
 
-		
+
 
 
 		m_buttonsInBank++;
 	}
 
 	theRect = m_bankButtonRects[m_buttonsInBank];
-	
+
 	sint32 width = image->TheSurface()->Width();
 	sint32 height = image->TheSurface()->Height();
 	if (m_buttonBounds.right > width+4) {
@@ -330,7 +322,6 @@ void ButtonBank::AddButton(ORDERMODE mode)
 	if (errcode != AUI_ERRCODE_OK) return;
 
 	m_bankButtons[m_buttonsInBank] = button;
-	
 
 
 	m_buttonsInBank++;
@@ -352,7 +343,7 @@ void ButtonBank::SetPage(sint32 page)
 				RemoveSubControl(m_bankButtons[i]->Id());
 			}
 		}
-	} else 
+	} else
 	if (page == 1) {
 		if (m_buttonsInBank <= k_BUTTON_BANK_NEXT_PAGE_INDEX) return;
 
@@ -390,10 +381,9 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 	count = selected.Num();
 	countAll = all->Num();
 
-	
 	for (i=0; i<count; i++) {
 		unit = selected.Access(i);
-		unit.GetPos(pos);	
+		unit.GetPos(pos);
 		unitRec = unit.GetDBRec();
 
 		if (!g_theUnitPool->IsValid(unit)) {
@@ -401,13 +391,6 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 			continue;
 		}
 
-	
-		
-		
-
-
-		
-		
 
 
 
@@ -415,53 +398,54 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 
 
 
-		
+
+
+
+
+
+
+
+
 		if (TRUE) AddButton(ORDERMODE_SLEEP);
 
-		
-		
-		
-		
-		
-		
-		
-			
 
 
 
-		
-		
+
+
+
+
+
+
+
+
+
+
 		if (selected.CanEntrench()) AddButton(ORDERMODE_FORTIFY);
-		
-		
+
 		if (selected.CanPillage()) AddButton(ORDERMODE_PILLAGE);
 
 
 
 
-		
+
 		if (selected.CanReformCity()) AddButton(ORDERMODE_REFORMCITY);
 
-		
 		if ( selected.CanBombard() ) AddButton(ORDERMODE_BOMBARD);
 
-		
 		if (selected.CanSettle()) AddButton(ORDERMODE_SETTLE);
 
-		
 		if (selected.CanEstablishEmbassy()) AddButton(ORDERMODE_ESTABLISHEMBASSY);
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		if (selected.CanSellIndulgences()) AddButton(ORDERMODE_SELLINDULGENCES);
 
-		
 		if (selected.CanSoothsay()) AddButton(ORDERMODE_SOOTHSAY);
-		
-		
+
 		if (selected.CanSue()) AddButton(ORDERMODE_SUE);
 
 
@@ -472,11 +456,11 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 		if (selected.CanUndergroundRailway(success, death)) AddButton(ORDERMODE_FREESLAVE);
 
 		if (selected.CanSlaveUprising()) AddButton(ORDERMODE_AIDUPRISING);
-		
+
 		if (selected.CanInvestigateCity(chance, eliteChance)) AddButton(ORDERMODE_SPY);
 
 		if (selected.CanStealTechnology(randChance, chance)) AddButton(ORDERMODE_STEALDISCOVERY);
-	
+
 		if (selected.CanAssasinateRuler(chance, eliteChance)) AddButton(ORDERMODE_BOMBCABINET);
 
 		if (selected.CanPlantNuke(chance, escapeChance)) {
@@ -484,29 +468,24 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 				AddButton(ORDERMODE_PLANTNUKE);
 			}
 		}
-		
-		
+
+
 
 
 		if (selected.CanCreateFranchise(chance)) AddButton(ORDERMODE_BRANCH);
 
-		
 		if (selected.CanAdvertise()) AddButton(ORDERMODE_ADVERTISE);
 
 		if (selected.CanNanoInfect(chance)) AddButton(ORDERMODE_PLANTNANOVIRUS);
 
 		if (selected.CanBioInfect(chance)) AddButton(ORDERMODE_INFECTCITY);
 
-		
 		if (selected.CanCloak()) AddButton(ORDERMODE_CLOAK);
 
-		
 		if (selected.CanCreatePark()) AddButton(ORDERMODE_CREATEPARK);
 
-		
 		if (selected.CanExpel()) AddButton(ORDERMODE_EXPEL);
 
-		
 		uint32 uindex;
 		if (selected.CanInterceptTrade(uindex)) {
 			AddButton(ORDERMODE_PIRACY);
@@ -515,40 +494,34 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 			AddButton(ORDERMODE_INCITEREVOLUTION);
 		}
 
-		
-		if ( count == 1 && unitRec->GetCanCarry() ) {	
+		if ( count == 1 && unitRec->GetCanCarry() ) {
 			AddButton( ORDERMODE_CARGO );
 		}
 
 		BOOL canRailLaunch = FALSE;
-		
-		
+
 		Unit city = g_theWorld->GetCell(unit.RetPos())->GetCity();
 		if (city.m_id != (0)) {
-			
-			
-			
-			
+
+
+
+
 		}
-		
+
 	}
 
-	
 	if (selected.CanSlaveRaid(success, death, timer, amount)) {
 		AddButton(ORDERMODE_CAPTURESLAVES);
 	}
 
-	
 	if (selected.CanConvertCity(chance, deathChance)) {
 		AddButton(ORDERMODE_CONVERTCITY);
 	}
 
-	
 	if (selected.CanInjoin()) {
 		AddButton(ORDERMODE_FILEINJUNCTION);
 	}
 
-	
 	if (TRUE) AddButton(ORDERMODE_DISBAND);
 
 }
@@ -566,12 +539,8 @@ ORDERMODE ButtonBank::ButtonToMode(ColorIconButton *button)
 	return ORDERMODE_NONE;
 }
 
-
 void BaseBankAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 }
-
-

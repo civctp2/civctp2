@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	#include <OpenTransport.h>
 	#include <OpenTptInternet.h>
 #else
-	#include <windows.h> 
+	#include <windows.h>
 	#include <winsock.h>
 #endif
 
@@ -63,7 +63,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #include "dictset.h"
-
 
 /**
 * Constants
@@ -113,9 +112,8 @@ typedef struct tcpInstance_s
   dcst_t handles;				/* TCPHANDLE<->TCPPEER dictionary set */
   TCPHANDLE myHandle;			/* Handle for this node's address */
   TCPHANDLE broadcastHandle;	/* Handle for broadcast address */
-} 
+}
 TCPINSTANCE;
-
 
 /**
 * Methods
@@ -149,5 +147,3 @@ int TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest)
 int TCPWIN_GetPacket(TCPINSTANCE *TCP, void *bufptr, ULONG *len, TCPHANDLE *phSrc, TCPPEER *pSrcAddr);
 
 #endif
-
-

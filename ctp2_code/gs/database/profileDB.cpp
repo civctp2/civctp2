@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,6 @@
 #include "player.h"
 #include "Diffcly.h"
 
-
 #include "Action.h"
 
 extern CivPaths             *g_civPaths;
@@ -67,8 +66,7 @@ extern SoundManager         *g_soundManager;
 extern Player              **g_player;
 
 #include "Diplomacy_Log.h"
-extern Diplomacy_Log        *g_theDiplomacyLog; 
-
+extern Diplomacy_Log        *g_theDiplomacyLog;
 
 ProfileDB::ProfileDB()
 :	m_closeEyepoint(FALSE),
@@ -93,7 +91,7 @@ ProfileDB::ProfileDB()
 	m_simplecombat = FALSE;
 	m_pollution = FALSE;
 	m_lineofsight = FALSE;
-	
+
 	m_unitAnim = FALSE;
 
 	m_goodAnim = FALSE;
@@ -114,14 +112,12 @@ ProfileDB::ProfileDB()
 	m_fullScreenMovies = FALSE;
 	m_showCityInfluence = FALSE;
 
-	
 	m_fogOfWar = FALSE;
 	m_startType = FALSE;
 
 	m_playerNumber = 1;
 
-	
-	
+
 	m_civIndex = (CIV_INDEX)16;
 
 	m_gameName[0] = '\0';
@@ -186,7 +182,7 @@ ProfileDB::ProfileDB()
 	m_islandcontinent = 5;
 	m_homodiverse = 5;
 	m_goodcount = 5;
-	
+
 	m_throneRoom = FALSE;
 
 	m_alienEndGame = TRUE;
@@ -194,7 +190,7 @@ ProfileDB::ProfileDB()
 	m_max_players = 16;
 
 	m_allow_ai_settle_move_cheat = FALSE;
-	m_is_diplomacy_log_on = FALSE; 
+	m_is_diplomacy_log_on = FALSE;
 	m_unitCompleteMessages = FALSE;
 	m_nonContinuousUnitCompleteMessages = FALSE;
 
@@ -205,13 +201,11 @@ ProfileDB::ProfileDB()
 	m_dontKillMessages = FALSE;
 	m_aiPopCheat = TRUE;
 
-	
 	m_unitSpeed = 1;
 	m_mouseSpeed = 5;
 	m_showCityNames = TRUE;
 	m_showTradeRoutes = TRUE;
 
-	
 	m_leftHandedMouse = FALSE;
 
 	m_cityBuiltMessage = TRUE;
@@ -245,9 +239,9 @@ ProfileDB::ProfileDB()
 
 	Var("NumPlayers", PV_NUM, &m_nPlayers, NULL, false);
 	Var("AiOn", PV_BOOL, &m_ai_on, NULL, false);
-    Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
+    Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false);
 	Var("UseMapPlugin", PV_BOOL, &m_use_map_plugin, NULL, false);
-	
+
 	Var("Difficulty", PV_NUM, &m_difficulty, NULL, false);
 	Var("RiskLevel", PV_NUM, &m_risklevel, NULL, false);
 
@@ -272,7 +266,7 @@ ProfileDB::ProfileDB()
 	Var("FullScreenMovies", PV_BOOL, &m_fullScreenMovies, NULL, false);
 	Var("AutoSave", PV_BOOL, &m_autoSave, NULL);
 	Var("PlayerNumber", PV_NUM, (sint32 *)&m_playerNumber, NULL, false);
-	
+
 	Var("CivIndex", PV_NUM, (sint32 *)&m_civIndex, NULL, false);
 
 	Var("GameName", PV_STRING, NULL, (char *)m_gameName, false);
@@ -281,7 +275,6 @@ ProfileDB::ProfileDB()
 	Var("SaveNote", PV_STRING, NULL, (char*)m_saveNote, false);
 	Var("Gender", PV_NUM, (sint32 *)&m_gender, NULL, false);
 
-	
 	Var("NoHumansOnHost", PV_BOOL, &m_noHumansOnHost, NULL, false);
 	Var("LogPlayerStats", PV_BOOL, &m_logPlayerStats, NULL, false);
 
@@ -321,11 +314,11 @@ ProfileDB::ProfileDB()
 	Var("IslandContinent", PV_NUM, &m_islandcontinent, NULL, false);
 	Var("HomoDiverse", PV_NUM, &m_homodiverse, NULL, false);
 	Var("GoodCount", PV_NUM, &m_goodcount, NULL, false);
-	
+
 	Var("ThroneRoom", PV_BOOL, &m_throneRoom, NULL, false);
 	Var("MaxPlayers", PV_NUM, &m_max_players, NULL, false);
 	Var("MapSize", PV_NUM, (sint32 *)&m_mapSize, NULL, false);
-	
+
 	Var("AlienEndGame", PV_BOOL, &m_alienEndGame, NULL, false);
 	Var("UnitCompleteMessages", PV_BOOL, &m_unitCompleteMessages, NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL, &m_nonContinuousUnitCompleteMessages, NULL);
@@ -337,13 +330,11 @@ ProfileDB::ProfileDB()
 	Var("ShowCityNames", PV_BOOL, &m_showCityNames, NULL);
 	Var("ShowTradeRoutes", PV_BOOL, &m_showTradeRoutes, NULL);
 
-	
 	Var("UnitSpeed", PV_NUM, &m_unitSpeed, NULL);
 	Var("MouseSpeed", PV_NUM, &m_mouseSpeed, NULL);
 
-	
 	Var("LeftHandedMouse", PV_BOOL, &m_leftHandedMouse, NULL);
-	
+
 	Var("CityBuiltMessage", PV_BOOL, &m_cityBuiltMessage, NULL, false);
 
 	Var("UseAttackMessages", PV_BOOL, &m_useAttackMessages, NULL, false);
@@ -415,25 +406,24 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
 		                                      profileName);
 		if(!profileTxtFile || !c3files_PathIsValid(profileTxtFile)) {
-			profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
+			profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA,
 			                                      "profile.txt", profileName);
 		}
 	} else {
-		
+
 		m_loadedFromTutorial = TRUE;
-		profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
+		profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA,
 		                                      "tut_profile.txt", profileName);
 	}
-	
-	if (profileTxtFile == NULL) { 
-		m_nPlayers = 3; 
+
+	if (profileTxtFile == NULL) {
+		m_nPlayers = 3;
 		m_ai_on = FALSE;
 		return FALSE;
 	} else {
 		FILE *pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
 		if(pro_file) {
-			
-			
+
 			sint32 saved_width = 0;
 			sint32 saved_height = 0;
 
@@ -453,7 +443,7 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 				m_screenResWidth = saved_width;
 				m_screenResHeight = saved_height;
 			}
-			
+
 			return res;
 		}
 		return FALSE;
@@ -461,9 +451,8 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 
 }
 
-
 BOOL ProfileDB::Parse(FILE *file)
-{ 
+{
 	char line[k_MAX_NAME_LEN];
 	sint32 linenum = 0;
 	while(!feof(file)) {
@@ -471,7 +460,7 @@ BOOL ProfileDB::Parse(FILE *file)
 			return TRUE;
 		linenum++;
 		sint32 len = strlen(line);
-		
+
 		while(isspace(line[len - 1])) {
 			line[len - 1] = 0;
 			len--;
@@ -483,7 +472,7 @@ BOOL ProfileDB::Parse(FILE *file)
 			name++;
 		}
 		if(*name == 0 || *name == '#') {
-			
+
 			continue;
 		}
 		if(!isalpha(*name)) {
@@ -505,11 +494,11 @@ BOOL ProfileDB::Parse(FILE *file)
 		while(isspace(*value) && *value != 0) {
 			value++;
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		PointerList<ProfileVar>::Walker walk(m_vars);
 		bool found = false;
 		while(walk.IsValid() && !found) {
@@ -557,7 +546,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		}
 	}
 
-	return TRUE; 
+	return TRUE;
 }
 
 void ProfileDB::SetTutorialAdvice( BOOL val )
@@ -586,7 +575,7 @@ void ProfileDB::SetDiplmacyLog(BOOL b)
 			Assert(g_theDiplomacyLog);
 		} else {
 			m_is_diplomacy_log_on = TRUE;
-			Assert(g_theDiplomacyLog); 
+			Assert(g_theDiplomacyLog);
 			g_theDiplomacyLog = new Diplomacy_Log;
 		}
 	} else {
@@ -601,7 +590,7 @@ void ProfileDB::SetDiplmacyLog(BOOL b)
 	}
 }
 
-void ProfileDB::SetPollutionRule( BOOL rule ) 
+void ProfileDB::SetPollutionRule( BOOL rule )
 {
 	m_pollution = rule;
 
@@ -612,30 +601,30 @@ void ProfileDB::SetPollutionRule( BOOL rule )
 
 void ProfileDB::SetSFXVolume(sint32 vol)
 {
-	m_sfxVolume = vol; 
+	m_sfxVolume = vol;
 	if ( g_soundManager ) {
 		g_soundManager->SetVolume( SOUNDTYPE_SFX, vol );
 	}
 }
 
 void ProfileDB::SetVoiceVolume(sint32 vol)
-{ 
-	m_voiceVolume = vol; 
+{
+	m_voiceVolume = vol;
 	if ( g_soundManager ) {
 		g_soundManager->SetVolume( SOUNDTYPE_VOICE, vol );
 	}
 }
 
 void ProfileDB::SetMusicVolume(sint32 vol)
-{ 
-	m_musicVolume = vol; 
+{
+	m_musicVolume = vol;
 	if ( g_soundManager ) {
 		g_soundManager->SetVolume( SOUNDTYPE_MUSIC, vol );
 	}
 }
 
 void ProfileDB::SetDifficulty(uint32 x)
-{ 
+{
 	Assert((x>=0) && (x<7));
 	if(x >= 0 && x < 7) {
 		m_difficulty = x;
@@ -662,7 +651,7 @@ void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
 void ProfileDB::Save()
 {
 	if(m_loadedFromTutorial || m_dontSave) {
-		
+
 		return;
 	}
 
@@ -728,5 +717,3 @@ void ProfileDB::SetValueByName(const char *name, sint32 value)
 		walk.Next();
 	}
 }
-
-

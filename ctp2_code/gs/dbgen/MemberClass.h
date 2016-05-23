@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Modified AddBitPair function to allow bit pairs to have default values
-//   so that when two records are merged, only the bit is merged 
+//   so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -43,13 +43,13 @@ public:
 	              char *subType);
 	void AddGroupedBits(char *name, struct namelist *list);
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
-	
+
 	void ExportHeader(FILE *outfile);
 	void ExportBits(FILE *outfile);
 	void ExportData(FILE *outfile);
 	void ExportMethods(FILE *outfile);
 	void ExportForwardDeclarations(FILE *outfile);
-	
+
 	void ExportInitialization(FILE *outfile, char *recordName);
 	void ExportParser(FILE *outfile, char *recordName);
 	void ExportTokenCases(FILE *outfile, char *recordName);

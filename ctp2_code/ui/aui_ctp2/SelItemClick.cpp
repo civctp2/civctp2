@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Bug fix: prevent easy invisible unit detection, by reporting the basic 
+// - Bug fix: prevent easy invisible unit detection, by reporting the basic
 //   terrain info when (right-)clicking on an enemy object.
 //
 //----------------------------------------------------------------------------
@@ -56,7 +56,6 @@
 #include "player.h"
 
 
-
 #include "gfx_options.h"
 
 
@@ -73,13 +72,10 @@ void SelectedItem::SetupClickFunctions()
 	SELECT_TYPE selected;
 	SELECT_TYPE clicked;
 
-	
 	m_justNowSelectedArmy = false;
 
-	
 	m_justGotDoubleClick = false;
 
-	
 	for(selected = SELECT_TYPE_NONE; selected < SELECT_TYPE_MAX; selected = SELECT_TYPE(sint32(selected) + 1)) {
 		for(clicked = SELECT_TYPE_NONE; clicked < SELECT_TYPE_MAX; clicked = SELECT_TYPE(sint32(clicked) + 1)) {
 			for(button = SELECT_BUTTON_LEFT; button < SELECT_BUTTON_MAX; button = SELECT_BUTTON(sint32(button) + 1)) {
@@ -90,20 +86,19 @@ void SelectedItem::SetupClickFunctions()
 		}
 	}
 
-	
 
 
 
-	
-	
-	
+
+
+
+
 	mode	= SELECT_MODE_RIGHT;
 	button	= SELECT_BUTTON_LEFT;
-	
-	
+
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &ErrorClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectCityClick;
@@ -112,7 +107,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -126,7 +120,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -140,7 +133,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -154,7 +146,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -168,7 +159,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -182,7 +172,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
@@ -196,7 +185,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -209,14 +197,14 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectEnemyArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
-	
 
 
 
-	
 
 
-	
+
+
+
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
@@ -225,13 +213,12 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &ArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &ErrorClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = 
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] =
 &EnemyCityContextClick;
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &EnemyArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -245,7 +232,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &MoveArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &MoveArmyClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -259,7 +245,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -273,7 +258,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -287,7 +271,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -301,7 +284,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
@@ -315,7 +297,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -328,21 +309,21 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &EnemyArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
-	
 
 
-	
 
 
-	
 
 
-	
+
+
+
+
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &ErrorClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectCityClick;
@@ -351,7 +332,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -365,7 +345,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &MoveArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &MoveArmyClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -379,7 +358,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -393,7 +371,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -407,7 +384,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -421,7 +397,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
@@ -435,7 +410,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -448,13 +422,13 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectEnemyArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
-	
 
 
-	
 
 
-	
+
+
+
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
@@ -468,7 +442,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -482,7 +455,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &DeselectClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &DeselectClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -496,7 +468,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -510,7 +481,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -524,7 +494,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -538,7 +507,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
@@ -552,7 +520,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -565,24 +532,24 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &EnemyArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
-	
 
 
-	
-	
-
-	
 
 
-	
 
 
-	
+
+
+
+
+
+
+
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &NullClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectArmyStartMoveClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &ErrorClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectCityClick;
@@ -591,7 +558,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_NONE;
@@ -605,12 +571,11 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &ActionClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &ActionClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &DeselectClick; 
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &DeselectClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectArmyStartMoveClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &ErrorClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectCityClick;
@@ -619,7 +584,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -633,7 +597,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &ActionClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &ActionClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DRAG;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -646,8 +609,7 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &MoveDrag;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &MoveDrag;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &MoveDrag;
-	
-	
+
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -660,9 +622,8 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &MoveDrop;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &MoveDrop;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &MoveDrop;
-	
 
-	
+
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -676,7 +637,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -690,7 +650,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -704,7 +663,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &ActionClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &ActionClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_GOOD;
@@ -718,7 +676,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &ActionClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &ActionClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -732,7 +689,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -746,7 +702,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -760,8 +715,7 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
-	
+
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
@@ -775,7 +729,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_GOOD;
@@ -789,7 +742,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -802,14 +754,14 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectEnemyArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectTradeRouteClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectGoodClick;
-	
 
 
 
-	
 
 
-	
+
+
+
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
@@ -823,7 +775,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -837,7 +788,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_LOCAL_ARMY;
@@ -851,7 +801,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &CancelPathingClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &CancelPathingClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -865,7 +814,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &CancelPathingClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &CancelPathingClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_GOOD;
@@ -879,7 +827,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &CancelPathingClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &CancelPathingClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_NONE;
@@ -893,7 +840,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &CancelPathingClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &CancelPathingClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
@@ -907,7 +853,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
@@ -921,7 +866,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &UnloadClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &UnloadClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
@@ -935,7 +879,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
@@ -949,7 +892,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
@@ -963,7 +905,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
 
-	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
@@ -976,25 +917,23 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &EnemyArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &GoodContextClick;
-	
 
 
-	
+
+
 }
 
 void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
 									bool leftDrag, bool leftDrop)
 {
-	
-	
-	
+
+
 	PLAYER_INDEX      vPlayer = GetVisiblePlayer();
 	bool			     left = data->lbutton != 0;
 	bool		        right = data->rbutton != 0;
 	SELECT_BUTTON button = SELECT_BUTTON_MAX;
 	SELECT_MODE mode = g_theProfileDB->IsUseLeftClick() ? SELECT_MODE_LEFT : SELECT_MODE_RIGHT;
 
-	
 	bool do_targeting_mode = false;
 
 	if (g_controlPanel!=NULL)
@@ -1007,8 +946,7 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 		button = SELECT_BUTTON_LEFT;
 	else if(right)
 		button = SELECT_BUTTON_RIGHT;
-	
-	
+
 	if(leftDrag)
 		button = SELECT_BUTTON_LEFT_DRAG;
 	else if(leftDrop)
@@ -1016,7 +954,6 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 
 	SELECT_TYPE clickedThing = GetClickedThing(pos, button != SELECT_BUTTON_LEFT_DROP);
 
-	
 	if(mode == SELECT_MODE_CTP2) {
 		if(m_is_pathing || do_targeting_mode) {
 			if(button == SELECT_BUTTON_LEFT) {
@@ -1027,8 +964,7 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 		}
 	}
 
-	
-	
+
 	if(m_select_state[vPlayer] == SELECT_TYPE_LOCAL_ARMY &&
 	   pos == m_select_pos[vPlayer] &&
 	   !leftDrop &&
@@ -1036,7 +972,6 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 		clickedThing = SELECT_TYPE_LOCAL_ARMY;
 	}
 
-	
 	if(doubleClick && button == SELECT_BUTTON_LEFT && pos == m_select_pos[vPlayer]) {
 		m_justGotDoubleClick = true;
 		clickedThing = m_select_state[vPlayer];
@@ -1047,43 +982,41 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 		return;
 	}
 
-	
-	
-	if(button == SELECT_BUTTON_LEFT && 
+
+	if(button == SELECT_BUTTON_LEFT &&
 	   (m_select_state[vPlayer] == SELECT_TYPE_NONE || m_select_pos[vPlayer] != pos) &&
 	   clickedThing == SELECT_TYPE_LOCAL_ARMY) {
 		m_justNowSelectedArmy = true;
 	}
 
 	if(button == SELECT_BUTTON_MAX)
-		
+
 		return;
-		
+
 	ClickFunctionPtr func = m_clickFunc
 		[m_select_state[vPlayer]]
 		[clickedThing]
 		[button]
 		[mode];
-	
+
 	(this->*func)(pos, data, doubleClick);
 }
 
 void SelectedItem::ErrorClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
-	
-	
+
+
 	Assert(FALSE);
 }
 
 void SelectedItem::NullClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 }
 
 void SelectedItem::SelectArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 	Unit top;
 	GetTopUnit(pos, top);
 	SetSelectUnit(top);
@@ -1091,19 +1024,17 @@ void SelectedItem::SelectArmyClick(const MapPoint &pos, const aui_MouseEvent *da
 	if(doubleClick) {
 		ArmyManagerWindow::Display();
 	}
-	
-	
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, top.GetArmy(), GEA_End);
 
 
 
-	
+
 
 
 
 
 }
-
 
 
 void SelectedItem::SelectArmyStartMoveClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
@@ -1117,7 +1048,7 @@ void SelectedItem::SelectArmyStartMoveClick(const MapPoint &pos, const aui_Mouse
 
 void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 	if(!GetIsPathing()) {
 		Unit top;
 		GetTopUnitOrCity(pos, top);
@@ -1130,7 +1061,6 @@ void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *da
 		}
 	}
 
-	
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
@@ -1146,7 +1076,7 @@ void SelectedItem::SelectGoodClick(const MapPoint &pos, const aui_MouseEvent *da
 
 void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 	Army a;
 	GetSelectedArmy(a);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, a, GEA_End);
@@ -1154,7 +1084,7 @@ void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEven
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
@@ -1162,7 +1092,7 @@ void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEven
 
 void SelectedItem::SelectTradeRouteClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+
 }
 
 void SelectedItem::DeselectClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
@@ -1269,7 +1199,7 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	// Report the underlying terrain information. This is just being useful. 
+	// Report the underlying terrain information. This is just being useful.
 	TerrainContextClick(pos, data, doubleClick);
 }
 
@@ -1291,8 +1221,8 @@ void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEve
 
 void SelectedItem::EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	// Report the underlying terrain information. For visible units, this is 
-	// just being useful. For invisible units, it will fix the bug that 
+	// Report the underlying terrain information. For visible units, this is
+	// just being useful. For invisible units, it will fix the bug that
 	// detection is too easy.
 	TerrainContextClick(pos, data, doubleClick);
 }
@@ -1305,48 +1235,42 @@ void SelectedItem::GoodContextClick(const MapPoint &pos, const aui_MouseEvent *d
 {
 }
 
-
 void SelectedItem::SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	sint32 player = GetVisiblePlayer();
 
-	
 
 	BOOL isForeignGood = FALSE;
-	
-	
+
 	Unit homeCity = g_theWorld->GetCell(m_select_pos[player])->GetCityOwner();
 	if(homeCity.m_id != 0) {
 		if (homeCity.GetOwner() != player) {
 			isForeignGood = TRUE;
 		}
 	} else {
-		
+
 		return;
 	}
-	
-	
+
 	if (!homeCity.IsValid()) return;
-	
-	
+
 	Unit destCity;
 	if (!GetTopUnitOrCity(pos, destCity)) return;
 	if (!destCity.IsCity()) return;
-	
-	
+
 	sint32		resIndex;
 	if (!g_theWorld->GetGood(m_select_pos[player], resIndex)) return;
-	
+
 	if(!isForeignGood) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 							   GEA_Int, resIndex,
 							   GEA_City, homeCity,
 							   GEA_City, destCity,
 							   GEA_End);
-		
-		
-		
-		
+
+
+
+
 	}
 #if 0
 	else {
@@ -1365,10 +1289,9 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 	MapPoint army_pos;
 	sint32 player = GetVisiblePlayer();
 
-	
 	m_selected_army[player].GetPos(army_pos);
-	
-	if(army_pos == pos && 
+
+	if(army_pos == pos &&
 	   GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY) {
 
 	} else {
@@ -1376,18 +1299,16 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 		if (m_good_path &&
 			(unit->GetDBRec()->GetCanCarry()) &&
 			(unit->GetNumCarried() > 0)) {
-			
-								
-								
+
+
 			if ((unit->GetDBRec()->GetCargoPod()) &&
 				(g_theWorld->IsWater(pos)) &&
 				(unit->GetData()->CargoHasLandUnits())) {
 				QuickSlic("15IALandInOcean", player, TRUE);
 				return;
 			}
-			
-								
-								
+
+
 			if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
 				(g_theWorld->IsLand(pos))) {
 				SlicObject *so = new SlicObject("14IAAutoUnload");
@@ -1408,24 +1329,22 @@ void SelectedItem::StartMoveClick(const MapPoint &pos, const aui_MouseEvent *dat
 	m_startDragPos = pos;
 	m_gotClick = true;
 	m_clickStartTime = GetTickCount();
-	
-	
-	
+
+
 }
 
 void SelectedItem::MoveDrag(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	DPRINTF(k_DBG_INFO, ("Move Drag: %d,%d\n", pos.x, pos.y));
 	if(!m_gotClick) {
-		
+
 		return;
 	}
 
 	if(pos != m_startDragPos) {
 		m_isDragging = true;
 		g_controlPanel->BeginOrderDelivery(m_moveOrder);
-		
-		
+
 	}
 }
 
@@ -1433,8 +1352,7 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, BOO
 {
 	DPRINTF(k_DBG_INFO, ("Move Drop: %d,%d\n", pos.x, pos.y));
 	if(!m_gotClick) {
-		
-		
+
 		return;
 	}
 	m_gotClick = false;
@@ -1476,7 +1394,7 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, BOO
 
 
 
-		
+
 
 
 
@@ -1487,7 +1405,7 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, BOO
 }
 
 void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
-{	
+{
 	m_startDragPos = pos;
 
 	if(g_controlPanel->ExecuteTargetingModeClick(pos)) {
@@ -1496,10 +1414,9 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 	}
 
 	if(!m_isDragging && !GetIsPathing()) {
-		
-		
+
 		if(m_select_pos[GetVisiblePlayer()] != pos) {
-			
+
 			DeselectClick(pos, data, doubleClick);
 		}
 		return;
@@ -1508,12 +1425,11 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 	if(GetIsPathing()) {
 		MapPoint army_pos;
 		sint32 player = GetVisiblePlayer();
-		
+
 		g_controlPanel->ClearTargetingMode();
 
-		
 		m_selected_army[player].GetPos(army_pos);
-		
+
 		m_is_pathing = FALSE;
 
 		if(army_pos != pos) {
@@ -1522,8 +1438,7 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 				(unit->GetDBRec()->GetCanCarry()) &&
 				(unit->GetNumCarried() > 0)) {
 
-				
-				
+
 				if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
 					(g_theWorld->IsLand(pos))) {
 					SlicObject *so = new SlicObject("14IAAutoUnload");
@@ -1562,11 +1477,10 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 		if(click)
 			return m_select_state[visiblePlayer];
 
-		
-		
+
 		switch(m_select_state[visiblePlayer]) {
 			case SELECT_TYPE_LOCAL_CITY:
-				
+
 				if(cell->GetNumUnits() > 0) {
 					if(GetTopUnit(pos, top)) {
 						if(top.GetOwner() == visiblePlayer) {
@@ -1576,18 +1490,16 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 						}
 					}
 				}
-				
-				
+
 				break;
 			case SELECT_TYPE_LOCAL_ARMY:
 				if(hasUnitOrCity && top.IsCity()) {
-					if(top.GetOwner() == visiblePlayer) {						
+					if(top.GetOwner() == visiblePlayer) {
 						return SELECT_TYPE_LOCAL_CITY;
 					} else {
 						return SELECT_TYPE_REMOTE_CITY;
 					}
-				
-				
+
 				} else if(hasUnitOrCity) {
 					if(top.GetOwner() == visiblePlayer)
 						return SELECT_TYPE_LOCAL_ARMY;
@@ -1611,8 +1523,7 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 							return SELECT_TYPE_REMOTE_ARMY;
 						}
 					}
-				
-				
+
 				}
 				return SELECT_TYPE_NONE;
 				break;
@@ -1621,9 +1532,8 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 		}
 	}
 
-	
 	if (GetTopUnitOrCity(pos, top)) {
-		
+
 		if (top.IsCity()) {
 			if (top.GetOwner() == visiblePlayer) {
 				if(g_theWorld->GetCell(pos)->GetNumUnits() > 0) {
@@ -1640,19 +1550,16 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 			}
 		} else {
 			if (top.GetOwner() == visiblePlayer) {
-				
+
 				return SELECT_TYPE_LOCAL_ARMY;
 			} else {
 				return SELECT_TYPE_REMOTE_ARMY;
 			}
 		}
 	} else {
-		
-		
-		
+
+
 	}
 
-	
 	return SELECT_TYPE_NONE;
 }
-

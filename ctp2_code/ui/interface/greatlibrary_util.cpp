@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -23,11 +23,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Made the interpretation text size a parameter to support the German 
+// - Made the interpretation text size a parameter to support the German
 //   version.
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "greatlibrary.h"
@@ -41,7 +40,7 @@
 //
 // Description: Load and interpret a library string.
 //
-// Parameters : filename            : (case insensitive) library string name 
+// Parameters : filename            : (case insensitive) library string name
 //              so                  : context to look up values of variables
 //                                    during interpretation
 //
@@ -56,17 +55,17 @@
 const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 {
 	char *text;
-	
+
 	char * lower_case_filename = new char[strlen(filename)+1];
 	strcpy(lower_case_filename, filename);
-	
+
 	for (int j = 0; (unsigned) j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
-	
+
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 	delete [] lower_case_filename;
 
-	if (text) 
+	if (text)
 	{
 		static MBCHAR interpreted[k_MAX_GL_ENTRY];
 		stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);

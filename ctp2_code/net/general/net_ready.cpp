@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Readiness.h"
 #include "net_ready.h"
@@ -34,7 +24,7 @@ void NetReadiness::Packetize(uint8 *buf, uint16 &size)
 	PUSHDOUBLE(m_data->m_cost);
 	PUSHBYTE(m_data->m_ignore_unsupport);
 	PUSHDOUBLE(m_data->m_percent_last_turn);
-	
+
 }
 
 void NetReadiness::Unpacketize(uint16 id, uint8 *buf, uint16 size)
@@ -43,7 +33,6 @@ void NetReadiness::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	sint32 pos = 2;
 
-	
 	uint8 owner;
 	PULLBYTE(owner);
 

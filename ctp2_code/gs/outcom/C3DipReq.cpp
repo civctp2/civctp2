@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "C3DipReq.h"
 #include "civarchive.h"
@@ -7,7 +5,6 @@
 
 #include "player.h"
 extern Player **g_player;
-
 
 C3DiplomaticRequest::C3DiplomaticRequest(const DiplomaticRequest &request,
 										 const Message &message)
@@ -41,7 +38,6 @@ void C3DiplomaticRequest::Serialize(CivArchive &archive)
 	}
 }
 
-
 STDMETHODIMP C3DiplomaticRequest::QueryInterface(REFIID riid, void **obj)
 {
 	*obj = NULL;
@@ -69,7 +65,6 @@ STDMETHODIMP_(ULONG) C3DiplomaticRequest::Release()
 	delete this;
 	return 0;
 }
-
 
 STDMETHODIMP_(PLAYER_INDEX)        C3DiplomaticRequest::GetOwner()
 {
@@ -145,7 +140,6 @@ STDMETHODIMP_(sint32)              C3DiplomaticRequest::GetGold()
 	return m_request.GetGold().GetLevel();
 }
 
-
 STDMETHODIMP_(void) C3DiplomaticRequest::Reject()
 {
 	if(m_message != Message(0)) {
@@ -170,5 +164,3 @@ STDMETHODIMP_(sint32) C3DiplomaticRequest::GetTone()
 {
 	return m_request.GetTone();
 }
-
-

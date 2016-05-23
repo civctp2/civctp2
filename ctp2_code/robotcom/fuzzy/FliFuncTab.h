@@ -1,10 +1,9 @@
-
 #pragma once
 
 #ifndef __FLI_FUNC_TAB_H__
 #define __FLI_FUNC_TAB_H__
 
-#define COM_INTERFACE 
+#define COM_INTERFACE
 
 #include "StringHash.h"
 #include "FliSetFunc.h"
@@ -12,14 +11,12 @@
 class FliFuncTab : public StringHash<FliSetFunc>
 {
 private:
-	
+
 	sint32 m_arraySize;
 	sint32 m_numEntries;
-	
 
-	
+
 	FliSetFunc **m_array;
-	
 
 public:
 	FliFuncTab(sint32 initsize);
@@ -31,4 +28,3 @@ public:
 	FliSetFunc *Get(sint32 index) const;
 };
 #endif
-

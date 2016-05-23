@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,7 +24,6 @@
 // - Event handlers declared in a notation that is more standard C++.
 //
 //----------------------------------------------------------------------------
-
 
 #ifndef CTP2_MENUBUTTON_H__
 #define CTP2_MENUBUTTON_H__
@@ -42,7 +41,6 @@ class ctp2_MenuButton : public c3_Button
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL );
 
-	
 	virtual ~ctp2_MenuButton();
 	virtual BOOL IsThisA(uint32 classId)
 	{
@@ -57,10 +55,9 @@ class ctp2_MenuButton : public c3_Button
 
 	ctp2_Menu *GetMenu() { return m_menu; }
 
-
   protected:
 	ctp2_MenuButton() : c3_Button() {}
-	
+
 	virtual void	MouseLGrabInside	(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway		(aui_MouseEvent * mouseData);
 

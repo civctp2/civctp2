@@ -32,7 +32,6 @@
 #ifndef __AUI_KEYBOARD_H__
 #define __AUI_KEYBOARD_H__
 
-
 #include "aui_base.h"
 #include "aui_input.h"
 
@@ -66,7 +65,7 @@ enum AUI_KEYBOARD_KEY
 	AUI_KEYBOARD_KEY_RIGHTARROW,
 	AUI_KEYBOARD_KEY_LAST
 };
-#endif 
+#endif
 
 const uint32 AUI_KEYBOARD_MOD_LSHIFT = 1;
 const uint32 AUI_KEYBOARD_MOD_RSHIFT = 2;
@@ -78,14 +77,12 @@ const uint32 AUI_KEYBOARD_MOD_LWIN = 64;
 const uint32 AUI_KEYBOARD_MOD_RWIN = 128;
 const uint32 AUI_KEYBOARD_MOD_WINMENU = 256;
 
-
 struct aui_KeyboardEvent
 {
-	uint32	key;	
-	BOOL	down;	
-	uint32	time;	
+	uint32	key;
+	BOOL	down;
+	uint32	time;
 };
-
 
 
 #define k_KEYBOARD_MAXINPUT		24
@@ -93,11 +90,10 @@ struct aui_KeyboardEvent
 #define k_KEYBOARD_MAXSTATE		256
 
 
-
 class aui_Keyboard : public aui_Base, public virtual aui_Input
 {
 public:
-	
+
 	aui_Keyboard(
 		AUI_ERRCODE *retval );
 	virtual ~aui_Keyboard();
@@ -107,15 +103,14 @@ protected:
 	AUI_ERRCODE	InitCommon( void );
 
 public:
-	
+
 	AUI_ERRCODE			GetKeyboardState( uint8 *keyboardState );
 	aui_KeyboardEvent	*GetLatestKeyboardEvent( void ) { return &m_data; }
 
 protected:
-	aui_KeyboardEvent m_data;	
+	aui_KeyboardEvent m_data;
 	uint8 m_keyboardState[ k_KEYBOARD_MAXSTATE ];
-		
+
 };
 
-
-#endif 
+#endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_surface.h"
@@ -53,7 +52,7 @@
 
 #include "ctp2_button.h"
 
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 #include "initialplaywindow.h"
 
 extern StringDB						*g_theStringDB;
@@ -76,10 +75,10 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		m_mp(NULL),
 		m_quit(NULL),
 		// Code for new buttons taken from spwindow.cpp and altered
-		m_tutorial(NULL), 
-		m_newgame(NULL), 
+		m_tutorial(NULL),
+		m_newgame(NULL),
 		m_loadgame(NULL),
-		m_options(NULL), 
+		m_options(NULL),
 		m_load(NULL),
 		m_continue(NULL),
 		m_instant(NULL),
@@ -89,9 +88,8 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 	ctp2_Static *testBox=new ctp2_Static(retval, aui_UniqueId(),"InitPlayWindow.TestTextBox");
 
 
-	
  	m_spriteTest = spNew_ctp2_Button(retval,
-		   							ldlBlock, 
+		   							ldlBlock,
 		   							"SpriteTestButton",
 		   							"Sprite Test",
 		   							spritetest_spPress,
@@ -101,27 +99,24 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 #endif
 
 
-	
 	m_email	= spNew_ctp2_Button(retval,
-								ldlBlock, 
+								ldlBlock,
 								"EmailButton",
 								"Email",
 								initialplayscreen_emailPress,
 								"CTP2_BUTTON_TEXT_LEFT_LARGE");
-	
-	
-	
+
+
 	m_hotseat = spNew_ctp2_Button(retval,
-								  ldlBlock, 
+								  ldlBlock,
 								  "HotseatButton",
 								  "Hotseat",
 								  initialplayscreen_hotseatPress,
 								  "CTP2_BUTTON_TEXT_LEFT_LARGE");
-   
-	
-	
+
+
 	m_mp = spNew_ctp2_Button(retval,
-							 ldlBlock, 
+							 ldlBlock,
 							 "MPButton",
 							 "Multiplayer",
 							 initialplayscreen_mpPress,
@@ -155,7 +150,7 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 								   ldlBlock,
 								   "LoadGameButton",
 								   initialplayscreen_loadgamePress);
-	
+
 	m_tutorial = spNew_ctp2_Button(retval,
 								   ldlBlock,
 								   "TutorialButton",
@@ -165,10 +160,9 @@ InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 								  ldlBlock,
 								  "OptionsButton",
 								  initialplayscreen_optionsPress);
-	
+
 	m_background = spNew_c3_Static(retval,ldlBlock,"Background");
 }
-
 
 InitPlayWindow::~InitPlayWindow()
 {
@@ -191,4 +185,3 @@ InitPlayWindow::~InitPlayWindow()
 	mycleanup(m_background);
 #undef mycleanup
 }
-

@@ -4,23 +4,19 @@
 #ifndef __TEXTBOX_H__
 #define __TEXTBOX_H__
 
-
 #include "aui_textbox.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
 
-
-#define k_TEXTBOX_MAXTEXT		256		
-#define k_TEXTBOX_MAXITEMS		200		
-#define k_TEXTBOX_LDL_TEXTSIZE	"textsize"	
-
+#define k_TEXTBOX_MAXTEXT		256
+#define k_TEXTBOX_MAXITEMS		200
+#define k_TEXTBOX_LDL_TEXTSIZE	"textsize"
 
 class TextBox : public aui_TextBox, public PatternBase
 {
 public:
-	
+
 	TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -58,5 +54,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

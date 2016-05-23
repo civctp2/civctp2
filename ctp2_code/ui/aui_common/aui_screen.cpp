@@ -35,7 +35,6 @@
 #include "aui_screen.h"
 
 
-
 aui_Screen::aui_Screen(
 	AUI_ERRCODE *retval,
 	uint32 id )
@@ -44,7 +43,6 @@ aui_Screen::aui_Screen(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE aui_Screen::InitCommon( uint32 id )
@@ -62,7 +60,6 @@ AUI_ERRCODE aui_Screen::InitCommon( uint32 id )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Screen::~aui_Screen()
@@ -83,7 +80,6 @@ aui_Screen::~aui_Screen()
 }
 
 
-
 AUI_ERRCODE aui_Screen::Show( void )
 {
 	ListPos position = m_windowList->GetHeadPosition();
@@ -100,7 +96,6 @@ AUI_ERRCODE aui_Screen::Show( void )
 }
 
 
-
 AUI_ERRCODE aui_Screen::Hide( void )
 {
 	ListPos position = m_windowList->GetHeadPosition();
@@ -111,7 +106,6 @@ AUI_ERRCODE aui_Screen::Hide( void )
 		g_ui->RemoveWindow( window->Id() );
 	}
 
-	
 	for ( i = m_tempWindowList->L(); i; i-- )
 	{
 		aui_Window *window = m_tempWindowList->RemoveTail();
@@ -124,13 +118,11 @@ AUI_ERRCODE aui_Screen::Hide( void )
 }
 
 
-
 AUI_ERRCODE aui_Screen::AddWindow( aui_Window *window, BOOL temp )
 {
 	Assert( window != NULL );
 	if ( !window ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if ( !GetWindow( window->Id() ) )
 	{
 		if ( temp )
@@ -139,13 +131,11 @@ AUI_ERRCODE aui_Screen::AddWindow( aui_Window *window, BOOL temp )
 			m_windowList->AddTail( window );
 	}
 
-	
 	if ( m_showing && !g_ui->GetWindow( window->Id() ) )
 		g_ui->AddWindow( window );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
@@ -158,7 +148,7 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 		aui_Window *window = m_windowList->GetNext( position );
 		if ( window->Id() == windowId )
 		{
-			
+
 			m_windowList->DeleteAt( prevPos );
 			g_ui->RemoveWindow( windowId );
 			break;
@@ -172,7 +162,7 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 		aui_Window *window = m_tempWindowList->GetNext( position );
 		if ( window->Id() == windowId )
 		{
-			
+
 			m_tempWindowList->DeleteAt( prevPos );
 			g_ui->RemoveWindow( windowId );
 			break;
@@ -181,7 +171,6 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Window *aui_Screen::GetWindow( uint32 windowId )

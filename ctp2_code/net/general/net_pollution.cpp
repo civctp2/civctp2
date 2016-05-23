@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_pollution.h"
 #include "network.h"
@@ -39,7 +37,5 @@ void NetPollution::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 	PULLLONG(g_thePollution->m_phase);
 
-
 	Assert(pos == size);
 }
-

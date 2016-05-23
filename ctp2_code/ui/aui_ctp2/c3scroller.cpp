@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -29,9 +16,7 @@
 
 #include "c3scroller.h"
 
-
 extern C3UI *g_c3ui;
-
 
 
 C3Scroller::C3Scroller(
@@ -73,7 +58,6 @@ C3Scroller::C3Scroller(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 C3Scroller::C3Scroller(
@@ -122,27 +106,22 @@ C3Scroller::C3Scroller(
 }
 
 
-
 AUI_ERRCODE C3Scroller::InitCommon( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	InitCommon( block->GetBool( "vertical" ) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE C3Scroller::InitCommon( BOOL isVertical )
@@ -154,7 +133,6 @@ AUI_ERRCODE C3Scroller::InitCommon( BOOL isVertical )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE C3Scroller::CreateButtonsAndThumb( void )
@@ -180,28 +158,24 @@ AUI_ERRCODE C3Scroller::CreateButtonsAndThumb( void )
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "<", RangerButtonActionCallback, this );
 	}
 
-	
 	AddChild( m_thumb );
 	AddChild( button1 );
 	AddChild( button2 );
 
-	
 	RepositionButtons();
 
-	
 	RepositionThumb( FALSE );
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE C3Scroller::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -210,7 +184,6 @@ AUI_ERRCODE C3Scroller::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
 
 
@@ -227,7 +200,7 @@ AUI_ERRCODE C3Scroller::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-		
+
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 

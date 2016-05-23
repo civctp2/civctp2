@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #define DPRINT(s) printf s
 #else
-#define DPRINT(s) 
+#define DPRINT(s)
 #endif
 
 /* Undefine this to turn on simple but blocking strawman version of code. */
@@ -83,7 +83,7 @@ serio_res_t serio_open_handle(serio_t *serio, HANDLE h)
 		DPRINT(("serio_open: CreateEvent failed\n"));
 		return serio_RES_BUG;
 	}
-	
+
 	serio_ASSERT(serio);
 	return serio_RES_OK;
 }
@@ -91,7 +91,7 @@ serio_res_t serio_open_handle(serio_t *serio, HANDLE h)
 /*-------------------------------------------------------------------------
  Return the Win32 handle used to access the comm port.
 -------------------------------------------------------------------------*/
-HANDLE serio_get_handle(serio_t *serio) 
+HANDLE serio_get_handle(serio_t *serio)
 {
 	return serio->port;
 }
@@ -117,25 +117,25 @@ serio_res_t serio_open(serio_t *serio, long baud, const char *portname)
 
 	/* Let child processes inherit this handle. */
 	memset(&SecurityAttributes, 0, sizeof(SECURITY_ATTRIBUTES));
-	SecurityAttributes.nLength =				sizeof( SECURITY_ATTRIBUTES ); 
-	SecurityAttributes.lpSecurityDescriptor =	NULL; 
+	SecurityAttributes.nLength =				sizeof( SECURITY_ATTRIBUTES );
+	SecurityAttributes.lpSecurityDescriptor =	NULL;
 	SecurityAttributes.bInheritHandle =			TRUE;
 
 	h = CreateFile(portname, GENERIC_READ | GENERIC_WRITE,
 		0,                    // exclusive access
 		&SecurityAttributes,
 		OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL 
+		FILE_ATTRIBUTE_NORMAL
 #ifdef USE_OVERLAP
 		| FILE_FLAG_OVERLAPPED // overlapped I/O
 #endif
 		, NULL);
-	
+
 	if (INVALID_HANDLE_VALUE == h) {
 		DPRINT(("serio_open: CreateFile(%s...) failed\n", portname));
 		return serio_RES_BAD;
 	}
-	
+
 	// Set the size of the input and output buffer.
 	if (!SetupComm( h, 4096, 0 )) {
 		DPRINT(("serio_open: SetupComm failed\n"));
@@ -177,7 +177,7 @@ serio_res_t serio_open(serio_t *serio, long baud, const char *portname)
 		DPRINT(("serio_open: SetCommTimeouts failed\n"));
 		return serio_RES_BUG;
 	}
-	
+
 	dcb.DCBlength = sizeof( DCB ) ;
 
 	if (!GetCommState( h, &dcb)) {
@@ -219,7 +219,7 @@ serio_res_t serio_close(serio_t *serio)
 
 #ifdef USE_OVERLAP
 /*-------------------------------------------------------------------------
- Handle any system calls that need to be made, 
+ Handle any system calls that need to be made,
  or check up on any that are already in progress.
 -------------------------------------------------------------------------*/
 serio_res_t serio_poll(serio_t *serio)
@@ -248,7 +248,7 @@ serio_res_t serio_poll(serio_t *serio)
 			}
 		}
 	}
-		
+
 	if (!serio->tx.pending) {
 		DPRINT(("%d serio_poll: tx completed; head %d =? tail %d\n", clock(), serio->tx.head, serio->tx.tail));
 		/* check to see if there are bytes we can write */
@@ -256,7 +256,7 @@ serio_res_t serio_poll(serio_t *serio)
 			/* Calculate number of bytes to write; don't wrap. */
 			len = serio->tx.tail - serio->tx.head;
 			if (len < 0)
-				len = serio_BUFSIZE - serio->tx.head; 
+				len = serio_BUFSIZE - serio->tx.head;
 			assert(len > 0);
 			DPRINT(("%d serio_poll: WriteFile(%d bytes)\n", clock(), len));
 			if (WriteFile(serio->port, serio->tx.buf+serio->tx.head, len, &cbTransfer, &serio->tx.overlap)) {
@@ -297,12 +297,12 @@ serio_res_t serio_poll(serio_t *serio)
 			}
 		}
 	}
-		
+
 	/* If no read is in progress, and there's room in the queue, start a read.
 	 */
 	if (!serio->rx.pending) {
 		/* Calculate free space from tail on without wrapping */
-		if (serio->rx.tail < serio->rx.head) 
+		if (serio->rx.tail < serio->rx.head)
 			len = serio->rx.head - serio->rx.tail - 1;
 		else if (serio->rx.tail)
 			len = serio_BUFSIZE - serio->rx.tail;
@@ -374,7 +374,7 @@ serio_res_t serio_write(serio_t *serio, void *buf, size_t len)
 	/* copy the request into the queue */
 	/* handle the part before the wrap */
 	n_copy = len;
-	if (n_copy >= (size_t)(serio_BUFSIZE - serio->tx.tail)) 
+	if (n_copy >= (size_t)(serio_BUFSIZE - serio->tx.tail))
 		n_copy = serio_BUFSIZE - serio->tx.tail;
 	memcpy(serio->tx.buf + serio->tx.tail, buf, n_copy);
 	old_tail = serio->tx.tail;
@@ -444,10 +444,10 @@ serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received
 	/* handle the part before the wrap */
 	n_copy = len;
 	n = serio_BUFSIZE - serio->rx.head;
-	if (n_copy >= (size_t)n) 
+	if (n_copy >= (size_t)n)
 		n_copy = n;
 	n = serio->rx.tail - serio->rx.head;
-	if ((n > 0) && ((int)n_copy > n)) 
+	if ((n > 0) && ((int)n_copy > n))
 		n_copy = (size_t)n;
 	memcpy(buf, serio->rx.buf + serio->rx.head, n_copy);
 	old_head = serio->rx.head;
@@ -460,7 +460,7 @@ serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received
 	/* handle the part after the wrap */
 	if ((len > 0) && (serio->rx.tail < serio->rx.head)) {
 		assert(serio->rx.tail < serio->rx.head);
-		if (len > (size_t)serio->rx.tail) 
+		if (len > (size_t)serio->rx.tail)
 			len = (size_t)serio->rx.tail;
 		memcpy(buf, serio->rx.buf + serio->rx.head, len);
 		serio->rx.head += len;
@@ -476,10 +476,10 @@ serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received
 }
 
 /*-------------------------------------------------------------------------
- Purge input buffer.  Any characters received by the serial port are 
+ Purge input buffer.  Any characters received by the serial port are
  thrown away.
 -------------------------------------------------------------------------*/
-serio_res_t serio_purge_read(serio_t *serio) 
+serio_res_t serio_purge_read(serio_t *serio)
 {
 	PurgeComm(serio->port, PURGE_RXABORT | PURGE_RXCLEAR);
 #ifdef USE_OVERLAP
@@ -490,10 +490,10 @@ serio_res_t serio_purge_read(serio_t *serio)
 }
 
 /*-------------------------------------------------------------------------
- Purge output buffer.  Any characters not yet sent by the serial port are 
+ Purge output buffer.  Any characters not yet sent by the serial port are
  thrown away.
 -------------------------------------------------------------------------*/
-serio_res_t serio_purge_write(serio_t *serio) 
+serio_res_t serio_purge_write(serio_t *serio)
 {
 	PurgeComm(serio->port, PURGE_TXABORT | PURGE_TXCLEAR);
 #ifdef USE_OVERLAP

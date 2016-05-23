@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added two new functions for better slic error 
-//   messages and for access on the number of entries 
+// - Added two new functions for better slic error
+//   messages and for access on the number of entries
 //   in a database, addion by Martin Gühmann.
 // - Added database array access. (Sep 16th 2005 Martin Gühmann)
 //

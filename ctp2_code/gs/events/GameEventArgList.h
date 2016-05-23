@@ -44,7 +44,7 @@ public:
 
 	BOOL GetPath(sint32 index, Path *&path);
 	BOOL GetDirection(sint32 index, WORLD_DIRECTION &d);
-	
+
 	BOOL GetAdvance(sint32 index, sint32 &a);
 	BOOL GetWonder(sint32 index, sint32 &w);
 
@@ -55,5 +55,5 @@ private:
 
 	PointerList<GameEventArgument> *m_argLists[GEA_End];
 };
-	
+
 #endif

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __TESTWINDOW_H__
 #define __TESTWINDOW_H__
 
@@ -18,7 +7,6 @@ class IconButton;
 
 class Button1Action;
 class Button2Action;
-
 
 class UITestWindow : public C3Window
 {
@@ -52,6 +40,4 @@ protected:
 	Button2Action			*m_button2Action;
 };
 
-
-#endif 
-
+#endif

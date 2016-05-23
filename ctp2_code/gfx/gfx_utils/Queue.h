@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -60,12 +60,12 @@ template <class T> class Queue;
 //----------------------------------------------------------------------------
 
 /// FIFO queue, implemented as circular buffer
-template <class T> class Queue 
+template <class T> class Queue
 {
-public: 
+public:
     Queue(size_t a_Size = 0);
     Queue(Queue<T> const & a_Original);
-    virtual ~Queue(); 
+    virtual ~Queue();
 
     Queue<T> & operator = (Queue<T> const & a_Original);
 
@@ -78,17 +78,17 @@ public:
 /// Peek ahead to an object in the queue
 /// \return     The object at the read index
 /// \remarks    The returned object may be completely bogus
-    T	 LookAtNextDeQueue(void) 
-    { 
-        return m_queue[m_queueTail]; 
-    }; 
+    T	 LookAtNextDeQueue(void)
+    {
+        return m_queue[m_queueTail];
+    };
 
 /// Peek back to an object in the queue
 /// \return     The object before the write index
 /// \remarks    The returned object is most likely completely bogus
-    T	 LookAtLastDeQueue(void) 
-    { 
-        return m_queue[(m_queueHead > 0) ? m_queueHead - 1 : m_queueSize - 1]; 
+    T	 LookAtLastDeQueue(void)
+    {
+        return m_queue[(m_queueHead > 0) ? m_queueHead - 1 : m_queueSize - 1];
     };
 
 /// Get the number of items in the queue
@@ -100,14 +100,14 @@ public:
     bool GetQueueItem(size_t index, T & item) const;
 
 private:
-    /// Allocated size of m_queue 
+    /// Allocated size of m_queue
     size_t      m_queueSize;
     /// Item queue
-    T *         m_queue;		
+    T *         m_queue;
     /// Write index
-    size_t      m_queueHead;	
+    size_t      m_queueHead;
     /// Read index
-    size_t      m_queueTail;	
+    size_t      m_queueTail;
     /// Number of stored items in the queue
     size_t      m_numItems;
 };
@@ -121,28 +121,28 @@ template <class T> Queue<T>::Queue(size_t a_Size)
 :
     m_queueSize   (a_Size + 1), // 1 extra for overflow detection
     m_queue       (NULL),
-    m_queueHead   (0),	
-    m_queueTail   (0),	
+    m_queueHead   (0),
+    m_queueTail   (0),
     m_numItems    (0)
-{ 
+{
     m_queue = new T[m_queueSize];
-} 
+}
 
 template <class T> Queue<T>::Queue(Queue<T> const & a_Original)
 :
     m_queueSize   (a_Original.m_queueSize),
     m_queue       (NULL),
-    m_queueHead   (a_Original.m_queueHead),	
-    m_queueTail   (a_Original.m_queueTail),	
+    m_queueHead   (a_Original.m_queueHead),
+    m_queueTail   (a_Original.m_queueTail),
     m_numItems    (a_Original.m_numItems)
-{ 
+{
     m_queue = new T[m_queueSize];
     std::copy(a_Original.m_queue, a_Original.m_queue + m_queueSize, m_queue);
-} 
+}
 
 template <class T> Queue<T>::~Queue()
 {
-    delete [] m_queue;    
+    delete [] m_queue;
 }
 
 template <class T> Queue<T> & Queue<T>::operator = (Queue<T> const & a_Original)
@@ -189,7 +189,7 @@ template <class T> bool Queue<T>::Enqueue(T const & object)
 {
     size_t  nextPosition = (m_queueHead + 1) % m_queueSize;
     Assert(nextPosition != m_queueTail);
-    if (nextPosition == m_queueTail) 
+    if (nextPosition == m_queueTail)
     {
         return false;   // The queue is full
     }
@@ -207,10 +207,10 @@ template <class T> bool Queue<T>::Enqueue(T const & object)
 template <class T> bool Queue<T>::Dequeue(T & object)
 {
     Assert(m_queueTail != m_queueHead);
-    if (m_queueTail == m_queueHead) 
+    if (m_queueTail == m_queueHead)
     {
         return false; // The queue is empty
-    } 
+    }
 
     object      = m_queue[m_queueTail];
     m_queueTail = (m_queueTail + 1) % m_queueSize;

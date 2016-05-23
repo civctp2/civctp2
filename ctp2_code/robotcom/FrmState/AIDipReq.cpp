@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "globals.h"
 #include "ic3Science.h"
@@ -62,7 +61,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 		REG("he_attacks_enemy");
 		REG("i_gain_advance");
 		REG("i_gain_gold");
-		REG("i_gain_map");	
+		REG("i_gain_map");
 		REG("i_gain_advance");
 		REG("he_stops_trade_with_third_party");
 		REG("third_party_relative_strength");
@@ -70,7 +69,6 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 		REG("his_third_party_relative_strength");
 	}
 
-	
 	fz_contact_gained = 0;
 	fz_gold_gained = 0;
 	fz_reduces_incursions = 0;
@@ -82,7 +80,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 	fz_last_got_map = 0;
 	fz_third_party_strength = 0;
 	fz_third_party_regard = 0;
-	fz_at_war_with_third_party = 0; 
+	fz_at_war_with_third_party = 0;
 	fz_his_trade_with_third_party = 0;
 	fz_he_gains_advance = 0;
 	fz_his_route_threat = 0;
@@ -111,9 +109,8 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 	fz_his_third_party_relative_strength = 0;
 
 	int rand;
-	
-	
-	
+
+
 	m_isvalid = FALSE;
 
 	double regard =	foreigner->GetDiplomaticRegard();
@@ -125,8 +122,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				m_isvalid = TRUE;
 			}
 			break;
-			
-		
+
 		case REQUEST_TYPE_DEMAND_ADVANCE:
 		{
 			if(ai->m_player->HasEmbassyWith(foreigner->GetPlayerIndex())) {
@@ -162,15 +158,15 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				}
 
 				delete [] canaskfor;
-                canaskfor = NULL; 
+                canaskfor = NULL;
 			}
 			break;
 
 		}
-			
+
 		case REQUEST_TYPE_DEMAND_CITY:
 		{
-			break; 
+			break;
 			BSet<ForeignCity> *vc = NULL;
 			BSetID c_id;
 			ForeignCity *his_city = NULL;
@@ -178,14 +174,13 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 			BSetID max_city;
 
 
-			
 			vc = foreigner->GetKnownCities();
 			for(his_city = vc->First(c_id); vc->Last(); his_city = vc->Next(c_id)) {
-				
+
 				MapPointData pos;
 				his_city->GetPos(pos);
-			
-				sint16 target_value = sint16(his_city->GetPopulation(ai)); 
+
+				sint16 target_value = sint16(his_city->GetPopulation(ai));
 				if(target_value >= max_value) {
 					max_value = target_value;
 					max_city = c_id;
@@ -210,21 +205,20 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 		case REQUEST_TYPE_DEMAND_GOLD:
 		{
 			double gold;
-			rand = (ai->m_rand->Next(100))+50; 
-			gold = double(foreigner->GetEstimatedGold() / 4); 
+			rand = (ai->m_rand->Next(100))+50;
+			gold = double(foreigner->GetEstimatedGold() / 4);
 			if(gold < 100)
 			{
 				gold = 100;
 			}
-			gold = double(gold / double(rand)); 
-			gold = gold * 100; 
-			
+			gold = double(gold / double(rand));
+			gold = gold * 100;
+
 			if(gold > 10000) gold = 10000;
 			if(ai->m_gold->GetCurrentSavings() == 0) {
 				fz_gold_gained = 100;
 			} else {
-				
-				
+
 				fz_gold_gained = (double(m_gold) / double(ai->m_gold->GetCurrentSavings())) * 100.0;
 			}
 			if(gold > 25) {
@@ -237,8 +231,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 		case REQUEST_TYPE_DEMAND_STOP_TRADE:
 		case REQUEST_TYPE_DEMAND_ATTACK_ENEMY:
 		{
-			
-			
+
 			PLAYER_INDEX third;
 			double minRegard = 100;
 			sint32 minThird = -1;
@@ -251,13 +244,12 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				   !ai->m_foreigner[third]->HaveContact()) {
 					continue;
 				}
-				
-				
+
 				if((ai->m_foreigner[third]->GetDiplomaticRegard() < minRegard )
-						&& 
+						&&
 					(ai->m_player->GetWar(
-						ai->my_player_index, 
-						foreigner->GetPlayerIndex(), 
+						ai->my_player_index,
+						foreigner->GetPlayerIndex(),
 						ai->m_foreigner[third]->GetPlayerIndex())
 					))
 				{
@@ -270,7 +262,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				m_isvalid = TRUE;
 				fz_third_party_strength = ai->GetStrength(m_thirdParty);
 				fz_third_party_regard = minRegard;
-				fz_at_war_with_third_party = 
+				fz_at_war_with_third_party =
 						ai->m_foreigner[m_thirdParty]->UpdateWar(ai, ai->my_player_index);
 
 				double hs;
@@ -307,14 +299,13 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				m_isvalid = TRUE;
 			break;
 		case REQUEST_TYPE_DEMAND_NO_PIRACY:
-			
+
 			fz_his_route_threat = foreigner->GetTradeThreat();
 			fz_he_will_stop_piracy = 1;
 			fz_my_num_trade_routes = ai->m_player->GetNumTradeRoutes();
 			m_isvalid = TRUE;
 			break;
 
-		
 		case REQUEST_TYPE_OFFER_ADVANCE:
 		{
 			if(ai->m_player->HasEmbassyWith(foreigner->GetPlayerIndex())) {
@@ -331,8 +322,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 					if(!canoffer[i]) {
 						continue;
 					}
-					
-					
+
 					if(advancesSkipped[i] > bestskipped) {
 						best = i;
 						bestskipped = advancesSkipped[i];
@@ -348,15 +338,15 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 					m_isvalid = TRUE;
 				}
 				delete [] canoffer;
-                canoffer = NULL; 
+                canoffer = NULL;
 				delete advancesSkipped;
-                advancesSkipped = NULL; 
+                advancesSkipped = NULL;
 			}
 			break;
 		}
 		case REQUEST_TYPE_OFFER_CITY:
 		{
-			break; 
+			break;
 			BSetID id;
 			CityAgent *the_city;
 			CityAgent *the_nearest_city = NULL;
@@ -397,8 +387,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 			break;
 		case REQUEST_TYPE_OFFER_GOLD:
 		{
-			
-			
+
 			double gold = double(m_gold);
 			gold = ai->m_gold->GetCurrentSavings() / 10 ;
 			if(gold < 100)
@@ -415,10 +404,9 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 			if(regard <= 10) gold = 0;
 
 			if(gold > 10000) gold = 10000;
-			while (gold > ( ai->m_gold->GetCurrentSavings() / 2)) 
+			while (gold > ( ai->m_gold->GetCurrentSavings() / 2))
 				gold = gold - 100;
 
-			
 			if(gold >= 25) {
 				fz_he_gains_gold = gold;
 				m_isvalid = TRUE;
@@ -439,12 +427,11 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY:
 			break;
 		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION:
-			
+
 			m_isvalid = TRUE;
 			fz_end_pollution_pact = 1;
 			break;
 
-		
 		case REQUEST_TYPE_EXCHANGE_ADVANCE:
 		{
 			if(ai->m_player->HasEmbassyWith(foreigner->GetPlayerIndex())) {
@@ -456,7 +443,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				sint32 i;
 				sint32 best = -1;
 				sint32 bestskipped = 0;
-				
+
 				for(i = 0; i < numAdvances; i++) {
 					if(!canoffer[i]) {
 						continue;
@@ -471,19 +458,19 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				}
 				if(best >= 0) {
 					fz_he_gains_advance = 1;
-					fz_advances_skipped = bestskipped; 
+					fz_advances_skipped = bestskipped;
 					m_advance = best;
 					m_isvalid = TRUE;
 				}
 				delete [] canoffer;
-                canoffer = NULL; 
+                canoffer = NULL;
 				delete advancesSkipped;
-                advancesSkipped = NULL; 
+                advancesSkipped = NULL;
 
 				if(!m_isvalid)
 					break;
 				m_isvalid = FALSE;
-				
+
 				numAdvances = ai->m_science->GetNumAdvances();
 				uint8 *canaskfor = new uint8[numAdvances];
 				num = ai->m_science->GetCanAskFor(foreigner->GetPlayerIndex(), canaskfor);
@@ -492,11 +479,11 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				best = -1;
 				bestskipped = 0;
 				sint32 skipped;
-				
+
 				for(i = 0; i < numAdvances; i++) {
 					if(!canaskfor[i])
 						continue;
-					
+
 					skipped = ai->m_science->GetMinPrerequisites(i);
 					if(skipped > bestskipped) {
 						best = i;
@@ -506,7 +493,7 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 					if(checked >= num)
 						break;
 				}
-				
+
 				if(best >= 0) {
 					fz_advances_skipped = bestskipped;
 					fz_advance_cost = ai->m_science->GetCost(best);
@@ -516,12 +503,12 @@ void AIDiplomaticRequest::WeighOptions(AiMain *ai, Foreigner *foreigner, BOOL fi
 				}
 
 				delete [] canaskfor;
-                canaskfor = NULL; 
+                canaskfor = NULL;
 			}
 			break;
 		}
 		case REQUEST_TYPE_EXCHANGE_CITY:
-			break; 
+			break;
 		case REQUEST_TYPE_EXCHANGE_MAP:
 			fz_map_area_gained = 1;
 			fz_i_gain_map = 1;

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -47,17 +47,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  A game client wishing to connect creates two tables with dptab_createTable():
  1) MYSESSIONS, a table of sessions created by the client, and
  2) SESSIONS, a table of all sessions created by anybody, then
- connects to the server, 
+ connects to the server,
  calls dptab_addPublisher on SESSIONS to accept session data from the server,
  and sends the server a login packet (presumably using dpio_put_reliable();
  this is beyond the scope of this module).
 
  The server, in response to the login packet,
- 1) calls dptab_addSubscriber on SESSIONS to send it to the client, and 
+ 1) calls dptab_addSubscriber on SESSIONS to send it to the client, and
  2) calls dptab_addPublisher on MYSESSIONS to accept the client's MYSESSIONS
  data.
 
- The client then 
+ The client then
  calls dptab_addSubscriber on MYSESSIONS to send it to the now-listening server.
 
  This set of calls leaves us with a happy situation in which the client
@@ -66,13 +66,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  all the session records published by all the clients attached to it.
 
  The server, meanwhile, could register a callback on its MYSESSIONS table
- with dptab_setTableCallback(); the callback could calls dptab_set() to copy 
- all the variables that arrive in MYSESSIONS right back to the SESSIONS table.  
+ with dptab_setTableCallback(); the callback could calls dptab_set() to copy
+ all the variables that arrive in MYSESSIONS right back to the SESSIONS table.
 
  Or the server might itself connect to a master game server which
- behaves just like a normal server but tells dptab_addPublisher to mount 
+ behaves just like a normal server but tells dptab_addPublisher to mount
  the slave servers' MYSESSIONS tables on SESSIONS instead of MYSESSIONS.
- The SESSIONS table on the master server would then contain all the records 
+ The SESSIONS table on the master server would then contain all the records
  published in the MYSESSIONS tables of the clients connected to any server.
 
  Each table entry is tagged with the time it was created on this machine
@@ -83,14 +83,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ----------------------------------------------------------------------
 
  There are two levels of tables.
- Associative arrays (hkeytab_t's) are used at both levels. 
+ Associative arrays (hkeytab_t's) are used at both levels.
  Keys and subkeys are strings of arbitrary bytes; embedded zeroes are ok.
 
  The top level is the master table.  Each entry in the master table
  has a name and a pointer to an hkeytab_t.
  The master table is itself an hkeytab_t private to each machine.
  This means that each machine can have a different set of tables.
- The functions dptab_createTable(), dptab_deleteTable(), 
+ The functions dptab_createTable(), dptab_deleteTable(),
  dptab_getTable(), dptab_addPublisher(), and dptab_deletePublisher()
  take a key/keylen pair which is used as an index into the master table.
 
@@ -109,15 +109,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Tables can be "published" by calling dptab_addSubscription() on them
  once for each subscriber.  The subscriber must at the same time
  call dptab_addPublisher() for the data from the publisher to be accepted
- and routed to a table.  This mounts a table from the remote machine 
+ and routed to a table.  This mounts a table from the remote machine
  onto a table on the
- local machine.  The mount can be plain or filtered.  
- In the case of dpsess, filtered mounts are useful for listing just 
+ local machine.  The mount can be plain or filtered.
+ In the case of dpsess, filtered mounts are useful for listing just
  the sessions with a particular session type, or just the sessions
  not published by a given game server.
- Remote updates for a table are ignored unless they are from a source 
+ Remote updates for a table are ignored unless they are from a source
  pair registered with dptab_addPublisher().
- 
+
  Table changes are handled by generic create, delete, and change functions.
  These functions, plus a send function, take a pointer to the hkeytab
  containing the element, the element's full id (both the id of the table
@@ -143,7 +143,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  themself.
 
  Pack/unpack routines may be provided by the user at table
- creation time to optimally compress (and byte-swap) items before/after 
+ creation time to optimally compress (and byte-swap) items before/after
  transmission; this is not yet supported.  It will probably be limited
  to small records, and is intended to allow user code to use
  inefficint structures in memory, but have them packed optimally
@@ -244,7 +244,7 @@ extern "C" {
 /* Maximum number of callbacks that can be registered on a table */
 #define dptab_MAX_CALLBACKS	2
 
-/* Function to notify the user code of a transfer in progress. 
+/* Function to notify the user code of a transfer in progress.
  * Each table can have its own callback function; still, a pointer to
  * the table is passed to the callback.
  * User code returns FALSE to cancel, TRUE to continue transfer.
@@ -259,7 +259,7 @@ struct dptab_s;
 struct dptab_table_s;
 typedef int (dp_FAR dp_PASCAL *dptab_status_cb)(struct dptab_s *dptab, struct dptab_table_s *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err);
 
-/* Function to pack a structure for transmission - or unpack it. 
+/* Function to pack a structure for transmission - or unpack it.
  * Returns number of bytes in result, or 0 for failure.
  */
 typedef size_t (*dptab_pack_fn)(const void *ibuf, size_t ibuflen, void *obuf, size_t obuflen);
@@ -268,7 +268,7 @@ typedef size_t (*dptab_pack_fn)(const void *ibuf, size_t ibuflen, void *obuf, si
  * Note: all types after this point are private to this module,  *
  * and are not to be referenced by user code                     *
  *---------------------------------------------------------------*/
- 
+
 /* Information about each variable.  Appended to end locally - never
  * transmitted.
  */
@@ -278,7 +278,7 @@ typedef struct {
 	clock_t arrived;	/* when it arrived here.  Used by dptab_delete_byAge */
 } dptab_varinfo_t;
 
-/* A type used to hold variable-sized variables.  
+/* A type used to hold variable-sized variables.
  * Fixed-size variables (i.e. if table->elsize != 0) are stored directly,
  * without this wrapper.
  */
@@ -358,7 +358,7 @@ typedef struct dptab_s {
 
 #ifdef dp_STATS
 	/* Statistics */
-	dp_stat_t stats[4];		/* dptab_STAT_RX_BYTES...dptab_STAT_TX_RECORDS*/ 
+	dp_stat_t stats[4];		/* dptab_STAT_RX_BYTES...dptab_STAT_TX_RECORDS*/
 #endif
 } dptab_t;
 
@@ -480,9 +480,9 @@ dptab_table_thaw(
  This is a kludge that allows us to misuse this system to
  broadcast small things periodically, e.g. session advertisements on a LAN.
 
- Note that if you want to shut down, but still want all the variables you 
+ Note that if you want to shut down, but still want all the variables you
  have set so far to propagate, you should loop,
- calling dptab_update(), dpio_update(), dpio_get(), and dpio_readyToFreeze() 
+ calling dptab_update(), dpio_update(), dpio_get(), and dpio_readyToFreeze()
  until the latter returns all clear.
 
  Returns dp_RES_EMPTY if no transfers waiting; dp_RES_OK if transfers
@@ -490,7 +490,6 @@ dptab_table_thaw(
 --------------------------------------------------------------------------*/
 
 DP_API dp_result_t dptab_update(dptab_t *dptab);
-
 
 /*********** Table Management ***********/
 
@@ -519,8 +518,8 @@ DP_API dp_result_t dptab_update(dptab_t *dptab);
 DP_API dp_result_t dptab_createTable(dptab_t *dptab, dptab_table_t **ptable, char *key, int keylen, size_t elsize, dptab_pack_fn pack, dptab_pack_fn unpack, dptab_status_cb cb, void *context);
 
 /*--------------------------------------------------------------------------
- Set (register) a table's callback function and callback context.  
- 
+ Set (register) a table's callback function and callback context.
+
  Context is used later as the context parameter of the callback function.
  It may be set to NULL if the callback doesn't need it.
 
@@ -535,8 +534,8 @@ DP_API dp_result_t dptab_createTable(dptab_t *dptab, dptab_table_t **ptable, cha
  called, all registered callbacks will be called three times:
  once with dp_RES_CHANGED (or dp_RES_CREATED), and twice with dp_RES_FINISHED.
 
- If a remote system sends us a variable to a table that is not republished, 
- all registered callbacks will be called once with dp_RES_CHANGED 
+ If a remote system sends us a variable to a table that is not republished,
+ all registered callbacks will be called once with dp_RES_CHANGED
  (or dp_RES_CREATED).
  If the table is republished to three other hosts, they will then also be
  called three times with dp_RES_FINISHED.
@@ -600,12 +599,11 @@ DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, int keylen);
 --------------------------------------------------------------------------*/
 #define dptab_size(dptab)  (dptab->tables->n_used)
 
-
 /*********** Subscription management ***********/
 
 /*--------------------------------------------------------------------------
  Add a subscriber for the given table.
- Initially, and upon any changes, items with hops>0 in the given 
+ Initially, and upon any changes, items with hops>0 in the given
  table are automatically sent to the destination, which places them
  in the corresponding table.
  Note: the subscriber must call dptab_addPublisher(), or he will ignore
@@ -640,7 +638,7 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
  For use e.g. when shutting off remote player or session deltas.
  If you expect multiple subscriptions, call this until it returns
  dp_RES_EMPTY.
- Returns a pointer to the table the subscription dumped into locally.   
+ Returns a pointer to the table the subscription dumped into locally.
 --------------------------------------------------------------------------*/
 dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerHdl_t h, dptab_table_t **ptable);
 
@@ -657,7 +655,7 @@ dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerH
 DP_API dp_result_t dptab_addPublisher(dptab_t *dptab, dptab_table_t *table, char *key, int keylen, playerHdl_t src);
 
 /*--------------------------------------------------------------------------
- Delete a publisher.  
+ Delete a publisher.
  The given table at the given source will no longer be allowed to update
  any table here.
  (Note: the key here is the key on the publisher's machine.)
@@ -682,18 +680,17 @@ DP_API dp_result_t dptab_addPeer(dptab_t *dptab, playerHdl_t dest);
 --------------------------------------------------------------------------*/
 DP_API dp_result_t dptab_deletePeer(dptab_t *dptab, playerHdl_t dest);
 
-
 /*********** Item management ***********/
 
 /*--------------------------------------------------------------------------
  Set the value for item 'key'.
  Value is copied onto the heap, and must be freed later with
- dptab_set (overwriting frees), dptab_delete, dptab_deleteTable, 
+ dptab_set (overwriting frees), dptab_delete, dptab_deleteTable,
  or dptab_destroy.
  If the item does not yet exist in the table, it is created.
 
  "Hops" is the number of publish/subscribe pairs across which this
- variable should be propagated.  
+ variable should be propagated.
  If hops=0, the variable is not sent automatically to any subscribers.
  If hops>0, the variable is sent automatically to any current or future
  subscribers; when it arrives there, it is stored with hops=hops-1.
@@ -715,7 +712,7 @@ DP_API dp_result_t dptab_delete_bySrc(dptab_t *dptab, dptab_table_t *table, play
 
 /*--------------------------------------------------------------------------
  Delete items that are older than the given number of seconds.
- Useful for broadcast data that is broadcast unreliably 
+ Useful for broadcast data that is broadcast unreliably
  (which can only be done by calling dptab_send with dest=PLAYER_BROADCAST;
   dptab_send_delete should also be used then, but can't be relied upon).
 
@@ -737,10 +734,10 @@ DP_API dp_result_t dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int 
 DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, int subkeylen, void **pbuf, size_t *plen);
 
 /*--------------------------------------------------------------------------
- Given a table pointer and an index, 
+ Given a table pointer and an index,
  retrieve the buffer and subkey of the nth item in the given table.
  Caller must have obtained 'table' via a call to dptab_get_table().
- 
+
  On entry, psubkey should point to a single short,
  pbuf should point to a void *, and
  plen should point to a size_t.
@@ -762,7 +759,7 @@ DP_API int dptab_tableSize(dptab_table_t *table);
 
 /*--------------------------------------------------------------------------
  Send item 'key' to a particular destination.
- Useful for items originally set with hops=0; the hops count specified here 
+ Useful for items originally set with hops=0; the hops count specified here
  temporarily overrides any hop count stored by dptab_set().
  Hops is the number of hops left - if hops is 0, it will not be
  resent by the destination.
@@ -837,7 +834,7 @@ typedef struct {
 /* Can't represent this in C */
 typedef struct {
 	unsigned char hops;		/* all vars in pkt have same hop count */
-	unsigned char subkeylen;	/* all vars in pkt have same subkeylen */	
+	unsigned char subkeylen;	/* all vars in pkt have same subkeylen */
 	unsigned char keylen;
 	char key[keylen];			/* table's key in master table. */
 	array of {
@@ -952,5 +949,3 @@ void dptab_assertPeerXfers(dptab_t* dt);
 #endif
 
 #endif
-
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -81,17 +81,13 @@
 
 #include "wonderutil.h"
 
-
 #include "text_hasher.h"
 
-
 #include "ResourceRecord.h"
-
 
 #include "OrderRecord.h"
 
 #include "stringutils.h"
-
 
 
 const int GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK = 999;
@@ -133,7 +129,6 @@ extern  C3UI				*g_c3ui;
 
 GreatLibraryWindow::GreatLibraryWindow(AUI_ERRCODE *err)
 {
-
 
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_libraryWindowBlock);
@@ -293,8 +288,8 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //
 // Remark(s)  : The function result is 1 (true?) when the requested name of
 //              the text exist in the database, 0 when it does not exist.
-//              
-//              However, the result is also 1 (illogical) when the passed 
+//
+//              However, the result is also 1 (illogical) when the passed
 //              user interface item is NULL. In that case, this function does
 //              nothing.
 //
@@ -303,21 +298,18 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 {
     char *text;
 
-
     if (textbox == NULL)
         return(1);
 
 
 
-	
+
 	char * lower_case_filename = new char[strlen(filename)+1];
 	strcpy(lower_case_filename, filename);
 
-	
 	for (int j = 0; (unsigned) j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 
-	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
 	delete [] lower_case_filename;
@@ -330,11 +322,11 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 	MBCHAR interpreted[k_MAX_GL_ENTRY];
 	stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
 
-	
-	
 
 
-    
+
+
+
 
 
 
@@ -343,13 +335,12 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 
     textbox->SetHyperText(interpreted);
 
-
     return(1);
 }
 
 sint32 GreatLibraryWindow::LoadHistoricalText ( SlicObject &so )
 {
-	
+
 	if (!strcmp(m_history_file, "NULL"))
 		return GREAT_LIBRARY_PANEL_BLANK;
 
@@ -358,7 +349,7 @@ sint32 GreatLibraryWindow::LoadHistoricalText ( SlicObject &so )
 
 sint32 GreatLibraryWindow::LoadGameplayText ( SlicObject &so )
 {
-	
+
 	if (!strcmp(m_gameplay_file, "NULL"))
 		return GREAT_LIBRARY_PANEL_BLANK;
 
@@ -381,14 +372,13 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 {
 #ifdef WIN32
 	MBCHAR fullPath[256];
-	
+
 	if (!m_techMovie) return 0;
 	if (!strcmp(m_movie_file,"null")) return 0;
 
-	
-	
+
 	if (g_civPaths->FindFile(C3DIR_VIDEOS, m_movie_file, fullPath, TRUE)) {
-		
+
 		g_soundManager->ReleaseSoundDriver();
 
 		m_techMovie->OpenStream(fullPath);
@@ -397,7 +387,6 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 	} else {
 		return 0;
 	}
-
 
 	return 1;
 #else
@@ -409,12 +398,10 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 {
 	MBCHAR fullPath[256];
 
-	
 	if ( !m_techStillShot ) return 0;
 	if ( !strcmp(m_still_file, "null") ) return 0;
 
-	
-	
+
 	if ( g_civPaths->FindFile(C3DIR_PICTURES, m_still_file, fullPath, TRUE) ) {
 		m_techStillShot->SetImage( m_still_file );
 	}
@@ -424,7 +411,6 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 
 	return 1;
 }
-
 
 void GreatLibraryWindow::PlayTechMovie ( void )
 {
@@ -440,7 +426,6 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 
 	const IconRecord *iconRec = NULL;
 
-	
 	switch ( theDatabase ) {
 	case DATABASE_UNITS:
 		iconRec = g_theUnitDB->Get(theMode)->GetDefaultIcon();
@@ -503,10 +488,9 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 }
 
 
-
 char * GreatLibraryWindow::GetIconRecText
-( 
-	int database, 
+(
+	int database,
 	int item,
 	uint8 historical
 )
@@ -515,7 +499,6 @@ char * GreatLibraryWindow::GetIconRecText
 
 	const IconRecord *iconRec = NULL;
 
-	
 	switch ( database ) {
 	case DATABASE_UNITS:
 		iconRec = g_theUnitDB->Get(item)->GetDefaultIcon();
@@ -565,9 +548,9 @@ char * GreatLibraryWindow::GetIconRecText
 		break;
 	}
 
-	if(iconRec) 
+	if(iconRec)
 	{
-		
+
 		char * lower_case_filename;
 
 		switch(historical){
@@ -611,25 +594,21 @@ char * GreatLibraryWindow::GetIconRecText
 				Assert(false);
 				break;
 		}
-		
+
 		if (!lower_case_filename)
 			return NULL;
 
-		
 		for (int j = 0; (unsigned) j < strlen(lower_case_filename); j++)
 			lower_case_filename[j] = tolower(lower_case_filename[j]);
 
-		
 		the_text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
-		
 		if (lower_case_filename)
 			delete [] lower_case_filename;
 	}
 
 	return the_text;
 }
-
 
 char * GreatLibraryWindow::GetGameplayText( int database, int item )
 {
@@ -650,4 +629,3 @@ char * GreatLibraryWindow::GetVariablesText( int database, int item )
 {
 	return GetIconRecText( database, item, 3 );
 }
-

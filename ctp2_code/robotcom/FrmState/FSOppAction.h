@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __FRAME_OPPORTUNITY_ACTIONS_H__
@@ -9,4 +8,3 @@
 FRAMESTATE(FS_Opportunity_Actions);
 
 #endif __FRAME_OPPORTUNITY_ACTIONS_H__
-

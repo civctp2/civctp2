@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Fixed crash when the game tries to display invalid text strings, 
+// - Fixed crash when the game tries to display invalid text strings,
 //   by Martin Gühmann.
 // - Tribe index check updated.
 // - Allowed for a number of players less than 3 to be displayed
@@ -34,7 +34,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_ldl.h"
@@ -70,7 +69,6 @@
 extern ProfileDB					*g_theProfileDB;
 extern StringDB						*g_theStringDB;
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
-
 
 extern MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
@@ -127,27 +125,25 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 
 	m_spStart = spNew_ctp2_Button(retval,ldlBlock,"StartButton",spnewgamescreen_startPress);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 	m_spReturn = spNew_ctp2_Button(retval,ldlBlock,"ReturnButton",spnewgamescreen_returnPress);
 
-	
 	m_scenarioName = spNew_c3_Static(retval, ldlBlock, "ScenarioName");
-	
+
 	m_scenarioStaticText = spNew_c3_Static(retval, ldlBlock, "ScenarioStaticText");
 
-	
-	
+
 	m_spTribe		= spNew_ctp2_Button( retval, ldlBlock, "TribeButton", spnewgamescreen_tribePress );
 	m_spDifficulty	= spNew_ctp2_Button( retval, ldlBlock, "DifficultyButton", spnewgamescreen_difficultyPress );
 	m_spMapSize		= spNew_ctp2_Button( retval, ldlBlock, "MapSizeButton", spnewgamescreen_mapSizePress );
@@ -155,18 +151,15 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	m_spMap			= spNew_ctp2_Button( retval, ldlBlock, "MapButton", spnewgamescreen_mapPress );
 	m_spRules		= spNew_ctp2_Button( retval, ldlBlock, "RulesButton", spnewgamescreen_rulesPress );
 
-	
 	m_spEditor = spNew_ctp2_Button(retval, ldlBlock, "EditorButton", spnewgamescreen_editorPress);
 
-	
 	m_spScenario = spNew_ctp2_Button(retval, ldlBlock, "ScenarioButton", spnewgamescreen_scenarioPress);
-
 
 	m_spName = spNewTextEntry(retval,ldlBlock,"Name");
 
-	
 
-	
+
+
 
 
 	m_worldShapeLabel = spNew_c3_Static( retval, ldlBlock, "WorldShapeLabel" );
@@ -182,18 +175,15 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 
 	m_quitButton = spNew_ctp2_Button( retval, ldlBlock, "QuitButton", spnewgamescreen_quitPress );
 
-	
 
 	m_spTitle			= spNew_c3_Static(retval,ldlBlock,"Title");
 	m_spBackground		= spNew_c3_Static(retval,ldlBlock,"Background");
 
 	m_string			= spNewStringTable(retval,"SPNewGameStrings");
 
-
 	Update();
 
 }
-
 
 SPNewGameWindow::~SPNewGameWindow()
 {
@@ -203,19 +193,17 @@ SPNewGameWindow::~SPNewGameWindow()
 	mycleanup(m_spReturn);
 
 
-	
-	
+
+
 	mycleanup( m_spTribe );
 	mycleanup( m_spDifficulty );
 	mycleanup( m_spMapSize );
 	mycleanup( m_spPlayers );
 	mycleanup( m_spMap );
 	mycleanup( m_spRules );
-	
-	
+
 	mycleanup( m_spEditor );
-	
-	
+
 	mycleanup(m_spName);
 
 
@@ -225,9 +213,9 @@ SPNewGameWindow::~SPNewGameWindow()
 
 
 
-	
 
-	
+
+
 
 
 	mycleanup(m_worldShapeLabel);
@@ -240,16 +228,14 @@ SPNewGameWindow::~SPNewGameWindow()
 	mycleanup(m_rulesLabel);
 	mycleanup(m_playersLabel);
 	mycleanup(m_worldTypeLabel);
-	
+
 	mycleanup(m_quitButton);
-	
 
 	mycleanup(m_spTitle);
 	mycleanup(m_spBackground);
 
 	mycleanup( m_string );
 
-	
 	mycleanup(m_spScenario);
 	mycleanup(m_scenarioName);
 	mycleanup(m_scenarioStaticText);
@@ -278,10 +264,8 @@ void SPNewGameWindow::Update( void )
 	MBCHAR s[_MAX_PATH];
 	sint32 index;
 
-	
 	m_spTribe->SetText( g_theProfileDB->GetCivName() );
 
-	
 	if ( m_useCustomMap && g_loadSaveMapWindow && g_loadSaveMapWindow->GetSaveMapInfo() )
 	{
 		MBCHAR mname[ 100 ];
@@ -290,20 +274,17 @@ void SPNewGameWindow::Update( void )
 	}
 	else
 	{
-		
-		m_useCustomMap = false;
 
+		m_useCustomMap = false;
 
 	}
 
-	
 	index = g_theProfileDB->GetDifficulty();
 //Added by MartinGühmann
 //Makes sure that the game doesn't crash if the according map size string is invalid.
 	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
 	m_spDifficulty->SetText( s );
 
-	
 
 	MAPSIZE size;
 	size = g_theProfileDB->GetMapSize();
@@ -340,7 +321,6 @@ void SPNewGameWindow::Update( void )
 	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
 	m_spMapSize->SetText( s );
 
-	
 	sint32 shape = g_theProfileDB->GetWorldShape();
 //Added by MartinGühmann
 //Makes sure that the game doesn't crash if the according world shape string is invalid.
@@ -348,8 +328,7 @@ void SPNewGameWindow::Update( void )
 	m_worldShapeButton->SetText( s );
 
 
-	
-	sint32 numPlayers = g_theProfileDB->GetNPlayers() - 1; 
+	sint32 numPlayers = g_theProfileDB->GetNPlayers() - 1;
 
 	// Removed the alteration to the value when it was below 3 - JJB
 	sprintf( s, "%d", numPlayers);
@@ -358,14 +337,14 @@ void SPNewGameWindow::Update( void )
 
 
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	if (g_civPaths->GetCurScenarioPath() != NULL) {
-		
+
 		if (strlen(g_scenarioName) > 0) {
 			m_scenarioName->SetText(g_scenarioName);
 			m_scenarioName->ShouldDraw(TRUE);
@@ -375,7 +354,7 @@ void SPNewGameWindow::Update( void )
 		m_scenarioName->Show();
 		m_scenarioStaticText->Show();
 	} else {
-		
+
 		m_scenarioName->SetText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME"));
 		m_scenarioName->Hide();
 		m_scenarioStaticText->Hide();
@@ -406,12 +385,11 @@ SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) 
 {
 	{
 		int i=0,numClans;
-		
+
 		numClans = g_theCivilisationDB->NumRecords();
-		
+
 		m_spClan		= spNew_c3_DropDown(retval,ldlBlock,"Clan",spnewgamescreen_clanSelect);
 
-		
 		while(i<numClans) {
 			aui_Item	*item = NULL;
 			const MBCHAR *cName = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName());
@@ -432,14 +410,13 @@ SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) 
 	m_spName		= spNewTextEntry(retval,ldlBlock,"Name");
 	m_spPreferences = spNew_ctp2_Button(retval,ldlBlock,"Preferences",spnewgamescreen_preferencePress);
 	m_spCustom		= spNew_ctp2_Button(retval,ldlBlock,"PCustom", spnewgamescreen_pCustomPress);
-	
+
 	m_PTOP			= spNew_c3_Static(retval,ldlBlock, "PTOP");
 	m_PHEADER		= spNew_c3_Static(retval,ldlBlock, "PHEADER");
 	m_PBOT			= spNew_c3_Static(retval,ldlBlock, "PBOT");
 	m_PLEFT			= spNew_c3_Static(retval,ldlBlock, "PLEFT");
 	m_PRIGHT		= spNew_c3_Static(retval,ldlBlock, "PRIGHT");
 }
-
 
 SPProfileBox::~SPProfileBox()
 {
@@ -449,7 +426,7 @@ SPProfileBox::~SPProfileBox()
 	mycleanup(m_spName);
 	mycleanup(m_spPreferences);
 	mycleanup(m_spCustom);
-	
+
 	mycleanup(m_PTOP);
 	mycleanup(m_PHEADER);
 	mycleanup(m_PBOT);
@@ -458,7 +435,6 @@ SPProfileBox::~SPProfileBox()
 
 #undef mycleanup
 }
-
 
 void SPProfileBox::SetLeader(uint32 index)
 {
@@ -504,7 +480,7 @@ SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 		mysizes			= spNewStringTable(retval,"SPMapSizeStringTable");
 		spFillDropDown(retval,m_mapSize,mysizes,"SPDropDownListItem","MapSize");
 		if(mysizes) delete mysizes;
-		
+
 	}
 	{
 		aui_StringTable *mytypes = NULL;
@@ -526,7 +502,7 @@ SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 		mydiffs			= spNewStringTable(retval,"SPDifficultyStringTable");
 		spFillDropDown(retval,m_difficulty,mydiffs,"SPDropDownListItem","Difficulty");
 		if(mydiffs) delete mydiffs;
-		
+
 		m_difficulty->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
 	{
@@ -535,7 +511,7 @@ SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 		myrisks			= spNewStringTable(retval,"SPRiskLevelStringTable");
 		spFillDropDown(retval,m_riskLevel,myrisks,"SPDropDownListItem","RiskLevel");
 		if(myrisks) delete myrisks;
-		
+
 		m_riskLevel->SetSelectedItem(g_theProfileDB->GetRiskLevel());
 	}
 	{
@@ -546,7 +522,7 @@ SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 			c3_ListItem *myitem = new SPDropDownListItem(retval,"SPDropDownListItem","Opponent", textBlock);
 			if(myitem) m_opponent->AddItem(myitem);
 		}
-		
+
 		uint32 numPlayers = g_theProfileDB->GetNPlayers();
 		Assert((numPlayers>2) && (numPlayers<17));
 		m_opponent->SetSelectedItem(numPlayers-3);
@@ -554,7 +530,6 @@ SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spCustom		= spNew_ctp2_Button(retval,ldlBlock,"WCustom", spnewgamescreen_wCustomPress);
 
 
-	
 	m_WTOP			= spNew_c3_Static(retval,ldlBlock, "WTOP");
 	m_WHEADER		= spNew_c3_Static(retval,ldlBlock, "WHEADER");
 	m_WBOT			= spNew_c3_Static(retval,ldlBlock, "WBOT");
@@ -573,7 +548,7 @@ SPWorldBox::~SPWorldBox()
 	mycleanup(m_riskLevel);
 	mycleanup(m_opponent);
 	mycleanup(m_spCustom);
-	
+
 	mycleanup(m_WTOP);
 	mycleanup(m_WHEADER);
 	mycleanup(m_WBOT);
@@ -605,14 +580,12 @@ SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spTrade		= spNew_c3_CheckBox(retval,ldlBlock,"TradeButton",0,spnewgamescreen_tradePress);
 	m_spCombat		= spNew_c3_CheckBox(retval,ldlBlock,"CombatButton",0,spnewgamescreen_combatPress);
 	m_spPollution	= spNew_c3_CheckBox(retval,ldlBlock,"PollutionButton",0,spnewgamescreen_pollutionPress);
-	
-	
+
 	m_spGenocide->SetState(g_theProfileDB->IsGenocideRule());
 	m_spTrade->SetState(g_theProfileDB->IsTradeRule());
 	m_spCombat->SetState(g_theProfileDB->IsSimpleCombatRule());
 	m_spPollution->SetState(g_theProfileDB->IsPollutionRule());
 
-	
 	m_RTOP			= spNew_c3_Static(retval,ldlBlock, "RTOP");
 	m_RHEADER		= spNew_c3_Static(retval,ldlBlock, "RHEADER");
 	m_RBOT			= spNew_c3_Static(retval,ldlBlock, "RBOT");
@@ -628,7 +601,7 @@ SPRulesBox::~SPRulesBox()
 	mycleanup(m_spTrade);
 	mycleanup(m_spCombat);
 	mycleanup(m_spPollution);
-	
+
 	mycleanup(m_RTOP);
 	mycleanup(m_RHEADER);
 	mycleanup(m_RBOT);
@@ -659,7 +632,7 @@ SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBC
 	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
-	
+
 	m_myItem = spNew_c3_Static(retval, ldlBlock, type);
 	if(m_myItem) {
 		m_myItem->SetText(name);
@@ -669,12 +642,12 @@ SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBC
 
 SPDropDownListItem::~SPDropDownListItem()
 {
-	
+
 }
 #if 0
 sint32 SPDropDownListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	
+
 }
 #endif
 
@@ -694,7 +667,7 @@ TwoChoiceButton::TwoChoiceButton(
 		MBCHAR *ldlBlock,
 		MBCHAR *choiceOff, MBCHAR *choiceOn, uint32 onoff,
 		ControlActionCallback *ActionFunc,
-		void *cookie) : 
+		void *cookie) :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
@@ -713,15 +686,3 @@ uint32 TwoChoiceButton::Switch()
 	SetText(m_choices[m_choice]);
 	return m_choice;
 }
-
-
-
-
-
-
-
-
-
-
-
-

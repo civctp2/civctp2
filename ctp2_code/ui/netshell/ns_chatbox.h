@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __NS_CHATBOX_H__
 #define __NS_CHATBOX_H__
-
 
 #include "textbox.h"
 #include "aui_action.h"
@@ -21,14 +9,13 @@ class aui_TextField;
 class aui_Button;
 
 
-
 class ns_ChatBox : public TextBox, public NETFunc::Chat
 {
 	NETFunc::Player *player;
 	bool bWhisper;
 	bool bGroup;
 public:
-	
+
 	ns_ChatBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -57,7 +44,6 @@ protected:
 	aui_TextBase *m_textstyleChat;
 	aui_TextBase *m_textstyleWhisper;
 
-
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE	CreateComponents( void );
@@ -71,5 +57,4 @@ protected:
 	AUI_ACTION_BASIC(InputFieldAction);
 };
 
-
-#endif 
+#endif

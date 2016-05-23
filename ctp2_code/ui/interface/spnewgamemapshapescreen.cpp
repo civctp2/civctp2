@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of user preferences.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Addion by Martin Gühmann: Two more world shape options, 
+// - Addion by Martin Gühmann: Two more world shape options,
 //   flat world and Uranus world.
 // - Memory leak repaired.
 // - Restored compatibility.
@@ -61,7 +61,7 @@ extern World		*g_theWorld;
 namespace
 {
 	typedef	std::vector<aui_Radio *>	MapShapeSelector;
-	
+
 	MapShapeSelector					s_checkBox;
     size_t        						s_mapShapeIndex;
 
@@ -69,7 +69,7 @@ namespace
     {
         s_mapShapeIndex = shape;
 		size_t	i		= 0;
-        for 
+        for
         (
         	MapShapeSelector::iterator	p = s_checkBox.begin();
         	p != s_checkBox.end();
@@ -80,11 +80,10 @@ namespace
             ++i;
         }
     }
-    
+
 } // namespace
 
 static c3_PopupWindow	*s_spNewGameMapShapeScreen	= NULL;
-
 
 
 static aui_SwitchGroup	*s_group		= NULL;
@@ -103,7 +102,6 @@ static MBCHAR const	checknames[WORLD_SHAPE_COUNT][50] = {
 };
 
 static sint32 s_useMode = 0;
-
 
 size_t spnewgamemapshapescreen_getMapShapeIndex( void )
 {
@@ -127,7 +125,7 @@ void spnewgamemapshapescreen_setMapShapeIndex(size_t index)
 //
 // Description: Display the map shape selection window.
 //
-// Parameters : viewMode 
+// Parameters : viewMode
 //              useMode
 //
 // Globals    : s_spNewGameMapShapeScreen
@@ -141,10 +139,10 @@ void spnewgamemapshapescreen_setMapShapeIndex(size_t index)
 //----------------------------------------------------------------------------
 sint32 spnewgamemapshapescreen_displayMyWindow(BOOL viewMode, sint32 useMode)
 {
-    sint32 const    retval = 
+    sint32 const    retval =
         s_spNewGameMapShapeScreen ? 0 : spnewgamemapshapescreen_Initialize();
 
-	for 
+	for
 	(
 		MapShapeSelector::iterator	p = s_checkBox.begin();
 		p != s_checkBox.end();
@@ -170,11 +168,11 @@ sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action)
 
 	uint32 id = s_group->WhichIsSelected();
 
-	if (id) 
+	if (id)
 	{
 		size_t	i = 0;
-		for 
-		( 
+		for
+		(
 			MapShapeSelector::iterator	p = s_checkBox.begin();
 			p != s_checkBox.end();
 			++p
@@ -188,7 +186,7 @@ sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action)
 		}
 	}
 
-	AUI_ERRCODE const auiErr = 
+	AUI_ERRCODE const auiErr =
         g_c3ui->RemoveWindow( s_spNewGameMapShapeScreen->Id());
 	keypress_RemoveHandler(s_spNewGameMapShapeScreen);
 
@@ -204,7 +202,6 @@ sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -213,28 +210,25 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_spNewGameMapShapeScreen ) return AUI_ERRCODE_OK; 
+	if ( s_spNewGameMapShapeScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameMapShapeScreen");
 
-	{ 
+	{
 		s_spNewGameMapShapeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameMapShapeScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameMapShapeScreen, errcode) ) errcode;
 
-		
 		s_spNewGameMapShapeScreen->Resize(s_spNewGameMapShapeScreen->Width(),s_spNewGameMapShapeScreen->Height());
 		s_spNewGameMapShapeScreen->GrabRegion()->Resize(s_spNewGameMapShapeScreen->Width(),s_spNewGameMapShapeScreen->Height());
 		s_spNewGameMapShapeScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	if ( !callback ) callback = spnewgamemapshapescreen_backPress;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameMapShapeScreen->AddTitle( controlBlock );
 	s_spNewGameMapShapeScreen->AddClose( callback );
-
 
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Group" );
@@ -242,10 +236,10 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	Assert( AUI_NEWOK(s_group, errcode) );
 	if ( !AUI_NEWOK(s_group, errcode) ) return errcode;
 
-	for (i = 0; i < WORLD_SHAPE_COUNT; ++i) 
+	for (i = 0; i < WORLD_SHAPE_COUNT; ++i)
     {
 		sprintf(switchBlock, "%s.%s", controlBlock, checknames[i]);
-		aui_Radio *	shape	= 
+		aui_Radio *	shape	=
 			new aui_Radio(&errcode, aui_UniqueId(), switchBlock);
 		s_checkBox.push_back(shape);
         s_group->AddSwitch(shape);
@@ -258,13 +252,11 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	s_fwLabel = spNew_c3_Static( &errcode, windowBlock, "FWLabel" );
 
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -289,12 +281,12 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 //----------------------------------------------------------------------------
 void spnewgamemapshapescreen_Cleanup()
 {
-	if (s_spNewGameMapShapeScreen) 
+	if (s_spNewGameMapShapeScreen)
 	{
 		g_c3ui->RemoveWindow(s_spNewGameMapShapeScreen->Id());
 		keypress_RemoveHandler(s_spNewGameMapShapeScreen);
 
-		for 
+		for
 		(
 			MapShapeSelector::iterator p = s_checkBox.begin();
 			p != s_checkBox.end();
@@ -317,9 +309,7 @@ void spnewgamemapshapescreen_Cleanup()
 	}
 }
 
-
 void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	spnewgamemapshapescreen_removeMyWindow(action);
 }
-

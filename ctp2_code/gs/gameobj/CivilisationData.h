@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
@@ -78,7 +78,6 @@ class	CivilisationData;
 // Class declarations
 //----------------------------------------------------------------------------
 
-
 #endif  // _MSC_VER
 #define k_MAX_NAME_LEN           512 // Why isn't dbtypes.h included
 #define k_CAPITAL_UNDEFINED       -1 // From CivilisationRec.h
@@ -87,13 +86,12 @@ class	CivilisationData;
 class CivilisationData : public GAMEOBJ
 	{
 	public:
-		
-		
+
 
 		PLAYER_INDEX    m_owner;
 
 		uint8           m_cityname_count[k_MAX_CityName];
-		
+
 		CIV_INDEX       m_civ;
 
 		GENDER          m_gender;
@@ -105,15 +103,15 @@ class CivilisationData : public GAMEOBJ
 		                m_civilisation_name[k_MAX_NAME_LEN],
 		                m_country_name[k_MAX_NAME_LEN],
 		                m_singular_name[k_MAX_NAME_LEN];
-		
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
+
 
 		friend class NetCivilization;
 
@@ -152,7 +150,6 @@ class CivilisationData : public GAMEOBJ
 		sint32 GetCityStyle(void) const;
 		void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
 
-		
 		void ResetCiv(CIV_INDEX newCivIndex, GENDER gender);
 
 		void ResetStrings();

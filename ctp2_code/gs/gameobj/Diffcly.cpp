@@ -1,39 +1,28 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "Diffcly.h"
 #include "DiffDB.h"
 #include "civarchive.h"
 
+extern DifficultyDB *g_theDifficultyDB;
 
-extern DifficultyDB *g_theDifficultyDB; 
-	
 Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 
-{	
-    m_pad = 0; 
+{
+    m_pad = 0;
 	m_owner = owner;
 
     m_max_martial_law_units=0;
-    m_martial_law_effect=0; 
+    m_martial_law_effect=0;
 
-    m_content_in_the_field=0; 
-    m_in_the_field_effect=0; 
+    m_content_in_the_field=0;
+    m_in_the_field_effect=0;
 
-    m_base_contentment = g_theDifficultyDB->GetBaseContentment(diff_level); 
+    m_base_contentment = g_theDifficultyDB->GetBaseContentment(diff_level);
 
-    m_big_city_scale = g_theDifficultyDB->GetBigCityScale (diff_level); 
+    m_big_city_scale = g_theDifficultyDB->GetBigCityScale (diff_level);
     m_big_city_offset = g_theDifficultyDB->GetBigCityOffset(diff_level);
-  
+
 	m_science_handicap = g_theDifficultyDB->GetScienceHandicap(diff_level);
 	m_pollution_multiplier = g_theDifficultyDB->GetPollutionMultiplier(diff_level) ;
 	m_riot_chance = g_theDifficultyDB->GetRiotChance(diff_level);
@@ -69,7 +58,7 @@ Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 
 
 
-	
+
 	m_vision_bonus = g_theDifficultyDB->GetVisionBonus(diff_level);
 	m_base_score = g_theDifficultyDB->GetBaseScore(diff_level);
 

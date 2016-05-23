@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 
 #include "ns_chatbox.h"
 
-
 ns_ChatBox::ns_ChatBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -65,8 +64,7 @@ ns_ChatBox::ns_ChatBox(
 	m_textstyleChat = new aui_TextBase("styles.chat", (MBCHAR *)NULL);
 	m_textstyleWhisper = new aui_TextBase("styles.whisper", (MBCHAR *)NULL);
 
-	
-	
+
 	m_textstyleSystem->TextReloadFont();
 	m_textstyleChat->TextReloadFont();
 	m_textstyleWhisper->TextReloadFont();
@@ -86,7 +84,6 @@ ns_ChatBox::ns_ChatBox(
 	bWhisper = false;
 	bGroup = false;
 }
-
 
 void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 	COLORREF color = 0x00ffffff;
@@ -136,7 +133,6 @@ AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE ns_ChatBox::CreateComponents( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -147,12 +143,11 @@ AUI_ERRCODE ns_ChatBox::CreateComponents( void )
 		2,
 		m_height + 2,
 		m_width - 4,
-		20, 
-		"pattern.tga" ); 
+		20,
+		"pattern.tga" );
 	Assert( AUI_NEWOK(m_inputField,errcode) );
 	if ( !AUI_NEWOK(m_inputField,errcode) ) return errcode;
 
-	
 	AddChild( m_inputField );
 
 	aui_Action *action = new InputFieldAction;
@@ -165,14 +160,12 @@ AUI_ERRCODE ns_ChatBox::CreateComponents( void )
 }
 
 
-
 AUI_ERRCODE ns_ChatBox::InitCommon()
 {
 	m_inputField = NULL;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 ns_ChatBox::~ns_ChatBox()
@@ -200,42 +193,35 @@ ns_ChatBox::~ns_ChatBox()
 	}
 }
 
-
 NETFunc::Player *ns_ChatBox::GetPlayer()
 {
 	return player;
 }
-
 
 void ns_ChatBox::SetPlayer(NETFunc::Player *p)
 {
 	player = p;
 }
 
-
 bool ns_ChatBox::IsWhisper()
 {
 	return bWhisper;
 }
-
 
 void ns_ChatBox::SetWhisper(bool w)
 {
 	bWhisper = w;
 }
 
-
 bool ns_ChatBox::IsGroup()
 {
 	return bGroup;
 }
 
-
 void ns_ChatBox::SetGroup(bool g)
 {
 	bGroup = g;
 }
-
 
 void ns_ChatBox::InputFieldAction::Execute(
 	aui_Control *control,
@@ -244,13 +230,10 @@ void ns_ChatBox::InputFieldAction::Execute(
 {
 	if ( action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE ) return;
 
-	
 	ns_ChatBox *chatbox = (ns_ChatBox *)control->GetParent();
 
-	
 	static MBCHAR text[ 241 ];
 	chatbox->GetInputField()->GetFieldText( text, 240 );
-
 
 	if(strlen(text) <= 0)
 		return;
@@ -268,12 +251,10 @@ void ns_ChatBox::InputFieldAction::Execute(
 	chatbox->GetInputField()->SetFieldText( "" );
 }
 
-
 AUI_ERRCODE ns_ChatBox::RepositionItems( void )
 {
 	return aui_TextBox::RepositionItems();
 }
-
 
 AUI_ERRCODE ns_ChatBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {

@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -26,7 +13,6 @@
 extern TiledMap *g_tiledMap;
 
 
-
 WorkWindow::WorkWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -40,7 +26,6 @@ WorkWindow::WorkWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 WorkWindow::WorkWindow(
@@ -62,27 +47,25 @@ WorkWindow::WorkWindow(
 }
 
 
-
 AUI_ERRCODE WorkWindow::InitCommon(void)
-{		
+{
 	return C3Window::InitCommon();
 }
 
 
-
 AUI_ERRCODE WorkWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
 
 	m_pattern->Draw( m_surface, &rect );
 
-	
 
 
-	
+
+
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
@@ -95,7 +78,7 @@ void WorkWindow::MouseMoveInside(aui_MouseEvent *data)
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-    Assert(data); 
+    Assert(data);
 
 	g_tiledMap->DrawHilite( FALSE );
 
@@ -108,7 +91,6 @@ void WorkWindow::MouseMoveAway(aui_MouseEvent *data)
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-    Assert(data); 
-
+    Assert(data);
 
 }

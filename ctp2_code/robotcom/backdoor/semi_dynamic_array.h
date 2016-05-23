@@ -1,19 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __semi_dynamic_array_h__
 #define __semi_dynamic_array_h__
-
 
 #ifndef MALLOC
 	#ifdef _DEBUG
@@ -64,123 +50,122 @@ class semi_dynamic_array
 {
 	public:
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		semi_dynamic_array
 		(
-			int i_size					
+			int i_size
 		);
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		~semi_dynamic_array();
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		semi_dynamic_array
 		(
 			semi_dynamic_array<T>& sda
 		);
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		semi_dynamic_array
 		(
              int r_size,
              char *r_data
 		);
 
-		
-		
-		
-		
-        
+
+
+
+
+
 		void Get_Raw
         (
-            int *r_size,                
-            char **r_data               
+            int *r_size,
+            char **r_data
         );
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		semi_dynamic_array& operator=
 		(
 			semi_dynamic_array<T>& sda
 		);
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		T& operator[](const int nIndex);
 		T operator[](const int nIndex) const;
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		void Resize
 		(
 			int new_size
 		);
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		int Get_Size();
 
 	protected:
 
-		T* data;						
-		int size;						
+		T* data;
+		int size;
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		void Allocate
 		(
 			int size
 		);
 
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		void Assign
 		(
 			semi_dynamic_array<T>& sda
 		);
 
-		
-		
-		
-		
-		
-		void Clean_Up();
 
+
+
+
+
+		void Clean_Up();
 
 
 };
@@ -202,15 +187,12 @@ void semi_dynamic_array<T>::Allocate
 	int new_size
 )
 {
-	
+
 	if (new_size <= 0) return;
 
-	
 	size = new_size;
 
-	
 	data = (T*) MALLOC(sizeof(T)*new_size);
-
 
 }
 
@@ -231,20 +213,17 @@ void semi_dynamic_array<T>::Assign
 	semi_dynamic_array<T>& sda
 )
 {
-	
-	int i;
-	
 
-	
+	int i;
+
+
 	Clean_Up();
 
-	
 	Allocate(sda.size);
 
-	
 	for (i = 0; i < size; i++)
 	{
-		
+
 		data[i] = sda.data[i];
 	}
 
@@ -267,13 +246,11 @@ void semi_dynamic_array<T>::Resize
 	int new_size
 )
 {
-	
+
 	if (new_size <= 0) return;
 
-	
 	size = new_size;
 
-	
 	if (data == NULL)
 		data = (T*)MALLOC(sizeof(T)*new_size);
 	else
@@ -312,11 +289,10 @@ int semi_dynamic_array<T>::Get_Size()
 template <class T>
 void semi_dynamic_array<T>::Clean_Up()
 {
-	
+
 	if (data isnt NULL)
 		FREE(data);
 
-	
 	data = NULL;
 
 }
@@ -337,7 +313,7 @@ void semi_dynamic_array<DATA_TYPE>::Get_Raw
 (
     int *r_size,
     char **r_data
-) 
+)
 {
 	*r_size = size * sizeof(T);
 	*r_data = (char *) data;
@@ -359,15 +335,13 @@ void semi_dynamic_array<DATA_TYPE>::Get_Raw
 template <class T>
 semi_dynamic_array<T>::semi_dynamic_array
 (
-	int i_size					
+	int i_size
 )
 {
 
-	
 	data = NULL;
-    size = 0; 
+    size = 0;
 
-	
 	Allocate(i_size);
 
 }
@@ -386,7 +360,7 @@ semi_dynamic_array<T>::semi_dynamic_array
 template <class T>
 semi_dynamic_array<T>::~semi_dynamic_array()
 {
-	
+
 	Clean_Up();
 }
 
@@ -407,15 +381,13 @@ semi_dynamic_array<T>::semi_dynamic_array
 	semi_dynamic_array<T>& sda
 )
 {
-	
+
 	data = NULL;
 
-	
 	chunk_size = sda.chunk_size;
 	max_chunks = sda.max_chunks;
 	chunks = sda.chunks;
 
-	
 	Assign(sda);
 }
 
@@ -438,13 +410,11 @@ semi_dynamic_array<T>::semi_dynamic_array
 )
 {
 
-	
 	data = NULL;
 
-	
 	Allocate((r_size / sizeof(T)) + 1);
 
-    Assert(r_data); 
+    Assert(r_data);
     memcpy((char *)data, r_data, r_size);
 }
 
@@ -466,7 +436,6 @@ semi_dynamic_array<T>& semi_dynamic_array<T>::operator=
 )
 {
 
-	
 	Assign(sda);
 
 	return this;
@@ -486,10 +455,9 @@ semi_dynamic_array<T>& semi_dynamic_array<T>::operator=
 template <class T>
 T& semi_dynamic_array<T>::operator[](const int nIndex)
 {
-	
+
 	_ASSERTE(nIndex >= 0 && nIndex < size);
 
-	
 	return data[nIndex];
 }
 
@@ -506,7 +474,7 @@ T& semi_dynamic_array<T>::operator[](const int nIndex)
 template <class T>
 T semi_dynamic_array<T>::operator[](const int nIndex) const
 {
-	
+
 	semi_dynamic_array<T>& curr = *(semi_dynamic_array<T>*)this;
 
 	return curr[nIndex];
@@ -517,4 +485,4 @@ T semi_dynamic_array<T>::operator[](const int nIndex) const
 
 
 
-#endif 
+#endif

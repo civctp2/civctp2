@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "moviedb.h"
@@ -38,13 +29,11 @@ MovieDB::MovieDB(CivArchive &archive)
 	Serialize(archive) ;
 	}
 
-
 MovieDB::~MovieDB ()
 
 {
 	delete m_map;
 }
-
 
 void MovieDB::SetSize(sint32 s)
 
@@ -56,23 +45,23 @@ void MovieDB::SetSize(sint32 s)
 sint32 MovieDB::FindTypeIndex(char *str) const
 
 {
-    sint32 i; 
+    sint32 i;
 
-    Assert(m_map); 
+    Assert(m_map);
 
-	for (i=0; i<m_size; i++) { 
+	for (i=0; i<m_size; i++) {
         if (strcmp(m_map[i].m_name, str) == 0) {
-			return i; 
-		} 
-	} 
-	return -1; 
+			return i;
+		}
+	}
+	return -1;
 }
 
 MBCHAR *MovieDB::GetMovieFilename(sint32 index) const
 {
 
 	Assert(0 <= index);
-	Assert(index < m_size); 
+	Assert(index < m_size);
 
 	return m_map[index].m_movieFilename;
 }
@@ -81,19 +70,19 @@ void MovieDB::SetName(sint32 index, char str[_MAX_PATH])
 
 {
  	Assert(0 <= index);
-	Assert(index < m_size); 
-    Assert(m_map); 
+	Assert(index < m_size);
+    Assert(m_map);
 
-    strcpy(m_map[index].m_name, str); 
+    strcpy(m_map[index].m_name, str);
 }
 
 void MovieDB::SetMovieFilename(sint32 index, MBCHAR *s)
 {
  	Assert(0 <= index);
-	Assert(index < m_size); 
-    Assert(m_map); 
+	Assert(index < m_size);
+    Assert(m_map);
 
-    strcpy(m_map[index].m_movieFilename, s); 
+    strcpy(m_map[index].m_movieFilename, s);
 }
 
 void MovieDB::Serialize(CivArchive &archive)
@@ -103,7 +92,7 @@ void MovieDB::Serialize(CivArchive &archive)
 	if (archive.IsStoring()) {
 		archive<<m_size ;
     	archive.Store((uint8 *)m_map, sizeof(MovieNameNode) * m_size) ;
-       
+
 	} else {
 		archive>>m_size ;
 		if (m_map)
@@ -120,26 +109,26 @@ sint32 MovieDB::ParseAMovie(Token *movieToken, sint32 count)
 {
     char str[_MAX_PATH];
 
-	if (movieToken->GetType() == TOKEN_EOF) { 
-		return FALSE; 
-	} 
-	
-	if (movieToken->GetType() != TOKEN_STRING) { 
-		c3errors_ErrorDialog  (movieToken->ErrStr(), "Icon name expected"); 
-        g_abort_parse = TRUE;
+	if (movieToken->GetType() == TOKEN_EOF) {
 		return FALSE;
-	} else { 
-   		movieToken->GetString(str); 
-        SetName(count, str); 
 	}
 
-    if (movieToken->Next() != TOKEN_QUOTED_STRING) { 
-		c3errors_ErrorDialog  (movieToken->ErrStr(), "Movie filename expected"); 
+	if (movieToken->GetType() != TOKEN_STRING) {
+		c3errors_ErrorDialog  (movieToken->ErrStr(), "Icon name expected");
         g_abort_parse = TRUE;
 		return FALSE;
-	} else { 
-   		movieToken->GetString(str); 
-        SetMovieFilename(count, str); 
+	} else {
+   		movieToken->GetString(str);
+        SetName(count, str);
+	}
+
+    if (movieToken->Next() != TOKEN_QUOTED_STRING) {
+		c3errors_ErrorDialog  (movieToken->ErrStr(), "Movie filename expected");
+        g_abort_parse = TRUE;
+		return FALSE;
+	} else {
+   		movieToken->GetString(str);
+        SetMovieFilename(count, str);
 	}
 
 	movieToken->Next();
@@ -151,34 +140,34 @@ sint32 MovieDB::Parse(char *filename)
 
 {
 
-    Token *movieToken = new Token(filename, C3DIR_GAMEDATA); 
-	Assert(movieToken); 
-	
-   	if (movieToken->GetType() != TOKEN_NUMBER) { 
-		c3errors_ErrorDialog  (movieToken->ErrStr(), "Missing number of unit icons"); 
+    Token *movieToken = new Token(filename, C3DIR_GAMEDATA);
+	Assert(movieToken);
+
+   	if (movieToken->GetType() != TOKEN_NUMBER) {
+		c3errors_ErrorDialog  (movieToken->ErrStr(), "Missing number of unit icons");
         g_abort_parse = TRUE;
 		delete movieToken;
-		return FALSE; 
-	} else { 
+		return FALSE;
+	} else {
         sint32 n;
-		movieToken->GetNumber(n); 
-		movieToken->Next(); 
-		if (n <0) { 
-			c3errors_ErrorDialog(movieToken->ErrStr(), "Number of unit icons is negative"); 
+		movieToken->GetNumber(n);
+		movieToken->Next();
+		if (n <0) {
+			c3errors_ErrorDialog(movieToken->ErrStr(), "Number of unit icons is negative");
             g_abort_parse = TRUE;
 			delete movieToken;
-			return FALSE; 
+			return FALSE;
 		}
-		SetSize(n); 
+		SetSize(n);
 	}
-	
+
     int count = 0;
-    while (ParseAMovie(movieToken, count)) { 
+    while (ParseAMovie(movieToken, count)) {
         count++;
     }
     if (g_abort_parse) {
 		delete movieToken;
-		return FALSE; 
+		return FALSE;
 	}
 
 	delete movieToken;

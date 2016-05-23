@@ -5,13 +5,11 @@
 #define __VICTORYWINDOW_H__
 
 
-
 class ctp2_Window;
 class ctp2_TabGroup;
 class ctp2_Button;
 
-
-class VictoryWindow 
+class VictoryWindow
 {
 public:
 	VictoryWindow(AUI_ERRCODE *err);
@@ -51,4 +49,4 @@ private:
 
 extern VictoryWindow	*g_victoryWindow;
 
-#endif 
+#endif

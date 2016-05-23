@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -20,7 +8,6 @@
 #include "primitives.h"
 
 #include "pictureswitch.h"
-
 
 PictureSwitch::PictureSwitch(
 	AUI_ERRCODE *retval,
@@ -47,10 +34,9 @@ PictureSwitch::PictureSwitch(
 {
 }
 
-
 AUI_ERRCODE PictureSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -61,12 +47,12 @@ AUI_ERRCODE PictureSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	if ( IsOn() )
 	{
-		
+
 		m_pictureOn->Draw( surface, &rect );
 	}
 	else
 	{
-		
+
 		m_pictureOff->Draw( surface, &rect );
 	}
 
@@ -74,18 +60,18 @@ AUI_ERRCODE PictureSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	{
 		if ( IsOn() )
 		{
-			
+
 			m_pictureActiveOn->Draw( surface, &rect );
 		}
 		else
 		{
-			
+
 			m_pictureActiveOff->Draw( surface, &rect );
 		}
 	}
 	else
 	{
-		
+
 	}
 
 	if ( surface == m_window->TheSurface() )

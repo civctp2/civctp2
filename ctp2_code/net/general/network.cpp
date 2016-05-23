@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Network object bookkeeping gets cleared when exiting a game (exiting and 
+// - Network object bookkeeping gets cleared when exiting a game (exiting and
 //   rejoining occasionally left something lying around, resulting in a resync
 //   not long after joining) (bug #30)
 // - Updated the above to prevent an invalid second delete.
@@ -184,19 +184,16 @@ extern C3UI *g_c3ui;
 
 extern ChatBox *g_chatBox;
 
-
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void network_AbortCallback( sint32 type )
 {
-	
 
 
 	g_civApp->PostQuitToLobbyAction();
-	
+
 }
 
 namespace
@@ -231,7 +228,7 @@ namespace
 		{
 			m_Packet->Release();
 		};
-	
+
 	private:
 		Packetizer * m_Packet;
 	};
@@ -391,19 +388,16 @@ Network::~Network()
 }
 
 
-
 void
 Network::Cleanup()
 {
 	uint16 i;
 
-	
 	c3_RemoveAbortMessage();
 
 	if(m_netIO) {
 		m_netIO->Reset();
-		
-		
+
 	}
 
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
@@ -429,17 +423,17 @@ Network::Cleanup()
 	m_readyToStart = FALSE;
 	m_crcError = FALSE;
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	m_transport = 5;
 	m_sessionIndex = -1;
 	m_setupMode = FALSE;
-	
+
 	m_launchFromNetFunc = FALSE;
 
 	if(m_nsPlayerInfo) {
@@ -490,8 +484,7 @@ void Network::SetLaunchFromNetFunc(BOOL fromSave)
 	m_readyToStart = FALSE;
 	m_launchHost = g_netfunc->IsHost();
 
-	
-	
+
 	m_rememberExclusions = g_exclusions;
 	g_exclusions = NULL;
 
@@ -515,9 +508,8 @@ void Network::InitFromNetFunc()
 	m_battleViewOriginalEndTime = 0;
 
 	if(m_fromSave) {
-		
-		
-		
+
+
 		sint32 i, numLegalSlots = 1;
 		GUID zeroGuid;
 		memset(&zeroGuid, 0, sizeof(GUID));
@@ -532,7 +524,7 @@ void Network::InitFromNetFunc()
 		g_gamesetup.SetSize(static_cast<sint16>(numLegalSlots));
 		SetMaxPlayers(numLegalSlots);
 		if(!g_exclusions) {
-			
+
 			g_exclusions = m_rememberExclusions;
 			m_rememberExclusions = NULL;
 		}
@@ -549,23 +541,21 @@ void Network::InitFromNetFunc()
 	if(m_noThread) {
 		((ActivNetIO *)m_netIO)->SetDP(g_netfunc->GetDP());
 	} else {
-		
+
 	}
 
 	if(!m_readyToStart) {
 		if(m_iAmHost) {
 			if(!m_launchHost) {
-				
-				
+
 				g_civApp->PostQuitToLobbyAction();
 				m_readyToStart = TRUE;
 				return;
 			}
-			
-			
-			
+
+
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
-			
+
 			char nonConstStr[1024];
 			if(str) {
 				strcpy(nonConstStr, str);
@@ -608,7 +598,6 @@ void Network::SetNSAIPlayerInfo(int civ,
 {
 	m_nsAIPlayerInfo->AddTail(new NSAIPlayerInfo(civ, group, civpoints, settlers));
 }
-
 
 NSPlayerInfo *Network::GetNSPlayerInfo(sint32 index)
 {
@@ -661,7 +650,6 @@ NSAIPlayerInfo *Network::GetNSAIPlayerInfo(sint32 index)
 	return NULL;
 }
 
-
 void
 Network::Process()
 {
@@ -679,11 +667,11 @@ Network::Process()
 
 	DoResetCityOwnerHack();
 
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	ProcessSends();
 
@@ -720,14 +708,14 @@ Network::Process()
 			report->Packetize(buf, size);
 			err = m_netIO->Send(m_hostId, TRUE, buf, size);
 			report->Release();
-			
+
 			Assert(err == NET_ERR_OK);
-			
+
 			m_sentReadySignal = TRUE;
 		}
 	}
 
-	
+
 
 
 	if(m_netIO) {
@@ -739,7 +727,6 @@ Network::Process()
 
 	static time_t battleEndedTime = -1;
 
-	
 	if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id()) && (!g_theCurrentBattle || g_theCurrentBattle->IsDone())) {
 		if(battleEndedTime < 0) {
 			battleEndedTime = time(0);
@@ -751,28 +738,26 @@ Network::Process()
 		battleEndedTime = -1;
 	}
 
-		
 	if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 
-		time_t timeNow = time(0); 
+		time_t timeNow = time(0);
 
 		bool diplomacyShouldPause = false;
 		if(!DipWizard::CanInitiateRightNow() && IsMyTurn()) {
-			
+
 			sint32 p;
 			for(p = 0; p < k_MAX_PLAYERS; p++) {
 				if(!g_player[p] || p == g_selected_item->GetVisiblePlayer())
 					continue;
 				if(Diplomat::GetDiplomat(GetPlayerIndex()).GetReceiverHasInitiative(p)) {
-					
+
 					diplomacyShouldPause = true;
 					break;
 				}
 			}
 		}
 
-		
-		if(g_c3ui && 
+		if(g_c3ui &&
 		   (g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) ||
 		   (diplomacyShouldPause)) {
 			if(m_battleViewOpenedTime < 0) {
@@ -793,16 +778,16 @@ Network::Process()
 						sci_advancescreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 					}
 					g_director->AddEndTurn();
-					
+
 				}
 			}
 		}
 	}
 
 	if(m_gameStyle & k_GAME_STYLE_TOTAL_TIME) {
-		if(IsMyTurn() && 
+		if(IsMyTurn() &&
 		   (m_totalTimeUsed + (time(0) - m_turnStartedAt) > m_totalStartTime)) {
-			
+
 			g_player[g_selected_item->GetCurPlayer()]->
 				GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);
 		}
@@ -820,7 +805,6 @@ void Network::ProcessSends()
 
 			isBusy = FALSE;
 
-			
 			while(m_playerData[pl] && !packetList->IsEmpty() && !isBusy) {
 				uint8 buf[8192];
 				uint8 *sbuf;
@@ -858,7 +842,7 @@ void Network::ProcessSends()
 #endif
 						break;
 					case NET_ERR_WOULDBLOCK:
-						
+
 						isBusy = TRUE;
 						if (m_playerData[pl])
 						{
@@ -890,15 +874,13 @@ void Network::ProcessSends()
 }
 
 
-
 void Network::Init()
 {
 	NET_ERR err;
 	if(!m_initialized) {
 		m_transport = 5;
-		
 
-		
+
 		err = m_netIO->EnumTransports();
 		if(err == NET_ERR_OK) {
 			err = m_netIO->SetTransport(m_transport);
@@ -906,8 +888,7 @@ void Network::Init()
 
 		if(err == NET_ERR_OK) {
 			if(!g_theProfileDB->UseIPX()) {
-				
-				
+
 				err = m_netIO->SetLobby("california12.activision.com");
 			}
 		}
@@ -917,23 +898,19 @@ void Network::Init()
 	}
 }
 
-
 void
 Network::Host()
 {
 }
-
 
 void
 Network::EnumSessions()
 {
 }
 
-
 void Network::Join(sint32 index )
 {
 }
-
 
 void
 Network::EnumTransport(NET_ERR result,
@@ -949,12 +926,11 @@ Network::EnumTransport(NET_ERR result,
 		}
 	} else {
 		if(strstr(transname, "winets2d.dll")) {
-			
+
 			m_transport = index;
 		}
 	}
 }
-
 
 void
 Network::EnumSession(NET_ERR result,
@@ -974,9 +950,8 @@ Network::EnumSession(NET_ERR result,
 	}
 }
 
-
-void Network::SessionReady(NET_ERR result,     
-						   void* session_data) 
+void Network::SessionReady(NET_ERR result,
+						   void* session_data)
 {
 	DPRINTF(k_DBG_NET, ("Session Ready\n"));
 	m_netIO->GetMyId(m_pid);
@@ -985,10 +960,9 @@ void Network::SessionReady(NET_ERR result,
 	}
 }
 
-
 Packetizer*
-Network::GetHandler(uint8* buf, 
-					uint16 size) 
+Network::GetHandler(uint8* buf,
+					uint16 size)
 {
 	Packetizer *handler = NULL;
 	switch(MAKE_CIV3_ID(buf[0], buf[1])) {
@@ -1066,7 +1040,6 @@ Network::GetHandler(uint8* buf,
 	return handler;
 }
 
-
 void Network::PacketReady(sint32 from,
                           uint8* buf,
                           sint32 size)
@@ -1075,7 +1048,7 @@ void Network::PacketReady(sint32 from,
 		return;
 	if(buf[0] == k_CHUNK_HEAD &&
 	   buf[1] == k_CHUNK_BODY) {
-		
+
 		DechunkList(from, &buf[2], size - 2);
 	} else {
 		Packetizer* handler = GetHandler(buf, static_cast<sint16>(size));
@@ -1084,11 +1057,9 @@ void Network::PacketReady(sint32 from,
 			handler->Unpacketize((uint16)from, buf, static_cast<sint16>(size));
 			handler->Release();
 		}
-		
-		
+
 	}
 }
-
 
 void Network::AddPlayer(uint16 id,
                         char* name)
@@ -1096,7 +1067,7 @@ void Network::AddPlayer(uint16 id,
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
 	}
-	
+
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 		if(m_playerData[i] && m_playerData[i]->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d) but already have that player.\n",
@@ -1118,8 +1089,7 @@ void Network::AddPlayer(uint16 id,
 	m_newPlayerList->AddTail(new PlayerData(name, (uint16)id));
 }
 
-
-void Network::RemovePlayer(uint16 id) 
+void Network::RemovePlayer(uint16 id)
 {
 	DPRINTF(k_DBG_NET, ("Removing player %d\n", id));
 
@@ -1134,9 +1104,9 @@ void Network::RemovePlayer(uint16 id)
 		return;
 
 	sint32 index = IdToIndex(id);
-	
+
 	if(index < 0) {
-		
+
 		PointerList<PlayerData>::Walker walk(m_newPlayerList);
 		while(walk.IsValid()) {
 			if(walk.GetObj()->m_id == id) {
@@ -1151,12 +1121,10 @@ void Network::RemovePlayer(uint16 id)
 			walk.Next();
 		}
 
-		
 		Assert(FALSE);
 		return;
 	}
 
-	
 	if(m_playerData[index]) {
 		char *name = new char[strlen(m_playerData[index]->m_name) + 1];
 		strcpy(name, m_playerData[index]->m_name);
@@ -1192,7 +1160,7 @@ void Network::RemovePlayer(uint16 id)
 
 		SetMaxPlayers(CountOpenSlots() + CountTakenSlots());
 	} else {
-		
+
 		if(g_player[index]) {
 			g_player[index]->m_openForNetwork = TRUE;
 		}
@@ -1202,7 +1170,6 @@ void Network::RemovePlayer(uint16 id)
 	}
 
 }
-
 
 void Network::SetToHost()
 {
@@ -1232,13 +1199,12 @@ void Network::SetToHost()
 				continue;
 
 			if(!m_playerData[p]) {
-				
+
 				g_player[p]->SetPlayerType(PLAYER_TYPE_ROBOT);
 				SetRobotName(p);
 			} else {
-				
-				
-				
+
+
 				g_player[p]->SetPlayerType(PLAYER_TYPE_NETWORK);
 				Resync(p);
 			}
@@ -1259,7 +1225,7 @@ void Network::SetToHost()
 void Network::ChangeHost(uint16 id)
 {
 	if(m_hostId != 0) {
-		
+
 		m_readyToStart = FALSE;
 	}
 	m_hostId = id;
@@ -1319,14 +1285,12 @@ void Network::SetReady(uint16 id)
 						      m_turnStartTime,
 						      m_extraTimePerCity));
 
-	
-	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 
+	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX,
 				       index, player->m_id);
 	QueuePacket(player->m_id, netInfo);
-		
+
 	SetupPlayerFromNSPlayerInfo(player->m_id, index);
 
-	
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(!g_player[i]) continue;
 		if(m_playerData[i] && i != index) {
@@ -1354,18 +1318,17 @@ void Network::SetReady(uint16 id)
 		}
 
 		MainControlPanel::UpdateCityList();
-		
+
 		return;
 	}
 
 #define PROGRESS(x) { QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_PROGRESS, x)); }
 #define CPROGRESS(x) { chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_PROGRESS, x)); }
 
-
 #define k_CELL_LIST_CELL_SIZE 6
 
 	PROGRESS(0);
-	
+
 	uint16 cells = 0;
 	NetCellList* cellList = NULL;
 
@@ -1380,12 +1343,11 @@ void Network::SetReady(uint16 id)
 				cellList = new NetCellList(x,y);
 			}
 			cellList->m_cells++;
-			
 
 
 			if(cellList->m_cells * k_CELL_LIST_CELL_SIZE >= 220) {
 				chunkPackets.AddTail(cellList);
-				
+
 				cellList = NULL;
 			}
 		}
@@ -1396,7 +1358,7 @@ void Network::SetReady(uint16 id)
 	}
 	if(cellList && cellList->m_cells > 0) {
 		chunkPackets.AddTail(cellList);
-		
+
 	}
 
 	ChunkList(player->m_id, &chunkPackets);
@@ -1419,7 +1381,7 @@ void Network::SetReady(uint16 id)
 		}
 		sint32 r;
 		sint32 n = g_player[p]->m_strengths->m_strengthRecords[0].Num();
-		for(r = 0; r < n; r += 100) {			
+		for(r = 0; r < n; r += 100) {
 			chunkPackets.AddTail(new NetFullStrengths(p, r, ((r + 99) < n) ? (r+99) : (n - 1)));
 		}
 	}
@@ -1429,7 +1391,6 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(55);
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_START_UNITS, 0));
-	
 
 	sint32 numPlayers = 0;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
@@ -1442,41 +1403,36 @@ void Network::SetReady(uint16 id)
 
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
-		
+
 		chunkPackets.AddTail(new NetSetPlayerGuid(p));
 
-		
 		UnitDynamicArray *unitList = g_player[p]->GetAllCitiesList();
 		for(n = 0; n < unitList->Num(); n++) {
 			UnitData* unitData;
 			unitData = g_theUnitPool->GetUnit(unitList->Get(n).m_id);
 
-			
 			chunkPackets.AddTail(new NetUnit(unitData));
 
-			
 			chunkPackets.AddTail(new NetCity(unitData, TRUE));
 			chunkPackets.AddTail(new NetCityName(unitData->GetCityData()));
 			chunkPackets.AddTail(new NetCity2(unitData->GetCityData(), TRUE));
 			chunkPackets.AddTail(new NetCityBuildQueue(unitData->GetCityData()));
 			chunkPackets.AddTail(
-						new NetHappy(unitList->Get(n), 
+						new NetHappy(unitList->Get(n),
 									 unitData->GetCityData()->GetHappy(),
 									 TRUE));
 
-			
-			
-			
+
+
+
 
 		}
 
-		
 		unitList = g_player[p]->GetAllUnitList();
 		for(n = 0; n < unitList->Num(); n++) {
 			chunkPackets.AddTail(new NetUnit(g_theUnitPool->GetUnit(unitList->Get(n).m_id)));
 		}
 
-		
 		for(n = 0; n < g_player[p]->m_all_armies->Num(); n++) {
 			Army army = g_player[p]->m_all_armies->Access(n);
 			chunkPackets.AddTail(
@@ -1486,7 +1442,7 @@ void Network::SetReady(uint16 id)
 												  p,
 												  CAUSE_NEW_ARMY_INITIAL,
 												  g_player[p]->m_all_armies->Access(n)));
-			
+
 			sint32 m;
 			for(m = 0; m < army.NumOrders(); m++) {
 				const Order *order = army.GetOrder(m);
@@ -1504,7 +1460,6 @@ void Network::SetReady(uint16 id)
 		}
 
 
-		
 		UnitDynamicArray* traderList = g_player[p]->GetTradersList();
 		for(n = 0; n < traderList->Num(); n++) {
 			UnitData* unitData;
@@ -1512,34 +1467,29 @@ void Network::SetReady(uint16 id)
 			chunkPackets.AddTail(new NetUnit(unitData));
 		}
 
-		
 		n = g_player[p]->m_terrainImprovements->Num();
 		for(i = 0; i < n; i++) {
 			chunkPackets.AddTail(new NetTerrainImprovement(g_player[p]->m_terrainImprovements->Access(i).AccessData()));
 		}
 
-		
 		n = g_player[p]->m_allInstallations->Num();
 		for(i = 0; i < n; i++) {
 			chunkPackets.AddTail(new NetInstallation(g_player[p]->m_allInstallations->Access(i).AccessData()));
 		}
 
-		
 		chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_GOLD,
 		                                 p, g_player[p]->m_gold->GetLevel()));
-		
+
 		chunkPackets.AddTail(new NetReadiness(g_player[p]->m_readiness));
 
-		
 		chunkPackets.AddTail(new NetPlayerHappy((uint8)p, g_player[p]->m_global_happiness, TRUE));
-		
-		
+
 		chunkPackets.AddTail(new NetCivilization(g_player[p]->m_civilisation->AccessData()));
 
-		
-		
 
-		
+
+
+
 		sint32 y;
 		for(y = 0; y < g_theWorld->GetYHeight(); y += k_VISION_STEP) {
 			chunkPackets.AddTail(new NetVision(p, static_cast<sint16>(y), k_VISION_STEP));
@@ -1579,7 +1529,6 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(90);
 
-	
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			if(g_theWorld->GetCell(x, y)->GetNumUnits() >= 2) {
@@ -1588,11 +1537,10 @@ void Network::SetReady(uint16 id)
 		}
 	}
 
-	
-	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_END_UNITS, 
+	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_END_UNITS,
 										  g_theUnitPool->HackGetKey(),
 										  g_theArmyPool->HackGetKey()));
-	
+
 	PROGRESS(95);
 
 	chunkPackets.AddTail(new NetAgreementMatrix);
@@ -1628,7 +1576,6 @@ void Network::SetReady(uint16 id)
 	                                             m_playerData[m_playerIndex]->m_name,
 	                                             m_playerIndex));
 
-	
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_TURN,
 	                                      g_selected_item->GetCurPlayer()));
 
@@ -1655,9 +1602,8 @@ void Network::SyncRand(sint32 index)
 	}
 }
 
-
-void 
-Network::Enqueue(UnitData* unit) 
+void
+Network::Enqueue(UnitData* unit)
 {
 	if(m_iAmHost) {
 		NetUnit* netUnit = new NetUnit(unit);
@@ -1682,7 +1628,6 @@ Network::MoveUnit(UnitData *data, const MapPoint &pnt)
 		Unblock(data->GetOwner());
 	}
 }
-
 
 void
 Network::Enqueue(UnitData* unit, CityData* city, BOOL isInitial)
@@ -1712,7 +1657,6 @@ void Network::SendCityName(CityData *city)
 	}
 }
 
-
 void
 Network::AddNewUnit(sint32 owner, Unit u)
 {
@@ -1721,14 +1665,12 @@ Network::AddNewUnit(sint32 owner, Unit u)
 	}
 }
 
-
-void 
-Network::Enqueue(Cell* cell, 
-				 sint32 x, sint32 y) 
+void
+Network::Enqueue(Cell* cell,
+				 sint32 x, sint32 y)
 {
 	if(m_iAmHost) {
-		
-		
+
 		NetCellData* cellData = new NetCellData(cell, x, y);
 		QueuePacketToAll(cellData);
 	}
@@ -1752,9 +1694,8 @@ Network::Enqueue(TradeOfferData* offer)
 	}
 }
 
-
 void
-Network::Enqueue(NetInfo* netInfo) 
+Network::Enqueue(NetInfo* netInfo)
 {
 	QueuePacketToAll(netInfo);
 }
@@ -1784,7 +1725,7 @@ Network::Enqueue(Gold *gold)
 	}
 }
 
-void 
+void
 Network::Enqueue(MilitaryReadiness *readiness)
 {
 	if(m_iAmHost) {
@@ -1913,9 +1854,8 @@ Network::SendCheat(NetCheat *netCheat)
 }
 #endif
 
-
 void
-Network::SendAction(NetAction* netAction) 
+Network::SendAction(NetAction* netAction)
 {
 	if(m_hostId == 0) {
 		m_netIO->GetHostId(m_hostId);
@@ -1925,7 +1865,7 @@ Network::SendAction(NetAction* netAction)
 }
 
 void
-Network::SendActionBookmark(NetAction* netAction) 
+Network::SendActionBookmark(NetAction* netAction)
 {
 	if(m_hostId == 0) {
 		m_netIO->GetHostId(m_hostId);
@@ -1943,7 +1883,7 @@ Network::SendOrder(sint32 owner, const Army &army, UNIT_ORDER_TYPE o,
 		m_netIO->GetHostId(m_hostId);
 	}
 
-	QueuePacket(m_hostId, new NetOrder(owner, army, 
+	QueuePacket(m_hostId, new NetOrder(owner, army,
 	                                   o, a_path, point,
 	                                   arg, event));
 }
@@ -1956,10 +1896,9 @@ void Network::SendToServer(Packetizer *packet)
 	QueuePacket(m_hostId, packet);
 }
 
-
 void
-Network::QueuePacket(uint16 id, 
-                     Packetizer* packet) 
+Network::QueuePacket(uint16 id,
+                     Packetizer* packet)
 {
 	PacketManager l_AutoRelease(packet);
 
@@ -1971,22 +1910,19 @@ Network::QueuePacket(uint16 id,
 	if(!m_playerData[index])
 		return;
 
-	
-	
+
 	packet->m_destination = (sint32)id;
 
 	if(m_playerData[index]->m_blocked > 0)
 		return;
 
-	
-	
-	if(packet->m_unitId == 0 || 
+
+	if(packet->m_unitId == 0 ||
 	   !m_playerData[index]->m_unitHash.IsPresent(packet->m_unitId)) {
-		
+
 		m_playerData[index]->m_packetList->AddTail(packet);
 		packet->PacketizeAndSave();
 
-		
 		if(packet->m_unitId != 0) {
 			m_playerData[index]->m_unitHash.Add(packet->m_unitId);
 		}
@@ -1995,19 +1931,18 @@ Network::QueuePacket(uint16 id,
 	ProcessSends();
 }
 
-
 void
-Network::QueuePacketBookmark(uint16 id, 
-							 Packetizer* packet) 
+Network::QueuePacketBookmark(uint16 id,
+							 Packetizer* packet)
 {
 	PacketManager	l_AutoRelease(packet);
 	sint32 index = IdToIndex(id);
 	Assert(m_playerData[index]);
 
-	
-	
-	
-	
+
+
+
+
 	if(m_playerData[index]->m_blocked > 0)
 		return;
 
@@ -2018,19 +1953,16 @@ Network::QueuePacketBookmark(uint16 id,
 		return;
 	}
 
-	
-	
+
 	packet->m_destination = (sint32)id;
 
-	
-	
-	if(packet->m_unitId == 0 || 
+
+	if(packet->m_unitId == 0 ||
 	   !m_playerData[index]->m_unitHash.IsPresent(packet->m_unitId)) {
-		
+
 		m_playerData[index]->m_packetList->InsertAt(m_playerData[index]->m_bookmarks->GetTail(), packet);
 		packet->PacketizeAndSave();
 
-		
 		if(packet->m_unitId != 0) {
 			m_playerData[index]->m_unitHash.Add(packet->m_unitId);
 		}
@@ -2044,33 +1976,31 @@ Network::QueuePacketToAll(Packetizer* packet)
 	PacketManager	l_AutoRelease(packet);
 
 	if(!g_player) {
-		
+
 		return;
 	}
-	
+
 	for(sint32 pl = 0; pl < k_MAX_PLAYERS; pl++) {
 		if(!g_player[pl]) continue;
-		
-		if(m_playerData[pl] && 
+
+		if(m_playerData[pl] &&
 		   g_player[pl]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
 
-			
-			
-			
+
+
+
 
 			if(m_playerData[pl]->m_blocked > 0)
 				continue;
 
-			
-			
-			if(packet->m_unitId == 0 || 
+
+			if(packet->m_unitId == 0 ||
 			   !m_playerData[pl]->m_unitHash.IsPresent(packet->m_unitId)) {
 
-				
 				m_playerData[pl]->m_packetList->AddTail(packet);
 				packet->PacketizeAndSave();
 				if(packet->m_unitId != 0) {
-					
+
 					m_playerData[pl]->m_unitHash.Add(packet->m_unitId);
 				}
 				packet->AddRef();
@@ -2082,7 +2012,7 @@ Network::QueuePacketToAll(Packetizer* packet)
 }
 
 void Network::Freeze(uint16 id)
-{ 
+{
 	if(id == 0xffff) {
 		Assert(IsClient());
 		id = m_hostId;
@@ -2091,7 +2021,7 @@ void Network::Freeze(uint16 id)
 }
 
 void Network::Unfreeze(uint16 id)
-{ 
+{
 	if(id == 0xffff) {
 		Assert(IsClient());
 		id = m_hostId;
@@ -2117,20 +2047,19 @@ void Network::Bookmark(uint16 id)
 
 void Network::Block(sint32 index)
 {
-	
+
 	if(m_playerData[index])
 		m_playerData[index]->m_blocked++;
 }
 
 void Network::Unblock(sint32 index)
 {
-	
+
 	if(m_playerData[index]) {
 		m_playerData[index]->m_blocked--;
 		Assert(m_playerData[index]->m_blocked >= 0);
 	}
 }
-
 
 
 sint32
@@ -2156,7 +2085,6 @@ Network::IdToIndex(uint16 id)
 }
 
 
-
 uint16
 Network::IndexToId(sint32 index)
 {
@@ -2170,15 +2098,15 @@ Network::IndexToId(sint32 index)
 }
 
 void Network::SetPlayerIndex(sint32 index, uint16 id)
-{ 
+{
 	BOOL sendMessage = FALSE;
 	if(id == m_pid) {
-		m_playerIndex = index; 
+		m_playerIndex = index;
 	} else {
 		sendMessage = TRUE;
 	}
 	m_totalTimeUsed = 0;
-	
+
 	PointerList<PlayerData>::Walker walk(m_newPlayerList);
 	while(walk.IsValid()) {
 		PlayerData* pd = (PlayerData*)walk.GetObj();
@@ -2198,10 +2126,10 @@ void Network::SetPlayerIndex(sint32 index, uint16 id)
 		m_playerData[index]->m_ready = TRUE;
 	}
 	m_playerData[index]->m_id = id;
-	
-	
-	
-	
+
+
+
+
 }
 
 
@@ -2260,9 +2188,9 @@ void Network::CheckReceivedObject(uint32 id)
 sint32 Network::FindEmptySlot(PlayerData *player, uint16 id)
 {
 	sint32 newslot = -1;
-	
+
 	NSPlayerInfo *nspi = GetNSPlayerInfoByID(id);
-	
+
 	sint32 p;
 	for(p = 1; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p] && g_player[p]->m_networkId == id &&
@@ -2270,27 +2198,27 @@ sint32 Network::FindEmptySlot(PlayerData *player, uint16 id)
 			return p;
 		}
 
-		if(nspi && g_player[p] && 
+		if(nspi && g_player[p] &&
 		   g_player[p]->m_civilisation->GetCivilisation() == nspi->m_civ &&
 		   !m_playerData[p]) {
 			return p;
 		}
 	}
-			
+
 	GUID zeroGuid;
 	memset((uint8 *)&zeroGuid, 0, sizeof(zeroGuid));
 
 	for(p = 1; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
-		
+
 		if(!m_playerData[p]) {
 			if(newslot < 0 || g_player[p]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 					newslot = p;
 			}
-			
-			
-			
-			
+
+
+
+
 			if(g_theProfileDB->NoHumanPlayersOnHost() && player->m_id == m_pid &&
 			   newslot >= 0 && g_player[newslot]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 				break;
@@ -2299,11 +2227,11 @@ sint32 Network::FindEmptySlot(PlayerData *player, uint16 id)
 				(g_player[newslot]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
 				(g_player[newslot]->m_openForNetwork &&
 				 memcmp(&g_player[newslot]->m_networkGuid, &zeroGuid, sizeof(GUID)) == 0))) {
-				
-				
-				
-				
-				
+
+
+
+
+
 				break;
 			}
 		}
@@ -2317,7 +2245,7 @@ sint32 Network::FindEmptySlot(PlayerData *player, uint16 id)
 sint32 Network::FindOldSlot(PlayerData *player, uint16 id)
 {
 	sint32 p;
-	
+
 	GUID zeroGuid;
 	memset((uint8 *)&zeroGuid, 0, sizeof(zeroGuid));
 
@@ -2331,7 +2259,7 @@ sint32 Network::FindOldSlot(PlayerData *player, uint16 id)
 
 		if(memcmp(&g_player[p]->m_networkGuid, &player->m_guid, sizeof(GUID)) == 0) {
 			if(m_playerData[p]) {
-				
+
 				return -1;
 			}
 			return p;
@@ -2349,7 +2277,6 @@ Network::ProcessNewPlayer(uint16 id)
 
 	PointerList<PlayerData>::Walker walk(m_newPlayerList);
 
-	
 	while(walk.IsValid() && !found) {
 		PlayerData* player = walk.GetObj();
 		if(player->m_id != id) {
@@ -2378,33 +2305,28 @@ Network::ProcessNewPlayer(uint16 id)
 			return;
 		}
 
-		
 		if(memcmp(&g_player[newslot]->m_networkGuid, &zeroGuid, sizeof(GUID)) &&
 		   memcmp(&g_player[newslot]->m_networkGuid, &player->m_guid, sizeof(GUID))) {
-			
-			
-			SendWrongPlayerJoinedMessage(player->m_name, newslot);			
+
+			SendWrongPlayerJoinedMessage(player->m_name, newslot);
 		} else {
 			g_player[newslot]->m_networkGuid = player->m_guid;
 			g_player[newslot]->m_networkGroup = player->m_group;
 			ClosePlayer(newslot);
 		}
 		found = TRUE;
-		
-		
-		
+
+
 		m_playerData[newslot] = player;
-		
+
 		if(m_iAmHost) {
 			SetMaxPlayers(CountOpenSlots() + CountTakenSlots());
 		}
 
-		
-		
+
 		Assert(g_player[newslot]->GetPlayerType() != PLAYER_TYPE_NETWORK);
-		
-		
-		
+
+
 		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
 		if(player->m_id != m_pid) {
 			g_player[newslot]->SetPlayerType(PLAYER_TYPE_NETWORK);
@@ -2429,11 +2351,10 @@ Network::ProcessNewPlayer(uint16 id)
 				g_radarMap->Update();
 			}
 		}
-		
+
 		player->m_index = newslot;
-		
-		
-		NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 
+
+		NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX,
 									   newslot, player->m_id);
 		QueuePacketToAll(netInfo);
 		QueuePacketToAll(new NetSetPlayerGuid(newslot));
@@ -2448,12 +2369,12 @@ Network::ProcessNewPlayer(uint16 id)
 			SetupPlayerFromNSPlayerInfo(m_pid, m_playerIndex);
 		}
 		walk.Remove();
-		
+
 		SetReady(id);
 		if(!m_readyToStart) {
 			if(m_newPlayerList->IsEmpty()) {
 				ResetTurnEndsAt();
-				
+
 				c3_RemoveAbortMessage();
 				SetReadyToStart(TRUE);
 			}
@@ -2470,25 +2391,24 @@ Network::ProcessNewPlayer(uint16 id)
 extern sint32 g_debugOwner;
 void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
 {
-	
-	
+
 
 	if(!priv)
-		sprintf(m_chatStr, "[%s] ", 
-				((from == 0) ? g_theStringDB->GetNameStr("NETWORK_SENDER_SYSTEM") : 
+		sprintf(m_chatStr, "[%s] ",
+				((from == 0) ? g_theStringDB->GetNameStr("NETWORK_SENDER_SYSTEM") :
 				 (g_player[from] ? (g_player[from]->m_civilisation->GetLeaderName()) : ".")));
 	else
-		sprintf(m_chatStr, "[P] (%s) ", ((from == 0) ? 
-										 (g_theStringDB->GetNameStr("NETWORK_SENDER_SYSTEM")) : 
-										 (g_player[from] ? 
+		sprintf(m_chatStr, "[P] (%s) ", ((from == 0) ?
+										 (g_theStringDB->GetNameStr("NETWORK_SENDER_SYSTEM")) :
+										 (g_player[from] ?
 										  (g_player[from]->m_civilisation->GetLeaderName()) :
 										  ("."))));
 
 	strcat(m_chatStr, str);
-	
+
 	if (g_chatBox) {
 		MBCHAR *c;
-		
+
 		for(c = m_chatStr; *c; c++) {
 			if(*c == '<')
 				*c = '(';
@@ -2513,9 +2433,9 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 			sprintf(buf, "Risk: %d", g_theGameSettings->GetRisk());
 			g_chatBox->AddLine(m_playerIndex, buf);
 
-			sprintf(buf, "Pollution: %s", g_theGameSettings->GetPollution() ? "On" : "Off");			
+			sprintf(buf, "Pollution: %s", g_theGameSettings->GetPollution() ? "On" : "Off");
 			g_chatBox->AddLine(m_playerIndex, buf);
-			
+
 			sprintf(buf, "Bloodlust: %s", g_theGameSettings->GetAlienEndGame() ? "Off" : "On");
 			g_chatBox->AddLine(m_playerIndex, buf);
 
@@ -2538,7 +2458,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 					if(g_player[i]->m_networkGroup == g_player[m_playerIndex]->m_networkGroup) {
 						char civname[1024];
 						g_player[i]->m_civilisation->GetSingularCivName(civname);
-						sprintf(buf + strlen(buf), "%s(%s)  ", 
+						sprintf(buf + strlen(buf), "%s(%s)  ",
 								g_player[i]->m_civilisation->GetLeaderName(),
 								civname);
 					}
@@ -2565,22 +2485,22 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 						for(p = 0; p < k_MAX_PLAYERS; p++) {
 							if(!g_player[p])
 								continue;
-							
+
 							char name[256];
 							char *n, *ln;
-							
-							for(n = &name[0], ln = g_player[p]->m_civilisation->GetLeaderName(); 
+
+							for(n = &name[0], ln = g_player[p]->m_civilisation->GetLeaderName();
 							*ln && !isspace(*ln); ln++, n++)
-								*n = *ln;					   						
+								*n = *ln;
 							*n = 0;
-							
-							if(g_player[p] && 
+
+							if(g_player[p] &&
 								stricmp(destination, name) == 0) {
 								dest = p;
 								break;
 							}
 						}
-					} else {						
+					} else {
 						dest = atoi(destination);
 					}
 					if(dest > 0 && dest < k_MAX_PLAYERS && g_player[dest]) {
@@ -2595,12 +2515,10 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 			}
 		}
 
-		
 		return;
 	}
 
-	
-	
+
 	AddChatText(str, len, static_cast<uint8>(g_selected_item->GetVisiblePlayer()), FALSE);
 
 	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
@@ -2692,7 +2610,7 @@ void Network::DisplayChat(aui_Surface *surf)
 			totalSentBytes += m_sentPacketBytes[i];
 		}
 		sprintf(buf, "Total: Rx: %d/%d, Tx: %d/%d [%d blocked]",
-				totalCount, totalBytes, 
+				totalCount, totalBytes,
 				totalSent, totalSentBytes,
 				m_blockedPackets);
 		primitives_DrawText(surf, k_LEFT_EDGE,
@@ -2753,11 +2671,9 @@ void Network::LogPacket(uint8 c1, uint8 c2, uint16 size)
 {
 	sint32 idx;
 
-
 	idx = GetPacketLogIndex(MAKE_CIV3_ID(c1, c2));
 	m_packetCounter[idx]++;
 	m_packetBytes[idx] += size;
-	
 
 }
 
@@ -2863,7 +2779,7 @@ void Network::InitPacketLog()
 				m_packetName[i][1] = k_PACKET_CITY2_ID & 0xff; break;
 			case 27:
 				m_packetName[i][0] = k_PACKET_POLLUTION_ID >> 8;
-				m_packetName[i][1] = k_PACKET_POLLUTION_ID & 0xff; break; 
+				m_packetName[i][1] = k_PACKET_POLLUTION_ID & 0xff; break;
 			case 28:
 				m_packetName[i][0] = k_PACKET_CITY_BQ_ID >> 8;
 				m_packetName[i][1] = k_PACKET_CITY_BQ_ID & 0xff; break;
@@ -3052,7 +2968,7 @@ void Network::SetSpeedStyle(BOOL on, sint32 timePerTurn,
 		} else {
 			m_gameStyle &= ~(k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES);
 		}
-		
+
 		if(m_iAmHost) {
 			Enqueue(new NetInfo(NET_INFO_CODE_SPEED_STYLE, on, timePerTurn, timePerCity));
 		}
@@ -3067,7 +2983,7 @@ void Network::SetTimedStyle(BOOL on, sint32 timePerGame,
 		if(on) {
 			if(!(m_gameStyle & k_GAME_STYLE_TOTAL_TIME))
 				m_totalTimeUsed = 0;
-			
+
 			m_gameStyle |= k_GAME_STYLE_TOTAL_TIME;
 		} else {
 			m_gameStyle &= ~(k_GAME_STYLE_TOTAL_TIME);
@@ -3086,13 +3002,13 @@ void Network::SetSimultaneousStyle(BOOL on, BOOL fromServer)
 		} else {
 			m_gameStyle &= ~(k_GAME_STYLE_SIMULTANEOUS);
 		}
-		
+
 		if(m_iAmHost) {
 			Enqueue(new NetInfo(NET_INFO_CODE_SIMULTANEOUS_STYLE, on));
 		}
 	}
 }
-	
+
 void Network::SetCarryoverStyle(BOOL on, BOOL fromServer)
 {
 	if(!IsActive() || (m_iAmHost || fromServer)) {
@@ -3109,7 +3025,7 @@ void Network::SetCarryoverStyle(BOOL on, BOOL fromServer)
 			Enqueue(new NetInfo(NET_INFO_CODE_CARRYOVER_STYLE, on));
 		}
 	}
-}	
+}
 
 void Network::SetStyleFromServer(uint8 gameStyle,
 								 sint32 movesPerSlice,
@@ -3125,7 +3041,7 @@ void Network::SetStyleFromServer(uint8 gameStyle,
 
 	m_totalTimeUsed = 0;
 }
- 
+
 void Network::UnitsMoved(sint32 count)
 {
 	if(!(m_gameStyle & k_GAME_STYLE_UNIT_MOVES))
@@ -3143,7 +3059,7 @@ void Network::SetMyTurn(BOOL turn)
 		if(m_gameStyle & k_GAME_STYLE_UNIT_MOVES) {
 			m_unitMovesUsed = 0;
 		}
-		
+
 		m_turnStartedAt = time(0);
 		if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 			ResetTurnEndsAt();
@@ -3156,7 +3072,7 @@ void Network::SetMyTurn(BOOL turn)
 
 	} else {
 		if(m_isMyTurn) {
-			
+
 			sint32 timeUsed = time(0) - m_turnStartedAt;
 			m_totalTimeUsed += timeUsed;
 			if((m_gameStyle & k_GAME_STYLE_SPEED) &&
@@ -3169,7 +3085,7 @@ void Network::SetMyTurn(BOOL turn)
 	}
 	m_isMyTurn = turn;
 
-	
+
 
 
 }
@@ -3196,7 +3112,7 @@ void Network::TurnSync()
 	if(IsLocalPlayer(g_selected_item->GetCurPlayer())) {
 		SetMyTurn(TRUE);
 
-		
+
 
 
 
@@ -3250,7 +3166,7 @@ void Network::EnterSetupMode()
 				g_player[i]->m_doneSettingUp = FALSE;
 				if(m_iAmHost) {
 					Assert(g_player[i]->m_all_armies->Num() > 0);
-					
+
 					if(g_player[i]->m_all_armies->Num() > 0) {
 						MapPoint pos;
 						g_player[i]->m_all_armies->Access(0).GetPos(pos);
@@ -3283,7 +3199,7 @@ void Network::SignalSetupDone(PLAYER_INDEX player)
 	if(m_iAmClient) {
 		SendAction(new NetAction(NET_ACTION_DONE_SETTING_UP));
 		return;
-	}		
+	}
 
 	sint32 count = 0;
 	sint32 active = 0;
@@ -3314,7 +3230,6 @@ void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;
-
 
 	g_player[player]->AddUnitVision(center, radius, revealed);
 
@@ -3382,10 +3297,10 @@ void Network::AckBeginTurn(PLAYER_INDEX index)
 	if(m_playerData[index]) {
 		m_playerData[index]->m_ackBeginTurn = TRUE;
 	}
-	
 
-	
-	
+
+
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 		GEV_BeginTurn,
 		GEA_Player, index,
@@ -3406,7 +3321,7 @@ UnitDynamicArray *Network::GetCreatedCities(PLAYER_INDEX owner)
 	Assert(m_playerData[owner]);
 	if(!m_playerData[owner])
 		return NULL;
-	
+
 	return m_playerData[owner]->m_createdCities;
 }
 
@@ -3418,7 +3333,7 @@ void Network::AddResetCityOwnerHack(const Unit &unit)
 void Network::DoResetCityOwnerHack()
 {
 	sint32 i, n = m_resetCityOwnerHackList->Num();
-	
+
 	for(i = 0; i < n; i++) {
 		Unit u = m_resetCityOwnerHackList->Access(i);
 		if(g_theUnitPool->IsValid(u)) {
@@ -3448,7 +3363,7 @@ void Network::SetupPlayerFromNSPlayerInfo(uint16 id, sint32 index)
 			}
 			walk.Next();
 		}
-		
+
 		if(!nspi)
 			return;
 		if(!m_fromSave) {
@@ -3485,7 +3400,7 @@ uint32 Network::GetHumanMask()
 			}
 		}
 	}
-	
+
 	return mask;
 }
 
@@ -3496,7 +3411,7 @@ void Network::SetCondensePopMoves(BOOL on)
 
 BOOL Network::ShouldAckBeginTurn()
 {
-	
+
 	if(m_enactedDiplomaticRequests->Num() > 0)
 		return FALSE;
 	if(m_iAmClient) {
@@ -3515,12 +3430,12 @@ void Network::AddEnact(DiplomaticRequest &req)
 void Network::RemoveEnact(DiplomaticRequest &req)
 {
 	if(m_iAmClient) {
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		m_enactedDiplomaticRequests->Del(req);
 	} else {
 		Assert(m_enactedDiplomaticRequests->Access(0).m_id == req.m_id);
@@ -3533,8 +3448,7 @@ void Network::RemoveEnact(DiplomaticRequest &req)
 			return;
 		}
 		if(g_theDiplomaticRequestPool->IsValid(req)) {
-			
-			
+
 			m_enactedDiplomaticRequests->Access(0).Enact(TRUE);
 		}
 		m_enactedDiplomaticRequests->DelIndex(0);
@@ -3579,7 +3493,6 @@ void Network::ResetGuid(sint32 player)
 		QueuePacketToAll(new NetSetPlayerGuid(player));
 	}
 }
-
 
 sint32 Network::CountOpenSlots()
 {
@@ -3645,12 +3558,10 @@ void Network::SetAllPlayersReady()
 		}
 		NewTurnCount::ClientStartNewYear();
 
-		
 		c3_RemoveAbortMessage();
 		SetReadyToStart(TRUE);
 	}
 }
-
 
 void Network::SetProgress(sint32 progress)
 {
@@ -3661,7 +3572,7 @@ void Network::SetProgress(sint32 progress)
 	c3_AbortUpdateData(NULL, (progress > 100 ? 100 : progress) );
 	if(m_progress >= 100) {
 		const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
-		
+
 		char nonConstStr[1024];
 		if(str) {
 			strcpy(nonConstStr, str);
@@ -3672,7 +3583,6 @@ void Network::SetProgress(sint32 progress)
 	} else {
 		c3_AbortUpdateData(NULL, progress);
 
-		
 		g_civApp->ProcessGraphicsCallback();
 	}
 }
@@ -3696,23 +3606,22 @@ void Network::SetReadyToStart(BOOL ready)
 		}
 
 		if(m_wasAttached) {
-			
+
 			g_player[m_playerIndex]->SetPlayerType(PLAYER_TYPE_ROBOT);
 		}
 
 		if(m_iAmHost) {
-			
-			
+
 			sint32 i;
 			for(i = 0; i < k_MAX_PLAYERS; i++) {
 				if(!g_player[i]) continue;
 				if(i == m_playerIndex) continue;
 				if(!m_playerData[i] && g_player[i]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
 					SendLeftMessage(g_player[i]->m_civilisation->GetLeaderName(), i);
-					
-					
-					
-					
+
+
+
+
 					g_player[i]->SetPlayerType(PLAYER_TYPE_ROBOT);
 					SetRobotName(i);
 					OpenPlayer(i);
@@ -3724,15 +3633,15 @@ void Network::SetReadyToStart(BOOL ready)
 					}
 				}
 				if(i == g_selected_item->GetCurPlayer() && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-					
+
 					g_director->AddEndTurn();
 				}
 				QueuePacketToAll(new NetSetPlayerGuid(i));
 			}
 
-			
-			
-			
+
+
+
 			QueuePacketToAll(new NetInfo(NET_INFO_CODE_ALL_PLAYERS_READY));
 		}
 
@@ -3754,7 +3663,6 @@ void Network::SendJoinedMessage(MBCHAR *name, sint32 player)
 
 		g_slicEngine->Execute(so);
 
-		
 	}
 
 	if(m_iAmHost) {
@@ -3780,7 +3688,7 @@ void Network::SendLeftMessage(MBCHAR *name, sint32 player)
 		SlicObject *so;
 		so = new SlicObject("350NetworkPlayerLeft");
 		so->AddAction(name);
-		
+
 		so->AddRecipient(m_playerIndex);
 
 		MBCHAR interp[k_MAX_NAME_LEN];
@@ -3821,8 +3729,8 @@ void Network::SendNewHostMessage(MBCHAR *name, sint32 player)
 	}
 }
 
-void Network::Resync(sint32 playerIndex) 
-{	
+void Network::Resync(sint32 playerIndex)
+{
 	if(!m_playerData[playerIndex]) {
 		return;
 	}
@@ -3834,20 +3742,18 @@ void Network::Resync(sint32 playerIndex)
 	if(id != 0xffff) {
 		m_playerData[playerIndex]->m_sentResync = TRUE;
 
-		
-		
-		
+
+
+
 		m_playerData[playerIndex]->m_createdUnits.Clear();
 		m_playerData[playerIndex]->m_createdArmies.Clear();
 		m_playerData[playerIndex]->m_createdCities->Clear();
 
-		
-		
+
 		if(g_selected_item->GetCurPlayer() == playerIndex &&
 		   !m_playerData[playerIndex]->m_ackBeginTurn) {
 
-			
-			
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 				GEV_BeginTurn,
 				GEA_Player, playerIndex,
@@ -3883,10 +3789,9 @@ void Network::StartResync()
 		sci_advancescreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 	}
 
-	
-	
+
 	if(g_player[m_playerIndex]->GetPlayerType() == PLAYER_TYPE_ROBOT ) {
-		
+
 		m_wasAttached = TRUE;
 	}
 
@@ -3894,11 +3799,11 @@ void Network::StartResync()
 	m_waitingOnResync = FALSE;
 
 	if(m_gameObjects) {
-		
-		
-		
-		
-		
+
+
+
+
+
 		delete m_gameObjects;
 		m_gameObjects = new NetGameObj;
 	}
@@ -3907,7 +3812,6 @@ void Network::StartResync()
 
 	DPRINTF(k_DBG_NET, ("Acknowledging resync\n"));
 	QueuePacket(m_hostId, new NetReport(NET_REPORT_ACK_RESYNC));
-	
 
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
@@ -3943,7 +3847,7 @@ void Network::RequestResync(RESYNC_REASON reason)
 
 	if(m_waitingOnResync)
 		return;
-	
+
 #ifdef WIN32
 	DPRINTF(k_DBG_NET, ("RequestResync(%d) stack trace: %s\n", reason, c3debug_StackTrace()));
 #endif
@@ -3996,14 +3900,14 @@ void network_PlayerListCallback(sint32 player, sint32 val, sint32 action)
 					g_network.KickPlayer(player);
 				break;
 			case PLAYER_ACTION_OPEN:
-				
+
 					g_network.OpenPlayer(player);
-				
+
 				break;
 			case PLAYER_ACTION_CLOSE:
-				
+
 					g_network.ClosePlayer(player);
-				
+
 				break;
 		}
 	}
@@ -4011,7 +3915,6 @@ void network_PlayerListCallback(sint32 player, sint32 val, sint32 action)
 		g_networkPlayersScreen->UpdateData();
 	}
 }
-
 
 MBCHAR *Network::GetStatusString(sint32 player)
 {
@@ -4055,24 +3958,22 @@ void Network::ChunkList(uint16 id, PointerList<Packetizer> *a_List)
 
 	sint32 mapBufSize = a_List->GetCount() * 258 + 16384;
 	uint8 *mapBuf = new uint8[mapBufSize];
-	
+
 	mapBuf[0] = k_CHUNK_HEAD;
 	mapBuf[1] = k_CHUNK_BODY;
 	sint32 size = 2;
 
-	
 	while(a_List->GetHead()) {
 		uint16 len = 0;
 		Packetizer *packet = a_List->RemoveHead();
 		packet->Packetize(&mapBuf[size + 2], len);
-		Assert(len < 16384); 
-		                   
+		Assert(len < 16384);
+
 		putshort(&mapBuf[size], len);
 		size += len + 2;
 
 		if(len >= 256) {
-			
-			
+
 			uint8* newMapBuf = new uint8[mapBufSize + len - 256];
 			memcpy(newMapBuf, mapBuf, size);
 			delete [] mapBuf;
@@ -4082,15 +3983,15 @@ void Network::ChunkList(uint16 id, PointerList<Packetizer> *a_List)
 
 		delete packet;
 	}
-	
+
 	Packetizer *chunk = new Packetizer(mapBuf, size);
 	QueuePacket(id, chunk);
-	
+
 }
 
 void Network::DechunkList(sint32 from, uint8 *buf, sint32 len)
 {
-	
+
 	sint32 pos;
 	pos = 0;
 	while(pos < len) {
@@ -4134,7 +4035,6 @@ void Network::SetRobotName(sint32 player)
 	}
 }
 
-					
 void Network::SendCity(CityData *cd)
 {
 	SendToServer(new NetCity(cd->GetHomeCity().AccessData(), TRUE));
@@ -4145,7 +4045,7 @@ void Network::SendCity(CityData *cd)
 }
 
 void Network::NotifyDiplomacyResponse(Response &response, sint32 p1, sint32 p2)
-{	
+{
 	if(!g_network.IsActive()) return;
 
 	if(IsHost()) {
@@ -4169,10 +4069,9 @@ void Network::SendUngroupRequest(const Army &army, const CellUnitList &units)
 	SendToServer(new NetUngroupRequest(army, units));
 }
 
-
 void network_VerifyGameData()
 {
-	
+
 	sint32 p;
 	sint32 u;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {

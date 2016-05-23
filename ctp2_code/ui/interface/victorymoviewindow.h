@@ -53,5 +53,4 @@ private:
 	Sequence			*m_sequence;
 };
 
-
 #endif

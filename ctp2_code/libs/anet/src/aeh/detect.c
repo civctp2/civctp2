@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
 {
 //Most reliable routine to find description of Video Card from Registry
 //	Does NOT check for or check info from DirectX!
-//Bonus: It's not recursive	
+//Bonus: It's not recursive
 	HKEY hKey1, hKey2, hSubKey1, hSubKey2;
 	int i, returnVal, found_it;
 	DWORD valueSize, valueType, value;
@@ -67,7 +67,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
          //
          valueSize = sizeof(DWORD);
          valueType = REG_DWORD;
-         returnVal = RegQueryValueEx(hSubKey1, "Problem", NULL, &valueType, (unsigned char *)&value, &valueSize); 
+         returnVal = RegQueryValueEx(hSubKey1, "Problem", NULL, &valueType, (unsigned char *)&value, &valueSize);
          if ( (returnVal == ERROR_SUCCESS) && (value == 0) )
          {
             //
@@ -77,7 +77,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
             valueSize = sizeof(keyName);
             valueType = REG_SZ;
             memset(keyName, 0, sizeof(keyName));
-            returnVal = RegQueryValueEx(hSubKey1, "HardwareKey", NULL, &valueType, (unsigned char *)keyName, &valueSize); 
+            returnVal = RegQueryValueEx(hSubKey1, "HardwareKey", NULL, &valueType, (unsigned char *)keyName, &valueSize);
             if ( returnVal == ERROR_SUCCESS )
             {
                //
@@ -89,7 +89,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
                   valueSize = sizeof(keyName);
                   valueType = REG_SZ;
                   memset(keyName, 0, sizeof(keyName));
-                  returnVal = RegQueryValueEx(hSubKey2, "Driver", NULL, &valueType, (unsigned char *)keyName, &valueSize); 
+                  returnVal = RegQueryValueEx(hSubKey2, "Driver", NULL, &valueType, (unsigned char *)keyName, &valueSize);
                   if ( (returnVal == ERROR_SUCCESS) && (strstr(strupr(keyName), "DISPLAY") != NULL) )
                   {
                      //
@@ -99,7 +99,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
                      //
                      valueSize = *len;
                      valueType = REG_SZ;
-                     returnVal = RegQueryValueEx(hSubKey2, "DeviceDesc", NULL, &valueType, (unsigned char *)desc, &valueSize); 
+                     returnVal = RegQueryValueEx(hSubKey2, "DeviceDesc", NULL, &valueType, (unsigned char *)desc, &valueSize);
                      if ( returnVal == ERROR_SUCCESS ) {
                         found_it = 1;
 						*len = valueSize - 1;
@@ -123,38 +123,37 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
    RegCloseKey(hKey1);
 }
 
-
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 BOOL FindDeviceInRegistry(LPSTR szStartKey, LPSTR szSearchStr)
 {
-	HKEY TopKey, CurKey; 
+	HKEY TopKey, CurKey;
 	DWORD dwTypeCode, dwSizeOfDataBuffer;
 	char szValueBuffer[MAX_PATH];
 	char szNewKeyName[MAX_PATH];
 	long i;
-	
+
 	dwTypeCode = REG_SZ;
 //	szDest[0] = '\0';
-	
-	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szStartKey, 0, 
+
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szStartKey, 0,
 		KEY_ALL_ACCESS, &TopKey) == ERROR_SUCCESS)
 	{
-		for (i=0; 
+		for (i=0;
 			RegEnumKey(TopKey, i, szValueBuffer, MAX_PATH) == ERROR_SUCCESS;
 			i++)
 		{
 			sprintf(szNewKeyName, "%s\\%s", szStartKey, szValueBuffer);
-			if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szNewKeyName, 0, 
+			if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szNewKeyName, 0,
 				KEY_ALL_ACCESS, &CurKey) == ERROR_SUCCESS)
 			{
 				dwSizeOfDataBuffer = MAX_PATH;
 				memset(szValueBuffer, 0, MAX_PATH);
-				RegQueryValueEx(CurKey, "DeviceDesc", NULL, &dwTypeCode, 
+				RegQueryValueEx(CurKey, "DeviceDesc", NULL, &dwTypeCode,
 					(LPBYTE) szValueBuffer, &dwSizeOfDataBuffer);
 				if (strstr(szValueBuffer, szSearchStr))
 				{
-					RegCloseKey(CurKey);					
+					RegCloseKey(CurKey);
 					return TRUE;
 				}
 				else
@@ -171,7 +170,6 @@ BOOL FindDeviceInRegistry(LPSTR szStartKey, LPSTR szSearchStr)
 	}
 	return FALSE;
 }
-
 
 
 //--------------------------------------------------------------------------
@@ -285,7 +283,6 @@ BOOL WINAPI FindPowerVR()
 
 	return result;
 }
-
 
 
 //--------------------------------------------------------------------------

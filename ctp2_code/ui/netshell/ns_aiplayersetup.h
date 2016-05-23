@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,7 +43,6 @@ public:
 	void Pack();
 	void Unpack();
 
-	
 	void Reset();
 
 	int	GetTribe() const { return m_tribe; }
@@ -64,7 +63,6 @@ protected:
 	int m_pwPoints;
 };
 
-
 class ns_AIPlayerSetup : public ns_Object<NETFunc::AIPlayer, ns_AIPlayerSetup>
 {
 public:
@@ -74,4 +72,4 @@ public:
 	char *m_name;
 };
 
-#endif 
+#endif

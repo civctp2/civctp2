@@ -4,19 +4,16 @@
 #ifndef __ICONBUTTON_H__
 #define __ICONBUTTON_H__
 
-
 #include "aui_button.h"
 #include "patternbase.h"
 
-
 class Icon;
-
 
 
 class IconButton : public aui_Button, public PatternBase
 {
 public:
-	
+
 	IconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -41,10 +38,8 @@ public:
 
 	virtual ~IconButton();
 
-	
 	Icon *&TheIcon( void ) { return m_icon; }
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -56,5 +51,4 @@ protected:
 	MBCHAR		*m_filename;
 };
 
-
-#endif 
+#endif

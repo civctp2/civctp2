@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -192,7 +192,6 @@ static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
 
 int main(int argc, char **argv);
 
-
 static LONG __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 {
 	dpReportCrash(ep);
@@ -346,7 +345,7 @@ int main(int argc, char **argv)
 		PRINT(("Must specify a driver with -n.\n"));
 		usage();
 	}
-	if (params.Host 
+	if (params.Host
 	&&  ((params.Maxplayers < 2) || (params.Maxplayers > dp_MAXREALPLAYERS))) {
 		PRINT(("params.Maxplayers must be between 2 and %d.\n", dp_MAXREALPLAYERS));
 		usage();
@@ -472,7 +471,7 @@ int main(int argc, char **argv)
 			} else if (err != dp_RES_BUSY) {
 				PRINT((MSG_ERR_LAUNCH, err, __LINE__));
 				exit(1);
-			}	
+			}
 			if (cancelbox_poll())
 				exit(1);
 		} while (err == dp_RES_BUSY);

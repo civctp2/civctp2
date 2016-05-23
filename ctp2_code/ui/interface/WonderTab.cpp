@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,24 +38,17 @@
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 
-
 #include "StrDB.h"
-
 
 #include "WonderTab.h"
 
-
 #include "linegraph.h"
-
 
 #include "aui_uniqueid.h"
 
-
 #include "aui_stringtable.h"
 
-
 #include "colorset.h"
-
 
 #include "rankingtab.h"
 
@@ -65,7 +58,6 @@
 #include "IconRecord.h"
 #include "DiffDB.h"
 #include "profileDB.h"
-
 
 
 #include "c3_button.h"
@@ -91,24 +83,22 @@ extern DifficultyDB *g_theDifficultyDB;
 extern PointerList<Player>      *g_deadPlayer;
 extern ColorSet *g_colorSet;
 
-
 WonderTab::WonderTab(ctp2_Window *parent) :
 	m_list(static_cast<ctp2_ListBox *>(aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab2.TabPanel.List")))
 {
 
-	
 	m_info_window = parent;
 
-	
 
-	
-	
-	
+
+
+
+
 	Assert( m_list);
 
-	
-	
-	
+
+
+
 	LoadData();
 }
 
@@ -116,23 +106,19 @@ WonderTab::~WonderTab(void)
 {
 }
 
-
 void WonderTab::Show()
 {
 }
-
 
 void WonderTab::Hide()
 {
 }
 
-
 void WonderTab::LoadData()
 {
-	
+
 	UpdateList();
 }
-
 
 void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 {
@@ -169,7 +155,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 				} else {
 					st->SetText("error");
 				}
-				
+
 				item->SetUserData((void*)turn);
 			}
 
@@ -199,7 +185,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 				}
 				if(!p) {
 					st->SetText("---");
-				} else {					
+				} else {
 					MBCHAR buf[k_MAX_NAME_LEN];
 					p->m_civilisation->GetCountryName(buf);
 					st->SetText(buf);
@@ -218,12 +204,11 @@ sint32 WonderTab::CompareWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 	ctp2_Static *box1 = (ctp2_Static *)item1->GetChildByIndex(0);
 	ctp2_Static *box2 = (ctp2_Static *)item2->GetChildByIndex(0);
 
-	column++; 
+	column++;
 
 	ctp2_Static *st1 = (ctp2_Static *)box1->GetChildByIndex(column);
 	ctp2_Static *st2 = (ctp2_Static *)box2->GetChildByIndex(column);
 
-	
 	if(column==2)
 	{
 #if defined(__LP64__)
@@ -238,11 +223,9 @@ sint32 WonderTab::CompareWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 	}
 }
 
-
 void WonderTab::UpdateList()
 {
 	m_list->Clear();
-	
 
 	PointerList<EventData>::Walker walk(g_eventTracker->m_dataList);
 	for(; walk.IsValid(); walk.Next()) {
@@ -255,6 +238,5 @@ void WonderTab::UpdateList()
 	}
 
 	m_list->Show();
-	
-}
 
+}

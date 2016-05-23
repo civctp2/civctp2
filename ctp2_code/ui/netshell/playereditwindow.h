@@ -1,27 +1,14 @@
-
-
-
-
-
-
-
-
-
-
- 
 #ifndef __PLAYEREDITWINDOW_H__
 #define __PLAYEREDITWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 #include "ns_playersetup.h"
 
-
 class PlayerEditWindow : public ns_Window
 {
 public:
-	
+
 	PlayerEditWindow( AUI_ERRCODE *retval );
 	virtual ~PlayerEditWindow();
 
@@ -45,7 +32,6 @@ public:
 	virtual AUI_ERRCODE Idle( void );
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 
-	
 
 	enum CONTROL
 	{
@@ -77,10 +63,9 @@ public:
 
 protected:
 	Mode    mode;
-	
+
     AUI_ACTION_BASIC(OKButtonAction);
     AUI_ACTION_BASIC(CancelButtonAction);
 };
 
-
-#endif 
+#endif

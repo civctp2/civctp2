@@ -1,4 +1,3 @@
-
 #ifndef LDL_LIST_H__
 #define LDL_LIST_H__
 
@@ -45,6 +44,5 @@ class ldl_attributelist {
 		return NULL;
 	}
 };
-
 
 #endif

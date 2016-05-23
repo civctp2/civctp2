@@ -36,7 +36,6 @@
 #include "aui_tabgroup.h"
 
 
-
 aui_TabGroup::aui_TabGroup(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -53,7 +52,6 @@ aui_TabGroup::aui_TabGroup(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_TabGroup::aui_TabGroup(
@@ -79,17 +77,14 @@ aui_TabGroup::aui_TabGroup(
 }
 
 
-
 AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -126,7 +121,6 @@ AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_TabGroup::InitCommon(
 	AUI_TABGROUP_ALIGNMENT alignment,
 	BOOL autoArrange,
@@ -143,19 +137,17 @@ AUI_ERRCODE aui_TabGroup::InitCommon(
 }
 
 
-
 AUI_ERRCODE aui_TabGroup::AddChild( aui_Region *child )
 {
 	AUI_ERRCODE errcode = aui_SwitchGroup::AddChild( child );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-		
+
 		FormatTabs();
 
-		
 		if ( !MakeSureOnlyOneIsSelected() )
 		{
-			
+
 			aui_Tab *tab = (aui_Tab *)m_childList->GetHead();
 			tab->SetState( 1 );
 			m_whichIsSelected = tab->Id();
@@ -166,12 +158,10 @@ AUI_ERRCODE aui_TabGroup::AddChild( aui_Region *child )
 }
 
 
-
 AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 {
 	sint32 numTabs = m_childList->L();
 
-	
 	sint32 maxPaneWidth = 0;
 	sint32 maxPaneHeight = 0;
 	ListPos position = m_childList->GetHeadPosition();
@@ -185,7 +175,6 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 			maxPaneHeight = tab->GetPane()->Height();
 	}
 
-	
 	sint32 maxTabWidth = 0;
 	sint32 maxTabHeight = 0;
 	position = m_childList->GetHeadPosition();
@@ -201,14 +190,11 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	default:
 	case AUI_TABGROUP_ALIGNMENT_TOP:
 	{
-		
-		
+
 		sint32 newTabWidth = sint32(0.9 * maxPaneWidth / numTabs + 0.5);
 
-		
 		sint32 tabOffset = sint32(0.05 * maxPaneWidth + 0.5);
 
-		
 		position = m_childList->GetHeadPosition();
 		for ( i = numTabs; i; i-- )
 		{
@@ -216,19 +202,17 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 			if ( m_autoArrange )
 			{
-				
+
 				tab->Move( tabOffset, 0 );
 				tab->Resize( newTabWidth, maxTabHeight );
 			}
 			else
 				tabOffset = tab->X();
 
-			
 			tab->GetPane()->Move( -tabOffset, maxTabHeight );
 			tab->GetPane()->Resize( maxPaneWidth, maxPaneHeight );
 			tab->GetPane()->Offset( m_paneOffsetX, m_paneOffsetY );
 
-			
 			tabOffset += newTabWidth;
 		}
 	}
@@ -236,14 +220,11 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 	case AUI_TABGROUP_ALIGNMENT_BOTTOM:
 	{
-		
-		
+
 		sint32 newTabWidth = sint32(0.9 * maxPaneWidth / numTabs + 0.5);
 
-		
 		sint32 tabOffset = sint32(0.05 * maxPaneWidth + 0.5);
 
-		
 		position = m_childList->GetHeadPosition();
 		for ( i = numTabs; i; i-- )
 		{
@@ -251,19 +232,17 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 			if ( m_autoArrange )
 			{
-				
+
 				tab->Move( tabOffset, maxPaneHeight );
 				tab->Resize( newTabWidth, maxTabHeight );
 			}
 			else
 				tabOffset = tab->X();
 
-			
 			tab->GetPane()->Move( -tabOffset, -maxPaneHeight );
 			tab->GetPane()->Resize( maxPaneWidth, maxPaneHeight );
 			tab->GetPane()->Offset( m_paneOffsetX, m_paneOffsetY );
 
-			
 			tabOffset += newTabWidth;
 		}
 	}
@@ -271,14 +250,11 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 	case AUI_TABGROUP_ALIGNMENT_LEFT:
 	{
-		
-		
+
 		sint32 newTabHeight = sint32(0.9 * maxPaneHeight / numTabs + 0.5);
 
-		
 		sint32 tabOffset = sint32(0.05 * maxPaneHeight + 0.5);
 
-		
 		position = m_childList->GetHeadPosition();
 		for ( i = numTabs; i; i-- )
 		{
@@ -286,19 +262,17 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 			if ( m_autoArrange )
 			{
-				
+
 				tab->Move( 0, tabOffset );
 				tab->Resize( maxTabWidth, newTabHeight );
 			}
 			else
 				tabOffset = tab->Y();
 
-			
 			tab->GetPane()->Move( maxTabWidth, -tabOffset );
 			tab->GetPane()->Resize( maxPaneWidth, maxPaneHeight );
 			tab->GetPane()->Offset( m_paneOffsetX, m_paneOffsetY );
 
-			
 			tabOffset += newTabHeight;
 		}
 	}
@@ -306,14 +280,11 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 	case AUI_TABGROUP_ALIGNMENT_RIGHT:
 	{
-		
-		
+
 		sint32 newTabHeight = sint32(0.9 * maxPaneHeight / numTabs + 0.5);
 
-		
 		sint32 tabOffset = sint32(0.05 * maxPaneHeight + 0.5);
 
-		
 		position = m_childList->GetHeadPosition();
 		for ( i = numTabs; i; i-- )
 		{
@@ -321,40 +292,35 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 			if ( m_autoArrange )
 			{
-				
+
 				tab->Move( maxPaneWidth, tabOffset );
 				tab->Resize( maxTabWidth, newTabHeight );
 			}
 			else
 				tabOffset = tab->Y();
 
-			
 			tab->GetPane()->Move( -maxPaneWidth, -tabOffset );
 			tab->GetPane()->Resize( maxPaneWidth, maxPaneHeight );
 			tab->GetPane()->Offset( m_paneOffsetX, m_paneOffsetY );
 
-			
 			tabOffset += newTabHeight;
 		}
 	}
 	break;
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_TabGroup::RemoveChild( uint32 tabId )
 {
 	AUI_ERRCODE errcode = aui_SwitchGroup::RemoveChild( tabId );
 
-	
 	FormatTabs();
 
 	return errcode;
 }
-
 
 
 AUI_TABGROUP_ALIGNMENT aui_TabGroup::SetTabGroupAlignment(

@@ -1,26 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __IC3ERRORREPORT_H__
 #define __IC3ERRORREPORT_H__
 
-
-DEFINE_GUID(CLSID_IC3ErrorReport, 
-			0x63aa7420, 
-			0x1fb, 
-			0x11d2, 
+DEFINE_GUID(CLSID_IC3ErrorReport,
+			0x63aa7420,
+			0x1fb,
+			0x11d2,
 			0x99, 0xee, 0x0, 0xe0, 0x98, 0x1, 0xd0, 0xf0);
 
 #undef INTERFACE

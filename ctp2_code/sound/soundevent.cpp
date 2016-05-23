@@ -10,17 +10,17 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ STDEHANDLER(SoundCreateCityEvent)
 {
 	Unit city;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
-	
+
 	if(g_soundManager) {
 		if(g_selected_item->GetVisiblePlayer() == city.GetOwner()) {
 			g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
@@ -63,4 +63,3 @@ void soundevent_Initialize()
 void soundevent_Cleanup()
 {
 }
-	

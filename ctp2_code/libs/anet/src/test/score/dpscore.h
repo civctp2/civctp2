@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  (See server/servscor.c for server-side code, and score/score*.c for
  shared code.)
 
- If there is a connection to an internet game server 
+ If there is a connection to an internet game server
  (hGameServer != PLAYER_NONE), the scores are sent there
  whenever players leave.
  Otherwise, the scores are reported to the comm driver immediately
@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  right now.
 
  Scores are identified by the session id of the game, and the user id
- of each player.  
+ of each player.
  Scores are not reported for players that don't have user id's.
 -----------------------------------------------------------------------*/
 
@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "dptab.h"
 
 /*----------------------------------------------------------------------
- Debugging routines. 
+ Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
 static void dumpBuf(const char *buf, int len);
@@ -83,10 +83,10 @@ dp_result_t dpscore_client_playerLeaving(dp_t *dp, dpid_t id);
 DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score);
 
 /*-------------------------------------------------------------------------
- Begin a score report.  
+ Begin a score report.
  Flag must be zero.
  This should only be called at the end of the game (but before dpClose).
- 
+
  Call dpReportScoreStart before calling dpReportScore2, then
  call dpReportScore2 to report as many scores as you like, then finally
  call dpReportScoreEnd to finish sending the block of scores.

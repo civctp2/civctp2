@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ Happy::Happy()
 	m_pad                   (0),
 	m_too_many_cities       (0.0),
 	m_timed                 (0.0),
-	m_crime                 (0.0), 
+	m_crime                 (0.0),
 	m_timedChanges          (0),
 	m_tracker               (new HappyTracker())
 { ; }
@@ -140,17 +140,16 @@ Happy::~Happy()
 	delete m_tracker;
 }
 
-
 void Happy::Serialize (CivArchive &archive)
 {
 	CHECKSERIALIZE
 
-	if (archive.IsStoring()) 
+	if (archive.IsStoring())
 	{
 		archive.StoreChunk((uint8 *)&m_happiness, ((uint8 *)&m_crime)+sizeof(m_crime));
 
 		archive << static_cast<uint32>(m_timedChanges.size());
-		for 
+		for
 		(
 			std::list<HappyTimer>::iterator p = m_timedChanges.begin();
 			p != m_timedChanges.end();
@@ -181,13 +180,11 @@ void Happy::Serialize (CivArchive &archive)
 	}
 }
 
-
 double Happy::CalcBase(Player *p)
 {
-	m_base = p->GetBaseContentment(); 
+	m_base = p->GetBaseContentment();
 	return m_base;
 }
-
 
 
 double Happy::CalcSize(CityData &cd, Player *p)
@@ -201,19 +198,18 @@ double Happy::CalcTooManyCities(Player *p)
 {
 	sint32 i;
 	sint32 gov_type = p->GetGovernmentType();
-   
+
 	double t = double (g_theGovernmentDB->Get(gov_type)->GetTooManyCitiesThreshold());
 	double s = g_theGovernmentDB->Get(gov_type)->GetTooManyCitiesCoefficient();
-	double n = p->m_all_cities->Num(); 
+	double n = p->m_all_cities->Num();
 
-	
 	sint32 num_cities = 0;
 	for (i=0; i<n; i++) {
 		Unit *city = &(p->m_all_cities->Access(i));
 		sint32 pop;
 		if (!city->IsValid())
 			continue;
-		
+
 		city->GetPop(pop);
 		if (pop < 1)
 			continue;
@@ -230,7 +226,6 @@ double Happy::CalcTooManyCities(Player *p)
 	} else {
 		res = -s * (num_cities - t);
 
-		
 		if (g_slicEngine->GetSegment("28IAMaxCitiesReached")->TestLastShown(p->m_owner, 10)) {
 			SlicObject *so = new SlicObject("28IAMaxCitiesReached");
 			so->AddRecipient(p->m_owner);
@@ -248,13 +243,12 @@ void Happy::ResetConquestDistress(double new_distress)
 	m_conquest_distress = new_distress;
 }
 
-
 double Happy::CalcConquestDistress(CityData &cd, Player *p)
 {
 
 	m_conquest_distress -= m_conquest_distress * p->GetConquestDistressDecay();
 	m_tracker->SetHappiness(HAPPY_REASON_CONQUEST_DISTRESS, m_conquest_distress);
-	return m_conquest_distress; 
+	return m_conquest_distress;
 }
 
 double Happy::CalcDistanceFromCapitol(CityData &cd, Player *p)
@@ -273,10 +267,9 @@ double Happy::CalcDistanceFromCapitol(CityData &cd, Player *p)
 				m_empire_dist);
 			return 0;
 		}
-		
+
 		cost = m_cost_to_capitol;
 
-		
 		cost += p->m_difficulty->GetDistanceFromCapitolAdjustment();
 
 		cost = min(cost, p->GetMaxEmpireDistance());
@@ -285,9 +278,7 @@ double Happy::CalcDistanceFromCapitol(CityData &cd, Player *p)
 		 cost = p->GetMaxEmpireDistance();
 	}
 
-	
-	m_dist_to_capitol = max(0.0, cost - g_theGovernmentDB->Get(p->GetGovernmentType())->GetMinEmpireDistance()); 
-
+	m_dist_to_capitol = max(0.0, cost - g_theGovernmentDB->Get(p->GetGovernmentType())->GetMinEmpireDistance());
 
 	m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
 	sint32 wonderDistanceModifier = wonderutil_GetDecreaseEmpireSize(p->m_builtWonders);
@@ -310,24 +301,23 @@ double Happy::CalcEnemyAction() {
 
 double Happy::CalcPeaceMovement(CityData &cd, Player *p)
 
-{ 
-	double overseas_defeat, home_defeat, overseas; 
+{
+	double overseas_defeat, home_defeat, overseas;
 	double prev_peace = m_peace;
 
 	p->GetPeaceMovement(overseas_defeat, home_defeat, overseas);
-	
+
 	sint32 numCities = p->m_all_cities->Num();
-	if(numCities < 1) 
+	if(numCities < 1)
 		numCities = 1;
-	
+
 	overseas_defeat /= numCities;
 	home_defeat /= numCities;
 	overseas /= numCities;
 
 	m_peace = -overseas_defeat + home_defeat - overseas;
-	
 
-	
+
 	if (((m_peace <= -1.0) && (prev_peace > -1.0)) || (m_peace <= -2.0)) {
 		if (g_slicEngine->GetSegment("27IAWarDiscontentRising")->TestLastShown(p->m_owner, 10)) {
 			SlicObject *so = new SlicObject("27IAWarDiscontentRising") ;
@@ -351,17 +341,16 @@ double Happy::CalcPollution(CityData &cd, Player *p)
 	if(wonderutil_GetNoPollutionUnhappiness(p->m_builtWonders)) {
 		m_pollution = 0;
 	} else {
-		m_pollution = - p->GetPollutionUnhappyCoef() * cd.m_total_pollution; 
+		m_pollution = - p->GetPollutionUnhappyCoef() * cd.m_total_pollution;
 	}
 	m_tracker->SetHappiness(HAPPY_REASON_POLLUTION,
 							m_pollution);
 	return m_pollution;
 }
 
-
 double Happy::CalcCityIndependentWorkday(Player *player)
 {
-	double delta = (player->GetUnitlessWorkday() - 
+	double delta = (player->GetUnitlessWorkday() -
 					player->GetWorkdayExpectation());
 	if(delta > 0.0)
 		return(delta * player->GetPositiveWorkdayCoef());
@@ -391,10 +380,9 @@ double Happy::CalcWorkday(CityData &cd, Player *p)
 {
 	m_workday = CalcCityIndependentWorkday(p);
 
-	m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, m_workday); 
-	return m_workday; 
+	m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, m_workday);
+	return m_workday;
 }
-
 
 double Happy::CalcWages(CityData &cd, Player *p)
 {
@@ -415,36 +403,35 @@ double Happy::CalcRations(CityData &cd, Player *p)
 double Happy::CalcMartialLaw(CityData &cd, Player *p)
 
 {
-	
+
 	sint32 mu = p->GetMaxMartialLawUnits();
 
-	if (mu < 1) { 
+	if (mu < 1) {
 		m_martial_law = 0.0;
-	} else { 
+	} else {
 		double me = p->GetMartialLawEffect();
-		MapPoint pos; 
+		MapPoint pos;
 
-		cd.m_home_city.GetPos(pos); 
+		cd.m_home_city.GetPos(pos);
 		CellUnitList *a = g_theWorld->GetArmyPtr(pos);
 
-		
-		
+
 		sint32 n;
 		sint32 i;
 		sint32 count = 0;
-		
+
 		if(a) {
 			n = a->Num();
 			for (i=0; i<n; i++) {
 				if ((*a)[i].ExertsMartialLaw()) {
-					count++; 
+					count++;
 				}
 			}
 		}
 		m_martial_law = min (mu, count) * me;
 	}
 	m_tracker->SetHappiness(HAPPY_REASON_MARTIAL_LAW, m_martial_law);
-	return m_martial_law; 
+	return m_martial_law;
 }
 
 
@@ -456,24 +443,23 @@ double Happy::CalcPopEntertain(CityData &cd, Player *p)
 	sint32 n = cd.m_population;
 
 	double increaseSpecialists = double(wonderutil_GetIncreaseSpecialists(p->m_builtWonders));
-	
-	m_pop_ent = cd.GetHappinessFromPops(); 
-	m_tracker->SetHappiness(HAPPY_REASON_ENTERTAINERS, m_pop_ent);
-	return m_pop_ent; 
-}
 
+	m_pop_ent = cd.GetHappinessFromPops();
+	m_tracker->SetHappiness(HAPPY_REASON_ENTERTAINERS, m_pop_ent);
+	return m_pop_ent;
+}
 
 double Happy::CalcImprovementContentment(CityData &cd, Player *p)
 {
 	sint32 b;
-	
-	m_improvement = 0.0; 
+
+	m_improvement = 0.0;
 
 	buildingutil_GetHappinessIncrement(cd.GetEffectiveBuildings(), b, cd.m_owner);
 	m_improvement += b;
 
-	
-	
+
+
 
 	m_tracker->SetHappiness(HAPPY_REASON_BUILDINGS, m_improvement);
 	return m_improvement;
@@ -484,14 +470,12 @@ double Happy::CalcWonders(CityData &cd, Player *p)
 {
 	m_wonders = 0.0;
 
-	
-	
+
 	m_wonders += wonderutil_GetIncreaseHappinessEmpire(p->GetBuiltWonders());
 
 	m_tracker->SetHappiness(HAPPY_REASON_WONDERS, m_wonders);
 	return m_wonders;
-} 
-
+}
 
 double Happy::CalcCrime(CityData &cd, Player *p)
 
@@ -499,10 +483,10 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 	double threshold = p->GetCrimeOffset();
 
 	if (m_happiness > threshold) {
-		m_crime = 0.0; 
-	} else { 
+		m_crime = 0.0;
+	} else {
 		double base_crime = threshold - m_happiness;
-		double cops = cd.GetImprovementCrimeMod() - 
+		double cops = cd.GetImprovementCrimeMod() -
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
 		double total_crime = 0.01 * base_crime;
 		total_crime += cops * total_crime;
@@ -512,23 +496,21 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 			m_crime = 0;
 	}
 
-	
-	m_tracker->SetHappiness(HAPPY_REASON_CRIME, 0); 
+	m_tracker->SetHappiness(HAPPY_REASON_CRIME, 0);
 	return m_crime;
 }
- 
+
 double Happy::CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
                                BOOL isFirstPass)
 {
-	if (isFirstPass && !projectedOnly) 
+	if (isFirstPass && !projectedOnly)
 	{
 		double ret = 0.0;
 
 		m_tracker->ClearEntries(HAPPY_REASON_HAPPINESS_ATTACK,
 		                        HAPPY_REASON_MAX);
 
-
-		for 
+		for
 		(
 			std::list<HappyTimer>::iterator ip	 = m_timedChanges.begin();
 			ip != m_timedChanges.end();
@@ -540,7 +522,7 @@ double Happy::CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
 			m_tracker->AddTimedChange(ip->m_reason, adj);
 			--ip->m_turnsRemaining;
 			if (ip->m_turnsRemaining > 0)
-			{	 
+			{
 				++ip;
 			}
 			else
@@ -558,42 +540,38 @@ double Happy::CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
 
 double Happy::CalcStarvation(CityData &cd, Player *p)
 {
-	
-	
-	
-	
-	
+
+
+
+
+
 		m_tracker->SetHappiness(HAPPY_REASON_STARVATION, 0.0);
 		m_starvation = 0.0;
-	
 
-	return m_starvation; 
+	return m_starvation;
 }
-
 
 void Happy::CountAffectivePop(CityData &cd)
 {
 }
 
-void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly, 
-                          sint32 &delta_martial_law, 
+void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
+                          sint32 &delta_martial_law,
                           BOOL isFirstPass)
 {
-	
-	Player *p = g_player[cd.m_owner]; 
+
+	Player *p = g_player[cd.m_owner];
 
 	CountAffectivePop(cd);
 
-	
-	m_happiness = CalcBase(p); 
+	m_happiness = CalcBase(p);
 
-	
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;
 	}
 
-	
-	
+
+
 
 	CalcTimedChanges(cd, p, projectedOnly, isFirstPass);
 
@@ -606,12 +584,12 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 	}
 
 	if(wonderutil_GetAllCitizensContent(p->m_builtWonders)) {
-		
+
 		return;
 	}
 
 	if(buildingutil_GetNoUnhappyPeople(cd.GetEffectiveBuildings())) {
-		
+
 		return;
 	}
 	m_happiness += CalcSize(cd, p);
@@ -627,8 +605,7 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 		m_happiness += m_conquest_distress;
 	}
 
-
-	if(isFirstPass) {		
+	if(isFirstPass) {
 		m_happiness += CalcDistanceFromCapitol(cd, p);
 	} else {
 		m_happiness += m_empire_dist;
@@ -639,7 +616,6 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 
 	m_happiness -= CalcStarvation(cd, p);
 
-	
 	m_happiness += CalcPeaceMovement(cd, p);
 
 	CalcWorkday(cd, p);
@@ -675,45 +651,42 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 			m_tracker->SetHappiness(HAPPY_REASON_RATIONS, 0);
 		}
 	} else {
-		
+
 		m_happiness += m_workday;
 		m_happiness += m_wages;
 		m_happiness += m_rations;
 	}
 
-	
 	m_happiness += p->GetTimedHappiness();
 
-	
-	
+
 	m_happiness += m_timed;
- 
+
 	m_tracker->SetHappiness(HAPPY_REASON_ASSASSINATION, p->GetTimedHappiness());
 
-	
-	
-	
-	
+
+
+
+
 	double const		mlt = static_cast<double>(p->GetMartialLawThreshold());
-	if (m_happiness < mlt) 
-	{ 
-		double const	new_happiness = 
+	if (m_happiness < mlt)
+	{
+		double const	new_happiness =
 			std::min(CalcMartialLaw(cd, p) + m_happiness,  mlt);
 		delta_martial_law = sint32 (new_happiness - m_happiness + 0.5);
-		m_happiness = new_happiness; 
+		m_happiness = new_happiness;
 
 	} else {
 		delta_martial_law = 0;
 	}
-	
-	
-	m_happiness += CalcPopEntertain(cd, p) + 
-		CalcImprovementContentment(cd, p) +  
+
+	m_happiness += CalcPopEntertain(cd, p) +
+		CalcImprovementContentment(cd, p) +
 		CalcWonders(cd, p);
 
 	m_happiness += CalcFeats(p);
 
-	CalcCrime(cd, p); 
+	CalcCrime(cd, p);
 
 	sint32 intHap = (sint32)m_happiness;
 	sint32 newHappiness = g_slicEngine->CallMod(mod_CityHappiness, intHap, cd.GetHomeCity().m_id, intHap);
@@ -731,23 +704,20 @@ void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly,
 
 }
 
-void Happy::ResetCrime(CityData *cd, double target_happiness) 
+void Happy::ResetCrime(CityData *cd, double target_happiness)
 {
-	Player *p = g_player[cd->m_owner]; 
-	m_happiness = target_happiness; 
-	CalcCrime(*cd, p); 
+	Player *p = g_player[cd->m_owner];
+	m_happiness = target_happiness;
+	CalcCrime(*cd, p);
 }
-
 
 
 double Happy::GetGreedyPopHappiness(CityData &cd)
 {
-	
-	Player *p = g_player[cd.m_owner]; 
 
-	
-	double local_happiness = m_base; 
+	Player *p = g_player[cd.m_owner];
 
+	double local_happiness = m_base;
 
 
 
@@ -766,7 +736,8 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 
 
 
-	
+
+
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return local_happiness;
 	}
@@ -777,9 +748,7 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 	local_happiness += m_pollution;
 	local_happiness -= m_starvation;
 
-	
 	local_happiness += m_peace;
-
 
 	CalcWorkday(cd, p);
 	CalcWages(cd, p);
@@ -790,28 +759,26 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 	} else {
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	double const	mlt = static_cast<double>(p->GetMartialLawThreshold());
 	if (local_happiness < mlt)
 	{
-		local_happiness = 
+		local_happiness =
 			std::min(CalcMartialLaw(cd, p) + local_happiness, mlt);
 	}
-	
-	local_happiness += 
-		CalcImprovementContentment(cd, p) + 
+
+	local_happiness +=
+		CalcImprovementContentment(cd, p) +
 		CalcWonders(cd, p);
 
-	
 
-	return local_happiness; 
+	return local_happiness;
 
 }
-
 
 
 void Happy::AddTimer(sint32 turns, double adjust, HAPPY_REASON reason)
@@ -821,14 +788,14 @@ void Happy::AddTimer(sint32 turns, double adjust, HAPPY_REASON reason)
 
 void Happy::RemoveTimerReason(HAPPY_REASON reason)
 {
-	for 
+	for
 	(
 		std::list<HappyTimer>::iterator p = m_timedChanges.begin();
 		p != m_timedChanges.end();
 		// p updated in loop
 	)
 	{
-		if (reason == p->m_reason)	
+		if (reason == p->m_reason)
 		{
 			p = m_timedChanges.erase(p);
 		}
@@ -862,8 +829,7 @@ void HappyTimer::Serialize(CivArchive &archive)
 	if(archive.IsStoring()) {
 		archive << m_turnsRemaining;
 		archive << m_adjustment;
-		
-		
+
 		archive.PutSINT32(m_reason);
 	} else {
 		archive >> m_turnsRemaining;
@@ -936,7 +902,6 @@ void Happy::ForceRevolt(void)
 	m_happiness = g_theConstDB->GetRevolutionLevel()-10 ;
 	}
 
-
 void Happy::SetFullHappinessTurns(sint32 turns)
 {
 	m_fullHappinessTurns = turns;
@@ -1006,4 +971,3 @@ void Happy::Copy(Happy *copy){
 		m_tracker->SetHappiness(static_cast<HAPPY_REASON>(i), data);
 	}
 }
-

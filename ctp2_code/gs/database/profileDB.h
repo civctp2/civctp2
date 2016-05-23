@@ -194,7 +194,6 @@ class ProfileDB {
 
     sint32	m_logPlayerStats;
 
-
     sint32	m_sfxVolume;
     sint32	m_voiceVolume;
     sint32	m_musicVolume;
@@ -209,7 +208,6 @@ class ProfileDB {
     sint32    m_combatLog;
 
     sint32	m_useLeftClick;
-
 
     sint32	m_showZoomedCombat;
     sint32	m_useFingerprinting;
@@ -373,7 +371,6 @@ public:
     void SetPlayerIndex(PLAYER_INDEX index)		{ m_playerNumber = index; }
     void SetGender(GENDER gender)				{ m_gender = gender; }
 
-
     void SetMapSize(MAPSIZE size)				{ m_mapSize = size; }
 
     void SetDifficulty(uint32 x);
@@ -466,15 +463,12 @@ public:
 
     void SetMoveHoldTime(sint32 t) { m_moveHoldTime = t; }
 
-
     void SetUnitSpeed(sint32 speed) { m_unitSpeed = speed; }
     void SetMouseSpeed(sint32 speed) { m_mouseSpeed = speed; }
-
 
     void SetLeftHandedMouse(BOOL lefty) { m_leftHandedMouse = lefty; }
 
     void SetCityBuiltMessage(BOOL on) { m_cityBuiltMessage = on; }
-
 
     void SetDontSave(BOOL on) { m_dontSave = on; }
 
@@ -490,7 +484,6 @@ public:
     void SetDisplayFilter(BOOL on) { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on) { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on) { m_displayTerrain = on;}
-
 
 
     sint32		GetNPlayers() const				{ return m_nPlayers; }
@@ -645,10 +638,8 @@ public:
     BOOL        GetShowCityNames() { return m_showCityNames; }
     BOOL        GetShowTradeRoutes() { return m_showTradeRoutes; }
 
-
     sint32		GetUnitSpeed(void) { return m_unitSpeed; }
     sint32		GetMouseSpeed(void) { return m_mouseSpeed; }
-
 
     sint32		GetLeftHandedMouse(void) { return m_leftHandedMouse; }
 

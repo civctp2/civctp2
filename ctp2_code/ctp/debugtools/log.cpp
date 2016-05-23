@@ -30,14 +30,12 @@ LogClass LOG_DIAG = "Diagnostic";
 
 LogClass LOG_ASSERT = "Assertion";
 LogClass LOG_EXCEPTION = "Exception";
-LogClass LOG_MEMORY_LEAK = "MemoryLeak";	
-LogClass LOG_MEMORY_FAIL = "MemoryFail";	
+LogClass LOG_MEMORY_LEAK = "MemoryLeak";
+LogClass LOG_MEMORY_FAIL = "MemoryFail";
 
-static LogClass LOG_LOG_CLASSES = "LogClasses";  
+static LogClass LOG_LOG_CLASSES = "LogClasses";
 
-#define k_DEBUG_MAX_LOG_FILE_SIZE		(5 * 1024 * 1024)		
-
-
+#define k_DEBUG_MAX_LOG_FILE_SIZE		(5 * 1024 * 1024)
 
 
 
@@ -51,7 +49,9 @@ static LogClass LOG_LOG_CLASSES = "LogClasses";
 
 
 
-static const int HashTableSize = 1024;  
+
+
+static const int HashTableSize = 1024;
 
 
 
@@ -93,27 +93,24 @@ static HashTable hash_table;
 
 static inline unsigned Hash (const char *hash_key)
 {
-	unsigned hash_value;		
-	unsigned rotate_bits;		
+	unsigned hash_value;
+	unsigned rotate_bits;
 
 	hash_value = 0;
 
-	
-	
-	
+
+
+
 	while (*hash_key)
 	{
-		
-		
-		
+
+
 		hash_value = hash_value ^ (*hash_key & 0x1f);
 
-		
 		rotate_bits = hash_value >> 8;
 		hash_value = hash_value << 2;
 		hash_value = (hash_value & 0x03fc) | (rotate_bits & 0x0003);
 
-		
 		hash_key++;
 	}
 
@@ -156,29 +153,25 @@ void Hash_Init (void)
 
 static void Hash_CloseEntry (HashTableEntry_Ptr entry)
 {
-	
+
 	if (entry)
 	{
-		
+
 		Hash_CloseEntry (entry->next);
 
-		
 		free (entry->key);
-		
-		
+
 		free (entry);
 	}
 }
-
 
 static void Hash_Close (void)
 {
 	int bucket;
 
-	
 	for (bucket = 0; bucket < HashTableSize; bucket++)
 	{
-		
+
 		Hash_CloseEntry (hash_table.bucket[bucket]);
 	}
 }
@@ -197,30 +190,26 @@ static void Hash_Close (void)
 
 static bool Hash_Exist (const char *hash_key)
 {
-	int					hash_value;		
-	HashTableEntry_Ptr	hash_entry;		
+	int					hash_value;
+	HashTableEntry_Ptr	hash_entry;
 
-	
 	hash_value = Hash (hash_key);
 	hash_entry = hash_table.bucket[hash_value];
-	
-	
+
 	while (hash_entry)
 	{
-		
+
 		if (stricmp (hash_key, hash_entry->key) == 0)
 		{
 			return (true);
 		}
 
-		
 		else
 		{
 			hash_entry = hash_entry->next;
 		}
 	}
 
-	
 	return (false);
 }
 
@@ -239,21 +228,18 @@ static bool Hash_Exist (const char *hash_key)
 
 void Hash_Add (const char *hash_key)
 {
-	int					hash_value;		
-	HashTableEntry_Ptr	hash_entry;		
+	int					hash_value;
+	HashTableEntry_Ptr	hash_entry;
 
-	
 	if (!Hash_Exist (hash_key))
 	{
-		
+
 		hash_value = Hash (hash_key);
 		hash_entry = (HashTableEntry_Ptr) malloc (sizeof (HashTableEntry));
 
-		
 		hash_entry->key = strdup (hash_key);
 		hash_entry->next = hash_table.bucket[hash_value];
 
-		
 		hash_table.bucket[hash_value] = hash_entry;
 	}
 }
@@ -278,13 +264,11 @@ static void Hash_DumpEntry (HashTableEntry_Ptr entry, int bucket)
 	int i;
 	int mask;
 
-	
 	if (entry)
 	{
-		
+
 		Hash_DumpEntry (entry->next, bucket);
 
-		
 		for (i = 0, mask = 512; i < 10; i++, mask >>= 1)
 		{
 			if (bucket & mask)
@@ -293,20 +277,17 @@ static void Hash_DumpEntry (HashTableEntry_Ptr entry, int bucket)
 			}
 		}
 
-		
 		LOG (("LogClasses", "  %-20s [%04d-%s]", entry->key, bucket, bucket2));
 	}
 }
-
 
 static void Hash_Dump (void)
 {
 	int bucket;
 
-	
 	for (bucket = 0; bucket < HashTableSize; bucket ++)
 	{
-		
+
 		Hash_DumpEntry (hash_table.bucket[bucket], bucket);
 	}
 }
@@ -323,20 +304,18 @@ static void Hash_Dump (void)
 
 struct Logging
 {
-	
-	bool				open;					
-	const char *		module_name;			
-	int					module_line;			
 
-	
-	bool				to_file;				
-	bool				to_debugger;			
+	bool				open;
+	const char *		module_name;
+	int					module_line;
+
+	bool				to_file;
+	bool				to_debugger;
 	FILE				*log_file;
-	char *				log_filename;			
-	bool				leave_open;				
-	
-	bool				log_all;				
+	char *				log_filename;
+	bool				leave_open;
 
+	bool				log_all;
 
 	time_t					base_time;
 #ifdef USE_SDL
@@ -396,15 +375,15 @@ void *Log_GetLoggingPtr(void)
 
 static void	Log_InitReadConfig (const char *config_filename, const char *log_filename)
 {
-	FILE *config_file;			
-	FILE *log_file;				
-	char *ok;					
+	FILE *config_file;
+	FILE *log_file;
+	char *ok;
 	const int buffer_size = 100;
 	char buffer[buffer_size];
 	int i;
 
-	
-	
+
+
 
 	{
 		logging->log_all = true;
@@ -412,7 +391,6 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 		logging->to_file = true;
 	}
 
-	
 	if (config_filename)
 	{
 		config_file = fopen (config_filename, "rt");
@@ -420,15 +398,14 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 		{
 			do
 			{
-				
+
 				ok = fgets (buffer, buffer_size, config_file);
 				for (i = 0; buffer[i] > ' '; i++) {};
 				buffer[i] = 0;
 
-				
 				if ((ok) && (buffer[0] != '#') && (buffer[0] != ';') && (buffer[0] != '/') && (buffer[0] != 0))
 				{
-					
+
 					if ((buffer[0] == '-') && (buffer[1] == '>'))
 					{
 						if (strcmp (&buffer[2], "file") == 0)
@@ -442,7 +419,6 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 
 					}
 
-					
 					else
 					{
 						Hash_Add (buffer);
@@ -451,20 +427,17 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 				}
 			} while (ok);
 
-			
 			fclose (config_file);
 		}
 	}
 
 
-	
 	if (!log_filename)
 	{
 		logging->to_file = false;
 	}
 
 
-	
 	if (logging->to_file)
 	{
 		log_file = fopen (log_filename, "wt");
@@ -483,13 +456,11 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 		}
 	}
 
-	
 	if (logging->to_file)
 	{
 		logging->log_filename = strdup (log_filename);
 	}
 }
-
 
 
 void Log_AddLoggingClasses(void)
@@ -509,7 +480,6 @@ void Log_Open (const char *config_file, const char *log_file)
 {
 	Log_EnsureLogAllocated();
 
-	
 	if (logging->open)
 	{
 		Breakpoint();
@@ -523,11 +493,10 @@ void Log_Open (const char *config_file, const char *log_file)
 	InitializeCriticalSection (&logging->entered);
 	EnterCriticalSection (&logging->entered);
 #endif
-	
+
 	Hash_Init();
 	Log_AddLoggingClasses();
 
-	
 	logging->open = true;
 	logging->module_name = NULL;
 	logging->module_line = 0;
@@ -540,21 +509,18 @@ void Log_Open (const char *config_file, const char *log_file)
 	logging->to_file = false;
 	logging->log_filename = NULL;
 	logging->log_all = false;
-	
+
 	logging->leave_open = TRUE;
 
 
-	
 	Log_InitReadConfig (config_file, log_file);
 
-	
 #ifdef USE_SDL
 	SDL_mutexV(logging->entered);
 #else
 	LeaveCriticalSection (&logging->entered);
 #endif
 
-	
 	LOG (("LogClasses", "Logging the Following LogClasses:"));
 	Hash_Dump();
 }
@@ -573,7 +539,6 @@ void Log_Close (void)
 {
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
 	{
 		Breakpoint();
@@ -587,7 +552,7 @@ void Log_Close (void)
 
 	Hash_Close();
 	logging->open = false;
-	
+
 	if (logging->log_filename)
 	{
 		free (logging->log_filename);
@@ -617,17 +582,15 @@ void Log_Close (void)
 
 void Log_Enable (LogClass log_class)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
 	{
 		Breakpoint();
 		return;
 	}
 
-	
 	Hash_Add (log_class);
 }
 
@@ -647,17 +610,15 @@ void Log_Enable (LogClass log_class)
 
 int Log_Enabled (LogClass log_class)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
 	{
 		Breakpoint();
 		return (false);
 	}
 
-	
 	return (Hash_Exist (log_class) ? 1 : 0);
 }
 
@@ -675,16 +636,14 @@ int Log_Enabled (LogClass log_class)
 
 int Log_OutputEnabled (void)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
-	{		
+	{
 		return (false);
 	}
 
-	
 	return (logging->to_file | logging->to_debugger) ? 1 : 0;
 }
 
@@ -703,10 +662,9 @@ int Log_OutputEnabled (void)
 
 void Log_Begin (const char *module_name, int module_line)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
 	{
 		return;
@@ -717,8 +675,7 @@ void Log_Begin (const char *module_name, int module_line)
 #else
 	EnterCriticalSection (&logging->entered);
 #endif
-	
-	
+
 	if (module_name)
 	{
 		logging->module_name = module_name;
@@ -750,7 +707,7 @@ void Log_Begin (const char *module_name, int module_line)
 
 static inline void Log_MiddleToDebugger (char *message)
 {
-	
+
 	Log_EnsureLogAllocated();
 #ifdef WIN32
 	if (logging->to_debugger)
@@ -770,13 +727,11 @@ static inline void Log_MiddleToFile (char *message)
 {
 	FILE *log_file;
 
-	
 	Log_EnsureLogAllocated();
 
-	
 	if (logging->to_file)
 	{
-		if (!logging->leave_open) 
+		if (!logging->leave_open)
 			log_file = fopen (logging->log_filename, "a+t");
 		else
 			log_file = logging->log_file;
@@ -798,7 +753,7 @@ static inline void Log_MiddleToFile (char *message)
 static inline void Log_MiddleCreateMessage (char *message, const char *message_text, LogClass log_class)
 {
 	int elapsed_time;
-	char *adjusted_text;		
+	char *adjusted_text;
 	char *adjusted_text_scan;
 	char *adjusted_module;
 	char *adjusted_module_scan;
@@ -809,17 +764,15 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	elapsed_time = time(NULL) - logging->base_time;
 #endif
 
-	
 	adjusted_module = strdup (logging->module_name);
 	adjusted_module_scan = adjusted_module + (strlen (adjusted_module));
 
-	
-	
-	while ((adjusted_module != adjusted_module_scan) && 
+
+	while ((adjusted_module != adjusted_module_scan) &&
 	        ((* (adjusted_module_scan - 1) != '\\')
 		 || (* (adjusted_module_scan - 1) != FILE_SEPC)))
 	{
-		
+
 		if (*adjusted_module_scan == '.')
 		{
 			*adjusted_module_scan = 0;
@@ -828,9 +781,9 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 		adjusted_module_scan--;
 	}
 
-	
-	
-	
+
+
+
 
 	adjusted_text = strdup (message_text);
 	for (adjusted_text_scan = adjusted_text; *adjusted_text_scan; adjusted_text_scan++)
@@ -842,16 +795,15 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	}
 
 
-	
-	
-	sprintf (message, "[%12s::%15s::%5d@%7d] %s", 
-		log_class, 
-		adjusted_module_scan, 
-		logging->module_line, 
+
+
+	sprintf (message, "[%12s::%15s::%5d@%7d] %s",
+		log_class,
+		adjusted_module_scan,
+		logging->module_line,
 		elapsed_time,
 		adjusted_text);
 
-	
 	free (adjusted_text);
 	free (adjusted_module);
 }
@@ -868,44 +820,38 @@ __cdecl
 #endif
 Log_Middle (LogClass log_class, const char *format, ...)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
-	
+
 	if (!logging->open)
 	{
 		Breakpoint();
 		return;
 	}
 
-	
 	if (logging->to_file || logging->to_debugger)
 	{
-		
+
 		if (Hash_Exist (log_class))
 		{
-			
-			va_list       variable_argument_list;	
-			char message[1000];						
-			char message_text[1000];				
+
+			va_list       variable_argument_list;
+			char message[1000];
+			char message_text[1000];
 
 
-			
 			va_start (variable_argument_list, format);
 			vsprintf (message_text, format, variable_argument_list);
 			va_end (variable_argument_list);
 
-			
 			Log_MiddleCreateMessage (message, message_text, log_class);
 
-			
 			Log_MiddleToFile (message);
 			Log_MiddleToDebugger (message);
 		}
 	}
 
-	
 	if (log_class == LOG_FATAL)
 	{
 		Breakpoint();
@@ -926,10 +872,9 @@ Log_Middle (LogClass log_class, const char *format, ...)
 
 void Log_End (void)
 {
-	
+
 	Log_EnsureLogAllocated();
 
-	
 	if (!logging->open)
 	{
 		return;
@@ -942,4 +887,4 @@ void Log_End (void)
 #endif
 }
 
-#endif 
+#endif

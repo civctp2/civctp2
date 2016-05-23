@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : net_info is used to propagate misc information from host to 
+// Description  : net_info is used to propagate misc information from host to
 //                player(s).
 // Id           : $Id$
 //
@@ -12,13 +12,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -74,17 +74,14 @@
 
 #include "newturncount.h"
 
-
 #include "SelItem.h"
 #include "TurnCnt.h"
 #include "c3ui.h"
 extern TurnCount *g_turn;
 extern C3UI					*g_c3ui;
 
-
 #include "pixelutils.h"
 #include "primitives.h"
-
 
 #include "aui.h"
 #include "ctp2_Window.h"
@@ -144,7 +141,7 @@ extern void network_VerifyGameData();
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	// this array tells how many arguments each NET_INFO has
-	
+
 	2, // NET_INFO_CODE_PLAYER_INDEX
 	1, // NET_INFO_CODE_BEGIN_TURN
 	0, // NET_INFO_CODE_MAP_DONE
@@ -156,7 +153,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	4, // NET_INFO_CODE_ADVANCE
 	2, // NET_INFO_CODE_SUPPORT_UNIT
 
-	
 	1, // NET_INFO_CODE_KILL_POP
 	2, // NET_INFO_CODE_KILL_TRADE_ROUTE
 	2, // NET_INFO_CODE_BUILDING_UNIT
@@ -167,7 +163,7 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	1, // NET_INFO_CODE_KILL_INSTALLATION
 	2, // NET_INFO_CODE_GOLD
 	2, // NET_INFO_CODE_MATERIALS_TAX
-	
+
 	2, // NET_INFO_CODE_WORKDAY_LEVEL
 	2, // NET_INFO_CODE_WAGES_LEVEL
 	2, // NET_INFO_CODE_RATIONS_LEVEL
@@ -179,7 +175,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_RESEARCH
 	2, // NET_INFO_CODE_REMOVE_HUT
 
-	
 	1, // NET_INFO_CODE_GLOBAL_WARMING
 	1, // NET_INFO_CODE_OZONE_DEPLETION
 	2, // NET_INFO_CODE_BATTLE
@@ -191,7 +186,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	0, // NET_INFO_CODE_REQUEST_SLICE
 	2, // NET_INFO_CODE_SET_GOVERNMENT
 
-	
 	1, // NET_INFO_CODE_ENACT_REQUEST
 	1, // NET_INFO_CODE_REJECT_REQUEST
 	0, // NET_INFO_CODE_CLASSIC_STYLE
@@ -203,7 +197,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	1, // NET_INFO_CODE_CARRYOVER_STYLE
 	1, // NET_INFO_CODE_SET_SETUP_MODE
 
-	
 	4, // NET_INFO_CODE_SET_SETUP_AREA
 	2, // NET_INFO_CODE_POWER_POINTS
 	1, // NET_INFO_CODE_CHOOSE_RESEARCH
@@ -215,7 +208,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_REMOVE_BUILD_ITEM
 	3, // NET_INFO_CODE_HAPPINESS_ATTACK
 
-	
 	1, // NET_INFO_CODE_CLEAR_ORDERS
 	1, // NET_INFO_CODE_EXECUTE_ORDERS
 	4, // NET_INFO_CODE_ADD_ARMY
@@ -227,7 +219,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_BUILD_WONDER
 	5, // NET_INFO_CODE_SEND_TRADE_BID
 
-	
 	2, // NET_INFO_CODE_SEND_SLAVE_TO
 	1, // NET_INFO_CODE_ACK_POP_MOVE
 	1, // NET_INFO_CODE_CLEAR_ORDERS_EXCEPT_GROUP
@@ -259,7 +250,7 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	2, // NET_INFO_CODE_WONDER_STARTED
 	2, // NET_INFO_CODE_WONDER_OBSOLETE
 	1, // NET_INFO_CODE_BEGIN_TURN_ENEMY_UNITS
-	
+
 	3, // NET_INFO_CODE_WONDER_ALMOST_DONE
 	2, // NET_INFO_CODE_WONDER_STOPPED
 	0, // NET_INFO_CODE_ALL_PLAYERS_READY
@@ -297,7 +288,6 @@ const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	1, // NET_INFO_CODE_MATERIALS				(unconfirmed value)
 };
 
-
 void
 NetInfo::Packetize(uint8* buf, uint16& size)
 {
@@ -321,7 +311,6 @@ NetInfo::Packetize(uint8* buf, uint16& size)
 		putlong(&buf[20], m_data5); size += 4;
 	}
 }
-
 
 void
 NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
@@ -350,11 +339,11 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 	switch(m_type) {
 		case NET_INFO_CODE_PLAYER_INDEX:
-			
+
 			g_network.SetPlayerIndex(m_data, (uint16)m_data2);
 			break;
 		case NET_INFO_CODE_BEGIN_TURN:
-			
+
 			g_network.SetLoop(FALSE);
 			DPRINTF(k_DBG_NET, ("Starting turn for player %d\n", m_data));
 			g_selected_item->SetCurPlayer(PLAYER_INDEX(m_data));
@@ -366,24 +355,22 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 			if(g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
 				if(g_network.ShouldAckBeginTurn()) {
-					
-					
-					
-					
-					
-					
-					
-					
+
+
+
+
+
+
+
+
 					CityWindow::Hide();
 					EditQueue::Hide();
 					CityWindow::CopyCitiesBack();
 					DomesticManagementDialog::Close();
 					UnitManager::Hide();
 
-					
 					g_network.SetSensitiveUIBlocked(true);
 
-					
 					g_gevManager->AddEvent(GEV_INSERT_Tail,
 										   GEV_BeginTurn,
 										   GEA_Player, m_data,
@@ -391,14 +378,13 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 										   GEA_End);
 
 					if (g_soundManager)
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 												 gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
 												 0,
 												 0);
 					g_selected_item->Refresh();
 				} else {
-					
-					
+
 					g_network.SendAction(new NetAction(NET_ACTION_NAK_BEGIN_TURN));
 				}
 			} else {
@@ -417,11 +403,10 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 		case NET_INFO_CODE_MAP_DONE:
 		{
-			
 
 			g_c3ui->RemoveWindow(g_radarWindow->Id());
 			radarwindow_Cleanup();
-			
+
 			delete g_tiledMap;
 			g_tiledMap = NULL;
 
@@ -429,27 +414,25 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 							 g_theWorld->GetYHeight());
 			g_tiledMap = new TiledMap(mapsize);
 			g_tiledMap->LoadTileset();
-			
-			RECT rect = 
+
+			RECT rect =
 			{
-				g_background->X(), 
-				g_background->Y(), 
+				g_background->X(),
+				g_background->Y(),
 				g_background->X() + g_background->Width(),
-				g_background->Y() + g_background->Height() 
+				g_background->Y() + g_background->Height()
 			};
-			
+
 			g_tiledMap->Initialize(&rect);
 			g_tiledMap->Refresh();
 
 			radarwindow_Initialize();
-			
+
 			radarwindow_Display();
 
-			
 
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
-			
 
 			g_theWorld->NumberContinents();
 
@@ -478,7 +461,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			g_theUnitTree->Clear();
 			g_network.ClearDeadUnits();
 
-			
 			CtpAi::Initialize();
 			break;
 		}
@@ -486,18 +468,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			g_theUnitPool->HackSetKey(m_data);
 			g_theArmyPool->HackSetKey(m_data2);
-            
-		
-	
-	
+
+
+
+
 			g_network.ClearDeadUnits();
-			
 
 			g_director->NextPlayer();
-			
+
 			g_radarMap->Update();
 
-			
 			sint32 i;
 			for(i = 0; i < k_MAX_PLAYERS; i++) {
 				if(!g_player[i]) continue;
@@ -507,7 +487,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					SettleMap::s_settleMap.HandleCityGrowth(g_player[i]->m_all_cities->Access(j));
 				}
 			}
-			
+
 			break;
 		}
 		case NET_INFO_CODE_KILL_UNIT:
@@ -518,8 +498,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				Unit unit(m_data);
 				if(unit.IsValid()) {
 					unit.KillUnit(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
-					
-					
+
 					g_network.RemoveDeadUnit(m_data);
 				}
 			}
@@ -552,15 +531,15 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->m_advances->m_discovered = m_data3;
 				g_player[m_data]->m_science->SetLevel(m_data4);
 
-				
-				
-				
+
+
+
 				sint32 i;
 				for(i = 0; i < g_player[m_data]->m_all_cities->Num(); i++) {
 					g_player[m_data]->m_all_cities->Access(i).GetData()->
 						GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
 				}
-				
+
 
 
 
@@ -581,16 +560,14 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Net: Killing trade route %d\n", m_data));
 
-			
-			
+
 			if(g_network.DeadUnit(m_data)) {
 				g_network.RemoveDeadUnit(m_data);
 			} else {
 				TradeRoute route(m_data);
 				if(g_theTradePool->IsValid(route)) {
 					route.KillRoute(CAUSE_KILL_TRADE_ROUTE(m_data2));
-					
-					
+
 					g_network.RemoveDeadUnit(m_data);
 				}
 			}
@@ -676,13 +653,13 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 		case NET_INFO_CODE_NEW_CIVILIZATION:
 			DPRINTF(k_DBG_NET, ("Server sent new civilisation\n"));
-			
-			
-			
-			
-			
+
+
+
+
+
 			if(g_player[m_data]) {
-				
+
 			} else {
 				g_player[m_data] = new Player(PLAYER_INDEX(m_data), 0, PLAYER_TYPE(m_data2));
 				g_selected_item->AddPlayer(PLAYER_INDEX(m_data));
@@ -693,7 +670,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 			}
 
-			
 			break;
 		case NET_INFO_CODE_BUILT_FRONT:
 		{
@@ -704,33 +680,33 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(!g_theUnitPool->IsValid(city))
 				return;
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
+
+
 			break;
 		}
 		case NET_INFO_CODE_KILL_MESSAGE:
 		{
 			DPRINTF(k_DBG_NET, ("Server says kill message %lx\n", m_data));
 			Message message(m_data);
-			
+
 			if(!g_theMessagePool->IsValid(message))
 				return;
-			
+
 			break;
 		}
 		case NET_INFO_CODE_KILL_DIP_REQUEST:
 		{
 			DPRINTF(k_DBG_NET, ("Server says kill dip request %lx\n", m_data));
 			DiplomaticRequest request(m_data);
-			
+
 			g_network.RemoveEnact(request);
 			if(!g_theDiplomaticRequestPool->IsValid(request))
 				return;
@@ -744,8 +720,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Unit unit(m_data);
 			if(g_theUnitPool->IsValid(unit)) {
 				if(unit.GetOwner() != (sint32)m_data2) {
-					
-					
+
 					unit.ResetCityOwner(m_data2, m_data3, CAUSE_REMOVE_CITY(m_data4));
 				}
 			}
@@ -824,12 +799,12 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 
 		case NET_INFO_CODE_BEGIN_SLICE:
-			
+
 			DPRINTF(k_DBG_NET, ("Starting slice for player %d\n", m_data));
 			g_selected_item->SetCurPlayer(PLAYER_INDEX(m_data));
 			if(g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
 				if (g_soundManager && !g_network.IsMyTurn())
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 												gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
 												0,
 												0);
@@ -865,7 +840,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 								m_data));
 			DiplomaticRequest req(m_data);
 			g_network.RemoveEnact(req);
-			
+
 			if(m_type == NET_INFO_CODE_ENACT_REQUEST_NEED_ACK) {
 				g_network.SendAction(new NetAction(NET_ACTION_ACK_ENACT,
 												   req.m_id));
@@ -873,7 +848,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(!g_theDiplomaticRequestPool->IsValid(req))
 				break;
 			req.Enact(TRUE);
-			
+
 			break;
 		}
 		case NET_INFO_CODE_REJECT_REQUEST:
@@ -881,7 +856,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Diplomatic request %lx rejected\n",
 								m_data));
 			DiplomaticRequest req(m_data);
-			
+
 			if(!g_theDiplomaticRequestPool->IsValid(req))
 				break;
 			req.Reject(TRUE);
@@ -953,7 +928,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_END_TURN_FOR:
 		{
 			DPRINTF(k_DBG_NET, ("Server: Run EndTurn() for player %d\n", m_data));
-			
+
 			if(g_player[m_data]) {
 				g_player[m_data]->EndTurn();
 			}
@@ -1012,8 +987,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Army %lx orders cleared\n",
 								m_data));
 			Army army(m_data);
-			
-			
+
 			if(g_theArmyPool->IsValid(army)) {
 				army.ClearOrders();
 			} else {
@@ -1027,12 +1001,11 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Army %lx executing orders\n",
 					m_data));
 			Army army(m_data);
-			
-			
+
 			if(g_theArmyPool->IsValid(army)) {
 				g_gevManager->Pause();
 				BOOL res = army->ExecuteOrders();
-				
+
 				Assert(res);
 				g_gevManager->Resume();
 			} else {
@@ -1103,9 +1076,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Army newArmy(m_data3);
 			Assert(unit.GetArmy() == oldArmy || unit.GetArmy() == newArmy);
 			if(unit.GetArmy() != oldArmy && unit.GetArmy() != newArmy) {
-				
-				
-				
+
+
 				g_network.RequestResync(RESYNC_INVALID_POP);
 			}
 			if(unit.GetArmy() != newArmy) {
@@ -1242,8 +1214,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Agreement %lx killed\n", m_data));
 			Agreement agreement(m_data);
-			
-			
+
 			if(g_theAgreementPool->IsValid(agreement)) {
 				agreement.Kill();
 			}
@@ -1263,7 +1234,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->BreakCeaseFire(m_data2, m_data3);
 			}
 			break;
-			
+
 		case NET_INFO_CODE_CLEAR_QUEUE:
 		{
 			DPRINTF(k_DBG_NET, ("Build queue for city %lx cleared\n",
@@ -1335,7 +1306,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Player %d's dip state towards %d is %d\n",
 								m_data, m_data2, m_data3));
 			if(g_player[m_data]) {
-				g_player[m_data]->SetDiplomaticState(m_data2, 
+				g_player[m_data]->SetDiplomaticState(m_data2,
 													 (DIPLOMATIC_STATE)m_data3);
 			}
 			break;
@@ -1565,8 +1536,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("%d recovered the probe\n", m_data));
 			if(g_player[m_data]) {
 				Unit city(m_data2);
-				
-				
+
 				g_player[m_data]->RecoveredProbe(city);
 			}
 			break;
@@ -1666,11 +1636,11 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Server says run AIFinishBeginTurn for player %d\n", m_data));
 			if(g_network.IsLocalPlayer(m_data)) {
-				
-				
-				
-				
-				
+
+
+
+
+
 				g_gevManager->AddEvent(GEV_INSERT_Tail,
 									   GEV_AIFinishBeginTurn,
 									   GEA_Player, m_data,
@@ -1688,7 +1658,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				}
 				else
 				{
-					g_gevManager->AddEvent(GEV_INSERT_Tail, 
+					g_gevManager->AddEvent(GEV_INSERT_Tail,
 										   GEV_FinishBuildPhase, // GEV_StartMovePhase,
 										   GEA_Player, m_data,
 										   GEA_End
@@ -1698,7 +1668,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			MainControlPanel::SelectedCity();
 			if(m_data == (unsigned) g_network.GetPlayerIndex()) {
-				
+
 				network_VerifyGameData();
 			}
 			break;
@@ -1721,7 +1691,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_INFO_CODE_REMOTE_GROUP:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server says group unit %lx into army %lx\n", m_data2, m_data));
 			if(!g_theArmyPool->IsValid(m_data)) {
 				g_network.RequestResync(RESYNC_INVALID_ARMY_OTHER);
@@ -1738,7 +1708,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			army->GroupUnit(unit);
 
 			if(army.GetOwner() == g_selected_item->GetVisiblePlayer()) {
-				
+
 				ArmyManagerWindow::NotifyRemoteGroupComplete(army);
 			}
 
@@ -1746,7 +1716,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_INFO_CODE_REMOTE_UNGROUP:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server says ungrouping of Army %lx done (owner=%d)\n", m_data, m_data2));
 
 			Army army(m_data);
@@ -1820,7 +1790,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		// propagate the accomplishment of a feat
 		case NET_INFO_CODE_ACCOMPLISHED_FEAT:
 			DPRINTF(k_DBG_NET,
-				    ("Server says player %d accomplished feat %d in turn %d", 
+				    ("Server says player %d accomplished feat %d in turn %d",
 					 m_data2, m_data, m_data3
 					)
 				   );
@@ -1833,16 +1803,16 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		// propagate the immobility of the settler created when disbanding a city
 		case NET_INFO_CODE_DISBANDED_CITY_SETTLER:
 		{
-			DPRINTF(k_DBG_NET, 
+			DPRINTF(k_DBG_NET,
 					("Server says unit %lx is a disbanded city settler\n", m_data)
 				   );
 			Unit unit(m_data);
-			if (unit.IsValid()) 
+			if (unit.IsValid())
 			{
 				unit.ClearFlag(k_UDF_FIRST_MOVE);
 				unit.SetMovementPoints(0.0);
 			}
-			else 
+			else
 			{
 				g_network.RequestResync(RESYNC_INVALID_UNIT);
 			}
@@ -1857,7 +1827,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->m_materialPool->SetLevel((sint32)m_data2);
 			}
 			break;
-
 
 		default:
 			Assert(FALSE);

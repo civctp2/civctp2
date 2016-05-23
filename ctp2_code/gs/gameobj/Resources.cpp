@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added Resize method for loading of savegames with different 
+// - Added Resize method for loading of savegames with different
 //   number of goods than in the database. - May 28th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -34,10 +34,10 @@
 #include "ResourceRecord.h"
 
 Resources::Resources()
-{ 
+{
 	m_numGoods = g_theResourceDB->NumRecords();
 	m_supply = new sint32[m_numGoods];
-	Clear(); 
+	Clear();
 }
 
 Resources::Resources(const Resources &copyme)
@@ -98,7 +98,7 @@ Resources & Resources::operator = (Resources &copyme)
 //
 // Name       : Resources::Resize
 //
-// Description: Resizes the underlying array m_supply by generating a new one 
+// Description: Resizes the underlying array m_supply by generating a new one
 //              and copying the data from the old one.
 //
 // Parameters : newSize: The new size of m_supply
@@ -107,7 +107,7 @@ Resources & Resources::operator = (Resources &copyme)
 //
 // Returns    : -
 //
-// Remark(s)  : Added for valid check so that savegames with modified 
+// Remark(s)  : Added for valid check so that savegames with modified
 //              ressource database can be loaded.
 //
 //----------------------------------------------------------------------------

@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "civarchive.h"
@@ -49,10 +40,10 @@ void Agreement::KillAgreement()
 void Agreement::RemoveAllReferences()
 {
 	if(g_player[GetRecipient()]) {
-		g_player[GetRecipient()]->RemoveAgreementReferences(*this) ;	
+		g_player[GetRecipient()]->RemoveAgreementReferences(*this) ;
 	}
 	if(g_player[GetOwner()]) {
-		g_player[GetOwner()]->RemoveAgreementReferences(*this) ;		
+		g_player[GetOwner()]->RemoveAgreementReferences(*this) ;
 	}
 
 	if(g_network.IsHost()) {

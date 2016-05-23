@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -40,15 +40,15 @@ OSErr LoadTransport(char *transportName)
 	//	transport. We do this by looking for a file with a code
 	//	fragment and then we load all of the function pointers
 	//	from it for later use throughout the application
-	
+
 	//	create a pascal string which is the file name which has the
 	//	fragment in it
-	
+
 	strcpy((char*) pTransportName, transportName);
 	c2pstr((char*) pTransportName);
-	
+
 	anErr = FSMakeFSSpec(gvRef, gparID, pTransportName, &spec);	if (anErr == noErr) {
-	
+
 		anErr = GetDiskFragment(
 			&spec,
 			0,
@@ -59,7 +59,7 @@ OSErr LoadTransport(char *transportName)
 			&mainAddr,
 			errName
 		);
-		
+
 	}
 	return anErr;
 }
@@ -79,7 +79,7 @@ OSErr GetData(unsigned long* value)
 	short		myIndex;
 	Str255	myName;
 	Ptr		myAddr;
-	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global 
+	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
 	if (error == noErr) {																// Found it; make it nil
 		*value = *hSer;
 	}
@@ -93,7 +93,7 @@ OSErr SetData(unsigned long value)
 	short		myIndex;
 	Str255	myName;
 	Ptr		myAddr;
-	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global 
+	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
 	if (error == noErr) {																// Found it; make it nil
 		*hSer = value;
 	}

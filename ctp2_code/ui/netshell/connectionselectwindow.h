@@ -1,30 +1,16 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __CONNECTIONSELECTWINDOW_H__
 #define __CONNECTIONSELECTWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 
-
 class aui_StringTable;
-
 
 
 class ConnectionSelectWindow : public ns_Window
 {
 public:
-	
+
 	ConnectionSelectWindow( AUI_ERRCODE *retval );
 	virtual ~ConnectionSelectWindow();
 
@@ -37,7 +23,6 @@ public:
 	void	Update( void );
 	virtual	AUI_ERRCODE Idle( void );
 
-	
 
 	enum CONTROL
 	{
@@ -61,5 +46,4 @@ protected:
     AUI_ACTION_BASIC(ConnectionListBoxAction);
 };
 
-
-#endif 
+#endif

@@ -20,9 +20,9 @@ public:
 	sint32		m_nConcepts;
 	ConceptInfo	*m_conceptInfo;
 
-	
-	
-	
+
+
+
 	sint32 *m_indexToAlpha;
 	sint32 *m_alphaToIndex;
 

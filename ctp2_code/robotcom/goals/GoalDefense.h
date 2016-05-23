@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef __GOAL_RECRUIT_DEFENSE_H__
@@ -7,33 +5,31 @@
 
 #include "ArmyGoal.h"
 
-enum GOAL_TYPE; 
-struct MapPointData; 
-class CivArchive; 
-class CityAgent; 
+enum GOAL_TYPE;
+struct MapPointData;
+class CivArchive;
+class CityAgent;
 
-class GoalDefense : public ArmyGoal { 
+class GoalDefense : public ArmyGoal {
 
-    BSetID *m_city_id; 
-    CityAgent *m_city_agent; 
+    BSetID *m_city_id;
+    CityAgent *m_city_agent;
 
 public:
 
-
-    GoalDefense(); 
+    GoalDefense();
 
 	GoalDefense
 	(
-		AiMain *init_ai,					
-		CityAgent *the_city,				
-		MapPointData pos					
-	); 	
-    GoalDefense(AiMain *ai, CivArchive &archive); 
-	~GoalDefense(); 
-    void Serialize(AiMain *ai, CivArchive &archive); 
-    BOOL Validate(AiMain *ai); 
+		AiMain *init_ai,
+		CityAgent *the_city,
+		MapPointData pos
+	);
+    GoalDefense(AiMain *ai, CivArchive &archive);
+	~GoalDefense();
+    void Serialize(AiMain *ai, CivArchive &archive);
+    BOOL Validate(AiMain *ai);
     void HookUp(AiMain *ai);
-
 
 
     GOAL_TYPE GetType () const;
@@ -41,67 +37,66 @@ public:
 	void Display_Goal_Details(AiMain *ai);
 	int Is_Satisfied(int *excess);
 
-    CityAgent *GetCityAgent() { return m_city_agent; } 
+    CityAgent *GetCityAgent() { return m_city_agent; }
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	int Closest_Enemy_Distance(AiMain *ai, sint32 &attack_threat);
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	double Compute_Raw_Priority(AiMain *ai);
 
     void ArrivedAtTask(AiMain *ai, ArmyAgent *the_army,
 					   ArmyAgent *the_transport, SUB_TASK_TYPE sub_task);
 
-	
-	
-	
-	
-	
-	
-	int Get_Totally_Complete(AiMain *ai) 
+
+
+
+
+
+
+	int Get_Totally_Complete(AiMain *ai)
 	{
 		return false;
 	}
 
-	
-	
-	
-	
-	
-	
-    void Set_Totally_Complete(const BOOL c) 
+
+
+
+
+
+
+    void Set_Totally_Complete(const BOOL c)
 	{
 		m_is_completed = false;
 	}
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	void Compute_Needed_Troop_Flow(AiMain *ai);
 
 	BOOL FindPathToTask(AiMain *ai, ArmyAgent *the_army,
-     ArmyAgent *the_transport, MapPointData &goal_pos, 
+     ArmyAgent *the_transport, MapPointData &goal_pos,
      const SUB_TASK_TYPE sub_task, MapPointData &dest_pos);
 
-
-}; 
+};
 
 #endif __GOAL_RECRUIT_DEFENSE_H__

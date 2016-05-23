@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -53,7 +44,7 @@ public:
 	TradeRoute (const int val) : ID (val) { return; };
 	TradeRoute (const unsigned int val) : ID (val) { return; };
 #endif
-   
+
 	TradeRouteData *operator -> () const { return AccessData(); }
 	bool IsValid() const;
 
@@ -79,7 +70,7 @@ public:
 
 	BOOL PassesThrough(sint32 player) const;
 	void SetTariff(sint32 player, BOOL b);
-	
+
 	BOOL CrossesWater() const;
 
 	uint32 GetColor() const;
@@ -87,7 +78,6 @@ public:
 	void SetColor( uint32 color );
 	void SetOutlineColor( uint32 color );
 
-	
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
 	sint32 AddSelectedWayPoint(const MapPoint &pos);
@@ -103,7 +93,7 @@ public:
 	double GetCost() const;
 	const DynamicArray<MapPoint>* GetPath() const;
 	const DynamicArray<MapPoint>* GetSelectedPath() const;
-	
+
 	BOOL IsActive() const;
 	void Activate();
 	void Deactivate();
@@ -117,7 +107,7 @@ public:
 					double &cost);
 	void SetPath(DynamicArray<MapPoint> &fullpath,
 				 DynamicArray<MapPoint> &waypoints);
-	
+
 	void BeginTurn();
 
 	void DontAdjustPointsWhenKilled();

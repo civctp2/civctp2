@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
@@ -16,7 +14,6 @@
 
 extern aui_UI		*g_ui;
 extern ColorSet		*g_colorSet;
-
 
 c3_Static::c3_Static(
 	AUI_ERRCODE *retval,
@@ -35,7 +32,6 @@ c3_Static::c3_Static(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Static::c3_Static(
@@ -65,17 +61,14 @@ c3_Static::c3_Static(
 }
 
 
-
 AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -83,21 +76,19 @@ AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
 	if (block->GetAttributeType( k_C3_STATIC_LDL_BEVELWIDTH ) == ATTRIBUTE_TYPE_INT) {
 		m_bevelWidth = block->GetInt( k_C3_STATIC_LDL_BEVELWIDTH );
 	} else {
-		m_bevelWidth = 0; 
+		m_bevelWidth = 0;
 	}
 
 	if (block->GetAttributeType( k_C3_STATIC_LDL_BEVELTYPE ) == ATTRIBUTE_TYPE_INT) {
 		m_bevelType = block->GetInt( k_C3_STATIC_LDL_BEVELTYPE );
 	} else {
-		m_bevelType = 0; 
+		m_bevelType = 0;
 	}
 
 	return AUI_ERRCODE_OK;
-	
 
 	return InitCommon(m_bevelWidth, m_bevelType);
 }
-
 
 
 AUI_ERRCODE c3_Static::InitCommon(uint32 bevelWidth, uint32 bevelType )
@@ -108,13 +99,12 @@ AUI_ERRCODE c3_Static::InitCommon(uint32 bevelWidth, uint32 bevelType )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_Static::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -123,7 +113,6 @@ AUI_ERRCODE c3_Static::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) {
 		if ( m_srcWidthPix || m_srcHeightPix ) {
 			RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -134,20 +123,19 @@ AUI_ERRCODE c3_Static::DrawThis(
 		}
 	}
 
-	
 	DrawThisStateImage(
 		0,
 		surface,
 		&rect );
 
-	
-	
-	
-	
-	
-	
 
-	
+
+
+
+
+
+
+
 	if (m_bevelWidth > 0) {
 		if ( m_bevelType == 2 ) {
 			primitives_FrameThickRect16( surface, &rect, g_colorSet->GetColor( COLOR_UI_BOX ), m_bevelWidth );
@@ -157,7 +145,6 @@ AUI_ERRCODE c3_Static::DrawThis(
 		}
 	}
 
-	
 	DrawThisText(
 		surface,
 		&rect );
@@ -169,25 +156,22 @@ AUI_ERRCODE c3_Static::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
 void c3_Static::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 
-
 	m_mouseCode = AUI_ERRCODE_HANDLED;
 }
 
 void c3_Static::MouseRGrabInside( aui_MouseEvent *mouseData)
 {
-	if (!GetWhichSeesMouse()) 
+	if (!GetWhichSeesMouse())
 		SetWhichSeesMouse(this);
 
 	m_mouseCode = AUI_ERRCODE_HANDLED;
 }
-
 
 
 void c3_Static::MouseLDropInside( aui_MouseEvent *mouseData )
@@ -205,15 +189,13 @@ void c3_Static::MouseLDropInside( aui_MouseEvent *mouseData )
 	m_mouseCode = AUI_ERRCODE_HANDLED;
 }
 
-
 void c3_Static::MouseRDropInside( aui_MouseEvent *mouseData )
 {
-
 
 #if 0
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this ) {
 		SetWhichSeesMouse( this );
-	} 
+	}
 
 	HandleGameSpecificRightClick((void *)this);
 	m_mouseCode = AUI_ERRCODE_HANDLED;
@@ -229,7 +211,6 @@ void c3_Static::MouseRDropInside( aui_MouseEvent *mouseData )
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this ) {
 		SetWhichSeesMouse( this );
 
-		
 		if(m_ActionFunc) {
 			m_ActionFunc(this, k_C3_STATIC_ACTION_RMOUSE, 0, m_cookie);
 		} else {
@@ -237,10 +218,9 @@ void c3_Static::MouseRDropInside( aui_MouseEvent *mouseData )
 		}
 
 		m_mouseCode = AUI_ERRCODE_HANDLED;
-	} 
+	}
 	else {
 		MouseRDropOutside( mouseData );
 	}
-#endif 
+#endif
 }
-

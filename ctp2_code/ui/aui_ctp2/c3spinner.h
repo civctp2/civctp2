@@ -4,16 +4,14 @@
 #ifndef __C3SPINNER_H__
 #define __C3SPINNER_H__
 
-
 #include "aui_ranger.h"
 #include "patternbase.h"
-
 
 
 class C3Spinner : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	C3Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -48,8 +46,7 @@ public:
 	BOOL	IsVertical( void ) const { return m_isVertical; }
 
 protected:
-	BOOL	m_isVertical;	
+	BOOL	m_isVertical;
 };
 
-
-#endif 
+#endif

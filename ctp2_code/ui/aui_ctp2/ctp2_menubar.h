@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 
 #ifndef __CTP2_MENUBAR_H__
 #define __CTP2_MENUBAR_H__
-
 
 #include "aui_window.h"
 #include "ctp2_Menu.h"
@@ -64,10 +63,9 @@ public:
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD, bool bevel = true );
 	virtual ~ctp2_MenuBar() {}
 
-	
 	ctp2_Menu		*GetMenu(MBCHAR *ldlParent,MBCHAR *menuname);
 	void			SetMenuCallback	(ctp2_Menu *menu,CTP2MenuCallback *callback);
-	void			AddMenuItem		
+	void			AddMenuItem
     (
         ctp2_Menu *     menu,
         MBCHAR const *  itemID,
@@ -81,10 +79,8 @@ protected:
 	ctp2_MenuBar() : aui_Window() {}
 	AUI_ERRCODE InitCommon( void );
 
-	
 	AUI_ERRCODE	AddChild( aui_Region *child );
 
-	
 	sint32	m_runningWidth;
 	sint32  m_rightRunningWidth;
 	sint32	m_largestItemHeight;
@@ -99,5 +95,4 @@ private:
 	bool m_bevel;
 };
 
-
-#endif 
+#endif

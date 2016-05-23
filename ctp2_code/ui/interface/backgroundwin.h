@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -18,6 +7,5 @@
 sint32 backgroundWin_Initialize(bool fullscreen=false);
 sint32 backgroundWin_Cleanup(void);
 AUI_ERRCODE background_draw_handler(LPVOID bg);
-
 
 #endif

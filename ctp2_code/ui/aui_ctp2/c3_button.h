@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -32,11 +24,10 @@
 class aui_Surface;
 class C3TextField;
 
-
 class c3_Button : public aui_Button, public PatternBase
 {
 public:
-	
+
 	c3_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -73,11 +64,10 @@ private:
 };
 
 
-
 class c3_EditButton : public c3_Button
 {
 public:
-	
+
 	c3_EditButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -128,9 +118,7 @@ protected:
 	ControlActionCallback *m_origCallback;
 };
 
-
 void c3_EditButtonCallback( aui_Control *, uint32, uint32, void * );
 void c3_EditButtonFieldCallback( aui_Control *, uint32, uint32, void * );
 
-
-#endif 
+#endif

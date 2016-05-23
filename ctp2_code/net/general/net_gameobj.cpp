@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Globals.h"
 #include "net_gameobj.h"
@@ -68,7 +58,7 @@ void NetGameObj::AddCreated(GAMEOBJ *obj)
 		DPRINTF(k_DBG_NET, ("AddCreated: Sending object %lx straight to limbo\n",
 							obj->m_id));
 		m_limbo->AddTail(new LimboID(obj->m_id));
-		
+
 	} else {
 		DPRINTF(k_DBG_NET, ("AddCreated: %lx\n", obj->m_id));
 		m_created->AddTail(new GameObjRecord(obj));
@@ -90,23 +80,22 @@ void NetGameObj::ACKObject(uint32 id)
 	if(!obj) {
 		LimboID *lID = m_limbo->GetHead();
 		if(lID && lID->m_id == id) {
-			DPRINTF(k_DBG_NET, ("ACKObject: Found object id %lx in limbo\n", 
+			DPRINTF(k_DBG_NET, ("ACKObject: Found object id %lx in limbo\n",
 								id));
-			
+
 			m_limbo->RemoveHead();
 			delete lID;
 		} else {
-			
+
 			Assert(FALSE);
 		}
 
 		return;
 	}
 
-	Assert(obj->m_id == id); 
+	Assert(obj->m_id == id);
 	if(obj->m_id == id) {
 		m_created->RemoveHead();
-
 
 		delete obj;
 		m_createdHash.Remove(id);
@@ -120,9 +109,9 @@ void NetGameObj::NAKObject(uint32 myId, uint32 realId)
 	LimboID *lID = m_limbo->RemoveHead();
 	uint32 id = lID->m_id;
 	delete lID;
-	Assert(id == myId); 
+	Assert(id == myId);
 	Assert(((realId & k_ID_KEY_MASK) >> k_ID_MASK_SHIFT) ==
-		   ((id & k_ID_KEY_MASK) >> k_ID_MASK_SHIFT)); 
+		   ((id & k_ID_KEY_MASK) >> k_ID_MASK_SHIFT));
 	KillObject(id);
 
 	if(realId != 0)
@@ -131,15 +120,15 @@ void NetGameObj::NAKObject(uint32 myId, uint32 realId)
 
 void NetGameObj::TheReaper()
 {
-	
+
 	while(!m_created->IsEmpty()) {
 		GameObjRecord *obj = m_created->RemoveHead();
-		
+
 		DPRINTF(k_DBG_NET, ("TheReaper: Sending object %lx to limbo\n",
 							obj->m_id));
 		m_limbo->AddTail(new LimboID(obj->m_id));
 		delete obj;
-		
+
 	}
 	m_createdHash.Clear();
 }
@@ -162,9 +151,8 @@ void NetGameObj::CheckReceived(uint32 id)
 	switch(id  & k_ID_TYPE_MASK) {
 		case k_BIT_GAME_OBJ_TYPE_UNIT:
 		{
-			
-			
-			
+
+
 			Unit u(id);
 			if(g_theUnitPool->IsValid(u)) {
 				if(m_createdHash.IsPresent(id)) {
@@ -199,15 +187,15 @@ void NetGameObj::CheckReceived(uint32 id)
 			}
 			break;
 		}
-		
-		
-		
-		
+
+
+
+
 
 		default:
 			if(!m_created->IsEmpty()) {
 				DPRINTF(k_DBG_NET, ("NetGameObj: Received object id %lx, but have unACKed objects\n", id));
-				
+
 				reap = TRUE;
 			}
 			break;
@@ -231,7 +219,7 @@ void NetGameObj::KillObject(uint32 id)
 			break;
 		}
 		case k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE:
-		{			
+		{
 			if(g_theTradePool->IsValid(id)) {
 				TradeRoute route(id);
 				route.KillRoute(CAUSE_KILL_TRADE_ROUTE_UNKNOWN);
@@ -240,7 +228,7 @@ void NetGameObj::KillObject(uint32 id)
 		}
 		case k_BIT_GAME_OBJ_TYPE_TRADE_OFFER:
 		{
-			
+
 			Assert(FALSE);
 		}
 		case k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT:
@@ -271,7 +259,6 @@ void NetGameObj::KillObject(uint32 id)
 		{
 			DiplomaticRequest rid(id);
 
-			
 			if(g_theDiplomaticRequestPool->IsValid(rid))
 				rid.Kill();
 			break;

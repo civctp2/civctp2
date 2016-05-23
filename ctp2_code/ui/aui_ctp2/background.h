@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __USING_SPANS
 // unknown
 //
@@ -36,7 +36,6 @@
 #ifndef __BACKGROUND_H__
 #define __BACKGROUND_H__
 
-
 #include "aui_window.h"
 #include "MapPoint.h"
 
@@ -48,12 +47,10 @@
 typedef AUI_ERRCODE (DrawHandler)(LPVOID);
 
 
-
-class Background : public aui_Window 
+class Background : public aui_Window
 {
 
     MapPoint m_current_mouse_tile;
-
 
 public:
 	Background(
@@ -68,14 +65,14 @@ public:
 		:
 		aui_Window( retval, id, x, y, width, height, bpp, AUI_WINDOW_TYPE_BACKGROUND ),
 		m_TheDrawHandler( TheDrawHandler ) {
-            m_lbutton_isdown = FALSE; 
-            m_rbutton_isdown = FALSE; 
-            m_current_mouse_tile.Set(-1,-1); 
+            m_lbutton_isdown = FALSE;
+            m_rbutton_isdown = FALSE;
+            m_current_mouse_tile.Set(-1,-1);
 #ifdef __USING_SPANS__
-			
+
 			if ( m_dirtyList ) delete m_dirtyList;
 			m_dirtyList = new aui_DirtyList( TRUE, width, height );
-#endif 
+#endif
         }
 
 	virtual ~Background() {};
@@ -88,8 +85,8 @@ public:
 	virtual AUI_ERRCODE Idle(void);
 
 protected:
-    sint32 m_lbutton_isdown; 
-    sint32 m_rbutton_isdown; 
+    sint32 m_lbutton_isdown;
+    sint32 m_rbutton_isdown;
 
     virtual void	MouseLDragOver(aui_MouseEvent * data);
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
@@ -104,11 +101,10 @@ protected:
     virtual void	MouseNoChange(aui_MouseEvent * data);
     virtual void	MouseLDoubleClickInside(aui_MouseEvent * data);
     virtual void	MouseRDoubleClickInside(aui_MouseEvent * data);
-    
-    void ProcessLastMouseMoveThisFrame(aui_MouseEvent *data);
 
+    void ProcessLastMouseMoveThisFrame(aui_MouseEvent *data);
 
 	DrawHandler *m_TheDrawHandler;
 };
 
-#endif 
+#endif

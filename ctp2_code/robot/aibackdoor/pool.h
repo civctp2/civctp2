@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // HAVE_PRAGMA_ONCE
 //
 //----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ class Pool
 public:
 	Pool
 	(
-		int i_chunk_size,			
-		int i_max_chunks = -1		
+		int i_chunk_size,
+		int i_max_chunks = -1
 	);
 
 	~Pool();
@@ -78,21 +78,20 @@ protected:
 
 	bool Prepare_New_Chunk();
 
-	int chunk_size;					
-	int max_chunks;					
-	int count;						
-	int next_element;				
-									
+	int chunk_size;
+	int max_chunks;
+	int count;
+	int next_element;
+
 	list_array<DATA_TYPE *> chunks;
 	list_array<int>         next_free_element_list;
 };
 
 
-
 template <class DATA_TYPE>
 bool Pool<DATA_TYPE>::Prepare_New_Chunk()
 {
-	if (static_cast<int>(chunks.size()) == max_chunks) 
+	if (static_cast<int>(chunks.size()) == max_chunks)
     {
         return false;
     }
@@ -101,24 +100,23 @@ bool Pool<DATA_TYPE>::Prepare_New_Chunk()
         DATA_TYPE *     test                = new DATA_TYPE[chunk_size];
 
 	    chunks.Append_Data(test);
-	    
+
 	    size_t const    first_new_element   = (chunks.size() - 1) * chunk_size;
 
         for (size_t i = first_new_element + 1; i <= first_new_element + chunk_size; ++i)
 	    {
 		    next_free_element_list.Append_Data(i);
-	    } 
+	    }
 
 	    return true;
     }
 }
 
-
 template <class DATA_TYPE>
 Pool<DATA_TYPE>::Pool
 (
-	int i_chunk_size,					
-	int i_max_chunks					
+	int i_chunk_size,
+	int i_max_chunks
 )
 :   count                   (0),
     chunks                  (INITIAL_CHUNK_LIST_SIZE),
@@ -128,13 +126,12 @@ Pool<DATA_TYPE>::Pool
     next_free_element_list  (i_chunk_size, i_chunk_size, i_max_chunks)
 {
 	_ASSERTE(chunk_size > 0);
-	
+
 	Prepare_New_Chunk();
 }
 
-
 template <class DATA_TYPE>
-Pool<DATA_TYPE>::~Pool() 
+Pool<DATA_TYPE>::~Pool()
 {
 	for (size_t i = 0; i < chunks.size(); ++i)
 	{
@@ -143,9 +140,8 @@ Pool<DATA_TYPE>::~Pool()
 	}
 }
 
-
 template <class DATA_TYPE>
-DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it) 
+DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it)
 {
 	if (count >= (static_cast<int>(chunks.size()) * chunk_size))
 	{
@@ -162,19 +158,18 @@ DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it)
 	int const   which_chunk         = which_element_is_it / chunk_size;
 	int const   element_in_chunk    = which_element_is_it - (which_chunk * chunk_size);
 	DATA_TYPE * the_chunk           = chunks.Return_Data_By_Number(which_chunk);
-	
+
 	next_element = next_free_element_list.Return_Data_By_Number(next_element);
 	next_free_element_list.Set_Data(ELEMENT_OCCUPIED, which_element_is_it);
 
 	return &(the_chunk[element_in_chunk]);
 }
 
-
 template <class DATA_TYPE>
 void Pool<DATA_TYPE>::Release_Pointer
 (
 	int ptr_to_free
-) 
+)
 {
 	if (ELEMENT_OCCUPIED == next_free_element_list.Return_Data_By_Number
                                 (ptr_to_free)
@@ -190,5 +185,3 @@ void Pool<DATA_TYPE>::Release_Pointer
 }
 
 #endif // __Pool_h__
-
-

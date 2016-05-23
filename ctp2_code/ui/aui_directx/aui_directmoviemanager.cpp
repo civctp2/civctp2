@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_directmoviemanager.h"
 
 #ifdef __AUI_USE_DIRECTMEDIA__
-
 
 #include "aui_ui.h"
 
@@ -33,11 +21,9 @@ aui_DirectMovieManager::aui_DirectMovieManager(bool init, bool initDirect)
 }
 
 
-
 aui_DirectMovieManager::~aui_DirectMovieManager()
 {
 	delete m_directMovieResource;
 }
 
-
-#endif 
+#endif

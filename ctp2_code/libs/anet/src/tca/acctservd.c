@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <sys/errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <netinet/in.h> 
-#include <arpa/inet.h> 
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "anet.h"
 #include "acctserv.h"
 #include "antpserv.h"
@@ -69,7 +69,7 @@ dp_dprintf(
 }
 #endif
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) 
+dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -90,7 +90,7 @@ static int acctservd_validateAddr(struct sockaddr_in addr)
 }
 
 /*--------------------------------------------------------------------------
- Handle an incoming account change request on <sockfd>. 
+ Handle an incoming account change request on <sockfd>.
 --------------------------------------------------------------------------*/
 static void acctservd_handleRequest(int sockfd, acctserv_t *acctserv)
 {
@@ -127,7 +127,7 @@ static void acctservd_handleRequest(int sockfd, acctserv_t *acctserv)
 			for (c = pbuf; c < pbuf + nbytes; c++) {
 				if (c > buf + acctservd_BUFLEN) {
 					DPRINT(("\nacctservd: request too long for buf\n"));
-					sprintf(buf, "%d %s\n", 4, "Buffer Overflow"); 
+					sprintf(buf, "%d %s\n", 4, "Buffer Overflow");
 					c = buf;  /* pbuf = c;  as we exit for loop */
 					buflen = strlen(buf);
 					state = acctservd_STATE_SENDERROR;
@@ -144,7 +144,7 @@ static void acctservd_handleRequest(int sockfd, acctserv_t *acctserv)
 					bNewArg = 1;
 				} else if (!isprint(*c)) {
 					DPRINT(("\nacctservd: bad char:%d in request\n", *c));
-					sprintf(buf, "%d %s\n", 3, "Bad Character in Request"); 
+					sprintf(buf, "%d %s\n", 3, "Bad Character in Request");
 					c = buf;  /* pbuf = c;  as we exit for loop */
 					buflen = strlen(buf);
 					state = acctservd_STATE_SENDERROR;
@@ -421,9 +421,9 @@ void main(int argc, char *argv[])
 {
 	dp_result_t err;
 	acctserv_t *acctserv;
-	int sockunix, sockinet; 
+	int sockunix, sockinet;
 	struct sockaddr_un addrunix;
-	struct sockaddr_in addrinet; 
+	struct sockaddr_in addrinet;
 	time_t now, next_save;
 	int MyPort;
 	char MyDir[antpserv_MAXPATH];
@@ -477,7 +477,7 @@ Usage: %s <Dir> <Port>\n\
 
 	printf("acctservd: binding unix domain socket\n");
 	memset(&addrunix, 0, sizeof(addrunix));
-	addrunix.sun_family = AF_LOCAL; 
+	addrunix.sun_family = AF_LOCAL;
 	strcpy(addrunix.sun_path, acctservd_SOCKETNAME);
 	unlink(addrunix.sun_path);
 	if (bind(sockunix, (struct sockaddr *)&addrunix, sizeof(addrunix)) < 0) {
@@ -490,9 +490,9 @@ Usage: %s <Dir> <Port>\n\
 	}
 	DPRINT(("acctservd: binding inet socket\n"));
 	memset(&addrinet, 0, sizeof(addrinet));
-	addrinet.sin_family = AF_INET; 
-	addrinet.sin_port = htons(MyPort); 
-	addrinet.sin_addr.s_addr = htons(INADDR_ANY); 
+	addrinet.sin_family = AF_INET;
+	addrinet.sin_port = htons(MyPort);
+	addrinet.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(sockinet, (struct sockaddr *)&addrinet, sizeof(addrinet)) < 0) {
 		DPRINT(("acctservd: bind error:%d\n", errno));
 		exit(1);
@@ -578,12 +578,12 @@ Usage: %s <Dir> <Port>\n\
 
 			case 0:
 				/* CHILD PROCESS */
-				/* child only uses newsock */ 
+				/* child only uses newsock */
 				close(sockunix);
 				close(sockinet);
 				close(1);		/* close stdout */
 				close(2);		/* close stderr */
-				acctservd_handleRequest(newsock, acctserv); 
+				acctservd_handleRequest(newsock, acctserv);
 				close(newsock);
 				exit(0);
 				break;
@@ -614,8 +614,8 @@ Usage: %s <Dir> <Port>\n\
 					break;
 
 				case 0:
-					/* CHILD PROCESS */ 
-					/* child only uses newsock */ 
+					/* CHILD PROCESS */
+					/* child only uses newsock */
 					close(sockunix);
 					close(sockinet);
 					close(1);		/* close stdout */
@@ -633,12 +633,12 @@ Usage: %s <Dir> <Port>\n\
 					case 0:		/* ORPHANED GRANDCHILD */
 						break;
 					default:	/* CHILD */
-						close(newsock); 
+						close(newsock);
 						exit(0);  /* orphan the grandchild */
 					}
 					/* ORPHANED GRANDCHILD handles connection */
-					antpserv_handleRequest(newsock, MyDir, DBFile); 
-					close(newsock); 
+					antpserv_handleRequest(newsock, MyDir, DBFile);
+					close(newsock);
 					exit(0);
 					break;
 

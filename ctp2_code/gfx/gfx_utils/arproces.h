@@ -13,7 +13,7 @@ sint32 RealConvolution(Pixel32 *InImage,
 							   uint32 Width, uint32 Height,
 							   double *Kernel, uint32 KernelCols,
 							   uint32 KernelRows, uint32 Scale,
-							   uint32 Absolute, 
+							   uint32 Absolute,
 							   Pixel32 **OutImageBufPtr);
 
 void AdjImageBrightness(Pixel32 *image, sint16 BrightnessFactor,

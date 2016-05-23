@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "globals.h"
 #include "civarchive.h"
@@ -8,7 +6,7 @@
 #include "ic3world.h"
 #include "ic3Science.h"
 #include "ic3player.h"
-#include "ic3TerrDB.h"              
+#include "ic3TerrDB.h"
 #include "ic3Rand.h"
 
 #include "FsDiplomat.h"
@@ -52,7 +50,6 @@ extern Wall_Clock *g_wall_clock;
 
 #define k_TRADE_REGARD_THRESHOLD 35.0
 
-
 #define k_BEST_VALUE 1000.0
 #define k_GOOD_VALUE 750.0
 #define k_AVERAGE_VALUE 500.0
@@ -61,7 +58,7 @@ extern Wall_Clock *g_wall_clock;
 
 #define k_BELOW_HOT_WAR (k_REGARD_HOTWAR-5.0)
 #define k_BELOW_COLD_WAR (k_REGARD_COLDWAR-5.0)
-#define k_ABOVE_COLD_WAR (k_REGARD_GOLDWAR+5.0); 
+#define k_ABOVE_COLD_WAR (k_REGARD_GOLDWAR+5.0);
 
 #define REGFV(v) if(ai->m_fliEngine->GetSymbol(v)) { ai->m_fliEngine->GetSymbol(v)->RegisterInit(section); } else {Assert(ai->m_fliEngine->GetSymbol(v)); }
 
@@ -70,18 +67,17 @@ extern Wall_Clock *g_wall_clock;
 #define REGACC(v) if(ai->m_fliEngine->GetSymbol(v)) { ai->m_fliEngine->GetSymbol(v)->RegisterInit(FLI_SECT_ACCEPTED_MESSAGE); } else { Assert(ai->m_fliEngine->GetSymbol(v)); }
 #define REGREJ(v) if(ai->m_fliEngine->GetSymbol(v)) { ai->m_fliEngine->GetSymbol(v)->RegisterInit(FLI_SECT_REJECTED_MESSAGE); } else { Assert(ai->m_fliEngine->GetSymbol(v)); }
 
-
-extern double fz_his_message_tone; 
+extern double fz_his_message_tone;
 extern double fz_unit_regard_towards_him;
-extern double fz_best_friend; 
-extern double fz_worst_enemy; 
+extern double fz_best_friend;
+extern double fz_worst_enemy;
 
 extern double fz_rand;
 extern double fz_has_pact_against_me_decay;
 extern double fz_time;
 
 extern double fz_at_war_count;
-extern double fz_he_beat_me_decay; 
+extern double fz_he_beat_me_decay;
 extern double fz_current_military_readiness;
 extern double fz_my_normalized_rank;
 extern double fz_normalized_rank_diff_between_first_and_second_place;
@@ -106,9 +102,8 @@ FSDiplomat::~FSDiplomat()
 	}
 
 	delete m_tradeOffers;
-    m_tradeOffers = NULL; 
+    m_tradeOffers = NULL;
 }
-
 
 void FSDiplomat::Serialize(CivArchive &archive)
 {
@@ -119,58 +114,56 @@ void FSDiplomat::Serialize(CivArchive &archive)
 
 BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 {
-	
-	
-	
 
-	
+
+
+
+
 	sint32 p;
-	
-    if (0 == ai->m_my_player_id) 
-	{ 
-		for(p = 1; p <k_MAX_PLAYERS; p++) 
+
+    if (0 == ai->m_my_player_id)
+	{
+		for(p = 1; p <k_MAX_PLAYERS; p++)
 		{
-			
+
 			if (!ai->m_foreigner[p])
 				continue;
 
-			
-			
+
 			Foreigner *foreigner = ai->m_foreigner[p];
 			int player_type = foreigner->GetPlayerType(ai, foreigner);
-			
-			if (ai->m_round_count->GetRound() < 50 && 
+
+			if (ai->m_round_count->GetRound() < 50 &&
 				ai->m_player->IsRobotPlayer(p)) {
 				foreigner->SetUnitRegard(100);
 				foreigner->SetDiplomaticRegard(ai, 100);
-            } else { 
+            } else {
                 foreigner->SetUnitRegard(0);
         		foreigner->SetDiplomaticRegard(ai, 0);
 
             }
 
 		}
-		return TRUE; 
-    } 
-	
+		return TRUE;
+    }
 
-	
-    
-    
-	
+
+
+
+
+
 	for(p = 0; p <k_MAX_PLAYERS; p++) {
 
-		
 		if(!ai->m_foreigner[p])
 			 continue;
 
-		
 
 
 
 
 
-		
+
+
 		if((ai->m_foreigner[p]->GetPlayerIndex()) == 0)
 		{
 			Foreigner *foreigner = ai->m_foreigner[p];
@@ -178,11 +171,10 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 			foreigner->SetDiplomaticRegard(ai, 0);
 			continue ;
 		}
-				
+
 		if (ai->m_foreigner[p]->HaveContact()) {
 			Foreigner *foreigner = ai->m_foreigner[p];
 
-			
 			foreigner->SetColdwarAttackedMe(foreigner->GetColdwarAttackedMe() * foreigner->GetHisColdwarAttackedMeDecay());
 			foreigner->SetHotwarAttackedMe(foreigner->GetHotwarAttackedMe() * foreigner->GetHisHotwarAttackedMeDecay());
 			foreigner->SetAcceptedRequests(foreigner->GetAcceptedRequests() * foreigner->GetAcceptedRequestsDecay());
@@ -195,21 +187,19 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 			foreigner->SetBrokenTreaties(foreigner->GetBrokenTreaties() *
 										 foreigner->GetBrokenTreatiesDecay());
 
-            foreigner->BeginTurnHeBeatMe(fz_he_beat_me_decay); 
+            foreigner->BeginTurnHeBeatMe(fz_he_beat_me_decay);
             foreigner->SetHasPactAgainstMe(
                    foreigner->HasPactAgainstMe() *
                    fz_has_pact_against_me_decay
                 );
 
-			
 			for(sint32 requests = 0; requests < REQUEST_TYPE_NULL; requests++)
 			{
 				foreigner->DecayMyResponses((REQUEST_TYPE) requests);
 				foreigner->DecayHisResponses((REQUEST_TYPE) requests);
 			}
-			
-			
-			
+
+
 			SetupForeignerVars(ai, foreigner, TRUE, FLI_SECT_BEGIN_DIPLOMACY);
 			if(!m_registered_foreigner_vars[FLI_SECT_PRE_OUTGOING_DIPLOMACY]) {
 				SetupForeignerVars(ai, foreigner, FALSE, FLI_SECT_PRE_OUTGOING_DIPLOMACY);
@@ -234,7 +224,7 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 			Assert(leastRecent >= 0);
 			if(leastRecent < 0 )
 				continue;
-			
+
 			if(fz_max_messages_considered_per_turn > (double)REQUEST_TYPE_MAX)
 				fz_max_messages_considered_per_turn = (double)REQUEST_TYPE_MAX;
 
@@ -253,20 +243,19 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 					GetSendUtility(ai, foreigner, &request[r]);
 					if(request[r].m_isvalid &&
 					   request[r].m_utility > request[r].m_threshold) {
-						if(((request[r].m_utility - request[r].m_threshold) * request[r].m_dip_send_coef) 
-								> maxutil) 
+						if(((request[r].m_utility - request[r].m_threshold) * request[r].m_dip_send_coef)
+								> maxutil)
 						{
-							
-							
+
  							maxutil = (request[r].m_utility - request[r].m_threshold) * request[r].m_dip_send_coef;
 							maxreq = r;
 						}
 					}
 				}
 			}
-			
-			if(maxutil >= 0 && request[maxreq].m_isvalid) { 
-				
+
+			if(maxutil >= 0 && request[maxreq].m_isvalid) {
+
 				ai->SendDiplomaticRequest(&request[maxreq]);
 			}
 			foreigner->SetViolatingStopTrade(0.0);
@@ -277,14 +266,11 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 		}
 	}
 
-    
     BuildFriendTable(ai);
 
-	
 	ConsiderTradeOffers(ai);
 	ConsiderMakingTradeOffers(ai);
 	ConsiderMakingTradeBids(ai);
-
 
     return TRUE;
 }
@@ -292,9 +278,9 @@ BOOL FSDiplomat::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 									BOOL fireRules, sint32 section)
 {
-    ForeignAgent *him; 
+    ForeignAgent *him;
     BSetID h_id;
-    BSet<ForeignAgent> *vu; 
+    BSet<ForeignAgent> *vu;
 
 	if(!m_registered_foreigner_vars[section]) {
 		m_registered_foreigner_vars[section] = TRUE;
@@ -308,38 +294,38 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 		REGFV("has_pact_against_me");
 		REGFV("he_beat_me");
 		REGFV("he_beat_me_this_turn");
-		
+
 		REGFV("diplomatic_regard_towards_him");
 		REGFV("unit_regard_towards_him");
-		
+
 		REGFV("loyalty");
 
 		REGFV("rejected_requests");
 		REGFV("accepted_requests");
-		
+
 		REGFV("length_of_war_with_him");
 		REGFV("num_he_is_at_war");
-		
+
 		REGFV("closest_capitol");
 		REGFV("he_shares_continent");
-		
+
 		REGFV("cease_fire_with_him");
 		REGFV("alliance_with_him");
 		REGFV("war_with_him");
 		REGFV("neutral_with_him");
-		
+
 		REGFV("last_attacked_me");
 		REGFV("he_beat_me");
 		REGFV("he_beat_me_this_turn");
 		REGFV("his_hotwar_attacked_me");
 		REGFV("his_coldwar_attacked_me");
-		
+
 		REGFV("his_strength");
 		REGFV("my_strength");
 
 		REGFV("his_strength");
 		REGFV("relative_strength");
- 
+
 		REGFV("military_incursions");
 		REGFV("my_military_incursions");
 
@@ -351,7 +337,7 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 
 		REGFV("num_players_in_game");
 
-		if(section == FLI_SECT_BEGIN_DIPLOMACY) 
+		if(section == FLI_SECT_BEGIN_DIPLOMACY)
 		{
 			REGFV("violating_stop_trade");
 			REGFV("violating_leave_our_lands");
@@ -389,51 +375,51 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 		REGFV("turns_to_disaster");
 		REGFV("time");
 
-		REGFV("my_responses_DEMAND_ADVANCE"); 
-		REGFV("my_responses_DEMAND_CITY"); 
-		REGFV("my_responses_DEMAND_MAP"); 
-		REGFV("my_responses_DEMAND_GOLD"); 
-		REGFV("my_responses_DEMAND_STOP_TRADE"); 
-		REGFV("my_responses_DEMAND_ATTACK_ENEMY"); 
-		REGFV("my_responses_DEMAND_LEAVE_OUR_LANDS"); 
-		REGFV("my_responses_DEMAND_REDUCE_POLLUTION"); 
-		REGFV("my_responses_DEMAND_LOWER_TARIFFS"); 
-		REGFV("my_responses_OFFER_ADVANCE"); 
-		REGFV("my_responses_OFFER_CITY"); 
-		REGFV("my_responses_OFFER_MAP"); 
-		REGFV("my_responses_OFFER_GOLD"); 
-		REGFV("my_responses_OFFER_CEASE_FIRE"); 
-		REGFV("my_responses_OFFER_PERMANENT_ALLIANCE"); 
-		REGFV("my_responses_OFFER_PACT_CAPTURE_CITY"); 
-		REGFV("my_responses_OFFER_PACT_END_POLLUTION"); 
-		REGFV("my_responses_EXCHANGE_ADVANCE"); 
-		REGFV("my_responses_EXCHANGE_CITY"); 
-		REGFV("my_responses_EXCHANGE_MAP"); 
-	
-		REGFV("his_responses_GREETING"); 
-		REGFV("his_responses_DEMAND_ADVANCE"); 
-		REGFV("his_responses_DEMAND_CITY"); 
-		REGFV("his_responses_DEMAND_MAP"); 
-		REGFV("his_responses_DEMAND_GOLD"); 
-		REGFV("his_responses_DEMAND_STOP_TRADE"); 
-		REGFV("his_responses_DEMAND_ATTACK_ENEMY"); 
-		REGFV("his_responses_DEMAND_LEAVE_OUR_LANDS"); 
-		REGFV("his_responses_DEMAND_REDUCE_POLLUTION"); 
-		REGFV("his_responses_DEMAND_LOWER_TARIFFS"); 
-		REGFV("his_responses_OFFER_ADVANCE"); 
-		REGFV("his_responses_OFFER_CITY"); 
-		REGFV("his_responses_OFFER_MAP"); 
-		REGFV("his_responses_OFFER_GOLD"); 
-		REGFV("his_responses_OFFER_CEASE_FIRE"); 
-		REGFV("his_responses_OFFER_PERMANENT_ALLIANCE"); 
-		REGFV("his_responses_OFFER_PACT_CAPTURE_CITY"); 
-		REGFV("his_responses_OFFER_PACT_END_POLLUTION"); 
-		REGFV("his_responses_EXCHANGE_ADVANCE"); 
-		REGFV("his_responses_EXCHANGE_CITY"); 
-		REGFV("his_responses_EXCHANGE_MAP"); 
+		REGFV("my_responses_DEMAND_ADVANCE");
+		REGFV("my_responses_DEMAND_CITY");
+		REGFV("my_responses_DEMAND_MAP");
+		REGFV("my_responses_DEMAND_GOLD");
+		REGFV("my_responses_DEMAND_STOP_TRADE");
+		REGFV("my_responses_DEMAND_ATTACK_ENEMY");
+		REGFV("my_responses_DEMAND_LEAVE_OUR_LANDS");
+		REGFV("my_responses_DEMAND_REDUCE_POLLUTION");
+		REGFV("my_responses_DEMAND_LOWER_TARIFFS");
+		REGFV("my_responses_OFFER_ADVANCE");
+		REGFV("my_responses_OFFER_CITY");
+		REGFV("my_responses_OFFER_MAP");
+		REGFV("my_responses_OFFER_GOLD");
+		REGFV("my_responses_OFFER_CEASE_FIRE");
+		REGFV("my_responses_OFFER_PERMANENT_ALLIANCE");
+		REGFV("my_responses_OFFER_PACT_CAPTURE_CITY");
+		REGFV("my_responses_OFFER_PACT_END_POLLUTION");
+		REGFV("my_responses_EXCHANGE_ADVANCE");
+		REGFV("my_responses_EXCHANGE_CITY");
+		REGFV("my_responses_EXCHANGE_MAP");
+
+		REGFV("his_responses_GREETING");
+		REGFV("his_responses_DEMAND_ADVANCE");
+		REGFV("his_responses_DEMAND_CITY");
+		REGFV("his_responses_DEMAND_MAP");
+		REGFV("his_responses_DEMAND_GOLD");
+		REGFV("his_responses_DEMAND_STOP_TRADE");
+		REGFV("his_responses_DEMAND_ATTACK_ENEMY");
+		REGFV("his_responses_DEMAND_LEAVE_OUR_LANDS");
+		REGFV("his_responses_DEMAND_REDUCE_POLLUTION");
+		REGFV("his_responses_DEMAND_LOWER_TARIFFS");
+		REGFV("his_responses_OFFER_ADVANCE");
+		REGFV("his_responses_OFFER_CITY");
+		REGFV("his_responses_OFFER_MAP");
+		REGFV("his_responses_OFFER_GOLD");
+		REGFV("his_responses_OFFER_CEASE_FIRE");
+		REGFV("his_responses_OFFER_PERMANENT_ALLIANCE");
+		REGFV("his_responses_OFFER_PACT_CAPTURE_CITY");
+		REGFV("his_responses_OFFER_PACT_END_POLLUTION");
+		REGFV("his_responses_EXCHANGE_ADVANCE");
+		REGFV("his_responses_EXCHANGE_CITY");
+		REGFV("his_responses_EXCHANGE_MAP");
 
 		REGFV("he_built_undersea");
-		REGFV("he_built_space"); 
+		REGFV("he_built_space");
 		REGFV("he_built_wormhole");
 		REGFV("someone_built_wormhole");
 		REGFV("someone_built_space");
@@ -443,25 +429,22 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 
 	}
 
-	
-    fz_time = ai->m_round_count->GetRound(); 
+    fz_time = ai->m_round_count->GetRound();
 	fz_rand = (ai->m_rand->Next((100)));
-	
-	
+
 	foreigner->UpdateDiplomaticState(ai);
 
-	
 	ComputeNormalizedStr(ai);
 
 	foreigner->UpdateMyResponses();
 	foreigner->UpdateHisResponses();
-	
-	foreigner->GetUnitAge(fz_he_built_undersea, fz_he_built_space, fz_he_built_wormhole); 
+
+	foreigner->GetUnitAge(fz_he_built_undersea, fz_he_built_space, fz_he_built_wormhole);
 
 	fz_his_pollution_level = foreigner->GetPollutionLevel();
 	fz_my_pollution_level = ai->m_player->GetPollutionLevel();
 	fz_global_pollution_level = ai->m_gs->GetGlobalPollutionLevel();
-	
+
 	if(fz_global_pollution_level == 0) { fz_global_pollution_level = 1;}
 
 	fz_my_percent_pollution = fz_my_pollution_level/fz_global_pollution_level;
@@ -472,27 +455,24 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 	fz_current_military_readiness = ai->m_player->GetReadinessLevel();
 
 	fz_distance_to_his_capitol = foreigner->GetDistanceToCapitol();
-	
-	
-	
+
+
 	fz_diplomatic_regard_towards_him = foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard();
-	
-	
-	
-	
-	
+
+
+
+
+
 	fz_unit_regard_towards_him = foreigner->GetUnitRegard() + foreigner->GetBonusRegard();
 
-	
 	if (foreigner->GetInsaneHatred())
 	{
 		fz_unit_regard_towards_him = k_REGARD_INSANE_HATRED -1 ;
 		fz_diplomatic_regard_towards_him = k_REGARD_INSANE_HATRED - 1;
 	}
 
-	
-	fz_best_friend = 0; 
-	fz_worst_enemy = 0; 
+	fz_best_friend = 0;
+	fz_worst_enemy = 0;
 	double highest_regard = 0;
 	double lowest_regard = 100;
 	double test_regard = 50;
@@ -513,20 +493,19 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 	double test_space = FALSE;
 	double test_wormhole = FALSE;
 
-	
-	for (i=1; i<k_MAX_PLAYERS; i++) 
+	for (i=1; i<k_MAX_PLAYERS; i++)
 	{
-		if( ai->m_foreigner[i]) 
+		if( ai->m_foreigner[i])
 		{
-			test_regard = ai->m_foreigner[i]->GetDiplomaticRegard() + ai->m_foreigner[i]->GetBonusRegard(); 
-			if(test_regard >= highest_regard) 
+			test_regard = ai->m_foreigner[i]->GetDiplomaticRegard() + ai->m_foreigner[i]->GetBonusRegard();
+			if(test_regard >= highest_regard)
 			{
-				if(test_regard == highest_regard) 
+				if(test_regard == highest_regard)
 				{
 					whohigh = -1;
 					highest_regard = test_regard;
-				} 
-				else 
+				}
+				else
 				{
 					whohigh = i;
 					highest_regard = test_regard;
@@ -534,19 +513,19 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 			}
 			if(test_regard <= lowest_regard)
 			{
-				
+
 				if(test_regard == lowest_regard)
 				{
 					wholow = -1;
 					lowest_regard = test_regard;
-				} 
-				else 
+				}
+				else
 				{
 					wholow = i;
 					lowest_regard = test_regard;
 				}
-			}	
-			if(fz_longest_war < ai->m_foreigner[i]->GetLengthOfWarWithHim(ai)) 
+			}
+			if(fz_longest_war < ai->m_foreigner[i]->GetLengthOfWarWithHim(ai))
 			{
 				fz_longest_war = ai->m_foreigner[i]->GetLengthOfWarWithHim(ai);
 			}
@@ -554,29 +533,28 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 			{
 				fz_shortest_peace = ai->m_foreigner[i]->GetLengthOfPeaceWithHim(ai);
 			}
-		
-			
-			if (ai->m_foreigner[i]->UpdateWar(ai, ai->my_player_index)) 
-			{ 
-                fz_at_war_count += 1.0; 
+
+			if (ai->m_foreigner[i]->UpdateWar(ai, ai->my_player_index))
+			{
+                fz_at_war_count += 1.0;
             }
 		}
 	}
 
-	if(whohigh > 0 && 
-		ai->m_foreigner[whohigh] == foreigner && 
-		((ai->m_foreigner[whohigh]->GetDiplomaticRegard() + ai->m_foreigner[whohigh]->GetBonusRegard()) > 50)) 
+	if(whohigh > 0 &&
+		ai->m_foreigner[whohigh] == foreigner &&
+		((ai->m_foreigner[whohigh]->GetDiplomaticRegard() + ai->m_foreigner[whohigh]->GetBonusRegard()) > 50))
 	{
 		fz_best_friend = 1;
 	}
 
-	if(wholow > 0 && 
+	if(wholow > 0 &&
 		ai->m_foreigner[wholow] == foreigner &&
-		((ai->m_foreigner[wholow]->GetDiplomaticRegard() + ai->m_foreigner[wholow]->GetBonusRegard()) < 50)) 
+		((ai->m_foreigner[wholow]->GetDiplomaticRegard() + ai->m_foreigner[wholow]->GetBonusRegard()) < 50))
 	{
 		fz_worst_enemy = 1;
 	}
-	
+
 	if(fz_best_friend == 1 && fz_worst_enemy == 1)
 	{
 		fz_worst_enemy = 0;
@@ -594,21 +572,19 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 	fz_he_shares_continent = foreigner->GetHeSharesContinent();
 	fz_length_of_war_with_him = foreigner->GetLengthOfWarWithHim(ai);
 
-	
 
-	
+
+
 	fz_his_normalized_rank = foreigner->GetNormalizedRank();
-	
-	
+
 	fz_player_type = foreigner->GetPlayerType(ai, foreigner);
-	
+
 	fz_chase_the_rabbit = FALSE;
 
-	
-	
-	for (i=1; i<k_MAX_PLAYERS; i++) 	
+
+	for (i=1; i<k_MAX_PLAYERS; i++)
 	{
-		if( ai->m_foreigner[i]) 
+		if( ai->m_foreigner[i])
 		{
 			double his_type = ai->m_foreigner[i]->GetPlayerType(ai, ai->m_foreigner[i]);
 			double his_rank = ai->m_foreigner[i]->GetNormalizedRank();
@@ -616,16 +592,16 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 			{
 				fz_chase_the_rabbit = 1.0;
 			}
-		
+
 		}
 	}
 
-	
-	
-	
+
+
+
 	sint32 my_player_id = ai->my_player_index;
 
-	fz_cease_fire_with_him = foreigner->UpdateCeaseFire(ai, my_player_id); 
+	fz_cease_fire_with_him = foreigner->UpdateCeaseFire(ai, my_player_id);
 	fz_alliance_with_him = foreigner->UpdateAlliance(ai, my_player_id);
 	fz_war_with_him = foreigner->UpdateWar(ai, my_player_id);
 	fz_neutral_with_him = foreigner->UpdateNeutrality(ai, my_player_id);
@@ -637,18 +613,17 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 	fz_he_beat_me = foreigner->GetHeBeatMe();
 	fz_he_beat_me_this_turn = foreigner->GetHeBeatMeThisTurn();
 
-	
-	
+
 	if(foreigner->GetLastAttackedMe() < 0)
 	{
-		
-		
-		
-		
 
-		
-		
-		
+
+
+
+
+
+
+
 		fz_last_attacked_me = 1000;
 	}
 	else
@@ -665,25 +640,25 @@ void FSDiplomat::SetupForeignerVars(AiMain *ai, Foreigner *foreigner,
 
 	fz_relative_strength = fz_my_strength / fz_his_strength;
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
 	fz_military_incursions = 0;
 
 	vu = foreigner->GetVisibleUnits();
 
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 	double attack = 0;
 
-	for (him = vu->First(h_id); vu->Last(); him =  vu->Next(h_id)) { 
-Assert(finite_loop++ < 1000); 
+	for (him = vu->First(h_id); vu->Last(); him =  vu->Next(h_id)) {
+Assert(finite_loop++ < 1000);
 
 		MapPointData pos;
 		him->GetPos(pos);
@@ -694,21 +669,21 @@ Assert(finite_loop++ < 1000);
 
 		if(attack > 0.001)
 		{
-			if(ai->m_world->GetCellOwner(&pos) == ai->my_player_index) 
+			if(ai->m_world->GetCellOwner(&pos) == ai->my_player_index)
 			{
 				fz_military_incursions += him->GetUnitNum();
 			}
 		}
-	} 
+	}
 
     BSetID id;
     ArmyAgent *agent;
 	fz_my_military_incursions = 0;
 
-    for (agent = ai->m_army_set->First(id); 
-		 ai->m_army_set->Last(); 
-		 agent = ai->m_army_set->Next(id)) 
-	{ 
+    for (agent = ai->m_army_set->First(id);
+		 ai->m_army_set->Last();
+		 agent = ai->m_army_set->Next(id))
+	{
         MapPointData pos;
 		agent->GetPos(ai, pos);
 		attack=agent->GetAttackStrength();
@@ -719,18 +694,18 @@ Assert(finite_loop++ < 1000);
 		}
 	}
 
-	
-	
-	
+
+
+
 
 	fz_last_got_map = (sint32)ai->m_round_count->GetRound() - foreigner->GotMapFrom();
 
 
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	if(section == FLI_SECT_BEGIN_DIPLOMACY) {
 		fz_violating_stop_trade = foreigner->GetViolatingStopTrade();
@@ -741,30 +716,25 @@ Assert(finite_loop++ < 1000);
 
 	}
 
-
 	fz_have_stop_trade = foreigner->HeAgreed(ai, AGREEMENT_TYPE_DEMAND_STOP_TRADE);
 	fz_have_leave_our_lands = foreigner->HeAgreed(ai, AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS);
 	fz_have_reduce_pollution = foreigner->HeAgreed(ai, AGREEMENT_TYPE_REDUCE_POLLUTION);
 	fz_have_end_pollution = foreigner->HeAgreed(ai, AGREEMENT_TYPE_PACT_END_POLLUTION);
-	
-	
-	
+
+
 	fz_have_attack_enemy = foreigner->HeAgreed(ai, AGREEMENT_TYPE_DEMAND_ATTACK_ENEMY);
 	fz_have_cease_fire = foreigner->HeAgreed(ai, AGREEMENT_TYPE_CEASE_FIRE);
 
-	
-	
-	
+
+
+
 	fz_have_alliance = !ai->m_player->IsEnemy(foreigner->GetPlayerIndex());
 
-	
 	fz_attacked_my_enemies = foreigner->GetAttackedMyEnemies();
-	
-	
-	
+
+
 	fz_attacked_my_friends = foreigner->GetAttackedMyFriends();
 
-	
 	fz_his_broken_treaties = foreigner->GetBrokenTreaties();
 
 	if(fireRules) {
@@ -778,87 +748,81 @@ Assert(finite_loop++ < 1000);
 		fz_attacked_my_friends_decay = 1.0;
 		fz_his_broken_treaties_decay = 1.0;
 
-		
 		fz_diplomatic_regard_delta = 0;
 		fz_dip_regard_pirate_delta = 0;
 		fz_dip_regard_attack_delta = 0;
-		fz_dip_regard_incursion_delta = 0; 
-		fz_dip_regard_pillage_delta = 0; 
+		fz_dip_regard_incursion_delta = 0;
+		fz_dip_regard_pillage_delta = 0;
 		fz_dip_regard_message_delta = 0;
-		fz_dip_regard_general_delta =0 ; 
+		fz_dip_regard_general_delta =0 ;
 		fz_dip_regard_strength_delta = 0;
 		fz_unit_regard_delta = 0.0;
 		ai->m_fliEngine->FireRules(section);
-				
-		
-		
-		double new_diplomatic_regard = foreigner->GetDiplomaticRegard() 
-			+ fz_diplomatic_regard_delta 
-			+ fz_dip_regard_pirate_delta 
-			+ fz_dip_regard_attack_delta 
-			+ fz_dip_regard_incursion_delta 
-			+ fz_dip_regard_pillage_delta 
-			+ fz_dip_regard_message_delta 
-			+ fz_dip_regard_general_delta 
-			+ fz_dip_regard_strength_delta 
-			; 
-		
+
+
+		double new_diplomatic_regard = foreigner->GetDiplomaticRegard()
+			+ fz_diplomatic_regard_delta
+			+ fz_dip_regard_pirate_delta
+			+ fz_dip_regard_attack_delta
+			+ fz_dip_regard_incursion_delta
+			+ fz_dip_regard_pillage_delta
+			+ fz_dip_regard_message_delta
+			+ fz_dip_regard_general_delta
+			+ fz_dip_regard_strength_delta
+			;
+
 		fz_diplomatic_regard_delta = 0;
 		fz_dip_regard_pirate_delta = 0;
 		fz_dip_regard_attack_delta = 0;
-		fz_dip_regard_incursion_delta = 0; 
-		fz_dip_regard_pillage_delta = 0; 
+		fz_dip_regard_incursion_delta = 0;
+		fz_dip_regard_pillage_delta = 0;
 		fz_dip_regard_message_delta = 0;
-		fz_dip_regard_general_delta =0 ; 
+		fz_dip_regard_general_delta =0 ;
 		fz_dip_regard_strength_delta = 0;
-		
+
 		if(new_diplomatic_regard > 100) {
-			
+
 			new_diplomatic_regard = 100;
 		}
-		
+
 		if(new_diplomatic_regard < 0 )
-		
+
 		{
 			new_diplomatic_regard = k_REGARD_INSANE_HATRED - 5  ;
-			
+
 		}
 
 		foreigner->SetDiplomaticRegard(ai, new_diplomatic_regard);
 		fz_diplomatic_regard_towards_him = new_diplomatic_regard;
-	
-		
-		
+
+
 		double new_unit_regard = foreigner->GetUnitRegard();
-		
-		
-		
-		if(fz_unit_regard_delta <= 5) 
-		
+
+
+		if(fz_unit_regard_delta <= 5)
+
 		{
-			new_unit_regard = fz_unit_regard_towards_him; 
+			new_unit_regard = fz_unit_regard_towards_him;
 		}else if (fz_unit_regard_delta > 5)
 		{
-			new_unit_regard = fz_unit_regard_delta; 
+			new_unit_regard = fz_unit_regard_delta;
 		}
 		fz_unit_regard_delta = 0.0;
-		
-			
+
 
 		if(new_unit_regard > 100) {
-			
+
 			new_unit_regard = 100;
 		}
-		
+
 		if(new_unit_regard < 0 )
-		
+
 		{
 			new_unit_regard = k_REGARD_INSANE_HATRED + 1;
 		}
 
 		foreigner->SetUnitRegard(new_unit_regard);
 		fz_unit_regard_towards_him = new_unit_regard;
-
 
 
 		double newLoyalty = foreigner->GetLoyalty() + fz_loyalty_modifier;
@@ -869,10 +833,10 @@ Assert(finite_loop++ < 1000);
 		foreigner->SetLoyalty(newLoyalty);
 		fz_loyalty = newLoyalty;
 
-		if((0.0 <= fz_his_coldwar_attacked_me_decay) && (fz_his_coldwar_attacked_me_decay < 0.999999999))  
+		if((0.0 <= fz_his_coldwar_attacked_me_decay) && (fz_his_coldwar_attacked_me_decay < 0.999999999))
 			foreigner->SetHisColdwarAttackedMeDecay(fz_his_coldwar_attacked_me_decay);
 
-		if((0.0 <= fz_his_hotwar_attacked_me_decay) && (fz_his_hotwar_attacked_me_decay < 0.999999999))  
+		if((0.0 <= fz_his_hotwar_attacked_me_decay) && (fz_his_hotwar_attacked_me_decay < 0.999999999))
 			foreigner->SetHisHotwarAttackedMeDecay(fz_his_hotwar_attacked_me_decay);
 
 		if ((0.0 <= fz_accepted_requests_decay) && (fz_accepted_requests_decay < 0.99999999))
@@ -889,14 +853,14 @@ Assert(finite_loop++ < 1000);
 		if((0.0 <= fz_attacked_my_friends_decay) && (fz_attacked_my_friends_decay < 0.9999999))
 			foreigner->SetAttackedMyEnemiesDecay(fz_attacked_my_friends_decay);
 
-		if((0.0 <= fz_his_broken_treaties_decay) && 
-		   (fz_his_broken_treaties_decay < 0.9999999)) 
+		if((0.0 <= fz_his_broken_treaties_decay) &&
+		   (fz_his_broken_treaties_decay < 0.9999999))
 		{
 			foreigner->SetBrokenTreatiesDecay(fz_his_broken_treaties_decay);
 		}
 		for(sint32 request = 0 ; request < REQUEST_TYPE_NULL; request++)
 		{
-			if(fz_his_responses_decay[(REQUEST_TYPE) request] > 0 
+			if(fz_his_responses_decay[(REQUEST_TYPE) request] > 0
 				&& fz_his_responses_decay[(REQUEST_TYPE) request] < .99)
 			{
 				foreigner->SetHisResponsesDecay(
@@ -911,59 +875,55 @@ Assert(finite_loop++ < 1000);
 					fz_my_responses_decay[(REQUEST_TYPE) request]);
 			}
 		}
-			
+
 	}
 }
 
 void FSDiplomat::ComputeNormalizedStr(AiMain *ai)
-{ 
-     double str_table[k_MAX_PLAYERS]; 
-     sint32 fcount=1; 
-     double str; 
-     double min_str = ai->m_my_raw_strength; 
-     double max_str = ai->m_my_raw_strength; 
+{
+     double str_table[k_MAX_PLAYERS];
+     sint32 fcount=1;
+     double str;
+     double min_str = ai->m_my_raw_strength;
+     double max_str = ai->m_my_raw_strength;
 	 double top = 0.001, second = 0.001;
 
      sint32 i,j;
-     
 
-     str_table[0] = 10000000.0; 
-	 
-     for (i=1; i<k_MAX_PLAYERS; i++) { 
-        if (ai->m_foreigner[i]) { 
-            str = ai->m_foreigner[i]->GetRawStrength(); 
+     str_table[0] = 10000000.0;
 
-            if (str<min_str) { 
-                min_str =str; 
-            } 
+     for (i=1; i<k_MAX_PLAYERS; i++) {
+        if (ai->m_foreigner[i]) {
+            str = ai->m_foreigner[i]->GetRawStrength();
 
-            if (max_str < str) { 
-                max_str = str; 
-            } 
+            if (str<min_str) {
+                min_str =str;
+            }
 
-            str_table[i] = str; 
-            fcount++; 
-        } else { 
-            str_table[i] = 10000000.0; 
+            if (max_str < str) {
+                max_str = str;
+            }
+
+            str_table[i] = str;
+            fcount++;
+        } else {
+            str_table[i] = 10000000.0;
         }
      }
-     str_table[ai->m_my_player_id] = ai->m_my_raw_strength; 
+     str_table[ai->m_my_player_id] = ai->m_my_raw_strength;
 
-     
      double tmp;
 
-	 
-     for (i=1; i<(k_MAX_PLAYERS-1); i++) { 
-         for (j=i+1; j<k_MAX_PLAYERS; j++) { 
-             if (str_table[i] > str_table[j]) { 
-                 tmp = str_table[i]; 
+     for (i=1; i<(k_MAX_PLAYERS-1); i++) {
+         for (j=i+1; j<k_MAX_PLAYERS; j++) {
+             if (str_table[i] > str_table[j]) {
+                 tmp = str_table[i];
                  str_table[i] = str_table[j];
-                 str_table[j] = tmp; 
-             } 
-         } 
-     } 
+                 str_table[j] = tmp;
+             }
+         }
+     }
 
-	
 	if(str_table[fcount - 1] > ai->m_my_raw_strength)
 	{
 		top = str_table[fcount];
@@ -980,139 +940,130 @@ void FSDiplomat::ComputeNormalizedStr(AiMain *ai)
 		second = str_table[fcount - 1];
 	}
 
-	
-	if(top <0.001) { 
+	if(top <0.001) {
 		fz_normalized_rank_diff_between_first_and_second_place = 0.0;
 	}else
 	{
-		fz_normalized_rank_diff_between_first_and_second_place = 
+		fz_normalized_rank_diff_between_first_and_second_place =
 			second/top;
 	}
 
-     
-     double median = str_table[fcount/2]; 
+     double median = str_table[fcount/2];
 
-     if (ai->m_my_raw_strength < median) { 
-         fz_my_normalized_rank = 0.5 * (ai->m_my_raw_strength - min_str)/(median-min_str); 
-     } else if (median < ai->m_my_raw_strength) { 
-         fz_my_normalized_rank = 0.5 + 0.5 * (ai->m_my_raw_strength - median) / (max_str - median); 
-     } else { 
-         fz_my_normalized_rank = 0.5; 
-     } 
-
-     
-     if (ai->my_player_index != 0){
-        ai->m_foreigner[0]->SetHisRank(1.0); 
+     if (ai->m_my_raw_strength < median) {
+         fz_my_normalized_rank = 0.5 * (ai->m_my_raw_strength - min_str)/(median-min_str);
+     } else if (median < ai->m_my_raw_strength) {
+         fz_my_normalized_rank = 0.5 + 0.5 * (ai->m_my_raw_strength - median) / (max_str - median);
+     } else {
+         fz_my_normalized_rank = 0.5;
      }
-     double his_rank; 
 
-	 for (i=1; i<k_MAX_PLAYERS; i++) { 
-		 if (ai->m_foreigner[i]) { 
-			 str = ai->m_foreigner[i]->GetRawStrength(); 
-			 
-			 if (str < median) { 
-				 his_rank = 0.5 * (str - min_str)/(median-min_str); 
-			 } else if (median < str) { 
-				 his_rank = 0.5 + 0.5 * (str - median) / (max_str - median); 
-			 } else { 
-				 his_rank = 0.5; 
-			 } 
-			 
-			 ai->m_foreigner[i]->SetHisRank(his_rank); 		 
+     if (ai->my_player_index != 0){
+        ai->m_foreigner[0]->SetHisRank(1.0);
+     }
+     double his_rank;
+
+	 for (i=1; i<k_MAX_PLAYERS; i++) {
+		 if (ai->m_foreigner[i]) {
+			 str = ai->m_foreigner[i]->GetRawStrength();
+
+			 if (str < median) {
+				 his_rank = 0.5 * (str - min_str)/(median-min_str);
+			 } else if (median < str) {
+				 his_rank = 0.5 + 0.5 * (str - median) / (max_str - median);
+			 } else {
+				 his_rank = 0.5;
+			 }
+
+			 ai->m_foreigner[i]->SetHisRank(his_rank);
 		 }
 	 }
 }
 
-
 void FSDiplomat::BuildFriendTable(AiMain *ai)
 {
     sint32 player_idx, third_party;
-    double who_likes_who[k_MAX_PLAYERS][k_MAX_PLAYERS]; 
+    double who_likes_who[k_MAX_PLAYERS][k_MAX_PLAYERS];
 
-    
-    for (player_idx=1; player_idx<k_MAX_PLAYERS; player_idx++) { 
-        ai->m_player->GetAllRegard(player_idx, who_likes_who[player_idx]); 
-    } 
+    for (player_idx=1; player_idx<k_MAX_PLAYERS; player_idx++) {
+        ai->m_player->GetAllRegard(player_idx, who_likes_who[player_idx]);
+    }
 
-    double is_friend_of_my_enemy; 
+    double is_friend_of_my_enemy;
     double is_enemy_of_my_enemy;
     sint32 diplomatic;
     sint32 unit;
     sint32 bonus;
-    double regard; 
+    double regard;
 
-    
-    for (player_idx=1; player_idx<k_MAX_PLAYERS; player_idx++) { 
+    for (player_idx=1; player_idx<k_MAX_PLAYERS; player_idx++) {
 
         if (ai->m_foreigner[player_idx] == NULL) continue;
 
-        is_friend_of_my_enemy = 0.0; 
+        is_friend_of_my_enemy = 0.0;
         is_enemy_of_my_enemy = 0.0;
 
-        
-        for (third_party=1; third_party<k_MAX_PLAYERS; third_party++) { 
+        for (third_party=1; third_party<k_MAX_PLAYERS; third_party++) {
 
-             
-            if (ai->m_foreigner[third_party]==NULL) continue; 
-            if (player_idx == third_party) continue; 
+            if (ai->m_foreigner[third_party]==NULL) continue;
+            if (player_idx == third_party) continue;
 
-            ai->m_foreigner[third_party]->GetFZRegard(diplomatic, unit, bonus); 
-            if (k_REGARD_HOTWAR < diplomatic) continue; 
-            
+            ai->m_foreigner[third_party]->GetFZRegard(diplomatic, unit, bonus);
+            if (k_REGARD_HOTWAR < diplomatic) continue;
 
-            
-            
-            
 
-            regard = min(who_likes_who[player_idx][third_party], 
-                    who_likes_who[third_party][player_idx]); 
 
-            if (k_REGARD_FRIENDLY <= regard) { 
-                is_friend_of_my_enemy = 1.0; 
-            } else if (regard <= k_REGARD_HOTWAR) { 
-                is_enemy_of_my_enemy = 1.0; 
-            } 
+
+
+
+            regard = min(who_likes_who[player_idx][third_party],
+                    who_likes_who[third_party][player_idx]);
+
+            if (k_REGARD_FRIENDLY <= regard) {
+                is_friend_of_my_enemy = 1.0;
+            } else if (regard <= k_REGARD_HOTWAR) {
+                is_enemy_of_my_enemy = 1.0;
+            }
         }
 
-        
         ai->m_foreigner[player_idx]->SetEnemyOfMyEnemy(is_enemy_of_my_enemy);
         ai->m_foreigner[player_idx]->SetFriendOfMyEnemy(is_friend_of_my_enemy);
-    } 
+    }
 }
 
 void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 										  IC3DiplomaticRequest *request)
 {
-	fz_i_lose_city = 0; 
-	fz_he_gains_city = 0; 
+	fz_i_lose_city = 0;
+	fz_he_gains_city = 0;
 	fz_gold_lost = 0;
-	fz_he_gains_advance = 0; 
-	fz_contact_gained = 0; 
-	fz_third_party_strength = 0; 
-	fz_third_party_regard = 0; 
-	fz_at_war_with_third_party = 0; 
-	fz_stops_trade_with_third_party = 0; 
-	fz_i_will_attack_third_party = 0; 
+	fz_he_gains_advance = 0;
+	fz_contact_gained = 0;
+	fz_third_party_strength = 0;
+	fz_third_party_regard = 0;
+	fz_at_war_with_third_party = 0;
+	fz_stops_trade_with_third_party = 0;
+	fz_i_will_attack_third_party = 0;
 	fz_he_built_undersea = 0;
 	fz_he_built_space = 0 ;
 	fz_he_built_wormhole = 0;
 
-	fz_reduces_pollution = 0; 
-	fz_his_pollution_level = 0; 
+	fz_reduces_pollution = 0;
+	fz_his_pollution_level = 0;
 
-	fz_my_pollution_level = 0; 
+	fz_my_pollution_level = 0;
 
-	fz_global_pollution_level = 0; 
+	fz_global_pollution_level = 0;
 
-	fz_i_will_stop_piracy = 0; 
-	fz_i_gain_advance = 0; 
-	fz_advances_skipped = 0; 
-	fz_advance_cost = 0; 
-	fz_i_gain_city = 0; 
-	fz_projected_food = 0; 
-	fz_projected_production = 0; 
-	fz_gold_gained = 0; 
-	fz_gains_cease_fire = 0; 
+	fz_i_will_stop_piracy = 0;
+	fz_i_gain_advance = 0;
+	fz_advances_skipped = 0;
+	fz_advance_cost = 0;
+	fz_i_gain_city = 0;
+	fz_projected_food = 0;
+	fz_projected_production = 0;
+	fz_gold_gained = 0;
+	fz_gains_cease_fire = 0;
 	fz_i_gain_map = 0;
 	fz_i_gain_gold = 0;
 	fz_he_gets_map = 0;
@@ -1169,7 +1120,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 		case REQUEST_TYPE_GREETING:
 			fz_contact_gained = 1;
 			break;
-		
+
 		case REQUEST_TYPE_DEMAND_ADVANCE:
 			fz_advance_cost = ai->m_science->GetCost(request->GetAdvance());
 			fz_he_gains_advance = 1;
@@ -1211,7 +1162,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 			fz_third_party_regard = ai->m_foreigner[request->GetThirdParty()]->GetDiplomaticRegard()
                 + ai->m_foreigner[request->GetThirdParty()]->GetBonusRegard();
 			fz_i_will_attack_third_party = 1;
-			fz_at_war_with_third_party = 
+			fz_at_war_with_third_party =
 						ai->m_foreigner[request->GetThirdParty()]->UpdateWar(ai, ai->my_player_index);
 			fz_his_trade_with_third_party = ai->GetTradeWith(foreigner->GetPlayerIndex(), request->GetThirdParty());
 			fz_third_party_relative_strength = ai->GetStrength(ai->my_player_index) / fz_third_party_strength;
@@ -1230,7 +1181,6 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 			fz_i_will_stop_piracy = 1;
 			break;
 
-		
 		case REQUEST_TYPE_OFFER_ADVANCE:
 			fz_advance_cost = ai->m_science->GetCost(request->GetAdvance());
 			fz_advances_skipped = ai->m_science->GetMinPrerequisites(request->GetAdvance());
@@ -1245,7 +1195,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 				MapPointData pos;
 				city->GetPos(pos);
 				fz_projected_food = city->GetFood(ai);
-				fz_projected_production = city->GetProduction(ai); 
+				fz_projected_production = city->GetProduction(ai);
 				fz_i_gain_city = 1;
 			}
 			break;
@@ -1253,7 +1203,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 		case REQUEST_TYPE_OFFER_MAP:
 			fz_i_gain_map = 1;
 			break;
-		case REQUEST_TYPE_OFFER_GOLD:							
+		case REQUEST_TYPE_OFFER_GOLD:
 			fz_i_gain_gold = 1;
 			if(ai->m_gold->GetCurrentSavings() < 1)
 				fz_gold_gained = 1;
@@ -1278,7 +1228,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 
 
 
-		
+
 		case REQUEST_TYPE_EXCHANGE_ADVANCE:
 			fz_he_gains_advance = 1;
 			fz_advance_cost = ai->m_science->GetCost(request->GetAdvance());
@@ -1293,7 +1243,7 @@ void FSDiplomat::SetupIncomingMessageVars(AiMain *ai,
 			break;
 		default:
 			Assert(FALSE);
-		
+
 	}
 }
 
@@ -1307,9 +1257,9 @@ BOOL FSDiplomat::HandleIncomingMessage(AiMain *ai,
 		return FALSE;
 	}
 
-    if (0 == ai->m_my_player_id) { 
-        request->Reject(); 
-    } else { 
+    if (0 == ai->m_my_player_id) {
+        request->Reject();
+    } else {
 		sint32 section = FLI_SECT_PRE_INCOMING_DIPLOMACY;
 		if(!m_registered_foreigner_vars[section]) {
 			REGFV("his_message_tone");
@@ -1324,56 +1274,53 @@ BOOL FSDiplomat::HandleIncomingMessage(AiMain *ai,
 	    double utility = GetUtility(ai, request);
 		utility *= fz_diplomatic_receive_coeff[request->GetRequest()];
 
-	    
-		
-		
-		
- 
-		
-		
-		if (	( ai->m_foreigner[request->GetOwner()]->GetLengthOfWarWithHim(ai) < 8) 
+
+
+
+
+
+
+
+		if (	( ai->m_foreigner[request->GetOwner()]->GetLengthOfWarWithHim(ai) < 8)
 				&& (!ai->m_player->IsRobotPlayer(request->GetOwner()))
-				&& (request->GetRequest() == REQUEST_TYPE_OFFER_CEASE_FIRE ) ) 
-		{ 
+				&& (request->GetRequest() == REQUEST_TYPE_OFFER_CEASE_FIRE ) )
+		{
 			fz_accept_threshold = 10001 ;
 		}
 
-		if (fz_accept_threshold <= utility) 
+		if (fz_accept_threshold <= utility)
 		{
-			
-			ai->m_foreigner[request->GetOwner()]->SetMyResponses(
-				(request->GetRequest()), 
-				1); 
 
-			
+			ai->m_foreigner[request->GetOwner()]->SetMyResponses(
+				(request->GetRequest()),
+				1);
+
 			if(request->GetRequest() == REQUEST_TYPE_DEMAND_ATTACK_ENEMY &&
 				ai->m_foreigner[request->GetThirdParty()])
-			{	
+			{
 				ai->m_foreigner[request->GetThirdParty()]->SetUnitRegard(k_BELOW_HOT_WAR);
 				ai->m_foreigner[request->GetThirdParty()]->SetDiplomaticRegard(ai, k_BELOW_HOT_WAR);
 			}
 
 			if(request->GetRequest() == REQUEST_TYPE_OFFER_CEASE_FIRE)
-			{	
+			{
 				if((ai->m_foreigner[request->GetOwner()]->GetDiplomaticRegard()) < k_BELOW_COLD_WAR)
 					ai->m_foreigner[request->GetOwner()]->SetDiplomaticRegard(ai, k_BELOW_COLD_WAR);
 				if((ai->m_foreigner[request->GetOwner()]->GetUnitRegard()) < k_BELOW_COLD_WAR)
 					ai->m_foreigner[request->GetOwner()]->SetUnitRegard(k_BELOW_COLD_WAR);
-				
+
 				ai->m_foreigner[request->GetOwner()]->SetLengthOfWar(-1) ;
 				ai->m_foreigner[request->GetOwner()]->SetLengthOfPeace(ai->m_round_count->GetRound()) ;
 			}
-			
-			
+
 			request->Enact();
 
 		} else {
-			
+
 			ai->m_foreigner[request->GetOwner()]->SetMyResponses(
 				(request->GetRequest()),
-				0);		  
+				0);
 
-			
 			request->Reject();
 
 	    }
@@ -1391,11 +1338,11 @@ BOOL FSDiplomat::HandleIncomingResponse(AiMain *ai, IC3DiplomaticRequest *reques
 	switch(request->GetResponse()) {
 		case REQUEST_RESPONSE_TYPE_ACCEPTED:
 			HandleAcceptedMessage(ai, request);
-			
+
 			break;
 		case REQUEST_RESPONSE_TYPE_REJECTED:
-			HandleRejectedMessage(ai, request); 
-			
+			HandleRejectedMessage(ai, request);
+
 			break;
 		default:
 			Assert(FALSE);
@@ -1453,7 +1400,6 @@ void FSDiplomat::ClearFuzzyMessageReceived(AiMain *ai)
 		REGREJ("he_rejected_demand_no_piracy");
 	}
 
-	
 	fz_he_accepted_greetings = 0;
 	fz_he_accepted_gold_demand = 0;
 	fz_he_accepted_demand_map = 0;
@@ -1476,7 +1422,6 @@ void FSDiplomat::ClearFuzzyMessageReceived(AiMain *ai)
 	fz_he_accepted_exchange_map = 0;
 	fz_he_accepted_demand_no_piracy = 0;
 
-	
 	fz_he_rejected_greetings = 0;
 	fz_he_rejected_gold_demand = 0;
 	fz_he_rejected_demand_map = 0;
@@ -1575,7 +1520,6 @@ BOOL FSDiplomat::HandleAcceptedMessage(AiMain *ai, IC3DiplomaticRequest *request
 			break;
 
 
-
 		case REQUEST_TYPE_EXCHANGE_ADVANCE:
 			fz_he_accepted_exchange_advance = 1;
 			break;
@@ -1589,7 +1533,7 @@ BOOL FSDiplomat::HandleAcceptedMessage(AiMain *ai, IC3DiplomaticRequest *request
 			fz_he_accepted_demand_no_piracy = 1;
 			break;
 		default:
-			
+
 			break;
 	}
 	SetupForeignerVars(ai, foreigner, TRUE, FLI_SECT_ACCEPTED_MESSAGE);
@@ -1607,14 +1551,13 @@ BOOL FSDiplomat::HandleRejectedMessage(AiMain *ai, IC3DiplomaticRequest *request
 	if (!foreigner) return FALSE;
 
 	foreigner->RejectedRequest();
-	
+
 	REQUEST_TYPE r = request->GetRequest();
 	foreigner->SetHisResponses(r, FALSE);
 
 	switch(request->GetRequest()) {
 		case REQUEST_TYPE_GREETING:
-			
-			
+
 			ai->m_foreigner[request->GetRecipient()]->m_he_accepted_greetings = TRUE;
 			fz_he_rejected_greetings = 1;
 			break;
@@ -1668,7 +1611,6 @@ BOOL FSDiplomat::HandleRejectedMessage(AiMain *ai, IC3DiplomaticRequest *request
 			break;
 
 
-
 		case REQUEST_TYPE_EXCHANGE_ADVANCE:
 			fz_he_rejected_exchange_advance = 1;
 			break;
@@ -1681,7 +1623,6 @@ BOOL FSDiplomat::HandleRejectedMessage(AiMain *ai, IC3DiplomaticRequest *request
 		case REQUEST_TYPE_DEMAND_NO_PIRACY:
 			fz_he_rejected_demand_no_piracy = 1;
 			break;
-
 
 		default:
 			break;
@@ -1696,7 +1637,6 @@ double FSDiplomat::GetUtility(AiMain *ai, IC3DiplomaticRequest *request)
 	switch(request->GetRequest()) {
 		case REQUEST_TYPE_GREETING: return GreetingUtility(ai, request);
 
-		
 		case REQUEST_TYPE_DEMAND_ADVANCE: return DemandAdvanceUtility(ai, request);
 		case REQUEST_TYPE_DEMAND_CITY: return DemandCityUtility(ai, request);
 		case REQUEST_TYPE_DEMAND_MAP: return DemandMapUtility(ai, request);
@@ -1706,8 +1646,7 @@ double FSDiplomat::GetUtility(AiMain *ai, IC3DiplomaticRequest *request)
 		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS: return DemandLeaveOurLandsUtility(ai, request);
 		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION: return DemandReducePollutionUtility(ai, request);
 		case REQUEST_TYPE_DEMAND_NO_PIRACY: return DemandLowerTariffsUtility(ai, request);
-		
-		
+
 		case REQUEST_TYPE_OFFER_ADVANCE: return OfferAdvanceUtility(ai, request);
 		case REQUEST_TYPE_OFFER_CITY: return OfferCityUtility(ai, request);
 		case REQUEST_TYPE_OFFER_MAP: return OfferMapUtility(ai, request);
@@ -1718,7 +1657,6 @@ double FSDiplomat::GetUtility(AiMain *ai, IC3DiplomaticRequest *request)
 		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION: return OfferPactEndPollutionUtility(ai, request);
 
 
-		
 		case REQUEST_TYPE_EXCHANGE_ADVANCE: return ExchangeAdvanceUtility(ai, request);
 		case REQUEST_TYPE_EXCHANGE_CITY: return ExchangeCityUtility(ai, request);
 		case REQUEST_TYPE_EXCHANGE_MAP: return ExchangeMapUtility(ai, request);
@@ -1729,17 +1667,15 @@ double FSDiplomat::GetUtility(AiMain *ai, IC3DiplomaticRequest *request)
 }
 
 
-
 double FSDiplomat::GreetingUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
     return k_AVERAGE_VALUE;
 }
 
 
-
 double FSDiplomat::DemandAdvanceUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
+
 
 
 
@@ -1767,11 +1703,10 @@ double FSDiplomat::DemandAdvanceUtility(AiMain *ai, IC3DiplomaticRequest *reques
 }
 
 
-
 double FSDiplomat::DemandCityUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
 	if(ai->m_city_set->GetNum() < 2)
-		
+
 		return 0.0;
 
 	uint32 wanted_city_id = request->GetTarget();
@@ -1780,18 +1715,16 @@ double FSDiplomat::DemandCityUtility(AiMain *ai, IC3DiplomaticRequest *request)
 	if(!wanted_city)
 		return k_WORST_VALUE;
 	return 0.0;
-	
+
 }
 
 double FSDiplomat::DemandMapUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
-	
+
 	MapPointData *size = ai->m_map->GetSize();
 
 	double explored = ai->m_map->ExploredArea(ai);
-	
-	
+
 	return k_POOR_VALUE - k_AVERAGE_VALUE * (explored / (size->x * size->y));
 }
 
@@ -1800,49 +1733,44 @@ double FSDiplomat::DemandMapUtility(AiMain *ai, IC3DiplomaticRequest *request)
 
 double FSDiplomat::DemandGoldUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
+
 	double gold = request->GetGold();
 	double savings = ai->m_gold->GetCurrentSavings();
 	if(gold > savings )
 		return 0.0;
 
-	
 	if (!ai->m_gold->CanSpendSpecialAction(ai, (sint32) gold))
 		return 0.0;
-		
+
 	double goldpart = gold / savings;
-	
-	
+
 	return k_AVERAGE_VALUE * goldpart;
 }
 
 double FSDiplomat::DemandStopTradeUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
+
 	double tradewiththird = ai->m_player->GetTradeWith(sint32(request->GetThirdParty()));
-	
-	
+
 	return k_GOOD_VALUE - (tradewiththird * fz_trade_utility);
 }
 
 double FSDiplomat::DemandAttackEnemyUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
 	Foreigner *foreigner = ai->m_foreigner[request->GetThirdParty()];
-	
-	
-	double regardthird = foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard(); 
-	
-	
+
+	double regardthird = foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard();
+
 	if (regardthird > 60)
 	{
 		return 0.0;
 	}
-	
+
 	return k_BEST_VALUE - ((foreigner->GetDiplomaticRegard()  + foreigner->GetBonusRegard())* 10);
 }
 
 double FSDiplomat::DemandLeaveOurLandsUtility(AiMain *ai, IC3DiplomaticRequest *request)
-	
+
 {
 	double mystrength = ai->m_gs->GetStrength(ai->m_my_player_id);
 	if(mystrength == 0)
@@ -1851,28 +1779,25 @@ double FSDiplomat::DemandLeaveOurLandsUtility(AiMain *ai, IC3DiplomaticRequest *
 	if(hisstrength == 0)
 		hisstrength = 0.001;
 
-	
 	return k_AVERAGE_VALUE;
-		
-}
 
+}
 
 double FSDiplomat::DemandReducePollutionUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
 	double pollutiontrigger = ai->m_gs->GetPollutionTriggerLevel();
 	double global_pollution = ai->m_gs->GetGlobalPollutionLevel();
-		
+
 	if(!pollutiontrigger)
 		pollutiontrigger = 1;
-    
-	
-	
-	
-	
+
+
+
+
+
 	return k_AVERAGE_VALUE;
 
 }
-
 
 
 double FSDiplomat::DemandLowerTariffsUtility(AiMain *ai, IC3DiplomaticRequest *request)
@@ -1884,42 +1809,38 @@ double FSDiplomat::DemandLowerTariffsUtility(AiMain *ai, IC3DiplomaticRequest *r
 	if(hisstrength == 0)
 		hisstrength = 0.001;
 
-	
 	double globalTradeRoutes = ai->m_gs->GetGlobalTradeRoutes() * 2;
-	double hisRelativeTradeRoutes = 
-		double(ai->m_gs->GetHisTradeRoutes(request->GetOwner())) / 
+	double hisRelativeTradeRoutes =
+		double(ai->m_gs->GetHisTradeRoutes(request->GetOwner())) /
 		globalTradeRoutes;
 	if(hisRelativeTradeRoutes < 1)
-		hisRelativeTradeRoutes = 1; 
+		hisRelativeTradeRoutes = 1;
 
-	
-	
+
 	return k_AVERAGE_VALUE;
 }
-		
 
 double FSDiplomat::OfferAdvanceUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
+
     return k_GOOD_VALUE;
 }
 
-
 double FSDiplomat::OfferCityUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-    
+
     return k_AVERAGE_VALUE;
 }
 
 double FSDiplomat::OfferMapUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-    
+
     return k_AVERAGE_VALUE;
 }
 
 double FSDiplomat::OfferGoldUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-    
+
 	return k_AVERAGE_VALUE;
 }
 
@@ -1927,33 +1848,32 @@ double FSDiplomat::OfferCeaseFireUtility(AiMain *ai, IC3DiplomaticRequest *reque
 {
 	Foreigner *foreigner = ai->m_foreigner[request->GetOwner()];
 
-	
 
 	double mystrength = ai->m_gs->GetStrength(ai->m_my_player_id);
 	if(mystrength == 0)
 		mystrength = 0.001;
-	
+
 	double hisstrength = ai->GetStrength(request->GetOwner());
-	
+
 	double hisregard = foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard();
 
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	return k_GOOD_VALUE ;
 }
 
 double FSDiplomat::OfferPermanentAllianceUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
-	
+
 
 
 
@@ -1981,27 +1901,25 @@ double FSDiplomat::OfferPactEndPollutionUtility(AiMain *ai, IC3DiplomaticRequest
 		pollutiontrigger = 1;
 
 	return k_AVERAGE_VALUE;
-	
-	
-	
-		
+
+
+
+
 }
 
 double FSDiplomat::ExchangeAdvanceUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
 	Foreigner *foreigner = ai->m_foreigner[request->GetOwner()];
-	
-	
+
 	double hisgain = (ai->m_science->GetHisCost(foreigner->GetPlayerIndex(), request->GetWantedAdvance()));
-	
+
 	double hisstepsgained = (ai->m_science->GetHisMinPrerequisites(foreigner->GetPlayerIndex(), request->GetWantedAdvance()));
-	
+
 	double mygain = ai->m_science->GetCost(request->GetAdvance());
-	
+
 	double mystepsgained = ai->m_science->GetMinPrerequisites(request->GetAdvance());
 
-	
-	
+
 	if(mygain > hisgain)
 	{
 		if(mystepsgained > hisstepsgained )
@@ -2022,17 +1940,17 @@ double FSDiplomat::ExchangeAdvanceUtility(AiMain *ai, IC3DiplomaticRequest *requ
 			return k_WORST_VALUE;
 		}
 	}
-			
+
 	return 0;
-			
+
 }
 
 double FSDiplomat::ExchangeCityUtility(AiMain *ai, IC3DiplomaticRequest *request)
 {
 	if(ai->m_city_set->GetNum() < 2)
 		return 0;
-	else 
-	
+	else
+
 		return 0.0;
 }
 
@@ -2041,24 +1959,21 @@ double FSDiplomat::ExchangeMapUtility(AiMain *ai, IC3DiplomaticRequest *request)
 	Foreigner *foreigner = ai->m_foreigner[request->GetOwner()];
 	MapPointData *size = ai->m_map->GetSize();
 	sint32 worldArea = size->x * size->y;
-	
+
 	double regard = foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard();
-	
-	
+
 	if(regard < 60)
 		return 0.0;
 
 	double known_percent = (ai->m_map->ExploredArea(ai) / worldArea);
-	
+
 	if(known_percent < 0.5)	return k_GOOD_VALUE;
-	
-	
-	if(known_percent > 0.8) 
+
+	if(known_percent > 0.8)
 	{
 		return k_POOR_VALUE;
 	}
 
-	
 	return k_AVERAGE_VALUE;
 }
 
@@ -2066,30 +1981,27 @@ void FSDiplomat::GetSendUtility(AiMain *ai,
 								Foreigner *foreigner,
 								AIDiplomaticRequest *request)
 {
-	
-	
-	
-	
+
+
+
+
 	request->WeighOptions(ai, foreigner, !m_registered_pre_outgoing);
 	m_registered_pre_outgoing = TRUE;
 
 	if(!request->m_isvalid)
 		return;
 
-	
-	
+
 	ai->m_fliEngine->FireRules(FLI_SECT_PRE_OUTGOING_DIPLOMACY);
-	
+
 	request->m_threshold = fz_send_threshold;
 	request->m_dip_send_coef = fz_dip_send_coef;
 	request->m_tone = (sint32)fz_send_tone;
 	request->m_strength = (sint32)fz_send_strength;
 
-	
 	switch(request->m_request) {
 		case REQUEST_TYPE_GREETING: request->m_utility = GreetingSendUtility(ai, foreigner, request); break;
 
-		
 		case REQUEST_TYPE_DEMAND_ADVANCE: request->m_utility = DemandAdvanceSendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_DEMAND_CITY: request->m_utility = DemandCitySendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_DEMAND_MAP: request->m_utility = DemandMapSendUtility(ai, foreigner, request); break;
@@ -2099,8 +2011,7 @@ void FSDiplomat::GetSendUtility(AiMain *ai,
 		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS: request->m_utility = DemandLeaveOurLandsSendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION: request->m_utility = DemandReducePollutionSendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_DEMAND_NO_PIRACY: request->m_utility = DemandLowerTariffsSendUtility(ai, foreigner, request); break;
-		
-		
+
 		case REQUEST_TYPE_OFFER_ADVANCE: request->m_utility = OfferAdvanceSendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_OFFER_CITY: request->m_utility = OfferCitySendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_OFFER_MAP: request->m_utility = OfferMapSendUtility(ai, foreigner, request); break;
@@ -2111,25 +2022,22 @@ void FSDiplomat::GetSendUtility(AiMain *ai,
 		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION: request->m_utility = OfferPactEndPollutionSendUtility(ai, foreigner, request); break;
 
 
-		
 		case REQUEST_TYPE_EXCHANGE_ADVANCE: request->m_utility = ExchangeAdvanceSendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_EXCHANGE_CITY: request->m_utility = ExchangeCitySendUtility(ai, foreigner, request); break;
 		case REQUEST_TYPE_EXCHANGE_MAP: request->m_utility = ExchangeMapSendUtility(ai, foreigner, request); break;
-	}		
+	}
 #ifdef _DEBUG
 	double pre_utility = request->m_utility;
 #endif
-	request->m_utility *= fz_diplomatic_coeff[request->m_request]; 
+	request->m_utility *= fz_diplomatic_coeff[request->m_request];
 
-	
 	sint32 randRange = sint32(double(fz_diplomacy_rand_max - fz_diplomacy_rand_min) * 1000.0);
 	if(randRange > 0) {
 		double mult = (double(ai->m_rand->Next(randRange)) / 1000.0) + fz_diplomacy_rand_min;
-		Assert(mult <= fz_diplomacy_rand_max); 
+		Assert(mult <= fz_diplomacy_rand_max);
 		request->m_utility *= mult;
 	}
 
-		
 	WPRINT((wstr, "Request type %d to player %d: Raw utility: %#.3le.  Utility coef: %#.31e. Cooked utility: %#.3le.  Threshold: %#.3le.\n",
 			request->m_request,
 			request->m_recipient,
@@ -2139,17 +2047,15 @@ void FSDiplomat::GetSendUtility(AiMain *ai,
 			request->m_threshold));
 }
 
-
 double FSDiplomat::GreetingSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
 
 	if(!foreigner->m_sent_greetings)
-		
-		return 2000; 
+
+		return 2000;
 	else
 		return 0.0;
 }
-
 
 
 double FSDiplomat::DemandAdvanceSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
@@ -2161,24 +2067,23 @@ double FSDiplomat::DemandCitySendUtility(AiMain *ai,  Foreigner *foreigner, AIDi
 {
  	double happy = request->m_target_city_ptr->ProjectedHappiness(ai);
 
-	return -10; 
+	return -10;
 
 }
 
 double FSDiplomat::DemandMapSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
 	MapPointData *size = ai->m_map->GetSize();
-	
+
 	double mapsize = (size->x * size->y);
 	double explored = ai->m_map->ExploredArea(ai);
-	
-	
+
 
 	return (1 - (ai->m_map->ExploredArea(ai) / (size->x * size->y)))
-		* (1 
-		- (ai->m_round_count->GetRound() / 
-		(ai->m_round_count->GetRound() + ai->m_round_count->EstimateRoundsToEnd()))) 
-		* k_AVERAGE_VALUE; 
+		* (1
+		- (ai->m_round_count->GetRound() /
+		(ai->m_round_count->GetRound() + ai->m_round_count->EstimateRoundsToEnd())))
+		* k_AVERAGE_VALUE;
 
 }
 
@@ -2208,26 +2113,24 @@ double FSDiplomat::DemandStopTradeSendUtility(AiMain *ai,  Foreigner *foreigner,
 
 double FSDiplomat::DemandAttackEnemySendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
 
 	double hisstrength = ai->GetStrength(request->m_recipient);
 	double thirdstrength = ai->GetStrength(request->m_thirdParty);
 	double hisregard = (foreigner->GetDiplomaticRegard() - 75);
 	double thirdregard = ai->m_foreigner[request->m_thirdParty]->GetDiplomaticRegard();
-	
-	
-	
-	if ((ai->m_foreigner[request->m_thirdParty]->GetUnitRegard() + 
+
+
+	if ((ai->m_foreigner[request->m_thirdParty]->GetUnitRegard() +
         ai->m_foreigner[request->m_thirdParty]->GetBonusRegard()) < 20 )
 	{
 			return k_GOOD_VALUE;
 	}
-	return 0;	
+	return 0;
 }
 
 double FSDiplomat::DemandLeaveOurLandsSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
+
 	double mystrength = ai->GetStrength(ai->my_player_index);
 	double hisstrength = ai->GetStrength(foreigner->GetPlayerIndex());
 
@@ -2244,21 +2147,19 @@ double FSDiplomat::DemandLeaveOurLandsSendUtility(AiMain *ai,  Foreigner *foreig
 double FSDiplomat::DemandReducePollutionSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
 
-	double pollutiontrigger = ai->m_gs->GetPollutionTriggerLevel();	
+	double pollutiontrigger = ai->m_gs->GetPollutionTriggerLevel();
 
 	if(!pollutiontrigger)
 		pollutiontrigger = 1;
-	
 
 	double globalpollution = ai->m_gs->GetGlobalPollutionLevel();
 	if(globalpollution < 1)
 		globalpollution = 0.1;
 
 	if(!fz_his_pollution_level)
-		fz_his_pollution_level = 0.1; 	
+		fz_his_pollution_level = 0.1;
 
-	
-	if((globalpollution / pollutiontrigger ) > 0.8) 
+	if((globalpollution / pollutiontrigger ) > 0.8)
 	{
 		if(fz_his_pollution_level / globalpollution > 0.8) return k_BEST_VALUE;
 		if(fz_his_pollution_level / globalpollution > 0.6) return k_GOOD_VALUE;
@@ -2269,13 +2170,11 @@ double FSDiplomat::DemandReducePollutionSendUtility(AiMain *ai,  Foreigner *fore
 	return -10;
 }
 
-
 double FSDiplomat::DemandLowerTariffsSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
+
 	double traderoutes = ai->m_player->GetNumTradeRoutes();
 	double hisPiratedMe = foreigner->GetDecayedPiracy();
-
 
 	if(hisPiratedMe > 4)
 	{
@@ -2291,7 +2190,6 @@ double FSDiplomat::DemandLowerTariffsSendUtility(AiMain *ai,  Foreigner *foreign
 	}
 	return -10;
 }
-		
 
 double FSDiplomat::OfferAdvanceSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 
@@ -2310,34 +2208,30 @@ double FSDiplomat::OfferAdvanceSendUtility(AiMain *ai,  Foreigner *foreigner, AI
 	return -10;
 }
 
-
 double FSDiplomat::OfferCitySendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
 	if(ai->m_city_set->GetNum() < 2)
 		return 0;
 
-	
 	return -1000;
 }
 
 double FSDiplomat::OfferMapSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
+
 	return k_POOR_VALUE;
 
 }
 
 double FSDiplomat::OfferGoldSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
-	
+
 	if ((foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard()) > 70)
 	{
 		return (k_AVERAGE_VALUE * fz_gold_need);
 	}
 	return 0;
 }
-
 
 double FSDiplomat::OfferCeaseFireSendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 	{
@@ -2351,31 +2245,29 @@ double FSDiplomat::OfferCeaseFireSendUtility(AiMain *ai,  Foreigner *foreigner, 
 	if(defeatedhim == 0)
 		defeatedhim = 0.001;
 
-	
 	double mystrength = ai->GetStrength(ai->m_my_player_id);
 	double hisstrength = ai->GetStrength(foreigner->GetPlayerIndex());
 
-	
 	fz_length_of_war_with_him = foreigner->GetLengthOfWarWithHim(ai);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	return k_GOOD_VALUE;
 }
 
@@ -2385,20 +2277,16 @@ double FSDiplomat::OfferPermanentAllianceSendUtility(AiMain *ai,  Foreigner *for
 	if(mystrength == 0)
 		mystrength = 0.001;
 
-	
 	double hisstrength = ai->GetStrength(foreigner->GetPlayerIndex());
-	
-	
-	
+
+
 	if (((foreigner->GetDiplomaticRegard() + foreigner->GetBonusRegard()) > 50) && (fz_loyalty > 30))
 	{
 		return (ai->GetStrength(foreigner->GetPlayerIndex()) / mystrength) * 250 * fz_alliance;
 	}
-	
-	
+
 	return 0.0;
 }
-
 
 double FSDiplomat::OfferPactCaptureCitySendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
@@ -2413,11 +2301,9 @@ double FSDiplomat::OfferPactEndPollutionSendUtility(AiMain *ai,  Foreigner *fore
 	if(!pollutiontrigger)
 		pollutiontrigger = 1;
 
-	
-	if(fz_pact_end_pollution > 500)  
+	if(fz_pact_end_pollution > 500)
 	{
-	
-	
+
 
 	return (global_pollution / pollutiontrigger) * 	fz_pact_end_pollution;
 	}
@@ -2437,14 +2323,13 @@ double FSDiplomat::OfferPactEndPollutionSendUtility(AiMain *ai,  Foreigner *fore
 
 double FSDiplomat::ExchangeAdvanceSendUtility(AiMain *ai, Foreigner *foreigner, AIDiplomaticRequest *request)
 {
-	
+
 	double hiscost = (ai->m_science->GetHisCost(foreigner->GetPlayerIndex(), request->m_advance));
-	double mycost =(ai->m_science->GetCost(request->m_reciprocalAdvance)); 
+	double mycost =(ai->m_science->GetCost(request->m_reciprocalAdvance));
 	double hisskipped = ai->m_science->GetHisMinPrerequisites(foreigner->GetPlayerIndex(), request->m_advance);
 	double myskipped = ai->m_science->GetMinPrerequisites(request->m_reciprocalAdvance);
 	double regard_him = foreigner->GetDiplomaticRegard();
 
-	
 	if(hiscost > mycost)
 	{
 		if(hisskipped > myskipped)
@@ -2463,14 +2348,14 @@ double FSDiplomat::ExchangeAdvanceSendUtility(AiMain *ai, Foreigner *foreigner, 
 		{
 			return k_GOOD_VALUE;
 		}
-	}		
+	}
 }
 
 double FSDiplomat::ExchangeCitySendUtility(AiMain *ai,  Foreigner *foreigner, AIDiplomaticRequest *request)
 {
 	if(ai->m_city_set->GetNum() < 2)
 		return 0;
-	else 
+	else
 		return -1;
 }
 
@@ -2484,7 +2369,7 @@ double FSDiplomat::ExchangeMapSendUtility(AiMain *ai,  Foreigner *foreigner, AID
 	if(regard_to_him < 70) return 0;
 
 	double percent_explored = exploredArea / worldArea;
-	if(percent_explored < .3) return k_GOOD_VALUE; 
+	if(percent_explored < .3) return k_GOOD_VALUE;
 	if(percent_explored > .8) return k_POOR_VALUE;
 
 	return k_AVERAGE_VALUE;
@@ -2498,36 +2383,36 @@ void FSDiplomat::ReceiveTradeBid(AiMain *ai,
 								 sint32 price,
 								 uint32 bidId)
 {
-    BOOL is_unknown_id; 
-    sint32 local_good_count; 
-    sint32 total_good_count; 
+    BOOL is_unknown_id;
+    sint32 local_good_count;
+    sint32 total_good_count;
 
-    ai->m_player->GetGoodCount(&is_unknown_id, fromCity,  
+    ai->m_player->GetGoodCount(&is_unknown_id, fromCity,
         resource, &local_good_count, &total_good_count);
 
 	BOOL accept = FALSE;
-    sint32 in_num; 
-    sint32 in_max; 
-    sint32 out_num; 
+    sint32 in_num;
+    sint32 in_max;
+    sint32 out_num;
     sint32 out_max;
     BOOL is_pirated;
 	if ((local_good_count == 1) && (total_good_count == 1)) {
 
-        ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, fromCity, &is_unknown_id, 
+        ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, fromCity, &is_unknown_id,
             &in_num, &in_max, &out_num, &out_max);
 
-        CityAgent *the_city = ai->m_city_set->Find(fromCity); 
-        Assert(the_city); 
+        CityAgent *the_city = ai->m_city_set->Find(fromCity);
+        Assert(the_city);
         if (the_city) {
 
             Pirate_Marker *pirate_ptr = the_city->FindPiracyMarker(ai->my_player_index, fromCity);
-            if (pirate_ptr) { 
-                if (pirate_ptr->IsSafe(ai->m_round_count->GetRound())) is_pirated=TRUE; 
+            if (pirate_ptr) {
+                if (pirate_ptr->IsSafe(ai->m_round_count->GetRound())) is_pirated=TRUE;
             }
 			else
 				is_pirated = FALSE;
 
-            if (!is_pirated) { 
+            if (!is_pirated) {
 		        if((ai->m_foreigner[toCityOwner]->GetDiplomaticRegard() +
                     ai->m_foreigner[toCityOwner]->GetBonusRegard()) >= k_TRADE_REGARD_THRESHOLD) {
 			        sint32 valueToMe = ai->m_terrainDB->GetGoodGoldValue(resource);
@@ -2540,7 +2425,6 @@ void FSDiplomat::ReceiveTradeBid(AiMain *ai,
 	}
 
 	if(accept) {
-
 
         ai->AcceptTradeBid(bidId);
 
@@ -2555,7 +2439,7 @@ void FSDiplomat::ReceiveTradeBid(AiMain *ai,
 
 
 
-		
+
 	} else {
 		ai->RejectTradeBid(bidId);
 	}
@@ -2584,14 +2468,13 @@ void FSDiplomat::RemoveTradeOffer(AiMain *ai, uint32 id)
 				uint32 fromCity = walk.GetObj()->GetFromCity();
 				if(fromCity) {
 					CityAgent *city = ai->m_city_set->Find(fromCity);
-					
-					
+
 					if(city) {
 						city->RemoveTradeOffer(id);
 					}
 				}
 			}
-					
+
 			walk.GetObj()->Release();
 			walk.Remove();
 			break;
@@ -2609,60 +2492,55 @@ void FSDiplomat::ConsiderTradeOffers(AiMain *ai)
 	if(ai->m_player->UnusedTradePoints() < 1)
 		return;
 
-	
     BOOL is_unknown_id;
-    sint32 in_num; 
+    sint32 in_num;
     sint32 in_max;
-    sint32 out_num; 
-    sint32 out_max; 
+    sint32 out_num;
+    sint32 out_max;
 
-	for(walk.SetList(m_tradeOffers); walk.IsValid(); walk.Next()) {		
+	for(walk.SetList(m_tradeOffers); walk.IsValid(); walk.Next()) {
 		IC3TradeOffer *offer = walk.GetObj();
 
 		sint32 resource = offer->GetOfferResource();
 
-		
-		
+
 		if(offer->GetOwner() == ai->my_player_index)
 			continue;
 
 		Foreigner *foreigner = ai->m_foreigner[offer->GetOwner()];
 
-		
 		if((foreigner->GetDiplomaticRegard() +  foreigner->GetBonusRegard()) < k_TRADE_REGARD_THRESHOLD)
 			continue;
 
 		switch(offer->GetOfferType()) {
 			case ROUTE_TYPE_RESOURCE:
 			{
-				
 
-				
+
 				CityAgent *city = ai->GetBestCityForResource(resource);
-               
+
 				if(!city)
 					continue;
 
 				if(!city->SeenByPlayer(ai, offer->GetOwner()))
 					continue;
 
-                 ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, city->GetID().GetVal(), &is_unknown_id, 
+                 ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, city->GetID().GetVal(), &is_unknown_id,
                     &in_num, &in_max, &out_num, &out_max);
 
-                 if (in_num >= in_max) continue; 
+                 if (in_num >= in_max) continue;
 
                 Pirate_Marker *pirate_ptr = city->FindPiracyMarker(offer->GetOwner(), offer->GetFromCity());
-                if (pirate_ptr) { 
-                    if (!pirate_ptr->IsSafe(ai->m_round_count->GetRound())) continue; 
+                if (pirate_ptr) {
+                    if (!pirate_ptr->IsSafe(ai->m_round_count->GetRound())) continue;
                 }
 
 
-				
-                BOOL is_unknown_id; 
+                BOOL is_unknown_id;
                 sint32 local_good_count;
-                sint32 total_good_count; 
-				ai->m_player->GetGoodCount(&is_unknown_id, city->m_id.GetVal(), 
-                    resource, &local_good_count, &total_good_count); 
+                sint32 total_good_count;
+				ai->m_player->GetGoodCount(&is_unknown_id, city->m_id.GetVal(),
+                    resource, &local_good_count, &total_good_count);
 
 				sint32 currentValue = sint32((total_good_count * (total_good_count + 1)) * 0.5 ) *
 					ai->m_terrainDB->GetGoodGoldValue(resource);
@@ -2673,8 +2551,7 @@ void FSDiplomat::ConsiderTradeOffers(AiMain *ai)
 
 				sint32 delta = newValue - currentValue;
 
-				
-				
+
 				if(delta > offer->GetAskingGold()) {
 					if(delta > bestProfit) {
 						bestProfit = delta;
@@ -2692,17 +2569,17 @@ void FSDiplomat::ConsiderTradeOffers(AiMain *ai)
 	if(bestOffer && bestProfit >= 10) {
 		sint32 owner = bestOffer->GetOwner();
 		bestOffer->Accept(bestCity->m_id.GetVal());
-		
-		
-		
-		
+
+
+
+
 		if (!ai->m_player->IsRobotPlayer(owner))
 			ai->SetCaravansReserved(TRUE);
 	}
 }
 
-IC3TradeOffer *FSDiplomat::AlreadyOffering(AiMain *ai, 
-										   CityAgent *city, 
+IC3TradeOffer *FSDiplomat::AlreadyOffering(AiMain *ai,
+										   CityAgent *city,
 										   sint32 resource)
 {
 	if(!city->GetTradeOffers())
@@ -2724,7 +2601,7 @@ void FSDiplomat::ConsiderMakingTradeOffers(AiMain *ai)
 	sint32 g;
 	sint32 numTypes = ai->m_terrainDB->GetNumTypeGoods();
 	BOOL madeAnOffer = FALSE;
-    BOOL is_unknown_id; 
+    BOOL is_unknown_id;
     sint32 local_good_count, total_good_count;
 
     sint32 in_num;
@@ -2738,31 +2615,29 @@ void FSDiplomat::ConsiderMakingTradeOffers(AiMain *ai)
 
 			IC3TradeOffer *offer = AlreadyOffering(ai, city, g);
 
-            ai->m_player->GetGoodCount(&is_unknown_id, city->m_id.GetVal(), g, 
+            ai->m_player->GetGoodCount(&is_unknown_id, city->m_id.GetVal(), g,
                 &local_good_count, &total_good_count);
 
-            ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, city->m_id.GetVal(), &is_unknown_id, 
+            ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, city->m_id.GetVal(), &is_unknown_id,
                 &in_num, &in_max, &out_num, &out_max);
 
-            if (out_num >= out_max) continue; 
+            if (out_num >= out_max) continue;
 
-            if (city->PiracyRecently(ai)) continue; 
+            if (city->PiracyRecently(ai)) continue;
 
 			if ((local_good_count  == 1) && (total_good_count == 1)){
 				if(!madeAnOffer) {
-					
-					
+
 					if(!offer) {
 						ai->m_player->MakeTradeOffer(city->m_id.GetVal(),
 							g,
 							ai->m_terrainDB->GetGoodGoldValue(g) + 10);
-						
+
 						madeAnOffer = TRUE;
 					}
 				}
 			} else if(offer) {
-				
-				
+
 				ai->m_player->CancelTradeOffer(offer);
 			}
 		}
@@ -2806,19 +2681,18 @@ BOOL FSDiplomat::ConfirmAcceptTradeOffer(AiMain *ai,
 
 
 
-	
-	
+
+
 	return TRUE;
 }
 
 void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 {
 	if(ai->m_player->UnusedTradePoints() < 1)
-		
+
 		return;
 
 
-	
 	BSetID id;
 	CityAgent *myCity;
 	sint32 g;
@@ -2826,7 +2700,7 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 	sint32 *maxCount = new sint32[numTypes];
 	CityAgent **maxCity = new CityAgent *[numTypes];
     BOOL is_unknown_id;
-    sint32 local_good_count; 
+    sint32 local_good_count;
     sint32 total_good_count;
     sint32 in_num, in_max, out_num, out_max;
 
@@ -2834,24 +2708,24 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 
 	for(myCity = ai->m_city_set->First(id); ai->m_city_set->Last(); myCity = ai->m_city_set->Next(id)) {
 
-        if (myCity->GetNumCitizens() < 3) continue; 
+        if (myCity->GetNumCitizens() < 3) continue;
 
-        if (myCity->PiracyRecently(ai)) continue;  
+        if (myCity->PiracyRecently(ai)) continue;
 
 		for(g = 0; g < numTypes; g++) {
 
-            ai->m_player->GetGoodCount(&is_unknown_id, myCity->m_id.GetVal(), g, 
+            ai->m_player->GetGoodCount(&is_unknown_id, myCity->m_id.GetVal(), g,
                 &local_good_count, &total_good_count);
 
-            if ((local_good_count == 1) && (total_good_count == 1)) { 
-                ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, myCity->GetID().GetVal(), &is_unknown_id, 
+            if ((local_good_count == 1) && (total_good_count == 1)) {
+                ai->m_player->GetCityNumTradeRoutes (ai->m_my_player_id, myCity->GetID().GetVal(), &is_unknown_id,
                         &in_num, &in_max, &out_num, &out_max);
 
                 if ((in_num < in_max) && (total_good_count > maxCount[g])) {
 				        maxCount[g] = total_good_count;
 				        maxCity[g] = myCity;
                 }
-            } 
+            }
 		}
 	}
 
@@ -2860,22 +2734,22 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 	sint32 bestBidGood;
 	ForeignCity *bestBidForeignCity = NULL;
 	sint32 bestoffer;
-  
+
 	sint32 p;
-	
+
 	for(p = 1; p < k_MAX_PLAYERS; p++) {
 		if(p == ai->my_player_index)
-			continue;		
+			continue;
 		if(ai->m_foreigner[p]) {
 			Foreigner *foreigner = ai->m_foreigner[p];
 			if(foreigner->GetTradePersistence() > 0) {
 				foreigner->SetTradePersistence(foreigner->GetTradePersistence() - 1);
 				continue;
 			}
-			
+
 			if(foreigner->GetDiplomaticRegard() < k_TRADE_REGARD_THRESHOLD)
 				continue;
-			
+
 			BSet<ForeignCity> *knownCities = foreigner->GetKnownCities();
 			ForeignCity *city;
 			BSetID cityId;
@@ -2888,37 +2762,34 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 
                 city->GetCityNumTradeRoutes(ai, in_num, in_max, out_num, out_max);
 
-                if (in_num >= in_max) continue; 
-                if (out_num >= out_max) continue;  
+                if (in_num >= in_max) continue;
+                if (out_num >= out_max) continue;
 
 				for(g = 0; g < numTypes; g++) {
 					if(!maxCount[g])
 						continue;
-					
+
 					sint32 goodCount = city->GetGoodCount(ai, g);
 					if(goodCount) {
-						
-						
-						
+
+
 						sint32 num = maxCount[g];
-						sint32 oldValue = ((num * (num + 1)) / 2) * 
+						sint32 oldValue = ((num * (num + 1)) / 2) *
 							ai->m_terrainDB->GetGoodGoldValue(g);
 						num++;
 						sint32 newValue = ((num * (num + 1)) / 2) *
 							ai->m_terrainDB->GetGoodGoldValue(g);
-						
-						
+
 						sint32 delta = newValue - oldValue;
 
-						
 						num = goodCount;
-						sint32 hisnowValue = ((num * (num + 1)) / 2) * 
+						sint32 hisnowValue = ((num * (num + 1)) / 2) *
 							ai->m_terrainDB->GetGoodGoldValue(g);
 						num--;
 						sint32 hisnewValue = ((num * (num + 1)) / 2) *
 							ai->m_terrainDB->GetGoodGoldValue(g);
 						sint32 hisgoodvalue = hisnowValue - hisnewValue;
-						if(delta < hisgoodvalue + 10) 
+						if(delta < hisgoodvalue + 10)
 						{
 							delta = 0;
 						}
@@ -2927,14 +2798,14 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 							bestBidGood = g;
 							bestBidCity = maxCity[g];
 							bestBidForeignCity = city;
-							bestoffer = hisgoodvalue + 10; 
+							bestoffer = hisgoodvalue + 10;
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	if(bestBidDelta > 0 && bestBidCity && bestBidForeignCity) {
 		ai->m_gs->MakeTradeBid(bestBidForeignCity->GetPlayerIndex(),
 							   bestBidForeignCity->m_id.GetVal(),
@@ -2945,9 +2816,9 @@ void FSDiplomat::ConsiderMakingTradeBids(AiMain *ai)
 			SetTradePersistence(fz_diplomatic_persistence);
 	}
 	delete [] maxCount;
-    maxCount = NULL; 
+    maxCount = NULL;
 	delete [] maxCity;
-    maxCity = NULL; 
+    maxCity = NULL;
 }
 
 void FSDiplomat::RegisterYouAreViolatingAgreement(AiMain *ai,
@@ -2955,7 +2826,7 @@ void FSDiplomat::RegisterYouAreViolatingAgreement(AiMain *ai,
 												  PLAYER_INDEX against,
 												  sint32 rounds)
 {
-	
+
 }
 
 void FSDiplomat::RegisterOtherCivIsViolatingAgreement(AiMain *ai,
@@ -2965,7 +2836,7 @@ void FSDiplomat::RegisterOtherCivIsViolatingAgreement(AiMain *ai,
 {
 	Foreigner *foreigner = ai->m_foreigner[violator];
 	if(!foreigner) {
-		
+
 		return;
 	}
 
@@ -2989,14 +2860,13 @@ void FSDiplomat::RegisterOtherCivIsViolatingAgreement(AiMain *ai,
 }
 
 
-
 void FSDiplomat::RegisterAttack(AiMain *ai,
 								PLAYER_INDEX attacker,
 								PLAYER_INDEX defender)
 {
 	if(attacker == ai->my_player_index ||
 	   defender == ai->my_player_index) {
-		
+
 		return;
 	}
 
@@ -3007,7 +2877,6 @@ void FSDiplomat::RegisterAttack(AiMain *ai,
 	if(!a || !d) {
 		return;
 	}
-
 
 	if(d->IsAtHotWar() || d->IsAtColdWar()) {
 		a->RegisterAttackedMyEnemy();
@@ -3021,11 +2890,10 @@ void FSDiplomat::RegisterBrokeTreaty(AiMain *ai,
 									 PLAYER_INDEX breakee)
 {
 	if(breaker == ai->my_player_index) {
-		
+
 		return;
 	}
-	
-	
+
 	Foreigner *foreigner = ai->m_foreigner[breaker];
 	Assert(foreigner);
 	if(foreigner) {

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 #include "DB.h"
 #include "civarchive.h"
 
-
 #include "StrDB.h"
 extern StringDB *g_theStringDB;
 
@@ -42,11 +41,10 @@ template <class T> Database<T>::Database()
 
 {
 	m_nRec = m_max_nRec = 0;
-	m_rec = NULL; 
+	m_rec = NULL;
 	m_indexToAlpha = NULL;
 	m_alphaToIndex = NULL;
 }
-
 
 template <class T> Database<T>::Database(CivArchive &archive)
 	{
@@ -68,7 +66,7 @@ template <class T> Database<T>::~Database()
 template <class T> void  Database<T>::SetSize(const sint32 n)
 
 {
-	Assert (0 < n); 
+	Assert (0 < n);
 	T*oldrec = NULL;
 	sint32 *oldalpha = NULL;
 	sint32 *oldindex = NULL;
@@ -82,14 +80,14 @@ template <class T> void  Database<T>::SetSize(const sint32 n)
 		oldindex = m_alphaToIndex;
 	}
 	m_max_nRec = n;
-	m_rec = new T[n]; 
-	m_indexToAlpha = new sint32[n]; 
-	m_alphaToIndex = new sint32[n]; 
+	m_rec = new T[n];
+	m_indexToAlpha = new sint32[n];
+	m_alphaToIndex = new sint32[n];
 	memset(m_indexToAlpha, 0, sizeof(sint32) * n);
 	memset(m_alphaToIndex, 0, sizeof(sint32) * n);
-	Assert(m_rec); 
-	Assert(m_indexToAlpha); 
-	Assert(m_alphaToIndex); 
+	Assert(m_rec);
+	Assert(m_indexToAlpha);
+	Assert(m_alphaToIndex);
 	if(oldrec) {
 		if(oldmax < m_max_nRec)
 		{
@@ -105,7 +103,6 @@ template <class T> void  Database<T>::SetSize(const sint32 n)
 		}
 	}
 
-	
 	if (oldrec)
 		delete [] oldrec;
 	if (oldalpha)
@@ -148,12 +145,11 @@ template <class T> T* Database<T>::Access(const sint32 i)
 	return &(m_rec[i]);
 }
 
-
 template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 
 {
 	Assert (m_nRec < m_max_nRec);
-	
+
 	m_rec[m_nRec].SetName(sid);
 	{
 		const MBCHAR *str = g_theStringDB->GetNameStr( sid );
@@ -163,13 +159,12 @@ template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 			if (stricmp( str, g_theStringDB->GetNameStr(
 				m_rec[ m_alphaToIndex[ a ] ].GetName() ) ) < 0 )
 			{
-				
+
 				memmove(
 					m_alphaToIndex + a + 1,
 					m_alphaToIndex + a,
 					( m_nRec - a ) * sizeof(sint32) );
 
-				
 				for ( sint32 j = 0; j < m_nRec; ++j )
 					if ( m_indexToAlpha[ j ] >= a )
 						++m_indexToAlpha[ j ];
@@ -178,7 +173,6 @@ template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 			}
 		}
 
-		
 		m_alphaToIndex[ a ] = m_nRec;
 		m_indexToAlpha[ m_nRec ] = a;
 	}
@@ -186,7 +180,6 @@ template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 	i = m_nRec;
 	m_nRec++;
 }
-
 
 template <class T> void Database<T>::SetEnabling (const sint32 i, const sint32 e)
 
@@ -236,7 +229,6 @@ template <class T> sint32 Database<T>::GetNamedItem (const StringId id, sint32 &
 	return FALSE;
 }
 
-
 template <class T> sint32 Database<T>::GetNamedItemID
 (
 	sint32 index,
@@ -249,7 +241,7 @@ template <class T> sint32 Database<T>::GetNamedItemID
 
 	id = m_rec[index].m_name;
 
-	return TRUE; 
+	return TRUE;
 }
 
 
@@ -273,12 +265,12 @@ template <class T> void Database<T>::Serialize(CivArchive &archive)
 		for (i=0; i<m_nRec; i++)
 		{
 			m_rec[i].Serialize(archive);
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 		}
 
 	} else {

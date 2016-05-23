@@ -1,21 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
 #include "aui_directsurface.h"
 #include "aui_directblitter.h"
-
 
 
 AUI_ERRCODE aui_DirectBlitter::Blt16To16(
@@ -27,9 +15,9 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
-	
+
+
+
 	if ( !destSurf->Buffer()
 	&&   !srcSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId )
@@ -106,10 +94,10 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 			} while ( 1 );
 		}
 
-		
-		
-		
-		
+
+
+
+
 		if(hr != DD_OK) {
 			DPRINTF(k_DBG_UI, ("%s:%d: hr = %d\n", __FILE__, __LINE__, hr));
 		}
@@ -127,7 +115,6 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 }
 
 
-
 AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 	aui_Surface *destSurf,
 	RECT *destRect,
@@ -136,14 +123,12 @@ AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
+
 	if ( !destSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId ) )
 	{
 		m_ddbfx.dwFillColor = color;
 		HRESULT hr;
-
 
 		do {
 			hr = ((aui_DirectSurface *)destSurf)->DDS()->Blt(
@@ -187,7 +172,6 @@ AUI_ERRCODE aui_DirectBlitter::ColorStencilBlt16(
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 	aui_Surface *destSurf,
 	RECT *destRect,
@@ -197,9 +181,9 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
-	
+
+
+
 	if ( !destSurf->Buffer()
 	&&   !srcSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId )
@@ -267,4 +251,3 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 }
 
 #endif
-

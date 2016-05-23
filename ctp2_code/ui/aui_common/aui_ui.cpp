@@ -56,7 +56,6 @@
 
 extern BOOL		g_exclusiveMode;
 
-
 aui_UI *g_ui = NULL;
 
 aui_UI::aui_UI(
@@ -86,7 +85,6 @@ aui_UI::aui_UI(
 }
 
 
-
 AUI_ERRCODE aui_UI::InitCommon(
 	HINSTANCE hinst,
 	HWND hwnd,
@@ -106,7 +104,6 @@ AUI_ERRCODE aui_UI::InitCommon(
 	m_audioManager = NULL;
 	m_movieManager = NULL;
 
-	
 	m_editMode = FALSE;
 	m_editRegion = NULL;
 	m_editWindow = NULL;
@@ -114,7 +111,6 @@ AUI_ERRCODE aui_UI::InitCommon(
 	m_absoluteRectText = NULL;
 	m_editModeLdlName = NULL;
 
-	
 	m_color = k_AUI_UI_NOCOLOR;
 	m_image = NULL;
 	SetRect( &m_imageRect, 0, 0, 0, 0 );
@@ -144,21 +140,17 @@ AUI_ERRCODE aui_UI::InitCommon(
 	Assert( m_dirtyList != NULL );
 	if ( !m_dirtyList ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_dirtyList->AddRect( 0, 0, m_width, m_height );
 
-	
 	m_actionList = new tech_WLList<aui_Action *>;
 	Assert( m_actionList != NULL );
 	if ( !m_actionList ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
-	
+
 	m_destructiveActionList = new tech_WLList<aui_Action *>;
 	Assert( m_destructiveActionList != NULL );
 	if ( !m_destructiveActionList ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_winList = new tech_WLList<HWND>;
 	Assert( m_winList != NULL );
 	if ( !m_winList ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -171,7 +163,6 @@ AUI_ERRCODE aui_UI::InitCommon(
 	Assert( m_dirtyRectInfoMemory != NULL );
 	if ( !m_dirtyRectInfoMemory ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	if ( ldlFilename )
 	{
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -184,13 +175,12 @@ AUI_ERRCODE aui_UI::InitCommon(
 	else m_ldl = NULL;
 
 
-	
 	m_dxver = 0;
 #ifdef __AUI_USE_DIRECTX__
 	HANDLE dll = LoadLibrary( "dll\\util\\dxver" );
 	if ( dll )
 	{
-		
+
 		typedef BOOL (WINAPI *FuncType)( DWORD *pVersion );
 		FuncType GetDirectXVersion =
 			(FuncType)GetProcAddress( (HINSTANCE)dll, "MicrosoftDirectXInstalled" );
@@ -201,13 +191,12 @@ AUI_ERRCODE aui_UI::InitCommon(
 			return AUI_ERRCODE_HACK;
 		}
 
-		
 		switch ( GetDirectXVersion( &m_dxver ) )
 		{
-		case 0: break; 
-		case DX_SOFTWARE: break; 
-		case DX_HARDWARE: break; 
-		case DX_NOINFO: break; 
+		case 0: break;
+		case DX_SOFTWARE: break;
+		case DX_HARDWARE: break;
+		case DX_NOINFO: break;
 		}
 
 		FreeLibrary( (HINSTANCE)dll );
@@ -218,13 +207,11 @@ AUI_ERRCODE aui_UI::InitCommon(
 }
 
 
-
 AUI_ERRCODE aui_UI::CreateScreen( void )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
-	
+
 	m_primary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, TRUE );
 	Assert( AUI_NEWOK(m_primary,retcode) );
 	if ( !AUI_NEWOK(m_primary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -254,13 +241,13 @@ aui_UI::~aui_UI()
 		delete m_colorAreas;
 		m_colorAreas = NULL;
 	}
-	
+
 	if ( m_imageAreas )
 	{
 		delete m_imageAreas;
 		m_imageAreas = NULL;
 	}
-	
+
 	if ( m_imageResource )
 	{
 		delete m_imageResource;
@@ -291,7 +278,7 @@ aui_UI::~aui_UI()
 		m_actionList = NULL;
 	}
 
-	if (m_destructiveActionList) 
+	if (m_destructiveActionList)
 	{
 		delete m_destructiveActionList;
 		m_destructiveActionList = NULL;
@@ -317,14 +304,12 @@ aui_UI::~aui_UI()
 
 	aui_Ldl::Remove(this);
 
-	
 	if ( m_ldl )
 	{
 		delete m_ldl;
 		m_ldl = NULL;
 	}
 
-	
 	g_ui = NULL;
 
 	free_crc();
@@ -336,13 +321,11 @@ aui_UI::~aui_UI()
 }
 
 
-
 void aui_UI::RegisterObject( aui_Blitter *blitter )
 {
 	Assert( blitter != NULL );
 	if ( blitter ) m_blitter = blitter;
 }
-
 
 
 void aui_UI::RegisterObject( aui_MemMap *memmap )
@@ -352,13 +335,11 @@ void aui_UI::RegisterObject( aui_MemMap *memmap )
 }
 
 
-
 void aui_UI::RegisterObject( aui_Mouse *mouse )
 {
 	Assert( mouse != NULL );
 	if ( mouse ) (m_mouse = mouse)->SetClip( 0, 0, m_width, m_height );
 }
-
 
 
 void aui_UI::RegisterObject( aui_Keyboard *keyboard )
@@ -368,13 +349,11 @@ void aui_UI::RegisterObject( aui_Keyboard *keyboard )
 }
 
 
-
 void aui_UI::RegisterObject( aui_Joystick *joystick )
 {
 	Assert( joystick != NULL );
 	if ( joystick ) m_joystick = joystick;
 }
-
 
 
 void aui_UI::RegisterObject( aui_AudioManager *audioManager )
@@ -384,13 +363,11 @@ void aui_UI::RegisterObject( aui_AudioManager *audioManager )
 }
 
 
-
 void aui_UI::RegisterObject( aui_MovieManager *movieManager )
 {
 	Assert( movieManager != NULL );
 	if ( movieManager ) m_movieManager = movieManager;
 }
-
 
 
 COLORREF aui_UI::SetBackgroundColor( COLORREF color )
@@ -411,10 +388,9 @@ COLORREF aui_UI::SetBackgroundColor( COLORREF color )
 		m_colorAreas = new aui_DirtyList;
 		Assert( m_colorAreas != NULL );
 	}
-	
+
 	return prevColor;
 }
-
 
 
 aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
@@ -444,30 +420,27 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 }
 
 
-
 AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 {
 	Assert(this);
 	Assert( child != NULL );
 	if ( !child || !this) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	Assert( child->IsThisA( aui_Window::m_windowClassId ) );
 	if ( !child->IsThisA( aui_Window::m_windowClassId ) )
 		return AUI_ERRCODE_INVALIDPARAM;
 
 	aui_Window *window = (aui_Window *)child;
 
-	
 	ListPos position = m_childList->GetHeadPosition();
 
 	if ( !position ) {
-		
+
 		m_childList->AddHead( child );
 	}
 	else
 	{
-		
+
 		if ( !GetChild( child->Id() ) )
 		{
 			sint32 j;
@@ -480,35 +453,31 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 
 				if ( window->Type() >= curWindow->Type() )
 				{
-					
+
 					m_childList->InsertBefore( curPosition, window );
 					break;
 				}
 			}
 
 			if ( !j )
-				
+
 				m_childList->AddTail( window );
 		} else {
-			
-			
-			
+
+
 			return AUI_ERRCODE_OK;
 		}
 	}
 
 	m_childListChanged = TRUE;
 
-	
 	window->SetParent( this );
 
-	
 	window->Draw();
 
 	return AUI_ERRCODE_OK;
 
 }
-
 
 
 AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
@@ -520,24 +489,21 @@ AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 		if ( window->Id() == windowId )
 		{
-			
+
 			window->DeleteSurfaceIfDynamic();
 
-			
   			aui_Control *focus = aui_Control::GetKeyboardFocus();
   			if ( focus && window->GetChild( focus->Id() ) )
   			{
   				focus->ReleaseKeyboardFocus();
   				focus->ReleaseMouseOwnership();
   			}
-			
+
 			window->Reset();
 
-			
-			
+
 			m_virtualFocus = NULL;
 
-			
 			position = window->ChildList()->GetHeadPosition();
 			for ( i = window->ChildList()->L(); i; i-- )
 			{
@@ -566,7 +532,6 @@ AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 }
 
 
-
 AUI_ERRCODE aui_UI::AddWin( HWND hwnd )
 {
 	if ( !m_winList->Find( hwnd ) )
@@ -574,7 +539,6 @@ AUI_ERRCODE aui_UI::AddWin( HWND hwnd )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_UI::RemoveWin( HWND hwnd )
@@ -586,14 +550,12 @@ AUI_ERRCODE aui_UI::RemoveWin( HWND hwnd )
 }
 
 
-
 AUI_ERRCODE aui_UI::AddDirtyRect( RECT *rect )
 {
 	if ( !rect ) return AddDirtyRect( 0, 0, m_width, m_height );
 
 	return AddDirtyRect( rect->left, rect->top, rect->right, rect->bottom );
 }
-
 
 
 AUI_ERRCODE aui_UI::AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 bottom )
@@ -608,7 +570,6 @@ AUI_ERRCODE aui_UI::AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 
 }
 
 
-
 aui_Window *aui_UI::BringWindowToTop( uint32 windowId )
 {
 	return BringWindowToTop( (aui_Window *)GetChild( windowId ) );
@@ -621,11 +582,9 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 {
 	aui_Window *prevTopWindow = NULL;
 
-	
 	uint32 type = window->Type();
 
-	
-	
+
 	BOOL found = FALSE;
 
 	m_childListChanged = TRUE;
@@ -640,21 +599,20 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 
 		if ( !found )
 		{
-			
+
 			if ( window == curWindow ) return window;
 
 			if ( type == curWindow->Type() )
 			{
 				prevTopWindow = curWindow;
 
-				
 				m_childList->InsertBefore( curPosition, window );
 				found = TRUE;
 			}
 		}
 		else
 		{
-			
+
 			if ( window == curWindow )
 			{
 				m_childList->DeleteAt( curPosition );
@@ -674,7 +632,6 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 }
 
 
-
 AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 {
 	if ( !recurse )
@@ -685,20 +642,18 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 			aui_Region *window = m_childList->GetPrev( position );
 			window->Idle();
 
-			
-			
-			
-			
-			
+
+
+
+
+
 			ListPos childPosition = window->ChildList()->GetHeadPosition();
 			for ( sint32 j = window->ChildList()->L(); j; j-- )
 				Idle( window->ChildList()->GetNext( childPosition ) );
 
-			
 			if ( m_childListChanged )
 			{
-				
-				
+
 				m_childListChanged = FALSE;
 				return AUI_ERRCODE_OK;
 			}
@@ -717,7 +672,6 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 }
 
 
-
 AUI_ERRCODE aui_UI::Invalidate( RECT *rect )
 {
 	if ( rect )
@@ -726,7 +680,6 @@ AUI_ERRCODE aui_UI::Invalidate( RECT *rect )
 	{
 		FlushDirtyList();
 
-		
 		m_dirtyList->AddRect(
 			0,
 			0,
@@ -736,7 +689,6 @@ AUI_ERRCODE aui_UI::Invalidate( RECT *rect )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_UI::FlushDirtyList( void )
@@ -752,7 +704,6 @@ AUI_ERRCODE aui_UI::FlushDirtyList( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
@@ -773,7 +724,6 @@ AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
 }
 
 
-
 AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -782,7 +732,7 @@ AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 		if ( window->Id() == windowId )
 		{
-			
+
 			window->Hide();
 			break;
 		}
@@ -797,7 +747,7 @@ AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 
 AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 {
-	
+
 	static aui_Window *window = NULL;
 	static sint32 windowX = 0;
 	static sint32 windowY = 0;
@@ -809,11 +759,9 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 	static aui_DirtyList *windowDirtyList = NULL;
 	static aui_Stencil *windowStencil = NULL;
 
-	
-	
+
 	m_dirtyList->Minimize();
 
-	
 	if ( m_colorAreas || m_imageAreas )
 	{
 		if ( m_colorAreas ) m_colorAreas->Flush();
@@ -832,9 +780,8 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				if ( Rectangle_Clip( &clipped, &m_imageRect ) )
 					m_imageAreas->AddRect( &clipped );
 			}
-		}		
+		}
 
-		
 		position = m_childList->GetHeadPosition();
 		for ( i = m_childList->L(); i; i-- )
 		{
@@ -854,19 +801,17 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 
 		if ( m_imageAreas )
 		{
-			
+
 			if ( m_colorAreas ) m_colorAreas->SubtractRect( &m_imageRect );
 
 			m_imageAreas->Minimize();
 		}
 
 		if ( m_colorAreas ) m_colorAreas->Minimize();
-		
-		
+
 		memset( &windowRect, 0, sizeof( windowRect ) );
 	}
 
-	
 	ListPos position = m_childList->GetTailPosition();
 	const ListPos tailPosition = position;
 	for ( sint32 i = m_childList->L(); i; i-- )
@@ -875,19 +820,18 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 
 		if ( !window->IsHidden() )
 		{
-			
+
 			windowX = window->X();
 			windowY = window->Y();
 			windowWidth = window->Width();
 			windowHeight = window->Height();
 			windowSurface = window->TheSurface();
 			windowOpaqueControls = window->AreControlsOpaque();
-			windowRect.right = windowWidth;		
-			windowRect.bottom = windowHeight;	
+			windowRect.right = windowWidth;
+			windowRect.bottom = windowHeight;
 			windowDirtyList = window->m_dirtyList;
 			windowStencil = window->GetStencil();
 
-			
 			ListPos dirtyPosition = m_dirtyList->GetHeadPosition();
 			sint32 j;
 			for ( j = m_dirtyList->L(); j; j-- )
@@ -900,14 +844,12 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				window->AddDirtyRect( &convertedRect );
 			}
 
-			
 			if ( !window->IsOpaque() && windowDirtyList->L() )
 			{
-				
-				
-/*			
+
+/*
 #if 0
-				if(windowStencil) {					
+				if(windowStencil) {
 					RECT stencilRect = {
 						0, 0,
 						windowStencil->Width(),
@@ -922,12 +864,11 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 */
 				windowDirtyList->Flush();
 				windowDirtyList->AddRect( &windowRect );
-				
+
 				if ((j = m_childList->L() - i))
 				{
-					
-					
-					
+
+
 					ListPos remainPosition = tailPosition;
 					for ( ; j; j-- )
 					{
@@ -953,9 +894,9 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 								OffsetRect( &srcRect, -left, -top );
 
 								g_ui->TheBlitter()->StencilMixBlt16(
-									windowSurface, 
+									windowSurface,
 									&rect,
-									NULL, 
+									NULL,
 									&rect,
 									remainWindow->TheSurface(),
 									&srcRect,
@@ -963,11 +904,9 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 									&rect);
 							}
 
-
 						}
 					}
 				}
-
 
 /*
 #if 0
@@ -978,9 +917,9 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 					{
 						RECT *rect = windowDirtyList->GetNext( pos );
 
-						
-						
-						
+
+
+
 
 
 
@@ -1025,11 +964,10 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				windowDirtyList->AddRect( &windowRect );
 			}
 			else
-				
+
 				windowDirtyList->Minimize();
 
-			
-			
+
 			ListPos remainPosition = position;
 			for ( j = i - 1; j; j-- )
 			{
@@ -1047,8 +985,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 						left + remainWindow->Width(),
 						top + remainWindow->Height() );
 
-					
-					
+
 					if ( altered == AUI_ERRCODE_HANDLED
 					&&   !remainWindow->IsOpaque() )
 					{
@@ -1062,7 +999,6 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				}
 			}
 
-			
 			remainPosition = windowDirtyList->GetHeadPosition();
 			for ( j = windowDirtyList->L(); j; j-- )
 				InsertDirtyRectInfo(
@@ -1075,28 +1011,23 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 }
 
 
-
 AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 {
 	Assert( !Rectangle_HasZeroArea( rect ) );
 	if ( Rectangle_HasZeroArea( rect ) )
 		return AUI_ERRCODE_OK;
 
-	
 	DirtyRectInfo *newDri = m_dirtyRectInfoMemory->New();
 	Assert( newDri != NULL );
 	if ( !newDri ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	memcpy( &newDri->rect, rect, sizeof( RECT ) );
 	newDri->window = window;
 
-	
 	sint32 newDriX = rect->left + window->X();
 	sint32 newDriY = rect->top + window->Y();
 
-	
-	
+
 	BOOL equals = FALSE;
 	ListPos position = m_dirtyRectInfoList->GetHeadPosition();
 	for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- )
@@ -1138,11 +1069,9 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 		}
 	}
 
-	
 	m_dirtyRectInfoList->AddTail( newDri );
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void aui_UI::FlushDirtyRectInfoList( void )
@@ -1183,20 +1112,18 @@ AUI_ERRCODE aui_UI::DrawOne(aui_Window *window)
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
 	window->m_dirtyList->Flush();
 
-	
+
 
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE aui_UI::Draw( void )
 {
-	
+
 	if ( !m_primary ) return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE errcode;
@@ -1217,7 +1144,7 @@ AUI_ERRCODE aui_UI::Draw( void )
             printf("%s L%d: BltBackgroundImageToPrimary\n", __FILE__, __LINE__);
             m_mouse->BltBackgroundImageToPrimary(m_image, &m_imageRect, m_imageAreas );
             }
-	
+
 	m_mouse->BltDirtyRectInfoToPrimary();
 
   if ( m_editMode )
@@ -1228,7 +1155,7 @@ AUI_ERRCODE aui_UI::Draw( void )
 #ifdef __AUI_USE_SDL__
   //printf("%s L%d: Trying to use SDL flip!\n", __FILE__, __LINE__);
   if (SDL_Flip(SDL_GetVideoSurface()) < 0) { //THIS UPDATES/DRAWS THE WOHLE SCREEN IF MOUSE IS MOVED!!! VERY BAD PERVORMANCE LOSS!!!
-      //SDL_Flip only works if SDL_DOUBLEBUF was used for surface! 
+      //SDL_Flip only works if SDL_DOUBLEBUF was used for surface!
       //where is the windows part of this???
       fprintf(stderr, "Flip failed: %s\n", SDL_GetError());
 	}
@@ -1237,11 +1164,9 @@ AUI_ERRCODE aui_UI::Draw( void )
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
-	
+
 	FlushDirtyList();
 
-	
 	FlushDirtyRectInfoList();
 
 	return AUI_ERRCODE_OK;
@@ -1265,10 +1190,10 @@ void aui_UI::SetEditRegion( aui_Region *region )
 		m_editWindow->ShouldDraw( TRUE );
 		aui_Region::EditModeClear();
 		return;
-	}	
+	}
 
 	m_editRegion = region;
-		
+
 	if ( aui_Ldl *theLdl = g_ui->GetLdl() ) {
 		if ( MBCHAR	*ldlBlock = theLdl->GetBlock( region ) ) {
 			MBCHAR editBuffer[ 1024 ];
@@ -1290,35 +1215,31 @@ void aui_UI::SetEditRegion( aui_Region *region )
 			m_editModeLdlName->SetText( " " );
 		}
 	}
-	
-	
+
 	SetRect( &m_editRect, region->X(), region->Y(),
 						  region->X() + region->Width(),
 						  region->Y() + region->Height() );
 
 	MBCHAR buffer[ 256 ];
 
-	sprintf( buffer, "%d, %d, %d, %d", m_editRect.left, m_editRect.top, 
-									   m_editRect.right, m_editRect.bottom );	
+	sprintf( buffer, "%d, %d, %d, %d", m_editRect.left, m_editRect.top,
+									   m_editRect.right, m_editRect.bottom );
 
 	m_localRectText->SetText( buffer );
 
 	if ( region->GetParent() != g_ui )
 		(( aui_Control *)region)->ToScreen( &m_editRect );
 
-	
 	region->ExpandRect( &m_editRect );
 
-
-	sprintf( buffer, "%d, %d, %d, %d", m_editRect.left, m_editRect.top, 
-									   m_editRect.right, m_editRect.bottom );	
+	sprintf( buffer, "%d, %d, %d, %d", m_editRect.left, m_editRect.top,
+									   m_editRect.right, m_editRect.bottom );
 
 	m_absoluteRectText->SetText( buffer );
 
 	m_editWindow->Draw( );
 
 }
-
 
 void aui_UI::SetEditMode( BOOL mode )
 {
@@ -1333,13 +1254,12 @@ void aui_UI::SetEditMode( BOOL mode )
 
 		if ( m_editRegion )
 			m_editRegion->ShouldDraw( TRUE );
-	
+
 		m_editRegion = NULL;
 	} else {
 		CreateEditModeDialog( TRUE );
 	}
 }
-
 
 AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 {
@@ -1348,7 +1268,7 @@ AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 	if ( make ) {
 		if ( m_editWindow ) return AUI_ERRCODE_OK;
 		m_editWindow = new aui_Window( &auiErr, aui_UniqueId(),
-								0, 0, 
+								0, 0,
 								200,
 								82,
 								m_primary->BitsPerPixel(),
@@ -1359,7 +1279,6 @@ AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 
 		m_editWindow->SetDraggable( TRUE );
 
-		
 		m_localRectText = new aui_Static( &auiErr, aui_UniqueId(),
 										5, 5,
 										190, 17, "000, 000, 000, 000" );
@@ -1398,7 +1317,7 @@ AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 	} else {
 
 		if ( !m_editWindow ) return AUI_ERRCODE_OK;
-		
+
 		RemoveWindow( m_editWindow->Id( ) );
 
 		delete m_localRectText;
@@ -1419,10 +1338,9 @@ AUI_ERRCODE aui_UI::CreateEditModeDialog(BOOL make)
 
 }
 
-
 AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 {
-	
+
 	if ( !region ) return AUI_ERRCODE_OK;
 
 	RECT rect;
@@ -1435,17 +1353,15 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 	Assert( width  > 3 );
 	Assert( height > 3 );
 
-	
 	SetRect( &rect, x, y, x + 1, y + height );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
-	
+
 	SetRect( &rect, x + 1, y + 1, x + 2, y + height - 1 );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(255,255,255), 0 );
 
 	SetRect( &rect, x + 2, y + 2, x + 3, y + height - 2 );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
-	
 	SetRect( &rect, x, y, x + width, y + 1 );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
@@ -1455,7 +1371,6 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 	SetRect( &rect, x + 2, y + 2, x + width - 2, y + 3 );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
-	
 	SetRect( &rect, x + width - 1, y, x + width, y + height );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
@@ -1465,7 +1380,6 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 	SetRect( &rect, x + width - 3, y + 2, x + width - 2, y + height - 2 );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
-	
 	SetRect( &rect, x, y + height - 1, x + width, y + height );
 	m_blitter->ColorBlt( m_primary, &rect, RGB(0,0,0), 0 );
 
@@ -1480,7 +1394,6 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 }
 
 
-
 AUI_ERRCODE aui_UI::HandleMouseEvents(
 	sint32 numEvents,
 	aui_MouseEvent *events )
@@ -1491,8 +1404,7 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 
 	aui_MouseEvent *curEvent = events;
 
-	
-	
+
 	static aui_MouseEvent mouseEvents[ k_MOUSE_MAXINPUT ];
 	if ( !numEvents && !events )
 	{
@@ -1500,15 +1412,12 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 		curEvent = mouseEvents;
 	}
 
-	
 	TagMouseEvents( numEvents, curEvent );
 
-	
 	for ( sint32 k = numEvents; k; k--, curEvent++ )
 	{
 		SetWhichSeesMouse( NULL );
 
-		
 		ListPos position = m_childList->GetHeadPosition();
 		for ( sint32 i = m_childList->L(); i; i-- )
 		{
@@ -1520,18 +1429,16 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 					curEvent,
 					!window->IgnoringEvents() );
 
-				
-				
-				
-				
-				
+
+
+
+
+
 				if ( m_childListChanged || errcode == AUI_ERRCODE_HANDLEDEXCLUSIVE)
 				{
-					
-					
+
 					m_childListChanged = FALSE;
 
-					
 					position = m_childList->GetHeadPosition();
 					for ( i = m_childList->L(); i; i-- )
 					{
@@ -1544,7 +1451,6 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 						}
 					}
 
-					
 					if ( k > 1 ) return HandleMouseEvents( k - 1, curEvent + 1 );
 					return errcode;
 				}
@@ -1554,7 +1460,6 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
@@ -1567,18 +1472,16 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 
 
 
-	
+
 	m_keyboard->GetInput();
 
-	
-	
-	
+
+
+
 	return AUI_ERRCODE_OK;
 
-	
 	aui_Control *control = aui_Control::GetKeyboardFocus();
 
-	
 	for ( sint32 k = 1; k; k-- )
 	{
 		aui_KeyboardEvent *event = m_keyboard->GetLatestKeyboardEvent();
@@ -1586,16 +1489,13 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 		if ( control )
 			errcode = control->HandleKeyboardEvent( event );
 
-		
 		if ( m_childListChanged )
 		{
-			
-			
+
 			m_childListChanged = FALSE;
 			return errcode;
 		}
 
-		
 		if ( event->key == AUI_KEYBOARD_KEY_TAB )
 		{
 			static BOOL wasJustDown = FALSE;
@@ -1617,8 +1517,7 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 
 					siblings->GetNext( position );
 
-					
-					
+
 					if ( position )
 						m_virtualFocus = (aui_Control *)siblings->GetNext( position );
 					else
@@ -1643,29 +1542,23 @@ AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 }
 
 
-
 AUI_ERRCODE aui_UI::HandleJoystickEvents( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_UNHANDLED;
 
-	
 	m_joystick->GetInput();
 
-	
 	aui_Control *control = aui_Control::GetKeyboardFocus();
 	if ( !control ) return errcode;
 
-	
 	for ( sint32 k = 1; k; k-- )
 	{
 		errcode = control->HandleJoystickEvent(
 			m_joystick->GetLatestJoystickEvent() );
 
-		
 		if ( m_childListChanged )
 		{
-			
-			
+
 			m_childListChanged = FALSE;
 			return errcode;
 		}
@@ -1673,7 +1566,6 @@ AUI_ERRCODE aui_UI::HandleJoystickEvents( void )
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_UI::HandleWindowsMessage(
 	HWND hwnd,
@@ -1684,7 +1576,6 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 #ifdef __AUI_USE_DIRECTX__
 	AUI_ERRCODE errcode = AUI_ERRCODE_UNHANDLED;
 
-	
 	if ( hwnd == m_hwnd )
 	switch( message )
 	{
@@ -1692,7 +1583,6 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		PAINTSTRUCT ps;
 		BeginPaint( hwnd, &ps );
 
-		
 		Invalidate( &ps.rcPaint );
 
 		EndPaint( hwnd, &ps );
@@ -1701,29 +1591,28 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		break;
 
 	case WM_SETCURSOR:
-		
+
 		if ( m_mouse && !m_mouse->IsSuspended() )
 		{
 			while ( ShowCursor( FALSE ) >= 0 )
-				; 
+				;
 		}
 		else
 		{
 			while ( ShowCursor( TRUE ) < 0 )
-				; 
+				;
 		}
 
 		errcode = AUI_ERRCODE_HANDLED;
 		break;
 
-	
 	case WM_SYSKEYUP:
-		
+
 		if ( !IsIconic( m_hwnd ) )
 		switch ( (int)wParam )
 		{
-		case VK_TAB:	
-		case VK_ESCAPE:	
+		case VK_TAB:
+		case VK_ESCAPE:
 			AltTabOut();
 			errcode = AUI_ERRCODE_HANDLED;
 			break;
@@ -1733,15 +1622,14 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		}
 		break;
 
-	
-	
+
 	case WM_ACTIVATE:
-		
+
 		if ( LOWORD(wParam) == WA_INACTIVE )
 		{
 
 			if (g_exclusiveMode) {
-			
+
 				if ( !IsChildWin( (HWND)lParam ) )
 				if ( !IsIconic( m_hwnd ) )
 				{
@@ -1757,12 +1645,12 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 			}
 
 		}
-		
+
 		else
 		{
 
 			if (g_exclusiveMode) {
-			
+
 				if (IsIconic( m_hwnd ) )
 				{
 					AltTabIn();
@@ -1775,13 +1663,12 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		}
 		break;
 
-	
-	
+
 	case WM_SYSCOMMAND:
 		{
 			if (LOWORD(wParam) == SC_SCREENSAVE) {
 				if (g_exclusiveMode) {
-				
+
 					if ( !IsChildWin( (HWND)lParam ) )
 					if ( !IsIconic( m_hwnd ) )
 					{
@@ -1799,7 +1686,7 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		}
 		break;
 
-	case WM_KEYDOWN: 
+	case WM_KEYDOWN:
 #ifdef _DEBUG
 		{
 		static RECT resizer = { 0, 0, 0, 0 };
@@ -1807,14 +1694,14 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 		switch ( (int)wParam )
 		{
 		case VK_ESCAPE:
-			
+
 			if ( m_editMode )
 				g_ui->SetEditRegion( NULL );
 			break;
 
 		case VK_F1:
-			
-			if ( GetKeyState( VK_SHIFT ) < 0 ) {	
+
+			if ( GetKeyState( VK_SHIFT ) < 0 ) {
 				if ( m_editMode ) {
 					aui_Region::PurgeUndoList();
 					SetEditMode( FALSE );
@@ -1822,12 +1709,12 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 					SetEditMode( TRUE );
 				}
 			}
-			
+
 			errcode = AUI_ERRCODE_HANDLED;
 			break;
 
 		case VK_F2:
-			
+
 			if ( m_editMode ) {
 				m_ldl->GetLdl()->WriteData();
 				errcode = AUI_ERRCODE_HANDLED;
@@ -1842,14 +1729,14 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 				}
 			}
 			break;
-		
-		case VK_LEFT: 
+
+		case VK_LEFT:
 			if ( m_editMode ) {
 				if ( GetKeyState( VK_SHIFT ) < 0 )
 					SetRect( &resizer, -1, 0, 0, 0 );
 				else if ( GetKeyState( VK_CONTROL ) < 0 )
 					SetRect( &resizer, 0, 0, -1, 0 );
-				else 
+				else
 					SetRect( &resizer, -1, 0, -1, 0 );
 
 				aui_Region::EditModeModifyRegion( resizer );
@@ -1866,7 +1753,7 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 					SetRect( &resizer, 0, 0, 0, -1 );
 				else
 					SetRect( &resizer, 0, -1, 0, -1 );
-			
+
 				aui_Region::EditModeModifyRegion( resizer );
 
 				errcode = AUI_ERRCODE_HANDLED;
@@ -1881,7 +1768,7 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 					SetRect( &resizer, 1, 0, 0, 0 );
 				else
 					SetRect( &resizer, 1, 0, 1, 0 );
-				
+
 				aui_Region::EditModeModifyRegion( resizer );
 
 				errcode = AUI_ERRCODE_HANDLED;
@@ -1902,7 +1789,7 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 				errcode = AUI_ERRCODE_HANDLED;
 			}
 			break;
-		
+
 		}
 		}
 #endif // _DEBUG
@@ -1914,7 +1801,6 @@ AUI_ERRCODE aui_UI::HandleWindowsMessage(
 	return AUI_ERRCODE_UNHANDLED;
 #endif// __AUI_USE_DIRECTX__
 }
-
 
 AUI_ERRCODE aui_UI::AltTabOut( void )
 {
@@ -1934,7 +1820,7 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 		}
 #ifdef __AUI_USE_DIRECTX__
 	while ( ShowCursor( TRUE ) < 0 )
-		; 
+		;
 
 	if ( m_minimize )
 	{
@@ -1948,7 +1834,6 @@ AUI_ERRCODE aui_UI::AltTabOut( void )
 }
 
 
-
 AUI_ERRCODE aui_UI::AltTabIn( void )
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -1957,7 +1842,7 @@ AUI_ERRCODE aui_UI::AltTabIn( void )
 			::ShowWindow( m_hwnd, SW_RESTORE );
 
 	while ( ShowCursor( FALSE ) >= 0 )
-		; 
+		;
 #endif
 	if ( !m_primary ) CreateScreen();
 #ifdef __AUI_USE_DIRECTX__
@@ -1978,14 +1863,12 @@ AUI_ERRCODE aui_UI::AltTabIn( void )
 }
 
 
-
 BOOL aui_UI::MinimizeOnAltTabOut( BOOL minimize )
 {
 	BOOL wasMinimizing = m_minimize;
 	m_minimize = minimize;
 	return wasMinimizing;
 }
-
 
 
 AUI_ERRCODE aui_UI::Process( void )
@@ -2015,13 +1898,11 @@ void aui_UI::HandleActions( void )
 }
 
 
-
 void aui_UI::AddAction( aui_Action *action )
 {
 	Assert( action != NULL );
 	if ( action ) m_actionList->AddTail( action );
 }
-
 
 
 void aui_UI::HandleDestructiveActions( void )
@@ -2034,13 +1915,11 @@ void aui_UI::HandleDestructiveActions( void )
 	}
 }
 
-
 void aui_UI::AddDestructiveAction( aui_Action *action )
 {
 	Assert( action != NULL );
 	if ( action ) m_destructiveActionList->AddTail( action );
 }
-
 
 AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 {
@@ -2049,37 +1928,35 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 		aui_MouseEvent *baseEvent = events;
 		aui_MouseEvent *thisEvent = baseEvent + 1;
 
-		
-		
-		
-		
+
+
+
+
 		BOOL moveCount = 0;
 		sint32 i;
 		for ( i = numEvents - 1; i; i--, thisEvent++ )
 		{
-			
+
 			if ( baseEvent->lbutton == thisEvent->lbutton
 			&&   baseEvent->rbutton == thisEvent->rbutton )
 			{
-				
+
 				moveCount++;
 			}
 			else
 			{
-				
+
 				for ( sint32 j = moveCount; ((baseEvent++)->movecount = j); j-- );
 
-				
 				moveCount = 0;
 			}
 		}
 
-		
 		for ( i = moveCount; ((baseEvent++)->movecount = i); i-- );
 
-		
-		
-		
+
+
+
 
 		for ( i = numEvents - 1; ((events++)->framecount = i); i-- );
 	}

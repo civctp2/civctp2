@@ -1,31 +1,17 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_HEADER_H__
 #define __AUI_HEADER_H__
-
 
 #include "aui_switchgroup.h"
 #include "aui_action.h"
 
 
-
 #define k_AUI_HEADER_LDL_SWITCH		"switch"
-
 
 
 class aui_Header : public aui_SwitchGroup
 {
 public:
-	
+
 	aui_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,13 +41,12 @@ protected:
 };
 
 
-
 class aui_HeaderSwitchAction : public aui_Action
 {
 public:
-	aui_HeaderSwitchAction(sint32 column) 
+	aui_HeaderSwitchAction(sint32 column)
     :   aui_Action  (),
-        m_column    (column) 
+        m_column    (column)
     { ; };
 
 	virtual void	Execute
@@ -75,5 +60,4 @@ protected:
 	sint32 m_column;
 };
 
-
-#endif 
+#endif

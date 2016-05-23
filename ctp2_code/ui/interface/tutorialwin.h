@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -13,7 +12,7 @@ class c3_Button;
 class c3_Switch;
 class aui_StringTable;
 
-#define k_MINIMIZED_HEIGHT	40		
+#define k_MINIMIZED_HEIGHT	40
 #define k_MAXIMIZED_HEIGHT	310
 
 class TutorialWin {
@@ -48,7 +47,6 @@ public:
 
 	void ClearList( void ) { m_list->Clear(); }
 };
-
 
 sint32 tutorialwin_Initialize( void );
 sint32 tutorialwin_Cleanup( void );

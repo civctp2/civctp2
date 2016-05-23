@@ -15,9 +15,9 @@ public:
 
 	void Packetize(uint8 *buf, uint16 &size);
 	void Unpacketize(uint16 id, uint8 *buf, uint16 size);
-	
+
 private:
 	Advances *m_adv;
 };
-	
+
 #endif

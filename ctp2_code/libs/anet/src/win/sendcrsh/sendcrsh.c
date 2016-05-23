@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -101,7 +101,6 @@ static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
 	return argi;
 }
 
-
 int main(int argc, char **argv);
 
 #define MAXARGS 4
@@ -160,14 +159,14 @@ static int checkEnvironment()
 	envlen = GetEnvironmentVariable("SENDCRSH", envval, 256);
 	if (envlen == 0) {
 		LPVOID lpMsgBuf;
-		FormatMessage( 
+		FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			GetLastError(),
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 			(LPTSTR) &lpMsgBuf,
 			0,
-			NULL 
+			NULL
 		);
 		DPRINT(("getenv error:%s\n", lpMsgBuf));
 		LocalFree( lpMsgBuf );
@@ -179,7 +178,7 @@ static int checkEnvironment()
 }
 
 /*--------------------------------------------------------------------------
- Returns 1 if this is the only instance of sendcrsh running or 0 if not. 
+ Returns 1 if this is the only instance of sendcrsh running or 0 if not.
 --------------------------------------------------------------------------*/
 static int checkUnique()
 {

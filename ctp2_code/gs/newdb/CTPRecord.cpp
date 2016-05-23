@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElement
 			delete oldArray;
 		} else {
 			*array = new sint32[1];
-		}		
+		}
 		(*array)[*numElements] = value;
 		*numElements += 1;
 	}while(lex->PeekAhead() == k_Token_Int);
@@ -77,7 +77,7 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numEleme
 			delete oldArray;
 		} else {
 			*array = new double[1];
-		}		
+		}
 		(*array)[*numElements] = value;
 		*numElements += 1;
 	}while(lex->PeekAhead() == k_Token_Int || lex->PeekAhead()== k_Token_Float);
@@ -90,7 +90,7 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElement
 		DBERROR(("Expected filename"));
 		return false;
 	}
-	
+
 	do{
 		lex->GetToken();
 		const char * value = lex->GetTokenText();
@@ -102,7 +102,7 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElement
 			delete oldArray;
 		} else {
 			*array = new char *[1];
-		}		
+		}
 		(*array)[*numElements] = new char[strlen(value) + 1];
 		strcpy((*array)[*numElements], value);
 		*numElements += 1;
@@ -116,7 +116,7 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numEl
 		DBERROR(("Expected stringid"));
 		return false;
 	}
-	
+
 	do{
 		lex->GetToken();
 		const char * value = lex->GetTokenText();
@@ -128,7 +128,7 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numEl
 			delete oldArray;
 		} else {
 			*array = new sint32[1];
-		}		
+		}
 		sint32 id;
 		if(!g_theStringDB->GetStringID(value, id)) {
 			DBERROR(("%s not in string database", value));
@@ -188,7 +188,7 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char **array, sint32 *numElements
 		DBERROR(("Expected quoted string"));
 		return false;
 	}
-	
+
 	do{
 		lex->GetToken();
 		const char * value = lex->GetTokenText();
@@ -210,7 +210,7 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numEle
 		DBERROR(("Expected string id"));
 		return false;
 	}
-	
+
 	do{
 		sint32 tok = lex->GetToken();
 		const char * value = lex->GetTokenText();

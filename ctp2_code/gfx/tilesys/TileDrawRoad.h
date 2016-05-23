@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -26,7 +14,7 @@
 #define k_ROAD_OFFSET_3		200
 #define k_ROAD_OFFSET_4		300
 
-#define k_BIT_SOUTH			1 
+#define k_BIT_SOUTH			1
 #define k_BIT_SOUTHWEST		1 << 1
 #define k_BIT_WEST			1 << 2
 #define k_BIT_NORTHWEST		1 << 3
@@ -49,7 +37,7 @@
 #define k_T_INTERSECT		3
 #define k_X_INTERSECT		4
 
-enum ROAD 
+enum ROAD
 {
 	ROAD_DEFAULT,
 	ROAD_SOUTH = 0,
@@ -74,4 +62,3 @@ enum ROAD
 };
 
 #endif
-

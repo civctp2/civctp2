@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -35,10 +35,10 @@
 #else
 #include "aui_directui.h"
 #endif
-#include "pattern.h"		
-#include "icon.h"			
-#include "picture.h"		
-#include "aui_resource.h"	
+#include "pattern.h"
+#include "icon.h"
+#include "picture.h"
+#include "aui_resource.h"
 #include "aui_window.h"
 
 class C3UI : public aui_NativeUI
@@ -55,7 +55,6 @@ public:
 		BOOL useExclusiveMode = FALSE );
 	virtual ~C3UI();
 
-	
 	aui_Resource<Pattern>	*GetPatternResource( void ) const { return m_patternResource; }
 
 	Pattern	*LoadPattern( const MBCHAR *name )
@@ -71,7 +70,6 @@ public:
 	AUI_ERRCODE	RemovePatternSearchPath( MBCHAR *path )
 		{ return m_patternResource->RemoveSearchPath( path ); }
 
-	
 	aui_Resource<Icon>	*GetIconResource( void ) const { return m_iconResource; }
 
 	Icon	*LoadIcon( const MBCHAR *name )
@@ -87,7 +85,6 @@ public:
 	AUI_ERRCODE	RemoveIconSearchPath( MBCHAR *path )
 		{ return m_iconResource->RemoveSearchPath( path ); }
 
-	
 	aui_Resource<Picture>	*GetPictureResource( void ) const { return m_pictureResource; }
 
 	Picture	*LoadPicture( const MBCHAR *name )
@@ -111,5 +108,4 @@ protected:
 	aui_Resource<Picture>	*m_pictureResource;
 };
 
-
-#endif 
+#endif

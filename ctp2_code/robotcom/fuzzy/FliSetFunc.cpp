@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "FliSetFunc.h"
 #include "fliif.h"
@@ -14,10 +13,9 @@ FliSetFunc::FliSetFunc(char *name, FliSymbol *variable, SFTYPE type,
 	m_center = center;
 	m_width = width;
 
-	
-    if (SFTYPE_SPIKE == type) { 
-        m_width = 0.0; 
-    } else { 
+    if (SFTYPE_SPIKE == type) {
+        m_width = 0.0;
+    } else {
 	    Assert(m_width != 0);
         if(m_width == 0){
 		    m_width = 0.00001;
@@ -27,16 +25,16 @@ FliSetFunc::FliSetFunc(char *name, FliSymbol *variable, SFTYPE type,
 	m_left_edge = GetLeftEdge();
 	m_right_edge = GetRightEdge();
 
-	
-	
-	
-	
+
+
+
+
 }
 
 FliSetFunc::~FliSetFunc()
 {
 	delete [] m_name;
-    m_name = NULL; 
+    m_name = NULL;
 }
 
 BOOL FliSetFunc::IsInputFunction()
@@ -59,12 +57,12 @@ double FliSetFunc::GetMembership(double x, double dx,
 	insideRight = FALSE;
 	switch(m_type) {
         case SFTYPE_SPIKE:
-            if (fabs(x - m_center) < (dx * 0.5)) { 
-                return 1.0; 
-            } else { 
-                return 0.0; 
-            } 
-		case SFTYPE_LEFT:			
+            if (fabs(x - m_center) < (dx * 0.5)) {
+                return 1.0;
+            } else {
+                return 0.0;
+            }
+		case SFTYPE_LEFT:
 			if(x <= m_center) {
 				insideLeftSteps = (sint32)((m_center - x) / dx);
 				return 1.0;
@@ -129,7 +127,5 @@ double FliSetFunc::GetRightEdge()
 
 double FliSetFunc::GetRecommendedDX()
 {
-    return m_width * 0.02; 
-} 
-
-
+    return m_width * 0.02;
+}

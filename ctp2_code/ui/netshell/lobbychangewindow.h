@@ -1,27 +1,14 @@
-
-
-
-
-
-
-
-
-
-
- 
 #ifndef __LOBBYCHANGEWINDOW_H__
 #define __LOBBYCHANGEWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 
 
-
 class LobbyChangeWindow : public ns_Window
 {
 public:
-	
+
 	LobbyChangeWindow( AUI_ERRCODE *retval );
 	virtual ~LobbyChangeWindow() {}
 
@@ -35,7 +22,6 @@ public:
 	virtual AUI_ERRCODE Idle( void );
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 
-	
 
 	enum CONTROL
 	{
@@ -57,5 +43,4 @@ protected:
     AUI_ACTION_BASIC(LobbyListBoxAction);
 };
 
-
-#endif 
+#endif

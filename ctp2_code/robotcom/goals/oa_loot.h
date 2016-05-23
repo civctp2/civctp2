@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __OA_LOOT__
@@ -6,16 +5,15 @@
 
 #include "Oa.h"
 
-class Opportunity_Action_Loot : public Opportunity_Action { 
+class Opportunity_Action_Loot : public Opportunity_Action {
 
 public:
 
-
-    Opportunity_Action_Loot (); 
+    Opportunity_Action_Loot ();
     ~Opportunity_Action_Loot ();
 
-    void Serialize (CivArchive &archive); 
-	void Execute(AiMain *ai); 
-}; 
+    void Serialize (CivArchive &archive);
+	void Execute(AiMain *ai);
+};
 
 #endif __OA_LOOT__

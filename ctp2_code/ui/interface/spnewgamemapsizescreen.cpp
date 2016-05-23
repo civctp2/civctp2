@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game map size selection screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -59,7 +59,6 @@ extern ProfileDB	*g_theProfileDB;
 static c3_PopupWindow	*s_spNewGameMapSizeScreen	= NULL;
 
 
-
 static aui_SwitchGroup	*s_group		= NULL;
 static aui_Radio	**s_checkBox;
 
@@ -71,7 +70,6 @@ static MBCHAR	checknames[k_NUM_MAPSIZEBOXES][50] = {
 };
 
 static sint32 s_useMode = 0;
-
 
 static sint32 s_mapSizeIndex = 0;
 sint32 spnewgamemapsizescreen_getMapSizeIndex( void )
@@ -86,7 +84,7 @@ sint32 spnewgamemapsizescreen_getMapSizeIndex( void )
 
 void spnewgamemapsizescreen_setMapSizeIndex( sint32 index )
 {
-	
+
 	if ( index < 0 || index >= k_NUM_MAPSIZEBOXES )
 		return;
 
@@ -112,7 +110,7 @@ void spnewgamemapsizescreen_setMapSizeIndex( sint32 index )
 
 		break;
 	default:
-		
+
 		Assert( FALSE );
 		break;
 	}
@@ -129,7 +127,6 @@ sint32	spnewgamemapsizescreen_displayMyWindow(BOOL viewMode, sint32 useMode)
 
 	AUI_ERRCODE auiErr;
 
-	
 	for (sint32 i = 0;i < k_NUM_MAPSIZEBOXES;i++ )
 		s_checkBox[ i ]->Enable( !viewMode );
 
@@ -173,7 +170,6 @@ sint32 spnewgamemapsizescreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -182,28 +178,25 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_spNewGameMapSizeScreen ) return AUI_ERRCODE_OK; 
+	if ( s_spNewGameMapSizeScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameMapSizeScreen");
 
-	{ 
+	{
 		s_spNewGameMapSizeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameMapSizeScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameMapSizeScreen, errcode) ) errcode;
 
-		
 		s_spNewGameMapSizeScreen->Resize(s_spNewGameMapSizeScreen->Width(),s_spNewGameMapSizeScreen->Height());
 		s_spNewGameMapSizeScreen->GrabRegion()->Resize(s_spNewGameMapSizeScreen->Width(),s_spNewGameMapSizeScreen->Height());
 		s_spNewGameMapSizeScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	if ( !callback ) callback = spnewgamemapsizescreen_backPress;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameMapSizeScreen->AddTitle( controlBlock );
 	s_spNewGameMapSizeScreen->AddClose( callback );
-
 
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Group" );
@@ -219,9 +212,8 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
 		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
 		s_group->AddSwitch( (aui_Radio *)s_checkBox[i] );
-	
-	}
 
+	}
 
 	MAPSIZE		size;
 
@@ -256,13 +248,12 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 
 
 
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -284,19 +275,19 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 
 AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 {
-	if (s_spNewGameMapSizeScreen) 
+	if (s_spNewGameMapSizeScreen)
 	{
 		g_c3ui->RemoveWindow(s_spNewGameMapSizeScreen->Id());
 		keypress_RemoveHandler(s_spNewGameMapSizeScreen);
 
-		for (sint32 i = 0; i < k_NUM_MAPSIZEBOXES; ++i) 
+		for (sint32 i = 0; i < k_NUM_MAPSIZEBOXES; ++i)
 		{
 			delete s_checkBox[i];
 			// NULLing unnecessary: deleting container next
 		}
 		delete [] s_checkBox;
 		s_checkBox = NULL;
-		
+
 #define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 		mycleanup(s_group);
 		mycleanup(s_spNewGameMapSizeScreen);
@@ -307,11 +298,9 @@ AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 }
 
 
-
 void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	spnewgamemapsizescreen_removeMyWindow(action);
 

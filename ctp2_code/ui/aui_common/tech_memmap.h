@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __TECH_MEMMAP_H__
 #define __TECH_MEMMAP_H__
-
 
 
 class tech_MemMap
@@ -27,9 +15,7 @@ public:
 	);
 	virtual void ReleaseFileBits( unsigned char *&bits );
 
-	
 	static bool GetFileExtension(char const * filename, char * extension);
 };
 
-
-#endif 
+#endif

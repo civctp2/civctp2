@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Victory movie window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -71,7 +71,6 @@ VictoryMovieWindow		*g_victoryMovieWindow = NULL;
 static GAME_OVER		s_result;
 
 
-
 void victorymoviewin_Initialize(Sequence *seq)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -101,7 +100,6 @@ void victorymoviewin_Initialize(Sequence *seq)
 
 
 }
-
 
 
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
@@ -135,13 +133,12 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 	case GAME_OVER_WON_SCIENCE :			whichMovie = "VICTORY_WON_SCIENCE";
 		break;
 
-	
 	case GAME_OVER_WON_OUT_OF_TIME:			whichMovie = "VICTORY_WON_CONQUERED_WORLD";
 		break;
-		
+
     default:
         {
-            BOOL I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE=0; 
+            BOOL I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE=0;
             Assert(I_DONT_KNOW_WHAT_MOVIE_YOU_WANT_TO_SEE);
             whichMovie = "VICTORY_LOST_INEPT";
         }
@@ -166,7 +163,6 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 }
 
 
-
 void victorymoviewin_Cleanup()
 {
 	Sequence	*seq = NULL;
@@ -180,10 +176,8 @@ void victorymoviewin_Cleanup()
 		g_victoryMovieWindow = NULL;
 	}
 
-	
 	g_director->ActionFinished(seq);
 }
-
 
 
 void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
@@ -194,13 +188,11 @@ void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, ui
 }
 
 
-
 void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
-	
+
 	victorymoviewin_Cleanup();
 
-	
 
 	sint32 type = 0;
 	switch (s_result) {
@@ -214,7 +206,7 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 		break;
 	case GAME_OVER_WON_OUT_OF_TIME:
 	case GAME_OVER_WON_SCENARIO:
-	case GAME_OVER_WON_CONQUERED_WORLD :		
+	case GAME_OVER_WON_CONQUERED_WORLD :
 	case GAME_OVER_WON_SCIENCE:
 	case GAME_OVER_WON_DIPLOMACY:
 		type = k_VICWIN_VICTORY;
@@ -223,10 +215,8 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 		Assert(0);
 	}
 
-	
-	
-	infowin_Cleanup();	
-						
+
+	infowin_Cleanup();
 
 	infowin_Initialize();
 
@@ -241,12 +231,10 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 		if (g_player[p] != NULL)
 			endGame = g_player[p]->m_endGame;
 
-		
-		
+
 	}
 
 
 
 
 }
-

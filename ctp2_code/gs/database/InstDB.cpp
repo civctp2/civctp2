@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "InstDB.h"
 #include "c3errors.h"
@@ -23,7 +13,7 @@ extern StringDB *g_theStringDB;
 
 InstallationDatabase::InstallationDatabase()
 {
-    m_maxVisionRange = 0; 
+    m_maxVisionRange = 0;
 }
 
 InstallationDatabase::InstallationDatabase(CivArchive &archive)
@@ -53,7 +43,7 @@ void InstallationDatabase::Serialize(CivArchive &archive)
 		m_rec = new InstallationRecord[m_max_nRec] ;
 		for(i = 0; i < m_nRec; i++)
 			m_rec[i].Serialize(archive) ;
-			
+
 	}
 
 }
@@ -188,11 +178,11 @@ BOOL InstallationDatabase::ParseAdvance(Token *token, sint32 &adv)
 	return TRUE;
 }
 
-BOOL InstallationDatabase::ParseAnAttribute(Token *token, 
+BOOL InstallationDatabase::ParseAnAttribute(Token *token,
 											InstallationRecord *rec)
 {
 	char str[k_MAX_NAME_LEN];
-	
+
 	switch(token->Next()) {
 		case TOKEN_PRODUCTION_COST:
 			ParseANumber(token, rec->m_productionCost);
@@ -220,59 +210,59 @@ BOOL InstallationDatabase::ParseAnAttribute(Token *token,
 			break;
 
 		case TOKEN_VISIBILITY_CLASS_0:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_1:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_2:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_3:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_4:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_5:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_6:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_7:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CLASS_8:
-			
+
 			break;
 
 		case TOKEN_VISIBILITY_CAN_SEE_0:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_1:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_2:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_3:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_4:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_5:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_6:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_7:
-			
+
 			break;
 		case TOKEN_VISIBILITY_CAN_SEE_8:
-			
+
 			break;
 
 		case TOKEN_IS_AIRFIELD:
@@ -345,10 +335,10 @@ BOOL InstallationDatabase::ParseAnAttribute(Token *token,
 		case TOKEN_SPACE_COST:
 		case TOKEN_DEAD_COST:
 		case TOKEN_DEAD_HILL_COST:
-		case TOKEN_BROWN_HILL_COST: 
-		case TOKEN_BROWN_MOUNTAIN_COST: 
-		case TOKEN_WHITE_HILL_COST: 
-		case TOKEN_WHITE_MOUNTAIN_COST: 
+		case TOKEN_BROWN_HILL_COST:
+		case TOKEN_BROWN_MOUNTAIN_COST:
+		case TOKEN_WHITE_HILL_COST:
+		case TOKEN_WHITE_MOUNTAIN_COST:
 		{
 			sint32 origtoken = token->GetType();
 			sint32 materials, timecost;
@@ -368,16 +358,16 @@ BOOL InstallationDatabase::ParseAnAttribute(Token *token,
 		}
 
 		case TOKEN_BUILD_SOUND_ID:
-				
-				if (token->Next() != TOKEN_STRING) { 
-   					c3errors_ErrorDialog  (token->ErrStr(), "ID string for TOKEN_BUILD_SOUND_ID expected"); 
+
+				if (token->Next() != TOKEN_STRING) {
+   					c3errors_ErrorDialog  (token->ErrStr(), "ID string for TOKEN_BUILD_SOUND_ID expected");
 					m_abort_parse = TRUE;
 					return FALSE;
 				}
 				token->GetString(str);
-				rec->m_buildSoundID = g_theSoundDB->FindTypeIndex(str); 
-				if (rec->m_buildSoundID  == -1) { 
-					c3errors_ErrorDialog  (token->ErrStr(), "Could not find sound %s", str); 
+				rec->m_buildSoundID = g_theSoundDB->FindTypeIndex(str);
+				if (rec->m_buildSoundID  == -1) {
+					c3errors_ErrorDialog  (token->ErrStr(), "Could not find sound %s", str);
 					m_abort_parse = TRUE;
 					return FALSE;
 				}
@@ -502,7 +492,7 @@ BOOL InstallationDatabase::IsHealUnits(sint32 type) const
 	return (Get(type)->m_flags & k_BIT_INSTALLATION_IS_HEAL_UNITS);
 }
 
-sint32 InstallationDatabase::GetBuildSoundID(sint32 type) 
+sint32 InstallationDatabase::GetBuildSoundID(sint32 type)
 {
 	return Get(type)->m_buildSoundID;
 }

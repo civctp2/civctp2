@@ -19,7 +19,7 @@ public:
 	void Serialize(CivArchive &archive);
     void SetData(uint64 data) { m_achievements = data; }
 	uint64 GetData() const { return m_achievements; }
-    
+
 	BOOL HasAchieved(sint32 which);
 	void AddAchievement(sint32 which);
 };

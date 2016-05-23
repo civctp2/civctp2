@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -47,7 +47,6 @@
 extern ScreenManager *g_screenManager;
 
 
-
 FacedSpriteWshadow::FacedSpriteWshadow()
 :   Sprite              (),
     m_hasShadow         (TRUE),
@@ -68,13 +67,12 @@ FacedSpriteWshadow::FacedSpriteWshadow()
 }
 
 
-
 FacedSpriteWshadow::~FacedSpriteWshadow()
 {
- 
+
 	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		if (m_frames[facing]) 
+		if (m_frames[facing])
 		{
 			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_frames[facing][n])
@@ -90,7 +88,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 			delete[] m_framesSizes[facing];
 			m_framesSizes[facing] = 0;
 		}
-		if (m_miniframes[facing]) 
+		if (m_miniframes[facing])
 		{
 			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_miniframes[facing][n])
@@ -107,7 +105,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 			delete[] m_miniframesSizes[facing];
 			m_miniframesSizes[facing] = 0;
 		}
-		if (m_shadowFrames[facing]) 
+		if (m_shadowFrames[facing])
 		{
 			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_shadowFrames[facing][n])
@@ -124,7 +122,7 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 			delete[] m_shadowFramesSizes[facing];
 			m_shadowFramesSizes[facing] = 0;
 		}
-		if (m_miniShadowFrames[facing] != NULL) 
+		if (m_miniShadowFrames[facing] != NULL)
 		{
 			for (size_t n = 0; n < m_shadowFrameCount; n++) {
 				if (m_miniShadowFrames[facing][n])
@@ -144,24 +142,23 @@ FacedSpriteWshadow::~FacedSpriteWshadow()
 	}
 }
 
-
 void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES])
 {
 	AllocateFrameArrays(nframes);
 
-	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
+	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		for (sint32 i=0; i < nframes; i++) 
+		for (sint32 i=0; i < nframes; i++)
 		{
 			size_t tifsize = 0;
 			char *tif = StripTIF2Mem(imageFiles[facing][i], &m_width, &m_height, &tifsize);
-			if (tif) 
+			if (tif)
 			{
 				char *minitif = NULL;
 				char *minishadow = NULL; // Not used
-				
+
 				spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
-				
+
 				size_t framesize = 0;
 				m_frames[facing][i]     = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &framesize);
 				m_framesSizes[facing][i] = (m_frames[facing][i] ? framesize : 0);
@@ -172,7 +169,7 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 				uint16 height;
 				char *shadowTif = StripTIF2Mem(shadowFiles[facing][i], &width, &height);
 
-				if (shadowTif) 
+				if (shadowTif)
 				{
 					m_shadowFrames[facing][i] = spriteutils_RGB32ToEncoded((Pixel32 *)shadowTif, m_width, m_height, &framesize);
 					m_shadowFramesSizes[facing][i] = (m_shadowFrames[facing][i] ? framesize : 0);
@@ -182,17 +179,17 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 
 					if(minishadow)
 					{
-						m_miniShadowFrames[facing][i] = 
+						m_miniShadowFrames[facing][i] =
 							spriteutils_RGB32ToEncoded((Pixel32 *)minishadow, m_width >> 1, m_height >> 1, &framesize);
 						m_miniShadowFramesSizes[facing][i] = (m_miniShadowFrames[facing][i] ? framesize : 0);
 					}
-					
+
 					free(shadowTif);
 				}
 
 				free(tif);
-			} 
-					
+			}
+
 			printf(".");
 		}
 	}
@@ -204,18 +201,18 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_NAMES])
 {
 	AllocateFrameArrays(nframes);
- 
-	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
+
+	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		for (sint32 i=0; i < nframes; i++) 
+		for (sint32 i=0; i < nframes; i++)
 		{
 			char *tif = StripTIF2Mem(imageFiles[facing][i], &m_width, &m_height);
 
-			if (tif) 
+			if (tif)
 			{
 				char *minitif = NULL;
 				spriteutils_CreateQuarterSize((Pixel32 *)tif, m_width, m_height, (Pixel32 **)&minitif, TRUE);
-			
+
 				size_t framesize = 0;
 				m_frames[facing][i]     = spriteutils_RGB32ToEncoded((Pixel32 *)tif, m_width, m_height, &framesize);
 				m_framesSizes[facing][i] = (m_frames[facing][i] ? framesize : 0);
@@ -223,25 +220,24 @@ void FacedSpriteWshadow::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][
 				m_miniframesSizes[facing][i] = (m_miniframes[facing][i] ? framesize : 0);
 
 				free(tif);
-			} 
-					
+			}
+
 			printf(".");
 		}
 	}
 }
-
 
 void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	SetSurface();
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -257,45 +253,44 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 		c3errors_ErrorDialog("FacedSpriteWshadow", "base sprite facing is missing or invalid for Draw");
 		return;
 	}
-	
 
-	
-	
+
+
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 5) 
+		if (facing < 5)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else
 			(this->*_DrawLowReversed)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 5)
 				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) 
+			if (facing < 5)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
-			else 
+			}
+			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
@@ -304,18 +299,17 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 	}
 }
 
-
 void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	LockSurface(surf);
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -332,10 +326,10 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 		UnlockSurface();
 		return;
 	}
-	
 
-	
-	
+
+
+
 	if (drawX > surf->Width() - (m_width*scale) || drawX < 0) {
 		UnlockSurface();
 		return;
@@ -345,40 +339,39 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 		return;
 	}
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 5) 
+		if (facing < 5)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else {
 			(this->*_DrawLowReversed)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 5)
 				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else {
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) 
+			if (facing < 5)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
-			else 
+			}
+			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
@@ -397,12 +390,12 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 {
 	SetSurface();
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -412,7 +405,7 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 	{
 		facing = k_SPRITE_BASEFACING;
 	}
-	
+
 	Assert(m_frames[facing][m_currentFrame] != NULL);
 	if(m_frames[facing][m_currentFrame] == NULL)
 	{
@@ -420,19 +413,17 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 		return;
 	}
 
-	
-	
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 4 && facing > 0) 
+		if (facing < 4 && facing > 0)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else if (facing == 4 || facing == 0)
 		{
 			(this->*_DrawLowReversed)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -441,10 +432,10 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 		{
 			(this->*_DrawLowReversed)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 4 && facing > 0)
 			{
@@ -458,10 +449,10 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 			{
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -469,12 +460,12 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
+			}
 			else if(facing == 4 || facing == 0)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
-			} 
+			}
 			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
@@ -492,12 +483,12 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 {
 	SetSurface();
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -509,47 +500,45 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 	}
 	if(m_shadowFrames[facing][m_currentFrame] == NULL)
 	{
-		
+
 		return;
 	}
 
-	
-	
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 5) 
+		if (facing < 5)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else
 			(this->*_DrawLowReversed)((Pixel16 *)m_shadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 5)
 				(this->*_DrawLow)((Pixel16 *)m_miniShadowFrames[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniShadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) 
+			if (facing < 5)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
-			else 
+			}
+			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
@@ -566,12 +555,12 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 {
 	SetSurface();
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -581,7 +570,7 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 	{
 		facing = k_SPRITE_BASEFACING;
 	}
-	
+
 	Assert(m_frames[facing][m_currentFrame] != NULL);
 	if(m_frames[facing][m_currentFrame] == NULL)
 	{
@@ -589,15 +578,13 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 		return;
 	}
 
-	
-	
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 5) 
+		if (facing < 5)
 		{
 			(this->*_DrawFlashLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
@@ -605,10 +592,10 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 		{
 			(this->*_DrawFlashLowReversed)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 5)
 			{
@@ -619,18 +606,18 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 				(this->*_DrawFlashLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		}
-		else 
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) 
+			if (facing < 5)
 			{
 				(this->*_DrawFlashScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 					transparency, outlineColor, flags, FALSE);
-			}	
-			else 
+			}
+			else
 			{
 				(this->*_DrawFlashScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 					transparency, outlineColor, flags, TRUE);
@@ -648,12 +635,12 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 {
 	SetSurface();
 
-	if (facing < 5) 
+	if (facing < 5)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
-	} 
-	else 
+	}
+	else
 	{
 		drawX -=  (m_width - (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].x * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
@@ -663,25 +650,23 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 	{
 		facing = k_SPRITE_BASEFACING;
 	}
-	
+
 	if(m_shadowFrames[facing][m_currentFrame] == NULL)
 	{
 		return;
 	}
 
-	
-	
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
-	if (scale == 1.0) 
+	if (scale == 1.0)
 	{
-		if (facing < 4 && facing > 0) 
+		if (facing < 4 && facing > 0)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else if (facing == 4 || facing == 0)
 		{
 			(this->*_DrawLowReversed)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -690,10 +675,10 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 		{
 			(this->*_DrawLowReversed)((Pixel16 *)m_shadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
-	} 
-	else 
+	}
+	else
 	{
-		if (scale == 0.5) 
+		if (scale == 0.5)
 		{
 			if (facing < 4 && facing > 0)
 			{
@@ -707,10 +692,10 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 			{
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniShadowFrames[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -718,12 +703,12 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
+			}
 			else if(facing == 4 || facing == 0)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
-			} 
+			}
 			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
@@ -734,13 +719,12 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 }
 
 
-
 sint32 FacedSpriteWshadow::ParseFromTokens(Token *theToken)
 {
-	sint32		tmp; 
+	sint32		tmp;
 	sint32		i;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_NUM_FRAMES, tmp)) return FALSE;
 	m_numFrames = (uint16)tmp;
@@ -754,18 +738,17 @@ sint32 FacedSpriteWshadow::ParseFromTokens(Token *theToken)
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_HEIGHT, tmp)) return FALSE;
 	m_height = (uint16)tmp;
 
-	
 	if (!token_ParseKeywordNext(theToken, TOKEN_SPRITE_HOT_POINTS)) return FALSE;
-	for (i=0; i<k_NUM_FACINGS; i++) 
+	for (i=0; i<k_NUM_FACINGS; i++)
 	{
 		POINT		p;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.x = tmp;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.y = tmp;
@@ -797,7 +780,7 @@ void FacedSpriteWshadow::AllocateFrameArrays(size_t count)
 {
 	Assert(0 == m_shadowFrameCount);
 
-	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing) 
+	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing)
 	{
 		m_frames[facing]                = new Pixel16 *[count];
 		m_framesSizes[facing]           = new size_t   [count];
@@ -808,7 +791,7 @@ void FacedSpriteWshadow::AllocateFrameArrays(size_t count)
 		m_miniShadowFrames[facing]      = new Pixel16 *[count];
 		m_miniShadowFramesSizes[facing] = new size_t   [count];
 
-		for (size_t i = 0; i < count; ++i) 
+		for (size_t i = 0; i < count; ++i)
 		{
 			m_frames[facing][i]                = 0;
 			m_framesSizes[facing][i]           = 0;
@@ -820,7 +803,7 @@ void FacedSpriteWshadow::AllocateFrameArrays(size_t count)
 			m_miniShadowFramesSizes[facing][i] = 0;
 		}
 	}
-	
+
 	m_shadowFrameCount = count;
 }
 
@@ -828,7 +811,7 @@ size_t FacedSpriteWshadow::GetFrameDataSize(uint16 facing, uint16 frame)
 {
 	Assert(facing < k_NUM_FACINGS);
 	Assert(frame < m_numFrames);
-	
+
 	if (!m_framesSizes[facing])
 		return 0;
 
@@ -837,12 +820,11 @@ size_t FacedSpriteWshadow::GetFrameDataSize(uint16 facing, uint16 frame)
 	return m_framesSizes[facing][frame];
 }
 
-
 size_t FacedSpriteWshadow::GetMiniFrameDataSize(uint16 facing, uint16 frame)
 {
 	Assert(facing < k_NUM_FACINGS);
 	Assert(frame < m_numFrames);
-	
+
 	if (!m_miniframesSizes[facing])
 		return 0;
 
@@ -856,7 +838,7 @@ size_t FacedSpriteWshadow::GetShadowFrameDataSize(uint16 facing, uint16 frame)
 {
 	Assert(facing < k_NUM_FACINGS);
 	Assert(frame < m_numFrames);
-	
+
 	if (!m_shadowFramesSizes[facing])
 		return 0;
 
@@ -870,7 +852,7 @@ size_t FacedSpriteWshadow::GetMiniShadowFrameDataSize(uint16 facing, uint16 fram
 {
 	Assert(facing < k_NUM_FACINGS);
 	Assert(frame < m_numFrames);
-	
+
 	if (!m_miniShadowFramesSizes[facing])
 		return 0;
 
@@ -879,4 +861,3 @@ size_t FacedSpriteWshadow::GetMiniShadowFrameDataSize(uint16 facing, uint16 fram
 
 	return m_miniShadowFramesSizes[facing][frame];
 }
-

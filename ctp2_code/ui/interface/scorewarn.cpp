@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -29,7 +29,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -54,11 +53,9 @@
 #include "SelItem.h"
 #include "GameSettings.h"
 
-
 extern C3UI				*g_c3ui;
 
 c3_PopupWindow	*g_scorewarn = NULL;
-
 
 static c3_Static	*s_message;
 
@@ -72,7 +69,6 @@ void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint
 
 	disclaimer_Initialize(scorewarn_AcceptWarningCallback);
 }
-
 
 
 void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -89,7 +85,6 @@ void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint3
 
 		ScenarioEditor::Display();
 
-		
 		g_theGameSettings->SetKeepScore( FALSE );
 	}
 }
@@ -103,7 +98,6 @@ void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, 
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 
-	
 	g_theGameSettings->SetKeepScore( TRUE );
 }
 
@@ -113,7 +107,7 @@ sint32 scorewarn_Initialize( void )
 	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if (g_scorewarn) return 0;	
+	if (g_scorewarn) return 0;
 
 	strcpy(windowBlock, "Scorewarn");
 
@@ -128,7 +122,6 @@ sint32 scorewarn_Initialize( void )
 
 	g_scorewarn->SetStronglyModal( TRUE );
 
-	
 	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, NULL, "c3_PopupOk" );
 	g_scorewarn->AddCancel( scorewarn_CancelButtonActionCallback );
 
@@ -149,7 +142,7 @@ sint32 scorewarn_Initialize( void )
 
 void scorewarn_Cleanup( void )
 {
-	if (!g_scorewarn) return;	
+	if (!g_scorewarn) return;
 
 	g_c3ui->RemoveWindow( g_scorewarn->Id() );
 	keypress_RemoveHandler(g_scorewarn);
@@ -183,7 +176,7 @@ void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, 
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	g_c3ui->AddAction(new DisclaimerCloseAction);
-	
+
 	if (s_disclaimerCallback)
 		s_disclaimerCallback(control, action, data, cookie);
 }
@@ -192,11 +185,10 @@ void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action,
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	
-	
-	
+
+
+
 	g_launchIntoCheatMode = FALSE;
-	
 
 	g_c3ui->AddAction(new DisclaimerCloseAction);
 }
@@ -215,9 +207,9 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 
 		s_disclaimerCallback = callback;
 
-		return 0;	
+		return 0;
 	}
-	
+
 	strcpy(windowBlock, "DisclaimerScreen");
 
 	s_disclaimerWindow = new c3_PopupWindow(
@@ -229,53 +221,51 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	Assert(AUI_NEWOK(s_disclaimerWindow, errcode));
 	if (!AUI_NEWOK(s_disclaimerWindow, errcode)) return -1;
 
-	
 	s_disclaimerWindow->SetStronglyModal(TRUE);
 
 
 
 
-	
+
 	sprintf(buttonBlock, "%s.%s", windowBlock, "TitleLabel");
 	s_disclaimerLabel = new c3_Static(&errcode, aui_UniqueId(), buttonBlock);
 	Assert(AUI_NEWOK(s_disclaimerLabel, errcode));
 	if (!AUI_NEWOK(s_disclaimerLabel, errcode)) return -1;
 
-	
-	
-	
+
+
+
 	sprintf( buttonBlock, "%s.%s", windowBlock, "AgreeButton" );
-	s_disclaimerAcceptButton = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock, 
+	s_disclaimerAcceptButton = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock,
 		disclaimer_AcceptButtonActionCallback);
 	Assert( AUI_NEWOK(s_disclaimerAcceptButton, errcode) );
 	if ( !AUI_NEWOK(s_disclaimerAcceptButton, errcode) ) return -1;
-	
 
-	
-	
-	
+
+
+
+
 	sprintf( buttonBlock, "%s.%s", windowBlock, "DisagreeButton" );
-	s_disclaimerDeclineButton = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock, 
+	s_disclaimerDeclineButton = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock,
 		disclaimer_DeclineButtonActionCallback);
 	Assert( AUI_NEWOK(s_disclaimerDeclineButton, errcode) );
 	if ( !AUI_NEWOK(s_disclaimerDeclineButton, errcode) ) return -1;
 
-	
-	
-	
+
+
+
 	sprintf(buttonBlock, "%s.%s", windowBlock, "DisclaimerText");
 	s_disclaimerTextBox = new ctp2_HyperTextBox(&errcode, aui_UniqueId(), buttonBlock, NULL, NULL);
 	Assert( AUI_NEWOK(s_disclaimerTextBox, errcode) );
 	if ( !AUI_NEWOK(s_disclaimerTextBox, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
-	
-	
-	
+
+
+
 	MBCHAR		*message;
 	sint32		filesize = 0;
 
@@ -289,14 +279,14 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	} else {
 		goto Error;
 	}
- 	
+
 	fclose(f);
 
 	message = new MBCHAR[filesize+1];
 	memset(message, 0, filesize+1);
 
 	f = fopen("disclaimer.txt", "rb");
-	if (!f) 
+	if (!f)
 		goto Error;
 
 
@@ -324,7 +314,6 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 
 	s_disclaimerCallback = callback;
 
-	
 	errcode = g_c3ui->AddWindow( s_disclaimerWindow );
 
 	Assert( errcode == AUI_ERRCODE_OK );
@@ -339,7 +328,6 @@ Error:
 
 	return -1;
 }
-
 
 
 void disclaimer_Cleanup()

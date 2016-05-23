@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_achievement.h"
 #include "AchievementTracker.h"
@@ -18,7 +16,7 @@ void NetAchievementTracker::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_ACHIEVEMENT_TRACKER_ID);
-	
+
 	uint64 built;
 	PULLLONG64(built);
 	g_theAchievementTracker->SetData(built);

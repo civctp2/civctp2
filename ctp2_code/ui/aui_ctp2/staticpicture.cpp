@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -24,7 +14,6 @@
 
 extern CivPaths		*g_civPaths;
 extern aui_UI		*g_ui;
-
 
 StaticPicture::StaticPicture(
 	AUI_ERRCODE *retval,
@@ -43,7 +32,6 @@ StaticPicture::StaticPicture(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 StaticPicture::StaticPicture(
@@ -68,22 +56,18 @@ StaticPicture::StaticPicture(
 }
 
 
-
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	MBCHAR *name =
 		block->GetString( picture ? picture : k_AUI_STATICIMAGE_LDL_IMAGE );
 	Assert( name != NULL );
@@ -93,10 +77,9 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 		Assert( AUI_SUCCESS(errcode) );
 		if ( !AUI_SUCCESS(errcode) ) return errcode;
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
@@ -116,7 +99,6 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
 }
 
 
-
 StaticPicture::~StaticPicture()
 {
 	if ( m_picture )
@@ -127,10 +109,9 @@ StaticPicture::~StaticPicture()
 }
 
 
-
 AUI_ERRCODE StaticPicture::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -165,10 +146,8 @@ void StaticPicture::SetPicture(MBCHAR *picture)
 		m_picture = NULL;
 	}
 
-
 	RECT rect = { 0, 0, m_width, m_height };
 	ToWindow( &rect );
 	m_window->AddDirtyRect( &rect );
 
 }
-

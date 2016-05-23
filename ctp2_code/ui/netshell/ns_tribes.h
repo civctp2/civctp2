@@ -1,20 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __NS_TRIBES_H__
 #define __NS_TRIBES_H__
 
-
 class AllinoneWindow;
-
 
 class ns_Tribes;
 extern ns_Tribes *g_nsTribes;
@@ -22,14 +9,11 @@ extern ns_Tribes *g_nsTribes;
 class ns_HPlayerItem;
 
 
-
 #define k_TRIBES_MAX 100
-
 
 #include "ns_item.h"
 #include "c3_dropdown.h"
 #include "aui_stringtable.h"
-
 
 
 class ns_Tribes
@@ -46,7 +30,6 @@ private:
 };
 
 
-
 class ns_TribesDropDown : public c3_DropDown
 {
 public:
@@ -58,5 +41,4 @@ public:
 	virtual ~ns_TribesDropDown();
 };
 
-
-#endif 
+#endif

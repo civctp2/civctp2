@@ -48,15 +48,14 @@ enum eScoreVictory
 class Score
 {
 private:
-	
-	
+
 	PLAYER_INDEX m_owner;
 	sint32 m_cities_recaptured;
 	sint32 m_opponents_conquered;
 	sint32 m_finalScore;
-	sint32 m_victory_type;	
-	
-	sint32 m_feats;			
+	sint32 m_victory_type;
+
+	sint32 m_feats;
 
 
 
@@ -65,9 +64,9 @@ private:
 
 
 
-	
-	
-	
+
+
+
 
 	friend class NetPlayer;
 	friend class NetScores;
@@ -79,7 +78,6 @@ public:
 	Score(PLAYER_INDEX owner);
 	Score(CivArchive &archive);
 	void Serialize(CivArchive &archive);
-	
 
 	void SetFinalScore(sint32 score) { m_finalScore = score; }
 
@@ -93,7 +91,6 @@ public:
 	void SetWonByWonder() {SetVictoryType(kScoreWonderVictory);}
 	void SetVictoryType(eScoreVictory type);
 	void AddFeat();
-
 
 	void AddCelebration();
 	void AddYearAtPeace();

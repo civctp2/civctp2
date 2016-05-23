@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -11,7 +10,7 @@ class ForeignTradeBidInfo;
 #include "ctp2_inttypes.h"
 #include "Unit.h"
 
-class ForeignTradeBidInfo 
+class ForeignTradeBidInfo
 {
 public:
 	ForeignTradeBidInfo(sint32 player, Unit &fromCity, Unit &toCity, sint32 resource);
@@ -25,8 +24,8 @@ public:
 void c3dialogs_PostForeignTradeBidDialog(sint32 player, Unit &fromCity, Unit &toCity, sint32 resource);
 void c3dialogs_ForeignTradeBidDialogCallback
 (
-    MBCHAR const *  text, 
-    sint32          accepted, 
+    MBCHAR const *  text,
+    sint32          accepted,
     void *          data
 );
 

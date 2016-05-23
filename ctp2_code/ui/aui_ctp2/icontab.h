@@ -13,7 +13,7 @@ class Icon;
 class IconTab : public aui_Tab, public PatternBase
 {
 public:
-	
+
 	IconTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -31,7 +31,6 @@ public:
 		BOOL selected = FALSE );
 	virtual ~IconTab() {}
 
-	
 	Pattern *&ThePattern( void ) { return m_pattern; }
 	Icon *&TheIcon( void ) { return m_icon; }
 	uint16 TheColor( void ) { return m_color; }
@@ -46,5 +45,4 @@ protected:
 	uint16 m_color;
 };
 
-
-#endif 
+#endif

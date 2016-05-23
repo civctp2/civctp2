@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -95,7 +95,7 @@ static void testramp_fill(char *buf, int pktsize, int npkt)
 }
 
 /*--------------------------------------------------------------------------
- Given a packet number, compare a buffer with the 
+ Given a packet number, compare a buffer with the
  expected test pattern.
 
  Aborts with given error message if comparison fails.
@@ -282,13 +282,13 @@ int dpiot2_poll(dpiot2_t *ptest, int send, int npktsfree)
 	dpio_flush(ptest->dpio);
 
 	if (send) {
-		if ((ptest->pkts_tx >= ptest->pkts_desired) 
+		if ((ptest->pkts_tx >= ptest->pkts_desired)
 		&&  (dp_RES_BUSY != dpio_ReadyToFreeze(ptest->dpio, NULL))) {
 			ptest->t_end = ptest->dpio_now;
 			return FALSE;
 		}
 	} else {
-		if ((ptest->pkts_rx >= ptest->pkts_desired) 
+		if ((ptest->pkts_rx >= ptest->pkts_desired)
 		&&  (dp_RES_BUSY != dpio_ReadyToFreeze(ptest->dpio, NULL))) {
 			ptest->t_end = ptest->dpio_now;
 			return FALSE;
@@ -314,7 +314,7 @@ void dpiot2_destroy(dpiot2_t *ptest)
 
 /*-----------------------------------------------------------------------
  Unit test main loop.  Creates two test objects, hooks them together,
- and polls them until they cry uncle.  Any failure causes the 
+ and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
 main(int argc, char **argv)

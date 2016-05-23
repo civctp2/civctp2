@@ -1,9 +1,3 @@
-
-
-
-
-
-
 #include "c3.h"
 #include "Events.h"
 #include "TurnCntEvent.h"
@@ -30,19 +24,19 @@ STDEHANDLER(BeginTurnEvent)
 	}
 
 	Assert(g_player[player] != NULL);
-	
+
 	g_player[player]->m_current_round = round;
 	g_player[player]->BeginTurn();
 
 	g_director->NextPlayer();
-	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient())) { 
+	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient())) {
 
-		
-		
-		
+
+
+
 		CtpAi::BeginTurn(player);
-	} 
-	
+	}
+
 	sint32 year = NewTurnCount::GetCurrentYear();
 
 	return GEV_HD_Continue;

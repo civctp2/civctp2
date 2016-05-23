@@ -1,20 +1,12 @@
-
-
-
-
-
-
 #include "c3.h"
 
 #include "c3ui.h"
-
 
 #include "LineDance.h"
 #include "cellunitlist.h"
 
 #include "battleview.h"
 #include "bset.h"
-
 
 extern UnitDatabase		*g_theUnitDB;
 extern BattleViewWindow	*g_battleViewWindow;
@@ -29,11 +21,9 @@ LineDance::LineDance(CellUnitList &attackers, CellUnitList &defenders)
 	m_startDefendersRangeSlot = (defenders.Num() + 1) / 2;
 	sint32 i;
 
-	
 	if (Player::IsThisPlayerARobot(attackers.GetOwner()) &&
 		Player::IsThisPlayerARobot(defenders.GetOwner())) return;
 
-	
 	if (attackers.Num() > 1 || defenders.Num() > 1) {
 		if (g_battleViewWindow)
 			g_c3ui->RemoveWindow(g_battleViewWindow->Id());
@@ -41,7 +31,7 @@ LineDance::LineDance(CellUnitList &attackers, CellUnitList &defenders)
 		BattleViewWindow::Initialize();
 
 		if (g_battleViewWindow) {
-			g_battleViewWindow->SetupBattle(m_numAttackers, m_attackers, 
+			g_battleViewWindow->SetupBattle(m_numAttackers, m_attackers,
 											m_numDefenders, m_defenders);
 		}
 
@@ -76,20 +66,20 @@ void LineDance::SortAttackers(CellUnitList &attackers)
 	n = attackers.Num();
 	m_numAttackers = n;
 	for(j = 0; j < n; j++) {
-		
+
 		maxassaultvalue = -1;
 		maxassault = -1;
 		for(i = 0; i < n; i++) {
-			
+
 			if(used[i])
 				continue;
 			rec = attackers[i].GetDBRec();
-			
+
 			if(rec->GetAttack() > maxassaultvalue) {
 				maxassaultvalue = (sint32)rec->GetAttack();
 				maxassault = i;
 			} else if(rec->GetAttack() == maxassaultvalue) {
-				
+
 				if(rec->GetZBRangeAttack() < attackers[maxassault].GetDBRec()->GetZBRangeAttack()) {
 					maxassault = i;
 				}
@@ -115,20 +105,20 @@ void LineDance::SortDefenders(CellUnitList &defenders)
 	n = defenders.Num();
 	m_numDefenders = n;
 	for(j = 0; j < n; j++) {
-		
+
 		maxdefensevalue = -1;
 		maxdefense = -1;
 		for(i = 0; i < n; i++) {
-			
+
 			if(used[i])
 				continue;
 			rec = defenders[i].GetDBRec();
-			
+
 			if(rec->GetAttack() > maxdefensevalue) {
 				maxdefensevalue = (sint32)rec->GetDefense();
 				maxdefense = i;
 			} else if(rec->GetDefense() == maxdefensevalue) {
-				
+
 				if(rec->GetZBRangeAttack() < defenders[maxdefense].GetDBRec()->GetZBRangeAttack()) {
 					maxdefense = i;
 				}
@@ -179,7 +169,7 @@ void LineDance::RemoveDeadDefender(sint32 index)
 void LineDance::RemoveDeadAttacker(sint32 index)
 {
 	sint32 i;
-	
+
 	m_dead_attackers->Insert(m_attackers[index]);
 
 	for(i = index; i < m_numAttackers - 1; i++) {
@@ -199,8 +189,7 @@ void LineDance::DoRangedAttackerAttacks()
 	for(i = 0; i < k_MAX_LINE_SIZE; i++) {
 		m_attackerUsedRangeFire[i] = FALSE;
 	}
-	
-	
+
 	for(i = m_startAttackersRangeSlot; i < m_numAttackers; i++) {
 		m_attackerUsedRangeFire[i] = FALSE;
 		rec = m_attackers[i].GetDBRec();
@@ -210,7 +199,7 @@ void LineDance::DoRangedAttackerAttacks()
 			for(j = 0 ; j < k_RANGED_ROUNDS; j++) {
 				m_attackers[i].FightOneLineDanceRangedAttack(m_defenders[0]);
 				if(m_defenders[0].GetHP() < 1) {
-					
+
 					if (g_battleViewWindow) {
 						g_battleViewWindow->RegisterAttackerRangedCombat(0, i);
 					}
@@ -218,28 +207,27 @@ void LineDance::DoRangedAttackerAttacks()
 					if(m_numDefenders <= 0)
 						return;
 
-					
-					
-					
+
+
+
 					break;
 				}
 			}
 		}
 	}
 
-	
-	
+
 	for(i = 1; i < m_startAttackersRangeSlot; i++) {
 		if(i >= m_numAttackers)
 			return;
 		rec = m_attackers[i].GetDBRec();
-		if(rec->GetZBRangeAttack() > 0 && 
+		if(rec->GetZBRangeAttack() > 0 &&
 		   rec->GetZBRangeAttack() > rec->GetAttack()) {
 
 			for(j = 0; j < k_RANGED_ROUNDS; j++) {
 				m_attackers[i].FightOneLineDanceRangedAttack(m_defenders[0]);
 				if(m_defenders[0].GetHP() < 1) {
-					
+
 					if (g_battleViewWindow) {
 						g_battleViewWindow->RegisterAttackerRangedCombat(0, i);
 					}
@@ -247,7 +235,6 @@ void LineDance::DoRangedAttackerAttacks()
 					if(m_numDefenders <= 0)
 						return;
 
-					
 					break;
 				}
 			}
@@ -270,7 +257,7 @@ void LineDance::DoRangedDefenderAttacks()
 			for(j = 0 ; j < k_RANGED_ROUNDS; j++) {
 				m_defenders[i].FightOneLineDanceRangedAttack(m_attackers[0]);
 				if(m_attackers[0].GetHP() < 1) {
-					
+
 					if (g_battleViewWindow) {
 						g_battleViewWindow->RegisterDefenderRangedCombat(0, i);
 					}
@@ -279,29 +266,28 @@ void LineDance::DoRangedDefenderAttacks()
 					if(m_numAttackers <= 0)
 						return;
 
-					
-					
-					
+
+
+
 					break;
 				}
 			}
 		}
 	}
 
-	
-	
+
 	for(i = 1; i < m_startDefendersRangeSlot; i++) {
 		if(i >= m_numDefenders)
 			return;
 
 		rec = m_defenders[i].GetDBRec();
-		if(rec->GetZBRangeAttack() > 0 && 
+		if(rec->GetZBRangeAttack() > 0 &&
 		   rec->GetZBRangeAttack() > rec->GetDefense()) {
 
 			for(j = 0; j < k_RANGED_ROUNDS; j++) {
 				m_defenders[i].FightOneLineDanceRangedAttack(m_attackers[0]);
 				if(m_attackers[0].GetHP() < 1) {
-					
+
 					if (g_battleViewWindow) {
 						g_battleViewWindow->RegisterDefenderRangedCombat(0, i);
 					}
@@ -310,14 +296,13 @@ void LineDance::DoRangedDefenderAttacks()
 					if(m_numAttackers <= 0)
 						return;
 
-					
 					break;
 				}
 			}
 		}
 	}
 }
-	
+
 void LineDance::DoAssaults()
 {
 	sint32 i, j;
@@ -339,14 +324,13 @@ void LineDance::DoAssaults()
 	sint32 numDeadAttackerAssaulters = 0;
 	sint32 numDeadDefenderAssaulters = 0;
 
-	
-	
-	
+
+
+
 
 	while((numDeadAttackerAssaulters + numAttackersThatUsedRangeFireAndAreGenerallyNotInvolvedInThisAssaultPhase) < m_startAttackersRangeSlot &&
 		numDeadDefenderAssaulters < m_startDefendersRangeSlot) {
-		
-		
+
 		for(i = 0; i < m_startAttackersRangeSlot; i++) {
 			if(i >= m_numAttackers)
 				break;
@@ -362,32 +346,32 @@ void LineDance::DoAssaults()
 						continue;
 					m_attackers[i].FightOneLineDanceAssault(m_defenders[j]);
 
-					
 
-					
-					
+
+
+
 
 					if(m_attackers[i].GetHP() < 1) {
-						
+
 						if (g_battleViewWindow) {
 							g_battleViewWindow->RegisterDefenderAssaultCombat(i, j);
 						}
 
 						m_attackerIsDead[i] = TRUE;
 						numDeadAttackerAssaulters++;
-						
+
 						break;
 					}
 
 					if(m_defenders[j].GetHP() < 1) {
-						
+
 						if (g_battleViewWindow) {
 							g_battleViewWindow->RegisterAttackerAssaultCombat(j, i);
 						}
 
 						m_defenderIsDead[j] = TRUE;
 						numDeadDefenderAssaulters++;
-						
+
 					}
 
 					if(m_numAttackers <= 0 || m_numDefenders <= 0) {
@@ -447,30 +431,25 @@ BOOL LineDance::Resolve(CellUnitList &dead_attackers,
 					totalDefenseRangedAttack += m_defenders[i].GetDBRec()->GetZBRangeAttack();
 				}
 				if(totalDefenseRangedAttack < 0.0001) {
-					
+
 					return FALSE;
 				}
 			}
 		}
 
-		
 		DoRangedAttackerAttacks();
 		DoRangedDefenderAttacks();
 
-		
-		
+
 		if (g_battleViewWindow) {
 			g_battleViewWindow->RegisterRoundEnd();
 		}
 
-		
 		DoAssaults();
 
-		
 		if (g_battleViewWindow) {
 			g_battleViewWindow->RegisterRoundEnd();
 		}
 	}
 	return TRUE;
 }
-

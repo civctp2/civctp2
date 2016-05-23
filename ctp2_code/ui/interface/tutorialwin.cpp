@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The tutorial window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -58,18 +58,15 @@
 
 #include "tutorialwin.h"
 
-
 extern C3UI			*g_c3ui;
 extern Player		**g_player;
-extern SelectedItem	*g_selected_item; 
+extern SelectedItem	*g_selected_item;
 
 extern SlicEngine	*g_slicEngine;
 
 extern ProfileDB	*g_theProfileDB;
 
-
 TutorialWin		*g_tutorialWin = NULL;
-
 
 
 void tutorialwin_DialogCallback( sint32 val )
@@ -104,7 +101,7 @@ void tutorialwin_SwitchCallback( aui_Control *control, uint32 action, uint32 dat
 
 void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
 	SingleListItem *item;
@@ -114,7 +111,6 @@ void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data,
 
 	sint32 i = 0;
 
-	
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return;
@@ -122,7 +118,7 @@ void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data,
 	PointerList<SlicRecord>::Walker walk(recordList);
 
 	while(walk.IsValid()) {
-		if ( i++ == item->GetValue() ) {	
+		if ( i++ == item->GetValue() ) {
 			walk.GetObj()->Reconstitute();
 			return;
 		}
@@ -134,7 +130,7 @@ sint32 tutorialwin_Initialize( void )
 {
 	if ( g_tutorialWin ) {
 		g_tutorialWin->UpdateData();
-		return 0;	
+		return 0;
 	}
 
 	g_tutorialWin = new TutorialWin();
@@ -166,7 +162,6 @@ TutorialWin::TutorialWin( void )
 
 	m_minimized = TRUE;
 
-	
 	Initialize( windowBlock );
 
 	UpdateData();
@@ -177,34 +172,28 @@ sint32 TutorialWin::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "List" );
 	m_list = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ListCallback, NULL );
 	TestControl( m_list );
 	m_list->Hide();
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "TitleButton" );
 	m_titleButton = new c3_Switch( &errcode, aui_UniqueId(), controlBlock, tutorialwin_SwitchCallback );
 	TestControl( m_titleButton );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "EndButton" );
 	m_endButton = new c3_Button( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ButtonCallback );
 	TestControl( m_endButton );
 	m_endButton->Hide();
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ExitButton" );
 	m_exitButton = new c3_Button( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ButtonCallback );
 	TestControl( m_exitButton );
 
-	
 	sprintf( controlBlock, "TutorialWinStrings" );
 	m_string = new aui_StringTable( &errcode, controlBlock );
 	TestControl( m_string );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -230,14 +219,12 @@ void TutorialWin::Display( void )
 	Assert( errcode == AUI_ERRCODE_OK );
 
 
-
 }
 
 void TutorialWin::Remove( void )
 {
 	AUI_ERRCODE errcode = g_c3ui->RemoveWindow( m_window->Id() );
 	Assert( errcode == AUI_ERRCODE_OK );
-
 
 
 }
@@ -249,7 +236,6 @@ sint32 TutorialWin::UpdateData( void )
 	MBCHAR title[_MAX_PATH];
 	sint32 i = 0;
 
-	
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return -1;
@@ -259,14 +245,13 @@ sint32 TutorialWin::UpdateData( void )
 	sprintf( ldlBlock, "TutorialListItem" );
 	SingleListItem *item;
 
-
 	PointerList<SlicRecord>::Walker walk(recordList);
 
 	while(walk.IsValid()) {
 		strcpy( title, walk.GetObj()->GetTitle() );
 		item = new SingleListItem( &errcode, title, i++, ldlBlock );
 		TestControl( item );
-		
+
 		m_list->AddItem( (c3_ListItem *)item );
 
 		walk.Next();
@@ -280,7 +265,6 @@ sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return -1;
@@ -290,16 +274,15 @@ sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
 
 	item = new SingleListItem( &errcode, text, index, ldlBlock );
 	TestControl( item );
-		
-	m_list->AddItem( (c3_ListItem *)item );
 
+	m_list->AddItem( (c3_ListItem *)item );
 
 	return 0;
 }
 
 sint32 TutorialWin::HandleSwitch( c3_Switch *button )
 {
-	if ( button == m_titleButton ) {	
+	if ( button == m_titleButton ) {
 		m_minimized = !m_minimized;
 		if ( !button->IsOn() ) {
 			m_window->Resize( m_window->Width(), k_MINIMIZED_HEIGHT );
@@ -329,4 +312,3 @@ sint32 TutorialWin::HandleButton( c3_Button *button )
 
 	return 0;
 }
-

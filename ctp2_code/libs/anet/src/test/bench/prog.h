@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * ONERROR	ONERROR label 			When an error occurs the program changes the current line to this label
  * SET		SET variable value		Sets the variable to the value specified
  * ADD		ADD variable1 variable2	Adds the value to the current contents of the variable
- * IF		IF variable1 !=<> variable2 label	Tests the two variables and if the equation is true then 
+ * IF		IF variable1 !=<> variable2 label	Tests the two variables and if the equation is true then
  *												the program	changes the current line to the label specified
  * EXIT		EXIT code				Exit the program using the return code specified
  *
@@ -101,11 +101,9 @@ struct prog_process_s;
 
 typedef prog_cmd_res_t (prog_cmd_t)(struct prog_process_s *process, const char *params, void *context);
 
-
 /*
  * Structures
  */
-
 
 /*
  * prog_fn_t
@@ -120,7 +118,6 @@ typedef struct prog_fn_s
 	struct prog_fn_s	*next;						/* pointer to next funtion */
 } prog_fn_t;
 
-
 /*
  * prog_syntax_t
  *
@@ -131,7 +128,6 @@ typedef struct prog_syntax_s
 {
 	prog_fn_t			*functions;				/* list of functions for this syntax */
 } prog_syntax_t;
-
 
 /*
  * prog_line_t
@@ -147,7 +143,6 @@ typedef struct prog_line_s
 	struct prog_line_s	*next;					/* pointer to next line in the program */
 } prog_line_t;
 
-
 /*
  * prog_t
  *
@@ -158,7 +153,6 @@ typedef struct prog_s
 {
 	prog_line_t		*lines;				/* lines of the program, pointer is to first line */
 } prog_t;
-
 
 /*
  * prog_process_t
@@ -179,11 +173,9 @@ typedef struct prog_process_s
 } prog_process_t;
 
 
-
 /*
  * Prototypes
  */
-
 
 /*
  * prog_syntax_Create
@@ -196,7 +188,6 @@ typedef struct prog_process_s
  */
 prog_res_t prog_syntax_Create(prog_syntax_t *syntax);
 
-
 /*
  * prog_syntax_Destroy
  *
@@ -207,7 +198,6 @@ prog_res_t prog_syntax_Create(prog_syntax_t *syntax);
  *        prog_RES_ERROR: syntax could not be destroyed
  */
 prog_res_t prog_syntax_Destroy(prog_syntax_t *syntax);
-
 
 /*
  * prog_syntax_AddCmd
@@ -223,7 +213,6 @@ prog_res_t prog_syntax_Destroy(prog_syntax_t *syntax);
  */
 prog_res_t prog_syntax_AddCmd(prog_syntax_t *syntax, const char *name, prog_cmd_t *cmd);
 
-
 /*
  * prog_syntax_PrintCmds
  *
@@ -238,7 +227,6 @@ prog_res_t prog_syntax_AddCmd(prog_syntax_t *syntax, const char *name, prog_cmd_
  *
  */
 prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose);
-
 
 /*
  * prog_Load
@@ -258,7 +246,6 @@ prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose);
  */
 prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int argc, char **argv);
 
-
 /*
  * prog_UnLoad
  *
@@ -269,7 +256,6 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
  *        prog_RES_ERROR: program could not be unloaded
  */
 prog_res_t prog_UnLoad(prog_t *proc);
-
 
 /*
  * prog_process_Init
@@ -285,7 +271,6 @@ prog_res_t prog_UnLoad(prog_t *proc);
  */
 prog_res_t prog_process_Init(prog_process_t *process, prog_t *prog, prog_line_t *line);
 
-
 /*
  * prog_process_Step
  *
@@ -299,7 +284,6 @@ prog_res_t prog_process_Init(prog_process_t *process, prog_t *prog, prog_line_t 
  */
 prog_res_t prog_process_Step(prog_process_t *process, void *context);
 
-
 /*
  * prog_process_GetInteger
  *
@@ -312,7 +296,6 @@ prog_res_t prog_process_Step(prog_process_t *process, void *context);
  */
 int prog_process_GetInteger(prog_process_t *process, int index);
 
-
 /*
  * prog_process_SetInteger
  *
@@ -323,7 +306,6 @@ int prog_process_GetInteger(prog_process_t *process, int index);
  *        value: value to set
  */
 void prog_process_SetInteger(prog_process_t *process, int index, int value);
-
 
 /*
  * prog_process_GetString
@@ -337,7 +319,6 @@ void prog_process_SetInteger(prog_process_t *process, int index, int value);
  */
 char *prog_process_GetString(prog_process_t *process, int index);
 
-
 /*
  * prog_process_SetString
  *
@@ -349,39 +330,36 @@ char *prog_process_GetString(prog_process_t *process, int index);
  */
 void prog_process_SetString(prog_process_t *process, int index, const char *value);
 
-
 /*
  * prog_process_GetExitCode
- * 
+ *
  * Returns the exit code of a process
- * 
+ *
  * in  -> process: process to get value from
  * out <- exit code of process or -1 if process has not exited
  *
  */
 int prog_process_GetExitCode(prog_process_t *process);
 
-
 /*
  * prog_Resolv
- * 
+ *
  * Resolves a string label into a line pointer
- * 
+ *
  * in  -> label: name of label to resolv
  *        prog: program label is within
  * out <- pointer to resolved line or NULL if not found
- * 
+ *
  */
 prog_line_t *prog_Resolv(const char *label, prog_t *prog);
 
 /*
  * prog_Char2Args
- * 
+ *
  * Converts a character string into arguments
- * 
+ *
  * in  -> string: string to be converted
  *        argc: pointer to variable which will hold the number of arguments
  *        argv: pointer to char * array to hold the argument pointers
  */
 void prog_Char2Args(char *string, int *argc, char **argv);
-

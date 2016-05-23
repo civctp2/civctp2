@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "MaterialPool.h"
 #include "civarchive.h"
@@ -38,7 +28,6 @@ void MaterialPool::Serialize(CivArchive &archive)
 	}
 }
 
-		
 void MaterialPool::AddMaterials(sint32 amt)
 {
 	if(m_level > 0 && amt > 0 && (m_level + amt) < 0) {

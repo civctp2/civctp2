@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "RiskDB.h"
@@ -22,7 +20,6 @@ RiskRecord::RiskRecord()
 	m_cityChance = 0.05 ;
 	m_settlerChance = 0.05;
 
-	
 	m_barbarianChance = 0.05;
 	m_barbarianUnitRankMax = 3;
 	m_barbarianUnitRankMin = 1;
@@ -214,4 +211,3 @@ BOOL RiskDatabase::ParseAnAttribute(Token *token, RiskRecord *rec)
 			return FALSE;
 	}
 }
-

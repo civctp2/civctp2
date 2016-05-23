@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -139,7 +139,6 @@ void ChatBox::AddText(MBCHAR *text)
 {
 	m_chatWindow->GetTextBox()->AppendHyperText(text);
 
-	
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 }
@@ -149,7 +148,7 @@ void ChatBox::SetActive(BOOL active)
 	if (!m_chatWindow) return;
 
 	if (active) {
-		
+
 		g_c3ui->AddWindow(m_chatWindow);
 		m_chatWindow->GetTextField()->SetKeyboardFocus();
 	} else {
@@ -163,22 +162,20 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 {
 	COLOR		color = g_colorSet->ComputePlayerColor(playerNum);
 	COLORREF	colorRef = g_colorSet->GetColorRef(color);
-	
+
 	MBCHAR			coloredText[_MAX_PATH];
 
 	m_chatWindow->ColorizeString(coloredText, text, colorRef);
-	
+
 	strcat(coloredText, "\n");
 
 	m_chatWindow->GetTextBox()->AppendHyperText(coloredText);
 
-	
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 
-	
 	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL) {
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									gamesounds_GetGameSoundID(GAMESOUNDS_CHAT_MESSAGE),
 									0,
 									0);
@@ -235,7 +232,6 @@ AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 	Move(0, g_radarWindow->Y() - m_height);
 
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -253,7 +249,7 @@ void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF 
 	g = (colorRef & 0x0000FF00) >> 8;
 	b = (colorRef & 0x00FF0000) >> 16;
 
-	sprintf(colorString, "<c:%u,%u,%u>", r, g, b); 
+	sprintf(colorString, "<c:%u,%u,%u>", r, g, b);
 	strcat(destString, colorString);
 	strcat(destString, srcString);
 
@@ -267,28 +263,26 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 		return;
 
 	ChatWindow		*chatWindow = (ChatWindow *)cookie;
-	
+
 	MBCHAR			str[k_CHATBOX_LINE_LENGTH];
 
 	chatWindow->GetTextField()->GetFieldText(str, k_CHATBOX_LINE_LENGTH);
 	chatWindow->GetTextField()->SetFieldText("");
 
-	
 	if (strlen(str) == 0 || !strcmp(str, "\n")) {
 		chatWindow->GetChatBox()->SetActive(FALSE);
 		return;
 	}
 
 
-	
-	
-	
+
+
+
 	if (chatWindow->CheckForEasterEggs(str)) {
 		return;
 	}
-	
 
-	
+
 	g_network.SendChatText(str, strlen(str));
 
 
@@ -296,7 +290,7 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 
 
-	
+
 
 
 
@@ -314,13 +308,13 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 {
 	if (!strcmp(s, "pacman")) {
 		return TRUE;
-	} else 
+	} else
 	if (!strcmp(s, "toe")) {
 
 		return TRUE;
 	} else
 	if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) {
-		sint32 i, n; 
+		sint32 i, n;
 		extern BOOL gDone;
 #if defined(WIN32)
 		MSG	msg;
@@ -330,12 +324,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			temp++;
 
 		n = atoi(temp);
-		
+
 		for (i=0; i<(n) && !gDone; i++) {
-			
+
 			NewTurnCount::StartNextPlayer(false);
-			
-			
+
 			g_director->NextPlayer();
 			do {
 				g_controlPanel->Idle();
@@ -347,9 +340,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 						gDone = TRUE;
 
 					TranslateMessage(&msg);
-					
+
 					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B) 
+						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
 
@@ -358,8 +351,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	       		g_letUIProcess = FALSE;
 
 			} while (((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())) &&
-				!gDone); 
-
+				!gDone);
 
 
 		}
@@ -368,22 +360,22 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 #if 0
 	} else
 	if (!strcmp(s, "/A") && !g_network.IsActive()) {
-        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
+        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
 			return TRUE;
 
 		if(g_network.IsActive()) {
 			g_turn->NetworkEndTurn();
 		} else {
             g_selected_item->Deselect(g_selected_item->GetCurPlayer());
- 			g_turn->EndThisTurnBeginNewTurn();	
+ 			g_turn->EndThisTurnBeginNewTurn();
           	g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
-            
-            
 
-			
-            
 
-			
+
+
+
+
+
 			NewTurnCount::StartNextPlayer(true);
 
 			g_director->AddCopyVision();
@@ -434,7 +426,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	} else
 	if (!strncmp(s, "/importmap", 10)) {
 		MBCHAR *temp = s + 11;
-		
+
 		if (g_theWorld->ImportMap(temp)) {
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
@@ -446,23 +438,23 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		while(isspace(*arg))
 			arg++;
 		if(*arg >= '0' && *arg <= '9') {
-			
+
 			sint32 player = atoi(arg);
 			if(g_network.IsActive()) {
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
-				
+
 				if(g_network.IsClient() && !g_network.IsMyTurn())
 					return FALSE;
 			}
-			
+
 			if (g_player[player])
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
 
-			
-			
-			
+
+
+
 		}
 	} else
 	if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) {
@@ -470,7 +462,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		while(isspace(*arg))
 			arg++;
 		if(*arg >= '0' && *arg <= '9') {
-			
+
 			sint32 player = atoi(arg);
 			if(g_network.IsActive()) {
 				Assert(g_network.IsLocalPlayer(player));
@@ -485,67 +477,67 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
 
-			
-			
-			
+
+
+
 		}
 	}
 #if 0
  else
 	if (!strncmp(s, "/demo", 5) && !g_network.IsActive()) {
-		sint32 i, n; 
+		sint32 i, n;
 		extern BOOL gDone;
 		MSG	msg;
-		
+
 		MBCHAR *temp = s+5;
 		while(isspace(*temp))
 			temp++;
-		
+
 		n = atoi(temp);
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		for (i=0; i<(n) && !gDone; i++) {
 			g_turn->NextRound();
 			do {
 				g_controlPanel->Idle();
 				if (g_civApp)
 					g_civApp->Process();
-				
+
 				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) ) {
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
-					
+
 					TranslateMessage(&msg);
-					
+
 					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B) 
+						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
-					
+
 					DispatchMessage(&msg);
 				}
-				
-				
-				
-				
+
+
+
+
 
 
 
 			} while (g_selected_item && !gDone &&
-					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())); 
-			
-			
-			
-			
-			
+					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()));
+
+
+
+
+
 		}
 		return TRUE;
-	} 
+	}
 #endif
 	else
 	if(!strncmp(s, "/resetstrings", 13)) {
@@ -558,7 +550,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
     else
 	if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) {
-		
+
         if(g_graphicsOptions->IsArmyTextOn()){
 			g_graphicsOptions->ArmyTextOff();
         }
@@ -580,7 +572,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 AUI_ERRCODE ChatWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if (surface == NULL)
@@ -593,9 +585,8 @@ AUI_ERRCODE ChatWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_GREEN));
 
-	
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
-	
+
 }

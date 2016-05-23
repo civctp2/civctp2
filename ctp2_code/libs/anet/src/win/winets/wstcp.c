@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * This material has been modified by the Apolyton CtP2 Source Code Project.
  * Contact the authors at ctp2source@apolyton.net.
  *
  * Modifications from the Activision Anet 0.10 code:
@@ -86,7 +86,6 @@ MSVC's warning level is set to 4.
 #define DEBUG_MODULE 1		/* Set to 1 to enable debug prints */
 #include "ddprint.h"
 
-
 /* Re-enable MSVC warnings (#@$&%#^& MS) */
 /* Disable MSVC warning "unreferenced inline function has been removed"
    (Windows linked code has six of these ) */
@@ -95,13 +94,11 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 /**
 * Constants
 */
 
 #define WAIT_SECONDS	5
-
 
 /**
 * Methods
@@ -122,7 +119,6 @@ getsockerror(void)
 
 	return(err);
 }
-
 
 /*-------------------------------------------------------------------------
  Broadcast a packet with a unique identifier, and wait for it to come
@@ -223,7 +219,6 @@ gethostaddr_connect(
 				TCPPEER * pAddr;
 				pAddr = (TCPPEER *) dcstFindValue(pTcp->handles, pTcp->myHandle);
 
-
 				addr.addr = stLclAddr.sin_addr.s_addr;
 				addr.port = pAddr->port;
 				DPRINT(("gethostaddr_connect: Host Address Retrieved: [%s:%d]\n", (char *) inet_ntoa(stLclAddr.sin_addr), ntohs(addr.port)));
@@ -236,7 +231,6 @@ gethostaddr_connect(
 	}
 	return bAddressFound;
 }
-
 
 /*--------------------------------------------------------------------------
  Yet another strategy to find the local machines IP
@@ -316,35 +310,35 @@ static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 	{
 		switch (WSAGetLastError())
 		{
-			case WSANOTINITIALISED:	
+			case WSANOTINITIALISED:
 				DPRINT(("gethostaddr_gethostname: A successful WSAStartup must occur before using this function.\n"));
 				break;
 
-			case WSAENETDOWN:	
+			case WSAENETDOWN:
 				DPRINT(("gethostaddr_gethostname: The Windows Sockets implementation has detected that the network subsystem has failed.\n"));
 				break;
 
-			case WSAHOST_NOT_FOUND:	
+			case WSAHOST_NOT_FOUND:
 				DPRINT(("gethostaddr_gethostname: Authoritative Answer Host not found.\n"));
 				break;
 
-			case WSATRY_AGAIN:	
+			case WSATRY_AGAIN:
 				DPRINT(("gethostaddr_gethostname: Non-Authoritative Host not found, or SERVERFAIL.\n"));
 				break;
 
-			case WSANO_RECOVERY:	
+			case WSANO_RECOVERY:
 				DPRINT(("gethostaddr_gethostname: Nonrecoverable errors: FORMERR, REFUSED, NOTIMP.\n"));
 				break;
 
-			case WSANO_DATA:	
+			case WSANO_DATA:
 				DPRINT(("gethostaddr_gethostname: Valid name, no data record of requested type.\n"));
 				break;
 
-			case WSAEINPROGRESS:	
+			case WSAEINPROGRESS:
 				DPRINT(("gethostaddr_gethostname: A blocking Windows Sockets operation is in progress.\n"));
 				break;
 
-			case WSAEINTR:	
+			case WSAEINTR:
 				DPRINT(("gethostaddr_gethostname: The (blocking) call was canceled using WSACancelBlockingCall.\n"));
 				break;
 
@@ -384,7 +378,7 @@ static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 			 */
 			memcpy(&peer.addr, *ptr, host->h_length);
 
-			/* 
+			/*
 			 * Use the port number from the broadcast handle
 			 */
 			broadcast = dcstFindValue(pTcp->handles, pTcp->broadcastHandle);
@@ -422,7 +416,7 @@ static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 				 */
 				memcpy(&peer2.peer.addr, *ptr, host->h_length);
 
-				/* 
+				/*
 				 * Use the port number from the broadcast handle
 				 */
 				broadcast = dcstFindValue(pTcp->handles, pTcp->broadcastHandle);
@@ -448,7 +442,6 @@ static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 }
 
 
-
 /*-------------------------------------------------------------------------
  Get the IP address of the host we're connected to.
 
@@ -462,7 +455,7 @@ static BOOL	gethostaddr(TCPINSTANCE *pTcp)	/* (modified) Current tcp instance */
 
 	assert(pTcp != NULL);
 
-	/* 
+	/*
 	 * Try this method first since it will cause a dial-up connection
 	 * to be established, even if it does not succeed...
 	 */
@@ -488,7 +481,7 @@ static BOOL	gethostaddr(TCPINSTANCE *pTcp)	/* (modified) Current tcp instance */
 	if (!bAddressFound)
 	{
 		/*
-		 * Since an address has not been found then put in a dud one, the first 
+		 * Since an address has not been found then put in a dud one, the first
 		 * packet we receive will inform dpio that our address is incorrect and fix
 		 * the problem.
 		 */
@@ -505,7 +498,6 @@ static BOOL	gethostaddr(TCPINSTANCE *pTcp)	/* (modified) Current tcp instance */
 
 	return(bAddressFound);
 }
-
 
 /******************************************************************************
  Create a TCP driver.
@@ -541,19 +533,19 @@ TCPWIN_Create(
 		DPRINT(("Could not initialize Winsock !\n"));
 		switch (WSAGetLastError())
 		{
-			case WSASYSNOTREADY:	
+			case WSASYSNOTREADY:
 				DPRINT(("TCPWIN_Create: Indicates that the underlying network subsystem is not ready for network communication.\n"));
 				break;
-			case WSAVERNOTSUPPORTED:	
+			case WSAVERNOTSUPPORTED:
 				DPRINT(("TCPWIN_Create: The version of Windows Sockets support requested is not provided by this particular Windows Sockets implementation.\n"));
 				break;
-			case WSAEINPROGRESS:	
+			case WSAEINPROGRESS:
 				DPRINT(("TCPWIN_Create: A blocking Windows Sockets 1.1 operation is in progress.\n"));
 				break;
-			case WSAEPROCLIM:	
+			case WSAEPROCLIM:
 				DPRINT(("TCPWIN_Create: Limit on the number of tasks supported by the Windows Sockets implementation has been reached.\n"));
 				break;
-			case WSAEFAULT:	
+			case WSAEFAULT:
 				DPRINT(("TCPWIN_Create: The lpWSAData is not a valid pointer.\n"));
 				break;
 			default:
@@ -568,10 +560,10 @@ TCPWIN_Create(
 	 * Print out what we found
 	 */
 	DPRINT(("TCPWIN_Create: Winsock Initialized\n"));
-	DPRINT(("TCPWIN_Create: Version    : %d.%d [%d.%d]\n", 
+	DPRINT(("TCPWIN_Create: Version    : %d.%d [%d.%d]\n",
 		HIBYTE(wsa.wVersion),
 		LOBYTE(wsa.wVersion),
-		HIBYTE(wsa.wHighVersion), 
+		HIBYTE(wsa.wHighVersion),
 		LOBYTE(wsa.wHighVersion)));
 	DPRINT(("TCPWIN_Create: Description: %s\n", wsa.szDescription));
 	DPRINT(("TCPWIN_Create: Status     : %s\n", wsa.szSystemStatus));
@@ -581,7 +573,7 @@ TCPWIN_Create(
 
 	/* allocate and initialize an instance structure */
 	pTcp = (TCPINSTANCE *) dp_MALLOC(sizeof(TCPINSTANCE));
-	if (pTcp == NULL) 
+	if (pTcp == NULL)
 	{
 		DPRINT(("TCPWIN_Create: Out of memory\n"));
 		*status = comm_STATUS_MEMORY;
@@ -591,7 +583,7 @@ TCPWIN_Create(
 
 	/* create primary handles */
 	pTcp->handles = dcstCreate(sizeof(TCPPEER), maxHandles, maxHandles/3);
-	if (pTcp->handles == NULL) 
+	if (pTcp->handles == NULL)
 	{
 		DPRINT(("TCPWIN_Create: Could not create primary handles\n"));
 		dp_FREE(pTcp);
@@ -616,13 +608,13 @@ TCPWIN_Create(
 
 	/* open a socket */
 	pTcp->socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	if (pTcp->socket == INVALID_SOCKET) 
+	if (pTcp->socket == INVALID_SOCKET)
 	{
 		DPRINT(("TCPWIN_Create: Could not create socket\n"));
 
 		switch (WSAGetLastError())
 		{
-			case WSANOTINITIALISED:	
+			case WSANOTINITIALISED:
 				DPRINT(("TCPWIN_Create: A successful WSAStartup must occur before using this API.\n"));
 				break;
 
@@ -630,31 +622,31 @@ TCPWIN_Create(
 				DPRINT(("TCPWIN_Create: The network subsystem or the associated service provider has failed.\n"));
 				break;
 
-			case WSAEAFNOSUPPORT:	
+			case WSAEAFNOSUPPORT:
 				DPRINT(("TCPWIN_Create: The specified address family is not supported.\n"));
 				break;
 
-			case WSAEINPROGRESS:	
+			case WSAEINPROGRESS:
 				DPRINT(("TCPWIN_Create: A blocking Windows Sockets 1.1 call is in progress, or the service provider is still processing a callback function.\n"));
 				break;
 
-			case WSAEMFILE:	
+			case WSAEMFILE:
 				DPRINT(("TCPWIN_Create: No more socket descriptors are available.\n"));
 				break;
 
-			case WSAENOBUFS:	
+			case WSAENOBUFS:
 				DPRINT(("TCPWIN_Create: No buffer space is available. The socket cannot be created.\n"));
 				break;
 
-			case WSAEPROTONOSUPPORT:	
+			case WSAEPROTONOSUPPORT:
 				DPRINT(("TCPWIN_Create: The specified protocol is not supported.\n"));
 				break;
 
-			case WSAEPROTOTYPE:	
+			case WSAEPROTOTYPE:
 				DPRINT(("TCPWIN_Create: The specified protocol is the wrong type for this socket.\n"));
 				break;
 
-			case WSAESOCKTNOSUPPORT:	
+			case WSAESOCKTNOSUPPORT:
 				DPRINT(("TCPWIN_Create: The specified socket type is not supported in this address family.\n"));
 				break;
 
@@ -693,7 +685,7 @@ TCPWIN_Create(
 #define TCP_PORT_RANGE_LEN   200
 	err = SOCKET_ERROR;
 	if (*port == TCP_SOCKET_ANY) {
-		/* If user specified 'any old port', try picking a random socket 
+		/* If user specified 'any old port', try picking a random socket
 		 * number inside our range.
 		 */
 		unsigned short randport = (eclock() % TCP_PORT_RANGE_LEN) + TCP_PORT_RANGE_START;
@@ -714,7 +706,7 @@ TCPWIN_Create(
 
 		err = bind(pTcp->socket, (SOCKADDR *) &sockAddr, sizeof(sockAddr));
 	}
-	if (SOCKET_ERROR == err) 
+	if (SOCKET_ERROR == err)
 	{
 		DPRINT(("TCPWIN_Create: Could not bind socket\n"));
 		dcstDestroy(pTcp->handles);
@@ -725,7 +717,7 @@ TCPWIN_Create(
 	}
 
 	/* determine the actual port number */
-	if (TCP_SOCKET_ANY == *port) 
+	if (TCP_SOCKET_ANY == *port)
 	{
 		int addrlen = sizeof(sockAddr);
 		memset(&sockAddr, 0, sizeof(sockAddr));
@@ -737,11 +729,11 @@ TCPWIN_Create(
 	    }
 		truePort = ntohs(sockAddr.sin_port);
 		*port = truePort;
-	} 
+	}
 	else
 	{
 		truePort = *port;
-	}	
+	}
 
 	peer.port = htons(truePort);
 	pTcp->myHandle = dcstReplace(pTcp->handles, pTcp->myHandle, &peer);
@@ -767,7 +759,7 @@ TCPWIN_Create(
 	}
 
 	/* Store our address for future use */
-	if (!gethostaddr(pTcp)) 
+	if (!gethostaddr(pTcp))
 	{
 		DPRINT(("TCPWIN_Create: could not get local address\n"));
 		dcstDestroy(pTcp->handles);
@@ -782,7 +774,6 @@ TCPWIN_Create(
 	return (pTcp);
 }
 
-
 /*****************************************************************************
  Destroy a TCP driver.
 *****************************************************************************/
@@ -795,9 +786,8 @@ TCPWIN_Destroy(
 	closesocket(pTcp->socket);
 	dcstDestroy(pTcp->handles);
 	dp_FREE(pTcp);
-	WSACleanup(); 
+	WSACleanup();
 }
-
 
 /*****************************************************************************
  Given a TCP peer address, return a handle that can be used to send a
@@ -879,7 +869,7 @@ TCPWIN_Address2Handle(
 			DPRINT(("1st "));
 
 			/*
-			 * We have been given two addresses 
+			 * We have been given two addresses
 			 * Is there a second address ?
 			 */
 			p2 = dcstFindValue(tcp->secondary, h);
@@ -1012,7 +1002,7 @@ TCPWIN_Address2Handle(
 	else
 	{
 		/*
-		 * A single address has been supplied 
+		 * A single address has been supplied
 		 */
 		DPRINT(("AddrX1 %s:%d ", inet_ntoa(*(struct in_addr *) &pAddr->addr), ntohs(pAddr->port)));
 
@@ -1101,7 +1091,7 @@ TCPWIN_Address2Handle(
 		        /* Did not find in second list */
 		        DPRINT(("n2nd "));
 
-				/* Check to see if there is a NON-LIVE version 
+				/* Check to see if there is a NON-LIVE version
 				   in the second group of addresses */
 				peer2.status = 0;
 				peer2.peer = *pAddr;
@@ -1131,7 +1121,6 @@ TCPWIN_Address2Handle(
 	DPRINT((": %d\n", h));
 	return (h);
 }
-
 
 /*****************************************************************************
  Given a handle, return the corresponding TCPPEER address.
@@ -1191,7 +1180,6 @@ TCPWIN_Handle2Address(
 	return(TCP_RES_OK);
 }
 
-
 /*****************************************************************************
  Send a packet to the given destination.
 
@@ -1238,7 +1226,7 @@ TCPWIN_PutPacket(
 		return(TCP_RES_FULL);
 	}
 
-	DPRINT(("TCPWIN_PutPacket: PKT %c%c Tx To %s:%d ", 
+	DPRINT(("TCPWIN_PutPacket: PKT %c%c Tx To %s:%d ",
 		((char *) bufptr)[0], ((char *) bufptr)[1],
 		 (char *) inet_ntoa(sockAddr.sin_addr), ntohs(sockAddr.sin_port)));
 
@@ -1249,7 +1237,7 @@ TCPWIN_PutPacket(
 		send the packet to the second address */
 	if (pPeer2 && (pPeer2->status == TCP_HDL2_LIVE))
 	{
-		/* only SYN && ACK && PING packets should be sent to multiple addresses 
+		/* only SYN && ACK && PING packets should be sent to multiple addresses
 		   note that User packets are allowed through since they are sent unreliably */
 #if 0
 		assert(
@@ -1259,13 +1247,13 @@ TCPWIN_PutPacket(
 			(*(dp_packetType_t *)bufptr) == (dp_PING_PACKET_ID));
 #else
 		/* Kludge: in the case where we establish a dpio connection
-		 * to someone using only one address, and then much later openHdl2 
+		 * to someone using only one address, and then much later openHdl2
 		 * is called with a 2nd address, we will notice it here.
 		 * The proper action is to turn off the 2nd address, I think.
 		 *
 		 * If this kludge doesn't work,
 		 * this could be done instead at a higher level, in dpio_openHdl2,
-		 * by testing whether a connection is established before 
+		 * by testing whether a connection is established before
 		 * creating a new handle, but that might require a flag to commSayHi
 		 * to tell it whether to insert or not.
 		 */
@@ -1298,7 +1286,6 @@ TCPWIN_PutPacket(
 	DPRINT(("\n"));
 	return(TCP_RES_OK);
 }
-
 
 /*****************************************************************************
  Receive a packet.
@@ -1361,7 +1348,6 @@ TCPWIN_GetPacket(
 	DPRINT(("TCPWIN_GetPacket(): Rx From %s:%d\n", (char *) inet_ntoa(sockAddr.sin_addr), ntohs(sockAddr.sin_port)));
 	*pLen = cBytes;
 
-
 	/*
 	 * If the packet is a SYN packet and it is from an address which is
 	 * different to the embedded address then we will attempt to translate
@@ -1380,7 +1366,7 @@ TCPWIN_GetPacket(
 			peer = *(TCPPEER *) (pkt + 7);
 
 			DPRINT(("TCPWIN_GetPacket(): Got SYN with mismatched addresses\n"));
-			DPRINT(("TCPWIN_GetPacket(): %08x:%d %08x:%d\n", 
+			DPRINT(("TCPWIN_GetPacket(): %08x:%d %08x:%d\n",
 				ntohl(addr.addr), ntohs(addr.port), ntohl(peer.addr), ntohs(peer.port) ));
 
 			*hsrc = TCPWIN_Address2Handle(tcp, &peer, &addr, FALSE, FALSE);

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -45,7 +45,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  2. dpLoadDLL and dpUnloadDLL now passed dpio_t, not dp_t.
 *******************************************************************************/
 
-
 /******************************************************************************
 
                                     Literals
@@ -61,7 +60,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef DYNALINK
   #define DYNALINK 1        // set to zero to test with static linking
 #endif
-
 
 /******************************************************************************
 
@@ -83,7 +81,7 @@ static HINSTANCE hcommDLL = NULL;
   static int (* pcommPeekPkt   ) (commPeekPktReq_t *,    commPeekPktResp_t *   ) = NULL;
   static int (* pcommRxPkt     ) (commRxPktReq_t *,      commRxPktResp_t *     ) = NULL;
   static int (* pcommScanAddr  ) (commScanAddrReq_t *,   commScanAddrResp_t *  ) = NULL;
-  static int (* pcommPrintAddr ) (commPrintAddrReq_t *,  commPrintAddrResp_t * ) = NULL; 
+  static int (* pcommPrintAddr ) (commPrintAddrReq_t *,  commPrintAddrResp_t * ) = NULL;
   static int (* pcommGroupAlloc) (commGroupAllocReq_t *, commGroupAllocResp_t *) = NULL;
   static int (* pcommGroupFree ) (commGroupFreeReq_t *,  commGroupFreeResp_t * ) = NULL;
   static int (* pcommGroupAdd  ) (commGroupAddReq_t *,   commGroupAddResp_t *  ) = NULL;
@@ -99,7 +97,7 @@ static HINSTANCE hcommDLL = NULL;
     void ** procptr;
   }
   COMMFUNC;
-  
+
   static COMMFUNC commfuncs[] =
   {
     {"commNoOp",       (void **) &pcommNoOp},
@@ -124,59 +122,57 @@ static HINSTANCE hcommDLL = NULL;
 
   #define NO_COMMDLL_FUNCS  (sizeof(commfuncs) / sizeof(commfuncs[0]))
 
-
   // public comm function stubs
   int cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp) {return (*pcommNoOp)(req, resp);}
-  
+
   int cdecl commInit(commInitReq_t *req, commInitResp_t *resp) {return (*pcommInit)(req, resp);}
-  
+
   int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp) {return (*pcommTerm)(req, resp);}
-  
+
   int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {return (*pcommDriverInfo)(req, resp);}
-  
+
   int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {return (*pcommPlayerInfo)(req, resp);}
-  
+
   int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {return (*pcommTxFull)(req, resp);}
-  
+
   int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp) {return (*pcommTxPkt)(req, resp);}
-  
+
   int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {return (*pcommPeekPkt)(req, resp);}
-  
+
   int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {return (*pcommRxPkt)(req, resp);}
-  
+
   int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {return (*pcommScanAddr)(req, resp);}
-  
+
   int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {return (*pcommPrintAddr)(req, resp);}
-  
+
   int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {return (*pcommGroupAlloc)(req, resp);}
-  
+
   int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {return (*pcommGroupFree)(req, resp);}
-  
+
   int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {return (*pcommGroupAdd)(req, resp);}
-  
+
   int cdecl commSetParam(commSetParamReq_t *req, commSetParamResp_t *resp) {return (*pcommSetParam)(req, resp);}
-  
+
   int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {return (*pcommSayHi)(req, resp);}
-  
+
   int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {return (*pcommSayBye)(req, resp);}
-  
+
   int cdecl commEnumPorts(commEnumPortsReq_t *req, commEnumPortsResp_t *resp) {return (*pcommEnumPorts)(req, resp);}
 #endif
-
 
 #if 0
 static void showErr()
 {
 	LPVOID lpMsgBuf;
-	 
-	FormatMessage( 
+
+	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		NULL,
 		GetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 		(LPTSTR) &lpMsgBuf,
 		0,
-		NULL 
+		NULL
 	);
 
 	// Display the string.
@@ -184,10 +180,9 @@ static void showErr()
 
 	// Free the buffer.
 	LocalFree( lpMsgBuf );
-	 
+
 }
 #endif
-
 
 /*-----------------------------------------------------------------------
  Read description out of the DLL file.
@@ -232,7 +227,6 @@ DP_API dp_result_t dpGetTransportInfo(dp_transport_t *transport, comm_driverInfo
 	return dp_RES_OK;
 }
 
-
 /*-------------------------------------------------------------------------
  Calls the given function once for each transport available.
  All calls are made before dpEnumTransports returns.
@@ -273,7 +267,6 @@ DP_API dp_result_t dpEnumTransports(dp_transport_t *tranDir, dpEnumTransportCall
     char StartupDrv[_MAX_DRIVE];
     char StartupDir[_MAX_DIR];
 
-
 	// Get Startup Drive & Directory
     GetModuleFileName(NULL, filename, sizeof(filename));
     _splitpath(filename, StartupDrv, StartupDir, StartupName, NULL);
@@ -287,9 +280,9 @@ DP_API dp_result_t dpEnumTransports(dp_transport_t *tranDir, dpEnumTransportCall
   // scan all DLLs found in path, get their info, and call callback funciton
   do {
 	memset(&dllname, 0, sizeof(dllname));
-    if (tranDir && tranDir->fname[0]) 
+    if (tranDir && tranDir->fname[0])
 		sprintf(dllname.fname, "%s/%s", pathns, finddata.cFileName);
-	else  
+	else
 		sprintf(dllname.fname, "%s", finddata.cFileName);
 
     if (dpGetTransportInfo(&dllname, &info) != dp_RES_OK)  continue;
@@ -303,7 +296,6 @@ DP_API dp_result_t dpEnumTransports(dp_transport_t *tranDir, dpEnumTransportCall
   return(dp_RES_OK);
 }
 
-
 /*-------------------------------------------------------------------------
  Called internally by dpCreate to load a DLL.
 -------------------------------------------------------------------------*/
@@ -311,13 +303,13 @@ DP_API dp_result_t dpEnumTransports(dp_transport_t *tranDir, dpEnumTransportCall
 dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 {
 #if DYNALINK
-  
+
 	int i;
 
 	if (!transport)
 		return dp_RES_BUG;
 
-    if (hcommDLL) 
+    if (hcommDLL)
 		return dp_RES_FULL;   // Don't allow double loading.
 
 	hcommDLL = LoadLibrary(transport->fname);
@@ -327,7 +319,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 	}
 
 	for (i = 0; i < NO_COMMDLL_FUNCS; i++) {
-		commfuncs[i].procptr[0] = 
+		commfuncs[i].procptr[0] =
 			(void *) GetProcAddress(hcommDLL, commfuncs[i].name);
 		if (!commfuncs[i].procptr[0])  {
 			FreeLibrary(hcommDLL);
@@ -342,7 +334,6 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 
   return(dp_RES_OK);
 }
-
 
 /*-------------------------------------------------------------------------
  Called internally by dpDestroy to unload a DLL.
@@ -366,12 +357,12 @@ void dpUnloadDLL(dpio_t *dpio)
  Present the returned list of port names to the user, then use the
  matching portnum as the value for commInitReq_t.portnum in dpCreate.
 
- On entry, 
+ On entry,
  transport is the name (from dpEnumTransports) of the transport to query.
  ports is an array to be filled with portnames.
  maxports is the size of the ports array.
 
- On exit, 
+ On exit,
  ports is filled with descriptions of the available ports.
  *pnPorts is set to the number of portnames placed in the ports array.
 -------------------------------------------------------------------------*/
@@ -383,14 +374,14 @@ DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPort
 
 	assert(transport && ports && pnPorts);
 	err = dpLoadDLL(NULL, transport);
-	if (err != dp_RES_OK) 
+	if (err != dp_RES_OK)
 		return err;
- 
+
 	memset(&req, 0, sizeof(commEnumPortsReq_t));
 	memset(&resp, 0, sizeof(commEnumPortsResp_t));
 
 	req.maxports = maxports;
-	req.buf = ports;	
+	req.buf = ports;
 	req.reqLen = sizeof(req);
 
 	commEnumPorts(&req, &resp);

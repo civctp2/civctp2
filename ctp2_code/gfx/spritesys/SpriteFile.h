@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,7 +32,6 @@
 #include "c3.h"
 #include "Action.h"
 
-
 #ifndef __SPRITEFILE_H__
 #define __SPRITEFILE_H__
 
@@ -41,31 +40,28 @@
 #define k_SPRITEFILE_VERSION1 0x00020000
 #define k_SPRITEFILE_VERSION2 0x00020001
 
-
-enum  
+enum
 {
-	
-	
-	SPRDATA_REGULAR=0, 
-	SPRDATA_LZW1, 
-   	
-	
-	
-	
+
+	SPRDATA_REGULAR=0,
+	SPRDATA_LZW1,
+
+
+
+
 
 	SPRDATA_MAX
 };
 
 #define  COM_BUFF_SIZE 320000
 
+#define LZW1_FLAG_BYTES    4
+#define LZW1_FLAG_COMPRESS 0
+#define LZW1_FLAG_COPY     1
+#define LZW1_PS (*p++!=*s++)
+#define LZW1_ITEMMAX 16
 
-#define LZW1_FLAG_BYTES    4  
-#define LZW1_FLAG_COMPRESS 0  
-#define LZW1_FLAG_COPY     1  
-#define LZW1_PS (*p++!=*s++)  
-#define LZW1_ITEMMAX 16       
-
-enum SPRITEFILETYPE 
+enum SPRITEFILETYPE
 {
 	SPRITEFILETYPE_PLAIN,
 	SPRITEFILETYPE_FACED,
@@ -80,7 +76,7 @@ enum SPRITEFILETYPE
 	SPRITEFILETYPE_MAX
 };
 
-enum SPRITEFILEERR 
+enum SPRITEFILEERR
 {
 	SPRITEFILEERR_OK,
 
@@ -103,9 +99,7 @@ typedef struct
   unsigned num_records;
   unsigned offset_to_special_data;
 
-
 } SPRITEFILE_2_0;
-
 
 #define k_SPRITEFILE_HEADER_SIZE	(sizeof(uint32) + sizeof(uint32) + sizeof(uint32))
 
@@ -121,7 +115,7 @@ class CitySpriteGroup;
 
 class Anim;
 
-class SpriteFile 
+class SpriteFile
 {
 public:
 	SpriteFile(MBCHAR const * filename);
@@ -144,7 +138,6 @@ public:
 	SPRITEFILEERR	Write(CitySpriteGroup *s, Anim *anim);
 	SPRITEFILEERR	CloseWrite();
 
-	
 	void			ReadSpriteDataBasic(Sprite *s);
 	void			ReadSpriteDataFull(Sprite *s);
 	void			SkipSpriteData();
@@ -152,7 +145,7 @@ public:
 	void			ReadFacedSpriteDataBasic(FacedSprite *s);
 	void			ReadFacedSpriteDataFull(FacedSprite *s);
 	void			SkipFacedSpriteData();
-	
+
 	void			ReadSpriteDataGeneralBasic(Sprite **sprite);
 	void			ReadSpriteDataGeneralFull(Sprite **sprite);
 
@@ -160,7 +153,6 @@ public:
 
 	void			ReadSpriteDataGeneral(FacedSpriteWshadow **sprite);
 	void			ReadFacedSpriteWshadowData(FacedSpriteWshadow *s);
-	
 
 	void			ReadAnimDataBasic(Anim *s);
 	void			ReadAnimDataFull(Anim *s);
@@ -172,21 +164,17 @@ public:
 	SPRITEFILEERR	Read(FacedSpriteWshadow **s, Anim **anim);
 	SPRITEFILEERR	Read(SpriteGroup **s, Anim **anim);
 
-	
 	SPRITEFILEERR	ReadBasic  (UnitSpriteGroup *s);
 	SPRITEFILEERR	ReadBasic  (GoodSpriteGroup *s);
-	
-	
+
 	SPRITEFILEERR	ReadFull   (UnitSpriteGroup *s);
 	SPRITEFILEERR	ReadFull   (GoodSpriteGroup *s);
-	
-	
+
 	SPRITEFILEERR	ReadIndexed(UnitSpriteGroup *s,GAME_ACTION index);
 	SPRITEFILEERR	ReadIndexed(GoodSpriteGroup *s,GAME_ACTION index);
-	
+
 	SPRITEFILEERR	Read(ProjectileSpriteGroup *s);
 	SPRITEFILEERR	Read(EffectSpriteGroup *s);
-
 
 	SPRITEFILEERR	Read(CitySpriteGroup **s, Anim **anim);
 	SPRITEFILEERR	CloseRead();
@@ -203,10 +191,9 @@ public:
 	void			SetFilePos(size_t pos);
 
 protected:
-	unsigned	m_version;			
-	unsigned	m_spr_compression;	
+	unsigned	m_version;
+	unsigned	m_spr_compression;
 
-	
 	SPRITEFILEERR	ReadFull_v13(UnitSpriteGroup *s);
 	SPRITEFILEERR	ReadFull_v20(UnitSpriteGroup *s);
 
@@ -216,19 +203,15 @@ protected:
 	SPRITEFILEERR	ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION index);
 	SPRITEFILEERR	ReadIndexed_v20(UnitSpriteGroup *s,GAME_ACTION index);
 
-	
 	SPRITEFILEERR	Write_v13(UnitSpriteGroup *s);
 	SPRITEFILEERR	Write_v20(UnitSpriteGroup *s);
 
-	
 	uint8 *CompressData  (void *Data, size_t &DataLen);
 	uint8 *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
-	
-	
+
 	uint8 *CompressData_Default  (void *Data, size_t &DataLen);
 	uint8 *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
 
-	
 	uint8 *CompressData_LZW1  (void *Data, size_t &DataLen);
 	uint8 *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
 

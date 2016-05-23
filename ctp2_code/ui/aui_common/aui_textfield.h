@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,26 +31,23 @@
 #ifndef __AUI_TEXTFIELD_H__
 #define __AUI_TEXTFIELD_H__
 
-
 #include "aui_win.h"
 #include "aui_bitmapfont.h"
-
 
 enum AUI_TEXTFIELD_ACTION
 {
 	AUI_TEXTFIELD_ACTION_FIRST = 0,
 	AUI_TEXTFIELD_ACTION_NULL = 0,
-	AUI_TEXTFIELD_ACTION_EXECUTE,	
-	AUI_TEXTFIELD_ACTION_DISMISS,	
+	AUI_TEXTFIELD_ACTION_EXECUTE,
+	AUI_TEXTFIELD_ACTION_DISMISS,
 	AUI_TEXTFIELD_ACTION_LAST
 };
 
 
-
 #define k_AUI_TEXTFIELD_LDL_TEXT		"fieldtext"
 #define k_AUI_TEXTFIELD_LDL_MULTILINE	"multiline"
-#define k_AUI_TEXTFIELD_LDL_AUTOVSCROLL	"autovscroll" 
-#define k_AUI_TEXTFIELD_LDL_AUTOHSCROLL	"autohscroll" 
+#define k_AUI_TEXTFIELD_LDL_AUTOVSCROLL	"autovscroll"
+#define k_AUI_TEXTFIELD_LDL_AUTOHSCROLL	"autohscroll"
 #define k_AUI_TEXTFIELD_LDL_ISFILENAME	"isfilename"
 #define k_AUI_TEXTFIELD_LDL_PASSWORD	"password"
 #define k_AUI_TEXTFIELD_LDL_FONT		"fontname"
@@ -58,11 +55,10 @@ enum AUI_TEXTFIELD_ACTION
 #define k_AUI_TEXTFIELD_LDL_MAXFIELDLEN	"maxfieldlen"
 
 
-
 class aui_TextField : public aui_Win
 {
 public:
-	
+
 	aui_TextField(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -121,7 +117,6 @@ public:
 		sint32 x,
 		sint32 y );
 
-	
 	static WNDPROC	m_windowProc;
 #ifdef __AUI_USE_DIRECTX__
 	static void HitEnter( HWND hwnd );
@@ -131,20 +126,19 @@ public:
 	static BOOL IsFileName( HWND hwnd );
 	static sint32 GetMaxFieldLen( HWND hwnd );
 
-	
-	
+
 	void SetSelection(sint32 start, sint32 end);
 	void GetSelection(sint32 *start, sint32 *end);
 	void SelectAll(void);
 
 protected:
-	BOOL	m_blink;			
-	BOOL	m_blinkThisFrame;	
-								
-	BOOL	m_multiLine;		
-	BOOL	m_passwordReady;	
+	BOOL	m_blink;
+	BOOL	m_blinkThisFrame;
 
-	BOOL	m_isFileName;		
+	BOOL	m_multiLine;
+	BOOL	m_passwordReady;
+
+	BOOL	m_isFileName;
 
 	sint32	m_maxFieldLen;
 	MBCHAR *m_Text;
@@ -152,7 +146,7 @@ protected:
 	sint32  m_selEnd;
 
 public:
-	sint32	m_textHeight;		
+	sint32	m_textHeight;
 	MBCHAR	m_desiredFont[256];
 #ifndef __AUI_USE_DIRECTX__
 	aui_BitmapFont *m_Font;
@@ -165,10 +159,9 @@ public:
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 };
 
-
 #ifdef WIN32
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, LPARAM lParam );
 #endif
 
-#endif 
+#endif

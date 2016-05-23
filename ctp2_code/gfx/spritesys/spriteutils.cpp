@@ -51,21 +51,16 @@ void spriteutils_EncodeShadowRun(Pixel32 **inBuf, sint32 *pos, sint32 width, Pix
 
 		(*inBuf)++;
 
-
 		(*pos)++;
-
 
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 	}
 
-
 	footer = (Pixel16)(k_SHADOW_RUN_ID << 8 | runLen);
 
-
 	if (*pos >= width) footer |= k_EOLN_ID << 8;
-
 
 	**outBufPtr = footer;
 	(*outBufPtr)++;
@@ -93,30 +88,22 @@ void spriteutils_EncodeCopyRun(Pixel32 **inBuf, sint32 *pos, sint32 width, Pixel
 
 	while (pix16 != shadowPixel && alpha == k_ALL_ALPHA && (*pos < width)) {
 
-
 		if (pix16 == 0x0000) pix16 = 0x0001;
-
 
 		**outBufPtr = pix16;
 
-
 		(*outBufPtr)++;
-
 
 		(*inBuf)++;
 
-
 		(*pos)++;
-
 
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 	}
 
-
 	footer = (Pixel16) (k_COPY_RUN_ID << 8 | runLen);
-
 
 	if (*pos >= width) footer |= k_EOLN_ID << 8;
 
@@ -135,23 +122,18 @@ char spriteutils_EncodeChromakeyRun(Pixel32 **inBuf, sint32 *pos, sint32 width, 
 
 		(*inBuf)++;
 
-
 		(*pos)++;
-
 
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 	}
 
-
 	if (runLen < width) {
 
 		footer = (Pixel16)(k_CHROMAKEY_RUN_ID << 8 | runLen);
 
-
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
-
 
 		**outBufPtr = footer;
 		(*outBufPtr)++;
@@ -175,23 +157,18 @@ char spriteutils_EncodeChromakeyWshadowRun(Pixel32 **inBuf, sint32 *pos, sint32 
 
 		(*inBuf)++;
 
-
 		(*pos)++;
-
 
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 	}
 
-
 	if (runLen < width) {
 
 		footer = (Pixel16)(k_CHROMAKEY_RUN_ID << 8 | runLen);
 
-
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
-
 
 		**outBufPtr = footer;
 		(*outBufPtr)++;
@@ -211,7 +188,6 @@ void spriteutils_EncodeFeatheredRun(Pixel32 **inBuf, sint32 *pos, sint32 width, 
 
 	RGB32Info(**inBuf, &pix16, &alpha);
 
-
 	if (pix16 == 0x0000) pix16 = 0x0001;
 
 	(*inBuf)++;
@@ -219,20 +195,16 @@ void spriteutils_EncodeFeatheredRun(Pixel32 **inBuf, sint32 *pos, sint32 width, 
 
 	footer = (k_FEATHERED_RUN_ID << 8) | alpha;
 
-
 	if (*pos >= width)
 		footer |= k_EOLN_ID << 8;
 
-
 	**outBufPtr = footer;
 	(*outBufPtr)++;
-
 
 	**outBufPtr = pix16;
 	(*outBufPtr)++;
 
 }
-
 
 char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBufPtr)
 {
@@ -251,12 +223,9 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 		shadowPixel = k_SHADOW_PIXEL_555;
 	}
 
-
 	pos = 0;
 
-
 	startPtr = *outBufPtr;
-
 
 
 	while (scanPtr < (scanline + width))
@@ -276,7 +245,6 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 		if ((pix16 == k_CHROMAKEY_PIXEL)&&(alpha == k_NO_ALPHA))
 
 		{
-
 
 			empty = spriteutils_EncodeChromakeyRun(&scanPtr, &pos, width, outBufPtr);
 		}
@@ -309,7 +277,6 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 	return empty;
 }
 
-
 char spriteutils_EncodeScanlineWshadow(Pixel32 *scanline, sint32 width, Pixel16 **outBufPtr)
 {
 	Pixel16         pix16;
@@ -327,12 +294,9 @@ char spriteutils_EncodeScanlineWshadow(Pixel32 *scanline, sint32 width, Pixel16 
 		shadowPixel = k_SHADOW_PIXEL_555;
 	}
 
-
 	pos = 0;
 
-
 	startPtr = *outBufPtr;
-
 
 
 	while (scanPtr < (scanline + width)) {
@@ -377,7 +341,6 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 	Pixel32     *shadowPixPtr, shadowPix;
 
 
-
 	BOOL        whiteBackground = FALSE;
 	if ((*shadowBuf & 0x00FFFFFF) == 0x00FFFFFF) {
 		whiteBackground = TRUE;
@@ -401,11 +364,9 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 				if (shadowPix != 0x00FFFFFF) {
 
-
 					Pixel16     r, g, b, a;
 
 					RGB32Components(pix, &r, &g, &b, &a);
-
 
 					if (a != 0xFF) {
 						*pixPtr = 0x00FF00FF;
@@ -415,11 +376,9 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 				if (shadowPix) {
 
-
 					Pixel16     r, g, b, a;
 
 					RGB32Components(pix, &r, &g, &b, &a);
-
 
 					if (a != 0xFF) {
 						*pixPtr = shadowPix;
@@ -429,7 +388,6 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 		}
 	}
 }
-
 
 Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, uint16 height, size_t *size)
 {
@@ -443,10 +401,8 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wid
 	BOOL                empty;
 
 
-
 	if (shadowBuf != NULL)
 		spriteutils_MergeShadowMap(buf, shadowBuf, width, height);
-
 
 	*table++ = (uint16)height;
 
@@ -459,7 +415,6 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wid
 		srcPixel = buf + width * y;
 
 		startDataPtr = dataPtr;
-
 
 		empty = spriteutils_EncodeScanline(srcPixel, width, &dataPtr);
 		if (empty) {
@@ -487,7 +442,6 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wid
 	return returnBuf;
 }
 
-
 Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, size_t *size)
 {
 	Pixel32             *srcPixel = buf;
@@ -500,7 +454,6 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, s
 	BOOL                empty;
 
 
-
 	*table++ = (uint16)height;
 
 	startOfData = outBuf + 1 + height;
@@ -511,7 +464,6 @@ Pixel16 *spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, s
 		srcPixel = buf + width * y;
 
 		startDataPtr = dataPtr;
-
 
 		empty = spriteutils_EncodeScanlineWshadow(srcPixel, width, &dataPtr);
 		if (empty) {
@@ -567,7 +519,6 @@ void spriteutils_DecodeToBuffer(Pixel16 *data, sint32 width, sint32 height)
 							for (short i=0; i<len; i++) {
 								*destPixel++ = *rowData--;
 							}
-
 
 							tag = *rowData--;
 						}
@@ -661,12 +612,10 @@ void spriteutils_CreateQuarterSize(Pixel32 *srcBuf, sint32 srcWidth, sint32 srcH
 }
 
 
-
 void spriteutils_ConvertPixelFormat(Pixel16 *frame, sint32 width, sint32 height)
 {
 	Pixel16     *table = frame+1;
 	Pixel16     *dataStart = table + height;
-
 
 	for(sint32 j=0; j<height; j++) {
 		if (table[j] != k_EMPTY_TABLE_ENTRY) {
@@ -730,7 +679,6 @@ void spriteutils_ConvertPixelFormatForFile(Pixel16 *frame, sint32 width, sint32 
 
 	Pixel16     *table = frame+1;
 	Pixel16     *dataStart = table + height;
-
 
 	for(sint32 j=0; j<height; j++) {
 		if (table[j] != k_EMPTY_TABLE_ENTRY) {

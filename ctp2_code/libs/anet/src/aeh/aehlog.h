@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ void aehlog_delete(aehlog_t *aehlog);
 long aehlog_getfsize(aehlog_t *aehlog);
 
 /*--------------------------------------------------------------------------
- Returns the current offset in the aehlog or -1 on error. 
+ Returns the current offset in the aehlog or -1 on error.
 --------------------------------------------------------------------------*/
 long aehlog_tell(aehlog_t *aehlog);
 
@@ -146,7 +146,7 @@ int aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const
 int aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst);
 
 /*--------------------------------------------------------------------------
- Read an aehbuf from a buf in memory in the format of an atvilog.bin file, 
+ Read an aehbuf from a buf in memory in the format of an atvilog.bin file,
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/

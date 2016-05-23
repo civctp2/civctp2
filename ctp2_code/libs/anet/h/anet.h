@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -184,17 +184,14 @@ typedef dp_char_t char_t;	/* for the moment - will go away */
 #define dp_MAXLEN_UNRELIABLE (dpio_MAXLEN_UNRELIABLE - sizeof_dp_envelope_t)
 #define dp_MAXLEN_RELIABLE   (dp_MAXLEN_UNRELIABLE - sizeof_dpio_reliable_header)
 
-
 /*  High bit of karma is whether it's a pseudoplayer. */
 #define dp_KARMA_MAKE(pseudo,k) (((pseudo) ? 0x8000:0) | ((k)&0x7fff))
 #define dp_KARMA_IS_PSEUDO(karma) (((karma) & 0x8000) != 0)
-
 
 #define dp_SNAMELEN 32
 #define dp_USERFIELDLEN 10
 #define dp_PASSWORDLEN 10
 #define dp_MAX_ADR_LEN 10	/*  Size of ipx's fullNetworkAddr_t. */
-
 
 /*  Values for dp_session_t->flags.  Combine with bitwise OR. */
 #define dp_SESSION_FLAGS_OPENSESSION		0x00
@@ -487,7 +484,7 @@ typedef struct dp_serverInfo_s {
 #define dp_USER_DESCRIPTION_LEN 256
 #define dp_USER_URL_LEN 64
 
-/* A record describing a user (users are more persistant than players) 
+/* A record describing a user (users are more persistant than players)
  * Strings of wchar_t are Unicode.  These strings are always nul-terminated.
  */
 typedef struct {
@@ -497,7 +494,7 @@ typedef struct {
 	wchar_t description[dp_USER_DESCRIPTION_LEN];
 } PACK dp_userInfo_t;
 
-/* A record describing a user's cumulative scores in one kind of game.  
+/* A record describing a user's cumulative scores in one kind of game.
  * Can't be completely declared in C; some manual unpacking required.
  */
 typedef struct {
@@ -533,7 +530,7 @@ typedef union {
 typedef struct {
 	short pktloss;		/* player deltas include a loss in percent */
 	short latency;     /* player deltas include a latency in ms */
-	
+
 	long flags;		/* one or more of dp_OBJECTDELTA_FLAG_* */
 
 	/* If an object is being created, status = dp_RES_CREATED.
@@ -576,7 +573,7 @@ typedef struct {
 #define dp_ACCOUNT_PACKET_ID dppt_MAKE(dp_PACKET_INITIALBYTE,'-')
 typedef struct {
 	dp_uid_t	uid;		/* dp_UID_NONE unless reason is dp_RES_OK */
-	dp_result_t 	reason;	
+	dp_result_t 	reason;
 	dp_uint32_t	reserved;	/* for future use */
 } dp_account_packet_t;
 #endif
@@ -1124,7 +1121,7 @@ DP_API dp_result_t DP_APIX dpEnumSessions(
  is generated and placed in a queue for retrieval with dpReceive.
  See anet.h for the definition of dp_objectDelta_packet_t.
 
- When called with monitor=TRUE, a burst of messages are generated giving 
+ When called with monitor=TRUE, a burst of messages are generated giving
  the initial contents of the table.
  When called with monitor=FALSE, no more messages of that sort will
  be generated, although there may still be some in the queue; you can
@@ -1133,11 +1130,11 @@ DP_API dp_result_t DP_APIX dpEnumSessions(
  The key argument is a variable-length binary string that indicates
  what objects to start or stop monitoring.
 
- To start or stop monitoring sessions, use 
+ To start or stop monitoring sessions, use
 	keylen=1, key[0] = dp_KEY_SESSIONS
- To stop monitoring servers, use 
+ To stop monitoring servers, use
 	keylen=1, key[0] = dp_KEY_SERVERPINGS,
- To start monitoring servers, use 
+ To start monitoring servers, use
  	keylen=3;
 	key[0] = dp_KEY_SERVERPINGS,
 	key[1] = (char) dpGETSHORT_FIRSTBYTE(sessiontype);
@@ -1147,7 +1144,7 @@ DP_API dp_result_t DP_APIX dpEnumSessions(
 	key[0] = dp_KEY_PLAYERS;
 	dpGetSessionId(dp, &sess, &key[1], &keylen);
 	keylen++;
- To request that latencies be included in player deltas for the current 
+ To request that latencies be included in player deltas for the current
 	session, use
     keylen = 1, key[0] = dp_KEY_PLAYER_LATENCIES;
 	The latency in milliseconds will be placed in the latency field of
@@ -1168,7 +1165,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
  If both intervals are 0, only ACKs of non-retransmitted reliable packets
-	will generate new measurements.  No extra bandwidth is used, but 
+	will generate new measurements.  No extra bandwidth is used, but
 	measurements may be infrequent if there are few reliable packets or
 	there is heavy packet loss.
  If piggbackPingInterval is set, additional small ping packets and
@@ -1521,7 +1518,7 @@ DP_API dp_result_t DP_APIX dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallba
  dpShutdown will wait an additional wait_after ms after closing the
  connection to handle packet retries.
  If flags is 1, the connection to the game server will not be closed.
- 
+
  Steps which are dependant on network events will time out in
  timeout ms, if timeout is non-zero.  Since there are three such
  states, the maximum total time for shut down is about
@@ -1559,11 +1556,11 @@ DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
 DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, long scoreVal);
 
 /*-------------------------------------------------------------------------
- Report the score(s) for player dpId.  
+ Report the score(s) for player dpId.
 
  The idea is to pack all the score info of interest about a particular player
  into a compact buffer, then call this function.  This should be done
- periodically, e.g. after every major event.  
+ periodically, e.g. after every major event.
 
  You should use the first two bytes for a rough 'score', most significant
  byte first, and the third byte should be 0 normally, and 1 if this player
@@ -1900,7 +1897,7 @@ DP_API FILE * DP_APIX dp_getLogFP(void);
  (Note that dp_setLogFname closes the currently open log file, regardless
  of whether it was passed in via this function, or opened by dp.)
  WARNING: unless you're very sure your program is using the same C runtime
- library instance as does this code, only use the return value of 
+ library instance as does this code, only use the return value of
  dp_getLogFP().
 --------------------------------------------------------------------------*/
 DP_API void DP_APIX dp_setLogFP(FILE *_fp);

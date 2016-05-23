@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <ctype.h>
 #include <windows.h>
 
-void usage(char * cmd) 
+void usage(char * cmd)
 {
 	printf("Usage: %s lineNoStart\n", cmd);
 	printf("lineNoStart may be 1 or 2\n");
@@ -37,7 +37,7 @@ void usage(char * cmd)
 	exit(1);
 }
 
-int main(int argc, char ** argv) 
+int main(int argc, char ** argv)
 {
 	PROCESS_INFORMATION pi;
 	STARTUPINFO si;
@@ -47,7 +47,6 @@ int main(int argc, char ** argv)
 	int lineNo;
 	FILE *stream;
 	int i;
-	
 
 	if (argc != 2) {
 		usage(argv[0]);
@@ -55,7 +54,6 @@ int main(int argc, char ** argv)
 	lineNo = atoi(argv[1]);
 	if (lineNo != 1 && lineNo != 2)
 		usage(argv[0]);
-
 
 	if( (stream = fopen( "input.txt", "rt" )) == NULL ) {
 		printf("input.txt is not in the current directory");
@@ -70,7 +68,7 @@ int main(int argc, char ** argv)
 		len = strlen(cmdLines[i]);
 		if (cmdLines[i][len-1] == '\n')
 			cmdLines[i][len-1] = 0;
-	} 
+	}
 	fclose( stream );
 
 	while (1) {
@@ -135,7 +133,7 @@ int main(int argc, char ** argv)
 			return 1;
 		}
 		lineNo=2; /* switch to join */
-	} 
+	}
 	printf("the end of the program\n");
 	return 0;
 }

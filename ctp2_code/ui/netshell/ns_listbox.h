@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,12 +46,11 @@
 #include "netfunc.h"
 
 
-
 template<class T,class NetShellT>
 class ns_ListBox : public ns_CivListBox, public NETFunc::ListHandler<T>
 {
 public:
-	
+
 	ns_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -70,13 +69,12 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	virtual void Insert( T *object );
 	virtual void Delete( T *object );
 	virtual void Change( T *object );
 	virtual void Destroy( void );
 
-	
 	ns_Item<T,NetShellT> *GetSelectedNetShellItem( void ) const
 	{ return (ns_Item<T,NetShellT> *)GetSelectedItem(); }
 
@@ -85,13 +83,13 @@ public:
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
 
 protected:
-	
+
 	AUI_ERRCODE	AddNetShellItem( ns_Item<T,NetShellT> *item );
 	AUI_ERRCODE	RemoveNetShellItem( ns_Item<T,NetShellT> *item );
 	AUI_ERRCODE UpdateNetShellItem( ns_Item<T,NetShellT> *item );
 
 private:
-	
+
 	AUI_ERRCODE	StoreAppropriateData( ns_Item<T,NetShellT> *item, sint32 i );
 };
 
@@ -105,7 +103,7 @@ private:
 template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Insert( T *object )
 {
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	ns_Item<T,NetShellT> *item = new ns_Item<T,NetShellT>(
 		&errcode,
@@ -115,26 +113,24 @@ void ns_ListBox<T,NetShellT>::Insert( T *object )
 	Assert( item != NULL );
 	if ( !item ) return;
 
-	AddNetShellItem( item );	
+	AddNetShellItem( item );
 }
-
 
 
 template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Delete( T *object )
 {
-	
+
 	ns_Item<T,NetShellT> *item = FindItem( object );
 	if ( item )
 		RemoveNetShellItem( item );
 }
 
 
-
 template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Change( T *object )
 {
-	
+
 	ns_Item<T,NetShellT> *item = FindItem( object );
 	if ( item )
 	{
@@ -142,17 +138,15 @@ void ns_ListBox<T,NetShellT>::Change( T *object )
 		UpdateNetShellItem( item );
 		item->ShouldDraw();
 
-		
 		SortByColumn( m_sortColumn, m_sortAscending );
 	}
 }
 
 
-
 template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Destroy( void )
 {
-	
+
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
@@ -162,7 +156,6 @@ void ns_ListBox<T,NetShellT>::Destroy( void )
 		RemoveNetShellItem( item );
 	}
 }
-
 
 
 template<class T,class NetShellT>
@@ -209,16 +202,13 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 }
 
 
-
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	Assert( theLdl->IsValid( ldlBlock ) );
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -227,7 +217,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	m_artXOffset = block->GetInt( "xoffset" );
 	m_artYOffset = block->GetInt( "yoffset" );
 
@@ -237,7 +226,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 template<class T,class NetShellT>
@@ -253,12 +241,10 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommon( void )
 }
 
 
-
 template<class T,class NetShellT>
 ns_ListBox<T,NetShellT>::~ns_ListBox()
 {
-	
-	
+
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
@@ -298,14 +284,13 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 	Assert( item != NULL );
 	if ( !item ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if ( item->GetNetShellObject() )
 	{
-		sint32 const	numProperties = 
+		sint32 const	numProperties =
 			item->GetNetShellObject()->list.size();
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
-			
+
 			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 			ns_Item<T,NetShellT> *childItem = new ns_Item<T,NetShellT>(
 				&errcode,
@@ -316,7 +301,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 			if ( !AUI_NEWOK(childItem,errcode) )
 				return AUI_ERRCODE_MEMALLOCFAILED;
 
-			
 			item->AddChild( childItem );
 
 			NetShellT *netShellObject = item->GetNetShellObject();
@@ -329,15 +313,12 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 		}
 	}
 
-	
 	AddItem( item );
 
-	
 	UpdateNetShellItem( item );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 template<class T,class NetShellT>
@@ -358,11 +339,11 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::RemoveNetShellItem(
 		if ( curItem == item )
 		{
 			RemoveItem( item->Id() );
-			
+
 			position = item->ChildList()->GetHeadPosition();
 			for ( sint32 j = item->ChildList()->L(); j; j-- )
 				delete item->ChildList()->GetNext( position );
-			
+
 			delete item;
 
 			break;
@@ -371,7 +352,6 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::RemoveNetShellItem(
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 template<class T,class NetShellT>
@@ -384,7 +364,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 	if ( item->GetNetShellObject() )
 	{
 		StoreAppropriateData( item, 0 );
-		sint32 const numProperties = 
+		sint32 const numProperties =
 			item->GetNetShellObject()->list.size();
 		ListPos position = item->ChildList()->GetHeadPosition();
 		for ( sint32 i = 1; i < numProperties; i++ )
@@ -395,28 +375,25 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 		}
 	}
 
-	
-	
+
 	m_draw |= k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
 
-	
 
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 	ns_Item<T,NetShellT> *item,
 	sint32 i )
 {
-	
+
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
 	NetShellT *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<T,NetShellT> *)item->GetParent())->
 			GetNetShellObject();
 
-	
 	sint32 width = 0;
 	if ( GetHeader() && GetHeader()->ChildList() )
 	{
@@ -442,10 +419,10 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 			{
 				AUI_ERRCODE	const	r =
 					item->SetText(* reinterpret_cast<MBCHAR const * *>(dataPtr));
-			
+
 				MBCHAR name[256 + 1];
 				strncpy(name, item->GetText(), 256);
-			
+
 				if (!item->GetTextFont())
 				{
 					item->TextReloadFont();
@@ -476,13 +453,12 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 }
 
 
-
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
 	sint32 column,
 	BOOL ascending )
 {
-	
+
 	if ( column == -1 ) return AUI_ERRCODE_OK;
 
 	Assert( 0 <= column && column < m_numColumns );
@@ -491,11 +467,9 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
 	m_sortColumn = column;
 	m_sortAscending = ascending;
 
-	
 	sint32 limit = m_numRows - 1;
 	if ( limit <= 0 ) return AUI_ERRCODE_OK;
 
-	
 	BOOL changed;
 	do
 	{
@@ -529,5 +503,4 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
 	return AUI_ERRCODE_OK;
 }
 
-
-#endif 
+#endif

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.73  1997/08/22 16:45:21  dkegel
  Become dp2.h if dp_ANET2 set.
  Revision 1.72  1997/07/27 22:57:49  dkegel
- No longer keep commInitReq in dp.  Moved dpdll.h so it 
+ No longer keep commInitReq in dp.  Moved dpdll.h so it
  can access types.
  Revision 1.71  1997/07/10 19:13:14  dkegel
  Use predefined _WIN32 symbol rather than special WIN32 symbol.
@@ -98,9 +98,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.46  1997/02/04 04:16:13  dkegel
  Added new function dpEnumGroupPlayers(); not implemented yet.
  Revision 1.45  1997/01/31 07:47:40  dkegel
- Settled the structure packing question by using 
+ Settled the structure packing question by using
  #pragma pack(x) / #pragma pack() pairs at top and bottom of
- all .h files that declare structures.  Was careful to put 
+ all .h files that declare structures.  Was careful to put
  #pragma pack(x) after last #include (to avoid wierd nesting effects
  due to lack of #pragma pack(pop).
  Revision 1.44  1997/01/30 01:56:48  dkegel
@@ -183,10 +183,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  setting a return value and falling through to end of function.
  Revision 1.23  1996/04/12 17:24:29  dkegel
  Added sessionType field to enumplayers packet to let us keep launched and
- unlaunched games from seeing each other.  (e.g. By incrementing 
+ unlaunched games from seeing each other.  (e.g. By incrementing
  myDP->s.sessionType immediately before calling dpFreeze, and decrementing
  it thereafter.)
- Also check sessionType and karma a little more carefully before 
+ Also check sessionType and karma a little more carefully before
  responding to enumsession packets.
  Revision 1.22  1996/04/09 02:29:49  dkegel
  1. Added password and other user fields to dp_session_t.
@@ -203,7 +203,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  2. Improved the documentation of each of the packet types in dp.h
  3. No longer call dpDumpPlayerTable() etc.
  Revision 1.19  1996/03/14 20:23:48  dkegel
- 1. New arguments and functionality for dpEnumPlayers.  Now you don't have 
+ 1. New arguments and functionality for dpEnumPlayers.  Now you don't have
  to join a session to enumerate its players.
  2. Fixed bug that caused truncation of last player's callsign.
  Revision 1.18  1996/03/09 01:20:46  dkegel
@@ -226,13 +226,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  operation to not destroy a player or create more than one of a player.
  Only showed up with 'short' addresses.
  Revision 1.13  1996/02/22 23:04:25  dkegel
- 1. dp_enumsess_packet_t now contains the link address of the 
- client requesting the session description.  That way, the master 
- can reply with a unicast response.  
+ 1. dp_enumsess_packet_t now contains the link address of the
+ client requesting the session description.  That way, the master
+ can reply with a unicast response.
  2. Added masterHostName arg to dpEnumSessions, which uses it to
  send a dp_enumsess_packet_t directly to the master.
  3. Added -s flag to dp_test.c to set masterHostName.  Needd to
- test dwango driver in the absence of a dwango host.   
+ test dwango driver in the absence of a dwango host.
  Revision 1.12  1996/02/20 05:46:47  dkegel
  dp_host_t was never used.
  Revision 1.11  1996/02/16 20:27:22  dkegel
@@ -240,7 +240,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  2. Trust outgoing packet queue if MULTICAST_BLAST defined.
  3. Local messages are delivered even if network is busy.
  4. Now send keepalives to master if user hasn't lately.
- 5. Added session karma to user packet envelope.  
+ 5. Added session karma to user packet envelope.
  6. Don't let user see packets from strangers.
  7. Retry player creation if no reply.
  8. Kludge: doubled BROADCAST_THRESH, because it counts dpid's rather than
@@ -378,14 +378,11 @@ typedef struct dp_enumsession_s {
 	unsigned isNew : 1;		/* Newly added session */
 } dp_enumsession_t;			/* Used to avoid duplicate reports */
 
-
 /********************************************************************* */
 /* The class structure itself */
 
-
 #define dp_MAGIC	4531
 #define dp_MAX_SERVERS 256
-
 
 typedef struct dp_s {
 	int			 magic;			/* sentinel to make sure structure valid */
@@ -407,7 +404,7 @@ typedef struct dp_s {
 	/* Our local list of players on this machine. No remote players included. */
 	int          my_nPlayers;
 	dp_playerId_t	my_players[dp_MAXPLAYERS];
-	
+
 	/* Copy of last player list from master. */
 	int          nPlayers;
 	dp_playerId_t	players[dp_MAXPLAYERS];

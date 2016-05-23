@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -30,12 +30,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define CANCELBOX_WIDTH 200
 #define CANCELBUTTON_HEIGHT 20
-#define CANCELBUTTON_WIDTH 80	
+#define CANCELBUTTON_WIDTH 80
 #define CANCELBOX_MARGIN 10
 #define MY_CMD_CANCEL 1
 
 /*--------------------
-   Global Variable 
+   Global Variable
 --------------------*/
 static HANDLE hCancel;
 static HWND	hWnd = NULL;
@@ -44,7 +44,7 @@ static BOOL CancelClicked = FALSE;
 /*--------------------------------------------------------------------------
   Window procdure
 --------------------------------------------------------------------------*/
-long FAR PASCAL cancelbox_WndProc(HWND hWnd, UINT wMessage, WPARAM wParam, LONG lParam) 
+long FAR PASCAL cancelbox_WndProc(HWND hWnd, UINT wMessage, WPARAM wParam, LONG lParam)
 {
 	switch(wMessage) {
 	case WM_COMMAND:
@@ -69,11 +69,10 @@ long FAR PASCAL cancelbox_WndProc(HWND hWnd, UINT wMessage, WPARAM wParam, LONG 
  msg is the text to display in the dialog box
  The caption is used only if it is passed into CreateWindows.
 --------------------------------------------------------------------------*/
-void cancelbox_set(const char *caption, const char *msg) 
+void cancelbox_set(const char *caption, const char *msg)
 {
-	
-	static HANDLE hStaticText;
 
+	static HANDLE hStaticText;
 
 	if (!hWnd) {
 		HDC hdc;
@@ -82,7 +81,7 @@ void cancelbox_set(const char *caption, const char *msg)
 		int temp;
 		int titleBarHeight;
 
-		WNDCLASS wndclass;			  
+		WNDCLASS wndclass;
 		wndclass.style 	= CS_HREDRAW | CS_VREDRAW;
 		wndclass.lpfnWndProc = cancelbox_WndProc;
 		wndclass.cbClsExtra = 0;
@@ -96,33 +95,33 @@ void cancelbox_set(const char *caption, const char *msg)
 
 		if (!RegisterClass (&wndclass))
 			return;
-		hWnd = CreateWindow("MyClass", caption, WS_OVERLAPPED,     
+		hWnd = CreateWindow("MyClass", caption, WS_OVERLAPPED,
 			0,0, 10,10,
 			NULL, NULL, hInstance, NULL);
 
 		hdc = GetDC(hWnd);
 		GetTextExtentPoint32(hdc, msg, strlen(msg), &sizeText);
 		ReleaseDC(hWnd, hdc);
-		
+
 		titleBarHeight = GetSystemMetrics(SM_CYSIZE);
 		sizeWin.cy = CANCELBOX_MARGIN * 3 + sizeText.cy + titleBarHeight + CANCELBUTTON_HEIGHT;
-		
+
 		MoveWindow(hWnd, GetScreenWidth()/2-CANCELBOX_WIDTH/2,
 			GetScreenHeight()/2-sizeWin.cy/2,
 			CANCELBOX_WIDTH, sizeWin.cy, FALSE);
-			
+
 		hStaticText = CreateWindow("STATIC", msg, WS_CHILD|SS_LEFT,
 			CANCELBOX_WIDTH/2 - sizeText.cx/2,
 			CANCELBOX_MARGIN, /*sizeWin.cy/2 - sizeText.cy/2-CANCELBUTTON_HEIGHT - 2 * CANCELBOX_MARGIN,*/
 			sizeText.cx, sizeText.cy,
 			hWnd,NULL, hInstance, NULL);
 		temp = sizeText.cy + CANCELBOX_MARGIN *2;
-			
-		hCancel = CreateWindow("BUTTON", "Cancel", 
-			WS_CHILD | BS_DEFPUSHBUTTON, 
-			CANCELBOX_WIDTH/2 - CANCELBUTTON_WIDTH/2 , 
+
+		hCancel = CreateWindow("BUTTON", "Cancel",
+			WS_CHILD | BS_DEFPUSHBUTTON,
+			CANCELBOX_WIDTH/2 - CANCELBUTTON_WIDTH/2 ,
 			temp,
-			CANCELBUTTON_WIDTH,CANCELBUTTON_HEIGHT, 
+			CANCELBUTTON_WIDTH,CANCELBUTTON_HEIGHT,
 			hWnd, (HMENU)MY_CMD_CANCEL, hInstance, NULL);
 	} else {
 		SetWindowText(hStaticText, msg);
@@ -130,14 +129,14 @@ void cancelbox_set(const char *caption, const char *msg)
 	ShowWindow(hCancel, SW_SHOWNORMAL);
 	ShowWindow(hStaticText, SW_SHOWNORMAL);
 	ShowWindow(hWnd, SW_SHOWNORMAL);
-	
+
 	CancelClicked = FALSE;
 }
 
 /*--------------------------------------------------------------------------
- Hide a cancelbox 
+ Hide a cancelbox
 --------------------------------------------------------------------------*/
-void cancelbox_clear() 
+void cancelbox_clear()
 {
 	ShowWindow(hWnd, SW_HIDE);
 }
@@ -146,7 +145,7 @@ void cancelbox_clear()
  call this often while the cancelbox is on the screen.
  It returns TRUE if the user has clicked on Cancel.
 --------------------------------------------------------------------------*/
-BOOL cancelbox_poll(void) 
+BOOL cancelbox_poll(void)
 {
 	MSG msg;
 	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -162,7 +161,7 @@ int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
 		, int nCmdShow)
 {
 	int i;
-	
+
 	cancelbox_set("Hello.. This is only a test");
 	for (i = 0; i < 500; i++)  {
 		if (cancelbox_poll())

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #ifdef HAVE_UNISTD_H
@@ -23,7 +12,6 @@
 #include "ldl_memmap.h"
 
 #include "ldlif.h"
-
 
 
 ldl::ldl(const char *fname, const char *outputDir, BOOL bUseInternalMemmap )
@@ -41,9 +29,8 @@ BOOL ldl::ReadData( const char *fname )
 	ldlif_parse(strrchr(fname, FILE_SEPC) + 1);
 
 	return TRUE;
-	
-}
 
+}
 
 ldl_datablock *ldl::FindDataBlock( char *szName, ldl_datablock *dbParent )
 {

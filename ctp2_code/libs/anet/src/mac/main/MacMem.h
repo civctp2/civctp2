@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,22 +28,22 @@ extern "C" {
 #endif
 
 	void MEM_free_lock(void* thePtr);
-	
+
 	void *MyNewPtr(long x);
 	void *MyNewPtrClear(long x);
 	void* MyRealloc(void *x, long y);
 	OSErr MyDisposePtr(void *x);
 	long Mymsize(void *x);
-	
+
 	unsigned char *HeapReAlloc(HANDLE hHeap, unsigned long flags, char * obj, size_t size);
 
 	//	algigned memory calls
-	
+
 	void* NewPtrAlign(long size);
 	void DisposePtrAlign(void* thePtr);
-	
+
 	//	memory cache calls
-	
+
 	void* GetNewObject(void);
 	void FreeObject(void* theObject);
 

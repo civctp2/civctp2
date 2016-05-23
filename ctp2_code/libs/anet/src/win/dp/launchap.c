@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -81,7 +81,7 @@ static dp_result_t notifystub(HANDLE hprocess)
  If /NEWCONSOLE is found in appParam->shellOpts, a new console is created.
  If /OLDCONSOLE is found in appParam->shellOpts, the old console is used.
 
- result may be NULL.  If result is not NULL, it is filled with system 
+ result may be NULL.  If result is not NULL, it is filled with system
  dependant information about the newly launched app.  On Win32 systems,
  if result is NULL, the handle to the newly created process is closed,
  otherwise it is left open for the caller.
@@ -119,7 +119,7 @@ DP_API dp_result_t dpLaunchApp2(dp_appParam_t *appParam, dpLaunchApp_result_t *r
 		}
 		DPRINT(("launched app w/ new console.\n"));
 	} else if (strstr(appParam->shellOpts, "/OLDCONSOLE")) {
-		if (!CreateProcess(NULL, cmd, NULL, NULL, TRUE, 
+		if (!CreateProcess(NULL, cmd, NULL, NULL, TRUE,
 					CREATE_NEW_PROCESS_GROUP, NULL, appParam->cwd, &si, &pi)) {
 			return dp_RES_BAD;
 		}

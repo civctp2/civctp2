@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The message turning on/off screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -82,7 +82,6 @@ static aui_StringTable		*s_messageString	= NULL,
 
 static void optionwarningscreen_setMyWarning(uint32);
 
-
 sint32	optionwarningscreen_displayMyWindow(uint32 warning)
 {
 	sint32 retval=0;
@@ -131,7 +130,6 @@ AUI_ERRCODE optionwarningscreen_Initialize( void )
 
 	s_optionwarningscreenWindow->SetStronglyModal(TRUE);
 
-	
 	s_but1 = spNew_ctp2_Button(&errcode,windowBlock,"But1Button",optionwarningscreen_but1Press);
 	s_but2 = spNew_ctp2_Button(&errcode,windowBlock,"But2Button",optionwarningscreen_but2Press);
 	s_nevermind = spNew_ctp2_Button(&errcode,windowBlock,"NeverMindButton",optionwarningscreen_nevermindPress);
@@ -146,7 +144,6 @@ AUI_ERRCODE optionwarningscreen_Initialize( void )
 	sprintf( block, "%s.%s", windowBlock, "Name" );
 	s_optionwarningscreenWindow->AddTitle( block );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -185,39 +182,37 @@ AUI_ERRCODE optionwarningscreen_Cleanup()
 void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-	
+
 	Assert((s_currentWarning >=OWS_OWSFIRST) && (s_currentWarning < OWS_OWSTOTAL));
 	switch(s_currentWarning) {
-	case OWS_LOAD: 
-		
+	case OWS_LOAD:
+
 		optionsscreen_removeMyWindow(action);
 		if(optionwarningscreen_removeMyWindow(action))
 			loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 		break;
 
 	case OWS_NEWGAME:
-		
-		
+
 		optionsscreen_removeMyWindow(action);
 		if(optionwarningscreen_removeMyWindow(action))
 			g_civApp->PostRestartGameAction();
 		break;
 
 	case OWS_RESTART:
-		
+
 		optionsscreen_removeMyWindow(action);
 		if(optionwarningscreen_removeMyWindow(action)) {
 			g_civApp->PostRestartGameSameMapAction();
 		}
 		break;
 
-	case OWS_QUIT: 
+	case OWS_QUIT:
 		ExitGame();
 		break;
 
 	case OWS_QUITTOSHELL:
-		
-		
+
 		optionsscreen_removeMyWindow(action);
 		if(optionwarningscreen_removeMyWindow(action))
 		{
@@ -241,12 +236,12 @@ void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	if(optionwarningscreen_removeMyWindow(action)) {
-		
 
-		
-		
+
+
+
 		g_isScenario = FALSE;
-		
+
 		loadsavescreen_displayMyWindow(LSS_SAVE_GAME);
 	}
 
@@ -274,4 +269,3 @@ void CloseOptionWarningScreenAction::Execute(aui_Control *control, uint32 action
 {
 	optionwarningscreen_Cleanup();
 }
-

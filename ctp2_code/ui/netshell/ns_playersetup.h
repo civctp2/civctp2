@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,7 +44,6 @@ public:
 	void Pack();
 	void Unpack();
 
-	
 	void Reset();
 
 	const char *GetIcq() const { return (const char *)m_icq; }
@@ -76,8 +75,8 @@ public:
 	{ m_experience = experience; }
 
 
-	
-	
+
+
 
 	int	GetTribe()
 	{
@@ -122,7 +121,6 @@ private:
 	int m_experience;
 };
 
-
 class ns_PlayerSetup : public ns_Object<nf_PlayerSetup, ns_PlayerSetup>
 {
 public:
@@ -132,5 +130,4 @@ public:
 	char *m_name;
 };
 
-
-#endif 
+#endif

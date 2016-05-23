@@ -13,7 +13,7 @@
 class MapDatabase : public Database<MapRecord> {
 public:
 	MapDatabase();
-	
+
 	BOOL Initialize(char *filename, C3DIR dir);
 
 	const MapRecord *FindBestMapSizeMatch(sint32 w, sint32 h);

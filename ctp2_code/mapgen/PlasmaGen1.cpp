@@ -8,7 +8,6 @@
 #include <stdlib.h>
 
 
-
 STDAPI CoCreateMapGenerator(IUnknown **obj)
 {
 	PlasmaGenerator1 *gen = new PlasmaGenerator1();
@@ -77,9 +76,9 @@ PlasmaGenerator1::Generate(sint16 *map, sint32 width, sint32 height)
 				if((oddline) && !x)
 					x += xstride;
 				map[y * width + x] = sint16(rand() % (range * 2)) - range;
-				map[y * width + x] += AverageVals(map, x, y, 
-												  xstride, ystride, width); 
-				
+				map[y * width + x] += AverageVals(map, x, y,
+												  xstride, ystride, width);
+
 			}
 		}
 		range >>= 1;
@@ -99,42 +98,35 @@ STDMETHODIMP PlasmaGenerator1::Generate(sint8 *map, sint32 width, sint32 height)
 {
 	srand(time(0));
 	int i,j,i2,j2,i3,j3,h,h2,delta,a,b,c,d;
-    
-	
-	
-	for (i=0;i<height;i++) 
-		for (j=0;j<width;j++) 
+
+
+	for (i=0;i<height;i++)
+		for (j=0;j<width;j++)
 			map[i * width + j]=0;
-    
-	
+
 	for (h=width; h>1; h=h2) {
 		h2=h/2;
 		delta= (int)(3*(h/4));
 		if(delta < 1)
 			delta = 1;
-		for (i=0; i<width; i+=h) { 
+		for (i=0; i<width; i+=h) {
 			i2=((i+h)&(width-1));
-            for (j=0; j<width; j+=h) { 
+            for (j=0; j<width; j+=h) {
                 j2=((j+h)&(width-1));
                 i3=i+h2; j3=j+h2;
                 a=map[i*width+j]; b=map[i2*width+j];
                 c=map[i*width+j2]; d=map[i2*width+j2];
-				
-                
+
                 map[i3*width+j3]=Rand1((a+b+c+d)/4,delta);
-				
-                
+
                 if (i==0)
 					map[i3*width+j]=Rand1((a+b)/2,delta);
-				
-                
+
                 if (j==0)
 					map[i*width+j3]=Rand1((a+c)/2,delta);
-				
-                
+
                 map[i2*width+j3]=Rand1((b+d)/2,delta);
-				
-                
+
                 map[i3*width+j2]=Rand1((c+d)/2,delta);
 			}
 		}

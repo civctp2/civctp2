@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,11 +46,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef _WSTCP_H_
 #define _WSTCP_H_ 1
 
-#include <windows.h> 
+#include <windows.h>
 #include <winsock.h>
 
 #include "dictset.h"
-
 
 /**
 * Constants
@@ -107,9 +106,8 @@ typedef struct tcpInstance_s
   dcst_t secondary;     /* TCPHANDLE<->TCPPEER secondary disctionary set */
   TCPHANDLE myHandle;			/* Handle for this node's address */
   TCPHANDLE broadcastHandle;	/* Handle for broadcast address */
-} 
+}
 TCPINSTANCE;
-
 
 /**
 * Methods
@@ -149,21 +147,21 @@ void TCPWIN_Destroy(TCPINSTANCE *TCP);
  *   If the address appears in the primary handle list then a check is done
  *   to ensure that if the handle appears in the secondary handle list then
  *   it is marked as NON-LIVE.  If the address appears in the secondary
- *   handle list AND the secondary address is marked as LIVE then the 
- *   primary and secondary addresses are EXCHANGED and the secondary is 
+ *   handle list AND the secondary address is marked as LIVE then the
+ *   primary and secondary addresses are EXCHANGED and the secondary is
  *   marked as NON-LIVE.
  */
 TCPHANDLE TCPWIN_Address2Handle(TCPINSTANCE *TCP, TCPPEER *addr, TCPPEER *addr2, BOOL insert, BOOL live);
 
 /* Convert a TCPHANDLE to its corresponding TCPPEER.  Return
-   a status code to indicate success or failure. 
+   a status code to indicate success or failure.
    If a second address exists then it is returned also via addr2
    A second address is only seached for if the primary existed
 */
 int TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr, TCPPEER2 *addr2);
 
 /*
- * Send a packet to a node identified by a TCPHANDLE. 
+ * Send a packet to a node identified by a TCPHANDLE.
  *
  * TCPHANDLE may turn out to have more than one address associated with it
  * In the event that more than one address is associated with the handle, the
@@ -175,7 +173,7 @@ int TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest)
 /*
  * Receive a packet.  The packet will be copied into bufptr, and
  * the source handle will be copied into phSrc.  If pSrcAddr is
- * not NULL, the source address will be copied into it. 
+ * not NULL, the source address will be copied into it.
  *
  * By virtue of the fact that incoming packet's source addresses
  * are translated into player handles, receiving packets may cause

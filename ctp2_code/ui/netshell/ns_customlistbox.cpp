@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
-// - Replaced typename T in specialized template member function by the 
+// - Replaced typename T in specialized template member function by the
 //   the type for that the function is specialized, by Martin Gühmann.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
@@ -47,7 +47,6 @@
 #include "ns_tribes.h"
 #include "ns_spinner.h"
 #include "ns_string.h"
-
 
 sint32 ns_TransportListBox::m_version = 102;
 
@@ -72,18 +71,18 @@ bool NETFunc::ListHandler<nf_AIPlayer>::Handle(NETFunc::Message *m) {
 		return true;
 	} else if(m->GetCode() == NETFunc::Message::ADDAIPLAYER) {
 		t.Set(m->GetBodySize(), m->GetBody());
-		
+
 		Insert(Add(new nf_AIPlayer(t)));
 		return true;
 	} else if(m->GetCode() == NETFunc::Message::DELAIPLAYER) {
 		t.Set(m->GetBodySize(), m->GetBody());
-		
+
 		Delete(&t);
 		Del(&t);
 		return true;
 	} else if(m->GetCode() == NETFunc::Message::CHGAIPLAYER) {
 		t.Set(m->GetBodySize(), m->GetBody());
-		
+
 		Change(Chg(&t));
 		return true;
 	}
@@ -163,7 +162,6 @@ ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 {
 }
 
-
 EmailTransport::EmailTransport()
 {
 	ns_String s( "strings.email" );
@@ -183,11 +181,11 @@ ns_TransportListBox::ns_TransportListBox (
 	ns_ListBox<NETFunc::Transport, ns_Transport> (
 	retval, id, ldlBlock, ActionFunc, cookie )
 {
-	
+
 	NETFunc::TransportList *l = &(g_netfunc->transportList);
 	NETFunc::TransportList::iterator i;
 	for(i = l->begin(); i != l->end(); i++) {
-		
+
 		switch((*i)->GetType()) {
 		case NETFunc::Transport::INTERNET:
 			Insert(Add(new NETFunc::Internet(*(NETFunc::Internet *)*i)));
@@ -200,14 +198,14 @@ ns_TransportListBox::ns_TransportListBox (
 		break;
 		case NETFunc::Transport::NULLMODEM:
 			Insert(Add(new NETFunc::NullModem(*(NETFunc::NullModem *)*i)));
-		break;	
+		break;
 		default:
 		break;
 		}
 	}
 
-	
-	
+
+
 
 
 
@@ -215,12 +213,11 @@ ns_TransportListBox::ns_TransportListBox (
 	FILE *f = fopen( "nstrnsprt.cfg", "rb" );
 	if ( f )
 	{
-		
+
 		sint32 test = 0;
 		fread( &test, sizeof( sint32 ), 1, f );
 
-		
-		
+
 		if ( test == m_version )
 		{
 			if ( fread( &lasttime, sizeof( sint32 ), 1, f ) != 1 )
@@ -240,8 +237,7 @@ ns_TransportListBox::~ns_TransportListBox()
 		FILE *f = fopen( "nstrnsprt.cfg", "wb" );
 		if ( f )
 		{
-			
-			
+
 			fwrite( &m_version, sizeof( sint32 ), 1, f );
 
 			fwrite( &lasttime, sizeof( sint32 ), 1, f );
@@ -361,14 +357,13 @@ void ns_PlayerListBox::Change( NETFunc::Player *player )
 
 void ns_PlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 {
-	
+
 	aui_Control *rowParent = (aui_Control *)FindItem( player );
 	if ( !rowParent ) return;
 
-	
 	if ( rowParent->ChildList()->L() < 2 ) return;
 	aui_Control *control = (aui_Control *)rowParent->ChildList()->
-		GetAtIndex( 1 ); 
+		GetAtIndex( 1 );
 
 	ns_Player *nsPlayer = FindItem( player )->GetNetShellObject();
 
@@ -391,7 +386,6 @@ void ns_PlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 		control->SetTextShadowColor( m_pingFastStyle->GetTextShadowColor() );
 	}
 }
-
 
 ns_RPlayerListBox::ns_RPlayerListBox (
 		AUI_ERRCODE *retval,
@@ -467,14 +461,13 @@ void ns_ServerListBox::Change( NETFunc::Server *server )
 
 void ns_ServerListBox::ColorCodePingTime( NETFunc::Server *server )
 {
-	
+
 	aui_Control *rowParent = (aui_Control *)FindItem( server );
 	if ( !rowParent ) return;
 
-	
 	if ( rowParent->ChildList()->L() < 2 ) return;
 	aui_Control *control = (aui_Control *)rowParent->ChildList()->
-		GetAtIndex( 1 ); 
+		GetAtIndex( 1 );
 
 	if ( server->GetPing() > m_pingSlowStyle->GetTextUnderline() )
 	{
@@ -495,7 +488,6 @@ void ns_ServerListBox::ColorCodePingTime( NETFunc::Server *server )
 		control->SetTextShadowColor( m_pingFastStyle->GetTextShadowColor() );
 	}
 }
-
 
 ns_GPlayerListBox::ns_GPlayerListBox (
 		AUI_ERRCODE *retval,
@@ -543,7 +535,7 @@ ns_GPlayerListBox::~ns_GPlayerListBox()
 
 void ns_GPlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 {
-	
+
 	ns_HPlayerItem *rowParent = FindHPlayerItem( player );
 	if ( !rowParent ) return;
 
@@ -571,7 +563,6 @@ void ns_GPlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 	}
 }
 
-
 void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 {
 	ns_ListBox<NETFunc::Player, ns_GPlayer>::Insert( player );
@@ -598,7 +589,7 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 	}
 	else
 	{
-		
+
 		if ( !g_gamesetup.GetHandicapping() )
 		{
 			item->GetCivpointsButton()->Enable( FALSE );
@@ -606,10 +597,8 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 		}
 
 
-
 	}
 
-	
 	switch ( g_allinoneWindow->GetMode() )
 	{
 	case AllinoneWindow::CONTINUE_CREATE:
@@ -624,16 +613,14 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 	ColorCodePingTime( player );
 }
 
-
 void ns_GPlayerListBox::EnableTribeButton( NETFunc::Player *player )
 {
 	ns_HPlayerItem *item = (ns_HPlayerItem *)FindItem(player);
-	
+
 	if(item) {
 		item->GetTribeButton()->Enable(TRUE);
 	}
 }
-
 
 void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 {
@@ -645,10 +632,8 @@ void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 
 	m_hplayerlistbox->RemoveItem( item->Id() );
 
-	
 	delete item;
 
-	
 	if ( g_netfunc->IsHost() )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
@@ -660,10 +645,8 @@ void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 		Assert( success );
 	}
 
-	
 	m_hplayerlistbox->SelectItem( m_hplayerlistbox->GetSelectedItemIndex() );
 }
-
 
 
 void ns_GPlayerListBox::Change( NETFunc::Player *player )
@@ -674,7 +657,6 @@ void ns_GPlayerListBox::Change( NETFunc::Player *player )
 	Assert( item != NULL );
 	if ( !item ) return;
 
-	
 	bool selfMotivated = true;
 	if ( !g_gamesetup.GetHandicapping() ||
 		 !FindItem(player)->GetNetShellObject()->IsMine() )
@@ -684,7 +666,6 @@ void ns_GPlayerListBox::Change( NETFunc::Player *player )
 
 	UpdateHPlayerItem( player, selfMotivated );
 
-	
 	SortByColumn(
 		m_hplayerlistbox->GetSortColumn(),
 		m_hplayerlistbox->GetSortAscending() );
@@ -693,16 +674,13 @@ void ns_GPlayerListBox::Change( NETFunc::Player *player )
 }
 
 
-
 void ns_GPlayerListBox::Destroy( void )
 {
-	
+
 	for(iterator i=begin(); i!=end(); i++)
 		Delete(*i);
-	
 
 }
-
 
 
 AUI_ERRCODE ns_GPlayerListBox::SortByColumn( sint32 column, BOOL ascending )
@@ -714,7 +692,6 @@ AUI_ERRCODE ns_GPlayerListBox::SortByColumn( sint32 column, BOOL ascending )
 
 	return m_hplayerlistbox->SortByColumn( column, ascending );
 }
-
 
 
 ns_HPlayerItem *ns_GPlayerListBox::FindHPlayerItem( NETFunc::Player *player )
@@ -736,7 +713,6 @@ ns_HPlayerItem *ns_GPlayerListBox::FindHPlayerItem( NETFunc::Player *player )
 }
 
 
-
 void ns_GPlayerListBox::UpdateHPlayerItem(
 	NETFunc::Player *player,
 	bool selfMotivated )
@@ -753,11 +729,9 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 	item->GetLaunchedItem()->
 		SetImage( player->IsReadyToLaunch() ? g_netshell->GetTrueBmp() : 0 );
 
-	
 	MBCHAR name[ dp_PNAMELEN + 1 ];
 	strncpy( name, player->GetName(), dp_PNAMELEN );
 
-	
 	if ( !item->GetNameItem()->GetTextFont() )
 		item->GetNameItem()->TextReloadFont();
 
@@ -774,7 +748,7 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 		SetText( ping );
 
 	item->SetTribe( playersetup.GetTribe() );
-	
+
 	if ( !selfMotivated )
 	{
 		item->SetCivpoints( playersetup.GetCivPoints() );
@@ -789,7 +763,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	ns_Item<NETFunc::Player, ns_Player> *item,
 	sint32 i )
 {
-	
+
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
 	ns_Player *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
@@ -807,7 +781,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 			{
 				MBCHAR name[dp_PNAMELEN + 1];
 				strncpy(name, * reinterpret_cast<MBCHAR const * *>(dataPtr), dp_PNAMELEN);
-			
+
 				if (!item->GetTextFont())
 				{
 					item->TextReloadFont();
@@ -837,7 +811,6 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 }
 
 
-
 ns_AIPlayerListBox::ns_AIPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -857,7 +830,6 @@ ns_AIPlayerListBox::ns_AIPlayerListBox (
 	m_hplayerlistbox( hplayerlistbox )
 {
 }
-
 
 
 void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
@@ -886,7 +858,7 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 	}
 	else
 	{
-		
+
 		if ( !g_gamesetup.GetHandicapping() )
 		{
 			item->GetCivpointsButton()->Enable( FALSE );
@@ -894,10 +866,8 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 		}
 
 
-
 	}
 
-	
 	switch ( g_allinoneWindow->GetMode() )
 	{
 	case AllinoneWindow::CONTINUE_CREATE:
@@ -906,7 +876,6 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 		break;
 	}
 }
-
 
 
 void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
@@ -919,10 +888,8 @@ void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
 
 	m_hplayerlistbox->RemoveItem( item->Id() );
 
-	
 	delete item;
 
-	
 	if ( g_netfunc->IsHost() )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
@@ -934,10 +901,8 @@ void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
 		Assert( success );
 	}
 
-	
 	m_hplayerlistbox->SelectItem( m_hplayerlistbox->GetSelectedItemIndex() );
 }
-
 
 
 void ns_AIPlayerListBox::Change( nf_AIPlayer *player )
@@ -948,7 +913,6 @@ void ns_AIPlayerListBox::Change( nf_AIPlayer *player )
 	Assert( item != NULL );
 	if ( !item ) return;
 
-	
 	bool selfMotivated = true;
 	if ( !g_gamesetup.GetHandicapping() || !g_netfunc->IsHost() )
 	{
@@ -957,23 +921,19 @@ void ns_AIPlayerListBox::Change( nf_AIPlayer *player )
 
 	UpdateHPlayerItem( player, selfMotivated );
 
-	
 	SortByColumn(
 		m_hplayerlistbox->GetSortColumn(),
 		m_hplayerlistbox->GetSortAscending() );
 }
 
 
-
 void ns_AIPlayerListBox::Destroy( void )
 {
-	
+
 	for(iterator i=begin(); i!=end(); i++)
 		Delete(*i);
 
-
 }
-
 
 
 AUI_ERRCODE ns_AIPlayerListBox::SortByColumn( sint32 column, BOOL ascending )
@@ -985,7 +945,6 @@ AUI_ERRCODE ns_AIPlayerListBox::SortByColumn( sint32 column, BOOL ascending )
 
 	return m_hplayerlistbox->SortByColumn( column, ascending );
 }
-
 
 
 ns_HPlayerItem *ns_AIPlayerListBox::FindHPlayerItem( nf_AIPlayer *player )
@@ -1007,7 +966,6 @@ ns_HPlayerItem *ns_AIPlayerListBox::FindHPlayerItem( nf_AIPlayer *player )
 }
 
 
-
 void ns_AIPlayerListBox::UpdateHPlayerItem(
 	nf_AIPlayer *player,
 	bool selfMotivated )
@@ -1016,19 +974,15 @@ void ns_AIPlayerListBox::UpdateHPlayerItem(
 	Assert( item != NULL );
 	if ( !item ) return;
 
-	
 	item->GetHostItem()->
 		SetImage( 0 );
 
-	
 	item->GetLaunchedItem()->
 		SetImage( g_netshell->GetTrueBmp() );
 
-	
 	MBCHAR name[ dp_PNAMELEN + 1 ];
 	strncpy( name, player->GetName(), dp_PNAMELEN );
 
-	
 	if ( !item->GetNameItem()->GetTextFont() )
 		item->GetNameItem()->TextReloadFont();
 
@@ -1039,7 +993,6 @@ void ns_AIPlayerListBox::UpdateHPlayerItem(
 	item->GetNameItem()->
 		SetText( name );
 
-	
 	static ns_String aiString( "strings.ai" );
 	item->GetPingItem()->
 		SetText( aiString.GetString() );
@@ -1048,8 +1001,8 @@ void ns_AIPlayerListBox::UpdateHPlayerItem(
 
 
 
-	
-	
+
+
 	if ( !selfMotivated )
 	{
 		item->SetCivpoints( player->GetCivPoints() );

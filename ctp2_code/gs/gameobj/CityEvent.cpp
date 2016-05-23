@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Readded possibility to gain an advance from a just captured 
+// - Readded possibility to gain an advance from a just captured
 //   city, by Martin Gühmann. However with or without the change
 //   the CaptureCityEvent leaks, maybe a problem of SlicObject.
 // - Prevented crash when reporting completion of the Solaris project.
@@ -86,43 +86,42 @@ STDEHANDLER(CaptureCityEvent)
 	MapPoint pos;
 	sint32 originalOwner;
 
-	if(!args->GetCity(0, city)) 
+	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-	if(!args->GetPlayer(0, newOwner)) 
+	if(!args->GetPlayer(0, newOwner))
 		return GEV_HD_Continue;
 
-	if(!args->GetInt(0, cause)) 
+	if(!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
 	originalOwner = city.GetOwner();
 	city.GetPos(pos);
 
 	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY)cause);
-	
+
 	if(city.GetData()->GetCityData()->PopCount() < 1) {
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
 			GEA_City, city,
-			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED, 
-			GEA_Player, newOwner, 
+			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED,
+			GEA_Player, newOwner,
 			GEA_End);
 	} else {
 		if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
 			g_director->AddCenterMap(pos);
 		}
-		
+
 		if(newOwner == g_selected_item->GetVisiblePlayer())
 			g_selected_item->SetSelectCity(city);
 
-		
 		if (city.AccessData()->CountSlaves() > 0) {
 			SlicObject *	so = new SlicObject("20IAFreeSlaves");
 			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}
-		
+
 		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
 			SlicObject *	so = new SlicObject("911CityNewOwner");
 			so->AddRecipient(originalOwner);
@@ -130,9 +129,9 @@ STDEHANDLER(CaptureCityEvent)
 			so->AddPlayer(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
-		}		
-		
-		if(g_rand->Next(100) < 
+		}
+
+		if(g_rand->Next(100) <
 		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
 //Added by Martin Gühmann to allow city advance gaining from
 //a captured city.
@@ -176,11 +175,11 @@ STDEHANDLER(CaptureCityEvent)
 
 			delete[] canSteal;
 		}
-		Assert(g_player[newOwner]); 
+		Assert(g_player[newOwner]);
 		g_player[newOwner]->FulfillCaptureCityAgreement(city);
 		g_slicEngine->RunCityCapturedTriggers(newOwner, originalOwner,
 		                                      city);
-		
+
 		if(city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 		{
 			sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CITYCONQUERED);
@@ -238,7 +237,6 @@ STDEHANDLER(CityBuildFrontEvent)
 	city.CD()->BuildFront();
 
 
-
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
 		if (city.CD()->PopCount() == 1) {
 			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
@@ -256,7 +254,7 @@ STDEHANDLER(CityCreateUnitEvent)
 {
 	Unit homeCity;
 	if(!args->GetCity(0, homeCity)) {
-		
+
 		return GEV_HD_Continue;
 	}
 
@@ -339,7 +337,7 @@ STDEHANDLER(KillPopEvent)
 
 	return GEV_HD_Continue;
 }
-	
+
 STDEHANDLER(FinishUprisingEvent)
 {
 	Army sa;
@@ -359,7 +357,7 @@ STDEHANDLER(CleanupUprisingEvent)
 	Army sa;
 	Unit city;
 
-	args->GetArmy(0, sa); 
+	args->GetArmy(0, sa);
 	if(!args->GetCity(0, city)) {
 		if(sa.IsValid()) {
 			sa->DecrementDontKillCount();
@@ -382,12 +380,11 @@ STDEHANDLER(NukeCityEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, nuker)) return GEV_HD_Continue;
 
-	
 	if(g_player[c.GetOwner()]) {
 		sint32 i;
 
 		for(i = 0; i < g_player[c.GetOwner()]->m_all_units->Num(); i++) {
-			
+
 			Unit u = g_player[c.GetOwner()]->m_all_units->Access(i);
 
 			if(!u.GetDBRec()->GetNuclearAttack())
@@ -398,13 +395,13 @@ STDEHANDLER(NukeCityEvent)
 
 			if(u->GetTargetCity().GetOwner() != nuker)
 				continue;
-			
+
 			unitutil_ExecuteMadLaunch(u);
 		}
 	}
 
 	if(g_network.IsHost() && nuker == g_selected_item->GetCurPlayer()) {
-		
+
 		g_network.Block(nuker);
 	}
 
@@ -447,8 +444,7 @@ STDEHANDLER(MakeFranchiseEvent)
 
 STDEHANDLER(SlaveRaidCityEvent)
 {
-	
-	
+
 	Unit city;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
@@ -510,7 +506,7 @@ STDEHANDLER(UnconvertCityEvent)
 {
 	Unit c;
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
-	
+
 	c.Unconvert();
 	return GEV_HD_Continue;
 }
@@ -551,7 +547,7 @@ STDEHANDLER(InjoinCityEvent)
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
 	c.Injoin(pl);
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -587,7 +583,7 @@ STDEHANDLER(CreateBuildingEvent)
 
 	if(g_player[player]->GetGaiaController()->HasMinSatsBuilt()) {
 		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			so = new SlicObject("GCMinSatsReachedUs");
 			so->AddPlayer(player);
@@ -603,13 +599,13 @@ STDEHANDLER(CreateBuildingEvent)
 
 	if(g_player[player]->GetGaiaController()->HasMinCoresBuilt()) {
 		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			so = new SlicObject("GCMinCoresReachedUs");
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
-	
+
 			so = new SlicObject("GCMinCoresReachedThem");
 			so->AddPlayer(player);
 			so->AddAllRecipientsBut(player);
@@ -632,16 +628,15 @@ STDEHANDLER(CreateWonderEvent)
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
 	g_player[c->GetOwner()]->RegisterCreateWonder(c, wonder);
 
-	
 	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&
 		!Player::IsThisPlayerARobot(c->GetOwner())) {
-		
+
 		if ( g_theProfileDB->IsWonderMovies() ) {
 			if (g_director) {
 				g_director->AddPlayWonderMovie(c.CD()->GetBuildQueue()->GetHead()->m_type);
 			}
 		}
-		
+
 	}
 	if(g_network.IsHost()) {
 		g_network.Block(c.GetOwner());
@@ -717,18 +712,18 @@ STDEHANDLER(KillTileEvent)
 	Cell *cell = g_theWorld->GetCell(pos);
 	if(cell->GetCanDie()) {
 		cell->Kill();
-		
+
 		g_theWorld->CutImprovements(pos);
-		
+
 		cell->CalcTerrainMoveCost();
 		g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 		g_tiledMap->TileChanged(pos);
 		MapPoint npos;
-		for(WORLD_DIRECTION d = NORTH; d < NOWHERE; 
+		for(WORLD_DIRECTION d = NORTH; d < NOWHERE;
 			d = (WORLD_DIRECTION)((sint32)d + 1)) {
 			if(pos.GetNeighborPosition(d, npos)) {
 				g_tiledMap->PostProcessTile(
-					npos, 
+					npos,
 					g_theWorld->GetTileInfo(npos));
 				g_tiledMap->TileChanged(npos);
 			}
@@ -740,7 +735,7 @@ STDEHANDLER(KillTileEvent)
 
 void cityevent_Initialize()
 {
-	g_gevManager->AddCallback(GEV_CaptureCity, GEV_PRI_Primary, &s_CaptureCityEvent);	
+	g_gevManager->AddCallback(GEV_CaptureCity, GEV_PRI_Primary, &s_CaptureCityEvent);
 
 	g_gevManager->AddCallback(GEV_CityTurnPreProduction, GEV_PRI_Primary, &s_CityTurnPreProductionEvent);
 	g_gevManager->AddCallback(GEV_CityBeginTurn, GEV_PRI_Primary, &s_CityBeginTurnEvent);

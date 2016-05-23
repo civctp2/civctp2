@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
@@ -25,9 +23,8 @@ c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 
 	*retval = InitCommonLdl(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_ListItem::~c3_ListItem()
@@ -38,12 +35,10 @@ c3_ListItem::~c3_ListItem()
 		delete m_childList->GetNext( position );
 }
 
-
 AUI_ERRCODE c3_ListItem::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	return AUI_ERRCODE_OK;
 }
-
 
 
 sint32 c3_ListItem::Compare(c3_ListItem *item2, uint32 column)
@@ -63,9 +58,8 @@ SingleListItem::SingleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, 
 
 	*retval = InitCommonLdl(name, value, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE SingleListItem::InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *ldlBlock)
 {
@@ -88,18 +82,14 @@ AUI_ERRCODE SingleListItem::InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *ld
 
 void SingleListItem::Update(void)
 {
-	
-	
+
 	c3_Static *subItem;
-	
-	
+
 	subItem = (c3_Static *)GetChildByIndex(0);
 
-	
 	MBCHAR name[ 256 + 1 ];
 	strncpy( name, m_name, 256 );
 
-	
 	if ( !subItem->GetTextFont() )
 		subItem->TextReloadFont();
 
@@ -120,7 +110,7 @@ sint32 SingleListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		
+
 		i1 = (c3_Static *)this->GetChildByIndex(column);
 		i2 = (c3_Static *)item2->GetChildByIndex(column);
 		strcpy(strbuf1,i1->GetText());
@@ -131,4 +121,3 @@ sint32 SingleListItem::Compare(c3_ListItem *item2, uint32 column)
 	}
 	return 0;
 }
-

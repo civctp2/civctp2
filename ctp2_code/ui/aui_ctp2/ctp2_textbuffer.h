@@ -1,4 +1,3 @@
-
 #ifndef __CTP2_TEXTBUFFER__
 #define __CTP2_TEXTBUFFER__
 
@@ -26,22 +25,21 @@ public:
 
 private:
 	aui_BitmapFont	*m_font;
-	aui_Surface		*m_surface;				
-	RECT			m_rect;					
-	sint32			m_charWidth;			
-	sint32			m_charHeight;			
+	aui_Surface		*m_surface;
+	RECT			m_rect;
+	sint32			m_charWidth;
+	sint32			m_charHeight;
 
-	sint32			m_numDisplayedRows;		
-	sint32			m_numDisplayedColumns;	
+	sint32			m_numDisplayedRows;
+	sint32			m_numDisplayedColumns;
 
-	sint32			m_maxRows;				
+	sint32			m_maxRows;
 
-	sint32			m_topLine;				
+	sint32			m_topLine;
 
-	sint32			m_curLine;				
-	sint32			m_numLines;				
+	sint32			m_curLine;
+	sint32			m_numLines;
 	MBCHAR			**m_rowData;
 };
 
 #endif
-

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 			break;
 	}
 	int     height  = 1 << i;
-	
+
 	sint8 * map = new sint8 [width * height];
     std::fill(map, map + (width * height), 0);
 
@@ -144,7 +144,7 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 	int     h       = height;
 	int     w       = width;
 	sint16  delta   = static_cast<sint16>(bigside);
-		
+
 	while(bigside > 1) {
 	h = std::max(h / 2, 2);
 	w = std::max(w / 2, 2);

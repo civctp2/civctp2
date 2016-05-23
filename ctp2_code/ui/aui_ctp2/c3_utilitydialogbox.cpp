@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
@@ -42,19 +41,15 @@
 #include "c3_static.h"
 #include "thermometer.h"
 
-
 #include "textbutton.h"
 #include "c3_button.h"
 #include "ctp2_button.h"
 
-
 #include "c3textfield.h"
-
 
 #include "ctp2_listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
-
 
 #include "c3window.h"
 #include "c3windows.h"
@@ -86,55 +81,48 @@
 
 #include "MainControlPanel.h"
 
-
 #include "UnitPool.h"
 extern UnitPool		*g_theUnitPool;
-
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI			*g_c3ui;
-extern SelectedItem				*g_selected_item; 
+extern SelectedItem				*g_selected_item;
 extern Player					**g_player;
-
 
 extern StringDB					*g_theStringDB;
 
 extern sint32					g_modalWindow;
-
 
 c3_UtilityTextMessagePopup		*g_utilityTextMessage = NULL;
 c3_UtilityAbortPopup			*g_utilityAbort = NULL;
 
 c3_ExpelPopup					*g_expelPopup = NULL;
 
-
 void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_UtilityCityListPopup *popup = (c3_UtilityCityListPopup *)cookie;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_window->Ok())
 	{
-		
+
 		SingleListItem *item = (SingleListItem *) popup->m_list->GetSelectedItem();
 		if (!item) return;
 
 		sint32 cityIndex = item->GetValue();
 
-		
-		
-		
-		
+
+
+
+
 		Assert(FALSE);
 		if (popup->m_callback)
 		{
-		
-			
+
 			popup->RemoveWindow();
 		}
 	}
@@ -143,24 +131,21 @@ void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action,
 		if (popup->m_callback)
 			popup->m_callback( Unit(0), FALSE );
 
-		
 		popup->RemoveWindow();
 	}
 }
 
-
 void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_PiracyPopup *popup = (c3_PiracyPopup *)cookie;
 	if (!popup) return;
 
 	if ((c3_Button*)control == popup->m_pirate)
 	{
-		
+
 
 
 
@@ -170,7 +155,6 @@ void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, v
 		if (popup->m_callback)
 		{
 
-			
 			popup->RemoveWindow();
 		}
 	}
@@ -179,18 +163,16 @@ void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, v
 
 
 
-		
+
 		popup->RemoveWindow();
 	}
 }
 
-
 void C3ExpelButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_ExpelPopup *popup = (c3_ExpelPopup *)cookie;
 	if (!popup) return;
 
@@ -199,41 +181,34 @@ void C3ExpelButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 		if (popup->m_callback)
 			popup->m_callback( EXPEL_ACTION_ATTACK );
 
-		
 		popup->RemoveWindow();
 
 	}
 
-	
 	if ((c3_Button*)control == popup->m_expel)
 	{
 		if (popup->m_callback)
 			popup->m_callback( EXPEL_ACTION_EXPEL );
 
-		
 		popup->RemoveWindow();
 	}
 
-	
 	if ((c3_Button*)control == popup->m_cancel)
 	{
 		if (popup->m_callback)
 			popup->m_callback( EXPEL_ACTION_CANCEL );
 
-		
 		popup->RemoveWindow();
 	}
 }
 
 
-
 void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE &&
 		action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	
 	c3_UtilityTextFieldPopup *popup = (c3_UtilityTextFieldPopup *)cookie;
 	if (!popup) return;
 
@@ -241,16 +216,14 @@ void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action
 			(((aui_TextField *)control == popup->m_text) &&
 				(action == AUI_TEXTFIELD_ACTION_EXECUTE)))
 	{
-		
+
 		MBCHAR *resultText = new MBCHAR[256];
-		
-		
+
 		popup->m_text->GetFieldText(resultText, 256);
 
-		
-		if (!strlen(resultText)) 
+		if (!strlen(resultText))
 		{
-			
+
 			delete resultText;
 			resultText = NULL;
 			if(popup->m_wantEmpties) {
@@ -262,7 +235,7 @@ void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action
 		else if (popup->m_callback)
 		{
 			popup->m_callback(resultText, TRUE, popup->GetData());
-			
+
 			popup->RemoveWindow();
 		}
 	}
@@ -271,18 +244,15 @@ void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action
 		if (popup->m_callback)
 			popup->m_callback(NULL, FALSE, popup->GetData());
 
-		
 		popup->RemoveWindow();
 	}
 }
 
-
 void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_UtilityTextMessagePopup *popup = (c3_UtilityTextMessagePopup *)cookie;
 	if (!popup) return;
 
@@ -291,12 +261,10 @@ void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 acti
 		if (popup->m_callback)
 			popup->m_callback( TRUE );
 
-		
 		popup->RemoveWindow();
 
 	}
 
-	
 	if ( popup->m_type )
 	{
 		if ((c3_Button*)control == popup->m_window->Cancel())
@@ -304,19 +272,16 @@ void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 acti
 			if (popup->m_callback)
 				popup->m_callback( FALSE );
 
-			
 			popup->RemoveWindow();
 		}
 	}
 }
 
-
 void C3AbortButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_UtilityAbortPopup *popup = (c3_UtilityAbortPopup *)cookie;
 	if (!popup) return;
 
@@ -325,30 +290,26 @@ void C3AbortButtonActionCallback( aui_Control *control, uint32 action, uint32 da
 		if (popup->m_callback)
 			popup->m_callback( FALSE );
 
-		
 		popup->RemoveWindow();
 
 	}
 
-	
 	if ( popup->m_type )
 	{
 	}
 }
 
-
 void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	c3_UtilityPlayerListPopup *popup = (c3_UtilityPlayerListPopup *)cookie;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_kick)
 	{
-		
+
 		DoubleListItem *item = (DoubleListItem *) popup->m_list->GetSelectedItem();
 		if (!item) return;
 
@@ -361,7 +322,7 @@ void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 actio
 	}
 	if ((ctp2_Button*)control == popup->m_open)
 	{
-		
+
 		DoubleListItem *item = (DoubleListItem *) popup->m_list->GetSelectedItem();
 		if (!item) return;
 
@@ -374,7 +335,7 @@ void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 actio
 	}
 	if ((ctp2_Button*)control == popup->m_close)
 	{
-		
+
 		DoubleListItem *item = (DoubleListItem *) popup->m_list->GetSelectedItem();
 		if (!item) return;
 
@@ -390,7 +351,6 @@ void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 actio
 		if (popup->m_callback)
 			popup->m_callback( -1, FALSE, PLAYER_ACTION_MAX );
 
-		
 		popup->RemoveWindow();
 	}
 }
@@ -411,32 +371,26 @@ c3_UtilityCityListPopup::c3_UtilityCityListPopup( c3_UtilityCityListCallback *ca
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"DefaultUtilityCityListPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_ok = NULL;
 	m_cancel = NULL;
 	m_list = NULL;
 	m_title_label = NULL;
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 
 }
@@ -467,13 +421,12 @@ sint32 c3_UtilityCityListPopup::Initialize( MBCHAR *windowBlock )
 
 
 
-	
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "CityList" );
 	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -494,7 +447,7 @@ void c3_UtilityCityListPopup::Cleanup( void )
 	mycleanup( m_title_label );
 	mycleanup( m_ok );
 	mycleanup( m_cancel );
-	
+
 	m_callback = NULL;
 
 	delete m_window;
@@ -507,7 +460,6 @@ void c3_UtilityCityListPopup::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
 
 	auiErr = g_c3ui->AddWindow(m_window);
@@ -531,10 +483,8 @@ sint32 c3_UtilityCityListPopup::UpdateData( void )
 
 	AUI_ERRCODE		retval;
 
-	
 	UnitDynamicArray *cityList = g_player[curPlayer]->GetAllCitiesList();
 
-	
 	strcpy(ldlBlock,"SingleListItem");
 	SingleListItem *item = NULL;
 
@@ -558,32 +508,26 @@ c3_PiracyPopup::c3_PiracyPopup( c3_PiracyCallback *callback, MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"DefaultPiracyPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_pirate = NULL;
 	m_cancel = NULL;
 	m_list = NULL;
 	m_title_label = NULL;
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -592,7 +536,6 @@ sint32 c3_PiracyPopup::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "PirateButton" );
 	m_pirate = new c3_Button(&errcode, aui_UniqueId(), controlBlock, C3PiracyButtonCallback, this);
 	Assert( AUI_NEWOK(m_pirate, errcode) );
@@ -608,13 +551,11 @@ sint32 c3_PiracyPopup::Initialize( MBCHAR *windowBlock )
 	Assert( AUI_NEWOK(m_title_label, errcode) );
 	if ( !AUI_NEWOK(m_title_label, errcode) ) return -1;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
 	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -635,7 +576,7 @@ void c3_PiracyPopup::Cleanup( void )
 	mycleanup( m_title_label );
 	mycleanup( m_pirate );
 	mycleanup( m_cancel );
-	
+
 	m_callback = NULL;
 
 	delete m_window;
@@ -648,7 +589,6 @@ void c3_PiracyPopup::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
 
 	auiErr = g_c3ui->AddWindow(m_window);
@@ -672,10 +612,8 @@ sint32 c3_PiracyPopup::UpdateData( void )
 
 	AUI_ERRCODE		retval;
 
-	
 	UnitDynamicArray *cityList = g_player[curPlayer]->GetAllCitiesList();
 
-	
 	strcpy(ldlBlock,"PiracyListItem");
 	SingleListItem *item = NULL;
 
@@ -699,32 +637,26 @@ c3_ExpelPopup::c3_ExpelPopup( c3_ExpelCallback *callback, MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"DefaultExpelPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_attack = NULL;
 	m_expel = NULL;
 	m_cancel = NULL;
 	m_title_label = NULL;
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -733,7 +665,6 @@ sint32 c3_ExpelPopup::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "AttackButton" );
 	m_attack = new c3_Button(&errcode, aui_UniqueId(), controlBlock, C3ExpelButtonCallback, this);
 	Assert( AUI_NEWOK(m_attack, errcode) );
@@ -754,7 +685,6 @@ sint32 c3_ExpelPopup::Initialize( MBCHAR *windowBlock )
 	Assert( AUI_NEWOK(m_title_label, errcode) );
 	if ( !AUI_NEWOK(m_title_label, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -776,7 +706,7 @@ void c3_ExpelPopup::Cleanup( void )
 	mycleanup( m_attack );
 	mycleanup( m_expel );
 	mycleanup( m_cancel );
-	
+
 	m_callback = NULL;
 
 	delete m_window;
@@ -807,30 +737,27 @@ void c3_ExpelPopup::RemoveWindow( void )
 
 
 
-c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback* callback, 
-												   const MBCHAR *titleText, const MBCHAR *defaultText, 
+c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback* callback,
+												   const MBCHAR *titleText, const MBCHAR *defaultText,
 												   const MBCHAR *messageText, MBCHAR *ldlBlock, void *data,
 													bool wantEmpties)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"DefaultUtilityTextFieldPopup");
 
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_ok = NULL;
 	m_cancel = NULL;
 
@@ -846,8 +773,7 @@ c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback*
 
 	m_wantEmpties = wantEmpties;
 
-	
-	if (defaultText) 
+	if (defaultText)
 	{
 		m_default_text = new MBCHAR[256];
 		strcpy(m_default_text, defaultText);
@@ -866,7 +792,6 @@ c3_UtilityTextFieldPopup::c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback*
 
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 
 	m_text->SetKeyboardFocus();
@@ -906,8 +831,7 @@ sint32 c3_UtilityTextFieldPopup::Initialize( MBCHAR *windowBlock )
 		C3UtilityTextFieldButtonActionCallback, this);
 	Assert( AUI_NEWOK(m_text, errcode) );
 	if ( !AUI_NEWOK(m_text, errcode) ) return -1;
-	
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -930,7 +854,7 @@ void c3_UtilityTextFieldPopup::Cleanup( void )
 	mycleanup( m_text );
 	mycleanup( m_title_label );
 	mycleanup( m_default_text );
-	
+
 	delete m_window;
 	m_window = NULL;
 
@@ -941,9 +865,8 @@ void c3_UtilityTextFieldPopup::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
-	
+
 	auiErr = g_c3ui->AddWindow(m_window);
 	Assert( auiErr == AUI_ERRCODE_OK );
 	keypress_RegisterHandler(m_window);
@@ -961,8 +884,8 @@ void c3_UtilityTextFieldPopup::RemoveWindow( void )
 
 sint32 c3_UtilityTextFieldPopup::UpdateData( void )
 {
-	
-	if (m_default_text) 
+
+	if (m_default_text)
 		m_text->SetFieldText(m_default_text);
 
 	return 0;
@@ -978,35 +901,31 @@ c3_UtilityTextMessagePopup::c3_UtilityTextMessagePopup( MBCHAR const *text, sint
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
-	else 
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
+	else
 	{
 		if (type) strcpy(windowBlock,"DefaultUtilityTextMessagePopup");
 		else strcpy(windowBlock,"DefaultUtilityTextMessageOkPopup");
 	}
 
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_ok = NULL;
 	m_cancel = NULL;
 	m_title_label = NULL;
 	m_text = NULL;
 	m_type = type;
-	
+
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -1058,8 +977,7 @@ sint32 c3_UtilityTextMessagePopup::Initialize( MBCHAR *windowBlock )
 	m_text = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_text, errcode) );
 	if ( !AUI_NEWOK(m_text, errcode) ) return -1;
-	
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -1083,7 +1001,7 @@ void c3_UtilityTextMessagePopup::Cleanup( void )
 	mycleanup( m_title_label );
 
 	m_type = 0;
-	
+
 	delete m_window;
 	m_window = NULL;
 
@@ -1094,9 +1012,8 @@ void c3_UtilityTextMessagePopup::DisplayWindow( MBCHAR const *text )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData(text);
-	
+
 	auiErr = g_c3ui->AddWindow(m_window);
 	Assert( auiErr == AUI_ERRCODE_OK );
 
@@ -1119,20 +1036,18 @@ void c3_UtilityTextMessagePopup::RemoveWindow( void )
 
 sint32 c3_UtilityTextMessagePopup::UpdateData( MBCHAR const *text )
 {
-	
+
 	if (text)
 		m_text->SetText(text);
 
-
 	return 0;
 }
-
 
 void c3_UtilityTextMessageCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
-	
+
 	if (g_utilityTextMessage)
 		g_utilityTextMessage->Cleanup();
 
@@ -1147,19 +1062,17 @@ c3_UtilityTextMessageCreateAction::c3_UtilityTextMessageCreateAction( MBCHAR con
 	m_ldlBlock = ldlBlock;
 }
 
-
 void c3_UtilityTextMessageCreateAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
-	
+
 	c3_TextMessage( m_text, m_type, m_callback, m_ldlBlock );
 }
-
 
 void c3_UtilityAbortCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
-	
+
 	if (g_utilityAbort)
 		g_utilityAbort->Cleanup();
 
@@ -1172,7 +1085,7 @@ void c3_UtilityAbortCleanupAction::Execute(aui_Control *control,
 
 void c3_TextMessage(MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback *callback, MBCHAR const *ldlBlock )
 {
-	
+
 	if (g_utilityTextMessage) return;
 
 	g_utilityTextMessage = new c3_UtilityTextMessagePopup( text, type, callback, ldlBlock );
@@ -1181,7 +1094,7 @@ void c3_TextMessage(MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallba
 
 void c3_KillTextMessage( void )
 {
-	
+
 	if (g_utilityTextMessage)
 		g_utilityTextMessage->Cleanup();
 
@@ -1194,7 +1107,7 @@ void c3_KillTextMessage( void )
 
 void c3_AbortMessage(MBCHAR *text, sint32 type, c3_AbortMessageCallback *callback, MBCHAR *ldlBlock )
 {
-	
+
 	if (g_utilityAbort) return;
 
 	g_utilityAbort = new c3_UtilityAbortPopup( text, type, callback, ldlBlock );
@@ -1234,20 +1147,18 @@ c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR const *text, sint32 type, c3_
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
-	else 
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
+	else
 	{
 		if (type == k_UTILITY_ABORT) strcpy(windowBlock,"DefaultUtilityAbortPopup");
 		else strcpy(windowBlock,"DefaultUtilityAbortProgressPopup");
 	}
 
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
@@ -1256,10 +1167,9 @@ c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR const *text, sint32 type, c3_
 	m_text = NULL;
 	m_meter = NULL;
 	m_type = type;
-	
+
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -1268,12 +1178,10 @@ sint32 c3_UtilityAbortPopup::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "AbortButton" );
 	m_abort = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, C3AbortButtonActionCallback, this);
 	TestControl( m_abort );
 
-	
 	if (m_type == k_UTILITY_PROGRESS_ABORT)
 	{
 		sprintf( controlBlock, "%s.%s", windowBlock, "Meter" );
@@ -1285,8 +1193,7 @@ sint32 c3_UtilityAbortPopup::Initialize( MBCHAR *windowBlock )
 	m_text = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_text, errcode) );
 	if ( !AUI_NEWOK(m_text, errcode) ) return -1;
-	
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -1308,7 +1215,7 @@ void c3_UtilityAbortPopup::Cleanup( void )
 	mycleanup( m_meter );
 
 	m_type = 0;
-	
+
 	delete m_window;
 	m_window = NULL;
 
@@ -1319,7 +1226,6 @@ void c3_UtilityAbortPopup::DisplayWindow( MBCHAR const *text, sint32 percentFill
 {
 	AUI_ERRCODE auiErr;
 
-	
 	if ( text ) {
 		UpdateData(text);
 	}
@@ -1348,7 +1254,7 @@ void c3_UtilityAbortPopup::RemoveWindow( void )
 
 sint32 c3_UtilityAbortPopup::UpdateData( MBCHAR const *text )
 {
-	
+
 	if (text)
 		m_text->SetText(text);
 
@@ -1357,7 +1263,7 @@ sint32 c3_UtilityAbortPopup::UpdateData( MBCHAR const *text )
 	return 0;
 }
 
-sint32 c3_UtilityAbortPopup::UpdateMeter( sint32 percentFilled ) 
+sint32 c3_UtilityAbortPopup::UpdateMeter( sint32 percentFilled )
 {
 	m_meter->SetPercentFilled( percentFilled );
 
@@ -1365,7 +1271,6 @@ sint32 c3_UtilityAbortPopup::UpdateMeter( sint32 percentFilled )
 
 	return 0;
 }
-
 
 void c3_UtilityAbortPopup::kh_Close()
 {
@@ -1383,32 +1288,26 @@ c3_UtilityPlayerListPopup::c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallba
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"DefaultUtilityPlayerListPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 	}
 
-	
 	m_abort = NULL;
 	m_kick = NULL;
 	m_open = NULL;
 	m_close = NULL;
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -1417,7 +1316,6 @@ sint32 c3_UtilityPlayerListPopup::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "AbortButton" );
 	m_abort = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, C3UtilityPlayerListButtonActionCallback, this);
 	TestControl( m_abort );
@@ -1434,13 +1332,11 @@ sint32 c3_UtilityPlayerListPopup::Initialize( MBCHAR *windowBlock )
 	m_close = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, C3UtilityPlayerListButtonActionCallback, this);
 	TestControl( m_close );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
 	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -1463,7 +1359,7 @@ void c3_UtilityPlayerListPopup::Cleanup( void )
 	mycleanup( m_open );
 	mycleanup( m_close );
 	mycleanup( m_list );
-	
+
 	m_callback = NULL;
 
 	delete m_window;
@@ -1476,7 +1372,6 @@ void c3_UtilityPlayerListPopup::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
 
 	auiErr = g_c3ui->AddWindow(m_window);
@@ -1507,13 +1402,11 @@ sint32 c3_UtilityPlayerListPopup::UpdateData( void )
 
 	AUI_ERRCODE		retval;
 
-	
 	strcpy(ldlBlock,"DoubleListItem");
 	DoubleListItem *item = NULL;
 
 	m_list->Clear();
 
-	
 	for ( sint32 i = 1 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if ( g_player[i] ) {
@@ -1576,9 +1469,8 @@ DoubleListItem::DoubleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, 
 
 	*retval = InitCommonLdl(name, value, text, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE DoubleListItem::InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock)
 {
@@ -1612,15 +1504,12 @@ AUI_ERRCODE DoubleListItem::InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *te
 
 void DoubleListItem::Update(void)
 {
-	
-	
+
 	c3_Static *subItem;
-	
-	
+
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText(m_name);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 	subItem->SetText(m_text);
 
@@ -1628,11 +1517,9 @@ void DoubleListItem::Update(void)
 
 sint32 DoubleListItem::SetSecondColumn( MBCHAR *s)
 {
-	
-	
+
 	c3_Static *subItem;
-	
-	
+
 	subItem = (c3_Static *)GetChildByIndex(1);
 	subItem->SetText(s);
 
@@ -1651,7 +1538,7 @@ sint32 DoubleListItem::Compare(c3_ListItem *item2, uint32 column)
 	switch (column) {
 	case 0:
 	case 1:
-		
+
 		i1 = (c3_Static *)this->GetChildByIndex(column);
 		i2 = (c3_Static *)item2->GetChildByIndex(column);
 		strcpy(strbuf1,i1->GetText());
@@ -1662,7 +1549,6 @@ sint32 DoubleListItem::Compare(c3_ListItem *item2, uint32 column)
 	}
 	return 0;
 }
-
 
 void c3Expel_Initialize( c3_ExpelCallback callback )
 {
@@ -1680,16 +1566,15 @@ void c3Expel_Cleanup( void )
 }
 
 
-
 static c3_UtilityTextFieldPopup	*s_nameTheCityPopup;
 static Unit						s_unit;
 
 void NameTheCityDialogBoxCallback(MBCHAR const *text, sint32 val2, void *data)
 {
-	if (!val2) return; 
+	if (!val2) return;
 
-	
-	
+
+
 
 	if(g_theUnitPool->IsValid(s_unit)) {
 		if (s_unit.GetOwner() == g_selected_item->GetVisiblePlayer()) {
@@ -1698,7 +1583,6 @@ void NameTheCityDialogBoxCallback(MBCHAR const *text, sint32 val2, void *data)
 		}
 	}
 
-	
 	delete[] text;
 
 }
@@ -1715,23 +1599,22 @@ void c3_utilitydialogbox_NameCity(Unit city)
 
 	if ( !s_nameTheCityPopup ) {
 
-		s_nameTheCityPopup = new c3_UtilityTextFieldPopup(NameTheCityDialogBoxCallback, 
-									NULL, 
-									nameText, 
-									NULL, 
+		s_nameTheCityPopup = new c3_UtilityTextFieldPopup(NameTheCityDialogBoxCallback,
+									NULL,
+									nameText,
+									NULL,
 									"NewNameTheCityPopup"
 									);
 		Assert(s_nameTheCityPopup);
 	} else {
-		
+
 		if (s_nameTheCityPopup->m_default_text) {
 			delete s_nameTheCityPopup->m_default_text;
 			s_nameTheCityPopup->m_default_text = new MBCHAR[strlen(nameText) + 1];
 			strcpy(s_nameTheCityPopup->m_default_text, nameText);
-			
+
 			s_nameTheCityPopup->UpdateData();
-			
-			
+
 			s_nameTheCityPopup->m_text->SetKeyboardFocus();
 			s_nameTheCityPopup->m_text->SelectAll();
 		}
@@ -1754,24 +1637,22 @@ void c3_utilitydialogbox_NameCityCleanup(void)
 c3_UtilityTextFieldPopup		*s_genericTextEntryPopup = NULL;
 
 void c3_utilitydialogbox_TextFieldDialog(MBCHAR *titleText,
-								   MBCHAR *defaultText, 
+								   MBCHAR *defaultText,
 								   MBCHAR *messageText,
 								   c3_UtilityTextFieldCallback *callback,
 								   MBCHAR *ldlBlock)
 {
 
-
 	if ( !s_genericTextEntryPopup ) {
 
-		s_genericTextEntryPopup = new c3_UtilityTextFieldPopup(callback, 
-																titleText, 
-																defaultText, 
-																messageText, 
+		s_genericTextEntryPopup = new c3_UtilityTextFieldPopup(callback,
+																titleText,
+																defaultText,
+																messageText,
 																ldlBlock);
 		Assert(s_genericTextEntryPopup);
 	}
 
-	
 	if (s_genericTextEntryPopup->m_default_text) {
 		delete s_genericTextEntryPopup->m_default_text;
 		s_genericTextEntryPopup->m_default_text = new MBCHAR[strlen(defaultText) + 1];
@@ -1779,10 +1660,8 @@ void c3_utilitydialogbox_TextFieldDialog(MBCHAR *titleText,
 	}
 
 
-
 	s_genericTextEntryPopup->UpdateData();
-	
-	
+
 	s_genericTextEntryPopup->m_text->SetKeyboardFocus();
 	s_genericTextEntryPopup->m_text->SelectAll();
 

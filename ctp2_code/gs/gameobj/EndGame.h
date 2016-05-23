@@ -9,19 +9,17 @@ class CivArchive;
 
 class EndGame {
 private:
-	
+
 	sint32 m_owner;
 	sint32 m_currentStage;
 
 	sint32 m_savedCurrentStage;
 
-	sint32 m_currentStageBegan; 
+	sint32 m_currentStageBegan;
 
-	
 	sint32 *m_numBuilt;
 
-	
-	
+
 	sint32 *m_savedNumBuilt;
 
 	friend class NetEndGame;
@@ -49,18 +47,14 @@ public:
 	void XLabCaptured();
 	void Cataclysm();
 
-	
 	sint32 GetTurnsSinceStageBegan();
 
-	
 	sint32 GetStage();
 	sint32 GetNumberBuilt(sint32 type);
 
-	
 	sint32 GetDisplayedStage();
 	sint32 GetNumberShown(sint32 type);
 
-	
 	void UpdateDisplayState(void);
 
 	BOOL HasLab();

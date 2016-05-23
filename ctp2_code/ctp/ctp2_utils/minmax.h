@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Created file (31-Mar-2007 Martin Gühmann)
-// - Moved min and max from c3.h so that we can use it also in the other 
+// - Moved min and max from c3.h so that we can use it also in the other
 //   projects so that we don't have to include everything from c3,h.
 //
 //----------------------------------------------------------------------------
@@ -63,4 +63,3 @@
 #endif	// _MSC_VER < 1300
 
 #endif
-

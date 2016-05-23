@@ -10,21 +10,21 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version when set.
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Hidden cities are no longer displayed in the info bar. 
+// - Hidden cities are no longer displayed in the info bar.
 //   - Oct. 15th 2004 Martin Gühmann
 // - Hidden tile improvements are no longer displayed.
 // - Does not show anymore the current tarrain stats but those from
@@ -41,8 +41,8 @@
 // - Game doesn't crash anymore if the cursor is moved over a city that is
 //   displayed as city belonging to a civilisation that was destroyed.
 //   - Last 2 on Mar. 4th 2004 Martin Gühmann
-// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
-//   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -79,7 +79,6 @@ extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
 extern C3UI					*g_c3ui;
 
-
 InfoBar *g_infoBar = NULL;
 
 void InfoBar::Initialize()
@@ -89,12 +88,12 @@ void InfoBar::Initialize()
 	if(!g_infoBar) {
 		g_infoBar = new InfoBar(&errcode,
 								aui_UniqueId(),
-								196, 
+								196,
 								g_ScreenHeight - k_INFOBAR_HEIGHT,
-								465, 
+								465,
 								k_INFOBAR_HEIGHT,
 								16,
-								k_PatternName); 
+								k_PatternName);
 
 	}
 
@@ -119,10 +118,10 @@ InfoBar::InfoBar(AUI_ERRCODE *retval,
 				 sint32 height,
 				 sint32 bpp,
 				 MBCHAR *pattern )
-	: C3Window(retval, 
-			   id, 
-			   x, y, width, height, 
-			   bpp, pattern, 
+	: C3Window(retval,
+			   id,
+			   x, y, width, height,
+			   bpp, pattern,
 			   AUI_WINDOW_TYPE_SINKING )
 {
 	memset(m_str, 0, sizeof(m_str));
@@ -132,7 +131,7 @@ InfoBar::InfoBar(AUI_ERRCODE *retval,
 
 AUI_ERRCODE InfoBar::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -149,8 +148,7 @@ AUI_ERRCODE InfoBar::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	DrawText(surface, x, y);
 
-	
-	Invalidate(); 
+	Invalidate();
 
 	return AUI_ERRCODE_OK;
 }
@@ -158,13 +156,13 @@ AUI_ERRCODE InfoBar::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 AUI_ERRCODE InfoBar::DrawText(aui_Surface *surface,
 							  sint32 x, sint32 y)
 {
-	
+
 	if(!surface) surface = m_surface;
 
 	RECT rect = { 0, 0, m_width, m_height };
 	primitives_DropText(surface, 15, 2, m_str, 0x0000, 1);
-	
-	Invalidate(); 
+
+	Invalidate();
 	return AUI_ERRCODE_OK;
 }
 
@@ -215,22 +213,22 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		// Use the information from the last visit of that cell
 		sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(point));
 
-		if(owner >= 0 
+		if(owner >= 0
 		&& g_player[owner]
 		&&(g_player[owner]->HasContactWith(g_selected_item->GetVisiblePlayer())
 		|| g_fog_toggle)
 		){
-			
+
 			MBCHAR buf[k_MAX_NAME_LEN];
 			g_player[owner]->m_civilisation->GetSingularCivName(buf);
 			Concat(buf);
 			Concat(" - ");
 		}
-		
+
 // Added by Martin Gühmann
 		UnseenCellCarton ucell;
 		BOOL hasUnseen = FALSE;
-		if(!g_tiledMap->GetLocalVision()->IsVisible(point) 
+		if(!g_tiledMap->GetLocalVision()->IsVisible(point)
 		){
 			hasUnseen = g_tiledMap->GetLocalVision()->GetLastSeen(point, ucell);
 		}
@@ -311,11 +309,11 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				if(city.CD()->IsNanoInfected()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_NANO_INFECTION"));
 				}
-	
+
 				if(city.CD()->IsConverted()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_CONVERTED"));
 				}
-				
+
 				if(city.CD()->IsFranchised()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_FRANCHISED"));
 				}
@@ -327,7 +325,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				if(city.CD()->GetIsRioting()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_RIOTING"));
 				}
-			
+
 				if(city.CD()->IsWatchful()) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_WATCHFUL"));
 				}
@@ -342,7 +340,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 
 				PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
 
-				PointerList<UnseenImprovementInfo>::Walker *walker = 
+				PointerList<UnseenImprovementInfo>::Walker *walker =
 					new PointerList<UnseenImprovementInfo>::Walker(improvements);
 
 				while(walker->IsValid()){
@@ -358,7 +356,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 						Concat(",");
 					}
 				}
-		
+
 				delete walker;
 			}
 			else{
@@ -379,8 +377,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 // Added by Martin Gühmann
 			if(hasUnseen){
 				// Use the values from the hidden info if the tile is hidden
-				// (Reminder: Goods don't change once seen. If we want to allow goods to be discovered or run out, 
-				//we'll have to add a member to UnseenCell.) 
+				// (Reminder: Goods don't change once seen. If we want to allow goods to be discovered or run out,
+				//we'll have to add a member to UnseenCell.)
 				food = ucell.m_unseenCell->GetFoodProduced();
 				prod = ucell.m_unseenCell->GetShieldsProduced();
 				gold = ucell.m_unseenCell->GetGoldProduced();
@@ -425,13 +423,12 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
             }
 			Concat(")");
 		}
-		
+
 #ifdef _DEBUG
 		MBCHAR buf[k_MAX_NAME_LEN];
 		sprintf(buf, " (%d, %d) ", point.x, point.y);
 		Concat(buf);
 #endif // _DEBUG
-
 
 		if(cell->GetNumUnits() > 0) {
 			if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer() ||
@@ -439,7 +436,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				sint32 i;
 				bool anyVisible = false;
 				for(i = 0; i < cell->GetNumUnits(); i++) {
-					
+
 					if(!cell->AccessUnit(i).IsValid())
 						break;
 
@@ -462,7 +459,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 						Concat(") ");
 						wroteOwner = true;
 					}
-					
+
 					for(i = 0; i < cell->GetNumUnits(); i++) {
 						if(cell->AccessUnit(i).GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
 							Concat(cell->AccessUnit(i).GetName());
@@ -473,11 +470,10 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					Concat("     ");
 				}
 			}
-		}		
+		}
 
 		if(g_tiledMap) {
-			
-			
+
 			g_tiledMap->GetFont()->TruncateString(m_str, m_width);
 		}
 	}

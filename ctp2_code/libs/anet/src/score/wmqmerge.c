@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -215,7 +215,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 					continue;
 				} else if (err == dp_RES_FULL) {
 					char *temp;
-					
+
 					/* we need a bigger buf in wmq_record[i] */
 					temp = (char *)realloc(wmq_record[i].datalen, wmq_record[i].buf);
 					if (!temp) {
@@ -246,7 +246,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 					t_offset = (long)(wmq_record[i].timestamp - t_now);
 					timestamp_now = wmq_record[i].timestamp;
 					printf("t_now:%d + t_offset:%d = t:%d\n",
-						t_now, t_offset, timestamp_now); 
+						t_now, t_offset, timestamp_now);
 				}
 				/* Check if it is the oldest, i.e. next to write.
 				 * Ties are broken by serverTag (smallest first).
@@ -268,7 +268,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 			sleep(RETRYTIME_GET);
 			continue;
 		} else if ((n_empty > 0)
-		       &&  ((long)(timestamp_now - MAX_CLOCKSKEW - 
+		       &&  ((long)(timestamp_now - MAX_CLOCKSKEW -
 		                   wmq_record[i_oldest].timestamp) < 0)) {
 			printf("t:%d, n_empty:%d/%d oldest:t[%s]=%d\n", timestamp_now,
 				n_empty, n_wmqs, wmq_in[i_oldest]->dir,
@@ -289,7 +289,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 
 			/* seek to end of file that would contain this timestamp */
 			err = wmq_seek(wmq_out, wmq_record[i_oldest].timestamp, 0);
-			if (err != dp_RES_OK) {	
+			if (err != dp_RES_OK) {
 				printf("%s: error:%d seeking(t:0x%x, o:END)\n",
 					wmq_out->dir, err, wmq_record[i_oldest].timestamp);
 				exit(1);

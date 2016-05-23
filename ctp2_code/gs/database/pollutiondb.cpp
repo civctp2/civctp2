@@ -13,8 +13,7 @@
 
 	extern	sint32	g_parse_pollution_abort ;
 
-
-#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))		
+#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))
 
 
 
@@ -38,7 +37,7 @@ PollutionDatabase::PollutionDatabase()
 
 sint32 PollutionDatabase::Initialise(char *filename, C3DIR dir)
 	{
-	
+
 	g_parse_pollution_abort = FALSE ;
 	if(!ParsePollutionDatabase(filename, dir))
 		return (FALSE) ;
@@ -47,7 +46,7 @@ sint32 PollutionDatabase::Initialise(char *filename, C3DIR dir)
 	return (TRUE) ;
 	}
 
-	
+
 
 
 
@@ -94,7 +93,7 @@ TokenData	g_PollutionDB_token_data[TOKEN_POLLUTION_MAX_VAL] =
 sint32 PollutionDatabase::ParsePollutionDatabase(char *filename, C3DIR dir)
 	{
 	Token	*pollutionToken = new Token(filename, TOKEN_POLLUTION_MAX_VAL - TOKEN_MAX, g_PollutionDB_token_data, dir) ;
-	
+
 	SetSize(MAX_POLLUTION_TRIGGERS) ;
 
 	ParseAPollution(pollutionToken, TOKEN_POLLUTION_TRIGGER_LIST_SMALL_MAP);
@@ -104,7 +103,7 @@ sint32 PollutionDatabase::ParsePollutionDatabase(char *filename, C3DIR dir)
 
 	delete pollutionToken ;
 
-	if (g_parse_pollution_abort) 
+	if (g_parse_pollution_abort)
 		return (FALSE) ;
 
 	return (TRUE) ;
@@ -124,10 +123,9 @@ sint32 PollutionDatabase::ParseAPollution(Token *pollutionToken, TOKEN_POLLUTION
 	{
 	sint32  rec = 0;
 
-	
 	if (pollutionToken->GetType() == TOKEN_EOF)
 		return (FALSE) ;
-	
+
 	if (pollutionToken->GetType() != which)
 		{
 		g_parse_pollution_abort = TRUE ;
@@ -193,51 +191,3 @@ sint32 PollutionDatabase::ParseAPollution(Token *pollutionToken, TOKEN_POLLUTION
 PollutionDatabase::~PollutionDatabase()
 	{
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

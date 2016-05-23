@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks
 //       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -76,32 +76,25 @@ class MainControlPanel;
 
 class MainControlPanel {
 public:
-	
+
 	static void Initialize(MBCHAR *ldlBlock);
 
-	
 	static void InitializeEvents();
 
 	static void Blank();
 
 	static void CleanUp();
 
-	
 	static void Update();
 
-	
 	static void UpdateCityList();
 
-	
 	static void UpdatePlayer(PLAYER_INDEX player);
 
-	
 	static void UpdateZoom();
 
-	
 	static void SelectedCity();
 
-	
 	static void SelectedUnit();
 
 	static void UnitPanelActivated();
@@ -112,23 +105,21 @@ public:
 	static void SwitchToTransportView();
 
 	static aui_ProgressBar* GetProgressBar();
-	
-	
+
 	MainControlPanel(MBCHAR *ldlBlock);
 
 	virtual ~MainControlPanel();
-	
+
 private:
-	
-	std::auto_ptr<ControlTabPanel>	m_controlTabPanel;	
-	std::auto_ptr<EndTurnButton>	m_endTurnButton;	
-	std::auto_ptr<ShortcutPad>		m_shortcutPad;		
-	std::auto_ptr<StatusBar>		m_statusBar;		
-	std::auto_ptr<TurnYearStatus>	m_turnYearStatus;	
+
+	std::auto_ptr<ControlTabPanel>	m_controlTabPanel;
+	std::auto_ptr<EndTurnButton>	m_endTurnButton;
+	std::auto_ptr<ShortcutPad>		m_shortcutPad;
+	std::auto_ptr<StatusBar>		m_statusBar;
+	std::auto_ptr<TurnYearStatus>	m_turnYearStatus;
 
 };
 
-
 extern MainControlPanel *g_mainControlPanel;
 
-#endif 
+#endif

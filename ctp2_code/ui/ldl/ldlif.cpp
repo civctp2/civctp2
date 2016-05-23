@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "ldlif.h"
 #include "CivPaths.h"
@@ -180,29 +179,28 @@ void *ldlif_end_block(void *names)
 {
 	PointerList<char> *namelist = (PointerList<char> *)names;
 	Assert(namelist);
-	
+
 	ldl_datablock *block = s_blockStack->RemoveTail();
 
 	block->AddTemplateChildren();
 
-	
 
 
 
 
 
-	
+
+
 
 
 	if(!s_blockStack->GetTail()) {
 		s_topLevelList->AddTail(block);
-		
-		
+
 	}
 
 	delete namelist;
 	return block;
-	
+
 }
 
 void *ldlif_add_empty_block(void *names)
@@ -235,7 +233,6 @@ void ldlif_add_string_attribute(const char *name, const char *val)
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 
-
 void ldlif_allocate_stuff()
 {
 	s_ldlStringHash = new StringHash<LDLString>(1024);
@@ -260,4 +257,3 @@ void ldlif_deallocate_stuff()
 	s_blockTree = NULL;
 
 }
-

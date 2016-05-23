@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,9 +32,7 @@
 #include "newturncount.h"
 #include "GameEventManager.h"
 
-
 #include "c3errors.h"
-
 
 #include "director.h"
 
@@ -51,7 +49,6 @@
 #include "tiledmap.h"
 
 #include "pollution.h"
-
 
 #include "network.h"
 #include "net_action.h"
@@ -81,20 +78,17 @@
 #include "radarwindow.h"
 #include "screenutils.h"
 
-extern SelectedItem             *g_selected_item; 
+extern SelectedItem             *g_selected_item;
 extern World                    *g_world;
 extern Director                 *g_director;
 extern Player                   **g_player;
 
-
 extern Pollution                *g_thePollution;
 
 
-
-extern ProfileDB                *g_theProfileDB; 
+extern ProfileDB                *g_theProfileDB;
 
 extern DifficultyDB             *g_theDifficultyDB;
-
 
 extern MessageModal             *g_modalMessage;
 
@@ -111,14 +105,13 @@ NewTurnCount::NewTurnCount()
 
 sint32 NewTurnCount::GetStopPlayer()
 {
-	return sm_the_stop_player; 
+	return sm_the_stop_player;
 }
 
 void NewTurnCount::SetStopPlayer(const sint32 &player_index)
 {
-	sm_the_stop_player = player_index; 
+	sm_the_stop_player = player_index;
 }
-
 
 void NewTurnCount::StartNextPlayer(bool stop)
 {
@@ -139,13 +132,10 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		return;
 	}
 
-	
 	g_player[current_player]->EndTurn();
 
-	
 #if 0
-	
-	
+
 	if((g_player[current_player]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
 		(g_player[current_player]->GetPlayerType() == PLAYER_TYPE_NETWORK &&
 		 g_network.IsLocalPlayer(current_player))) &&
@@ -155,18 +145,16 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		g_player[current_player]->m_endingTurn = FALSE;
 	}
 #endif
-	
-	
+
 	extern BOOL g_aPlayerIsDead;
 	if(!g_network.IsClient() && g_aPlayerIsDead) {
 		Player::RemoveDeadPlayers();
 	}
 
-	
 	NewTurnCount::ChooseNextActivePlayer();
 	PLAYER_INDEX next_player = g_selected_item->GetCurPlayer();
 	sint32 next_round = g_player[next_player]->GetCurRound() + 1;
-	
+
 	if(g_turn->IsHotSeat() || g_turn->IsEmail()) {
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
 			stop = true;
@@ -178,11 +166,11 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		//   PLAYER_TYPE_ROBOT) {
 		//	g_turn->SendNextPlayerMessage();
 		//}
-		
+
 		g_director->NextPlayer();
-		
+
 		g_director->AddCopyVision();
-		
+
 		g_tiledMap->InvalidateMix();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
@@ -194,7 +182,6 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		close_AllScreens();
 	}
 
-	
 	if (stop ||
 		(g_network.IsActive() &&
 		 (g_network.IsClient() || g_player[next_player]->GetPlayerType() != PLAYER_TYPE_ROBOT)))
@@ -204,13 +191,12 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	}
 
 	if(g_network.IsHost() && GetStopPlayer() == next_player) {
-		
+
 		if(g_player[next_player]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 			SetStopPlayer(g_selected_item->GetVisiblePlayer());
 		}
 	}
 
-	
 	g_controlPanel->UpdatePlayerEndProgress(current_player);
 
 	sint32 oldVis = g_selected_item->GetVisiblePlayer();
@@ -218,10 +204,10 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	if(oldVis != g_selected_item->GetVisiblePlayer()) {
 		g_tiledMap->CopyVision();
 	}
-	
+
 	if (next_player == 0)
 		{
-			
+
 			NewTurnCount::StartNewYear();
 		}
 
@@ -237,15 +223,14 @@ void NewTurnCount::StartNextPlayer(bool stop)
 			GEA_End);
 	} else {
 
-		
 
-		
+
+
 		g_director->NextPlayer();
 	}
-	
+
 	g_thePollution->BeginTurn();
 }
-
 
 void NewTurnCount::ChooseNextActivePlayer()
 {
@@ -258,17 +243,16 @@ void NewTurnCount::ChooseNextActivePlayer()
 	} while( g_player[g_selected_item->GetCurPlayer()] == NULL );
 }
 
-
 void NewTurnCount::StartNewYear()
 {
-	
+
 	g_theWorld->A_star_heuristic->Update();
 
 	Barbarians::BeginYear();
 
-	
-	
-	
+
+
+
 
 	g_slicEngine->RunYearlyTriggers();
 
@@ -277,17 +261,16 @@ void NewTurnCount::StartNewYear()
 	RunNewYearMessages();
 }
 
-
 void NewTurnCount::ClientStartNewYear()
 {
-	
+
 	g_theWorld->A_star_heuristic->Update();
 
 	RunNewYearMessages();
 }
 
 sint32 NewTurnCount::GetCurrentYear(sint32 player)
-{	
+{
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
 	if(player >= 0 && player < k_MAX_PLAYERS)
 		current_player = player;
@@ -306,43 +289,43 @@ sint32 NewTurnCount::GetCurrentRound()
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
 	Assert(g_player != NULL);
 	if(!g_player || !g_player[current_player]) return 0;
-	
+
 	return g_player[current_player]->GetCurRound();
 }
 
 void NewTurnCount::RunNewYearMessages(void)
 {
-	
-	if (GetCurrentYear() >= g_theConstDB->GetEndOfGameYearEarlyWarning()) 
+
+	if (GetCurrentYear() >= g_theConstDB->GetEndOfGameYearEarlyWarning())
 	{
-		if(!m_sentGameAlmostOverMessage) 
+		if(!m_sentGameAlmostOverMessage)
 		{
 			m_sentGameAlmostOverMessage = TRUE;
-			
+
 			SendMsgEndOfGameEarlyWarning() ;
 		}
 	}
 
-	if(GetCurrentYear() >= g_theConstDB->GetEndOfGameYear()) 
+	if(GetCurrentYear() >= g_theConstDB->GetEndOfGameYear())
 	{
-		if(!m_sentGameOverMessage) 
+		if(!m_sentGameOverMessage)
 		{
 			sint32 i;
 			sint32 highScore = -1;
 			sint32 highPlayer = 1;
 
-			for(i = 1; i < k_MAX_PLAYERS; i++) 
+			for(i = 1; i < k_MAX_PLAYERS; i++)
 			{
-				if(g_player[i]) 
+				if(g_player[i])
 				{
-					if(g_player[i]->m_score->GetTotalScore() > highScore) 
+					if(g_player[i]->m_score->GetTotalScore() > highScore)
 					{
 						highScore = g_player[i]->m_score->GetTotalScore();
 						highPlayer = i;
 					}
 				}
 			}
-			if(g_network.IsHost()) 
+			if(g_network.IsHost())
 			{
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_GAME_OVER_OUT_OF_TIME,
 				                              highPlayer));
@@ -374,7 +357,7 @@ void NewTurnCount::RunNewYearMessages(void)
 void NewTurnCount::SendMsgEndOfGameEarlyWarning()
 {
 	SendMsgToAllPlayers("73EndOfGameTimeIsRunningOut") ;
-	if(g_network.IsHost()) 
+	if(g_network.IsHost())
 	{
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_TIMES_ALMOST_UP));
 	}
@@ -400,7 +383,6 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 {
 	Player *player = g_player[g_selected_item->GetCurPlayer()];
 
-
 	if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
 		return(TRUE);
 	}
@@ -415,8 +397,8 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 	if(g_theCriticalMessagesPrefs->IsEnabled("16IAOutOfFuel")) {
 		if (g_slicEngine->GetSegment("16IAOutOfFuel")->TestLastShown(player->m_owner, 1)) {
 			int i;
-			int n = player->GetAllUnitList()->Num(); 
-			for (i=0; i<n; i++) { 
+			int n = player->GetAllUnitList()->Num();
+			for (i=0; i<n; i++) {
 				Unit *unit = &(player->GetAllUnitList()->Access(i));
 				if (!(unit->GetMovementTypeAir()) && !(unit->GetMovementTypeSpace()))
 					continue;
@@ -435,12 +417,11 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if(g_theCriticalMessagesPrefs->IsEnabled("23IACityWillStarve")) {
 		if (g_slicEngine->GetSegment("23IACityWillStarve")->TestLastShown(player->m_owner, 1)) {
 			int i;
-			int n = player->GetAllCitiesList()->Num(); 
-			for (i=0; i<n; i++) { 
+			int n = player->GetAllCitiesList()->Num();
+			for (i=0; i<n; i++) {
 				double tmp;
 				Unit *unit = &(player->GetAllCitiesList()->Access(i));
 				if (!(unit->IsCity()))
@@ -461,7 +442,6 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if(g_theCriticalMessagesPrefs->IsEnabled("21IACannotAffordMaintenance")) {
 		if (g_slicEngine->GetSegment("21IACannotAffordMaintenance")->TestLastShown(player->m_owner, 1)) {
 			if (player->m_gold->BankruptcyImminent() &&
@@ -475,14 +455,13 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 		}
 	}
 
-
 	if(g_theCriticalMessagesPrefs->IsEnabled("22IACannotAffordSupport")) {
 		if (g_slicEngine->GetSegment("22IACannotAffordSupport")->TestLastShown(player->m_owner, 1)) {
 			int i;
-			int n = player->GetAllCitiesList()->Num(); 
+			int n = player->GetAllCitiesList()->Num();
 			double prod_total = 0.0;
 			double fudge = (double)(g_theConstDB->SupportWarningFudgeFactor()) / 100.0;
-			for (i=0; i<n; i++) { 
+			for (i=0; i<n; i++) {
 				Unit *unit = &(player->GetAllCitiesList()->Access(i));
 				if (!(unit->IsCity()))
 					continue;
@@ -500,7 +479,6 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 			}
 		}
 	}
-
 
 	return(TRUE);
 }

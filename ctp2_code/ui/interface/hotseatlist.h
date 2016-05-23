@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -34,10 +34,10 @@
 #include "aui_action.h"
 #include "keyboardhandler.h"
 
-typedef void (HotseatListCallback)(sint32 launch, 
-								   sint32 player, 
-								   sint32 civ, 
-								   BOOL human, 
+typedef void (HotseatListCallback)(sint32 launch,
+								   sint32 player,
+								   sint32 civ,
+								   BOOL human,
 								   MBCHAR *name,
 								   MBCHAR *email);
 
@@ -46,17 +46,14 @@ typedef void (HotseatListCallback)(sint32 launch,
 class HotseatListItem : public c3_ListItem
 {
 public:
-	
-	
+
 	HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 					sint32 civ, BOOL isHuman, MBCHAR *email,
 					MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32  GetCiv() { return m_civ; }
 	void	SetCiv(sint32 civ) { m_civ = civ; }
 
@@ -72,12 +69,11 @@ public:
 protected:
 	HotseatListItem() : c3_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 civ, BOOL isHuman, MBCHAR *email, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
@@ -115,7 +111,6 @@ public:
 
 	void kh_Close();
 };
-
 
 
 void hotseatlist_ClearOptions(void);

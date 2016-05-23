@@ -1,5 +1,3 @@
-
-
 #ifndef __BATTLEEVENT_H__
 #define __BATTLEEVENT_H__
 
@@ -14,9 +12,9 @@ enum BATTLE_EVENT_TYPE {
 	BATTLE_EVENT_TYPE_NONE  = -1,
 
 	BATTLE_EVENT_TYPE_PLACEMENT,
-	BATTLE_EVENT_TYPE_ATTACK,	
-	BATTLE_EVENT_TYPE_EXPLODE,	
-	BATTLE_EVENT_TYPE_DEATH,	
+	BATTLE_EVENT_TYPE_ATTACK,
+	BATTLE_EVENT_TYPE_EXPLODE,
+	BATTLE_EVENT_TYPE_DEATH,
 
 	BATTLE_EVENT_TYPE_MAX
 };
@@ -26,12 +24,11 @@ class EffectActor;
 class aui_Surface;
 
 union BattleEventData {
-	
+
 	struct {
 		BattleViewActor *actor;
 	};
 
-	
 	struct {
 		BattleViewActor *positionActor;
 		sint32			positionColumn;
@@ -41,14 +38,12 @@ union BattleEventData {
 		BOOL			positionIsDefender;
 	};
 
-	
 	struct {
 		BattleViewActor *attackActor;
 		sint32			attackSoundID;
 		double			attackHP;
 	};
 
-	
 	struct {
 		BattleViewActor *explodeVictim;
 		EffectActor		*explodeActor;
@@ -56,7 +51,6 @@ union BattleEventData {
 		double			explodeHP;
 	};
 
-	
 	struct {
 		BattleViewActor *deathVictim;
 		sint32			deathSoundID;
@@ -76,10 +70,9 @@ public:
 	void ProcessExplode(void);
 	void ProcessDeath(void);
 	void Process(void);
-	
+
 	void DrawExplosions(aui_Surface *surface);
 
-	
 	BOOL					IsFinished(void) const { return m_finished; }
 	void					SetFinished(BOOL finished) { m_finished = TRUE; }
 
@@ -89,7 +82,7 @@ public:
 
 	BOOL					HasActor(BattleViewActor *actor);
 
-	void					AddPositionData(BattleViewActor *actor, sint32 column, sint32 row, 
+	void					AddPositionData(BattleViewActor *actor, sint32 column, sint32 row,
 												sint32 facing, double hp, BOOL isDefender);
 	void					AddAttackData(BattleViewActor *actor, sint32 soundID, double hp);
 	void					AddExplosionData(BattleViewActor *actor, EffectActor *explodeActor, sint32 soundID, double hp);
@@ -106,6 +99,5 @@ private:
 	BOOL									m_animating;
 	BOOL									m_finished;
 };
-
 
 #endif

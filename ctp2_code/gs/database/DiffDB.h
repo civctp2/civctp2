@@ -45,10 +45,10 @@ template <class T> class PointerList;
 
 class DifficultyDBRecord {
 public:
-	sint32 m_base_contentment; 
+	sint32 m_base_contentment;
     sint32 m_granary_coef;
 
-    double m_big_city_scale; 
+    double m_big_city_scale;
     double m_big_city_offset;
 	double m_pollution_multiplier ;
 	sint32 m_science_handicap;
@@ -57,9 +57,7 @@ public:
 	sint32 m_vision_bonus;
 	sint32 m_base_score;
 
-	
 	TimeScaleData	m_time_scale;
-
 
 	double m_feats_factor;
 	double m_advances_factor;
@@ -97,12 +95,12 @@ public:
 	double m_ai_distance_from_capitol_adjustment;
 	double m_pollution_adjust;
 
-	
-	
-	
-	
 
-	
+
+
+
+
+
 	double GetAiTechnologyCost(const sint32 playerId, const sint32 age) const;
 	double GetAiProductionCostAdjustment(const sint32 playerId, const sint32 age) const;
 	double GetAiGoldAdjustment(const sint32 playerId, const sint32 age)const;
@@ -119,34 +117,28 @@ public:
 	double m_pollution_production_ratio;
 	double m_pollution_population_ratio;
 
-
 	sint32 m_max_score;
 
-	
 	double m_starvation_effect;
 
 	sint32 m_negativeYearFormat, m_positiveYearFormat;
 
 	PointerList<DiffAdvanceChance> *m_advanceChances;
-	
-    DifficultyDBRecord(); 
+
+    DifficultyDBRecord();
 	~DifficultyDBRecord();
     void Serialize(CivArchive &archive);
 
-	
 	double m_ai_min_behind_percent;
 
-	
 	double m_ai_max_behind_percent;
 
-	
 	double m_ai_min_ahead_percent;
 
-	
 	double m_ai_max_ahead_percent;
 
-	
-	
+
+
 
 	double m_ai_min_behind_technology_cost[k_MAX_AGES];
 	double m_ai_max_behind_technology_cost[k_MAX_AGES];
@@ -163,55 +155,55 @@ public:
 	double m_ai_max_ahead_gold_adjustment[k_MAX_AGES];
 };
 
-class DifficultyDB { 
+class DifficultyDB {
 
 	DifficultyDBRecord m_table[LEVELS_OF_DIFFICULTY];
-	
+
 public:
-	
-	DifficultyDB(); 
+
+	DifficultyDB();
 	DifficultyDB(CivArchive &archive) ;
-	
-	DifficultyDBRecord * Get(sint32 diff) { 
+
+	DifficultyDBRecord * Get(sint32 diff) {
 		Assert(0<=diff);
-		Assert(diff<LEVELS_OF_DIFFICULTY); 
-		return &m_table[diff]; 
+		Assert(diff<LEVELS_OF_DIFFICULTY);
+		return &m_table[diff];
 	}
 	sint32 GetBaseContentment(sint32 diff) {
 		Assert(0<=diff);
-		Assert(diff<LEVELS_OF_DIFFICULTY); 
-		return m_table[diff].m_base_contentment; 
+		Assert(diff<LEVELS_OF_DIFFICULTY);
+		return m_table[diff].m_base_contentment;
 	}
-	
+
 	sint32 GetYearFromTurn(sint32 diff, sint32 turn);
 	const char *GetYearStringFromTurn(sint32 diff, sint32 turn);
 	sint32 GetYearIncrementFromTurn(sint32 diff, sint32 turn);
-	
-	double GetBigCityScale (sint32 diff) { 
+
+	double GetBigCityScale (sint32 diff) {
 		Assert(0<=diff);
-		Assert(diff<LEVELS_OF_DIFFICULTY); 
-		return m_table[diff].m_big_city_scale; 
+		Assert(diff<LEVELS_OF_DIFFICULTY);
+		return m_table[diff].m_big_city_scale;
 	}
-	
-	double GetBigCityOffset(sint32 diff) { 
+
+	double GetBigCityOffset(sint32 diff) {
 		Assert(0<=diff);
-		Assert(diff<LEVELS_OF_DIFFICULTY); 
-		return m_table[diff].m_big_city_offset; 
+		Assert(diff<LEVELS_OF_DIFFICULTY);
+		return m_table[diff].m_big_city_offset;
 	}
-	
+
 	double GetPollutionMultiplier(sint32 diff)
 	{
 		Assert(0<=diff) ;
 		Assert(diff<LEVELS_OF_DIFFICULTY) ;
 		return (m_table[diff].m_pollution_multiplier) ;
 	}
-	
+
 	sint32 GetScienceHandicap(sint32 diff) {
 		Assert(diff >= 0);
 		Assert(diff < LEVELS_OF_DIFFICULTY);
 		return m_table[diff].m_science_handicap;
 	}
-	
+
 	double GetRiotChance(sint32 diff) {
 		Assert(diff >= 0);
 		Assert(diff < LEVELS_OF_DIFFICULTY);
@@ -270,7 +262,6 @@ public:
 		return m_table[diff].m_pollution_population_ratio;
 	}
 
-	
 	double GetFeatsFactor(sint32 diff);
 	double GetAdvancesFactor(sint32 diff);
 	double GetWondersFactor(sint32 diff);
@@ -307,8 +298,8 @@ public:
 
 };
 
-#else 
+#else
 
-class DifficultyDB; 
+class DifficultyDB;
 
 #endif

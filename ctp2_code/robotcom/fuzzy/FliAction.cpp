@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "fliif.h"
 #include "globals.h"
@@ -17,9 +15,7 @@
 #include "planner.h"
 #include "AIP_Manager.h"
 
-
 extern AIP_Manager * g_AIP_manager;
-
 
 FliAction::FliAction(const char *name, FliEngine *engine)
 {
@@ -35,18 +31,18 @@ FliAction::FliAction(const char *name, FliEngine *engine)
 FliAction::~FliAction()
 {
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
 	if(m_arguments) {
 		char *str;
 		while((str = m_arguments->RemoveHead()) != NULL) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 			delete [] str;
-            str = NULL; 
+            str = NULL;
 		}
 		delete m_arguments;
-        m_arguments = NULL; 
+        m_arguments = NULL;
 	}
 }
 
@@ -68,7 +64,7 @@ void FliAction::Evaluate(AiMain *ai)
 {
 	switch(m_op) {
 		case BFLOP_LT:
-			if(m_symbol->GetValue() < m_value) 
+			if(m_symbol->GetValue() < m_value)
 				Execute(ai);
 			break;
 		case BFLOP_GT:
@@ -87,7 +83,6 @@ void FliAction::Execute(AiMain *ai)
 	switch(m_action) {
 		case FLI_ACTION_LOAD_AIP:
 
-   
 			g_AIP_manager->Update_AIP(ai, &(ai->m_planner->the_AIP), m_arguments->GetHead());
 			break;
 		default:
@@ -95,5 +90,3 @@ void FliAction::Execute(AiMain *ai)
 			break;
 	}
 }
-
-

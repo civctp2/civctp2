@@ -35,14 +35,13 @@ sint32 aui_Base::m_baseRefCount = 0;
 
 static uint32 *g_crcTable = NULL;
 
-
 void gen_crc_table()
 {
    if (!g_crcTable)
       g_crcTable = new uint32[256];
    register int i, j;
    register unsigned long crc_accum;
-   
+
    for ( i = 0;  i < 256;  i++ ) {
       crc_accum = ( (uint32) i << 24 );
       for ( j = 0;  j < 8;  j++ ) {
@@ -51,7 +50,7 @@ void gen_crc_table()
          else
             crc_accum = ( crc_accum << 1 );
       }
-      
+
       g_crcTable[i] = crc_accum;
    }
 

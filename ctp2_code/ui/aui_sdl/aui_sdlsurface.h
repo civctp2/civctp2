@@ -39,14 +39,12 @@ public:
 
 	virtual uint32 SetChromaKey( uint32 color );
 
-
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
 	SDL_Surface*    DDS( void ) const { return m_lpdds; }
 	BOOL                            IsDCGot( void ) const { return m_dcIsGot
 ; }
-
 
         virtual BOOL IsOK( void ) const;
 
@@ -57,7 +55,6 @@ public:
 protected:
 	SDL_Surface* m_lpdds;
 };
-
 
 #endif // defined(__AUI_USE_SDL__)
 

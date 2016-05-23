@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -112,7 +112,7 @@ long aehlog_getfsize(aehlog_t *aehlog)
 }
 
 /*--------------------------------------------------------------------------
- Returns the current offset in the aehlog or -1 on error. 
+ Returns the current offset in the aehlog or -1 on error.
 --------------------------------------------------------------------------*/
 long aehlog_tell(aehlog_t *aehlog)
 {
@@ -143,7 +143,7 @@ int aehlog_seek(aehlog_t *aehlog, long offset)
 	unsigned int aehlog_tag, ninst, buflen;
 
 	if (!aehlog) return aeh_RES_BAD;
-	if (aehlog->status == aehlog_WRITE) 
+	if (aehlog->status == aehlog_WRITE)
 		aehlog_close(aehlog);
 	if (!aehlog->fp) {
 		if (!(aehlog->fp = fopen(aehlog->path, "rb")))
@@ -230,7 +230,7 @@ static int aehlog_writetofile(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const u
 }
 
 /*--------------------------------------------------------------------------
- Read an aehbuf from a buf in memory in the format of an atvilog.bin file, 
+ Read an aehbuf from a buf in memory in the format of an atvilog.bin file,
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/
@@ -260,7 +260,7 @@ int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, 
 }
 
 /*--------------------------------------------------------------------------
- Write an aehbuf to buf in memory in the format of an atvilog.bin file, 
+ Write an aehbuf to buf in memory in the format of an atvilog.bin file,
  suitable for use with aehlog_appendMultExceptionRecords.
  buf must be at least aehbuf->buflen + 12 bytes in length.
  Returns number of bytes written or -1 on failure.
@@ -313,7 +313,7 @@ static int checkDupException(const unsigned char *buf, unsigned int size, unsign
 	aeh_SetCurrent(__LINE__, __FILE__);
 	return 0;
 }
-	
+
 /* get the exception file and set the file position for writing */
 static int initExceptionFileStream(aehlog_t *aehlog, const aeh_buf_t *aehbuf, unsigned int *ninst, unsigned long fmaxsize)
 {
@@ -463,7 +463,7 @@ int aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int
 {
 	int err;
 	if (!aehlog || !aehbuf || !ninst) return aeh_RES_BAD;
-	if (aehlog->status == aehlog_WRITE) 
+	if (aehlog->status == aehlog_WRITE)
 		aehlog_close(aehlog);
 	if (!aehlog->fp)
 		if (!(aehlog->fp = fopen(aehlog->path, "rb"))) return aeh_RES_EMPTY;

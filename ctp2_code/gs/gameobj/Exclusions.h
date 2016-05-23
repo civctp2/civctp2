@@ -22,7 +22,7 @@ public:
 	Exclusions();
 	Exclusions(CivArchive &archive) { Serialize(archive); }
 	~Exclusions();
-	
+
 	void Serialize(CivArchive &archive);
 
 	sint32 IsUnitExcluded(sint32 type) { return m_units[type]; }

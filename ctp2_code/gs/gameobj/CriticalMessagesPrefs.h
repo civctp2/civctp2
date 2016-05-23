@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -39,25 +39,20 @@ struct CriticalMessagesData
 	bool m_messageEnabled;
 };
 
-class CriticalMessagesPrefs 
+class CriticalMessagesPrefs
 {
 public:
 	CriticalMessagesPrefs();
 	~CriticalMessagesPrefs();
 
-	
 	sint32 IsEnabled(const char *name);
 
-	
 	void SetEnabled(const char *name, bool enable);
 
-	
 	void EnableAll();
 
-	
 	void Load();
 
-	
 	void Save();
 
 private:
@@ -67,4 +62,4 @@ private:
 
 extern CriticalMessagesPrefs *g_theCriticalMessagesPrefs;
 
-#endif 
+#endif

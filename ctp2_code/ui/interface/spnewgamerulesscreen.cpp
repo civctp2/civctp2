@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -100,7 +100,6 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -108,29 +107,27 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK; 
+	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameRulesScreen");
 
-	{ 
+	{
 		s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
 
-		
 		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
 	}
-	
 
 
 
-	
+
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( controlBlock );
 	s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_backPress );
-
 
 
 	s_checkBox = new aui_Switch*[k_NUM_RULESBOXES];
@@ -140,7 +137,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 		s_checkBox[i] = new aui_Switch( &errcode, aui_UniqueId(), controlBlock, spnewgamerulesscreen_switchPress );
 		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
 		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
-	
+
 	}
 
 	s_checkBox[ 0 ]->SetState( g_theProfileDB->IsGenocideRule() );
@@ -155,13 +152,12 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 
 
 
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 //----------------------------------------------------------------------------
@@ -188,7 +184,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 		g_c3ui->RemoveWindow(s_spNewGameRulesScreen->Id());
 		keypress_RemoveHandler(s_spNewGameRulesScreen);
 
-		for (sint32 i = 0; i < k_NUM_RULESBOXES; i++) 
+		for (sint32 i = 0; i < k_NUM_RULESBOXES; i++)
 		{
 			delete s_checkBox[i];
 			// NULLing unnecessary: deleting the container next
@@ -204,27 +200,23 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 }
 
 
-
 void spnewgamerulesscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	spnewgamerulesscreen_removeMyWindow(action);
 
 }
 void spnewgamerulesscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	spnewgamerulesscreen_removeMyWindow(action);
 
 }
 void spnewgamerulesscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	spnewgamerulesscreen_removeMyWindow(action);
 
@@ -255,7 +247,7 @@ void spnewgamerulesscreen_switchPress(aui_Control *control, uint32 action, uint3
 
 				}
 			}
-		
+
 		}
 		break;
 	}

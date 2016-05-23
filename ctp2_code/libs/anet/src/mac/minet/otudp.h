@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -32,9 +32,9 @@ extern "C" {
 	OSStatus CreateAndConfigUDP(EndpointRef *ep);
 	OSStatus ShutDownUDP(void);
 	OSStatus HandleErrorUDERR(void);
-	
+
 	pascal void  HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult result, void* it);
-	
+
 #ifdef __cplusplus
 }
 #endif

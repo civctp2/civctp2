@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "civarchive.h"
@@ -74,7 +62,6 @@ sint32 PollutionRecord::ParsePollutionRecord(Token *pollutionToken)
 
 	while (pollutionToken->Next() == TOKEN_POLLUTION_TRIGGER) {
 
-		
 		if (pollutionToken->Next() != TOKEN_NUMBER)
 			{
 			c3errors_ErrorDialog (pollutionToken->ErrStr(), "number expected for trigger level") ;
@@ -84,7 +71,6 @@ sint32 PollutionRecord::ParsePollutionRecord(Token *pollutionToken)
 
 		pollutionToken->GetNumber(m_triggerLevel[i]) ;
 
-		
 		switch (pollutionToken->Next())
 			{
 			case TOKEN_POLLUTION_OZONE_DISASTER :
@@ -116,7 +102,7 @@ sint32 PollutionRecord::ParsePollutionRecord(Token *pollutionToken)
 			c3errors_ErrorDialog(pollutionToken->ErrStr(), "pollution trigger list too long") ;
 		}
 	}
-	
+
 	m_numTriggers = i;
 
 	return (TRUE) ;

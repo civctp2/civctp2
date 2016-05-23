@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __GOAL_ENSLAVE_H__
@@ -7,28 +6,26 @@
 #include "ArmyGoal.h"
 
 class AiMain;
-class CivArchive; 
+class CivArchive;
 class ForeignAgent;
-class ForeignCity; 
+class ForeignCity;
 enum GOAL_TYPE;
-class BSetID; 
+class BSetID;
 
 
-
-class GoalEnslaveFlat { 
+class GoalEnslaveFlat {
 
 protected:
-    sint32 m_place_holder_flat; 
+    sint32 m_place_holder_flat;
 
 public:
-	GoalEnslaveFlat(); 
-	void Serialize(CivArchive &archive); 
+	GoalEnslaveFlat();
+	void Serialize(CivArchive &archive);
 };
 
-
-class GoalEnslavePtr { 
+class GoalEnslavePtr {
 protected:
-    sint32 foreign_player; 
+    sint32 foreign_player;
 
     BSetID m_his_agent_id;
     BSetID m_his_city_id;
@@ -36,37 +33,36 @@ protected:
 
 public:
 
-	GoalEnslavePtr(); 
-    ~GoalEnslavePtr(); 
+	GoalEnslavePtr();
+    ~GoalEnslavePtr();
 	void Serialize(CivArchive &archive);
 	void Store(CivArchive &archive);
     void Load(CivArchive &archive, sint32 pcount, uint8 nmask[]);
 };
 
 
-
-class GoalEnslave :  public ArmyGoal, public GoalEnslaveFlat, 
-    public GoalEnslavePtr { 
+class GoalEnslave :  public ArmyGoal, public GoalEnslaveFlat,
+    public GoalEnslavePtr {
 
 public:
 
-    GoalEnslave(); 
-    GoalEnslave( AiMain *init_ai, BSetID &id, ForeignAgent *him); 
-    GoalEnslave( AiMain *init_ai, BSetID &id, ForeignCity *his_city); 
+    GoalEnslave();
+    GoalEnslave( AiMain *init_ai, BSetID &id, ForeignAgent *him);
+    GoalEnslave( AiMain *init_ai, BSetID &id, ForeignCity *his_city);
 
-    GoalEnslave(AiMain *ai, CivArchive &archive); 
-    void Init(); 
+    GoalEnslave(AiMain *ai, CivArchive &archive);
+    void Init();
 
-    void Serialize(AiMain *ai, CivArchive &archive); 
-    BOOL Validate(AiMain *ai); 
-    void HookUp(AiMain *ai); 
-    
+    void Serialize(AiMain *ai, CivArchive &archive);
+    BOOL Validate(AiMain *ai);
+    void HookUp(AiMain *ai);
+
     GOAL_TYPE GetType () const;
 	void Display_Goal_Type(AiMain *ai);
-    
+
     BOOL GetPos(MapPointData &pos);
-    BOOL IsCity();  
-    void CleanUp(); 
+    BOOL IsCity();
+    void CleanUp();
 
 	void Set_Invalid();
 	double Compute_Raw_Priority(AiMain *ai);
@@ -81,6 +77,5 @@ public:
 	BOOL WithinRange(AiMain *ai, Agent *agent,
 					 const SUB_TASK_TYPE & sub_task);
 };
-
 
 #endif __GOAL_ENSLAVE_H__

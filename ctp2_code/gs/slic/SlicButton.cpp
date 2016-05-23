@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "SlicButton.h"
 #include "SlicObject.h"
@@ -106,7 +104,7 @@ void SlicButton::Serialize(CivArchive &archive)
 	}
 	m_message->Serialize(archive);
 }
-	
+
 void SlicButton::Callback()
 {
 	if(m_segmentName && !m_segment) {
@@ -116,7 +114,7 @@ void SlicButton::Callback()
 	}
 
 	SlicObject *myContext = m_context;
-	
+
 	if(myContext) {
 		myContext->AddRef();
 	}
@@ -133,7 +131,7 @@ void SlicButton::Callback()
 #endif
 
 	SlicFrame *frame = new SlicFrame(m_segment);
-	
+
 	Message oldmessage;
 
 	SlicObject *oldContext = g_slicEngine->GetContext();
@@ -142,17 +140,14 @@ void SlicButton::Callback()
 	g_slicEngine->SetContext(m_context);
 	g_slicEngine->SetCurrentMessage(*m_message);
 
-	
-	
+
 	frame->RunAt(m_codeOffset);
 
 	g_slicEngine->SetCurrentMessage(oldmessage);
 	g_slicEngine->SetContext(oldContext);
 
-	
 	delete frame;
-	
-	
+
 	if(myContext)
 		myContext->Release();
 

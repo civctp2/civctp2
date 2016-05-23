@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -32,7 +22,6 @@ extern C3UI			*g_c3ui;
 extern	MessagePool					*g_theMessagePool;
 
 BOOL bInsult = FALSE;
-
 
 void Button1Action::Execute( aui_Control *control, uint32 action, uint32 data )
 {
@@ -72,7 +61,7 @@ void Button1Action::Execute( aui_Control *control, uint32 action, uint32 data )
 			break;
 		}
 	}
-	
+
  	Message message = g_theMessagePool->Create( 1,
 									1,
 									MESSAGE_TYPE_EVENT,
@@ -81,12 +70,10 @@ void Button1Action::Execute( aui_Control *control, uint32 action, uint32 data )
 
 }
 
-
 void Button2Action::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
  	Message message = g_theMessagePool->Create( 1,
 									1,
 									MESSAGE_TYPE_DIPLOMATIC,
@@ -95,4 +82,3 @@ void Button2Action::Execute( aui_Control *control, uint32 action, uint32 data )
 	messagewin_CreateMessage( message );
 
 }
-

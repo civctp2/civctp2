@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -66,14 +66,13 @@ namespace
 SHORT TgaDecodeScanLine(BYTE *DecodedBuffer, WORD LineLength,
                         WORD PixelSize, BYTE **DpTga);
 
- 
 bool Get_TGA_Dimension (char const * fname,
                         int &Width,
                         int &Height,
                         int &Bpp)
 {
 	FILE *  fp  = fopen(fname, "rb");
-	if (!fp) 
+	if (!fp)
 	{
 		ReportFileNotFound(fname);
 		return false;
@@ -99,7 +98,7 @@ bool Get_TGA_Dimension (char const * fname,
 	    Bpp     = head.PixelDepth / 8;
         fclose(fp);
         return true;
-    
+
     default:
 		DPRINTF(k_DBG_UI, ("File \"%s\" is not a 16, 24 or 32 bit Targa\n", fname));
 		fclose(fp);
@@ -181,10 +180,8 @@ bool Load_TGA_File_Simple(char const * fname,
 			return false;
 		}
 
-
 		dataPtr -= Buffer_Width;
 	   }
-
 
 		fclose(fp);
 	}
@@ -225,7 +222,6 @@ bool Load_TGA_File_Simple(char const * fname,
 	return true;
 }
 
-
 void TGA2RGB32(Pixel32 * data, int datasize)
 {
     struct TGA_DATA
@@ -241,7 +237,6 @@ void TGA2RGB32(Pixel32 * data, int datasize)
         ++dp;
     }
 }
-
 
 bool Load_TGA_File(char const *fname,
 			 unsigned char *data,
@@ -397,7 +392,7 @@ bool Load_TGA_File(char const *fname,
 bool write_tga(char const * fname, int width, int height, unsigned char const * data)
 {
 	FILE * fp = fopen(fname, "wb");
-	if (!fp) 
+	if (!fp)
     {
 		ReportFileNotFound(fname);
 		return false;
@@ -419,12 +414,12 @@ bool write_tga(char const * fname, int width, int height, unsigned char const * 
 	head.PixelDepth     = BYTES_PER_PIXEL * 8;
 	head.ImagDesc       = 0;
 
-	bool    isWritten   = 
+	bool    isWritten   =
         (1 == fwrite(&head, sizeof(TGAHEADER), 1, fp)) &&
         (1 == fwrite(data, width * height * BYTES_PER_PIXEL, 1, fp));
 	fclose(fp);
 
-    if (!isWritten) 
+    if (!isWritten)
     {
 		DPRINTF(k_DBG_UI, ("Error writing file \"%s\"\n", fname));
 	}

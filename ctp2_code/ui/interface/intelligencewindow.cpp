@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -83,7 +83,6 @@ aui_StringTable             *IntelligenceWindow::sm_embassyImages = NULL;
 
 ctp2_Window                 *IntelligenceWindow::sm_showTreatyDetail = NULL;
 
-
 #define k_INT_FLAG_COL      0
 #define k_INT_NATION_COL    1
 #define k_INT_REGARD_COL    2
@@ -123,7 +122,6 @@ IntelligenceWindow::IntelligenceWindow(AUI_ERRCODE *err)
 	if(*err == AUI_ERRCODE_OK) {
 		InitImageTables();
 	}
-
 
 
 }
@@ -281,9 +279,8 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 		if(p == g_selected_item->GetVisiblePlayer()) continue;
 		if(!visPl->HasContactWith(p)) continue;
 
-		
 		item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("IntelligenceListItem");
-		
+
 		Assert(item);
 		if(!item) break;
 
@@ -298,8 +295,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL))) {
 			civ->GetCountryName(buf);
 			child->SetText(buf);
-			
-			
+
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 
@@ -319,19 +315,19 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 
 
 
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 			DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
 
 			if(relativeStrength < DIPLOMATIC_STRENGTH_WEAK)
 			{
 				strcpy(buf,g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_VWEK_BUTTON"));
 			}
-			else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE) 
+			else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE)
 			{
 				strcpy(buf,g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_WEAK_BUTTON"));
 			}
@@ -355,8 +351,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 
 		if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))) {
 			child->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
-			
-			
+
 			child->SetActionFuncAndCookie(SelectItem, (void *)item);
 		}
 		item->SetUserData((void*)p);
@@ -392,17 +387,15 @@ void IntelligenceWindow::Advice(aui_Control *control, uint32 action, uint32 data
 		}
 	}
 
-	
 	IntelligenceWindow::UpdateAdviceText();
 }
-
 
 AUI_ERRCODE IntelligenceWindow::DrawPlayerColor(ctp2_Static *control,
 												 aui_Surface *surface,
 												 RECT &rect,
 												 void *cookie)
 {
-	
+
 #if defined(__LP64__)
 	sint32 player = (sint64)cookie;
 #else
@@ -411,7 +404,7 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerColor(ctp2_Static *control,
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
-	
+
 	RECT drawRect = rect;
 	drawRect.top += 2;
 	drawRect.bottom -= 2;
@@ -444,12 +437,12 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerFlag(ctp2_Static *control,
 	rect.right -= 2;
 	rect.bottom -= 8;
 
-	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);	
+	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);
 }
 
 sint32 IntelligenceWindow::GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer)
 {
-	
+
 	ai::Regard airegard = Diplomat::GetDiplomat(ofPlayer).GetPublicRegard(forPlayer);
 
 	if(airegard <= HOTWAR_REGARD) return HOTWAR_REGARD;
@@ -473,14 +466,14 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 	sint32 p = (sint32)cookie;
 #endif
 
-	
 
 
 
 
 
 
-	
+
+
 	switch(GetRegardThreshold(p, g_selected_item->GetVisiblePlayer())) {
 		case HOTWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_ANGRY]; break;
 		case COLDWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_INDIGNANT]; break;
@@ -492,11 +485,10 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 			break;
 	}
 
-	
 	if(imageName) {
 		image = g_c3ui->LoadImage(imageName);
 		if(image) {
-			
+
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
 			rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
 
@@ -506,7 +498,6 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 				image->TheSurface()->Height()
 			};
 
-			
 			image->SetChromakey(255,0,255);
 
 			g_c3ui->TheBlitter()->Blt(
@@ -539,7 +530,7 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) return AUI_ERRCODE_OK;
 
-	
+
 
 
 
@@ -549,12 +540,12 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 	sint32 myTotalStrength = 0;
 	sint32 hisTotalStrength = 0;
 
-	
-	
 
-	
+
+
+
 	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
-	
+
 	if(!sm_strengthImages) {
 		InitImageTables();
 	}
@@ -563,12 +554,11 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 	else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE) imageName = sm_strengthImages->GetString(1);
 	else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG) imageName = sm_strengthImages->GetString(2);
 	else imageName = sm_strengthImages->GetString(3);
-											   
-	
+
 	if(imageName) {
 		image = g_c3ui->LoadImage(imageName);
 		if(image) {
-			
+
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
 			rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
 
@@ -578,7 +568,6 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 				image->TheSurface()->Height()
 			};
 
-			
 			image->SetChromakey(255,0,255);
 
 			g_c3ui->TheBlitter()->Blt(
@@ -609,7 +598,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 	sint32 p = (sint32)cookie;
 #endif
 
-	
+
 
 
 
@@ -625,19 +614,18 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 		if(imageName) {
 			aui_Image *image = g_c3ui->LoadImage(imageName);
 			if(image) {
-				
+
 				rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
 				rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
-				
+
 				RECT srcRect = {
 					0, 0,
 					image->TheSurface()->Width(),
 					image->TheSurface()->Height()
 				};
-				
-				
+
 				image->SetChromakey(255,0,255);
-				
+
 				g_c3ui->TheBlitter()->Blt(
 					surface,
 					rect.left,
@@ -650,7 +638,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 			}
 		}
 	} else {
-		
+
 	}
 	return AUI_ERRCODE_OK;
 }
@@ -667,7 +655,7 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 #endif
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
-	
+
 
 
 
@@ -677,22 +665,22 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 
 	sint32 x = 0;
 
-	
-	
-	
+
+
+
 
 	sint32 ag;
 	sint32 slot;
 	sint32 embargo_slot = -1;
 	for(ag = 1; ag < PROPOSAL_MAX; ag++) {
 
-		
-		
-		
-		
-		
 
-		const DiplomacyProposalRecord *rec = 
+
+
+
+
+
+		const DiplomacyProposalRecord *rec =
 			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
 		if (!rec->GetImageSlot())
@@ -700,7 +688,6 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 
 		rec->GetImageSlot(slot);
 
-		
 		if (rec->GetHasEmbargo())
 		{
 			if (!Diplomat::GetDiplomat(p).GetEmbargo(visP))
@@ -708,7 +695,7 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 		}
 		else if(!AgreementMatrix::s_agreements.HasAgreement(visP, p, (PROPOSAL_TYPE)ag))
 			continue;
-		
+
 		aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
 		Assert(image);
 		if(!image)
@@ -718,32 +705,31 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 				image->TheSurface()->Width(),
 				image->TheSurface()->Height()
 		};
-		
+
 		image->SetChromakey(255,0,255);
-		
-		
+
 		x = image->TheSurface()->Width() * slot;
-		
-		g_c3ui->TheBlitter()->Blt(surface, rect.left + x, 
+
+		g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
 			rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
 			image->TheSurface(),
 			&srcRect,
 			k_AUI_BLITTER_FLAG_CHROMAKEY);
-		
-		
-		
-		
+
+
+
+
 		g_c3ui->UnloadImage(image);
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -821,7 +807,6 @@ void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 
 
 	if(!sm_list) return;
 
-	
 	if(sm_list->GetSelectedItem() == item) {
 		sm_list->DeselectItem(item);
 		DiplomacyWindow::EnableButtons(FALSE);
@@ -833,8 +818,8 @@ void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 
 		DiplomacyWindow::EnableButtons( TRUE, (sint32)item->GetUserData() );
 #endif
 	}
-	
-	
+
+
 
 
 }
@@ -892,7 +877,7 @@ void IntelligenceWindow::DeclareWarOnSelected()
 	stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_IW_CONFIRM_WAR"), so, buf);
 
 	MessageBoxDialog::Query(buf, "QueryDeclareWar", intelligence_DeclareWarCallback, (void *)player);
-	
+
 }
 
 void IntelligenceWindow::DeclareEmbargoOnSelected()
@@ -938,7 +923,7 @@ void IntelligenceWindow::SendMessageToSelected()
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
 	if(!g_player[visP]) return;
-	
+
 	if(DipWizard::CanInitiateRightNow()) {
 		DipWizard::Display();
 		DipWizard::SetNation(player);
@@ -965,17 +950,16 @@ void IntelligenceWindow::DisplayDetailsOfSelected()
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
 	if(!g_player[visP]) return;
-	
+
 	DiplomacyDetails::SetNation(player);
 	DiplomacyDetails::Display();
 }
-
 
 void IntelligenceWindow::UpdateAdviceText()
 {
 	if(!sm_list) return;
 
-	ctp2_HyperTextBox *advice = 
+	ctp2_HyperTextBox *advice =
 		(ctp2_HyperTextBox *)aui_Ldl::GetObject(s_intelligenceAdviceBlock, "Advice");
 
 	Assert(advice);
@@ -990,7 +974,6 @@ void IntelligenceWindow::UpdateAdviceText()
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 	if(!g_player[visP]) return;
 
-	
 	if(!item) {
 		adviceId = Diplomat::GetDiplomat(visP).GetDiplomacyAdvice(sc);
 	}
@@ -1004,7 +987,6 @@ void IntelligenceWindow::UpdateAdviceText()
 		adviceId = Diplomat::GetDiplomat(visP). Diplomat::GetDiplomacyAdvice(sc, player);
 	}
 
-		
 	if (adviceId < 0)
 		{
 			advice->SetHyperText("");

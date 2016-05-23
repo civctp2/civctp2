@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -36,7 +36,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include 	"mstcplow.h"
 
 
-
 /******************************************************************************
  Create a TCP driver.
 
@@ -52,7 +51,7 @@ TCPWIN_Create(
 {
 	TCPINSTANCE* pTcp;
 	TCPPEER peer;
-	
+
 	DPRINT(("TCPWIN_Create() Called..\n"));
 
 	assert(status != NULL);
@@ -60,7 +59,7 @@ TCPWIN_Create(
 	/* allocate and initialize an instance structure */
 	pTcp = (TCPINSTANCE *) dp_MALLOC(sizeof(TCPINSTANCE));
 	if (pTcp == NULL) {
-		*status = comm_STATUS_MEMORY;  
+		*status = comm_STATUS_MEMORY;
 		return NULL;
 	}
 	memset(pTcp, 0, sizeof(TCPINSTANCE));
@@ -68,7 +67,7 @@ TCPWIN_Create(
 						maxHandles, maxHandles/3);
 	if (pTcp->handles == NULL) {
 		dp_FREE(pTcp);
-		*status = comm_STATUS_MEMORY;  
+		*status = comm_STATUS_MEMORY;
 		return NULL;
 	}
 	pTcp->myHandle = TCP_HDL_NONE;
@@ -88,7 +87,7 @@ TCPWIN_Create(
 /*****************************************************************************
  Destroy a TCP driver.
 *****************************************************************************/
-void 
+void
 TCPWIN_Destroy(
 	TCPINSTANCE *pTcp)	/* (modified) Current TCP instance */
 {
@@ -101,7 +100,7 @@ TCPWIN_Destroy(
 /*****************************************************************************
  Given a TCP peer address, return a handle that can be used to send a
  message to that address.
- 
+
  Handles are integers starting at 0.  If a handle has been assigned to that
  address, return it.  If no handle has been assigned to the address, fewer
  than the maximum number of handles have been assigned, and insert is non-zero,
@@ -138,7 +137,6 @@ TCPWIN_Address2Handle(
 	return h;
 }
 
-
 /*****************************************************************************
  Given a handle, return the corresponding TCPPEER address.
 
@@ -163,7 +161,6 @@ TCPWIN_Handle2Address(
 	return(TCP_RES_OK);
 }
 
-
 /*****************************************************************************
  Send a packet to the given destination.
 
@@ -178,7 +175,7 @@ TCPWIN_PutPacket(
 	TCPHANDLE hdest)	/* (input) destination for packet */
 {
 	TCPPEER* pPeer;
-	
+
 	assert(tcp != NULL);
 	assert(bufptr != NULL);
 	assert(len < TCP_MAX_USERDATALEN);
@@ -196,7 +193,6 @@ TCPWIN_PutPacket(
 
 	return TCPLow_PutPacket(tcp,pPeer,bufptr,len);
 }
-
 
 /*****************************************************************************
  Receive a packet.
@@ -228,7 +224,7 @@ TCPWIN_GetPacket(
 {
 	TCPPEER addr;
 	int status;
-	
+
 	/* do sanity checks */
 	assert(tcp != NULL);
 	assert(bufptr != NULL);

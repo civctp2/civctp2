@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -48,7 +48,6 @@ sint32 initialplayscreen_displayMyWindow();
 sint32 initialplayscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE initialplayscreen_Initialize( void );
 AUI_ERRCODE initialplayscreen_Cleanup();
-
 
 void
 spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
@@ -95,7 +94,7 @@ private:
 
 	ctp2_Button	    *m_spriteTest,
 					*m_sp,
-					*m_email, 
+					*m_email,
 					*m_hotseat,
 					*m_mp,
 					*m_credits,
@@ -111,11 +110,9 @@ private:
 					*m_continue,
 					*m_instant,
 					*m_mapeditor;
-		            
-		            
-	
+
+
 	c3_Static		*m_background;
 };
-
 
 #endif

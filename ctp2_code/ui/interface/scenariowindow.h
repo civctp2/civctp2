@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -16,11 +15,9 @@ class ctp2_Static;
 
 class ctp2_ListBox;
 
-
 class ScenarioRulesBox;
 class ScenarioBox;
 class AvailableBox;
-
 
 struct Scenario;
 struct ScenarioPack;
@@ -31,9 +28,7 @@ struct ScenarioPack;
 sint32 scenarioscreen_displayMyWindow();
 sint32 scenarioscreen_removeMyWindow(uint32 action);
 
-
 sint32 scenarioscreen_SetExitCallback(aui_Control::ControlActionCallback *callback);
-
 
 AUI_ERRCODE scenarioscreen_Initialize( aui_Control::ControlActionCallback
 									   *callback = NULL );
@@ -77,10 +72,8 @@ public:
 
 	void			FillListWithScenarios(ctp2_ListBox *available);
 
-	
 	void			FillListWithScenarioPacks(ctp2_ListBox *available, bool hideOriginalScenarios=false);
 
-	
 	static void			SetExitCallback(aui_Control::ControlActionCallback *callback);
 	aui_Control::ControlActionCallback *GetExitCallback(void) { return m_exitCallback; }
 
@@ -100,34 +93,30 @@ public:
 	static void SetProfileFromScenario( void );
 	static void LoadScenarioGame( void );
 
+public:
 
-public:	
-	
 	Scenario		*m_scenario;
-	ScenarioPack	*m_scenarioPack;	
+	ScenarioPack	*m_scenarioPack;
 	sint32			m_scenarioPackIndex;
-	
+
 	SCENARIO_WINDOW_MODE	m_mode;
 
 	ctp2_Window *m_window;
 	ctp2_Static *m_scenInstructions;
 	ctp2_Static *m_packInstructions;
 
-	
 	ctp2_Button     *m_LoadButton;
 	ctp2_Button     *m_SaveButton;
 	ctp2_Button     *m_NewButton;
 	ctp2_Button     *m_BackButton;
 
 	ctp2_ListBox		*m_available;
-	
+
 	ctp2_Window *m_newPackWindow;
 	ctp2_Window *m_newScenWindow;
 
-	
 	aui_Control::ControlActionCallback	*m_exitCallback;
 };
-
 
 AUI_ACTION_BASIC(CloseScenarioScreenAction);
 

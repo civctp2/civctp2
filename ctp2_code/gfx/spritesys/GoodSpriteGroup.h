@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 
 enum GOODACTION {
 	GOODACTION_NONE = -1,
-	
+
 	GOODACTION_IDLE,
 
 	GOODACTION_MAX
@@ -67,9 +67,9 @@ public:
 
 	void			ExportScript(MBCHAR *name);
 
-	void			Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+	void			Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
-	void			DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+	void			DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 
 	void			DrawText(sint32 x, sint32 y, char *s);
@@ -83,13 +83,10 @@ public:
 	POINT			GetHotPoint(GOODACTION action);
 
 
-	
 	sint32			Parse(uint16 id,GROUPTYPE group);
 
 private:
 
-
 };
-
 
 #endif

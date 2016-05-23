@@ -1,13 +1,10 @@
-
 #include "c3.h"
-
 
 
 #include "globals.h"
 #include "C3GameState.h"
 
 #include "c3endgamedb.h"
-
 
 #include "player.h"
 #include "EndGameDB.h"
@@ -18,12 +15,12 @@
 
 #include "StrDB.h"
 
-extern EndGameDatabase *g_theEndGameDB; 
-extern World *g_theWorld; 
+extern EndGameDatabase *g_theEndGameDB;
+extern World *g_theWorld;
 extern StringDB *g_theStringDB;
 
 #include "ConstDB.h"
-extern ConstDB *g_theConstDB; 
+extern ConstDB *g_theConstDB;
 
 #include "Readiness.h"
 
@@ -56,33 +53,32 @@ STDMETHODIMP_(ULONG) C3EndGameDB::Release()
 	return 0;
 }
 
-
 C3EndGameDB::C3EndGameDB(Player *p)
 {
    	m_refCount = 0;
     m_player = p;
-} 
+}
 
 C3EndGameDB::C3EndGameDB(Player *p, CivArchive &archive)
 {
     m_player = p;
-    Serialize(archive); 
-} 
+    Serialize(archive);
+}
 
-void C3EndGameDB::Serialize(CivArchive &archive) 
+void C3EndGameDB::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
-        archive << m_refCount; 
-    } else { 
-        archive >> m_refCount; 
-    } 
+    if (archive.IsStoring()) {
+        archive << m_refCount;
+    } else {
+        archive >> m_refCount;
+    }
 }
 
 STDMETHODIMP_ (sint32) C3EndGameDB::GetNumObjectTypes ()
 {
-    
+
 	return g_theEndGameDB->GetNumRec();
 }
 
@@ -91,16 +87,15 @@ STDMETHODIMP_ (sint32) C3EndGameDB::End_Game_Object_String_To_Int(char *object_s
 	StringId str_id;
 	sint32 index;
 
-	
 	if (g_theStringDB->GetStringID(object_string, str_id))
 	{
-		
+
 		if (g_theEndGameDB->GetNamedItem(str_id, index))
 		{
-			
+
 			return index;
-		} 
-	} 
+		}
+	}
 
 	Assert(false);
 
@@ -112,16 +107,14 @@ STDMETHODIMP_ (char *) C3EndGameDB::End_Game_Object_Int_To_String(sint32 index)
 	StringId str_id;
 	char * end_game_string;
 
-	
 	if (g_theEndGameDB->GetNamedItemID(index, str_id))
 	{
-		
+
 		end_game_string = (char *) g_theStringDB->GetNameStr(str_id);
 	}
 
 	return end_game_string;
 }
-
 
 STDMETHODIMP_ (BOOL) C3EndGameDB::RequiresProbeRecovery(sint32 object_id)
 {
@@ -137,7 +130,6 @@ STDMETHODIMP_ (BOOL) C3EndGameDB::ExactlyOneRequired(sint32 object_id)
 {
 	return g_theEndGameDB->Get(object_id)->ExactlyOneRequired();
 }
-
 
 
 STDMETHODIMP_ (double) C3EndGameDB::RushBuyModifier(sint32 object_id)
@@ -179,7 +171,6 @@ STDMETHODIMP_ (sint32) C3EndGameDB::GetCost(sint32 object_id)
 {
 	return g_theEndGameDB->Get(object_id)->GetCost();
 }
-
 
 STDMETHODIMP_ (sint32) C3EndGameDB::GetTurnsPerStage(sint32 object_id, sint32 numBuilt)
 {

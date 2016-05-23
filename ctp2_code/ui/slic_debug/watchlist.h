@@ -23,13 +23,12 @@ typedef void (*WatchListCallback)(sint32 arg);
 class WatchListItem : public c3_ListItem, public SlicSymbolWatchCallback
 {
 public:
-	WatchListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *line, 
+	WatchListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *line,
 				  MBCHAR *ldlBlock);
 	virtual ~WatchListItem();
 
 	virtual void Update();
-	
-	
+
 	void WatchCallback(SlicSymbolData *symbol, bool isAddCallback);
 	void WatchVariableDeleted(SlicSymbolData *symbol);
 
@@ -57,7 +56,6 @@ public:
 	WatchList(WatchListCallback callback = NULL, MBCHAR *ldlBlock = NULL);
 	virtual ~WatchList();
 
-
 //public:
 	sint32 Initialize(MBCHAR *ldlBlock);
 	sint32 Cleanup();
@@ -65,7 +63,7 @@ public:
 
 	void RemoveWindow();
 	void DisplayWindow();
-	
+
 	virtual void kh_Close();
 
 	c3_ListBox *GetList() { return m_list; }
@@ -87,7 +85,6 @@ public:
 
 	WatchListCallback m_callback;
 };
-  
 
 
 void watchlist_Display();
@@ -99,4 +96,3 @@ extern WatchList *g_watchList;
 #endif//CTP2_ENABLE_SLICDEBUG
 
 #endif
-
