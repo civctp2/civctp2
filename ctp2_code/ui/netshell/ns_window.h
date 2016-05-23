@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __NS_WINDOW_H__
 #define __NS_WINDOW_H__
 
 
-
 #include "c3_popupwindow.h"
-
 
 #define k_NS_WINDOW_TILE_LDL_NAME		"tile"
 #define k_NS_WINDOW_RETIRED_LDL_NAME	"retired"
@@ -25,11 +12,10 @@ class aui_Image;
 class c3_Static;
 
 
-
 class ns_Window : public c3_PopupWindow
 {
 public:
-	
+
 	ns_Window(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -53,7 +39,7 @@ public:
 	BOOL		IsRetired( void ) const { return m_retired; }
 	BOOL		SetRetired( BOOL retired );
 
-	
+
 
 
 
@@ -73,16 +59,13 @@ public:
 
 
 protected:
-	sint32		m_numControls;	
+	sint32		m_numControls;
 
+	aui_Control	**m_controls;
 
-	aui_Control	**m_controls;	
+	aui_Image	*m_tile;
 
-
-	aui_Image	*m_tile;		
-
-	BOOL		m_retired;		
+	BOOL		m_retired;
 };
 
-
-#endif 
+#endif

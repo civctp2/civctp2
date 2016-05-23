@@ -10,11 +10,10 @@
 class Pattern;
 class Icon;
 
-
 class IconSwitch : public aui_Switch, public PatternBase
 {
 public:
-	
+
 	IconSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -28,7 +27,6 @@ public:
 		BOOL selected = FALSE );
 	virtual ~IconSwitch() {}
 
-	
 	Pattern *&ThePattern( void ) { return m_pattern; }
 	Icon *&TheIcon( void ) { return m_icon; }
 	uint16 TheColor( void ) { return m_color; }
@@ -44,4 +42,3 @@ protected:
 };
 
 #endif
-

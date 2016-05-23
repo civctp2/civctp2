@@ -10,18 +10,18 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Addion by Martin Gühmann: Two more world shape options, 
+// - Addion by Martin Gühmann: Two more world shape options,
 //   flat world and Uranus world
 // - Improved import structure and compatibility.
 //
@@ -38,7 +38,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -46,12 +46,12 @@
 
 class SPDropDownListItem;
 class SPNewGameWindow;
-class SPProfileBox; 
+class SPProfileBox;
 class SPRulesBox;
 class SPWorldBox;
 class TwoChoiceButton;
 
-enum SP_NEWGAME_STR 
+enum SP_NEWGAME_STR
 {
 	SP_NEWGAME_STR_CHIEFTAIN,
 	SP_NEWGAME_STR_WARLORD,
@@ -104,7 +104,6 @@ class aui_TextField;
 class C3TextField;
 class aui_StringTable;
 
-
 #include "ctp2_button.h"
 
 //----------------------------------------------------------------------------
@@ -149,9 +148,7 @@ void spnewgamescreen_rulesPress( aui_Control *control, uint32 action, uint32 dat
 void spnewgamescreen_mapTypePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_worldShapePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-
 
 void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
@@ -164,7 +161,6 @@ void spnewgamescreen_genderSelect(aui_Control *control, uint32 action, uint32 da
 void spnewgamescreen_preferencePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_pCustomPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void spnewgamescreen_mapSizeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_worldTypeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_worldShapeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
@@ -173,15 +169,12 @@ void spnewgamescreen_riskLevelSelect(aui_Control *control, uint32 action, uint32
 void spnewgamescreen_opponentSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_wCustomPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
-
 
 
 class TwoChoiceButton : public ctp2_Button
@@ -195,7 +188,7 @@ public:
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	~TwoChoiceButton() {};
-	
+
 	uint32	GetChoice() { return m_choice; };
 	uint32 Switch();
 private:
@@ -204,8 +197,7 @@ private:
 };
 
 
-
-class SPProfileBox 
+class SPProfileBox
 {
 public:
 	SPProfileBox (
@@ -215,13 +207,13 @@ public:
 	virtual ~SPProfileBox();
 	void	SetLeader(uint32 index);
 private:
-	
+
 	c3_DropDown		*m_spClan;
 	c3_DropDown		*m_spGender;
 	C3TextField		*m_spName;
 	ctp2_Button		*m_spPreferences;
 	ctp2_Button		*m_spCustom;
-	
+
 	c3_Static		*m_PTOP;
 	c3_Static		*m_PHEADER;
 	c3_Static		*m_PBOT;
@@ -230,8 +222,7 @@ private:
 };
 
 
-
-class SPWorldBox 
+class SPWorldBox
 {
 public:
 	SPWorldBox (
@@ -258,7 +249,7 @@ private:
 					*m_riskLevel,
 					*m_opponent;
 	ctp2_Button		*m_spCustom;
-	
+
 	c3_Static		*m_WTOP;
 	c3_Static		*m_WHEADER;
 	c3_Static		*m_WBOT;
@@ -268,8 +259,7 @@ private:
 };
 
 
-
-class SPRulesBox 
+class SPRulesBox
 {
 public:
 	SPRulesBox (
@@ -277,7 +267,7 @@ public:
 		uint32 id,
 		MBCHAR *ldlBlock );
 	virtual ~SPRulesBox();
-	
+
 	uint32 GetGenocideRules();
 	uint32 GetTradeRules();
 	uint32 GetCombatRules();
@@ -287,14 +277,13 @@ private:
 						*m_spTrade,
 						*m_spCombat,
 						*m_spPollution;
-	
+
 	c3_Static		*m_RTOP;
 	c3_Static		*m_RHEADER;
 	c3_Static		*m_RBOT;
 	c3_Static		*m_RLEFT;
 	c3_Static		*m_RRIGHT;
 };
-
 
 
 class SPNewGameWindow : public C3Window
@@ -311,14 +300,12 @@ public:
 
 	void Update( void );
 
-	
-	
+
 	ctp2_Button		*m_spStart;
 	c3_Static		*m_spOk;
 	ctp2_Button		*m_spReturn;
 
-	
-	
+
 	ctp2_Button		*m_spTribe;
 	ctp2_Button		*m_spDifficulty;
 	ctp2_Button		*m_spMapSize;
@@ -326,10 +313,8 @@ public:
 	ctp2_Button		*m_spMap;
 	ctp2_Button		*m_spRules;
 
-	
 	ctp2_Button		*m_spEditor;
 
-	
 	ctp2_Button		*m_spScenario;
 
 	c3_Static		*m_spGeneral;
@@ -340,9 +325,9 @@ public:
 
 
 
-	
 
-	
+
+
 	ctp2_Button		*m_mapTypeButton;
 	c3_Static		*m_mapTypeLabel;
 	ctp2_Button		*m_worldShapeButton;
@@ -360,18 +345,15 @@ public:
 
 	ctp2_Button		*m_quitButton;
 
-	
 	c3_Static		*m_spTitle;
 	c3_Static		*m_spBackground;
 
 	aui_StringTable	*m_string;
 
-	
 	c3_Static		*m_scenarioName;
 	c3_Static		*m_scenarioStaticText;
 
 };
-
 
 
 class SPDropDownListItem : public c3_ListItem
@@ -385,7 +367,6 @@ private:
 };
 
 
-
 sint32				callbackSetSelected(aui_Control *control, void *cookie);
 
 aui_StringTable		*spNewStringTable(AUI_ERRCODE *errcode, MBCHAR *ldlme);
@@ -394,7 +375,7 @@ c3_Button			*spNew_c3_Button(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldl
 ctp2_Button			*spNew_ctp2_Button(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
 									   void (*callback)(aui_Control*,uint32,uint32,void*));
 c3_Switch			*spNew_c3_Switch(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL, 
+									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
 									void *cookie=NULL );
 aui_Switch			*spNew_aui_Switch(
 									AUI_ERRCODE *errcode,
@@ -421,12 +402,12 @@ aui_SwitchGroup		*spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, MBCHAR *ldlParent
 
 
 
-ctp2_Button* 
-spNew_ctp2_Button(AUI_ERRCODE *errcode, 
+ctp2_Button*
+spNew_ctp2_Button(AUI_ERRCODE *errcode,
 				  MBCHAR *ldlParent,
 				  MBCHAR *ldlMe,
 				  MBCHAR *default_text,
 				  void (*callback)(aui_Control*,uint32,uint32,void*),
 				  MBCHAR *buttonFlavor);
 
-#endif 
+#endif

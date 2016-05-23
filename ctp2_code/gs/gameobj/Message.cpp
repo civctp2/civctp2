@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "civarchive.h"
@@ -66,7 +58,7 @@ void Message::RemoveAllReferences()
 	}
 
 	if (g_player && g_player[GetOwner()])
-		g_player[GetOwner()]->RemoveMessageReferences(*this) ;			
+		g_player[GetOwner()]->RemoveMessageReferences(*this) ;
 
 	AccessData()->KillMessageWindow();
 	g_theMessagePool->Del(*this) ;
@@ -110,17 +102,14 @@ MessageData* Message::AccessData()
 
 void Message::Show()
 {
-	
-	
+
 	if (!AccessData()) return;
 	if (!AccessData()->GetMessageWindow()) return;
 	if (!AccessData()->GetMessageWindow()->GetIconWindow()) return;
-	
 
 	g_c3ui->AddAction(new MessageOpenAction(AccessData()->GetMessageWindow()->GetIconWindow()));
-	
-	
-	
+
+
 	SetRead();
 
 }
@@ -145,7 +134,7 @@ sint32 Message::GetExpiration() const
 	return GetData()->GetExpiration();
 }
 
-void Message::MinimizeMessage() 
+void Message::MinimizeMessage()
 {
 	AccessData()->GetMessageWindow()->ShowWindow( FALSE );
 	AccessData()->GetMessageWindow()->GetIconWindow()->SetCurrentIconButton(NULL);

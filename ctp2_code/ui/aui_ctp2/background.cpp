@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Background screen handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,11 +70,9 @@ struct SavedMouseEvent {
 };
 
 
-
 PointerList<SavedMouseEvent> s_savedEvents;
 
 sint32				doubleClickTimeout = 100;
-
 
 AUI_ERRCODE Background::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
@@ -101,28 +99,26 @@ void Background::MouseLGrabInside(aui_MouseEvent *data)
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
-	
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	SavedMouseEvent *ev = new SavedMouseEvent;	
+	SavedMouseEvent *ev = new SavedMouseEvent;
 	memcpy(&ev->event, data, sizeof(aui_MouseEvent));
 	ev->type = SEV_LGRAB;
 	s_savedEvents.AddTail(ev);
 
 
+    m_lbutton_isdown = TRUE;
 
-    m_lbutton_isdown = TRUE; 
 
-	
-	
-	
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
 	data->position.x += X();
 	data->position.y += Y();
 }
@@ -134,7 +130,6 @@ void Background::MouseRGrabInside(aui_MouseEvent *data)
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-	
 
 	Assert(g_tiledMap != NULL);
 	if(g_tiledMap == NULL) return;
@@ -147,21 +142,21 @@ void Background::MouseRGrabInside(aui_MouseEvent *data)
 	ev->type = SEV_RGRAB;
 	s_savedEvents.AddTail(ev);
 
-	
+
 
 
 
 	m_rbutton_isdown = TRUE;
 
-	
-	
-	
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
+
 	data->position.x += X();
 	data->position.y += Y();
 }
@@ -181,29 +176,24 @@ void Background::MouseLDropInside(aui_MouseEvent *data)
 	ev->type = SEV_LDROP;
 	s_savedEvents.AddTail(ev);
 
-	
 
     m_lbutton_isdown = FALSE;
 
-	
-	
+
 	data->position.x += X();
 	data->position.y += Y();
 }
-
 
 
 void Background::MouseLDropOutside(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
 
-    m_lbutton_isdown = FALSE; 
+    m_lbutton_isdown = FALSE;
 
 }
 
-
-extern SelectedItem *g_selected_item; 
-
+extern SelectedItem *g_selected_item;
 
 void Background::MouseMoveInside(aui_MouseEvent *data)
 
@@ -213,15 +203,15 @@ void Background::MouseMoveInside(aui_MouseEvent *data)
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
-    Assert(data); 
+    Assert(data);
 
     MapPoint tmp;
 
     if (g_tiledMap && g_tiledMap->GetMouseTilePos(tmp)){
-        m_current_mouse_tile = tmp; 
+        m_current_mouse_tile = tmp;
     }
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
@@ -238,7 +228,7 @@ void Background::MouseLDragInside( aui_MouseEvent *data )
 	if ( !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
 
 	MapPoint tmp;
-	
+
 	data->position.x -= X();
 	data->position.y -= Y();
 
@@ -249,13 +239,12 @@ void Background::MouseLDragInside( aui_MouseEvent *data )
 			ev->type = SEV_LDRAG;
 			s_savedEvents.AddTail(ev);
 
-			
-			
+
 		}
-        m_current_mouse_tile = tmp; 
+        m_current_mouse_tile = tmp;
     }
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
@@ -264,8 +253,7 @@ void Background::MouseLDragInside( aui_MouseEvent *data )
 		g_tiledMap->DrawHilite( TRUE );
 	}
 
-	
-	
+
 	data->position.x += X();
 	data->position.y += Y();
 }
@@ -275,16 +263,15 @@ void Background::MouseMoveOver(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
 
-    Assert(data); 
-
+    Assert(data);
 
     MapPoint tmp;
 	if (g_tiledMap && g_tiledMap->GetMouseTilePos(tmp))
 	{
-        m_current_mouse_tile = tmp; 
+        m_current_mouse_tile = tmp;
     }
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
@@ -296,9 +283,9 @@ void Background::MouseMoveOutside(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
 
-    Assert(data); 
+    Assert(data);
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
@@ -317,15 +304,14 @@ void Background::MouseMoveOutside(aui_MouseEvent *data)
 }
 
 
-
 void Background::MouseMoveAway(aui_MouseEvent *data)
 
 {
 	if (IsDisabled()) return;
 
-    Assert(data); 
+    Assert(data);
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
@@ -340,14 +326,13 @@ void Background::MouseNoChange(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
 
-    Assert(data); 
+    Assert(data);
 
-    if (data->movecount==0) { 
+    if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
 
 }
-
 
 void Background::ProcessLastMouseMoveThisFrame(aui_MouseEvent *data)
 {
@@ -372,7 +357,7 @@ void Background::ProcessLastMouseMoveThisFrame(aui_MouseEvent *data)
 		{
 			g_selected_item->SetCurMouseTile(m_current_mouse_tile);
 		}
-		
+
 		g_infoBar->SetTextFromMap(m_current_mouse_tile);
 
 		if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
@@ -397,7 +382,6 @@ AUI_ERRCODE Background::Idle(void)
 		g_tiledMap->Idle();
 	}
 
-	
 	while(s_savedEvents.GetCount() > 0) {
 		SavedMouseEvent *ev = s_savedEvents.GetHead();
 		switch(ev->type) {
@@ -405,7 +389,7 @@ AUI_ERRCODE Background::Idle(void)
 			{
 				uint32 curTicks = GetTickCount();
 				if (curTicks > (ev->event.time + doubleClickTimeout)) {
-					g_tiledMap->Click(&ev->event, FALSE);					
+					g_tiledMap->Click(&ev->event, FALSE);
 				} else {
 					return AUI_ERRCODE_OK;
 				}
@@ -426,7 +410,7 @@ AUI_ERRCODE Background::Idle(void)
 		}
 		delete s_savedEvents.RemoveHead();
 	}
-				
+
 #if 0
 	if (hasSavedEvent) {
 		uint32 curTicks = GetTickCount();
@@ -439,7 +423,6 @@ AUI_ERRCODE Background::Idle(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 void Background::MouseLDoubleClickInside(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
@@ -450,7 +433,6 @@ void Background::MouseLDoubleClickInside(aui_MouseEvent *data)
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
-	
 	data->position.x -= X();
 	data->position.y -= Y();
 
@@ -469,7 +451,7 @@ void Background::MouseLDoubleClickInside(aui_MouseEvent *data)
 		g_tiledMap->Click(data, TRUE);
 	}
 
-    m_lbutton_isdown = TRUE; 
+    m_lbutton_isdown = TRUE;
 
 }
 
@@ -483,13 +465,11 @@ void Background::MouseRDoubleClickInside(aui_MouseEvent *data)
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
-	
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	
 	g_tiledMap->Click(data, TRUE);
 
-    m_lbutton_isdown = TRUE; 
+    m_lbutton_isdown = TRUE;
 
 }

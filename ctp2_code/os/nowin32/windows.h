@@ -12,13 +12,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 #ifndef __WINDOWS_H__
 #define __WINDOWS_H__ 1
@@ -169,7 +169,6 @@ typedef struct hwnd_t* HWND;
 #endif
 #define RGB(r,g,b) ((BYTE)(b) << 16 | (BYTE)(g) << 8 | (BYTE)(r))
 #define WINAPI
-
 
 
 /* stub functions */

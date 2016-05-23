@@ -30,7 +30,6 @@ void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 da
 void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 class OptionsWindow : public c3_PopupWindow
 {
 public:
@@ -46,7 +45,6 @@ public:
 	sint32 EnableButtons( void );
 	sint32 DisableButtons( void );
 
-	
 	void RemoveQuitToWindowsButton( void );
 	void AddQuitToWindowsButton( void );
 
@@ -64,7 +62,7 @@ public:
 	ctp2_Button *KeyboardButton() const { return m_keyboard; }
 
 private:
-	
+
 	ctp2_Button		*m_graphics,
 					*m_sound,
 					*m_music,
@@ -76,12 +74,10 @@ private:
 					*m_mapeditor,
 					*m_keyboard,
 					*m_quittoshell;
-	
 
 	c3_Static		*m_configHeader;
 	c3_Static		*m_gameHeader;
 
 };
-
 
 #endif

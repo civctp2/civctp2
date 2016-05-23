@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "coloriconswitch.h"
 
@@ -18,7 +17,6 @@
 #include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
-
 
 ColorIconSwitch::ColorIconSwitch(
 	AUI_ERRCODE *retval,
@@ -59,7 +57,7 @@ ColorIconSwitch::ColorIconSwitch(
 	m_filename = NULL;
 
 	SetRect(&m_pictureRect, 0, 0, 0, 0);
-	
+
 	InitCommon(ldlBlock, TRUE);
 }
 
@@ -69,7 +67,7 @@ AUI_ERRCODE ColorIconSwitch::Resize(sint32 width, sint32 height)
 
 	errcode = aui_Switch::Resize(width, height);
 
-	if (errcode == AUI_ERRCODE_OK) 
+	if (errcode == AUI_ERRCODE_OK)
 		ResizePictureRect();
 
 	return errcode;
@@ -109,9 +107,7 @@ void ColorIconSwitch::ResizePictureRect(void)
 {
 	sint32 destHeight, destWidth;
 
-
 	if (GetImage(0) && GetImage(0)->TheSurface()) {
-
 
 		sint32 pictureWidth = GetImage(0)->TheSurface()->Width();
 		sint32 pictureHeight = GetImage(0)->TheSurface()->Height();
@@ -124,31 +120,30 @@ void ColorIconSwitch::ResizePictureRect(void)
 
 		if (m_shrinkToFit) {
 			double pictureRat = (double)pictureWidth / (double)pictureHeight;
-			
+
 			if (pictureRat < 1.0) {
-				
+
 				iconRect.right =  (sint32)((double)destHeight * pictureRat);
 				iconRect.bottom = destHeight;
 			} else {
-				
+
 				iconRect.right = destWidth;
 				iconRect.bottom = (sint32)((double)destWidth / pictureRat);
 			}
 		}
-		
+
 		if (buttonRect.right > iconRect.right)  {
 			OffsetRect(&iconRect, buttonRect.right/2 - iconRect.right/2, 0);
 		} else {
 			OffsetRect(&iconRect, iconRect.right/2 - buttonRect.right/2, 0);
 		}
-		
+
 		if (buttonRect.bottom > iconRect.bottom) {
 			OffsetRect(&iconRect, 0, buttonRect.bottom/2 - iconRect.bottom/2);
 		} else {
 			OffsetRect(&iconRect, 0, iconRect.bottom/2 - buttonRect.bottom/2);
 		}
 
-		
 		m_pictureRect = iconRect;
 	}
 }
@@ -160,7 +155,6 @@ void ColorIconSwitch::SetIcon(MBCHAR *name)
 	if (m_filename) delete[] m_filename;
 
 	m_filename = new MBCHAR[_MAX_PATH];
-
 
 
 	strcpy(m_filename, name);
@@ -205,14 +199,12 @@ ColorIconSwitch::~ColorIconSwitch()
 	delete [] m_filename;
 }
 
-
 AUI_ERRCODE ColorIconSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
-
 
 	RECT rect = { 0, 0, m_width, m_height };
 
@@ -242,7 +234,7 @@ AUI_ERRCODE ColorIconSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y 
 
 
 
-	
+
 	RECT down = rect;
 	down.left += 2;
 	down.top += 2;

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,15 +31,13 @@
 #ifndef __AUI_WIN_H__
 #define __AUI_WIN_H__
 
-
 #include "aui_control.h"
-
 
 
 class aui_Win : public aui_Control
 {
 public:
-	
+
 	aui_Win(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -78,13 +76,13 @@ public:
 		sint32 y );
 
 protected:
-	static BOOL		m_registered;	
-	static MBCHAR	*m_windowClass;	
-	static sint32	m_winRefCount;	
+	static BOOL		m_registered;
+	static MBCHAR	*m_windowClass;
+	static sint32	m_winRefCount;
 
-	HWND			m_hwnd;			
+	HWND			m_hwnd;
 
-	POINT			m_offscreen;	
+	POINT			m_offscreen;
 
 	HDC				m_memdc;
 	HBITMAP			m_hbitmap;
@@ -96,32 +94,31 @@ protected:
 	void			WinMouseLDrag(aui_MouseEvent * mouseData);
 	void			WinMouseRDrag(aui_MouseEvent * mouseData);
 
-	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);	
-	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);	
+	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData);
 
-	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);	
-	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);	
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
-	virtual void	MouseRDragInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData);	
+	virtual void	MouseRDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData);
 
-	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
-	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);	
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabOutside(aui_MouseEvent * mouseData);
-	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData);	
+	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData);
 
-	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);	
+	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
+	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

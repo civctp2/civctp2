@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,9 +32,9 @@
 //
 //   * Added m_hasGovernmentsModified (bool,) used throughout to incorporate
 //     appropriate code for each parser
-//   * Code dynamically generates m_hasGovernmentsModified into the record 
+//   * Code dynamically generates m_hasGovernmentsModified into the record
 //     parser, and sets it, accordingly.
-//   * Code dynamically generates (along with a public accessor for 
+//   * Code dynamically generates (along with a public accessor for
 //     m_hasGovernmentsModified,) generic accessors...
 //     - sint32 GenericGetNumGovernmentsModified()
 //     - sint32 GenericGetGovernmentsModifiedIndex(sint32 index)
@@ -47,24 +47,24 @@
 // - Added return type void to Init function to make .NET quiet about the
 //   missing return type, by Martin Gühmann.
 // - Modified AddBitPair function to allow bit pairs to have default values
-//   so that when two records are merged, only the bit is merged 
+//   so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
 // - Output files only have spaces instead of tabs as indent and indetion
 //   was fixed. (Aug 25th 2005 Martin Gühmann)
-// - Added alias names and the possibility to have default values from 
+// - Added alias names and the possibility to have default values from
 //   other entries. (Aug 26th 2005 Martin Gühmann)
 // - Added accessors for slic database array access. (Sep 16th 2005 Martin Gühman)
 // - Made float arrays possible. (Sep 16th 2005 Martin Gühman)
 // - Made value of int databases accessable. (Sep 16th 2005 Martin Gühman)
 // - If database records have no name a default name is generated. e.g.
 //   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
-// - Added ParseNum so that a certain number of entries can be parsed if 
+// - Added ParseNum so that a certain number of entries can be parsed if
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 // - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
-// - Added support for default values taken from other databases like the 
+// - Added support for default values taken from other databases like the
 //   Const database. (9-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -79,7 +79,7 @@
 
 #if defined(WIN32)
 // Do not define the min and max *macros* in <windows.h>.
-#define NOMINMAX	
+#define NOMINMAX
 #include <windows.h>
 #else
 #include "windows.h"
@@ -123,7 +123,7 @@ RecordDescription::~RecordDescription()
 }
 
 void RecordDescription::SetBaseType(DATUM_TYPE type)
-{ 
+{
 	m_baseType = type;
 
 	Datum * l_Value     = new Datum("Value", type);
@@ -176,7 +176,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
 
     // Main class
 	fprintf(outfile, "\nclass %sRecord : public CTPRecord\n{\npublic:\n", m_name);
-	
+
 	fprintf(outfile, "    typedef sint32 (%sRecord::*IntAccessor)() const;\n", m_name);
 	fprintf(outfile, "    typedef bool   (%sRecord::*BoolAccessor)() const;\n", m_name);
 	fprintf(outfile, "    typedef double (%sRecord::*FloatAccessor)() const ;\n", m_name);
@@ -189,7 +189,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
 
 	fprintf(outfile, "\nprivate:\n");
 	ExportData(outfile);
-	
+
 	fprintf(outfile, "\npublic:\n");
 	ExportMethods(outfile);
 
@@ -211,7 +211,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "extern CTPDatabase<%sRecord> *   g_the%sDB;\n\n", m_name, m_name);
 	fprintf(outfile, "extern char * g_%s_Tokens[];\n", m_name);
 
-    // Multiple include guard 
+    // Multiple include guard
 	fprintf(outfile, "\n#endif\n");
 }
 
@@ -224,14 +224,14 @@ void RecordDescription::ExportForwardDeclarations(FILE *outfile)
 	    PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
         walk.Next()
-    ) 
+    )
     {
         Datum * dat = walk.GetObj();
-		if (DATUM_RECORD == dat->m_type) 
+		if (DATUM_RECORD == dat->m_type)
         {
             forwardClasses.insert(dat->m_subType);
 		}
-		else if (    (DATUM_BIT_PAIR == dat->m_type) 
+		else if (    (DATUM_BIT_PAIR == dat->m_type)
                   && (DATUM_RECORD   == dat->m_bitPairDatum->m_type)
                 )
         {
@@ -239,7 +239,7 @@ void RecordDescription::ExportForwardDeclarations(FILE *outfile)
 		}
 	}
 
-    for 
+    for
     (
         std::set<std::string>::const_iterator  p = forwardClasses.begin();
         p != forwardClasses.end();
@@ -253,27 +253,26 @@ void RecordDescription::ExportForwardDeclarations(FILE *outfile)
         // else: The main class has been exported at the top
     }
 
-	for 
+	for
     (
         PointerList<MemberClass>::Walker membWalk(&m_memberClasses);
 	    membWalk.IsValid();
 		membWalk.Next()
-    ) 
+    )
     {
 		membWalk.GetObj()->ExportForwardDeclarations(outfile);
 	}
 }
 
 
-
 void RecordDescription::ExportDataCode(FILE *outfile)
 {
-	for 
+	for
     (
         PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
         walk.Next()
-    ) 
+    )
     {
 		walk.GetObj()->ExportDataCode(outfile, m_name);
 	}
@@ -282,7 +281,7 @@ void RecordDescription::ExportDataCode(FILE *outfile)
 void RecordDescription::SetParseNum(sint32 parseNum)
 {
 	if(m_addingToMemberClass) {
-		
+
 		Assert(m_memberClasses.GetTail());
 		if(m_memberClasses.GetTail()) {
 			m_memberClasses.GetTail()->SetParseNum(parseNum);
@@ -302,7 +301,7 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
                                  char *subType, bool isPreBody)
 {
 	if(m_addingToMemberClass) {
-		
+
 		Assert(m_memberClasses.GetTail());
 		if(m_memberClasses.GetTail()) {
 			m_memberClasses.GetTail()->AddDatum(type, nameInfo,
@@ -311,7 +310,7 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 		}
 		return;
 	}
-	
+
 	Datum *dat = new Datum(nameInfo->name, type);
 	dat->m_akaName = nameInfo->akaName;
 	dat->m_defaultName = nameInfo->defaultName;
@@ -323,7 +322,7 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	    (dat->m_maxSize <= 0)
 	   )
 	{
-		switch(dat->m_type) 
+		switch(dat->m_type)
 		{
 		default:
 			break;
@@ -348,7 +347,7 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	}
 	m_datumList.AddTail(dat);
 
-	if (dat->m_type == DATUM_BIT) 
+	if (dat->m_type == DATUM_BIT)
 	{
 		dat->m_bitNum = m_numBits;
 		m_numBits++;
@@ -364,8 +363,7 @@ void RecordDescription::AddGroupedBits(char *groupName, struct namelist *list)
 		}
 		return;
 	}
-	
-	
+
 	Datum *dat = new Datum(groupName, DATUM_BIT_GROUP);
 	dat->m_groupList = list;
 	m_datumList.AddTail(dat);
@@ -380,7 +378,6 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 		}
 		return;
 	}
-
 
 	Datum *dat = new Datum(nameInfo->name, DATUM_BIT_PAIR);
 	dat->m_minSize = minSize;
@@ -409,7 +406,6 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 	m_datumList.AddTail(dat);
 }
 
-
 void RecordDescription::StartMemberClass(char const * name)
 {
 	m_memberClasses.AddTail(new MemberClass(name));
@@ -429,10 +425,10 @@ void RecordDescription::ExportBits(FILE *outfile)
 {
 	sint32 bit = 0;
 	char nicename[k_MAX_RECORD_NAME];
-	
+
 	PointerList<Datum>::Walker walk(&m_datumList);
 
-	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
     {
 		Datum *dat = walk.GetObj();
 		if(dat->m_type == DATUM_BIT || dat->m_type == DATUM_BIT_PAIR) {
@@ -444,22 +440,22 @@ void RecordDescription::ExportBits(FILE *outfile)
 			bit++;
 		}
 	}
-	
+
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
     {
 		Datum *dat = walk.GetObj();
 
-		if (dat->m_type == DATUM_BIT_GROUP) 
+		if (dat->m_type == DATUM_BIT_GROUP)
         {
 			fprintf(outfile, "//\n// m_%s bit group\n", dat->m_name);
-			
+
 			sint32 bit = 0;
-            for 
+            for
             (
-                struct namelist *node = dat->m_groupList; 
-                node; 
+                struct namelist *node = dat->m_groupList;
+                node;
                 node = node->next
-            ) 
+            )
             {
 				sprintf(nicename, "k_%s_%s_%s_Bit", m_name, dat->m_name, node->name);
 				fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << bit);
@@ -474,7 +470,7 @@ void RecordDescription::ExportBits(FILE *outfile)
         PointerList<MemberClass>::Walker membWalk(&m_memberClasses);
 	    membWalk.IsValid();
         membWalk.Next()
-    ) 
+    )
     {
 		membWalk.GetObj()->ExportBits(outfile);
 	}
@@ -482,7 +478,7 @@ void RecordDescription::ExportBits(FILE *outfile)
 
 void RecordDescription::ExportRanges(FILE *outfile)
 {
-    for 
+    for
     (
 	    PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
@@ -495,7 +491,7 @@ void RecordDescription::ExportRanges(FILE *outfile)
 
 void RecordDescription::ExportData(FILE *outfile)
 {
-	for (sint32 flag = 0; flag < FlagCount(); ++flag) 
+	for (sint32 flag = 0; flag < FlagCount(); ++flag)
     {
 		fprintf(outfile, "    uint32 m_flags%d;\n", flag);
 	}
@@ -505,7 +501,7 @@ void RecordDescription::ExportData(FILE *outfile)
 	    PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
         walk.Next()
-    ) 
+    )
     {
 		if(walk.GetObj()->m_type != DATUM_BIT) {
 			walk.GetObj()->ExportVariable(outfile, 0);
@@ -533,22 +529,22 @@ void RecordDescription::ExportMethods(FILE *outfile)
 
 	PointerList<Datum>::Walker walk(&m_datumList);
 
-	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
     {
 		Datum * dat = walk.GetObj();
 
-        if (dat->m_type == DATUM_BIT_GROUP) 
+        if (dat->m_type == DATUM_BIT_GROUP)
         {
 			fprintf(outfile, "    sint32 Parse%sBit(DBLexer *lex);\n", dat->m_name);
 		}
 	}
 	fprintf(outfile, "\n");
-	
-	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
     {
 		Datum * dat = walk.GetObj();
 
-		if (strcmp("GovernmentsModified", dat->m_name) == 0) 
+		if (strcmp("GovernmentsModified", dat->m_name) == 0)
         {
             m_hasGovernmentsModified = true;
         }
@@ -557,7 +553,7 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	}
 
 	fprintf(outfile, "    bool GetHasGovernmentsModified() const { return m_hasGovernmentsModified; }\n");
-	if (m_hasGovernmentsModified) 
+	if (m_hasGovernmentsModified)
     {
 	    fprintf(outfile, "    sint32 GenericGetNumGovernmentsModified() const { return m_numGovernmentsModified; }\n");
 	    fprintf(outfile, "    sint32 GenericGetGovernmentsModifiedIndex(sint32 index) const {");
@@ -572,17 +568,17 @@ void RecordDescription::ExportMethods(FILE *outfile)
 
 void RecordDescription::ExportMemberClasses(FILE *outfile)
 {
-	for 
+	for
     (
-        PointerList<MemberClass>::Walker walk(&m_memberClasses); 
-        walk.IsValid(); 
+        PointerList<MemberClass>::Walker walk(&m_memberClasses);
+        walk.IsValid();
         walk.Next()
     )
     {
 		walk.GetObj()->ExportHeader(outfile);
 	}
 }
-	
+
 void RecordDescription::ExportCode(FILE *outfile)
 {
     // Pre-compiled header
@@ -606,7 +602,7 @@ void RecordDescription::ExportCode(FILE *outfile)
 	fprintf(outfile, "\n");
 
     // Generated database
-	fprintf(outfile, "CTPDatabase<%sRecord> *g_the%sDB = NULL;\n\n", 
+	fprintf(outfile, "CTPDatabase<%sRecord> *g_the%sDB = NULL;\n\n",
                         m_name, m_name
            );
 
@@ -622,23 +618,23 @@ void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 	/// @todo Collect names in map to prevent multiple occurrences
 	for
 	(
-	    PointerList<Datum>::Walker walk(&m_datumList); 
-	    walk.IsValid(); 
+	    PointerList<Datum>::Walker walk(&m_datumList);
+	    walk.IsValid();
 	    walk.Next()
 	)
 	{
 		Datum * dat = walk.GetObj();
 
-		if (DATUM_RECORD == dat->m_type) 
+		if (DATUM_RECORD == dat->m_type)
 		{
 			if (strcmp(dat->m_subType, m_name))  // already have own declarations at the top
 			{
 				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_subType);
 			}
 		}
-		else if (DATUM_BIT_PAIR == dat->m_type) 
+		else if (DATUM_BIT_PAIR == dat->m_type)
 		{
-			if (DATUM_RECORD == dat->m_bitPairDatum->m_type) 
+			if (DATUM_RECORD == dat->m_bitPairDatum->m_type)
 			{
 				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_bitPairDatum->m_subType);
 			}
@@ -659,8 +655,8 @@ void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 
 	for
 	(
-	    PointerList<MemberClass>::Walker membWalk(&m_memberClasses); 
-	    membWalk.IsValid(); 
+	    PointerList<MemberClass>::Walker membWalk(&m_memberClasses);
+	    membWalk.IsValid();
 	    membWalk.Next()
 	)
 	{
@@ -676,7 +672,7 @@ void RecordDescription::ExportManagement(FILE *outfile)
     // Init()
     fprintf(outfile, "void %sRecord::Init()\n", m_name);
 	fprintf(outfile, "{\n");
-	for (i = 0; i < FlagCount(); i++) 
+	for (i = 0; i < FlagCount(); i++)
     {
 		fprintf(outfile, "    m_flags%d = 0;\n", i);
 	}
@@ -684,7 +680,7 @@ void RecordDescription::ExportManagement(FILE *outfile)
     {
 		walk.GetObj()->ExportInitialization(outfile);
 	}
-	
+
 	fprintf(outfile, "    //GovMod Specific flag initialization\n");
 	fprintf(outfile, "    m_hasGovernmentsModified = %s;\n", AsString(m_hasGovernmentsModified));
 	fprintf(outfile, "}\n\n");
@@ -701,11 +697,11 @@ void RecordDescription::ExportManagement(FILE *outfile)
 	fprintf(outfile, "        else{\n");
 	fprintf(outfile, "            archive << static_cast<MBCHAR*>(NULL);\n");
 	fprintf(outfile, "        }\n");
-	for(i = 0; i  < FlagCount(); i++) 
+	for(i = 0; i  < FlagCount(); i++)
 	{
 		fprintf(outfile, "        archive << m_flags%d;\n", i);
 	}
-	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 	{
 		walk.GetObj()->ExportSerializationStoring(outfile);
 	}
@@ -739,9 +735,9 @@ void RecordDescription::ExportManagement(FILE *outfile)
 		walk.GetObj()->ExportDestructor(outfile);
 	}
 	fprintf(outfile, "}\n\n");
-	
+
     // Assignment operator
-    fprintf(outfile, "%sRecord const & %sRecord::operator = (%sRecord const & rval)\n", 
+    fprintf(outfile, "%sRecord const & %sRecord::operator = (%sRecord const & rval)\n",
                         m_name, m_name, m_name
            );
 	fprintf(outfile, "{\n");
@@ -770,17 +766,17 @@ void RecordDescription::ExportMerger(FILE *outfile)
 		m_name, m_name);
 	fprintf(outfile, "{\n");
 
-	for 
-    ( 
+	for
+    (
         PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
         walk.Next()
     )
     {
-	    if (walk.GetObj()->m_type == DATUM_BIT_PAIR || 
+	    if (walk.GetObj()->m_type == DATUM_BIT_PAIR ||
 	        walk.GetObj()->m_maxSize >= 0 ||
 	        walk.GetObj()->m_type == DATUM_BIT_GROUP
-           ) 
+           )
         {
 		    walk.GetObj()->ExportMerge(outfile, m_name);
 	    }
@@ -812,10 +808,10 @@ void RecordDescription::ExportParser(FILE *outfile)
 	}
 
 	fprintf(outfile, "};\n\n");
-	
+
 	fprintf(outfile, "%sRecordAccessorInfo g_%sRecord_Accessors[] =\n", m_name, m_name);
 	fprintf(outfile, "{\n");
-	
+
     for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
     {
 		Datum *dat = walk.GetObj();
@@ -862,14 +858,14 @@ void RecordDescription::ExportParser(FILE *outfile)
 				} else {
 					fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				}
-				
+
 			default:
 				fprintf(outfile, "    { NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* %s */\n", dat->m_name);
 				break;
 		}
 	}
 	fprintf(outfile, "};\n\n");
-	
+
 	sint32 numTokens = 0;
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 	{
@@ -885,7 +881,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		}
 	}
 
-	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 	{
 		Datum *dat = walk.GetObj();
 		if(dat->m_akaName){
@@ -902,12 +898,12 @@ void RecordDescription::ExportParser(FILE *outfile)
 
 	fprintf(outfile, "void %sRecord::CheckRequiredFields(DBLexer *lex)\n", m_name);
 	fprintf(outfile, "{\n");
-	if (g_generateRequirementWarnings) 
+	if (g_generateRequirementWarnings)
 	{
-		for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
+		for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 		{
 			Datum *dat = walk.GetObj();
-			if(dat->m_required) 
+			if(dat->m_required)
 			{
 				if(dat->m_akaName)
 				{
@@ -936,8 +932,8 @@ void RecordDescription::ExportParser(FILE *outfile)
 	fprintf(outfile, "\n");
 	fprintf(outfile, "sint32 %sRecord::Parse(DBLexer *lex, sint32 numRecords)\n", m_name);
 	fprintf(outfile, "{\n");
-	
-	if (DATUM_NONE == m_baseType) 
+
+	if (DATUM_NONE == m_baseType)
 	{
 		char uppName[256];
 		memset(uppName, 0, sizeof(uppName));
@@ -961,8 +957,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "        char newName[256];\n");
 		fprintf(outfile, "        sprintf(newName, \"%s_%s\", numRecords);\n", uppName, "%i");
 		fprintf(outfile, "        if(!g_theStringDB->GetStringID(newName, m_name)) {\n");
-		
-		
+
 		fprintf(outfile, "            g_theStringDB->InsertStr(newName, newName);\n");
 		fprintf(outfile, "            if(!g_theStringDB->GetStringID(newName, m_name))\n");
 		fprintf(outfile, "                SetTextName(newName);\n");
@@ -970,8 +965,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "    else{\n");
 		fprintf(outfile, "        if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name)) {\n");
-		
-		
+
 		fprintf(outfile, "            g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());\n");
 		fprintf(outfile, "            if(!g_theStringDB->GetStringID(lex->GetTokenText(), m_name))\n");
 		fprintf(outfile, "                SetTextName(lex->GetTokenText());\n");
@@ -1022,9 +1016,9 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "            s_ParsedTokens.SetBit(tok - k_Token_Custom_Base);\n");
 		fprintf(outfile, "        }\n");
 		fprintf(outfile, "        switch(tok) {\n");
-		
+
 		ExportTokenCases(outfile);
-		
+
 		if(m_allowsSingleRecord)
 		{
 			fprintf(outfile, "            case k_Token_Undefined:\n");
@@ -1059,7 +1053,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    m_NameText = new char[strlen(lex->GetTokenText()) + 1];\n");
 		fprintf(outfile, "    strcpy(m_NameText, lex->GetTokenText());\n");
 
-		switch (m_baseType) 
+		switch (m_baseType)
 		{
 		case DATUM_INT:
 			fprintf(outfile, "    if(!lex->GetIntAssignment(m_Value)) {\n");
@@ -1092,12 +1086,12 @@ void RecordDescription::ExportParser(FILE *outfile)
 		}
 		fprintf(outfile, "    return 1;\n");
 		fprintf(outfile, "}\n");
-	} 
-	
+	}
+
 	ExportResolver(outfile);
-	
+
 	ExportMemberClassParsers(outfile);
-	
+
 	ExportDataParsers(outfile);
 }
 
@@ -1133,10 +1127,10 @@ void RecordDescription::ExportPreBodyTokens(FILE *outfile)
 
 void RecordDescription::ExportTokenCases(FILE *outfile)
 {
-	for 
+	for
 	(
-	    PointerList<Datum>::Walker walk(&m_datumList); 
-	    walk.IsValid(); 
+	    PointerList<Datum>::Walker walk(&m_datumList);
+	    walk.IsValid();
 	    walk.Next()
 	)
 	{
@@ -1150,7 +1144,7 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 			fprintf(outfile, "            case k_Token_%s_%s:\n", m_name, dat->m_akaName);
 		}
 		if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {
-			
+
 			switch(dat->m_type) {
 				case DATUM_INT:
 					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
@@ -1179,10 +1173,10 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 			fprintf(outfile, "                    done = true; break;\n");
 			fprintf(outfile, "                }\n");
 		} else if(dat->m_maxSize > 0) {
-			
+
 			switch(dat->m_type) {
 				case DATUM_INT:
-					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
@@ -1190,20 +1184,20 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
-					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRING:
 				case DATUM_FILE:
-					fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, (char **)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+					fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, (char **)m_%s, &m_num%s, k_MAX_%s)) {\n",
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_RECORD:
-					fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+					fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 							dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRUCT:
-					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+					fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 							m_name, dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
 					break;
 				default:
@@ -1277,7 +1271,7 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 	PointerList<Datum>::Walker walk(&m_datumList);
 	Datum *dat = walk.GetObj();
 	if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {
-			
+
 		switch(dat->m_type) {
 			case DATUM_INT:
 				fprintf(outfile, "                Assert(false)\n");
@@ -1315,7 +1309,7 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 		switch(dat->m_type) {
 			case DATUM_INT:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+				fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 						dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_STRINGID:
@@ -1325,22 +1319,22 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 				break;
 			case DATUM_FLOAT:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+				fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 						dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_STRING:
 			case DATUM_FILE:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, (char **)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+				fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, (char **)m_%s, &m_num%s, k_MAX_%s)) {\n",
 						dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_RECORD:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+				fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 						dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_STRUCT:
-				fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+				fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
 						m_name, dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
 				break;
 			default:
@@ -1414,24 +1408,24 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 
 void RecordDescription::ExportMemberClassParsers(FILE *outfile)
 {
-	for 
+	for
     (
-        PointerList<MemberClass>::Walker walk(&m_memberClasses); 
+        PointerList<MemberClass>::Walker walk(&m_memberClasses);
 	    walk.IsValid();
         walk.Next()
-    ) 
+    )
     {
 		walk.GetObj()->ExportInitialization(outfile, m_name);
 		walk.GetObj()->ExportParser(outfile, m_name);
 	}
 }
-	
+
 void RecordDescription::ExportDataParsers(FILE *outfile)
 {
     for
     (
-        PointerList<Datum>::Walker walk(&m_datumList); 
-        walk.IsValid(); 
+        PointerList<Datum>::Walker walk(&m_datumList);
+        walk.IsValid();
         walk.Next()
     )
     {
@@ -1441,8 +1435,8 @@ void RecordDescription::ExportDataParsers(FILE *outfile)
         {
         default:
             break;
-        
-        case DATUM_BIT_GROUP: 
+
+        case DATUM_BIT_GROUP:
     		dat->ExportBitGroupParser(outfile, m_name);
             break;
 		}
@@ -1462,18 +1456,17 @@ void RecordDescription::ExportMemberClassDataCode(FILE *outfile)
 	}
 }
 
-
 void RecordDescription::ExportResolver(FILE *outfile)
 {
 	fprintf(outfile, "void %sRecord::ResolveDBReferences()\n", m_name);
 	fprintf(outfile, "{\n");
 
-	for 
+	for
     (
         PointerList<Datum>::Walker walk(&m_datumList);
 	    walk.IsValid();
         walk.Next()
-    ) 
+    )
     {
 		Datum * dat = walk.GetObj();
 
@@ -1481,8 +1474,8 @@ void RecordDescription::ExportResolver(FILE *outfile)
         {
         default:
             break;
-        
-        case DATUM_BIT_PAIR: 
+
+        case DATUM_BIT_PAIR:
         case DATUM_RECORD:
         case DATUM_STRUCT:
 			dat->ExportResolver(outfile);
@@ -1492,4 +1485,3 @@ void RecordDescription::ExportResolver(FILE *outfile)
 
 	fprintf(outfile, "}\n\n");
 }
-

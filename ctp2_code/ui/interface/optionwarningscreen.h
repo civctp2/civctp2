@@ -12,7 +12,6 @@ AUI_ERRCODE optionwarningscreen_Initialize( void );
 AUI_ERRCODE optionwarningscreen_Cleanup();
 
 
-
 typedef enum
 {
 	OWS_OWSFIRST=0,

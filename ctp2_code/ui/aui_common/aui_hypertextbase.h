@@ -1,41 +1,25 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_HYPERTEXTBASE_H__
 #define __AUI_HYPERTEXTBASE_H__
 
-
 #include "tech_wllist.h"
-
 
 class aui_Static;
 class aui_Surface;
 class aui_BitmapFont;
 
 
-
 #define k_AUI_HYPERTEXTBASE_DEFAULT_MAXLEN		1024
 #define k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS		100
-
 
 
 #define k_AUI_HYPERTEXTBASE_LDL_TEXT			"hypertext"
 #define k_AUI_HYPERTEXTBASE_LDL_MAXLEN			"hypermaxlength"
 
 
-
 class aui_HyperTextBase
 {
 public:
-	
+
 	aui_HyperTextBase(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock );
@@ -87,7 +71,6 @@ protected:
 
 	tech_WLList<aui_Static *>	*m_hyperStaticList;
 
-	
 	MBCHAR		m_hyperTtffile[ MAX_PATH + 1 ];
 	sint32		m_hyperPointSize;
 	sint32		m_hyperBold;
@@ -100,5 +83,4 @@ protected:
 	uint32		m_hyperFlags;
 };
 
-
-#endif 
+#endif

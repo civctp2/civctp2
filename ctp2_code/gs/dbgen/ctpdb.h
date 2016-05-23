@@ -11,7 +11,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
  *   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
  * - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
- * - Added support for default values taken from other databases like the 
+ * - Added support for default values taken from other databases like the
  *   Const database. (9-Dec-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------

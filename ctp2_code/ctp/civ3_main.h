@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -34,15 +34,12 @@
 #ifndef __CIV3_MAIN_H__
 #define __CIV3_MAIN_H__
 
-
-#define k_TICKS_PER_GENERIC_FRAME	100 
-#define k_TICKS_PER_SCROLL_FRAME	50	
-
+#define k_TICKS_PER_GENERIC_FRAME	100
+#define k_TICKS_PER_SCROLL_FRAME	50
 
 #define _NO_GAME_WATCH
 
 class aui_Surface;
-
 
 int ui_Initialize(void);
 int ui_Process(void);
@@ -68,9 +65,8 @@ void main_RestoreTaskBar(void);
 
 int radar_Initialize(void);
 
-
 void DoFinalCleanup(int exitCode = -1);
 
 BOOL ExitGame(void);
 
-#endif 
+#endif

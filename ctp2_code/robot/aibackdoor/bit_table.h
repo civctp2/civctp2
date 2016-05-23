@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
-#pragma once 
+#pragma once
 #endif
 
 #ifndef BIT_TABLE_H_
@@ -127,8 +127,8 @@ public:
 		else
 			m_data = NULL;
 
-		max_x = mx; 
-		max_y = my; 
+		max_x = mx;
+		max_y = my;
 
 		Reset(start_val);
 	}
@@ -165,7 +165,7 @@ public:
 			delete [] m_data;
 			if (m_total_len > 0)
 			{
-				m_data = new sint32[m_total_len]; 
+				m_data = new sint32[m_total_len];
 				archive.Load((uint8*)m_data, m_total_len * sizeof(sint32));
 			}
 			else
@@ -202,12 +202,12 @@ public:
 		}
 	}
 
-	Bit_Table& operator=(const Bit_Table& rhs) 
+	Bit_Table& operator=(const Bit_Table& rhs)
 	{
 		if (this != &rhs)
 		{
 			/// @todo Add delete+new for m_data when this assert fails
-			Assert(m_total_len == rhs.m_total_len); 
+			Assert(m_total_len == rhs.m_total_len);
 			Assert(y_col_len == rhs.y_col_len);
 			if (m_total_len > 0)
 			{
@@ -215,7 +215,7 @@ public:
 			}
 		}
 
-		return *this; 
+		return *this;
 	}
 };
 

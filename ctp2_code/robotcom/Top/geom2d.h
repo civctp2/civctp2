@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #ifndef __GEOM2D_H__
 #define __GEOM2D_H__ 1
@@ -24,9 +24,8 @@
 
 typedef double	Real;
 
-
-class istream; 
-class ostream; 
+class istream;
+class ostream;
 
 class Vector2d {
 public:
@@ -39,7 +38,6 @@ public:
 	Vector2d operator-(const Vector2d&) const;
 	friend Vector2d operator*(Real, const Vector2d&);
 	friend Real dot(const Vector2d&, const Vector2d&);
-
 
 
 };
@@ -56,8 +54,8 @@ public:
 
 
 
-    
-    void* operator new(size_t); 
+
+    void* operator new(size_t);
     void operator delete(void *);
 
 };
@@ -74,4 +72,3 @@ private:
 };
 
 #endif __GEOM2D_H__
-

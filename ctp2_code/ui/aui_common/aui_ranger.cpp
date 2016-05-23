@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "aui_ranger.h"
 
@@ -24,7 +23,6 @@ static const MBCHAR *k_AUI_RANGER_LDL_AUTO_INCX		= "autoincx";
 static const MBCHAR *k_AUI_RANGER_LDL_AUTO_DECY		= "autodecy";
 static const MBCHAR *k_AUI_RANGER_LDL_AUTO_INCY		= "autoincy";
 
-
 aui_Ranger::aui_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -46,7 +44,6 @@ aui_Ranger::aui_Ranger(
 	*retval = CreateButtonsAndThumb( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 aui_Ranger::aui_Ranger(
@@ -75,7 +72,6 @@ aui_Ranger::aui_Ranger(
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
@@ -160,7 +156,6 @@ AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::InitCommon(
 	AUI_RANGER_TYPE type,
 	AUI_RANGER_ORIENTATION orientation,
@@ -208,71 +203,62 @@ AUI_ERRCODE aui_Ranger::InitCommon(
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 										  const MBCHAR *autoLdlName,
 										  const MBCHAR *ldlName)
 {
 	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
-	
+
 	AUI_ERRCODE     errcode     = AUI_ERRCODE_OK;
 	aui_Button *    arrowButton = NULL;
 
-	
 	if(ldlBlock) {
-		
+
 		arrowButton = (aui_Button *)aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
 			std::string(ldlBlock).append(".").append(
 			autoLdlName).c_str()));
 
-		
 		if(arrowButton) {
-			
+
 			arrowButton->SetActionFuncAndCookie(
 				RangerButtonActionCallback, this);
-		} else {	
-			
+		} else {
+
 			sprintf(block, "%s.%s", ldlBlock, ldlName);
 
-			
             if (aui_Ldl::FindDataBlock(block))
 				arrowButton = new aui_Button(&errcode, aui_UniqueId(),
 				block, RangerButtonActionCallback, this);
 		}
 	}
 
-	
 	if(!arrowButton)
 		arrowButton = new aui_Button(&errcode, aui_UniqueId(),
 		0, 0, 0, 0, RangerButtonActionCallback, this);
 
-	
 	Assert(arrowButton);
 
-	
 	if(arrowButton)
 		AddChild(arrowButton);
 
-	
 	return arrowButton;
 }
-
 
 AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 {
 	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	if(ldlBlock) {
-		
+
 		m_rangeContainer = (aui_Control *)aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
 			std::string(ldlBlock).append(".").append(
 			k_AUI_RANGER_LDL_AUTO_DISPLAY).c_str()));
-		
-		
 
-		
+
+
+
 		if(!m_rangeContainer) {
 			sprintf(block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_DISPLAY);
             if (aui_Ldl::FindDataBlock(block))
@@ -281,92 +267,73 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 		}
 	}
 
-	
 	if(m_rangeContainer)
 		AddChild(m_rangeContainer);
 
-	
 	if((m_type == AUI_RANGER_TYPE_SLIDER) ||
 		(m_type == AUI_RANGER_TYPE_SCROLLER)) {
-		
-		
+
 		if(ldlBlock) {
 			sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
-			
             if (aui_Ldl::FindDataBlock(block))
 				m_thumb = new aui_Thumb(&errcode, aui_UniqueId(), block,
 				RangerThumbActionCallback, this);
 		}
 
-		
 		if(!m_thumb)
 			m_thumb = new aui_Thumb(&errcode, aui_UniqueId(),
 				0, 0, 0, 0, RangerThumbActionCallback, this);
 
-		
 		Assert(AUI_NEWOK(m_thumb,errcode));
 		if(!AUI_NEWOK(m_thumb,errcode))
 			return AUI_ERRCODE_MEMALLOCFAILED;
 
-		
 		AddChild(m_thumb);
 
-		
 		RepositionThumb(false);
 	}
 
-	
 	if((m_type == AUI_RANGER_TYPE_SCROLLER) ||
 		(m_type == AUI_RANGER_TYPE_SPINNER )) {
-		
+
 		if((m_orientation == AUI_RANGER_ORIENTATION_HORIZONTAL) ||
 			(m_orientation == AUI_RANGER_ORIENTATION_BIDIRECTIONAL)) {
-			
+
 			m_incXButton = CreateArrowButton(ldlBlock,
 				k_AUI_RANGER_LDL_AUTO_INCX, k_AUI_RANGER_LDL_INCX);
 
-			
 			if(!m_incXButton)
 				return(AUI_ERRCODE_MEMALLOCFAILED);
 
-			
 			m_decXButton = CreateArrowButton(ldlBlock,
 				k_AUI_RANGER_LDL_AUTO_DECX, k_AUI_RANGER_LDL_DECX);
 
-			
 			if(!m_decXButton)
 				return(AUI_ERRCODE_MEMALLOCFAILED);
 		}
 
-		
 		if((m_orientation == AUI_RANGER_ORIENTATION_VERTICAL) ||
 			(m_orientation == AUI_RANGER_ORIENTATION_BIDIRECTIONAL)) {
-			
+
 			m_incYButton = CreateArrowButton(ldlBlock,
 				k_AUI_RANGER_LDL_AUTO_INCY, k_AUI_RANGER_LDL_INCY);
 
-			
 			if(!m_incYButton)
 				return(AUI_ERRCODE_MEMALLOCFAILED);
 
-			
 			m_decYButton = CreateArrowButton(ldlBlock,
 				k_AUI_RANGER_LDL_AUTO_DECY, k_AUI_RANGER_LDL_DECY);
 
-			
 			if(!m_decYButton)
 				return(AUI_ERRCODE_MEMALLOCFAILED);
 		}
 
-		
 		RepositionButtons();
 	}
 
-	
 	return errcode;
 }
-
 
 
 aui_Ranger::~aui_Ranger()
@@ -378,7 +345,6 @@ aui_Ranger::~aui_Ranger()
 	delete m_decYButton;
 	delete m_rangeContainer;
 }
-
 
 
 AUI_ERRCODE aui_Ranger::Show( void )
@@ -400,7 +366,6 @@ AUI_ERRCODE aui_Ranger::Show( void )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::Resize( sint32 width, sint32 height )
 {
 	aui_Control::Resize( width, height );
@@ -412,15 +377,14 @@ AUI_ERRCODE aui_Ranger::Resize( sint32 width, sint32 height )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::SetValue( sint32 valX, sint32 valY )
 {
-	
+
 	if ( valX < m_minX ) valX = m_minX;
 	if ( valX > m_maxX ) valX = m_maxX;
 	if ( valY < m_minY ) valY = m_minY;
 	if ( valY > m_maxY ) valY = m_maxY;
-	
+
 	if ( m_valX != valX || m_valY != valY )
 	{
 		m_valX = valX, m_valY = valY;
@@ -430,7 +394,6 @@ AUI_ERRCODE aui_Ranger::SetValue( sint32 valX, sint32 valY )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Ranger::SetMinimum( sint32 minX, sint32 minY )
@@ -443,13 +406,11 @@ AUI_ERRCODE aui_Ranger::SetMinimum( sint32 minX, sint32 minY )
 
 	m_minX = minX, m_minY = minY;
 
-	
 	if ( m_valX < m_minX ) m_valX = m_minX;
 	if ( m_valY < m_minY ) m_valY = m_minY;
 
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::SetMaximum( sint32 maxX, sint32 maxY )
@@ -462,13 +423,11 @@ AUI_ERRCODE aui_Ranger::SetMaximum( sint32 maxX, sint32 maxY )
 
 	m_maxX = maxX, m_maxY = maxY;
 
-	
 	if ( m_valX > m_maxX ) m_valX = m_maxX;
 	if ( m_valY > m_maxY ) m_valY = m_maxY;
 
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::SetIncrement( sint32 incX, sint32 incY )
@@ -489,10 +448,8 @@ AUI_ERRCODE aui_Ranger::SetIncrement( sint32 incX, sint32 incY )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::SetPage( sint32 pageX, sint32 pageY )
 {
-
 
 	if ( pageX < m_incX
 	||   pageY < m_incY )
@@ -504,14 +461,12 @@ AUI_ERRCODE aui_Ranger::SetPage( sint32 pageX, sint32 pageY )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::IncrementUpX( void )
 {
 	m_valX += m_incX;
 	if ( m_valX > m_maxX ) m_valX = m_maxX;
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::IncrementUpY( void )
@@ -522,14 +477,12 @@ AUI_ERRCODE aui_Ranger::IncrementUpY( void )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::IncrementDownX( void )
 {
 	m_valX -= m_incX;
 	if ( m_valX < m_minX ) m_valX = m_minX;
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::IncrementDownY( void )
@@ -540,14 +493,12 @@ AUI_ERRCODE aui_Ranger::IncrementDownY( void )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::PageUpX( void )
 {
 	m_valX += m_pageX;
 	if ( m_valX > m_maxX ) m_valX = m_maxX;
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::PageUpY( void )
@@ -558,14 +509,12 @@ AUI_ERRCODE aui_Ranger::PageUpY( void )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::PageDownX( void )
 {
 	m_valX -= m_pageX;
 	if ( m_valX < m_minX ) m_valX = m_minX;
 	return RepositionThumb();
 }
-
 
 
 AUI_ERRCODE aui_Ranger::PageDownY( void )
@@ -576,10 +525,9 @@ AUI_ERRCODE aui_Ranger::PageDownY( void )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::ThumbMoved( BOOL forceQuantize )
 {
-	
+
 	if ( m_thumb )
 	{
 		m_valX = m_thumb->X();
@@ -606,10 +554,10 @@ AUI_ERRCODE aui_Ranger::ThumbMoved( BOOL forceQuantize )
 
 AUI_ERRCODE aui_Ranger::RepositionThumb( BOOL callActionFunc )
 {
-	
+
 	if ( m_thumb )
 	{
-		
+
 		sint32 range;
 		sint32 page;
 
@@ -625,7 +573,6 @@ AUI_ERRCODE aui_Ranger::RepositionThumb( BOOL callActionFunc )
 
 		if ( m_rigidThumb && range ) h = m_minThumbSize;
 
-		
 		if ( m_orientation != AUI_RANGER_ORIENTATION_VERTICAL
 		&&   w < m_minThumbSize )
 			w = m_width >= m_minThumbSize ? m_minThumbSize : m_width;
@@ -635,7 +582,6 @@ AUI_ERRCODE aui_Ranger::RepositionThumb( BOOL callActionFunc )
 
 		m_thumb->Resize( w, h );
 
-		
 		sint32 x = m_valX;
 		sint32 y = m_valY;
 
@@ -644,10 +590,10 @@ AUI_ERRCODE aui_Ranger::RepositionThumb( BOOL callActionFunc )
 		m_thumb->Move( x, y );
 	}
 
-	
-	
-	
-	
+
+
+
+
 	if(m_incXButton) {
 		if(m_valX >= m_maxX) {
 			if(!m_incXButton->IsDisabled())
@@ -686,31 +632,28 @@ AUI_ERRCODE aui_Ranger::RepositionThumb( BOOL callActionFunc )
 		else if ( m_action )
 			m_action->Execute( this, AUI_RANGER_ACTION_VALUECHANGE, 0 );
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE aui_Ranger::RepositionButtons()
 {
-	
+
 	if(m_rangeContainer) {
-		
+
 		if(m_decXButton)
 			m_decXButton->Move( 0, 0 );
 		if(m_decYButton)
 			m_decYButton->Move( 0, 0 );
 
-		
-		
+
 		if(m_incXButton)
 			m_incXButton->Move( m_width - m_incXButton->Width(), 0 );
 		if(m_incYButton)
 			m_incYButton->Move( 0, m_height - m_incYButton->Height() );
 
-		
-		
+
 		if((m_orientation == AUI_RANGER_ORIENTATION_HORIZONTAL) ||
 			(m_orientation == AUI_RANGER_ORIENTATION_BIDIRECTIONAL))
 			m_rangeContainer->Resize(
@@ -719,8 +662,7 @@ AUI_ERRCODE aui_Ranger::RepositionButtons()
 			(m_incXButton ? (m_incXButton->Width() - m_overlap) : 0),
 			m_rangeContainer->Height());
 
-		
-		
+
 		if((m_orientation == AUI_RANGER_ORIENTATION_VERTICAL) ||
 			(m_orientation == AUI_RANGER_ORIENTATION_BIDIRECTIONAL))
 			m_rangeContainer->Resize(
@@ -729,12 +671,11 @@ AUI_ERRCODE aui_Ranger::RepositionButtons()
 			(m_decXButton ? (m_decXButton->Height() - m_overlap) : 0) -
 			(m_incXButton ? (m_incXButton->Height() - m_overlap) : 0));
 
-		
 		m_rangeContainer->Move(m_decXButton ?
 			(m_decXButton->Width() - m_overlap) : 0,
 			m_decYButton ? (m_decYButton->Height() - m_overlap) : 0);
-	} else {	
-		
+	} else {
+
 		if(m_buttonSize) {
 			if(m_decXButton)
 				m_decXButton->Resize(m_buttonSize, m_decXButton->Height());
@@ -746,7 +687,6 @@ AUI_ERRCODE aui_Ranger::RepositionButtons()
 				m_incYButton->Resize(m_decYButton->Width(), m_buttonSize);
 		}
 
-		
 		if(m_decXButton)
 			m_decXButton->Move(-m_decXButton->Width(), 0);
 		if(m_decYButton)
@@ -757,15 +697,13 @@ AUI_ERRCODE aui_Ranger::RepositionButtons()
 			m_incYButton->Move(0, m_height);
 	}
 
-	
 	return(AUI_ERRCODE_OK);
 }
 
 
-
 AUI_ERRCODE aui_Ranger::ValueToPosition( sint32 *x, sint32 *y )
 {
-	
+
 	if ( !m_thumb ) return AUI_ERRCODE_NOCONTROL;
 
 	Assert( m_minX <= *x );
@@ -778,8 +716,7 @@ AUI_ERRCODE aui_Ranger::ValueToPosition( sint32 *x, sint32 *y )
 	||   *y > m_maxY )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
-	
-	
+
 	sint32 range;
 
 	*x = (range = m_maxX - m_minX) ?
@@ -794,10 +731,9 @@ AUI_ERRCODE aui_Ranger::ValueToPosition( sint32 *x, sint32 *y )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::PositionToValue( sint32 *x, sint32 *y )
 {
-	
+
 	if ( !m_thumb ) return AUI_ERRCODE_NOCONTROL;
 
 	Assert( 0 <= *x );
@@ -810,8 +746,7 @@ AUI_ERRCODE aui_Ranger::PositionToValue( sint32 *x, sint32 *y )
 	||   *y > m_height - m_thumb->Height() )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
-	
-	
+
 	sint32 range;
 
 	*x = m_minX + (
@@ -828,10 +763,9 @@ AUI_ERRCODE aui_Ranger::PositionToValue( sint32 *x, sint32 *y )
 }
 
 
-
 AUI_ERRCODE aui_Ranger::CenterPositionToValue( sint32 *x, sint32 *y )
 {
-	
+
 	if ( !m_thumb ) return AUI_ERRCODE_NOCONTROL;
 
 	Assert( 0 <= *x );
@@ -844,8 +778,7 @@ AUI_ERRCODE aui_Ranger::CenterPositionToValue( sint32 *x, sint32 *y )
 	||   *y >= m_height )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
-	
-	
+
 	sint32 range;
 
 	*x = m_minX + (
@@ -862,8 +795,7 @@ AUI_ERRCODE aui_Ranger::CenterPositionToValue( sint32 *x, sint32 *y )
 		(double)range + 0.5):
 		0 );
 
-	
-	
+
 	if ( m_valX < m_minX )
 		m_valX = m_minX;
 	else if ( m_valX > m_maxX )
@@ -876,7 +808,6 @@ AUI_ERRCODE aui_Ranger::CenterPositionToValue( sint32 *x, sint32 *y )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Ranger::SlideThumb( void )
@@ -906,8 +837,7 @@ AUI_ERRCODE aui_Ranger::SlideThumb( void )
 
 void aui_Ranger::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
-	
-	
+
 	if ( m_sliding && mouseData->time - m_startWaitTime > m_timeOut )
 	if ( mouseData->time - m_lastRepeatTime > m_repeatTime )
 	{
@@ -922,7 +852,6 @@ void aui_Ranger::PostChildrenCallback( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseMoveInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -932,7 +861,6 @@ void aui_Ranger::MouseMoveInside( aui_MouseEvent *mouseData )
 	else if ( !IsActive() )
 		MouseMoveOver( mouseData );
 }
-
 
 
 void aui_Ranger::MouseMoveOver( aui_MouseEvent *mouseData )
@@ -946,11 +874,9 @@ void aui_Ranger::MouseMoveOver( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER;
 
@@ -964,7 +890,6 @@ void aui_Ranger::MouseMoveOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseLDragOver( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -973,7 +898,6 @@ void aui_Ranger::MouseLDragOver( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( !m_thumb ) return;
 
 		if ( GetMouseOwnership() == this )
@@ -989,12 +913,10 @@ void aui_Ranger::MouseLDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( GetMouseOwnership() == this )
@@ -1007,35 +929,28 @@ void aui_Ranger::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		HideTipWindow();
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-			
 			SetMouseOwnership();
 			SetKeyboardFocus();
 
-			
 			sint32 x = mouseData->position.x - m_x;
 			sint32 y = mouseData->position.y - m_y;
 
-			
 			if ( x < m_thumb->X() )
 				m_slideDx = -m_pageX;
 			else if ( x >= m_thumb->X() + m_thumb->Width() )
@@ -1050,8 +965,7 @@ void aui_Ranger::MouseLGrabInside( aui_MouseEvent *mouseData )
 			else
 				m_slideDy = 0;
 
-			
-			
+
 			SlideThumb();
 			m_sliding = TRUE;
 			m_startWaitTime = mouseData->time;
@@ -1066,12 +980,10 @@ void aui_Ranger::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( GetWhichSeesMouse() == m_thumb ) m_sliding = FALSE;
@@ -1083,10 +995,8 @@ void aui_Ranger::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			ReleaseMouseOwnership();
 
-			
 			m_sliding = FALSE;
 
 			HandleGameSpecificLeftClick( this );
@@ -1110,7 +1020,6 @@ void aui_Ranger::MouseLDropInside( aui_MouseEvent *mouseData )
 		MouseLDropOutside( mouseData );
 }
 
-
 void aui_Ranger::MouseRDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -1127,17 +1036,15 @@ void aui_Ranger::MouseRDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( GetMouseOwnership() == this  )
 	{
-		
+
 		ReleaseMouseOwnership();
 
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
@@ -1150,12 +1057,10 @@ void aui_Ranger::MouseLDropOutside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Ranger::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
@@ -1188,7 +1093,7 @@ void aui_Ranger::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 void RangerThumbActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	aui_Ranger *ranger = (aui_Ranger *)cookie;
 
 	switch ( action )
@@ -1207,11 +1112,9 @@ void RangerThumbActionCallback( aui_Control *control, uint32 action, uint32 data
 }
 
 
-
 void RangerButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_PRESS ) return;
 
 	aui_Ranger *ranger = (aui_Ranger *)cookie;

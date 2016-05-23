@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -58,7 +57,6 @@
 
 #include "c3slider.h"
 #include "thermometer.h"
-
 
 #include "textbutton.h"
 #include "textswitch.h"
@@ -96,9 +94,7 @@
 
 #include "chart.h"
 
-
 #include "pixelutils.h"
-
 
 #include "sci_advancescreen.h"
 
@@ -121,11 +117,9 @@ extern C3UI					*g_c3ui;
 extern DebugWindow			*g_debugWindow;
 extern aui_Surface			*g_sharedSurface;
 
-
 ScienceWin			*g_scienceWin = NULL;
 
 static c3_Button		*s_returnButton;
-
 
 static sint32			s_scienceTax;
 
@@ -142,7 +136,6 @@ static c3_Static	*s_listbc;
 static c3_Static	*s_listbr;
 
 static c3_Static	*s_titleText;
-
 
 
 static MBCHAR			s_ldlBlocks[k_EXTRA_PLAYERS][50] = {
@@ -177,7 +170,7 @@ static c3_Static		*s_civText;
 
 void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	close_ScienceStatus();
@@ -190,9 +183,8 @@ void ScienceWin::kh_Close()
 
 void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 
 	Chart *tree = (Chart *)cookie;
@@ -203,7 +195,7 @@ void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint
 
 void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	sci_advancescreen_displayMyWindow(NULL, k_SCI_INCLUDE_CANCEL);
@@ -212,44 +204,39 @@ void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint3
 
 void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
 	if ( (c3_Button *)control == g_scienceWin->PlusButton() ) {
-		
+
 		s_scienceTax += 10;
-		
-		
+
 		if ( s_scienceTax > 100 )
 			s_scienceTax = 100;
 	}
 	else if ( (c3_Button *)control == g_scienceWin->MinusButton() ) {
-		
+
 		s_scienceTax -= 10;
-		
-		
+
 		if ( s_scienceTax < 0 )
 			s_scienceTax = 0;
 	}
 
-	
 	double taxRate = (double)s_scienceTax / 100;
 	p->SetTaxes( taxRate );
 
-	
 	g_scienceWin->UpdateData( SCI_UPDATE_NOCHART );
-	
-	
+
+
 
 
 }
 
-
 void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -265,7 +252,7 @@ void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint3
 
 void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -282,7 +269,7 @@ void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint
 
 void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT &&
 		 action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) return;
 	if ( !g_scienceWin->AdvanceList() ) return;
@@ -296,7 +283,6 @@ void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32
 	}
 
 	if ( item ) {
-
 
 
 		g_scienceWin->Tree()->Update( item->GetIndex() );
@@ -331,7 +317,7 @@ sint32 knowledgewin_Initialize( void )
 
 
 
-	
+
 
 
 
@@ -506,17 +492,15 @@ sint32 knowledgewin_Initialize( void )
 	Assert( AUI_NEWOK(s_titleText, errcode ) );
 	if ( !AUI_NEWOK(s_titleText, errcode) ) return -23;
 
-	
 	knowledgewin_InitGraphicTrim( windowBlock );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
 
 
-	
+
 	g_modalWindow++;
 
 
@@ -639,8 +623,8 @@ sint32 knowledgewin_Cleanup( void )
 
 
 
-	
-	
+
+
 	delete s_givesBox;
 	s_givesBox = NULL;
 	delete s_civBox;
@@ -652,7 +636,6 @@ sint32 knowledgewin_Cleanup( void )
 	delete s_titleText;
 	s_titleText = NULL;
 
-	
 	delete s_lt;
 	s_lt = NULL;
 	delete s_ct;
@@ -683,7 +666,6 @@ sint32 knowledgewin_Cleanup( void )
 	return 0;
 }
 
-
 KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
@@ -695,9 +677,8 @@ KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 {
@@ -720,10 +701,8 @@ AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 void KnowledgeListItem::Update(void)
 {
 
-
 	c3_Static *subItem;
 
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText( g_theAdvanceDB->GetNameStr(m_index) );
 }
@@ -736,7 +715,7 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((KnowledgeListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -747,7 +726,6 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
 
 EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
@@ -760,9 +738,8 @@ EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 {
@@ -790,7 +767,6 @@ void EmbassyListItem::Update(void)
 
 	g_player[m_index]->GetPluralCivName( name );
 
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText( name );
 }
@@ -803,7 +779,7 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((EmbassyListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -814,7 +790,6 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
 
 AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
 	:
@@ -827,7 +802,7 @@ AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 
 	*retval = InitCommonLdl(index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 AdvanceListItem::~AdvanceListItem()
@@ -836,7 +811,7 @@ AdvanceListItem::~AdvanceListItem()
 
 	for ( sint32 i = m_childList->L(); i; i-- ) {
 		aui_Region		*subControl;
-		
+
 		subControl = m_childList->GetNext( position );
 		if (subControl) {
 			ListPos	subPos = subControl->ChildList()->GetHeadPosition();
@@ -907,15 +882,14 @@ AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
 	subItem = new c3_Icon(&retval, aui_UniqueId(), block);
 	AddChild(subItem);
 
-	
-	
-	
-	
+
+
+
+
 	aui_Ldl		*ldl = g_c3ui->GetLdl();
 	if (ldl) {
 		ldl->Remove((void *)this);
 
-		
 		MBCHAR name[k_MAX_NAME_LEN];
 
 		sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(index)->m_name));
@@ -936,7 +910,6 @@ void AdvanceListItem::Update(void)
 
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 
-	
 	subIcon = (c3_Icon*)GetChildByIndex(0);
 	if ( g_player[curPlayer] && g_player[curPlayer]->HasAdvance(m_index) ) {
 		subIcon->SetColor( g_colorSet->ComputePlayerColor(curPlayer) );
@@ -946,34 +919,30 @@ void AdvanceListItem::Update(void)
 		subIcon->SetMapIcon( MAPICON_MAX );
 	}
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 	branchItem = (c3_Static *)subItem->GetChildByIndex(0);
 	if ( g_scienceWin ) {
 		branchItem->SetImage( g_scienceWin->GetString(g_theAdvanceDB->Get(m_index)->GetBranchIndex()) );
 	}
 
-	
 	subItem = (c3_Static *)GetChildByIndex(2);
 	subItem->SetText( g_theAdvanceDB->GetNameStr(m_index) );
 
 	sint32 i,x = 0;
 
-	
 	for ( i = 0;i < k_MAX_PLAYERS;i++ ) {
 		if ( i != curPlayer ) {
-			
+
 			if ( g_player[i] && g_player[curPlayer]->HasEmbassyWith(i) ) {
 				subIcon = (c3_Icon *)GetChildByIndex(x+++3);
 
-				
 				if (subIcon) {
-					
+
 					if ( g_player[i]->HasAdvance(m_index) ) {
 						subIcon->SetColor( g_colorSet->ComputePlayerColor(i) );
 						subIcon->SetMapIcon( MAPICON_FLAG );
 					}
-					
+
 					else {
 						subIcon->SetMapIcon( MAPICON_MAX );
 					}
@@ -982,11 +951,9 @@ void AdvanceListItem::Update(void)
 		}
 	}
 
-	
 	while ( x < k_PLAYERS ) {
 		subIcon = (c3_Icon *)GetChildByIndex(x+++3);
-		
-		
+
 		if (subIcon) {
 			subIcon->SetMapIcon( MAPICON_MAX );
 		}
@@ -1002,7 +969,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1010,7 +977,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 1:
-		val1 = m_branchVal; 
+		val1 = m_branchVal;
 		val2 = ((AdvanceListItem *)item2)->GetBranchVal();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1025,7 +992,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 3:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1033,7 +1000,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 4:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1041,7 +1008,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 5:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1049,7 +1016,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 6:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1057,7 +1024,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 7:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1065,7 +1032,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 8:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1073,7 +1040,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 9:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1081,7 +1048,7 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 10:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((AdvanceListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1098,7 +1065,7 @@ sint32 sciencewin_Initialize( void )
 	if ( g_scienceWin ) {
 		g_scienceWin->UpdateData( SCI_UPDATE_ALL );
 		g_scienceWin->m_window->MoveOG();
-		return 0;	
+		return 0;
 	}
 
 	g_scienceWin = new ScienceWin();
@@ -1128,15 +1095,12 @@ ScienceWin::ScienceWin( void )
 
 	m_window->SetSurface( g_sharedSurface );
 
-	
 	m_window->Resize(m_window->Width(),m_window->Height());
 	m_window->SetStronglyModal(TRUE);
-
 
 	m_window->GrabRegion()->Resize( m_window->Width(), 20 );
 	m_window->SetDraggable( TRUE );
 
-	
 	Initialize( windowBlock );
 }
 
@@ -1149,7 +1113,7 @@ sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 	sprintf( controlBlock, "%s.%s", windowBlock, "CloseButton" );
 	m_closeButton = new c3_Button( &errcode, aui_UniqueId(), controlBlock, sciencewin_ExitCallback );
 	TestControl( m_closeButton );
-	
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "Title" );
 	m_title = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_title );
@@ -1159,78 +1123,63 @@ sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 	m_advanceList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, sciencewin_AdvanceListCallback );
 	TestControl( m_advanceList );
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "ChangeButton" );
 	m_changeButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, sciencewin_ChangeButtonCallback );
 	TestControl( m_changeButton );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResearchBox" );
 	m_researchBox = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_researchBox );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResearchMeter" );
 	m_researchMeter = new Thermometer( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_researchMeter );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResearchClock" );
 	m_researchClock = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_researchClock );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "TurnsBox" );
 	m_turnsBox = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_turnsBox );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "CostLabel" );
 	m_costLabel = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_costLabel );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "CostBox" );
 	m_costBox = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_costBox );
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "PlusButton" );
 	m_plusButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, sciencewin_SciButtonCallback );
 	TestControl( m_plusButton );
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "MinusButton" );
 	m_minusButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, sciencewin_SciButtonCallback );
 	TestControl( m_minusButton );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "PercentBox" );
 	m_percentBox = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_percentBox );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "SciLabel" );
 	m_sciLabel = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_sciLabel );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "SciBeaker" );
 	m_sciBeaker = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_sciBeaker );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "SciBox" );
 	m_sciBox = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_sciBox );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "Chart" );
 	m_tree = new Chart( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_tree );
 	m_tree->Update(0);
 
-	
 	sint32 i;
 	for ( i = 0;i < 4 ;i++ ) {
 		m_tree->GetPreReqButton(i)->SetActionFuncAndCookie( sciencewin_PrereqActionCallback, m_tree );
@@ -1240,17 +1189,14 @@ sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 		m_tree->GetLeadsToButton(i)->SetActionFuncAndCookie( sciencewin_LeadsToActionCallback, m_tree );
 	}
 
-	
 	sprintf( buttonBlock, "%s.%s", windowBlock, "LibraryButton" );
 	m_libraryButton = new c3_Button( &errcode, aui_UniqueId(), buttonBlock, sciencewin_LibraryButtonCallback, m_tree );
 	TestControl( m_libraryButton );
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "KnownToLabel" );
 	m_knownToLabel = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	TestControl( m_knownToLabel );
 
-	
 	m_playerLabel = new c3_Static*[ k_EXTRA_PLAYERS ];
 	m_playerFlag = new c3_Icon*[ k_EXTRA_PLAYERS];
 
@@ -1265,11 +1211,9 @@ sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 		m_playerFlag[i]->SetMapIcon( MAPICON_MAX );
 	}
 
-	
 	m_string = new aui_StringTable( &errcode, "ScienceStrings" );
 	TestControl( m_string );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -1279,7 +1223,6 @@ sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
 ScienceWin::~ScienceWin( void )
 {
 	sint32 i;
-
 
 	AUI_ERRCODE errcode;
 	errcode = g_c3ui->RemoveWindow( m_window->Id() );
@@ -1320,8 +1263,7 @@ ScienceWin::~ScienceWin( void )
 
 	RemoveControl( m_string );
 
-	
-	
+
 	if (m_window)
 		m_window->SetSurface(NULL);
 
@@ -1359,9 +1301,8 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 researching = g_player[curPlayer]->m_advances->GetResearching();
-	
+
 	BOOL alreadyHas = p->HasAdvance(p->m_advances->GetResearching());
 
 	if(alreadyHas)
@@ -1374,11 +1315,9 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	}
 	m_researchBox->SetText( str );
 
-	
 	sint32 sciLevel = p->GetCurrentScienceLevel();
 	sint32 advanceCost = p->GetCurrentScienceCost();
 
-	
 	if(alreadyHas)
 	{
 		m_researchMeter->SetPercentFilled( 0 );
@@ -1388,7 +1327,6 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 		m_researchMeter->SetPercentFilled( (sciLevel * 100) / advanceCost );
 	}
 
-	
 	if(alreadyHas)
 	{
 		str[0]=0;
@@ -1399,16 +1337,15 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	}
 	m_costBox->SetText( str );
 
-	
 	sciLevel = p->m_advances->GetProjectedScience();
 	if ( sciLevel < 0 ) {
 		sciLevel = 0;
 	}
 	sprintf( str, "%d", sciLevel );
 	m_sciBox->SetText( str );
-		
+
 	double scienceTax;
-	
+
 	p->GetScienceTaxRate( scienceTax );
 
 	s_scienceTax = AsPercentage(scienceTax);
@@ -1418,7 +1355,6 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 
 	sint32 advanceTurns = p->m_advances->TurnsToNextAdvance();
 
-	
 	if ( advanceTurns == -1 ) {
 		sprintf( str, "-" );
 	}
@@ -1431,16 +1367,14 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 
 	m_turnsBox->SetText( str );
 
-	if ( update == SCI_UPDATE_NOCHART ) return 0;	
+	if ( update == SCI_UPDATE_NOCHART ) return 0;
 
 	m_tree->Update(researching );
 
+	if ( update == SCI_UPDATE_NOLIST ) return 0;
 
-	if ( update == SCI_UPDATE_NOLIST ) return 0;	
-	
 	UpdateList();
 
-	
 	g_player[curPlayer]->GetPluralCivName( str );
 	m_playerLabel[0]->SetText( str );
 	m_playerLabel[0]->Show();
@@ -1479,7 +1413,6 @@ void ScienceWin::UpdateList(void)
 	sint32		curPlayer = g_selected_item->GetVisiblePlayer();
 	sint32		num = g_theAdvanceDB->NumRecords();
 
-	
 	m_advanceList->Clear();
 
 	sprintf( ldlBlock, "AdvanceListItem" );
@@ -1488,14 +1421,14 @@ void ScienceWin::UpdateList(void)
 
 		if ( g_player[curPlayer]->HasAdvance(i) ) {
 			AdvanceListItem *item = new AdvanceListItem( &errcode, i, ldlBlock );
-			m_advanceList->AddItem( (c3_ListItem *)item );	
+			m_advanceList->AddItem( (c3_ListItem *)item );
 		}
 		else {
 			for ( sint32 j = 0;j < k_MAX_PLAYERS;j++ ) {
 				if ( j != curPlayer ) {
 					if ( g_player[j] && g_player[curPlayer]->HasEmbassyWith(j) && g_player[j]->HasAdvance(i) ) {
 						AdvanceListItem *item = new AdvanceListItem( &errcode, i, ldlBlock );
-						m_advanceList->AddItem( (c3_ListItem *)item );	
+						m_advanceList->AddItem( (c3_ListItem *)item );
 						break;
 					}
 				}
@@ -1503,7 +1436,6 @@ void ScienceWin::UpdateList(void)
 		}
 	}
 }
-
 
 void SW_UpdateAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
@@ -1518,4 +1450,3 @@ void SW_UpdateAction::Execute(aui_Control *control, uint32 action, uint32 data)
 		}
 	}
 }
-

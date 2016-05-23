@@ -1,22 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef LOG_H
 #define LOG_H
 
@@ -26,10 +7,10 @@ extern "C" {
 
 typedef const char *LogClass;
 
-extern LogClass LOG_FATAL;	
-extern LogClass LOG_ERR;	
-extern LogClass LOG_WARN;	
-extern LogClass LOG_DIAG;	
+extern LogClass LOG_FATAL;
+extern LogClass LOG_ERR;
+extern LogClass LOG_WARN;
+extern LogClass LOG_DIAG;
 
 extern LogClass LOG_ASSERT;
 extern LogClass LOG_EXCEPTION;

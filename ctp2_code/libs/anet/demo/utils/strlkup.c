@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -27,10 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 StrLookup StrLookup_Global_Object = NULL;
 
-
 #define SPACESTR  " \n\r\t\v\f"
 #define SEPARATOR "\x7f"
-
 
 /* The comparison routine for doing STRLOOKUPs
  */
@@ -38,7 +36,6 @@ static int compare_table( const void *elem1, const void *elem2 )
 {
 	return strcmp(((Table_ptr) elem1)->index, ((Table_ptr) elem2)->index);
 }
-
 
 /* Convert C escape sequences in a read-in string to their character
  * equivalents
@@ -152,7 +149,6 @@ static char *str_convert(char *buffer)
 	return buffer;
 }
 
-
 /* Read lines from a file until a blank line is encountered
  */
 static char *read_until_blank_line(FILE *fp, int *line_num)
@@ -188,13 +184,11 @@ static char *read_until_blank_line(FILE *fp, int *line_num)
 	return str_read;
 }
 
-
 /* Debugging options */
 #define ELBONIAN 	1
 #define STARS		2
 #define LINENUM		4
 #define XTDELBON	8	/* Extended Elbonian - NYI */
-
 
 /* Build a translation string from an english string with debugging options
  */
@@ -244,7 +238,7 @@ static void do_options(char **english, char **xlation,
 	}
 	if (options & STARS) {
 		int length = strlen(*xlation), i;
-		
+
 		/* Change all non-space characters in the string to stars,
 		 * EXCEPT the first and last, which are dollar signs */
 		for (i = 0; i < length; i++) {
@@ -266,7 +260,6 @@ static void do_options(char **english, char **xlation,
 		*xlation = xl_temp;
 	}
 }
-
 
 /* Get an English string and its translated equivalent from a file
  * Sets the xlat_options if an :OPTIONS: keyword is encountered
@@ -295,7 +288,7 @@ static int get_string_pair(FILE *fp, char **english, char **xlation,
 				if (*xlat_options) {
 					/* Build the translated string with debug options */
 					do_options(english, xlation, *xlat_options, *line_num);
-				} 
+				}
 				return 1;
 			}
 		} else if (!strnicmp(buffer, ":OPTIONS:", 9)) {
@@ -320,7 +313,6 @@ static int get_string_pair(FILE *fp, char **english, char **xlation,
 	/* We ran out of file!  We're done! */
 	return 0;
 }
-
 
 /* Read in the lang.txt or other specified file for English strings
  * and their translations
@@ -373,7 +365,6 @@ StrLookup StrLookupCreate(char *filename)
 	return obj;
 }
 
-
 void StrLookupDestroy(StrLookup obj)
 {
 	int i;
@@ -389,12 +380,11 @@ void StrLookupDestroy(StrLookup obj)
 	return;
 }
 
-
 char *StrLookupFind(StrLookup obj, char *string)
 {
 	struct StrLookup_table input;
 	struct StrLookup_table *ret;
-	
+
 	if (obj) {
 		input.index = string;
 		if (ret = bsearch(&input, obj->lookup_table, obj->stringcount,
@@ -404,7 +394,6 @@ char *StrLookupFind(StrLookup obj, char *string)
 	}
 	return string;
 }
-
 
 /* sprintf style string formatter with translation lookup.
  * Takes extended format specifications %num:fmt where num is the
@@ -445,17 +434,17 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 		} else {
 			/* Get the number of this format spec */
 			if (!sscanf(ptr2, "%%%d:", &fmtn)) return EOF;
-	
+
 			/* Skip forward to the colon (we already know is there)
 			 * and copy the %number: to the intermediate */
 			ptr = ptr2;
 			ptr2 = strchr(ptr, ':');
 			strncat(fmt2, ptr, ptr2 - ptr + 1);
-	
+
 			/* Now find the length of the rest of the format specifier */
 			fmtlen = strcspn(ptr2, "diouxXeEfgGcCsSnp");
 			totalfmtlen += fmtlen + 1;		/* We add 1 for the % here */
-	
+
 			if (fmtn > nfmtspec) {
 				/* We need a bigger array for format specs */
 				if (!(fmtspec = realloc(fmtspec, sizeof(char *)*fmtn))) return EOF;
@@ -470,7 +459,7 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 			/* Note that we skip past the colon by incrementing ptr2 */
 			strncpy(&fmtspec[fmtn][1], ++ptr2, fmtlen);
 			fmtspec[fmtn][fmtlen+1] = '\0';
-	
+
 			/* Skip past this format spec and continue parsing */
 			ptr = ptr2 + fmtlen;
 		}
@@ -526,7 +515,7 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 		} else {
 			/* Get the number from this format spec number */
 			if (!sscanf(ptr2, "%%%d:", &fmtn)) return EOF;
-	
+
 			/* Now copy the vsprintf output for this spec */
 			strcat(buffer, fmtspec[--fmtn]);
 
@@ -543,4 +532,3 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 	free(fmt2);
 	return strlen(buffer);
 }
-

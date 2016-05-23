@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -52,7 +52,7 @@
 
 class Action;
 
-enum ACTIONEND 
+enum ACTIONEND
 {
 	ACTIONEND_PATHEND,
 	ACTIONEND_ANIMEND,
@@ -121,7 +121,7 @@ public:
 
 	sint32			GetActionType(void) const { return (m_actionType > 0 ) ? m_actionType : 0; }
 	void			SetActionType(sint32 action) { m_actionType=action;};
-	bool			GetIsSpecialActionType(void) const { return (m_actionType < 0 ); } 
+	bool			GetIsSpecialActionType(void) const { return (m_actionType < 0 ); }
 
 	Anim *          GetAnim(void) const { return m_curAnim; }
 	sint32			GetAnimPos(void) const { return m_animPos; }
@@ -138,7 +138,6 @@ public:
 	void			SetAnim(Anim *anim);
 	void			CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2);
 
-
 	sint32			GetMaxActionCounter(void) const { return m_maxActionCounter; }
 	void			SetMaxActionCounter(sint32 count) { m_maxActionCounter = count; }
 
@@ -149,7 +148,6 @@ public:
 	uint16			GetSpriteFrame(void) const;
 	uint16			GetTransparency(void) const;
 
-	
 	sint32			GetFacing(void); // not quite const
 	void			SetFacing(sint32 facing) { m_facing = facing; }
 	sint32			SpecialDelayProcess(void) const {return m_specialDelayProcess; }
@@ -169,7 +167,7 @@ public:
 
 	ACTIONEND		GetCurrentEndCondition(void) const { return m_endCondition; }
 	void			SetCurrentEndCondition(ACTIONEND end_condition) { m_endCondition = end_condition; }
-	bool			LoopAnimHasCycled(void) const { return m_loopAnimFinished; } 
+	bool			LoopAnimHasCycled(void) const { return m_loopAnimFinished; }
 	void			ResetAnimLoop(void) { m_loopAnimFinished = false; }
 
 	void			SetItIsTimeToAct(bool act) { m_itIsTimeToAct = act; }
@@ -180,29 +178,28 @@ public:
 	void			SetNumRevealedActors(sint32 num) { m_numRevealedActors = num; }
 	sint32			GetNumRevealedActors(void) const { return m_numRevealedActors; }
 
-	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors) 
-    { 
-        m_moveActors = moveActors; 
-        m_numOActors = numOActors; 
+	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors)
+    {
+        m_moveActors = moveActors;
+        m_numOActors = numOActors;
     }
 	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
 
 	void			SetNumOActors(sint32 val) { m_numOActors = val; }
 	sint32			GetNumOActors(void) const { return m_numOActors; }
 
-	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; } 
-	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; } 
+	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
+	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
-	void			SetUnitVisionRange(double visRange) { m_unitVisionRange = visRange; } 
-	double			GetUnitVisionRange(void) const { return m_unitVisionRange; } 
+	void			SetUnitVisionRange(double visRange) { m_unitVisionRange = visRange; }
+	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 
 	void			SetSpecialUnitEffectsAction(DQAction action) { m_specialUnitEffectsAction = action; }
 	DQAction		GetSpecialUnitEffectsAction(void) const { return m_specialUnitEffectsAction; }
-	
+
 	void			SetSequence(Sequence *seq) { m_sequence = seq; }
 	Sequence		*GetSequence(void) const { return m_sequence; }
 
-	
 	void			SetSoundEffect(sint32 sound_id) { m_sound_effect_id = sound_id; }
 	sint32  		GetSoundEffect(void) const { return m_sound_effect_id; }
 
@@ -215,34 +212,34 @@ protected:
 
 	sint32				m_maxActionCounter;
 	sint32				m_curActionCounter;
-	sint32				m_animPos; 
+	sint32				m_animPos;
 	sint32				m_animDelayEnd;
 	sint32				m_animElapsed;
 	sint32				m_animLastFrameTime;
-	
-	sint32				m_delay; 
 
-	bool				m_itIsTimeToAct; 
-	bool				m_finished; 
-	bool				m_loopAnimFinished; 
-	sint32  			m_specialDelayProcess; 
+	sint32				m_delay;
+
+	bool				m_itIsTimeToAct;
+	bool				m_finished;
+	bool				m_loopAnimFinished;
+	sint32  			m_specialDelayProcess;
 
 	MapPoint			m_startMapPoint;
 	MapPoint			m_endMapPoint;
 
 	sint32				m_facing;
-	sint32              m_sound_effect_id; 
+	sint32              m_sound_effect_id;
 
-	uint32				m_unitsVisibility; 
+	uint32				m_unitsVisibility;
 
-	double				m_unitVisionRange; 
+	double				m_unitVisionRange;
 
 	sint32				m_numRevealedActors;
 	UnitActor			**m_revealedActors;
-	UnitActor			**m_moveActors; 
-	sint32				m_numOActors; 
+	UnitActor			**m_moveActors;
+	sint32				m_numOActors;
 
-	DQAction			m_specialUnitEffectsAction; 
+	DQAction			m_specialUnitEffectsAction;
 
 	Sequence			*m_sequence;
 };

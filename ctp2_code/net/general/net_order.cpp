@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Globals.h"
 #include "GameEventDescription.h"
@@ -27,7 +18,7 @@ extern Player **g_player;
 extern TurnCount *g_turn;
 extern SelectedItem *g_selected_item;
 
-NetOrder::NetOrder(sint32 owner, const Army &army, 
+NetOrder::NetOrder(sint32 owner, const Army &army,
 				   UNIT_ORDER_TYPE o, Path *a_path,
 				   MapPoint point, sint32 arg, GAME_EVENT event)
 {
@@ -85,12 +76,12 @@ void NetOrder::Packetize(uint8 *buf, uint16 &size)
 		}
 	}
 
-	DPRINTF(k_DBG_NET, ("Packetizing order: type %d, Army %lx, Loc(%d,%d) Army Loc:(%d,%d) Path:%s\n", 
-						m_order, m_army.m_id, 
-						(sint32)m_point.x, 
-						(sint32)m_point.y, 
-						(sint32)armyPos.x, 
-						(sint32)armyPos.y, 
+	DPRINTF(k_DBG_NET, ("Packetizing order: type %d, Army %lx, Loc(%d,%d) Army Loc:(%d,%d) Path:%s\n",
+						m_order, m_army.m_id,
+						(sint32)m_point.x,
+						(sint32)m_point.y,
+						(sint32)armyPos.x,
+						(sint32)armyPos.y,
 						pathstr));
 #endif
 
@@ -104,7 +95,7 @@ void NetOrder::Packetize(uint8 *buf, uint16 &size)
 	PUSHSHORT((uint16)m_point.y);
 
 	uint16 n = m_path ? (uint16)m_path->m_step.Num() : 0;
-	if(m_path) 
+	if(m_path)
 		n |= 0x8000;
 	PUSHSHORT(n);
 
@@ -168,7 +159,7 @@ void NetOrder::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		PULLSHORT(path->m_start.y);
 		PULLSHORT(path->m_current.x);
 		PULLSHORT(path->m_current.y);
-		PULLLONG(path->m_next_dir);		
+		PULLLONG(path->m_next_dir);
 		PULLLONG(path->m_next);
 		n &= ~(0x8000);
 	}
@@ -207,10 +198,10 @@ void NetOrder::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 
-	DPRINTF(k_DBG_NET, ("Unpacketized order: type %d, Army %lx, Loc(%d,%d) Army Loc(%d,%d) Path:%s\n", 
-						m_order, m_army.m_id, 
-						(sint32)m_point.x, 
-						(sint32)m_point.y, 
+	DPRINTF(k_DBG_NET, ("Unpacketized order: type %d, Army %lx, Loc(%d,%d) Army Loc(%d,%d) Path:%s\n",
+						m_order, m_army.m_id,
+						(sint32)m_point.x,
+						(sint32)m_point.y,
 						(sint32)armyPos.x,
 						(sint32)armyPos.y,
 						pathstr));
@@ -223,9 +214,9 @@ void NetOrder::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_gevManager->GotUserInput();
 	}
 
-	
-	
-	
+
+
+
 
 	g_network.GetSliceFor(m_owner);
 	Assert(size == pos);

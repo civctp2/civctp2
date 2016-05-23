@@ -36,17 +36,15 @@ class aui_AviMovieFormat;
 
 class aui_Surface;
 
-
 #define k_AUI_MOVIE_PLAYFLAG_LOOP			0x00000001
 #define k_AUI_MOVIE_PLAYFLAG_ONSCREEN		0x00000002
 #define k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD	0x00000004
 
 
-
 class aui_MovieFormat : public aui_FileFormat
 {
 public:
-	
+
 	aui_MovieFormat() {}
 	virtual ~aui_MovieFormat() {}
 
@@ -55,11 +53,10 @@ public:
 };
 
 
-
 class aui_Movie : public aui_Base
 {
 public:
-	
+
 	aui_Movie(
 		AUI_ERRCODE *retval,
 		MBCHAR const * filename = NULL );
@@ -69,11 +66,10 @@ protected:
 	AUI_ERRCODE InitCommon( MBCHAR const * filename );
 
 public:
-	
+
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
-	
 	AUI_ERRCODE	SetFilename( MBCHAR const * filename );
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
 
@@ -96,7 +92,6 @@ public:
 	uint32 SetTimePerFrame( uint32 timePerFrame );
 	uint32 GetTimePerFrame( void ) const { return m_timePerFrame; }
 
-	
 	virtual AUI_ERRCODE Open(
 		uint32 flags = 0,
 		aui_Surface *surface = NULL,
@@ -116,7 +111,6 @@ public:
 	BOOL IsFinished( void ) const { return m_isFinished; }
 	BOOL IsPaused( void ) const { return m_isPaused; }
 
-	
 	static WNDPROC		m_windowProc;
 	static aui_Movie	*m_onScreenMovie;
 
@@ -128,30 +122,29 @@ public:
 	void SetWindowRect(RECT *rect) { m_windowRect = *rect; }
 
 protected:
-	
-	
+
 	AUI_ERRCODE PlayOnScreenMovie( void );
 
-	MBCHAR m_filename[ MAX_PATH + 1 ];	
-	aui_MovieFormat *m_format;			
+	MBCHAR m_filename[ MAX_PATH + 1 ];
+	aui_MovieFormat *m_format;
 
-	aui_Surface	*m_surface;				
-	RECT		m_rect;					
+	aui_Surface	*m_surface;
+	RECT		m_rect;
 
-	aui_Surface *m_windowSurface;		
-	RECT		m_windowRect;			
+	aui_Surface *m_windowSurface;
+	RECT		m_windowRect;
 
 	BOOL		m_isOpen;
 	BOOL		m_isPlaying;
 	BOOL		m_isFinished;
 	BOOL		m_isPaused;
 
-	uint32		m_flags;				
+	uint32		m_flags;
 
 	uint32		m_timePerFrame;
 	uint32		m_lastFrameTime;
 
-#if defined(__AUI_USE_DIRECTX__)	
+#if defined(__AUI_USE_DIRECTX__)
 	PAVIFILE			m_aviFile;
 	PAVISTREAM			m_aviStream;
 	AVIFILEINFO			m_aviFileInfo;
@@ -172,11 +165,10 @@ protected:
 class aui_AviMovieFormat : public aui_MovieFormat
 {
 public:
-	
+
 	aui_AviMovieFormat() {}
 	virtual ~aui_AviMovieFormat() {}
 
-	
 	virtual AUI_ERRCODE	Load( MBCHAR const * filename, aui_Movie *movie )
 	{ return AUI_ERRCODE_OK; }
 };
@@ -190,5 +182,4 @@ LRESULT CALLBACK OnScreenMovieWindowProc(
 	WPARAM wParam,
 	LPARAM lParam );
 
-
-#endif 
+#endif

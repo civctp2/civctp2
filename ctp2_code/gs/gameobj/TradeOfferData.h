@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Trade Offer data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,21 +43,20 @@ class CivArchive;
 
 class TradeOfferData : public GameObj {
 private:
-	
+
 	PLAYER_INDEX m_owner;
-	Unit m_fromCity;         
-	ROUTE_TYPE m_offerType;  
-	sint32 m_offerResource;  
-	ROUTE_TYPE m_askingType; 
-	sint32 m_askingResource; 
-	Unit m_toCity;           
-	
+	Unit m_fromCity;
+	ROUTE_TYPE m_offerType;
+	sint32 m_offerResource;
+	ROUTE_TYPE m_askingType;
+	sint32 m_askingResource;
+	Unit m_toCity;
 
 	friend class NetTradeOffer;
 
 public:
 	TradeOfferData(const ID id,
-				   const Unit city, 
+				   const Unit city,
 				   const ROUTE_TYPE offerType, const sint32 offerResource,
 				   const ROUTE_TYPE askingType, const sint32 askingResource,
 				   const Unit toCity)
@@ -77,7 +76,6 @@ public:
 
 	TradeOfferData(CivArchive &archive) : GameObj(0) { Serialize(archive); };
 
-	
 	PLAYER_INDEX GetOwner() const { return m_owner; }
 	Unit GetFromCity() const { return m_fromCity; }
 	Unit GetToCity() const { return m_toCity; }
@@ -89,8 +87,7 @@ public:
 
 	BOOL Accept(PLAYER_INDEX player, const Unit &sourceCity, Unit const &destCity);
 
-	
-	
+
 	void Serialize(CivArchive &archive);
 };
 

@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected the bounding Rec computation (problem with wraping)
-// 
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -254,7 +254,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 		m_upperLeft.y = add_rect.m_upperLeft.y;
 	}
 
-	if((m_lr_x_wrap != add_rect.m_lr_x_wrap) || (is_add_rect_lr_xWrapOk && (m_lr_x_wrap == add_rect.m_lr_x_wrap))) 
+	if((m_lr_x_wrap != add_rect.m_lr_x_wrap) || (is_add_rect_lr_xWrapOk && (m_lr_x_wrap == add_rect.m_lr_x_wrap)))
 	{
 		if (add_rect.m_lowerRight.x < m_lowerRight.x)
 		{
@@ -266,7 +266,7 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 		m_lowerRight.x = add_rect.m_lowerRight.x;
 	}
 
-	if((m_lr_y_wrap != add_rect.m_lr_y_wrap) || (is_add_rect_lr_yWrapOk && (m_lr_y_wrap == add_rect.m_lr_y_wrap))) 
+	if((m_lr_y_wrap != add_rect.m_lr_y_wrap) || (is_add_rect_lr_yWrapOk && (m_lr_y_wrap == add_rect.m_lr_y_wrap)))
 	{
 		if(add_rect.m_lowerRight.y < m_lowerRight.y)
 		{
@@ -360,7 +360,6 @@ void BoundingRect::Get(sint16 row, sint16 col, MapPoint & pos)
 	pos.y = row + m_lowerRight.x;
 	if(pos.y >= m_mapSize.y) pos.y -= m_mapSize.y;
 }
-
 
 bool BoundingRect::Get(const sint32 & index, MapPoint & pos, const sint32 & max_rows, const sint32 & max_columns) const
 {

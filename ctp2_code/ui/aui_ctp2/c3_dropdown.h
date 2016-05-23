@@ -1,5 +1,3 @@
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -13,7 +11,7 @@
 class c3_DropDown : public aui_DropDown, public PatternBase
 {
 public:
-	
+
 	c3_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -35,7 +33,7 @@ public:
 	virtual ~c3_DropDown() {};
 
 	void Clear(void);
-	
+
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,

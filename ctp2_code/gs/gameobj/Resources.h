@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added GetNum and Resize methods for loading of savegames with different 
+// - Added GetNum and Resize methods for loading of savegames with different
 //   number of goods in than in the database. - May 28th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -48,19 +48,19 @@ private:
 public:
 	Resources();
 	Resources(const Resources &copyme);
-	virtual ~Resources() 
+	virtual ~Resources()
     {
 		delete [] m_supply;
 	}
 
-	void Clear() 
+	void Clear()
 	{
 		memset(m_supply, 0, m_numGoods * sizeof(sint32));
 		m_totalResources = 0;
 	}
 
 	void Resize(sint32 newSize);
-	
+
 	const sint32 & operator [] (const sint32 index) const
 	{
 		Assert(index >= 0 && index < m_numGoods);
@@ -81,7 +81,7 @@ public:
 		return (m_supply[index] += amt);
 	}
 
-	void SetResourceCount(sint32 index, sint32 amt) 
+	void SetResourceCount(sint32 index, sint32 amt)
 	{
 		m_totalResources -= m_supply[index] - amt;
 		Assert(m_totalResources >= 0);
@@ -114,7 +114,7 @@ public:
 	//
 	// Returns    : The size of the underlying m_supply arry.
 	//
-	// Remark(s)  : Added for valid check so that savegames with modified 
+	// Remark(s)  : Added for valid check so that savegames with modified
 	//              ressource database can be loaded.
 	//
 	//----------------------------------------------------------------------------
@@ -126,5 +126,3 @@ public:
 };
 
 #endif
-
-

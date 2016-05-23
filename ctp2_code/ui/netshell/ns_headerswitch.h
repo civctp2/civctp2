@@ -1,33 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_HEADERSWITCH_H__
 #define __AUI_HEADERSWITCH_H__
-
 
 #include "aui_radio.h"
 #include "patternbase.h"
 
 
-
 #define k_NS_HEADERSWITCH_LDL_ICON			"icon"
 
-#define k_NS_HEADERSWITCH_DEFAULTNUMSTATES	3	
-
+#define k_NS_HEADERSWITCH_DEFAULTNUMSTATES	3
 
 
 class ns_HeaderSwitch : public aui_Radio, public PatternBase
 {
 public:
-	
+
 	ns_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -67,5 +53,4 @@ protected:
 	aui_Image	*m_icon;
 };
 
-
-#endif 
+#endif

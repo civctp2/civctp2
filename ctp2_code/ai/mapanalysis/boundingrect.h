@@ -1,25 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -67,52 +45,40 @@ public:
 			return *this;
 		}
 
-	
-	BoundingRect(const MapPoint & center, 
-				 const sint16 radius, 
+	BoundingRect(const MapPoint & center,
+				 const sint16 radius,
 				 const MapPoint & map_size,
-				 const bool & x_wrap_ok, 
+				 const bool & x_wrap_ok,
 				 const bool & y_wrap_ok)
 		{
 			Initialize(center, radius, map_size, x_wrap_ok, y_wrap_ok);
 		}
 
-	
 	bool IsValid() const { return m_isValid; }
 
-	
-	void Initialize(const MapPoint & center, 
+	void Initialize(const MapPoint & center,
 					const sint16 radius,
 					const MapPoint & map_size,
 					const bool & x_wrap_ok,
 					const bool & y_wrap_ok);
 
-	
 	bool Normalize();
 
-	
 	bool Add(const BoundingRect & rect);
 
-	
-	
+
 	bool Get(const sint32 & index, MapPoint & pos, const sint32 & max_rows, const sint32 & max_columns) const;
 
-	
 	const MapPoint & Get(const sint32 & index) const;
 
-	
 	bool Expand(const sint16 & size);
 
-	
 	bool IsMaxRect() const;
 
-	
 	MapPoint GetCenter() const;
 
-	
 	bool WithinRectangle(const MapPoint & pos) const;
 
-	
 	void Get(sint16 row, sint16 col, MapPoint & pos);
 	sint16 GetMaxCols();
 	sint16 GetMaxRows();
@@ -120,17 +86,14 @@ public:
 private:
 	bool m_isValid;
 
-	
 	MapPoint m_upperLeft;
 	MapPoint m_lowerRight;
 
-	
 	bool m_xWrapOk;
 	bool m_yWrapOk;
 	MapPoint m_mapSize;
 
-	
-	
+
 	bool m_ul_x_wrap;
 	bool m_lr_x_wrap;
 	bool m_ul_y_wrap;
@@ -138,5 +101,3 @@ private:
 };
 
 #endif // __BOUNDING_RECT_H
-
-

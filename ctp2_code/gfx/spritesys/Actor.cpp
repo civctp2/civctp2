@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _ACTOR_DRAW_OPTIMIZATION
 //
 //----------------------------------------------------------------------------
@@ -33,7 +33,6 @@
 #include "c3.h"
 #include "Actor.h"
 
-
 Actor::Actor(SpriteState * ss)
 :
 #if defined(_ACTOR_DRAW_OPTIMIZATION)
@@ -49,13 +48,3 @@ Actor::Actor(SpriteState * ss)
     m_morphing      (false),
     m_animPos       (0)
 { }
-
-
-
-
-
-
-
-
-
-

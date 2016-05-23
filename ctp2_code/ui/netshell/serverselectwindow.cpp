@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,7 +41,6 @@
 
 #include "netshell.h"
 #include "ns_customlistbox.h"
-
 
 #include "serverselectwindow.h"
 #include "playerselectwindow.h"
@@ -73,7 +72,6 @@ ServerSelectWindow::ServerSelectWindow(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 AUI_ERRCODE ServerSelectWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -87,7 +85,6 @@ AUI_ERRCODE ServerSelectWindow::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 {
@@ -123,11 +120,9 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
 
-	
 	aui_Ldl::SetupHeirarchyFromRoot( "serverselectwindow" );
 
 
-	
 	aui_Action *action;
 
 	action = new OKButtonAction;
@@ -145,19 +140,18 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
 	m_controls[ CONTROL_SELECTSERVERLISTBOX ]->SetAction( action );
 
-	
 
-	
+
+
 	((aui_ListBox *)m_controls[ CONTROL_SELECTSERVERLISTBOX ])->
 		SetForceSelect( TRUE );
 
 	Update();
 
-
 	return AUI_ERRCODE_OK;
 }
 
-ServerSelectWindow::~ServerSelectWindow() 
+ServerSelectWindow::~ServerSelectWindow()
 {
 	delete m_dbActionArray[ 0 ];
 }
@@ -176,7 +170,6 @@ void ServerSelectWindow::Update( bool wait )
 	{
 		b->Enable(TRUE);
 
-		
 		static bool didThisAlready = false;
 		if ( !didThisAlready )
 		{
@@ -184,7 +177,6 @@ void ServerSelectWindow::Update( bool wait )
 			g_netfunc->SetServer( server );
 			didThisAlready = true;
 
-			
 			((aui_ListBox *)m_controls[ CONTROL_SELECTSERVERLISTBOX ])->
 				SetForceSelect( FALSE );
 
@@ -197,10 +189,10 @@ void ServerSelectWindow::Update( bool wait )
 }
 
 AUI_ERRCODE ServerSelectWindow::Idle( void )
-{	
-	if (g_netfunc) 
+{
+	if (g_netfunc)
     {
-        while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+        while (NETFunc::Message * m = g_netfunc->GetMessage())
         {
 			g_netfunc->HandleMessage(m);
 
@@ -212,13 +204,13 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 
 			case dp_OBJECTDELTA_PACKET_ID:
                 {
-            	    dp_objectDelta_packet_t *   p = 
+            	    dp_objectDelta_packet_t *   p =
                         (dp_objectDelta_packet_t *) m->GetBody();
 
-				    if (p->key[0] == dp_KEY_SERVERPINGS 
+				    if (p->key[0] == dp_KEY_SERVERPINGS
 					    && (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
 					    && p->data.serv.loss_percent != 100 && s_dbw
-                       ) 
+                       )
                     {
 					    DialogBoxWindow::PopDown(s_dbw);
 					    s_dbw = NULL;
@@ -281,7 +273,7 @@ void ServerSelectWindow::OKButtonAction::Execute(
 	ns_ServerItem *item = (ns_ServerItem *)listbox->GetSelectedItem();
 
 	if(item) {
-		
+
 		strncpy( g_serverName, item->GetText(), 100 );
 
 		NETFunc::Server *server = item->GetNetShellObject()->GetNETFuncObject();
@@ -291,11 +283,10 @@ void ServerSelectWindow::OKButtonAction::Execute(
 		g_netshell->GotoScreen( NetShell::SCREEN_PLAYERSELECT );
 	}
 	else {
-		
+
 		strncpy( g_serverName, "", 100 );
 	}
 }
-
 
 void ServerSelectWindow::CancelButtonAction::Execute(
 	aui_Control *control,
@@ -304,7 +295,6 @@ void ServerSelectWindow::CancelButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	strncpy( g_serverName, "", 100 );
 
 	g_netfunc->Disconnect();
@@ -317,10 +307,8 @@ void ServerSelectWindow::DialogBoxPopDownAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	g_netfunc->Disconnect();
 
-	
 
 	if ( s_dbw )
 	{

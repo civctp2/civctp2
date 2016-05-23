@@ -7,7 +7,6 @@
 
 #if 0
 
-
 template <class T> class NetList {
 public:
 	class NetListNode {
@@ -18,27 +17,27 @@ public:
 			m_obj(obj)
 		{
 		};
-		
+
 		~NetListNode() {
 			if(m_next)
 				m_next->m_prev = m_prev;
 			if(m_prev)
 				m_prev->m_next = m_next;
 		}
-		
+
 		T* GetObj() { return m_obj; };
-		
+
 		T* m_obj;
 		NetListNode* m_next;
 		NetListNode* m_prev;
 	};
 
-	NetList() : m_head(NULL), 
+	NetList() : m_head(NULL),
 				m_tail(NULL)
 	{
 	};
 
-	~NetList() 
+	~NetList()
 	{
 		while(m_head) {
 			NetListNode* node = m_head;
@@ -60,7 +59,7 @@ public:
 	BOOL  IsEmpty() { return m_head == NULL; };
 
 	NetListNode *Find(T *obj);
-	
+
 	class Walker {
 	public:
 		Walker(NetList* list) :
@@ -82,10 +81,10 @@ public:
 		void Prev() { Assert(m_node); m_node = m_node->m_prev; }
 		int IsValid() { return m_node != NULL; }
 		T *GetObj() { return m_node->m_obj; }
-		void Remove() 
-		{ 
+		void Remove()
+		{
 			NetListNode* nextNode = m_node->m_next;
-			m_list->Remove(m_node); 
+			m_list->Remove(m_node);
 			m_node = nextNode;
 		}
 	private:

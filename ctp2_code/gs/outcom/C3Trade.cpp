@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "C3Trade.h"
 #include "civarchive.h"
@@ -40,7 +38,6 @@ void C3TradeOffer::Serialize(CivArchive &archive)
 	}
 }
 
-
 STDMETHODIMP C3TradeOffer::QueryInterface(REFIID riid, void **obj)
 {
 	*obj = NULL;
@@ -69,7 +66,6 @@ STDMETHODIMP_(ULONG) C3TradeOffer::Release()
 	return 0;
 }
 
-
 STDMETHODIMP_(uint32) C3TradeOffer::GetID()
 {
 	return (uint32)m_offer;
@@ -91,7 +87,7 @@ STDMETHODIMP_(uint32) C3TradeOffer::GetFromCity()
 
 	if(!g_player[fromCity.GetOwner()]->m_all_cities->IsPresent(fromCity))
 		return 0;
-	
+
 	return g_player[m_offer.GetFromCity().GetOwner()]->GetCityId(m_offer.GetFromCity());
 }
 

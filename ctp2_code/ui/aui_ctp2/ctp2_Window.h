@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -34,7 +34,6 @@
 #ifndef __CTP2_WINDOW_H__
 #define __CTP2_WINDOW_H__
 
-
 #include "aui_window.h"
 #include "patternbase.h"
 #include "pointerlist.h"
@@ -45,7 +44,6 @@ typedef void (CTP2WindowWeaklyModalCancelCallback) (aui_MouseEvent *event,
 													ctp2_Window *window,
 													void *cookie,
 													bool &passEventOn);
-
 
 class ctp2_Window : public aui_Window, public PatternBase
 {
@@ -83,16 +81,14 @@ public:
 		m_weaklyModalCancelCookie = cookie;
 	}
 
-	virtual void	MouseLGrabOutside		(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDropOutside		(aui_MouseEvent * mouseData);	
-	
+	virtual void	MouseLGrabOutside		(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside		(aui_MouseEvent * mouseData);
+
 	void	SetBevelMode(bool on_or_off) { m_bevel=on_or_off;};
 
-	
-	
+
 	void    ResetCurrentMouseState();
 
-	
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	virtual AUI_ERRCODE Move(sint32 x, sint32 y);
@@ -109,9 +105,8 @@ private:
 	CTP2WindowWeaklyModalCancelCallback *m_weaklyModalCancelCallback;
 	void *m_weaklyModalCancelCookie;
 	PointerList<ctp2_Window> m_dockedWindows;
-	ctp2_Window *m_dockedTo;  
-	ctp2_Window *m_dock;      
+	ctp2_Window *m_dockedTo;
+	ctp2_Window *m_dock;
 };
 
-
-#endif 
+#endif

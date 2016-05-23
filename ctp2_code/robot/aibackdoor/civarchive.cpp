@@ -102,9 +102,9 @@ CivArchive::~CivArchive()
 void CivArchive::SetSize(uint32 ulSize)
 {
 	delete m_pbBaseMemory ;
-	m_pbBaseMemory = NULL; 
+	m_pbBaseMemory = NULL;
 
-	Assert(0<ulSize); 
+	Assert(0<ulSize);
 	m_pbBaseMemory = new uint8[ulSize] ;
 	m_ulAllocated = ulSize ;
 	m_pbInsert = m_pbBaseMemory ;
@@ -199,7 +199,6 @@ void CivArchive::LoadChunk(uint8 *start, uint8 *end)
 
 #endif // HUNT_SERIALIZE
 
-
 enum
 {
 	TYPE_CHECK_UNKNOWN,
@@ -252,7 +251,7 @@ void CivArchive::TestMagic(uint32 id)
 
 	{
 		BOOL ARCHIVE_MAGIC_DUD=0;
-		Assert(ARCHIVE_MAGIC_DUD); 
+		Assert(ARCHIVE_MAGIC_DUD);
 	}
 
 	exit(0);

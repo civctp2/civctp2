@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added more yy* symbols to be replaced by ldl* symbols so that there are 
+// - Added more yy* symbols to be replaced by ldl* symbols so that there are
 //   less problems with the other parser charing the same global symbols that
 //   caused usage of invalid memory. Actual this is done for sc.tab.c but what
 //   a defect is there is a defect here as well, the game just didn't fail.
@@ -61,7 +61,7 @@
 #define yytoks ldltoks
 #define yyv ldlv
 #define yyval ldlval
-// Added by Martin Gühmann to fix external linkage 
+// Added by Martin Gühmann to fix external linkage
 // issures in the sliccmd parser
 #define yyssp ldlssp
 #define yyvsp ldlvsp

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  JNI wrapper for ActiveNet's main methods.
 
  To reduce the overhead of JNI's heavyweight but portable interface technique,
- enumeration methods will generally be implemented as functions that return 
+ enumeration methods will generally be implemented as functions that return
  the entire set of results in a single call.
 
  $Log: anetj.c $
@@ -108,7 +108,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 //#include <stdio.h>
 //#define PRINTF(s) { printf s; fflush(stdout); }
-#define PRINTF(s) 
+#define PRINTF(s)
 
 static dp_t *myDP = NULL;
 static jobject gj_mySession = NULL;	/* global handle to the currently open Session */
@@ -119,7 +119,7 @@ static jobject gj_mySession = NULL;	/* global handle to the currently open Sessi
 --------------------------------------------------------------------------*/
 /*JNIEnv *callback_env = NULL;*/
 
-/* 
+/*
 * Get a conventional C string from a Java string.  Use UTF-8 encoding
 * to convert from Java's internal Unicode format to a byte array for
 * the C representation.  If the string is too long to fit into the buffer,
@@ -131,13 +131,13 @@ static char *getCstring(JNIEnv *env, jstring jstr, char *buf, size_t buflen)
 	const char *utf8path;
 
 	/* Turn it into a null-terminated UTF string */
-	len = (*env)->GetStringUTFLength(env, jstr); 
+	len = (*env)->GetStringUTFLength(env, jstr);
 	if (len > 0) {
 		/* Get the converted bytes */
-		utf8path = (*env)->GetStringUTFChars(env, jstr, NULL); 
+		utf8path = (*env)->GetStringUTFChars(env, jstr, NULL);
 		if (!utf8path) {
 			DPRINT(("getCstring: utfchars returns null\n"));
-			(*env)->ReleaseStringUTFChars(env, jstr, utf8path); 
+			(*env)->ReleaseStringUTFChars(env, jstr, utf8path);
 			return NULL;
 		}
 
@@ -148,7 +148,7 @@ static char *getCstring(JNIEnv *env, jstring jstr, char *buf, size_t buflen)
 		}*/
 
 		/*
-		* Truncate to a character boundary.  UTF8 contains either 
+		* Truncate to a character boundary.  UTF8 contains either
 		* single-byte characters, which have the high bit of the byte
 		* set to 0, or multi-byte characters, which have the high bit
 		* of the byte set to 1, and the next highest bit set to 0,
@@ -164,7 +164,7 @@ static char *getCstring(JNIEnv *env, jstring jstr, char *buf, size_t buflen)
 
 		/* Copy it to the given buffer and release the original */
 		memcpy(buf, utf8path, len);
-		(*env)->ReleaseStringUTFChars(env, jstr, utf8path); 
+		(*env)->ReleaseStringUTFChars(env, jstr, utf8path);
 	}
 
 	/* Null-terminate it. */
@@ -231,24 +231,24 @@ static jclass commInitReq_init(JNIEnv *env)
 		return NULL;
 
 	/* Get field id's.  Later, perhaps we can cache these. */
-	cfid.phonenum   = (*env)->GetFieldID(env, hccommInitReq, "phonenum", "Ljava/lang/String;"); 
+	cfid.phonenum   = (*env)->GetFieldID(env, hccommInitReq, "phonenum", "Ljava/lang/String;");
 	if (!cfid.phonenum) return NULL;
-	cfid.modeministr   = (*env)->GetFieldID(env, hccommInitReq, "modeministr", "Ljava/lang/String;"); 
+	cfid.modeministr   = (*env)->GetFieldID(env, hccommInitReq, "modeministr", "Ljava/lang/String;");
 	if (!cfid.modeministr) return NULL;
 
-	cfid.sessionId  = (*env)->GetFieldID(env, hccommInitReq, "sessionId", "I"); 
+	cfid.sessionId  = (*env)->GetFieldID(env, hccommInitReq, "sessionId", "I");
 	if (!cfid.sessionId) return NULL;
-	cfid.portnum    = (*env)->GetFieldID(env, hccommInitReq, "portnum", "I"); 
+	cfid.portnum    = (*env)->GetFieldID(env, hccommInitReq, "portnum", "I");
 	if (!cfid.portnum) return NULL;
-	cfid.baud    = (*env)->GetFieldID(env, hccommInitReq, "baud", "I"); 
+	cfid.baud    = (*env)->GetFieldID(env, hccommInitReq, "baud", "I");
 	if (!cfid.baud) return NULL;
-	cfid.dialingMethod = (*env)->GetFieldID(env, hccommInitReq, "dialingMethod", "I"); 
+	cfid.dialingMethod = (*env)->GetFieldID(env, hccommInitReq, "dialingMethod", "I");
 	if (!cfid.dialingMethod) return NULL;
 
 	return hccommInitReq;
 }
 
-/* Convert a C commInitReq_t to a Java ANet.commInitReq. 
+/* Convert a C commInitReq_t to a Java ANet.commInitReq.
  * Returns jobject on success, NULL on failure.
  */
 static jobject commInitReq_CtoJava(JNIEnv *env, jclass hccommInitReq, commInitReq_t *c)
@@ -265,12 +265,12 @@ static jobject commInitReq_CtoJava(JNIEnv *env, jclass hccommInitReq, commInitRe
 	(*env)->SetIntField(env, cur, cfid.portnum, 0xffff & c->portnum);
 	(*env)->SetIntField(env, cur, cfid.baud, 0xffff & c->baud);
 	(*env)->SetIntField(env, cur, cfid.dialingMethod, 0xffff & c->dialing_method);
-	/* Save the two string fields.  
+	/* Save the two string fields.
 	 */
-	(*env)->SetObjectField(env, cur, cfid.phonenum, (*env)->NewStringUTF(env, c->phonenum)); 
+	(*env)->SetObjectField(env, cur, cfid.phonenum, (*env)->NewStringUTF(env, c->phonenum));
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
-	(*env)->SetObjectField(env, cur, cfid.modeministr, (*env)->NewStringUTF(env, c->modeministr)); 
+	(*env)->SetObjectField(env, cur, cfid.modeministr, (*env)->NewStringUTF(env, c->modeministr));
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	return cur;
@@ -278,7 +278,7 @@ static jobject commInitReq_CtoJava(JNIEnv *env, jclass hccommInitReq, commInitRe
 
 #define mytemp_STR_LEN 256
 
-/* Convert a Java ANet.commInitReq to a C commInitReq_t. 
+/* Convert a Java ANet.commInitReq to a C commInitReq_t.
  * Returns pointer to buf on success, NULL on failure.
  */
 static commInitReq_t *commInitReq_JavatoC(JNIEnv *env, jobject cur, commInitReq_t *c)
@@ -323,7 +323,7 @@ PRINTF(("done:\n"));
 JNIEXPORT jint JNICALL Java_Activision_ANet_create
   (JNIEnv *env, jobject jANet, jobject transport, jobject params, jstring jthawfname)
 {
-	jclass hANetTransport; 
+	jclass hANetTransport;
 	jfieldID fidPath;
 	jsize len;
 	jstring jpath;
@@ -338,11 +338,11 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_create
 
 	DPRINT(("ANet_create:\n"));
 	/* Get access to path field of transport object */
-	hANetTransport = (*env)->GetObjectClass(env, transport); 
+	hANetTransport = (*env)->GetObjectClass(env, transport);
 	if (!hANetTransport) return dp_RES_BAD;
-	fidPath = (*env)->GetFieldID(env, hANetTransport, "path", "Ljava/lang/String;"); 
+	fidPath = (*env)->GetFieldID(env, hANetTransport, "path", "Ljava/lang/String;");
 	if (!fidPath) return dp_RES_BAD;
-	jpath = (*env)->GetObjectField(env, transport, fidPath); 
+	jpath = (*env)->GetObjectField(env, transport, fidPath);
 	if (!jpath) return dp_RES_BAD;
 
 	/* Turn it into a null-terminated UTF string */
@@ -479,7 +479,6 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_enumPorts
 	return vec;
 }
 
-
 /*------------------ Activision.ANet.ANetTable --------------------------*/
 #ifdef dp_ANET2
 
@@ -591,7 +590,7 @@ DPRINT(("JTcb1\n"));
 
 DPRINT(("JTcb2\n"));
 	/* Get the id of the field within the class... */
-	jfid_listener = (*callback_env)->GetFieldID(callback_env, hcTable, "listener", "LActivision/ANetTableListener;"); 
+	jfid_listener = (*callback_env)->GetFieldID(callback_env, hcTable, "listener", "LActivision/ANetTableListener;");
 	if (!jfid_listener) return dp_RES_BUG;
 
 DPRINT(("JTcb3\n"));
@@ -601,7 +600,7 @@ DPRINT(("JTcb3\n"));
 
 DPRINT(("JTcb4\n"));
 	/* Get the class of the callback object itself */
-	hcTableListener = (*callback_env)->GetObjectClass(callback_env, jlistener); 
+	hcTableListener = (*callback_env)->GetObjectClass(callback_env, jlistener);
 	if (!hcTableListener ) return dp_RES_BAD;
 
 DPRINT(("JTcb5\n"));
@@ -637,7 +636,7 @@ DPRINT(("JTcb9\n"));
 JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_getTable
   (JNIEnv *env, jobject jobj, jboolean fCreate)
 {
-	if (!myDP) 
+	if (!myDP)
 		return dp_RES_CLOSED;
 	if (!fCreate)  {
 		if (getTable(env, jobj) == NULL)
@@ -807,7 +806,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_getTableSize
   (JNIEnv *env, jobject jobj)
 {
 	dptab_table_t *tab;
-	if (!myDP) 
+	if (!myDP)
 		return 0;
 	if ((tab = getTable(env, jobj)) == NULL) return 0;
 	return dptab_tableSize(tab);
@@ -826,7 +825,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_setVal
 	char *csubkey, *cbuf;
 	dptab_table_t *tab;
 	jclass jbcl;
-	if (!myDP) 
+	if (!myDP)
 		return dp_RES_CLOSED;
 	jbcl = (*env)->FindClass(env, "[B");
 	if (!(*env)->IsInstanceOf(env, buf, jbcl))
@@ -855,7 +854,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_00024ANetTable_getValByKey
 	char *csubkey, *cbuf;
 	jbyteArray buf;
 	dptab_table_t *tab;
-	if (!myDP) 
+	if (!myDP)
 		return NULL;
 	if ((tab = getTable(env, jobj)) == NULL) return NULL;
 	subkeylen = (*env)->GetArrayLength(env, subkey);
@@ -881,7 +880,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_00024ANetTable_getValByIndex
 	char *csubkey, *cbuf;
 	jbyteArray buf;
 	dptab_table_t *tab;
-	if (!myDP) 
+	if (!myDP)
 		return NULL;
 	if ((tab = getTable(env, jobj)) == NULL) return NULL;
 	csubkey = (*env)->GetByteArrayElements(env, subkey, NULL);
@@ -905,7 +904,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_deleteVal
 	int subkeylen;
 	char *csubkey;
 	dptab_table_t *tab;
-	if (!myDP) 
+	if (!myDP)
 		return dp_RES_BAD;
 	if ((tab = getTable(env, jobj)) == NULL) return dp_RES_EMPTY;
 	subkeylen = (*env)->GetArrayLength(env, subkey);
@@ -1064,7 +1063,7 @@ int dp_PASCAL listServers_cb(const char *hostname, long roundtrip_ms,dp_serverIn
 }
 
 /*-------------------------------------------------------------------------
- Here's a tricky part.  
+ Here's a tricky part.
  When the Java program calls ANet.pingServers(), it calls dpEnumServers()
  without any useful callback.
  On each call to dpReceive(), dp will register ping replies into its
@@ -1101,11 +1100,11 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 	int i;
 	int n;
 
-	if (!myDP) 
+	if (!myDP)
 		return NULL;
 
 	/* Get server class */
-	jcANetServer = (*env)->FindClass(env, "Activision/ANet$ANetServer"); 
+	jcANetServer = (*env)->FindClass(env, "Activision/ANet$ANetServer");
 	if (!jcANetServer) {
 		checkExc(env);
 		return NULL;
@@ -1119,16 +1118,16 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 	}
 
 	/* Get the field id's. */
-	fid_hostname = (*env)->GetFieldID(env, jcANetServer, "hostname", "Ljava/lang/String;"); 
+	fid_hostname = (*env)->GetFieldID(env, jcANetServer, "hostname", "Ljava/lang/String;");
 	if (!fid_hostname) return NULL;
 
-	fid_rtt_ms_avg = (*env)->GetFieldID(env, jcANetServer, "rtt_ms_avg", "I"); 
+	fid_rtt_ms_avg = (*env)->GetFieldID(env, jcANetServer, "rtt_ms_avg", "I");
 	if (!fid_rtt_ms_avg) return NULL;
 
-	fid_loss_percent = (*env)->GetFieldID(env, jcANetServer, "loss_percent", "I"); 
+	fid_loss_percent = (*env)->GetFieldID(env, jcANetServer, "loss_percent", "I");
 	if (!fid_loss_percent) return NULL;
 
-	fid_sesstype_players = (*env)->GetFieldID(env, jcANetServer, "sesstype_players", "I"); 
+	fid_sesstype_players = (*env)->GetFieldID(env, jcANetServer, "sesstype_players", "I");
 	if (!fid_sesstype_players) return NULL;
 
 #ifdef dp_ANET2
@@ -1141,7 +1140,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		return NULL;
 
 	/* Create array of null servers */
-	out = (jobjectArray) (*env)->NewObjectArray(env, n, jcANetServer, NULL); 
+	out = (jobjectArray) (*env)->NewObjectArray(env, n, jcANetServer, NULL);
 	if (!out)
 		return NULL;
 
@@ -1172,7 +1171,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		(*env)->SetIntField(env, cur, fid_sesstype_players, server->cur_sessTypeUsers);
 
 		/* Save the one string field. */
-		(*env)->SetObjectField(env, cur, fid_hostname, (*env)->NewStringUTF(env, server->hostname)); 
+		(*env)->SetObjectField(env, cur, fid_hostname, (*env)->NewStringUTF(env, server->hostname));
 		if ((*env)->ExceptionOccurred(env)) break;
 
 		/* Then save it as the current element of the array. */
@@ -1188,9 +1187,8 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 	if (n <= 0)
 		return NULL;
 
-
 	/* Create array of null servers */
-	out = (jobjectArray) (*env)->NewObjectArray(env, n, jcANetServer, NULL); 
+	out = (jobjectArray) (*env)->NewObjectArray(env, n, jcANetServer, NULL);
 	if (!out)
 		return NULL;
 
@@ -1214,7 +1212,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		(*env)->SetIntField(env, cur, fid_loss_percent, server->loss_percent);
 
 		/* Save the one string field. */
-		(*env)->SetObjectField(env, cur, fid_hostname, (*env)->NewStringUTF(env, server->hostname)); 
+		(*env)->SetObjectField(env, cur, fid_hostname, (*env)->NewStringUTF(env, server->hostname));
 		if ((*env)->ExceptionOccurred(env)) break;
 
 		/* Then save it as the current element of the array. */
@@ -1245,10 +1243,10 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_setGameServer
 
 	jcANetServer = (*env)->GetObjectClass(env, jServer);
 	if (!jcANetServer) return dp_RES_BAD;
-	fid_hostname = (*env)->GetFieldID(env, jcANetServer, "hostname", "Ljava/lang/String;"); 
+	fid_hostname = (*env)->GetFieldID(env, jcANetServer, "hostname", "Ljava/lang/String;");
 	if (!fid_hostname) return dp_RES_BAD;
 
-	jhostname = (jstring)(*env)->GetObjectField(env, jServer, fid_hostname); 
+	jhostname = (jstring)(*env)->GetObjectField(env, jServer, fid_hostname);
 	if (!jhostname) return dp_RES_BAD;
 
 	if (!getCstring(env, jhostname, hostname, sizeof(hostname)))
@@ -1294,10 +1292,10 @@ void dp_PASCAL enumTransports_cb(const dp_transport_t *path, const comm_driverIn
 		(*et.env)->SetIntField(et.env, cur, et.fidCapabilities, 0xffff & info->capabilities);
 
 		/* Save the two string fields. */
-		(*et.env)->SetObjectField(et.env, cur, et.fidName, (*et.env)->NewStringUTF(et.env, info->name)); 
+		(*et.env)->SetObjectField(et.env, cur, et.fidName, (*et.env)->NewStringUTF(et.env, info->name));
 		if ((*et.env)->ExceptionOccurred(et.env)) return;
 
-		(*et.env)->SetObjectField(et.env, cur, et.fidPath, (*et.env)->NewStringUTF(et.env, path->fname)); 
+		(*et.env)->SetObjectField(et.env, cur, et.fidPath, (*et.env)->NewStringUTF(et.env, path->fname));
 		if ((*et.env)->ExceptionOccurred(et.env)) return;
 
 		/* Then save it as the current element of the array. */
@@ -1330,7 +1328,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumTransports
 	if (!et.constructor_methodID)
 		return NULL;
 
-	et.out = (jobjectArray) (*env)->NewObjectArray(env, et.n, hANetTransport, NULL); 
+	et.out = (jobjectArray) (*env)->NewObjectArray(env, et.n, hANetTransport, NULL);
 	et.env = env;
 	et.hANetTransport = hANetTransport;
 	et.n = 0;
@@ -1339,27 +1337,25 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumTransports
 		return NULL;
 
 	/* First, get the field id's. */
-	et.fidName = (*env)->GetFieldID(env, hANetTransport, "name", "Ljava/lang/String;"); 
+	et.fidName = (*env)->GetFieldID(env, hANetTransport, "name", "Ljava/lang/String;");
 	if (!et.fidName) return NULL;
 
-	et.fidPath = (*env)->GetFieldID(env, hANetTransport, "path", "Ljava/lang/String;"); 
+	et.fidPath = (*env)->GetFieldID(env, hANetTransport, "path", "Ljava/lang/String;");
 	if (!et.fidPath) return NULL;
 
-	et.fidNeeds = (*env)->GetFieldID(env, hANetTransport, "needs", "I"); 
+	et.fidNeeds = (*env)->GetFieldID(env, hANetTransport, "needs", "I");
 	if (!et.fidNeeds) return NULL;
 
-	et.fidCapabilities = (*env)->GetFieldID(env, hANetTransport, "capabilities", "I"); 
+	et.fidCapabilities = (*env)->GetFieldID(env, hANetTransport, "capabilities", "I");
 	if (!et.fidCapabilities) return NULL;
 
-
-	/* Then have dp call the callback function once for each transport. 
+	/* Then have dp call the callback function once for each transport.
 	 * The callback will fill the output array.
 	 */
 	err = dpEnumTransports(&dll, enumTransports_cb, NULL);
 
 	return et.out;
 }
-
 
 /*------------------ Activision.ANet.InstalledApp --------------------------*/
 
@@ -1440,8 +1436,7 @@ static int InstalledApp_init(JNIEnv *env)
 	return TRUE;
 }
 
-
-/* Convert a Java ANet.InstalledApp to a C dp_appParam_t. 
+/* Convert a Java ANet.InstalledApp to a C dp_appParam_t.
  * appParam character buffers must have size MAX_PATH.
  * Returns pointer to appParam on success, NULL on failure.
  */
@@ -1480,7 +1475,7 @@ static dp_appParam_t *InstalledApp_JavatoC(JNIEnv *env, jobject cur, dp_appParam
 	return appParam;
 }
 
-/* Convert a C dp_appParam_t to a Java ANet.InstalledApp. 
+/* Convert a C dp_appParam_t to a Java ANet.InstalledApp.
  * Returns jobject on success, NULL on failure.
  */
 static jobject InstalledApp_CtoJava(JNIEnv *env, jclass jclApp, dp_appParam_t *param)
@@ -1670,7 +1665,7 @@ JNIEXPORT jboolean JNICALL Java_Activision_ANet_00024InstalledApp_downloadPatch
 	} else {
 		DPRINT(("downloadPatch: err: dpDownloadUpdate returns %d\n", err));
 	}
-	
+
 	return FALSE;
 }
 
@@ -1725,36 +1720,36 @@ static jclass Session_init(JNIEnv *env)
 		return NULL;
 
 	/* Get field id's.  Later, perhaps we can cache these. */
-	sfid.name       = (*env)->GetFieldID(env, hcSession, "name", "Ljava/lang/String;"); 
+	sfid.name       = (*env)->GetFieldID(env, hcSession, "name", "Ljava/lang/String;");
 	if (!sfid.name) return NULL;
-	sfid.password   = (*env)->GetFieldID(env, hcSession, "password", "Ljava/lang/String;"); 
+	sfid.password   = (*env)->GetFieldID(env, hcSession, "password", "Ljava/lang/String;");
 	if (!sfid.password) return NULL;
 
-	sfid.type       = (*env)->GetFieldID(env, hcSession, "type", "I"); 
+	sfid.type       = (*env)->GetFieldID(env, hcSession, "type", "I");
 	if (!sfid.type) return NULL;
-	sfid.maxPlayers = (*env)->GetFieldID(env, hcSession, "maxPlayers", "I"); 
+	sfid.maxPlayers = (*env)->GetFieldID(env, hcSession, "maxPlayers", "I");
 	if (!sfid.maxPlayers) return NULL;
-	sfid.curPlayers = (*env)->GetFieldID(env, hcSession, "curPlayers", "I"); 
+	sfid.curPlayers = (*env)->GetFieldID(env, hcSession, "curPlayers", "I");
 	if (!sfid.curPlayers) return NULL;
-	sfid.karma      = (*env)->GetFieldID(env, hcSession, "karma", "I"); 
+	sfid.karma      = (*env)->GetFieldID(env, hcSession, "karma", "I");
 	if (!sfid.karma) return NULL;
-	sfid.userField  = (*env)->GetFieldID(env, hcSession, "userField", "[B"); 
+	sfid.userField  = (*env)->GetFieldID(env, hcSession, "userField", "[B");
 	if (!sfid.userField) return NULL;
-	sfid.dwUser1    = (*env)->GetFieldID(env, hcSession, "dwUser1", "I"); 
+	sfid.dwUser1    = (*env)->GetFieldID(env, hcSession, "dwUser1", "I");
 	if (!sfid.dwUser1) return NULL;
-	sfid.flags      = (*env)->GetFieldID(env, hcSession, "flags", "I"); 
+	sfid.flags      = (*env)->GetFieldID(env, hcSession, "flags", "I");
 	if (!sfid.flags) return NULL;
-	sfid.adrMaster  = (*env)->GetFieldID(env, hcSession, "adrMaster", "[B"); 
+	sfid.adrMaster  = (*env)->GetFieldID(env, hcSession, "adrMaster", "[B");
 	if (!sfid.adrMaster) return NULL;
 #ifdef dp_ANET2
-	sfid.reserved2  = (*env)->GetFieldID(env, hcSession, "reserved2", "[B"); 
+	sfid.reserved2  = (*env)->GetFieldID(env, hcSession, "reserved2", "[B");
 	if (!sfid.reserved2) return NULL;
 #endif
 
 	return hcSession;
 }
 
-/* Convert a C dp_session_t to a Java ANet.Session. 
+/* Convert a C dp_session_t to a Java ANet.Session.
  * Returns jobject on success, NULL on failure.
  */
 static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
@@ -1780,12 +1775,12 @@ static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
 	 * right.  It seems to be so for passwords, anyway.
 	 */
 	s->sessionName[sizeof(s->sessionName)-1] = 0;
-	(*env)->SetObjectField(env, cur, sfid.name, (*env)->NewStringUTF(env, s->sessionName)); 
+	(*env)->SetObjectField(env, cur, sfid.name, (*env)->NewStringUTF(env, s->sessionName));
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	s->szPassword[sizeof(s->szPassword)-1] = 0;
 	szPassword = s->szPassword;
-	(*env)->SetObjectField(env, cur, sfid.password, (*env)->NewStringUTF(env, szPassword)); 
+	(*env)->SetObjectField(env, cur, sfid.password, (*env)->NewStringUTF(env, szPassword));
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	/* Save the byte array fields. */
@@ -1794,7 +1789,7 @@ static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->szUserField), s->szUserField);
 	if (checkExc(env))
 		return NULL;
-	(*env)->SetObjectField(env, cur, sfid.userField, arr); 
+	(*env)->SetObjectField(env, cur, sfid.userField, arr);
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	arr = (*env)->NewByteArray(env, sizeof(s->adrMaster));
@@ -1802,7 +1797,7 @@ static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->adrMaster), s->adrMaster);
 	if (checkExc(env))
 		return NULL;
-	(*env)->SetObjectField(env, cur, sfid.adrMaster, arr); 
+	(*env)->SetObjectField(env, cur, sfid.adrMaster, arr);
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 #ifdef dp_ANET2
@@ -1811,14 +1806,14 @@ static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->reserved2), s->reserved2);
 	if (checkExc(env))
 		return NULL;
-	(*env)->SetObjectField(env, cur, sfid.reserved2, arr); 
+	(*env)->SetObjectField(env, cur, sfid.reserved2, arr);
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 #endif
 
 	return cur;
 }
 
-/* Convert a Java ANet.Session to a C dp_session_t. 
+/* Convert a Java ANet.Session to a C dp_session_t.
  * Returns pointer to buf on success, NULL on failure.
  */
 static dp_session_t *Session_JavatoC(JNIEnv *env, jobject cur, dp_session_t *s)
@@ -1893,7 +1888,7 @@ int dp_PASCAL enumSessions_cb(dp_session_t *sess, long *pTimeout, long flags, vo
     JNIEnv *callback_env = (JNIEnv *)context;
 	if (!myDP || !sess) return 0;
 
-	if ((es.n < es.nSessions) && callback_env) { 
+	if ((es.n < es.nSessions) && callback_env) {
 		jobject cur;
 
 		/* Create the current array element */
@@ -2001,7 +1996,6 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_setSessionDesc
     return dpSetSessionDesc(myDP, &sess, 0L);
 }
 
-
 /*
  * Class:     Activision_ANet
  * Method:    enableNewPlayers
@@ -2013,7 +2007,6 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_enableNewPlayers
     return dpEnableNewPlayers(myDP, enable);
 }
 
-
 /** Context for a join_sess callback */
 typedef struct s_openContext {
     JNIEnv *env;
@@ -2022,11 +2015,10 @@ typedef struct s_openContext {
 
 t_openContext context;
 
-
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when joining a session.
 -------------------------------------------------------------------------*/
-static int dp_PASCAL join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context) 
+static int dp_PASCAL join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context)
 {
 	jmethodID cb_methodID ;
 	jobject gjcb = ((t_openContext *)context)->gjcb;
@@ -2045,7 +2037,7 @@ PRINTF(("Ab:\n"));
 		return FALSE;
 
 PRINTF(("Ac:\n"));
-	hcSessionListener = (*callback_env)->GetObjectClass(callback_env, gjcb); 
+	hcSessionListener = (*callback_env)->GetObjectClass(callback_env, gjcb);
 	if (!hcSessionListener ) return dp_RES_BAD;
 
 PRINTF(("Ad:\n"));
@@ -2142,7 +2134,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_closeSession
   (JNIEnv *env, jobject jANet)
 {
 	dp_result_t err;
-	
+
 	/*callback_env = env;*/
 	err = dpClose(myDP);
 	/*callback_env = NULL;*/
@@ -2192,18 +2184,18 @@ static jclass Player_init(JNIEnv *env)
 		return NULL;
 
 	/* Get field id's.  Later, perhaps we can cache these. */
-	pfid.name       = (*env)->GetFieldID(env, hcPlayer, "name", "Ljava/lang/String;"); 
+	pfid.name       = (*env)->GetFieldID(env, hcPlayer, "name", "Ljava/lang/String;");
 	if (!pfid.name) return NULL;
 
-	pfid.id         = (*env)->GetFieldID(env, hcPlayer, "id", "I"); 
+	pfid.id         = (*env)->GetFieldID(env, hcPlayer, "id", "I");
 	if (!pfid.id) return NULL;
-	pfid.local      = (*env)->GetFieldID(env, hcPlayer, "local", "Z"); 
+	pfid.local      = (*env)->GetFieldID(env, hcPlayer, "local", "Z");
 	if (!pfid.local) return NULL;
 
 	return hcPlayer;
 }
 
-/* Convert a C dp_playerId_t to a Java ANet.Player. 
+/* Convert a C dp_playerId_t to a Java ANet.Player.
  * Returns jobject on success, NULL on failure.
  */
 static jobject Player_CtoJava(JNIEnv *env, jclass hcPlayer, dp_playerId_t *s)
@@ -2221,13 +2213,13 @@ static jobject Player_CtoJava(JNIEnv *env, jclass hcPlayer, dp_playerId_t *s)
 	(*env)->SetIntField(env, cur, pfid.local, memcmp(s->adr, myDP->dpio->myAdr, myDP->dpio->myAdrLen) ? FALSE : TRUE);
 
 	/* Save the string field. */
-	(*env)->SetObjectField(env, cur, pfid.name, (*env)->NewStringUTF(env, s->name)); 
+	(*env)->SetObjectField(env, cur, pfid.name, (*env)->NewStringUTF(env, s->name));
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	return cur;
 }
 
-/* Convert a Java ANet.Player to a C dp_playerId_t. 
+/* Convert a Java ANet.Player to a C dp_playerId_t.
  * Returns pointer to buf on success, NULL on failure.
  */
 static dp_playerId_t *Player_JavatoC(JNIEnv *env, jobject cur, dp_playerId_t *s)
@@ -2266,7 +2258,7 @@ void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, long flags, void *cont
 
 		/* Create the current array element */
 		cur = (*callback_env)->NewObject(callback_env, ep.hcPlayer, pfid.hmPlayerConstructor);
-		if (!cur) 
+		if (!cur)
 			return;
 
 		/* Save the int fields. */
@@ -2275,10 +2267,10 @@ void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, long flags, void *cont
                     (jboolean) ((flags & dp_EPC_FLAGS_LOCAL) == dp_EPC_FLAGS_LOCAL));
 
 		/* Save the string field. */
-		(*callback_env)->SetObjectField(callback_env, cur, pfid.name, (*callback_env)->NewStringUTF(callback_env, name)); 
+		(*callback_env)->SetObjectField(callback_env, cur, pfid.name, (*callback_env)->NewStringUTF(callback_env, name));
 		if ((*callback_env)->ExceptionOccurred(callback_env))
             return;
-	
+
 		/* Then save it as the current element of the array. */
 		(*callback_env)->SetObjectArrayElement(callback_env, ep.out, ep.n, cur);
 		ep.n++;
@@ -2307,7 +2299,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumPlayers
 	ep.nPlayers = dpNumPlayers(myDP);
 
 	/* Create the result array */
-	ep.out = (jobjectArray) (*env)->NewObjectArray(env, ep.nPlayers, ep.hcPlayer, NULL); 
+	ep.out = (jobjectArray) (*env)->NewObjectArray(env, ep.nPlayers, ep.hcPlayer, NULL);
 	if (!ep.out)
 		return NULL;
 
@@ -2349,7 +2341,7 @@ PRINTF(("Bb:\n"));
 
 PRINTF(("Bc:\n"));
 	/* Get the id of the field within the class... */
-	jfid_listener = (*callback_env)->GetFieldID(callback_env, hcSession, "listener", "LActivision/ANetPlayerListener;"); 
+	jfid_listener = (*callback_env)->GetFieldID(callback_env, hcSession, "listener", "LActivision/ANetPlayerListener;");
 	if (!jfid_listener) return dp_RES_BUG;
 PRINTF(("Bd:\n"));
 
@@ -2360,7 +2352,7 @@ PRINTF(("Bd:\n"));
 PRINTF(("Be:\n"));
 
 	/* Get the class of the callback object itself */
-	hcPlayerListener = (*callback_env)->GetObjectClass(callback_env, jlistener); 
+	hcPlayerListener = (*callback_env)->GetObjectClass(callback_env, jlistener);
 	if (!hcPlayerListener ) return dp_RES_BAD;
 PRINTF(("Bf:\n"));
 
@@ -2509,7 +2501,6 @@ PRINTF(("DP 4\n"));
 	return info.dwLatency;
 }
 
-
 /*
  * Class:     Activision_ANet
  * Method:    writeObject
@@ -2582,19 +2573,19 @@ static jclass Packet_init(JNIEnv *env)
 		return NULL;
 
 	/* Get field id's.  Later, perhaps we can cache these. */
-	qfid.body       = (*env)->GetFieldID(env, hcPacket, "body", "[B"); 
+	qfid.body       = (*env)->GetFieldID(env, hcPacket, "body", "[B");
 	if (!qfid.body) return NULL;
-	qfid.src       = (*env)->GetFieldID(env, hcPacket, "src", "I"); 
+	qfid.src       = (*env)->GetFieldID(env, hcPacket, "src", "I");
 	if (!qfid.src) return NULL;
-	qfid.dest       = (*env)->GetFieldID(env, hcPacket, "dest", "I"); 
+	qfid.dest       = (*env)->GetFieldID(env, hcPacket, "dest", "I");
 	if (!qfid.dest) return NULL;
-	qfid.err       = (*env)->GetFieldID(env, hcPacket, "err", "I"); 
+	qfid.err       = (*env)->GetFieldID(env, hcPacket, "err", "I");
 	if (!qfid.err) return NULL;
 
 	return hcPacket;
 }
 
-/* Convert a C dp_packet_t to a Java ANet.Packet. 
+/* Convert a C dp_packet_t to a Java ANet.Packet.
  * Returns jobject on success, NULL on failure.
  */
 static jobject Packet_CtoJava(JNIEnv *env, jclass hcPacket, dp_packet_t *pkt)
@@ -2618,13 +2609,13 @@ static jobject Packet_CtoJava(JNIEnv *env, jclass hcPacket, dp_packet_t *pkt)
 	(*env)->SetByteArrayRegion(env, arr, 0, pkt->len, pkt->body);
 	if (checkExc(env))
 		return NULL;
-	(*env)->SetObjectField(env, cur, qfid.body, arr); 
+	(*env)->SetObjectField(env, cur, qfid.body, arr);
 	if ((*env)->ExceptionOccurred(env)) return NULL;
 
 	return cur;
 }
 
-/* Convert a Java ANet.Packet to a C packet. 
+/* Convert a Java ANet.Packet to a C packet.
  * Returns dp_RES_OK on success.
  */
 static int Packet_JavatoC(JNIEnv *env, jobject cur, dp_packet_t *pkt)
@@ -2711,7 +2702,7 @@ PRINTF(("receivePackets: in\n"));
 		return NULL;
 
 	/* Create the result array */
-	out = (jobjectArray) (*env)->NewObjectArray(env, n, hcPacket, NULL); 
+	out = (jobjectArray) (*env)->NewObjectArray(env, n, hcPacket, NULL);
 	if (!out)
 		return NULL;
 

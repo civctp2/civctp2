@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -40,16 +40,14 @@
 
 class aui_Static;
 
-
 struct ctp2_HyperLink {
-	aui_Static *m_static;	
+	aui_Static *m_static;
 	sint32 m_db;
 	sint32 m_index;
 	sint32 m_frame;
-	COLORREF m_selectColor;		
+	COLORREF m_selectColor;
 	COLORREF m_oldColor;
 };
-
 
 enum CTP2_HYPERLINK_ACTION
 {
@@ -58,11 +56,10 @@ enum CTP2_HYPERLINK_ACTION
 	CTP2_HYPERLINK_ACTION_LAST
 };
 
-
 class ctp2_HyperTextBox : public aui_HyperTextBox, public PatternBase
 {
 public:
-	
+
 	ctp2_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -87,7 +84,7 @@ public:
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
-	
+
 	ctp2_HyperLink *GetSelectedHyperLink( void ) { return m_selectedHyperLink; }
 
 protected:
@@ -102,17 +99,16 @@ protected:
 
 	virtual AUI_ERRCODE AddHyperStatics( const MBCHAR *hyperText );
 
-	tech_WLList<ctp2_HyperLink *>	*m_hyperLinkList;	
+	tech_WLList<ctp2_HyperLink *>	*m_hyperLinkList;
 
 	ctp2_HyperLink *m_selectedHyperLink;
-
 
 	sint32 m_bevelWidth;
 
 private:
 	void FormatText
 	(
-		MBCHAR const *	a_Text, 
+		MBCHAR const *	a_Text,
 		MBCHAR const *	a_TextEnd,
 		sint32			a_Database,
 		sint32			a_Index,
@@ -121,4 +117,4 @@ private:
 
 };
 
-#endif 
+#endif

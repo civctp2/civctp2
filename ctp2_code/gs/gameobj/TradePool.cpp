@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TradePool.h"
 #include "citylayer.h"
@@ -45,7 +35,7 @@ TradePool::~TradePool()
 	delete m_all_routes;
 }
 
-TradeRoute TradePool::Create(Unit sourceCity, 
+TradeRoute TradePool::Create(Unit sourceCity,
 							 Unit destCity,
 							 PLAYER_INDEX owner,
 							 ROUTE_TYPE sType,
@@ -55,13 +45,12 @@ TradeRoute TradePool::Create(Unit sourceCity,
 {
 	TradeRouteData* newData;
 	TradeRoute newRoute(NewKey(k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE));
-	
-	newData = new TradeRouteData(newRoute, sourceCity, destCity, owner, 
+
+	newData = new TradeRouteData(newRoute, sourceCity, destCity, owner,
 								 sType, sResource, paying_for,
 								 gold_in_return);
 	if(!newData->IsValid()) {
-		
-		
+
 		delete newData;
 		return TradeRoute();
 	}
@@ -84,7 +73,6 @@ void TradePool::Remove(TradeRoute route)
 }
 
 
-
 TradeRoute TradePool::GetRouteIndex(sint32 index)
 {
 	Assert(index >= 0 && index < m_all_routes->Num());
@@ -96,33 +84,32 @@ void TradePool::Draw(aui_Surface* surface)
 {
 	if(!g_theProfileDB->GetShowTradeRoutes())
 		return;
-	
+
 	sint32 num = m_all_routes->Num();
 
     for (sint32 i = 0; i < num; i++) {
 		TradeRoute route = m_all_routes->Access(i);
 
-		
-		DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(), 
+		DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
 			g_colorSet->GetPlayerColor(route.GetOwner()),
 			(uint16)route.GetOutlineColor());
-		
+
 #if 0
-		
+
 		if (!m_all_routes->Access(i).IsSelectedPathSame())
 		{
-			
+
 			if (m_all_routes->Access(i).GetPathSelectionState() == k_TRADEROUTE_SELECTED_PATH)
 			{
-				
-				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(), 
+
+				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_SELECT_1),
 					g_colorSet->GetColor(COLOR_BLACK));
-			} 
-			else 
+			}
+			else
 			{
-				
-				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(), 
+
+				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_RED),
 					g_colorSet->GetColor(COLOR_BLACK));
 			}
@@ -167,7 +154,7 @@ void TradePool::Serialize(CivArchive &archive)
 		m_all_routes->Serialize(archive);
 	}
 }
-	
+
 void TradePool::RecreateActors()
 {
 	sint32 i;
@@ -183,7 +170,7 @@ sint32 TradePool::GetGoldValue(sint32 resource, sint32 n)
 #if 0
 	sint32 terrain = resource % k_BASE_TERRAIN_TYPES;
  	sint32 good = resource / k_BASE_TERRAIN_TYPES;
- 	sint32 gold = (n+1) * 
+ 	sint32 gold = (n+1) *
 		g_theTerrainDB->Get(terrain)->GetGood(good)->GetGoodGoldValue();
 	return gold;
 #endif
@@ -191,7 +178,7 @@ sint32 TradePool::GetGoldValue(sint32 resource, sint32 n)
 
 sint32 TradePool::GetSingleGoodValue(sint32 resource, sint32 nth_good)
 {
-	return (((nth_good * (nth_good + 1) / 2) 
+	return (((nth_good * (nth_good + 1) / 2)
 			- ((nth_good-1) * (nth_good) / 2 ))
 			* g_theResourceDB->Get(resource)->GetGold() );
 }
@@ -212,8 +199,8 @@ void TradePool::BreakOffTrade(PLAYER_INDEX attack_owner,
 			route.GetDestination().GetOwner() == defense_owner) ||
 		   (route.GetDestination().GetOwner() == attack_owner &&
 			route.GetSource().GetOwner() == defense_owner)) {
-			
-			g_gevManager->Pause(); 
+
+			g_gevManager->Pause();
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillTradeRoute,
 				GEA_TradeRoute, route.m_id,
 				GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,

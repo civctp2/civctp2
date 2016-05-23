@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Moved the autosave file generation to just before the StartMovePhase 
+// - Moved the autosave file generation to just before the StartMovePhase
 //   event, to prevent losing the advance that just was completed.
 // - Corrected GrantAdvanceEvent input handling.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
@@ -58,7 +58,6 @@
 #include "EndGame.h"
 #include "TurnCnt.h"
 #include "Score.h"
-
 
 #include "profileDB.h"
 #include "civapp.h"
@@ -144,14 +143,12 @@ STDEHANDLER(PeaceMovementEvent)
 	                                                        *g_player[player]->m_all_armies,
 	                                                        *g_player[player]->m_all_cities);
 
-	
-	
+
 	if(p->m_assasinationTimer > 0) {
 		p->m_assasinationTimer--;
 		if(p->m_assasinationTimer <= 0)
 			p->m_assasinationModifier = 0;
 	}
-
 
 	return GEV_HD_Continue;
 }
@@ -179,7 +176,6 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	p->m_gold->SetSavings();
 
-
 	p->m_readiness->BeginTurn(p->m_government_type);
 
 	if(p->m_capitol && g_theUnitPool->IsValid(p->m_capitol->m_id)) {
@@ -192,7 +188,7 @@ STDEHANDLER(BeginTurnAllCitiesEvent)
 
 	if(g_player[player]->GetGaiaController()->CanStartCountdown()) {
 		SlicSegment *       seg  = g_slicEngine->GetSegment("GCReadyToActivateUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			SlicObject *    so   = new SlicObject("GCReadyToActivateUs");
 			so->AddPlayer(player);
@@ -299,7 +295,6 @@ STDEHANDLER(BeginTurnGovernmentEvent)
 		p->m_changed_government_this_turn = FALSE;
 	}
 
-	
 	g_slicEngine->RunPlayerTriggers(player);
 
 	return GEV_HD_Continue;
@@ -312,7 +307,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 		return GEV_HD_Continue;
 
 	Player *p = g_player[player];
-	
+
 	bool atPeace = true;
 
 	for(sint32 i = 1; i < k_MAX_PLAYERS; i++)
@@ -397,7 +392,7 @@ STDEHANDLER(CreateUnitEvent)
 	sint32      pl;
 
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
-	args->GetCity(0, homeCity); 
+	args->GetCity(0, homeCity);
 	if(!args->GetInt(0, utype)) return GEV_HD_Continue;
 	if(!args->GetInt(1, cause)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
@@ -419,7 +414,7 @@ STDEHANDLER(SettleEvent)
 {
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
-	
+
 	if(g_player[a.GetOwner()])
 	{
 		if(g_player[a.GetOwner()]->Settle(a))
@@ -435,7 +430,7 @@ STDEHANDLER(SettleInCityEvent)
 {
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
-	
+
 	if(g_player[a.GetOwner()])
 	{
 		if(g_player[a.GetOwner()]->SettleInCity(a))
@@ -510,11 +505,10 @@ STDEHANDLER(CreateImprovementEvent)
 	if(!args->GetInt(0, imptype)) return GEV_HD_Continue;
 
 	g_player[player]->CreateImprovement(imptype, pos, 0);
-	
 
 	if(g_player[player] && g_player[player]->GetGaiaController()->HasMinTowersBuilt()) {
-		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");	
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		SlicSegment *	seg = g_slicEngine->GetSegment("GCMinObelisksReachedUs");
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			SlicObject *	so = new SlicObject("GCMinObelisksReachedUs");
 			so->AddRecipient(player);
@@ -582,7 +576,7 @@ STDEHANDLER(TradeBidEvent)
 STDEHANDLER(CreatedArmyEvent)
 {
 	// Post army creation event doesn't do anything if you call it from slic.
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -674,20 +668,17 @@ STDEHANDLER(StartMovePhaseEvent)
 	}
 
 	if(!g_network.IsClient()) {
-		
 
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AIFinishBeginTurn,
 		                       GEA_Player, player,
 		                       GEA_End);
 	}
 
-	
 
 #ifndef _BFR_
 	gslog_LogPlayerStats(g_selected_item->GetCurPlayer());
 
-	
 	Diplomat::GetDiplomat(player).LogDebugStatus(1);
 #endif
 
@@ -713,22 +704,20 @@ STDEHANDLER(AIFinishBeginTurnEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(GiveMapEvent)
 {
 	sint32 from_player;
 	sint32 to_player;
-	if(!args->GetPlayer(0, from_player)) 
-		return GEV_HD_Continue;	
-	if(!args->GetPlayer(1, to_player)) 
-		return GEV_HD_Continue;	
+	if(!args->GetPlayer(0, from_player))
+		return GEV_HD_Continue;
+	if(!args->GetPlayer(1, to_player))
+		return GEV_HD_Continue;
 
 	Assert(g_player[from_player] != NULL);
 	g_player[from_player]->GiveMap(to_player);
 
 	return GEV_HD_Continue;
 }
-
 
 
 STDEHANDLER(GiveCityEvent)
@@ -777,7 +766,6 @@ void playerevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_ContactMade,           GEV_PRI_Primary, &s_ContactMadeEvent);
 
-	
 	g_gevManager->AddCallback(GEV_WormholeTurn,          GEV_PRI_Primary, &s_WormholeEvent);
 	g_gevManager->AddCallback(GEV_PlayerPatience,        GEV_PRI_Primary, &s_PatienceEvent);
 	g_gevManager->AddCallback(GEV_PeaceMovement,         GEV_PRI_Primary, &s_PeaceMovementEvent);
@@ -792,7 +780,6 @@ void playerevent_Initialize()
 	g_gevManager->AddCallback(GEV_BeginTurnEndGame,      GEV_PRI_Primary, &s_BeginTurnEndGameEvent);
 	g_gevManager->AddCallback(GEV_BeginTurnGovernment,   GEV_PRI_Primary, &s_BeginTurnGovernmentEvent);
 	g_gevManager->AddCallback(GEV_FinishBeginTurn,       GEV_PRI_Primary, &s_FinishBeginTurnEvent);
-	
 
 	g_gevManager->AddCallback(GEV_CreateUnit,            GEV_PRI_Primary, &s_CreateUnitEvent);
 

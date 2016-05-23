@@ -1,6 +1,5 @@
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
 
 #if (DIRECTINPUT_VERSION >= 0x0500)
@@ -10,10 +9,8 @@
 #include "aui_directjoystick.h"
 
 
-
 BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID data );
 BOOL CALLBACK enumJoystickObjectsCallback( LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID data );
-
 
 aui_DirectJoystick::aui_DirectJoystick(
 	AUI_ERRCODE *retval,
@@ -32,7 +29,6 @@ aui_DirectJoystick::aui_DirectJoystick(
 	*retval = CreateDirectJoystick();
 }
 
-
 aui_DirectJoystick::~aui_DirectJoystick()
 {
 	if (m_lpDI2Joystick)
@@ -42,7 +38,6 @@ aui_DirectJoystick::~aui_DirectJoystick()
 	}
 }
 
-
 AUI_ERRCODE aui_DirectJoystick::CreateDirectJoystick( void )
 {
 	HRESULT hr;
@@ -50,13 +45,11 @@ AUI_ERRCODE aui_DirectJoystick::CreateDirectJoystick( void )
 	hr = m_lpdi->EnumDevices( DIDEVTYPE_JOYSTICK, (LPDIENUMDEVICESCALLBACK)enumMyJoystickCallback, this, DIEDFL_ATTACHEDONLY );
 	if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
 
-	
 	if ( m_lpdid )
 	{
 	hr = m_lpdid->QueryInterface( IID_IDirectInputDevice2, (LPVOID *)&m_lpDI2Joystick );
 	if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
 
-	
 	m_lpdid->Acquire();
 	}
 	else
@@ -65,18 +58,15 @@ AUI_ERRCODE aui_DirectJoystick::CreateDirectJoystick( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 {
 	BOOL bSame = TRUE;
 
 	if ( !m_lpdid ) return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 
-	
-	
+
 	m_data.time = GetTickCount();
 
-	
 	for ( sint32 numInputs = 2; numInputs; numInputs-- )
 	{
 		DIJOYSTATE js;
@@ -84,7 +74,6 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 
         HRESULT hr = m_lpDI2Joystick->Poll();
 
-		
 		hr = m_lpdid->GetDeviceState(
 			sizeof( DIJOYSTATE ),
 			&js);
@@ -114,8 +103,7 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 			return AUI_ERRCODE_GETDEVICEDATAFAILED;
 		}
 
-		
-		
+
 		uint32 key = AUI_JOYSTICK_X_AXIS;
 
 		if ( ( abs(js.lX - m_data.lX) > (int ( m_lMax / 2 ) )) )
@@ -130,11 +118,11 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 			m_data.key = key;
 			bSame = FALSE;
 		}
-	
+
 		for ( int i = 0 ; i < 4 && bSame; i++ )
 		{
 			if ( js.rgdwPOV[i] != m_data.POV[i] )
-			{	
+			{
 				switch ( js.rgdwPOV[i] )
 				{
 				case 0:
@@ -168,7 +156,6 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 			}
 		}
 
-		
 		if ( !bSame )
 		{
 			m_data.lX = js.lX;
@@ -195,10 +182,10 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 
 BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID data )
 {
-	DIPROPRANGE				diprg; 
+	DIPROPRANGE				diprg;
 	LPDIRECTINPUTDEVICE		lpTempJoystick;
 	aui_DirectJoystick *    joy = (aui_DirectJoystick *) data;
-	
+
 	if( DI_OK != (joy->DI())->CreateDevice( lpDeviceInst->guidInstance, &lpTempJoystick, NULL ) )
 		return( DIENUM_CONTINUE );
 
@@ -214,36 +201,35 @@ BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID da
 		return( DIENUM_CONTINUE );
 	}
 
-	
-	
-	diprg.diph.dwSize = sizeof(DIPROPRANGE); 
-	diprg.diph.dwHeaderSize = sizeof(DIPROPHEADER); 
-	diprg.diph.dwHow = DIPH_BYOFFSET; 
-	diprg.lMin = joy->GetLowerMin(); 
-	diprg.lMax = joy->GetUpperMax(); 
 
-	diprg.diph.dwObj = DIJOFS_X; 
-	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
-	
-	diprg.diph.dwObj = DIJOFS_Y; 
-	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
-	
-	diprg.diph.dwObj = DIJOFS_Z; 
-	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
-	
-	diprg.diph.dwObj = DIJOFS_RX; 
-	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
-	
-	diprg.diph.dwObj = DIJOFS_RY; 
-	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
-	
-	diprg.diph.dwObj = DIJOFS_RZ; 
+	diprg.diph.dwSize = sizeof(DIPROPRANGE);
+	diprg.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+	diprg.diph.dwHow = DIPH_BYOFFSET;
+	diprg.lMin = joy->GetLowerMin();
+	diprg.lMax = joy->GetUpperMax();
+
+	diprg.diph.dwObj = DIJOFS_X;
 	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
 
-	diprg.diph.dwObj = DIJOFS_SLIDER(0); 
+	diprg.diph.dwObj = DIJOFS_Y;
 	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
 
- 	diprg.diph.dwObj = DIJOFS_SLIDER(1); 
+	diprg.diph.dwObj = DIJOFS_Z;
+	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
+
+	diprg.diph.dwObj = DIJOFS_RX;
+	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
+
+	diprg.diph.dwObj = DIJOFS_RY;
+	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
+
+	diprg.diph.dwObj = DIJOFS_RZ;
+	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
+
+	diprg.diph.dwObj = DIJOFS_SLIDER(0);
+	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
+
+ 	diprg.diph.dwObj = DIJOFS_SLIDER(1);
 	lpTempJoystick->SetProperty( DIPROP_RANGE, &diprg.diph );
 
 	joy->SetDevice( lpTempJoystick );
@@ -253,8 +239,6 @@ BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID da
 }
 
 
+#endif
 
-#endif 
-
-#endif 
-
+#endif

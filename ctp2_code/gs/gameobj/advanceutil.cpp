@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "AdvanceRecord.h"
 #include "advanceutil.h"

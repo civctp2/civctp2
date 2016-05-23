@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Sound added by Martin Gühmann
 // - Crash fixed when there is no sound defined (for mod).
-// - Moved network handling from TerrainImprovementData constructor to prevent 
+// - Moved network handling from TerrainImprovementData constructor to prevent
 //   reporting the temporary when completing the tile improvement.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "SelItem.h"
 #include "network.h"                    // g_network
 
-TerrainImprovementPool::TerrainImprovementPool() 
+TerrainImprovementPool::TerrainImprovementPool()
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 {
 }
@@ -66,7 +66,7 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 // Parameters : owner				: owner of the terrain improvement
 //				point				: map location to improve
 //				type				: type of improvement
-//				extraData			: ? 
+//				extraData			: ?
 //
 // Globals    : g_theTerrainImprovementDB
 //				g_player
@@ -90,7 +90,7 @@ TerrainImprovementPool::Create
     sint32 extraData
 )
 {
-	TerrainImprovementRecord const *	dbTerrainImprovement	= 
+	TerrainImprovementRecord const *	dbTerrainImprovement	=
 		g_theTerrainImprovementDB->Get(type);
 
 	if((!dbTerrainImprovement) ||
@@ -99,12 +99,12 @@ TerrainImprovementPool::Create
 	    )
 	   )
 	{
-		// Invalid or inapplicable improvement 
+		// Invalid or inapplicable improvement
 		return TerrainImprovement();
 	}
 
 	// Obscure the improvement for all but the owner
-	for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+	for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 	{
 		if (g_player[i] && (i != owner))
 		{
@@ -114,12 +114,12 @@ TerrainImprovementPool::Create
 
 	// Add the new improvement to the map
 	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
-	TerrainImprovementData *	newData = 
+	TerrainImprovementData *	newData =
 		new TerrainImprovementData(newImprovement, owner, point, type, extraData);
 
-	if (g_network.IsActive() && g_network.IsHost()) 
+	if (g_network.IsActive() && g_network.IsHost())
 	{
-		g_network.Enqueue(newData); 
+		g_network.Enqueue(newData);
 	}
 
 	Insert(newData);
@@ -143,7 +143,7 @@ TerrainImprovementPool::Create
 	return newImprovement;
 }
 
-void 
+void
 TerrainImprovementPool::Serialize(CivArchive &archive)
 {
 	TerrainImprovementData *data;

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ enum SFN_ERROR;
 class SlicFrame
 {
 private:
-	
+
 	sint32  m_offset;
 	SLIC_RT m_error;
 	sint32  m_argStackPtr;

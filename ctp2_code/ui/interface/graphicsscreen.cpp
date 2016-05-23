@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "graphicsresscreen.h"
 
@@ -34,7 +32,6 @@ static C3Slider		*s_bright					= NULL,
 					*s_color					= NULL,
 					*s_contrast					= NULL;
 
-
 static c3_Static	*s_unitSpeedN				= NULL;
 static C3Slider		*s_unitSpeed				= NULL;
 
@@ -44,18 +41,15 @@ static c3_Static	*s_brightN					= NULL,
 					*s_contrastN				= NULL;
 static aui_Switch	*s_walk						= NULL,
 
-
 					*s_trade					= NULL,
 					*s_wonder					= NULL,
-
 
 					*s_politicalBorders			= NULL,
 					*s_tradeRoutes				= NULL,
 
-
 					*s_cityInfluence			= NULL,
 					*s_grid						= NULL,
-							
+
 					*s_cityNames				= NULL,
 					*s_civflags					= NULL,
 					*s_smooth					= NULL,
@@ -64,7 +58,6 @@ static aui_Switch	*s_walk						= NULL,
 					*s_cityProd					= NULL,
 
 					*s_NULL						= NULL;
-
 
 static BOOL			s_gridToggled				= FALSE;
 static BOOL			s_cityInfluenceToggled		= FALSE;
@@ -80,10 +73,8 @@ enum
 {
 	GS_WALK,
 
-
 	GS_TRADE,
 	GS_WONDER,
-
 
 	GS_POLITICALBORDERS,
 	GS_TRADEROUTES,
@@ -91,7 +82,7 @@ enum
 
 	GS_CITYINFLUENCE,
 	GS_GRID,
-	GS_CITYNAMES,	
+	GS_CITYNAMES,
 	GS_ARMYNAMES,
 	GS_CIVFLAGS,
 	GS_SMOOTH,
@@ -105,10 +96,8 @@ static uint32 check[] =
 {
 	GS_WALK,
 
-
 	GS_TRADE,
 	GS_WONDER,
-
 
 	GS_POLITICALBORDERS,
 	GS_TRADEROUTES,
@@ -123,8 +112,8 @@ static uint32 check[] =
 	GS_SMOOTH,
 	GS_GOODANIMS,
 	GS_CITYPROD,
-	
-	GS_TOTAL 
+
+	GS_TOTAL
 };
 
 
@@ -156,15 +145,13 @@ sint32 graphicsscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE graphicsscreen_Initialize( void )
 {
 	s_gridToggled = FALSE;
 	s_cityInfluenceToggled = FALSE;
 	s_politicalBordersToggled = FALSE;
 
-
-	if ( s_graphicsWindow ) return AUI_ERRCODE_OK; 
+	if ( s_graphicsWindow ) return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -182,7 +169,6 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	s_graphicsWindow->SetStronglyModal(TRUE);
 
-	
 
 	s_walk				= spNew_aui_Switch(&errcode,windowBlock,"WalkButton",graphicsscreen_checkPress,&check[GS_WALK]);
 	s_trade				= spNew_aui_Switch(&errcode,windowBlock,"TradeButton",graphicsscreen_checkPress,&check[GS_TRADE]);
@@ -203,14 +189,13 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	s_unitSpeed			= spNew_C3Slider(&errcode, windowBlock, "UnitSpeedSlider", graphicsscreen_unitSpeedSlide);
 	s_unitSpeedN		= spNew_c3_Static(&errcode, windowBlock, "UnitSpeedName");
-	
+
 	if(g_theProfileDB) {
 		s_unitSpeed->SetValue(g_theProfileDB->GetUnitSpeed(), 0);
 	} else {
 		s_unitSpeed->SetValue(0,0);
 	}
 
-	
 	s_walk				->SetState(g_theProfileDB->IsUnitAnim());
 	s_trade				->SetState(g_theProfileDB->IsTradeAnim());
 	s_wonder			->SetState(g_theProfileDB->IsWonderMovies());
@@ -230,13 +215,11 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 	s_graphicsWindow->AddTitle( block );
 	s_graphicsWindow->AddClose( graphicsscreen_exitPress );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void graphicsscreen_Cleanup()
@@ -274,7 +257,7 @@ void graphicsscreen_Cleanup()
 void graphicsscreen_screensizeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(s_graphicsWindow) callbackSetSelected(control,cookie);
 
 }
@@ -316,29 +299,29 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 
 void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
 	uint32 checkbox = *((uint32*)cookie);
 	void (ProfileDB::*func)(BOOL) = 0;
-	uint32 state = data; 
+	uint32 state = data;
 
 	switch(checkbox) {
-	case GS_WALK:		
-		func = &ProfileDB::SetUnitAnim; 
+	case GS_WALK:
+		func = &ProfileDB::SetUnitAnim;
 		s_unitAnimToggled = TRUE;
 		break;
-	case GS_TRADE:		
+	case GS_TRADE:
 		func = &ProfileDB::SetTradeAnim;
 		break;
-	case GS_WONDER:		
+	case GS_WONDER:
 		func = &ProfileDB::SetWonderMovies;
 		break;
 	case GS_POLITICALBORDERS:
-		func = &ProfileDB::SetShowPoliticalBorders; 
+		func = &ProfileDB::SetShowPoliticalBorders;
 		s_politicalBordersToggled = TRUE;
 		break;
-	case GS_TRADEROUTES:	
+	case GS_TRADEROUTES:
 		func = &ProfileDB::SetShowTradeRoutes;
 		break;
 	case GS_CITYINFLUENCE:
@@ -375,7 +358,7 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 	};
 
 	if(func)
-		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
+		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
 
 void graphicsscreen_selectResolution(aui_Control *control, uint32 action, uint32 data, void *cookie)

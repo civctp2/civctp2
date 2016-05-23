@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -202,7 +202,6 @@ void enumSessionCallback(dp_session_t *sDesc,void *context)
 		return;
 	}
 
-
 	sprintf(buf, "(%04x; %d players) %s", sDesc->karma, sDesc->currentPlayers, sDesc->sessionName);
 	stuffChatText("****", buf);
 	(void) context;
@@ -297,7 +296,6 @@ int processChatCommand(const char *szChatText)
 		stuffChatText("*****", buf);
 		JoinGameByName(arg2);
 #endif
-
 
 	} else if (stricmp(arg1, "host") == 0) {
 		/* Create a room */
@@ -490,7 +488,7 @@ int main( int argc, char *argv[] )
 	commInitReq.baud = 19200;
 	commInitReq.hwirq = 0;
 	commInitReq.portnum = 1;
-	commInitReq.sessionId = rand() | (rand() << 16);	
+	commInitReq.sessionId = rand() | (rand() << 16);
 	commInitReq.reqLen = sizeof(commInitReq_t);
 
 	ProcessCommandLine(argc, argv);
@@ -587,7 +585,6 @@ int main( int argc, char *argv[] )
 			err = dpGetPlayerName(myDP, idFrom, nameBuf, sizeof(nameBuf));
 			stuffChatText(nameBuf, pkt.u.buf);
 			break;
-
 
 		default:
 			DPRINT(("That's odd; got a %2.2s packet.\n", &pkt.type));

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,15 +31,12 @@
 #ifndef __AUI_RANGER_H__
 #define __AUI_RANGER_H__
 
-
 #include "aui_control.h"
-
 
 class aui_Control;
 class aui_Button;
 class aui_Thumb;
 class aui_Surface;
-
 
 
 enum AUI_RANGER_TYPE
@@ -52,7 +49,6 @@ enum AUI_RANGER_TYPE
 };
 
 
-
 enum AUI_RANGER_ORIENTATION
 {
 	AUI_RANGER_ORIENTATION_FIRST = 0,
@@ -63,7 +59,6 @@ enum AUI_RANGER_ORIENTATION
 };
 
 
-
 enum AUI_RANGER_ACTION
 {
 	AUI_RANGER_ACTION_FIRST = 0,
@@ -72,7 +67,6 @@ enum AUI_RANGER_ACTION
 	AUI_RANGER_ACTION_RELEASE,
 	AUI_RANGER_ACTION_LAST
 };
-
 
 
 #define k_AUI_RANGER_DEFAULTMINX	0
@@ -94,19 +88,16 @@ enum AUI_RANGER_ACTION
 #define k_AUI_RANGER_LDL_SLIDER			"slider"
 #define k_AUI_RANGER_LDL_SPINNER		"spinner"
 
-
 #define k_AUI_RANGER_LDL_ORIENTATION	"orientation"
 #define k_AUI_RANGER_LDL_VERTICAL		"vertical"
 #define k_AUI_RANGER_LDL_HORIZONTAL		"horizontal"
 #define k_AUI_RANGER_LDL_BIDIRECTIONAL	"bidirectional"
-
 
 #define k_AUI_RANGER_LDL_THUMB			"thumb"
 #define k_AUI_RANGER_LDL_INCX			"incx"
 #define k_AUI_RANGER_LDL_INCY			"incy"
 #define k_AUI_RANGER_LDL_DECX			"decx"
 #define k_AUI_RANGER_LDL_DECY			"decy"
-
 
 #define k_AUI_RANGER_LDL_MINXVAL		"minxval"
 #define k_AUI_RANGER_LDL_MAXXVAL		"maxxval"
@@ -120,16 +111,14 @@ enum AUI_RANGER_ACTION
 #define k_AUI_RANGER_LDL_YVAL			"yval"
 #define k_AUI_RANGER_LDL_MINTHUMBSIZE	"minthumbsize"
 
-
 #define k_AUI_RANGER_LDL_RIGIDTHUMB		"rigidthumb"
 #define k_AUI_RANGER_LDL_QUANTIZEDRAG	"quantizedrag"
-
 
 
 class aui_Ranger : public aui_Control
 {
 public:
-	
+
 	aui_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -215,7 +204,6 @@ public:
 
 	AUI_RANGER_TYPE GetType( void ) const { return m_type; }
 
-	
 	AUI_ERRCODE	ThumbMoved( BOOL forceQuantize = FALSE );
 
 	BOOL		UsingRigidThumb( void ) const { return m_rigidThumb; }
@@ -237,47 +225,40 @@ protected:
 
 	AUI_ERRCODE	RepositionThumb( BOOL callActionFunc = TRUE );
 
-	
 	virtual AUI_ERRCODE	RepositionButtons();
 
-	
 	aui_Button *CreateArrowButton(const MBCHAR *ldlBlock,
 		const MBCHAR *autoLdlName, const MBCHAR *ldlName);
 
-	
 	AUI_ERRCODE CreateButtonsAndThumb(MBCHAR *ldlBlock = NULL);
 
-	
-	AUI_RANGER_TYPE			m_type;			
-	AUI_RANGER_ORIENTATION	m_orientation;	
+	AUI_RANGER_TYPE			m_type;
+	AUI_RANGER_ORIENTATION	m_orientation;
 
-	
-	BOOL		m_quantized;	
-	BOOL		m_rigidThumb;	
-	sint32		m_minThumbSize;	
-	sint32		m_buttonSize;	
+	BOOL		m_quantized;
+	BOOL		m_rigidThumb;
+	sint32		m_minThumbSize;
+	sint32		m_buttonSize;
 
-	
 	aui_Control	*m_rangeContainer;
 
-	
-	aui_Button	*m_incXButton;	
-	aui_Button	*m_incYButton;	
-	aui_Button	*m_decXButton;	
-	aui_Button	*m_decYButton;	
-	aui_Thumb	*m_thumb;		
-	sint32		m_overlap;		
+	aui_Button	*m_incXButton;
+	aui_Button	*m_incYButton;
+	aui_Button	*m_decXButton;
+	aui_Button	*m_decYButton;
+	aui_Thumb	*m_thumb;
+	sint32		m_overlap;
 
-	sint32		m_valX;			
-	sint32		m_valY;			
-	sint32		m_minX;			
-	sint32		m_minY;			
-	sint32		m_maxX;			
-	sint32		m_maxY;			
-	sint32		m_incX;			
-	sint32		m_incY;			
-	sint32		m_pageX;		
-	sint32		m_pageY;		
+	sint32		m_valX;
+	sint32		m_valY;
+	sint32		m_minX;
+	sint32		m_minY;
+	sint32		m_maxX;
+	sint32		m_maxY;
+	sint32		m_incX;
+	sint32		m_incY;
+	sint32		m_pageX;
+	sint32		m_pageY;
 
 	BOOL		m_sliding;
 	sint32		m_slideDx;
@@ -299,9 +280,7 @@ protected:
 };
 
 
-
 aui_Control::ControlActionCallback RangerThumbActionCallback;
 aui_Control::ControlActionCallback RangerButtonActionCallback;
 
-
-#endif 
+#endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 #ifndef __GREATLIBRARYWINDOW_H__
 #define __GREATLIBRARYWINDOW_H__
 
-
 #include "greatlibrary.h"
 #include "SlicObject.h"
 
@@ -55,8 +54,7 @@ class GreatLibraryWindow {
 public:
 	ctp2_Window		*m_window;
 
-	
-	
+
 	static const int GREAT_LIBRARY_PANEL_BLANK;
 	GreatLibraryWindow(AUI_ERRCODE *err);
 	~GreatLibraryWindow();
@@ -66,25 +64,24 @@ public:
 	void SetTechTitle( ctp2_Static *text ) { m_techTitle = text; };
 	void SetTechTree( Chart *chart ) { m_techTree = chart; }
 	void SetTechStillShot( ctp2_Static *image ) { m_techStillShot = image; };
-	void SetTechDescriptionGroup( aui_SwitchGroup *group ) 
-	{ 
-		m_techDescriptionGroup = group; 
+	void SetTechDescriptionGroup( aui_SwitchGroup *group )
+	{
+		m_techDescriptionGroup = group;
 	};
 	void SetTechHistoricalText( ctp2_HyperTextBox *text ) { m_techHistoricalText = text; };
 	void SetTechGameplayText( ctp2_HyperTextBox *text ) { m_techGameplayText = text; };
 #ifdef __AUI_USE_DIRECTX__
 	void SetTechMovie( DirectVideo *movie ) { m_techMovie = movie; };
 #endif
-	void SetTechRequirementsText( ctp2_HyperTextBox *text ) 
-	{ 
-		m_techRequirementsText = text; 
+	void SetTechRequirementsText( ctp2_HyperTextBox *text )
+	{
+		m_techRequirementsText = text;
 	};
-	void SetTechVariablesText( ctp2_HyperTextBox *text ) 
-	{ 
-		m_techVariablesText = text; 
+	void SetTechVariablesText( ctp2_HyperTextBox *text )
+	{
+		m_techVariablesText = text;
 	};
 
-	
 	char const * GetIconRecText(int database, int item, uint8 historical);
 	char const * GetHistoricalText( int database, int item );
 	char const * GetGameplayText( int database, int item );
@@ -107,7 +104,6 @@ public:
 	sint32 LoadTechMovie ( void );
 	sint32 LoadTechStill( void );
 
-	
 	char	m_title_name[_MAX_PATH];
 	char	m_still_file[_MAX_PATH];
 	char	m_history_file[_MAX_PATH];
@@ -123,7 +119,7 @@ private:
 	ctp2_Static				*m_techTitle;
 	Chart					*m_techTree;
 	ctp2_Static				*m_techStillShot;
-	
+
 	aui_SwitchGroup			*m_techDescriptionGroup;
 	ctp2_HyperTextBox		*m_techHistoricalText;
 	ctp2_HyperTextBox		*m_techGameplayText;
@@ -134,7 +130,6 @@ private:
 #endif
 };
 
-
 BOOL getNonBlankLine (char *buf, int buf_size, FILE *fp);
 
-#endif 
+#endif

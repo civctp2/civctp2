@@ -4,18 +4,16 @@
 #ifndef __THERMOMETER_H__
 #define __THERMOMETER_H__
 
-
 #include "aui_control.h"
 #include "patternbase.h"
 
 #define k_THERMOMETER_PERCENT_FILLED "percent"
 #define k_THERMOMETER_COLOR			 "color"
 
-
 class Thermometer : public aui_Control, public PatternBase
 {
 public:
-	
+
 	Thermometer(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -50,5 +48,4 @@ protected:
 
 };
 
-
-#endif 
+#endif

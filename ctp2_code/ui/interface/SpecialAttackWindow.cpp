@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -243,13 +243,12 @@ AUI_ERRCODE SpecialAttackWindow::DrawThis( aui_Surface *surface, sint32 x, sint3
 	if ( !surface ) surface = m_surface;
 
 	RECT rect = { 0, 0, m_width, m_height };
-	
+
 	primitives_PaintRect16( surface, &rect, 0x0000 );
-	
+
 	C3Window::DrawThis(surface,x,y);
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(s_saWindowBorderColor));
 
 	return AUI_ERRCODE_OK;
 }
-

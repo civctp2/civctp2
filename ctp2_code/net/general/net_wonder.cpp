@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_wonder.h"
 #include "WonderTracker.h"
@@ -19,7 +17,7 @@ void NetWonderTracker::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_WONDER_TRACKER_ID);
-	
+
 	uint64 built;
 	PULLLONG64(built);
 	g_theWonderTracker->SetBuiltWonders(built);
@@ -30,5 +28,3 @@ void NetWonderTracker::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	Assert(pos == size);
 }
-
-

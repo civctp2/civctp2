@@ -1,7 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __DIPLOMATICREQUEST_H__ 
+#ifndef __DIPLOMATICREQUEST_H__
 #define __DIPLOMATICREQUEST_H__
 
 class DiplomaticRequest;
@@ -30,7 +30,6 @@ public:
 	REQUEST_TYPE GetRequest(void) const { return (GetData()->GetRequest()) ; }
 
 
-
 	void SetAdvance(const AdvanceType &advance) { AccessData()->SetAdvance(advance) ; }
 	void SetWanted(const AdvanceType &advance) { AccessData()->SetWanted(advance) ; }
 	void SetWanted(const Unit &city) { AccessData()->SetWanted(city) ; }
@@ -42,7 +41,6 @@ public:
 	Unit &GetWantedCity()  { return AccessData()->GetWantedCity(); }
 	PLAYER_INDEX GetThirdParty() { return AccessData()->GetThirdParty(); }
 	REQUEST_RESPONSE_TYPE GetResponse() { return AccessData()->GetResponse(); }
-
 
 
 	Unit &GetTarget() { return AccessData()->GetTarget(); }

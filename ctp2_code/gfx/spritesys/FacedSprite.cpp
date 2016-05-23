@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,6 @@ extern ScreenManager *g_screenManager;
 extern TiledMap		*g_tiledMap;
 
 
-
 FacedSprite::FacedSprite()
 :   Sprite              (),
     m_facedFrameCount   (0)
@@ -65,12 +64,11 @@ FacedSprite::FacedSprite()
 }
 
 
-
 FacedSprite::~FacedSprite()
 {
-	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing) 
+	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing)
 	{
-		for (size_t i = 0; i < m_facedFrameCount; ++i) 
+		for (size_t i = 0; i < m_facedFrameCount; ++i)
 	        {
 			if ((m_frames[facing] != NULL) && (m_frames[facing][i] != NULL)) {
 				delete m_frames[facing][i];
@@ -102,28 +100,26 @@ FacedSprite::~FacedSprite()
 }
 
 
-
 void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES])
 {
     AllocateFrameArrays(nframes);
- 
-	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++) 
+
+	for (sint32 facing=0; facing < k_NUM_FACINGS; facing++)
 	{
-		for (uint16 i=0; i < nframes; i++) 
+		for (uint16 i=0; i < nframes; i++)
 		{
 			char ext[_MAX_DIR];
-		
+
 			Pixel16 *   data        = NULL;
 			size_t      dataSize    = 0;
-			Pixel32 *   image       = NULL;      
+			Pixel32 *   image       = NULL;
 			Pixel32 *   miniimage	= NULL;
 			Pixel32 *   shadow		= NULL;
 			Pixel32 *   minishadow	= NULL;
 			char *      fname       = imageFiles[facing][i];
 
-			
 			_splitpath(fname,NULL,NULL,NULL,ext);
-		
+
 			if (strstr(strupr(ext),"TIF"))
 				ImportTIFF(i,imageFiles[facing],&image);
 			else
@@ -131,43 +127,37 @@ void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 					ImportTGA(i,imageFiles[facing],&image);
 				else
 					printf("Unknown image file \"%s\"\n",fname);
-		
-			
+
 			fname = shadowFiles[facing][i];
 
-			
 			_splitpath(fname,NULL,NULL,NULL,ext);
-		
+
 			if (strstr(strupr(ext),"TIF"))
 				ImportTIFF(i,shadowFiles[facing],&shadow);
 			else
 				if (strstr(strupr(ext),"TGA"))
 					ImportTGA(i,shadowFiles[facing],&shadow);
 
-			
 			if (image)
 			{
 				spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
-		
-				
+
 				data = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &dataSize);
 				SetFrameData(facing, i, data, dataSize);
-		
+
 				if (shadow)
 					spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
-		
-				
+
 				data = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1, &dataSize);
 				SetMiniFrameData(facing, i, data, dataSize);
 			}
-			else 
+			else
 			{
-				
+
 				printf("Could not locate %s.  Aborting.\n\n", imageFiles[facing][i]);
 				exit(-1);
 			}
 
-			
 			delete [] image;
 			delete [] shadow;
 			delete [] miniimage;
@@ -182,12 +172,12 @@ void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 //
 // Name       : FacedSprite::Draw
 //
-// Description: Draw a sprite 
+// Description: Draw a sprite
 //
 // Parameters : drawX, drawY    : position
 //              facing          : facing
 //              scale           : magnification (zoom level)
-//              transparency    : 
+//              transparency    :
 //              outlineColor    :
 //              flags
 //
@@ -195,7 +185,7 @@ void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 //
 // Returns    : -
 //
-// Remark(s)  : Refactored a bit to better understand what is going on. 
+// Remark(s)  : Refactored a bit to better understand what is going on.
 //              But the problem wasn't here after all.
 //
 //----------------------------------------------------------------------------
@@ -214,30 +204,29 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
         return;
     }
 
-	if (isReversed) 
+	if (isReversed)
     {
 		drawX -= (sint32)((double)(m_width - m_hotPoints[facingIndex].x) * scale);
 	    drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
-	} 
-    else 
+	}
+    else
     {
 		drawX -= (sint32)((double)m_hotPoints[facingIndex].x * scale);
 	    drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
 	}
 
-
-	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) 
+	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST))
     {
-		if (isReversed) 
+		if (isReversed)
         {
 			(this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-		} 
+		}
         else
         {
 			(this->*_DrawLow)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
         }
-	} 
-    else if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) 
+	}
+    else if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST))
     {
 		if (isReversed)
         {
@@ -247,8 +236,8 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
         {
 			(this->*_DrawLow)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
         }
-	} 
-    else 
+	}
+    else
     {
 		sint32 const    destWidth   = (sint32) (m_width * scale);
 		sint32 const    destHeight  = (sint32) (m_height * scale);
@@ -259,7 +248,7 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
 	}
 }
 
-BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, 
+BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags)
 {
 	if (facing < 5) {
@@ -271,7 +260,6 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 	}
 
 
-	
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
 		if (facing < 5) {
 			return HitTestLow(mousePt, (Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -284,7 +272,7 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 			else
 				return HitTestLowReversed(mousePt, (Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 		} else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -393,21 +381,19 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
 	}
 
-	
-	
+
 	if (drawX > surf->Width() - 1 || drawX < -(m_width*scale)) {
 		UnlockSurface();
 		return;
 	}
-	
-	if (drawY > surf->Height() - 1 || drawY < -(m_height*scale)) 
+
+	if (drawY > surf->Height() - 1 || drawY < -(m_height*scale))
 	{
 		UnlockSurface();
 		return;
 	}
 
-	
-	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) 
+	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST))
 	{
 		if (facing < 5) {
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -423,7 +409,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		} else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -458,18 +444,16 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
 	}
 
-	
-	
+
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
-	
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 4 && facing > 0) 
+		if (facing < 4 && facing > 0)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
+		}
 		else if (facing == 4 || facing == 0)
 		{
 			(this->*_DrawLowReversed)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
@@ -493,7 +477,7 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		} else {
-			
+
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
@@ -501,12 +485,12 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
-			} 
+			}
 			else if(facing == 4 || facing == 0)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
-			} 
+			}
 			else
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
@@ -517,13 +501,12 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 }
 
 
-
 sint32 FacedSprite::ParseFromTokens(Token *theToken)
 {
-	sint32		tmp; 
+	sint32		tmp;
 	sint32		i;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_NUM_FRAMES, tmp)) return FALSE;
 	m_facedFrameCount = tmp;
@@ -537,17 +520,16 @@ sint32 FacedSprite::ParseFromTokens(Token *theToken)
 	if (!token_ParseValNext(theToken, TOKEN_SPRITE_HEIGHT, tmp)) return FALSE;
 	m_height = (uint16)tmp;
 
-	
 	if (!token_ParseKeywordNext(theToken, TOKEN_SPRITE_HOT_POINTS)) return FALSE;
 	for (i=0; i<k_NUM_FACINGS; i++) {
 		POINT		p;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.x = tmp;
 
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 
 		p.y = tmp;
@@ -579,7 +561,7 @@ void FacedSprite::AllocateFrameArrays(size_t count)
 {
     Assert(0 == m_facedFrameCount);
 
-	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing) 
+	for (size_t facing = 0; facing < k_NUM_FACINGS; ++facing)
     {
 		m_frames[facing]          = new Pixel16 * [count];
 		m_framesSizes[facing]     = new size_t    [count];
@@ -622,4 +604,3 @@ void FacedSprite::Export(FILE *file)
 
 	return;
 }
-

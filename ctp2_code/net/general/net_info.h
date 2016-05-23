@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -183,7 +183,7 @@ enum NET_INFO_CODE {
 	// Notify the accomplishment of a feat
 	NET_INFO_CODE_ACCOMPLISHED_FEAT				= 0x0083,
 	// Mark a settler as created by disbanding a city
-	NET_INFO_CODE_DISBANDED_CITY_SETTLER		= 0x0084,	
+	NET_INFO_CODE_DISBANDED_CITY_SETTLER		= 0x0084,
 	// Propagate PW each turn update
 	NET_INFO_CODE_MATERIALS,					// unconfirmed value
 

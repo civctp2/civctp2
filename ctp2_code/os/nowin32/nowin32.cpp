@@ -118,7 +118,7 @@ MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 #endif
-	
+
 	return 0;
 }
 
@@ -196,7 +196,6 @@ strupr(char* str)
 	return str;
 }
 
-
 void CopyRect(RECT *dest, RECT *src) {
 	*dest = *src;
 }
@@ -217,7 +216,7 @@ void InflateRect(RECT *pr, int x, int y)
 {
 	if (!pr)
 		return;
-	
+
 	pr->bottom += y;
 	pr->left -= x;
 	pr->right += x;
@@ -237,12 +236,12 @@ BOOL PtInRect(RECT* pr, struct POINT m)
 {
 	if (!pr)
 		return FALSE;
-		
+
 	return pr->left <= m.x && m.x < pr->right && pr->top <= m.y && m.y < pr->bottom;
 }
 
 void SetRect(RECT* R, int left, int top, int right, int bottom)
-{ 
+{
 	R->left = left;
 	R->right = right;
 	R->top = top;

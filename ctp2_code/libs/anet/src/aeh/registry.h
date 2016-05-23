@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef registry_h
 #define registry_h
 
-
 #include <windows.h>
 
 #ifndef MAX_STRING
@@ -43,33 +42,27 @@ HKEY MyRegOpenKey( HKEY base, LPCSTR szSubkey );
 // this combines reading a value and allocating space for it into one operation.   pType recieves
 // the data type.  pSize recieves the data length.  Either of these can be NULL.  The pointer to the
 // new space holding the data is returned (or NULL, in case of failure).  if hKey is NULL, NULL is
-// returned.  
+// returned.
 char *MyRegQueryValueMalloc( HKEY hKey, LPCSTR szValueName, LPDWORD pType, LPDWORD pSize );
-
 
 // these functions simplify the above calls by handling opening and closing of keys automatically...
 // use them if you are not expecting to need error information or an intermediate HKEY.
 char *MyRegQuickQueryMalloc( HKEY base, LPCSTR szSubKey, LPCSTR szValueName, LPDWORD pType, LPDWORD pSize );
 
-
 // this is a very slightly simplified version of RegSetValueEx.  return value of TRUE means success.
 BOOL MyRegSetValue( HKEY hKey, LPCSTR szName, DWORD dwType, char *pData, DWORD cData );
-
 
 // return value of NULL indicates failure.  pDisposition returns either REG_OPENED_EXISTING_KEY or
 // REG_CREATED_NEW_KEY.  pDisposition may be NULL.
 HKEY MyRegCreateKey( HKEY base, LPCSTR szSubKey, DWORD *pDisposition );
 
-
 // these functions return the names of the immediate subkeys of a key (they take care of allocating
 // space for the string, and return NULL if the index is out of range)
 char *MyRegEnumKeyMalloc( HKEY hKey, DWORD dwIndex );
 
-
 // these functions return the names of the values of a key (they take care of allocating
 // space for the string, and return NULL if the index is out of range)
 char *MyRegEnumValueMalloc( HKEY hKey, DWORD dwIndex );
-
 
 
 #endif

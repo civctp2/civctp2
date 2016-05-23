@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ typedef	unsigned char nw_netAdr_t[4];
 typedef	unsigned char nw_nodeAdr_t[6];
 
 // The two together form a full IPX internetwork address.
-typedef	struct {	
+typedef	struct {
 	nw_netAdr_t		net;
 	nw_nodeAdr_t	node;
 } nw_adr_t;

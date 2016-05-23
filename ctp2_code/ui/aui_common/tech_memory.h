@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -67,13 +67,12 @@ protected:
 			{
 				memset( used, 0, usedSize * sizeof( unsigned ) );
 
-				
 				if (remainder)
 				{
 					used[usedSize - 1] = ~(( 1 << remainder ) - 1);
 				}
 			}
-			
+
 			data = new T[dataSize];
 		};
 
@@ -92,17 +91,15 @@ protected:
 			}
 		};
 
-		Block *     pNext;			
-		size_t      usedSize; 
-		unsigned *  used;			
-		size_t      dataSize; 
-		T *         data;				
+		Block *     pNext;
+		size_t      usedSize;
+		unsigned *  used;
+		size_t      dataSize;
+		T *         data;
 	};
 
-	
 	T *UseFreeElement( void );
 
-	
 	void UnuseElement( T *t );
 
 	size_t m_blockSize;
@@ -124,7 +121,6 @@ tech_Memory< T >::tech_Memory( size_t blockSize )
 }
 
 
-
 template< class T >
 tech_Memory< T >::~tech_Memory()
 {
@@ -137,7 +133,6 @@ tech_Memory< T >::~tech_Memory()
 
 	m_pFirst = m_pLast = 0;
 }
-
 
 
 template< class T >
@@ -163,7 +158,6 @@ T *tech_Memory< T >::New( void )
 }
 
 
-
 template< class T >
 void tech_Memory< T >::Delete( T *t )
 {
@@ -171,22 +165,20 @@ void tech_Memory< T >::Delete( T *t )
 }
 
 
-
 template< class T >
 T *tech_Memory< T >::UseFreeElement( void )
 {
-	
+
 	for ( Block *pBlock = m_pFirst; pBlock; pBlock = pBlock->pNext )
 	{
 		T *t = pBlock->data;
 		T *stopT = t + m_blockSize;
 
-		
 		unsigned *pUsed = pBlock->used;
 		unsigned *pStop = pUsed + pBlock->usedSize;
 		for ( ; pUsed != pStop; pUsed++ )
 		{
-			
+
 			unsigned freeSlots = ~(*pUsed);
 			if ( freeSlots )
 			{
@@ -210,14 +202,12 @@ T *tech_Memory< T >::UseFreeElement( void )
 }
 
 
-
 template< class T >
 void tech_Memory< T >::UnuseElement( T *t )
 {
-	
+
 	if ( !t ) return;
 
-	
 	size_t offset = 0;
 	Block *			pBlock = m_pFirst;
 	for ( ; pBlock ; pBlock = pBlock->pNext )
@@ -227,10 +217,8 @@ void tech_Memory< T >::UnuseElement( T *t )
 			break;
 	}
 
-	
 	if ( !pBlock ) return;
 
-	
 	pBlock->used[ offset / k_TECH_MEMORY_BITSPERDWORD ] &=
 		~( 1 << ( offset % k_TECH_MEMORY_BITSPERDWORD ) );
 }
@@ -238,4 +226,4 @@ void tech_Memory< T >::UnuseElement( T *t )
 
 
 
-#endif 
+#endif

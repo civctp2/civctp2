@@ -10,15 +10,15 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,8 +26,8 @@
 // - Does not show anymore the current tarrain stats but those from
 //   the last visit. - Dec. 23rd 2004 Martin Gühmann
 // - Add in food, shields, and gold from any good that is present. PFT 3 apr 05
-// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
-//   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
+// - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@
 #include "TerrImprovePool.h"
 
 #include "c3_dropdown.h"
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 
 #include "helptile.h"
 
@@ -102,7 +102,7 @@ static c3_Static			*s_tileITR			= NULL;
 static c3_Static			*s_tileIBL			= NULL;
 static c3_Static			*s_tileIBR			= NULL;
 
-#define IMPROVEMENT_LISTBOXldl "TileImprovementListBox" 
+#define IMPROVEMENT_LISTBOXldl "TileImprovementListBox"
 #define HELPTILE_WINDOWldl "HelpTileWindow"
 static void bExitPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 static
@@ -125,7 +125,7 @@ sint32 helptile_Initialize( void )
 	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if(g_helpTileWindow){	
+	if(g_helpTileWindow){
 		return 0;
 	}
 
@@ -142,7 +142,6 @@ sint32 helptile_Initialize( void )
 
 	g_helpTileWindow->AddClose( bExitPress );
 	g_helpTileWindow->AddTitle();
-
 
 	if(newC3Static(windowBlock,"FoodN",&s_tileFood)) return -1;
 	if(newC3Static(windowBlock,"ProdN",&s_tileProd)) return -1;
@@ -225,10 +224,10 @@ void helptile_displayData(const MapPoint &p)
 	const Cell *myTile = g_theWorld->GetCell(p);
 
 	UnseenCellCarton ucell;
-	if(!g_tiledMap->GetLocalVision()->IsVisible(p) 
-	&& !g_fog_toggle 
-	&& !g_god 
-	&& (g_player[g_selected_item->GetVisiblePlayer()] 
+	if(!g_tiledMap->GetLocalVision()->IsVisible(p)
+	&& !g_fog_toggle
+	&& !g_god
+	&& (g_player[g_selected_item->GetVisiblePlayer()]
 	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
 	&& g_tiledMap->GetLocalVision()->GetLastSeen(p, ucell)
 	){
@@ -241,7 +240,7 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
-		sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced()); 
+		sprintf( mytext, "%d", ucell.m_unseenCell->GetGoldProduced());
 		s_tileGoldV->SetText(mytext);
 
 		// Unfortunatly this kind of information is not stored in the
@@ -251,7 +250,7 @@ void helptile_displayData(const MapPoint &p)
 			StringId	goodStrID;
 
 			myTile->GetGoodsIndex(goods);
-		
+
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
 			s_tileGoodV->SetText(mytext);
@@ -279,7 +278,7 @@ void helptile_displayData(const MapPoint &p)
 		sprintf( mytext , "%d\n", myTile->GetShieldsProduced());
 		s_tileProdV->SetText(mytext);
 
-		sprintf( mytext, "%d", myTile->GetGoldProduced()); 
+		sprintf( mytext, "%d", myTile->GetGoldProduced());
 		s_tileGoldV->SetText(mytext);
 
 		if(g_theWorld->IsGood(p))
@@ -287,7 +286,7 @@ void helptile_displayData(const MapPoint &p)
 			StringId	goodStrID;
 
 			myTile->GetGoodsIndex(goods);
-		
+
 			goodStrID = g_theWorld->GetTerrain(p)->GetResources(goods)->GetName();
 			sprintf( mytext , "%s\n", g_theStringDB->GetNameStr(goodStrID));
 			s_tileGoodV->SetText(mytext);
@@ -327,7 +326,7 @@ void helptile_setPosition(const MapPoint& p)
 
 	sint32 x,y;
 	maputils_MapXY2PixelXY(p.x,p.y,&x,&y);
-	g_helpTileWindow->Move(x,y);	
+	g_helpTileWindow->Move(x,y);
 }
 
 static

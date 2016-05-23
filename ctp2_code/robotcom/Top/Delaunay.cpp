@@ -1,37 +1,31 @@
-
 #include "c3.h"
-
 
 #include "geom2d.h"
 #include "Delaunay.h"
 
-
 #include "Memory_Manager.h"
 
 
-
-extern Memory_Manager *g_memory_QuadEdge; 
+extern Memory_Manager *g_memory_QuadEdge;
 
 void* QuadEdge::operator new(size_t byte_size)
 {
     Assert(sizeof(QuadEdge)==byte_size);
-    return g_memory_QuadEdge->Alloc(); 
+    return g_memory_QuadEdge->Alloc();
 }
 void QuadEdge::operator delete(void *ptr)
 {
-    g_memory_QuadEdge->Dealloc(ptr); 
+    g_memory_QuadEdge->Dealloc(ptr);
 }
-
 
 
 inline QuadEdge::QuadEdge()
 {
-    m_qnext = NULL; 
+    m_qnext = NULL;
 	e[0].num = 0, e[1].num = 1, e[2].num = 2, e[3].num = 3;
 	e[0].next = &(e[0]); e[1].next = &(e[3]);
 	e[2].next = &(e[2]); e[3].next = &(e[1]);
 }
-
 
 
 inline Edge* Edge::Rot()
@@ -101,7 +95,6 @@ inline Edge* Edge::Rprev()
 }
 
 
-
 inline Point2d* Edge::Org()
 {
 	return data;
@@ -123,27 +116,25 @@ inline const Point2d& Edge::Org2d() const
 	return *data;
 }
 
-
 inline const Point2d& Edge::Dest2d() const
 {
 	return (num < 2) ? *((this + 2)->data) : *((this - 2)->data);
 }
 
-QuadEdge *g_quad_edge_head; 
-QuadEdge *g_quad_edge_tail; 
-
+QuadEdge *g_quad_edge_head;
+QuadEdge *g_quad_edge_tail;
 
 Edge* MakeEdge()
 {
 	QuadEdge *ql = new QuadEdge;
 
-    if (g_quad_edge_head == NULL) { 
-        g_quad_edge_head = ql; 
-        g_quad_edge_tail = ql; 
-    } else { 
-        g_quad_edge_tail->m_qnext = ql; 
+    if (g_quad_edge_head == NULL) {
+        g_quad_edge_head = ql;
         g_quad_edge_tail = ql;
-    } 
+    } else {
+        g_quad_edge_tail->m_qnext = ql;
+        g_quad_edge_tail = ql;
+    }
 	return ql->e;
 }
 
@@ -177,24 +168,24 @@ void DeleteEdge(Edge* e)
 	Splice(e->Sym(), e->Sym()->Oprev());
 	QuadEdge *del_me = e->Qedge();
 
-    QuadEdge *q; 
-    if (del_me == g_quad_edge_head) { 
-        if (del_me == g_quad_edge_tail) { 
-            g_quad_edge_tail = NULL; 
-        } 
-        g_quad_edge_head = g_quad_edge_head->m_qnext; 
-    } else { 
-        for (q = g_quad_edge_head; q && (q->m_qnext != del_me); q = q->m_qnext); 
+    QuadEdge *q;
+    if (del_me == g_quad_edge_head) {
+        if (del_me == g_quad_edge_tail) {
+            g_quad_edge_tail = NULL;
+        }
+        g_quad_edge_head = g_quad_edge_head->m_qnext;
+    } else {
+        for (q = g_quad_edge_head; q && (q->m_qnext != del_me); q = q->m_qnext);
 
-        Assert(q); 
-        Assert(q->m_qnext == del_me); 
+        Assert(q);
+        Assert(q->m_qnext == del_me);
 
-        if (g_quad_edge_tail == del_me) { 
-            g_quad_edge_tail = q; 
-        } 
-        q->m_qnext = del_me->m_qnext; 
-    } 
-    delete del_me; 
+        if (g_quad_edge_tail == del_me) {
+            g_quad_edge_tail = q;
+        }
+        q->m_qnext = del_me->m_qnext;
+    }
+    delete del_me;
 }
 
 
@@ -234,7 +225,6 @@ Edge* Connect(Edge* a, Edge* b)
 
 void Swap(Edge* e)
 
-
 {
 	Edge* a = e->Oprev();
 	Edge* b = e->Sym()->Oprev();
@@ -246,9 +236,7 @@ void Swap(Edge* e)
 }
 
 
-
 inline Real TriArea(const Point2d& a, const Point2d& b, const Point2d& c)
-
 
 {
 	return (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x);
@@ -256,7 +244,6 @@ inline Real TriArea(const Point2d& a, const Point2d& b, const Point2d& c)
 
 int InCircle(const Point2d& a, const Point2d& b,
 			 const Point2d& c, const Point2d& d)
-
 
 {
 	return (a.x*a.x + a.y*a.y) * TriArea(b, c, d) -
@@ -284,7 +271,6 @@ int LeftOf(const Point2d& x, Edge* e)
 int OnEdge(const Point2d& x, Edge* e)
 
 
-
 {
 	Real t1, t2, t3;
 	t1 = (x - e->Org2d()).norm();
@@ -310,11 +296,11 @@ Edge* Subdivision::Locate(const Point2d& x)
 	Edge* e = startingEdge;
 
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
 	while (TRUE) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		if (x == e->Org2d() || x == e->Dest2d())
 		    return e;
 		else if (RightOf(x, e))
@@ -336,33 +322,32 @@ void Subdivision::InsertSite(const Point2d& x)
 
 {
 	Edge* e = Locate(x);
-	if ((x == e->Org2d()) || (x == e->Dest2d()))  
+	if ((x == e->Org2d()) || (x == e->Dest2d()))
 	    return;
 	else if (OnEdge(x, e)) {
 		e = e->Oprev();
 		DeleteEdge(e->Onext());
 	}
 
-	
-	
-	
+
+
+
 	Edge* base = MakeEdge();
 	base->EndPoints(e->Org(), new Point2d(x));
 	Splice(base, e);
 	startingEdge = base;
 
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
 	do {
 		base = Connect(e, base->Sym());
 		e = base->Oprev();
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 	} while (e->Lnext() != startingEdge);
 
-	
-	
+
 	do {
 		Edge* t = e->Oprev();
 		if (RightOf(t->Dest2d(), e) &&
@@ -370,50 +355,12 @@ Assert(++finite_loop < 100000);
 				Swap(e);
 				e = e->Oprev();
 		}
-		else if (e->Onext() == startingEdge)  
+		else if (e->Onext() == startingEdge)
 			return;
-		else  
+		else
 		    e = e->Onext()->Lprev();
 
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 
 	} while (TRUE);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

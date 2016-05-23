@@ -1,4 +1,3 @@
-
 // edit rulesscreen code to be more like gameplay options
 // now it works
 #ifdef HAVE_PRAGMA_ONCE
@@ -16,22 +15,22 @@ enum RULE {
 	RULE_LINE_OF_SIGHT,
 //emod new rules
 	RULE_CITYCAPTURE, //emod1
-	RULE_NoAIProductionDeficit,		
-	RULE_NoAIGoldDeficit,					
-	RULE_AICityDefenderBonus,					
-	RULE_BarbarianCities,					
+	RULE_NoAIProductionDeficit,
+	RULE_NoAIGoldDeficit,
+	RULE_AICityDefenderBonus,
+	RULE_BarbarianCities,
 	RULE_SectarianHappiness,
-	RULE_RevoltCasualties,					
-	RULE_RevoltInsurgents,					
-	RULE_BarbarianCamps,			
-	RULE_BarbarianSpawnsBarbarian,			
-	RULE_AINoSinking,							
-	RULE_AINoCityLimit,						
+	RULE_RevoltCasualties,
+	RULE_RevoltInsurgents,
+	RULE_BarbarianCamps,
+	RULE_BarbarianSpawnsBarbarian,
+	RULE_AINoSinking,
+	RULE_AINoCityLimit,
 	RULE_GoldPerUnitSupport,
-	RULE_GoldPerCity,							
-	RULE_AINoShieldHunger,					
-	RULE_AINoGoldHunger,						
-	RULE_AIFreeUpgrade,						
+	RULE_GoldPerCity,
+	RULE_AINoShieldHunger,
+	RULE_AINoGoldHunger,
+	RULE_AIFreeUpgrade,
 	RULE_AIMilitiaUnit,
 	RULE_DebugAI
 };
@@ -49,7 +48,6 @@ void spnewgamerulesscreen_switchPress(aui_Control *control, uint32 action, uint3
 */
 //removed to implement new rules screen code
 
-
 sint32 spnewgamerulesscreen_displayMyWindow();
 sint32 spnewgamerulesscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgamerulesscreen_Initialize( void );
@@ -59,7 +57,5 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void spnewgamerulesscreen_mouseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
 #endif
-

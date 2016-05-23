@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,13 +38,12 @@
 #include "aui_dropdown.h"
 #include "patternbase.h"
 
-
 class ctp2_ListItem;
 
 class ctp2_DropDown : public aui_DropDown, public PatternBase
 {
 public:
-	
+
 	ctp2_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -66,8 +65,7 @@ public:
 	virtual ~ctp2_DropDown() {};
 
 	void	Clear(void);
-	
-	
+
 	virtual AUI_ERRCODE Draw(aui_Surface *surface, sint32 x, sint32 y);
 
 	virtual AUI_ERRCODE DrawThis(
@@ -75,16 +73,13 @@ public:
 						sint32 x = 0,
 						sint32 y = 0 );
 
-	
-	
+
 	AUI_ERRCODE		AddItem(ctp2_ListItem *item);
 
-	
-	
+
 	void			BuildListStart(void);
 
-	
-	
+
 	void			BuildListEnd(void);
 	void			SetForceSelect(bool forceSelect);
 

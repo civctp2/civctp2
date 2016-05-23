@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,7 +41,6 @@
 #include "radarmap.h"
 #include "c3_dropdown.h"
 
-
 #include "messageiconwindow.h"
 #include "messagewin.h"
 #include "messagewindow.h"
@@ -62,26 +61,23 @@
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;
 
-
 void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
-	if ( action != 0) return; 
+	if ( action != 0) return;
 
 	Message *   message = m_iconWindow->GetMessage();
-	
+
 	if (!message) return;
 	if (!g_theMessagePool->IsValid(*message)) return;
 
 	if ( data ) {
-		
-		
+
 		if(!message->AccessData()->IsCloseDisabled()) {
 			message->Kill();
 		}
 		return;
 	}
 
-	
 	if ( !g_c3ui->GetWindow( m_iconWindow->GetWindow()->Id( ))) {
 		m_iconWindow->SetCurrentIconButton( m_iconWindow->GetIconButton() );
 		m_iconWindow->GetWindow()->ShowWindow( TRUE );
@@ -92,26 +88,22 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 		return;
 	}
 
-	
 	MBCHAR const *  wavName = message->AccessData()->GetMsgOpenSound();
-	if (wavName)  
+	if (wavName)
     {
-		MBCHAR filename[_MAX_PATH]; 
+		MBCHAR filename[_MAX_PATH];
 		g_civPaths->FindFile(C3DIR_SOUNDS, wavName, filename);
-		PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME); 
+		PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME);
 	}
 }
-
 
 
 void MessageMinimizeAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	m_window->ShowWindow( FALSE );
 
-	
 	m_window->GetIconWindow()->SetCurrentIconButton( NULL );
 
 	sint32 p = g_selected_item->GetVisiblePlayer();
@@ -161,7 +153,6 @@ void MessageDismissAction::Execute( aui_Control *control, uint32 action, uint32 
 }
 
 
-
 void MessageLibraryAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -170,9 +161,8 @@ void MessageLibraryAction::Execute( aui_Control *control, uint32 action, uint32 
 		return;
 
 	m_window->GetMessage()->AccessData()->GreatLibraryCallback();
-	
-}
 
+}
 
 
 //----------------------------------------------------------------------------
@@ -187,7 +177,7 @@ void MessageLibraryAction::Execute( aui_Control *control, uint32 action, uint32 
 //
 // Globals    : g_theProfileDB		: user preferences
 //				g_theMessagePool	: currently active messages
-//				
+//
 //
 // Returns    : -
 //
@@ -199,9 +189,9 @@ void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Message *message;
-	if ( m_window ) 
+	if ( m_window )
 		message = m_window->GetMessage();
-	else 
+	else
 		message = m_modal->GetMessage();
 
 	if(!g_theMessagePool->IsValid(*message))
@@ -216,14 +206,13 @@ void MessageStandardEyePointAction::Execute( aui_Control *control, uint32 action
 }
 
 
-
 void MessageDropdownEyePointAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Message *message;
 
-	if ( m_window ) 
+	if ( m_window )
 		message = m_window->GetMessage();
 	else
 		message = m_modal->GetMessage();
@@ -241,14 +230,13 @@ void MessageDropdownEyePointAction::Execute( aui_Control *control, uint32 action
 }
 
 
-
 void MessageDropdownAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_LISTBOX_ACTION_SELECT) return;
 
 	Message *message;
 
-	if ( m_window ) 
+	if ( m_window )
 		message = m_window->GetMessage();
 	else
 		message = m_modal->GetMessage();
@@ -267,23 +255,21 @@ void MessageDropdownAction::Execute( aui_Control *control, uint32 action, uint32
 }
 
 
-
 void MessageListboxEyePointAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Message *message;
 
-	if ( m_window ) 
+	if ( m_window )
 		message = m_window->GetMessage();
 	else
 		message = m_modal->GetMessage();
 
-	
 	m_index += m_change;
 	if ( m_index > m_max ) m_index = m_min;
 	if ( m_index < m_min ) m_index = m_max;
-	
+
 	if(!g_theMessagePool->IsValid(*message))
 		return;
 
@@ -291,13 +277,12 @@ void MessageListboxEyePointAction::Execute( aui_Control *control, uint32 action,
 	message->AccessData()->GetEyePointMapPosition( m_index, pos );
 	g_radarMap->CenterMap( pos );
 
-	
 
-	
+
+
 	m_action->SetIndex( m_index );
-	
-}
 
+}
 
 
 void MessageResponseUIAction::Execute(aui_Control *control, uint32 action, uint32 data)
@@ -310,16 +295,13 @@ void MessageResponseUIAction::Execute(aui_Control *control, uint32 action, uint3
     }
 }
 
-
 void MessageResponseAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
-	
+
 	g_c3ui->AddAction(new MessageResponseUIAction(m_window, m_response));
 }
-
 
 
 void MessageModalResponseAction::Execute( aui_Control *control, uint32 action, uint32 data )
@@ -327,7 +309,7 @@ void MessageModalResponseAction::Execute( aui_Control *control, uint32 action, u
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	if(g_theMessagePool->IsValid(*m_message)) {
-		
+
 		m_message->AccessData()->GetButton( m_response )->Callback();
 	}
 
@@ -341,7 +323,6 @@ void MessageModalDestroyAction::Execute( aui_Control *control, uint32 action, ui
 {
 	messagemodal_DestroyModalMessage();
 }
-
 
 
 void MessageResponseSubmitAction::Execute( aui_Control *control, uint32 action, uint32 data )
@@ -358,14 +339,12 @@ void MessageResponseSubmitAction::Execute( aui_Control *control, uint32 action, 
 }
 
 
-
 void MessageCleanupAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	messagewin_CleanupMessage( m_iconWindow );
 	MessageList *   messagelist = messagewin_GetPlayerMessageList(m_index);
 	messagelist->CheckVisibleMessages( );
 }
-
 
 
 void ChangeOffsetMessageIconButtonAction::Execute( aui_Control *control, uint32 action, uint32 data )
@@ -377,16 +356,14 @@ void ChangeOffsetMessageIconButtonAction::Execute( aui_Control *control, uint32 
 };
 
 
-
 void ChangeOffsetDestroyButtonAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
-	
-	if ( m_more ) 
+
+	if ( m_more )
 		messagewin_MoreMessagesIcon( FALSE );
-	else 
+	else
 		messagewin_LessMessagesIcon( FALSE );
 };
-
 
 
 void MessageAdviceDismissAction::Execute( aui_Control *control, uint32 action, uint32 data )
@@ -398,10 +375,7 @@ void MessageAdviceDismissAction::Execute( aui_Control *control, uint32 action, u
 }
 
 
-
 void MessageAdviceDestroyAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
 	messageadvice_DestroyWindow();
 }
-
-

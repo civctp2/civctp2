@@ -41,11 +41,10 @@ extern "C" {
 #define Breakpoint() __asm { int 03h }
 
 
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif  
+#endif
 
-#endif 
+#endif

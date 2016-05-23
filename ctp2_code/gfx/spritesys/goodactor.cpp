@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ GoodActor::GoodActor(sint32 index, const MapPoint &pos)
 	m_pos               (pos),
     m_goodSpriteGroup   (NULL),
     m_curAction         (NULL),
-    m_curGoodAction     (GOODACTION_IDLE),     
+    m_curGoodAction     (GOODACTION_IDLE),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
     m_loadType          (LOADTYPE_BASIC)
 {
@@ -95,7 +95,7 @@ GoodActor::GoodActor(GoodActor const & a_Original)
 	m_pos               (a_Original.m_pos),
     m_goodSpriteGroup   (NULL),
     m_curAction         (NULL),
-    m_curGoodAction     (a_Original.m_curGoodAction),     
+    m_curGoodAction     (a_Original.m_curGoodAction),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
     m_loadType          (LOADTYPE_BASIC)
 {
@@ -135,7 +135,7 @@ GoodActor & GoodActor::operator = (GoodActor const & a_Original)
         m_transparency      = a_Original.m_transparency;
         m_index             = a_Original.m_index;
 	    m_pos               = a_Original.m_pos;
- 
+
         if (g_goodSpriteGroupList)
         {
             if (m_goodSpriteGroup)
@@ -156,8 +156,8 @@ GoodActor & GoodActor::operator = (GoodActor const & a_Original)
         delete m_curAction;
         m_curAction     = a_Original.m_curAction ? new Action(*a_Original.m_curAction) : NULL;
         m_curGoodAction = a_Original.m_curGoodAction;
-        
-      	while (m_actionQueue.GetNumItems() > 0) 
+
+      	while (m_actionQueue.GetNumItems() > 0)
         {
             Action *    action  = NULL;
 		    m_actionQueue.Dequeue(action);
@@ -191,7 +191,6 @@ GoodActor::GoodActor(GoodActor *copy)
 	m_actionQueue.CopyQueue();
 }
 
-
 GoodActor::GoodActor(CivArchive &archive)
 :
     Actor               (),
@@ -202,7 +201,7 @@ GoodActor::GoodActor(CivArchive &archive)
 	m_pos               (),
     m_goodSpriteGroup   (NULL),
     m_curAction         (NULL),
-    m_curGoodAction     (GOODACTION_IDLE),     
+    m_curGoodAction     (GOODACTION_IDLE),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
     m_loadType          (LOADTYPE_BASIC)
 {
@@ -222,7 +221,7 @@ GoodActor::~GoodActor()
 {
     delete m_curAction;
 
-	while (m_actionQueue.GetNumItems() > 0) 
+	while (m_actionQueue.GetNumItems() > 0)
     {
         Action *    action  = NULL;
 		m_actionQueue.Dequeue(action);
@@ -242,7 +241,7 @@ void GoodActor::FullLoad(void)
 
 	SpriteGroup *group = g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_FULL,(GAME_ACTION)0);
 	Assert(group == m_goodSpriteGroup);
-	
+
 	m_loadType = LOADTYPE_FULL;
 	m_frame = 0;
 }
@@ -263,7 +262,6 @@ void GoodActor::DumpFullLoad(void)
 	m_frame = 0;
 }
 
-
 void GoodActor::PositionActor(MapPoint &pos)
 {
 	sint32 pixelX, pixelY;
@@ -279,7 +277,7 @@ void GoodActor::AddIdle(void)
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_ANIMEND);
 
 	Anim * anim = CreateAnim(GOODACTION_IDLE);
-	if (anim) 
+	if (anim)
     {
 	    m_curAction->SetAnim(anim);
 	    m_curAction->SetDelay(0);
@@ -291,16 +289,15 @@ void GoodActor::Process(void)
 {
 	sint32		tickCount = GetTickCount();
 
-	if (m_curAction) 
+	if (m_curAction)
     {
 		m_curAction->Process();
 
-		
-		if (m_curAction->Finished()) 
+		if (m_curAction->Finished())
         {
 			if (m_curAction->GetDelay() > 0 &&
 				tickCount > m_curAction->GetDelay()
-               ) 
+               )
             {
 				MapPoint  end;
 				m_curAction->GetEndMapPoint(end);
@@ -319,23 +316,21 @@ void GoodActor::Process(void)
 		}
 	}
 
-	if (m_curAction) 
+	if (m_curAction)
     {
 		sint32 x, y;
 		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
         Actor::SetPos(x, y);
 
-		
 		m_frame = m_curAction->GetSpriteFrame();
 
-		
 		m_transparency = m_curAction->GetTransparency();
 
-		if (m_curAction->GetPath()) 
+		if (m_curAction->GetPath())
         {
             Actor::SetPos(m_curAction->GetPosition());
 		}
-		
+
 		m_facing = m_curAction->GetFacing();
 	}
 }
@@ -353,7 +348,7 @@ void GoodActor::GetNextAction(void)
 			Assert(FALSE);
 		}
 	} else {
-		
+
 		AddIdle();
 	}
 }
@@ -362,7 +357,7 @@ void GoodActor::AddAction(Action *actionObj)
 {
 	Assert(m_goodSpriteGroup && actionObj);
 	if (!m_goodSpriteGroup || !actionObj) return;
-	
+
 	m_actionQueue.Enqueue(actionObj);
 
 	if (m_curAction) {
@@ -376,9 +371,9 @@ Anim *GoodActor::CreateAnim(GOODACTION action)
 {
 	Assert(m_goodSpriteGroup);
 	if (!m_goodSpriteGroup) return NULL;
-	
+
 	Anim	*origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)action);
-	if (origAnim == NULL) 
+	if (origAnim == NULL)
 	{
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 	}
@@ -393,13 +388,11 @@ void GoodActor::DrawSelectionBrackets(void)
 
 	RECT		rect;
 	SetRect(&rect, 0, 0, 1, 1);
-	
 
-	
- 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2, 
+
+ 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2,
 						m_y + (sint32)(k_TILE_GRID_HEIGHT * g_tiledMap->GetScale())/2);
 
-	
 	InflateRect(&rect, 25, 25);
 
 	g_tiledMap->AddDirtyRectToMix(rect);
@@ -431,9 +424,9 @@ bool GoodActor::Draw(bool fogged)
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-	
 
-	
+
+
 
 
 
@@ -441,8 +434,8 @@ bool GoodActor::Draw(bool fogged)
 
 
 #ifdef _ACTOR_DRAW_OPTIMIZATION
-	
-	if ( ( m_frame == m_oldFrame ) && 
+
+	if ( ( m_frame == m_oldFrame ) &&
 		( m_x+xoffset == m_oldOffsetX ) && ( m_y+yoffset == m_oldOffsetY ) )
 	{
 		if (m_paintTwice < 2)
@@ -462,7 +455,7 @@ bool GoodActor::Draw(bool fogged)
 	if (fogged)
 		flags |= k_BIT_DRAWFLAGS_FOGGED;
 
-	m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing, 
+	m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
 							g_tiledMap->GetScale(), m_transparency, color, flags);
 
 	if (g_selected_item->GetState() == SELECT_TYPE_GOOD) {
@@ -479,11 +472,10 @@ void GoodActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
 
-
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * scale);
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * scale);
 
-	m_goodSpriteGroup->DrawDirect(surf, GOODACTION_IDLE, m_frame, x+xoffset, y+yoffset, m_facing, scale, 
+	m_goodSpriteGroup->DrawDirect(surf, GOODACTION_IDLE, m_frame, x+xoffset, y+yoffset, m_facing, scale,
 							m_transparency, color, flags);
 }
 
@@ -532,7 +524,7 @@ void GoodActor::GetBoundingRect(RECT *rect) const
 
 	POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	double	scale = g_tiledMap->GetScale();
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 	rect->left = 0;
@@ -547,12 +539,12 @@ void GoodActor::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
 
-	if (archive.IsStoring()) 
+	if (archive.IsStoring())
     {
 		archive << m_index;
 		m_pos.Serialize(archive);
-	} 
-    else 
+	}
+    else
     {
 		archive >> m_index;
 		m_pos.Serialize(archive);

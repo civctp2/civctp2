@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "AttractWindow.h"
 
@@ -47,12 +45,12 @@ void AttractWindow::Cleanup(void)
 	}
 }
 
-AttractWindow::AttractWindow(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, 
+AttractWindow::AttractWindow(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							 sint32 bpp, AUI_WINDOW_TYPE type)
 							 :
 C3Window(retval, id, ldlBlock, bpp, type)
 {
-	*retval = InitCommon();	
+	*retval = InitCommon();
 }
 
 AttractWindow::~AttractWindow()
@@ -64,25 +62,23 @@ AUI_ERRCODE AttractWindow::InitCommon(void)
 {
 	m_attractStage = -1;
 	m_finishTime = 0;
-	
-	
+
 
 	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE AttractWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
-	if (!surface) 
+	if (!surface)
 		surface = TheSurface();
 
 	DrawAttractiveStuff();
 
 	RECT rect = {0, 0, Width(), Height()};
 
-	
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
@@ -191,7 +187,6 @@ void AttractWindow::HighlightControl(MBCHAR *ldlName)
 	Assert(g_c3ui->GetLdl());
 	if (!g_c3ui->GetLdl()) return;
 
-	
 	aui_Region *region = (aui_Region *)g_c3ui->GetLdl()->GetObject(ldlName);
 
 	Assert(region);
@@ -200,36 +195,33 @@ void AttractWindow::HighlightControl(MBCHAR *ldlName)
 		return;
 	}
 
-	if(region->CanAttract()) {		
+	if(region->CanAttract()) {
 		RemoveRegion(region);
 		AddRegion(region);
 		return;
 	}
-	RECT rect = {region->X(), region->Y(), 
+	RECT rect = {region->X(), region->Y(),
 					region->X() + region->Width(),
 					region->Y() + region->Height() };
 
-	
 	if ( region->GetParent() != g_c3ui )
 		(( aui_Control *)region)->ToScreen( &rect );
 
 	m_screenAttractRect = rect;
 
-	
 	sint32		x, y;
 
 	x = m_screenAttractRect.left + (m_screenAttractRect.right - m_screenAttractRect.left)/2;
 	y = m_screenAttractRect.top + (m_screenAttractRect.bottom - m_screenAttractRect.top)/2;
-	
+
 	m_attractPoint.x = x;
 	m_attractPoint.y = y;
 
 	x -= Width()/2;
 	y -= Height()/2;
 
-	
 	if (x < 0) x = 0;
-	
+
 	if (y < 0) y = 0;
 	if (x + Width() > g_c3ui->Width())
 		x = g_c3ui->Width() - Width();
@@ -237,19 +229,15 @@ void AttractWindow::HighlightControl(MBCHAR *ldlName)
 	if (y + Height() > g_c3ui->Height())
 		y = g_c3ui->Height() - Height();
 
-	
 	Move(x, y);
 
-	
 	m_attractPoint.x -= X();
 	m_attractPoint.y -= Y();
 
 	m_attractStage = 0;
 
-	
 	ClearWindow();
 
-	
 	Show();
 
 	g_c3ui->AddWindow(this);

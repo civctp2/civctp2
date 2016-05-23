@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,6 @@ class ObjPool;
 #include "Globals.h"                // k_GAME_OBJ_TYPE_...
 #include "ID.h"
 
-
 size_t const    k_OBJ_POOL_TABLE_SIZE       = 1024;
 
 uint32 const    k_OBJ_POOL_TABLE_SIZE_MASK  = k_OBJ_POOL_TABLE_SIZE - 1;
@@ -50,29 +49,29 @@ uint32 const    k_ID_TYPE_MASK              = 0xf0000000u;
 uint32 const    k_ID_KEY_MASK               = ~k_ID_TYPE_MASK;
 uint32 const    k_ID_MASK_SHIFT             = 28;
 
-uint32 const    k_BIT_GAME_OBJ_TYPE_UNIT    = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_UNIT    =
     (uint32) k_GAME_OBJ_TYPE_UNIT << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_POP     = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_POP     =
     (uint32) k_GAME_OBJ_TYPE_POP << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE =
     (uint32) k_GAME_OBJ_TYPE_TRADE_ROUTE << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_TRADE_OFFER = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_TRADE_OFFER =
     (uint32) k_GAME_OBJ_TYPE_TRADE_OFFER << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT =
     (uint32) k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST =
     (uint32) k_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_INSTALLATION = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_INSTALLATION =
     (uint32) k_GAME_OBJ_TYPE_INSTALLATION << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_CIVILISATION = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_CIVILISATION =
     (uint32) k_GAME_OBJ_TYPE_CIVILISATION << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_AGREEMENT = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_AGREEMENT =
     (uint32) k_GAME_OBJ_TYPE_AGREEMENT << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_MESSAGE = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_MESSAGE =
     (uint32) k_GAME_OBJ_TYPE_MESSAGE << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_ARMY    = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_ARMY    =
     (uint32) k_GAME_OBJ_TYPE_ARMY << k_ID_MASK_SHIFT;
-uint32 const    k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB  = 
+uint32 const    k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB  =
     (uint32) k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB << k_ID_MASK_SHIFT;
 
 class CivArchive;
@@ -81,7 +80,7 @@ class ObjPool
 {
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -105,7 +104,7 @@ private:
 	}
 	uint32 Key(uint32 id) const
 	{
-		Assert(id); 
+		Assert(id);
 		Assert((id & k_ID_TYPE_MASK)== m_id_type);
 
 		return id & k_OBJ_POOL_TABLE_SIZE_MASK;
@@ -122,13 +121,13 @@ public:
 		return IsValidKey(id.m_id, val);
 	}
 	bool    IsValidKey (uint32 id, uint32 &val) const;
-	
+
 	void    HackSetKey(uint32 k);
 	uint32  HackGetKey() { return m_nObjs; }
 
 	const GameObj * Get(const ID &id) const
 	{
-		return Get(id.m_id); 
+		return Get(id.m_id);
 	}
 
 	const GameObj* Get(uint32 id) const

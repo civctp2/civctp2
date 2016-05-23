@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_region.h"
 
 #include "aui_dimension.h"
-
 
 
 aui_Dimension::aui_Dimension( aui_Region *parent )
@@ -40,7 +28,6 @@ aui_Dimension::aui_Dimension( aui_Region *parent )
 }
 
 
-
 aui_Region *aui_Dimension::SetParent( aui_Region *parent )
 {
 	aui_Region *prevParent = m_parent;
@@ -49,12 +36,10 @@ aui_Region *aui_Dimension::SetParent( aui_Region *parent )
 }
 
 
-
 void aui_Dimension::AnchorLeft( void )
 {
 	m_hanchorType = AUI_DIMENSION_HANCHOR_LEFT;
 }
-
 
 
 void aui_Dimension::AnchorHorizontalCenter( void )
@@ -63,12 +48,10 @@ void aui_Dimension::AnchorHorizontalCenter( void )
 }
 
 
-
 void aui_Dimension::AnchorRight( void )
 {
 	m_hanchorType = AUI_DIMENSION_HANCHOR_RIGHT;
 }
-
 
 
 void aui_Dimension::AnchorTop( void )
@@ -77,19 +60,16 @@ void aui_Dimension::AnchorTop( void )
 }
 
 
-
 void aui_Dimension::AnchorVerticalCenter( void )
 {
 	m_vanchorType = AUI_DIMENSION_VANCHOR_CENTER;
 }
 
 
-
 void aui_Dimension::AnchorBottom( void )
 {
 	m_vanchorType = AUI_DIMENSION_VANCHOR_BOTTOM;
 }
-
 
 
 void aui_Dimension::AbsoluteHorizontalPosition( BOOL absolute )
@@ -101,7 +81,6 @@ void aui_Dimension::AbsoluteHorizontalPosition( BOOL absolute )
 }
 
 
-
 void aui_Dimension::AbsoluteVerticalPosition( BOOL absolute )
 {
 	if ( absolute )
@@ -109,7 +88,6 @@ void aui_Dimension::AbsoluteVerticalPosition( BOOL absolute )
 	else
 		m_vposType = AUI_DIMENSION_VPOSITION_RELATIVE;
 }
-
 
 
 void aui_Dimension::AbsoluteHorizontalSize( BOOL absolute )
@@ -121,7 +99,6 @@ void aui_Dimension::AbsoluteHorizontalSize( BOOL absolute )
 }
 
 
-
 void aui_Dimension::AbsoluteVerticalSize( BOOL absolute )
 {
 	if ( absolute )
@@ -129,7 +106,6 @@ void aui_Dimension::AbsoluteVerticalSize( BOOL absolute )
 	else
 		m_vsizeType = AUI_DIMENSION_VSIZE_RELATIVE;
 }
-
 
 
 sint32 aui_Dimension::CalculateX( void )
@@ -155,12 +131,11 @@ sint32 aui_Dimension::CalculateX( void )
 			return sint32((double)m_parent->Width() * m_hpos / 100.0 + 0.5);
 	}
 	else
-		
+
 		Assert( FALSE );
 
 	return m_hpos;
 }
-
 
 
 sint32 aui_Dimension::CalculateY( void )
@@ -186,12 +161,11 @@ sint32 aui_Dimension::CalculateY( void )
 			return sint32((double)m_parent->Height() * m_vpos / 100.0 + 0.5);
 	}
 	else
-		
+
 		Assert( FALSE );
 
 	return m_vpos;
 }
-
 
 
 sint32 aui_Dimension::CalculateWidth( void )
@@ -203,12 +177,11 @@ sint32 aui_Dimension::CalculateWidth( void )
 	else if ( m_hsizeType == AUI_DIMENSION_HSIZE_RELATIVE )
 		return sint32((double)m_parent->Width() * m_hsize / 100.0 + 0.5);
 	else
-		
+
 		Assert( FALSE );
 
 	return m_hsize;
 }
-
 
 
 sint32 aui_Dimension::CalculateHeight( void )
@@ -220,12 +193,11 @@ sint32 aui_Dimension::CalculateHeight( void )
 	else if ( m_vsizeType == AUI_DIMENSION_VSIZE_RELATIVE )
 		return sint32((double)m_parent->Height() * m_vsize / 100.0 + 0.5);
 	else
-		
+
 		Assert( FALSE );
 
 	return m_vsize;
 }
-
 
 
 void aui_Dimension::CalculateAll(
@@ -234,9 +206,9 @@ void aui_Dimension::CalculateAll(
 	sint32 *width,
 	sint32 *height )
 {
-	
-	
-	
+
+
+
 
 	*x = CalculateX();
 	*y = CalculateY();
@@ -244,17 +216,15 @@ void aui_Dimension::CalculateAll(
 	*height = CalculateHeight();
 }
 
-
 void aui_Dimension::SetHorizontalPosition( sint32 x )
 {
 	if ( !m_parent ) m_hpos = x;
 
 	if ( m_hanchorType == AUI_DIMENSION_HANCHOR_CENTER )
 	{
-		
-		
+
 		m_hpos = x;
-		
+
 	}
 	else if ( m_hanchorType == AUI_DIMENSION_HANCHOR_RIGHT )
 	{
@@ -273,11 +243,10 @@ void aui_Dimension::SetHorizontalPosition( sint32 x )
 
 	}
 	else
-		
+
 		Assert( FALSE );
 
 }
-
 
 void aui_Dimension::SetVerticalPosition( sint32 y )
 {
@@ -285,8 +254,7 @@ void aui_Dimension::SetVerticalPosition( sint32 y )
 
 	if ( m_vanchorType == AUI_DIMENSION_VANCHOR_CENTER )
 	{
-		
-		
+
 		m_vpos = y;
 	}
 	else if ( m_vanchorType == AUI_DIMENSION_VANCHOR_BOTTOM )
@@ -306,11 +274,10 @@ void aui_Dimension::SetVerticalPosition( sint32 y )
 
 	}
 	else
-		
+
 		Assert( FALSE );
 
 }
-
 
 void aui_Dimension::SetHorizontalSize( sint32 width )
 {
@@ -322,11 +289,10 @@ void aui_Dimension::SetHorizontalSize( sint32 width )
 		m_hsize = sint32((double) width * 100.0 / m_parent->Width() + 0.5);
 
 	else
-		
+
 		Assert( FALSE );
 
 }
-
 
 void aui_Dimension::SetVerticalSize( sint32 height )
 {
@@ -337,7 +303,7 @@ void aui_Dimension::SetVerticalSize( sint32 height )
 	else if ( m_vsizeType == AUI_DIMENSION_VSIZE_RELATIVE )
 		m_vsize = sint32((double) height * 100.0 / m_parent->Height() + 0.5);
 	else
-		
+
 		Assert( FALSE );
 
 }

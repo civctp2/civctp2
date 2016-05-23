@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,9 +29,7 @@
 
 #include "c3.h"
 
-
 #include "radarwindow.h"
-
 
 #include "aui_ldl.h"
 #include "c3ui.h"
@@ -43,7 +41,6 @@
 #include "gameinit.h"		// g_startHotseatGame
 
 ctp2_Window *g_radarWindow = NULL;
-
 
 
 extern sint32		g_ScreenHeight;
@@ -62,8 +59,8 @@ extern RadarMap		*g_radarMap;
 void UnitsToggleButtonActionCallback
 (
 	aui_Control *control,
-	uint32 action, 
-	uint32 data, 
+	uint32 action,
+	uint32 data,
 	void *cookie
 )
 {
@@ -78,12 +75,11 @@ void UnitsToggleButtonActionCallback
 	}
 }
 
-
 void CitiesToggleButtonActionCallback
 (
 	aui_Control *control,
-	uint32 action, 
-	uint32 data, 
+	uint32 action,
+	uint32 data,
 	void *cookie
 )
 {
@@ -98,12 +94,11 @@ void CitiesToggleButtonActionCallback
 	}
 }
 
-
 void BordersToggleButtonActionCallback
 (
 	aui_Control *control,
-	uint32 action, 
-	uint32 data, 
+	uint32 action,
+	uint32 data,
 	void *cookie
 )
 {
@@ -117,7 +112,6 @@ void BordersToggleButtonActionCallback
 		break;
 	}
 }
-
 
 void FilterToggleButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
@@ -220,24 +214,20 @@ void RelationsToggleButtonActionCallback(aui_Control *control,
 
 sint32 radarwindow_Initialize()
 {
-	
+
 	if(g_radarWindow)
 		return(0);
 
-	
 	sint32 radarSize = g_ScreenHeight / 3;
 
-	
 	g_radarWindow = static_cast<ctp2_Window*>(
 		 aui_Ldl::BuildHierarchyFromRoot("RadarWindow"));
 
 	g_radarWindow->SetType(AUI_WINDOW_TYPE_SINKING);
 
-	
 	g_radarMap = static_cast<RadarMap*>(aui_Ldl::GetObject(
 		"RadarWindow.RadarMap"));
 
-	
 	ctp2_Static *topBorder		= static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder"));
 	ctp2_Static *leftBorder		= static_cast<ctp2_Static*>(aui_Ldl::GetObject(
@@ -247,60 +237,50 @@ sint32 radarwindow_Initialize()
 	ctp2_Static *bottomBorder	= static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 		"RadarWindow.BottomBorder"));
 
-	
 	sint32 topSize		= topBorder->Height();
 	sint32 leftSize		= leftBorder->Width();
 	sint32 rightSize	= rightBorder->Width();
 	sint32 bottomSize	= bottomBorder->Height();
 
-	
 	if(g_ScreenWidth <= 800) {
 		radarSize = 198 - (leftSize + rightSize);
 	}
 
-	
 	g_radarWindow->Resize(leftSize + radarSize + rightSize,
 		topSize + radarSize + bottomSize);
-	
-	
-	
+
+
 	g_radarWindow->Move(0, g_ScreenHeight - g_radarWindow->Height());
 
-	
 	topBorder->Resize(leftSize + radarSize + rightSize, topSize);
 	leftBorder->Resize(leftSize, radarSize);
 	rightBorder->Resize(rightSize, radarSize);
 	bottomBorder->Resize(leftSize + radarSize + rightSize, bottomSize);
 
-	
 	leftBorder->Move(0, topSize);
 	rightBorder->Move(leftSize + radarSize, topSize);
 	bottomBorder->Move(0, topSize + radarSize);
 
-	
 	g_radarMap->Resize(radarSize, radarSize);
 	g_radarMap->Move(leftSize, topSize);
 
-	
-	
-	
+
+
+
 #define k_RADAR_BUTTONS_PER_ROW 7
 
-	sint32 childWidth = radarSize / k_RADAR_BUTTONS_PER_ROW; 
+	sint32 childWidth = radarSize / k_RADAR_BUTTONS_PER_ROW;
 
 	sint32 col = 0;
 	sint32 row = 0;
-	
-	
-	
+
+
 	for(sint32 childIndex = 0; childIndex < topBorder->NumChildren(); childIndex++) {
-		
+
 		aui_Region *child = topBorder->GetChildByIndex(childIndex);
 
-		
 		child->Resize(childWidth, child->Height());
 
-		
 		child->Move(leftSize + (childWidth * col), child->Y() + row * child->Height());
 		col++;
 		if(col >= k_RADAR_BUTTONS_PER_ROW) {
@@ -309,7 +289,6 @@ sint32 radarwindow_Initialize()
 		}
 	}
 
-	
 	ctp2_Switch *unitsButton	= static_cast<ctp2_Switch*>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button1"));
 	ctp2_Switch *citiesButton	= static_cast<ctp2_Switch*>(aui_Ldl::GetObject(
@@ -333,12 +312,10 @@ sint32 radarwindow_Initialize()
 
 	minimizeButton->Move(topBorder->Width() - minimizeButton->Width() - 15, minimizeButton->Y());
 
-	
 	Assert(unitsButton);
 	Assert(citiesButton);
 	Assert(bordersButton);
 
-	
 	unitsButton->SetState( g_radarMap->IsDisplayUnits() );
 	citiesButton->SetState( g_radarMap->IsDisplayCities() );
 	bordersButton->SetState( g_radarMap->IsDisplayBorders() );
@@ -349,7 +326,6 @@ sint32 radarwindow_Initialize()
 	capitolsButton->SetState( g_radarMap->IsDisplayCapitols());
 	relationsButton->SetState( g_radarMap->IsDisplayRelations());
 
-	
 	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
 	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, NULL);
 	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, NULL);
@@ -360,7 +336,6 @@ sint32 radarwindow_Initialize()
 	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, NULL);
 	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, NULL);
 	relationsButton->SetActionFuncAndCookie(RelationsToggleButtonActionCallback, NULL);
-
 
 	g_c3ui->AddWindow(g_radarWindow);
 
@@ -373,32 +348,27 @@ sint32 radarwindow_Initialize()
 	return(0);
 }
 
-
 void radarwindow_Display(void)
 {
-	
+
 	Assert(g_radarWindow != NULL);
 	if(!g_radarWindow)
 		return;
 
-	
 	g_radarWindow->Show();
 }
 
-
 sint32 radarwindow_Cleanup( void )
 {
-	
+
 	if(g_radarWindow) {
 		g_c3ui->RemoveWindow(g_radarWindow->Id());
 		aui_Ldl::DeleteHierarchyFromRoot("RadarWindow");
 	}
 
-	
 	g_radarWindow = NULL;
 	g_radarMap = NULL;
 
-	
 	return(0);
 }
 
@@ -424,4 +394,3 @@ void radarwindow_Toggle()
 		g_radarWindow->Hide();
 	}
 }
-

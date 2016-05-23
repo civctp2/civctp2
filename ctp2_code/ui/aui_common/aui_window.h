@@ -11,14 +11,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -62,7 +62,6 @@ enum AUI_WINDOW_TYPE
 #define k_WINDOW_ATTRIBUTE_DRAGGABLE		0x00000080
 #define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
 
-
 #include "aui_region.h"
 #include "aui_dirtylist.h"
 #include "aui_mouse.h"
@@ -81,7 +80,7 @@ public:
 		AUI_ERRCODE *retval,
 		uint32 id,
 		MBCHAR *ldlBlock,
-		sint32 bpp = 0, 
+		sint32 bpp = 0,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 	aui_Window(
 		AUI_ERRCODE *retval,
@@ -90,7 +89,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		sint32 bpp = 0, 
+		sint32 bpp = 0,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 	virtual ~aui_Window();
 
@@ -103,9 +102,9 @@ public:
 
 protected:
 	aui_Window()
-    :   aui_Region          (),  
+    :   aui_Region          (),
 	    m_surface           (NULL),
-        m_opaqueControls    (FALSE),		
+        m_opaqueControls    (FALSE),
         m_bpp               (0),
         m_type              (AUI_WINDOW_TYPE_STANDARD),
     	m_dirtyList         (NULL),
@@ -132,17 +131,13 @@ public:
 	virtual AUI_ERRCODE MoveOG( void );
 
 
-	
 	aui_DirtyList *GetDirtyList( void ) { return m_dirtyList; }
 
-	
 	aui_Surface *TheSurface( void ) const { return m_surface; }
-
 
 	BOOL		AreControlsOpaque( void ) const { return m_opaqueControls; }
 	uint32		Type( void ) const { return m_type; }
 
-	
 	AUI_ERRCODE	AddControl( aui_Control *control )
 	{ return AddChild( (aui_Region *)control ); }
 	AUI_ERRCODE	RemoveControl( uint32 controlId )
@@ -152,14 +147,11 @@ public:
 	virtual AUI_ERRCODE	AddChild( aui_Region *child );
 	virtual AUI_ERRCODE	RemoveChild( uint32 controlId );
 
-	
 	virtual AUI_ERRCODE	ShowThis( void );
 	virtual AUI_ERRCODE	HideThis( void );
 
-	
 	BOOL	IsDirty( void ) const { return !m_dirtyList->IsEmpty(); }
 
-	
 	BOOL IsOpaque( void ) const
 		{ return !IsTransparent() && !IsTranslucent(); }
 	BOOL IsTransparent( void ) const
@@ -184,25 +176,20 @@ public:
 	uint32 SetDraggable( BOOL draggable );
 	uint32 SetDynamic( BOOL dynamic );
 
-	
 	aui_Region *GrabRegion( void ) const { return m_grabRegion; }
 
-	
 	virtual AUI_ERRCODE Draw(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	AUI_ERRCODE	Invalidate( RECT *rect = NULL );
 
-	
 	AUI_ERRCODE AddDirtyRect( RECT *rect );
 	AUI_ERRCODE AddDirtyRect(
 		sint32 left,
@@ -210,11 +197,9 @@ public:
 		sint32 right,
 		sint32 bottom );
 
-	
 	void SetSurface( aui_Surface *surface ) { m_surface = surface; }
 	void SetType( AUI_WINDOW_TYPE type ) { m_type = type; }
 
-	
 	BOOL IsDragging() { return m_isDragging; }
 
 	void SetStencilFromImage(const MBCHAR *imageFileName);
@@ -229,44 +214,41 @@ protected:
 	virtual AUI_ERRCODE CreateSurface( void );
 
 
-
 	void MakeSureSurfaceIsValid( void );
 	void DeleteSurfaceIfDynamic( void );
 
-	aui_Surface	*m_surface;		
+	aui_Surface	*m_surface;
 
+	BOOL m_opaqueControls;
+	sint32 m_bpp;
 
-	BOOL m_opaqueControls;		
-	sint32 m_bpp;				
+	AUI_WINDOW_TYPE m_type;
 
-	AUI_WINDOW_TYPE m_type;		
+	aui_DirtyList *m_dirtyList;
 
-	aui_DirtyList *m_dirtyList;	
-
-	BOOL		m_isDragging;	
-	POINT		m_grabPoint;	
-	aui_Region	*m_grabRegion;	
+	BOOL		m_isDragging;
+	POINT		m_grabPoint;
+	aui_Region	*m_grabRegion;
 
 	sint32 m_ogX;
 	sint32 m_ogY;
 
-	aui_Stencil *m_stencil;     
+	aui_Stencil *m_stencil;
 
 	aui_Control *m_focusControl;
 	tech_WLList<aui_Region *> *m_focusList;
 
-	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
-	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
+	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 
 	friend class aui_UI;
 };
 
-
-#endif 
+#endif

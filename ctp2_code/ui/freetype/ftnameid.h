@@ -32,7 +32,6 @@
 #define TT_PLATFORM_ISO                 2
 #define TT_PLATFORM_MICROSOFT           3
 
-
 /*
  * possible values of the platform specific encoding identifier field in
  * the name records of the TTF "name" table when the 'Platform' identifier
@@ -43,7 +42,6 @@
 #define TT_APPLE_ID_UNICODE_1_1         1
 #define TT_APPLE_ID_ISO_10646           2
 #define TT_APPLE_ID_UNICODE_2_0         3
-
 
 /*
  * possible values of the platform specific encoding identifier field in
@@ -86,7 +84,6 @@
 #define TT_MAC_ID_SINDHI                31
 #define TT_MAC_ID_UNINTERP              32
 
-
 /*
  * possible values of the platform specific encoding identifier field in
  * the name records of the TTF "name" table when the 'Platform' identifier
@@ -96,7 +93,6 @@
 #define TT_ISO_ID_7BIT_ASCII    0
 #define TT_ISO_ID_10646         1
 #define TT_ISO_ID_8859_1        2
-
 
 /*
  * possible values of the platform specific encoding identifier field in
@@ -111,7 +107,6 @@
 #define TT_MS_ID_BIG_5          4
 #define TT_MS_ID_WANSUNG        5
 #define TT_MS_ID_JOHAB          6
-
 
 
 /*
@@ -234,7 +229,6 @@
 #define TT_MAC_LANGID_IRISH_GAELIC                      141
 #define TT_MAC_LANGID_BRETON                            142
 #define TT_MAC_LANGID_INUKTITUT                         143
-
 
 /*
  * possible values of the language identifier field in the name records of
@@ -397,7 +391,6 @@
 #define TT_MS_LANGID_SANSKRIT_INDIA                     0x044f
 #define TT_MS_LANGID_KONKANI_INDIA                      0x0457
 
-
 /*
  * possible values of the 'Name' identifier field in the name records of
  * the TTF "name" table.  These values are platform independent.
@@ -423,7 +416,6 @@
 #define TT_NAME_ID_PREFERRED_FAMILY     16
 #define TT_NAME_ID_PREFERRED_SUBFAMILY  17
 #define TT_NAME_ID_MAC_FULL_NAME        18
-
 
 /*
  * Bit Mask values for the Unicode Ranges from the TTF "OS2 " table.
@@ -591,7 +583,6 @@
 /* Bit 70   Tibetan */
 #define TT_UCR_TIBETAN                         (1L <<  6) /* U+0F00-U+0FBF */
 
-
 /* Some compilers have a very limited length of identifiers. */
 #if defined(__TURBOC__) && __TURBOC__ < 0x0410 || defined(__PACIFIC__)
 #define HAVE_LIMIT_ON_IDENTS
@@ -609,11 +600,11 @@
  *  Borland compilers (read: from BC++ 3.1 on) can increase this limit.
  *  If you get a warning with such a compiler, use the -i40 switch.
  */
- 
+
 #define TT_UCR_ARABIC_PRESENTATION_FORMS_A      \
          TT_UCR_ARABIC_PRESENTATIONS_A
 #define TT_UCR_ARABIC_PRESENTATION_FORMS_B      \
-         TT_UCR_ARABIC_PRESENTATIONS_B           
+         TT_UCR_ARABIC_PRESENTATIONS_B
 
 #define TT_UCR_COMBINING_DIACRITICAL_MARKS      \
          TT_UCR_COMBINING_DIACRITICS
@@ -623,6 +614,5 @@
 #endif /* ndef HAVE_LIMIT_ON_IDENTS */
 
 #endif /* FTNAMEID_H */
-
 
 /* END */

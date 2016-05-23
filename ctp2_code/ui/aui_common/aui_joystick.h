@@ -27,7 +27,6 @@ enum AUI_JOYSTICK_CONTROL
 	AUI_JOYSTICK_BUTTON_8
 };
 
-
 struct aui_JoystickEvent
 {
 	LONG		lX;
@@ -36,8 +35,8 @@ struct aui_JoystickEvent
 	DWORD		POV[4];
 	BYTE		buttons[32];
 	uint32   key;
-	BOOL		down;	
-	uint32	time;	
+	BOOL		down;
+	uint32	time;
 
 	aui_JoystickEvent()
 	:
@@ -53,10 +52,8 @@ struct aui_JoystickEvent
 	}
 };
 
-
 #include "aui_base.h"
 #include "aui_input.h"
-
 
 class aui_Joystick : public aui_Base, public virtual aui_Input
 {
@@ -67,7 +64,7 @@ public:
 	aui_JoystickEvent	*GetLatestJoystickEvent( void ) { return &m_data; }
 
 protected:
-	aui_JoystickEvent m_data;	
+	aui_JoystickEvent m_data;
 };
 
-#endif 
+#endif

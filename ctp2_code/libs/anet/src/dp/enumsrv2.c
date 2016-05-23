@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -88,12 +88,12 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 	} PACK pkt;
 	playerHdl_t h;
 	dp_species_t sessbuf;
-	
+
 	/* Note: fields of ping packet are:
 		dp_karma_t	karma;
 		unsigned short	pktnum;
 		unsigned char	len;
-		unsigned char	data[dp_MAXLEN_UNRELIABLE-5];	// 0..len-1 
+		unsigned char	data[dp_MAXLEN_UNRELIABLE-5];	// 0..len-1
 	 * We will store the current time in the data field.
 	*/
 
@@ -127,7 +127,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 
 	DPRINT(("dpEnumServers: sending to h:%d, len %d, t:%d\n", h, pkt.body.len, dp->now));
 	dpSwapPingPacket(&pkt.body);
-	err = dpio_put_unreliable(dp->dpio, &h, 1, &pkt, 
+	err = dpio_put_unreliable(dp->dpio, &h, 1, &pkt,
 			sizeof(pkt.tag)
 			+sizeof(pkt.body.karma)
 			+sizeof(pkt.body.len)
@@ -161,8 +161,8 @@ static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname,
 	if (hostnamelen > sizeof(server.hostname))
 		hostnamelen = sizeof(server.hostname);
 
-	DPRINT(("addServer: ns %d, name %*.*s, adr %02x.%02x.%02x.%02x.%02x.%02x, len %d\n", 
-			dptab_tableSize(dp->serverpings), hostnamelen, hostnamelen, hostname, 
+	DPRINT(("addServer: ns %d, name %*.*s, adr %02x.%02x.%02x.%02x.%02x.%02x, len %d\n",
+			dptab_tableSize(dp->serverpings), hostnamelen, hostnamelen, hostname,
 			255 & adrbuf[0],
 			255 & adrbuf[1],
 			255 & adrbuf[2],
@@ -363,7 +363,7 @@ static dp_result_t dp_subscribeServerList(dp_t *dp)
 	DPRINT(("dp_subscribeServerList: hGameServer h:%x, servertab:%p\n",
 				dp->hGameServer, dp->servertab));
 
-	if (dp->hGameServer == PLAYER_NONE) 
+	if (dp->hGameServer == PLAYER_NONE)
 		return dp_RES_OK;
 
 	/* If we already have a server table, assume we don't need to update it */
@@ -430,7 +430,7 @@ void dp_initEnumServers(dp_t *dp)
 			int subkeylen;
 			void *buf;
 			size_t len;
-			
+
 			/* Blow away the table if it doesn't have the correct record size */
 			err = dptab_get_byindex(dp->serverpings, 1, &buf, &len, subkey, &subkeylen);
 			if ((err != dp_RES_OK) || (len != sizeof(dp_serverInfo_t))) {
@@ -486,7 +486,7 @@ void dp_initEnumServers(dp_t *dp)
 			/* Don't use DNS - it's too slow.  We really need to update
 			 * this list dynamically!
 			 */
-			adrlen = dpio_scanAdr(dp->dpio, bootstrap[sn].ip, 
+			adrlen = dpio_scanAdr(dp->dpio, bootstrap[sn].ip,
 					adrbuf, sizeof(adrbuf));
 			if (adrlen == dp->dpio->myAdrLen)
 				addServer(dp, adrbuf, adrlen,
@@ -496,7 +496,7 @@ void dp_initEnumServers(dp_t *dp)
 
 	DPRINT(("dp_initEnumServers: hGameServer:%x servertab:%p\n", dp->hGameServer, dp->servertab));
 	/* If we're connected to a server, ask it to send us the new table. */
-	if ((dp->hGameServer != PLAYER_NONE) 
+	if ((dp->hGameServer != PLAYER_NONE)
 	&&   !dp->servertab) {
 		err = dp_subscribeServerList(dp);
 		if (err != dp_RES_OK) {
@@ -512,7 +512,7 @@ void dp_saveServerList(dp_t *dp)
 {
 	FILE *fp;
 
-	if (!dp) 
+	if (!dp)
 		return;
 	if (!dp->serverpings)
 		return;
@@ -557,7 +557,7 @@ static void calc_delay(dp_serverInfo_t *server)
 		server->loss_percent = n_lost * 100 / (n_replies + n_lost);
 	else
 		server->loss_percent = 100;
-	/*DPRINT(("calc_delay: hostname %s, n_lost %d, n_sent %d, %% %d\n", 
+	/*DPRINT(("calc_delay: hostname %s, n_lost %d, n_sent %d, %% %d\n",
 		server->hostname, n_lost, n_lost+n_replies, server->loss_percent));*/
 }
 
@@ -601,7 +601,7 @@ static int dp_PASCAL serversEx_cb(const char *hostname, long roundtrip_ms,
 
  Since our functions must be non-blocking, returns immediately,
  before any calls to the callback. The callback is called by dpReceive,
- which must be called frequently. 
+ which must be called frequently.
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumServers(
 	dp_t *dp,
@@ -668,15 +668,15 @@ DP_API dp_result_t DP_APIX dpEnumServersEx(
 		int subkeylen;
 		size_t serverlen;
 		dp_result_t err = dptab_get_byindex(dp->serverpings, i, (void **)&server, &serverlen, subkey, &subkeylen);
-		DPRINT(("dpEnumServersEx: getting host %d, err:%d; adr %02x.%02x.%02x.%02x.%02x.%02x\n", i, err, 
+		DPRINT(("dpEnumServersEx: getting host %d, err:%d; adr %02x.%02x.%02x.%02x.%02x.%02x\n", i, err,
 				0xff & subkey[0],
-				0xff & subkey[1], 
+				0xff & subkey[1],
 				0xff & subkey[2],
 				0xff & subkey[3],
-				0xff & subkey[4], 
+				0xff & subkey[4],
 				0xff & subkey[5]
 				));
-		DPRINT(("dpEnumServersEx: subkeylen %d, dp->dpio->myAdrLen %d \n", subkeylen, dp->dpio->myAdrLen)); 
+		DPRINT(("dpEnumServersEx: subkeylen %d, dp->dpio->myAdrLen %d \n", subkeylen, dp->dpio->myAdrLen));
 		assert(subkeylen == dp->dpio->myAdrLen);
 		if (err == dp_RES_OK) {
 			dp_serverInfo_t serv = *server;
@@ -695,7 +695,7 @@ DP_API dp_result_t DP_APIX dpEnumServersEx(
  this routine will ping the servers for him with an interval between pings
  somewhere between 1 and 10 seconds.
  If no response is received from any server, decreases the period.
- otherwise, increases the period.  
+ otherwise, increases the period.
 ----------------------------------------------------------------------*/
 dp_result_t dpEnumServersPoll(dp_t *dp)
 {
@@ -806,8 +806,7 @@ dp_result_t dpHandleServerPingResponsePacket(
 	 */
 	dptab_set(dp->dt, dp->serverpings, adrbuf, dp->dpio->myAdrLen, &serv, sizeof(serv), 1, PLAYER_ME);
 
-
-	DPRINT(("dpHandleServerPingResponsePacket: host %s, rtt %d, loss %d%%; sent at T:%d, now t:%d\n", 
+	DPRINT(("dpHandleServerPingResponsePacket: host %s, rtt %d, loss %d%%; sent at T:%d, now t:%d\n",
 			serv.hostname, serv.rtt_ms_avg, serv.loss_percent, tStart, dp->now));
 
 	/* Inform caller via callback, if desired */

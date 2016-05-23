@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
     cin.get(c);
 
 
-
     // second, use Timer::getElapsedTime() ////////////////////////////////////
     Timer t;
 

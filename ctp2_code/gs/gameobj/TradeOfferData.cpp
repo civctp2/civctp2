@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Trade Offer data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ void TradeOfferData::Serialize(CivArchive &archive)
 	}
 }
 
-BOOL TradeOfferData::Accept(PLAYER_INDEX player, 
+BOOL TradeOfferData::Accept(PLAYER_INDEX player,
                             const Unit &sourceCity,
                             Unit const & destCity)
 {
@@ -122,8 +122,7 @@ BOOL TradeOfferData::Accept(PLAYER_INDEX player,
 
 	if(m_offerType == ROUTE_TYPE_RESOURCE &&
 	   !m_fromCity.HasResource(m_offerResource)) {
-		
-		
+
 		return TRUE;
 	}
 
@@ -139,7 +138,7 @@ BOOL TradeOfferData::Accept(PLAYER_INDEX player,
 												     m_askingResource,
 												     m_toCity,
 												     m_fromCity.GetOwner());
-	    if (toRoute.IsValid()) 
+	    if (toRoute.IsValid())
         {
     	    toRoute.SetRecip(fromRoute);
 	        fromRoute.SetRecip(toRoute);

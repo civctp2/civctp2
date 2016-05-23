@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -82,7 +82,7 @@ class TradeOfferData;
 class TerrainImprovementData;
 class InstallationData;
 class Gold;
-class MilitaryReadiness; 
+class MilitaryReadiness;
 class PlayerHappiness;
 class UnitMoveList;
 class Path;
@@ -116,7 +116,6 @@ class CellUnitList;
 #ifdef _DEBUG
 class aui_Surface;
 #endif
-
 
 #define ENQUEUE() { if(g_network.IsActive() && g_network.IsHost()) g_network.Enqueue(this); }
 
@@ -187,7 +186,6 @@ public:
 	}
 };
 
-
 class Network : public NetIOResponse
 {
 public:
@@ -221,10 +219,9 @@ public:
 	void EnumSessions();
 	void Join(sint32 index);
 
-	
-	void EnumTransport(NET_ERR result, 
+	void EnumTransport(NET_ERR result,
 						sint32 index,
-						const char* transname, 
+						const char* transname,
 						void* transdata);
 	void EnumSession(NET_ERR result,
 					  sint32 index,
@@ -247,7 +244,7 @@ public:
 
 	void SyncRand();
 	void SyncRand(sint32 index);
-	
+
 	void Enqueue(UnitData*);
 	void Enqueue(UnitData *unit, Unit useActor);
 	void AddNewUnit(sint32 owner, Unit u);
@@ -255,12 +252,10 @@ public:
 	void SendCityName(CityData *city);
 	void MoveUnit(UnitData *data, const MapPoint &p);
 	void Enqueue(Cell*, sint32 x, sint32 y);
-	
-	
+
 	void Enqueue(TradeRouteData*);
 	void Enqueue(TradeOfferData*);
-	
-	
+
 	void Enqueue(NetInfo*);
 	void Enqueue(TerrainImprovementData*);
 	void Enqueue(InstallationData *);
@@ -278,7 +273,7 @@ public:
 	void Enqueue(NetOrder *netorder);
 	void Enqueue(ArmyData *armyData);
 	void AddNewArmy(sint32 owner, const Army &army);
-	
+
 	void Enqueue(CityData *cd);
 	void SendBuildQueue(CityData *cd);
 
@@ -513,7 +508,6 @@ private:
 
 	NetGameObj *m_gameObjects;
 
-	
 	uint32 m_transport;
 	char   m_sessionName[256];
 	sint32 m_sessionIndex;
@@ -568,7 +562,6 @@ private:
 
 	bool m_sensitiveUIBlocked;
 
-	
 	MBCHAR m_chatStr[k_MAX_CHAT_LEN * 2];
 	uint32 m_chatMask;
 

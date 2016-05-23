@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __PATTERNBASE_H__
 #define __PATTERNBASE_H__
-
 
 class Pattern;
 
@@ -30,7 +17,7 @@ class Pattern;
 class PatternBase
 {
 public:
-	
+
 	PatternBase(
 		MBCHAR const * pattern );
 	PatternBase(
@@ -44,7 +31,7 @@ protected:
 	AUI_ERRCODE InitCommonLdl( MBCHAR const *ldlBlock, MBCHAR const *pattern );
 
 public:
-	
+
 	Pattern *&ThePattern( void ) { return m_pattern; }
 
 	sint32	SrcX( void ) const { return m_srcX; }
@@ -64,5 +51,4 @@ protected:
 	sint32	m_srcHeightPix;
 };
 
-
-#endif 
+#endif

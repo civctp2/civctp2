@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,14 +34,12 @@
 #include "c3.h"
 #include "aui_control.h"
 
-
 #include <string>
 #ifndef WIN32
 #include <sstream>
 #else
 #include <strstream>
 #endif
-
 
 #include "aui_ui.h"
 #include "aui_blitter.h"
@@ -58,7 +56,6 @@
 #include "ldl_data.hpp"
 #include "ldl_file.hpp"
 
-
 static const MBCHAR *k_AUI_CONTROL_NUMBER_OF_LAYERS		= "numberoflayers";
 static const MBCHAR *k_AUI_CONTROL_IMAGES_PER_LAYER		= "imagesperlayer";
 static const MBCHAR *k_AUI_CONTROL_LDL_LAYER_ALWAYS		= "layeralways";
@@ -73,20 +70,16 @@ static const MBCHAR *k_AUI_CONTROL_IMAGE_NEXT_ROW		= "imagenextrow";
 static const MBCHAR *k_AUI_CONTROL_SHORTCUT             = "shortcut";
 static const MBCHAR *k_AUI_CONTROL_CANFOCUS             = "focusindex";
 
-
 const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_ALWAYS		= 1;
 const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_HIGHLIGHT	= 2;
 const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_DISABLED		= 4;
 const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_ENABLED		= 8;
 
-
 uint32          aui_Control::s_controlClassId   = aui_UniqueId();
-aui_Control *   aui_Control::s_whichOwnsMouse   = NULL;	
+aui_Control *   aui_Control::s_whichOwnsMouse   = NULL;
 aui_Control *   aui_Control::s_whichHasFocus    = NULL;
 
-
 static const MBCHAR *const k_AUI_CONTROL_LDL_STATUS_TEXT	=	"statustext";
-
 
 aui_Control::aui_Control
 (
@@ -94,7 +87,7 @@ aui_Control::aui_Control
 	uint32                  id,
 	MBCHAR *                ldlBlock,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie 
+	void *                  cookie
 )
 :
 	aui_ImageBase           (ldlBlock),
@@ -117,7 +110,6 @@ aui_Control::aui_Control
 }
 
 
-
 aui_Control::aui_Control
 (
 	AUI_ERRCODE *           retval,
@@ -127,7 +119,7 @@ aui_Control::aui_Control
 	sint32                  width,
 	sint32                  height,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie 
+	void *                  cookie
 )
 :
 	aui_ImageBase           ((sint32) 0),
@@ -151,7 +143,6 @@ aui_Control::aui_Control
 }
 
 
-
 AUI_ERRCODE aui_Control::InitCommonLdl(
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
@@ -165,14 +156,12 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	MBCHAR *tip = block->GetString(k_AUI_CONTROL_LDL_TIPWINDOW);
 	if (tip) {
 		m_tip = new aui_TipWindow(&errcode, aui_UniqueId(), "DefaultTipWindow");
 		Assert( AUI_NEWOK(m_tip,errcode) );
 		if ( !AUI_NEWOK(m_tip,errcode) ) return errcode;
 
-		
 		aui_Ldl::Remove( m_tip );
 
 		m_allocatedTip = TRUE;
@@ -187,7 +176,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	}
 
 	MBCHAR *shortcut = block->GetString(k_AUI_CONTROL_SHORTCUT);
-	m_keyboardAction = 0; 
+	m_keyboardAction = 0;
 	if(shortcut) {
 		if(shortcut[0] == '^') {
 			if(shortcut[1] >= '@' && shortcut[1] <= '[')
@@ -207,14 +196,12 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 		}
 	}
 
-	
 	m_statusText = block->GetString(k_AUI_CONTROL_LDL_STATUS_TEXT);
 	StringId statusTextID = 0;
 	if(m_statusText && g_theStringDB->GetStringID(m_statusText, statusTextID)) {
 		m_statusText = g_theStringDB->GetNameStr(statusTextID);
 	}
 
-	
 	static MBCHAR stblock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( stblock, "%s.%s", ldlBlock, k_AUI_CONTROL_LDL_STRINGTABLE );
     ldl_datablock *ldlblock = aui_Ldl::GetLdl()->FindDataBlock( stblock );
@@ -226,7 +213,6 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 			return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
-	
 	InitializeImageLayers(block);
 
 	if (block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) == ATTRIBUTE_TYPE_INT)
@@ -240,7 +226,6 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Control::InitCommon(
@@ -266,25 +251,23 @@ AUI_ERRCODE aui_Control::InitCommon(
 }
 
 
-
 aui_Control::~aui_Control()
 {
 	ReleaseKeyboardFocus();
 	ReleaseMouseOwnership();
 
 	delete m_stringTable;
-	
+
 	if (m_allocatedTip)
 	{
 		delete m_tip;
 	}
-	
+
 	delete m_imageLayerList;
 	delete [] m_layerRenderFlags;
 	// m_statusText: reference only
 	delete m_statusTextCopy;
 }
-
 
 
 AUI_ERRCODE aui_Control::SetActionFuncAndCookie(
@@ -293,25 +276,21 @@ AUI_ERRCODE aui_Control::SetActionFuncAndCookie(
 {
 	m_ActionFunc = ActionFunc;
 
-	
 	m_cookie = cookie;
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 aui_Action *aui_Control::SetAction( aui_Action *action )
 {
-	
+
 	m_ActionFunc = NULL;
 
-	
 	aui_Action *prevAction = m_action;
 	m_action = action;
 	return prevAction;
 }
-
 
 
 AUI_ERRCODE aui_Control::SetParentWindow( aui_Window *window )
@@ -337,23 +316,20 @@ AUI_ERRCODE aui_Control::SetParentWindow( aui_Window *window )
 }
 
 
-
 AUI_ERRCODE aui_Control::ResetThis( void )
 {
 	if ( GetMouseOwnership() == this ) ReleaseMouseOwnership();
 	if ( GetKeyboardFocus() == this ) ReleaseKeyboardFocus();
 
-	
 	ResetCurrentRenderFlags();
 
 	return aui_Region::ResetThis();
 }
 
 
-
 AUI_ERRCODE aui_Control::AddChild( aui_Region *child )
 {
-	
+
 	Assert( child != NULL );
 	if ( !child ) return AUI_ERRCODE_INVALIDPARAM;
 
@@ -376,7 +352,6 @@ AUI_ERRCODE aui_Control::AddChild( aui_Region *child )
 }
 
 
-
 AUI_ERRCODE aui_Control::InsertChild( aui_Region *child, sint32 index )
 {
 	AUI_ERRCODE errcode = aui_Region::InsertChild( child, index );
@@ -391,7 +366,6 @@ AUI_ERRCODE aui_Control::InsertChild( aui_Region *child, sint32 index )
 }
 
 
-
 AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -401,12 +375,11 @@ AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
 		if ( control->Id() == controlId )
 		{
-			
+
 			control->ReleaseKeyboardFocus();
 
 			control->SetParent( NULL );
 
-			
 			m_childList->DeleteAt( prevPos );
 
 			m_childListChanged = TRUE;
@@ -415,37 +388,33 @@ AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 		}
 	}
 
-	
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE aui_Control::ToWindow( RECT *rect )
 {
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	if (!m_parent) return AUI_ERRCODE_OK;
-	
-	
+
 
 	if ( m_parent != (aui_Region *)m_window )
 	{
-        Assert(m_parent); 
+        Assert(m_parent);
 		OffsetRect( rect, m_parent->X(), m_parent->Y() );
 		((aui_Control *)m_parent)->ToWindow( rect );
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Control::ToWindow( POINT *point )
@@ -461,7 +430,6 @@ AUI_ERRCODE aui_Control::ToWindow( POINT *point )
 }
 
 
-
 AUI_ERRCODE aui_Control::ToScreen( RECT *rect )
 {
 	ToWindow( rect );
@@ -469,7 +437,6 @@ AUI_ERRCODE aui_Control::ToScreen( RECT *rect )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Control::ToScreen( POINT *point )
@@ -482,31 +449,26 @@ AUI_ERRCODE aui_Control::ToScreen( POINT *point )
 }
 
 
-
 BOOL aui_Control::ShowTipWindow( aui_MouseEvent *mouseData )
 {
 	if ( m_tip && !m_showingTip )
 	{
 		aui_Static *tipStatic = ((aui_TipWindow *)m_tip)->GetStatic();
 
-		
 		if(tipStatic && (!tipStatic->GetText() || tipStatic->GetText()[0] == 0))
 			return FALSE;
 
 		PlaySound( AUI_SOUNDBASE_SOUND_TIP );
 
-		
 		m_showingTip = g_ui->AddWindow( m_tip ) == AUI_ERRCODE_OK;
 
 		RECT rect = { mouseData->position.x, m_y, 0, 0 };
 		ToWindow( &rect );
 
-		
 		m_tip->Move(
 			m_window->X() + rect.left - m_tip->Width() / 2,
 			m_window->Y() + rect.top - m_tip->Height() );
 
-		
 		if ( m_tip->X() < 0 ) m_tip->Move( 0, m_tip->Y() );
 		if ( m_tip->Y() < 0 ) m_tip->Move( m_tip->X(), 0 );
 		sint32 adjustX = m_tip->X() + m_tip->Width() - g_ui->Width();
@@ -521,7 +483,6 @@ BOOL aui_Control::ShowTipWindow( aui_MouseEvent *mouseData )
 }
 
 
-
 aui_Window *aui_Control::SetTipWindow( aui_Window *window )
 {
 	aui_Window *prevTip = m_tip;
@@ -530,17 +491,16 @@ aui_Window *aui_Control::SetTipWindow( aui_Window *window )
 
 	if (window != NULL)
 		m_allocatedTip = TRUE;
-	
+
 	return prevTip;
 }
-
 
 
 BOOL aui_Control::HideTipWindow( void )
 {
 	if ( m_tip && m_showingTip )
 	{
-		
+
 		m_showingTip = !(g_ui->RemoveWindow( m_tip->Id() ) == AUI_ERRCODE_OK);
 
 		return !m_showingTip;
@@ -549,28 +509,24 @@ BOOL aui_Control::HideTipWindow( void )
 	return FALSE;
 }
 
-	
 AUI_ERRCODE aui_Control::ShowThis()
 {
-	
+
 	if(IsHidden()) {
-		
+
 		ResetCurrentRenderFlags();
 	}
 
-	
 	return aui_Region::ShowThis();
 }
 
-
 AUI_ERRCODE aui_Control::HideThis( void )
 {
-	
+
 	HideTipWindow();
 
 	return aui_Region::HideThis();
 }
-
 
 
 aui_Control *aui_Control::SetMouseOwnership( void )
@@ -580,20 +536,18 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 	s_whichOwnsMouse = this;
 
 #if FALSE
-		
+
 #ifdef _DEBUG
-		
-		
+
 #define STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 #ifdef STATUS_BAR_MOUSE_OVER_LDL_DEBUG_INFORMATION
 		StatusBar::SetText(aui_Ldl::GetBlock(GetMouseOwnership()));
-#endif	
-#endif	
+#endif
+#endif
 #endif
 
 	return prevOwner;
 }
-
 
 
 AUI_ERRCODE aui_Control::ReleaseMouseOwnership( void )
@@ -604,7 +558,6 @@ AUI_ERRCODE aui_Control::ReleaseMouseOwnership( void )
 	s_whichOwnsMouse = NULL;
     return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Control *aui_Control::SetKeyboardFocus( void )
@@ -620,7 +573,6 @@ aui_Control *aui_Control::SetKeyboardFocus( void )
 
 	return prevFocus;
 }
-
 
 
 AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
@@ -645,7 +597,6 @@ AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 }
 
 
-
 AUI_ERRCODE aui_Control::Draw( aui_Surface *surface, sint32 x, sint32 y )
 {
 	if (!surface && m_window) surface = m_window->TheSurface();
@@ -656,13 +607,12 @@ AUI_ERRCODE aui_Control::Draw( aui_Surface *surface, sint32 x, sint32 y )
 }
 
 
-
 AUI_ERRCODE aui_Control::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -671,10 +621,9 @@ AUI_ERRCODE aui_Control::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if(m_numberOfLayers > 0)	
+	if(m_numberOfLayers > 0)
 		DrawLayers(surface, &rect);
-	else						
+	else
 		DrawThisStateImage(0, surface, &rect);
 
 	DrawThisText(
@@ -686,7 +635,6 @@ AUI_ERRCODE aui_Control::DrawThis(
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Control::DrawThisStateImage(
@@ -783,10 +731,9 @@ AUI_ERRCODE aui_Control::DrawThisStateImage(
 			state,
 			AUI_IMAGEBASE_SUBSTATE_STATE );
 
-	
 	if ( m_stringTable )
 	{
-		
+
 		if ( state < 0 )
 			state = 0;
 		if ( state > m_stringTable->GetNumStrings() )
@@ -808,16 +755,13 @@ AUI_ERRCODE aui_Control::DrawThisStateImage(
 }
 
 
-
 AUI_ERRCODE aui_Control::HandleKeyboardEvent( aui_KeyboardEvent *input )
 {
 	if ( IsHidden() || IsDisabled() || IgnoringEvents() )
 		return AUI_ERRCODE_UNHANDLED;
 
-	
 	KeyboardCallback( input );
 
-	
 	memcpy( &m_keyboardEvent, input, sizeof( aui_KeyboardEvent ) );
 
 	if ( m_draw ) Draw();
@@ -826,16 +770,13 @@ AUI_ERRCODE aui_Control::HandleKeyboardEvent( aui_KeyboardEvent *input )
 }
 
 
-
 AUI_ERRCODE aui_Control::HandleJoystickEvent( aui_JoystickEvent *input )
 {
 	if ( IsHidden() || IsDisabled() || IgnoringEvents() )
 		return AUI_ERRCODE_UNHANDLED;
 
-	
 	JoystickCallback( input );
 
-	
 	memcpy( &m_joystickEvent, input, sizeof( aui_JoystickEvent ) );
 
 	if ( m_draw ) Draw();
@@ -852,7 +793,7 @@ AUI_ERRCODE aui_Control::HandleJoystickEvent( aui_JoystickEvent *input )
 
 void aui_Control::MouseMoveInside( aui_MouseEvent *mouseData )
 {
-	
+
 	if(IsDisabled())
 		return;
 
@@ -861,7 +802,6 @@ void aui_Control::MouseMoveInside( aui_MouseEvent *mouseData )
 	else if ( !IsActive() )
 		MouseMoveOver( mouseData );
 }
-
 
 
 void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
@@ -874,7 +814,7 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 		SetWhichSeesMouse( this );
 
 		if(GetWhichSeesMouse() == this) {
-			
+
 			Highlight();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
@@ -891,7 +831,6 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER;
 
@@ -908,16 +847,14 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Control::MouseMoveAway( aui_MouseEvent *mouseData )
 {
-	
+
 	HideTipWindow();
 
 	if(IsDisabled())
 		return;
 
-	
 	Highlight(false);
 
 	if(IsActive()) {
@@ -927,11 +864,9 @@ void aui_Control::MouseMoveAway( aui_MouseEvent *mouseData )
 			StatusBar::SetText("", NULL);
 		}
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY;
 
@@ -943,10 +878,9 @@ void aui_Control::MouseMoveAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Control::MouseLDragInside( aui_MouseEvent *mouseData )
 {
-	
+
 	if(IsDisabled())
 		return;
 
@@ -957,10 +891,9 @@ void aui_Control::MouseLDragInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Control::MouseRDragInside( aui_MouseEvent *mouseData )
 {
-	
+
 	if(IsDisabled())
 		return;
 
@@ -971,21 +904,18 @@ void aui_Control::MouseRDragInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Control::MouseLDragOver( aui_MouseEvent *mouseData )
 {
 	if(GetMouseOwnership() == this)
-		Highlight();	
+		Highlight();
 }
-
 
 
 void aui_Control::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if(GetMouseOwnership() == this)
-		Highlight(false);	
+		Highlight(false);
 }
-
 
 
 void aui_Control::MouseRDragOver( aui_MouseEvent *mouseData )
@@ -994,12 +924,11 @@ void aui_Control::MouseRDragOver( aui_MouseEvent *mouseData )
 		return;
 
 	if(GetMouseOwnership() == this)
-		Highlight();	
+		Highlight();
 
 	if(!GetMouseOwnership())
 		MouseMoveOver(mouseData);
 }
-
 
 
 void aui_Control::MouseRDragAway( aui_MouseEvent *mouseData )
@@ -1008,17 +937,15 @@ void aui_Control::MouseRDragAway( aui_MouseEvent *mouseData )
 		return;
 
 	if(GetMouseOwnership() == this)
-		Highlight(false);	
+		Highlight(false);
 
 	if(!GetMouseOwnership())
 		MouseMoveAway(mouseData);
 }
 
 
-
 void aui_Control::MouseNoChange( aui_MouseEvent *mouseData )
 {
-
 
 	if ( m_isMouseInside )
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
@@ -1045,70 +972,60 @@ void aui_Control::ExchangeImage(sint32 layerIndex, sint32 imageIndex,
 {
 	Assert(m_imageLayerList);
 	if(!m_imageLayerList) return;
-	
+
 	m_imageLayerList->ExchangeImage(layerIndex, imageIndex, imageName);
 }
-
 
 
 AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 {
 	uint32 oldRenderFlags = m_renderFlags;
 
-	
 	AUI_ERRCODE errorCode = aui_Region::Resize(width, height);
 
-	
 	if(m_numberOfLayers) {
 		MBCHAR *ldlBlock = (MBCHAR *)GetLdlBlock();
 		if(!ldlBlock)
-			
-			
+
 			ldlBlock = aui_Ldl::GetBlock(this);
 
 		if(ldlBlock) {
-			
+
 			delete m_imageLayerList;
 			m_imageLayerList = NULL;
-			
-			
-			
-			
+
+
+
+
 			InitializeImageLayers(g_ui->GetLdl()->GetLdl()->FindDataBlock(ldlBlock));
 		}
 	}
 
 	SetCurrentRenderFlags(oldRenderFlags);
 
-	
 	return(errorCode);
 }
-
 
 
 void aui_Control::InitializeLayerFlag(ldl_datablock *theBlock, sint32 layerIndex,
 									  const MBCHAR *flagString, sint32 flag,
 									  const MBCHAR *layerIndexString)
 {
-	
-	
+
 	static const sint32 LAYER_INDEX_STRING_SIZE = 16;
 	static char localLayerIndexString[LAYER_INDEX_STRING_SIZE];
 
-	
 	if(!layerIndexString) {
-		
-		
-		
+
+
 		sprintf(localLayerIndexString, "%d", layerIndex);
-		
-		
+
 		layerIndexString = localLayerIndexString;
 	}
 
-	
-	
-	
+
+
+
 	std::string layerFlagString;
 	if(theBlock->GetAttributeType(layerFlagString.assign(
 		flagString).append(layerIndexString).c_str())
@@ -1116,40 +1033,33 @@ void aui_Control::InitializeLayerFlag(ldl_datablock *theBlock, sint32 layerIndex
 		m_layerRenderFlags[layerIndex] |= flag;
 }
 
-
 void aui_Control::DrawLayers(aui_Surface *surface, RECT *rectangle)
 {
-	
+
 	for(int layerIndex = 0; layerIndex < m_numberOfLayers; layerIndex++) {
-		
-		
+
 		if(m_layerRenderFlags[layerIndex] & m_renderFlags) {
-			
+
 			m_imageLayerList->SetState(layerIndex);
 
-			
 			m_imageLayerList->DrawImages(surface, rectangle);
 		}
 	}
 }
 
-
 void aui_Control::Highlight(bool status)
 {
-	
+
 	if(IgnoreHighlight())
 		return;
 
-	
 	sint32 renderFlags = GetCurrentRenderFlags();
 
-	
 	if(status && !IsDisabled())
 		m_renderFlags |= k_AUI_CONTROL_LAYER_FLAG_HIGHLIGHT;
 	else
 		m_renderFlags &= ~k_AUI_CONTROL_LAYER_FLAG_HIGHLIGHT;
 
-	
 	if(GetCurrentRenderFlags() != renderFlags)
 		ShouldDraw();
 }
@@ -1160,23 +1070,21 @@ void aui_Control::Highlight(bool status)
 
 void aui_Control::ResetCurrentRenderFlags()
 {
-	
+
 	BaseResetCurrentRenderFlags();
 }
-
 
 
 void aui_Control::InitializeLayerFlags(ldl_datablock *theBlock,
 									   sint32 layerIndex)
 {
-	
-	
-	
-	
+
+
+
+
 	char layerIndexString[20];
 	sprintf(layerIndexString, "%d", layerIndex);
 
-	
 	InitializeLayerFlag(theBlock, layerIndex, k_AUI_CONTROL_LDL_LAYER_ALWAYS,
 		k_AUI_CONTROL_LAYER_FLAG_ALWAYS, layerIndexString);
 	InitializeLayerFlag(theBlock, layerIndex, k_AUI_CONTROL_LDL_LAYER_HIGHLIGHT,
@@ -1187,73 +1095,62 @@ void aui_Control::InitializeLayerFlags(ldl_datablock *theBlock,
 		k_AUI_CONTROL_LAYER_FLAG_ENABLED, layerIndexString);
 }
 
-
 bool aui_Control::AllocateImageLayers(ldl_datablock *theBlock)
 {
-	
+
 	if(theBlock->GetAttributeType(k_AUI_CONTROL_NUMBER_OF_LAYERS) ==
 		ATTRIBUTE_TYPE_INT)
 		m_numberOfLayers = theBlock->GetInt(k_AUI_CONTROL_NUMBER_OF_LAYERS);
 
-	
 	if(!m_numberOfLayers)
 		return(false);
 
-	
-	m_imagesPerLayer = 1;	
+	m_imagesPerLayer = 1;
 	if(theBlock->GetAttributeType(k_AUI_CONTROL_IMAGES_PER_LAYER) ==
 		ATTRIBUTE_TYPE_INT)
 		m_imagesPerLayer = theBlock->GetInt(k_AUI_CONTROL_IMAGES_PER_LAYER);
 
-	
 	m_imageLayerList = new aui_ImageList(m_numberOfLayers, m_imagesPerLayer);
 
-	
 	if(!m_layerRenderFlags)
 		m_layerRenderFlags = new sint32[m_numberOfLayers];
 
-	
 	return(true);
 }
 
-
 void aui_Control::InitializeFlagLayers(ldl_datablock *theBlock)
 {
-	
+
 	for(sint32 layerIndex = 0; layerIndex < m_numberOfLayers; layerIndex++) {
-		
+
 		m_layerRenderFlags[layerIndex] = 0;
 
-		
 		InitializeLayerFlags(theBlock, layerIndex);
 	}
 }
 
-
 void aui_Control::LoadLayerImages(ldl_datablock *theBlock,
 								  sint32 layerIndex)
 {
-	
+
 	for(int imageIndex = 0; imageIndex < m_imagesPerLayer; imageIndex++) {
-		
-		
-		
-		
-		
+
+
+
+
+
 		char imageAttributeString[k_MAX_NAME_LEN];
 		sprintf(imageAttributeString, "%s%d%d", k_AUI_CONTROL_LDL_IMAGE, layerIndex, imageIndex);
 
-		
 		const char *imageName = theBlock->GetString(imageAttributeString);
 
-		
-		
+
 		RECT imageRectangle = { 0, 0, -1, -1 };
 
-		
-		
-		
-		
+
+
+
+
 		char imageBltTypeStringName[k_MAX_NAME_LEN];
 		sprintf(imageBltTypeStringName, "%s%d%d", k_AUI_IMAGEBASE_LDL_BLTTYPE, layerIndex, imageIndex);
 		const char *imageBltTypeString = theBlock->GetString(imageBltTypeStringName);
@@ -1268,14 +1165,14 @@ void aui_Control::LoadLayerImages(ldl_datablock *theBlock,
 				imageBltType = AUI_IMAGEBASE_BLTTYPE_TILE;
 			}
 		} else {
-			
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
 			char stretchXAttributeString[k_MAX_NAME_LEN];
 			char stretchYAttributeString[k_MAX_NAME_LEN];
 			sprintf(stretchXAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_X, layerIndex, imageIndex);
@@ -1286,11 +1183,11 @@ void aui_Control::LoadLayerImages(ldl_datablock *theBlock,
 				imageBltType = AUI_IMAGEBASE_BLTTYPE_TILE;
 			}
 		}
-			
 
-		
-		
-		
+
+
+
+
 		char imageBltFlagStringName[k_MAX_NAME_LEN];
 		sprintf(imageBltFlagStringName, "%s%d%d", k_AUI_IMAGEBASE_LDL_BLTFLAG, layerIndex, imageIndex);
 		const char *imageBltFlagString = theBlock->GetString(imageBltFlagStringName);
@@ -1319,51 +1216,45 @@ void aui_Control::LoadLayerImages(ldl_datablock *theBlock,
 			imageRectangle.bottom = imageRectangle.top + height;
 		}
 
-		
 		m_imageLayerList->SetImage(layerIndex, imageIndex, imageBltType,
 			imageBltFlag, &imageRectangle, imageName,
 			m_chromaRed, m_chromaGreen, m_chromaBlue);
 	}
 }
 
-
 void aui_Control::LoadLayers(ldl_datablock *theBlock)
 {
-	
+
 	for(sint32 layerIndex = 0; layerIndex < m_numberOfLayers; layerIndex++) {
-		
+
 		LoadLayerImages(theBlock, layerIndex);
 	}
 }
 
-
 sint32 aui_Control::DesiredWidth(ldl_datablock *theBlock,
 								 sint32 layerIndex) const
 {
-	
+
 	sint32 layerWidth = Width();
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	char widthLayerString[k_MAX_NAME_LEN];
 	sprintf(widthLayerString, "%s%d", k_AUI_LDL_HABSSIZE, layerIndex);
 
-	
 	if(theBlock->GetAttributeType(widthLayerString) == ATTRIBUTE_TYPE_INT) {
-		
+
 		layerWidth = theBlock->GetInt(widthLayerString);
 	}
 
-	
-	
+
 	if(!layerWidth && GetText() && GetTextFont()) {
-		layerWidth = GetTextFont()->GetStringWidth(GetText()) + 24;	
+		layerWidth = GetTextFont()->GetStringWidth(GetText()) + 24;
 	}
 
-	
 	return(layerWidth);
 }
 
@@ -1377,41 +1268,37 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 											   sint32 imageEnd,
 											   sint32 desiredWidth) const
 {
-	
+
 	FillSize result(0, desiredWidth);
 
-	
 	for(int imageIndex = imageStart; imageIndex <= imageEnd; imageIndex++) {
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		char stretchXAttributeString[k_MAX_NAME_LEN];
 		sprintf(stretchXAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_X, layerIndex, imageIndex);
 
-		
 		if (theBlock->GetAttributeType(stretchXAttributeString) &&
 			theBlock->GetBool(stretchXAttributeString)
-           ) 
+           )
         {
 			result.first++;
-		} 
-        else 
+		}
+        else
         {
 			result.second = std::max<sint32>
                 (0,
-				 result.second - 
+				 result.second -
                     m_imageLayerList->GetSize(layerIndex, imageIndex)->right
                 );
 		}
 	}
 
-	
 	return(result);
 }
-
 
 
 bool aui_Control::FillWidth(ldl_datablock *theBlock,
@@ -1419,42 +1306,39 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
 							sint32 imageEnd, const FillSize &desiredSize,
 							sint32 &width)
 {
-	
+
 	sint32 desiredWidth =
 		desiredSize.first ? (desiredSize.second / desiredSize.first) : 0;
 
-	
 	for(sint32 imageIndex = imageStart; imageIndex <= imageEnd; imageIndex++) {
-		
-		
-		
-		
-		
+
+
+
+
+
 		char xAttributeString[k_MAX_NAME_LEN];
 		sprintf(xAttributeString, "%s%d%d", k_AUI_LDL_HABSPOSITION, layerIndex, imageIndex);
 
-		
 		if(theBlock->GetAttributeType(xAttributeString) == ATTRIBUTE_TYPE_INT) {
-			
+
 			OffsetRect(m_imageLayerList->GetSize(layerIndex, imageIndex),
 				theBlock->GetInt(xAttributeString), 0);
-		} else if(imageIndex != imageStart) {	
-			
+		} else if(imageIndex != imageStart) {
+
 			OffsetRect(m_imageLayerList->GetSize(layerIndex, imageIndex),
 				m_imageLayerList->GetSize(layerIndex, imageIndex - 1)->right -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->left, 0);
 		}
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		char stretchXAttributeString[k_MAX_NAME_LEN];
 		sprintf(stretchXAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_X, layerIndex, imageIndex);
 
-		
 		if(theBlock->GetAttributeType(stretchXAttributeString) &&
 			theBlock->GetBool(stretchXAttributeString)) {
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->right =
@@ -1468,8 +1352,7 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
                 );
 	}
 
-	
-	
+
 	return(desiredSize.first > 0);
 }
 
@@ -1481,54 +1364,46 @@ bool aui_Control::ResizeLayerWidth(ldl_datablock *theBlock,
 								   sint32 layerIndex, sint32 numberOfRows,
 								   sint32 *rowIndices, sint32 &width)
 {
-	
+
 	bool sizedImage = false;
 
-	
 	sint32 desiredWidth = DesiredWidth(theBlock, layerIndex);
 
-	
 	for(sint32 rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-		
+
 		sint32 imageStart = rowIndices[rowIndex];
 		sint32 imageEnd = (rowIndex < (numberOfRows - 1)) ?
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
-		
 		sizedImage |= FillWidth(theBlock, layerIndex, imageStart, imageEnd,
 			WidthToFill(theBlock, layerIndex, imageStart, imageEnd,
 			desiredWidth), width);
 	}
 
-	
 	return(sizedImage);
 }
-
 
 sint32 aui_Control::DesiredHeight(ldl_datablock *theBlock,
 								  sint32 layerIndex) const
 {
-	
+
 	sint32 layerHeight = Height();
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	char heightLayerString[k_MAX_NAME_LEN];
 	sprintf(heightLayerString, "%s%d", k_AUI_LDL_VABSSIZE, layerIndex);
 
-	
 	if(theBlock->GetAttributeType(heightLayerString) == ATTRIBUTE_TYPE_INT) {
-		
+
 		layerHeight = theBlock->GetInt(heightLayerString);
 	}
 
-	
 	return(layerHeight);
 }
-
 
 
 aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
@@ -1538,36 +1413,33 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 												sint32 column,
 												sint32 desiredHeight) const
 {
-	
+
 	FillSize result(0, desiredHeight);
 
-	
 	for(int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-		
+
 		sint32 imageIndex = RowColumnIndex(numberOfRows, rowIndices,
 			rowIndex, column);
 
-		
 		if(imageIndex < 0)
 			continue;
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		char stretchYAttributeString[k_MAX_NAME_LEN];
 		sprintf(stretchYAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_Y, layerIndex, imageIndex);
 
-		
 		if (theBlock->GetAttributeType(stretchYAttributeString) &&
 			theBlock->GetBool(stretchYAttributeString)
-           ) 
+           )
         {
 			result.first++;
-		} 
-        else 
+		}
+        else
         {
 			result.second = std::max<sint32>
                 (0,
@@ -1577,10 +1449,8 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 		}
 	}
 
-	
 	return(result);
 }
-
 
 
 bool aui_Control::FillHeight(ldl_datablock *theBlock,
@@ -1589,55 +1459,50 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 							 const FillSize &desiredSize,
 							 sint32 &height)
 {
-	
+
 	sint32 desiredHeight =
 		desiredSize.first ? (desiredSize.second / desiredSize.first) : 0;
 
-	
 	for(int rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-		
+
 		sint32 imageIndex = RowColumnIndex(numberOfRows, rowIndices,
 			rowIndex, column);
 
-		
 		if(imageIndex < 0)
 			continue;
 
-		
-		
+
 		sint32 previousIndex = PreviousRowColumnIndex(numberOfRows, rowIndices,
 			rowIndex, column);
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		char yAttributeString[k_MAX_NAME_LEN];
 		sprintf(yAttributeString, "%s%d%d", k_AUI_LDL_VABSPOSITION, layerIndex, imageIndex);
 
-		
 		if(theBlock->GetAttributeType(yAttributeString) == ATTRIBUTE_TYPE_INT) {
-			
+
 			OffsetRect(m_imageLayerList->GetSize(layerIndex, imageIndex),
 				0, theBlock->GetInt(yAttributeString));
-		} else if(previousIndex >= 0) {	
-			
+		} else if(previousIndex >= 0) {
+
 			OffsetRect(m_imageLayerList->GetSize(layerIndex, imageIndex), 0,
 				m_imageLayerList->GetSize(layerIndex, previousIndex)->bottom -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->top);
 		}
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		char stretchYAttributeString[k_MAX_NAME_LEN];
 		sprintf(stretchYAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_Y, layerIndex, imageIndex);
 
-		
 		if(theBlock->GetAttributeType(stretchYAttributeString) &&
 			theBlock->GetBool(stretchYAttributeString)) {
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom =
@@ -1651,8 +1516,7 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
                     );
 	}
 
-	
-	
+
 	return(desiredSize.first > 0);
 }
 
@@ -1664,86 +1528,71 @@ bool aui_Control::ResizeLayerHeight(ldl_datablock *theBlock,
 									sint32 layerIndex, sint32 numberOfRows,
 									sint32 *rowIndices, sint32 &height)
 {
-	
+
 	bool sizedImage = false;
 
-	
 	sint32 numberOfColumns = NumberOfColumns(numberOfRows, rowIndices);
 
-	
 	sint32 desiredHeight = DesiredHeight(theBlock, layerIndex);
 
-	
 	for(sint32 columnIndex = 0; columnIndex < numberOfColumns; columnIndex++) {
-		
+
 		sizedImage |= FillHeight(theBlock, layerIndex, numberOfRows, rowIndices,
 			columnIndex, HeightToFill(theBlock, layerIndex, numberOfRows,
 			rowIndices, columnIndex, desiredHeight), height);
 	}
 
-	
 	return(sizedImage);
 }
-
 
 
 sint32 aui_Control::PreviousRowColumnIndex(sint32 numberOfRows, sint32 *rowIndices,
 										   sint32 row, sint32 column) const
 {
-	
+
 	sint32 imageIndex = -1;
 
-	
-	
+
 	while((row > 0) && (imageIndex < 0))
 		imageIndex = RowColumnIndex(numberOfRows, rowIndices, --row, column);
 
-	
 	return(imageIndex);
 }
-
 
 
 sint32 aui_Control::RowColumnIndex(sint32 numberOfRows, sint32 *rowIndices,
 								   sint32 row, sint32 column) const
 {
-	
+
 	sint32 imageIndex = rowIndices[row] + column;
 
-	
-	
+
 	sint32 imageNextRow = (row < (numberOfRows - 1)) ?
 		rowIndices[row + 1] : m_imagesPerLayer;
 
-	
 	if(!(imageIndex < imageNextRow))
 		return(-1);
 
-	
 	return(imageIndex);
 }
-
 
 sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 									sint32 *rowIndices) const
 {
-	
+
 	sint32 numberOfColumns = 0;
 
-	
 	for(sint32 rowIndex = 0; rowIndex < numberOfRows; rowIndex++) {
-		
+
 		sint32 imageStart = rowIndices[rowIndex];
 		sint32 imageEnd = (rowIndex < (numberOfRows - 1)) ?
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
-		
 		numberOfColumns = std::max<sint32>(numberOfColumns,
 			                               (imageEnd - imageStart + 1)
                                           );
 	}
 
-	
 	return numberOfColumns;
 }
 
@@ -1755,36 +1604,31 @@ sint32 aui_Control::SegmentImages(ldl_datablock *theBlock,
 								  sint32 layerIndex,
 								  sint32 *rowIndices) const
 {
-	
+
 	sint32 currentSegment = 0;
 
-	
 	rowIndices[currentSegment++] = 0;
 
-	
 	for(int imageIndex = 1; imageIndex < m_imagesPerLayer; imageIndex++) {
-		
-		
+
 		rowIndices[imageIndex] = -1;
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		char nextRowAttributeString[k_MAX_NAME_LEN];
 		sprintf(nextRowAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_NEXT_ROW, layerIndex, imageIndex);
 
-		
 		if(theBlock->GetAttributeType(nextRowAttributeString) &&
 			theBlock->GetBool(nextRowAttributeString)) {
-			
+
 			rowIndices[currentSegment++] = imageIndex;
 		}
 	}
 
-	
 	return(currentSegment);
 }
 
@@ -1794,78 +1638,63 @@ sint32 aui_Control::SegmentImages(ldl_datablock *theBlock,
 
 void aui_Control::ResizeLayers(ldl_datablock *theBlock)
 {
-	
+
 	TextReloadFont();
 
-	
 	sint32 width = Width();
 	sint32 height = Height();
 
-	
 	for(sint32 layerIndex = 0; layerIndex < m_numberOfLayers; layerIndex++) {
-		
+
 		sint32 *rowIndices = new sint32[m_imagesPerLayer];
 		sint32 numberOfRows = SegmentImages(theBlock,
 			layerIndex, rowIndices);
 
-		
 		ResizeLayerWidth(theBlock, layerIndex, numberOfRows,
 			rowIndices, width);
 
-		
 		ResizeLayerHeight(theBlock, layerIndex, numberOfRows,
 			rowIndices, height);
 
-		
 		delete [] rowIndices;
 	}
 
-	
-	
-	
+
+
+
 	aui_Region::Resize(width, height);
 }
 
-
 void aui_Control::BaseResetCurrentRenderFlags()
 {
-	
+
 	SetCurrentRenderFlags(k_AUI_CONTROL_LAYER_FLAG_ALWAYS);
 
-	
-	
+
 	if(IsDisabled())
 		AddRenderFlags(k_AUI_CONTROL_LAYER_FLAG_DISABLED);
 	else
 		AddRenderFlags(k_AUI_CONTROL_LAYER_FLAG_ENABLED);
 
-	
 	ShouldDraw();
 }
 
-
 void aui_Control::InitializeImageLayers(ldl_datablock *theBlock)
 {
-	
-	
+
 	bool initializeFlags = (m_layerRenderFlags == NULL);
 
-	
-	
+
 	if(!AllocateImageLayers(theBlock))
 		return;
 
-	
 	if(initializeFlags)
 		InitializeFlagLayers(theBlock);
 
-	
 	LoadLayers(theBlock);
 
-	
 	ResizeLayers(theBlock);
 
-	
 	BaseResetCurrentRenderFlags();
 }
 
@@ -1889,7 +1718,7 @@ bool aui_Control::HandleKey(uint32 wParam)
 	for ( sint32 i = m_childList->L(); i; i-- )
 	{
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
-		
+
 		if(control && control->HandleKey(wParam))
 			return true;
 	}

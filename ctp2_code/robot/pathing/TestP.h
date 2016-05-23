@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef __TEST_PATH__
 #define __TEST_PATH__
@@ -11,8 +10,7 @@ class TestPath : public Astar
 
 public:
 
-    double EntryCost(const MapPoint pos) { return 1.0 ;}    
-    
+    double EntryCost(const MapPoint pos) { return 1.0 ;}
 
 
 };

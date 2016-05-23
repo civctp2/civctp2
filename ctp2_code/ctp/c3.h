@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version.
 //
 // _DEBUGTOOLS
 // - Provides debug tools (leak reporter, asserts, ...)
 //
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only).
 //
 // __GNUC__
@@ -42,7 +42,7 @@
 // - Prevented useless warnings.
 // - Moved DirectX API-Version to use into "ctp2_config.h"
 // - Added struct for automatic debug tool initialization and
-//   cleanup so that it is the first respective the last thing 
+//   cleanup so that it is the first respective the last thing
 //   that is done in the program. (Oct 3rd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -75,7 +75,7 @@
 //#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
 //#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT 1
 // Suppress some rediculous MS warnings about "deprecated" standard functions
-#define _SECURE_SCL					0	
+#define _SECURE_SCL					0
 #define _SECURE_SCL_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #include "dynarr.h"
 #include "directions.h"
 
-struct Direction { 
+struct Direction {
 
 	sint8 dir;
 
@@ -74,13 +74,12 @@ public:
 	void FlattenAstarList(AstarPoint *best);
 	void FlattenNormalizedPointList(const MapPoint &start, DynamicArray<MapPoint> &pixel);
 	void SetStart(const MapPoint &s) { m_start = s; m_step.Clear(); }
-	void Clear(); 
+	void Clear();
 	sint32 Num() { return m_step.Num() + ((m_start.x == -1) ? 0 : 1); }
 
 	void Start(MapPoint &p);
 	void Restart(MapPoint &p);
 	void JustSetStart(const MapPoint &p);
-
 
     bool IsEnd() const;
     sint32 Next(MapPoint &p);
@@ -111,7 +110,6 @@ public:
 
 	MapPoint GetEnd() const;
 
-	
 	sint32 GetNextIndex() const;
 	void RestoreIndexAndCurrentPos(const sint32 & index);
 

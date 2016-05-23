@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // - None
 //
 //----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ void Pollution::WarnPlayers()
 {
 	SlicObject *	so	= new SlicObject("911ImminentFlood");
 	SlicSegment *	seg	= g_slicEngine->GetSegment("911ImminentFlood");
-	
+
 	// Start at 1: skip the barbarians.
 	for(PLAYER_INDEX i = 1; i < k_MAX_PLAYERS; ++i)
 	{
@@ -140,7 +140,7 @@ void Pollution::WarnPlayers()
 			so->AddRecipient(i);
 		}
 	}
-	
+
 	if (so->GetNumRecipients())
 	{
 		g_slicEngine->Execute(so);
@@ -272,7 +272,6 @@ void Pollution::SetGlobalPollutionLevel(sint32 requiredPollution)
 	SetHistory(requiredPollution);
 }
 
-
 void Pollution::BeginTurn(void)
 {
 	if(!g_theGameSettings->GetPollution())
@@ -403,7 +402,7 @@ sint32 Pollution::GetTrend(void) const
 //
 // Returns    : sint32          : estimated number of turns to next disaster
 //
-// Remark(s)  : Will return ROUNDS_COUNT_INMEASURABLE when there is no 
+// Remark(s)  : Will return ROUNDS_COUNT_INMEASURABLE when there is no
 //              pollution at all.
 //
 //              m_history[0]    : pollution level this turn
@@ -421,7 +420,7 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 	// Check for a pollution suppressing wonder built by some player.
 	for(int i = 0; i < k_MAX_PLAYERS; ++i)
 	{
-		if(g_player[i] && 
+		if(g_player[i] &&
 			wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders())
 		  )
 		{
@@ -431,11 +430,10 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 
 	// Estimate the number of turns until the next disaster.
 	sint32 const pollutionDeltaPerTurn	= m_history[0] - m_history[1];
-	sint32 const pollutionUntilTrigger	= 
+	sint32 const pollutionUntilTrigger	=
 		g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase)->GetPollutionTrigger() - m_history[0];
 	return pollutionUntilTrigger / pollutionDeltaPerTurn;
 }
-
 
 void pollution_NukeCell(MapPoint &pos, Cell *cell)
 {
@@ -456,29 +454,29 @@ void pollution_NukeCell(MapPoint &pos, Cell *cell)
 			instArray.KillList();
 		}
 		g_theWorld->GetCell(pos)->SetEnv(
-						 g_theWorld->GetCell(pos)->GetEnv() & ~(k_MASK_ENV_ROAD | 
+						 g_theWorld->GetCell(pos)->GetEnv() & ~(k_MASK_ENV_ROAD |
 																k_MASK_ENV_IRRIGATION |
-																k_MASK_ENV_MINE | 
+																k_MASK_ENV_MINE |
 																k_MASK_ENV_INSTALLATION |
 																k_MASK_ENV_CANAL_TUNNEL));
 		if(g_network.IsHost())
 		{
 			g_network.Enqueue(g_theWorld->GetCell(pos), pos.x, pos.y);
 		}
-		
+
 		cell->CalcTerrainMoveCost();
 		MapPoint nonConstPos = pos;
-		
+
 		g_tiledMap->PostProcessTile(nonConstPos, g_theWorld->GetTileInfo(nonConstPos));
 		g_tiledMap->TileChanged(nonConstPos);
 		MapPoint npos;
-		for(WORLD_DIRECTION d = NORTH; d < NOWHERE; 
+		for(WORLD_DIRECTION d = NORTH; d < NOWHERE;
 			d = (WORLD_DIRECTION)((sint32)d + 1)) // No better idea of doing it?!
 		{
 			if(pos.GetNeighborPosition(d, npos))
 			{
 				g_tiledMap->PostProcessTile(
-											npos, 
+											npos,
 											g_theWorld->GetTileInfo(npos));
 				g_tiledMap->TileChanged(npos);
 			}
@@ -513,7 +511,6 @@ void Pollution::AddNukePollution(const MapPoint &cpos)
 	m_history[0]+=g_theConstDB->Get(0)->GetPollutionCausedByNuke();
 }
 
-
 uint32 Pollution::GetPollutionAtRound(const PLAYER_INDEX player, const sint32 round)
 {
 	Assert(g_player[player] != NULL);
@@ -524,7 +521,7 @@ uint32 Pollution::GetPollutionAtRound(const PLAYER_INDEX player, const sint32 ro
 
 	if (current_round < round)
 		return 0;
-	
+
 	if ((current_round - round) > k_MAX_POLLUTION_HISTORY)
 		return 0;
 

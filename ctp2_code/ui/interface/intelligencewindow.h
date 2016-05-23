@@ -1,4 +1,3 @@
-
 #ifndef INTELLIGENCE_WINDOW_H__
 #define INTELLIGENCE_WINDOW_H__
 
@@ -15,7 +14,7 @@ class IntelligenceWindow {
   private:
 	ctp2_Window *m_window;
 	ctp2_Window *m_adviceWindow;
-	
+
 	static ctp2_Window *sm_showTreatyDetail;
 
 	static ctp2_ListBox *sm_list;
@@ -45,12 +44,11 @@ class IntelligenceWindow {
 	static void SendMessageToSelected();
 	static void DisplayDetailsOfSelected();
 
-	
 	static void UpdateAdviceText();
 
 	static AUI_ERRCODE DrawPlayerColor(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie);
-	
+
 	static AUI_ERRCODE DrawPlayerFlag(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie);
 	static sint32 GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer);
@@ -70,11 +68,10 @@ class IntelligenceWindow {
 									aui_Surface *surface,
 									RECT &rect,
 									void *cookie);
-	
+
 	static void ClickTreaties(ctp2_Static *control, aui_MouseEvent *mouseData, void *cookie);
 
 	static void InitImageTables();
 };
 
 #endif
-

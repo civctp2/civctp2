@@ -1,4 +1,3 @@
-
 #ifndef ARMY_MANAGER_WINDOW_H__
 #define ARMY_MANAGER_WINDOW_H__
 
@@ -19,20 +18,20 @@ class ctp2_Static;
 
 template <class T> class PointerList;
 
-class ArmyListNode 
+class ArmyListNode
 {
 public:
-	ArmyListNode() 
+	ArmyListNode()
     : m_army    ()
     { ; };
 
-	ArmyListNode(Army const & a) 
-    : m_army    (a) 
+	ArmyListNode(Army const & a)
+    : m_army    (a)
     { ; };
 
 private:
 	Army m_army;
-    
+
     friend class ArmyManagerWindow;
 };
 
@@ -93,5 +92,4 @@ class ArmyManagerWindow {
 	static void CleanupEvents();
 };
 
-	
 #endif

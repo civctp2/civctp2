@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public:
 		Assert(i < m_nElements);
 		return m_array[i];
 	}
-	
+
 	void Clear() { m_nElements = 0; }
 
 	sint32 Num() const { return m_nElements; }
@@ -144,7 +144,7 @@ public:
 	bool IsEnemy(Unit defender) const;
 	bool IsEnemy(CellUnitList &defender) const;
 	bool CanAtLeastOneCaptureCity() const;
-	bool CanBeExpelled(); 
+	bool CanBeExpelled();
 
 	bool IsVisible(PLAYER_INDEX player) const;
 	bool GetTopVisibleUnitOfMoveType
@@ -158,7 +158,7 @@ public:
 	(
 		PLAYER_INDEX const	looker
 	) const;
-	
+
 	bool CanBeSued() const;
 	bool ExertsZOC() const;
 	bool CanSee(const Army & army) const;
@@ -185,7 +185,6 @@ public:
 
 	void UpdateMoveIntersection();
 
-
 	void ComputeStrength(float & attack,
 						 float & defense,
 						 float & ranged,
@@ -198,7 +197,6 @@ public:
 						 const bool terrainIndependent,
 						 bool noCargo = false) const;
 
-
 	void ComputeCargoStrength(float & attack,
 							  float & defense,
 							  float & ranged,
@@ -209,7 +207,6 @@ public:
 							  float & air_bombard,
 							  float & total_value,
 							  const bool terrainIndependent) const;
-
 
 	double  GetAverageHealthPercentage() const;
 	uint8   GetFlags() const

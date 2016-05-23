@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 #include "director.h"
 #include "textutils.h"
 #include "MoveFlags.h"
-#include "ArmyData.h" 
+#include "ArmyData.h"
 #include "TerrainRecord.h"
 #include "UnitData.h"
 
@@ -80,7 +80,6 @@
 
 #define k_DASH_LENGTH               4
 #define k_DOT_LENGTH                2  //PFT 07 Mar 05
-
 
 namespace // unnamed = static
 {
@@ -108,16 +107,16 @@ double GetEntryCost
 	MapPoint const &	a_Place
 )
 {
-	double	cost	= a_Army.GetMovementTypeAir() 
-					  ? k_MOVE_AIR_COST 
+	double	cost	= a_Army.GetMovementTypeAir()
+					  ? k_MOVE_AIR_COST
 					  : g_theWorld->GetMoveCost(a_Place);
 
 	if ((a_Army.IsAtLeastOneMoveShallowWater() ||
 		 a_Army.IsAtLeastOneMoveWater()
 		) &&
 		(!a_Army.IsAtLeastOneMoveLand())
-	   ) 
-	{ 
+	   )
+	{
 		// Army without land units: do not use roads/tunnels etc.
 		TerrainRecord::Modifiers const * bareTerrainProperties  =
 		    (g_theWorld->HasCity(a_Place))
@@ -125,7 +124,7 @@ double GetEntryCost
 		    : g_theWorld->GetTerrain(a_Place)->GetEnvBase();
 
 		sint32	icost;
-		if (bareTerrainProperties->GetMovement(icost)) 
+		if (bareTerrainProperties->GetMovement(icost))
 		{
 			cost = icost;
 		}
@@ -161,11 +160,10 @@ bool IsKnownEntryCost
 )
 {
 	return g_player[a_Army.GetOwner()]->IsExplored(a_Place) ||
-		   a_Army.GetMovementTypeAir(); 
+		   a_Army.GetMovementTypeAir();
 }
 
 } // namespace
-
 
 
 #define INSURFACE(x, y) (x >= 0 && y >= 0 && x < pSurface->Width() && y < pSurface->Height())
@@ -176,28 +174,28 @@ bool IsKnownEntryCost
 //
 // Name       : TiledMap::CanDrawSpecialMove
 //
-// Description: Test if a selected army is either about to attack a city or 
+// Description: Test if a selected army is either about to attack a city or
 //              can unload cargo at MapPoint &dest_pos
 //
 // Parameters : SELECT_TYPE sType   : selection mode (what's being selected)
 //              Army &sel_army      : the selected army
 //              MapPoint &old_pos   : ?
-//              MapPoint &dest_pos  : 
+//              MapPoint &dest_pos  :
 //
 // Globals    : g_theWorld      : world map information
 //            : g_controlPanel  :
-//            : g_selected_item : 
+//            : g_selected_item :
 //
-// Returns    : bool            : 
+// Returns    : bool            :
 //
-// Remark(s)  : 
+// Remark(s)  :
 //
 //----------------------------------------------------------------------------
 bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &dest_pos)
 {
 	switch (sType) {
 	case SELECT_TYPE_LOCAL_ARMY:
-		if (g_theWorld->HasCity(dest_pos)) { 
+		if (g_theWorld->HasCity(dest_pos)) {
 			if(g_controlPanel->GetTargetingMode() == CP_TARGETING_MODE_ORDER_PENDING) {
 				const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
 				if(rec->GetTargetPretestEnemyCity()) {
@@ -234,7 +232,7 @@ bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPo
 //----------------------------------------------------------------------------
 void TiledMap::DrawLegalMove
 (
-	aui_Surface *	pSurface	
+	aui_Surface *	pSurface
 )
 {
 	if (!(g_selected_item->GetIsPathing() &&	// path available?
@@ -267,12 +265,12 @@ void TiledMap::DrawLegalMove
 		sint32 const	xoffset				= (sint32) ((k_TILE_PIXEL_WIDTH * m_scale) / 2);
 		sint32 const	yoffset				= (sint32) (k_TILE_PIXEL_HEIGHT * m_scale);
 
-		while (!goodPath.IsEnd()) 
+		while (!goodPath.IsEnd())
 		{
 			prevPos = currPos;
 			goodPath.Next(currPos);
 
-			line_segment_count++; 
+			line_segment_count++;
 
 			if ((prevPos != currPos) &&
 				TileIsVisible(prevPos.x, prevPos.y) &&
@@ -283,13 +281,13 @@ void TiledMap::DrawLegalMove
 
 				maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 				maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-				
+
 				x1 += xoffset;
 				y1 += yoffset;
 				x2 += xoffset;
 				y2 += yoffset;
 
-				if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) 
+				if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 				{
 					Pixel16 const	pixelColor	= g_colorSet->GetColor(lineColor);
 
@@ -306,7 +304,7 @@ void TiledMap::DrawLegalMove
 	}
 
 	if ((sType != SELECT_TYPE_LOCAL_ARMY) &&
-		(sType != SELECT_TYPE_LOCAL_ARMY_UNLOADING) 
+		(sType != SELECT_TYPE_LOCAL_ARMY_UNLOADING)
 	   )
 	{
 		return;
@@ -322,9 +320,9 @@ void TiledMap::DrawLegalMove
 		if (sel_army[i]->IsImmobile())
 			return;
 	}
-	
+
 	double			currMovementPoints;
-	sel_army.CurMinMovementPoints(currMovementPoints); 
+	sel_army.CurMinMovementPoints(currMovementPoints);
 	if (currMovementPoints < 1.0)
 	{
 		currMovementPoints = -1.0;
@@ -337,7 +335,7 @@ void TiledMap::DrawLegalMove
 	sel_army.CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
 
 	MapPoint		prevPos;
-	sel_army.GetPos(prevPos); 
+	sel_army.GetPos(prevPos);
 
 	// Draw the colored line segments
 
@@ -348,24 +346,24 @@ void TiledMap::DrawLegalMove
 	MapPoint		currPos;
 	goodPath.Start(currPos);
 
-	bool			draw_one_special	= true; 
-	sint32			line_segment_count	= 0; 
+	bool			draw_one_special	= true;
+	sint32			line_segment_count	= 0;
 	sint32			special_line_segment= -1;
 
-	COLOR			actual_line_color	= k_TURN_COLOR_GO; 
+	COLOR			actual_line_color	= k_TURN_COLOR_GO;
 	COLOR			old_line_color		= k_TURN_COLOR_GO;// ??
-	COLOR			lineColor			= 
+	COLOR			lineColor			=
 		goodPath.IsEnd() ? k_TURN_COLOR_STOP : k_TURN_COLOR_GO;
 
 	//PFT 07 Mar 05
 	MapPoint move_pos = prevPos;//move_pos will become a position to move to if trying to bombard out of range
 	MapPoint target_pos = goodPath.GetEnd();
-	
+
 	const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
 	sint32 min_rge, max_rge = 0, dist = 9999;
 
 	if (rec && rec->GetUnitPretest_CanBombard() ){//test if it's a bombard order
-	
+
 		sel_army.AccessData()->GetBombardRange(min_rge, max_rge);
 
 		if(max_rge){//army can bombard
@@ -373,7 +371,7 @@ void TiledMap::DrawLegalMove
 			 dist = prevPos.NormalizedDistance(target_pos);
 
 			 if(dist > max_rge){//target is out of range
-				while (!goodPath.IsEnd() ) 
+				while (!goodPath.IsEnd() )
 				{
 					prevPos = move_pos;
 					goodPath.Next(move_pos);
@@ -403,13 +401,13 @@ void TiledMap::DrawLegalMove
 
 		maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 		maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-			
+
 		x1 += xoffset;
 		y1 += yoffset;
 		x2 += xoffset;
 		y2 += yoffset;
-	
-		if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) 
+
+		if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 		{
 			Pixel16 const	pixelColor	= g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
 
@@ -417,23 +415,23 @@ void TiledMap::DrawLegalMove
 		}
 		return;
 	}
-	
+
 	//else draw standard move path
 
 	//start by drawing green/yellow (good) part
-	while (!goodPath.IsEnd()) 
+	while (!goodPath.IsEnd())
 	{
 		prevPos = currPos;
 		goodPath.Next(currPos);
 
-		line_segment_count++; 
+		line_segment_count++;
 
 		if (!IsKnownEntryCost(sel_army, currPos))
 		{
 			lineColor = k_TURN_COLOR_STOP;
 		}
-		
-		if (currMovementPoints > 0) 
+
+		if (currMovementPoints > 0)
 		{
 			currMovementPoints	   -= GetEntryCost(sel_army, currPos);
 			if (isFirstMove)
@@ -442,15 +440,15 @@ void TiledMap::DrawLegalMove
 				isFirstMove			= false;
 			}
 		}
-		
-		if (currMovementPoints < 0)	
-		{	
+
+		if (currMovementPoints < 0)
+		{
 			if (lineColor != k_TURN_COLOR_STOP)
 			{
 				lineColor = k_TURN_COLOR_WAIT;
 			}
 		}
-		else if (FEQUAL(currMovementPoints,0.0)) 
+		else if (FEQUAL(currMovementPoints,0.0))
 		{
 			currMovementPoints = -1;
 		}
@@ -464,32 +462,32 @@ void TiledMap::DrawLegalMove
 
 			maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 			maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-				
+
 			x1 += xoffset;
 			y1 += yoffset;
 			x2 += xoffset;
 			y2 += yoffset;
-				
-			if ((sType == SELECT_TYPE_LOCAL_ARMY) || 
+
+			if ((sType == SELECT_TYPE_LOCAL_ARMY) ||
 				((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
-			   ) 
-			{ 
-				if (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos)) 
-				{ 
-					draw_one_special		= false; 
+			   )
+			{
+				if (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
+				{
+					draw_one_special		= false;
 					lineColor				= k_TURN_COLOR_SPECIAL;
-					special_line_segment	= line_segment_count; 
-				} 
+					special_line_segment	= line_segment_count;
+				}
 			}
-				
-			if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) 
+
+			if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 			{
 				Pixel16 const	pixelColor	= g_colorSet->GetColor(lineColor);
-				if (num_tiles_to_half < line_segment_count) 
+				if (num_tiles_to_half < line_segment_count)
 				{
 					primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DASH_LENGTH);
-				} 
-				else 
+				}
+				else
 				{
 					primitives_DrawAALine16(pSurface, x1, y1, x2, y2, pixelColor);
 
@@ -497,13 +495,13 @@ void TiledMap::DrawLegalMove
 
 						maputils_MapXY2PixelXY(currPos.x, currPos.y, &x1, &y1);
 						maputils_MapXY2PixelXY(target_pos.x, target_pos.y, &x2, &y2);
-							
+
 						x1 += xoffset;
 						y1 += yoffset;
 						x2 += xoffset;
 						y2 += yoffset;
-					
-						if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) 
+
+						if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 						{
 							Pixel16 const	pixelColor	= g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
 
@@ -520,20 +518,20 @@ void TiledMap::DrawLegalMove
 			AddDirtyTileToMix(currPos);
 		}
 
-		if (sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) 
-		{ 
+		if (sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING)
+		{
 			break;
 		}
 	} // while goodPath
 	// draw red (bad) part
 	prevPos			= currPos;
-	old_line_color	= lineColor; 
+	old_line_color	= lineColor;
 
 	Path			badPath(g_selected_item->GetBadPath());
 //	sint32			badPath_old_index	= badPath.GetNextIndex(); // ??? not used
 	badPath.Start(currPos);
 
-	if (TileIsVisible(prevPos.x, prevPos.y) && 
+	if (TileIsVisible(prevPos.x, prevPos.y) &&
 		TileIsVisible(currPos.x, currPos.y)
 	   )
 	{
@@ -541,40 +539,40 @@ void TiledMap::DrawLegalMove
 
 		maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 		maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-		
+
 		x1 += xoffset;
 		y1 += yoffset;
 		x2 += xoffset;
 		y2 += yoffset;
 
-		if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos)) 
+		if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
 		{
-			if (((sType == SELECT_TYPE_LOCAL_ARMY) || 
+			if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 				 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
 				) &&
 				(draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
-			   ) 
-			{ 
-				draw_one_special		= false; 
+			   )
+			{
+				draw_one_special		= false;
 				actual_line_color		= k_TURN_COLOR_SPECIAL;
-				special_line_segment	= line_segment_count; 
-			} 
-			else 
-			{ 
-				actual_line_color		= k_TURN_COLOR_STOP; 
+				special_line_segment	= line_segment_count;
+			}
+			else
+			{
+				actual_line_color		= k_TURN_COLOR_STOP;
 			}
 		}
-		else 
-		{ 
+		else
+		{
 			actual_line_color = k_TURN_COLOR_STOP;
-		} 
-		line_segment_count++; 
+		}
+		line_segment_count++;
 
-		if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) 
+		if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 		{
 			Pixel16 const	pixelColor	= g_colorSet->GetColor(actual_line_color);
 
-			if (num_tiles_to_half < line_segment_count) 
+			if (num_tiles_to_half < line_segment_count)
 			{
 				primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DASH_LENGTH);
 			}
@@ -588,18 +586,18 @@ void TiledMap::DrawLegalMove
 				}
 			}
 		}
-	
+
 		AddDirtyTileToMix(prevPos);
 		AddDirtyTileToMix(currPos);
 	}
 
 	old_line_color = actual_line_color;
-	
-	while (!badPath.IsEnd()) 
+
+	while (!badPath.IsEnd())
 	{
 		prevPos = currPos;
 		badPath.Next(currPos);
-		line_segment_count++; 
+		line_segment_count++;
 
 		if ((prevPos != currPos) &&
 			TileIsVisible(prevPos.x, prevPos.y) &&
@@ -616,28 +614,28 @@ void TiledMap::DrawLegalMove
 			x2 += xoffset;
 			y2 += yoffset;
 
-			if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos)) 
+			if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
 			{
-				if (((sType == SELECT_TYPE_LOCAL_ARMY) || 
+				if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 					 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 1))
 					) &&
 					(draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
-				   ) 
-				{ 
-					draw_one_special		= FALSE; 
+				   )
+				{
+					draw_one_special		= FALSE;
 					actual_line_color		= k_TURN_COLOR_SPECIAL;
-					special_line_segment	= line_segment_count; 
-				} 
-				else 
-				{ 
-					actual_line_color = k_TURN_COLOR_STOP; 
+					special_line_segment	= line_segment_count;
+				}
+				else
+				{
+					actual_line_color = k_TURN_COLOR_STOP;
 				}
 			}
-			else 
-			{ 
+			else
+			{
 				actual_line_color = k_TURN_COLOR_STOP;
-			} 
-			old_line_color = actual_line_color; 
+			}
+			old_line_color = actual_line_color;
 
 			if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
 			{
@@ -651,42 +649,42 @@ void TiledMap::DrawLegalMove
 	}
 
 	// Restart to add the turn count boxes.
-	
-	old_line_color			= actual_line_color; 
+
+	old_line_color			= actual_line_color;
 	goodPath				= *g_selected_item->GetGoodPath();
 	isFirstMove				= sel_army.GetFirstMoveThisTurn();
 	line_segment_count		= -1;
 
-	sint32 const	boxEdgeSize			= 
-		std::max(static_cast<sint32>(k_TURN_BOX_SIZE_MINIMUM), 
+	sint32 const	boxEdgeSize			=
+		std::max(static_cast<sint32>(k_TURN_BOX_SIZE_MINIMUM),
 				 static_cast<sint32>(k_TURN_BOX_SIZE * m_scale)
 				);
-	bool			special_box_done	= false; 
+	bool			special_box_done	= false;
 	sint32			turn				= 0;
 
 	double	maxMovementPoints;
-	sel_army.MinMovementPoints(maxMovementPoints); 
+	sel_army.MinMovementPoints(maxMovementPoints);
 	if (maxMovementPoints < 1.0)
 	{
 		maxMovementPoints	= -1.0;
 	}
 
-	sel_army.CurMinMovementPoints(currMovementPoints); 
+	sel_army.CurMinMovementPoints(currMovementPoints);
 	double	count			= currMovementPoints;
-	
+
 	if (currMovementPoints < 1.0)
 	{
 		currMovementPoints	= -1.0;
 		count				= maxMovementPoints;
 		isFirstMove			= 1;
 	}
-	
+
 	double	prevMovementPoints	= 0.0;
 	goodPath.Start(currPos);
-	
-	while (!goodPath.IsEnd())	
+
+	while (!goodPath.IsEnd())
 	{
-		line_segment_count++; 
+		line_segment_count++;
 		prevPos = currPos;
 		goodPath.Next(currPos);
 
@@ -696,19 +694,19 @@ void TiledMap::DrawLegalMove
 		}
 
 		double const	cost	= GetEntryCost(sel_army, currPos);
-		
+
 		if (currMovementPoints > 0)
 		{
 			prevMovementPoints	= currMovementPoints;
 			currMovementPoints -= cost;
-			
+
 			if (isFirstMove)
 			{
 				currMovementPoints = std::max(currMovementPoints, 0.0);
 				// isFirstMove not reset yet: used for count later.
 			}
 		}
-		
+
 		COLOR		turnColor	= k_TURN_COLOR_GO;
 		if (prevMovementPoints < 1.0)
 		{
@@ -718,7 +716,7 @@ void TiledMap::DrawLegalMove
 		{
 			currMovementPoints = -1;
 		}
-		
+
 		if (count > 0)
 		{
 			count -= cost;
@@ -728,7 +726,7 @@ void TiledMap::DrawLegalMove
 				isFirstMove = false;
 			}
 		}
-		
+
 		bool		countWasZero	= false;
 		MapPoint	drawPos			= prevPos;
 
@@ -739,11 +737,11 @@ void TiledMap::DrawLegalMove
 			drawPos			= currPos;
 			isFirstMove		= true;
 		}
-		
+
 		if (count < 0)
 		{
 			count = maxMovementPoints;
-			
+
 			if (!countWasZero)
 			{
 				if (cost > count)
@@ -755,39 +753,39 @@ void TiledMap::DrawLegalMove
 					count -= cost;
 				}
 			}
-				
+
 			turn++;
 			prevMovementPoints = 0;
-				
+
 			if (TileIsVisible(drawPos.x, drawPos.y))
 			{
 				sint32	x;
 				sint32	y;
-				
+
 				maputils_MapXY2PixelXY(drawPos.x, drawPos.y, &x, &y);
-				
+
 				x += xoffset;
 				y += yoffset;
-				
-				RECT	turnRect	= 
+
+				RECT	turnRect	=
 					{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
 
-				if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom)) 
+				if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom))
 				{
 					MBCHAR turnNumber[80];
-					
-					if ((!special_box_done) && (special_line_segment == line_segment_count)) 
-					{ 
-						special_box_done = true; 
+
+					if ((!special_box_done) && (special_line_segment == line_segment_count))
+					{
+						special_box_done = true;
 						sprintf(turnNumber, "*");
 						actual_line_color = k_TURN_COLOR_SPECIAL;
-					} 
-					else 
+					}
+					else
 					{
 						sprintf(turnNumber,"%d",turn);
 						actual_line_color = turnColor;
-					} 
-					
+					}
+
                     dist = drawPos.NormalizedDistance(target_pos);//pft
 					if(dist > max_rge){
 						primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
@@ -797,60 +795,59 @@ void TiledMap::DrawLegalMove
 						sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 						sint32 const	textX	= x - (width >> 1);
 						sint32 const	textY	= y - (height >> 1);
-							
+
 						primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 					}
-				} 
-			} 
-		} 
+				}
+			}
+		}
 	}
- 
+
 	MapPoint drawPos;
 	badPath.Start(drawPos);
 
 	if ((0 <= special_line_segment) && (!special_box_done) && !badPath.IsEnd())
-	{ 
-		if (goodPath.IsEnd() || (goodPath.Num() < 1)) 
-		{ 
-			badPath.Next(drawPos); 
-		} 
-		 
-		if (TileIsVisible(drawPos.x,drawPos.y)) 
+	{
+		if (goodPath.IsEnd() || (goodPath.Num() < 1))
+		{
+			badPath.Next(drawPos);
+		}
+
+		if (TileIsVisible(drawPos.x,drawPos.y))
 		{
 			if (!IsKnownEntryCost(sel_army, drawPos))
 			{
 				return;
 			}
-			 
+
 			sint32	x;
-			sint32	y; 
-			
+			sint32	y;
+
 			maputils_MapXY2PixelXY(drawPos.x, drawPos.y, &x, &y);
-			 
+
 			x += xoffset;
 			y += yoffset;
-			 
-			RECT	turnRect	= 
+
+			RECT	turnRect	=
 				{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
-			 
-			if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom)) 
+
+			if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom))
 			{
                 dist = drawPos.NormalizedDistance(target_pos);//pft
 				if(dist > max_rge){
-					MBCHAR turnNumber[80];						
+					MBCHAR turnNumber[80];
 					sprintf(turnNumber, "*");
 					actual_line_color	= k_TURN_COLOR_SPECIAL;
-					special_box_done	= true; 
+					special_box_done	= true;
 
 					primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
 					primitives_FrameRect16(pSurface, &turnRect, 0);
-					 
 
 					sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
 					sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
 					sint32 const	textX	= x - (width >> 1);
 					sint32 const	textY	= y - (height >> 1);
-					 
+
 					primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
 				}
 			}
@@ -869,31 +866,31 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 	}
 
 	Army 	sel_army 			= Army(id);
-	Assert(sel_army.IsValid()); 
+	Assert(sel_army.IsValid());
 	if ( !sel_army.GetOrder(0) ) return;
 	if ( !sel_army.GetOrder(0)->m_path ) return;
-	
+
 	//PFT: handle immobile units
 	for (sint32 i = 0; i < sel_army.Num(); i++)
 	{
 		if (sel_army[i].IsImmobile())
 			return;
 	}
-	
+
 	Path goodPath(sel_army.GetOrder(0)->m_path);
 
 	double 	currMovementPoints 	= 0.0;
-	sel_army.CurMinMovementPoints(currMovementPoints); 
+	sel_army.CurMinMovementPoints(currMovementPoints);
 	if (currMovementPoints < 1.0)
 		currMovementPoints = -1.0;
 
 	bool	isFirstMove 		= sel_army.GetFirstMoveThisTurn();
 
-	sint32 num_tiles_to_half; 
+	sint32 num_tiles_to_half;
 	sint32 num_tiles_to_empty;
 	sel_army.CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
 
-	sint32 line_segement_count = 0; 
+	sint32 line_segement_count = 0;
 	//get the army's currPos
 	MapPoint	currPos;
 	sel_army.GetPos(currPos);
@@ -909,43 +906,43 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 	//draw the (COLOR_GRAY) path from currPos
 	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEIGHT*m_scale);
-	
+
 	MapPoint prevPos;
-	while (!goodPath.IsEnd()) 
+	while (!goodPath.IsEnd())
 	{
 		prevPos = currPos;
 		goodPath.Next(currPos);
 		uint16 lineColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
 		double old, cost;
 		line_segement_count++;
-		
+
 		if (!(sel_army.GetMovementTypeAir() || m_localVision->IsExplored(currPos)))
 			break;
-		
+
 		if (currMovementPoints > 0)
 		{
 			old = currMovementPoints;
-			Assert(sel_army.m_id != (0)); 
+			Assert(sel_army.m_id != (0));
 			cost = GetEntryCost(sel_army, currPos);
-			
+
 			if (isFirstMove)
 			{
-				
+
 				if (cost > currMovementPoints)
 					currMovementPoints = 0;
 				else
 					currMovementPoints -= cost;
-				
+
 				isFirstMove = 0;
 			}
 			else
 				currMovementPoints -= cost;
 		}
-		
-		if (FEQUAL(currMovementPoints,0.0)) 
+
+		if (FEQUAL(currMovementPoints,0.0))
 			currMovementPoints = -1;
-		
-		if (prevPos != currPos) 
+
+		if (prevPos != currPos)
 		{
 			if (TileIsVisible(prevPos.x, prevPos.y) &&
 				TileIsVisible(currPos.x, currPos.y))
@@ -953,44 +950,42 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 				sint32 x1, y1, x2, y2;
 				maputils_MapXY2PixelXY(prevPos.x, prevPos.y, &x1, &y1);
 				maputils_MapXY2PixelXY(currPos.x, currPos.y, &x2, &y2);
-				
-				
+
 				x1 += xoffset;
 				y1 += yoffset;
 				x2 += xoffset;
 				y2 += yoffset;
-				
-				
-				
+
+
 				if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) {
 					if (num_tiles_to_half < line_segement_count) {
 						primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, lineColor, k_DASH_LENGTH);
 					} else {
 						primitives_DrawAALine16(pSurface, x1, y1, x2, y2, lineColor);
-					} 
+					}
 				}
-				
+
 				AddDirtyTileToMix(prevPos);
 				AddDirtyTileToMix(currPos);
 			}
 		}
-	} 
+	}
 
 	line_segement_count++;
 	sint32 turn = 0;
 	currMovementPoints=0.0;
 	double prevMovementPoints=0.0;
 	double maxMovementPoints=0.0;
-	
+
 	sel_army = Army(id);
-	sel_army.CurMinMovementPoints(currMovementPoints); 
-	double count = currMovementPoints; 
-	sel_army.MinMovementPoints(maxMovementPoints); 
+	sel_army.CurMinMovementPoints(currMovementPoints);
+	double count = currMovementPoints;
+	sel_army.MinMovementPoints(maxMovementPoints);
 	if (maxMovementPoints < 1.0)
 		maxMovementPoints = -1.0;
-		
+
 	isFirstMove =  sel_army.GetFirstMoveThisTurn();
-		
+
 	if (currMovementPoints < 1.0)
 	{
 		currMovementPoints = -1;
@@ -998,7 +993,7 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 		count = maxMovementPoints;
 		isFirstMove = true;
 	}
-	
+
 	sel_army.GetPos(currPos);
 	goodPath.Start( tempPos );
 	//move down goodPath to reach currPos
@@ -1009,52 +1004,51 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 	{
 		prevPos = currPos;
 		goodPath.Next(currPos);
-		
+
 		if (!(m_localVision->IsExplored(currPos) || sel_army.GetMovementTypeAir()))
 			break;
 
 		double const	cost	= GetEntryCost(sel_army, currPos);
-		
+
 		uint16 turnColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
 		MapPoint drawPos = prevPos;
-		
-		
+
 		if (currMovementPoints > 0)
 		{
 			prevMovementPoints = currMovementPoints;
-			
+
 			if (isFirstMove)
 			{
-				if (cost > currMovementPoints) 
+				if (cost > currMovementPoints)
 					currMovementPoints = 0;
 				else
 					currMovementPoints -= cost;
-				
+
 			}
 			else
 				currMovementPoints -= cost;
 		}
-		
-		if (prevMovementPoints < 1.0)		
+
+		if (prevMovementPoints < 1.0)
 			turnColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
-		else if (currMovementPoints <1.0)	
+		else if (currMovementPoints <1.0)
 			currMovementPoints = -1;
-		
+
 		if (count > 0)
 		{
 			if (isFirstMove)
 			{
-				if (cost > count) 
+				if (cost > count)
 					count = 0;
 				else
 					count -= cost;
-				
+
 				isFirstMove = false;
 			}
-			else 
+			else
 				count -= cost;
 		}
-		
+
 		bool countWasZero = false;
 		if ((-0.01 < count) && (count < 0.01))
 		{
@@ -1063,54 +1057,54 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 			countWasZero 	= true;
 			count 			= -1;
 		}
-		
+
 		if (count < 0)
 		{
 			count = maxMovementPoints;
-			
+
 			if (!countWasZero)
 			{
 				if (cost > count)
 					count = -1;
 				else
 					count -= cost;
-				
+
 				turn++;
 				prevMovementPoints = 0;
-				
+
 				sint32 x,y;
-				
+
 				maputils_MapXY2PixelXY(drawPos.x,drawPos.y,&x,&y);
-				
+
 				x += xoffset;
 				y += yoffset;
-				
+
 				sint32	boxEdgeSize = (sint32)((double)k_TURN_BOX_SIZE * m_scale);
 				if (boxEdgeSize < k_TURN_BOX_SIZE_MINIMUM) boxEdgeSize = k_TURN_BOX_SIZE_MINIMUM;
-				
-				RECT turnRect = {x - boxEdgeSize, 
-					y - boxEdgeSize, 
-					x + boxEdgeSize, 
+
+				RECT turnRect = {x - boxEdgeSize,
+					y - boxEdgeSize,
+					x + boxEdgeSize,
 					y + boxEdgeSize};
-				
+
 				if (TileIsVisible(drawPos.x,drawPos.y))
 				{
 					if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom)) {
 						primitives_PaintRect16(pSurface,&turnRect,turnColor);
 						primitives_FrameRect16(pSurface,&turnRect,g_colorSet->GetColor(k_TURN_COLOR));
-						
+
 						MBCHAR turnNumber[80];
-						
+
 						sprintf(turnNumber,"%d",turn);
-						
+
 						COLORREF color = g_colorSet->GetColorRef(k_TURN_COLOR);
-						
+
 						sint32 width = textutils_GetWidth(pSurface, turnNumber);
 						sint32 height = textutils_GetHeight(pSurface, turnNumber);
-						
+
 						sint32 textX = x - (width>>1);
 						sint32 textY = y - (height>>1);
-						
+
 						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
 					}
 				}

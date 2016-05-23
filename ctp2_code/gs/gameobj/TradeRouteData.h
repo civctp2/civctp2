@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Trade Route Data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added SetSourceResource method to correct the trade route index if 
+// - Added SetSourceResource method to correct the trade route index if
 //   the size of the Resource database was increased. - June 4th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -45,7 +45,6 @@ class TradeRouteData;
 #include "CityRadius.h"
 #include "Army.h"
 
-
 #define k_TRADEROUTE_NO_PATH		0
 #define k_TRADEROUTE_ORIGINAL_PATH	1
 #define k_TRADEROUTE_SELECTED_PATH	2
@@ -56,39 +55,34 @@ class TradeRouteData : public GameObj,
 					   public CityRadiusCallback
 {
 private:
-    
-	
+
 	double m_transportCost;
 	PLAYER_INDEX m_owner;
 	PLAYER_INDEX m_payingFor;
 	Army m_piratingArmy;
 
 	ROUTE_TYPE m_sourceRouteType;
-	sint32 m_sourceResource; 
+	sint32 m_sourceResource;
 	BOOL m_passesThrough[k_MAX_PLAYERS];
 	BOOL m_crossesWater;
 	BOOL m_isActive;
 
-	
 	uint32	m_color;
 	uint32	m_outline;
 
-	
 	sint32	m_selectedIndex;
-
 
 	BOOL m_valid;
 
 	sint32 m_gold_in_return;
 
-	
-	sint32	m_path_selection_state;	
+	sint32	m_path_selection_state;
 
-	
-	
 
-	
-	
+
+
+
+
 	Unit m_sourceCity;
 	Unit m_destinationCity;
 	TradeRoute m_recip;
@@ -102,10 +96,10 @@ private:
 	DynamicArray<MapPoint> m_setWayPoints;
 
 	Path *m_astarPath;
-	
-	
 
-	
+
+
+
 	BOOL m_dontAdjustPointsWhenKilled;
 
 	void CheckSquareForCity(MapPoint const & pos);
@@ -113,15 +107,15 @@ private:
 	friend class NetTradeRoute;
 
 public:
-	TradeRouteData(const TradeRoute route, 
-				   const Unit source, 
+	TradeRouteData(const TradeRoute route,
+				   const Unit source,
 				   const Unit dest,
 				   const PLAYER_INDEX owner,
 				   const ROUTE_TYPE sourceType,
 				   const sint32 sourceResource,
 				   PLAYER_INDEX paying_for,
 				   sint32 gold_in_return);
-	TradeRouteData(const TradeRoute route); 
+	TradeRouteData(const TradeRoute route);
 	TradeRouteData(CivArchive &archive);
 	TradeRouteData(TradeRouteData* copyme, uint32 new_id);
 	~TradeRouteData();
@@ -131,7 +125,6 @@ public:
 	PLAYER_INDEX GetOwner() const { return m_owner; }
 	PLAYER_INDEX GetPayingFor() const { return m_payingFor; }
 
-	
 	uint32 GetColor() const { return m_color; }
 	uint32 GetOutlineColor() const { return m_outline; }
 	void SetColor( uint32 color ) { m_color = color; }
@@ -159,7 +152,6 @@ public:
 
 	BOOL CrossesWater() const;
 
-	
 	void ClearPath();
 	void AddWayPoint(MapPoint pos);
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
@@ -169,7 +161,6 @@ public:
 				 DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
 
-	
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
 	sint32 AddSelectedWayPoint(const MapPoint &pos);

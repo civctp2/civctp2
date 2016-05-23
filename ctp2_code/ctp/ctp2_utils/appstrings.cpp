@@ -19,7 +19,6 @@
 #include "ctp2_config.h"
 #include "c3types.h"
 
-
 static MBCHAR **    s_appStrings        = NULL;
 static size_t	    s_numAppStrings     = 0;
 

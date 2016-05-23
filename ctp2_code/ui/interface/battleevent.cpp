@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,6 @@ extern SoundManager		*g_soundManager;
 extern BattleViewWindow	*g_battleViewWindow;
 
 
-
 BattleEvent::BattleEvent(BATTLE_EVENT_TYPE type)
 {
 	Initialize();
@@ -51,21 +50,19 @@ BattleEvent::BattleEvent(BATTLE_EVENT_TYPE type)
 }
 
 
-
 void BattleEvent::Initialize(void)
 {
 	m_type = BATTLE_EVENT_TYPE_NONE;
 	m_finished = FALSE;
-	m_animating = FALSE;				
+	m_animating = FALSE;
 	m_dataList = new PointerList<BattleEventData>;
 	m_walker = new PointerList<BattleEventData>::Walker(m_dataList);
 }
 
 
-
 BattleEvent::~BattleEvent()
 {
-	
+
 	if (m_dataList) {
 		m_dataList->DeleteAll();
 		delete m_dataList;
@@ -75,7 +72,6 @@ BattleEvent::~BattleEvent()
 		delete m_walker;
 	}
 }
-
 
 
 BOOL BattleEvent::HasActor(BattleViewActor *actor)
@@ -92,8 +88,7 @@ BOOL BattleEvent::HasActor(BattleViewActor *actor)
 }
 
 
-
-void BattleEvent::AddPositionData(BattleViewActor *actor, sint32 column, sint32 row, 
+void BattleEvent::AddPositionData(BattleViewActor *actor, sint32 column, sint32 row,
 									sint32 facing, double hp, BOOL isDefender)
 {
 	if (HasActor(actor)) return;
@@ -111,7 +106,6 @@ void BattleEvent::AddPositionData(BattleViewActor *actor, sint32 column, sint32 
 }
 
 
-
 void BattleEvent::AddAttackData(BattleViewActor *actor, sint32 soundID, double hp)
 {
 	if (HasActor(actor)) return;
@@ -124,7 +118,6 @@ void BattleEvent::AddAttackData(BattleViewActor *actor, sint32 soundID, double h
 
 	m_dataList->AddTail(data);
 }
-
 
 
 void BattleEvent::AddExplosionData(BattleViewActor *actor, EffectActor *explodeActor, sint32 soundID,
@@ -143,7 +136,6 @@ void BattleEvent::AddExplosionData(BattleViewActor *actor, EffectActor *explodeA
 }
 
 
-
 void BattleEvent::AddDeathData(BattleViewActor *actor, sint32 soundID, double hp)
 {
 	if (HasActor(actor)) return;
@@ -156,7 +148,6 @@ void BattleEvent::AddDeathData(BattleViewActor *actor, sint32 soundID, double hp
 
 	m_dataList->AddTail(data);
 }
-
 
 
 void BattleEvent::ProcessPlacement(void)
@@ -179,14 +170,14 @@ void BattleEvent::ProcessPlacement(void)
 													   &x, &y);
 				}
 				DPRINTF(k_DBG_GAMESTATE, ("Process placement for actor %lx (unit %lx)\n", data->positionActor, data->positionActor->GetUnitID().m_id));
-				
+
 				data->positionActor->SetX(x);
 				data->positionActor->SetY(y);
 				data->positionActor->SetFacing(data->positionFacing);
 				data->positionActor->SetHitPoints(data->positionHP);
 			}
 
-			
+
 
 
 			delete m_walker->Remove();
@@ -194,11 +185,10 @@ void BattleEvent::ProcessPlacement(void)
 			Assert(FALSE);
 			m_walker->Next();
 		}
-	}	
+	}
 
 	m_finished = TRUE;
 }
-
 
 
 void BattleEvent::ProcessAttack(void)
@@ -222,13 +212,12 @@ void BattleEvent::ProcessAttack(void)
 			Assert(actor);
 			if (!actor) {
 
-
 				delete m_walker->Remove();
 			} else {
 				BOOL finished = FALSE;
 
 				if (!m_animating) {
-					
+
 					Assert(actor);
 
 					Anim *  anim = actor->CreateAnim(UNITACTION_ATTACK);
@@ -238,21 +227,19 @@ void BattleEvent::ProcessAttack(void)
 						action->SetAnim(anim);
 						actor->AddAction(action);
 					} else {
-						
+
 						finished = TRUE;
 					}
 
-					
 					if (g_soundManager && data->attackSoundID >= 0)
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(), 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(),
 												data->attackSoundID);
-					
+
 					nowAnimating = TRUE;
 				} else {
-					
+
 					actor->Process();
 
-					
 					if (actor->GetCurAction()) {
 						if (actor->GetCurAction()->GetActionType() != UNITACTION_ATTACK) {
 							finished = TRUE;
@@ -260,10 +247,8 @@ void BattleEvent::ProcessAttack(void)
 					}
 				}
 
-				
 				if (finished) {
 					actor->SetHitPoints(data->attackHP);
-
 
 					delete m_walker->Remove();
 				} else {
@@ -271,11 +256,10 @@ void BattleEvent::ProcessAttack(void)
 				}
 			}
 		}
-	}	
+	}
 	if (nowAnimating)
 		m_animating = TRUE;
 }
-
 
 
 void BattleEvent::ProcessExplode(void)
@@ -298,7 +282,6 @@ void BattleEvent::ProcessExplode(void)
 
 			BOOL finished = FALSE;
 
-			
 			if (!m_animating) {
 
 				if (actor) {
@@ -328,7 +311,7 @@ void BattleEvent::ProcessExplode(void)
 						actor->SetY(data->explodeVictim->GetY());
 					}
 				}
-				
+
 				if (g_soundManager)
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, data->explodeSoundID);
 
@@ -336,7 +319,7 @@ void BattleEvent::ProcessExplode(void)
 			} else {
 				if (actor) {
 					actor->Process();
-					
+
 					if(data->explodeVictim) {
 						actor->SetX(data->explodeVictim->GetX());
 						actor->SetY(data->explodeVictim->GetY());
@@ -349,12 +332,10 @@ void BattleEvent::ProcessExplode(void)
 				}
 			}
 
-			
 			if (finished) {
 				if(data->explodeVictim) {
 					data->explodeVictim->SetHitPoints(data->explodeHP);
 				}
-
 
 				delete m_walker->Remove();
 				delete actor;
@@ -367,7 +348,6 @@ void BattleEvent::ProcessExplode(void)
 	if (nowAnimating)
 		m_animating = TRUE;
 }
-
 
 
 void BattleEvent::ProcessDeath(void)
@@ -392,16 +372,15 @@ void BattleEvent::ProcessDeath(void)
 			if(actor) {
 				finished = FALSE;
 
-				
 				if (!m_animating) {
 					Action		*action;
 					Anim		*anim;
 
-					
-					
+
+
 
 					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
-						
+
 						action = new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND);
 						anim = actor->MakeFakeDeath();
 					} else {
@@ -412,9 +391,8 @@ void BattleEvent::ProcessDeath(void)
 					action->SetAnim(anim);
 					actor->AddAction(action);
 
-					
 					if (g_soundManager)
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(), 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(),
 												 data->deathSoundID);
 
 					actor->Process();
@@ -425,19 +403,17 @@ void BattleEvent::ProcessDeath(void)
 				} else {
 					actor->Process();
 
-					if (actor->GetCurAction() && 
-						actor->GetCurAction()->m_actionType != UNITACTION_VICTORY && 
+					if (actor->GetCurAction() &&
+						actor->GetCurAction()->m_actionType != UNITACTION_VICTORY &&
 						actor->GetCurAction()->m_actionType != UNITACTION_FAKE_DEATH) {
-						
+
 						finished = TRUE;
 					}
 				}
 
 			}
 
-			
 			if (finished) {
-				
 
 
 				delete m_walker->Remove();
@@ -448,11 +424,10 @@ void BattleEvent::ProcessDeath(void)
 				m_walker->Next();
 			}
 		}
-	}	
+	}
 	if (nowAnimating)
 		m_animating = TRUE;
 }
-
 
 
 void BattleEvent::Process(void)
@@ -473,11 +448,10 @@ void BattleEvent::Process(void)
 }
 
 
-
 void BattleEvent::DrawExplosions(aui_Surface *surface)
 {
 	if (m_type != BATTLE_EVENT_TYPE_EXPLODE) return;
-	
+
 	if (m_dataList->GetCount() <= 0) return;
 
 	BattleEventData *data;
@@ -495,9 +469,8 @@ void BattleEvent::DrawExplosions(aui_Surface *surface)
 			}
 		}
 		m_walker->Next();
-	}	
+	}
 }
-
 
 
 BattleViewActor *BattleEvent::GetActor(void)
@@ -534,13 +507,13 @@ BattleViewActor *BattleEvent::GetActor(void)
 
 void BattleEvent::RemoveDeadActor(BattleViewActor *deadActor)
 {
-	
+
 	PointerList<BattleEventData>::Walker walk(m_dataList);
 	for(; walk.IsValid(); walk.Next()) {
 		BattleEventData *data = walk.GetObj();
-		
+
 		if(deadActor == data->actor) {
-			
+
 			data->actor = NULL;
 		}
 	}

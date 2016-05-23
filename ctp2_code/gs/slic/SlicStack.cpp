@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Prevented random memory access and NULL-dereferencing crashes. 
+// - Prevented random memory access and NULL-dereferencing crashes.
 //
 //----------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ SlicStack::~SlicStack()
 
 void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 {
-	if (static_cast<size_t>(m_sptr) + sizeof(SlicStackValue) + 1 > m_stackSize) 
+	if (static_cast<size_t>(m_sptr) + sizeof(SlicStackValue) + 1 > m_stackSize)
     {
 		uint8* newStack = new uint8[m_stackSize * 2];
 		memcpy(newStack, m_stack, m_stackSize);
@@ -68,7 +68,7 @@ void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 sint32 SlicStack::Pop(SS_TYPE &type, SlicStackValue &value)
 {
 	Assert(m_sptr >= (1 + sizeof(SlicStackValue)));
-	if (static_cast<size_t>(m_sptr) < 1 + sizeof(SlicStackValue)) 
+	if (static_cast<size_t>(m_sptr) < 1 + sizeof(SlicStackValue))
     {
 		return -1;
 	}
@@ -79,7 +79,6 @@ sint32 SlicStack::Pop(SS_TYPE &type, SlicStackValue &value)
 	type = SS_TYPE(m_stack[m_sptr]);
 	return m_sptr;
 }
-
 
 SlicSymbolData *SlicStack::GetSymbol(SS_TYPE symType, SlicStackValue symVal)
 {
@@ -109,7 +108,7 @@ sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 		{
 			return retValue;
 		}
-	
+
 		if(g_theProfileDB
 		&& g_theProfileDB->IsDebugSlic()
 		){
@@ -135,7 +134,6 @@ BOOL SlicStack::GetCity(SS_TYPE type, SlicStackValue symVal, Unit &city)
 	SlicSymbolData const *	sym = GetSymbol(type, symVal);
 	return (sym) ? sym->GetCity(city) : FALSE;
 }
-
 
 BOOL SlicStack::GetPos(SS_TYPE type, SlicStackValue symVal, MapPoint &pos)
 {

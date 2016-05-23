@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -69,26 +69,25 @@ C3FancyWindow::C3FancyWindow(
 
 
 
-	
-	
+
+
 	m_originalDimensions.x = 546;
 	m_originalDimensions.y = 173;
-	
+
 	NullBorders();
-	
+
 		for(int i=0; i< k_NUM_BORDERS; i++)
 			if(ldlBorder[i]) {
 				m_border[i] = new C3Window(retval, aui_UniqueId(), ldlBorder[i], 16, AUI_WINDOW_TYPE_FLOATING, false );
 				Assert( AUI_NEWOK(m_border[i], *retval) );
 				if ( !AUI_NEWOK(m_border[i], *retval) ) return;
-				
-				
+
 				m_border[i]->SetTransparent(true);
 				m_offset[i].x = m_border[i]->X();
 				m_offset[i].y = m_border[i]->Y();
 				m_border[i]->Offset(m_x,m_y);
 			}
-	
+
 	if(exitCallBack && m_border[TR]) {
 		MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 		sprintf( buttonBlock, "%s.%s", ldlBorder[TR], "ExitButton" );
@@ -107,8 +106,7 @@ C3FancyWindow::C3FancyWindow(
 
 C3FancyWindow::~C3FancyWindow()
 {
-	
-	
+
 
 	for(int i=0; i<k_NUM_BORDERS; i++) {
 		if(m_border[i]) {
@@ -119,14 +117,12 @@ C3FancyWindow::~C3FancyWindow()
 	if(m_exit) { delete m_exit; m_exit = NULL;}
 }
 
-
 void C3FancyWindow::MakeDraggable( BOOL draggable )
 {
 	SetDraggable( draggable );
 	m_grabRegion->Move( 0, 0 );
 	m_grabRegion->Resize( m_width, m_height );
 
-	
 	for(int i=0; i<k_NUM_BORDERS; i++) {
 		if(m_border[i]) {
 			m_border[i]->SetBlindness( TRUE );
@@ -135,13 +131,12 @@ void C3FancyWindow::MakeDraggable( BOOL draggable )
 }
 
 
-
 void C3FancyWindow::MouseLGrabInside (aui_MouseEvent *mouseData)
 {
 	if (IsDisabled()) return;
 
 	C3Window::MouseLGrabInside(mouseData);
-	
+
 	BringBorderToTop();
 
 }
@@ -151,19 +146,18 @@ void C3FancyWindow::MouseLDragAway (aui_MouseEvent *mouseData)
 	if (IsDisabled()) return;
 
 	C3Window::MouseLDragAway(mouseData);
-	
+
 	for(int i=0; i< k_NUM_BORDERS; i++) {
 		if(m_border[i])
 			m_border[i]->Move(m_offset[i].x+m_x,m_offset[i].y+m_y);
 	}
 }
 
-
 void C3FancyWindow::BringBorderToTop()
 {
 	for(int i=0; i< k_NUM_BORDERS; i++)
 		if(m_border[i])
-			g_c3ui->BringWindowToTop( m_border[i] ); 
+			g_c3ui->BringWindowToTop( m_border[i] );
 }
 
 AUI_ERRCODE C3FancyWindow::AddBordersToUI()
@@ -198,18 +192,17 @@ AUI_ERRCODE C3FancyWindow::RemoveBordersFromUI()
 AUI_ERRCODE	C3FancyWindow::Resize( sint32 width, sint32 height )
 {
 	C3Window::Resize(width,height);
-	
+
 	sint32 dw = width - m_originalDimensions.x,
 			dh = height - m_originalDimensions.y;
 
-	
-	
-	
-	
+
+
+
+
 	sint32 lx =0, cx = dw/2, rx = dw,
 			ty = 0, by = dh;
-	
-	
+
 #if 0
 	m_border[TL]->Offset(lx,ty);
 	m_border[TR]->Offset(rx,ty);
@@ -237,10 +230,9 @@ AUI_ERRCODE	C3FancyWindow::Resize( sint32 width, sint32 height )
 			m_border[i]->Move(m_offset[i].x+m_x,m_offset[i].y+m_y);
 	}
 #endif
-	
+
 	m_originalDimensions.x = width; m_originalDimensions.y = height;
 
-	
 	m_border[TOPL]->Resize(m_border[TOPL]->Width()+cx,m_border[TOPL]->Height());
 	m_border[TOPR]->Resize(m_border[TOPR]->Width()+cx,m_border[TOPR]->Height());
 	m_border[FB_LEFT]->Resize(m_border[FB_LEFT]->Width(),m_border[FB_LEFT]->Height()+dh);

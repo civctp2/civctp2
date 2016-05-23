@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "prjfile.h"
 
@@ -24,26 +23,25 @@
 
 #include "CivPaths.h"       // g_civPaths
 
-
 #define MAX_ENTRIES_PER_TABLE 100
 #define ZFSFLAG_DELETED 0x0001
 
 struct ZFS_RENTRY {
-    char      rname[MAX_RECORDNAME_LENGTH]; 
-    long      offset;                   
-    long      rnum;                     
-    long      size;                     
-    long      time;                     
-    long      flags;                    
+    char      rname[MAX_RECORDNAME_LENGTH];
+    long      offset;
+    long      rnum;
+    long      size;
+    long      time;
+    long      flags;
 };
 
 struct ZFS_DTABLE {
-    long          next_dtable;          
+    long          next_dtable;
     ZFS_RENTRY    rentry[MAX_ENTRIES_PER_TABLE];
 };
 
 struct ZFS_FHEADER {
-    char      filetag[4];               
+    char      filetag[4];
     long      version;
     long      max_recordname_length;
     long      max_entries_per_table;
@@ -51,7 +49,6 @@ struct ZFS_FHEADER {
     long      encrypt_key;
     long      dtable_head;
 };
-
 
 char *strcasecpy(char *out, char const * in)
 {
@@ -98,7 +95,7 @@ void * mapFile(char const * path, long *size, HANDLE *mhandle, HANDLE *fhandle)
     }
 
     void *  ptr = MapViewOfFile(*mhandle, FILE_MAP_READ, 0, 0, 0);
-    if (ptr == NULL) 
+    if (ptr == NULL)
     {
         CloseHandle(*mhandle);
         CloseHandle(*fhandle);
@@ -157,28 +154,27 @@ ProjectFile::ProjectFile()
     memset(m_paths, 0, sizeof(PFPath) * MAX_PRJFILE_PATHS);
 }
 
-
 ProjectFile::~ProjectFile()
 {
-    if (m_entries) 
+    if (m_entries)
     {
         free(m_entries);
     }
 
-    for (size_t i = 0; i < MAX_PRJFILE_PATHS; i++) 
+    for (size_t i = 0; i < MAX_PRJFILE_PATHS; i++)
     {
-        switch(m_paths[i].type) 
+        switch(m_paths[i].type)
         {
         default:
             break;
 
-        case PRJFILE_PATH_ZFS: 
+        case PRJFILE_PATH_ZFS:
             fclose(m_paths[i].zfs_fp);
             break;
 
-        case PRJFILE_PATH_ZMS: 
+        case PRJFILE_PATH_ZMS:
 #ifdef WIN32
-            unmapFile(m_paths[i].zms_start, 
+            unmapFile(m_paths[i].zms_start,
                       m_paths[i].zms_hm,
                       m_paths[i].zms_hf
                      );
@@ -192,9 +188,9 @@ ProjectFile::~ProjectFile()
 
 int ProjectFile::mergeEntries(PFEntry *newList, int newCount)
 {
-    
+
     if (m_entries) {
-        m_entries = 
+        m_entries =
             (PFEntry *)realloc(m_entries, (sizeof(PFEntry) *
                                            (newCount + m_num_entries)));
     } else {
@@ -206,16 +202,13 @@ int ProjectFile::mergeEntries(PFEntry *newList, int newCount)
         return(0);
     }
 
-    
     memcpy(m_entries + m_num_entries, newList, sizeof(PFEntry) * newCount);
     m_num_entries += newCount;
 
-    
     qsort(m_entries, m_num_entries, sizeof(PFEntry), PFEntry_compare);
 
     return(1);
 }
-    
 
 PFEntry *ProjectFile::findRecord(char const * rname) const
 {
@@ -223,9 +216,9 @@ PFEntry *ProjectFile::findRecord(char const * rname) const
 
     strcasecpy(key.rname, rname);
 
-    return((PFEntry *)bsearch(&key, m_entries, m_num_entries, 
+    return((PFEntry *)bsearch(&key, m_entries, m_num_entries,
                               sizeof(PFEntry), PFEntry_compare));
-}    
+}
 
 bool ProjectFile::exists(char const * rname) const
 {
@@ -236,7 +229,7 @@ void *ProjectFile::getData_DOS(PFEntry *entry, size_t & size, C3DIR dir)
 {
     char tempstr[256];
 
-	if ((dir == C3DIR_DIRECT) || !g_civPaths->FindFile(dir, entry->rname, tempstr)) 
+	if ((dir == C3DIR_DIRECT) || !g_civPaths->FindFile(dir, entry->rname, tempstr))
     {
 		sprintf(tempstr, "%s%s%s", m_paths[entry->path].dos_path, FILE_SEP, entry->rname);
 	}
@@ -248,8 +241,7 @@ void *ProjectFile::getData_DOS(PFEntry *entry, size_t & size, C3DIR dir)
         return(NULL);
     }
     setvbuf(fp, NULL, _IONBF, 0);
-        
-    
+
     fseek(fp, 0, SEEK_END);
     size = ftell(fp);
     char *data = (char *) malloc(size);
@@ -259,13 +251,13 @@ void *ProjectFile::getData_DOS(PFEntry *entry, size_t & size, C3DIR dir)
     }
 
     fseek(fp, 0, SEEK_SET);
-    if (fread(data, size, 1, fp) < 1) {    
+    if (fread(data, size, 1, fp) < 1) {
         sprintf(m_error_string, "Could not read file \"%s\"", tempstr);
         free(data);
         fclose(fp);
         return(NULL);
     }
-        
+
     fclose(fp);
     return data;
 }
@@ -277,18 +269,18 @@ void *ProjectFile::getData_ZFS(PFEntry *entry, size_t & size)
     if (fp == NULL) {
         return(NULL);
     }
-        
+
     size = entry->size;
     char *  data = (char *) malloc(size);
-    if (data == NULL) 
+    if (data == NULL)
     {
-        sprintf(m_error_string, "Could not malloc data for record %s\n", 
+        sprintf(m_error_string, "Could not malloc data for record %s\n",
                 entry->rname);
         return NULL;
     }
 
     fseek(fp, entry->offset, SEEK_SET);
-    if (fread(data, size, 1, fp) < 1) {    
+    if (fread(data, size, 1, fp) < 1) {
         sprintf(m_error_string, "Could not read record \"%s\" from \"%s\"" ,
                 entry->rname, m_paths[entry->path].dos_path);
         free(data);
@@ -320,14 +312,14 @@ void *ProjectFile::getData(char const * rname, size_t & size, C3DIR dir)
 {
     PFEntry *   entry = findRecord(rname);
 
-    if (!entry) 
+    if (!entry)
     {
         sprintf(m_error_string, "Couldn't find record \"%s\"", rname);
         size = 0;
         return NULL;
     }
 
-    switch (m_paths[entry->path].type) 
+    switch (m_paths[entry->path].type)
     {
     default:                return NULL;
     case PRJFILE_PATH_DOS:  return getData_DOS(entry, size, dir);
@@ -336,12 +328,12 @@ void *ProjectFile::getData(char const * rname, size_t & size, C3DIR dir)
     }
 }
 
-void *ProjectFile::getData(char const * rname, size_t & size, 
+void *ProjectFile::getData(char const * rname, size_t & size,
                            HANDLE * hFileMap, size_t & offset)
 {
     PFEntry *entry = findRecord(rname);
 
-    if (!entry) 
+    if (!entry)
     {
         sprintf(m_error_string, "Couldn't find record \"%s\"", rname);
         size = 0;
@@ -350,7 +342,7 @@ void *ProjectFile::getData(char const * rname, size_t & size,
         return NULL;
     }
 
-    if (m_paths[entry->path].type != PRJFILE_PATH_ZMS) 
+    if (m_paths[entry->path].type != PRJFILE_PATH_ZMS)
     {
         sprintf(m_error_string, "Record \"%s\" is not file mapped", rname);
         size = 0;
@@ -362,14 +354,13 @@ void *ProjectFile::getData(char const * rname, size_t & size,
     return getData_ZMS(entry, size, hFileMap, offset);
 }
 
-
 void ProjectFile::freeData(void *ptr)
 {
-    for (int i = 0; i < m_num_paths; i++) 
+    for (int i = 0; i < m_num_paths; i++)
     {
         if ((m_paths[i].type == PRJFILE_PATH_ZMS) &&
-            (ptr >= m_paths[i].zms_start) && 
-            (ptr < m_paths[i].zms_end)) 
+            (ptr >= m_paths[i].zms_start) &&
+            (ptr < m_paths[i].zms_end))
         {
             return;
         }
@@ -378,7 +369,6 @@ void ProjectFile::freeData(void *ptr)
     if (ptr)
         free(ptr);
 }
-
 
 int ProjectFile::readDOSdir(long path, PFEntry *table)
 {
@@ -400,7 +390,7 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
         sprintf(m_error_string, "Couldn't find \"%s\"", tmp);
         return(0);
     }
-        
+
     int count = 0;
     do {
 #ifdef WIN32
@@ -452,7 +442,7 @@ int ProjectFile::addPath_DOS(char const * path)
     strcpy(m_paths[pathnum].dos_path, path);
 
     int count = readDOSdir(pathnum, NULL);
-    if (count == 0) 
+    if (count == 0)
     {
         return(1);
     }
@@ -479,16 +469,16 @@ int ProjectFile::verify_ZFS_header(ZFS_FHEADER *header)
 
     return(1);
 }
-    
+
 void ProjectFile::read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
                                  PFEntry **tlp, long *rcount)
 {
-    for 
+    for
     (
-        int i = 0; 
-        (i<MAX_ENTRIES_PER_TABLE) && (dtable->rentry[i].rname[0]); 
+        int i = 0;
+        (i<MAX_ENTRIES_PER_TABLE) && (dtable->rentry[i].rname[0]);
         i++
-    ) 
+    )
     {
         if (!(dtable->rentry[i].flags & ZFSFLAG_DELETED)) {
             ZFS_RENTRY *rentry = dtable->rentry + i;
@@ -522,39 +512,37 @@ int ProjectFile::addPath_ZFS(char const * path)
     m_num_paths++;
 
 
-	
  	fseek(fp, 0, SEEK_SET);
 
     ZFS_FHEADER header;
-	if (fread(&header, sizeof(ZFS_FHEADER), 1, fp) < 1) {	
+	if (fread(&header, sizeof(ZFS_FHEADER), 1, fp) < 1) {
 		sprintf(m_error_string, "Could not read header of file \"%s\"", path);
 		return(0);
 	}
-	
-	
+
     if (!verify_ZFS_header(&header)) {
 		sprintf(m_error_string, "Invalid header in file \"%s\"", path);
 		return(0);
 	}
-    
+
     int         count   = header.num_rentries;
     PFEntry *   tmpList = new PFEntry[count];
     PFEntry *   tlp     = tmpList;
     long        dhead   = header.dtable_head;
     long        rcount  = 0;
     ZFS_DTABLE  dtable;
-    do 
+    do
     {
         fseek(fp, dhead, SEEK_SET);
 
-        if (fread(&dtable, sizeof(ZFS_DTABLE), 1, fp) < 1) {	
+        if (fread(&dtable, sizeof(ZFS_DTABLE), 1, fp) < 1) {
             sprintf(m_error_string, "File \"%s\" is corrupt", path);
             delete [] tmpList;
             return(0);
         }
 
         read_ZFS_dtable(pathnum, &dtable, &tlp, &rcount);
-    } 
+    }
     while ((dhead = dtable.next_dtable) != 0);
 
     mergeEntries(tmpList, rcount);
@@ -570,8 +558,8 @@ int ProjectFile::addPath_ZMS(char const * path)
     int             pathnum = m_num_paths;
     unsigned char * fbase   = reinterpret_cast<unsigned char *>
 #ifdef WIN32
-        (mapFile(path, &fsize, 
-                 &(m_paths[pathnum].zms_hm), 
+        (mapFile(path, &fsize,
+                 &(m_paths[pathnum].zms_hm),
                  &(m_paths[pathnum].zms_hf)
                 )
         );
@@ -589,24 +577,24 @@ int ProjectFile::addPath_ZMS(char const * path)
     m_paths[pathnum].zms_end    = fbase + fsize;
     strcpy(m_paths[pathnum].dos_path, path);
     m_num_paths++;
-	
+
     ZFS_FHEADER * header = (ZFS_FHEADER *) fbase;
     if (!verify_ZFS_header(header)) {
 		sprintf(m_error_string, "Invalid header in file \"%s\"", path);
 		return(0);
 	}
-    
+
     int             count   = header->num_rentries;
     PFEntry *       tmpList = new PFEntry[count];
     PFEntry *       tlp     = tmpList;
     long            rcount  = 0;
     long            dhead   = header->dtable_head;
     ZFS_DTABLE *    dtable;
-    do 
+    do
     {
         dtable = (ZFS_DTABLE *)(fbase + dhead);
         read_ZFS_dtable(pathnum, dtable, &tlp, &rcount);
-    } 
+    }
     while ((dhead = dtable->next_dtable) != 0);
 
     mergeEntries(tmpList, rcount);
@@ -618,7 +606,7 @@ int ProjectFile::addPath_ZMS(char const * path)
 
 int ProjectFile::addPath(char const * path, bool use_filemapping)
 {
-    
+
     if (m_num_paths >= MAX_PRJFILE_PATHS) {
         sprintf(m_error_string, "Couldn't add \"%s\", too many paths", path);
         return(0);
@@ -626,19 +614,19 @@ int ProjectFile::addPath(char const * path, bool use_filemapping)
 
     char const * ext = strrchr(path, '.');
 
-    if (ext) 
+    if (ext)
     {
         ext++;
 
         if ((toupper(ext[0]) == 'Z') &&
             (toupper(ext[1]) == 'F') &&
             (toupper(ext[2]) == 'S') &&
-            (toupper(ext[3]) == 0)) 
+            (toupper(ext[3]) == 0))
         {
             return (use_filemapping) ? addPath_ZMS(path) : addPath_ZFS(path);
         }
     }
-    
+
     return addPath_DOS(path);
 }
 

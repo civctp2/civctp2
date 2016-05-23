@@ -45,13 +45,13 @@ sint32 buildingutil_GetProductionCost(const sint32 building_type, const sint32 o
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
                                            sint32 wonderLevel, const sint32 owner);
 sint32 buildingutil_GetBlgUpkeep(const sint32 building_type, const sint32 owner);
-sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements, 
+sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
                                                 sint32 wonderLevel, const sint32 owner);
 bool buildingutil_GetDesignatesCapitol(const uint64 built_improvements, const sint32 owner);
-void buildingutil_GetDefendersBonus(const uint64 built_improvements, 
+void buildingutil_GetDefendersBonus(const uint64 built_improvements,
                                     double &bonus, const sint32 owner);
 
-void buildingutil_GetHappinessIncrement(const uint64 built_improvements, 
+void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
                                         sint32 &bonus, const sint32 owner);
 
 bool buildingutil_GetDoubleTelevangelism(uint64 built_improvements, const sint32 owner);
@@ -94,7 +94,6 @@ sint32 buildingutil_GetStarvationProtection(const uint64 built_improvements, con
 double buildingutil_GetOffenseBonusLand(const uint64 built_improvements, const sint32 owner);
 double buildingutil_GetOffenseBonusWater(const uint64 built_improvements, const sint32 owner);
 double buildingutil_GetOffenseBonusAir(const uint64 built_improvements, const sint32 owner);
-
 
 //EMODs
 sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements, const sint32 owner);

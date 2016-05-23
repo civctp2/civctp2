@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ void NetTerrainImprovement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		oldpoint = m_data->m_point;
 		oldOwner = m_data->m_owner;
 	}
-	
+
 	pos = 6;
 	PULLBYTE(m_data->m_owner);
 	PULLBYTETYPE(m_data->m_type, TERRAIN_IMPROVEMENT);
@@ -145,17 +145,15 @@ void NetTerrainImprovement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_player[m_data->m_owner]->AddImprovement(imp);
 	} else {
 		if(oldpoint != m_data->m_point) {
-			
-			
+
 			g_theWorld->RemoveImprovement(imp, oldpoint);
 			g_theWorld->InsertImprovement(imp, m_data->m_point);
-			
+
 			g_tiledMap->RedrawTile(&oldpoint);
 			g_tiledMap->RedrawTile(&m_data->m_point);
 		}
 
 		if(oldOwner != m_data->m_owner) {
-			
 
 			g_player[oldOwner]->RemoveImprovementReferences(imp);
 			g_player[m_data->m_owner]->AddImprovement(imp);

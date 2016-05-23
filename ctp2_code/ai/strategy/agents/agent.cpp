@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -287,9 +287,9 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	            (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")
 	           )
 	          );
-	
+
 	AI_DPRINTF(log, -99, goal != NULL ? goal->Get_Goal_Type() : -1, m_army.m_id,
-		("\t\t   -------\n")); 
+		("\t\t   -------\n"));
 }
 
 bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
@@ -359,7 +359,7 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 	{
 		found_path.Clear();
 		found_path.JustSetStart( start_pos );
-		found_path.Restart( start_pos ); 
+		found_path.Restart( start_pos );
 		return true;
 	}
 
@@ -385,7 +385,7 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 		move_union = 0x0;
 		path_type = RobotAstar2::PATH_TYPE_DEFENSIVE;
 	}
-	
+
 	if (RobotAstar2::s_aiPathing.FindPath( path_type,
 										   army,
 										   move_union,
@@ -428,7 +428,7 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 
 	float cost = 0.0f;
 	g_city_astar.FindCantEnterPenaltyDistance(m_playerId, Get_Pos(), pos, cost, cells, move_union);
-	
+
 	move_point_cost = static_cast<double>(cost);
 	cells *= cells;
 #endif
@@ -441,7 +441,7 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 		Cell *          myCell      = g_theWorld->GetCell(pos);
 		Cell *          otherCell   = g_theWorld->GetCell(Get_Pos());
 		double const    movement    = 100.0;
-		// This does not do the trick, better avaerage 
+		// This does not do the trick, better avaerage
 		// over all tiles from pos to target, unfortunately this
 		// is slow.
 		//  std::min(myCell->GetMoveCost(), otherCell->GetMoveCost());
@@ -502,7 +502,6 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	bool check_continents = !transport->m_army.GetMovementTypeAir();
 	bool is_land;
-
 
 	MapPoint trans_pos = transport->Get_Pos();
 	if (check_continents)
@@ -804,7 +803,7 @@ sint32 Agent::DisbandObsoleteUnits()
 
 	if (!Get_Can_Be_Executed())
 		return 0;
-	
+
 	if (!m_army->IsObsolete())
 		return 0;
 
@@ -815,9 +814,9 @@ sint32 Agent::DisbandObsoleteUnits()
 		return 0;
 
 	MapPoint    pos         = Get_Pos();
-	sint32      power       = 
+	sint32      power       =
 	    MapAnalysis::GetMapAnalysis().GetPower(m_playerId, pos);
-	sint32      threat      = 
+	sint32      threat      =
 	    MapAnalysis::GetMapAnalysis().GetThreat(m_playerId, pos);
 
 	if ( (power > 0) && ((threat/(double)power) > 1.0))
@@ -828,7 +827,7 @@ sint32 Agent::DisbandObsoleteUnits()
 	if (city_unit.m_id == 0)
 	{
 		MapPoint nearest_city_pos;
-		sint32 nearest_distance = g_mp_size.x + g_mp_size.y; 
+		sint32 nearest_distance = g_mp_size.x + g_mp_size.y;
 		sint32 distance;
 		bool found = false;
 
@@ -863,7 +862,7 @@ sint32 Agent::DisbandObsoleteUnits()
 	Assert(city);
 
 	CellUnitList city_units;
-	g_theWorld->GetArmy(pos, city_units); 
+	g_theWorld->GetArmy(pos, city_units);
 	sint32 remaining_defenders = city_units.Num() - unit_count;
 
 	if (remaining_defenders < city->GetNeededGarrison())

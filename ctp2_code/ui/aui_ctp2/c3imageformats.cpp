@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -59,7 +59,6 @@
 
 extern ProjectFile *    g_ImageMapPF;
 extern sint32           g_is565Format;
-
 
 AUI_ERRCODE TiffImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
@@ -115,7 +114,7 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 	int		width;
     int     height;
 	int		bpp;
-	if (!Get_TGA_Dimension(filename, width, height, bpp)) 
+	if (!Get_TGA_Dimension(filename, width, height, bpp))
     {
 		return AUI_ERRCODE_LOADFAILED;
     }
@@ -135,7 +134,7 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	uint16 *    buffer;
 	errcode = surface->Lock( NULL, (LPVOID *)&buffer, 0 );
-	
+
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
@@ -163,12 +162,12 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR const * filename, aui_Image *image)
 {
     // Find the last DOS or Unix style file separator
-    char const *    lastSep     = strrchr(filename, '\\');  
+    char const *    lastSep     = strrchr(filename, '\\');
     if (!lastSep)
     {
         lastSep = strrchr(filename, '/');
     }
-    
+
     char const *    basename        = (lastSep) ? lastSep + 1 : filename;
     size_t const    BASE_LEN_MAX    = 255;
     size_t const    rlen            = strlen(basename);
@@ -189,7 +188,7 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR const * filename, aui_Image *image)
     size_t  size    = 0;
     void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, size) : NULL;
 
-    if (buffer == NULL) 
+    if (buffer == NULL)
     {
         if (g_ImageMapPF && !g_ImageMapPF->IsReported(filename))
         {
@@ -199,7 +198,7 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR const * filename, aui_Image *image)
 
         return AUI_ERRCODE_LOADFAILED;
     }
-    
+
     uint8 *     image_data  = (uint8 *)buffer + sizeof(RIMHeader);
     RIMHeader * rhead       = (RIMHeader *)buffer;
 

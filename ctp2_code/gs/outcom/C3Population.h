@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 
 #ifndef __C3Population_H__
@@ -22,14 +11,12 @@ class CivArchive ;
 class C3Population : public IC3Population
 	{
 	ULONG m_refCount ;
-	
-	
+
     Player *m_player ;
 	sint32	m_owner ;
 
-
 public:
-	
+
 	STDMETHODIMP QueryInterface(REFIID, void **obj) ;
 	STDMETHODIMP_(ULONG) AddRef() ;
 	STDMETHODIMP_(ULONG) Release() ;
@@ -60,7 +47,7 @@ public:
 	STDMETHODIMP_ (void) GetCityProjectedFood(uint32 city_id, sint32 *food, BOOL *is_unknown_id) ;
 	STDMETHODIMP_ (void) GetCityRequiredFood(uint32 city_id, sint32 *food, BOOL *is_unknown_id) ;
 	STDMETHODIMP_ (void) GetCityProjectedProduction(uint32 city_id, sint32 *production, BOOL *is_unknown_id) ;
-	STDMETHODIMP_ (void) GetCityProjectedTrade(uint32 city_id, BOOL *is_unknown_id, 
+	STDMETHODIMP_ (void) GetCityProjectedTrade(uint32 city_id, BOOL *is_unknown_id,
         sint32 *projected_gross_gold, sint32 *projected_net_gold) ;
 	STDMETHODIMP_ (void) GetCityProjectedTradeFromCell(uint32 city_id, MapPointData *p, sint32 *trade, BOOL *is_unknown_id) ;
 	STDMETHODIMP_ (BOOL) TryPlacePop(uint32 city_id, uint32 pop_idx, sint32 player_id, MapPointData *p, BOOL *is_unknown_id) ;
@@ -70,9 +57,8 @@ public:
     STDMETHODIMP_ (double) GetCityGruntOutput(uint32 city_id, BOOL *is_unknown_id);
     STDMETHODIMP_ (double) GetCityMusicianOutput(uint32 city_id, BOOL *is_unknown_id);
 
-    STDMETHODIMP_ (double) GetCitizensHunger (); 
-    STDMETHODIMP_ (double) GetSlaveHunger (); 
-
+    STDMETHODIMP_ (double) GetCitizensHunger ();
+    STDMETHODIMP_ (double) GetSlaveHunger ();
 
     } ;
 

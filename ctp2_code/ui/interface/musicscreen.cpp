@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -98,7 +98,6 @@ sint32 musicscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE musicscreen_Initialize( void )
 {
 	if ( s_musicScreen ) return AUI_ERRCODE_OK;
@@ -107,19 +106,18 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	strcpy(windowBlock, "MusicScreen");
-	{ 
+	{
 		s_musicScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicScreen, errcode) );
 		if ( !AUI_NEWOK(s_musicScreen, errcode) )
 		{
 			return errcode;
 		}
-		
+
 		s_musicScreen->Resize(s_musicScreen->Width(),s_musicScreen->Height());
 		s_musicScreen->GrabRegion()->Resize(s_musicScreen->Width(),s_musicScreen->Height());
 		s_musicScreen->SetStronglyModal(TRUE);
 	}
-	
 
 
 	s_musicScreen->AddTitle( "MusicScreen.Name" );
@@ -138,13 +136,12 @@ AUI_ERRCODE musicscreen_Initialize( void )
 	s_useAutoRepeat		= g_soundManager->IsAutoRepeat();
 	s_useRandomOrder	= (MUSICSTYLE_RANDOM == g_soundManager->GetMusicStyle());
 	s_useMusicOn		= g_theProfileDB->IsUseRedbookAudio();
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void musicscreen_Cleanup()
@@ -164,7 +161,6 @@ void musicscreen_Cleanup()
 	allocated::clear(s_musicOn);
 	allocated::clear(s_musicScreen);
 }
-
 
 void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {

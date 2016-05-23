@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,8 +31,8 @@
 // - Fixed slic database access after a reload by Martin Gühmann.
 // - Types corrected.
 // - Added debugging code for '**' operator
-// - Replaced slicif_is_sym by slicif_is_name function. This function is 
-//   modelled slicif_find_db_index but without error message if this 
+// - Replaced slicif_is_sym by slicif_is_name function. This function is
+//   modelled slicif_find_db_index but without error message if this
 //   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
 // - Added debugging code for bitwise operator
 // - Prevented crash with invalid Slic input.
@@ -157,7 +157,7 @@ void slicif_init()
 //
 // Name       : slicif_cleanup
 //
-// Description: Clean up used (heap) memory 
+// Description: Clean up used (heap) memory
 //
 // Parameters : -
 //
@@ -230,7 +230,7 @@ void slicif_add_object(struct PSlicObject *obj)
 
 	g_slicObjectArray[g_slicNumEntries] = obj;
 	g_slicNumEntries++;
-	
+
 	if(obj->m_type == SLIC_OBJECT_TRIGGER) {
 		obj->m_trigger_symbols = (int *)malloc(s_num_trigger_symbols * sizeof(int));
 		obj->m_num_trigger_symbols = s_num_trigger_symbols;
@@ -249,7 +249,6 @@ void slicif_add_object(struct PSlicObject *obj)
 		memcpy(obj->m_parameters, s_parameters, s_num_parameters * sizeof(int));
 		obj->m_return_type = s_function_return_type;
 
-		
 		funcSym = g_slicEngine->GetOrMakeSymbol(obj->m_id);
 		Assert(funcSym->GetType() == SLIC_SYM_FUNC || funcSym->GetType() == SLIC_SYM_UFUNC || funcSym->GetType() == SLIC_SYM_UNDEFINED);
 		if(funcSym->GetType() == SLIC_SYM_UNDEFINED)
@@ -290,7 +289,7 @@ void slicif_declare_sym(char *name, SLIC_SYM type)
 
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
-			sprintf(buf, "Symbol '%s' already has a type", name);			
+			sprintf(buf, "Symbol '%s' already has a type", name);
 			yyerror(buf);
 		} else {
 			SlicStructDescription *desc = g_slicEngine->GetStructDescription(type);
@@ -361,7 +360,7 @@ void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
 //
 // Name       : slicif_add_op
 //
-// Description: This function is used to compile slic code as far as it is 
+// Description: This function is used to compile slic code as far as it is
 //              known.
 //
 // Parameters : SOP op and as many as you want.
@@ -396,13 +395,12 @@ void slicif_add_op(SOP op, ...)
 	va_start(vl, op);
 
 	if(s_code_ptr - s_code > (s_allocated_code - 40)) {
-		
+
 		unsigned char *newcode = new unsigned char[s_allocated_code * 2];
 		s_allocated_code *= 2;
 		memcpy(newcode, s_code, s_code_ptr - s_code);
 		s_code_ptr = newcode + (s_code_ptr - s_code);
 
-		
 		sint32 i, j;
 		for(i = 0; i <= s_level; i++) {
 			s_block_ptr[i] = newcode + (s_block_ptr[i] - s_code);
@@ -421,13 +419,13 @@ void slicif_add_op(SOP op, ...)
 	*s_code_ptr++ = (unsigned char)op;
 	switch(op) {
 		case SOP_PUSHD:
-			
+
 			dval = va_arg(vl, double);
 			*((double*)s_code_ptr) = dval;
 			s_code_ptr += sizeof(double);
 			break;
 		case SOP_PUSHI:
-			
+
 			ival = va_arg(vl, int);
 			*((int*)s_code_ptr) = ival;
 			s_code_ptr += sizeof(int);
@@ -437,7 +435,7 @@ void slicif_add_op(SOP op, ...)
 			s_argSymbol = NULL;
 			break;
 		case SOP_PUSHV:
-			
+
 			name = va_arg(vl, char*);
 			symval = slicif_get_symbol(name);
 			if(!symval) {
@@ -449,19 +447,19 @@ void slicif_add_op(SOP op, ...)
 			s_code_ptr += sizeof(int);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = -1;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 
 			break;
 
 		case SOP_PUSHA:
-			
+
 			name = va_arg(vl, char*);
 			symval = slicif_get_symbol(name);
 			if(!symval) {
@@ -472,18 +470,18 @@ void slicif_add_op(SOP op, ...)
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = -1;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
-			break;			
+			break;
 		case SOP_PUSHM:
 		{
-			
+
 			char *structname = va_arg(vl, char *);
 			name = va_arg(vl, char *);
 			symval = slicif_get_symbol(structname);
@@ -503,31 +501,30 @@ void slicif_add_op(SOP op, ...)
 					yyerror(errbuf);
 				}
 			}
-			
+
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 
-			
 			*((int *)s_code_ptr) = member;
 			s_code_ptr += sizeof(int);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = member;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 			break;
 		}
 		case SOP_PUSHAM:
 		{
-			
+
 			char *structname = va_arg(vl, char *);
 			name = va_arg(vl, char *);
-			
+
 			symval = slicif_get_symbol(structname);
 			sint32 member = 0;
 			if(!symval) {
@@ -545,32 +542,31 @@ void slicif_add_op(SOP op, ...)
 					yyerror(errbuf);
 				}
 			}
-			
+
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 
-			
 			*((int *)s_code_ptr) = member;
-			s_code_ptr += sizeof(int);	
+			s_code_ptr += sizeof(int);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = member;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 			break;
-		}			
+		}
 		case SOP_SARGS:
-			
+
 			s_currentEventArgument[++s_parenLevel] = 0;
 			s_argValuePushed = false;
 			break;
 		case SOP_ARGE:
-			
+
 			slicif_check_argument();
 			s_argValuePushed = false;
 			s_argSymbol = NULL;
@@ -611,8 +607,7 @@ void slicif_add_op(SOP op, ...)
 			if(symval->GetType() == SLIC_SYM_UNDEFINED) {
 				symval->SetType(SLIC_SYM_STRING);
 			} else {
-				
-				
+
 				Assert(symval->GetType() == SLIC_SYM_STRING);
 			}
 
@@ -632,7 +627,7 @@ void slicif_add_op(SOP op, ...)
 			name    = va_arg(vl, char*);
             symval  = g_slicEngine->GetSymbol(name);
 
-			if (symval) 
+			if (symval)
             {
 				if(symval->GetType() != SLIC_SYM_FUNC &&
 				   symval->GetType() != SLIC_SYM_UFUNC) {
@@ -677,14 +672,12 @@ void slicif_add_op(SOP op, ...)
 			s_code_ptr += sizeof(int);
 			break;
 		case SOP_END:
-			
+
 			ival = va_arg(vl, int);
 
-			
 			*((int *)s_code_ptr) = -1;
 			s_code_ptr += sizeof(int);
 
-			
 			offset = s_code_ptr - s_code;
 			*((int *)s_block_ptr[ival]) = offset;
 			s_block_ptr[ival][-1] = SOP_JMP;
@@ -706,35 +699,31 @@ void slicif_add_op(SOP op, ...)
 			break;
 		case SOP_BNT:
 		case SOP_BNEV:
-			
-			
+
 			sptr = (char *)(s_block_ptr[s_level] - 1);
 			*sptr = static_cast<char>(op);
 			sptr++;
-			*((int*)sptr) = (int)(s_code_ptr - s_code) - 1; 
+			*((int*)sptr) = (int)(s_code_ptr - s_code) - 1;
 
-			
-			
+
 			s_block_ptr[s_level] = s_code_ptr - 5;
 
-			
-			
+
 			slicif_add_if_clause_end((char *)(s_code_ptr - 5));
 			*(s_code_ptr - 6) = SOP_JMP;
-			
-			
-			
+
+
 			s_code_ptr -= 1;
-			
+
 			break;
-			
+
 		case SOP_JMP:
 			ival = va_arg(vl, int);
 			*((int *)s_code_ptr) = ival;
 			s_code_ptr += sizeof(int);
 			break;
 		case SOP_ASSN:
-			
+
 			name = va_arg(vl, char*);
 			symval = slicif_get_symbol(name);
 			if(!symval) {
@@ -754,11 +743,10 @@ void slicif_add_op(SOP op, ...)
 
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
-			break;			
+			break;
 		case SOP_ASSNA:
-			
-			
-			
+
+
 			name = va_arg(vl, char *);
 			symval = slicif_get_symbol(name);
 			if(!symval) {
@@ -778,11 +766,10 @@ void slicif_add_op(SOP op, ...)
 		case SOP_ASSNM:
 		case SOP_ASSNAM:
 		{
-			
-			
+
 			int member;
-			char *structname = va_arg(vl, char*); 
-			name = va_arg(vl, char*);       
+			char *structname = va_arg(vl, char*);
+			name = va_arg(vl, char*);
 			symval = slicif_get_symbol(structname);
 			if(!symval) {
 				sprintf(errbuf, "Symbol %s is undefined", structname);
@@ -795,7 +782,7 @@ void slicif_add_op(SOP op, ...)
 				yyerror(errbuf);
 				member = -1;
 			} else {
-				
+
 				SlicStructDescription *theStruct = symval->GetStruct()->GetDescription();
 				member = (int)theStruct->GetMemberIndex(name);
 				if(member < 0) {
@@ -804,11 +791,9 @@ void slicif_add_op(SOP op, ...)
 				}
 			}
 
-			
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 
-			
 			*((int *)s_code_ptr) = member;
 			s_code_ptr += sizeof(int);
 
@@ -875,14 +860,13 @@ void slicif_add_op(SOP op, ...)
 			*((int *)s_code_ptr) = symval->GetIndex();
 			s_code_ptr += sizeof(int);
 
-
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = -1;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 
@@ -901,7 +885,7 @@ void slicif_add_op(SOP op, ...)
 				sprintf(errbuf, "Symbol %s is undefined", name);
 				yyerror(errbuf);
 				symval = g_slicEngine->GetOrMakeSymbol(name);
-				//variable name is now free and can be reused. 
+				//variable name is now free and can be reused.
 			}
 
 			//Get referenced name of a flag from the according database.
@@ -934,12 +918,12 @@ void slicif_add_op(SOP op, ...)
 			s_code_ptr += sizeof(char);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = symval;
 				s_argMemberIndex = -1;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 
@@ -983,12 +967,12 @@ void slicif_add_op(SOP op, ...)
 			s_code_ptr += sizeof(char);
 
 			if(!s_argValuePushed && (s_parenLevel > 0)) {
-				
+
 				s_argValuePushed = true;
 				s_argSymbol = NULL;
 				s_argMemberIndex = -1;
 			} else {
-				
+
 				s_argSymbol = NULL;
 			}
 
@@ -1028,7 +1012,7 @@ void slicif_add_op(SOP op, ...)
 				sprintf(errbuf, "Token %s not found in %s", name, conduit->GetName());
 				yyerror(errbuf);
 			}
-			
+
 			//Save the database name to the code data, by saving every
 			//single char including the /0 char.
 			int i;
@@ -1047,7 +1031,7 @@ void slicif_add_op(SOP op, ...)
 			}
 			*((char*)s_code_ptr) = name[i];
 			s_code_ptr += sizeof(char);
-			
+
 			if(!s_argValuePushed && s_parenLevel > 0) {
 				s_argValuePushed = true;
 			}
@@ -1057,7 +1041,7 @@ void slicif_add_op(SOP op, ...)
 		}
 		case SOP_DBSIZE:
 		{
-			//Added by Martin Gühmann to figure out via 
+			//Added by Martin Gühmann to figure out via
 			//slic how many records the database contains
 			conduit = va_arg(vl, SlicDBInterface *);
 			Assert(conduit);
@@ -1132,23 +1116,19 @@ void slicif_end_while()
 {
 	char *sptr;
 
-	
 	s_code_ptr -= 5;
 
-	
 	slicif_add_op(SOP_JMP, s_while_stack[s_while_level].expression);
 
-	
-	
+
 	sptr = (char *)(s_block_ptr[s_level] - 1);
 	*sptr = SOP_BNT;
 	sptr++;
 	*((int *)sptr) = (int)(s_code_ptr - s_code);
 
-	
 	s_while_level--;
-}	
-	
+}
+
 #ifdef _DEBUG
 //----------------------------------------------------------------------------
 //
@@ -1204,10 +1184,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_PUSHV:
 				ival = *((int*)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
@@ -1218,10 +1198,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_PUSHA:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
@@ -1239,27 +1219,26 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				    codePtr += sizeof(int);
 
                     SlicStructInstance *    gotStruct   = symval->GetStruct();
-                    char const *            memberName  = 
-                        gotStruct 
-                        ? gotStruct->GetDescription()->GetMemberName(ival2) 
+                    char const *            memberName  =
+                        gotStruct
+                        ? gotStruct->GetDescription()->GetMemberName(ival2)
                         : NAME_STRUCT_INVALID;
-			        fprintf(debuglog, "pushm %s(%d).%s(%d)\n", 
+			        fprintf(debuglog, "pushm %s(%d).%s(%d)\n",
                             symval->GetName(), symval->GetIndex(), memberName, ival2
                            );
                 }
 				break;
 			case SOP_PUSHAM:
-				
+
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
 				symval = g_slicEngine->GetSymbol(ival);
-				
+
 				if(!symval) {
 					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 					return;
 				}
 
-				
 				ival2 = *((int *)codePtr);
 				codePtr += sizeof(int);
 				fprintf(debuglog, "pusham %s(%d)[].%s(%d)\n", symval->GetName(), symval->GetIndex(),
@@ -1288,10 +1267,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ARGID:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
@@ -1304,13 +1283,13 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				}
 				fprintf(debuglog, "argid %s(%d)\n", symval->GetName(), ival);
 				break;
-			case SOP_ARGS: 
+			case SOP_ARGS:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(symval->GetType() != SLIC_SYM_SVAR) {
 					fprintf(debuglog, "Bad Mojo, string id arg doesn't have string id type\n");
@@ -1321,10 +1300,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ARGST:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(symval->GetType() != SLIC_SYM_STRING) {
 					fprintf(debuglog, "Bad Mojo, string arg doesn't have string type\n");
@@ -1336,10 +1315,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_CALLR:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
@@ -1351,7 +1330,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 							symval->GetName());
 					return;
 				}
-				fprintf(debuglog, "call%c %s(%d)\n", (op == SOP_CALL) ? ' ' : 'r', 
+				fprintf(debuglog, "call%c %s(%d)\n", (op == SOP_CALL) ? ' ' : 'r',
 						symval->GetName(), ival);
 				break;
 			case SOP_EVENT:
@@ -1387,10 +1366,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(int);
 				ival2 = *((int *)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 
 				symval = g_slicEngine->GetSymbol(ival2);
 				if(symval->GetType() != SLIC_SYM_SVAR) {
@@ -1414,10 +1393,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ASSN:
 				ival = *((int*)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
@@ -1428,10 +1407,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_ASSNA:
 				ival = *((int*)codePtr);
 				codePtr += sizeof(int);
-				
-				
-				
-				
+
+
+
+
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
 					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
@@ -1444,7 +1423,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			case SOP_NOT: fprintf(debuglog, "not\n"); break;
 			case SOP_SARGS: fprintf(debuglog, "sargs\n"); break;
 			case SOP_RET:   fprintf(debuglog, "ret\n"); break;
-			case SOP_LINE: 
+			case SOP_LINE:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
 
@@ -1660,7 +1639,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 			}
 			case SOP_DBSIZE:
 			{
-				//Added by Martin Gühmann to figure out via 
+				//Added by Martin Gühmann to figure out via
 				//slic how many records the database contains
 				//Get the database name:
 				int i;
@@ -1689,8 +1668,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 int slicif_find_string(char *id)
 {
 	char errbuf[1024];
-	
-	
+
 	SlicNamedSymbol *sym = g_slicEngine->GetOrMakeSymbol(id + 3);
 	if(sym->GetType() == SLIC_SYM_UNDEFINED) {
 		sym->SetType(SLIC_SYM_SVAR);
@@ -1719,7 +1697,7 @@ void slicif_add_region(char *name, int x1, int y1, int x2, int y2)
 
 #ifdef _DEBUG
 	extern FILE *debuglog;
-	fprintf(debuglog, "Adding region %s: (%d,%d)-(%d,%d)\n", name, 
+	fprintf(debuglog, "Adding region %s: (%d,%d)-(%d,%d)\n", name,
 			x1,y1,x2,y2);
 #endif
 
@@ -1742,7 +1720,7 @@ void slicif_start_complex_region(char *name)
 {
 #if 0
 	struct PSlicSymbol *rgnsym;
-	
+
 #ifdef _DEBUG
 	extern FILE *debuglog;
 	fprintf(debuglog, "Complex region %s: ", name);
@@ -1764,7 +1742,7 @@ void slicif_finish_complex_region()
 	extern FILE *debuglog;
 	fprintf(debuglog, "\n");
 #endif
-	
+
 	s_current_complex_region = NULL;
 #endif
 
@@ -1783,7 +1761,7 @@ void slicif_add_region_to_complex(char *name)
 		slic_parse_error = SLIC_ERROR_INTERNAL;
 		return;
 	}
-	
+
 	addregion = slicif_find_sym(name, 1);
 	if(!addregion) {
 		slic_parse_error = SLIC_ERROR_UNKNOWN_REGION;
@@ -1795,11 +1773,11 @@ void slicif_add_region_to_complex(char *name)
 		slic_parse_error = SLIC_ERROR_SYMBOL_NOT_REGION;
 		return;
 	}
-		
+
 	if(addregion->m_type == SLIC_SYM_REGION) {
-		
+
 #ifdef _DEBUG
-		fprintf(debuglog, "[%d,%d - %d,%d] ", 
+		fprintf(debuglog, "[%d,%d - %d,%d] ",
 				addregion->m_region->x1,
 				addregion->m_region->y1,
 				addregion->m_region->x2,
@@ -1810,11 +1788,11 @@ void slicif_add_region_to_complex(char *name)
 		*s_current_complex_region->m_complex_region = *(struct PSlicComplexRegion *)addregion->m_region;
 		s_current_complex_region->m_complex_region->next = oldhead;
 	} else {
-		
+
 		for(chk = addregion->m_complex_region; chk; chk = chk->next) {
 			struct PSlicComplexRegion *last = s_current_complex_region->m_complex_region;
 #ifdef _DEBUG
-			fprintf(debuglog, "[%d,%d - %d,%d] ", 
+			fprintf(debuglog, "[%d,%d - %d,%d] ",
 					chk->x1, chk->y1, chk->x2, chk->y2);
 #endif
 			s_current_complex_region->m_complex_region = (PSlicComplexRegion *)malloc(sizeof(struct PSlicComplexRegion));
@@ -1846,13 +1824,13 @@ void slicif_add_parameter(SLIC_SYM type, char *name)
 
 	SlicSymbolData * sym = g_slicEngine->GetSymbol(namebuf);
 
-	if (sym) 
+	if (sym)
     {
 		char errbuf[1024];
 		sprintf(errbuf, "'%s' already has a local definition", name);
 		yyerror(errbuf);
 	} else {
-		
+
 		SlicParameterSymbol *psym = g_slicEngine->GetParameterSymbol(namebuf, s_parameter_index++);
 		Assert(psym);
 		Assert(psym->IsParameter());
@@ -1860,7 +1838,7 @@ void slicif_add_parameter(SLIC_SYM type, char *name)
 		if(desc) {
 			psym->SetType(SLIC_SYM_STRUCT);
 			psym->SetStruct(new SlicStructInstance(desc, psym));
-		} else {			
+		} else {
 			psym->SetType(type);
 		}
 		s_parameters[s_num_parameters] = psym->GetIndex();
@@ -1890,18 +1868,15 @@ void slicif_add_prototype(char *name)
 	}
 
 	if(s_num_parameters > 0) {
-		
-		
+
 		sprintf(errbuf, "Prototypes should not define arguments\n");
 		yyerror(errbuf);
 	}
 }
 
-
 void slicif_start_for()
 {
 }
-
 
 void slicif_for_expression()
 {
@@ -1910,27 +1885,23 @@ void slicif_for_expression()
 	s_while_stack[s_while_level].increment = -1;
 }
 
-
 void slicif_for_continue()
 {
-	
-	
+
 	slicif_add_op(SOP_JMP, -1);
 	s_while_stack[s_while_level].increment = s_code_ptr - s_code;
 }
 
 void slicif_start_for_body()
 {
-	
-	
+
 	slicif_add_op(SOP_JMP, s_while_stack[s_while_level].expression);
 }
-
 
 void slicif_end_for()
 {
 	s_code_ptr -= 5;
-	
+
 	slicif_add_op(SOP_JMP, s_while_stack[s_while_level].increment);
 
 	char * sptr = (char *)(s_block_ptr[s_level] - 1);
@@ -1938,12 +1909,10 @@ void slicif_end_for()
 	sptr++;
 	*((int *)sptr) = (int)(s_code_ptr - s_code);
 
-    
 	sptr = (char*)(s_code +  s_while_stack[s_while_level].increment - 5);
-	sptr++; 
+	sptr++;
 	*((int *)sptr) = (int)(s_block_ptr[s_level] - 1 - s_code);
 
-	
 	s_while_level--;
 }
 
@@ -1994,10 +1963,10 @@ void slicif_set_event_checking(char *eventname)
 
 	while(*argString) {
 		Assert(*argString == '%' || *argString == '&' || *argString == '$');
-		argString++; 
+		argString++;
 		if(!*argString)
 			break;
-		
+
 		GAME_EVENT_ARGUMENT argType = g_gevManager->ArgCharToIndex(*argString);
 		s_arg_counts[argType]++;
 		argString++;
@@ -2037,17 +2006,16 @@ void slicif_add_local_struct(char *structtype, char *name)
 
 void slicif_register_line(int line, int offset)
 {
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	if(s_inSegment && g_theProfileDB->IsDebugSlic()) {
 		slicif_add_op(SOP_LINE, line, offset);
 	}
 }
-
 
 SlicNamedSymbol *slicif_get_symbol(char *name)
 {
@@ -2061,7 +2029,6 @@ SlicNamedSymbol *slicif_get_symbol(char *name)
 	sym = g_slicEngine->GetSymbol(name);
 	return sym;
 }
-
 
 void slicif_start_event(char *name)
 {
@@ -2083,9 +2050,8 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 	SLIC_SYM symType;
 
 	if(!s_argSymbol) {
-		
-		
-		
+
+
 		if(type != SLIC_SYM_IVAR && type != SLIC_SYM_PLAYER && type != SLIC_SYM_LOCATION &&
 			type != SLIC_SYM_CITY && type != SLIC_SYM_UNIT && type != SLIC_SYM_ARMY) {
 			sprintf(errbuf, "Argument %u requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
@@ -2113,7 +2079,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 	}
 
 	if(type == SLIC_SYM_PLAYER && symType == SLIC_SYM_IVAR) {
-		
+
 		return;
 	}
 	if(symType != type) {
@@ -2158,7 +2124,7 @@ void slicif_check_argument()
 			case GEAC_DIRECTION:
 				slicif_check_arg_symbol(SLIC_SYM_IVAR, "int_t");
 				break;
-				
+
 			case GEAC_ADVANCE:
 				slicif_check_arg_symbol(SLIC_SYM_IVAR, "int_t");
 				break;
@@ -2172,7 +2138,6 @@ void slicif_check_argument()
 		s_currentEventArgument[s_parenLevel]++;
 	}
 }
-
 
 void slicif_check_num_args()
 {
@@ -2211,7 +2176,7 @@ void slicif_check_hard_string_argument()
 //
 // Returns    : Returns whether there is a database with such a name
 //              given by dbname. So finally 1 or 0.
-//              
+//
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
@@ -2234,15 +2199,15 @@ int slicif_find_db(const char *dbname, void **dbptr)
 // Description: Handels slic database access.
 //
 // Parameters : void *dbptr:      Represents a database for instance UnitDB.
-//              const char *name: Represents name that can be found in the 
+//              const char *name: Represents name that can be found in the
 //                                given database for instance UNIT_SETTLER.
 //
 // Globals    : -
 //
-// Returns    : The database index of the given name.For instance 
+// Returns    : The database index of the given name.For instance
 //              UnitDB(UNIT_SETTLER) gives the the datbase index of the
 //              unit with name UNIT_SETTLER.
-//              
+//
 // Remark(s)  : This function is called at copiling time.
 //
 //----------------------------------------------------------------------------
@@ -2269,19 +2234,19 @@ int slicif_find_db_index(void *dbptr, const char *name)
 // Description: Handels slic database access.
 //
 // Parameters : void *dbptr:         Represents a database for instance UnitDB.
-//              const char *recname: Represents name that can be found in the 
+//              const char *recname: Represents name that can be found in the
 //                                   given database for instance UNIT_SETTLER.
-//              const char *valname: Represents a flag of an entry in the given 
+//              const char *valname: Represents a flag of an entry in the given
 //                                   database for instance MaxMovePoints.
 //
 // Globals    : -
 //
-// Returns    : Gets the value of a flag of a given entry in a given 
-//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints 
-//              gives the value of the MaxMovePoints flag of the entry 
+// Returns    : Gets the value of a flag of a given entry in a given
+//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints
+//              gives the value of the MaxMovePoints flag of the entry
 //              in UnitDB with the internal name UNIT_SETTLER.
-//              
-// Remark(s)  : This function is called at copiling time in normal slic 
+//
+// Remark(s)  : This function is called at copiling time in normal slic
 //              function but called at run time from the Great Libary.
 //
 //----------------------------------------------------------------------------
@@ -2319,18 +2284,18 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 //
 // Parameters : void *dbptr:         Represents a database for instance UnitDB.
 //              int index:           Represents an index in the given database.
-//              const char *valname: Represents a flag of an entry in the given 
+//              const char *valname: Represents a flag of an entry in the given
 //                                   database for instance MaxMovePoints.
 //
 // Globals    : -
 //
-// Returns    : Gets the value of a flag of a given entry in a given 
+// Returns    : Gets the value of a flag of a given entry in a given
 //              database. For instance UnitDB(0).MaxMovePoints gives
 //              the value of the MaxMovePoints flag of the first entry in
 //              UnitDB.
-//              
-// Remark(s)  : This function is called both at copiling time and run time 
-//              in normal slic function but called at run time from the 
+//
+// Remark(s)  : This function is called both at copiling time and run time
+//              in normal slic function but called at run time from the
 //              Great Libary.
 //
 //
@@ -2361,20 +2326,20 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname)
 // Description: Handels slic database access.
 //
 // Parameters : void *dbptr:         Represents a database for instance UnitDB.
-//              const char *recname: Represents name that can be found in the 
+//              const char *recname: Represents name that can be found in the
 //                                   given database for instance UNIT_SETTLER.
-//              const char *valname: Represents a flag of an entry in the given 
+//              const char *valname: Represents a flag of an entry in the given
 //                                   database for instance MaxMovePoints.
 //              sint32 val:          Represents an array index.
 //
 // Globals    : -
 //
-// Returns    : Gets the value of a flag of a given entry in a given 
-//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints 
-//              gives the value of the MaxMovePoints flag of the entry 
+// Returns    : Gets the value of a flag of a given entry in a given
+//              database. For instance UnitDB(UNIT_SETTLER).MaxMovePoints
+//              gives the value of the MaxMovePoints flag of the entry
 //              in UnitDB with the internal name UNIT_SETTLER.
-//              
-// Remark(s)  : This function is called at copiling time in normal slic 
+//
+// Remark(s)  : This function is called at copiling time in normal slic
 //              function but called at run time from the Great Libary.
 //
 //----------------------------------------------------------------------------
@@ -2412,19 +2377,19 @@ int slicif_find_db_array_value(void *dbptr, const char *recname, const char *val
 //
 // Parameters : void *dbptr:         Represents a database for instance UnitDB.
 //              int index:           Represents an index in the given database.
-//              const char *valname: Represents a flag of an entry in the given 
+//              const char *valname: Represents a flag of an entry in the given
 //                                   database for instance MaxMovePoints.
 //              sint32 val:          Represents an array index.
 //
 // Globals    : -
 //
-// Returns    : Gets the value of a flag of a given entry in a given 
+// Returns    : Gets the value of a flag of a given entry in a given
 //              database. For instance UnitDB(0).MaxMovePoints gives
 //              the value of the MaxMovePoints flag of the first entry in
 //              UnitDB.
-//              
-// Remark(s)  : This function is called both at copiling time and run time 
-//              in normal slic function but called at run time from the 
+//
+// Remark(s)  : This function is called both at copiling time and run time
+//              in normal slic function but called at run time from the
 //              Great Libary.
 //
 //
@@ -2449,13 +2414,12 @@ int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valn
 }
 
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : slicif_is_name
 //
-// Description: Retrieves the database index of the given, same as 
-//              slicif_find_db_index but without an error message 
+// Description: Retrieves the database index of the given, same as
+//              slicif_find_db_index but without an error message
 //              if it fails.
 //
 // Parameters : const char *name
@@ -2467,8 +2431,8 @@ int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valn
 //              database.
 //
 // Remark(s)  : This function is only used at compiling time, to determine
-//              wheather a given name represents a name in the given 
-//              database. That is double work as it is also done in the 
+//              wheather a given name represents a name in the given
+//              database. That is double work as it is also done in the
 //              slicif_find_db_index if it is called. But as it is only
 //              done at compile time, the additional time needed shouldn't
 //              be a problem.

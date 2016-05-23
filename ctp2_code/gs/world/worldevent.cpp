@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -85,13 +85,13 @@ STDEHANDLER(CutImprovementsEvent)
 		if(!g_theWorld->CanEnter(pos, units[i].GetMovementType())
 		&& !g_theWorld->HasCity(pos)
 		){
-			
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillUnit,
 								   GEA_Unit, units[i],
 								   GEA_Int, CAUSE_REMOVE_ARMY_ILLEGAL_CELL,
 								   GEA_Player, -1,
 								   GEA_End);
-			
+
 			num_killed++;
 		}
 		if (num_killed > 0)

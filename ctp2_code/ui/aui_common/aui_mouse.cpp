@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -69,11 +69,10 @@ extern CivApp		*g_civApp;
 #include <SDL_thread.h>
 #endif
 
-
 aui_Mouse::aui_Mouse
 (
 	AUI_ERRCODE *   retval,
-	MBCHAR *        ldlBlock 
+	MBCHAR *        ldlBlock
 )
 :
     aui_Base    (),
@@ -82,7 +81,6 @@ aui_Mouse::aui_Mouse
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 AUI_ERRCODE aui_Mouse::InitCommon( void )
@@ -94,7 +92,7 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 	m_time = 0;
 
 	if(g_theProfileDB) {
-		
+
 		m_sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
 	} else {
 		m_sensitivity = 1.0;
@@ -130,7 +128,6 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
         m_data.position.y = y;
 #endif
 
-	
 	if ( !m_mouseRefCount++ )
 	{
 #ifdef __AUI_USE_DIRECTX__
@@ -151,7 +148,6 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
@@ -236,7 +232,6 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 sint32 aui_Mouse::FindNumCursorsFromLdl( ldl_datablock *block )
 {
 	sint32 i = block->GetInt( k_MOUSE_LDL_NUMCURSORS );
@@ -256,13 +251,11 @@ sint32 aui_Mouse::FindNumCursorsFromLdl( ldl_datablock *block )
 }
 
 
-
 aui_Mouse::~aui_Mouse()
 {
-	
+
 	End();
 
-	
 	if ( m_cursors )
 	{
 		for ( sint32 i = 0; i < k_MOUSE_MAXNUMCURSORS; i++ )
@@ -294,7 +287,6 @@ aui_Mouse::~aui_Mouse()
 }
 
 
-
 void aui_Mouse::SetClip( sint32 left, sint32 top, sint32 right, sint32 bottom )
 {
 	if ( left < 0 ) left = 0;
@@ -306,7 +298,6 @@ void aui_Mouse::SetClip( sint32 left, sint32 top, sint32 right, sint32 bottom )
 }
 
 
-
 void aui_Mouse::SetClip( RECT *clip )
 {
 	if ( clip )
@@ -314,7 +305,6 @@ void aui_Mouse::SetClip( RECT *clip )
 	else
 		SetClip( 0, 0, g_ui->Width(), g_ui->Height() );
 }
-
 
 
 void aui_Mouse::SetCursor(sint32 index, MBCHAR * cursor)
@@ -334,7 +324,7 @@ void aui_Mouse::SetCursor(sint32 index, MBCHAR * cursor)
 		    Assert(c->TheSurface()->Height() <= k_MOUSE_MAXSIZE);
 
 		    if (    c->TheSurface()->Width() > k_MOUSE_MAXSIZE
-		         || c->TheSurface()->Height() > k_MOUSE_MAXSIZE 
+		         || c->TheSurface()->Height() > k_MOUSE_MAXSIZE
                )
 		    {
 			    g_ui->UnloadCursor(c);
@@ -342,12 +332,11 @@ void aui_Mouse::SetCursor(sint32 index, MBCHAR * cursor)
             }
 		}
 	}
-	
+
     m_cursors[index] = c;
 
 	if (oldCursor) g_ui->UnloadCursor(oldCursor);
 }
-
 
 
 void aui_Mouse::SetCurrentCursor( sint32 index )
@@ -362,10 +351,9 @@ void aui_Mouse::SetCurrentCursor( sint32 index )
 }
 
 
-
-sint32 aui_Mouse::GetCurrentCursorIndex(void) 
+sint32 aui_Mouse::GetCurrentCursorIndex(void)
 {
-	for (sint32 i = m_firstIndex; i <= m_lastIndex; ++i) 
+	for (sint32 i = m_firstIndex; i <= m_lastIndex; ++i)
     {
 		if (m_curCursor == (m_cursors + i))
 			return i;
@@ -374,12 +362,10 @@ sint32 aui_Mouse::GetCurrentCursorIndex(void)
 	return 0;
 }
 
-
 void aui_Mouse::SetAnimDelay( uint32 animDelay )
 {
 	m_animDelay = animDelay;
 }
-
 
 
 void aui_Mouse::SetAnimIndexes( sint32 firstIndex, sint32 lastIndex )
@@ -396,17 +382,15 @@ void aui_Mouse::SetAnimIndexes( sint32 firstIndex, sint32 lastIndex )
 }
 
 
-
 void aui_Mouse::SetAnim( sint32 anim )
 {
 	Assert( anim >= 0 );
 	if ( anim < 0 ) return;
-	
-	
 
-	
+
+
+
 	SetAnimIndexes(anim, anim);
-
 
 }
 
@@ -427,15 +411,14 @@ AUI_ERRCODE aui_Mouse::Start( void )
 	m_threadId = SDL_GetThreadID(m_thread);
 #endif
 
-	
 	m_curCursor = m_cursors + m_firstIndex;
 
 	if ( m_thread )
 	{
-		
+
 #ifdef __AUI_USE_DIRECTX__
 		SetThreadPriority( m_thread, THREAD_PRIORITY_NORMAL );
-		
+
 		m_threadEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_terminateEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 		m_suspendEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -443,7 +426,6 @@ AUI_ERRCODE aui_Mouse::Start( void )
 		m_replyEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 #endif
 
-		
 		Acquire();
 	}
 
@@ -481,7 +463,7 @@ void aui_Mouse::DestroyPrivateBuffers( void )
 
 	delete m_pickup;
 	m_pickup = NULL;
-	
+
 	delete m_prevPickup;
 	m_prevPickup = NULL;
 }
@@ -568,7 +550,7 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 
 		if ( SuspendThread( m_thread ) != 0xffffffff )
 		{
-			
+
 			if ( eraseCursor )
 			{
 				Erase();
@@ -586,14 +568,12 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 
 AUI_ERRCODE aui_Mouse::Resume( void )
 {
-	
+
 	if ( !m_thread ) return AUI_ERRCODE_NOTHREAD;
 
-	
 	if ( m_suspendCount == 0 ) return AUI_ERRCODE_OK;
 
-	
-	
+
 	if ( m_suspendCount > 1 )
 	{
 		m_suspendCount--;
@@ -605,13 +585,12 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 #elif defined(__AUI_USE_DIRECTX__)
 	if ( ResumeThread( m_thread ) != 0xffffffff )
 	{
-		
-		if (!IsAcquired()) 
+
+		if (!IsAcquired())
         {
             Acquire();
         }
 
-		
 		SetEvent( m_resumeEvent );
 
 		m_suspendCount = 0;
@@ -623,22 +602,19 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 }
 
 
-
 inline BOOL aui_Mouse::ShouldTerminateThread( void )
 {
-#ifdef __AUI_USE_DIRECTX__	
+#ifdef __AUI_USE_DIRECTX__
 	if ( WaitForSingleObject( m_threadEvent, 0 ) == WAIT_OBJECT_0 )
 	{
 		ResetEvent( m_threadEvent );
 
-		
 		if ( WaitForSingleObject( m_terminateEvent, 0 ) == WAIT_OBJECT_0 )
 		{
 			ResetEvent( m_terminateEvent );
 			return TRUE;
 		}
 
-		
 		if ( WaitForSingleObject( m_suspendEvent, 0 ) == WAIT_OBJECT_0 )
 		{
 			ResetEvent( m_suspendEvent );
@@ -689,21 +665,17 @@ AUI_ERRCODE aui_Mouse::SetPosition( sint32 x, sint32 y )
 	if ( x >= m_clip.right ) x = m_clip.right - 1;
 	if ( y >= m_clip.bottom ) y = m_clip.bottom - 1;
 
-	
 	AUI_ERRCODE errcode = Suspend( FALSE );
 	Assert( AUI_SUCCESS(errcode) );
 
-	
 	m_data.position.x = x;
 	m_data.position.y = y;
 
-	
 	errcode = Resume();
 	Assert( AUI_SUCCESS(errcode) );
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_Mouse::SetPosition( POINT *point )
@@ -713,7 +685,6 @@ AUI_ERRCODE aui_Mouse::SetPosition( POINT *point )
 
 	return SetPosition( point->x, point->y );
 }
-
 
 
 AUI_ERRCODE aui_Mouse::GetHotspot( sint32 *x, sint32 *y, sint32 index )
@@ -728,7 +699,6 @@ AUI_ERRCODE aui_Mouse::GetHotspot( sint32 *x, sint32 *y, sint32 index )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Mouse::SetHotspot( sint32 x, sint32 y, sint32 index )
@@ -767,7 +737,6 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 	prevImage.x = image.x;
 	prevImage.y = image.y;
 
-	
 	RECT mixRect =
 	{
 		image.x,
@@ -778,10 +747,8 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 
 	RECT unclippedMixRect = mixRect;
 
-	
 	Rectangle_Clip( &mixRect, &m_clip );
 
-	
 	RECT rect =
 	{
 		mixRect.left - image.x,
@@ -789,7 +756,6 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		mixRect.right - image.x,
 		mixRect.bottom - image.y
 	};
-
 
 	static RECT prevRect = { 0, 0, 0, 0 };
 	static RECT prevUnclippedMixRect = { 0, 0, 0, 0 };
@@ -846,7 +812,6 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		Assert( errcode == AUI_ERRCODE_OK );
 	}
 
-	
 	errcode = g_ui->TheBlitter()->Blt(
 		m_privateMix,
 		rect.left,
@@ -856,7 +821,6 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		k_AUI_BLITTER_FLAG_COPY );
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
 	errcode = g_ui->TheBlitter()->Blt(
 		m_privateMix,
 		rect.left,
@@ -874,7 +838,6 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		k_AUI_BLITTER_FLAG_COPY );
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
 	static RECT eraser1, eraser2;
 	Rectangle_GetErasers(
 		&eraser1, &eraser2,
@@ -933,14 +896,14 @@ AUI_ERRCODE aui_Mouse::HandleAnim( void )
 {
 	if ( m_lastIndex >= m_firstIndex )
 	{
-		
+
 		if(m_curCursor < m_cursors + m_firstIndex)
 			m_curCursor = m_cursors + m_firstIndex;
 
 		uint32 now = GetTickCount();
 		if ( now - m_time > m_animDelay )
 		{
-			
+
 			if ( m_curCursor++ >= m_cursors + m_lastIndex )
 				m_curCursor = m_cursors + m_firstIndex;
 
@@ -963,18 +926,15 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 	aui_Surface *windowSurface = window->TheSurface();
 	aui_DirtyList *windowDirtyList = window->GetDirtyList();
 
-	
 	ListPos position = windowDirtyList->GetHeadPosition();
 	for ( sint32 j = windowDirtyList->L(); j; j-- )
 	{
-		
+
 		RECT *windowDirtyRect = windowDirtyList->GetNext( position );
 
-		
 		RECT screenDirtyRect = *windowDirtyRect;
 		OffsetRect( &screenDirtyRect, windowX, windowY );
 
-		
 		POINT hotspot;
 		(*m_curCursor)->GetHotspot(hotspot);
 
@@ -982,7 +942,6 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 		image.x -= hotspot.x;
 		image.y -= hotspot.y;
 
-		
 		RECT mixRect =
 		{
 			image.x,
@@ -991,11 +950,9 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 			image.y + k_MOUSE_MAXSIZE
 		};
 
-		
 		Rectangle_Clip( &mixRect, &m_clip );
 		Rectangle_Clip( &mixRect, &screenDirtyRect );
 
-		
 		RECT rect =
 		{
 			mixRect.left - image.x,
@@ -1004,11 +961,9 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 			mixRect.bottom - image.y
 		};
 
-		
 		RECT windowMixRect = mixRect;
 		OffsetRect( &windowMixRect, -windowX, -windowY );
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			m_prevPickup,
 			rect.left,
@@ -1023,7 +978,6 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 			break;
 		}
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			windowSurface,
 			windowMixRect.left,
@@ -1039,8 +993,7 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 		}
 
 #ifdef _DEBUG
-		
-		
+
 		static FILE *f = fopen( "__seisureblit__", "rb" );
 		if ( f )
 		{
@@ -1049,14 +1002,14 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 				RGB(255,255,255),
 				0 );
 #ifdef WIN32
-			Sleep( 20 ); 
+			Sleep( 20 );
 #elif defined(LINUX)
 			struct timespec t = { 0, 20000000L };
 			nanosleep(&t, NULL);
 #endif
 			fclose(f);
 		}
-#endif 
+#endif
 
 		errcode = g_ui->BltToSecondary(
 			screenDirtyRect.left,
@@ -1088,7 +1041,6 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 
 	return retcode;
 }
-
 
 AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 {
@@ -1127,17 +1079,13 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 
 		if ( !windowSurface ) continue;
 
-		
 		if (g_civApp->IsInBackground()) continue;
 
-		
 		RECT *windowDirtyRect = &dri->rect;
 
-		
 		RECT screenDirtyRect = *windowDirtyRect;
 		OffsetRect( &screenDirtyRect, windowX, windowY );
 
-		
 		POINT hotspot;
 		(*m_curCursor)->GetHotspot(hotspot);
 
@@ -1145,7 +1093,6 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 		image.x -= hotspot.x;
 		image.y -= hotspot.y;
 
-		
 		RECT mixRect =
 		{
 			image.x,
@@ -1154,11 +1101,9 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			image.y + k_MOUSE_MAXSIZE
 		};
 
-		
 		Rectangle_Clip( &mixRect, &m_clip );
 		Rectangle_Clip( &mixRect, &screenDirtyRect );
 
-		
 		RECT rect =
 		{
 			mixRect.left - image.x,
@@ -1167,11 +1112,9 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			mixRect.bottom - image.y
 		};
 
-		
 		RECT windowMixRect = mixRect;
 		OffsetRect( &windowMixRect, -windowX, -windowY );
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			m_prevPickup,
 			rect.left,
@@ -1186,7 +1129,6 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			break;
 		}
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			windowSurface,
 			windowMixRect.left,
@@ -1218,7 +1160,7 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			nanosleep(&t, NULL);
 #endif
 		}
-#endif 
+#endif
 
 		if (!g_civApp->IsInBackground()) // Actual Drawing
 		{
@@ -1236,7 +1178,6 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			}
 		}
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			windowSurface,
 			windowMixRect.left,
@@ -1278,7 +1219,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 
 	if (g_civApp->IsInBackground()) return retcode;
 
-	
 	POINT hotspot;
 	(*m_curCursor)->GetHotspot(hotspot);
 
@@ -1286,7 +1226,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 	cursorLocation.x -= hotspot.x;
 	cursorLocation.y -= hotspot.y;
 
-	
 	RECT screenCursorRect =
 	{
 		cursorLocation.x,
@@ -1295,21 +1234,17 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 		cursorLocation.y + k_MOUSE_MAXSIZE
 	};
 
-	
 	ListPos position = colorAreas->GetHeadPosition();
 	for ( sint32 j = colorAreas->L(); j; j-- )
 	{
 		RECT *screenDirtyRect = colorAreas->GetNext( position );
 
-		
 		RECT clippedScreenCursorRect = screenCursorRect;
 		Rectangle_Clip( &clippedScreenCursorRect, screenDirtyRect );
 
-		
 		RECT clippedCursorRect = clippedScreenCursorRect;
 		OffsetRect( &clippedCursorRect, -cursorLocation.x, -cursorLocation.y );
 
-		
 		errcode = g_ui->TheBlitter()->ColorBlt(
 			m_prevPickup,
 			&clippedCursorRect,
@@ -1322,7 +1257,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 			break;
 		}
 
-		
 		errcode = g_ui->TheBlitter()->ColorBlt(
 			m_privateMix,
 			&clippedCursorRect,
@@ -1405,7 +1339,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 
 	if (g_civApp->IsInBackground()) return retcode;
 
-	
 	POINT hotspot;
 	(*m_curCursor)->GetHotspot(hotspot);
 
@@ -1413,7 +1346,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 	cursorLocation.x -= hotspot.x;
 	cursorLocation.y -= hotspot.y;
 
-	
 	RECT screenCursorRect =
 	{
 		cursorLocation.x,
@@ -1422,27 +1354,22 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 		cursorLocation.y + k_MOUSE_MAXSIZE
 	};
 
-	
 	ListPos position = imageAreas->GetHeadPosition();
 	for ( sint32 j = imageAreas->L(); j; j-- )
 	{
-		
-		
+
 		RECT *screenDirtyRect = imageAreas->GetNext( position );
 
-		
 		RECT clippedScreenCursorRect = screenCursorRect;
 		Rectangle_Clip( &clippedScreenCursorRect, screenDirtyRect );
 
-		
 		RECT clippedCursorRect = clippedScreenCursorRect;
 		OffsetRect( &clippedCursorRect, -cursorLocation.x, -cursorLocation.y );
 
 		RECT clippedImageCursorRect = clippedScreenCursorRect;
 		OffsetRect(
 			&clippedImageCursorRect, -imageRect->left, -imageRect->top );
-			
-		
+
 		errcode = g_ui->TheBlitter()->Blt(
 			m_prevPickup,
 			clippedCursorRect.left,
@@ -1457,7 +1384,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 			break;
 		}
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			m_privateMix,
 			clippedCursorRect.left,
@@ -1472,7 +1398,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 			break;
 		}
 
-		
 		errcode = g_ui->TheBlitter()->Blt(
 			m_privateMix,
 			clippedCursorRect.left,
@@ -1487,7 +1412,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 			break;
 		}
 
-		
 		errcode = g_ui->BltToSecondary(
 			clippedScreenCursorRect.left,
 			clippedScreenCursorRect.top,
@@ -1502,7 +1426,6 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 			break;
 		}
 
-		
 		static RECT rects[ 4 ];
 		sint32 numRects = Rectangle_Subtract(
 			screenDirtyRect,
@@ -1517,7 +1440,7 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 
 		for ( RECT *rectPtr = rects; numRects; numRects--, rectPtr++ )
 		{
-			
+
 			RECT imageDirtyRect = *rectPtr;
 			OffsetRect( &imageDirtyRect, -imageRect->left, -imageRect->top );
 
@@ -1551,7 +1474,6 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 	image.x -= hotspot.x;
 	image.y -= hotspot.y;
 
-	
 	RECT mixRect =
 	{
 		image.x,
@@ -1560,13 +1482,11 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 		image.y + k_MOUSE_MAXSIZE
 	};
 
-	
 	Rectangle_Clip( &mixRect, &m_clip );
 
 	RECT rect = mixRect;
 	OffsetRect( &rect, -image.x, -image.y );
 
-	
 	errcode = g_ui->BltToSecondary(
 		mixRect.left,
 		mixRect.top,
@@ -1574,7 +1494,6 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 		&rect,
 		k_AUI_BLITTER_FLAG_COPY );
 
-	
 	m_reset = TRUE;
 
 	return AUI_ERRCODE_OK;
@@ -1590,7 +1509,6 @@ sint32 aui_Mouse::ManipulateInputs( aui_MouseEvent *data, BOOL add )
 #elif defined(__AUI_USE_SDL__)
 	SDL_mutexP(m_lpcs);
 #endif
-
 
 	if ( add )
 	{
@@ -1621,7 +1539,7 @@ sint32 aui_Mouse::ManipulateInputs( aui_MouseEvent *data, BOOL add )
 			}
 		}
 	}
-	
+
 	else
 	{
 		if ( index )

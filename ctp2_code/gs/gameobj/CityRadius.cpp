@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City radius handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,7 +37,6 @@
 extern World *g_theWorld;
 extern MapPoint g_mp_size;
 
-
 #include "directions.h"	// NOWHERE
 
 //----------------------------------------------------------------------------
@@ -56,7 +55,7 @@ extern MapPoint g_mp_size;
 // Remark(s)  : The action is performed on the location itself as well.
 //
 //----------------------------------------------------------------------------
-void CityRadiusIterator(const MapPoint &cpos, 
+void CityRadiusIterator(const MapPoint &cpos,
 						CityRadiusCallback *cb)
 {
 	// Visit the outer ring, skipping the N, E, S, and W points

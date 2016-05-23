@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -22,7 +9,7 @@ class CitySpriteGroup;
 
 enum CITYSIZE {
 	CITYSIZE_NONE = -1,
-	
+
 	CITYSIZE_1,
 	CITYSIZE_2,
 	CITYSIZE_3,
@@ -38,7 +25,7 @@ enum CITYSIZE {
 #include "pixeltypes.h"
 #include "SpriteGroup.h"
 
-class CitySpriteGroup : public SpriteGroup 
+class CitySpriteGroup : public SpriteGroup
 {
 public:
 	CitySpriteGroup(GROUPTYPE type);
@@ -46,13 +33,12 @@ public:
 	void			Load(MBCHAR const * filename);
 	void			Import(uint16 id);
 
-	void			Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+	void			Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	void			DrawText(sint32 x, sint32 y, MBCHAR const * s);
 
 private:
 	CITYSIZE		m_currentSize;
 };
-
 
 #endif

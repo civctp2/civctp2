@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game random/custom screen (seems to be unused, but should be used)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,7 +54,6 @@ extern SPNewGameWindow *g_spNewGameWindow;
 static c3_PopupWindow	*s_spNewGameRandomCustomScreen	= NULL;
 
 
-
 static aui_SwitchGroup	*s_group		= NULL;
 static aui_Radio	**s_checkBox;
 
@@ -78,11 +77,10 @@ sint32	spnewgamerandomcustomscreen_displayMyWindow()
 
 	Assert( auiErr == AUI_ERRCODE_OK );
 
-	
 	bool custom = g_spNewGameWindow ?
 		g_spNewGameWindow->m_useCustomMap != 0:
 
-		false; 
+		false;
 	s_checkBox[ 0 ]->SetState( !custom );
 	s_checkBox[ 1 ]->SetState( custom );
 
@@ -103,7 +101,6 @@ sint32 spnewgamerandomcustomscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 	aui_Control::ControlActionCallback *callback )
 {
@@ -113,27 +110,24 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_spNewGameRandomCustomScreen ) return AUI_ERRCODE_OK; 
+	if ( s_spNewGameRandomCustomScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameRandomCustomScreen");
 
-	{ 
+	{
 		s_spNewGameRandomCustomScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) ) errcode;
 
-		
 		s_spNewGameRandomCustomScreen->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());
 		s_spNewGameRandomCustomScreen->GrabRegion()->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());
 		s_spNewGameRandomCustomScreen->SetStronglyModal(TRUE);
 	}
-	
 
-	
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRandomCustomScreen->AddTitle( controlBlock );
 	s_spNewGameRandomCustomScreen->AddClose( callback ? callback : spnewgamerandomcustomscreen_backPress );
-
 
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Group" );
@@ -149,10 +143,9 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
 		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
 		s_group->AddSwitch( (aui_Radio *)s_checkBox[i] );
-	
+
 	}
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -160,12 +153,11 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 }
 
 
-
 AUI_ERRCODE spnewgamerandomcustomscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_spNewGameRandomCustomScreen  ) return AUI_ERRCODE_OK; 
+	if ( !s_spNewGameRandomCustomScreen  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_spNewGameRandomCustomScreen->Id() );
 	keypress_RemoveHandler(s_spNewGameRandomCustomScreen);
@@ -196,7 +188,6 @@ void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, 
 
 	spnewgamerandomcustomscreen_removeMyWindow(action);
 
-	
 	if ( s_checkBox[ 1 ]->GetState() )
 	{
 		if ( g_spNewGameWindow )
@@ -212,7 +203,7 @@ void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, 
 	}
 	else
 	{
-		
+
 		if ( g_spNewGameWindow )
 		{
 			g_spNewGameWindow->m_useCustomMap = false;

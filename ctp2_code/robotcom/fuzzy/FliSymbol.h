@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef __FLI_SYMBOL_H__
@@ -25,24 +23,23 @@ interface IC3CivArchive;
 
 class FliSymbol {
 private:
-	double *m_internal; 
-	double m_external;  
-	double m_initValue[FLI_SECT_MAX]; 
-	
+	double *m_internal;
+	double m_external;
+	double m_initValue[FLI_SECT_MAX];
+
 	uint16 m_hasInitValue;
 
 	uint8 m_flags;
 	uint8 pad;
-	
-	
+
 	sint32 m_index;
 	double m_minValue;
 	double m_maxValue;
 
-	
-	                  
-	
-	
+
+
+
+
 	sint16 m_numRules[FLI_SECT_MAX];
 	sint16 m_firedRules[FLI_SECT_MAX];
 	sint16 m_dependancies[FLI_SECT_MAX];
@@ -73,7 +70,7 @@ public:
 		max = m_maxValue;
 	}
 
-    sint32 GetNumFuzzySets(const sint32 module) const; 
+    sint32 GetNumFuzzySets(const sint32 module) const;
 	void SetIndex(sint32 index) { m_index = index; }
 	sint32 GetIndex() const { return m_index; }
 
@@ -98,12 +95,12 @@ public:
 	BOOL IsInitializedForSection(sint32 module);
 	void RegisterInit(sint32 module);
 
-    void DoubleFuzzySetBuff(sint32 &max_num_fuzzy_set, double**& fuzzy_set_buf); 
-    void GetFuzzyGraph(const sint32 idx_section, char **label, double *minx, double *maxx, 
-        sint32 *num_graphs, sint32 &max_num_fuzzy_set, double **&fuzzy_set_buff, 
+    void DoubleFuzzySetBuff(sint32 &max_num_fuzzy_set, double**& fuzzy_set_buf);
+    void GetFuzzyGraph(const sint32 idx_section, char **label, double *minx, double *maxx,
+        sint32 *num_graphs, sint32 &max_num_fuzzy_set, double **&fuzzy_set_buff,
         double *defuzz_val);
 
-    double GetRecommendedDX(const sint32 module); 
+    double GetRecommendedDX(const sint32 module);
 
 #ifdef _DEBUG
 	void CatLogStrings(PointerList<InputString> *strings);

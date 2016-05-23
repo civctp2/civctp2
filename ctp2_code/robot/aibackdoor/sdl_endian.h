@@ -1,29 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef _SDL_endian_h
 #define _SDL_endian_h
 
@@ -44,11 +18,9 @@
 #define SDL_BYTEORDER	SDL_BIG_ENDIAN
 #endif
 
-
 #define SDL_Swap16(X)  ((X<<8)|(X>>8))
 #define SDL_Swap32(X)  ((X<<24)|((X<<8)&0x00FF0000)|((X>>8)&0x0000FF00)|(X>>24))
 #define SDL_Swap64(X)  "How do we swap a 64-bit value?"
-
 
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 #define SDL_SwapLE16(X)	(X)
@@ -66,4 +38,4 @@
 #define SDL_SwapBE64(X)	(X)
 #endif
 
-#endif 
+#endif

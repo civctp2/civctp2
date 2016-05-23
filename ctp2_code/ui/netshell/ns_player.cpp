@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,8 +30,8 @@
 #include "netshell.h"
 #include "ns_player.h"
 
-ns_Player::ns_Player(NETFunc::Player * player) 
-:	ns_Object<NETFunc::Player, ns_Player>(player) 
+ns_Player::ns_Player(NETFunc::Player * player)
+:	ns_Object<NETFunc::Player, ns_Player>(player)
 {
 	list.push_back(Struct(ICON,		&m_mute));
 	list.push_back(Struct(STRING,	&m_name));

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -67,8 +67,8 @@ enum UNIT_TYPE {
 #define k_NON_FLANKER_PRIORITY 10000
 
 class Army;
-class Battle; 
-class BattleEvent; 
+class Battle;
+class BattleEvent;
 
 class CombatUnit {
 private:
@@ -97,7 +97,7 @@ public:
 	CombatUnit(double offense, double defense,
 			   double strength, double armor,
 			   double ranged, double hp,
-			   UNIT_TYPE type, 
+			   UNIT_TYPE type,
 			   bool const isVeteran = false
 			  );
 #else
@@ -109,7 +109,7 @@ public:
 
 	double GetOffense() const
 	{
-		return (m_isVeteran) 
+		return (m_isVeteran)
 			   ? m_offense + (m_offense * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)
 			   : m_offense;
 	}
@@ -118,7 +118,7 @@ public:
 	double GetArmor() { return m_armor; }
 	double GetRangedAttack() const
 	{
-		return (m_isVeteran) 
+		return (m_isVeteran)
 			   ? m_ranged + (m_ranged * g_theConstDB->Get(0)->GetVeteranCoef() * 0.01)
 			   : m_ranged;
 	}
@@ -130,16 +130,16 @@ public:
 	void SetPriority(sint32 pri) { m_priority = pri; }
 
 	double GetHP() { return m_hp; }
-	void DeductHP(double amt) 
+	void DeductHP(double amt)
 #ifndef TEST_APP
 		;
 #else
-	{ 
-		m_hp -= amt; 
+	{
+		m_hp -= amt;
 		if(m_hp < 0.001) {
 			m_hp = 0;
 		}
-			
+
 	}
 #endif
 
@@ -160,8 +160,7 @@ private:
 
 public:
 	CombatField(sint32 width, sint32 height, bool isOffense);
-	
-	
+
 	~CombatField();
 
 #ifndef TEST_APP
@@ -180,7 +179,7 @@ public:
 	void Move();
 	void Sort();
 	void InsertInPreferredCol(CombatUnit *u);
-	
+
 	sint32 CountColumn(sint32 col);
 	void MoveRowForward(sint32 row);
 	void MoveUnitsToFront(sint32 num);
@@ -201,11 +200,9 @@ public:
 #else
 	CTP2Combat(sint32 width, sint32 height, CellUnitList &attackers, CellUnitList &defenders);
 
-	
 	~CTP2Combat();
 #endif
 
-	
 	bool ResolveOneRound();
 	bool IsDone();
 
@@ -220,12 +217,11 @@ public:
 	sint32 GetDefender() { return m_defender; }
 	Army GetAttackerArmy();
 	MapPoint GetDefenderLocation() { return m_defenderPos; }
-	
+
 	Battle *GetBattle() { return m_battle; }
 
-	
 	void KillBattle() { delete m_battle; m_battle = NULL; }
-	void ClearBattle() { m_battle = NULL; } 
+	void ClearBattle() { m_battle = NULL; }
 #endif
 
 	void AddDeadUnit(Unit &u) { m_deadUnits.Insert(u); }
@@ -249,22 +245,22 @@ private:
 	void DumpState();
 #endif
 
-	void ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 attY, 
+	void ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 attY,
 							 CombatField *defender, sint32 defX, sint32 defY);
 	void DoRangedAttacks(CombatField *attacker, CombatField *defender);
 	void DoRangedAttacks();
 	void DoRangedCounterAttacks();
 
-	void ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY, 
+	void ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 					   CombatField *defender, sint32 defX, sint32 defY);
 	void DoAttacks(CombatField *attacker, CombatField *defender);
 	void DoAttacks();
 	void DoCounterAttacks();
 	// below are used only when g_theProfileDB->IsNewCombat
-	void ExecuteRangedCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY, 
+	void ExecuteRangedCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY,
 							 CombatField *defender, sint32 defX, sint32 defY);
 	void DoRangedCounterAttacksNC(CombatField *attacker, CombatField *defender);
-	void ExecuteCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY, 
+	void ExecuteCounterAttackNC(CombatField *attacker, sint32 attX, sint32 attY,
 					   CombatField *defender, sint32 defX, sint32 defY);
 	void DoCounterAttacksNC(CombatField *attacker, CombatField *defender);
 	// end newcombat option -Maq
@@ -278,4 +274,3 @@ extern CTP2Combat *g_theCurrentBattle;
 #endif
 
 #endif
-

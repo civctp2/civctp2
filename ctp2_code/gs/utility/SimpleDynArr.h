@@ -10,7 +10,7 @@ template <class T> class SimpleDynamicArray;
 #include "civarchive.h"
 #include "ctp2_inttypes.h"  // sint32
 
-template <class T> class SimpleDynamicArray 
+template <class T> class SimpleDynamicArray
 {
 public:
 	SimpleDynamicArray();
@@ -23,7 +23,7 @@ public:
 		return m_array[i];
 	}
 
-	T & operator [] (const sint32 i) 
+	T & operator [] (const sint32 i)
     {
 		Assert((0 <= i) && (i < m_nElements));
 		return m_array[i];
@@ -100,13 +100,12 @@ template <class T> void SimpleDynamicArray<T>::DelIndex(sint32 i)
     m_nElements--;
 }
 
-
 template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
 		archive << m_nElements;
 		archive << m_arraySize; // Not very useful to store this
-        if (0 < m_nElements) { 
+        if (0 < m_nElements) {
     		archive.Store((uint8*)m_array, m_nElements * sizeof(T));
         }
 	} else {
@@ -116,7 +115,7 @@ template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 		delete [] m_array;
 		m_array = new T[m_arraySize]; /// @todo Try std::max(1, m_nElements)
 
-        if (0 < m_nElements) { 
+        if (0 < m_nElements) {
     		archive.Load((uint8*)m_array, m_nElements * sizeof(T));
         }
 	}
@@ -124,12 +123,12 @@ template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 
 template <class T> bool SimpleDynamicArray<T>::IsPresent(T const & chk) const
 {
-	for (int i = 0; i < m_nElements; i++) 
+	for (int i = 0; i < m_nElements; i++)
     {
 		if (m_array[i] == chk)
 			return true;
 	}
-	
+
     return false;
 }
 #endif

@@ -1,11 +1,10 @@
-
 #include "c3.h"
 
 #include "SlicEngine.h"
 #include "SlicModFunction.h"
 
 SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
-{	
+{
 	m_numArgs = 0;
 
 	m_segment = g_slicEngine->GetSegment(name);
@@ -66,4 +65,3 @@ SLIC_TAG SlicModFunc::GetArg(sint32 arg)
 	else
 		return ST_END;
 }
-

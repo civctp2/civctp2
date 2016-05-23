@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - The finish method just deletes the MessageData from the asscicated 
+// - The finish method just deletes the MessageData from the asscicated
 //   SlicFrame as the SlicFrame may be used later. (Sep. 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -52,7 +52,7 @@
 #include "messagewin.h"
 #include "TradeBids.h"
 #include "messagewindow.h"
-#include "stringutils.h"        
+#include "stringutils.h"
 #include "TurnCnt.h"            // g_turn
 #include "Globals.h"
 #include "controlpanelwindow.h"
@@ -69,7 +69,7 @@ namespace
 sint32 g_robotMessages = FALSE;
 #endif
 
-sint32 g_hackInstantMessages = 0;	
+sint32 g_hackInstantMessages = 0;
 
 SlicObject::SlicObject()
 :
@@ -126,7 +126,7 @@ SlicObject::SlicObject(char const * id)
 	m_segment   = g_slicEngine->GetSegment(m_id);
 	m_frame     = new SlicFrame(m_segment);
 
-    if (m_segment && !m_segment->IsHelp()) 
+    if (m_segment && !m_segment->IsHelp())
     {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
 	}
@@ -157,14 +157,14 @@ SlicObject::SlicObject(SlicSegment *segment)
 	m_argList               (NULL)
 {
 	strcpy(m_id, segment->GetName());
-	if (m_segment && !m_segment->IsHelp()) 
+	if (m_segment && !m_segment->IsHelp())
     {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
 	}
 }
 
-SlicObject::SlicObject(SlicSegment * segment, SlicObject * copy) 
-: 
+SlicObject::SlicObject(SlicSegment * segment, SlicObject * copy)
+:
     SlicContext             (copy),
     m_refCount              (0),
     m_id                    (new char[strlen(segment->GetName()) + 1]),
@@ -191,8 +191,8 @@ SlicObject::SlicObject(SlicSegment * segment, SlicObject * copy)
 	m_request               = new ID(*copy->m_request);
 }
 
-SlicObject::SlicObject(char const * id, SlicContext *copy) 
-: 
+SlicObject::SlicObject(char const * id, SlicContext *copy)
+:
     SlicContext             (copy),
     m_refCount              (0),
     m_id                    (new char[strlen(id) + 1]),
@@ -218,7 +218,7 @@ SlicObject::SlicObject(char const * id, SlicContext *copy)
 	strcpy(m_id, id);
 	m_segment   = g_slicEngine->GetSegment(m_id);
 	m_frame     = new SlicFrame(m_segment);
-	if (m_segment && !m_segment->IsHelp()) 
+	if (m_segment && !m_segment->IsHelp())
     {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
 	}
@@ -334,14 +334,14 @@ void SlicObject::Execute()
 		m_segment->AddSpecials(this);
 	}
 
-	if (m_frame->GetMessageData()) 
+	if (m_frame->GetMessageData())
     {
 		m_frame->GetMessageData()->SetMsgText(m_segment->GetName());
 	}
 
 	m_frame->Run();
 
-	if (!g_slicEngine->AtBreak()) 
+	if (!g_slicEngine->AtBreak())
     {
 	    Finish();
 	}
@@ -351,9 +351,9 @@ void SlicObject::Execute()
 //
 // Name       : SlicObject::Finish
 //
-// Description: Displays any messagebox defined by this SlicObject and then 
+// Description: Displays any messagebox defined by this SlicObject and then
 //              deletes the original MessageData from the associated SlicFrame.
-//              The SlicFrame is not deleted as it may be used for error 
+//              The SlicFrame is not deleted as it may be used for error
 //              messages later.
 //
 // Parameters : -
@@ -365,7 +365,7 @@ void SlicObject::Execute()
 // Remark(s)  : This gets the MessageData object from m_frame, finishes
 //              initializing its fields and uses it to construct a
 //              Message object which is then added to g_theMessagePool.
-//              
+//
 //              It appears to do this once for each recipient, and it seems
 //              to use the same MessageData object every time, so a great
 //              deal of the work could be superfluous, and could be moved
@@ -375,15 +375,15 @@ void SlicObject::Execute()
 void SlicObject::Finish()
 {
 	if(m_segment->GetType() == SLIC_OBJECT_MESSAGEBOX) {
-		
+
 		if (m_numRecipients == 0 && !g_civApp->IsGameLoaded()) {
-			
+
 			MessageData *messageData = m_frame->GetMessageData();
 
 			if(m_segment->IsHelp()) {
 				messageData->SetIsHelpBox();
 			}
-			
+
 			Message newMessage(g_theMessagePool->NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
 			MessageData * newData = new MessageData(newMessage, messageData);
 			newData->SetOwner(0);
@@ -405,7 +405,7 @@ void SlicObject::Finish()
 				if(m_aborted)
 					continue;
 
-				if(!g_network.IsActive() || 
+				if(!g_network.IsActive() ||
 				   g_network.IsLocalPlayer(m_recipientList[i]) ||
 				   (m_request && m_request->m_id != 0)) {
 
@@ -454,7 +454,7 @@ void SlicObject::Finish()
 					if(m_segment->GetFilenum() == k_TUTORIAL_FILE &&
 					   !m_dontSave) {
 						g_slicEngine->AddTutorialRecord(m_recipientList[i],
-														messageData->GetTitle(),	
+														messageData->GetTitle(),
 														messageData->GetMsgText(),
 														m_segment);
 					}
@@ -470,7 +470,7 @@ void SlicObject::Finish()
 					}
 
 					if(m_segment->IsAlert()) {
-						
+
 					}
 				}
 			}
@@ -486,7 +486,7 @@ void SlicObject::Dump()
 
 	SlicContext::Dump();
 }
-#endif 
+#endif
 
 void SlicObject::SetMessageText(const MBCHAR *text)
 {
@@ -545,22 +545,22 @@ void SlicObject::SetMessageDuration(sint32 duration)
 void SlicObject::Serialize(CivArchive &archive)
 {
 	uint32	l;
-	
+
 #define SLICLIST_MAGIC 0x25831462
 	if (archive.IsStoring()) {
 		archive.PerformMagic(SLICLIST_MAGIC) ;
-		
+
 		l = strlen(m_id) + 1;
 		archive << l;
 		archive.Store((uint8 *)m_id, l);
-		
+
 		archive<<m_seconds ;
 		archive<<m_numRecipients ;
-		
+
 		archive.Store((uint8*)m_recipientList, m_numRecipients * sizeof(sint32)) ;
-		
+
 		if(m_segment) {
-			
+
 			l = strlen(m_segment->GetName()) + 1 ;
 		} else {
 			l = 0;
@@ -569,7 +569,7 @@ void SlicObject::Serialize(CivArchive &archive)
 		if(l > 0) {
 			archive.Store((uint8 *)m_segment->GetName(), l) ;
 		}
-		
+
 		archive << m_defaultAdvanceSet;
 		archive << m_defaultAdvance;
 		archive << m_aborted;
@@ -580,10 +580,9 @@ void SlicObject::Serialize(CivArchive &archive)
 		archive << m_isDiplomaticResponse;
 		archive << m_useDirector;
 
-		
 	} else {
 		archive.TestMagic(SLICLIST_MAGIC) ;
-		
+
 		archive>>l ;
 
 		m_refCount = 0;
@@ -591,10 +590,10 @@ void SlicObject::Serialize(CivArchive &archive)
 		delete [] m_id;
 		m_id = new char[l] ;
 		archive.Load((uint8 *)m_id, l) ;
-		
+
 		archive>>m_seconds ;
 		archive>>m_numRecipients ;
-		
+
 		delete [] m_recipientList ;
 		m_recipientList = new sint32[m_numRecipients] ;
 		archive.Load((uint8 *)m_recipientList, m_numRecipients * sizeof(sint32)) ;
@@ -649,7 +648,7 @@ void SlicObject::SetDefaultAdvance(sint32 adv)
 
 bool SlicObject::ConcernsPlayer(PLAYER_INDEX player) const
 {
-	for (sint32 i = 0; i < m_numRecipients; i++) 
+	for (sint32 i = 0; i < m_numRecipients; i++)
     {
 		if (m_recipientList[i] == player)
 			return true;
@@ -673,4 +672,3 @@ void SlicObject::Continue()
     	Finish();
     }
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialised all members in the default constructor, to prevent a crash 
+// - Initialised all members in the default constructor, to prevent a crash
 //   in the destructor.
 // - Added left and right to textblttype. (Aug 16th 2005 Martin Gühmann)
 //
@@ -48,7 +48,6 @@ class aui_TextBase;
 #define k_AUI_TEXTBASE_DEFAULT_FONTNAME			"arial.ttf"
 #define k_AUI_TEXTBASE_DEFAULT_USEDATABASE		FALSE
 
-
 #define k_AUI_TEXTBASE_LDL_TEXT					"text"
 #define k_AUI_TEXTBASE_LDL_MAXLENGTH			"maxlength"
 #define k_AUI_TEXTBASE_LDL_RED					"fontcolorred"
@@ -65,16 +64,13 @@ class aui_TextBase;
 #define k_AUI_TEXTBASE_LDL_FONTSIZEDEPENDENT	"fontsizedependent"
 #define k_AUI_TEXTBASE_LDL_FONTNAME				"fontname"
 
-
 #define k_AUI_TEXTBASE_LDL_NODATABASE			"nodatabase"
-
 
 #define k_AUI_TEXTBASE_LDL_BLTTYPE				"textblttype"
 #define k_AUI_TEXTBASE_LDL_LEFT					"left"
 #define k_AUI_TEXTBASE_LDL_CENTER				"center"
 #define k_AUI_TEXTBASE_LDL_RIGHT				"right"
 #define k_AUI_TEXTBASE_LDL_FILL					"fill"
-
 
 #define k_AUI_TEXTBASE_LDL_JUST					"just"
 #define k_AUI_TEXTBASE_LDL_JUSTLEFT				"left"
@@ -90,20 +86,19 @@ class aui_TextBase;
 class aui_Surface;
 class aui_BitmapFont;
 
-
 class aui_TextBase
 {
 public:
-	
+
 	aui_TextBase
     (
 		MBCHAR const *  ldlBlock,
-		MBCHAR const *  text 
+		MBCHAR const *  text
     );
 	aui_TextBase
     (
 		MBCHAR const *  text        = NULL,
-		uint32          maxLength   = 0 
+		uint32          maxLength   = 0
     );
 	virtual ~aui_TextBase();
 
@@ -111,7 +106,7 @@ protected:
 	AUI_ERRCODE InitCommonLdl
     (
 		MBCHAR const *  ldlBlock,
-		MBCHAR const *  text 
+		MBCHAR const *  text
     );
 	AUI_ERRCODE InitCommon(
 		const MBCHAR *text,
@@ -132,7 +127,6 @@ public:
 		const MBCHAR *text,
 		uint32 len = 0xffffffff );
 
-	
 	AUI_ERRCODE	SetText2(MBCHAR *fmt,...);
 
 	virtual AUI_ERRCODE	AppendText(MBCHAR const * text);
@@ -149,13 +143,11 @@ public:
 	COLORREF GetTextShadowColor(void) const { return m_textshadowcolor; }
 	void SetTextShadowColor( COLORREF color ) { m_textshadowcolor = color; }
 
-	
 	aui_BitmapFont *GetTextFont( void ) const { return m_textfont; }
 
 	uint32 &TextFlags( void ) { return m_textflags; }
 
-	
-	
+
 	virtual void SetTextFont(MBCHAR const * ttffile);
 	virtual void SetTextFontSize( sint32 pointSize );
 	void SetTextBold( sint32 bold );
@@ -164,14 +156,14 @@ public:
 	void TextReloadFont( void );
 
 protected:
-	
+
 	static uint32 FindNextWordBreak(
 		MBCHAR const *text, HDC hdc, sint32 width );
 	static MBCHAR const * FindNextToken
     (
-		MBCHAR const *  text, 
-        MBCHAR *        tokenList, 
-        sint32          count 
+		MBCHAR const *  text,
+        MBCHAR *        tokenList,
+        sint32          count
     );
 
 	AUI_ERRCODE DrawThisText(
@@ -191,7 +183,6 @@ protected:
 	COLORREF	m_textcolor;
 	sint32		m_textunderline;
 
-	
 	BOOL		m_textreload;
 	MBCHAR		m_textttffile[ MAX_PATH + 1 ];
 	sint32		m_textpointsize;
@@ -199,5 +190,4 @@ protected:
 	sint32		m_textitalic;
 };
 
-
-#endif 
+#endif

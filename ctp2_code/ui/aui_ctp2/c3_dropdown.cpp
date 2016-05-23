@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -48,7 +48,6 @@
 #include "c3_dropdown.h"
 
 extern C3UI		*g_c3ui;
-
 
 c3_DropDown::c3_DropDown(
 	AUI_ERRCODE *retval,
@@ -89,7 +88,6 @@ c3_DropDown::c3_DropDown(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 c3_DropDown::c3_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -122,7 +120,6 @@ c3_DropDown::c3_DropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
@@ -159,7 +156,7 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
         if (aui_Ldl::FindDataBlock(block))
 		{
-			
+
 			m_button = new aui_Button(
 				&errcode,
 				aui_UniqueId(),
@@ -172,11 +169,11 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	}
 
 	if ( !m_button )
-		
+
 		m_button = new aui_Button(
 			&errcode,
 			aui_UniqueId(),
-			0, 0, 0, 0, 
+			0, 0, 0, 0,
 			DropDownButtonActionCallback, this );
 
 	Assert( AUI_NEWOK(m_button,errcode) );
@@ -193,11 +190,9 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 				aui_UniqueId(),
 				block,
 
-
 				16, AUI_WINDOW_TYPE_POPUP );
 
-			
-			
+
 			aui_Ldl::Remove( m_listBoxWindow );
 
 			if ( m_listBoxWindow )
@@ -223,7 +218,6 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 			aui_UniqueId(),
 			0, 0, m_width + m_buttonSize, m_windowSize,
 
-
 			16, AUI_WINDOW_TYPE_POPUP );
 
 	Assert( AUI_NEWOK(m_listBoxWindow,errcode) );
@@ -240,7 +234,6 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	Assert( AUI_NEWOK(m_listBox,errcode) );
 	if ( !AUI_NEWOK(m_listBox,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_listBox->SetForceSelect( TRUE );
 
 	AddChild( m_button );
@@ -253,12 +246,10 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_DropDown::RepositionListBoxWindow( void )
 {
-	
 
-	
+
 	if ( m_window )
 	{
 		POINT screenLocation = { m_x, m_y + m_height };
@@ -267,7 +258,6 @@ AUI_ERRCODE c3_DropDown::RepositionListBoxWindow( void )
 		m_listBoxWindow->Move( screenLocation.x, screenLocation.y );
 	}
 
-	
 
 	sint32 listBoxWidth = m_listBoxWindow->Width();
 	if ( m_listBox->GetVerticalRanger()->GetMaximumY() )
@@ -275,14 +265,12 @@ AUI_ERRCODE c3_DropDown::RepositionListBoxWindow( void )
 
 	c3_ListBox	*myListBox = (c3_ListBox *)m_listBox;
 
-	myListBox->Resize( listBoxWidth - (myListBox->GetBevelWidth() * 2), 
+	myListBox->Resize( listBoxWidth - (myListBox->GetBevelWidth() * 2),
 						m_windowSize - (myListBox->GetBevelWidth() * 2) );
 	myListBox->Move( myListBox->GetBevelWidth(), myListBox->GetBevelWidth() );
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
@@ -292,20 +280,16 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if ( m_pattern ) 
+	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
 	primitives_BevelRect16( surface, &rect, 2, 0, 16, 16 );
 
-	
 	DrawSelectedItem( surface, 2, 2 );
 
-	
-	
+
 	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
 	{
-		
 
 		uint16 *pixel;
 
@@ -313,15 +297,13 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
 		{
-			
+
 			uint16 *origPixel = pixel;
 
-			
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
 
-			
 			uint16 *stopHorizontal = pixel + width;
 			const uint16 *stopVertical = pixel +
 				pitch * ( rect.bottom - rect.top );
@@ -331,9 +313,9 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				do
 				{
 					*pixel = pixelutils_BlendFast(
-						*pixel,	
-						0x0000,	
-						24 );	
+						*pixel,
+						0x0000,
+						24 );
 
 				} while ( ++pixel != stopHorizontal );
 
@@ -345,29 +327,27 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 
-	if (m_window) 
+	if (m_window)
 		if ( surface == m_window->TheSurface() )
 			m_window->AddDirtyRect( &rect );
 
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_DropDown::RepositionButton( void )
 {
-	
+
 	m_button->Resize( m_buttonSize - 2, m_height - 4 );
 
-	
 
-	
-	
+
+
+
 
 	m_button->Move( m_width, 2 );
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 void c3_DropDown::Clear(void)
 {

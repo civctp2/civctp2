@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "c3_radio.h"
 
@@ -19,7 +18,6 @@
 
 extern C3UI			*g_c3ui;
 
-
 c3_Radio::c3_Radio(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -39,7 +37,6 @@ c3_Radio::c3_Radio(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Radio::c3_Radio(
@@ -69,14 +66,13 @@ c3_Radio::c3_Radio(
 }
 
 
-
 AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
-	sint32  bevelWidth  = k_C3_RADIO_DEFAULT_BEVELWIDTH; 
+
+	sint32  bevelWidth  = k_C3_RADIO_DEFAULT_BEVELWIDTH;
 	if (block->GetAttributeType( k_C3_RADIO_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_RADIO_LDL_BEVELWIDTH );
 	}
@@ -88,7 +84,6 @@ AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_Radio::InitCommon( sint32 bevelWidth )
 {
 	m_bevelWidth = bevelWidth;
@@ -97,13 +92,12 @@ AUI_ERRCODE c3_Radio::InitCommon( sint32 bevelWidth )
 }
 
 
-
 AUI_ERRCODE c3_Radio::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

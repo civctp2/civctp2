@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3_coloredswitch.h"
 
@@ -19,7 +17,6 @@
 
 extern C3UI			*g_c3ui;
 
-
 c3_ColoredSwitch::c3_ColoredSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -38,7 +35,6 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 c3_ColoredSwitch::c3_ColoredSwitch(
@@ -67,22 +63,20 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 }
 
 
-
 AUI_ERRCODE c3_ColoredSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH;
-    
+
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
     Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
+
 	if (block->GetAttributeType( k_C3_COLOREDSWITCH_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_COLOREDSWITCH_LDL_BEVELWIDTH );
 	}
 
 	return InitCommon(bevelWidth);
 }
-
 
 
 AUI_ERRCODE c3_ColoredSwitch::InitCommon( sint32 bevelWidth )
@@ -95,13 +89,12 @@ AUI_ERRCODE c3_ColoredSwitch::InitCommon( sint32 bevelWidth )
 }
 
 
-
 AUI_ERRCODE c3_ColoredSwitch::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

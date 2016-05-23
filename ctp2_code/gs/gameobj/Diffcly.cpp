@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -102,7 +102,7 @@ double diffutil_GetAiAdjustment(const sint32 diff,
                                )
 {
 	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
-	double const	rank_percent		= 
+	double const	rank_percent		=
 		MapAnalysis::GetMapAnalysis().GetScienceHandicapRatio(playerId);
 	double percent_spread;
 	double value_spread;
@@ -115,7 +115,7 @@ double diffutil_GetAiAdjustment(const sint32 diff,
 			value = max_behind_value;
 		else
 		{
-			
+
 			percent_spread = rec->GetAIMaxBehind() - rec->GetAIMinBehind();
 			value_spread = max_behind_value - min_behind_value;
 			rank_spread_percent = (rec->GetAIMinBehind() - rank_percent) / fabs(percent_spread);
@@ -128,7 +128,7 @@ double diffutil_GetAiAdjustment(const sint32 diff,
 		value = min_ahead_value;
 	else
 	{
-		
+
 		percent_spread = rec->GetAIMaxAhead() - rec->GetAIMinAhead();
 		value_spread =  max_ahead_value - min_ahead_value;
 		rank_spread_percent = (rec->GetAIMinAhead() - rank_percent) / fabs(percent_spread);
@@ -181,7 +181,6 @@ sint32 diffutil_GetYearFromTurn(const sint32 diff, const sint32 turn)
 {
 	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
 
-
 	sint32 period = -1;
 
 	const DifficultyRecord::TimeScale *tsrec = rec->GetTimeScale();
@@ -204,10 +203,10 @@ sint32 diffutil_GetYearFromTurn(const sint32 diff, const sint32 turn)
 			sint32 totalTurns = tsrec->GetPeriod(i+1)->GetStartTurn() -
 								tsrec->GetPeriod(i)->GetStartTurn();
 			curYear += (totalTurns * tsrec->GetPeriod(i)->GetYearsPerTurn());
-			
+
 			turnsLeft -= totalTurns;
 		} else {
-			
+
 			curYear += (turnsLeft * tsrec->GetPeriod(i)->GetYearsPerTurn());
 		}
 	}
@@ -237,7 +236,6 @@ const char *diffutil_GetYearStringFromTurn(sint32 diff, sint32 turn)
 
 	return TurnYearStatus::GetYearString(year, turn);
 }
-
 
 uint32 Diffcly_Difficulty_GetVersion(void)
 {

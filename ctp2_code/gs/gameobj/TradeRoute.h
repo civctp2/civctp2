@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -34,9 +25,8 @@ enum ROUTE_TYPE {
 	ROUTE_TYPE_RESOURCE,
 	ROUTE_TYPE_FOOD,
 	ROUTE_TYPE_GOLD,
-	ROUTE_TYPE_SLAVE, 
+	ROUTE_TYPE_SLAVE,
 };
-
 
 #include "DB.h"     // StringId
 #include "ID.h"     // ID
@@ -46,7 +36,6 @@ template <class T> class DynamicArray;
 class TradeRouteData;
 class Unit;
 class MapPoint;
-
 
 class TradeRoute : public ID
 {
@@ -80,7 +69,7 @@ public:
 
 	BOOL PassesThrough(sint32 player) const;
 	void SetTariff(sint32 player, BOOL b);
-	
+
 	BOOL CrossesWater() const;
 
 	uint32 GetColor() const;
@@ -88,7 +77,6 @@ public:
 	void SetColor( uint32 color );
 	void SetOutlineColor( uint32 color );
 
-	
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
 	sint32 AddSelectedWayPoint(const MapPoint &pos);
@@ -104,7 +92,7 @@ public:
 	double GetCost() const;
 	const DynamicArray<MapPoint>* GetPath() const;
 	const DynamicArray<MapPoint>* GetSelectedPath() const;
-	
+
 	BOOL IsActive() const;
 	void Activate();
 	void Deactivate();
@@ -118,7 +106,7 @@ public:
 					double &cost);
 	void SetPath(DynamicArray<MapPoint> &fullpath,
 				 DynamicArray<MapPoint> &waypoints);
-	
+
 	void BeginTurn();
 
 	void DontAdjustPointsWhenKilled();

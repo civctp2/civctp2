@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_input.h"
-
 
 aui_Input::aui_Input()
 :	m_acquired	(false)

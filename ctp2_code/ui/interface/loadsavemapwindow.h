@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -39,7 +39,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -50,10 +50,10 @@ class LSMGameMapsListItem;
 class LSMSaveMapsListItem;
 
 enum LSMS_TYPE
-{ 
-	LSMS_FIRST=0, 
-	
-	LSMS_LOAD_GAMEMAP=0, 
+{
+	LSMS_FIRST=0,
+
+	LSMS_LOAD_GAMEMAP=0,
 	LSMS_SAVE_GAMEMAP,
 
 	LSMS_TOTAL
@@ -108,12 +108,11 @@ public:
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
-	
+
 	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
 
 	virtual ~LoadSaveMapWindow();
 
-	
 	void FillListOne(void);
 	void FillListTwo(GameMapInfo *info);
 
@@ -121,7 +120,6 @@ public:
 
 	void SetRadarMap(SaveMapInfo *info);
 
-	
 	void SelectCurrentGameMap(void);
 	void SelectCurrentSaveMap(void);
 
@@ -136,7 +134,6 @@ public:
 	BOOL GetSaveMapName(MBCHAR *name);
 	BOOL GetNote(MBCHAR *note);
 
-	
 	void EnableFields( BOOL enable );
 
 	GameMapInfo *GetGameMapInfo(void) const { return m_gameMapInfo; }
@@ -144,7 +141,6 @@ public:
 	void SetGameMapInfo(GameMapInfo *info);
 	void SetSaveMapInfo(SaveMapInfo *info);
 
-	
 	void CleanUpSaveMapInfo( void );
 	SaveMapInfo *GetSaveMapInfoToSave( void ) const { return m_saveMapInfoToSave; }
 
@@ -152,7 +148,6 @@ public:
 
 	C3TextField* GetTextField() { return m_gameMapTextBox; }
 
-	
 	c3_Button *GetDeleteButton( void ) { return m_deleteButton; }
 	ctp2_Button *GetOkButton( void ) { return Ok(); }
 	c3_Static *GetMapStatic( void ) { return m_mapTabImage; }
@@ -161,8 +156,7 @@ public:
 	c3_ListBox *GetListTwo( void ) const { return m_listTwo; }
 
 private:
-	
-	
+
 	BOOL CreateSaveMapInfoIfNeeded( SaveMapInfo *&info );
 
 	uint32			 m_type;
@@ -171,17 +165,14 @@ private:
 	GameMapInfo		*m_gameMapInfo;
 	SaveMapInfo		*m_saveMapInfo;
 
-	
-	
+
 	SaveMapInfo		*m_saveMapInfoRemember;
 	SaveMapInfo		*m_saveMapInfoToSave;
 
-	
 	PointerList<GameMapInfo> *m_fileList;
 
-	
 	c3_Static		*m_titlePanel;
-	
+
 	c3_Static		*m_gameMapText;
 	C3TextField		*m_gameMapTextBox;
 
@@ -193,11 +184,9 @@ private:
 
 	c3_ListBox		*m_listOne;
 	c3_ListBox		*m_listTwo;
-	
-	
+
 	aui_TabGroup	*m_tabGroup;
-	
-	
+
 	TextTab			*m_mapTab;
 	c3_Static		*m_mapTabImage;
 	aui_Image		*m_mapTabImageBackup;
@@ -224,7 +213,6 @@ private:
 	GameMapInfo	*m_info;
 
 };
-
 
 class LSMSaveMapsListItem : public c3_ListItem
 {

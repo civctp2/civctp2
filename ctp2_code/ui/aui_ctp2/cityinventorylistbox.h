@@ -11,7 +11,7 @@ class Unit;
 class CityInventoryListBox : public C3ListBox
 {
 public:
-	
+
 	CityInventoryListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -42,7 +42,6 @@ protected:
 
 	const Unit *m_unit;
 	sint32 m_buildMode;
-
 
 };
 

@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
@@ -43,7 +43,6 @@
 #include "squad_Strength.h"
 #include "StrategyRecord.h"
 
-
 #include <vector>
 #include <utility>
 #include <deque>
@@ -56,7 +55,6 @@
 class GoalRecord;
 class Scheduler;
 class Army;
-
 
 class Scheduler
 {
@@ -106,7 +104,7 @@ public:
 	typedef std::vector<Sorted_Agent_List>                                   Sorted_Agent_List_Vector;
 	typedef Sorted_Agent_List::iterator                                      Sorted_Agent_Iter;
 
-#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
+#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version
 	typedef std::deque<Scheduler>                                            Scheduler_Vector;
 #else
 	typedef std::vector<Scheduler>                                           Scheduler_Vector;
@@ -114,7 +112,6 @@ public:
 #endif
 
 	static sint32 s_max_match_list_cycles;
-
 
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
 
@@ -127,32 +124,25 @@ public:
 
 	static void CleanupAll(void);
 
-
 	static void       SetContactCache         (sint32 player);
 	static bool CachedHasContactWithExceptSelf(sint32 player1, sint32 player2);
-	
+
 	static void    SetIsNeutralRegardCache(sint32 player);
 	static bool CachedIsNeutralRegard     (sint32 player, sint32 opponent);
-	
-	
+
 	static void    SetIsAllyRegardCache(sint32 player);
 	static bool CachedIsAllyRegard     (sint32 player, sint32 ally);
 
-
 	Scheduler();
-
 
 
 	Scheduler(const Scheduler &scheduler);
 
 
-
 	~Scheduler();
 
-	
 	Scheduler& operator= (const Scheduler &scheduler);
 
-	
 	void Cleanup();
 
 #if 0
@@ -162,22 +152,18 @@ public:
 
 	void Initialize();
 
-	
 	void SetPlayerId(const PLAYER_INDEX &team_index);
 
 	void Process_Agent_Changes();
 	void Process_Goal_Changes();
 
-
 	void Reset_Agent_Execution();
 
 	void Sort_Goals();
 
-
 	void Match_Resources(const bool move_armies);
 
-	
-	
+
 	void Add_New_Goal(const Goal_ptr & new_goal);
 
 	void Add_New_Agent(const Agent_ptr & new_agent);
@@ -185,22 +171,16 @@ public:
 
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
 
-	
 	void Remove_Goals_Type(const GoalRecord *rec);
 
-	
-	
-	Squad_Strength GetMostNeededStrength() const;
 
+	Squad_Strength GetMostNeededStrength() const;
 
 	sint32 GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const;
 
-
 	Goal_ptr GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const;
 
-
 	sint16 CountGoalsOfType(const GOAL_TYPE & type) const;
-
 
 	void DisbandObsoleteArmies(const sint16 max_count);
 
@@ -208,7 +188,6 @@ public:
 
 	bool Prune_Goals();
 
-	
 	void SetArmyDetachState(const Army & army, const bool detach);
 	void Recompute_Goal_Strength();
 	void Compute_Agent_Strength();
@@ -227,15 +206,11 @@ protected:
 	    const bool       update_match_value = true
 	);
 
-
 	void Add_New_Matches_For_Agent(const Agent_ptr & agent);
-
 
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );
 
-
 	void Remove_Matches_For_Agent( const Agent_ptr & agnet );
-
 
 	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
@@ -243,10 +218,8 @@ protected:
 
 	bool Add_Transport_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
-	
 	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
 
-	
 	bool GetArmyDetachState(const Army & army) const;
 
 private:

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -29,19 +29,16 @@
 //
 //----------------------------------------------------------------------------
 
-
 #ifndef __AUI_TAB_H__
 #define __AUI_TAB_H__
 
-
 #include "aui_radio.h"
-
 
 
 class aui_Tab : public aui_Radio
 {
 public:
-	
+
 	aui_Tab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -93,5 +90,4 @@ protected:
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

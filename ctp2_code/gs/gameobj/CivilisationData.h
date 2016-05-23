@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -73,13 +73,12 @@ class	CivilisationData;
 class CivilisationData : public GameObj
 {
 public:
-	
-	
+
 
 	PLAYER_INDEX    m_owner;
 
 	uint8           m_cityname_count[k_MAX_CityName];
-	
+
 	sint32          m_civ;
 
 	GENDER          m_gender;
@@ -91,15 +90,15 @@ public:
 		            m_civilisation_name[k_MAX_NAME_LEN],
 		            m_country_name[k_MAX_NAME_LEN],
 		            m_singular_name[k_MAX_NAME_LEN];
-	
-	
 
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
 
 	friend class NetCivilization;
 
@@ -138,7 +137,6 @@ public:
 	sint32 GetCityStyle(void) const;
 	void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
 
-	
 	void ResetCiv(sint32 newCivIndex, GENDER gender);
 
 	void ResetStrings();

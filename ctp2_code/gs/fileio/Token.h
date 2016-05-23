@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - #pragma once commented out.
-// - Added new token so that the loading of default strings can be 
+// - Added new token so that the loading of default strings can be
 //   prevented. (Jan 30th 2006 Martin Gühmann)
 // - Removed unused tokens. (July 15th 2006 Martin Gühmann)
 // - Added new token so that the loading of default strings in scenarios
@@ -43,8 +43,8 @@
 
 class Token;
 
-enum TOKEN_TYPES 
-{ 
+enum TOKEN_TYPES
+{
 	TOKEN_STRING,
 	TOKEN_QUOTED_STRING,
 	TOKEN_MISSING_QUOTE,
@@ -111,7 +111,6 @@ enum TOKEN_TYPES
 	TOKEN_ANIM_TRANSPARENCIES,
 
 
-
 	TOKEN_TILESET_TILE,
 	TOKEN_TILESET_TILE_BASE_TYPE,
 	TOKEN_TILESET_TILE_TRANS_0,
@@ -143,20 +142,20 @@ enum TOKEN_TYPES
 
 #include "c3files.h"
 #include "dbtypes.h"
-class StringDB; 
+class StringDB;
 
-struct TokenData { 
-	sint32 tok; 
-	char keyword[k_MAX_NAME_LEN]; 
+struct TokenData {
+	sint32 tok;
+	char keyword[k_MAX_NAME_LEN];
 };
 
-class Token 
-{ 
+class Token
+{
 public:
 	Token(char const * fn, C3DIR dir, sint32 a_Count = 0, TokenData * il = NULL);
     /// @todo Remove when no longer referenced (backwards compatibility)
 	Token(char *fn, sint32, TokenData *il, C3DIR dir);
-	~Token(); 
+	~Token();
 
     static char const * GetKeyword(sint32 tok);
     static bool IsWhitespace(int c);
@@ -172,29 +171,29 @@ public:
 
 	sint32 Next();
 	void GetString(char *str);
-	void GetNumber(sint32 &n); 
+	void GetNumber(sint32 &n);
 	void GetFloat(double &n);
 	void SetCheckScenario(bool checkScenario){ m_checkScenario = checkScenario; };
-	
-	char const * ErrStr(); 
-	
-private:	
+
+	char const * ErrStr();
+
+private:
 	FILE			*m_fin;
 	char			m_filename[_MAX_PATH];
-	char 			m_buf[k_MAX_TOKEN_LEN]; 
-	sint32			m_len, 
-					m_index, 
-					m_val_string_len, 
-					m_current_type; 
+	char 			m_buf[k_MAX_TOKEN_LEN];
+	sint32			m_len,
+					m_index,
+					m_val_string_len,
+					m_current_type;
 	double			m_val_number ;
-	char			m_val_string[k_MAX_TEXT_LEN]; 
+	char			m_val_string[k_MAX_TEXT_LEN];
 	/// Last read character (or EOF)
-	int 			m_cur; 
+	int 			m_cur;
 	char			m_estr[_MAX_PATH + 10];
-	
-	sint32			m_num_it; 
+
+	sint32			m_num_it;
 	TokenData		*m_imported_tokens;
-	
+
 	C3DIR			m_dir;
 	FILE			*m_importFile;
 
@@ -202,12 +201,10 @@ private:
 	sint32			m_savedLineNumber;
 	FILE			*m_savedFin;
 	bool			m_checkScenario;
-	
-	
+
 	friend bool token_ParseValNext(Token *aToken, sint32 t, sint32 &val);
 	friend bool token_ParseFloatNext(Token *aToken, sint32 t, double &val);
 };
-
 
 char const *    token_GetKeyword(sint32 i);
 bool            token_ParseKeywordNext(Token *aToken, sint32 t);

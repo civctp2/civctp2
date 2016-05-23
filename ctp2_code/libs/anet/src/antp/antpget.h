@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ typedef struct {
 	long length;					/* length returned in response header */
 	char buf[antpget_HEADER_MAXLEN];	/* buffer containing header */
 	int nlines;							/* number of lines parsed */
-	char *line[antpget_HEADER_MAXLINES];	/* pointers to lines in buf, 
+	char *line[antpget_HEADER_MAXLINES];	/* pointers to lines in buf,
 											 * each terminated by a \0.
 											 */
 } antpget_header_t;
@@ -118,7 +118,7 @@ dp_result_t antpget_requestFirst(antpget_t *antpget);
  before calling again.  dp_RES_EMPTY indicates parsing is done and the
  caller can move on to calling antpget_readData.
  On dp_RES_EMPTY, a pointer to the parsed header is returned in phdr.
- 
+
  In normal usage, returns:
 	dp_RES_OK if any more of the header was processed,
 	dp_RES_AGAIN if not, but the header has yet to be terminated,
@@ -147,7 +147,7 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr);
 	dp_RES_EMPTY if the current response's data is finished
 		(the last of the data, if any, is returned as well),
 	dp_RES_HOST_NOT_RESPONDING if the antp connection was lost.
- Abnormal returns include the standard dp_RES_BAD and dp_RES_BUG and: 
+ Abnormal returns include the standard dp_RES_BAD and dp_RES_BUG and:
 	dp_RES_NOTYET if the header has not been parsed,
 	dp_RES_BADSIZE if the antp server returned an invalid header.
 --------------------------------------------------------------------------*/

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : SLIC command handling 
+// Description  : SLIC command handling
 //
 //----------------------------------------------------------------------------
 //
@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,7 +29,6 @@
 // - Fixed broken government message with white text. April 14th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "c3errors.h"
@@ -46,7 +45,6 @@
 #include "StrDB.h"
 #include "SlicDBConduit.h"
 #include "profileDB.h"
-
 
 
 PointerList<SlicSymbolData> *s_symbolList = NULL;
@@ -102,27 +100,23 @@ int sliccmd_call(char *funcName)
 
 int sliccmd_ref_has_int_value(char *structName, char *memberName)
 {
-	
+
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
 	if(!sym) {
 		return 0;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_STRUCT) {
 		return 0;
 	}
 
-	
 	SlicStructInstance *inst = sym->GetStruct();
-	
-	
+
 	Assert(inst);
 
 	if(!inst)
 		return 0;
 
-	
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		return 0;
@@ -130,7 +124,6 @@ int sliccmd_ref_has_int_value(char *structName, char *memberName)
 
 	sliccmd_add_symbol_used(member);
 
-	
 	sint32 value;
 	// Added by Martin Gühmann
 	if(!member->GetIntValue(value)
@@ -146,7 +139,6 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 {
 	char errbuf[1024];
 
-	
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", structName);
@@ -154,23 +146,19 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 		return 0;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_STRUCT) {
 		sprintf(errbuf, "%s is not a structure", structName);
 		scerror(errbuf);
 		return 0;
 	}
 
-	
 	SlicStructInstance *inst = sym->GetStruct();
-	
-	
+
 	Assert(inst);
 
 	if(!inst)
 		return 0;
 
-	
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		sprintf(errbuf, "Struct %s has no member named %s", structName, memberName);
@@ -180,7 +168,6 @@ int sliccmd_get_ref_value(char *structName, char *memberName)
 
 	sliccmd_add_symbol_used(member);
 
-	
 	sint32 value;
 	if(!member->GetIntValue(value)) {
 		sprintf(errbuf, "%s.%s is not an integer", structName, memberName);
@@ -194,7 +181,6 @@ void *sliccmd_get_ref_sym(char *structName, char *memberName)
 {
 	char errbuf[1024];
 
-	
 	SlicSymbolData *sym = sliccmd_get_symbol(structName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", structName);
@@ -202,23 +188,19 @@ void *sliccmd_get_ref_sym(char *structName, char *memberName)
 		return 0;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_STRUCT) {
 		sprintf(errbuf, "%s is not a structure", structName);
 		scerror(errbuf);
 		return 0;
 	}
 
-	
 	SlicStructInstance *inst = sym->GetStruct();
-	
-	
+
 	Assert(inst);
 
 	if(!inst)
 		return 0;
 
-	
 	SlicSymbolData *member = inst->GetMemberSymbolByName(memberName);
 	if(!member) {
 		sprintf(errbuf, "Struct %s has no member named %s", structName, memberName);
@@ -235,7 +217,6 @@ int sliccmd_array_lookup(char *arrayName, int index)
 {
 	char errbuf[1024];
 
-	
 	SlicSymbolData *sym = sliccmd_get_symbol(arrayName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", arrayName);
@@ -243,7 +224,6 @@ int sliccmd_array_lookup(char *arrayName, int index)
 		return 0;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
 		scerror(errbuf);
@@ -274,12 +254,10 @@ int sliccmd_array_lookup(char *arrayName, int index)
 	return 0;
 }
 
-
 void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberName)
 {
 	char errbuf[1024];
 
-	
 	SlicSymbolData *sym = sliccmd_get_symbol(arrayName);
 	if(!sym) {
 		sprintf(errbuf, "Symbol %s not found", arrayName);
@@ -287,7 +265,6 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 		return 0;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
 		scerror(errbuf);
@@ -418,7 +395,6 @@ void *sliccmd_array_lookup_sym(char *arrayName, int index)
 		return NULL;
 	}
 
-	
 	if(sym->GetType() != SLIC_SYM_ARRAY) {
 		sprintf(errbuf, "%s is not an array", arrayName);
 		scerror(errbuf);
@@ -458,7 +434,7 @@ void sliccmd_parse_done(struct sliccmdExpValue *v, int action)
 		strcpy(sliccmd_output, "<Err>");
 		return;
 	}
-	
+
 	if(action == SLICCMD_REPLACE) {
 		bool expanded = false;
 		if(sliccmd_cat_string[0] != 0) {
@@ -485,7 +461,7 @@ void sliccmd_parse_done(struct sliccmdExpValue *v, int action)
 		delete sym;
 	}
 }
-			
+
 void sliccmd_assign(void *vsym, struct sliccmdExpValue *v)
 {
 	SlicSymbolData *sym = (SlicSymbolData *)vsym;
@@ -517,7 +493,7 @@ void sliccmd_clear_symbols()
 {
 	if (s_symbolList)
     {
-    	while (s_symbolList->GetHead()) 
+    	while (s_symbolList->GetHead())
         {
 		    s_symbolList->RemoveHead();
         }
@@ -534,7 +510,7 @@ void sliccmd_add_symbol_used(SlicSymbolData *sym)
 
 	PointerList<SlicSymbolData>::Walker walk(s_symbolList);
 	while(walk.IsValid()) {
-		
+
 		if(walk.GetObj() == sym)
 			return;
 		walk.Next();
@@ -555,7 +531,6 @@ void sliccmd_add_watch(SlicSymbolWatchCallback *watch)
 		walk.Next();
 	}
 }
-
 
 
 SlicSymbolData *sliccmd_get_symbol(char *name)

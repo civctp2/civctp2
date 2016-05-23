@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,6 @@ extern	Player	**g_player ;
 
 extern	StringDB	*g_theStringDB ;
 
-
 extern RandomGenerator *g_rand;
 
 extern ProfileDB *g_theProfileDB;
@@ -80,7 +79,6 @@ CivilisationPool::CivilisationPool(CivArchive &archive) : ObjPool(k_BIT_GAME_OBJ
 	m_usedCivs = new SimpleDynamicArray<sint32>;
 	Serialize(archive) ;
 }
-
 
 CivilisationPool::~CivilisationPool(void)
 {
@@ -188,7 +186,7 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, sint32 requiredC
 	}
 
 	CivilisationData *	newData = new CivilisationData(newCivilisation, owner, civ, gender);
-	
+
 	m_usedCivs->Insert(civ);
 
 	StringId	strId = (gender == GENDER_MALE)
@@ -199,7 +197,6 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, sint32 requiredC
 
 	strId = g_theCivilisationDB->Get(civ)->GetPersonalityDescription();
 	newData->SetPersonalityDescription(g_theStringDB->GetNameStr(strId));
-
 
 	strId = g_theCivilisationDB->Get(civ)->GetPluralCivName();
 	newData->SetPluralCivName(g_theStringDB->GetNameStr(strId));
@@ -239,13 +236,12 @@ void CivilisationPool::Release(sint32 const & civ)
 {
 	sint32 const	usedCount = m_usedCivs->Num();
 
-	for (sint32 i = 0; i < usedCount; ++i) 
+	for (sint32 i = 0; i < usedCount; ++i)
 	{
-		if (civ == m_usedCivs->Access(i)) 
+		if (civ == m_usedCivs->Access(i))
 		{
 			m_usedCivs->DelIndex(i);
 			return;
 		}
 	}
 }
-

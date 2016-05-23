@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
@@ -20,7 +9,6 @@
 #include "pixelutils.h"
 #include "primitives.h"
 #include "colorset.h"   // g_colorSet
-
 
 aui_TipWindow::aui_TipWindow(
 	AUI_ERRCODE *retval,
@@ -36,7 +24,6 @@ aui_TipWindow::aui_TipWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_TipWindow::aui_TipWindow(
@@ -58,7 +45,6 @@ aui_TipWindow::aui_TipWindow(
 }
 
 
-
 AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -69,11 +55,9 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	MBCHAR tipBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( tipBlock, "%s.%s", ldlBlock, k_AUI_TIPWINDOW_LDL_TIP );
 
-	
 
     if (aui_Ldl::FindDataBlock(tipBlock))
 	{
@@ -88,7 +72,6 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 
 		m_staticTip->TextReloadFont();
 
-		
 		aui_Ldl::Remove( m_staticTip );
 		m_allocatedTip = TRUE;
 		AddChild( m_staticTip );
@@ -106,17 +89,16 @@ AUI_ERRCODE aui_TipWindow::SetTipText(MBCHAR *text)
 
 	sint32			width = font->GetStringWidth(text);
 	sint32			height = font->GetMaxHeight();
-	
+
 	width += 10;
 	height += 2;
-	
+
 	Resize(width, height);
 
 	m_staticTip->Resize(m_width, m_height);
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_TipWindow::InitCommon( void )
 {
@@ -127,7 +109,6 @@ AUI_ERRCODE aui_TipWindow::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_TipWindow::~aui_TipWindow()
@@ -142,7 +123,7 @@ aui_TipWindow::~aui_TipWindow()
 
 AUI_ERRCODE aui_TipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;

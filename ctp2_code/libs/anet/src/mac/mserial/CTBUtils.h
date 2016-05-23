@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -30,6 +30,5 @@ Boolean InitializeCommToolBox(void);
 OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection);
 
 void TearDownCTB(void);
-
 
 #endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,6 @@
 #include "player.h"         // g_player
 #include "SelItem.h"        // g_selected_item
 
-
 bool Army::IsValid() const
 {
 	return g_theArmyPool->IsValid(m_id);
@@ -60,7 +59,7 @@ void Army::KillArmy()
 	AccessData()->StopPirating();
 
 	Army tmp(*this);
-	tmp.SetRemoveCause(cause); 
+	tmp.SetRemoveCause(cause);
 	tmp.RemoveAllReferences();
 }
 
@@ -79,7 +78,7 @@ void Army::RemoveAllReferences()
 
 void Army::FastKill()
 {
-	if (IsValid()) 
+	if (IsValid())
 	{
 		g_theArmyPool->Del(*this);
 	}
@@ -163,7 +162,6 @@ void Army::GetPos(MapPoint &pos) const
 	AccessData()->GetPos(pos);
 }
 
-
 uint32 Army::GetMovementType() const
 {
 	return GetData()->GetMovementType();
@@ -173,7 +171,6 @@ bool Army::CanEnter(const MapPoint &point) const
 {
 	return AccessData()->CanEnter(point);
 }
-
 
 bool Army::IsAtLeastOneMoveLand() const
 {
@@ -194,7 +191,6 @@ bool Army::IsAtLeastOneMoveAir() const
 {
 	return AccessData()->IsAtLeastOneMoveAir();
 }
-
 
 bool Army::IsAtLeastOneMoveMountain() const
 {
@@ -227,7 +223,6 @@ bool Army::IsIgnoresZOC() const
 	return GetData()->IsIgnoresZOC();
 }
 
-
 bool Army::CanSettle(const MapPoint &pos) const
 {
 	return GetData()->CanSettle(pos);
@@ -237,7 +232,6 @@ bool Army::CanSettle() const
 {
 	return GetData()->CanSettle();
 }
-
 
 bool Army::IsOccupiedByForeigner(const MapPoint &pos)
 {
@@ -258,7 +252,6 @@ bool Army::IsEnemy(Army &defender) const
 {
 	return GetData()->IsEnemy(defender.GetOwner());
 }
-
 
 double Army::GetHPModifier()
 {
@@ -298,9 +291,8 @@ bool Army::IsPatrolling() const
 void Army::SetPatrolling(bool p)
 {
 	Assert(false);
-	
-}
 
+}
 
 void Army::GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis)
 {
@@ -345,12 +337,10 @@ bool Army::IsVisible(sint32 player)
 	return AccessData()->IsVisible(player);
 }
 
-
 sint32 Army::GetCost()
 {
 	return AccessData()->GetCost();
 }
-
 
 bool Army::CanFranchise(double &chance, sint32 &uindex)
 {
@@ -394,21 +384,20 @@ bool Army::CanPlantNuke(double &chance, double &escape_chance)
 	return AccessData()->CanPlantNuke(chance, escape_chance);
 }
 
-
-bool Army::CanSlaveRaid(double &success, double &death, 
+bool Army::CanSlaveRaid(double &success, double &death,
 						sint32 &timer, sint32 &amount)
 {
 	return AccessData()->CanSlaveRaid(success, death,
 									  timer, amount);
 }
-bool Army::IsSlaveRaidPossible(const MapPoint &point, 
-							   double &success, 
-							   double &death, 
-							   sint32 &timer, 
+bool Army::IsSlaveRaidPossible(const MapPoint &point,
+							   double &success,
+							   double &death,
+							   sint32 &timer,
 							   sint32 &amount,
-							   sint32 &uindex, 
-							   bool &target_is_city, 
-							   Unit &target_city, 
+							   sint32 &uindex,
+							   bool &target_is_city,
+							   Unit &target_city,
 							   Unit &home_city)
 {
 	return AccessData()->IsSlaveRaidPossible(point,
@@ -421,7 +410,6 @@ bool Army::IsSlaveRaidPossible(const MapPoint &point,
 											 target_city,
 											 home_city);
 }
-
 
 bool Army::CanEnslaveSettler(sint32 &uindex)
 {
@@ -443,7 +431,6 @@ bool Army::CanInciteUprising(sint32 &uindex)
 {
 	return AccessData()->CanInciteUprising(uindex);
 }
-
 
 bool Army::CanEstablishEmbassy(sint32 &uindex)
 {
@@ -484,7 +471,6 @@ bool Army::CanConvertCity(const MapPoint &point)
 {
 	return AccessData()->CanConvertCity(point);
 }
-
 
 bool Army::CanReformCity(sint32 &uindex, const MapPoint &point)
 {
@@ -535,7 +521,6 @@ bool Army::AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex)
 {
 	return AccessData()->AbleToPlantNukeTarget(point, uindex);
 }
-
 
 bool Army::AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex)
 {
@@ -649,12 +634,10 @@ bool Army::GetFirstMoveThisTurn() const
 	return AccessData()->GetFirstMoveThisTurn();
 }
 
-
 bool Army::HasLeftMap() const
 {
 	return AccessData()->HasLeftMap();
 }
-
 
 void Army::CurMinMovementPoints(double &cur) const
 {
@@ -665,7 +648,6 @@ void Army::MinMovementPoints(double &cur) const
 {
 	AccessData()->MinMovementPoints(cur);
 }
-
 
 bool Army::CanBombard(const MapPoint &point)
 {
@@ -786,7 +768,6 @@ bool Army::CanMoveIntoThisTransport(const Army &transports)
 	return AccessData()->CanMoveIntoThisTransport(*transports.AccessData());
 }
 
-
 void Army::ResetPos()
 {
 	AccessData()->ResetPos();
@@ -812,22 +793,20 @@ void Army::AddDeath(const Unit &u, CAUSE_REMOVE_ARMY cause, PLAYER_INDEX who)
 	AccessData()->AddDeath(u, cause, who);
 }
 
-
 sint32 Army::GetMinFuel() const
 {
 	return AccessData()->GetMinFuel();
 }
 
-void Army::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const 
+void Army::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const
 {
-    GetData()->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty); 
+    GetData()->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
 }
 
 bool Army::CanMove() const
 {
 	return AccessData()->CanMove();
 }
-
 
 bool Army::CanBeachAssault()
 {
@@ -853,7 +832,6 @@ bool Army::CanCloak()
 {
 	return AccessData()->CanCloak();
 }
-
 
 bool Army::CanCreateFranchise( double &chance )
 {
@@ -894,7 +872,7 @@ void Army::GetCurrentHP
 (
 	sint32 &	count,
 	sint32		unit_type[MAX_UNIT_COUNT],
-	sint32		unit_hp[MAX_UNIT_COUNT] 
+	sint32		unit_hp[MAX_UNIT_COUNT]
 ) const
 {
 	GetData()->GetCurrentHP(count, unit_type, unit_hp);
@@ -945,4 +923,3 @@ bool Army::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost )
 {
 	return ArmyData::GetInciteUprisingCost( point, attackCost );
 }
-

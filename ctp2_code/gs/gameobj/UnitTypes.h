@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
 //
@@ -48,7 +48,7 @@
 #pragma once
 #endif
 
-#ifndef __UNITENUMS_H__ 
+#ifndef __UNITENUMS_H__
 #define __UNITENUMS_H__ 1
 
 enum OPTIMISE_STATE
@@ -65,7 +65,7 @@ enum OPTIMISE_STATE
 enum CITY_ATTITUDE
 {
 	CITY_ATTITUDE_CONTENT,
-	CITY_ATTITUDE_WE_LOVE_THE_KING, 
+	CITY_ATTITUDE_WE_LOVE_THE_KING,
 	CITY_ATTITUDE_HAPPY,
 	CITY_ATTITUDE_DISORDER,
 };
@@ -94,7 +94,7 @@ enum UPRISING_CAUSE
 	UPRISING_CAUSE_SLAVE_STARVED,
 	UPRISING_CAUSE_UNGUARDED_SLAVES,
 	UPRISING_CAUSE_INCITED,
-	UPRISING_CAUSE_INTERNAL, 
+	UPRISING_CAUSE_INTERNAL,
 };
 
 enum POP_TYPE
@@ -131,7 +131,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_MOVE_TO,                      //  8
 	UNIT_ORDER_TELEPORT_TO,                  //  9
 
-	
 	UNIT_ORDER_EXPEL_TO,                     // 10
 	UNIT_ORDER_GROUP,                        // 11
 	UNIT_ORDER_UNGROUP,                      // 12
@@ -143,7 +142,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_INVESTIGATE_READINESS,        // 18
 	UNIT_ORDER_BOMBARD,                      // 19
 
-	
 	UNIT_ORDER_SUE,                          // 20
 	UNIT_ORDER_FRANCHISE,                    // 21
 	UNIT_ORDER_SUE_FRANCHISE,                // 22
@@ -155,7 +153,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_SLAVE_RAID,                   // 28
 	UNIT_ORDER_ENSLAVE_SETTLER,              // 29
 
-	
 	UNIT_ORDER_UNDERGROUND_RAILWAY,          // 30
 	UNIT_ORDER_INCITE_UPRISING,              // 31
 	UNIT_ORDER_BIO_INFECT,                   // 32
@@ -167,7 +164,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_CREATE_PARK,                  // 38
 	UNIT_ORDER_PILLAGE,                      // 39
 
-	
 	UNIT_ORDER_INJOIN,                       // 40
 	UNIT_ORDER_INTERCEPT_TRADE,              // 41
 	UNIT_ORDER_PARADROP_MOVE,                // 42
@@ -179,7 +175,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_BOARD_TRANSPORT,              // 48
 	UNIT_ORDER_WAKE_UP,                      // 49
 
-	
 	UNIT_ORDER_PILLAGE_UNCONDITIONALLY,      // 50
 	UNIT_ORDER_MOVE_THEN_UNLOAD,             // 51
 	UNIT_ORDER_ADVERTISE,                    // 52
@@ -191,7 +186,6 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_TARGET,                       // 58
 	UNIT_ORDER_CLEAR_TARGET,                 // 59
 
-	
 	UNIT_ORDER_PLAGUE,                       // 60
 	UNIT_ORDER_VICTORY_MOVE,                 // 61
 	UNIT_ORDER_SETTLE_IN_CITY,               // 62

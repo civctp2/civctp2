@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "c3ui.h"
 #include "aui_button.h"
@@ -44,7 +43,6 @@
 
 #include "StrDB.h"
 
-
 #include "message.h"
 #include "MessageData.h"
 #include "messageactions.h"
@@ -56,7 +54,6 @@
 
 #include "TurnYearStatus.h"
 
-
 extern C3UI			*g_c3ui;
 extern StringDB		*g_theStringDB;
 
@@ -65,7 +62,6 @@ extern MessagePool *g_theMessagePool;
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
-
 
 MessageWindow::MessageWindow(
 	AUI_ERRCODE *retval,
@@ -84,8 +80,7 @@ MessageWindow::MessageWindow(
 }
 
 
-
-AUI_ERRCODE MessageWindow::InitCommon( Message data, 
+AUI_ERRCODE MessageWindow::InitCommon( Message data,
 									   MessageIconWindow *iconWindow )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -132,7 +127,7 @@ AUI_ERRCODE MessageWindow::InitCommon( Message data,
 	errcode = CreateGreatLibraryButton( windowBlock );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
-	
+
 	errcode = CreateEyePointBox( windowBlock );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
@@ -145,8 +140,8 @@ AUI_ERRCODE MessageWindow::InitCommon( Message data,
 
 
 
-	
-	
+
+
 	MakeSureSurfaceIsValid( );
 
 	errcode = CreateStandardTextBox( windowBlock );
@@ -157,14 +152,12 @@ AUI_ERRCODE MessageWindow::InitCommon( Message data,
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
 
-	
 	data.AccessData()->SetMessageWindow( this );
 
 	SetDynamic(TRUE);
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE MessageWindow::CreateWindowEdges( MBCHAR *ldlBlock )
 {
@@ -243,10 +236,8 @@ AUI_ERRCODE MessageWindow::CreateWindowEdges( MBCHAR *ldlBlock )
 	AddControl( m_bottomBar );
 
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
@@ -262,8 +253,7 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 	m_turnText->TextFlags() = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT | k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
 
 	AddControl( m_turnText );
-	
-	
+
 	MBCHAR	copyBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if(m_message.AccessData()->GetTitle())
@@ -284,14 +274,12 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE MessageWindow::CreateStandardTextBox( MBCHAR *ldlBlock )
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	sprintf( textBlock, "%s.%s", ldlBlock, "MessageTextBox" );
-
 
 	m_messageText = new aui_HyperTextBox( &errcode, aui_UniqueId(), textBlock );
 	Assert( AUI_NEWOK( m_messageText, errcode ));
@@ -300,20 +288,17 @@ AUI_ERRCODE MessageWindow::CreateStandardTextBox( MBCHAR *ldlBlock )
 	m_messageText->TextFlags() = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT | k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
 
 	AddControl( m_messageText );
-	
-	
+
 
 	errcode = m_messageText->SetHyperText( m_message.GetText( ));
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
 
 
-
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE MessageWindow::CreateStandardDismissButton( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateStandardDismissButton( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -337,18 +322,15 @@ AUI_ERRCODE MessageWindow::CreateStandardDismissButton( MBCHAR *ldlBlock )
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardMinimizeButton" );
 	m_minimizeIcon = new aui_Button( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK( m_minimizeIcon, errcode ));
 	if ( !AUI_NEWOK( m_minimizeIcon, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
-	
 
 	errcode = AddControl( m_minimizeIcon );
 	Assert( errcode == AUI_ERRCODE_OK );
@@ -366,15 +348,14 @@ AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton( MBCHAR *ldlBlock )
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateGreatLibraryButton( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateGreatLibraryButton( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( g_theMessagePool->IsValid(m_message) && 
+	if ( g_theMessagePool->IsValid(m_message) &&
 		 m_message.AccessData()->GetGreatLibraryButton() ) {
-		
+
 		sprintf( buttonBlock, "%s.%s", ldlBlock, "GreatLibraryButton" );
 		m_libraryIcon = new aui_Button( &errcode, aui_UniqueId(), buttonBlock );
 		Assert( AUI_NEWOK( m_libraryIcon, errcode ));
@@ -395,8 +376,7 @@ AUI_ERRCODE MessageWindow::CreateGreatLibraryButton( MBCHAR *ldlBlock )
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateEyePointBox( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateEyePointBox( MBCHAR *ldlBlock )
 {
 	if(!g_theMessagePool->IsValid(m_message))
 		return AUI_ERRCODE_OK;
@@ -417,52 +397,46 @@ AUI_ERRCODE MessageWindow::CreateEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateStandardEyePointBox( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateStandardEyePointBox( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-	m_messageEyePoint.m_messageEyePointStandard = new MessageEyePointStandard( &errcode, 
+	m_messageEyePoint.m_messageEyePointStandard = new MessageEyePointStandard( &errcode,
 						ldlBlock, this );
 	Assert( m_messageEyePoint.m_messageEyePointStandard != NULL );
-	if ( m_messageEyePoint.m_messageEyePointStandard == NULL ) 
+	if ( m_messageEyePoint.m_messageEyePointStandard == NULL )
 		return AUI_ERRCODE_MEMALLOCFAILED;
-
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateDropdownEyePointBox( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateDropdownEyePointBox( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-	m_messageEyePoint.m_messageEyePointDropdown = new MessageEyePointDropdown( &errcode, 
+	m_messageEyePoint.m_messageEyePointDropdown = new MessageEyePointDropdown( &errcode,
 						ldlBlock, this );
 	Assert( m_messageEyePoint.m_messageEyePointDropdown != NULL );
-	if ( m_messageEyePoint.m_messageEyePointDropdown == NULL ) 
+	if ( m_messageEyePoint.m_messageEyePointDropdown == NULL )
 		return AUI_ERRCODE_MEMALLOCFAILED;
-	
-	
+
 	return AUI_ERRCODE_OK;
 }
 
 
-
-AUI_ERRCODE MessageWindow::CreateListboxEyePointBox( MBCHAR *ldlBlock ) 
+AUI_ERRCODE MessageWindow::CreateListboxEyePointBox( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-	m_messageEyePoint.m_messageEyePointListbox = new MessageEyePointListbox( &errcode, 
+	m_messageEyePoint.m_messageEyePointListbox = new MessageEyePointListbox( &errcode,
 						ldlBlock, this );
 	Assert( m_messageEyePoint.m_messageEyePointListbox != NULL );
-	if ( m_messageEyePoint.m_messageEyePointListbox == NULL ) 
+	if ( m_messageEyePoint.m_messageEyePointListbox == NULL )
 		return AUI_ERRCODE_MEMALLOCFAILED;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE MessageWindow::CreateResponses( MBCHAR *ldlBlock )
@@ -484,34 +458,31 @@ AUI_ERRCODE MessageWindow::CreateResponses( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE MessageWindow::CreateSelectResponses( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	m_messageResponse.m_messageResponseStandard = new MessageResponseStandard( &errcode, 
+	m_messageResponse.m_messageResponseStandard = new MessageResponseStandard( &errcode,
 						ldlBlock, this );
 	Assert( m_messageResponse.m_messageResponseStandard != NULL );
-	if ( m_messageResponse.m_messageResponseStandard == NULL ) 
+	if ( m_messageResponse.m_messageResponseStandard == NULL )
 		return AUI_ERRCODE_MEMALLOCFAILED;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE MessageWindow::CreateSubmitResponses( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-	m_messageResponse.m_messageResponseDropdown = new MessageResponseDropdown( &errcode, 
+	m_messageResponse.m_messageResponseDropdown = new MessageResponseDropdown( &errcode,
 						ldlBlock, this );
 	Assert( m_messageResponse.m_messageResponseDropdown != NULL );
-	if ( m_messageResponse.m_messageResponseDropdown == NULL ) 
+	if ( m_messageResponse.m_messageResponseDropdown == NULL )
 		return AUI_ERRCODE_MEMALLOCFAILED;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE MessageWindow::ShowWindow( BOOL show )
@@ -527,18 +498,18 @@ AUI_ERRCODE MessageWindow::ShowWindow( BOOL show )
 
 
 
-		
-		
+
+
 
 		sint32 x,y;
-		
+
 		if(g_ScreenWidth < 1024) {
 			x = 0,
 			y = 50;
 		} else {
 			x = 0,
 			y = 32;
-		}			
+		}
 
 		Move(x, y);
 
@@ -546,7 +517,7 @@ AUI_ERRCODE MessageWindow::ShowWindow( BOOL show )
 		Assert(errcode == AUI_ERRCODE_OK);
 
 		g_currentMessageWindow = this;
-		
+
 		AddBordersToUI();
 		Show();
 	} else {
@@ -560,7 +531,6 @@ AUI_ERRCODE MessageWindow::ShowWindow( BOOL show )
 	Assert(errcode == AUI_ERRCODE_OK);
 	return errcode;
 }
-
 
 
 MessageOpenAction *MessageWindow::GetMessageOpenAction( void )
@@ -591,7 +561,7 @@ MessageOpenAction *MessageWindow::GetMessageOpenAction( void )
 
 
 
-MessageWindow::~MessageWindow () 
+MessageWindow::~MessageWindow ()
 {
 	if ( g_c3ui->GetWindow( this->Id() ))
 		g_c3ui->RemoveWindow( this->Id());
@@ -609,8 +579,7 @@ MessageWindow::~MessageWindow ()
 	}
 
 	if (g_theMessagePool->IsValid(m_message)) {
-		
-		
+
 		m_message.AccessData()->SetMessageWindow(NULL);
 	}
 
@@ -653,38 +622,38 @@ MessageWindow::~MessageWindow ()
 
 
 
-	
+
 	if ( m_minimizeIcon )
 	{
 		delete m_minimizeIcon;
 		m_minimizeIcon = NULL;
 	}
-	
+
 	if ( m_minimizeAction )
 	{
 		delete m_minimizeAction;
 		m_minimizeAction = NULL;
 	}
-	
+
 	if ( m_dismissIcon )
 	{
 		delete m_dismissIcon;
 		m_dismissIcon = NULL;
 	}
-	
+
 	if ( m_dismissAction )
 	{
 		delete m_dismissAction;
 		m_dismissAction = NULL;
 	}
-	
+
 	if ( m_libraryIcon )
 	{
 		delete m_libraryIcon;
 		m_libraryIcon = NULL;
 	}
 
-	if ( m_libraryAction ) 
+	if ( m_libraryAction )
 	{
 		delete m_libraryAction;
 		m_libraryAction = NULL;
@@ -702,13 +671,11 @@ MessageWindow::~MessageWindow ()
 		m_messageResponse.m_messageResponseStandard = NULL;
 	}
 
-	
-	
+
 	if(g_currentMessageWindow == this) {
 		g_currentMessageWindow = NULL;
 	}
 }
-
 
 void MessageWindow::BringBorderToTop()
 {
@@ -726,10 +693,9 @@ void MessageWindow::BringBorderToTop()
 }
 
 
-
 AUI_ERRCODE MessageWindow::AddBordersToUI()
 {
-	
+
 
 
 
@@ -760,7 +726,6 @@ AUI_ERRCODE MessageWindow::AddBordersToUI()
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE MessageWindow::RemoveBordersFromUI()
@@ -796,4 +761,3 @@ AUI_ERRCODE MessageWindow::RemoveBordersFromUI()
 
 	return AUI_ERRCODE_OK;
 }
-

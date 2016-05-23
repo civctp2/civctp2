@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ MSVC's warning level is set to 4.
 #include "wstcp.h"
 
 /* fancy dance to allow including dp.h */
-#define DEBUG_MODULE 0		
+#define DEBUG_MODULE 0
 #define dp_dprintf __bogus_dprintf
 
 #include "dp.h"		/* for the ping packet stuff; includes ddprint.h */
@@ -107,7 +107,6 @@ FILE *logpkt_fp = NULL;
 #pragma warning( disable : 4514 )
 #endif
 
-
 /**
 * Constants
 */
@@ -117,13 +116,11 @@ FILE *logpkt_fp = NULL;
 /* The maximum number of nodes we can communicate with */
 #define TCP_MAX_PEERS	100
 
-
 /**
 * Global Data
 */
 
 static TCPINSTANCE *pTcp;
-
 
 /**
 * Methods
@@ -155,7 +152,6 @@ tcp2commHdl(
 	return ((playerHdl_t) h);
 }
 
-
 /*****************************************************************************
  Convert a playerHdl_t to the corresponding TCPHANDLE.
 *****************************************************************************/
@@ -179,7 +175,6 @@ commHdl2tcp(
 	DPRINT(("\n"));
 	return ((TCPHANDLE) h);
 }
-
 
 /*****************************************************************************
  Do nothing; return TRUE.  If resp is not null, copy TCP_RES_OK
@@ -247,7 +242,7 @@ commInit(
 #ifdef LOGPKT_ENABLED
 	logpkt_fp = logPkt_open();
 #endif
-	
+
 	/* Protect against invalid parameters */
 	if (NULL == resp)
 	{
@@ -306,10 +301,9 @@ commInit(
 	return TRUE;
 }
 
-
 /*****************************************************************************
- Tear down the communications driver.  
-  
+ Tear down the communications driver.
+
  WARNING: Call this function only once, only after calling commInit().
 
  Return TRUE if successful, FALSE otherwise.  If resp is not NULL,
@@ -336,7 +330,6 @@ commTerm(
 	DPRINT(("@\n"));
 	return TRUE;
 }
-
 
 /*****************************************************************************
  Retrieve info about the communications driver.
@@ -394,14 +387,13 @@ commDriverInfo(
 	return (TRUE);
 }
 
-
 /*****************************************************************************
  Retrieve info about a player, including ourselves.
 
  The player info is copied into the appropriate fields in resp.  The
  fields and values are:
 	status (comm_status_t): TCP_RES_OK on success, TCP_RES_BAD for
-				invalid parameters, a value returned by 
+				invalid parameters, a value returned by
 				TCPWIN_Handle2Address() on other error.
 	name (char[]): Player name; always the empty string (this layer
 				doesn't know about names).
@@ -412,7 +404,7 @@ commDriverInfo(
 				not have a second address then it is identical to the first
 	addrLen (size_t): The number of bytes that address points to.
 	nodeID (char[8]): Always {0,0,0,0,0,0,0,0}.
- 
+
  WARNING: Potential memory leak, potential unexpected behavior.  The player
  address is copied into a static buffer, and the resp->address field is
  overwritten to point to the static buffer.  If the resp->address field
@@ -447,7 +439,7 @@ commPlayerInfo(
 
 	/* Get corresponding TCP peer from player handle */
 	err = TCPWIN_Handle2Address(pTcp, commHdl2tcp(pTcp, req->player), &addrBuf, &addrBuf2);
-	if (TCP_RES_OK != err) 
+	if (TCP_RES_OK != err)
 	{
 		if (NULL != resp)
 		{
@@ -457,7 +449,7 @@ commPlayerInfo(
 	}
 
 	/* Protect against NULL resp ??? should this be an assertion ??? */
-	if (NULL != resp) 
+	if (NULL != resp)
 	{
 		// fill in response struct from TCP peer info
 		resp->name = "";		// This layer doesn't know about names
@@ -473,7 +465,6 @@ commPlayerInfo(
 
 	return(TRUE);
 }
-
 
 /*****************************************************************************
  Find out whether the transmit queue is full.
@@ -501,14 +492,13 @@ commTxFull(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Send a packet.
-  
+
   On entry, req->dest contains the player handle of the recipient or
   PLAYER_BROADCAST, req->buffer contains the packet to be sent, and
   req->length contains the number of bytes in the packet.
-  
+
   On exit, the buffer may be discarded, although the packet may not be
   sent until later; resp->status contains the completion status.
 
@@ -558,14 +548,13 @@ commTxPkt(
 	return (TCP_RES_OK == resp->status);
 }
 
-
 /*****************************************************************************
   Get information about a pending incoming packet.
   Return TRUE if a packet is available, FALSE otherwise.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commPeekPkt(
 	commPeekPktReq_t *req,
 	commPeekPktResp_t *resp)
@@ -585,7 +574,6 @@ commPeekPkt(
 	resp->status = TCP_RES_UNIMPLEMENTED;
 	return FALSE;
 }
-
 
 /*****************************************************************************
  Retrieve a pending incoming packet.
@@ -639,7 +627,7 @@ commRxPkt(
 
 	/* Handle ping packets immediately */
 	if ((dp_PING_PACKET_ID == *(dp_packetType_t*)req->buffer) &&
-			(TCP_HDL_NONE != hTcp) && (pTcp->myHandle != hTcp)) 
+			(TCP_HDL_NONE != hTcp) && (pTcp->myHandle != hTcp))
 	{
 		*(dp_packetType_t*)req->buffer = dp_PING_RESP_PACKET_ID;
 		logPkt(logpkt_fp, req->buffer, resp->length, resp->src, "tx");
@@ -648,10 +636,10 @@ commRxPkt(
 	}
 
 	/* Ignore packets from myself, save address of unknown senders */
-	if (PLAYER_ME == resp->src) 
+	if (PLAYER_ME == resp->src)
 	{
 		err = TCP_RES_EMPTY;
-	} 
+	}
 	else if (TCP_HDL_NONE == hTcp)
 	{
 		assert(sizeof(TCPPEER) <= comm_MAX_ADR_LEN);
@@ -662,7 +650,6 @@ commRxPkt(
 	resp->status = err;
 	return (TCP_RES_OK == err);
 }
-
 
 /*****************************************************************************
  Attempt to parse a NUL-terminated address string into a 6-byte address
@@ -745,13 +732,12 @@ commScanAddr(
 	return (TRUE);
 }
 
-
 /*****************************************************************************
   Attempt to format a 6-byte address buffer into a NUL-terminated
   string.  The string will be of the form 255.255.255.255:65535, where
   the first four numbers are the address and the final number is the port
   (socket) number.
-  
+
   Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 *****************************************************************************/
 DLLEXPORT int cdecl				/* success boolean */
@@ -804,7 +790,6 @@ commPrintAddr(
 	return TRUE;
 }
 
-
 /*****************************************************************************
   Generate a pseudo-player handle referring to a group of players.  Handy
   for multicasting.  A group can have zero players.
@@ -812,7 +797,7 @@ commPrintAddr(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupAlloc(
 	commGroupAllocReq_t *req,
 	commGroupAllocResp_t *resp)
@@ -830,14 +815,13 @@ commGroupAlloc(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Invalidate a pseudo-player handle referring to a group of players.
   Return TRUE if the pseudo-player handle was invalidated.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupFree(
 	commGroupFreeReq_t *req,
 	commGroupFreeResp_t *resp)
@@ -855,14 +839,13 @@ commGroupFree(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Add one or more players to a group.
   Return TRUE if the players were all added.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupAdd(
 	commGroupAddReq_t *req,
 	commGroupAddResp_t *resp)
@@ -879,7 +862,6 @@ commGroupAdd(
 	resp->status = TCP_RES_UNIMPLEMENTED;
 	return FALSE;
 }
-
 
 /*****************************************************************************
   Set driver parameters.
@@ -911,7 +893,6 @@ commSetParam(
 	return TRUE;
 }
 
-
 /*****************************************************************************
   Establish a data link to a player and shake hands with him.  This does
   not actually establish a connection in the IP sense of the word.
@@ -926,7 +907,7 @@ commSayHi(
 	TCPHANDLE hTcp;
 
   DPRINT(("@TCP commSayHi():\n"));
-  
+
 	/* Protect against invalid parameters */
 	assert(req != NULL);
 	if (NULL == resp)
@@ -950,7 +931,7 @@ commSayHi(
 	/* Copy req's player handle into resp */
 	hTcp = TCPWIN_Address2Handle(pTcp, req->address, req->address2, TRUE, req->flags & comm_SAYHI_2NDLIVE);
 	resp->player = tcp2commHdl(pTcp, hTcp);
-	if (hTcp == TCP_HDL_NONE) 
+	if (hTcp == TCP_HDL_NONE)
 	{
 		DPRINT(("Returned TCP_HDL_NONE in commSayHi()!!"));
 		resp->status = TCP_RES_BAD;
@@ -961,7 +942,6 @@ commSayHi(
 	resp->status = TCP_RES_OK;
 	return TRUE;
 }
-
 
 /*****************************************************************************
   Tear down a data link to a player.  The link or the player may already be
@@ -1003,7 +983,6 @@ commSayBye(
 	return TRUE;
 }
 
-
 #if defined(_WINDOWS)
 /*****************************************************************************
   Windows-only DLL entry point.
@@ -1021,7 +1000,7 @@ DllMain (
 			/* start Windows Sockets */
 /*			WSAStartup(MAKEWORD(1, 1), &wsaData); */
 			return(TRUE);
- 
+
 		case DLL_PROCESS_DETACH:
 			/* end Windows Sockets */
 /*			WSACleanup(); */
@@ -1029,14 +1008,13 @@ DllMain (
 
 		case DLL_THREAD_ATTACH:
 			return(TRUE);
- 
+
 		case DLL_THREAD_DETACH:
 			return(TRUE);
 	}
- 
+
 	(void) lpReserved;
 	(void) hModule;
 	return(TRUE);
 }
 #endif /* defined(_WINDOWS) */
-

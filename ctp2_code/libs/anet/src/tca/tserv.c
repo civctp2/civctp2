@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * This material has been modified by the Apolyton CtP2 Source Code Project.
  * Contact the authors at ctp2source@apolyton.net.
  *
  * Modifications from the Activision Anet 0.10 code:
@@ -37,7 +37,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Server side code to authenticate clients and keep clients up to date
  on which of their friends are logged in.
 --------------------------------------------------------------------------*/
-
 
 /*--------------------------------------------------------------------------
  The client should call tserv_account_login/create/activate to request a
@@ -77,7 +76,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "dppack1.h"
 
-/* All the packets this module sends can be represented by this type. 
+/* All the packets this module sends can be represented by this type.
  * Their length varies, though, and sizeof(this type) isn't very useful.
  */
 typedef struct {
@@ -112,10 +111,10 @@ tserv_t *tserv_create(dpio_t *dpio, tca_t *tca)
 	tserv->tca = tca;
 	tserv->tnextPoll = eclock() + ECLOCKS_PER_SEC;
 	ASSERTMEM();
-		   
+
 	if ((tserv->clients = assoctab_create(sizeof(tserv_clientinfo_t))) == NULL)
 		return NULL;
-	
+
 	tserv->hServer = PLAYER_NONE;
 	tserv->please_send_response = FALSE;
 	tserv->please_send_newuser = FALSE;
@@ -154,7 +153,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 	buf[3*i-1] = '\0';
 	return buf;
 }
-#endif 
+#endif
 
 /*--------------------------------------------------------------------------
  Freeze a tserv_t to file.
@@ -169,7 +168,7 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 	precondition(tserv);
 	precondition(fp);
 	tserv_assertValid(tserv);
-	
+
 	/* tserv server/peer info */
 	DPRINT(("tserv_Freeze: writing %d clients and my info\n", tserv->clients->n_used));
 	if (fwrite(&(tserv->clients->n_used), sizeof(int), 1, fp) != 1)
@@ -196,7 +195,7 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 			(fwrite(&(pci->reason), sizeof(dp_result_t), 1, fp) != 1))
 			return dp_RES_FULL;
 	}
-	
+
 	/* tserv client info */
 	/* DPRINT(("tserv_Freeze: hServer:%x\n", tserv->hServer)); */
 	err = dpio_freezeHdl(tserv->dpio, tserv->hServer, fp);
@@ -228,7 +227,7 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 		(fwrite(&(tserv->please_send_pwchange), sizeof(int), 1, fp) != 1) ||
 		(fwrite(&(tserv->waiting_for_rx), sizeof(int), 1, fp) != 1))
 		return dp_RES_FULL;
-	
+
 	err = tca_Freeze(tserv->tca, fp);
 	if (err != dp_RES_OK) {
 		DPRINT(("tserv_Freeze: tca_Freeze returns err:%d\n", err));
@@ -259,7 +258,7 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 	for (i = 0; i < nClients; i++) {
 		playerHdl_t hClient;
 		tserv_clientinfo_t *pci;
-		
+
 		err = dpio_thawHdl(tserv->dpio, &hClient, fp);
 		if (err != dp_RES_OK) {
 			DPRINT(("tserv_Thaw: error thawing hClient[%d], err:%d\n", i, err));
@@ -280,7 +279,7 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 		 */
 	}
 	assert(tserv->clients->n_used == nClients);  /* sanity check */
-	
+
 	/* tserv client info */
 	err = dpio_thawHdl(tserv->dpio, &(tserv->hServer), fp);
 	if (err != dp_RES_OK) {
@@ -312,7 +311,7 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 	 * DPRINT(("tserv_Thaw: challenge (set:%d) %s\n", tserv->challenge_set, hexstring(tserv->challenge.challenge, tca_LEN_CHALLENGE)));
 	 * DPRINT(("tserv_Thaw: please_send_response:%d newuser:%d secretcode:%d pwchage:%d\n", tserv->please_send_response, tserv->please_send_newuser, tserv->please_send_secretcode, tserv->please_send_pwchange));
 	 */
-	
+
 	err = tca_Thaw(tserv->tca, fp);
 	if (err != dp_RES_OK) {
 		DPRINT(("tserv_Thaw: tca_Thaw returns err:%d\n", err));
@@ -322,7 +321,7 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 	now = eclock();
 	tserv->tnextPoll = now;
 	tserv->rx_deadline = now + 30 * ECLOCKS_PER_SEC;
-	
+
 	tserv_assertValid(tserv);
 	return dp_RES_OK;
 }
@@ -337,7 +336,7 @@ playerHdl_t tserv_uid2hdl(tserv_t *tserv, tcapw_uid_t uid)
 	int i;
 	assoctab_item_t *pi;
 	tserv_clientinfo_t *pci;
-	
+
 	ASSERTMEM();
 	if (tserv == NULL || uid == tcapw_UID_NONE)
 		return PLAYER_NONE;
@@ -393,7 +392,7 @@ dp_result_t tserv_uid2info(tserv_t *tserv, tcapw_uid_t uid, tcapw_entry_t *entry
 {
 	dp_result_t err;
 	tcapw_entry_t e;
-	
+
 	precondition(tserv);
 	precondition(tserv->tca);
 	precondition(entry);
@@ -405,7 +404,7 @@ dp_result_t tserv_uid2info(tserv_t *tserv, tcapw_uid_t uid, tcapw_entry_t *entry
 	ASSERTMEM();
 	if (err != dp_RES_OK)
 		return err;
-	
+
 	mywcs_ncpy0(entry->uname.uname, e.uname.uname, tcapw_LEN_USERNAME);
 	strncpy(entry->email, e.email, tcapw_MAXLEN_EMAIL);
 	entry->uid = e.uid;
@@ -480,7 +479,7 @@ static dp_result_t tserv_send_challenge(tserv_t *tserv, playerHdl_t h, tserv_cli
  Client, internal use only.
  Sends a response of the requested type to the challenge, if we have it yet.
  Returns dp_RES_OK on successful send,
-         dp_RES_AGAIN if there was no challenge or no pending request, 
+         dp_RES_AGAIN if there was no challenge or no pending request,
 		 dp_RES_BAD on bad args or if incompatible requests are pending,
 		 dp_RES_BUSY if the packet could not be queued, etc.
 --------------------------------------------------------------------------*/
@@ -502,7 +501,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
 	if (!tserv->challenge_set) {
 		DPRINT(("tserv_send_response: no challenge received yet, waiting.\n"));
 		return dp_RES_AGAIN;
-	}	
+	}
 	if (tserv->please_send_response) {
 		if (tserv->logged_in) {
 			DPRINT(("tserv_send_response: already logged in, can't send response\n"));
@@ -524,7 +523,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
 	} else if (tserv->please_send_secretcode) {
 		tcapw_hpw_t hpw;
 		tcapw_uname_t uname;
-		
+
 		if (!tserv->logged_in) {
 			DPRINT(("tserv_send_response: not logged in yet, secretcode waiting.\n"));
 			return dp_RES_AGAIN;
@@ -548,7 +547,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
 	DPRINT(("tserv_send_response: sending response kind %c\n", pkt.u.tserv.kind));
 
 	/* And send it to the server. */
-	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt, 
+	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt,
 			sizeof(pkt.type)+sizeof(pkt.u.tserv.kind)+len, NULL);
 	ASSERTMEM();
 	if (err == dp_RES_OK) {
@@ -578,7 +577,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
  Client, internal use only.
  Sends a pwchange using the challenge from login.
  Returns dp_RES_OK on successful send,
-         dp_RES_AGAIN if there was no pending request, 
+         dp_RES_AGAIN if there was no pending request,
 		 dp_RES_BAD on bad args,
 		 dp_RES_BUSY if the packet could not be queued, etc.
 --------------------------------------------------------------------------*/
@@ -597,18 +596,18 @@ static dp_result_t tserv_send_pwchange(tserv_t *tserv)
 		DPRINT(("tserv_send_pwchange: I am not logged in!\n"));
 		return dp_RES_BUG;
 	}
-	
+
 	if ((err = tca_pwchange_generate(tserv->tca, &tserv->challenge, &tserv->userinfo.hpw, &tserv->newhpw, tserv->userinfo.flags, tserv->userinfo.email, &pkt.u.tserv.u.pwchange, &len)) != dp_RES_OK) {
 		DPRINT(("tserv_sent_pwchange: pwchange_generate err:%d\n", err));
 		tserv->please_send_pwchange = FALSE;
 		return err;
 	}
-	
+
 	pkt.type = dp_TSERV_PACKET_ID;
 	pkt.u.tserv.kind = tserv_KIND_PWCHANGE;
 
 	/* send it to the server. */
-	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt, 
+	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt,
 			sizeof(pkt.type)+sizeof(pkt.u.tserv.kind)+len, NULL);
 	if (err == dp_RES_OK) {
 		tserv->waiting_for_rx = TRUE;
@@ -642,7 +641,7 @@ static dp_result_t tserv_send_validate(tserv_t *tserv, playerHdl_t h, tserv_clie
 	pkt.u.tserv.u.validate.uid = pci->uid;
 	pkt.u.tserv.u.validate.reason = pci->reason;
 
-	err = dpio_put_reliable(tserv->dpio, &h, 1, &pkt, 
+	err = dpio_put_reliable(tserv->dpio, &h, 1, &pkt,
 			sizeof(pkt.type)+sizeof(pkt.u.tserv.kind)+sizeof(pkt.u.tserv.u.validate), NULL);
 	if (err != dp_RES_OK) {
 		DPRINT(("tserv_send_validate: Can't send, queuing.\n"));
@@ -673,7 +672,7 @@ static dp_result_t tserv_send_pwvalidate(tserv_t *tserv, playerHdl_t h, tserv_cl
 	pkt.u.tserv.kind = tserv_KIND_PWVALIDATE;
 	pkt.u.tserv.u.pwvalidate.reason = pci->reason;
 
-	err = dpio_put_reliable(tserv->dpio, &h, 1, &pkt, 
+	err = dpio_put_reliable(tserv->dpio, &h, 1, &pkt,
 			sizeof(pkt.type)+sizeof(pkt.u.tserv.kind)+sizeof(pkt.u.tserv.u.pwvalidate), NULL);
 	if (err != dp_RES_OK) {
 		DPRINT(("tserv_send_pwvalidate: Can't send, queuing.\n"));
@@ -692,14 +691,14 @@ static tserv_clientinfo_t *tserv_hdl2pci(tserv_t *tserv, playerHdl_t h, tserv_ev
 {
 	tserv_clientinfo_t *pci;
 
-	pci = (tserv_clientinfo_t *)assoctab_subscript(tserv->clients, h);	
+	pci = (tserv_clientinfo_t *)assoctab_subscript(tserv->clients, h);
 	if (!pci) {
 		tserv_clientinfo_t temppci;
-		
+
 		temppci.uid = tcapw_UID_NONE;
 		temppci.reason = dp_RES_BUG;
 		tserv_send_validate(tserv, h, &temppci);
-	
+
 		result->h = h;
 		result->uid = tcapw_UID_NONE;
 		result->reason = dp_RES_EMPTY;  /* caller should close handle */
@@ -714,7 +713,7 @@ static tserv_clientinfo_t *tserv_hdl2pci(tserv_t *tserv, playerHdl_t h, tserv_ev
 dp_result_t tserv_client_add(tserv_t *tserv, playerHdl_t h)
 {
 	tserv_clientinfo_t *pci;
-	
+
 	precondition(tserv);
 	precondition(tserv->clients);
 	precondition(h != PLAYER_NONE);
@@ -727,7 +726,7 @@ dp_result_t tserv_client_add(tserv_t *tserv, playerHdl_t h)
 	pci->need_send = 0;
 	pci->challenge_uses = 0;
 	pci->reason = dp_RES_OK;
-		
+
 	return tserv_send_challenge(tserv, h, pci);
 }
 
@@ -836,7 +835,7 @@ static dp_result_t tserv_send_credentials1(tserv_t *tserv, playerHdl_t hFrom, pl
 
 	pkt.tag = dp_TSERV_PACKET_ID;
 	pkt.body.kind = tserv_KIND_CREDENTIALS;
-	
+
 	/* Get both known addresses of the handle */
 	len = dp_MAX_ADR_LEN;
 	err = dpio_hdl2adr2(tserv->dpio, hFrom, pkt.body.u.credentials.adr, pkt.body.u.credentials.adr2, &len);
@@ -901,7 +900,7 @@ dp_result_t tserv_send_credentials(tserv_t *tserv, playerHdl_t h1, playerHdl_t h
  Returns dp_RES_OK and an event in *result upon success.
  Else *event is not changed.
 
- These are requests from a game server to open a connection to 
+ These are requests from a game server to open a connection to
  a designated address.  We must insure that this packet has come from a game
  server and then we open a handle to the player in the normal way.
  This routine should not be called if the packet was not sent reliably.
@@ -981,7 +980,7 @@ static dp_result_t tserv_handle_credentials1(tserv_t *tserv, playerHdl_t src, ts
 	 dp_RES_EMPTY   packet rec'd from handle h not in client table,
 	                please close handle with dpio_closeHdl(result->h);
      dp_RES_CREATED	player created and logged in with given h/uid,
-	                please send a secret code email. 
+	                please send a secret code email.
 	 dp_RES_CHANGED player h/uid changed his password, email, or flags.
 	 dp_RES_HELP    please send another secret code email.
  Possible values of return->reason for the client on validation are:
@@ -1019,7 +1018,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 		}
 		/* got the challenge we were waiting for, don't time out the server */
 		tserv->waiting_for_rx = FALSE;
-		
+
 		/* Save the challenge */
 		memcpy(&tserv->challenge, &pkt->u.challenge, sizeof(tserv->challenge));
 		tserv->challenge_set = TRUE;
@@ -1058,9 +1057,9 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 				pci->logged_in = TRUE;
 
 				/* pull email_valid flag out of the db, if we need to */
-				if (!pci->activated) {					
+				if (!pci->activated) {
 					tcapw_entry_t entry;
-					
+
 					DPRINT(("tserv_handle_packet: looking up activated status of uid:%d\n", uid));
 					err = tserv_uid2info(tserv, uid, &entry);
 					assert(!err);
@@ -1069,17 +1068,17 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 				}
 				if (pci->activated) {
 					DPRINT(("tserv_handle_packet: uid:%d logged in.\n", uid));
-					
+
 					/* Tell the client that the login succeeded */
 					pci->reason = dp_RES_OK;
 					tserv_send_validate(tserv, src, pci);
-					
+
 					/* Tell the server that the login succeeded */
 					result->h = src;
 					result->uid = uid;
 					result->reason = dp_RES_OK;	/* should be dp_RES_LOGIN? */
 					ASSERTMEM();
-					
+
 					return dp_RES_OK;
 				} else {
 					DPRINT(("tserv_handle_packet: uid:%d logged in, not activated.\n", uid));
@@ -1111,7 +1110,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 			}
 		}
 		break;
-		
+
 	case tserv_KIND_NEWUSER:
 		if (tserv->hServer != PLAYER_NONE) {
 			DPRINT(("tserv_handle_packet: got %c, but I am not a server\n", pkt->kind));
@@ -1140,7 +1139,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 				 */
 				pci->reason = dp_RES_NOTYET;
 				tserv_send_validate(tserv, src, pci);
-				
+
 				/* Tell the server that the login succeeded. */
 				/* The server should send a secret code email to this user */
 				result->h = src;
@@ -1160,7 +1159,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 				else  /* failed for some buggy reason */
 					pci->reason = dp_RES_BUG;
 				tserv_send_validate(tserv, src, pci);
-			
+
 				/* drop client, tell server if challenge has been overused */
 				if (pci->challenge_uses > tserv_MAX_CHALLENGE_USES) {
 					tserv_client_delete(tserv, src);
@@ -1201,7 +1200,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 				if (!pci->activated)
 					pci->reason = dp_RES_NOTYET;
 				tserv_send_pwvalidate(tserv, src, pci);
-				
+
 				/* notify the server of the change */
 				result->h = src;
 				result->uid = uid;
@@ -1247,7 +1246,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 			result->uid = pkt->u.validate.uid;
 			result->reason = pkt->u.validate.reason;
 			DPRINT(("tserv_handle_packet: validate recd, premap err:%d\n", pkt->u.validate.reason));
-			
+
 			/* wipe the password we set for the response. */
 			memset(&tserv->userinfo.hpw, 0, sizeof(tserv->userinfo.hpw));
 			if (pkt->u.validate.reason == dp_RES_OK) {
@@ -1299,7 +1298,7 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 		} else {
 			/* We've been answered, don't time out the server*/
 			tserv->waiting_for_rx = FALSE;
-			
+
 			/* Notify the caller of the success or failure */
 			result->h = PLAYER_ME;
 #if defined(ANET_ORIGINAL)
@@ -1422,12 +1421,12 @@ dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, 
 			} else {
 				DPRINT(("tserv_handle_packet: access denied, error %d.\n", err));
 				/* Tell the client that the activation failed */
-				if (err = dp_RES_ACCESS) 
+				if (err = dp_RES_ACCESS)
 					pci->reason = dp_RES_NOTYET;
 				else  /* failed for a buggy reason */
 					pci->reason = dp_RES_BUG;
 				tserv_send_validate(tserv, src, pci);
-			
+
 				/* drop client, tell server if challenge has been overused */
 				if (pci->challenge_uses > tserv_MAX_CHALLENGE_USES) {
 					tserv_client_delete(tserv, src);
@@ -1523,11 +1522,10 @@ dp_result_t tserv_account_loginW(tserv_t *tserv, const wchar_t *username, const 
 	/* schedule a response packet */
 	tserv->please_send_response = TRUE;
 	DPRINT(("tserv_account_login: login %s response pending\n", tcapw_u2ascii(tserv->userinfo.uname.uname, tcapw_LEN_USERNAME)));
-	
+
 	/* tserv_poll would do this for us, but let's speed up the process */
 	tserv_send_response(tserv);
 	ASSERTMEM();
-
 
 	return dp_RES_OK;
 }
@@ -1568,9 +1566,9 @@ dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const
 	/* schedule a newuser packet */
 	tserv->please_send_newuser = TRUE;
 	DPRINT(("tserv_account_create: newuser %s response pending\n", tcapw_u2ascii(tserv->userinfo.uname.uname, tcapw_LEN_USERNAME)));
-	
+
 	/* tserv_poll would do this for us, but let's speed up the process */
-	tserv_send_response(tserv);	
+	tserv_send_response(tserv);
 	ASSERTMEM();
 
 	return dp_RES_OK;
@@ -1591,14 +1589,14 @@ dp_result_t tserv_account_activateW(tserv_t *tserv, const wchar_t *secretcode)
 	}
 
 	mywcs_wchar2netchar(tserv->secretcode.pw, secretcode, tcapw_LEN_PW);
-	
+
 	/* schedule a secretcode packet */
 	tserv->please_send_secretcode = TRUE;
 	DPRINT(("tserv_account_activate: secretcode %d response pending\n", tserv->userinfo.secretcode));
-	
+
 	/* tserv_poll would do this for us, but let's speed up the process */
 	tserv_send_response(tserv);
-	
+
 	return dp_RES_OK;
 }
 
@@ -1610,7 +1608,7 @@ dp_result_t tserv_account_activateW(tserv_t *tserv, const wchar_t *secretcode)
   username, password, and email are in native byte-order unicode.
   See tserva.c for ASCII versions of these functions.
   flags is a union of user set tcapw_entry_FLAGS_*.
-  
+
   Returns dp_RES_OK if the request was successfully queued,
           dp_RES_BAD if the client was not logged in or authenticated,
           dp_RES_* if the request can't be queued.
@@ -1623,7 +1621,7 @@ dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, c
 	dp_result_t err;
 	tcapw_pw_t oldpw;
 	tcapw_pw_t newpw;
-	
+
 	precondition(tserv);
 	precondition(tserv->tca);
 	precondition(tserv->tca->tdb);
@@ -1640,7 +1638,7 @@ dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, c
 		return dp_RES_BUSY;
 	}
 	assert(!tserv->please_send_response && !tserv->please_send_newuser);
-	
+
 	/* convert to network byte order, hash the password, and store in tserv */
 	mywcs_tombs(tserv->userinfo.email, tcapw_MAXLEN_EMAIL, email);
 	if ((err = tserv_check_email(tserv->userinfo.email)) != dp_RES_OK) {
@@ -1655,14 +1653,14 @@ dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, c
 	err = tcapw_password_hash(tserv->tca->tdb, &newpw, &tserv->newhpw);
 	assert(!err);
 	tserv->userinfo.flags = flags;
-	
+
 	/* schedule a pwchange packet */
 	tserv->please_send_pwchange = TRUE;
 	DPRINT(("tserv_change_password: pwchange response pending\n"));
-	
+
 	/* tserv_poll would do this for us, but let's speed up the process */
 	tserv_send_pwchange(tserv);
-	
+
 	return dp_RES_OK;
 }
 
@@ -1682,13 +1680,13 @@ dp_result_t tserv_request_email(tserv_t *tserv)
 	pkt.type = dp_TSERV_PACKET_ID;
 	pkt.u.tserv.kind = tserv_KIND_EMAILREQ;
 
-	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt, 
+	err = dpio_put_reliable(tserv->dpio, &tserv->hServer, 1, &pkt,
 			sizeof(pkt.type)+sizeof(pkt.u.tserv.kind), NULL);
 	if (err != dp_RES_OK) {
 		DPRINT(("tserv_request_email: Can't send, try again later.\n"));
 		return err;
 	}
-	return dp_RES_OK;	
+	return dp_RES_OK;
 }
 
 /*--------------------------------------------------------------------------
@@ -1699,7 +1697,7 @@ dp_result_t tserv_server_delete(tserv_t *tserv)
 {
 	precondition(tserv);
 	ASSERTMEM();
-	
+
 	tserv->hServer = PLAYER_NONE;
 	tserv->challenge_set = FALSE;
 	tserv->logged_in = FALSE;

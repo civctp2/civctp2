@@ -14,7 +14,7 @@ class InstallationPool : public ObjPool
 public:
 	InstallationPool();
 	InstallationPool(CivArchive &archive);
-	
+
 	InstallationData *AccessInstallation(const Installation id)
 	{
 		return (InstallationData*)Access(id);

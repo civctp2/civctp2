@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "net_diff.h"
 #include "net_util.h"
@@ -22,7 +12,7 @@ NetDifficulty::NetDifficulty(Difficulty* diff)
 	m_difficulty = diff;
 }
 
-void 
+void
 NetDifficulty::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'G';
@@ -38,7 +28,7 @@ NetDifficulty::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	Assert(buf[0] == 'G' && buf[1] == 'D');
 	PLAYER_INDEX pidx = (PLAYER_INDEX)getshort(&buf[2]);
-	
+
 	Assert(pidx < k_MAX_PLAYERS);
 	Assert(g_player[pidx] != NULL);
 

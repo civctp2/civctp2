@@ -1,20 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_SOUNDBASE_H__
 #define __AUI_SOUNDBASE_H__
 
-
 class aui_Sound;
-
 
 
 enum AUI_SOUNDBASE_SOUND
@@ -30,11 +17,10 @@ enum AUI_SOUNDBASE_SOUND
 };
 
 
-
 class aui_SoundBase
 {
 public:
-	
+
 	aui_SoundBase( MBCHAR *ldlBlock );
 	aui_SoundBase( MBCHAR **soundNames );
 	virtual ~aui_SoundBase();
@@ -55,5 +41,4 @@ protected:
 	static MBCHAR	*m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ];
 };
 
-
-#endif 
+#endif

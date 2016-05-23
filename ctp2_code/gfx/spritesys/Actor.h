@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 //
 // _ACTOR_DRAW_OPTIMIZATION
 //
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -79,7 +79,7 @@ class SpriteState;
 //
 //----------------------------------------------------------------------------
 
-class Actor 
+class Actor
 {
 public:
 	Actor(SpriteState * ss = NULL);
@@ -101,7 +101,6 @@ public:
 	virtual void	SetAnim(Anim *a)  {};
 	virtual void	Process(void)     {};
 
-	
 	bool	IsActive () const { return m_isactive; };
 	void	SetActive(bool active) { m_isactive = active; };
 
@@ -112,14 +111,14 @@ protected:
 	sint32			m_oldOffsetY;
 	sint32			m_oldFrame;
 #endif
-	
+
 	bool			m_isactive;
 
-	sint32			m_x;	
+	sint32			m_x;
 	sint32			m_y;
 	SpriteState		*m_spriteState;
 
-	bool			m_morphing; 
+	bool			m_morphing;
 
 	sint32			m_animPos;
 

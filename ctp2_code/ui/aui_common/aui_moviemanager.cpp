@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_moviemanager.h"
-
 
 
 aui_MovieManager::aui_MovieManager(bool init)

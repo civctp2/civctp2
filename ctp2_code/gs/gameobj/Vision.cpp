@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 // - Corrected strange vision behaviour at the top row.
 // - Corrected strange visibility patterns ("see tile" counter underflow).
 // - Removed causes of memory leak reports (static variables).
-// - Unseen cells are now always created and not only in the case if a 
+// - Unseen cells are now always created and not only in the case if a
 //   tile improvement is under construction there. - Dec. 21st 2004 Martin Gühmann
 // - Corrected cleanup (using the old m_width!) when reloading in Serialize.
 //
@@ -56,7 +56,7 @@ extern sint32 g_god;
 
 /// The fog of war has been toggled off.
 /// This should make all tiles visible once explored.
-sint32 g_fog_toggle; 
+sint32 g_fog_toggle;
 
 namespace
 {
@@ -88,9 +88,9 @@ Vision::Vision(sint32 owner, bool amOnScreen)
 	m_height = size->y;
 	m_xyConversion = (m_height - (2 * m_width)) / 2;
 	m_isYwrap = g_theWorld->IsYwrap();
-	
+
 	m_array = new uint16*[m_width];
-	for (int x = 0; x < m_width; x++) 
+	for (int x = 0; x < m_width; x++)
 	{
 		m_array[x] = new uint16[m_height];
 		std::fill(m_array[x], m_array[x] + m_height, 0);
@@ -110,14 +110,13 @@ Vision::~Vision()
 	delete [] m_array;
 }
 
-
 void Vision::Clear()
 {
-	for (int x = 0; x < m_width; x++) 
+	for (int x = 0; x < m_width; x++)
 	{
 		std::fill(m_array[x], m_array[x] + m_height, 0);
 	}
-	
+
 	delete m_unseenCells;
 	m_unseenCells = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
 }
@@ -144,7 +143,7 @@ void Vision::SetTheWholeWorldUnexplored()
 	{
 		for (int y = 0; y < m_height; y++)
 		{
-			
+
 			if(!(m_array[x][y] & k_VISIBLE_REFERENCE_MASK))
 			{
 				m_array[x][y] = 0;
@@ -162,7 +161,7 @@ void Vision::SetTheWholeWorldUnseen()
 	}
 }
 
-bool Vision::IsExplored(MapPoint pos) const 
+bool Vision::IsExplored(MapPoint pos) const
 {
 	if (IsAllVisible(m_owner))
 	{
@@ -197,13 +196,12 @@ void Vision::RemoveVisible(MapPoint pos, double radius,
 	FillCircle(pos, radius, CIRCLE_OP_SUBTRACT, removeadd);
 }
 
-
 void Vision::AddRadar(MapPoint pos, double radius)
 {
 	FillCircle(pos, radius, CIRCLE_OP_ADD_RADAR);
 }
 
-bool Vision::IsVisible(MapPoint pos) const 
+bool Vision::IsVisible(MapPoint pos) const
 {
 	if (IsAllVisible(m_owner))
 	{
@@ -278,7 +276,7 @@ void Vision::MergeMap(Vision *src)
 					// Create always an unseen cell
 					if(cell->GetCity().m_id != 0)
 						cell->GetCity().SetVisible(m_owner);
-						
+
 					ucell.m_unseenCell = new UnseenCell(point);
 					m_unseenCells->Insert(ucell);
 				}
@@ -306,19 +304,19 @@ void Vision::MergeMap(Vision *src)
 					}
 				}
 
-				if(cell->GetCity().m_id != (0) && 
+				if(cell->GetCity().m_id != (0) &&
 				   cell->GetCity().GetVisibility() & (1 << src->m_owner))
 				{
 					cell->GetCity().SetVisible(m_owner);
 				}
-				
+
 				if((*hisVersion & k_VISIBLE_REFERENCE_MASK) == 0)
 				{
 					if(src->m_unseenCells->GetAt(point, ucell))
 					{
 						UnseenCellCarton newUnseen(
 							new UnseenCell(ucell.m_unseenCell));
-						
+
 						m_unseenCells->Insert(newUnseen);
 					}
 				}
@@ -383,14 +381,14 @@ bool Vision::MergePoint(sint32 x, sint32 y)
 		return false;
 
 	uint16 *myVersion = &m_array[x][y];
-	
+
 	if(*myVersion & k_EXPLORED_BIT)
 	{
 		if((*myVersion & k_VISIBLE_REFERENCE_MASK) > 0)
 		{
 			return false;
 		}
-		
+
 		if((*hisVersion & k_VISIBLE_REFERENCE_MASK) > 0)
 		{
 			MapPoint point(x, y);
@@ -439,9 +437,9 @@ bool Vision::MergePoint(sint32 x, sint32 y)
 //
 // Returns    : removeadd       : filled with changed points
 //
-// Remark(s)  : The center is now passed as an RC coordinate (used in most of 
+// Remark(s)  : The center is now passed as an RC coordinate (used in most of
 //              the game). dx and dy are still for Convert-ed coordinates,
-//              and map wrap checks are easier when using XY coordinates. 
+//              and map wrap checks are easier when using XY coordinates.
 //              Quite a mess.
 //
 //                          Convert       XY          RC
@@ -457,21 +455,21 @@ bool Vision::MergePoint(sint32 x, sint32 y)
 void Vision::FillCircle
 (
 	MapPoint const &			centerRC,
-	double const				radius, 
+	double const				radius,
 	CIRCLE_OP const				op,
 	DynamicArray<MapPoint> *	removeadd
 )
 {
-	double const	r	= radius + 0.5;	
+	double const	r	= radius + 0.5;
 	sint32 const	rsq	= sint32(r * r);
 
-	for (sint16 dx = sint16(r); dx >= 0; dx--) 
+	for (sint16 dx = sint16(r); dx >= 0; dx--)
 	{
 		bool	incircle = false;
-		
-		for (sint16 dy = sint16(r); dy >= 0; dy--) 
+
+		for (sint16 dy = sint16(r); dy >= 0; dy--)
 		{
-			if (incircle || ((dx * dx) + (dy * dy) <= rsq)) 
+			if (incircle || ((dx * dx) + (dy * dy) <= rsq))
 			{
 				incircle = true;
 
@@ -508,7 +506,7 @@ void Vision::FillCircle
 				if ((dx != 0) && (dy != 0))
 				{
 					OrthogonalPoint testXY(centerRC);
-					testXY.Move(MapPointData(- dx - dy, + dx - dy)); 
+					testXY.Move(MapPointData(- dx - dy, + dx - dy));
 					if (testXY.IsValid())
 					{
 						DoFillCircleOp(testXY.GetRC(), op, removeadd);
@@ -537,7 +535,7 @@ void Vision::FillCircle
 //              Convert + Unconvert will take care of the wrap.
 //
 //----------------------------------------------------------------------------
-void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op, 
+void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 							DynamicArray<MapPoint> *removeadd)
 {
 	MapPoint	pos(posRC);
@@ -547,7 +545,7 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 
 	bool		redraw	= false;
 	uint16 *	entry	= &m_array[pos.x][pos.y];
-	switch(op) 
+	switch(op)
 	{
 		case CIRCLE_OP_ADD:
 			if(!((*entry) & k_EXPLORED_BIT))
@@ -713,7 +711,7 @@ void Vision::Serialize(CivArchive &archive)
 		archive.LoadChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
 
 		m_array         = new uint16*[m_width];
-		for (sint16 y = 0; y < m_width; y++) 
+		for (sint16 y = 0; y < m_width; y++)
 		{
 			m_array[y] = new uint16[m_height];
 			archive.Load((uint8 *)m_array[y], sizeof(m_array[0][0]) * m_height) ;
@@ -742,7 +740,7 @@ void Vision::DeleteUnseenCells()
 	DynamicArray<UnseenCellCarton>  array;
 	m_unseenCells->BuildList(array, 0xffffffff);
 
-	for (int i = 0; i < array.Num(); i++) 
+	for (int i = 0; i < array.Num(); i++)
 	{
 		delete array[i].m_unseenCell;
 	}

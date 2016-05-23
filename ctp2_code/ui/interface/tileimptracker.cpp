@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -103,7 +103,6 @@ sint32 tileimptracker_Initialize()
 	g_tileImpTrackerWindow = new TileimpTrackerWindow( &errcode, aui_UniqueId(), textBlock, 16);
 	Assert( AUI_NEWOK(g_tileImpTrackerWindow, errcode) );
 	if( !AUI_SUCCESS(errcode) ) return -1;
-	
 
 	sprintf( controlBlock, "%s.%s", textBlock, "TimeN");
 	s_trackerTimeN = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
@@ -160,7 +159,6 @@ sint32 tileimptracker_Initialize()
 	Assert(AUI_NEWOK(s_trackerBackground, errcode));
 	if(!AUI_SUCCESS(errcode)) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( textBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
@@ -172,8 +170,8 @@ sint32 tileimptracker_Initialize()
 //
 // Name       : tileimptracker_DisplayData
 //
-// Description: Displays the food, production and gold boni at the given 
-//              position that the given tileimp generates. In addition it 
+// Description: Displays the food, production and gold boni at the given
+//              position that the given tileimp generates. In addition it
 //              displays the needed time for construction and the PW costs.
 //
 // Parameters : MapPoint &p: Position at that the given tileimp should be
@@ -213,22 +211,21 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 	}
 
 	sint32 extraData = 0;
-	
-	
-	
-	
-	
-	
 
-	BOOL alreadyHasIt = g_theTerrainImprovementPool->HasImprovement(p, 
-																	TERRAIN_IMPROVEMENT(s_tileImprovementNum), 
+
+
+
+
+
+
+	BOOL alreadyHasIt = g_theTerrainImprovementPool->HasImprovement(p,
+																	TERRAIN_IMPROVEMENT(s_tileImprovementNum),
 																	extraData);
 
 	if(g_player[visPlayer]->IsExplored(p) && !alreadyHasIt) {
 
 		maputils_MapXY2PixelXY(p.x,p.y,&x,&y);
 
-		
 
 		g_tileImpTrackerWindow->Move(x,y);
 
@@ -255,7 +252,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 				sint32 oldFood = cell->GetFoodProduced();
 				sint32 oldProd = cell->GetShieldsProduced();
 				sint32 oldGold = cell->GetGoldProduced();
-				
+
 				sint32 newFood = newT->GetEnvBase()->GetFood();
 				sint32 newProd = newT->GetEnvBase()->GetShield();
 				sint32 newGold = newT->GetEnvBase()->GetGold();
@@ -266,7 +263,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 					newProd += newT->GetEnvRiverPtr()->GetShield();
 					newGold += newT->GetEnvRiverPtr()->GetGold();
 				}
-				
+
 				food       = newFood - oldFood;
 				production = newProd - oldProd;
 				gold       = newGold - oldGold;
@@ -282,7 +279,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		else
 		{
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(g_theTerrainImprovementDB->Get(s_tileImprovementNum), p);
-			
+
 			sint32 dFood = 0;
 			if(eff) eff->GetBonusFood(dFood);
 			sint32 dProd = 0;
@@ -290,7 +287,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 			sint32 dGold = 0;
 			if(eff) eff->GetBonusGold(dGold);
 
-			
 			food = dFood + cell->GetFoodFromTerrain();
 			production = dProd + cell->GetShieldsFromTerrain();
 			extraData = 0;
@@ -315,11 +311,11 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 		if (g_player[visPlayer]->CanCreateImprovement
 				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, checkMaterials, err)
-		   ) 
+		   )
 		{
 			if (g_player[visPlayer]->CanCreateImprovement
 					(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, true, err)
-			   ) 
+			   )
 			{
 				s_trackerBorderColor = COLOR_GREEN;
 			}
@@ -328,8 +324,8 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 				s_trackerBorderColor = COLOR_RED;
 			}
 			g_c3ui->AddWindow(g_tileImpTrackerWindow);
-		} 
-		else 
+		}
+		else
 		{
 			g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
 		}
@@ -341,7 +337,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 static void mycleanup(c3_Static * & mypointer)
 { delete mypointer; mypointer = NULL; }
-
 
 //----------------------------------------------------------------------------
 //
@@ -405,13 +400,12 @@ AUI_ERRCODE TileimpTrackerWindow::DrawThis(aui_Surface *surface, sint32 x, sint3
 	if(!surface) surface = m_surface;
 
 	RECT rect = { 0, 0, m_width, m_height };
-	
+
 	primitives_PaintRect16(surface, &rect, 0x0000);
-	
+
 	C3Window::DrawThis(surface,x,y);
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(s_trackerBorderColor));
 
 	return AUI_ERRCODE_OK;
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 //
 // __AUI_USE_SDL__
 // Use SDL instead of DirectX.
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -60,17 +60,17 @@ typedef void (* UiCleanupCallback) (void);
 #else
 #include "aui_directui.h"
 #endif
-#include "pattern.h"		
-#include "icon.h"			
-#include "picture.h"		
-#include "aui_resource.h"	
+#include "pattern.h"
+#include "icon.h"
+#include "picture.h"
+#include "aui_resource.h"
 #include "aui_window.h"
 
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
 
-#if defined(__AUI_USE_SDL__) 
+#if defined(__AUI_USE_SDL__)
 class C3UI : public aui_SDLUI
 #else
 class C3UI : public aui_DirectUI
@@ -88,7 +88,6 @@ public:
 		BOOL useExclusiveMode = FALSE );
 	virtual ~C3UI();
 
-	
 	aui_Resource<Pattern>	*GetPatternResource( void ) const { return m_patternResource; }
 
 	Pattern	*LoadPattern( MBCHAR const * name )
@@ -104,7 +103,6 @@ public:
 	AUI_ERRCODE	RemovePatternSearchPath(MBCHAR const * path)
 		{ return m_patternResource->RemoveSearchPath(path); }
 
-	
 	aui_Resource<Icon>	*GetIconResource( void ) const { return m_iconResource; }
 
 	Icon	*LoadIcon(MBCHAR const * name)
@@ -120,7 +118,6 @@ public:
 	AUI_ERRCODE	RemoveIconSearchPath(MBCHAR const * path)
 		{ return m_iconResource->RemoveSearchPath(path); }
 
-	
 	aui_Resource<Picture>	*GetPictureResource( void ) const { return m_pictureResource; }
 
 	Picture	*LoadPicture(MBCHAR const * name)
@@ -138,7 +135,7 @@ public:
 
     void        RegisterCleanup(UiCleanupCallback);
 	bool        TopWindowIsNonBackground(void) const;
-	
+
 private:
 	aui_Resource<Pattern> *         m_patternResource;
 	aui_Resource<Icon> *            m_iconResource;
@@ -146,5 +143,4 @@ private:
     std::list<UiCleanupCallback>    m_cleanupActions;
 };
 
-
-#endif 
+#endif

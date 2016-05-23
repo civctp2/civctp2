@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -53,7 +53,6 @@ This number may not be increased subsequently.  Be sure to choose
 a large enough number for the expected use, and be sure to fail
 gracefully if dcstAdd() fails.
 
-
 Debugging
 ---------
 When compiled in debug mode, this module will check all parameters and
@@ -67,7 +66,6 @@ any time a problem is suspected in this module.  If the speed penalty
 is not prohibitive, it is recommended that the debug version be used
 throughout development.
 
-
 Compilation Control
 -------------------
 Selftest: Define DCST_SELFTEST to include all selftest code; remove the
@@ -76,7 +74,6 @@ Selftest: Define DCST_SELFTEST to include all selftest code; remove the
 Debug: Do not define NDEBUG, or define _DEBUG, to include all debugging
   code (debug version); define NDEBUG and do not define _DEBUG to omit
   debug code (release version).
-
 
 Copyright (c) 1997 by Activision Inc.  All rights reserved.
 Copyright protection claimed includes all forms and matters of
@@ -102,7 +99,6 @@ on the screen such as icons, screen display looks, etc.
 
 #include <stdio.h>
 
-
 /**
 * Constants
 */
@@ -113,7 +109,6 @@ on the screen such as icons, screen display looks, etc.
 /* Allowed values for dcst_status_t */
 #define dcst_STATUS_OK			0	/* All is well */
 #define dcst_STATUS_DEFERRED	1	/* Call to a method not yet implemented */
-
 
 /**
 * Types
@@ -140,13 +135,12 @@ typedef int (*dcst_forEach_cb) (
 	dcst_value_t value,	/* value of current element */
 	void *context);		/* context passed to dcstForEach() */
 
-
 /**
 * Methods
 */
 
 /* Create a dictionary set, whose values are the given size, and which
-can accomodate a maximum of maxKeys elements.  Use maxHashEntries to 
+can accomodate a maximum of maxKeys elements.  Use maxHashEntries to
 tune the size vs. speed of the lookup; a value of maxKeys/2 should
 produce close to optimum response time. */
 dcst_t dcstCreate(size_t valueSize, int maxKeys, int maxHashEntries);
@@ -207,7 +201,6 @@ dcst_status_t dcstFreeze(dcst_t pDcst, FILE *fp);
 /* Restore a dictionary set from a stream.  Not yet implemented. */
 dcst_status_t dcstThaw(dcst_t pDcst, FILE *fp);
 
-
 /**
 * Debugging support
 */
@@ -223,7 +216,6 @@ void dcstAssertValid(dcst_t pDcst, char* file, int line);
 #define dcst_ASSERTVALID(d)
 
 #endif /* debugging support */
-
 
 /**
 * Self-test support

@@ -1,4 +1,3 @@
-
 #ifndef __FLI_STACK_H__
 #define __FLI_STACK_H__
 
@@ -8,7 +7,7 @@ class FliStack {
 private:
 	double m_stack[k_FLI_MAX_STACK_SIZE];
 	sint32 m_stackPtr;
-    
+
 public:
 	void Clear();
 	void Push(double value);

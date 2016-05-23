@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -85,8 +85,8 @@ class LineGraph : public aui_Control
 {
 public:
 
-	LineGraph(AUI_ERRCODE *retval, 
-	                sint32 id, 
+	LineGraph(AUI_ERRCODE *retval,
+	                sint32 id,
 	                MBCHAR *ldlBlock,
 	                ControlActionCallback *ActionFunc = NULL,
 	                void *cookie = NULL,
@@ -126,9 +126,9 @@ public:
 	void		EnablePrecision( sint32 enable ) { m_enablePrecision = enable; };
 
 	void		SetGraphType(GRAPH_TYPE graphType) {m_graphType=graphType;};
-	void		SetEventTracker(EventTracker *events) 
+	void		SetEventTracker(EventTracker *events)
 	{
-		m_events = events; 
+		m_events = events;
 		if (m_events != NULL) SetGraphType(GRAPH_TYPE_ZEROSUM);
 	}
 

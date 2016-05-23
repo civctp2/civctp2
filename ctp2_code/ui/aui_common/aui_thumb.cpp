@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_blitter.h"
@@ -16,7 +5,6 @@
 #include "aui_action.h"
 
 #include "aui_thumb.h"
-
 
 
 aui_Thumb::aui_Thumb(
@@ -37,7 +25,6 @@ aui_Thumb::aui_Thumb(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Thumb::aui_Thumb(
@@ -63,7 +50,6 @@ aui_Thumb::aui_Thumb(
 }
 
 
-
 AUI_ERRCODE aui_Thumb::InitCommon( void )
 {
 	m_grabPoint.x = m_grabPoint.y = 0;
@@ -72,16 +58,14 @@ AUI_ERRCODE aui_Thumb::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE aui_Thumb::Reposition( sint32 x, sint32 y )
 {
-	
+
 	Assert( m_parent->Width() >= m_width );
 	Assert( m_parent->Height() >= m_height );
 	if ( m_parent->Width() < m_width || m_parent->Height() < m_height )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
-	
 	if ( x < 0 ) x = 0;
 	if ( y < 0 ) y = 0;
 
@@ -90,7 +74,6 @@ AUI_ERRCODE aui_Thumb::Reposition( sint32 x, sint32 y )
 	limit = m_parent->Height() - m_height;
 	if ( y > limit ) y = limit;
 
-	
 	Move( x, y );
 
 	return AUI_ERRCODE_OK;
@@ -106,7 +89,7 @@ AUI_ERRCODE aui_Thumb::Reposition( sint32 x, sint32 y )
 void aui_Thumb::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == this )
 	{
 		sint32 x = mouseData->position.x - m_grabPoint.x;
@@ -126,13 +109,11 @@ void aui_Thumb::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Thumb::MouseLDragOver( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	MouseLDragAway( mouseData );
 }
-
 
 
 void aui_Thumb::MouseLDragInside( aui_MouseEvent *mouseData )
@@ -142,13 +123,11 @@ void aui_Thumb::MouseLDragInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Thumb::MouseLDragOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
 	MouseLDragAway( mouseData );
 }
-
 
 
 void aui_Thumb::MouseLGrabInside( aui_MouseEvent *mouseData )
@@ -160,10 +139,8 @@ void aui_Thumb::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
@@ -182,7 +159,6 @@ void aui_Thumb::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Thumb::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -190,12 +166,10 @@ void aui_Thumb::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			ReleaseMouseOwnership();
 			m_grabPoint.x = m_grabPoint.y = 0;
 		}
@@ -203,12 +177,10 @@ void aui_Thumb::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -221,7 +193,6 @@ void aui_Thumb::MouseLDropInside( aui_MouseEvent *mouseData )
 	else
 		MouseLDropOutside( mouseData );
 }
-
 
 void aui_Thumb::MouseRDropInside( aui_MouseEvent *mouseData )
 {
@@ -238,26 +209,22 @@ void aui_Thumb::MouseRDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Thumb::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == this )
 	{
-		
+
 		ReleaseMouseOwnership();
 		m_grabPoint.x = m_grabPoint.y = 0;
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 
-		
 		if ( m_parent != (aui_Region *)m_window )
 			((aui_Control*)m_parent)->SetMouseOwnership();
 

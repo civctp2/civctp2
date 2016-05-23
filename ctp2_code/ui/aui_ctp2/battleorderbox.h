@@ -13,9 +13,7 @@ class BattleOrderBox;
 #include "Unit.h"
 #include "unittabbutton.h"
 
-
 #define k_MAX_BOB_UNITS		9
-
 
 class Army;
 class CellUnitList;
@@ -72,8 +70,8 @@ private:
 	BOOL			m_stackDisplay;
 
 	c3_ColorIconButton	*m_unitImage;
-	c3_Static		*m_unitFortify;			
-	c3_Static		*m_unitVeteran;			
+	c3_Static		*m_unitFortify;
+	c3_Static		*m_unitVeteran;
 
 	c3_Static		*m_unitARD;
 	c3_Static		*m_unitMovement;
@@ -92,4 +90,4 @@ private:
 	c3_ColoredStatic *m_cargo[ k_CARGO_CAPACITY ];
 };
 
-#endif 
+#endif

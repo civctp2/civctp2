@@ -4,19 +4,16 @@
 #ifndef __C3DROPDOWN_H__
 #define __C3DROPDOWN_H__
 
-
 #include "aui_dropdown.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
-
 
 
 class C3DropDown : public aui_DropDown, public PatternBase
 {
 public:
-	
+
 	C3DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -52,5 +49,4 @@ protected:
 	virtual AUI_ERRCODE	RepositionButton( void );
 };
 
-
-#endif 
+#endif

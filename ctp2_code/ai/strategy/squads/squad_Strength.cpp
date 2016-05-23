@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Squad strength object 
+// Description  : Squad strength object
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -130,7 +130,7 @@ Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 	m_value             -= remove_me.m_value;
 	m_transport         -= remove_me.m_transport;
 	m_defenders         -= remove_me.m_defenders;
-	m_ranged            -= remove_me.m_ranged; 
+	m_ranged            -= remove_me.m_ranged;
 	m_land_bombard_str  -= remove_me.m_land_bombard_str;
 	m_water_bombard_str -= remove_me.m_water_bombard_str;
 	m_air_bombard_str   -= remove_me.m_air_bombard_str;
@@ -179,7 +179,7 @@ void Squad_Strength::Set_Army_Strength(const Army & army, bool noCargo)
 	for(sint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
-		
+
 		if(unit.IsValid())
 		{
 			m_value		+= unit.GetDBRec()->GetShieldCost();
@@ -252,7 +252,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	for(sint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
-		
+
 		if(unit.IsValid())
 		{
 			m_value		+= unit.GetDBRec()->GetShieldCost();

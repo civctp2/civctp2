@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ SlicArray::SlicArray(CivArchive &archive)
 
 SlicArray::~SlicArray()
 {
-	if (SS_TYPE_SYM == m_type) 
+	if (SS_TYPE_SYM == m_type)
     {
         for (size_t i = 0; i < m_allocatedSize; ++i)
         {
@@ -87,7 +87,7 @@ SlicArray::~SlicArray()
 
 void SlicArray::FixSize(sint32 size)
 {
-	if (SS_TYPE_SYM == m_type) 
+	if (SS_TYPE_SYM == m_type)
     {
         for (size_t i = 0; i < m_allocatedSize; ++i)
         {
@@ -97,7 +97,7 @@ void SlicArray::FixSize(sint32 size)
     delete [] m_array;
 
 	m_allocatedSize = static_cast<uint32>(size);
-    m_arraySize     = size; 
+    m_arraySize     = size;
 	m_array         = new SlicStackValue[m_allocatedSize];
 	memset(m_array, 0, m_allocatedSize * sizeof(SlicStackValue));
 	m_sizeIsFixed   = true;
@@ -146,7 +146,7 @@ void SlicArray::Serialize(CivArchive &archive)
 		m_sizeIsFixed = (bool)(archive.GetUINT8() != 0);
 
 		if(m_varType == SLIC_SYM_STRUCT) {
-			SLIC_BUILTIN structType = (SLIC_BUILTIN)archive.GetUINT8();		
+			SLIC_BUILTIN structType = (SLIC_BUILTIN)archive.GetUINT8();
 			m_structTemplate = g_slicEngine->GetStructDescription(structType);
 		} else {
 			m_structTemplate = NULL;
@@ -171,15 +171,14 @@ void SlicArray::Serialize(CivArchive &archive)
 
 BOOL SlicArray::Lookup(sint32 index, SS_TYPE &type, SlicStackValue &value)
 {
-	
+
 	type = m_type;
 
-	
 	if(index < 0 || index >= m_arraySize) {
 		if(g_slicEngine->GetContext() && g_slicEngine->GetContext()->GetSegment() &&
 			g_slicEngine->GetContext()->GetFrame()) {
 			if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-				c3errors_ErrorDialog("SLIC", "%s:%d: Array index %d out of bounds", 
+				c3errors_ErrorDialog("SLIC", "%s:%d: Array index %d out of bounds",
 									 g_slicEngine->GetContext()->GetSegment()->GetFilename(),
 									 g_slicEngine->GetContext()->GetFrame()->GetCurrentLine(),
 									 index);
@@ -193,10 +192,9 @@ BOOL SlicArray::Lookup(sint32 index, SS_TYPE &type, SlicStackValue &value)
 		return FALSE;
 	}
 
-	
 	if(m_type == SS_TYPE_SYM && m_array[index].m_sym == NULL) {
-		
-		if(m_structTemplate) {			
+
+		if(m_structTemplate) {
 			m_array[index].m_sym = m_structTemplate->CreateInstance();
 		} else {
 			m_array[index].m_sym = new SlicSymbolData(m_varType);
@@ -212,14 +210,13 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 	switch(m_type) {
 		case SS_TYPE_VAR:
 		{
-			
+
 			Assert(type == SS_TYPE_VAR || type == SS_TYPE_SYM);
 			if(type != SS_TYPE_VAR && type != SS_TYPE_SYM) {
 				return FALSE;
 			}
-			
-			
-			
+
+
 			SlicSymbolData *sym;
 			if(type == SS_TYPE_VAR)
 				sym = g_slicEngine->GetSymbol(value.m_int);
@@ -232,7 +229,7 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 			break;
 		}
 		case SS_TYPE_INT:
-			
+
 			if(type != SS_TYPE_INT) {
 				SlicSymbolData *sym = value.m_sym;
 				if(!sym) {
@@ -243,10 +240,10 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 			}
 			break;
 		case SS_TYPE_SYM:
-			
+
 			break;
 		default:
-			
+
 			Assert(FALSE);
 			return FALSE;
 	}
@@ -256,16 +253,16 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 
 	size_t const    index = static_cast<size_t>(untestedIndex);
 
-	if (index >= m_allocatedSize) 
+	if (index >= m_allocatedSize)
     {
 		uint32 const oldAllocated = m_allocatedSize;
-		while (index >= m_allocatedSize) 
+		while (index >= m_allocatedSize)
         {
 			m_allocatedSize *= 2;
 		}
 
 		SlicStackValue * newArray = new SlicStackValue[m_allocatedSize];
-		memset(&newArray[oldAllocated], 0, 
+		memset(&newArray[oldAllocated], 0,
 			   (m_allocatedSize - oldAllocated) * sizeof(SlicStackValue));
 
 		memcpy(newArray, m_array, oldAllocated * sizeof(SlicStackValue));
@@ -273,37 +270,35 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 		m_array = newArray;
 	}
 
-	
-	if (index >= static_cast<size_t>(m_arraySize)) 
+	if (index >= static_cast<size_t>(m_arraySize))
 	{
-		if (m_sizeIsFixed) 
+		if (m_sizeIsFixed)
 		{
-			
+
 			return FALSE;
 		}
 
-		if (index > static_cast<size_t>(m_arraySize)) 
+		if (index > static_cast<size_t>(m_arraySize))
 		{
 			memset(&m_array[m_arraySize], 0, (index - m_arraySize) * sizeof(SlicStackValue));
 		}
 		m_arraySize = index + 1;
 	}
 
-	
-	if (m_type == SS_TYPE_SYM) 
+	if (m_type == SS_TYPE_SYM)
     {
         // Create a new symbol if one does not exist yet.
-	    if (!m_array[index].m_sym) 
+	    if (!m_array[index].m_sym)
         {
-			m_array[index].m_sym = (m_structTemplate) 
-                                   ? m_structTemplate->CreateInstance() 
+			m_array[index].m_sym = (m_structTemplate)
+                                   ? m_structTemplate->CreateInstance()
                                    : new SlicSymbolData(m_varType);
-		} 
+		}
 
         return m_array[index].m_sym &&
                m_array[index].m_sym->SetValueFromStackValue(type, value);
-	} 
-    else 
+	}
+    else
     {
 		m_array[index] = value;
 	}
@@ -311,15 +306,14 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 	return TRUE;
 }
 
-
 void SlicArray::Prune(sint32 size)
 {
 	if (m_sizeIsFixed)
 		return;
 
-	if (m_type == SS_TYPE_SYM) 
+	if (m_type == SS_TYPE_SYM)
     {
-		for (sint32 i = size; i < m_arraySize; i++) 
+		for (sint32 i = size; i < m_arraySize; i++)
         {
 			delete m_array[i].m_sym;
 			m_array[i].m_sym = NULL;

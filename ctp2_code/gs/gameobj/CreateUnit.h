@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C/C++ header
 // Description  : Unit Creation
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

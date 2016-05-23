@@ -19,7 +19,7 @@ typedef void (SourceListCallback)(sint32 arg);
 class SourceListItem : public c3_ListItem
 {
 public:
-	SourceListItem(AUI_ERRCODE *retval, sint32 index, SlicSegment *segment, MBCHAR *line, 
+	SourceListItem(AUI_ERRCODE *retval, sint32 index, SlicSegment *segment, MBCHAR *line,
 				   sint32 lineNumber, MBCHAR *ldlBlock);
 
 	virtual void Update();
@@ -69,7 +69,6 @@ public:
 	c3_Static      *m_status;
 
 	SourceListCallback *m_callback;
-	
 
 	SlicSegment *m_segment;
 
@@ -80,7 +79,7 @@ public:
 
 	void RemoveWindow();
 	void DisplayWindow(SlicSegment *segment);
-	
+
 	void kh_Close();
 
 	c3_ListBox *GetList() { return m_list; }
@@ -88,7 +87,6 @@ public:
 	void Continue();
 	void StepInto();
 };
-  
 
 
 void sourcelist_Display(SlicSegment *segment);
@@ -99,4 +97,3 @@ extern SourceList *g_sourceList;
 #endif // CTP2_ENABLE_SLICDEBUG
 
 #endif
-

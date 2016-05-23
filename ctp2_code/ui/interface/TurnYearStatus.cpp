@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -95,10 +95,9 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 	return buf;
 
 #if 0
-	
-	
+
 	std::stringstream yearString;
-	
+
 	if (s_useCustomYear && g_pTurnLengthOverride)
 	{
 		uint32 round = NewTurnCount::GetCurrentRound();
@@ -111,7 +110,7 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 	}
 	else
 	{
-		
+
 		yearString << abs(currentYear) << " "
 			<< ((currentYear < 0) ?
 			g_theStringDB->GetNameStr("str_tbl_ldl_BC") :
@@ -119,7 +118,6 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 			<< std::ends;
 	}
 
-	
 	return(yearString.str());
 #endif
 }
@@ -133,14 +131,12 @@ const MBCHAR *TurnYearStatus::GetCurrentRound()
 	sprintf(buf, "%d %s", round, g_theStringDB->GetNameStr("str_ldl_Turns"));
 	return buf;
 #if 0
-	
-	
+
 	std::stringstream roundString;
 	roundString << NewTurnCount::GetCurrentRound() << " "
 		<< g_theStringDB->GetNameStr("str_ldl_Turns")
 		<< std::ends;
 
-	
 	return(roundString.str());
 #endif
 }
@@ -223,8 +219,8 @@ void TurnYearStatus::UpdatePlayer(PLAYER_INDEX player)
 
 void TurnYearStatus::Update()
 {
-	
-	switch(m_displayType) 
+
+	switch(m_displayType)
 	{
 		case DISPLAY_YEAR:
 			if (s_useCustomYear && s_pTurnLengthOverride)
@@ -243,7 +239,7 @@ void TurnYearStatus::Update()
 			}
 			break;
 		case DISPLAY_TURN:
-			
+
 			m_turnYearStatus->SetText(GetCurrentRound());
 			break;
 		default:
@@ -253,32 +249,28 @@ void TurnYearStatus::Update()
 	m_dougsProgress->ShouldDraw(TRUE);
 }
 
-
 void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 action,
 												  uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
 
-	
 	TurnYearStatus *turnYearStatus = static_cast<TurnYearStatus*>(cookie);
 
 	turnYearStatus->m_displayType = static_cast<DisplayType>(
 		(turnYearStatus->m_displayType + 1) % NUMBER_OF_DISPLAY_TYPES);
 
-	
 	turnYearStatus->Update();
 }
-
 
 AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 											  aui_Surface *surface,
 											  RECT &rect,
 											  void *cookie)
 {
-	
+
 	if(g_selected_item == NULL)
 		return AUI_ERRCODE_OK;
 
@@ -297,7 +289,7 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 
 		sint32 alive = 0;
 		sint32 progress = 0;
-		
+
 		sint32 startp = g_selected_item->GetVisiblePlayer() + 1;
 		if(startp >= k_MAX_PLAYERS)
 			startp = 0;
@@ -309,7 +301,7 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 				progress = alive;
 			}
 			if(p == k_MAX_PLAYERS - 1) {
-				
+
 				p = -1;
 			}
 		}

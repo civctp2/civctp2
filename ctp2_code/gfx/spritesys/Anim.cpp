@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
 // __SPRITETEST__
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,7 +31,6 @@
 
 #include <algorithm>    // std::copy
 #include "director.h"   // g_director
-
 
 Anim::Anim()
 :
@@ -124,7 +123,6 @@ Anim const & Anim::operator = (Anim const & copy)
     return *this;
 }
 
-
 Anim::~Anim()
 {
 	delete [] m_frames;
@@ -139,11 +137,10 @@ uint16 Anim::GetFrame(sint32 animPos)
 	return m_frames[(animPos % m_numFrames)];
 }
 
-uint16 Anim::GetPlaybackTime(void) 
+uint16 Anim::GetPlaybackTime(void)
 {
 
 
-	
 	return m_playbackTime;
 }
 
@@ -165,7 +162,7 @@ sint32 Anim::GetNextPosition(sint32 animPos)
 	switch (m_type) {
 	case ANIMTYPE_SEQUENTIAL:
 		animPos++;
-		
+
 		if (animPos >= m_numFrames) {
 			m_finished = TRUE;
 		}
@@ -175,22 +172,22 @@ sint32 Anim::GetNextPosition(sint32 animPos)
 
 		if(m_noIdleJustDelay)
 			animPos = m_numFrames-1;
-		
-		if (animPos >= m_numFrames) 
+
+		if (animPos >= m_numFrames)
 		{
 			animPos = 0;
 			if (m_delay != 0)
 			{
-				
+
 				m_weAreInDelay = TRUE;
 				m_delayEnd = curTime + (sint32)m_delay;
 			}
-			
+
 			else if(m_delay == 0 && m_numFrames <= 1)
 			{
-				
+
 				m_weAreInDelay = TRUE;
-				m_delayEnd = curTime + (sint32)60000; 
+				m_delayEnd = curTime + (sint32)60000;
 			}
 			else
 			{
@@ -325,14 +322,13 @@ sint32 Anim::GetNextPosition(sint32 animPos)
 
 sint32 Anim::ParseFromTokens(Token *theToken)
 {
-	sint32		tmp; 
+	sint32		tmp;
 	sint32		i;
 
-	
 	if (!token_ParseValNext(theToken, TOKEN_ANIM, tmp)) return FALSE;
 	if (tmp == 0) return FALSE;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 	if (!token_ParseValNext(theToken, TOKEN_ANIM_TYPE, tmp)) return FALSE;
 	m_type = (uint16)tmp;
@@ -346,37 +342,35 @@ sint32 Anim::ParseFromTokens(Token *theToken)
 	if (!token_ParseValNext(theToken, TOKEN_ANIM_DELAY, tmp)) return FALSE;
 	m_delay = (uint16)tmp;
 
-	
 	m_frames = new uint16[m_numFrames];
 	if (!token_ParseKeywordNext(theToken, TOKEN_ANIM_FRAME_DATA)) return FALSE;
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 		else return FALSE;
 		m_frames[i] = (uint16)tmp;
 	}
 
-	
 	m_moveDeltas = new POINT[m_numFrames];
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
-		POINT p = {0,0}; 
-		m_moveDeltas[i] = p; 
+		POINT p = {0,0};
+		m_moveDeltas[i] = p;
 	}
 	if (!token_ParseValNext(theToken, TOKEN_ANIM_MOVE_DELTAS, tmp)) return FALSE;
-	if (tmp) 
+	if (tmp)
 	{
-		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
-		for (i=0; i<m_numFrames; i++) 
+		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
+		for (i=0; i<m_numFrames; i++)
 		{
 			POINT		p;
 
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 			else return FALSE;
 
 			p.x = tmp;
 
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 			else return FALSE;
 
 			p.y = tmp;
@@ -386,19 +380,18 @@ sint32 Anim::ParseFromTokens(Token *theToken)
 		if (!token_ParseAnCloseBraceNext(theToken)) return FALSE;
 	}
 
-	
 	m_transparencies = new uint16[m_numFrames];
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
 		m_transparencies[i] = 15;
 	}
 	if (!token_ParseValNext(theToken, TOKEN_ANIM_TRANSPARENCIES, tmp)) return FALSE;
-	if (tmp) 
+	if (tmp)
 	{
-		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
-		for (i=0; i<m_numFrames; i++) 
+		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
+		for (i=0; i<m_numFrames; i++)
 		{
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp); 
+			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
 			else return FALSE;
 			m_transparencies[i] = (uint16)tmp;
 		}
@@ -428,7 +421,7 @@ void Anim::Export(FILE *file)
 	fprintf(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_DELAY].keyword, m_delay);
 
 	fprintf(file, "\t\t%s", g_allTokens[TOKEN_ANIM_FRAME_DATA].keyword);
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
 		if (i%5 == 0) fprintf(file, "\n\t\t\t");
 		fprintf(file, "%d\t", m_frames[i]);
@@ -436,14 +429,14 @@ void Anim::Export(FILE *file)
 	fprintf(file, "\n\n");
 
 	fprintf(file, "\t\t%s\t1\n\t\t{\n", g_allTokens[TOKEN_ANIM_MOVE_DELTAS].keyword);
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
 		fprintf(file, "\t\t\t%d %d\n", m_moveDeltas[i].x, m_moveDeltas[i].y);
 	}
 	fprintf(file, "\n\t\t}\n");
 
 	fprintf(file, "\t\t%s\t1\n\t\t{", g_allTokens[TOKEN_ANIM_TRANSPARENCIES].keyword);
-	for (i=0; i<m_numFrames; i++) 
+	for (i=0; i<m_numFrames; i++)
 	{
 		if (i%5 == 0) fprintf(file, "\n\t\t\t");
 		fprintf(file, "%d\t", m_transparencies[i]);
@@ -454,4 +447,3 @@ void Anim::Export(FILE *file)
 
 	return;
 }
-

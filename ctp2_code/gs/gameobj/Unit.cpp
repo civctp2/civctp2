@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,8 +42,8 @@
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 // - Added IsReligion bools 1-23-2007
 // - Added IsHiddenNationality bool 2-7-2007
-// - The upgrade function now selects the best unit type for upgrading 
-//   according to the unit transport capacity or the unit attack, defense and 
+// - The upgrade function now selects the best unit type for upgrading
+//   according to the unit transport capacity or the unit attack, defense and
 //   range statitics. (19-May-2007 Martin Gühmann)
 // - modified sink to display the sink message and the unit type
 // - If a unit dies it now uses the value of LaunchPollution if present
@@ -58,7 +58,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Unit.h" 
+#include "Unit.h"
 
 #include "Globals.h"
 #include "GWRecord.h"
@@ -164,7 +164,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_slicEngine->RunMiscUnitDeathTriggers(*this);
 			break;
 	}
-	
+
 	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx\n",
 							  m_id));
 	if(g_network.IsActive())
@@ -178,7 +178,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_network.AddDeadUnit(m_id);
 		}
 	}
-	
+
 	if (GetActor())
 	{
 		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE
@@ -197,12 +197,12 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_director->AddDeath(*this);
 		}
 	}
-	
+
 	if(!GetDBRec()->GetIsTrader())
 	{
 		AccessData()->KillVision();
 	}
-	
+
 	MapPoint        pos;
 	GetPos(pos);
 	PLAYER_INDEX    owner   = GetOwner();
@@ -225,13 +225,13 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			Assert(r);
 		}
 	}
-	
+
 	if(!IsTempSlaveUnit())
 	{
 		r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy);
 		Assert(r);
 	}
-	
+
 	Unit transport = GetTransport();
 	if(transport.IsValid())
 	{
@@ -246,7 +246,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_theWorld->SetCanalTunnel(pos, 0);
 			is_renumber_cont = true;
 		}
-		
+
 		Cell *cell = g_theWorld->GetCell(pos);
 
 		g_theWorld->CutImprovements(pos);
@@ -261,12 +261,12 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 		if (cell->UnitArmy())
 		{
-			if (cause != CAUSE_REMOVE_ARMY_NUKE) 
+			if (cause != CAUSE_REMOVE_ARMY_NUKE)
 			{
-				for (sint32 i = cell->UnitArmy()->Num() - 1; i >= 0; --i) 
+				for (sint32 i = cell->UnitArmy()->Num() - 1; i >= 0; --i)
 				{
 					Unit    u = cell->UnitArmy()->Access(i);
-					if (u.IsValid() && !g_theWorld->CanEnter(pos, u.GetMovementType())) 
+					if (u.IsValid() && !g_theWorld->CanEnter(pos, u.GetMovementType()))
 					{
 						u.Kill(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
 					}
@@ -292,7 +292,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		UpdateZOCForRemoval();
 	}
 
-	
 	g_theUnitPool->Del(m_id);
 
 	if(is_renumber_cont)
@@ -300,7 +299,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		g_theWorld->NumberContinents();
 	}
 }
-
 
 
 void Unit::FastKill()
@@ -374,7 +372,7 @@ const MBCHAR * Unit::GetName() const
 // Returns    : std::string     : text to display as name
 //
 // Remark(s)  : Differs from GetName only for units that have been marked as
-//              leader in unit.txt. In this case, the player name is appended 
+//              leader in unit.txt. In this case, the player name is appended
 //              to the unit name.
 //
 //----------------------------------------------------------------------------
@@ -390,8 +388,8 @@ std::string Unit::GetDisplayName(void) const
 	else
 	{
 		std::string	unitName(g_theStringDB->GetNameStr(info->m_name));
-		return info->GetLeader() 
-			   ? unitName + " " + g_player[GetOwner()]->GetLeaderName() 
+		return info->GetLeader()
+			   ? unitName + " " + g_player[GetOwner()]->GetLeaderName()
 			   : unitName;
 	}
 }
@@ -406,10 +404,9 @@ sint32 Unit::GetType() const
 	return GetData()->GetType();
 }
 
-
-void Unit::GetPos(MapPoint &pos) const 
+void Unit::GetPos(MapPoint &pos) const
 {
-	GetData()->GetPos(pos); 
+	GetData()->GetPos(pos);
 }
 
 MapPoint Unit::RetPos() const
@@ -432,7 +429,6 @@ uint32 Unit::GetOwnerBit() const
 	return GetData()->GetOwnerBit();
 }
 
-
 bool Unit::IsIgnoresZOC() const
 {
 	return GetDBRec()->GetIgnoreZOC();
@@ -454,9 +450,9 @@ bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 	MapPoint center;
 	GetPos(center);
 	CircleIterator it(center, searchRadius, static_cast<sint32>(GetVisionRange()));
-	for (it.Start(); !it.End(); it.Next()) 
+	for (it.Start(); !it.End(); it.Next())
 	{
-		if (    !g_player[GetOwner()]->IsExplored(it.Pos()) 
+		if (    !g_player[GetOwner()]->IsExplored(it.Pos())
 		     && GetArmy()->CanEnter(it.Pos())
 		     && g_theWorld->IsOnSameContinent(it.Pos(), center)
 		   )
@@ -489,7 +485,7 @@ bool Unit::NearestFriendlyCity(MapPoint &p) const
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-		size_t d = std::max(abs(city_pos.x - unit_pos.x), 
+		size_t d = std::max(abs(city_pos.x - unit_pos.x),
 		                    abs(city_pos.y - unit_pos.y)
 		                   );
 		if (d < closest_distance)
@@ -513,28 +509,28 @@ bool Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 
 	MapPoint    city_pos;
 	int const   n = g_player[GetOwner()]->m_all_cities->Num();
-	bool const  testWaterMove   = 
+	bool const  testWaterMove   =
 	    army.IsValid() &&
-	   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater()); 
+	   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater());
 
-	for (int i = 0; i < n; i++)	
+	for (int i = 0; i < n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
-		
+
 		if (g_theWorld->GetCell(city_pos)->GetNumUnits() + needRoom > k_MAX_ARMY_SIZE)
 			continue;
 
-		if (testWaterMove &&  
-			(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) && 
+		if (testWaterMove &&
+			(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) &&
 			 !g_theWorld->IsWater(city_pos)
             )
            )
 			continue;
 
-        size_t	d = std::max(abs(city_pos.x - unit_pos.x), 
+        size_t	d = std::max(abs(city_pos.x - unit_pos.x),
                              abs(city_pos.y - unit_pos.y)
                             );
-		if (d < closest_distance) 
+		if (d < closest_distance)
         {
 			closest_distance = d;
 			p = city_pos;
@@ -568,7 +564,7 @@ bool Unit::NearestFriendlyCity(Unit &c) const
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-        size_t	d = std::max(abs(city_pos.x - unit_pos.x), 
+        size_t	d = std::max(abs(city_pos.x - unit_pos.x),
                              abs(city_pos.y - unit_pos.y)
                             );
 
@@ -597,13 +593,12 @@ bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed)
 	return SetPosition(p, revealed);
 }
 
-
 bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed)
 {
 	bool left_map = false;
-	AccessData()->SetPos(p, left_map); 
+	AccessData()->SetPos(p, left_map);
 
-	return left_map || g_theWorld->InsertUnit(p, *this, revealed); 
+	return left_map || g_theWorld->InsertUnit(p, *this, revealed);
 }
 
 void Unit::SetPosAndNothingElse(const MapPoint &p)
@@ -618,7 +613,7 @@ double Unit::GetMaxMovePoints() const
 
 double Unit::GetMovementPoints() const
 {
-	return GetData()->GetMovementPoints(); 
+	return GetData()->GetMovementPoints();
 }
 
 void Unit::SetMovementPoints(double m)
@@ -633,7 +628,7 @@ bool Unit::CanBeExpelled() const
 
 double Unit::GetAttack() const
 {
-	return GetDBRec()->GetAttack(); 
+	return GetDBRec()->GetAttack();
 }
 
 double Unit::GetDefense() const
@@ -721,7 +716,7 @@ bool Unit::IsSubmarine() const
 	return GetDBRec()->GetIsSubmarine();
 }
 
-bool Unit::IsNoZoc() const 
+bool Unit::IsNoZoc() const
 {
 	return GetDBRec()->GetNoZoc();
 }
@@ -730,7 +725,6 @@ bool Unit::DeductMoveCost(const double cost, bool &out_of_fuel)
 {
 	return AccessData()->DeductMoveCost(*this, cost, out_of_fuel);
 }
-
 
 void Unit::SetIsInTransport(const Unit &transport)
 {
@@ -762,7 +756,7 @@ bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint &
 bool Unit::UnloadCargo(const MapPoint &new_pos, Army &debark,
 					   bool justOneUnit, const Unit &theUnit)
 {
-	return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit); 
+	return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit);
 }
 
 bool Unit::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
@@ -782,12 +776,12 @@ void Unit::GetInserted(const Unit &transport)
 
 bool Unit::InsertCargo(const Unit &addme)
 {
-	return AccessData()->InsertCargo(addme); 
+	return AccessData()->InsertCargo(addme);
 }
 
 bool Unit::CanBeachAssault() const
 {
-	return GetDBRec()->GetCanBeachAssault(); 
+	return GetDBRec()->GetCanBeachAssault();
 }
 
 //PFT
@@ -808,7 +802,7 @@ sint32 Unit::ResetMovement()
 
 void Unit::SetHP(const double newval)
 {
-	AccessData()->SetHP(newval); 
+	AccessData()->SetHP(newval);
 }
 
 void Unit::SetType(const sint32 type)
@@ -858,7 +852,7 @@ void Unit::UnVeteran()
 
 bool Unit::CanInterceptTrade() const
 {
-	return GetData()->CanInterceptTrade(); 
+	return GetData()->CanInterceptTrade();
 }
 
 bool Unit::CanRustle(CellUnitList &defender) const
@@ -871,7 +865,7 @@ bool Unit::CanConvertCity(Unit &city) const
 	return GetData()->CanConvertCity(city);
 }
 
-bool Unit::CanBombard(CellUnitList &defender) const 
+bool Unit::CanBombard(CellUnitList &defender) const
 {
 	return GetData()->CanBombard(defender);
 }
@@ -939,7 +933,6 @@ void Unit::GetCargoHP(sint32 &i, sint32 unit_type[100],
 	GetData()->GetCargoHP(i, unit_type, unit_hp);
 
 }
-
 
 sint32 Unit::GetNumCarried() const
 {
@@ -1047,13 +1040,12 @@ void Unit::SetText(char *str)
 
 #endif
 
-
 bool Unit::IsCantCaptureCity()
 {
 	return GetDBRec()->GetCantCaptureCity();
 }
 
-void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest, 
+void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
                           const CAUSE_REMOVE_CITY cause)
 {
 	AccessData()->ResetCityOwner(*this, newo, is_conquest, cause);
@@ -1079,7 +1071,7 @@ void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
 
 
 
-void Unit::ResetUnitOwner(const PLAYER_INDEX newo, 
+void Unit::ResetUnitOwner(const PLAYER_INDEX newo,
                           CAUSE_REMOVE_ARMY rem_cause)
 {
 	if(g_network.IsHost()) {
@@ -1202,7 +1194,6 @@ uint32 Unit_Unit_GetVersion(void)
 {
 	return (k_UNIT_VERSION_MAJOR<<16 | k_UNIT_VERSION_MINOR);
 }
-
 
 bool Unit::IsCity() const
 {
@@ -1342,7 +1333,6 @@ void Unit::PayFederalProductionAbs(sint32 mil_paid,
 	AccessData()->PayFederalProductionAbs (mil_paid, percent_mat, mat_paid);
 }
 
-
 void Unit::SetMaterialContribution(bool on)
 {
 	AccessData()->SetMaterialContribution(on);
@@ -1368,7 +1358,7 @@ void Unit::SetIsProfessional(bool on)
 {
 	if (GetIsProfessional() != on) {
 		g_player[GetOwner()]->RegisterProfessionalChange(on, *this);
-		AccessData()->SetIsProfessional(on); 
+		AccessData()->SetIsProfessional(on);
 	}
 }
 
@@ -1510,7 +1500,7 @@ double Unit::GetHappyCrime() const
 	return GetData()->GetHappyCrime();
 }
 
-void Unit::CalcHappiness(sint32 &virtualGoldSpent, bool firstPass) 
+void Unit::CalcHappiness(sint32 &virtualGoldSpent, bool firstPass)
 
 {
 	AccessData()->CalcHappiness(virtualGoldSpent, firstPass);
@@ -1577,7 +1567,6 @@ sint32 Unit::AirportLastUsed() const
 {
 	return GetData()->AirportLastUsed();
 }
-	
 
 bool Unit::HasCityWalls() const
 {
@@ -1598,7 +1587,6 @@ ORDER_RESULT Unit::StealTechnology(Unit c, sint32 whichAdvance)
 {
 	return AccessData()->StealTechnology(c, whichAdvance);
 }
-
 
 ORDER_RESULT Unit::InciteRevolution(Unit c)
 {
@@ -1625,7 +1613,6 @@ void Unit::SetSpiedUpon()
 	AccessData()->SetSpiedUpon();
 }
 
-
 void Unit::CityNullifyWalls()
 {
 	AccessData()->CityNullifyWalls();
@@ -1650,7 +1637,6 @@ sint32 Unit::GetFranchiseOwner() const
 {
 	return GetData()->GetFranchiseOwner();
 }
-
 
 void Unit::SetFranchiseTurnsRemaining(sint32 turns)
 {
@@ -1685,7 +1671,6 @@ sint32 Unit::PopCount() const
 {
 	return GetData()->PopCount();
 }
-
 
 sint32 Unit::CountSlaves() const
 {
@@ -2018,7 +2003,7 @@ void Unit::CheckRiot()
 	AccessData()->CheckRiot();
 }
 
-bool Unit::AiGetCargoMovementPoints(double &min_move_points, 
+bool Unit::AiGetCargoMovementPoints(double &min_move_points,
                                     bool  &first) const
 {
 	return GetData()->AiGetCargoMovementPoints(min_move_points, first);
@@ -2045,7 +2030,7 @@ void Unit::RecalculateResources()
 {
 	AccessData()->RecalculateResources();
 }
-	
+
 bool Unit::FightOneLineDanceRangedAttack(Unit &defender)
 {
 	return AccessData()->FightOneLineDanceRangedAttack(defender);
@@ -2126,7 +2111,7 @@ void Unit::AddWonderHPBonus(sint32 amt)
 
 
 
-bool Unit::CanPlantNuke(const MapPoint &pos) 
+bool Unit::CanPlantNuke(const MapPoint &pos)
 {
 	return AccessData()->CanPlantNuke(pos);
 }
@@ -2288,16 +2273,15 @@ void Unit::UpdateZOCForRemoval()
 		Cell *cell = g_theWorld->GetCell(pos);
 		CellUnitList *units = cell->UnitArmy();
 		sint32 i;
-		
-		
-		
+
+
 		bool updateZoc = true;
 		if(cell->GetCity().IsValid() &&
-		   cell->GetCity().GetOwner() == GetOwner()) 
+		   cell->GetCity().GetOwner() == GetOwner())
         {
 			updateZoc = false;
-		} 
-        else if(units && units->GetOwner() == GetOwner()) 
+		}
+        else if(units && units->GetOwner() == GetOwner())
         {
 			for(i = 0; i < units->Num(); i++) {
 				if(!units->Access(i).IsNoZoc()) {
@@ -2310,7 +2294,7 @@ void Unit::UpdateZOCForRemoval()
 		if(updateZoc) {
 			g_theWorld->RemoveZOC(pos, GetOwner());
 			g_theWorld->AddOtherArmyZOC(pos, GetOwner(), Army(), Unit());
-			
+
 			sint32 dd;
 			for(dd = 0; dd < (sint32)NOWHERE; dd++) {
 				MapPoint npos;
@@ -2340,22 +2324,22 @@ bool UnitCanCarry(sint32 dest, sint32 src, sint32 government)
 
 	if (!drec->GetCanCarry()) {
 		return false;
-	} 
-	
+	}
+
 	if (srec->GetSizeSmall()) {
-		
+
 		if (drec->GetCanCarrySmallLand() && srec->GetMovementTypeLand()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarrySmallAir() && srec->GetMovementTypeAir()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarrySmallWater() && srec->GetMovementTypeSea()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarrySmallSpace() && srec->GetMovementTypeSpace()) {
 			return true;
 		}
@@ -2363,35 +2347,35 @@ bool UnitCanCarry(sint32 dest, sint32 src, sint32 government)
 		if (drec->GetCanCarryMedLand() && srec->GetMovementTypeLand()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryMedAir() && srec->GetMovementTypeAir()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryMedWater() && srec->GetMovementTypeSea()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryMedSpace() && srec->GetMovementTypeSpace()) {
 			return true;
 		}
-	} else if (srec->GetSizeLarge()) { 
+	} else if (srec->GetSizeLarge()) {
 		if (drec->GetCanCarryLargeLand() && srec->GetMovementTypeLand()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryLargeAir() && srec->GetMovementTypeAir()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryLargeWater() && srec->GetMovementTypeSea()) {
 			return true;
 		}
-		
+
 		if (drec->GetCanCarryLargeSpace() && srec->GetMovementTypeSpace()) {
 			return true;
 		}
-	} 
+	}
 	return false;
 }
 
@@ -2427,7 +2411,7 @@ bool Unit::NeedsRefueling() const
 //
 //  Description: Test if a unit passes an order's UnitPretest
 //
-//  Parameters : OrderRecord * order_rec : The order's order record 
+//  Parameters : OrderRecord * order_rec : The order's order record
 //
 //  Globals    : g_theUnitDB             : The unit database
 //
@@ -2455,7 +2439,6 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 
 	bool order_valid = false;
 
-	
 	if(order_rec->GetUnitPretest_CanAttack())
 		order_valid = (unit_rec->GetAttack() > 0.0 );
 	else if(order_rec->GetUnitPretest_CanEntrench())
@@ -2527,7 +2510,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanTransport())
 		order_valid = unit_rec->HasCargoData();
 	else if(order_rec->GetUnitPretest_CanBeTransported())
-		order_valid = unit_rec->GetSizeMedium() || 
+		order_valid = unit_rec->GetSizeMedium() ||
 		              unit_rec->GetSizeSmall();
 	else if(order_rec->GetUnitPretest_CanLaunch())
 		order_valid = unit_rec->HasSpaceLaunch();
@@ -2601,4 +2584,3 @@ void Unit::UnElite()
 {
 	AccessData()->UnElite();
 }
-

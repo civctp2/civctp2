@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,8 +44,8 @@
 
 class	ID;
 
-#define k_ID_VERSION_MAJOR	0										
-#define k_ID_VERSION_MINOR	0										
+#define k_ID_VERSION_MAJOR	0
+#define k_ID_VERSION_MINOR	0
 
 //----------------------------------------------------------------------------
 // Project imports
@@ -58,66 +58,60 @@ class	ID;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class ID { 
+class ID {
 public:
-	uint32 m_id; 
-	
-	ID (uint32 val = 0) 
+	uint32 m_id;
+
+	ID (uint32 val = 0)
     :   m_id    (val)
     {  };
 
-    ID (const ID & i) 
+    ID (const ID & i)
     :   m_id    (i.m_id)
     {  };
 
-	void DelPointers() 
+	void DelPointers()
     {
         // Nothing to delete, but required for use in DynamicArray<ID>
     };
-	
-	operator int() const  { return m_id; }; 
-	operator unsigned int() const  { return m_id; }; 
+
+	operator int() const  { return m_id; };
+	operator unsigned int() const  { return m_id; };
 	operator unsigned long() const  { return m_id; };
-   
+
 	bool operator! () const { return !m_id; };
 
 	uint32 operator~ () const { return ~m_id; };
-	uint32  operator& (const ID &val) const { return m_id & val.m_id; };  
-	
+	uint32  operator& (const ID &val) const { return m_id & val.m_id; };
 
 	uint32  operator| (const ID &val) const { return m_id | val.m_id; };
-	
- 
+
 	bool operator== (const ID &val) const { return m_id == val.m_id; };
-	
-   
+
 	bool operator!= (const ID &val) const { return m_id != val.m_id; };
-	
 
 	bool operator&& (const ID &val) const { return m_id && val.m_id; };
-	
-  
-	bool operator|| (const ID &val) const { return m_id || val.m_id; };
-	
 
-	bool operator < (const ID & val) const 
-	{ 
-		return m_id < val.m_id; 
+	bool operator|| (const ID &val) const { return m_id || val.m_id; };
+
+	bool operator < (const ID & val) const
+	{
+		return m_id < val.m_id;
 	};
-	
-	bool operator <= (const ID & val) const 
-	{ 
-		return m_id <= val.m_id; 
+
+	bool operator <= (const ID & val) const
+	{
+		return m_id <= val.m_id;
 	};
-	
-	bool operator > (const ID & val) const 
-	{ 
-		return m_id > val.m_id; 
+
+	bool operator > (const ID & val) const
+	{
+		return m_id > val.m_id;
 	};
-	
-	bool operator >= (const ID & val) const 
-	{ 
-		return m_id >= val.m_id; 
+
+	bool operator >= (const ID & val) const
+	{
+		return m_id >= val.m_id;
 	};
 
 	void Serialize(CivArchive &archive) ;

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,13 +46,13 @@ extern SpriteGroupList *        g_unitSpriteGroupList;
 
 BattleViewActor::BattleViewActor
 (
-    SpriteState *       ss, 
-    Unit                id, 
-    sint32              unitType, 
-    const MapPoint &    pos, 
+    SpriteState *       ss,
+    Unit                id,
+    sint32              unitType,
+    const MapPoint &    pos,
     sint32              owner
 )
-: 
+:
     Actor               (ss),
 	m_pos               (pos),
 	m_unitID            (id),
@@ -78,7 +78,7 @@ BattleViewActor::BattleViewActor
 
     if (g_unitSpriteGroupList)
     {
-	    m_unitSpriteGroup = 
+	    m_unitSpriteGroup =
             (UnitSpriteGroup *) g_unitSpriteGroupList->GetSprite
                 (m_spriteID, m_type, LOADTYPE_FULL, (GAME_ACTION) 0);
     }
@@ -91,8 +91,8 @@ BattleViewActor::~BattleViewActor()
 	DPRINTF(k_DBG_GAMESTATE, ("Deleting actor at %lx, unit=%lx\n", this, m_unitID.m_id));
 
     DumpAllActions();
-	
-	if (m_unitSpriteGroup && g_unitSpriteGroupList) 
+
+	if (m_unitSpriteGroup && g_unitSpriteGroupList)
     {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 	}
@@ -100,12 +100,11 @@ BattleViewActor::~BattleViewActor()
 	delete m_curAction;
 }
 
-
 void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 {
 	Anim * anim = CreateAnim(UNITACTION_IDLE);
 
-	if (anim == NULL) 
+	if (anim == NULL)
 	{
 		anim = CreateAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
@@ -130,47 +129,43 @@ void BattleViewActor::Process(void)
 	if(!m_curAction)
 		GetNextAction();
 
-	
 	while(m_curAction && m_curAction->GetActionType() == UNITACTION_NONE)
 	{
 		GetNextAction();
 	}
-		
-	
-	if (m_curAction) 
+
+	if (m_curAction)
 	{
 		if(GetActionQueueNumItems() > 0)
 			m_curAction->Process(LookAtNextAction());
 		else
 			m_curAction->Process();
 
-		
-		
-		
-		if (m_curAction->Finished()) 
+
+
+
+		if (m_curAction->Finished())
 		{
 			GetNextAction();
 		}
 	}
-	
-    if (m_curAction) 
+
+    if (m_curAction)
     {
         m_frame        = m_curAction->GetSpriteFrame();
         m_transparency = m_curAction->GetTransparency();
     }
 }
 
-
 void BattleViewActor::DumpAllActions(void)
 {
-	
+
 	if (m_curAction) {
 		m_facing = m_curAction->GetFacing();
 		delete m_curAction;
 		m_curAction = NULL;
 	}
 
-	
 	Action *deadAction=NULL;
 	while (m_actionQueue.GetNumItems() > 0) {
 		m_actionQueue.Dequeue(deadAction);
@@ -182,7 +177,6 @@ void BattleViewActor::DumpAllActions(void)
 	}
 }
 
-
 void BattleViewActor::GetNextAction(BOOL isVisible)
 {
 	uint32 numItems = GetActionQueueNumItems();
@@ -191,7 +185,7 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 	m_curAction = NULL;
 
 	Action *pendingAction = LookAtNextAction();
-	
+
 	while(numItems > 0 && pendingAction->GetActionType() == UNITACTION_NONE)
 	{
 		m_actionQueue.Dequeue(m_curAction);
@@ -199,12 +193,10 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 		m_curAction = NULL;
 		pendingAction = LookAtNextAction();
 	}
-		
-		
-	if (numItems > 0) 
+
+	if (numItems > 0)
 	{
 
-		
 		m_actionQueue.Dequeue(m_curAction);
 
 		if (m_curAction) {
@@ -215,18 +207,17 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 	}
 	else
 	{
-		
+
 		AddIdle();
 	}
 }
-
 
 void BattleViewActor::AddAction(Action *actionObj)
 {
 	Assert(m_unitSpriteGroup && actionObj);
 	if (!m_unitSpriteGroup || !actionObj) return;
-	
-	if (m_unitID.IsValid()) 
+
+	if (m_unitID.IsValid())
 	{
 		m_playerNum = m_unitID.GetOwner();
 	}
@@ -258,12 +249,12 @@ Anim *BattleViewActor::CreateAnim(UNITACTION action)
 		srand(anim->GetDelay() + g_director->GetMasterCurTime());
 		anim->AdjustDelay(rand() % 2000);
 	}
-	
+
 	return anim;
 }
 
-#define k_FAKE_DEATH_FRAMES			15		
-#define k_FAKE_DEATH_DURATION		1500	
+#define k_FAKE_DEATH_FRAMES			15
+#define k_FAKE_DEATH_DURATION		1500
 
 Anim * BattleViewActor::MakeFakeDeath(void)
 {
@@ -278,9 +269,9 @@ Anim * BattleViewActor::MakeFakeDeath(void)
     POINT       pt          = {0,0};
     std::fill(moveDeltas, moveDeltas + k_FAKE_DEATH_FRAMES, pt);
 	anim->SetDeltas(moveDeltas);
-	
+
     uint16 *    transparencies = new uint16[k_FAKE_DEATH_FRAMES];
-    for (uint16 i = 0; i < k_FAKE_DEATH_FRAMES; ++i) 
+    for (uint16 i = 0; i < k_FAKE_DEATH_FRAMES; ++i)
     {
         transparencies[i] = (uint16) (k_FAKE_DEATH_FRAMES - i);
     }
@@ -297,9 +288,9 @@ void BattleViewActor::Draw(BOOL fogged)
 	uint16			flags           = k_DRAWFLAGS_NORMAL;
 	Pixel16			color           = 0x0000;
 	BOOL			directionAttack = FALSE;
-	
+
 	if (m_transparency < 15) {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 
 	if (fogged)
@@ -307,13 +298,13 @@ void BattleViewActor::Draw(BOOL fogged)
 
 	if (m_curAction == NULL)
 	{
-		
-		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
+
+		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
 			g_tiledMap->GetScale(), m_transparency, color, flags, FALSE, directionAttack);
 	}
 	else
 	{
-		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
+		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
 			g_tiledMap->GetScale(), m_transparency, color, flags, m_curAction->SpecialDelayProcess(), directionAttack);
 	}
 }
@@ -325,16 +316,15 @@ void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 	BOOL			directionAttack = FALSE;
 
 	if (m_transparency < 15) {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
-	
-	
+
 	if (m_isFortified) {
 		Pixel16			*fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34);
 		g_tiledMap->DrawOverlay(surf, fortifiedImage, x + k_ACTOR_CENTER_OFFSET_X-48,  y+k_ACTOR_CENTER_OFFSET_Y-48);
 	}
 
-	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
+	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
 							1, m_transparency, color, flags, m_curUnitAction == UNITACTION_IDLE, directionAttack);
 
 	DrawHealthBar(surf);
@@ -378,7 +368,6 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 	sint32		surfWidth = surf->Width();
 	sint32		surfHeight = surf->Height();
 
-	
 	POINT	iconDim = tileSet->GetMapIconDimensions(icon);
 
 	RECT	iconRect = {0, 0, iconDim.x, iconDim.y};
@@ -389,8 +378,7 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 
 	POINT *shieldPoint;
 
-	
-	
+
 	if (unitAction == UNITACTION_IDLE && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL) {
 		shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
 		OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
@@ -399,14 +387,13 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 			shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
 			OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
 		} else {
-			
+
 			top = m_y;
 			middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale())/2;
 			OffsetRect(&iconRect, middle - iconDim.x / 2, top - iconDim.y);
 		}
 	}
 
-	
 	if (iconRect.left < 0) return;
 	if (iconRect.right >= surfWidth) return;
 	if (iconRect.top < 0) return;
@@ -423,7 +410,7 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 	if (iconRect.bottom >= surfHeight) return;
 
 	primitives_FrameRect16(surf, &iconRect, g_colorSet->GetColor(COLOR_BLACK));
-	
+
 	InflateRect(&iconRect, -1, -1);
 
 	leftRect = rightRect = iconRect;
@@ -455,16 +442,16 @@ uint16 BattleViewActor::GetWidth(void) const
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite * theSprite = 
+	Sprite * theSprite =
         m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 
-	if (theSprite != NULL) 
+	if (theSprite != NULL)
 	{
 		return theSprite->GetWidth();
-	} 
-	else 
+	}
+	else
 	{
-		if (m_curUnitAction == UNITACTION_IDLE) 
+		if (m_curUnitAction == UNITACTION_IDLE)
 		{
 			theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
 			if (theSprite != NULL)
@@ -480,16 +467,16 @@ uint16 BattleViewActor::GetHeight(void) const
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite * theSprite = 
+	Sprite * theSprite =
         m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
 
-	if (theSprite != NULL) 
+	if (theSprite != NULL)
 	{
 		return theSprite->GetHeight();
-	} 
-	else 
+	}
+	else
 	{
-		if (m_curUnitAction == UNITACTION_IDLE) 
+		if (m_curUnitAction == UNITACTION_IDLE)
 		{
 			theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
 			if (theSprite != NULL)
@@ -508,7 +495,7 @@ void BattleViewActor::GetBoundingRect(RECT *rect) const
 	POINT	hotPoint = m_unitSpriteGroup->GetHotPoint(m_curUnitAction, m_facing);
 	double	scale = g_tiledMap->GetScale();
 
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 	rect->left = 0;
@@ -521,4 +508,3 @@ void BattleViewActor::GetBoundingRect(RECT *rect) const
 rect->bottom += 36;
 
 }
-

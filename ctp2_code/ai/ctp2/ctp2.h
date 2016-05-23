@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -22,7 +10,6 @@
 
 #pragma warning( error : 4700 )
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +20,6 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <time.h>
-
 
 #include "ctp_types.h"
 #include "ctp_debug.h"

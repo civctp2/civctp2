@@ -40,7 +40,6 @@
 extern "C" {
 #endif
 
-
 #define VERSIONINFO			"V01.000 Overburn"
 #define CHRVERSIONINFOLEN	30
 #define DWVERSIONINFOLEN	CHRVERSIONINFOLEN / sizeof( DWORD ) + 1
@@ -48,7 +47,6 @@ extern "C" {
 enum{ _TRACKLEN_OK, _TRACKLEN_VERSIONMISMATCH, _TRACKLEN_LOADFAILED, _TRACKLEN_CHECKFAILED };
 
 #define tracklen_MAXTRACKS 128
-
 
 #define tracklen_DATFILE "texture.dat"
 
@@ -78,4 +76,4 @@ void tracklen_AutoPlay_Restore();
 }
 #endif
 
-#endif 
+#endif

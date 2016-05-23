@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Prevented crashes when accessing files that failed to open/create. 
+// - Prevented crashes when accessing files that failed to open/create.
 // - Prevented crashes due to uninitialised members.
 // - Moved common SpriteGroup member handling to SpriteGroup.
 // - Removed Assert to make mod battles less tedious to debug.
@@ -61,18 +61,18 @@
 extern ScreenManager	*g_screenManager;
 
 UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
-:	
+:
     SpriteGroup         (type),
 	m_numFirePointsWork (0)
 {
 	POINT const	thePoint	= {24, 24};
 	POINT const	emptyPoint	= {0, 0};
 
-	for (int j = 0; j < k_NUM_FACINGS; j++) 
+	for (int j = 0; j < k_NUM_FACINGS; j++)
 	{
 		m_moveOffsets[j]			= emptyPoint;
 
-		for (int i = 0; i < UNITACTION_MAX; i++) 
+		for (int i = 0; i < UNITACTION_MAX; i++)
 		{
 			m_shieldPoints[i][j]	= thePoint;
 		}
@@ -86,7 +86,7 @@ UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 
 void UnitSpriteGroup::DeallocateStorage(void)
 {
-	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
+	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++)
 	{
 		delete m_sprites[i];
 		m_sprites[i] = NULL;
@@ -102,45 +102,44 @@ void UnitSpriteGroup::DeallocateStorage(void)
 
 void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
+	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++)
 	{
 		delete m_anims[i];
 		m_anims[i] = NULL;
 	}
 }
 
-void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
 {
-	
-	
-	if (action == UNITACTION_FAKE_DEATH) 
+
+	if (action == UNITACTION_FAKE_DEATH)
 		action = UNITACTION_MOVE;
 
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	if (specialDelayProcess 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	if (specialDelayProcess
 		|| (action == UNITACTION_IDLE && m_sprites[action] == NULL)
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
 		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
@@ -149,22 +148,21 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
-			frame = 0; 
+			frame = 0;
 		}
 	}
 
 	if (m_sprites[action])
     {
-    	if ((frame < 0) || 
+    	if ((frame < 0) ||
             (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
-           ) 
+           )
         {
 		    frame = 0;
 	    }
-	
+
     	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 
-	
 	    if (directionalAttack)
 	    {
 		    m_sprites[action]->DirectionalDraw
@@ -178,29 +176,29 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
     }
 }
 
-BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, 
+BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing,
 							double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
 							BOOL specialDelayProcess, BOOL directionalAttack)
 {
-	if (action == UNITACTION_FAKE_DEATH) 
+	if (action == UNITACTION_FAKE_DEATH)
 		action = UNITACTION_MOVE;
 
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-	if (specialDelayProcess 
-        || (action == UNITACTION_IDLE && m_sprites[action] == NULL) 
+	if (specialDelayProcess
+        || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
         || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
        )
 	{
 		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
-			frame = 0; 
+			frame = 0;
 		}
 	}
 
-	if (m_sprites[action]) 
+	if (m_sprites[action])
     {
     	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 	    return m_sprites[action]->HitTest
@@ -209,26 +207,24 @@ BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, si
     return FALSE;
 }
 
-void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, 
+void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
+						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
 						   BOOL specialDelayProcess, BOOL directionalAttack)
 {
-	
-	
-	if (action == UNITACTION_FAKE_DEATH) 
+
+	if (action == UNITACTION_FAKE_DEATH)
 		action = UNITACTION_MOVE;
 
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-	
-	if (action < UNITACTION_MOVE || action > UNITACTION_WORK) 
+	if (action < UNITACTION_MOVE || action > UNITACTION_WORK)
 		return;
 
-	
-	
-	
-	if (specialDelayProcess 
+
+
+
+	if (specialDelayProcess
         || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
         || (action == UNITACTION_MOVE && (m_sprites[UNITACTION_IDLE] == NULL))
        )
@@ -236,23 +232,22 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 		if (m_sprites[UNITACTION_MOVE])
 		{
 			action = UNITACTION_MOVE;
-			frame = 0; 
+			frame = 0;
 		}
 	}
 
-    if (m_sprites[action] && 
+    if (m_sprites[action] &&
         (frame < static_cast<sint32>(m_sprites[action]->GetNumFrames()))
        )
     {
     	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
-	
+
     	if (!directionalAttack)
 	    {
 			m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
 	    }
 	}
 }
-
 
 void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
@@ -284,7 +279,6 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
 }
 
 
-
 void UnitSpriteGroup::LoadFull(MBCHAR const * filename)
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
@@ -302,7 +296,7 @@ void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
-	if (SPRITEFILEERR_OK == 
+	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_UNIT, version_id, compression_mode)
 	   )
 	{
@@ -310,7 +304,7 @@ void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 		file->CloseWrite();
 	}
 }
- 
+
 
 
 
@@ -340,31 +334,28 @@ void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 
 
 
-bool			
+bool
 UnitSpriteGroup::GetImageFileName(MBCHAR * name, char *format,...)
 {
    	va_list          v_args;
 	char			 fname[512];
-	
-	
-    va_start(v_args, format);    
-    vsprintf(name,format,v_args);
-    va_end( v_args );            
 
-	
+    va_start(v_args, format);
+    vsprintf(name,format,v_args);
+    va_end( v_args );
+
 	sprintf(fname,"%s.%s",name,"TGA");
 
 	if (c3files_PathIsValid(fname))
-	{	
+	{
 		strcpy(name,fname);
 		return true;
 	}
 
-	
 	sprintf(fname,"%s.%s",name,"TIF");
 
 	if (c3files_PathIsValid(fname))
-	{	
+	{
 		strcpy(name,fname);
 		return true;
 	}
@@ -388,17 +379,16 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	char			prefixStr[80];
 
-	
-	for (j=0; j<k_NUM_FACINGS; j++) 
+	for (j=0; j<k_NUM_FACINGS; j++)
 	{
-		for (i=0; i<k_MAX_NAMES; i++) 
+		for (i=0; i<k_MAX_NAMES; i++)
 		{
 			facedImageNames[j][i] =  new MBCHAR[2 * k_MAX_NAME_LENGTH];
 			facedShadowNames[j][i] = new MBCHAR[2 * k_MAX_NAME_LENGTH];
 		}
 	}
 
-	for (i=0; i<k_MAX_NAMES; i++) 
+	for (i=0; i<k_MAX_NAMES; i++)
 	{
 		imageNames[i] =  new MBCHAR[2 * k_MAX_NAME_LENGTH];
 		shadowNames[i] = new MBCHAR[2 * k_MAX_NAME_LENGTH];
@@ -410,57 +400,53 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 	{
 		sprintf(scriptName, "GU%.3d.txt", id);
 
-		
 		if (!c3files_PathIsValid(scriptName))
 			sprintf(scriptName, "GU%.2d.txt", id);
 	}
-	else 
+	else
 		sprintf(scriptName, "GC%.3d.txt", id);
 
 	printf("Processing '%s'\n", scriptName);
 
-	Token	* theToken = new Token(scriptName, C3DIR_SPRITES); 
-	Assert(theToken); 
-	if (!theToken) return FALSE; 
-	
-	sint32 tmp; 
+	Token	* theToken = new Token(scriptName, C3DIR_SPRITES);
+	Assert(theToken);
+	if (!theToken) return FALSE;
 
-	if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE)) return FALSE; 
+	sint32 tmp;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE)) return FALSE;
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_MOVE, tmp)) return FALSE;    
-	
-	if (tmp) 
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
+
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_MOVE, tmp)) return FALSE;
+
+	if (tmp)
 	{
 		Assert(type == GROUPTYPE_UNIT);
-		
-		if (type != GROUPTYPE_UNIT) 
+
+		if (type != GROUPTYPE_UNIT)
 		{
 			printf("\n Illegal unit action (Move) for a city sprite.\n");
 			return FALSE;
 		}
 
-		
 		FacedSprite *moveSprite = new FacedSprite;
-		
-		
+
 		moveSprite->ParseFromTokens(theToken);
 
 		printf(" [Move");
-		for (j=0; j<k_NUM_FACINGS; j++) 
+		for (j=0; j<k_NUM_FACINGS; j++)
 		{
-			for (size_t k = 0; k < moveSprite->GetNumFrames(); ++k) 
+			for (size_t k = 0; k < moveSprite->GetNumFrames(); ++k)
 			{
 				if (!GetImageFileName(facedShadowNames[j][k],"%sGU%#.3dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame()))
 					GetImageFileName(facedShadowNames[j][k] ,"%sGU%#.2dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame());
-				
+
 				if (!GetImageFileName(facedImageNames[j][k], "%sGU%#.3dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame()))
 					GetImageFileName(facedImageNames[j][k] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame());
 			}
 		}
 
-		
 		moveSprite->Import(moveSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
 		delete m_sprites[UNITACTION_MOVE];
@@ -474,43 +460,40 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_anims[UNITACTION_MOVE] = moveAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_ATTACK, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_ATTACK, tmp)) return FALSE;
+	if (tmp)
 	{
 		Assert(type == GROUPTYPE_UNIT);
-		
-		if (type != GROUPTYPE_UNIT) 
+
+		if (type != GROUPTYPE_UNIT)
 		{
 			printf("\n Illegal unit action (Attack) for a city sprite.\n");
 			return FALSE;
 		}
-		
+
 		if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_ATTACK_IS_DIRECTIONAL, tmp)) return FALSE;
-		if (tmp) 
+		if (tmp)
 			m_hasDirectional = TRUE;
-		else 
+		else
 			m_hasDirectional = FALSE;
 
-		
 		FacedSprite *attackSprite = new FacedSprite;
-		
-		
+
 		attackSprite->ParseFromTokens(theToken);
 
 		printf(" [Attack");
-		for (j=0; j<k_NUM_FACINGS; j++) 
+		for (j=0; j<k_NUM_FACINGS; j++)
 		{
-			for(i=0; i<attackSprite->GetNumFrames(); i++) 
+			for(i=0; i<attackSprite->GetNumFrames(); i++)
 			{
 				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dAS%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame()))
 					GetImageFileName (facedShadowNames[j][i],"%sGU%#.2dAS%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame());
-				
+
 				if (!GetImageFileName(facedImageNames [j][i],"%sGU%#.3dAA%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame()))
 					GetImageFileName (facedImageNames [j][i],"%sGU%#.2dAA%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame());
 			}
 		}
 
-		
 		attackSprite->Import(attackSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
 		delete m_sprites[UNITACTION_ATTACK];
@@ -524,35 +507,35 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_anims[UNITACTION_ATTACK] = attackAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_IDLE, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_IDLE, tmp)) return FALSE;
+	if (tmp)
 	{
 		Sprite *idleSprite = new Sprite;
 		idleSprite->ParseFromTokens(theToken);
 
-		if (type == GROUPTYPE_UNIT) 
+		if (type == GROUPTYPE_UNIT)
 		{
 			printf(" [Idle");
-		  
-			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
+
+			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n)
 			{
 				if (!GetImageFileName(imageNames[n] ,"%sGU%#.3dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
 					GetImageFileName (imageNames[n] ,"%sGU%#.2dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
 				if (!GetImageFileName(shadowNames[n],"%sGU%#.3dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
 					GetImageFileName (shadowNames[n],"%sGU%#.2dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
 			}
-		} 
-		else if (type == GROUPTYPE_CITY) 
+		}
+		else if (type == GROUPTYPE_CITY)
 		{
 			printf(" [City");
 
-			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
+			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n)
 			{
 				GetImageFileName(shadowNames[n], "%sGC%#.3dS.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
 				GetImageFileName(imageNames[n] , "%sGC%#.3dA.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
 			}
-		} 
-		else 
+		}
+		else
 		{
 			Assert(FALSE);
 		}
@@ -569,12 +552,12 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_anims[UNITACTION_IDLE] = idleAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_VICTORY, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_VICTORY, tmp)) return FALSE;
+	if (tmp)
 	{
 		Assert(type == GROUPTYPE_UNIT);
-		
-		if (type != GROUPTYPE_UNIT) 
+
+		if (type != GROUPTYPE_UNIT)
 		{
 			printf("\n Illegal unit action (Victory) for a city sprite.\n");
 			return FALSE;
@@ -588,8 +571,8 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		victorySprite->ParseFromTokens(theToken);
 
 		printf(" [Victory");
-		for(size_t n = 0; n < victorySprite->GetNumFrames(); ++n) 
-		{			
+		for(size_t n = 0; n < victorySprite->GetNumFrames(); ++n)
+		{
 			if (!GetImageFileName(shadowNames[n],"%sGU%#.3dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
 				GetImageFileName (shadowNames[n],"%sGU%#.2dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame());
 			if (!GetImageFileName(imageNames[n], "%sGU%#.3dVA%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
@@ -608,26 +591,24 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_anims[UNITACTION_VICTORY] = victoryAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_WORK, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_WORK, tmp)) return FALSE;
+	if (tmp)
 	{
 		Assert(type == GROUPTYPE_UNIT);
-		if (type != GROUPTYPE_UNIT) 
+		if (type != GROUPTYPE_UNIT)
 		{
 			printf("\n Illegal unit action (Work) for a city sprite.\n");
 			return FALSE;
 		}
 
-		
 		FacedSprite *workSprite = new FacedSprite;
-		
-		
+
 		workSprite->ParseFromTokens(theToken);
 
 		printf(" [Work/A2");
-		for (j=0; j<k_NUM_FACINGS; j++) 
+		for (j=0; j<k_NUM_FACINGS; j++)
 		{
-			for(size_t n = 0; n < workSprite->GetNumFrames(); ++n) 
+			for(size_t n = 0; n < workSprite->GetNumFrames(); ++n)
 			{
 				if (!GetImageFileName(facedShadowNames[j][n],"%sGU%#.3dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame()))
 					GetImageFileName (facedShadowNames[j][n],"%sGU%#.2dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame());
@@ -637,7 +618,6 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		}
 
 
-		
 		workSprite->Import(workSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
 		delete m_sprites[UNITACTION_WORK];
@@ -650,12 +630,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_anims[UNITACTION_WORK] = workAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_FIREPOINTS, tmp)) return FALSE;    
-	
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_FIREPOINTS, tmp)) return FALSE;
+
+	if (tmp)
 	{
-		
-	
+
 
 		for (sint32 j=0; j<tmp; j++) {
 			if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
@@ -666,9 +645,9 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		}
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_FIREPOINTS_WORK, tmp)) return FALSE;    
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_FIREPOINTS_WORK, tmp)) return FALSE;
 	if (tmp) {
-		
+
 		m_numFirePointsWork = (uint16)tmp;
 
 		for (sint32 j=0; j<tmp; j++) {
@@ -680,8 +659,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		}
 	}
 
-
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_MOVEOFFSETS, tmp)) return FALSE;    
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_MOVEOFFSETS, tmp)) return FALSE;
 	if (tmp) {
 		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 		for (i=0; i<k_NUM_FACINGS; i++) {
@@ -690,61 +668,61 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		if (!token_ParseAnCloseBraceNext(theToken)) return FALSE;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS, tmp)) return FALSE;    
+	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS, tmp)) return FALSE;
 	if (tmp) {
-		
+
 		if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
-		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_MOVE)) return FALSE;    
+		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_MOVE)) return FALSE;
 		if (tmp) {
 			for (i=0; i<k_NUM_FACINGS; i++) {
 				m_shieldPoints[UNITACTION_MOVE][i] = token_ParsePoint(theToken);
 			}
 		}
-		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_ATTACK)) return FALSE;    
+		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_ATTACK)) return FALSE;
 		if (tmp) {
 			for (i=0; i<k_NUM_FACINGS; i++) {
 				m_shieldPoints[UNITACTION_ATTACK][i] = token_ParsePoint(theToken);
 			}
 		}
-		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_IDLE)) return FALSE;    
+		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_IDLE)) return FALSE;
 		if (tmp) {
 			for (i=0; i<k_NUM_FACINGS; i++) {
 				m_shieldPoints[UNITACTION_IDLE][i] = token_ParsePoint(theToken);
 			}
 		}
-		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_VICTORY)) return FALSE;    
+		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_VICTORY)) return FALSE;
 		if (tmp) {
 			for (i=0; i<k_NUM_FACINGS; i++) {
 				m_shieldPoints[UNITACTION_VICTORY][i] = token_ParsePoint(theToken);
 			}
 		}
-		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_WORK)) return FALSE;    
+		if (!token_ParseKeywordNext(theToken, TOKEN_UNIT_SPRITE_SHIELDPOINTS_WORK)) return FALSE;
 		if (tmp) {
 			for (i=0; i<k_NUM_FACINGS; i++) {
 				m_shieldPoints[UNITACTION_WORK][i] = token_ParsePoint(theToken);
 			}
 		}
-		
+
 		if (!token_ParseAnCloseBraceNext(theToken)) return FALSE;
 	}
 
-	
 
-	
+
+
 
 	delete theToken;
 
-	for (j=0; j<k_NUM_FACINGS; j++) 
+	for (j=0; j<k_NUM_FACINGS; j++)
     {
-		for (i=0; i<k_MAX_NAMES; i++) 
+		for (i=0; i<k_MAX_NAMES; i++)
 		{
 			delete [] facedImageNames[j][i];
 			delete [] facedShadowNames[j][i];
 		}
 	}
 
-	for (i = 0; i < k_MAX_NAMES; i++) 
+	for (i = 0; i < k_MAX_NAMES; i++)
     {
 		delete [] imageNames[i];
 		delete [] shadowNames[i];
@@ -757,7 +735,6 @@ POINT UnitSpriteGroup::GetHotPoint(UNITACTION action, sint32 facing)
 {
 	POINT nullPoint = {0,0};
 
-	
 	if (action == UNITACTION_IDLE && m_sprites[action] == NULL)
 		action = UNITACTION_MOVE;
 
@@ -778,20 +755,20 @@ POINT UnitSpriteGroup::GetHotPoint(UNITACTION action, sint32 facing)
 void
 UnitSpriteGroup::SetHotPoint(UNITACTION action, sint32 facing,POINT pt)
 {
-	
+
 	if (action == UNITACTION_IDLE && m_sprites[action] == NULL)
 		action = UNITACTION_MOVE;
 
-	if (m_sprites[action] != NULL) 
+	if (m_sprites[action] != NULL)
 	{
-		if (m_sprites[action]->GetType() == SPRITETYPE_FACED) 
+		if (m_sprites[action]->GetType() == SPRITETYPE_FACED)
 		{
-			if (facing >= k_NUM_FACINGS) 
+			if (facing >= k_NUM_FACINGS)
 				facing = k_MAX_FACINGS - facing;
-			
+
 			((FacedSprite *)m_sprites[action])->SetHotPoint((uint16)facing,pt.x,pt.y);
-		} 
-		else 
+		}
+		else
 			m_sprites[action]->SetHotPoint(pt.x,pt.y);
 	}
 }
@@ -804,7 +781,7 @@ void UnitSpriteGroup::ExportScript(MBCHAR const * name)
 {
 	sint32				i;
 	extern TokenData	g_allTokens[];
-	
+
 	FILE * file = fopen(name, "w");
 	if (!file) {
 		c3errors_ErrorDialog("Sprite Export", "Could not open '%s' for writing.", name);
@@ -825,14 +802,12 @@ void UnitSpriteGroup::ExportScript(MBCHAR const * name)
 	fprintf(file, "# %s\n", timebuf);
 	fprintf(file, "#\n\n");
 
-
 	fprintf(file, "%d # %s\n\n", 0, name);
 	fprintf(file, "%s\n", g_allTokens[TOKEN_UNIT_SPRITE].keyword);
 	fprintf(file, "{\n");
 
 	fprintf(file, "\t%s", g_allTokens[TOKEN_UNIT_SPRITE_MOVE].keyword);
-	
-	
+
 	ExportSpriteGroup(file,(GAME_ACTION)UNITACTION_MOVE,TOKEN_UNIT_SPRITE_MOVE, TOKEN_MAX);
 
 
@@ -886,41 +861,41 @@ void UnitSpriteGroup::ExportScript(MBCHAR const * name)
 
 
 
-	
- 
- 
- 
- 
- 
- 
- 
-	  
- 
- 
- 
- 
 
-	
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
-	
- 
- 
- 
- 
- 
- 
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	fprintf(file, "\t%s\t1\n", g_allTokens[TOKEN_UNIT_SPRITE_SHIELDPOINTS].keyword);
 	fprintf(file, "\t{\t\n");
 
@@ -944,7 +919,7 @@ void UnitSpriteGroup::ExportScript(MBCHAR const * name)
 	for (i=0; i<k_NUM_FACINGS; i++) {
 		fprintf(file, "\t\t\t%d %d\n", m_shieldPoints[UNITACTION_WORK][i].x, m_shieldPoints[UNITACTION_WORK][i].y);
 	}
-	
+
 	fprintf(file, "\t}\n\n");
 
 	fprintf(file, "}\n");

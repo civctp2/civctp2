@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,15 +26,15 @@
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Reorganised to try to prevent crashes.
-// - Number of colors in a ColorsXX.txt must be now either 58 like in the 
+// - Number of colors in a ColorsXX.txt must be now either 58 like in the
 //   original game or 74 like in the source code edition. If there are just
-//   58 the missing player colors are filled with the map colors at that 
+//   58 the missing player colors are filled with the map colors at that
 //   like in the original version. (Oct 22nd 2005 Martin Gühmann)
 // - Relaxed the above to allow more than 74 color entries in the future.
 // - Added check for invalid/unassigned player index in ComputePlayerColor.
 //
 //----------------------------------------------------------------------------
- 
+
 #include "c3.h"
 #include "colorset.h"
 
@@ -67,7 +67,7 @@ ColorSet     s_theUniqueColorSet;
 // Parameters : c               : color in native format
 //
 // Globals    : g_is565Format   : native format is RGB565 (when false: RGB555)
-//                                                  
+//
 //
 // Returns    : COLORREF        : color in RGB888 format
 //
@@ -96,7 +96,7 @@ COLORREF ColorRef(Pixel16 const & c)
 //
 // Parameters : tokenStream     : the token stream
 //
-// Globals    : - 
+// Globals    : -
 //
 // Returns    : <T>             : the next number from the stream.
 //
@@ -110,7 +110,6 @@ template <typename T> T ParseNextNumber(Token & tokenStream)
         throw std::runtime_error("Error during parse.");
     }
 
-
     sint32  tmp;
     tokenStream.GetNumber(tmp);
     return static_cast<T>(tmp);
@@ -118,7 +117,7 @@ template <typename T> T ParseNextNumber(Token & tokenStream)
 
 } // local namespace
 
-ColorSet *	g_colorSet  = &s_theUniqueColorSet; 
+ColorSet *	g_colorSet  = &s_theUniqueColorSet;
 
 ColorSet::ColorSet()
 :   m_colors()
@@ -182,7 +181,7 @@ void ColorSet::Initialize(uint32 fileNumber)
 //
 // Returns    : -
 //
-// Remark(s)  : When anything fails (file can not be found or has invalid 
+// Remark(s)  : When anything fails (file can not be found or has invalid
 //              format) the color data is cleared, and all colors are black.
 //
 //----------------------------------------------------------------------------
@@ -190,7 +189,7 @@ void ColorSet::Import(uint32 fileNumber)
 {
 	MBCHAR		filename[_MAX_PATH];
 	sprintf(filename, "Colors%.2ld.txt", fileNumber);
-	Token       theToken(filename, C3DIR_GAMEDATA); 
+	Token       theToken(filename, C3DIR_GAMEDATA);
 
     try
     {
@@ -200,11 +199,11 @@ void ColorSet::Import(uint32 fileNumber)
         }
 
         sint32 fileColorCount = 0;
-        theToken.GetNumber(fileColorCount); 
+        theToken.GetNumber(fileColorCount);
         if (    (fileColorCount != static_cast<sint32>(OLD_COLOR_NUMBER))
 		     && (fileColorCount <  static_cast<sint32>(NEW_COLOR_NUMBER_MIN))
-           ) 
-		{ 
+           )
+		{
 	        throw std::runtime_error("Illegal number of colors.");
         }
 
@@ -212,20 +211,20 @@ void ColorSet::Import(uint32 fileNumber)
 	        !token_ParseAnOpenBraceNext(&theToken)
            )
         {
-            throw std::runtime_error("Error before open brace."); 
+            throw std::runtime_error("Error before open brace.");
         }
 
-        size_t const    arraySize   = 
+        size_t const    arraySize   =
             std::max(NEW_COLOR_NUMBER_MIN, static_cast<size_t>(fileColorCount));
 
         m_colors.resize(arraySize);
-        for (size_t i = 0; i < static_cast<size_t>(fileColorCount); ++i) 
+        for (size_t i = 0; i < static_cast<size_t>(fileColorCount); ++i)
         {
-	        if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET_COLOR)) 
+	        if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET_COLOR))
             {
-		        throw std::runtime_error("Error during parse."); 
+		        throw std::runtime_error("Error during parse.");
             }
-	        
+
 	        uint16 const    r       = ParseNextNumber<uint16>(theToken);
             uint16 const    g       = ParseNextNumber<uint16>(theToken);
             uint16 const    b       = ParseNextNumber<uint16>(theToken);
@@ -240,10 +239,10 @@ void ColorSet::Import(uint32 fileNumber)
             {
                 // The playtest made itself incompatible by middle-insertion.
                 // The following index shift hack compensates for this.
-				size_t const    hackIndex   = 
+				size_t const    hackIndex   =
                     i + static_cast<size_t>(COLOR_TERRAIN_0)
                       - static_cast<size_t>(COLOR_PLAYER18);
-                
+
                 m_colors[hackIndex] = pixelutils_Convert565to555(rgb565);
                 // And another hack: copy terrain colors to player colors?!
                 m_colors[i]         = m_colors[hackIndex];
@@ -265,7 +264,7 @@ void ColorSet::Import(uint32 fileNumber)
     catch (std::exception const & error)
     {
         std::vector<Pixel16>().swap(m_colors);
-        c3errors_FatalDialog(theToken.ErrStr(), error.what()); 
+        c3errors_FatalDialog(theToken.ErrStr(), error.what());
     }
 }
 
@@ -325,4 +324,3 @@ Pixel16 ColorSet::GetLightPlayerColor(sint32 playerNum) const
 {
 	return pixelutils_Lightening(GetPlayerColor(playerNum));
 }
-

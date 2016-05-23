@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Collection of control panels during actual play.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -122,7 +122,7 @@ void MainControlPanel::UpdateCityList()
 void MainControlPanel::UpdatePlayer(PLAYER_INDEX player)
 {
 	if(g_mainControlPanel) {
-		
+
 		g_mainControlPanel->m_endTurnButton->UpdatePlayer(player);
 		g_mainControlPanel->m_turnYearStatus->UpdatePlayer(player);
 	}
@@ -184,7 +184,7 @@ MainControlPanel::~MainControlPanel()
 
 bool MainControlPanel::GetSelectedCargo(CellUnitList &cargo)
 {
-	return g_mainControlPanel && 
+	return g_mainControlPanel &&
 	       g_mainControlPanel->m_controlTabPanel->GetSelectedCargo(cargo);
 }
 

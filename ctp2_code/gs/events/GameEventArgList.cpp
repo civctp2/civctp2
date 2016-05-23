@@ -42,11 +42,10 @@
 #include "Unit.h"
 #include "GameEventDescription.h"
 
-
 GameEventArgList::GameEventArgList(va_list *vl, GAME_EVENT eventType)
 {
-	std::fill(m_argLists, 
-	          m_argLists + GEA_End, 
+	std::fill(m_argLists,
+	          m_argLists + GEA_End,
 	          (PointerList<GameEventArgument> *) NULL
 	         );
 
@@ -137,8 +136,7 @@ void GameEventArgList::Add(GameEventArgument *arg)
 }
 
 
-
-GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType, 
+GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 											sint32 index) const
 {
 	Assert(argType > GEA_Null);
@@ -152,7 +150,7 @@ GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 
 	sint32  i = 0;
 
-	for 
+	for
 	(
 	    PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
 	    walk.IsValid();
@@ -232,7 +230,6 @@ sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType) const
 	return m_argLists[argType]->GetCount();
 }
 
-
 bool GameEventArgList::GetCity(sint32 index, Unit &c) const
 {
 	GameEventArgument * arg = GetArg(GEA_City, index);
@@ -254,7 +251,6 @@ bool GameEventArgList::GetArmy(sint32 index, Army &a) const
 	return arg && arg->GetArmy(a) && a.IsValid();
 }
 
-
 bool GameEventArgList::GetInt(sint32 index, sint32 &value) const
 {
 	GameEventArgument * arg = GetArg(GEA_Int, index);
@@ -269,14 +265,12 @@ bool GameEventArgList::GetPlayer(sint32 index, sint32 &player) const
 	return arg && arg->GetPlayer(player);
 }
 
-
 bool GameEventArgList::GetPos(sint32 index, MapPoint & pos) const
 {
 	GameEventArgument * arg = GetArg(GEA_MapPoint, index);
 
 	return arg && arg->GetPos(pos); /// @todo Add && pos.IsValid()?
 }
-
 
 bool GameEventArgList::GetPath(sint32 index, Path *&path) const
 {
@@ -288,21 +282,21 @@ bool GameEventArgList::GetPath(sint32 index, Path *&path) const
 bool GameEventArgList::GetDirection(sint32 index, WORLD_DIRECTION &d) const
 {
 	GameEventArgument * arg = GetArg(GEA_Direction, index);
-		
+
 	return arg && arg->GetDirection(d);
 }
 
 bool GameEventArgList::GetAdvance(sint32 index, sint32 &a) const
 {
 	GameEventArgument * arg = GetArg(GEA_Advance, index);
-		
+
 	return arg && arg->GetAdvance(a);
 }
 
 bool GameEventArgList::GetWonder(sint32 index, sint32 &w) const
 {
 	GameEventArgument * arg = GetArg(GEA_Wonder, index);
-		
+
 	return arg && arg->GetWonder(w);
 }
 

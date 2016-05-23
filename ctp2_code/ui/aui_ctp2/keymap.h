@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ enum KEY_FUNCTION
     KEY_FUNCTION_OPEN_WORK_VIEW,       // Reused for army manager
     KEY_FUNCTION_SLEEP,
     KEY_FUNCTION_ENTRENCH,
-    KEY_FUNCTION_SETTLE, 
+    KEY_FUNCTION_SETTLE,
     KEY_FUNCTION_PILLAGE,
     KEY_FUNCTION_BOMBARD,
     KEY_FUNCTION_REFORM,
@@ -106,7 +106,7 @@ enum KEY_FUNCTION
     KEY_FUNCTION_OPEN_SCIENCE_STATUS,
     KEY_FUNCTION_OPEN_UNIT_STATUS,
     KEY_FUNCTION_OPEN_TRADE_STATUS,
-    KEY_FUNCTION_TRADE_SUMMARY,    
+    KEY_FUNCTION_TRADE_SUMMARY,
     KEY_FUNCTION_OPEN_DIPLOMACY,
     KEY_FUNCTION_NEW_PROPOSAL,
     KEY_FUNCTION_OPEN_MESSAGE,
@@ -183,7 +183,7 @@ struct FUNC_TABLE {
     char str[80];
 };
 
-struct KEYPRESS_MAP { 
+struct KEYPRESS_MAP {
     unsigned long keycode;
     KEY_FUNCTION function;
 };
@@ -199,7 +199,7 @@ class KEYMAP
 
 public:
     KEYMAP(BOOL useDefault);
-    KEY_FUNCTION get_function(unsigned long wParam); 
+    KEY_FUNCTION get_function(unsigned long wParam);
     uint32 get_keycode( KEY_FUNCTION key );
     sint32 remap_key( KEY_FUNCTION key, uint32 wParam, uint32 oldKeycode );
     void save();

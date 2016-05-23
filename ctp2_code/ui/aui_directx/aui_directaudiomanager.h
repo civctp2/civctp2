@@ -1,24 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTAUDIOMANAGER_H__
 #define __AUI_DIRECTAUDIOMANAGER_H__
 
 #ifdef __AUI_USE_DIRECTX__
 
-
 #include "aui_audiomanager.h"
 #include "aui_directsound.h"
 #include "aui_resource.h"
-
 
 
 #define DS3D_LISTENERDOPPLERFACTOR DS3D_DEFAULTDOPPLERFACTOR
@@ -26,7 +13,6 @@
 #define DS3D_LISTENERDISTANCEFACTOR (D3DVALUE)1.0
 #define DS3D_LISTENERMINDISTANCE (D3DVALUE)2500.0
 #define DS3D_LISTENERMAXDISTANCE (D3DVALUE)30000.0
-
 
 #define RATE44KHZ				44100
 #define RATE22KHZ				22050
@@ -89,7 +75,6 @@ public:
 
 	void Update( void );
 
-	
 	void StartMusic() {};
 	void StartMusic( sint32 trackNumber ) {};
 
@@ -101,14 +86,14 @@ protected:
 	aui_Resource<aui_DirectSound>	*m_activeSoundResource;
 	aui_Resource<aui_DirectSound>	*m_inactiveSoundResource;
 
-	LPDIRECTSOUND	m_dsHandle; 
-	LPDIRECTSOUNDBUFFER m_primaryBuffer; 
-	LPDIRECTSOUND3DLISTENER m_listener;	
-	sint32	m_timeOut;	
+	LPDIRECTSOUND	m_dsHandle;
+	LPDIRECTSOUNDBUFFER m_primaryBuffer;
+	LPDIRECTSOUND3DLISTENER m_listener;
+	sint32	m_timeOut;
 	sint32	m_numObjects;
 	sint32	m_maxObjects;
-	sint32	m_masterVolume1;		
-	sint32	m_masterVolume2;		
+	sint32	m_masterVolume1;
+	sint32	m_masterVolume2;
 
 	sint32 m_numberOfActiveSounds;;
 	BOOL m_use3D;
@@ -126,4 +111,4 @@ typedef aui_DirectAudioManager aui_NativeAudioManager;
 
 #endif // __AUI_USE_DIRECTX__
 
-#endif 
+#endif

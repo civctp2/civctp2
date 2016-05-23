@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #ifndef __MESSAGE_ACTIONS_H__
 #define __MESSAGE_ACTIONS_H__
 
@@ -22,7 +12,6 @@ class MessageList;
 class MessageIconWindow;
 class MessageWindow;
 class MessageModal;
-
 
 
 class MessageOpenAction : public aui_Action
@@ -88,9 +77,9 @@ class MessageStandardEyePointAction : public aui_Action
 {
 public:
 	MessageStandardEyePointAction
-    ( 
-        MessageWindow * window, 
-        MessageModal *  modal = NULL 
+    (
+        MessageWindow * window,
+        MessageModal *  modal = NULL
     )
     :   aui_Action  (),
         m_window    (window),
@@ -114,8 +103,8 @@ class MessageDropdownEyePointAction : public MessageStandardEyePointAction
 {
 public:
 	MessageDropdownEyePointAction
-    ( 
-        MessageWindow * window, 
+    (
+        MessageWindow * window,
         MessageModal *  modal       = NULL,
         c3_DropDown *   dropdown    = NULL
     )
@@ -141,11 +130,11 @@ class MessageDropdownAction : public aui_Action
 {
 public:
 	MessageDropdownAction
-    ( 
-        MessageWindow * window, 
-        c3_DropDown *   dropdown, 
-        MessageModal *  modal = NULL 
-    ) 
+    (
+        MessageWindow * window,
+        c3_DropDown *   dropdown,
+        MessageModal *  modal = NULL
+    )
 	:   aui_Action  (),
         m_window    (window),
         m_dropdown  (dropdown),
@@ -170,13 +159,13 @@ class MessageListboxEyePointAction : public MessageStandardEyePointAction
 {
 public:
 	MessageListboxEyePointAction
-    ( 
-        MessageWindow * window, 
+    (
+        MessageWindow * window,
         sint32          index,
-		sint32          change, 
-        sint32          min, 
-        sint32          max, 
-        MessageModal *  modal = NULL 
+		sint32          change,
+        sint32          min,
+        sint32          max,
+        MessageModal *  modal = NULL
     )
     :   MessageStandardEyePointAction   (window, modal),
         m_index                         (index),
@@ -208,7 +197,7 @@ protected:
 class MessageResponseAction : public aui_Action
 {
 public:
-	MessageResponseAction(MessageWindow * window, sint32 response) 
+	MessageResponseAction(MessageWindow * window, sint32 response)
     :   aui_Action  (),
         m_window    (window),
         m_response  (response)
@@ -230,7 +219,7 @@ protected:
 class MessageResponseUIAction : public MessageResponseAction
 {
 public:
-	MessageResponseUIAction(MessageWindow * window, sint32 response) 
+	MessageResponseUIAction(MessageWindow * window, sint32 response)
     : MessageResponseAction (window, response)
     { ; };
 	virtual ~MessageResponseUIAction(void) { ; };
@@ -246,7 +235,7 @@ public:
 class MessageModalResponseAction : public aui_Action
 {
 public:
-	MessageModalResponseAction(Message * message, sint32 response) 
+	MessageModalResponseAction(Message * message, sint32 response)
     :   aui_Action  (),
         m_message   (message),
         m_response  (response)
@@ -269,7 +258,7 @@ protected:
 class MessageResponseSubmitAction : public aui_Action
 {
 public:
-	MessageResponseSubmitAction(MessageWindow * window) 
+	MessageResponseSubmitAction(MessageWindow * window)
     :   aui_Action  (),
         m_window    (window)
     { ; };
@@ -293,19 +282,19 @@ class MessageCleanupAction : public aui_Action
 {
 public:
 	MessageCleanupAction
-    ( 
-        MessageIconWindow * iconWindow, 
-        PLAYER_INDEX        index 
-    ) 
+    (
+        MessageIconWindow * iconWindow,
+        PLAYER_INDEX        index
+    )
     :   aui_Action      (),
         m_iconWindow    (iconWindow),
         m_index         (index)
     { ; };
 	MessageCleanupAction
-    ( 
-        MessageWindow *     window, 
-        PLAYER_INDEX        index 
-    ) 
+    (
+        MessageWindow *     window,
+        PLAYER_INDEX        index
+    )
     :   aui_Action      (),
         m_iconWindow    (window ? window->GetIconWindow() : NULL),
         m_index         (index)
@@ -328,14 +317,14 @@ class ChangeOffsetMessageIconButtonAction : public aui_Action
 {
 public:
 	ChangeOffsetMessageIconButtonAction
-    ( 
-        sint32          offset, 
-        MessageList *   list, 
+    (
+        sint32          offset,
+        MessageList *   list,
 		bool            flag = true
     )
     :   aui_Action      (),
         m_offset        (offset),
-        m_messagelist   (list), 
+        m_messagelist   (list),
         m_offsetflag    (flag)
     { ; };
 	virtual ~ChangeOffsetMessageIconButtonAction(void) { ; };
@@ -350,16 +339,15 @@ public:
 	void SetList(MessageList * newlist) { m_messagelist = newlist; };
 
 protected:
-	sint32			m_offset;			
-	bool			m_offsetflag;		
+	sint32			m_offset;
+	bool			m_offsetflag;
 	MessageList	*   m_messagelist;
 };
-
 
 class ChangeOffsetDestroyButtonAction : public aui_Action
 {
 public:
-	ChangeOffsetDestroyButtonAction(bool more) 
+	ChangeOffsetDestroyButtonAction(bool more)
 	:   aui_Action  (),
         m_more      (more)
     { ; };
@@ -380,4 +368,4 @@ AUI_ACTION_BASIC(MessageAdviceDismissAction);
 AUI_ACTION_BASIC(MessageAdviceDestroyAction);
 AUI_ACTION_BASIC(MessageModalDestroyAction);
 
-#endif 
+#endif

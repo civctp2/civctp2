@@ -2,8 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
-// Id           : $Id:$
+// Description  :
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,47 +41,44 @@ extern sint32		g_is565Format;
 extern TiledMap		*g_tiledMap;
 
 
-
 void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 							uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	uint8			*surfBase;
 
-	
 	sint32			surfWidth = m_surfWidth;
 	sint32			surfHeight = m_surfHeight;
 	sint32			surfPitch = m_surfPitch;
 
-	sint32			xstart, xend, 
+	sint32			xstart, xend,
 					ystart, yend;
 
-	if (drawX < 0) 
+	if (drawX < 0)
 	{
 		xstart = 0 - drawX;
 		drawX = 0;
-	} else 
+	} else
 		xstart = 0;
 
-	if (drawY < 0) 
+	if (drawY < 0)
 	{
 		ystart = 0 - drawY;
 		drawY = 0;
-	} else 
+	} else
 		ystart = 0;
 
-	if (drawX >= (surfWidth - width)) 
+	if (drawX >= (surfWidth - width))
 		xend = (surfWidth - drawX);
-	else 
+	else
 		xend = width;
 
-	if (drawY >= (surfHeight - height)) 
+	if (drawY >= (surfHeight - height))
 		yend = (surfHeight - drawY);
-    else 
+    else
 		yend = height;
 
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
 	Pixel16		*destPixel;
 
 	Pixel16		*table = frame+1;
@@ -92,28 +89,27 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 
 	sint32		xpos;
 
-	
-	for(j=ystart; j<yend; j++) 
+	for(j=ystart; j<yend; j++)
 	{
-		if (table[j] != k_EMPTY_TABLE_ENTRY) 
-		{		
+		if (table[j] != k_EMPTY_TABLE_ENTRY)
+		{
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			destPixel = (Pixel16 *)(surfBase + j * surfPitch);
 			rowData = dataStart + table[j];
 			tag = *rowData++;
-			tag = tag & 0x0FFF;	
+			tag = tag & 0x0FFF;
 			xpos = 0;
-			while ((tag & 0xF000) == 0) 
+			while ((tag & 0xF000) == 0)
 			{
-				switch ((tag & 0x0F00) >> 8) 
+				switch ((tag & 0x0F00) >> 8)
 				{
 					case k_CHROMAKEY_RUN_ID	:
-						 
+
 						 len = (tag & 0x00FF);
-						 
-						 while (len) 
+
+						 while (len)
 						 {
 						 	len--;
 						 	if ((xpos >= xstart) && (xpos < xend))
@@ -122,17 +118,16 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 }
 						 break;
 
-					case k_COPY_RUN_ID			: 
+					case k_COPY_RUN_ID			:
 
 						 len = (tag & 0x00FF);
 
-						
 						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
 						 {
-							
-							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
+
+							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 							{
-						 		while (len) 
+						 		while (len)
 								{
 						 			len--;
 						 			if (xpos >= xstart && xpos < xend)
@@ -141,14 +136,13 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 			rowData++;
 						 			xpos++;
 						 		}
-							
-								break;
-							} 
 
-							
-						 	if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+								break;
+							}
+
+						 	if (flags & k_BIT_DRAWFLAGS_FOGGED)
 							{
-						 		while (len) 
+						 		while (len)
 								{
 						 			len--;
 						 			if ((xpos >= xstart) && (xpos < xend))
@@ -158,12 +152,12 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 			xpos++;
 						 		}
 						 		break;
-							} 
-							
-						 	while (len) 
+							}
+
+						 	while (len)
 							{
 						 		len--;
-						 		
+
 						 		if ((xpos >= xstart) && (xpos < xend))
 						 			*destPixel++ = pixelutils_Desaturate_565(*rowData++);
 						 		else
@@ -174,8 +168,7 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 							break;
 						 }
 
-						 
-						 while (len) 
+						 while (len)
 						 {
 						 	len--;
 						 	if ((xpos >= xstart) && (xpos < xend))
@@ -184,13 +177,13 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 		rowData++;
 						 	xpos++;
 						 }
-						 
+
 						 break;
 
-					case k_SHADOW_RUN_ID		: 
+					case k_SHADOW_RUN_ID		:
 						 len = (tag & 0x00FF);
 
-						 while (len) 
+						 while (len)
 						 {
 						 	len--;
 						 	if ((xpos >= xstart) && (xpos < xend))
@@ -200,19 +193,17 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 	}
 						 	xpos++;
 						 }
-						
+
 						 break;
 					case k_FEATHERED_RUN_ID	:
-						 
+
 						 if((xpos >= xstart) && (xpos < xend))
 						 	*destPixel++ = *rowData;
-						 
+
 						 xpos++;
 						 rowData++;
-						
+
 						 break;
-						 
-						
 
 
 
@@ -245,7 +236,9 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 
 
 
- 
+
+
+
 				default:
 						Assert(FALSE);
 						break;
@@ -274,7 +267,6 @@ Pixel16 test_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 	sint32 rb0, g0;
 
 	rb2 = (pixel2 & 0xF81F);
-	
 
 
 	rb0 = ((rb2<<5)+((blend*((pixel1 & 0xF81F)-rb2))>>5)) & 0xF81F;
@@ -295,117 +287,109 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 {
 	uint8			*surfBase;
 
-	
 	sint32 surfWidth  = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch  = m_surfPitch;
 
 
-	
-	
-	
-	
-	
-	
 
-	
-	
-	if ((drawX < 0) || 
-		(drawY < 0) || 
-		(drawX >= (surfWidth-width)) || 
-		(drawY >= (surfHeight-height))) 
+
+
+
+
+
+
+
+
+	if ((drawX < 0) ||
+		(drawY < 0) ||
+		(drawX >= (surfWidth-width)) ||
+		(drawY >= (surfHeight-height)))
 	{
-	    
+
 		if (drawX <= -width)  return;
 		if (drawY <= -height) return;
 		if (drawX >= surfWidth)  return;
 		if (drawY >= surfHeight) return;
-		
+
 		(this->*_DrawLowClipped)(frame, drawX, drawY, width, height, transparency, outlineColor, flags);
 		return;
 	}
 
-	
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
-	
 
-	
+
+
+
 	PixelAddress destAddr;
 	PixelAddress rowAddr;
-	
+
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
 	register	sint32 j;
-	
-	
+
 	uint32		w_len;
 	Pixel16		tag;
 
-	
-	
 
-	
-	for(j=0; j<height; j++) 
+
+
+
+	for(j=0; j<height; j++)
 	{
-		if (table[j]!=k_EMPTY_TABLE_ENTRY) 
-		{		
+		if (table[j]!=k_EMPTY_TABLE_ENTRY)
+		{
 		   	destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch);
-		  
-			
+
 			rowAddr.w_ptr  = dataStart + table[j];
 
 		    tag = *rowAddr.w_ptr++;
 
-			tag = tag & 0x0FFF;	
-					
-			while ((tag & 0xF000) == 0) 
+			tag = tag & 0x0FFF;
+
+			while ((tag & 0xF000) == 0)
 			{
-				switch ((tag & 0x0F00) >> 8) 
+				switch ((tag & 0x0F00) >> 8)
 				{
-					
+
 				    case k_CHROMAKEY_RUN_ID	:
 						 destAddr.w_ptr += (tag & 0x00FF);
 						 break;
-				  
-					
-					case k_COPY_RUN_ID			: 
-						 
+
+					case k_COPY_RUN_ID			:
+
 						 w_len = (tag & 0x00FF);
 
-						 
 						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
 						 {
-							
+
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 							{
 								__BlendFast_565_16(destAddr,rowAddr,1,1,w_len,transparency);
-								break; 
+								break;
 							}
-							
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+
+							if (flags & k_BIT_DRAWFLAGS_FOGGED)
 							{
 								__Shadow_565_32(destAddr,rowAddr,1,1,w_len>>1);
 								__Shadow_565_16(destAddr,rowAddr,1,1,w_len&0x01);
-								break; 
+								break;
 							}
-							
+
 							__Desaturate_565_16(destAddr,rowAddr,1,1,w_len);
-						 	
-							break; 
+
+							break;
 						 }
 
-						 
 						 __Copy_32(destAddr,rowAddr,1,1,w_len>>1);
 						 __Copy_16(destAddr,rowAddr,1,1,w_len&0x01);
-						
+
 						 break;
 
-					
-					case k_SHADOW_RUN_ID		: 
-						 
+					case k_SHADOW_RUN_ID		:
+
 						 w_len = (tag & 0x00FF);
 
 						 __Shadow_565_32(destAddr,1,w_len>>1);
@@ -413,58 +397,53 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 
 						 break;
 
-					
 					case k_FEATHERED_RUN_ID	:
 
-					  	 
-						 
-						 
 
-						 
-					  	 if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
+
+
+
+
+					  	 if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 					  	 {
-					
-					
-					
+
+
 					 		*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, transparency);
 					 		destAddr.w_ptr++;
 							rowAddr.w_ptr++;
-					 	 } 
-					  	 else 
-					  
+					 	 }
+					  	 else
 
 						 {
-						  
+
 							Pixel16 pixel = *rowAddr.w_ptr;
 
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+							if (flags & k_BIT_DRAWFLAGS_FOGGED)
 								pixel = pixelutils_Shadow_565(pixel);
 
-							if (flags & k_BIT_DRAWFLAGS_DESATURATED) 
+							if (flags & k_BIT_DRAWFLAGS_DESATURATED)
 								pixel = pixelutils_Desaturate_565(pixel);
 
-							if (flags & k_BIT_DRAWFLAGS_FEATHERING) 
+							if (flags & k_BIT_DRAWFLAGS_FEATHERING)
 							{
 								uint16 alpha = (tag & 0x00FF);
-							
-							
-							
-							  
+
+
+
+
 								*destAddr.w_ptr = pixelutils_BlendFast_565(pixel,*destAddr.w_ptr, (uint16)alpha>>3);
 								destAddr.w_ptr++;
 								rowAddr.w_ptr++;
-							} 
-							else 
+							}
+							else
 							{
-							  
-							  
+
 								*destAddr.w_ptr++ = pixel;
 								rowAddr.w_ptr++;
 							}
 						 }
 						break;
 
-					
 					default:
 						Assert(FALSE);
 						break;
@@ -473,11 +452,9 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 			}
 		}
 
-		
-	    
+
 	}
 }
-
 
 
 void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
@@ -485,15 +462,14 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 {
 	uint8			*surfBase;
 
-	
 	sint32			surfWidth = m_surfWidth;
 	sint32			surfHeight = m_surfHeight;
 	sint32			surfPitch = m_surfPitch;
 
-	sint32			xstart, xend, 
+	sint32			xstart, xend,
 					ystart, yend;
 
-	if (drawX < 0) 
+	if (drawX < 0)
 	{
 		xstart = 0 - drawX;
 		drawX = 0;
@@ -508,31 +484,29 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 		ystart = 0;
 	}
 
-	if (drawX >= surfWidth - width) 
+	if (drawX >= surfWidth - width)
 	{
 
 		xend = (surfWidth - drawX);
-	} 
-	else 
+	}
+	else
 	{
 		xend = width;
 	}
 
-	if (drawY >= surfHeight - height) 
+	if (drawY >= surfHeight - height)
 	{
 
 		yend = (surfHeight - drawY);
-	} 
-	else 
+	}
+	else
 	{
 		yend = height;
 	}
 
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
   	Pixel16		*destPixel;
-  
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
@@ -542,17 +516,16 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 
 	sint32		xpos;
 
-	
 	for(j=ystart; j<yend; j++) {
-		if (table[j] != k_EMPTY_TABLE_ENTRY) 
-		{		
+		if (table[j] != k_EMPTY_TABLE_ENTRY)
+		{
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			destPixel = (Pixel16 *)(surfBase + j * surfPitch + (width * 2));
 			rowData = dataStart + table[j];
 			tag = *rowData++;
-			tag = tag & 0x0FFF;	
+			tag = tag & 0x0FFF;
 			xpos = width;
 			while ((tag & 0xF000) == 0) {
 				switch ((tag & 0x0F00) >> 8) {
@@ -577,7 +550,7 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 									rowData++;
 									xpos--;
 								}
-							} else 
+							} else
 								if (flags & k_BIT_DRAWFLAGS_FOGGED) {
 									while (len) {
 										len--;
@@ -587,7 +560,7 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 											rowData++;
 										xpos--;
 									}
-								} else 
+								} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										while (len) {
 											len--;
@@ -672,26 +645,25 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 {
 	uint8			*surfBase;
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight= m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-	
-	
-	
-	
-	
-	
 
-	
-	
-	if ((drawX < 0) || 
-		(drawY < 0) || 
-		(drawX >= (surfWidth - width)) || 
-		(drawY >= (surfHeight-height))) 
+
+
+
+
+
+
+
+
+	if ((drawX < 0) ||
+		(drawY < 0) ||
+		(drawX >= (surfWidth - width)) ||
+		(drawY >= (surfHeight-height)))
 	{
-		
+
 		if (drawX <= 0 - width)  return;
 		if (drawY <= 0 - height) return;
 		if (drawX >= surfWidth)  return;
@@ -701,10 +673,8 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 		return;
 	}
 
-	
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
@@ -715,60 +685,56 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 	register	sint32 len;
 	sint32		j;
 
-	
-	for(j=0; j < height; j++) 
+	for(j=0; j < height; j++)
 	{
-		if (table[j] != k_EMPTY_TABLE_ENTRY) 
-		{		
+		if (table[j] != k_EMPTY_TABLE_ENTRY)
+		{
 			destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch + (width * 2));
 			rowAddr.w_ptr  = dataStart + table[j];
-			
-			tag = *rowAddr.w_ptr++;
-			tag = tag & 0x0FFF;	
 
-			while ((tag & 0xF000) == 0) 
+			tag = *rowAddr.w_ptr++;
+			tag = tag & 0x0FFF;
+
+			while ((tag & 0xF000) == 0)
 			{
-				switch ((tag & 0x0F00) >> 8) 
+				switch ((tag & 0x0F00) >> 8)
 				{
 					case k_CHROMAKEY_RUN_ID	:
 						 destAddr.w_ptr -= (tag & 0x00FF);
 						 break;
-					
-					case k_COPY_RUN_ID			: 
-						 
-						 
+
+					case k_COPY_RUN_ID			:
+
 						 len = (tag & 0x00FF);
 
-						 
 						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
 						 {
-							
+
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 							{
 								__BlendFast_565_16(destAddr,rowAddr,-1,1,len,transparency);
-								break; 
+								break;
 							}
-							
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+
+							if (flags & k_BIT_DRAWFLAGS_FOGGED)
 							{
 								__Shadow_565_16(destAddr,rowAddr,-1,1,len);
-								break; 
+								break;
 							}
-							
+
 							__Desaturate_565_16(destAddr,rowAddr,-1,1,len);
-						 	
-							break; 
+
+							break;
 						 }
 
-						 
-						 
-						 
+
+
+
 						 __Copy_16(destAddr,rowAddr,-1,1,len);
-						
+
 						 break;
 
 
-				
 
 
 
@@ -808,12 +774,12 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 
 
 
-					case k_SHADOW_RUN_ID		: 
-						 
+
+					case k_SHADOW_RUN_ID		:
+
 						 len = (tag & 0x00FF);
 
-						 
-						 
+
 						 __Shadow_565_32(destAddr,-1,len>>1);
 						 __Shadow_565_16(destAddr,-1,len&0x01);
 
@@ -821,19 +787,19 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 
 					case k_FEATHERED_RUN_ID	:
 
-					 
 
-					 
 
-						
 
-						if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
+
+
+
+						if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 						{
 								*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, (uint16)transparency);
 								destAddr.w_ptr--;
 								rowAddr.w_ptr++;
-						} 
-						else 
+						}
+						else
 						{
 							Pixel16 pixel = *rowAddr.w_ptr;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
@@ -855,7 +821,7 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 								rowAddr.w_ptr++;
 							}
 						}
-	 
+
 				}
 				tag = *rowAddr.w_ptr++;
 			}
@@ -873,7 +839,6 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 {
 	uint8			*surfBase;
 
-	
 	Pixel16		emptyRow[2];
 
 	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
@@ -881,7 +846,6 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 
 	RECT destRect = { x, y, x + destWidth, y + destHeight };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -893,13 +857,11 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 	if (destRect.right > surfWidth) return;
 	if (destRect.bottom > surfHeight) return;
 
-	
 	Pixel16			*destPixel;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
 
-	
 	sint32				vaccum;
 	sint32				vincx, vincxy;
 	sint32				vend;
@@ -916,12 +878,11 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 	vdestpos = y;
 	vend = m_height - 1;
 
-	
 	while ( vpos1 < vend) {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
+
 			Pixel16		*rowData1, *rowData2;
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
@@ -932,16 +893,15 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 			sint32		hpos;
 			sint32		hdestpos;
 
-			
 			if (table[vpos1] == k_EMPTY_TABLE_ENTRY) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1];	
+			else rowData1 = dataStart + table[vpos1];
 			if (table[vpos2] == k_EMPTY_TABLE_ENTRY) rowData2 = emptyRow;
 			else rowData2 = dataStart + table[vpos2];
 
 			haccum = destWidth*2 - m_width;
 			hincx = destWidth*2;
 			hincxy = (destWidth - m_width) * 2;
-			
+
 			hpos = 0;
 			if (reverse) hdestpos = x + destWidth;
 			else hdestpos = x;
@@ -951,14 +911,14 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 			sint32		mode2;
 			sint32		pos1 = 0;
 			sint32		pos2 = 0;
-			sint32		end1, 
+			sint32		end1,
 						end2;
-			sint32		alpha1, 
+			sint32		alpha1,
 						alpha2;
-			sint32		oldend1 = 0, 
+			sint32		oldend1 = 0,
 						oldend2 = 0;
 
-			Pixel16			firstPixel  = 0, 
+			Pixel16			firstPixel  = 0,
 							secondPixel = 0;
 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
@@ -975,7 +935,6 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 
 					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 
-					
 					while (pos1 <= hpos) {
 						switch (mode1) {
 							case k_CHROMAKEY_RUN_ID	:
@@ -984,10 +943,10 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 							case k_COPY_RUN_ID			:
 									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
 										firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, transparency);
-									} else 
+									} else
 									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
 										firstPixel = pixelutils_Shadow_565(*rowData1);
-									} else 
+									} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										firstPixel = pixelutils_Desaturate_565(*rowData1);
 									} else {
@@ -997,7 +956,7 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 								break;
 							case k_SHADOW_RUN_ID		:
 									firstPixel = pixelutils_Shadow_565(*destPixel);
-								break;			
+								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										firstPixel = outlineColor;
@@ -1023,7 +982,7 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 							default:
 								Assert(mode1 == k_CHROMAKEY_RUN_ID || mode1 == k_COPY_RUN_ID || mode1 == k_SHADOW_RUN_ID || mode1 == k_FEATHERED_RUN_ID);
 						}
-						
+
 						pos1++;
 
 						if (pos1 >= end1) {
@@ -1032,9 +991,8 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 						}
 					}
 
-					
 					while (pos2 <= hpos) {
-					
+
 						switch (mode2) {
 							case k_CHROMAKEY_RUN_ID	:
 									secondPixel = k_MEDIUM_KEY;
@@ -1079,7 +1037,7 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 									}
 									rowData2++;
 								break;
-							default : 
+							default :
 								Assert(mode2 == k_CHROMAKEY_RUN_ID || mode2 == k_COPY_RUN_ID || mode2 == k_SHADOW_RUN_ID || mode2 == k_FEATHERED_RUN_ID);
 						}
 
@@ -1098,30 +1056,30 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 
 
 
-					
+
 					if (flags & k_BIT_DRAWFLAGS_AA) {
 						if (flags & k_BIT_DRAWFLAGS_AA_4_WAY) {
 							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 								pixel =	average_565(pixel1, pixel2, pixel3, pixel4);
-								
-								if (pixel == 0) 
+
+								if (pixel == 0)
 									pixel = 0x0001;
 								*destPixel = pixel;
 							}
 						} else {
 							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY) {
 								pixel = average_565(pixel2, pixel3);
-								if (pixel == 0) 
+								if (pixel == 0)
 									pixel = 0x0001;
-								
+
 								*destPixel = pixel;
 							}
 						}
 					} else {
-						if (pixel3 == 0) 
+						if (pixel3 == 0)
 							pixel3 = 0x0001;
-						
-						if (pixel3 != k_MEDIUM_KEY) 
+
+						if (pixel3 != k_MEDIUM_KEY)
 							*destPixel = pixel3;
 					}
 					pixel1 = pixel3;
@@ -1135,12 +1093,12 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 
 			vaccum += vincxy;
 			vdestpos++;
-		} 
+		}
 		vpos1++;
 		vpos2++;
 	}
 
-	
+
 
 
 }
@@ -1155,7 +1113,6 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 
 	RECT destRect = { drawX, drawY, drawX + width, drawY + height };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -1167,7 +1124,6 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 	if (destRect.right > surfWidth) return;
 	if (destRect.bottom > surfHeight) return;
 
-	
 	Pixel16	*destPixel;
 
 	Pixel16		*table = frame+1;
@@ -1176,32 +1132,31 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 	register sint32 j;
 	register sint32 len;
 
-	
-	for(j=0; j<height; j++) 
+	for(j=0; j<height; j++)
 	{
-		if (table[j] != k_EMPTY_TABLE_ENTRY) 
-		{		
+		if (table[j] != k_EMPTY_TABLE_ENTRY)
+		{
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			destPixel = (Pixel16 *)(surfBase + j * surfPitch);
 			rowData = dataStart + table[j];
 			tag = *rowData++;
-			tag = tag & 0x0FFF;	
+			tag = tag & 0x0FFF;
 
-			while ((tag & 0xF000) == 0) 
+			while ((tag & 0xF000) == 0)
 			{
-				switch ((tag & 0x0F00) >> 8) 
+				switch ((tag & 0x0F00) >> 8)
 				{
 					case k_CHROMAKEY_RUN_ID	:
 						 destPixel += (tag & 0x00FF);
 						 break;
-			   
-					case k_COPY_RUN_ID			: 
+
+					case k_COPY_RUN_ID			:
 
 						 len = (tag & 0x00FF);
 
-						 while (len--) 
+						 while (len--)
 						 {
 
 						 	*destPixel = pixelutils_Additive_565(*destPixel, *rowData);
@@ -1209,11 +1164,11 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 						 	rowData++;
 						 }
 						 break;
-				  
-					case k_SHADOW_RUN_ID		: 
+
+					case k_SHADOW_RUN_ID		:
 						 len = (tag & 0x00FF);
 
-						 while (len--) 
+						 while (len--)
 						 {
 
 							*destPixel = pixelutils_Shadow_565(*destPixel);
@@ -1234,7 +1189,6 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 	}
 
 
-
 }
 
 
@@ -1247,7 +1201,6 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 
 	RECT destRect = { drawX, drawY, drawX + width, drawY + height };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -1259,26 +1212,24 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 	if (destRect.right > surfWidth) return;
 	if (destRect.bottom > surfHeight) return;
 
-	
 	Pixel16	*destPixel;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	
 	for(sint32 j=0; j < height; j++) {
-		if (table[j] != k_EMPTY_TABLE_ENTRY) {		
+		if (table[j] != k_EMPTY_TABLE_ENTRY) {
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			destPixel = (Pixel16 *)(surfBase + j * surfPitch + (width * 2));
 
 			rowData = dataStart + table[j];
-			
+
 			tag = *rowData++;
-			
-			tag = tag & 0x0FFF;	
-					
+
+			tag = tag & 0x0FFF;
+
 			while ((tag & 0xF000) == 0) {
 				switch ((tag & 0x0F00) >> 8) {
 					case k_CHROMAKEY_RUN_ID	:
@@ -1324,7 +1275,6 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 								if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
 									uint16 alpha = (tag & 0x00FF);
 
-
 									*destPixel = pixelutils_Blend_565(*rowData, *destPixel, (uint16)alpha>>3);
 									destPixel--;
 									rowData++;
@@ -1341,7 +1291,6 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 	}
 
 
-
 }
 
 #define k_MEDIUM_KEY	0x4208
@@ -1354,7 +1303,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 {
 	uint8			*surfBase;
 
-	
 	Pixel16		emptyRow[2];
 
 	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
@@ -1362,7 +1310,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 	RECT destRect = { x, y, x + destWidth, y + destHeight };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -1374,13 +1321,11 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 	if (destRect.right > surfWidth) return;
 	if (destRect.bottom > surfHeight) return;
 
-	
 	Pixel16			*destPixel;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
 
-	
 	sint32				vaccum;
 	sint32				vincx, vincxy;
 	sint32				vend;
@@ -1397,12 +1342,11 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 	vdestpos = y;
 	vend = m_height - 1;
 
-	
 	while ( vpos1 < vend) {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
+
 			Pixel16		*rowData1, *rowData2;
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
@@ -1413,36 +1357,35 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 			sint32		hpos;
 			sint32		hdestpos;
 
-			
 			if (table[vpos1] == k_EMPTY_TABLE_ENTRY) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1];	
+			else rowData1 = dataStart + table[vpos1];
 			if (table[vpos2] == k_EMPTY_TABLE_ENTRY) rowData2 = emptyRow;
 			else rowData2 = dataStart + table[vpos2];
 
 			haccum = destWidth*2 - m_width;
 			hincx = destWidth*2;
 			hincxy = (destWidth - m_width) * 2;
-			
+
 			hpos = 0;
 			if (reverse) hdestpos = x + destWidth;
 			else hdestpos = x;
 			hend = m_width-1;
 
-			
+
 
 
 			sint32		mode1;
 			sint32		mode2;
 			sint32		pos1 = 0;
 			sint32		pos2 = 0;
-			sint32		end1, 
+			sint32		end1,
 						end2;
-			sint32		alpha1, 
+			sint32		alpha1,
 						alpha2;
-			sint32		oldend1 = 0, 
+			sint32		oldend1 = 0,
 						oldend2 = 0;
 
-			Pixel16			firstPixel  = 0, 
+			Pixel16			firstPixel  = 0,
 							secondPixel = 0;
 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
@@ -1462,15 +1405,15 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 					haccum += hincxy;
 
 					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
-		
-					
 
 
 
 
 
 
-					
+
+
+
 					while (pos1 <= hpos) {
 						switch (mode1) {
 							case k_CHROMAKEY_RUN_ID	:
@@ -1486,7 +1429,7 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 								break;
 							case k_SHADOW_RUN_ID		:
 									firstPixel = pixelutils_Shadow_565(*destPixel);
-								break;			
+								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										firstPixel = outlineColor;
@@ -1507,7 +1450,7 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 							default:
 								Assert(mode1 == k_CHROMAKEY_RUN_ID || mode1 == k_COPY_RUN_ID || mode1 == k_SHADOW_RUN_ID || mode1 == k_FEATHERED_RUN_ID);
 						}
-						
+
 						pos1++;
 
 						if (pos1 >= end1) {
@@ -1516,9 +1459,8 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 						}
 					}
 
-					
 					while (pos2 <= hpos) {
-					
+
 						switch (mode2) {
 							case k_CHROMAKEY_RUN_ID	:
 									secondPixel = k_MEDIUM_KEY;
@@ -1551,7 +1493,7 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 									}
 									rowData2++;
 								break;
-							default : 
+							default :
 								Assert(mode2 == k_CHROMAKEY_RUN_ID || mode2 == k_COPY_RUN_ID || mode2 == k_SHADOW_RUN_ID || mode2 == k_FEATHERED_RUN_ID);
 						}
 
@@ -1570,24 +1512,24 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 
 
-					
+
 					if (flags & k_BIT_DRAWFLAGS_AA) {
 						if (flags & k_BIT_DRAWFLAGS_AA_4_WAY) {
 							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 								pixel =	average_565(pixel1, pixel2, pixel3, pixel4);
-								
+
 								*destPixel = pixel;
 							}
 						} else {
 							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY) {
 								pixel = average_565(pixel2, pixel3);
-								
+
 								*destPixel = pixel;
 							}
 						}
 					} else {
-						
-						if (pixel3 != k_MEDIUM_KEY) 
+
+						if (pixel3 != k_MEDIUM_KEY)
 							*destPixel = pixel3;
 					}
 					pixel1 = pixel3;
@@ -1601,12 +1543,12 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 			vaccum += vincxy;
 			vdestpos++;
-		} 
+		}
 		vpos1++;
 		vpos2++;
 	}
 
-	
+
 
 
 }
@@ -1620,7 +1562,6 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 
 	RECT destRect = { drawX, drawY, drawX + width, drawY + height };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -1632,26 +1573,24 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 	if (destRect.right > surfWidth) return;
 	if (destRect.bottom > surfHeight) return;
 
-	
 	Pixel16	*destPixel;
 
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	
 	for(sint32 j=0; j<height; j++) {
-		if (table[j] != k_EMPTY_TABLE_ENTRY) {		
+		if (table[j] != k_EMPTY_TABLE_ENTRY) {
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			destPixel = (Pixel16 *)(surfBase + (height + (height-j)/2)* surfPitch);
 
 			rowData = dataStart + table[j];
-			
+
 			tag = *rowData++;
-			
-			tag = tag & 0x0FFF;	
-					
+
+			tag = tag & 0x0FFF;
+
 			while ((tag & 0xF000) == 0) {
 				switch ((tag & 0x0F00) >> 8) {
 					case k_CHROMAKEY_RUN_ID	:
@@ -1747,7 +1686,7 @@ inline Pixel16 Sprite::average_565(Pixel16 pixel1, Pixel16 pixel2)
 
 	return (Pixel16)(sum>>1);
 
- 
+
 
 
 
@@ -1773,7 +1712,7 @@ inline Pixel16 Sprite::average_565(Pixel16 pixel1, Pixel16 pixel2)
 
 inline void Sprite::__Desaturate_565_16	(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
-	while (num) 
+	while (num)
 	{
 		num--;
 		*dest.w_ptr=pixelutils_Desaturate_565(*src.w_ptr);
@@ -1783,15 +1722,14 @@ inline void Sprite::__Desaturate_565_16	(PixelAddress &dest,PixelAddress &src,si
 }
 
 
-
 inline void Sprite::__BlendFast_565_16	(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num,uint16 transparency)
 {
-	while (num) 
+	while (num)
 	{
 		num--;
 
 		*dest.w_ptr=(Pixel16)pixelutils_BlendFast_565(*src.w_ptr, *dest.w_ptr, transparency);
-		
+
 		dest.w_ptr +=dest_inc;
 		src.w_ptr  +=src_inc;
 	}
@@ -1803,7 +1741,7 @@ inline void Sprite::__BlendFast_565_16	(PixelAddress &dest,PixelAddress &src,sin
 
 inline void Sprite::__Shadow_565_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
-  while (num) 
+  while (num)
   {
   	 num--;
   	*dest.w_ptr = pixelutils_Shadow_565(*src.w_ptr);
@@ -1817,7 +1755,7 @@ inline void Sprite::__Shadow_565_16(PixelAddress &dest,PixelAddress &src,sint32 
 
 inline void Sprite::__Shadow_565_16(PixelAddress &dest,sint32 dest_inc,sint32 num)
 {
-  while (num) 
+  while (num)
   {
   	 num--;
   	*dest.w_ptr = pixelutils_Shadow_565(*dest.w_ptr);
@@ -1831,7 +1769,7 @@ inline void Sprite::__Shadow_565_16(PixelAddress &dest,sint32 dest_inc,sint32 nu
 
 inline void Sprite::__Shadow_565_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
-  while (num) 
+  while (num)
   {
   	 num--;
   	*dest.l_ptr = pixelutils_Shadow32_565(*src.l_ptr);
@@ -1845,12 +1783,10 @@ inline void Sprite::__Shadow_565_32(PixelAddress &dest,PixelAddress &src,sint32 
 
 inline void Sprite::__Shadow_565_32(PixelAddress &dest,sint32 dest_inc,sint32 num)
 {
-  while (num) 
+  while (num)
   {
   	 num--;
   	*dest.l_ptr = pixelutils_Shadow32_565(*dest.l_ptr);
   	 dest.l_ptr+=dest_inc;
   }
 }
-
-

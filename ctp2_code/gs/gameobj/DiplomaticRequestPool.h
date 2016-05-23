@@ -15,18 +15,18 @@ class MessageDynamicArray ;
 
 class DiplomaticRequestPool : public ObjPool
 	{
-		
-		
 
-		
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
+
+
+
 
 	public:
 		DiplomaticRequestData* AccessDiplomaticRequest(const DiplomaticRequest id)

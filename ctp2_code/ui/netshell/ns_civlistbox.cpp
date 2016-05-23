@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -80,14 +80,13 @@ ns_CivListBox::ns_CivListBox(
 }
 
 
-
 ns_CivListBox::ns_CivListBox(
-	AUI_ERRCODE *retval, 
-	uint32 id, 
-	sint32 x, 
-	sint32 y, 
-	sint32 width, 
-	sint32 height, 
+	AUI_ERRCODE *retval,
+	uint32 id,
+	sint32 x,
+	sint32 y,
+	sint32 width,
+	sint32 height,
 	MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
@@ -125,7 +124,6 @@ ns_CivListBox::ns_CivListBox(
 }
 
 
-
 AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -139,10 +137,9 @@ AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_CivListBox::InitCommon( sint32 bevelWidth, sint32 bevelType )
 {
-	
+
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
@@ -157,7 +154,6 @@ AUI_ERRCODE ns_CivListBox::InitCommon( sint32 bevelWidth, sint32 bevelType )
 }
 
 
-
 AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -170,7 +166,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-		
+
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );
@@ -180,7 +176,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
-		
 		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_header = new ns_Header(
 				&errcode,
@@ -194,13 +189,11 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 			aui_UniqueId(),
 			0, 0, 0, 0 );
 
-
 	Assert( AUI_NEWOK(m_header,errcode) );
 	if ( !AUI_NEWOK(m_header,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	AddChild( m_header );
 
-	
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
@@ -210,7 +203,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
@@ -241,7 +233,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
@@ -268,11 +259,11 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = 
+	sint32 maxRangerSize =
         std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
 	if ( maxRangerSize )
-		SetRangerSize( maxRangerSize ); 
+		SetRangerSize( maxRangerSize );
 	else
 		RepositionRangers();
 
@@ -283,12 +274,10 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_CivListBox::RemoveItem( uint32 id )
 {
 	return aui_ListBox::RemoveItem( id );
 }
-
 
 
 AUI_ERRCODE ns_CivListBox::Draw(
@@ -296,7 +285,7 @@ AUI_ERRCODE ns_CivListBox::Draw(
 	sint32 x,
 	sint32 y)
 {
-	
+
 	aui_Region::Draw(surf, x, y);
 
 	if (IsHidden()) return AUI_ERRCODE_OK;
@@ -309,7 +298,6 @@ AUI_ERRCODE ns_CivListBox::Draw(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
@@ -320,16 +308,16 @@ AUI_ERRCODE ns_CivListBox::Draw(
 
 	if ( m_selectableList )
 	{
-		
+
 		ListPos position = m_visualSelectedList->GetHeadPosition();
 
-		
-		
-		
+
+
+
 
 		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
 		{
-			
+
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
 			{
@@ -337,7 +325,6 @@ AUI_ERRCODE ns_CivListBox::Draw(
 					( itemIndex - minVertical ) * m_maxItemHeight;
 				selectRect.bottom = selectRect.top + m_maxItemHeight - 4;
 
-				
 				primitives_FrameRect16(
 					surf,
 					&selectRect,
@@ -352,14 +339,13 @@ AUI_ERRCODE ns_CivListBox::Draw(
 }
 
 
-
 AUI_ERRCODE ns_CivListBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
 	if (IsHidden()) return AUI_ERRCODE_OK;
-	
+
 	if ( !surface ) surface = m_window->TheSurface();
 
 	sint32 headerHeight = m_header->IsHidden() ? 0 : m_header->Height();
@@ -368,7 +354,6 @@ AUI_ERRCODE ns_CivListBox::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if (m_bevelWidth > 0) {
 		RECT bevelRect = rect;
 		if (!m_verticalRanger->IsHidden())
@@ -377,7 +362,6 @@ AUI_ERRCODE ns_CivListBox::DrawThis(
 			bevelRect.bottom += m_rangerSize;
 		InflateRect(&bevelRect, m_bevelWidth, m_bevelWidth);
 
-		
 		if ( m_pattern ) {
 			if ( m_srcWidthPix || m_srcHeightPix ) {
 				RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -387,7 +371,7 @@ AUI_ERRCODE ns_CivListBox::DrawThis(
 				m_pattern->Draw( surface, &bevelRect );
 			}
 		}
-		
+
 		DrawThisStateImage(
 			0,
 			surface,
@@ -417,13 +401,12 @@ AUI_ERRCODE ns_CivListBox::DrawThis(
 			0,
 			surface,
 			&rect );
-		
+
 		m_window->AddDirtyRect(&rect);
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 ns_HPlayerListBox::ns_HPlayerListBox(
@@ -446,14 +429,13 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 }
 
 
-
 ns_HPlayerListBox::ns_HPlayerListBox(
-	AUI_ERRCODE *retval, 
-	uint32 id, 
-	sint32 x, 
-	sint32 y, 
-	sint32 width, 
-	sint32 height, 
+	AUI_ERRCODE *retval,
+	uint32 id,
+	sint32 x,
+	sint32 y,
+	sint32 width,
+	sint32 height,
 	MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
@@ -494,10 +476,9 @@ AUI_ERRCODE ns_HPlayerListBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_HPlayerListBox::InitCommon( void )
 {
-	
+
 	SetAbsorbancy( FALSE );
 
 	return AUI_ERRCODE_OK;

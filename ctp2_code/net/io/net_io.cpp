@@ -1,8 +1,3 @@
-
-
-
-
-
 #include "c3.h"
 
 #include "net_types.h"
@@ -78,7 +73,6 @@ NetIO::SetName(char* name)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }
-
 
 NET_ERR
 NetIO::SetTransport(sint32 idx)

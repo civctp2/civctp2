@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,11 +25,11 @@
 // Modifications from the original Activision code:
 //
 // - Production time calculation improved, and safeguarded against negative
-//   numbers. 
-// - Updates the graphics of tile improvements under contruction every 
-//   turn, so that the process to completeness of a tile improvements is 
+//   numbers.
+// - Updates the graphics of tile improvements under contruction every
+//   turn, so that the process to completeness of a tile improvements is
 //   visualized. - Oct. 16th 2004 Martin Gühmann
-// - Moved network handling from TerrainImprovementData constructor to prevent 
+// - Moved network handling from TerrainImprovementData constructor to prevent
 //   reporting the temporary when completing the tile improvement.
 // - Restored save game compatibilty. (April 22nd 2006 Martin Gühmann)
 //
@@ -83,7 +83,7 @@ TerrainImprovementData::TerrainImprovementData(CivArchive &archive) : GameObj(0)
 	Serialize(archive);
 }
 
-BOOL TerrainImprovementData::Complete(void) 
+BOOL TerrainImprovementData::Complete(void)
 {
 	TerrainImprovement imp(m_id);
 
@@ -91,7 +91,7 @@ BOOL TerrainImprovementData::Complete(void)
 
 	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
-		if(p == m_owner) continue; 
+		if(p == m_owner) continue;
 		g_player[p]->m_vision->AddUnseen(m_point);
 	}
 	DPRINTF(k_DBG_GAMESTATE, ("Completed improvement %d at (%d,%d)\n",
@@ -133,7 +133,7 @@ BOOL TerrainImprovementData::Complete(void)
 
 	sint32 intRad;
 	sint32 sqRad;
-	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) 
+	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad))
 	{
 		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
@@ -142,7 +142,6 @@ BOOL TerrainImprovementData::Complete(void)
 	g_tiledMap->TileChanged(m_point);
 
 	MapPoint pos;
-	
 
 	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1))
 	{
@@ -162,7 +161,7 @@ BOOL TerrainImprovementData::Complete(void)
 
 	g_theWorld->GetCell(m_point)->SetColor(1000);
 
-	// Restored the original Kill: the illegal access is prevented in 
+	// Restored the original Kill: the illegal access is prevented in
 	// Improvementevent.cpp, and the object has to be killed to enable
 	// further tile improvements after terraforming.
 	imp.Kill();
@@ -173,7 +172,7 @@ BOOL TerrainImprovementData::Complete(void)
 BOOL TerrainImprovementData::AddTurn(sint32 turns)
 {
 	if(!m_isBuilding)
-		
+
 		return FALSE;
 
 // add turn here can be used to make tile imps grow?
@@ -189,12 +188,12 @@ BOOL TerrainImprovementData::AddTurn(sint32 turns)
 		g_tiledMap->RedrawTile(&m_point);
 	}
 	else{
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
 							   GEA_Improvement, TerrainImprovement(m_id),
 							   GEA_End);
-		
+
 	}
 	return FALSE;
 }
@@ -231,7 +230,6 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 	}
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : TerrainImprovementData::PercentComplete
@@ -251,13 +249,13 @@ sint32 TerrainImprovementData::PercentComplete() const
 {
 	// Function replaced by Martin Gühmann
 	// Original function always returns 10 instead of the total production turns.
-	sint32 const	totalTurns = 
+	sint32 const	totalTurns =
 		terrainutil_GetProductionTime(m_type, m_point, m_transformType);
 
 	// Guard against negative numbers and division by 0.
 	if ((m_turnsToComplete <= 0) || (totalTurns <= 0))
 	{
-		return 100;	
+		return 100;
 	}
 	else if (m_turnsToComplete >= totalTurns)
 	{

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Handling single player game start options. 
+// Description  : Handling single player game start options.
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,12 +25,12 @@
 // Modifications from the original Activision code:
 //
 // - Redisign of the single player new game players screen by Martin Gühmann.
-//   Instead of buttons to determine the number of players in a new game 
+//   Instead of buttons to determine the number of players in a new game
 //   this screen now allows the player to specify the player index he wants
 //   to use determines the player color, he can also specify how many civs
-//   should be in the game at the start and how many civs in the game should 
+//   should be in the game at the start and how many civs in the game should
 //   be maximal in the game. The maximum number of players in one game is
-//   currently 32 and is hard encoded somewhere else. 
+//   currently 32 and is hard encoded somewhere else.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -100,9 +100,7 @@ static c3_Static    *s_num_player         = NULL;
 static c3_Static    *s_max_player         = NULL;
 static c3_Static    *s_player             = NULL;
 
-
 static sint32        s_maxPlayers         = 0;
-
 
 //----------------------------------------------------------------------------
 //
@@ -116,7 +114,7 @@ static sint32        s_maxPlayers         = 0;
 //
 // Returns    : sint32
 //
-// Remark(s)  : Displays and initialzes (if necessary) the single 
+// Remark(s)  : Displays and initialzes (if necessary) the single
 //              player new game player screen
 //
 //----------------------------------------------------------------------------
@@ -208,33 +206,30 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 
 	if ( s_spNewGamePlayersScreen )
 	{
-		return AUI_ERRCODE_OK;		
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "SPNewGamePlayersScreen");
 
-	{ 
+	{
 		s_spNewGamePlayersScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGamePlayersScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGamePlayersScreen, errcode) ) errcode;
 
-		
 		s_spNewGamePlayersScreen->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());
 		s_spNewGamePlayersScreen->GrabRegion()->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());
 		s_spNewGamePlayersScreen->SetStronglyModal(TRUE);
 	}
-	
 
-	
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGamePlayersScreen->AddTitle( controlBlock );
 
-	
 	if (!callback) callback = spnewgameplayersscreen_backPress;
 
 	s_spNewGamePlayersScreen->AddClose( callback );
 
-	// May not exist for mods 
+	// May not exist for mods
 	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerSpinner");
 	if (aui_Ldl::IsValid(controlBlock))
 	{
@@ -345,7 +340,7 @@ void spnewgameplayersscreen_Cleanup()
 //
 // Returns    : void
 //
-// Remark(s)  : Hides the single player new game player screen when the 
+// Remark(s)  : Hides the single player new game player screen when the
 //              back button is pressed
 //
 //----------------------------------------------------------------------------
@@ -403,9 +398,8 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 	if(!s_num_player_spinner) return;
 	sint32 value = s_num_player_spinner->GetValueX();
 
-	if(s_player_spinner) s_player_spinner->SetMaximum(value, 0); 
+	if(s_player_spinner) s_player_spinner->SetMaximum(value, 0);
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -422,7 +416,7 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 //
 // Returns    : void
 //
-// Remark(s)  : Handels changes on the UI when the value of the 
+// Remark(s)  : Handels changes on the UI when the value of the
 //              s_max_player_spinner changes
 //
 //----------------------------------------------------------------------------
@@ -448,7 +442,7 @@ void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action
 //
 // Returns    : void
 //
-// Remark(s)  : -Handels changes on the UI when the value of the 
+// Remark(s)  : -Handels changes on the UI when the value of the
 //               s_player_spinner changes
 //
 //----------------------------------------------------------------------------

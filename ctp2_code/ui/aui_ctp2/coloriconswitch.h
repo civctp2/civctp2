@@ -5,19 +5,16 @@
 #define __COLORICONSWITCH_H__
 
 
-
 #include "c3_switch.h"
-
 
 
 class Picture;
 
 
-
 class ColorIconSwitch : public c3_Switch
 {
 public:
-	
+
 	ColorIconSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -44,13 +41,11 @@ public:
 	virtual AUI_ERRCODE Resize(sint32 width, sint32 height);
 	void	ResizePictureRect(void);
 
-	
 	void SetIcon(MBCHAR *name);
 	void ShrinkToFit(BOOL fit) { m_shrinkToFit = fit; }
 
 	MBCHAR *GetFilename() { return m_filename; }
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -62,5 +57,4 @@ protected:
 	RECT		m_pictureRect;
 };
 
-
-#endif 
+#endif

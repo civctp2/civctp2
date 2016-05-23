@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -57,17 +57,17 @@ int dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 {
 	dptab_table_t *sessions = (dptab_table_t *)context;
 
-	printf("print_cb: src h:%x, dest h:%x, table %s, subkey %s, err %d\n", 
-			src, dest, 
+	printf("print_cb: src h:%x, dest h:%x, table %s, subkey %s, err %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
-			key2a2(subkey, subkeylen), 
+			key2a2(subkey, subkeylen),
 			err);
 
 	return TRUE;
 }
 
-/* When a new client comes online, 
- * send it our SESSIONS table, 
+/* When a new client comes online,
+ * send it our SESSIONS table,
  * and when it sends us its MYSESSIONS table, put it in our MYSESSIONS table.
  * (If we're the master gameserver, dump it into the sessions table
  * instead.)
@@ -150,7 +150,7 @@ main(int argc, char **argv)
 	dptab_setTableCallback(mydp->mysessions, print_cb, NULL);
 	dptab_setTableCallback(mydp->sessions, print_cb, NULL);
 
-	/* Wait for login requests.  If the request is ok, 
+	/* Wait for login requests.  If the request is ok,
 	 * add a subscription for the sessions table.
 	 */
 	started = eclock();

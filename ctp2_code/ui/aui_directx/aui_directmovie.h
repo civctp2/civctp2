@@ -1,29 +1,16 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTMOVIE_H__
 #define __AUI_DIRECTMOVIE_H__
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-
 #include "aui_movie.h"
 
 class aui_DirectSurface;
 
-
 class aui_DirectMovie : public aui_Movie
 {
 public:
-	
+
 	aui_DirectMovie(
 		AUI_ERRCODE *retval,
 		MBCHAR const * filename = NULL );
@@ -33,7 +20,7 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	virtual AUI_ERRCODE Open(
 		uint32 flags = 0,
 		aui_Surface *surface = NULL,
@@ -63,6 +50,6 @@ protected:
 
 typedef aui_DirectMovie aui_NativeMovie;
 
-#endif 
+#endif
 
-#endif 
+#endif

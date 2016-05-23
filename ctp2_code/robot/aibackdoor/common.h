@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __common_h__
 #define __common_h__
 
@@ -47,7 +33,7 @@ extern "C" {
 #define DLLHEADER
 #define DllImport
 #define DllExport
-#endif 
+#endif
 
 
 
@@ -61,7 +47,6 @@ extern "C" {
 #define A_ZILLION A_REALLY_BIG_POSITIVE_REAL_NUMBER
 #define A_REALLY_BIG_NEGATIVE_REAL_NUMBER -1000000000
 
-
 #ifdef STRATEGY_DEMO_BUILD
 #define RED 0
 #define GREEN 1
@@ -70,8 +55,8 @@ extern "C" {
 
 #define DEBUG 1
 
-#define BEGIN_DEBUG 
-#define END_DEBUG 
+#define BEGIN_DEBUG
+#define END_DEBUG
 
 #define MAX_STRING 100
 
@@ -86,10 +71,8 @@ extern DLLHEADER FILE *debug_file;
 #define DEBUG_MSG2 if (DEBUG_CONFIG>2) fprintf
 #define DEBUG_MSG3 if (DEBUG_CONFIG>3) fprintf
 
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_surface.h"
@@ -29,11 +18,9 @@ namespace
 
 }
 
-
 sint32 aui_Pixel::m_lastRand = 0;
 sint32 aui_Pixel::m_randRector[VECTOR_SIZE] = {0};
 double **aui_Pixel::m_edge = NULL;
-
 
 uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
 {
@@ -41,7 +28,7 @@ uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
     {
 		return ColorCode555(red, green, blue);
     }
-	else 
+	else
     {
 		return ColorCode565(red, green, blue);
     }
@@ -51,7 +38,7 @@ uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPAL
 {
 #ifdef __AUI_USE_DIRECTX__
 	PALETTEENTRY *  pe              = new PALETTEENTRY[256];
-	size_t const    paletteCount    = 
+	size_t const    paletteCount    =
         static_cast<size_t>(GetPaletteEntries(*hpal, 0, 256, pe));
     Assert(paletteCount == 256);
 
@@ -59,11 +46,11 @@ uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPAL
 	uint8           color           = 0;
 	sint32          diff            = INT_MAX;
 
-	for (uint8 i = 0; i < static_cast<uint8>(paletteCount); ++i) 
+	for (uint8 i = 0; i < static_cast<uint8>(paletteCount); ++i)
     {
 		uint16  valCompare = ColorCode555(pe[i].peRed, pe[i].peGreen, pe[i].peBlue);
-		
-		if (abs(valCompare - valMain) < diff ) 
+
+		if (abs(valCompare - valMain) < diff )
         {
 			color   = i;
 			diff    = abs(valCompare - valMain);
@@ -86,11 +73,11 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGB
 	sint32  diff    = INT_MAX;
 	uint16  valMain = ColorCode555(red, green, blue);
 
-	for (uint8 i = 0; i < 256; i++) 
+	for (uint8 i = 0; i < 256; i++)
     {
 		uint16  valCompare = ColorCode555(rgbq[i].rgbRed, rgbq[i].rgbGreen, rgbq[i].rgbBlue);
 
-		if (abs(valCompare - valMain) < diff) 
+		if (abs(valCompare - valMain) < diff)
         {
 			color   = i;
 			diff    = abs(valCompare - valMain);
@@ -98,18 +85,18 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGB
 			if (diff == 0) break;
 		}
 	}
-	
+
 	return color;
 
 }
 
 AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 							 uint16 *buf16,
-							 uint8 *buf24, 
-							 uint32 cols, 
-							 uint32 rows, 
-							 uint32 skipr, 
-							 uint32 skipg, 
+							 uint8 *buf24,
+							 uint32 cols,
+							 uint32 rows,
+							 uint32 skipr,
+							 uint32 skipg,
 							 uint32 skipb)
 {
     m_edge = MakeEdge(buf24, cols, rows);
@@ -121,8 +108,8 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
     sint32 *    nextgerr = new sint32[ cols + 2 ];
     sint32 *    nextberr = new sint32[ cols + 2 ];
 
-	if (!thisrerr || !thisgerr || !thisberr || 
-		!nextrerr || !nextgerr || !nextberr) 
+	if (!thisrerr || !thisgerr || !thisberr ||
+		!nextrerr || !nextgerr || !nextberr)
     {
 		delete thisrerr;
 		delete thisgerr;
@@ -140,10 +127,9 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 	    thisrerr[col] = ScaleRandom();
 	    thisgerr[col] = ScaleRandom();
 	    thisberr[col] = ScaleRandom();
-	    
+
     }
 	sint32      fs_direction = 1;
-
 
 	uint32 limitcol;
 	sint32 err;
@@ -177,17 +163,17 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 
 
 
-            if ((skipb != -1) && 
+            if ((skipb != -1) &&
                 (fb == skipb) && (fg == skipg) && (fr == skipr)) {
-                
+
                 sr = fr;
                 sg = fg;
                 sb = fb;
                 tr = Shift(sr, 0, col, row);
                 tg = Shift(sg, 0, col, row);
                 tb = Shift(sb, 0, col, row);
-            } else {                
-                
+            } else {
+
                 sr = fr + thisrerr[col + 1] / FS_SCALE;
                 sg = fg + thisgerr[col + 1] / FS_SCALE;
                 sb = fb + thisberr[col + 1] / FS_SCALE;
@@ -198,16 +184,13 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
                 if      (sb < 0)   sb = 0;
                 else if (sb > 255) sb = 255;
 
-                
                 tr = Shift(sr, 1, col, row);
                 tg = Shift(sg, 1, col, row);
                 tb = Shift(sb, 1, col, row);
             }
 
-
             *tp = (uint16)((tr << 10) | (tg << 5) | tb);
 
-            
             if ( fs_direction ) {
                 err = ( sr - (tr << 3) ) * FS_SCALE;
                 thisrerr[col + 2] += ( err * 7 ) / 16;
@@ -277,16 +260,15 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 	return AUI_ERRCODE_OK;
 }
 
-
 sint32 aui_Pixel::Shift(sint32 x, sint32 add_noise, sint32 col, sint32 row)
 {
     sint32 noise = 0;
-    if (add_noise) 
+    if (add_noise)
     {
         double rscale = std::max<double>(1.0, 2.0 - (50.0 * m_edge[row][col]));
 
         noise = Random() * Random();
-        if (Random() > (RAND_MAX / 2)) 
+        if (Random() > (RAND_MAX / 2))
         {
             noise = -noise;
         }
@@ -300,10 +282,9 @@ sint32 aui_Pixel::Shift(sint32 x, sint32 add_noise, sint32 col, sint32 row)
     return x;
 }
 
-
 sint32 aui_Pixel::ScaleRandom()
 {
-    
+
     return ((Random() >> 4) - FS_SCALE);
 }
 double **aui_Pixel::Alloc2D(sint32 width, sint32 height)
@@ -318,8 +299,8 @@ double **aui_Pixel::Alloc2D(sint32 width, sint32 height)
        delete [] d2;
        return NULL;
    }
-       
-   for (sint32 y = 0; y < height; y++) 
+
+   for (sint32 y = 0; y < height; y++)
    {
        d2[y] = d1 + y*width;
    }
@@ -341,7 +322,7 @@ double **aui_Pixel::ImageToDouble(uint8 *image24, sint32 width, sint32 height)
 
     uint8 * p = image24;
     for (sint32 j = 0; j < height; j++) {
-        for (sint32 i = 0; i < width; i++) 
+        for (sint32 i = 0; i < width; i++)
         {
             double val  = 0.212671 * *p++;
             val += 0.715160 * *p++;
@@ -352,7 +333,7 @@ double **aui_Pixel::ImageToDouble(uint8 *image24, sint32 width, sint32 height)
     return data;
 }
 
-void aui_Pixel::DoubleToImage(double **fimage, sint8 *image24, 
+void aui_Pixel::DoubleToImage(double **fimage, sint8 *image24,
                     sint32 width, sint32 height)
 {
     sint8 * p = image24;
@@ -366,14 +347,12 @@ void aui_Pixel::DoubleToImage(double **fimage, sint8 *image24,
     }
 }
 
-
-void aui_Pixel::Gradient(double **in_image, double **out_image, 
+void aui_Pixel::Gradient(double **in_image, double **out_image,
               sint32 width, sint32 height)
 {
    sint32          x, y;
    double 	Dx, Dy;
 
-   
    for (y = 1; y < (height-1); y++)
        for (x = 1; x < (width-1); x++) {
            Dx = (in_image[y+1][x+1] + 2*in_image[y][x+1] + in_image[y-1][x+1]
@@ -383,7 +362,6 @@ void aui_Pixel::Gradient(double **in_image, double **out_image,
            out_image[y][x] = (double)sqrt((double)(Dx*Dx + Dy*Dy));
        }
 
-   
    for (x = 0; x < width; x++) {
       out_image[0][x] = out_image[1][x];
       out_image[height-1][x] = out_image[height-2][x];
@@ -393,7 +371,6 @@ void aui_Pixel::Gradient(double **in_image, double **out_image,
       out_image[y][width-1] = out_image[y][width-2];
    }
 }
-
 
 double **aui_Pixel::MakeEdge(uint8 *image, sint32 width, sint32 height)
 {
@@ -419,7 +396,7 @@ void aui_Pixel::SeedRandom(uint32 seed)
 		m_randRector[j] = rand();
 
 	m_lastRand = rand();
-}	
+}
 
 sint32 aui_Pixel::Random()
 {
@@ -429,7 +406,6 @@ sint32 aui_Pixel::Random()
 	m_randRector[j] = rand();
 	return m_lastRand;
 }
-
 
 
 AUI_ERRCODE aui_Pixel::Convert24To16(
@@ -448,12 +424,10 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 	const sint32 destWidth = surface16->Width();
 	const sint32 destPitch = surface16->Pitch();
 
-	
-	const sint32 destDiff = destPitch / 2 - destWidth;	
-	const sint32 srcDiff = srcPitch - 3 * srcWidth;		
+	const sint32 destDiff = destPitch / 2 - destWidth;
+	const sint32 srcDiff = srcPitch - 3 * srcWidth;
 
-	
-	uint8 *stopHorizontal = buf24 + 3 * srcWidth; 
+	uint8 *stopHorizontal = buf24 + 3 * srcWidth;
 	const uint8 *stopVertical = buf24 + srcPitch * srcHeight;
 
 	AUI_ERRCODE retcode         = AUI_ERRCODE_OK;
@@ -470,7 +444,7 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 
 	if ( destBuf )
 	{
-		
+
 		uint16 *origDestBuf = destBuf;
 
 		uint8 red,green,blue;
@@ -502,7 +476,6 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 }
 
 
-
 AUI_ERRCODE aui_Pixel::Convert8To16(
 	aui_Surface *surface16,
 	uint8 *buf8,
@@ -519,7 +492,6 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 
 	uint16 lookupTable[ 256 ];
 
-	
 	for ( uint32 i = 0; i < 256; i++ )
 		lookupTable[i] =
 			Get16BitRGB(
@@ -530,12 +502,10 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 	const sint32 destWidth = surface16->Width();
 	const sint32 destPitch = surface16->Pitch();
 
-	
-	const sint32 destDiff = destPitch / 2 - destWidth;	
-	const sint32 srcDiff = srcPitch - srcWidth;		
+	const sint32 destDiff = destPitch / 2 - destWidth;
+	const sint32 srcDiff = srcPitch - srcWidth;
 
-	
-	uint8 *stopHorizontal = buf8 + srcWidth; 
+	uint8 *stopHorizontal = buf8 + srcWidth;
 	const uint8 *stopVertical = buf8 + srcPitch * srcHeight;
 
 	AUI_ERRCODE retcode         = AUI_ERRCODE_OK;
@@ -550,10 +520,9 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 	    }
     }
 
-	
 	if ( destBuf )
 	{
-		
+
 		uint16 *origDestBuf = destBuf;
 
 		do

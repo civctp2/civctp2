@@ -1,5 +1,3 @@
-
-
 sint32 graphicsscreen_displayMyWindow();
 sint32 graphicsscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE graphicsscreen_Initialize( void );

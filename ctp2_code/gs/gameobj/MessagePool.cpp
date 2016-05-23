@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Unit.h"
 #include "player.h"
@@ -64,18 +56,18 @@ void MessagePool::Serialize(CivArchive &archive)
 
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
+    if (archive.IsStoring()) {
 		archive.PerformMagic(MSGPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
-        for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++) { 
-            if(m_table[i]) { 
+        for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++) {
+            if(m_table[i]) {
 				count++;
             }
         }
 
 		archive<<count;
-        for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) { 
-            if(m_table[i]) { 
+        for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+            if(m_table[i]) {
 				((MessageData *)(m_table[i]))->Serialize(archive) ;
             }
         }
@@ -94,7 +86,7 @@ void MessagePool::Serialize(CivArchive &archive)
 
 	}
 
-	
+
 
 
 
@@ -107,11 +99,11 @@ Message MessagePool::Create(PLAYER_INDEX owner, PLAYER_INDEX sender, MESSAGE_TYP
 	MessageData* newData;
 
 	Message newRequest(NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
-	
+
 	newData = new MessageData(newRequest, owner, sender, type, msg) ;
 	Insert(newData) ;
 
-	g_player[owner]->AddMessage(newRequest) ;						
+	g_player[owner]->AddMessage(newRequest) ;
 	DoNetwork(newData);
 
 	return (newRequest) ;
@@ -133,11 +125,11 @@ Message MessagePool::Create(PLAYER_INDEX owner, MBCHAR *msg)
 	MessageData* newData;
 
 	Message newMessage(NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
-	
+
 	newData = new MessageData(newMessage, owner, PLAYER_INDEX_INVALID, 0, msg) ;
 	Insert(newData) ;
 
-	g_player[owner]->AddMessage(newMessage) ;						
+	g_player[owner]->AddMessage(newMessage) ;
 
 	DoNetwork(newData);
 
@@ -149,20 +141,19 @@ Message MessagePool::Recreate(PLAYER_INDEX owner, MBCHAR *msg, MBCHAR *title)
 	MessageData* newData;
 
 	Message newMessage(NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
-	
+
 	newData = new MessageData(newMessage, owner, PLAYER_INDEX_INVALID, 0, msg) ;
 	Insert(newData) ;
 
 	if(title)
 		newData->SetTitle(title);
 
-	g_player[owner]->AddMessage(newMessage) ;						
+	g_player[owner]->AddMessage(newMessage) ;
 
 	DoNetwork(newData);
 
 	return (newMessage) ;
 	}
-
 
 Message MessagePool::Create(PLAYER_INDEX owner, MessageData *copy)
 {
@@ -173,9 +164,9 @@ Message MessagePool::Create(PLAYER_INDEX owner, MessageData *copy)
 	Insert(newData);
 	g_player[owner]->AddMessage(newMessage);
 
-	
-	
-	
+
+
+
 	return newMessage;
 }
 
@@ -200,7 +191,7 @@ Message MessagePool::ServerCreate()
 
 void MessagePool::DoNetwork(MessageData *newData)
 {
-	
+
 	return;
 #if 0   // Unreachable
     if(g_network.IsClient()) {
@@ -226,8 +217,8 @@ void MessagePool::DoNetwork(MessageData *newData)
 void MessagePool::NotifySlicReload()
 {
 	sint32 i;
-	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) { 
-		if(m_table[i]) { 
+	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		if(m_table[i]) {
 			((MessageData *)(m_table[i]))->NotifySlicReload();
 		}
 	}

@@ -3,7 +3,6 @@
 #include "ldl_memmap.h"
 
 
-
 unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )
 {
 	unsigned int filesize;
@@ -12,7 +11,7 @@ unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )
 
 	if ( !f )
 		return NULL;
-	
+
 	if (fseek(f, 0, SEEK_END) == 0) {
 		filesize = ftell(f);
 	} else {
@@ -43,7 +42,6 @@ unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )
 	return bits;
 
 }
-
 
 
 void ldl_MemMap::ReleaseFileBits( unsigned char *&bits )

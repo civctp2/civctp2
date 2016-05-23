@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // CTP1_TRADE
 // - Creates an executable with trade like in CTP1. Currently broken.
 //
@@ -48,7 +48,7 @@
 #pragma once
 #endif
 
-#ifndef __UNIT_H__ 
+#ifndef __UNIT_H__
 #define __UNIT_H__ 1
 
 #include <string>
@@ -70,10 +70,10 @@ class Unit;
 
 class CityData;
 class UnitData;
-class UnitRecord; 
+class UnitRecord;
 class UnitDynamicArray;
 class SpriteState;
-class UnitActor; 
+class UnitActor;
 class TradeRoute;
 class Resources;
 class Army;
@@ -84,8 +84,7 @@ class aui_Surface;
 #define k_UNIT_VERSION_MAJOR    0
 #define k_UNIT_VERSION_MINOR    0
 
-
-class Unit : public ID 
+class Unit : public ID
 {
 private:
 	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
@@ -95,7 +94,7 @@ public:
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
-	
+
 	UnitData *operator -> () const { return AccessData(); }
 #ifdef _DEBUG
 	char const * GetText() const;
@@ -104,7 +103,7 @@ public:
 
 	const UnitRecord * GetDBRec() const;
 	const UnitData * GetData(void) const;
-	UnitData * AccessData(void) const; 
+	UnitData * AccessData(void) const;
 	void KillUnit(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 	void Kill(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 	{ KillUnit(cause, killedBy); }
@@ -116,7 +115,7 @@ public:
 	uint32 GetOwnerBit() const;
 	uint32 GetFlag0();
 	sint32 GetType() const;
-	
+
 	const MBCHAR * GetName() const;
 	bool IsInVisionRange(MapPoint &pos) const;
 	bool NearestUnexplored(sint32 searchRadius, MapPoint &pos) const;
@@ -125,10 +124,8 @@ public:
 	bool NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoomFor,
 	                                 Army army) const;
 
-
 	sint32 ExertsMartialLaw() const;
 	bool IsContentOverseas() const { return false; } // Should be implemented
-
 
 	double GetHappiness() const;
 	double GetHappySize() const;
@@ -145,10 +142,10 @@ public:
 	double GetHappyImprovement() const;
 	double GetHappyWonders() const;
 	double GetHappyCrime() const;
-	void CalcHappiness(sint32 &virtualGoldSpent, bool firstPass); 
+	void CalcHappiness(sint32 &virtualGoldSpent, bool firstPass);
 	sint32 PayWages(sint32 w);
 	sint32 GetWagesNeeded() const;
-	
+
 	sint32 GetFirstMoveThisTurn() const;
 
 	sint32 GetShieldHunger() const;
@@ -183,7 +180,7 @@ public:
 
 	void SetIsInTransport(const Unit &transport);
 	bool IsBeingTransported() const;
-	
+
 	bool CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision, bool check_move_points = true) const;
 
 	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
@@ -194,7 +191,7 @@ public:
 
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
 	                sint32 unit_hp[100]) const;
-	
+
 	void GetInserted (const Unit &transport);
 	bool InsertCargo(const Unit &addme);
 
@@ -232,7 +229,7 @@ public:
 	void SetDesiredPosInArmy(const MapPoint &p);
 
 	bool CanInterceptTrade() const;
-	bool CanRustle(CellUnitList &defender) const; 
+	bool CanRustle(CellUnitList &defender) const;
 	bool CanConvertCity(Unit &city) const;
 	bool CanBombard(CellUnitList &defender) const;
 	bool CanCounterBombard(CellUnitList &defender) const;
@@ -246,7 +243,6 @@ public:
 	void FightOneRound(Unit did, double defenders_bonuse, double amr, double dmr);
 	bool IsFlanker() const;
 	sint32 GetZBRange() const;
-
 
 	sint32 GetCargoCapacity() const;
 	sint32 GetNumCarried() const;
@@ -268,10 +264,9 @@ public:
 
 	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
 
-
 	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 
-	bool Settle(); 
+	bool Settle();
 
 	bool IsCantCaptureCity();
 	void ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
@@ -308,7 +303,6 @@ public:
 	bool IsCity() const;
 	void DrawCityStats(aui_Surface *surf, sint32 x, sint32 y);
 
-	
 	void AddTradeRoute(TradeRoute &route, bool fromNetwork = false);
 	void DelTradeRoute(TradeRoute route);
 
@@ -327,7 +321,6 @@ public:
 	sint32 GetIncomingTrade() const;
 	sint32 GetOutgoingTrade() const;
 
-	
 	void RemoveUnitVision();
 	void AddUnitVision();
 	void DoVision(UnitDynamicArray &revealedUnits);
@@ -348,16 +341,14 @@ public:
 
 	void BeginTurnVision(PLAYER_INDEX player);
 
-	
 	sint32 CollectProduction(sint32 &mil, sint32 &mat);
 	void PayFederalProduction (double percent_military,
-	                           sint32 &mil_paid, 
-	                           double percent_terrain, 
+	                           sint32 &mil_paid,
+	                           double percent_terrain,
 	                           sint32 &mat_paid);
-	void PayFederalProductionAbs (sint32 mil_paid, 
-	                              double percent_mat, 
+	void PayFederalProductionAbs (sint32 mil_paid,
+	                              double percent_mat,
 	                              sint32 &mat_paid);
-
 
 	void SetMaterialContribution(bool on);
 	bool GetMaterialContribution() const;
@@ -368,9 +359,8 @@ public:
 	bool GetIsProfessional() const;
 
 	bool GetNeedsNoSupport() const;
-	sint32 GetShieldCost() const; 
+	sint32 GetShieldCost() const;
 
-	
 	void SetSpriteState(SpriteState *s);
 	SpriteState * GetSpriteState() const;
 	void SetActor(UnitActor *a);
@@ -424,7 +414,7 @@ public:
 	void SetSpiedUpon();
 
 	void CityNullifyWalls();
-	
+
 	ORDER_RESULT EstablishEmbassy(Unit &c);
 	ORDER_RESULT ThrowParty(Unit c, sint32 gold);
 
@@ -441,9 +431,8 @@ public:
 	void SetIgnoreHappiness(bool v);
 #endif
 
-
 	void MakeCitizen(PopDBIndex pi, const MapPoint &pos, sint32 origOwner = -1);
-	
+
 	sint32 PopCount() const;
 	sint32 CountSlaves() const;
 	bool IsWatchful() const;
@@ -505,7 +494,7 @@ public:
 
 	bool CanBuildUnit(sint32 type) const;
 	bool CanBuildBuilding(sint32 type) const;
-	
+
 	bool CanBuildCapitalization() const;
 	bool CanBuildWonder(sint32 type) const;
 
@@ -515,15 +504,14 @@ public:
 
 	double GetDistanceToCapitol() const;
 	bool GetCurrentOrderString(StringId &id) const;
-	
-	
+
 	double GetSupportCost() const;
 	double GetOverseasDistress() const;
 
 	void SupportBuildings();
 	void CheckRiot();
 
-	bool AiGetCargoMovementPoints(double &min_move_points, 
+	bool AiGetCargoMovementPoints(double &min_move_points,
 	                              bool  &first) const;
 
 #if 0
@@ -533,8 +521,7 @@ public:
 	bool IsInjured() const;
 
 	void RecalculateResources();
-	
-	
+
 	bool FightOneLineDanceRangedAttack(Unit &defender);
 	bool FightOneLineDanceAssault(Unit &defender);
 

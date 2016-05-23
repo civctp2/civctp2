@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,12 +40,12 @@
 #include "Token.h"
 
 SpriteGroup::SpriteGroup(GROUPTYPE type)
-:	
+:
     m_type              (type),
     m_width             (0),
     m_height            (0),
-    m_usageRefCount     (0),			
-    m_fullLoadRefCount  (0),			
+    m_usageRefCount     (0),
+    m_fullLoadRefCount  (0),
     m_loadType          (LOADTYPE_NONE),
     m_hasDeath          (false),
     m_hasDirectional    (false)
@@ -56,13 +56,12 @@ SpriteGroup::SpriteGroup(GROUPTYPE type)
 
 SpriteGroup::~SpriteGroup()
 {
-    for (int i = 0; i < ACTION_MAX; ++i) 
+    for (int i = 0; i < ACTION_MAX; ++i)
     {
         delete m_anims[i];
         delete m_sprites[i];
     }
 }
-
 
 
 size_t SpriteGroup::GetNumFrames(GAME_ACTION action) const
@@ -72,7 +71,6 @@ size_t SpriteGroup::GetNumFrames(GAME_ACTION action) const
 
     return m_sprites[action] ? m_sprites[action]->GetNumFrames() : 0;
 }
-
 
 void SpriteGroup::DeallocateStorage(void)
 {
@@ -92,19 +90,19 @@ void SpriteGroup::DeallocateFullLoadAnims(void)
     }
 }
 
-void SpriteGroup::Draw(	 sint32 drawX, 
-						 sint32 drawY, 
-						 sint32 facing, 
-						 double scale, 
-						 uint16 transparency, 
-						 Pixel16 outlineColor, 
+void SpriteGroup::Draw(	 sint32 drawX,
+						 sint32 drawY,
+						 sint32 facing,
+						 double scale,
+						 uint16 transparency,
+						 Pixel16 outlineColor,
 						 uint16 flags)
 {
 
 }
 
-void SpriteGroup::DrawText(sint32 x, 
-						   sint32 y, 
+void SpriteGroup::DrawText(sint32 x,
+						   sint32 y,
 						   MBCHAR const * s)
 {
 }
@@ -131,15 +129,14 @@ void SpriteGroup::ReleaseFullLoad(void)
 	Assert(m_fullLoadRefCount >= 0);
 }
 
-
 void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES main_token,TOKEN_TYPES sub_token,BOOL sub_value)
 {
 	extern TokenData	g_allTokens[];
 	fprintf(file,"\t%s", g_allTokens[main_token].keyword);
-	
+
     Sprite *    sprite  = GetGroupSprite(action);
-	if (sprite!=NULL) 
-	{	
+	if (sprite!=NULL)
+	{
 		fprintf(file, "\t1\n");
 
 		if((sub_token>=0)&&(sub_token<TOKEN_MAX))
@@ -150,8 +147,7 @@ void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES ma
         Anim *  anim    = GetGroupAnim(action);
 		if(anim!=NULL)
 		   anim->Export(file);
-	} 
-	else 
+	}
+	else
 		fprintf(file, "\t0\n\n");
 }
-

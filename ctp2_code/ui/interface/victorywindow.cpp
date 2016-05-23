@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_ldl.h"
@@ -28,7 +15,6 @@
 #include "victorywin.h"
 
 extern C3UI *g_c3ui;
-
 
 static MBCHAR *s_VictoryWindowBlock = "VictoryWindow";
 
@@ -66,7 +52,6 @@ VictoryWindow::VictoryWindow(AUI_ERRCODE *err)
 	}
 
 
-
 }
 
 VictoryWindow::~VictoryWindow()
@@ -75,67 +60,3 @@ VictoryWindow::~VictoryWindow()
 		aui_Ldl::DeleteHierarchyFromRoot(s_VictoryWindowBlock);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

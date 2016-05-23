@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ FeatTracker *g_featTracker = NULL;
 //
 // Returns    : -
 //
-// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
@@ -119,7 +119,7 @@ FeatTracker::FeatTracker()
 
 	m_buildingFeat = new bool[g_theBuildingDB->NumRecords()];
 	memset(m_buildingFeat, 0, sizeof(bool) * g_theBuildingDB->NumRecords());
-	
+
 	FindBuildingFeats();
 }
 
@@ -218,7 +218,6 @@ void FeatTracker::Serialize(CivArchive & archive)
 			memset(m_buildingFeat, 0, g_theBuildingDB->NumRecords() * sizeof(bool));
 		}
 
-		
 		PointerList<Feat>::Walker walk(m_activeList);
 		while(walk.IsValid())
 		{
@@ -302,7 +301,7 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 //
 // Returns    : -
 //
-// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to 
+// Remark(s)  : The special round value USE_CURRENT_ROUND may be used to
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
@@ -311,7 +310,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 	const FeatRecord *rec = g_theFeatDB->Get(type);
 	Assert(rec);
 	if(!rec) return;
-	
+
 	if(m_achieved[type])
 	{
 		return;
@@ -434,7 +433,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 				case FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY:  rec->GetEffectEliminateDistancePenalty(sub);break;
 				case FEAT_EFFECT_INCREASE_BOAT_VISION:        rec->GetEffectIncreaseBoatVision(sub);break;
 				case FEAT_EFFECT_INCREASE_SCIENCE:            rec->GetEffectIncreaseScience(sub);break;
-				
+
 				case FEAT_EFFECT_INCREASE_HIT_POINTS:         rec->GetEffectIncreaseHitPoints(sub);break;
 				//increase food
 				//increase citylimit
@@ -448,7 +447,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 				//increase move for unit?
 				//increase vision for unit?
 				//add other civ4 like promotions - but unit wide
-				
+
 				default:
 					Assert(FALSE);
 					break;
@@ -490,7 +489,7 @@ void FeatTracker::BeginTurn(sint32 player)
 				walk.Remove();
 				RemoveFeatFromEffectLists(feat);
 				delete feat;
-				continue; 
+				continue;
 			}
 		}
 
@@ -563,7 +562,7 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 {
 	sint32 featIndex;
-	if(g_theFeatDB->GetNamedItem("FEAT_CONQUERED_BY_FORCE", featIndex)) 
+	if(g_theFeatDB->GetNamedItem("FEAT_CONQUERED_BY_FORCE", featIndex))
 	{
 		sint32 minCityCount = 0;
 		if(g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv(minCityCount))
@@ -585,7 +584,6 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 	}
 }
 
-
 //EMOD added to check if a player achieved a feat 5-11-2006
 bool FeatTracker::HasFeat(sint32 type) const
 {
@@ -593,8 +591,8 @@ bool FeatTracker::HasFeat(sint32 type) const
 //	const FeatRecord *rec = g_theFeatDB->Get(type);
 //	Assert(rec);
 //	if(!rec) return;
-	
-	return m_achieved[type]; 
+
+	return m_achieved[type];
 }
 
 //EMOD added to check if a player achieved a feat 5-11-2006
@@ -637,7 +635,7 @@ bool FeatTracker::PlayerHasFeat(sint32 type, sint32 player) const
 //----------------------------------------------------------------------------
 STDEHANDLER(AccomplishFeat)
 {
-	
+
 	sint32 player, featIndex;
 	if(!args->GetInt(0, featIndex)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;

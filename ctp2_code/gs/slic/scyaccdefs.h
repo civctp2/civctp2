@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added more yy* symbols to be replaced by sc* symbols so that there are 
+// - Added more yy* symbols to be replaced by sc* symbols so that there are
 //   less problems with the other parser charing the same global symbols that
 //   caused usage of invalid memory. - May 28th 2005 Martin Gühmann
 //
@@ -59,7 +59,7 @@
 #define yytoks sctoks
 #define yyv scv
 #define yyval scval
-// Added by Martin Gühmann to fix external linkage 
+// Added by Martin Gühmann to fix external linkage
 // issures in the sliccmd parser
 #define yyssp scssp
 #define yyvsp scvsp

@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_window.h"
@@ -22,7 +21,7 @@ static CityManagerWindow *s_cityManagerWindow = NULL;
 
 void CityManagerWindow::Open()
 {
-	if (!s_cityManagerWindow) 
+	if (!s_cityManagerWindow)
     {
 	    AUI_ERRCODE err = AUI_ERRCODE_OK;
 		s_cityManagerWindow = new CityManagerWindow(&err,
@@ -32,13 +31,13 @@ void CityManagerWindow::Open()
 
 		g_c3ui->AddWindow(s_cityManagerWindow);
 	}
-	
+
 	s_cityManagerWindow->Show();
 }
 
 void CityManagerWindow::Cleanup()
 {
-	if (s_cityManagerWindow) 
+	if (s_cityManagerWindow)
     {
 		s_cityManagerWindow->Hide();
         if (g_c3ui)
@@ -54,9 +53,9 @@ void CityManagerWindow::Cleanup()
 CityManagerWindow::CityManagerWindow(AUI_ERRCODE *retval,
 									 uint32 id,
 									 MBCHAR *ldlBlock)
-	: aui_Window(retval, id, 
+	: aui_Window(retval, id,
 				 uiutils_ChooseLdl(ldlBlock, "CITY_MANAGER_WINDOW"),
-				 16, 
+				 16,
 				 AUI_WINDOW_TYPE_STANDARD)
 {
 	m_ok = m_cancel = NULL;
@@ -94,7 +93,7 @@ void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32
 
 AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    if (!aui_Ldl::IsValid(ldlBlock)) 
+    if (!aui_Ldl::IsValid(ldlBlock))
     {
 		return AUI_ERRCODE_HACK;
 	}
@@ -108,7 +107,6 @@ AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 						   386, 414,
 						   100, 20,
 
-
 						   CityManagerWindowButtonCallback,
 						   this);
 	AddControl(m_ok);
@@ -119,13 +117,11 @@ AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 							   526, 414,
 							   100, 20,
 
-
 							   CityManagerWindowButtonCallback,
 							   this);
 	AddControl(m_cancel);
 
-	
-	
+
 	m_bg = g_ui->LoadImage("CM.tga");
 
 	Assert(m_bg);
@@ -149,8 +145,8 @@ AUI_ERRCODE CityManagerWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y
 	if(m_bg) {
 		aui_Surface *srcSurf = m_bg->TheSurface();
 		RECT srcRect = {0, 0, srcSurf->Width(), srcSurf->Height()};
-		
-		err = 
+
+		err =
 			g_ui->TheBlitter()->Blt(surface,
 									0, 0,
 									srcSurf,

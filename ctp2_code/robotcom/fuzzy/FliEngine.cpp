@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include <stdarg.h>
 
@@ -37,7 +35,6 @@ FliEngine::FliEngine(IC3GameState *gs, AiMain *ai)
 		m_ruleLists[i] = NULL;
 		m_actionLists[i] = new PointerList<FliAction>;
 
-
 		GetSymbol("always_one_var")->RegisterInit(i);
 		char actualname[1024];
 		sprintf(actualname, "s%02d_alwaysone", i);
@@ -53,43 +50,43 @@ FliEngine::FliEngine(IC3GameState *gs, AiMain *ai)
 
 FliEngine::~FliEngine()
 {
-    if(m_symTab) { 
+    if(m_symTab) {
 		delete m_symTab;
-        m_symTab = NULL; 
-    } 
+        m_symTab = NULL;
+    }
 
     if(m_funcTab) {
 		delete m_funcTab;
-        m_funcTab = NULL; 
-    } 
+        m_funcTab = NULL;
+    }
 
 	sint32 i;
 	for(i = 0; i < sint32(FLI_SECT_MAX); i++) {
 		if(m_rawRuleLists[i]) {
 			m_rawRuleLists[i]->DeleteAll();
 			delete m_rawRuleLists[i];
-            m_rawRuleLists[i] = NULL; 
+            m_rawRuleLists[i] = NULL;
 		}
 
 		if(m_ruleLists[i]) {
 			m_ruleLists[i]->DeleteAll();
 			delete m_ruleLists[i];
-            m_ruleLists[i] = NULL; 
+            m_ruleLists[i] = NULL;
 		}
 
 		if(m_actionLists[i]) {
 			m_actionLists[i]->DeleteAll();
 			delete m_actionLists[i];
-            m_actionLists[i] = NULL; 
+            m_actionLists[i] = NULL;
 		}
 	}
 
 	delete [] m_rawRuleLists;
-    m_rawRuleLists = NULL; 
+    m_rawRuleLists = NULL;
 	delete [] m_ruleLists;
-    m_ruleLists = NULL; 
+    m_ruleLists = NULL;
 	delete [] m_actionLists;
-    m_actionLists = NULL; 
+    m_actionLists = NULL;
 
 }
 
@@ -146,7 +143,7 @@ void FliEngine::AddFunction(char *name, FliSymbol *variable, SFTYPE type,
 	m_funcTab->Add(name, variable, type, v1, v2);
 }
 
-void FliEngine::AddRule(uint8 *code, sint32 codelen, 
+void FliEngine::AddRule(uint8 *code, sint32 codelen,
 						PointerList<FliSymbol> *inputsyms,
 						PointerList<FliSymbol> *outputsyms,
 						sint32 ruletype,
@@ -173,16 +170,16 @@ void FliEngine::SortRules(PointerList<FliRule>*inlist,
 						  PointerList<FliRule>*outlist)
 {
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
 	while(!inlist->IsEmpty()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		sint32 startrules = inlist->GetCount();
-		
+
 		PointerList<FliRule>::Walker walk(inlist);
 		while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 			FliRule *rule = walk.GetObj();
 			if(rule->DependanciesResolved()) {
 				rule->ResolveDependancies();
@@ -193,17 +190,16 @@ Assert(++finite_loop < 100000);
 			}
 		}
 
-		
 		if(inlist->GetCount() == startrules) {
-			
+
 			ReportDBError("FLI_FUZZY_CYCLE");
 			return;
 		}
 	}
 }
 
-sint32 rules_time; 
-sint32 act_time; 
+sint32 rules_time;
+sint32 act_time;
 
 void FliEngine::FireRules(sint32 module)
 {
@@ -219,27 +215,27 @@ void FliEngine::FireRules(sint32 module)
 	PointerList<FliRule> *ruleList = m_ruleLists[module];
 	PointerList<FliRule>::Walker walk(ruleList);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-sint32 start_time  = 0; 
+sint32 start_time  = 0;
 
 start_time = 0;
 
-start_time = GetTickCount(); 
+start_time = GetTickCount();
 
 	while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		FliRule *rule = walk.GetObj();
 		rule->Evaluate(this, module);
 		walk.Next();
 	}
-rules_time += GetTickCount() - start_time; 
+rules_time += GetTickCount() - start_time;
 
-start_time = GetTickCount(); 
+start_time = GetTickCount();
 	PointerList<FliAction>::Walker actionWalk(m_actionLists[module]);
 	while(actionWalk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		FliAction *action = actionWalk.GetObj();
 		action->Evaluate(m_ai);
 		actionWalk.Next();
@@ -264,13 +260,13 @@ void FliEngine::Defuzzify(const sint32 module, FliSymbol *variable, double nSamp
 
 	variable->RemoveUnusedOutputProcs(module);
 
-    Assert(0.0 < nSamples); 
+    Assert(0.0 < nSamples);
 	variable->GetMinMax(min, max);
-    double vdx = variable->GetRecommendedDX(module);  
-    double sdx = (max - min) / nSamples; 
-    double dx = min(sdx, vdx); 
+    double vdx = variable->GetRecommendedDX(module);
+    double sdx = (max - min) / nSamples;
+    double dx = min(sdx, vdx);
 
-	for(x = min; x <= max; x += dx) {		
+	for(x = min; x <= max; x += dx) {
 		y = variable->GetMaxMembership(module, x, dx, max);
 		weightedAverage += y * (x - min);
 		area += y;
@@ -278,9 +274,9 @@ void FliEngine::Defuzzify(const sint32 module, FliSymbol *variable, double nSamp
 
 	if(area < 0.0000001) {
 
-		
-		
-		
+
+
+
 	} else {
 		variable->SetValue((weightedAverage + (min * area))  / area);
 	}
@@ -318,46 +314,45 @@ void FliEngine::ReportError(const MBCHAR *text, ...)
 
 void FliEngine::InitGraphics()
 {
-    m_symTab->InitGraphics(); 
-} 
+    m_symTab->InitGraphics();
+}
 
 sint32 FliEngine::GetNumFuzzySections()
 {
     return FLI_SECT_MAX;
-} 
+}
 
 sint32 FliEngine::GetNumFuzzyVariables(sint32 idx_section)
 {
-    return m_symTab->GetNumFuzzyVariables(idx_section); 
-} 
+    return m_symTab->GetNumFuzzyVariables(idx_section);
+}
 
-void FliEngine::GetFuzzyGraph(sint32 idx_section, sint32 idx_variable, 
-        char **label, double *minx, double *maxx, double *miny, double *maxy, 
+void FliEngine::GetFuzzyGraph(sint32 idx_section, sint32 idx_variable,
+        char **label, double *minx, double *maxx, double *miny, double *maxy,
         sint32 *num_graphs, sint32 *num_x, double ***height, double *defuzz_val)
 {
-    m_symTab->GetFuzzyGraph(idx_section, idx_variable, 
-        label, minx, maxx, miny, maxy, 
+    m_symTab->GetFuzzyGraph(idx_section, idx_variable,
+        label, minx, maxx, miny, maxy,
         num_graphs, num_x, height, defuzz_val);
-    
+
 }
 
 void FliEngine::ReloadFuzzyLogic()
 {
 }
-void FliEngine::ResetFuzzyInput(sint32 idx_section, sint32 idx_variable, 
+void FliEngine::ResetFuzzyInput(sint32 idx_section, sint32 idx_variable,
         double new_defuzz_val)
 {
 }
 
-
 #ifdef DO_FZLOG
-void FliEngine::DumpFZInputHeaders(sint32 which) 
-{ 
-	if (m_symTab) m_symTab->DumpFZInputHeaders(which); 
+void FliEngine::DumpFZInputHeaders(sint32 which)
+{
+	if (m_symTab) m_symTab->DumpFZInputHeaders(which);
 }
-void FliEngine::DumpFZInputs(sint32 which) 
-{ 
-	if (m_symTab) m_symTab->DumpFZInputs(which); 
+void FliEngine::DumpFZInputs(sint32 which)
+{
+	if (m_symTab) m_symTab->DumpFZInputs(which);
 }
 #endif
 
@@ -366,7 +361,7 @@ void FliEngine::StartAction(const char *name)
 	Assert(m_currentAction == NULL);
 	if(m_currentAction != NULL) {
 		delete m_currentAction;
-        m_currentAction = NULL; 
+        m_currentAction = NULL;
 	}
 	m_currentAction = new FliAction(name, this);
 }

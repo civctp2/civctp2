@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -23,8 +23,8 @@
 // - When not defined, generates standard C++.
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks
 //       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -32,8 +32,8 @@
 // Modifications from the original Activision code:
 //
 // - pragma once marked as MS specific.
-// - Accessor functionality added. 
-// - Standardized code. (May 29th 2006 Martin Gühmann) 
+// - Accessor functionality added.
+// - Standardized code. (May 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ public:
 		~Member();
 
 		SlicStructDescription *GetParent() { return m_parent; }
-		
+
 	private:
 		friend class SlicStructDescription;
 		friend class SlicStructInstance;
@@ -74,7 +74,7 @@ public:
 		SLIC_SYM m_type;
 		char *m_name;
 		class SlicStructDescription *m_parent;
-		class SlicStructMemberData *m_symbol; 
+		class SlicStructMemberData *m_symbol;
 	};
 
 	SlicStructDescription(char const * name, SLIC_BUILTIN type);
@@ -84,7 +84,7 @@ public:
 
 	SlicStructMemberData * GetMemberSymbol(sint32 index) const;
 	sint32 GetMemberSymbolIndex(SlicStructMemberData * symbol) const;
-	size_t GetNumAccessors(void) const 
+	size_t GetNumAccessors(void) const
 		{ return m_accessors.size(); };
 
 	void AddMember(SlicStructDescription::Member *member);
@@ -99,7 +99,6 @@ public:
 
 	SlicSymbolData *CreateInstance(SS_TYPE type, SlicStackValue value);
 	SlicSymbolData *CreateInstance();
-	
 
 
 	virtual SlicSymbolData *CreateDataSymbol();
@@ -127,16 +126,16 @@ public:
 
 	SlicStructMemberData
     (
-        SlicStructInstance *    parent, 
+        SlicStructInstance *    parent,
         SlicSymbolData const &  data
-    ) 
+    )
     :   SlicSymbolData  (data),
         m_parent        (parent)
     { ; }
 
 	SlicStructMemberData
 	(
-		SlicStructInstance *	parent	= NULL, 
+		SlicStructInstance *	parent	= NULL,
 		SLIC_SYM				type	= SLIC_SYM_UNDEFINED
 	)
 	:	SlicSymbolData  (type),
@@ -158,19 +157,17 @@ public:
 };
 
 
-
 class SlicStructInstance {
 public:
 	SlicStructInstance(SlicStructDescription *desc, SlicSymbolData *dataSym = NULL);
 	SlicStructInstance(CivArchive &archive);
 	~SlicStructInstance();
 	void Serialize(CivArchive &archive);
-	
 
 
 	SlicSymbolData *GetMemberSymbol(sint32 memberIndex);
 	SlicSymbolData *GetMemberSymbolByName(char *name);
-	
+
 	SlicStructDescription *GetDescription() { return m_description; }
 	SlicSymbolData *GetDataSymbol();
 	sint32 GetMemberSymbolIndex(SlicStructMemberData *memb);

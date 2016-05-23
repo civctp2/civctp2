@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -16,7 +7,6 @@
 
 class c3_Button;
 class c3_EditButton;
-
 
 #define k_C3_BUTTON_DEFAULT_BEVELWIDTH		2
 #define k_C3_BUTTON_LDL_BEVELWIDTH			"bevelwidth"
@@ -36,7 +26,6 @@ class c3_EditButton;
 
 class aui_Surface;
 class C3TextField;
-
 
 class c3_Button : public aui_Button, public PatternBase
 {
@@ -67,9 +56,9 @@ public:
 		sint32 y = 0 );
 
 protected:
-	c3_Button() 
-    : 
-        aui_Button      (), 
+	c3_Button()
+    :
+        aui_Button      (),
         PatternBase     (),
         m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
         m_bevelType     (0)
@@ -81,7 +70,6 @@ private:
 	uint32	m_bevelWidth;
 	uint32	m_bevelType;
 };
-
 
 
 class c3_EditButton : public c3_Button
@@ -116,8 +104,8 @@ public:
 	void DoCallback( void );
 
 protected:
-	c3_EditButton() 
-    : 
+	c3_EditButton()
+    :
         c3_Button       (),
 	    m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
 	    m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
@@ -146,9 +134,7 @@ private:
 	AUI_ERRCODE CreateFieldAndActions( MBCHAR *ldlBlock = NULL );
 };
 
-
 void c3_EditButtonCallback( aui_Control *, uint32, uint32, void * );
 void c3_EditButtonFieldCallback( aui_Control *, uint32, uint32, void * );
 
-
-#endif 
+#endif

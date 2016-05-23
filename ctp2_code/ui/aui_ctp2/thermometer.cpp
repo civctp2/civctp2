@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "thermometer.h"
 
@@ -24,7 +12,6 @@
 #include "colorset.h"       // g_colorSet
 
 extern C3UI			*g_c3ui;
-
 
 Thermometer::Thermometer(
 	AUI_ERRCODE *retval,
@@ -45,7 +32,6 @@ Thermometer::Thermometer(
 	m_percentFilled(percentFilled)
 {
 }
-
 
 Thermometer::Thermometer(
 	AUI_ERRCODE *retval,
@@ -74,13 +60,12 @@ AUI_ERRCODE Thermometer::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -90,7 +75,6 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	ToWindow( &rect );
 	RECT mainRect = rect;
 
-	
 	if ( m_pattern ) {
 		if ( m_srcWidthPix || m_srcHeightPix ) {
 			RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -113,11 +97,11 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
     Assert(m_percentFilled >= 0);
 
     if (m_percentFilled < 0)
-        m_percentFilled=0; 
+        m_percentFilled=0;
     Assert(m_percentFilled <= 100);
 
     if (100 < m_percentFilled)
-        m_percentFilled=100; 
+        m_percentFilled=100;
 
 	if (m_percentFilled < 25) {
 		color = COLOR_RED;
@@ -134,7 +118,6 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if (rect.right > rect.left)
 		primitives_PaintRect16( surface, &rect, g_colorSet->GetColor(color) );
 
-	
 	DrawThisText(
 		surface,
 		&mainRect );
@@ -145,7 +128,7 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-void Thermometer::SetPercentFilled( sint32 percentFilled ) 
+void Thermometer::SetPercentFilled( sint32 percentFilled )
 {
     m_percentFilled = std::min<sint32>(100, percentFilled);
     m_draw         |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;

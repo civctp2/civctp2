@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sound property screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -47,7 +47,6 @@
 
 extern C3UI					*g_c3ui;
 extern ProfileDB			*g_theProfileDB;
-
 
 static c3_PopupWindow *s_soundWindow	= NULL;
 static C3Slider		*s_sfx				= NULL,
@@ -87,7 +86,6 @@ sint32 soundscreen_removeMyWindow(uint32 action)
 
 	AUI_ERRCODE auiErr;
 
-	
 	sint32		sfx, voice, music;
 
 	soundscreen_getValues(sfx, music, voice);
@@ -104,13 +102,12 @@ sint32 soundscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE soundscreen_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_soundWindow ) return AUI_ERRCODE_OK; 
+	if ( s_soundWindow ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SoundWindow");
 	s_soundWindow = new c3_PopupWindow(
@@ -125,7 +122,6 @@ AUI_ERRCODE soundscreen_Initialize( void )
 
 	s_soundWindow->SetStronglyModal(TRUE);
 
-	
 	s_sfx				= spNew_C3Slider(&errcode,windowBlock,"SFXSlider",soundscreen_sfxSlide);
 	s_sfxN				= spNew_c3_Static(&errcode,windowBlock,"SFXName");
 	s_music				= spNew_C3Slider(&errcode,windowBlock,"MusicSlider",soundscreen_musicSlide);
@@ -140,7 +136,6 @@ AUI_ERRCODE soundscreen_Initialize( void )
 	s_voicemin			= spNew_c3_Static(&errcode,windowBlock,"VoiceMin");
 	s_voicemax			= spNew_c3_Static(&errcode,windowBlock,"VoiceMax");
 
-	
 	s_sfx->SetValue(g_theProfileDB->GetSFXVolume(), 0);
 	s_voice->SetValue(g_theProfileDB->GetVoiceVolume(), 0);
 	s_music->SetValue(g_theProfileDB->GetMusicVolume(), 0);
@@ -155,7 +150,6 @@ AUI_ERRCODE soundscreen_Initialize( void )
 	s_soundWindow->AddTitle( block );
 	s_soundWindow->AddClose( soundscreen_exitPress );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -163,16 +157,14 @@ AUI_ERRCODE soundscreen_Initialize( void )
 }
 
 
-
 AUI_ERRCODE soundscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_soundWindow  ) return AUI_ERRCODE_OK; 
+	if ( !s_soundWindow  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_soundWindow->Id() );
 	keypress_RemoveHandler(s_soundWindow);
-
 
 
 	mycleanup(s_sfx);
@@ -181,7 +173,6 @@ AUI_ERRCODE soundscreen_Cleanup()
 	mycleanup(s_musicN);
 	mycleanup(s_voice);
 	mycleanup(s_voiceN);
-
 
 
 	mycleanup(s_sfxmin);
@@ -204,7 +195,7 @@ AUI_ERRCODE soundscreen_Cleanup()
 void soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	g_theProfileDB->Save();
-	
+
 	soundscreen_removeMyWindow(action);
 }
 
@@ -242,7 +233,7 @@ void soundscreen_voiceSlide(aui_Control *control, uint32 action, uint32 data, vo
 
 void soundscreen_getValues(sint32 &sfx, sint32 &music, sint32 &voice)
 {
-	
+
 	sfx				= s_sfx->GetValueX();
 	music			= s_music->GetValueX();
 	voice			= s_voice->GetValueX();

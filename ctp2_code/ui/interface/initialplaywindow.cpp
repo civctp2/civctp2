@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,48 +57,48 @@
 
 InitPlayWindow::InitPlayWindow
 (
-    AUI_ERRCODE *       retval, 
+    AUI_ERRCODE *       retval,
     uint32              id,
-    MBCHAR *			ldlBlock, 
-    sint32              bpp, 
-    AUI_WINDOW_TYPE     type, 
+    MBCHAR *			ldlBlock,
+    sint32              bpp,
+    AUI_WINDOW_TYPE     type,
     bool                bevel
 )
-: 
+:
     C3Window        (retval, id, ldlBlock, bpp, type, bevel),
     m_spriteTest    (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "SpriteTestButton", "Sprite Test", spritetest_spPress, 
+                       (retval, ldlBlock,
+		   		        "SpriteTestButton", "Sprite Test", spritetest_spPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
     m_email         (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "EmailButton", "Email",	initialplayscreen_emailPress, 
+                       (retval, ldlBlock,
+		   		        "EmailButton", "Email",	initialplayscreen_emailPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
     m_hotseat       (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "HotSeatButton", "Hotseat", initialplayscreen_hotseatPress, 
+                       (retval, ldlBlock,
+		   		        "HotSeatButton", "Hotseat", initialplayscreen_hotseatPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
     m_mp            (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "MPButton", "Multiplayer", initialplayscreen_mpPress, 
+                       (retval, ldlBlock,
+		   		        "MPButton", "Multiplayer", initialplayscreen_mpPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
     m_credits       (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "CreditsButton", "Credits", initialplayscreen_creditsPress, 
+                       (retval, ldlBlock,
+		   		        "CreditsButton", "Credits", initialplayscreen_creditsPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
     m_quit          (spNew_ctp2_Button
-                       (retval, ldlBlock, 
-		   		        "QuitButton", "Quit Out", initialplayscreen_quitPress, 
+                       (retval, ldlBlock,
+		   		        "QuitButton", "Quit Out", initialplayscreen_quitPress,
                         "CTP2_BUTTON_TEXT_RIGHT_LARGE"
                        )
                     ),
@@ -124,4 +124,3 @@ InitPlayWindow::InitPlayWindow
     m_spriteTest->Hide();
 #endif
 }
-

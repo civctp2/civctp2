@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
 // Use DirectX
 //
@@ -35,16 +35,14 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-
 #include "aui_surface.h"
 #include "aui_directx.h"
-
 
 
 class aui_DirectSurface : public aui_Surface, public aui_DirectX
 {
 public:
-	
+
 	aui_DirectSurface(
 		AUI_ERRCODE *retval,
 		sint32 width,
@@ -68,21 +66,18 @@ public:
 
 	virtual uint32 SetChromaKey( uint32 color );
 
-	
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
-	
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 
 	virtual AUI_ERRCODE Blank(const uint32 &color);
-	
+
 	LPDIRECTDRAWSURFACE BUFFER ( void ) const { return (m_back == NULL) ? m_lpdds : m_back; }
 	LPDIRECTDRAWSURFACE DDS    ( void ) const { return m_lpdds; }
 	BOOL				IsDCGot( void ) const { return m_dcIsGot; }
 
-	
 	virtual BOOL IsOK( void ) const;
 	virtual void Flip();
 
@@ -104,6 +99,6 @@ protected:
 
 typedef aui_DirectSurface aui_NativeSurface;
 
-#endif 
+#endif
 
-#endif 
+#endif

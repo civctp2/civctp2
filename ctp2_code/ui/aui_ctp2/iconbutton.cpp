@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "iconbutton.h"
 
@@ -18,7 +17,6 @@
 
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
-
 
 IconButton::IconButton(
 	AUI_ERRCODE *retval,
@@ -57,7 +55,6 @@ IconButton::IconButton(
 {
 	InitCommon(ldlBlock, TRUE);
 
-
 }
 
 AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
@@ -69,7 +66,6 @@ AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-		
 
 		name = block->GetString( "icon" );
 		Assert( name != NULL );
@@ -93,10 +89,9 @@ IconButton::~IconButton()
 	delete [] m_filename;
 }
 
-
 AUI_ERRCODE IconButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

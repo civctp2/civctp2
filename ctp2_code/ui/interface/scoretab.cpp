@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "scoretab.h"
 
@@ -22,38 +20,38 @@ extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );
 
 
 
-ScoreTab::ScoreTab(void) 
+ScoreTab::ScoreTab(void)
 :
 	m_difficulty        (static_cast<ctp2_Static *>
                             (aui_Ldl::GetObject
-                                ("InfoDialog", 
+                                ("InfoDialog",
                                  "TabGroup.Tab1.TabPanel.Difficulty.Value"
                                 )
                             )
                         ),
 	m_rank              (static_cast<ctp2_Static *>
                             (aui_Ldl::GetObject
-                                ("InfoDialog", 
+                                ("InfoDialog",
                                  "TabGroup.Tab1.TabPanel.Rank.Value"
                                 )
                              )
                         ),
 	m_total             (static_cast<ctp2_Static *>
                             (aui_Ldl::GetObject
-                                ("InfoDialog", 
+                                ("InfoDialog",
                                  "TabGroup.Tab1.TabPanel.Total.Value"
                                 )
                             )
                         ),
 	m_scoreList         (static_cast<ctp2_ListBox *>
                             (aui_Ldl::GetObject
-                                ("InfoDialog", 
+                                ("InfoDialog",
                                  "TabGroup.Tab1.TabPanel.List"
                                 )
                             )
                         ),
     m_difficultyStrings (NULL)
-    
+
 {
     AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_difficultyStrings = new aui_StringTable(&errcode, "strings.difficulty1strings");
@@ -89,7 +87,7 @@ void ScoreTab::Update(void)
 {
 	sint32      curPlayer   = g_selected_item->GetVisiblePlayer();
 	Player *    pl          = g_player[curPlayer];
-	if (!pl) 
+	if (!pl)
     {
 		pl = Player::GetDeadPlayer(curPlayer);
 	}
@@ -115,11 +113,11 @@ void ScoreTab::Update(void)
 	m_total->SetText(commaNumber);
 
 	sint32 rank = 1;
-	for (int p = 1; p < k_MAX_PLAYERS; p++) 
+	for (int p = 1; p < k_MAX_PLAYERS; p++)
     {
-		if ((p != curPlayer) && g_player[p] && 
+		if ((p != curPlayer) && g_player[p] &&
             (g_player[p]->m_score->GetTotalScore() > score->GetTotalScore())
-           ) 
+           )
         {
 			rank++;
 		}

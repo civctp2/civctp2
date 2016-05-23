@@ -7,8 +7,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// __AUI_USE_DIRECTMEDIA__	
+//
+// __AUI_USE_DIRECTMEDIA__
 // should be set to have any meaningful code at all
 //
 //----------------------------------------------------------------------------
@@ -21,11 +21,9 @@
 
 #include "c3.h"
 
-
 #include "c3ui.h"
 
 #ifdef __AUI_USE_DIRECTMEDIA__
-
 
 #include "aui_directui.h"
 #include "aui_directsurface.h"
@@ -35,7 +33,6 @@
 #include "CivPaths.h"			// g_civPaths
 #include "RefTime.h"			// UNITS, MILLISECONDS
 #include "soundmanager.h"		// g_soundManager
-
 
 
 extern C3UI		*g_c3ui;
@@ -55,7 +52,6 @@ aui_DirectMovie::aui_DirectMovie(
 }
 
 
-
 AUI_ERRCODE aui_DirectMovie::InitCommon( void )
 {
 	m_mmStream = NULL;
@@ -69,7 +65,6 @@ AUI_ERRCODE aui_DirectMovie::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_DirectMovie::~aui_DirectMovie()
@@ -106,7 +101,6 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			IID_IAMMultiMediaStream,
 			(void **)&temp );
 
-		
 		m_mmStream = temp;
 
 		if ( FAILED(hr) )
@@ -142,7 +136,7 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			AMMSF_ADDDEFAULTRENDERER,
 			NULL );
         (void) hr;  // Ignore audio failures: display movie without sound.
-		
+
 		char fullPath[_MAX_PATH];
 		strcpy(fullPath, m_filename);
 
@@ -165,14 +159,12 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			0 );
 
 
-
 		if ( FAILED(hr) )
 		{
 			Close();
 			return AUI_ERRCODE_LOADFAILED;
 		}
 
-		
 
 		hr = m_mmStream->GetMediaStream(
 			MSPID_PrimaryVideo,
@@ -184,7 +176,6 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			return AUI_ERRCODE_LOADFAILED;
 		}
 
-		
 		hr = m_primaryVidStream->QueryInterface(
 			IID_IDirectDrawMediaStream,
 			(void **)&m_ddStream );
@@ -194,13 +185,11 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			return AUI_ERRCODE_LOADFAILED;
 		}
 
-		
-		
+
 		STREAM_TIME streamTime = 0;
 		hr = m_ddStream->GetTimePerFrame( &streamTime );
 		m_timePerFrame = static_cast<uint32>(streamTime / ( UNITS / MILLISECONDS ));
 
-		
 		hr = m_ddStream->CreateSample(
 			NULL,
 			NULL,
@@ -212,7 +201,6 @@ AUI_ERRCODE aui_DirectMovie::Open(
 			return AUI_ERRCODE_LOADFAILED;
 		}
 
-		
 		hr = m_streamSample->GetSurface(
 			&m_streamSurface,
 			&m_streamRect );
@@ -234,7 +222,6 @@ AUI_ERRCODE aui_DirectMovie::Open(
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectMovie::TargetSurface(aui_DirectSurface *surface)
 {
 
@@ -244,7 +231,6 @@ AUI_ERRCODE aui_DirectMovie::TargetSurface(aui_DirectSurface *surface)
 
 	HRESULT hr;
 
-	
 	hr = m_ddStream->CreateSample(
 		surface->BUFFER(),
 		NULL,
@@ -256,7 +242,6 @@ AUI_ERRCODE aui_DirectMovie::TargetSurface(aui_DirectSurface *surface)
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
-	
 	hr = m_streamSample->GetSurface(
 		&m_streamSurface,
 		&m_streamRect );
@@ -270,10 +255,9 @@ AUI_ERRCODE aui_DirectMovie::TargetSurface(aui_DirectSurface *surface)
 }
 
 
-
 AUI_ERRCODE aui_DirectMovie::Close( void )
 {
-	
+
 	Stop();
 
 	if ( m_primaryVidStream )
@@ -318,23 +302,20 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 {
 	if ( !m_isPlaying )
 	{
-		
+
 		Open();
 
 		m_isPlaying = TRUE;
 		m_isPaused = FALSE;
 
-		
-		
+
 		if ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) {
 
-			sint32		savedWidth = g_c3ui->Width(), 
+			sint32		savedWidth = g_c3ui->Width(),
 						savedHeight = g_c3ui->Height();
 
-			
 			g_c3ui->TearDownMouse();
 
-			
 			g_c3ui->DestroyDirectScreen();
 			g_c3ui->SetWidth(640);
 			g_c3ui->SetHeight(480);
@@ -345,13 +326,12 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 			if ( FAILED(hr) )
 				return AUI_ERRCODE_HACK;
 
-			
 			while ( ShowCursor( FALSE ) >= 0 )
 				;
 
-			
-			
-			
+
+
+
 			if (m_mmStream) {
 				STREAM_TIME st = 0;
 				HRESULT hr = m_mmStream->GetDuration(&st);
@@ -364,7 +344,6 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 
 			PlayOnScreenMovie();
 
-			
 			g_c3ui->DestroyDirectScreen();
 			g_c3ui->SetWidth(savedWidth);
 			g_c3ui->SetHeight(savedHeight);
@@ -372,15 +351,15 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 
 			g_c3ui->RestoreMouse();
 		} else {
-		
+
 			HRESULT hr = m_mmStream->SetState( STREAMSTATE_RUN );
 			Assert( !FAILED(hr) );
 			if ( FAILED(hr) )
 				return AUI_ERRCODE_HACK;
 
-			
-			
-			
+
+
+
 			if (m_mmStream) {
 				STREAM_TIME st = 0;
 				HRESULT hr = m_mmStream->GetDuration(&st);
@@ -414,7 +393,7 @@ AUI_ERRCODE aui_DirectMovie::Stop( void )
 
 				HRESULT hr = m_mmStream->GetDuration(&st);
 				Assert(!FAILED(hr));
-				
+
 				hr = m_mmStream->Seek(st);
 				Assert(!FAILED(hr));
 
@@ -424,7 +403,7 @@ AUI_ERRCODE aui_DirectMovie::Stop( void )
 					NULL,
 					0 );
 				Assert(!FAILED(hr));
-	
+
 				hr = m_streamSample->CompletionStatus( COMPSTAT_WAIT, 0 );
 				Assert(!FAILED(hr));
 
@@ -452,7 +431,6 @@ AUI_ERRCODE aui_DirectMovie::Stop( void )
 
 	}
 
-	
 	g_soundManager->ReacquireSoundDriver();
 
 	return AUI_ERRCODE_OK;
@@ -516,7 +494,7 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 		{
 			if (GetTickCount() >= m_endOfMovieTickCount) {
 				if (m_flags & k_AUI_MOVIE_PLAYFLAG_LOOP) {
-					
+
 					if (m_mmStream)
 						m_mmStream->Seek( 0 );
 				} else {
@@ -525,18 +503,17 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 			}
 		}
 
-		
 		if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)
 		{
 			if (!g_ui) return AUI_ERRCODE_UNHANDLED;
 
-			LPDIRECTDRAWSURFACE lpdds = 
+			LPDIRECTDRAWSURFACE lpdds =
 					((aui_DirectSurface *)g_ui->Secondary())->BUFFER();
 
 			RECT surfRect = {0, 0, g_ui->SecondaryWidth(), g_ui->SecondaryHeight() };
 			RECT destRect = {0, 0, m_streamRect.right * 2, m_streamRect.bottom * 2};
 
-			OffsetRect(&destRect, 
+			OffsetRect(&destRect,
 						(surfRect.right - surfRect.left)/2 - (destRect.right - destRect.left)/2,
 						(surfRect.bottom - surfRect.top)/2 - (destRect.bottom - destRect.top)/2);
 			if(destRect.left < 0) destRect.left = 0;
@@ -575,7 +552,6 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 			g_ui->BltSecondaryToPrimary(k_AUI_BLITTER_FLAG_COPY);
 		}
 
-		
 		m_lastFrameTime = GetTickCount();
 
 		retval = AUI_ERRCODE_HANDLED;
@@ -584,5 +560,4 @@ AUI_ERRCODE aui_DirectMovie::Process( void )
 	return retval;
 }
 
-
-#endif 
+#endif

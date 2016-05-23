@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -73,8 +73,8 @@ namespace
 	/// \param      a_Context   Context, containing variable substitution values
 	void SetLabelText
 	(
-	    MBCHAR const *      a_Label, 
-	    MBCHAR const *      a_Text, 
+	    MBCHAR const *      a_Label,
+	    MBCHAR const *      a_Text,
 	    SlicObject &        a_Context
 	)
 	{
@@ -85,9 +85,9 @@ namespace
 		{
 		    MBCHAR parsedText[k_MAX_NAME_LEN];
 		    parsedText[0] = 0;
-		    stringutils_Interpret(g_theStringDB->GetNameStr(a_Text), 
-		                          a_Context, 
-		                          parsedText, 
+		    stringutils_Interpret(g_theStringDB->GetNameStr(a_Text),
+		                          a_Context,
+		                          parsedText,
 		                          k_MAX_NAME_LEN
 		                         );
 		    st->SetText(parsedText);
@@ -108,7 +108,7 @@ CityEspionage::CityEspionage()
 	{
 		m_cancelButton  = static_cast<ctp2_Button *>
 		    (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.CancelButton"));
-		if (m_cancelButton) 
+		if (m_cancelButton)
 		{
 			m_cancelButton->SetActionFuncAndCookie(CancelCallback, this);
 		}
@@ -128,14 +128,14 @@ CityEspionage::~CityEspionage()
 		m_inventoryList->Clear();
 	}
 
-	for (size_t unitIndex = 0; unitIndex < k_MAX_ARMY_SIZE; ++unitIndex) 
+	for (size_t unitIndex = 0; unitIndex < k_MAX_ARMY_SIZE; ++unitIndex)
 	{
 		MBCHAR  block [k_MAX_NAME_LEN];
 		sprintf(block, "DialogBackground.FortifiedUnitsBox.Unit%i", unitIndex);
 
 		ctp2_Static * unitPicture  = static_cast<ctp2_Static *>
 		                                (aui_Ldl::GetObject(LDL_BLOCK, block));
-		if (unitPicture) 
+		if (unitPicture)
 		{
 			unitPicture->ExchangeImage(0, 0, NULL);
 		}
@@ -145,7 +145,7 @@ CityEspionage::~CityEspionage()
 }
 
 /// Release all data of the singleton.
-/// \remarks Can be used as ::UiCleanupCallback 
+/// \remarks Can be used as ::UiCleanupCallback
 void CityEspionage::Cleanup()
 {
 	delete s_CityEspionage;
@@ -175,7 +175,7 @@ void CityEspionage::DisplayWindow(Unit a_City)
 		AUI_ERRCODE err = g_c3ui->AddWindow(m_window);
 		Assert(err == AUI_ERRCODE_OK);
 
-		if (err == AUI_ERRCODE_OK) 
+		if (err == AUI_ERRCODE_OK)
 		{
 			err = m_window->Show();
 		}
@@ -198,7 +198,7 @@ void CityEspionage::DisplayWindow(Unit a_City)
 		SetLabelText("DialogBackground.GoldFromTrade",      "str_ldl_Espionage_GoldInTrade_Label",  so);
 
 		Assert(m_inventoryList);
-		if (m_inventoryList) 
+		if (m_inventoryList)
 		{
 			m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
 			m_inventoryList->Clear();
@@ -208,12 +208,12 @@ void CityEspionage::DisplayWindow(Unit a_City)
 
 			for (sint32 buildIndex = 0; buildIndex < g_theBuildingDB->NumRecords(); ++buildIndex)
 			{
-				if (cityData->HasBuilding(buildIndex)) 
+				if (cityData->HasBuilding(buildIndex))
 				{
 					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
 					    (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 
-					if (item) 
+					if (item)
 					{
 						item->SetText(g_theBuildingDB->Get(buildIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(true, buildIndex));
@@ -223,20 +223,19 @@ void CityEspionage::DisplayWindow(Unit a_City)
 				}
 			}
 
-			
-			for (sint32 wonderIndex = 0; wonderIndex < g_theWonderDB->NumRecords(); ++wonderIndex) 
+			for (sint32 wonderIndex = 0; wonderIndex < g_theWonderDB->NumRecords(); ++wonderIndex)
 			{
-				if (cityData->GetBuiltWonders() & ((uint64) 1 << (uint64) wonderIndex)) 
+				if (cityData->GetBuiltWonders() & ((uint64) 1 << (uint64) wonderIndex))
 				{
 					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
 					    (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 
-					if (item) 
+					if (item)
 					{
 						item->SetText(g_theWonderDB->Get(wonderIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(false, wonderIndex));
 					}
-					
+
 					m_inventoryList->AddItem(item);
 				}
 			}
@@ -250,22 +249,20 @@ void CityEspionage::DisplayWindow(Unit a_City)
 			CellUnitList cellUnitList;
 			cell->GetArmy(cellUnitList);
 
-			
 			sint32 unitIndex = 0;
 
-			
-			for (sint32 multiIndex = 0; multiIndex < k_MAX_ARMY_SIZE; ++multiIndex) 
+			for (sint32 multiIndex = 0; multiIndex < k_MAX_ARMY_SIZE; ++multiIndex)
 			{
 				MBCHAR interp[k_MAX_NAME_LEN];
 				sprintf(interp, "DialogBackground.FortifiedUnitsBox.Unit%i", multiIndex);
 				ctp2_Static * st = (ctp2_Static *) aui_Ldl::GetObject(LDL_BLOCK, interp);
-				
+
 				if (st)
 				{
-					if (unitIndex < cellUnitList.Num()) 
+					if (unitIndex < cellUnitList.Num())
 					{
 						Unit &  unit = cellUnitList[unitIndex++];
-						
+
 						if (st->IsDisabled())
 						{
 							st->Enable(true);
@@ -303,16 +300,16 @@ void CityEspionage::HideWindow()
 }
 
 /// Handle the cancel button
-/// \param  control Not used 
+/// \param  control Not used
 /// \param  action  Action to perform
 /// \param  data    Not used
 /// \param  cookie  Not used, except for consistency testing in the debug version.
 /// \remarks Can be used as aui_Control::ControlActionCallback
 void CityEspionage::CancelCallback
 (
-    aui_Control *   control, 
-    uint32          action, 
-    uint32          data, 
+    aui_Control *   control,
+    uint32          action,
+    uint32          data,
     void *          cookie
 )
 {
@@ -324,4 +321,3 @@ void CityEspionage::CancelCallback
 		s_CityEspionage->HideWindow();
 	}
 }
-

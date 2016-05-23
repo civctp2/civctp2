@@ -12,7 +12,7 @@
 class Command;
 class CommandLine;
 
-class aui_Surface; 
+class aui_Surface;
 
 struct CommandRecord
 {
@@ -21,7 +21,6 @@ struct CommandRecord
 	char* m_helptext;
 };
 
-
 class Command
 {
 public:
@@ -29,7 +28,6 @@ public:
 };
 
 #define COMMAND(x) class x : public Command { public: void Execute(sint32 argc, char **argv); }
-
 
 COMMAND(ZBCommand);
 COMMAND(BuildCommand);
@@ -49,7 +47,7 @@ COMMAND(HelpCommand);
 COMMAND(StayOnCommand);
 COMMAND(TurnOffCommand);
 COMMAND(RandTestCommand);
-COMMAND(ClearTextCommand); 
+COMMAND(ClearTextCommand);
 COMMAND(TradeRouteCommand);
 COMMAND(UntradeRouteCommand);
 COMMAND(CityResourcesCommand);
@@ -129,13 +127,13 @@ COMMAND(RequestExchangeCityCommand) ;
 COMMAND(RequestExchangeMapCommand) ;
 
 COMMAND(RevoltCommand);
-COMMAND(SeeWWRCommand); 
-COMMAND(SetWorkdayCommand); 
-COMMAND(SetWagesCommand); 
-COMMAND(SetRationsCommand); 
+COMMAND(SeeWWRCommand);
+COMMAND(SetWorkdayCommand);
+COMMAND(SetWagesCommand);
+COMMAND(SetRationsCommand);
 COMMAND(SetMaterialsPercentCommand);
 COMMAND(AddMaterialsCommand);
-COMMAND(SetReadinessCommand); 
+COMMAND(SetReadinessCommand);
 COMMAND(PactEndPollutionCommand);
 COMMAND(PactCaptureCityCommand);
 COMMAND(CaptureCityForGoldCommand);
@@ -152,7 +150,7 @@ COMMAND(CreateImprovementCommand);
 COMMAND(SetCityNameCommand) ;
 COMMAND(SetCitySizeCommand);
 
-COMMAND(ToggleAIStr); 
+COMMAND(ToggleAIStr);
 
 COMMAND(InvestigateCityCommand);
 COMMAND(NullifyWallsCommand);
@@ -190,7 +188,7 @@ COMMAND(RustleCommand);
 COMMAND(CreateParkCommand);
 COMMAND(CreateRiftCommand);
 
-COMMAND(FastRoundCommand); 
+COMMAND(FastRoundCommand);
 COMMAND(DumpAlliesCommand) ;
 
 COMMAND(HelpLinesCommand);
@@ -213,14 +211,14 @@ COMMAND(FastMoveCommand);
 COMMAND(InjoinCommand);
 COMMAND(GrantAllCommand);
 COMMAND(GrantManyCommand);
-COMMAND(DebugCheckMemCommand); 
+COMMAND(DebugCheckMemCommand);
 COMMAND(UseLadderCommand);
 COMMAND(TutorialCommand);
 COMMAND(ToggleMapColorCommand);
-COMMAND(ToggleHeuristicCommand); 
+COMMAND(ToggleHeuristicCommand);
 COMMAND(SimultaneousCommand);
 COMMAND(AutoCenterCommand);
-COMMAND(AiDumpCommand); 
+COMMAND(AiDumpCommand);
 COMMAND(SetUnitMovesStyleCommand);
 COMMAND(SetClassicStyleCommand);
 COMMAND(SetSpeedStyleCommand);
@@ -254,7 +252,7 @@ COMMAND(ForceRevoltCommand);
 
 COMMAND(ToeCommand);
 
-COMMAND(WhoAmICommand); 
+COMMAND(WhoAmICommand);
 COMMAND(AutoSaveCommand);
 COMMAND(HeapTotalsCommand);
 COMMAND(HotSeatCommand);
@@ -266,8 +264,7 @@ COMMAND(SendSlaveCommand);
 COMMAND(DisbandCommand);
 COMMAND(AttachCommand);
 COMMAND(DetachCommand);
-COMMAND(ToggleShieldSupport); 
-
+COMMAND(ToggleShieldSupport);
 
 COMMAND(SuperFastDebugModeCommand);
 COMMAND(KillPopCommand);
@@ -276,31 +273,28 @@ COMMAND(AutoGroupCommand);
 COMMAND(AddPopCommand);
 COMMAND(CopyVisionCommand);
 
-
 COMMAND(CombatLogCommand);
 
-
 COMMAND(ThroneRoomUpgradeCommand);
-
 
 
 COMMAND(GiveMeProbeCommand);
 
 COMMAND(RedrawMapCommand);
 COMMAND(GodCommand);
-COMMAND(ReloadFliCommand); 
+COMMAND(ReloadFliCommand);
 
 COMMAND(MultiCycleCommand);
-COMMAND(DumpFZRegardCommand); 
-COMMAND(SetFZRegardCommand); 
+COMMAND(DumpFZRegardCommand);
+COMMAND(SetFZRegardCommand);
 
 COMMAND(LeaksClearCommand);
 COMMAND(LeaksShowCommand);
-COMMAND(TotalWarCommand); 
+COMMAND(TotalWarCommand);
 
 COMMAND(SlicVariableCommand);
-COMMAND(DipLogOnCommand); 
-COMMAND(DipLogOffCommand); 
+COMMAND(DipLogOnCommand);
+COMMAND(DipLogOffCommand);
 
 COMMAND(DirectorDumpCommand);
 COMMAND(ResyncCommand);
@@ -311,10 +305,8 @@ COMMAND(CleanSpritesCommand);
 COMMAND(CleanScreenCommand);
 COMMAND(ResetVisionCommand);
 
-
 COMMAND(ExportMapCommand);
 COMMAND(ImportMapCommand);
-
 
 COMMAND(InitializeDiplomacyCommand);
 COMMAND(BeginDiplomacyCommand);
@@ -329,10 +321,8 @@ COMMAND(NextStateCommand);
 COMMAND(SetPersonalityCommand);
 COMMAND(DeclareWarCommand);
 
-
 COMMAND(SetGovernorForCityCommand);
 COMMAND(SetGovernorPwReserveCommand);
-
 
 COMMAND(ToggleCellText);
 COMMAND(ToggleArmyText);
@@ -340,20 +330,15 @@ COMMAND(ToggleArmyName);
 
 COMMAND(ArmyClumps);
 
-
 COMMAND(SetGoodsCommand);
-
 
 COMMAND(AiDebugCommand);
 
-
 COMMAND(DRayTestCode);
-
 
 COMMAND(ShowVictoryCommand);
 
 COMMAND(ReloadSpritesCommand);
-
 
 #ifdef DUMP_ASTAR
 
@@ -370,7 +355,7 @@ class CommandLine
 {
 public:
 	CommandLine();
-	
+
 	BOOL AddKey(char c);
 	void Clear();
 	void Execute();
@@ -388,7 +373,7 @@ private:
 	sint32 Parse();
 	BOOL PartialMatch(const char* x, const char* y);
 
-	char* m_argv[256]; 
+	char* m_argv[256];
 	sint32 m_argc;
 
 	char m_buf[1024];
@@ -401,10 +386,10 @@ private:
 
     bool m_addingKey;
 
-    BOOL m_display_mem; 
+    BOOL m_display_mem;
     sint32 m_old_mem_count;
-    double m_flux; 
-    double m_flux_decay; 
+    double m_flux;
+    double m_flux_decay;
 };
 
 extern CommandLine g_commandLine;

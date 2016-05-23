@@ -1,11 +1,9 @@
-
 #pragma once
 
 #ifndef __IC3Government_H__
 #define __IC3Government_H__ 1
 
-
-#include <OBJBASE.H>  
+#include <OBJBASE.H>
 
 DEFINE_GUID(CLSID_IC3Government, 0x20335c21, 0x5fc, 0x11d2, 0x83, 0x55, 0x0, 0xc0, 0x4f, 0xba, 0x43, 0xc0) ;
 
@@ -14,13 +12,12 @@ DEFINE_GUID(CLSID_IC3Government, 0x20335c21, 0x5fc, 0x11d2, 0x83, 0x55, 0x0, 0xc
 
 DECLARE_INTERFACE_(IC3Government, IUnknown)
 	{
- 	
 
 	STDMETHOD_ (double, GetWorkdayCoef)(THIS_ sint32 ) PURE ;
 	STDMETHOD_ (double, GetWorkdayBase)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetWorkdayExpectation)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetWorkdayUnit)(THIS_ sint32 gov_id) PURE ;
- 
+
 	STDMETHOD_ (double, GetWagesCoef)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetWagesBase)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetWagesExpectation)(THIS_ sint32 gov_id) PURE ;
@@ -40,7 +37,7 @@ DECLARE_INTERFACE_(IC3Government, IUnknown)
     STDMETHOD_ (double, GetMinEmpireDistance)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetMaxEmpireDistance)(THIS_ sint32 gov_id) PURE ;
     STDMETHOD_ (double, GetBigCityCoef) (THIS_) PURE;
-    STDMETHOD_ (double, GetBigCityOffset)(THIS_) PURE; 
+    STDMETHOD_ (double, GetBigCityOffset)(THIS_) PURE;
 
 	STDMETHOD_ (double, GetCrimeCoef)(THIS_ sint32 gov_id) PURE ;
 	STDMETHOD_ (double, GetCrimeOffset)(THIS_ sint32 gov_id) PURE ;
@@ -71,7 +68,7 @@ DECLARE_INTERFACE_(IC3Government, IUnknown)
     STDMETHOD_ (double, GetTooManyCitiesCoefficient) (THIS_ sint32 gov_id) PURE;
 
     STDMETHOD_ (double, GetGoldCoefficient)(THIS_ sint32 gov_id) PURE;
-    STDMETHOD_ (double, GetProductionCoefficient)(THIS_ sint32 gov_id) PURE;  
+    STDMETHOD_ (double, GetProductionCoefficient)(THIS_ sint32 gov_id) PURE;
 
 } ;
 

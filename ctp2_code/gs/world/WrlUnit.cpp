@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
 extern UnitPool *g_theUnitPool;
 
-bool World::InsertUnit (const MapPoint &pos, Unit &id, 
+bool World::InsertUnit (const MapPoint &pos, Unit &id,
 						  UnitDynamicArray &revealedUnits)
 {
 	Assert(!id.IsCity());
@@ -75,21 +75,21 @@ sint32 World::RemoveUnitReference (const MapPoint &pos, const Unit &id)
 
 	g_theUnitTree->Remove(id);
 
-	return GetCell(pos)->RemoveUnitReference(id); 
+	return GetCell(pos)->RemoveUnitReference(id);
 }
 
 sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports)
 {
-	Cell *ptr = GetCell(pos); 
+	Cell *ptr = GetCell(pos);
 
-	transports.Clear(); 
+	transports.Clear();
 
-	sint32 n = ptr->GetNumUnits(); 
+	sint32 n = ptr->GetNumUnits();
 	for (sint32 i=0; i<n; i++)
 	{
 		if (0 < ptr->AccessUnit(i).GetCargoCapacity())
 		{
-			transports.Insert(ptr->AccessUnit(i)); 
+			transports.Insert(ptr->AccessUnit(i));
 		}
 	}
 
@@ -102,91 +102,88 @@ void World::GetArmy(const MapPoint &pos, CellUnitList &al)
 	GetCell(pos)->GetArmy(al);
 }
 
-BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos, 
-                      const BOOL is_check_only_visible) 
+BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos,
+                      const BOOL is_check_only_visible)
 {
-	CellUnitList *a; 
-	sint32 i; 
+	CellUnitList *a;
+	sint32 i;
 
-    if (is_check_only_visible) { 
-        if (g_player[owner]->IsVisible(pos) == FALSE) { 
-            return FALSE; 
-        } 
-    } 
+    if (is_check_only_visible) {
+        if (g_player[owner]->IsVisible(pos) == FALSE) {
+            return FALSE;
+        }
+    }
 
-    a = GetArmyPtr(pos); 
+    a = GetArmyPtr(pos);
 
     if(!a)
 		return FALSE;
 
 	sint32 n = a->Num();
-    if (n < 1) 
-        return FALSE; 
+    if (n < 1)
+        return FALSE;
 
     if (!player_isEnemy(owner, a->GetOwner()))
-        return FALSE; 
+        return FALSE;
 
 	if(is_check_only_visible && !a->IsVisible(owner)) {
-		
+
 		return FALSE;
 	}
 
-    
-    for (i=0; i<n; i++) { 
-        if (!a->Get(i).IsNoZoc()) { 
-			if(!is_check_only_visible || 
+    for (i=0; i<n; i++) {
+        if (!a->Get(i).IsNoZoc()) {
+			if(!is_check_only_visible ||
 			   a->Get(i).GetVisibility() & (1 << owner)) {
-				return TRUE;           
+				return TRUE;
 			}
         }
-    } 
-    return FALSE; 
-} 
+    }
+    return FALSE;
+}
 
-BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start, 
+BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
                       const MapPoint &dest, const BOOL is_check_only_visible)
-{ 
+{
 #if 1
 	Cell *toCell = m_map[dest.x][dest.y];
 	CellUnitList *toUnits = toCell->UnitArmy();
 	if(toUnits) {
 		if(toUnits->GetOwner() == owner &&
 		   toUnits->ExertsZOC()) {
-			
+
 			return FALSE;
 		} else if(toUnits->GetOwner() != owner) {
-			
+
 			return FALSE;
 		}
 	}
 	if(toCell->GetCity().m_id != (0)) {
-		
+
 		return FALSE;
 	}
 
 	uint32 fromZoc = m_map[start.x][start.y]->m_zoc;
 	uint32 ownerMask = (~(1 << owner)) & (~(g_player[owner]->mask_alliance));
 	if(!(fromZoc & ownerMask)) {
-		
-		return FALSE;
-	}
-	
-	uint32 toZoc = m_map[dest.x][dest.y]->m_zoc;
-	if(!((toZoc & fromZoc) & ownerMask)) {
-		
+
 		return FALSE;
 	}
 
-	
-	if((g_player[owner]->IsRobot() && 
+	uint32 toZoc = m_map[dest.x][dest.y]->m_zoc;
+	if(!((toZoc & fromZoc) & ownerMask)) {
+
+		return FALSE;
+	}
+
+	if((g_player[owner]->IsRobot() &&
 		!(g_network.IsClient() && g_network.IsLocalPlayer(owner))) ||
 	   !is_check_only_visible) {
-		
+
 		return TRUE;
 	}
 
-	
-	
+
 	UnitDynamicArray startUnits;
 	GetAdjacentUnits(startUnits, start);
 	sint32 i;
@@ -201,7 +198,7 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 	}
 
     UnitDynamicArray city_list;
-    if (!canSeeStartUnit) { 
+    if (!canSeeStartUnit) {
         city_list.Clear();
         GetAdjacentCities(city_list, start);
 	    for(i = 0; i < city_list.Num(); i++) {
@@ -225,51 +222,49 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 			return TRUE;
 	}
 
-
     city_list.Clear();
     GetAdjacentCities(city_list, dest);
 	for(i = 0; i < city_list.Num(); i++) {
 		if(city_list[i].GetOwner() != owner &&
 		   (city_list[i].GetVisibility() & (1 << owner))){
-            return TRUE; 
+            return TRUE;
 		}
 	}
-
 
 	return FALSE;
 
 #else
-    if (!start.IsNextTo(dest)) { 
+    if (!start.IsNextTo(dest)) {
         return FALSE;
     }
 
-    WORLD_DIRECTION dir = start.GetNeighborDirection(dest); 
-    static MapPoint left, right; 
+    WORLD_DIRECTION dir = start.GetNeighborDirection(dest);
+    static MapPoint left, right;
 
-    CellUnitList *a = GetArmyPtr(dest); 
-    if (a && 0 < a->Num()) { 
-        return FALSE;   
+    CellUnitList *a = GetArmyPtr(dest);
+    if (a && 0 < a->Num()) {
+        return FALSE;
     }
 
-    switch (dir) { 
+    switch (dir) {
     case NORTH:
         if(start.GetNeighborPosition(NORTHWEST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(NORTHEAST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case NORTHEAST:
         if(start.GetNeighborPosition(NORTH, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(NORTHWEST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
 
         if(start.GetNeighborPosition(EAST, left)) {
@@ -280,25 +275,25 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 			if (IsCellZoc(owner, left, is_check_only_visible))
 				return TRUE;
 		}
-        break; 
+        break;
     case EAST:
 		if(start.GetNeighborPosition(NORTHEAST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(SOUTHEAST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case SOUTHEAST:
         if(start.GetNeighborPosition(NORTHEAST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(EAST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
 
         if(start.GetNeighborPosition(SOUTH, left)) {
@@ -307,27 +302,27 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 		}
         if(start.GetNeighborPosition(SOUTHWEST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case SOUTH:
         if(start.GetNeighborPosition(SOUTHEAST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(SOUTHWEST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case SOUTHWEST:
         if(start.GetNeighborPosition(SOUTHEAST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(SOUTH, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
 
         if(start.GetNeighborPosition(WEST, left)) {
@@ -336,27 +331,27 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 		}
         if(start.GetNeighborPosition(NORTHWEST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case WEST:
         if(start.GetNeighborPosition(SOUTHWEST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(NORTHWEST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
     case NORTHWEST:
         if(start.GetNeighborPosition(SOUTHWEST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
         if(start.GetNeighborPosition(WEST, right)) {
 			if (IsCellZoc(owner, right, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
 
         if(start.GetNeighborPosition(NORTH, left)) {
@@ -365,15 +360,15 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 		}
 		if(start.GetNeighborPosition(NORTHEAST, left)) {
 			if (IsCellZoc(owner, left, is_check_only_visible))
-				return TRUE; 
+				return TRUE;
 		}
-        break; 
+        break;
 	case UP:
 	case DOWN:
 		return FALSE;
 		break;
     default:
-        Assert(0); 
+        Assert(0);
     }
 
     return FALSE;
@@ -502,7 +497,7 @@ bool World::GetSecondUnit (const MapPoint &pos, Unit &second) const
 
 CellUnitList * World::GetArmyPtr(const MapPoint &pos)
 {
-	return (GetCell(pos)->UnitArmy()); 
+	return (GetCell(pos)->UnitArmy());
 }
 
 #ifdef _DEBUG
@@ -531,18 +526,17 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 		return;
 	}
 
-	
 	CellUnitList * cunits = cell->UnitArmy();
-	if (cunits && cunits->Access(0).IsValid()) 
+	if (cunits && cunits->Access(0).IsValid())
 	{
-		if (    (cunits->CanEnter(pos)) 
-		     && (cunits->GetOwner() == player) 
-		   ) 
+		if (    (cunits->CanEnter(pos))
+		     && (cunits->GetOwner() == player)
+		   )
 		{
-			for (sint32 i = cunits->Num() - 1; i >= 0; i--) 
+			for (sint32 i = cunits->Num() - 1; i >= 0; i--)
 			{
 				if (    ((*cunits)[i].GetArmy() != a )
-				     && !(*cunits)[i].IsNoZoc()) 
+				     && !(*cunits)[i].IsNoZoc())
 				{
 					cell->m_zoc |= (1 << player);
 					return;
@@ -551,11 +545,9 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 		}
 	}
 
-	
 	if(AdjacentToZOCUnit(pos, player, a, notThisCity)) {
 		cell->m_zoc |= (1 << player);
 #ifdef _DEBUG
-
 
 
 #endif
@@ -566,7 +558,7 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 //
 // Name       : World::AdjacentToZOCUnit
 //
-// Description: Check whether a position is restricted by a ZoC 
+// Description: Check whether a position is restricted by a ZoC
 //              (zone of control) of a player.
 //
 // Parameters : cpos            : position to check
@@ -592,25 +584,25 @@ BOOL World::AdjacentToZOCUnit(const MapPoint &cpos, sint32 player, const Army &n
 			MapPoint const	wpos	= testXY.GetRC();
 			Unit			city	= m_map[wpos.x][wpos.y]->GetCity();
 
-			if (city.m_id == 0) 
+			if (city.m_id == 0)
 			{
 				CellUnitList * units	= m_map[wpos.x][wpos.y]->m_unit_army;
-				if (units && units->GetOwner() == player && units->CanEnter(cpos)) 
+				if (units && units->GetOwner() == player && units->CanEnter(cpos))
 				{
-					for (sint32 i = units->Num() - 1; i >= 0; i--) 
+					for (sint32 i = units->Num() - 1; i >= 0; i--)
 					{
 						if (!units->Access(i).IsNoZoc() && units->Access(i).GetArmy() != notThisArmy)
 							return TRUE;
 					}
 				}
 			}
-			else if (city != notThisCity && 
-			         city.GetOwner() == player && 
+			else if (city != notThisCity &&
+			         city.GetOwner() == player &&
 			         g_theWorld->CanEnter(cpos, city.GetMovementType())
-					) 
+					)
 			{
 				return TRUE;
-			} 
+			}
 		}
 	}
 
@@ -645,7 +637,7 @@ void World::GetAdjacentCities(UnitDynamicArray &city_list, const MapPoint &cpos)
 			MapPoint const	wpos		= testXY.GetRC();
 			Cell * 			cell		= m_map[wpos.x][wpos.y];
 			Unit			nth_city	= cell->GetCity();
-			if (nth_city.m_id != 0) 
+			if (nth_city.m_id != 0)
 			{
 				city_list.Insert(nth_city);
 			}
@@ -680,9 +672,9 @@ void World::GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &cpos)
 		{
 			MapPoint const	wpos		= testXY.GetRC();
 			Cell * 			cell		= m_map[wpos.x][wpos.y];
-			if(cell->UnitArmy()) 
+			if(cell->UnitArmy())
 			{
-				for (sint32 i = 0; i < cell->UnitArmy()->Num(); i++) 
+				for (sint32 i = 0; i < cell->UnitArmy()->Num(); i++)
 				{
 					units.Insert(cell->UnitArmy()->Access(i));
 				}
@@ -691,15 +683,13 @@ void World::GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &cpos)
 	}
 }
 
-
 void World::RecalculateZOC()
 {
-	
+
 	MapPoint pos, chk;
 	sint32 d;
 	sint32 i;
 
-	
 	for(pos.x = 0; pos.x < m_size.x; pos.x++) {
 		for(pos.y = 0; pos.y < m_size.y; pos.y++) {
 			Cell *cell = m_map[pos.x][pos.y];
@@ -710,9 +700,9 @@ void World::RecalculateZOC()
 	for(pos.x = 0; pos.x < m_size.x; pos.x++) {
 		for(pos.y = 0; pos.y < m_size.y; pos.y++) {
 			Cell *cell = m_map[pos.x][pos.y];
-			
+
 			if(cell->GetCity().m_id != 0) {
-				
+
 				sint32 owner = cell->GetCity().GetOwner();
 				AddZOC(pos, owner);
 				for(d = 0; d < (sint32)NOWHERE; d++) {
@@ -723,7 +713,7 @@ void World::RecalculateZOC()
 					}
 				}
 			} else if(cell->UnitArmy()) {
-				
+
 				for(i = 0; i < cell->UnitArmy()->Num(); i++) {
 					if(!g_theUnitPool->IsValid(cell->UnitArmy()->Access(i))) {
 						cell->RemoveUnitReference(cell->UnitArmy()->Access(i));
@@ -735,7 +725,7 @@ void World::RecalculateZOC()
 					}
 
 					if(!cell->UnitArmy()->Access(i).IsNoZoc()) {
-						
+
 						sint32 owner = cell->UnitArmy()->GetOwner();
 						AddZOC(pos, owner);
 						for(d = 0; d < (sint32)NOWHERE; d++) {
@@ -751,19 +741,18 @@ void World::RecalculateZOC()
 	}
 }
 
-
 void World::RecalculateZOC(const MapPoint &p)
 {
 	SquareIterator it(p, 1);
 	Cell *centerCell = GetCell(p);
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = GetCell(it.Pos());
-		if(cell->UnitArmy() && 
+		if(cell->UnitArmy() &&
 		   cell->UnitArmy()->ExertsZOC() &&
 		   cell->UnitArmy()->CanEnter(p)) {
 			AddZOC(p, cell->UnitArmy()->GetOwner());
 		}
-		if(cell->HasCity() && 
+		if(cell->HasCity() &&
 		   cell->GetCity().IsValid() &&
 		   centerCell->CanEnter(cell->GetCity().GetMovementType())) {
 			AddZOC(p, cell->GetCity().GetOwner());

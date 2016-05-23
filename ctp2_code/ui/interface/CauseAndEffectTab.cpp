@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // - Added optimize sliders button and according callback function to allow
 //   the player to optimize sliders, automaticly. - April 8th 2005 Martin Gühmann
 // - Backwards compatibility crash prevention
-// - All food, production and gold values are now updated, when a single 
+// - All food, production and gold values are now updated, when a single
 //   slider is moved, because happiness modifies crime, crime modifies
 //   losses and production modifies pollution and pollution modifies crime.
 //   This means all the values are modified even if only a single slider
@@ -42,9 +42,7 @@
 
 #include "c3.h"
 
-
 #include "CauseAndEffectTab.h"
-
 
 #include "aui_ldl.h"
 #include "aui_region.h"
@@ -60,7 +58,7 @@
 #include "FeatTracker.h"				// g_featTracker
 #include "governor.h"                   // To allow automatic slider optimization
 #include "GovernmentRecord.h"
-#include "Happy.h"	
+#include "Happy.h"
 #include "network.h"
 #include "pixelutils.h"
 #include "player.h"
@@ -73,10 +71,8 @@
 #include "UnitDynArr.h"
 #include "wonderutil.h"
 
-
 static sint32 k_ONE_FIVE__NEG_TWO_TWO_CONVERSION = 3;
 static sint32 k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION = 2;
-
 
 CauseAndEffectTab::CauseAndEffectTab(MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
@@ -264,7 +260,7 @@ m_summaryCommerceSavings(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 m_summaryCommerceConversionsGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationSummary.ConversionsGold.Value")))
 {
-	
+
 	Assert(m_numberOfCities);
 	Assert(m_population);
 	Assert(m_happinessValue);
@@ -352,10 +348,8 @@ m_summaryCommerceConversionsGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ld
 
 	strcpy(m_ldlBlock,ldlBlock);
 
-	
 	DisplayDetails(false);
 
-	
 	m_tabPanel->SetShowCallback(DetailsShowCallback, this);
 	m_detailsButton->SetActionFuncAndCookie(
 		DetailsButtonActionCallback, this);
@@ -380,40 +374,33 @@ m_summaryCommerceConversionsGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ld
 	m_tab->SetActionFuncAndCookie(CauseAndEffectTabActionCallback, this);
 }
 
-
 void CauseAndEffectTab::Update()
 {
-	
+
 	if(g_network.GetSensitiveUIBlocked())
 		return;
 
 	UpdateCities();
 
-	
 	UpdateGeneral();
 
-	
 	UpdateFoodSpinners();
 	UpdateProductionSpinners();
 	UpdateCommerceSpinners();
 
-	
 	UpdateFoodValues();
 	UpdateProductionValues();
 	UpdateCommerceValues();
 }
 
-
 void CauseAndEffectTab::DisplayDetails(bool flag)
 {
-	
+
 	m_displayDetails = flag;
 
-	
 	if(m_tabPanel->IsHidden())
 		return;
 
-	
 	if(m_displayDetails) {
 		static_cast<ctp2_Static*>(aui_Ldl::GetObject(m_ldlBlock,
 			"Food.InformationDetails"))->Show();
@@ -443,94 +430,80 @@ void CauseAndEffectTab::DisplayDetails(bool flag)
 	}
 }
 
-
 void CauseAndEffectTab::UpdateGeneral()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	static char stringBuffer[16];
 
-	
 	sprintf(stringBuffer, "%d", player->GetNumCities());
 	m_numberOfCities->SetText(stringBuffer);
 	sprintf(stringBuffer, "%d", player->GetTotalPopulation()*k_PEOPLE_PER_POPULATION+player->GetPartialPopulation());
 	m_population->SetText(stringBuffer);
 
-	
 	sint32 happiness;
 	happiness=player->GetAverageHappiness();
 	sprintf(stringBuffer, "%d", happiness);
 	m_happinessValue->SetText(stringBuffer);
 
-	
 	const GovernmentRecord *government =
 		g_theGovernmentDB->Get(player->GetGovernmentType());
 
-	
 	m_government->SetText(government->GetNameText());
 }
 
-
 void CauseAndEffectTab::UpdateFoodSpinners()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	m_foodRationsSpinner->SetValue(static_cast<sint32>(player->GetUnitlessRations()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 }
 
 void CauseAndEffectTab::UpdateProductionSpinners()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	m_productionWorkdaySpinner->SetValue(static_cast<sint32>(-player->GetUnitlessWorkday()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 
-	
 	m_productionPublicWorksSpinner->SetValue(
 		static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5), 0);
 }
 
 void CauseAndEffectTab::UpdateCommerceSpinners()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	m_commerceWagesSpinner->SetValue(static_cast<sint32>(player->GetUnitlessWages()) +
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION, 0);
 
-	
 	double currentScienceTax = 0.0;
 	player->GetScienceTaxRate(currentScienceTax);
-	double const	maxScienceTax	= 
+	double const	maxScienceTax	=
 		g_theGovernmentDB->Get(player->GetGovernmentType())->GetMaxScienceRate();
 	m_commerceScienceTaxSpinner->SetMaximum(AsPercentage(maxScienceTax), 0);
 	m_commerceScienceTaxSpinner->SetValue(AsPercentage(currentScienceTax), 0);
 }
 
-
 void CauseAndEffectTab::UpdateFoodValues()
 {
-	
+
 	double totalFoodRequired = 0.0, totalFood = 0.0,
 		totalFoodCrime = 0.0, totalFoodConsumed = 0.0,
 		totalTerrainFood = 0.0, totalFoodFromBuildings = 0.0,
 		totalFoodGovBonus = 0.0, totalFoodFarmers = 0.0,
 		totalFeatWonderFood = 0.0;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
-	
-	
+
+
+
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
 	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
 	{
@@ -558,7 +531,7 @@ void CauseAndEffectTab::UpdateFoodValues()
 		// Gov bonus.
 		double totalFoodWithoutGov = noBonusesGrossFood + foodBuildingBonus
 			+ farmersFood + featWonderFood;
-		double foodGovBonus = ceil(totalFoodWithoutGov 
+		double foodGovBonus = ceil(totalFoodWithoutGov
 			* g_theGovernmentDB->Get(player->m_government_type)->GetFoodCoef());
 		foodGovBonus -= totalFoodWithoutGov;
 
@@ -582,15 +555,12 @@ void CauseAndEffectTab::UpdateFoodValues()
 		totalFoodConsumed += foodConsumed;
 	}
 
-	
 	double subTotal = totalFoodCrime + totalFoodConsumed;
 	double totalFoodStored = totalFood - subTotal;
 
-	
 	static char stringBuffer[16];
 	static char formatBuffer[64];
 
-	
 	//sprintf(stringBuffer, "%d", totalFoodRequired);
 	//m_foodRequired->SetText(stringBuffer);
 
@@ -625,7 +595,6 @@ void CauseAndEffectTab::UpdateFoodValues()
 	m_detailsFoodStored->SetText(stringBuffer);
 	m_summaryFoodStored->SetText(stringBuffer);
 
-	
 	sint32 happiness = static_cast<sint32>(
 		Happy::CalcCityIndependentRations(player));
 	sprintf(stringBuffer, "%d", happiness);
@@ -641,7 +610,7 @@ void CauseAndEffectTab::UpdateFoodValues()
 
 void CauseAndEffectTab::UpdateProductionValues()
 {
-	
+
 	double totalProduction = 0.0, totalProductionCrime = 0.0,
 		totalTerrainProd = 0.0, totalProdFromBuildings = 0.0,
 		totalLaborersProd = 0.0, totalProdGovBonus = 0.0,
@@ -649,12 +618,11 @@ void CauseAndEffectTab::UpdateProductionValues()
 		totalWorkdayBonus = 0.0;
 	sint32 totalProductionUnitUpkeep = 0, totalProductionPublicWorks = 0;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
-	
-	
+
+
+
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
 	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
 	{
@@ -688,14 +656,14 @@ void CauseAndEffectTab::UpdateProductionValues()
 		                    (wonderutil_GetIncreaseProduction(player->m_builtWonders) * 0.01));
 
 		featWonderProd = (featProd + wonderProd);
-		
+
 		// Labourers bonus.
 		double laborersProd = cityData->GetSpecialistsResources(POP_LABORER) * cityData->LaborerCount();
 
 		// Gov bonus.
 		double totalProdWithoutGov = prodNoBonuses + workdayBonus
 			+ prodBuildingBonus + laborersProd + featWonderProd;
-		double prodGovBonus = ceil(totalProdWithoutGov 
+		double prodGovBonus = ceil(totalProdWithoutGov
 			* g_theGovernmentDB->Get(player->m_government_type)->GetProductionCoef());
 		prodGovBonus -= totalProdWithoutGov;
 
@@ -721,7 +689,6 @@ void CauseAndEffectTab::UpdateProductionValues()
 		// Crime.
 		sint32 productionCrime = cityData->GetProdCrime();
 
-		
 		sint32 productionPublicWorks =
 			cityData->ComputeMaterialsPaid(player->m_materialsTax);
 
@@ -736,7 +703,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 		totalProductionCrime += productionCrime;
 		totalProductionPublicWorks += productionPublicWorks;
 	}
-	
+
 	totalProductionUnitUpkeep = player->GetReadinessCost();
 
 	// This always returns 0, seems it is reset once the franchise
@@ -753,12 +720,10 @@ void CauseAndEffectTab::UpdateProductionValues()
 	//	totalProductionUnitUpkeep -= franchiseGain;
 	//}
 
-	
 	double deductions = totalProductionCrime + totalProductionUnitUpkeep + totalFranchiseBioLoss;
 	double totalProductionCityUse = totalProduction -
 		(deductions + totalProductionPublicWorks);
 
-	
 	static char stringBuffer[16];
 	static char formatBuffer[64];
 
@@ -805,13 +770,12 @@ void CauseAndEffectTab::UpdateProductionValues()
 	m_detailsProductionCityUse->SetText(stringBuffer);
 	m_summaryProductionCityUse->SetText(stringBuffer);
 
-	
 	sint32 happiness = static_cast<sint32>(
 		Happy::CalcCityIndependentWorkday(player));
 	sprintf(stringBuffer, "%d", happiness);
 	m_productionHappinessValue->SetText(stringBuffer);
 	SetHappinessIcon(m_productionHappinessIcon, happiness);
-	
+
 	sprintf(formatBuffer, "EMPIRE_WORKDAY_AMOUNT_%i",
 		(int) (4-(player->GetUnitlessWorkday()+k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION)));
 	sprintf(stringBuffer, "%s%s", g_theStringDB->GetNameStr(formatBuffer),
@@ -821,7 +785,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 
 void CauseAndEffectTab::UpdateCommerceValues()
 {
-	
+
 	sint32 totalCommerce = 0, totalCommerceGoldCrime = 0,
 		totalCommerceWages = 0, totalCommerceCityBuildingUpkeep = 0,
 		totalCommerceScience = 0, totalCommerceSavings = 0,
@@ -836,9 +800,8 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		totalGoldSubTotal = 0, totalUnitWages = 0,
 		totalGoldTradeRoutes = 0, totalGoldConversions = 0;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-	
+
 	UnitDynamicArray *cityList = player->GetAllCitiesList();
 	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
 	{
@@ -849,20 +812,17 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		// Worker wages - deducted from commerce.
 		sint32 commerceWages = cityData->CalcWages();
 
-
 		// Building and city maintenance - deducted from commerce.
 		sint32 commerceCityBuildingUpkeep = cityData->GetSupportBuildingsCost();
 
-
 		// Sub Total commerce, just before splitting to science and savings.
 		sint32 commerce = commerceTerrain - (commerceWages + commerceCityBuildingUpkeep);
-		
+
 		// These are the terrain values for science and gold.
 		double s;
 		player->GetScienceTaxRate(s);
 		sint32 scienceFromCommerce = static_cast<sint32>(ceil(commerce * s));
 		sint32 goldFromCommerce = commerce - scienceFromCommerce;
-
 
 		// Buildings (building bonus * terrain science or savings).
 		sint32 commerceScience = scienceFromCommerce;// Terrain city science.
@@ -881,7 +841,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		buildingutil_GetCommercePercent(cityData->GetEffectiveBuildings(), goldBonus, player->GetOwner());
 		goldBuildingsBonus += static_cast<sint32>(terrainSavings * goldBonus);
 
-
 		// FEATS AND WONDERS.
 		// - science
 		sint32 buildingAndTaxScience = commerceScience + scienceBuildingsBonus;
@@ -898,7 +857,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		featWonderScie = (featScie + wonderScie);
 
-
 		// - gold savings
 		sint32 featGold = 0;
 		sint32 buildingAndTaxGold = goldFromCommerce + goldBuildingsBonus;
@@ -909,12 +867,10 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Gold wonders are done on an empire-wide basis.
 
-
 		// NOTE: goldpercitizen buildings are not modified by feat bonus so have to be added after.
-		sint32 goldPerCitizen = 
+		sint32 goldPerCitizen =
 			buildingutil_GetGoldPerCitizen(cityData->GetEffectiveBuildings(), cityData->GetOwner());
 		goldBuildingsBonus += goldPerCitizen * cityData->PopCount();
-
 
 		// Specialists.
 		sint32 scientistsScie = 0;
@@ -933,30 +889,26 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		cityData->CalculateTradeRoutes(true); // Update trade routes
 		sint32 goldTradeRoutes = cityData->CalculateGoldFromResources();
 
-
 		// Government modifiers to science and savings.
 		sint32 totalScieWithoutGov = scienceFromCommerce + scienceBuildingsBonus +
 			featWonderScie + scientistsScie;
 		sint32 totalGoldWithoutGov = goldFromCommerce + goldBuildingsBonus +
 			featGold + merchantsGold + goldTradeRoutes;
 
-		sint32 scienceGov = static_cast<sint32>(ceil(totalScieWithoutGov 
+		sint32 scienceGov = static_cast<sint32>(ceil(totalScieWithoutGov
 			* g_theGovernmentDB->Get(player->m_government_type)->GetKnowledgeCoef()));
 		scienceGov -= totalScieWithoutGov;
 
-		sint32 goldGov = static_cast<sint32>(totalGoldWithoutGov 
+		sint32 goldGov = static_cast<sint32>(totalGoldWithoutGov
 			* g_theGovernmentDB->Get(player->m_government_type)->GetGoldCoef());
 		goldGov -= totalGoldWithoutGov;
-
 
 		// Gold lost to conversion.
 		sint32 GoldConversionLoss = cityData->GetConvertedGold();
 
-
 		// Science and savings lost to crime
 		sint32 commerceScieCrime = cityData->GetScienceCrime();
 		sint32 commerceGoldCrime = cityData->GetTradeCrime();
-
 
 		////////////////////////////////////
 		// TOTALS:
@@ -1036,9 +988,9 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		if(!g_player[j] || g_player[j] == player)
 			continue;
 		for(k = g_player[j]->m_all_cities->Num() - 1; k >= 0; k--) {
-			if (g_player[j]->m_all_cities->Access(k)->GetCityData()->IsConvertedTo() == 
+			if (g_player[j]->m_all_cities->Access(k)->GetCityData()->IsConvertedTo() ==
 				player->GetOwner())
-				totalGoldConversions += 
+				totalGoldConversions +=
 					g_player[j]->m_all_cities->Access(k)->GetCityData()->GetConvertedGold();
 		}
 	}
@@ -1128,7 +1080,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 	m_detailsCommerceConversionsGold->SetText(stringBuffer);
 	m_summaryCommerceConversionsGold->SetText(stringBuffer);
 
-	
 	sint32 happiness = static_cast<sint32>(
 		Happy::CalcCityIndependentWages(player));
 	sprintf(stringBuffer, "%d", happiness);
@@ -1143,11 +1094,10 @@ void CauseAndEffectTab::UpdateCommerceValues()
 }
 
 
-
 void CauseAndEffectTab::SetHappinessIcon(ctp2_Static *control,
                                          sint32 happiness)
 {
-	
+
 	if(happiness < -1)
 		control->ExchangeImage(0, 0, "updi43.tga");
 	else if(happiness == -1)
@@ -1179,83 +1129,72 @@ void CauseAndEffectTab::UpdateCities()
 }
 
 AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
-                                                          aui_Surface *surface, 
-                                                          RECT &rect, 
+                                                          aui_Surface *surface,
+                                                          RECT &rect,
                                                           void *cookie)
 {
-	
+
 	if(g_selected_item == NULL)
 		return(AUI_ERRCODE_OK);
 
-	
 	sint32 hapvals[3];
 	g_player[g_selected_item->GetVisiblePlayer()]->CountCityHappiness(
 		hapvals[0],hapvals[1],hapvals[2]);
 
-	
 	float total = static_cast<float>(hapvals[0]+hapvals[1]+hapvals[2]);
 
-	
 	RECT barRect=rect;
 	barRect.top += 2;
 	barRect.left += 2;
 	barRect.right -= 2;
 	barRect.bottom -= 2;
 
-	
 	if(total <= 0.0f)
 		primitives_PaintRect16(surface, &barRect, g_colorSet->GetColor(COLOR_YELLOW));
 	else {
-		
+
 		float width = static_cast<float>(barRect.right - barRect.left);
 
-		
 		Pixel16 colors[3] = {
 			g_colorSet->GetColor(COLOR_RED),
 			g_colorSet->GetColor(COLOR_YELLOW),
 			g_colorSet->GetColor(COLOR_GREEN)
 		};
 
-		
-		
+
 		for (uint32 index = 0; index < 3; index++) {
-			
+
 			barRect.right = barRect.left +
 				static_cast<sint32>(
 				(static_cast<float>(hapvals[index]) /
 				total) * width);
-			
+
 			primitives_PaintRect16(surface, &barRect, colors[index]);
-			
+
 			barRect.left = barRect.right;
 		}
 	}
 
-	
 	return(AUI_ERRCODE_OK);
 }
 
-
 void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
-                                                     uint32 action, 
+                                                     uint32 action,
                                                      uint32 data,
                                                      void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	
 	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 rationLevelSet = spinner->GetValueX() -
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(rationLevelSet != player->GetUnitlessRations())	{ 
+	if(rationLevelSet != player->GetUnitlessRations())	{
 		player->SetRationsLevel(rationLevelSet);
 		UpdateCities();
 	}
@@ -1273,26 +1212,22 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
 void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	
 	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 workdayLevelSet = spinner->GetValueX() -
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(workdayLevelSet != player->GetUnitlessWorkday())	{ 
+	if(workdayLevelSet != player->GetUnitlessWorkday())	{
 		player->SetWorkdayLevel(-workdayLevelSet);
 		UpdateCities();
 	}
 
-	
 	// Happiness is modified by this spinner and happiness modfies crime
 	// and crime modifies food, production and commerce, therefore all three
 	// need to be updated.
@@ -1306,27 +1241,23 @@ void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	
 	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 publicWorksLevelSet = spinner->GetValueX();
 	if(publicWorksLevelSet !=
-		static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5))	{ 
+		static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5))	{
 		player->SetMaterialsTax(
 			static_cast<double>(publicWorksLevelSet) / 100.0);
 		UpdateCities();
 	}
 
-	
 	tab->UpdateProductionValues();
 	tab->UpdateGeneral();
 	tab->m_tabPanel->ShouldDraw(TRUE);
@@ -1335,26 +1266,22 @@ void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	
 	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 wagesLevelSet = spinner->GetValueX() -
 		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(wagesLevelSet != player->GetUnitlessWages())	{ 
+	if(wagesLevelSet != player->GetUnitlessWages())	{
 		player->SetWagesLevel(wagesLevelSet);
 		UpdateCities();
 	}
 
-	
 	// Happiness is modified by this spinner and happiness modfies crime
 	// and crime modifies food, production and commerce, therefore all three
 	// need to be updated.
@@ -1368,18 +1295,15 @@ void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	
 	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 scienceTaxLevelSet = spinner->GetValueX();
 	double currentScienceTax = 0.0;
 	player->GetScienceTaxRate(currentScienceTax);
@@ -1390,21 +1314,18 @@ void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 		UpdateCities();
 	}
 
-	
 	tab->UpdateCommerceValues();
 	tab->UpdateGeneral();
 	tab->m_tabPanel->ShouldDraw(TRUE);
 }
 
-
 void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	static_cast<CauseAndEffectTab*>(cookie)->DisplayDetails(
 		!(static_cast<CauseAndEffectTab*>(cookie)->m_displayDetails));
 
@@ -1432,7 +1353,7 @@ void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
@@ -1467,20 +1388,18 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 
 }
 
-
 void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
                                             void *userData)
 {
-	
+
 	CauseAndEffectTab *dialog = static_cast<CauseAndEffectTab*>(userData);
 
-	
 	dialog->DisplayDetails(dialog->m_displayDetails);
 }
 
 void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
-                                                        uint32 action, 
-                                                        uint32 data, 
+                                                        uint32 action,
+                                                        uint32 data,
                                                         void *cookie)
 {
 	CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);

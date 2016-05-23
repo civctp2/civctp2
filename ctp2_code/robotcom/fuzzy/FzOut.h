@@ -1,5 +1,3 @@
-
-
 #pragma once
 #ifndef __FZ_OUT_H__
 #define __FZ_OUT_H__ 1
@@ -224,7 +222,6 @@ interface IC3GameState;
 
 #define FZ_ROUND(X) \
 	(floor(X) + 0.5 < X ? ceil(X) : floor(X))
-
 
 enum FZ_GOVERNMENT_TYPE { FZ_GOVERNMENT_ANARCHY,
 						  FZ_GOVERNMENT_TYRANNY,

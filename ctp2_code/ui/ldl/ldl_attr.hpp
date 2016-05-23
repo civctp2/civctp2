@@ -8,7 +8,6 @@
 
 *******************************************************************************/
 
-
 #ifndef LDL_ATTR_HPP
 #define LDL_ATTR_HPP
 
@@ -61,7 +60,7 @@ template <class Type> class ldl_attributeValue : public ldl_attribute {
 	Type m_value;
 
   public:
-	ldl_attributeValue(char *name, ATTRIBUTE_TYPE t, Type value) : ldl_attribute(name, t) 
+	ldl_attributeValue(char *name, ATTRIBUTE_TYPE t, Type value) : ldl_attribute(name, t)
 	{
 		m_value = value;
 	}
@@ -73,6 +72,5 @@ template <class Type> class ldl_attributeValue : public ldl_attribute {
 	Type GetValue() { return m_value; }
 	void SetValue(Type val) { m_value = val; }
 };
-
 
 #endif //LDL_ATTR_HPP

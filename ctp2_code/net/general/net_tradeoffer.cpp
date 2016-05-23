@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "network.h"
 #include "net_tradeoffer.h"
@@ -76,4 +66,3 @@ void NetTradeOffer::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		g_theTradeOfferPool->AddFromNetwork(offer);
 	}
 }
-

@@ -37,7 +37,7 @@ protected:
 	AUI_ERRCODE CreateDirectJoystick( void );
 #endif
 
-public:	
+public:
 	virtual AUI_ERRCODE Acquire( void ) { return aui_SDLInput::Acquire(); }
 	virtual AUI_ERRCODE Unacquire( void ) { return aui_SDLInput::Unacquire(); }
 

@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -41,5 +33,4 @@ private:
 	static int      s_skip_table[NUM_CHAR_VALUES];
 };
 
-#endif 
-
+#endif

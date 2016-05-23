@@ -1,7 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __MESSAGE_H__ 
+#ifndef __MESSAGE_H__
 #define __MESSAGE_H__
 
 class Message;

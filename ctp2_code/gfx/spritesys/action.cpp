@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,6 @@
 
 #define STOMPCHECK()
 
-
 Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, sint32 specialDelayProcess)
 :
     m_actionType                (actionType),
@@ -58,26 +57,26 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_curPath                   (NULL),
 	m_maxActionCounter          (0),
 	m_curActionCounter          (0),
-	m_animPos                   (startAnimPos), 
+	m_animPos                   (startAnimPos),
 	m_animDelayEnd              (0),
 	m_animElapsed               (0),
 	m_animLastFrameTime         (0),
-	m_delay                     (0), 
-	m_itIsTimeToAct             (false), 
-	m_finished                  (false), 
-	m_loopAnimFinished          (false), 
-	m_specialDelayProcess       (specialDelayProcess), 
+	m_delay                     (0),
+	m_itIsTimeToAct             (false),
+	m_finished                  (false),
+	m_loopAnimFinished          (false),
+	m_specialDelayProcess       (specialDelayProcess),
     m_startMapPoint             (),
 	m_endMapPoint               (),
 	m_facing                    (k_DEFAULTSPRITEFACING),
-	m_sound_effect_id           (-1), 
-	m_unitsVisibility           (0), 
-	m_unitVisionRange           (0), 
+	m_sound_effect_id           (-1),
+	m_unitsVisibility           (0),
+	m_unitVisionRange           (0),
 	m_numRevealedActors         (0),
 	m_revealedActors            (NULL),
-	m_moveActors                (NULL), 
-	m_numOActors                (0), 
-    m_specialUnitEffectsAction  (), 
+	m_moveActors                (NULL),
+	m_numOActors                (0),
+    m_specialUnitEffectsAction  (),
     m_sequence                  (NULL)
 { ; }
 
@@ -89,26 +88,26 @@ Action::Action(Action const & a_Original)
 	m_curPath                   (NULL),
 	m_maxActionCounter          (a_Original.m_maxActionCounter),
 	m_curActionCounter          (a_Original.m_curActionCounter),
-	m_animPos                   (a_Original.m_animPos), 
+	m_animPos                   (a_Original.m_animPos),
 	m_animDelayEnd              (a_Original.m_animDelayEnd),
 	m_animElapsed               (a_Original.m_animElapsed),
 	m_animLastFrameTime         (a_Original.m_animLastFrameTime),
-	m_delay                     (a_Original.m_delay), 
-	m_itIsTimeToAct             (a_Original.m_itIsTimeToAct), 
-	m_finished                  (a_Original.m_finished), 
-	m_loopAnimFinished          (a_Original.m_loopAnimFinished), 
-	m_specialDelayProcess       (a_Original.m_specialDelayProcess), 
+	m_delay                     (a_Original.m_delay),
+	m_itIsTimeToAct             (a_Original.m_itIsTimeToAct),
+	m_finished                  (a_Original.m_finished),
+	m_loopAnimFinished          (a_Original.m_loopAnimFinished),
+	m_specialDelayProcess       (a_Original.m_specialDelayProcess),
     m_startMapPoint             (a_Original.m_startMapPoint),
 	m_endMapPoint               (a_Original.m_endMapPoint),
 	m_facing                    (a_Original.m_facing),
-	m_sound_effect_id           (a_Original.m_sound_effect_id), 
-	m_unitsVisibility           (a_Original.m_unitsVisibility), 
-	m_unitVisionRange           (a_Original.m_unitVisionRange), 
+	m_sound_effect_id           (a_Original.m_sound_effect_id),
+	m_unitsVisibility           (a_Original.m_unitsVisibility),
+	m_unitVisionRange           (a_Original.m_unitVisionRange),
 	m_numRevealedActors         (a_Original.m_numRevealedActors),
 	m_revealedActors            (NULL),
-	m_moveActors                (NULL), 
-	m_numOActors                (a_Original.m_numOActors), 
-    m_specialUnitEffectsAction  (a_Original.m_specialUnitEffectsAction), 
+	m_moveActors                (NULL),
+	m_numOActors                (a_Original.m_numOActors),
+    m_specialUnitEffectsAction  (a_Original.m_specialUnitEffectsAction),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
     m_sequence                  (a_Original.m_sequence)
 {
@@ -134,7 +133,6 @@ Action::Action(Action *copyme)
 	m_revealedActors = NULL;
 }
 
-
 Action::~Action(void)
 {
 	delete m_curPath;
@@ -154,23 +152,23 @@ void Action::Process(void)
         SetFinished(true);
         return;
     }
-	
+
 	m_animPos = m_curAnim->GetNextPosition(m_animPos);
 	m_animDelayEnd = m_curAnim->GetDelayEnd();
 	m_animElapsed = m_curAnim->GetElapsed();
 	m_animLastFrameTime = m_curAnim->GetLastFrameTime();
 
-	
-	
-	
-	
 
 
 
 
 
 
-	
+
+
+
+
+
 	m_specialDelayProcess = m_curAnim->GetWeAreInDelay() && (m_actionType == UNITACTION_IDLE);
 	if (m_specialDelayProcess)
     {
@@ -180,10 +178,10 @@ void Action::Process(void)
 	m_curActionCounter++;
 
 
-	
-	
 
-	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished()) 
+
+
+	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished())
 	{
 		m_curActionCounter = m_maxActionCounter;
 		m_loopAnimFinished = true;
@@ -269,10 +267,10 @@ POINT Action::GetPosition(void) const
 uint16 Action::GetSpriteFrame(void) const
 {
 	uint16 frame;
-	
+
 	if (m_curAnim) {
 		if (m_loopAnimFinished && m_curActionCounter == m_maxActionCounter) {
-			frame = 0; 
+			frame = 0;
 		} else {
 			frame = m_curAnim->GetFrame(m_animPos);
 		}
@@ -290,10 +288,10 @@ sint32 Action::GetFacing(void)
 	STOMPCHECK();
 #endif
 
-	if (m_curPath) 
+	if (m_curPath)
     {
 		m_facing = m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter);
-	} 
+	}
     // else: No action: keep current facing
 
 	return m_facing;
@@ -318,5 +316,3 @@ uint16 Action::GetTransparency(void) const
 
 	return trans;
 }
-
-

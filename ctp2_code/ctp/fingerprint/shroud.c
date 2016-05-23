@@ -49,7 +49,6 @@
 
 #include "shroud.h"
 
-
 /*--------------------------------------------------------------------------
  Open a shrouded file for reading.
  Uses fopen().
@@ -76,7 +75,6 @@ shroud_t *shroud_readopen( char *filename )
 	return sfile;
 }
 
-
 /*--------------------------------------------------------------------------
  Open a shrouded file for writing.
  Uses fopen().
@@ -102,7 +100,6 @@ shroud_t *shroud_writeopen( char *filename )
 
 	return sfile;
 }
-
 
 /*--------------------------------------------------------------------------
  Open a shrouded file for appending.
@@ -134,7 +131,6 @@ shroud_t *shroud_appendopen( char *filename )
 	return sfile;
 }
 
-
 /*--------------------------------------------------------------------------
  Open a shrouded file for reading and writing.  'filename' must exist and a
  call to shroud_seek() is necessary between calls to shourd_read() and
@@ -163,7 +159,6 @@ shroud_t *shroud_updateopen( char *filename )
 	return sfile;
 }
 
-
 /*--------------------------------------------------------------------------
  Read 'length' bytes from a shrouded file and decode them into 'buffer.'
  Uses fread().
@@ -184,7 +179,6 @@ size_t shroud_read( shroud_t *sfile, unsigned char * buffer, size_t length )
 
 	return size;
 }
-
 
 /*--------------------------------------------------------------------------
  Write 'length' bytes from 'buffer' and encode them into a shrouded file.
@@ -241,7 +235,6 @@ size_t shroud_write( shroud_t *sfile, unsigned char *buffer, size_t length )
 	return bytecount;
 }
 
-
 /*--------------------------------------------------------------------------
  Moves the shrouded file pointer to a specified location.
  Essentially fseek().
@@ -256,7 +249,6 @@ int shroud_seek( shroud_t *sfile, long offset, int origin )
 
 	return 0;
 }
-
 
 /*--------------------------------------------------------------------------
  Close a shrouded file.
@@ -273,7 +265,6 @@ int shroud_close( shroud_t *sfile )
 	return 0;
 }
 
-
 /*--------------------------------------------------------------------------
  Test main.
 --------------------------------------------------------------------------*/
@@ -281,9 +272,7 @@ int shroud_close( shroud_t *sfile )
 */
 #ifdef	shroud_TESTMAIN
 
-
 #include <assert.h>
-
 
 int main( void )
 {
@@ -310,7 +299,6 @@ int main( void )
 		fwrite( &(unsigned char)i, 1, 1, file );
 	fclose( file );
 
-
 	/*--------------------------
 	Write a whole shrouded file.
 	--------------------------*/
@@ -328,7 +316,6 @@ int main( void )
 
 	errorcode = shroud_close( sfile );
 	assert( errorcode == 0 );
-
 
 	/*-------------------------
 	Read a whole shrouded file.
@@ -355,7 +342,6 @@ int main( void )
 
 	/* Make sure the encoding and decoding works. */
 	assert( memcmp( bytes, morebytes, testsize ) == 0 );
-
 
 	/*------------------------
 	Append to a shrouded file.
@@ -389,7 +375,6 @@ int main( void )
 	assert( errorcode == 0 );
 
 	assert( memcmp( bytes, "abcde", 5 ) == 0 );
-
 
 	/*---------------------
 	Update a shrouded file.
@@ -439,7 +424,6 @@ int main( void )
 
 	assert( memcmp( bytes, "ABCDE", 5 ) == 0 );
 
-
 	/* Clean up. */
 	free( bytes );
 	free( morebytes );
@@ -450,9 +434,7 @@ int main( void )
 	return 0;
 }
 
-
 #endif
-
 
 /*--------------------------------------------------------------------------
 CLAIM: 'testsize' is not a multiple of 'shroud_BLOCKSIZE.'

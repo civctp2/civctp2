@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "tradeevent.h"
 
@@ -19,7 +18,6 @@ STDEHANDLER(KillTradeRouteEvent)
 	route.Kill(static_cast<CAUSE_KILL_TRADE_ROUTE>(cause));
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(SetPiratingArmyEvent)
 {
@@ -43,5 +41,3 @@ void tradeevent_Initialize()
 void tradeevent_Cleanup()
 {
 }
-
-

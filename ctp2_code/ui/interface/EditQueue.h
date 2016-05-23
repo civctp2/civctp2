@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class EditItemInfo {
 	sint32 m_type;
 };
 
-class EditQueueCityInfo {	
+class EditQueueCityInfo {
   public:
 	EditQueueCityInfo(CityData *cd) {
 		m_cityData = cd;
@@ -165,10 +165,8 @@ class EditQueue {
 	void ClearChoiceLists();
 	ctp2_ListBox *GetVisibleItemList();
 
-	
 	static bool EditingCity(CityData *city);
 
-	
 	void InsertInQueue(EditItemInfo *info, bool insert, bool confirm = false, bool confirmSwitch = false);
 	void Add(bool insert);
 	void Suggest(bool insert);
@@ -178,7 +176,6 @@ class EditQueue {
 
 	static void ShowSelectedInfo();
 
-	
 	static void ToggleUnits(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ToggleBuildings(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ToggleWonders(aui_Control *control, uint32 action, uint32 data, void *cookie);

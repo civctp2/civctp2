@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -87,7 +87,6 @@ public:
 
 	~BattleViewActor();
 
-
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			AddAction(Action *actionObj);
@@ -95,32 +94,31 @@ public:
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 
 	Anim *          CreateAnim(UNITACTION action);
-	
+
 	bool			HasThisAnim(UNITACTION action) const
-    { 
-        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
+    {
+        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
     };
 	Anim			*MakeFakeDeath(void);
 
-	
 	void			Draw(BOOL fogged = FALSE);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);
 
 	void			DrawHealthBar(aui_Surface *surf);
 
-	MapPoint		GetPos(void) const 
-    { 
-        return m_pos; 
+	MapPoint		GetPos(void) const
+    {
+        return m_pos;
     };
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
     void            GetPixelPos(sint32 &x, sint32 &y) const
     {
-        x = Actor::GetX(); 
-        y = Actor::GetY(); 
-    }; 
-	void			SetPixelPos(sint32 x, sint32 y) 
-    { 
-        Actor::SetPos(x, y); 
+        x = Actor::GetX();
+        y = Actor::GetY();
+    };
+	void			SetPixelPos(sint32 x, sint32 y)
+    {
+        Actor::SetPos(x, y);
     };
 
 	sint32			GetFacing(void) const { return m_facing; }
@@ -129,8 +127,8 @@ public:
 	uint16			GetWidth(void) const;
 	uint16			GetHeight(void) const;
 	Unit			GetUnitID(void) const
-    { 
-        return m_unitID; 
+    {
+        return m_unitID;
     };
 
 	Action			*GetCurAction(void) const { return m_curAction; }
@@ -138,17 +136,17 @@ public:
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
 	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
 	uint32			GetActionQueueNumItems(void) const
-    { 
-        return m_actionQueue.GetNumItems(); 
+    {
+        return m_actionQueue.GetNumItems();
     }
 
-	bool			HasDeath(void) const 
-    { 
-        return m_unitSpriteGroup->HasDeath(); 
+	bool			HasDeath(void) const
+    {
+        return m_unitSpriteGroup->HasDeath();
     };
 	bool			HasDirectional(void) const
-    { 
-        return m_unitSpriteGroup->HasDirectional(); 
+    {
+        return m_unitSpriteGroup->HasDirectional();
     };
 
 	void			GetBoundingRect(RECT *rect) const;
@@ -157,7 +155,6 @@ public:
 	double			GetHitPointsMax(void) const{ return m_hitPointsMax; }
 	void			SetHitPoints(double points) { m_hitPoints = points; }
 	void			SetHitPointsMax(double points) { m_hitPointsMax = points; }
-
 
 	void			SetFortified(bool fortified) { m_isFortified = fortified; }
 	bool			GetFortified(void) const { return m_isFortified; }
@@ -177,14 +174,13 @@ protected:
 	UNITACTION			m_curUnitAction;
 
 	Queue<Action *>		m_actionQueue;
-	GROUPTYPE			m_type;			
-	uint32				m_spriteID;		
+	GROUPTYPE			m_type;
+	uint32				m_spriteID;
 
 	double				m_hitPoints;
 	double				m_hitPointsMax;
 
 	bool				m_isFortified;
 };
-
 
 #endif

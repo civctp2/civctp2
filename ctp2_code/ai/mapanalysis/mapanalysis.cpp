@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -60,16 +60,13 @@
 #include <vector>
 #include <limits>
 
-
 MapGrid < sint32 >::MapGridArray MapGrid < sint32 >::s_scratch;
-
 
 MapAnalysis MapAnalysis::s_mapAnalysis;
 
-
 MapAnalysis & MapAnalysis::GetMapAnalysis()
 {
-	return s_mapAnalysis; 
+	return s_mapAnalysis;
 }
 
 void MapAnalysis::Resize
@@ -135,7 +132,6 @@ void MapAnalysis::Resize
     m_movementTypeUnion.resize(maxPlayerId);
 }
 
-
 void MapAnalysis::ResizeContinents()
 {
     sint32 maxLandCont = g_theWorld->GetMaxLandContinent() -
@@ -144,7 +140,6 @@ void MapAnalysis::ResizeContinents()
     m_cityOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
     m_armyOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
 }
-
 
 void MapAnalysis::AddPiracyIncome(const PLAYER_INDEX playerId,
 const PLAYER_INDEX victimId,
@@ -304,7 +299,6 @@ void MapAnalysis::BeginTurn()
 			m_bioWeapons[player]     += army->CountBioUnits();
 			m_nanoWeapons[player]    += army->CountNanoUnits();
 
-
 			if(m_empireCenter[player] == MapPoint())
 			{
 				CalcEmpireCenter(player);
@@ -338,7 +332,6 @@ void MapAnalysis::BeginTurn()
 				}
 			}
 
-
             m_movementTypeUnion[player] |= army.GetMovementType();
 
             Assert(m_threatGrid      [player].GetTotalValue()  >= 0);
@@ -359,7 +352,6 @@ void MapAnalysis::BeginTurn()
             Assert(m_totalTrade      [player]                  >= 0);
         }
 
-
         sint32 num_cities = player_ptr->m_all_cities->Num();
         for (i = 0; i < num_cities; i++)
         {
@@ -368,9 +360,7 @@ void MapAnalysis::BeginTurn()
             city.GetPos(pos);
             sint32 total_value = city->GetCityData()->GetValue();
 
-
             m_totalTrade[player] += city->GetCityData()->GetGoldFromTradeRoutes();
-
 
             m_valueGrid[player].AddValue(pos, total_value);
 
@@ -393,7 +383,6 @@ void MapAnalysis::BeginTurn()
                     AddValue(pirate_army->RetPos(), route_value);
                 }
 
-
                 const DynamicArray < MapPoint > * path = trade_routes->Get(j)->GetPath();
                 sint32 per_cell_value =
                             (sint32)(((double)route_value / path->Num()) * 1000.0);
@@ -410,7 +399,6 @@ void MapAnalysis::BeginTurn()
             if (is_land)
             {
                 m_cityOnContinent.Set(player, cont, TRUE);
-
 
                 m_continentSize[player] += g_theWorld->GetLandContinentSize(cont) / num_cities;
             }
@@ -761,7 +749,6 @@ void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 	        m_empireCenter[playerId].y));
 }
 
-
 void MapAnalysis::UpdateBoundingRectangle(const Army & army)
 {
     const PLAYER_INDEX player = army.GetOwner();
@@ -816,7 +803,7 @@ void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
     if ((xy_radius % 2) != 0)
         xy_radius++;
 
-    BoundingRect cityRect(xy_center, xy_radius, xy_map_size, 
+    BoundingRect cityRect(xy_center, xy_radius, xy_map_size,
 						  g_theWorld->IsXwrap(), g_theWorld->IsYwrap()
 						 );
 
@@ -880,7 +867,6 @@ double MapAnalysis::CityAtRiskRatio(const Unit city, const PLAYER_INDEX opponent
     MapPoint pos;
     city.GetPos(pos);
 
-
     sint32  player_threat   = m_threatGrid[playerId].GetGridValue(pos);
     sint32  opponent_threat = (PLAYER_UNASSIGNED == opponentId) // In that case no opponent there, so it is the right way to calculate it?
                               ? GetThreat(playerId, pos)
@@ -899,7 +885,7 @@ double MapAnalysis::CityAtRiskRatio(const Unit city, const PLAYER_INDEX opponent
 	{
 		ratio  = 0.0;
 	}
-	else 
+	else
 	{
 		ratio = 1.0;
 	}
@@ -966,7 +952,7 @@ sint32 MapAnalysis::AtRiskCitiesValue
     {
         Unit city = player_ptr->m_all_cities->Access(i);
         Assert(city.IsValid());
-		
+
         if (i < opponent_nukes && !city.GetCityData()->SafeFromNukes())
 		{
 			ratio = 1.0;
@@ -983,7 +969,7 @@ sint32 MapAnalysis::AtRiskCitiesValue
 
         return (sint32)(((double)at_risk_value / m_valueGrid[playerId].GetTotalValue()) * 100.0);
     else
-		
+
         return 100;
 }
 
@@ -1066,13 +1052,13 @@ sint32 MapAnalysis::AverageSettledContinentSize(const PLAYER_INDEX playerId) con
 
 sint16 MapAnalysis::GetTotalPopulation(const PLAYER_INDEX playerId) const
 {
-    return (playerId == PLAYER_UNASSIGNED) ? m_worldPopulation 
+    return (playerId == PLAYER_UNASSIGNED) ? m_worldPopulation
                                            : m_totalPopulation[playerId];
 }
 
 sint16 MapAnalysis::GetLandArea(const PLAYER_INDEX playerId) const
 {
-	return m_landArea[playerId];	
+	return m_landArea[playerId];
 }
 
 double MapAnalysis::GetPopulationPercent(const PLAYER_INDEX playerId) const
@@ -1097,10 +1083,10 @@ void MapAnalysis::ComputeAllianceSize(const PLAYER_INDEX playerId, PLAYER_INDEX 
     leaderId = playerId;
     sint32 max_population = m_totalPopulation[playerId];
     sint32 allies = 0;
-    for 
+    for
     (
-        PLAYER_INDEX foreignerId = 0; 
-        static_cast<size_t>(foreignerId) < m_threatGrid.size(); 
+        PLAYER_INDEX foreignerId = 0;
+        static_cast<size_t>(foreignerId) < m_threatGrid.size();
         ++foreignerId
     )
     {
@@ -1113,7 +1099,6 @@ void MapAnalysis::ComputeAllianceSize(const PLAYER_INDEX playerId, PLAYER_INDEX 
             alliance_population += m_totalPopulation[foreignerId];
             alliance_land += m_landArea[foreignerId];
             allies++;
-
 
             if(!g_player[foreignerId]->IsRobot()
             &&  m_totalPopulation[foreignerId] > max_population

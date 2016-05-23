@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ dp_result_t dpGetTransportInfo(
 
 /*----------------------------------------------------------------------
  Calls the given function once for each transport available.
- The given function should copy rather than save pointers to the transports 
+ The given function should copy rather than save pointers to the transports
  it is passed.
 ----------------------------------------------------------------------*/
 dp_result_t dpEnumTransports(
@@ -113,12 +113,12 @@ void dpUnloadDLL(dpio_t *dpio)
  Present the returned list of port names to the user, then use the
  matching portnum as the value for commInitReq_t.portnum in dpCreate.
 
- On entry, 
+ On entry,
  transport is the name (from dpEnumTransports) of the transport to query.
  ports is an array to be filled with portnames.
  maxports is the size of the ports array.
 
- On exit, 
+ On exit,
  ports is filled with descriptions of the available ports.
  *pnPorts is set to the number of portnames placed in the ports array.
 -------------------------------------------------------------------------*/

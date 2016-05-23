@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Map visibility handling 
+// Description  : Map visibility handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -72,27 +72,27 @@ class Vision
 {
 private:
 	/// Operation to perform
-	enum CIRCLE_OP 
+	enum CIRCLE_OP
 	{
 		CIRCLE_OP_ADD,          ///< add to normal vision
 		CIRCLE_OP_SUBTRACT,     ///< remove from normal vision
 		CIRCLE_OP_ADD_RADAR,    ///< add to radar vision
 		CIRCLE_OP_MERGE         ///< merge 2 visions
 	};
-	
+
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
-	
+
 	sint16 m_width;
 	sint16 m_height;
 	sint32 m_owner;
 	sint16 m_xyConversion;   // Unused
 	BOOL   m_isYwrap;
 	BOOL   m_amOnScreen;
-	
+
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
@@ -137,17 +137,17 @@ public:
 
 	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell) const;
 
-	void Convert(MapPoint &pos) const 
+	void Convert(MapPoint &pos) const
 	{
 		int l_ResultY   = pos.y + pos.x;
-		while (l_ResultY >= m_height) 
+		while (l_ResultY >= m_height)
 		{
 			l_ResultY  -= m_height;
 		}
 		pos.y = static_cast<sint16>(l_ResultY);
 	}
 
-	void Unconvert(MapPoint & pos) const 
+	void Unconvert(MapPoint & pos) const
 	{
 		int l_ResultX   = pos.x;
 
@@ -162,23 +162,21 @@ public:
 		pos.x = static_cast<sint16>(l_ResultX);
 
 		int l_ResultY   = pos.y - l_ResultX;
-		while (l_ResultY < 0) 
+		while (l_ResultY < 0)
 		{
 			l_ResultY += m_height;
 		}
 		pos.y = static_cast<sint16>(l_ResultY);
 	}
 
-
 	void MergeMap(Vision *src);
 
 	void AddUnseen(const MapPoint &point);
-	void AddUnseen(UnseenCell *ucell); 
+	void AddUnseen(UnseenCell *ucell);
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
 	void Clear();
 
-	
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);
 	bool MergePoint(sint32 x, sint32 y);
 	void ModifyPoint(Vision *src, sint32 x, sint32 y);

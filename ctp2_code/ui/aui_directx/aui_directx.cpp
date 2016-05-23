@@ -1,16 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #ifdef __AUI_USE_DIRECTX__
 
@@ -24,7 +12,6 @@
 #include "display.h"
 
 
-
 LPDIRECTDRAW aui_DirectX::m_lpdd =		NULL;
 LPDIRECTINPUT aui_DirectX::m_lpdi =		NULL;
 sint32 aui_DirectX::m_directXRefCount =	0;
@@ -33,7 +20,6 @@ BOOL aui_DirectX::m_b_created_dd = FALSE;
 BOOL aui_DirectX::m_b_created_di = FALSE;
 
 extern DisplayDevice	g_displayDevice;
-
 
 void aui_DirectX::DD( LPDIRECTDRAW lpdd )
 {
@@ -45,7 +31,6 @@ void aui_DirectX::DD( LPDIRECTDRAW lpdd )
 }
 
 
-
 void aui_DirectX::DI( LPDIRECTINPUT lpdi )
 {
 	Assert( !m_lpdi );
@@ -55,19 +40,16 @@ void aui_DirectX::DI( LPDIRECTINPUT lpdi )
 	}
 }
 
-
 AUI_ERRCODE aui_DirectX::InitCommon( BOOL useExclusiveMode )
 {
 	m_exclusiveMode = useExclusiveMode;
 
-	
 	Assert( g_ui->DXVer() != 0 );
 	if ( !g_ui->DXVer() ) return AUI_ERRCODE_HACK;
 
-	
 	if ( !m_lpdd )
 	{
-		
+
 		if (!m_lpdd) {
 			HRESULT hr = DirectDrawCreate( g_displayDevice.lpGUID, &m_lpdd, NULL );
 			Assert( hr == DD_OK );
@@ -75,11 +57,9 @@ AUI_ERRCODE aui_DirectX::InitCommon( BOOL useExclusiveMode )
 		}
 
 		m_b_created_dd = TRUE;
-		
-		
+
 	}
 
-	
 	if ( !m_lpdi )
 	{
 		HRESULT hr = DirectInputCreate(
@@ -94,7 +74,6 @@ AUI_ERRCODE aui_DirectX::InitCommon( BOOL useExclusiveMode )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_DirectX::~aui_DirectX()
@@ -117,5 +96,4 @@ aui_DirectX::~aui_DirectX()
 	}
 }
 
-
-#endif 
+#endif

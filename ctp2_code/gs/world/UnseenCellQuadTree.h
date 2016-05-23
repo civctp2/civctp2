@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef _UNSEEN_CELL_QUAD_TREE_H_
 #define _UNSEEN_CELL_QUAD_TREE_H_
@@ -27,11 +17,10 @@ public:
 	}
 	void Convert(MapPoint &pos) {}
 	void Clear();
-	
-	
+
 	~UnseenCellQuadTree()
 	{
-		
+
 	}
 };
 
@@ -47,4 +36,3 @@ void UnseenCellQuadTree::Clear()
 }
 
 #endif
-

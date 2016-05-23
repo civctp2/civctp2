@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,6 @@
 
 extern C3UI *   g_c3ui;
 
-
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,
 	MBCHAR *ldlBlock,
@@ -57,12 +56,12 @@ void ProgressWindow::BeginProgress(
 
 		progwin->m_factorList.AddTail( 1.0 );
 
-		
-		
-		
+
+
+
 		g_c3ui->SetBackgroundColor( RGB(0,0,0) );
 
-		
+
 
 
 
@@ -81,7 +80,6 @@ void ProgressWindow::BeginProgress(
 
 	progwin->m_baseList.AddTail( progwin->m_pbar->GetCurValue() );
 
-	
 	progwin->StartCountingTo( 0 );
 }
 
@@ -107,7 +105,7 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 {
 	if ( progwin )
 	{
-		
+
 		progwin->StartCountingTo( progwin->m_pbar->GetMaxValue() );
 
 		progwin->m_prevValList.RemoveTail();
@@ -192,7 +190,6 @@ ProgressWindow::~ProgressWindow()
 }
 
 
-
 COLORREF ProgressWindow::SetBarColor(COLORREF color)
 {
 	return m_pbar->SetBarColor(color);
@@ -204,9 +201,9 @@ AUI_ERRCODE StandardProgressBar::CalculateIntervals(
 {
 	double x = (double)m_curValue / (double)m_maxValue;
 
-	
-	
-	
+
+
+
 	*start = 0.0;
 	*stop = x;
 

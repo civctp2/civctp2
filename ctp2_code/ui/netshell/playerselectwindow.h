@@ -1,27 +1,14 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __PLAYERSELECTWINDOW_H__
 #define __PLAYERSELECTWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 #include "ns_playersetup.h"
 
-
 class PlayerSelectWindow : public ns_Window
 {
 public:
-	
+
 	PlayerSelectWindow( AUI_ERRCODE *retval );
 	virtual ~PlayerSelectWindow() {}
 
@@ -36,7 +23,6 @@ public:
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 	nf_PlayerSetup *GetPlayerSetup(NETFunc::Player *player);
 
-	
 
 	enum CONTROL
 	{
@@ -66,5 +52,4 @@ protected:
     AUI_ACTION_BASIC(PlayerListBoxAction);
 };
 
-
-#endif 
+#endif

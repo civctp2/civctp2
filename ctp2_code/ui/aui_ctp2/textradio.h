@@ -4,16 +4,14 @@
 #ifndef __TEXTRADIO_H__
 #define __TEXTRADIO_H__
 
-
 #include "aui_radio.h"
 #include "patternbase.h"
-
 
 
 class TextRadio : public aui_Radio, public PatternBase
 {
 public:
-	
+
 	TextRadio(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -44,5 +42,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

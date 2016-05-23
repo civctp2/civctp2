@@ -64,7 +64,7 @@ STDEHANDLER(RunCombatEvent)
 		return(GEV_HD_Continue);
 
 	bool const  isDoneAtStart   = g_theCurrentBattle->IsDone();
-	bool const  playAnimations  = 
+	bool const  playAnimations  =
 	    isDoneAtStart ? false : g_theCurrentBattle->ResolveOneRound();
 
 	if (isDoneAtStart)
@@ -110,10 +110,10 @@ STDEHANDLER(StartCombatEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, p)) return GEV_HD_Continue;
 
-	if (g_theCurrentBattle) 
+	if (g_theCurrentBattle)
 	{
 		// Close previous screen - if still open
-		if (g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) 
+		if (g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id()))
 		{
 			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 		}
@@ -124,7 +124,7 @@ STDEHANDLER(StartCombatEvent)
 
 	CellUnitList defender;
 	g_theWorld->GetCell(p)->GetArmy(defender);
-		
+
 	Assert(a.Num() > 0);
 	Assert(defender.Num() > 0);
 	if (a.Num() > 0 && defender.Num() > 0 &&

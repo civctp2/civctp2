@@ -19,5 +19,4 @@ public:
 	virtual aui_FileFormat * GetFileFormat(MBCHAR const * filename);
 };
 
-
-#endif 
+#endif

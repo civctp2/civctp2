@@ -1,9 +1,6 @@
-
 #include "c3.h"
 
-
 #include "C3Population.h"
-
 
 #include "player.h"
 #include "XY_Coordinates.h"
@@ -16,7 +13,6 @@
 	extern	World	*g_theWorld ;
 
 	extern	Player	**g_player ;
-
 
 #include "bset.h"
 #include "UnitData.h"
@@ -76,7 +72,7 @@ STDMETHODIMP_(ULONG) C3Population::Release()
 	{
 	if (--m_refCount)
 		return (m_refCount) ;
-	
+
 	delete this ;
 
 	return (0) ;
@@ -124,7 +120,7 @@ C3Population::C3Population(CivArchive &archive)
 
 
 
-void C3Population::Serialize(CivArchive &archive) 
+void C3Population::Serialize(CivArchive &archive)
 	{
 
     CHECKSERIALIZE
@@ -331,13 +327,12 @@ void C3Population::SetCityPopType(uint32 city_id, uint32 pop_idx, uint32 popType
 
 
 
-void C3Population::GetRawHappiness(uint32 city_id, BOOL *is_unknown_id, 
+void C3Population::GetRawHappiness(uint32 city_id, BOOL *is_unknown_id,
     double *raw_happiness, double *happy_per_entertainer)
 
-{ 
+{
     BSetID *idx = m_player->m_bset_cities_index->Find(city_id) ;
 
-	
 	*is_unknown_id = TRUE ;
 	if (idx == NULL)
 		return;
@@ -345,10 +340,10 @@ void C3Population::GetRawHappiness(uint32 city_id, BOOL *is_unknown_id,
 	*is_unknown_id = FALSE ;
 
     CityData *the_city = m_player->m_all_cities->Get(idx->GetVal()).GetData()->GetCityData();
-    Assert(the_city); 
+    Assert(the_city);
 
     *raw_happiness = the_city->m_happy->GetGreedyPopHappiness(*the_city);
-    
+
     *happy_per_entertainer = 0;
 
 }
@@ -363,7 +358,7 @@ void C3Population::GetRawHappiness(uint32 city_id, BOOL *is_unknown_id,
 sint32 C3Population::GetTileFood(uint32 city_id, MapPointData *pos, BOOL *is_unknown_id)
 	{
 	MapPoint	ipos ;
-	
+
 	ipos.Norm2Iso(*pos) ;
 
 	return (m_player->GetTileFood(city_id, ipos, *is_unknown_id)) ;
@@ -380,7 +375,7 @@ sint32 C3Population::GetTileFood(uint32 city_id, MapPointData *pos, BOOL *is_unk
 sint32 C3Population::GetTileProduction(uint32 city_id, MapPointData *pos, BOOL *is_unknown_id)
 	{
 	MapPoint	ipos ;
-	
+
 	ipos.Norm2Iso(*pos) ;
 
 	return (m_player->GetTileProduction(city_id, ipos, *is_unknown_id)) ;
@@ -397,7 +392,7 @@ sint32 C3Population::GetTileProduction(uint32 city_id, MapPointData *pos, BOOL *
 sint32 C3Population::GetTileResource(uint32 city_id, MapPointData *pos, BOOL *is_unknown_id)
 	{
 	MapPoint	ipos ;
-	
+
 	ipos.Norm2Iso(*pos) ;
 
 	return (m_player->GetTileResource(city_id, ipos, *is_unknown_id)) ;
@@ -424,10 +419,10 @@ void C3Population::GetCityProjectedFood(uint32 city_id, sint32 *food, BOOL *is_u
 
 
 
-void C3Population::GetCityProjectedTrade(uint32 city_id,  
+void C3Population::GetCityProjectedTrade(uint32 city_id,
      BOOL *is_unknown_id, sint32 *projected_gross_gold, sint32 *projected_net_gold)
 {
-	m_player->GetCityProjectedTrade(city_id, *is_unknown_id, 
+	m_player->GetCityProjectedTrade(city_id, *is_unknown_id,
         *projected_gross_gold, *projected_net_gold) ;
 }
 
@@ -484,34 +479,33 @@ void C3Population::GetCityRequiredFood(uint32 city_id, sint32 *food, BOOL *is_un
 BOOL C3Population::TryPlacePop(uint32 city_id, uint32 pop_idx, sint32 player_id, MapPointData *p, BOOL *is_unknown_id)
 	{
 if (
-    (p->x < 0) || 
+    (p->x < 0) ||
    (g_theWorld->GetXWidth() <= p->x) ||
-    (p->y < 0) || 
+    (p->y < 0) ||
    (g_theWorld->GetYHeight() <= p->y) ||
-    (p->z < 0) || 
+    (p->z < 0) ||
    (g_theWorld->GetZHeight() <= p->z))
 {
-    sint32 TryPlacePop_out_of_bounds=0; 
-    Assert(TryPlacePop_out_of_bounds); 
-    return FALSE; 
-} 
+    sint32 TryPlacePop_out_of_bounds=0;
+    Assert(TryPlacePop_out_of_bounds);
+    return FALSE;
+}
 
-    
 
 		{
 		MapPoint ipos ;
 		ipos.Norm2Iso(*p) ;
 
-        Assert(m_player); 
-        if (NULL == m_player) 
-            return FALSE; 
+        Assert(m_player);
+        if (NULL == m_player)
+            return FALSE;
 
 		return FALSE;
 		}
 
 	return (FALSE) ;
 	}
- 
+
 
 
 
@@ -525,7 +519,7 @@ BOOL C3Population::IsPopAllowed(uint32 city_id, uint32 popType, BOOL *is_unknown
 	return (m_player->IsPopAllowed(city_id, (POPTYPE)(popType), *is_unknown_id)) ;
 	}
 
-double C3Population::GetCityScientistOutput(uint32 city_id, BOOL *is_unknown_id)  
+double C3Population::GetCityScientistOutput(uint32 city_id, BOOL *is_unknown_id)
 {
     return 0;
 }
@@ -553,11 +547,10 @@ void C3Population::GetCityScience(uint32 city_id, sint32 *science, BOOL *is_unkn
 
 double C3Population::GetSlaveHunger ()
 {
-    return 0.0; 
+    return 0.0;
 }
 
 double C3Population::GetCitizensHunger ()
 {
-    return 0.0; 
+    return 0.0;
 }
-

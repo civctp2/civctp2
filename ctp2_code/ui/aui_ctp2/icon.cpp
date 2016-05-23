@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -69,7 +56,6 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 
 	sint32 errcode;
 
-	
 	errcode = pDestSurf->Lock(NULL, (LPVOID *)&pDestBuffer, 0);
 	if (errcode == AUI_ERRCODE_OK)
 	{
@@ -85,10 +71,8 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 			if (height > srcHeight) height = srcHeight;
 
 
-			
 			uint16 *pSrcPixel;
 			uint16 *pDestPixel;
-
 
 
 			Pixel16 blendPixel;
@@ -114,7 +98,6 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 
 			}
 
-			
 			errcode = pSrcSurf->Unlock((LPVOID)pSrcBuffer);
 		}
 

@@ -1,9 +1,3 @@
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -22,7 +16,6 @@
 #include "primitives.h"
 
 extern aui_UI *g_ui;
-
 
 
 c3_HeaderSwitch::c3_HeaderSwitch(
@@ -53,7 +46,6 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_HeaderSwitch::c3_HeaderSwitch(
@@ -98,14 +90,12 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 }
 
 
-
 AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	if ( ldlBlock )
 	{
 		AUI_ERRCODE errcode;
@@ -118,7 +108,7 @@ AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 				&errcode,
 				aui_UniqueId(),
 				imageBlock );
-			
+
 			m_image->SetBlindness( TRUE );
 		}
 	}
@@ -131,15 +121,13 @@ AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_HeaderSwitch::InitCommon(void)
 {
-	
+
 	SetNumStates( k_C3_HEADERSWITCH_DEFAULTNUMSTATES );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 c3_HeaderSwitch::~c3_HeaderSwitch()
@@ -150,14 +138,12 @@ c3_HeaderSwitch::~c3_HeaderSwitch()
 	}
 }
 
-
 AUI_ERRCODE c3_HeaderSwitch::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
 
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -166,12 +152,10 @@ AUI_ERRCODE c3_HeaderSwitch::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if ( m_pattern ) 
+	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
-	
-	
+
 	aui_Radio::DrawThis( surface, x, y );
 
 	if ( IsOn() )
@@ -179,8 +163,8 @@ AUI_ERRCODE c3_HeaderSwitch::DrawThis(
 	else
 		primitives_BevelRect16( surface, &rect, 2, 0, 16, 16 );
 
-	
-	
+
+
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );

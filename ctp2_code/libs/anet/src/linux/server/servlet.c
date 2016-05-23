@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -227,11 +227,11 @@ static dp_result_t Session_CtoJava(jobject jSess, dp_session_t *s)
 	 * right.  It seems to be so for passwords, anyway.
 	 */
 	s->sessionName[sizeof(s->sessionName)-1] = 0;
-	(*env)->SetObjectField(env, jSess, jasess.name, (*env)->NewStringUTF(env, s->sessionName)); 
+	(*env)->SetObjectField(env, jSess, jasess.name, (*env)->NewStringUTF(env, s->sessionName));
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
 	s->szPassword[sizeof(s->szPassword)-1] = 0;
 	szPassword = s->szPassword;
-	(*env)->SetObjectField(env, jSess, jasess.password, (*env)->NewStringUTF(env, szPassword)); 
+	(*env)->SetObjectField(env, jSess, jasess.password, (*env)->NewStringUTF(env, szPassword));
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
 
 	/* Save the byte array fields. */
@@ -239,24 +239,24 @@ static dp_result_t Session_CtoJava(jobject jSess, dp_session_t *s)
 	if (!arr) return dp_RES_BAD;
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->szUserField), s->szUserField);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
-	(*env)->SetObjectField(env, jSess, jasess.userField, arr); 
+	(*env)->SetObjectField(env, jSess, jasess.userField, arr);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
 	arr = (*env)->NewByteArray(env, sizeof(s->adrMaster));
 	if (!arr) return dp_RES_BAD;
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->adrMaster), s->adrMaster);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
-	(*env)->SetObjectField(env, jSess, jasess.adrMaster, arr); 
+	(*env)->SetObjectField(env, jSess, jasess.adrMaster, arr);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
 	arr = (*env)->NewByteArray(env, sizeof(s->reserved2));
 	if (!arr) return dp_RES_BAD;
 	(*env)->SetByteArrayRegion(env, arr, 0, sizeof(s->reserved2), s->reserved2);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
-	(*env)->SetObjectField(env, jSess, jasess.reserved2, arr); 
+	(*env)->SetObjectField(env, jSess, jasess.reserved2, arr);
 	if ((*env)->ExceptionOccurred(env)) return dp_RES_BAD;
 	return dp_RES_OK;
 }
 
-int dp_PASCAL sess_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, 
+int dp_PASCAL sess_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src,
 	playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent,
 	size_t total, int seconds_left, void *context, dp_result_t status)
 {
@@ -398,7 +398,7 @@ void main(int argc, char **argv)
 	dpid_t src, dest;
 	char buf[512];
 	size_t size;
-	 
+
 	JavaVM *jvm;
 
 	if ((argc != 3) || strcmp(argv[1], "-classpath")) {

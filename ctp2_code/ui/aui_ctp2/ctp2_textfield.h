@@ -4,7 +4,6 @@
 #ifndef __ctp2_TEXTFIELD_H__
 #define __ctp2_TEXTFIELD_H__
 
-
 #include "aui_textfield.h"
 #include "patternbase.h"
 
@@ -12,11 +11,10 @@
 #define k_CTP2_TEXTFIELD_LDL_BEVELWIDTH			"bevelwidth"
 
 
-
 class ctp2_TextField : public aui_TextField, public PatternBase
 {
 public:
-	
+
 	ctp2_TextField(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -52,5 +50,4 @@ private:
 	sint32	m_bevelWidth;
 };
 
-
-#endif 
+#endif

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_soundbase.h"
 
@@ -23,7 +12,6 @@
 
 extern SoundManager		*g_soundManager;
 
-
 MBCHAR *aui_SoundBase::m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ] =
 {
 	"activatesound",
@@ -35,19 +23,16 @@ MBCHAR *aui_SoundBase::m_soundLdlKeywords[ AUI_SOUNDBASE_SOUND_LAST ] =
 };
 
 
-
 aui_SoundBase::aui_SoundBase( MBCHAR *ldlBlock )
 {
 	InitCommonLdl( ldlBlock );
 }
 
 
-
 aui_SoundBase::aui_SoundBase( MBCHAR **soundNames )
 {
 	InitCommon( soundNames );
 }
-
 
 
 AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
@@ -66,7 +51,6 @@ AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_SoundBase::InitCommon( MBCHAR **soundNames )
 {
 	memset( m_sounds, 0, sizeof( m_sounds ) );
@@ -76,7 +60,6 @@ AUI_ERRCODE aui_SoundBase::InitCommon( MBCHAR **soundNames )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_SoundBase::~aui_SoundBase()
@@ -92,7 +75,6 @@ aui_SoundBase::~aui_SoundBase()
 }
 
 
-
 aui_Sound *aui_SoundBase::GetSound( AUI_SOUNDBASE_SOUND sound ) const
 {
 	if ( sound < 0 || sound >= AUI_SOUNDBASE_SOUND_LAST )
@@ -100,7 +82,6 @@ aui_Sound *aui_SoundBase::GetSound( AUI_SOUNDBASE_SOUND sound ) const
 
 	return m_sounds[ sound ];
 }
-
 
 
 aui_Sound *aui_SoundBase::SetSound(
@@ -128,7 +109,6 @@ aui_Sound *aui_SoundBase::SetSound(
 }
 
 
-
 AUI_ERRCODE aui_SoundBase::PlaySound( AUI_SOUNDBASE_SOUND sound )
 {
 
@@ -140,14 +120,12 @@ AUI_ERRCODE aui_SoundBase::PlaySound( AUI_SOUNDBASE_SOUND sound )
 	switch (sound) {
 
 
-
 	case AUI_SOUNDBASE_SOUND_EXECUTE:
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 				gamesounds_GetGameSoundID(GAMESOUNDS_BUTTONCLICK), 0, 0);
 		break;
 	case AUI_SOUNDBASE_SOUND_ENGAGE:
 	case AUI_SOUNDBASE_SOUND_TIP:
-
 
 		break;
 	}

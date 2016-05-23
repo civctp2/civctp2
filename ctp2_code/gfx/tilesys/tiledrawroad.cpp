@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ void TiledMap::DrawARoadPiece
 	{
 		if (m_zoomLevel != k_ZOOM_NORMAL)
 		{
-			DrawBlendedOverlayScaled(surface, data, x, y, GetZoomTilePixelWidth(), 
+			DrawBlendedOverlayScaled(surface, data, x, y, GetZoomTilePixelWidth(),
 				GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE, flags);
 		}
 		else

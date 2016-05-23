@@ -12,11 +12,10 @@
 class aui_Surface;
 class aui_Static;
 
-
 class c3_Ranger : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	c3_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,

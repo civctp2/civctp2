@@ -58,14 +58,13 @@ public:
 	    m_dest           ()
 	{ ; }
 
-
 	void FindCantEnterPenaltyDistance(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
 	  float &cost, sint32 &distance, uint32 & pathPenalizeCantEnter);
 	void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
 	  float &cost, sint32 &distance);
 	bool IsConnected(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
 	  float &cost, sint32 &distance, sint32 maxSquaredDistance = -1, bool isLand = true);
-	
+
 	bool FindSimpleDistancePath(const MapPoint & start,
 					  const MapPoint & dest,
 					  PLAYER_INDEX owner,

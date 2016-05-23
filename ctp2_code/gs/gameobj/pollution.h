@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class Pollution
 public:
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -94,7 +94,7 @@ public:
 	// It should be larger than k_ROUNDS_BEFORE_DISASTER, and larger than the values
 	// that appear in FearPollution_MotivationEvent in MotivationEvent.cpp.
 	static sint32 const ROUNDS_COUNT_IMMEASURABLE;
-	
+
 	static uint32 GetPollutionAtRound(const PLAYER_INDEX player, const sint32 round);
 
 	Pollution();
@@ -116,7 +116,6 @@ public:
 	void   BeginTurn(void);
 	void   EndRound(void);
 
-	
 	sint32 GetPhase(void) { return m_phase; }
 
 	void   AddNukePollution(const MapPoint &cpos);

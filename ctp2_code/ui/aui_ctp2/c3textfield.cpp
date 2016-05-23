@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3textfield.h"
 
@@ -27,7 +14,6 @@
 #include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
-
 
 C3TextField::C3TextField(
 	AUI_ERRCODE *retval,
@@ -47,7 +33,6 @@ C3TextField::C3TextField(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 C3TextField::C3TextField(
 	AUI_ERRCODE *retval,
@@ -73,22 +58,20 @@ C3TextField::C3TextField(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 AUI_ERRCODE C3TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
-	sint32	bevelWidth = k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH; 
-	
+
+	sint32	bevelWidth = k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH;
+
 	if (block->GetAttributeType( k_C3_TEXTFIELD_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_TEXTFIELD_LDL_BEVELWIDTH );
 	}
 
 	return InitCommon(bevelWidth);
 }
-
 
 
 AUI_ERRCODE C3TextField::InitCommon( sint32 bevelWidth )
@@ -98,20 +81,17 @@ AUI_ERRCODE C3TextField::InitCommon( sint32 bevelWidth )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE C3TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
 
-	
 	RECT rect = { 0, 0, m_width + 4, m_height + 4 };
 	OffsetRect( &rect, m_x + x - 2, m_y + y - 2 );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
 
 	if (m_bevelWidth > 0)
@@ -126,11 +106,9 @@ AUI_ERRCODE C3TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	aui_TextField::DrawThis( surface, x, y );
 
-	
-	
+
 	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
 	{
-		
 
 		uint16 *pixel;
 
@@ -138,15 +116,13 @@ AUI_ERRCODE C3TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
 		{
-			
+
 			uint16 *origPixel = pixel;
 
-			
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
 
-			
 			uint16 *stopHorizontal = pixel + width;
 			const uint16 *stopVertical = pixel +
 				pitch * ( rect.bottom - rect.top );
@@ -156,9 +132,9 @@ AUI_ERRCODE C3TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				do
 				{
 					*pixel = pixelutils_BlendFast(
-						*pixel,	
-						0x0000,	
-						24 );	
+						*pixel,
+						0x0000,
+						24 );
 
 				} while ( ++pixel != stopHorizontal );
 

@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ private:
 public:
 	DBToken(const char *name, sint32 value);
 	~DBToken();
-	
+
 	const char *GetName() { return m_name; }
 	sint32 GetValue() { return m_value; }
 };
@@ -70,7 +70,7 @@ public:
 		m_numTokens = numTokens;
 	}
 };
-	
+
 class DBLexer
 {
 	FILE *m_file;
@@ -83,7 +83,6 @@ class DBLexer
 	PointerList<DBCustomTokens> *m_customTokenStack;
 	char m_filename[_MAX_PATH];
 	sint32 m_currentToken;
-
 
 public:
 	DBLexer(const C3DIR & c3dir, const char *file);
@@ -116,6 +115,5 @@ public:
 	sint32 GetLineNumber();
 	const char *GetFilename();
 };
-
 
 #endif

@@ -76,14 +76,14 @@ enum ATTITUDE_TYPE
 	ATTITUDE_TYPE_MAX,
 };
 
-enum DEATH_EFFECT_MORALE 
+enum DEATH_EFFECT_MORALE
 {
     DEATH_EFFECT_OVERSEAS,
     DEATH_EFFECT_HOME,
     DEATH_EFFECT_CALC
 };
 
-enum DIPLOMATIC_STATE 
+enum DIPLOMATIC_STATE
 {
 	DIPLOMATIC_STATE_WAR,
 	DIPLOMATIC_STATE_CEASEFIRE,
@@ -91,7 +91,7 @@ enum DIPLOMATIC_STATE
 	DIPLOMATIC_STATE_ALLIED
 };
 
-enum DIPLOMATIC_STRENGTH 
+enum DIPLOMATIC_STRENGTH
 {
 	DIPLOMATIC_STRENGTH_VERY_WEAK,
 	DIPLOMATIC_STRENGTH_WEAK,
@@ -100,7 +100,7 @@ enum DIPLOMATIC_STRENGTH
 	DIPLOMATIC_STRENGTH_VERY_STRONG
 };
 
-enum PLAYER_TYPE 
+enum PLAYER_TYPE
 {
 	PLAYER_TYPE_HUMAN,
 	PLAYER_TYPE_ROBOT,
@@ -199,7 +199,7 @@ private:
 public:
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -222,7 +222,6 @@ public:
 	sint32           m_patience[k_MAX_PLAYERS] ;
 	sint32           m_sent_requests_this_turn[k_MAX_PLAYERS];
 
-
 	double           m_materialsTax;
 
 	sint32           m_home_lost_unit_count;
@@ -240,12 +239,10 @@ public:
 	BOOL             m_isDead;
 	BOOL             m_first_city;
 
-
 	sint32           m_totalArmiesCreated;
 	BOOL             m_hasUsedCityView;
 	BOOL             m_hasUsedWorkView;
 	BOOL             m_hasUsedProductionControls;
-
 
 	sint32           m_total_production;
 	BOOL             m_is_turn_over;                // Used
@@ -297,7 +294,6 @@ public:
 
 	sint32           m_researchGoal;
 
-
 	sint32           m_broken_alliances_and_cease_fires;
 
 //----------------------------------------------------------------------------
@@ -317,7 +313,7 @@ public:
 	TaxRate                          *m_tax_rate;                 // Serialized
 	Difficulty                       *m_difficulty;               // Serialized
 	Advances                         *m_advances;                 // Serialized
-	MaterialPool                     *m_materialPool;  
+	MaterialPool                     *m_materialPool;
 
 	DynamicArray<TradeOffer>         *m_tradeOffers;              // Serialized
 #ifdef BATTLE_FLAGS
@@ -349,7 +345,6 @@ public:
 
 	CreateUnitRequest                *m_unitRequestList;
 
-
 	Unit                             *m_slic_special_city;        // Not serialized
 	BOOL                              m_hasGlobalRadar;           // Not serialized and unused
 
@@ -377,9 +372,7 @@ public:
 	Player(CivArchive &archive) ;
 	~Player();
 
-
 	void InitPlayer(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt) ;
-
 
 	Unit CreateUnitNoPosition(const sint32 type, CellUnitList &army,
 							  const MapPoint &actor_pos, sint32 oldOwner);
@@ -393,7 +386,6 @@ public:
 	sint32 FindArmyIndex(const Army &army) const;
 	sint32 FindCityIndex(const Unit &find) const;
 	sint32 GetWeakestEnemy() const;
-
 
 
 	Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
@@ -423,7 +415,6 @@ public:
 	bool RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner,
 			const Unit &his_unit, UNIT_ORDER_TYPE attack_type);
 
-
 	void ResetAllMovement();
 
 	void BeginTurnUnits();
@@ -438,7 +429,6 @@ public:
 	void GetPluralCivName(MBCHAR *s) ;
 	void GetSingularCivName(MBCHAR *s) ;
 	const MBCHAR *GetLeaderName(void) ;
-
 
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
@@ -467,7 +457,6 @@ public:
 	void InsertArmy(const MapPoint &point, const Unit &home_city,
 	                Army &army, CAUSE_NEW_ARMY cause);
 
-
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;
 	void AdjustPollution(const sint32 amount) ;
@@ -477,7 +466,6 @@ public:
 	uint32 *GetPollutionHistory(void) { return (&m_pollution_history[0]) ; }
 	uint32 GetPollutionLevel(void) { return (m_pollution_history[0]) ; }
 	uint32 GetAverageEventPollution(void) ;
-
 
 	Army GetArmy(sint32 s_index);
 	UnitDynamicArray *GetAllUnitList() { return m_all_units; }
@@ -508,7 +496,6 @@ public:
 	sint32	ReturnPopToCity(const MapPoint &pos, const sint32 announce);
 	sint32	LoadBuildQueue(const sint32 city, const MBCHAR *file) ;
 	sint32	SaveBuildQueue(const sint32 city, const MBCHAR *file) ;
-
 
 	bool IsFriendly(sint32 p) { Assert((p>=0) && (p<k_MAX_PLAYERS) );
 	                            return ((mask_alliance & 1L<<p) != 0); } ;
@@ -561,19 +548,15 @@ public:
 	Agreement MakeCaptureCityPact(PLAYER_INDEX player, Unit &city) ;
 
 
-
 	Agreement MakeEndPollutionPact(PLAYER_INDEX player) ;
 	Agreement MakeLeaveOurLands(PLAYER_INDEX player) ;
 	Agreement MakeReducePollution(PLAYER_INDEX player) ;
 
 
-
 	DiplomaticRequest RequestIndexToRequest(sint32 requestIndex) ;
-
 
 	bool WillViolatePact(PLAYER_INDEX otherParty) ;
 	bool HaveNoPiracyAgreement(PLAYER_INDEX otherParty);
-
 
 	bool FulfillCaptureCityAgreement(Unit city) ;
 	DynamicArray<DiplomaticRequest>	*GetRequests(void) const { return (m_requests) ; }
@@ -612,7 +595,6 @@ public:
 	void DumpAllies(void) ;
 
 
-
 	void AddMessage(Message &msg) ;
 	void RegisterDiplomaticMessage(const Message &msg);
 	void RegisterDiplomaticResponse(const DiplomaticRequest &req);
@@ -621,7 +603,6 @@ public:
 	void SendTestMessage(void) ;
 	DynamicArray<Message> *GetMessages(void) const { return (m_messages) ; }
 	void NotifyModalMessageDestroyed();
-
 
 
 	bool HasAdvance(AdvanceType adv) const;
@@ -633,7 +614,6 @@ public:
 #ifdef _DEBUG
 	void DisplayAdvances() ;
 #endif
-
 
 	TradeRoute CreateTradeRoute(Unit sourceCity, ROUTE_TYPE sourceType,
 								sint32 sourceResource,
@@ -647,14 +627,12 @@ public:
 	void RemoveUsedTransportPoints(sint32 delta);
 
 
-
 	void RemoveTradeRoute(TradeRoute route, CAUSE_KILL_TRADE_ROUTE cause);
 
 
 
 
 	void CancelTradeRoute(TradeRoute route);
-
 
 	void RenumberTradeRoute(TradeRoute oldRoute, TradeRoute newRoute);
 	void InterceptTrade(sint32 army_index);
@@ -677,7 +655,6 @@ public:
 	sint32 GetUnusedFreight()const;
 	sint32 GetTotalFreight()const;
 
-
 	void AddUnitVision(const MapPoint &pnt, double range);
 	void RemoveUnitVision(const MapPoint &pnt, double range);
 	void OwnExploredArea();
@@ -687,7 +664,6 @@ public:
 	bool IsVisible(sint32 x, sint32 y) const;
 	bool GetLastSeen(const MapPoint &pnt, UnseenCellCarton &ucell);
 	void BeginTurnEnemyUnits();
-
 
 	bool CanCreateImprovement(sint32 type,
 	                          const MapPoint &point,
@@ -702,7 +678,6 @@ public:
 	void AddImprovement(TerrainImprovement imp);
 	void RemoveImprovementReferences(TerrainImprovement imp);
 	void BeginTurnImprovements();
-
 
 	sint32 GetMaterialsStored()  const;
 	Installation CreateInstallation(sint32 type, MapPoint &point);
@@ -727,7 +702,6 @@ public:
 
 	void GamestateDebug();
 
-
 	void GiveOrders(sint32 army, UNIT_ORDER_TYPE orders);
 
 	void SetPlayerType(PLAYER_TYPE pt);
@@ -751,7 +725,7 @@ public:
 	void BeginTurnUnitSupportGold();
 	void BeginTurnCommodityMarket();
 	sint32 CalcWonderGold();
-	sint32 CalcUnitSupportGold();	
+	sint32 CalcUnitSupportGold();
 	sint32 CalcTotalBuildingUpkeep();
 	void BuildUnit(sint32 type, Unit city);
 	void BuildImprovement(sint32 type, Unit city);
@@ -761,7 +735,6 @@ public:
 	bool ChangeCurrentlyBuildingItem(Unit city, sint32 category, sint32 item_type);
 
 	void Serialize(CivArchive &archive) ;
-
 
 	void BeginTurnProduction();
 
@@ -789,7 +762,6 @@ public:
 
 	void SetMaterialsTax(double m);
 	void ContributeMaterials(sint32 &cityProduction);
-
 
 	PLAYER_INDEX GetOwner() const { return m_owner; }
 	sint32 GetGovernmentType() const { return m_government_type; }
@@ -822,7 +794,6 @@ public:
 	void   CalcAllHappiness();
 	sint32 GetAverageHappiness();
 	void   RegisterProfessionalChange(bool on, Unit &u);
-
 
 
 	Difficulty* GetDifficulty() { return m_difficulty; }
@@ -867,7 +838,6 @@ public:
 	double GetMartialLawEffect() const;
 	sint32 GetMartialLawThreshold() const;
 
-
 	double GetAtHomeRadius() const;
 	double GetOverseasCoef() const;
 
@@ -889,7 +859,6 @@ public:
 
 	double GetReadyWarCoef() const;
 	double GetReadyWarHP() const;
-
 
 	double GetIncomePercent() {return m_income_Percent; }
 
@@ -937,7 +906,6 @@ public:
 	sint32 GetUsedTradeTransportPoints() const { return m_usedTradeTransportPoints; }
 
 	double GetPercentProductionToMilitary() const;
-
 
 	Regard *GetRegard() const { return (m_regard) ; }
 
@@ -1028,9 +996,7 @@ public:
 
 	void ResetVision();
 
-
 	void SetGovernorPwReserve(const sint32 &reserve){ m_governorPwReserve = reserve; }
-
 
 	sint32 GetGovernorPwReserve() const { return m_governorPwReserve; };
 
@@ -1048,9 +1014,7 @@ public:
 	void CalcCargoCapacity();
 	void AddCargoCapacity(const sint16 delta_cargo_slots);
 
-
 	GaiaController *GetGaiaController();
-
 
 	void EnterNewAge(sint32 age);
 

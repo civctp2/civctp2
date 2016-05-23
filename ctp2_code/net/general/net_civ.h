@@ -1,7 +1,3 @@
-
-
-
-
 #ifndef _NET_CIV_H_
 #define _NET_CIV_H_
 

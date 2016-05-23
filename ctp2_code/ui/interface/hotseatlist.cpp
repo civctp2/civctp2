@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -81,26 +81,24 @@ extern C3UI *g_c3ui;
 
 HotseatList *g_hotseatList = NULL;
 
-
 sint32       s_hotseatCivList[k_MAX_PLAYERS];
 bool        *s_legalCivList = NULL;
 bool         s_playerCivsLocked;
 
 
-
 void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
+
 
 
 
 	if ((ctp2_Button*)control == g_hotseatList->m_window->Ok())
 	{
 		sint32 i;
-		
+
 		sint32 numHumans = 0;
 		for(i = 0; i < g_theProfileDB->GetNPlayers() - 1; i++) {
 			HotseatListItem *item = (HotseatListItem*)g_hotseatList->m_list->GetItemByIndex(i);
@@ -113,59 +111,49 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 				numHumans++;
 			}
 		}
-		
-		
+
 		if(numHumans < 1)
 			return;
 
 		for(i = 0; i < g_theProfileDB->GetNPlayers() - 1; i++) {
 			HotseatListItem *item = (HotseatListItem*)g_hotseatList->m_list->GetItemByIndex(i);
 			item->Update();
-			g_hotseatList->m_callback(0, i + 1, 
+			g_hotseatList->m_callback(0, i + 1,
 							  item->GetCiv(),
 							  item->IsHuman(),
 							  item->GetName(),
 							  item->GetEmail());
 		}
-							  
-		
+
 		g_hotseatList->m_callback( 1, 0, 0, 0, NULL, NULL);
 
-		
 		g_hotseatList->RemoveWindow();
 	}
 }
-
 
 HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"HotseatListPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(TRUE);
 
 	}
 
-	
 	m_ok = NULL;
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -174,7 +162,7 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
+
 
 
 
@@ -182,19 +170,15 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 
 	m_window->AddOk(HotseatListButtonActionCallback);
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
 	m_list->SetAbsorbancy(FALSE);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
-	
 	m_window->AddTitle();
 
-	
 	m_window->Title()->Move( (m_window->Width() - m_window->Title()->Width()) / 2, 17 );
-
 
 	if (g_startEmailGame) {
 		m_window->TitleText()->SetText(g_theStringDB->GetNameStr("ldl_str_EMAIL_LIST_TITLE"));
@@ -204,13 +188,11 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 		}
 	}
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return 0;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -247,12 +229,10 @@ HotseatList::~HotseatList()
 
 }
 
-
 void HotseatList::DisplayWindow( void )
 {
 	AUI_ERRCODE auiErr;
 
-	
 	UpdateData();
 
 	auiErr = g_c3ui->AddWindow(m_window);
@@ -282,13 +262,11 @@ sint32 HotseatList::UpdateData( void )
 
 	AUI_ERRCODE		retval;
 
-	
 	strcpy(ldlBlock,"HotseatListItem");
 	HotseatListItem *item = NULL;
 
 	m_list->Clear();
 
-	
 	if(g_theProfileDB->GetNPlayers() > k_MAX_HOTSEAT_PLAYERS + 1)
 		g_theProfileDB->SetNPlayers(k_MAX_HOTSEAT_PLAYERS + 1);
 
@@ -346,12 +324,11 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 			curCiv++;
 			if(curCiv >= g_theCivilisationDB->NumRecords())
 				curCiv = 0;
-		} while(g_theCivilisationDB->m_alphaToIndex[curCiv] == 0); 
+		} while(g_theCivilisationDB->m_alphaToIndex[curCiv] == 0);
 
 		realCiv = g_theCivilisationDB->m_alphaToIndex[curCiv];
 		used = false;
 
-		
 		if (!hotseatlist_CivEnabled(realCiv)) {
 			continue;
 		}
@@ -362,12 +339,11 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 				used = true;
 
 				if (numEnabledCivs == g_theProfileDB->GetNPlayers()) {
-					
-					
+
 					item->SetCiv(curItem->GetCiv());
 					item->Update();
 					curItem->SetCiv(realCiv);
-					
+
 					found = true;
 					break;
 				}
@@ -457,7 +433,7 @@ AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
 	AddChild(subButton);
 
 	sprintf(block, "%s.%s", ldlBlock, "AIOrHuman");
-	subButton = new c3_Button(&retval, aui_UniqueId(), block, 
+	subButton = new c3_Button(&retval, aui_UniqueId(), block,
 							  HotseatAIToggleCallback, this);
 	AddChild(subButton);
 
@@ -482,23 +458,19 @@ AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
 
 void HotseatListItem::Update(void)
 {
-	
-	
+
 	c3_Button *subButton;
 	C3TextField *subText;
 
-	
 	subButton = (c3_Button *)GetChildByIndex(0);
 	subButton->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(m_civ)->GetSingularCivName()));
 
-	
 	if (hotseatlist_PlayerCivsLocked()) {
 		subButton->Enable(false);
 	} else {
 		subButton->Enable(true);
 	}
 
-	
 	subButton = (c3_Button *)GetChildByIndex(1);
 	if(m_isHuman) {
 		subButton->SetText(g_theStringDB->GetNameStr("HOTSEAT_HUMAN"));
@@ -515,7 +487,7 @@ void HotseatListItem::Update(void)
 			subText->Enable(false);
 	} else {
 		subButton->SetText(g_theStringDB->GetNameStr("HOTSEAT_AI"));
-		
+
 		subText = (C3TextField *)GetChildByIndex(2);
 		subText->Enable(false);
 
@@ -528,7 +500,6 @@ sint32 HotseatListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	return m_index - ((HotseatListItem *)item2)->m_index;
 }
-
 
 void HotseatListItem::SetHuman(bool human)
 {
@@ -563,7 +534,6 @@ void HotseatListItem::EnterEmail()
 {
 	C3TextField *subText;
 
-	
 	subText = (C3TextField *)GetChildByIndex(3);
 	subText->GetFieldText(m_email, 255);
 
@@ -581,17 +551,14 @@ void hotseatlist_ClearOptions(void)
 }
 
 
-
 void hotseatlist_SetPlayerCiv(PLAYER_INDEX index, sint32 civ)
 {
 }
-
 
 void hotseatlist_LockCivs(void)
 {
 	s_playerCivsLocked = true;
 }
-
 
 bool hotseatlist_PlayerCivsLocked(void)
 {
@@ -599,36 +566,30 @@ bool hotseatlist_PlayerCivsLocked(void)
 }
 
 
-
 void hotseatlist_EnableAllCivs(void)
 {
 	std::fill(s_legalCivList, s_legalCivList + g_theCivilisationDB->NumRecords(), true);
 }
-
 
 void hotseatlist_DisableAllCivs(void)
 {
 	std::fill(s_legalCivList, s_legalCivList + g_theCivilisationDB->NumRecords(), false);
 }
 
-
 void hotseatlist_EnableCiv(sint32 civ)
 {
 	s_legalCivList[civ] = true;
 }
-
 
 void hotseatlist_DisableCiv(sint32 civ)
 {
 	s_legalCivList[civ] = false;
 }
 
-
 bool hotseatlist_CivEnabled(sint32 civ)
 {
 	return s_legalCivList[civ];
 }
-
 
 sint32 hotseatlist_NumEnabled(void)
 {

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -118,7 +118,7 @@ public:
 class DQActionMove : public DQAction
 {
 public:
-	DQActionMove() 
+	DQActionMove()
     :
         DQAction        (),
         move_actor      (NULL),
@@ -155,7 +155,7 @@ public:
 	sint32						projectile_path;
 };
 
-class DQActionSpecialEffect : public DQAction 
+class DQActionSpecialEffect : public DQAction
 {
 public:
 	DQActionSpecialEffect() {}
@@ -168,7 +168,7 @@ public:
 class DQActionAttack : public DQAction
 {
 public:
-	DQActionAttack() 
+	DQActionAttack()
     :
         DQAction        (),
         attacker        (NULL),
@@ -194,7 +194,7 @@ public:
 class DQActionAttackPos : public DQAction
 {
 public:
-	DQActionAttackPos() 
+	DQActionAttackPos()
     :
         DQAction                (),
         attackpos_attacker      (NULL),
@@ -255,7 +255,7 @@ public:
 class DQActionMorph : public DQAction
 {
 public:
-	DQActionMorph() 
+	DQActionMorph()
     :
         DQAction        (),
         morphing_actor  (NULL),
@@ -273,7 +273,7 @@ public:
 class DQActionHideShow : public DQAction
 {
 public:
-	DQActionHideShow() 
+	DQActionHideShow()
     :
         DQAction        (),
         hiding_actor    (NULL),
@@ -287,7 +287,7 @@ public:
 class DQActionWork : public DQAction
 {
 public:
-	DQActionWork() 
+	DQActionWork()
     :
         DQAction        (),
         working_actor   (NULL),
@@ -304,7 +304,7 @@ public:
 class DQActionFastKill : public DQAction
 {
 public:
-	DQActionFastKill() 
+	DQActionFastKill()
     :
         DQAction    (),
         dead        (NULL)
@@ -325,7 +325,7 @@ public:
 class DQActionSetOwner : public DQAction
 {
 public:
-	DQActionSetOwner() 
+	DQActionSetOwner()
     :
         DQAction        (),
         setowner_actor  (NULL),
@@ -339,7 +339,7 @@ public:
 class DQActionSetVisibility : public DQAction
 {
 public:
-	DQActionSetVisibility() 
+	DQActionSetVisibility()
     :
         DQAction            (),
         setvisibility_actor (NULL),
@@ -353,7 +353,7 @@ public:
 class DQActionSetVisionRange : public DQAction
 {
 public:
-	DQActionSetVisionRange() 
+	DQActionSetVisionRange()
     :
         DQAction                (),
         setvisionrange_actor    (NULL)
@@ -438,7 +438,7 @@ public:
 class DQActionPlaySound : public DQAction
 {
 public:
-	DQActionPlaySound() 
+	DQActionPlaySound()
     :
         DQAction            (),
         playsound_soundID   (CTPRecord::INDEX_INVALID),
@@ -480,7 +480,7 @@ public:
 class DQActionFaceoff : public DQAction
 {
 public:
-	DQActionFaceoff() 
+	DQActionFaceoff()
     :
         DQAction                (),
         faceoff_attacker        (NULL),
@@ -499,7 +499,7 @@ public:
 class DQActionTerminateFaceOff : public DQAction
 {
 public:
-	DQActionTerminateFaceOff() 
+	DQActionTerminateFaceOff()
     :
         DQAction    (),
         faceroffer  (NULL)
@@ -528,7 +528,7 @@ public:
 class DQActionInvokeResearchAdvance : public DQAction
 {
 public:
-	DQActionInvokeResearchAdvance() 
+	DQActionInvokeResearchAdvance()
     :
         DQAction    (),
         message     (NULL)
@@ -537,7 +537,6 @@ public:
 
 	MBCHAR *        message;
 };
-
 
 class DQActionBeginScheduler : public DQAction
 {

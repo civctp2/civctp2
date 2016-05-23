@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -76,37 +76,27 @@ private:
 	sint32          m_rankingWonders;
 	sint32          m_rankingOverall;
 
-	
 	void Show();
 
-	
 	void Hide();
 
-	
 	void Add_Dropdown_Category(char * category);
 
-	
 	void SetLineGraph( bool line_graph );
 
-	
 	void UpdatePlayerList();
 
-	
-	
+
 	void UpdateGraph();
 
-	
 	void CleanupGraph();
 
-	
 	static void SelectRankingActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
 	static void LineOrZeroSumButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
 };
 
-
-#endif 
+#endif

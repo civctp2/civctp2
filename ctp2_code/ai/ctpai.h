@@ -52,29 +52,21 @@ class OrderRecord;
 class CtpAi {
 public:
 
-	
 	static PLAYER_INDEX s_maxPlayers; /// The maximum numbers of players in the game, including Barbarians
 
-	
 	static void Cleanup();
 	static void CleanupEvents();
 
-	
 	static void InitializeEvents();
 
-	
 	static void Initialize(bool initDiplomat = true);
 
-	
 	static void Load(CivArchive & archive);
 
-	
 	static void Save(CivArchive & archive);
 
-	
 	static void RemovePlayer(const PLAYER_INDEX player);
 
-	
 	static void AddPlayer(const PLAYER_INDEX newPlayerId);
 
 	static void BeginMapAnalysis(const PLAYER_INDEX player);
@@ -87,37 +79,27 @@ public:
 
 	static void UnGroupGarrisonUnits(const PLAYER_INDEX playerId);
 
-	
 	static void FinishBeginTurn(const PLAYER_INDEX player);
 
-	
 	static void NetworkClientBeginTurn(const PLAYER_INDEX player);
-
 
 	static void AddForeignerGoalsForCity(const Unit & city, const PLAYER_INDEX ownerId);
 
-	
 	static void AddOwnerGoalsForCity(const Unit & city, const PLAYER_INDEX foreignerId);
 
-	
 	static void GroupWithEscort(const Army & army);
 
-	
 	static void AddGoalsForArmy(const Army & army);
 
-	
 	static bool GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance);
 
-	
 	static void ExecuteOpportunityActions(const PLAYER_INDEX player);
 
-	
 	static const OrderRecord * GetUnloadOrder();
 	static const OrderRecord * GetSpaceLaunchOrder();
 	static const OrderRecord * GetDisbandArmyOrder();
 	static const OrderRecord * GetMoveOrder();
 
-	
 	static const sint32 GetGoalDefendIndex();
 	static const sint32 GetGoalSeigeIndex();
 	static const sint32 GetEndgameWorldUnionIndex();
@@ -126,20 +108,16 @@ public:
 
 	static void SetResearch(const PLAYER_INDEX player);
 
-	
 	static void ComputeCityGarrisons(const PLAYER_INDEX player);
 
 private:
 
 	static void Resize();
 
-	
 	static void AddExploreTargets(const PLAYER_INDEX player);
 
-	
 	static void AddSettleTargets(const PLAYER_INDEX player);
 
-	
 	static void AddMiscMapTargets(const PLAYER_INDEX player);
 
 #if 0
@@ -151,14 +129,11 @@ private:
 
 	static bool GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance);
 
-	
 	static void RefuelAirplane(const Army & army);
 
 
-	
 	static void SpendGoldToRushBuy(const PLAYER_INDEX player);
 
-	
 	static const OrderRecord * sm_unloadOrderRec;
 	static const OrderRecord * sm_spaceLaunchOrderRec;
 	static const OrderRecord * sm_disbandArmyOrderRec;

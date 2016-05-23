@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Sprite with facings and shadows 
+// Description  : Sprite with facings and shadows
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -65,8 +65,7 @@ class Token;
 // Class declarations
 //----------------------------------------------------------------------------
 
-
-class FacedSpriteWshadow : public Sprite 
+class FacedSpriteWshadow : public Sprite
 {
 public:
 	FacedSpriteWshadow();
@@ -74,25 +73,25 @@ public:
 
 	void			Import(uint16 nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES]);
 	void			Import(uint16 nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES]);
-	
+
 	void			Load(char *filename);
 
-	void			Draw(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	void			Draw(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 							Pixel16 outlineColor, uint16 flags);
 
-	void			DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	void			DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
 	void			DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags);
 
-	void			DrawShadow(sint32 SdrawX, sint32 SdrawY, sint32 facing, double m_scale, sint16 transparency, 
+	void			DrawShadow(sint32 SdrawX, sint32 SdrawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
 	void			DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags);
 
-	void			DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	void			DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
 	Pixel16			*GetFrameData(uint16 facing, uint16 frame);
@@ -102,12 +101,12 @@ public:
 
 	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
-	
+
 	Pixel16			*GetShadowFrameData(uint16 facing, uint16 frame);
 	size_t			GetShadowFrameDataSize(uint16 facing, uint16 frame);
 	Pixel16			*GetMiniShadowFrameData(uint16 facing, uint16 frame);
 	size_t			GetMiniShadowFrameDataSize(uint16 facing, uint16 frame);
-	
+
 	void			SetShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 	void			SetMiniShadowFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size);
 
@@ -126,13 +125,12 @@ public:
 	virtual size_t	GetNumFrames(void) const    { return m_shadowFrameCount; };
 	virtual void	SetNumFrames(uint16 num)    { m_shadowFrameCount = num; }
 
-
 protected:
 	Pixel16			**m_frames[k_NUM_FACINGS];
 	size_t			*m_framesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniframes[k_NUM_FACINGS];
 	size_t			*m_miniframesSizes[k_NUM_FACINGS];
-	
+
 	Pixel16			**m_shadowFrames[k_NUM_FACINGS];
 	size_t			*m_shadowFramesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniShadowFrames[k_NUM_FACINGS];

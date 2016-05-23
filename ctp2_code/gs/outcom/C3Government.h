@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 
 #ifndef __C3Government_H__
@@ -16,19 +5,18 @@
 
 #include "ic3Government.h"
 
-class Player; 
-class CivArchive; 
+class Player;
+class CivArchive;
 
 class C3Government : public IC3Government
 	{
 	ULONG m_refCount;
-	
-	
+
     Player	*m_player ;
 	sint32	m_owner ;
 
 	public:
-		
+
 		STDMETHODIMP QueryInterface(REFIID, void **obj) ;
 		STDMETHODIMP_(ULONG) AddRef() ;
 		STDMETHODIMP_(ULONG) Release() ;
@@ -48,7 +36,7 @@ class C3Government : public IC3Government
 		STDMETHODIMP_ (double) GetWagesUnit(THIS_ sint32 gov_id) ;
 
 		STDMETHODIMP_ (double) GetRationsCoef(sint32 gov_id) ;
-        STDMETHODIMP_ (double) GetRationsBase(sint32 gov_id) ; 
+        STDMETHODIMP_ (double) GetRationsBase(sint32 gov_id) ;
 		STDMETHODIMP_ (double) GetRationsExpectation(sint32 gov_id) ;
 	    STDMETHODIMP_ (double) GetRationsUnit(sint32 gov_id) ;
 
@@ -61,7 +49,7 @@ class C3Government : public IC3Government
 		STDMETHODIMP_ (double) GetMinEmpireDistance(sint32 gov_id) ;
 		STDMETHODIMP_ (double) GetMaxEmpireDistance(sint32 gov_id) ;
         STDMETHODIMP_ (double) GetBigCityCoef();
-        STDMETHODIMP_ (double) GetBigCityOffset(); 
+        STDMETHODIMP_ (double) GetBigCityOffset();
 
 		STDMETHODIMP_ (double) GetCrimeCoef(sint32 gov_id) ;
 		STDMETHODIMP_ (double) GetCrimeOffset(sint32 gov_id) ;

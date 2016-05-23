@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -33,7 +33,6 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-
 #include "aui_ui.h"
 #include "aui_directx.h"
 
@@ -43,7 +42,7 @@
 class aui_DirectUI : public aui_UI, public aui_DirectX
 {
 public:
-	
+
 	aui_DirectUI(
 		AUI_ERRCODE *retval,
 		HINSTANCE hinst,
@@ -67,7 +66,7 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	virtual AUI_ERRCODE AltTabOut( void );
 	virtual AUI_ERRCODE AltTabIn( void );
 	AUI_ERRCODE CreateDirectScreen( BOOL useExclusiveMode );
@@ -86,6 +85,6 @@ protected:
 
 typedef aui_DirectUI aui_NativeUI;
 
-#endif 
+#endif
 
-#endif 
+#endif

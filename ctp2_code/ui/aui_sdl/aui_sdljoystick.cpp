@@ -17,5 +17,4 @@ aui_SDLJoystick::~aui_SDLJoystick()
 {
 }
 
-
 #endif

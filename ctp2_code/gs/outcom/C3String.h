@@ -16,10 +16,10 @@ public:
 	STDMETHODIMP_(ULONG) Release();
 
 	C3String();
-    C3String(CivArchive &archive); 
+    C3String(CivArchive &archive);
 	~C3String();
 
-    void Serialize(CivArchive &archive); 
+    void Serialize(CivArchive &archive);
 
 	STDMETHODIMP_(const MBCHAR *) GetString(const MBCHAR *stringId);
 };

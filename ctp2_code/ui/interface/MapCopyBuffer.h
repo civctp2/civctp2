@@ -1,4 +1,3 @@
-
 #ifndef MAP_COPY_BUFFER_H__
 #define MAP_COPY_BUFFER_H__
 
@@ -27,5 +26,5 @@ class MapCopyBuffer {
 	void Save(const MBCHAR *filename);
 
 };
-	
+
 #endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 #ifndef __TURN_COUNT_H__
 #define __TURN_COUNT_H__
 
-
 #include "newturncount.h"
 
 class CivArchive ;
@@ -56,7 +55,6 @@ class TurnCount {
 	uint8 m_sentGameOverMessage;
 	sint32 m_happinessPlayer;
 
-	
 	friend class NetInfo;
 
 private:
@@ -68,9 +66,9 @@ private:
 public:
 
 	static sint32 GetStopPlayer() { return sm_the_stop_player; }
-	static void SetStopPlayer(const sint32 &player_index) { sm_the_stop_player = player_index; } 
+	static void SetStopPlayer(const sint32 &player_index) { sm_the_stop_player = player_index; }
 
-	TurnCount(); 
+	TurnCount();
 	TurnCount(CivArchive &archive);
 	~TurnCount();
 
@@ -101,7 +99,7 @@ public:
 	BOOL SimultaneousMode() const;
 	void SetSimultaneousMode(BOOL on);
 	void NetworkEndTurn(BOOL force = FALSE);
-	
+
 	void Serialize(CivArchive &archive) ;
 
 	void CountActivePlayers();

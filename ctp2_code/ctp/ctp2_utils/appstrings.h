@@ -31,7 +31,6 @@ enum APPSTR {
 	APPSTR_MAX
 };
 
-
 void appstrings_Initialize(void);
 void appstrings_Cleanup(void);
 

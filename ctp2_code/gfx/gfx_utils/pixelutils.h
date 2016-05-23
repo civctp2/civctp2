@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -21,7 +8,7 @@
 #define BLEND_MAX_VALUE		64
 #define RGB_VALUES			32768
 #define k_MAX_PERCENT		128
-#define k_PERCENT_SHIFT		7		
+#define k_PERCENT_SHIFT		7
 
 #include "pixeltypes.h"
 
@@ -37,7 +24,6 @@ typedef union
   Pixel32 *l_ptr;
 
 } PixelAddress;
-
 
 void pixelutils_Initialize(void);
 
@@ -88,10 +74,8 @@ inline Pixel16 pixelutils_Blend(Pixel16 pixel1, Pixel16 pixel2, short blend)
 		b0 = (short)(gPixelTable[blend][b1][b2] >> 1) ;
 	}
 
-
 	return static_cast<Pixel16>(r0 | g0 | b0);
 }
-
 
 inline Pixel16 pixelutils_Additive(Pixel16 pixel1, Pixel16 pixel2)
 {
@@ -125,7 +109,6 @@ inline Pixel16 pixelutils_Additive(Pixel16 pixel1, Pixel16 pixel2)
 	}
 }
 
-
 inline Pixel16 pixelutils_BlendFast(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
 	sint32 rb2, g2;
@@ -135,12 +118,12 @@ inline Pixel16 pixelutils_BlendFast(sint32 pixel1, sint32 pixel2, sint32 blend)
 	if (g_is565Format)
 	{
 		rb2 = (pixel2 & 0xF81F);
-		
 
 
-		
-		
-		
+
+
+
+
 
 		rb0 = ( ((rb2<<5) + (blend * ((pixel1 & 0xF81F)-rb2) )) >> 5)  & 0xF81F;
 
@@ -159,7 +142,6 @@ inline Pixel16 pixelutils_BlendFast(sint32 pixel1, sint32 pixel2, sint32 blend)
 	Pixel16 pixel = (Pixel16)(rb0|g0);
 	return ((!pixel) ? static_cast<Pixel16>(0x0001) : pixel);
 }
-
 
 inline Pixel16 pixelutils_Shadow(Pixel16 pixel)
 {
@@ -180,7 +162,6 @@ inline Pixel16 pixelutils_Shadow(Pixel16 pixel)
 		return p;
 	}
 }
-
 
 inline Pixel16 pixelutils_Lightening(Pixel16 pixel)
 {
@@ -216,7 +197,6 @@ inline Pixel16 pixelutils_Lightening(Pixel16 pixel)
 		return static_cast<Pixel16>((r<<10) | (g<<5) | b);
 	}
 }
-
 
 inline Pixel16 pixelutils_PercentDarken(Pixel16 pixel, sint32 percent)
 {
@@ -256,7 +236,6 @@ inline Pixel16 pixelutils_PercentDarken(Pixel16 pixel, sint32 percent)
 		return static_cast<Pixel16>((r<<10) | (g<<5) | b);
 	}
 }
-
 
 inline Pixel16 pixelutils_PercentLighten(Pixel16 pixel, sint32 percent)
 {
@@ -321,7 +300,6 @@ inline Pixel16 pixelutils_Convert565to555(Pixel16 pixel)
 	return static_cast<Pixel16>(((pixel & 0xFFC0) >> 1) | (pixel & 0x001F));
 }
 
-
 inline Pixel16 pixelutils_Convert555to565(Pixel16 pixel)
 {
 	extern sint32		g_is565Format;
@@ -330,7 +308,6 @@ inline Pixel16 pixelutils_Convert555to565(Pixel16 pixel)
 
 	return static_cast<Pixel16>(((pixel & 0x7FE0) << 1) | (pixel & 0x001F));
 }
-
 
 Pixel16 pixelutils_Convert565to555(Pixel16 pixel);
 Pixel16 pixelutils_Convert555to565(Pixel16 pixel);
@@ -363,7 +340,6 @@ inline Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, short blend)
 
 }
 
-
 inline Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 {
 	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
@@ -379,19 +355,17 @@ inline Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 	return static_cast<Pixel16>((r<<11) | (g<<5) | b);
 }
 
-
 inline Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
-
 
 	sint32 rb2, g2;
 	sint32 rb0, g0;
 
 	rb2 = (pixel2 & 0xF81F);
-	
 
 
-	
+
+
 
 	rb0 = ( ((rb2<<5) + (blend * ((pixel1 & 0xF81F)-rb2) )) >> 5)  & 0xF81F;
 
@@ -401,12 +375,10 @@ inline Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 ble
 	return static_cast<Pixel16>(rb0 | g0);
 }
 
-
 inline Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
 {
     return static_cast<Pixel16>((pixel&0xF7DF)>>1);
 }
-
 
 inline Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 {
@@ -415,18 +387,17 @@ inline Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 	r = (pixel & 0xF800) >> 10;
 	if (r > 0x001F)
    		r = 0x001F;
-	
+
 	g = (pixel & 0x07E0) >> 4;
 	if (g > 0x003F)
    		g = 0x003F;
-	
+
 	b = (pixel & 0x001F) << 1;
 	if (b > 0x001F)
    		b = 0x001F;
 
     return static_cast<Pixel16>((r<<11) | (g<<5) | b);
 }
-
 
 inline Pixel16 pixelutils_PercentDarken_565(Pixel16 pixel, sint32 percent)
 {
@@ -447,7 +418,6 @@ inline Pixel16 pixelutils_PercentDarken_565(Pixel16 pixel, sint32 percent)
 
 	return static_cast<Pixel16>((r<<11) | (g<<5) | b);
 }
-
 
 inline Pixel16 pixelutils_PercentLighten_565(Pixel16 pixel, sint32 percent)
 {
@@ -475,14 +445,12 @@ inline Pixel16 pixelutils_PercentLighten_565(Pixel16 pixel, sint32 percent)
 	return static_cast<Pixel16>((r<<11) | (g<<5) | b);
 }
 
-
 inline Pixel16 pixelutils_Desaturate_565(Pixel16 pixel)
 {
 	sint32 ave = (((pixel & 0xF800) >> 11) + ((pixel & 0x07E0) >> 6) + (pixel & 0x001F)+128)>>2;
 
 	return ((Pixel16)(((ave & 0x1F) << 11) | ((ave & 0x3F) << 6) | (ave & 0x1F)));
 }
-
 
 Pixel32 pixelutils_Blend32_565(Pixel32 pixel1, Pixel32 pixel2, short blend);
 Pixel32 pixelutils_Additive32_565(Pixel32 pixel1, Pixel32 pixel2);
@@ -492,7 +460,6 @@ inline Pixel32 pixelutils_Shadow32_565(Pixel32 pixel)
 {
   return ((pixel&0xF7DEF7DE)>>1);
 }
-
 
 
 Pixel32 pixelutils_Lightening32_565(Pixel16 pixel);
@@ -525,7 +492,6 @@ inline Pixel16 pixelutils_Blend_555(Pixel16 pixel1, Pixel16 pixel2, short blend)
 	return static_cast<Pixel16>(r0 | g0 | b0);
 }
 
-
 inline Pixel16 pixelutils_Additive_555(Pixel16 pixel1, Pixel16 pixel2)
 {
 	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
@@ -541,7 +507,6 @@ inline Pixel16 pixelutils_Additive_555(Pixel16 pixel1, Pixel16 pixel2)
 	return static_cast<Pixel16>((r<<10) | (g<<5) | b);
 }
 
-
 inline Pixel16 pixelutils_BlendFast_555(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
 	sint32 rb2, g2;
@@ -556,12 +521,10 @@ inline Pixel16 pixelutils_BlendFast_555(sint32 pixel1, sint32 pixel2, sint32 ble
 	return static_cast<Pixel16>(rb0 | g0);
 }
 
-
 inline Pixel16 pixelutils_Shadow_555(Pixel16 pixel)
 {
     return static_cast<Pixel16>((pixel&0x7BDF)>>1);
 }
-
 
 inline Pixel16 pixelutils_Lightening_555(Pixel16 pixel)
 {
@@ -578,7 +541,6 @@ inline Pixel16 pixelutils_Lightening_555(Pixel16 pixel)
 
 	return static_cast<Pixel16>((r<<10) | (g<<5) | b);
 }
-
 
 inline Pixel16 pixelutils_PercentDarken_555(Pixel16 pixel, sint32 percent)
 {
@@ -599,7 +561,6 @@ inline Pixel16 pixelutils_PercentDarken_555(Pixel16 pixel, sint32 percent)
 
 	return static_cast<Pixel16>((r<<10) | (g<<5) | b);
 }
-
 
 inline Pixel16 pixelutils_PercentLighten_555(Pixel16 pixel, sint32 percent)
 {
@@ -628,26 +589,22 @@ inline Pixel16 pixelutils_PercentLighten_555(Pixel16 pixel, sint32 percent)
 }
 
 
-
 inline Pixel16 pixelutils_Desaturate_555(Pixel16 pixel)
 {
-	Pixel16 const ave = 
+	Pixel16 const ave =
         static_cast<Pixel16>((((pixel & 0x7C00) >> 10) + ((pixel & 0x03E0) >> 5) + (pixel & 0x001F)) / 3);
 
 	return static_cast<Pixel16>(((ave & 0x1F) << 10) | ((ave & 0x1F) << 5) | (ave & 0x1f));
 }
 
-
 Pixel32 pixelutils_Blend32_555(Pixel32 pixel1, Pixel32 pixel2, short blend);
 Pixel32 pixelutils_Additive32_555(Pixel32 pixel1, Pixel32 pixel2);
 Pixel32 pixelutils_BlendFast32_555(Pixel32 pixel1,Pixel32 pixel2, sint32 blend);
-
 
 inline Pixel32 pixelutils_Shadow32_555(Pixel32 pixel)
 {
     return static_cast<Pixel32>((pixel&0x7BDE7BDE)>>1);
 }
-
 
 Pixel32 pixelutils_Lightening32_555(Pixel32 pixel);
 Pixel32 pixelutils_PercentDarken32_555(Pixel32 pixel, sint32 percent);
@@ -657,5 +614,4 @@ Pixel16 pixelutils_Desaturate(Pixel16 pixel);
 Pixel16 pixelutils_RGB(int r,int g,int b);
 void pixelutils_ComputeRGBTable(void);
 
-#endif 
-
+#endif

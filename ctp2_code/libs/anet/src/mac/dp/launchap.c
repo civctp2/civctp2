@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //	EventRecord event;
 //	while (!done) {		/* wait for return receipt */
 //		WaitNextEvent(everyEvent, &event, SLEEP_DEF, nil);
-//		if (event.message != HighLevelEventMsgClass || pttolong(event.where) != rtrnReceiptMsgID) {			
+//		if (event.message != HighLevelEventMsgClass || pttolong(event.where) != rtrnReceiptMsgID) {
 //			SIOUXHandleOneEvent(&event);
 //		} else {
 //			msglen = 0;
@@ -70,7 +70,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //				} else {
 //					DPRINT(("dpLaunchApp: got return receipt from unknown source\n"));
 //				}
-//			}	
+//			}
 //		}
 //	}
 	/* stub accepted launch request; now wait for it to finish or timeout to expire*/
@@ -117,7 +117,7 @@ DP_API dp_result_t dpLaunchApp(dp_appParam_t *appParam)
 	FSSpec appFSSpec;
 	LaunchParamBlockRec launchParams;
 	static ProcessSerialNumber launchPSN;
-	
+
 	/* set up launchParams for appParam->path */
 	strcpy(buf, appParam->path);
 	err = FSMakeFSSpec(0, 0, c2pstr(buf), &appFSSpec);

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomatic request poll
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,6 @@
 #include "SelItem.h"
 extern SelectedItem *g_selected_item;
 
-
 	extern	StringDB	*g_theStringDB ;
 
 	extern	TurnCount	*g_turn ;
@@ -64,9 +63,9 @@ extern SelectedItem *g_selected_item;
 
 
 
- 
+
 #include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog; 
+extern Diplomacy_Log *g_theDiplomacyLog;
 
 #include "TradePool.h"
 extern TradePool *g_theTradePool;
@@ -78,8 +77,8 @@ extern TradePool *g_theTradePool;
 
 
 
-DiplomaticRequestData::DiplomaticRequestData(const ID id) 
-: 
+DiplomaticRequestData::DiplomaticRequestData(const ID id)
+:
     GameObj             (id.m_id),
 	m_round             (g_turn ? g_turn->GetRound() : 0),
     m_owner             (PLAYER_INDEX_INVALID),
@@ -89,15 +88,14 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id)
     m_response          (REQUEST_RESPONSE_TYPE_NULL),
     m_tone              (k_MESSAGE_TONE_NEUTRAL),
     m_advance           (0),
-    m_reciprocalAdvance (0),	
+    m_reciprocalAdvance (0),
     m_targetCity        (),
 	m_reciprocalCity    (),
 	m_amount            (0)
 { ; }
 
-
 DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request)
-: 
+:
     GameObj             (id.m_id),
 	m_round             (g_turn ? g_turn->GetRound() : 0),
     m_owner             (owner),
@@ -113,13 +111,12 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX own
 	m_amount            (0)
 { ; }
 
-
 void DiplomaticRequestData::Serialize(CivArchive &archive)
 {
 
 	CHECKSERIALIZE
 
-	GameObj::Serialize(archive); 
+	GameObj::Serialize(archive);
 	uint8 hasChild;
 
 	if (archive.IsStoring())
@@ -137,7 +134,6 @@ void DiplomaticRequestData::Serialize(CivArchive &archive)
 		m_targetCity.Serialize(archive) ;
 		m_reciprocalCity.Serialize(archive) ;
 		m_amount.Serialize(archive) ;
-
 
 		hasChild = m_lesser != NULL;
 		archive << hasChild;
@@ -166,7 +162,6 @@ void DiplomaticRequestData::Serialize(CivArchive &archive)
 		m_targetCity.Serialize(archive) ;
 		m_reciprocalCity.Serialize(archive) ;
 		m_amount.Serialize(archive) ;
-
 
 		archive >> hasChild;
 		if(hasChild)
@@ -247,7 +242,7 @@ void DiplomaticRequestData::SetGold(const Gold &amount)
 {
 	m_amount = amount ;
 #if 0
-	if(g_network.IsClient()) 
+	if(g_network.IsClient())
 	{
 		g_network.SendAction(new NetAction(NET_ACTION_SET_REQUEST_GOLD,
 										   (uint32)m_id,
@@ -274,7 +269,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 {
 	switch (m_request)
 	{
-		case REQUEST_TYPE_GREETING :								
+		case REQUEST_TYPE_GREETING :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : Greetings\n", i, m_owner, m_recipient)) ;
 			break ;
 
@@ -298,55 +293,55 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : demand stop trading with P%d\n", i, m_owner, m_recipient, m_thirdParty)) ;
 			break ;
 
-		case REQUEST_TYPE_DEMAND_ATTACK_ENEMY :						
+		case REQUEST_TYPE_DEMAND_ATTACK_ENEMY :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : demand attack enemy P%d\n", i, m_owner, m_recipient, m_thirdParty)) ;
 			break ;
 
-		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS :					
+		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : vacate lands\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION :					
+		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : reduce pollution\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_ADVANCE :							
+		case REQUEST_TYPE_OFFER_ADVANCE :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of Advance #%d\n", i, m_owner, m_recipient, m_advance)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_CITY :								
+		case REQUEST_TYPE_OFFER_CITY :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of City #%d\n", i, m_owner, m_recipient, m_targetCity)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_MAP :								
+		case REQUEST_TYPE_OFFER_MAP :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of map\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_GOLD :								
+		case REQUEST_TYPE_OFFER_GOLD :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of %d Gold\n", i, m_owner, m_recipient, m_amount)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_CEASE_FIRE :						
+		case REQUEST_TYPE_OFFER_CEASE_FIRE :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offers cease fire\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE :				
+		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer permanent alliance\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY :					
+		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer pact to capture City #%d\n", i, m_owner, m_recipient, m_targetCity)) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION :			
+		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer pact to end pollution\n", i, m_owner, m_recipient)) ;
 			break ;
 
-		case REQUEST_TYPE_EXCHANGE_ADVANCE :						
+		case REQUEST_TYPE_EXCHANGE_ADVANCE :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : exchange Advance #%d for Advance #%d\n", i, m_owner, m_recipient, m_advance, m_reciprocalAdvance)) ;
 			break ;
 
-		case REQUEST_TYPE_EXCHANGE_CITY :							
+		case REQUEST_TYPE_EXCHANGE_CITY :
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : exchange City #%d for City #%d\n", i, m_owner, m_recipient, m_reciprocalCity, m_targetCity)) ;
 			break ;
 
@@ -356,7 +351,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 
 		default :
 			Assert(0) ;
-			
+
 			break ;
 
 	}
@@ -381,7 +376,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 
 #ifdef _DEBUG
     if (g_theDiplomacyLog) {
-        g_theDiplomacyLog->LogEnact(m_owner, m_recipient, m_request);	
+        g_theDiplomacyLog->LogEnact(m_owner, m_recipient, m_request);
     }
 #endif // _DEBUG
 
@@ -389,10 +384,9 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 		g_network.SendAction(new NetAction(NET_ACTION_ENACT_REQUEST,
 										   (uint32)m_id));
 		DiplomaticRequest me(m_id);
-		if(!g_network.IsLocalPlayer(g_selected_item->GetCurPlayer())) 
+		if(!g_network.IsLocalPlayer(g_selected_item->GetCurPlayer()))
 			g_network.AddEnact(me);
-		
-		
+
 		if(!g_network.IsMyTurn())
 			return;
 	} else if(g_network.IsHost()) {
@@ -410,9 +404,9 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			g_network.Unblock(g_selected_item->GetCurPlayer());
 		}
 	}
-	
+
 	if(!g_player[m_owner] || !g_player[m_recipient]) {
-		
+
 		DiplomaticRequest me(m_id);
 		me.Kill();
 		return;
@@ -472,7 +466,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 
 		case REQUEST_TYPE_DEMAND_STOP_TRADE :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_DEMAND_STOP_TRADE, m_thirdParty) ;
-			g_player[m_recipient]->StopTradingWith(m_thirdParty) ;		
+			g_player[m_recipient]->StopTradingWith(m_thirdParty) ;
             g_theTradePool->BreakOffTrade(m_owner, m_thirdParty);
 			so = new SlicObject("01dipAcceptDemandStoptrade");
 			so->AddRecipient(m_owner) ;
@@ -481,8 +475,8 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			so->AddCivilisation(m_thirdParty) ;
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 
-            
-            
+
+
 
 
 			break ;
@@ -494,14 +488,13 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			so->AddCivilisation(m_recipient) ;
 			so->AddCivilisation(m_thirdParty) ;
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
-            
-            
+
 
             g_theTradePool->BreakOffTrade(m_owner, m_thirdParty);
             g_theTradePool->BreakOffTrade(m_recipient, m_thirdParty);
 			break ;
 
-		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS :					
+		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS :
 			g_player[m_owner]->MakeLeaveOurLands(m_recipient) ;
 			so = new SlicObject("01dipAcceptDemandLeave");
 			so->AddRecipient(m_owner) ;
@@ -510,7 +503,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION :					
+		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION :
 			g_player[m_owner]->MakeReducePollution(m_recipient) ;
 			so = new SlicObject("01dipAcceptDemandPollution");
 			so->AddRecipient(m_owner) ;
@@ -519,7 +512,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_ADVANCE :							
+		case REQUEST_TYPE_OFFER_ADVANCE :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_OFFER_ADVANCE) ;
 			g_player[m_owner]->GiveAdvance(m_recipient, m_advance, CAUSE_SCI_DIPLOMACY) ;
 			g_slicEngine->RunDiscoveryTradedTriggers(m_owner, m_recipient, m_advance);
@@ -532,7 +525,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_CITY :								
+		case REQUEST_TYPE_OFFER_CITY :
 #ifdef _DIPLOMATIC_CITY_EXCHANGE
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_OFFER_CITY) ;
 			g_player[m_owner]->GiveCity(m_recipient, m_targetCity) ;
@@ -545,7 +538,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 #endif
 			break ;
 
-		case REQUEST_TYPE_OFFER_MAP :								
+		case REQUEST_TYPE_OFFER_MAP :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_OFFER_MAP) ;
 			g_player[m_owner]->GiveMap(m_recipient) ;
 			so = new SlicObject("01dipAcceptOfferMaps");
@@ -555,7 +548,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_GOLD :								
+		case REQUEST_TYPE_OFFER_GOLD :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_OFFER_GOLD) ;
 			g_player[m_owner]->GiveGold(m_recipient, m_amount) ;
 			so = new SlicObject("01dipAcceptOfferGold");
@@ -566,7 +559,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_CEASE_FIRE :						
+		case REQUEST_TYPE_OFFER_CEASE_FIRE :
 			g_player[m_owner]->MakeCeaseFire(m_recipient) ;
 			so = new SlicObject("01dipAcceptTreatyCease");
 			so->AddRecipient(m_owner) ;
@@ -575,7 +568,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE :				
+		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE :
 			g_player[m_owner]->FormAlliance(m_recipient) ;
 			so = new SlicObject("01dipAcceptTreatyAlliance");
 			so->AddRecipient(m_owner) ;
@@ -584,11 +577,11 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY :					
+		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY :
 			g_player[m_owner]->MakeCaptureCityPact(m_recipient, m_targetCity) ;
 			break ;
 
-		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION :			
+		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION :
 		{
 			g_player[m_owner]->MakeEndPollutionPact(m_recipient) ;
 			so = new SlicObject("01dipAcceptTreatyEco");
@@ -598,10 +591,9 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 
 			SlicObject *so2 = new SlicObject("01dipAcceptTreatyEco");
-			
-			
-			
-			so2->AddRecipient(m_recipient);	
+
+
+			so2->AddRecipient(m_recipient);
 			so2->AddCivilisation(m_recipient) ;
 			so2->AddCivilisation(m_owner) ;
 			so2->AddAttitude(ATTITUDE_TYPE_NEUTRAL);
@@ -609,10 +601,10 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			break ;
 		}
 
-		case REQUEST_TYPE_EXCHANGE_ADVANCE :						
+		case REQUEST_TYPE_EXCHANGE_ADVANCE :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_EXCHANGE_ADVANCE) ;
-			g_player[m_owner]->GiveAdvance(m_recipient, m_advance, CAUSE_SCI_DIPLOMACY) ;	
-			g_player[m_recipient]->GiveAdvance(m_owner, m_reciprocalAdvance, CAUSE_SCI_DIPLOMACY) ;	
+			g_player[m_owner]->GiveAdvance(m_recipient, m_advance, CAUSE_SCI_DIPLOMACY) ;
+			g_player[m_recipient]->GiveAdvance(m_owner, m_reciprocalAdvance, CAUSE_SCI_DIPLOMACY) ;
 
 			g_slicEngine->RunDiscoveryTradedTriggers(m_owner, m_recipient, m_advance);
 			g_slicEngine->RunDiscoveryTradedTriggers(m_recipient, m_owner, m_reciprocalAdvance);
@@ -626,7 +618,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-		case REQUEST_TYPE_EXCHANGE_CITY :							
+		case REQUEST_TYPE_EXCHANGE_CITY :
 #ifdef _DIPLOMATIC_CITY_EXCHANGE
 			so = new SlicObject("01dipAcceptExchangeCity");
 			so->AddRecipient(m_owner) ;
@@ -637,13 +629,13 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_EXCHANGE_CITY) ;
-			g_player[m_recipient]->ExchangeCity(m_owner, m_reciprocalCity, m_targetCity) ;	
+			g_player[m_recipient]->ExchangeCity(m_owner, m_reciprocalCity, m_targetCity) ;
 #endif
 			break ;
 
 		case REQUEST_TYPE_EXCHANGE_MAP :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_EXCHANGE_MAP) ;
-			g_player[m_recipient]->ExchangeMap(m_owner) ;			
+			g_player[m_recipient]->ExchangeMap(m_owner) ;
 			so = new SlicObject("01dipAcceptExchangeMaps");
 			so->AddRecipient(m_owner) ;
 			so->AddCivilisation(m_owner) ;
@@ -652,7 +644,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			break ;
 
 		case REQUEST_TYPE_DEMAND_NO_PIRACY :
-			g_player[m_owner]->MakeNoPiracyPact(m_recipient) ;			
+			g_player[m_owner]->MakeNoPiracyPact(m_recipient) ;
 			so = new SlicObject("01dipAcceptDemandPiracy");
 			so->AddRecipient(m_owner) ;
 			so->AddCivilisation(m_owner) ;
@@ -660,9 +652,8 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
 
-
 		default :
-			
+
 			break ;
 
 		}
@@ -674,15 +665,14 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 		g_player[m_owner]->RegisterDiplomaticResponse(DiplomaticRequest(m_id));
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
-        g_theDiplomacyLog->LogRegard(m_owner, m_recipient); 
-        g_theDiplomacyLog->LogRegard(m_recipient, m_owner); 
-    } 
+    if (g_theDiplomacyLog) {
+        g_theDiplomacyLog->LogRegard(m_owner, m_recipient);
+        g_theDiplomacyLog->LogRegard(m_recipient, m_owner);
+    }
 #endif // _DEBUG
 
 	DiplomaticRequest me(m_id);
 	me.Kill();
-
 
 
 }
@@ -733,17 +723,17 @@ void DiplomaticRequestData::Reject(BOOL fromServer)
 									  (uint32)m_id));
 		g_network.Unblock(m_recipient);
 	}
-	
+
 	if(!g_player[m_owner] || g_player[m_owner]->m_isDead ||
 	   !g_player[m_recipient] || g_player[m_recipient]->m_isDead) {
 		return;
 	}
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
-        g_theDiplomacyLog->LogReject(m_owner, m_recipient, m_request); 
-    } 
-#endif 
+    if (g_theDiplomacyLog) {
+        g_theDiplomacyLog->LogReject(m_owner, m_recipient, m_request);
+    }
+#endif
 
 	m_response = REQUEST_RESPONSE_TYPE_REJECTED ;
 	switch (m_request)
@@ -899,7 +889,7 @@ void DiplomaticRequestData::Reject(BOOL fromServer)
 			so->AddCity(m_reciprocalCity) ;
             so->AddAttitude(GetAttitude(m_recipient, m_owner));
 			break ;
-		
+
 		case REQUEST_TYPE_EXCHANGE_ADVANCE :
 			so = new SlicObject("01dipRejectExchangeAdvance");
 			so->AddRecipient(m_owner) ;
@@ -940,10 +930,10 @@ void DiplomaticRequestData::Reject(BOOL fromServer)
 	g_player[m_owner]->RegisterDiplomaticResponse(DiplomaticRequest(m_id));
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
-        g_theDiplomacyLog->LogRegard(m_owner, m_recipient); 
-        g_theDiplomacyLog->LogRegard(m_recipient, m_owner); 
-    } 
+    if (g_theDiplomacyLog) {
+        g_theDiplomacyLog->LogRegard(m_owner, m_recipient);
+        g_theDiplomacyLog->LogRegard(m_recipient, m_owner);
+    }
 #endif // _DEBUG
 
 }
@@ -1022,7 +1012,6 @@ MBCHAR *DiplomaticRequestData::GetRequestString(void)
     return(NULL);
 }
 
-
 void DiplomaticRequestData::SetAdvance(const AdvanceType &advance)
 {
 	m_advance = advance;
@@ -1041,11 +1030,11 @@ void DiplomaticRequestData::SetWanted(const Unit &city)
 void DiplomaticRequestData::Complete()
 {
 	switch(GetAttitude(m_owner, m_recipient)) {
-		case ATTITUDE_TYPE_STRONG_HOSTILE: 
-			m_tone = k_MESSAGE_TONE_HOSTILE; 
+		case ATTITUDE_TYPE_STRONG_HOSTILE:
+			m_tone = k_MESSAGE_TONE_HOSTILE;
 			break;
-		case ATTITUDE_TYPE_WEAK_HOSTILE: 
-			m_tone = k_MESSAGE_TONE_HOSTILE; 
+		case ATTITUDE_TYPE_WEAK_HOSTILE:
+			m_tone = k_MESSAGE_TONE_HOSTILE;
 			break;
 		case ATTITUDE_TYPE_NEUTRAL:
 			m_tone = k_MESSAGE_TONE_NEUTRAL;
@@ -1062,8 +1051,8 @@ void DiplomaticRequestData::Complete()
 	}
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
-        g_theDiplomacyLog->LogTone(m_owner, m_recipient, GetAttitude(m_owner, m_recipient)); 
+    if (g_theDiplomacyLog) {
+        g_theDiplomacyLog->LogTone(m_owner, m_recipient, GetAttitude(m_owner, m_recipient));
     }
 #endif // _DEBUG
 

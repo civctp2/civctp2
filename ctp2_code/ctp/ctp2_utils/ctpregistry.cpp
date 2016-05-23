@@ -8,9 +8,9 @@ BOOL ctpregistry_DoesKeyExist(void *key, MBCHAR *subKey)
 	BOOL opened;
 	HKEY newKey;
 
-	opened = RegOpenKeyEx((HKEY)key, subKey, 
-						  0,  
-						  KEY_READ, 
+	opened = RegOpenKeyEx((HKEY)key, subKey,
+						  0,
+						  KEY_READ,
 						  &newKey) == ERROR_SUCCESS;
 	if(opened) {
 		RegCloseKey(newKey);
@@ -23,7 +23,7 @@ BOOL ctpregistry_DoesKeyExist(void *key, MBCHAR *subKey)
 
 
 
-BOOL ctpregistry_SetKeyValue(void *key, MBCHAR *subKey, 
+BOOL ctpregistry_SetKeyValue(void *key, MBCHAR *subKey,
 							 MBCHAR *name,
 							 MBCHAR *value)
 {
@@ -57,16 +57,15 @@ MBCHAR *ctpregistry_GetKeyValue(void *key,
 								MBCHAR *subKey,
 								MBCHAR *name)
 {
-	
-	
+
 	static MBCHAR valBuf[_MAX_PATH];
 	BOOL opened;
 	HKEY theKey;
 	DWORD valueType;
 	DWORD bufSize;
-	opened = RegOpenKeyEx((HKEY)key, subKey, 
-						  0,  
-						  KEY_READ, 
+	opened = RegOpenKeyEx((HKEY)key, subKey,
+						  0,
+						  KEY_READ,
 						  &theKey) == ERROR_SUCCESS;
 	if(opened) {
 		BOOL queried;

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -49,7 +49,7 @@
 
 class SpriteGroup;
 
-enum GROUPTYPE 
+enum GROUPTYPE
 {
 	GROUPTYPE_GROUP,
 
@@ -58,7 +58,6 @@ enum GROUPTYPE
 	GROUPTYPE_EFFECT,
 	GROUPTYPE_CITY,
 	GROUPTYPE_GOOD,
-
 
 	GROUPTYPE_MAX
 };
@@ -89,8 +88,8 @@ class Sprite;
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
- 
-class SpriteGroup 
+
+class SpriteGroup
 {
 public:
 	SpriteGroup(GROUPTYPE type);
@@ -106,13 +105,13 @@ public:
 	virtual void	DeallocateStorage(void);
 	virtual void	DeallocateFullLoadAnims(void);
 
-	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	virtual void	DrawText(sint32 x, sint32 y, MBCHAR const * s);
 
 	virtual void	AddRef(void);
 	virtual void	Release(void);
-	
+
 	virtual void	AddFullLoadRef(void);
 	virtual void	ReleaseFullLoad(void);
 
@@ -124,7 +123,6 @@ public:
 	LOADTYPE		GetLoadType(void) const { return m_loadType; }
 	void			SetLoadType(LOADTYPE type) { m_loadType = type; }
 
-	
 	Sprite *        GetGroupSprite(GAME_ACTION action) const { return m_sprites[action]; }
 	void			SetGroupSprite (GAME_ACTION action, Sprite *sprite) { m_sprites[action] = sprite; }
 
@@ -141,22 +139,22 @@ public:
 
 	bool			HasDirectional(void) const { return m_hasDirectional; }
 	void			SetHasDirectional(bool val) { m_hasDirectional = val; }
- 
+
 	bool			HasDeath(void) const { return m_hasDeath; }
 	void			SetHasDeath(bool val) { m_hasDeath = val; }
 
-  
-  
+
+
 
 private:
-	
+
 	GROUPTYPE		m_type;
 
 protected:
 	sint32			m_width, m_height;
-	
-	sint32			m_usageRefCount;			
-	sint32			m_fullLoadRefCount;			
+
+	sint32			m_usageRefCount;
+	sint32			m_fullLoadRefCount;
 
 	LOADTYPE		m_loadType;
 
@@ -166,6 +164,5 @@ protected:
 	bool			m_hasDeath;
 	bool			m_hasDirectional;
 };
-
 
 #endif

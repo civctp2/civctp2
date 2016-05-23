@@ -121,8 +121,8 @@ void NetMessage::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 }
 
-NetInfoMessage::NetInfoMessage(NET_MSG_TYPE msg, 
-							   const MBCHAR *playerName, 
+NetInfoMessage::NetInfoMessage(NET_MSG_TYPE msg,
+							   const MBCHAR *playerName,
 							   sint32 index)
 {
 	m_msg = msg;
@@ -145,7 +145,7 @@ void NetInfoMessage::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	sint32 pos = 0;
 	PULLID(packid);
 	Assert(packid == k_PACKET_NET_INFO_MESSAGE_ID);
-	
+
 	PULLLONGTYPE(m_msg, NET_MSG_TYPE);
 	MBCHAR name[1024];
 	PULLSTRING(name);
@@ -168,4 +168,3 @@ void NetInfoMessage::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	Assert(pos == size);
 }
-

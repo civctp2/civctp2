@@ -2,7 +2,6 @@
 
 #include "EmptyTile.h"
 
-
 EmptyTile::EmptyTile(MapPoint &pos, sint32 f, sint32 p, sint32 g)
 {
 	m_pos = pos ;
@@ -18,7 +17,6 @@ EmptyTile::EmptyTile(EmptyTile *tile)
 	m_production = tile->GetProduction() ;
 	m_gold = tile->GetGold() ;
 	}
-
 
 EmptyTile::EmptyTile(void)
 	{

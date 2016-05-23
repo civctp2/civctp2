@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -8,7 +7,6 @@
 #include "aui_action.h"
 
 class c3_UpdateAction;
-
 
 class c3_UpdateAction : public aui_Action
 {
@@ -28,7 +26,6 @@ public:
 
 	virtual c3_UpdateAction * CopyMe(void);
 };
-
 
 
 #endif

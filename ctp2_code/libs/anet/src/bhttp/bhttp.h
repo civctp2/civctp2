@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -96,7 +96,7 @@ bhttp_t *bhttp_create(unsigned short port, bhttp_url2buf_t url2buf_cb, void *url
 void bhttp_destroy(bhttp_t *bhttp);
 
 /*------------------------------------------------------------------------
- Gets the set of sockets that need reading into *rfds, and writing 
+ Gets the set of sockets that need reading into *rfds, and writing
  into *wfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
@@ -104,14 +104,14 @@ int bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds);
 
 /*------------------------------------------------------------------------
  Handle any new connections, data, or handle state changes.
- rfds and wfds should be the same fd_set*'s that were passed to select 
+ rfds and wfds should be the same fd_set*'s that were passed to select
  as it's second and third parameters.
  nsocks is the return value of select.
 
  Call this once after each select, regardless of whether select times out.
 
  Returns 0 upon success.
- Returns -1 on error; detailed error message is printed to log file if 
+ Returns -1 on error; detailed error message is printed to log file if
  this is a debug build.
 ------------------------------------------------------------------------*/
 int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks);

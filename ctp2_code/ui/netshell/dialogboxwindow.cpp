@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,17 +57,16 @@ DialogBoxWindow::DialogBoxWindow(
 				 aui_UniqueId(),
 				 ldlBlock,
 				 0,
-				 AUI_WINDOW_TYPE_FLOATING 
+				 AUI_WINDOW_TYPE_FLOATING
 				),
 	m_numButtons	(0),
-	m_buttons		(NULL) 
+	m_buttons		(NULL)
 {
 	if ( !AUI_SUCCESS(*retval) ) return;
 	*retval = InitCommon();
 	if ( !AUI_SUCCESS(*retval) ) return;
 	*retval = CreateControls( ldlBlock, actions );
 }
-
 
 AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 {
@@ -78,7 +77,6 @@ AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE DialogBoxWindow::CreateControls(
 	MBCHAR *ldlBlock,
@@ -260,7 +258,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 		control = NULL;
 	m_controls[ CONTROL_PROGRESSBAR ] = control;
 
-	
 	do
 	{
 		sprintf( block, "%s.button%d", ldlBlock, m_numButtons );
@@ -278,7 +275,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 		Assert( m_buttons != NULL );
 		if ( !m_buttons ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-		
 		memset( m_buttons, 0, m_numButtons * sizeof( aui_Button * ) );
 
 		for ( sint32 i = 0; i < m_numButtons; i++ )
@@ -289,7 +285,7 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 			m_buttons[ i ] = spNew_ctp2_Button(
 				&errcode,
 				ldlBlock,
-				block, 
+				block,
 				NULL);
 
 			Assert( AUI_NEWOK(m_buttons[i],errcode) );
@@ -308,7 +304,6 @@ AUI_ERRCODE DialogBoxWindow::CreateControls(
 	return AUI_ERRCODE_OK;
 }
 
-
 DialogBoxWindow::~DialogBoxWindow()
 {
 	if (m_buttons)
@@ -320,7 +315,6 @@ DialogBoxWindow::~DialogBoxWindow()
 		delete[] m_buttons;
 	}
 }
-
 
 DialogBoxWindow *DialogBoxWindow::PopUp(
 	MBCHAR *ldlBlock,
@@ -346,7 +340,6 @@ DialogBoxWindow *DialogBoxWindow::PopUp(
 	return dbw;
 }
 
-
 void DialogBoxWindow::PopDown( DialogBoxWindow *dbw, aui_Button *button )
 {
 	Assert( dbw != NULL );
@@ -364,7 +357,6 @@ void DialogBoxWindow::PopDown( DialogBoxWindow *dbw, aui_Button *button )
 
 	g_ui->AddAction( new SafeDeleteAction( dbw ) );
 }
-
 
 void DialogBoxWindow::SafeDeleteAction::Execute(
 	aui_Control *control,

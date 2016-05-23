@@ -9,9 +9,9 @@
 class NetIOResponse
 {
 public:
-	virtual void EnumTransport(NET_ERR result, 
+	virtual void EnumTransport(NET_ERR result,
 								sint32 index,
-								const char* transname, 
+								const char* transname,
 								void* transdata) = 0;
 	virtual void EnumSession(NET_ERR result,
 							  sint32 index,
@@ -31,7 +31,7 @@ public:
 	virtual bool ReadyForPackets() = 0;
 };
 
-class NetIO 
+class NetIO
 {
 public:
 	virtual NET_ERR Init(NetIOResponse* response);

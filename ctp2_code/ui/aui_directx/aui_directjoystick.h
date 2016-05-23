@@ -8,11 +8,10 @@
 #include "aui_joystick.h"
 #include "aui_directinput.h"
 
-
 class aui_DirectJoystick : public aui_Joystick, public aui_DirectInput
 {
 public:
-	
+
 	aui_DirectJoystick(
 		AUI_ERRCODE *retval,
 		uint32 lMin = -1000,
@@ -33,11 +32,10 @@ protected:
 	AUI_ERRCODE CreateDirectJoystick( void );
 
 public:
-	
+
 	virtual AUI_ERRCODE Acquire( void ) { return aui_DirectInput::Acquire(); }
 	virtual AUI_ERRCODE Unacquire( void ) { return aui_DirectInput::Unacquire(); }
 
-	
 	virtual AUI_ERRCODE GetInput( void );
 
 protected:
@@ -50,8 +48,8 @@ protected:
 
 typedef aui_DirectJoystick aui_NativeJoystick;
 
-#endif 
+#endif
 
-#endif 
+#endif
 
-#endif 
+#endif

@@ -1,14 +1,11 @@
-
 #pragma once
 
 #ifndef __IC3Wonder_H__
 #define __IC3Wonder_H__ 1
 
+#include <OBJBASE.H>
 
-#include <OBJBASE.H>  
-
-
-enum WONDER_EFFECT { 
+enum WONDER_EFFECT {
 	WONDER_EFFECT_EMBASSY,
 	WONDER_EFFECT_CLOSE_EMBASSY,
 	WONDER_EFFECT_REFORM_CITIES,
@@ -37,8 +34,8 @@ enum WONDER_EFFECT {
 	WONDER_EFFECT_POLLUTERS_TO_PARKS,
 	WONDER_EFFECT_REDUCE_WORLD_POLLUTION,
     WONDER_EFFECT_POLLUTION_BONUS,
-	WONDER_EFFECT_POLLUTION_CLEANER, 
-    WONDER_EFFECT_MAX 
+	WONDER_EFFECT_POLLUTION_CLEANER,
+    WONDER_EFFECT_MAX
 };
 
 DEFINE_GUID(CLSID_IC3Wonder, 0x5cdc3321, 0x69e, 0x11d2, 0x83, 0x55, 0x0, 0xc0, 0x4f, 0xba, 0x43, 0xc0) ;
@@ -48,7 +45,6 @@ DEFINE_GUID(CLSID_IC3Wonder, 0x5cdc3321, 0x69e, 0x11d2, 0x83, 0x55, 0x0, 0xc0, 0
 
 DECLARE_INTERFACE_(IC3Wonder, IUnknown)
 	{
- 	
 
 	STDMETHOD_ (sint32, GetNumWonders)(THIS_) PURE ;
 	STDMETHOD_ (BOOL, HasBeenBuilt)(THIS_ sint32 wonder_type) PURE ;
@@ -57,15 +53,14 @@ DECLARE_INTERFACE_(IC3Wonder, IUnknown)
 	STDMETHOD_ (sint32, ObsoleteDiscovery)(THIS_ sint32 wonder_type) PURE ;
     STDMETHOD_ (BOOL, WondersAvailable) (THIS_ sint32 player_idx) PURE;
 
-    STDMETHOD_ (sint32, GetProductionCost) (THIS_ sint32 wonder_type) PURE; 
+    STDMETHOD_ (sint32, GetProductionCost) (THIS_ sint32 wonder_type) PURE;
     STDMETHOD_ (void, GetAllEffects) (THIS_ sint32 wonder_type, double *effects) PURE;
-    STDMETHOD_ (char *, Wonder_Int_To_String) (THIS_ sint32 wonder_type) PURE; 
-    STDMETHOD_ (sint32, Wonder_String_To_Int) (THIS_ char *wonder_name) PURE; 
-    STDMETHOD_ (double, MaxPecentageThisWonderDone) (THIS_ sint32 wonder_type) PURE; 
-    STDMETHOD_ (BOOL, CanBuild) (THIS_ sint32 wonder_type) PURE; 
-	STDMETHOD_ (BOOL, IsObsolete) (THIS_ sint32 wonder_type) PURE; 
-    STDMETHOD_ (BOOL, IsWormholeDetectorBuilt)(THIS_) PURE; 
-
+    STDMETHOD_ (char *, Wonder_Int_To_String) (THIS_ sint32 wonder_type) PURE;
+    STDMETHOD_ (sint32, Wonder_String_To_Int) (THIS_ char *wonder_name) PURE;
+    STDMETHOD_ (double, MaxPecentageThisWonderDone) (THIS_ sint32 wonder_type) PURE;
+    STDMETHOD_ (BOOL, CanBuild) (THIS_ sint32 wonder_type) PURE;
+	STDMETHOD_ (BOOL, IsObsolete) (THIS_ sint32 wonder_type) PURE;
+    STDMETHOD_ (BOOL, IsWormholeDetectorBuilt)(THIS_) PURE;
 
 	} ;
 

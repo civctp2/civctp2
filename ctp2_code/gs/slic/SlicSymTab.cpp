@@ -3,7 +3,7 @@
 #include "SlicEngine.h"
 #include "civarchive.h"
 
-SlicSymTab::SlicSymTab(sint32 size) : 
+SlicSymTab::SlicSymTab(sint32 size) :
 	StringHash<SlicNamedSymbol>(k_SLIC_SYM_TAB_HASH_SIZE)
 {
 	m_arraySize = m_numEntries = size;
@@ -25,9 +25,8 @@ SlicSymTab::~SlicSymTab()
 {
 	if(m_array) {
 #if 0
-		
-		
-		
+
+
 		for(sint32 i = 0; i < m_numEntries; i++) {
 			if(m_array[i])
 				delete m_array[i];
@@ -74,7 +73,7 @@ void SlicSymTab::PostSerialize()
 {
 	for(sint32 i = 0; i < m_numEntries; i++) {
 		if(m_array[i]) {
-			
+
 		}
 	}
 }
@@ -95,7 +94,7 @@ void SlicSymTab::Add(SlicNamedSymbol *sym)
 			free(g_slicSymTab[index]->m_region);
 		}
 		free(g_slicSymTab[index]);
-		
+
 		g_slicSymTab[index] = NULL;
 	} else {
 #endif

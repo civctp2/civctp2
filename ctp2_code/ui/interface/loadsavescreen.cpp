@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -62,7 +62,7 @@
 #ifdef WIN32
 #include <direct.h>
 #endif // WIN32
-#include "gamefile.h"                   // SAVE_LEADER_NAME_SIZE	
+#include "gamefile.h"                   // SAVE_LEADER_NAME_SIZE
 #include "gameinit.h"
 #include "Globals.h"                    // allocated::reassign
 #include "hotseatlist.h"
@@ -124,10 +124,10 @@ void loadsavescreen_deleteDialog( bool response, void *data )
 sint32	loadsavescreen_displayMyWindow(uint32 type)
 {
     AUI_ERRCODE retval = g_loadsaveWindow ? AUI_ERRCODE_OK : loadsavescreen_Initialize();
-	
+
 	g_loadsaveWindow->CleanUpSaveInfo();
 
-	if (retval == AUI_ERRCODE_OK) 
+	if (retval == AUI_ERRCODE_OK)
     {
 		g_loadsaveWindow->SetType(type);
 		g_c3ui->AddWindow(g_loadsaveWindow);
@@ -149,10 +149,9 @@ sint32 loadsavescreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	if ( g_loadsaveWindow ) return AUI_ERRCODE_OK; 
+	if ( g_loadsaveWindow ) return AUI_ERRCODE_OK;
 
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "LoadSaveWindow");
@@ -165,7 +164,6 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-	
 	switch ( g_loadsaveWindow->GetType() )
 	{
 	case LSS_LOAD_GAME:
@@ -188,7 +186,6 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 	g_loadsaveWindow->GetListOne()->GetHeader()->Enable( FALSE );
 	g_loadsaveWindow->GetListTwo()->GetHeader()->Enable( FALSE );
 
-	
 	if ( callback )
 		g_loadsaveWindow->GetOkButton()->SetActionFuncAndCookie(
 			callback, NULL );
@@ -233,8 +230,8 @@ static SaveInfo	*s_tempSaveInfo = NULL;
 
 
 
-void loadsavescreen_HotseatCallback(sint32 launch, sint32 player, 
-									 sint32 civ, BOOL human, 
+void loadsavescreen_HotseatCallback(sint32 launch, sint32 player,
+									 sint32 civ, BOOL human,
 									 MBCHAR *name, MBCHAR *email)
 {
 	if(launch) {
@@ -261,7 +258,7 @@ void loadsavescreen_HotseatCallback(sint32 launch, sint32 player,
 
 
 	} else {
-		
+
 		g_hsPlayerSetup[player].civ = civ;
 		g_hsPlayerSetup[player].isHuman = human;
 		delete [] g_hsPlayerSetup[player].name;
@@ -466,7 +463,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 		{
 			spnewgametribescreen_Cleanup();
 			spnewgametribescreen_Initialize( loadsavescreen_TribeScreenActionCallback );
-			
+
 			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED)
 			{
 				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->NumRecords() - 1));
@@ -500,18 +497,18 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 						if (noCivsInList)
 						{
 							BOOL foundOne = FALSE;
-							
+
 							for (size_t i = 0; i < k_MAX_PLAYERS; ++i)
 							{
 								MBCHAR *    civName = s_tempSaveInfo->civList[i];
-								
+
 								if (strlen(civName) > 0)
 								{
 									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++)
 									{
-										MBCHAR const *  dbString = 
+										MBCHAR const *  dbString =
 										    g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
-										
+
 										if (!stricmp(dbString, civName))
 										{
 											spnewgametribescreen_addTribeNoDuplicate(j);
@@ -540,7 +537,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 							}
 						}
 					}
-					
+
 					spnewgametribescreen_displayMyWindow(NULL, TRUE);
 
 					return;
@@ -564,80 +561,72 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 	allocated::clear(s_tempSaveInfo);
 }
 
-
 void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 {
 	MBCHAR		path[_MAX_PATH];
 	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
 
 	if (saveInfo->startInfoType != STARTINFOTYPE_NONE) {
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		if (saveInfo->scenarioName != NULL && strlen(saveInfo->scenarioName) > 0) {
-			
-			
+
 			Scenario		*scen;
 			ScenarioPack	*pack;
 
 			if (g_civScenarios->FindScenario(saveInfo->scenarioName, &pack, &scen)) {
-				
+
 				g_civPaths->SetCurScenarioPath(scen->m_path);
 				g_civPaths->SetCurScenarioPackPath(pack->m_path);
 				g_theProfileDB->SetIsScenario(TRUE);
-				
-				
+
 				strcpy(g_scenarioName, saveInfo->scenarioName);
 			} else {
-				
-				
+
 				MBCHAR tempStr[_MAX_PATH];
 				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
-				
-				
+
 				MessageBoxDialog::Information(tempStr,"CantLoadScenario",NULL, NULL, "str_ldl_MB_OK", false);
 				return;
 			}
 		} else {
-			
-			
+
 			g_civPaths->SetCurScenarioPath(directoryPath);
 			g_theProfileDB->SetIsScenario(TRUE);
-			
+
 			g_isScenario = true;
 		}
 	} else {
-		
+
 		BOOL wasScenario = saveInfo->scenarioName != NULL && strlen(saveInfo->scenarioName) > 0;
 
-		
-		
 
-		
-		
-		
-		
+
+
+
+
+
+
 		g_civPaths->ClearCurScenarioPath();
 		g_theProfileDB->SetIsScenario(FALSE);
 
 		if (wasScenario) {
-			
+
 			Scenario *scen;
 			ScenarioPack *pack;
 			if(g_civScenarios->FindScenario(saveInfo->scenarioName, &pack, &scen)) {
 				g_civPaths->SetCurScenarioPath(scen->m_path);
 				g_civPaths->SetCurScenarioPackPath(pack->m_path);
 			} else {
-				
-				
+
 				MBCHAR tempStr[_MAX_PATH];
 				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
-				
-				
+
 				MessageBoxDialog::Information(tempStr,"CantLoadScenarioData",NULL, NULL, "str_ldl_MB_OK", false);
 				return;
 			}
@@ -651,17 +640,17 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		(saveInfo->startInfoType == STARTINFOTYPE_CIVS ||
 		 saveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED ||
 		 saveInfo->startInfoType == STARTINFOTYPE_CIVSFIXED ||
-		 saveInfo->startInfoType == STARTINFOTYPE_NOLOCS)) { 
+		 saveInfo->startInfoType == STARTINFOTYPE_NOLOCS)) {
 
-		
-		
 
-		
-		
+
+
+
+
 		strcpy(s_tempPath, path);
 		allocated::reassign(s_tempSaveInfo, new SaveInfo(saveInfo));
 
-		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS) 
+		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS)
 		{
 			loadsavescreen_PlayersScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 		}
@@ -673,12 +662,10 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 			spnewgameplayersscreen_displayMyWindow();
 		}
 	} else {
-		
-		
+
 		g_civApp->PostLoadSaveGameAction(path);
 	}
 }
-
 
 
 void loadsavescreen_LoadGame(void)
@@ -689,7 +676,7 @@ void loadsavescreen_LoadGame(void)
 	if (!gameInfo) return;
 	if (!c3files_HasLegalCD()) return;
 
-	if (SaveInfo * saveInfo = g_loadsaveWindow->GetSaveInfo()) 
+	if (SaveInfo * saveInfo = g_loadsaveWindow->GetSaveInfo())
 	{
 		loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
 	}
@@ -699,10 +686,9 @@ void loadsavescreen_LoadGame(void)
 	}
 }
 
-
 void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 {
-	
+
 	SaveInfo		*saveInfo = g_loadsaveWindow->GetSaveInfoToSave();
 
 	Assert( saveInfo != NULL );
@@ -712,11 +698,10 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	if (!g_loadsaveWindow->GetSaveName(saveInfo->fileName)) return;
 	if (!g_loadsaveWindow->GetNote(saveInfo->note)) return;
 
-	
 	saveInfo->isScenario = g_isScenario;
 
 	if (strlen(saveInfo->gameName) == 0) {
-		
+
 		if (g_loadsaveWindow->GetGameInfo() != NULL) {
 			strcpy(saveInfo->gameName, g_loadsaveWindow->GetGameInfo()->name);
 		} else {
@@ -727,7 +712,6 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 
 	nf_GameSetup gs;
 
-	
 	sint32 j = 0;
 	uint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++)
@@ -736,27 +720,23 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 		{
 			TribeSlot ts;
 
-			
 			ts.key = 0;
 
 #if you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
 			ts.isAI = g_player[ i ]->IsRobot();
 #else
 			ts.isAI = 0;
-#endif 
+#endif
 
-			
-			
+
 			ts.tribe = g_player[ i ]->m_civilisation->GetCivilisation() + 1;
 
 			ts.isFemale = (g_player[i]->m_civilisation->GetGender() == GENDER_FEMALE);
 
 
-			
 			if ( 1 < ts.tribe )
 			{
-				
-				
+
 				if ( j >= k_NS_MAX_PLAYERS ) break;
 
 				gs.GetSavedTribeSlots()[ j++ ] = ts;
@@ -773,9 +753,9 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	} else {
 		if (!g_civPaths->GetSavePath(C3SAVEDIR_GAME, path)) return;
 	}
-	
+
 	if(!useName) {
-		
+
 		char *testchars="\\*\"/:|?<>";
 		bool charschanged=false;
 		for(i=0; i<strlen(saveInfo->gameName); i++)
@@ -861,7 +841,7 @@ void loadsavescreen_LoadMPGame(void)
 	// EAS02161999 - Must also check to see if you're not the host.
 	// 'Cause in single player mode, somebody might've already created
 	// a ligitimate *single*player gameInfo that's still lying around.
-	if (!gameInfo || (g_netfunc && !g_netfunc->IsHost())) { 		
+	if (!gameInfo || (g_netfunc && !g_netfunc->IsHost())) {
 		g_civApp->PostStartGameAction();
 		return;
 	}
@@ -915,10 +895,10 @@ void loadsavescreen_SaveMPGame(void)
 
 	MBCHAR	path[_MAX_PATH];
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_MP, path)) return;
-	
+
 	MBCHAR	fullPath[_MAX_PATH];
 	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
-	
+
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
 		if (!c3files_CreateDirectory(fullPath)) {
@@ -966,7 +946,7 @@ void loadsavescreen_LoadSCENGame(void)
 //	g_civApp->PostLoadSaveGameAction(path);
 
 	g_civPaths->SetCurScenarioPath(gameInfo->path);
-	
+
 	g_theProfileDB->SetIsScenario(TRUE);
 
 	g_civApp->PostLoadScenarioGameAction(saveInfo->fileName);
@@ -1027,10 +1007,10 @@ void loadsavescreen_SaveSCENGame(void)
 	MBCHAR	path[_MAX_PATH];
 
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_SCEN, path)) return;
-	
+
 	MBCHAR	fullPath[_MAX_PATH];
 	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
-	
+
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
 		if (!c3files_CreateDirectory(fullPath)) {
@@ -1093,8 +1073,8 @@ void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 dat
 			case LSS_LOAD_SCEN:		loadsavescreen_LoadSCENGame();		break;
 			case LSS_LOAD_SCEN_MP:	break;	// in this case, do nothing here, LoadSCENGame() is called elsewhere
 			case LSS_SAVE_SCEN:		loadsavescreen_SaveSCENGame();		break;
-			default: 
-				Assert(0); 
+			default:
+				Assert(0);
 				break;
 		}
 		loadsavescreen_PostCleanupAction();
@@ -1195,12 +1175,11 @@ void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
-	if (g_loadsaveWindow->GetGameInfo()) 
-    {	
-		MessageBoxDialog::Query(g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM"), 
-                                "ConfirmLoadSaveDelete", 
-                                loadsavescreen_deleteDialog 
+	if (g_loadsaveWindow->GetGameInfo())
+    {
+		MessageBoxDialog::Query(g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM"),
+                                "ConfirmLoadSaveDelete",
+                                loadsavescreen_deleteDialog
                                );
 	}
 }
@@ -1288,9 +1267,9 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 					delete[] oldSaveInfo->radarMapData;
 					oldSaveInfo->radarMapData = NULL;
 				}
-			
-				// Set load type back to basic 
-				oldSaveInfo->loadType = SAVEINFOLOAD_BASIC;	
+
+				// Set load type back to basic
+				oldSaveInfo->loadType = SAVEINFOLOAD_BASIC;
 			}
 		}
 	}
@@ -1339,7 +1318,7 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 
 void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) 
+	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT )
 		return;
 }
 
@@ -1379,9 +1358,9 @@ BOOL loadsavescreen_CheckOverwrite( void )
 	if (!g_loadsaveWindow->GetNote(saveInfo->note)) return FALSE;
 
 	GameInfo *  gameInfo = g_loadsaveWindow->GetGameInfo();
-	if (gameInfo) 
+	if (gameInfo)
     {
-		for 
+		for
         (
             PointerList<SaveInfo>::Walker walker = PointerList<SaveInfo>::Walker(gameInfo->files);
             walker.IsValid();
@@ -1389,12 +1368,12 @@ BOOL loadsavescreen_CheckOverwrite( void )
         )
         {
 			SaveInfo * info = walker.GetObj();
-			if ( !strcmp(info->fileName, saveInfo->fileName) ) 
+			if ( !strcmp(info->fileName, saveInfo->fileName) )
             {
 				//c3_TextMessage( s, k_UTILITY_TEXTMESSAGE_YESNO, loadsavescreen_OverwriteCallback );
-				MessageBoxDialog::Query(g_theStringDB->GetNameStr("SAVE_OVERWRITE"), 
-                                        "ConfirmSaveOverwrite", 
-                                        loadsavescreen_OverwriteCallback 
+				MessageBoxDialog::Query(g_theStringDB->GetNameStr("SAVE_OVERWRITE"),
+                                        "ConfirmSaveOverwrite",
+                                        loadsavescreen_OverwriteCallback
                                        );
 				return TRUE;
 			}
@@ -1403,4 +1382,3 @@ BOOL loadsavescreen_CheckOverwrite( void )
 
 	return FALSE;
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,21 +30,17 @@
 
 #include "c3.h"
 
-
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_button.h"
 #include "aui_stringtable.h"
 
-
 #include "c3_static.h"
 #include "c3_button.h"
 
-
 #include "civapp.h"
 extern CivApp *g_civApp;
-
 
 #include "netshell.h"
 #include "ns_customlistbox.h"
@@ -56,7 +52,6 @@ extern CivApp *g_civApp;
 #include "playerselectwindow.h"
 #include "passwordscreen.h"
 #include "serverselectwindow.h"
-
 
 ConnectionSelectWindow::ConnectionSelectWindow(
 	AUI_ERRCODE *retval )
@@ -81,7 +76,6 @@ ConnectionSelectWindow::ConnectionSelectWindow(
 }
 
 
-
 AUI_ERRCODE ConnectionSelectWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -93,13 +87,12 @@ AUI_ERRCODE ConnectionSelectWindow::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-	
+
 
 	aui_Control *control;
 
@@ -143,7 +136,6 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_CONNECTIONDESCRIPTIONSTATICTEXT ] = control;
 
-	
 	control = new c3_Static(
 		&errcode,
 		aui_UniqueId(),
@@ -176,12 +168,11 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
-	
 
 	aui_Ldl::SetupHeirarchyFromRoot( "connectionselectwindow" );
 
 
-	
+
 
 	aui_Action *action;
 
@@ -205,7 +196,6 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
 	m_controls[ CONTROL_CONNECTIONTYPELISTBOX ]->SetAction( action );
 
-	
 
 	m_controls[ CONTROL_CONNECTIONDESCRIPTIONTEXTFIELD ]->Enable( FALSE );
 
@@ -214,11 +204,9 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 ConnectionSelectWindow::~ConnectionSelectWindow()
 {
 }
-
 
 void ConnectionSelectWindow::Update(void)
 {
@@ -226,7 +214,6 @@ void ConnectionSelectWindow::Update(void)
 	ns_TransportListBox *listbox = (ns_TransportListBox *)(FindControl( ConnectionSelectWindow::CONTROL_CONNECTIONTYPELISTBOX ));
 	ns_TransportItem *item = (ns_TransportItem *)listbox->GetSelectedItem();
 	aui_Button *b = (aui_Button *)(FindControl( ConnectionSelectWindow::CONTROL_OKBUTTON ));
-
 
 	if(item) {
 		b->Enable(TRUE);
@@ -274,10 +261,9 @@ void ConnectionSelectWindow::Update(void)
 }
 
 
-
 AUI_ERRCODE ConnectionSelectWindow::Idle( void )
-{	
-    while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+{
+    while (NETFunc::Message * m = g_netfunc->GetMessage())
     {
 		g_netfunc->HandleMessage(m);
 
@@ -289,14 +275,13 @@ AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 		delete m;
 	}
 
-	if (g_netfunc->GetStatus() == NETFunc::READY) 
+	if (g_netfunc->GetStatus() == NETFunc::READY)
     {
 		g_netshell->GotoScreen( NetShell::SCREEN_PLAYERSELECT );
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
@@ -329,7 +314,6 @@ void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
 }
 
 
-
 void ConnectionSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -349,18 +333,18 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 			if ( ((FakeTransport *)t)->GetSubType() ==
 					FakeTransport::EMAIL )
 			{
-				
+
 				NetShell::Leave( k_NS_FLAGS_DESTROY, TRUE );
 				g_civApp->PostStartGameAction();
-				
+
 			}
 			else if ( ((FakeTransport *)t)->GetSubType() ==
 					FakeTransport::HOTSEAT )
 			{
-				
+
 				NetShell::Leave( k_NS_FLAGS_DESTROY, TRUE );
 				g_civApp->PostStartGameAction();
-				
+
 			}
 		}
 		else
@@ -370,14 +354,13 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 			{
 				passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_NODIALUP );
 			} else if(t->GetType() == NETFunc::Transport::INTERNET) {
-				
+
 				g_netshell->GotoScreen( NetShell::SCREEN_SERVERSELECT );
 				((ServerSelectWindow *)g_netshell->FindWindow( NetShell::WINDOW_SERVERSELECT ))->Update( true );
 			}
 		}
 	}
 }
-
 
 
 void ConnectionSelectWindow::CancelButtonAction::Execute(
@@ -387,7 +370,7 @@ void ConnectionSelectWindow::CancelButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	control->Enable(FALSE); 
-	
+	control->Enable(FALSE);
+
 	NetShell::Leave( k_NS_FLAGS_DESTROY | k_NS_FLAGS_MAINMENU, TRUE );
 }

@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "HappyTracker.h"
 
@@ -7,20 +6,18 @@
 #include "gamefile.h"
 #include "StrDB.h"          // g_theStringDB
 
-
 StringId HappyTracker::sm_happinessNames[HAPPY_REASON_MAX];
-
 
 
 namespace
 {
 
-/// Reference count of cached string ids in ::sm_happinessNames 
+/// Reference count of cached string ids in ::sm_happinessNames
 int             s_refCount                      = 0;
 /// Number of stored happiness reasons in save game versions 64 or earlier
-size_t const    HAPPY_REASON_MAX_VERSION_64     = 29;  
+size_t const    HAPPY_REASON_MAX_VERSION_64     = 29;
 /// Number of stored happiness reasons in save game versions 65 and 66
-size_t const    HAPPY_REASON_MAX_VERSION_66     = 30;  
+size_t const    HAPPY_REASON_MAX_VERSION_66     = 30;
 
 } // namespace
 
@@ -29,7 +26,7 @@ HappyTracker::HappyTracker()
     std::fill(m_happinessAmounts, m_happinessAmounts + HAPPY_REASON_MAX, 0.0);
     std::fill(m_tempSaveHappiness, m_tempSaveHappiness + HAPPY_REASON_MAX, 0.0);
 
-    if (!s_refCount++) 
+    if (!s_refCount++)
     {
         RefreshStringIds();
     }
@@ -42,7 +39,7 @@ HappyTracker::HappyTracker(CivArchive &archive)
 
     Serialize(archive);
 
-    if (!s_refCount++) 
+    if (!s_refCount++)
     {
         RefreshStringIds();
     }
@@ -86,38 +83,38 @@ void HappyTracker::RefreshStringIds(void)
 	g_theStringDB->GetStringID("HAPPY_REASON_ATTACKED_CONVERTER", sm_happinessNames[HAPPY_REASON_ATTACKED_CONVERTER]);
 	g_theStringDB->GetStringID("HAPPY_REASON_ASSASSINATION", sm_happinessNames[HAPPY_REASON_ASSASSINATION]);
 	g_theStringDB->GetStringID("HAPPY_REASON_SECTHAPPY", sm_happinessNames[HAPPY_REASON_SECTHAPPY]);
-} 
+}
 
 /// Store/load the happiness information to/from an archive
 /// \param archive  The archive to use
-/// \remarks    The HAPPY_REASON_SECTHAPPY item can not be stored without 
-///             causing a save game incompatibility. 
+/// \remarks    The HAPPY_REASON_SECTHAPPY item can not be stored without
+///             causing a save game incompatibility.
 void HappyTracker::Serialize(CivArchive &archive)
 {
-    if (archive.IsStoring()) 
+    if (archive.IsStoring())
     {
-        archive.Store((uint8*) m_happinessAmounts, 
+        archive.Store((uint8*) m_happinessAmounts,
                       sizeof(double) * HAPPY_REASON_MAX_VERSION_66
                      );
-    } 
-    else 
+    }
+    else
     {
-        if (g_saveFileVersion <= 64) 
+        if (g_saveFileVersion <= 64)
         {
-            // Apparently HAPPY_REASON_FEATS was middle-inserted by Activision 
+            // Apparently HAPPY_REASON_FEATS was middle-inserted by Activision
             // in version 65, requiring a shift of all items with higher index.
-            archive.Load((uint8*) m_happinessAmounts, 
+            archive.Load((uint8*) m_happinessAmounts,
                          sizeof(double) * HAPPY_REASON_MAX_VERSION_64
                         );
-            for (int i = HAPPY_REASON_FEATS + 1; i < HAPPY_REASON_MAX; ++i) 
+            for (int i = HAPPY_REASON_FEATS + 1; i < HAPPY_REASON_MAX; ++i)
             {
                  m_happinessAmounts[i] = m_happinessAmounts[i - 1];
 	        }
 		    m_happinessAmounts[HAPPY_REASON_FEATS] = 0.0;
-        } 
+        }
         else if (g_saveFileVersion <= 66)
         {
-            archive.Load((uint8*) m_happinessAmounts, 
+            archive.Load((uint8*) m_happinessAmounts,
                          sizeof(double) * HAPPY_REASON_MAX_VERSION_66
                         );
 	    }
@@ -134,7 +131,6 @@ void HappyTracker::GetHappiness
 	amount = m_happinessAmounts[which];
 	name = sm_happinessNames[which];
 }
-
 
 void HappyTracker::SetHappiness(HAPPY_REASON which, double amount)
 {
@@ -159,7 +155,6 @@ void HappyTracker::ClearEntries(HAPPY_REASON start, HAPPY_REASON end)
     std::fill(m_happinessAmounts + validatedStart, m_happinessAmounts + validatedEnd, 0.0);
 }
 
-
 void HappyTracker::AddTimedChange(HAPPY_REASON which, double delta)
 {
     Assert((which >= 0) && (which < HAPPY_REASON_MAX));
@@ -173,9 +168,9 @@ void HappyTracker::AddTimedChange(HAPPY_REASON which, double delta)
 void HappyTracker::Dump()
 {
     DPRINTF(k_DBG_GAMESTATE, ("Happy happy, joy joy:\n"));
-    for (int i = 0; i < HAPPY_REASON_MAX; ++i) 
+    for (int i = 0; i < HAPPY_REASON_MAX; ++i)
     {
-        DPRINTF(k_DBG_GAMESTATE, ("  %20s: %.2lf\n", 
+        DPRINTF(k_DBG_GAMESTATE, ("  %20s: %.2lf\n",
 						 g_theStringDB->GetNameStr(sm_happinessNames[i]),
 						 m_happinessAmounts[i]
                                  )

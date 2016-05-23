@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Call this once before the server has initialized dp.
  Downloads the password database from the account server, which could
  potentially take a while to finish.
- Returns the socket used by servpw or -1 on error. 
+ Returns the socket used by servpw or -1 on error.
 --------------------------------------------------------------------------*/
 int servpw_init(const char *wmqDirectory, const char *PWServerAddr,
 	int PWServerPort, const char *PWFile);

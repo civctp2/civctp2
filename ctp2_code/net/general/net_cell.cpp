@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -74,7 +74,6 @@ void NetCellData::Packetize(uint8 * buf, uint16 & size)
 	}
 }
 
-
 void NetCellData::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	Assert(buf[0] == 'G' && buf[1] == 'C');
@@ -91,11 +90,11 @@ void NetCellData::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLBYTE(m_cell->m_terrain_type);
 	sint16 old_move_cost = m_cell->m_move_cost;
 	PULLSHORT(m_cell->m_move_cost);
-	
+
 	if (old_move_cost != m_cell->m_move_cost)
 		g_theWorld->SetCapitolDistanceDirtyFlags(0xffffffff);
 	PULLSHORT(m_cell->m_continent_number);
-	
+
 	uint8 owner;
 	PULLBYTE(owner);
 	m_cell->SetOwner(owner);
@@ -134,18 +133,17 @@ void NetCellData::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_tiledMap->RedrawTile(&npos);
 			}
 		}
-		
+
 		g_tiledMap->RedrawTile(&mp);
 	}
 }
-
 
 void NetCellList::Packetize(uint8* buf, uint16& size)
 {
 	size = 0;
 
 	PUSHID(k_PACKET_CELL_LIST_ID);
-	
+
 	MapPoint pos(m_x, m_y);
 	PUSHLONG(g_network.PackedPos(pos));
 	PUSHBYTE(m_cells);
@@ -164,7 +162,7 @@ void NetCellList::Packetize(uint8* buf, uint16& size)
 			MapPoint mp(x,y);
 			Cell const * cell = g_theWorld->GetCell(mp);
 			PUSHLONG(cell->m_env);
-			
+
 			uint8 terrainPlusFlags = cell->m_terrain_type;
 			if (cell->GetCity().m_id != 0)
 			{
@@ -178,14 +176,14 @@ void NetCellList::Packetize(uint8* buf, uint16& size)
 
 			PUSHBYTE(cell->m_cellOwner);
 			PUSHLONG(cell->m_city.m_id);
-			
+
 			if (cell->m_jabba)
 			{
 				PUSHBYTE((uint8)cell->m_jabba->m_typeValue);
 				Assert(cell->m_jabba->m_value >= 0 && cell->m_jabba->m_value < k_VALUE_RANGE);
 				PUSHSHORT((uint16)cell->m_jabba->m_value)
 			}
-			
+
 #ifdef SEND_MOVE_COST
 			PUSHSHORT(cell->m_move_cost);
 #endif
@@ -232,27 +230,27 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 		{
 			MapPoint mp(x,y);
 			Cell* cell = g_theWorld->AccessCell(mp);
-			
+
 			delete cell->m_unit_army;
 			cell->m_unit_army = NULL;
 
 			cell->SetCity(Unit());
-			
+
 			delete cell->m_objects;
 			cell->m_objects = NULL;
-			
+
 			PULLLONG(cell->m_env);
-			
+
 			uint8 terrainPlusFlags;
 			PULLBYTE(terrainPlusFlags);
 			cell->m_terrain_type = terrainPlusFlags & 0x3f;
-			
+
 			uint8 owner;
 			PULLBYTE(owner);
 			cell->SetOwner(owner);
 
 			PULLLONG(cell->m_city.m_id);
-			
+
 			delete cell->m_jabba;
 			if (terrainPlusFlags & 0x40)
 			{
@@ -267,7 +265,7 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 			{
 				cell->m_jabba = NULL;
 			}
-				
+
 #ifdef SEND_MOVE_COST
 			uint16 actualCost;
 			PULLSHORT(actualCost);
@@ -329,7 +327,7 @@ void NetCellUnitOrder::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_CELL_UNIT_ORDER_ID);
-	
+
 	PULLSHORT(m_x);
 	PULLSHORT(m_y);
 	CellUnitList *units = g_theWorld->GetCell(m_x, m_y)->UnitArmy();

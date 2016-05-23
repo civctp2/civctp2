@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTBLITTER_H__
 #define __AUI_DIRECTBLITTER_H__
 
@@ -20,11 +9,10 @@ typedef aui_DirectBlitter aui_NativeBlitter;
 #include "aui_blitter.h"
 
 
-
 class aui_DirectBlitter : public aui_Blitter
 {
 public:
-	
+
 	aui_DirectBlitter()
 	{
 		memset( &m_ddbfx, 0, sizeof( m_ddbfx ) );
@@ -32,8 +20,7 @@ public:
 	}
 	virtual ~aui_DirectBlitter() {}
 
-	
-	
+
 	virtual NakedBltFunc Blt16To16;
 	virtual NakedColorBltFunc ColorBlt16;
 	virtual NakedStretchBltFunc StretchBlt16To16;
@@ -45,6 +32,6 @@ protected:
 
 typedef aui_DirectBlitter aui_NativeBlitter;
 
-#endif 
+#endif
 
-#endif 
+#endif

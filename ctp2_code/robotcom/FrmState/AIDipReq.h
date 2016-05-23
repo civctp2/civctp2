@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef __AI_DIP_REQ_H__
 #define __AI_DIP_REQ_H__

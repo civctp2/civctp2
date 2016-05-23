@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ class aui_Movie;
 class aui_UI : public aui_Region
 {
 public:
-	
+
 	aui_UI(
 		AUI_ERRCODE *retval,
 		HINSTANCE hinst,
@@ -165,14 +165,12 @@ public:
 	void RegisterObject( aui_MovieManager *movieManager );
 	void RegisterObject( aui_Joystick *joystick );
 
-	
 	COLORREF	SetBackgroundColor( COLORREF color );
 	aui_Image	*SetBackgroundImage(
 		aui_Image *image,
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	HINSTANCE	TheHINSTANCE( void ) const { return m_hinst; }
 	HWND		TheHWND( void ) const { return m_hwnd; }
 	aui_Ldl		*GetLdl( void ) const { return m_ldl; }
@@ -246,10 +244,8 @@ public:
 
 	aui_DirtyList	*GetDirtyList( void ) { return m_dirtyList; }
 
-	
 	AUI_ERRCODE		FlushDirtyList( void );
 
-	
 	aui_Resource<aui_Image> *GetImageResource( void ) const
 		{ return m_imageResource; }
 
@@ -266,7 +262,6 @@ public:
 	AUI_ERRCODE	RemoveImageSearchPath( const MBCHAR *path )
 		{ return m_imageResource->RemoveSearchPath( path ); }
 
-	
 	aui_Resource<aui_Cursor> *GetCursorResource( void ) const
 		{ return m_cursorResource; }
 
@@ -283,13 +278,12 @@ public:
 	AUI_ERRCODE	RemoveCursorSearchPath( const MBCHAR *path )
 		{ return m_cursorResource->RemoveSearchPath( path ); }
 
-	
 	aui_Resource<aui_BitmapFont> *GetBitmapFontResource( void ) const
 		{ return m_bitmapFontResource; }
 
-	
-	
-	
+
+
+
 	aui_BitmapFont	*LoadBitmapFont( const MBCHAR *name, uint32 size = 0 )
 		{ return m_bitmapFontResource->Load( name, C3DIR_DIRECT, size ); }
 
@@ -303,7 +297,6 @@ public:
 	AUI_ERRCODE	RemoveBitmapFontSearchPath( const MBCHAR *path )
 		{ return m_bitmapFontResource->RemoveSearchPath( path ); }
 
-	
 	aui_AudioManager *TheAudioManager( void ) const { return m_audioManager; }
 
 	aui_Sound	*LoadSound( const MBCHAR *name )
@@ -319,7 +312,6 @@ public:
 	AUI_ERRCODE	RemoveSoundSearchPath( const MBCHAR *path )
 		{ return m_audioManager ? m_audioManager->RemoveSearchPath( path ) : AUI_ERRCODE_HACK; }
 
-	
 	aui_MovieManager *TheMovieManager( void ) const { return m_movieManager; }
 
 	aui_Movie	*LoadMovie( const MBCHAR *name)
@@ -335,16 +327,13 @@ public:
 	AUI_ERRCODE	RemoveMovieSearchPath( const MBCHAR *path )
 		{ return m_movieManager ? m_movieManager->RemoveSearchPath( path ) : AUI_ERRCODE_HACK; }
 
-	
 	aui_Window		*TopWindow( void ) const
 	{ return m_childList->L() ? (aui_Window *)m_childList->GetHead() : NULL; }
 	aui_Window		*BringWindowToTop( uint32 windowId );
 	aui_Window		*BringWindowToTop( aui_Window *window );
 
-	
 	virtual AUI_ERRCODE DrawOne( aui_Window *window );
 
-	
 	AUI_ERRCODE Draw( void );
 
 	AUI_ERRCODE	AddWindow( aui_Window *window )
@@ -363,11 +352,9 @@ public:
 
 	AUI_ERRCODE	Invalidate( RECT *rect = NULL );
 
-	
 	AUI_ERRCODE AddDirtyRect( RECT *rect );
 	AUI_ERRCODE AddDirtyRect( sint32 left, sint32 top, sint32 right, sint32 bottom );
 
-	
 	AUI_ERRCODE HandleMouseEvents(
 		sint32 numEvents = 0,
 		aui_MouseEvent *events = NULL );
@@ -380,31 +367,27 @@ public:
 		LPARAM lParam );
 	virtual AUI_ERRCODE Process( void );
 
-	
 	void AddAction( aui_Action *action );
 	void HandleActions( void );
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	void AddDestructiveAction(aui_Action *action);
 	void HandleDestructiveActions( void );
 
-	
 	virtual AUI_ERRCODE AltTabOut( void );
 	virtual AUI_ERRCODE AltTabIn( void );
 	BOOL	MinimizeOnAltTabOut( BOOL minimize );
 
-	
 	BOOL		IsChildWin( HWND hwnd ) const
 	{ return (m_winList->Find(hwnd) ? TRUE : FALSE); }
 	AUI_ERRCODE	AddWin( HWND hwnd );
 	void		RemoveWin( HWND hwnd );
 
-	
 	aui_Region	*TheEditRegion( void ) const { return m_editRegion; }
 	void		SetEditRegion( aui_Region *region );
 	void		SetEditMode( BOOL mode );
@@ -419,7 +402,6 @@ public:
 		aui_Window *window;
 	};
 
-	
 	tech_WLList<DirtyRectInfo *> *GetDirtyRectInfoList( void )
 	{ return m_dirtyRectInfoList; }
 
@@ -434,43 +416,40 @@ protected:
 	tech_Memory<DirtyRectInfo>		*m_dirtyRectInfoMemory;
 	tech_WLList<DirtyRectInfo *>	*m_dirtyRectInfoList;
 
-	HINSTANCE		m_hinst;		
-	HWND			m_hwnd;			
+	HINSTANCE		m_hinst;
+	HWND			m_hwnd;
 	sint32			m_bpp;
 	AUI_SURFACE_PIXELFORMAT m_pixelFormat;
 
-	aui_Ldl			*m_ldl;			
+	aui_Ldl			*m_ldl;
 
-	aui_Surface		*m_primary;		
+	aui_Surface		*m_primary;
 	aui_Surface		*m_secondary;
-	aui_Blitter		*m_blitter;		
-	aui_MemMap		*m_memmap;		
-	aui_Mouse		*m_mouse;		
-	aui_Keyboard	*m_keyboard;	
-	aui_Joystick	*m_joystick;	
-	aui_DirtyList	*m_dirtyList;	
+	aui_Blitter		*m_blitter;
+	aui_MemMap		*m_memmap;
+	aui_Mouse		*m_mouse;
+	aui_Keyboard	*m_keyboard;
+	aui_Joystick	*m_joystick;
+	aui_DirtyList	*m_dirtyList;
 
-	COLORREF		m_color;		
-	aui_Image		*m_image;		
-	RECT			m_imageRect;	
-	aui_DirtyList	*m_colorAreas;	
-	aui_DirtyList	*m_imageAreas;	
-									
+	COLORREF		m_color;
+	aui_Image		*m_image;
+	RECT			m_imageRect;
+	aui_DirtyList	*m_colorAreas;
+	aui_DirtyList	*m_imageAreas;
 
 	aui_Control		*m_virtualFocus;
 
-	DWORD			m_dxver;		
-									
+	DWORD			m_dxver;
 
-	BOOL			m_editMode;		
-	aui_Region		*m_editRegion;	
-	RECT			m_editRect;		
+	BOOL			m_editMode;
+	aui_Region		*m_editRegion;
+	RECT			m_editRect;
 	aui_Window		*m_editWindow;
 	aui_Static		*m_localRectText;
 	aui_Static		*m_absoluteRectText;
 	aui_Static		*m_editModeLdlName;
 
-	
 	aui_Resource<aui_Image>			*m_imageResource;
 	aui_Resource<aui_Cursor>		*m_cursorResource;
 	aui_Resource<aui_BitmapFont>	*m_bitmapFontResource;
@@ -478,22 +457,20 @@ protected:
 	aui_MovieManager				*m_movieManager;
 
 	tech_WLList<aui_Action *>	*m_actionList;
-									
+
 	tech_WLList<aui_Action *>	*m_destructiveActionList;
-									
 
 	tech_WLList<HWND>			*m_winList;
-									
-	BOOL m_minimize;				
 
-	
-	
-	
+	BOOL m_minimize;
+
+
+
+
 	sint32			m_savedMouseAnimFirstIndex;
 	sint32			m_savedMouseAnimLastIndex;
 	sint32			m_savedMouseAnimCurIndex;
 	sint32			m_savedMouseAnimDelay;
 };
 
-
-#endif 
+#endif

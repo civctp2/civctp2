@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // HAVE_PRAGMA_ONCE
 //
 //----------------------------------------------------------------------------
@@ -125,7 +125,7 @@ Pool<DATA_TYPE>::Pool
     next_free_element_list  (i_chunk_size, i_chunk_size, i_max_chunks)
 {
 	_ASSERTE(chunk_size > 0);
-	
+
 	Prepare_New_Chunk();
 }
 
@@ -140,7 +140,7 @@ Pool<DATA_TYPE>::~Pool()
 }
 
 template <class DATA_TYPE>
-DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it) 
+DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it)
 {
 	if (count >= (static_cast<int>(chunks.size()) * chunk_size))
 	{
@@ -157,7 +157,7 @@ DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it)
 	int const   which_chunk         = which_element_is_it / chunk_size;
 	int const   element_in_chunk    = which_element_is_it - (which_chunk * chunk_size);
 	DATA_TYPE * the_chunk           = chunks.Return_Data_By_Number(which_chunk);
-	
+
 	next_element = next_free_element_list.Return_Data_By_Number(next_element);
 	next_free_element_list.Set_Data(ELEMENT_OCCUPIED, which_element_is_it);
 

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,13 +33,11 @@
 #ifndef __MESSAGEADVICE_H__
 #define __MESSAGEADVICE_H__
 
-
 class C3ListBox;
 
 class MessageAdviceDismissAction;
 
-
-class MessageAdvice : public C3Window 
+class MessageAdvice : public C3Window
 {
 public:
 	MessageAdvice(
@@ -77,13 +75,12 @@ private:
 
 	aui_Button						*m_dismissButton;
 	MessageAdviceDismissAction		*m_dismissAction;
-	
+
 	C3ListBox						*m_listBox;
 
 };
 
-
-int messageadvice_AddText( MBCHAR *text );	
+int messageadvice_AddText( MBCHAR *text );
 int messageadvice_DestroyWindow( void );
 
-#endif 
+#endif

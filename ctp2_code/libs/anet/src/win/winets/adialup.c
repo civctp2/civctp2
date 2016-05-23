@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if 0
 #include <stdio.h>
-#define DPRINT(s) printf s 
+#define DPRINT(s) printf s
 #else
 #define DPRINT(s)
 #endif
@@ -46,7 +46,7 @@ int adialup_autodial_enabled(void)
 	/* First, check to see if EnableAutodial is set in the registry. */
 
 	/* Open the registry folder */
-	werr = RegOpenKeyEx(HKEY_CURRENT_USER, 
+	werr = RegOpenKeyEx(HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
 			0, KEY_EXECUTE, &hKey);
 	if (werr != ERROR_SUCCESS) {
@@ -57,13 +57,13 @@ int adialup_autodial_enabled(void)
 	}
 	/* retrieve the value */
 	enableAutodial = FALSE;
-	len = sizeof(enableAutodial); 
+	len = sizeof(enableAutodial);
 	werr = RegQueryValueEx(hKey,
 			"EnableAutodial",
 			NULL, NULL, (void *)&enableAutodial, &len);
 	CloseHandle(hKey);
 	if (werr != ERROR_SUCCESS) {
-		DPRINT(("autodial_enabled: Can't find %s in subkey %s, error %d\n", 
+		DPRINT(("autodial_enabled: Can't find %s in subkey %s, error %d\n",
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
 			"EnableAutodial",
 			werr));
@@ -73,7 +73,7 @@ int adialup_autodial_enabled(void)
 	if (!enableAutodial) {
 		DPRINT(("autodial_enabled: autodial is off.\n"));
 		return FALSE;
-	}	
+	}
 
 	DPRINT(("autodial_enabled: autodial is on.\n"));
 	return TRUE;
@@ -90,7 +90,7 @@ int adialup_autodial_set(int enable)
 	size_t len;
 
 	/* Open the registry folder */
-	werr = RegOpenKeyEx(HKEY_CURRENT_USER, 
+	werr = RegOpenKeyEx(HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
 			0, KEY_SET_VALUE, &hKey);
 	if (werr != ERROR_SUCCESS) {
@@ -155,7 +155,7 @@ int adialup_is_active(void)
 	rasconnArray[0].dwSize = sizeof(rasconnArray[0]);
 	rasconnLen = sizeof(rasconnArray);
 	cConnections = adialup_MAXCONNS;
-	werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections); 
+	werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections);
 	if (werr) {
 		DPRINT(("adialup_is_active: RasEnumConnections fails, err %d\n", werr));
 		FreeLibrary(hlib);
@@ -169,7 +169,7 @@ int adialup_is_active(void)
 
 	for (i=0; i<cConnections; i++) {
 		rasconnstatus.dwSize = sizeof(rasconnstatus);
-		werr = pfnRasGetConnectStatus( rasconnArray[i].hrasconn, &rasconnstatus); 
+		werr = pfnRasGetConnectStatus( rasconnArray[i].hrasconn, &rasconnstatus);
 		if (rasconnstatus.rasconnstate == RASCS_Connected) {
 			DPRINT(("adialup_is_active: cnxn %d is active!\n", i));
 			FreeLibrary(hlib);
@@ -194,12 +194,12 @@ int adialup_willdial(void)
 /*-------------------------------------------------------------------------
  Unit test (interactive).
  Compile with
- cl adialup.c advapi32.lib 
+ cl adialup.c advapi32.lib
 --------------------------------------------------------------------------*/
 main(int argc, char *argv[])
 {
 	printf("adialup_willdial returns %d\n", adialup_willdial());
-	if (argc == 2) 
+	if (argc == 2)
 		adialup_autodial_set(atoi(argv[1]));
 	printf("adialup_autodial_enabled returns %d\n", adialup_autodial_enabled());
 }

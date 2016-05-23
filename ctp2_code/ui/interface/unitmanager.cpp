@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -66,7 +66,7 @@
 #include "player.h"
 #include "Readiness.h"
 #include "SelItem.h"
-#include "SlicContext.h" 
+#include "SlicContext.h"
 #include "StrDB.h"
 #include "stringutils.h"
 #include "Unit.h"
@@ -82,10 +82,8 @@ static MBCHAR *s_unitManagerBlock = "UnitManager";
 static MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
 bool UnitManager::sm_statsTabVisible = true;
 
-
 #define k_UNITMAN_STATS 0
 #define k_UNITMAN_TACTICAL 1
-
 
 #define k_STATS_ICON_COL 0
 #define k_STATS_NAME_COL 1
@@ -97,14 +95,12 @@ bool UnitManager::sm_statsTabVisible = true;
 #define k_STATS_D_COL 7
 #define k_STATS_M_COL 8
 
-
 #define k_TACTICAL_ICON_COL 0
 #define k_TACTICAL_NAME_COL 1
 #define k_TACTICAL_ARMY_COL 2
 #define k_TACTICAL_ORDER_COL 3
 #define k_TACTICAL_LOCATION_COL 4
 #define k_TACTICAL_HEALTH_COL 5
-
 
 #define k_ADVICE_CATEGORY_COL 0
 #define k_ADVICE_PERCENT_COL 1
@@ -138,7 +134,7 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 
 
 
-	
+
 
 
 
@@ -178,10 +174,10 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 
 	m_lastDisbandedUnit = 0;
 }
-	
+
 UnitManager::~UnitManager()
 {
-	if (m_statsList) 
+	if (m_statsList)
     {
 		m_statsList->Clear();
     }
@@ -191,12 +187,12 @@ UnitManager::~UnitManager()
         m_tacticalList->Clear();
     }
 
-	if (m_window) 
+	if (m_window)
     {
 		aui_Ldl::DeleteHierarchyFromRoot(s_unitManagerBlock);
 	}
 
-	if (m_adviceWindow) 
+	if (m_adviceWindow)
     {
 		aui_Ldl::DeleteHierarchyFromRoot(s_unitManagerAdviceBlock);
 	}
@@ -243,7 +239,7 @@ AUI_ERRCODE UnitManager::Display()
 		s_unitManager->Update();
 		err = g_c3ui->AddWindow(s_unitManager->m_window);
 		Assert(err == AUI_ERRCODE_OK);
-		
+
 		err = s_unitManager->m_window->Show();
 
 
@@ -326,11 +322,11 @@ void UnitManager::UpdateStatsList()
 
 		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 			if(unitcount[i] > 0) {
-				
+
 				const UnitRecord *rec = g_theUnitDB->Get(i);
 
 				ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitStatsItem");
-				
+
 				ctp2_Static *child;
 
 				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_ICON_COL);
@@ -419,9 +415,9 @@ void UnitManager::UpdateTacticalList()
 	UnitDynamicArray *units = pl->m_all_units;
 	Assert(units);
 	if(!units) return;
-	
+
 	sint32 i;
-	for (i = 0; i < units->Num(); i++) 
+	for (i = 0; i < units->Num(); i++)
     {
 		Unit u = units->Access(i);
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitTacticalItem");
@@ -466,7 +462,7 @@ void UnitManager::UpdateTacticalList()
 				child->SetText(g_theStringDB->GetNameStr("UNIT_ORDER_NONE"));
 			}
 		}
-		
+
 		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_LOCATION_COL);
 		if(child) {
 			if(u.Flag(k_UDF_IN_SPACE)) {
@@ -518,15 +514,14 @@ void UnitManager::UpdateAdvice()
 		}
 
 		if(!walk.IsValid()) {
-			
+
 			UnitManagerCategoryInfo *info = new UnitManagerCategoryInfo;
 			info->stringId = cat;
-			info->numUnits = 1; 
+			info->numUnits = 1;
 			m_unitCategories.AddTail(info);
-		}		
+		}
 	}
 
-	
 	walk.SetList(&m_unitCategories);
 	while(walk.IsValid()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitManagerAdviceItem");
@@ -558,7 +553,7 @@ void UnitManager::UpdateAdvice()
 	}
 
 	MBCHAR buf[k_MAX_NAME_LEN];
-	
+
 	double totalProd = pl->m_total_production;
 	sint32 p;
 	if(totalProd == 0)
@@ -579,7 +574,7 @@ void UnitManager::UpdateReadiness()
 {
 	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!pl) return;
-	
+
 	ctp2_Static *state = (ctp2_Static *)aui_Ldl::GetObject(s_unitManagerBlock, "State");
 	Assert(state);
 	if(!state) return;
@@ -620,7 +615,7 @@ void  UnitManager::UpdateNumUnits()
 
 void UnitManager::UpdateAdviceText()
 {
-	ctp2_HyperTextBox *advice = 
+	ctp2_HyperTextBox *advice =
 		(ctp2_HyperTextBox *)aui_Ldl::GetObject(s_unitManagerAdviceBlock, "Advice");
 
 	Assert(advice);
@@ -631,7 +626,7 @@ void UnitManager::UpdateAdviceText()
 	const Governor & governor = Governor::GetGovernor(playerId);
 
 	SlicContext sc;
-	StringId    adviceId = (sm_statsTabVisible) 
+	StringId    adviceId = (sm_statsTabVisible)
                            ? governor.GetUnitsAdvice(sc)
                            : governor.GetTacticalAdvice(sc);
 
@@ -647,10 +642,9 @@ void UnitManager::UpdateAdviceText()
 	advice->SetHyperText(strbuf);
 }
 
-
 sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	sint32 idx1 = (sint32)item1->GetUserData(); 
+	sint32 idx1 = (sint32)item1->GetUserData();
 	sint32 idx2 = (sint32)item2->GetUserData();
 	const UnitRecord *rec1 = g_theUnitDB->Get(idx1);
 	const UnitRecord *rec2 = g_theUnitDB->Get(idx2);
@@ -685,16 +679,16 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 		case k_STATS_SUPPORT_COL:
 			return rec1->GetShieldHunger() - rec2->GetShieldHunger();
 		case k_STATS_A_COL:
-			
+
 			return sint32(rec1->GetAttack() - rec2->GetAttack());
 		case k_STATS_R_COL:
-			
+
 			return sint32(rec1->GetZBRangeAttack() - rec2->GetZBRangeAttack());
 		case k_STATS_D_COL:
-			
+
 			return sint32(rec1->GetDefense() - rec2->GetDefense());
 		case k_STATS_M_COL:
-			
+
 			return sint32(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
 		default:
 			return 0;
@@ -728,7 +722,7 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 					return 0;
 				}
 			}
-            
+
             StringId o2;
 			if(!u2->GetCurrentOrderString(o2)) {
 				if(!g_theStringDB->GetStringID("UNIT_ORDER_NONE", o2)) {
@@ -761,13 +755,13 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 			} else {
 				l2name = g_theStringDB->GetNameStr("UNIT_LOCATION_IN_FIELD");
 			}
-			
+
 			return stricmp(l1name, l2name);
 		}
 
 		case k_TACTICAL_HEALTH_COL:
 		{
-			
+
 			double p1 = u1.GetHP() / u1->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
 			double p2 = u2.GetHP() / u2->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
 
@@ -778,7 +772,7 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 			return 0;
 	}
 }
-		
+
 sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
 	UnitManagerCategoryInfo *info1 = (UnitManagerCategoryInfo *)item1->GetUserData();
@@ -790,14 +784,13 @@ sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item
 						   g_theStringDB->GetNameStr(info2->stringId));
 		case k_ADVICE_PERCENT_COL:
 		case k_ADVICE_TOTAL_COL:
-			
+
 			return info1->numUnits - info2->numUnits;
 		default:
 			Assert(FALSE);
 			return 0;
 	}
 }
-
 
 AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, void *cookie)
@@ -833,7 +826,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	{
 		percent = double(u.GetHP()) / double(u->CalculateTotalHP());
 	}
-	else 
+	else
 	{
 		percent = 1;
 	}
@@ -855,7 +848,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	}
 
 	err = g_ui->TheBlitter()->ColorBlt(surface, &barRect, color, 0);
-	
+
 	return err;
 }
 
@@ -869,12 +862,12 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_Button *butt = (ctp2_Button *)control;
 	MBCHAR buf[k_MAX_NAME_LEN];
-	
+
 	if(strstr(butt->GetText(), "%")) {
 		pl->m_readiness->RecalcCost();
 		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepTotalFormat"), (sint32)pl->m_readiness->GetCost());
 	} else {
-		
+
 		double totalProd = pl->m_total_production;
 		double readinessCost = pl->m_readiness->GetCost();
 		sint32 p;
@@ -897,11 +890,11 @@ void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void 
 	Assert(s_unitManager && s_unitManager->m_adviceWindow);
 	if (s_unitManager && s_unitManager->m_adviceWindow)
     {
-	    if (g_c3ui->GetWindow(s_unitManager->m_adviceWindow->Id())) 
+	    if (g_c3ui->GetWindow(s_unitManager->m_adviceWindow->Id()))
         {
 		    g_c3ui->RemoveWindow(s_unitManager->m_adviceWindow->Id());
-	    } 
-        else 
+	    }
+        else
         {
 		    UnitManager::UpdateAdviceText();
 		    g_c3ui->AddWindow(s_unitManager->m_adviceWindow);
@@ -930,7 +923,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
-	
+
     ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
 	if(!item) return;
 
@@ -969,8 +962,7 @@ void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data
 							"QueryUnitDisband",
 							DisbandQuery);
 
-	
-	
+
 }
 
 void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1013,18 +1005,18 @@ void UnitManager::DisbandSelected()
 
 	if(selList->L() <= 0) return;
 
-	g_gevManager->Pause(); 
+	g_gevManager->Pause();
 	ListPos position = selList->GetHeadPosition();
 	sint32 i;
 	for(i = selList->L(); i > 0; i--) {
 		sint32 itemIndex = selList->GetNext(position);
 
 		ctp2_ListItem *item = (ctp2_ListItem *)theList->GetItemByIndex(itemIndex);
-		
+
 		if(theList == m_tacticalList) {
-			
+
 			Unit u; u.m_id = (uint32)item->GetUserData();
-			
+
 			m_lastDisbandedUnit = u.m_id;
 			if(g_network.IsClient()) {
 				g_network.SendAction(new NetAction(NET_ACTION_DISBAND_UNIT, u.m_id));
@@ -1033,7 +1025,7 @@ void UnitManager::DisbandSelected()
 								   GEA_Unit, u.m_id,
 								   GEA_End);
 		} else if(theList == m_statsList) {
-			
+
 			sint32 unitType = (sint32)item->GetUserData();
 			sint32 i;
 			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1043,7 +1035,7 @@ void UnitManager::DisbandSelected()
 			for(i = 0; i < pl->m_all_units->Num(); i++) {
 				Unit u = pl->m_all_units->Access(i);
 				if(u.GetType() == unitType) {
-					
+
 					m_lastDisbandedUnit = u.m_id;
 					if(g_network.IsClient()) {
 						g_network.SendAction(new NetAction(NET_ACTION_DISBAND_UNIT, u.m_id));
@@ -1073,7 +1065,7 @@ STDEHANDLER(UnitManagerArmyDisbanded)
 
 /// Handle disbanding of individual units
 /// @todo Verify whether using the "last disbanded unit" is sound.
-///       This may prevent removal of invalid units from the lists when not 
+///       This may prevent removal of invalid units from the lists when not
 ///       removed through the unit manager.
 STDEHANDLER(UnitManagerUnitDisbanded)
 {
@@ -1082,8 +1074,7 @@ STDEHANDLER(UnitManagerUnitDisbanded)
 
 	Unit u;
 
-	
-	
+
 	GameEventArgument *arg = args->GetArg(GEA_Unit, 0);
 	if(!arg->GetUnit(u)) {
 		return GEV_HD_Continue;
@@ -1108,7 +1099,6 @@ void UnitManager::CleanupEvents()
 {
 }
 
-
 void UnitManager::ReadinessActionCallback(aui_Control *control,
 													 uint32 action, uint32 data,
 													 void *cookie)
@@ -1119,7 +1109,7 @@ void UnitManager::ReadinessActionCallback(aui_Control *control,
 	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 	Assert(pl);
 	if(!pl) return;
-	
+
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	pl->SetReadinessLevel((READINESS_LEVEL) spinner->GetValueX());

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,11 +43,9 @@ class MapPoint;
 class Unit;
 
 
-
 #include "TerrainImprovementRecord.h"
 
 void terrainutil_Initialize();
-
 
 const TerrainImprovementRecord *terrainutil_GetBestRoad(sint32 player, const MapPoint &pos);
 
@@ -143,7 +141,6 @@ TERRAIN_TYPE terrainutil_GetWhiteHill();
 TERRAIN_TYPE terrainutil_GetWhiteMountain();
 TERRAIN_TYPE terrainutil_GetWaterKelp();
 TERRAIN_TYPE terrainutil_GetWaterReef();
-
 
 sint32 terrainutil_GetTerraformHillsImprovement();
 sint32 terrainutil_GetTerraformPlainsImprovement();

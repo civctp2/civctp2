@@ -17,9 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
-// Use DirectX 
+// Use DirectX
 //
 //----------------------------------------------------------------------------
 //
@@ -90,9 +90,9 @@ const uint32 AUI_KEYBOARD_MOD_WINMENU   = 0x0100;
 
 struct aui_KeyboardEvent
 {
-	uint32	    key;	
-	BOOL	    down;	
-	uint32	    time;	
+	uint32	    key;
+	BOOL	    down;
+	uint32	    time;
 
 	aui_KeyboardEvent()
 	:	key	    (0),
@@ -122,13 +122,13 @@ public:
 	virtual ~aui_Keyboard();
 
 	AUI_ERRCODE         GetKeyboardState(uint8 * keyboardState) const;
-	aui_KeyboardEvent * GetLatestKeyboardEvent(void) 
-	{ 
-		return &m_data; 
+	aui_KeyboardEvent * GetLatestKeyboardEvent(void)
+	{
+		return &m_data;
 	};
 
 protected:
-	aui_KeyboardEvent 	m_data;	
+	aui_KeyboardEvent 	m_data;
 	uint8 			    m_keyboardState[k_KEYBOARD_MAXSTATE];
 };
 

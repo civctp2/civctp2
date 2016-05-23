@@ -1,43 +1,28 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "Rec.h"
 #include "civarchive.h"
 
-
 Record::Record()
-{ 
+{
 	sint32 i;
-	m_name = -1; 
-	m_enable = -1; 
+	m_name = -1;
+	m_enable = -1;
 	for(i = 0; i < k_MAX_OBSOLETE; i++) {
 		m_obsolete[i] = -1;
 	}
 	m_nObsolete = 0;
 }
 
-
 void Record::SetName(const StringId string_id)
 {
-   m_name = string_id; 
+   m_name = string_id;
 }
 
 void Record::SetEnabling(const sint32 e)
 {
    m_enable = e;
 }
-
 
 void Record::SetObsolete(const sint32 o, sint32 index)
 {
@@ -46,7 +31,7 @@ void Record::SetObsolete(const sint32 o, sint32 index)
 	if(o < 0)
 		return;
 	if(index >= 0 && index < k_MAX_OBSOLETE) {
-		m_obsolete[index] = o; 
+		m_obsolete[index] = o;
 		if(index + 1 > m_nObsolete)
 			m_nObsolete = index + 1;
 	}
@@ -54,8 +39,8 @@ void Record::SetObsolete(const sint32 o, sint32 index)
 
 sint32 Record::GetEnabling() const
 {
-    return m_enable; 
-} 
+    return m_enable;
+}
 
 sint32 Record::GetObsolete(sint32 index) const
 {

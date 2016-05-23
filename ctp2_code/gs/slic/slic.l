@@ -13,11 +13,11 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.                                                              
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
-//                                                                                                                                                                         
+//
 // Compiler flags
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-#include "slicif.h" 
+#include "slicif.h"
 
 int state;
 int g_slicLineNumber = 1;
@@ -85,16 +85,16 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 				strcpy(include_filename_stack[include_stack_ptr],
 					   buf);
 			    yyin = fopen( buf, "r" );
-			  
+
 			    if ( ! yyin ) {
 				    slic_parse_error = SLIC_ERROR_CANT_OPEN_FILE;
 					yyterminate();
 				} else {
 					yy_switch_to_buffer(
 						yy_create_buffer( yyin, YY_BUF_SIZE ) );
-					
+
 					g_slicLineNumber = 1;
-					BEGIN(INITIAL);	
+					BEGIN(INITIAL);
 				}
 			}
 		}
@@ -119,7 +119,6 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 			}
         }
 
-						
 MessageBox	{ return KW_MESSAGEBOX;}
 AlertBox    { return KW_ALERTBOX; }
 HelpBox     { return KW_HELPBOX; }
@@ -155,7 +154,7 @@ Const       { return KW_CONST; }
 Return      { return KW_RETURN; }
 
 {stringid}  { yylval.val = slicif_find_string(yytext); return STRINGID; }
-{name}		{ 
+{name}		{
 			    int value;
 				void *dbptr;
 				if(slicif_find_const(yytext, &value)) {
@@ -165,26 +164,26 @@ Return      { return KW_RETURN; }
 					yylval.dbptr = dbptr;
 					return DBREF;
 				} else {
-				    yylval.name = (char*)strdup(yytext); 
+				    yylval.name = (char*)strdup(yytext);
 				    return NAME;
 				}
 			}
 [0-9]+		{ yylval.val = atoi(yytext); return NUMBER; }
-{slicid}	{ 
+{slicid}	{
 				yylval.name = malloc(strlen(yytext) - 1);
 				strncpy(yylval.name, yytext + 1, strlen(yytext) - 2);
 				yylval.name[strlen(yytext) - 2] = 0;
-				return IDENTIFIER; 
+				return IDENTIFIER;
 			}
-{string}    { 
+{string}    {
                 yylval.name = malloc(strlen(yytext) - 1);
 				strncpy(yylval.name, yytext + 1, strlen(yytext) - 2);
 				yylval.name[strlen(yytext) - 2] = 0;
 				return STRING;
 			}
 
-\/\/.*\n	{ 
-              g_slicLineNumber++; 
+\/\/.*\n	{
+              g_slicLineNumber++;
               slicif_register_line(g_slicLineNumber, -1);
             }
 \{ 			{ /*slicif_start_block();*/ return yytext[0]; }
@@ -199,11 +198,11 @@ Return      { return KW_RETURN; }
 \>=		{ return GTE; }
 !=      { return NEQ; }
 &&      { return AND; }
-\*\*    { 
+\*\*    {
 		return EXP;
 		}
 \|\|    { return OR; }
-\n		{ 
+\n		{
             g_slicLineNumber++;
             slicif_register_line(g_slicLineNumber, -1);
         }

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  This module's put routine appends the message together with its
  timestamp to the current output file, and advances to the next output
  file if it is time.
- There is an unambiguous mapping between the time/date of a record and 
- the file to which the record is written by the put routine: 
- the output file is always yyyymmdd.dat where yyyymmdd are the year, month 
+ There is an unambiguous mapping between the time/date of a record and
+ the file to which the record is written by the put routine:
+ the output file is always yyyymmdd.dat where yyyymmdd are the year, month
  and day in GMT assocated with the record.
 
  This module's get routine reads from the current location of the current
@@ -96,7 +96,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 
 /*--------------------------------------------------------------------------
  Terminate a wmq file with a 0 timestamp, if it is not already terminated.
- An unterminated wmq file ends in the 4 bytes of wmqMagic, while a 
+ An unterminated wmq file ends in the 4 bytes of wmqMagic, while a
  terminated file ends in that plus 4 zero bytes.
  Returns dp_RES_OK if the file is now terminated,
 		 dp_RES_BADSIZE if the file is not a valid wmq file.
@@ -186,7 +186,7 @@ wmq_t *wmq_create(const char *dir, int openForWrite)
 		return NULL;
 	}
 
-	wmq = (wmq_t *)malloc(sizeof(wmq_t)); 
+	wmq = (wmq_t *)malloc(sizeof(wmq_t));
 	if (!wmq)
 		return NULL;
 	memset(wmq, 0, sizeof(wmq_t));
@@ -211,7 +211,7 @@ wmq_t *wmq_create(const char *dir, int openForWrite)
 void wmq_destroy(wmq_t *wmq)
 {
 	dp_result_t err;
-	
+
 	if (!wmq)
 		return;
 	err = wmq_flush(wmq);
@@ -220,7 +220,7 @@ void wmq_destroy(wmq_t *wmq)
 	fclose(wmq->fp);
 
 	memset(wmq, 0, sizeof(wmq_t));
-	free(wmq);	
+	free(wmq);
 }
 
 /*--------------------------------------------------------------------------
@@ -242,7 +242,7 @@ dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen
 
 /*--------------------------------------------------------------------------
  Get the position of the next message to be read from a web message queue.
- poffset must be the address of an uninitialized long; 
+ poffset must be the address of an uninitialized long;
  ptime must be the address of an uninitialized time_t.
 
  Note that the offset returned is NOT ftell(wmq->fp), since offset 0 points
@@ -289,7 +289,7 @@ dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset)
 	char *file;
 	long real_offset;
 	char buf[wmq_HEADER_LEN];
-	
+
 	precondition(wmq);
 
 	/* create the filename corresponding to when */
@@ -301,7 +301,7 @@ dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset)
 		return dp_RES_BUG;
 	}
 	DPRINT(("wmq_seek: seeking file %s offset %d\n", filepath, offset));
-	
+
 	if (wmq->openForWrite == 1) {
 		int terminated = FALSE;
 
@@ -357,7 +357,7 @@ dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset)
 			}
 			/* set tmin to the last rollover before when */
 			wmq->tmin = when - when % wmqfile_ROLLOVER_TIME;
-			/* set tmax to 1 sec before next rollover following when */ 
+			/* set tmax to 1 sec before next rollover following when */
 			wmq->tmax = wmq->tmin + wmqfile_ROLLOVER_TIME - 1;
 			DPRINT(("wmq_seek: starting new file: tmin:%d - tmax:%d\n",
 				wmq->tmin, wmq->tmax));
@@ -461,7 +461,7 @@ dp_result_t wmq_seek_byTime(wmq_t *wmq, time_t when)
 	char filepath[wmq_DIR_MAXLEN + 24];
 	char *file;
 	char buf[wmq_HEADER_LEN];
-	
+
 	precondition(wmq);
 
 	if (wmq->openForWrite == 1)
@@ -476,7 +476,7 @@ dp_result_t wmq_seek_byTime(wmq_t *wmq, time_t when)
 	*file++ = wmq_DIRECTORY_DELIMITER;
 	sprintf(file, "%04d%02d%02d.wmq", 1900+gmt->tm_year, gmt->tm_mon+1, gmt->tm_mday);
 	DPRINT(("wmq_seek_byTime: seeking t:%d in file %s\n", when, filepath));
-	
+
 	if (wmq->fp != NULL) {
 		DPRINT(("wmq_seek_byTime: closing old file, reading from new.\n"));
 		fclose(wmq->fp);
@@ -514,7 +514,7 @@ dp_result_t wmq_seek_byTime(wmq_t *wmq, time_t when)
 	DPRINT(("wmq_seek_byTime: for when:%d, file:%s tmin:%d tmax:%d\n", when, file, wmq->tmin, wmq->tmax));
 
 	/* Scan until we hit a record after <when> or the end of the queue.
-	 * This can be expensive if <when> is near or after tmax;  perhaps 
+	 * This can be expensive if <when> is near or after tmax;  perhaps
 	 * the case of <when> > tmax should be dealt with separately?
 	 */
 	while (1) {
@@ -631,7 +631,7 @@ dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const c
 		DPRINT(("wmq_put: warning: writing out of order timestamps\n"));
 
 	if (now > wmq->tmax) {
-		/* open a new file for writing. 
+		/* open a new file for writing.
 		 * wmq_seek will terminate this file.
 		 */
 		DPRINT(("wmq_put: now:%d > wmq->tmax:%d, opening new file\n", now, wmq->tmax));
@@ -639,9 +639,9 @@ dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const c
 		if (err != dp_RES_OK) {
 			DPRINT(("wmq_put: wmq_seek to new file failed with err:%d\n", err));
 			return err;
-		} 
+		}
 	}
-	
+
 	buf[0] = dpGETLONG_FIRSTBYTE(now);
 	buf[1] = dpGETLONG_SECONDBYTE(now);
 	buf[2] = dpGETLONG_THIRDBYTE(now);

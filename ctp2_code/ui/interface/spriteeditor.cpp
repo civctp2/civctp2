@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -39,7 +39,6 @@
 #include "aui_uniqueid.h"
 #include "c3ui.h"
 #include "director.h"           // g_director
-
 
 
 #include "maputils.h"
@@ -84,7 +83,7 @@
 
 
 
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 
 
 
@@ -123,7 +122,6 @@ extern SelectedItem		*g_selected_item;
 extern Player			**g_player;
 extern ProfileDB		*g_theProfileDB;
 
-
 extern unsigned char *g_compression_buff;
 
 
@@ -147,8 +145,7 @@ static MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
 	"DipButton",
 	"OptionsButton",
 	"CityButton",
- 
- 
+
 };
 
 static aui_StringTable *s_statsString;
@@ -159,7 +156,7 @@ static aui_StringTable *s_statsString;
 
 void SpriteEditSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 }
 
 
@@ -168,9 +165,9 @@ void SpriteEditSwitchActionCallback( aui_Control *control, uint32 action, uint32
 
 void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-	
+
 	g_spriteEditWindow->m_loopInProgress = false;
 
    	if ((int)cookie)
@@ -189,7 +186,7 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	g_spriteEditWindow->SetAnimation((sint32)cookie);
 	g_spriteEditWindow->m_frame             = 0;
 	g_spriteEditWindow->m_facing            = k_DEFAULTSPRITEFACING;
-	g_spriteEditWindow->m_loopInProgress    = false;; 
+	g_spriteEditWindow->m_loopInProgress    = false;;
 	g_spriteEditWindow->m_stopAfterLoop     = true;
 	g_spriteEditWindow->BeginAnimation();
 }
@@ -199,13 +196,12 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 
 void StepCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->AddFrame((sint32)cookie); 
+	g_spriteEditWindow->AddFrame((sint32)cookie);
 	g_spriteEditWindow->m_loopInProgress = false;
 
-   
 }
 
 
@@ -214,7 +210,7 @@ void StepCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 
 void PlayCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_spriteEditWindow->m_loopInProgress = !g_spriteEditWindow->m_loopInProgress;
@@ -232,12 +228,11 @@ void PlayCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 
 void FacingCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_spriteEditWindow->AddFacing((sint32)cookie);
 
-	
 }
 
 
@@ -250,18 +245,18 @@ int SpriteEditWindow_Initialize( void )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( g_spriteEditWindow ) return 0; 
+	if ( g_spriteEditWindow ) return 0;
 
 	strcpy(windowBlock, "SpriteEditor");
 
 	g_spriteEditWindow = new SpriteEditWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
-   
+
 	Assert( AUI_NEWOK(g_spriteEditWindow, errcode));
 	if ( !AUI_NEWOK(g_spriteEditWindow, errcode) ) return -1;
 
-	
 
-	
+
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
@@ -277,10 +272,9 @@ int SpriteEditWindow_Initialize( void )
 }
 
 
-
 void SpriteEditWindow_Cleanup(void)
 {
-	if (g_c3ui && g_spriteEditWindow) 
+	if (g_c3ui && g_spriteEditWindow)
     {
 	    g_c3ui->RemoveWindow(g_spriteEditWindow->Id());
     }
@@ -292,7 +286,6 @@ void SpriteEditWindow_Cleanup(void)
 	g_spriteEditWindow = NULL;
 }
 
-
 SpriteEditWindow::SpriteEditWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -302,13 +295,12 @@ SpriteEditWindow::SpriteEditWindow(
 	:
 	C3Window(retval, id, ldlBlock, bpp, type)
 {
-	
+
 	m_Load=NULL;
 	m_Save=NULL;
 	m_drawX=400;
 	m_drawY=300;
 
-	
 	m_largeSurface = NULL;
 	m_largeImage = NULL;
 
@@ -316,44 +308,37 @@ SpriteEditWindow::SpriteEditWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
-	
-	
+
+
+
 	m_largeSurface = NULL;
 
-	
 	InitializeControls(retval,ldlBlock);
 
 	m_loopInProgress	=false;
 	m_stopAfterLoop		=true;
 	m_lastTime			=0;
 
-	m_facing		=k_DEFAULTSPRITEFACING; 
-	m_frame			=0; 
+	m_facing		=k_DEFAULTSPRITEFACING;
+	m_frame			=0;
 	m_animation		=UNITACTION_MOVE;
-	m_currentAnim	=NULL;	 
+	m_currentAnim	=NULL;
 
-	
 	m_actionObj		= new Action();
 
-	
 	aui_Dimension	*dimension=GetDim();
 
 	if (dimension!=NULL)
 	{
 		sint32	height=dimension->VerticalSizeData();
 
-		
 		m_mouseChangeY = g_ScreenHeight-height;
 
-		
 		Move(0,m_mouseChangeY);
 
-		
 		Resize(g_ScreenWidth,height);
 	}
 
-	
 	dimension=m_largeImage->GetDim();
 
 	if (dimension!=NULL)
@@ -361,27 +346,23 @@ SpriteEditWindow::SpriteEditWindow(
 		sint32	height=dimension->VerticalSizeData();
 		sint32  width =dimension->HorizontalSizeData();
 		sint32	posX=dimension->HorizontalPositionData();
-		
+
 		m_largeImage->Move(posX,g_ScreenHeight-height);
 
-		
 		m_largeRectAbs.left		= posX;
 		m_largeRectAbs.top		= g_ScreenHeight-height;
 		m_largeRectAbs.right	= posX+width;
 		m_largeRectAbs.bottom	= m_largeRectAbs.top+height;
 
-		
-		m_largeRect.left	= 0;	
+		m_largeRect.left	= 0;
 		m_largeRect.top		= 0;
 		m_largeRect.right	= width;
 		m_largeRect.bottom	= height;
 	}
 
-	
 	m_currentSprite=NULL;
 	m_spriteSurface=NULL;
 
-	
 	g_compression_buff = new unsigned char[COM_BUFF_SIZE];
 	LoadSprite("GU02");
 }
@@ -393,14 +374,14 @@ SpriteEditWindow::~SpriteEditWindow()
 //  delete m_actionObj      : TODO (crashes)
 	delete m_currentSprite;
 	delete m_spriteSurface;
-	delete m_Load;	 
-	delete m_Save;	 
+	delete m_Load;
+	delete m_Save;
 	delete m_fileName;
-	delete m_MOVEAnim;  
+	delete m_MOVEAnim;
 	delete m_ATTACKAnim;
-	delete m_IDLEAnim;  
+	delete m_IDLEAnim;
 	delete m_VICTORYAnim;
-	delete m_WORKAnim;  
+	delete m_WORKAnim;
 	delete m_stepPlus;
 	delete m_stepMinus;
 	delete m_playOnce;
@@ -413,8 +394,7 @@ SpriteEditWindow::~SpriteEditWindow()
 	delete m_hotCoordsHerald;
 }
 
-
-void	
+void
 SpriteEditWindow::AddFrame	(sint32 add)
 {
 	m_frame +=add;
@@ -422,13 +402,13 @@ SpriteEditWindow::AddFrame	(sint32 add)
 	SetFrame(m_frame);
 }
 
-void	
+void
 SpriteEditWindow::SetFrame	(sint32 frame)
 {
 	m_frame = frame;
 
 	if ((m_frame < 0) ||
-        (static_cast<size_t>(m_frame) >= 
+        (static_cast<size_t>(m_frame) >=
             m_currentSprite->GetNumFrames((GAME_ACTION) m_animation)
         )
        )
@@ -437,7 +417,7 @@ SpriteEditWindow::SetFrame	(sint32 frame)
     }
 }
 
-void	
+void
 SpriteEditWindow::AddFacing	(sint32 add)
 {
 	m_facing += add;
@@ -445,7 +425,7 @@ SpriteEditWindow::AddFacing	(sint32 add)
 	SetFacing(m_facing);
 }
 
-void	
+void
 SpriteEditWindow::SetFacing	(sint32 facing)
 {
 	m_facing = facing;
@@ -457,15 +437,13 @@ SpriteEditWindow::SetFacing	(sint32 facing)
 			m_facing=k_MAX_FACINGS-1;
 }
 
-void	
+void
 SpriteEditWindow::SetAnimation(sint32 anim)
 {
 	m_animation = anim;
 
-	
 	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
 
-	
 	m_currentAnim =m_currentSprite->GetAnim((GAME_ACTION)m_animation);
 }
 
@@ -476,29 +454,24 @@ SpriteEditWindow::SetAnimation(sint32 anim)
 void
 SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 {
-   
-	
+
 	m_Load = spNew_ctp2_Button(errcode,windowBlock,"STLoadButton","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_Save = spNew_ctp2_Button(errcode,windowBlock,"STSaveButton","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 
-	
 	m_fileName		= spNewTextEntry(errcode,windowBlock,"Name");
 
-	
 	m_MOVEAnim  	=spNew_ctp2_Button(errcode,windowBlock,"STMOVEAnim"   ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_ATTACKAnim	=spNew_ctp2_Button(errcode,windowBlock,"STATTACKAnim" ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_IDLEAnim  	=spNew_ctp2_Button(errcode,windowBlock,"STIDLEAnim"   ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_VICTORYAnim	=spNew_ctp2_Button(errcode,windowBlock,"STVICTORYAnim","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
-	m_WORKAnim		=spNew_ctp2_Button(errcode,windowBlock,"STWORKAnim"   ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");  
+	m_WORKAnim		=spNew_ctp2_Button(errcode,windowBlock,"STWORKAnim"   ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 
-	
 	m_MOVEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_MOVE   );
 	m_ATTACKAnim	->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_ATTACK );
 	m_IDLEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_IDLE   );
 	m_VICTORYAnim	->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_VICTORY);
 	m_WORKAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_WORK   );
 
-	
 	m_stepPlus		=spNew_ctp2_Button(errcode,windowBlock,"STPlayStepPlus"	,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_stepMinus		=spNew_ctp2_Button(errcode,windowBlock,"STPlayStepMinus","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_playOnce		=spNew_ctp2_Button(errcode,windowBlock,"STPlayOnce"		,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
@@ -506,11 +479,9 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 	m_facingPlus	=spNew_ctp2_Button(errcode,windowBlock,"STFacingPlus"	,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_facingMinus	=spNew_ctp2_Button(errcode,windowBlock,"STFacingMinus"	,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 
-	
 	m_Load ->SetActionFuncAndCookie(FileButtonActionCallback,(void *)true );
 	m_Save ->SetActionFuncAndCookie(FileButtonActionCallback,(void *)false);
 
-	
 	m_stepPlus		->SetActionFuncAndCookie(StepCallback	,(void *) 1);
 	m_stepMinus		->SetActionFuncAndCookie(StepCallback	,(void *)-1);
 	m_playOnce		->SetActionFuncAndCookie(PlayCallback	,(void *)true);
@@ -518,20 +489,18 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 	m_facingPlus	->SetActionFuncAndCookie(FacingCallback	,(void *) 1);
 	m_facingMinus	->SetActionFuncAndCookie(FacingCallback	,(void *)-1);
 
-	
 	m_largeImage = new C3Window(errcode, aui_UniqueId(),"STLargeImage", 16 );
 
 	g_c3ui->AddWindow( m_largeImage );
 
-	
 	m_hotCoordsCurrent = new c3_Static(errcode, aui_UniqueId(),"SpriteEditor.CoordsHotSpot");
 	m_hotCoordsMouse   = new c3_Static(errcode, aui_UniqueId(),"SpriteEditor.CoordsCursor" );
 	m_hotCoordsHerald  = new c3_Static(errcode, aui_UniqueId(),"SpriteEditor.CoordsHerald");
 
-	
-	
 
-	
+
+
+
 	m_Load		->SetParent(g_spriteEditWindow);
 	m_Save		->SetParent(g_spriteEditWindow);
 
@@ -552,12 +521,10 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 
 	m_largeImage ->SetParent(g_spriteEditWindow);
 
-	
 	m_hotCoordsCurrent->SetParent(g_spriteEditWindow);
 	m_hotCoordsMouse  ->SetParent(g_spriteEditWindow);
 	m_hotCoordsHerald ->SetParent(g_spriteEditWindow);
 
-	
 	m_Load		->Show();
 	m_Save		->Show();
 
@@ -578,11 +545,10 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 
 	m_largeImage ->Show();
 
-	
 	m_hotCoordsCurrent->Show();
 	m_hotCoordsMouse  ->Show();
 	m_hotCoordsHerald ->Show();
-	
+
 	m_largeSurface=m_largeImage->TheSurface();
 }
 
@@ -600,18 +566,16 @@ AUI_ERRCODE SpriteEditWindow::InitCommon(void)
 }
 
 
-
 AUI_ERRCODE SpriteEditWindow::InitCommonLdl(MBCHAR *ldlBlock)
-{		
+{
 	InitCommon();
 	return C3Window::InitCommon();
 }
 
-
 AUI_ERRCODE SpriteEditWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	if ( IsHidden() ) 
+
+	if ( IsHidden() )
 		return AUI_ERRCODE_OK;
 
 	return AUI_ERRCODE_OK;
@@ -620,7 +584,7 @@ AUI_ERRCODE SpriteEditWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y
 
 
 
-bool	
+bool
 SpriteEditWindow::FileExists(char *name)
 {
 	if (name==NULL)
@@ -630,7 +594,7 @@ SpriteEditWindow::FileExists(char *name)
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, spritePath, FALSE);
 	sprintf(fullPath, "%s%s%s", spritePath, FILE_SEP, name);
-	
+
 	return c3files_PathIsValid(fullPath);
 }
 
@@ -642,11 +606,9 @@ SpriteEditWindow::LoadSprite(char *name)
 {
 	char tbuffer[256];
 
-	
-	m_loopInProgress=false;; 
+	m_loopInProgress=false;;
 	m_stopAfterLoop =true;
 
-	
 	if (name==NULL)
 	{
 		m_fileName->GetFieldText(tbuffer,128);
@@ -659,22 +621,18 @@ SpriteEditWindow::LoadSprite(char *name)
 
 	sprintf(tbuffer,"%s.SPR",name);
 
-	
 	if (!FileExists(tbuffer))
 		return;
 
-	
 	m_frame=0;
 	m_facing=k_DEFAULTSPRITEFACING;
 
-	
 	delete m_currentSprite;
     delete m_spriteSurface;
 
 	m_currentSprite = new UnitSpriteGroup(GROUPTYPE_UNIT);
 	m_currentSprite->LoadFull(tbuffer);
 
-	
 	uint32		i;
 	uint16		w = 0, h = 0;
 
@@ -691,10 +649,10 @@ SpriteEditWindow::LoadSprite(char *name)
 		{
 			w =  m_spriteData->GetWidth();
 			h =  m_spriteData->GetHeight();
-		
+
 			if (m_spriteRect.right<w)
 				m_spriteRect.right=w;
-			
+
 			if (m_spriteRect.bottom<h)
 				m_spriteRect.bottom=h;
 		}
@@ -702,16 +660,12 @@ SpriteEditWindow::LoadSprite(char *name)
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	m_spriteSurface=new aui_Surface(&errcode,m_spriteRect.right,m_spriteRect.bottom,16);
 
-	
 	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
 
-	
 	m_currentAnim =m_currentSprite->GetAnim((GAME_ACTION)m_animation);
 
-	
 	float largew=(float)(m_largeRect.right);
 	float largeh=(float)(m_largeRect.bottom);
 
@@ -725,11 +679,9 @@ SpriteEditWindow::LoadSprite(char *name)
 	else
 		m_heightRatio=1.0f;
 
-	
-	m_oneOverWidthRatio  = 1.0f/m_widthRatio; 
-	m_oneOverHeightRatio = 1.0f/m_heightRatio; 
-	
-	
+	m_oneOverWidthRatio  = 1.0f/m_widthRatio;
+	m_oneOverHeightRatio = 1.0f/m_heightRatio;
+
 	m_drawFlag      = true;
 }
 
@@ -742,7 +694,6 @@ SpriteEditWindow::SaveSprite(char *name)
 	char tbuffer[256];
 	char *fname=name;
 
-	
 	if (name==NULL)
 	{
 		m_fileName->GetFieldText(tbuffer,128);
@@ -755,9 +706,9 @@ SpriteEditWindow::SaveSprite(char *name)
 	sprintf(tbuffer,"%s.SPR",name);
 
 	m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
-	
+
 	sprintf(tbuffer,"%s.TXT",fname);
-	
+
 	m_currentSprite->ExportScript(name);
 }
 
@@ -767,16 +718,14 @@ SpriteEditWindow::SaveSprite(char *name)
 void
 SpriteEditWindow::BeginAnimation()
 {
-	
+
 	if (m_currentAnim==NULL)
 		return;
 
 //	sint32	  speed				= g_theProfileDB->GetUnitSpeed();
 
-	
 	m_frame = 0;
 
-	
 	m_actionObj->SetActionType(m_animation);
 	m_actionObj->SetAnimPos(0);
 	m_actionObj->SetSpecialDelayProcess(FALSE);
@@ -787,16 +736,16 @@ SpriteEditWindow::BeginAnimation()
 	m_currentAnim->SetType(ANIMTYPE_LOOPED);
 	m_actionObj->SetUnitsVisibility(1000);
 	m_actionObj->SetUnitVisionRange(1000);
-						  
+
 	m_currentAnim->SetWeAreInDelay(FALSE);
 	m_currentAnim->SetFinished(FALSE);
 
-	
 
-	
-	  
 
-	
+
+
+
+
 }
 
 
@@ -812,14 +761,13 @@ SpriteEditWindow::Animate()
 		m_currentAnim->SetWeAreInDelay(FALSE);
 
 		m_actionObj->Process();
-		
+
 		sint32 animPos = m_actionObj->GetAnimPos();
 
 		m_frame = m_currentAnim->GetFrame(animPos);
 
 		sint32 num_frames = m_currentAnim->GetNumFrames();
-		
-		
+
 		if (animPos >= num_frames)
 		{
 			animation_over = true;
@@ -835,8 +783,7 @@ SpriteEditWindow::Animate()
 		AddFrame(1);
 		animation_over = (m_frame==0);
 	}
-   
-	
+
 	if (animation_over)
 	{
 		if (m_stopAfterLoop)
@@ -845,13 +792,12 @@ SpriteEditWindow::Animate()
 }
 
 
-
 void
 SpriteEditWindow::DrawSprite( )
 {
 
 	if ((m_currentSprite!=NULL)&&(g_tiledMap!=NULL))
-	{		
+	{
 		RECT rect;
 
 		rect.left	= m_drawX-m_spriteRect.right;
@@ -859,16 +805,14 @@ SpriteEditWindow::DrawSprite( )
 		rect.right	= m_drawX+m_spriteRect.right;
 		rect.bottom = m_drawY+m_spriteRect.bottom;
 
-		
 		if (m_drawFlag)
 			m_currentSprite->Draw((UNITACTION)m_animation,m_frame,m_drawX,m_drawY,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL,false,false);
 
-		
 		POINT flag;
 		maputils_MapXY2PixelXY(m_drawPoint.x, m_drawPoint.y, flag);
-		
+
 		POINT *hPoint = m_currentSprite->GetShieldPoints((UNITACTION)m_animation);
-		if (hPoint) 
+		if (hPoint)
         {
 			flag.x += hPoint->x;
 			flag.y += hPoint->y;
@@ -876,13 +820,13 @@ SpriteEditWindow::DrawSprite( )
 
 		MAPICON icon = MAPICON_HERALD;
 
-		
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
 		Pixel16 blue = pixelutils_RGB(0,0,255);
 
 		g_tiledMap->DrawColorizedOverlayIntoMix(g_tiledMap->GetTileSet()->GetMapIconData(icon), flag.x, flag.y, blue);
@@ -890,7 +834,6 @@ SpriteEditWindow::DrawSprite( )
 		g_tiledMap->AddDirtyRectToMix(rect);
 	}
 }
-
 
 
 void
@@ -904,7 +847,6 @@ SpriteEditWindow::ReDrawLargeSprite( )
 		POINT sav,pt;
 		static int cval=0;
 
-		
 		g_c3ui->TheBlitter()->ColorBlt(m_spriteSurface,&m_spriteRect,RGB(64,64,64),k_AUI_BLITTER_FLAG_COPY);
 
 		pt.x = 0;
@@ -919,25 +861,23 @@ SpriteEditWindow::ReDrawLargeSprite( )
 		m_currentSprite->SetHotPoint((UNITACTION)m_animation,m_facing,sav);
 
 		g_c3ui->TheBlitter()->StretchBlt(m_largeSurface,&m_largeRect,m_spriteSurface,&m_spriteRect,k_AUI_BLITTER_FLAG_COPY);
-		
-		
+
 		char tbuffer[256];
 
 		sprintf(tbuffer,"HotSpot:\t%d,%d",sav.x,sav.y);
 		m_hotCoordsCurrent  ->SetText(tbuffer);
-		
-		
+
 		RECT HotRect;
 
 		HotRect.left    = (int)(m_oneOverWidthRatio*(float)sav.x)-3;
 		HotRect.top     = (int)(m_oneOverHeightRatio*(float)sav.y)-3;
 		HotRect.right   = HotRect.left+6;
 		HotRect.bottom  = HotRect.top +6;
-		  
+
 		COLORREF color=RGB(cval,cval,cval);
-		
+
 		g_c3ui->TheBlitter()->ColorBlt(m_largeSurface,&HotRect,color,k_AUI_BLITTER_FLAG_COPY);
-	   
+
 		POINT *hPoint = m_currentSprite->GetShieldPoints((UNITACTION)m_animation);
 		if(hPoint) {
 			sprintf(tbuffer, "Herald:\t%d,%d", hPoint->x, hPoint->y);
@@ -953,24 +893,20 @@ SpriteEditWindow::ReDrawLargeSprite( )
 	}
 }
 
-
 AUI_ERRCODE SpriteEditWindow::Idle( void )
 {
 	if ((g_c3ui->TheMouse()==NULL)||(g_tiledMap==NULL))
 		return AUI_ERRCODE_OK;
 
-	sint32 curTime = g_director->GetMasterCurTime(); 
+	sint32 curTime = g_director->GetMasterCurTime();
 
-	
 	if ((curTime-m_lastTime)>100)
 	{
 		m_lastTime = curTime;
 
-		
 		if (m_loopInProgress)
 			Animate();
 	}
-
 
 	ReDrawLargeSprite();
 
@@ -978,21 +914,19 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 
 	char tbuffer[256];
 
-	
 	if (PtInRect(&m_largeRectAbs,me->position))
 	{
 		int mx,my;
 
 		mx = (int)((float)(me->position.x-m_largeRectAbs.left)*m_widthRatio);
 		my = (int)((float)(me->position.y-m_largeRectAbs.top )*m_heightRatio);
- 
+
 		sprintf(tbuffer,"Cursor:\t%d,%d",mx,my);
 		m_hotCoordsMouse  ->SetText(tbuffer);
 	}
 
 	if (me->rbutton) {
-		
-		
+
 			POINT new_herald = me->position;
 			new_herald.x -= m_largeRectAbs.left;
 			new_herald.y -= m_largeRectAbs.top;
@@ -1000,12 +934,12 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 			new_herald.y = (int)((float)new_herald.y*m_heightRatio);
 
 			*m_currentSprite->GetShieldPoints((UNITACTION)m_animation) = new_herald;
-			
+
 	}
 
 	if (!me->lbutton)
 		return AUI_ERRCODE_OK;
-	
+
 	if (g_c3ui->TheMouse()->Y()<m_mouseChangeY)
 	{
 		MapPoint point;
@@ -1014,18 +948,17 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 		m_drawX += k_ACTOR_CENTER_OFFSET_X;
 		m_drawY += k_ACTOR_CENTER_OFFSET_Y;
 		m_drawPoint = point;
-  	
-	   	
+
 	}
 	else
 	{
 		if (PtInRect(&m_largeRectAbs,me->position))
 		{
 			POINT new_hot=me->position;
-			
+
 			new_hot.x -= m_largeRectAbs.left;
 			new_hot.y -= m_largeRectAbs.top;
-		  
+
 			new_hot.x = (int)((float)new_hot.x*m_widthRatio);
 			new_hot.y = (int)((float)new_hot.y*m_heightRatio);
 
@@ -1036,4 +969,3 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 	return AUI_ERRCODE_OK;
 
 }
-

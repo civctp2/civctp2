@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "globals.h"
 #include "C3GameState.h"
@@ -47,14 +36,12 @@
 #include "player.h"
 
 
-
 #include "GameSettings.h"
 
 #include "network.h"
 
 
-
-extern Player **g_player; 
+extern Player **g_player;
 extern ConstDB *g_theConstDB ;
 extern CivPaths *g_civPaths;
 extern UnitPool *g_theUnitPool;
@@ -96,110 +83,108 @@ STDMETHODIMP_(ULONG) C3GameState::Release()
 C3GameState::C3GameState(sint32 idx)
 
 {
-    m_refCount = 0; 
-    Assert(g_player[idx]); 
-    m_owner = PLAYER_INDEX(idx); 
+    m_refCount = 0;
+    Assert(g_player[idx]);
+    m_owner = PLAYER_INDEX(idx);
 
   	m_player = new C3Player(idx);
 	m_world = new C3World(g_player[idx]);
-    m_astar = new RobotAstar(g_player[idx]); 
-    m_unitDB = new C3UnitDB(g_player[idx]); 
-    m_buildingDB = new C3BuildingDB(g_player[idx]); 
-    m_population = new C3Population(idx); 
+    m_astar = new RobotAstar(g_player[idx]);
+    m_unitDB = new C3UnitDB(g_player[idx]);
+    m_buildingDB = new C3BuildingDB(g_player[idx]);
+    m_population = new C3Population(idx);
 	m_science = new C3Science(idx) ;
 	m_government = new C3Government(idx) ;
 	m_wonder = new C3Wonder(idx) ;
-    m_installationDB = new C3InstDB(g_player[idx]); 
-    m_terrainDB = new C3TerrainDB(g_player[idx]); 
+    m_installationDB = new C3InstDB(g_player[idx]);
+    m_terrainDB = new C3TerrainDB(g_player[idx]);
 	m_errorReport = new C3ErrorReport;
 	m_stringDB = new C3String;
 	m_endGameDB = new C3EndGameDB(g_player[idx]) ;
 
 	if(g_network.IsClient()) {
-		
+
 		m_rand = new C3Rand(TRUE);
 	} else {
 		m_rand = new C3Rand(FALSE);
 	}
 }
 
-
 C3GameState::C3GameState(CivArchive &archive)
 
-{ 
-    Serialize(archive); 
-} 
+{
+    Serialize(archive);
+}
 
 void C3GameState::Serialize(CivArchive &archive)
 
 {
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
+    if (archive.IsStoring()) {
 
-        archive << m_refCount; 
-        archive.PutSINT32(m_owner); 
+        archive << m_refCount;
+        archive.PutSINT32(m_owner);
 
-        m_player->Serialize(archive); 
-        m_world->Serialize(archive); 
-        m_astar->Serialize(archive); 
-        m_unitDB->Serialize(archive); 
+        m_player->Serialize(archive);
+        m_world->Serialize(archive);
+        m_astar->Serialize(archive);
+        m_unitDB->Serialize(archive);
 
-        m_buildingDB->Serialize(archive);      
+        m_buildingDB->Serialize(archive);
         m_population->Serialize(archive);
 		m_science->Serialize(archive) ;
 		m_government->Serialize(archive) ;
 		m_wonder->Serialize(archive) ;
-        m_installationDB->Serialize(archive); 
-        m_terrainDB->Serialize(archive); 
-        m_rand->Serialize(archive); 
-        m_errorReport->Serialize(archive); 
-        m_stringDB->Serialize(archive); 
-		m_endGameDB->Serialize(archive); 
-    } else { 
-        archive >> m_refCount; 
-        m_owner = PLAYER_INDEX(archive.GetSINT32()); 
+        m_installationDB->Serialize(archive);
+        m_terrainDB->Serialize(archive);
+        m_rand->Serialize(archive);
+        m_errorReport->Serialize(archive);
+        m_stringDB->Serialize(archive);
+		m_endGameDB->Serialize(archive);
+    } else {
+        archive >> m_refCount;
+        m_owner = PLAYER_INDEX(archive.GetSINT32());
 
         m_player = new C3Player(archive);
 	    m_world = new C3World(g_player[m_owner], archive);
-        m_astar = new RobotAstar(g_player[m_owner], archive); 
+        m_astar = new RobotAstar(g_player[m_owner], archive);
         m_unitDB = new C3UnitDB(g_player[m_owner], archive);
-		
-        m_buildingDB = new C3BuildingDB(g_player[m_owner], archive); 
+
+        m_buildingDB = new C3BuildingDB(g_player[m_owner], archive);
         m_population = new C3Population(archive) ;
 		m_science = new C3Science(archive) ;
 		m_government = new C3Government(archive) ;
 		m_wonder = new C3Wonder(archive) ;
-        m_installationDB = new C3InstDB(g_player[m_owner], archive); 
+        m_installationDB = new C3InstDB(g_player[m_owner], archive);
         m_terrainDB = new C3TerrainDB(g_player[m_owner], archive);
-        m_rand = new C3Rand(archive); 
+        m_rand = new C3Rand(archive);
         m_errorReport = new C3ErrorReport(archive);
 	    m_stringDB = new C3String(archive);
         m_endGameDB = new C3EndGameDB(g_player[m_owner], archive);
     }
 
     CHECKSERIALIZE
-} 
+}
 
 C3GameState::~C3GameState()
 
 {
     delete (C3Player*) m_player;
 	delete (C3World *) m_world;
-    delete (RobotAstar *) m_astar; 
+    delete (RobotAstar *) m_astar;
     delete (C3UnitDB *) m_unitDB;
-	delete (C3BuildingDB *) m_buildingDB; 
-    delete (C3InstDB *) m_installationDB; 
-    delete (C3Population *) m_population; 
+	delete (C3BuildingDB *) m_buildingDB;
+    delete (C3InstDB *) m_installationDB;
+    delete (C3Population *) m_population;
     delete (C3Science *) m_science ;
 	delete (C3Government *) m_government ;
 	delete (C3Wonder *) m_wonder ;
-    delete (C3TerrainDB *) m_terrainDB; 
+    delete (C3TerrainDB *) m_terrainDB;
 	if(m_errorReport) delete m_errorReport;
 	if(m_stringDB) delete m_stringDB;
 	delete (C3EndGameDB *) m_endGameDB;
 
-	
 	if (m_rand)
 		delete m_rand;
 }
@@ -222,7 +207,7 @@ sint32 C3GameState::GetNumPlayers()
 
 sint32 C3GameState::GetMyPlayerId()
 {
-    return m_owner; 
+    return m_owner;
 }
 
 
@@ -239,11 +224,10 @@ sint32 C3GameState::GetConstRevolutionLevel(void)
 	return (g_theConstDB->GetRevolutionLevel()) ;
 	}
 
-sint32 C3GameState::GetConstRiotLevel(void) 
-{ 
-    return g_theConstDB->GetRiotLevel(); 
-} 
-
+sint32 C3GameState::GetConstRiotLevel(void)
+{
+    return g_theConstDB->GetRiotLevel();
+}
 
 const MBCHAR *C3GameState::GetDataPath(void)
 {
@@ -279,20 +263,18 @@ STDMETHODIMP_(void)C3GameState::SendDiplomaticRequest(C3AIDiplomaticRequest *req
 			}
 			break;
 		default:
-			
 
-            break; 
+            break;
 	}
 	switch(request->m_request) {
-		case REQUEST_TYPE_GREETING: 
+		case REQUEST_TYPE_GREETING:
 			p->RequestGreeting(recip);
 			break;
 
-		
-		case REQUEST_TYPE_DEMAND_ADVANCE: 
+		case REQUEST_TYPE_DEMAND_ADVANCE:
 			p->RequestDemandAdvance(recip, request->m_advance);
 			break;
-		case REQUEST_TYPE_DEMAND_CITY: 
+		case REQUEST_TYPE_DEMAND_CITY:
 		{
 			BSetID *idx = g_player[recip]->m_bset_cities_index->Find(request->m_targetCity);
 			if(idx) {
@@ -305,36 +287,36 @@ STDMETHODIMP_(void)C3GameState::SendDiplomaticRequest(C3AIDiplomaticRequest *req
 			break;
 		}
 
-		case REQUEST_TYPE_DEMAND_MAP: 
+		case REQUEST_TYPE_DEMAND_MAP:
 			p->RequestDemandMap(recip);
 			break;
-		case REQUEST_TYPE_DEMAND_GOLD: 
+		case REQUEST_TYPE_DEMAND_GOLD:
 		{
 			Gold gold;
 			gold.SetLevel(request->m_gold);
 			p->RequestDemandGold(recip, gold);
 			break;
 		}
-		case REQUEST_TYPE_DEMAND_STOP_TRADE: 
+		case REQUEST_TYPE_DEMAND_STOP_TRADE:
 			p->RequestDemandStopTrade(recip, request->m_thirdParty);
 			break;
-		case REQUEST_TYPE_DEMAND_ATTACK_ENEMY: 
+		case REQUEST_TYPE_DEMAND_ATTACK_ENEMY:
 			p->RequestDemandAttackEnemy(recip, request->m_thirdParty);
 			break;
-		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS: 
+		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS:
 			p->RequestDemandLeaveOurLands(recip);
 			break;
-		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION: 
+		case REQUEST_TYPE_DEMAND_REDUCE_POLLUTION:
 			p->RequestDemandReducePollution(recip);
 			break;
 		case REQUEST_TYPE_DEMAND_NO_PIRACY:
 			p->RequestDemandNoPiracy(recip);
 			break;
-		
-		case REQUEST_TYPE_OFFER_ADVANCE: 
+
+		case REQUEST_TYPE_OFFER_ADVANCE:
 			p->RequestOfferAdvance(recip, request->m_advance);
 			break;
-		case REQUEST_TYPE_OFFER_CITY: 
+		case REQUEST_TYPE_OFFER_CITY:
 		{
 			BSetID *idx = p->m_bset_cities_index->Find(request->m_targetCity);
 			Assert(idx);
@@ -347,23 +329,23 @@ STDMETHODIMP_(void)C3GameState::SendDiplomaticRequest(C3AIDiplomaticRequest *req
 			}
 			break;
 		}
-		case REQUEST_TYPE_OFFER_MAP: 
+		case REQUEST_TYPE_OFFER_MAP:
 			p->RequestOfferMap(recip);
 			break;
-		case REQUEST_TYPE_OFFER_GOLD: 
+		case REQUEST_TYPE_OFFER_GOLD:
 		{
 			Gold gold;
 			gold.SetLevel(request->m_gold);
 			p->RequestOfferGold(recip, gold);
 			break;
 		}
-		case REQUEST_TYPE_OFFER_CEASE_FIRE: 
+		case REQUEST_TYPE_OFFER_CEASE_FIRE:
 			p->RequestOfferCeaseFire(recip);
 			break;
-		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE: 
+		case REQUEST_TYPE_OFFER_PERMANENT_ALLIANCE:
 			p->RequestOfferPermanentAlliance(recip);
 			break;
-		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY: 
+		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY:
 		{
 			BSetID *idx = g_player[request->m_thirdParty]->m_bset_cities_index->Find(request->m_targetCity);
 			Assert(idx);
@@ -376,14 +358,14 @@ STDMETHODIMP_(void)C3GameState::SendDiplomaticRequest(C3AIDiplomaticRequest *req
 			}
 			break;
 		}
-		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION: 
+		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION:
 			p->RequestOfferPactEndPollution(recip);
 			break;
-			
-		case REQUEST_TYPE_EXCHANGE_ADVANCE: 
+
+		case REQUEST_TYPE_EXCHANGE_ADVANCE:
 			p->RequestExchangeAdvance(recip, request->m_advance, request->m_reciprocalAdvance);
 			break;
-		case REQUEST_TYPE_EXCHANGE_CITY: 
+		case REQUEST_TYPE_EXCHANGE_CITY:
 		{
 			BSetID *idx = g_player[request->m_thirdParty]->m_bset_cities_index->Find(request->m_targetCity);
 			Assert(idx);
@@ -404,13 +386,13 @@ STDMETHODIMP_(void)C3GameState::SendDiplomaticRequest(C3AIDiplomaticRequest *req
 			}
 			break;
 		}
-		case REQUEST_TYPE_EXCHANGE_MAP: 
+		case REQUEST_TYPE_EXCHANGE_MAP:
 			p->RequestExchangeMap(recip);
 			break;
 	}
 }
 
-STDMETHODIMP_(sint32) C3GameState::GetTradeWith(PLAYER_INDEX second, 
+STDMETHODIMP_(sint32) C3GameState::GetTradeWith(PLAYER_INDEX second,
 												PLAYER_INDEX third)
 {
 	Assert(g_player[second]);
@@ -421,37 +403,37 @@ STDMETHODIMP_(sint32) C3GameState::GetTradeWith(PLAYER_INDEX second,
 }
 
 void C3GameState::GetMinMaxStrength(double *min, double *max)
-{ 
-    sint32 player_idx; 
-    double s; 
+{
+    sint32 player_idx;
+    double s;
 
-    *min = 1000000000.0; 
-    *max = -1.0; 
+    *min = 1000000000.0;
+    *max = -1.0;
 
-    for (player_idx=0; player_idx < k_MAX_PLAYERS; player_idx++) { 
+    for (player_idx=0; player_idx < k_MAX_PLAYERS; player_idx++) {
         if(g_player[player_idx]) {
 		    s = (double)g_player[player_idx]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
-            if (s < *min) { 
-                *min = s; 
-            } 
+            if (s < *min) {
+                *min = s;
+            }
 
-            if (*max < s) { 
-                *max = s; 
-            } 
+            if (*max < s) {
+                *max = s;
+            }
 	    }
     }
-} 
+}
 
 STDMETHODIMP_(double) C3GameState::GetStrength(PLAYER_INDEX player)
 {
-    
+
 	Assert(g_player[player]);
 	double strValue = 0.0;
 	if(g_player[player]) {
-		
-		
 
-		
+
+
+
 		strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_UNITS);
 		strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_GOLD);
 		strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_BUILDINGS);
@@ -542,7 +524,7 @@ STDMETHODIMP_(void) C3GameState::MakeTradeBid(PLAYER_INDEX foreigner,
 		g_player[m_owner]->AiGetCity(isUnknown, myCity, toCity);
 		Assert(!isUnknown);
 		if(!isUnknown) {
-			
+
 			g_player[m_owner]->SendTradeBid(fromCity, resource, toCity,
 											goldOffered);
 		}
@@ -574,12 +556,12 @@ STDMETHODIMP_(sint32) C3GameState::GetDifficulty()
 
 STDMETHODIMP_(sint32) C3GameState::GetOrderGoldCost(sint32 order)
 {
-	
+
 	sint32 index = g_orderInfoMap[order];
 	OrderInfo *oi = NULL;
 	if(index >= 0 && index < g_numOrderInfo) {
 		oi = &g_orderInfo[index];
-	} 
+	}
 
 	if (oi)
 		{
@@ -587,7 +569,6 @@ STDMETHODIMP_(sint32) C3GameState::GetOrderGoldCost(sint32 order)
 		}
 	return 0;
 }
-
 
 STDMETHODIMP_(sint32) C3GameState::GetOrderMaxGoldCost()
 {
@@ -612,12 +593,11 @@ STDMETHODIMP_(void) C3GameState::ProcessGraphicsCallback()
 		g_civApp->ProcessGraphicsCallback();
 }
 
-
 #include "TurnCnt.h"
 
 STDMETHODIMP_(sint32) C3GameState::GetTurn()
 {
-	extern TurnCount *g_turn; 
+	extern TurnCount *g_turn;
 
 	if (g_turn)
 		return g_turn->GetRound();

@@ -6,11 +6,10 @@
 
 #include "aui_image.h"
 
-
 class c3_Image : public aui_Image
 {
 public:
-	
+
 	c3_Image(
 		AUI_ERRCODE *retval,
 		MBCHAR *filename = NULL );
@@ -23,5 +22,4 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 };
 
-
-#endif 
+#endif

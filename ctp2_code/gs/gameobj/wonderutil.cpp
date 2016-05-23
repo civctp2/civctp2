@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - wonderutil_IsObsolete now has two new checks GovernmentType and 
+// - wonderutil_IsObsolete now has two new checks GovernmentType and
 //   ObsoleteGovernmentType switching from or two these obsoletes your wonder (E 5-27-2006)
 // - wonderutil_GetGoldPerBuildingAnywhere (E 5-27-2006)
 // - added hasreligionicon bool 6.25.2007
@@ -56,7 +56,7 @@
 uint64 forEachBuilt = builtWonders & (shiftbit(g_theWonderDB->NumRecords())-1); \
 for(sint32 wndr=0;forEachBuilt>0;wndr++,forEachBuilt>>=1) \
 	if((forEachBuilt&1) && \
-	g_theWonderDB->Get(wndr)->func() && !wonderutil_IsObsolete(wndr)) 
+	g_theWonderDB->Get(wndr)->func() && !wonderutil_IsObsolete(wndr))
 
 #define BOOL_WNDR(flag) FOREACH_WNDR(flag) { return true; } return false;
 #define INT_WNDR(func, getfunc)\
@@ -93,13 +93,12 @@ const WonderRecord *wonderutil_Get(const sint32 wonder, const sint32 playerId)
 bool wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders)
 {
 
-	
-	
+
 	uint64 wonders = hisWonders & (shiftbit(g_theWonderDB->NumRecords())-1);
 	int j = 0;
 	while (wonders>0)
 	{
-		if ((wonders&1) && g_theWonderDB->Get(j)->GetCloseEmbassies()) 
+		if ((wonders&1) && g_theWonderDB->Get(j)->GetCloseEmbassies())
 			return FALSE;
 		wonders>>=1;
 		j++;
@@ -340,21 +339,18 @@ bool wonderutil_IsAvailable(sint32 wonder, sint32 player)
 	}
 
 	const WonderRecord *rec = g_theWonderDB->Get(wonder);
-	
-	if(rec->GetEnableAdvanceIndex() >= 0 && 
+
+	if(rec->GetEnableAdvanceIndex() >= 0 &&
 	   !g_player[player]->HasAdvance(rec->GetEnableAdvanceIndex()))
 		return false;
 
-	
 	if(wonderutil_IsObsolete(wonder))
 		return false;
 
-	
 	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
 		return false;
 	}
 
-	
 	return true;
 }
 
@@ -378,7 +374,6 @@ PLAYER_INDEX wonderutil_GetOwner(sint32 wonder)
 		return PLAYER_INDEX_INVALID;
 	return who;
 }
-
 
 void wonderutil_AddBuilt(sint32 wonder)
 {
@@ -413,7 +408,7 @@ bool wonderutil_IsObsolete(sint32 wonder)
 	}
 
 	sint32 i;
-	// EMOD if you change from the govt that allows for 
+	// EMOD if you change from the govt that allows for
 	// the wonder to be built you make it obsolete
 	for(i = 0; i < rec->GetNumGovernmentType(); i++) {
 		if(rec->GetGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
@@ -421,7 +416,7 @@ bool wonderutil_IsObsolete(sint32 wonder)
 		}
 	}
 
-	// EMOD if you switch to this govt it will obsolete 
+	// EMOD if you switch to this govt it will obsolete
 	// the wonder 9ie communism for religious wonders)
 	for(i = 0; i < rec->GetNumObsoleteGovernmentType(); i++) {
 		if(rec->GetObsoleteGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
@@ -453,7 +448,7 @@ sint32 wonderutil_GetFobCityIndex()
 {
 	sint32 i;
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-		if(g_theWonderDB->Get(i)->GetCloseEmbassies()) 
+		if(g_theWonderDB->Get(i)->GetCloseEmbassies())
 			return i;
 	}
 	return i;

@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __REGARD_EVENT_H__
 #define __REGARD_EVENT_H__

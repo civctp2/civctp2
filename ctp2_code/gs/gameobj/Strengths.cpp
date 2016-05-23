@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ Strengths::Strengths(sint32 owner)
 		return;
 
 	sint32 const	curRound = NewTurnCount::GetCurrentRound();
-	
+
 	sint32 c, y;
 	for(y = 1; y < curRound; y++) {
 		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++) {
@@ -145,7 +145,7 @@ void Strengths::Calculate()
 
 sint32 Strengths::GetStrength(STRENGTH_CAT category) const
 {
-	return m_strengthRecords[category].Num() 
+	return m_strengthRecords[category].Num()
 		   ? m_strengthRecords[category].GetLast()
 		   : 0;
 }
@@ -153,11 +153,10 @@ sint32 Strengths::GetStrength(STRENGTH_CAT category) const
 sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 {
 	if (!m_strengthRecords[category].Num()) return 0;
-	
-	
-	
+
+
 	if (turn < 0) turn = m_strengthRecords[category].Num() -1;
-	
+
 	if (turn >= m_strengthRecords[category].Num()) return 0;
 
 	return m_strengthRecords[category][turn];

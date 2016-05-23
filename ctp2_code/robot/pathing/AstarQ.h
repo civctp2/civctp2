@@ -1,21 +1,19 @@
-
-
 #pragma once
 #ifndef __ASTAR_QUEUE__
 #define __ASTAR_QUEUE__ 1
 
 #include "astarpnt.h"
 
-class AstarQueue { 
+class AstarQueue {
 
-  AstarPoint *head; 
+  AstarPoint *head;
 
 public:
 
-	AstarQueue(); 
-	void Enqueue(AstarPoint *node); 
-	AstarPoint *Dequeue(); 
-      
+	AstarQueue();
+	void Enqueue(AstarPoint *node);
+	AstarPoint *Dequeue();
+
     sint32 Remove(const AstarPoint *node);
 
     void Empty() { head = NULL; }

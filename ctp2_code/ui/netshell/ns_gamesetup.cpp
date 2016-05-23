@@ -2,8 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
-// Id           : $Id:$
+// Description  :
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,16 +51,13 @@
   ADD -----> OCC One City Change option -> if enable human cant build unit type IsSettler.
 */
 
-
 #include "c3.h"
 
 #include "netshell.h"
 #include "ns_gamesetup.h"
 
 
-
 sint32 nf_GameSetup::m_version = 105;
-
 
 nf_GameSetup::nf_GameSetup(NETFunc::KeyStruct *k):NETFunc::GameSetup() {
 	SetKey(k);
@@ -74,9 +71,9 @@ nf_GameSetup::nf_GameSetup(NETFunc::Game *g):NETFunc::GameSetup(g) {
 nf_GameSetup::nf_GameSetup(void):NETFunc::GameSetup() {
 	Init();
 
-	
-	
-	
+
+
+
 	SetSyncLaunch( true );
 }
 
@@ -85,28 +82,25 @@ void nf_GameSetup::Init( void ) {
 	SetPlayStyleValue(0);
 
 
-
 	SetHandicapping(0);
 	SetDynamicJoin(0);
 
 	SetBloodlust(0);
 
 
-
-	SetPollution(1); 
-	SetCivPoints(100); 
-	SetPwPoints(1); 
-
+	SetPollution(1);
+	SetCivPoints(100);
+	SetPwPoints(1);
 
 	SetStartAge(0);
-	SetEndAge(4); 
+	SetEndAge(4);
 	SetMapSize(0);
-	SetWorldType1(5); 
-	SetWorldType2(5); 
-	SetWorldType3(5); 
-	SetWorldType4(5); 
-	SetWorldType5(5); 
-	SetWorldType6(5); 
+	SetWorldType1(5);
+	SetWorldType2(5);
+	SetWorldType3(5);
+	SetWorldType4(5);
+	SetWorldType5(5);
+	SetWorldType6(5);
 	SetWorldShape(0);
 	SetDifficulty1(0);
 	SetDifficulty2(0);
@@ -120,7 +114,6 @@ void nf_GameSetup::Init( void ) {
 	memset( m_excludedImprovements, 0, sizeof( m_excludedImprovements ) );
 	m_numAvailWonders = 0;
 	memset( m_excludedWonders, 0, sizeof( m_excludedWonders ) );
-
 
 	SetSavedId( 0 );
 }
@@ -137,18 +130,15 @@ void nf_GameSetup::Pack()
 	Push( m_playstylevalue );
 
 
-
 	Push( m_handicapping );
 	Push( m_dynamicJoin );
 
 	Push( m_bloodlust );
 
 
-
 	Push( m_pollution );
 	Push( m_civPoints );
 	Push( m_pwPoints );
-
 
 	Push( m_startAge );
 	Push( m_endAge );
@@ -198,18 +188,15 @@ void nf_GameSetup::Unpack()
 	Pop( m_playstylevalue );
 
 
-
 	Pop( m_handicapping );
 	Pop( m_dynamicJoin );
 
 	Pop( m_bloodlust );
 
 
-
 	Pop( m_pollution );
 	Pop( m_civPoints );
 	Pop( m_pwPoints );
-
 
 	Pop( m_startAge );
 	Pop( m_endAge );
@@ -265,7 +252,7 @@ void nf_GameSetup::Unpack()
 void nf_GameSetup::SetSavedId( uint32 savedId )
 {
 	uint32 *buff = (uint32 *)GetUserField();
-	
+
 	buff[ 1 ] = savedId;
 	SetUserField( (char *)buff, 2 * sizeof( uint32 ) );
 }
@@ -276,13 +263,11 @@ uint32 nf_GameSetup::GetSavedId( void )
 }
 
 
-
-ns_GameSetup::ns_GameSetup(nf_GameSetup * game) 
-:	ns_Object<nf_GameSetup, ns_GameSetup>(game) 
+ns_GameSetup::ns_GameSetup(nf_GameSetup * game)
+:	ns_Object<nf_GameSetup, ns_GameSetup>(game)
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-
 
 void ns_GameSetup::Update( nf_GameSetup *gamesetup ) {
 	SetMine(false);

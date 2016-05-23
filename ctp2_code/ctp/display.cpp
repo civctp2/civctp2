@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "display.h"
@@ -7,7 +5,7 @@
 #include "pointerlist.h"
 #include "appstrings.h"
 
-#define COMPILE_MULTIMON_STUBS 
+#define COMPILE_MULTIMON_STUBS
 #ifdef __AUI_USE_DIRECTX__
 #include <multimon.h>
 #elif defined(__AUI_USE_SDL__)
@@ -34,17 +32,14 @@ extern BOOL					g_createDirectDrawOnSecondary;
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
-
 #ifdef WIN32
 BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 								   LPSTR szDevice, LPVOID lParam, HMONITOR hMonitor)
 {
 
-	
-	
+
 	DisplayDevice *p = new DisplayDevice;
 
-	
 	if (lpGUID)
 	{
 		p->DisplayGUID = *lpGUID;
@@ -59,7 +54,6 @@ BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 
 	p->hMon = hMonitor;
 
-	
 	g_displayDevices->AddTail(p);
 
 	return TRUE;
@@ -73,31 +67,27 @@ BOOL display_EnumerateDisplayDevices(void)
 
 	g_displayDevices = new PointerList<DisplayDevice>;
 
-	
 	memset(&g_displayDevice, 0, sizeof(DisplayDevice));
-
 
 	hModule = GetModuleHandle("ddraw.dll");
 	pfnEnum = (LPDIRECTDRAWENUMERATEEX)GetProcAddress(hModule, "DirectDrawEnumerateExA");
-	
+
 	if (pfnEnum != NULL)
 	{
-		
 
 
 		hres = (*pfnEnum)(	display_FindDeviceCallbackEx,
-							NULL, 
+							NULL,
 							DDENUM_ATTACHEDSECONDARYDEVICES);
 	}
 	else
 	{
-		
+
 		Assert(FALSE);
 	}
 
 	return TRUE;
 }
-
 
 HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam)
 {
@@ -105,7 +95,6 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
     sint32 height = pdds->dwHeight;
     sint32 bpp    = pdds->ddpfPixelFormat.dwRGBBitCount;
 
-	
 	BOOL	legalSize = TRUE;
 
 	if (width < 640 || height < 480)
@@ -127,11 +116,9 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
 		g_displayModes->AddTail(mode);
 	}
 
-    
     return S_FALSE;
 }
 #endif
-
 
 void display_EnumerateDisplayModes(void)
 {
@@ -152,9 +139,9 @@ void display_EnumerateDisplayModes(void)
 	SDL_PixelFormat fmt = { 0 };
 	fmt.BitsPerPixel = 16;
 	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
-	
+
 	g_displayModes = new PointerList<CTPDisplayMode>;
-	
+
 	if (0 == modes) {
 		return;
 	} else if ((SDL_Rect **) -1 == modes) {
@@ -215,17 +202,16 @@ void display_EnumerateDisplayModes(void)
 }
 
 
-
 BOOL display_IsLegalResolution(sint32 width, sint32 height)
 {
-	
+
 	PointerList<CTPDisplayMode>::PointerListNode	*node;
 
 	node = g_displayModes->GetHeadNode();
 	while (node) {
 		CTPDisplayMode *mode = node->GetObj();
 		if (mode->width == width && mode->height == height) {
-			
+
 			return TRUE;
 		}
 		node = node->GetNext();
@@ -251,7 +237,6 @@ BOOL display_InitWindow( HINSTANCE hinst, int cmdshow )
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = gszMainWindowClass;
 
-	
 	if (!RegisterClass(&wc)) return FALSE;
 
 	DWORD	exStyle;
@@ -263,15 +248,15 @@ BOOL display_InitWindow( HINSTANCE hinst, int cmdshow )
 
 
 
-	
+
 	HWND hwnd = FindWindow(gszMainWindowClass, gszMainWindowName);
 	if(hwnd) {
-		
+
 		if (IsIconic(hwnd)) {
 			ShowWindow(hwnd, SW_RESTORE);
 		}
 		SetForegroundWindow (hwnd);
-		
+
 		exit(0);
 	}
 
@@ -292,26 +277,23 @@ BOOL display_InitWindow( HINSTANCE hinst, int cmdshow )
 	Assert(gHwnd != NULL);
 	if (gHwnd == NULL) return FALSE;
 
-    SetFocus(gHwnd);    
+    SetFocus(gHwnd);
 	ShowWindow(gHwnd, cmdshow);
     UpdateWindow(gHwnd);
-	
+
 	return TRUE;
 }
 #endif
-
 
 int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 {
 #ifdef __AUI_USE_DIRECTX__
 	display_EnumerateDisplayDevices();
 
-	
 	DisplayDevice	*device = g_displayDevices->GetTail();
 
 	if (g_createDirectDrawOnSecondary && device != NULL) {
 
-		
 		g_displayDevice = *device;
 
 		MONITORINFO	*monInfo = new MONITORINFO;
@@ -326,7 +308,7 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 		delete monInfo;
 	} else {
-		
+
 		g_ScreenWidth = GetSystemMetrics(SM_CXSCREEN);
 		g_ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
 
@@ -335,9 +317,9 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 #endif
 	display_EnumerateDisplayModes();
 
-	
-	
-	
+
+
+
 	BOOL foundRes = FALSE;
 
 	if (g_theProfileDB->IsTryWindowsResolution()) {
@@ -345,16 +327,14 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 			foundRes = TRUE;
 	}
 
-	
-	
+
 	if (!foundRes) {
-		if (display_IsLegalResolution(g_theProfileDB->GetScreenResWidth(), 
+		if (display_IsLegalResolution(g_theProfileDB->GetScreenResWidth(),
 									g_theProfileDB->GetScreenResHeight())) {
 			g_ScreenWidth = g_theProfileDB->GetScreenResWidth();
 			g_ScreenHeight = g_theProfileDB->GetScreenResHeight();
 		} else {
-			
-			
+
 			CTPDisplayMode *mode = g_displayModes->GetHead();
 
 			g_ScreenWidth = mode->width;
@@ -362,8 +342,7 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 		}
 	}
 
-	
-	
+
 	if (g_createDirectDrawOnSecondary) {
 		g_ScreenWidth = 800;
 		g_ScreenHeight = 600;
@@ -375,7 +354,6 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 	return 0;
 }
-
 
 
 void display_Cleanup()

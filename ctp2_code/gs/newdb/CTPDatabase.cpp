@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,7 @@
 //
 //   * m_numModifiedRecords, and m_allocatedModifiedSize are auxilary member
 //     variables to aid in insertion and dynamic growth (of m_modifiedRecords)
-//     
+//
 //   * Included memory destructors and dynamic growth code for new member
 //     variables
 //
@@ -65,8 +65,8 @@
 //
 // - Repaired memory leaks.
 // - Removed some completely unused code.
-// - Modernised some code: e.g. implemented the modified records list as a 
-//   std::vector, so we don't have to do the memory management ourselves. 
+// - Modernised some code: e.g. implemented the modified records list as a
+//   std::vector, so we don't have to do the memory management ourselves.
 // - Prevented crash in Parse when m_numrecords is 0.
 // - Added the new civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
@@ -97,7 +97,6 @@
 #define k_INITIAL_DB_SIZE 10
 #define k_GROW_DB_STEP 10
 
-
 template <class T> CTPDatabase<T>::CTPDatabase()
 :
     m_numRecords        (0),
@@ -110,12 +109,11 @@ template <class T> CTPDatabase<T>::CTPDatabase()
 	m_modifiedList  = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
 }
 
-
 template <class T> CTPDatabase<T>::~CTPDatabase()
 {
-	if (m_records) 
+	if (m_records)
 	{
-		for (sint32 i = 0; i < m_numRecords; i++) 
+		for (sint32 i = 0; i < m_numRecords; i++)
 		{
 			delete m_records[i];
 		}
@@ -131,11 +129,11 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	}
 	m_modifiedRecords.clear();
 
-	if (m_modifiedList) 
+	if (m_modifiedList)
 	{
-		for (sint32 k = 0; k < m_numRecords; k++) 
+		for (sint32 k = 0; k < m_numRecords; k++)
 		{
-			if (m_modifiedList[k]) 
+			if (m_modifiedList[k])
 			{
 				m_modifiedList[k]->DeleteAll();
 				delete m_modifiedList[k];
@@ -158,7 +156,7 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 // Returns    : -
 //
 // Remark(s)  : Does not Serialize the government modified stuff.
-//              Fortunately these database serialize methods are 
+//              Fortunately these database serialize methods are
 //              not thought for loading, just for database check.
 //              But this is on the TODO list.
 //
@@ -230,9 +228,9 @@ template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 	if (!nonSpecific) return NULL;
 
 	// Check for any government specific overrides
-	for 
+	for
 	(
-	    PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
+	    PointerList<GovernmentModifiedRecordNode>::Walker   walk =
 	        PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
 	    walk.IsValid();
 	    walk.Next()
@@ -247,19 +245,17 @@ template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 	return nonSpecific;
 }
 
-
 template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
 {
 	return const_cast<const T *>(Access(index, govIndex));
 }
-
 
 template <class T> void CTPDatabase<T>::Grow()
 {
 	PointerList<GovernmentModifiedRecordNode> **oldList = m_modifiedList;
 	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize + k_GROW_DB_STEP];
 	memcpy(m_modifiedList, oldList, m_allocatedSize * sizeof(PointerList<GovernmentModifiedRecordNode> *));
-	delete [] oldList;	
+	delete [] oldList;
 
 	T **oldRecords = m_records;
 	m_records = new T *[m_allocatedSize + k_GROW_DB_STEP];
@@ -268,10 +264,9 @@ template <class T> void CTPDatabase<T>::Grow()
 	m_allocatedSize += k_GROW_DB_STEP;
 }
 
-
 template <class T> void CTPDatabase<T>::Add(T *obj)
 {
-	if (obj->GetHasGovernmentsModified() && 
+	if (obj->GetHasGovernmentsModified() &&
 	    (obj->GenericGetNumGovernmentsModified() > 0)
 	   )
 	{
@@ -280,17 +275,16 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		{
 			numberGovernmentRecords=g_theGovernmentDB->NumRecords();
 		}
-		else 
+		else
 		{
 			numberGovernmentRecords=0;
 			DPRINTF(k_DBG_FIX, ("GovMod- No Government Records \n"));
 		}
 
-
 		sint32 validIndex = 0;
 		for (sint32 j = 0; j < obj->GenericGetNumGovernmentsModified(); j++)
 		{
-			if ((obj->GenericGetGovernmentsModifiedIndex(j) >= 0) && 
+			if ((obj->GenericGetGovernmentsModifiedIndex(j) >= 0) &&
 				(obj->GenericGetGovernmentsModifiedIndex(j) < numberGovernmentRecords)
 			   )
 			{
@@ -302,7 +296,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		if ((mainRecord >= 0) && (validIndex > 0))
 		{
 			// Add the new object to the list of modified records.
-			sint32 const	newIndex	= m_modifiedRecords.size();	
+			sint32 const	newIndex	= m_modifiedRecords.size();
 			obj->SetIndex(newIndex);
 			m_modifiedRecords.push_back(obj);
 
@@ -314,9 +308,9 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 
 			for (sint32 i = 0; i < obj->GenericGetNumGovernmentsModified(); i++)
 			{
-				if ((obj->GenericGetGovernmentsModifiedIndex(i) >= 0) && 
+				if ((obj->GenericGetGovernmentsModifiedIndex(i) >= 0) &&
 					(obj->GenericGetGovernmentsModifiedIndex(i) < numberGovernmentRecords)
-				   ) 
+				   )
 				{
 					DPRINTF(k_DBG_FIX, ("GovMod- Adding modified record %s, Gov Index %d \n",obj->GetIDText(),obj->GenericGetGovernmentsModifiedIndex(i)));
 					m_modifiedList[mainRecord]->AddHead
@@ -435,7 +429,6 @@ template <class T> bool CTPDatabase<T>::Parse(DBLexer *lex)
 					m_alphaToIndex + a,
 					(i - a) * sizeof(sint32));
 
-				
 				for(sint32 j = 0; j < i; ++j)
 					if(m_indexToAlpha[j] >= a)
 						++m_indexToAlpha[j];
@@ -474,7 +467,6 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer * lex, sint32
 	sint32 strId;
 	if(!g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 
-		
 		sint32 i;
 		for(i = 0; i < m_numRecords; i++) {
 			if(!stricmp(m_records[i]->GetNameText(), lex->GetTokenText())) {
@@ -482,10 +474,10 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer * lex, sint32
 				return true;
 			}
 		}
-		
+
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());
 		if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
-			index = strId | 0x80000000; 
+			index = strId | 0x80000000;
 			return true;
 		} else {
 			return false;
@@ -517,7 +509,6 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 	sint32 strId;
 	if(!g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 
-		
 		sint32 i;
 		for(i = 0; i < m_numRecords; i++) {
 			if(!stricmp(m_records[i]->GetNameText(), lex->GetTokenText())) {
@@ -525,10 +516,10 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 				return true;
 			}
 		}
-		
+
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());
 		if(g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
-			index = strId | 0x80000000; 
+			index = strId | 0x80000000;
 			return true;
 		} else {
 			return false;
@@ -558,7 +549,7 @@ template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 
 		delete oldArray;
 	} else {
 		*array = new sint32[1];
-	}		
+	}
 
 	sint32 i;
 	for(i = 0; i < m_numRecords; i++) {
@@ -572,8 +563,7 @@ template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 
 			}
 	}
 
-	
-	
+
 	sint32 strId;
 	if(!g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());
@@ -612,8 +602,7 @@ template <class T> bool CTPDatabase<T>::ParseRecordInArray(DBLexer *lex, sint32 
 			return true;
 		}
 	}
-	
-	
+
 	sint32 strId;
 	if(!g_theStringDB->GetStringID(lex->GetTokenText(), strId)) {
 		g_theStringDB->InsertStr(lex->GetTokenText(), lex->GetTokenText());

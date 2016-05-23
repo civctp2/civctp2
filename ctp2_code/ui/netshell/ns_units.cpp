@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ ns_Units::ns_Units()
     m_stringtable   (NULL)
 {
 	Assert(g_theUnitDB->NumRecords() <= k_UNITS_MAX);
-    sint32      numUnits    = 
+    sint32      numUnits    =
         std::min<sint32>(k_UNITS_MAX, g_theUnitDB->NumRecords());
 	m_noIndex = new sint32[numUnits];
 

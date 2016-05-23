@@ -1,4 +1,3 @@
-
 #pragma once
 
 
@@ -15,35 +14,33 @@
 
 #include "ArmyGoal.h"
 
-enum GOAL_TYPE; 
-struct MapPointData; 
-class CivArchive; 
-class ForeignCity; 
+enum GOAL_TYPE;
+struct MapPointData;
+class CivArchive;
+class ForeignCity;
 
-class GoalExpel : public ArmyGoal { 
+class GoalExpel : public ArmyGoal {
 
-    sint32 m_foreign_player; 
-    BSetID m_target_id; 
+    sint32 m_foreign_player;
+    BSetID m_target_id;
 	AiMain *m_ai;
 
 public:
 
-	
 	static BOOL PretestConstruct(AiMain *ai, ForeignAgent * agent);
-    GoalExpel(); 
+    GoalExpel();
 	GoalExpel
 	(
-		AiMain *init_ai,					
-		ForeignAgent *target,				
-		MapPointData pos					
-	); 	     
-    GoalExpel(AiMain *ai, CivArchive &archive); 
-	~GoalExpel(); 
-    void Serialize(AiMain *ai,CivArchive &archive); 
-    BOOL Validate(AiMain *ai); 
+		AiMain *init_ai,
+		ForeignAgent *target,
+		MapPointData pos
+	);
+    GoalExpel(AiMain *ai, CivArchive &archive);
+	~GoalExpel();
+    void Serialize(AiMain *ai,CivArchive &archive);
+    BOOL Validate(AiMain *ai);
     void HookUp(AiMain *ai);
 
-	
     GOAL_TYPE GetType () const;
 	void Display_Goal_Type(AiMain *ai);
 
@@ -63,6 +60,6 @@ public:
 	double Action_Bid(AiMain *ai, Agent *agent);
 	double Compute_Raw_Priority(AiMain *ai);
 	Goal_Result BuildTaskSolution(AiMain *ai, CityAgent *the_city, Plan *the_plan);
-}; 
+};
 
 #endif __GOAL_EXPEL_H__

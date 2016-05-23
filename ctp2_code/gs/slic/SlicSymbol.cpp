@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 //
 // - Repaired memory leaks.
 // - Removed assert to prevent lots of pop-ups with e.g. the LOTR scenario.
-// - GetText function now returns FALSE if there is no proper string to 
+// - GetText function now returns FALSE if there is no proper string to
 //   retrieve, so that this can be checked if. - Nov 5th 2004 Martin Gühmann
 // - Added validity checks to GetPos.
 //
@@ -142,7 +142,7 @@ SlicSymbolData::~SlicSymbolData()
         break;
 
     case SLIC_SYM_COMPLEX_REGION:
-        while (m_val.m_complexRegion) 
+        while (m_val.m_complexRegion)
         {
 			PSlicComplexRegion *next = m_val.m_complexRegion->next;
 			delete m_val.m_complexRegion;
@@ -252,7 +252,6 @@ BOOL SlicSymbolData::SetValueFrom(SlicSymbolData *sym)
 	return TRUE;
 }
 
-
 BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 {
 	switch(GetType()) {
@@ -265,7 +264,7 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			Unit u;
 			if(!SlicStack::GetUnit(type, value, u)) {
 				m_val.m_unit_id = u.m_id;
-				
+
 				return FALSE;
 			}
 			m_val.m_unit_id = u.m_id;
@@ -277,7 +276,7 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			Unit city;
 			if(!SlicStack::GetCity(type, value, city)) {
 				m_val.m_city_id = city.m_id;
-				
+
 				return FALSE;
 			}
 			m_val.m_city_id = city.m_id;
@@ -288,9 +287,9 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 		{
 			Army army;
 			if(!SlicStack::GetArmy(type, value, army)) {
-				
+
 				m_val.m_army_id = army.m_id;
-				
+
 				return FALSE;
 			}
 			m_val.m_army_id = army.m_id;
@@ -304,7 +303,7 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			if(!SlicStack::GetPos(type, value, pos)) {
 				m_val.m_location.x = pos.x;
 				m_val.m_location.y = pos.y;
-				
+
 				return FALSE;
 			}
 			m_val.m_location.x = pos.x;
@@ -325,7 +324,7 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			Assert(type == SS_TYPE_SYM);
 			if(type == SS_TYPE_SYM) {
 				char buf[k_MAX_MSG_LEN];
-				if(value.m_sym->GetText(buf, k_MAX_MSG_LEN)) 
+				if(value.m_sym->GetText(buf, k_MAX_MSG_LEN))
                 {
                     delete [] m_val.m_hard_string;
 					m_val.m_hard_string = new MBCHAR[strlen(buf) + 1];
@@ -353,11 +352,11 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 
 		case SLIC_SYM_IMPROVEMENT:
 			// Assert removed to get the LOTR scenario somewhat debuggable..
-			// This code is reached when having a statement of the form 
+			// This code is reached when having a statement of the form
 			//	"improvement_t" var = "int_t" value;
-			// Probably these statements are rubbish anyway, because the 
-			// improvement_t var expects to get the  - unique game object - ID, 
-			// but the value is usually filled with the database index of the 
+			// Probably these statements are rubbish anyway, because the
+			// improvement_t var expects to get the  - unique game object - ID,
+			// but the value is usually filled with the database index of the
 			// improvement descriptor.
 			return FALSE;
 
@@ -378,9 +377,9 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 }
 
 SlicFunc *SlicSymbolData::GetFunction() const
-{ 
+{
 	if(GetType() == SLIC_SYM_FUNC) {
-		return m_val.m_function_object; 
+		return m_val.m_function_object;
 	}
 	return NULL;
 }
@@ -500,7 +499,7 @@ BOOL SlicSymbolData::GetImprovement(TerrainImprovement &imp) const
 {
 	if(GetType() == SLIC_SYM_IMPROVEMENT) {
 		imp = TerrainImprovement(m_val.m_improvement_id);
-		if(g_theTerrainImprovementPool->IsValid(imp))		   
+		if(g_theTerrainImprovementPool->IsValid(imp))
 			return TRUE;
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		if(m_val.m_struct->GetDataSymbol()) {
@@ -592,7 +591,7 @@ BOOL SlicSymbolData::GetUnitType(sint32 &type) const
 
 BOOL SlicSymbolData::GetRegion(struct PSlicRegion &region) const
 {
-	
+
 	if(GetType() != SLIC_SYM_REGION)
 		return FALSE;
 	region = *m_val.m_region;
@@ -601,7 +600,7 @@ BOOL SlicSymbolData::GetRegion(struct PSlicRegion &region) const
 
 BOOL SlicSymbolData::GetComplexRegion(const struct PSlicComplexRegion *&region) const
 {
-	
+
 	if(GetType() != SLIC_SYM_COMPLEX_REGION)
 		return FALSE;
 	region = m_val.m_complexRegion;
@@ -680,14 +679,14 @@ void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
 			break;
 		case SLIC_SYM_UNIT:
 			if(GetUnit(u)) {
-				
+
 				sprintf(text, "Unit %lx: %s", u.m_id,
 						u.IsValid() ? u.GetName() : "<DEAD>");
 			} else {
 				sprintf(text, "Invalid unit (%lx?)", m_val.m_unit_id);
 			}
 			break;
-		case SLIC_SYM_ARMY:			
+		case SLIC_SYM_ARMY:
 			if(GetArmy(army)) {
 				sprintf(text, "Army %lx", army.m_id);
 			} else {
@@ -696,7 +695,7 @@ void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
 			break;
 		case SLIC_SYM_LOCATION:
 			if(GetPos(pos)) {
-				sprintf(text, "Location: %d,%d", 
+				sprintf(text, "Location: %d,%d",
 						pos.x,
 						pos.y);
 			} else {
@@ -720,9 +719,8 @@ void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
 	}
 }
 
-
 const char *SlicSymbolData::GetName() const
-{ 
+{
 	return "noname";
 }
 
@@ -741,7 +739,6 @@ void SlicSymbolData::SetSegment(SlicSegment *segment)
 	if(GetType() == SLIC_SYM_ID || GetType() == SLIC_SYM_UFUNC)
 		m_val.m_segment = segment;
 }
-
 
 BOOL SlicSymbolData::ArrayLookup(sint32 index, SS_TYPE &retType, SlicStackValue &retValue)
 {
@@ -794,10 +791,10 @@ void SlicSymbolData::SetStruct(SlicStructInstance *aStruct)
 }
 
 void SlicSymbolData::SetType(SLIC_SYM type)
-{ 
+{
 //  Assert((m_type == type) || (m_type == SLIC_SYM_UNDEFINED));
 
-    m_type = type; 
+    m_type = type;
 	sint32 res;
 
 	switch(GetType()) {
@@ -808,7 +805,7 @@ void SlicSymbolData::SetType(SLIC_SYM type)
 		case SLIC_SYM_FUNC:
 			m_val.m_function_object = g_slicEngine->GetFunction(GetName());
 			break;
-		case SLIC_SYM_SVAR:			
+		case SLIC_SYM_SVAR:
 			res = g_theStringDB->GetStringID(GetName(), m_val.m_string_value);
 			Assert(res);
 			break;
@@ -898,7 +895,7 @@ void SlicSymbolDebugInfo::AddWatch(SlicSymbolWatchCallback *watch)
 	Assert(m_watchList);
 	PointerList<SlicSymbolWatchCallback>::Walker walk(m_watchList);
 	while(walk.IsValid()) {
-		
+
 		if(walk.GetObj() == watch)
 			return;
 		walk.Next();
@@ -913,8 +910,7 @@ void SlicSymbolDebugInfo::RemoveWatch(SlicSymbolWatchCallback *watch)
 		if(walk.GetObj() == watch) {
 			walk.Remove();
 		} else {
-			
-			
+
 			walk.Next();
 		}
 	}
@@ -940,7 +936,7 @@ void SlicSymbolData::SetString(MBCHAR const * str)
         }
         else
         {
-            m_val.m_hard_string = NULL;            
+            m_val.m_hard_string = NULL;
         }
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		m_val.m_struct->GetDataSymbol()->SetString(str);
@@ -953,12 +949,12 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 {
 	MBCHAR buf[_MAX_PATH];
 
-	if(archive.IsStoring()) 
+	if(archive.IsStoring())
     {
 		archive.PutUINT8(static_cast<uint8>(GetSerializeType()));
 		archive.PutUINT8(static_cast<uint8>(m_type));
 
-		switch(GetType()) 
+		switch(GetType())
         {
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
@@ -975,8 +971,8 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 
 			case SLIC_SYM_FUNC:
                 {
-                    size_t len = (m_val.m_function_object) 
-                                 ? strlen(m_val.m_function_object->GetName()) 
+                    size_t len = (m_val.m_function_object)
+                                 ? strlen(m_val.m_function_object->GetName())
                                  : 0;
     			    archive << static_cast<uint16>(len);
                     if (len > 0)
@@ -993,7 +989,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 
 			case SLIC_SYM_STRING:
                 {
-                    size_t  len = 
+                    size_t  len =
                         (m_val.m_hard_string) ? strlen(m_val.m_hard_string) : 0;
 				    archive << static_cast<uint16>(len);
 				    if (len > 0)
@@ -1008,7 +1004,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 
 			case SLIC_SYM_BUILTIN:
-				Assert(FALSE); 
+				Assert(FALSE);
 				break;
 
 			case SLIC_SYM_STRUCT:
@@ -1021,7 +1017,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 			case SLIC_SYM_UFUNC:
 			case SLIC_SYM_ID:
                 {
-                    size_t  len = 
+                    size_t  len =
                         (m_val.m_segment) ? strlen(m_val.m_segment->GetName()) : 0;
 				    archive << static_cast<uint16>(len);
 				    if (len > 0)
@@ -1031,21 +1027,21 @@ void SlicSymbolData::Serialize(CivArchive &archive)
                 }
 				break;
 
-			case SLIC_SYM_POP:  
-			case SLIC_SYM_PATH: 
-				Assert(FALSE); 
+			case SLIC_SYM_POP:
+			case SLIC_SYM_PATH:
+				Assert(FALSE);
 				break;
 
 			case SLIC_SYM_UNDEFINED:
 				break;
 		}
-	} 
-    else 
+	}
+    else
     {
         uint16  len;
 
 		m_type = (SLIC_SYM)archive.GetUINT8();
-		switch (GetType() == SLIC_SYM_UNDEFINED ? m_type : GetType()) 
+		switch (GetType() == SLIC_SYM_UNDEFINED ? m_type : GetType())
         {
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
@@ -1061,7 +1057,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 
             case SLIC_SYM_FUNC:
-				archive >> len;				
+				archive >> len;
 				if(len > 0) {
 					archive.Load((uint8*)buf, len);
 				}
@@ -1071,7 +1067,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 			case SLIC_SYM_REGION:
 			case SLIC_SYM_COMPLEX_REGION:
-				
+
 				Assert(FALSE);
 				break;
 			case SLIC_SYM_STRING:
@@ -1088,7 +1084,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				m_val.m_array = new SlicArray(archive);
 				break;
 			case SLIC_SYM_BUILTIN:
-				Assert(FALSE); 
+				Assert(FALSE);
 				break;
 			case SLIC_SYM_STRUCT:
 				m_val.m_struct = new SlicStructInstance(archive);
@@ -1106,9 +1102,9 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 					m_val.m_segment = NULL;
 				}
 				break;
-			case SLIC_SYM_POP:  
-			case SLIC_SYM_PATH: 
-				Assert(FALSE); 
+			case SLIC_SYM_POP:
+			case SLIC_SYM_PATH:
+				Assert(FALSE);
 				break;
 			case SLIC_SYM_UNDEFINED:
 				break;
@@ -1117,7 +1113,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 
 	switch(GetSerializeType()) {
 		case SLIC_SYM_SERIAL_GENERIC:
-			
+
 			break;
 		case SLIC_SYM_SERIAL_NAMED:
 			((SlicNamedSymbol *)this)->SlicNamedSymbol::Serialize(archive);
@@ -1146,7 +1142,7 @@ SlicSymbolData *slicsymbol_Load(CivArchive &archive, SlicSymbolData *useSymbol)
 		case SLIC_SYM_SERIAL_GENERIC:
 			sym = new SlicSymbolData;
 			break;
-			
+
 		case SLIC_SYM_SERIAL_NAMED:
 			sym = new SlicNamedSymbol;
 			break;
@@ -1172,4 +1168,3 @@ SlicSymbolData *slicsymbol_Load(CivArchive &archive, SlicSymbolData *useSymbol)
 	}
 	return sym;
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __TILESET_H__
@@ -55,12 +55,10 @@ class TileSet;
 #define k_32_BIT_COLORIZE_PIXEL		0x00FFFF00
 #define k_32_BIT_RGB_MASK			0x00FFFFFF
 
-
 #define k_16_BIT_SHADOW_PIXEL		0x7C1F
 #define k_16_BIT_SKIP_PIXEL			0x0000
 #define k_16_BIT_COLORIZE_PIXEL		0x03FF
 #define k_16_BIT_RGB_MASK			0x7FFF
-
 
 #define k_TILE_GRID_HEIGHT		72
 #define k_TILE_GRID_WIDTH		94
@@ -69,26 +67,22 @@ class TileSet;
 #define k_TILE_PIXEL_HEIGHT		48
 #define k_TILE_PIXEL_HEADROOM	24
 
-
 #define k_MAX_TRANSFORMS		300
 
-#define k_TRANSFORM_SIZE		15		
+#define k_TRANSFORM_SIZE		15
 #define k_TRANSFORM_TO_INDEX	9
 #define	k_TRANSFORM_TO_LIST_FIRST		10
 #define k_TRANSFORM_TO_LIST_ID			-1
 #define k_MAX_TRANSFORM_TO_LIST	5
-
 
 #define k_MAX_BASE_TILES		3000
 #define k_TRANSITIONS_PER_TILE	4
 #define k_FIRST_VARIATION		600
 #define k_FIRST_MEGATILE		700
 
-
 #define k_MAX_RIVERS			16
 #define k_MAX_RIVER_TRANSFORMS	32
 #define k_RIVER_TRANSFORM_SIZE	10
-
 
 #define k_MAX_MEGATILES			50
 #define k_MAX_MEGATILE_STEPS	5
@@ -105,16 +99,15 @@ class TileSet;
 #define k_MEGATILE_DIRECTION_CHAR_W		'W'
 
 struct MegaTileStep{
-	uint32		direction:6,		
-				terrainType:10,		
-				tileNum:16;			
+	uint32		direction:6,
+				terrainType:10,
+				tileNum:16;
 };
-
 
 #define k_MAX_IMPROVEMENTS			1024
 
-enum MAPICON { 
-	
+enum MAPICON {
+
 	MAPICON_BIODISEASE,       //upc001.rim
 	MAPICON_NANODISEASE,
 	MAPICON_CONVERSION,
@@ -125,8 +118,8 @@ enum MAPICON {
 
 	MAPICON_BRACKET1,
 	MAPICON_BRACKET2,
-	MAPICON_BRACKET3,  
-	
+	MAPICON_BRACKET3,
+
 	MAPICON_BRACKET4,
 
 	MAPICON_HERALD2,          //upc012.rim
@@ -139,7 +132,7 @@ enum MAPICON {
 	MAPICON_HERALD9,
 
 	MAPICON_RESOURCE1,        //upc020.rim
-	
+
 	MAPICON_RESOURCE2,
 	MAPICON_RESOURCE3,
 
@@ -150,10 +143,10 @@ enum MAPICON {
 	MAPICON_CIRCLE3,
 
 	MAPICON_UNKNOWN1,         //upc027.rim  arch
-	MAPICON_UNKNOWN2,    
+	MAPICON_UNKNOWN2,
 	MAPICON_UNKNOWN3,
-	MAPICON_UNKNOWN4,         //upc030.rim 
-	
+	MAPICON_UNKNOWN4,         //upc030.rim
+
 	MAPICON_UNKNOWN5,
 	MAPICON_UNKNOWN6,         //house
 	MAPICON_UNKNOWN7,         //earth
@@ -165,7 +158,7 @@ enum MAPICON {
 
 	MAPICON_SLAVE,
 	MAPICON_SLEEPINGUNITS,
-	
+
 	MAPICON_AIRPORT,
 	MAPICON_UPRISING,
 	MAPICON_WATCHFUL,         //upc043.rim
@@ -175,7 +168,6 @@ enum MAPICON {
 	MAPICON_CARGO,
 	MAPICON_ARMY,             //upc046.rim star
 	MAPICON_VETERAN,
-
 
 	MAPICON_TARGET,
 	MAPICON_HERALD10,
@@ -203,8 +195,8 @@ enum MAPICON {
 	MAPICON_RELIGION7,	//63 hinduism
 	MAPICON_RELIGION8,  //64orthodox christianity?  communism?
 	MAPICON_RELIGION9,	//65shia islam?
-	MAPICON_RELIGION10,	//66paganism?  
-//civilization flags 
+	MAPICON_RELIGION10,	//66paganism?
+//civilization flags
 
 	MAPICON_CIVFLAG_0,		//67
 	MAPICON_CIVFLAG_1,
@@ -223,7 +215,7 @@ enum MAPICON {
 	MAPICON_CIVFLAG_14,
 	MAPICON_CIVFLAG_15,
 	MAPICON_CIVFLAG_16,
-	MAPICON_CIVFLAG_17,	
+	MAPICON_CIVFLAG_17,
 	MAPICON_CIVFLAG_18,
 	MAPICON_CIVFLAG_19,
 	MAPICON_CIVFLAG_20,
@@ -278,7 +270,6 @@ enum MAPICON {
 	MAPICON_CIVFLAG_69,
 	MAPICON_CIVFLAG_70,		//137
 
-
 //city expansion?
 	MAPICON_URBANANC,
 	MAPICON_URBANMED,
@@ -286,11 +277,11 @@ enum MAPICON {
 	MAPICON_URBANSLUM,
 //visible wonders
 	MAPICON_WONDER1,
-	MAPICON_WONDER2,	
-	MAPICON_WONDER3,	
-	MAPICON_WONDER4,	
-	MAPICON_WONDER5,	
-	MAPICON_WONDER6,	
+	MAPICON_WONDER2,
+	MAPICON_WONDER3,
+	MAPICON_WONDER4,
+	MAPICON_WONDER5,
+	MAPICON_WONDER6,
 	MAPICON_WONDER7,
 	MAPICON_WONDER8,
 	MAPICON_WONDER9,
@@ -326,7 +317,6 @@ enum MAPICON {
 
 #include "gstypes.h"
 #include "pixeltypes.h"     // Pixel16
-
 
 class BaseTile;
 
@@ -375,7 +365,7 @@ public:
 	POINT			GetMapIconDimensions(MAPICON icon) { return m_mapIconDimensions[icon]; }
 
 	uint8			ReverseDirection(sint32 dir);
-	
+
 	void			QuickLoadTransforms(uint8 **dataPtr);
 	void			QuickLoadTransitions(uint8 **dataPtr);
 	void			QuickLoadBaseTiles(uint8 **dataPtr);
@@ -388,7 +378,6 @@ public:
 	void			QuickLoadMapped(void);
 
 	BOOL			QuickLoaded(void) { return m_quick; }
-
 
 private:
 	uint16			m_numTransforms;
@@ -408,7 +397,7 @@ private:
 	uint16			m_numMegaTiles;
 	uint16			m_megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	m_megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
-	
+
 	Pixel16			**m_mapIcons;
 	POINT			*m_mapIconDimensions;
 
@@ -423,6 +412,5 @@ private:
 	size_t			m_MMapSize;
 #endif
 };
-
 
 #endif

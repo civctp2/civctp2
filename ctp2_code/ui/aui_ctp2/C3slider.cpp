@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,6 @@
 extern C3UI	*           g_c3ui;
 
 
-
 C3Slider::C3Slider(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -85,7 +84,6 @@ C3Slider::C3Slider(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-
 	*retval = InitCommon( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -93,7 +91,6 @@ C3Slider::C3Slider(
 	*retval = CreateThumb( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 C3Slider::C3Slider(
@@ -145,7 +142,6 @@ C3Slider::C3Slider(
 }
 
 
-
 AUI_ERRCODE C3Slider::InitCommon( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -158,12 +154,10 @@ AUI_ERRCODE C3Slider::InitCommon( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE C3Slider::InitCommon( void )
 {
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
@@ -176,7 +170,6 @@ AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
-		
 		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_thumb = new C3Thumb(
 				&errcode,
@@ -206,17 +199,15 @@ AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 void C3Slider::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !m_thumb ) return;
 
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
 	{
-		
+
 		return;
 	}
 	else
@@ -228,10 +219,10 @@ void C3Slider::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -247,7 +238,6 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	else
 		InflateRect( &rect, 0, -m_height / 2 + 8 );
 
-	
 	if ( m_pattern ) {
 		if ( m_srcWidthPix || m_srcHeightPix ) {
 			RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -258,8 +248,7 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 
-	
-	
+
 	if ( m_ticks && m_quantized )
 	{
 		if ( m_orientation == AUI_RANGER_ORIENTATION_VERTICAL )
@@ -304,8 +293,7 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-		
-		
+
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 
@@ -318,10 +306,9 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 void C3SliderThumbActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	aui_Ranger *ranger = (aui_Ranger *)cookie;
 
 	sint32		sound = -1;
@@ -356,17 +343,15 @@ void C3SliderThumbActionCallback( aui_Control *control, uint32 action, uint32 da
 
 	if (sound != -1)
 		if (g_soundManager) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 					gamesounds_GetGameSoundID(sound), 0, 0);
 		}
 }
 
 
-
 void C3SliderButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_PRESS ) return;
 
 	aui_Ranger *ranger = (aui_Ranger *)cookie;
@@ -390,7 +375,7 @@ void C3SliderButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 
 	if (sound != -1)
 	if (g_soundManager) {
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 				gamesounds_GetGameSoundID(sound), 0, 0);
 	}
 }

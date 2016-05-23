@@ -9,8 +9,8 @@
 
 class TilesControlPanel {
 public:
-	
+
 	TilesControlPanel(MBCHAR *ldlBlock);
 };
 
-#endif 
+#endif

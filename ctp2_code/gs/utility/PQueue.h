@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef __PQUEUE_H__
 #define __PQUEUE_H__
@@ -22,7 +21,7 @@ private:
 			Grow();
 
 		if(m_nElements - index > 0) {
-			memmove(&m_array[index + 1], &m_array[index], 
+			memmove(&m_array[index + 1], &m_array[index],
 					sizeof(T) * (m_nElements - index));
 		}
 		m_nElements++;

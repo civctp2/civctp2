@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_surface.h"
@@ -47,7 +46,7 @@
 #include "StrDB.h"
 #include "network.h"
 
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 #include "optionswindow.h"
 
 extern StringDB						*g_theStringDB;
@@ -77,20 +76,18 @@ c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 	m_keyboard = spNew_ctp2_Button( retval, ldlBlock, "KeyboardButton", optionsscreen_keyboardPress );
 	m_quittoshell = spNew_ctp2_Button( retval, ldlBlock, "QuitToShellButton", optionsscreen_quitPress );
 
-	
 	m_configHeader = spNew_c3_Static(retval,ldlBlock,"ConfigHeader");
 	m_gameHeader = spNew_c3_Static(retval,ldlBlock,"GameHeader");
 
 
 
-	
+
 
 
 
 	AddClose( optionsscreen_returnPress );
 
 }
-
 
 OptionsWindow::~OptionsWindow()
 {
@@ -101,11 +98,9 @@ OptionsWindow::~OptionsWindow()
 	mycleanup(m_mapeditor);
 	mycleanup(m_gameplay);
 
-
 	mycleanup(m_restart);
 	mycleanup(m_loadgame);
 	mycleanup(m_savegame);
-
 
 	mycleanup(m_newgame);
 	mycleanup(m_music);
@@ -116,21 +111,18 @@ OptionsWindow::~OptionsWindow()
 	mycleanup(m_gameHeader);
 
 
-	
+
 
 
 
 #undef mycleanup
 }
 
-
-sint32 OptionsWindow::EnableButtons( void ) 
+sint32 OptionsWindow::EnableButtons( void )
 {
-	
-	
+
 	m_newgame->Enable( TRUE );
 	m_savegame->Enable( TRUE );
-
 
 	m_restart->Enable( TRUE );
 	m_mapeditor->Enable( TRUE );
@@ -139,14 +131,11 @@ sint32 OptionsWindow::EnableButtons( void )
 	return 0;
 }
 
-
 sint32 OptionsWindow::DisableButtons( void )
 {
-	
-	
+
 	m_newgame->Enable( FALSE );
 	m_savegame->Enable( FALSE );
-
 
 	m_restart->Enable( FALSE );
 	m_mapeditor->Enable( FALSE );
@@ -155,13 +144,11 @@ sint32 OptionsWindow::DisableButtons( void )
 	return 0;
 }
 
-
 void OptionsWindow::RemoveQuitToWindowsButton( void )
 {
 	if ( m_quittoshell && GetChild( m_quittoshell->Id() ) )
 		RemoveChild( m_quittoshell->Id() );
 }
-
 
 void OptionsWindow::AddQuitToWindowsButton( void )
 {

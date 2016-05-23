@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -145,27 +145,27 @@ int DoEnterNewAddressDialog(StringPtr name, StringPtr description)
 		GetPort(&oldPort);
 
 		/* On PowerPC, need a RoutineDescriptor from heap; on 68K, no allocation */
-		
+
 		MyFilterUPP = NewModalFilterProc(MyFilter);
 		if (MyFilterUPP == NIL) goto cleanUp;
 
 		/* Build dialog window and install its item values */
-		
+
 		dlog = OpenThisDialog(name, description);
 		if (dlog == NIL) goto cleanUp;
 
 		/* Entertain filtered user events until dialog is dismissed */
-		
+
 		while (keepGoing) {
 			ModalDialog(MyFilterUPP,&itemHit);
 			keepGoing = DoDialogItem(dlog,itemHit);
 			}
-		
+
 		/*
 		 *	Do final processing of item values, such as exporting them to caller.
 		 *	DoDialogItem() has already called AnyBadValues().
 		 */
-		
+
 		okay = (itemHit == OK_ITEM);
 		if (okay) {
 			GetDlgString(dlog, EDIT5, name);
@@ -174,11 +174,11 @@ int DoEnterNewAddressDialog(StringPtr name, StringPtr description)
 
 		/* That's all, folks! */
 
-cleanUp:		
+cleanUp:
 		if (dlog) CloseThisDialog(dlog);
 		if (MyFilterUPP) DisposeRoutineDescriptor(MyFilterUPP);
 		SetPort(oldPort);
-		
+
 		return(okay);
 	}
 
@@ -194,7 +194,7 @@ static pascal Boolean MyFilter(DialogPtr dlog, EventRecord *evt, short *itemHit)
 		Boolean ans=FALSE,doHilite=FALSE; WindowPtr w;
 		short type,ch; Handle hndl; Rect box;
 		static long then; static Point clickPt;
-		
+
 		w = (WindowPtr)(evt->message);
 		switch(evt->what) {
 			case updateEvt:
@@ -396,42 +396,42 @@ static int DoDialogItem(DialogPtr dlog, short itemHit) {
 			case ctrlItem+btnCtrl:
 				switch(itemHit) {
 					case BUT1_OK:
-					
+
 						//	the default is that we're done
-						
+
 						keepGoing = FALSE; okay = TRUE;
-					
+
 						//	check to see if the name that has been entered can be resolved
-						
+
 						{
 							extern InetSvcRef	gInetService;
-							
+
 							Str255				theString;
 							InetHostInfo		theHost;
 							short				aShort;
 							OSStatus			err;
-							
+
 							GetDlgString(dlog, EDIT5, theString);		//	machine name
 							ParamText(theString, "\p", "\p", "\p");		//	show the name in the dialog
 							p2cstr(theString);
-							
+
 							OTSetSynchronous(gInetService);
 							err = OTInetStringToAddress(gInetService, theString, &theHost);
 							OTSetAsynchronous(gInetService);
 							if (err != noErr) {
-							
+
 								//	the name cannot be looked up, ask the user if they want
 								//	to add the entry anyway
-								
+
 								aShort = CautionAlert(1501, nil);		//	returns 1 if OK to add
 								if (aShort != 1) {
 									keepGoing = TRUE; okay = FALSE;
 								}
-							
+
 							}
-						
+
 						}
-					
+
 						break;
 					case BUT2_Cancel:
 						keepGoing = FALSE;
@@ -637,7 +637,7 @@ static void PutDlgChkRadio(DialogPtr dlog, int item, int val)
 static int GetDlgChkRadio(DialogPtr dlog, int item)
 	{
 		short type; Handle hndl; Rect box;
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		return(GetControlValue((ControlHandle)hndl) != 0);
 	}
@@ -649,7 +649,7 @@ static int GetDlgChkRadio(DialogPtr dlog, int item)
  *	resulting Pascal string in the buffer, str, which is assumed large enough
  *	to hold the text (256 bytes max).  If item is the number of a static text
  *	item, the empty string is delivered.  Delivers TRUE or FALSE according to
- *	whether or not the text so delivered was empty.  
+ *	whether or not the text so delivered was empty.
  */
 
 static int GetDlgString(DialogPtr dlog, int item, unsigned char *str)
@@ -697,7 +697,7 @@ static int GetDlgWord(DialogPtr dlog, int item, short *val)
 /*
  *  If any of the variable argument scrap types are available for pasting from
  *  the scrap, deliver the first one.  Otherwise, deliver 0.  For example,
- *	
+ *
  *      if (whichType = CanPaste(3,'TEXT','PICT','STUF')) ...
  *
  *  There can be any number of types in the list, as long as the preceding count, n,
@@ -709,10 +709,10 @@ static OSType CanPaste(int n, ...)
 		register OSType nextType,ans = 0L;
 		long err,offset;
 		va_list nextArg;
-		
+
 		va_start(nextArg,n);
 		nextType = va_arg(nextArg, OSType);
-		
+
 		while (n-- > 0) {
 			err = GetScrap(NIL, nextType, &offset);
 			if (err >= -1) {
@@ -721,7 +721,7 @@ static OSType CanPaste(int n, ...)
 				}
 			nextType = va_arg(nextArg, OSType);
 			}
-		
+
 		va_end(nextArg);
 		return(ans);
 	}
@@ -737,10 +737,9 @@ static OSType CanPaste(int n, ...)
 static void GetDlgPanel(DialogPtr dlog, int item, Rect *panel)
 	{
 		short type; Handle hndl;
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,panel);
 		HideDialogItem(dlog,item);
 	}
 
 #endif
-

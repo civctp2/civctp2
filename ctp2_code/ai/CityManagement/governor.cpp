@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version when set.
 //
@@ -28,9 +28,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Consider other tile improvements when there is no fitting one for the 
+// - Consider other tile improvements when there is no fitting one for the
 //   preferred type.
-// - Adapted the tile improvement choice to take the CTP2 ringwise fractional 
+// - Adapted the tile improvement choice to take the CTP2 ringwise fractional
 //   worker utilisation into account.
 // - Ambiguous floor call removed for .NET compilation.
 // - Removed .NET warnings, by Martin Gühmann.
@@ -38,26 +38,26 @@
 // - Allowed AI to build food tile improvements when city growth is low, by Martin Gühmann.
 // - Allowed to link cities on different continents with undersea tunnels, by Martin Gühmann.
 // - Added owner call to FindRoadPath to match the new function signature, by Martin Gühmann.
-// - Added terrain boni arguments to FindBestTileImprovement to record the 
+// - Added terrain boni arguments to FindBestTileImprovement to record the
 //   already given terrain boni for that city, by Martin Gühmann
 // - Added roads around all cities. -Calvitix
-// - Disabled the last change as it takes to much roads even if there is no 
+// - Disabled the last change as it takes to much roads even if there is no
 //   city to bypass.
 // - Added GetBestTerraformImprovement function to find the best terraform
-//   improvement. - Sep. 21st 2004 Martin Gühmann 
-// - Modified FindBestTileImprovement function so that the AI can now 
+//   improvement. - Sep. 21st 2004 Martin Gühmann
+// - Modified FindBestTileImprovement function so that the AI can now
 //   terraform if there is no food improvement for that terrain, and the
-//   according city needs more food. - Sep. 21st 2004 Martin Gühmann 
+//   according city needs more food. - Sep. 21st 2004 Martin Gühmann
 // - Disabled the utilization factor for first ring food improvements, such
 //   cities benefit from food improvmements even if the ring is not filled.
-//   - Oct. 6th 2004 Martin Gühmann 
-// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann 
+//   - Oct. 6th 2004 Martin Gühmann
+// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann
 // - Fixed an error in the should terraform logic. - Oct. 6th 2004 Martin Gühmann
 // - Disabled the utilization factor for all first ring improvements, so that
 //   small ciries are more likly improved. - Feb. 21st 2005 Martin Gühmann
-// - Replaced c-sytle casts by by standart static_cast's. 
+// - Replaced c-sytle casts by by standart static_cast's.
 //   - Feb. 21st 2005 Martin Gühmann
-// - Fixed AssignPopulation function, at least it is now in the state as 
+// - Fixed AssignPopulation function, at least it is now in the state as
 //   supposed to be, however this is still far from perfect:
 //   - Fixed population assignment if city has slaves.
 //   - Allow usage of the first record in the pop database
@@ -73,22 +73,22 @@
 //   - April 4th 2005 Martin Gühmann
 // - Redesigned AssignPopulation function:
 //   - Instead calculating an assigned variable, the amount of free workers
-//     is now taken to figure out whether more pops can be assigned. This 
+//     is now taken to figure out whether more pops can be assigned. This
 //     method is less error prone.
-//   - Entertainer assignment was moved to the end and a happiness 
+//   - Entertainer assignment was moved to the end and a happiness
 //     recalculation is done, because happiness is dependent on the amount
 //     of assigned specialists at least if pollotion is on.
 //   - All pops are turned into workers before pop assignment to make
 //     assigned variable superflous.
 //   - April 4th 2005 Martin Gühmann
 // - Cleaned a little bit functions and added experimental code for slider
-//   optimization, the code is currently outcommented as it seemed that it 
+//   optimization, the code is currently outcommented as it seemed that it
 //   harms the AI more than it helps. - April 15th 2005 Martin Gühmann
 // - Improved cleanup to reduce memory leak reports.
 // - Removed debug allocator version.
-// - Added copy constructor to bypass a problem concerning memory 
+// - Added copy constructor to bypass a problem concerning memory
 //   allocation. - June 18th 2005 Martin Gühmann
-// - Added OptimizeSliders method and updated TestSliders method for 
+// - Added OptimizeSliders method and updated TestSliders method for
 //   better AI sliders optimisation routines. - Jul 18th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - Repaired incorrect AddEvent parameters.
@@ -106,9 +106,9 @@
 //   replacing its garrison units. (30-Jun-2008 Martin Gühmann)
 // - Corrected iterator problems (detected with _HAS_ITERATOR_DEBUGGING).
 // - Prepared for trade route ordering on profit per invested caravan.
-// - Allowed selection of government update when it will improve the situation 
+// - Allowed selection of government update when it will improve the situation
 //   w.r.t. the limit on the number of cities, even when it does not solve the
-//   problem completely. When having 21 cities, a limit of 20 will now be 
+//   problem completely. When having 21 cities, a limit of 20 will now be
 //   preferred when currently having a limit of 10.
 // - Prevented crash with missing population assignment data.
 // - If the AI loses its Capitol it builds a new one in its most productive
@@ -116,7 +116,7 @@
 // - Changed science formula to deduct crime after the government coefficient
 //   like all other resources. (22-Jul-2009 Maq)
 // - The AI can now select a special build list for small cities with enough
-//   garrison units, and can use a special build list for maximum size 
+//   garrison units, and can use a special build list for maximum size
 //   increasing increasing buildings. (20-Aug-2009 Martin Gühmann)
 // - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
@@ -193,7 +193,7 @@ namespace
 	sint32 const            MAX_DISTANCE                = 0x7fffffff;
 	Governor const          UniqueInvalidGovernor       = Governor(PLAYER_UNASSIGNED);
 	/// Value for a trade route not requiring caravans (should not occur)
-	double const            VALUE_FREE_LUNCH 	        = 
+	double const            VALUE_FREE_LUNCH 	        =
 		std::numeric_limits<double>::max();
 }
 
@@ -242,7 +242,7 @@ void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 // Returns    : -
 //
 // Remark(s)  : static function
-//              Assumption: The size of s_theGovernors has been updated 
+//              Assumption: The size of s_theGovernors has been updated
 //                          (read from stream) before calling this function.
 //
 //----------------------------------------------------------------------------
@@ -267,7 +267,7 @@ void Governor::LoadAll(CivArchive & archive)
 // Returns    : -
 //
 // Remark(s)  : static function
-//              Assumption: The size of s_theGovernors has been saved 
+//              Assumption: The size of s_theGovernors has been saved
 //                          (written to stream) before calling this function.
 //
 //----------------------------------------------------------------------------
@@ -287,7 +287,7 @@ void Governor::SaveAll(CivArchive & archive)
 //
 // Parameters : -
 //
-// Globals    : s_theGovernors  
+// Globals    : s_theGovernors
 //
 // Returns    : -
 //
@@ -309,7 +309,7 @@ void Governor::Cleanup(void)
 //
 // Parameters : playerId        : player to govern
 //
-// Globals    : s_theGovernors  
+// Globals    : s_theGovernors
 //
 // Returns    : Governor &      : governor of the player
 //
@@ -320,8 +320,8 @@ Governor & Governor::GetGovernor(PLAYER_INDEX const & playerId)
 {
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < s_theGovernors.size());
-	
-	return s_theGovernors[playerId]; 
+
+	return s_theGovernors[playerId];
 }
 
 //----------------------------------------------------------------------------
@@ -395,7 +395,7 @@ Governor::Governor(Governor const & copyme)
 //
 // Parameters : -
 //
-// Globals    : -  
+// Globals    : -
 //
 // Returns    : -
 //
@@ -432,13 +432,13 @@ sint32 Governor::ComputeBestGovernment() const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	const StrategyRecord & strategy = 
+	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	for (sint32 gov_index = 0; gov_index < strategy.GetNumGovernment(); gov_index++)
 	{
 		const GovernmentRecord * rec = strategy.GetGovernment(gov_index);
-			
+
 		if(!player_ptr->HasAdvance(rec->GetEnableAdvanceIndex()))
 			continue;
 
@@ -455,7 +455,7 @@ sint32 Governor::ComputeBestGovernment() const
 		sint32 const newCityLimit = rec->GetTooManyCitiesThreshold();
 		if (player_ptr->GetNumCities() > newCityLimit)
 		{
-			sint32 const oldCityLimit = 
+			sint32 const oldCityLimit =
 				strategy.GetGovernment(player_ptr->GetGovernmentType())->
 					GetTooManyCitiesThreshold();
 
@@ -475,7 +475,6 @@ sint32 Governor::ComputeBestGovernment() const
 	return CTPRecord::INDEX_INVALID;
 }
 
-
 StringId Governor::GetGovernmentAdvice() const
 {
 	Player const *      player_ptr      = g_player[m_playerId];
@@ -486,10 +485,10 @@ StringId Governor::GetGovernmentAdvice() const
 
 		if (new_gov_index != CTPRecord::INDEX_INVALID)
 		{
-			GovernmentRecord const *    new_gov_rec     = 
+			GovernmentRecord const *    new_gov_rec     =
 				g_theGovernmentDB->Get(new_gov_index);
 			sint32 const                new_rank        = new_gov_rec->GetRank();
-			sint32 const                current_rank    = 
+			sint32 const                current_rank    =
 				g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->GetRank();
 
 			if (new_rank == current_rank)
@@ -534,12 +533,10 @@ void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 	else if(player_ptr->GetWorkdayExpectation() - sliders_setting.m_deltaProduction < -2)
 		sliders_setting.m_deltaProduction = 2 + static_cast<sint32>(player_ptr->GetWorkdayExpectation());
 
-	
 	if(player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold > 2)
 		sliders_setting.m_deltaGold = -2 + static_cast<sint32>(player_ptr->GetWagesExpectation());
 	else if(player_ptr->GetWagesExpectation() - sliders_setting.m_deltaGold < -2)
 		sliders_setting.m_deltaGold = 2 + static_cast<sint32>(player_ptr->GetWagesExpectation());
-
 
 	if(player_ptr->GetRationsExpectation() - sliders_setting.m_deltaFood > 2)
 		sliders_setting.m_deltaFood = -2 + static_cast<sint32>(player_ptr->GetRationsExpectation());
@@ -553,7 +550,7 @@ void Governor::NormalizeSliders(SlidersSetting & sliders_setting) const
 //
 // Description: Finds the possible maximal slider settings.
 //
-// Parameters : sliders_setting: Filled with the possible maximal slider 
+// Parameters : sliders_setting: Filled with the possible maximal slider
 //                               settings.
 //
 // Globals    : g_player: List of players
@@ -676,7 +673,6 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	if(!update_cities)
 		return 0;
 
-
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
 
@@ -686,7 +682,7 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	{
 		CityData * city = city_list->Access(i)->GetCityData();
 		double old_happiness = city->GetHappiness();
-	
+
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
@@ -724,10 +720,10 @@ void Governor::GetSliders(SlidersSetting & sliders_setting) const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	sliders_setting.m_deltaProduction = 
+	sliders_setting.m_deltaProduction =
 		static_cast<sint32>(player_ptr->GetWorkdayExpectation() - player_ptr->GetUnitlessWorkday());
 
-	sliders_setting.m_deltaGold = 
+	sliders_setting.m_deltaGold =
 		static_cast<sint32>(player_ptr->GetWagesExpectation() - player_ptr->GetUnitlessWages());
 
 	sliders_setting.m_deltaFood =
@@ -758,17 +754,16 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	SlidersSetting tmp_sliders_setting;
 	sint32 prod, gold, food;
 
-	bool found = TestSliderSettings(sliders_setting, 
+	bool found = TestSliderSettings(sliders_setting,
 	                                production_test,
 	                                gold_test,
 	                                food_test,
 	                                happiness_test,
 	                                prod, gold, food);
-	
+
 	if(found)
 		return false;
 
-	
 	SlidersSetting orig_sliders_setting = sliders_setting;
 
 	bool changed = true;
@@ -783,7 +778,7 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 #endif
 		tmp_sliders_setting = sliders_setting;
 
-		found = TestSliderSettings(sliders_setting, 
+		found = TestSliderSettings(sliders_setting,
 		                           production_test,
 		                           gold_test,
 		                           food_test,
@@ -834,7 +829,7 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 		changed = (sliders_setting != tmp_sliders_setting );
 	}
 
-	found = TestSliderSettings(sliders_setting, 
+	found = TestSliderSettings(sliders_setting,
 	                           production_test,
 	                           gold_test,
 	                           food_test,
@@ -861,7 +856,7 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 //----------------------------------------------------------------------------
 bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 {
-	const StrategyRecord & strategy = 
+	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	bool config_found = false;
@@ -905,7 +900,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 			{
 				sliders_setting.m_deltaFood = -1 * elem->GetDelta();
 			}
-		
+
 			found = FitSlidersToCities( sliders_setting );
 
 			sliders_setting.m_optimizeGold = false;
@@ -991,16 +986,15 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 		Assert(loop_test < 10000);
 		loop_test++;
 #endif
-			
-		found = TestSliderSettings(sliders_setting, 
+
+		found = TestSliderSettings(sliders_setting,
 		                           production_test,
 		                           gold_test,
 		                           food_test,
 		                           happiness_test,
 		                           prod, gold, food);
 		changed = false;
-		
-		
+
 		if(happiness_test == false)
 		{
 			if(sliders_setting.m_optimizeProduction == true
@@ -1044,8 +1038,8 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 			changed = true;
 		}
 
-		while((sliders_setting.m_deltaProduction + 
-		       sliders_setting.m_deltaGold + 
+		while((sliders_setting.m_deltaProduction +
+		       sliders_setting.m_deltaGold +
 		       sliders_setting.m_deltaFood) < 0
 		){
 			if(sliders_setting.m_deltaProduction < 0)
@@ -1074,7 +1068,7 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 //
 // Name       : Governor::TestSliderSettings
 //
-// Description: Checks if the given slider settings are enough to support 
+// Description: Checks if the given slider settings are enough to support
 //              the empire.
 //
 // Parameters : sliders_setting:  The slider settings to be tesed.
@@ -1082,12 +1076,12 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 //                                new slider settings allow to support units.
 //              gold_test:        Indicates after function execution whether
 //                                new slider settings allow to pay wages and
-//                                building upkeep or if building upkeep can't 
+//                                building upkeep or if building upkeep can't
 //                                be paid whether deficit spending is not to high.
-//              food_test:        Indicates after function execution whether 
+//              food_test:        Indicates after function execution whether
 //                                new slider settings allow to feed each city.
 //              happiness_test:   Indicates after function execution whether
-//                                new slider settings allow each city to stay 
+//                                new slider settings allow each city to stay
 //                                above the minimum happiness level.
 //              total_production: Filled with empire production (military support,
 //                                public works and production for buildings)
@@ -1125,7 +1119,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	DPRINTF(k_DBG_GOVERNOR, ("//                         Rations %d\n", sliders_setting.m_deltaFood));
 #endif
 
-	const StrategyRecord & strategy = 
+	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	double deficit_spending;
@@ -1144,12 +1138,12 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 
 	food_test = true;
 	happiness_test = true;
-	
+
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
 	SetSliders(sliders_setting, false);
-	
+
 	UnitDynamicArray *  city_list   = player_ptr->GetAllCitiesList();
 	sint32              num_cities  = city_list ? city_list->Num() : 0;
 
@@ -1196,7 +1190,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		total_gold_cost += city->GetWagesNeeded();
 		total_gold += city->GetNetCityGold();
 		gross_gold += city->GetGrossCityGold();
-			
+
 		if(city->GetNetCityFood() < 0)
 		{
 			food_test = false;
@@ -1305,10 +1299,9 @@ StringId Governor::GetSlidersAdvice() const
 			adviceId = expectationStringId;
 		}
 	}
-	
+
 	return adviceId;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -1383,7 +1376,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			valueFood = std::numeric_limits<sint32>::min();
 		}
 
-		// If all values are good and the people are 
+		// If all values are good and the people are
 		// happy enough, we are happy, too.
 		if(value >= valueProd
 		&& value >= valueGold
@@ -1555,7 +1548,7 @@ void Governor::ComputeRoadPriorities()
 		{
 			float   total_cost = 0.0;
 			Path    found_path;
-			
+
 			Unit    min_neighbor_unit = iter->m_city;
 
 			if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
@@ -1599,9 +1592,8 @@ void Governor::PlaceTileImprovements()
 {
 	Player *                player_ptr  = g_player[m_playerId];
 	Assert(player_ptr);
-	StrategyRecord const &  strategy    = 
+	StrategyRecord const &  strategy    =
 	    Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-	
 
 	sint32  reserve_pw   = 0;
 	strategy.GetPublicWorksReserve(reserve_pw);
@@ -1627,8 +1619,8 @@ void Governor::PlaceTileImprovements()
 		sint32  bonusFood = 0;
 		sint32  bonusProduction = 0;
 		sint32  bonusCommerce = 0;
-			
-		for (it.Start(); !it.End(); it.Next()) 
+
+		for (it.Start(); !it.End(); it.Next())
 		{
 			if(unit.RetPos() == it.Pos())
 				continue;
@@ -1650,11 +1642,11 @@ void Governor::PlaceTileImprovements()
 
 	sint32 max_eval = 0;
 	(void) strategy.GetMaxEvalTileImprovements(max_eval);
-	TiGoalQueue::iterator max_iter = 
+	TiGoalQueue::iterator max_iter =
 		m_tileImprovementGoals.begin() + std::min(static_cast<size_t>(max_eval),
 												  m_tileImprovementGoals.size()
 												 );
-	
+
 	std::partial_sort(m_tileImprovementGoals.begin(),
 	                  max_iter,
 	                  m_tileImprovementGoals.end(),
@@ -1702,7 +1694,7 @@ void Governor::PlaceTileImprovements()
 //				g_theWorld:      Map information
 //
 // Returns    : bool:            The tile can be improved
-//              goal:            Type and priority value of the tile improvement 
+//              goal:            Type and priority value of the tile improvement
 //              bonusFood:       Added food by the selected tile improvement
 //              bonusProduction: Added production(shields) by the selected tile improvement
 //              bonusCommerce:   Added commerce(gold) by the selected tile improvement
@@ -1725,11 +1717,11 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	Unit city_owner = g_theWorld->GetCell(pos)->GetCityOwner();
 	CityData* city = city_owner.GetCityData();
 	Assert(city);
-	
+
 	double growth_rank     = the_map.GetGrowthRank    (city);
 	double production_rank = the_map.GetProductionRank(city);
 	double gold_rank       = the_map.GetCommerceRank  (city);
-	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) / 
+	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) /
 		(double) World::GetAvgFoodFromTerrain();
 	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
 		(double) World::GetAvgShieldsFromTerrain();
@@ -1743,10 +1735,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	sint32 best_gold_improvement;
 	GetBestFoodProdGoldImprovement(pos,best_growth_improvement, best_production_improvement, best_gold_improvement);
 
-	
 	goal.pos = pos;
 
-	
 	goal.type = -1;
 
 	sint32 food_ter = -1;
@@ -1782,12 +1772,12 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
 		}
 	}
-	
+
 	sint32 foodMissing;
 	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, foodMissing, true);
 //	bool moreProdNeeded = city->NeedMoreProdOrGold(bonusProd, bonusGold, true);
 
-	if((moreFoodNeeded 
+	if((moreFoodNeeded
 	|| (best_production_improvement < 0
 	&&  best_gold_improvement < 0))
 	&& (best_growth_improvement >= 0)
@@ -1804,9 +1794,9 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 
 		effect->GetBonusGold(tmp_bonus);
 		bonusCommerce += tmp_bonus;
-		
+
 		goal.type = best_growth_improvement;
-	
+
 		strategy.GetImproveGrowthBonus(bonus);
 		goal.utility = bonus * terr_food_rank;
 
@@ -1820,7 +1810,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			goal.utility += bonus;
 		}
 	}
-	else if(moreFoodNeeded 
+	else if(moreFoodNeeded
 	&&      food_ter >= 0
 	){
 		if(g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain))
@@ -1828,9 +1818,9 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
 			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
 			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
-	
+
 			goal.type = food_ter;
-	
+
 			if(terrain_type != terrainutil_GetDead())
 			{
 				strategy.GetImproveGrowthBonus(bonus);
@@ -1841,7 +1831,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 				    strategy.GetImproveSmallCityGrowthBonus(bonus);
 					goal.utility +=  bonus * (1.0 - growth_rank);
 				}
-		
+
 			}
 			else
 			{
@@ -1868,20 +1858,18 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 
 		effect->GetBonusGold(tmp_bonus);
 		bonusCommerce += tmp_bonus;
-			
+
 		goal.type = best_production_improvement;
-			
-			
+
 		strategy.GetImproveProductionBonus(bonus);
 		goal.utility =  bonus * terr_prod_rank;
-			
-			
+
 		if(production_rank > 0.8)
 		{
 			strategy.GetImproveLargeCityProductionBonus(bonus);
 			goal.utility += bonus *	production_rank;
 		}
-			
+
 		if(g_theWorld->IsGood(pos))
 		{
 			strategy.GetImproveGoodBonus(bonus);
@@ -1905,11 +1893,10 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		bonusCommerce += tmp_bonus;
 
 		goal.type = best_gold_improvement;
-			
-			
+
 		strategy.GetImproveProductionBonus(bonus);
 		goal.utility = bonus * terr_gold_rank;
-			
+
 		if(production_rank > 0.8)
 		{
 			strategy.GetImproveLargeCityProductionBonus(bonus);
@@ -1924,8 +1911,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	else if(g_theWorld->IsGood(pos) == FALSE)
 	{ // Should be removed
 		ERR_BUILD_INST err;
-		if(terrain_type == terrainutil_GetGlacier() 
-		|| terrain_type == terrainutil_GetSwamp() 
+		if(terrain_type == terrainutil_GetGlacier()
+		|| terrain_type == terrainutil_GetSwamp()
 		|| terrain_type == terrainutil_GetTundra()
 		){
 			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, 0, FALSE, err))
@@ -1969,7 +1956,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
 #else
-	// CTP2: utilisation depends on the number of available workers and the 
+	// CTP2: utilisation depends on the number of available workers and the
 	// (ring) distance from the city, and may be any fraction from 0.0 to 1.0.
 	if ((goal.type >= 0) && city)
 	{
@@ -2025,7 +2012,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 		return -1;
 	}
 
-	TerrainImprovementRecord const * terr_imp_rec = 
+	TerrainImprovementRecord const * terr_imp_rec =
 		terrainutil_GetBestRoad(m_playerId, pos);
 	if (terr_imp_rec == NULL)
 		return -1;
@@ -2036,13 +2023,13 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 	    return -1;
 
 	sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
-	TerrainImprovementRecord::Effect const * effect = 
+	TerrainImprovementRecord::Effect const * effect =
 	    terrainutil_GetTerrainEffect(terr_imp_rec, pos);
 
 	sint32 cost;
 	if (effect && effect->GetMoveCost(cost) && cost >= old_move_cost)
 		return -1;
-	
+
 	return terr_imp_rec->GetIndex();
 }
 
@@ -2050,7 +2037,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 //
 // Name       : Governor::GetBestFoodProdGoldImprovement
 //
-// Description: Determines the best food, production and gold improvement 
+// Description: Determines the best food, production and gold improvement
 //              for a tile.
 //
 // Parameters : pos: Position of the tile on the map
@@ -2060,7 +2047,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 //              g_theTerrainImprovementDB: The tile improvement database
 //
 // Returns    : food_imp: Best food tile improvement
-//              prod_imp: Best production tile improvement 
+//              prod_imp: Best production tile improvement
 //              gold_imp: Best gold tile improvement
 //
 // Remark(s)  : The return values are filled with -1 if there is no according
@@ -2095,7 +2082,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 		if (effect == NULL)
 			continue;
 
-		if (!rec->GetClassRoad() && 
+		if (!rec->GetClassRoad() &&
 			!rec->GetClassLandDetector() &&
 			!rec->GetClassOceanDetector() &&
 			!rec->GetClassStructure1() && !rec->GetClassStructure2())
@@ -2108,33 +2095,33 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 		){
 			max_bonus_food = tmp_bonus;
 		}
-		
+
 		if(effect->GetBonusProduction(tmp_bonus)
 		&& tmp_bonus > max_bonus_prod
 		){
 			max_bonus_prod = tmp_bonus;
 		}
-		
+
 		if(effect->GetBonusGold(tmp_bonus)
 		&& tmp_bonus > max_bonus_gold
 		){
 			max_bonus_gold = tmp_bonus;
 		}
 	}
-	
+
 	Assert(g_player[m_playerId]);
 	Player *player_ptr = g_player[m_playerId];
-	
+
 	const TERRAIN_TYPES terrain_type = g_theWorld->GetTerrainType(pos);
-	
+
 	for (type = 0; type < g_theTerrainImprovementDB->NumRecords(); type++)
 	{
 		rec = g_theTerrainImprovementDB->Get(type);
 		ERR_BUILD_INST err;
-		
+
 		if (!player_ptr->CanCreateImprovement(type, pos, 0, FALSE, err))
 			continue;
-		
+
 		if (current_class != 0x0 && ((rec->GetClass() & current_class) == 0x0))
 			continue;
 
@@ -2147,7 +2134,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 				food_imp = type;
 				max_bonus_food = tmp_bonus;
 			}
-			
+
 			if(effect->GetBonusProduction(tmp_bonus)
 			&& tmp_bonus > max_bonus_prod
 			){
@@ -2180,7 +2167,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 //              g_theTerrainImprovementDB: The tile improvement database
 //
 // Returns    : food_imp: Best terraform food improvement
-//              prod_imp: Best terraform production improvement 
+//              prod_imp: Best terraform production improvement
 //              gold_imp: Best terraform gold improvement
 //
 // Remark(s)  : The return values are filled with -1 if there is no better
@@ -2222,7 +2209,7 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 	sint32 i;
 	for(i = 0; i < g_theTerrainDB->NumRecords(); ++i){
 		toRec = g_theTerrainDB->Get(i);
-	
+
 		if(!player_ptr->HasAdvance(toRec->GetAddAdvanceIndex()))
 			continue;
 
@@ -2266,7 +2253,7 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 			gold_ter = i;
 		}
 	}
-	
+
 	const TerrainImprovementRecord *rec;
 	sint32 ter;
 	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); ++i)
@@ -2321,13 +2308,12 @@ void Governor::AssignPopulations()
 	}
 }
 
-
 const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(const CityData *city) const
 {
 	Assert(city);
 	Assert(g_player[m_playerId]);
 
-	const StrategyRecord & strategy = 
+	const StrategyRecord & strategy =
 	           Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	const StrategyRecord::PopAssignmentElement *elem = NULL;
 
@@ -2340,11 +2326,11 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 		{
 			rank = MapAnalysis::GetMapAnalysis().GetProductionRank(city);
 		}
-		else if (elem->GetGrowthCities()) 
+		else if (elem->GetGrowthCities())
 		{
 			rank = MapAnalysis::GetMapAnalysis().GetGrowthRank(city);
 		}
-		else if (elem->GetGoldCities()) 
+		else if (elem->GetGoldCities())
 		{
 			rank = MapAnalysis::GetMapAnalysis().GetCommerceRank(city);
 		}
@@ -2353,7 +2339,7 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 			// Always OK, regardless of rank
 			return elem;
 		}
-		else 
+		else
 		{
 			// Try next one
 			continue;
@@ -2382,7 +2368,7 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 //
 // Description: Assigns the specialists
 //
-// Parameters : city: The city data of city for which the population should 
+// Parameters : city: The city data of city for which the population should
 //                    be assigned.
 //
 // Globals    : g_theCitySizeDB: The city size database.
@@ -2402,7 +2388,7 @@ void Governor::AssignPopulation(CityData *city) const
 	Timer t1;
 #endif
 
-	StrategyRecord::PopAssignmentElement const * pop_assignment = 
+	StrategyRecord::PopAssignmentElement const * pop_assignment =
 		GetMatchingPopAssignment(city);
 	if (!pop_assignment)
 	{
@@ -2417,8 +2403,8 @@ void Governor::AssignPopulation(CityData *city) const
 	city->ChangeSpecialists(POP_SCIENTIST,   -city->ScientistCount());
 
 	//////////////////////////////////////////////////////////////////////
-	// Not a pretty good idea to redo all the stuff, but to avoid this 
-	// the resources from the inner ring and the last ring must be 
+	// Not a pretty good idea to redo all the stuff, but to avoid this
+	// the resources from the inner ring and the last ring must be
 	// stored at seperated places to use them in the HowMuchMoreFoodNeeded
 	// method.
 #if !defined(NEW_RESOURCE_PROCESS)
@@ -2443,10 +2429,10 @@ void Governor::AssignPopulation(CityData *city) const
 
 	///////////////////////////////////////////////////////////////
 	// Get the amount of workers needed for base resources supply.
-	sint32 farmers, laborers, merchants, scientists, 
-	       minFood, minProd, minGold, minScie; 
+	sint32 farmers, laborers, merchants, scientists,
+	       minFood, minProd, minGold, minScie;
 	double farmersEff, laborersEff, merchantsEff, scientistsEff;
-	sint32 min_workers = ComputeMinimumWorkers(city, 
+	sint32 min_workers = ComputeMinimumWorkers(city,
 	                     farmers, laborers, merchants, scientists,
 #if defined(NEW_RESOURCE_PROCESS)
 	                     minFood, minProd, minGold, minScie);
@@ -2564,13 +2550,13 @@ void Governor::AssignPopulation(CityData *city) const
 		{
 			city->ChangeSpecialists(POP_LABORER, count);
 			city->ProcessProduction(true);
-		}			
+		}
 		else if(tmp_city->GetGrossCityProduction() < prev_result)
 		{
 			delta = (-city->LaborerCount());
 			city->ChangeSpecialists(POP_LABORER, delta);
 		}
-			
+
 		delta = city->LaborerCount() - tmp_city->LaborerCount();
 		tmp_city->ChangeSpecialists(POP_LABORER, delta );
 #endif
@@ -2624,7 +2610,7 @@ void Governor::AssignPopulation(CityData *city) const
 		tmp_city->ChangeSpecialists(POP_FARMER, count);
 		tmp_city->CollectResourcesFinally();
 		tmp_city->ProcessFood();
-		
+
 		if(tmp_city->GetProducedFood() > prev_result)
 		{
 			// The specialists are beneficial: employ in the real city.
@@ -2633,21 +2619,21 @@ void Governor::AssignPopulation(CityData *city) const
 		else if(tmp_city->GetProducedFood() < prev_result)
 		{
 			// The specialists are producing less than workers: fire them all?
-			// This should not do anything, because there should be none left 
+			// This should not do anything, because there should be none left
 			// after the reset at the start.
 			Assert(0 == city->FarmerCount());
 			delta = (-city->FarmerCount());
 			city->ChangeSpecialists(POP_FARMER, delta);
 		}
 //		DPRINTF(k_DBG_GAMESTATE, ("NewResult: %f\n", tmp_city->GetProducedFood()));
-		
+
 		// Synchronise the tmp_city with the real city.
 		delta = city->FarmerCount() - tmp_city->FarmerCount();
 		tmp_city->ChangeSpecialists(POP_FARMER, delta );
 #endif
 	}
 //	DPRINTF(k_DBG_GAMESTATE, ("Farmers: %i\n", city->FarmerCount()));
-	
+
 	best_specialist = city->GetBestSpecialist(POP_MERCHANT);
 
 	count = static_cast<sint32>
@@ -2660,7 +2646,7 @@ void Governor::AssignPopulation(CityData *city) const
 
 	//////////////////////////////////
 	// First pop database index is 0
-	if((best_specialist >= 0) 
+	if((best_specialist >= 0)
 	&& (count > 0)
 	){
 #if defined(NEW_RESOURCE_PROCESS)
@@ -2673,7 +2659,7 @@ void Governor::AssignPopulation(CityData *city) const
 		tmp_city->ChangeSpecialists(POP_MERCHANT, count);
 		tmp_city->CollectResourcesFinally();
 		tmp_city->CollectOtherTrade(TRUE);
-		
+
 		if(tmp_city->GetGrossCityGold() > prev_result)
 		{
 			city->ChangeSpecialists(POP_MERCHANT, count);
@@ -2683,14 +2669,14 @@ void Governor::AssignPopulation(CityData *city) const
 			delta = (-city->MerchantCount());
 			city->ChangeSpecialists(POP_MERCHANT, delta);
 		}
-		
+
 		delta = city->MerchantCount() - tmp_city->MerchantCount();
 		tmp_city->ChangeSpecialists(POP_MERCHANT, delta );
 #endif
 	}
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	// Not used anymore 
+	// Not used anymore
 	delete tmp_city;
 #endif
 
@@ -2761,7 +2747,7 @@ void Governor::AssignPopulation(CityData *city) const
 
 		count = static_cast<sint32>
 			(ceil(specialists * pop_assignment->GetEntertainerPercent()));
-		
+
 		count = (count >= min_entertainers ? count : min_entertainers);
 		count = (count <= max_entertainers ? count : max_entertainers);
 
@@ -2792,7 +2778,7 @@ void Governor::AssignPopulation(CityData *city) const
 // Description: Estimates the amount of entertainers needed to achieve
 //              minimum and full happiness.
 //
-// Parameters : city: The city data of city for which the amount of 
+// Parameters : city: The city data of city for which the amount of
 //                    entertainers should be estimated.
 //              min:  Filled with the minimum amount of enteriners needed.
 //              max:  Filled with the amount of entertainers needed for
@@ -2818,7 +2804,7 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, s
 	sint32 per_pop_happiness = g_thePopDB->Get(entertainer_type)->GetHappiness();
 	if (per_pop_happiness <= 0)
 	{
-		DPRINTF(k_DBG_GAMESTATE, 
+		DPRINTF(k_DBG_GAMESTATE,
                 ("Entertainer pop type: %i, happiness: %i\n", entertainer_type, per_pop_happiness)
                );
 		Assert(0);
@@ -2829,12 +2815,11 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, s
 	sint32 maximum = g_theConstDB->Get(0)->GetVeryHappyThreshold();
 	sint32 current = static_cast<sint32>(city->GetHappiness());
 
-
-	double min_delta = static_cast<double>(needed - current) / 
+	double min_delta = static_cast<double>(needed - current) /
 	                     static_cast<double>(per_pop_happiness);
-	double max_delta = static_cast<double>(maximum - current) / 
-	                     static_cast<double>(per_pop_happiness);	
-	
+	double max_delta = static_cast<double>(maximum - current) /
+	                     static_cast<double>(per_pop_happiness);
+
 	if (min_delta < 0)
 	{
 		min_delta = floor(min_delta);
@@ -2863,17 +2848,17 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, s
 // Name       : Governor::GetMinNumOfFieldWorkers
 //
 // Description: Estimates the amount of needed workers to generate the amount
-//              of resources (food, production or gold) given by 
+//              of resources (food, production or gold) given by
 //              resourceFraction.
 //
-// Parameters : city:             The city data of city for which the amount 
+// Parameters : city:             The city data of city for which the amount
 //                                needed workers should be calculated.
 //              resourceFraction: The fraction of total resources that the
 //                                city needs as minimum.
 //
 // Globals    : g_theCitySizeDB:  The city size database.
 //
-// Returns    : The amount of minimum field wokers to generate the given 
+// Returns    : The amount of minimum field wokers to generate the given
 //              fraction of resources.
 //
 // Remark(s)  : -
@@ -2918,11 +2903,11 @@ sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFr
 //
 // Description: Estimates the amount workers needed so that all kinds
 //              of ressources (food, production, gold and science) are
-//              positive. The amount of workers is estimated on the 
+//              positive. The amount of workers is estimated on the
 //              assumption the according resource is not by a specialists
 //              gained instead by the field worker.
 //
-// Parameters : city: The city data of city for which the amount of 
+// Parameters : city: The city data of city for which the amount of
 //                    workers should be estimated.
 //
 // Globals    : g_theCitySizeDB: The city size database
@@ -2934,13 +2919,13 @@ sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFr
 //              minProd:         Filled minimum field workers for production.
 //              minGold:         Filled minimum field workers for gold.
 //              minScie:         Filled minimum field workers for science.
-//              farmersEff       Additional food of a farmer after 
+//              farmersEff       Additional food of a farmer after
 //                               deduction of field food.
-//              laborersEff      Additional production of a laborer after 
+//              laborersEff      Additional production of a laborer after
 //                               deduction of field production.
-//              merchantsEff     Additional gold of an merchant after 
+//              merchantsEff     Additional gold of an merchant after
 //                               deduction of field gold.
-//              scientistsEff    Additional science of an scientist after 
+//              scientistsEff    Additional science of an scientist after
 //                               deduction of field food.
 //
 // Returns    : Amount of workers needed.
@@ -2951,10 +2936,10 @@ sint32 Governor::GetMinNumOfFieldWorkers(const CityData *city, double resourceFr
 //              and production are needed.
 //
 //----------------------------------------------------------------------------
-sint32 Governor::ComputeMinimumWorkers(CityData *city, 
-                                       sint32 &farmers, 
-                                       sint32 &laborers, 
-                                       sint32 &merchants, 
+sint32 Governor::ComputeMinimumWorkers(CityData *city,
+                                       sint32 &farmers,
+                                       sint32 &laborers,
+                                       sint32 &merchants,
                                        sint32 &scientists,
                                        sint32 &minFood,
                                        sint32 &minProd,
@@ -2993,7 +2978,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 	double prodRequired = 1.0; // At least one production, better requirement needed.
 	double goldRequired = static_cast<double>(city->GetSupport());
 	double scieRequired = 1.0; // At least one science, better requirement needed.
-	
+
 	double foodFraction = foodRequired / food;
 	double prodFraction = prodRequired / prod;
 	double goldFraction = goldRequired / gold;
@@ -3185,16 +3170,16 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 	//	DPRINTF(k_DBG_GAMESTATE, ("part_size: %i\n", part_size));
 	//	DPRINTF(k_DBG_GAMESTATE, ("part_size_pop: %i\n", part_size_pop));
 		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 0 = %f ms\n", t1.getElapsedTimeInMilliSec()));
-		part_radii_prod = city->ProcessProduction(true, 
-		                         grossProduction, 
-		                         part_radii_prod, 
-		                         crimeLoss, 
+		part_radii_prod = city->ProcessProduction(true,
+		                         grossProduction,
+		                         part_radii_prod,
+		                         crimeLoss,
 		                         specialLoss, true);
 		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 1 = %f ms\n", t1.getElapsedTimeInMilliSec()));
-		full_radii_prod = city->ProcessProduction(true, 
-		                         grossProduction, 
-		                         full_radii_prod, 
-		                         crimeLoss, 
+		full_radii_prod = city->ProcessProduction(true,
+		                         grossProduction,
+		                         full_radii_prod,
+		                         crimeLoss,
 		                         specialLoss, true);
 		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 2 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
@@ -3316,15 +3301,15 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		&& full_radii_food + part_radii_food > city->GetFoodRequired()
 		&& part_radii_food > 0.0
 		){
-			utilization_needed = 
+			utilization_needed =
 			    (city->GetFoodRequired() - full_radii_food) / part_radii_food;
 
 			if (fullSquaredRadius > 0)
 			{
 				workers_needed = full_rec->GetMaxWorkers();
 			}
-	
-			workers_needed += static_cast<sint32>(ceil(utilization_needed * 
+
+			workers_needed += static_cast<sint32>(ceil(utilization_needed *
 									(part_rec->GetMaxWorkers() - workers_needed)));
 			if(WorkersNeeded < workers_needed)
 			{
@@ -3345,15 +3330,15 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		&& full_radii_prod + part_radii_prod > 0 // Needs according function.
 		&& part_radii_prod > 0
 		){
-			utilization_needed = 
+			utilization_needed =
 			    static_cast<double>(0 - full_radii_prod) / static_cast<double>(part_radii_prod);
 
 			if (fullSquaredRadius > 0)
 			{
 				workers_needed = full_rec->GetMaxWorkers();
 			}
-	
-			workers_needed += static_cast<sint32>(ceil(utilization_needed * 
+
+			workers_needed += static_cast<sint32>(ceil(utilization_needed *
 									(part_rec->GetMaxWorkers() - workers_needed)));
 			if(WorkersNeeded < workers_needed)
 			{
@@ -3379,17 +3364,17 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		&& full_radii_gold + part_radii_gold > support
 		&& part_radii_gold > 0
 		){
-			utilization_needed = 
+			utilization_needed =
 			    static_cast<double>(support - full_radii_gold) / static_cast<double>(part_radii_gold);
-	
+
 	//		DPRINTF(k_DBG_GAMESTATE, ("utilization_needed: %f\n", utilization_needed));
 
 			if (fullSquaredRadius > 0)
 			{
 				workers_needed = full_rec->GetMaxWorkers();
 			}
-	
-			workers_needed += static_cast<sint32>(ceil(utilization_needed * 
+
+			workers_needed += static_cast<sint32>(ceil(utilization_needed *
 									(part_rec->GetMaxWorkers() - workers_needed)));
 	//		DPRINTF(k_DBG_GAMESTATE, ("workers_needed: %i\n", workers_needed));
 			if(WorkersNeeded < workers_needed)
@@ -3411,15 +3396,15 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		&& full_radii_science + part_radii_science > 0 // Better condition needed.
 		&& part_radii_science > 0
 		){
-			utilization_needed = 
+			utilization_needed =
 			    static_cast<double>(0 - full_radii_science) / static_cast<double>(part_radii_science);
 
 			if (fullSquaredRadius > 0)
 			{
 				workers_needed = full_rec->GetMaxWorkers();
 			}
-	
-			workers_needed += static_cast<sint32>(ceil(utilization_needed * 
+
+			workers_needed += static_cast<sint32>(ceil(utilization_needed *
 									(part_rec->GetMaxWorkers() - workers_needed)));
 			if(WorkersNeeded < workers_needed){
 				WorkersNeeded = workers_needed;
@@ -3475,21 +3460,21 @@ void Governor::ComputeDesiredUnits()
 	Assert(g_player[m_playerId]);
 	Player * player_ptr = g_player[m_playerId];
 
-	sint32 max_cities = 
+	sint32 max_cities =
 		g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->GetTooManyCitiesThreshold();
 	sint32 num_cities = player_ptr->GetNumCities();
 	sint32 needed_cities = (max_cities - num_cities);
 	sint32 total_unallocated_support = 0;
-	
-	double unit_support_percent = 0.0; 
+
+	double unit_support_percent = 0.0;
 	(void) strategy.GetUnitSupportPercent(unit_support_percent);
-	
+
 	sint32 total_unit_support = static_cast<sint32>
 		(player_ptr->GetTotalProduction() * unit_support_percent);
-	
+
 	Assert(g_theUnitDB);
 	std::fill_n(m_currentUnitCount.begin(), g_theUnitDB->NumRecords(), 0);
-	
+
 	sint32 num_armies = player_ptr->m_all_armies->Num();
 	for (sint32 army_index = 0; army_index < num_armies; army_index++)
 	{
@@ -3504,8 +3489,8 @@ void Governor::ComputeDesiredUnits()
 				m_currentUnitCount[unit.GetType()]++;
 			}
 		}
-	} 
-	
+	}
+
 	sint32 city_index;
 	for (city_index = 0; city_index < num_cities; city_index++)
 	{
@@ -3513,7 +3498,7 @@ void Governor::ComputeDesiredUnits()
 
 		if (unit.IsValid())
 		{
-			BuildQueue * buildQueue = 
+			BuildQueue * buildQueue =
 			    unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
 			Assert(buildQueue);
 			if (    buildQueue
@@ -3528,10 +3513,10 @@ void Governor::ComputeDesiredUnits()
 
 	m_maximumUnitShieldCost = 0;
 	m_currentUnitShieldCost = 0;
-	
+
 	sint32 needed_transport = Scheduler::GetScheduler(m_playerId).
 		                        GetMostNeededStrength().Get_Transport();
-	
+
 	for (int list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
 		m_buildUnitList[list_num].m_perCityGarrison =  0;
@@ -3549,31 +3534,31 @@ void Governor::ComputeDesiredUnits()
 		{
 		case BUILD_UNIT_LIST_OFFENSE:
 			(void) strategy.GetOffensiveGarrisonCount(garrison_count);
-			m_buildUnitList[list_num].m_perCityGarrison = 
+			m_buildUnitList[list_num].m_perCityGarrison =
 				static_cast<sint16>(garrison_count);
-			m_buildUnitList[list_num].m_maximumGarrisonCount = 
+			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
-			
+
 			strategy.GetOffensiveUnitsPercent(unit_support_percent_by_type);
 			break;
 
 		case BUILD_UNIT_LIST_DEFENSE:
 			(void) strategy.GetDefensiveGarrisonCount(garrison_count);
-			m_buildUnitList[list_num].m_perCityGarrison = 
+			m_buildUnitList[list_num].m_perCityGarrison =
 				static_cast<sint16>(garrison_count);
-			m_buildUnitList[list_num].m_maximumGarrisonCount = 
+			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
-			
+
 			strategy.GetDefensiveUnitsPercent(unit_support_percent_by_type);
 			break;
 
 		case BUILD_UNIT_LIST_RANGED:
 			(void) strategy.GetRangedGarrisonCount(garrison_count);
-			m_buildUnitList[list_num].m_perCityGarrison = 
+			m_buildUnitList[list_num].m_perCityGarrison =
 				static_cast<sint16>(garrison_count);
-			m_buildUnitList[list_num].m_maximumGarrisonCount = 
+			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
-			
+
 			strategy.GetRangedUnitsPercent(unit_support_percent_by_type);
 			break;
 
@@ -3633,7 +3618,7 @@ void Governor::ComputeDesiredUnits()
 			break;
 
 		default:
-			
+
 			Assert(false);
 			break;
 		}
@@ -3651,10 +3636,10 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_RANGED:
 		case BUILD_UNIT_LIST_SEA:
 		case BUILD_UNIT_LIST_AIR:
-			
-			total_unit_support_by_type = 
+
+			total_unit_support_by_type =
 				static_cast<sint32>(total_unit_support * unit_support_percent_by_type);
-			
+
 			if (best_unit_type >= 0)
 			{
 				total_unit_support_by_type += total_unallocated_support;
@@ -3663,34 +3648,34 @@ void Governor::ComputeDesiredUnits()
 				if (bestUnitSupport > 0)
 				{
 					Assert(total_unit_support_by_type >= 0);
-					m_buildUnitList[list_num].m_maximumCount = 
+					m_buildUnitList[list_num].m_maximumCount =
 						static_cast<sint16>
-							(floor(static_cast<double>(total_unit_support_by_type) / 
+							(floor(static_cast<double>(total_unit_support_by_type) /
 								   bestUnitSupport
 								  )
 							);
-					
-					total_unallocated_support = total_unit_support_by_type - 
+
+					total_unallocated_support = total_unit_support_by_type -
 						m_buildUnitList[list_num].m_maximumCount * bestUnitSupport;
 				}
-				else 
+				else
 				{
-					m_buildUnitList[list_num].m_maximumCount = 
+					m_buildUnitList[list_num].m_maximumCount =
 						static_cast<sint16>(total_unit_support_by_type);
-					
+
 					total_unallocated_support = total_unit_support_by_type;
 				}
-				m_buildUnitList[list_num].m_desiredCount = 
-					m_buildUnitList[list_num].m_maximumCount - 
+				m_buildUnitList[list_num].m_desiredCount =
+					m_buildUnitList[list_num].m_maximumCount -
 					m_currentUnitCount[best_unit_type];
 
-				m_maximumUnitShieldCost += 
+				m_maximumUnitShieldCost +=
 					m_buildUnitList[list_num].m_maximumCount * bestUnitSupport;
 
-				m_currentUnitShieldCost += 
+				m_currentUnitShieldCost +=
 					m_currentUnitCount[best_unit_type] * bestUnitSupport;
 			}
-			else 
+			else
 			{
 				total_unallocated_support += total_unit_support_by_type;
 			}
@@ -3698,15 +3683,15 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_SETTLER:
 		case BUILD_UNIT_LIST_SEA_SETTLER:
 
-			if (    (best_unit_type >= 0) 
+			if (    (best_unit_type >= 0)
 			     && (desired_count > m_currentUnitCount[best_unit_type])
 			   )
 			{
 				m_buildUnitList[list_num].m_maximumCount =
 					static_cast<sint16>(needed_cities);
 
-				m_buildUnitList[list_num].m_desiredCount = 
-					m_buildUnitList[list_num].m_maximumCount - 
+				m_buildUnitList[list_num].m_desiredCount =
+					m_buildUnitList[list_num].m_maximumCount -
 					m_currentUnitCount[best_unit_type];
 			}
 			else
@@ -3722,8 +3707,8 @@ void Governor::ComputeDesiredUnits()
 			if (best_unit_type >= 0)
 			{
 				m_buildUnitList[list_num].m_maximumCount = desired_count;
-				m_buildUnitList[list_num].m_desiredCount = 
-				    static_cast<sint16>(desired_count 
+				m_buildUnitList[list_num].m_desiredCount =
+				    static_cast<sint16>(desired_count
 				                        - m_currentUnitCount[best_unit_type]
 				                       );
 			}
@@ -3732,9 +3717,9 @@ void Governor::ComputeDesiredUnits()
 			if (best_unit_type >= 0)
 			{
 				m_buildUnitList[list_num].m_maximumCount = desired_count + needed_transport;
-				m_buildUnitList[list_num].m_desiredCount = 
-				    static_cast<sint16>(desired_count 
-				                        + needed_transport 
+				m_buildUnitList[list_num].m_desiredCount =
+				    static_cast<sint16>(desired_count
+				                        + needed_transport
 				                        - m_currentUnitCount[best_unit_type]
 				                       );
 			}
@@ -3743,10 +3728,10 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_AIR_TRANSPORT:
 			if (best_unit_type >= 0)
 			{
-				if (m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount == 0) 
+				if (m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount == 0)
 				{
 					m_buildUnitList[list_num].m_maximumCount = desired_count;
-					m_buildUnitList[list_num].m_desiredCount = 
+					m_buildUnitList[list_num].m_desiredCount =
 					    static_cast<sint16>(desired_count
 					                        - m_currentUnitCount[best_unit_type]
 					                       );
@@ -3755,7 +3740,7 @@ void Governor::ComputeDesiredUnits()
 			break;
 
 		default:
-			
+
 			Assert(false);
 			break;
 		}
@@ -3764,7 +3749,7 @@ void Governor::ComputeDesiredUnits()
 	m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount = 0;
 	m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount = 0;
 	m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount = 0;
-	
+
 	sint32 desired_offense;
 	sint32 desired_defense;
 	sint32 desired_ranged;
@@ -3815,13 +3800,13 @@ void Governor::ComputeDesiredUnits()
 
 		if ( desired_offense > 0)
 		{
-			m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount += 
+			m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount +=
 				static_cast<sint16>(desired_offense);
 		}
 
 		if ( desired_defense > 0 )
 		{
-			m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount += 
+			m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount +=
 				static_cast<sint16>(desired_defense);
 		}
 
@@ -3853,7 +3838,7 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 	bool first_turn_of_war = Diplomat::GetDiplomat(m_playerId).FirstTurnOfWar();
 
 	UnitDynamicArray *  city_list = player->GetAllCitiesList();
-	
+
 	for (sint32 i = 0; i < city_list->Num(); i++)
 	{
 		Unit        cityUnit    = city_list->Access(i);
@@ -3885,8 +3870,8 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 			continue;
 
 		bool insert_ok = false;
-		switch (cat) 
-		{ 
+		switch (cat)
+		{
 		case k_GAME_OBJ_TYPE_UNIT:
 			insert_ok = city->BuildUnit(type);
 			if (insert_ok && list_num < BUILD_UNIT_LIST_MAX)
@@ -3897,7 +3882,7 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 			break;
 		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			insert_ok = city->BuildImprovement(type);
-			break; 
+			break;
 		case k_GAME_OBJ_TYPE_CAPITALIZATION:
 			insert_ok = true;
 //			city->InsertCapitalization(); // How is Capitalization removed?
@@ -3991,7 +3976,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 {
 	StringId advice;
 	bool noUnits = false;
-	const BuildListSequenceRecord *build_list_sequence = 
+	const BuildListSequenceRecord *build_list_sequence =
 		GetMatchingSequence(city, !g_player[m_playerId]->IsRobot(), advice, noUnits);
 
 	if (city->GetUseGovernor() && !g_player[m_playerId]->IsRobot())
@@ -4006,9 +3991,9 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			city->SetBuildListSequenceIndex(suggested_sequence);
 	}
 
-	bool city_full = 
+	bool city_full =
 		(g_theWorld->GetCell(city->GetHomeCity().RetPos())->GetNumUnits() >= k_MAX_ARMY_SIZE);
-	
+
 	for (sint32 i = 0; i < build_list_sequence->GetNumBuildListElement(); i++)
 	{
 		BuildListSequenceRecord::BuildListElement const * elem =
@@ -4128,7 +4113,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 	sint32 minNumUnits;
 	sint32 maxRawHappiness;
-	
+
 	SlidersSetting sliders_setting;
 	sint32 cityRawHappiness = static_cast<sint32>(city->GetHappiness()) - city->GetHappinessFromPops();
 
@@ -4291,9 +4276,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		}
 	}
 
-
 	advice = -1;
-	
+
 	if (best_elem == NULL)
 	{
 		best_elem = strategy.GetBuildListSequenceElement(i-1);
@@ -4308,7 +4292,6 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 	return best_elem->GetBuildListSequence();
 }
-
 
 sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) const
 {
@@ -4328,13 +4311,13 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 	strategy.GetBuildTransportProductionLevel(build_transport_production_level);
 	strategy.GetBuildSettlerProductionLevel(build_settler_production_level);
 
-	bool canBuildSettlers  = static_cast<double>(m_currentUnitShieldCost) / 
-	                         static_cast<double>(m_maximumUnitShieldCost) > 
+	bool canBuildSettlers  = static_cast<double>(m_currentUnitShieldCost) /
+	                         static_cast<double>(m_maximumUnitShieldCost) >
 	                                      build_settler_production_level;
 //	                      || city->GetNeededGarrisonStrength() * build_settler_production_level <= city->GetCurrentGarrisonStrength();
 
-	bool canBuildTransporters = static_cast<double>(m_currentUnitShieldCost) / 
-	                            static_cast<double>(m_maximumUnitShieldCost) > 
+	bool canBuildTransporters = static_cast<double>(m_currentUnitShieldCost) /
+	                            static_cast<double>(m_maximumUnitShieldCost) >
 	                                         build_settler_production_level;
 //	                      || city->GetNeededGarrisonStrength() * build_transport_production_level <= city->GetCurrentGarrisonStrength();
 
@@ -4363,12 +4346,12 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			if (!g_theWorld->GetAdjacentOcean(city->GetHomeCity().RetPos(), cont))
 				continue;
 		}
-		
+
 		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_FREIGHT)
 			continue;
-		
+
 		const BuildUnitList & list_ref = m_buildUnitList[list_num];
-		
+
 		if
 		  (
 		       list_ref.m_bestType < 0
@@ -4377,12 +4360,12 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		{
 			continue;
 		}
-		
-		needed_production = 
+
+		needed_production =
 			GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
-		
+
 		turns_to_build = city->HowMuchLonger(needed_production);
-		
+
 		if
 		  (
 		       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
@@ -4395,7 +4378,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		{
 			needed_production *= list_ref.m_desiredCount;
 		}
-		
+
 		if ( needed_production > 0 )
 		{
 			if
@@ -4456,7 +4439,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 	{
 		type = m_buildUnitList[max_list].m_bestType;
 		list_num = max_list;
-		
+
 		if (!city->CanBuildUnit(type))
 		{
 			const UnitBuildListRecord *build_list_rec = GetBuildListRecord(strategy, max_list);
@@ -4533,7 +4516,7 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 		Assert(false);
 		return NULL;
 	}
-}	
+}
 
 double Governor::MaxiumGarrisonDefence(const MapPoint & pos) const
 {
@@ -4583,7 +4566,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	sint32 cont;
 
 	Scheduler & scheduler = Scheduler::GetScheduler(m_playerId);
-	
+
 	for (list_num = BUILD_UNIT_LIST_SEA_TRANSPORT; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
 
@@ -4622,7 +4605,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 //			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
 			  )
 			{
-				needed_production = 
+				needed_production =
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4644,7 +4627,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					continue;
 				}
 
-				needed_production = 
+				needed_production =
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4667,7 +4650,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					continue;
 				}
 
-				needed_production = 
+				needed_production =
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4687,7 +4670,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			   && garrisonPercent > build_settler_production_level
 			  )
 			{
-				needed_production = 
+				needed_production =
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4700,7 +4683,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else
 			{
-				needed_production = (list_ref.m_garrisonCount * 
+				needed_production = (list_ref.m_garrisonCount *
 									 GetDBUnitRec(list_ref.m_bestType)->GetShieldCost());
 			}
 		}
@@ -4720,7 +4703,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			{
 				if(garrisonComplte >= 1.0) // Don't merge this part, since it may be exposed for the three types
 				{
-					needed_production = 
+					needed_production =
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4741,7 +4724,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 				if(garrisonComplte >= 1.0)
 				{
-					needed_production = 
+					needed_production =
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4762,7 +4745,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 				if(garrisonComplte >= 1.0)
 				{
-					needed_production = 
+					needed_production =
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4783,7 +4766,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			{
 				if(garrisonComplte >= 1.0)
 				{
-					needed_production = 
+					needed_production =
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
@@ -4797,7 +4780,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else
 			{
-				needed_production = list_ref.m_perCityGarrison * 
+				needed_production = list_ref.m_perCityGarrison *
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				g_theWorld->GetArmy( city->GetHomeCity().RetPos(), garrison_army );
@@ -4805,7 +4788,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 				{
 					if ( garrison_army.Get(i).GetDBRec()->GetIndex() == list_ref.m_bestType)
 					{
-						needed_production -= 
+						needed_production -=
 							GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 					}
 				}
@@ -4840,11 +4823,10 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	return type;
 }
 
-
 sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec ) const
 {
 	Assert(city);
-	
+
 	for (sint32 i = 0; i < build_list_rec->GetNumBuilding(); i++)
 	{
 		sint32 const building_type = build_list_rec->GetBuildingIndex(i);
@@ -4911,7 +4893,7 @@ sint32 Governor::ComputeBestUnitType(const UnitBuildListRecord *build_list_rec, 
 
 sint32 Governor::ComputeBestMilitaryReadiness() const
 {
-	
+
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	sint32 new_level = 0;
 	(void) strategy.GetReadinessLevel(new_level);
@@ -4930,7 +4912,6 @@ sint32 Governor::ComputeBestMilitaryReadiness() const
 		max_support_cost = (static_cast<double>(support_percent) / 100.0);
 	}
 
-	
 	if(total_production
 	&& player_ptr->GetReadinessCost() > (max_support_cost * total_production)
 	){
@@ -4962,7 +4943,7 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 
 	Player *player_ptr = g_player[m_playerId];
 	Assert(g_player[m_playerId])
-	
+
 	if (player_ptr == NULL)
 		return -1;
 
@@ -5023,7 +5004,7 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 				garrison[j].IsEntrenching())
 				break;
 		}
-		
+
 		if (j == garrison.Num())
 		{
 			sc.AddCity(city);
@@ -5091,7 +5072,6 @@ void Governor::ManageGoodsTradeRoutes()
 
 	m_neededFreight = 0.0;
 
-	
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
 	for (sint32 i = 0; i < cityCount; i++)
@@ -5108,10 +5088,10 @@ void Governor::ManageGoodsTradeRoutes()
 				if(!city.CD()->HasResource(g)
 				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute))
 				{
-					sellingPrice = 
+					sellingPrice =
 						tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g);
 				}
-				else 
+				else
 				{
 					curDestRoute.m_id = 0;
 				}
@@ -5131,20 +5111,20 @@ void Governor::ManageGoodsTradeRoutes()
 						if (!player_ptr->HasContactWith(op))
 							continue;
 
-						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) 
+						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0)
 							continue;
-					
+
 						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
 							continue;
 					}
-					
+
 					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
-						
-						if(!(destCity.GetVisibility() & (1 << m_playerId))) 
+
+						if(!(destCity.GetVisibility() & (1 << m_playerId)))
 							continue;
-						
-						if(destCity.m_id == city.m_id) 
+
+						if(destCity.m_id == city.m_id)
 							continue;
 
 						if (Diplomat::GetDiplomat(m_playerId).
@@ -5152,7 +5132,7 @@ void Governor::ManageGoodsTradeRoutes()
 							continue;
 
 						if(curDestRoute.m_id != 0 &&
-						    curDestRoute->GetDestination().m_id == destCity.m_id) 
+						    curDestRoute->GetDestination().m_id == destCity.m_id)
 							continue;
 
 						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g);
@@ -5163,22 +5143,22 @@ void Governor::ManageGoodsTradeRoutes()
 							maxNeededFreight = cost;
 							bestPrice = price;
 						}
-						
+
 						if ((price > maxPrice) && (cost < total_freight))
 						{
 							maxPrice = price;
 							maxCity = destCity;
 							maxCost = cost;
 						}
-					} 
-				} 
-	
+					}
+				}
+
 				m_neededFreight += maxNeededFreight;
 
 				if (!player_ptr->IsRobot())
 					continue;
 
-				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) || 
+				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) ||
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId).
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
@@ -5194,14 +5174,14 @@ void Governor::ManageGoodsTradeRoutes()
 					}
 				}
 
-				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice))) 
+				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice)))
 				{
 					new_route.m_sourceCity      = city;
 					new_route.m_destinationCity = maxCity;
 					new_route.m_cost            = maxCost;
 					new_route.m_value           = maxPrice;
 					new_route.m_resource        = g;
-					new_route.m_valuePerCaravan	= 
+					new_route.m_valuePerCaravan	=
 						(maxCost <= 0) ? VALUE_FREE_LUNCH
 									   : static_cast<double>(maxPrice) / maxCost;
 					new_routes.push_back(new_route);
@@ -5328,4 +5308,3 @@ void Governor::RebuildCapitol() const
 		newCapital->BuildImprovement(type);
 	}
 }
-

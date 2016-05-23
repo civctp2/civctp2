@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 // - Removed an Assert which is annoyingly triggered all the time when having
 //   an improvement file without sound defintions.
 // - Removed some completely unused code.
-// - Modernised some code: e.g. implemented the modified records list as a 
+// - Modernised some code: e.g. implemented the modified records list as a
 //   std::vector, so we don't have to do the memory management ourselves.
 // - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
 // - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
@@ -56,7 +56,7 @@ template <class T> class CTPDatabase;
 
 #define DBERROR(x) { lex->ReportError x; }
 
-enum DBPARSE_ERROR 
+enum DBPARSE_ERROR
 {
 	DBPARSE_OK,
 	DBPARSE_DEFER,
@@ -93,7 +93,6 @@ public:
 	sint32 m_modifiedRecord;
 };
 
-
 template <class T> class CTPDatabase
 {
 protected:
@@ -124,7 +123,7 @@ public:
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
 			return NULL;
-	
+
 		return m_records[index];
 	}
 
@@ -135,9 +134,9 @@ public:
 	sint32 GetName(sint32 index);
 	const char * GetNameStr(sint32 index);
 	void Add(T *obj);
-	sint32 NumRecords() const 
-	{ 
-		return m_numRecords; 
+	sint32 NumRecords() const
+	{
+		return m_numRecords;
 	}
 	bool GetNamedItem(sint32 name, sint32 &index);
 	bool GetNamedItemID(sint32 index, sint32 &name);

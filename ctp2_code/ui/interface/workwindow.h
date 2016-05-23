@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : User interface 
+// Description  : User interface
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,11 +33,9 @@
 #ifndef __WORKWINDOW_H__
 #define __WORKWINDOW_H__
 
-
 #include "c3window.h"
 
-
-class WorkWindow : public C3Window 
+class WorkWindow : public C3Window
 {
 public:
 	WorkWindow(
@@ -62,7 +60,6 @@ public:
 	virtual AUI_ERRCODE InitCommon(void);
 
 
-
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -73,5 +70,4 @@ protected:
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

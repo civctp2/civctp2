@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,9 +51,8 @@
 
 #include "GameWatch.h"
 
-
 extern int g_gameWatchID;
-#endif 
+#endif
 
 uint32 g_debug_mask = k_DBG_NONE;
 static int g_useMask;
@@ -106,7 +105,7 @@ void c3debug_InitDebugLog()
 	strcpy(path, "logs" FILE_SEP "*.*");
 
 	HANDLE lpFileList = FindFirstFile(path, &fileData);
-	
+
 	if(lpFileList != INVALID_HANDLE_VALUE)
 	{
 		MBCHAR fileName[256];
@@ -214,7 +213,7 @@ void c3debug_dprintf(char const * format, ...)
 		vsprintf(g_last_debug_text + strlen(g_last_debug_text), format, list);
 		va_end(list);
 #ifndef _AIDLL
-		
+
 		if (g_debugWindow)
 		{
 			g_debugWindow->AddText(g_last_debug_text);
@@ -268,7 +267,6 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 	DPRINTF(k_DBG_FIX, ("Exception: '%s' thrown.\n", s));
 
-	
 	s = c3debug_ExceptionStackTrace(exception_pointers);
 
 	DPRINTF(k_DBG_FIX, ("Exception Stack Trace:\n%s\n", s));
@@ -277,16 +275,16 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 	char userName[256];
 	DWORD size = 256;
-	userName[0] = '\0';		
+	userName[0] = '\0';
 	GetUserName(userName, &size);
 
 	char computerName[256];
 	size = 256;
-	computerName[0] = '\0';		
+	computerName[0] = '\0';
 	GetComputerName(computerName, &size);
 
 	SYSTEMTIME localTime;
-	memset(&localTime, 0, sizeof(localTime));	
+	memset(&localTime, 0, sizeof(localTime));
 	GetLocalTime(&localTime);
 
 	char stamp[1024];
@@ -315,15 +313,15 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 
 void c3debug_Assert(char const *s, char const * file, int line)
 {
-	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line)); 
+	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line));
 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", c3debug_StackTrace()));
 
 #if defined(_DEBUG)
 	do
 	{
-		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) 
+		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1)
 		{
-			_CrtDbgBreak(); 
+			_CrtDbgBreak();
 		}
 	}
 	while (0);

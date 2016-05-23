@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -161,7 +161,6 @@ static FUNC_TABLE func2key[] = {
 	{ 0, KEY_FUNCTION_CONTROL_PREV, "CONTROL_PREV"}
 };
 
-
 KEYMAP::KEYMAP(BOOL useDefault)
 {
 	sint32 i;
@@ -271,7 +270,7 @@ KEYMAP::KEYMAP(BOOL useDefault)
 		k = hash_32to16(val) & MASK_MAX_KEYPRESS_MAP;
 		old = k;
 
-		searching = TRUE; 
+		searching = TRUE;
 
 		for (i = 0; i < KEY_FUNCTION_LAST_NOOP; ++i)
 		{
@@ -282,9 +281,9 @@ KEYMAP::KEYMAP(BOOL useDefault)
 					if (key2func[k].function == KEY_FUNCTION_NOOP)
 					{
 						key2func[k].function = KEY_FUNCTION(i);
-						key2func[k].keycode = val; 
-						searching = FALSE; 
-						func2key[i].keycode = val; 
+						key2func[k].keycode = val;
+						searching = FALSE;
+						func2key[i].keycode = val;
 						break;
 					}
 					else
@@ -319,7 +318,7 @@ uint32 KEYMAP::hash_32to16(unsigned long val)
 KEY_FUNCTION KEYMAP::get_function(unsigned long wParam)
 {
 	uint32 val = hash_32to16(wParam) & MASK_MAX_KEYPRESS_MAP;
-	uint32 old = val; 
+	uint32 old = val;
 
 	do
 	{
@@ -343,7 +342,6 @@ KEY_FUNCTION KEYMAP::get_function(unsigned long wParam)
 	return KEY_FUNCTION_NOOP;
 }
 
-
 uint32 KEYMAP::get_keycode( KEY_FUNCTION key )
 {
 	return func2key[key].keycode;
@@ -354,21 +352,17 @@ sint32 KEYMAP::remap_key( KEY_FUNCTION keyFunc, uint32 wParam, uint32 oldKeycode
 	uint32 val = hash_32to16( wParam ) & MASK_MAX_KEYPRESS_MAP;
 	uint32 oldVal = hash_32to16( oldKeycode ) & MASK_MAX_KEYPRESS_MAP;
 
-	
 	KEY_FUNCTION oldFunc = key2func[val].function;
 
-	
 	func2key[oldFunc].keycode = 0;
-	
+
 	func2key[keyFunc].keycode = wParam;
-	
+
 	key2func[oldVal].keycode = 0;
 	key2func[oldVal].function = KEY_FUNCTION_NOOP;
-	
-	
-	key2func[val].keycode = wParam;		
-	key2func[val].function = keyFunc;
 
+	key2func[val].keycode = wParam;
+	key2func[val].function = keyFunc;
 
 	return 0;
 }
@@ -381,7 +375,7 @@ void KEYMAP::save()
 		c3errors_ErrorDialog("keymap.txt", "Could not open userkeymap.txt");
 		return;
 	}
-	
+
 	sint32 i;
 	for(i = KEY_FUNCTION_NOOP + 1; i < KEY_FUNCTION_LAST_NOOP; i++) {
 		sint32 code = func2key[i].keycode;

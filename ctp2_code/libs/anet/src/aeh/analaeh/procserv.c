@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*--------------------------------------------------------------------------
  Program to merge, filter, and/or sort crash log file.
 --------------------------------------------------------------------------*/
- 
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -430,7 +430,7 @@ int main(int argc, char **argv)
 						bRemoveOnErr = 1;
 						iarg++;
 						break;
-					case 's': 
+					case 's':
 					{
 						int key;
 						switch (tolower(*++argv[iarg])) {

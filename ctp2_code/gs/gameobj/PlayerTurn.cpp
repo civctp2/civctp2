@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -77,13 +77,13 @@ extern Pollution                *g_thePollution;
 
 void Player::BeginTurn()
 {
-	if (g_tileImprovementMode) 
+	if (g_tileImprovementMode)
 	{
 		g_tileImprovementMode = 0;
-		
+
 	}
 
-	if(g_controlPanel) 
+	if(g_controlPanel)
 	{
 		g_controlPanel->UpdatePlayerBeginProgress(m_owner);
 		g_controlPanel->GetWindow()->DrawChildren();
@@ -214,7 +214,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
 		m_strengths->Calculate();
 		if(g_network.IsHost())
 		{

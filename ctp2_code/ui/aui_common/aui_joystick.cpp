@@ -9,16 +9,3 @@ aui_Joystick::aui_Joystick()
 
 aui_Joystick::~aui_Joystick()
 { ; }
-
-
-
-
-
-
-
-
-
-
-
-
-

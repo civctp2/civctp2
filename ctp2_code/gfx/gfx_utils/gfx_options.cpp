@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Cell and Army text
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,6 @@
 // - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "gfx_options.h"
@@ -143,18 +142,18 @@ CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
 {
 	CellText dummyCellText;
 	dummyCellText.m_key = PackCellAVLKey(pos);
-	
+
 	Comparable<CellText *> * avlObject = m_cellAVL->Search(&dummyCellText);
 	return (avlObject) ? avlObject->Key() : NULL;
 }
 
-bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text, 
+bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
 									const uint8 &colorMagnitude)
 {
 	if (!m_cellTextOn) return false;
 
 	CellText * cellText = GetCellText(pos);
-	if (cellText) 
+	if (cellText)
 	{
 		delete [] cellText->m_text;
 		cellText->m_text = NULL;
@@ -182,7 +181,7 @@ bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
 void GraphicsOptions::ResetCellText(const MapPoint &pos)
 {
 	CellText *cellText = GetCellText(pos);
-	if (cellText) 
+	if (cellText)
 	{
 		delete [] cellText->m_text;
 		m_cellAVL->Delete(cellText);

@@ -10,11 +10,10 @@
 
 class aui_Surface;
 
-
 class ns_Spinner : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	ns_Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,

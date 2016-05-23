@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-/* Two-letter language codes from ISO 639; see 
+/* Two-letter language codes from ISO 639; see
  * http://www.perl.com/CPAN-local/modules/by-module/Locale/Locale-Codes-0.003.tar.gz
  * Numerical values are assigned here for the few we actually use.
  */
@@ -191,4 +191,3 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define dp_LANGNAME_zh "Chinese"
 #define dp_LANGNAME_zu "Zulu"
-

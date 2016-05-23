@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games.  
+//   games.
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ MBCHAR * AppendBlockName(MBCHAR const * ldlBlock, MBCHAR const * subBlock)
 
 } // namespace
 
-ControlTabPanel::ControlTabPanel(MBCHAR *ldlBlock) 
+ControlTabPanel::ControlTabPanel(MBCHAR *ldlBlock)
 :
     m_ldlBlock                  (AppendBlockName(ldlBlock, "ControlTabPanel")),
     m_domesticControlPanel      (new DomesticControlPanel(m_ldlBlock.get())),
@@ -87,18 +87,15 @@ void ControlTabPanel::Update()
 	m_unitControlPanel->Update();
 }
 
-
 void ControlTabPanel::UpdateCityList()
 {
 	m_cityControlPanel->UpdateCityList();
 }
 
-
 void ControlTabPanel::SelectedCity()
 {
 	m_cityControlPanel->SelectedCity();
 }
-
 
 void ControlTabPanel::SelectedUnit()
 {

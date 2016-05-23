@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -45,7 +45,7 @@ GameSettings *g_theGameSettings = NULL;
 
 GameSettings::GameSettings()
 {
-	if (g_setDifficultyUponLaunch) 
+	if (g_setDifficultyUponLaunch)
 	{
 		m_difficulty	= g_difficultyToSetUponLaunch;
 	}
@@ -54,7 +54,7 @@ GameSettings::GameSettings()
 		m_difficulty	= g_theProfileDB->GetDifficulty();
 	}
 
-	if (g_setBarbarianRiskUponLaunch) 
+	if (g_setBarbarianRiskUponLaunch)
 	{
 		m_risk			= g_barbarianRiskUponLaunch;
 	}
@@ -74,12 +74,12 @@ GameSettings::GameSettings(CivArchive &archive)
 {
 	Serialize(archive);
 
-	if (g_setDifficultyUponLaunch) 
+	if (g_setDifficultyUponLaunch)
 	{
 		m_difficulty	= g_difficultyToSetUponLaunch;
 	}
 
-	if (g_setBarbarianRiskUponLaunch) 
+	if (g_setBarbarianRiskUponLaunch)
 	{
 		m_risk			= g_barbarianRiskUponLaunch;
 	}
@@ -108,10 +108,10 @@ void GameSettings::SetAlienEndGameWon(sint32 player)
 {
 
 
-	
 
 
-	
+
+
 
 
 

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,24 +28,22 @@
 #ifndef __NS_GAMESETUP_H__
 #define __NS_GAMESETUP_H__
 
-
 #include "ns_object.h"
 #include "ns_tribes.h"
 #include "ns_units.h"
 #include "ns_improvements.h"
 #include "ns_wonders.h"
 
-#define k_NS_MAX_HUMANS		4	
-#define k_NS_MAX_PLAYERS	8	
+#define k_NS_MAX_HUMANS		4
+#define k_NS_MAX_PLAYERS	8
 
 struct TribeSlot
 {
-	sint8	isFemale;	
-	sint8	isAI;		
-	uint16	key;		
-	sint32	tribe;		
+	sint8	isFemale;
+	sint8	isAI;
+	uint16	key;
+	sint32	tribe;
 };
-
 
 class nf_GameSetup:public NETFunc::GameSetup {
 public:
@@ -60,7 +58,6 @@ public:
 	void Pack();
 	void Unpack();
 
-	
 	void Reset() {}
 
 	int	GetPlayStyle() const { return m_playstyle; }
@@ -223,11 +220,11 @@ public:
 	void SetNumAvailWonders( int numAvailWonders )
 	{ m_numAvailWonders = numAvailWonders; }
 
-	
 
 
 
-	
+
+
 	void SetSavedId( uint32 savedId );
 	uint32 GetSavedId( void );
 
@@ -236,18 +233,15 @@ private:
 	int m_playstylevalue;
 
 
-
 	char m_handicapping;
 	char m_dynamicJoin;
 
 	char m_bloodlust;
 
 
-
 	char m_pollution;
 	int m_civPoints;
 	int m_pwPoints;
-
 
 	char m_startAge;
 	char m_endAge;
@@ -273,7 +267,6 @@ private:
 	char m_excludedWonders[ ( k_WONDERS_MAX >> 3 ) + 1 ];
 };
 
-
 class ns_GameSetup : public ns_Object<nf_GameSetup, ns_GameSetup>
 {
 public:
@@ -283,5 +276,4 @@ public:
 	char *m_name;
 };
 
-
-#endif 
+#endif

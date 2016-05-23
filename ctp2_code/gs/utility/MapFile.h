@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ template <class T> class CTPDatabase;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class MapFile 
+class MapFile
 {
 public:
 	MapFile();
@@ -69,7 +69,7 @@ public:
 
 private:
     /// Common part for all information blocks: type and size
-    class Chunk 
+    class Chunk
     {
     public:
 	    uint32 m_id;
@@ -116,7 +116,7 @@ private:
 		archive.SetStore();
 		archive.PutSINT32(theDB->NumRecords());
 
-		for (sint32 i = 0; i < theDB->NumRecords(); i++) 
+		for (sint32 i = 0; i < theDB->NumRecords(); i++)
         {
 			const char *idStr;
 			if(theDB->Get(i)->GetName() < 0) {
@@ -132,15 +132,15 @@ private:
 				archive.Store((uint8*)idStr, len);
 			}
 		}
-		
+
 		m_chunk.m_id = chunkId;
 		m_chunk.m_size = archive.StreamLen();
-		
+
 		return m_chunk.Save(outfile) &&
-               (fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) == 
+               (fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) ==
                     archive.StreamLen()
                );
-	}		
+	}
 
 };
 

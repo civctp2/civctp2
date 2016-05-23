@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ void WonderTracker::Serialize(CivArchive &archive)
 		archive << m_globeSatFlags;
 	} else {
 		archive >> m_builtWonders;
-		
+
 		if (g_saveFileVersion >= 58) {
 			archive.Load((uint8*)m_buildingWonders, k_MAX_PLAYERS * sizeof(uint64));
 			if(g_saveFileVersion >= 63) {
@@ -76,7 +76,7 @@ void WonderTracker::Serialize(CivArchive &archive)
 			}
 		}
 		else {
-			
+
 			sint32 tmp[k_MAX_PLAYERS];
 			archive.Load((uint8*)tmp, k_MAX_PLAYERS * sizeof(sint32));
 			for(int i=0; i<k_MAX_PLAYERS; i++)
@@ -140,29 +140,24 @@ bool WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
 }
 void WonderTracker::SetBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
-	
-	
+
 	m_buildingWonders[who] |= (uint64)1 << (uint64)which;
 }
-
 
 void WonderTracker::ClearBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
 	m_buildingWonders[who] &= ~((uint64)1 << (uint64)which);
 }
 
-
 bool WonderTracker::IsBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
 	return (m_buildingWonders[who] & ((uint64)1 << (uint64)which)) != 0;
 }
 
-
 void WonderTracker::RecomputeIsBuilding(const PLAYER_INDEX who)
 {
-	
-	
-	
+
+
 	m_buildingWonders[who] = (uint64) 0x0;
 
 	Unit city;
@@ -173,7 +168,7 @@ void WonderTracker::RecomputeIsBuilding(const PLAYER_INDEX who)
 		city = g_player[who]->m_all_cities->Access(i);
 		Assert( g_theUnitPool->IsValid(city) );
 		Assert( city->GetCityData() != NULL );
-		
+
 		if(city.CD() && city.CD()->GetBuildQueue()->GetHead())
 		{
 			category = city.CD()->GetBuildQueue()->GetHead()->m_category;

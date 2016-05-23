@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 void main(int argc, char **argv)
 {
 	dp_transport_t transport;
-	commPortName_t portName[MAX_PORTS]; 
+	commPortName_t portName[MAX_PORTS];
 	int nportName;
 	int i;
 	dp_result_t err;
@@ -40,7 +40,7 @@ Lists available values for portnum for given driver, along with\n\
 the human readable name for each port.\n", argv[0], argv[0]);
 		 exit(1);
 	}
-	
+
 	memset(&transport, 0, sizeof(transport));
 	strcpy(transport.fname, argv[1]);
 	err = dpEnumPorts(&transport, portName, MAX_PORTS, &nportName);
@@ -49,7 +49,7 @@ the human readable name for each port.\n", argv[0], argv[0]);
 		exit(1);
 	}
 
-	for (i=0; i<nportName; i++) 
+	for (i=0; i<nportName; i++)
 		printf("portnum %d, name %s\n", portName[i].portnum, portName[i].name);
 	exit(0);
 }

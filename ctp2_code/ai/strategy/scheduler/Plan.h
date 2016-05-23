@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,7 @@
 //   pne agent pointer. (27-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
- 
+
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -64,7 +64,6 @@ public:
 	bool operator>  (const Plan &plan) const;
 	bool operator== (const Plan &plan) const;
 	bool operator!= (const Plan &plan) const;
-
 
 	bool Plan_Is_Needed_And_Valid() const { return m_the_agent != NULL; };
 
@@ -98,6 +97,5 @@ protected:
 	bool             m_cannot_be_used;
 	bool             m_needs_transporter;
 };
-
 
 #endif // PLAN_H__

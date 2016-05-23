@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -34,15 +34,15 @@ int cdecl ddprintf(const char *	__format,  ...)
     int     len;
     char    buf[512];
   	va_list	argptr;
-  
+
     va_start(argptr, __format);
-  
+
   	len = vsprintf(buf, __format, argptr);
-  
+
   	va_end(argptr);
-  
+
     OutputDebugString(buf);
-  
+
   	return(len);
 }
 #else

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,7 +33,7 @@
 #include "aui_movie.h"
 
 /// Create an aui_FileFormat object
-/// \param  filename The file to use  
+/// \param  filename The file to use
 /// \return The created object (or NULL, when the file format is not supported).
 /// \remarks The format is derived from the extension of the file.
 /// \see C3MemMap::GetFileFormat for more supported extensions.

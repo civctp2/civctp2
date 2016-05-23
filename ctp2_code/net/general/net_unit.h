@@ -30,7 +30,7 @@ private:
 	Unit m_actorId;
 };
 
-class NetUnitMove : public Packetizer 
+class NetUnitMove : public Packetizer
 {
 public:
 	NetUnitMove(const Unit id, const MapPoint &pnt);

@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,7 +37,7 @@
 
 class SelectedItem;
 
-enum SELECT_TYPE { 
+enum SELECT_TYPE {
 SELECT_TYPE_NONE,
 
 SELECT_TYPE_LOCAL_ARMY,
@@ -84,7 +84,7 @@ class ID;
 struct aui_MouseEvent;
 class OrderRecord;
 
-#define k_SELECTED_ITEM_VERSION_MAJOR 0 
+#define k_SELECTED_ITEM_VERSION_MAJOR 0
 #define k_SELECTED_ITEM_VERSION_MINOR 0
 
 class SelectedItem
@@ -92,7 +92,6 @@ class SelectedItem
 	typedef void (SelectedItem::*ClickFunctionPtr) (const MapPoint &pos,
 												const aui_MouseEvent *data,
 												bool doubleClick);
-
 
 	// Serialized
 	SELECT_TYPE m_select_state[k_MAX_PLAYERS];
@@ -110,7 +109,7 @@ class SelectedItem
 	bool         m_is_pathing;
 	MapPoint     m_cur_mouse_tile;
 	Path *       m_good_path, m_bad_path;
-	bool         m_is_broken_path; 
+	bool         m_is_broken_path;
 	DynamicArray<MapPoint> m_waypoints;
 	PLAYER_INDEX m_player_on_screen;
 	bool         m_auto_unload;
@@ -132,11 +131,11 @@ class SelectedItem
 public:
 	friend class NetUnit;
 
-	SelectedItem(const sint32 nPlayers); 
-	SelectedItem(CivArchive &archive); 
+	SelectedItem(const sint32 nPlayers);
+	SelectedItem(CivArchive &archive);
 	~SelectedItem();
 
-	void Serialize(CivArchive &archive); 
+	void Serialize(CivArchive &archive);
 	void Init();
 
 	void Deselect(PLAYER_INDEX player);
@@ -152,9 +151,9 @@ public:
 
 	SELECT_TYPE GetClickedThing(const MapPoint &pos, bool click);
 	void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick,
-					   bool leftDrag, bool leftDrop); 
+					   bool leftDrag, bool leftDrop);
 
-	void KeyboardSelectFirstUnit(); 
+	void KeyboardSelectFirstUnit();
 	void SelectFirstUnit(bool setSelect = true);
 	void NextUnmovedUnit(bool isFirst = false, bool manualNextUnit = false);
 	void MaybeAutoEndTurn(bool isFirst = false);
@@ -166,7 +165,7 @@ public:
 
 	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; }
 
-	void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
+	void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 					   SELECT_TYPE &s_state);
 
 	MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayer()]; }
@@ -181,36 +180,33 @@ public:
 	PLAYER_INDEX GetNextHumanPlayer();
 	void NextRound();
 
-	void RegisterCreatedUnit(const PLAYER_INDEX owner); 
+	void RegisterCreatedUnit(const PLAYER_INDEX owner);
 	void RegisterCreatedCity(const PLAYER_INDEX owner);
-	void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army); 
+	void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army);
 	void RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city);
-
 
 
 	void SetCurPlayer (PLAYER_INDEX p);
 	PLAYER_INDEX GetCurPlayer() const { return m_current_player; };
-	void RemovePlayer(PLAYER_INDEX p); 
+	void RemovePlayer(PLAYER_INDEX p);
 	void AddPlayer(PLAYER_INDEX p) ;
 	sint32 GetVisiblePlayer() const;
 	bool IsPlayerVisible(sint32 player) const { return player == GetVisiblePlayer(); };
 	bool IsAutoCenterOn() const;
 	void SetAutoCenter(const bool on);
 
-
 	void AddWaypoint(const MapPoint &p);
 	sint32 GetIsPathing() const;
 	bool ShouldDrawPath();
 	void GetOldMouseTilePos(MapPoint &p) const { p = m_cur_mouse_tile; }
 	void SetCurMouseTile(const MapPoint &p) { m_cur_mouse_tile = p; }
-	void SetDrawablePathDest(MapPoint &p); 
+	void SetDrawablePathDest(MapPoint &p);
 	void ConstructPath(bool &isCircular, double &cost);
 
 	Path *GetGoodPath() { return m_good_path; }
 	Path GetBadPath() { return m_bad_path; }
 
 	void SelectTradeRoute(const MapPoint &p);
-
 
 	bool IsLocalArmy() const;
 	bool IsLocalCity() const;
@@ -220,8 +216,8 @@ public:
 	void ForgetPatrol();
 	void ProcessUnitOrders();
 
-	void GroupArmy(); 
-	void UngroupArmy(); 
+	void GroupArmy();
+	void UngroupArmy();
 
 	void Settle();
 	void Entrench();
@@ -300,7 +296,6 @@ public:
 
 	void ArmyMovedCallback(Army &a);
 
-	
 	void SetupClickFunctions();
 	void NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick,
 						  bool leftDrag, bool leftDrop);
@@ -353,4 +348,3 @@ extern uint32 SelectedItem_GetVersion(void);
 extern SelectedItem *g_selected_item;
 
 #endif
-

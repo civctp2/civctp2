@@ -12,11 +12,10 @@
 #define k_TEXTBUTTON_MAXTEXT	64
 
 
-
 class TextButton : public c3_Button
 {
 public:
-	
+
 	TextButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -36,12 +35,10 @@ public:
 		void *cookie = NULL );
 	virtual ~TextButton() {}
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

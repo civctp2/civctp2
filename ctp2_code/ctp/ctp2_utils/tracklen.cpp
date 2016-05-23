@@ -55,7 +55,6 @@ FILE *tracklen_fp = NULL;
 
 char tracklen_buf[512];
 
-
 char *tracklen_cryptAscii(char *s)
 {
 	static char *keyy = "Checking aspiration formants.\n";
@@ -92,11 +91,10 @@ static void DMCIError(int error)
 #endif
 }
 
-
 #else
-#define tracklen_DPRINT(ss) 
+#define tracklen_DPRINT(ss)
 #define DMCIError(error)
-#endif 
+#endif
 
 
 
@@ -130,18 +128,17 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
 	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mp);
-	if (iRet) 
+	if (iRet)
     {
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: failed to set time format.\n" ));
 		return __LINE__;
 	}
 	tracklen_DPRINT((tracklen_buf, "GetTrackLengths: set time format to milliseconds.\n"));
 
-	
 	memset(&msp, 0, sizeof(msp));
 	msp.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
 	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp );
-	if (iRet) 
+	if (iRet)
 	{
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to read # of tracks\n"));
 		DMCIError( iRet );
@@ -252,8 +249,8 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	mop.wDeviceID = 0;
 
 	iRet = mciSendCommand
-                    (0, MCI_OPEN, 
-                     MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE, 
+                    (0, MCI_OPEN,
+                     MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE,
                      (DWORD_PTR) &mop
                     );
 	if (iRet)
@@ -277,7 +274,7 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	SDL_CDClose(cdrom);
 #else
 	iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, mop.wDeviceID);
-	
+
 	mciSendCommand( mop.wDeviceID, MCI_CLOSE, 0, NULL );
 #endif
 
@@ -300,7 +297,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 		SendMessage( hCD, WM_CLOSE, 0, 0 );
 	}
 #endif
-	
+
 	int iDrive;
 #ifdef USE_SDL
 	for (iDrive=0; iDrive<SDL_CDNumDrives(); iDrive++) {
@@ -320,7 +317,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 #ifdef USE_SDL
 		if (driveName)
 			szDrive[0] = driveName[0];
-		else             
+		else
 			szDrive[0] = ' ';
 #else
 		szDrive[0] = static_cast<char>(iDrive + 'A');
@@ -349,7 +346,6 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 			tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: drive %s has %d tracks, wanted %d\n", szDrive, newbuf[0], trackLenBuf[0] ));
 			continue;
 		}
-		
 
 
 		for (i=2; i< (int)(newbuf[0]); i++) {
@@ -358,7 +354,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 				break;
 			}
 		}
-		
+
 		if (i == ((int) newbuf[0])) {
 			tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: success!\n"));
 			return 0;
@@ -397,7 +393,7 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 
 		if (!S_ISLNK(st.st_mode))
 			return NULL;
-		
+
 		int size = readlink(szLink, szTemp, sizeof(szTemp));
 		if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
 			return NULL;
@@ -422,13 +418,13 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 	if( hFile == INVALID_HANDLE_VALUE ) {
 #else
 	FILE *f = fopen(szTemp, "r");
-	
+
 	if (!f)
 	{
 		strcpy( szTemp, szFile );
 		f = fopen(szTemp, "r");
 	}
-	
+
 	if (!f) {
 #endif
 		tracklen_DPRINT((tracklen_buf, "tracklen_LoadEncryptedKey: can't open %s\n", szTemp));
@@ -483,13 +479,13 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 
 char *GetVersionInfo( DWORD *trackLenBuffer )
 {
-	
+
 	char *szVersionPtr = (char*)&trackLenBuffer[1];
 	if( szVersionPtr[0] != 'V' || szVersionPtr[3] != '.' )
 	{
 #ifdef tracklen_LOGGING
 		tracklen_DPRINT((tracklen_buf, "GetVersionInfo: outdated tracklen file: does not contain version information. Version information has been implemented as of 08/21/00\n"));
-#endif	
+#endif
 		return( NULL );
 	}
 
@@ -512,7 +508,6 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 
 	BYTE byRet = _TRACKLEN_OK;
 
-	
 	char *szVersionPtr = GetVersionInfo( trackLenBuf );
 #ifdef tracklen_LOGGING
 	if( !szVersionPtr )
@@ -520,13 +515,13 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
                 tracklen_DPRINT((tracklen_buf, "tracklen_CheckTrackLengths: Warning: tracklen file does not contain any version information and was most likely created using a previous version of this SDK\n"));
 		byRet = _TRACKLEN_VERSIONMISMATCH;
 	}
-#endif	
+#endif
 
 	if( szVersionPtr && szVersionInfoBuffer )
 		strncpy( szVersionInfoBuffer, szVersionPtr, CHRVERSIONINFOLEN );
 
 #ifdef tracklen_LOGGING
-	
+
 	if( szVersionPtr )
 	{
 		if( strcmp( szVersionPtr, VERSIONINFO ) )
@@ -539,30 +534,27 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 			tracklen_DPRINT((tracklen_buf, "tracklen_CheckTrackLengths: Verified version info: %s\n", szVersionPtr ));
 		}
 	}
-#endif	
+#endif
 
 	if( szVersionPtr )
 	{
 		trackLenBuf[ DWVERSIONINFOLEN ] = trackLenBuf[0] - (DWORD)(DWVERSIONINFOLEN);
 		if( tracklen_CheckTrackLengths2( trackLenBuf + DWVERSIONINFOLEN ) )
 			return( _TRACKLEN_CHECKFAILED );
-		
+
 		return( byRet );
 	}
 	else if( tracklen_CheckTrackLengths2( trackLenBuf ) )
 		return( _TRACKLEN_CHECKFAILED );
-	
+
 	return( byRet );
 }
 
-
-#define AUTORUN_UNKNOWN 0		
+#define AUTORUN_UNKNOWN 0
 #define AUTORUN_DEFAULT 0x95
 #define AUTORUN_DISABLE 0xff
 
-
 static ULONG s_oldAutoRunValue = AUTORUN_UNKNOWN;
-
 
 void tracklen_AutoPlay_Disable()
 {
@@ -572,12 +564,12 @@ void tracklen_AutoPlay_Disable()
 
 	hkey = NULL;
 	res = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_ALL_ACCESS, &hkey);
-	if (res == ERROR_SUCCESS) {	
+	if (res == ERROR_SUCCESS) {
 		if (s_oldAutoRunValue == AUTORUN_UNKNOWN) {
 			unsigned long ulDataSize = sizeof(s_oldAutoRunValue);
 			res = RegQueryValueEx(hkey, "NoDriveTypeAutoRun", 0, NULL, (unsigned char*)&s_oldAutoRunValue, &ulDataSize);
 		}
-		
+
 		if (res == ERROR_SUCCESS) {
 			unsigned long ulDisableAutoRun = AUTORUN_DISABLE;
 			RegSetValueEx(hkey, "NoDriveTypeAutoRun", 0, REG_BINARY, (const unsigned char*)&ulDisableAutoRun, 4);
@@ -594,13 +586,12 @@ void tracklen_AutoPlay_Restore()
 	int res;
 	HKEY hkey = NULL;
 
-	
 	if (s_oldAutoRunValue == AUTORUN_UNKNOWN) {
 		return;
 	}
 
 	res = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_ALL_ACCESS, &hkey);
-	if (res == ERROR_SUCCESS) {	
+	if (res == ERROR_SUCCESS) {
 		RegSetValueEx(hkey, "NoDriveTypeAutoRun", 0, REG_BINARY, (const unsigned char*)&s_oldAutoRunValue, 4);
 		RegFlushKey(hkey);
 		RegCloseKey(hkey);

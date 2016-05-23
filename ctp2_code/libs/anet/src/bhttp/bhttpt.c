@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -109,14 +109,14 @@ void main (int argc, char *argv[])
 		FD_ZERO(&rfds);
 		FD_ZERO(&wfds);
 		sockmax = bhttp_getfds(bhttp, &rfds, &wfds);
-		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);		
+		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);
 		if (nsocks < 0) {
 			printf("select error:%d\n", errno);
 			exit(1);
 		} else if (nsocks == 0) {
 			printf("select timed out\n");
 		}
-		printf("select returns %d/%d socks", nsocks, (1 + bhttp->conns->n_used)); 
+		printf("select returns %d/%d socks", nsocks, (1 + bhttp->conns->n_used));
 		for (sock = 0; sock <= sockmax; sock++) {
 			if (FD_ISSET(sock, &rfds))
 				printf(":%d", sock);

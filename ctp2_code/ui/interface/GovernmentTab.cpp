@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
 #include "c3.h"
 
-
 #include "GovernmentTab.h"
-
 
 #include "aui_ldl.h"
 #include "ctp2_button.h"
@@ -29,17 +20,15 @@
 #include "UnitRecord.h"
 #include "MessageBoxDialog.h"
 
-
 template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 {
-	
+
 	static const sint32 LESS_THAN_CHARACTER = 0;
 	static const sint32 EQUAL_CHARACTER = 1;
 	static const sint32 GREATER_THAN_CHARACTER = 2;
 	static const MBCHAR *compareCharacter[] = { " ", " ", " " };
-	
 
-	
+
 	if(left < right)
 		return(compareCharacter[LESS_THAN_CHARACTER]);
 	if(right < left)
@@ -47,15 +36,13 @@ template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 	return(compareCharacter[EQUAL_CHARACTER]);
 }
 
-
 template <class type> COLORREF ComparisonColor(type left, type right)
 {
-	
+
 	static const sint32 LESS_THAN_CHARACTER = 0;
 	static const sint32 EQUAL_CHARACTER = 1;
 	static const sint32 GREATER_THAN_CHARACTER = 2;
 
-	
 	if(left < right)
 		return(g_colorSet->GetColorRef(COLOR_RED));
 	if(right < left)
@@ -65,19 +52,17 @@ template <class type> COLORREF ComparisonColor(type left, type right)
 
 template <class type> COLORREF ComparisonColorOpposite(type left, type right)
 {
-	
+
 	static const sint32 LESS_THAN_CHARACTER = 0;
 	static const sint32 EQUAL_CHARACTER = 1;
 	static const sint32 GREATER_THAN_CHARACTER = 2;
 
-	
 	if(left > right)
 		return(g_colorSet->GetColorRef(COLOR_RED));
 	if(right > left)
 		return(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
 	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
-
 
 GovernmentTab::GovernmentTab(MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
@@ -88,7 +73,7 @@ m_currentGovernment(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 m_compareGovernment(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(ldlBlock,
 	"CompareGovernment")))
 {
-	
+
 	m_currentInformation[GII_CITIES] = static_cast<ctp2_Static*>(
 		aui_Ldl::GetObject(ldlBlock, "Cities.CurrentValue"));
 	m_currentInformation[GII_GROWTH] = static_cast<ctp2_Static*>(
@@ -150,7 +135,6 @@ m_compareGovernment(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(ldlBlock,
 	m_compareInformation[GII_ANTI_POLLUTION] = static_cast<ctp2_Static*>(
 		aui_Ldl::GetObject(ldlBlock, "AntiPollution.CompareValue"));
 
-	
 	Assert(m_enactButton);
 	Assert(m_currentGovernment);
 	Assert(m_compareGovernment);
@@ -161,71 +145,57 @@ m_compareGovernment(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(ldlBlock,
 		Assert(m_comparison[comparisonIndex]);
 	for(int compareIndex = 0; compareIndex < GII_TOTAL; compareIndex++)
 		Assert(m_compareInformation[compareIndex]);
-#endif 
+#endif
 
-	
 	m_compareGovernment->SetActionFuncAndCookie(
 		CompareGovernmentActionCallback, this);
 	m_enactButton->SetActionFuncAndCookie(
 		EnactGovernmentActionCallback, this);
 }
 
-
 void GovernmentTab::Update()
 {
-	
+
 	UpdateCurrentGovernment();
 	UpdateCompareGovernmentDropdown();
 }
 
-
 void GovernmentTab::UpdateCurrentGovernment()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	const GovernmentRecord *government =
 		g_theGovernmentDB->Get(player->GetGovernmentType());
 
-	
 	m_currentGovernment->SetText(government->GetNameText());
 
-	
 	UpdateGovernmentInformation(government, m_currentInformation);
 }
 
-
 void GovernmentTab::UpdateCompareGovernmentDropdown()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	std::pair<bool, sint32> currentSelection = GetGovernmentSelection();
 
-	
 	m_compareGovernment->Clear();
 
-	
 	ctp2_ListItem *reselect = NULL;
 
-	
 	for(sint32 governmentIndex = 1; governmentIndex <
 		g_theGovernmentDB->NumRecords(); governmentIndex++ ) {
-		
+
 		if(governmentIndex == player->GetGovernmentType())
 			continue;
 
-		
 		const GovernmentRecord *government =
 			g_theGovernmentDB->Get(governmentIndex);
 
-		
 		sint32 enablingAdvance = government->GetEnableAdvanceIndex();
 
-		
-		
+
 		bool obsoleteGovernment = false;
 		for(sint32 advanceIndex = 0; advanceIndex <
 			government->GetNumObsoleteAdvance(); advanceIndex++) {
@@ -235,67 +205,56 @@ void GovernmentTab::UpdateCompareGovernmentDropdown()
 				break;
 			}
 		}
-			
+
 		if(!obsoleteGovernment ||
 			(enablingAdvance < 0)) {
 
 			ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 				aui_Ldl::BuildHierarchyFromRoot("GovernmentListItem"));
 
-			
 			ctp2_Static *label = static_cast<ctp2_Static*>(
 				listItem->GetChildByIndex(0));
 			label->SetText(government->GetNameText());
 			listItem->SetUserData(
 				reinterpret_cast<void*>(governmentIndex));
 
-			
 			m_compareGovernment->AddItem(listItem);
 
-			
 			if(governmentIndex == currentSelection.second)
 				reselect = listItem;
 		}
 	}
 
-	
 	if(reselect) {
 		m_compareGovernment->GetListBox()->SelectItem(reselect);
-		m_compareGovernment->ShouldDraw();	
+		m_compareGovernment->ShouldDraw();
 	}
 
-	
-	
+
 	if(m_compareGovernment->GetListBox()->NumItems())
 		m_enactButton->Enable(true);
 	else
 		m_enactButton->Enable(false);
 
-	
 	UpdateCompareGovernment();
 }
 
-
 void GovernmentTab::UpdateCompareGovernment()
 {
-	
+
 	std::pair<bool, sint32> currentSelection = GetGovernmentSelection();
 
-	
-	
+
 	if(currentSelection.first) {
-		
+
 		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-		
 		const GovernmentRecord *currentGovernment =
 			g_theGovernmentDB->Get(player->GetGovernmentType());
 
-		
 		const GovernmentRecord *compareGovernment =
 			g_theGovernmentDB->Get(currentSelection.second);
 
-		
 		UpdateComparison(currentGovernment, compareGovernment);
 		UpdateGovernmentInformation(compareGovernment, m_compareInformation);
 
@@ -307,18 +266,17 @@ void GovernmentTab::UpdateCompareGovernment()
 			m_enactButton->Enable(false);
 
 	} else {
-		
+
 		ClearGovernmentInformation(m_comparison);
 		ClearGovernmentInformation(m_compareInformation);
 	}
 }
 
 
-
 void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 									 const GovernmentRecord *compareGovernment)
 {
-	
+
 	m_comparison[GII_CITIES]->SetText(ComparisonCharacter(
 		currentGovernment->GetTooManyCitiesThreshold(),
 		compareGovernment->GetTooManyCitiesThreshold()));
@@ -359,7 +317,6 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 	m_comparison[GII_ANTI_POLLUTION]->SetText(ComparisonCharacter(
 		currentGovernment->GetPollutionRank(),
 		compareGovernment->GetPollutionRank()));
-
 
 
 	m_currentInformation[GII_CITIES]->SetTextColor(ComparisonColor(
@@ -435,23 +392,20 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 		currentGovernment->GetPollutionRank()));
 }
 
-
 void GovernmentTab::ClearGovernmentInformation(ctp2_Static **information)
 {
 	for(int currentIndex = 0; currentIndex < GII_TOTAL; currentIndex++)
 		information[currentIndex]->SetText("");
 }
 
-
 void GovernmentTab::UpdateGovernmentInformation(
 	const GovernmentRecord *government,
 	ctp2_Static **information)
 {
-	
+
 	static char stringBuffer[32];
 	static char formatBuffer[64];
 
-	
 	sprintf(stringBuffer, "%d", government->GetTooManyCitiesThreshold());
 	information[GII_CITIES]->SetText(stringBuffer);
 
@@ -479,7 +433,7 @@ void GovernmentTab::UpdateGovernmentInformation(
 
 	sprintf(stringBuffer, "%d x %.0f", government->GetMaxMartialLawUnits(), government->GetMartialLawEffect());
 	information[GII_MARTIAL_LAW]->SetText(stringBuffer);
-	
+
 	sprintf(formatBuffer,"EMPIRE_VALUE_DESC_ANTI_POLLUTION_%i",government->GetPollutionRank());
 	sprintf(stringBuffer, "%s", g_theStringDB->GetNameStr(formatBuffer));
 	information[GII_ANTI_POLLUTION]->SetText(stringBuffer);
@@ -490,47 +444,41 @@ void GovernmentTab::UpdateGovernmentInformation(
 
 std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 {
-	
-	
+
 	std::pair<bool, sint32> currentSelection(false, 0);
 	if(m_compareGovernment->GetListBox()->NumItems()) {
-		
-		
-		
+
+
 		ctp2_ListItem *currentItem = static_cast<ctp2_ListItem*>(
 			m_compareGovernment->GetListBox()->GetItemByIndex(
 			m_compareGovernment->GetSelectedItem()));
 
 		if(currentItem) {
-			
+
 			currentSelection.first = true;
 
-			
 			currentSelection.second = reinterpret_cast<sint32>
 				(currentItem->GetUserData());
 		}
 	}
 
-	
 	return(currentSelection);
 }
-
 
 void GovernmentTab::CompareGovernmentActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
-	
 	static_cast<GovernmentTab*>(cookie)->UpdateCompareGovernment();
 	static_cast<GovernmentTab*>(cookie)->m_tabPanel->ShouldDraw(TRUE);
 }
 
 void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
 {
-	
+
 	GovernmentTab *tab = static_cast<GovernmentTab*>(data);
 
 	if(result) {
@@ -542,28 +490,24 @@ void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
 
 		tab->Update();
 		tab->m_tabPanel->ShouldDraw();
-		g_soundManager->AddGameSound(GAMESOUNDS_ADVANCE); 
+		g_soundManager->AddGameSound(GAMESOUNDS_ADVANCE);
 
 		g_domesticManagementDialog->Update();
-	}		
+	}
 }
-	
 
 void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 
-	
 	GovernmentTab *tab = static_cast<GovernmentTab*>(cookie);
 
-	
 	sint32 i;
 	for(i = player->m_all_units->Num() - 1; i >= 0; i--) {
 
@@ -579,8 +523,7 @@ void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
 				break;
 			}
 		}
-		
-		
+
 		if(!found) {
 			MessageBoxDialog::Query(g_theStringDB->GetNameStr("str_code_GovernmentChangeDisbandsUnits"),
 									"GovernmentChangeDisbandsUnits",
@@ -588,14 +531,11 @@ void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
 			return;
 		}
 	}
-								   
-	
+
 	Assert(tab->GetGovernmentSelection().first);
 
-	
 	player->SetGovernmentType(tab->GetGovernmentSelection().second);
 
-	
 	tab->Update();
 	tab->m_tabPanel->ShouldDraw(TRUE);
 	g_soundManager->AddGameSound(GAMESOUNDS_ADVANCE);

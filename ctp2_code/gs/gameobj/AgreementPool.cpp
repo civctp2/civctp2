@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Unit.h"
 #include "Gold.h"
@@ -22,7 +12,7 @@
 #include "AgreementDynArr.h"
 #include "Globals.h"
 #include "gamefile.h"
-	
+
 	extern	Player	**g_player ;
 
 	extern Pollution *g_thePollution ;
@@ -91,8 +81,8 @@ void AgreementPool::Serialize(CivArchive &archive)
 		}
 
 	}
-	
-	
+
+
 
 
 
@@ -104,15 +94,15 @@ Agreement AgreementPool::Create(PLAYER_INDEX owner, PLAYER_INDEX recipient, AGRE
 	{
 	AgreementData* newData;
 	Agreement newAgreement(NewKey(k_BIT_GAME_OBJ_TYPE_AGREEMENT));
-	
+
 	newData = new AgreementData(newAgreement, owner, recipient, request) ;
 	Insert(newData) ;
 
 	if(g_player[owner])
-		g_player[owner]->AddAgreement(newAgreement) ;					
+		g_player[owner]->AddAgreement(newAgreement) ;
 
 	if(g_player[recipient])
-		g_player[recipient]->AddAgreement(newAgreement) ;				
+		g_player[recipient]->AddAgreement(newAgreement) ;
 
 	return (newAgreement) ;
 	}
@@ -138,32 +128,31 @@ void AgreementPool::EndRound(void)
 		{
 		if(m_table[i])
 			{
-			AgreementData	*agreeData = (AgreementData *)(m_table[i]) ;				
+			AgreementData	*agreeData = (AgreementData *)(m_table[i]) ;
 #if 0
-			
-			
-			
-			
-			if (agreeData->GetAgreement() == AGREEMENT_TYPE_PACT_END_POLLUTION)	
+
+
+
+
+			if (agreeData->GetAgreement() == AGREEMENT_TYPE_PACT_END_POLLUTION)
 				{
-				
+
 				if (g_thePollution->GetTrend() == k_TREND_DOWNWARD)
 					{
-					
-					
+
 					expired.Insert(m_table[i]->m_id) ;
 					}
 
 				}
 #endif
 
-			if (agreeData->IsExpired())								
+			if (agreeData->IsExpired())
 				{
 
 
 
-				
-				expired.Insert(m_table[i]->m_id) ;					
+
+				expired.Insert(m_table[i]->m_id) ;
 				}
 
 			agreeData->DecrementTurns() ;
@@ -171,7 +160,7 @@ void AgreementPool::EndRound(void)
 
 		}
 
-    expired.KillList() ;											
+    expired.KillList() ;
 	}
 
 AgreementData *AgreementPool::AccessAgreement(const Agreement id)

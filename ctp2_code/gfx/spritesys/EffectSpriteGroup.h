@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -32,7 +19,7 @@ class EffectSpriteGroup;
 
 enum EFFECTACTION {
 	EFFECTACTION_NONE = -1,
-	
+
 	EFFECTACTION_PLAY,
 	EFFECTACTION_FLASH,
 
@@ -50,8 +37,8 @@ class aui_Surface;
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
- 
-class EffectSpriteGroup : public SpriteGroup 
+
+class EffectSpriteGroup : public SpriteGroup
 {
 public:
 	EffectSpriteGroup(GROUPTYPE type) : SpriteGroup(type) {};

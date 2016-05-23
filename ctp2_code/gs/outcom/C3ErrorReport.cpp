@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "globals.h"
@@ -64,11 +62,9 @@ C3ErrorReport::C3ErrorReport(CivArchive &archive)
 
 void C3ErrorReport::Serialize(CivArchive &archive)
 {
-    if (archive.IsStoring()) { 
-        archive << m_refCount; 
-    } else { 
-        archive >> m_refCount; 
-    } 
+    if (archive.IsStoring()) {
+        archive << m_refCount;
+    } else {
+        archive >> m_refCount;
+    }
 }
-
-

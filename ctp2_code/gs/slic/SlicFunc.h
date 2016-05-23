@@ -11,19 +11,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Readded all the slicfunctions of the patch, maybe some of them belong 
+// - Readded all the slicfunctions of the patch, maybe some of them belong
 //   better into slicfuncai.h, by Martin Gühmann.
 // - New slic functions added by Martin Gühmann:
 //   - CargoCapacity     Gets number of additional units a unit can carry.
@@ -62,31 +62,31 @@ enum SA_TYPE {
 	SA_TYPE_BUILTIN,
 	SA_TYPE_HARD_STRING,
 };
-	
+
 enum SFN_ERROR {
 	SFN_ERROR_OK,
-	SFN_ERROR_NUM_ARGS,     
-	SFN_ERROR_TYPE_ARGS,    
-	SFN_ERROR_BAD_FUNCTION, 
-	SFN_ERROR_INTERNAL,     
-	SFN_ERROR_TYPE_BUILTIN, 
-	SFN_ERROR_NOT_ADVANCE,  
-	SFN_ERROR_NOT_UNIT_FLAG, 
-	SFN_ERROR_NOT_IN_BUTTON, 
-	SFN_ERROR_NOT_DIP_MESSAGE, 
-	SFN_ERROR_NOT_MESSAGE_TYPE, 
-	SFN_ERROR_NOT_SEGMENT,    
-	SFN_ERROR_NOT_TRADE_BID, 
-	SFN_ERROR_NOT_SINGLE_RECIPIENT, 
-	SFN_ERROR_NOT_ADJACENT,  
-	SFN_ERROR_UNKNOWN_UNIT_TYPE, 
-	SFN_ERROR_UNKNOWN_BUILDING, 
-	SFN_ERROR_OUT_OF_RANGE, 
-	SFN_ERROR_DEAD_PLAYER, 
-	SFN_ERROR_EFFECT_NOT_FOUND, 
-	SFN_ERROR_SOUND_NOT_FOUND, 
-	SFN_ERROR_CIV_NOT_FOUND, 
-	SFN_ERROR_NOT_A_FUNCTION, 
+	SFN_ERROR_NUM_ARGS,
+	SFN_ERROR_TYPE_ARGS,
+	SFN_ERROR_BAD_FUNCTION,
+	SFN_ERROR_INTERNAL,
+	SFN_ERROR_TYPE_BUILTIN,
+	SFN_ERROR_NOT_ADVANCE,
+	SFN_ERROR_NOT_UNIT_FLAG,
+	SFN_ERROR_NOT_IN_BUTTON,
+	SFN_ERROR_NOT_DIP_MESSAGE,
+	SFN_ERROR_NOT_MESSAGE_TYPE,
+	SFN_ERROR_NOT_SEGMENT,
+	SFN_ERROR_NOT_TRADE_BID,
+	SFN_ERROR_NOT_SINGLE_RECIPIENT,
+	SFN_ERROR_NOT_ADJACENT,
+	SFN_ERROR_UNKNOWN_UNIT_TYPE,
+	SFN_ERROR_UNKNOWN_BUILDING,
+	SFN_ERROR_OUT_OF_RANGE,
+	SFN_ERROR_DEAD_PLAYER,
+	SFN_ERROR_EFFECT_NOT_FOUND,
+	SFN_ERROR_SOUND_NOT_FOUND,
+	SFN_ERROR_CIV_NOT_FOUND,
+	SFN_ERROR_NOT_A_FUNCTION,
 };
 
 enum SLIC_FUNC_RET_TYPE {
@@ -112,7 +112,7 @@ class SlicSegment;
 class SlicSymbolData;
 class Unit;
 
-struct SlicArg 
+struct SlicArg
 {
     SlicArg
     (
@@ -153,7 +153,7 @@ public:
 	void Serialize(CivArchive &archive) {};
 };
 
-class SlicArgList 
+class SlicArgList
 {
 public:
 	SlicArgList();
@@ -161,10 +161,10 @@ public:
 	void AddArg(SA_TYPE type, sint32 value);
 	void AddArg(SlicSegment *segment, SlicSymbolData *symbol);
 	void AddArg(SA_TYPE type, SlicSymbolData *symbol);
-	
-    void Clear() 
-    { 
-        m_argValue.clear(); 
+
+    void Clear()
+    {
+        m_argValue.clear();
     };
 
 	bool GetInt(sint32 arg, sint32 &value) const;
@@ -210,7 +210,7 @@ public:
 	SLIC_FUNC_RET_TYPE GetReturnType() { return m_type; }
 
 	char const *GetName() const { return m_name; }
-	virtual SFN_ERROR Call(SlicArgList *args) 
+	virtual SFN_ERROR Call(SlicArgList *args)
 	{
 		DPRINTF(k_DBG_SLIC, ("Hey you!  Stop that!\n"));
 		return SFN_ERROR_BAD_FUNCTION;
@@ -226,391 +226,377 @@ public:\
 };
 
 
-
 SLICFUNC(SFR_VOID, PrintInt);
 SLICFUNC(SFR_VOID, PrintText);
 SLICFUNC(SFR_VOID, Return1);
 SLICFUNC(SFR_VOID, Return0);
 
-
-SLICFUNC(SFR_VOID, Text);				
-SLICFUNC(SFR_VOID, Message);			
-SLICFUNC(SFR_VOID, AddMessage);		
-SLICFUNC(SFR_VOID, MessageAll);		
-SLICFUNC(SFR_VOID, MessageAllBut);	
-SLICFUNC(SFR_VOID, EyePoint);			
-SLICFUNC(SFR_VOID, DisableTrigger);	
-SLICFUNC(SFR_VOID, EnableTrigger);	
-SLICFUNC(SFR_INT,  HasAdvance); 		
-SLICFUNC(SFR_INT,  IsContinentBiggerThan);    
-SLICFUNC(SFR_INT,  IsHostile);		
-SLICFUNC(SFR_INT,  TradePoints);      
-SLICFUNC(SFR_INT,  TradePointsInUse);      
-SLICFUNC(SFR_INT,  TradeRoutes);      
+SLICFUNC(SFR_VOID, Text);
+SLICFUNC(SFR_VOID, Message);
+SLICFUNC(SFR_VOID, AddMessage);
+SLICFUNC(SFR_VOID, MessageAll);
+SLICFUNC(SFR_VOID, MessageAllBut);
+SLICFUNC(SFR_VOID, EyePoint);
+SLICFUNC(SFR_VOID, DisableTrigger);
+SLICFUNC(SFR_VOID, EnableTrigger);
+SLICFUNC(SFR_INT,  HasAdvance);
+SLICFUNC(SFR_INT,  IsContinentBiggerThan);
+SLICFUNC(SFR_INT,  IsHostile);
+SLICFUNC(SFR_INT,  TradePoints);
+SLICFUNC(SFR_INT,  TradePointsInUse);
+SLICFUNC(SFR_INT,  TradeRoutes);
 SLICFUNC(SFR_INT,  HasSameGoodAsTraded);
-SLICFUNC(SFR_VOID, AddCity);          
-SLICFUNC(SFR_INT,  IsSecondRowUnit);  
-SLICFUNC(SFR_INT,  IsFlankingUnit);   
-SLICFUNC(SFR_INT,  IsBombardingUnit); 
+SLICFUNC(SFR_VOID, AddCity);
+SLICFUNC(SFR_INT,  IsSecondRowUnit);
+SLICFUNC(SFR_INT,  IsFlankingUnit);
+SLICFUNC(SFR_INT,  IsBombardingUnit);
 
-SLICFUNC(SFR_INT,  IsWormholeProbe);  
-SLICFUNC(SFR_INT,  IsUnderseaCity);   
-SLICFUNC(SFR_INT,  IsSpaceCity);      
-SLICFUNC(SFR_INT,  IsSpaceUnit);      
-SLICFUNC(SFR_INT,  IsWonderType);     
-SLICFUNC(SFR_INT,  IsCounterBombardingUnit); 
-SLICFUNC(SFR_INT,  IsCleric);         
-SLICFUNC(SFR_INT,  IsSlaver);         
-SLICFUNC(SFR_INT,  IsActiveDefender); 
-SLICFUNC(SFR_INT,  IsDiplomat);       
-SLICFUNC(SFR_INT,  IsInRegion);       
-SLICFUNC(SFR_INT,  UnitHasFlag);      
-SLICFUNC(SFR_INT,  UnitsInCell);      
-SLICFUNC(SFR_INT,  PlayerCityCount);  
-SLICFUNC(SFR_INT,  RegardLevel);      
+SLICFUNC(SFR_INT,  IsWormholeProbe);
+SLICFUNC(SFR_INT,  IsUnderseaCity);
+SLICFUNC(SFR_INT,  IsSpaceCity);
+SLICFUNC(SFR_INT,  IsSpaceUnit);
+SLICFUNC(SFR_INT,  IsWonderType);
+SLICFUNC(SFR_INT,  IsCounterBombardingUnit);
+SLICFUNC(SFR_INT,  IsCleric);
+SLICFUNC(SFR_INT,  IsSlaver);
+SLICFUNC(SFR_INT,  IsActiveDefender);
+SLICFUNC(SFR_INT,  IsDiplomat);
+SLICFUNC(SFR_INT,  IsInRegion);
+SLICFUNC(SFR_INT,  UnitHasFlag);
+SLICFUNC(SFR_INT,  UnitsInCell);
+SLICFUNC(SFR_INT,  PlayerCityCount);
+SLICFUNC(SFR_INT,  RegardLevel);
 SLICFUNC(SFR_VOID, ChangeRegardLevel);
-SLICFUNC(SFR_VOID, Kill);             
-SLICFUNC(SFR_VOID, DeactivateTutorial);   
-SLICFUNC(SFR_INT,  ControlsRegion);    
-SLICFUNC(SFR_VOID, DemandWarFromAllies); 
+SLICFUNC(SFR_VOID, Kill);
+SLICFUNC(SFR_VOID, DeactivateTutorial);
+SLICFUNC(SFR_INT,  ControlsRegion);
+SLICFUNC(SFR_VOID, DemandWarFromAllies);
 
-SLICFUNC(SFR_INT,  KnowledgeRank);     
-SLICFUNC(SFR_INT,  MilitaryRank);      
+SLICFUNC(SFR_INT,  KnowledgeRank);
+SLICFUNC(SFR_INT,  MilitaryRank);
 
-SLICFUNC(SFR_INT,  TradeRank);         
-SLICFUNC(SFR_INT,  GoldRank);          
-SLICFUNC(SFR_INT,  PopulationRank);    
-SLICFUNC(SFR_INT,  CitiesRank);        
-SLICFUNC(SFR_INT,  GeographicRank);    
-SLICFUNC(SFR_INT,  SpaceRank);         
-SLICFUNC(SFR_INT,  UnderseaRank);      
+SLICFUNC(SFR_INT,  TradeRank);
+SLICFUNC(SFR_INT,  GoldRank);
+SLICFUNC(SFR_INT,  PopulationRank);
+SLICFUNC(SFR_INT,  CitiesRank);
+SLICFUNC(SFR_INT,  GeographicRank);
+SLICFUNC(SFR_INT,  SpaceRank);
+SLICFUNC(SFR_INT,  UnderseaRank);
 
+SLICFUNC(SFR_VOID, Accept);
+SLICFUNC(SFR_VOID, Reject);
 
-SLICFUNC(SFR_VOID, Accept);            
-SLICFUNC(SFR_VOID, Reject);            
+SLICFUNC(SFR_VOID, EyeDropdown);
 
-
-SLICFUNC(SFR_VOID, EyeDropdown);       
-
-
-SLICFUNC(SFR_VOID, CaptureCity);       
-SLICFUNC(SFR_VOID, CaptureRegion);     
-SLICFUNC(SFR_VOID, LeaveRegion);       
-SLICFUNC(SFR_VOID, Surrender);         
-
+SLICFUNC(SFR_VOID, CaptureCity);
+SLICFUNC(SFR_VOID, CaptureRegion);
+SLICFUNC(SFR_VOID, LeaveRegion);
+SLICFUNC(SFR_VOID, Surrender);
 
 SLICFUNC(SFR_VOID, Research);
 
-SLICFUNC(SFR_VOID, MessageType);       
-SLICFUNC(SFR_VOID, Caption);           
+SLICFUNC(SFR_VOID, MessageType);
+SLICFUNC(SFR_VOID, Caption);
 
-SLICFUNC(SFR_VOID, Duration);          
-SLICFUNC(SFR_VOID, BreakAgreement);    
-SLICFUNC(SFR_VOID, AcceptTradeOffer);  
-SLICFUNC(SFR_VOID, DontAcceptTradeOffer); 
-SLICFUNC(SFR_VOID, SetGovernment);     
-SLICFUNC(SFR_VOID, StealRandomAdvance); 
-SLICFUNC(SFR_VOID, StealSpecificAdvance); 
+SLICFUNC(SFR_VOID, Duration);
+SLICFUNC(SFR_VOID, BreakAgreement);
+SLICFUNC(SFR_VOID, AcceptTradeOffer);
+SLICFUNC(SFR_VOID, DontAcceptTradeOffer);
+SLICFUNC(SFR_VOID, SetGovernment);
+SLICFUNC(SFR_VOID, StealRandomAdvance);
+SLICFUNC(SFR_VOID, StealSpecificAdvance);
 
-SLICFUNC(SFR_VOID, DisableTileImprovementButton); 
-SLICFUNC(SFR_VOID, DisableScreensButton); 
-SLICFUNC(SFR_VOID, EnableTileImprovementButton); 
-SLICFUNC(SFR_VOID, EnableScreensButton); 
+SLICFUNC(SFR_VOID, DisableTileImprovementButton);
+SLICFUNC(SFR_VOID, DisableScreensButton);
+SLICFUNC(SFR_VOID, EnableTileImprovementButton);
+SLICFUNC(SFR_VOID, EnableScreensButton);
 
-SLICFUNC(SFR_VOID, OpenCiv); 
-SLICFUNC(SFR_VOID, OpenCity); 
-SLICFUNC(SFR_VOID, OpenUnit); 
-SLICFUNC(SFR_VOID, OpenScience); 
-SLICFUNC(SFR_VOID, OpenDiplomacy); 
-SLICFUNC(SFR_VOID, OpenTrade); 
-SLICFUNC(SFR_VOID, OpenInfo); 
-SLICFUNC(SFR_VOID, OpenOptions); 
-SLICFUNC(SFR_VOID, OpenCivTab); 
-SLICFUNC(SFR_VOID, OpenMaxTab); 
-SLICFUNC(SFR_VOID, OpenLaborTab); 
-SLICFUNC(SFR_VOID, OpenProductionTab); 
-SLICFUNC(SFR_VOID, OpenCityTab); 
-SLICFUNC(SFR_VOID, ExitToShell); 
+SLICFUNC(SFR_VOID, OpenCiv);
+SLICFUNC(SFR_VOID, OpenCity);
+SLICFUNC(SFR_VOID, OpenUnit);
+SLICFUNC(SFR_VOID, OpenScience);
+SLICFUNC(SFR_VOID, OpenDiplomacy);
+SLICFUNC(SFR_VOID, OpenTrade);
+SLICFUNC(SFR_VOID, OpenInfo);
+SLICFUNC(SFR_VOID, OpenOptions);
+SLICFUNC(SFR_VOID, OpenCivTab);
+SLICFUNC(SFR_VOID, OpenMaxTab);
+SLICFUNC(SFR_VOID, OpenLaborTab);
+SLICFUNC(SFR_VOID, OpenProductionTab);
+SLICFUNC(SFR_VOID, OpenCityTab);
+SLICFUNC(SFR_VOID, ExitToShell);
 
-SLICFUNC(SFR_VOID, SendTradeBid); 
-SLICFUNC(SFR_VOID, AcceptTradeBid); 
-SLICFUNC(SFR_VOID, RejectTradeBid); 
+SLICFUNC(SFR_VOID, SendTradeBid);
+SLICFUNC(SFR_VOID, AcceptTradeBid);
+SLICFUNC(SFR_VOID, RejectTradeBid);
 
-SLICFUNC(SFR_VOID, BreakAlliance); 
-SLICFUNC(SFR_VOID, AddOrder); 
+SLICFUNC(SFR_VOID, BreakAlliance);
+SLICFUNC(SFR_VOID, AddOrder);
 
-SLICFUNC(SFR_VOID, EndTurn); 
-SLICFUNC(SFR_VOID, FinishBuilding); 
-SLICFUNC(SFR_VOID, Abort);          
-SLICFUNC(SFR_VOID, Show);           
-SLICFUNC(SFR_VOID, DoAutoUnload);                 
-SLICFUNC(SFR_VOID, DoLandInOcean);                
-SLICFUNC(SFR_VOID, DoOutOfFuel);                  
-SLICFUNC(SFR_VOID, DoPillageOwnLand);             
-SLICFUNC(SFR_VOID, DoSellImprovement);            
-SLICFUNC(SFR_VOID, DoCertainRevolution);          
-SLICFUNC(SFR_VOID, DoFreeSlaves);                 
-SLICFUNC(SFR_VOID, DoCannotAffordMaintenance);    
-SLICFUNC(SFR_VOID, DoCannotAffordSupport);        
-SLICFUNC(SFR_VOID, DoCityWillStarve);             
-SLICFUNC(SFR_VOID, DoYouWillBreakRoute);          
+SLICFUNC(SFR_VOID, EndTurn);
+SLICFUNC(SFR_VOID, FinishBuilding);
+SLICFUNC(SFR_VOID, Abort);
+SLICFUNC(SFR_VOID, Show);
+SLICFUNC(SFR_VOID, DoAutoUnload);
+SLICFUNC(SFR_VOID, DoLandInOcean);
+SLICFUNC(SFR_VOID, DoOutOfFuel);
+SLICFUNC(SFR_VOID, DoPillageOwnLand);
+SLICFUNC(SFR_VOID, DoSellImprovement);
+SLICFUNC(SFR_VOID, DoCertainRevolution);
+SLICFUNC(SFR_VOID, DoFreeSlaves);
+SLICFUNC(SFR_VOID, DoCannotAffordMaintenance);
+SLICFUNC(SFR_VOID, DoCannotAffordSupport);
+SLICFUNC(SFR_VOID, DoCityWillStarve);
+SLICFUNC(SFR_VOID, DoYouWillBreakRoute);
 
-SLICFUNC(SFR_INT,  TerrainType);                  
+SLICFUNC(SFR_INT,  TerrainType);
 
-SLICFUNC(SFR_VOID, LibraryUnit);                  
-SLICFUNC(SFR_VOID, LibraryBuilding);              
-SLICFUNC(SFR_VOID, LibraryWonder);                
-SLICFUNC(SFR_VOID, LibraryAdvance);               
-SLICFUNC(SFR_VOID, LibraryTerrain);               
-SLICFUNC(SFR_VOID, LibraryConcept);               
-SLICFUNC(SFR_VOID, LibraryGovernment);            
-SLICFUNC(SFR_VOID, LibraryTileImprovement);       
+SLICFUNC(SFR_VOID, LibraryUnit);
+SLICFUNC(SFR_VOID, LibraryBuilding);
+SLICFUNC(SFR_VOID, LibraryWonder);
+SLICFUNC(SFR_VOID, LibraryAdvance);
+SLICFUNC(SFR_VOID, LibraryTerrain);
+SLICFUNC(SFR_VOID, LibraryConcept);
+SLICFUNC(SFR_VOID, LibraryGovernment);
+SLICFUNC(SFR_VOID, LibraryTileImprovement);
 
-SLICFUNC(SFR_INT,  UnitCount);                    
+SLICFUNC(SFR_INT,  UnitCount);
 
-SLICFUNC(SFR_INT,  UnitType);                   
-SLICFUNC(SFR_VOID, KillMessages);                 
+SLICFUNC(SFR_INT,  UnitType);
+SLICFUNC(SFR_VOID, KillMessages);
 
-SLICFUNC(SFR_VOID, MessageClass);                 
-SLICFUNC(SFR_VOID, KillClass);                    
+SLICFUNC(SFR_VOID, MessageClass);
+SLICFUNC(SFR_VOID, KillClass);
 
-SLICFUNC(SFR_INT,  CityHasBuilding);              
+SLICFUNC(SFR_INT,  CityHasBuilding);
 
-SLICFUNC(SFR_VOID, Title);                        
+SLICFUNC(SFR_VOID, Title);
 
-SLICFUNC(SFR_VOID, NetworkAccept);                
-SLICFUNC(SFR_VOID, NetworkEject);                 
+SLICFUNC(SFR_VOID, NetworkAccept);
+SLICFUNC(SFR_VOID, NetworkEject);
 
-SLICFUNC(SFR_VOID, Attract);                      
-SLICFUNC(SFR_VOID, StopAttract);                  
+SLICFUNC(SFR_VOID, Attract);
+SLICFUNC(SFR_VOID, StopAttract);
 
-SLICFUNC(SFR_VOID, DontSave);                     
+SLICFUNC(SFR_VOID, DontSave);
 
-SLICFUNC(SFR_INT,  IsUnitSelected)                
-SLICFUNC(SFR_INT,  IsCitySelected)                
+SLICFUNC(SFR_INT,  IsUnitSelected)
+SLICFUNC(SFR_INT,  IsCitySelected)
 
-SLICFUNC(SFR_INT,  BuildingType)                  
+SLICFUNC(SFR_INT,  BuildingType)
 
-SLICFUNC(SFR_INT,  IsHumanPlayer)                 
+SLICFUNC(SFR_INT,  IsHumanPlayer)
 
-SLICFUNC(SFR_VOID, DisableClose)                  
+SLICFUNC(SFR_VOID, DisableClose)
 
-SLICFUNC(SFR_VOID, EnableCloseMessage)            
-SLICFUNC(SFR_VOID, EnableCloseClass)              
+SLICFUNC(SFR_VOID, EnableCloseMessage)
+SLICFUNC(SFR_VOID, EnableCloseClass)
 
-SLICFUNC(SFR_VOID, AddGoods)                      
-SLICFUNC(SFR_INT,  GoodType)                      
-SLICFUNC(SFR_INT,  GoodCount)                     
-SLICFUNC(SFR_INT,  GoodCountTotal)                
-SLICFUNC(SFR_INT,  GoodVisibutik)                 
+SLICFUNC(SFR_VOID, AddGoods)
+SLICFUNC(SFR_INT,  GoodType)
+SLICFUNC(SFR_INT,  GoodCount)
+SLICFUNC(SFR_INT,  GoodCountTotal)
+SLICFUNC(SFR_INT,  GoodVisibutik)
 
-SLICFUNC(SFR_VOID, StartTimer)                    
-SLICFUNC(SFR_VOID, StopTimer)                     
+SLICFUNC(SFR_VOID, StartTimer)
+SLICFUNC(SFR_VOID, StopTimer)
 
-SLICFUNC(SFR_VOID, DisableMessageClass)           
-SLICFUNC(SFR_VOID, EnableMessageClass)            
+SLICFUNC(SFR_VOID, DisableMessageClass)
+SLICFUNC(SFR_VOID, EnableMessageClass)
 
-SLICFUNC(SFR_INT,  CreateUnit)                    
-SLICFUNC(SFR_INT,  Random)                        
-SLICFUNC(SFR_VOID, AddCityByIndex)                
-SLICFUNC(SFR_VOID, DetachRobot)                   
-SLICFUNC(SFR_VOID, AttachRobot)                   
+SLICFUNC(SFR_INT,  CreateUnit)
+SLICFUNC(SFR_INT,  Random)
+SLICFUNC(SFR_VOID, AddCityByIndex)
+SLICFUNC(SFR_VOID, DetachRobot)
+SLICFUNC(SFR_VOID, AttachRobot)
 
-SLICFUNC(SFR_VOID, ForceRegard)                   
-SLICFUNC(SFR_INT,  Cities)                        
-SLICFUNC(SFR_INT,  AddPops)                       
+SLICFUNC(SFR_VOID, ForceRegard)
+SLICFUNC(SFR_INT,  Cities)
+SLICFUNC(SFR_INT,  AddPops)
 
-SLICFUNC(SFR_VOID, KillUnit)                      
-SLICFUNC(SFR_VOID, PlaySound)                     
+SLICFUNC(SFR_VOID, KillUnit)
+SLICFUNC(SFR_VOID, PlaySound)
 
-SLICFUNC(SFR_INT,  CreateCity)                    
-SLICFUNC(SFR_INT,  CreateCoastalCity)             
-SLICFUNC(SFR_VOID, ExtractLocation)               
+SLICFUNC(SFR_INT,  CreateCity)
+SLICFUNC(SFR_INT,  CreateCoastalCity)
+SLICFUNC(SFR_VOID, ExtractLocation)
 
-SLICFUNC(SFR_INT,  FindCoastalCity)               
-SLICFUNC(SFR_VOID, Terraform)                     
-SLICFUNC(SFR_VOID, PlantGood)                     
-SLICFUNC(SFR_VOID, GetRandomNeighbor)             
+SLICFUNC(SFR_INT,  FindCoastalCity)
+SLICFUNC(SFR_VOID, Terraform)
+SLICFUNC(SFR_VOID, PlantGood)
+SLICFUNC(SFR_VOID, GetRandomNeighbor)
 
-SLICFUNC(SFR_VOID, GrantAdvance)                  
-SLICFUNC(SFR_VOID, AddUnit)                       
+SLICFUNC(SFR_VOID, GrantAdvance)
+SLICFUNC(SFR_VOID, AddUnit)
 
-SLICFUNC(SFR_VOID, AddExpelOrder)                 
-SLICFUNC(SFR_INT,  AllUnitsCanBeExpelled)         
-SLICFUNC(SFR_VOID, GetMessageClass)               
-SLICFUNC(SFR_VOID, SetPlayer)                     
+SLICFUNC(SFR_VOID, AddExpelOrder)
+SLICFUNC(SFR_INT,  AllUnitsCanBeExpelled)
+SLICFUNC(SFR_VOID, GetMessageClass)
+SLICFUNC(SFR_VOID, SetPlayer)
 
-SLICFUNC(SFR_INT,  CityCollectingGood)            
-SLICFUNC(SFR_INT,  GetNearestWater)               
+SLICFUNC(SFR_INT,  CityCollectingGood)
+SLICFUNC(SFR_INT,  GetNearestWater)
 
-SLICFUNC(SFR_INT,  IsPlayerAlive)                 
+SLICFUNC(SFR_INT,  IsPlayerAlive)
 
-SLICFUNC(SFR_INT,  CityFoodDelta)                
-SLICFUNC(SFR_INT,  PlayerWagesExp)                
-SLICFUNC(SFR_INT,  PlayerWorkdayExp)                
-SLICFUNC(SFR_INT,  PlayerRationsExp)                
-SLICFUNC(SFR_INT,  PlayerWagesLevel)                
-SLICFUNC(SFR_INT,  PlayerWorkdayLevel)                
-SLICFUNC(SFR_INT,  PlayerRationsLevel)                
-SLICFUNC(SFR_INT,  CityStarvationTurns)                
+SLICFUNC(SFR_INT,  CityFoodDelta)
+SLICFUNC(SFR_INT,  PlayerWagesExp)
+SLICFUNC(SFR_INT,  PlayerWorkdayExp)
+SLICFUNC(SFR_INT,  PlayerRationsExp)
+SLICFUNC(SFR_INT,  PlayerWagesLevel)
+SLICFUNC(SFR_INT,  PlayerWorkdayLevel)
+SLICFUNC(SFR_INT,  PlayerRationsLevel)
+SLICFUNC(SFR_INT,  CityStarvationTurns)
 
-SLICFUNC(SFR_INT,  GameOver)                      
+SLICFUNC(SFR_INT,  GameOver)
 
-SLICFUNC(SFR_VOID, SaveGame)                      
-SLICFUNC(SFR_VOID, LoadGame)                      
+SLICFUNC(SFR_VOID, SaveGame)
+SLICFUNC(SFR_VOID, LoadGame)
 
-SLICFUNC(SFR_INT,  HasRiver)                      
-SLICFUNC(SFR_VOID, SetScience)                    
+SLICFUNC(SFR_INT,  HasRiver)
+SLICFUNC(SFR_VOID, SetScience)
 
-SLICFUNC(SFR_VOID, SetResearching)                
+SLICFUNC(SFR_VOID, SetResearching)
 
-SLICFUNC(SFR_INT,  IsInZOC)                       
-SLICFUNC(SFR_VOID, DisableChooseResearch)         
-SLICFUNC(SFR_VOID, EnableChooseResearch)          
-SLICFUNC(SFR_VOID, SetTimerGranularity)           
+SLICFUNC(SFR_INT,  IsInZOC)
+SLICFUNC(SFR_VOID, DisableChooseResearch)
+SLICFUNC(SFR_VOID, EnableChooseResearch)
+SLICFUNC(SFR_VOID, SetTimerGranularity)
 
-SLICFUNC(SFR_VOID, QuitToLobby);                  
-SLICFUNC(SFR_VOID, KillEyepointMessage);          
+SLICFUNC(SFR_VOID, QuitToLobby);
+SLICFUNC(SFR_VOID, KillEyepointMessage);
 
-SLICFUNC(SFR_VOID, ClearBuildQueue);              
+SLICFUNC(SFR_VOID, ClearBuildQueue);
 
-SLICFUNC(SFR_VOID, BreakLeaveOurLands);           
-SLICFUNC(SFR_VOID, BreakNoPiracy);                
-SLICFUNC(SFR_VOID, UseDirector);                  
-SLICFUNC(SFR_VOID, ClearOrders);                  
+SLICFUNC(SFR_VOID, BreakLeaveOurLands);
+SLICFUNC(SFR_VOID, BreakNoPiracy);
+SLICFUNC(SFR_VOID, UseDirector);
+SLICFUNC(SFR_VOID, ClearOrders);
 
+SLICFUNC(SFR_VOID, SetUnit);
+SLICFUNC(SFR_VOID, SetUnitByIndex);
 
-SLICFUNC(SFR_VOID, SetUnit);                      
-SLICFUNC(SFR_VOID, SetUnitByIndex);               
+SLICFUNC(SFR_VOID, SetCity);
+SLICFUNC(SFR_VOID, SetCityByIndex);
 
-SLICFUNC(SFR_VOID, SetCity);                      
-SLICFUNC(SFR_VOID, SetCityByIndex);               
+SLICFUNC(SFR_VOID, SetLocation);
+SLICFUNC(SFR_VOID, MakeLocation);
 
-SLICFUNC(SFR_VOID, SetLocation);                  
-SLICFUNC(SFR_VOID, MakeLocation);                 
+SLICFUNC(SFR_VOID, SetOrder);
 
-SLICFUNC(SFR_VOID, SetOrder);                     
+SLICFUNC(SFR_VOID, Flood);
+SLICFUNC(SFR_VOID, Ozone);
+SLICFUNC(SFR_VOID, GodMode);
+SLICFUNC(SFR_VOID, ExecuteAllOrders);
+SLICFUNC(SFR_VOID, CatchUp);
+SLICFUNC(SFR_VOID, Deselect);
 
-SLICFUNC(SFR_VOID, Flood);                        
-SLICFUNC(SFR_VOID, Ozone);                        
-SLICFUNC(SFR_VOID, GodMode);                      
-SLICFUNC(SFR_VOID, ExecuteAllOrders);             
-SLICFUNC(SFR_VOID, CatchUp);                      
-SLICFUNC(SFR_VOID, Deselect);                     
+SLICFUNC(SFR_INT,  Preference);
+SLICFUNC(SFR_INT,  SetPreference);
 
-SLICFUNC(SFR_INT,  Preference);                   
-SLICFUNC(SFR_INT,  SetPreference);                
-
-SLICFUNC(SFR_VOID, AddMovement);                  
-SLICFUNC(SFR_VOID, ToggleVeteran); 
+SLICFUNC(SFR_VOID, AddMovement);
+SLICFUNC(SFR_VOID, ToggleVeteran);
 SLICFUNC(SFR_INT,  IsVeteran);
-SLICFUNC(SFR_VOID, CantAttackUnit);               
-SLICFUNC(SFR_VOID, CantAttackCity);               
-SLICFUNC(SFR_VOID, CityCantRiotOrRevolt);         
-SLICFUNC(SFR_VOID, SelectUnit);                   
-SLICFUNC(SFR_VOID, SelectCity);                   
+SLICFUNC(SFR_VOID, CantAttackUnit);
+SLICFUNC(SFR_VOID, CantAttackCity);
+SLICFUNC(SFR_VOID, CityCantRiotOrRevolt);
+SLICFUNC(SFR_VOID, SelectUnit);
+SLICFUNC(SFR_VOID, SelectCity);
 
-SLICFUNC(SFR_VOID, CantEndTurn);                  
-SLICFUNC(SFR_VOID, Heal);                         
-SLICFUNC(SFR_VOID, AddGold);                      
-SLICFUNC(SFR_VOID, SetActionKey);                 
-SLICFUNC(SFR_INT,  GetCityByLocation);            
+SLICFUNC(SFR_VOID, CantEndTurn);
+SLICFUNC(SFR_VOID, Heal);
+SLICFUNC(SFR_VOID, AddGold);
+SLICFUNC(SFR_VOID, SetActionKey);
+SLICFUNC(SFR_INT,  GetCityByLocation);
 
-SLICFUNC(SFR_INT,  GetNeighbor);                  
+SLICFUNC(SFR_INT,  GetNeighbor);
 
-SLICFUNC(SFR_VOID, DamageUnit);                   
+SLICFUNC(SFR_VOID, DamageUnit);
 
-SLICFUNC(SFR_INT,  IsUnitInBuildList)             
-SLICFUNC(SFR_INT,  IsBuildingInBuildList)         
-SLICFUNC(SFR_INT,  IsWonderInBuildList)           
-SLICFUNC(SFR_INT,  IsEndgameInBuildList)          
-SLICFUNC(SFR_INT,  IsBuildingAtHead)	          
-SLICFUNC(SFR_INT,  IsWonderAtHead)		          
+SLICFUNC(SFR_INT,  IsUnitInBuildList)
+SLICFUNC(SFR_INT,  IsBuildingInBuildList)
+SLICFUNC(SFR_INT,  IsWonderInBuildList)
+SLICFUNC(SFR_INT,  IsEndgameInBuildList)
+SLICFUNC(SFR_INT,  IsBuildingAtHead)
+SLICFUNC(SFR_INT,  IsWonderAtHead)
 
-SLICFUNC(SFR_VOID, AddUnitToBuildList)            
-SLICFUNC(SFR_VOID, AddBuildingToBuildList)        
-SLICFUNC(SFR_VOID, AddWonderToBuildList)          
-SLICFUNC(SFR_VOID, AddEndgameToBuildList)         
-SLICFUNC(SFR_VOID, KillUnitFromBuildList)         
-SLICFUNC(SFR_VOID, KillBuildingFromBuildList)     
-SLICFUNC(SFR_VOID, KillWonderFromBuildList)       
-SLICFUNC(SFR_VOID, KillEndgameFromBuildList)      
-SLICFUNC(SFR_VOID, SetPW)                         
-SLICFUNC(SFR_VOID, Stacked)                       
+SLICFUNC(SFR_VOID, AddUnitToBuildList)
+SLICFUNC(SFR_VOID, AddBuildingToBuildList)
+SLICFUNC(SFR_VOID, AddWonderToBuildList)
+SLICFUNC(SFR_VOID, AddEndgameToBuildList)
+SLICFUNC(SFR_VOID, KillUnitFromBuildList)
+SLICFUNC(SFR_VOID, KillBuildingFromBuildList)
+SLICFUNC(SFR_VOID, KillWonderFromBuildList)
+SLICFUNC(SFR_VOID, KillEndgameFromBuildList)
+SLICFUNC(SFR_VOID, SetPW)
+SLICFUNC(SFR_VOID, Stacked)
 
-SLICFUNC(SFR_VOID, SetString)                     
-SLICFUNC(SFR_VOID, SetStringByDBIndex)            
-SLICFUNC(SFR_VOID, GetStringDBIndex)              
+SLICFUNC(SFR_VOID, SetString)
+SLICFUNC(SFR_VOID, SetStringByDBIndex)
+SLICFUNC(SFR_VOID, GetStringDBIndex)
 
-SLICFUNC(SFR_VOID, UnitHasUserFlag)               
+SLICFUNC(SFR_VOID, UnitHasUserFlag)
 
-SLICFUNC(SFR_VOID, BlankScreen)                   
-SLICFUNC(SFR_VOID, AddCenter)                     
-SLICFUNC(SFR_VOID, AddEffect)                     
+SLICFUNC(SFR_VOID, BlankScreen)
+SLICFUNC(SFR_VOID, AddCenter)
+SLICFUNC(SFR_VOID, AddEffect)
 
-SLICFUNC(SFR_INT,  PlayerCivilization)            
-SLICFUNC(SFR_INT,  CivilizationIndex)             
-SLICFUNC(SFR_VOID, ExitToDesktop)                 
+SLICFUNC(SFR_INT,  PlayerCivilization)
+SLICFUNC(SFR_INT,  CivilizationIndex)
+SLICFUNC(SFR_VOID, ExitToDesktop)
 
-SLICFUNC(SFR_INT,  Import)                        
-SLICFUNC(SFR_VOID, Export)                        
+SLICFUNC(SFR_INT,  Import)
+SLICFUNC(SFR_VOID, Export)
 
-SLICFUNC(SFR_INT, GetUnitFromArmy)               
-SLICFUNC(SFR_INT, GetUnitByIndex)                
-SLICFUNC(SFR_INT, GetArmyByIndex)                
-SLICFUNC(SFR_INT, GetCityByIndex)                
+SLICFUNC(SFR_INT, GetUnitFromArmy)
+SLICFUNC(SFR_INT, GetUnitByIndex)
+SLICFUNC(SFR_INT, GetArmyByIndex)
+SLICFUNC(SFR_INT, GetCityByIndex)
 
-SLICFUNC(SFR_INT, GetUnitsAtLocation)            
-SLICFUNC(SFR_INT, GetUnitFromCell)              
+SLICFUNC(SFR_INT, GetUnitsAtLocation)
+SLICFUNC(SFR_INT, GetUnitFromCell)
 
+SLICFUNC(SFR_INT, IsRoad)
 
-SLICFUNC(SFR_INT, IsRoad)                        
+SLICFUNC(SFR_INT, GetMapHeight)
+SLICFUNC(SFR_INT, GetMapWidth)
 
+SLICFUNC(SFR_VOID, AddFeat)
 
-SLICFUNC(SFR_INT, GetMapHeight)                  
-SLICFUNC(SFR_INT, GetMapWidth)                   
+SLICFUNC(SFR_INT, IsFortress)
 
-SLICFUNC(SFR_VOID, AddFeat)                      
+SLICFUNC(SFR_INT, Distance)
+SLICFUNC(SFR_INT, SquaredDistance)
+SLICFUNC(SFR_INT, HasGood)
 
+SLICFUNC(SFR_INT, GetRiotLevel)
+SLICFUNC(SFR_INT, GetRevolutionLevel)
 
-SLICFUNC(SFR_INT, IsFortress)                     
+SLICFUNC(SFR_INT, GetCurrentRound)
+SLICFUNC(SFR_INT, GetCurrentYear)
 
-SLICFUNC(SFR_INT, Distance)                      
-SLICFUNC(SFR_INT, SquaredDistance)               
-SLICFUNC(SFR_INT, HasGood)                       
+SLICFUNC(SFR_INT, CityIsValid)
 
+SLICFUNC(SFR_INT, CellOwner)
 
-SLICFUNC(SFR_INT, GetRiotLevel)                  
-SLICFUNC(SFR_INT, GetRevolutionLevel)            
+SLICFUNC(SFR_INT, CityIsNamed)
 
+SLICFUNC(SFR_INT, StringCompare)
+SLICFUNC(SFR_INT, CityNameCompare)
+SLICFUNC(SFR_VOID, ChangeGlobalRegard)
 
-SLICFUNC(SFR_INT, GetCurrentRound)				 
-SLICFUNC(SFR_INT, GetCurrentYear)				 
+SLICFUNC(SFR_VOID, SetAllCitiesVisible)
+SLICFUNC(SFR_VOID, SetCityVisible)
 
-SLICFUNC(SFR_INT, CityIsValid)                   
+SLICFUNC(SFR_INT, IsCivilian)
 
-SLICFUNC(SFR_INT, CellOwner)                     
-
-SLICFUNC(SFR_INT, CityIsNamed)					 
-
-
-SLICFUNC(SFR_INT, StringCompare)				
-SLICFUNC(SFR_INT, CityNameCompare)				
-SLICFUNC(SFR_VOID, ChangeGlobalRegard)			 
-
-SLICFUNC(SFR_VOID, SetAllCitiesVisible)			
-SLICFUNC(SFR_VOID, SetCityVisible)				
-
-
-SLICFUNC(SFR_INT, IsCivilian)					
-
-SLICFUNC(SFR_VOID, FinishImprovements)         
-SLICFUNC(SFR_VOID, RemoveAdvance)              
-SLICFUNC(SFR_INT, PlayerGold)                  
-SLICFUNC(SFR_INT, GetArmyFromUnit)				
-SLICFUNC (SFR_INT, ClearBattleFlag)				
-SLICFUNC(SFR_VOID, MinimizeAction)				
-SLICFUNC(SFR_INT, IsUnitAtHead)					
+SLICFUNC(SFR_VOID, FinishImprovements)
+SLICFUNC(SFR_VOID, RemoveAdvance)
+SLICFUNC(SFR_INT, PlayerGold)
+SLICFUNC(SFR_INT, GetArmyFromUnit)
+SLICFUNC (SFR_INT, ClearBattleFlag)
+SLICFUNC(SFR_VOID, MinimizeAction)
+SLICFUNC(SFR_INT, IsUnitAtHead)
 SLICFUNC(SFR_VOID, OpenScenarioEditor)
 
 //New Slicfunctions of CTP2.1 readded by Martin Gühmann
@@ -640,18 +626,16 @@ SLICFUNC(SFR_INT, IsWater)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)
 //New slicfunctions by E
-SLICFUNC(SFR_VOID, KillCity); 
+SLICFUNC(SFR_VOID, KillCity);
 SLICFUNC(SFR_VOID, Pillage);
 SLICFUNC(SFR_VOID, Plunder);
 SLICFUNC(SFR_VOID, Liberate);
-SLICFUNC(SFR_VOID, AddPW);  
-SLICFUNC(SFR_VOID, PuppetGovt); 
+SLICFUNC(SFR_VOID, AddPW);
+SLICFUNC(SFR_VOID, PuppetGovt);
 //New slicfunctions by Maq
 SLICFUNC(SFR_INT, CreateBuilding)
 SLICFUNC(SFR_INT, CreateWonder)
 SLICFUNC(SFR_INT, UnitMovementLeft)
 SLICFUNC(SFR_INT, GetStoredProduction)
 
-
 #endif // __SLICFUNC_H__
-

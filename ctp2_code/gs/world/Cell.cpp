@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,13 +25,13 @@
 // Modifications from the original Activision code:
 //
 // - Added CalcTerrainFreightCost by Martin Gühmann
-// - Corrected handling of tile improvements that did not have a Freight 
+// - Corrected handling of tile improvements that did not have a Freight
 //   modifier.
 // - Standardised min/max usage.
 // - Prevented some crashes.
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
-//   with a hypothetical terrain type argument to check whether there is a 
-//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
+//   with a hypothetical terrain type argument to check whether there is a
+//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann
 // - GetGoldProduced function now uses GetGoldFromTerrain function to avoid
 //   duplicating code. - Sep. 21st 2004 Martin Gühmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
@@ -69,14 +69,12 @@
 #include "World.h"
 #include <limits>           // std::numeric_limits<sint16>::max()
 
-extern void WhackScreen(); 
+extern void WhackScreen();
 
 class CivArchive ;
 extern UnitPool *g_theUnitPool;
 
-
 int Cell::m_playerLandArea[k_MAX_PLAYERS+1];
-
 
 int Cell::PlayerLandArea(int player)
 {
@@ -101,7 +99,6 @@ void Cell::RecalcPlayerLandArea()
 	g_theWorld->WholePlayerLandArea(m_playerLandArea);
 }
 #endif
-
 
 
 Cell::Cell()
@@ -135,10 +132,9 @@ Cell::~Cell()
 	delete m_unit_army;
 	delete m_objects;
 	delete m_jabba;
-	
+
 	m_playerLandArea[m_cellOwner+1]--;  // static!
 }
-
 
 void Cell::Serialize(CivArchive &archive)
 {
@@ -213,7 +209,7 @@ void Cell::Serialize(CivArchive &archive)
 void Cell::CalculateTmpFutureMoveCosts(sint32 tileImpType)
 {
 	const TerrainImprovementRecord *impRec = g_theTerrainImprovementDB->Get(tileImpType);
-	const TerrainImprovementRecord::Effect *effect = 
+	const TerrainImprovementRecord::Effect *effect =
 	    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 	sint32 cost;
@@ -249,7 +245,7 @@ bool Cell::InsertUnit(Unit id)
 		m_unit_army = new CellUnitList;
 	}
 
-	return m_unit_army->Insert(id); 
+	return m_unit_army->Insert(id);
 }
 
 bool Cell::RemoveUnitReference(const Unit &u)
@@ -291,7 +287,7 @@ bool Cell::GetGoodsIndex(sint32 &val) const
 	{
 		val >>= k_SHIFT_ENV_GOOD;
 		val--;
-		while(val >= 0 && 
+		while(val >= 0 &&
 			  (g_theTerrainDB->Get(m_terrain_type)->GetNumResources() <= val)) {
 			val--;
 		}
@@ -317,7 +313,7 @@ bool Cell::GetCanDie(void) const
 //
 // Description: Gets the food from the given cell with the given terrain.
 //
-// Parameters : terrainType: The terrain type from that the statitics 
+// Parameters : terrainType: The terrain type from that the statitics
 //                           should be calculated.
 //
 // Globals    : g_theTerrainDB: The terrain database
@@ -331,7 +327,7 @@ bool Cell::GetCanDie(void) const
 sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
-	
+
 	sint32 food = rec->GetEnvBase()->GetFood();
 
 	if(HasCity() && rec->HasEnvCity()) {
@@ -375,7 +371,7 @@ sint32 Cell::GetFoodFromTerrain() const
 //
 // Name       : Cell::GetFoodProduced
 //
-// Description: Gets the food from the given cell with the current terrain 
+// Description: Gets the food from the given cell with the current terrain
 //              including tile improvement.
 //
 // Parameters : -
@@ -388,14 +384,14 @@ sint32 Cell::GetFoodFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 Cell::GetFoodProduced() const 
+sint32 Cell::GetFoodProduced() const
 {
 	sint32 food = GetFoodFromTerrain();
 	size_t const	count	= m_objects ? m_objects->Num() : 0;
 	for (size_t i = 0; i < count; ++i)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
+			const TerrainImprovementRecord *impRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 			const TerrainImprovementRecord::Effect *effect;
 			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
@@ -415,7 +411,7 @@ sint32 Cell::GetFoodProduced() const
 //
 // Description: Gets the shields from the given cell with the given terrain.
 //
-// Parameters : terrainType: The terrain type from that the statitics 
+// Parameters : terrainType: The terrain type from that the statitics
 //                           should be calculated.
 //
 // Globals    : g_theTerrainDB: The terrain database
@@ -473,7 +469,7 @@ sint32 Cell::GetShieldsFromTerrain() const
 //
 // Name       : Cell::GetShieldsProduced
 //
-// Description: Gets the shields from the given cell with the current terrain 
+// Description: Gets the shields from the given cell with the current terrain
 //              including tile improvement.
 //
 // Parameters : -
@@ -486,7 +482,7 @@ sint32 Cell::GetShieldsFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 Cell::GetShieldsProduced() const 
+sint32 Cell::GetShieldsProduced() const
 {
 	sint32 shield = GetShieldsFromTerrain();
 
@@ -494,7 +490,7 @@ sint32 Cell::GetShieldsProduced() const
 	for (size_t i = 0; i < count; ++i)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
+			const TerrainImprovementRecord *impRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 			const TerrainImprovementRecord::Effect *effect;
 			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
@@ -505,7 +501,7 @@ sint32 Cell::GetShieldsProduced() const
 		}
 	}
 
-	return shield; 
+	return shield;
 }
 
 //----------------------------------------------------------------------------
@@ -514,7 +510,7 @@ sint32 Cell::GetShieldsProduced() const
 //
 // Description: Gets the gold from the given cell with the given terrain.
 //
-// Parameters : terrainType: The terrain type from that the statitics 
+// Parameters : terrainType: The terrain type from that the statitics
 //                           should be calculated.
 //
 // Globals    : g_theTerrainDB: The terrain database
@@ -572,7 +568,7 @@ sint32 Cell::GetGoldFromTerrain() const
 //
 // Name       : Cell::GetGoldProduced
 //
-// Description: Gets the gold from the given cell with the current terrain 
+// Description: Gets the gold from the given cell with the current terrain
 //              including tile improvement.
 //
 // Parameters : -
@@ -585,7 +581,7 @@ sint32 Cell::GetGoldFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 Cell::GetGoldProduced() const 
+sint32 Cell::GetGoldProduced() const
 {
 	sint32 gold = GetGoldFromTerrain(); // Like in GetShieldProduced and in GetFoodProduced functions
 
@@ -593,7 +589,7 @@ sint32 Cell::GetGoldProduced() const
 	for (size_t i = 0; i < count; ++i)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
+			const TerrainImprovementRecord *impRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 			const TerrainImprovementRecord::Effect *effect;
 			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
@@ -604,13 +600,13 @@ sint32 Cell::GetGoldProduced() const
 		}
 	}
 
-	return gold; 
+	return gold;
 }
 
-sint32 Cell::GetScore() const 
+sint32 Cell::GetScore() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
-	
+
 	sint32 score = rec->GetEnvBase()->GetScore();
 
 	if(HasCity() && rec->HasEnvCity()) {
@@ -621,14 +617,13 @@ sint32 Cell::GetScore() const
 		score += rec->GetEnvRiverPtr()->GetScore();
 	}
 
-	
 	if ((m_env & k_MASK_ENV_GOOD) != 0x0) {
 		// Should be moved to Goods.txt
-		
+
 		score += rec->GetEnvBase()->GetScore();
 	}
 
-	return score; 
+	return score;
 }
 
 #ifdef CELL_COLOR
@@ -638,7 +633,7 @@ void Cell::SetColor(sint32 c)
 	return;
 #if 0   // unreachable
 #ifdef _DEBUG
-    m_color = c; 
+    m_color = c;
     WhackScreen();
 #endif // _DEBUG
 #endif // unreachable
@@ -662,10 +657,10 @@ void Cell::DelTradeRoute(TradeRoute route)
 	{
 		m_objects->Del(route);
 		size_t const	count	= m_objects->Num();
-		
+
 		for (size_t i = 0; i < count; ++i)
 		{
-			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) ==
 					k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE
 			   )
 			{
@@ -681,7 +676,7 @@ void Cell::DelTradeRoute(TradeRoute route)
 	}
 
 	// Mark cell free of trade.
-	m_env &= ~(k_BIT_MOVEMENT_TYPE_TRADE);	
+	m_env &= ~(k_BIT_MOVEMENT_TYPE_TRADE);
 }
 
 bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
@@ -691,11 +686,11 @@ bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
 
 	TradeRoute route;
 
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
-		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) ==
 		    k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE
-		   ) 
+		   )
 		{
 			route = m_objects->Access(i).m_id;
 			if (route.GetOwner() == owner ||
@@ -711,7 +706,6 @@ sint32 Cell::GetNumTradeRoutes() const
 	if(!(m_env & k_BIT_MOVEMENT_TYPE_TRADE))
 		return 0;
 
-
 	sint32 c = 0;
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE)
@@ -725,9 +719,9 @@ TradeRoute Cell::GetTradeRoute(sint32 index) const
 	if (m_objects)
 	{
 		sint32 c = 0;
-		for (sint32 i = 0; i < m_objects->Num(); ++i) 
+		for (sint32 i = 0; i < m_objects->Num(); ++i)
 		{
-			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) 
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE)
 			{
 				if (c == index)
 					return TradeRoute(m_objects->Access(i).m_id);
@@ -759,10 +753,10 @@ void Cell::RemoveImprovement(const TerrainImprovement &imp)
 		}
 
 		size_t const	count	= m_objects->Num();
-		
+
 		for (size_t i = 0; i < count; ++i)
 		{
-			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) ==
 					k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT
 			   )
 			{
@@ -778,13 +772,13 @@ void Cell::RemoveImprovement(const TerrainImprovement &imp)
 	}
 
 	// Mark cell free of trade.
-	m_env &= ~(k_BIT_ENV_HAS_IMPROVEMENT);	
+	m_env &= ~(k_BIT_ENV_HAS_IMPROVEMENT);
 
 }
 
 void Cell::SetOwner(sint32 owner)
 {
-	
+
 	m_playerLandArea[m_cellOwner+1]--;
 	m_cellOwner = (sint8)owner;
 	m_playerLandArea[m_cellOwner+1]++;
@@ -812,7 +806,7 @@ BOOL Cell::DecayBattleFlag()
 
 double Cell::GetTerrainDefenseBonus()
 {
-	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type); 
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	return rec->GetEnvBase()->GetDefense();
 }
 
@@ -890,7 +884,7 @@ void Cell::SetCity(const Unit &c)
 
 Unit Cell::GetCity() const
 {
-	if (m_env & k_MASK_ENV_CITY) 
+	if (m_env & k_MASK_ENV_CITY)
 	{
 		return m_city;
 	}
@@ -924,7 +918,7 @@ sint32 Cell::GetNumImprovements() const
 
 	sint32 c = 0;
 
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 			c++;
@@ -953,7 +947,7 @@ TerrainImprovement Cell::AccessImprovement(sint32 index)
 
 void Cell::CreateGoodyHut()
 {
-	if (!m_jabba) 
+	if (!m_jabba)
 	{
 		m_jabba = new GoodyHut();
 	}
@@ -987,7 +981,7 @@ void Cell::SetTerrain(sint32 terrain)
 
 void Cell::CalcMovementType()
 {
-	m_env = (m_env & (~(k_MASK_ENV_MOVEMENT_TYPE))) | 
+	m_env = (m_env & (~(k_MASK_ENV_MOVEMENT_TYPE))) |
 		(g_theTerrainDB->Get(m_terrain_type)->GetMovementType() << k_SHIFT_ENV_MOVEMENT_TYPE);
 	if(m_env & (k_MASK_ENV_ROAD)) {
 		m_env |= (k_Unit_MovementType_Land_Bit << k_SHIFT_ENV_MOVEMENT_TYPE);
@@ -1010,7 +1004,7 @@ void Cell::ClearUnitsNStuff()
 #ifdef BATTLE_FLAGS
 	m_battleFlags = 0;
 #endif
-	
+
 	SetOwner(PLAYER_UNASSIGNED);
 	delete m_unit_army;
 	m_unit_army = NULL;
@@ -1020,7 +1014,7 @@ void Cell::ClearUnitsNStuff()
 			m_objects->DelIndex(i);
 	}
 
-	m_env &= ~(k_MASK_ENV_INSTALLATION | 
+	m_env &= ~(k_MASK_ENV_INSTALLATION |
 			   k_MASK_ENV_CITY |
 			   k_MASK_ENV_ROAD |
 			   k_MASK_ENV_IRRIGATION |
@@ -1031,7 +1025,7 @@ void Cell::ClearUnitsNStuff()
 
 sint16 Cell::GF() const
 {
-	return m_gf; 
+	return m_gf;
 }
 
 void Cell::SetGF(const sint16 v)
@@ -1068,23 +1062,23 @@ void Cell::CalcTerrainMoveCost()
 {
 	sint32 tmp = GetBaseMoveCosts();
 
-	for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i) 
+	for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i)
 	{
 		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 		{
-			const TerrainImprovementRecord *impRec = 
+			const TerrainImprovementRecord *impRec =
 			    g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
-			const TerrainImprovementRecord::Effect *effect = 
+			const TerrainImprovementRecord::Effect *effect =
 			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 			sint32 cost;
-			if (effect && effect->GetMoveCost(cost)) 
+			if (effect && effect->GetMoveCost(cost))
 			{
 				tmp = std::min(tmp, cost);
 			}
 		}
 	}
-	
+
 	sint16 new_cost = static_cast<sint16>(tmp);
 	if (new_cost != m_move_cost)
 	{
@@ -1114,17 +1108,17 @@ double Cell::GetFutureTerrainMoveCost() const
 {
 	sint32 tmp = m_move_cost;
 
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 		{
 			sint32 type = TerrainImprovement(m_objects->Access(i).m_id).GetType();
 			const TerrainImprovementRecord *impRec = g_theTerrainImprovementDB->Get(type);
-			const TerrainImprovementRecord::Effect *effect = 
+			const TerrainImprovementRecord::Effect *effect =
 			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 			sint32 cost;
-			if (effect && effect->GetMoveCost(cost)) 
+			if (effect && effect->GetMoveCost(cost))
 			{
 				tmp = std::min(tmp, cost);
 			}
@@ -1196,28 +1190,28 @@ double Cell::CalcTerrainFreightCost()
 	sint32					cost	= rec->GetEnvBase()->GetFreight();
 
 	// Modifications by special situations (city, river)
-	if (HasCity() && rec->HasEnvCity()) 
+	if (HasCity() && rec->HasEnvCity())
 	{
 		cost = std::min(cost, rec->GetEnvCityPtr()->GetFreight());
 	}
-	if (HasRiver() && rec->HasEnvRiver()) 
+	if (HasRiver() && rec->HasEnvRiver())
 	{
 		cost = std::min(cost, rec->GetEnvRiverPtr()->GetFreight());
 	}
 
 	// Modifications by tile improvements (roads, etc.)
-	for (sint32 i = GetNumObjects() - 1; i >= 0; --i) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; --i)
 	{
 		ID const &	object	= m_objects->Access(i);
-		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
+		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK))
 		{
-			TerrainImprovementRecord const *			impRec = 
+			TerrainImprovementRecord const *			impRec =
 			    g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
 			TerrainImprovementRecord::Effect const *	effect =
 			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 			sint32	modifiedFreight;
-			if (effect && effect->GetFreight(modifiedFreight)) 
+			if (effect && effect->GetFreight(modifiedFreight))
 			{
 				cost = std::min(cost, modifiedFreight);
 			}
@@ -1239,7 +1233,7 @@ sint32 Cell::GetNumObjects() const
 ID Cell::GetObject(sint32 index)
 {
 	Assert(m_objects);
-	if(m_objects)	  
+	if(m_objects)
 		return m_objects->Access(index);
 
 	return ID();
@@ -1255,10 +1249,10 @@ void Cell::InsertDBImprovement(sint32 type)
 	sint32 i;
 	for (i = m_objects->Num() - 1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *oldRec = 
+			const TerrainImprovementRecord *oldRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 			if(oldRec->GetClass() & rec->GetExcludes()) {
-				
+
 				m_objects->DelIndex(i);
 			} else if(m_objects->Access(i).m_id == id) {
 				return;
@@ -1284,7 +1278,7 @@ void Cell::InsertDBImprovement(sint32 type)
 // Seems to remove all tile improvements
 void Cell::RemoveDBImprovement(sint32 type)
 {
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			m_objects->DelIndex(i);
@@ -1296,7 +1290,7 @@ sint32 Cell::GetNumDBImprovements() const
 {
 	sint32 c = 0;
 
-	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			c++;
@@ -1359,7 +1353,7 @@ bool Cell::IsUnitUpgradePosition(sint32 unitOwner) const
 	for(size_t i = 0; i < count; ++i)
 	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
+			const TerrainImprovementRecord *impRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 
 			canUpgrade |= impRec->GetCanUpgrade();

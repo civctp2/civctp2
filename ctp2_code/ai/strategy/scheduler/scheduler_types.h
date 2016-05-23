@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // - None
 //
 //----------------------------------------------------------------------------
@@ -36,7 +36,6 @@
 #include <utility>    // std::pair
 
 #include "Goal_And_Squad_Types.h"
-
 
 enum GOAL_RESULT
 {
@@ -61,7 +60,6 @@ typedef Plan*			Plan_ptr;
 
 typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr;
 typedef std::pair<double, Agent_ptr> Sorted_Agent_ptr;
-
 
 template<class _T1, class _T2>
 bool operator <

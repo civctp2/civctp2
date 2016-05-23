@@ -1,4 +1,3 @@
-
 #ifndef SLIC_MOD_FUNC_H__
 #define SLIC_MOD_FUNC_H__
 

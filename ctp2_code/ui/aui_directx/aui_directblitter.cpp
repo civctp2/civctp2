@@ -1,21 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_directsurface.h"
 
 #include "aui_directblitter.h"
 
 #ifdef __AUI_USE_DIRECTX__
-
 
 AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 	aui_Surface *destSurf,
@@ -55,7 +43,7 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 					chromakey | DDBLT_WAIT,
 					NULL);
 
-			// Try again until 
+			// Try again until
 			if ( hr != DDERR_SURFACEBUSY && hr != DDERR_WASSTILLDRAWING )
 				break;
 		}
@@ -141,7 +129,6 @@ AUI_ERRCODE aui_DirectBlitter::ColorStencilBlt16(
 {
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 	aui_Surface *destSurf,

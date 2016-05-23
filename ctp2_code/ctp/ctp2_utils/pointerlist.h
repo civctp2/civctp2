@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,12 +61,12 @@ public:
 			m_next(NULL),
 			m_prev(NULL)
         { ; };
-		
-		virtual ~PointerListNode() 
+
+		virtual ~PointerListNode()
         { ; };
-		
+
 		T* GetObj() { return m_obj; };
-		
+
 		PointerListNode *GetNext() { return m_next; };
 		PointerListNode *GetPrev() { return m_prev; };
 	private:
@@ -77,14 +77,14 @@ public:
 		PointerListNode* m_prev;
 	};
 
-	PointerList() : m_head(NULL), 
+	PointerList() : m_head(NULL),
 				m_tail(NULL),
 				m_count(0)
     { ; };
 
-	virtual ~PointerList() 
+	virtual ~PointerList()
 	{
-		while (m_head) 
+		while (m_head)
         {
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
@@ -94,7 +94,7 @@ public:
 
 	void DeleteAll()
 	{
-		while (m_head) 
+		while (m_head)
         {
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
@@ -129,51 +129,51 @@ public:
 	sint32 GetCount() const { return m_count; }
 
 	PointerListNode *Find(T *obj);
-	
+
 	void Swap(PointerListNode *node, PointerListNode *swap) {
 		PointerListNode *oldNext = node->m_next;
 		PointerListNode *oldPrev = node->m_prev;
 		PointerListNode *swapNext = swap->m_next;
 		PointerListNode *swapPrev = swap->m_prev;
-		
+
 		if(oldPrev) {
 			oldPrev->m_next = swap;
 		}
-		
+
 		if(oldNext) {
 			oldNext->m_prev = swap;
 		}
-		
+
 		if(oldPrev == swap) {
 			swap->m_prev = node;
 		} else {
 			swap->m_prev = oldPrev;
 		}
-		
+
 		if(oldNext == swap) {
 			swap->m_next = node;
 		} else {
 			swap->m_next = oldNext;
 		}
-		
+
 		if(swapNext == node) {
 			node->m_next = swap;
 		} else {
 			node->m_next = swapNext;
 		}
-		
+
 		if(swapPrev == node) {
 			node->m_prev = swap;
 		} else {
 			node->m_prev = swapPrev;
 		}
-		
+
 		if(node->m_prev) {
 			node->m_prev->m_next = node;
 		} else {
 			m_head = node;
 		}
-		
+
 		if(node->m_next) {
 			node->m_next->m_prev = node;
 		} else {
@@ -191,14 +191,14 @@ public:
 
 	class Walker {
 	public:
-		Walker(PointerList * list = NULL) 
+		Walker(PointerList * list = NULL)
         :
             m_node  (list ? list->m_head : NULL),
 			m_list  (list)
 		{
 		};
 
-		void SetList(PointerList *list) 
+		void SetList(PointerList *list)
         {
             m_node = list ? list->m_head : NULL;
 			m_list = list;
@@ -207,11 +207,11 @@ public:
 		void Prev() { Assert(m_node); m_node = m_node->GetPrev(); }
 		bool IsValid() { return m_node != NULL; }
 		T *GetObj() { Assert(m_node); return m_node->GetObj(); }
-		T *Remove() 
-		{ 
+		T *Remove()
+		{
 			T *obj = m_node->GetObj();
 			PointerListNode* nextNode = m_node->GetNext();
-			m_list->Remove(m_node); 
+			m_list->Remove(m_node);
 			m_node = nextNode;
 			return obj;
 		}
@@ -224,7 +224,7 @@ public:
 
 		void MoveUp() {
 			if(!m_node->GetPrev()) {
-				
+
 				return;
 			}
 
@@ -233,7 +233,7 @@ public:
 
 		void MoveDown() {
 			if(!m_node->GetNext()) {
-				
+
 				return;
 			}
 			m_list->Swap(m_node, m_node->GetNext());
@@ -342,7 +342,7 @@ template <class T> void PointerList<T>::Remove(PointerListNode* node)
     if (!node)
         return;
 
-	if (node == m_head) 
+	if (node == m_head)
     {
 		m_head = node->m_next;
         if (m_head)
@@ -354,7 +354,7 @@ template <class T> void PointerList<T>::Remove(PointerListNode* node)
 			m_tail = NULL;
         }
 	}
-    else if (node == m_tail) 
+    else if (node == m_tail)
     {
 		m_tail = node->m_prev;
 		if (m_tail)
@@ -382,10 +382,9 @@ template <class T> void PointerList<T>::Remove(PointerListNode* node)
 	delete node;
 }
 
-
 template <class T> void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
 {
-	if (node) 
+	if (node)
     {
 	    PointerListNode * newNode = new PointerListNode(obj);
 		newNode->m_next = node->m_next;
@@ -404,7 +403,7 @@ template <class T> void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
     else
     {
 		AddHead(obj);   // AddTail would have been more logical
-	} 
+	}
 }
 
 template <class T> void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
@@ -430,7 +429,7 @@ template <class T> void PointerList<T>::InsertBefore(PointerListNode *node, T *o
         AddHead(obj);
     }
 }
-	
+
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
 {
 	for (PointerListNode * search = m_head; search; search = search->m_next)

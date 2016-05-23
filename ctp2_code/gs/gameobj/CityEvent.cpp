@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Readded possibility to gain an advance from a just captured 
+// - Readded possibility to gain an advance from a just captured
 //   city, by Martin Gühmann. However with or without the change
 //   the CaptureCityEvent leaks, maybe a problem of SlicObject.
 // - Prevented crash when reporting completion of the Solaris project.
@@ -88,17 +88,17 @@ extern void player_ActivateSpaceButton(sint32 pl);
 
 STDEHANDLER(CaptureCityEvent)
 {
-	Unit city; 
+	Unit city;
 	sint32 newOwner;
 	sint32 cause;
 
-	if(!args->GetCity(0, city)) 
+	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-	if(!args->GetPlayer(0, newOwner)) 
+	if(!args->GetPlayer(0, newOwner))
 		return GEV_HD_Continue;
 
-	if(!args->GetInt(0, cause)) 
+	if(!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
 	sint32 const    originalOwner   = city.GetOwner();
@@ -116,13 +116,13 @@ STDEHANDLER(CaptureCityEvent)
 	}
 
 	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause); //this is where capitol is destroyed. unitdata::resetcityowner
-	
-	if (city.GetData()->GetCityData()->PopCount() < 1) 
+
+	if (city.GetData()->GetCityData()->PopCount() < 1)
     {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
 			GEA_City, city,
-			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED, 
-			GEA_Player, newOwner, 
+			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED,
+			GEA_Player, newOwner,
 			GEA_End);
 	//added cities leaving ruin options requires a tileimp with the flag IsCityRuin to be placed
 			if (g_theProfileDB->GetCityLeavesRuins()){
@@ -139,16 +139,16 @@ STDEHANDLER(CaptureCityEvent)
 		// Added by Maq - Reset shield store for captured cities.
 		city.CD()->SetShieldstore(0);
 
-		if (city.GetOwner() == g_selected_item->GetVisiblePlayer()) 
+		if (city.GetOwner() == g_selected_item->GetVisiblePlayer())
 		{
 			g_director->AddCenterMap(pos);
 		}
-		
+
 		if (newOwner == g_selected_item->GetVisiblePlayer())
 		{
 			g_selected_item->SetSelectCity(city);
 		}
-		
+
 		if (city.AccessData()->CountSlaves() > 0)
 		{
 			SlicObject *	so = new SlicObject("20IAFreeSlaves");
@@ -222,7 +222,7 @@ STDEHANDLER(CaptureCityEvent)
             g_slicEngine->Execute(so);
         }
 
-		if(g_rand->Next(100) < 
+		if(g_rand->Next(100) <
 		   g_theConstDB->Get(0)->GetCaptureCityAdvanceChance() * 100) {
 			//Added by Martin Gühmann to allow city advance gaining from
 			//a captured city.
@@ -266,11 +266,11 @@ STDEHANDLER(CaptureCityEvent)
 
 			delete[] canSteal;
 		}
-		Assert(g_player[newOwner]); 
+		Assert(g_player[newOwner]);
 		g_player[newOwner]->FulfillCaptureCityAgreement(city);
 		g_slicEngine->RunCityCapturedTriggers(newOwner, originalOwner,
 		                                      city);
-		
+
 		if(city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 		{
 			sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CITYCONQUERED);
@@ -338,7 +338,7 @@ STDEHANDLER(CityBuildFrontEvent)
 	// End EMOD
 
 	if (city.CD()->GetBuildQueue()->m_settler_pending) {
-		if (city.CD()->PopCount() == 1) {  //Isn't this already reflected in bldque.cpp(407)? 
+		if (city.CD()->PopCount() == 1) {  //Isn't this already reflected in bldque.cpp(407)?
 			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
 			so->AddCity(city);
 			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
@@ -354,7 +354,7 @@ STDEHANDLER(CityCreateUnitEvent)
 {
 	Unit homeCity;
 	if(!args->GetCity(0, homeCity)) {
-		
+
 		return GEV_HD_Continue;
 	}
 
@@ -430,11 +430,11 @@ STDEHANDLER(MakePopEvent)
 	if(!args->GetPlayer(0, origPlayer))
 		origPlayer = -1;
 
-// EMOD to ADD City population caps 
+// EMOD to ADD City population caps
 //	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetCityPopCap() {
 //	sint32 PopCap = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetCityPopCap()
 //	sint32 PopCapIncrease = buildingutil_GetIncreasesPopCap(city.CD->GetEffectiveBuildings());
-//			PopCap += PopCapIncrease;				
+//			PopCap += PopCapIncrease;
 //		if cd.Popcount() < PopCap {
 //			city.CD()->ChangePopulation(1);
 //		}
@@ -445,7 +445,6 @@ STDEHANDLER(MakePopEvent)
 		city.CD()->AddSlaveBit(origPlayer);
 		city.CD()->ChangeSpecialists(POP_SLAVE, 1);
 	}
-
 
 	return GEV_HD_Continue;
 }
@@ -460,7 +459,7 @@ STDEHANDLER(KillPopEvent)
 
 	return GEV_HD_Continue;
 }
-	
+
 STDEHANDLER(FinishUprisingEvent)
 {
 	Army sa;
@@ -480,7 +479,7 @@ STDEHANDLER(CleanupUprisingEvent)
 	Army sa;
 	Unit city;
 
-	args->GetArmy(0, sa); 
+	args->GetArmy(0, sa);
 	if(!args->GetCity(0, city)) {
 		if(sa.IsValid()) {
 			sa->DecrementDontKillCount();
@@ -503,12 +502,11 @@ STDEHANDLER(NukeCityEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 	if(!args->GetPlayer(0, nuker)) return GEV_HD_Continue;
 
-	
 	if(g_player[c.GetOwner()]) {
 		sint32 i;
 
 		for(i = 0; i < g_player[c.GetOwner()]->m_all_units->Num(); i++) {
-			
+
 			Unit u = g_player[c.GetOwner()]->m_all_units->Access(i);
 
 			if(!u.GetDBRec()->HasNuclearAttack())
@@ -519,13 +517,13 @@ STDEHANDLER(NukeCityEvent)
 
 			if(u->GetTargetCity().GetOwner() != nuker)
 				continue;
-			
+
 			unitutil_ExecuteMadLaunch(u);
 		}
 	}
 
 	if(g_network.IsHost() && nuker == g_selected_item->GetCurPlayer()) {
-		
+
 		g_network.Block(nuker);
 	}
 
@@ -568,8 +566,7 @@ STDEHANDLER(MakeFranchiseEvent)
 
 STDEHANDLER(SlaveRaidCityEvent)
 {
-	
-	
+
 	Unit city;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
@@ -631,7 +628,7 @@ STDEHANDLER(UnconvertCityEvent)
 {
 	Unit c;
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
-	
+
 	c.Unconvert();
 	return GEV_HD_Continue;
 }
@@ -672,7 +669,7 @@ STDEHANDLER(InjoinCityEvent)
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
 	c.Injoin(pl);
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -708,7 +705,7 @@ STDEHANDLER(CreateBuildingEvent)
 
 	if(g_player[player]->GetGaiaController()->HasMinSatsBuilt()) {
 		seg = g_slicEngine->GetSegment("GCMinSatsReachedUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			so = new SlicObject("GCMinSatsReachedUs");
 			so->AddPlayer(player);
@@ -724,13 +721,13 @@ STDEHANDLER(CreateBuildingEvent)
 
 	if(g_player[player]->GetGaiaController()->HasMinCoresBuilt()) {
 		seg = g_slicEngine->GetSegment("GCMinCoresReachedUs");
-		if (seg && !seg->TestLastShown(player, 10000)) 
+		if (seg && !seg->TestLastShown(player, 10000))
 		{
 			so = new SlicObject("GCMinCoresReachedUs");
 			so->AddRecipient(player);
 			so->AddPlayer(player);
 			g_slicEngine->Execute(so);
-	
+
 			so = new SlicObject("GCMinCoresReachedThem");
 			so->AddPlayer(player);
 			so->AddAllRecipientsBut(player);
@@ -752,16 +749,15 @@ STDEHANDLER(CreateWonderEvent)
 	wonderutil_AddBuilt(wonder);
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
 
-	
 	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&
 		!Player::IsThisPlayerARobot(c->GetOwner())) {
-		
+
 		if ( g_theProfileDB->IsWonderMovies() ) {
 			if (g_director) {
 				g_director->AddPlayWonderMovie(c.CD()->GetBuildQueue()->GetHead()->m_type);
 			}
 		}
-		
+
 	}
 	if(g_network.IsHost()) {
 		g_network.Block(c.GetOwner());
@@ -838,18 +834,18 @@ STDEHANDLER(KillTileEvent)
 	Cell *cell = g_theWorld->GetCell(pos);
 	if(cell->GetCanDie()) {
 		cell->Kill();
-		
+
 		g_theWorld->CutImprovements(pos);
-		
+
 		cell->CalcTerrainMoveCost();
 		g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 		g_tiledMap->TileChanged(pos);
 		MapPoint npos;
-		for(WORLD_DIRECTION d = NORTH; d < NOWHERE; 
+		for(WORLD_DIRECTION d = NORTH; d < NOWHERE;
 			d = (WORLD_DIRECTION)((sint32)d + 1)) {
 			if(pos.GetNeighborPosition(d, npos)) {
 				g_tiledMap->PostProcessTile(
-					npos, 
+					npos,
 					g_theWorld->GetTileInfo(npos));
 				g_tiledMap->TileChanged(npos);
 			}
@@ -861,7 +857,7 @@ STDEHANDLER(KillTileEvent)
 
 void cityevent_Initialize()
 {
-	g_gevManager->AddCallback(GEV_CaptureCity, GEV_PRI_Primary, &s_CaptureCityEvent);	
+	g_gevManager->AddCallback(GEV_CaptureCity, GEV_PRI_Primary, &s_CaptureCityEvent);
 
 	g_gevManager->AddCallback(GEV_CityTurnPreProduction, GEV_PRI_Primary, &s_CityTurnPreProductionEvent);
 	g_gevManager->AddCallback(GEV_CityBeginTurn, GEV_PRI_Primary, &s_CityBeginTurnEvent);

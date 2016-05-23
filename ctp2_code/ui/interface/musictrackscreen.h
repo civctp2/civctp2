@@ -1,5 +1,3 @@
-
-
 #ifndef __MUSICTRACKSCREEN_H__
 #define __MUSICTRACKSCREEN_H__
 
@@ -13,12 +11,10 @@ void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 da
 class MusicTrackListItem : public c3_ListItem
 {
 public:
-	
-	
+
 	MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock);
-	
-	
-	
+
+
 	virtual void Update(void) {}
 
 	sint32 GetTrackNum(void) { return m_trackNum; }

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_ui.h"
@@ -19,8 +9,7 @@
 
 extern StringDB	*g_theStringDB;
 
-
-ns_String::ns_String( char *ldlBlock ) 
+ns_String::ns_String( char *ldlBlock )
 :
     m_string    (NULL)
 {
@@ -31,7 +20,7 @@ ns_String::ns_String( char *ldlBlock )
 	const char *string;
 
 	if ( block->GetBool(k_NS_STRING_LDL_NODATABASE) || (!block->GetString("text"))) {
-		
+
 		string = block->GetString( "text" );
 	}
 	else {
@@ -42,7 +31,7 @@ ns_String::ns_String( char *ldlBlock )
     strcpy(m_string, string);
 }
 
-ns_String::~ns_String( void ) 
+ns_String::~ns_String( void )
 {
 	delete [] m_string;
 }

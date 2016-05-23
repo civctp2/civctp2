@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,8 +49,8 @@ class ctp2_ListBox;
 class ctp2_Window;
 
 /// City espionage window and data
-/// \remarks    Implemented using a sort of singleton pattern. 
-///             Only 1 city espionage screen can be active at a given time. 
+/// \remarks    Implemented using a sort of singleton pattern.
+///             Only 1 city espionage screen can be active at a given time.
 ///             A second call of Display will overwrite the data.
 class CityEspionage
 {
@@ -69,9 +69,9 @@ private:
 
     static void         CancelCallback
     (
-        aui_Control *   control, 
-        uint32          action, 
-        uint32          data, 
+        aui_Control *   control,
+        uint32          action,
+        uint32          data,
         void *          cookie
     );
 

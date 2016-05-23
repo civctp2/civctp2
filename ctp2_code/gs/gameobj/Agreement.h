@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -39,12 +30,11 @@ public:
 	PLAYER_INDEX GetThirdParty(void) const { return (GetData()->GetThirdParty()) ; }
 	AGREEMENT_TYPE GetAgreement(void) const { return (GetData()->GetAgreement()) ; }
 
-
 	void SetExpires(const sint32 turns) { AccessData()->SetExpires(turns) ; }
 	BOOL IsExpired(void) const { return (GetData()->IsExpired()) ; }
 	BOOL DoesExpire(void) const { return (GetData()->DoesExpire()) ; }
 	sint32 GetTurns(void) const { return (GetData()->GetTurns()) ; }
-	
+
 
 
 

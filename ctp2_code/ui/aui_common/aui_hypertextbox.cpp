@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "aui_hypertextbox.h"
 
@@ -64,7 +63,6 @@ aui_HyperTextBox::aui_HyperTextBox(
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -81,7 +79,6 @@ AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 {
 	m_ranger = NULL;
@@ -91,8 +88,7 @@ AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 	m_virtualHeight = 0;
 	m_curStaticPos.x = m_curStaticPos.y = 0;
 
-	
-	
+
 	memset( m_hyperTtffile, 0, sizeof( m_hyperTtffile ) );
 	strncpy( m_hyperTtffile, m_textttffile, MAX_PATH );
 	m_hyperPointSize = m_textpointsize;
@@ -102,13 +98,11 @@ AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 	m_hyperUnderline = m_textunderline;
 	m_hyperShadow = m_textshadow;
 	m_hyperShadowColor = m_textshadowcolor;
-	
-	
+
 	m_hyperFlags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
@@ -121,7 +115,6 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
-		
 		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_ranger = new aui_Ranger(
 				&errcode,
@@ -153,12 +146,10 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 }
 
 
-
 aui_HyperTextBox::~aui_HyperTextBox()
 {
 	delete m_ranger;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBox::SetHyperText( const MBCHAR *hyperText )
@@ -171,7 +162,6 @@ AUI_ERRCODE aui_HyperTextBox::SetHyperText( const MBCHAR *hyperText )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::AppendHyperText( const MBCHAR *hyperText )
 {
 	AUI_ERRCODE errcode = aui_HyperTextBase::AppendHyperText( hyperText );
@@ -182,12 +172,11 @@ AUI_ERRCODE aui_HyperTextBox::AppendHyperText( const MBCHAR *hyperText )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
-		
+
 		RemoveHyperStatics();
 		m_virtualHeight = 0;
 		m_curStaticPos.x = m_curStaticPos.y = 0;
@@ -252,7 +241,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			break;
 
 			default:
-				
+
 				Assert( FALSE );
 				return AUI_ERRCODE_INVALIDPARAM;
 			}
@@ -390,7 +379,6 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					m_curStaticPos.y = m_virtualHeight;
 				}
 
-				
 				if (m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS)
 				{
 					delete m_hyperStaticList->RemoveHead();
@@ -408,7 +396,6 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::Resize( sint32 width, sint32 height )
 {
 	aui_Control::Resize( width, height );
@@ -420,17 +407,14 @@ AUI_ERRCODE aui_HyperTextBox::Resize( sint32 width, sint32 height )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::Show( void )
 {
 	aui_Control::Show();
 
-	
 	RepositionRanger();
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBox::RepositionRanger( void )
@@ -439,13 +423,10 @@ AUI_ERRCODE aui_HyperTextBox::RepositionRanger( void )
 	sint32 rangerDimension = m_height - 2 * rangerButtonSize;
 	if ( rangerDimension < 0 ) rangerDimension = 0;
 
-	
 	m_ranger->Resize( m_rangerSize, rangerDimension );
 
-	
 	m_ranger->Move( m_width, rangerButtonSize );
 
-	
 	sint32 newMax = m_virtualHeight - m_height;
 	if ( newMax < 0 ) newMax = 0;
 
@@ -471,13 +452,12 @@ AUI_ERRCODE aui_HyperTextBox::RepositionRanger( void )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -504,10 +484,9 @@ AUI_ERRCODE aui_HyperTextBox::DrawThis(
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBox::RangerMoved( void )
 {
-	
+
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
@@ -526,7 +505,7 @@ void HyperTextBoxRangerActionCallback(
 	uint32 data,
 	void *cookie )
 {
-	
+
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
 		aui_HyperTextBox *hypertextbox = (aui_HyperTextBox *)cookie;
@@ -534,4 +513,3 @@ void HyperTextBoxRangerActionCallback(
 		hypertextbox->RangerMoved();
 	}
 }
-

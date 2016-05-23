@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -142,7 +142,7 @@ AUI_ERRCODE ArmyManagerWindow::Initialize()
 
 void ArmyManagerWindow::Cleanup()
 {
-	if (s_armyWindow) 
+	if (s_armyWindow)
     {
 		Hide();
         allocated::clear(s_armyWindow);
@@ -162,12 +162,11 @@ AUI_ERRCODE ArmyManagerWindow::Display()
 	if(g_selected_item->GetSelectedArmy(s_armyWindow->m_army)) {
 		s_armyWindow->m_army.GetPos(s_armyWindow->m_pos);
 	} else {
-		
+
 		return AUI_ERRCODE_OK;
 	}
-	
 
-	
+
 	s_armyWindow->m_armies->DeleteAll();
 
 	s_armyWindow->FillArmies();
@@ -233,20 +232,19 @@ void ArmyManagerWindow::RenameArmy()
 		}
 	}
 }
-		
-		
+
 void ArmyManagerWindow::NotifySelection()
 {
 	if(!s_armyWindow)
 		return;
 
 	Army a;
-	if (g_selected_item->GetSelectedArmy(a)) 
+	if (g_selected_item->GetSelectedArmy(a))
     {
 		s_armyWindow->m_army        = a;
 		s_armyWindow->m_pos         = a->RetPos();
-	} 
-    else 
+	}
+    else
     {
 		s_armyWindow->m_army.m_id   = 0;
 		s_armyWindow->m_pos         = g_selected_item->GetCurSelectPos();
@@ -259,7 +257,7 @@ void ArmyManagerWindow::NotifySelection()
 
 void ArmyManagerWindow::NotifyRemoteGroupComplete(const Army &army)
 {
-	if (army.IsValid() && army[0].IsValid()) 
+	if (army.IsValid() && army[0].IsValid())
     {
 		g_selected_item->SetSelectUnit(army[0]);
 	}
@@ -293,7 +291,6 @@ void ArmyManagerWindow::Update()
 
 	sint32 sw = 0;
 
-	
 	for(i = 0; i < cell->GetNumUnits(); i++) {
 		Unit u = cell->AccessUnit(i);
 		if(u.IsValid()) {
@@ -314,8 +311,7 @@ void ArmyManagerWindow::Update()
 			ctp2_Switch *inCellSwitch = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 			Assert(inCellSwitch);
 			if(inCellSwitch) {
-				
-				
+
 				inCellSwitch->Enable(TRUE);
 				inCellSwitch->SetState(0);
 				inCellSwitch->SetImage((char *)irec->GetIcon(), 0);
@@ -325,7 +321,6 @@ void ArmyManagerWindow::Update()
 		}
 	}
 
-	
 	for(i = sw; i < k_MAX_ARMY_SIZE; i++) {
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);
 		ctp2_Switch *inCellSwitch = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
@@ -369,7 +364,7 @@ void ArmyManagerWindow::Update()
 
 		m_inArmy[i].m_id = 0;
 
-		if(inArmySwitch) {			
+		if(inArmySwitch) {
 			inArmySwitch->SetState(0);
 			inArmySwitch->SetImage(NULL, 0);
 			inArmySwitch->SetImage(NULL, 1);
@@ -397,7 +392,7 @@ void ArmyManagerWindow::Update()
 
 			COLORREF	fgColor = RGB(r, g, b);
 			// not used COLORREF	bgColor = RGB(0,0,0);
-		
+
 			armyTextlabel->SetTextColor(fgColor);
 			armyTextlabel->SetTextShadow(true);
 			armyTextlabel->SetTextShadowColor(fgColor); /// @todo bgColor?
@@ -438,10 +433,10 @@ void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem *item)
 		ctp2_Static *icon = (ctp2_Static *)box->GetChildByIndex(0);
 		Assert(icon);
 		if(icon) {
-			
+
 			icon->SetImage("upic21.tga");
 		}
-		
+
 		ctp2_Static *count = (ctp2_Static *)box->GetChildByIndex(1);
 		Assert(count);
 		if(count) {
@@ -542,7 +537,7 @@ void ArmyManagerWindow::FillArmies()
 
 	PointerList<ArmyListNode>::Walker walk(m_armies);
 	while(walk.IsValid()) {
-		
+
 		if(walk.GetObj()->m_army.m_id != 0) {
 			delete walk.Remove();
 		} else {
@@ -552,14 +547,14 @@ void ArmyManagerWindow::FillArmies()
 
 	for(i = 0; i < cell->GetNumUnits(); i++) {
 		bool alreadyIn = false;
-		
+
 		for(j = 0; j < i; j++) {
 			if(cell->AccessUnit(j).GetArmy().m_id == cell->AccessUnit(i).GetArmy().m_id) {
 				alreadyIn = true;
 				break;
 			}
 		}
-		
+
 		if(alreadyIn)
 			continue;
 
@@ -615,7 +610,6 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 	Assert(lb);
 	if(!lb) return;
 
-	
 	s_armyWindow->RenameArmy();
 
 	ctp2_ListItem *selItem = (ctp2_ListItem *)lb->GetSelectedItem();
@@ -628,19 +622,19 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 			Army a;
 			if(g_selected_item->GetSelectedArmy(a)) {
 				if(a.m_id != node->m_army.m_id) {
-					
+
 					g_selected_item->SetSelectUnit(node->m_army[0]);
 				} else {
 					s_armyWindow->Update();
 				}
 			} else {
-				
+
 				g_selected_item->SetSelectUnit(node->m_army[0]);
 			}
 		} else {
 			s_armyWindow->m_army.m_id = 0;
 			s_armyWindow->Update();
-			
+
 		}
 	} else {
 		s_armyWindow->m_army.m_id = 0;
@@ -669,7 +663,7 @@ void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data,
 	sint32 i;
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
+		sprintf(switchName, "OutOfArmyBox.Unit%d", i);
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(s_armyWindow->m_outOfArmy[i].m_id)
@@ -690,7 +684,7 @@ void ArmyManagerWindow::RemoveAll(aui_Control *control, uint32 action, uint32 da
 	sint32 i;
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "InArmyBox.Unit%d", i);		
+		sprintf(switchName, "InArmyBox.Unit%d", i);
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(s_armyWindow->m_inArmy[i].m_id)
@@ -722,9 +716,9 @@ void ArmyManagerWindow::AddSelectedUnits()
 	sint32 i;
 	CellUnitList units;
 
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
+		sprintf(switchName, "OutOfArmyBox.Unit%d", i);
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(sw && sw->IsSelected()) {
@@ -735,7 +729,6 @@ void ArmyManagerWindow::AddSelectedUnits()
 		}
 	}
 
-	
 	if(g_network.IsClient()) {
 		if(node->m_army.m_id != 0) {
 			Assert(node->m_army.IsValid());
@@ -761,12 +754,12 @@ void ArmyManagerWindow::AddSelectedUnits()
 		if(g_theArmyPool->IsValid(node->m_army)) {
 			theArmy = node->m_army;
 		} else {
-			
+
 			theArmy = g_player[g_selected_item->GetVisiblePlayer()]->GetNewArmy(CAUSE_NEW_ARMY_GROUPING);
 			node->m_army = theArmy;
 		}
 	}
-			   
+
 	for(i = units.Num() - 1; i >= 0; i--) {
 		theArmy->GroupUnit(units[i]);
 	}
@@ -813,7 +806,6 @@ void ArmyManagerWindow::Remove(aui_Control *control, uint32 action, uint32 data,
 	s_armyWindow->RemoveSelectedUnits();
 }
 
-
 void ArmyManagerWindow::RemoveSelectedUnits()
 {
 	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
@@ -823,7 +815,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 
 	ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetSelectedItem();
 	if(!item) {
-		
+
 		return;
 	}
 
@@ -831,7 +823,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 
 	Army theArmy;
 	if((node->m_army.m_id == 0) || (node->m_army.Num() < 1)) {
-		
+
 		return;
 	}
 
@@ -840,24 +832,23 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 
 	CellUnitList units;
 
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "InArmyBox.Unit%d", i);		
+		sprintf(switchName, "InArmyBox.Unit%d", i);
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(sw && sw->IsSelected()) {
-			Assert(m_inArmy[i].IsValid());			
+			Assert(m_inArmy[i].IsValid());
 			Assert(m_inArmy[i].GetArmy() == theArmy);
 			if(m_inArmy[i].IsValid()) {
 				if(g_network.IsClient()) {
-					
-					
-					
+
+
 					units.Insert(m_inArmy[i]);
 				} else {
 					Army newArmy = g_player[g_selected_item->GetVisiblePlayer()]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING);
 					m_inArmy[i].ChangeArmy(newArmy, CAUSE_NEW_ARMY_UNGROUPING);
-					
+
 					m_armies->AddTail(new ArmyListNode(newArmy));
 					AddArmyItem(armyList, m_armies->GetTail());
 				}
@@ -875,15 +866,15 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
 
 	NotifySelection();
-	
-	
 
-	
+
+
+
 }
 
 void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action == AUI_SWITCH_ACTION_DOUBLECLICK) 
+	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
 		Assert(s_armyWindow);
 		if(s_armyWindow) {
@@ -893,10 +884,10 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 
 	bool enableRemoveButton		= false;
 	bool enableRemoveAllButton	= false;
-	for (int i = 0; (i < k_MAX_ARMY_SIZE) && !enableRemoveButton; ++i) 
-	{		
+	for (int i = 0; (i < k_MAX_ARMY_SIZE) && !enableRemoveButton; ++i)
+	{
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "InArmyBox.Unit%d", i);		
+		sprintf(switchName, "InArmyBox.Unit%d", i);
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		enableRemoveButton = sw && sw->IsSelected();
@@ -913,28 +904,28 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 
 void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action == AUI_SWITCH_ACTION_DOUBLECLICK) 
+	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
 		Assert(s_armyWindow);
 		if(s_armyWindow) {
 			s_armyWindow->AddSelectedUnits();
-		}	
+		}
 	}
 
 	bool enableAddButton	= false;
 	bool enableAddAllButton	= false;
 //	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
-	for (int i = 0; (i < k_MAX_ARMY_SIZE) && ! enableAddButton; ++i) 
-	{		
+	for (int i = 0; (i < k_MAX_ARMY_SIZE) && ! enableAddButton; ++i)
+	{
 		MBCHAR switchName[k_MAX_NAME_LEN];
-		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
+		sprintf(switchName, "OutOfArmyBox.Unit%d", i);
 		ctp2_Switch * sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(s_armyWindow->m_outOfArmy[i].m_id)
 		{
 			enableAddAllButton=true;
 		}
-		if (sw && sw->IsSelected()) 
+		if (sw && sw->IsSelected())
 		{
 			enableAddButton = true;
 		}
@@ -955,7 +946,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
 							hpwidth > (width/4)?g_colorSet->GetColor(COLOR_YELLOW):
 							g_colorSet->GetColor(COLOR_RED));
-		
+
 		primitives_DrawLine16(surface, rect.left, rect.top, rect.left+hpwidth, rect.top, drawColor);
 		primitives_DrawLine16(surface, rect.left, rect.bottom, rect.left+hpwidth, rect.bottom, drawColor);
 	}
@@ -974,7 +965,7 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control,
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
 							hpwidth > (width/4)?g_colorSet->GetColor(COLOR_YELLOW):
 							g_colorSet->GetColor(COLOR_RED));
-		
+
 		primitives_DrawLine16(surface, rect.left, rect.top, rect.left+hpwidth, rect.top, drawColor);
 		primitives_DrawLine16(surface, rect.left, rect.bottom, rect.left+hpwidth, rect.bottom, drawColor);
 	}

@@ -75,7 +75,7 @@ public:
 
 	bool GetPath(sint32 index, Path *&path) const;
 	bool GetDirection(sint32 index, WORLD_DIRECTION &d) const;
-	
+
 	bool GetAdvance(sint32 index, sint32 &a) const;
 	bool GetWonder(sint32 index, sint32 &w) const;
 

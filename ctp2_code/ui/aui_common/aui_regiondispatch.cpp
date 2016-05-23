@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_region.h"
@@ -30,8 +19,8 @@ extern SelectedItem		*g_selected_item;
 
 
 void aui_Region::MouseDispatch( aui_MouseEvent *input, BOOL handleIt )
-{ 
-	
+{
+
 	if ( !m_noChange )
 		m_noChangeTime = input->time;
 	else
@@ -40,20 +29,17 @@ void aui_Region::MouseDispatch( aui_MouseEvent *input, BOOL handleIt )
 	sint32 xDistance = abs(input->position.x - m_doubleClickOldPos.x);
 	sint32 yDistance = abs(input->position.y - m_doubleClickOldPos.y);
 
-	
 	if ( input->position.x != m_mouseState.position.x
 	||   input->position.y != m_mouseState.position.y
-	||   m_x != m_xLastTime		
-	||   m_y != m_yLastTime )	
+	||   m_x != m_xLastTime
+	||   m_y != m_yLastTime )
 	{
-		
+
 		BOOL wasMouseInside = m_isMouseInside;
 
-		
 		m_isMouseInside = IsInside( &input->position );
 
 
-		
 		if ( handleIt )
 
 		if ( m_isMouseInside )
@@ -904,11 +890,10 @@ void aui_Region::MouseDispatch( aui_MouseEvent *input, BOOL handleIt )
 		}
 	}
 
-	
-	
+
 	else
 	{
-		
+
 		if ( handleIt )
 
 		if ( m_isMouseInside )
@@ -1308,22 +1293,19 @@ void aui_Region::MouseDispatch( aui_MouseEvent *input, BOOL handleIt )
 	}
 }
 
-
 void aui_Region::MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt )
 {
-	
+
 	if ( input->position.x != m_mouseState.position.x
 	||   input->position.y != m_mouseState.position.y
-	||   m_x != m_xLastTime		
-	||   m_y != m_yLastTime )	
+	||   m_x != m_xLastTime
+	||   m_y != m_yLastTime )
 	{
-		
+
 		BOOL wasMouseInside = m_isMouseInside;
 
-		
 		m_isMouseInside = IsInside( &input->position );
 
-		
 		if ( handleIt )
 
 		if ( m_isMouseInside )
@@ -2138,11 +2120,10 @@ void aui_Region::MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt )
 		}
 	}
 
-	
-	
+
 	else
 	{
-		
+
 		if ( handleIt )
 
 		if ( m_isMouseInside )

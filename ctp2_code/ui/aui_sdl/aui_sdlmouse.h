@@ -20,7 +20,7 @@ public:
 
 protected:
 	aui_SDLMouse();
-	virtual AUI_ERRCODE GetInput();	
+	virtual AUI_ERRCODE GetInput();
 };
 
 typedef aui_SDLMouse aui_NativeMouse;

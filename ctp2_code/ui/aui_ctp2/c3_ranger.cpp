@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -52,7 +52,6 @@
 extern aui_UI		*g_ui;
 
 
-
 c3_Ranger::c3_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -87,12 +86,11 @@ c3_Ranger::c3_Ranger(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-	
+
 	*retval = CreateButtonsAndThumb(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Ranger::c3_Ranger(
@@ -131,16 +129,15 @@ c3_Ranger::c3_Ranger(
 	*retval = PatternBase::InitCommon( pattern );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-	
+
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-	
+
 	*retval = CreateButtonsAndThumb(NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE c3_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
@@ -153,7 +150,6 @@ AUI_ERRCODE c3_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_Ranger::InitCommon( void )
 {
 	memset( m_arrows, 0, sizeof( m_arrows ) );
@@ -162,18 +158,15 @@ AUI_ERRCODE c3_Ranger::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
     MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
-	
+
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 	sint32 maxButtonSize = 0;
 
-	
 	if ( m_type == AUI_RANGER_TYPE_SLIDER
 	||   m_type == AUI_RANGER_TYPE_SCROLLER )
 	{
@@ -181,7 +174,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
-			
 			if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 				m_thumb = new c3_Thumb(
 					&errcode,
@@ -209,7 +201,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 		RepositionThumb( FALSE );
 	}
 
-	
 	if ( m_type == AUI_RANGER_TYPE_SCROLLER
 	||   m_type == AUI_RANGER_TYPE_SPINNER )
 	{
@@ -258,7 +249,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				m_arrows[ i ]->SetBlindness( TRUE );
 				m_incXButton->AddChild( m_arrows[ i ] );
 
-				
 				m_arrows[ i ]->GetDim()->SetParent( m_incXButton );
 			}
 
@@ -309,7 +299,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				m_arrows[ i ]->SetBlindness( TRUE );
 				m_decXButton->AddChild( m_arrows[ i ] );
 
-				
 				m_arrows[ i ]->GetDim()->SetParent( m_decXButton );
 			}
 
@@ -363,7 +352,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				m_arrows[ i ]->SetBlindness( TRUE );
 				m_incYButton->AddChild( m_arrows[ i ] );
 
-				
 				m_arrows[ i ]->GetDim()->SetParent( m_incYButton );
 			}
 
@@ -413,7 +401,6 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				m_arrows[ i ]->SetBlindness( TRUE );
 				m_decYButton->AddChild( m_arrows[ i ] );
 
-				
 				m_arrows[ i ]->GetDim()->SetParent( m_decYButton );
 			}
 
@@ -424,14 +411,13 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 		}
 
 		if ( maxButtonSize )
-			SetButtonSize( maxButtonSize ); 
+			SetButtonSize( maxButtonSize );
 		else
 			RepositionButtons();
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 c3_Ranger::~c3_Ranger()
@@ -448,13 +434,11 @@ c3_Ranger::~c3_Ranger()
 }
 
 
-
 AUI_ERRCODE c3_Ranger::RepositionButtons( void )
 {
 	AUI_ERRCODE errcode = aui_Ranger::RepositionButtons();
 
-	
-	
+
 	for ( sint32 i = 0; i < 4; i++ )
 	if ( m_arrows[ i ] )
 		m_arrows[ i ]->Adjust();
@@ -463,10 +447,9 @@ AUI_ERRCODE c3_Ranger::RepositionButtons( void )
 }
 
 
-
 AUI_ERRCODE c3_Ranger::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

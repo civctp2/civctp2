@@ -40,31 +40,29 @@ aui_SDLKeyboard::aui_SDLKeyboard(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE aui_SDLKeyboard::createSDLKeyboard( void )
 {
 	// TODO: SDL_Init()
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 {
 	SDL_Event event;
 	BOOL gotEvent = FALSE;
-	
+
 	if (g_secondaryKeyboardEventQueueMutex != NULL) {
 		if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
 			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_LockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
-		
+
 		if (!g_secondaryKeyboardEventQueue.empty()) {
 			gotEvent = TRUE;
 			event = g_secondaryKeyboardEventQueue.front();
 			g_secondaryKeyboardEventQueue.pop();
 		}
-		
+
 		if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
 			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
@@ -187,6 +185,5 @@ AUI_ERRCODE aui_SDLKeyboard::Unacquire()
 {
 	return AUI_ERRCODE_OK;
 }
-
 
 #endif // defined(__AUI_USE_SDL__)

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -139,21 +139,21 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 
 	sint8 * map = new sint8 [width * height];
     std::fill(map, map + (width * height), 0);
-	
+
     int     bigside = std::max(width, height);
 	int     h       = height;
 	int     w       = width;
 	sint16  delta   = static_cast<sint16>(bigside);
-		
-	while (bigside > 1) 
+
+	while (bigside > 1)
     {
         h = std::max(h / 2, 2);
         w = std::max(w / 2, 2);
 		bigside = bigside / 2;
 
-		for (i = 0; i < height; i += h) 
+		for (i = 0; i < height; i += h)
         {
-			for (int j = 0; j < width; j += w) 
+			for (int j = 0; j < width; j += w)
             {
 				int     i2  = (i + h) % height;
 				int     i3  = (i + h/2) % height;
@@ -178,9 +178,9 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
         delta = std::max<sint16>(1, static_cast<sint16>(delta * roughness));
 	}
 
-	for (i = 0 ; i < outheight ; i++) 
+	for (i = 0 ; i < outheight ; i++)
     {
-		for (int j = 0; j < outwidth; j++) 
+		for (int j = 0; j < outwidth; j++)
         {
 			outmap[i * outwidth + j] = map[((height * i)/outheight) * width + ((width * j)/outwidth)];
 		}

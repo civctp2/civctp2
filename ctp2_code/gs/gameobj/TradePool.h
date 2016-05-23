@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -24,18 +15,17 @@ class TradeDynamicArray;
 
 class TradePool : public ObjPool
 {
-    
-	
 
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
+
 	TradeDynamicArray *m_all_routes;
-	
-	
+
 
 	friend class NetTradeRoute;
 	friend class Network;
@@ -66,9 +56,7 @@ public:
 	void Serialize(CivArchive &archive);
 	void RecreateActors();
 
-	
 	sint32 GetSingleGoodValue(sint32 resource, sint32 nth_good);
-
 
 	const TradeDynamicArray &GetAllRoutes();
 	TradeDynamicArray *AccessAllRoutes() { return m_all_routes; }

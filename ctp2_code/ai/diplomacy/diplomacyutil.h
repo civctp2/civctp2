@@ -1,4 +1,3 @@
-
 #ifndef DIPLOMACY_UTIL_H__
 #define DIPLOMACY_UTIL_H__
 

@@ -1,10 +1,9 @@
-
 #ifndef __PLAYLISTDB_H__
 #define __PLAYLISTDB_H__
 
 class CivArchive;
 
-class PlayListDB 
+class PlayListDB
 {
 public:
 	PlayListDB();

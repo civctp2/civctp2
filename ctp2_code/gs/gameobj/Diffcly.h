@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Difficulty settings class and diffutils.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,10 +41,9 @@ class CivArchive;
 #define k_DIFFICULTY_VERSION_MAJOR	0
 #define k_DIFFICULTY_VERSION_MINOR	0
 
-
 class Difficulty {
 
-	double m_big_city_scale; 
+	double m_big_city_scale;
 	double m_big_city_offset;
 	double m_pollution_multiplier ;
 	double m_riot_chance;
@@ -68,16 +67,15 @@ class Difficulty {
 	double m_distance_from_capitol_adjustment;
 	double m_starvation_effect;
 
-
 	PLAYER_INDEX m_owner;
 
-	sint32 m_base_contentment; 
+	sint32 m_base_contentment;
 
 	sint32 m_max_martial_law_units;
-	sint32 m_martial_law_effect; 
+	sint32 m_martial_law_effect;
 
-	sint32 m_content_in_the_field; 
-	sint32 m_in_the_field_effect; 
+	sint32 m_content_in_the_field;
+	sint32 m_in_the_field_effect;
 
 	sint32 m_science_handicap;
 	sint32 m_starting_gold;
@@ -85,7 +83,7 @@ class Difficulty {
 	sint32 m_base_score;
 
 	sint32 m_vision_bonus;
-	sint32 m_pad; 
+	sint32 m_pad;
 
 	friend class NetDifficulty;
 	friend class Score;
@@ -93,8 +91,7 @@ class Difficulty {
 public:
 
 	Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman);
-	sint32 GetBaseContentment() const { return m_base_contentment; } 
-
+	sint32 GetBaseContentment() const { return m_base_contentment; }
 
 	double GetBigCityScale() const { return m_big_city_scale; }
 	double GetBigCityOffset() const { return m_big_city_offset; }

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,7 +24,6 @@
 // - AOM facilitation: set player[0] to the recipient.
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "SlicEyePoint.h"
@@ -45,7 +44,6 @@ extern TiledMap	*g_tiledMap;
 extern SelectedItem *g_selected_item;
 extern UnitPool *g_theUnitPool;
 extern Director *g_director;
-
 
 #ifdef _BAD_EYE
 PointerList<SlicEyePoint> s_deletedEyepoints;
@@ -102,7 +100,6 @@ SlicEyePoint::~SlicEyePoint()
 	if(m_message)
 		delete m_message;
 }
-
 
 SlicEyePoint::SlicEyePoint(CivArchive &archive)
 {
@@ -165,12 +162,12 @@ void SlicEyePoint::Serialize(CivArchive &archive)
 }
 
 void SlicEyePoint::SetMessage(const Message &message)
-{ 
+{
 #ifdef _BAD_EYE
 	Assert(!s_deletedEyepoints.Find(this));
 #endif
 
-	*m_message = message; 
+	*m_message = message;
 }
 
 Message SlicEyePoint::GetMessage() const
@@ -181,7 +178,7 @@ Message SlicEyePoint::GetMessage() const
 void SlicEyePoint::Callback()
 {
 	SlicObject * obj = NULL;
-	if (m_segment) 
+	if (m_segment)
     {
 		obj = new SlicObject(m_segment);
 		obj->AddRecipient(m_recipient);
@@ -211,7 +208,7 @@ void SlicEyePoint::Callback()
 		case EYE_POINT_TYPE_ADVANCE:
 			Assert(*m_message != Message());
 			if(*m_message != Message()) {
-				m_message->SetSelectedAdvance(m_data);				
+				m_message->SetSelectedAdvance(m_data);
 			}
 			if(obj)
 				obj->AddAdvance(m_data);
@@ -226,8 +223,7 @@ void SlicEyePoint::Callback()
 		Message oldMsg = g_slicEngine->GetEyepointMessage();
 		g_slicEngine->SetEyepointMessage(*m_message);
 		g_slicEngine->Execute(obj);
-		
-		
+
 		g_slicEngine->SetEyepointMessage(oldMsg);
 	}
 }

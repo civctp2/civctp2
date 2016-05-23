@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.11  1997/09/02 21:38:43  dkegel
  Allow server addresses to be any length
  Revision 1.10  1997/09/01 00:36:49  dkegel
- Hosts which time out now have their player and host records 
+ Hosts which time out now have their player and host records
  removed again.
  Revision 1.9  1997/08/31 04:45:39  dkegel
  Big warning on dp_PLAYERS_PER_HOST; must be power of two.
@@ -142,7 +142,7 @@ extern "C" {
 
 /* To make creating players easier, we preallocate a block of 4 id's for
  * each host that joins a session.  This limits us to
- * 2^14 or 16384 hosts per session.  
+ * 2^14 or 16384 hosts per session.
  * THIS MUST BE A POWER OF TWO, so it's easy to map back to firstId from id
  * with  firstId = id & ~(dp_PLAYERS_PER_HOST-1);
  */
@@ -196,11 +196,9 @@ typedef struct {
 /********************************************************************* */
 /* The class structure itself */
 
-
 #define dp_MAGIC	4531
 #define dp_MAX_SERVERS 256
 #define dp_MAX_SERVERNAMELEN 64
-
 
 typedef struct dp_s {
 
@@ -210,7 +208,7 @@ typedef struct dp_s {
 
 	dptab_t *dt;
 
-	/* Our address as seen by an outside authority, like 
+	/* Our address as seen by an outside authority, like
 	 * the first game server we connect to.
 	 * Default value is our internal address; overwritten
 	 * each time we connect to a game server or host
@@ -315,7 +313,7 @@ typedef struct dp_s {
 	int election_size;			/* number of votes needed to win election, or 0 if no election */
 	assoctab_t *election_votes;	/* indexed by handle; holds dp_election_vote_t; cleared on dpClose */
 	dp_session_t election_old_session;	/* Used by winner of election */
-	
+
 	/* Following fields support session record compression */
 	dp_species_t defaultSessionType;
 
@@ -331,7 +329,7 @@ typedef struct dp_s {
 #ifdef _WIN32
 	unsigned long threadId;		/* id of thread that called dpCreate() */
 #endif
-	
+
 	/* Following fields support score reporting */
 	scorerep_t *scorerep;		/* dpScoreReport creates, dpClose deletes */
 	dptab_table_t *myscoretab;	/* local score reports */
@@ -404,7 +402,7 @@ typedef struct {
 
 /*-------------------------------------------------------------------------
  Only for game servers.
- When a new client comes online, send it our SESSIONS table, 
+ When a new client comes online, send it our SESSIONS table,
  and when it sends us its MYSESSIONS table, put it in our MYSESSIONS table.
  (If we're the master gameserver, dump it into the sessions table
  instead.)

@@ -11,11 +11,10 @@ class EmptyTile
 	private	:
 		MapPoint	m_pos ;
 
-		sint32	m_food,												
-				m_production,										
-				m_gold												
-				;											
-
+		sint32	m_food,
+				m_production,
+				m_gold
+				;
 
 	public :
 		EmptyTile(MapPoint &pos, sint32 f, sint32 p, sint32 g) ;

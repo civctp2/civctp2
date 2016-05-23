@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -43,5 +32,4 @@ struct HotseatPlayerSetup {
 };
 extern HotseatPlayerSetup g_hsPlayerSetup[k_MAX_PLAYERS];
 
-#endif 
-
+#endif

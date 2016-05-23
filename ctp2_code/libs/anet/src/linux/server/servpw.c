@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -78,7 +78,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
  Call this once before the server has initialized dp.
  Downloads the password database from the account server, which could
  potentially take a while to finish.
- Returns the socket used by servpw or -1 on error. 
+ Returns the socket used by servpw or -1 on error.
 --------------------------------------------------------------------------*/
 int servpw_init(const char *wmqDirectory, const char *PWServerAddr,
 	int PWServerPort, const char *PWFile)
@@ -160,7 +160,7 @@ void servpw_initQ(tca_t *tca, const char *wmqDirectory)
 		printf("servpw_initQ: NULL parameter\n");
 		exit(1);
 	}
-	
+
 	pwq = pwq_create(tca->tdb, wmqDirectory, 0, pwq_SERVERTAG_MASTER);
 	if (pwq == NULL) {
 		printf("servpw_initQ: pwq_create(%s) failed!\n", wmqDirectory);
@@ -389,7 +389,7 @@ dp_result_t servpw_poll(clock_t now)
 		}
 		if ((err != dp_RES_EMPTY) || (state != STATE_READDATA))
 			return dp_RES_AGAIN;  /* This test should never be true */
-		/* else fall through to READDATA while sock is still set 
+		/* else fall through to READDATA while sock is still set
 		 * to be read, in order to read the rest of the current buffer
 		 * as data.
 		 */

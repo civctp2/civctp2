@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,9 +29,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  This module's put routine appends the message together with its
  timestamp to the current output file, and advances to the next output
  file if it is time.
- There is an unambiguous mapping between the time/date of a record and 
- the file to which the record is written by the put routine: 
- the output file is always yyyymmdd.wmq where yyyymmdd are the year, month 
+ There is an unambiguous mapping between the time/date of a record and
+ the file to which the record is written by the put routine:
+ the output file is always yyyymmdd.wmq where yyyymmdd are the year, month
  and day in GMT assocated with the record.
 
  This module's get routine reads from the current location of the current
@@ -68,7 +68,7 @@ typedef struct {
 	char serverTag[6];		/* unique server identifier - e.g. IP address */
 	char recordTag[2];		/* tag identifying type of data */
 	unsigned short datalen;	/* length of the data in this record */
-	unsigned short buflen;	/* currently allocated length of buf */	
+	unsigned short buflen;	/* currently allocated length of buf */
 	char *buf;				/* pointer to data buffer */
 } wmq_record_t;
 
@@ -94,7 +94,7 @@ dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen
 
 /*--------------------------------------------------------------------------
  Get the position of the next message to be read from a web message queue.
- poffset must be the address of an uninitialized long; 
+ poffset must be the address of an uninitialized long;
  ptime must be the address of an uninitialized time_t.
 
  Note that the offset returned is NOT ftell(wmq->fp), since offset 0 points

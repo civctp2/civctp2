@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui.h"
 
@@ -34,7 +21,6 @@ extern CivPaths			*g_civPaths;
 extern C3UI				*g_c3ui;
 
 
-
 VideoWindow::VideoWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -50,22 +36,19 @@ VideoWindow::VideoWindow(
 	:
 	C3Window()
 {
-	
+
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = aui_Window::InitCommon( bpp, type );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = C3Window::InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = PatternBase::InitCommon( pattern );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -80,7 +63,6 @@ VideoWindow::VideoWindow(
 }
 
 
-
 AUI_ERRCODE VideoWindow::InitCommon( void )
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -90,7 +72,6 @@ AUI_ERRCODE VideoWindow::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
@@ -111,7 +92,7 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 	hr = m_video->OpenStream(fname);
 	Assert(!hr);
 	if (hr != 0) {
-		
+
 		c3errors_ErrorDialog("Video", "Error opening DirectMovie Indeo 5 video stream.  Be sure that DirectMovie and Indeo 5 are installed.");
 		return AUI_ERRCODE_MEMALLOCFAILED;
 	}
@@ -143,12 +124,11 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 }
 
 
-
 VideoWindow::~VideoWindow()
 {
 #ifdef __AUI_USE_DIRECTX__
 	if (m_video != NULL) {
-		
+
 		m_video->CloseStream();
 		delete m_video;
 		m_video = NULL;
@@ -157,36 +137,32 @@ VideoWindow::~VideoWindow()
 }
 
 
-
 AUI_ERRCODE VideoWindow::Idle(void)
 {
 #ifdef __AUI_USE_DIRECTX__
 	if (m_video != NULL) {
 		m_video->Process();
 		if (m_video->Finished()) {
-			
+
 			m_video->CloseStream();
 			delete m_video;
 			m_video = NULL;
 
-			
 		}
 	}
 #endif
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE VideoWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
 
 	m_pattern->Draw( m_surface, &rect );
 
-	
 	primitives_BevelRect16( m_surface, &rect, 1, 0, 16, 16 );
 
 	primitives_DropText(m_surface, 5, 3, m_filename, 0xFFFF, TRUE);
@@ -196,7 +172,6 @@ AUI_ERRCODE VideoWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 	InflateRect(&rect, -5, -5);
 	primitives_BevelRect16( m_surface, &rect, 5, 1, 16, 16 );
 
-	
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;

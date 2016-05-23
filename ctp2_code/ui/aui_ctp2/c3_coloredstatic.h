@@ -1,5 +1,3 @@
-
-
 #ifndef __C3_COLOREDSTATIC_H__
 #define __C3_COLOREDSTATIC_H__
 
@@ -7,7 +5,6 @@
 #include "c3_static.h"
 
 class aui_Surface;
-
 
 class c3_ColoredStatic : public c3_Static {
 public:
@@ -26,7 +23,6 @@ public:
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(void);
 
@@ -38,6 +34,5 @@ public:
 private:
 	COLOR	m_color;
 };
-
 
 #endif

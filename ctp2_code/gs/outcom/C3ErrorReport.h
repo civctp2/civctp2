@@ -4,7 +4,7 @@
 
 #include "ic3ErrorReport.h"
 
-class CivArchive; 
+class CivArchive;
 
 class C3ErrorReport : public IC3ErrorReport
 {
@@ -17,10 +17,10 @@ public:
 	STDMETHODIMP_(ULONG) Release();
 
 	C3ErrorReport();
-    C3ErrorReport(CivArchive &archive); 
+    C3ErrorReport(CivArchive &archive);
 	~C3ErrorReport();
 
-    void Serialize(CivArchive &archive); 
+    void Serialize(CivArchive &archive);
 
 	STDMETHODIMP_(void) ReportDBError(const MBCHAR *stringId);
 	STDMETHODIMP_(void) ReportError(const MBCHAR *text);

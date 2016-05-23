@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef __FLI_ENGINE_H__
@@ -20,7 +18,7 @@ class FliAction;
 typedef int BFLOP_TYPE;
 class FliWhen;
 
-#define k_NUM_DEFUZZ_SAMPLES 100.0 
+#define k_NUM_DEFUZZ_SAMPLES 100.0
 
 class FliEngine {
 	FliSymTab *m_symTab;
@@ -30,7 +28,7 @@ class FliEngine {
 	PointerList<FliRule> **m_ruleLists;
 	PointerList<FliAction> **m_actionLists;
 
-	FliAction *m_currentAction;  
+	FliAction *m_currentAction;
 
 	IC3GameState *m_gs;
 
@@ -67,25 +65,24 @@ public:
 	void ReportDBError(const MBCHAR *stringId, ...);
 	void ReportError(const MBCHAR *text, ...);
 
-	
-	
-	
+
+
+
 	void StartAction(const char *name);
 	void EndAction(sint32 section);
 	void AddArgument(const char *str);
 	void SetBoolExp(const char *varname, BFLOP_TYPE op, double value);
 
-
     void InitGraphics();
-    sint32 GetNumFuzzySections(); 
-    sint32 GetNumFuzzyVariables(sint32 idx_section); 
-    void GetFuzzyGraph(sint32 idx_section, sint32 idx_variable, 
-        char **label, double *minx, double *maxx, double *miny, double *maxy, 
-        sint32 *num_graphs, sint32 *num_x, double ***height, double *defuzz_val); 
+    sint32 GetNumFuzzySections();
+    sint32 GetNumFuzzyVariables(sint32 idx_section);
+    void GetFuzzyGraph(sint32 idx_section, sint32 idx_variable,
+        char **label, double *minx, double *maxx, double *miny, double *maxy,
+        sint32 *num_graphs, sint32 *num_x, double ***height, double *defuzz_val);
 
-    void ReloadFuzzyLogic(); 
-    void ResetFuzzyInput(sint32 idx_section, sint32 idx_variable, 
-        double new_defuzz_val); 
+    void ReloadFuzzyLogic();
+    void ResetFuzzyInput(sint32 idx_section, sint32 idx_variable,
+        double new_defuzz_val);
 	char *GetSectionName(sint32 module);
 #ifdef DO_FZLOG
 	void DumpFZInputHeaders(sint32 which);

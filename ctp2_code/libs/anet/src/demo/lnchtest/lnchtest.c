@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -109,7 +109,7 @@ static void ProcessCommandLine(int argc, char **argv) {
 		case 'S':	/* Set session id */
 			sessionid = atol(argv[i]+3);
 			break;
-			
+
 		case 'W':   /*  Set phone number */
 			strncpy(phonenum, argv[i]+3, sizeof(phonenum));
 			phonenum[sizeof(phonenum)-1] = '\0';
@@ -137,7 +137,7 @@ int main( int argc, char *argv[] )
     commInitResp_t  commInitResp;
 	commTermReq_t   termReq;
     dp_result_t err;
-    
+
 	if (argc == 1) {
 		printf("Usage: %s [-N=comm.dll][-W=phonenum][-Y=commportnum(0 = com1)]\n", argv[0]);
 		printf("need to specify comm.dll\n");
@@ -167,7 +167,7 @@ int main( int argc, char *argv[] )
 		commInitReq.flags = comm_INIT_FLAGS_RESUME;
 		printf("got sessionId %ld, baseadr %ld, portnum %d\n", commInitReq.sessionId, commInitReq.baseadr, commInitReq.portnum);
 	} else {
-		commInitReq.sessionId = rand() | (rand() << 16);	
+		commInitReq.sessionId = rand() | (rand() << 16);
 	}
 	commInitReq.reqLen = sizeof(commInitReq_t);
 
@@ -185,7 +185,7 @@ int main( int argc, char *argv[] )
 		printf("Unable to load DLL!  Error %d.\n", err);
 		exit(1);
 	}
-	
+
     /*  init comm system */
     if (!commInit(&commInitReq, &commInitResp)) {
 		printf("Unable to init comm system, error: %d\n", commInitResp.status);
@@ -230,5 +230,3 @@ int main( int argc, char *argv[] )
 
     return(0);
 }
-
-

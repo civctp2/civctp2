@@ -14,7 +14,6 @@ class C3Scroller;
 
 class aui_Surface;
 
-
 class C3Scroller : public aui_Ranger, public PatternBase
 {
 public:
@@ -24,7 +23,7 @@ public:
 		uint32 id,
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL 
+		void *cookie = NULL
     );
 	C3Scroller
     (
@@ -37,14 +36,14 @@ public:
 		bool   isVertical,
 		MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL 
+		void *cookie = NULL
     );
 
 	virtual AUI_ERRCODE DrawThis
     (
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
-		sint32 y = 0 
+		sint32 y = 0
     );
 
 	bool	IsVertical( void ) const { return m_isVertical; }
@@ -53,8 +52,7 @@ private:
 	AUI_ERRCODE CreateButtonsAndThumb( void );
 	AUI_ERRCODE InitCommon(void);
 
-	bool	m_isVertical;	
+	bool	m_isVertical;
 };
 
-
-#endif 
+#endif

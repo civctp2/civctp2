@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __FLI_SET_FUNC_H__
@@ -8,12 +7,11 @@ typedef int SFTYPE;
 class FliSymbol;
 #include "fliif.h"
 
-class FliSetFunc { 
+class FliSetFunc {
 private:
 	double m_center, m_width;
 	sint32 m_index;
 	uint8 m_type;
-	
 
 	char *m_name;
 	FliSymbol *m_variable;
@@ -28,7 +26,7 @@ public:
 
 	const char *GetName() const { return m_name; };
 	SFTYPE GetType() const { return (SFTYPE)m_type; }
-    double GetCenter() const { return m_center; } 
+    double GetCenter() const { return m_center; }
     double GetWidth() const { return m_width; }
 
 	sint32 GetIndex() const { return m_index; }
@@ -43,7 +41,6 @@ public:
 	double GetRightEdge();
 
     double GetRecommendedDX();
-
 
 };
 

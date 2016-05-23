@@ -9,7 +9,6 @@
 
 #include "shroud.h"
 
-
 /*--------------------------------------------------------------------------
  Encode 'length' elements of 'bytes' using 'operand' as the encoding key.
  When used with shrouded files, 'operand' represents the offset of the the
@@ -62,7 +61,6 @@ void shroud_encode( unsigned char *bytes, size_t length, size_t operand )
 	}
 }
 
-
 /*--------------------------------------------------------------------------
  Decode 'length' elements of 'bytes' using 'operand' as the decoding key.
  When used with shrouded files, 'operand' represents the offset of the the
@@ -107,7 +105,6 @@ void shroud_decode( unsigned char *bytes, size_t length, size_t operand )
 	}
 }
 
-
 /*--------------------------------------------------------------------------
  Test main.
 --------------------------------------------------------------------------*/
@@ -115,16 +112,13 @@ void shroud_decode( unsigned char *bytes, size_t length, size_t operand )
 */
 #ifdef	endedode_TESTMAIN
 
-
 #include <assert.h>
 #include <memory.h>
 #include <stdlib.h>
 #include <time.h>
 
-
 #define LENGTH1 90
 #define LENGTH2 110
-
 
 int main( void )
 {
@@ -151,7 +145,6 @@ int main( void )
 	memcpy( ebytesA, bytes, LENGTH1 + LENGTH2 );
 	memcpy( ebytesB, bytes, LENGTH1 + LENGTH2 );
 
-
 	/*-----
 	Encode.
 	-----*/
@@ -165,7 +158,6 @@ int main( void )
 
 	/* Make sure we got the same results. */
 	assert( memcmp( ebytesA, ebytesB, LENGTH1 + LENGTH2 ) == 0 );
-
 
 	/*-----
 	Decode.
@@ -181,7 +173,6 @@ int main( void )
 	/* Make sure we got the same results. */
 	assert( memcmp( ebytesA, ebytesB, LENGTH1 + LENGTH2 ) == 0 );
 
-
 	/* Make sure that decode() undid encode(). */
 	assert( memcmp( bytes, ebytesA, LENGTH1 + LENGTH2 ) == 0 );
 
@@ -190,6 +181,5 @@ int main( void )
 
 	return 0;
 }
-
 
 #endif

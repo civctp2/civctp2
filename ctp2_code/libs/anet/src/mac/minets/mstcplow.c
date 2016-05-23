@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 	OSStatus err;
 
 	pTcp->isValid = false;
-		
+
 	//	Initialize OpenTransport
 
 	err = InitOpenTransport();
@@ -44,7 +44,7 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 		*status = comm_STATUS_BAD;
 		return;
 	}
-	
+
 	//	initialize Internet Services
 
 	pTcp->inetService = OTOpenInternetServices(kDefaultInternetServicesPath, 0, &err);
@@ -52,7 +52,7 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 		*status = comm_STATUS_BAD;
 		return;
 	}
-	
+
 	//	open an endpoint for sending and recieving data
 
 	err = CreateAndConfigUDP(&pTcp->udpEndpoint);
@@ -62,9 +62,9 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 		return;
 	}
 	pTcp->isValid = true;
-			
+
 	//	Get information about Internet
-	
+
 	err = OTInetGetInterfaceInfo(&inetInfo, kDefaultInetInterface);
 	if (err != noErr) {
 		//DebugStr("\pCannot Get Information About Default Interface");
@@ -81,7 +81,7 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 		ShutDownUDP(pTcp->udpEndpoint);
 		return;
 	}
-	
+
 	peer->addr = inetInfo.fAddress;
 	peer->port = *port = boundInetAddr.fPort;
 	pTcp->myHandle = dcstReplace(pTcp->handles,pTcp->myHandle,peer);
@@ -101,21 +101,21 @@ int TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len)
 	OTResult	theResult;
 	InetAddress	destAddr;
 	unsigned char *pt;
-	
+
 	OTInitInetAddress(&destAddr,pPeer->port,pPeer->addr);
-	
+
 	udata.addr.maxlen = sizeof(InetAddress);
 	udata.addr.len = sizeof(InetAddress);
 	udata.addr.buf = (unsigned char *) &destAddr;
-	
+
 	udata.opt.maxlen = 0;
 	udata.opt.len = 0;
 	udata.opt.buf = nil;
-	
+
 	udata.udata.maxlen = len;
 	udata.udata.len = len;
 	udata.udata.buf = (unsigned char *)bufptr;
-	
+
 	do {
 		err = OTSndUData(tcp->udpEndpoint, &udata);
 		if (err == kOTLookErr) {
@@ -135,7 +135,7 @@ int TCPLow_GetPacket(TCPINSTANCE* tcp,void* bufptr,ULONG* pLen,TCPPEER* addr)
 	//	this method reads a packet and returns the
 	//	size of the data read and sets up the senders
 	//	address for the status routine
-				   
+
 	unsigned char		recvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
 	InetAddress*		srcAddr;
 	unsigned long		theSize = udpMaxRawData;
@@ -152,6 +152,6 @@ int TCPLow_GetPacket(TCPINSTANCE* tcp,void* bufptr,ULONG* pLen,TCPPEER* addr)
 		*pLen = theSize;
 	} else
 		return TCP_RES_EMPTY;
-		
+
 	return TCP_RES_OK;
 }

@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 
 #include "aui_sound.h"
-
 
 
 aui_Sound::aui_Sound(
@@ -27,12 +15,10 @@ aui_Sound::aui_Sound(
 }
 
 
-
 aui_Sound::~aui_Sound()
 {
 	Unload();
 }
-
 
 
 AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
@@ -46,14 +32,13 @@ AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
 }
 
 
-
 AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 {
 	Unload();
 
 	memset ( m_filename, '\0', sizeof( m_filename ));
 
-	if ( !filename ) 
+	if ( !filename )
 		return AUI_ERRCODE_INVALIDPARAM;
 
 	strncpy ( m_filename, filename, MAX_PATH );
@@ -61,13 +46,12 @@ AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 	m_format = (aui_SoundFormat *)
 		g_ui->TheMemMap()->GetFileFormat ( m_filename );
 	Assert(m_format);
-	
+
     return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
 }
 
 
-
-AUI_ERRCODE aui_Sound::Load( void ) 
+AUI_ERRCODE aui_Sound::Load( void )
 {
 
 	Assert ( m_format != NULL );
@@ -79,8 +63,7 @@ AUI_ERRCODE aui_Sound::Load( void )
 }
 
 
-
-AUI_ERRCODE aui_Sound::Unload( void ) 
+AUI_ERRCODE aui_Sound::Unload( void )
 {
 	g_ui->TheMemMap()->ReleaseFileFormat(m_format);
 
@@ -100,11 +83,10 @@ AUI_ERRCODE aui_WavSoundFormat::LoadSoundData
 	Assert( *wavdata != NULL );
 	if ( !*wavdata ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	TrimWavHeader( wavdata, size ); 
+	TrimWavHeader( wavdata, size );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 void aui_SoundFormat::ReleaseSoundData() {
 	if(m_data)
@@ -112,19 +94,18 @@ void aui_SoundFormat::ReleaseSoundData() {
 }
 
 
-
 void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, size_t *size)
 {
 	int i;
-	uint8 *data; 
-	long raw_data_size=0; 
+	uint8 *data;
+	long raw_data_size=0;
 
 	data = *wavedata;
 	for(i=0;i<(int)*size;i++)
 	{
 		if(*(long *)data == *(long *)"data")
 		{
-		data += 4; 
+		data += 4;
 		raw_data_size = *(long *)data;
 		data += 4;
 		break;
@@ -133,6 +114,6 @@ void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, size_t *size)
 		data++;
 	}
 
-	*wavedata = data; 
-	*size = raw_data_size; 
+	*wavedata = data;
+	*size = raw_data_size;
 }

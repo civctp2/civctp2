@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic Structure
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,10 +57,10 @@ SlicStructDescription::Member::Member(SlicStructDescription *parent, char const 
 	m_parent = parent;
 	m_name = new char[strlen(name) + 1];
 	strcpy(m_name, name);
-	
+
 	m_type = sym->GetType();
 	m_symbol = sym;
-	
+
 }
 
 SlicStructDescription::Member::~Member()
@@ -80,18 +80,17 @@ SlicStructDescription::SlicStructDescription(char const * name, SLIC_BUILTIN typ
 	m_numMembers = 0;
 }
 
-
 SlicStructDescription::~SlicStructDescription()
 {
 	delete [] m_name;
 
-	for (sint32 i = 0; i < m_numMembers; ++i) 
+	for (sint32 i = 0; i < m_numMembers; ++i)
     {
 		delete m_members[i];
 	}
 	delete [] m_members;
 
-	for 
+	for
 	(
 		std::vector<Member *>::iterator	p = m_accessors.begin();
 		p < m_accessors.end();
@@ -121,7 +120,7 @@ SlicStructDescription::~SlicStructDescription()
 //----------------------------------------------------------------------------
 void SlicStructDescription::AddAccessor
 (
-	char const *			name, 
+	char const *			name,
 	SlicStructMemberData *	symbol
 )
 {
@@ -140,7 +139,7 @@ void SlicStructDescription::AddAccessor
 //
 // Returns    : -
 //
-// Remark(s)  : When the member at the index is not found or NULL, 
+// Remark(s)  : When the member at the index is not found or NULL,
 //              NULL is returned.
 //
 //----------------------------------------------------------------------------
@@ -180,8 +179,8 @@ SlicStructMemberData * SlicStructDescription::GetMemberSymbol(sint32 index) cons
 //
 // Returns    : sint32	: member index
 //
-// Remark(s)  : - The index of the first matching member or accessor is 
-//                returned. 
+// Remark(s)  : - The index of the first matching member or accessor is
+//                returned.
 //              - When the name is not found, -1 is returned.
 //              - The members and accessors are ordered on time of adding,
 //                but the accessors are ordered behind the members. So,
@@ -201,7 +200,7 @@ sint32 SlicStructDescription::GetMemberSymbolIndex(SlicStructMemberData * symbol
 	}
 
 	// Continue counting while checking the accessors
-	for 
+	for
 	(
 		std::vector<Member *>::const_iterator	p = m_accessors.begin();
 		p < m_accessors.end();
@@ -223,14 +222,14 @@ sint32 SlicStructDescription::GetMemberSymbolIndex(SlicStructMemberData * symbol
 
 void SlicStructDescription::AddMember(SlicStructDescription::Member *member)
 {
-	
+
 	m_numMembers++;
 	if(!m_members) {
-		
+
 		Assert(m_numMembers == 1);
 		m_members = new SlicStructDescription::Member *[m_numMembers];
 	} else {
-		
+
 		SlicStructDescription::Member **oldmembers = m_members;
 		m_members = new SlicStructDescription::Member *[m_numMembers];
 		memcpy(m_members, oldmembers, (m_numMembers - 1) * sizeof(SlicStruct *));
@@ -249,7 +248,7 @@ void SlicStructDescription::AddMember(char const * name, SlicStructMemberData *s
 {
 	AddMember(new SlicStructDescription::Member(this, name, sym));
 }
-	
+
 //----------------------------------------------------------------------------
 //
 // Name       : SlicStructDescription::GetMemberIndex
@@ -262,8 +261,8 @@ void SlicStructDescription::AddMember(char const * name, SlicStructMemberData *s
 //
 // Returns    : sint32	: index of member or accessor with given name.
 //
-// Remark(s)  : - The index of the first matching member or accessor is 
-//                returned. 
+// Remark(s)  : - The index of the first matching member or accessor is
+//                returned.
 //              - When the name is not found, -1 is returned.
 //              - The members and accessors are ordered on time of adding,
 //                but the accessors are ordered behind the members. So,
@@ -280,7 +279,7 @@ sint32 SlicStructDescription::GetMemberIndex(char const * name) const
 	}
 
 	// Continue counting while checking the accessors
-	for 
+	for
 	(
 		std::vector<Member *>::const_iterator	p = m_accessors.begin();
 		p < m_accessors.end();
@@ -307,7 +306,6 @@ SlicSymbolData *SlicStructDescription::CreateInstance(SS_TYPE type, SlicStackVal
 	return sym;
 }
 
-
 SlicSymbolData *SlicStructDescription::CreateInstance()
 {
 	return new SlicSymbolData(new SlicStructInstance(this));
@@ -331,7 +329,7 @@ SlicSymbolData *SlicStructDescription::CreateDataSymbol()
 // Returns    : const char *	: name of member or accessor with given index.
 //
 // Remark(s)  : - When the index is invalid, "<Error>" is returned.
-//              - See GetMemberIndex for the numbering of the members and 
+//              - See GetMemberIndex for the numbering of the members and
 //                accessors.
 //
 //----------------------------------------------------------------------------
@@ -344,7 +342,7 @@ const char * SlicStructDescription::GetMemberName(sint32 index) const
 		{
 			return m_members[index]->m_name;
 		}
-		else 
+		else
 		{
 			size_t const	accessorIndex	= index - m_numMembers;
 			if (accessorIndex < m_accessors.size())
@@ -356,7 +354,7 @@ const char * SlicStructDescription::GetMemberName(sint32 index) const
 
 	return "<Error>";
 }
-	
+
 
 
 
@@ -366,12 +364,12 @@ SlicStructInstance::SlicStructInstance(SlicStructDescription *description, SlicS
     m_dataSymbolIndex   (INDEX_INVALID),
     m_description       (description)
 {
-	m_validIndexCount	= 
+	m_validIndexCount	=
 		m_description->GetNumMembers() + m_description->GetNumAccessors();
 	m_members			= new SlicStructMemberData *[m_validIndexCount];
 	std::fill(m_members, m_members + m_validIndexCount, (SlicStructMemberData *) NULL);
 
-	if (!m_dataSymbol) 
+	if (!m_dataSymbol)
     {
 		m_dataSymbol    = m_description->CreateDataSymbol();
 		m_createdData   = true;
@@ -400,7 +398,7 @@ SlicStructInstance::SlicStructInstance(CivArchive &archive)
 //----------------------------------------------------------------------------
 SlicStructInstance::~SlicStructInstance()
 {
-	if (m_createdData) 
+	if (m_createdData)
     {
 		delete m_dataSymbol;
 	}
@@ -433,7 +431,7 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 			if(m_createdData) {
 				m_dataSymbol->SlicSymbolData::Serialize(archive);
 			} else {
-				
+
 				SlicNamedSymbol *sym = (SlicNamedSymbol *)m_dataSymbol;
 				archive.PutSINT32(sym->GetIndex());
 			}
@@ -472,7 +470,7 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 			m_dataSymbolIndex = INDEX_INVALID;
 		}
 
-		if (!m_dataSymbol && (m_dataSymbolIndex < 0)) 
+		if (!m_dataSymbol && (m_dataSymbolIndex < 0))
         {
 			m_dataSymbol    = m_description->CreateDataSymbol();
             m_createdData   = true;
@@ -495,8 +493,8 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 //
 // Remark(s)  : Assumption: index is valid.
 //
-//				Cache-like functionality: a clone of the descriptor data will 
-//				be created upon first entry. If the clone has already been 
+//				Cache-like functionality: a clone of the descriptor data will
+//				be created upon first entry. If the clone has already been
 //              created before, this function does nothing.
 //
 //----------------------------------------------------------------------------
@@ -551,14 +549,14 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
 }
 
 SlicSymbolData *SlicStructInstance::GetDataSymbol()
-{ 
+{
 	if (!m_dataSymbol && (m_dataSymbolIndex >= 0))
     {
 		m_dataSymbol        = g_slicEngine->GetSymbol(m_dataSymbolIndex);
 		m_dataSymbolIndex   = INDEX_INVALID;
 	}
 
-	return m_dataSymbol;		
+	return m_dataSymbol;
 }
 
 void SlicStructMemberData::SerializeMemberReference(CivArchive &archive)
@@ -569,4 +567,3 @@ void SlicStructMemberData::SerializeMemberReference(CivArchive &archive)
 	Assert(index >= 0);
 	archive.PutSINT32(index);
 }
-

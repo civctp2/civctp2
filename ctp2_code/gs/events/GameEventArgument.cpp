@@ -102,7 +102,6 @@ void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlway
 	if(type < (GAME_EVENT_ARGUMENT)0 || type >= GEA_End)
 		return;
 
-	
 	static Unit unit;
 	static Army army;
 	static MapPoint pos;
@@ -282,7 +281,6 @@ bool GameEventArgument::GetAdvance(sint32 &a) const
 	a = m_data.m_value;
 	return true;
 }
-
 
 bool GameEventArgument::GetWonder(sint32 &w) const
 {

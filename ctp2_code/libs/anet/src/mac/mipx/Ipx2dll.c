@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -74,7 +74,6 @@ comm_driverInfo_t gCommDriverInfo =
     #define FALSE       (0)
 #endif
 
-
 static playerHdl_t ipx2commHdl( ipx2_hdl_t h )
 {
 	switch ( h ) {
@@ -132,7 +131,6 @@ commNoOp(
 	return (TRUE);
 }
 
-
 /*
  *	Initialize the communications driver.
  *  Call this function only once.
@@ -156,9 +154,9 @@ commInit(
 		req = (commInitReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
 		resp = &respDummy;
-		
+
 	//	initialize Ipx
-	
+
 	IpxInitialize();
 
 	ipx = ipx2_create(SOCKET_MW2, &status);
@@ -172,12 +170,12 @@ commInit(
 	resp->status = comm_STATUS_OK;
 
 	DPRINT(("@%u\n", resp->status));
-	
+
 	#ifdef MACDEBUG
 		{
 			IPX_STATS		buffer;
 			unsigned long		length = sizeof(IPX_STATS);
-			
+
 			IpxGetStatistics(&buffer, &length);
 		}
 	#endif
@@ -185,9 +183,8 @@ commInit(
 	return TRUE;
 }
 
-
 /*
- *	Tear down the communications driver.  
+ *	Tear down the communications driver.
  *
  *	Return FALSE on error.
  */
@@ -204,7 +201,7 @@ commTerm(
 		{
 			IPX_STATS		buffer;
 			unsigned long		length = sizeof(IPX_STATS);
-			
+
 			IpxGetStatistics(&buffer, &length);
 		}
 	#endif
@@ -224,7 +221,6 @@ commTerm(
 
 	return TRUE;
 }
-
 
 /*
  *	Retrieve info about the communications driver.
@@ -291,7 +287,6 @@ commPlayerInfo(
 	return TRUE;
 }
 
-
 /*
  *	Find out whether the transmit queue is full.
  *
@@ -318,7 +313,6 @@ commTxFull(
 
 	return FALSE;
 }
-
 
 /*
  *	Send a packet.  Upon return, the buffer can be discarded, although the
@@ -359,7 +353,6 @@ commTxPkt(
 	return (err == ipx2_RES_OK);
 }
 
-
 /*
  *	Get information about a pending incoming packet.
  *
@@ -386,7 +379,6 @@ commPeekPkt(
 
 	return FALSE;
 }
-
 
 /*
  *	Retrieve a pending incoming packet.
@@ -424,7 +416,6 @@ commRxPkt(
 
 	return (err == ipx2_RES_OK);
 }
-
 
 /*
  *	Attempt to parse a NUL-terminated address string into a free-format
@@ -473,7 +464,6 @@ commScanAddr(
 
 	return (TRUE);
 }
-
 
 /*
  *	Attempt to format a free-format address buffer into a NUL-terminated
@@ -529,7 +519,6 @@ commPrintAddr(
 	return TRUE;
 }
 
-
 /*
  *	Generate a pseudo-player handle referring to a group of players.  Handy
  *	for multicasting.  A group can have zero players.
@@ -557,7 +546,6 @@ commGroupAlloc(
 	return FALSE;
 }
 
-
 /*
  *	Invalidate a pseudo-player handle referring to a group of players.
  *
@@ -583,7 +571,6 @@ commGroupFree(
 
 	return FALSE;
 }
-
 
 /*
  *	Add one or more players to a group.
@@ -697,7 +684,6 @@ commSayHi(
 	resp->status = ipx2_RES_OK;
 	return TRUE;
 }
-
 
 /*
  *	Tear down a data link to a player.  The link or the player may already be

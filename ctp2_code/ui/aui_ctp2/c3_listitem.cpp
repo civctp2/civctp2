@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_item.h"
@@ -24,7 +22,6 @@ c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, MBCHAR const * ldlBlock)
 }
 
 
-
 c3_ListItem::~c3_ListItem()
 {
 	ListPos position = m_childList->GetHeadPosition();
@@ -32,7 +29,6 @@ c3_ListItem::~c3_ListItem()
 	for ( sint32 i = m_childList->L(); i; i-- )
 		delete m_childList->GetNext( position );
 }
-
 
 sint32 c3_ListItem::Compare(c3_ListItem *item2, uint32 column)
 {
@@ -52,7 +48,6 @@ SingleListItem::SingleListItem(AUI_ERRCODE *retval, MBCHAR const *name, sint32 v
 	*retval = InitCommonLdl(name, value, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 AUI_ERRCODE SingleListItem::InitCommonLdl(MBCHAR const *name, sint32 value, MBCHAR const * ldlBlock)
 {
@@ -94,7 +89,7 @@ sint32 SingleListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	if (column < 0) return 0;
 
-	switch (column) 
+	switch (column)
     {
 	case 0:
 		i1 = (c3_Static *)this->GetChildByIndex(column);
@@ -107,4 +102,3 @@ sint32 SingleListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-

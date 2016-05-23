@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,49 +54,46 @@ public:
 	void *                      m_userData;
 	CTP2ItemCompareCallback *   m_compareCallback;
 
-	
 	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
 	virtual ~ctp2_ListItem();
 
 	virtual AUI_ERRCODE Draw( aui_Surface *surface, sint32 x, sint32 y );
-	
-	
-	
-	
-	
+
+
+
+
+
 	virtual void Update(void) {}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
-	
-	
+
 	void SetUserData(void *data) { m_userData = data; }
 	void *GetUserData() { return m_userData; }
-	
+
 	void SetCompareCallback(CTP2ItemCompareCallback *cb) { m_compareCallback = cb; }
 
 protected:
-	ctp2_ListItem() 
-    : 
-        aui_Item            (), 
+	ctp2_ListItem()
+    :
+        aui_Item            (),
         PatternBase         (),
         m_userData          (NULL),
         m_compareCallback   (NULL)
     { ; };
 
 };
-
 
 #endif

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,17 +31,14 @@
 #ifndef __AUI_DROPDOWN_H__
 #define __AUI_DROPDOWN_H__
 
-
 #include "aui_control.h"
 #include "aui_listbox.h"
-
 
 class aui_Surface;
 class aui_Button;
 class aui_Window;
 class aui_Item;
 class aui_Static;
-
 
 
 #define k_AUI_DROPDOWN_LDL_BUTTONSIZE	"buttonsize"
@@ -53,7 +50,6 @@ class aui_Static;
 #define k_AUI_DROPDOWN_LDL_ALWAYSPOPUP	"alwayspopup"
 #define k_AUI_DROPDOWN_LDL_INVERTED     "inverted"
 
-
 enum AUI_DROPDOWN_ACTION
 {
 	AUI_DROPDOWN_ACTION_FIRST = 0,
@@ -63,11 +59,10 @@ enum AUI_DROPDOWN_ACTION
 };
 
 
-
 class aui_DropDown : public aui_Control
 {
 public:
-	
+
 	aui_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -94,8 +89,7 @@ protected:
 	AUI_ERRCODE CreateComponents( MBCHAR *ldlBlok = NULL );
 
 public:
-	
-	
+
 	BOOL ExtractEndUserTriggeredEvent( uint32 data ) const
 	{ return (data & 0x1) == 0; }
 
@@ -134,7 +128,6 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	AUI_ERRCODE UpdateSelectedItem( BOOL update = TRUE );
 
 protected:
@@ -153,9 +146,9 @@ protected:
 	sint32		m_windowSize;
 
 	BOOL		m_alwaysPopup;
-	BOOL        m_inverted; 
+	BOOL        m_inverted;
 
-	sint32		m_selectedItem; 
+	sint32		m_selectedItem;
 
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
@@ -164,8 +157,7 @@ protected:
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 };
 
-
 aui_Control::ControlActionCallback DropDownButtonActionCallback;
 aui_Control::ControlActionCallback DropDownListBoxActionCallback;
 
-#endif 
+#endif

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_ldl.h"
@@ -20,7 +9,6 @@ extern BOOL			g_helpMode;
 extern SlicEngine	*g_slicEngine;
 extern aui_UI		*g_ui;
 extern CivApp		*g_civApp;
-
 
 BOOL HandleGameSpecificLeftClick( void *control )
 {
@@ -41,7 +29,6 @@ BOOL HandleGameSpecificLeftClick( void *control )
 	return handled;
 }
 
-
 BOOL HandleGameSpecificRightClick( void *control )
 {
 	BOOL handled = FALSE;
@@ -53,11 +40,9 @@ BOOL HandleGameSpecificRightClick( void *control )
 
 				g_slicEngine->RunHelpTriggers(ldl->GetBlock(control));
 			handled = TRUE;
-		} 
-
+		}
 
 	}
 
 	return handled;
 }
-

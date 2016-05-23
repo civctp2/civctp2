@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,12 +53,12 @@ c3_Button::c3_Button
 	uint32 id,
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie 
+	void *cookie
 )
 :
     // virtual (see aui_Control)
-	aui_ImageBase   (ldlBlock ),                 
-	aui_TextBase    (ldlBlock, (MBCHAR *) NULL),   
+	aui_ImageBase   (ldlBlock ),
+	aui_TextBase    (ldlBlock, (MBCHAR *) NULL),
     // normal
 	aui_Button      (retval, id, ldlBlock, ActionFunc, cookie),
 	PatternBase     (ldlBlock, NULL),
@@ -71,7 +71,6 @@ c3_Button::c3_Button
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 c3_Button::c3_Button(
@@ -87,7 +86,7 @@ c3_Button::c3_Button(
 :
     // virtual (see aui_Control)
 	aui_ImageBase   ((sint32) 0),
-	aui_TextBase    (NULL),      
+	aui_TextBase    (NULL),
     // normal
 	aui_Button      (retval, id, x, y, width, height, ActionFunc, cookie),
 	PatternBase     (pattern),
@@ -98,14 +97,13 @@ c3_Button::c3_Button(
 }
 
 
-
 AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
-	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) 
+
+	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT)
     {
 		m_bevelWidth = block->GetInt( k_C3_BUTTON_LDL_BEVELWIDTH );
 	}
@@ -114,25 +112,24 @@ AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
         m_bevelWidth = k_C3_BUTTON_DEFAULT_BEVELWIDTH;
     }
 
-	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELTYPE ) == ATTRIBUTE_TYPE_INT) 
+	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELTYPE ) == ATTRIBUTE_TYPE_INT)
     {
 		m_bevelType = block->GetInt( k_C3_BUTTON_LDL_BEVELTYPE );
-	} 
-    else 
+	}
+    else
     {
-		m_bevelType = 0; 
+		m_bevelType = 0;
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE c3_Button::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -140,7 +137,6 @@ AUI_ERRCODE c3_Button::DrawThis(
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
-
 
 	if ( m_pattern ) {
 		if ( m_srcWidthPix || m_srcHeightPix ) {
@@ -168,7 +164,6 @@ AUI_ERRCODE c3_Button::DrawThis(
 		}
 	}
 
-	
 	RECT down = rect;
 	down.left += 2;
 	down.top += 2;
@@ -184,14 +179,13 @@ AUI_ERRCODE c3_Button::DrawThis(
 }
 
 
-
 c3_EditButton::c3_EditButton
 (
 	AUI_ERRCODE *retval,
 	uint32 id,
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie 
+	void *cookie
 )
 :
     // virtual (defined in aui_Control)
@@ -218,7 +212,6 @@ c3_EditButton::c3_EditButton
 }
 
 
-
 c3_EditButton::c3_EditButton
 (
 	AUI_ERRCODE *retval,
@@ -229,12 +222,12 @@ c3_EditButton::c3_EditButton
 	sint32 height,
 	MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie 
+	void *cookie
 )
 :
     // virtual (see aui_Control)
 	aui_ImageBase   ((sint32) 0),
-	aui_TextBase    (NULL),      
+	aui_TextBase    (NULL),
     // normal
 	c3_Button       (retval, id, x, y, width, height, pattern, ActionFunc, cookie),
 	m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
@@ -250,7 +243,6 @@ c3_EditButton::c3_EditButton
 	*retval = CreateFieldAndActions();
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
@@ -275,7 +267,6 @@ AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
     return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -286,7 +277,6 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_C3_EDITBUTTON_LDL_FIELD );
 
-		
         if (aui_Ldl::FindDataBlock( block ) )
 			m_field = new C3TextField(
 				&errcode,
@@ -305,11 +295,9 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 	if ( !AUI_NEWOK(m_field,errcode) )
 		return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
-	
+
 	aui_Ldl::Remove( m_field );
 
-	
 	m_field->SetActionFuncAndCookie( c3_EditButtonFieldCallback, this );
 
 	m_origCallback  = GetActionFunc();
@@ -323,24 +311,22 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
     {
         m_origAction    = GetAction();
     }
-	
+
 	SetActionFuncAndCookie( c3_EditButtonCallback, m_field );
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 c3_EditButton::~c3_EditButton( void )
 {
 	delete m_field;
-	
+
 	if (!m_origCallback)
     {
         delete m_origAction;    /// @todo Check this is OK: m_origAction is not allocated
     }
 }
-
 
 
 AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
@@ -362,7 +348,6 @@ AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
 }
 
 
-
 AUI_ERRCODE c3_EditButton::SetMinimum( sint32 min )
 {
 	Assert( min <= m_max );
@@ -373,7 +358,6 @@ AUI_ERRCODE c3_EditButton::SetMinimum( sint32 min )
     // Recheck impact on current value
     return SetValue(m_val);
 }
-
 
 
 AUI_ERRCODE c3_EditButton::SetMaximum( sint32 max )
@@ -388,11 +372,9 @@ AUI_ERRCODE c3_EditButton::SetMaximum( sint32 max )
 }
 
 
-
 void c3_EditButton::DoCallback( void )
 {
-	
-	
+
 	if ( !GetActionFunc() && !GetAction() ) return;
 
 	if ( !HandleGameSpecificLeftClick( this ) ) {
@@ -404,7 +386,6 @@ void c3_EditButton::DoCallback( void )
 		}
 	}
 }
-
 
 
 void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -424,7 +405,6 @@ void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 	field->SetKeyboardFocus();
 	field->GetParentWindow()->ShouldDraw();
 }
-
 
 
 void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )

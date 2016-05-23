@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -58,4 +58,3 @@ int main(int argc, char **argv)		//argv = {gameDrive:gameDir, gameCommand}
 	fprintf(stderr, "path %s, drive %c, driveVal %d\n", path, newDrive, driveVal);
 	exit(2);
 }
-

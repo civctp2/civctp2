@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -65,9 +65,8 @@ PRIMITIVES_ERRCODE	primitives_PaintRect16(aui_Surface *pSurface,RECT *pRect,Pixe
 PRIMITIVES_ERRCODE	primitives_OldBevelRect16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);
 PRIMITIVES_ERRCODE  primitives_Scale16(aui_Surface *pSrc, aui_Surface *pDst, const fRect &sRect, const fRect &dRect, bool bFilter);
 
-PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface, 
+PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface,
 			  sint32 x1,sint32 y1,sint32 x2,sint32 y2,Pixel16 color);
-
 
 
 PRIMITIVES_ERRCODE	primitives_DrawText(aui_Surface *pDirectSurface,
@@ -81,19 +80,19 @@ PRIMITIVES_ERRCODE	primitives_DropText(aui_Surface *pDirectSurface,
 PRIMITIVES_ERRCODE	primitives_ColoredDropText(aui_Surface *pDirectSurface,
 				sint32 x,sint32 y,const MBCHAR *pString,COLORREF textColor,COLORREF dropColor,BOOL bg);
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
-	aui_Surface *pDirectSurface,	
+	aui_Surface *pDirectSurface,
 	RECT *destRect,
-	const MBCHAR *pString,					
-	COLORREF color,						
-	BOOL bg								
+	const MBCHAR *pString,
+	COLORREF color,
+	BOOL bg
 	);
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
-	aui_Surface *pDirectSurface,	
+	aui_Surface *pDirectSurface,
 	RECT *destRect,
-	const MBCHAR *pString,					
-	COLORREF textColor,						
-	COLORREF dropColor,						
-	BOOL bg								
+	const MBCHAR *pString,
+	COLORREF textColor,
+	COLORREF dropColor,
+	BOOL bg
 	);
 PRIMITIVES_ERRCODE	primitives_DropTextBatch(aui_Surface *pDirectSurface,sint32 x,sint32 y,
 				const MBCHAR **pString,sint32 numStrings,COLORREF color,BOOL bg);
@@ -123,8 +122,7 @@ PRIMITIVES_ERRCODE	primitives_BevelRightPiece16(
 PRIMITIVES_ERRCODE	primitives_BevelRect16(aui_Surface *pSurface, RECT *pRect, sint32 level, BOOL flag, sint32 blendLight, sint32 blendDark);
 PRIMITIVES_ERRCODE	primitives_FrameThickRect16(aui_Surface *pSurface, RECT *pRect, Pixel16 color, sint32 level );
 
-
-PRIMITIVES_ERRCODE	primitives_DrawFrame16(aui_Surface *pSurface, 
+PRIMITIVES_ERRCODE	primitives_DrawFrame16(aui_Surface *pSurface,
 				aui_Image *pImageUpperLeft, aui_Image *pImageUpperRight, aui_Image *pImageLowerLeft, aui_Image *pImageLowerRight,
 				Pattern *pPatternLeft, Pattern *pPatternTop, Pattern *pPatternRight, Pattern *pPatternBottom,
 				RECT *pDestRect);

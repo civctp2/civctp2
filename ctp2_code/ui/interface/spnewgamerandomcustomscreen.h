@@ -15,4 +15,4 @@ void spnewgamerandomcustomscreen_acceptPress( aui_Control *control, uint32 actio
 void spnewgamerandomcustomscreen_cancelPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamerandomcustomscreen_backPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-#endif 
+#endif

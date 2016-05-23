@@ -1,8 +1,3 @@
-
-
-
-
-
 #ifndef __linked_list_H__
 #define __linked_list_H__
 
@@ -20,7 +15,7 @@ typedef class unique_ID_list_cell *unique_ID_cell_ptr;
 
 
 
-class list_cell 
+class list_cell
 {
 public:
   data_ptr cell_data;
@@ -62,7 +57,7 @@ typedef class linked_list * linked_list_ptr;
 
 
 
-class DLLHEADER linked_list 
+class DLLHEADER linked_list
 {
 
 protected:
@@ -104,23 +99,22 @@ public:
 		data_ptr dead_data
 	);
 
-	
-	
-	int Remove_Data_Multiple 
+
+	int Remove_Data_Multiple
 	(
 		data_ptr dead_data
 	);
 
-	
-	
-	
-	
-	
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     inline list_cell_ptr Random_Access_Lookup
     (
         int data_num
@@ -143,23 +137,23 @@ public:
         tC = ABS(df_point) < df_tail;
 
         if (tA && tB) {
-            
+
             p = head;
             for(i=0; i<data_num; i++, p = p->next);
 
         } else if (!tB && !tC) {
-            
+
             p = tail;
             for(i=df_tail; i; i--, p = p->prev);
 
         } else {
-            
+
             p = last_cell_accessed;
             if (df_point < 0) {
-                
+
                 for(i= -df_point; i; i--, p = p->prev);
             } else {
-                
+
                 for(i=0; i < df_point; i++, p = p->next);
             }
         }
@@ -167,68 +161,63 @@ public:
         return(p);
     }
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	inline data_ptr Return_Data_By_Number
 	(
 		int data_num
 	)
 	{
-		
+
 		list_cell_ptr current_cell;
-		
 
 		if ((data_num <0) || (data_num >= count))
 			return(NULL);
 
-		
 
-		
+
+
 		if (data_num is 0)
 		{
 			current_cell = head;
 		}
 
-		
-		if (data_num is (last_number_accessed - 1)) 
+		if (data_num is (last_number_accessed - 1))
 		{
 			current_cell = last_cell_accessed->prev;
-		} 
+		}
 
-		
-		else if (data_num is (last_number_accessed + 1)) 
+		else if (data_num is (last_number_accessed + 1))
 		{
 			current_cell = last_cell_accessed->next;
-		} 
+		}
 
-		
 		else if (data_num is (count-1))
 		{
 			current_cell = tail;
-		} 
+		}
 
-		
-		else 
+		else
 		{
             current_cell = Random_Access_Lookup(data_num);
 		}
 
-		
-		
-		
+
+
+
 		last_number_accessed = data_num;
 		last_cell_accessed = current_cell;
 
-		Assert(current_cell); 
+		Assert(current_cell);
 		return(current_cell->cell_data);
 	};
-	
-	
-	
-	
+
+
+
+
 
 
 
@@ -242,19 +231,16 @@ public:
 		int cell_num
 	);
 
-	
-	int Return_Index_Of_Data 
+	int Return_Index_Of_Data
 	(
 		data_ptr search_data
 	);
 
-	
 	void Append_Whole_List(linked_list * other_list);
 
     #ifdef _DEBUG
-        void Validate(); 
+        void Validate();
     #endif _DEBUG
-
 
 };
 
@@ -306,4 +292,4 @@ public :
 
 
 
-#endif 
+#endif

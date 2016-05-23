@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Slic Built In 
+// Description  : Slic Built In
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,24 +25,24 @@
 // Modifications from the original Activision code:
 //
 // - Added a built in field for player to be able to get the the database
-//   index of the player's current government, by Peter Triggs and 
+//   index of the player's current government, by Peter Triggs and
 //   Martin Gühmann.
 // - Added three new globals by Martin Gühmann:
 //   - g.num_of_players: Gets the number of players in the current game
-//   - g.last_player:    Gets the last player, the player with the highest 
+//   - g.last_player:    Gets the last player, the player with the highest
 //                       index in the game
 //   - g.max_player:     Gets the maximum number of players that is in a game
 //                       possible, currently it is 32 including the Barbarians.
-// - The following builtins are not only useful anymore in string replacement 
+// - The following builtins are not only useful anymore in string replacement
 //   but also in slic code (Changed by Martin Gühmann - Oct. 30th 2004):
 //   - player.capital:           The player's capital as string or city_t.
 //   - player.largestcity:       The player's largest city as string or city_t.
-//   - player.researching:       The database index or name of the current 
+//   - player.researching:       The database index or name of the current
 //                               player's research project.
 //   - player.militarystate:     The player's military state as index or string.
 //   - player.leaderperonality:  The player's leader's personality type as
 //                               string or personality database index.
-//   - player.govttype:          The player's government type as string or 
+//   - player.govttype:          The player's government type as string or
 //                               government database index.
 //   Note: leaderperonality should be leaderpersonality but as it is used
 //   in the text files I don't fix it.
@@ -117,7 +117,7 @@ class GlobalSymbol_Player : public SlicStructMemberData {
 		return TRUE;
 	};
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
 	{
 		return GetPlayer(value);
 	};
@@ -150,7 +150,7 @@ class GlobalSymbol_LastPlayer : public SlicStructMemberData {
 		return TRUE;
 	}
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
 	{
 		return GetPlayer(value);
 	};
@@ -165,7 +165,6 @@ class GlobalSymbol_MaxPlayers : public SlicStructMemberData {
 	}
 };
 
-
 SlicStruct_Global::SlicStruct_Global() :
 	SlicStructDescription("g", SLIC_BUILTIN_GLOBAL)
 {
@@ -175,9 +174,8 @@ SlicStruct_Global::SlicStruct_Global() :
 	AddAccessor("num_of_players", new GlobalSymbol_NumOfPlayers);
 	AddAccessor("last_player", new GlobalSymbol_LastPlayer);
 	AddAccessor("max_players", new GlobalSymbol_MaxPlayers);
-	
-}
 
+}
 
 
 class UnitSymbol_Owner : public SlicStructMemberData {
@@ -197,7 +195,7 @@ class UnitSymbol_Owner : public SlicStructMemberData {
 		}
 	}
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
     {
         return GetPlayer(value);
 	}
@@ -318,7 +316,7 @@ class CitySymbol_Owner : public SlicStructMemberData {
 
 	SLIC_SYM GetType() const { return SLIC_SYM_IVAR; }
 
-    BOOL GetPlayer(sint32 &val) const 
+    BOOL GetPlayer(sint32 &val) const
     {
 		Unit city;
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
@@ -377,7 +375,7 @@ class CitySymbol_Population : public SlicStructMemberData {
 		if (res)
         {
             value = city.IsValid() ? city.PopCount() : 0;
-		} 
+		}
         return res;
 	}
 };
@@ -386,17 +384,17 @@ class CitySymbol_Happiness : public SlicStructMemberData {
 	DEF_MAKECOPY(CitySymbol_Happiness);
 
 	SLIC_SYM GetType() const { return SLIC_SYM_IVAR; }
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
 	{
 		Unit city;
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
 		Assert(res);
-		if (city.IsValid()) 
+		if (city.IsValid())
 		{
 			value = static_cast<sint32>(city.GetHappiness());
 			return TRUE;
-		} 
-		else 
+		}
+		else
 		{
 			return FALSE;
 		}
@@ -443,7 +441,7 @@ class CitySymbol_Building : public SlicStructMemberData {
 		Unit city;
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
 		Assert(res);
-		if(city.IsValid()) 
+		if(city.IsValid())
 		{
 			if(city.CD()->GetBuildQueue()->GetHead())
 			{
@@ -462,7 +460,7 @@ class CitySymbol_Building : public SlicStructMemberData {
 		Unit city;
 		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
 		Assert(res);
-		if(city.IsValid()) 
+		if(city.IsValid())
 		{
 			if(city.CD()->GetBuildQueue()->GetHead())
 			{
@@ -471,7 +469,7 @@ class CitySymbol_Building : public SlicStructMemberData {
 			else
 			{
 				sint32 id;
-				
+
 				if(g_theStringDB->GetStringID("str_ldl_Building_Nothing_Label", id))
 					return id;
 				return -1;
@@ -538,7 +536,7 @@ SlicStruct_City::SlicStruct_City() :
 	AddMember("building", new CitySymbol_Building);
 	AddMember("buildingtime", new CitySymbol_BuildingTime);
 	AddMember("buildqueuelength", new CitySymbol_BuildQueueLength);
-	
+
 }
 
 
@@ -568,7 +566,7 @@ class PlayerSymbol_Cities : public SlicStructMemberData {
 		if (res)
         {
             value = g_player[pl] ? g_player[pl]->m_all_cities->Num() : 0;
-		} 
+		}
         return res;
 	}
 };
@@ -579,7 +577,7 @@ class PlayerSymbol_Units : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if (res) 
+		if (res)
         {
             value = g_player[pl] ? g_player[pl]->m_all_units->Num() : 0;
 		}
@@ -628,17 +626,17 @@ class PlayerSymbol_MilitaryUnits : public SlicStructMemberData {
 		if (res)
         {
 			value = 0;
-            if (g_player[pl] && g_player[pl]->m_all_units) 
+            if (g_player[pl] && g_player[pl]->m_all_units)
             {
-			    for (sint32 i = 0; i < g_player[pl]->m_all_units->Num(); i++) 
+			    for (sint32 i = 0; i < g_player[pl]->m_all_units->Num(); i++)
                 {
-				    if (g_player[pl]->m_all_units->Access(i).GetDBRec()->GetAttack() > 0.001) 
+				    if (g_player[pl]->m_all_units->Access(i).GetDBRec()->GetAttack() > 0.001)
                     {
 					    value++;
                     }
 				}
 			}
-		} 
+		}
         return res;
 	}
 };
@@ -652,7 +650,7 @@ class PlayerSymbol_TotalPopulation : public SlicStructMemberData {
 		if (res)
         {
             value = g_player[pl] ? g_player[pl]->GetTotalPopulation() : 0;
-		} 
+		}
         return res;
 	}
 };
@@ -692,7 +690,7 @@ class PlayerSymbol_Capital : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if (res) 
+		if (res)
 		{
             if (g_player[pl] && g_player[pl]->m_capitol)
             {
@@ -701,7 +699,7 @@ class PlayerSymbol_Capital : public SlicStructMemberData {
             else
             {
                 // no capitol
-                city = Unit();  
+                city = Unit();
             }
 		}
 		return res;
@@ -725,7 +723,7 @@ class PlayerSymbol_LargestCity : public SlicStructMemberData {
 	}
 	// Added by Martin Gühmann to allow to access the largest city
 	// as city_t.
-	BOOL GetCity(Unit &city) const 
+	BOOL GetCity(Unit &city) const
     {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
@@ -742,7 +740,7 @@ class PlayerSymbol_LargestCity : public SlicStructMemberData {
 
 			    for (sint32 i = 1; i < g_player[pl]->m_all_cities->Num(); i++)
 			    {
-                    Unit const &    testCity = g_player[pl]->m_all_cities->Get(i); 
+                    Unit const &    testCity = g_player[pl]->m_all_cities->Get(i);
 				    if (testCity->PopCount() > lpop)
                     {
 					    lpop    = testCity->PopCount();
@@ -767,7 +765,7 @@ class PlayerSymbol_Researching : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if (pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if (pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
 			strncpy(text, g_theAdvanceDB->Get(g_player[pl]->m_advances->GetResearching())->GetNameText(), maxLen);
 			return TRUE;
@@ -803,9 +801,9 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
-			switch(g_player[pl]->GetReadinessLevel()) 
+			switch(g_player[pl]->GetReadinessLevel())
 			{
 				case READINESS_LEVEL_PEACE:
 					strncpy(text, g_theStringDB->GetNameStr("str_ldl_READINESS_LEVEL_PEACE"), maxLen);
@@ -828,10 +826,10 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
 			sint32 id = -1;
-			switch(g_player[pl]->GetReadinessLevel()) 
+			switch(g_player[pl]->GetReadinessLevel())
 			{
 				case READINESS_LEVEL_PEACE:
 					g_theStringDB->GetStringID("str_ldl_READINESS_LEVEL_PEACE", id);
@@ -850,11 +848,11 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 		}
 		return -1;
 	}
-	// Added by Martin Gühmann to allow to access the index of 
+	// Added by Martin Gühmann to allow to access the index of
 	// the current military readiness level.
 	BOOL GetIntValue(sint32 &value) const {
 		PLAYER_INDEX    pl   = PLAYER_UNASSIGNED;
-		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl]) 
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl])
         {
 			value = g_player[pl]->GetReadinessLevel();
 			return TRUE;
@@ -864,12 +862,11 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 	}
 };
 
-
 class PlayerSymbol_LeaderPersonality : public SlicStructMemberData {
 	DEF_MAKECOPY(PlayerSymbol_LeaderPersonality);
 	BOOL GetText(MBCHAR *text, sint32 maxLen) const {
 		PLAYER_INDEX    pl = PLAYER_UNASSIGNED;
-		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl]) 
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl])
 		{
 			StringId description = Diplomat::GetDiplomat(pl).GetPersonality()->GetDescription();
 			if (description != -1)
@@ -886,7 +883,7 @@ class PlayerSymbol_LeaderPersonality : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
 			value = Diplomat::GetDiplomat(pl).GetPersonality()->GetIndex();
 			return TRUE;
@@ -902,9 +899,9 @@ class PlayerSymbol_GovtType : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
-			
+
 			strncpy(text, g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetNameText(), maxLen);
 			return TRUE;
 		}
@@ -915,7 +912,7 @@ class PlayerSymbol_GovtType : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
 			return g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetName();
 		}
@@ -927,7 +924,7 @@ class PlayerSymbol_GovtType : public SlicStructMemberData {
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
 		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL)
 		{
 			value = g_player[pl]->m_government_type;
 			return TRUE;
@@ -1012,8 +1009,7 @@ class PlayerSymbol_LeaderName : public SlicStructMemberData {
 		Assert(res);
 		if(res) {
 			StringId id = -1;
-			
-			
+
 			if(g_player[pl]->m_civilisation->GetGender() == GENDER_MALE) {
 				id = g_theCivilisationDB->Get((*(g_player[pl]->m_civilisation))->GetCivilisation())->GetLeaderNameMale();
 			} else {
@@ -1196,11 +1192,10 @@ class PlayerSymbol_SirCap : public SlicStructMemberData {
 	}
 };
 
-
 class PlayerSymbol_PublicWorksTax : public SlicStructMemberData {
 	DEF_MAKECOPY(PlayerSymbol_PublicWorksTax);
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
 	{
 		sint32 pl;
 		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
@@ -1222,7 +1217,6 @@ class PlayerSymbol_PublicWorksLevel : public SlicStructMemberData {
 	}
 };
 
-
 SlicStruct_Player::SlicStruct_Player() :
 	SlicStructDescription("player", SLIC_BUILTIN_PLAYER)
 {
@@ -1241,7 +1235,6 @@ SlicStruct_Player::SlicStruct_Player() :
 	AddMember("leaderperonality", new PlayerSymbol_LeaderPersonality);
 	AddMember("govttype", new PlayerSymbol_GovtType);
 
-	
 	AddMember("civ_name_plural", new PlayerSymbol_CivNamePlural);
 	AddMember("civ_name_singular", new PlayerSymbol_CivNameSingular);
 	AddMember("country_name", new PlayerSymbol_CountryName);
@@ -1255,11 +1248,9 @@ SlicStruct_Player::SlicStruct_Player() :
 	AddMember("sir", new PlayerSymbol_Sir);
 	AddMember("sir_cap", new PlayerSymbol_SirCap);
 
-	
 	AddMember("publicworkstax", new PlayerSymbol_PublicWorksTax);
 	AddMember("publicworkslevel", new PlayerSymbol_PublicWorksLevel);
 }
-
 
 class ArmySymbol_Owner : public SlicStructMemberData {
 	DEF_MAKECOPY(ArmySymbol_Owner);
@@ -1276,7 +1267,7 @@ class ArmySymbol_Owner : public SlicStructMemberData {
 		return TRUE;
 	}
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
     {
 		return GetPlayer(value);
 	}
@@ -1302,11 +1293,11 @@ class ArmySymbol_Size : public SlicStructMemberData {
 	DEF_MAKECOPY(ArmySymbol_Size);
 	SLIC_SYM GetType() const { return SLIC_SYM_IVAR; }
 
-	BOOL GetIntValue(sint32 &value) const 
+	BOOL GetIntValue(sint32 &value) const
     {
 		Army army;
 		BOOL const res = m_parent->GetDataSymbol()->GetArmy(army);
-		if (res) 
+		if (res)
         {
             value = army.IsValid() ? army.Num() : 0;
         }
@@ -1335,7 +1326,6 @@ class LocationSymbol_Location : public SlicStructMemberData {
 };
 
 
-
 class LocationSymbol_X : public SlicStructMemberData {
 	DEF_MAKECOPY(LocationSymbol_X);
 	SLIC_SYM GetType() const { return SLIC_SYM_IVAR; }
@@ -1350,7 +1340,6 @@ class LocationSymbol_X : public SlicStructMemberData {
 		return TRUE;
 	}
 };
-
 
 class LocationSymbol_Y : public SlicStructMemberData {
 	DEF_MAKECOPY(LocationSymbol_Y);
@@ -1367,13 +1356,11 @@ class LocationSymbol_Y : public SlicStructMemberData {
 	}
 };
 
-
 SlicStruct_Location::SlicStruct_Location() :
 	SlicStructDescription("location", SLIC_BUILTIN_LOCATION)
 {
 	AddMember("location", new LocationSymbol_Location);
-    
-	
+
 	AddMember("x", new LocationSymbol_X);
 	AddMember("y", new LocationSymbol_Y);
 }
@@ -1395,7 +1382,7 @@ SlicStruct_Government::SlicStruct_Government() :
 	AddMember("type", new GovernmentSymbol_Type);
 }
 
-	
+
 
 
 
@@ -1594,7 +1581,7 @@ class UnitRecordSymbol_Name : public SlicStructMemberData {
 		Assert(res);
 		if(!res)
 			type = 0;
-		
+
 		strncpy(text, g_theUnitDB->Get(type)->GetNameText(), maxLen);
 		return TRUE;
 	}
@@ -1745,4 +1732,3 @@ SlicStruct_Good::SlicStruct_Good() :
 {
 	AddMember("name", new GoodSymbol_Name);
 }
-

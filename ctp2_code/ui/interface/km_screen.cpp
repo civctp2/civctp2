@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,7 +49,7 @@
 #include "keymap.h"
 #include "keypress.h"
 
-#include "c3_dropdown.h"	
+#include "c3_dropdown.h"
 #include "spnewgamewindow.h"
 
 #include "StrDB.h"
@@ -63,7 +63,7 @@ extern StringDB     *g_theStringDB;
 namespace
 {
     // Key mapping categories
-    enum KM 
+    enum KM
     {
         KM_BASIC,
         KM_UNIT,
@@ -108,7 +108,7 @@ namespace
             KEY_FUNCTION_MOVE_EAST,
             KEY_FUNCTION_MOVE_SOUTHWEST,
             KEY_FUNCTION_MOVE_SOUTH,
-            KEY_FUNCTION_MOVE_SOUTHEAST,	
+            KEY_FUNCTION_MOVE_SOUTHEAST,
             KEY_FUNCTION_UNIT_CITY_TOGGLE,
             KEY_FUNCTION_NEXT_ITEM,
             KEY_FUNCTION_KEYBOARD_SELECT_UNIT,
@@ -116,7 +116,7 @@ namespace
 //          KEY_FUNCTION_ENDTURN,           // CTP2: "--" placeholder in km_screen.ldl
         };
 
-    TabDescriptor const TAB_BASIC 
+    TabDescriptor const TAB_BASIC
         ("Basic", sizeof(BASIC_FUNCTION) / sizeof(BASIC_FUNCTION[0]));
 
     KEY_FUNCTION const  UNIT_FUNCTION[]         =
@@ -124,12 +124,12 @@ namespace
             KEY_FUNCTION_OPEN_WORK_VIEW,    // CTP2: reused for army manager
             KEY_FUNCTION_SLEEP,
             KEY_FUNCTION_ENTRENCH,
-            KEY_FUNCTION_SETTLE, 
+            KEY_FUNCTION_SETTLE,
             KEY_FUNCTION_PILLAGE,
             KEY_FUNCTION_BOMBARD,
             KEY_FUNCTION_REFORM,
             KEY_FUNCTION_EXPEL,
-            KEY_FUNCTION_UNLOAD_TRANS, 
+            KEY_FUNCTION_UNLOAD_TRANS,
             KEY_FUNCTION_INVESTIGATE_CITY,
             KEY_FUNCTION_PLANT_NUKE,
             KEY_FUNCTION_BIOINFECT,
@@ -159,7 +159,7 @@ namespace
             KEY_FUNCTION_OPEN_SCIENCE_STATUS,
             KEY_FUNCTION_OPEN_UNIT_STATUS,
             KEY_FUNCTION_OPEN_TRADE_STATUS,
-            KEY_FUNCTION_TRADE_SUMMARY,    
+            KEY_FUNCTION_TRADE_SUMMARY,
             KEY_FUNCTION_OPEN_DIPLOMACY,
             KEY_FUNCTION_NEW_PROPOSAL,
             KEY_FUNCTION_OPEN_MESSAGE,
@@ -286,7 +286,7 @@ void km_screen_loadKeyList(void)
     KEY_FUNCTION const  *   functionList;
     size_t                  functionCount;
 
-	switch (s_selected) 
+	switch (s_selected)
     {
     default:
         functionCount   = TAB_INVALID.Count;
@@ -319,13 +319,12 @@ void km_screen_loadKeyList(void)
 		break;
 	}
 
-
 	s_keyList->Clear();
-	for (size_t i = 0; i < functionCount; ++i) 
+	for (size_t i = 0; i < functionCount; ++i)
     {
         AUI_ERRCODE             errcode = AUI_ERRCODE_OK;
         KEY_FUNCTION const &    f       = functionList[i];
-    	KeyListItem *           item    = 
+    	KeyListItem *           item    =
             new KeyListItem(&errcode, f, theKeyMap->get_keycode(f), ldl);
 		Assert(AUI_NEWOK(item, errcode));
 
@@ -343,7 +342,6 @@ void km_screen_loadKeyList(void)
         }
     }
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -373,35 +371,32 @@ AUI_ERRCODE km_screen_Initialize( void )
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_km_screen ) return AUI_ERRCODE_OK; 
+	if ( s_km_screen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "KmScreen");
 
-	{ 
+	{
 		s_km_screen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING );
 		Assert( AUI_NEWOK(s_km_screen, errcode) );
 		if ( !AUI_NEWOK(s_km_screen, errcode) ) errcode;
 
-		
 		s_km_screen->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->GrabRegion()->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->SetStronglyModal(TRUE);
 	}
-	
-	s_km_screen->AddClose( km_screen_backPress );
 
+	s_km_screen->AddClose( km_screen_backPress );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_km_screen->AddTitle( controlBlock );
 
 
-	
 	s_switch = new ctp2_Button*[KM_MAX];
 
 	sprintf( groupBlock, "%s.%s", windowBlock, "Group" );
-	
-	
-	
+
+
+
 
 	s_groupStatic = new ctp2_Static(&errcode, aui_UniqueId(), groupBlock);
 	Assert(AUI_NEWOK(s_groupStatic, errcode));
@@ -413,34 +408,29 @@ AUI_ERRCODE km_screen_Initialize( void )
 		Assert( AUI_NEWOK(s_switch[i], errcode) );
 		if ( !AUI_NEWOK(s_switch[i], errcode) ) return errcode;
 	}
- 
+
 	s_switch[s_selected]->SetToggleState(true);
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResetButton" );
 	s_resetButton = new ctp2_Button( &errcode, aui_UniqueId(), controlBlock, km_screen_resetPress );
 	Assert( AUI_NEWOK(s_resetButton, errcode) );
 	if ( !AUI_NEWOK(s_resetButton, errcode) ) return errcode;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "KeyList" );
 	s_keyList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock );
 	Assert( AUI_NEWOK(s_keyList, errcode) );
 	if ( !AUI_NEWOK(s_keyList, errcode) ) return errcode;
-	
-	
+
 	sprintf( controlBlock, "%s", "KeylistStrings" );
 	s_strings = new aui_StringTable( &errcode, controlBlock );
 	Assert( AUI_NEWOK(s_strings , errcode) );
 	if ( !AUI_NEWOK(s_strings , errcode) ) return errcode;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 } // namespace
 
@@ -479,8 +469,7 @@ sint32 km_screen_removeMyWindow(uint32 action)
 
 	if(!s_km_screen) return 0;
 
-
-	if (g_c3ui && s_km_screen) 
+	if (g_c3ui && s_km_screen)
 	{
 		AUI_ERRCODE const auiErr = g_c3ui->RemoveWindow(s_km_screen->Id());
 		Assert( auiErr == AUI_ERRCODE_OK );
@@ -513,7 +502,7 @@ void km_screen_Cleanup()
 
 	if (s_switch)
 	{
-		for (size_t i = 0; i < KM_MAX; ++i) 
+		for (size_t i = 0; i < KM_MAX; ++i)
 		{
 			mycleanup( s_switch[i] );
 		}
@@ -570,7 +559,6 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 {
 	KeyListItem *item;
 
-	
 	item = (KeyListItem *)s_keyList->GetSelectedItem();
 	if ( !item ) return 0;
 
@@ -580,8 +568,7 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 	theKeyMap->remap_key( keyFunc, wParam, keycode );
 	item->UpdateKey( theKeyMap->get_keycode(keyFunc) );
 
-	
-	
+
 	sint32 curIndex = s_keyList->GetSelectedItemIndex();
 	sint32 curRangerPos = s_keyList->GetVerticalRanger()->GetValueY();
 
@@ -592,7 +579,6 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 
 	return 1;
 }
-
 
 KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock)
 	:
@@ -605,9 +591,8 @@ KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCH
 
 	*retval = InitCommonLdl(index, keycode, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock)
 {
@@ -679,7 +664,7 @@ MBCHAR const * km_GetKeyName(uint32 code)
 			}
 			else
 			{
-				sprintf(str, "%c", code); 
+				sprintf(str, "%c", code);
 			}
 			break;
 	}
@@ -731,7 +716,7 @@ MBCHAR const * KeyListItem::GetKeyFromKMScreen(uint32 keycode)
 
 sint32 KeyListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	switch (column) 
+	switch (column)
 	{
 		default:
 			break;
@@ -748,5 +733,3 @@ sint32 KeyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
-

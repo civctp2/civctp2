@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 #include "soundmanager.h"
 #include "civ3_main.h"
 #include "pointerlist.h"
-
 
 #include "display.h"
 
@@ -95,20 +94,18 @@ sint32 graphicsresscreen_removeMyWindow(uint32 action)
 }
 
 
-
 void ScreenResListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
-	
 	ScreenResListItem *item = (ScreenResListItem *) s_resList->GetSelectedItem();
 	if (!item)
 		return;
 
 	s_selectedDisplayMode = item->GetDisplayMode();
 
-	if (s_selectedDisplayMode->width == g_ScreenWidth && 
+	if (s_selectedDisplayMode->width == g_ScreenWidth &&
 		s_selectedDisplayMode->height == g_ScreenHeight) {
 		s_warning->Hide();
 	} else {
@@ -126,20 +123,19 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_graphicsResScreen ) return AUI_ERRCODE_OK; 
+	if ( s_graphicsResScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "ScreenResScreen");
-	{ 
+	{
 		s_graphicsResScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_graphicsResScreen, errcode) );
 		if ( !AUI_NEWOK(s_graphicsResScreen, errcode) ) errcode;
 
-		
 		s_graphicsResScreen->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());
 		s_graphicsResScreen->GrabRegion()->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());
 		s_graphicsResScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	s_graphicsResScreen->AddTitle( "ScreenResScreen.Name" );
 	s_graphicsResScreen->AddClose( graphicsresscreen_acceptPress );
 
@@ -153,18 +149,16 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	Assert( AUI_NEWOK(s_warning, errcode) );
 	if ( !AUI_NEWOK(s_warning, errcode) ) return errcode;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-	
 	s_warning->Hide();
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "ScreenResListItem");
 
-	
-	
-	
+
+
+
 	PointerList<CTPDisplayMode>::PointerListNode	*node;
 	sint32		i=0;
 
@@ -175,7 +169,7 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 			ScreenResListItem		*item = new ScreenResListItem(&errcode, mode, controlBlock);
 			s_resList->AddItem((aui_Item *)item);
 			if (mode->width == g_ScreenWidth && mode->height == g_ScreenHeight) {
-				
+
 				s_currentResIndex = i;
 			}
 		}
@@ -196,7 +190,7 @@ AUI_ERRCODE graphicsresscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_graphicsResScreen  ) return AUI_ERRCODE_OK; 
+	if ( !s_graphicsResScreen  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_graphicsResScreen->Id() );
 
@@ -244,10 +238,9 @@ ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, 
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = InitCommonLdl(mode, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, MBCHAR *ldlBlock)
@@ -270,4 +263,3 @@ AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, MBCHAR *ldlBl
 	m_mode = mode;
 	return AUI_ERRCODE_OK;
 }
-

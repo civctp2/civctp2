@@ -5,16 +5,14 @@
 #define __TILECONTROL_H__
 
 
-
 class aui_Surface;
 class MapPoint;
-
 
 
 class TileControl : public aui_Control
 {
 public:
-	
+
 	TileControl(AUI_ERRCODE *retval,
 						uint32 id,
 						MBCHAR *ldlBlock );
@@ -40,11 +38,10 @@ protected:
 	MapPoint			m_currentTile;
 
 	sint32 DrawTile(aui_Surface *surface,
-			sint32 i,	
-			sint32 j,	
+			sint32 i,
+			sint32 j,
 			sint32 x,
 			sint32 y);
 };
 
-
-#endif 
+#endif

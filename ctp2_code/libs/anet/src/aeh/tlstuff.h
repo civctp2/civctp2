@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -18,13 +18,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <windows.h>
-#include <tlhelp32.h> // needed for tool help declarations  
- 
-// Type definitions for pointers to call tool help functions. 
-typedef BOOL (WINAPI *MODULEWALK)(HANDLE hSnapshot, LPMODULEENTRY32 lpme); 
-typedef HANDLE (WINAPI *CREATESNAPSHOT)(DWORD dwFlags, DWORD th32ProcessID); 
+#include <tlhelp32.h> // needed for tool help declarations
+
+// Type definitions for pointers to call tool help functions.
+typedef BOOL (WINAPI *MODULEWALK)(HANDLE hSnapshot, LPMODULEENTRY32 lpme);
+typedef HANDLE (WINAPI *CREATESNAPSHOT)(DWORD dwFlags, DWORD th32ProcessID);
 typedef DWORD (WINAPI *UNDECORATESYMNAME)(LPSTR DecoratedName, LPSTR UnDecoratedName, DWORD UndecoratedLength, DWORD Flags);
- 
+
 typedef struct {
 	CREATESNAPSHOT pCreate32Snapshot;
 	MODULEWALK  pModule32First;

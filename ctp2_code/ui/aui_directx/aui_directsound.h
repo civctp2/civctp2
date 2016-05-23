@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTSOUND_H__
 #define __AUI_DIRECTSOUND_H__
 
 #ifdef __AUI_USE_DIRECTX__
-
 
 #include "aui_sound.h"
 
@@ -34,8 +22,8 @@ public:
 		char *fileName,
 		float x,
 		float y,
-		float z ) { return AUI_ERRCODE_OK; }; 
-	virtual AUI_ERRCODE Load( void );	
+		float z ) { return AUI_ERRCODE_OK; };
+	virtual AUI_ERRCODE Load( void );
 	virtual AUI_ERRCODE Unload ( void );
 	virtual void Play( void );
 	virtual void Stop( void );
@@ -51,17 +39,17 @@ protected:
 	sint32	m_maxCopies;
 	sint32	m_volume;
 	sint32	m_random;
-	sint32	m_sampleRate;	
+	sint32	m_sampleRate;
 	uint32	m_copiesPlaying;
 	BOOL	m_duplicated;
 	BOOL	m_alreadyDeleted;
-	sint32	m_count;			
+	sint32	m_count;
 	uint32	m_flags;
 	sint32	m_playFlags;
-}; 
+};
 
 typedef aui_DirectSound aui_NativeSound;
 
-#endif 
+#endif
 
-#endif 
+#endif

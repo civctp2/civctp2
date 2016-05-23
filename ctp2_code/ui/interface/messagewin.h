@@ -18,7 +18,6 @@ class MessageIconWindow;
 #define BOUNCE_IT		g_theProfileDB->IsBounceMessage()
 
 
-
 AUI_ERRCODE messagewin_InitializeMessages( void );
 MessageList *messagewin_InitializePlayerMessage( PLAYER_INDEX index );
 
@@ -27,7 +26,7 @@ int messagewin_CreateModalMessage( Message data );
 
 MessageList *messagewin_GetPlayerMessageList( PLAYER_INDEX index );
 int messagewin_PrepareDestroyWindow( MessageWindow *window );
-int messagewin_FastKillWindow(MessageWindow *window);	
+int messagewin_FastKillWindow(MessageWindow *window);
 int messagewin_CleanupMessage( MessageIconWindow *iconWindow );
 int messagewin_CleanupMessage( MessageWindow *window );
 int messagewin_CleanupMessage( MessageIconWindow *iconWindow, MessageWindow *window );
@@ -41,4 +40,4 @@ int messagewin_LessMessagesIcon( BOOL make, BOOL destroy = FALSE );
 
 int messagewin_IsModalMessageDisplayed();
 
-#endif 
+#endif

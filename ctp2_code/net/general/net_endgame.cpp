@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -117,11 +117,11 @@ void NetEndGame::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 
-	
 
 
 
-	
+
+
 
 
 
@@ -217,7 +217,6 @@ void NetWormhole::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	sint32 packpos;
 	PULLLONG(packpos);
 	g_network.UnpackedPos(packpos, wpos);
-	
 
 	if(!g_wormhole) {
 		g_wormhole = new Wormhole(discoverer, wpos);
@@ -243,4 +242,3 @@ void NetWormhole::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_wormhole->m_entries->AddTail(new EntryRecord(unit, round));
 	}
 }
-

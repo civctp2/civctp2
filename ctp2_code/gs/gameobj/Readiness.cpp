@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -59,15 +59,14 @@
 
 #include "GameEventManager.h"   // g_gevManager
 
-
 MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
 :
-    m_delta             (0.0),  
-    m_hp_modifier       (1.0), 
+    m_delta             (0.0),
+    m_hp_modifier       (1.0),
     m_cost              (0.0),
-    m_percent_last_turn (0.0), 
+    m_percent_last_turn (0.0),
     m_readinessLevel    (READINESS_LEVEL_WAR),
-    m_ignore_unsupport  (FALSE), 
+    m_ignore_unsupport  (FALSE),
     m_owner             (a_Owner),
     m_turnStarted       (-1),
     m_costGold          (0)
@@ -76,24 +75,24 @@ MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
 
 double MilitaryReadiness::GetSupportModifier(sint32 gov) const
 {
-    const GovernmentRecord *rec = g_theGovernmentDB->Get(gov); 
+    const GovernmentRecord *rec = g_theGovernmentDB->Get(gov);
 
-    switch (m_readinessLevel) { 
-    case READINESS_LEVEL_PEACE: 
-        return rec->GetReadyPeaceCoef(); 
-    case READINESS_LEVEL_ALERT: 
-        return rec->GetReadyAlertCoef(); 
-    case READINESS_LEVEL_WAR: 
-        return rec->GetReadyWarCoef(); 
+    switch (m_readinessLevel) {
+    case READINESS_LEVEL_PEACE:
+        return rec->GetReadyPeaceCoef();
+    case READINESS_LEVEL_ALERT:
+        return rec->GetReadyAlertCoef();
+    case READINESS_LEVEL_WAR:
+        return rec->GetReadyWarCoef();
     default:
-        Assert(0); 
+        Assert(0);
         return 0.0;
     }
 }
 
 double MilitaryReadiness::GetSpecialForcesSupportModifier(sint32 gov) const
 {
-	const GovernmentRecord *rec = g_theGovernmentDB->Get(gov); 
+	const GovernmentRecord *rec = g_theGovernmentDB->Get(gov);
 
 	return rec->GetReadyWarCoef();
 }
@@ -125,16 +124,16 @@ double MilitaryReadiness::GetHPModifier() const
 	return m_hp_modifier;
 }
 
-double MilitaryReadiness::GetReadyHP(sint32 gov, READINESS_LEVEL level) 
+double MilitaryReadiness::GetReadyHP(sint32 gov, READINESS_LEVEL level)
 {
     const GovernmentRecord *rec = g_theGovernmentDB->Get(gov);
 
     switch (level) {
     case READINESS_LEVEL_PEACE:
         return rec->GetReadyPeaceHP();
-    case READINESS_LEVEL_ALERT: 
+    case READINESS_LEVEL_ALERT:
         return rec->GetReadyAlertHP();
-    case READINESS_LEVEL_WAR: 
+    case READINESS_LEVEL_WAR:
         return rec->GetReadyWarHP();
     default:
         Assert(0);
@@ -179,7 +178,7 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 	} else {
 		unitCost = u.GetShieldHunger() * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
 	}
-	unitCost -= unitCost * 
+	unitCost -= unitCost *
 		double((double)wonderutil_GetReadinessCostReduction(
 			g_player[m_owner]->GetBuiltWonders()) / 100.0);
 
@@ -193,7 +192,6 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 
 	return unitCost;
 }
-
 
 //EMOD
 sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
@@ -214,7 +212,7 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 			unitCostGold = static_cast<double>(goldHunger) * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
 		}
 
-		unitCostGold -= unitCostGold * 
+		unitCostGold -= unitCostGold *
 			(static_cast<double>(wonderutil_GetReadinessCostReduction(
 				g_player[m_owner]->GetBuiltWonders())) / 100.0);
 
@@ -231,7 +229,6 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 	return static_cast<sint32>(unitCostGold);
 }
 
-
 void MilitaryReadiness::UnsupportUnit(const Unit &u, sint32 gov)
 {
 	if (m_ignore_unsupport)
@@ -244,18 +241,18 @@ void MilitaryReadiness::UnsupportUnit(const Unit &u, sint32 gov)
 	g_network.Unblock(m_owner);
 }
 
-void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies, 
+void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
               READINESS_LEVEL level, BOOL immediate)
 {
 	if (level == m_readinessLevel)
 		return;
 
-	m_cost = 0.0; 
+	m_cost = 0.0;
 
 	sint32 turns;
 
 	if (level < m_readinessLevel || immediate) {
-		
+
 		turns = 1;
 		m_turnStarted = -1;
 	} else {
@@ -264,7 +261,7 @@ void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
 	}
 
 	READINESS_LEVEL oldLevel = m_readinessLevel;
-	m_readinessLevel = level; 
+	m_readinessLevel = level;
 
 	m_delta = (GetReadyHP(gov, m_readinessLevel) - GetReadyHP(gov, oldLevel))/turns;
 	RecalcCost();
@@ -282,7 +279,7 @@ void MilitaryReadiness::RecalcCost()
 	int const   n = all_armies->Num();
 	for(sint32 i = 0; i < n; i++)
 	{
-		int const m =all_armies->Access(i).Num(); 
+		int const m =all_armies->Access(i).Num();
 		for(sint32 j = 0; j < m; j++)
 		{
 			m_cost += GetSupportCost(all_armies->Access(i)[j]);
@@ -290,29 +287,28 @@ void MilitaryReadiness::RecalcCost()
 	}
 }
 
-struct UnitCost { 
-    Unit u; 
-    double cost; 
+struct UnitCost {
+    Unit u;
+    double cost;
 };
-
 
 //EMOD
 sint32 MilitaryReadiness::TotalUnitGoldSupport()
 {
-//based on RecalcCost, this coade (renamed from RecalcCostGold) gets all support gold hunger from units * govt coefficient * readiness 
+//based on RecalcCost, this coade (renamed from RecalcCostGold) gets all support gold hunger from units * govt coefficient * readiness
 
 	m_costGold = 0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-	sint32 i, j; 
-	sint32 const n = all_armies->Num(); 
-	for (i=0; i<n; i++) 
-    { 
-    	sint32 const m = all_armies->Access(i).Num(); 
-    	for (j=0; j<m; j++) 
-        { 
+	sint32 i, j;
+	sint32 const n = all_armies->Num();
+	for (i=0; i<n; i++)
+    {
+    	sint32 const m = all_armies->Access(i).Num();
+    	for (j=0; j<m; j++)
+        {
 		    m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
     	}
-    }	
+    }
     return m_costGold;
 }
 
@@ -323,8 +319,8 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total)
 // notgoing to do a gold one because it will cost economy not units, tougher for human and AI
 {
-	if (sint32(m_cost) <= mil_total) 
-		return; 
+	if (sint32(m_cost) <= mil_total)
+		return;
 
 //EMOD AI can run deficit? but cant build production?
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit()
@@ -332,28 +328,27 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 		return;
 
 
-
 	sint32 n = m_all_armies.Num();
 
 	if (n < 1) {
 		return;
-	} 
+	}
 
 	sint32 i, j, m;
 	sint32 n_units = 0;
-	for (i=0; i<n; i++) { 
-		n_units += m_all_armies[i].Num(); 
+	for (i=0; i<n; i++) {
+		n_units += m_all_armies[i].Num();
 	}
-	
-	Assert(0 < n_units); 
-	UnitCost *all_units = new UnitCost[n_units]; 
+
+	Assert(0 < n_units);
+	UnitCost *all_units = new UnitCost[n_units];
 	UnitCost *prof_units = new UnitCost[n_units];
 
 	n_units = 0;
 	sint32 n_prof_units = 0;
-	for (i=0; i<n; i++) { 
-		m=m_all_armies[i].Num(); 
-		for (j=0; j<m; j++) { 
+	for (i=0; i<n; i++) {
+		m=m_all_armies[i].Num();
+		for (j=0; j<m; j++) {
 			if (m_all_armies[i][j].GetNeedsNoSupport())
 				continue;
 
@@ -366,17 +361,16 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 				n_prof_units++;
 			}
 			else{
-				all_units[n_units].u = m_all_armies[i][j]; 
+				all_units[n_units].u = m_all_armies[i][j];
 				all_units[n_units].cost = GetSupportCost(m_all_armies[i][j]);
-				n_units++; 
+				n_units++;
 			}
 		}
 	}
 
-
 	double tmpc;
 	Unit tmpu;
-	
+
 	for (i=0; i<(n_units-1); i++) {
 		for (j=i+1; j<n_units; j++) {
 			if (all_units[i].cost > all_units[j].cost) {
@@ -391,7 +385,6 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 			}
 		}
 	}
-
 
 	m_ignore_unsupport = TRUE;
 	for (i = n_units-1; 0 <= i; i--) {
@@ -415,8 +408,7 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 		}
 	}
 
-	
-	
+
 	if(sint32(m_cost) > mil_total) {
 		for (i=0; i<(n_prof_units-1); i++) {
 			for (j=i+1; j<n_prof_units; j++) {
@@ -430,12 +422,12 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 					prof_units[j].u = tmpu;
 					prof_units[j].cost = tmpc;
 				}
-			} 
-		} 
+			}
+		}
 		for (i = n_prof_units-1; 0 <= i; i--) {
 			if (sint32(m_cost) <= mil_total)
 				break;
-			
+
 			m_cost -= prof_units[i].cost;
 
 			if (g_slicEngine->GetSegment("120NoSupport")->TestLastShown(m_owner, 1)) {
@@ -492,35 +484,34 @@ void MilitaryReadiness::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
     {
-        archive << m_delta; 
-        archive << m_hp_modifier; 
-        archive << m_cost; 
-        archive << m_percent_last_turn; 
+        archive << m_delta;
+        archive << m_hp_modifier;
+        archive << m_cost;
+        archive << m_percent_last_turn;
         archive << static_cast<sint32>(m_readinessLevel);
-        archive << static_cast<sint32>(m_ignore_unsupport); 
+        archive << static_cast<sint32>(m_ignore_unsupport);
         archive << m_owner;
         archive << m_turnStarted;
-	    archive << m_costGold; 
-        // unused padding, to fill to an 8 byte boundary 
-        archive << static_cast<sint32>(0);  
+	    archive << m_costGold;
+        // unused padding, to fill to an 8 byte boundary
+        archive << static_cast<sint32>(0);
     }
     else
     {
         sint32  l_FourBytes;
 
-        archive >> m_delta; 
-        archive >> m_hp_modifier; 
-        archive >> m_cost; 
+        archive >> m_delta;
+        archive >> m_hp_modifier;
+        archive >> m_cost;
         archive >> m_percent_last_turn;
         archive >> l_FourBytes;
         m_readinessLevel    = static_cast<READINESS_LEVEL>(l_FourBytes);
         archive >> l_FourBytes;
-        m_ignore_unsupport  = static_cast<BOOL>(l_FourBytes); 
+        m_ignore_unsupport  = static_cast<BOOL>(l_FourBytes);
         archive >> m_owner;
         archive >> m_turnStarted;
-	    archive >> m_costGold;  
-        // unused padding, to fill to an 8 byte boundary 
+	    archive >> m_costGold;
+        // unused padding, to fill to an 8 byte boundary
         archive >> l_FourBytes;
     }
 }
-

@@ -1,22 +1,17 @@
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __INFOBAR_H__
 #define __INFOBAR_H__
 
-
 #include "c3window.h"
-
 
 #define k_MAX_INFOBAR_TEXT 1024
 #define k_INFOBAR_HEIGHT 17
 
 class MapPoint;
 
-
-class InfoBar : public C3Window 
+class InfoBar : public C3Window
 {
 private:
 	MBCHAR m_str[k_MAX_INFOBAR_TEXT + 1];
@@ -55,4 +50,4 @@ public:
 
 extern InfoBar *g_infoBar;
 
-#endif 
+#endif

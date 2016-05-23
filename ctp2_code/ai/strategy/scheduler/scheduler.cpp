@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Do not consider invalid goals (e.g. threatened city that has been 
+// - Do not consider invalid goals (e.g. threatened city that has been
 //   destroyed already).
 // - Marked MS version specific code.
 // - Added CanMatchesBeReevaluated() check -> to reevaluate the goals each turn
@@ -60,7 +60,6 @@
 
 #include <algorithm>
 #include <list>
-
 
 #include "goal.h"
 #include "Plan.h"
@@ -168,8 +167,8 @@ Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 {
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < s_theSchedulers.size());
-	
-	return s_theSchedulers[playerId]; 
+
+	return s_theSchedulers[playerId];
 }
 
 void Scheduler::CleanupAll(void)
@@ -662,7 +661,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 		MapPoint pos = (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 				("[%d] Starting to match resources to %s: %x (x=%d,y=%d), match %d, %s\n",
 					count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, oldMatchValue, (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")));
 		count++;
@@ -670,7 +669,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		if(oldMatchValue == Goal::BAD_UTILITY)
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL (goal: %x) -- First goal with bad utility - stop matching\n",
 						goal_ptr));
 
@@ -685,7 +684,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		if(newMatchValue == Goal::BAD_UTILITY)
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 				("\t\tGOAL (goal: %x)(agent count: %d) -- Goal with bad utility, trying agian in next cycle.\n",
 						goal_ptr, goal_ptr->Get_Agent_Count()));
 
@@ -750,7 +749,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			|| transNum == goal_ptr->Get_Transporters_Num()
 			){
 				// Has to be modified for partial transport
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL_FAILED Not enough transporters (goal: %x)\n", goal_ptr));
 
 				Rollback_Matches_For_Goal(goal_ptr);
@@ -762,7 +761,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		if(goal_ptr->Get_Agent_Count() == 0)
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL (goal: %x) -- No agents were committed, maybe next time. Continuing...\n",
 						goal_ptr));
 			continue;
@@ -801,7 +800,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 #endif
 				if(goal_ptr->Get_Removal_Time())
 				{
-					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 						("\t\tGOAL_COMPLETE (goal: %x) -- Removing matches for goal.\n",
 						goal_ptr));
 					Remove_Matches_For_Goal(goal_ptr);
@@ -818,18 +817,18 @@ void Scheduler::Match_Resources(const bool move_armies)
 				// Optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
 				if (!out_of_transports)
 				{
-					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 						("\t\tGOAL_NEEDS_TRANSPORT (goal: %x)\n", goal_ptr));
 
 					if(!Add_Transport_Matches_For_Goal(goal_ptr))
 					{
 						out_of_transports = true; // record the fact we could not find a transport
-						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 							("\t\t **NO transporters found. Failing.\n"));
 					}
 					else
 					{
-						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 							("\t\t Transporters found.\n"));
 						--goal_iter;
 						committed_agents -= goal_ptr->Get_Agent_Count();
@@ -840,7 +839,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			}
 			case GOAL_FAILED:
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL_FAILED (goal: %x)\n", goal_ptr));
 
 				committed_agents -= goal_ptr->Get_Agent_Count();
@@ -894,7 +893,7 @@ void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
 	sint32 goal_type    = new_goal->Get_Goal_Type();
 
-	Sorted_Goal_Iter tmp_goal_iter = 
+	Sorted_Goal_Iter tmp_goal_iter =
 		m_goals_of_type[goal_type].begin();
 
 	while(tmp_goal_iter != m_goals_of_type[goal_type].end())
@@ -957,7 +956,7 @@ Agent_List::iterator Scheduler::Add_Agent(const Agent_ptr & agent)
 	{
 		agent_iter++;
 	}
-	
+
 	Assert(agent_iter == m_agents.end());
 #endif // _DEBUG_SCHEDULER
 
@@ -1011,7 +1010,7 @@ void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
 // Remark(s)  : Used in ThreatenedCity_MotivationEvent to trigger MOTIVATION_FEAR_CITY_DEFENSE
 //
 //----------------------------------------------------------------------------
-sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const 
+sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 {
 	sint32 total_value = 0;
 
@@ -1019,13 +1018,13 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 	{
 		for
 		(
-		    Sorted_Goal_List::const_iterator 
+		    Sorted_Goal_List::const_iterator
 		        sorted_goal_iter  = m_goals_of_type[type].begin();
 		        sorted_goal_iter != m_goals_of_type[type].end();
 		      ++sorted_goal_iter
 		)
 		{
-			Goal_ptr const goal_ptr = 
+			Goal_ptr const goal_ptr =
 				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
 			if(goal_ptr->Get_Invalid()		||
@@ -1066,19 +1065,19 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 //              MOTIVATION_FEAR_CITY_DEFENSE
 //
 //----------------------------------------------------------------------------
-Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const 
+Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const
 {
-	if(IsValid(type, m_goals_of_type)) 
+	if(IsValid(type, m_goals_of_type))
 	{
 		for
 		(
 		    Sorted_Goal_List::const_iterator
 		        sorted_goal_iter  = m_goals_of_type[type].begin();
-		        sorted_goal_iter != m_goals_of_type[type].end(); 
+		        sorted_goal_iter != m_goals_of_type[type].end();
 		      ++sorted_goal_iter
 		)
 		{
-			Goal_ptr	const	goal_ptr = 
+			Goal_ptr	const	goal_ptr =
 				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
 			if(goal_ptr->Get_Invalid()                  ||
@@ -1107,8 +1106,8 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 ///////////////////////////////////////////////////////////////////////////
 sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
-	return IsValid(type, m_goals_of_type) 
-	       ? m_goals_of_type[type].size() 
+	return IsValid(type, m_goals_of_type)
+	       ? m_goals_of_type[type].size()
 	       : 0;
 }
 
@@ -1167,7 +1166,7 @@ bool Scheduler::Prioritize_Goals()
 
 			if(goal_ptr->Get_Removal_Time())
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\tRemoving Invalid/Completed Goal: %x\n", goal_ptr));
 
 				sorted_goal_iter = Remove_Goal(sorted_goal_iter);
@@ -1468,7 +1467,7 @@ void Scheduler::Add_New_Matches_For_Agent
 	{
 		Sorted_Goal_List & goal_list = m_goals_of_type[i];
 
-		SQUAD_CLASS goal_squad_class = 
+		SQUAD_CLASS goal_squad_class =
 				  g_theGoalDB->Get(i)->GetSquadClass();
 
 		if((goal_squad_class & squad_class) != goal_squad_class)
@@ -1498,7 +1497,6 @@ void Scheduler::Remove_Matches_For_Goal
 {
 	goal_ptr->Remove_Matches();
 }
-
 
 void Scheduler::Remove_Matches_For_Agent
 (
@@ -1533,15 +1531,15 @@ void Scheduler::Rollback_Matches_For_Goal
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 #endif
 
-	Squad_Strength needed_strength = 
+	Squad_Strength needed_strength =
 		goal->Get_Strength_Needed();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("\t\tMissing attack = %3.0f\n",needed_strength.Get_Attack()));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("\t\tMissing transport = %d\n",needed_strength.Get_Transport()));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("\t\tMissing defense = %3.0f\n",needed_strength.Get_Defense()));
 
 #endif
@@ -1621,7 +1619,6 @@ void Scheduler::Reprioritize_Goal(Goal_List::iterator &goal_iter)
 	Goal_List tmp_list;
 	tmp_list.splice(tmp_list.begin(), m_goals, goal_iter);
 
-
 	while(goal_ptr_iter != m_goals.end())
 	{
 		Utility tmpValue = static_cast<Goal_ptr>(*goal_ptr_iter)->Get_Matching_Value();
@@ -1643,15 +1640,13 @@ GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_elem
 	Assert(goal_type >= 0);
 	Assert(goal_type < g_theGoalDB->NumRecords());
 
-	
 	double tmp_eval = goal_element_ptr->GetMaxEval();
 	double tmp_exec = goal_element_ptr->GetMaxExec();
-	
+
 	if (goal_element_ptr->GetEvalPerCity() ||
 		goal_element_ptr->GetPerCity())
 		tmp_eval *= g_player[m_playerId]->GetNumCities();
 
-	
 	if (goal_element_ptr->GetExecPerCity() ||
 		goal_element_ptr->GetPerCity())
 		tmp_exec *= g_player[m_playerId]->GetNumCities();
@@ -1661,7 +1656,6 @@ GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_elem
 
 	return goal_type;
 }
-
 
 void Scheduler::DisbandObsoleteArmies(const sint16 max_count)
 {
@@ -1820,7 +1814,7 @@ bool Scheduler::CachedIsAllyRegard(sint32 player, sint32 ally)
 	{
 
 #ifdef _DEBUG
-		
+
 	//	Diplomat & diplomat = Diplomat::GetDiplomat(player);
 	//	int test1 = diplomat.TestAlliedRegard(ally);
 	//	int test2 = ((m_allyRegardCache>>ally) & 1) != 0;

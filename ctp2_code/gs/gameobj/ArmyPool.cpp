@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "ArmyPool.h"
@@ -51,7 +49,7 @@ Army ArmyPool::Create(const Unit &u)
 	Insert(newData);
 	return newArmy;
 }
-	
+
 Army ArmyPool::Create()
 {
 	ArmyData *newData;

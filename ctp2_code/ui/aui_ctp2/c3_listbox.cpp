@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,18 +10,18 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
 //       between #else and #endif are modified Apolyton code. The blocks that
 //       are active for _MSC_VER value 1200 are the original Activision code.
 //
@@ -65,7 +65,6 @@
 extern aui_UI		*g_ui;
 
 
-
 c3_ListBox::c3_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -104,12 +103,12 @@ c3_ListBox::c3_ListBox(
 }
 
 c3_ListBox::c3_ListBox(
-	AUI_ERRCODE *retval, 
-	uint32 id, 
-	sint32 x, 
-	sint32 y, 
-	sint32 width, 
-	sint32 height, 
+	AUI_ERRCODE *retval,
+	uint32 id,
+	sint32 x,
+	sint32 y,
+	sint32 width,
+	sint32 height,
 	MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
@@ -161,7 +160,6 @@ c3_ListBox::~c3_ListBox()
 }
 
 
-
 AUI_ERRCODE c3_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -175,10 +173,9 @@ AUI_ERRCODE c3_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 {
-	
+
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
@@ -202,7 +199,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-		
+
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );
@@ -212,7 +209,6 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
-		
 		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_header = new c3_Header(
 				&errcode,
@@ -231,7 +227,6 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_header );
 
-	
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
@@ -241,7 +236,6 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
@@ -272,7 +266,6 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
@@ -299,11 +292,11 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = 
+	sint32 maxRangerSize =
         std::max<sint32>(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
 	if ( maxRangerSize )
-		SetRangerSize( maxRangerSize ); 
+		SetRangerSize( maxRangerSize );
 	else
 		RepositionRangers();
 
@@ -312,7 +305,6 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void c3_ListBox::Clear(void)
@@ -336,10 +328,10 @@ AUI_ERRCODE c3_ListBox::SortByColumn(
 	sint32 column,
 	BOOL ascending )
 {
-	
+
 	if ( column == -1 ) return AUI_ERRCODE_OK;
 
-	if ( column != -2 ) 
+	if ( column != -2 )
 	{
 		Assert( 0 <= column && column < m_numColumns );
 		if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
@@ -348,10 +340,8 @@ AUI_ERRCODE c3_ListBox::SortByColumn(
 	m_sortColumn = column;
 	m_sortAscending = ascending;
 
-	
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
 
-	
 	BOOL changed;
 	do
 	{
@@ -381,10 +371,9 @@ AUI_ERRCODE c3_ListBox::SortByColumn(
 }
 
 
-
 AUI_ERRCODE c3_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 {
-	
+
 	aui_Region::Draw(surf, x, y);
 
 	if (IsHidden()) return AUI_ERRCODE_OK;
@@ -397,7 +386,6 @@ AUI_ERRCODE c3_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
@@ -406,20 +394,18 @@ AUI_ERRCODE c3_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );
 
-	
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
 	if ( m_absorbEvents ) {
 		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
 		{
-			
+
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
 			{
 				selectRect.top = rect.top + headerHeight + 2 + ( itemIndex - minVertical ) * m_maxItemHeight;
 				selectRect.bottom = selectRect.top + m_maxItemHeight - 4;
 
-				
 				primitives_FrameRect16( surf, &selectRect, g_colorSet->GetColor(COLOR_SELECT_0));
 				primitives_BevelRect16( surf, &selectRect, 1, 1, 10, 10 );
 			}
@@ -430,11 +416,10 @@ AUI_ERRCODE c3_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 }
 
 
-
 AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 	if (IsHidden()) return AUI_ERRCODE_OK;
-	
+
 	if ( !surface ) surface = m_window->TheSurface();
 
 	sint32 headerHeight = m_header->IsHidden() ? 0 : m_header->Height();
@@ -443,7 +428,6 @@ AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if (m_bevelWidth > 0) {
 		RECT bevelRect = rect;
 		if (!m_verticalRanger->IsHidden())
@@ -452,7 +436,6 @@ AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			bevelRect.bottom += m_rangerSize;
 		InflateRect(&bevelRect, m_bevelWidth, m_bevelWidth);
 
-		
 		if ( m_pattern ) {
 			if ( m_srcWidthPix || m_srcHeightPix ) {
 				RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -462,7 +445,7 @@ AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				m_pattern->Draw( surface, &bevelRect );
 			}
 		}
-		
+
 		DrawThisStateImage(
 			0,
 			surface,
@@ -492,7 +475,7 @@ AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			0,
 			surface,
 			&rect );
-		
+
 		m_window->AddDirtyRect(&rect);
 	}
 

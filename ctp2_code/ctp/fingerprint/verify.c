@@ -14,10 +14,8 @@
 #include "verify.h"
 
 
-
 #define MAX_USERNAME	12
 #define MAX_PASSWORD	12
-
 
 /*--------------------------------------------------------------------------
  user_t data type.
@@ -30,7 +28,6 @@ typedef struct
 	char	szUsername[ MAX_USERNAME + 1 ];
 	char	szPassword[ MAX_PASSWORD + 1 ];
 } user_t;
-
 
 static user_t verify_user;
 
@@ -68,11 +65,11 @@ BOOL IsValidUser( char *szListFile )
 			shroud_seek( sfile, bfh.bfSize, SEEK_SET );
 
 			/* Loop until we find one or reach the end. */
-			while (!bFoundUser && 
-                   shroud_read(sfile, 
-                               (unsigned char *) &ValidUser, 
-                               sizeof(user_t) 
-                              ) == sizeof(user_t) 
+			while (!bFoundUser &&
+                   shroud_read(sfile,
+                               (unsigned char *) &ValidUser,
+                               sizeof(user_t)
+                              ) == sizeof(user_t)
                   )
             {
 			    if ( strcmp( verify_user.szUsername, ValidUser.szUsername ) == 0
@@ -86,7 +83,6 @@ BOOL IsValidUser( char *szListFile )
 
 	return bFoundUser;
 }
-
 
 /*--------------------------------------------------------------------------
  Retreives 'szUsername' and 'szPassword' from 'szFingerprintFile.'
@@ -114,10 +110,10 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 		{
 			if ( shroud_seek(sfile, offset, SEEK_CUR ) != 0
 			||   shroud_read
-                    (sfile, 
-                     (unsigned char *) verify_user.szUsername + i, 
-                     1 
-                    ) != 1 
+                    (sfile,
+                     (unsigned char *) verify_user.szUsername + i,
+                     1
+                    ) != 1
                )
             {
 				bGotFingerprint = FALSE;
@@ -133,10 +129,10 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 		{
 			if ( shroud_seek( sfile, offset, SEEK_CUR ) != 0
 			||   shroud_read
-                    (sfile, 
-                     (unsigned char *) verify_user.szPassword + i, 
-                     1 
-                    ) != 1 
+                    (sfile,
+                     (unsigned char *) verify_user.szPassword + i,
+                     1
+                    ) != 1
                )
             {
 				bGotFingerprint = FALSE;

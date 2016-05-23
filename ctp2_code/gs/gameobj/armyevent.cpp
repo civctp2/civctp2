@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ STDEHANDLER(ArmyMoveOrderEvent)
 	Path *p;
 	MapPoint curPos;
 	sint32 extra;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPath(0, p)) return GEV_HD_Continue;
 	if(!args->GetPos(0, curPos)) return GEV_HD_Continue;
@@ -150,12 +150,11 @@ STDEHANDLER(ArmyMovePathOrderEvent)
 			rebase = true;
 		}
 	}
-					
+
 	if (rebase) {  ///fix
 			if(army.AccessData()->IsOccupiedByForeigner(p)) {
 			if (g_theWorld->HasCity(p) || terrainutil_HasAirfield(p)) {  //add unit later?
 
-				
 					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							   GEV_FinishMove,
 							   GEA_Army, army,
@@ -164,12 +163,11 @@ STDEHANDLER(ArmyMovePathOrderEvent)
 							   GEA_Int, order,
 							   GEA_End);
 
-		
 
 		return GEV_HD_Continue;
 
 	end EMOD	*/
-	
+
 	g_selected_item->EnterMovePath(army.GetOwner(), army, army->RetPos(), p);
 	return GEV_HD_Continue;
 }
@@ -181,7 +179,7 @@ STDEHANDLER(ArmyUnloadOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
-	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD; 
+	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD;
 	if (a.GetOwner() == g_selected_item->GetVisiblePlayer())
 	{
 		CellUnitList cargoToUnload;
@@ -265,9 +263,8 @@ STDEHANDLER(ArmyGroupUnitOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 
-	MapPoint pos; 
-	
-	
+	MapPoint pos;
+
 	a->AddOrders(UNIT_ORDER_GROUP_UNIT, NULL, pos, u.m_id);
 
 	return GEV_HD_Continue;
@@ -555,7 +552,7 @@ STDEHANDLER(ArmySellIndulgencesOrderEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_INDULGENCE , pos);
-	
+
 	Unit c;
 	c.m_id = g_theWorld->GetCity(pos).m_id;
 
@@ -573,7 +570,6 @@ STDEHANDLER(ArmySoothsayOrderEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(ArmyCreateParkOrderEvent)
 {
 	Army a;
@@ -584,7 +580,6 @@ STDEHANDLER(ArmyCreateParkOrderEvent)
 	a->AddOrders(UNIT_ORDER_CREATE_PARK , pos);
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(ArmyPillageOrderEvent)
 {
@@ -641,7 +636,7 @@ STDEHANDLER(ArmyGetExpelledOrderEvent)
 STDEHANDLER(ArmySettleOrderEvent)
 {
 	Army a;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_SETTLE);
@@ -651,18 +646,17 @@ STDEHANDLER(ArmySettleOrderEvent)
 STDEHANDLER(ArmySettleInCityOrderEvent)
 {
 	Army a;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_SETTLE_IN_CITY);
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(BoardTransportOrderEvent)
 {
 	Army a;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_BOARD_TRANSPORT);
@@ -735,13 +729,13 @@ STDEHANDLER(ArmyMoveEvent)
 
 	armyData->CheckLoadSleepingCargoFromCity(NULL);
 
-	if (armyData->IsMovePointsEnough(newPos)) 
+	if (armyData->IsMovePointsEnough(newPos))
 	{
 		/// @todo finish this code or remove it
 /*EMOD for rebasing? this just moves it to newpos maybe do pathing order? or move to? and then set newpos as endpos?
 		if (order == UNIT_ORDER_MOVE_TO
 
-// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
+// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a
 //city to another city anywhere in the world and costing that unit 1 move.
 
 		UnitDynamicArray revealedUnits;
@@ -762,15 +756,15 @@ STDEHANDLER(ArmyMoveEvent)
 		{
 			CellUnitList * defender = g_theWorld->GetCell(newPos)->UnitArmy();
 
-			for (sint32 d = 0; d < defender->Num(); ++d) 
+			for (sint32 d = 0; d < defender->Num(); ++d)
 			{
 				if (defender->Access(d).Flag(k_UDF_CANT_BE_ATTACKED))
 					return GEV_HD_Continue;
 			}
 
 			PLAYER_INDEX owner = army.GetOwner();
-			if ((owner == PLAYER_INDEX_VANDALS) && 
-				wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) 
+			if ((owner == PLAYER_INDEX_VANDALS) &&
+				wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders))
 			{
 				return GEV_HD_Continue;
 			}
@@ -803,7 +797,7 @@ STDEHANDLER(ArmyMoveEvent)
 			if (order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 				return GEV_HD_Continue;
 
-			for (sint32 i = 0; i < army.Num(); i++) 
+			for (sint32 i = 0; i < army.Num(); i++)
 			{
 				if ((*armyData)[i].Flag(k_UDF_FOUGHT_THIS_TURN) ||
 				    (*armyData)[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN)
@@ -903,7 +897,7 @@ STDEHANDLER(MoveIntoTransportEvent)
 	Army a;
 	MapPoint pos;
 
-	if(!args->GetArmy(0, a)) 
+	if(!args->GetArmy(0, a))
 	{
 		Assert( g_theArmyPool->IsValid(a) );
 		return GEV_HD_Continue;
@@ -912,7 +906,7 @@ STDEHANDLER(MoveIntoTransportEvent)
 
 	CellUnitList transports;
 	sint32 canMoveIntoTransport = a.AccessData()->NumUnitsCanMoveIntoTransport(pos, transports);
-	
+
 	if(a.AccessData()->Num() <= canMoveIntoTransport)
 	{
 		a.AccessData()->MoveIntoTransport(pos, transports);
@@ -951,7 +945,7 @@ STDEHANDLER(BattleEvent)
 	g_theWorld->GetArmy(pos, defender);
 
 	bool const  i_died = !army.AccessData()->Fight(defender);
-	if (!i_died) 
+	if (!i_died)
 	{
 		for (sint32 k = 0; k < army.Num(); k++) {
 			bool out_of_fuel;
@@ -1006,7 +1000,7 @@ STDEHANDLER(AftermathEvent)
 		//end EMOD
 		if(g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultDestroyBuildingChance() * 100)
 		{
-			//shouldn't constDB allow players to set how many buildings be destroyed? 
+			//shouldn't constDB allow players to set how many buildings be destroyed?
 			c.DestroyRandomBuilding();
 		}
 		//this code actually isn't used...
@@ -1039,7 +1033,7 @@ STDEHANDLER(AftermathEvent)
 	{
 		g_director->AddTerminateFaceoff(td);
 	}
-	
+
 	bool attackerWon = false;
 
 	if(army.IsValid() && army.Num() > 0)
@@ -1097,20 +1091,20 @@ STDEHANDLER(AftermathEvent)
 			}
 			//TODO find out why its not running the leader & elite code
 			// apparently a '#' outcomented the value in constDB.txt
-			if( (army[i].GetAttack() > 0) 
+			if( (army[i].GetAttack() > 0)
 			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatLeaderChance() * 100.0))
 			&&  (army[i].IsElite()) //IsElite
 			){
 				g_player[attack_owner]->CreateLeader(); //Great Leader Code - Emod 6-5-2007
 			}
-			
-			if( (army[i].GetAttack() > 0) 
+
+			if( (army[i].GetAttack() > 0)
 			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatEliteChance() * 100.0))
-			&&  (army[i].IsVeteran()) 
+			&&  (army[i].IsVeteran())
 			){
 				army[i].SetElite(); //elite code - Emod 6-5-2007
 			}
-			
+
 			if( (army[i].GetAttack() > 0)
 			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatVeteranChance() * 100.0))
 			&&  (!army[i].IsVeteran())
@@ -1129,7 +1123,7 @@ STDEHANDLER(AftermathEvent)
 							   GEA_MapPoint, pos,
 							   GEA_End);
 	}
-	
+
 	for(sint32 i = 0; i < defender.Num() ; i++)
 	{
 		if(defender[i].GetAttack() > 0 &&
@@ -1137,14 +1131,14 @@ STDEHANDLER(AftermathEvent)
 		{
 			defender[i].SetVeteran();
 		}
-		if( (defender[i].GetAttack() > 0) 
+		if( (defender[i].GetAttack() > 0)
 		&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatEliteChance() * 100.0))
 		&&  (defender[i].IsVeteran())
 		){
 			defender[i].SetElite();
 		}
 		//Great Leader Code - Emod 6-5-2007
-		if( (defender[i].GetAttack() > 0) 
+		if( (defender[i].GetAttack() > 0)
 		&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatLeaderChance() * 100.0))
 		&&  (defender[i].IsElite())
 		){
@@ -1159,7 +1153,7 @@ STDEHANDLER(AftermathEvent)
 
 	return GEV_HD_Continue;
 }
-	
+
 STDEHANDLER(CheckOrdersEvent)
 {
 	Army a;
@@ -1219,8 +1213,8 @@ STDEHANDLER(MoveUnitsEvent)
 	sint32 army_owner = a->GetOwner();
 
 	Player *player_ptr = g_player[new_cell_owner];
-	if ( new_cell_owner != -1 && 
-		 new_cell_owner != army_owner && 
+	if ( new_cell_owner != -1 &&
+		 new_cell_owner != army_owner &&
 		 player_ptr &&
 		 player_ptr->IsVisible(to)) {
 
@@ -1229,7 +1223,7 @@ STDEHANDLER(MoveUnitsEvent)
 		if (!(incursion_permission & (0x1 << army_owner)) &&
 			!new_cell_diplomat.GetBorderIncursionBy(army_owner))
 		{
-			bool is_threat = (a->HasCargo() || !a->IsCivilian()) && 
+			bool is_threat = (a->HasCargo() || !a->IsCivilian()) &&
 			                 a->PlayerCanSee(new_cell_owner);
 
 			if (is_threat)
@@ -1379,7 +1373,7 @@ STDEHANDLER(LawsuitEvent)
 
 	Cell *cell = g_theWorld->GetCell(point);
 
-	a->InformAI(UNIT_ORDER_SUE, point); 
+	a->InformAI(UNIT_ORDER_SUE, point);
 
 	sint32 victim = cell->AccessUnit(0)->GetOwner();
 	sint32 i, n = cell->GetNumUnits();
@@ -1396,7 +1390,7 @@ STDEHANDLER(LawsuitEvent)
 								   GEA_Int, CAUSE_REMOVE_ARMY_SUE,
 								   GEA_Player, a->GetOwner(),
 								   GEA_End);
-			
+
 		}
 	}
 
@@ -1586,7 +1580,7 @@ void armyevent_Initialize()
 
 	g_gevManager->AddCallback(GEV_BeginTurnExecute, GEV_PRI_Primary, &s_ArmyBeginTurnExecuteEvent);
 }
-	
+
 void armyevent_Cleanup()
 {
 }

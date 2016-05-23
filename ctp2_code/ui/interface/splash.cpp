@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "splash.h"
 
@@ -37,10 +35,10 @@ void Splash::AddText(MBCHAR const * text)
 {
 	if (g_c3ui)
 	{
-		primitives_DrawText(g_c3ui->Secondary(), 
-		                    m_textX, m_textY, 
-		                    text, 
-		                    g_colorSet->GetColorRef(COLOR_WHITE), 
+		primitives_DrawText(g_c3ui->Secondary(),
+		                    m_textX, m_textY,
+		                    text,
+		                    g_colorSet->GetColorRef(COLOR_WHITE),
 		                    true
 		                   );
 
@@ -62,10 +60,10 @@ void Splash::AddTextNL(MBCHAR const * text)
 		aui_Surface * surface = g_c3ui->Secondary();
 		if (!surface) return;
 
-		primitives_DrawText(surface, 
-		                    m_textX + 325, m_textY, 
-		                    text, 
-		                    g_colorSet->GetColorRef(COLOR_WHITE), 
+		primitives_DrawText(surface,
+		                    m_textX + 325, m_textY,
+		                    text,
+		                    g_colorSet->GetColorRef(COLOR_WHITE),
 		                    true
 		                   );
 
@@ -91,10 +89,10 @@ void Splash::AddHilitedTextNL(MBCHAR const *text)
 
 		if (!surface) return;
 
-		primitives_DrawText(surface, 
-		                    m_textX, m_textY, 
-		                    text, 
-		                    g_colorSet->GetColorRef(COLOR_YELLOW), 
+		primitives_DrawText(surface,
+		                    m_textX, m_textY,
+		                    text,
+		                    g_colorSet->GetColorRef(COLOR_YELLOW),
 		                    true
 		                   );
 

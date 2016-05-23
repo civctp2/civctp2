@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -47,7 +47,7 @@
 
 class Anim;
 
-enum ANIMTYPE 
+enum ANIMTYPE
 {
 	ANIMTYPE_SEQUENTIAL,
 	ANIMTYPE_LOOPED,
@@ -65,7 +65,7 @@ enum ANIMTYPE
 // Class declarations
 //----------------------------------------------------------------------------
 
-class Anim 
+class Anim
 {
 public:
 	Anim();
@@ -78,9 +78,9 @@ public:
 	uint16		*GetFrames(void) { return m_frames; }
 	uint16		GetPlaybackTime(void);
 	uint16		GetDelay(void) { return m_delay; }
-	void		AdjustDelay(uint32 val) 
-    { 
-        m_delay = static_cast<uint16>(m_delay + val); 
+	void		AdjustDelay(uint32 val)
+    {
+        m_delay = static_cast<uint16>(m_delay + val);
     };
 
 	POINT		*GetDeltas(void) { return m_moveDeltas; }
@@ -94,13 +94,13 @@ public:
 	void		SetTransparencies(uint16 *t) { m_transparencies = t; }
 
 	uint16		GetFrame(sint32 animPos);
-	uint32		GetDelayEnd(void) {return m_delayEnd; } 
+	uint32		GetDelayEnd(void) {return m_delayEnd; }
 	uint32		GetElapsed(void) { return m_elapsed; }
 	uint32		GetLastFrameTime(void) { return m_lastFrameTime; }
 	sint32		GetNextPosition(sint32 animPos);
 
-	void		SetDelayEnd(uint32 delayEnd) {m_delayEnd = delayEnd; } 
-	void		SetElapsed(uint32 elapsed) {m_elapsed = elapsed; } 
+	void		SetDelayEnd(uint32 delayEnd) {m_delayEnd = delayEnd; }
+	void		SetElapsed(uint32 elapsed) {m_elapsed = elapsed; }
 	void		SetLastFrameTime(uint32 lastFrameTime) { m_lastFrameTime = lastFrameTime; }
 
 	sint32		ParseFromTokens(Token *theToken);
@@ -118,22 +118,22 @@ public:
 protected:
 	uint16		m_type;
 	uint16		m_numFrames;
-	uint16		*m_frames;			
-	POINT		*m_moveDeltas;		
-	uint16		*m_transparencies;	
+	uint16		*m_frames;
+	POINT		*m_moveDeltas;
+	uint16		*m_transparencies;
 
-	uint16		m_playbackTime;		
-	uint16		m_delay;			
-	uint32		m_delayEnd;			
+	uint16		m_playbackTime;
+	uint16		m_delay;
+	uint32		m_delayEnd;
 
-	uint32		m_lastFrameTime;	
-	uint32		m_elapsed;			
+	uint32		m_lastFrameTime;
+	uint32		m_elapsed;
 
-	BOOL		m_loopFinished;		
-	BOOL		m_finished;			
+	BOOL		m_loopFinished;
+	BOOL		m_finished;
 
-	BOOL		m_weAreInDelay;		
-	BOOL		m_noIdleJustDelay; 
+	BOOL		m_weAreInDelay;
+	BOOL		m_noIdleJustDelay;
 };
 
 #endif

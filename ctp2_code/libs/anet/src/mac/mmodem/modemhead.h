@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* for TextUtils.h, so we can get c2pstr() */
 #define OLDROUTINELOCATIONS 0
-
 
 #define PtoCstr		p2cstr
 #define CtoPstr		c2pstr

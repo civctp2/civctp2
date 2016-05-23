@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -60,8 +60,8 @@ enum COLOR;
 class RadarMap : public aui_Control, public PatternBase
 {
 public:
-	RadarMap(AUI_ERRCODE *retval, 
-					sint32 id, 
+	RadarMap(AUI_ERRCODE *retval,
+					sint32 id,
 					MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL);
@@ -81,29 +81,24 @@ public:
 	void		InitCommon(void);
 	virtual		AUI_ERRCODE	Resize( sint32 width, sint32 height );
 
-	
-	
-	
+
+
+
 	void		ClearMapOverlay(void);
 	void		SetMapOverlayCell(MapPoint const & pos, COLOR color);
 
-	
 	void		CalculateMetrics(void);
-	
-	
+
 	void RenderMap(aui_Surface *surface);
 	void RenderViewRect(aui_Surface *surf, sint32 x, sint32 y);
 
-	
 	POINT		MapToPixel(sint32 x, sint32 y);
 	POINT		MapToPixel(MapPoint *pos);
 
-	
 	void		UpdateMap(aui_Surface *surf, sint32 x, sint32 y);
 
-	
 	BOOL		IncludePointInView(MapPoint &pos, sint32 radius);
-	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);	
+	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);
 	MapPoint	CenterMap(const MapPoint &pos );
 	void		Setup( void );
 	void		Update( void );
@@ -112,7 +107,6 @@ public:
 
 	aui_Surface *GetMapSurface(void) const { return m_mapSurface; }
 
-	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
@@ -120,37 +114,33 @@ public:
 
 	virtual AUI_ERRCODE			Idle( void );
 
-	
 	bool IsInteractive() const { return(m_isInteractive); }
 
-	
-	
+
 	void SetInteractive(bool status = true)
 	{ m_isInteractive = status; ShouldDraw(); }
 
-	
-	void DisplayUnits(bool status = true)	
+	void DisplayUnits(bool status = true)
 		{ m_displayUnits = status; Update(); g_theProfileDB->SetDisplayUnits(status);}
-	void DisplayCities(bool status = true)	
+	void DisplayCities(bool status = true)
 		{ m_displayCities = status; Update(); g_theProfileDB->SetDisplayCities(status);}
-	void DisplayBorders(bool status = true)	
+	void DisplayBorders(bool status = true)
 		{ m_displayBorders = status; Update(); g_theProfileDB->SetDisplayBorders(status);}
-	void DisplayOverlay(bool status = true)	
+	void DisplayOverlay(bool status = true)
 		{ m_displayOverlay = status; Update(); }
 	void Filter(bool status = true)
 		{ m_filter = status; Update(); g_theProfileDB->SetDisplayFilter(status);}
-	void DisplayTrade(bool status = true) 
+	void DisplayTrade(bool status = true)
 		{ m_displayTrade = status; Update(); g_theProfileDB->SetDisplayTrade(status);}
-	void DisplayTerrain(bool status = true) 
+	void DisplayTerrain(bool status = true)
 		{ m_displayTerrain = status; Update(); g_theProfileDB->SetDisplayTerrain(status);}
-	void DisplayPolitical(bool status = true) 
+	void DisplayPolitical(bool status = true)
 		{ m_displayPolitical = status; Update(); g_theProfileDB->SetDisplayPolitical(status);}
-	void DisplayCapitols(bool status = true) 
+	void DisplayCapitols(bool status = true)
 		{ m_displayCapitols = status; Update(); g_theProfileDB->SetDisplayCapitols(status);}
-	void DisplayRelations(bool status = true) 
+	void DisplayRelations(bool status = true)
 		{ m_displayRelations = status; Update(); g_theProfileDB->SetDisplayRelations(status);}
 
-	
 	bool IsDisplayUnits() { return(m_displayUnits); }
 	bool IsDisplayCities() { return(m_displayCities); }
 	bool IsFilter() { return(m_filter); }
@@ -163,51 +153,40 @@ public:
 	bool IsDisplayRelations() { return m_displayRelations; }
 
 private:
-	
-	
+
 	Player *GetVisiblePlayerToRender();
 
-	
-	
+
 	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
 
-	
 	Pixel16 RadarTileBorderColor(const MapPoint &position, const Player *player);
 
 	Pixel16 RadarTileRelationsColor    (const MapPoint &position, const Player *player, sint32 unitOwner = -1);
 	Pixel16 RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 unitOwner = -1);
 
-	
 	uint8 RadarTileBorder(const Player *player, const MapPoint &position);
 
-	
 	void RenderTradeRoute(aui_Surface *surf, const RECT &tileRectangle);
 
 	void RenderCapitol(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player);
 
-	
-	
+
 	void RenderSpecialTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
 
-	
-	
+
 	void RenderSpecialTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
 		uint8 borderFlags, Pixel16 borderColor);
 
-	
 	void RenderNormalTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
 
-	
 	void RenderNormalTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
 		uint8 borderFlags, Pixel16 borderColor);
 
-	
 	void RenderMapTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
 
-	
 	void RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
 		uint8 borderFlags, Pixel16 borderColor);
 
@@ -225,39 +204,35 @@ private:
 	MapPoint MapOffset(const MapPoint oldPosition);
 	MapPoint PosWorldToPosRadar(const MapPoint worldpos);
 
-	
-	bool		m_displayUnits;		
-	bool		m_displayCities;	
-	bool		m_displayBorders;	
-	bool		m_displayOverlay;	
-	bool		m_filter;			
-	bool        m_displayTerrain;   
+	bool		m_displayUnits;
+	bool		m_displayCities;
+	bool		m_displayBorders;
+	bool		m_displayOverlay;
+	bool		m_filter;
+	bool        m_displayTerrain;
 	bool        m_displayTrade;
 	bool		m_displayPolitical;
 	bool		m_displayCapitols;
 	bool		m_displayRelations;
 
-	
-	
+
 	bool		m_isInteractive;
 
-	
-	aui_Surface	*m_mapSurface;		
+	aui_Surface	*m_mapSurface;
 	MapPoint	*m_mapSize;
-	COLOR		*m_mapOverlay;		
-	MapPoint	m_clickedCell;		
+	COLOR		*m_mapOverlay;
+	MapPoint	m_clickedCell;
 	double		m_tilePixelWidth,
 				m_tilePixelHeight;
 	aui_Surface *m_tempSurface;
 	uint8		*m_tempBuffer;
-	RECT		m_mapViewRect;		
+	RECT		m_mapViewRect;
 	MapPoint	m_lastCenteredPoint;
 	Unit		m_selectedCity;
 	MapPoint	m_displayOffset[k_MAX_PLAYERS]; // Shifted x and y value
 											    // for each player (Hotseat)
 };
 
-
 extern RadarMap *g_radarMap;
 
-#endif 
+#endif

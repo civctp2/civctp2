@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "TradeOffer.h"
@@ -21,7 +12,6 @@
 #include "trademanager.h"
 
 extern Player **g_player;
-
 
 void TradeOffer::KillOffer()
 {
@@ -43,7 +33,6 @@ void TradeOffer::RemoveAllReferences()
 	}
 
 
-
 	g_theTradeOfferPool->Remove(*this);
 
 	sint32 p;
@@ -55,7 +44,6 @@ void TradeOffer::RemoveAllReferences()
 		}
 	}
 
-	
 	TradeManager::Notify();
 }
 
@@ -69,10 +57,9 @@ TradeOfferData* TradeOffer::AccessData()
 	return g_theTradeOfferPool->AccessTradeOffer(*this);
 }
 
-BOOL TradeOffer::Accept(PLAYER_INDEX player, 
+BOOL TradeOffer::Accept(PLAYER_INDEX player,
 			const Unit &sourceCity,
 			Unit const &destCity)
 {
 	return AccessData()->Accept(player, sourceCity, destCity);
 }
-

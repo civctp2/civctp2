@@ -34,16 +34,16 @@
 //
 // - Changed the > and < operator  (to change the Sort method see Sort_Matches) - Calvitix
 //   instead of only looking for the matching value, the new operator first
-//   compare the Goal Raw-priority. If it is equal, then compare matching 
+//   compare the Goal Raw-priority. If it is equal, then compare matching
 //   value. It has the advantage to give the possibility for high priority
-//   goal that demands many units to be considered. 
-//   For example :  3 units available, 
-//                  3 Goals : 
+//   goal that demands many units to be considered.
+//   For example :  3 units available,
+//                  3 Goals :
 //                  GOAL1  priority 50000, demands 2 units to be satisfied
 //                  GOAL2  priority 40000, demands 1 unit to be satisfied
 //                  GOAL3  priority 30000, demands 1 unit to be satisfied
 //
-//      the matches are : 
+//      the matches are :
 //
 //                  GOAL1 <-> UNIT1   52000
 //                  GOAL1 <-> UNIT2   49000
@@ -55,10 +55,10 @@
 //                  GOAL3 <-> UNIT2   53000
 //                  GOAL3 <-> UNIT3   55000
 //
-//      Original Sort_matches and agent committing : 
+//      Original Sort_matches and agent committing :
 //
 //              GOAL3  ->  UNIT3   --> OK
-//              GOAL2  ->  UNIT1   --> OK     
+//              GOAL2  ->  UNIT1   --> OK
 //              GOAL1  ->  FAILED to Satisfy, and it has the greatest priority !!!!
 //
 //
@@ -67,7 +67,7 @@
 //              GOAL1  -> UNIT1
 //                     -> UNIT2    --> OK
 //              GOAL2  -> UNIT3    --> OK
-//              GOAL3  -> FAILED to Satisfy       
+//              GOAL3  -> FAILED to Satisfy
 //
 // - Added an method that determines if the matches can be reevaluated)
 //   (ie the agent can be rollbacked and eventually be used for another goal)
@@ -236,10 +236,10 @@ Plan::~Plan()
 //
 // Globals    : -
 //
-// Returns    : bool    : This object has lower/higher priority than the object 
+// Returns    : bool    : This object has lower/higher priority than the object
 //                        to compare against.
 //
-// Remark(s)  : The order is determined by the priority of the goal, with 
+// Remark(s)  : The order is determined by the priority of the goal, with
 //              matching value as tie breaker.
 //
 //----------------------------------------------------------------------------
@@ -266,10 +266,10 @@ bool Plan::operator > (Plan const & plan) const
 //
 // Globals    : -
 //
-// Returns    : bool    : This object is equal to/different from the object 
+// Returns    : bool    : This object is equal to/different from the object
 //                        to compare against.
 //
-// Remark(s)  : Equality is defined is having the same agent and the same 
+// Remark(s)  : Equality is defined is having the same agent and the same
 //              matching value.
 //              Probably not used
 //

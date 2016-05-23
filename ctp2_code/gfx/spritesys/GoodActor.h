@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public:
 	void			DrawSelectionBrackets(void);
 	bool			Draw(bool fogged = false);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
-	
+
 	void			DrawText(sint32 x, sint32 y, MBCHAR const * goodText);
 
 	bool			IsAnimating(void) const;
@@ -110,7 +110,7 @@ public:
 	uint16			GetHeight(void) const;
 	POINT			GetHotpoint(void) const;
 	void			GetBoundingRect(RECT *rect) const;
-	
+
 	void            Serialize(CivArchive &archive);
 
 	LOADTYPE		GetLoadType(void) const { return m_loadType; }

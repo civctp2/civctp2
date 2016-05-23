@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -36,12 +36,10 @@
 #include "player.h"
 
 
-
-extern World *g_theWorld; 
+extern World *g_theWorld;
 
 TradeAstar g_theTradeAstar;
-extern Player **g_player; 
-
+extern Player **g_player;
 
 bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
      float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry)
@@ -52,10 +50,10 @@ bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	if (!g_player[m_owner]->IsExplored(pos))
 	{
 		cost = k_ASTAR_BIG;
-		entry = ASTAR_BLOCKED; 
+		entry = ASTAR_BLOCKED;
 		return false;
 	}
-	
+
 	if(!g_theWorld->IsXwrap())
 	{
 		sint16 w = (sint16)g_theWorld->GetXWidth();
@@ -71,17 +69,16 @@ bool TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		}
 	}
 
-	cost = float(ceil(g_theWorld->CalcTerrainFreightCost(pos))); 
+	cost = float(ceil(g_theWorld->CalcTerrainFreightCost(pos)));
 	return true;
 }
-
 
 sint32 TradeAstar::GetMaxDir(MapPoint &pos) const
 {
 	return SOUTH;
 }
 
-bool TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+bool TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
                       Path &a_path, float &total_cost, const bool isunit)
 {
 	sint32 cutoff = 2000000000;

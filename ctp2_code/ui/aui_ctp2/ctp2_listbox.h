@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -53,11 +53,11 @@ class   aui_Surface;
 class   ctp2_ListItem;
 class   ctp2_MenuButton;
 
-class ctp2_ListBox : public aui_ListBox, public PatternBase 
+class ctp2_ListBox : public aui_ListBox, public PatternBase
 {
 public:
-    ctp2_ListBox() 
-    : 
+    ctp2_ListBox()
+    :
         aui_ListBox     (),
         m_bevelWidth    (0),
         m_bevelType     (0),
@@ -65,16 +65,15 @@ public:
         // m_borderOffset
     {};
 
-	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, MBCHAR *ldlBlock, 
+	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
-	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, 
+	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 							MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
 							ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
 
 	virtual ~ctp2_ListBox();
 
-	
-	
+
 	virtual BOOL IsThisA( uint32 classId )
 	{
 		return classId == m_ctp2_listboxClassId;
@@ -83,10 +82,10 @@ public:
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(sint32 bevelWidth, sint32 bevelType );
 	AUI_ERRCODE CreateRangersAndHeader( MBCHAR *ldlBlock = NULL );
-	
+
 /// Clear the user data.
 /// \remarks Does not clear the list itself.
-    template <typename T> 
+    template <typename T>
     void ClearUserData(VOID_PARAMETER_FOR_TEMPLATE(T))
     {
         for (int i = 0; i < this->NumItems(); ++i)
@@ -100,7 +99,6 @@ public:
             }
         } // for
     }
-
 
 	void Clear(void);
 

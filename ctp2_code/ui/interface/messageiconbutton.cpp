@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -23,9 +13,7 @@
 
 extern C3UI			*g_c3ui;
 
-
 MessageIconButton *MessageIconButton::m_currentButton = NULL;
-
 
 MessageIconButton::MessageIconButton(
 	AUI_ERRCODE *retval,
@@ -40,7 +28,6 @@ MessageIconButton::MessageIconButton(
 {
 }
 
-
 void MessageIconButton::SetCurrentIconButton( MessageIconButton *button )
 {
 	if ( m_currentButton )
@@ -49,13 +36,12 @@ void MessageIconButton::SetCurrentIconButton( MessageIconButton *button )
 	m_currentButton = button;
 }
 
-
 AUI_ERRCODE MessageIconButton::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -71,7 +57,6 @@ AUI_ERRCODE MessageIconButton::DrawThis(
 		DrawImage( surface, &rect, 0,
 					AUI_IMAGEBASE_SUBSTATE_STATE );
 	}
-
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );
@@ -136,20 +121,16 @@ void MessageIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 
-		
 		m_isRepeating = TRUE;
 		m_repeatCount = 0;
 		m_startWaitTime = mouseData->time;
@@ -161,7 +142,6 @@ void MessageIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void MessageIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -169,33 +149,28 @@ void MessageIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 
-			
-			
-			
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_isRepeating = FALSE;
-			
+
 			if ( m_action )
 				m_action->Execute( this, AUI_BUTTON_ACTION_EXECUTE, 1 );
 		}
 		else
 		{
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -206,17 +181,15 @@ void MessageIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void MessageIconButton::MouseRDropOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == this )
 	{
-		
+
 		ReleaseMouseOwnership();
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 

@@ -27,7 +27,7 @@
 // - Added OrthogonalPoint to facilitate wrap computations.
 // - Corrected wrap computation for city influence and borders.
 // - Fixed first RadiusIterator constructor so that it does the same as
-//   in the original version. The defect caused a significant AI 
+//   in the original version. The defect caused a significant AI
 //   performance loss. July 16th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -87,7 +87,6 @@ sint32 WrapDelta(sint32 delta, sint32 size)
 }
 
 }	// namespace
-
 
 MapPoint& MapPoint::operator += (const MapPoint &rhs)
 {
@@ -277,7 +276,7 @@ WORLD_DIRECTION MapPoint::GetNeighborDirection(MapPoint const & neighbor) const
 		if (-2 == diff.y)       return NORTH;
 		if ( 2 == diff.y)       return SOUTH;
 #if !defined(_SMALL_MAPPOINTS)
-		if ( 0 == diff.y) 
+		if ( 0 == diff.y)
 		{
 			if (-1 == diff.z)   return DOWN;
 			if ( 1 == diff.z)   return UP;
@@ -340,7 +339,7 @@ bool MapPoint::IsNextTo(MapPoint const & neighbor) const
 //
 // Returns    : bool	: point is valid
 //
-// Remark(s)  : A MapPoint is valid if its coordinates are in the 
+// Remark(s)  : A MapPoint is valid if its coordinates are in the
 //              World::m_map array.
 //
 //----------------------------------------------------------------------------
@@ -376,7 +375,7 @@ MapPointData MapPoint::NormalizedSubtract(MapPoint const & dest) const
 	OrthogonalPoint to      (dest);
 	to.Move(MapPointData(-here.x, -here.y));
 
-	MapPointData    diff    (to.x, to.y);    
+	MapPointData    diff    (to.x, to.y);
 
 	if (g_theWorld->IsXwrap())
 	{
@@ -422,12 +421,10 @@ void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 	d.x = (g_mp_size.y-1) - (dest.x + dest.y);
 	d.y = dest.x;
 
-
 	static MapPoint delta_inner,
 					delta_left, delta_right,
 					delta_up, delta_down,
 					delta_ur, delta_ul, delta_dr, delta_dl;
-
 
 	delta_inner.x = d.x - s.x;
 	delta_inner.y = d.y - s.y;
@@ -460,7 +457,6 @@ void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 		delta_ul.y = delta_up.y;
 		sqmp(delta_ul, sq_min, diff);
 
-
 		delta_dr.x = delta_right.x- g_mp_size.x;
 		delta_dr.y = delta_down.y;
 		sqmp(delta_dr, sq_min, diff);
@@ -475,7 +471,6 @@ void MapPoint::Iso2Norm(const MapPointData &pos)
 {
 	x = pos.x;
 	y = pos.y;
-
 
 	y += x;
 	while (y >= g_mp_size.y) {
@@ -511,7 +506,6 @@ void MapPoint::Norm2Iso(const MapPoint &pos)
 	Norm2Iso(MapPointData(pos));
 }
 
-
 #ifdef _DEBUG
 sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 {
@@ -521,7 +515,6 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 
 	if(!g_theWorld->IsXwrap()) {
 
-
 		sint32 adjX1 = (((uPos.x + (uPos.y / 2)) % w) * 2) + (uPos.y & 1);
 		sint32 adjX2 = (((pos.x + (pos.y / 2)) % w) * 2) + (pos.y & 1);
 
@@ -529,7 +522,6 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 		dx1 = adjX1 - adjX2;
 		return (dx1 * dx1 + dy1 * dy1) / 2;
 	}
-
 
 	dx1 = uPos.x - pos.x;
 
@@ -790,7 +782,7 @@ MapPoint OrthogonalPoint::GetRC(void)
 // Remark(s)  : Apply wrapping first.
 //
 //----------------------------------------------------------------------------
-bool OrthogonalPoint::IsValid(void) 
+bool OrthogonalPoint::IsValid(void)
 {
 	Normalise();
 
@@ -973,10 +965,10 @@ void SquareIterator::Start()
 	m_cur.x     = m_startX;
 	m_row       = 0;
 	m_cur.y     = m_center.y + m_row;
-	
+
 	m_testXY    = OrthogonalPoint(m_center);
 	m_testXY.Move(WEST, m_intRadius);
-	
+
 	if (IsIncluded())
 	{
 		// Point is on the map
@@ -991,14 +983,14 @@ void SquareIterator::Start()
 void SquareIterator::Next()
 {
 	bool	isValid	= false;
-	
+
 	while (!isValid && !End())
 	{
 		m_cur.x++;
 		m_cur.y--;
 		m_testXY.Move(NORTHEAST);
 
-		if (m_cur.x > m_endX) 
+		if (m_cur.x > m_endX)
 		{
 			m_row++;
 			m_cur.x = m_startX;

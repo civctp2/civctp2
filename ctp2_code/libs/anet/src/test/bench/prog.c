@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * When programs are loaded, %1 %2 %3 etc are translated into arguments
  * Note that if parameters contain the % characters, BAD stuff happens
- * 
+ *
  * There a several build in commands to aid with flow control
  *
  * Command	Usage					Descrition
@@ -36,11 +36,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * SET		SET variable value		Sets the variable to the value specified
  * ADD		ADD variable1 variable2	Adds the value to the current contents of the variable
  * DIV		DIV variable1 variable2	Divides var1 by var2.
- * IF		IF variable1 !=<> variable2 label	Tests the two variables and if the equation is true then 
+ * IF		IF variable1 !=<> variable2 label	Tests the two variables and if the equation is true then
  *												the program	changes the current line to the label specified
  * EXIT		EXIT code				Exit the program using the return code specified
  */
-
 
 /*
  * Includes
@@ -119,7 +118,7 @@ typedef struct prog_integer_add_s
 	int	var2;
 } prog_integer_add_t;
 
-typedef enum 
+typedef enum
 {
 	prog_integer_if_type_eq,
 	prog_integer_if_type_ne,
@@ -135,7 +134,6 @@ typedef struct prog_integer_if_s
 	prog_line_t	*line;
 	char labeltext[PROG_MAX_STRINGLEN];
 } prog_integer_if_t;
-
 
 /*
  * prog_syntax_Create
@@ -154,7 +152,6 @@ prog_res_t prog_syntax_Create(prog_syntax_t *syntax)
 
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_syntax_Destroy
@@ -181,7 +178,6 @@ prog_res_t prog_syntax_Destroy(prog_syntax_t *syntax)
 
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_syntax_AddCmd
@@ -221,7 +217,6 @@ prog_res_t prog_syntax_AddCmd(prog_syntax_t *syntax, const char *name, prog_cmd_
 
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_syntax_PrintCmds
@@ -263,7 +258,6 @@ prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose)
 	}
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_Load
@@ -343,22 +337,22 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
 		{
 			continue;
 		}
-		
+
 		/* Translate any %x into the supplied argument */
 		params = strchr(buffer, PROG_PARAM);
-		
+
 		while (params)
 		{
 			char buffer2[PROG_MAX_LINE_LENGTH];
 			int	 arg;
-			
+
 			/* Terminate string at parameter */
 			*params = '\0';
 			params++;
-			
+
 			/* Copy the string before the parameter */
 			strcpy(buffer2, buffer);
-			
+
 			/* Find the parameter and make sure its valid */
 			arg = atoi(params);
 			if (arg >= argc)
@@ -369,21 +363,20 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
 
 			/* Replace with the supplied argument */
 			strcat(buffer2, argv[arg]);
-			
+
 			/* Check to see if there is any text following the parameter */
 			params = strchr(params, ' ');
 			if (params)
 			{
 				strcat(buffer2, params);
 			}
-					
+
 			/* Copy the new buffer into the original */
-			memcpy(buffer, buffer2, PROG_MAX_LINE_LENGTH);			
-			
+			memcpy(buffer, buffer2, PROG_MAX_LINE_LENGTH);
+
 			/* Perform the test again */
 			params = strchr(buffer, PROG_PARAM);
 		}
-		
 
 		/* The first word of each line is the command the rest is paramaters */
 		params = strchr(buffer, PROG_SEPARATOR);
@@ -491,7 +484,6 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
 	return (prog_RES_OK);
 }
 
-
 /*
  * prog_UnLoad
  *
@@ -514,7 +506,6 @@ prog_res_t prog_UnLoad(prog_t *prog)
 
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_process_Init
@@ -540,7 +531,6 @@ prog_res_t prog_process_Init(prog_process_t *process, prog_t *prog, prog_line_t 
 	process->next = NULL;
 	return (prog_RES_OK);
 }
-
 
 /*
  * prog_process_Step
@@ -585,7 +575,7 @@ prog_res_t prog_process_Step(prog_process_t *process, void *context)
 
 		case prog_cmd_RES_WAIT:
 			break;
-		
+
 		case prog_cmd_RES_EXIT:
 			return (prog_RES_EXIT);
 			break;
@@ -605,7 +595,6 @@ prog_res_t prog_process_Step(prog_process_t *process, void *context)
 	return (prog_RES_OK);
 }
 
-
 /*
  * prog_process_GetInteger
  *
@@ -624,7 +613,6 @@ int prog_process_GetInteger(prog_process_t *process, int index)
 	return (process->integers[index]);
 }
 
-
 /*
  * prog_process_SetInteger
  *
@@ -641,7 +629,6 @@ void prog_process_SetInteger(prog_process_t *process, int index, int value)
 
 	process->integers[index] = value;
 }
-
 
 /*
  * prog_process_GetString
@@ -661,7 +648,6 @@ char *prog_process_GetString(prog_process_t *process, int index)
 	return (process->strings[index]);
 }
 
-
 /*
  * prog_process_SetString
  *
@@ -680,23 +666,21 @@ void prog_process_SetString(prog_process_t *process, int index, const char *valu
 	process->strings[index][PROG_MAX_STRINGLEN-1] = 0;
 }
 
-
 /*
  * prog_process_GetExitCode
- * 
+ *
  * Retrieve the exit code of a process
- * 
+ *
  * in  -> process: process to get value from
  * out <- exit code of process or -1 if process has not exited
- * 
+ *
  */
 int prog_process_GetExitCode(prog_process_t *process)
 {
 	ASSERT(process);
-	
+
 	return (process->exitcode);
 }
-
 
 /*
  * progAddLine
@@ -709,7 +693,6 @@ prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, unsign
 	prog_line_t	*line;
 
 	ASSERT(prog);
-
 
 	line = (prog_line_t *) malloc(sizeof (prog_line_t));
 
@@ -751,7 +734,6 @@ prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, unsign
 	return (prog_RES_OK);
 }
 
-
 /*
  * progInternalFunctionLabel
  *
@@ -762,7 +744,6 @@ prog_res_t progInternalFunctionLabel(prog_t *prog, char *params)
 {
 	return (progAddLine(prog, NULL, params, PROG_LINE_FLAGS_LABEL));
 }
-
 
 /*
  * progInternalFunctionGoto
@@ -776,7 +757,6 @@ prog_res_t progInternalFunctionGoto(prog_t *prog, char *params)
 	return (progAddLine(prog, progFunctionGoto, params, PROG_LINE_FLAGS_RESOLV));
 }
 
-
 /*
  * progInternalFunctionOnError
  *
@@ -785,7 +765,6 @@ prog_res_t progInternalFunctionOnError(prog_t *prog, char *params)
 {
 	return (progAddLine(prog, progFunctionOnError, params, PROG_LINE_FLAGS_RESOLV));
 }
-
 
 /*
  * progInternalFunctionSet
@@ -816,7 +795,7 @@ prog_res_t progInternalFunctionSet(prog_t *prog, char *params)
 		return progAddLine(prog, progFunctionSet, (char *) &set, 0);
 	} else if (*argv[0] == 'S') {
 		prog_string_set_t	setstring;
-		
+
 		setstring.var = atoi(argv[0] + 1);
 		if (argc < 1) {
 			printf("Expected variable after Set\n");
@@ -829,7 +808,7 @@ prog_res_t progInternalFunctionSet(prog_t *prog, char *params)
 
 			/* need to hack remainder of params back into a string. */
 			/* note that this relies on the internals of prog_Char2Args. */
-			ptr = argv[1]; 
+			ptr = argv[1];
 			while (ptr - argv[1] < PROG_MAX_STRINGLEN - 1) {
 				/* convert \0's before the end of the last arg back to ' 's. */
 				if (*ptr == 0) {
@@ -852,7 +831,6 @@ prog_res_t progInternalFunctionSet(prog_t *prog, char *params)
 		return prog_RES_ERROR;
 	}
 }
-
 
 /*
  * progInternalFunctionAdd
@@ -928,7 +906,6 @@ prog_res_t progInternalFunctionDiv(prog_t *prog, char *params)
 	return (progAddLine(prog, progFunctionDiv, (char *) &add, 0));
 }
 
-
 /*
  * progInternalFunctionIf
  *
@@ -999,7 +976,6 @@ prog_res_t progInternalFunctionIf(prog_t *prog, char *params)
 	return (progAddLine(prog, progFunctionIf, (char *) &i, flags));
 }
 
-
 /*
  * progInternalFunctionExit
  *
@@ -1008,7 +984,6 @@ prog_res_t progInternalFunctionExit(prog_t *prog, char *params)
 {
 	return (progAddLine(prog, progFunctionExit, params, 0));
 }
-
 
 /*
  * progFunctionGoto
@@ -1020,7 +995,6 @@ prog_cmd_res_t progFunctionGoto(prog_process_t *process, const char *params, voi
 	return (prog_cmd_RES_WAIT);
 }
 
-
 /*
  * progFunctionOnError
  *
@@ -1031,7 +1005,6 @@ prog_cmd_res_t progFunctionOnError(prog_process_t *process, const char *params, 
 	return (prog_cmd_RES_CONTINUE);
 }
 
-
 /*
  * progFunctionSet
  *
@@ -1040,12 +1013,11 @@ prog_cmd_res_t progFunctionSet(prog_process_t *process, const char *params, void
 {
 	prog_integer_set_t	*set = (prog_integer_set_t *) params;
 
-//	printf("I%d = %d\n", set->var, set->value); 
+//	printf("I%d = %d\n", set->var, set->value);
 
 	process->integers[set->var] = set->value;
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * progFunctionSetString
@@ -1055,12 +1027,11 @@ prog_cmd_res_t progFunctionSetString(prog_process_t *process, const char *params
 {
 	prog_string_set_t *setstring = (prog_string_set_t *) params;
 
-//	printf("S%d = %d\n", setstring->var, setstring->value); 
+//	printf("S%d = %d\n", setstring->var, setstring->value);
 
 	strncpy(process->strings[setstring->var], setstring->value, PROG_MAX_STRINGLEN);
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * progFunctionAdd
@@ -1070,8 +1041,8 @@ prog_cmd_res_t progFunctionAdd(prog_process_t *process, const char *params, void
 {
 	prog_integer_add_t	*add = (prog_integer_add_t *) params;
 
-/*	printf("I%d [%d] += I%d [%d] => %d\n", 
-		add->var1, process->integers[add->var1], 
+/*	printf("I%d [%d] += I%d [%d] => %d\n",
+		add->var1, process->integers[add->var1],
 		add->var2, process->integers[add->var2],
 		process->integers[add->var1] + process->integers[add->var2]);
 */
@@ -1087,15 +1058,14 @@ prog_cmd_res_t progFunctionDiv(prog_process_t *process, const char *params, void
 {
 	prog_integer_add_t	*add = (prog_integer_add_t *) params;
 
-/*	printf("I%d [%d] /= I%d [%d] => %d\n", 
-		add->var1, process->integers[add->var1], 
+/*	printf("I%d [%d] /= I%d [%d] => %d\n",
+		add->var1, process->integers[add->var1],
 		add->var2, process->integers[add->var2],
 		process->integers[add->var1] + process->integers[add->var2]);
 */
 	process->integers[add->var1] /= process->integers[add->var2];
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * progFunctionIf
@@ -1109,7 +1079,7 @@ prog_cmd_res_t progFunctionIf(prog_process_t *process, const char *params, void 
 	{
 		case prog_integer_if_type_eq:
 /*
-			printf("IF I%d [%d] = I%d [%d] => %s\n", 
+			printf("IF I%d [%d] = I%d [%d] => %s\n",
 				i->var1, process->integers[i->var1],
 				i->var2, process->integers[i->var2],
 				(process->integers[i->var1] == process->integers[i->var2]) ? "TRUE" : "FALSE");
@@ -1123,7 +1093,7 @@ prog_cmd_res_t progFunctionIf(prog_process_t *process, const char *params, void 
 
 		case prog_integer_if_type_ne:
 /*
-			printf("IF I%d [%d] ! I%d [%d] => %s\n", 
+			printf("IF I%d [%d] ! I%d [%d] => %s\n",
 				i->var1, process->integers[i->var1],
 				i->var2, process->integers[i->var2],
 				(process->integers[i->var1] != process->integers[i->var2]) ? "TRUE" : "FALSE");
@@ -1137,7 +1107,7 @@ prog_cmd_res_t progFunctionIf(prog_process_t *process, const char *params, void 
 
 		case prog_integer_if_type_gt:
 /*
-			printf("IF I%d [%d] > I%d [%d] => %s\n", 
+			printf("IF I%d [%d] > I%d [%d] => %s\n",
 				i->var1, process->integers[i->var1],
 				i->var2, process->integers[i->var2],
 				(process->integers[i->var1] > process->integers[i->var2]) ? "TRUE" : "FALSE");
@@ -1151,7 +1121,7 @@ prog_cmd_res_t progFunctionIf(prog_process_t *process, const char *params, void 
 
 		case prog_integer_if_type_lt:
 /*
-			printf("IF I%d [%d] < I%d [%d] => %s\n", 
+			printf("IF I%d [%d] < I%d [%d] => %s\n",
 				i->var1, process->integers[i->var1],
 				i->var2, process->integers[i->var2],
 				(process->integers[i->var1] < process->integers[i->var2]) ? "TRUE" : "FALSE");
@@ -1170,7 +1140,6 @@ prog_cmd_res_t progFunctionIf(prog_process_t *process, const char *params, void 
 	return (prog_cmd_RES_CONTINUE);
 }
 
-
 /*
  * progFunctionIf
  *
@@ -1180,7 +1149,6 @@ prog_cmd_res_t progFunctionExit(prog_process_t *process, const char *params, voi
 	process->exitcode = atoi(params);
 	return (prog_cmd_RES_EXIT);
 }
-
 
 /*
  * prog_Resolv
@@ -1210,7 +1178,6 @@ prog_line_t *prog_Resolv(const char *label, prog_t *prog)
 }
 
 
-
 /*
  * prog_Char2Args
  *
@@ -1229,7 +1196,7 @@ void prog_Char2Args(char *string, int *argc, char **argv)
 		*argc = 0;
 		return;
 	}
-	
+
 	ptr = string;
 	argv[0] = ptr;
 	*argc = 1;
@@ -1242,7 +1209,6 @@ void prog_Char2Args(char *string, int *argc, char **argv)
 		(*argc)++;
 	}
 }
-
 
 #if 0
 
@@ -1345,5 +1311,3 @@ int main(void)
 }
 
 #endif
-
-

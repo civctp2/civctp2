@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // BATTLE_FLAGS
 // ?
 //
@@ -39,7 +39,7 @@
 struct  CityInfo;
 class   ThumbnailMap;
 
-enum    C3_THUMBNAIL_ACTION 
+enum    C3_THUMBNAIL_ACTION
 {
 	C3_THUMBNAIL_ACTION_NULL,
 	C3_THUMBNAIL_ACTION_SELECTEDCITY,
@@ -47,7 +47,6 @@ enum    C3_THUMBNAIL_ACTION
 
 	C3_THUMBNAIL_ACTION_MAX
 };
-
 
 #define k_THUMBNAIL_CITY_BLINK_RATE		1000
 
@@ -79,8 +78,8 @@ struct CityInfo {
 class ThumbnailMap : public aui_Control, public PatternBase
 {
 public:
-	ThumbnailMap(AUI_ERRCODE *retval, 
-					sint32 id, 
+	ThumbnailMap(AUI_ERRCODE *retval,
+					sint32 id,
 					MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL);
@@ -102,13 +101,12 @@ public:
 
 	void		BuildCityList(void);
 
-	
 
 	void		SetCityBlink(Unit city, BOOL blink, COLOR blinkColor = COLOR_BLACK);
 
-	
-	
-	
+
+
+
 	void		ClearMapOverlay(void);
 	void		SetMapOverlayCell(MapPoint &pos, COLOR color);
 
@@ -118,30 +116,24 @@ public:
 	void		SetSelectedRoute(TradeRoute *route) { m_selectedRoute = route; }
 	TradeRoute *GetSelectedRoute(void) { return m_selectedRoute; }
 
-	
 	void		SetCityFilterProc(CityFilterProc *proc) { m_cityFilterProc = proc; }
 	CityFilterProc *GetCityFilterProc(void) { return m_cityFilterProc; }
 
-	
 	void		CalculateMetrics(void);
-	
-	
+
 	void		RenderMap(aui_Surface *surf);
 	void		RenderTradeRoute(aui_Surface *surf, TradeRoute *route);
 	void		RenderTradeRoutes(aui_Surface *surf);
 	void		RenderUnitMovement(aui_Surface *surf);
 	void		RenderAll(aui_Surface *surf);
 
-	
 	POINT		MapToPixel(sint32 x, sint32 y);
 	POINT		MapToPixel(MapPoint *pos);
 
-	
 	void		UpdateCities(aui_Surface *surf, sint32 x, sint32 y);
 	void		UpdateMap(aui_Surface *surf, sint32 x, sint32 y);
 	void		UpdateAll( void );
 
-	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
@@ -154,11 +146,11 @@ public:
 	BOOL ShowTipWindow( aui_MouseEvent *mouseData );
 
 private:
-	aui_Surface						*m_mapSurface;		
+	aui_Surface						*m_mapSurface;
 	MapPoint						*m_mapSize;
-	COLOR							*m_mapOverlay;		
+	COLOR							*m_mapOverlay;
 
-	sint32							m_centerX,			
+	sint32							m_centerX,
 									m_centerY;
 
 	double							m_tilePixelWidth,
@@ -181,7 +173,7 @@ private:
 	BOOL							m_displayUnitMovement;
 	BOOL							m_displayOverlay;
 
-	CityFilterProc					*m_cityFilterProc;	
+	CityFilterProc					*m_cityFilterProc;
 };
 
 #endif

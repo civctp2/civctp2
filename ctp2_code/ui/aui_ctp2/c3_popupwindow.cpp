@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 #include "pattern.h"
 #include "primitives.h"
 #include "UIUtils.h"
-
 
 c3_PopupWindow::c3_PopupWindow
 (
@@ -94,9 +93,8 @@ c3_PopupWindow::c3_PopupWindow
 	*retval = InitCommon();
 }
 
-
 AUI_ERRCODE c3_PopupWindow::InitCommon(void)
-{		
+{
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_border[POPUP_BORDER_UL] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupUL");
@@ -117,7 +115,7 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	m_border[POPUP_BORDER_LR] = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupLR");
 	Assert( AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) );
 	if ( !AUI_NEWOK(m_border[POPUP_BORDER_LR], errcode) ) return errcode;
-	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(), 
+	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(),
 		m_height - m_border[POPUP_BORDER_LR]->Height() );
 
 	sint32 cornerHeight = m_border[POPUP_BORDER_UL]->Height();
@@ -156,18 +154,17 @@ AUI_ERRCODE c3_PopupWindow::InitCommon(void)
 	return C3Window::InitCommon();
 }
 
-
 AUI_ERRCODE c3_PopupWindow::Resize( sint32 width, sint32 height )
 {
 	AUI_ERRCODE errcode = C3Window::Resize(width, height);
 
 	m_border[POPUP_BORDER_UL]->Move( 0, 0 );
-	
+
 	m_border[POPUP_BORDER_UR]->Move( m_width - m_border[POPUP_BORDER_UR]->Width(), 0 );
-	
+
 	m_border[POPUP_BORDER_LL]->Move( 0, m_height - m_border[POPUP_BORDER_LL]->Height() );
 
-	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(), 
+	m_border[POPUP_BORDER_LR]->Move( m_width - m_border[POPUP_BORDER_LR]->Width(),
 		m_height - m_border[POPUP_BORDER_LR]->Height() );
 
 	sint32 cornerHeight = m_border[POPUP_BORDER_UL]->Height();
@@ -189,7 +186,6 @@ AUI_ERRCODE c3_PopupWindow::Resize( sint32 width, sint32 height )
 }
 
 
-
 c3_PopupWindow::~c3_PopupWindow( void )
 {
 	for (int i = 0; i < POPUP_BORDER_MAX; ++i)
@@ -202,7 +198,6 @@ c3_PopupWindow::~c3_PopupWindow( void )
 	delete m_cancel;
 	delete m_ok;
 }
-
 
 
 AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
@@ -218,7 +213,6 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 }
 
 
-
 sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 {
 	if (m_title)
@@ -231,10 +225,10 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 		m_title = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupTitle");
 		TestControl(m_title);
 		char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
-		m_titleText = 
+		m_titleText =
 			new c3_Static
-		        (&errcode, 
-		         aui_UniqueId(), 
+		        (&errcode,
+		         aui_UniqueId(),
 		         (titleBlock) ? titleBlock : ldlBlock
 		        );
 		TestControl(m_titleText);
@@ -249,7 +243,6 @@ sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
 
 	return 1;
 }
-
 
 
 sint32 c3_PopupWindow::AddCancel
@@ -277,7 +270,6 @@ sint32 c3_PopupWindow::AddCancel
 }
 
 
-
 sint32 c3_PopupWindow::AddOk
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
@@ -301,7 +293,6 @@ sint32 c3_PopupWindow::AddOk
 
 	return 1;
 }
-
 
 sint32 c3_PopupWindow::AddClose
 (
@@ -332,7 +323,6 @@ sint32 c3_PopupWindow::AddNo
 {
 	return AddCancel(actionFunc, cookie, buttonBlock);
 }
-
 
 void c3_PopupWindow::kh_Close()
 {
@@ -390,4 +380,3 @@ void c3_PopupWindow::PatternInfoSave(void)
 		}
 	}
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <windows.h>
 #include <direct.h>
 #endif
-#ifdef UNIX 
+#ifdef UNIX
 #include <unistd.h>
 #endif
 #include <string.h>
@@ -58,7 +58,6 @@ typedef struct modcrc_mapfilecat_s {
 	unsigned n;                /* the current malloc'd size of the array */
 } modcrc_mapfilecat_t;
 
-
 void printUsage(void)
 {
 	printf("\
@@ -77,7 +76,6 @@ Options:\n\
 
 	exit(1);
 }
-
 
 /* Convert path delimiter to portable */
 static void convertPathDelimiters(char *s)
@@ -115,7 +113,7 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 	if ((f = fopen(mappath, "r")) == NULL) {
 		aehDPRINT(("test_addmod: error: %s not found\n", mappath));
 		return;
-	} 
+	}
 	fclose(f);
 
 	/* Strip off directory prefix, and calculate CRC of filename (not file) */
@@ -128,8 +126,8 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 		pbuf = mappath;
 
 	this_fnamecrc = dp_crc32(pbuf, strlen(pbuf));
-	
-	/* check to see if fnamecrc (the crc of the filename) is already in 
+
+	/* check to see if fnamecrc (the crc of the filename) is already in
 	 * modcrc.txt.  If so, skip this file.
 	 */
 	for (i=0; i<files_seen->n; i++) {
@@ -140,7 +138,7 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 	}
 
 	/* Otherwise, calculate CRC of file contents */
-	f = fopen(fpath, "rb");		
+	f = fopen(fpath, "rb");
 	if (f) {
 		unsigned long crc = dp_fil_crc32(f);
 		fclose(f);
@@ -160,10 +158,9 @@ BOOLEAN validdir(LPWIN32_FIND_DATA lpffd)
 			strcmp(lpffd->cFileName, ".") && strcmp(lpffd->cFileName, ".."));
 }
 
-
 /*------------------------------------------------------------------------------
  Recursively search (path) and its sub-directories for files matching (pattern)
- call test_addmod() to add crc entries for any new files into the crc file (fp) 
+ call test_addmod() to add crc entries for any new files into the crc file (fp)
 ------------------------------------------------------------------------------*/
 void test_getmod(const char *path, char *pattern, modcrc_mapfilecat_t *files_seen, FILE *fp)
 {
@@ -203,9 +200,9 @@ void test_getmod(const char *path, char *pattern, modcrc_mapfilecat_t *files_see
 	/* Recurse */
 	strcpy(ptmp, "*.*");
 	aehDPRINT(("looking for %s\n", buf));
-	
-	hFile=FindFirstFile(buf, lpffd); 
-	if (hFile != INVALID_HANDLE_VALUE) do { 
+
+	hFile=FindFirstFile(buf, lpffd);
+	if (hFile != INVALID_HANDLE_VALUE) do {
 		if (validdir(lpffd)) {
 			strcpy(ptmp, lpffd->cFileName);
 			buf[strlen(buf) + 1] = '\0';
@@ -246,7 +243,6 @@ int test_getfilesseen(modcrc_mapfilecat_t *files_seen, FILE *fp)
 	return aeh_RES_OK;
 }
 
-
 int main(int argc, char **argv)
 {
 	FILE *fp;
@@ -258,7 +254,7 @@ int main(int argc, char **argv)
 
 	files_seen.fnamecrc = (unsigned long*)NULL;
 	files_seen.n = 0;
-	
+
 	/* Set defaults */
 	readNamesFromStdin = FALSE;
 	if (!getcwd(rootpath, sizeof(rootpath))) {
@@ -345,7 +341,7 @@ int main(int argc, char **argv)
 
 		while (fgets(buf, sizeof(buf), stdin)) {
 			char *p;
-			
+
 			p = strrchr(buf, '\n');
 			if (p)
 				*p = 0;

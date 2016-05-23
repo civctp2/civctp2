@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,15 +31,13 @@
 #include "ns_lobby.h"
 
 
-
-ns_Lobby::ns_Lobby(NETFunc::Lobby * lobby) 
-:	ns_Object<NETFunc::Lobby, ns_Lobby>(lobby) 
+ns_Lobby::ns_Lobby(NETFunc::Lobby * lobby)
+:	ns_Object<NETFunc::Lobby, ns_Lobby>(lobby)
 {
 	list.push_back(Struct(ICON,		&m_closed));
 	list.push_back(Struct(STRING,	&m_name));
 	list.push_back(Struct(INT,		&m_players));
 };
-
 
 void ns_Lobby::Update( NETFunc::Lobby *lobby ) {
 	SetMine(lobby->IsCurrentSession());
@@ -47,4 +45,3 @@ void ns_Lobby::Update( NETFunc::Lobby *lobby ) {
 	m_name = lobby->GetName();
 	m_players = lobby->GetPlayers();
 }
-

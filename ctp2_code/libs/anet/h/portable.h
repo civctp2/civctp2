@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,7 +29,6 @@ Initial revision
 #if !defined(_DP_PORTABLE_H)
 #define _DP_PORTABLE_H 1
 
-
 /* Construct portable multibyte representation of short integers */
 #define dpGETSHORT_FIRSTBYTE(s) (unsigned char)((s) & 0xff)
 #define dpGETSHORT_SECONDBYTE(s) (unsigned char)(((s) >> 8) & 0xff)
@@ -49,6 +48,4 @@ Initial revision
 		(unsigned long)dpMAKESHORT(first,second) |\
 		((unsigned long)dpMAKESHORT(third, fourth)) << 16)
 
-
 #endif /* _DP_PORTABLE_H */
-

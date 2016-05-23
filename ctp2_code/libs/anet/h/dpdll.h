@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -60,6 +60,5 @@ void dpUnloadDLL(dpio_t *dpio);
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

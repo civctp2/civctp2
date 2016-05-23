@@ -1,9 +1,6 @@
-
-
 #include "c3.h"
 #include "globals.h"
 #include "IMapPointData.h"
-
 
 #include "FSWar.h"
 #include "aicell.h"
@@ -13,7 +10,6 @@
 #include "Foreigner.h"
 
 
-
 #include "ArmyAgent.h"
 #include "CityAgent.h"
 
@@ -21,42 +17,35 @@
 extern Wall_Clock *g_wall_clock;
 
 
-
-void FSBeginWar::Serialize(CivArchive &archive) 
+void FSBeginWar::Serialize(CivArchive &archive)
 {
-    return; 
-} 
+    return;
+}
 
 BOOL FSBeginWar::Execute(AiMain *ai, sint32 &branch, FILE *fout)
 {
-    
 
-    return TRUE; 
+    return TRUE;
 }
 
 
-
-void FSUpdateThreat::Serialize(CivArchive &archive) 
+void FSUpdateThreat::Serialize(CivArchive &archive)
 {
-    return; 
-} 
+    return;
+}
 
 BOOL FSUpdateThreat::Execute(AiMain *ai, sint32 &branch,  FILE *fout)
 {
-	
+
     ai->m_map->GetVisibleForeigners(ai);
 
-    
 
-    CityAgent *ca; 
-    BSetID id; 
+    CityAgent *ca;
+    BSetID id;
 
-    
-    for (ca = ai->m_city_set->First(id); ai->m_city_set->Last(); ca = ai->m_city_set->Next(id)) { 
+    for (ca = ai->m_city_set->First(id); ai->m_city_set->Last(); ca = ai->m_city_set->Next(id)) {
         ca->UpdateThreat(ai);
     }
 
-
-    return TRUE; 
+    return TRUE;
 }
-

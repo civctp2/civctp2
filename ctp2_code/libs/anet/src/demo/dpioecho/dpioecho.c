@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -67,7 +67,7 @@ dp_result_t dpio_get(
 		memcpy(buffer, simnetbuf[sim_my_rx].buf, simnetbuf[sim_my_rx].len);
 		*psize = simnetbuf[sim_my_rx].len;
 		simnetbuf[sim_my_rx].len = 0;
-		printf("sim dpio_get: %d got packet of size %d from %d\n", sim_my_rx, *psize, *psrc); 
+		printf("sim dpio_get: %d got packet of size %d from %d\n", sim_my_rx, *psize, *psrc);
 		return dp_RES_OK;
 	}
 	return dp_RES_EMPTY;
@@ -83,7 +83,7 @@ dp_result_t dpio_put_reliable2(
 	playerHdl_t *errDest,  /* If error occurs, dest with error indicated here */
 	int flags)
 {
-	printf("sim dpio_put: %d sending packet of size %d to %d\n", sim_my_rx, size, (int)(*dests)); 
+	printf("sim dpio_put: %d sending packet of size %d to %d\n", sim_my_rx, size, (int)(*dests));
 	if ((int)(*dests) != (1 - sim_my_rx)) {
 		printf("dpio_put_reliable: bad dest\n");
 		exit(1);
@@ -99,7 +99,7 @@ dp_result_t dpio_put_reliable2(
 
 #define dpio_openHdl2(dpio, adr, adr2) (0)
 #define dpio_create(dpio, transport, commInitReq, now, c) dp_RES_OK
-#define dpio_destroy(dpio, flags) 
+#define dpio_destroy(dpio, flags)
 
 dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char *buf, size_t buflen)
 {
@@ -140,7 +140,7 @@ void ProcessCommandLine(int argc, char **argv)
 
 	servername[0] = '\0';
 	commDLLName[0] = '\0';
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
 			/* deal with args that start with - or / */
@@ -161,7 +161,7 @@ void ProcessCommandLine(int argc, char **argv)
 				break;
 			case 'D':
 				/*  Turn on some sort of debugging mode */
-				break;				
+				break;
 			case 'I':   /*  Set modem init string */
 				strncpy(modeministr, argv[i]+3, sizeof(modeministr));
 				modeministr[sizeof(modeministr)-1] = '\0';
@@ -231,15 +231,14 @@ out the network address for clients to connect to.\n");
 	}
 }
 
-
 /*----------------------------------------------------------------------------
- A simple client packet send and receive poll function.  
+ A simple client packet send and receive poll function.
  Sends out what the user types to the server, prints out whatever returns.
  On first entry,
     init = TRUE
 	all other values ignored
  On following entries,
-	init = FALSE 
+	init = FALSE
 	charFromUser = 0 or an ASCII keystroke
 	serverhdl = where to send chat packets to
 ----------------------------------------------------------------------------*/
@@ -259,12 +258,12 @@ void echo_client(playerHdl_t serverhdl, int init, int charFromUser)
 		c = kbbuf;
 		return;
 	}
-	
+
 	now = eclock();
 	err = dpio_update(dpio);
 	assert(err != dp_RES_BAD);
 	assert(err != dp_RES_BUG);
-	
+
 	pktlen = dpio_MAXLEN_UNRELIABLE;
 	err = dpio_get(dpio, &phdl, pktbuf, &pktlen, &flags);
 	assert(err != dp_RES_BAD);
@@ -272,9 +271,9 @@ void echo_client(playerHdl_t serverhdl, int init, int charFromUser)
 	if (err == dp_RES_OK) {
 		printf("Received: %s\n", pktbuf);
 	}
-	
+
 	if (charFromUser) {
-		if ((charFromUser == 13) /* ^M or Return */ 
+		if ((charFromUser == 13) /* ^M or Return */
 		||  (c-kbbuf > sizeof(kbbuf)-2)) {
 			playerHdl_t errdest;
 
@@ -292,7 +291,7 @@ void echo_client(playerHdl_t serverhdl, int init, int charFromUser)
 }
 
 /*----------------------------------------------------------------------------
-  A simple server packet send and receive polling function.  
+  A simple server packet send and receive polling function.
   Processes and sends any packets received back to the sender.
 ----------------------------------------------------------------------------*/
 void echo_server()
@@ -315,7 +314,7 @@ void echo_server()
 	if (err == dp_RES_OK) {
 		playerHdl_t errdest;
 		char *p;
-		
+
 		/* process incoming packets here (just uppercase them) */
 		for (p = pktbuf; (size_t)(p - pktbuf) < pktlen; p++)
 			*p = toupper(*p);
@@ -354,10 +353,10 @@ out the network address for clients to connect to.\n");
 	commInitReq.baud = 19200;
 	commInitReq.hwirq = 0;
 	commInitReq.portnum = 1;
-	commInitReq.sessionId = rand() | (rand() << 16);	
+	commInitReq.sessionId = rand() | (rand() << 16);
 	commInitReq.reqLen = sizeof(commInitReq_t);
 	server = TRUE;  /* I am server unless -C is specified */
-	
+
 	ProcessCommandLine(argc, argv);
 
 	if (!commDLLName[0]) {
@@ -379,10 +378,10 @@ out the network address for clients to connect to.\n");
 #ifndef SIMNET
 	if (!server)
 #endif
-	{		
+	{
 		char serveraddr[dp_MAX_ADR_LEN];
 		int addrlen;
-	
+
 		addrlen = dpio_scanAdr(dpio, servername, serveraddr, dp_MAX_ADR_LEN);
 		if (addrlen == 0) {
 			printf("dpio_scanAdr(%s) failed\n", argv[1]);
@@ -413,7 +412,7 @@ out the network address for clients to connect to.\n");
 		}
 		printf("I am server, my address is %s\n", printable);
 	}
-	
+
 	raw_init();
 	while (1) {
 		int charFromUser = 0;
@@ -424,7 +423,7 @@ out the network address for clients to connect to.\n");
 				break;
 			}
 		}
-#ifdef SIMNET		
+#ifdef SIMNET
 		sim_my_rx = 0;
 		echo_server();
 		sim_my_rx = 1;
@@ -438,13 +437,10 @@ out the network address for clients to connect to.\n");
 #endif
 	}
 	raw_end();
-	
+
 	printf("dpio_destroy unloading comm drivers...");
 	dpio_destroy(dpio, 0);
 	printf(" done.\n");
 
     return(0);
 }
-
-
-

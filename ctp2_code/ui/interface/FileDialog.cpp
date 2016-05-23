@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "FileDialog.h"
 #include "aui_ldl.h"
@@ -22,13 +21,13 @@ FileDialog::FileDialog()
 {
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_block);
 	Assert(m_window);
-	
+
 	m_list = (ctp2_ListBox *)aui_Ldl::GetObject(s_block, "List");
 	Assert(m_list);
 
 	m_field = (ctp2_TextField *)aui_Ldl::GetObject(s_block, "NameField");
 	Assert(m_field);
-	
+
 	aui_Ldl::SetActionFuncAndCookie(s_block, "LoadButton", LoadCallback, this);
 	aui_Ldl::SetActionFuncAndCookie(s_block, "SaveButton", SaveCallback, this);
 	aui_Ldl::SetActionFuncAndCookie(s_block, "CancelButton", CancelCallback, this);
@@ -101,7 +100,7 @@ void FileDialog::AddFile(const MBCHAR *path, void *cookie)
 	if(!box) return;
 
 	box->SetText(path);
-	
+
 	item->SetUserData(cookie);
 	m_list->AddItem(item);
 }
@@ -153,7 +152,7 @@ const MBCHAR *FileDialog::GetSelectedFile()
 
 	Assert(m_list);
 	if(!m_list) return file;
-	
+
 	ctp2_ListItem *item = (ctp2_ListItem *)m_list->GetSelectedItem();
 	if(item) {
 		ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
@@ -164,12 +163,12 @@ const MBCHAR *FileDialog::GetSelectedFile()
 	} else {
 		Assert(m_field);
 		if(!m_field) return file;
-		
+
 		m_field->GetFieldText(file, _MAX_PATH - 1);
 	}
 	return file;
 }
-	
+
 void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
@@ -203,7 +202,7 @@ void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data
 		di->m_callback(di, k_FILE_DIALOG_CANCEL, NULL, di->m_cookie);
 	}
 	di->Close();
-				   
+
 }
 
 void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -249,7 +248,7 @@ void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, 
 
 	Assert(di->m_list);
 	if(!di->m_list) return;
-	
+
 	di->m_list->DeselectItem(di->m_list->GetSelectedItem());
 
 	MBCHAR fieldText[_MAX_PATH];
@@ -273,4 +272,3 @@ void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, 
 		}
 	}
 }
-

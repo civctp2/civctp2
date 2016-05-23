@@ -1,4 +1,3 @@
-
 #ifndef __TILE_IMP_TRACKER_WINDOW
 #define __TILE_IMP_TRACKER_WINDOW
 
@@ -21,7 +20,6 @@ public:
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
-
 
 
 };

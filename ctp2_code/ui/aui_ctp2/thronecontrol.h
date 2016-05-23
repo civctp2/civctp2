@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -65,14 +65,13 @@ class c3_Image;
 class c3_Static;
 class c3_Button;
 
-
 class ThroneControl : public aui_Control, public PatternBase
 {
 public:
-	
+
 	ThroneControl(
-		AUI_ERRCODE *retval, 
-		sint32 id, 
+		AUI_ERRCODE *retval,
+		sint32 id,
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
@@ -109,7 +108,6 @@ public:
 	sint32		RenderThrone( aui_Surface *surf );
 	sint32		RepaintFrames( aui_Surface *surf );
 
-	
 	void		UpdateThrone(aui_Surface *surf, sint32 x, sint32 y);
 
 	void		SetDrawOrder( sint8 a, sint8 b, sint8 c, sint8 d, sint8 e );
@@ -148,20 +146,18 @@ private:
 
 	c3_Static	*m_messageText;
 	c3_Static	*m_currentText[ k_THRONE_IMAGES ];
-	c3_Static	*m_upgradeText[ k_THRONE_IMAGES ]; 
+	c3_Static	*m_upgradeText[ k_THRONE_IMAGES ];
 
 	sint32		m_selectedImage;
 	sint32		m_hilightedImage;
 	sint32		m_wasHilighted;
 
-	
 	aui_Surface *m_oldCutout;
 	aui_Surface *m_newCutout;
 
 	BOOL		m_isCrossFade;
 	sint32		m_blendVal;
-	sint32		m_blendSpeed;		
+	sint32		m_blendSpeed;
 };
 
-
-#endif 
+#endif

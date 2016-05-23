@@ -15,7 +15,7 @@
 class aui_SDLInput : public virtual aui_Input, public aui_SDL
 {
 public:
-	
+
 	aui_SDLInput(
 		AUI_ERRCODE *retval,
 		BOOL useExclusiveMode = FALSE );
@@ -26,7 +26,7 @@ protected:
 	AUI_ERRCODE InitCommon( BOOL useExclusiveMode );
 
 public:
-	
+
 	virtual AUI_ERRCODE Acquire( void );
 	virtual AUI_ERRCODE Unacquire( void );
 

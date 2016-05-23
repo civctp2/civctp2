@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ typedef struct {
 sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, short port);
 
 /*------------------------------------------------------------------------
- Destroy an instance of the sbdclnt module. 
+ Destroy an instance of the sbdclnt module.
 ------------------------------------------------------------------------*/
 void sbdclnt_destroy(sbdclnt_t *sbdclnt);
 

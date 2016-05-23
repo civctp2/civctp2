@@ -28,7 +28,7 @@
 // - Set the SUB_TASK_TYPE global - Calvitix
 // - Added an SUB_TASK_TYPE attribute (used for armytext display) - Calvitix
 // - Added methods to Ungroup armies - Calvitix
-// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will
 //   be changed on wounded case) - Calvitix
 // - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
 // - Use more than one transporter if the goal needs more than one. (8-Feb-2008 Martin Gühmann)
@@ -86,41 +86,30 @@ public:
     Goal(const Goal & goal);
     ~Goal();
 
-
     Goal & operator = (const Goal & goal);
     bool operator ==  (const Goal & rval) const;
     bool operator <   (const Goal & goal) const { return (m_raw_priority < goal.m_raw_priority); };
 
-
     GOAL_TYPE Get_Goal_Type() const { return m_goal_type; };
-
 
     void Set_Player_Index(const PLAYER_INDEX & playerId) { m_playerId = playerId; };
 
-
     PLAYER_INDEX Get_Player_Index() const { return m_playerId; };
-
 
     bool Is_Satisfied() const;
 
-
     bool Is_Goal_Undercommitted() const { return (!Is_Satisfied() && m_agents.size() > 0); };
-
 
     sint16 Get_Agent_Count() const { return m_agents.size(); };
 
-
     bool Is_Single_Agent() const { return m_agents.size() == 1; };
 
-
     void Commit_Agent(const Agent_ptr & agent);
-
 
     void Rollback_Agent(Agent_ptr agent_ptr);
     void Rollback_Emptied_Transporters();
 
     bool Is_Execute_Incrementally() const;
-
 
     void Compute_Needed_Troop_Flow();
 
@@ -129,39 +118,27 @@ public:
     Utility Get_Initial_Priority() const;
     Utility Compute_Raw_Priority();
 
-
     Utility Get_Raw_Priority() const { return m_raw_priority; };
-
 
     GOAL_RESULT Execute_Task();
 
-
     bool Get_Invalid() const;
-
 
     bool Get_Removal_Time() const;
 
-
     bool Can_Be_Executed() const;
-
 
     void Set_Can_Be_Executed(const bool & can_be_executed);
 
-
     void Set_Type(const GOAL_TYPE & type);
-
 
     void Set_Raw_Priority(const Utility & priority);
 
-
     bool Get_Is_Appropriate() const;
-
 
     bool Satisfied_By(const Squad_Strength & army_strength) const;
 
-
     bool Needs_Transporter() const;
-
 
     const Squad_Strength Get_Strength_Needed() const;
 
@@ -198,12 +175,9 @@ public:
     void Sort_Matches_If_Necessary();
     void Set_Target_Pos(const MapPoint & pos);
 
-
     void Set_Target_Army(const Army & army);
 
-
     void Set_Target_City(const Unit & city);
-
 
     const MapPoint & Get_Target_Pos() const;
     const MapPoint Get_Target_Pos(const Army & army) const;
@@ -215,24 +189,17 @@ public:
     void Set_Sub_Task(const SUB_TASK_TYPE & sub_task);
 
 
-
     const Unit & Get_Target_City() const;
-
 
     sint32 Get_Target_Value() const;
 
-
     PLAYER_INDEX Get_Target_Owner() const;
-
 
     bool Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) const;
 
-
     bool ArmiesAtGoal() const;
 
-
     sint32 GetThreatenBonus() const;
-
 
     void Log_Debug_Info(const int & log) const;
     void Log_Debug_Info_Full(const int & log) const;
@@ -262,15 +229,11 @@ private:
                           MapPoint & dest_pos,
                           Path & path);
 
-
     bool GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport, MapPoint & pos);
-
 
     bool GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos);
 
-
     bool Ok_To_Rally() const;
-
 
     bool RallyComplete() const;
 
@@ -287,12 +250,9 @@ private:
 
     bool Goal_Too_Expensive() const;
 
-
     bool TryTransport(Agent_ptr agent_ptr, const MapPoint & goal_pos);
 
-
     bool FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Utility, Agent_ptr> > & transporter_list);
-
 
     bool LoadTransporters(Agent_ptr agent_ptr);
 

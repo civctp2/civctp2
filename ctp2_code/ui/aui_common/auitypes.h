@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUITYPES_H__
 #define __AUITYPES_H__
 
@@ -16,11 +5,11 @@
 
 enum AUI_ERRCODE
 {
-	AUI_ERRCODE_HACK = -1,	
-							
-							
-							
-							
+	AUI_ERRCODE_HACK = -1,
+
+
+
+
 	AUI_ERRCODE_FIRST = 0,
 	AUI_ERRCODE_OK = 0,
 	AUI_ERRCODE_LOADFAILED,
@@ -90,7 +79,7 @@ enum AUI_ERRCODE
 	AUI_ERRCODE_NODIRECTINPUTDEVICE,
 	AUI_ERRCODE_SETPROPERTYFAILED,
 	AUI_ERRCODE_SETFORMATFAILED,
-//#endif 
+//#endif
 	AUI_ERRCODE_MAX
 };
 
@@ -109,4 +98,4 @@ typedef _TCHAR              tchar;
 typedef tchar               MBCHAR;
 typedef MBCHAR*             LPMBCHAR;
 
-#endif 
+#endif

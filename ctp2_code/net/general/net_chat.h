@@ -23,5 +23,5 @@ private:
 	sint16 m_len;
 	uint8 m_from;
 };
-	
+
 #endif

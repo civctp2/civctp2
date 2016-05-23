@@ -26,13 +26,12 @@ typedef enum {
 	SLIC_SYM_PLAYER,
 	SLIC_SYM_UFUNC,
 
-	SLIC_SYM_POP,  
-	SLIC_SYM_PATH, 
-	SLIC_SYM_IMPROVEMENT, 
+	SLIC_SYM_POP,
+	SLIC_SYM_PATH,
+	SLIC_SYM_IMPROVEMENT,
 
 	SLIC_SYM_UNDEFINED,
     // Should not have more than 256 entries
 } SLIC_SYM;
-
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*-------------------------------------------------------------------------
  Write the dynatab to the given file in a format encrypted with key,
  suitable for restoration with tcapwtab_thaw_encrypted.
- Saves the wmq position (timestamp, offset) and lastuid in the header.   
+ Saves the wmq position (timestamp, offset) and lastuid in the header.
 -------------------------------------------------------------------------*/
 void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t timestamp, long offset, dp_uid_t lastuid);
 

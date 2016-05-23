@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "FliStack.h"
 
@@ -22,7 +20,7 @@ double FliStack::And()
 	double v2 = m_stack[--m_stackPtr];
     double result = min(v1, v2);
 	Push(result);
-    return result; 
+    return result;
 }
 
 double FliStack::Or()
@@ -72,9 +70,9 @@ double FliStack::Kinda()
 
 double FliStack::GetScalar()
 {
-	
-	
-	
+
+
+
 
 	double ret = 1.0;
 
@@ -84,4 +82,3 @@ double FliStack::GetScalar()
 	ret = min(ret, m_stack[m_stackPtr - 1]);
 	return ret;
 }
-

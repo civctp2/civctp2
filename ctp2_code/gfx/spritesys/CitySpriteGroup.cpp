@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -41,7 +41,7 @@ CitySpriteGroup::CitySpriteGroup(GROUPTYPE type)
 {
 }
 
-void CitySpriteGroup::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+void CitySpriteGroup::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(m_currentSize >= CITYSIZE_1 &&

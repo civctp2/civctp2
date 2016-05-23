@@ -23,14 +23,13 @@ ctp2_MenuButton::ctp2_MenuButton(AUI_ERRCODE *retval,
 	m_menu(NULL),
 	m_rightNeighbor(NULL),
 	m_leftNeighbor(NULL)
-{	
+{
 	Assert(AUI_SUCCESS(*retval));
 	if(!AUI_SUCCESS(*retval)) return;
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 ctp2_MenuButton::~ctp2_MenuButton()
 {
@@ -46,12 +45,10 @@ void ctp2_MenuButton::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( GetMouseOwnership() == this)
 	{
 		PlaySound( AUI_SOUNDBASE_SOUND_DISENGAGE );
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -59,7 +56,6 @@ void ctp2_MenuButton::MouseLDragAway( aui_MouseEvent *mouseData )
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
-		
 		m_isRepeating = FALSE;
 		if ( m_ActionFunc )
 			m_ActionFunc( this, AUI_BUTTON_ACTION_RELEASE, 0, m_cookie );

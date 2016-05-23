@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Diplomatic request poll
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -39,7 +39,6 @@
 #include "Gold.h"
 #include "Unit.h"
 
-
 typedef sint32 AdvanceType;
 
 class CivArchive;
@@ -47,33 +46,29 @@ class CivArchive;
 #include "DiplomaticTypes.h"
 #include "player.h"
 
-
 class DiplomaticRequestData : public GameObj
 	{
 	private:
-		
-		sint32	m_round ;											
-		
-		PLAYER_INDEX	m_owner,									
-						m_recipient,								
-						m_thirdParty ;								
 
-		REQUEST_TYPE	m_request ;									
-		REQUEST_RESPONSE_TYPE	m_response ;						
+		sint32	m_round ;
+
+		PLAYER_INDEX	m_owner,
+						m_recipient,
+						m_thirdParty ;
+
+		REQUEST_TYPE	m_request ;
+		REQUEST_RESPONSE_TYPE	m_response ;
 
 
+		sint32 m_tone;
 
-		sint32 m_tone;                                       
+		AdvanceType	m_advance ;
+		AdvanceType	m_reciprocalAdvance ;
 
-		AdvanceType	m_advance ;										
-		AdvanceType	m_reciprocalAdvance ;							
-		
 
-		
-		Unit	m_targetCity ;										
-		Unit	m_reciprocalCity ;									
-		Gold	m_amount ;											
-		
+		Unit	m_targetCity ;
+		Unit	m_reciprocalCity ;
+		Gold	m_amount ;
 
 		friend class NetDiplomaticRequest;
 		friend class NetAction;
@@ -86,14 +81,13 @@ class DiplomaticRequestData : public GameObj
 		void MakeRequest(const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request) ;
 		REQUEST_TYPE GetRequest(void) const { return (m_request) ; }
 
-		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }	
-		PLAYER_INDEX GetRecipient(void) const { return (m_recipient) ; }	
+		PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }
+		PLAYER_INDEX GetRecipient(void) const { return (m_recipient) ; }
 		void SetAdvance(const AdvanceType &advance);
 		void SetWanted(const AdvanceType &advance);
 		void SetWanted(const Unit &city);
 		void SetThirdParty(const PLAYER_INDEX thirdParty) ;
 		void SetResponse(const REQUEST_RESPONSE_TYPE response) ;
-
 
 
 		void SetTarget(const Unit &city) ;
@@ -104,7 +98,6 @@ class DiplomaticRequestData : public GameObj
 		Unit &GetWantedCity()  { return m_reciprocalCity; }
 		PLAYER_INDEX GetThirdParty() { return m_thirdParty; }
 		REQUEST_RESPONSE_TYPE GetResponse() { return m_response; }
-
 
 
 		Unit &GetTarget() { return m_targetCity; }

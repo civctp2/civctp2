@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //   or on the units statistics like attack, defense and range. (19-May-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and GetCitySeaAttackBonus
-//   for battleview window. Moved leader bonus from positiondefense, 
+//   for battleview window. Moved leader bonus from positiondefense,
 //   to unitdata::getdefense. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -82,8 +82,7 @@ void unitutil_Initialize()
 		if(rec->GetVisionRange() > s_maxVisionRange)
 			s_maxVisionRange = rec->GetVisionRange();
 	}
-	
-	
+
 	for(i = 0; i < SPECATTACK_MAX; i++) {
 		s_specialAttackMap[i] = NULL;
 	}
@@ -138,7 +137,6 @@ void unitutil_Initialize()
 		}
 		// EMOD add else if or if here? to check built buildings and wonders and get squared Radius
 
-
 	}
 }
 
@@ -187,7 +185,7 @@ sint32 unitutil_GetSeaCity()
 
 	return 0;
 }
-	
+
 sint32 unitutil_GetCityTypeFor(const MapPoint &pos)
 {
 	if(g_theWorld->IsLand(pos))
@@ -216,9 +214,9 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 	entrenched_bonus = 0.0;
 	const UnitRecord *rec;
 	sint32 i;
-	
+
 	const Cell *    cell = g_theWorld->GetCell(pos);
-	if (cell->GetCity().IsValid()) 
+	if (cell->GetCity().IsValid())
     {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
@@ -230,7 +228,6 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 			} else {
 				city_bonus += cityData->GetDefendersBonus();
 
-				
 				double wallval=g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attackers.GetOwner());
 				if(wallval)
 				{
@@ -257,7 +254,7 @@ void unitutil_GetCityLandAttackBonus(const MapPoint &pos, double & city_landatk_
 	city_landatk_bonus = 0.0;
 
 	const Cell *    cell = g_theWorld->GetCell(pos);
-	if (cell->GetCity().IsValid()) 
+	if (cell->GetCity().IsValid())
     {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
@@ -271,7 +268,7 @@ void unitutil_GetCityAirAttackBonus(const MapPoint &pos, double & city_airatk_bo
 	city_airatk_bonus = 0.0;
 
 	const Cell *    cell = g_theWorld->GetCell(pos);
-	if (cell->GetCity().IsValid()) 
+	if (cell->GetCity().IsValid())
     {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
@@ -285,7 +282,7 @@ void unitutil_GetCitySeaAttackBonus(const MapPoint &pos, double & city_seaatk_bo
 	city_seaatk_bonus = 0.0;
 
 	const Cell *    cell = g_theWorld->GetCell(pos);
-	if (cell->GetCity().IsValid()) 
+	if (cell->GetCity().IsValid())
     {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
@@ -307,23 +304,22 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 		BOOL hasWalls = cityData->HasCityWalls();
 		BOOL hasForceField = cityData->HasForceField();
 
-		
-		BOOL futureAge = 0; 
+		BOOL futureAge = 0;
 
 		if (futureAge) {
-			
+
 			if (hasForceField) {
 				image_index = 3;
 			} else {
 				if (hasWalls) {
-					
+
 					image_index = 2;
 				} else {
 					image_index = 2;
 				}
 			}
 		} else {
-			
+
 			if (hasWalls) {
 				image_index = 1;
 			} else {
@@ -338,17 +334,16 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 	return false;
 }
 
-
 void unitutil_ExecuteMadLaunch(Unit & unit)
 {
-	
-	if( unit.GetDBRec()->HasNuclearAttack() && 
+
+	if( unit.GetDBRec()->HasNuclearAttack() &&
 		unit->GetTargetCity().IsValid() &&
 		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
-		
-		
-		
-		
+
+
+
+
 		if (unit.IsBeingTransported())
 		{
 			Unit transport = unit.GetTransport();
@@ -357,7 +352,7 @@ void unitutil_ExecuteMadLaunch(Unit & unit)
 		} else {
 			unit->CreateOwnArmy();
 		}
-		
+
 		unit.SetFlag(k_UDF_MAD_LAUNCHED);
 		unit.SetMovementPoints(unit.GetDBRec()->GetMaxMovePoints());
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MADLaunch,
@@ -412,7 +407,7 @@ bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov)
 
 double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrenched, const MapPoint pos, const Unit &attacker)
 {
-	if (g_theWorld->IsWater(pos) && 
+	if (g_theWorld->IsWater(pos) &&
 	    !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())
 	   )
 	{
@@ -425,7 +420,7 @@ double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrench
 
 	if(cell->GetCity().m_id != (0))
 	{
-		const CityData *cityData = 
+		const CityData *cityData =
 			cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
 		def += cityData->GetDefendersBonus();
@@ -457,12 +452,11 @@ double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrench
 
 	def += (basedef * fort_bonus);
 
-	
-	if(terrain_bonus > 0 && 
+	if(terrain_bonus > 0 &&
 		(rec->GetMovementTypeLand() && g_theWorld->IsLand(pos)) ||
 		(rec->GetMovementTypeMountain() && g_theWorld->IsMountain(pos)) ||
 		(rec->GetMovementTypeSea() && g_theWorld->IsWater(pos)) ||
-		(rec->GetMovementTypeSpace() && g_theWorld->IsSpace(pos))) 
+		(rec->GetMovementTypeSpace() && g_theWorld->IsSpace(pos)))
 	{
 		def += basedef * terrain_bonus;
 	}

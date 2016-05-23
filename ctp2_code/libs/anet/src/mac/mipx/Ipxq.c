@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Initial revision
  Revision 1.2  1996/02/13 20:16:31  dkegel
  No longer a queue; IPX treats all submitted ECB's without regard
- to the order of submission, so we have to search all the ECB's 
+ to the order of submission, so we have to search all the ECB's
  instead of looking at the oldest.
  Revision 1.1  1996/02/11 22:54:59  dkegel
  Initial revision
@@ -76,7 +76,7 @@ ipxq_t *ipxq_create(short socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
 		return NULL;
 	}
 	memset(pq->pkt_base.flat.p, 0, len);
-		
+
 	// Set up scratch area
 	pq->scratch.flat.p = pq->pkt_base.flat.p;
 	(char *)pq->scratch.flat.p += len - ipxq_SCRATCHLEN;
@@ -95,7 +95,6 @@ ipxq_t *ipxq_create(short socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
 		// a pointer to its header/user packet in protected memory,
 		pp->hdr_n_buf.flat.p = ((char *)(pq->pkt_base.flat.e + ipxq_MAXELS))
 								+ i*(sizeof(nw_hdr_t) + ipxq_MAX_USERDATALEN);
-
 
 		// the ECB's first fragment points to the packet header,
 		pp->ecb.flat.e->fragList[0].fragAddress = pp->hdr_n_buf.flat.p;
@@ -118,7 +117,7 @@ ipxq_t *ipxq_create(short socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
 		memcpy(&(pp->hdr_n_buf.flat.h->sourceNet), defaultSrc, sizeof(nw_adr_t));
 		pp->hdr_n_buf.flat.h->packetType = 4;		// IPX
 	}
-	
+
 	// Second sanity check - protected mode address of last packet
 	{
 		size_t len2 =
@@ -146,7 +145,7 @@ ipxq_t *ipxq_create(short socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
 -----------------------------------------------------------------------*/
 void ipxq_destroy(ipxq_t *pq)
 {
-	
+
 	if (pq != nil) {
 		if (pq->pkt_base.flat.p != nil) {
 			free(pq->pkt_base.flat.p);
@@ -165,7 +164,7 @@ ipxq_pkt_t *ipxq_get(ipxq_t *pq)
 	int i;
 	ipxq_pkt_t *pp;
 
-	for (i=0, pp=pq->pkts; i<ipxq_MAXELS; i++, pp++) 
+	for (i=0, pp=pq->pkts; i<ipxq_MAXELS; i++, pp++)
 		if (pp->ecb.flat.e->UserWorkspace[0] == 0x00) return pp;
 	return NULL;
 }
@@ -179,7 +178,6 @@ ipxq_pkt_t *ipxq_get(ipxq_t *pq)
  Returns the address of the packet in the pool on success.
 -----------------------------------------------------------------------*/
 ipxq_pkt_t *ipxq_put(ipxq_t *pq)
-{    
+{
 	return (ipxq_pkt_t *)1;
 }
-

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -64,9 +64,8 @@ public:
 
 	typedef BOOL (WorkMapDrawFunc)(aui_Surface *surf, MapPoint const & pos, void *context);
 
-	
-	WorkMap(AUI_ERRCODE *retval, 
-					sint32 id, 
+	WorkMap(AUI_ERRCODE *retval,
+					sint32 id,
 					MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL);
@@ -93,7 +92,6 @@ public:
 	void DrawView(void);
 
 	void NotifyPopChanged();
-
 
 	BOOL		DrawSprites(aui_Surface *pSurface, RECT *destRect);
 	sint32		DrawSurface(void);
@@ -133,7 +131,6 @@ public:
 
 	void		HandlePop( MapPoint point );
 
-	
 	void		SetUpdateAction(c3_UpdateAction *action) { m_updateAction = action; }
 	c3_UpdateAction *GetUpdateAction(void) { return m_updateAction; }
 
@@ -147,17 +144,17 @@ public:
 
 	void		GetOwningCity(Unit &c) { c = m_unit; }
 
-	WorkerActor	*GetWorker(sint32 index) 
-				{ 
-					Assert(index >= 0 && index < k_MAX_WORKERS);
-					if (index < 0 && index >= k_MAX_WORKERS) return NULL; 
-					return m_worker[index]; 
-				}
-	
-	void		SetWorker(sint32 index, WorkerActor *actor) 
+	WorkerActor	*GetWorker(sint32 index)
 				{
 					Assert(index >= 0 && index < k_MAX_WORKERS);
-					if (index < 0 && index >= k_MAX_WORKERS) return; 
+					if (index < 0 && index >= k_MAX_WORKERS) return NULL;
+					return m_worker[index];
+				}
+
+	void		SetWorker(sint32 index, WorkerActor *actor)
+				{
+					Assert(index >= 0 && index < k_MAX_WORKERS);
+					if (index < 0 && index >= k_MAX_WORKERS) return;
 
 					Assert(actor);
 					m_worker[index] = actor;
@@ -166,7 +163,7 @@ public:
 	sint32		GetNumWorkers(void) { return m_numWorkers; }
 	void		SetNumWorkers(sint32 num) { m_numWorkers = num; }
 
-protected:		
+protected:
 	aui_Surface *m_surface;
 
 	Unit		m_unit;
@@ -186,17 +183,16 @@ protected:
 
 	aui_StringTable *m_string;
 
-	
 	c3_UpdateAction *m_updateAction;
 
 	MapPoint			m_current_mouse_tile;
 
 	sint32		m_scale;
 
-	RECT		m_normalizedViewRect;	
-	sint32		m_leftEdge;		
-	sint32		m_topEdge;		
-	MapPoint	m_topLeftPos;	
+	RECT		m_normalizedViewRect;
+	sint32		m_leftEdge;
+	sint32		m_topEdge;
+	MapPoint	m_topLeftPos;
 
 	// Event handlers
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ void logPkt_getFilename(char *filename)
 /*------------------------------------------------------------------------------
  Open a log file and return it's file pointer - must be used before logPkt().
  Uses filenames of the form "output#.#" beginning with "output0.0".
- If there are output files from a previous process, up to 9 backup sets are 
+ If there are output files from a previous process, up to 9 backup sets are
  kept by incrementing the first number from 0 to 1, 1 to 2, etc.
  If called multiple times within one process, the second number is incremented
  once per call (from 0 to 4999).
@@ -63,8 +63,8 @@ FILE *logPkt_open()
 	char filename[40];
 
 	if (nCalls == 0) {
-		/* Delete all output9.* and move all old output0.* to output1.*, 
-		 * output1.* to output2.*, etc. 
+		/* Delete all output9.* and move all old output0.* to output1.*,
+		 * output1.* to output2.*, etc.
 		 */
 		int n = 0, i;
 		int retval;
@@ -74,10 +74,10 @@ FILE *logPkt_open()
 			retval = unlink(filename);
 			n++;
 		} while (retval == 0 && n < 5000);
-		
+
 		for (i = 8; i >= 0; i--) {
 			char newfilename[40];
-			
+
 			n = 0;
 			do {
 				sprintf(filename, "output%d.%d", i, n);
@@ -91,7 +91,7 @@ FILE *logPkt_open()
 
 	if (nCalls >= 5000)
 		return NULL;
-	
+
 	logPkt_getFilename(filename);
 	if ((fp = fopen(filename, "wt")) != NULL) {
 		nCalls++;
@@ -99,7 +99,6 @@ FILE *logPkt_open()
 	}
 	return NULL;
 }
-
 
 /*------------------------------------------------------------------------------
  Close the log file - use after logging is finished to be nice
@@ -111,7 +110,6 @@ void logPkt_close(FILE *outFile)
 	}
 	fclose(outFile);
 }
-
 
 /*------------------------------------------------------------------------------
  Log a packet to the debugging packet log file
@@ -135,17 +133,17 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer
 	*p++ = (isprint(xbuf[0]) ? xbuf[0] : '?');
 	*p++ = (isprint(xbuf[1]) ? xbuf[1] : '?');
 	*p++ = ' ';
-	
+
 	for (i=0; i<length; i++) {
 		unsigned int c = ((unsigned char *)xbuf)[i];
 		unsigned int nib;
 		unsigned int hc;
-		
+
 		nib = (c >> 4) & 0xf;
 		hc = nib + '0';
 		if (nib > 9) hc += 'a' - (10 + '0');
 		*p++ = hc;
-		
+
 		nib = (c) & 0xf;
 		hc = nib + '0';
 		if (nib > 9) hc += 'a' - (10 + '0');
@@ -154,7 +152,7 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer
 		*p++ = ' ';
 	}
 	*p++ = 0;
-	
+
 	fprintf(outFile, "%2s %10d %2d %3d : %s\n", tag, eclock(), peer, length, tbuf);
 }
 

@@ -65,7 +65,6 @@ private:
 
     friend void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 };
-  
 
 
 void segmentlist_Display();

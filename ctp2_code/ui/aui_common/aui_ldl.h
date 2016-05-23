@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,7 +31,6 @@
 #ifndef __AUI_LDL_H__
 #define __AUI_LDL_H__
 
-
 #include "aui_base.h"
 #include "aui_control.h"
 
@@ -43,20 +42,17 @@ template <class T> class AvlTree;
 
 struct aui_LdlObject
 {
-	void			*object;		
-	MBCHAR			*ldlBlock;		
-	uint32			hash;			
-	aui_LdlObject	*prev;			
-	aui_LdlObject	*next;			
+	void			*object;
+	MBCHAR			*ldlBlock;
+	uint32			hash;
+	aui_LdlObject	*prev;
+	aui_LdlObject	*next;
 };
-
 
 
 #define k_AUI_LDL_MAXBLOCK			1024
 
-
 #define k_AUI_LDL_DEFAULTTEMPLATE	"default"
-
 
 #define k_AUI_LDL_PARENT			"parent"
 #define k_AUI_LDL_HANCHOR			"xanchor"
@@ -88,98 +84,94 @@ struct aui_LdlObject
 
 #define k_AUI_LDL_DETACH			"detach"
 
-
 class aui_Ldl : public aui_Base
 {
 public:
 	aui_Ldl
     (
 		AUI_ERRCODE *   retval,
-		MBCHAR const *  ldlFilename 
+		MBCHAR const *  ldlFilename
     );
 	virtual ~aui_Ldl();
 
 public:
 	static bool			IsValid(MBCHAR const * ldlBlock);
 	static ldl *        GetLdl( void ) { return s_ldl; }
-	
+
 	static AUI_ERRCODE	Associate( void *object, MBCHAR const * ldlBlock);
 	static AUI_ERRCODE	Remove( void *object );
 	static AUI_ERRCODE	Remove(MBCHAR const * ldlBlock);
 	static MBCHAR		*GetBlock( void *object );
 	static void			*GetObject(const MBCHAR *ldlBlock);
 	static void			*GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock);
-	
-	
+
 	static AUI_ERRCODE	SetupHeirarchyFromRoot(MBCHAR const * rootBlock);
 	static AUI_ERRCODE	SetupHeirarchyFromLeaf(MBCHAR * leafBlock, aui_Region *object);
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	static aui_Region * BuildHierarchyFromRoot(MBCHAR const * rootBlock);
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	static AUI_ERRCODE	BuildHierarchyFromLeaf(ldl_datablock *dataBlock, aui_Region *region);
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	static AUI_ERRCODE	BuildObjectFromType(MBCHAR *typeString, MBCHAR *ldlName,
 											aui_Region **theObject);
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR const * rootBlock);
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	static AUI_ERRCODE	DeleteHierarchyFromLeaf(ldl_datablock *dataBlock);
 
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	static AUI_ERRCODE  SetActionFuncAndCookie
     (
-        MBCHAR const *                          ldlBlock, 
+        MBCHAR const *                          ldlBlock,
 	    aui_Control::ControlActionCallback *    actionFunc,
 		void *                                  cookie          = NULL
     );
 	static AUI_ERRCODE  SetActionFuncAndCookie
     (
-        MBCHAR const *                          parentBlock, 
+        MBCHAR const *                          parentBlock,
         MBCHAR const *                          regionBlock,
 		aui_Control::ControlActionCallback *    actionFunc,
 		void *                                  cookie          = NULL
     );
-	
+
 	static AUI_ERRCODE	DetachHierarchy(aui_Region *root);
 
-	
 	static void			ModifyAttributes( MBCHAR const *ldlBlock, aui_Dimension * dimension);
 
 
-	
 	static sint32		    GetIntDependent(MBCHAR const * strPtr);
     static ldl_datablock *  FindDataBlock(MBCHAR const * ldlBlock);
 
@@ -194,7 +186,6 @@ protected:
 
 	static ldl			*s_ldl;
 
-
 	static aui_LdlObject				*s_objectList;
 	static aui_LdlObject				*s_objectListTail;
 
@@ -208,5 +199,4 @@ private:
 
 };
 
-
-#endif 
+#endif

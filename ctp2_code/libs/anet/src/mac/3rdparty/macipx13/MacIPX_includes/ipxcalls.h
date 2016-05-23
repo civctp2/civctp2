@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * This include file defines IPX constants, macros, and types.
  */
- 
+
 #ifndef __IPXCALLS_INCLUDED__
 #define __IPXCALLS_INCLUDED__
 
@@ -101,7 +101,7 @@ typedef ESRProcPtr ESRUPP;
  *   q - the application may read this field                                 *
  *   u - this field is reserved for the application, IPX/SPX will not use it *
  *---------------------------------------------------------------------------*/
-   
+
 #if defined(powerc) || defined (__powerc)
 #pragma options align=mac68k
 #endif

@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       holds: the (_MSC_VER) preprocessor directive lines, and the blocks 
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER 
+//       holds: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are inactiThe blocks that are active for _MSC_VER
 //       value 1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -67,11 +67,11 @@ enum
 enum DIPLOMATIC_TONE
 {
 	DIPLOMATIC_TONE_NOT_CHOSEN = -1,
-	DIPLOMATIC_TONE_KIND, 
-	DIPLOMATIC_TONE_EQUAL, 
-	DIPLOMATIC_TONE_MEEK, 
-	DIPLOMATIC_TONE_INDIGNANT, 
-	DIPLOMATIC_TONE_ANGRY, 
+	DIPLOMATIC_TONE_KIND,
+	DIPLOMATIC_TONE_EQUAL,
+	DIPLOMATIC_TONE_MEEK,
+	DIPLOMATIC_TONE_INDIGNANT,
+	DIPLOMATIC_TONE_ANGRY,
 	DIPLOMATIC_TONE_MAX
 };
 
@@ -93,61 +93,60 @@ extern std::string s_regardEventNames[REGARD_EVENT_MAX];
 enum PROPOSAL_TYPE
 {
 	PROPOSAL_NONE,
-	
-	PROPOSAL_OFFER_GIVE_CITY,			
-	PROPOSAL_REQUEST_GIVE_CITY,			
-	
-	PROPOSAL_OFFER_WITHDRAW_TROOPS,			
-	PROPOSAL_REQUEST_WITHDRAW_TROOPS,		
-	
-	PROPOSAL_OFFER_STOP_PIRACY,			
-	PROPOSAL_REQUEST_STOP_PIRACY,		
-	
-	PROPOSAL_OFFER_BREAK_AGREEMENT,			
-	PROPOSAL_REQUEST_BREAK_AGREEMENT,		
-	
-	PROPOSAL_OFFER_STOP_RESEARCH,			
-	PROPOSAL_REQUEST_STOP_RESEARCH,			
-	
-	PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS,	
+
+	PROPOSAL_OFFER_GIVE_CITY,
+	PROPOSAL_REQUEST_GIVE_CITY,
+
+	PROPOSAL_OFFER_WITHDRAW_TROOPS,
+	PROPOSAL_REQUEST_WITHDRAW_TROOPS,
+
+	PROPOSAL_OFFER_STOP_PIRACY,
+	PROPOSAL_REQUEST_STOP_PIRACY,
+
+	PROPOSAL_OFFER_BREAK_AGREEMENT,
+	PROPOSAL_REQUEST_BREAK_AGREEMENT,
+
+	PROPOSAL_OFFER_STOP_RESEARCH,
+	PROPOSAL_REQUEST_STOP_RESEARCH,
+
+	PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS,
 	PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS,
-	
-	PROPOSAL_OFFER_REDUCE_BIO_WEAPONS,		
-	PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS,	
-	
-	PROPOSAL_OFFER_REDUCE_NANO_WEAPONS,		
-	PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS,	
-	
-	PROPOSAL_OFFER_GIVE_ADVANCE,			
-	PROPOSAL_REQUEST_GIVE_ADVANCE,			
-	
-	PROPOSAL_OFFER_GIVE_GOLD,				
-	PROPOSAL_REQUEST_GIVE_GOLD,				
-	
-	PROPOSAL_OFFER_REDUCE_POLLUTION,		
-	PROPOSAL_REQUEST_REDUCE_POLLUTION,		
-	
-	PROPOSAL_OFFER_MAP,						
-	PROPOSAL_REQUEST_MAP,					
-	
-	PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT,	
-	PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT,	
-	
-	PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT,	
-	PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT,	
-	
-	PROPOSAL_OFFER_END_EMBARGO,				
-	PROPOSAL_REQUEST_END_EMBARGO,			
-	
-	
-	PROPOSAL_TREATY_DECLARE_WAR,			
-	PROPOSAL_TREATY_CEASEFIRE,				
-	PROPOSAL_TREATY_PEACE,					
-	PROPOSAL_TREATY_TRADE_PACT,				
-	PROPOSAL_TREATY_RESEARCH_PACT,			
-	PROPOSAL_TREATY_MILITARY_PACT,			
-	PROPOSAL_TREATY_POLLUTION_PACT,			
-	PROPOSAL_TREATY_ALLIANCE,				
+
+	PROPOSAL_OFFER_REDUCE_BIO_WEAPONS,
+	PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS,
+
+	PROPOSAL_OFFER_REDUCE_NANO_WEAPONS,
+	PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS,
+
+	PROPOSAL_OFFER_GIVE_ADVANCE,
+	PROPOSAL_REQUEST_GIVE_ADVANCE,
+
+	PROPOSAL_OFFER_GIVE_GOLD,
+	PROPOSAL_REQUEST_GIVE_GOLD,
+
+	PROPOSAL_OFFER_REDUCE_POLLUTION,
+	PROPOSAL_REQUEST_REDUCE_POLLUTION,
+
+	PROPOSAL_OFFER_MAP,
+	PROPOSAL_REQUEST_MAP,
+
+	PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT,
+	PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT,
+
+	PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT,
+	PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT,
+
+	PROPOSAL_OFFER_END_EMBARGO,
+	PROPOSAL_REQUEST_END_EMBARGO,
+
+	PROPOSAL_TREATY_DECLARE_WAR,
+	PROPOSAL_TREATY_CEASEFIRE,
+	PROPOSAL_TREATY_PEACE,
+	PROPOSAL_TREATY_TRADE_PACT,
+	PROPOSAL_TREATY_RESEARCH_PACT,
+	PROPOSAL_TREATY_MILITARY_PACT,
+	PROPOSAL_TREATY_POLLUTION_PACT,
+	PROPOSAL_TREATY_ALLIANCE,
 	PROPOSAL_MAX
 };
 
@@ -221,7 +220,7 @@ struct DiplomacyArg
 		    && gold         == a.gold
 		    && percent      == a.percent;
 	}
-	
+
 	bool operator<(const DiplomacyArg &a) const
 	{
 		return playerId     <= a.playerId
@@ -428,10 +427,10 @@ struct Response
 	PLAYER_INDEX  senderId;
 	PLAYER_INDEX  receiverId;
 	RESPONSE_TYPE type;
-	
+
 	ProposalData  counter;
 	ThreatData    threat;
-	
+
 	StringId      explainStrId;
 	StringId      adviceStrId;
 	StringId      newsStrId;
@@ -448,7 +447,7 @@ struct Threat
 		explainStrId  (-1),
 		newsStrId     (-1)
 	{}
-	
+
 	bool operator==(const sint32 &tmpId) const
 	{
 		return tmpId == id;
@@ -458,7 +457,7 @@ struct Threat
 	{
 		return tmpId != id;
 	}
-	
+
 	bool operator==(const Threat &threat) const
 	{
 		return detail == threat.detail;
@@ -491,7 +490,7 @@ struct Threat
 namespace ai
 {
 	typedef sint16 Regard;
-	
+
 	struct Agreement
 	{
 		Agreement()
@@ -503,12 +502,12 @@ namespace ai
 			explainStrId  (-1),
 			newsStrId     (-1)
 		{}
-		
+
 		bool operator==(const sint32 &tmpId) const
 		{
-			return (tmpId == id); 
+			return (tmpId == id);
 		}
-		
+
 		bool operator==(const ai::Agreement & rval) const
 		{
 			return  senderId             == rval.senderId
@@ -548,7 +547,7 @@ namespace ai
 
 enum MOTIVATION_TYPE {
 	MOTIVATION_NONE,
-	
+
 	MOTIVATION_FEAR_SCENARIO,
 	MOTIVATION_FEAR_INVASION,
 	MOTIVATION_FEAR_CITY_DEFENSE,
@@ -560,7 +559,7 @@ enum MOTIVATION_TYPE {
 	MOTIVATION_FEAR_MILITARY_RANK,
 	MOTIVATION_FEAR_TRADE_RANK,
 	MOTIVATION_FEAR_POLLUTION,
-	
+
 	MOTIVATION_DESIRE_SCENARIO,
 	MOTIVATION_DESIRE_ATTACK,
 	MOTIVATION_DESIRE_ATTACK_CITY,
@@ -618,7 +617,7 @@ struct AiState {
 		newsStrId   (-1)
 	{}
 
-	bool operator==(const AiState &a) const 
+	bool operator==(const AiState &a) const
 	{
 		return (dbIndex==a.dbIndex);
 	}

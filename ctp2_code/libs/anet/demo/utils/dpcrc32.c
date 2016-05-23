@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -37,14 +37,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  ...
  Subject: [51] I need a CRC algorithm
- 
+
  As its name implies (Cyclic Redundancy Check) a crc adds redundancy whereas
  the topic of this group is to remove it. Yet this question comes up often in
  comp.compression.
- 
+
  The file ftp://ftp.rocksoft.com/clients/rocksoft/papers/crc_v3.txt is a pretty
  comprehensive description of the whole CRC concept, including a C program.
- 
+
  See also:
  - Schwaderer W.D., "CRC Calculation", April 85 PC Tech Journal, pp.118-133.
  - "Calculating CRCs by Bits and Bytes", BYTE Magazine, September 1986
@@ -52,15 +52,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
    Micro, Aug 1988.
  - the source of all archivers, such as the file makecrc.c in the Info-ZIP
    sources (see extension .zip in item 2)
- 
- 
+
  The following C code (by Rob Warnock <rpw3@sgi.com>) does CRC-32 in
  BigEndian/BigEndian byte/bit order.  That is, the data is sent most
  significant byte first, and each of the bits within a byte is sent most
  significant bit first, as in FDDI. You will need to twiddle with it to do
  Ethernet CRC, i.e., BigEndian/LittleEndian byte/bit order. [Left as an
  exercise for the reader.]
- 
+
  The CRCs this code generates agree with the vendor-supplied Verilog models
  of several of the popular FDDI "MAC" chips.
 --------------------------------------------------------------------------*/

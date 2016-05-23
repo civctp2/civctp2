@@ -3,7 +3,6 @@
 #include "ID.h"
 #include "civarchive.h"
 
-
 void ID::Serialize(CivArchive &archive)
 	{
 	if (archive.IsStoring())

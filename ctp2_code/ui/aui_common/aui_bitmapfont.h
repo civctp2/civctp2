@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 //
 // _JAPANESE
 // Support SJIS characters
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -45,7 +45,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -53,7 +53,7 @@
 
 class aui_BitmapFont;
 
-#define k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT		0x00000001 
+#define k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT		0x00000001
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTRIGHT		0x00000002
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER	0x00000004
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTFULL		0x00000008
@@ -85,13 +85,12 @@ class aui_BitmapFont;
 class aui_BitmapFont : public aui_Base
 {
 public:
-	
+
 	aui_BitmapFont(
 		AUI_ERRCODE *retval,
 		MBCHAR const * descriptor = NULL );
 	virtual ~aui_BitmapFont();
 
-	
 	static void AttributesToDescriptor(
 		MBCHAR out[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ],
 		MBCHAR ttffile[ MAX_PATH + 1 ],
@@ -113,16 +112,13 @@ public:
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
-	
 	bool IsLoaded( void ) const { return m_ttFace.z != NULL; }
-	
+
 	bool HasCached( void ) const { return m_surfaceList->L() != 0; }
 
-	
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_descriptor; }
 	AUI_ERRCODE	SetFilename( MBCHAR const * descriptor );
 
-	
 	MBCHAR		*GetTTFFile( void ) const { return (MBCHAR *)m_ttffile; }
 	AUI_ERRCODE	SetTTFFile( MBCHAR const * ttffile );
 	sint32		GetPointSize( void ) const { return m_pointSize; }
@@ -132,21 +128,19 @@ public:
 	sint32		GetItalic( void ) const { return m_italic; }
 	sint32		SetItalic( sint32 italic );
 
-	
 	sint32		GetLineSkip( void ) const { return m_lineSkip; }
 	sint32		SetLineSkip( sint32 lineSkip );
 	sint32		GetTabSkip( void ) const { return m_tabSkip; }
 	sint32		SetTabSkip( sint32 tabSkip );
 
-	
-	
-	
+
+
+
 	sint32		GetMaxHeight( void ) const { return m_maxHeight; }
 	sint32		SetMaxHeight( sint32 maxHeight );
 	sint32		GetBaseLine( void ) const { return m_baseLine; }
 	sint32		SetBaseLine( sint32 baseLine );
 
-	
 	AUI_ERRCODE DrawString(
 		aui_Surface *surface,
 		RECT *bound,
@@ -156,24 +150,22 @@ public:
 		COLORREF color = RGB(255,255,255),
 		sint32 underline = 0 );
 
-	
 	struct GlyphInfo
 	{
-		MBCHAR		c;			
+		MBCHAR		c;
 #if defined(_JAPANESE)
-		uint16		c2;	
+		uint16		c2;
 #endif
 		aui_Surface	*surface;
-		RECT		bbox;		
-		sint16		bearingX;	
-		sint16		bearingY;	
-		sint16		advance;	
+		RECT		bbox;
+		sint16		bearingX;
+		sint16		bearingY;
+		sint16		advance;
 	};
 
-	
 	GlyphInfo *GetGlyphInfo( MBCHAR c );
 	GlyphInfo *GetGlyphInfo( const MBCHAR *c );
-	
+
 	AUI_ERRCODE RenderLine(
 		aui_Surface *surface,
 		RECT *bound,
@@ -183,14 +175,13 @@ public:
 		const MBCHAR *stop,
 		COLORREF color = RGB(255,255,255),
 		sint32 underline = 0,
-		sint32 *ascend = NULL,	
-		sint32 *descend = NULL,	
+		sint32 *ascend = NULL,
+		sint32 *descend = NULL,
 		bool wrap = false,
-		bool midWordBreaks = false, 
-		bool modWordBreaksOnly = false ); 
+		bool midWordBreaks = false,
+		bool modWordBreaksOnly = false );
 
-	
-	
+
 	AUI_ERRCODE GetLineInfo(
 		RECT *wrap,
 		POINT *penPos,
@@ -201,13 +192,12 @@ public:
 		bool midWordBreaks = false,
 		bool midWordBreaksOnly = false );
 
-	
-	
-	
+
+
+
 	sint32 GetStringWidth( const MBCHAR *string );
 
-	
-	
+
 	AUI_ERRCODE RenderGlyph(
 		aui_Surface *destSurf,
 		RECT *clipRect,
@@ -216,16 +206,15 @@ public:
 		COLORREF color = RGB(255,255,255),
 		sint32 underline = 0 );
 
-	
 	bool TruncateString( MBCHAR *name, sint32 width );
 
 #ifdef _DEBUG
 	void DumpCachedSurfaces( aui_Surface *destSurf = NULL );
-#endif 
+#endif
 
-	
 
-	
+
+
 	AUI_ERRCODE RenderGlyph16(
 		aui_Surface *destSurf,
 		RECT *destRect,
@@ -234,8 +223,7 @@ public:
 		COLORREF color = RGB(255,255,255) );
 
 protected:
-	
-	
+
 #if !defined(_JAPANESE)
 	bool IsCached( MBCHAR c ) const
 	{ return m_glyphs[ (uint16)uint8(c) ].surface != NULL; }
@@ -247,30 +235,26 @@ protected:
 #endif
 
 
-	
 	MBCHAR m_descriptor[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ];
 
-	
 	MBCHAR		m_ttffile[ MAX_PATH + 1 ];
 	sint32		m_pointSize;
 	sint32		m_bold;
 	sint32		m_italic;
 
-	
 	tech_WLList<aui_Surface *> *m_surfaceList;
 
-	
 #if !defined(_JAPANESE)
 	GlyphInfo m_glyphs[ 256 ];
 #else
 	GlyphInfo m_glyphs[ 65536 ];
 #endif
 
-	sint32 m_curOffset;	
-	sint32 m_maxHeight; 
-	sint32 m_baseLine;	
-	sint32 m_lineSkip;	
-	sint32 m_tabSkip;	
+	sint32 m_curOffset;
+	sint32 m_maxHeight;
+	sint32 m_baseLine;
+	sint32 m_lineSkip;
+	sint32 m_tabSkip;
 
 	static sint32           s_bitmapFontRefCount;
 	static TT_Engine	      s_ttEngine;
@@ -282,5 +266,4 @@ protected:
 	TT_CharMap			m_ttCharMap;
 };
 
-
-#endif 
+#endif

@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Unit.h"
 #include "player.h"
-
 
 #include "DiplomaticRequestPool.h"
 #include "MessagePool.h"
@@ -31,7 +20,7 @@ extern	Player	**g_player ;
 extern TurnCount *g_turn;
 
 #include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog; 
+extern Diplomacy_Log *g_theDiplomacyLog;
 
 
 
@@ -83,7 +72,7 @@ void DiplomaticRequestPool::Serialize(CivArchive &archive)
 		}
 	else
 	{
-		if(g_saveFileVersion < 55) 
+		if(g_saveFileVersion < 55)
 		{
 			archive.TestMagic(DIPREQPOOL_MAGIC) ;
 			archive>>count;
@@ -92,9 +81,9 @@ void DiplomaticRequestPool::Serialize(CivArchive &archive)
 				newData = new DiplomaticRequestData(archive) ;
 				Insert(newData) ;
 			}
-			
+
 		}
-		
+
 	}
 }
 
@@ -120,37 +109,37 @@ DiplomaticRequest DiplomaticRequestPool::Create(PLAYER_INDEX owner, PLAYER_INDEX
 	DiplomaticRequestData* newData;
 
 #ifdef _DEBUG
-    if (g_theDiplomacyLog) { 
-        g_theDiplomacyLog->LogRegard(owner, recipient); 
-        g_theDiplomacyLog->LogRegard(recipient, owner); 
-    } 
+    if (g_theDiplomacyLog) {
+        g_theDiplomacyLog->LogRegard(owner, recipient);
+        g_theDiplomacyLog->LogRegard(recipient, owner);
+    }
 #endif // _DEBUG
 
 	DiplomaticRequest newRequest(NewKey(k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST));
-	
+
 	newData = new DiplomaticRequestData(newRequest, owner, recipient, request) ;
 	Insert(newData) ;
 
-	g_player[owner]->AddDiplomaticRequest(newRequest) ;				
+	g_player[owner]->AddDiplomaticRequest(newRequest) ;
 	g_player[owner]->IncrementSentRequests(recipient);
 
-	g_player[recipient]->AddDiplomaticRequest(newRequest) ;			
+	g_player[recipient]->AddDiplomaticRequest(newRequest) ;
 
 #ifdef _DEBUG
     if (g_theDiplomacyLog) {
-        g_theDiplomacyLog->LogRequestCreated(owner, recipient, request); 
-    } 
+        g_theDiplomacyLog->LogRequestCreated(owner, recipient, request);
+    }
 #endif // _DEBUG
 
 #if 0
-	if(g_network.IsClient()) 
+	if(g_network.IsClient())
 		{
 		Assert(owner == g_network.GetPlayerIndex());
-		if(owner == g_network.GetPlayerIndex()) 
+		if(owner == g_network.GetPlayerIndex())
 			{
 			g_network.AddCreatedObject(newData);
 			g_network.SendAction(new NetAction(NET_ACTION_CREATE_DIP_REQUEST,
-											   (uint32)owner, 
+											   (uint32)owner,
 											   (uint32)recipient,
 											   (uint32)request,
 											   (uint32)newRequest));
@@ -173,7 +162,7 @@ DiplomaticRequestData *DiplomaticRequestPool::CreateData()
 	return newData;
 }
 
-	
+
 
 
 
@@ -199,7 +188,7 @@ void DiplomaticRequestPool::EndTurn(const PLAYER_INDEX sender)
 
 		}
 
-	for(i = msgExpired.Num() - 1; i >= 0; i--) 
+	for(i = msgExpired.Num() - 1; i >= 0; i--)
 		{
 		if(g_theMessagePool->IsValid(msgExpired[i]))
 			msgExpired[i].Kill();
@@ -216,4 +205,3 @@ void DiplomaticRequestPool::EndTurn(DiplomaticRequestData *top,
 		EndTurn(top->GetGreater(), sender, msgExpired);
 
 }
-

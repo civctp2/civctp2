@@ -61,9 +61,7 @@
 #define k_GAME_OBJ_TYPE_CAPITALIZATION          16
 #define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17
 
-
 #define k_MAP_WRAPAROUND 5
-
 
 enum ATTITUDE
 {
@@ -82,7 +80,6 @@ enum MAPSIZE
 	MAPSIZE_GIGANTIC
 };
 
-
 // Global utilities for allocated object pointers
 namespace allocated
 {
@@ -90,10 +87,10 @@ namespace allocated
 /// Reassign an allocated object
 /// \param      a_Pointer	Pointer to reassign to
 /// \param      a_NewPointer  New value to assign
-/// \remarks    The pointer shall have been allocated with new (or be 
+/// \remarks    The pointer shall have been allocated with new (or be
 ///             NULL, in which case this function is an assignment).
-/// This looked like a nice idea, but is not working well. The 
-/// new pointer parameter was constructed before deleting the old, 
+/// This looked like a nice idea, but is not working well. The
+/// new pointer parameter was constructed before deleting the old,
 /// so too much memory is used.
 /// A posibilty would be to create the new object inside template
 /// function by using the default constructor of type T.
@@ -105,8 +102,8 @@ template <typename T> void reassign(T * & a_Pointer, T * a_NewPointer)
 
 /// Clear an allocated object
 /// \param      a_Pointer	Pointer to clear
-/// \remarks    The pointer shall have been allocated with new (or be 
-///             NULL, in which case this function has no effect). 
+/// \remarks    The pointer shall have been allocated with new (or be
+///             NULL, in which case this function has no effect).
 template <typename T> void clear(T * & a_Pointer)
 {
     delete a_Pointer;
@@ -131,7 +128,6 @@ template <typename T> void clearContainer(T & a_Container)
 
     T().swap(a_Container);
 };
-
 
 } // namespace allocated
 

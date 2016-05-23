@@ -68,8 +68,8 @@ class GameEvent
 public:
 	GameEvent
 	(
-	    GAME_EVENT          type, 
-	    GameEventArgList *  args, 
+	    GAME_EVENT          type,
+	    GameEventArgList *  args,
 	    sint32              serial,
 	    GAME_EVENT          addedDuring
 	);

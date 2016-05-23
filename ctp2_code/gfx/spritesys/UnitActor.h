@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -103,7 +103,6 @@ public:
 	void			SetSize(sint32 size) { m_size = size; }
 	sint32			GetSize(void) const { return m_size; }
 
-	
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			EndTurnProcess(void);
@@ -120,10 +119,9 @@ public:
 
 	bool			HasThisAnim(UNITACTION action) const
 	{
-		return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
+		return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
 	}
 
-	
 	void			DrawFortified(bool fogged);
 	void			DrawFortifying(bool fogged);
 	void			DrawCityWalls(bool fogged);
@@ -141,14 +139,13 @@ public:
 
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
 
-	
 	bool			IsAnimating(void) const;
 
 	MapPoint		GetPos(void) const { return m_pos; }
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
 	MapPoint		GetSavedPos(void) const { return m_savePos; }
 	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-	void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; } 
+	void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; }
 
 	sint32			GetFacing(void) const { return m_facing; }
 
@@ -174,14 +171,14 @@ public:
 
 	void			SetUnitVisibility(uint32 val) { m_unitSaveVisibility = m_unitVisibility = val; }
 	void			SetUnitVisibility(uint32 val, BOOL bval) { m_unitSaveVisibility = m_unitVisibility; m_unitVisibility = val; m_bVisSpecial = TRUE; }
-											
+
 	void			SetUnitVisibility() { m_bVisSpecial = FALSE; }
 	uint32			GetUnitVisibility(void) const { return m_unitVisibility; }
 	uint32			GetUnitSavedVisibility(void) const { return m_unitSaveVisibility; }
 
 	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
 	void			SetVisSpecial(BOOL val) { m_bVisSpecial = val; }
-	
+
 	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
 	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
@@ -238,13 +235,12 @@ public:
 	void			SetTempStackSize(sint32 i) { m_tempStackSize = i; }
 	sint32			GetTempStackSize(void) const { return m_tempStackSize; }
 
-
 	BOOL			HitTest(POINT mousePt);
 
-	
-	
-	
-	
+
+
+
+
 	void			AddActiveListRef(void) { m_activeListRef++; }
 	sint32			ReleaseActiveListRef(void) { return --m_activeListRef;}
 	sint32			GetActiveListRef(void) const { return m_activeListRef; }
@@ -254,20 +250,17 @@ public:
 #ifdef _DEBUG
 	void			DumpActor(void);
 #endif
-	sint32          m_refCount; 
-
+	sint32          m_refCount;
 
 	bool			ActionMove	       (Action *actionObj);
 	bool			ActionAttack       (Action *actionObj,sint32 facing);
 	bool			ActionSpecialAttack(Action *actionObj,sint32 facing);
 	bool            TryAnimation       (Action *actionObj,UNITACTION action);
 
-
-	void			TerminateLoopingSound	(uint32 sound_type); 
+	void			TerminateLoopingSound	(uint32 sound_type);
 	void			AddSound				(uint32 sound_type, sint32 sound_id);
 	void			AddLoopingSound			(uint32 sound_type, sint32 sound_id);
 
-	
 	void            HackSetSpriteID(sint32 spriteID) { m_spriteID = spriteID; }
 
 protected:
@@ -280,7 +273,7 @@ protected:
 	sint32              m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
 
 	UnitSpriteGroup		*m_unitSpriteGroup;
-	LOADTYPE			m_loadType;							
+	LOADTYPE			m_loadType;
 
 	sint32				m_facing;
 	sint32				m_lastMoveFacing;
@@ -291,56 +284,54 @@ protected:
 	UNITACTION			m_curUnitAction;
 
 	Queue<Action *>		m_actionQueue;
-	
+
 	RECT				m_heraldRect;
 
-	uint32				m_unitVisibility;					
-	uint32				m_unitSaveVisibility;				
+	uint32				m_unitVisibility;
+	uint32				m_unitSaveVisibility;
 
-	BOOL				m_directionalAttack;				
- 	BOOL				m_needsToDie;						
- 	BOOL				m_needsToVictor;					
-	BOOL				m_killNow;							
-	double				m_unitVisionRange;					
-	double              m_newUnitVisionRange;				
-	
+	BOOL				m_directionalAttack;
+ 	BOOL				m_needsToDie;
+ 	BOOL				m_needsToVictor;
+	BOOL				m_killNow;
+	double				m_unitVisionRange;
+	double              m_newUnitVisionRange;
+
 	sint32				m_numRevealedActors;
-	UnitActor			**m_revealedActors;					
+	UnitActor			**m_revealedActors;
 	sint32				m_numSavedRevealedActors;
-	UnitActor			**m_savedRevealedActors;			
+	UnitActor			**m_savedRevealedActors;
 
-	BOOL				m_bVisSpecial;						
-	
-	UnitActor			**m_moveActors;						
-	sint32				m_numOActors;						
-	BOOL				m_hidden;							
-	BOOL				m_hiddenUnderStack;					
-	sint32				m_isTransported;					
-															
+	BOOL				m_bVisSpecial;
 
-	sint32				m_holdingCurAnimPos[UNITACTION_MAX]; 
-	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX]; 
-	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX]; 
-	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX]; 
-	sint32				m_holdingCurAnimSpecialDelayProcess; 
+	UnitActor			**m_moveActors;
+	sint32				m_numOActors;
+	BOOL				m_hidden;
+	BOOL				m_hiddenUnderStack;
+	sint32				m_isTransported;
 
-	sint32				m_size;								
+	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
+	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
+	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
+	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
+	sint32				m_holdingCurAnimSpecialDelayProcess;
+
+	sint32				m_size;
 	BOOL                m_isUnseenCellActor;
 
-	GROUPTYPE			m_type;								
-	sint32				m_spriteID;							
+	GROUPTYPE			m_type;
+	sint32				m_spriteID;
 
 	BOOL				m_isFortified;
 	BOOL				m_isFortifying;
 	BOOL				m_hasCityWalls;
 	BOOL				m_hasForceField;
 
-
 	uint32				m_shieldFlashOnTime;
 	uint32				m_shieldFlashOffTime;
 
 	sint32				m_activeListRef;
-	double				m_healthPercent;	
+	double				m_healthPercent;
 	sint32				m_tempStackSize;
 
 #ifdef _ACTOR_DRAW_OPTIMIZATION
@@ -356,6 +347,5 @@ protected:
 
 #endif
 };
-
 
 #endif

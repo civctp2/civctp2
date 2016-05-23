@@ -41,7 +41,6 @@ typedef ns_Item<nf_AIPlayer, ns_AIPlayer> ns_AIPlayerItem;
 
 typedef ns_Item<nf_AIPlayer, ns_AIPlayerSetup> ns_AIPlayerSetupItem;
 
-
 class FakeTransport:public NETFunc::Transport {
 public:
 	enum SUBTYPE {
@@ -112,12 +111,11 @@ public:
 		strncpy(m_filename, filename, 64);
 		FILE *file = fopen(filename, "rb");
 		if(file) {
-			
+
 			sint32 test = 0;
 			fread( &test, sizeof( sint32 ), 1, file );
 
-			
-			
+
 			if ( test == NFT::m_version )
 			{
 				NFT *t;
@@ -156,17 +154,15 @@ public:
 	}
 
 	AUI_ERRCODE Save(void) {
-		
+
 		memset(&(this->curkey), 0, sizeof(this->curkey));
 		this->curkey.len = 1;
 		FILE *file = fopen(m_filename, "wb");
 		if(file) {
-			
-			
+
 			fwrite( &NFT::m_version, sizeof( sint32 ), 1, file );
 
-			
-			
+
 			sint32 first = -1;
 			sint32 j = 0;
 			typename ns_FileDataListBox<NFT,NST>::iterator i = begin();
@@ -309,7 +305,6 @@ public:
 };
 
 
-
 class ns_GPlayerListBox:public ns_ListBox<NETFunc::Player, ns_GPlayer> {
 public:
 	ns_GPlayerListBox (
@@ -321,7 +316,6 @@ public:
 		void *cookie = NULL );
 	virtual ~ns_GPlayerListBox();
 
-	
 	virtual void Insert( NETFunc::Player *object );
 	virtual void Delete( NETFunc::Player *object );
 	virtual void Change( NETFunc::Player *object );
@@ -345,7 +339,6 @@ public:
 };
 
 
-
 class ns_AIPlayerListBox:public ns_ListBox<nf_AIPlayer, ns_AIPlayer> {
 public:
 	ns_AIPlayerListBox (
@@ -356,7 +349,6 @@ public:
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 
-	
 	virtual void Insert( nf_AIPlayer *object );
 	virtual void Delete( nf_AIPlayer *object );
 	virtual void Change( nf_AIPlayer *object );
@@ -372,4 +364,4 @@ public:
 	ns_HPlayerListBox *m_hplayerlistbox;
 };
 
-#endif 
+#endif

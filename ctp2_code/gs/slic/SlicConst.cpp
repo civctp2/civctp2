@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "SlicConst.h"
 #include "SlicEngine.h"
@@ -37,4 +36,3 @@ void SlicConst::Serialize(CivArchive &archive)
 		archive >> m_value;
 	}
 }
-

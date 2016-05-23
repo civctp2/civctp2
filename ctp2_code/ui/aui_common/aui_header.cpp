@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -61,7 +61,6 @@ aui_Header::aui_Header(
 }
 
 
-
 aui_Header::aui_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -87,12 +86,10 @@ aui_Header::aui_Header(
 }
 
 
-
 AUI_ERRCODE aui_Header::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE aui_Header::InitCommon( void )
@@ -101,12 +98,10 @@ AUI_ERRCODE aui_Header::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -144,10 +139,9 @@ AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
 }
 
 
-
 aui_Header::~aui_Header()
 {
-	
+
 	ListPos position = m_childList->GetHeadPosition();
 	for ( sint32 i = m_childList->L(); i; i-- )
 	{
@@ -158,7 +152,6 @@ aui_Header::~aui_Header()
 		delete theSwitch;
 	}
 }
-
 
 
 AUI_ERRCODE aui_Header::AddChild( aui_Region *child )
@@ -172,7 +165,6 @@ AUI_ERRCODE aui_Header::AddChild( aui_Region *child )
 }
 
 
-
 AUI_ERRCODE aui_Header::RemoveChild( uint32 itemId )
 {
 	AUI_ERRCODE errcode = aui_SwitchGroup::RemoveChild( itemId );
@@ -184,10 +176,9 @@ AUI_ERRCODE aui_Header::RemoveChild( uint32 itemId )
 }
 
 
-
 AUI_ERRCODE aui_Header::CalculateDimensions( void )
 {
-	
+
 	m_width = 0;
 	m_height = 0;
 
@@ -204,7 +195,6 @@ AUI_ERRCODE aui_Header::CalculateDimensions( void )
 }
 
 
-
 AUI_ERRCODE aui_Header::RepositionSwitches( void )
 {
 	sint32 x = 0;
@@ -214,7 +204,6 @@ AUI_ERRCODE aui_Header::RepositionSwitches( void )
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 
-		
 		theSwitch->Move( x, m_height - theSwitch->Height() );
 
 		x += theSwitch->Width();
@@ -235,29 +224,27 @@ void aui_HeaderSwitchAction::Execute(
 	uint32 action,
 	uint32 data )
 {
-	
+
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
-	
-	
-	
+
+
+
 	aui_ListBox *listbox = (aui_ListBox *)control->GetParent()->GetParent();
 	if ( !listbox ) return;
 
-	
 	switch ( ((aui_Switch *)control)->ExtractState( data ) )
 	{
-	
+
 	default:
 	case 1:
-		
+
 		listbox->SortByColumn( m_column, TRUE );
 		break;
 
-	
-	
+
 	case 2:
-		
+
 		listbox->SortByColumn( m_column, FALSE );
 		break;
 	}

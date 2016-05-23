@@ -37,7 +37,6 @@ struct SlicSymMapPoint {
 };
 
 
-
 class SlicSymbolWatchCallback {
 public:
 	virtual void WatchCallback(SlicSymbolData *symbol, bool isAddCallback) = 0;
@@ -84,7 +83,7 @@ protected:
 		SlicSymMapPoint m_location;
 		SlicArray *m_array;
 		SlicStructInstance *m_struct;
-		
+
 	} m_val;
 
 	SlicSymbolDebugInfo *m_debugInfo;
@@ -113,8 +112,7 @@ public:
 	virtual StringId GetStringId() const;
 	virtual void SetStringId(StringId id);
 	virtual bool IsParameter() const { return false; }
-	
-	
+
 	void SetType(SLIC_SYM type);
 
 	void SetIntValue(sint32 val);
@@ -149,7 +147,6 @@ public:
 	void SetSegment(SlicSegment *segment);
 
 	void SetArrayType(SLIC_SYM type);
-	
 
 	void AddWatch(SlicSymbolWatchCallback *watch);
 	void RemoveWatch(SlicSymbolWatchCallback *watch);

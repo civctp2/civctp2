@@ -40,7 +40,7 @@ protected:
 	MessageEyePointListItem() : c3_ListItem() {}
 
 	AUI_ERRCODE InitCommonLdl(MBCHAR const * name, sint32 index, MBCHAR const * ldlBlock);
-	
+
 private:
 	MBCHAR		m_name[_MAX_PATH];
 	sint32		m_index;
@@ -48,15 +48,14 @@ private:
 };
 
 
-
-class MessageEyePointStandard 
+class MessageEyePointStandard
 {
 public:
-	MessageEyePointStandard( AUI_ERRCODE *retval, 
-							 MBCHAR const *ldlBlock, 
+	MessageEyePointStandard( AUI_ERRCODE *retval,
+							 MBCHAR const *ldlBlock,
 							 MessageWindow *window );
-	MessageEyePointStandard( AUI_ERRCODE *retval, 
-							 MBCHAR const *ldlBlock, 
+	MessageEyePointStandard( AUI_ERRCODE *retval,
+							 MBCHAR const *ldlBlock,
 							 MessageModal *window );
 
 	virtual ~MessageEyePointStandard();
@@ -70,15 +69,14 @@ private:
 };
 
 
-
 class MessageEyePointDropdown
 {
 public:
-	MessageEyePointDropdown( AUI_ERRCODE *retval, 
-							 MBCHAR const *ldlBlock, 
+	MessageEyePointDropdown( AUI_ERRCODE *retval,
+							 MBCHAR const *ldlBlock,
 							 MessageWindow *window );
-	MessageEyePointDropdown( AUI_ERRCODE *retval, 
-							 MBCHAR const *ldlBlock, 
+	MessageEyePointDropdown( AUI_ERRCODE *retval,
+							 MBCHAR const *ldlBlock,
 							 MessageModal *window );
 
 	virtual ~MessageEyePointDropdown();
@@ -90,7 +88,7 @@ private:
     AUI_ERRCODE InitCommonCommon
     (
         MBCHAR const *  ldlBlock,
-        MessageData *   a_Message  
+        MessageData *   a_Message
     );
 
 	aui_Button *                    m_button;
@@ -101,15 +99,14 @@ private:
 };
 
 
-
 class MessageEyePointListbox
 {
 public:
-	MessageEyePointListbox( AUI_ERRCODE *retval, 
-							MBCHAR const *ldlBlock, 
+	MessageEyePointListbox( AUI_ERRCODE *retval,
+							MBCHAR const *ldlBlock,
 							MessageWindow *window );
-	MessageEyePointListbox( AUI_ERRCODE *retval, 
-							MBCHAR const *ldlBlock, 
+	MessageEyePointListbox( AUI_ERRCODE *retval,
+							MBCHAR const *ldlBlock,
 							MessageModal *window );
 
 	virtual ~MessageEyePointListbox();
@@ -124,4 +121,4 @@ private:
 	MessageListboxEyePointAction	*m_action2;
 };
 
-#endif 
+#endif

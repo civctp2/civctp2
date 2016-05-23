@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,9 +32,9 @@
 //
 //   * Added bool m_hasGovernmentsModified to the RecordDescription class
 // - Modified AddBitPair function to allow bit pairs to have default values
-//   so that when two records are merged, only the bit is merged 
+//   so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
-// - Added ParseNum so that a certain number of entries can be parsed if 
+// - Added ParseNum so that a certain number of entries can be parsed if
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
@@ -52,7 +52,7 @@
 class   RecordDescription;
 
 #include "ctp2_inttypes.h"  // sint32, uint32
-#include "ctpdb.h"          // DATUM_TYPE, namelist, etc. 
+#include "ctpdb.h"          // DATUM_TYPE, namelist, etc.
 #include "Datum.h"          // Datum
 #include "MemberClass.h"    // MemberClass
 #include "pointerlist.h"    // PointerList

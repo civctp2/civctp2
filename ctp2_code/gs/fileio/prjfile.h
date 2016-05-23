@@ -20,12 +20,12 @@ struct ZFS_DTABLE;
 
 enum PRJFILE_PATH_TYPE {
     PRJFILE_PATH_NULL,
-    PRJFILE_PATH_DOS,                   
-    PRJFILE_PATH_ZFS,                   
-    PRJFILE_PATH_ZMS                    
+    PRJFILE_PATH_DOS,
+    PRJFILE_PATH_ZFS,
+    PRJFILE_PATH_ZMS
 };
 
-struct PFPath 
+struct PFPath
 {
     PRJFILE_PATH_TYPE   type;
     FILE *              zfs_fp;
@@ -48,7 +48,7 @@ struct PFEntry {
     long path;
 };
 
-class ProjectFile 
+class ProjectFile
 {
 public:
     ProjectFile();
@@ -59,13 +59,10 @@ public:
     void * getData(char const * rname, size_t & size, C3DIR dir = C3DIR_DIRECT);
     void * getData(char const * rname, size_t & size, HANDLE * hFileMap, size_t & offset);
 
-    
     void freeData(void *);
 
-    
     bool exists(char const * fname) const;
 
-    
     char const * getError() const { return m_error_string; }
 
     bool    IsReported(char const * a_FileName) const;
@@ -87,7 +84,7 @@ private:
     void *getData_DOS(PFEntry *entry, size_t & size, C3DIR dir = C3DIR_DIRECT);
     void *getData_ZFS(PFEntry *entry, size_t & size);
     void *getData_ZMS(PFEntry *entry, size_t & size);
-    void *getData_ZMS(PFEntry *entry, size_t & size, 
+    void *getData_ZMS(PFEntry *entry, size_t & size,
                       HANDLE *hFileMap, size_t & offset);
 
     PFPath m_paths[MAX_PRJFILE_PATHS];
@@ -102,6 +99,5 @@ private:
     std::set<std::string>   m_Reported;
 
 };
-
 
 #endif

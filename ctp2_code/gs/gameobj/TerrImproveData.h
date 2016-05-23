@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,8 +55,7 @@ enum TERRAIN_IMPROVEMENT {
 	TERRAIN_IMPROVEMENT_CANAL_TUNNEL,
 
     TERRAIN_IMPROVEMENT_TRANSFORM,
-	TERRAIN_IMPROVEMENT_INSTALLATION 
-  	                                
+	TERRAIN_IMPROVEMENT_INSTALLATION
 
 };
 #else
@@ -69,7 +68,7 @@ class TerrainImprovementData : public GameObj
 {
 private:
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -86,7 +85,7 @@ private:
 //----------------------------------------------------------------------------
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
- 
+
     // sint32 m_materialBonus;
 
     friend class NetTerrainImprovement;

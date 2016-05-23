@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,8 +42,7 @@ class Unit;
 class WonderTracker {
 private:
 	uint64 m_builtWonders;
-	
-	
+
 	uint64 m_buildingWonders[k_MAX_PLAYERS];
 	uint32 m_globeSatFlags;
 
@@ -64,10 +63,8 @@ public:
 	void ClearBuildingWonder(sint32 which, PLAYER_INDEX who);
 	bool IsBuildingWonder(sint32 which, PLAYER_INDEX who);
 
-	
 	void RecomputeIsBuilding(const PLAYER_INDEX who);
 
-	
 	uint32 GlobeSatFlags() { return m_globeSatFlags; }
 	void SetGlobeSatFlags(uint32 flags) { m_globeSatFlags = flags; }
 };

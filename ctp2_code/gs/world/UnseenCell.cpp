@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,13 +26,13 @@
 //
 // - Finished tile improvements are now stored as well in the improvements
 //   list to be able to draw or access them later. - Dec. 21st 2004 Martin Gühmann
-// - Added new functions to calculate the food, shields and gold values produced 
+// - Added new functions to calculate the food, shields and gold values produced
 //   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
-// - Modified constructors and serialize method to support the new 
-//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann 
+// - Modified constructors and serialize method to support the new
+//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann
 // - When an UnseenCell object is created and the according cell contains a
-//   city the owner is now taken from the CityData instead of the Unit 
-//   itsself this allows to get the right owner info when a city changes 
+//   city the owner is now taken from the CityData instead of the Unit
+//   itsself this allows to get the right owner info when a city changes
 //   hands. - Mar. 4th 2005 Martin Gühmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
@@ -82,7 +82,7 @@ namespace
     {
         if (a_Actor)
         {
-		    if (--a_Actor->m_refCount <= 0) 
+		    if (--a_Actor->m_refCount <= 0)
             {
 			    g_director->ActiveUnitRemove(a_Actor);
 			    delete a_Actor;
@@ -166,7 +166,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 		}
 		for(i = 0; i < cell->GetNumImprovements(); i++) {
 			TerrainImprovement imp = cell->AccessImprovement(i);
-			if (imp.IsValid()) 
+			if (imp.IsValid())
 			{
 				m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
 															      imp.PercentComplete()));
@@ -187,7 +187,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 
 		Unit    city = cell->GetCity();
 
-		if (city.IsValid()) 
+		if (city.IsValid())
 		{
 			m_citySize = (sint16)city.PopCount();
 			m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
@@ -205,10 +205,10 @@ UnseenCell::UnseenCell(const MapPoint & point)
 
 				SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
 
-				UnitActor *newActor = new UnitActor(newSS, 
-												    city, 
-												    city.GetType(), 
-												    point, 
+				UnitActor *newActor = new UnitActor(newSS,
+												    city,
+												    city.GetType(),
+												    point,
 												    city.GetOwner(),
 												    TRUE,
 												    city.GetVisionRange(),
@@ -259,7 +259,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 
 		} // city.IsValid
 	} // cell
-	
+
 	SetHasHut(NULL != g_theWorld->GetGoodyHut(point));
 }
 
@@ -431,13 +431,13 @@ UnseenCell::~UnseenCell()
 
     delete m_tileInfo;
 
-	if (m_installations) 
+	if (m_installations)
     {
 		m_installations->DeleteAll();
 		delete m_installations;
 	}
 
-	if (m_improvements) 
+	if (m_improvements)
     {
 		m_improvements->DeleteAll();
 		delete m_improvements;
@@ -458,7 +458,7 @@ UnseenCell::~UnseenCell()
 //
 // Returns    : sint32: 1 if location has an airfield, 0 otherwise.
 //
-// Remark(s)  : Does not seem to depend on hidden tile information as it 
+// Remark(s)  : Does not seem to depend on hidden tile information as it
 //              should be.
 //
 //----------------------------------------------------------------------------
@@ -479,8 +479,8 @@ bool UnseenCell::IsAirfield(void) const
 //
 // Returns    : bool: location has a listening post
 //
-// Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be. 
+// Remark(s)  : Does not seem to depend on hidden tile information as it
+//              should be.
 //
 //----------------------------------------------------------------------------
 bool UnseenCell::IsListeningPost(void) const
@@ -500,7 +500,7 @@ bool UnseenCell::IsListeningPost(void) const
 //
 // Returns    : bool: location has a fort
 //
-// Remark(s)  : Does not seem to depend on hidden tile information as it 
+// Remark(s)  : Does not seem to depend on hidden tile information as it
 //              should be.
 //
 //----------------------------------------------------------------------------
@@ -521,7 +521,7 @@ bool UnseenCell::IsFort(void) const
 //
 // Returns    : bool: location has a radar
 //
-// Remark(s)  : Does not seem to depend on hidden tile information as it 
+// Remark(s)  : Does not seem to depend on hidden tile information as it
 //              should be.
 //
 //----------------------------------------------------------------------------
@@ -542,8 +542,8 @@ bool UnseenCell::IsRadar(void) const
 //
 // Returns    : bool: location can heal units
 //
-// Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be. 
+// Remark(s)  : Does not seem to depend on hidden tile information as it
+//              should be.
 //
 //----------------------------------------------------------------------------
 bool UnseenCell::IsHealUnits(void) const
@@ -551,12 +551,11 @@ bool UnseenCell::IsHealUnits(void) const
 	return terrainutil_HasFort(m_point);
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::GetFoodFromTerrain
 //
-// Description: Gets the food from the given cell with terrain presumed the 
+// Description: Gets the food from the given cell with terrain presumed the
 //              terrain type did not change since the last visit.
 //
 // Parameters : -
@@ -595,7 +594,7 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 //
 // Name       : UnseenCell::GetFoodProduced
 //
-// Description: Gets the food from the given cell with terrain presumed the 
+// Description: Gets the food from the given cell with terrain presumed the
 //              terrain type did not change since the last visit including
 //              tile improvements.
 //
@@ -609,11 +608,11 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 UnseenCell::GetFoodProduced() const 
+sint32 UnseenCell::GetFoodProduced() const
 {
 	sint32 food = GetFoodFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
+	PointerList<UnseenImprovementInfo>::Walker walker =
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
@@ -624,26 +623,26 @@ sint32 UnseenCell::GetFoodProduced() const
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
-		const TerrainImprovementRecord *impRec = 
+		const TerrainImprovementRecord *impRec =
 		    g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
+		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 		sint32 bonus;
-		if (effect && effect->GetBonusFood(bonus)) 
+		if (effect && effect->GetBonusFood(bonus))
 		{
 			food += bonus;
 		}
 	}
 
-	return food; 
+	return food;
 }
 
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::GetShieldsFromTerrain
 //
-// Description: Gets the shields from the given cell with terrain presumed the 
+// Description: Gets the shields from the given cell with terrain presumed the
 //              terrain type did not change since the last visit.
 //
 // Parameters : -
@@ -682,7 +681,7 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 //
 // Name       : UnseenCell::GetShieldsProduced
 //
-// Description: Gets the shields from the given cell with terrain presumed the 
+// Description: Gets the shields from the given cell with terrain presumed the
 //              terrain type did not change since the last visit including
 //              tile improvements.
 //
@@ -696,11 +695,11 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 UnseenCell::GetShieldsProduced() const 
+sint32 UnseenCell::GetShieldsProduced() const
 {
 	sint32 shield = GetShieldsFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
+	PointerList<UnseenImprovementInfo>::Walker walker =
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
@@ -711,26 +710,25 @@ sint32 UnseenCell::GetShieldsProduced() const
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
-		const TerrainImprovementRecord *impRec = 
+		const TerrainImprovementRecord *impRec =
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
+		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
-		if(effect && effect->GetBonusProduction(bonus)) 
+		if(effect && effect->GetBonusProduction(bonus))
 		{
 			shield += bonus;
 		}
 	}
 
-	return shield; 
+	return shield;
 }
-
 
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::GetGoldFromTerrain
 //
-// Description: Gets the gold from the given cell with terrain presumed the 
+// Description: Gets the gold from the given cell with terrain presumed the
 //              terrain type did not change since the last visit.
 //
 // Parameters : -
@@ -769,7 +767,7 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 //
 // Name       : UnseenCell::GetGoldProduced
 //
-// Description: Gets the gold from the given cell with terrain presumed the 
+// Description: Gets the gold from the given cell with terrain presumed the
 //              terrain type did not change since the last visit including
 //              tile improvements.
 //
@@ -783,11 +781,11 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 UnseenCell::GetGoldProduced() const 
+sint32 UnseenCell::GetGoldProduced() const
 {
 	sint32 gold = GetGoldFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
+	PointerList<UnseenImprovementInfo>::Walker walker =
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
@@ -798,9 +796,9 @@ sint32 UnseenCell::GetGoldProduced() const
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
-		const TerrainImprovementRecord *impRec = 
+		const TerrainImprovementRecord *impRec =
 		    g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
+		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
 		if(effect && effect->GetBonusGold(bonus)) {
@@ -810,7 +808,6 @@ sint32 UnseenCell::GetGoldProduced() const
 
 	return gold;
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -837,7 +834,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		{
 			// A dirty workaround in order not to change the save game format.
 			// UnseenInstallationInfo is now abused to store m_visibleCityOwner
-			// as visibility member. As both are of type uint32 it is not a 
+			// as visibility member. As both are of type uint32 it is not a
 			// problem. Its type is marked as -1. At least this doesn't interfere
 			// with anything else, as the installation data is just stored in
 			// this class but it isn't aceessed. Maybe a mistake or a left
@@ -861,8 +858,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		}
 
 
-
-		if (m_cityName) 
+		if (m_cityName)
 		{
 			l = strlen(m_cityName) + 1;
 			archive << l;
@@ -872,7 +868,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		{
 			l = 0;
 			archive << l;
-		} 
+		}
 
 		archive << (sint32)(m_actor != NULL);
 		if (m_actor) {
@@ -885,7 +881,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		m_point.Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
-		if (m_installations) 
+		if (m_installations)
 		{
 			m_installations->DeleteAll();
 		}
@@ -916,7 +912,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		// Backwards compartibility: If this UnseenCell didn't have an m_visibleCityOwner
 		if(vCityOwnerNotSet) m_visibleCityOwner = g_theWorld->GetCell(m_point)->GetCityOwner().m_id;
 
-		if (m_improvements) 
+		if (m_improvements)
 		{
 			m_improvements->DeleteAll();
 		}
@@ -929,7 +925,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		for(i = 0; i < l; i++) {
 			m_improvements->AddTail(new UnseenImprovementInfo(archive));
 		}
-		
+
 		delete [] m_cityName;
 		archive >> l;
 		if (l > 0)
@@ -946,14 +942,14 @@ void UnseenCell::Serialize(CivArchive &archive)
 		archive >> hasActor;
 
 		ReleaseActor(m_actor);
-		if (hasActor) 
+		if (hasActor)
 		{
 			m_actor = new UnitActor(archive);
 		}
 
 		delete m_tileInfo;
 		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(m_point));
-		Assert(m_tileInfo); 
+		Assert(m_tileInfo);
 		m_tileInfo->Serialize(archive);
 	}
 }

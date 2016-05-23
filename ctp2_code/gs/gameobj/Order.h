@@ -30,7 +30,6 @@ extern OrderInfo g_orderInfo[];
 extern sint32 g_numOrderInfo;
 extern sint32 g_orderInfoMap[UNIT_ORDER_MAX];
 
-
 #include "GameEventDescription.h"
 #include "cursormanager.h"
 #include "MapPoint.h"
@@ -39,7 +38,6 @@ class CivArchive;
 class GameEventArgList;
 class OrderRecord;
 class Path;
-
 
 class Order {
 public:
@@ -50,15 +48,14 @@ public:
 	sint32 m_argument;
 	sint32 m_index;
 
-	
 	GAME_EVENT m_eventType;
 	GameEventArgList *m_gameEventArgs;
 
 	Order(UNIT_ORDER_TYPE order, Path *path, const MapPoint &point,
 		  sint32 argument);
 	Order(CivArchive &archive);
-	Order() 
-	{ 
+	Order()
+	{
 		m_order = UNIT_ORDER_NONE;
 		m_path = NULL;
 		m_round = -1;

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -48,15 +48,12 @@ enum AUI_SWITCH_ACTION
 };
 
 
-
 #define k_AUI_SWITCH_LDL_STATE		"state"
 #define k_AUI_SWITCH_LDL_NUMSTATES	"numstates"
-
 
 #define k_AUI_SWITCH_DEFAULTNUMSTATES	2
 
 #include "aui_control.h"
-
 
 class aui_Switch : public aui_Control
 {
@@ -82,7 +79,6 @@ public:
 
 	virtual AUI_ERRCODE ResetThis( void );
 
-	
 	BOOL			IsSelected( void ) const { return m_state != 0; }
 	sint32			GetState( void ) const { return m_state; }
 	virtual sint32	SetState( sint32 state );
@@ -96,7 +92,6 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	typedef AUI_ERRCODE (SwitchDrawCallback)(
 		aui_Switch *control,
 		aui_Surface *surface,
@@ -119,10 +114,9 @@ protected:
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( sint32 state, sint32 numStates );
 
-	sint32	m_state;		
-	sint32	m_numStates;	
+	sint32	m_state;
+	sint32	m_numStates;
 
-	
 	bool	m_drawCallbackExclusive;
 	SwitchDrawCallback *m_drawFunc;
 	void *m_drawCookie;
@@ -135,5 +129,4 @@ protected:
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

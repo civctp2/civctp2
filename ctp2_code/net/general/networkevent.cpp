@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network events
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,9 +57,9 @@ STDEHANDLER(NetBeginTurnEvent)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	
-	
-	
+
+
+
 
 	if(g_network.IsActive()) {
 		if(pl == g_network.GetPlayerIndex())
@@ -73,7 +73,7 @@ STDEHANDLER(NetBeginTurnEvent)
 	if(g_network.IsClient() && g_network.IsLocalPlayer(pl)) {
 		g_network.SendAction(new NetAction(NET_ACTION_ACK_BEGIN_TURN));
 	}
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -98,19 +98,18 @@ STDEHANDLER(NetTurnSyncEvent)
 	return GEV_HD_Continue;
 }
 
-STDEHANDLER(NetStartMovePhaseEvent) 
+STDEHANDLER(NetStartMovePhaseEvent)
 {
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
 	if(g_network.IsHost()) {
-		
-		
+
 		PointerList<Packetizer> cityPackets;
 		PointerList<Packetizer> buildQueuePackets;
 		sint32 p;
 		for(p = 0; p < k_MAX_PLAYERS; p++) {
-			
+
 			if(!g_player[p])
 				continue;
 
@@ -122,25 +121,24 @@ STDEHANDLER(NetStartMovePhaseEvent)
 
 			uint16 id = g_network.IndexToId(p);
 			if(id != 0xffff) {
-				
+
 				sint32 i;
-				for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {			
+				for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
 					UnitData *ud = g_player[pl]->m_all_cities->Access(i).AccessData();
 					CityData *cd = ud->GetCityData();
-					
+
 					cityPackets.AddTail(new NetCity(ud, FALSE));
 					cityPackets.AddTail(new NetCity2(cd, FALSE));
 					cityPackets.AddTail(new NetHappy(g_player[pl]->m_all_cities->Access(i), cd->GetHappy(), FALSE));
-					
+
 					buildQueuePackets.AddTail(new NetCityBuildQueue(cd));
-					
-					
-					
+
+
 				}
 
 				g_network.ChunkList(id, &cityPackets);
 				if(p != pl) {
-					
+
 					g_network.ChunkList(id, &buildQueuePackets);
 				}
 			}
@@ -156,19 +154,19 @@ STDEHANDLER(NetAIFinishBeginTurnEvent)
 {
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
-	
+
 
 
 
 	if(g_network.IsHost() && !g_network.IsLocalPlayer(pl)) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_FINISH_AI_TURN, pl));
 	} else if(g_network.IsClient() && g_network.IsLocalPlayer(pl) && g_player[pl]->IsRobot()) {
-		
+
 	}
 
-	
-	
-	
+
+
+
 
 	return GEV_HD_Continue;
 }
@@ -214,14 +212,14 @@ STDEHANDLER(NetEndAIClientTurnEvent)
 	if(g_player[p]->IsRobot()) {
 		DPRINTF(k_DBG_NET, ("NetEndAIClientTurnEvent, %d\n", p));
 		g_director->AddEndTurn();
-		
+
 	}
 	return GEV_HD_Continue;
 }
 
 STDEHANDLER(NetCreatedWonderEvent)
 {
-	return GEV_HD_Continue; 
+	return GEV_HD_Continue;
 #if 0   // Unreachable: CtP1 code?
 	if(!g_network.IsHost()) return GEV_HD_Continue;
 
@@ -239,7 +237,6 @@ STDEHANDLER(NetCreatedWonderEvent)
 #endif
 }
 
-	
 void networkevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Pre, &s_NetBeginTurnEvent);
@@ -254,7 +251,6 @@ void networkevent_Initialize()
 
 	g_gevManager->AddCallback(GEV_EndAIClientTurn, GEV_PRI_Primary, &s_NetEndAIClientTurnEvent);
 
-	
 }
 
 void networkevent_Cleanup()

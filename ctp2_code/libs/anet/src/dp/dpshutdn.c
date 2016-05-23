@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  dpShutdown will wait an additional wait_after ms after closing the
  connection to handle packet retries.
  If flags is 1, the connection to the game server will not be closed.
- 
+
  Steps which are dependant on network events will time out in
  timeout ms, if timeout is non-zero.  Since there are three such
  states, the maximum total time for shut down is about
@@ -121,7 +121,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		if ((dp->hGameServer == PLAYER_NONE) || (flags & 1)) {
 			dp->quitState += 2;	/* no server discon; skip to next step pair */
 			break;
-		} 
+		}
 		DPRINT(("dpShutdown: disconnecting from server.\n"));
 		err = dpSetGameServerEx(dp, NULL, 0);
 		if (err != dp_RES_OK) {
@@ -165,6 +165,6 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		DPRINT(("dpShutdown: bug: unknown quitState %d!\n", dp->quitState));
 		return dp_RES_BUG;
 		break;
-	}		
+	}
 	return dp_RES_BUSY;
 }

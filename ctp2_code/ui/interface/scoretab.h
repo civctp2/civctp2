@@ -26,7 +26,7 @@ private:
 	ctp2_Static *       m_total;
 	ctp2_ListBox *      m_scoreList;
 	ctp2_ListItem *     m_scoreElem[SCORE_CAT_MAX];
-    aui_StringTable *   m_difficultyStrings; 
+    aui_StringTable *   m_difficultyStrings;
 };
 
 #endif

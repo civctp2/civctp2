@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -130,18 +130,17 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 
 	s_tribeIndex = index;
 
-	sint32 const    playerIndex         = 
+	sint32 const    playerIndex         =
 	    g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
 	bool const      shouldSetProfileDB  =
-	    !g_isCheatModeOn || 
-	     (g_player[playerIndex] && 
+	    !g_isCheatModeOn ||
+	     (g_player[playerIndex] &&
 	      g_player[playerIndex]->IsHuman()
 	     );
 
 	if (shouldSetProfileDB)
 		g_theProfileDB->SetCivIndex(index);
 
-	
 	StringId civString = g_theCivilisationDB->Get(index)->GetPluralCivName();
 
 	if (shouldSetProfileDB)
@@ -166,7 +165,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	{
 
 		StringId nameString = g_theCivilisationDB->Get(index)->GetLeaderNameMale();
-		
+
 		if ( s_maleRadio->GetState() )
 			nameString = g_theCivilisationDB->Get(index)->GetLeaderNameMale();
 		else
@@ -232,7 +231,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 		if(callback) {
 			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
 		}
-		return AUI_ERRCODE_OK; 
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "SPNewGameTribeScreen");
@@ -286,7 +285,6 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 		s_maleRadio->Enable(TRUE);
 		s_femaleRadio->Enable(TRUE);
 	}
-
 
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -365,8 +363,7 @@ void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 
 	const sint32 size = 100;
 	MBCHAR lname[ size + 1 ];
 	spnewgametribescreen_getLeaderName( lname );
-	
-	
+
 	spnewgametribescreen_removeMyWindow(action, lname);
 }
 

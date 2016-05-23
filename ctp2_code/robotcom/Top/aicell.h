@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __AI_CELL_H__
 #define __AI_CELL_H__ 1
@@ -19,7 +5,7 @@
 
 
 
-#define k_TERRRAIN_TYPE_MASK 0xf8000000  
+#define k_TERRRAIN_TYPE_MASK 0xf8000000
 #define k_TERRRAIN_TYPE_SHIFT 27
 
 #define k_SHIFTED_TERRAIN_FOREST (TERRAIN_FOREST<<k_TERRRAIN_TYPE_SHIFT)
@@ -41,38 +27,34 @@
 #define k_SHIFTED_TERRAIN_WATER_TRENCH (TERRAIN_WATER_TRENCH<<k_TERRRAIN_TYPE_SHIFT)
 #define k_SHIFTED_TERRAIN_WATER_RIFT (TERRAIN_WATER_RIFT<<k_TERRRAIN_TYPE_SHIFT)
 #define k_SHIFTED_TERRAIN_DEAD (TERRAIN_DEAD<<k_TERRRAIN_TYPE_SHIFT)
-#define k_SHIFTED_TERRAIN_UNEXPLORED (TERRAIN_UNEXPLORED<<k_TERRRAIN_TYPE_SHIFT)   
+#define k_SHIFTED_TERRAIN_UNEXPLORED (TERRAIN_UNEXPLORED<<k_TERRRAIN_TYPE_SHIFT)
 
-
-enum GRADIENT_BITS { 
-   GRADIENT_0_FIVE, 
-   GRADIENT_1_SIX, 
-   GRADIENT_2_SEVEN, 
-   GRADIENT_3_SEVEN, 
-   GRADIENT_4_SEVEN, 
+enum GRADIENT_BITS {
+   GRADIENT_0_FIVE,
+   GRADIENT_1_SIX,
+   GRADIENT_2_SEVEN,
+   GRADIENT_3_SEVEN,
+   GRADIENT_4_SEVEN,
    NUM_GRADIENT
 };
 
+struct MapPointData;
+class AiMain;
+class CivArchive;
+class AiCell;
 
-struct MapPointData; 
-class AiMain; 
-class CivArchive; 
-class AiCell; 
+class AiCellPtr {
 
-
-class AiCellPtr { 
-    
     sint16 x, y;
-    sint16 m_queue_idx; 
+    sint16 m_queue_idx;
 
 public:
 
     AiCellPtr();
     ~AiCellPtr();
-    void Init(); 
+    void Init();
 
-    
-    void* operator new(size_t); 
+    void* operator new(size_t);
     void operator delete(void *);
 
     AiCellPtr& operator= (AiCell* set_me);
@@ -82,34 +64,30 @@ public:
 
     friend class AiMap;
 
-    sint32 GetPriorityQueueIndex() const { return m_queue_idx; } 
-    void SetPriorityQueueIndex(const sint32 i) { 
-        Assert(-1 <= i); 
-        Assert(i < SHRT_MAX); 
+    sint32 GetPriorityQueueIndex() const { return m_queue_idx; }
+    void SetPriorityQueueIndex(const sint32 i) {
+        Assert(-1 <= i);
+        Assert(i < SHRT_MAX);
         m_queue_idx = sint16(i); }
 
 };
 
+class AiCell {
 
-class AiCell { 
-
-    
-    sint16 m_current_settle_value; 
-    sint16 m_dynamic_settle_value; 
+    sint16 m_current_settle_value;
+    sint16 m_dynamic_settle_value;
     AiCellPtr * m_settle_ptr;
-    
 
 public:
 
-	AiCell(); 
-    
-    void Serialize(CivArchive &archive); 
+	AiCell();
+
+    void Serialize(CivArchive &archive);
 
     friend class AiMap;
-    friend class AiCellPtr; 
+    friend class AiCellPtr;
 
 };
-
 
 
 #endif

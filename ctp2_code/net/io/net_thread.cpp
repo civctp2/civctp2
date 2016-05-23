@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 //
 // _DEBUG
 // Generate extra debug information when set.
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -51,7 +51,7 @@ TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
 	m_actualBuf = NULL;
 	m_totalLen = 0;
 
-	if(!sendPacket && 
+	if(!sendPacket &&
 	   buf[0] == k_SPLIT_PACKET_HEAD &&
 	   buf[1] == k_SPLIT_PACKET_START) {
 		sint32 realLen = getlong(&buf[2]);
@@ -107,14 +107,13 @@ void TPacketData::RemoveSplitInfo()
 
 NET_ERR NetThread::Reset()
 {
-	
+
 	m_exit = TRUE;
 	while(!m_exited)
 		;
 
 	m_exit = m_exited = FALSE;
-	
-	
+
 	if(m_origDP) {
 		dpSetActiveThread(m_origDP);
 	}
@@ -133,12 +132,11 @@ NET_ERR NetThread::Reset()
 	m_origDP = NULL;
 	m_setMaxPlayers = -1;
 
-	
 	Init(m_response);
 
 	return NET_ERR_OK;
 }
-	
+
 NetThread::~NetThread()
 {
 	m_exit = TRUE;
@@ -196,7 +194,7 @@ NetThread::NetThread()
 	m_kickPlayers = new SimpleDynamicArray<uint16>;
 }
 
-NET_ERR NetThread::Init(NetIOResponse *response)       
+NET_ERR NetThread::Init(NetIOResponse *response)
 {
 	NetIO::Init(response);
 
@@ -233,13 +231,12 @@ void NetThread::Run()
 #endif
 		if(m_anet) {
 			if(m_dp) {
-				
+
 				dpSetActiveThread(m_dp);
 				m_anet->SetDP(m_dp);
 				m_origDP = m_dp;
 				m_dp = NULL;
-				
-				
+
 			}
 
 			if(m_setMaxPlayers >= 0) {
@@ -268,10 +265,10 @@ void NetThread::Run()
 					while(!busy && ((packet = outgoing->RemoveHead()) != NULL)) {
 						static uint8 buf[dp_MAXLEN_UNRELIABLE * 2];
 						memcpy(buf, packet->m_buf, packet->m_len);
-						
-						NET_ERR err = m_anet->Send(packet->m_id, 
-												   packet->m_flags, 
-												   buf, 
+
+						NET_ERR err = m_anet->Send(packet->m_id,
+												   packet->m_flags,
+												   buf,
 												   packet->m_len);
 						switch(err) {
 							case NET_ERR_OK:
@@ -330,7 +327,6 @@ void NetThread::SetDP(dp_t *dp)
 	Unlock();
 }
 
-
 NET_ERR NetThread::EnumTransports()
 {
 	return NET_ERR_NOTIMPLEMENTED;
@@ -359,7 +355,7 @@ NET_ERR NetThread::Join(sint32 index)
 NET_ERR NetThread::GetMyId(uint16& id)
 {
 	Assert(m_anet);
-	
+
 	return m_anet->GetMyId(id);
 }
 
@@ -404,7 +400,7 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 		header[0] = k_SPLIT_PACKET_HEAD;
 		header[1] = k_SPLIT_PACKET_START;
 		putlong(&header[2], len);
-		outgoing->AddTail(new TPacketData(id, flags, buf, k_SPLIT_LEN - 1, 
+		outgoing->AddTail(new TPacketData(id, flags, buf, k_SPLIT_LEN - 1,
 											header, 6));
 		added = k_SPLIT_LEN - 1;
 		while(added < len) {
@@ -418,13 +414,13 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 				header[1] = k_SPLIT_PACKET_BODY;
 				toSend = k_SPLIT_LEN - 1;
 			}
-			
+
 			outgoing->AddTail(new TPacketData(id, flags, buf + added, toSend,
 												header, 2));
 			added += toSend;
 		}
 		Assert(added == len);
-	} else {					
+	} else {
 		outgoing->AddTail(new TPacketData(id, flags, buf, len, TRUE));
 	}
 
@@ -461,13 +457,13 @@ NET_ERR NetThread::Idle()
 	TPacketData *packet;
 	BOOL stopProcessing = FALSE;
 	hackPackets = 0;
-	while(!stopProcessing && (m_response->ReadyForPackets()) && 
+	while(!stopProcessing && (m_response->ReadyForPackets()) &&
 		  ((m_incoming->GetHead() != NULL))) {
 		packet = m_incoming->RemoveHead();
-		
+
 		if(packet->m_buf && packet->m_buf[0] == k_SPLIT_PACKET_HEAD &&
 			packet->m_id != k_RPC_ID) {
-			
+
 			m_incoming->AddHead(packet);
 			stopProcessing = TRUE;
 			continue;
@@ -483,8 +479,7 @@ NET_ERR NetThread::Idle()
 				{
 					m_response->AddPlayer(getshort(&packet->m_buf[packet->m_len - 2]),
 										  (char*)packet->m_buf);
-					
-					
+
 					stopProcessing = TRUE;
 					break;
 				}
@@ -545,12 +540,12 @@ BOOL NetThread::ReadyForData()
 	return ready;
 }
 
-void NetThread::EnumTransport(NET_ERR result, 
+void NetThread::EnumTransport(NET_ERR result,
 				   sint32 index,
-				   const char* transname, 
+				   const char* transname,
 				   void* transdata)
 {
-	
+
 }
 
 void NetThread::EnumSession(NET_ERR result,
@@ -558,7 +553,7 @@ void NetThread::EnumSession(NET_ERR result,
 				 const char* sessionName,
 				 void* sessionData)
 {
-	
+
 }
 void NetThread::SessionReady(NET_ERR result,
 				  void* sessionData)
@@ -576,7 +571,7 @@ TPacketData *NetThread::FindSplitStart(uint16 from)
 {
 	PointerList<TPacketData>::Walker walk(m_incoming);
 	for(; walk.IsValid(); walk.Next()) {
-		if(walk.GetObj()->m_id == from && walk.GetObj()->m_buf[0] == k_SPLIT_PACKET_HEAD) {			
+		if(walk.GetObj()->m_id == from && walk.GetObj()->m_buf[0] == k_SPLIT_PACKET_HEAD) {
 			Assert(walk.GetObj()->m_buf[1] == k_SPLIT_PACKET_START);
 			return walk.GetObj();
 		}
@@ -591,7 +586,7 @@ void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 	TPacketData *currentTail = m_incoming->GetTail();
 #endif
 	if(buf[0] == k_SPLIT_PACKET_HEAD && m_incoming->GetCount() > 0) {
-		
+
 		TPacketData *splitStart = FindSplitStart((uint16)from);
 		if(!splitStart) {
 			Assert(buf[1] == k_SPLIT_PACKET_START);
@@ -609,9 +604,9 @@ void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 					Assert(FALSE);
 					break;
 			}
-		}	
+		}
 #if 0
-		if((currentTail->m_buf && 
+		if((currentTail->m_buf &&
 			(currentTail->m_buf[0] != k_SPLIT_PACKET_HEAD))) {
 			Assert(buf[1] == k_SPLIT_PACKET_START);
 			m_incoming->AddTail(new TPacketData((uint16)from, 0, buf, size,
@@ -636,12 +631,12 @@ void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 		TPacketData *splitStart = FindSplitStart((uint16)from);
 		Assert(!splitStart);
 #endif
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 
 		m_incoming->AddTail(new TPacketData((uint16)from, 0, buf, size, FALSE));
 	}
@@ -650,7 +645,7 @@ void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 
 void NetThread::AddPlayer(uint16 id, char* name)
 {
-	Lock();	
+	Lock();
 	DPRINTF(k_DBG_NET, ("AddPlayer(%d, %s)\n", id, name));
 
 	TPacketData *packet = new TPacketData(k_RPC_ID,
@@ -669,7 +664,7 @@ void NetThread::AddPlayer(uint16 id, char* name)
 			break;
 		}
 	}
-	Assert(i < k_MAX_NETWORK_PLAYERS); 
+	Assert(i < k_MAX_NETWORK_PLAYERS);
 	Unlock();
 }
 
@@ -697,8 +692,7 @@ void NetThread::RemovePlayer(uint16 id)
 		}
 	}
 
-	
-	
+
 	PointerList<TPacketData>::Walker walk(m_incoming);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_id == id) {
@@ -708,7 +702,7 @@ void NetThread::RemovePlayer(uint16 id)
 		}
 	}
 
-	Assert(i < k_MAX_NETWORK_PLAYERS); 
+	Assert(i < k_MAX_NETWORK_PLAYERS);
 	Unlock();
 }
 
@@ -759,11 +753,9 @@ void NetThread::SessionLost()
 										  0,
 										  TRUE);
 
-	
-	
+
 	m_incoming->DeleteAll();
 
 	m_incoming->AddTail(packet);
 	Unlock();
 }
-

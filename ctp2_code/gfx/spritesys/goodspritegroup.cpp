@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -50,7 +50,7 @@
 extern CivPaths *g_civPaths;
 extern ScreenManager *g_screenManager;
 
-void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > GOODACTION_NONE &&
@@ -58,7 +58,7 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 
 	if (m_sprites[action] == NULL) return;
 
-	if ((frame < 0) || 
+	if ((frame < 0) ||
         (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
        )
     {
@@ -69,7 +69,7 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 	m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
 }
 
-void GoodSpriteGroup::DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
+void GoodSpriteGroup::DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > GOODACTION_NONE &&
@@ -87,7 +87,6 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 
 	return m_sprites[action] ? m_sprites[action]->GetHotPoint() : nullPoint;
 }
-
 
 void GoodSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
@@ -119,7 +118,7 @@ void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
-	if (SPRITEFILEERR_OK == 
+	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
        )
 	{
@@ -130,7 +129,7 @@ void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 
 void GoodSpriteGroup::DeallocateStorage(void)
 {
-    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
     {
 	    delete m_sprites[i];
         m_sprites[i] = NULL;
@@ -139,7 +138,7 @@ void GoodSpriteGroup::DeallocateStorage(void)
 
 void GoodSpriteGroup::DeallocateFullLoadAnims(void)
 {
-    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
     {
         delete m_anims[i];
         m_anims[i] = NULL;
@@ -159,15 +158,13 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
 	sprintf(scriptName, "GG%.2d.txt", id);
 
-
-	Token * theToken = new Token(scriptName, C3DIR_SPRITES); 
-	Assert(theToken); 
-	if (!theToken) return FALSE; 
-	
+	Token * theToken = new Token(scriptName, C3DIR_SPRITES);
+	Assert(theToken);
+	if (!theToken) return FALSE;
 
 	if (!token_ParseKeywordNext(theToken, TOKEN_GOOD_SPRITE)) {
 		delete theToken;
-		return k_NOT_GOOD; 
+		return k_NOT_GOOD;
 	}
 
 	printf("Good Processing '%s'\n", scriptName);
@@ -176,7 +173,7 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	MBCHAR *    shadowNames[k_MAX_NAMES];
 	size_t		i;
 
-    for (i = 0; i < k_MAX_NAMES; i++) 
+    for (i = 0; i < k_MAX_NAMES; i++)
     {
         imageNames[i] =  new MBCHAR[k_MAX_NAME_LENGTH];
         shadowNames[i] = new MBCHAR[k_MAX_NAME_LENGTH];
@@ -215,11 +212,10 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		m_anims[GOODACTION_IDLE] = idleAnim;
 	}
 
-	
 
 	delete theToken;
 
-    for (i = 0; i < k_MAX_NAMES; i++) 
+    for (i = 0; i < k_MAX_NAMES; i++)
     {
         delete [] imageNames[i];
         delete [] shadowNames[i];
@@ -250,13 +246,12 @@ void GoodSpriteGroup::ExportScript(MBCHAR const * name)
 	fprintf(file, "# %s\n", timebuf);
 	fprintf(file, "#\n\n");
 
-
 	fprintf(file, "%d # %s\n\n", 0, name);
 	fprintf(file, "%s\n", g_allTokens[TOKEN_GOOD_SPRITE].keyword);
 	fprintf(file, "{\n");
 
 	ExportSpriteGroup(file,(GAME_ACTION)GOODACTION_IDLE,TOKEN_UNIT_SPRITE_IDLE,TOKEN_MAX);
-  
+
 
 
 

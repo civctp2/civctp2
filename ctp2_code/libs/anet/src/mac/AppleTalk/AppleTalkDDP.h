@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-
 /*
  * Copyright (C) 1994-1996, Michael S. Durkin & Tsoft.  All Rights Reserved.
  *    Please see legalese in README.1ST or contact us for details:
@@ -34,7 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Some code may be leached, hopefully noted in comments.  Terms
  * throughout leached from the tcp201.txt specification.
  */
- 
+
 #ifndef _atalk_ddp_h
 #define _atalk_ddp_h
 

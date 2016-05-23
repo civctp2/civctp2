@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,12 +70,12 @@ static aui_Switch			*s_tutorialadvice			= NULL,
 							*s_enemyMoves				= NULL,
 							*s_autoCenter				= NULL,
 							*s_autoTabSelect			= NULL,
-							*s_battleViewAlways			= NULL,	
+							*s_battleViewAlways			= NULL,
 							*s_autoSave					= NULL,
 
-							*s_EnemyHealth				= NULL, //emod1	
+							*s_EnemyHealth				= NULL, //emod1
 
-							*s_leftHandedMouse			= NULL;	
+							*s_leftHandedMouse			= NULL;
 
 static C3Slider				*s_mouseSpeed				= NULL;
 static c3_Static			*s_mouseSpeedN				= NULL;
@@ -85,17 +85,17 @@ static BOOL					s_leftHandedMouseFlag = FALSE;
 enum
 {
 	GP_TUTORIALADVICE,
-	
+
 	GP_AUTOCYCLETURN,
 	GP_AUTOCYCLEUNITS,
 	GP_BATTLEVIEW,
-	
+
 	GP_ENEMYMOVES,
 	GP_AUTOCENTER,
 	GP_AUTOTABSELECT,
-	GP_BATTLEVIEWALWAYS,		
+	GP_BATTLEVIEWALWAYS,
 	GP_AUTOSAVE,
-	GP_LEFTHANDEDMOUSE,	
+	GP_LEFTHANDEDMOUSE,
 	GP_ENEMYHEALTH,
 	GP_TOTAL
 };
@@ -103,17 +103,17 @@ enum
 static uint32 check[] =
 {
 	GP_TUTORIALADVICE,
-	
+
 	GP_AUTOCYCLETURN,
 	GP_AUTOCYCLEUNITS,
 	GP_BATTLEVIEW,
-	
+
 	GP_ENEMYMOVES,
 	GP_AUTOCENTER,
 	GP_AUTOTABSELECT,
-	GP_BATTLEVIEWALWAYS,		
+	GP_BATTLEVIEWALWAYS,
 	GP_AUTOSAVE,
-	GP_LEFTHANDEDMOUSE,	
+	GP_LEFTHANDEDMOUSE,
 	GP_ENEMYHEALTH,
 	GP_TOTAL
 };
@@ -123,7 +123,7 @@ sint32 gameplayoptions_updateData()
 	if ( !g_theProfileDB ) return -1;
 
 	sint32 diff = g_theGameSettings ? g_theGameSettings->GetDifficulty() : g_theProfileDB->GetDifficulty();
-	
+
 	if(diff >= 2 || g_network.IsActive()) {
 		s_tutorialadvice->SetState(0);
 		s_tutorialadvice->Enable(FALSE);
@@ -131,21 +131,18 @@ sint32 gameplayoptions_updateData()
 		s_tutorialadvice->SetState( g_theProfileDB->IsTutorialAdvice() );
 	}
 
-	
+
 
 
 	s_autocycleturn->SetState( g_theProfileDB->IsAutoTurnCycle() );
-	
-	
+
 	s_autocycleunits->SetState( g_theProfileDB->IsAutoSelectNext() );
 
 	s_battleview->SetState( g_theProfileDB->IsShowZoomedCombat() );
 
-	
 	s_battleViewAlways->SetState(g_theProfileDB->IsZoomedCombatAlways());
 	s_autoSave->SetState(g_theProfileDB->IsAutoSave());
 	s_mouseSpeed->SetValue(g_theProfileDB->GetMouseSpeed(), 0);
-
 
 	s_enemyMoves->SetState(g_theProfileDB->IsEnemyMoves());
 	s_autoCenter->SetState(g_theProfileDB->IsAutoCenter());
@@ -154,7 +151,6 @@ sint32 gameplayoptions_updateData()
 
 	return 1;
 }
-
 
 
 sint32	gameplayoptions_displayMyWindow()
@@ -205,7 +201,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 
 
 
-		return AUI_ERRCODE_OK; 
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "GamePlayOptionsWindow");
@@ -221,10 +217,8 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 
 	s_gameplayoptionsWindow->SetStronglyModal(TRUE);
 
-	
 	s_tutorialadvice	= spNew_aui_Switch(&errcode,windowBlock,"TutorialButton",
 								gameplayoptions_checkPress,&check[GP_TUTORIALADVICE]);
-
 
 	s_autocycleturn		= spNew_aui_Switch(&errcode,windowBlock,"AutoCycleTurnButton",
 								gameplayoptions_checkPress,&check[GP_AUTOCYCLETURN]);
@@ -233,7 +227,6 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 	s_battleview		= spNew_aui_Switch(&errcode,windowBlock,"BattleViewButton",
 								gameplayoptions_checkPress,&check[GP_BATTLEVIEW]);
 
-
 	s_enemyMoves		= spNew_aui_Switch(&errcode,windowBlock,"EnemyMovesButton",
 								gameplayoptions_checkPress,&check[GP_ENEMYMOVES]);
 	s_autoCenter		= spNew_aui_Switch(&errcode,windowBlock,"AutoCenterButton",
@@ -241,8 +234,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 	s_autoTabSelect		= spNew_aui_Switch(&errcode,windowBlock,"AutoTabSelectButton",
 								gameplayoptions_checkPress,&check[GP_AUTOTABSELECT]);
 
-	
-	s_battleViewAlways	= spNew_aui_Switch(&errcode, windowBlock, "BattleViewAlwaysButton", 
+	s_battleViewAlways	= spNew_aui_Switch(&errcode, windowBlock, "BattleViewAlwaysButton",
 								gameplayoptions_checkPress, &check[GP_BATTLEVIEWALWAYS]);
 
 	s_mouseSpeed		 = spNew_C3Slider(&errcode, windowBlock, "MouseSpeedSlider",
@@ -255,7 +247,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 	s_leftHandedMouse	= spNew_aui_Switch(&errcode, windowBlock, "LeftHandedMouseButton",
 								gameplayoptions_checkPress, &check[GP_LEFTHANDEDMOUSE]);
 	//emod5
-	s_EnemyHealth		= spNew_aui_Switch(&errcode, windowBlock, "EnemyHealthButton", 
+	s_EnemyHealth		= spNew_aui_Switch(&errcode, windowBlock, "EnemyHealthButton",
 								gameplayoptions_checkPress, &check[GP_ENEMYHEALTH]);
 
 
@@ -263,7 +255,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 
 
 
-	
+
 	gameplayoptions_updateData();
 
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -271,7 +263,6 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 	s_gameplayoptionsWindow->AddTitle( block );
 	s_gameplayoptionsWindow->AddClose( gameplayoptions_exitPress );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -279,12 +270,11 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 }
 
 
-
 AUI_ERRCODE gameplayoptions_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_gameplayoptionsWindow  ) return AUI_ERRCODE_OK; 
+	if ( !s_gameplayoptionsWindow  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_gameplayoptionsWindow->Id() );
 	keypress_RemoveHandler(s_gameplayoptionsWindow);
@@ -299,7 +289,6 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 	mycleanup(s_autoCenter);
 	mycleanup(s_autoTabSelect);
 
-	
 	mycleanup(s_battleViewAlways);
 	mycleanup(s_mouseSpeed);
 	mycleanup(s_mouseSpeedN);
@@ -314,21 +303,20 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 #undef mycleanup
 }
 
-
 void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
 	uint32 checkbox = *((uint32*)cookie);
 	void (ProfileDB::*func)(BOOL) = 0;
-	uint32 state = data; 
+	uint32 state = data;
 
 	switch(checkbox) {
 	case GP_TUTORIALADVICE:	func = &ProfileDB::SetTutorialAdvice; break;
-	
+
 	case GP_AUTOCYCLETURN:	func = &ProfileDB::SetAutoTurnCycle; break;
-	case GP_AUTOCYCLEUNITS:	
+	case GP_AUTOCYCLEUNITS:
 		state = !state;
 		g_theProfileDB->SetAutoSelectFirstUnit(state);
 		g_theProfileDB->SetAutoSelectNext(state);
@@ -342,7 +330,7 @@ void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data
 	case GP_BATTLEVIEWALWAYS: func = &ProfileDB::SetZoomedCombatAlways; break;
 	case GP_AUTOSAVE: func = &ProfileDB::SetAutoSave; break;
 	case GP_ENEMYHEALTH: func = &ProfileDB::SetEnemyHealth; break; //emod7
-	case GP_LEFTHANDEDMOUSE: 
+	case GP_LEFTHANDEDMOUSE:
 		s_leftHandedMouseFlag = !state;
 		func = NULL;
 
@@ -352,7 +340,7 @@ void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data
 	};
 
 	if(func)
-		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
+		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
 void gameplayoptions_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -363,22 +351,18 @@ void gameplayoptions_exitPress(aui_Control *control, uint32 action, uint32 data,
 	gameplayoptions_removeMyWindow(action);
 }
 
-
 void gameplayoptions_mouseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 
 	g_theProfileDB->SetMouseSpeed(s_mouseSpeed->GetValueX());
 
-	
 	if (g_c3ui->TheMouse()) {
 		double sensitivity = 0.0;
 
-		
 		sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
 
 		g_c3ui->TheMouse()->Sensitivity() = sensitivity;
 
 	}
 }
-

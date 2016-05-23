@@ -7,7 +7,6 @@
 #include "aui_action.h"
 
 
-
 class Button1Action : public aui_Action
 {
 public:
@@ -18,7 +17,6 @@ public:
 
 protected:
 };
-
 
 class Button2Action : public aui_Action
 {
@@ -31,5 +29,4 @@ public:
 protected:
 };
 
-
-#endif 
+#endif

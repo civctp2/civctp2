@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * reliable send queue.
  * Using dp_SEND_RESERVE_THREEQUARTERS means that dpSend will return FULL
  * when the reliable send queue is one quarter or more full.
- * Use dp_SEND_RESERVE_THREEQUARTERS for reliable packets that can be 
+ * Use dp_SEND_RESERVE_THREEQUARTERS for reliable packets that can be
  * merged together for more efficient sending; when dpSend returns FULL,
  * you should merge your packets together to reduce the number of sends.
  */
@@ -54,13 +54,12 @@ typedef unsigned short dp_packetType_t;
 /* Limit for dpio_put_reliable. */
 #define dpio_MAXLEN_RELIABLE (dpio_MAXLEN_UNRELIABLE - sizeof_dpio_reliable_header)
 
-
 #define dp_MAXDPIDS		64000   /* kludge.  Should be unlimited. */
 #define dp_FIRST_DPID      40	/* dpid's less than dp_FIRST_DPID are reserved
 								 * for system use as group ids, etc.
 								 */
 #define dp_ID_NONE		(dp_MAXDPIDS+1)
-typedef unsigned short dpid_t;	/* Id for a player.  Unique among players 
+typedef unsigned short dpid_t;	/* Id for a player.  Unique among players
 								 * currently in the session, but may be reused
 								 * after ~16000 players have come and gone.
 								 */
@@ -128,6 +127,5 @@ typedef unsigned short dp_species_t;
 #define dp_RES_DELETED				21
 #define dp_RES_CREATED				26	/* new object */
 #define dp_RES_CHANGED				27	/* old object, but new value */
-
 
 #endif

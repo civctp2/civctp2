@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "macapp.h"
 
 /*--------------------------------------------------------------------------
-Takes a long int and returns a point; used to convert eventRecord.where for 
+Takes a long int and returns a point; used to convert eventRecord.where for
  high-level applications.
 --------------------------------------------------------------------------*/
 Point longtopt(long n) {
@@ -56,7 +56,7 @@ dp_result_t getstub(ProcessSerialNumber *pstubPSN)
 	char processName[FILENAME_MAX];
 	FSSpec launchFSSpec;
 	char buf[FILENAME_MAX];		// p2cstr alters its arg so use buffer
-	
+
 	/* check if already have determined if stub exists and if so return it */
 	switch (havestub) {
 		case -2:
@@ -74,8 +74,8 @@ dp_result_t getstub(ProcessSerialNumber *pstubPSN)
 		default:
 			DPRINT(("macapp: error got havestub = %d\n", havestub));
 			return dp_RES_BUG;
-	}			
-	
+	}
+
 	/* find launcher of current process */
 	proc.processInfoLength = sizeof(ProcessInfoRec);
 	proc.processName = nil;

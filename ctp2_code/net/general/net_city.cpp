@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -29,7 +29,7 @@
 // Modifications from the original Activision code:
 //
 // - Activision patch reimplementation: propagate the defensive bonus.
-// - Replaced some member names to match the new one in CityData. 
+// - Replaced some member names to match the new one in CityData.
 //   - Aug 6th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -59,8 +59,8 @@
 #include "MainControlPanel.h"
 #include "SelItem.h"
 
-NetCity::NetCity(UnitData* unit, BOOL isInitial) : 
-	m_unitData(unit) 
+NetCity::NetCity(UnitData* unit, BOOL isInitial) :
+	m_unitData(unit)
 {
 	m_unitId = unit->m_id;
 	m_isInitialPacket = static_cast<uint8>(isInitial);
@@ -89,12 +89,12 @@ void NetCity::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(cityData->m_city_attitude);
 	PUSHLONG64((uint64)cityData->m_built_improvements);
 
-	
-	
+
+
 
 #ifdef CTP1_TRADE
 	uint8 numNonZeroResources = 0;
-	
+
 	sint32 resourceCountPosition = size++;
 
 	sint32 i;
@@ -130,7 +130,7 @@ void NetCity::Packetize(uint8* buf, uint16& size)
 	for(r = 0; r < g_theResourceDB->NumRecords(); r++) {
 		PUSHLONG(cityData->m_distanceToGood[r]);
 	}
-	
+
 }
 
 void NetCity::PacketizeResources(const Resources &resources, uint8 *buf, uint16 &size)
@@ -285,12 +285,12 @@ void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLSTRING(name);
 	if(g_theUnitPool->IsValid(home_city)) {
 		if(!home_city->GetCityData()) {
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 			if(g_network.IsHost()) {
 				g_network.Resync(g_network.IdToIndex(id));
 			} else {
@@ -309,8 +309,7 @@ void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 		}
 	}
-	
-	
+
 	Assert(pos == size);
 }
 
@@ -320,7 +319,7 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 	PUSHID(k_PACKET_CITY2_ID);
 
 	PUSHLONG((uint32)m_data->m_home_city);
-	
+
 	PUSHLONG(m_data->m_gold_lost_to_crime);
 	PUSHLONG(m_data->m_gross_gold);
 	PUSHLONG(m_data->m_goldFromTradeRoutes);
@@ -335,7 +334,7 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 	PUSHDOUBLE(m_data->m_food_consumed_this_turn);
 	PUSHLONG(m_data->m_total_pollution);
 
-	uint8 flags = 
+	uint8 flags =
 		(uint8)m_data->m_contribute_materials |
 		((uint8)m_data->m_contribute_military << 1) |
 		((uint8)m_data->m_buildCapitalization << 4) |
@@ -356,14 +355,14 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 						m_data->m_convertedTo,
 						m_data->m_convertedBy));
 #endif
-						
+
 	PUSHBYTE((sint8)m_data->m_spied_upon);
 
 	PUSHBYTE((sint8)m_data->m_franchise_owner);
 	PUSHBYTE((sint8)m_data->m_franchiseTurnsRemaining);
-	
+
 #ifdef _DEBUG
-	
+
 #endif
 	PUSHBYTE((sint8)m_data->m_watchfulTurns);
 	PUSHBYTE((sint8)m_data->m_bioInfectionTurns);
@@ -373,10 +372,10 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 	PUSHLONG(m_data->m_convertedGold);
 
 	PUSHLONG(m_data->m_accumulated_food);
-	
 
-	
-	
+
+
+
 
 	PUSHLONG(m_data->m_foodVatPollution);
 	sint8 govSetting = -1;
@@ -397,10 +396,9 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	if(packid != k_PACKET_CITY2_ID)
 		return;
 
-	
 	Unit home_city;
 	PULLLONGTYPE(home_city, Unit);
-	
+
 	if(!g_theUnitPool->IsValid(home_city))
 		return;
 	m_data = home_city.AccessData()->GetCityData();
@@ -415,8 +413,8 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 
-	double oldgross = m_data->m_gross_food, 
-		oldproduced = m_data->m_net_food, 
+	double oldgross = m_data->m_gross_food,
+		oldproduced = m_data->m_net_food,
 		oldconsumed = m_data->m_food_consumed_this_turn;
 	double oldLostToCrime = m_data->m_food_lost_to_crime;
 	sint32 oldaccum = m_data->m_accumulated_food;
@@ -457,10 +455,9 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLLONG(m_data->m_accumulated_food);
 
-
 	PULLLONG(m_data->m_foodVatPollution);
 
-	sint8 govSetting;	
+	sint8 govSetting;
 	PULLBYTE(govSetting);
 	if(govSetting == -1) {
 		m_data->m_useGovernor = FALSE;
@@ -535,7 +532,6 @@ void NetCityBuildQueue::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	if(packid != k_PACKET_CITY_BQ_ID)
 		return;
 
-	
 	Unit city;
 	PULLLONGTYPE(city, Unit);
 	Assert(g_theUnitPool->IsValid(city));
@@ -559,7 +555,7 @@ void NetCityBuildQueue::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	if(g_network.IsHost()) {
 		g_network.Block(m_cityData->m_owner);
-		
+
 		g_network.Enqueue(m_cityData);
 		g_network.Unblock(m_cityData->m_owner);
 	}
@@ -586,7 +582,7 @@ void NetCityResources::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_RESOURCES_ID);
-	
+
 	Unit city;
 	PULLLONGTYPE(city, Unit);
 	Assert(g_theUnitPool->IsValid(city));
@@ -607,4 +603,3 @@ void NetCityResources::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 #endif
 	Assert(pos == size);
 }
-

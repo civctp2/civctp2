@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -27,7 +14,6 @@
 
 extern C3UI		*g_c3ui;
 
-
 StaticText::StaticText(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -38,12 +24,10 @@ StaticText::StaticText(
 {
 	m_border = 0;
 
-	
 	*retval = InitCommon( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 StaticText::StaticText(
 	AUI_ERRCODE *retval,
@@ -61,35 +45,29 @@ StaticText::StaticText(
 {
 	m_border = 0;
 
-	
 	if (size) m_size = size;
 }
-
 
 AUI_ERRCODE StaticText::InitCommon( MBCHAR *ldlBlock )
 {
 	uint32 size = 0;
 
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
-	
-	
+
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	size = block->GetInt( k_STATICTEXT_LDL_TEXTSIZE );
 
-	
 	if (size) m_size = size;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE StaticText::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {

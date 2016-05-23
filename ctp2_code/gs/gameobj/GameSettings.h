@@ -1,4 +1,3 @@
-
 // - removed new rules attempt - E 12.27.2006
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -10,16 +9,15 @@ class CivArchive;
 
 class GameSettings {
 private:
-	
+
 	sint32 m_difficulty;
 	sint32 m_risk;
 	BOOL m_alienEndGame;
 	BOOL m_keepScore;
 
-	sint32 m_startingAge, m_endingAge; 
-	
+	sint32 m_startingAge, m_endingAge;
+
 	BOOL m_pollution;
-	
 
 	friend class NetGameSettings;
 

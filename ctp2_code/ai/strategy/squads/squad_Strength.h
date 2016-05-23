@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Squad strength object 
+// Description  : Squad strength object
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -71,13 +71,11 @@ public:
 	Squad_Strength & operator+=(const Squad_Strength & add_me);
 	Squad_Strength & operator-=(const Squad_Strength & remove_me);
 
-
 	sint32 Get_Agent_Count()                    const { return m_agent_count; };
 	void   Set_Agent_Count(const sint32 & count)      { m_agent_count = count; };
 
 	void Add_Agent_Strength(const Agent_ptr & agent);
 	void Remove_Agent_Strength(const Agent_ptr & agent);
-
 
 	void Set_Pos_Strength       (const MapPoint & pos);
 	void Set_Army_Strength      (const Army & army, bool noCargo = false);
@@ -106,14 +104,12 @@ public:
 	void Set_Defenders    (const sint8 & units)   { m_defenders         = units;   };
 	void Set_Ranged_Units (const sint8 & units)   { m_ranged            = units;   };
 
-
 	void Set_Force_Matching( const float attack_ratio,
 							 const float defense_ratio,
 							 const float ranged_ratio,
 							 const float bombard_ratio,
 							 const float value_ratio );
 	void Set_To_The_Maximum(Squad_Strength);
-
 
 	bool NothingNeeded() const;
 	void Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, char * text) const;

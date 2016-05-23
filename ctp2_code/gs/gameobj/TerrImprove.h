@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -19,9 +11,9 @@ template <class T> class DynamicArray;
 
 class TerrainImprovement : public ID {
 public:
-	TerrainImprovement () : ID() { return; } ; 
-	TerrainImprovement (sint32 val) : ID (val) { return; }; 
-	TerrainImprovement (uint32 val) : ID (val) { return; }; 
+	TerrainImprovement () : ID() { return; } ;
+	TerrainImprovement (sint32 val) : ID (val) { return; };
+	TerrainImprovement (uint32 val) : ID (val) { return; };
 
 	TerrainImprovementData *operator -> () const { return AccessData(); }
 
@@ -37,7 +29,7 @@ public:
 
 	sint32 GetOwner() const { return GetData()->GetOwner(); }
 	sint32 GetType() const { return GetData()->GetType(); }
-    sint32 GetInstType() const { return 0; } 
+    sint32 GetInstType() const { return 0; }
 	MapPoint GetLocation() const { return GetData()->GetLocation(); }
 	sint32 GetCompletion() const { return GetData()->GetCompletion(); }
 	sint32 PercentComplete() const { return GetData()->PercentComplete(); }
@@ -50,5 +42,5 @@ public:
 	void StartBuilding() { AccessData()->StartBuilding(); }
 
 };
-	
+
 #endif

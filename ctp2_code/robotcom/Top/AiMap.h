@@ -1,16 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma once 
+#pragma once
 
 #ifndef __AI_MAP_H__
 #define __AI_MAP_H__
@@ -19,78 +7,73 @@
 #include "aicell.h"
 #include "priorityqueue.h"
 
-
-class AiCell; 
-class AiCellPtr; 
+class AiCell;
+class AiCellPtr;
 class MapPoint;
 
 typedef AiCell * AiCellYarray ;
 typedef AiCellYarray * AiCellXarray;
 
-struct MapPointData; 
+struct MapPointData;
 
-class AiMain; 
-class CivArchive; 
-class Bit_Table; 
-enum GOAL_TYPE; 
-enum GRADIENT_BITS; 
+class AiMain;
+class CivArchive;
+class Bit_Table;
+enum GOAL_TYPE;
+enum GRADIENT_BITS;
 
-#define k_MINECELLX 15 
-#define k_MINECELLY 15 
+#define k_MINECELLX 15
+#define k_MINECELLY 15
 
 #include "TerrImproveData.h"
 
-enum INSTALLATION_TYPES { 
-    INSTALLATION_LISTENING_POSTS=0, 
+enum INSTALLATION_TYPES {
+    INSTALLATION_LISTENING_POSTS=0,
 
-    INSTALLATION_RADAR_STATIONS, 	
+    INSTALLATION_RADAR_STATIONS,
     INSTALLATION_AIR_BASES,
-    INSTALLATION_FORTIFICATIONS, 
+    INSTALLATION_FORTIFICATIONS,
     INSTALLATION_SONAR_BUOYS,
-   
-    
+
 };
 
-enum ERROR_INSERT_SETTLE { 
-    ERROR_INSERT_SETTLE_OK, 
+enum ERROR_INSERT_SETTLE {
+    ERROR_INSERT_SETTLE_OK,
     ERROR_INSERT_SETTLE_EMPTY
 };
 
+interface IC3GameState;
 
-interface IC3GameState; 
+class AiMap {
 
+    MapPointData *m_size;
 
-class AiMap { 
+    Bit_Table *m_can_settle_ground;
+    Bit_Table *m_can_settle_space;
 
-    MapPointData *m_size; 
-  	
-
-    Bit_Table *m_can_settle_ground; 
-    Bit_Table *m_can_settle_space; 
-
-    sint32 m_choke_land; 
+    sint32 m_choke_land;
 	DynamicArray<MapPointData> m_stealthAttacks;
 	DynamicArray<MapPointData> m_minedCells;
 	DynamicArray<MapPointData> m_nukeSafeCities;
 
-    sint32 m_cellx; 
-    sint32 m_celly; 
+    sint32 m_cellx;
+    sint32 m_celly;
     sint32 **m_mine_count;
     sint32 **m_fort_count;
-    sint32 **m_airfield_count; 
-    sint32 **m_guardtower_count; 
+    sint32 **m_airfield_count;
+    sint32 **m_guardtower_count;
 
-    DAPriorityQueue<AiCellPtr> m_settle_queue; 
+    DAPriorityQueue<AiCellPtr> m_settle_queue;
 
-    sint32 m_settler_xy_range; 
+    sint32 m_settler_xy_range;
 public:
 
-	AiMap(sint16 x, sint16 y, sint16 z, IC3GameState *gs); 
-    AiMap(CivArchive &archive); 
-    void Serialize(CivArchive &archive); 
+	AiMap(sint16 x, sint16 y, sint16 z, IC3GameState *gs);
+    AiMap(CivArchive &archive);
+    void Serialize(CivArchive &archive);
 	~AiMap();
 
-    void BeginTurn(); 
+    void BeginTurn();
 
 
 
@@ -99,19 +82,18 @@ public:
 
 
     MapPointData *GetSize() { return m_size; }
-    
 
     void Wrap(const sint16 x, const sint16 y, const sint16 z, MapPointData &w) const;
     double WrappedDistance(const MapPointData &a, const MapPointData &b);
 
     BOOL CanSeeForeigner(AiMain *ai);
     void GetVisibleForeigners(AiMain *ai);
-    
+
     void IncLandCityNeighbor (AiMain *ai, MapPointData &w, sint32 val[9], sint32 &num);
     void IncWaterCityNeighbor (AiMain *ai, MapPointData &w, sint32 val[9], sint32 &num);
-    void IncCityNeighbors(AiMain *ai, const sint32 water, const sint32 land, 
+    void IncCityNeighbors(AiMain *ai, const sint32 water, const sint32 land,
         MapPointData &pos);
-    BOOL IsNextToUnexplored(AiMain *ai, 
+    BOOL IsNextToUnexplored(AiMain *ai,
                                const MapPointData &pos);
 
 
@@ -125,7 +107,6 @@ public:
 
 	sint32 ExploredArea(AiMain *ai);
 
-	
 	void RegisterStealthAttack(const MapPointData &pos);
 	void ClearStealthAttacks();
 	DynamicArray<MapPointData> & GetStealthAttacks();
@@ -137,7 +118,6 @@ public:
 	BOOL IsNukeSafeCity(const MapPointData &pos);
 
 
- 
     void IncMineCellCount(const MapPointData &pos);
     sint32 GetMineCellCount(const MapPointData &pos);
 
@@ -150,24 +130,22 @@ public:
     void IncGuardtowerCellCount(const MapPointData &pos);
     sint32 GetGuardtowerCellCount(const MapPointData &pos);
 
-    void GetCellMax(sint32 &maxx, sint32 &maxy) { maxx =  m_cellx; maxy = m_celly;  } 
+    void GetCellMax(sint32 &maxx, sint32 &maxy) { maxx =  m_cellx; maxy = m_celly;  }
 
-    
-    void GroundBuildSettleTree(AiMain *ai);    
-    void SpaceBuildSettleTree(AiMain *ai);    
+    void GroundBuildSettleTree(AiMain *ai);
+    void SpaceBuildSettleTree(AiMain *ai);
 
-    void FlattenCanSettle(Bit_Table *can_settle, MapPointData &center, 
+    void FlattenCanSettle(Bit_Table *can_settle, MapPointData &center,
         sint16 radius);
 
     void FlattenStaticSettle(MapPointData &center, sint16 radius);
 
-    void UnflattenSettle(MapPointData &pos, sint16 radius); 
+    void UnflattenSettle(MapPointData &pos, sint16 radius);
 
-
-    void InsertBestSettleGoal(AiMain *ai, ERROR_INSERT_SETTLE &err, 
-        Bit_Table *can_settle, 
-         sint32 *land_cont_count, sint32 &total_land_count, sint32 land_eval_nun,          
-         sint32 *water_cont_count,  sint32 &total_water_count, sint32 water_eval_nun, 
+    void InsertBestSettleGoal(AiMain *ai, ERROR_INSERT_SETTLE &err,
+        Bit_Table *can_settle,
+         sint32 *land_cont_count, sint32 &total_land_count, sint32 land_eval_nun,
+         sint32 *water_cont_count,  sint32 &total_water_count, sint32 water_eval_nun,
         sint16 z_value);
 
     void InsertSomeSpaceCities(AiMain *ai);
@@ -178,7 +156,6 @@ public:
     void CleanSettleQueue();
 
 };
-
 
 BOOL IsEqual(const MapPointData &start, const MapPointData &pos);
 

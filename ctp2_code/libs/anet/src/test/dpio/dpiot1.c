@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -83,7 +83,7 @@ static int testramp_fill(int id, int npkt, char *buf)
 }
 
 /*--------------------------------------------------------------------------
- Given a process id and packet number, compare a buffer with the 
+ Given a process id and packet number, compare a buffer with the
  expected test pattern.
 
  Aborts with given error message if comparison fails.
@@ -188,7 +188,6 @@ void dpiot1_peer_connect(dpiot1_t *ptest, char *peerAdr)
 	printf("Opening handle to peer returns h:%x\n", ptest->hPeer);
 }
 
-
 /*--------------------------------------------------------------------------
  Call this repeatedly.
  Simulates the network processing routine of a game.
@@ -251,9 +250,9 @@ int dpiot1_poll(dpiot1_t *ptest)
 	ptest->dpio_status = err;
 	dpio_flush(ptest->dpio);
 
-	if ((ptest->pkts_rx >= ptest->pkts_desired) 
-	&&  (ptest->pkts_tx >= ptest->pkts_desired) 
-	&&  (ptest->dpio_status == dp_RES_EMPTY) 
+	if ((ptest->pkts_rx >= ptest->pkts_desired)
+	&&  (ptest->pkts_tx >= ptest->pkts_desired)
+	&&  (ptest->dpio_status == dp_RES_EMPTY)
 	&&  (dp_RES_BUSY != dpio_ReadyToFreeze(ptest->dpio, NULL))) {
 		return FALSE;
 	}
@@ -280,7 +279,7 @@ void dpiot1_destroy(dpiot1_t *ptest)
 
 /*-----------------------------------------------------------------------
  Unit test main loop.  Creates two test objects, hooks them together,
- and polls them until they cry uncle.  Any failure causes the 
+ and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
 main(int argc, char **argv)

@@ -1,29 +1,15 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_FONT_H__
 #define __AUI_FONT_H__
 
-
 #include "aui_base.h"
 
-
 #define k_AUI_FONT_MAXFONTNAME	32
-
 
 
 class aui_Font : public aui_Base
 {
 public:
-	
+
 	aui_Font(
 		AUI_ERRCODE *retval,
 		MBCHAR *descriptor = NULL );
@@ -37,14 +23,11 @@ public:
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
-	
 	HFONT		GetHFONT( void ) const { return m_hfont; }
 	MBCHAR		*GetDescriptor( void ) const { return (MBCHAR *)m_descriptor; }
 
-	
 	AUI_ERRCODE	SetDescriptor( MBCHAR *descriptor );
 
-	
 	MBCHAR		*GetFilename( void ) const { return GetDescriptor(); }
 	AUI_ERRCODE	SetFilename( MBCHAR *filename )
 	{ return SetDescriptor( filename ); }
@@ -52,7 +35,7 @@ public:
 protected:
 	AUI_ERRCODE	SetVariablesFromDescriptor( void );
 
-	MBCHAR	m_descriptor[ MAX_PATH + 1 ]; 
+	MBCHAR	m_descriptor[ MAX_PATH + 1 ];
 
 	HFONT	m_hfont;
 
@@ -72,5 +55,4 @@ protected:
 	MBCHAR	m_fontname[ k_AUI_FONT_MAXFONTNAME + 1 ];
 };
 
-
-#endif 
+#endif

@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -19,9 +7,7 @@
 #include "ErrMsg.h"
 #include "civarchive.h"
 
-
 	sint32	g_parse_uv_abort ;
-
 
 enum TOKEN_UV_POLLUTION
 	{
@@ -33,7 +19,6 @@ enum TOKEN_UV_POLLUTION
 	TOKEN_UV_UPPER_SOUTH_MERIDIAN_PROB,
 	TOKEN_UV_LOWER_SOUTH_MERIDIAN_PROB,
 	TOKEN_UV_SOUTH_POLAR_PROB,
-
 
 	TOKEN_OZONE_DEAD_TILES,
 	TOKEN_OZONE_DEAD_RESOURCES,
@@ -102,7 +87,6 @@ OzoneDatabase::OzoneDatabase()
 	memset(m_meridian_prob, 0, sizeof(m_meridian_prob)) ;
 	memset(m_meridian_phase_bonus, 0, sizeof(m_meridian_phase_bonus)) ;
 
-
 	}
 
 
@@ -115,7 +99,7 @@ OzoneDatabase::OzoneDatabase()
 
 sint32 OzoneDatabase::Initialise(char *filename, C3DIR dir)
 	{
-	
+
 	g_parse_uv_abort = FALSE ;
 	if(!ParseOzoneDatabase(filename, dir))
 		return (FALSE) ;
@@ -123,7 +107,7 @@ sint32 OzoneDatabase::Initialise(char *filename, C3DIR dir)
 	return (TRUE) ;
 	}
 
-	
+
 
 
 
@@ -217,13 +201,13 @@ TokenData	g_UVDB_token_data[TOKEN_UV_POLLUTION_MAX_VAL] =
 sint32 OzoneDatabase::ParseOzoneDatabase(char *filename, C3DIR dir)
 	{
 	Token	*uvToken = new Token(filename, TOKEN_UV_POLLUTION_MAX_VAL - TOKEN_MAX, g_UVDB_token_data, dir) ;
-	
+
 	ParseAnOzone(uvToken) ;
 	uvToken->Next() ;
 
 	delete uvToken ;
 
-	if (g_parse_uv_abort) 
+	if (g_parse_uv_abort)
 		return (FALSE) ;
 
 	return (TRUE) ;
@@ -241,10 +225,10 @@ sint32 OzoneDatabase::ParseOzoneDatabase(char *filename, C3DIR dir)
 
 sint32 OzoneDatabase::ParseAnOzone(Token *uvToken)
 	{
-	
+
 	if (uvToken->GetType() == TOKEN_EOF)
 		return (FALSE) ;
-	
+
 	if (uvToken->GetType() == TOKEN_OZONE_TRIGGER)
 		{
 		ParseUVTriggerRecord(uvToken) ;
@@ -255,8 +239,8 @@ sint32 OzoneDatabase::ParseAnOzone(Token *uvToken)
 
 		return (FALSE) ;
 		}
-	
-	return (TRUE) ;	
+
+	return (TRUE) ;
 	}
 
 
@@ -286,8 +270,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	if (!token_ParseAnOpenBraceNext(uvToken))
 		return (FALSE) ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_NORTH_POLAR_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected north polar region probability found") ;
@@ -318,8 +301,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	uvToken->GetFloat(tmp) ;
 	m_meridian_phase_bonus[REGION_TYPE_NORTH_POLAR] = tmp * 0.01f ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_UPPER_NORTH_MERIDIAN_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected upper north meridian region probability found") ;
@@ -350,8 +332,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	uvToken->GetFloat(tmp) ;
 	m_meridian_phase_bonus[REGION_TYPE_UPPER_NORTH_MERIDIAN] = tmp * 0.01f ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_LOWER_NORTH_MERIDIAN_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected lower north meridian region probability found") ;
@@ -382,8 +363,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	uvToken->GetFloat(tmp) ;
 	m_meridian_phase_bonus[REGION_TYPE_LOWER_NORTH_MERIDIAN] = tmp * 0.01f ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_EQUATORIAL_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected equatorial region probability found") ;
@@ -414,8 +394,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	uvToken->GetFloat(tmp) ;
 	m_meridian_phase_bonus[REGION_TYPE_EQUATORIAL] = tmp * 0.01f ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_UPPER_SOUTH_MERIDIAN_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected upper south meridian region probability found") ;
@@ -447,8 +426,8 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	m_meridian_phase_bonus[REGION_TYPE_UPPER_SOUTH_MERIDIAN] = tmp * 0.01f ;
 
 
-	
-	
+
+
 	if (uvToken->Next() != TOKEN_UV_LOWER_SOUTH_MERIDIAN_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected lower south meridian region probability found") ;
@@ -479,8 +458,7 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	uvToken->GetFloat(tmp) ;
 	m_meridian_phase_bonus[REGION_TYPE_LOWER_SOUTH_MERIDIAN] = tmp * 0.01f ;
 
-	
-	
+
 	if (uvToken->Next() != TOKEN_UV_SOUTH_POLAR_PROB)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected south polar region probability found") ;
@@ -512,8 +490,6 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 	m_meridian_phase_bonus[REGION_TYPE_SOUTH_POLAR] = tmp * 0.01f ;
 
 
-	
-	
 
 
 
@@ -545,8 +521,10 @@ sint32 OzoneDatabase::ParseUVTriggerRecord(Token *uvToken)
 
 
 
-	
-	
+
+
+
+
 	if (uvToken->Next() != TOKEN_CLOSE_BRACE)
 		return (FALSE) ;
 
@@ -565,7 +543,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!token_ParseAnOpenBraceNext(uvToken))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_DESERT)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead desert tile production not found") ;
@@ -577,7 +554,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_DESERT], m_dead_shield[DEAD_TILE_TYPE_DESERT], m_dead_trade[DEAD_TILE_TYPE_DESERT]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_FORESTS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead forests tile production not found") ;
@@ -589,7 +565,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_FORESTS], m_dead_shield[DEAD_TILE_TYPE_FORESTS], m_dead_trade[DEAD_TILE_TYPE_FORESTS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_GRASSLANDS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead grasslands tile production not found") ;
@@ -601,7 +576,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_GRASSLANDS], m_dead_shield[DEAD_TILE_TYPE_GRASSLANDS], m_dead_trade[DEAD_TILE_TYPE_GRASSLANDS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_HILLS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead hills tile production not found") ;
@@ -613,7 +587,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_HILLS], m_dead_shield[DEAD_TILE_TYPE_HILLS], m_dead_trade[DEAD_TILE_TYPE_HILLS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_MOUNTAINS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead mountains tile production not found") ;
@@ -625,7 +598,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_MOUNTAINS], m_dead_shield[DEAD_TILE_TYPE_MOUNTAINS], m_dead_trade[DEAD_TILE_TYPE_MOUNTAINS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_PLAINS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead plains tile production not found") ;
@@ -637,7 +609,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_PLAINS], m_dead_shield[DEAD_TILE_TYPE_PLAINS], m_dead_trade[DEAD_TILE_TYPE_PLAINS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_SWAMPS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead swamps tile production not found") ;
@@ -649,7 +620,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_SWAMPS], m_dead_shield[DEAD_TILE_TYPE_SWAMPS], m_dead_trade[DEAD_TILE_TYPE_SWAMPS]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_TUNDRA)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead tundra tile production not found") ;
@@ -661,7 +631,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_TUNDRA], m_dead_shield[DEAD_TILE_TYPE_TUNDRA], m_dead_trade[DEAD_TILE_TYPE_TUNDRA]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_TILE_CONTINENTAL_SHELF)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead continental shelf tile production not found") ;
@@ -673,7 +642,6 @@ sint32 OzoneDatabase::ParseUVDeadTilesRecord(Token *uvToken)
 	if (!ParseDeadTileNumbers(uvToken, m_dead_food[DEAD_TILE_TYPE_CONTINENTAL_SHELF], m_dead_shield[DEAD_TILE_TYPE_CONTINENTAL_SHELF], m_dead_trade[DEAD_TILE_TYPE_CONTINENTAL_SHELF]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_CLOSE_BRACE)
 		return (FALSE) ;
 
@@ -707,7 +675,7 @@ sint32 OzoneDatabase::ParseDeadTileNumbers(Token *uvToken, sint32 &food, sint32 
 
 		return (FALSE) ;
 		}
-	
+
 	uvToken->GetNumber(shield) ;
 
 	if (uvToken->Next() != TOKEN_NUMBER)
@@ -717,7 +685,7 @@ sint32 OzoneDatabase::ParseDeadTileNumbers(Token *uvToken, sint32 &food, sint32 
 
 		return (FALSE) ;
 		}
-	
+
 	uvToken->GetNumber(trade) ;
 
 	return (TRUE) ;
@@ -738,7 +706,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 	if (!token_ParseAnOpenBraceNext(uvToken))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_PALM_OIL)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead palm oil resource production not found") ;
@@ -752,7 +719,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_OIL)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead oil resource production not found") ;
@@ -766,7 +732,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_PHEASANT)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead pheasant resource production not found") ;
@@ -780,7 +745,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_SILK)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead silk resource production not found") ;
@@ -794,7 +758,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_SPICE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead spice resource production not found") ;
@@ -808,7 +771,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_TUSKS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead tusks resource production not found") ;
@@ -822,7 +784,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_BLUBBER)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead blubber resource production not found") ;
@@ -836,7 +797,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_ALIEN_CORPSES)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead alien corpses resource production not found") ;
@@ -850,7 +810,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_CLAY)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead clay resource production not found") ;
@@ -864,7 +823,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_TOBACCO)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead tobacco resource production not found") ;
@@ -878,7 +836,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_COTTON)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead cotton resource production not found") ;
@@ -892,7 +849,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_COAL)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead coal resource production not found") ;
@@ -906,7 +862,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_GRAPES)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead grapes oil resource production not found") ;
@@ -920,7 +875,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_GRANITE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead granite oil resource production not found") ;
@@ -934,7 +888,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_BANANAS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead bananas resource production not found") ;
@@ -948,7 +901,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_JADE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead jade resource production not found") ;
@@ -962,7 +914,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_HARDWOOD)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead hardwood resource production not found") ;
@@ -976,7 +927,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_IRON)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead iron resource production not found") ;
@@ -990,7 +940,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_GOLD)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead gold resource production not found") ;
@@ -1004,7 +953,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_SILVER)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead silver resource production not found") ;
@@ -1018,7 +966,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_BUFFALO)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead buffalo resource production not found") ;
@@ -1032,7 +979,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_WHEAT)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead wheat resource production not found") ;
@@ -1046,7 +992,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_CORN)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead corn resource production not found") ;
@@ -1060,7 +1005,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_PEAT)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead peat resource production not found") ;
@@ -1074,7 +1018,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_MANGROVE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead mangrove resource production not found") ;
@@ -1088,7 +1031,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_MINK)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead mink resource production not found") ;
@@ -1102,7 +1044,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_CARIBOU)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead caribou resource production not found") ;
@@ -1116,7 +1057,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_FISH)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead fish resource production not found") ;
@@ -1130,7 +1070,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_WHALES)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead whales resource production not found") ;
@@ -1144,7 +1083,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_CRABS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead crabs resource production not found") ;
@@ -1158,7 +1096,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_DIAMONDS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead diamonds resource production not found") ;
@@ -1172,7 +1109,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_MAGNESIUM_NODULE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead magnesium nodule resource production not found") ;
@@ -1186,7 +1122,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_PHOSPHORUS)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead phosphorus resource production not found") ;
@@ -1200,7 +1135,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_PLANKTON_UPWELLING)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead plankton upwelling resource production not found") ;
@@ -1214,7 +1148,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_GIANT_CLAM)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead giant clam resource production not found") ;
@@ -1228,7 +1161,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 
 	i++ ;
 
-	
 	if (uvToken->Next() != TOKEN_UV_DEAD_RESOURCE_GIANT_SQUID)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "expected dead giant squid `resource production not found") ;
@@ -1240,7 +1172,6 @@ sint32 OzoneDatabase::ParseUVDeadResourcesRecord(Token *uvToken)
 	if (!ParseDeadResourceNumbers(uvToken, m_dead_food[i], m_dead_shield[i], m_dead_trade[i], m_dead_gold[i]))
 		return (FALSE) ;
 
-	
 	if (uvToken->Next() != TOKEN_CLOSE_BRACE)
 		{
 		c3errors_ErrorDialog (uvToken->ErrStr(), "missing closing brace") ;
@@ -1279,7 +1210,7 @@ sint32 OzoneDatabase::ParseDeadResourceNumbers(Token *uvToken, sint32 &food, sin
 
 		return (FALSE) ;
 		}
-	
+
 	uvToken->GetNumber(shield) ;
 
 	if (uvToken->Next() != TOKEN_NUMBER)
@@ -1289,7 +1220,7 @@ sint32 OzoneDatabase::ParseDeadResourceNumbers(Token *uvToken, sint32 &food, sin
 
 		return (FALSE) ;
 		}
-	
+
 	uvToken->GetNumber(trade) ;
 
 	if (uvToken->Next() != TOKEN_NUMBER)
@@ -1325,7 +1256,6 @@ void OzoneDatabase::Serialize(CivArchive &archive)
 		 archive.StoreArrayString(m_meridian_prob, k_NUM_MERIDIANS + 1);
 		 archive.StoreArrayString(m_meridian_phase_bonus, k_NUM_MERIDIANS+1);
 
-
 		archive.StoreArray(m_dead_food, k_MAX_RESOURCES);
 		archive.StoreArray(m_dead_shield, k_MAX_RESOURCES);
 		archive.StoreArray(m_dead_trade, k_MAX_RESOURCES);
@@ -1334,5 +1264,3 @@ void OzoneDatabase::Serialize(CivArchive &archive)
 	else {
 	}
 }
-
-

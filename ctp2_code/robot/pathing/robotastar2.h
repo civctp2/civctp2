@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -49,11 +49,11 @@ public:
 
 	RobotAstar2();
 
-	bool FindPath(const PathType & pathType, 
+	bool FindPath(const PathType & pathType,
 				  const Army & army,
-				  const uint32 & army_move_type, 
-		          const MapPoint & start, 
-				  const MapPoint & dest, 
+				  const uint32 & army_move_type,
+		          const MapPoint & start,
+				  const MapPoint & dest,
 				  const bool & check_dest,
 				  const sint32 & trans_dest_cont,
 				  const float & trans_max_r,
@@ -82,16 +82,15 @@ private:
 								float & cost,
 								ASTAR_ENTRY_TYPE & entry);
 
-	
-	
-	
+
+
+
 	bool EntryCost(const MapPoint & prev, const MapPoint & pos,
 					 float &cost, bool & is_zoc, ASTAR_ENTRY_TYPE & entry);
 
 	void RecalcEntryCost(AstarPoint *parent, AstarPoint *node,
 						 float &new_entry_cost, bool &new_is_zoc,
 						 ASTAR_ENTRY_TYPE &new_entry);
-
 
 	PathType m_pathType;
 	sint32 m_transDestCont;

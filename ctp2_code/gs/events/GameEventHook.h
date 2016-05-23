@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // Generate extra debugging output.
 //
@@ -59,37 +59,36 @@ class GameEventHookCallback;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class GameEventHookCallback 
+class GameEventHookCallback
 {
 public:
     virtual GAME_EVENT_HOOK_DISPOSITION GEVHookCallback
     (
-        GAME_EVENT         type, 
+        GAME_EVENT         type,
         GameEventArgList * args
-    ) 
-    { 
+    )
+    {
         return GEV_HD_Continue;
     };
 
-    virtual void GetDescription(char * str, sint32 maxsize) 
-    { 
+    virtual void GetDescription(char * str, sint32 maxsize)
+    {
         strncpy(str, DESCRIPTION_MISSING, maxsize);
     };
 
     static char const DESCRIPTION_MISSING[];
 };
 
-	
-class GameEventHook 
+class GameEventHook
 {
 public:
-    struct Node 
+    struct Node
     {
 	    Node
         (
-            GameEventHookCallback * cb  = NULL, 
+            GameEventHookCallback * cb  = NULL,
             GAME_EVENT_PRIORITY     pri = GEV_PRI_Primary
-        ) 
+        )
         :   m_cb        (cb),
             m_priority  (pri)
         { ; };
@@ -106,11 +105,10 @@ public:
 
 	GAME_EVENT_ERR      Activate
     (
-        GameEventArgList *  args, 
-        sint32              startIndex, 
+        GameEventArgList *  args,
+        sint32              startIndex,
         sint32 &            resumeIndex
     ) const;
-
 
 #if defined(_DEBUG)
 	void Dump(FILE * f) const;
@@ -121,6 +119,5 @@ private:
     GAME_EVENT              m_type;
     std::list<Node>         m_callbacks;
 };
-
 
 #endif

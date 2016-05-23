@@ -10,8 +10,8 @@
 
 class MessageControlPanel {
 public:
-	
+
 	MessageControlPanel(MBCHAR *ldlBlock);
 };
 
-#endif 
+#endif

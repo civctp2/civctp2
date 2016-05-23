@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "picturebutton.h"
 
@@ -11,7 +10,6 @@
 #include "ldl_data.hpp"
 
 extern C3UI *g_c3ui;
-
 
 PictureButton::PictureButton(
 	AUI_ERRCODE *retval,
@@ -56,7 +54,7 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 	MBCHAR		*upName, *downName;
 	MBCHAR		path[_MAX_PATH];
 
-	if (isLDL) 
+	if (isLDL)
 	{
 		ldlBlock = upPicture;
 
@@ -64,7 +62,6 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-		
 
 		upName = block->GetString( "uppicture" );
 		Assert( upName != NULL );
@@ -74,7 +71,7 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 		upName = upPicture;
 		downName = downPicture;
 	}
-	
+
 	AUI_ERRCODE retval = AUI_ERRCODE_OK;
 
 	delete m_upPicture;
@@ -103,10 +100,9 @@ PictureButton::~PictureButton()
 }
 
 
-
 AUI_ERRCODE PictureButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -129,4 +125,3 @@ AUI_ERRCODE PictureButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
-

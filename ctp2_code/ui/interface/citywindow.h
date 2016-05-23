@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,7 +61,6 @@ class aui_Image;
 class aui_Region;
 
 template <class T> class PointerList;
-
 
 class InventoryItemInfo {
   public:
@@ -139,7 +138,7 @@ class CityWindow {
 	static AUI_ERRCODE Cleanup();
 	static AUI_ERRCODE Display(CityData *city);
 	static AUI_ERRCODE Hide();
-	
+
 	static void CopyCitiesBack();
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -216,11 +215,9 @@ class CityWindow {
 	static void SetItemIconOnly(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, aui_Region *parent,
 								   ctp2_Button *itemButton = NULL);
 
-
 	void FillHappinessList();
 	void FillPollutionList();
 	void FillStatsLists();
-
 
 	static AUI_ERRCODE DrawHappyIcons(ctp2_Static *control,
 									aui_Surface *surface,

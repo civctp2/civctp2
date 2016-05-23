@@ -31,7 +31,7 @@ public:
 
 SLICSTRUCT(Unit, SLIC_SYM_UNIT);
 SLICSTRUCT(City, SLIC_SYM_CITY);
-SLICSTRUCT(Player, SLIC_SYM_IVAR); 
+SLICSTRUCT(Player, SLIC_SYM_IVAR);
 SLICSTRUCT(Army, SLIC_SYM_ARMY);
 SLICSTRUCT(Location, SLIC_SYM_LOCATION);
 SLICSTRUCT(Government, SLIC_SYM_IVAR);
@@ -46,7 +46,6 @@ SLICSTRUCT(Gold, SLIC_SYM_IVAR);
 SLICSTRUCT(Good, SLIC_SYM_IVAR);
 
 #if 0
-
 
 
 class SlicStruct_Unit : public SlicStructDescription
@@ -128,5 +127,3 @@ public:
 #endif
 
 #endif
-
-

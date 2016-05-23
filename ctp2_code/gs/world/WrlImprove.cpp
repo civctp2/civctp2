@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -84,7 +84,7 @@ World::InsertInstallation(Installation &inst, MapPoint const & pnt)
 	g_theInstallationTree->Insert(inst);
 }
 
-void 
+void
 World::RemoveInstallation(Installation &inst, MapPoint const & pnt)
 {
 	g_theInstallationTree->Remove(inst);
@@ -110,7 +110,6 @@ sint32 World::CountImprovements(const MapPoint & pos)
   return count + l_array.Num();
 }
 
-
 sint32 World::GetMaxFoodFromTerrain()
 {
 	static sint32 max_food = 0;
@@ -118,14 +117,13 @@ sint32 World::GetMaxFoodFromTerrain()
 	if (max_food != 0)
 		return max_food;
 
-	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) 
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
     {
         max_food = std::max(max_food, Terrain(g_theTerrainDB->Get(i)).GetFood());
 	}
 
 	return max_food;
 }
-
 
 sint32 World::GetMaxShieldsFromTerrain()
 {
@@ -134,14 +132,13 @@ sint32 World::GetMaxShieldsFromTerrain()
 	if (max_prod != 0)
 		return max_prod;
 
-	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) 
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
     {
         max_prod = std::max(max_prod, Terrain(g_theTerrainDB->Get(i)).GetShield());
 	}
 
 	return max_prod;
 }
-
 
 sint32 World::GetAvgFoodFromTerrain()
 {
@@ -150,7 +147,7 @@ sint32 World::GetAvgFoodFromTerrain()
 	if (avg_food != 0)
 		return avg_food;
 
-	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) 
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
     {
 		avg_food += Terrain(g_theTerrainDB->Get(i)).GetFood();
 	}
@@ -159,7 +156,6 @@ sint32 World::GetAvgFoodFromTerrain()
 	return avg_food;
 }
 
-
 sint32 World::GetAvgShieldsFromTerrain()
 {
 	static sint32 avg_prod = 0;
@@ -167,7 +163,7 @@ sint32 World::GetAvgShieldsFromTerrain()
 	if (avg_prod != 0)
 		return avg_prod;
 
-	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) 
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
     {
 		avg_prod += Terrain(g_theTerrainDB->Get(i)).GetShield();
 	}
@@ -176,7 +172,6 @@ sint32 World::GetAvgShieldsFromTerrain()
 	return avg_prod;
 }
 
-
 sint32 World::GetAvgGoldFromTerrain()
 {
 	static sint32 avg_gold = 0;
@@ -184,7 +179,7 @@ sint32 World::GetAvgGoldFromTerrain()
 	if (avg_gold != 0)
 		return avg_gold;
 
-	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) 
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
     {
 		avg_gold += Terrain(g_theTerrainDB->Get(i)).GetGold();
 	}

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,9 +31,8 @@
 #include "ns_session.h"
 
 
-
-ns_Session::ns_Session(NETFunc::Session * session) 
-:	ns_Object<NETFunc::Session, ns_Session>(session) 
+ns_Session::ns_Session(NETFunc::Session * session)
+:	ns_Object<NETFunc::Session, ns_Session>(session)
 {
 	list.push_back(Struct(ICON,		&m_locked));
 	list.push_back(Struct(ICON,		&m_closed));
@@ -48,4 +47,3 @@ void ns_Session::Update( NETFunc::Session *session ) {
 	m_name = session->GetName();
 	m_players = session->GetPlayers();
 }
-

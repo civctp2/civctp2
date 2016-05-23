@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -82,17 +82,13 @@
 
 #include "wonderutil.h"
 
-
 #include "text_hasher.h"
 
-
 #include "ResourceRecord.h"
-
 
 #include "OrderRecord.h"
 
 #include "stringutils.h"
-
 
 
 const int GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK = 999;
@@ -133,7 +129,7 @@ GreatLibraryWindow::GreatLibraryWindow(AUI_ERRCODE * err)
 {
 	m_window = (ctp2_Window *) aui_Ldl::BuildHierarchyFromRoot(s_libraryWindowBlock);
 	Assert(m_window);
-	if (!m_window) 
+	if (!m_window)
     {
 		*err = AUI_ERRCODE_INVALIDPARAM;
 	}
@@ -144,11 +140,10 @@ GreatLibraryWindow::~GreatLibraryWindow()
 	aui_Ldl::DeleteHierarchyFromRoot(s_libraryWindowBlock);
 }
 
-
 AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 {
 #ifdef __AUI_USE_DIRECTX__
-	if (m_techMovie && m_techMovie->Open()) 
+	if (m_techMovie && m_techMovie->Open())
     {
 		HRESULT hr = m_techMovie->PlayOne();
 		Assert(!FAILED(hr));
@@ -178,8 +173,8 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //
 // Remark(s)  : The function result is 1 (true?) when the requested name of
 //              the text exist in the database, 0 when it does not exist.
-//              
-//              However, the result is also 1 (illogical) when the passed 
+//
+//              However, the result is also 1 (illogical) when the passed
 //              user interface item is NULL. In that case, this function does
 //              nothing.
 //
@@ -188,10 +183,10 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 {
     if (textbox)
     {
-        char const *    text    = 
+        char const *    text    =
             GreatLibrary::s_great_library_info->Look_Up_Data(filename);
 
-        if (text == NULL) 
+        if (text == NULL)
         {
 		    textbox->SetHyperText(" ");
             return 0;
@@ -207,7 +202,7 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 
 sint32 GreatLibraryWindow::LoadHistoricalText ( SlicObject &so )
 {
-	
+
 	if (!strcmp(m_history_file, "NULL"))
 		return GREAT_LIBRARY_PANEL_BLANK;
 
@@ -216,7 +211,7 @@ sint32 GreatLibraryWindow::LoadHistoricalText ( SlicObject &so )
 
 sint32 GreatLibraryWindow::LoadGameplayText ( SlicObject &so )
 {
-	
+
 	if (!strcmp(m_gameplay_file, "NULL"))
 		return GREAT_LIBRARY_PANEL_BLANK;
 
@@ -243,7 +238,7 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 
 	MBCHAR fullPath[_MAX_PATH];
 	if (g_civPaths->FindFile(C3DIR_VIDEOS, m_movie_file, fullPath, TRUE)) {
-		
+
 		g_soundManager->ReleaseSoundDriver();
 
 		m_techMovie->OpenStream(fullPath);
@@ -252,7 +247,6 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 	} else {
 		return 0;
 	}
-
 
 	return 1;
 #else
@@ -266,7 +260,7 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 	if ( !strcmp(m_still_file, "null") ) return 0;
 
 	MBCHAR fullPath[_MAX_PATH];
-	if ( g_civPaths->FindFile(C3DIR_PICTURES, m_still_file, fullPath, TRUE) ) 
+	if ( g_civPaths->FindFile(C3DIR_PICTURES, m_still_file, fullPath, TRUE) )
     {
 		m_techStillShot->SetImage( m_still_file );
 	}
@@ -276,7 +270,6 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 
 	return 1;
 }
-
 
 void GreatLibraryWindow::PlayTechMovie ( void )
 {
@@ -295,7 +288,7 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 
 	const IconRecord *  iconRec = NULL;
 
-	switch ( theDatabase ) 
+	switch ( theDatabase )
     {
 	case DATABASE_UNITS:
 		iconRec = g_theUnitDB->Get(theMode)->GetDefaultIcon();
@@ -358,22 +351,21 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 }
 
 
-
 char const * GreatLibraryWindow::GetIconRecText
-( 
-	int database, 
+(
+	int database,
 	int item,
 	uint8 historical
 )
 {
 	IconRecord const *  iconRec;
 
-	switch (database) 
+	switch (database)
     {
     default:
 		iconRec = NULL;
         {
-            bool InvalidDatabase = false;		
+            bool InvalidDatabase = false;
             Assert(InvalidDatabase);
         }
 		break;
@@ -419,7 +411,7 @@ char const * GreatLibraryWindow::GetIconRecText
 		break;
 	}
 
-	if (iconRec) 
+	if (iconRec)
 	{
 		char const * filename;
 
@@ -445,7 +437,7 @@ char const * GreatLibraryWindow::GetIconRecText
 			filename = iconRec->GetVari();
 			break;
 		}
-		
+
         if (filename)
         {
     		return GreatLibrary::s_great_library_info->Look_Up_Data(filename);
@@ -454,7 +446,6 @@ char const * GreatLibraryWindow::GetIconRecText
 
 	return NULL;
 }
-
 
 char const * GreatLibraryWindow::GetGameplayText( int database, int item )
 {
@@ -475,4 +466,3 @@ char const * GreatLibraryWindow::GetVariablesText( int database, int item )
 {
 	return GetIconRecText( database, item, 3 );
 }
-

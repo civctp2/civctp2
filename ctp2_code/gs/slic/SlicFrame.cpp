@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // - Added a way to find out the size of a slic database, by Martin Gühmann.
 // - Repaired memory leak caused by one of the contructors, by Martin Gühmann.
 // - Replaced Debug Assertion for slic division by 0 by slic error message
-//   the problem must be solved by the slicer not by a c++ coder, 
+//   the problem must be solved by the slicer not by a c++ coder,
 //   by Martin Gühmann
 // - Treat modulo (%) 0 errors in the same way as errors with division by 0.
 // - Fixed slic database access after a reload by Martin Gühmann.
@@ -38,8 +38,8 @@
 // - Repaired crash with invalid input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added database array access. (Sep 16th 2005 Martin Gühmann)
-// - Repaired crashes with game saved with original Activision executable. 
-// - Standardized code. (May 29th 2006 Martin Gühmann) 
+// - Repaired crashes with game saved with original Activision executable.
+// - Standardized code. (May 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -66,27 +66,25 @@
 #include "SlicArray.h"
 #include "profileDB.h"
 
-
 //Added by Martin Gühmann for database access
 #include "SlicDBConduit.h"
 #include <math.h>
 
 extern "C" FILE *debuglog;
 
-
 namespace
 {
     SlicDBInterface * GetDatabase(unsigned char * & instructionPointer)
     {
-        SlicDBInterface *   namedDatabase = 
+        SlicDBInterface *   namedDatabase =
             g_slicEngine->GetDBConduit(reinterpret_cast<char *>(instructionPointer));
 
         if (namedDatabase)
         {
-		    // Skip the name string 	
+		    // Skip the name string
             for ( ; *instructionPointer++; )
-            { 
-                // No action: just skip 
+            {
+                // No action: just skip
             }
 
             return namedDatabase;
@@ -122,7 +120,6 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)
     m_messageData  (NULL)
 {
 }
-
 
 SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
 :
@@ -171,7 +168,7 @@ BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 {
 	SlicSymbolData * arraySym = SlicStack::GetSymbol(arrayType, array);
 
-	if (arraySym) 
+	if (arraySym)
     {
 	    sint32 index = Eval(indexType, indexValue);
 	    return arraySym->ArrayLookup(index, retType, retValue);
@@ -182,7 +179,6 @@ BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 		return FALSE;
 	}
 }
-
 
 sint32 SlicFrame::Eval(SS_TYPE type, SlicStackValue value)
 {
@@ -222,18 +218,18 @@ sint32 SlicFrame::IsEqual(SS_TYPE type1, SlicStackValue value1,
 				if(sym2->GetPos(pos2)) {
 					return pos1 == pos2;
 				}
-			} 
+			}
 			if(sym1->GetUnit(u1)) {
 				if(sym2->GetUnit(u2)) {
 					return u1 == u2;
 				}
-			} 
+			}
 			if(sym1->GetCity(u1)) {
 				if(sym2->GetCity(u2)) {
 					return u1 == u2;
 				}
 			}
-			
+
 			if(sym1->GetType() != SLIC_SYM_IVAR)
 				return 0;
 
@@ -283,9 +279,8 @@ void SlicFrame::SetValue(SlicSymbolData *sym, SS_TYPE type, SlicStackValue value
 		}
 	}
 }
-			
 
-BOOL SlicFrame::SetArrayValue(SlicSymbolData *sym, 
+BOOL SlicFrame::SetArrayValue(SlicSymbolData *sym,
 							  SS_TYPE insType, SlicStackValue insValue,
 							  SS_TYPE indexType, SlicStackValue indexValue)
 {
@@ -361,10 +356,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 #if defined(SLIC_DOUBLES)
 	double dval;
 #endif
-	
-	sint32 ival, ival2; 
 
-	
+	sint32 ival, ival2;
+
 	SlicStackValue sval1, sval2, sval3;
 
 	SS_TYPE type1, type2, type3;
@@ -397,7 +391,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(int);
 			sval1.m_sym = g_slicEngine->GetSymbol(ival);
-			if (sval1.m_sym) 
+			if (sval1.m_sym)
             {
                 m_stack->Push(SS_TYPE_SYM, sval1);
             }
@@ -430,7 +424,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			ival2 = *((sint32*)codePtr);
 			codePtr += sizeof(sint32);
-			
+
 			sval1.m_sym = theStruct->GetMemberSymbol(ival2);
 			m_stack->Push(SS_TYPE_SYM, sval1);
 			break;
@@ -438,7 +432,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 		case SOP_PUSHAM:
 		{
-			
+
 			ival = *((sint32*)codePtr);
 			codePtr += sizeof(sint32);
 			symval = g_slicEngine->GetSymbol(ival);
@@ -454,30 +448,26 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			
 			sp = m_stack->Pop(type3, sval3);
 			Assert(sp >= 1);
-			
-			
+
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
 
-			
 			if(!symval->ArrayLookup(Eval(type3, sval3), type1, sval1)) {
 				DPRINTF(k_DBG_SLIC, ("Couldn't perform array lookup in SOP_PUSHAM\n"));
 				stopped = TRUE;
 				break;
 			}
-			
-			
+
 			SlicSymbolData * structSym = SlicStack::GetSymbol(type1, sval1);
-			if (!structSym) 
+			if (!structSym)
             {
 				DPRINTF(k_DBG_SLIC, ("Couldn't find struct symbol in SOP_PUSHAM\n"));
 				stopped = TRUE;
 				break;
 			}
-			
+
 			if(structSym->GetType() != SLIC_SYM_STRUCT) {
 				DPRINTF(k_DBG_SLIC, ("Bad Mojo, array symbol id not a struct in SOP_PUSHAM\n"));
 				stopped = TRUE;
@@ -486,11 +476,10 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			SlicStructInstance *theStruct = structSym->GetStruct();
 			Assert(theStruct);
-			
-			
+
 			ival2 = *((sint32*)codePtr);
 			codePtr += sizeof(sint32);
-			
+
 			sval1.m_sym = theStruct->GetMemberSymbol(ival2);
 			m_stack->Push(SS_TYPE_SYM, sval1);
 			break;
@@ -518,25 +507,25 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			res = ArrayLookup(type2, sval2, type1, sval1,
 							  type3, sval3);
 			if(res)
-				
+
 				m_stack->Push(type3, sval3);
 			else {
 				sval3.m_int = 0;
-				
+
 				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
-		case SOP_ADD:  
+		case SOP_ADD:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
 			sval3.m_int = Eval(type2, sval2) + Eval(type1, sval1);
-			
+
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_SUB:  
+		case SOP_SUB:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -545,7 +534,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_MULT: 
+		case SOP_MULT:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -554,7 +543,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_EXP: 
+		case SOP_EXP:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -564,7 +553,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 		// Bitwise operators:
-		case SOP_BAND: 
+		case SOP_BAND:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -594,7 +583,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			sval3.m_int = ~Eval(type1, sval1);
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
-		case SOP_DIV:  
+		case SOP_DIV:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -615,7 +604,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_MOD:  
+		case SOP_MOD:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -641,17 +630,17 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_EQ:   
+		case SOP_EQ:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
 			sval3.m_int = IsEqual(type2, sval2, type1, sval1);
-			
+
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_GT:   
+		case SOP_GT:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -660,7 +649,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_LT:   
+		case SOP_LT:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -669,7 +658,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_GTE:  
+		case SOP_GTE:
 
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
@@ -679,7 +668,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval3);
 
 			break;
-		case SOP_LTE:  
+		case SOP_LTE:
 
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
@@ -690,7 +679,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			break;
 		case SOP_NEQ:
-			
+
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
@@ -723,20 +712,19 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			sval3.m_int = !Eval(type1, sval1);
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
-		case SOP_POP:  
-			
-			
+		case SOP_POP:
+
 			Assert(FALSE);
 			break;
-		case SOP_TRIG: 
+		case SOP_TRIG:
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			sval3.m_int = Eval(type1, sval1);
 			if(!sval3.m_int)
 				stopped = TRUE;
 			break;
-		case SOP_ARGE: 
-			sp = m_stack->Pop(type1, sval1);			
+		case SOP_ARGE:
+			sp = m_stack->Pop(type1, sval1);
 			AddArg(type1, sval1);
 			break;
 		case SOP_ARGID:
@@ -754,7 +742,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			m_argList->AddArg(symval->GetSegment(), symval);
 			break;
-		case SOP_ARGS: 
+		case SOP_ARGS:
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
 			symval = g_slicEngine->GetSymbol(ival);
@@ -777,7 +765,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_CALL:
 		case SOP_CALLR:
 		{
-			
+
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
 			symval = g_slicEngine->GetSymbol(ival);
@@ -794,7 +782,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			SFN_ERROR err;
 
 			if(!funcObj) {
-				
+
 				SlicSegment *segment = g_slicEngine->GetSegment(symval->GetName());
 				if(!segment || segment->GetType() != SLIC_OBJECT_FUNCTION) {
 					DPRINTF(k_DBG_SLIC, ("Undefined function %s\n", symval->GetName()));
@@ -803,15 +791,14 @@ BOOL SlicFrame::DoInstruction(SOP op)
 					}
 					return FALSE;
 				}
-				
-				
+
 				SlicObject * obj = NULL;
 				err = segment->Call(m_argList, obj);
 				if (obj)
                 {
-                    if (op == SOP_CALLR) 
+                    if (op == SOP_CALLR)
                     {
-					    if (g_slicEngine->AtBreak()) 
+					    if (g_slicEngine->AtBreak())
                         {
                             Assert(!m_resultObject); // need stack when failing?
                             if (m_resultObject)
@@ -819,15 +806,15 @@ BOOL SlicFrame::DoInstruction(SOP op)
                                 m_resultObject->Release();
                             }
 						    m_resultObject  = obj;
-					    } 
-                        else 
+					    }
+                        else
                         {
 						    sval1.m_int = obj->GetResult();
 						    m_stack->Push(SS_TYPE_INT, sval1);
 						    obj->Release();
 					    }
                     }
-                    else 
+                    else
                     {
                         // SOP_CALL: result not used
                         obj->Release();
@@ -853,7 +840,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				stopped = TRUE;
 			}
 
-			
 			m_argStackPtr--;
 			Assert(m_argStackPtr >= -1);
 			if(m_argStackPtr >= 0) {
@@ -883,8 +869,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			g_gevManager->ArglistAddEvent(GEV_INSERT_Tail,
 										  (GAME_EVENT)ival,
 										  args);
-			
-			
+
 			m_argStackPtr--;
 			Assert(m_argStackPtr >= -1);
 			if(m_argStackPtr >= 0) {
@@ -903,7 +888,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			return FALSE;
 		case SOP_END:
 			stopped = TRUE;
-			codePtr += sizeof(sint32); 
+			codePtr += sizeof(sint32);
 			break;
 		case SOP_JMP:
 			m_offset    = *(reinterpret_cast<sint32 *>(codePtr));
@@ -919,11 +904,10 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			break;
 		case SOP_BNEV:
-			
-			
-			
+
+
 			codePtr += sizeof(sint32);
-			
+
 			break;
 		case SOP_BUTN:
 			ival = *((sint32 *)codePtr);
@@ -969,12 +953,11 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 
 			sp = m_stack->Pop(type1, sval1);
-			
-			
+
 			SetValue(symval, type1, sval1);
 			break;
 		case SOP_ASSNA:
-			
+
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
 			symval = g_slicEngine->GetSymbol(ival);
@@ -992,14 +975,12 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 1);
 
-			
 			sp = m_stack->Pop(type3, sval3);
 			Assert(sp >= 0);
-			
+
 			SetArrayValue(symval, type2, sval2, type3, sval3);
 			break;
 		case SOP_ASSNM:
@@ -1024,9 +1005,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			ival2 = *((sint32*)codePtr);
 			codePtr += sizeof(sint32);
-			
+
 			symval = theStruct->GetMemberSymbol(ival2);
-			
+
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			SetValue(symval, type1, sval1);
@@ -1034,17 +1015,15 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		}
 		case SOP_ASSNAM:
 		{
-			
 
-			
+
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
 			SlicSymbolData *arraySym = g_slicEngine->GetSymbol(ival);
 
-			
 			ival2 = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
-			
+
 			if(!arraySym) {
 				DPRINTF(k_DBG_SLIC, ("Bad Mojo, symbol %d does not exist", ival));
 				stopped = TRUE;
@@ -1057,23 +1036,21 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 1);
 
-			
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
 
 			if(!arraySym->ArrayLookup(Eval(type2, sval2), type3, sval3)) {
-				DPRINTF(k_DBG_SLIC, ("Array lookup, %s[%d], failed\n", 
+				DPRINTF(k_DBG_SLIC, ("Array lookup, %s[%d], failed\n",
 									 arraySym->GetName(), Eval(type2, sval2)));
 				stopped = TRUE;
 				break;
 			}
 
 			SlicSymbolData *structSym = SlicStack::GetSymbol(type3, sval3);
-			if (!structSym) 
+			if (!structSym)
 			{
 				DPRINTF(k_DBG_SLIC, ("Couldn't find symbol for %s[%d]\n",
 									 arraySym->GetName(), Eval(type2, sval2)));
@@ -1098,9 +1075,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			SlicSymbolData *assnSym = theStruct->GetMemberSymbol(ival2);
 			assnSym->SetValueFromStackValue(type1, sval1);
 			break;
-		}			
+		}
 		case SOP_SARGS:
-			
+
 			m_argStackPtr++;
 			Assert(m_argStackPtr < k_ARGLIST_STACK_SIZE);
 			if(m_argStackPtr < k_ARGLIST_STACK_SIZE) {
@@ -1109,7 +1086,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			break;
 		case SOP_RET:
-			
+
 			sp = m_stack->Pop(type1, sval1);
 			Assert(sp >= 0);
 			g_slicEngine->GetContext()->SetResult(Eval(type1, sval1));
@@ -1118,7 +1095,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_LINE:
 		case SOP_LBRK:
 		{
-			
+
 			ival = *((sint32 *)codePtr);
 			codePtr += sizeof(sint32);
 			m_currentLine = ival;
@@ -1126,8 +1103,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			ival2 = *((sint32 *)codePtr);
 			if(m_segment->GetFilename()) {
 				if(ival2 < 0) {
-					
-					
+
 					*((sint32 *)codePtr) = FindFileOffset(m_segment->GetFilename(), ival);
 					ival2 = *((sint32 *)codePtr);
 				}
@@ -1140,9 +1116,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			if(op == SOP_LBRK || g_slicEngine->BreakRequested()) {
 				if(!cond || (cond->Eval() != 0)) {
-					
-					
-					g_slicEngine->Break(m_segment, codePtr - m_segment->m_code, 
+
+					g_slicEngine->Break(m_segment, codePtr - m_segment->m_code,
 										g_slicEngine->GetContext(), m_stack,
 										m_messageData);
 					stopped = TRUE;
@@ -1173,20 +1148,20 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr    += sizeof(sint32);
 			symval      = g_slicEngine->GetSymbol(ival);
 
-			if (conduit && symval) 
+			if (conduit && symval)
             {
 			    sval1.m_sym = symval;
-			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
-			
+			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);
+
 			    if ((sval3.m_int >= 0) && sval3.m_int < conduit->GetNumRecords())
-                {	
+                {
                     // No action: value is OK
 			    }
 			    else
                 {
 				    sval3.m_int = -1;
                 }
-                
+
                 m_stack->Push(SS_TYPE_INT, sval3);
 			}
             else
@@ -1203,7 +1178,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr    += sizeof(sint32);
 			symval      = g_slicEngine->GetSymbol(ival);
 
-			if (conduit && symval) 
+			if (conduit && symval)
             {
                 //Get the member:
                 name = reinterpret_cast<char *>(codePtr);
@@ -1214,9 +1189,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
                 }
 
                 sval1.m_sym = symval;
-                sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+                sval3.m_int = Eval(SS_TYPE_SYM, sval1);
 
-                if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+                if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){
 	                sval3.m_int = conduit->GetValue(sval3.m_int, name);
 	                m_stack->Push(SS_TYPE_INT, sval3);
                 }
@@ -1242,7 +1217,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr    += sizeof(int);
 			symval      = g_slicEngine->GetSymbol(ival);
 
-			if (conduit && symval) 
+			if (conduit && symval)
             {
 			    //Get the member:
 			    name    = reinterpret_cast<char *>(codePtr);
@@ -1253,14 +1228,14 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			    }
 
 			    sval1.m_sym = symval;
-			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);
 
 			    sp = m_stack->Pop(type2, sval2);
 			    Assert(sp >= 0);
 
 			    sval2.m_int = Eval(type2, sval2);
 
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){
 				    sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
 				    m_stack->Push(SS_TYPE_INT, sval3);
 			    }
@@ -1301,8 +1276,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			    sval2.m_int = Eval(type2, sval2);
 
-
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){
 				    sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
 				    m_stack->Push(SS_TYPE_INT, sval3);
 			    }
@@ -1333,7 +1307,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			    sval3.m_int = Eval(type1, sval1);
 
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){
 				    m_stack->Push(SS_TYPE_INT, sval3);
 			    }
 			    else{
@@ -1368,7 +1342,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			    sval2.m_int = Eval(type1, sval1);
 
-			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
+			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){
 				    sval3.m_int = conduit->GetValue(sval2.m_int, name);
 				    m_stack->Push(SS_TYPE_INT, sval3);
 			    }
@@ -1412,7 +1386,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			    sval2.m_int = Eval(type2, sval2);
 
-			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
+			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){
 				    sval3.m_int = conduit->GetValue(sval2.m_int, name, sval1.m_int);
 				    m_stack->Push(SS_TYPE_INT, sval3);
 			    }
@@ -1429,12 +1403,12 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, incorrect database symbol\n"));
 				stopped = TRUE;
             }
-            
+
 			break;
 		}
 		case SOP_DBSIZE:
 		{
-			//Added by Martin Gühmann to figure out via 
+			//Added by Martin Gühmann to figure out via
 			//slic how many records the database contains
 			//Get the database:
 			conduit = GetDatabase(codePtr);
@@ -1459,10 +1433,10 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		m_offset += codePtr - origCodePtr;
 	return !stopped;
 }
-		
+
 BOOL SlicFrame::Run()
 {
-	if (m_resultObject) 
+	if (m_resultObject)
     {
 		SlicStackValue value;
 		value.m_int = m_resultObject->GetResult();
@@ -1519,7 +1493,7 @@ void SlicFrame::ReportSFError(SFN_ERROR err, SlicSymbolData *sym)
 {
 	MBCHAR buf[1024];
 
-	sprintf(buf, "In object %s, function %s: ", 
+	sprintf(buf, "In object %s, function %s: ",
 			m_segment->GetName(), sym->GetFunction()->GetName());
 	switch(err) {
 		case SFN_ERROR_NUM_ARGS:

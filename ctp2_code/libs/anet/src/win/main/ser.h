@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Initial revision
 --------------------------------------------------------------------------*/
 #ifndef ser_h
-#define ser_h 
+#define ser_h
 
 #include <string.h>
 #include <stddef.h>
@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  and have the address mean the same thing on the other machine.
  This means each computer needs its own 'address'.
  Furthermore, the dp layer expects the address to not change from session
- to session.  
+ to session.
 --------------------------------------------------------------------------*/
 typedef long ser_adr_t;
 #define ser_ADR_NONE 0			// Used internally to indicate no connection.
@@ -115,16 +115,16 @@ typedef struct {
 	// Stuff about incoming serial data
 	int len;					// number of bytes in rbuf
 	int head;					// index into rbuf; next byte to get out
-	
+
 	// The packet being recieved.
 	struct {
 		ser_hdr_t hdr;			// header of received packet
 		unsigned char body[ser_USERMAXPACK];	// bytes of recieved packet
 	} pkt;
-	
+
 	// 'got' is the number of bytes of packet received and recognized so far.
 	// 0 <= got < sizeof(pkt)
-	int got;					
+	int got;
 
 #endif
 } ser_t;

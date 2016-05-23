@@ -1,6 +1,6 @@
 %{
 #include "scyaccdefs.h"
-#include "sliccmd.h" 
+#include "sliccmd.h"
 #include "sc.tab.h"
 #include <stdlib.h>
 #include <string.h>
@@ -35,9 +35,9 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 					return tok;
 				}
 			}
-	
+
 {stringid}  { yylval.v.value = slicif_find_string(yytext); return STRINGID; }
-{name}		{ 
+{name}		{
 			    int value;
                 void *dbptr;
 				if(slicif_find_const(yytext, &value)) {
@@ -54,13 +54,13 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 				}
 			}
 [0-9]+		{ yylval.v.type = EXP_VAL_INT; yylval.v.value = atoi(yytext); return NUMBER; }
-{slicid}	{ 
+{slicid}	{
                 yylval.v.type = EXP_VAL_SYM;
 				strncpy(yylval.v.name, yytext + 1, strlen(yytext) - 2);
 				yylval.v.name[strlen(yytext) - 2] = 0;
-				return IDENTIFIER; 
+				return IDENTIFIER;
 			}
-{string}    { 
+{string}    {
                 yylval.v.type = EXP_VAL_SYM;
 				strncpy(yylval.v.name, yytext + 1, strlen(yytext) - 2);
 				yylval.v.name[strlen(yytext) - 2] = 0;

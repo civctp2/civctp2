@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -141,7 +141,6 @@ DPBOOL dpturn_delPlayer(dp_t *dp, dpid_t id)
 
 	return TRUE;
 }
-
 
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
@@ -289,7 +288,7 @@ DP_API dp_result_t dpTurnGetMove(dp_t *dp, dpid_t *id, void *buf, size_t *data_l
 		for (loop = 0, p = dp->dpt.peers; loop < dp->dpt.n_peers; loop++, p++)
 			if (the_id == p->id)
 				break;
-	
+
 	} else {
 		/* No player specified?  Accept any player with a packet ready. */
 		for (loop = 0, p = dp->dpt.peers; loop < dp->dpt.n_peers; loop++, p++)
@@ -465,4 +464,3 @@ DP_API dp_result_t dpTurnPoll(dp_t *dp)
 	}
 	return dp_RES_EMPTY;
 }
-

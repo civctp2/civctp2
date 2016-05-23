@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -37,7 +37,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 #include "hkeytab.h"
 
-
 /*-----------------------------------------------------------------------
  Create a table whose elements all have the given size.
  Element size is the size of the value; it doesn't include the size of
@@ -48,7 +47,6 @@ hkeytab_t *hkeytab_create(size_t element_size)
 {
 	return (hkeytab_t *)dynatab_create(sizeof_hkeytab_item_t(element_size));
 }
-
 
 /*-----------------------------------------------------------------------
  Destroy a table.
@@ -108,7 +106,7 @@ void *hkeytab_subscript(hkeytab_t *tab, const void *key, size_t keylen)
 	}
 	return NULL;
 }
-	
+
 /*-----------------------------------------------------------------------
  Delete the given key from the table, shifts higher keys down
  (in the hkeytab_getkey sense).
@@ -134,7 +132,7 @@ int hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen)
 	}
 	return 1;
 }
-	
+
 #if 0
 
 #include <stdio.h>
@@ -257,10 +255,9 @@ main()
 		test1(pt[i], 2);
 		test1(pt[i], 3);
 	}
-	for (i=0;i<NTABS;i++) 
+	for (i=0;i<NTABS;i++)
 		hkeytab_destroy(pt[i]);
 	printf("test okay\n");
 	return 0;
 }
 #endif
-

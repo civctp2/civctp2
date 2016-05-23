@@ -1,19 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include <windows.h>
 #include "ear.h"
 
@@ -58,11 +42,9 @@ DPROCV		EAR_StartTimer;
 VPROCV		EAR_ShutDownTimer;
 VPROCV		EAR_UpdateEar;
 
-
 BOOL gbEarLoadedLibrary = FALSE;
 BOOL gbEarLoadedPDS		= FALSE;
 BOOL gbExtLoadedPDS		= FALSE;
-
 
 BOOL EP_RegisterEarServiceTable(BOOL bForceDirectSound)
  {	if (EAR_DLL != 0 && EAR_UpdateEar != 0)
@@ -74,46 +56,42 @@ BOOL EP_RegisterEarServiceTable(BOOL bForceDirectSound)
 	 {	gbExtLoadedPDS = TRUE;
 		strcpy(dll_name, EARPDS_DLL_FILENAME);
 	 }
-	
+
 	else
 	 {	strcpy(dll_name, EARIAS_DLL_FILENAME);
 	 }
 
 	EAR_DLL = GetModuleHandle(dll_name);
-	
-	
+
 	if (EAR_DLL == 0)
 	 {	gbEarLoadedLibrary = TRUE;
 		EAR_DLL = LoadLibrary(dll_name);
 
-		
 		if (EAR_DLL == 0 && !bForceDirectSound)
 		 {	gbEarLoadedLibrary = FALSE;
 			gbEarLoadedPDS	   = TRUE;
 
 			EAR_DLL = GetModuleHandle(EARPDS_DLL_FILENAME);
 
-			
 			if (EAR_DLL == 0)
 			 {	gbEarLoadedLibrary = TRUE;
 				EAR_DLL = LoadLibrary(EARPDS_DLL_FILENAME);
 
-				
 				if (EAR_DLL == 0)
 					return FALSE;
 
-			 } 
+			 }
 
-		 } 
+		 }
 
-	 } 
+	 }
 
 	if (EAR_UpdateEar != 0)
 		return TRUE;
 
 	BOOL failed = 0;
 
-	failed = 
+	failed =
 	(EAR_AAA_Validate = (DPROCD)GetProcAddress(EAR_DLL, "_EAR_DLL_AAA_Validate@4")) == NULL |
 	(EAR_AssignHwnd = (DPROCD)GetProcAddress(EAR_DLL, "_EAR_DLL_AssignHwnd@4")) == NULL |
 	(EAR_ChangeChannelControl = (DPROCDD)GetProcAddress(EAR_DLL, "_EAR_DLL_ChangeChannelControl@8")) == NULL |
@@ -148,14 +126,12 @@ BOOL EP_RegisterEarServiceTable(BOOL bForceDirectSound)
 
 	if (failed)
 		return FALSE;
-	
-	
+
 	WM_EAR_CALLBACK = RegisterWindowMessage(EAR_MONIKER);
 
 	return TRUE;
 
- } 
-
+ }
 
 VOID EP_ClearEarServiceTable(VOID)
  {	if (gbEarLoadedLibrary)
@@ -165,11 +141,11 @@ VOID EP_ClearEarServiceTable(VOID)
 			else
 				EAR_DLL = GetModuleHandle(EARIAS_DLL_FILENAME);
 		 }
-		
+
 		if (EAR_DLL != 0)
 			FreeLibrary(EAR_DLL);
 
-	 } 
+	 }
 
 	EAR_DLL = 0;
 
@@ -204,9 +180,8 @@ VOID EP_ClearEarServiceTable(VOID)
 	EAR_ShutDownTimer = 0;
 	EAR_UpdateEar = 0;
 
-	gbEarLoadedLibrary = 
-	gbEarLoadedPDS = 
+	gbEarLoadedLibrary =
+	gbEarLoadedPDS =
 	gbExtLoadedPDS = FALSE;
 
- } 
-
+ }

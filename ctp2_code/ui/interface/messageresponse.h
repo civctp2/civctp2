@@ -21,7 +21,6 @@ class MessageResponseAction;
 class MessageResponseSubmitAction;
 // MBCHAR
 
-
 class MessageResponseListItem : public c3_ListItem
 {
 public:
@@ -34,8 +33,8 @@ public:
 	virtual sint32  Compare(c3_ListItem * item2, uint32 column);
 
 protected:
-	MessageResponseListItem() 
-    : 
+	MessageResponseListItem()
+    :
         c3_ListItem (),
         m_index     (0)
     {
@@ -43,15 +42,14 @@ protected:
     }
 
 	AUI_ERRCODE InitCommonLdl(MBCHAR const * name, sint32 index, MBCHAR *ldlBlock);
-	
+
 private:
 	MBCHAR		m_name[_MAX_PATH];
 	sint32		m_index;
 };
 
 
-
-class MessageResponseStandard 
+class MessageResponseStandard
 {
 public:
 	MessageResponseStandard (
@@ -70,10 +68,9 @@ private:
 	tech_WLList<ctp2_Button *>				*m_messageResponseButton;
 	tech_WLList<MessageResponseAction *>	*m_messageResponseAction;
 
-	ctp2_Button		*m_dontShowButton;	
+	ctp2_Button		*m_dontShowButton;
 	char *m_identifier;
 };
-
 
 
 class MessageResponseDropdown
@@ -95,4 +92,4 @@ private:
 	MessageResponseSubmitAction		*m_action;
 };
 
-#endif 
+#endif

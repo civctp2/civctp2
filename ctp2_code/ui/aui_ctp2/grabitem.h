@@ -1,5 +1,3 @@
-
-
 #ifndef __GRABITEM_H__
 #define __GRABITEM_H__
 
@@ -16,12 +14,12 @@ enum GrabItemType {
 class Unit;
 class TradeRoute;
 
-class GrabItem 
+class GrabItem
 {
 public:
 					GrabItem();
 					~GrabItem();
-	
+
 	static void		Init(void);
 	static void		Cleanup(void);
 
@@ -38,12 +36,11 @@ public:
 	void			Release(void) { m_isGrabbed = FALSE; m_grabbedItem = NULL; m_grabbedItemType = GRABITEMTYPE_NONE; }
 
 private:
-	BOOL			m_isGrabbed;	
-	
+	BOOL			m_isGrabbed;
+
 	void			*m_grabbedItem;
 	GrabItemType	m_grabbedItemType;
 
 };
-
 
 #endif

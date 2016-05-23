@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,13 +25,13 @@
 // Modifications from the original Activision code:
 //
 // - Exposed strategies to personalities.txt by Martin Gühmann.
-// - Fixed advice string for BuildupStrength and SeigeCities 
+// - Fixed advice string for BuildupStrength and SeigeCities
 //   strategies by Martin Gühmann.
 // - Added over city limit strategy by Martin Gühmann.
-// - Restored backward compatibility with old personalities.txts 
+// - Restored backward compatibility with old personalities.txts
 //   by Martin Gühmann
 // - Activated consideration of a defined nuclear strike strategy.
-// - added difficulty where AI ignores any citylimit because the flag causes 
+// - added difficulty where AI ignores any citylimit because the flag causes
 //   no unhappiness for ai
 // - Moved code of InitSStateEvent to Diplomat. (13-Jun-2008 Martin Gühmann)
 // - Stopped the AI checking it's city limit if no city limit rule is enabled.
@@ -70,7 +70,7 @@
 //
 // Name       : InitSStateEvent
 //
-// Description: Initializes the default player's strategy 
+// Description: Initializes the default player's strategy
 //
 // Parameters : -
 //
@@ -99,7 +99,7 @@ STDEHANDLER(InitSStateEvent)
 //
 // Name       : NextSStateEvent
 //
-// Description: Computes the current player's strategy 
+// Description: Computes the current player's strategy
 //
 // Parameters : -
 //
@@ -129,7 +129,7 @@ STDEHANDLER(NextSStateEvent)
 // Name       : FullAttack_NextSStateEvent
 //
 // Description: Checks whether the player should use the full attack startegy
-//              and sets it if necessary. 
+//              and sets it if necessary.
 //
 // Parameters : -
 //
@@ -203,8 +203,8 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 //
 // Name       : BuildupStrength_NextSStateEvent
 //
-// Description: Checks whether the player should use the defend startegy 
-//              to build up its strength and sets it if necessary. 
+// Description: Checks whether the player should use the defend startegy
+//              to build up its strength and sets it if necessary.
 //
 // Parameters : -
 //
@@ -310,7 +310,7 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 		g_theStringDB->GetStringID(   "SPY_REGROUP_SS", state.spyStrId);
 		g_theStringDB->GetStringID("ADVICE_REGROUP_SS", state.adviceStrId);
 		g_theStringDB->GetStringID(  "NEWS_REGROUP_SS", state.newsStrId);
-		
+
 		diplomat.ConsiderStrategicState(state);
 	}
 
@@ -366,7 +366,7 @@ STDEHANDLER(OpeningGambit_NextSStateEvent)
 			g_theStrategyDB->GetNamedItem("STRATEGY_CAREFUL_START", state.dbIndex);
 		}
 	}
-	
+
 	diplomat.ConsiderStrategicState(state);
 
 	return GEV_HD_Continue;
@@ -376,9 +376,9 @@ STDEHANDLER(OpeningGambit_NextSStateEvent)
 //
 // Name       : NuclearStrike_NextSStateEvent
 //
-// Description: Checks whether the players's personality has a lunch nukes 
+// Description: Checks whether the players's personality has a lunch nukes
 //              strategy and sets it if the player's personalty has such a
-//              startegy. 
+//              startegy.
 //
 // Parameters : -
 //
@@ -413,8 +413,8 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 //
 // Name       : NuclearReadiness_NextSStateEvent
 //
-// Description: Determines which nuklear readiness strategy should be used. 
-//              This is dependent on the nuclear threat level. 
+// Description: Determines which nuklear readiness strategy should be used.
+//              This is dependent on the nuclear threat level.
 //
 // Parameters : -
 //
@@ -581,7 +581,7 @@ STDEHANDLER(SetExpansion_NextSStateEvent)
 //
 // Name       : SetExploration_NextSStateEvent
 //
-// Description: Loads the player's personality's exploration strategy. 
+// Description: Loads the player's personality's exploration strategy.
 //
 // Parameters : -
 //
@@ -873,7 +873,7 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 //
 // Name       : CheckCityLimit_NextSStateEvent
 //
-// Description: Loads the over city limit strategy 
+// Description: Loads the over city limit strategy
 //
 // Parameters : -
 //
@@ -885,7 +885,7 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 //
 //----------------------------------------------------------------------------
 STDEHANDLER(CheckCityLimit_NextSStateEvent)
-{	
+{
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit()
 		|| g_theProfileDB->IsNoCityLimit())
 		return GEV_HD_Continue;
@@ -897,7 +897,7 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
-	const GovernmentRecord *government = 
+	const GovernmentRecord *government =
 	      g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
 
 	sint32 acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
@@ -909,7 +909,7 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 			state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
 			state.dbIndex  = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
 			diplomat.ConsiderStrategicState(state);
-		
+
 			if
 			  (
 			       wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
@@ -944,7 +944,7 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 // Name       : StrategicStateEventCallbacks::AddCallbacks
 //
 // Description: Adds the functions above to the event manager callback,
-//              so that all these functions are executed on the 
+//              so that all these functions are executed on the
 //              InitStrategicState or NextStrategicState event.
 //
 // Parameters : -
@@ -975,13 +975,13 @@ void StrategicStateEventCallbacks::AddCallbacks()
 							  &s_FullAttack_NextSStateEvent);
 
 	g_gevManager->AddCallback(GEV_NextStrategicState,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_BuildupStrength_NextSStateEvent);
 
 	g_gevManager->AddCallback(GEV_NextStrategicState,
 							  GEV_PRI_Pre,
 							  &s_SeigeCities_NextSStateEvent);
-	
+
 	g_gevManager->AddCallback(GEV_NextStrategicState,
 							  GEV_PRI_Pre,
 							  &s_NuclearReadiness_NextSStateEvent);

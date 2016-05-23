@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -163,7 +163,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(callback) {
 			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
 		}
-		return AUI_ERRCODE_OK; 
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "SPNewGameDiffScreen");
@@ -173,15 +173,13 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		Assert( AUI_NEWOK(s_spNewGameDiffScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) errcode;
 
-		
 		s_spNewGameDiffScreen->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->GrabRegion()->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	if ( !callback ) callback = spnewgamediffscreen_backPress;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameDiffScreen->AddTitle( controlBlock );
 	s_spNewGameDiffScreen->AddClose( callback );
@@ -203,9 +201,9 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		Assert(item);
 		if(!item)
 			break;
-				
+
 		item->SetUserData((void *)i);
-				
+
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
 		if(!text)
@@ -230,9 +228,9 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		Assert(item);
 		if(!item)
 			break;
-				
+
 		item->SetUserData((void *)i);
-				
+
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
 		if(!text)

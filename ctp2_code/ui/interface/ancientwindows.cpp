@@ -1,17 +1,12 @@
-
-
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
 
-
 #include "aui_static.h"
 #include "c3_static.h"
-
 
 #include "c3window.h"
 #include "c3windows.h"
@@ -23,10 +18,8 @@
 
 #include "ancientwindows.h"
 
-
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
-
 
 extern C3UI						*g_c3ui;
 
@@ -41,7 +34,6 @@ extern ControlPanelWindow	*g_controlPanel;
 
 static C3Window		*s_lowerRight = NULL;
 static aui_Static	*s_imageLowerRight;
-
 
 static C3Window		*s_angelLeft = NULL;
 static aui_Static	*s_imageAngelLeft;
@@ -70,7 +62,6 @@ return 0;
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE	errcode;
 
-
 	sprintf(windowBlock, "%s", "LowerRight");
 
 	s_lowerRight = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_BACKGROUND );
@@ -89,22 +80,18 @@ return 0;
 sint32 ancientwindows_GetControlPieceY( void )
 {
 
-
 	return g_controlPanel->Y();
 }
 
 sint32 ancientwindows_GetControlPieceHeight( void )
 {
 
-
 	return g_controlPanel->Height();
 }
 
 
-
 BevelLessWindow		*s_controlPanelLeftHat=NULL;
 BevelLessWindow		*s_controlPanelRightHat=NULL;
-
 
 int AncientWindows_Initialize( void )
 {
@@ -121,19 +108,17 @@ return 0;
 	Assert( AUI_NEWOK(s_controlPiece, errcode) );
 	if ( !AUI_NEWOK(s_controlPiece, errcode) ) return -1;
 
-	
 	if ( g_ScreenWidth > 640 || g_ScreenHeight > 480 ) {
-		
+
 		s_controlPiece->Resize(g_controlPanel->Width(), s_controlPiece->Height());
 		s_controlPiece->Move(s_controlPiece->X(), g_ScreenHeight - g_controlPanel->Height() - s_controlPiece->Height());
 	}
-	
+
 	errcode = g_c3ui->AddWindow( s_controlPiece );
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
 
-	
 	sprintf(windowBlock, "%s", "AngelLeft");
 	s_angelLeft = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_SINKING );
 	Assert( AUI_NEWOK(s_angelLeft, errcode) );
@@ -141,12 +126,11 @@ return 0;
 
 	sint32 nudge = 0;
 
-	
 	if ( g_ScreenWidth > 640 || g_ScreenHeight > 480 ) {
-		
+
 		if ( g_ScreenHeight < 768 ) nudge = 2;
-		
-		extern aui_Static	*s_leftBorder;	
+
+		extern aui_Static	*s_leftBorder;
 		s_angelLeft->Move(s_angelLeft->X(), g_ScreenHeight - s_leftBorder->Height() - s_angelLeft->Height() + nudge);
 	}
 
@@ -154,7 +138,7 @@ return 0;
 	s_imageAngelLeft = new aui_Static(&errcode, aui_UniqueId(), imageBlock);
 	Assert( AUI_NEWOK(s_imageAngelLeft, errcode) );
 	if ( !AUI_NEWOK(s_imageAngelLeft, errcode) ) return -1;
-	
+
 	errcode = s_angelLeft->AddControl(s_imageAngelLeft);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -166,23 +150,21 @@ return 0;
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
-	
 
 	sprintf(windowBlock, "%s", "AngelRight");
 	s_angelRight = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_SINKING );
 	Assert( AUI_NEWOK(s_angelRight, errcode) );
 	if ( !AUI_NEWOK(s_angelRight, errcode) ) return -1;
 
-	sint32 downwardNudge = 3;	
+	sint32 downwardNudge = 3;
 	if ( g_ScreenHeight < 768 ) {
 		if ( g_ScreenHeight <= 480) downwardNudge = 0;
 		else downwardNudge = 13;
-	} 
+	}
 
-	
 	if ( g_ScreenWidth > 640 || g_ScreenHeight > 480 ) {
-		
-		s_angelRight->Move(s_angelRight->X(), 
+
+		s_angelRight->Move(s_angelRight->X(),
 			g_ScreenHeight - g_controlPanel->Height() - s_angelRight->Height() + downwardNudge);
 	}
 
@@ -190,7 +172,7 @@ return 0;
 	s_imageAngelRight = new aui_Static(&errcode, aui_UniqueId(), imageBlock);
 	Assert( AUI_NEWOK(s_imageAngelRight, errcode) );
 	if ( !AUI_NEWOK(s_imageAngelRight, errcode) ) return -1;
-	
+
 	errcode = s_angelRight->AddControl(s_imageAngelRight);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -202,9 +184,9 @@ return 0;
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
-	
 
-	
+
+
 
 
 
@@ -219,21 +201,19 @@ return 0;
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
-	
 
 	sprintf(windowBlock, "%s", "RadarBorderRight");
 	s_radarBorderRight = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_SINKING );
 	Assert( AUI_NEWOK(s_radarBorderRight, errcode) );
 	if ( !AUI_NEWOK(s_radarBorderRight, errcode) ) return -1;
-	
-	
+
 	s_radarBorderRight->Move(s_radarBorderRight->X(), g_ScreenHeight - s_radarBorderRight->Height());
 
 	sprintf(imageBlock, "%s.%s", windowBlock, "Image");
 	s_imageRadarBorderRight = new aui_Static(&errcode, aui_UniqueId(), imageBlock);
 	Assert( AUI_NEWOK(s_imageRadarBorderRight, errcode) );
 	if ( !AUI_NEWOK(s_imageRadarBorderRight, errcode) ) return -1;
-	
+
 	errcode = s_radarBorderRight->AddControl(s_imageRadarBorderRight);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -241,32 +221,28 @@ return 0;
 	s_radarBorderRight->Enable( FALSE );
 
 
-
 	errcode = g_c3ui->AddWindow( s_radarBorderRight );
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
-	
-	
+
 	if ( g_ScreenWidth < 1024 || g_ScreenHeight < 768 ) {
 		return 0;
 	}
 
-	
 
 	sprintf(windowBlock, "%s", "ControlLeft");
 	s_controlLeft = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_SINKING );
 	Assert( AUI_NEWOK(s_controlLeft, errcode) );
 	if ( !AUI_NEWOK(s_controlLeft, errcode) ) return -1;
 
-	
 	s_controlLeft->Move(s_controlLeft->X(), g_ScreenHeight - s_controlLeft->Height());
-	
+
 	sprintf(imageBlock, "%s.%s", windowBlock, "Image");
 	s_imageControlLeft = new c3_Static(&errcode, aui_UniqueId(), imageBlock);
 	Assert( AUI_NEWOK(s_imageControlLeft, errcode) );
 	if ( !AUI_NEWOK(s_imageControlLeft, errcode) ) return -1;
-	
+
 	errcode = s_controlLeft->AddControl(s_imageControlLeft);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -274,26 +250,23 @@ return 0;
 	s_controlLeft->Enable( FALSE );
 
 
-
 	errcode = g_c3ui->AddWindow( s_controlLeft );
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
 
-	
 
 	sprintf(windowBlock, "%s", "ControlRight");
 	s_controlRight = new C3Window(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_SINKING );
 	Assert( AUI_NEWOK(s_controlRight, errcode) );
 	if ( !AUI_NEWOK(s_controlRight, errcode) ) return -1;
-	
-	
+
 	s_controlRight->Move(s_controlRight->X(), g_ScreenHeight - s_controlRight->Height());
 
 	sprintf(imageBlock, "%s.%s", windowBlock, "Image");
 	s_imageControlRight = new c3_Static(&errcode, aui_UniqueId(), imageBlock);
 	Assert( AUI_NEWOK(s_imageControlRight, errcode) );
 	if ( !AUI_NEWOK(s_imageControlRight, errcode) ) return -1;
-	
+
 	errcode = s_controlRight->AddControl(s_imageControlRight);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -301,11 +274,9 @@ return 0;
 	s_controlRight->Enable( FALSE );
 
 
-
 	errcode = g_c3ui->AddWindow( s_controlRight );
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode != AUI_ERRCODE_OK ) return 11;
-
 
 	return 0;
 #endif
@@ -322,7 +293,6 @@ int AncientWindows_Cleanup( void )
 		g_c3ui->RemoveWindow(s_controlPanelRightHat->Id());
 		delete s_controlPanelRightHat;
 	}
-
 
 return 0;
 

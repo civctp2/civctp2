@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,20 +41,16 @@
 #include "pixelutils.h"
 #include "primitives.h"
 
-
 #include "c3_button.h"
 #include "ctp2_button.h"
-
 
 #include "c3_static.h"
 #include "c3_coloredstatic.h"
 #include "c3_switch.h"
 #include "c3_utilitydialogbox.h"
 
-
 #include "c3window.h"
 #include "c3windows.h"
-
 
 #include "tiledmap.h"                   // g_tiledMap
 #include "colorset.h"                   // g_colorSet
@@ -70,11 +66,9 @@
 #include "network.h"
 #include "victorywin.h"
 
-
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 
 #include "MessageBoxDialog.h"
-
 
 extern sint32       g_ScreenWidth;
 extern sint32       g_ScreenHeight;
@@ -82,9 +76,7 @@ extern C3UI			*g_c3ui;
 extern C3Window		*g_toolbar;
 extern C3Window		*g_turnWindow;
 
-
 StatsWindow *g_statsWindow = NULL;
-
 
 
 #define k_STATS_SCROLL		197
@@ -92,8 +84,7 @@ StatsWindow *g_statsWindow = NULL;
 #define k_TURN_WINDOW_HEIGHT	181
 
 #define k_STATS_SCROLL640		122
-#define k_TURN_WINDOW_HEIGHT640	135	
-
+#define k_TURN_WINDOW_HEIGHT640	135
 
 static ctp2_Button **s_statsButton = NULL;
 static c3_Switch *s_screensSwitch;
@@ -107,8 +98,7 @@ static MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
 	"DipButton",
 	"OptionsButton",
 	"CityButton",
- 
- 
+
 };
 
 static aui_StringTable *s_statsString;
@@ -271,7 +261,7 @@ static aui_StringTable *s_statsString;
 void statswindow_HideButtons( void )
 {
 	sint32 i;
-	
+
 	for ( i = 0;i < k_STATS_NUM_BUTTONS;i++ ) {
 		s_statsButton[i]->Hide();
 	}
@@ -280,7 +270,7 @@ void statswindow_HideButtons( void )
 void statswindow_ShowButtons( void )
 {
 	sint32 i;
-	
+
 	for ( i = 0;i < k_STATS_NUM_BUTTONS;i++ ) {
 		s_statsButton[i]->Show();
 	}
@@ -288,7 +278,7 @@ void statswindow_ShowButtons( void )
 
 void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	switch ( action ) {
 	case AUI_SWITCH_ACTION_ON:
 		statswindow_ShowButtons();
@@ -308,14 +298,14 @@ void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data
 
 void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	for ( sint32 i = 0;i<k_STATS_NUM_BUTTONS;i++) 
+	for ( sint32 i = 0;i<k_STATS_NUM_BUTTONS;i++)
 	{
-		if ( control->Id() == s_statsButton[i]->Id() ) 
+		if ( control->Id() == s_statsButton[i]->Id() )
 		{
-			switch ( i ) 
+			switch ( i )
 			{
 			case 0:
 
@@ -328,13 +318,13 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 					open_TradeStatus();
 				}
 				break;
-		   
+
 			case 2:
 			  	if ( g_statsWindow->CheckCity() ) {
 			  		open_ScienceStatus();
 			  	}
 				break;
-			
+
 			case 3:
 				if ( g_statsWindow->CheckUnit() ) {
 					open_UnitStatus();
@@ -358,7 +348,6 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 				break;
 
 
-
 			case 8:
 				open_OptionsScreen( 1 );
 				break;
@@ -367,7 +356,6 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-
 int StatsWindow_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -375,9 +363,8 @@ int StatsWindow_Initialize( void )
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32		i;
 
-	if ( g_statsWindow ) return 0; 
+	if ( g_statsWindow ) return 0;
 
-	
 	strcpy(windowBlock, "StatsWindow");
 	g_statsWindow = new StatsWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
 	Assert( AUI_NEWOK(g_statsWindow, errcode) );
@@ -385,11 +372,11 @@ int StatsWindow_Initialize( void )
 
 	g_statsWindow->SetTransparent( TRUE );
 
-	
 
 
-	
-	
+
+
+
 
 
 
@@ -453,37 +440,33 @@ int StatsWindow_Initialize( void )
 
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "ScreensSwitch" );
-	
-	
 
-	
-	
+
+
+
+
 	s_statsButton = new ctp2_Button*[k_STATS_NUM_BUTTONS];
 
-	for ( i = 0;i < k_STATS_NUM_BUTTONS;i++ ) 
+	for ( i = 0;i < k_STATS_NUM_BUTTONS;i++ )
 	{
 		sprintf( controlBlock, "%s.%s", windowBlock, s_buttonName[i] );
-		
-		
-	   
+
+
  		s_statsButton[i] = spNew_ctp2_Button(&errcode,
-		   									windowBlock, 
+		   									windowBlock,
 		   									s_buttonName[i],
 		   									s_buttonName[i],
 		   									StatsButtonActionCallback,
 											"CTP2_BUTTON_TITLE_BAR");
 
-		
 		Assert( AUI_NEWOK(s_statsButton[i], errcode) );
 		if ( !AUI_NEWOK(s_statsButton[i], errcode) ) return -10;
 
 	}
 
-
 	s_statsString = new aui_StringTable( &errcode, "StatsStrings" );
 	TestControl( s_statsString );
 
-	
 
 
 
@@ -524,25 +507,24 @@ int StatsWindow_Initialize( void )
 
 
 
-	
+
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
 
-	
 
-	
-	if ( g_ScreenWidth >= 1024 || g_ScreenHeight >= 768 ) 
+
+
+	if ( g_ScreenWidth >= 1024 || g_ScreenHeight >= 768 )
 	{
-		
-	   
-	   
-	} 
+
+
+	}
 	else
 	{
-		
-	   
-	   
+
+
 	}
 
 	statswindow_ShowButtons();
@@ -557,17 +539,16 @@ int StatsWindow_Initialize( void )
 }
 
 
-
 int StatsWindow_Cleanup( void )
 {
-	
-	if ( !g_statsWindow ) return 0; 
+
+	if ( !g_statsWindow ) return 0;
 
 	g_c3ui->RemoveWindow( g_statsWindow->Id() );
 
-	
 
-	
+
+
 	for ( sint32 i = 0;i < k_STATS_NUM_BUTTONS;i++ ) {
 		delete s_statsButton[i];
 		s_statsButton[i] = NULL;
@@ -600,7 +581,6 @@ int StatsWindow_Cleanup( void )
 }
 
 
-
 StatsWindow::StatsWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -614,7 +594,6 @@ StatsWindow::StatsWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 StatsWindow::StatsWindow(
@@ -636,7 +615,6 @@ StatsWindow::StatsWindow(
 }
 
 
-
 AUI_ERRCODE StatsWindow::InitCommon(void)
 {
 	m_scroll = FALSE;
@@ -647,18 +625,16 @@ AUI_ERRCODE StatsWindow::InitCommon(void)
 }
 
 
-
 AUI_ERRCODE StatsWindow::InitCommonLdl(MBCHAR *ldlBlock)
-{		
+{
 	InitCommon();
 	return C3Window::InitCommon();
 }
 
 
-
 AUI_ERRCODE StatsWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -666,16 +642,16 @@ AUI_ERRCODE StatsWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if (m_pattern!=NULL)
 		m_pattern->Draw( m_surface, &rect );
 
-	
 
 
-	
+
+
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
 }
 
-BOOL StatsWindow::CheckCity( void ) 
+BOOL StatsWindow::CheckCity( void )
 {
 	if(!g_player[g_selected_item->GetVisiblePlayer()])
 		return FALSE;
@@ -686,29 +662,27 @@ BOOL StatsWindow::CheckCity( void )
 		return TRUE;
 	}
 	else {
-		
-		
+
 		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_CITIES ),"SW_NO_CITIES",NULL, NULL, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
 
-BOOL StatsWindow::CheckUnit( void ) 
+BOOL StatsWindow::CheckUnit( void )
 {
-	sint32 units = g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Num(); 
+	sint32 units = g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Num();
 
 	if ( units ) {
 		return TRUE;
 	}
 	else {
-		
-		
+
 		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_UNITS ),"SW_NO_UNITS",NULL, NULL, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
 
-BOOL StatsWindow::CheckDiplomacy( void ) 
+BOOL StatsWindow::CheckDiplomacy( void )
 {
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
@@ -722,9 +696,8 @@ BOOL StatsWindow::CheckDiplomacy( void )
 			}
 		}
 	}
-	
-	
-	
+
+
 	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, NULL, "str_ldl_MB_OK", false);
 	return FALSE;
 }
@@ -839,7 +812,7 @@ AUI_ERRCODE StatsWindow::Idle( void )
 	return AUI_ERRCODE_OK;
 }
 
-sint32 statswindow_EnableDiplomacy( void ) 
+sint32 statswindow_EnableDiplomacy( void )
 {
 	s_statsButton[BUTTON_DIP]->Enable( TRUE );
 	return 1;
@@ -866,13 +839,12 @@ BOOL statswindow_IsTradeDisabled( void )
 
 sint32 statswindow_DisableScreensButton( void )
 {
-	
+
 	return 1;
 }
 
 sint32 statswindow_EnableScreensButton( void )
 {
-	
+
 	return 1;
 }
-

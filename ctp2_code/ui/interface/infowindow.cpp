@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -48,11 +48,11 @@ extern C3UI *       g_c3ui;
 
 static InfoWindow * s_InfoWindow = NULL;
 
-InfoWindow::InfoWindow(void) 
+InfoWindow::InfoWindow(void)
 :
 	m_window        (static_cast<ctp2_Window*>
                         (aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))
-                    ),	
+                    ),
 	m_closeButton   (NULL),
 	m_ranking_tab   (NULL),
     m_score_tab     (new ScoreTab()),
@@ -123,15 +123,13 @@ void InfoWindow::Update(void)
     }
 }
 
-
 void InfoWindow::Close(void)
 {
-    if (s_InfoWindow) 
+    if (s_InfoWindow)
     {
         s_InfoWindow->Hide();
     }
 }
-
 
 /// Update the data at all tabs
 void InfoWindow::UpdateData(void)
@@ -148,19 +146,17 @@ void InfoWindow::Show()
     m_window->Show();
 }
 
-
 void InfoWindow::Hide()
 {
     m_window->Hide();
 	g_c3ui->RemoveWindow(m_window->Id());
 }
 
-
 void InfoWindow::CloseButtonActionCallback
 (
     aui_Control *   control,
-	uint32          action, 
-    uint32          data, 
+	uint32          action,
+    uint32          data,
     void *          cookie
 )
 {

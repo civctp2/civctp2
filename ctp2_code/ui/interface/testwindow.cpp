@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -17,7 +7,6 @@
 
 #include "pattern.h"
 #include "primitives.h"
-
 
 #include "messageiconwindow.h"
 #include "messagewindow.h"
@@ -29,9 +18,7 @@
 
 #include "iconbutton.h"
 
-
 extern C3UI				*g_c3ui;
-
 
 
 UITestWindow::UITestWindow(
@@ -67,7 +54,7 @@ AUI_ERRCODE UITestWindow::InitCommon( void )
 								37,
 								32,
 								32,
-								"upba0104.tif", 
+								"upba0104.tif",
 								k_MESSAGE_ICON_EVENT,
 								0 );
 	Assert( AUI_NEWOK( m_button1, errcode ));
@@ -82,13 +69,13 @@ AUI_ERRCODE UITestWindow::InitCommon( void )
 	if ( m_button1Action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_button1->SetAction( m_button1Action );
-	
+
 	m_button2 = new IconButton( &errcode, aui_UniqueId(),
 								54,
 								37,
 								32,
 								32,
-								"upba0104.tif", 
+								"upba0104.tif",
 								k_MESSAGE_ICON_DIPLOMATIC,
 								0 );
 	Assert( AUI_NEWOK( m_button2, errcode ));
@@ -103,17 +90,15 @@ AUI_ERRCODE UITestWindow::InitCommon( void )
 	if ( m_button2Action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_button2->SetAction( m_button2Action );
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE UITestWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;
@@ -122,7 +107,6 @@ AUI_ERRCODE UITestWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	RECT rectTitle = { 4, 4, (m_width - 4), 24 };
 	RECT rect = { 0, 0, m_width, m_height };
 
-	
 	g_c3ui->TheBlitter()->ColorBlt(
 		surface,
 		&rect,
@@ -139,20 +123,19 @@ AUI_ERRCODE UITestWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-	
+
 	g_c3ui->TheBlitter()->ColorBlt(
 		surface,
 		&rectTitle,
 		RGB(0,0,142),
 		0 );
 
-	
 	g_c3ui->TheBlitter()->ColorBlt(
 		surface,
 		&rectInside,
 		RGB(255,255,255),
 		0 );
-	
+
 
 
 

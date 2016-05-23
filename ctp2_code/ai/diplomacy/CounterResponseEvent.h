@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __COUNTER_RESPONSE_EVENT_H__
 

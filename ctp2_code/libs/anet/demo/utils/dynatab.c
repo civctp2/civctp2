@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -74,7 +74,6 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 /*-----------------------------------------------------------------------
  Create a table whose elements all have the given size.
  Returns NULL on failure.
@@ -82,7 +81,7 @@ MSVC's warning level is set to 4.
 dynatab_t *dynatab_create(size_t element_size)
 {
 	dynatab_t *pdt;
-	
+
 	assert(element_size > 0);
 
 	pdt = (dynatab_t *)dp_MALLOC(sizeof(dynatab_t));
@@ -93,7 +92,6 @@ dynatab_t *dynatab_create(size_t element_size)
 	pdt->n_alloced = 0;
 	return pdt;
 }
-
 
 /*-----------------------------------------------------------------------
  Destroy a table.
@@ -158,7 +156,7 @@ void *dynatab_subscript_grow(dynatab_t *tab, int subscript)
 		if (new_n_alloced < subscript + 1)
 			new_n_alloced = subscript + 16;
 
-		if (tab->buf) 
+		if (tab->buf)
 			newbuf = dp_REALLOC(tab->buf, new_n_alloced * tab->unit);
 		else
 			newbuf = dp_MALLOC(new_n_alloced * tab->unit);
@@ -215,7 +213,6 @@ dynatab_find(
 
 	return dynatab_NONE;
 }
-
 
 /*****************/
 /* Freeze & Thaw */
@@ -306,7 +303,7 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 	DPRINT(("dynatab_thaw: successful.\n"));
 	return (void *) tab->buf;
 }
-	
+
 #if defined(UNITTEST)
 
 #include <stdio.h>
@@ -442,7 +439,7 @@ main()
 		}
 		test1(pt[i]);
 	}
-	for (i=0;i<NTABS;i++) 
+	for (i=0;i<NTABS;i++)
 		dynatab_destroy(pt[i]);
 	printf("test okay\n");
 	return 0;
@@ -450,4 +447,3 @@ main()
 
 #endif /* dynatab_UNITTEST */
 #endif /* UNITTEST */
-

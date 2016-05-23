@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -93,11 +93,11 @@ private:
     std::auto_ptr<ctp2_Button>  m_loadgame;
     std::auto_ptr<ctp2_Button>  m_options;
     std::auto_ptr<c3_Static>    m_background;
-    std::auto_ptr<ctp2_Static>  m_testBox; 
+    std::auto_ptr<ctp2_Static>  m_testBox;
 };
 
 //----------------------------------------------------------------------------
-// Function declarations 
+// Function declarations
 // The definitions are in InitialPlayScreen.cpp
 //----------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -294,7 +294,7 @@ Usage: %s <filelist>\n\
 					sockmax = sock[i];
 			}
 		}
-		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);		
+		nsocks = select(sockmax + 1, &rfds, &wfds, NULL, &tv);
 		if (nsocks < 0) {
 			DPRINT(("select error!\n"));
 			break;
@@ -340,7 +340,7 @@ Usage: %s <filelist>\n\
 				if (FD_ISSET(sock[i], &wfds)) {
 					if (url[i].path[0])
 						err = antpget_requestGet(antpget[i], url[i].path, offset[i]);
-					else 
+					else
 						err = antpget_requestFirst(antpget[i]);
 					if (err == dp_RES_OK) {
 						if (url[i].path[0])
@@ -432,7 +432,7 @@ Usage: %s <filelist>\n\
 				}
 				if ((err != dp_RES_EMPTY) || (state[i] != STATE_READDATA))
 					break;
-				/* else fall through to READDATA while sock[i] is still set 
+				/* else fall through to READDATA while sock[i] is still set
 				 * to be read, in order to read the rest of the current buffer
 				 * as data.
 				 * If we don't do this and the entirety of the data fit in

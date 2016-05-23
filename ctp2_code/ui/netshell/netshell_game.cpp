@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_ui.h"
@@ -31,7 +20,6 @@ extern CivScenarios *g_civScenarios;
 extern CivApp *g_civApp;
 
 
-
 void EnterMainMenu( void )
 {
 	initialplayscreen_Initialize();
@@ -39,20 +27,17 @@ void EnterMainMenu( void )
 }
 
 
-
 void LeaveMainMenu( void )
 {
-	
+
 	g_ui->AddAction( new DestroyInitialPlayScreenAction );
 }
-
 
 
 void LaunchGame( void )
 {
 	AllinoneWindow *w = g_allinoneWindow;
 
-	
 
 	switch ( w->GetMode() )
 	{
@@ -72,7 +57,7 @@ void LaunchGame( void )
 		break;
 
 	case w->CREATE:
-		
+
 		g_network.SetLaunchFromNetFunc(FALSE);
 
 		if(w->IsScenarioGame()) {
@@ -99,7 +84,7 @@ void LaunchGame( void )
 		break;
 
 	default:
-		
+
 		Assert( FALSE );
 		break;
 	}

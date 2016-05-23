@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ void ProcessCommandLine(int argc, char **argv)
 {
 	char *chptr;
 	int   i;
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
 			/* deal with args that start with - or / */
@@ -107,7 +107,6 @@ A simple command line tcapw database editor.\n");
 	}
 }
 
-
 int main(int argc, char *argv[])
 {
 	tcapw_t *tcapw = NULL;
@@ -118,7 +117,7 @@ int main(int argc, char *argv[])
 	tcapw_uname_t uname1;
 	tcapw_uid_t uid1;
 	wchar_t wcbuf[256];
-	
+
 	dp_result_t res;
 
 	if (argc < 2) {
@@ -133,7 +132,7 @@ Usage: %s [-F=dbfile]\n\
 	}
 
 	/* defaults */
-	strcpy(dbFilename, "prefs.dat");  
+	strcpy(dbFilename, "prefs.dat");
 	action = 0;
 	/* these are all disallowed 'null' values.  If the -C option is
 	 * used, any fields which retain the values below are left alone.
@@ -190,14 +189,11 @@ Usage: %s [-F=dbfile]\n\
 		printf("Unsupported action %c\n", action);
 		break;
 	}
-	
+
 	res = tcapw_close(tcapw);
 	if (res != dp_RES_OK)
 		printf("Error writing dbfile %s: %d\n", dbFilename, res);
 	tcapw_destroy(tcapw);
-	
+
 	return(0);
 }
-
-
-

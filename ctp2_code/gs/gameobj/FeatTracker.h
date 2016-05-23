@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Feat tracking 
+// Description  : Feat tracking
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,19 +43,19 @@
 class	Feat;
 class	FeatTracker;
 
-enum	FEAT_EFFECT 
+enum	FEAT_EFFECT
 {
 	FEAT_EFFECT_NONE						= -1,
-	FEAT_EFFECT_BOAT_MOVEMENT,  
+	FEAT_EFFECT_BOAT_MOVEMENT,
 	FEAT_EFFECT_CITY_DEFENSE_BONUS,
 	FEAT_EFFECT_REDUCE_CITY_WALLS,
 	FEAT_EFFECT_INCREASE_CITY_VISION,
-	FEAT_EFFECT_INCREASE_PRODUCTION, 
-	FEAT_EFFECT_INCREASE_COMMERCE,   
-	FEAT_EFFECT_INCREASE_HAPPINESS,  
+	FEAT_EFFECT_INCREASE_PRODUCTION,
+	FEAT_EFFECT_INCREASE_COMMERCE,
+	FEAT_EFFECT_INCREASE_HAPPINESS,
 	FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY,
 	FEAT_EFFECT_INCREASE_BOAT_VISION,
-	FEAT_EFFECT_INCREASE_SCIENCE, 
+	FEAT_EFFECT_INCREASE_SCIENCE,
 	FEAT_EFFECT_GIVE_MAPS,
 	FEAT_EFFECT_INCREASE_HIT_POINTS,
 	FEAT_EFFECT_SCRIPTED_TURN,
@@ -70,7 +70,7 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3types.h"			// MBCHAR, sint32 
+#include "c3types.h"			// MBCHAR, sint32
 #include "civarchive.h"			// CivArchive
 #include "pointerlist.h"		// PointerList
 #include "Unit.h"				// Unit
@@ -79,7 +79,7 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class Feat 
+class Feat
 {
   public:
 	Feat(sint32 type, sint32 player, sint32 round = USE_CURRENT_ROUND);
@@ -94,10 +94,10 @@ class Feat
 
   private:
 
-	sint32 m_type; 
-	sint32 m_player; 
-	sint32 m_round; 
-	
+	sint32 m_type;
+	sint32 m_player;
+	sint32 m_round;
+
 };
 
 class FeatTracker {
@@ -135,7 +135,7 @@ class FeatTracker {
 
   private:
 	PointerList<Feat> *m_activeList;
-	PointerList<Feat> *m_effectList[FEAT_EFFECT_MAX]; 
+	PointerList<Feat> *m_effectList[FEAT_EFFECT_MAX];
 	bool *m_achieved;
 	bool *m_buildingFeat;
 };
@@ -143,4 +143,3 @@ class FeatTracker {
 extern FeatTracker *g_featTracker;
 
 #endif
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,7 +31,6 @@
 #include "c3.h"
 
 
-
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "c3ui.h"
@@ -43,18 +42,14 @@
 #include "c3_static.h"
 #include "thermometer.h"
 
-
 #include "textbutton.h"
 #include "c3_button.h"
 
-
 #include "c3textfield.h"
-
 
 #include "c3listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
-
 
 #include "c3window.h"
 #include "c3windows.h"
@@ -77,7 +72,6 @@
 extern C3UI			*g_c3ui;
 
 WatchList *g_watchList = NULL;
-
 
 void watchlist_Callback(sint32 arg)
 {
@@ -124,7 +118,7 @@ WatchList::WatchList(WatchListCallback callback, MBCHAR *ldlBlock)
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 	if (AUI_NEWOK(m_window, errcode))
-    {	
+    {
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(FALSE);
@@ -140,7 +134,7 @@ WatchList::~WatchList(void)
     {
 	    g_c3ui->RemoveWindow(m_window->Id());
     }
-	
+
     if (m_list)
     {
 	    m_list->Clear();
@@ -157,7 +151,7 @@ void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, v
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
-	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)) 
+	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
 	WatchList *list = (WatchList *)cookie;
@@ -165,7 +159,7 @@ void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, v
 	WatchListItem *item = (WatchListItem *)list->GetList()->GetSelectedItem();
 
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
-		
+
 	}
 
 	if(!item)
@@ -205,34 +199,33 @@ sint32 WatchList::Initialize(MBCHAR *windowBlock)
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 
-	
+
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "WatchList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, WatchListActionCallback, this);
 	m_list->SetAbsorbancy(FALSE);
 	m_list->Clear();
 
 	Assert( AUI_NEWOK(m_list, errcode) );
-	if ( !AUI_NEWOK(m_list, errcode) ) 
+	if ( !AUI_NEWOK(m_list, errcode) )
 		return -1;
-	
+
 	sprintf(controlBlock, "%s.%s", windowBlock, "NewButton");
 	m_newButton = new c3_Button(&errcode, aui_UniqueId(), controlBlock, WatchListButtonCallback, this);
-	
+
 	sprintf(controlBlock, "%s.%s", windowBlock, "ClearButton");
 	m_clearButton = new c3_Button(&errcode, aui_UniqueId(), controlBlock, WatchListButtonCallback, this);
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "ExitButton");
 	m_exitButton = new c3_Button(&errcode, aui_UniqueId(), controlBlock, WatchListButtonCallback, this);
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return 0;
 }
-	
+
 void WatchList::DisplayWindow()
 {
 	AUI_ERRCODE auiErr;
@@ -241,7 +234,7 @@ void WatchList::DisplayWindow()
 
 	auiErr = g_c3ui->AddWindow(m_window);
 	Assert(auiErr == AUI_ERRCODE_OK);
-	
+
 	keypress_RegisterHandler(this);
 }
 
@@ -268,7 +261,7 @@ sint32 WatchList::UpdateData(void)
 
 	return 0;
 }
-	
+
 void WatchList::AddExpression(char *exp)
 {
 	AUI_ERRCODE retval;
@@ -377,10 +370,9 @@ void WatchListItem::Update(void)
 		m_watching->RemoveHead();
 	}
 
-	
 	sliccmd_add_watch(this);
 
-	if(res != 0) { 
+	if(res != 0) {
 		strcpy(valbuf, "--");
 	}
 

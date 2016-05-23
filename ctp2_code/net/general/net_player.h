@@ -15,7 +15,7 @@ class NetPlayer : public Packetizer
 public:
 	NetPlayer(Player* player);
 	NetPlayer() {}
-	
+
 	void Packetize(uint8* buf, uint16& size);
 	void Unpacketize(uint16 id, uint8* buf, uint16 size);
 private:

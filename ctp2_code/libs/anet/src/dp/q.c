@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*-----------------------------------------------------------------------
  Create a queue.  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-q_t *q_create(void) 
+q_t *q_create(void)
 {
 	q_t	*pq;
 
@@ -116,7 +116,7 @@ int q_nfree(q_t *pq)
 {
 	int nfree = pq->tail - pq->head - 1;
 	if (nfree < 0)
-		nfree += q_MAXELS; 
+		nfree += q_MAXELS;
 	return nfree;
 }
 
@@ -322,4 +322,3 @@ main()
 	exit(0);
 }
 #endif
-

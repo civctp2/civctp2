@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ void ProcessCommandLine(int argc, char **argv)
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
 			/* deal with args that start with - or / */
@@ -80,7 +80,7 @@ void ProcessCommandLine(int argc, char **argv)
 			switch(toupper(argv[i][1])) {
 			case 'D':
 				/*  Turn on some sort of debugging mode */
-				break;				
+				break;
 			case 'I':   /*  Set modem init string */
 				strncpy(modeministr, chptr+1, sizeof(modeministr));
 				modeministr[sizeof(modeministr)-1] = '\0';
@@ -187,7 +187,7 @@ int client_poll(int init)
 	int got_result;
 	int done = FALSE;
 	char *servername = servernames[0];
-	
+
 	static int client_state = 0;
 	static dp_uid_t uid = dp_UID_NONE;
 	static clock_t deadline;
@@ -232,7 +232,7 @@ int client_poll(int init)
 
 	case 20:	   	/* Connect */
 		DPRINT(("client: Connecting... (%d)\n", client_state));
-		err = dpSetGameServerEx(myDP, servername, sessiontype);		
+		err = dpSetGameServerEx(myDP, servername, sessiontype);
 		if (err == dp_RES_OK) {
 			client_state += 10;
 			printf("client: going to state %d\n", client_state);
@@ -243,7 +243,7 @@ int client_poll(int init)
 		DPRINT(("client: Setting username and password (%d)\n", client_state));
 		err = dpAccountLogin(myDP, "user2", "pass2");
 		client_state += 10;
-		printf("client: going to state %d\n", client_state);			
+		printf("client: going to state %d\n", client_state);
 		break;
 
 	case 40:        /* Wait for user2 authorization */
@@ -257,7 +257,7 @@ int client_poll(int init)
 			uid = result.uid;
 			assert(uid != dp_UID_NONE);
 			client_state = 100;
-			printf("client: going to state %d\n", client_state);				
+			printf("client: going to state %d\n", client_state);
 		}
 		break;
 
@@ -279,7 +279,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 115:
 		if (dpReadyToFreeze(myDP) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -292,7 +292,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 120:		/* Connect */
 		DPRINT(("client: Connecting... (%d)\n", client_state));
 		err = dpSetGameServerEx(myDP, servername, sessiontype);
@@ -415,7 +415,7 @@ int client_poll(int init)
 		client_state += 10;
 		printf("client: going to state %d\n", client_state);
 		break;
-		
+
 	case 310:		/* Disconnect */
 		if (dpReadyToFreeze(myDP) != dp_RES_BUSY) {
 			client_state += 5;
@@ -468,7 +468,7 @@ int client_poll(int init)
 		break;
 
 	case 350:  /* Ask for an emailed secret code */
-#if 0		
+#if 0
 		if ((err = dpRequestEmail(myDP)) == dp_RES_OK) {
 			DPRINT(("client: Sent email request (%d)\n", client_state));
 			client_state = 400;
@@ -483,7 +483,7 @@ int client_poll(int init)
 		client_state = 400;  /* skip it since creation should trigger email */
 #endif
 		break;
-		
+
 	case 400:		/* Ready to Disconnect? */
 		DPRINT(("client: Disconnecting (%d)\n", client_state));
 		err = dpSetGameServerEx(myDP, NULL, 0);
@@ -551,7 +551,7 @@ int client_poll(int init)
         DPRINT(("client: sending wrong secret code %s (%d)\n", secretcode+1, client_state));
 		err = dpAccountActivate(myDP, secretcode+1);
 		client_state += 5;
-		printf("client: going to state %d\n", client_state);			
+		printf("client: going to state %d\n", client_state);
 		break;
 
 	case 455:			/* Wait for activation notice */
@@ -575,9 +575,9 @@ int client_poll(int init)
 			DPRINT(("client: sending secret code %s (%d)\n", secretcode, client_state));
 			err = dpAccountActivate(myDP, secretcode);
 			client_state += 3;
-			printf("client: going to state %d\n", client_state);			
+			printf("client: going to state %d\n", client_state);
 		}
-		break;		
+		break;
 
 	case 460:			/* Wait for activation notice */
 		if (got_result) {
@@ -733,7 +733,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 1020:		/* done */
 		done = TRUE;
 		break;
@@ -759,7 +759,7 @@ int client_poll_speedtest(int init)
 	int got_result;
 	int done = FALSE;
 	char *servername;
-	
+
 	static int client_state = 0;
 	static dp_uid_t uid = dp_UID_NONE;
 	static clock_t deadline;
@@ -852,7 +852,7 @@ int client_poll_speedtest(int init)
 			deadline = now + (disconnect_wait * ECLOCKS_PER_SEC)/1000;
 		}
 		break;
-		
+
 	case 115:
 		if (dpReadyToFreeze(myDP) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -881,19 +881,18 @@ int client_poll_speedtest(int init)
 	return done;
 }
 
-
 void tserv_test(int which)
 {
 	dp_result_t err;
 	dp_transport_t transport;
 	char kbbuf[80];
 	char *c;
-	
+
 	c = kbbuf;
 	now = eclock();
 	memset(&transport, 0, sizeof(transport));
 	strcpy(transport.fname, commDLLName);
-	
+
 	printf("Creating dp...\n");
 	/* Initialize the networking layer */
 	DPRINT(("setting sessionId to %x for benefit of serial drivers.\n", commInitReq.sessionId));
@@ -909,7 +908,7 @@ void tserv_test(int which)
 		client_poll_speedtest(1);
 	else
 		client_poll(1);  /* initialize */
-	
+
 	raw_init();
 	while (1) {
 		int charFromUser = 0;
@@ -943,7 +942,7 @@ void tserv_test(int which)
 int main(int argc, char *argv[])
 {
 	int exitCode;
-	
+
 	/* The modem driver and loopback drivers use the random number
 	 * generator, so initialize it here.  Games should do this, too.
 	 */
@@ -953,7 +952,7 @@ int main(int argc, char *argv[])
 	 * program in our exit status.
 	 */
 	exitCode = 0;
-	
+
 	if (argc < 2) {
 		printf("\
 Usage: %s -N=comm.dll [-P=serveraddr][-S=sessionId][-T=disconnect_wait]\n\
@@ -982,7 +981,7 @@ connect to.\n");
 	strcpy(user1, "user2");
 	strcpy(pass1, "pass2");
 	commDLLName[0] = 0;
-	
+
 	ProcessCommandLine(argc, argv);
 
 	if (!commDLLName[0]) {
@@ -1000,6 +999,3 @@ connect to.\n");
 
 	return exitCode;
 }
-
-
-

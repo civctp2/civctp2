@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // None
 //
 //----------------------------------------------------------------------------
@@ -61,19 +61,17 @@ extern CivApp				*g_civApp;
 extern nf_GameSetup			g_gamesetup;
 extern SPNewGameWindow		*g_spNewGameWindow;
 
-
 LoadSaveMapWindow				*g_loadSaveMapWindow = NULL;
 
 static uint32 s_type = LSMS_TOTAL;
 static c3_Static					*s_name					= NULL;
 static aui_StringTable				*s_nameString			= NULL;
 
-
 sint32	loadsavemapscreen_displayMyWindow(uint32 type)
 {
 	AUI_ERRCODE const   retval = loadsavemapscreen_Initialize();
-	
-	if (g_loadSaveMapWindow) 
+
+	if (g_loadSaveMapWindow)
     {
 	    g_loadSaveMapWindow->CleanUpSaveMapInfo();
 		g_loadSaveMapWindow->SetType(type);
@@ -96,10 +94,9 @@ sint32 loadsavemapscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	if ( g_loadSaveMapWindow ) return AUI_ERRCODE_OK; 
+	if ( g_loadSaveMapWindow ) return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[k_AUI_LDL_MAXBLOCK + 1];
@@ -167,7 +164,6 @@ void loadsavemapscreen_LoadGameMap(void)
 	sprintf(path, "%s\\%s", gameMapInfo->path, saveMapInfo->fileName);
 
 
-
 }
 
 
@@ -187,24 +183,20 @@ void loadsavemapscreen_SaveGameMap(void)
 	MBCHAR	fullPath[_MAX_PATH];
 
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_MAP, path)) return;
-	
+
 	sprintf(fullPath, "%s\\%s", path, saveMapInfo->gameMapName);
-	
-	
+
 	if (!c3files_PathIsValid(fullPath)) {
 		if (!c3files_CreateDirectory(fullPath)) {
 			Assert(FALSE);
-			
-			
-			
+
+
 			return;
 		}
 	}
 
-	
 	sprintf(saveMapInfo->pathName, "%s\\%s", fullPath, saveMapInfo->fileName);
 
-	
 	g_loadSaveMapWindow->GetRadarMap(saveMapInfo);
 
 	GameMapFile::SaveGameMap(saveMapInfo->pathName, saveMapInfo);
@@ -216,43 +208,37 @@ void loadsavemapscreen_SaveGameMap(void)
 
 void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	if(loadsavemapscreen_removeMyWindow(action)) {
 		switch(g_loadSaveMapWindow->GetType()) {
 			case LSMS_LOAD_GAMEMAP:		loadsavemapscreen_LoadGameMap();			break;
 			case LSMS_SAVE_GAMEMAP:		loadsavemapscreen_SaveGameMap();			break;
-			default: 
-				Assert(0); 
+			default:
+				Assert(0);
 				break;
 		}
 	}
 
-	
 	spnewgamescreen_update();
 }
-
 
 
 void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
-	
+
+
 
 
 	loadsavemapscreen_removeMyWindow(action) ;
 
-	
 	if ( g_spNewGameWindow ) g_spNewGameWindow->m_useCustomMap = false;
 	spnewgamescreen_update();
 }
-
 
 
 void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -277,9 +263,8 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 	if (!unlink(path))
 #endif // WIN32
 	{
-		
 
-		
+
 		sint32 one = g_loadSaveMapWindow->GetListOne()->GetSelectedItemIndex();
 		sint32 two = g_loadSaveMapWindow->GetListTwo()->GetSelectedItemIndex();
 
@@ -305,27 +290,24 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 }
 
 
-
 void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
 	c3_ListBox	*list = (c3_ListBox *)control;
 	if (list == NULL) return;
 
-	
 	LSMGameMapsListItem *item = (LSMGameMapsListItem *)list->GetSelectedItem();
 	if (item == NULL)
 	{
 		g_loadSaveMapWindow->SetGameMapInfo(NULL);
 
-		
 		g_loadSaveMapWindow->SetType( g_loadSaveMapWindow->GetType() );
 	}
 	else
 	{
-		
+
 		g_loadSaveMapWindow->SetGameMapInfo(item->GetGameMapInfo());
 	}
 
@@ -347,16 +329,14 @@ void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint3
 }
 
 
-
 void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
 	c3_ListBox	*list = (c3_ListBox *)control;
 	if (list == NULL) return;
 
-	
 	LSMSaveMapsListItem *item = (LSMSaveMapsListItem *)list->GetSelectedItem();
 	if (item == NULL)
 	{
@@ -373,7 +353,6 @@ void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint3
 
 		g_loadSaveMapWindow->SetSaveMapInfo(NULL);
 
-		
 		g_loadSaveMapWindow->SetType( g_loadSaveMapWindow->GetType() );
 
 		g_loadSaveMapWindow->GetDeleteButton()->Enable( FALSE );
@@ -383,7 +362,6 @@ void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint3
 		SaveMapInfo	*info = item->GetSaveMapInfo();
 		if (info == NULL) return;
 
-		
 		g_loadSaveMapWindow->SetSaveMapInfo(info);
 
 		g_loadSaveMapWindow->GetOkButton()->Enable( TRUE );

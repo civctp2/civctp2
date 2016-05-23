@@ -41,11 +41,10 @@ protected:
 	SingleListItem() : c3_ListItem() {}
 
 	AUI_ERRCODE InitCommonLdl(MBCHAR const *name, sint32 value, MBCHAR const *ldlBlock);
-	
+
 private:
 	MBCHAR			m_name[256];
 	sint32			m_value;
 };
-
 
 #endif

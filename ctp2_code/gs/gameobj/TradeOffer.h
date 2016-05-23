@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -18,9 +10,9 @@
 
 class TradeOffer : public ID {
 public:
-	TradeOffer () : ID() { return; } ; 
-	TradeOffer (sint32 val) : ID (val) { return; }; 
-	TradeOffer (uint32 val) : ID (val) { return; }; 
+	TradeOffer () : ID() { return; } ;
+	TradeOffer (sint32 val) : ID (val) { return; };
+	TradeOffer (uint32 val) : ID (val) { return; };
 
 	void KillOffer();
 	void Kill() { KillOffer(); }

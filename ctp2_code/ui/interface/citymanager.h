@@ -1,4 +1,3 @@
-
 #ifndef CITY_MANAGER_H__
 #define CITY_MANAGER_H__
 

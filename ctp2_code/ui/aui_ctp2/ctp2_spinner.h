@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -36,11 +36,10 @@
 
 #include "aui_ranger.h"
 
-
 class ctp2_Spinner : public aui_Ranger
 {
 public:
-	
+
 	ctp2_Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -70,5 +69,4 @@ protected:
 	bool                    m_displayValue;
 };
 
-
-#endif 
+#endif

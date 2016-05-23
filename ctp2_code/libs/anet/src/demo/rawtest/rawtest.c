@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -96,7 +96,7 @@ static void chatTest(char *otherPlayer, int broadcast)
 	commSayHiResp_t			cshResp;
 	char					printable[50];
 	char					adrBuf[16];
-	
+
 	printf("chatTest(otherPlayer: %s)\n", otherPlayer);
 
     /*  find out info about this driver */
@@ -139,7 +139,7 @@ static void chatTest(char *otherPlayer, int broadcast)
 		} else {
 			strcpy(printable, otherPlayer);
 		}
-	
+
 		/*  Convert partner's address to binary for use with commSayHi */
 		scanReq.printable = printable;
 		scanReq.address = adrBuf;
@@ -148,7 +148,7 @@ static void chatTest(char *otherPlayer, int broadcast)
 			printf("Unable to scan player address, error: %d\n", scanResp.status);
 			return;
 		}
-	
+
 		/*  Open a comm handle to the partner's address */
 		cshReq.address = adrBuf;
 		cshReq.length = scanResp.length;
@@ -159,7 +159,6 @@ static void chatTest(char *otherPlayer, int broadcast)
 		printf("Got player handle: %x\n", cshResp.player);
 	}
 
-
     for (;;)
     {
         char ch;
@@ -169,39 +168,39 @@ static void chatTest(char *otherPlayer, int broadcast)
         /*  see about receiving data */
 		rxPktReq.buffer = &ch;
 		rxPktReq.size = sizeof(ch);
-		
+
 		/*  Check for any received packets */
 		if (commRxPkt(&rxPktReq, &rxPktResp)) {
 			/*  Make sure this is not a broadcast message from myself. */
 			printf("Packet from: %x\n",rxPktResp.src);
 			if (rxPktResp.src != PLAYER_ME) {
-				putch(ch);						
+				putch(ch);
 				/*  Do a linefeed when we need to */
 				if (ch == 13) putch(10);
 				fflush(stdout);
 				/* sleep(3); */
 			}
 		}
-		
+
 		/*  see about sending data */
 		if (raw_kbhit()) {
 			commTxPktReq_t	txPktReq;
-	
+
 			ch = raw_getc();
 			putch(ch);
 			/*  Do a linefeed when we need to */
 			if (ch == 13) putch(10);
 			fflush(stdout);
-	
+
 			/*  see if user wants to esc */
 			if ((ch == 3) || (ch == 0x1b)) break;
-	
+
 			if (broadcast) txPktReq.dest = PLAYER_BROADCAST;
 			else txPktReq.dest = cshResp.player;
 			txPktReq.buffer = &ch;
 			txPktReq.length = 1;
 			txPktReq.flags  = 0;
-						
+
 			commTxPkt(&txPktReq,NULL);
 			/* sleep(3); */
 		}
@@ -248,8 +247,7 @@ static void packetTest(int packetLen)
 	char		buf[1000];
 	char		ch;
 	/*  rough guess at size of commbuf in packets */
-	int			prestuff=1024/(packetLen+20);	
-
+	int			prestuff=1024/(packetLen+20);
 
 	commTxPktReq_t	txReq;
 	commTxPktResp_t	txResp;
@@ -409,7 +407,6 @@ static void quickTest(int packetLen)
 	/* commRxPktReq_t		rxReq; */
 	/* commRxPktResp_t		rxResp; */
 
-
 	printf("entering quickTest.\n");
 	/*  send a packet so the other side assigns a playerHdl_t */
 	/*  and starts sending packets */
@@ -424,7 +421,6 @@ static void quickTest(int packetLen)
 
 	printf("quicktest done.\n");
 }
-
 
 /* ======================================================================== *
    Function Name: ProcessCommandLine
@@ -552,7 +548,7 @@ int main( int argc, char *argv[] )
     commInitResp_t  commInitResp;
 	commTermReq_t   termReq;
     dp_result_t err;
-    
+
 	#ifdef __MWERKS__
 		argc = ccommand(&argv);
 	#endif
@@ -579,7 +575,7 @@ int main( int argc, char *argv[] )
 	commInitReq.baud = 19200;
 	commInitReq.hwirq = 0;
 	commInitReq.portnum = 1;
-	commInitReq.sessionId = rand() | (rand() << 16);	
+	commInitReq.sessionId = rand() | (rand() << 16);
 	commInitReq.reqLen = sizeof(commInitReq_t);
 
 	ProcessCommandLine(argc, argv);
@@ -597,7 +593,7 @@ int main( int argc, char *argv[] )
 		printf("Unable to load DLL!  Error %d.\n", err);
 		exit(1);
 	}
-	
+
     /*  init comm system */
     if (!commInit(&commInitReq, &commInitResp)) {
 		printf("Unable to init comm system, error: %d\n", commInitResp.status);
@@ -636,7 +632,7 @@ int main( int argc, char *argv[] )
 		/*  Chat via (transport DLL argv[2]) with (user at address argv[3]) */
 		chatTest(adrString, FALSE);
 		break;
-		
+
 	default:
 		raw_end();
 		printf("bogus argument %c\n",cmd);
@@ -655,5 +651,3 @@ int main( int argc, char *argv[] )
 
     return(0);
 }
-
-

@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "textbox.h"
 
@@ -34,7 +21,6 @@
 #include "ldl_file.hpp"
 
 extern C3UI			*g_c3ui;
-
 
 TextBox::TextBox(
 	AUI_ERRCODE *retval,
@@ -81,7 +67,6 @@ TextBox::TextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 TextBox::TextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -122,12 +107,10 @@ TextBox::TextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE TextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon(TRUE);
 }
-
 
 
 AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
@@ -142,9 +125,7 @@ AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
 	aui_Static **itemPtr = m_items;
 
 
-	
 	TextReloadFont();
-
 
 	for (i=0; i<k_AUI_TEXTBOX_MAXITEMS; i++) {
 		(*itemPtr) = NULL;
@@ -166,7 +147,6 @@ AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
 	{
 		AUI_ERRCODE		errcode;
 
-
 		*itemPtr = new c3_Static(
 			&errcode,
 			aui_UniqueId(),
@@ -185,7 +165,6 @@ AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
 }
 
 
-
 AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -194,12 +173,11 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
 
-	
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
-		
+
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );
@@ -209,7 +187,6 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_header = new aui_Header(
 				&errcode,
@@ -228,7 +205,6 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 
 	AddChild( m_header );
 
-	
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
@@ -238,7 +214,6 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
@@ -269,7 +244,6 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-		
         if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
@@ -296,11 +270,11 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-    sint32 maxRangerSize = 
+    sint32 maxRangerSize =
         std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
     if (maxRangerSize)
-		SetRangerSize( maxRangerSize ); 
+		SetRangerSize( maxRangerSize );
 	else
 		RepositionRangers();
 
@@ -311,13 +285,12 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE TextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -326,7 +299,7 @@ AUI_ERRCODE TextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
+
 
 
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
@@ -342,14 +315,13 @@ AUI_ERRCODE TextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 #define k_VERTICALBORDER 5
 #define k_HORIZONTALBORDER 5
 
-
 AUI_ERRCODE TextBox::RepositionItems( void )
 {
 	Assert( m_pane );
 	if ( !m_pane ) return AUI_ERRCODE_INVALIDPARAM;
 
 	sint32 minVertical = m_verticalRanger->GetValueY();
-	sint32 maxVertical = 
+	sint32 maxVertical =
         std::min<sint32>(m_numRows, minVertical + m_itemsPerHeight);
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
@@ -361,7 +333,6 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 			if ( !IsHidden() ) item->Show();
 			item->Move( k_VERTICALBORDER, ( i - minVertical ) * m_maxItemHeight );
 
-			
 			if ( m_widthList->L() ) {
 				item->Resize( m_widthList->GetHead()-k_HORIZONTALBORDER*2, item->Height());
 			}
@@ -381,7 +352,7 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 			ListPos subPosition = item->ChildList()->GetHeadPosition();
 			for ( sint32 j = 1; j < m_numColumns; j++ )
 			{
-				
+
 				if ( !subPosition ) break;
 
 				aui_Item *subItem =
@@ -390,7 +361,6 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 				{
 					subItem->Move( x, 0 );
 
-					
 					ListPos widthPosition = m_widthList->FindIndex( j );
 					if ( widthPosition )
 						subItem->Resize(

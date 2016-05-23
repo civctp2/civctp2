@@ -10,18 +10,18 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Repaired memory leak or illegal access when loading a file with a 
+// - Repaired memory leak or illegal access when loading a file with a
 //   different table size.
 // - Repaired crash when computing the key of a zero-length string.
 //
@@ -40,7 +40,7 @@
 
 template <class T> class StringHashNode {
 public:
-	
+
 	T *m_obj;
 	StringHashNode<T> *m_next;
 
@@ -49,14 +49,14 @@ public:
         m_next  (NULL)
     { ; };
 
-	StringHashNode(ARCHIVE archive) 
+	StringHashNode(ARCHIVE archive)
     :   m_obj   (NULL),
         m_next  (NULL)
 	{
 		Serialize(archive);
 	};
 
-	~StringHashNode() 
+	~StringHashNode()
     {
 		delete m_obj;
         // m_next not deleted (intentional)
@@ -68,7 +68,6 @@ public:
 		if(archive.IsStoring()) {
 
 
-
 			m_obj->Serialize(archive);
 
 			isPresent = (m_next != NULL);
@@ -76,7 +75,6 @@ public:
 			if(m_next)
 				m_next->Serialize(archive);
 		} else {
-
 
 			m_obj = new T(archive);
 			archive >> isPresent;
@@ -192,12 +190,12 @@ template <class T> uint16 StringHash<T>::Key(const char *str)
 	uint16			key = 0;
 	size_t const	len	= strlen(str);
 
-	for (size_t i = 0; (i + 1) < len; ++i) 
+	for (size_t i = 0; (i + 1) < len; ++i)
 	{
 		key = key + static_cast<uint16>((tolower(str[i]) << 8 | tolower(str[i + 1])) + i);
 	}
 
-	if (len > 0) 
+	if (len > 0)
 	{
 		key = key + static_cast<uint16>((tolower(str[len - 1]) << 8) + (len - 1));
 	}

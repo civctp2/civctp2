@@ -1,29 +1,16 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "ActorPath.h"
 
 #include "maputils.h"           // maputils_MapXY2PixelXY
 #include "spriteutils.h"        // spriteutils_DeltaToFacing
 
-
 ActorPath::ActorPath(uint16 numPoints)
 {
 	Assert(numPoints < POINTSPOSTYPE_MAX);
 	if(numPoints >= POINTSPOSTYPE_MAX) return;
-	
+
 	m_numPoints = numPoints;
-	
+
 	m_points = new POINT[numPoints];
 	m_pos = new POINT[numPoints];
 
@@ -36,10 +23,10 @@ ActorPath::ActorPath(uint16 numPoints)
 ActorPath::ActorPath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 {
 	m_numPoints = POINTSPOSTYPE_MAX;
-	
+
 	m_points = new POINT[m_numPoints];
 	m_pos = new POINT[m_numPoints];
-	
+
 	Assert(m_points != NULL && m_pos != NULL);
 	if (m_points == NULL || m_pos == NULL) return;
 
@@ -87,11 +74,11 @@ void ActorPath::CalcPosition(sint32 start, sint32 end, sint32 current, POINT *po
 	Assert(m_points != NULL && m_pos != NULL);
 	if (m_points == NULL || m_pos == NULL) return;
 
-	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_STARTPOS].x, 
-                           m_pos[POINTSPOSTYPE_STARTPOS].y, 
+	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_STARTPOS].x,
+                           m_pos[POINTSPOSTYPE_STARTPOS].y,
 						   m_points[POINTSPOSTYPE_STARTPOS]
                           );
-	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_ENDPOS].x, 
+	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_ENDPOS].x,
                            m_pos[POINTSPOSTYPE_ENDPOS].y,
                            m_points[POINTSPOSTYPE_ENDPOS]
                           );

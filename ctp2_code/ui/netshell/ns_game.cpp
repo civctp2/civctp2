@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,15 +25,13 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "c3.h"
 
 #include "netshell.h"
 #include "ns_game.h"
 
 
-
-ns_Game::ns_Game(NETFunc::Game * game) 
+ns_Game::ns_Game(NETFunc::Game * game)
 :	ns_Object<NETFunc::Game, ns_Game>(game)
 {
 	list.push_back(Struct(ICON,		&m_launched));
@@ -42,7 +40,6 @@ ns_Game::ns_Game(NETFunc::Game * game)
 	list.push_back(Struct(ICON,		&m_closed));
 	list.push_back(Struct(INT,		&m_players));
 };
-
 
 void ns_Game::Update( NETFunc::Game *game ) {
 	SetMine(game->IsCurrentSession());
@@ -53,4 +50,3 @@ void ns_Game::Update( NETFunc::Game *game ) {
 	m_players = game->GetPlayers();
 
 }
-

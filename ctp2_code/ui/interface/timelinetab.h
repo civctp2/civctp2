@@ -1,4 +1,3 @@
-
 // Looks like this is dead file, should be removed
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -18,7 +17,6 @@ class ctp2_ListBox;
 class LineGraph;
 
 
-
 class TimelineTab
 {
 public:
@@ -28,7 +26,6 @@ public:
 	static void Open(void);
 	static void Close(void);
 
-	
 	void UpdateGraph();
 
 private:
@@ -36,28 +33,20 @@ private:
 
 	sint32 m_currentWonderDisplay;
 
-	
 	LineGraph * m_infoGraph;
 
-	
 	double **m_infoGraphData;
 
-	
 	sint32 m_infoYCount;
 
-	
 	ctp2_Window *m_info_window;
 
-	
 	void Show();
 
-	
 	void Hide();
 
-	
 	void LoadData();
 
-	
 	void CleanupGraph();
 
 	void doButtonCallback(ctp2_Button *button);
@@ -66,5 +55,4 @@ private:
 
 };
 
-
-#endif 
+#endif

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_blitter.h"
@@ -15,7 +5,6 @@
 #include "aui_control.h"
 
 #include "aui_dragdropwindow.h"
-
 
 
 aui_DragDropWindow::aui_DragDropWindow(
@@ -42,7 +31,6 @@ aui_DragDropWindow::aui_DragDropWindow(
 }
 
 
-
 AUI_ERRCODE aui_DragDropWindow::InitCommon(
 	aui_Control *dragDropItem,
 	aui_Region *launchPad )
@@ -53,7 +41,6 @@ AUI_ERRCODE aui_DragDropWindow::InitCommon(
 	SetDynamic( TRUE );
 	SetTransparent( TRUE );
 
-	
 	SetDraggable( TRUE );
 	m_grabRegion->Move( 0, 0 );
 	m_grabRegion->Resize( m_width, m_height );
@@ -62,20 +49,18 @@ AUI_ERRCODE aui_DragDropWindow::InitCommon(
 }
 
 
-
 AUI_ERRCODE aui_DragDropWindow::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;
 
 	RECT rect = { 0, 0, m_width, m_height };
 
-	
 	g_ui->TheBlitter()->ColorBlt( surface, &rect, RGB(0,0,0), 0 );
 
 	if ( m_dragDropItem )
@@ -83,7 +68,6 @@ AUI_ERRCODE aui_DragDropWindow::DrawThis(
 		POINT itemPoint = { m_dragDropItem->X(), m_dragDropItem->Y() };
 		m_dragDropItem->ToWindow( &itemPoint );
 
-		
 		BOOL wasHidden = m_dragDropItem->IsHidden();
 		m_dragDropItem->Show();
 
@@ -99,12 +83,10 @@ AUI_ERRCODE aui_DragDropWindow::DrawThis(
 }
 
 
-
 void aui_DragDropWindow::StartDragging( sint32 localX, sint32 localY )
 {
 	if (IsDisabled()) return;
 
-	
 	SetWhichSeesMouse( this );
 
 	m_isDragging = TRUE;
@@ -129,6 +111,5 @@ void aui_DragDropWindow::MouseLDropOutside( aui_MouseEvent *mouseData )
 
 	aui_Window::MouseLDropOutside( mouseData );
 
-	
 	SetWhichSeesMouse( NULL );
 }

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -84,9 +84,9 @@ enum DQITEM_TYPE {
 	DQITEM_FACEOFF,
 	DQITEM_TERMINATE_FACEOFF,
 	DQITEM_TERMINATE_SOUND,
-	
+
 	DQITEM_INVOKE_THRONE_ROOM,
-	
+
 	DQITEM_INVOKE_RESEARCH_ADVANCE,
 
 	DQITEM_BEGIN_SCHEDULER,
@@ -119,9 +119,9 @@ enum SEQ_ACTOR {
 #define k_TRANSPORTREMOVEONLY -1
 #define k_TRANSPORTADDONLY -2
 
-#define k_TIME_LOG_SIZE				30			
+#define k_TIME_LOG_SIZE				30
 #define k_DEFAULT_FPS				10
-#define k_ELAPSED_CEILING			100			
+#define k_ELAPSED_CEILING			100
 
 //----------------------------------------------------------------------------
 //
@@ -137,7 +137,7 @@ enum SEQ_ACTOR {
 #include "gamesounds.h"
 #include "Unit.h"               // Unit, SPECATTACK
 
-class TradeRoute; 
+class TradeRoute;
 class UnitActor;
 class ProjectileActor;
 class EffectActor;
@@ -153,7 +153,6 @@ template <class T> class tech_WLList;
 //----------------------------------------------------------------------------
 
 typedef void (DQHandler)(DQAction *action, Sequence *seq, DHEXECUTE executeType);
-
 
 
 class DQItem {
@@ -181,15 +180,15 @@ public:
 
 
 
-class Sequence 
+class Sequence
 {
 public:
-	Sequence(sint32 seqID = 0) 
+	Sequence(sint32 seqID = 0)
     :
         m_sequenceID    (seqID),
         m_refCount      (0),
         m_item          (NULL)
-	{ 
+	{
 		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = FALSE;
 		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = FALSE;
 	}
@@ -228,7 +227,6 @@ public:
 
 	Sequence		*NewSequence(void);
 
-	
 	void			UpdateTimingClock(void);
 	void			Process(void);
 	void			PauseDirector(BOOL pause);
@@ -236,7 +234,7 @@ public:
 #ifdef _DEBUG
 	void			DumpItem(DQItem *item);
 	void			DumpInfo(void);
-#endif 
+#endif
 
 	void			HandleNextAction(void);
 
@@ -253,33 +251,31 @@ public:
 
 	bool			TileIsVisibleToPlayer(MapPoint &pos);
 
-	
 	bool			IsProcessing();
 
-	
-	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported); 
+	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported);
 
     void AddMove
     (
-        Unit                mover, 
-        MapPoint const &    oldPos, 
-        MapPoint const &    newPos, 
-        sint32              numRevealed, 
+        Unit                mover,
+        MapPoint const &    oldPos,
+        MapPoint const &    newPos,
+        sint32              numRevealed,
         UnitActor **        revealedActors,
-        sint32              numRest, 
-        UnitActor **        restOfStack, 
-        bool                isTransported, 
+        sint32              numRest,
+        UnitActor **        restOfStack,
+        bool                isTransported,
         sint32              soundID
     );
 
 	void AddTeleport
     (
-        Unit                top, 
-        MapPoint const &    oldPos, 
-        MapPoint const &    newPos, 	
-        sint32              numRevealed, 
+        Unit                top,
+        MapPoint const &    oldPos,
+        MapPoint const &    newPos,
+        sint32              numRevealed,
         UnitActor **        revealedActors,
-		sint32              arraySize, 
+		sint32              arraySize,
         UnitActor **        moveActors
     );
 
@@ -296,10 +292,10 @@ public:
 	void			AddShow(Unit hider);
 	void			AddWork(Unit worker);
 	void			AddFastKill(Unit dead);
-	void			AddRemoveVision(const MapPoint &pos, double range);	
-	void			AddAddVision(const MapPoint &pos, double range);		
-	void			AddSetVisibility(UnitActor *actor, uint32 visibility);	
-	void			AddSetOwner(UnitActor *actor, sint32 owner);	
+	void			AddRemoveVision(const MapPoint &pos, double range);
+	void			AddAddVision(const MapPoint &pos, double range);
+	void			AddSetVisibility(UnitActor *actor, uint32 visibility);
+	void			AddSetOwner(UnitActor *actor, sint32 owner);
 	void			AddSetVisionRange(UnitActor *actor, double range);
 	void			AddCombatFlash(MapPoint const & pos);
 	void			AddCopyVision(void);
@@ -316,12 +312,11 @@ public:
 	void			AddTerminateFaceoff(Unit &faceroffer);
 	void			AddTerminateSound(Unit &unit);
 	void			AddInvokeThroneRoom(void);
-	void			AddInvokeResearchAdvance(MBCHAR *text);	
+	void			AddInvokeResearchAdvance(MBCHAR *text);
 	void            AddBeginScheduler(sint32 player);
 
 	void			ActiveUnitAdd(UnitActor *unitActor);
 	void			ActiveUnitRemove(UnitActor *unitActor);
-
 
 	void			ActiveEffectAdd(EffectActor *effectActor);
 	void			ActiveEffectRemove(EffectActor *effectActor);
@@ -352,13 +347,11 @@ public:
 
 	void			NextPlayer(BOOL forcedUpdate = FALSE);
 
-	
 	uint32			GetMasterCurTime(void) {return m_masterCurTime;}
 	void			SetMasterCurTime(uint32 val) {m_masterCurTime = val;}
 	sint32			GetAverageFPS(void) const { return m_averageFPS; }
 
-	
-	void		Kill(UnitActor *actor);	
+	void		Kill(UnitActor *actor);
 	void        FastKill(UnitActor *actor);
 
 	void        FastKill(EffectActor *actor);
@@ -378,29 +371,27 @@ public:
 	void NotifyResync();
 
 
-
 	tech_WLList<UnitActor *>		*m_activeUnitList;
 
 	tech_WLList<EffectActor *>		*m_activeEffectList;
-	tech_WLList<TradeActor *>		*m_tradeActorList; 
+	tech_WLList<TradeActor *>		*m_tradeActorList;
 
-	BOOL							m_nextPlayer; 
+	BOOL							m_nextPlayer;
 
-	
-	uint32							m_masterCurTime;			
-	sint32							m_lastTickCount;			
-	sint32							m_timeLog[k_TIME_LOG_SIZE];	
-	sint32							m_timeLogIndex;				
-	sint32							m_averageElapsed;			
+	uint32							m_masterCurTime;
+	sint32							m_lastTickCount;
+	sint32							m_timeLog[k_TIME_LOG_SIZE];
+	sint32							m_timeLogIndex;
+	sint32							m_averageElapsed;
 	sint32							m_averageFPS;
 
-	BOOL							m_actionFinished;			
-																
-	BOOL							m_paused;
-	BOOL							m_processingActiveUnits;	
-	BOOL							m_processingActiveEffects;	
+	BOOL							m_actionFinished;
 
-	
+	BOOL							m_paused;
+	BOOL							m_processingActiveUnits;
+	BOOL							m_processingActiveEffects;
+
+
 
 
 
@@ -456,4 +447,4 @@ DQHandler dh_invokeThroneRoom;
 DQHandler dh_invokeResearchAdvance;
 DQHandler dh_beginScheduler;
 
-#endif 
+#endif

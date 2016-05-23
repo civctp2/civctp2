@@ -166,7 +166,7 @@ void NetDipResponse::Packetize(uint8 *buf, uint16 &size)
 	PUSHLONG(m_resp.receiverId);
 	PUSHLONG(m_resp.type);
 	netdiplomacy_PacketizeProposalData(m_resp.counter, buf, size);
-	netdiplomacy_PacketizeThreatData(m_resp.threat, buf, size);	
+	netdiplomacy_PacketizeThreatData(m_resp.threat, buf, size);
 }
 
 void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
@@ -201,7 +201,7 @@ void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		execute = false;
 	}
 
-	if(g_network.IsClient() && 
+	if(g_network.IsClient() &&
 	   !g_network.IsLocalPlayer(m_resp.senderId) &&
 	   !g_network.IsLocalPlayer(m_resp.receiverId)) {
 		execute = false;
@@ -226,7 +226,7 @@ void NetDipResponse::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 	}
-	
+
 }
 
 void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
@@ -236,27 +236,27 @@ void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 	PUSHID(k_PACKET_DIP_AGREEMENT_MATRIX_ID);
 	PUSHSHORT(AgreementMatrix::s_agreements.GetMaxPlayers());
 
-	for (uint8 p1 = 0; p1 < k_MAX_PLAYERS; p1++) 
+	for (uint8 p1 = 0; p1 < k_MAX_PLAYERS; p1++)
 	{
 		if(!g_player[p1])
 			continue;
 
-		for (uint8 p2 = 0; p2 < k_MAX_PLAYERS; p2++) 
+		for (uint8 p2 = 0; p2 < k_MAX_PLAYERS; p2++)
 		{
 			if(!g_player[p2])
 				continue;
 			if(p2 == p1)
 				continue;
 
-			for (uint8 prop = PROPOSAL_NONE + 1; prop <PROPOSAL_MAX; ++prop) 
+			for (uint8 prop = PROPOSAL_NONE + 1; prop <PROPOSAL_MAX; ++prop)
 			{
 				ai::Agreement ag = AgreementMatrix::s_agreements.GetAgreement(p1, p2, (PROPOSAL_TYPE)prop);
-				if (ag != AgreementMatrix::s_badAgreement) 
+				if (ag != AgreementMatrix::s_badAgreement)
 				{
 					PUSHBYTE(p1);
 					PUSHBYTE(p2);
 					PUSHBYTE(prop);
-					
+
 					PUSHLONG(ag.id);
 					PUSHBYTE(static_cast<uint8>(ag.senderId));
 					PUSHBYTE(static_cast<uint8>(ag.receiverId));
@@ -269,7 +269,7 @@ void NetAgreementMatrix::Packetize(uint8 *buf, uint16 &size)
 			}
 		}
 	}
-	
+
 	PUSHBYTE(END_MARKER);
 }
 
@@ -282,7 +282,7 @@ void NetAgreementMatrix::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	sint16  maxPlayers;
 	PULLSHORT(maxPlayers);
-	if (maxPlayers != AgreementMatrix::s_agreements.GetMaxPlayers()) 
+	if (maxPlayers != AgreementMatrix::s_agreements.GetMaxPlayers())
     {
 		AgreementMatrix::s_agreements.Resize(maxPlayers);
 	}
@@ -290,7 +290,7 @@ void NetAgreementMatrix::Unpacketize(uint16 id, uint8 *buf, uint16 size)
     uint8   p1; // player, or end marker
 	PULLBYTE(p1);
 
-	while (END_MARKER != p1) 
+	while (END_MARKER != p1)
     {
         uint8           p2;
         uint8           prop;
@@ -314,5 +314,3 @@ void NetAgreementMatrix::Unpacketize(uint16 id, uint8 *buf, uint16 size)
         PULLBYTE(p1);
 	}
 }
-
-	

@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #ifndef __FS_FUZZY_H__
@@ -7,27 +5,25 @@
 
 #include "FrameState.h"
 
-class AiMain; 
-class CivArchive; 
+class AiMain;
+class CivArchive;
 
-class FSFuzzyBeginTurnPre : public FrameState { 
+class FSFuzzyBeginTurnPre : public FrameState {
 private:
 
-    friend AiMain; 
+    friend AiMain;
 
 public:
-	
 
-    void Serialize(CivArchive &archive); 
-   
-    
+    void Serialize(CivArchive &archive);
+
     BOOL Execute(AiMain *ai, sint32 &branch, FILE *fout);
 
     void ComputeLandContinentFull(AiMain *ai, double &continent_full, bool include_enemies);
 
 } ;
 
-class FSFuzzyBeginTurnDiplomacy : public FrameState{ 
+class FSFuzzyBeginTurnDiplomacy : public FrameState{
 
 private:
     void ComputeNormalizedStr(AiMain *ai);
@@ -36,24 +32,24 @@ private:
 
 public:
 
-     void Serialize(CivArchive &archive); 
+     void Serialize(CivArchive &archive);
 
      BOOL Execute(AiMain *ai, sint32 &branch, FILE *fout);
 
 };
 
-class FSFuzzyBeginTurnRules : public FrameState { 
+class FSFuzzyBeginTurnRules : public FrameState {
 
-public: 
+public:
 
      BOOL m_registered_variables;
 
      FSFuzzyBeginTurnRules() { m_registered_variables = FALSE; }
 
-     void Serialize(CivArchive &archive); 
+     void Serialize(CivArchive &archive);
 
      BOOL Execute(AiMain *ai, sint32 &branch, FILE *fout);
-}; 
+};
 
 FRAMESTATE(FSFuzzyBeginTurnPost);
 

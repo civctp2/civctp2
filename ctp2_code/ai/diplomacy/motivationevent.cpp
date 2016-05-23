@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy motivation events
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -29,7 +29,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "profileai.h"
 
@@ -56,7 +55,6 @@
 #include "pollution.h"
 extern Pollution *g_thePollution;
 
-
 STDEHANDLER(MotivationEvent)
 {
 	sint32 playerId;
@@ -82,13 +80,11 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	PLAYER_INDEX playerId;
 
-	
 	sint32 defend_goal_type = CtpAi::GetGoalDefendIndex();
 	Assert(defend_goal_type >= 0);
 	if (defend_goal_type < 0)
 		return GEV_HD_Continue;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -96,8 +92,7 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 	const Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	Motivation motivation;
 
-	
-	sint32 at_risk_value = 
+	sint32 at_risk_value =
 		scheduler.GetValueUnsatisfiedGoals(static_cast<GOAL_TYPE>(defend_goal_type));
 	Goal_ptr goal_ptr = scheduler.GetHighestPriorityGoal(static_cast<GOAL_TYPE>(defend_goal_type), false);
 
@@ -107,8 +102,7 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	sint32 total_value = MapAnalysis::GetMapAnalysis().TotalValue(playerId);
 
-	
-	
+
 	if (at_risk_value > total_value * 0.10)
 	{
 		sint32 priority;
@@ -130,7 +124,7 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	if (adviceId < 0)
 	{
 		char motivation_name[] = "MOTIVATION_DESIRE_GOLD_ADVICE";
-		BOOL found = 
+		BOOL found =
 			g_theStringDB->GetStringID(motivation_name, adviceId);
 		Assert(found);
 	}
@@ -146,7 +140,7 @@ STDEHANDLER(DesireGold_MotivationEvent)
 	bool low_reserves = (needed_reserves < g_player[playerId]->GetGold());
 	bool capitalist_personality = (diplomat.GetPersonality()->GetDiscoveryEconomic());
 
-	if ( rank < 75 || low_reserves || capitalist_personality) 
+	if ( rank < 75 || low_reserves || capitalist_personality)
 	{
 		sint32 priority;
 		diplomat.GetCurrentStrategy().GetDesireGold(priority);
@@ -182,7 +176,7 @@ STDEHANDLER(DesireMakeFriend_MotivationEvent)
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
-	bool friendly_personality = 
+	bool friendly_personality =
 		diplomat.GetPersonality()->GetDiscoveryDiplomatic() ||
 		diplomat.GetPersonality()->GetConquestPassive();
 
@@ -285,16 +279,16 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	Motivation motivation;
-	
+
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
-	bool agressive_personality = 
+	bool agressive_personality =
 		diplomat.GetPersonality()->GetAlignmentEvil() ||
 		diplomat.GetPersonality()->GetDiscoveryMilitary() ||
 		diplomat.GetPersonality()->GetConquestAgressive();
 
-	bool friendly_personality = 
+	bool friendly_personality =
 		diplomat.GetPersonality()->GetDiscoveryDiplomatic() ||
 		diplomat.GetPersonality()->GetConquestPassive();
 
@@ -363,7 +357,7 @@ STDEHANDLER(FearRank_MotivationEvent)
 
 	rank = g_player[playerId]->GetRank(STRENGTH_CAT_TRADE);
 
-	if ( rank < 75 || 
+	if ( rank < 75 ||
 		 (rank < 50 && diplomat.GetPersonality()->GetDiscoveryEconomic()) )
 	{
 		diplomat.GetCurrentStrategy().GetFearTradeRank(priority);
@@ -420,41 +414,41 @@ STDEHANDLER(FearPollution_MotivationEvent)
 	return GEV_HD_Continue;
 }
 
-void MotivationEventCallbacks::AddCallbacks() 
+void MotivationEventCallbacks::AddCallbacks()
 {
-	g_gevManager->AddCallback(GEV_ComputeMotivations, 
-							  GEV_PRI_Primary, 
+	g_gevManager->AddCallback(GEV_ComputeMotivations,
+							  GEV_PRI_Primary,
 							  &s_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_ThreatenedCity_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_DesireGold_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_DesireMakeFriend_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_StopPiracy_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_EnlistFriends_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_PressAdvantage_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_FearRank_MotivationEvent);
 
 	g_gevManager->AddCallback(GEV_ComputeMotivations,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_FearPollution_MotivationEvent);
 }

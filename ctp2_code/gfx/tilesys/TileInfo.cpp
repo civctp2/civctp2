@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -28,7 +28,7 @@
 //
 /// \file   TileInfo.cpp
 /// \brief  Tile information (definitions)
- 
+
 #include "c3.h"
 #include "TileInfo.h"
 
@@ -70,7 +70,7 @@ TileInfo::TileInfo(TileInfo *copy)
 {
 	*this = *copy;
 
-	if (copy->m_goodActor) 
+	if (copy->m_goodActor)
     {
 		m_goodActor = new GoodActor(*copy->m_goodActor);
 	}
@@ -78,7 +78,7 @@ TileInfo::TileInfo(TileInfo *copy)
 }
 
 TileInfo::TileInfo(CivArchive &archive)
-:   
+:
     m_riverPiece    (-1),
     m_megaInfo      (0),
     m_terrainType   (0),
@@ -104,7 +104,6 @@ TILEINDEX TileInfo::GetTileNum(void)
 		return m_tileNum;
 	}
 
-	
 	if (!g_player[g_selected_item->GetVisiblePlayer()]) return m_tileNum;
 
 	if(g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar) {
@@ -127,8 +126,8 @@ void TileInfo::SetGoodActor(sint32 index, MapPoint const & pos)
 {
     delete m_goodActor;
 	m_goodActor = new GoodActor(index, pos);
-	
-	if (g_theProfileDB->IsGoodAnim()) 
+
+	if (g_theProfileDB->IsGoodAnim())
 	{
 		m_goodActor->FullLoad();
 	}
@@ -146,7 +145,7 @@ void TileInfo::Serialize(CivArchive &archive)
 
 	if(archive.IsStoring()) {
 		DPRINTF(k_DBG_GRAPHICS, ("%d,%d,%d,%d, %d,%d,%d,%d\n",
-								 m_riverPiece, m_megaInfo, 
+								 m_riverPiece, m_megaInfo,
 								 m_terrainType, m_tileNum,
 								 m_transitions[0], m_transitions[1],
 								 m_transitions[2], m_transitions[3]));
@@ -155,7 +154,7 @@ void TileInfo::Serialize(CivArchive &archive)
 		archive << m_terrainType;
 		archive << m_tileNum;
 		archive << m_transform;
-		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++) 
+		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++)
         {
 			archive << m_transitions[i];
 		}
@@ -169,7 +168,7 @@ void TileInfo::Serialize(CivArchive &archive)
 		archive >> m_terrainType;
 		archive >> m_tileNum;
 		archive >> m_transform;
-		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++) 
+		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++)
         {
 			archive >> m_transitions[i];
 		}

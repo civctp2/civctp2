@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -70,7 +70,6 @@
 #define Report(x) { fprintf(stderr, "%s\n", x); }
 #endif
 
-
 typedef void (* CivExceptionFunction) (void);
 
 #define k_DBG_ALL               0xffffffff
@@ -92,7 +91,6 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DBG_MAPANALYSIS       0x00004000
 #define k_DBG_ASTAR             0x00008000
 #define k_DBG_GOVERNOR          0x00010000
-
 
 #define k_DEBUG_OWNER_NONE          0
 #define k_DEBUG_OWNER_CRC           1

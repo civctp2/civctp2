@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -113,9 +113,7 @@ public:
 
 	const Army & Get_Army() const { return m_army; };
 
-
 	PLAYER_INDEX Get_Player_Number() const { return m_playerId; };
-
 
 	MapPoint Get_Pos() const { return m_army.IsValid() ? m_army->RetPos() : MapPoint(); };
 
@@ -125,9 +123,7 @@ public:
 
 	bool CanMove() const { return m_army.IsValid() && m_army->CanMove(); };
 
-
 	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
-
 
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path );
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost);
@@ -150,15 +146,11 @@ public:
 
 	bool Can_Execute_Order(const sint32 & order_type) const;
 
-
 	void Execute_Order(const sint32 & order_type, const MapPoint & order_pos);
-
 
 	void Group_Order();
 
-
 	void Group_With( Agent_ptr second_army );
-
 
 	void Ungroup_Order();
 

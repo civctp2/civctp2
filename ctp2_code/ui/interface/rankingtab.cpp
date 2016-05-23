@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -58,20 +58,17 @@
 #include "Strengths.h"
 #include "TurnCnt.h"            // g_turn
 
-
 extern C3UI *g_c3ui;
 extern PointerList<Player>      *g_deadPlayer;
 
 static sint32			s_minRound = 0;
 
 
-
 RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
-
 RankingTab::RankingTab(ctp2_Window *parent)
-:   
+:
     m_line_graph         (true), // Has to be set again
     m_infoGraph          (static_cast<LineGraph *>(aui_Ldl::GetObject(
                           "InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
@@ -134,55 +131,45 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	}
 }
 
-
 void RankingTab::Add_Dropdown_Category(char * category)
 {
-	
-	ctp2_ListItem * listItem = 
+
+	ctp2_ListItem * listItem =
 	    static_cast<ctp2_ListItem*>(aui_Ldl::BuildHierarchyFromRoot("RankingListItem"));
 
-	
 	ctp2_Static *label = static_cast<ctp2_Static*>(
 		listItem->GetChildByIndex(0));
 
-	
 	label->SetText(g_theStringDB->GetNameStr(category));
 
-	
 	m_rankingDropDown->AddItem(listItem);
 
-	
 	m_rankingDropDown->SetSelectedItem(0);
 }
 
 
-
 void RankingTab::SetLineGraph( bool line_graph )
 {
-	
+
 	m_line_graph = line_graph;
 
-	
 	if (m_line_graph)
 	{
-		
+
 		m_infoGraph->SetGraphType(GRAPH_TYPE_LINE);
 
-		
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_ZEROSUM_BUTTON"));
 
-	} 
+	}
 	else
 	{
-		
+
 		m_infoGraph->SetGraphType(GRAPH_TYPE_ZEROSUM);
 
-		
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
 
 	}
 }
-
 
 void RankingTab::Open(void)
 {
@@ -195,38 +182,33 @@ void RankingTab::Open(void)
 void RankingTab::Close(void)
 {
 
-
 }
 
 
 void RankingTab::Show()
 {
-	
+
 	m_lineOrZeroSumButton->Show();
 }
 
-
 void RankingTab::Hide()
 {
-	
+
 	m_lineOrZeroSumButton->Hide();
 }
 
-
 void RankingTab::LoadData()
 {
-	
+
 	UpdateGraph();
 
-	
 	UpdatePlayerList();
 
 }
 
-
 void RankingTab::CleanupGraph()
 {
-	
+
 	if (m_infoGraphData)
 	{
 		for (sint32 i = 0 ; i < m_infoYCount; ++i)
@@ -238,7 +220,6 @@ void RankingTab::CleanupGraph()
 		m_infoYCount    = 0;
 	}
 }
-
 
 void RankingTab::UpdateGraph()
 {
@@ -273,16 +254,14 @@ void RankingTab::UpdatePlayerList( void )
 
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(ldlBlock, "InfoPlayerListItem");
-	
+
 	AUI_ERRCODE	retval;
 	MBCHAR strbuf[256];
 
 	sint32 color = 0;
 
-	
 	LineGraphData * myData = m_infoGraph->GetData();
 
-	
 	sint32 lineIndex = 0;
 	for (sint32 i = 1 ; i < k_MAX_PLAYERS ; i++)
 	{
@@ -300,7 +279,7 @@ void RankingTab::UpdatePlayerList( void )
 			}
 
 			Civilisation * civ = p->GetCivilisation();
-			if (civ && g_theCivilisationPool->IsValid(*civ)) 
+			if (civ && g_theCivilisationPool->IsValid(*civ))
 			{
 				civ->GetSingularCivName(strbuf);
 				m_infoPlayerList->AddItem
@@ -317,7 +296,7 @@ void RankingTab::UpdatePlayerList( void )
 	)
 	{
 		Player * p = walk.GetObj();
-		if (p) 
+		if (p)
 		{
 			if (myData)
 			{
@@ -329,7 +308,7 @@ void RankingTab::UpdatePlayerList( void )
 			}
 
 			Civilisation * civ = p->GetCivilisation();
-			if (civ  && g_theCivilisationPool->IsValid(*civ)) 
+			if (civ  && g_theCivilisationPool->IsValid(*civ))
 			{
 				civ->GetSingularCivName(strbuf);
 				m_infoPlayerList->AddItem
@@ -338,7 +317,6 @@ void RankingTab::UpdatePlayerList( void )
 		}
 	}
 }
-
 
 
 void RankingTab::SelectRankingActionCallback(aui_Control *control,
@@ -354,7 +332,6 @@ void RankingTab::SelectRankingActionCallback(aui_Control *control,
 }
 
 
-
 void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
@@ -367,7 +344,6 @@ void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 		s_current_ranking_tab->UpdateGraph();
 	}
 }
-
 
 RankingTab::~RankingTab(void)
 {

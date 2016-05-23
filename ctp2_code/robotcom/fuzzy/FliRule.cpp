@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "FliRule.h"
 #include "FliSetFunc.h"
@@ -30,11 +28,11 @@ FliRule::FliRule(uint8 *code, sint32 codelen,
 
 	PointerList<FliSymbol>::Walker walk(m_outputSymbols);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
     while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		walk.GetObj()->AddRule(m_type);
 		walk.Next();
 	}
@@ -46,20 +44,20 @@ Assert(++finite_loop < 100000);
 
 FliRule::~FliRule()
 {
-    if(m_inputSymbols) { 
+    if(m_inputSymbols) {
 		delete m_inputSymbols;
-        m_inputSymbols = NULL; 
-    } 
+        m_inputSymbols = NULL;
+    }
 
-    if(m_outputSymbols) { 
+    if(m_outputSymbols) {
 		delete m_outputSymbols;
-        m_outputSymbols = NULL; 
-    } 
+        m_outputSymbols = NULL;
+    }
 
-    if(m_code) { 
+    if(m_code) {
 		delete [] m_code;
-        m_code = NULL; 
-    } 
+        m_code = NULL;
+    }
 
 	if(m_when) {
 		m_when->Release();
@@ -78,11 +76,11 @@ BOOL FliRule::DependanciesResolved()
 {
 	PointerList<FliSymbol>::Walker walk(m_inputSymbols);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
     while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		if(!walk.GetObj()->DependanciesResolved(m_type)) {
 			return FALSE;
 		}
@@ -95,18 +93,18 @@ void FliRule::ResolveDependancies()
 {
 	PointerList<FliSymbol>::Walker walk(m_outputSymbols);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
     while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		walk.GetObj()->RemoveDependance(m_type);
 		walk.Next();
 	}
 }
 
-sint32 int_time; 
-sint32 def_time; 
+sint32 int_time;
+sint32 def_time;
 void FliRule::Evaluate(FliEngine *fli_engine, const sint32 module)
 {
 #ifdef _DEBUG
@@ -114,30 +112,28 @@ void FliRule::Evaluate(FliEngine *fli_engine, const sint32 module)
 		m_inputStrings->DeleteAll();
 	}
 #endif
-sint32 start_time = 0; 
- start_time = 0; 
+sint32 start_time = 0;
+ start_time = 0;
 
-start_time = GetTickCount(); 
+start_time = GetTickCount();
 
-	
 	if(!m_when || m_when->Evaluate()) {
 		Interpret(fli_engine, module);
 	}
 
-int_time += GetTickCount() - start_time; 
+int_time += GetTickCount() - start_time;
 
-	
-	
+
 	PointerList<FliSymbol>::Walker walk(m_outputSymbols);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-start_time = GetTickCount(); 
+start_time = GetTickCount();
 
     while(walk.IsValid()) {
-Assert(++finite_loop < 100000); 
-		if(walk.GetObj()->FireRule(m_type) == 
+Assert(++finite_loop < 100000);
+		if(walk.GetObj()->FireRule(m_type) ==
 		   walk.GetObj()->NumRules(m_type)) {
 			fli_engine->Defuzzify(module, walk.GetObj(), k_NUM_DEFUZZ_SAMPLES);
 #ifdef _DEBUG
@@ -148,30 +144,29 @@ Assert(++finite_loop < 100000);
 		}
 		walk.Next();
 	}
-def_time += GetTickCount() - start_time; 
+def_time += GetTickCount() - start_time;
 }
 
-sint32 g_str_stack_idx; 
-char g_str_stack[10][512]; 
+sint32 g_str_stack_idx;
+char g_str_stack[10][512];
 
 void PushStr(char *str)
-{ 
-    Assert(g_str_stack_idx < 10); 
-    strcpy(g_str_stack[g_str_stack_idx], str); 
-    g_str_stack_idx++; 
-} 
+{
+    Assert(g_str_stack_idx < 10);
+    strcpy(g_str_stack[g_str_stack_idx], str);
+    g_str_stack_idx++;
+}
 void PopStr(char *str)
 {
     g_str_stack_idx--;
-    if (g_str_stack_idx  < 0) { 
-        strcpy(str, " "); 
-        g_str_stack_idx=0; 
-    } else { 
-        strcpy(str, g_str_stack[g_str_stack_idx]); 
+    if (g_str_stack_idx  < 0) {
+        strcpy(str, " ");
+        g_str_stack_idx=0;
+    } else {
+        strcpy(str, g_str_stack[g_str_stack_idx]);
     }
-    
-} 
 
+}
 
 void FliRule::Interpret(FliEngine *fli_engine, const sint32 module)
 {
@@ -184,10 +179,10 @@ void FliRule::Interpret(FliEngine *fli_engine, const sint32 module)
 	double tmpval;
 
 	BOOL error = FALSE;
-    BOOL executing = TRUE; 
+    BOOL executing = TRUE;
 	double scalar=0.0;
-    double oldscalar = 1.0; 
-    double dx = 0.000001; 
+    double oldscalar = 1.0;
+    double dx = 0.000001;
 #ifdef _DEBUG
 	char tmpstr[2048];
     char rule_str[2048];
@@ -195,7 +190,7 @@ void FliRule::Interpret(FliEngine *fli_engine, const sint32 module)
     char str2[512];
     g_str_stack_idx=0;
 	if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-        rule_str[0]=0; 
+        rule_str[0]=0;
     }
 #endif
 
@@ -203,10 +198,10 @@ void FliRule::Interpret(FliEngine *fli_engine, const sint32 module)
 
     FLOP_TYPE op;
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 	while((codePtr < m_code + m_codelen) && !error && executing) {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
 		op = FLOP_TYPE(*codePtr++);
 		switch(op) {
 			case FLOP_NOP:
@@ -220,11 +215,11 @@ Assert(++finite_loop < 100000);
 					error = TRUE;
 					break;
 				}
-				if(func->IsInputFunction() && 
+				if(func->IsInputFunction() &&
 				   !func->GetVariable()->IsInitializedForSection(module)) {
-					fli_engine->ReportDBError("FLI_NOT_INITIALIZED_WARNING", 
+					fli_engine->ReportDBError("FLI_NOT_INITIALIZED_WARNING",
 											  func->GetVariable()->GetName(),
-											  func->GetName() + 4, 
+											  func->GetName() + 4,
 											  fli_engine->GetSectionName(module));
 				}
 				tmpval = func->Evaluate(dx);
@@ -232,22 +227,22 @@ Assert(++finite_loop < 100000);
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
 
-                    switch (func->GetType()) { 
-                    case SFTYPE_RIGHT: sprintf (str1, "right"); break; 
-                    case SFTYPE_LEFT: sprintf (str1, "left"); break; 
-                    case SFTYPE_TRI: sprintf (str1, "tri"); break; 
-                    case SFTYPE_SPIKE: sprintf (str1, "spike"); break; 
+                    switch (func->GetType()) {
+                    case SFTYPE_RIGHT: sprintf (str1, "right"); break;
+                    case SFTYPE_LEFT: sprintf (str1, "left"); break;
+                    case SFTYPE_TRI: sprintf (str1, "tri"); break;
+                    case SFTYPE_SPIKE: sprintf (str1, "spike"); break;
                     default:
-                        Assert(0); 
-                    } 
+                        Assert(0);
+                    }
 
 					sprintf(tmpstr, "Input %40s(%5s,%4.2f,%4.2f)=%4.2lf because %s=%4.2lf\n",
 							func->GetName()+4,
-                            str1, 
-                            func->GetCenter(), 
+                            str1,
+                            func->GetCenter(),
                             func->GetWidth(),
 							tmpval,
-							func->GetVariable()->GetName(), 
+							func->GetVariable()->GetName(),
 							func->GetVariable()->GetValue());
 					m_inputStrings->AddTail(new InputString(tmpstr));
 
@@ -266,12 +261,12 @@ Assert(++finite_loop < 100000);
 					break;
 				}
 				outputproc = func->GetVariable()->NewOutputProc(module);
-				outputproc->Init(min(oldscalar, scalar), func); 
+				outputproc->Init(min(oldscalar, scalar), func);
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
 
                     sprintf (tmpstr, "(%s=%3.3lf)\n", func->GetName()+4, tmpval);
-                    strcat (rule_str, tmpstr); 
+                    strcat (rule_str, tmpstr);
 					func->GetVariable()->CatLogStrings(m_inputStrings);
 				}
 #endif
@@ -281,9 +276,9 @@ Assert(++finite_loop < 100000);
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
 
-                    PopStr(str1); 
-                    PopStr(str2); 
-                    sprintf (tmpstr, "(%s AND %s)=%3.3lf\n", str1, str2, tmpval); 
+                    PopStr(str1);
+                    PopStr(str2);
+                    sprintf (tmpstr, "(%s AND %s)=%3.3lf\n", str1, str2, tmpval);
                     PushStr(tmpstr);
                 }
 #endif
@@ -293,9 +288,9 @@ Assert(++finite_loop < 100000);
 				tmpval = stack.Or();
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-                    PopStr(str1); 
-                    PopStr(str2); 
-                    sprintf (tmpstr, "(%s OR %s)=%3.3lf\n", str1, str2, tmpval); 
+                    PopStr(str1);
+                    PopStr(str2);
+                    sprintf (tmpstr, "(%s OR %s)=%3.3lf\n", str1, str2, tmpval);
                     PushStr(tmpstr);
                 }
 #endif
@@ -305,19 +300,19 @@ Assert(++finite_loop < 100000);
 					tmpval = stack.Not();
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-                    PopStr(str1); 
-                    sprintf (tmpstr, "NOT(%s)=%3.3lf\n", str1, tmpval); 
+                    PopStr(str1);
+                    sprintf (tmpstr, "NOT(%s)=%3.3lf\n", str1, tmpval);
                     PushStr(tmpstr);
                 }
 #endif
-                } else { 
+                } else {
                     outputproc->AddModifier(FLOP_NOT);
 #ifdef _DEBUG
-				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {                    
-                    sprintf (tmpstr, "%sNOT ", rule_str); 
+				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
+                    sprintf (tmpstr, "%sNOT ", rule_str);
                     strcpy(rule_str, tmpstr);
                 }
-#endif           
+#endif
                 }
 
 				break;
@@ -326,42 +321,42 @@ Assert(++finite_loop < 100000);
 					tmpval = stack.Very();
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-                    PopStr(str1); 
-                    sprintf (tmpstr, "VERY(%s)=%3.3lf\n", str1, tmpval); 
+                    PopStr(str1);
+                    sprintf (tmpstr, "VERY(%s)=%3.3lf\n", str1, tmpval);
                     PushStr(tmpstr);
                 }
 #endif
                 }
-                else { 
+                else {
 					outputproc->AddModifier(FLOP_VERY);
 #ifdef _DEBUG
-				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {                    
-                    sprintf (tmpstr, "%sVERY ", rule_str); 
+				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
+                    sprintf (tmpstr, "%sVERY ", rule_str);
                     strcpy(rule_str, tmpstr);
                 }
-#endif           
+#endif
                 }
 
 				break;
 			case FLOP_KINDA:
-                if(inInput)  { 
+                if(inInput)  {
 					tmpval = stack.Kinda();
 #ifdef _DEBUG
 				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-                    PopStr(str1); 
-                    sprintf (tmpstr, "KINDA(%s)=%3.3lf\n", str1, tmpval); 
+                    PopStr(str1);
+                    sprintf (tmpstr, "KINDA(%s)=%3.3lf\n", str1, tmpval);
                     PushStr(tmpstr);
                 }
 #endif
 
-                } else { 
+                } else {
 					outputproc->AddModifier(FLOP_KINDA);
 #ifdef _DEBUG
-				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {                    
-                    sprintf (tmpstr, "%sKINDA ", rule_str); 
+				if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
+                    sprintf (tmpstr, "%sKINDA ", rule_str);
                     strcpy(rule_str, tmpstr);
                 }
-#endif           
+#endif
                 }
 
 				break;
@@ -379,17 +374,17 @@ Assert(++finite_loop < 100000);
 
             case FLOP_ENDIF:
 				inInput = TRUE;
-                oldscalar = min(oldscalar, 1.0 - scalar); 
+                oldscalar = min(oldscalar, 1.0 - scalar);
 				break;
             case FLOP_STARTELSE:
-                scalar = 1.0 - scalar; 
+                scalar = 1.0 - scalar;
 #ifdef _DEBUG
                 if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
                     sprintf (tmpstr, "ELSE\n");
-                    strcat (rule_str, tmpstr); 
+                    strcat (rule_str, tmpstr);
                 }
 #endif
-                break; 
+                break;
             case FLOP_ENDELSE:
 				inInput = TRUE;
              	break;
@@ -397,12 +392,12 @@ Assert(++finite_loop < 100000);
 #ifdef _DEBUG
                 if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
                     sprintf (tmpstr, "ELSEIF\n");
-                    strcat (rule_str, tmpstr); 
+                    strcat (rule_str, tmpstr);
                 }
 #endif
-				inInput = TRUE;  
-                oldscalar = min(oldscalar, 1.0 - scalar); 
-                break;				
+				inInput = TRUE;
+                oldscalar = min(oldscalar, 1.0 - scalar);
+                break;
 			case FLOP_STOP:
 				executing = FALSE;
 				break;
@@ -414,10 +409,10 @@ Assert(++finite_loop < 100000);
 
 #ifdef _DEBUG
     if(fli_GetFliLoggingEnabled(fli_engine->m_ai->my_player_index)) {
-        sprintf (tmpstr, "\nIF\n%s", rule_str); 
+        sprintf (tmpstr, "\nIF\n%s", rule_str);
         FLPRINTF((tmpstr));
     }
 #endif
 
-    Assert(error == FALSE); 
+    Assert(error == FALSE);
 }

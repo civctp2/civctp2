@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -65,11 +65,11 @@ RobotAstar2::RobotAstar2()
 	m_pathType = PATH_TYPE_DEFAULT;
 }
 
-bool RobotAstar2::TransportPathCallback (const bool & can_enter, 
-										 const MapPoint & prev,  
-									     const MapPoint & pos, 
-										 const bool & is_zoc, 
-									     float & cost, 
+bool RobotAstar2::TransportPathCallback (const bool & can_enter,
+										 const MapPoint & prev,
+									     const MapPoint & pos,
+										 const bool & is_zoc,
+									     float & cost,
 									     ASTAR_ENTRY_TYPE & entry )
 {
 	if (can_enter)
@@ -83,7 +83,7 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 		if(occupied || wrong_cont)
 		{
 			if(  is_land
-			   && 
+			   &&
 			     (    g_theWorld->IsWater(prev)
 			       || g_theWorld->IsShallowWater(prev)
 			       || g_theWorld->IsCity(prev)
@@ -126,11 +126,11 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 	}
 }
 
-bool RobotAstar2::AirliftPathCallback (const bool & can_enter, 
-									   const MapPoint & prev,  
-									   const MapPoint & pos, 
-									   const bool & is_zoc, 
-									   float & cost, 
+bool RobotAstar2::AirliftPathCallback (const bool & can_enter,
+									   const MapPoint & prev,
+									   const MapPoint & pos,
+									   const bool & is_zoc,
+									   float & cost,
 									   ASTAR_ENTRY_TYPE & entry )
 {
 	if (can_enter)
@@ -175,11 +175,11 @@ bool RobotAstar2::AirliftPathCallback (const bool & can_enter,
 	}
 }
 
-bool RobotAstar2::DefensivePathCallback (const bool & can_enter,  
-									     const MapPoint & prev,  
-									     const MapPoint & pos, 
-										 const bool & is_zoc, 
-									     float & cost, 
+bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
+									     const MapPoint & prev,
+									     const MapPoint & pos,
+										 const bool & is_zoc,
+									     float & cost,
 									     ASTAR_ENTRY_TYPE & entry)
 {
 	PLAYER_INDEX pos_owner;
@@ -196,7 +196,7 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 			!(m_incursionPermission & (0x1 << prev_owner)))
 		{
 			cost += k_MOVE_TREASPASSING_COST;
-			return true; 
+			return true;
 		}
 	}
 
@@ -238,10 +238,10 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	bool isspecial, cancapture, haszoc, canbombard;
 	bool isstealth;
 	sint32 maxattack, maxdefense;
-	army->CharacterizeArmy( isspecial, 
-		isstealth, 
-		maxattack, 
-		maxdefense, 
+	army->CharacterizeArmy( isspecial,
+		isstealth,
+		maxattack,
+		maxdefense,
 		cancapture,
 		haszoc,
 		canbombard);
@@ -252,10 +252,10 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	}
 	else
 	{
-		m_incursionPermission = 
+		m_incursionPermission =
 			Diplomat::GetDiplomat(army.GetOwner()).GetIncursionPermission();
 	}
-	
+
 	if (army_move_type != 0x0)
 	{
 		nUnits = 1;
@@ -266,7 +266,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	}
 	else
 	{
-		UnitAstar::InitArmy (army, nUnits, move_intersection, move_union,  
+		UnitAstar::InitArmy (army, nUnits, move_intersection, move_union,
 			m_army_minmax_move);
 	}
 
@@ -292,14 +292,14 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	){
 		return false;
 	}
-	
+
 	return !is_broken_path;
 }
 
-bool RobotAstar2::EntryCost( const MapPoint &prev, 
+bool RobotAstar2::EntryCost( const MapPoint &prev,
 							   const MapPoint &pos,
-							   float & cost, 
-							   bool &is_zoc, 
+							   float & cost,
+							   bool &is_zoc,
 							   ASTAR_ENTRY_TYPE &entry )
 {
 	if(m_pathType == PATH_TYPE_TRANSPORT || m_pathType == PATH_TYPE_AIRLIFT)
@@ -340,9 +340,9 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 
 		if (cost < 1.0)
 		{
-			cost = 1.0; 
+			cost = 1.0;
 		}
-		else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION)) 
+		else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION))
 		{
 			return false;
 		}
@@ -351,15 +351,15 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 	return r;
 }
 
-void RobotAstar2::RecalcEntryCost(AstarPoint *parent, 
-    AstarPoint *node, float &new_entry_cost, 
+void RobotAstar2::RecalcEntryCost(AstarPoint *parent,
+    AstarPoint *node, float &new_entry_cost,
     bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
-	new_entry = ASTAR_CAN_ENTER; 
-	UnitAstar::RecalcEntryCost(parent, 
-							   node, 
-							   new_entry_cost, 
-							   new_is_zoc, 
+	new_entry = ASTAR_CAN_ENTER;
+	UnitAstar::RecalcEntryCost(parent,
+							   node,
+							   new_entry_cost,
+							   new_is_zoc,
 							   new_entry);
 
 	if ((new_entry_cost < k_ASTAR_BIG) && (new_entry == ASTAR_CAN_ENTER))

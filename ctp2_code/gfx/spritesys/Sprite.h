@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -46,7 +46,7 @@
 
 class Sprite;
 
-enum SPRITETYPE 
+enum SPRITETYPE
 {
 	SPRITETYPE_NORMAL,
 	SPRITETYPE_FACED,
@@ -55,7 +55,7 @@ enum SPRITETYPE
 	SPRITETYPE_MAX          // dummy last entry, used as counter
 };
 
-#define k_SPRITE_BASEFACING 0 
+#define k_SPRITE_BASEFACING 0
 
 #define k_BIT_DRAWFLAGS_NONE			0x00000000
 #define k_BIT_DRAWFLAGS_FEATHERING		0x00000001
@@ -67,13 +67,11 @@ enum SPRITETYPE
 #define k_BIT_DRAWFLAGS_FOGGED			0x00000040
 #define k_BIT_DRAWFLAGS_DESATURATED		0x00000080
 
-
 #define k_BIT_DRAWFLAGS_SPECIAL1	    (k_BIT_DRAWFLAGS_TRANSPARENCY |	\
 										 k_BIT_DRAWFLAGS_FOGGED		  |	\
 										 k_BIT_DRAWFLAGS_DESATURATED  )
 
 #define k_DRAWFLAGS_NORMAL		        k_BIT_DRAWFLAGS_FEATHERING
-
 
 //----------------------------------------------------------------------------
 // Project dependencies
@@ -87,37 +85,36 @@ class Token;
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
- 
-typedef  void (Sprite::*_SPRITE_DRAWLOW1)(Pixel16 *frame, 
-										  sint32 drawX, sint32 drawY, 
+
+typedef  void (Sprite::*_SPRITE_DRAWLOW1)(Pixel16 *frame,
+										  sint32 drawX, sint32 drawY,
 										  sint32 width, sint32 height,
-										  uint16 transparency, 
-										  Pixel16 outlineColor, 
+										  uint16 transparency,
+										  Pixel16 outlineColor,
 										  uint16 flags);
 
-
-typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame, 
-										  sint32 drawX, sint32 drawY, 
+typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame,
+										  sint32 drawX, sint32 drawY,
 										  sint32 destwidth, sint32 destheight,
-										  uint16 transparency, 
-										  Pixel16 outlineColor, 
+										  uint16 transparency,
+										  Pixel16 outlineColor,
 										  uint16 flags,
 										  BOOL reversed);
 
-class Sprite 
+class Sprite
 {
 public:
 	Sprite();
 	virtual ~Sprite();
-	
+
 	void			Load(char const * filename);
-	
+
 	void			Import(size_t nframes, char **imageFiles, char **shadowFiles);
-	
+
 	void			ImportTIFF(uint16 index,char **imageFiles,Pixel32 **imageData, size_t *size = NULL);
-	
+
 	void			ImportTGA (uint16 index,char **imageFiles,Pixel32 **imageData, size_t *size = NULL);
-	
+
 	void			Save(char const * filename);
 	void			Export(FILE *file);
 
@@ -137,16 +134,15 @@ public:
 	POINT			GetHotPoint(void) { return m_hotPoint; }
 	void			SetHotPoint(sint32 hx, sint32 hy) { m_hotPoint.x = hx; m_hotPoint.y = hy; };
 
-	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, 
+	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
-	virtual void	DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
+	virtual void	DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 						sint16 transparency, Pixel16 outlineColor, uint16 flags);
 
-	virtual void	DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	virtual void	DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
-
-	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
+	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags);
 
 	virtual size_t	GetNumFrames(void) const { return m_numFrames; };
@@ -168,11 +164,11 @@ public:
 
 	virtual sint32	ParseFromTokens(Token *theToken);
 	virtual void	AllocateFrameArrays(size_t count);
-	
+
 	void			InitializeDrawLow();
 
 protected:
-    
+
 	_SPRITE_DRAWLOW1 _DrawLowClipped        	;
 	_SPRITE_DRAWLOW1 _DrawLow               	;
 	_SPRITE_DRAWLOW1 _DrawLowReversedClipped	;
@@ -181,11 +177,9 @@ protected:
 	_SPRITE_DRAWLOW1 _DrawFlashLow          	;
 	_SPRITE_DRAWLOW1 _DrawFlashLowReversed  	;
 
-	
 	_SPRITE_DRAWLOW2 _DrawScaledLow		;
 	_SPRITE_DRAWLOW2 _DrawFlashScaledLow;
 
-	
 	void	DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 							uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	void	DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
@@ -211,7 +205,6 @@ protected:
 	inline Pixel16	average_565(Pixel16 pixel1, Pixel16 pixel2);
 
 
-	
 	void	DrawLowClipped555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 							uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	void	DrawLow555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
@@ -240,9 +233,9 @@ protected:
 
 
 
-	
-	
-	
+
+
+
 	void __Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
@@ -254,9 +247,9 @@ protected:
 		}
 	};
 
-	
-	
-	
+
+
+
 	void __Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
@@ -321,14 +314,12 @@ protected:
 
 	sint32			ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
 
-
 	BOOL	HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 						uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	BOOL	HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 						uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	BOOL	HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse);
-
 
 protected:
 	SPRITETYPE		m_type;
@@ -344,7 +335,6 @@ protected:
 	uint16			m_firstFrame;
 	uint16			m_currentFrame;
 
-	
 	aui_Surface		*m_surface;
 	sint32			m_surfWidth;
 	sint32			m_surfHeight;

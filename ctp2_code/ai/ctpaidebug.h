@@ -57,18 +57,13 @@ public:
 
 	static bool DebugLogCheck(const sint32 player, const sint32 goal_type, const sint32 army_id);
 
-
 	static bool IsDebugGoalTypeSet();
-
 
 	static bool IsDebugArmyIdSet();
 
-
 	static void SetDebugPlayer(const sint32 debug_player);
 
-
 	static void SetDebugGoalType(const sint32 goal_type);
-
 
 	static void SetDebugArmies(const CellUnitList & unit_list);
 

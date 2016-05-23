@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public:
 		m_y			(static_cast<uint16>(y))
 	{};
 
-	NetCellData() 
+	NetCellData()
 	:
 		Packetizer	(),
 		m_cell		(NULL),
@@ -92,7 +92,7 @@ private:
 class NetCellList : public Packetizer
 {
 public:
-	NetCellList(sint32 x, sint32 y) 
+	NetCellList(sint32 x, sint32 y)
 	:
 		Packetizer	(),
 		m_x			(static_cast<uint16>(x)),
@@ -100,7 +100,7 @@ public:
 		m_cells		(0)
 	{};
 
-	NetCellList() 
+	NetCellList()
 	:
 		Packetizer	(),
 		m_x			(0),
@@ -118,7 +118,6 @@ private:
 
 	friend class Network;
 };
-
 
 class NetCellUnitOrder : public Packetizer
 {

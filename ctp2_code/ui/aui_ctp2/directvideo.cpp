@@ -20,7 +20,6 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-
 #include "directvideo.h"
 
 #include "aui.h"
@@ -30,7 +29,6 @@
 #include "c3errors.h"
 #include "errors.h"
 #include "RefTime.h"
-
 
 DirectVideo::DirectVideo()
 :
@@ -60,7 +58,6 @@ DirectVideo::DirectVideo()
 DirectVideo::~DirectVideo()
 {
 }
-
 
 HRESULT DirectVideo::Initialize(aui_DirectUI *ui)
 {
@@ -92,7 +89,6 @@ HRESULT DirectVideo::Initialize(aui_DirectUI *ui, aui_Window *window, BOOL modal
 	Assert(dd != NULL);
 	if (dd == NULL) return -1;
 	m_dd = dd;
-
 
 	m_window = window;
 
@@ -145,8 +141,8 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	}
 
 	hr = pAMStream->AddMediaStream(NULL, &MSPID_PrimaryAudio, AMMSF_ADDDEFAULTRENDERER, NULL);
-	(void) hr;  // Ignore failures: display video without sound. 
-	
+	(void) hr;  // Ignore failures: display video without sound.
+
 	WCHAR       wPath[_MAX_PATH];
 	MultiByteToWideChar(CP_ACP, 0, name, -1, wPath, sizeof(wPath)/sizeof(wPath[0]));
 
@@ -158,8 +154,8 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 
 	m_mmStream = pAMStream;
 
-	
-	
+
+
 
 	hr = m_mmStream->GetMediaStream(MSPID_PrimaryVideo, &m_primaryVidStream);
 	if (FAILED(hr))
@@ -168,27 +164,23 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 		goto Exit;
 	}
 
-	
 	hr = m_primaryVidStream->QueryInterface(IID_IDirectDrawMediaStream, (void **)&m_ddStream);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw media stream.  Error#%d.", hr);
 		goto Exit;
 	}
 
-	
 	STREAM_TIME		streamTime;
 
 	hr = m_ddStream->GetTimePerFrame(&streamTime);
 	m_timePerFrame = (uint32)(streamTime / (UNITS / MILLISECONDS));
 
-	
 	hr = m_ddStream->CreateSample(NULL, NULL, 0, &m_streamSample);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw stream sample.  Error#%d.", hr);
 		goto Exit;
 	}
 
-	
 	hr = m_streamSample->GetSurface(&m_streamSurface, &m_surfaceRect);
 	if (FAILED(hr)) {
 		c3errors_ErrorDialog("Video", "Couldn't access the DirectDraw sample surface.  Error#%d.", hr);
@@ -199,7 +191,6 @@ HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 	m_isOpen = TRUE;
 
 	return hr;
-
 
 Exit:
 	if (pAMStream != NULL)
@@ -219,10 +210,8 @@ HRESULT	DirectVideo::PlayAll(void)
 	HRESULT hr = m_mmStream->SetState(STREAMSTATE_RUN);
 	if (FAILED(hr)) return hr;
 
-	
 	m_isFinished = false;
 
-	
 	while (true)
 	{
 		if (m_streamSample->Update(0, NULL, NULL, 0) != S_OK)
@@ -241,7 +230,6 @@ HRESULT	DirectVideo::PlayOne(void)
 
 	if (m_isFinished) return hr;
 
-	
 	Assert(m_mmStream);
 
 	if (!m_mmStream) {
@@ -257,10 +245,8 @@ HRESULT	DirectVideo::PlayOne(void)
 
 	if (m_lastFrameTime == 0) m_lastFrameTime = GetTickCount();
 //	sint32 iterations = (GetTickCount() - m_lastFrameTime)/m_timePerFrame + 2;
-	
 
 	sint32	r = m_streamSample->Update(SSUPDATE_CONTINUOUS, NULL, NULL, 0);
-
 
 	r = m_streamSample->CompletionStatus(COMPSTAT_WAIT, 0);
 	if (r == MS_S_ENDOFSTREAM) {
@@ -271,10 +257,8 @@ HRESULT	DirectVideo::PlayOne(void)
 
 	hr = m_primarySurface->Blt(&m_destRect, m_streamSurface, &m_surfaceRect, DDBLT_WAIT, NULL);
 
-	
 	m_lastFrameTime = GetTickCount();
 
-	
 	if (m_flags == DVFLAGS_INWINDOW && !m_isModal) {
 		Assert(m_window != NULL);
 		if (m_window) {
@@ -301,14 +285,13 @@ HRESULT	DirectVideo::CloseStream(void)
 
     if (m_streamSample != NULL) {
 		m_streamSample->Release();
-		m_streamSample = NULL;	
+		m_streamSample = NULL;
 	}
 
     if (m_streamSurface != NULL) {
 		m_streamSurface->Release();
 		m_streamSurface = NULL;
 	}
-
 
 	if (m_mmStream != NULL) {
 		m_mmStream->Release();
@@ -320,7 +303,7 @@ HRESULT	DirectVideo::CloseStream(void)
 
 HRESULT DirectVideo::Process(void)
 {
-	if (m_flags == DVFLAGS_INWINDOW) 
+	if (m_flags == DVFLAGS_INWINDOW)
     {
         return (m_isModal) ? PlayAll() : PlayOne();
 	}
@@ -330,11 +313,11 @@ HRESULT DirectVideo::Process(void)
 
 void DirectVideo::Pause(void)
 {
-	if (m_isPlaying) 
+	if (m_isPlaying)
     {
 		m_isPaused = true;
 
-		if (m_mmStream) 
+		if (m_mmStream)
         {
 	        HRESULT hr = m_mmStream->SetState(STREAMSTATE_STOP);
 			if (FAILED(hr)) return;
@@ -344,9 +327,9 @@ void DirectVideo::Pause(void)
 
 void DirectVideo::Resume(void)
 {
-	if (m_isPaused) 
+	if (m_isPaused)
     {
-		if (m_mmStream) 
+		if (m_mmStream)
         {
 			HRESULT hr = m_mmStream->SetState(STREAMSTATE_RUN);
 			if (FAILED(hr)) return;

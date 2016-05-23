@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ ProfileEdit::ProfileEdit(AUI_ERRCODE *err)
 	m_list = (ctp2_ListBox *)aui_Ldl::GetObject("ProfileEdit.List");
 	Assert(m_list);
 
-	m_list->SetAbsorbancy(FALSE); 
+	m_list->SetAbsorbancy(FALSE);
 
 	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.CloseButton", CloseWindow, NULL);
 	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.EnableMessages", EnableMessages, NULL);
@@ -83,11 +83,10 @@ ProfileEdit::~ProfileEdit()
 
 AUI_ERRCODE ProfileEdit::Initialize()
 {
-	
+
 	if(s_profileEdit)
 		return AUI_ERRCODE_OK;
 
-	
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_profileEdit = new ProfileEdit(&err);
 
@@ -100,7 +99,7 @@ AUI_ERRCODE ProfileEdit::Display()
 {
 	if(!s_profileEdit)
 		Initialize();
-	
+
 	Assert(s_profileEdit);
 	if(!s_profileEdit)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -116,7 +115,7 @@ AUI_ERRCODE ProfileEdit::Display()
 		if(err == AUI_ERRCODE_OK) {
 			s_profileEdit->FillList();
 		}
-	}		
+	}
 	return err;
 }
 
@@ -153,7 +152,7 @@ void ProfileEdit::FillList()
 	m_list->BuildListStart();
 	for(; walk.IsValid(); walk.Next()) {
 		if(!walk.GetObj()->m_visible) {
-			
+
 			continue;
 		}
 
@@ -163,7 +162,7 @@ void ProfileEdit::FillList()
 				itemname = "ProfileEditNumItem";
 				break;
 			case PV_STRING:
-				
+
 				continue;
 			case PV_BOOL:
 				itemname = "ProfileEditBoolItem";
@@ -179,7 +178,7 @@ void ProfileEdit::FillList()
 			ctp2_Static *label = (ctp2_Static *)box->GetChildByIndex(0);
 			Assert(label);
 			if(!label) break;
-			
+
 			char localId[k_MAX_NAME_LEN];
 			sprintf(localId, "str_profile_%s", walk.GetObj()->m_name);
 			const char *localName = g_theStringDB->GetNameStr(localId);
@@ -189,7 +188,7 @@ void ProfileEdit::FillList()
 			} else {
 				label->SetText(walk.GetObj()->m_name);
 			}
-			
+
 			switch(walk.GetObj()->m_type) {
 				case PV_BOOL:
 				{
@@ -267,7 +266,7 @@ void ProfileEdit::SetNumVar(aui_Control *control, uint32 action, uint32 data, vo
 void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
-		
+
 		g_theProfileDB->Save();
 
 		ProfileEdit::Hide();
@@ -280,4 +279,3 @@ void ProfileEdit::EnableMessages(aui_Control *control, uint32 action, uint32 dat
 		g_theCriticalMessagesPrefs->EnableAll();
 	}
 }
-

@@ -98,14 +98,14 @@ GameEventManager::GameEventManager()
 
 GameEventManager::~GameEventManager()
 {
-	if (m_eventList) 
+	if (m_eventList)
     {
 		m_eventList->DeleteAll();
 		delete m_eventList;
 	}
 
 #ifdef _DEBUG
-    for 
+    for
     (
         std::list<GameEvent *>::iterator    p = m_eventHistory.begin();
         p != m_eventHistory.end();
@@ -117,7 +117,7 @@ GameEventManager::~GameEventManager()
     std::list<GameEvent *>().swap(m_eventHistory);
 #endif
 
-	for (size_t i = 0; i < GEV_MAX; ++i) 
+	for (size_t i = 0; i < GEV_MAX; ++i)
     {
 		delete m_hooks[i];
 	}
@@ -134,14 +134,14 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	if(g_slicEngine->AtBreak()) {
 		return GEV_ERR_AtBreak;
 	}
@@ -205,7 +205,7 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 		default:
 			return GEV_ERR_BadInsert;
 	}
-	
+
 	g_director->IncrementPendingGameActions();
 
 	return Process();
@@ -221,9 +221,9 @@ GAME_EVENT_ERR GameEventManager::Process()
     m_processing        = true;
 	GAME_EVENT_ERR  err = GEV_ERR_OK;
 
-    while ((GEV_ERR_OK == err) 
+    while ((GEV_ERR_OK == err)
             && m_eventList->GetHead()
-            && !g_slicEngine->AtBreak() 
+            && !g_slicEngine->AtBreak()
             && !m_needUserInput
             && !m_pauseCount
           )
@@ -233,7 +233,7 @@ GAME_EVENT_ERR GameEventManager::Process()
 	m_processing        = false;
 
 	if (GEV_ERR_NeedUserInput == err)
-    {		
+    {
 		m_needUserInput = true;
 		return GEV_ERR_OK;
 	}
@@ -244,11 +244,11 @@ GAME_EVENT_ERR GameEventManager::Process()
 GAME_EVENT_ERR GameEventManager::ProcessHead()
 {
 	GameEvent *     event   = m_eventList->GetHead();
-    
+
     // Processing busy
 	m_processingEvent       = event->GetType();
 
-	EVENTLOG(("ProcessEvent: %s Serial: %d\n", 
+	EVENTLOG(("ProcessEvent: %s Serial: %d\n",
               g_eventDescriptions[m_processingEvent].name,
 			  event->GetSerial()
             ));
@@ -258,7 +258,7 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
     // Processing ready
 	m_processingEvent       = GEV_MAX;
 
-	if (GEV_ERR_NeedUserInput != err) 
+	if (GEV_ERR_NeedUserInput != err)
     {
 		Assert(event == m_eventList->GetHead());
 		m_eventList->RemoveHead();
@@ -278,12 +278,12 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
         // Release version: delete the handled event immediately
 		delete event;
 #endif
-	} 
+	}
 
 	return err;
 }
 
-GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type, 
+GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type,
 											 GAME_EVENT_PRIORITY pri,
 											 GameEventHookCallback *cb)
 {
@@ -314,7 +314,7 @@ void GameEventManager::RemoveCallback
 
 GAME_EVENT_ERR GameEventManager::ActivateHook
 (
-    GAME_EVENT          type, 
+    GAME_EVENT          type,
 											  GameEventArgList *args,
 	sint32              startIndex,
 	sint32 &            resumeIndex
@@ -425,8 +425,8 @@ char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
 
 	for
 	(
-	    char const * argString = g_eventDescriptions[type].args; 
-	    *argString; 
+	    char const * argString = g_eventDescriptions[type].args;
+	    *argString;
 	    ++argString
 	)
 	{
@@ -441,7 +441,7 @@ char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
 
 		if (count == index)
 			return *argString;
-		
+
 		++count;
 	}
 
@@ -459,7 +459,7 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
 
     for
     (
-        char const * argString = g_eventDescriptions[type].args; 
+        char const * argString = g_eventDescriptions[type].args;
         *argString;
         ++argString
     )
@@ -483,7 +483,6 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
     return count;
 }
 
-
 bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 {
 	Assert(type >= (GAME_EVENT)0);
@@ -506,17 +505,17 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		if(nextArg == GEA_End && *argString == 0)
 			return true;
 
-		
-		
-		
-		
-		
+
+
+
+
+
 		if(!isOptional) {
-			
+
 			Assert(*argString == '%' || *argString == '&' || *argString == '$');
 			if(*argString != '%' && *argString != '&' && *argString != '$')
 				return false;
-			
+
 			if(*argString == '&')
 				isOptional = true;
 		} else {
@@ -526,12 +525,10 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		}
 
 		if(isOptional && nextArg == GEA_End) {
-			
-			
+
 			return true;
 		}
-		
-		
+
 		argString++;
 		argNum++;
 
@@ -539,7 +536,6 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		if(!(*argString))
 			return FALSE;
 
-		
 
 		static Army a;
 		static Unit u, c;
@@ -643,7 +639,7 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 #ifdef _DEBUG
 void GameEventManager::Log(const char *fmt, ...)
 {
-	
+
 	if (g_eventLog == FALSE)
 		return;
 
@@ -652,14 +648,13 @@ void GameEventManager::Log(const char *fmt, ...)
 	va_start(vl, fmt);
 	vsprintf(text, fmt, vl);
 	va_end(vl);
-	
+
 	FILE *f = fopen(EVENTLOGNAME, "a");
 	if(f) {
 		fprintf(f, "%s", text);
 		fclose(f);
 	}
-	
-	
+
 }
 
 void GameEventManager::Dump()
@@ -668,25 +663,22 @@ void GameEventManager::Dump()
 
 	GAME_EVENT ev;
 	for(ev = (GAME_EVENT)0; ev < GEV_MAX; ev = GAME_EVENT((sint32)ev + 1)) {
-		
+
 		fprintf(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
 
 		char *argString = g_eventDescriptions[ev].args;
 		BOOL first = TRUE;
 
 
-		
 		while(*argString) {
 			Assert(*argString == '%' || *argString == '&' || *argString == '$');
-			
-			
+
 			BOOL  optional= *argString=='&';
 			if(optional)
 				{
 				fprintf(f, " [");
 				}
-			
-			
+
 
 			argString++;
 			if(!(*argString)) {
@@ -700,16 +692,13 @@ void GameEventManager::Dump()
 			fprintf(f, "%s", ArgCharToName(*argString));
 			argString++;
 
-			
 			if(optional)
 				{
 				fprintf(f, "]");
 				}
-			
-			
+
 		}
 
-		
 		fprintf(f, "): %s\n", g_eventDescriptions[ev].description);
 
 		if(m_hooks[ev]) {

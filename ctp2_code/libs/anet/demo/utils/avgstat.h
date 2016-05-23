@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -------------------------------------------------------------------------*/
 typedef struct {
   dp_stat_t stats[dp_STAT_MAX+1];
-  time_t t; 
+  time_t t;
 } dp_stats_t;
 
 /*-------------------------------------------------------------------------
@@ -63,7 +63,7 @@ dp_result_t dp_avgstat_init(dp_t *dp, dp_avgstat_t *avgstat);
  return value is dp_RES_OK on success, or error code returned by
  dpGetStats on failure.
 -------------------------------------------------------------------------*/
-dp_result_t dp_avgstat_poll(dp_t *dp, dp_avgstat_t *avgstat, 
+dp_result_t dp_avgstat_poll(dp_t *dp, dp_avgstat_t *avgstat,
 		dp_stats_t *stats1,
 		dp_stats_t *stats60,
 		dp_stats_t *max1,
@@ -76,7 +76,7 @@ dp_result_t dp_avgstat_poll(dp_t *dp, dp_avgstat_t *avgstat,
  This should be called e.g. when closing a session to print out the average
  statistics durning the session.
 -------------------------------------------------------------------------*/
-dp_result_t dp_avgstat_print(dp_t *dp,  
+dp_result_t dp_avgstat_print(dp_t *dp,
 		const dp_stats_t *stats,
 		dp_avgstat_printline_fn_t printfn, void *printcontext);
 #endif

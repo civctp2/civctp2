@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -25,25 +16,24 @@ class aui_StringTable;
 class ldl_datablock;
 // MBCHAR
 
-
 class aui_StringTable : aui_Base
 {
 public:
 	aui_StringTable
     (
 		AUI_ERRCODE *   retval,
-		MBCHAR const *  ldlBlock 
+		MBCHAR const *  ldlBlock
     );
 	aui_StringTable
     (
 		AUI_ERRCODE *   retval,
-		size_t          numStrings = 0 
+		size_t          numStrings = 0
     );
 	virtual ~aui_StringTable();
 
-	sint32	    GetNumStrings( void ) const 
-    { 
-        return static_cast<sint32>(m_Strings.size()); 
+	sint32	    GetNumStrings( void ) const
+    {
+        return static_cast<sint32>(m_Strings.size());
     };
 
 	MBCHAR *    GetString(sint32 index) const;
@@ -55,5 +45,4 @@ private:
     std::vector<MBCHAR *>   m_Strings;
 };
 
-
-#endif 
+#endif

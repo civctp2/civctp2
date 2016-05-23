@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "ConstRecord.h"
 #include "World.h"
 
-extern TradeAstar g_theTradeAstar; 
+extern TradeAstar g_theTradeAstar;
 
 sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource)
 {
@@ -57,12 +57,10 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sin
 	if(resource < 0 || resource >= g_theResourceDB->NumRecords())
 		return 0;
 
-
 	double baseValue = g_theWorld->GetGoodValue(resource);
 	double distance = static_cast<double>(destination.GetCityData()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
-	
-	
+
     PLAYER_INDEX const  tradePartner    = destination.GetOwner();
 
     if (    (owner != tradePartner)
@@ -96,7 +94,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
 	              static_cast<double>
 	                (source.RetPos().NormalizedDistance(destination.RetPos()));
-	
+
 	return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
 

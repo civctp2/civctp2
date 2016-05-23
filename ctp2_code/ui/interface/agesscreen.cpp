@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 //
 // - Starting and ending age selection screen now uses the age names from
 //   gl_str.txt, Martin Gühmann.
-// - Compatibility restored. 
+// - Compatibility restored.
 // - Memory leak repaired.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added single-player start and end age. (11-Apr-2009 Maq)
@@ -42,7 +42,7 @@
 #include "c3_listitem.h"
 #include "c3ui.h"
 #include "c3window.h"
-#include "ctp2_dropdown.h"	
+#include "ctp2_dropdown.h"
 #include "dialogboxwindow.h"
 #include "Globals.h"                // allocated::...
 #include "ns_gamesetup.h"
@@ -54,7 +54,6 @@
 extern nf_GameSetup g_gamesetup;
 extern C3UI	*       g_c3ui;
 
-
 static DialogBoxWindow *s_agesScreen	= NULL;
 
 static aui_Button		*s_back				= NULL;
@@ -65,8 +64,7 @@ static ctp2_DropDown	*s_startDropDown	= NULL;
 static ctp2_DropDown	*s_endDropDown		= NULL;
 
 
-
-static sint32 s_numAges = 0; 
+static sint32 s_numAges = 0;
 static sint32 s_startAge = 0;
 static sint32 s_endAge = s_numAges;
 sint32 agesscreen_getStartAge( void )
@@ -147,10 +145,9 @@ sint32 agesscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	if ( s_agesScreen ) return AUI_ERRCODE_OK; 
+	if ( s_agesScreen ) return AUI_ERRCODE_OK;
 
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "agesscreen");
@@ -164,7 +161,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	Assert( AUI_NEWOK(s_agesScreen, errcode) );
 	if ( !AUI_NEWOK(s_agesScreen, errcode) ) errcode;
 
-	
 	s_back = new aui_Button(
 		&errcode,
 		aui_UniqueId(),
@@ -181,7 +177,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( controlBlock, "%s.%s", windowBlock, "StartDropDown" );
-	
+
 	s_startDropDown = new ctp2_DropDown(
 		&errcode,
 		aui_UniqueId(),
@@ -192,7 +188,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	if ( !AUI_NEWOK(s_startDropDown, errcode) ) return errcode;
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "EndDropDown" );
-	
+
 	s_endDropDown = new ctp2_DropDown(
 		&errcode,
 		aui_UniqueId(),
@@ -201,7 +197,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		NULL );
 	Assert( AUI_NEWOK(s_endDropDown, errcode) );
 	if ( !AUI_NEWOK(s_endDropDown, errcode) ) return errcode;
-
 
 	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
 	s_numAges = g_theAgeDB->NumRecords();
@@ -222,11 +217,11 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		{
 			name = ageId;
 		}
-	
-	
-	
 
-		
+
+
+
+
 
 		{
 			ns_ListItem *item = new ns_ListItem(
@@ -239,14 +234,14 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 			s_startDropDown->AddItem( (ctp2_ListItem *)item );
 		}
 
-	
-	
-	
 
-		
+
+
+
+
 
 		{
-			
+
 			ns_ListItem *item = new ns_ListItem(
 				&errcode,
 				name,
@@ -260,18 +255,16 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 	agesscreen_setStartAge(0);
 	agesscreen_setEndAge(s_numAges - 1);
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-	
 	if (s_back) {
 		s_back->Move( s_agesScreen->Width() - s_back->Width() - 14, s_agesScreen->Height() - s_back->Height() - 17);
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 //----------------------------------------------------------------------------
@@ -326,11 +319,11 @@ void agesscreen_startDropDownCallback(
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT ) return;
 
-	
-	
-	
+
+
+
 #if 0
-	
+
 	if ( s_startDropDown->GetSelectedItem() == s_numAges - 1 )
 	{
 		s_startDropDown->SetSelectedItem( s_numAges - 2 );
@@ -347,7 +340,7 @@ void agesscreen_startDropDownCallback(
 		 s_endDropDown->GetSelectedItem() )
 		s_endDropDown->SetSelectedItem(
 			s_startDropDown->GetSelectedItem() );
-#endif 
+#endif
 
 }
 void agesscreen_endDropDownCallback(
@@ -358,11 +351,11 @@ void agesscreen_endDropDownCallback(
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT ) return;
 
-	
-	
-	
+
+
+
 #if 0
-	
+
 	if ( s_endDropDown->GetSelectedItem() == 0 )
 	{
 		s_endDropDown->SetSelectedItem( 1 );
@@ -379,13 +372,12 @@ void agesscreen_endDropDownCallback(
 		 s_startDropDown->GetSelectedItem() )
 		s_startDropDown->SetSelectedItem(
 			s_endDropDown->GetSelectedItem() );
-#endif 
+#endif
 
 }
 void agesscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 
-	
-	
+
 	agesscreen_removeMyWindow(action);
 }

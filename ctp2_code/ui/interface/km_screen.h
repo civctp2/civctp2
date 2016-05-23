@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -23,7 +22,7 @@ public:
 	sint32	        GetKey(void) const      { return m_index; };
 	sint32	        GetKeycode(void) const  { return m_keycode; };
     MBCHAR *        GetName(void) const     { return m_name; };
-	
+
 	virtual sint32  Compare(c3_ListItem *item2, uint32 column);
 
 	static MBCHAR const * GetKeyFromKMScreen(uint32 keycode);
@@ -35,7 +34,6 @@ private:
 	sint32      m_index;
 	uint32	    m_keycode;
 };
-
 
 sint32      km_screen_displayMyWindow();
 sint32      km_screen_removeMyWindow(uint32 action);

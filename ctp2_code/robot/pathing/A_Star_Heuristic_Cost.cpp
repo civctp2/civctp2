@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Heuristic cost for the A* pathing algorithm
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 // Compiler flags
 //
 // SUPER_DEBUG_HEURISTICS
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -36,7 +36,6 @@
 #include <algorithm>                // std::fill
 #include <limits>                   // DBL_MAX
 #include "World.h"                  // g_theWorld
-
 
 namespace
 {
@@ -59,7 +58,7 @@ namespace
 //----------------------------------------------------------------------------
 inline size_t	DivCeil
 (
-	size_t const	a_Value, 
+	size_t const	a_Value,
 	size_t const	a_Divisor
 )
 {
@@ -87,7 +86,7 @@ inline size_t	DivCeil
 //----------------------------------------------------------------------------
 inline bool		IsInRange
 (
-	int	const		a_Test, 
+	int	const		a_Test,
 	int const		a_Begin,
 	int const		a_End,
 	bool const		a_MayWrap,
@@ -186,11 +185,9 @@ A_Star_Heuristic_Cost::~A_Star_Heuristic_Cost()
 
 void A_Star_Heuristic_Cost::Update()
 {
-	
-	
+
 	Update_Raw_Movement_Costs();
 
-	
 	Relax_Raw_Movement_Costs();
 
 }
@@ -210,8 +207,8 @@ void A_Star_Heuristic_Cost::Update()
 
 void A_Star_Heuristic_Cost::Update_One_Tiles_Cost
 (
-	MapPointData &the_tile,			
-	double new_cost					
+	MapPointData &the_tile,
+	double new_cost
 )
 {
 }
@@ -281,7 +278,7 @@ void A_Star_Heuristic_Cost::Update_One_Tiles_Cost
 
 void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 {
-	std::fill(raw_min_movement_costs, 
+	std::fill(raw_min_movement_costs,
 		      raw_min_movement_costs + (rows * columns),
 			  DBL_MAX
 			 );
@@ -300,54 +297,47 @@ void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 
 void A_Star_Heuristic_Cost::Update_Raw_Movement_Costs()
 {
-	
 
 
-	double a_tiles_cost;				
+	double a_tiles_cost;
 
-	double *raw_min_cost;				
-	int odd_row = true;					
-	
+	double *raw_min_cost;
+	int odd_row = true;
 
-	
+
 	Clear_Raw_Movement_Costs();
 
-	
 	for (xy_pos.y = 0; xy_pos.y < world_rows; xy_pos.y++)
 	{
-		
+
 		if (odd_row) xy_pos.x = 0;
-		
+
 		else xy_pos.x = 1;
 
-		
-		
+
 		for (; xy_pos.x < world_columns; xy_pos.x += 2)
 		{
-			
+
 			g_theWorld->XY_Coords.XY_to_RC(xy_pos, ipos);
 
-			
 			a_tiles_cost = g_theWorld->GetMoveCost(ipos);
 
 			Assert(a_tiles_cost > 0);
 
-			
 			raw_min_cost = Get_Raw_Cost_Grid_Pointer(xy_pos);
 
-			
 			if (a_tiles_cost < (*raw_min_cost))
 			{
-				
+
 				(*raw_min_cost) = a_tiles_cost;
 
-			} 
+			}
 
-		} 
+		}
 
 		odd_row = !odd_row;
 
-	} 
+	}
 
 }
 
@@ -358,46 +348,42 @@ void A_Star_Heuristic_Cost::Update_Raw_Movement_Costs()
 #ifdef SUPER_DEBUG_HEURISTIC
 void A_Star_Heuristic_Cost::test_terrain_costs()
 {
-	
 
 
-	double a_tiles_cost;				
-	int odd_row = true;					
-    MapPoint norm_pos; 
-	
-
-	
+	double a_tiles_cost;
+	int odd_row = true;
+    MapPoint norm_pos;
 
 
-	
+
+
+
+
 	for (xy_pos.y = 0; xy_pos.y < world_rows; xy_pos.y++)
 	{
-		
+
 		if (odd_row) xy_pos.x = 0;
-		
+
 		else xy_pos.x = 1;
 
-		
-		
+
 		for (; xy_pos.x < world_columns; xy_pos.x += 2)
 		{
-			
+
 			g_theWorld->XY_Coords.XY_to_RC(xy_pos, ipos);
 
-			
 			a_tiles_cost = g_theWorld->GetMoveCost(ipos);
 
 			Assert(a_tiles_cost > 0);
 
-			norm_pos.Iso2Norm(ipos); 
-			g_theWorld->SetColor(ipos, (long) a_tiles_cost); 
+			norm_pos.Iso2Norm(ipos);
+			g_theWorld->SetColor(ipos, (long) a_tiles_cost);
 
-		} 
+		}
 
-		
 		odd_row = not odd_row;
 
-	} 
+	}
 
 
 
@@ -415,7 +401,7 @@ void A_Star_Heuristic_Cost::test_terrain_costs()
 
 
 
-  
+
 
 }
 #endif
@@ -430,22 +416,21 @@ void A_Star_Heuristic_Cost::test_terrain_costs()
 
 void A_Star_Heuristic_Cost::Relax_Raw_Movement_Costs()
 {
-	
-	int row, column;					
-	
 
-	
+	int row, column;
+
+
 	for (row = 0; row < rows; row++)
 	{
-		
+
 		for (column = 0; column < columns; column++)
 		{
-			
+
 			Relax_One_Cost_Grid(row, column);
 
-		} 
+		}
 
-	} 
+	}
 }
 
 
@@ -464,7 +449,7 @@ void A_Star_Heuristic_Cost::Relax_Raw_Movement_Costs()
 //
 // Name       : A_Star_Heuristic_Cost::Relax_One_Cost_Grid
 //
-// Description: Sets a (relaxed) block value to the minimum (raw) value of 
+// Description: Sets a (relaxed) block value to the minimum (raw) value of
 //              itself and its direct neighbours.
 //
 // Parameters : a_Row			: block row number
@@ -500,7 +485,7 @@ void A_Star_Heuristic_Cost::Relax_One_Cost_Grid
 				int column;
 				if (IsInRange(j, 0, columns, x_wrap, column))
 				{
-					double const &	neighbourValue	= 
+					double const &	neighbourValue	=
 						raw_min_movement_costs[column + (row * columns)];
 
 					if (neighbourValue < relaxedMin)
@@ -512,6 +497,3 @@ void A_Star_Heuristic_Cost::Relax_One_Cost_Grid
 		}
 	}
 }
-
-
-

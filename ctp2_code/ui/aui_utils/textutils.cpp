@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,13 +25,11 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "c3.h"
 #include "textutils.h"
 
 #include "aui.h"
 #include "aui_surface.h"
-
 
 #include "primitives.h"
 #include "colorset.h"               // g_colorSet
@@ -69,8 +67,8 @@ void textutils_Cleanup(void)
 
 
 sint32 textutils_GetWidth(
-		aui_Surface *pDirectSurface,	
-		const MBCHAR *pString					
+		aui_Surface *pDirectSurface,
+		const MBCHAR *pString
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -84,14 +82,12 @@ sint32 textutils_GetWidth(
 	Assert(pString);
 	if (pString==NULL) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	hr = pDirectSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACELOCKFAILED;
 
 	GetTextMetrics(hdc, &tm);
 	GetTextExtentPoint32(hdc,pString,strlen(pString),&size);
 
-	
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -108,8 +104,8 @@ sint32 textutils_GetWidth(
 
 
 sint32 textutils_GetHeight(
-		aui_Surface *pDirectSurface,	
-		const MBCHAR *pString					
+		aui_Surface *pDirectSurface,
+		const MBCHAR *pString
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -122,13 +118,11 @@ sint32 textutils_GetHeight(
 	Assert(pString);
 	if (pString==NULL) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	hr = pDirectSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACELOCKFAILED;
 
 	GetTextMetrics(hdc,&tm);
 
-	
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -138,10 +132,9 @@ sint32 textutils_GetHeight(
 #endif // __AUI_USE_DIRECTX__
 }
 
-
 sint32 textutils_GetFontHeight(
-		aui_Surface *surface,	
-		uint32 size							
+		aui_Surface *surface,
+		uint32 size
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -154,7 +147,6 @@ sint32 textutils_GetFontHeight(
 	Assert(surface);
 	if (surface==NULL) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	hr = surface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACELOCKFAILED;
 
@@ -162,7 +154,6 @@ sint32 textutils_GetFontHeight(
 	GetTextMetrics(hdc,&tm);
 	DeleteObject(SelectObject(hdc,holdfont));
 
-	
 	hr = surface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -172,10 +163,9 @@ sint32 textutils_GetFontHeight(
 #endif
 }
 
-
 HFONT textutils_GetFont(
-		aui_Surface *surface,	
-		uint32 size							
+		aui_Surface *surface,
+		uint32 size
 		)
 {
 	return textutils_CreateFont(surface, k_FONT_FACE_NAME, size * 10, 0, 0, TRUE);
@@ -189,8 +179,8 @@ HFONT textutils_GetFont(
 
 
 RECT textutils_GetBounds(
-		aui_Surface *pDirectSurface,	
-		const MBCHAR *pString					
+		aui_Surface *pDirectSurface,
+		const MBCHAR *pString
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -207,7 +197,6 @@ RECT textutils_GetBounds(
 	Assert(pString);
 	if (pString==NULL) return rect;
 
-	
 	hr = pDirectSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return rect;
 
@@ -216,12 +205,11 @@ RECT textutils_GetBounds(
 	rect.right = size.cx;
 	rect.bottom = size.cy;
 
-	
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return rect;
 #endif // __AUI_USE_DIRECTX__
 
-	return rect;  
+	return rect;
 }
 
 
@@ -231,9 +219,9 @@ RECT textutils_GetBounds(
 
 
 RECT textutils_CenterText(
-		aui_Surface *pDirectSurface,	
-		const MBCHAR *pString,				
-		RECT *pDestRect					
+		aui_Surface *pDirectSurface,
+		const MBCHAR *pString,
+		RECT *pDestRect
 		)
 {
 	RECT center = {0,0,0,0};
@@ -247,7 +235,7 @@ RECT textutils_CenterText(
 
 	RECT bounds = textutils_GetBounds(pDirectSurface,pString);
 
-	OffsetRect(&bounds, 
+	OffsetRect(&bounds,
 				pDestRect->left + ((pDestRect->right-pDestRect->left)/2 - (bounds.right-bounds.left)/2),
 				pDestRect->top + ((pDestRect->bottom-pDestRect->top)/2 - (bounds.bottom-bounds.top)/2));
 
@@ -261,7 +249,7 @@ RECT textutils_CenterText(
 
 	Assert(boundsWidth>=0);
 	Assert(boundsHeight>=0);
-	
+
 
 
 
@@ -287,7 +275,7 @@ RECT textutils_CenterText(
 
 
 void textutils_AddFont(
-		const MBCHAR *szFileName	
+		const MBCHAR *szFileName
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -305,7 +293,7 @@ void textutils_AddFont(
 
 
 void textutils_RemoveFont(
-		const MBCHAR *szFileName		
+		const MBCHAR *szFileName
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -323,13 +311,13 @@ void textutils_RemoveFont(
 
 
 HFONT textutils_CreateFont(
-		aui_Surface *pDirectSurface,	
-		const MBCHAR *szFaceName,				
-		sint32 iDeciPtHeight,			
-		sint32 iDeciPtWidth,			
-		sint32 iAttributes,				
-										
-		BOOL fLogRes					
+		aui_Surface *pDirectSurface,
+		const MBCHAR *szFaceName,
+		sint32 iDeciPtHeight,
+		sint32 iDeciPtWidth,
+		sint32 iAttributes,
+
+		BOOL fLogRes
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -371,7 +359,7 @@ HFONT textutils_CreateFont(
 		cxDpi = (FLOAT) (25.4*GetDeviceCaps(hdc, HORZRES) /
 							GetDeviceCaps(hdc, HORZSIZE));
 
-		cyDpi = (FLOAT) (25.4*GetDeviceCaps(hdc, VERTRES) / 
+		cyDpi = (FLOAT) (25.4*GetDeviceCaps(hdc, VERTRES) /
 							GetDeviceCaps(hdc, VERTSIZE));
 	}
 
@@ -403,7 +391,7 @@ HFONT textutils_CreateFont(
 		hFont = (HFONT) SelectObject(hdc, hFont);
 		GetTextMetrics(hdc, &tm);
 		DeleteObject(SelectObject(hdc, hFont));
-		lf.lfWidth = RoundToNearest(tm.tmAveCharWidth * 
+		lf.lfWidth = RoundToNearest(tm.tmAveCharWidth *
 			                        fabs(static_cast<double>(pt.x)) /
 			                        fabs(static_cast<double>(pt.y))
 						           );
@@ -433,13 +421,12 @@ HFONT textutils_CreateFont(
 
 
 void textutils_SelectFont(
-		HFONT hFont	
+		HFONT hFont
 		)
 {
 	Assert(hFont);
 	if (hFont==NULL) return;
 
-	
 	if (g_hFont)
 		textutils_DeleteFont(g_hFont);
 
@@ -453,7 +440,7 @@ void textutils_SelectFont(
 
 
 void textutils_DeleteFont(
-		HFONT hFont	
+		HFONT hFont
 		)
 {
 	Assert(hFont);
@@ -477,7 +464,6 @@ void textutils_DropString(aui_Surface *surface, const MBCHAR *text, sint32 x, si
 	Assert(tempFont);
 	if (!tempFont) return;
 
-	
 	textutils_SelectFont(tempFont);
 	primitives_DropText(surface, x, y, text, colorRef, 1);
 	textutils_DeleteFont(tempFont);
@@ -496,7 +482,6 @@ void textutils_ColoredDropString(aui_Surface *surface, const MBCHAR *text, sint3
 	Assert(tempFont);
 	if (!tempFont) return;
 
-	
 	textutils_SelectFont(tempFont);
 	primitives_ColoredDropText(surface, x, y, text, colorRefText, colorRefDrop, 1);
 	textutils_DeleteFont(tempFont);
@@ -515,12 +500,9 @@ void textutils_CenteredDropString(aui_Surface *surface, const MBCHAR *text, RECT
 	if (!tempFont) return;
 
 
-	
 	textutils_SelectFont(tempFont);
 
-	
 	textutils_CenterText(surface, text, destRect);
-
 
 	primitives_DropTextCentered(surface, destRect, text, colorRef, 1);
 
@@ -541,12 +523,9 @@ void textutils_CenteredColoredDropString(aui_Surface *surface, const MBCHAR *tex
 	if (!tempFont) return;
 
 
-	
 	textutils_SelectFont(tempFont);
 
-	
 	textutils_CenterText(surface, text, destRect);
-
 
 	primitives_ColoredDropTextCentered(surface, destRect, text, colorRefText, colorRefDrop, 1);
 
@@ -563,10 +542,8 @@ void textutils_SizedBoundedString(aui_Surface *surface, const MBCHAR *text, RECT
 	if (!tempFont) return;
 
 
-	
 	textutils_SelectFont(tempFont);
 
-	
 	textutils_CenterText(surface, text, destRect);
 
 	primitives_DrawBoundedText(surface, destRect, text, colorRef, 1);
@@ -581,7 +558,7 @@ void textutils_SizedBoundedString(aui_Surface *surface, const MBCHAR *text, RECT
 
 
 void textutils_TestFonts(
-		aui_Surface *pDirectSurface	
+		aui_Surface *pDirectSurface
 		)
 {
 #ifdef __AUI_USE_DIRECTX__
@@ -644,4 +621,3 @@ void textutils_TestFonts(
 	textutils_RemoveFont("../Fusion/Fonts/Symbol.ttf");
 #endif // __AUI_USE_DIRECTX__
 }
-

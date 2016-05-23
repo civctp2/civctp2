@@ -1,4 +1,3 @@
-
 #ifndef UNIT_MANAGER_H__
 #define UNIT_MANAGER_H__
 
@@ -53,7 +52,6 @@ class UnitManager {
 
 	static void UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Advice(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
 
 	static void TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void DisbandButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -63,7 +61,6 @@ class UnitManager {
 					uint32 action, uint32 data, void *cookie);
 
 	static void DisbandQuery(bool response, void *data);
-
 
 	static void InitializeEvents();
 	static void CleanupEvents();
@@ -77,7 +74,7 @@ private:
     ctp2_ListBox *      m_tacticalList;
     ctp2_ListBox *      m_adviceList;
 	ctp2_TabGroup *     m_tabGroup;
-	PointerList<UnitManagerCategoryInfo> 
+	PointerList<UnitManagerCategoryInfo>
                         m_unitCategories;
 	uint32              m_lastDisbandedUnit;
 };

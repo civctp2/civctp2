@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -50,7 +50,6 @@ enum AUI_BUTTON_ACTION
 class aui_Image;
 class aui_Surface;
 
-
 class aui_Button : public aui_Control
 {
 public:
@@ -72,7 +71,6 @@ public:
 
 	virtual AUI_ERRCODE ResetThis( void );
 
-	
 	sint32 ExtractRepeatCount( uint32 data ) const { return (sint32)data; }
 
 	virtual AUI_ERRCODE DrawThis(
@@ -81,18 +79,17 @@ public:
 		sint32 y = 0 );
 
 protected:
-	aui_Button() 
-    : 
+	aui_Button()
+    :
         aui_Control     (),
         m_isRepeating   (false),
         m_repeatCount   (0)
     {};
 
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	
-							
+
 	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
-	
+
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
@@ -102,12 +99,11 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 
-	BOOL	m_isRepeating;	
-	sint32	m_repeatCount;	
+	BOOL	m_isRepeating;
+	sint32	m_repeatCount;
 
 private:
 	AUI_ERRCODE InitCommon( void );
 };
 
-
-#endif 
+#endif

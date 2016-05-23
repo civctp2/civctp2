@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been modified by the Apolyton CtP2 Source Code Project. 
+ * This material has been modified by the Apolyton CtP2 Source Code Project.
  * Contact the authors at ctp2source@apolyton.net.
  *
  * Modifications from the Activision Anet 0.10 code:
@@ -137,7 +137,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  2. Close handles by looking at hdl2sess rather than dpid2hdl;
  this catches even hosts that haven't created players yet.
  Revision 1.29  1997/09/01 00:37:38  dkegel
- Hosts which time out now have their player and host records 
+ Hosts which time out now have their player and host records
  removed again.
  Revision 1.28  1997/08/31 22:14:21  dkegel
  Compiles with gcc.  (Had to cast foo ** to void **... yech.)
@@ -192,14 +192,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.15  1997/08/23 21:24:19  dkegel
  Master now updates session record when players enter or leave.
  Revision 1.14  1997/08/23 20:48:12  dkegel
- 1. Added dp_LEAVE_PACKET_ID 
+ 1. Added dp_LEAVE_PACKET_ID
  2. Added dpSendLeaveSession() and dpHandleLeaveSession()
  3. Added code in dpClose() to more thoroughly undo dpOpen()
  Revision 1.13  1997/08/23 00:54:22  dkegel
  Fixed swap routine.
  Revision 1.12  1997/08/23 00:41:31  dkegel
  1. Maintain array to map dpid's to playerhdl's.
- 2. Implement dpClose more fully.  
+ 2. Implement dpClose more fully.
  Revision 1.11  1997/08/22 21:13:19  dkegel
  1. Avoid calling dpClose in callbacks by setting new private flag
  pleaseClose
@@ -297,7 +297,6 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 #define DEFER_SESSION_UPDATE
 #define DP_BEACON_INT_MSEC 1000		/* How often to do frequent chores */
 
@@ -378,7 +377,7 @@ static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags);
 static int dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, int flags);
 
 /*----------------------------------------------------------------------
- Debugging routines. 
+ Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
 static void dumpBuf(const char *buf, int len)
@@ -440,7 +439,6 @@ static void dprint_sess(dp_t *dp, const dp_session_t *sess, char *msg)
 #else
 #define dprint_sess(dp, sess, msg)
 #endif
-
 
 /*-------------------------------------------------------------------------
 Debugging dump routines
@@ -512,7 +510,6 @@ void dp_assertValid(dp_t* d)
 #define dp_assertValid(d)
 #endif
 
-
 /*-------------------------------------------------------------------------
 Debugging dump routines
 -------------------------------------------------------------------------*/
@@ -569,7 +566,7 @@ void dumpSessionContexts(dp_t *dp)
 #endif
 
 /*-------------------------------------------------------------------------
- Byte-swapping routines.  
+ Byte-swapping routines.
  This library runs on both bigendian and little-endian machines, so
  every object stuffed into a dptab table should have one of these
  so the bytes sent over the network always have a standard byte ordering.
@@ -600,11 +597,10 @@ static void dpSwapSelectSessionPacket(dp_select_sess_packet_t *p)
 #endif
 #define dpSwapLeavePacketT(p, len) dpSwapJoinPacketT(p, len)
 
- 
 /*----------------------------------------------------------------------
  Convert a dpid into a playerHdl.
 
- Works only for the default session.  
+ Works only for the default session.
  Looks up the comm handle associated with the block of dpid's containing
  the specified id.
 ----------------------------------------------------------------------*/
@@ -686,7 +682,7 @@ void commHdl4dpid(
 	firstId = (dpid_t) (id & ~(dp_PLAYERS_PER_HOST-1));	/* Skip back to firstId */
 	if (h == PLAYER_NONE) {
 		int err = assoctab_subscript_delete(dp->dpid2commHdl, firstId);
-		DPRINT(("commHdl4dpid: deleting commHdl[%d..%d]; fail:%d\n", 
+		DPRINT(("commHdl4dpid: deleting commHdl[%d..%d]; fail:%d\n",
 			firstId, firstId+dp_PLAYERS_PER_HOST-1, err));
 		dp_assertValid(dp);
 		return;
@@ -698,22 +694,22 @@ void commHdl4dpid(
 		dp_assertValid(dp);
 		return;
 	}
-	DPRINT(("commHdl4dpid: assigning commHdl[%d..%d] = %d\n", 
+	DPRINT(("commHdl4dpid: assigning commHdl[%d..%d] = %d\n",
 		firstId, firstId+dp_PLAYERS_PER_HOST-1, h));
 
 	/* Quick sanity check.
 	 * I don't think zero is an officially reserved value
 	 * for playerHdl_t, but the drivers we have do seem to avoid using
-	 * handle 0.  
+	 * handle 0.
 	 */
 	if (*pH && (*pH != PLAYER_NONE) && (*pH != h)) {
-		DPRINT(("commHdl4dpid: commHdl[%d..%d] was already %d: bug!\n", 
+		DPRINT(("commHdl4dpid: commHdl[%d..%d] was already %d: bug!\n",
 				firstId, firstId+dp_PLAYERS_PER_HOST-1, *pH, h));
 	}
 	*pH = h;
 	dp_assertValid(dp);
 }
- 
+
 /*----------------------------------------------------------------------
  Somebody requested something they couldn't have.  Send an error packet.
 ----------------------------------------------------------------------*/
@@ -766,8 +762,8 @@ static void dpSendSessionLostPacket(dp_t *dp)
 }
 
 /*----------------------------------------------------------------------
- Notify the caller of the success or failure of his attempt to join a 
- session using the callback passed to dpOpen (if any) and a local packet 
+ Notify the caller of the success or failure of his attempt to join a
+ session using the callback passed to dpOpen (if any) and a local packet
  indicating success or failure and information about the session joined.
 
  If there are no internal errors, dp_RES_OK is returned.
@@ -784,7 +780,7 @@ static dp_result_t dpOpenLocalResult(dp_t *dp, dp_result_t reason, dpid_t id)
 		dp_packetType_t tag;
 		dp_sessionResult_packet_t body;
 	} pkt;
-	
+
 	assert(dp->dpOpen_cb != NULL);
 	cb = dp->dpOpen_cb;
 	dp->dpOpen_cb = NULL;  /* flag: our open is no longer in progress */
@@ -807,13 +803,13 @@ static dp_result_t dpOpenLocalResult(dp_t *dp, dp_result_t reason, dpid_t id)
 			err = dp_RES_BUG;
 		}
 	} else {
-		DPRINT(("dpOpenLocalResult: t:%d session join failed, reason:%d\n", 
+		DPRINT(("dpOpenLocalResult: t:%d session join failed, reason:%d\n",
 				*(dp->dpio->now), reason));
 		pSess = NULL;
 		dp->pleaseClose = TRUE;
 	}
 
-	DPRINT(("dpOpenLocalResult: calling callback %p\n", cb)); 
+	DPRINT(("dpOpenLocalResult: calling callback %p\n", cb));
 	cb(pSess, NULL, 0, dp->dpOpen_context);
 	dpioerr = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
 	if (dpioerr != dp_RES_OK) {
@@ -854,7 +850,7 @@ static void dp_openHdl_cb(
 				DPRINT(("dp_openHdl_cb: deleting host record for h:%x; first_id:%d\n", h, firstId));
 				subkey[0] = (char) dpGETSHORT_FIRSTBYTE(firstId);
 				subkey[1] = (char) dpGETSHORT_SECONDBYTE(firstId);
-				dptab_delete(dp->dt, dp->hosts, subkey, 2);	
+				dptab_delete(dp->dt, dp->hosts, subkey, 2);
 			}
 			if (h == dp->hMaster) {
 				dp_session_t sess;
@@ -895,13 +891,13 @@ static void dp_openHdl_cb(
 					DPRINT(("dp_openHdl_cb: sp %p; h:%x was in a session; deleting\n", *spp, h));
 					dptab_delete_bySrc(dp->dt, (*spp)->players, h);
 					dptab_delete_bySrc(dp->dt, (*spp)->myplayers, h);
-					dptab_delete_bySrc(dp->dt, (*spp)->hosts, h);	
+					dptab_delete_bySrc(dp->dt, (*spp)->hosts, h);
 
 					for (i = 0; i < dp_MAX_GROUPS; i++) {
-						dptab_delete_bySrc(dp->dt, (*spp)->grplayers[i], h);	
+						dptab_delete_bySrc(dp->dt, (*spp)->grplayers[i], h);
 					}
 
-					dptab_delete_bySrc(dp->dt, (*spp)->groups, h);	
+					dptab_delete_bySrc(dp->dt, (*spp)->groups, h);
 				}
 				assoctab_subscript_delete(dp->hdl2sess, h);
 			}
@@ -913,7 +909,7 @@ static void dp_openHdl_cb(
 			if(peer != NULL) {
 				dptab_assertValidPeer(peer);
 				/* Clean up after dp_RemoteEnumPlayers() by deleting any player
-				 * table published from this handle that isn't just 
+				 * table published from this handle that isn't just
 				 * his myplayers table & that isn't in use by the
 				 * current session
 				 */
@@ -947,7 +943,7 @@ static void dp_openHdl_cb(
 			int len = dp_MAX_ADR_LEN;
 			static unsigned char adr[dp_MAX_ADR_LEN];
 			dp_result_t err = dp_RES_OK;
-	
+
 			memset(adr, 0, sizeof(adr));
 			/*
 			err = hdl2adr(h, adr, &len);
@@ -1017,7 +1013,7 @@ DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_s
 	*lenp = len;
 	q += len;
 
-	DPRINT(("dp_pack_session: subkey %s, adrMaster ", 
+	DPRINT(("dp_pack_session: subkey %s, adrMaster ",
 			key2a2(p->reserved2, subkeylen)));
 	printAdr(dp->dpio->myAdrLen, p->adrMaster);
 	/*dumpBuf(buf, (q - buf));*/
@@ -1040,7 +1036,7 @@ DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_s
 }
 
 /*----------------------------------------------------------------------
- Unpack the compact, byte-order-uniform version of a dp_session_t 
+ Unpack the compact, byte-order-uniform version of a dp_session_t
  into the fluffy form we use internally.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
@@ -1096,16 +1092,16 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 
 	len = *q++;
 	memset(userbuf, 0, sizeof(userbuf));
-	memcpy(userbuf, q, len); 
+	memcpy(userbuf, q, len);
 	q += len;
 	p->dwUser1 = (long) dpMAKELONG(userbuf[0], userbuf[1], userbuf[2], userbuf[3]);
 	/*DPRINT(("dp_unpack_session: dwuser1 %02x%02x%02x%02x = %08x\n", userbuf[0], userbuf[1], userbuf[2], userbuf[3], p->dwUser1));*/
 
 	len -= 4;
-	if (len > dp_USERFIELDLEN) 
+	if (len > dp_USERFIELDLEN)
 		len = dp_USERFIELDLEN;
 	if (len > 0)
-		memcpy(p->szUserField, userbuf+4, len);	
+		memcpy(p->szUserField, userbuf+4, len);
 
 	len = buflen - ((int)q - (int)buf);
 	if (len > 0) {
@@ -1141,7 +1137,7 @@ static int dp_pack_session(dp_t *dp, const dp_session_t *p, char *buf)
 }
 
 /*----------------------------------------------------------------------
- Unpack the compact, byte-order-uniform version of a dp_session_t 
+ Unpack the compact, byte-order-uniform version of a dp_session_t
  into the fluffy form we use internally.
  All this does right now is add back in the subkey.
  Returns number of bytes used, or -1 on error.
@@ -1192,7 +1188,7 @@ dp_sessions_cb(
 	if (bIAmGameServer(dp) && status == dp_RES_CREATED) {
 		dp_result_t err;
 		dp_uid_t uid;
-		
+
 		uid = tserv_hdl2uid(dp->tserv, src);
 		DPRINT(("dp_sessions_cb: recording sessid4uid(%d)\n", uid));
 		err = dp_sessid4uid(dp, uid, sess.reserved2, dp->dpio->myAdrLen+2, sess.sessionType);
@@ -1200,7 +1196,7 @@ dp_sessions_cb(
 			DPRINT(("dp_sessions_cb: can't record session for h:%x uid:%d, err:%d\n", src, uid, err));
 		}
 	}
-	
+
 	if (dp->monitor_object_sessions) {
 		dp_result_t err;
 		err = dpSendObjectDelta(dp, status, (dp_object_t *) &sess, table, subkey, subkeylen);
@@ -1216,7 +1212,7 @@ dp_sessions_cb(
 			dp->election_old_session = sess;
 		} else if (status == dp_RES_DELETED) {
 			DPRINT(("dp_sessions_cb: current session deleted.\n"));
-			if ((dp->hGameServer != PLAYER_NONE) 
+			if ((dp->hGameServer != PLAYER_NONE)
 			&&  (dp->hMaster == PLAYER_ME)
 			&&  !dp->closing) {
 				dp_result_t err;
@@ -1254,7 +1250,7 @@ dp_sessions_cb(
 		/* Report only sessions that allow new players, and have same type unless wildcard (0) specified */
 		if (
 #ifdef IGNORE_CLOSEDSESS
-			!(sess.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) || 
+			!(sess.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) ||
 #endif
 			(dp->enumSessions_sessType && (dp->enumSessions_sessType != sess.sessionType))) {
 			dp_assertValid(dp);
@@ -1284,10 +1280,10 @@ dp_sessions_cb(
 }
 
 /*----------------------------------------------------------------------
- Unpack the compact, byte-order-uniform version of a dp_host_t 
+ Unpack the compact, byte-order-uniform version of a dp_host_t
  into the fluffy form we use internally.
  Since the record's key is firstId, no need to send that.
- Reduces record size from 18 to 10 bytes if adrlen is 4, so we can get 
+ Reduces record size from 18 to 10 bytes if adrlen is 4, so we can get
  21 instead of 12 of these into one packet.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
@@ -1383,11 +1379,11 @@ static int dp_pack_playerId(const dp_playerId_t *p, char *buf)
 	q += len;
 
 #if 0
-	DPRINT(("dp_pack_playerId: len %d: karma %d bloblen %d name %s\n", 
+	DPRINT(("dp_pack_playerId: len %d: karma %d bloblen %d name %s\n",
 			(q - buf), p->karma, p->bloblen, p->name));
 	DPRINT(("dp_pack_playerId: input:"));
 	dumpBuf((char *)p, sizeof(*p));
-	DPRINT(("dp_pack_playerId: output:")); 
+	DPRINT(("dp_pack_playerId: output:"));
 	dumpBuf(buf, q - buf);
 #endif
 
@@ -1395,7 +1391,7 @@ static int dp_pack_playerId(const dp_playerId_t *p, char *buf)
 }
 
 /*----------------------------------------------------------------------
- Unpack the compact, byte-order-uniform version of a dp_playerId_t 
+ Unpack the compact, byte-order-uniform version of a dp_playerId_t
  into the fluffy form we use internally.
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
@@ -1410,7 +1406,7 @@ int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 
 	len = *q++;
 #if 0
-	DPRINT(("dp_unpack_playerId(id %d): name len %d, expected max %d\n", 
+	DPRINT(("dp_unpack_playerId(id %d): name len %d, expected max %d\n",
 			id, len, dp_PNAMELEN));
 	dumpBuf(buf, 20);
 #endif
@@ -1427,7 +1423,7 @@ int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 		DPRINT(("dp_unpack_playerId: blob len %d, expected max of %d\n", len, dp_MAX_PLAYERBLOB_LEN));
 		return -1;
 	}
-	p->bloblen = len; 
+	p->bloblen = len;
 	memcpy(p->blob, q, len);
 	q += len;
 
@@ -1462,8 +1458,8 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 		if (dpid2commHdl(dp, phost->firstId) == PLAYER_NONE) {
 			DPRINT(("dp_player_notify: bug: no handle for firstId %d yet\n", phost->firstId));
 #if 0
-		/* Open a comm handle to this fellow, and 
-		 * Remember the comm handle for this range of id's. 
+		/* Open a comm handle to this fellow, and
+		 * Remember the comm handle for this range of id's.
 		 * FIXME: to work behind firewalls, might need to open oadr
 		 * instead.  Probably need to pass both addresses to dpio and
 		 * let it sort the issue out.
@@ -1476,18 +1472,18 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 	}
 
 	/* Should we use iadr or oadr?  Can't tell until we try to connect.
-	 * For now, just guess iadr.  We won't have oadr until dpio 
+	 * For now, just guess iadr.  We won't have oadr until dpio
 	 * knows how to get address of sender of packets from strangers.
 	 * We'll have to deal with this before we work over firewalls.  FIXME
 	 */
 	memcpy(pp->adr, phost->iadr, dp->dpio->myAdrLen);
-	/* This address should not be used, let's set it to zero to see what happens :) 
+	/* This address should not be used, let's set it to zero to see what happens :)
 	   Well, what happens is DR1.3 ignore feature goes to pot.
 	memset(pp->adr, 0x00, dp->dpio->myAdrLen); */
 
 	/* If a player was added, and it was us, call dpCreatePlayer's callback.
 	 *
-	 * It's not enough to match our internal address, because 
+	 * It's not enough to match our internal address, because
 	 * others might be behind different firewalls, and share the
 	 * same internal address.
 	 * Um, for the moment, just make sure it has the expected id.  FIXME
@@ -1498,7 +1494,7 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 			DPRINT(("dp_player_notify: bug: id %d != nextId-1 %d\n", pp->id, dp->nextId-1));
 		}
 		if (status == dp_RES_CREATED) {
-			DPRINT(("dp_player_notify: local player created, calling callback.  t:%d, id %d, name %s, status %d\n", 
+			DPRINT(("dp_player_notify: local player created, calling callback.  t:%d, id %d, name %s, status %d\n",
 					*(dp->dpio->now), pp->id, pp->name, status));
 			if (dp->dpCreatePlayer_cb)
 				dp->dpCreatePlayer_cb(pp->id,
@@ -1585,15 +1581,15 @@ dp_playervars_cb(
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dp_playervars_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n", 
-			status, src, dest, 
+	DPRINT(("dp_playervars_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n",
+			status, src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 
 	/* Don't care about send events */
 	if ((status != dp_RES_CREATED) && (status != dp_RES_CHANGED) && (status != dp_RES_DELETED)) {
 		return 0;
-	} 
+	}
 	if (status == dp_RES_DELETED) {
 		/* ???????? don't do anything ?????? */
 		return dp_RES_OK;
@@ -1634,7 +1630,7 @@ dp_playervars_cb(
 		dpid_t firstid = (unsigned short) dpMAKESHORT(table->key[3], table->key[4]);
 		id = firstid + (unsigned short) dpMAKESHORT(subkey[0], 0);
 	}
-	DPRINT(("dp_playervars_cb: subkey %s maps to id %d\n", 
+	DPRINT(("dp_playervars_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
 	{	struct {
@@ -1664,7 +1660,7 @@ static short dp_getDesiredHandleOptions(dp_t *dp, playerHdl_t h)
 {
 	short opt;
 
-	/* Check pings, if dpSetPingIntervals() was called. 
+	/* Check pings, if dpSetPingIntervals() was called.
 	 * Not sure this is quite right for a server, but it's not unreasonable.
 	 */
 	opt = dp->peerHandleMode;
@@ -1723,8 +1719,8 @@ dp_hosts_cb(
 
 	if ((status == dp_RES_CREATED) || (status == dp_RES_CHANGED)) {
 #if 1
-		/* Open a comm handle to this fellow, and 
-		 * remember the comm handle for this range of id's. 
+		/* Open a comm handle to this fellow, and
+		 * remember the comm handle for this range of id's.
 		 *
 		 * Supports NAT and machines with multiple ip interfaces
 		 * as long as the game server only sees one address.
@@ -1811,7 +1807,7 @@ dp_hosts_cb(
 			dptab_table_t *playervars;
 			char key[dptab_KEY_MAXLEN];
 			int keylen;
-			dp_session_t sess;	
+			dp_session_t sess;
 			err = dpGetSessionDescById(dp, pSess->sess_subkey, &sess, 0);
 			if (err != dp_RES_OK) {
 				DPRINT(("dp_hosts_cb: bug: can't get session record\n"));
@@ -1972,8 +1968,8 @@ dp_myplayers_cb(
 	dp_result_t err;
 
 	dptab_assertValid(dptab);
-	DPRINT(("dp_myplayers_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n", 
-			status, src, dest, 
+	DPRINT(("dp_myplayers_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n",
+			status, src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 
@@ -2010,10 +2006,10 @@ dp_myplayers_cb(
 			uid = tserv_hdl2uid(dp->tserv, src);
 		player.karma = (dp_karma_t)(uid & 0xffff);	/* kludge... */
 		DPRINT(("dp_myplayers_cb: id %d, karma %d (uid %d), bloblen %d, name %s\n",
-				player.id, 
+				player.id,
 				player.karma, uid,
 				player.bloblen,
-				player.name)); 
+				player.name));
 		playerlen = dp_pack_playerId(&player, playerbuf);
 
 		DPRINT(("dp_myplayers_cb: setting player info in pSess->players\n"));
@@ -2067,8 +2063,8 @@ dp_players_cb(
 	size_t hostlen;
 
 	dptab_assertValid(dptab);
-	DPRINT(("dp_players_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n", 
-			status, src, dest, 
+	DPRINT(("dp_players_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n",
+			status, src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 
@@ -2110,7 +2106,7 @@ dp_players_cb(
 		err = dptab_set(dp->dt, dp->mysessions, pSess->sess_subkey, pSess->sess_subkeylen, rawbuf, rawbuflen, 4, PLAYER_ME);
 		DPRINT(("dp_players_cb: currentPlayers now %d; dptab_set returns err:%d\n", sess.currentPlayers, err));
 
-	}	
+	}
 	}
 #endif
 
@@ -2139,12 +2135,12 @@ dp_players_cb(
 		key[2] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
 		for (i = dp->firstGId; i < dp->firstGId + dp_MAX_GROUPS; i++) {
 			dptab_table_t *grplayers;
-			key[0] = (char) dp_KEY_GROUP_PLAYERS;	
+			key[0] = (char) dp_KEY_GROUP_PLAYERS;
 			key[3] = (char) dpGETSHORT_FIRSTBYTE(i);
 			key[4] = (char) dpGETSHORT_SECONDBYTE(i);
 			if ((grplayers = dptab_getTable(dp->dt, key, keylen)) != NULL)
 				dptab_delete(dp->dt, grplayers, subkey, subkeylen);
-			key[0] = (char) dp_KEY_GROUP_MYPLAYERS;	
+			key[0] = (char) dp_KEY_GROUP_MYPLAYERS;
 			if ((grplayers = dptab_getTable(dp->dt, key, keylen)) != NULL)
 				dptab_delete(dp->dt, grplayers, subkey, subkeylen);
 		}
@@ -2183,20 +2179,20 @@ dp_players_cb(
 		return 0;
 	}
 
-	DPRINT(("dp_players_cb: subkey %s maps to id %d\n", 
+	DPRINT(("dp_players_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
 	len = dp_unpack_playerId(id, buf, &player);
 	if (len != total) {
-		DPRINT(("dp_players_cb: can't unpack player %d; len %d != total %d\n", 
+		DPRINT(("dp_players_cb: can't unpack player %d; len %d != total %d\n",
 				id, len, total));
 		dp_assertValid(dp);
 		return 0;
 	}
 
-	/* get the player's network address from the hosts table. 
+	/* get the player's network address from the hosts table.
 	 * If we can't, it might be because the player record was delivered
-	 * before the hosts record; to handle this, the hosts callback will call 
+	 * before the hosts record; to handle this, the hosts callback will call
 	 * dp_player_notify on any players already in the table.
 	 */
 	if (!dp->hosts) {
@@ -2245,8 +2241,8 @@ dp_groups_cb(
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dp_groups_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n", 
-			status, src, dest, 
+	DPRINT(("dp_groups_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n",
+			status, src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 
@@ -2272,7 +2268,7 @@ dp_groups_cb(
 	}
 
 	id = (unsigned short) dpMAKESHORT(subkey[0], subkey[1]);
-	DPRINT(("dp_groups_cb: subkey %s maps to id %d\n", 
+	DPRINT(("dp_groups_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
 	gbuf.id = id;
@@ -2339,8 +2335,8 @@ dp_group_players_cb(
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dp_group_players_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n", 
-			status, src, dest, 
+	DPRINT(("dp_group_players_cb: status:%d, src h:%x, dest h:%x, table %s, subkey %s\n",
+			status, src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 
@@ -2377,7 +2373,7 @@ dp_group_players_cb(
 	}
 
 	id = (dpid_t) dpMAKESHORT(subkey[0], subkey[1]);
-	DPRINT(("dp_group_players_cb: subkey %s maps to id %d\n", 
+	DPRINT(("dp_group_players_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
 	gbuf.dpIdGroup = (unsigned short) dpMAKESHORT(table->key[3], table->key[4]);
@@ -2420,7 +2416,6 @@ dp_group_players_cb(
 	dp_assertValid(dp);
 	return 0;
 }
-
 
 /* Used to mark freeze files (for Garfield fans) */
 #define dp_SIGNATURE	(0x0D1E)
@@ -2522,7 +2517,6 @@ dp_sessionContext_freeze(
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
 Thaw the contents of a dp_sessionContext_t.
 Assumes that dp contains a dptab that has already been thawed.
@@ -2613,7 +2607,6 @@ dp_sessionContext_thaw(
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
 Save the current running game to a file (for use during a future dpCreate).
 
@@ -2641,7 +2634,7 @@ dpFreeze(
 	dp_assertValid(dp);
 
 #if 0
-	/* The caller should be responsible for waiting for any important 
+	/* The caller should be responsible for waiting for any important
 	 * communications to finish (using dpReadyToFreeze), if this is desired.
 	 * dpFreeze will happily freeze and thaw all in transit communications,
 	 * which is handy for doing a quick server restart to change log files.
@@ -2652,7 +2645,7 @@ dpFreeze(
 		return dp_RES_BUSY;
 	}
 #endif
-	
+
 	if((fp = fopen(fname, "wb")) == NULL) {
 		DPRINT(("dpFreeze: Couldn't open file %s for writing.\n", fname));
 		dp_assertValid(dp);
@@ -2660,7 +2653,7 @@ dpFreeze(
 	}
 
 	/* Transport layer */
-	/* Must call before signature, so that both dpCreate() and dpio_create() 
+	/* Must call before signature, so that both dpCreate() and dpio_create()
 	   can restore from this file. */
 	err = dpio_freeze(dp->dpio, fp);
 	if (err != dp_RES_OK) {
@@ -2707,7 +2700,7 @@ dpFreeze(
 		(fwrite(&(dp->nextGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fwrite(&(dp->defaultSessionType), sizeof(dp_species_t), 1, fp) != 1) ||
 		(fwrite(&(dp->select_keylen), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) != 
+		(fwrite(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) !=
 		 											dptab_KEY_MAXLEN) ||
 		(fwrite(&(dp->pleaseClose), sizeof(int), 1, fp) != 1)) {
 		DPRINT(("dpFreeze: error writing details\n", err));
@@ -2843,7 +2836,7 @@ dpFreeze(
 		fclose(fp);
 		return dp_RES_FULL;
 	}
-		
+
 	if(fclose(fp) != 0) {
 		DPRINT(("dpFreeze: error closing.\n"));
 		return dp_RES_BAD;
@@ -2859,11 +2852,10 @@ dpFreeze(
 	return dp_RES_OK;
 }
 
-
 /*------------------------------------------------------------------------
  Restore the current state from a stream.
 
- Most of the information is simply restored from the stream.  
+ Most of the information is simply restored from the stream.
  Caller must have initialized dpio.
  All dpEnumPlayers, dpEnumSessions, and dpPingUser information is cleared.
 
@@ -2930,7 +2922,7 @@ dpThaw(
 		(fread(&(dp->nextGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fread(&(dp->defaultSessionType), sizeof(dp_species_t), 1, fp) != 1) ||
 		(fread(&(dp->select_keylen), sizeof(int), 1, fp) != 1) ||
-		(fread(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) != 
+		(fread(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) !=
 													dptab_KEY_MAXLEN) ||
 		(fread(&(dp->pleaseClose), sizeof(int), 1, fp) != 1)) {
 		DPRINT(("dpThaw: error reading details\n", err));
@@ -2996,7 +2988,7 @@ dpThaw(
 		return dp_RES_EMPTY;
 	}
 	DPRINT(("dpThaw: thawing dpid2commHdl of %d items\n", id2comm_used));
-	if ((id2comm_used < 0) 
+	if ((id2comm_used < 0)
 	|| (id2comm_used > (dp_PLAYERS_PER_HOST * dp->dpio->max_playerHdls))) {
 		DPRINT(("dpThaw: wrong length for dpid2commHdl:%d\n", id2comm_used));
 		dp->dpid2commHdl = NULL;
@@ -3123,8 +3115,8 @@ dpThaw(
 					err = dptab_get_byindex(pSess->hosts, j, (void **)&hostbuf, &len, subkey, &subkeylen);
 					condition(err == dp_RES_OK, "pSess->hosts corrupted");
 					if (((dpid_t)dpMAKESHORT(subkey[0], subkey[1])) == dp->firstId) continue; /* already did our own table */
-					key[3] = subkey[0]; 
-					key[4] = subkey[1]; 
+					key[3] = subkey[0];
+					key[4] = subkey[1];
 					playervars = dptab_getTable(dp->dt, key, keylen);
 					assert(playervars != NULL);
 					err = dptab_setTableCallback(playervars, dp_playervars_cb, pSess);
@@ -3192,7 +3184,7 @@ dpThaw(
 		DPRINT(("dpThaw: tserv_Thaw returns err:%d\n", err));
 		return err;
 	}
-	
+
 	dumpSessionContexts(dp);
 	assert((dp->players == NULL) ||
 		(dptab_getTableContext(dp->players, dp_players_cb) != NULL));
@@ -3210,7 +3202,6 @@ dpThaw(
 	dp->next_beacon4 = dp->now + 4*dp->beacon_interval;
 	/* rely on dpCreate's memset(dp, 0, sizeof(dp)) to clear all fields
 	   associated with dpEnumServers, dpEnumSessions, and dpPingUser */
-
 
 	dp_assertValid(dp);
 	return dp_RES_OK;
@@ -3260,7 +3251,7 @@ static int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout,long fl
 	/*dumpBuf((char *)sDesc, sizeof(dp_session_t)); */
 
 	DPRINT(("(k %d; %d/%d plrs; spec %d; fl %x; U1 %x; pw '%s') name %s reserved2 %d.%d.%d.%d\n",
-		sDesc->karma & 0xffff, 
+		sDesc->karma & 0xffff,
 		sDesc->currentPlayers,
 		sDesc->maxPlayers,
 		sDesc->sessionType, sDesc->flags,
@@ -3322,7 +3313,7 @@ static void chopnl(char *string)
 --------------------------------------------------------------------------*/
 static int allzeros(char *buf, int len)
 {
-	while(len--) 
+	while(len--)
 		if (*buf++)
 			return FALSE;
 
@@ -3335,13 +3326,13 @@ static int allzeros(char *buf, int len)
 #if defined(_WIN32) || defined(UNIX)  /* No dpYield/dpReadAnetInf for Mac */
 
 /*-------------------------------------------------------------------------
- Given a file pointer pointing to a dp_launchParams_t, initialize a 
+ Given a file pointer pointing to a dp_launchParams_t, initialize a
  dp_t and connect to or create a game session specified by the file.
- Do not return until the session has been established and a player has 
+ Do not return until the session has been established and a player has
  been created.
  During any delays, this function will call the given callback periodically
- to both inform the caller of its progress joining the session and to 
- give the caller a chance to abort (by returning 0). 
+ to both inform the caller of its progress joining the session and to
+ give the caller a chance to abort (by returning 0).
 -------------------------------------------------------------------------*/
 DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb, void *context)
 {
@@ -3355,10 +3346,10 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	char	 GameArgs[MAX_PATH]="";
 	char	 GameCwd[MAX_PATH]="";
 	char	 GameShellOpts[MAX_PATH]="";
-	int		 cancelStatus=0;	
+	int		 cancelStatus=0;
 	dpid_t my_id;
 	time_t deadline;
-	
+
 	/* KLUDGE: this has to be static, or 'finder.sessname' is corrupted
 	 * when callback time comes around.  FIXME
 	 * The way to fix this is to use session delta messages instead of
@@ -3379,7 +3370,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	if (!thawfp) {
 		DPRINT(("dpCommThaw: null fp\n"));
 		return dp_RES_BAD;
-	} 
+	}
 	if (!fgets(arg, sizeof(arg), thawfp)) {
 		DPRINT(("dpCommThaw: fread() failed to read from freeze.dat \n"));
 		return dp_RES_BAD;
@@ -3401,7 +3392,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 			DPRINT(("dpCommThaw: Bad argument '%s' in thaw file\n", arg));
 		}
 	}
-	
+
 	/* Load the app's anet.inf. */
 	err = dpReadAnetInf(".", &app);
 	if (err != dp_RES_OK) {
@@ -3440,18 +3431,18 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 			DPRINT(("dpCommThaw: Can't connect to game server %s, err %d\n", params.GameServer, err));
 			return dp_RES_BAD;
 		}
-		
+
 		/* Login using Username and Password (tserv login) */
 		if (params.Username[0] != 0) {
 			int got_result = FALSE;
 			dp_uid_t dpuid = dp_UID_NONE;
 			dp_uid_t tservuid = dp_UID_NONE;
-			
+
 			/* Send our username and password and wait for a response */
 			err = dpAccountLoginA(dp, params.Username, params.Password);
 			if (err != dp_RES_OK)
 				return dp_RES_BAD;
-			
+
 			while (!got_result) {
 				dpid_t idFrom;
 				dpid_t idTo;
@@ -3529,7 +3520,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 		}
 		DPRINT(("dpCommThaw: t:%d, extra wait done\n", eclock()));
 	}
-		   
+
 	/* Start or wait for the session. */
 	if (params.Host) {
 		/* Create a room */
@@ -3886,7 +3877,7 @@ DP_API dp_result_t dpCreate(
 
 	/* Setup for dpShutdown() */
 	dp->quitState = 0;
-	
+
 	/* Success. */
 	*pdp = dp;
 	dp_assertValid(dp);
@@ -3960,7 +3951,7 @@ DP_API dp_result_t dpCloseGameServer(
 
 	h = dp->hGameServer;
 
-	/* Clear old list of sessions, and don't let him publish any more to us; 
+	/* Clear old list of sessions, and don't let him publish any more to us;
 	 * a few may leak thru, but will go away when close handle callback fires.
 	 * Note: deleting the table would cause a crash if any more packets
 	 * come in and were routed there; this actually happened when running
@@ -4036,7 +4027,7 @@ DP_API dp_result_t dpResolveHostname(
 			}
 		}
 	}
-				
+
 	if (dpio_scanAdr(dp->dpio, hostname, adrbuf, dp_MAX_ADR_LEN) == 0)
 		return dp_RES_BAD;
 
@@ -4061,7 +4052,7 @@ static dp_result_t dp_setSessionTablePeer(
 	precondition(dp != NULL);
 	dp_assertValid(dp);
 
-	DPRINT(("dp_setSessionTablePeer: sessionType %d, h:%x\n", sessionType, h)); 
+	DPRINT(("dp_setSessionTablePeer: sessionType %d, h:%x\n", sessionType, h));
 	/* Register the game server as a dptab peer. */
 	err = dptab_addPeer(dp->dt, h);
 	if ((err != dp_RES_OK) && (err != dp_RES_ALREADY)) {
@@ -4074,7 +4065,7 @@ static dp_result_t dp_setSessionTablePeer(
 	key[0] = (char) ((h == PLAYER_BROADCAST) ? dp_KEY_MYSESSIONS : dp_KEY_SESSIONS);
 	keylen = 1;
 #ifdef dp_MULTISESSTABLE
-	/* If connecting to a game server, request the game specific session 
+	/* If connecting to a game server, request the game specific session
 	 * table rather than the generic session table.
 	 */
 	if ((h != PLAYER_BROADCAST) && (sessionType != 0)) {
@@ -4082,7 +4073,7 @@ static dp_result_t dp_setSessionTablePeer(
 		key[keylen++] = dpGETSHORT_SECONDBYTE(sessionType);
 		/* Tell dp_unpack_session what the default session type is */
 		dp->defaultSessionType = sessionType;
-		DPRINT(("dp_setSessionTablePeer: setting defaultSessionType to %d\n", sessionType)); 
+		DPRINT(("dp_setSessionTablePeer: setting defaultSessionType to %d\n", sessionType));
 	}
 #endif
 	err = dptab_addPublisher(dp->dt, dp->sessions, key, keylen, h);
@@ -4134,7 +4125,7 @@ DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_result_t err;
 	dp_appParam_t app;
 	dp_species_t sessionType = 0;
-	
+
 	err = dpGetAppVersion(dp, &app);
 	if ((err == dp_RES_EMPTY) || (err == dp_RES_OK)) {
 		sessionType = app.sessionType;
@@ -4149,9 +4140,9 @@ DP_API dp_result_t DP_APIX dpSetGameServer(
 
  Call with NULL to clear the game server.
 
- dpSetGameServerEx lets you specify the session type you will be calling 
- dpEnumSessions() later with.  This tells the game server to send only 
- information about that particular session type. 
+ dpSetGameServerEx lets you specify the session type you will be calling
+ dpEnumSessions() later with.  This tells the game server to send only
+ information about that particular session type.
  To get information about all session types, specify 0 for sessionType.
 
  Returns:
@@ -4186,7 +4177,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 			DPRINT(("dpSetGameServerEx: masterHostName too long\n"));
 			return dp_RES_BADSIZE;
 		}
-			
+
 		/* Let them log in even if they didn't finish shutting down */
 		dp->quitState = 0;
 
@@ -4250,7 +4241,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	/* Tell the server what session type we need. */
 	pktbuf[0] = 'e';
 	pktbuf[1] = '1';
-	pktlen = 2;	
+	pktlen = 2;
 #ifdef dp_MULTISESSTABLE
 	if (sessionType != 0) {
 		pktbuf[pktlen++] = dpGETSHORT_FIRSTBYTE(sessionType);
@@ -4305,7 +4296,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	/* Arrange for an updated list of servers, now that we have a gameserver. */
 	dp_initEnumServers(dp);
 
-	/* Tell dpio to alert us if the game server goes down or becomes 
+	/* Tell dpio to alert us if the game server goes down or becomes
 	 * unreachable.
 	 */
 	err = dpio_setHandleOptions(dp->dpio, dp->hGameServer, dpio_OPTION_KEEPALIVE);
@@ -4341,8 +4332,8 @@ DP_API dp_result_t DP_APIX dpGetGameServerEx(
 
 	if (!dp->nameGameServer[0])
 		return dp_RES_NOTYET;
-	
-	if (strlen(dp->nameGameServer) >= masterHostNameBufLen) 
+
+	if (strlen(dp->nameGameServer) >= masterHostNameBufLen)
 		return dp_RES_FULL;
 
 	strcpy(masterHostNameBuf, dp->nameGameServer);
@@ -4386,7 +4377,7 @@ DP_API dp_result_t DP_APIX dpGetSessionDesc(
 		*pbuflen = sizeof(dp_session_t);
 
 	sesstab = dp->sessions;
-	if (dp->hMaster == PLAYER_ME) 
+	if (dp->hMaster == PLAYER_ME)
 		sesstab = dp->mysessions;
 
 	/* Get pointer to the current session entry in mysessions */
@@ -4397,7 +4388,7 @@ DP_API dp_result_t DP_APIX dpGetSessionDesc(
 		return err;
 #else
 		/* use most recently cached copy */
-		
+
 		*buf = dp->election_old_session;
 #endif
 	} else {
@@ -4504,7 +4495,7 @@ static dp_result_t dp_setSessionDesc(
 	/* Must pack when writing to dptab */
 	rawbuflen = dp_pack_session(dp, 0, &desc, rawbuf);
 
-	/* Set new value for current session's subkey.  
+	/* Set new value for current session's subkey.
 	 * Allow four hops (client -> server -> masterserver -> server -> client)
 	 */
 	err = dptab_set(dp->dt, dp->mysessions, dp->sess_subkey, dp->sess_subkeylen, rawbuf, rawbuflen, 4, PLAYER_ME);
@@ -4668,7 +4659,7 @@ static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContex
 	&&  !(dp->election_old_session.flags & dp_SESSION_FLAGS_ISLOBBY)) {
 		err = dptab_addSubscriber(dp->dt, dp->mysessions, h);
 		if (err != dp_RES_OK) {
-			DPRINT(("dp_subscribe_client: players: subscribe h:%x?, err:%d\n", 
+			DPRINT(("dp_subscribe_client: players: subscribe h:%x?, err:%d\n",
 					h, err));
 			dp_assertValid(dp);
 			return err;
@@ -4677,21 +4668,21 @@ static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContex
 #endif
 	err = dptab_addSubscriber(dp->dt, sp->players, h);
 	if (err != dp_RES_OK) {
-		DPRINT(("dp_subscribe_client: players: subscribe h:%x?, err:%d\n", 
+		DPRINT(("dp_subscribe_client: players: subscribe h:%x?, err:%d\n",
 				h, err));
 		dp_assertValid(dp);
 		return err;
 	}
 	err = dptab_addSubscriber(dp->dt, sp->hosts, h);
 	if (err != dp_RES_OK) {
-		DPRINT(("dp_subscribe_client: hosts: subscribe h:%x?, err:%d\n", 
+		DPRINT(("dp_subscribe_client: hosts: subscribe h:%x?, err:%d\n",
 				h, err));
 		dp_assertValid(dp);
 		return err;
 	}
 	err = dptab_addSubscriber(dp->dt, sp->groups, h);
 	if (err != dp_RES_OK) {
-		DPRINT(("dp_subscribe_client: groups: subscribe h:%x?, err:%d\n", 
+		DPRINT(("dp_subscribe_client: groups: subscribe h:%x?, err:%d\n",
 				h, err));
 		dp_assertValid(dp);
 		return err;
@@ -4699,7 +4690,7 @@ static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContex
 	for (i = 0; i < dp_MAX_GROUPS; i++) {
 		err = dptab_addSubscriber(dp->dt, sp->grplayers[i], h);
 		if (err != dp_RES_OK) {
-			DPRINT(("dp_subscribe_client: grplayers[%d]: subscribe h:%x?, err:%d\n", 
+			DPRINT(("dp_subscribe_client: grplayers[%d]: subscribe h:%x?, err:%d\n",
 					i, h, err));
 			dp_assertValid(dp);
 			return err;
@@ -4757,7 +4748,7 @@ static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContex
 		key[4] = (char) dpGETSHORT_SECONDBYTE(gid);
 		err = dptab_addPublisher(dp->dt, sp->grplayers[i], key, keylen, h);
 		if (err != dp_RES_OK) {
-			DPRINT(("dp_subscribe_client: grplayers[%d]: publisher h:%x?, err:%d\n", 
+			DPRINT(("dp_subscribe_client: grplayers[%d]: publisher h:%x?, err:%d\n",
 					i, h, err));
 			dp_assertValid(dp);
 			return err;
@@ -4795,7 +4786,7 @@ static dp_result_t dp_subscribe_host(dp_t *dp, playerHdl_t h, dp_sessionContext_
 
 /*-------------------------------------------------------------------------
  Only for game servers.
- When a new client comes online, send it our SESSIONS table, 
+ When a new client comes online, send it our SESSIONS table,
  and when it sends us its MYSESSIONS table, put it in our MYSESSIONS table.
  (If we're the master gameserver, dump it into the sessions table
  instead.)
@@ -4901,7 +4892,7 @@ static dp_result_t dp_selectSessionForHost
 	for (i = 0; i < dp->sessionContexts->n_used; i++) {
 		dp_result_t err;
 		int nPlayers, nHosts;
-		dp_session_t sess;	
+		dp_session_t sess;
 		dp_sessionContext_t *pSess;
 		dp_sessionContext_t **ppS = (dp_sessionContext_t **)dynatab_subscript(
 					dp->sessionContexts, i);
@@ -4936,7 +4927,7 @@ static dp_result_t dp_selectSessionForHost
 			continue;
 		}
 		/* check to make sure this session will not be rejected
-		 * by dpHandleJoinSession() 
+		 * by dpHandleJoinSession()
 		 */
 		if (!(sess.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS)) {
 			/*DPRINT(("dp_selectSessionForHost: rejected due to disabled new players\n"));*/
@@ -4945,9 +4936,9 @@ static dp_result_t dp_selectSessionForHost
 
 		/* Rate the session for joinability:
 		 * The rating is maxPlayers for an empty room, increases linearly to
-		 * maxPlayers*2 for a half full room, then decreases linearly to 
+		 * maxPlayers*2 for a half full room, then decreases linearly to
 		 * zero for a full room.
-		 * This favors rooms which are not too close to full or empty 
+		 * This favors rooms which are not too close to full or empty
 		 * and favors large rooms over small ones.
 		 */
 		if (nPlayers * 2 < sess.maxPlayers)
@@ -4995,7 +4986,7 @@ static dp_result_t dp_selectSessionForHost
  Someone (possibly ourselves) has requested that we let them in to
  one of our sessions so they can start creating players.
  If we don't feel like it, ignore the request.
- Otherwise, subscribe from their MYPLAYERS.sessionid onto our 
+ Otherwise, subscribe from their MYPLAYERS.sessionid onto our
  PLAYERS.sessionid and their groupid.sessionid's and publish them to them, then
  add a record for them into HOSTS.sessionid table and publish it to them.
 
@@ -5027,14 +5018,14 @@ dpHandleJoinSession(
 
 	DPRINT(("dpHandleJoinSession: got join request ... type %s\n",
 		(reqlen == dp_V1_JOIN_PACKET_LEN) ? "V1" :
-		(reqlen == dp_V2_JOIN_PACKET_LEN) ? "V2" : 
+		(reqlen == dp_V2_JOIN_PACKET_LEN) ? "V2" :
 		(reqlen == dp_V3_JOIN_PACKET_LEN) ? "V3" : "UNKNOWN!"));
 
 	dp_assertValid(dp);
 	assert((dp->hosts == NULL) ||
 		(dptab_getTableContext(dp->hosts, dp_hosts_cb) != NULL));
 
-	DPRINT(("dpHandleJoinSession: src h:%x, joinK %d, sessK %d, t:%d\n", 
+	DPRINT(("dpHandleJoinSession: src h:%x, joinK %d, sessK %d, t:%d\n",
 			h, req->joinKarma, req->sessionKarma, *(dp->dpio->now)));
 
 	/* Check if sessionKarma is zero; if yes, select a session for host */
@@ -5118,7 +5109,6 @@ dpHandleJoinSession(
 		return dp_RES_EMPTY;
 	}
 
-
 #if 1
 	{
 		char *sessbuf;
@@ -5128,7 +5118,7 @@ dpHandleJoinSession(
 		/* Verify that session is not full and allows new players.  Act as
 		 * if lurkers take a slot, too. */
 		err = dptab_get_bykey(dp->mysessions, sp->sess_subkey, sp->sess_subkeylen, (void **)&sessbuf, &len);
-		if (err != dp_RES_OK) 
+		if (err != dp_RES_OK)
 		{
 			DPRINT(("dpHandleJoinSession: bug: no session record?\n"));
 			dpSendErrorPacket(dp, h, dp_JOIN_PACKET_ID,
@@ -5173,7 +5163,7 @@ dpHandleJoinSession(
 				err = dp_sessid4uid(dp, uid, sess.reserved2, dp->dpio->myAdrLen+2, sess.sessionType);
 				if (err != dp_RES_OK)
 					DPRINT(("dpHandleJoinSession: dp_sessid4uid(uid:%d, sesstype:%d) returns err:%d\n", uid, sess.sessionType, err));
-			} else 
+			} else
 				DPRINT(("dpHandleJoinSession: handle h:%x has no uid\n", h));
 		}
 
@@ -5201,8 +5191,8 @@ dpHandleJoinSession(
 		int buflen;
 
 		host.firstId = (dpid_t) (dp_PLAYERS_PER_HOST * sp->hostid++);
-		/* Wrap dpids around at dp_MAXDPIDS back to dp_FIRST_DPID 
-	 	 * We wouldn't want to hand out dp_ID_NONE or the reserved dpId block. 
+		/* Wrap dpids around at dp_MAXDPIDS back to dp_FIRST_DPID
+	 	 * We wouldn't want to hand out dp_ID_NONE or the reserved dpId block.
 	 	 */
 		if ((host.firstId + dp_PLAYERS_PER_HOST - 1 > dp_MAXDPIDS) ||
 			(host.firstId < dp_FIRST_DPID)) {
@@ -5228,8 +5218,8 @@ dpHandleJoinSession(
 	printAdr(dp->dpio->myAdrLen, host.iadr);
 
 	/*
-	 * If both addresses were supplied in the join request then use 
-	 * the two addresses as they were supplied 
+	 * If both addresses were supplied in the join request then use
+	 * the two addresses as they were supplied
 	 */
 	if (reqlen >= dp_V3_JOIN_PACKET_LEN) {
 		memcpy(host.iadr2, req->iadr2, dp_MAX_ADR_LEN);
@@ -5256,7 +5246,7 @@ dpHandleJoinSession(
 	 * here, and we want the hop counts the same!  This hops thing is
 	 * more trouble than it's worth... it was meant to aid in doing a
 	 * distributed server, but we haven't used it yet.
-	 * Having hops disagree between elements of same table causes dptab 
+	 * Having hops disagree between elements of same table causes dptab
 	 * to flush too often...
 	 */
 	hops = 4;
@@ -5299,9 +5289,9 @@ dpHandleJoinSession(
 }
 
 /*-------------------------------------------------------------------------
- Request that the game server tell the host of the given session to open a 
+ Request that the game server tell the host of the given session to open a
  handle to us.
- The 3rd argument is TRUE to join the session, or FALSE to just 
+ The 3rd argument is TRUE to join the session, or FALSE to just
  open a connection to enumerate players.
 --------------------------------------------------------------------------*/
 static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joining)
@@ -5368,7 +5358,7 @@ static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_
 		dprint_sess(dp, session, "session");
 	} else  {
 		DPRINT(("session: NULL\n"));
-	} 
+	}
 	memset(&pkt, 0, sizeof(pkt));
 	pkt.tag = dp_JOIN_PACKET_ID;
 	pkt.body.joinKarma = joinKarma;
@@ -5409,7 +5399,7 @@ static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_
   			bodylen = dp_V1_JOIN_PACKET_LEN;
 		}
 	}
-	
+
 	/* If local request, don't queue or swap it, execute it immediately */
 	if (h == PLAYER_ME) {
 		dp_assertValid(dp);
@@ -5463,7 +5453,7 @@ static dp_result_t dpHandleLeaveSession(dp_t *dp, playerHdl_t h, dp_leave_packet
 	precondition(dp != NULL);
 	dp_assertValid(dp);
 
-	DPRINT(("dpHandleLeaveSession: src h:%x, joinK %d, sessK %d, t:%d\n", 
+	DPRINT(("dpHandleLeaveSession: src h:%x, joinK %d, sessK %d, t:%d\n",
 			h, req->joinKarma, req->sessionKarma, *(dp->dpio->now)));
 	if (reqlen != dp_LEAVE_PACKET_LEN) {
 		DPRINT(("dpHandleLeaveSession: request %d bytes, expected %d\n",
@@ -5566,7 +5556,7 @@ static dp_result_t dpHandleLeaveSession(dp_t *dp, playerHdl_t h, dp_leave_packet
 }
 
 /*-------------------------------------------------------------------------
- Request that the given host remove this host and all its players from 
+ Request that the given host remove this host and all its players from
  the given session.
  The first karma identifies the act of joining this host to this session;
  the second karma identifies the session.
@@ -5667,10 +5657,10 @@ static dp_result_t dpHandleSelectedSession
 /*-------------------------------------------------------------------------
  Check if a session with the given karma already exists.
 -------------------------------------------------------------------------*/
-static dp_sessionContext_t *findSessionWithKarma(dp_t *dp, dp_karma_t karma) 
+static dp_sessionContext_t *findSessionWithKarma(dp_t *dp, dp_karma_t karma)
 {
 	int i;
-	
+
 	for (i = 0; i < dp->sessionContexts->n_used; i++) {
 		dp_sessionContext_t *pSess;
 		dp_sessionContext_t **ppS = (dp_sessionContext_t **)dynatab_subscript(
@@ -5686,7 +5676,7 @@ static dp_sessionContext_t *findSessionWithKarma(dp_t *dp, dp_karma_t karma)
 	DPRINT(("findSessionWithKarma: no matching session found\n"));
 	return NULL;
 }
-	
+
 /*-------------------------------------------------------------------------
  Set up session record sess using info from enum'd or selected session s and
   create player, group, etc. tables for the session.
@@ -5747,7 +5737,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 		}
 		/* Clear flags, except for user-modifiable flags */
 		DPRINT(("initOpenSession: Pre-clear flags=%x\n", sess->flags));
-		sess->flags = (short) (sess->flags & 
+		sess->flags = (short) (sess->flags &
 			(dp_SESSION_FLAGS_USE_BROADCAST| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN|
 			dp_SESSION_FLAGS_ISLOBBY | dp_SESSION_FLAGS_ENABLE_NEWPLAYERS |
 			dp_SESSION_FLAGS_ENABLE_PLAYERVARS));
@@ -5780,7 +5770,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 
 	dprint_sess(dp, sess, "initOpenSession");
 
-	/* If master, save session record in 'mysessions'. 
+	/* If master, save session record in 'mysessions'.
 	 * If slave, contact master.
 	 */
 	if (s->flags & dp_SESSION_FLAGS_CREATESESSION) {
@@ -5805,14 +5795,12 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 		 */
 		s->flags |= dp_SESSION_FLAGS_ENABLE_DUALADDRESS;
 
-
 		err = dp_setSessionDesc(dp, sess, 0);
 		if (err != dp_RES_OK) {
 			DPRINT(("initOpenSession: can't create session record, err:%d\n", err));
 			dp_assertValid(dp);
 			return err;
 		}
-
 
 		/* If a game server is listening to our mysession table,
 		 * or if we're broadcasting it periodically on a LAN,
@@ -5845,7 +5833,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 
 	/* Calculate key for the session's player table.  Note:
 	 * this key is the same on client and host, and is
-	 * a constant byte PLAYERS followed by the 
+	 * a constant byte PLAYERS followed by the
 	 * karma assigned by the original master.  (Can't use the
 	 * original host's address unless we somehow add it to the
 	 * session record.)
@@ -5973,7 +5961,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 	}
 
 	/* Create player variable table.   Published to all in session from each
-	 * client. Add subscribers during dp_hosts_cb. */ 
+	 * client. Add subscribers during dp_hosts_cb. */
 	if (s->flags & dp_SESSION_FLAGS_ENABLE_PLAYERVARS) {
 		key[0] = dp_KEY_PLAYER_VARIABLES;
 		err = dptab_createTable(dp->dt, &pSess->playervars, key, keylen, 0, NULL, NULL, dp_playervars_cb, pSess);
@@ -6106,7 +6094,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 
 /*------------------------------------------------------------------------
  Since dpOpen_cb is used as a flag to check if an open is in progress and
- dpOpen does not require a callback, we need a non-null value to use if no 
+ dpOpen does not require a callback, we need a non-null value to use if no
  callback is given.
 ------------------------------------------------------------------------*/
 static int dp_PASCAL dpOpen_dummy_cb(dp_session_t *sDesc, long *timeout, long flags, void *context)
@@ -6197,9 +6185,9 @@ DP_API dp_result_t dpOpen(
 		dp_assertValid(dp);
 		return dp_RES_BAD;
 	}
-	if (s 
+	if (s
 	&& !bJoinAny
-	&& !(s->flags & dp_SESSION_FLAGS_CREATESESSION) 
+	&& !(s->flags & dp_SESSION_FLAGS_CREATESESSION)
 	&& !(s->flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS)) {
 		DPRINT(("dpOpen: err: session closed to new players\n"));
 		dprint_sess(dp, s, "dpOpen error");
@@ -6248,7 +6236,7 @@ DP_API dp_result_t dpOpen(
 	DPRINT(("dpOpen: chose joinKarma %d.\n", 0xffff & dp->joinKarma));
 
 	/* We get positive confirmation that we're in the session
-	 * when our host record - with the right joinkarma - appears in the 
+	 * when our host record - with the right joinkarma - appears in the
 	 * session's hosts table.  (Possibly during dpSendJoinSession.)
 	 * We get negative confirmation if the handle to the game
 	 * host is closed.
@@ -6272,7 +6260,7 @@ DP_API dp_result_t dpOpen(
 			sessType = s->sessionType;
 		else
 			sessType = dp->defaultSessionType;
-			
+
 		if (s) {
 			DPRINT(("dpOpen: joining any session sessType %d, flags %d\n", sessType, s->flags));
 			err = dpSendJoinSession(dp, dp->joinKarma, NULL, sessType, s->flags, mask, dp->hMaster);
@@ -6364,7 +6352,7 @@ DP_API dp_result_t dpClose(
 	DPRINT(("dpClose: karma %d (%d.%d)\n",
 		dp->sess_karma, dpGETSHORT_FIRSTBYTE(dp->sess_karma), dpGETSHORT_SECONDBYTE(dp->sess_karma)));
 	dumpSessionContexts(dp);
-	
+
 	dp_election_end(dp);
 
 	dp->closing = TRUE;		/* kludge flag for dp_sessions_cb */
@@ -6392,14 +6380,14 @@ DP_API dp_result_t dpClose(
 		}
 	}
 #endif
-	
+
 	if (dp->hMaster != PLAYER_NONE) {
 		char key[dptab_KEY_MAXLEN];
 		int keylen;
 
 		/* Delete master's right to publish players, hosts, groups and
 		 * group players tables to us, or when he does, he will crash us,
-		 * since the pointer in the publications table will soon be invalid. 
+		 * since the pointer in the publications table will soon be invalid.
 		 */
 		keylen = 0;
 		key[keylen++] = dp_KEY_PLAYERS;
@@ -6421,7 +6409,7 @@ DP_API dp_result_t dpClose(
 			dptab_deletePublisher(dp->dt, key, keylen, dp->hMaster);
 		}
 
-		/* Delete the session record itself.  
+		/* Delete the session record itself.
 		 * This prevents the session from migrating to another host?  FIXME
 		 */
 		if (dp->hMaster == PLAYER_ME) {
@@ -6448,7 +6436,7 @@ DP_API dp_result_t dpClose(
 		}
 	}
 
-	/* Delete publisher and player variable tables for all hosts in the 
+	/* Delete publisher and player variable tables for all hosts in the
 	 * session.  Delete subscribers to our player variable table. */
 	if (dp->hosts) {
 		char key[dptab_KEY_MAXLEN];
@@ -6634,16 +6622,16 @@ DP_API dp_result_t dpClose(
 
  Caveats:
  Intended for use only on game servers.
- Can only be called on the master.  
+ Can only be called on the master.
 
- I don't think you can call dpOpen() to join a session that you cast off 
+ I don't think you can call dpOpen() to join a session that you cast off
  yourself, but that could be arranged if needed.
  You can't currently close sessions once they've been cast off.
  Actually, this is all backwards; there ought to be a dpCreateSession
  and a dpDestroySession that do the real work of creating and destroying
  sessions, and should work without reference to the default session pointers.
 
- Any players created by the local system are stranded.  
+ Any players created by the local system are stranded.
  (They probably ought to be deleted, but I haven't implemented that yet.)
 ------------------------------------------------------------------------*/
 DP_API dp_result_t dpCastoffSession(
@@ -6832,7 +6820,7 @@ DP_API dp_result_t dpEnumSessions(
 
 		if (
 #ifdef IGNORE_CLOSEDSESS
-			(sess.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) && 
+			(sess.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) &&
 #endif
 			((sDesc->sessionType==0) || (sDesc->sessionType==sess.sessionType))) {
 			timeout_dummy = 0;
@@ -6873,16 +6861,16 @@ DP_API dp_result_t dpDeclareLobby(
 	dpGetSessionDesc(dp, &sess, 0);
 	if (flags) {
 		DPRINT(("dpDeclareLobby: Setting flags from %x\n", sess.flags));
-		sess.flags |= 
-			dp_SESSION_FLAGS_ISSERVER 
-			| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN 
+		sess.flags |=
+			dp_SESSION_FLAGS_ISSERVER
+			| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN
 			| dp_SESSION_FLAGS_ISLOBBY;
 	} else {
 		DPRINT(("dpDeclareLobby: Clearing flags from %x\n", sess.flags));
 		dpio_setMaxPlayerHdls(dp->dpio, dp_MAXREALPLAYERS + 5);
 		sess.flags &= ~(
-			dp_SESSION_FLAGS_ISSERVER 
-			| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN 
+			dp_SESSION_FLAGS_ISSERVER
+			| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN
 #if 0
 			| dp_SESSION_FLAGS_ISLOBBY
 #endif
@@ -6895,10 +6883,10 @@ DP_API dp_result_t dpDeclareLobby(
 }
 
 /*----------------------------------------------------------------------
- Clear out any unnecessary player table publishers (i.e. any but the 
- host of the session we are in) and tell them to cancel our 
+ Clear out any unnecessary player table publishers (i.e. any but the
+ host of the session we are in) and tell them to cancel our
  subscription.
- Call this when entering a game to really turn off (not just ignore) 
+ Call this when entering a game to really turn off (not just ignore)
  player deltas from outside sessions.
 ----------------------------------------------------------------------*/
 dp_result_t dpPrunePlayerSubscriptions(dp_t *dp)
@@ -6906,7 +6894,7 @@ dp_result_t dpPrunePlayerSubscriptions(dp_t *dp)
 	dp_result_t err;
 	int i;
 
-	if (bIAmGameServer(dp)) 
+	if (bIAmGameServer(dp))
 		return dp_RES_OK;
 	if (!dp->dt || !dp->dt->peers)
 		return dp_RES_BAD;
@@ -6922,7 +6910,7 @@ dp_result_t dpPrunePlayerSubscriptions(dp_t *dp)
 			return dp_RES_BUG;
 		}
 		h = dpe->key;
-		
+
 		/* Blow away player subscriptions from anyone but the host */
 		if (h == dp->hMaster)
 			continue;
@@ -6967,7 +6955,7 @@ dp_result_t dpPruneSessionSubscription(dp_t *dp)
 	dp_result_t err;
 	dptab_table_t *table;
 
-	if (bIAmGameServer(dp) || (dp->hGameServer == PLAYER_NONE)) 
+	if (bIAmGameServer(dp) || (dp->hGameServer == PLAYER_NONE))
 		return dp_RES_OK;
 
 	err = dptab_shutdownMatchingSubscription(dp->dt, dp_KEY_SESSIONS, dp->hGameServer, &table);
@@ -7011,7 +6999,7 @@ DP_API dp_result_t dpCreatePlayer(
 	dp_assertValid(dp);
 
 	DPRINT(("dpCreatePlayer(name %s):\n", name));
-	if (!dp) 
+	if (!dp)
 		return dp_RES_BUG;
 	if (dp->dpCreatePlayer_cb) {
 		DPRINT(("dpCreatePlayer: err: busy\n"));
@@ -7074,10 +7062,10 @@ DP_API dp_result_t dpCreatePlayer(
 		dp_playerId_t foo;
 		int len_used = dp_unpack_playerId(player.id, playerbuf, &foo);
 		DPRINT(("dpCreatePlayer: id %d %d, karma %d %d bloblen %d %d, name %s %s\n",
-				player.id, foo.id, 
-				player.karma, foo.karma, 
-				player.bloblen, foo.bloblen, 
-				player.name, foo.name)); 
+				player.id, foo.id,
+				player.karma, foo.karma,
+				player.bloblen, foo.bloblen,
+				player.name, foo.name));
 	}
 #endif
 	err = dptab_set(dp->dt, dp->myplayers, subkey, subkeylen, playerbuf, playerlen, 2, PLAYER_ME);
@@ -7131,10 +7119,10 @@ DP_API dp_result_t dpDestroyPlayer(
 	}
 
 #if 0
-	/* When we delete from myplayers, dp_myplayers_cb handles deleting 
+	/* When we delete from myplayers, dp_myplayers_cb handles deleting
 	 * from players.
 	 * Originally, the only way for players to disappear from the player
-	 * table was if the machine that created the player deleted the player 
+	 * table was if the machine that created the player deleted the player
 	 * from his myplayers table; this deletion would propagate to the host's
 	 * players table, thence to everybody's player table.
 	 * On the host, the myplayers table didn't propagate to the players table,
@@ -7225,11 +7213,11 @@ DP_API dp_result_t dpGetPlayerName(
 			dp_assertValid(dp);
 			return dp_RES_EMPTY;
 		}
-	
+
 		/* drk: calculate number of bytes to copy minus nul assuming no nul
 		 * in dptab.
 		 */
-		if (len >= bufLen) 
+		if (len >= bufLen)
 			len = bufLen - 1;
 
 		if (buf) {
@@ -7283,13 +7271,12 @@ DP_API dp_result_t dpSetPlayerName(
 	if (!name) return dp_RES_BAD;
 	if (!dp->players) return dp_RES_CLOSED;
 	if (!dp->groups) return dp_RES_CLOSED;
-	
+
 	DPRINT(("dpSetPlayerName(id:%d, name:%s):\n", id, name));
 
 	subkey[0] = (char) dpGETSHORT_FIRSTBYTE(id);
 	subkey[1] = (char) dpGETSHORT_SECONDBYTE(id);
 	subkeylen = 2;
-
 
 	err = dptab_get_bykey(dp->myplayers, subkey, subkeylen, (void **)&playerbuf, &len);
 	if (err != dp_RES_OK) {
@@ -7393,7 +7380,7 @@ DP_API dp_result_t dpGetPlayerBlob(
 	if (!dp->players) return dp_RES_CLOSED;
 	if (!dp->groups) return dp_RES_CLOSED;
 	if (!pbuflen) return dp_RES_BAD;
-	
+
 	subkey[0] = (char) dpGETSHORT_FIRSTBYTE(id);
 	subkey[1] = (char) dpGETSHORT_SECONDBYTE(id);
 	subkeylen = 2;
@@ -7423,7 +7410,7 @@ DP_API dp_result_t dpGetPlayerBlob(
 
 /*------------------------------------------------------------------------
  Set the blob for the player indicated by the given dpid.
- If blob is too long, dp_RES_FULL is returned. 
+ If blob is too long, dp_RES_FULL is returned.
  On success return dp_RES_OK
 ------------------------------------------------------------------------*/
 DP_API dp_result_t dpSetPlayerBlob(
@@ -7444,17 +7431,16 @@ DP_API dp_result_t dpSetPlayerBlob(
 	precondition(dp != NULL);
 	dp_assertValid(dp);
 	if (!blob) return dp_RES_BAD;
-	if (bloblen < 1) return dp_RES_BAD; 
-	if (bloblen > dp_MAX_PLAYERBLOB_LEN) return dp_RES_FULL; 
+	if (bloblen < 1) return dp_RES_BAD;
+	if (bloblen > dp_MAX_PLAYERBLOB_LEN) return dp_RES_FULL;
 	if (!dp->players) return dp_RES_CLOSED;
 	if (!dp->groups) return dp_RES_CLOSED;
-	
+
 	DPRINT(("dpSetPlayerBlob(id:%d, bloblen:%d):\n", id, bloblen));
 
 	subkey[0] = (char) dpGETSHORT_FIRSTBYTE(id);
 	subkey[1] = (char) dpGETSHORT_SECONDBYTE(id);
 	subkeylen = 2;
-
 
 	err = dptab_get_bykey(dp->myplayers, subkey, subkeylen, (void **)&playerbuf, &len);
 	if (err != dp_RES_OK) {
@@ -7850,7 +7836,6 @@ DP_API dp_result_t dpEnumPlayersEx(
 }
 #endif
 
-
 /*----------------------------------------------------------------------
  Enable or disable new players from entering the game.
  May only be called by host.
@@ -7878,7 +7863,6 @@ DP_API dp_result_t dpEnableNewPlayers(
 	return dp_RES_OK;
 }
 
-
 /******************** Sending/Receiving Datagrams ************************/
 
 #define dp_ELECTIONLEN ((10 * dp->dpio->maxRxInterval)/8)
@@ -7886,7 +7870,7 @@ DP_API dp_result_t dpEnableNewPlayers(
 /*--------------------------------------------------------------------------
   If an election isn't in progress, start one.  Otherwise, do nothing.
   Set hostDeleted TRUE only when calling because you've just noticed the
-  host's handle has closed; set it FALSE if somebody else started the 
+  host's handle has closed; set it FALSE if somebody else started the
   election.
 --------------------------------------------------------------------------*/
 static void dp_election_start(dp_t *dp, int hostDeleted)
@@ -7919,7 +7903,7 @@ static void dp_election_start(dp_t *dp, int hostDeleted)
 	/* Set # of votes needed to win election.
 	 * Could just be nhosts/2, but let's require a stronger majority.
 	 * We want it to work if 2 out of seven hosts crap out, so let's
-	 * set the bar at about 5/7.  Can't set it much lower, else 
+	 * set the bar at about 5/7.  Can't set it much lower, else
 	 * someone may declare he won while somebody still thinks the old
 	 * host is winning.  We may need to change the validation in
 	 * dpHandleVictory to work in that case.
@@ -7940,10 +7924,9 @@ static void dp_election_start(dp_t *dp, int hostDeleted)
 		dp->election_size = 1;
 	}
 
-	DPRINT(("dp_election_start: t:%d, yield t:%d, end t:%d; %d hosts, toWin %d, hostDeleted %d\n", 
-		dp->now, dp->election_yield_deadline, dp->election_deadline, 
+	DPRINT(("dp_election_start: t:%d, yield t:%d, end t:%d; %d hosts, toWin %d, hostDeleted %d\n",
+		dp->now, dp->election_yield_deadline, dp->election_deadline,
 		nhosts, dp->election_size, hostDeleted));
-
 
 /*  Session description already gone; use one cached earlier
 	err = dpGetSessionDesc(dp, &dp->election_old_session, 0);
@@ -7982,7 +7965,7 @@ static void dp_election_end(dp_t *dp)
 	dp->election_deadline = 0;
 	dp->election_yield_deadline = 0;
 	dp->election_size = 0;
-	
+
 	/* Turn off keepalive for all handles but host */
 	{
 		int i, n;
@@ -8027,7 +8010,7 @@ static void dp_election_poll(dp_t *dp)
 static dp_result_t dp_election_set_master(dp_t *dp, dpid_t newIdMaster)
 {
 	playerHdl_t newhMaster;
-	
+
 	newhMaster = dpid2commHdl(dp, newIdMaster);
 	DPRINT(("dp_election_set_master: newIdMaster %d new hMaster h:%x\n", newIdMaster,newhMaster));
 	if (newhMaster != dp->hMaster) {
@@ -8051,7 +8034,7 @@ static dp_result_t dp_election_set_master(dp_t *dp, dpid_t newIdMaster)
 			DPRINT(("dp_election_set_master: can't change publisher, err:%d\n", err));
 			return err;
 		}
-			
+
 		dp->hMaster = newhMaster;
 
 #ifdef SEMIRELIABLE_SESSIONS
@@ -8082,7 +8065,7 @@ static dp_result_t dp_election_set_master(dp_t *dp, dpid_t newIdMaster)
 /*--------------------------------------------------------------------------
  Register a vote.  Called by dpHandleVote.
 --------------------------------------------------------------------------*/
-static void dp_election_register_vote(dp_t *dp, 
+static void dp_election_register_vote(dp_t *dp,
 	dpid_t idVoter, playerHdl_t hVoter, dpid_t idVotedFor)
 {
 	dp_election_vote_t *pvote;
@@ -8135,7 +8118,7 @@ static int dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
 			pint = assoctab_subscript_grow(tally, pvote->id);
 			assert(pint);
 			(*pint)++;
-			DPRINT(("dp_election_tally: id:%d h:%x votes for id %d; total %d\n", 
+			DPRINT(("dp_election_tally: id:%d h:%x votes for id %d; total %d\n",
 				voter_id, voter_h, pvote->id, *pint));
 			if (*pint > winner_votes) {
 				winner_votes = *pint;
@@ -8150,7 +8133,7 @@ static int dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
 }
 
 /*--------------------------------------------------------------------------
- When votes have been tallied, and a player on this machine has been 
+ When votes have been tallied, and a player on this machine has been
  unanimously elected master, this function is called to assume the throne.
 --------------------------------------------------------------------------*/
 static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
@@ -8164,8 +8147,8 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 
 	DPRINT(("dp_election_become_master: We must have won the election.  Setting up to be master.\n"));
 
-	/* If we lost connection to game server, try to reestablish it, 
-	 * so that the game will reappear on the game server 
+	/* If we lost connection to game server, try to reestablish it,
+	 * so that the game will reappear on the game server
 	 */
 	if ((dp->hGameServer == PLAYER_NONE) && dp->adrGameServer[0] && dp->adrGameServer[1] && dp->adrGameServer[2]) {
 		char hostName[64];
@@ -8175,7 +8158,7 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 			DPRINT(("dp_election_become_master: Restoring connection to server %s returns err:%d\n", hostName, err));
 		}
 	}
-	
+
 	/* Notify local user code that it is the new master. */
 	h = PLAYER_ME;
 	pkt = dp_USER_HOST_PACKET_ID;
@@ -8345,7 +8328,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 		if (err != dp_RES_OK) {
 			DPRINT(("dp_election_inaugerate_winner: Winner %d has no player record? bug\n"));
 			return err;
-		} 
+		}
 		len_used = dp_unpack_playerId(winner_id, pbuf, &player);
 		if (len_used != len) {
 			DPRINT(("dp_election_inaugerate_winner: can't unpack player %d. len %d, len_used %d; bug\n", winner_id, len, len_used));
@@ -8361,7 +8344,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 	/*---- start fix to 'delayed vote for crashed player triggers election' -*/
 	/* Blow away players with id's lower than the winner.
 	 * Note that if an election is triggered, and the current master
-	 * is not the lowest id, there must be a migration to the new 
+	 * is not the lowest id, there must be a migration to the new
 	 * lowest id for this to work.
 	 */
 	if (1) {
@@ -8383,7 +8366,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 				playerHdl_t h = dpid2commHdl(dp, firstId);
 				DPRINT(("dpHandleVictory: peer id:%d h:%x has lower id than winner id:%d, so closing handle to him\n", firstId, h, winner_id));
 				/* Note: this may delete the host.  That's why we iterate
-				 * downwards. 
+				 * downwards.
 				 */
 				dpio_closeHdl(dp->dpio, h);
 			}
@@ -8442,7 +8425,7 @@ dpHandleVote(
 	int winner_votes;
 	dp_result_t err;
 	dpid_t idVoter = dp_ID_NONE;
-	
+
 	/* If somebody really voted, register their vote in election_votes[]. */
 	if (req) {
 		dpid_t idVotedFor;
@@ -8495,14 +8478,14 @@ dpHandleVote(
 			}
 
 			/* otherwise his vote will start a new election. */
-		} 
+		}
 
 		dp_election_start(dp, FALSE);
 
 		/* Register the vote */
 		dp_election_register_vote(dp, idVoter, hVoter, idVotedFor);
 	}
-	
+
 	/* Find out who had the most votes and how many he had */
 	winner_votes = dp_election_tally(dp, &winner_id);
 
@@ -8580,7 +8563,7 @@ dpHandleVote(
 			return dp_RES_OK;
 		}
 	}
-	
+
 	/* Otherwise, if we weren't just listening to ourselves vote,
 	 * pick the best candidate, and vote again.
 	 * (We might vote for the same guy again, but that's ok.)
@@ -8595,7 +8578,7 @@ dpHandleVote(
 /*-------------------------------------------------------------------------
  Either we have noticed start of an election, or we are changing our vote.
  Send a vote for the given candidate to the given destination.
- If destination is PLAYER_BROADCAST, send it to all hosts in the current 
+ If destination is PLAYER_BROADCAST, send it to all hosts in the current
  session.
 --------------------------------------------------------------------------*/
 static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
@@ -8613,7 +8596,7 @@ static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 	precondition(dp != NULL);
 	precondition(dp->dpid2commHdl);
 	dp_assertValid(dp);
-	
+
 	pkt.tag = dp_VOTE_PACKET_ID;
 	pkt.body[0] = (char) dpGETSHORT_FIRSTBYTE(candidate);
 	pkt.body[1] = (char) dpGETSHORT_SECONDBYTE(candidate);
@@ -8638,7 +8621,7 @@ static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 	}
 
 	/* Send it to self, too */
-	if (dest == PLAYER_BROADCAST) 
+	if (dest == PLAYER_BROADCAST)
 		dpHandleVote(dp, PLAYER_ME, &pkt.body[0], sizeof(pkt.body));
 
 	dp_assertValid(dp);
@@ -8678,7 +8661,7 @@ static dp_result_t dpSendVictory(dp_t *dp)
 	precondition(dp != NULL);
 	precondition(dp->dpid2commHdl);
 	dp_assertValid(dp);
-	
+
 	pkt.tag = dp_VICTORY_PACKET_ID;
 
 	DPRINT(("dpSendVictory: t:%d\n", dp->now));
@@ -8696,7 +8679,7 @@ static dp_result_t dpSendVictory(dp_t *dp)
 }
 
 /*-------------------------------------------------------------------------
- The new master has assumed the throne.  Pester him with all sorts of 
+ The new master has assumed the throne.  Pester him with all sorts of
  requests.
 --------------------------------------------------------------------------*/
 static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
@@ -8705,7 +8688,7 @@ static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
-	
+
 	/* Do nothing if bogus packet */
 	if (reqlen != 0) {
 		return dp_RES_OK;
@@ -8731,7 +8714,7 @@ static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
 			DPRINT(("dpHandleVictory: believing winner id:%d\n", winner_id));
 			/* Do whatever it is we do after an election */
 			err = dp_election_inaugerate_winner(dp, winner_id);
-			if (err != dp_RES_OK) 
+			if (err != dp_RES_OK)
 				return err;
 		} else {
 			DPRINT(("dpHandleVictory: error: winner_id:%d doesn't map to src h:%x\n", winner_id, src));
@@ -8793,14 +8776,14 @@ static dpid_t dp_findLowestHost(dp_t *dp, clock_t maxAge)
 			/* Don't vote for a handle that is closing! */
 			playerHdl_t h = dpid2commHdl(dp, firstId);
 			short state = dpio_getHdlState(dp->dpio, h);
-			DPRINT(("dp_findLowestHost: considering id %d h:%x; state %x; bad state %x\n", firstId, h, state, state&BADSTATE)); 
+			DPRINT(("dp_findLowestHost: considering id %d h:%x; state %x; bad state %x\n", firstId, h, state, state&BADSTATE));
 			if (state & BADSTATE)
 				continue;
 
 			if (maxAge) {
 				/* Don't vote for a handle that is too old */
 				clock_t age = dpio_getHdlAge(dp->dpio, h);
-				DPRINT(("dp_findLowestHost: considering id %d h:%x; age %d <? maxAge %d\n", firstId, h, age, maxAge)); 
+				DPRINT(("dp_findLowestHost: considering id %d h:%x; age %d <? maxAge %d\n", firstId, h, age, maxAge));
 				if (age > maxAge)
 					continue;
 			}
@@ -8827,7 +8810,7 @@ static void dpElectMaster(
 	dpid_t lowest;
 	dp_session_t sess;
 	dp_election_vote_t *pvote;
-	
+
 	DPRINT(("dpElectMaster: Old master h:%x\n", dp->hMaster));
 
 	dp_assertValid(dp);
@@ -8855,14 +8838,13 @@ static void dpElectMaster(
 	pvote = NULL;
 	if (dp->election_size)
 		pvote = assoctab_subscript(dp->election_votes, PLAYER_ME);
-	DPRINT(("dpElectMaster: old vote %d, new vote %d\n", 
+	DPRINT(("dpElectMaster: old vote %d, new vote %d\n",
 			(pvote ? pvote->id : -1), lowest));
 	if (!pvote || (pvote->id != lowest)) {
 		dp_election_set_master(dp, lowest);
 		dpSendVote(dp, lowest, PLAYER_BROADCAST);
 	}
 }
-
 
 /*----------------------------------------------------------------------
  Internal.
@@ -8889,15 +8871,14 @@ static dp_result_t dpPoll(
 
 	/* Check the beacons and reset them */
 	beacon_expired = ((long)(dp->next_beacon - now) < 0);
-	if (beacon_expired) 
+	if (beacon_expired)
 		dp->next_beacon = now + dp->beacon_interval;
 	beacon2_expired = ((long)(dp->next_beacon2 - now) < 0);
-	if (beacon2_expired) 
+	if (beacon2_expired)
 		dp->next_beacon2 = now + dp->beacon_interval*2;
 	beacon4_expired = ((long)(dp->next_beacon4 - now) < 0);
-	if (beacon4_expired) 
+	if (beacon4_expired)
 		dp->next_beacon4 = now + dp->beacon_interval*4;
-
 
 	/* Every beacon... */
 	if (beacon_expired) {
@@ -8920,19 +8901,19 @@ static dp_result_t dpPoll(
 	/* Every call */
 	/* Retransmit reliable datagrams if necessary, and send keepalives. */
 	dpio_update(dp->dpio);
-	
+
 	/* Every 2nd beacon... */
 
 	/* Check for hosts that have actively reset their connection to us */
 	if (dp->check_timeout || beacon2_expired) {
 		h = dpio_findTimedOutHost(dp->dpio);
 		DPRINT(("dpPoll: t:%d, findTimedOutHost returns h:%x\n", now, h));
-		
+
 		/* check again later if we find  one now */
-		dp->check_timeout = (h != PLAYER_NONE);	
+		dp->check_timeout = (h != PLAYER_NONE);
 		if (h != PLAYER_NONE) {
 
-			/* If we found a dying or inactive handle, close it.  
+			/* If we found a dying or inactive handle, close it.
 			 * Caution: This triggers a callback that might do dangerous
 			 * stuff; see dp_openHdl_cb().
 			 */
@@ -8947,7 +8928,7 @@ static dp_result_t dpPoll(
 				dp->defaultSessionType = 0;
 				/* Careful - don't clobber return_value, it must get back */
 			}
-	
+
 		}
 	}
 	if (beacon2_expired) {
@@ -8988,7 +8969,7 @@ static dp_result_t dpPoll(
 			if (!ppS) break;
 			pSess = *ppS;
 			/*DPRINT(("dpPoll: old_numplayers %d, new numplayers %d, key %s\n",
-				pSess->old_numplayers, dptab_tableSize(pSess->players), 
+				pSess->old_numplayers, dptab_tableSize(pSess->players),
 				key2a(pSess->sess_subkey, pSess->sess_subkeylen)));*/
 			if (pSess->old_numplayers == dptab_tableSize(pSess->players))
 				continue;
@@ -9005,7 +8986,7 @@ static dp_result_t dpPoll(
 				rawbuflen = dp_pack_session(dp, 0, &sess, rawbuf);
 				err = dptab_set(dp->dt, dp->mysessions, pSess->sess_subkey, pSess->sess_subkeylen, rawbuf, rawbuflen, 4, PLAYER_ME);
 				DPRINT(("dpPoll: currentPlayers now %d; dptab_set returns err:%d\n", sess.currentPlayers, err));
-			}	
+			}
 		}
 #endif
 		if (dp->dpio->driverinfo->capabilities& comm_DRIVER_NO_BROADCAST) {
@@ -9060,7 +9041,6 @@ static dp_result_t dpPoll(
 						dp->dpio->driverinfo->capabilities));
 #endif
 				err = dptab_send(dp->dt, dp->mysessions, dp->sess_subkey, dp->sess_subkeylen, PLAYER_BROADCAST, 1);
-
 
 			}
 
@@ -9176,7 +9156,7 @@ static void dpPollPing(dp_t *dp)
 }
 
 /*----------------------------------------------------------------------
- Look up the session type and id of the session the given uid most 
+ Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
 dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidlen, dp_species_t *sessType)
@@ -9205,9 +9185,8 @@ dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidle
 	return err;
 }
 
-
 /*----------------------------------------------------------------------
- Remember the session type and id of the session the given uid most 
+ Remember the session type and id of the session the given uid most
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
@@ -9219,7 +9198,7 @@ dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessid
 
 	if (uid == dp_UID_NONE)
 		return dp_RES_OK;
-	
+
 	subkey[0] = dpGETLONG_FIRSTBYTE(uid);
 	subkey[1] = dpGETLONG_SECONDBYTE(uid);
 	subkey[2] = dpGETLONG_THIRDBYTE(uid);
@@ -9227,7 +9206,7 @@ dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessid
 
 	if (!dp->uid2sessionid) {
 		char key[dptab_KEY_MAXLEN];
-		
+
 		key[0] = dp_KEY_UID2SESSIONID;
 		err = dptab_createTable(dp->dt, &dp->uid2sessionid, key, 1, sessidlen + sizeof(dp_species_t), NULL,NULL,NULL,NULL);
 		if ((err != dp_RES_OK) && (err != dp_RES_ALREADY)) {
@@ -9300,7 +9279,7 @@ DP_API dp_result_t dpReceive(
 	ptimer_Exit(PTIMER_ECLOCK, 0);
 	if ((new_now - dp->now) > (dp->dpio->clocksPerSec / 5)) {
 		DPRINT(("dpReceive: time elapsed since last call %d ms\n",
-				(1000 * (new_now - dp->now)) / dp->dpio->clocksPerSec)); 
+				(1000 * (new_now - dp->now)) / dp->dpio->clocksPerSec));
 		if (dp->dpReceive_prevcall) {
 #if 0
 			/* Abort if too much time elapsed. */
@@ -9310,7 +9289,7 @@ DP_API dp_result_t dpReceive(
 		} else
 			dp->dpReceive_prevcall = 1;
 	}
-	dp->now = new_now; 
+	dp->now = new_now;
 	orig_size = *size;
 	ptimer_Enter(PTIMER_RECEIVE, "dpReceive timer");
 	for (i = 0; (i < 25) && (err == dp_RES_AGAIN); i++) {
@@ -9406,9 +9385,8 @@ static dp_result_t dp_receive(
 		} body;
 	} PACK *pkt = (struct dpReceivePkt_s *)buffer;
 
-
 	/* If our host record was deleted, or if the master's handle
-	 * timed out or was reset, close the session. 
+	 * timed out or was reset, close the session.
 	 */
 	if (dp->pleaseClose) {
 		DPRINT(("dpReceive: closed session\n"));
@@ -9448,18 +9426,18 @@ static dp_result_t dp_receive(
 	 */
 	if (get_flags & dpio_GET_CHECK_TIMEOUT) {
 		dp_result_t pollerr;
-		
+
 		dp->check_timeout = TRUE;
 		pollerr = dpPoll(dp, dp->now);
 		if ((pollerr == dp_RES_NETWORK_NOT_RESPONDING)
 			|| (pollerr == dp_RES_HOST_NOT_RESPONDING))
 			return pollerr;
 	}
-	/* If we've requested player deltas and dpio_get() has a new latency 
-	 * measurement for this player and there isn't too much local traffic, 
+	/* If we've requested player deltas and dpio_get() has a new latency
+	 * measurement for this player and there isn't too much local traffic,
 	 * generate a player delta containing the latency.
 	 */
-	if (dp->monitor_player_latencies && 
+	if (dp->monitor_player_latencies &&
 		(get_flags & dpio_GET_LATENCY_MEASUREMENT) &&
 		(dpio_localQ_npkts(dp->dpio) < 16)) {
 		dp_result_t deltaerr = dp_sendLatencyDelta(dp, pktsrc);
@@ -9589,8 +9567,8 @@ static dp_result_t dp_receive(
 		}
 		/* A request we made to a server failed. */
 		dpSwapErrorPacket(&pkt->body.error);
-		DPRINT(("dpReceive: got failure packet %2.2s k%d from h:%x\n", 
-				&pkt->body.error.request, 
+		DPRINT(("dpReceive: got failure packet %2.2s k%d from h:%x\n",
+				&pkt->body.error.request,
 				pkt->body.error.karma,
 				pkt->body.error.err,
 				pktsrc));
@@ -9620,7 +9598,7 @@ static dp_result_t dp_receive(
 
 	case dp_PING_RESP_PACKET_ID:
 		dpSwapPingPacket(&pkt->body.pingresp);
-		DPRINT(("ping_resp: karma %d, want karma %d, pktnum %d, len %d\n", 
+		DPRINT(("ping_resp: karma %d, want karma %d, pktnum %d, len %d\n",
 				pkt->body.pingresp.karma,
 				dp->ping.karma,
 				pkt->body.pingresp.pktnum,
@@ -9745,7 +9723,7 @@ static dp_result_t dp_receive(
 	case dp_REQUEST_OPEN_PACKET_ID:
 	{
 		/*
-		 * Request Open Packets are requests from a game server to open a connection to 
+		 * Request Open Packets are requests from a game server to open a connection to
 		 * a designated address.  We must insure that this packet has come from a game
 		 * server and then we open a handle to the player in the normal way.
 		 */
@@ -9787,7 +9765,7 @@ static dp_result_t dp_receive(
 		dp_session_t	sess;
 		playerHdl_t		host;
 		size_t			len;
-		
+
 		DPRINT(("dpReceive: got INDIRECT_JOIN packet\n"));
 		/* make sure packet was sent reliably */
 		if ((get_flags & dpio_GET_RELIABLE) == 0) {
@@ -9831,7 +9809,7 @@ static dp_result_t dp_receive(
 		 */
 		if (pkt->body.indirectJoin.chunk1 == dp_INDIRECT_JOIN_CHUNK_SESSIONID) {
 			dp_uid_t uid;
-			
+
 			uid = tserv_hdl2uid(dp->tserv, pktsrc);
 			err = dp_sessid4uid(dp, uid, pkt->body.indirectJoin.sessionId, dp->dpio->myAdrLen+2, sess.sessionType);
 			if (err != dp_RES_OK) {
@@ -9850,7 +9828,7 @@ static dp_result_t dp_receive(
 		 * to the joiner.
 		 */
 		err = tserv_send_credentials(dp->tserv, pktsrc, host);
-		if (err != dp_RES_OK) 
+		if (err != dp_RES_OK)
 #endif
 		{
 
@@ -9869,10 +9847,10 @@ static dp_result_t dp_receive(
 			int len;
 
 			DPRINT(("dpReceive: Could not send credentials from h:%x to h:%x, err:%d\n", pktsrc, host, err));
-			
+
 			pkt.tag = dp_REQUEST_OPEN_PACKET_ID;
 			len = dp_MAX_ADR_LEN;
-			
+
 			err = dpio_hdl2adr2(dp->dpio, pktsrc, pkt.body.adr, pkt.body.adr2, &len);
 
 			DPRINT(("dpReceive: Sending REQUEST OPEN for "));
@@ -10030,7 +10008,7 @@ static dp_result_t dp_receive(
  Note: will not return PLAYER_ME...
 
  If flags is dp_SEND_RELIABLE, never yields PLAYER_BROADCAST.
- If flags is dp_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if 
+ If flags is dp_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if
  idTo is dp_ID_BROADCAST and the driver prefers broadcast.
 --------------------------------------------------------------------------*/
 static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
@@ -10040,7 +10018,7 @@ static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
 
 	dp_assertValid(dp);
 
-	if ((flags == dp_SEND_UNRELIABLE) 
+	if ((flags == dp_SEND_UNRELIABLE)
 	&& (dp->dpio->driverinfo->capabilities&comm_DRIVER_PREFERS_BROADCAST)) {
 		DPRINT(("dp_getBroadcastHdls: hardware broadcast!\n"));
 		hdls[0] = PLAYER_BROADCAST;
@@ -10071,7 +10049,7 @@ static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
 		pH = (playerHdl_t *) &pe->value;
 		h = *pH;
 
-		/* Don't broadcast to myself if there's only one player here. 
+		/* Don't broadcast to myself if there's only one player here.
 		 * Don't broadcast to the Game Server.
 		 * Note: This means we can't really create player on server.
 		 */
@@ -10179,7 +10157,7 @@ static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
  Convert a destination dpid into an array of playerHdl_t for use with
  the dpio layer.
  If flags is dp_SEND_RELIABLE, never yields PLAYER_BROADCAST.
- If flags is dp_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if 
+ If flags is dp_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if
  idTo is dp_ID_BROADCAST and the driver prefers broadcast.
 
  Returns number of handles, or -1 (or zero :( ) on error.
@@ -10283,7 +10261,7 @@ DP_API dp_result_t dpSend(
 	else
 		err = dp_RES_BUG;
 
-	/* Flush the packet, if the user code hasn't volunteered to do 
+	/* Flush the packet, if the user code hasn't volunteered to do
 	 * that itself by calling dpFlush().
 	 */
 	if (!dp->dpio->appWillFlush) {
@@ -10311,7 +10289,7 @@ DP_API dp_result_t dpFlush(
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
  If both intervals are 0, only ACKs of non-retransmitted reliable packets
-	will generate new measurements.  No extra bandwidth is used, but 
+	will generate new measurements.  No extra bandwidth is used, but
 	measurements may be infrequent if there are few reliable packets or
 	there is heavy packet loss.
  If piggbackPingInterval is set, additional small ping packets and
@@ -10486,7 +10464,6 @@ DP_API dp_result_t dpCreateGroup(
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
  Destroy the given group; removes the group from the game session.
  The dpID will not be reused during the current session.
@@ -10541,7 +10518,7 @@ DP_API dp_result_t dpDestroyGroup(
 		for (i = dptab_tableSize(grplayers) - 1; i >= 0; i--) {
 			void *pbuf;
 			size_t plen;
-	
+
 			err = dptab_get_byindex(grplayers, i, (void **)&pbuf, &plen, subkey, &subkeylen);
 			if (err != dp_RES_OK) {
 				DPRINT(("dpDestroyGroup: err: couldn't get %d player from table\n", i));
@@ -10788,7 +10765,7 @@ DP_API dp_result_t dpDeletePlayerFromGroup(
  of sessions you haven't joined.
 
  On success, dp_RES_OK is returned.
- On failure, dp_RES_BUG is returned if inputs are null; dp_RES_CLOSED if 
+ On failure, dp_RES_BUG is returned if inputs are null; dp_RES_CLOSED if
  session not fully initialized; dp_RES_BAD if session is not NULL.
 ----------------------------------------------------------------------*/
 DP_API dp_result_t dpEnumGroups(
@@ -11038,7 +11015,7 @@ DP_API dp_result_t dpSetPlayerData(
 }
 
 /*------------------------------------------------------------------------
- Send a given player's variable 'key' to a player (or to everybody, 
+ Send a given player's variable 'key' to a player (or to everybody,
  if idTo == dp_ID_BROADCAST).
  Only used for variables that were not sent when they were set, i.e.
  which were set with dpSendPlayerData(..., dp_PLAYERDATA_FLAG_NOFLOOD)
@@ -11125,7 +11102,7 @@ DP_API dp_result_t dpSendPlayerData(
 			DPRINT(("dpSendPlayerData: err: in sending player variable %d\n", err));
 			return err;
 		}
-	}	
+	}
 	return dp_RES_OK;
 }
 
@@ -11249,7 +11226,7 @@ DP_API dp_result_t dpReadyToFreeze(
 			}
 			peer = (dptab_peer_t *)dpe->value;
 			errHdl = dpe->key;
-			
+
 			if (peer->tx->n_used) {
 				DPRINT(("dpReadyToFreeze: Outstanding table transfers to h:%x.\n", errHdl));
 				return dp_RES_BUSY;
@@ -11258,7 +11235,6 @@ DP_API dp_result_t dpReadyToFreeze(
 	}
 	return dpio_ReadyToFreeze(dp->dpio, &errHdl);
 }
-
 
 /*----------------------------------------------------------------------
  Sets a callback to be called for incoming connections.  This is done
@@ -11314,7 +11290,7 @@ DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, int paramId, long *ppara
 	}
 	*pparamVal = resp.param_value;
 	DPRINT(("dpGetParameterLong: paramId %d new value %d\n", paramId, *pparamVal));
-	return dp_RES_OK;  
+	return dp_RES_OK;
 }
 
 /*----------------------------------------------------------------------
@@ -11335,7 +11311,6 @@ DP_API dp_result_t DP_APIX dpGetCurrentTransportInfo(
 
 	return dp_RES_OK;
 }
-
 
 /************************* Turn Management *******************************/
 
@@ -11431,9 +11406,9 @@ DP_API dp_result_t dpTurnPoll(dp_t *dp)
 #ifdef dp_STATS
 /************************** Statistics ********************************/
 /*-------------------------------------------------------------------------
- Retrieve statistics from dp about network traffic. 
- On entry, 
- statkind is one of dp_STAT_*; for example, if you want to know how many 
+ Retrieve statistics from dp about network traffic.
+ On entry,
+ statkind is one of dp_STAT_*; for example, if you want to know how many
  reliable packets have been received by the underlying reliable transport
  since dpCreate, use dp_STAT_DPIO_RX_REL_PKTS.
  buf should be a pointer to a dp_stat_t.
@@ -11448,7 +11423,7 @@ DP_API dp_result_t dpGetStats(
 	size_t buflen)
 {
 	dp_stat_t *p;
-	if (!dp || !buf) 
+	if (!dp || !buf)
 		return dp_RES_BAD;
 
 	switch (statkind) {
@@ -11462,13 +11437,13 @@ DP_API dp_result_t dpGetStats(
 	case dp_STAT_DPIO_TX_UNREL_PKTS  :
 	case dp_STAT_DPIO_CONNECTING  :
 	case dp_STAT_DPIO_CONNECTED   :
-		p = &dp->dpio->stats[statkind]  ; break; 
+		p = &dp->dpio->stats[statkind]  ; break;
 	case dp_STAT_DPTAB_RX_BYTES     :
 	case dp_STAT_DPTAB_RX_RECORDS   :
 	case dp_STAT_DPTAB_TX_BYTES     :
 	case dp_STAT_DPTAB_TX_RECORDS   :
-		p = &dp->dt->stats[statkind - dp_STAT_DPTAB_RX_BYTES]  ; break; 
-	default: 
+		p = &dp->dt->stats[statkind - dp_STAT_DPTAB_RX_BYTES]  ; break;
+	default:
 		return dp_RES_BAD;
 	}
 	memcpy(buf, p, buflen);

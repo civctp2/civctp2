@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  cgi-bin program to update game server text files and optionally reset server.
  Requires user to enter correct admin password.
  Redirects user to http://$server/anet2/etc/servfil.html
- then writes completion status there slowly.  
+ then writes completion status there slowly.
  (That way, the browser's reload can grab updated status without accidentally
  reloading the cgi-bin script!)
 --------------------------------------------------------------------------*/
@@ -217,12 +217,12 @@ int main(int argc, char **argv)
 					bCorrectPwd = 1;
 			} else if (!strcmp(var, "restart")) {
 				if (!strcmp(val, "true"))
-					bRestart = "1";	
+					bRestart = "1";
 			} else if (!strcmp(var, "reload")) {
 				if (!strcmp(val, "true")) {
 					/* restart has precedence over reload */
 					if (strcmp(bRestart, "1"))
-						bRestart = "2";	
+						bRestart = "2";
 				}
 			}
 		}

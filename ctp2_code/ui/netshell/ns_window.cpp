@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Multiplayer game setup window 
+// Description  : Multiplayer game setup window
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -59,7 +59,6 @@ ns_Window::ns_Window(
 }
 
 
-
 AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -73,14 +72,12 @@ AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_Window::InitCommon( MBCHAR *tile, BOOL retired )
 {
 	m_numControls = 0;
 	m_controls = NULL;
 	m_tile = NULL;
 	m_retired = FALSE;
-
 
 
 	SetRetired( retired );
@@ -95,7 +92,6 @@ AUI_ERRCODE ns_Window::InitCommon( MBCHAR *tile, BOOL retired )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 ns_Window::~ns_Window()
@@ -129,7 +125,6 @@ ns_Window::~ns_Window()
 }
 
 
-
 aui_Control *ns_Window::FindControl( uint32 index )
 {
 	Assert( (sint32)index < m_numControls );
@@ -137,7 +132,6 @@ aui_Control *ns_Window::FindControl( uint32 index )
 
 	return m_controls[ index ];
 }
-
 
 
 aui_Image *ns_Window::SetTile( MBCHAR *tile )
@@ -164,13 +158,12 @@ aui_Image *ns_Window::SetTile( MBCHAR *tile )
 }
 
 
-
 BOOL ns_Window::SetRetired( BOOL retired )
 {
 	BOOL wasRetired = m_retired;
 	if ( m_retired = retired && !wasRetired )
 	{
-		
+
 		MBCHAR *blockIdentifier = aui_Ldl::GetBlock( this );
 		Assert( blockIdentifier != NULL );
 		if ( !blockIdentifier ) return wasRetired;
@@ -194,4 +187,3 @@ BOOL ns_Window::SetRetired( BOOL retired )
 
 	return wasRetired;
 }
-

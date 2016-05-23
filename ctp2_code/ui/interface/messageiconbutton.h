@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,15 +33,13 @@
 #ifndef __MESSAGEICONBUTTON_H__
 #define __MESSAGEICONBUTTON_H__
 
-
 #include "aui_button.h"
-
 
 
 class MessageIconButton : public aui_Button
 {
 public:
-	
+
 	MessageIconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -67,5 +65,4 @@ private:
 
 };
 
-
-#endif 
+#endif

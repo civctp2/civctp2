@@ -11,14 +11,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
 //
-// _WIN32		
+// _WIN32
 // - Microsoft Windows version
 //
 //----------------------------------------------------------------------------
@@ -48,12 +48,12 @@
 //----------------------------------------------------------------------------
 
 enum C3DIR {
-	C3DIR_DIRECT	= -1,	
+	C3DIR_DIRECT	= -1,
 
-	C3DIR_GAMEDATA,			
+	C3DIR_GAMEDATA,
   	C3DIR_GL,
 	C3DIR_AIDATA,
-    C3DIR_UIDATA,			
+    C3DIR_UIDATA,
 	C3DIR_LAYOUT,
 	C3DIR_FONTS,
 	C3DIR_GRAPHICS,
@@ -63,7 +63,7 @@ enum C3DIR {
 	C3DIR_PICTURES,
 	C3DIR_ICONS,
 	C3DIR_CURSORS,
-    C3DIR_SOUNDS, 
+    C3DIR_SOUNDS,
 	C3DIR_VIDEOS,
 
 	C3DIR_MAX
@@ -138,12 +138,10 @@ bool		c3files_CreateDirectory(MBCHAR *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
-
 bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
 #ifdef _WIN32
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
-
 
 DriveIdType c3files_GetCtpCdId(void);
 bool		c3files_HasCD(void);

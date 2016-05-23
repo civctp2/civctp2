@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 //
 // _DEBUG
 // Generate extra debug output
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -43,7 +43,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -68,13 +68,12 @@ typedef sint32  AdvanceType;
 
 uint32 Advances_Advances_GetVersion(void);
 
-
-class Advances 
+class Advances
 {
 
 private:
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -87,19 +86,18 @@ private:
 	sint32	m_age;
 
 	sint32 m_theLastAdvanceEnabledThisManyAdvances;
-	
+
 	sint32 m_total_cost;
 	sint32 m_discovered;
 
 //----------------------------------------------------------------------------
 // End of fixed variable list. Changing below this line is less dangerous.
 //----------------------------------------------------------------------------
-	
+
 	uint8* m_hasAdvance;
 	uint8 *m_canResearch;
 	uint16 *m_turnsSinceOffered;
-	
-	
+
 	friend class NetInfo;
 	friend class NetPlayer;
 	friend class NetResearch;
@@ -115,7 +113,6 @@ public:
 
 	sint32 GetNum() const { return m_size; }
 
-	
 	void UpdateCitySprites(BOOL forceUpdate);
 	bool HasAdvance(sint32 index) const;
 	void SetHasAdvance(AdvanceType advance, const bool init = false);
@@ -124,19 +121,18 @@ public:
 	void GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient = FALSE);
 	void GiveAdvancePlusPrerequisites(AdvanceType adv);
 	void TakeAdvance(AdvanceType adv);
-	void InitialAdvance(AdvanceType adv); 
+	void InitialAdvance(AdvanceType adv);
 	double GetPollutionSizeModifier(void) const;
 	double GetPollutionProductionModifier(void) const;
 
 	AdvanceType GetResearching() const { return m_researching; }
 	void SetResearching(AdvanceType adv);
 
-	sint32 GetCostOfWhatHeKnows() const { return m_total_cost; }	
+	sint32 GetCostOfWhatHeKnows() const { return m_total_cost; }
 
 	sint32 GetCost() const;
 	sint32 GetCost(const AdvanceType adv) const;
 
-	
 	uint8* CanResearch() const;
 	BOOL CanResearch(sint32 advance) const;
 	void ResetCanResearch(sint32 justGot);
@@ -148,7 +144,7 @@ public:
 	sint32 GetMinPrerequisites(sint32 adv) const;
 	sint32 GetMinPrerequisites(sint32 adv, sint32 limit) const;
 	sint32 FindLevel(AdvanceRecord const * const rec, sint32 const fromLevel = 0) const;
-	
+
 #ifdef _DEBUG
 	void DebugDumpTree();
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -67,9 +67,9 @@ void main (int argc, char *argv[])
 	npkts = atoi(argv[3]);
 	if (argc > 4)
 		pktsize = (size_t)atoi(argv[4]);
-	else 
+	else
 		pktsize = sbd_MAXLEN;
-		
+
 	for (i = 0; i < pktsize; i++)
 		buf[i] = (i % ('Z' - 'A') + 'A');
 

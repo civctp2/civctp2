@@ -11,7 +11,7 @@ class Picture;
 class PictureTab : public aui_Tab
 {
 public:
-	
+
 	PictureTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,6 @@ public:
 		BOOL selected = FALSE );
 	virtual ~PictureTab() {}
 
-	
 	Picture *&ThePictureOn( void ) { return m_pictureOn; }
 	Picture *&ThePictureOff( void ) { return m_pictureOff; }
 	Picture *&ThePictureActiveOn( void ) { return m_pictureActiveOn; }
@@ -48,4 +47,4 @@ protected:
 	Picture *m_pictureActiveOff;
 };
 
-#endif 
+#endif

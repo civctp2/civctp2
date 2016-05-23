@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ class CivArchive;
 //
 //----------------------------------------------------------------------------
 
-class CivApp 
+class CivApp
 {
 public:
 	CivApp();
@@ -77,9 +77,9 @@ public:
 	void		CleanupAppDB(void);
 	sint32		EndGame(void);
 
-	sint32		GetKeyboardScrollingKey(void) const 
-    { 
-        return m_keyboardScrollingKey; 
+	sint32		GetKeyboardScrollingKey(void) const
+    {
+        return m_keyboardScrollingKey;
     };
 
     sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
@@ -87,23 +87,23 @@ public:
 	sint32		InitializeAppDB(CivArchive &archive);
 	sint32		InitializeGame(CivArchive &archive);
 
-   	bool		IsGameLoaded(void) const 
-    { 
-        return m_gameLoaded; 
+   	bool		IsGameLoaded(void) const
+    {
+        return m_gameLoaded;
     };
 
-	bool		IsInBackground(void) const 
-    { 
-        return m_inBackground; 
+	bool		IsInBackground(void) const
+    {
+        return m_inBackground;
     };
 
-	bool		IsKeyboardScrolling(void) const 
-    { 
-        return m_isKeyboardScrolling; 
+	bool		IsKeyboardScrolling(void) const
+    {
+        return m_isKeyboardScrolling;
     };
 
 	sint32		LoadSavedGame(MBCHAR const * name);
-	sint32		LoadSavedGameMap(MBCHAR const * name); 
+	sint32		LoadSavedGameMap(MBCHAR const * name);
 	sint32		LoadScenarioGame(MBCHAR const * name);
 	void		PostEndGameAction(void);
 	void        PostLoadQuickSaveAction(sint32 player);
@@ -123,13 +123,13 @@ public:
 	sint32		QuitToSPShell(void);
 	sint32		RestartGame(void);
 	sint32		RestartGameSameMap(void);
-	bool		SaveDBInGameFile(void) const 
-    { 
-        return m_saveDBInGameFile; 
+	bool		SaveDBInGameFile(void) const
+    {
+        return m_saveDBInGameFile;
     }
-	void		SetInBackground(bool in = true) 
-    { 
-        m_inBackground = in; 
+	void		SetInBackground(bool in = true)
+    {
+        m_inBackground = in;
     }
 	sint32		StartSpriteEditor(void);
 	sint32		StartGame(void);
@@ -142,7 +142,7 @@ private:
 	void 		InitializeAppUI(void);
 	sint32  	InitializeGameUI(void);
 	sint32		InitializeSpriteEditor(CivArchive &archive);
-	void		PostLoadSaveGameMapAction(MBCHAR const *); 
+	void		PostLoadSaveGameMapAction(MBCHAR const *);
 	sint32      ProcessAI();
 	sint32      ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds);
 	sint32		ProcessProfile(void);
@@ -162,7 +162,6 @@ private:
 	sint32		m_keyboardScrollingKey;
 };
 
-
 AUI_ACTION_BASIC(EndGameAction);
 AUI_ACTION_BASIC(QuitToSPShellAction);
 AUI_ACTION_BASIC(QuitToLobbyAction);
@@ -174,9 +173,9 @@ AUI_ACTION_BASIC(SpriteTestAction);
 class LoadSaveGameAction : public aui_Action
 {
 public:
-	LoadSaveGameAction(MBCHAR const * name = NULL) 
-    :   aui_Action  () 
-    { 
+	LoadSaveGameAction(MBCHAR const * name = NULL)
+    :   aui_Action  ()
+    {
         if (name)
         {
             strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
@@ -202,9 +201,9 @@ private:
 class LoadSaveGameMapAction : public aui_Action
 {
 public:
-	LoadSaveGameMapAction(MBCHAR const * name = NULL) 
-    :   aui_Action  () 
-    { 
+	LoadSaveGameMapAction(MBCHAR const * name = NULL)
+    :   aui_Action  ()
+    {
         if (name)
         {
             strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
@@ -230,12 +229,12 @@ private:
 class LoadScenarioGameAction : public aui_Action
 {
 public:
-	LoadScenarioGameAction(MBCHAR const * name) 
-    :   aui_Action  () 
-    { 
+	LoadScenarioGameAction(MBCHAR const * name)
+    :   aui_Action  ()
+    {
         if (name)
         {
-            strncpy(m_filename, name, _MAX_PATH); 
+            strncpy(m_filename, name, _MAX_PATH);
         }
         else
         {

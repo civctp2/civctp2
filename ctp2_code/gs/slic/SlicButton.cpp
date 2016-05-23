@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic message box buttons
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -134,7 +134,7 @@ void SlicButton::Serialize(CivArchive &archive)
 	}
 	m_message->Serialize(archive);
 }
-	
+
 void SlicButton::Callback()
 {
 	if(m_segmentName && !m_segment) {
@@ -142,7 +142,7 @@ void SlicButton::Callback()
 		delete [] m_segmentName;
 		m_segmentName = NULL;
 	}
-	
+
 #ifdef _DEBUG
 	if(m_name >= 0) {
 		Assert(GetName());

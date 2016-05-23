@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -40,7 +40,6 @@
 #include "PlayHap.h"
 #include "player.h"         // g_player
 
-
 NetHappy::NetHappy(Unit city, Happy *data, BOOL isInitial)
 {
 	m_city = city;
@@ -61,28 +60,28 @@ NetHappy::Packetize(uint8 *buf, uint16 &size)
 
 	PUSHDOUBLE(m_data->m_last_captured);
 
-	PUSHDOUBLE(m_data->m_base); 
-	PUSHDOUBLE(m_data->m_size); 
-	PUSHDOUBLE(m_data->m_pollution); 
+	PUSHDOUBLE(m_data->m_base);
+	PUSHDOUBLE(m_data->m_size);
+	PUSHDOUBLE(m_data->m_pollution);
 	PUSHDOUBLE(m_data->m_conquest_distress);
 	PUSHDOUBLE(m_data->m_empire_dist);
-	PUSHDOUBLE(m_data->m_enemy_action); 
-	PUSHDOUBLE(m_data->m_peace); 
-	
-	PUSHDOUBLE(m_data->m_workday); 
-	PUSHDOUBLE(m_data->m_wages); 
-	PUSHDOUBLE(m_data->m_rations); 
-	
+	PUSHDOUBLE(m_data->m_enemy_action);
+	PUSHDOUBLE(m_data->m_peace);
+
+	PUSHDOUBLE(m_data->m_workday);
+	PUSHDOUBLE(m_data->m_wages);
+	PUSHDOUBLE(m_data->m_rations);
+
 	PUSHDOUBLE(m_data->m_martial_law);
-	
-	PUSHDOUBLE(m_data->m_pop_ent); 
-	PUSHDOUBLE(m_data->m_improvement); 
-	PUSHDOUBLE(m_data->m_wonders); 
-	
+
+	PUSHDOUBLE(m_data->m_pop_ent);
+	PUSHDOUBLE(m_data->m_improvement);
+	PUSHDOUBLE(m_data->m_wonders);
+
 	PUSHDOUBLE(m_data->m_dist_to_capitol);
 	PUSHDOUBLE(m_data->m_too_many_cities);
 
-	PUSHDOUBLE(m_data->m_crime); 
+	PUSHDOUBLE(m_data->m_crime);
 	PUSHLONG(m_data->m_cost_to_capitol);
 	PUSHDOUBLE(m_data->m_dist_to_capitol);
 	PUSHLONG(m_data->m_fullHappinessTurns);
@@ -93,7 +92,7 @@ NetHappy::Packetize(uint8 *buf, uint16 &size)
         (std::min<size_t>(255, m_data->m_timedChanges.size()));
 	PUSHBYTE(n);
     std::list<HappyTimer>::iterator p = m_data->m_timedChanges.begin();
-	for (uint8 i = 0; i < n; ++i) 
+	for (uint8 i = 0; i < n; ++i)
     {
 		PUSHLONG(p->m_turnsRemaining);
 		PUSHDOUBLE(p->m_adjustment);
@@ -112,7 +111,7 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint32 unitid;
 
 	PULLLONG(unitid);
-	
+
 	if(!g_theUnitPool->IsValid(unitid))
 		return;
 
@@ -134,31 +133,31 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PDCHK(m_data->m_last_captured);
 
-	PDCHK(m_data->m_base); 
-	PDCHK(m_data->m_size); 
-	PDCHK(m_data->m_pollution); 
+	PDCHK(m_data->m_base);
+	PDCHK(m_data->m_size);
+	PDCHK(m_data->m_pollution);
 	PDCHK(m_data->m_conquest_distress);
 	PDCHK(m_data->m_empire_dist);
-	PDCHK(m_data->m_enemy_action); 
-	PDCHK(m_data->m_peace); 
-	
-	PDCHK(m_data->m_workday); 
-	PDCHK(m_data->m_wages); 
-	PDCHK(m_data->m_rations); 
-	
+	PDCHK(m_data->m_enemy_action);
+	PDCHK(m_data->m_peace);
+
+	PDCHK(m_data->m_workday);
+	PDCHK(m_data->m_wages);
+	PDCHK(m_data->m_rations);
+
 	PDCHK(m_data->m_martial_law);
-	
-	PDCHK(m_data->m_pop_ent); 
-	PDCHK(m_data->m_improvement); 
-	PDCHK(m_data->m_wonders); 
-	
+
+	PDCHK(m_data->m_pop_ent);
+	PDCHK(m_data->m_improvement);
+	PDCHK(m_data->m_wonders);
+
 	PDCHK(m_data->m_dist_to_capitol);
 	PDCHK(m_data->m_too_many_cities);
 
-	PDCHK(m_data->m_crime); 
+	PDCHK(m_data->m_crime);
 	sint32 oldCost = m_data->m_cost_to_capitol;
 	PULLLONG(m_data->m_cost_to_capitol);
-	if (isCheck) 
+	if (isCheck)
     {
 		Assert(oldCost == m_data->m_cost_to_capitol);
 		if(oldCost != m_data->m_cost_to_capitol)
@@ -168,7 +167,7 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PDCHK(m_data->m_dist_to_capitol);
 	sint32 oldFullHappiness = m_data->m_fullHappinessTurns;
 	PULLLONG(m_data->m_fullHappinessTurns);
-	if (isCheck) 
+	if (isCheck)
     {
 		Assert(oldFullHappiness == m_data->m_fullHappinessTurns);
 		if(oldFullHappiness != m_data->m_fullHappinessTurns)
@@ -180,12 +179,12 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint8 n;
 	PULLBYTE(n);
 
-	if (isCheck) 
+	if (isCheck)
     {
 		Assert(n == m_data->m_timedChanges.size());
 		if ((n == m_data->m_timedChanges.size()) ||
             ((n == 255) && (m_data->m_timedChanges.size() > 255))
-           ) 
+           )
         {
             // No action: size OK, or impossible to repair.
         }
@@ -199,17 +198,17 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		m_data->m_timedChanges.clear();
 	}
 
-	if (!resync) 
+	if (!resync)
     {
         std::list<HappyTimer>::iterator     p   = m_data->m_timedChanges.begin();
-		for (uint8 i = 0; i < n; i++) 
+		for (uint8 i = 0; i < n; i++)
         {
 			HappyTimer ins;
 			PULLLONG(ins.m_turnsRemaining);
 			PULLDOUBLE(ins.m_adjustment);
 			PULLBYTETYPE(ins.m_reason, HAPPY_REASON);
-			
-			if (isCheck) 
+
+			if (isCheck)
             {
 				Assert(p->m_turnsRemaining == ins.m_turnsRemaining);
 				if (p->m_turnsRemaining != ins.m_turnsRemaining)
@@ -223,15 +222,15 @@ NetHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 				if (p->m_reason != ins.m_reason)
 					resync = true;
 			}
-            else 
+            else
             {
 				m_data->m_timedChanges.push_back(ins);
-			} 
+			}
 		}
 		Assert(pos == size);
 	}
 
-	if (resync) 
+	if (resync)
     {
 		g_network.RequestResync(RESYNC_CITY_STATS);
 	}
@@ -250,21 +249,20 @@ NetPlayerHappy::Packetize(uint8 *buf, uint16 &size)
 {
 	buf[0] = k_PACKET_PLAYER_HAPPY_ID >> 8;
 	buf[1] = k_PACKET_PLAYER_HAPPY_ID & 0xff;
-	
+
 	size = 2;
 
 	PUSHBYTE(m_owner);
 	PUSHBYTE(m_isInitialPacket);
 
-	
-    PUSHDOUBLE(m_playerHappiness->m_workday_per_person); 
-    PUSHLONG(m_playerHappiness->m_unitless_workday); 
+    PUSHDOUBLE(m_playerHappiness->m_workday_per_person);
+    PUSHLONG(m_playerHappiness->m_unitless_workday);
 
-    PUSHDOUBLE(m_playerHappiness->m_rations_per_person); 
-    PUSHLONG(m_playerHappiness->m_unitless_rations); 
+    PUSHDOUBLE(m_playerHappiness->m_rations_per_person);
+    PUSHLONG(m_playerHappiness->m_unitless_rations);
 
-    PUSHDOUBLE(m_playerHappiness->m_wages_per_person); 
-    PUSHLONG(m_playerHappiness->m_unitless_wages); 
+    PUSHDOUBLE(m_playerHappiness->m_wages_per_person);
+    PUSHLONG(m_playerHappiness->m_unitless_wages);
 
     PUSHDOUBLE(m_playerHappiness->m_raw_overseas_defeat);
     PUSHDOUBLE(m_playerHappiness->m_raw_home_defeat);
@@ -273,7 +271,7 @@ NetPlayerHappy::Packetize(uint8 *buf, uint16 &size)
     PUSHDOUBLE(m_playerHappiness->m_home_defeat);
 
     PUSHDOUBLE(m_playerHappiness->m_dist_overseas);
-    PUSHDOUBLE(m_playerHappiness->m_overseas); 
+    PUSHDOUBLE(m_playerHappiness->m_overseas);
 }
 
 void
@@ -288,14 +286,14 @@ NetPlayerHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 #define PDCHK2(x) {double tmp = x; PULLDOUBLE(x); if((m_owner == g_network.GetPlayerIndex()) && !m_isInitialPacket) { Assert(tmp == x); }}
 
-    PDCHK2(m_playerHappiness->m_workday_per_person); 
-    PULLLONG(m_playerHappiness->m_unitless_workday); 
+    PDCHK2(m_playerHappiness->m_workday_per_person);
+    PULLLONG(m_playerHappiness->m_unitless_workday);
 
-    PDCHK2(m_playerHappiness->m_rations_per_person); 
-    PULLLONG(m_playerHappiness->m_unitless_rations); 
+    PDCHK2(m_playerHappiness->m_rations_per_person);
+    PULLLONG(m_playerHappiness->m_unitless_rations);
 
-    PDCHK2(m_playerHappiness->m_wages_per_person); 
-    PULLLONG(m_playerHappiness->m_unitless_wages); 
+    PDCHK2(m_playerHappiness->m_wages_per_person);
+    PULLLONG(m_playerHappiness->m_unitless_wages);
 
     PDCHK2(m_playerHappiness->m_raw_overseas_defeat);
     PDCHK2(m_playerHappiness->m_raw_home_defeat);
@@ -304,5 +302,5 @@ NetPlayerHappy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
     PDCHK2(m_playerHappiness->m_home_defeat);
 
     PDCHK2(m_playerHappiness->m_dist_overseas);
-    PDCHK2(m_playerHappiness->m_overseas); 
+    PDCHK2(m_playerHappiness->m_overseas);
 }

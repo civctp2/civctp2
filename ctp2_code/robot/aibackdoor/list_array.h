@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // None.
 //
 //----------------------------------------------------------------------------
@@ -27,12 +27,10 @@
 //
 //----------------------------------------------------------------------------
 
-
 #ifndef __List_Array_h__
 #define __List_Array_h__
 
 #include <vector>       // std::vector
-
 
 template <typename LIST_DATA_TYPE>
 class list_array
@@ -40,9 +38,9 @@ class list_array
 public:
 	list_array
 	(
-		int i_size,					
-		int i_chunk_size = -1,	
-		int i_max_chunks = -1		
+		int i_size,
+		int i_chunk_size = -1,
+		int i_max_chunks = -1
 	);
 
     ~list_array();
@@ -52,7 +50,7 @@ public:
         data_list.clear();
     };
 
-    size_t size() const   
+    size_t size() const
     {
         return data_list.size();
     };
@@ -82,23 +80,22 @@ public:
 	);
 
 protected:
-	int chunk_size;					
+	int chunk_size;
 	int initial_size;
-	int max_chunks;					
-	int chunks;						
+	int max_chunks;
+	int chunks;
 
     std::vector<LIST_DATA_TYPE> data_list;
 };
 
-
 template <typename LIST_DATA_TYPE>
 list_array<LIST_DATA_TYPE>::list_array
 (
-	int i_size,					
-	int i_chunk_size,			
-	int i_max_chunks			
-								
-) 
+	int i_size,
+	int i_chunk_size,
+	int i_max_chunks
+
+)
 :   data_list       (),
     chunk_size      ((i_chunk_size == -1) ? i_size : i_chunk_size),
     max_chunks      (i_max_chunks),
@@ -106,9 +103,8 @@ list_array<LIST_DATA_TYPE>::list_array
     chunks          (0)
 { ; }
 
-
 template <typename LIST_DATA_TYPE>
-list_array<LIST_DATA_TYPE>::~list_array() 
+list_array<LIST_DATA_TYPE>::~list_array()
 {
     std::vector<LIST_DATA_TYPE>().swap(data_list);
 }
@@ -143,16 +139,16 @@ int list_array<LIST_DATA_TYPE>::Append_Data
     }
     else
     {
-        _ASSERTE(0 < chunk_size); 
-	
-		size_t const    needed_chunks = 
+        _ASSERTE(0 < chunk_size);
+
+		size_t const    needed_chunks =
             (old_size - initial_size + chunk_size) / chunk_size;
-		
+
 		if ((static_cast<int>(needed_chunks) >= max_chunks) && (max_chunks >= 0))
 		{
 			_ASSERTE(needed_chunks < static_cast<size_t>(max_chunks));
-		} 
-		else 
+		}
+		else
 		{
     	    size_t const    extra_chunks = needed_chunks - chunks;
 
@@ -161,10 +157,9 @@ int list_array<LIST_DATA_TYPE>::Append_Data
     			chunks = needed_chunks;
                 data_list.reserve(data_list.capacity() + (chunk_size * extra_chunks));
             }
-		} 
-	} 
+		}
+	}
 
-    
 	data_list.push_back(the_data);
 
     return data_list.size() - 1;
@@ -182,5 +177,3 @@ void list_array<LIST_DATA_TYPE>::Set_Data
 }
 
 #endif // __List_Array_h__
-
-

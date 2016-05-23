@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 // - Added random map settings option. (5-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "c3window.h"
@@ -198,7 +197,6 @@ sint32 custommapscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -207,26 +205,24 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 
 	uint32 seed = GetTickCount();
 	srand(seed);
-	custommapscreenRand = new RandomGenerator(seed); 
+	custommapscreenRand = new RandomGenerator(seed);
 
-	if ( s_customMapWindow ) return AUI_ERRCODE_OK; 
+	if ( s_customMapWindow ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "CustomMapWindow");
-	{ 
+	{
 		s_customMapWindow = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_customMapWindow, errcode) );
 		if ( !AUI_NEWOK(s_customMapWindow, errcode) ) errcode;
 
-		
 		s_customMapWindow->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());
 		s_customMapWindow->GrabRegion()->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());
 		s_customMapWindow->SetStronglyModal(TRUE);
 	}
-	
+
 	if ( !callback ) callback = custommapscreen_backPress;
 	s_customMapWindow->AddOk( callback );
 
-	
 	s_customMapWindow->AddCancel( custommapscreen_cancelPress );
 
 	s_wetdry			= spNew_C3Slider(&errcode,windowBlock,"WetDrySlider",custommapscreen_wetdrySlide);
@@ -265,7 +261,6 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 		&errcode,
 		"CustomMapWindow.CloseButtonStrings" );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -273,12 +268,11 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 }
 
 
-
 AUI_ERRCODE custommapscreen_Cleanup()
 {
 #define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_customMapWindow  ) return AUI_ERRCODE_OK; 
+	if ( !s_customMapWindow  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_customMapWindow->Id() );
 	keypress_RemoveHandler(s_customMapWindow);
@@ -328,12 +322,10 @@ void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data,
 
 		if ( s_useMode == 1 ) {// This is not used.
 
-			
 			g_theProfileDB->SetSaveNote("");
 
 			g_civApp->PostStartGameAction();
 
-			
 			g_c3ui->AddAction( new SetupMapEditorAction );
 		}
 	}
@@ -355,43 +347,37 @@ void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 dat
 }
 void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 void custommapscreen_warmcoldSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
@@ -415,7 +401,6 @@ void custommapscreen_getValues(
 	homodiverse		= s_homodiverse->GetValueX();
 	goodcount		= s_goodcount->GetValueX();
 
-	
 }
 
 
@@ -450,15 +435,15 @@ void custommapscreen_setValues(
 	g_theProfileDB->SetIslandContinent(islandcontinent);
 	g_theProfileDB->SetHomoDiverse(homodiverse);
 	g_theProfileDB->SetGoodCount(goodcount);
-	
-	
-	
 
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	sint32 forest =
 		(sint32)g_theConstDB->Get(0)->GetForestDry() * wetdry +
 		(sint32)g_theConstDB->Get(0)->GetForestWet() * ( 10 - wetdry );
@@ -471,7 +456,6 @@ void custommapscreen_setValues(
 	sint32 desert =
 		(sint32)g_theConstDB->Get(0)->GetDesertDry() * wetdry +
 		(sint32)g_theConstDB->Get(0)->GetDesertWet() * ( 10 - wetdry );
-	
 
 	g_theProfileDB->SetPercentForest( sint32(forest / 10) );
 	g_theProfileDB->SetPercentGrass( sint32(grass / 10) );
@@ -479,7 +463,7 @@ void custommapscreen_setValues(
 	g_theProfileDB->SetPercentDesert( sint32(desert / 10) );
 
 
-	
+
 
 	sint32 white =
 		(sint32)g_theConstDB->Get(0)->GetWhiteCold() * warmcold +
@@ -490,31 +474,31 @@ void custommapscreen_setValues(
 	sint32 temperatureRangeAdjust =
 		(sint32)g_theConstDB->Get(0)->GetTemperatureRangeAdjustCold() * warmcold +
 		(sint32)g_theConstDB->Get(0)->GetTemperatureRangeAdjustWarm() * ( 10 - warmcold );
-		
+
 	g_theProfileDB->SetPercentWhite( sint32(white / 10) );
 	g_theProfileDB->SetPercentBrown( sint32(brown / 10) );
 	g_theProfileDB->SetTemperatureRangeAdjust(sint32(temperatureRangeAdjust/10));
 
 
-	
 
-	
+
+
 	g_theProfileDB->SetPercentLand( ((double)(0.9 * oceanland) / 10.0) + 0.1 );
 
 
-	
 
-	
+
+
 	g_theProfileDB->SetPercentContinent( (double)islandcontinent / 10.0 );
 
 
-	
 
-	
+
+
 	g_theProfileDB->SetHomogenous( 10 * homodiverse );
 
 
-	
+
 
 	sint32 richness =
 		(sint32)g_theConstDB->Get(0)->GetRichnessManyGoods() * goodcount +

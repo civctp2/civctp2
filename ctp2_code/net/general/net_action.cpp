@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added check for clear queue actions from clients received after they lost 
+// - Added check for clear queue actions from clients received after they lost
 //   the city to another player (bug #26)
 //
 //----------------------------------------------------------------------------
@@ -89,197 +89,181 @@ extern C3UI *g_c3ui;
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
 const uint32 NetAction::m_args[NET_ACTION_NULL] = {
-	2, 
-	0, 
-	1, 
-	2, 
-	3, 
-	2, 
-	7, 
-	1, 
-	7, 
-	1, 
+	2,
+	0,
+	1,
+	2,
+	3,
+	2,
+	7,
+	1,
+	7,
+	1,
 
-	
-	1, 
-	1, 
-	2, 
-	5, 
-	4, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
+	1,
+	1,
+	2,
+	5,
+	4,
+	1,
+	1,
+	1,
+	1,
+	1,
 
-	
-	1, 
-	1, 
-	2, 
-	1, 
-	4, 
-	2, 
-	2, 
-	1, 
-	1, 
-	1, 
+	1,
+	1,
+	2,
+	1,
+	4,
+	2,
+	2,
+	1,
+	1,
+	1,
 
-	
-	3, 
-	4, 
-	4, 
-	2, 
-	1, 
-	4, 
-	1, 
-	4, 
-	4, 
-	3, 
+	3,
+	4,
+	4,
+	2,
+	1,
+	4,
+	1,
+	4,
+	4,
+	3,
 
-	
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
 
-	
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
-	4, 
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
+	4,
 
-	
-	4, 
-	1, 
-	1, 
-	4, 
-	4, 
-	4, 
-	1, 
-	1, 
-	1, 
-	1, 
+	4,
+	1,
+	1,
+	4,
+	4,
+	4,
+	1,
+	1,
+	1,
+	1,
 
-	
-	1, 
-	2, 
-	2, 
-	2, 
-	2, 
-	2, 
-	2, 
-	2, 
-	2, 
-	2, 
+	1,
+	2,
+	2,
+	2,
+	2,
+	2,
+	2,
+	2,
+	2,
+	2,
 
-	
-	2, 
-	1, 
-	1, 
-	1, 
-	4, 
-	3, 
-	1, 
-	2, 
-	1, 
-	0, 
+	2,
+	1,
+	1,
+	1,
+	4,
+	3,
+	1,
+	2,
+	1,
+	0,
 
-	
-	3, 
-	4, 
-	1, 
-	1, 
-	1, 
-	4, 
-	3, 
-	0, 
-	1, 
-	1, 
+	3,
+	4,
+	1,
+	1,
+	1,
+	4,
+	3,
+	0,
+	1,
+	1,
 
-	
-	1, 
-	1, 
-	4, 
-	2, 
-	1, 
-	2, 
-	4, 
-	1, 
-	0, 
-	1, 
+	1,
+	1,
+	4,
+	2,
+	1,
+	2,
+	4,
+	1,
+	0,
+	1,
 
-	
-	4, 
-	3, 
-	2, 
-	2, 
-	1, 
-	3, 
-	1, 
-	1, 
-	2, 
-	5, 
+	4,
+	3,
+	2,
+	2,
+	1,
+	3,
+	1,
+	1,
+	2,
+	5,
 
-	
-	5, 
-	5, 
-	1, 
-	2, 
-	0, 
-	4, 
-	1, 
-	1, 
-	1, 
-	2, 
+	5,
+	5,
+	1,
+	2,
+	0,
+	4,
+	1,
+	1,
+	1,
+	2,
 
-	
-	1, 
-	3, 
-	4, 
-	1, 
-	2, 
-	3, 
-	1, 
-	5, 
-	1, 
-	0, 
+	1,
+	3,
+	4,
+	1,
+	2,
+	3,
+	1,
+	5,
+	1,
+	0,
 
-	
-	3, 
-	2, 
-	1, 
-	1, 
-	1, 
-	1, 
-	1, 
-	2, 
-	1, 
-	1, 
+	3,
+	2,
+	1,
+	1,
+	1,
+	1,
+	1,
+	2,
+	1,
+	1,
 
-	
-	1, 
-	1, 
-	1, 
-	3, 
-	3, 
-	0, 
-	1, 
-	3, 
-	1, 
+	1,
+	1,
+	1,
+	3,
+	3,
+	0,
+	1,
+	3,
+	1,
 };
-
 
 NetAction::NetAction(NET_ACTION action, ...)
 :
@@ -314,7 +298,6 @@ NetAction::NetAction()
 {
 }
 
-
 void NetAction::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'A';
@@ -327,12 +310,11 @@ void NetAction::Packetize(uint8* buf, uint16& size)
 	}
 }
 
-
 void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	Assert(buf[0] == 'A' && buf[1] == 'A');
 	sint32 pos = 2;
-	
+
 	Assert(g_network.IsHost());
 
 	PULLSHORTTYPE(m_action, NET_ACTION);
@@ -343,18 +325,17 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	sint32 index = g_network.IdToIndex(id);
 
 	if(g_network.SentResync(index)) {
-		
-		
-		
+
+
 		return;
 	}
 
 	switch(m_action) {
 		case NET_ACTION_MOVE_UNIT:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("NetAction: Player %d moving army %d(%d units), dir: %d\n",
-								index, m_data[0], 
+								index, m_data[0],
 								g_player[index]->GetAllArmiesList()->Access(m_data[0]).Num(),
 								m_data[1]));
 			break;
@@ -373,24 +354,22 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_network.ShouldAckBeginTurn()) {
 					DPRINTF(k_DBG_NET, ("NET_ACTION_END_TURN, %d\n", curPlayerIndex));
 
-					
 					Assert(g_network.m_playerData[index]->m_createdArmies.Num() == 0);
 					Assert(g_network.m_playerData[index]->m_createdUnits.Num() == 0);
 
-					
 					if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) {
 						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 					}
 
-					g_director->AddEndTurn(); 
+					g_director->AddEndTurn();
 
-					
-					
-					
-					
-					
-					
-					
+
+
+
+
+
+
+
 				} else {
 					g_network.SetEndTurnWhenClear();
 				}
@@ -409,18 +388,18 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(g_selected_item->GetCurPlayer() == index) {
 				g_network.Bookmark(id);
 				unit.Settle();
-				
-				
-				
-			
-				
-				
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
+
+
+
+
+
+
 				g_network.Unfreeze(id);
 			} else {
 			}
@@ -463,7 +442,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			TradeRoute route;
 			if(g_player[index]) {
 				g_network.Block(index);
-				route = 
+				route =
 					g_player[index]->CreateTradeRoute(
 					    Unit(m_data[0]),
 						ROUTE_TYPE(m_data[1]),
@@ -496,9 +475,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Cancelling trade route %d\n",
 								m_data[0]));
 			TradeRoute route(m_data[0]);
-			
-			
-			
+
+
 			Assert((route.GetSource().GetOwner() == index) ||
 				   (route.GetDestination().GetOwner() == index));
 			if(g_player[index])
@@ -545,10 +523,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_CREATED_UNIT:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: client %d created Unit %lx\n",
 								index, m_data[0]));
-			
+
 			if(!g_network.m_playerData[index])
 				break;
 
@@ -559,7 +537,6 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				break;
 			}
 
-			
 
 			if(pd->m_createdUnits[0] == Unit(m_data[0])) {
 				g_network.QueuePacket(id,
@@ -570,10 +547,9 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 									  new NetInfo(NET_INFO_CODE_NAK_OBJECT,
 												  m_data[0], (uint32)pd->m_createdUnits[0]));
 			}
-			
-			
+
 			pd->m_createdUnits.DelIndex(0);
-			
+
 			break;
 		}
 		case NET_ACTION_SET_READINESS:
@@ -583,13 +559,12 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(g_player[index]) {
 				g_player[index]->SetReadinessLevel((READINESS_LEVEL)m_data[0], m_data[1] != 0);
 			}
-			
-			
+
 			break;
 		}
 		case NET_ACTION_TERRAIN_IMPROVEMENT:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d creating terrain improvement\n", index));
 			MapPoint pnt(m_data[1], m_data[2]);
 			if(g_player[index]) {
@@ -602,16 +577,15 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					TerrainImprovement oops(m_data[4]);
 					g_network.QueuePacket(id, new NetInfo(
 														  NET_INFO_CODE_NAK_OBJECT, m_data[4], (uint32)imp));
-					
-					
-					
+
+
 					if(g_theTerrainImprovementPool->IsValid(oops)) {
-						g_network.QueuePacket(id, 
+						g_network.QueuePacket(id,
 											  new NetTerrainImprovement(oops.AccessData()));
 					}
-					
+
 					if(g_theTerrainImprovementPool->IsValid(imp)) {
-						
+
 						g_network.QueuePacket(id,
 											  new NetTerrainImprovement(imp.AccessData()));
 					}
@@ -624,10 +598,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_CREATE_INSTALLATION:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d creating installation id %lx, type %d at %d,%d\n",
-								index, m_data[3], m_data[0], 
-								m_data[1], m_data[2]));			
+								index, m_data[3], m_data[0],
+								m_data[1], m_data[2]));
 			MapPoint pnt(m_data[1], m_data[2]);
 			Installation inst(m_data[3]);
 			MapPoint rpnt;
@@ -649,8 +623,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_ENTRENCH:
 		{
-			
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d entrenching unit %lx\n", index, m_data[0]));
 			if(g_player[index])
 				g_player[index]->Entrench(m_data[0]);
@@ -658,8 +631,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_DETRENCH:
 		{
-			
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d detrenching unit %lx\n", index, m_data[0]));
 			if(g_player[index])
 				g_player[index]->Detrench(m_data[0]);
@@ -667,7 +639,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_SLEEP:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d sleeping unit %lx\n", index, m_data[0]));
 			if(g_player[index])
 				g_player[index]->Sleep(m_data[0]);
@@ -675,7 +647,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_WAKEUP:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d waking unit %lx\n", index, m_data[0]));
 			if(g_player[index])
 				g_player[index]->WakeUp(m_data[0]);
@@ -731,7 +703,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_INTERCEPT_TRADE:
 		{
-			
+
 			DPRINTF(k_DBG_NET, ("Server: Player %d intercepting trade with army %d\n",
 								index, m_data[0]));
 			if(g_player[index])
@@ -795,10 +767,9 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 		}
 
-		
 		case NET_ACTION_UNLOAD_TRANSPORT:
 		{
-			
+
 			break;
 		}
 		case NET_ACTION_GROUP_ARMY:
@@ -831,17 +802,17 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
-			
+
 			break;
 		}
 		case NET_ACTION_NULLIFY_WALLS:
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -850,7 +821,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			Unit u(m_data[0]);
@@ -872,11 +843,11 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(ordindex >= 0 && ordindex < g_numOrderInfo) {
 					oi = &g_orderInfo[ordindex];
 				}
-				
+
 				if(oi && oi->m_goldCost > 0) {
 					g_player[index]->m_gold->SubGold(oi->m_goldCost);
 				}
-				
+
 				if(g_theUnitPool->IsValid(u)) {
 					u.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 					if(oi && oi->m_moveCost > 0) {
@@ -892,7 +863,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -901,20 +872,20 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
-			
+
 			break;
 		}
 		case NET_ACTION_INVESTIGATE_READINESS:
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
-			
+
 			break;
 		}
 		case NET_ACTION_BOMBARD:
@@ -946,17 +917,17 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
-			
+
 			break;
 		}
 		case NET_ACTION_SLAVE_RAID:
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -970,7 +941,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -994,7 +965,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1003,7 +974,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1012,7 +983,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1021,7 +992,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1030,17 +1001,17 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
 		}
-			
+
 		case NET_ACTION_INDULGENCE_SALE:
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1059,7 +1030,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1068,7 +1039,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
@@ -1077,13 +1048,12 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(index == g_selected_item->GetCurPlayer());
 			if(index != g_selected_item->GetCurPlayer()) {
-				
+
 				return;
 			}
 			break;
 		}
 
-		
 		case NET_ACTION_REJECT_MESSAGE:
 		{
 			Message message(m_data[0]);
@@ -1115,8 +1085,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 		}
 
-		
-		
+
 		case NET_ACTION_SET_THIRD_PARTY:
 		{
 			DiplomaticRequest request(m_data[0]);
@@ -1145,20 +1114,20 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 		case NET_ACTION_SET_REWARD_GOLD:
 		{
-			
+
 			Assert(FALSE) ;
 			break;
 		}
 
 		case NET_ACTION_SET_REWARD_CITY:
 		{
-			
+
 			Assert(FALSE) ;
 			break;
 		}
 		case NET_ACTION_SET_REWARD_ADVANCE:
 		{
-			
+
 			Assert(FALSE) ;
 			break;
 		}
@@ -1227,7 +1196,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			Assert(FALSE);
 			break;
-		}			
+		}
 		case NET_ACTION_RESEARCH:
 		{
 			if(g_player[index]) {
@@ -1257,14 +1226,13 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_ACTION_USE_SPACE_LADDER:
 		{
-			
+
 			break;
 		}
 		case NET_ACTION_END_SLICE:
 		{
 			int curPlayerIndex = g_network.IdToIndex(id);
 
-			
 			Assert(curPlayerIndex == g_selected_item->GetCurPlayer());
 			if(curPlayerIndex != g_selected_item->GetCurPlayer())
 				break;
@@ -1279,7 +1247,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			if(m_action == NET_ACTION_DO_SETTLE_ORDER) {
 				DPRINTF(k_DBG_NET, ("DO_SETTLE_ORDER: %lx", m_data[3]));
 			}
-			
+
 			break;
 		}
 
@@ -1292,7 +1260,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_ENACT_REQUEST:
 		{
 			DiplomaticRequest req(m_data[0]);
-			
+
 			if(!g_theDiplomaticRequestPool->IsValid(req)) {
 				g_network.QueuePacket(id, new NetInfo(NET_INFO_CODE_NAK_ENACT,
 													  m_data[0]));
@@ -1305,14 +1273,14 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			req.Enact(g_selected_item->GetCurPlayer() == index &&
 					  g_network.CurrentPlayerAckedBeginTurn());
-			
+
 			break;
 		}
-			
+
 		case NET_ACTION_REJECT_REQUEST:
 		{
 			DiplomaticRequest req(m_data[0]);
-			
+
 			if(!g_theDiplomaticRequestPool->IsValid(req))
 				break;
 			Assert(req.GetRecipient() == index);
@@ -1342,7 +1310,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 #ifdef _DEBUG
 			MapPoint pnt(m_data[1], m_data[2]);
 			if(g_player[index]) {
-				g_player[index]->CreateCity(m_data[0], pnt, 
+				g_player[index]->CreateCity(m_data[0], pnt,
 											CAUSE_NEW_CITY_CHEAT,
 											NULL, -1);
 			}
@@ -1450,11 +1418,11 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 		case NET_ACTION_CREATED_CITY:
 		{
-			
-			
-			
-			
-			
+
+
+
+
+
 				UnitDynamicArray *cityList = g_network.GetCreatedCities(index);
 				if(cityList) {
 					Assert(cityList->Num() > 0);
@@ -1472,7 +1440,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 															  m_data[0], 0));
 					}
 				}
-				
+
 			break;
 		}
 		case NET_ACTION_SELL_BUILDING:
@@ -1510,7 +1478,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Client %d cleared orders for army %lx\n",
 								index, m_data[0]));
 			Army army(m_data[0]);
-			
+
 			if(g_theArmyPool->IsValid(army)) {
 				army.ClearOrders();
 			} else {
@@ -1524,7 +1492,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Client %d's army %lx executing orders\n",
 								index, m_data[0]));
 			Army army(m_data[0]);
-			
+
 			if(g_theArmyPool->IsValid(army)) {
 				g_gevManager->Pause();
 				BOOL res = army->ExecuteOrders();
@@ -1584,7 +1552,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			break;
 		}
-		
+
 		case NET_ACTION_ACCEPT_TRADE_BID:
 		{
 			DPRINTF(k_DBG_NET, ("Server: Accept Trade Bid: from: %d, fc: %lx, res: %d, tc: %lx, price: %d",
@@ -1792,7 +1760,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 								index, m_data[0], m_data[1], m_data[2]));
 			Army army(m_data[0]);
 			Assert(g_theArmyPool->IsValid(army));
-			
+
 			if(g_theArmyPool->IsValid(army)) {
 				MapPoint apos;
 				army.GetPos(apos);
@@ -1814,7 +1782,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Player %d's dip state for %d is now %d\n",
 								index, m_data[0], m_data[1]));
 			if(g_player[index]) {
-				g_player[index]->SetDiplomaticState(m_data[0], 
+				g_player[index]->SetDiplomaticState(m_data[0],
 													(DIPLOMATIC_STATE)m_data[1]);
 			}
 			break;
@@ -1823,7 +1791,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Player %d killing all trade routes at %lx\n",
 								index, m_data[0]));
-			Unit city(m_data[0]);			
+			Unit city(m_data[0]);
 			if(g_theUnitPool->IsValid(city)) {
 				Assert(index == city.GetOwner());
 				if(index == city.GetOwner()) {
@@ -1847,9 +1815,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d acknowledges RemoveIllegalItems at %lx\n", index, m_data[0]));
 			Unit city(m_data[0]);
 			if(g_theUnitPool->IsValid(city)) {
-				
-				
-				
+
+
 				if(city.GetOwner() == index) {
 					city.GetData()->GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
 				}
@@ -1861,7 +1828,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d clearing queue except head for city %lx\n",
 								index, m_data[0]));
 			Unit city(m_data[0]);
-			
+
 			if(g_theUnitPool->IsValid(city)) {
 				city.GetData()->GetCityData()->GetBuildQueue()->ClearAllButHead();
 			}
@@ -1956,8 +1923,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			} else {
 				ROUTE_TYPE	routeType;
 				sint32		resIndex = 0;
-				
-				
+
 				Unit sourceCity = route.GetSource();
 				if(!g_theUnitPool->IsValid(sourceCity)) {
 					g_network.Resync(index);
@@ -1966,7 +1932,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 				sint32 sourceOwner = sourceCity.GetOwner();
 				route.GetSourceResource(routeType, resIndex);
-				
+
 				Unit destCity = route.GetDestination();
 				if(!g_theUnitPool->IsValid(destCity)) {
 					g_network.Resync(index);
@@ -1975,11 +1941,9 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 				sint32 destOwner = destCity.GetOwner();
 				sint32 resValue = route.GetGoldInReturn();
-				
-				
+
 				route.Kill(CAUSE_KILL_TRADE_ROUTE_RESET);
-				
-				
+
 				g_player[sourceOwner]->CreateTradeRoute(sourceCity, ROUTE_TYPE_RESOURCE, resIndex, destCity, destOwner, resValue);
 			}
 			break;
@@ -2067,4 +2031,3 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			break;
 	}
 }
-

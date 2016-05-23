@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /*--------------------------------------------------------------------------
- Class to extract information about installed modems from the windows 
+ Class to extract information about installed modems from the windows
  registry.
 --------------------------------------------------------------------------*/
 
@@ -28,8 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define regmo_STRLEN 64
 #define regmo_N_INIT 8
 
-/*------------------------------------------------------------------------- 
- Information known about a particular modem. 
+/*-------------------------------------------------------------------------
+ Information known about a particular modem.
  Member name are the same as the registry key names.
  See the Windows 95 Resource Kit, chapter 25, page 812.
 -------------------------------------------------------------------------*/

@@ -32,9 +32,8 @@ c3_TradeListItem::c3_TradeListItem(AUI_ERRCODE *retval, TradeRoute *route, sint3
 
 	*retval = InitCommonLdl(route, gold, resIndex, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE c3_TradeListItem::InitCommonLdl(TradeRoute *route, sint32 gold, sint32 resIndex, MBCHAR *ldlBlock)
 {
@@ -70,25 +69,22 @@ AUI_ERRCODE c3_TradeListItem::InitCommonLdl(TradeRoute *route, sint32 gold, sint
 
 void c3_TradeListItem::Update(void)
 {
-	
+
 	CityData		*srcCity, *destCity;
 	MBCHAR			s[_MAX_PATH];
 
 	c3_Static *subItem;
-	
-	
+
 	if (!m_route)
 	{
-		
+
 		subItem = (c3_Static *)GetChildByIndex(0);
 		strcpy(s, tradewin_GetResourceName(m_resIndex));
 		subItem->SetText(s);
 
-		
 		subItem = (c3_Static *)GetChildByIndex(1);
 		subItem->SetText((char *)g_theStringDB->GetNameStr("str_ldl_Local"));
 
-		
 		subItem = (c3_Static *)GetChildByIndex(2);
 		subItem->SetText((char *)g_theStringDB->GetNameStr("str_tbl_ldl_None"));
 	}
@@ -97,21 +93,17 @@ void c3_TradeListItem::Update(void)
 		srcCity = m_route->GetSource().GetData()->GetCityData();
 		destCity = m_route->GetDestination().GetData()->GetCityData();
 
-		
 		subItem = (c3_Static *)GetChildByIndex(0);
 		strcpy(s, g_theStringDB->GetNameStr(m_route->GetResourceName()));
 		subItem->SetText(s);
 
-		
 		subItem = (c3_Static *)GetChildByIndex(1);
 		subItem->SetText(srcCity->GetName());
 
-		
 		subItem = (c3_Static *)GetChildByIndex(2);
 		subItem->SetText(destCity->GetName());
 	}
 
-	
 	subItem = (c3_Static *)GetChildByIndex(3);
 	sprintf(s, "%ld", m_gold);
 	subItem->SetText(s);
@@ -134,7 +126,7 @@ sint32 c3_TradeListItem::Compare(c3_ListItem *item2, uint32 column)
 
 		break;
 	case 3:
-		sint32	gold1 = m_gold, 
+		sint32	gold1 = m_gold,
 				gold2 = ((c3_TradeListItem *)item2)->GetGold();
 		if (gold1 < gold2) return -1;
 		else if (gold1 > gold2) return 1;

@@ -3,7 +3,6 @@
 
 #include <windows.h>
 
-
 #define VER_FIRSTISLATER		1
 #define VER_SECONDISLATER		2
 #define VER_SAMEVERSION			4
@@ -24,9 +23,7 @@
 
 #define DX_SOFTWARE				1
 
-
 #define DX_HARDWARE				2
-
 
 
 #define DX_NOINFO				3
@@ -109,6 +106,5 @@ BOOL WINAPI MicrosoftDirectXInstalled( DWORD *pVersion );
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

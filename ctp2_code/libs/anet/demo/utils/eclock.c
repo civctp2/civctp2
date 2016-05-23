@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "eclock.h"
 
-
 /****************************** Solaris 2.x **************************/
 #ifdef SPARC
 
@@ -38,7 +37,6 @@ clock_t eclock_sparc(void)
 }
 #endif
 
-
 /****************************** Macintosh *****************************/
 #if defined(__MWERKS__)
 
@@ -52,7 +50,6 @@ clock_t eclock(void)
     return ((clock_t)(t.lo/1000));
 }
 #endif
-
 
 
 /**************************** Windows NT/95 ***************************/
@@ -84,14 +81,13 @@ clock_t eclock_win32(void)
 	if (!clk_offset) {
 		SYSTEMTIME time_buffer;
 		GetSystemTime(&time_buffer);
-		clk_offset = GetTickCount() - 
-			(time_buffer.wMilliseconds + 
-			 1000L * ( time_buffer.wSecond + 
-			          60L * ( time_buffer.wMinute + 
+		clk_offset = GetTickCount() -
+			(time_buffer.wMilliseconds +
+			 1000L * ( time_buffer.wSecond +
+			          60L * ( time_buffer.wMinute +
 			                  60L * time_buffer.wHour)));
 	}
 	return GetTickCount() - clk_offset;
 }
-
 
 #endif

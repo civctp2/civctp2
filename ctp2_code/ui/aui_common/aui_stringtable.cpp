@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -45,7 +45,7 @@
 aui_StringTable::aui_StringTable
 (
 	AUI_ERRCODE *   retval,
-	size_t          numStrings 
+	size_t          numStrings
 )
 :
 	m_Strings       (numStrings, (MBCHAR *) NULL)
@@ -56,7 +56,7 @@ aui_StringTable::aui_StringTable
 aui_StringTable::aui_StringTable
 (
 	AUI_ERRCODE *   retval,
-	MBCHAR const *  ldlBlock 
+	MBCHAR const *  ldlBlock
 )
 :
 	m_Strings       ()
@@ -81,7 +81,7 @@ aui_StringTable::aui_StringTable
 			SetString(block->GetString(temp), i);
 		}
 	}
-	else 
+	else
     {
 		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
@@ -93,10 +93,9 @@ aui_StringTable::aui_StringTable
 	*retval = AUI_ERRCODE_OK;
 }
 
-
 aui_StringTable::~aui_StringTable()
 {
-    for 
+    for
     (
         std::vector<MBCHAR *>::iterator p = m_Strings.begin();
         p != m_Strings.end();
@@ -105,7 +104,7 @@ aui_StringTable::~aui_StringTable()
 	{
 		delete [] *p;
 	}
-    
+
     std::vector<MBCHAR *>().swap(m_Strings);
 }
 
@@ -113,7 +112,7 @@ size_t aui_StringTable::FindNumStringsFromLdl(ldl_datablock * block)
 {
     sint32  stringCount = 0;
 
-	if (ATTRIBUTE_TYPE_INT == 
+	if (ATTRIBUTE_TYPE_INT ==
             block->GetAttributeType(k_AUI_STRINGTABLE_LDL_NUMSTRINGS)
        )
     {
@@ -126,7 +125,7 @@ size_t aui_StringTable::FindNumStringsFromLdl(ldl_datablock * block)
         // Look for string0, string1, etc. entries and count
 	    MBCHAR  temp[k_AUI_LDL_MAXBLOCK + 1];
 	    bool    isAtEnd = false;
-        
+
         while (!isAtEnd)
         {
 		    sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, stringCount);
@@ -158,11 +157,10 @@ MBCHAR * aui_StringTable::GetString( sint32 index ) const
 }
 
 
-
 AUI_ERRCODE aui_StringTable::SetString(const MBCHAR *text, sint32 index)
 {
 	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
-	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size()) 
+	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size())
         return AUI_ERRCODE_INVALIDPARAM;
 
 	if (text)

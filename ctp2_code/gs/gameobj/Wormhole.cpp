@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,6 @@
 #include "gamefile.h"
 #include "ResourceRecord.h"
 
-
 #define k_WORMHOLE_GOOD_ID_STR		"WORMHOLE"
 
 Wormhole *g_wormhole = NULL;
@@ -73,7 +72,6 @@ Wormhole::Wormhole(sint32 discoverer)
 	m_entries = new PointerList<EntryRecord>;
 	m_discoveredAt = g_turn->GetRound();
 
-	
 	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
@@ -92,7 +90,6 @@ Wormhole::Wormhole(sint32 discoverer, MapPoint &startPos)
 	m_entries = new PointerList<EntryRecord>;
 	m_discoveredAt = g_turn->GetRound();
 
-	
 	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
@@ -101,7 +98,7 @@ Wormhole::Wormhole(CivArchive &archive)
 {
 	m_entries = new PointerList<EntryRecord>;
 	Serialize(archive);
-	
+
 	sint32 id = g_theResourceDB->Get(g_theResourceDB->FindRecordNameIndex(k_WORMHOLE_GOOD_ID_STR))->GetSpriteID();
 	m_actor = new GoodActor(id, m_pos);
 }
@@ -170,13 +167,12 @@ void Wormhole::BeginTurn(sint32 player)
 		delete walk.Remove();
 
 #if 0
-		
-		
+
 		if(walk.GetObj()->m_round + g_theConstDB->WormholeReturnTime() <= g_turn->GetRound()) {
 			EntryRecord *erec = walk.GetObj();
 			walk.Remove();
 			erec->m_unit.ExitWormhole(m_pos);
-			
+
 			g_director->AddShow(erec->m_unit);
 
 			delete erec;
@@ -198,7 +194,7 @@ void Wormhole::Move()
 	sint32 i;
 	sint32 speed = g_theConstDB->Get(0)->GetWormholeSpeed();
 	for(i = 0; i < speed; i++) {
-		if((m_curDir == EAST || m_curDir == NORTHEAST) && 
+		if((m_curDir == EAST || m_curDir == NORTHEAST) &&
 		   !g_theWorld->IsXwrap()) {
 			if(!m_pos.GetNeighborPosition(m_curDir, m_pos)) {
 				m_pos.x = 0;

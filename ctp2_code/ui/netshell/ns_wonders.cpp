@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ ns_Wonders::ns_Wonders()
     m_stringtable   (NULL)
 {
 	Assert(g_theWonderDB->NumRecords() <= k_WONDERS_MAX);
-    sint32      numWonders  = 
+    sint32      numWonders  =
         std::min<sint32>(k_WONDERS_MAX, g_theWonderDB->NumRecords());
 
 	AUI_ERRCODE errcode     = AUI_ERRCODE_OK;
@@ -56,7 +56,6 @@ ns_Wonders::ns_Wonders()
 		m_stringtable->SetString(g_theStringDB->GetNameStr(stringNum), i);
 	}
 }
-
 
 ns_Wonders::~ns_Wonders()
 {

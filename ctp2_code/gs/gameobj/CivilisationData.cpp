@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -47,8 +47,7 @@
 
 extern	StringDB                *g_theStringDB ;
 
-extern	ProfileDB               *g_theProfileDB; 
-
+extern	ProfileDB               *g_theProfileDB;
 
 #include "CivilisationPool.h"	// CIV_INDEX_INVALID
 #include "CityStyleRecord.h"	// g_theCityStyleDB
@@ -71,7 +70,7 @@ extern	ProfileDB               *g_theProfileDB;
 // Remark(s)  : Notifies other (network) players of its existence.
 //
 //----------------------------------------------------------------------------
-CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ, GENDER gender) 
+CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ, GENDER gender)
 :	GameObj(id.m_id),
 	m_owner(owner),
 	m_civ(civ),
@@ -80,7 +79,7 @@ CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ,
 {
 	memset(m_cityname_count, 0, sizeof(m_cityname_count));
 	memset(m_leader_name, 0, k_MAX_NAME_LEN);
-	memset(m_personality_description, 0, k_MAX_NAME_LEN); 
+	memset(m_personality_description, 0, k_MAX_NAME_LEN);
 	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
 	memset(m_country_name, 0, k_MAX_NAME_LEN);
 	memset(m_singular_name, 0, k_MAX_NAME_LEN);
@@ -104,7 +103,7 @@ CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ,
 //              are not notified yet.
 //
 //----------------------------------------------------------------------------
-CivilisationData::CivilisationData(const ID &id) 
+CivilisationData::CivilisationData(const ID &id)
 :	GameObj(id.m_id),
 	m_owner(-1),
 	m_civ(CIV_INDEX_INVALID),
@@ -113,7 +112,7 @@ CivilisationData::CivilisationData(const ID &id)
 {
 	memset(m_cityname_count, 0, sizeof(m_cityname_count)) ;
 	memset(m_leader_name, 0, k_MAX_NAME_LEN);
-	memset(m_personality_description, 0, k_MAX_NAME_LEN); 
+	memset(m_personality_description, 0, k_MAX_NAME_LEN);
 	memset(m_civilisation_name, 0, k_MAX_NAME_LEN);
 	memset(m_country_name, 0, k_MAX_NAME_LEN);
 	memset(m_singular_name, 0, k_MAX_NAME_LEN);
@@ -183,12 +182,10 @@ void CivilisationData::Serialize(CivArchive &archive)
 	}
 }
 
-
 bool cityNameIsUsedByPlayer(const char *strName, sint32 player)
 {
-	
-	
-	
+
+
 	if(player < 0 || player >= k_MAX_PLAYERS || !g_player[player]) {
 		Assert(false);
 		return false;
@@ -337,7 +334,6 @@ void CivilisationData::ReleaseCityName(const sint32 name)
 		m_cityname_count[name]--;
 }
 
-
 sint32 CivilisationData::GetUseCount(const sint32 name) const
 {
 	Assert(name >= 0);
@@ -346,12 +342,10 @@ sint32 CivilisationData::GetUseCount(const sint32 name) const
 	return (m_cityname_count[name]) ;
 }
 
-
 MBCHAR const * CivilisationData::GetLeaderName(void) const
 {
     return (m_leader_name[0]) ? m_leader_name : g_theProfileDB->GetLeaderName();
 }
-
 
 void CivilisationData::SetLeaderName(const MBCHAR *s)
 {
@@ -378,7 +372,6 @@ void CivilisationData::GetPluralCivName(MBCHAR *s)
 	strcpy(s, m_civilisation_name) ;
 }
 
-
 void CivilisationData::SetPluralCivName(const MBCHAR *s)
 {
 	Assert(s[0]!=0) ;
@@ -386,13 +379,11 @@ void CivilisationData::SetPluralCivName(const MBCHAR *s)
 	strcpy(m_civilisation_name, s) ;
 }
 
-
 void CivilisationData::GetCountryName(MBCHAR *s)
 {
 	Assert(s!=NULL) ;
 	strcpy(s, m_country_name) ;
 }
-
 
 void CivilisationData::SetCountryName(const MBCHAR *s)
 {
@@ -401,13 +392,11 @@ void CivilisationData::SetCountryName(const MBCHAR *s)
 	strcpy(m_country_name, s) ;
 }
 
-
 void CivilisationData::GetSingularCivName(MBCHAR *s)
 {
 	Assert(s!=NULL) ;
 	strcpy(s, m_singular_name) ;
 }
-
 
 void CivilisationData::SetSingularCivName(const MBCHAR *s)
 {
@@ -415,7 +404,6 @@ void CivilisationData::SetSingularCivName(const MBCHAR *s)
 	Assert(s!=NULL) ;
 	strcpy(m_singular_name, s) ;
 }
-
 
 sint32 CivilisationData::GetCapitalName(void) const
 {
@@ -428,7 +416,7 @@ sint32 CivilisationData::GetCapitalName(void) const
 	}
 }
 
-void CivilisationData::ResetCiv(sint32 newCivIndex, GENDER gender) 
+void CivilisationData::ResetCiv(sint32 newCivIndex, GENDER gender)
 {
 	StringId		strId;
 
@@ -448,10 +436,10 @@ void CivilisationData::ResetCiv(sint32 newCivIndex, GENDER gender)
 
 	strId = g_theCivilisationDB->Get(newCivIndex)->GetPluralCivName();
 	SetPluralCivName(g_theStringDB->GetNameStr(strId));
-	
+
 	strId = g_theCivilisationDB->Get(newCivIndex)->GetCountryName();
 	SetCountryName(g_theStringDB->GetNameStr(strId));
-	
+
 	strId = g_theCivilisationDB->Get(newCivIndex)->GetSingularCivName();
 	SetSingularCivName(g_theStringDB->GetNameStr(strId));
 
@@ -495,7 +483,7 @@ sint32 CivilisationData::GetCityStyle(void) const
 	{
 		return m_cityStyle;
 	}
-	else if (g_theCivilisationDB && 
+	else if (g_theCivilisationDB &&
 		     (m_civ >= 0) && (m_civ < g_theCivilisationDB->NumRecords())
 			)
 	{

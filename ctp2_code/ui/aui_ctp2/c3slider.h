@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -36,22 +36,18 @@
 #ifndef __C3SLIDER_H__
 #define __C3SLIDER_H__
 
-
 #include "aui_ranger.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
 
-
 #define k_C3SLIDER_LDL_TICKS	"ticks"
-
 
 
 class C3Slider : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	C3Slider(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -93,4 +89,4 @@ protected:
 aui_Control::ControlActionCallback C3SliderThumbActionCallback;
 aui_Control::ControlActionCallback C3SliderButtonActionCallback;
 
-#endif 
+#endif

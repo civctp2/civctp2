@@ -1,4 +1,3 @@
-
 #ifndef LDLIF_H__
 #define LDLIF_H__
 
@@ -8,7 +7,6 @@
 #define LDL_ERROR_INCLUDE 3
 
 #define MAX_INCLUDE_DEPTH 64
-
 
 #if defined(__cplusplus)
 class ldl_datablock;

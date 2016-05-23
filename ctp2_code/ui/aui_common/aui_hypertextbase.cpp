@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -47,7 +47,6 @@ aui_HyperTextBase::aui_HyperTextBase(
 }
 
 
-
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
 	MBCHAR *hyperText,
@@ -56,7 +55,6 @@ aui_HyperTextBase::aui_HyperTextBase(
 	*retval = InitCommon( hyperText, hyperMaxLen );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
@@ -72,7 +70,6 @@ AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBase::InitCommon(
@@ -92,21 +89,19 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 		if ( m_hyperCurLen > m_hyperMaxLen )
 			m_hyperCurLen = m_hyperMaxLen;
 
-		
 		m_hyperText = new MBCHAR[ m_hyperMaxLen + 1 ];
 		Assert( m_hyperText != NULL );
 		if ( !m_hyperText ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		memset( m_hyperText, '\0', m_hyperMaxLen + 1 );
 
-		
 		strncpy( m_hyperText, hyperText, m_hyperMaxLen );
 	}
 	else
 	{
 		if ( m_hyperMaxLen )
 		{
-			
+
 			m_hyperText = new MBCHAR[ m_hyperMaxLen + 1 ];
 			Assert( m_hyperText != NULL );
 			if ( !m_hyperText ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -135,7 +130,6 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 }
 
 
-
 aui_HyperTextBase::~aui_HyperTextBase()
 {
 	delete [] m_hyperText;
@@ -148,16 +142,15 @@ aui_HyperTextBase::~aui_HyperTextBase()
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::SetHyperText
 (
 	const MBCHAR *  hyperText,
-	uint32          maxlen 
+	uint32          maxlen
 )
 {
 	memset(m_hyperText, '\0', m_hyperMaxLen + 1);
 
-	if (hyperText) 
+	if (hyperText)
     {
         strncpy(m_hyperText, hyperText, std::min(maxlen, m_hyperMaxLen));
         m_hyperCurLen = std::min(m_hyperMaxLen, strlen(m_hyperText));
@@ -171,13 +164,11 @@ AUI_ERRCODE aui_HyperTextBase::SetHyperText
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::AppendHyperText( const MBCHAR *hyperText )
 {
 	Assert( hyperText != NULL );
 	if ( !hyperText ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 
 	strncat( m_hyperText, hyperText, m_hyperMaxLen - m_hyperCurLen );
 
@@ -185,7 +176,6 @@ AUI_ERRCODE aui_HyperTextBase::AppendHyperText( const MBCHAR *hyperText )
 
 	return AddHyperStatics( hyperText );
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
@@ -225,7 +215,6 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 }
 
 
-
 void aui_HyperTextBase::RemoveHyperStatics(void)
 {
 	for (sint32 i = m_hyperStaticList->L(); i; --i)
@@ -233,7 +222,6 @@ void aui_HyperTextBase::RemoveHyperStatics(void)
 		delete m_hyperStaticList->RemoveTail();
     }
 }
-
 
 
 aui_Static *aui_HyperTextBase::CreateHyperStatic(
@@ -249,7 +237,7 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 	COLORREF shadowColor,
 	uint32 flags )
 {
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Static *hs = new aui_Static(
 		&errcode,
@@ -262,31 +250,26 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 
 	hs->SetBlindness( TRUE );
 
-	
 	hs->TextFlags() = flags;
 	hs->SetTextColor( color );
 	hs->SetTextUnderline( underline );
 	hs->SetTextShadow( shadow );
 	hs->SetTextShadowColor( shadowColor );
 
-	
 	hs->SetTextFont( ttffile );
 	hs->SetTextFontSize( pointSize );
 	hs->SetTextBold( bold );
 	hs->SetTextItalic( italic );
 
-	
 	hs->TextReloadFont();
 
-	
-	
+
 	hs->Resize(
 		hs->GetTextFont()->GetStringWidth( hs->GetText() ),
 		hs->GetTextFont()->GetLineSkip() );
 
 	return hs;
 }
-
 
 AUI_ERRCODE aui_HyperTextBase::DrawThisHyperText(
 	aui_Surface *destSurf,

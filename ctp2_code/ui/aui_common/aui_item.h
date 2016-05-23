@@ -1,26 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_ITEM_H__
 #define __AUI_ITEM_H__
 
-
 #include "aui_control.h"
-
 
 
 class aui_Item : public aui_Control
 {
 public:
-	
+
 	aui_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -44,5 +31,4 @@ protected:
 	aui_Item() : aui_Control() {}
 };
 
-
-#endif 
+#endif

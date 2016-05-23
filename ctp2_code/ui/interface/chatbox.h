@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -59,7 +58,6 @@ public:
 
 	BOOL CheckForEasterEggs(MBCHAR *s);
 
-	
 	c3_HyperTextBox	*   GetTextBox(void) const { return m_textBox; }
 	C3TextField	*       GetTextField(void) const { return m_textField; }
 	ChatBox	*           GetChatBox(void) const { return m_chatBox; }

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -73,7 +73,7 @@
 
 #include "keypress.h"
 //missing?
-#include "GameSettings.h" 
+#include "GameSettings.h"
 #include "screenutils.h"
 #include "network.h"
 
@@ -161,7 +161,6 @@ sint32 spnewgamerulesscreen_updateData()
 	return 1;
 }
 
-
 sint32	spnewgamerulesscreen_displayMyWindow()
 {
 	sint32 retval=0;
@@ -195,13 +194,12 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK; 
+	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameRulesScreen");
 
@@ -209,11 +207,9 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 		Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
 
-		
 		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
-
 
 	s_genocide			= spNew_aui_Switch(&errcode, windowBlock, "RuleOne",             spnewgamerulesscreen_checkPress, &check[R_GENOCIDE     ]);
 	s_pollution			= spNew_aui_Switch(&errcode, windowBlock, "RuleTwo",             spnewgamerulesscreen_checkPress, &check[R_POLLUTION    ]);
@@ -244,7 +240,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	sprintf( block, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( block );
 	s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -255,7 +251,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_spNewGameRulesScreen  ) return AUI_ERRCODE_OK; 
+	if ( !s_spNewGameRulesScreen  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_spNewGameRulesScreen->Id() );
 	keypress_RemoveHandler(s_spNewGameRulesScreen);
@@ -351,7 +347,6 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		}
 	}
 
-
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
 	void (ProfileDB::*func)(BOOL) = 0;
@@ -379,7 +374,6 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	if(func)
 		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
-
 
 void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -109,6 +109,6 @@ sint32 wonderutil_GetEnergyHunger(const uint64 builtWonders);
 sint32 wonderutil_GetEnergyHungerPerPop(const uint64 builtWonders);
 sint32 wonderutil_GetProducesEnergy(const uint64 builtWonders);
 sint32 wonderutil_GetProducesEnergyPerPop(const uint64 builtWonders);
-bool wonderutil_GetHasReligionIcon(uint64 builtWonders); 
-bool wonderutil_GetShowCityIconTop(uint64 builtWonders); 
+bool wonderutil_GetHasReligionIcon(uint64 builtWonders);
+bool wonderutil_GetShowCityIconTop(uint64 builtWonders);
 #endif

@@ -34,7 +34,6 @@
 #ifndef GAME_EVENT_TYPES_H_
 #define GAME_EVENT_TYPES_H_
 
-
 #include "GameEventDescription.h"
 
 enum GAME_EVENT_INSERT {
@@ -56,15 +55,15 @@ enum GAME_EVENT_ERR {
 };
 
 enum GAME_EVENT_HOOK_DISPOSITION {
-	GEV_HD_Continue,      
-	GEV_HD_Stop,          
-	GEV_HD_NeedUserInput, 
+	GEV_HD_Continue,
+	GEV_HD_Stop,
+	GEV_HD_NeedUserInput,
 
 	GEV_HD_MAX
 };
 
 enum GAME_EVENT_ARGUMENT {
-	GEA_Null, 
+	GEA_Null,
 
 	GEA_Army,
 	GEA_Unit,
@@ -94,10 +93,10 @@ enum GAME_EVENT_ARGUMENT {
 #define GEAC_ARMY 'a'
 #define GEAC_UNIT 'u'
 #define GEAC_CITY 'c'
-#define GEAC_POP 'C' 
+#define GEAC_POP 'C'
 #define GEAC_GOLD 'g'
 #define GEAC_PATH 'p'
-#define GEAC_MAPPOINT 'l' 
+#define GEAC_MAPPOINT 'l'
 #define GEAC_PLAYER 'P'
 #define GEAC_INT 'i'
 #define GEAC_DIRECTION 'd'
@@ -110,9 +109,9 @@ enum GAME_EVENT_ARGUMENT {
 /// Execution stage of an event
 enum GAME_EVENT_PRIORITY {
 	/// SLIC 'pre' handler stage, executed before the event has taken place.
-	/// At this stage, the actual processing can be prevented by returning a 
+	/// At this stage, the actual processing can be prevented by returning a
 	/// stop code.
-	GEV_PRI_Pre, 
+	GEV_PRI_Pre,
 	/// Source code handler stage, doing the actual processing.
 	GEV_PRI_Primary,
 	/// SLIC 'post' handler stage, signalling that the event has been executed.

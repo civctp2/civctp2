@@ -1,31 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __C3_HEADERSWITCH_H__
 #define __C3_HEADERSWITCH_H__
 
 #include "aui_radio.h"
 #include "patternbase.h"
 
-#define k_C3_HEADERSWITCH_DEFAULTNUMSTATES	3	
+#define k_C3_HEADERSWITCH_DEFAULTNUMSTATES	3
 
 #define k_C3_HEADERSWITCH_IMAGE		"headerimage"
 
 class c3_Static;
 
-
 class c3_HeaderSwitch : public aui_Radio, public PatternBase
 {
 public:
-	
+
 	c3_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -63,5 +51,4 @@ protected:
 	c3_Static *m_image;
 };
 
-
-#endif 
+#endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 //
 // - Start the great library with the current research project of the player.
 // - Prevent production errors when pressing F3 after end of turn.
-// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the 
+// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the
 //   information window can stay open. (Aug. 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -87,7 +87,6 @@
 
 #include "sciencevictorydialog.h"
 
-
 extern C3UI                 *g_c3ui;
 extern WorkWindow           *g_workWindow;
 
@@ -123,7 +122,7 @@ sint32 open_WorkView( void )
 
 void close_WorkView(void)
 {
-	if (g_workWindow) 
+	if (g_workWindow)
     {
 		g_c3ui->RemoveWindow(g_workWindow->Id());
 	}
@@ -301,7 +300,6 @@ void close_InfoScreen( void )
 	InfoWindow::Close();
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : open_GreatLibrary
@@ -350,7 +348,7 @@ bool open_GreatLibrary(sint32 index, bool sci)
 //
 // Returns    : sint32              : opening succeeded
 //
-// Remark(s)  : When the library is not open already, it will open with the 
+// Remark(s)  : When the library is not open already, it will open with the
 //              advance that is being researched by the current player.
 //
 //----------------------------------------------------------------------------
@@ -362,15 +360,13 @@ bool open_GreatLibrary( void )
 	return open_GreatLibrary(advance);
 }
 
-
 void close_GreatLibrary(void)
 {
-	if (g_greatLibrary) 
+	if (g_greatLibrary)
     {
 		g_greatLibrary->Remove();
 	}
 }
-
 
 sint32 open_OptionsScreen( sint32 fromWhichScreen )
 {
@@ -379,7 +375,7 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 #endif // _DEBUG
 
 	sint32 err = optionsscreen_displayMyWindow( fromWhichScreen );
-	
+
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Options Screen" );
 #endif // _DEBUG
@@ -391,7 +387,6 @@ void close_OptionsScreen( void )
 {
 	optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 }
-
 
 sint32 open_KeyMappingScreen( void )
 {
@@ -407,7 +402,6 @@ void close_ScenarioEditor(void)
 {
 	ScenarioEditor::Hide();
 }
-
 
 void close_KeyMappingScreen( void )
 {
@@ -444,7 +438,7 @@ void close_KeyMappingScreen( void )
 
 
 /// Open alien life window (removed CTP1 functionality)
-sint32 open_EndGame() 
+sint32 open_EndGame()
 {
 	return 0;
 }
@@ -484,8 +478,7 @@ void close_TutorialWin(void)
 }
 
 
-
-sint32 open_CreditsScreen() 
+sint32 open_CreditsScreen()
 {
 	sint32 err = creditsscreen_Initialize();
 	Assert(!err);
@@ -496,12 +489,10 @@ sint32 open_CreditsScreen()
     return (auiErr == AUI_ERRCODE_OK) ? 0 : -1;
 }
 
-
 void close_CreditsScreen(void)
 {
 	creditsscreen_Cleanup();
 }
-
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
@@ -541,7 +532,7 @@ void close_AllScreens(void)
 	DipWizard::Hide();
 	ScienceVictoryDialog::Close();
 
-	if (g_battleViewWindow) 
+	if (g_battleViewWindow)
     {
 		g_modalWindow = 1;
 

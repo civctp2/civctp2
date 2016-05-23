@@ -1,37 +1,23 @@
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #include "ctp2_TabButton.h"
 
-
 #include <string>
-
 
 #include "aui_ldl.h"
 #include "c3ui.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
 
-
 extern C3UI	*g_c3ui;
-
 
 static const MBCHAR *k_CTP2_BUTTON_LDL_LAYER_LEFT		= "layerleft";
 static const MBCHAR *k_CTP2_BUTTON_LDL_LAYER_RIGHT		= "layerright";
 static const MBCHAR *k_CTP2_BUTTON_LDL_LAYER_ACTIVE		= "layeractive";
 
-
 const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_LEFT		= 64;
 const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_RIGHT		= 128;
 const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_ACTIVE	= 256;
-
 
 ctp2_TabButton::ctp2_TabButton(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							   ControlActionCallback *ActionFunc, void *cookie) :
@@ -46,16 +32,14 @@ ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie)
 		return;
 	}
 
-	
 	for(sint32 layerIndex = 0; layerIndex < GetNumberOfLayers(); layerIndex++) {
-		
-		
-		
-		
+
+
+
+
 		char layerIndexString[20];
 		sprintf(layerIndexString, "%d", layerIndex);
 
-		
 		InitializeLayerFlag(block, layerIndex, k_CTP2_BUTTON_LDL_LAYER_LEFT,
 			k_CTP2_TAB_BUTTON_LAYER_FLAG_LEFT, layerIndexString);
 		InitializeLayerFlag(block, layerIndex, k_CTP2_BUTTON_LDL_LAYER_RIGHT,
@@ -65,41 +49,35 @@ ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie)
 	}
 }
 
-
 ctp2_TabButton::~ctp2_TabButton()
 {
 }
 
 
-
 uint32 ctp2_TabButton::ShouldDraw(uint32 draw)
 {
-	
+
 	if(draw & k_AUI_REGION_DRAWFLAG_UPDATE) {
-		
+
 		ctp2_Tab *tab = static_cast<ctp2_Tab*>(GetParent());
 		Assert(tab);
 		if(!tab)
 			return 0;
 		ctp2_TabGroup *tabGroup = static_cast<ctp2_TabGroup*>(tab->GetParent());
 
-		
 		Assert(tabGroup);
 		if(tabGroup) {
-			
-			
+
 			tabGroup->ShouldDraw(k_AUI_REGION_DRAWFLAG_OVERLAP);
 		}
 	}
 
-	
 	return(ctp2_Button::ShouldDraw(draw));
 }
 
-
 void ctp2_TabButton::SetTabMode(TabMode mode)
 {
-	
+
 	switch(mode) {
 	case TAB_LEFT:
 		SetCurrentRenderFlags((GetCurrentRenderFlags() | k_CTP2_TAB_BUTTON_LAYER_FLAG_LEFT) &
@@ -114,7 +92,7 @@ void ctp2_TabButton::SetTabMode(TabMode mode)
 			~(k_CTP2_TAB_BUTTON_LAYER_FLAG_LEFT | k_CTP2_TAB_BUTTON_LAYER_FLAG_RIGHT));
 		break;
 	default:
-		Assert(false);	
+		Assert(false);
 		break;
 	}
 }

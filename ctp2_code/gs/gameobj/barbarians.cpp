@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ bool SomeoneCanHave(const UnitRecord *rec)
 //How do I get it so feat only affects one player?
 
 		sint32 feat;
-		if(!g_network.IsNetworkLaunch() 
+		if(!g_network.IsNetworkLaunch()
 		&& g_player[g_selected_item->GetCurPlayer()]
 		&& advRec->GetTriggerFeatIndex(feat)
 		){
@@ -100,7 +100,6 @@ bool SomeoneCanHave(const UnitRecord *rec)
 		}
 	}
 */
-
 
 sint32 Barbarians::ChooseUnitType()
 {
@@ -122,7 +121,7 @@ sint32 Barbarians::ChooseUnitType()
 
 		if(!rec->GetMovementTypeLand())
 			continue;
-		
+
 		if(rec->GetAttack() < 1)
 			continue;
 
@@ -213,7 +212,7 @@ bool Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 			if(use >= NOWHERE)
 				use = NORTH;
 		}
-	
+
 		tried[use] = true;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor))
@@ -245,7 +244,6 @@ bool Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 
 #define k_MAX_BARBARIAN_TRIES 400
 
-
 sint32 Barbarians::ChooseSeaUnitType()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
@@ -268,7 +266,7 @@ sint32 Barbarians::ChooseSeaUnitType()
 
 		if(!rec->GetMovementTypeSea())
 			continue;
-		
+
 		if(rec->GetAttack() < 1)
 			continue;
 
@@ -307,7 +305,7 @@ sint32 Barbarians::ChooseSeaUnitType()
 		{
 			rankMax = count - 1;
 		}
-		else 
+		else
 		{
 			rankMax = risk->GetBarbarianUnitRankMax();
 		}
@@ -367,7 +365,7 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 			if(use >= NOWHERE)
 				use = NORTH;
 		}
-	
+
 		tried[use] = true;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor))
@@ -416,10 +414,10 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 
 		if(!rec->GetIsGuerrilla())
 			continue;
-		
+
 		if(!rec->GetMovementTypeLand())
 			continue;
-		
+
 		if(rec->GetAttack() < 1)
 			continue;
 
@@ -427,9 +425,9 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 			continue;
 		if(rec->GetNoBarbarian())
 			continue;
-	
-		
-		
+
+
+
 
 		if(SomeoneCanHave(rec)) {  //Someone can have is an enable advance check
 			for(j = 0; j < num_best_units; j++) {
@@ -468,12 +466,11 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 }
 
 //EMOD to add special guerrilla barbarians; because guerrillas may go obsolete for normal players.  Eventually add this to insurgent code in citydata. but is it needed?
-bool Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,  
+bool Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,
 							   BOOL fromGoodyHut)
 {
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
 		return FALSE;
-
 
 	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
 	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
@@ -508,7 +505,7 @@ bool Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,
 			if(use >= NOWHERE)
 				use = NORTH;
 		}
-	
+
 		tried[use] = TRUE;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
@@ -528,10 +525,8 @@ bool Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,
 	return count != 0;
 }
 
-
-bool Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,  
+bool Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,
 							   BOOL fromGoodyHut)   //code for a random free trade unit that acts as a corporation?
-
 
 
 //end EMOD*/
@@ -550,13 +545,12 @@ void Barbarians::BeginYear()
 ///       difficult to read. Added the initialisation of p "just in case".
 ///       It could be OK without the initialisation, but I am not in the mood
 ///       to work it out at the moment.
-///       What is p supposed to represent anyway? p will become k_MAX_PLAYERS 
+///       What is p supposed to represent anyway? p will become k_MAX_PLAYERS
 ///       (not a valid player) when noone can see some random tile???
 
 		MapPoint point;
 		sint32 tries;
 		sint32 p    = PLAYER_UNASSIGNED;
-
 
 		// this is for standard attack units
 		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
@@ -596,7 +590,7 @@ void Barbarians::BeginYear()
 		{
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
-			
+
 			sint32 owner = g_theWorld->GetCell(point)->GetOwner();
 			if(owner > 0
 			&& g_player[owner]
@@ -624,15 +618,15 @@ void Barbarians::BeginYear()
 /*  EMOD Barbarian Special Forces code
 		sint32 sftries;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpecialForces())
-	  { 
+	  {
 		for(sftries = 0; sftries < k_MAX_BARBARIAN_TRIES; ptries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
-			
+
 			if (!g_theWorld->IsLand(point)) {
 				continue;
 			}
-			
+
 			for(p = 1; p < k_MAX_PLAYERS; p++) {
 				if(g_player[p] && g_player[p]->IsVisible(point))
 					break;
@@ -649,7 +643,7 @@ void Barbarians::BeginYear()
 
 */
 //end EMOD
-		
+
 	}
 }
 

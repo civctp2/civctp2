@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -27,7 +18,7 @@ class AgreementPool : public ObjPool
 public:
 	AgreementData* AccessAgreement(const Agreement id);
 	AgreementData* GetAgreement(const Agreement id) const;
-	
+
 	AgreementPool();
 	AgreementPool(CivArchive &archive);
 

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ namespace
 /// @param  a_Strengths Information per category and turn
 /// @param  a_Turn      The turn
 /// @param  a_Category  A strength category
-/// @return The combined "strength" value 
+/// @return The combined "strength" value
 sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 a_Category)
 {
 	switch(a_Category)
@@ -167,7 +167,7 @@ LineGraph::LineGraph
 	void *                  cookie,
 	EventTracker *          events
 )
-:	
+:
     aui_Control         (retval, id, ldlBlock, ActionFunc, cookie),
 	m_xmin              (0.0),
 	m_xmax              (0.0),
@@ -192,9 +192,8 @@ LineGraph::LineGraph
     m_graphType         (events ? GRAPH_TYPE_ZEROSUM : GRAPH_TYPE_LINE),
     m_events            (events)
 {
-    InitCommon();	
+    InitCommon();
 }
-
 
 LineGraph::LineGraph
 (
@@ -207,7 +206,7 @@ LineGraph::LineGraph
 	ControlActionCallback * ActionFunc,
 	void *                  cookie
 )
-:	
+:
     aui_Control         (retval, id, x, y, width, height, ActionFunc, cookie),
 	m_xmin              (0.0),
 	m_xmax              (0.0),
@@ -231,7 +230,7 @@ LineGraph::LineGraph
 	m_enablePrecision   (true),
     m_graphType         (GRAPH_TYPE_LINE)
 {
-	InitCommon();	
+	InitCommon();
 }
 
 //----------------------------------------------------------------------------
@@ -256,9 +255,9 @@ LineGraph::~LineGraph()
 	delete m_surface;
 	delete [] m_data;
 
-	if (m_lineData) 
+	if (m_lineData)
 	{
-		for (sint32 i = 0; i < m_numLines * 3; i++) 
+		for (sint32 i = 0; i < m_numLines * 3; i++)
 		{
 			delete [] m_lineData[i];
 		}
@@ -283,7 +282,6 @@ void LineGraph::InitCommon(void)
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE;
 }
 
-
 AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 {
 	if ( !m_draw )
@@ -291,7 +289,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 
 	if (!(m_draw && k_AUI_REGION_DRAWFLAG_UPDATE)) return AUI_ERRCODE_OK;
 
-	if ( !surface ) 
+	if ( !surface )
 		surface = m_window->TheSurface();
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -306,7 +304,6 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 void LineGraph::UpdateGraph(aui_Surface * surface, sint32 x, sint32 y)
 {
 	RECT		rect = {0, 0, m_width, m_height};
@@ -314,12 +311,10 @@ void LineGraph::UpdateGraph(aui_Surface * surface, sint32 x, sint32 y)
     g_c3ui->TheBlitter()->Blt(surface, x, y, m_surface, &rect, k_AUI_BLITTER_FLAG_COPY);
 }
 
-
 void LineGraph::LabelAxes(void)
 {
 	MBCHAR		s[80];
 
-	
 	if (m_enableXNumber)
 	{
 		if (m_enablePrecision) sprintf(s, "%#.3f", m_xmin);
@@ -335,7 +330,6 @@ void LineGraph::LabelAxes(void)
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
-	
 	if (m_enableXLabel)
 	{
 		sint32 len = textutils_GetWidth(m_surface, m_xAxisName);
@@ -343,33 +337,31 @@ void LineGraph::LabelAxes(void)
 		primitives_DrawText(m_surface, xpos, m_graphRect.bottom + 2 + (m_events?20:0), m_xAxisName,	g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
-	
 	if (m_enableYNumber)
 	{
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymin);
 		else sprintf(s, "%d", (sint32)m_ymin);
 
-        primitives_DrawText(m_surface, 
-                            std::max(0L, m_graphRect.left-45L), 
+        primitives_DrawText(m_surface,
+                            std::max(0L, m_graphRect.left-45L),
                             std::max(0L, m_graphRect.bottom-15L),
-							s, 
-                            g_colorSet->GetColorRef(COLOR_WHITE), 
+							s,
+                            g_colorSet->GetColorRef(COLOR_WHITE),
                             TRUE
                            );
 
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymax);
 		else sprintf(s, "%d", (sint32)m_ymax);
-	
-        primitives_DrawText(m_surface, 
-                            std::max(0L, m_graphRect.left-45L), 
+
+        primitives_DrawText(m_surface,
+                            std::max(0L, m_graphRect.left-45L),
                             m_graphRect.top,
-							s, 
-                            g_colorSet->GetColorRef(COLOR_WHITE), 
+							s,
+                            g_colorSet->GetColorRef(COLOR_WHITE),
                             TRUE
                            );
 	}
 }
-
 
 void LineGraph::DrawIndicator(void)
 {
@@ -379,8 +371,8 @@ void LineGraph::DrawIndicator(void)
     double xnorm = (m_indicatorValue - m_xmin) / (m_xmax - m_xmin);
 	xpos = sint32(m_graphRect.left + xnorm * (m_graphRect.right-m_graphRect.left));
 
-	primitives_DrawLine16(m_surface, xpos, m_graphRect.top + 1, 
-							xpos, m_graphRect.bottom - 1, 
+	primitives_DrawLine16(m_surface, xpos, m_graphRect.top + 1,
+							xpos, m_graphRect.bottom - 1,
 							g_colorSet->GetColor(COLOR_YELLOW));
 
 	sprintf(s, "%#.3f", m_indicatorValue);
@@ -388,20 +380,19 @@ void LineGraph::DrawIndicator(void)
 	primitives_DrawText(m_surface, xpos - (len/2), m_graphRect.top+15, s, g_colorSet->GetColorRef(COLOR_YELLOW), TRUE);
 }
 
-
 void LineGraph::DrawLines(int eventsOfset)
 {
 	sint32		color = (sint32)COLOR_RED;
 	sint32		i, j;
 	sint32		xpos = 0, ypos = 0, oldxpos = 0, oldypos = 0;
 	double		point;
-	
-    Assert(m_ymin <= m_ymax); 
+
+    Assert(m_ymin <= m_ymax);
 	if(m_graphType == GRAPH_TYPE_LINE)
 	{
 		for (i=0; i<m_numLines; i++) {
-			bool first = true;		
-			for (j=0; j<m_numSamples; j++) 
+			bool first = true;
+			for (j=0; j<m_numSamples; j++)
             {
                 point = std::min(m_ymax, m_lineData[i][j]);
                 point = std::max(m_ymin, point);
@@ -414,12 +405,12 @@ void LineGraph::DrawLines(int eventsOfset)
 
                 sint32  l_Color = (m_data) ? m_data[i].color : color;
 
-                if (first) 
+                if (first)
                 {
 					primitives_DrawLine16(m_surface, xpos, ypos, xpos, ypos, g_colorSet->GetColor((COLOR) l_Color));
 					first = false;
-				} 
-                else 
+				}
+                else
                 {
 					primitives_DrawLine16(m_surface, oldxpos, oldypos, xpos, ypos, g_colorSet->GetColor((COLOR) l_Color));
 				}
@@ -427,7 +418,7 @@ void LineGraph::DrawLines(int eventsOfset)
                 oldxpos = xpos;
 				oldypos = ypos;
 			}
-		
+
 			color++;
 		}
 	}
@@ -438,11 +429,11 @@ void LineGraph::DrawLines(int eventsOfset)
 
 		width=m_graphRect.right-m_graphRect.left;
 		height=m_graphRect.bottom-m_graphRect.top;
-		for (i=0; i<m_numLines; i++) 
+		for (i=0; i<m_numLines; i++)
 		{
 			for(j=0; j<width; j++)
 			{
-				
+
 				bottom = m_data[i].bottomArray[j*m_numSamples/width];
 				top = m_data[i].topArray[j*m_numSamples/width];
 
@@ -455,14 +446,14 @@ void LineGraph::DrawLines(int eventsOfset)
 
 				primitives_DrawLine16(m_surface, xpos, ypos, xpos, ypos2, g_colorSet->GetColor((COLOR)m_data[i].color));
 			}
-		
+
 			color++;
 		}
 
 		if (m_events)
 		{
 			int currentEventNum = 0;
-			for 
+			for
             (
                 EventData * curData = m_events->GetEvents(true);
                 curData;
@@ -470,7 +461,7 @@ void LineGraph::DrawLines(int eventsOfset)
             )
 			{
 				xpos=m_graphRect.left+(curData->m_turn-1)*width/m_numSamples;
-				ypos=((sint32)((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
+				ypos=((sint32)((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] +
 					m_data[curData->m_playerNum-1].topArray[curData->m_turn-1])/2.0)*height)+
 					m_graphRect.top;
 				primitives_DrawLine16(m_surface, xpos-1, ypos-1, xpos+1, ypos+1, g_colorSet->GetColor((COLOR)(m_data[curData->m_playerNum].color+1)));
@@ -489,14 +480,12 @@ void LineGraph::DrawLines(int eventsOfset)
 	}
 }
 
-
 void LineGraph::RenderGraph(int eventsOfset)
 {
 	primitives_PaintRect16(m_surface, &m_surfaceRect, g_colorSet->GetColor(COLOR_BLACK));
 	primitives_FrameRect16(m_surface, &m_surfaceRect, g_colorSet->GetColor(COLOR_WHITE));
 	primitives_FrameRect16(m_surface, &m_graphRect, g_colorSet->GetColor(COLOR_WHITE));
-	
-	
+
 	DrawThisStateImage(
 		0,
 		m_surface,
@@ -507,15 +496,14 @@ void LineGraph::RenderGraph(int eventsOfset)
 	if (m_hasIndicator) DrawIndicator();
 }
 
-
 void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, sint32 *color)
 {
 	sint32		i,j;
 	double		sum,curYPos;
 
-	if (m_lineData) 
+	if (m_lineData)
 	{
-		for (i = 0; i < (m_numLines * 3); i++) 
+		for (i = 0; i < (m_numLines * 3); i++)
 		{
 			delete [] m_lineData[i];
 		}
@@ -568,7 +556,6 @@ void LineGraph::SetLineData(sint32 numLines, sint32 numSamples, double **data, s
 	m_numSamples = numSamples;
 }
 
-
 void LineGraph::SetGraphBounds(double minx, double maxx, double miny, double maxy)
 {
 	m_xmin = minx;
@@ -576,7 +563,6 @@ void LineGraph::SetGraphBounds(double minx, double maxx, double miny, double max
 	m_ymin = miny;
 	m_ymax = maxy;
 }
-
 
 void LineGraph::SetXAxisName(MBCHAR *name)
 {
@@ -587,7 +573,6 @@ void LineGraph::SetXAxisName(MBCHAR *name)
 	m_xAxisName = new MBCHAR[strlen(name)+1];
 	strcpy(m_xAxisName, name);
 }
-
 
 void LineGraph::SetYAxisName(MBCHAR *name)
 {
@@ -617,7 +602,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 	double curRound = g_turn->GetRound();
 	double minPower = 0;
 	double maxPower = 10;
-	
+
 	SetGraphBounds(minRound, curRound, minPower, maxPower);
 	HasIndicator(false);
 
@@ -652,7 +637,6 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 		color[infoYCount++] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
 	}
 
-
 	infoXCount = static_cast<sint32>(curRound) - static_cast<sint32>(minRound);
 	if (infoXCount == 0)
 	{
@@ -685,7 +669,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 				while (strValue > maxPower)
 					maxPower += 10.0;
 			}
-			
+
 			playerCount++;
 		}
 	}
@@ -705,7 +689,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 			while (strValue > maxPower)
 				maxPower += 10.0;
 		}
-		
+
 		playerCount++;
 	}
 

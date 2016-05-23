@@ -11,20 +11,20 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
  *
  * Modifications from the original Activision code:
- * 
+ *
  * - Addition by Martin Gühmann to allow:
- *   - Slic database access                                                                            
+ *   - Slic database access
  *   - Slic database size access
  * - Exponentiation operator '**' added.
  * - Bitwise operators ('&', '|', '^', '~') added.
  * - Added database array access. (Sep 16th 2005 Martin Gühmann)
- * 
+ *
  *----------------------------------------------------------------------------
  */
 %{
@@ -41,13 +41,13 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
  *
  * Compiler flags
- * 
+ *
  * _DEBUG
  * Set when generating the debug version.
  *
@@ -148,10 +148,10 @@ const: KW_CONST NAME '=' NUMBER ';' { slicif_add_const($2.name, $4.val); }
 	   ;
 
 messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
-	{ 
+	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed MessageBox %s\n", $2); 
+		fprintf(debuglog, "Parsed MessageBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -182,7 +182,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 		obj->m_is_alert = 0;
 		obj->m_is_help = 1;
 		slicif_add_object(obj);
-	}		
+	}
 	;
 
 trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN triggercondition body
@@ -211,11 +211,11 @@ trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN trigge
 		obj->m_id = $2.name;
 		obj->m_ui_component = $5.name;
 		slicif_add_object(obj);
-	}		
+	}
 	;
 
-eventhandler: KW_HANDLEEVENT '(' NAME ')' 
-			  { 
+eventhandler: KW_HANDLEEVENT '(' NAME ')'
+			  {
 			      slicif_check_event_exists($3.name);
 				  slicif_set_event_checking($3.name);
 		      }
@@ -224,7 +224,7 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
 	    fprintf(debuglog, "Parsed HandleEvent %s\n", $3.name);
-#endif	
+#endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
 		obj->m_type = SLIC_OBJECT_HANDLEEVENT;
@@ -234,21 +234,21 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
 		obj->m_priority = slicif_get_priority();
 		slicif_add_object(obj);
 	}
-    | KW_HANDLEEVENT '(' NAME ')' 
-	  { 
+    | KW_HANDLEEVENT '(' NAME ')'
+	  {
 	      slicif_check_event_exists($3.name);
 		  slicif_set_event_checking($3.name);
 	  }
-      IDENTIFIER priority 
-      { 
-		  slicif_start_segment($6.name); 
-	  } 
+      IDENTIFIER priority
+      {
+		  slicif_start_segment($6.name);
+	  }
       body
     {
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
 	    fprintf(debuglog, "Parsed HandleEvent %s '%s'\n", $3.name, $6.name);
-#endif	
+#endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
 		obj->m_type = SLIC_OBJECT_HANDLEEVENT;
@@ -260,9 +260,9 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
     }
     ;
 
-priority: KW_PRE 
+priority: KW_PRE
           { slicif_set_priority(SLIC_PRI_PRE); }
-        | KW_POST 
+        | KW_POST
 		  { slicif_set_priority(SLIC_PRI_POST); }
         ;
 
@@ -274,12 +274,12 @@ region: KW_REGION NAME '[' NUMBER ',' NUMBER ',' NUMBER ',' NUMBER ']' ';'
 		{ slicif_finish_complex_region(); }
 		;
 
-regionlist: NAME {slicif_add_region_to_complex($1.name); } '+' regionlist 
+regionlist: NAME {slicif_add_region_to_complex($1.name); } '+' regionlist
 		|	NAME { slicif_add_region_to_complex($1.name); }
 		;
 
-functionhead: returntype NAME 
-              { $$.name = $2.name; slicif_start_segment($2.name); } 
+functionhead: returntype NAME
+              { $$.name = $2.name; slicif_start_segment($2.name); }
               ;
 
 functionproto: functionhead '(' functionarglist ')' ';' { slicif_add_prototype($1.name); }
@@ -289,7 +289,7 @@ function: functionhead '(' functionarglist ')' body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed Function %s\n", $1.name); 
+		fprintf(debuglog, "Parsed Function %s\n", $1.name);
 #endif
 		obj->m_type = SLIC_OBJECT_FUNCTION;
 		obj->m_id = $1.name;
@@ -308,7 +308,7 @@ functionarglist: functionargument
 			   | /* empty */
 			   ;
 
-functionargument: vartype NAME { slicif_add_parameter((SLIC_SYM)$1.val, $2.name); }				  
+functionargument: vartype NAME { slicif_add_parameter((SLIC_SYM)$1.val, $2.name); }
 				  ;
 
 vartype: KW_UNIT { $$.val = SLIC_SYM_UNIT; }
@@ -336,16 +336,16 @@ simplestatement: NAME '(' {slicif_add_op(SOP_SARGS);} arguments ')' { slicif_add
 statement: simplestatement ';'
 	| KW_BUTTON '(' STRINGID ')' body { slicif_add_op(SOP_BUTN, $3.val); }
 	| KW_ONCLOSE body { slicif_add_op(SOP_OCLS); }
-	| KW_IF                   { slicif_start_if(); } 
-	  '(' expression ')' body { slicif_add_op(SOP_BNT); } 
+	| KW_IF                   { slicif_start_if(); }
+	  '(' expression ')' body { slicif_add_op(SOP_BNT); }
 	  elsestatements          { slicif_end_if(); }
 	| KW_WHILE                { slicif_start_while(); }
 	  '(' expression ')' body { slicif_end_while(); }
 	| KW_RETURN expression ';' { slicif_add_op(SOP_RET); }
-	| KW_FOR '(' { slicif_start_for(); } simplestatement ';' 
-                 { slicif_for_expression(); } expression ';' 
-                 { slicif_for_continue(); } simplestatement ')' 
-				 { slicif_start_for_body(); } body { slicif_end_for(); } 
+	| KW_FOR '(' { slicif_start_for(); } simplestatement ';'
+                 { slicif_for_expression(); } expression ';'
+                 { slicif_for_continue(); } simplestatement ')'
+				 { slicif_start_for_body(); } body { slicif_end_for(); }
 	| KW_EVENT ':' NAME '(' {slicif_start_event($3.name); } arguments ')' ';'{ slicif_add_op(SOP_EVENT, $3.name); }
 	| typedef
 /*	| KW_STRUCT NAME NAME ';' { slicif_add_local_struct($2.name, $3.name); }*/
@@ -403,8 +403,8 @@ expression:
 	|   arrayref {slicif_add_op(SOP_AINDX); }
 	|   arrayref REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $3.name); }
 	|   NAME REF '#' { slicif_add_op(SOP_ASIZE, $1.name); }
-	|   DBREF '(' NAME ')' 
-	    { 
+	|   DBREF '(' NAME ')'
+	    {
 	        if (slicif_is_name($1.dbptr, $3.name) < 0)
 			{
 		        slicif_add_op(SOP_DBNAME, $1.dbptr, $3.name);
@@ -414,8 +414,8 @@ expression:
 		        slicif_add_op(SOP_PUSHI, slicif_find_db_index($1.dbptr, $3.name));
 	        }
         }
-	|   DBREF '(' NAME ')' REF NAME 
-	    { 
+	|   DBREF '(' NAME ')' REF NAME
+	    {
             if (slicif_is_name($1.dbptr, $3.name) < 0)
 			{
 		        slicif_add_op(SOP_DBNAMEREF, $1.dbptr, $3.name, $6.name);
@@ -426,7 +426,7 @@ expression:
 	        }
         }
 	|   DBREF '(' NAME ')' REF NAME '[' expression ']'
-	    { 
+	    {
             if (slicif_is_name($1.dbptr, $3.name) < 0)
 			{
 		        slicif_add_op(SOP_DBNAMEARRAY, $1.dbptr, $3.name, $6.name);
@@ -443,7 +443,7 @@ expression:
 /*	|   NAME '[' expression ']' REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $6.name); }*/
 	;
 
-arrayref: NAME { $$.name = $1.name; slicif_add_op(SOP_PUSHA, $1.name); } '[' expression ']' 
+arrayref: NAME { $$.name = $1.name; slicif_add_op(SOP_PUSHA, $1.name); } '[' expression ']'
 	;
 %%
 
@@ -463,13 +463,12 @@ SLIC_ERROR slicif_run_parser(char* filename, int symStart)
 #endif
 	slicif_set_start(symStart);
 
-
 	g_slicLineNumber = 1;
 
 	if(!slicif_open_first_file(filename)) {
 		return slic_parse_error = SLIC_ERROR_CANT_OPEN_FILE;
 	}
-	
+
 	slic_parse_error = SLIC_ERROR_OK;
 	slic_parser_done = 0;
 
@@ -505,4 +504,3 @@ void yyerror(char *s)
 	slicif_report_error(slic_parser_error_text);
 	/*slic_parse_error = SLIC_ERROR_SYNTAX;*/
 }
-

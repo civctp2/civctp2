@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -36,7 +36,7 @@
 // - Fixed number of city styles removed.
 // - Prevented crashes due to uninitialised members.
 // - Prevented some NULL-dereferencing crashes.
-// - Exposed city walls and force field graphics to agecitystyle.txt, 
+// - Exposed city walls and force field graphics to agecitystyle.txt,
 //   by Martin Gühmann.
 // - Prevented crashes with invalid (i.e. killed or destroyed) units.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
@@ -105,7 +105,6 @@ extern PointerList<Player> *g_deadPlayer;
 #define k_SHIELD_ON_TIME        650
 #define k_SHIELD_OFF_TIME       150
 
-
 #ifndef _DEBUG_MEMORY
 #define STOMPCHECK() if (m_curAction) { Assert(_CrtIsMemoryBlock(m_curAction, sizeof(Action),NULL,NULL,NULL));}
 #else
@@ -123,7 +122,7 @@ namespace
 
 UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
-:   
+:
     Actor                       (ss),
 	m_refCount                  (1),
     m_pos                       (pos),
@@ -148,7 +147,7 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_needsToDie                (false),
     m_needsToVictor             (false),
     m_killNow                   (false),
-	m_unitVisionRange           (visionRange),	
+	m_unitVisionRange           (visionRange),
     m_newUnitVisionRange        (0.0),
     m_numRevealedActors         (0),
     m_revealedActors            (NULL),
@@ -160,15 +159,15 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
     m_isTransported             (false),
-//	sint32				m_holdingCurAnimPos[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimSpecialDelayProcess; 
+//	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimSpecialDelayProcess;
     m_size                      (0),
     m_isUnseenCellActor         (isUnseenCellActor),
-//	GROUPTYPE			m_type;								
-//	sint32				m_spriteID;							
+//	GROUPTYPE			m_type;
+//	sint32				m_spriteID;
     m_isFortified               (false),
     m_isFortifying              (false),
     m_hasCityWalls              (false),
@@ -208,7 +207,7 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 
 
 UnitActor::UnitActor(CivArchive &archive)
-:   
+:
     Actor                       (NULL),
     m_refCount                  (1),
     m_pos                       (),
@@ -233,7 +232,7 @@ UnitActor::UnitActor(CivArchive &archive)
     m_needsToDie                (false),
     m_needsToVictor             (false),
     m_killNow                   (false),
-	m_unitVisionRange           (0.0),	
+	m_unitVisionRange           (0.0),
     m_newUnitVisionRange        (0.0),
     m_numRevealedActors         (0),
     m_revealedActors            (NULL),
@@ -245,15 +244,15 @@ UnitActor::UnitActor(CivArchive &archive)
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
     m_isTransported             (false),
-//	sint32				m_holdingCurAnimPos[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX]; 
-//	sint32				m_holdingCurAnimSpecialDelayProcess; 
+//	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
+//	sint32				m_holdingCurAnimSpecialDelayProcess;
     m_size                      (0),
     m_isUnseenCellActor         (false),
-//	GROUPTYPE			m_type;								
-//	sint32				m_spriteID;							
+//	GROUPTYPE			m_type;
+//	sint32				m_spriteID;
     m_isFortified               (false),
     m_isFortifying              (false),
     m_hasCityWalls              (false),
@@ -261,7 +260,7 @@ UnitActor::UnitActor(CivArchive &archive)
 //	uint32				m_shieldFlashOnTime;
 //	uint32				m_shieldFlashOffTime;
 //	sint32				m_activeListRef;
-//	double				m_healthPercent;	
+//	double				m_healthPercent;
     m_tempStackSize             (0)
 #ifdef _ACTOR_DRAW_OPTIMIZATION
 //	sint32				m_oldFacing;
@@ -293,9 +292,9 @@ void UnitActor::Initialize(void)
 	m_transparency			= 0;
 	m_numRevealedActors		= 0;
 
-	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
+	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
 	{
-		m_holdingCurAnimPos[i] = 0; 
+		m_holdingCurAnimPos[i] = 0;
 		m_holdingCurAnimDelayEnd[i] = 0;
 		m_holdingCurAnimElapsed[i] = 0;
 		m_holdingCurAnimLastFrameTime[i] = 0;
@@ -327,21 +326,18 @@ void UnitActor::Initialize(void)
 
 	m_frame = 0;
 
-	
 	m_curAction = NULL;
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 
-	
 
 	m_numSavedRevealedActors = 0;
-	m_savedRevealedActors = m_revealedActors = NULL; 
-	m_moveActors = NULL; 
+	m_savedRevealedActors = m_revealedActors = NULL;
+	m_moveActors = NULL;
 	m_hiddenUnderStack = FALSE;
 	m_isTransported = FALSE;
-	
+
 	m_hidden = FALSE;
 
-	
 	m_isFortifying = FALSE;
 	m_isFortified = FALSE;
 	m_hasCityWalls = FALSE;
@@ -358,7 +354,6 @@ void UnitActor::Initialize(void)
 
 	AddIdle();
 }
-
 
 void UnitActor::AddVision(void)
 {
@@ -443,16 +438,16 @@ void UnitActor::GetIDAndType
 UnitActor::~UnitActor()
 {
 	DumpAllActions();
-	
-	if (m_type == GROUPTYPE_UNIT) 
+
+	if (m_type == GROUPTYPE_UNIT)
     {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
         if (LOADTYPE_BASIC != m_loadType)
         {
             g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_BASIC);
         }
-	} 
-    else 
+	}
+    else
     {
 		g_citySpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
         if (LOADTYPE_BASIC != m_loadType)
@@ -489,7 +484,7 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 		}
 		else
 		{
-			// PFT, computes TurnsToNextPop and puts 
+			// PFT, computes TurnsToNextPop and puts
 			// it into the actor's m_nextPop
 			id.GetTurnsToNextPop(m_nextPop);
 		}
@@ -497,8 +492,7 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 	DumpAllActions();
 
-	
-	
+
 	if (m_type == GROUPTYPE_UNIT) {
 		if (g_unitSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType))
 			m_unitSpriteGroup = NULL;
@@ -515,10 +509,8 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 	if (spriteID == -1) {
 
-
 		spriteID = 1;
 
-		
 		const CityStyleRecord *styleRec = g_theCityStyleDB->Get(0);
 		if(styleRec) {
 			const AgeCityStyleRecord *ageStyleRec = styleRec->GetAgeStyle(0);
@@ -530,13 +522,13 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 
 	m_spriteID = spriteID;
 
-	if (groupType == GROUPTYPE_UNIT) 
+	if (groupType == GROUPTYPE_UNIT)
 	{
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite(spriteID, groupType, LOADTYPE_BASIC,(GAME_ACTION)0);
-	} 
-	else 
+	}
+	else
 	{
-		
+
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite(spriteID, groupType, LOADTYPE_BASIC,(GAME_ACTION)0);
 
 		m_lastMoveFacing = 0;
@@ -566,7 +558,7 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 	ChangeImage(ss, type, id);
 
 	if (updateVision) {
-		if(g_tiledMap->GetLocalVision() != NULL && 
+		if(g_tiledMap->GetLocalVision() != NULL &&
 		   m_playerNum == g_selected_item->GetVisiblePlayer() &&
 		   !m_isUnseenCellActor) {
 			DPRINTF(k_DBG_INFO, ("Removing vision for %lx, owner %d, range %lf, center: %d,%d\n",
@@ -578,7 +570,7 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 	m_unitVisionRange = m_newUnitVisionRange;
 
 	if (updateVision) {
-		if(g_tiledMap->GetLocalVision() != NULL && 
+		if(g_tiledMap->GetLocalVision() != NULL &&
 		   m_playerNum == g_selected_item->GetVisiblePlayer() &&
 		   !m_isUnseenCellActor)
 		{
@@ -590,8 +582,8 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 	}
 
     m_directionalAttack = m_unitSpriteGroup && m_unitSpriteGroup->HasDirectional();
-	
-    if (id.IsValid()) 
+
+    if (id.IsValid())
     {
         id.SetSpriteState(ss);
     }
@@ -605,19 +597,16 @@ void UnitActor::AddIdle(bool NoIdleJustDelay)
 	Anim *  anim    = CreateAnim(UNITACTION_IDLE);
 	m_frame         = 0;
 
-	
 	if (anim == NULL) {
 		anim = CreateAnim(UNITACTION_MOVE);
 	}
-
 
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-
-	Action * idleAction = 
+	Action * idleAction =
         new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
 
     if (NoIdleJustDelay)
@@ -631,7 +620,7 @@ void UnitActor::AddIdle(bool NoIdleJustDelay)
 
 
 
-	
+
 	if (g_soundManager)
 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
 }
@@ -640,8 +629,7 @@ void UnitActor::ActionQueueUpIdle(bool NoIdleJustDelay)
 {
 	Anim * anim = CreateAnim(UNITACTION_IDLE);
 
-	
-	if (anim == NULL) 
+	if (anim == NULL)
 	{
 		anim = CreateAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
@@ -652,14 +640,14 @@ void UnitActor::ActionQueueUpIdle(bool NoIdleJustDelay)
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-	Action *	tempCurAction	= 
+	Action *	tempCurAction	=
 		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
 
 	tempCurAction->SetAnim(anim);
 
-	
 
-	
+
+
 	m_actionQueue.Enqueue(tempCurAction);
 }
 
@@ -667,9 +655,9 @@ void UnitActor::GetNextAction(bool isVisible)
 {
 	delete m_curAction;
 	m_curAction = NULL;
-	
+
 	if (GetActionQueueNumItems() > 0) {
-		
+
 		m_actionQueue.Dequeue(m_curAction);
 
 		Assert(m_curAction);
@@ -677,7 +665,7 @@ void UnitActor::GetNextAction(bool isVisible)
 		{
 			return;
 		}
-		
+
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
 
@@ -689,11 +677,10 @@ void UnitActor::GetNextAction(bool isVisible)
 		return;
 	}
 
-	
-	
+
 	if(m_curAction->m_actionType == UNITACTION_ATTACK )
 	{
-		
+
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
 
@@ -720,9 +707,9 @@ void UnitActor::GetNextAction(bool isVisible)
 	m_curAction->GetStartMapPoint(curStartMapPoint);
 	m_curAction->GetEndMapPoint(curEndMapPoint);
 
-	
-	
-	
+
+
+
 	int i, j;
 	if((j = i = m_curAction->GetNumOActors()) > 0)
 	{
@@ -732,37 +719,34 @@ void UnitActor::GetNextAction(bool isVisible)
 		{
 			if(moveActors[i] != NULL)
 				moveActors[i]->SetHiddenUnderStack(TRUE);
-			
-			if(!m_isUnseenCellActor && 
+
+			if(!m_isUnseenCellActor &&
 				m_playerNum == g_selected_item->GetVisiblePlayer()) {
 			}
 		}
 		m_curAction->SetNumOActors(0 - j);
 	}
 
-	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE) 
+	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE)
 	{
-		
-		
+
 		if(!m_curAction->GetIsSpecialActionType())
 		{
 			if(m_isTransported == k_TRANSPORTADDONLY)
 			{
-				
+
 				m_isTransported = FALSE;
 			}
 		}
 
-		
 		if(m_savedRevealedActors != NULL)
 		{
 			for (sint32 i=0; i<m_numSavedRevealedActors; i++) {
 				UnitActor * tempActor = m_savedRevealedActors[i];
 				Assert(tempActor != NULL);
 				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE); 
+					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
 			}
-
 
 			delete[] m_savedRevealedActors;
 			m_savedRevealedActors = NULL;
@@ -770,21 +754,21 @@ void UnitActor::GetNextAction(bool isVisible)
 
 		}
 
-		
-		
-		
-		
+
+
+
+
 		UnitActor **revealedActors = m_curAction->GetRevealedActors();
 		if (revealedActors) {
 			for (sint32 i=0; i<m_curAction->GetNumRevealedActors(); i++) {
 				UnitActor * tempActor = revealedActors[i];
 				Assert(tempActor != NULL);
 				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE); 
+					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
 			}
 
-			SaveRevealedActors(revealedActors); 
-			
+			SaveRevealedActors(revealedActors);
+
 			m_numRevealedActors = 0;
 			m_revealedActors = NULL;
 			m_curAction->SetRevealedActors(NULL);
@@ -792,27 +776,23 @@ void UnitActor::GetNextAction(bool isVisible)
 		}
 	}
 
-	
 	m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
 }
-
 
 void UnitActor::Process(void)
 {
 	if (!m_curAction)
 		GetNextAction();
 
-	if (!m_curAction) 
+	if (!m_curAction)
 	{
-		
-		
+
 		DumpFullLoad();
 
-		
 		AddIdle(m_facing != 3);
 
-		
-		
+
+
 
 	}
 
@@ -821,105 +801,96 @@ void UnitActor::Process(void)
 
 	m_curAction->Process();
 
-	if (m_curAction->Finished()) 
+	if (m_curAction->Finished())
 	{
-		if (m_curUnitAction==UNITACTION_MOVE) 
+		if (m_curUnitAction==UNITACTION_MOVE)
 		{
 			MapPoint pos;
 
 			m_curAction->GetEndMapPoint(pos);
 			PositionActor(pos);
 		}
-		
-		
+
 		UnitActor **moveActors = m_curAction->GetMoveActors();
-		
-		if(moveActors != NULL) 
+
+		if(moveActors != NULL)
 		{
-			
+
 			sint32 num = abs(m_curAction->GetNumOActors());
 
 			m_curAction->SetNumOActors(num);
 
-			for (int i = num-1; i >= 0; i--) 
+			for (int i = num-1; i >= 0; i--)
 			{
-				if(moveActors[i] != NULL) 
+				if(moveActors[i] != NULL)
 				   moveActors[i]->PositionActor(m_pos);
-				
+
 			}
 			delete moveActors;
 			m_curAction->SetMoveActors(NULL, NULL);
 		}
 
-		
 		if (m_curAction->m_actionType != UNITACTION_IDLE &&
 			m_curAction->m_actionType != UNITACTION_FACE_OFF)
 			g_director->ActionFinished(m_curAction->GetSequence());
 
-		
 		if((m_curAction->m_actionType == UNITACTION_VICTORY && HasDeath())
 			||
 			m_curAction->m_actionType == UNITACTION_FAKE_DEATH) {
 			SetKillNow();
 			delete m_curAction;
 			m_curAction = NULL;
-		} else 
+		} else
 		{
-			
+
 			GetNextAction();
 		}
 
-		
 		g_director->HandleNextAction();
-	} 
-	else 
+	}
+	else
 	{
-		
-		
 
-		
 
-		
-		if (m_curAction->GetPath()!=NULL)  
+
+
+
+
+		if (m_curAction->GetPath()!=NULL)
 		{
-			
+
 			POINT curPt = m_curAction->GetPosition();
 			m_x = curPt.x;
 			m_y = curPt.y;
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			sint32 x, y;
 			maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
 			m_x = x;
 			m_y = y;
 		}
 
-		
-		
+
 		if(m_curAction->GetActionType() == UNITACTION_MOVE || m_curAction->GetActionType() == UNITACTION_ATTACK)
 		{
 			m_lastMoveFacing = m_curAction->GetFacing();
 		}
 
-		
-		
-		if(m_curAction->SpecialDelayProcess() 
-			|| (m_curUnitAction == UNITACTION_IDLE 
-				&& m_unitSpriteGroup 
+
+		if(m_curAction->SpecialDelayProcess()
+			|| (m_curUnitAction == UNITACTION_IDLE
+				&& m_unitSpriteGroup
 				&& m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL)) {
 			m_facing = m_lastMoveFacing;
 		} else {
-			
-			
+
 			m_facing = m_curAction->GetFacing();
 		}
 
-		
 		m_frame = m_curAction->GetSpriteFrame();
 
-		
 		m_transparency = m_curAction->GetTransparency();
 	}
 
@@ -938,8 +909,8 @@ Action *UnitActor::WillDie(void) const
 		{
 			if (HasDeath())
 				return m_curAction;
-		} 
-		else if (type == UNITACTION_FAKE_DEATH) 
+		}
+		else if (type == UNITACTION_FAKE_DEATH)
 		{
 			return m_curAction;
 		}
@@ -947,18 +918,18 @@ Action *UnitActor::WillDie(void) const
 
 	size_t  numItems = GetActionQueueNumItems();
 
-	for (size_t i = 0; i < numItems; ++i) 
+	for (size_t i = 0; i < numItems; ++i)
     {
     	Action * action = NULL;
 		m_actionQueue.GetQueueItem(i, action);
-		if (action) 
+		if (action)
         {
 			type = action->m_actionType;
 			if (type == UNITACTION_VICTORY) {
 				if (HasDeath())
 					return action;
-			} 
-			else if (type == UNITACTION_FAKE_DEATH) 
+			}
+			else if (type == UNITACTION_FAKE_DEATH)
 			{
 				return action;
 			}
@@ -978,9 +949,9 @@ Action *UnitActor::WillMorph(void) const
 	{
 		return m_curAction;
 	}
-	
+
 	size_t numItems = GetActionQueueNumItems();
-	for (size_t i = 0; i < numItems; ++i) 
+	for (size_t i = 0; i < numItems; ++i)
     {
         Action * action = NULL;
 		m_actionQueue.GetQueueItem(i, action);
@@ -1000,15 +971,14 @@ void UnitActor::DumpAllActions(void)
 #endif
 	static MapPoint pos;
 
-	
 	if (m_curAction != NULL) {
 		m_facing = m_curAction->GetFacing();
-		
+
 		if (m_curAction->m_actionType == UNITACTION_MOVE) {
 			m_curAction->GetEndMapPoint(pos);
 			PositionActor(pos);
 		}
-		
+
 		if (m_curAction->m_actionType != UNITACTION_IDLE &&
 			m_curAction->m_actionType != UNITACTION_FACE_OFF) {
 			g_director->ActionFinished(m_curAction->GetSequence());
@@ -1017,13 +987,12 @@ void UnitActor::DumpAllActions(void)
 		m_curAction = NULL;
 	}
 
-	
 	Action *deadAction=NULL;
 	while (m_actionQueue.GetNumItems() > 0) {
 		m_actionQueue.Dequeue(deadAction);
 		if (deadAction != NULL) {
 			m_facing = deadAction->GetFacing();
-			
+
 			if (deadAction->m_actionType == UNITACTION_MOVE) {
 				deadAction->GetEndMapPoint(pos);
 				PositionActor(pos);
@@ -1037,7 +1006,7 @@ void UnitActor::DumpAllActions(void)
 			delete deadAction;
 			deadAction = NULL;
 		} else {
-			
+
 			Assert(FALSE);
 			return;
 		}
@@ -1071,26 +1040,25 @@ void UnitActor::AddAction(Action *actionObj)
 #endif
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return;
-	
+
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
 
-	
-	
-	
-	
+
+
+
+
 	if (g_theUnitPool) {
-		if(g_theUnitPool->IsValid(GetUnitID())) 
+		if(g_theUnitPool->IsValid(GetUnitID()))
 		{
 			m_playerNum = Unit(GetUnitID()).GetOwner();
 		}
 	}
 
 	m_actionQueue.Enqueue(actionObj);
-	
-	
-	
+
+
 	if (m_curAction) {
 		if (m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT) {
 			m_curAction->SetFinished(TRUE);
@@ -1108,10 +1076,9 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return NULL;
 
-	
 	Anim	*origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
 
-	if (origAnim == NULL) 
+	if (origAnim == NULL)
 	{
 		if(action != UNITACTION_IDLE)
 		{
@@ -1119,8 +1086,7 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 		}
 		else
 		{
-			
-			
+
 			origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_MOVE);;
 //			Assert(origAnim != NULL);
 			if(origAnim == NULL)
@@ -1139,7 +1105,6 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 		anim->SetElapsed(m_holdingCurAnimElapsed[action]);
 		anim->SetLastFrameTime(g_director->GetMasterCurTime() - m_holdingCurAnimElapsed[action]);
 
-		
 		if(m_holdingCurAnimDelayEnd[action] != 0)
 			anim->SetWeAreInDelay(TRUE);
 
@@ -1150,12 +1115,12 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 		srand(anim->GetDelay() + g_director->GetMasterCurTime());
 		anim->AdjustDelay(rand() % 2000);
 	}
-	
+
 	return anim; // Has to be deleted outside.
 }
 
-#define k_FAKE_DEATH_FRAMES			15		
-#define k_FAKE_DEATH_DURATION		1500	
+#define k_FAKE_DEATH_FRAMES			15
+#define k_FAKE_DEATH_DURATION		1500
 
 Anim * UnitActor::MakeFakeDeath(void)
 {
@@ -1165,9 +1130,9 @@ Anim * UnitActor::MakeFakeDeath(void)
     POINT        pt              = {0,0};
     POINT *      moveDeltas      = new POINT[k_FAKE_DEATH_FRAMES];
     std::fill(moveDeltas, moveDeltas + k_FAKE_DEATH_FRAMES, pt);
-	
+
     uint16 *     transparencies  = new uint16[k_FAKE_DEATH_FRAMES];
-    for (int i = 0; i < k_FAKE_DEATH_FRAMES; i++) 
+    for (int i = 0; i < k_FAKE_DEATH_FRAMES; i++)
     {
         transparencies[i] = (uint16)(15 - i);
     }
@@ -1183,7 +1148,6 @@ Anim * UnitActor::MakeFakeDeath(void)
     return anim;
 }
 
-
 #define k_FACEOFF_FRAMES			1
 #define k_FACEOFF_DURATION			1000
 
@@ -1195,7 +1159,7 @@ Anim *UnitActor::MakeFaceoff(void)
     POINT        pt              = {0,0};
     POINT *      moveDeltas      = new POINT[k_FACEOFF_FRAMES];
     std::fill(moveDeltas, moveDeltas + k_FACEOFF_FRAMES, pt);
-	
+
     uint16 *     transparencies  = new uint16[k_FACEOFF_FRAMES];
     std::fill(transparencies, transparencies + k_FACEOFF_FRAMES, 15);
 
@@ -1212,12 +1176,12 @@ Anim *UnitActor::MakeFaceoff(void)
 
 void UnitActor::DrawFortified(bool fogged)
 {
-	sint32	    nudgeX      = (sint32)((k_ACTOR_CENTER_OFFSET_X - 48) * g_tiledMap->GetScale()); 
+	sint32	    nudgeX      = (sint32)((k_ACTOR_CENTER_OFFSET_X - 48) * g_tiledMap->GetScale());
 	sint32      nudgeY      = (sint32)((k_ACTOR_CENTER_OFFSET_Y - 48) * g_tiledMap->GetScale());
 	sint32      surfWidth   = g_screenManager->GetSurfWidth();
 	sint32      surfHeight  = g_screenManager->GetSurfHeight();
 
-	if ((m_x + nudgeX) > (surfWidth - g_tiledMap->GetZoomTilePixelWidth())) 
+	if ((m_x + nudgeX) > (surfWidth - g_tiledMap->GetZoomTilePixelWidth()))
 		return;
 
 	if ((m_y + nudgeY) > (surfHeight - g_tiledMap->GetZoomTilePixelHeight()))
@@ -1226,20 +1190,20 @@ void UnitActor::DrawFortified(bool fogged)
 	Pixel16	*   fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34);
 
 	if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-		
+
 		if (fogged)
 			g_tiledMap->DrawBlendedOverlayIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
 		else
 			g_tiledMap->DrawColorizedOverlayIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY, 0x0000);
 	} else {
-		
+
 		if (fogged)
-			g_tiledMap->DrawBlendedOverlayScaledIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY, 
-												g_tiledMap->GetZoomTilePixelWidth(), 
+			g_tiledMap->DrawBlendedOverlayScaledIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY,
+												g_tiledMap->GetZoomTilePixelWidth(),
 												g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
 		else
-			g_tiledMap->DrawScaledOverlayIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY, 
-												g_tiledMap->GetZoomTilePixelWidth(), 
+			g_tiledMap->DrawScaledOverlayIntoMix(fortifiedImage, m_x + nudgeX, m_y + nudgeY,
+												g_tiledMap->GetZoomTilePixelWidth(),
 												g_tiledMap->GetZoomTileGridHeight());
 	}
 }
@@ -1249,9 +1213,8 @@ void UnitActor::DrawFortifying(bool fogged)
 	aui_BitmapFont	*font = g_tiledMap->GetFont();
 	if (!font) return;
 
-	sint32	x = m_x + (sint32)(double)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale()), 
+	sint32	x = m_x + (sint32)(double)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale()),
 			y = m_y + (sint32)(double)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
-
 
 	MBCHAR		*fString = g_tiledMap->GetFortifyString();
 
@@ -1264,18 +1227,18 @@ void UnitActor::DrawFortifying(bool fogged)
 
     if (clipRect.left < 0) clipRect.left = 0;
 	if (clipRect.top < 0) clipRect.top = 0;
-	if (clipRect.right >= g_screenManager->GetSurfWidth()) 
+	if (clipRect.right >= g_screenManager->GetSurfWidth())
 		clipRect.right = g_screenManager->GetSurfWidth() - 1;
-	if (clipRect.bottom >= g_screenManager->GetSurfHeight()) 
+	if (clipRect.bottom >= g_screenManager->GetSurfHeight())
 		clipRect.bottom = g_screenManager->GetSurfHeight() - 1;
 
 	COLORREF colorRef = g_colorSet->GetColorRef(COLOR_BLACK);
 
-	font->DrawString(g_screenManager->GetSurface(), &rect, &clipRect, fString, 
-		0, 
+	font->DrawString(g_screenManager->GetSurface(), &rect, &clipRect, fString,
+		0,
 		colorRef,
 		0);
-	
+
 	if (fogged) {
 		colorRef = g_colorSet->GetColorRef(COLOR_WHITE);
 	} else {
@@ -1285,8 +1248,8 @@ void UnitActor::DrawFortifying(bool fogged)
 	OffsetRect(&rect, -1, -1);
 	OffsetRect(&clipRect, -1, -1);
 
-	font->DrawString(g_screenManager->GetSurface(), &rect, &clipRect, fString, 
-		0, 
+	font->DrawString(g_screenManager->GetSurface(), &rect, &clipRect, fString,
+		0,
 		colorRef,
 		0);
 }
@@ -1318,27 +1281,27 @@ void UnitActor::DrawCityWalls(bool fogged)   //TODO make a draw wonders and draw
 	Unit			unit(GetUnitID());
 
 	// Test city style overrides.
-	CityStyleRecord const *	styleRec	= 
+	CityStyleRecord const *	styleRec	=
 		g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
 
 	if (styleRec)
 	{
-		AgeCityStyleRecord const *	ageStyleRec = 
+		AgeCityStyleRecord const *	ageStyleRec =
 			styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
 
 		if (ageStyleRec)
 		{
 			bool const		isWater			= g_theWorld->IsWater(m_pos);
 			sint32 const	spriteCount		= ageStyleRec->GetNumSprites();
-			AgeCityStyleRecord::SizeSprite const *		
+			AgeCityStyleRecord::SizeSprite const *
 							matchingSprite	= NULL;
 
-			for (sint32 i = 0; i < spriteCount; ++i) 
+			for (sint32 i = 0; i < spriteCount; ++i)
 			{
-				AgeCityStyleRecord::SizeSprite const *	spr	= 
+				AgeCityStyleRecord::SizeSprite const *	spr	=
 					ageStyleRec->GetSprites(i);
-				
-				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType()))) 
+
+				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType())))
 				{
 					matchingSprite = spr;
 
@@ -1350,12 +1313,12 @@ void UnitActor::DrawCityWalls(bool fogged)   //TODO make a draw wonders and draw
 						break;	// exact match found
 					}
 
-					// When no exact match has been found, the last (largest?) 
+					// When no exact match has been found, the last (largest?)
 					// of the correct type will be used.
 				}
 			}
 
-			if (matchingSprite) 
+			if (matchingSprite)
 			{
 				cityImage = tileSet->GetImprovementData(static_cast<uint16>(matchingSprite->GetWalls()));
 			}
@@ -1364,24 +1327,24 @@ void UnitActor::DrawCityWalls(bool fogged)   //TODO make a draw wonders and draw
 	}
 	// else: keep default
 
-	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
+	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()),
 			nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
 	if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-		
+
 		if (fogged)
 			g_tiledMap->DrawBlendedOverlayIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
 		else
 			g_tiledMap->DrawColorizedOverlayIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY, 0x0000);
 	} else {
-		
+
 		if (fogged)
 			g_tiledMap->DrawBlendedOverlayScaledIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY,
-											g_tiledMap->GetZoomTilePixelWidth(), 
+											g_tiledMap->GetZoomTilePixelWidth(),
 											g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
 		else
 			g_tiledMap->DrawScaledOverlayIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY,
-											g_tiledMap->GetZoomTilePixelWidth(), 
+											g_tiledMap->GetZoomTilePixelWidth(),
 											g_tiledMap->GetZoomTileGridHeight());
 	}
 }
@@ -1408,22 +1371,22 @@ void UnitActor::DrawCityWalls(bool fogged)   //TODO make a draw wonders and draw
 //----------------------------------------------------------------------------
 void UnitActor::DrawForceField(bool fogged)
 {
-	sint32 const	nudgeX	= 
+	sint32 const	nudgeX	=
 		(sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-	sint32 const	nudgeY = 
+	sint32 const	nudgeY =
 		(sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
 	// Default sprite index (fixed number from original code)
 	sint32 which;
-	if (g_theWorld->IsLand(m_pos)) 
+	if (g_theWorld->IsLand(m_pos))
 	{
 		which = 154;
-	} 
-	else if (g_theWorld->IsWater(m_pos)) 
+	}
+	else if (g_theWorld->IsWater(m_pos))
 	{
 		which = 155;
-	} 
-	else 
+	}
+	else
 	{
 		which = 156;	// space?
 	}
@@ -1431,27 +1394,27 @@ void UnitActor::DrawForceField(bool fogged)
 	Unit			unit(GetUnitID());
 
 	// Test city style overrides.
-	CityStyleRecord const *	styleRec	= 
+	CityStyleRecord const *	styleRec	=
 		g_theCityStyleDB->Get(unit.CD()->GetCityStyle());
 
 	if (styleRec)
 	{
-		AgeCityStyleRecord const *	ageStyleRec = 
+		AgeCityStyleRecord const *	ageStyleRec =
 			styleRec->GetAgeStyle(g_player[unit->GetOwner()]->m_age);
 
 		if (ageStyleRec)
 		{
 			bool const		isWater			= g_theWorld->IsWater(m_pos);
 			sint32 const	spriteCount		= ageStyleRec->GetNumSprites();
-			AgeCityStyleRecord::SizeSprite const *		
+			AgeCityStyleRecord::SizeSprite const *
 							matchingSprite	= NULL;
 
-			for (sint32 i = 0; i < spriteCount; ++i) 
+			for (sint32 i = 0; i < spriteCount; ++i)
 			{
-				AgeCityStyleRecord::SizeSprite const *	spr	= 
+				AgeCityStyleRecord::SizeSprite const *	spr	=
 					ageStyleRec->GetSprites(i);
-				
-				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType()))) 
+
+				if (spr && (isWater == (CITY_TYPE_WATER == spr->GetType())))
 				{
 					matchingSprite = spr;
 
@@ -1463,12 +1426,12 @@ void UnitActor::DrawForceField(bool fogged)
 						break;	// exact match found
 					}
 
-					// When no exact match has been found, the last (largest?) 
+					// When no exact match has been found, the last (largest?)
 					// of the correct type will be used.
 				}
 			}
 
-			if (matchingSprite) 
+			if (matchingSprite)
 			{
 				which = matchingSprite->GetForceField();
 			}
@@ -1477,12 +1440,10 @@ void UnitActor::DrawForceField(bool fogged)
 	}
 	// else: keep default
 
-	
 	Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which);
 
-
 	if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-		
+
 		g_tiledMap->DrawDitheredOverlayIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY, fogged);
 
 
@@ -1491,7 +1452,7 @@ void UnitActor::DrawForceField(bool fogged)
 
 
 	} else {
-		
+
 		g_tiledMap->DrawDitheredOverlayScaledIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY,
 														g_tiledMap->GetZoomTilePixelWidth(),
 														g_tiledMap->GetZoomTileGridHeight(),
@@ -1521,7 +1482,7 @@ bool UnitActor::Draw(bool fogged)
 	sint32  yoffset = (sint32)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
 	uint16  flags   = k_DRAWFLAGS_NORMAL;
-	if (m_transparency < 15) 
+	if (m_transparency < 15)
 	{
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
@@ -1532,9 +1493,9 @@ bool UnitActor::Draw(bool fogged)
 
 	bool isCloaked = false;
 
-	if (m_unitID.IsValid()) 
+	if (m_unitID.IsValid())
 	{
-		if (m_unitID.IsAsleep()) 
+		if (m_unitID.IsAsleep())
 		{
 			flags |= k_BIT_DRAWFLAGS_DESATURATED;
 			m_isFortified = FALSE;
@@ -1552,11 +1513,11 @@ bool UnitActor::Draw(bool fogged)
 	g_selected_item->GetTopCurItem(selectedPlayer, selectedID, selectType);
 
 	Unit            selectedUnit;
-	if (selectType == SELECT_TYPE_LOCAL_CITY) 
+	if (selectType == SELECT_TYPE_LOCAL_CITY)
 	{
 		selectedUnit = selectedID;
 	}
-	else if (selectType == SELECT_TYPE_LOCAL_ARMY) 
+	else if (selectType == SELECT_TYPE_LOCAL_ARMY)
 	{
 		selectedUnit = Army(selectedID).GetTopVisibleUnit(selectedPlayer);
 	}
@@ -1564,10 +1525,10 @@ bool UnitActor::Draw(bool fogged)
 	bool	drawShield              = true;
 	bool	drawSelectionBrackets   = false;
 
-	if (selectedUnit.IsValid() && selectedUnit.GetActor() == this) 
+	if (selectedUnit.IsValid() && selectedUnit.GetActor() == this)
 	{
-		drawSelectionBrackets = true;	
-		if (GetTickCount() > m_shieldFlashOffTime) 
+		drawSelectionBrackets = true;
+		if (GetTickCount() > m_shieldFlashOffTime)
 		{
 			drawShield  = GetTickCount() > m_shieldFlashOnTime;
 			if (drawShield)
@@ -1579,11 +1540,11 @@ bool UnitActor::Draw(bool fogged)
 	}
 
 #ifdef _ACTOR_DRAW_OPTIMIZATION
-	
-	if (   (m_frame == m_oldFrame) 
+
+	if (   (m_frame == m_oldFrame)
 		&& (m_facing == m_oldFacing)
-		&& (m_x+xoffset == m_oldOffsetX) 
-		&& (m_y+yoffset == m_oldOffsetY) 
+		&& (m_x+xoffset == m_oldOffsetX)
+		&& (m_y+yoffset == m_oldOffsetY)
 		&& (flags == m_oldFlags)
 		&& (IsFortified() == m_oldIsFortified)
 		&& (IsFortifying() == m_oldIsFortifying)
@@ -1619,8 +1580,8 @@ bool UnitActor::Draw(bool fogged)
 
 	if (m_unitSpriteGroup && m_unitID.IsValid())
 	{
-		if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  
-			DrawCityImprovements(fogged); 
+		if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007
+			DrawCityImprovements(fogged);
 
 		if (IsFortified())
 			DrawFortified(fogged);
@@ -1628,7 +1589,7 @@ bool UnitActor::Draw(bool fogged)
 		if (IsFortifying()) {
 			DrawFortifying(fogged);
 		}
-		
+
 		if (HasCityWalls()) {
 			DrawCityWalls(fogged);
 		}
@@ -1637,29 +1598,29 @@ bool UnitActor::Draw(bool fogged)
 		if (isCloaked) {
 			oldTransparency = m_transparency;
 			m_transparency = static_cast<uint16>(8 + (rand() % 5));
-			flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+			flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 		}
 
 		Pixel16 color   = 0x0000;
 		if(m_curAction == NULL)
 		{
-			
-			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing, 
+
+			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
 									g_tiledMap->GetScale(), m_transparency, color, flags, FALSE, directionAttack);
 		}
 		else
 		{
-			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing, 
+			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
 									g_tiledMap->GetScale(), m_transparency, color, flags, m_curAction->SpecialDelayProcess(), directionAttack);
 		}
 
-		if (isCloaked)  
+		if (isCloaked)
 			m_transparency = oldTransparency;
-								
+
 		bool forcefieldsEverywhere = false;
 
 		if (g_player[m_playerNum]) {
-			if (wonderutil_GetForcefieldEverywhere(g_player[m_playerNum]->m_builtWonders)) 
+			if (wonderutil_GetForcefieldEverywhere(g_player[m_playerNum]->m_builtWonders))
 			{
 				forcefieldsEverywhere = m_unitID.IsValid() && m_unitID.IsCity();
 			}
@@ -1675,10 +1636,9 @@ bool UnitActor::Draw(bool fogged)
 	// bool check is in the method
 	//emod
 
-
 	}
 
-	if (drawSelectionBrackets) 
+	if (drawSelectionBrackets)
 		DrawSelectionBrackets();
 
 	if (drawShield)
@@ -1689,14 +1649,14 @@ bool UnitActor::Draw(bool fogged)
 
 void UnitActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 {
-	if (m_unitSpriteGroup) 
+	if (m_unitSpriteGroup)
     {
 	    uint16			flags   = k_DRAWFLAGS_NORMAL;
 	    Pixel16			color   = 0;
 	    BOOL			directionAttack = FALSE;
 	    sint32			xoffset = (sint32)(k_ACTOR_CENTER_OFFSET_X * scale);
 	    sint32			yoffset = (sint32)(k_ACTOR_CENTER_OFFSET_Y * scale);
-		m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+xoffset, y+yoffset, m_facing, 
+		m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+xoffset, y+yoffset, m_facing,
 									  scale, m_transparency, color, flags, FALSE, directionAttack);
 	}
 }
@@ -1764,7 +1724,6 @@ void UnitActor::DrawHerald(void)
 }
 
 
-
 void UnitActor::DrawHealthBar(void)
 {
 #ifndef _TEST
@@ -1774,20 +1733,20 @@ void UnitActor::DrawHealthBar(void)
 	if (m_size > 0) return;
 	if (!g_showHeralds) return;
 
-	if (m_unitID.IsValid() && m_unitID.IsCity()) 
+	if (m_unitID.IsValid() && m_unitID.IsCity())
 	{
 		return;
 	}
 
 	TileSet	*   tileSet = g_tiledMap->GetTileSet();
 	Cell *      myCell = g_theWorld->GetCell(m_pos);
-	
+
 	sint32		stackSize = 1;
 	if (m_tempStackSize != 0)
 	{
 		stackSize = m_tempStackSize;
 	}
-	else if (IsActive()) 
+	else if (IsActive())
 	{
 		if (m_unitID.IsValid())
 		{
@@ -1802,7 +1761,7 @@ void UnitActor::DrawHealthBar(void)
 	else
 	{
 		CellUnitList *  unitList = myCell->UnitArmy();
-		if (unitList) 
+		if (unitList)
 		{
 			stackSize = unitList->Num();
 			for (sint32 i=0; i<unitList->Num(); i++)
@@ -1810,12 +1769,12 @@ void UnitActor::DrawHealthBar(void)
 				Unit top;
 
 				Army a      = Army(unitList->Access(i).GetArmy().m_id);
-				if (a.IsValid()) 
+				if (a.IsValid())
 				{
 					top = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 				}
 
-				if (!top.IsValid()) 
+				if (!top.IsValid())
 				{
 					top.m_id = unitList->Access(i).m_id;
 				}
@@ -1831,7 +1790,7 @@ void UnitActor::DrawHealthBar(void)
 	double  ratio;
 	if (m_unitID.IsValid())
 	{
-		if (stackSize > 1 && myCell->GetNumUnits()) 
+		if (stackSize > 1 && myCell->GetNumUnits())
 		{
 			ratio = std::max(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
 		}
@@ -1852,7 +1811,6 @@ void UnitActor::DrawHealthBar(void)
 		ratio = std::max(0.0, m_healthPercent);
 	}
 
-
 	POINT	iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
 
 	RECT	iconRect = {0, 0, iconDim.x, iconDim.y}; //	RECT	iconRect = {0, 0, iconDim.x, iconDim.y};  original
@@ -1863,12 +1821,12 @@ void UnitActor::DrawHealthBar(void)
 		unitAction = UNITACTION_IDLE;
 
 	POINT *     shieldPoint;
-	if (unitAction == UNITACTION_IDLE && 
+	if (unitAction == UNITACTION_IDLE &&
 	    m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL
 	   )
 	{
 		shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
-		OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
+		OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()),
 							  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
 	}
 	else
@@ -1876,7 +1834,7 @@ void UnitActor::DrawHealthBar(void)
 		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)unitAction) != NULL)
 		{
 			shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
-			OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
+			OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()),
 								  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
 		}
 		else
@@ -1908,7 +1866,7 @@ void UnitActor::DrawHealthBar(void)
 	if (black == 0x0000)
 		black = 0x0001;
 
-	if (g_theProfileDB->GetShowEnemyHealth() || 
+	if (g_theProfileDB->GetShowEnemyHealth() ||
 	    m_playerNum == g_selected_item->GetVisiblePlayer()
 	   )
 	{
@@ -1922,7 +1880,7 @@ void UnitActor::DrawHealthBar(void)
 		if (healthBar.bottom >= g_screenManager->GetSurfHeight()) return;
 
 		primitives_FrameRect16(g_screenManager->GetSurface(), &healthBar, black);
-		
+
 		InflateRect(&healthBar, -1, -1);
 
 		RECT    leftRect    = healthBar;
@@ -1987,7 +1945,7 @@ void UnitActor::DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stack)
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
 	sint32      displayedOwner;
-	if (    m_unitID.IsValid() 
+	if (    m_unitID.IsValid()
 	     && m_unitID.IsHiddenNationality()
 	     && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
 	   )
@@ -2008,17 +1966,17 @@ void UnitActor::DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stack)
 // Remove the next line when the scaling and centering of the text has been implemented
 // properly - or you want to test its operation. Currently, the generated text looks too
 // ugly to include it in a release.
-#define USE_PREDEFINED_ICONS	
+#define USE_PREDEFINED_ICONS
 
 #if defined(USE_PREDEFINED_ICONS)
 	MAPICON		icon = MAPICON_HERALD; // default: plain icon
 
-	if (stack > 1 && stack <= 9) 
+	if (stack > 1 && stack <= 9)
 	{
 		// single digit predefined icons
 		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
 	}
-	else if (stack >= 10 && stack <= 12) 
+	else if (stack >= 10 && stack <= 12)
 	{
 		// double digits predefined icons
 		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
@@ -2033,7 +1991,7 @@ void UnitActor::DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stack)
 	sprintf(strn, "%i", stack);
 
 	/// @todo Scale and center text
-	if (stack > 1 && stack <= 9) 
+	if (stack > 1 && stack <= 9)
 	{
 		// single digit
 		DrawText(x + 5, y, strn);
@@ -2044,14 +2002,13 @@ void UnitActor::DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stack)
 		DrawText(x, y, strn);
 	}
 #endif
-	
+
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
 
 	// @ToDo clean the code so that the following is superflous
 	x = x2;
 	y = y2;
 }
-
 
 //emod - moved these from stacking indicators to separate indicators
 
@@ -2171,7 +2128,7 @@ void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //iden
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
 	sint32      displayedOwner;
-	if (    m_unitID.IsValid() 
+	if (    m_unitID.IsValid()
 	     && m_unitID.IsHiddenNationality()
 	     && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
 	   )
@@ -2189,9 +2146,9 @@ void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //iden
 	sint32 y2 = y + iconDim.y;
 	sint32 w = iconDim.x;
 	sint32 h = iconDim.y;
-	
+
 	//If religious unit it shows the religion icon else it shows the national flag - E Aug 27 2007
-	
+
 	sint32  religionicon = 0;
 	if(m_unitID.IsValid()
 	&& m_unitID.GetDBRec()->GetHasReligionIconIndex(religionicon)
@@ -2202,7 +2159,7 @@ void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //iden
 	else if(g_theProfileDB->IsCivFlags())
 	{
 		sint32 civ = -1;
-		// Add civilization flags here - moved flags here and edited the 
+		// Add civilization flags here - moved flags here and edited the
 		// heralds to put numbers on national flags emod 2-21-2007
 		if(g_player[displayedOwner] != NULL)
 		{
@@ -2218,7 +2175,7 @@ void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //iden
 			)
 			{
 				Player * p = walk.GetObj();
-		
+
 				if(p)
 				{
 					Civilisation *civP = p->GetCivilisation();
@@ -2262,7 +2219,7 @@ void UnitActor::DrawSelectionBrackets(void)
 	RECT		rect;
 	SetRect(&rect, 0, 0, 1, 1);
 
- 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2, 
+ 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2,
 						m_y + (sint32)(k_TILE_GRID_HEIGHT * g_tiledMap->GetScale())/2);
 
 	InflateRect(&rect, 25, 25);
@@ -2285,13 +2242,13 @@ void UnitActor::DrawSelectionBrackets(void)
 	Assert(botLeft); if (!botLeft) return;
 
 	COLOR color = COLOR_YELLOW;
-	if (m_unitID.IsValid()) 
+	if (m_unitID.IsValid())
     {
 		if (m_unitID.GetArmy().IsValid() && m_unitID.GetArmy().CanMove())
 		{
 			color = COLOR_GREEN;
 		}
-		else if (m_unitID.IsCity()) 
+		else if (m_unitID.IsCity())
         {
 			color = COLOR_RED;
 		}
@@ -2339,8 +2296,8 @@ uint16 UnitActor::GetHeight(void) const
 	if (m_unitSpriteGroup == NULL) return 0;
 
 	Sprite * theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-	
-    if (!theSprite && (m_curUnitAction == UNITACTION_IDLE)) 
+
+    if (!theSprite && (m_curUnitAction == UNITACTION_IDLE))
 	{
 		theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
 	}
@@ -2359,10 +2316,9 @@ void UnitActor::GetBoundingRect(RECT *rect) const
 	if(!m_unitSpriteGroup)
 		return;
 
-
 	POINT	hotPoint = m_unitSpriteGroup->GetHotPoint(m_curUnitAction, m_facing);
 	double	scale = g_tiledMap->GetScale();
-	
+
 	sint32 x = m_x;
 	if (m_facing >= 5) {
 		x += (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - (GetWidth()-hotPoint.x)) * scale);
@@ -2383,7 +2339,7 @@ void UnitActor::Serialize(CivArchive &archive)
 	{
 		EndTurnProcess();
 
-		if (m_unitID.IsValid() && m_unitID.IsCity()) 
+		if (m_unitID.IsValid() && m_unitID.IsCity())
 		{
 			m_unitID.GetPop(m_size);
 		}
@@ -2408,7 +2364,7 @@ void UnitActor::Serialize(CivArchive &archive)
 #endif
 		archive << m_unitVisionRange;
 		archive << m_unitVisibility;
-		
+
 		m_pos.Serialize(archive);
 		m_spriteState->Serialize(archive);
 	}
@@ -2417,7 +2373,7 @@ void UnitActor::Serialize(CivArchive &archive)
 		archive >> m_facing;
 		archive >> m_lastMoveFacing;
 		archive >> m_size;
-		
+
 		m_isUnseenCellActor = (BOOL)archive.GetUINT8();
 
 		m_type = (GROUPTYPE)archive.GetUINT8();
@@ -2478,58 +2434,55 @@ LOADTYPE UnitActor::GetLoadType(void) const
 
 void UnitActor::FullLoad(UNITACTION action)
 {
-	
-	
-	if (!g_theProfileDB->IsUnitAnim()) 
+
+	if (!g_theProfileDB->IsUnitAnim())
 		return;
 
-	if (!m_unitSpriteGroup) 
+	if (!m_unitSpriteGroup)
 		return;
-	if (m_loadType == LOADTYPE_FULL) 
+	if (m_loadType == LOADTYPE_FULL)
 		return;
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	SpriteGroup *group = g_unitSpriteGroupList->GetSprite(m_spriteID, m_unitSpriteGroup->GetType(), LOADTYPE_FULL,(GAME_ACTION)action);
-	
+
 	m_loadType = LOADTYPE_FULL;
 
-	
 	Assert(group == m_unitSpriteGroup);
 }
 
 
 
 
-bool UnitActor::ActionMove(Action *actionObj)	
+bool UnitActor::ActionMove(Action *actionObj)
 {
 	Assert(actionObj != NULL);
-	
-	if (actionObj == NULL) 
+
+	if (actionObj == NULL)
 		return false;
 
 	if(GetNeedsToDie())
 	   return false;
-	
+
 	SetIsFortifying(FALSE);
 	SetIsFortified (FALSE);
 
-	
 	actionObj->SetActionType(UNITACTION_MOVE);
 	actionObj->SetAnimPos(GetHoldingCurAnimPos(UNITACTION_MOVE));
 	actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(UNITACTION_MOVE));
 	actionObj->SetCurrentEndCondition(ACTIONEND_PATHEND);
-	
-	if (GetLoadType()!=LOADTYPE_FULL) 
+
+	if (GetLoadType()!=LOADTYPE_FULL)
 	 	FullLoad(UNITACTION_MOVE);
 
 	Anim * anim	= CreateAnim(UNITACTION_MOVE);
 	Assert(anim != NULL);
-   	if (anim == NULL) 
+   	if (anim == NULL)
    		return false;
 
 	actionObj->SetAnim(anim);
@@ -2541,42 +2494,41 @@ bool UnitActor::ActionMove(Action *actionObj)
 
 	AddAction(actionObj);
 
-	if (GetIsTransported() == k_TRANSPORTREMOVEONLY) 
+	if (GetIsTransported() == k_TRANSPORTREMOVEONLY)
     {
 		TerminateLoopingSound(SOUNDTYPE_SFX);
     }
-	else 
+	else
 	{
 	    sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
 
 		if ((visiblePlayer == GetPlayerNum()) ||
-			(GetUnitVisibility() & (1 << visiblePlayer))) 
+			(GetUnitVisibility() & (1 << visiblePlayer)))
         {
 			AddLoopingSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
         }
    	}
-	
+
 	return true;
 }
 
 
-
-bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)	
+bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 {
 	Assert(actionObj != NULL);
-	
-	if (actionObj == NULL) 
+
+	if (actionObj == NULL)
 		return false;
 
-	if(GetNeedsToDie()) 
+	if(GetNeedsToDie())
 	   return false;
 
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
-	
+
    	if(!TryAnimation(actionObj,UNITACTION_ATTACK))
 	   if(!TryAnimation(actionObj,UNITACTION_IDLE))
 	 	 return false;
-	
+
 	actionObj->SetActionType(UNITACTION_ATTACK);
 	actionObj->SetFacing(facing);
 	actionObj->SetUnitsVisibility(GetUnitVisibility());
@@ -2584,55 +2536,49 @@ bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 
 	AddAction(actionObj);
 
-	
 	TerminateLoopingSound(SOUNDTYPE_SFX);
 
 	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
-	
-    if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer))) 
+
+    if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer)))
 		  AddSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
 
-	
 	return true;
-}		   
+}
 
-
-bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)	
+bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 {
 	Assert(actionObj != NULL);
-	
-	if (actionObj==NULL) 
+
+	if (actionObj==NULL)
 		return false;
 
-	if(GetNeedsToDie()) 
+	if(GetNeedsToDie())
 	   return false;
 
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
 
-	
 	if(!TryAnimation(actionObj,UNITACTION_WORK))
 	   if(!TryAnimation(actionObj,UNITACTION_ATTACK))
 		  if(!TryAnimation(actionObj,UNITACTION_IDLE))
 			 return false;
 
-	
 	actionObj->SetActionType(UNITACTION_ATTACK);
 	actionObj->SetFacing(facing);
 	actionObj->SetUnitsVisibility(GetUnitVisibility());
 	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-	
+
 	AddAction(actionObj);
-	
+
 	TerminateLoopingSound(SOUNDTYPE_SFX);
 
 	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
-	
-	if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer))) 
+
+	if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer)))
 		AddSound(SOUNDTYPE_SFX, actionObj->GetSoundEffect());
 
 	return true;
 }
-
 
 bool UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
 {
@@ -2640,16 +2586,15 @@ bool UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
 
 	Anim * theAnim = CreateAnim(action); // theAnim must be deleted
 	if (theAnim)
-	{ 
+	{
         actionObj->SetAnimPos(GetHoldingCurAnimPos(action));
         actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(action));
         actionObj->SetAnim(theAnim);
         return true;
 	}
-	
+
 	return false;
 }
-
 
 void UnitActor::DumpFullLoad(void)
 {
@@ -2675,8 +2620,8 @@ BOOL UnitActor::HitTest(POINT mousePt)
     bool    isSpecialDelay      = m_curAction && m_curAction->SpecialDelayProcess();
 
 	return m_unitSpriteGroup->HitTest
-                (mousePt, m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, 
-                 m_facing, g_tiledMap->GetScale(), m_transparency, color, flags, 
+                (mousePt, m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset,
+                 m_facing, g_tiledMap->GetScale(), m_transparency, color, flags,
                  isSpecialDelay, isDirectionAttack
                 );
 }
@@ -2694,7 +2639,6 @@ void UnitActor::AddLoopingSound(uint32 sound_type, sint32 sound_id)
 
 }
 
-
 void UnitActor::AddSound(uint32 sound_type, sint32 sound_id)
 {
 	if ((g_soundManager)&&(sound_id>=0))
@@ -2703,13 +2647,11 @@ void UnitActor::AddSound(uint32 sound_type, sint32 sound_id)
 								 GetPos().x, GetPos().y);
 }
 
-
-void UnitActor::TerminateLoopingSound(uint32 sound_type) 
+void UnitActor::TerminateLoopingSound(uint32 sound_type)
 {
 	if (g_soundManager)
  		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,GetUnitID());
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -2750,7 +2692,7 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	{
 		if(buildingutil_Get(b, m_playerNum)->GetShowCityIconBottomIndex(cityIcon))
 		{
-			if(unit.CD()->GetImprovements() & ((uint64)1 << b)) 
+			if(unit.CD()->GetImprovements() & ((uint64)1 << b))
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST)
 				{
@@ -2759,22 +2701,21 @@ void UnitActor::DrawCityImprovements(bool fogged)
 					else
 							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
 				}
-				else 
+				else
 				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
 					else
 						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight());
 				}
 				nudgeX += 5;
 			}
 		}
 	}
-
 
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
@@ -2793,11 +2734,11 @@ void UnitActor::DrawCityImprovements(bool fogged)
 				{
 					if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
 					else
 						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight());
 				}
 				nudgeX += 5;
@@ -2806,7 +2747,6 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	}
 	}
 }
-
 
 #ifdef _DEBUG
 void UnitActor::DumpActor(void)
@@ -2823,17 +2763,17 @@ void UnitActor::DumpActor(void)
 		DPRINTF(k_DBG_UI, ("  m_curAction.m_sequence       :%#.8lx\n", m_curAction->GetSequence()));
 		if (m_curAction->GetSequence()) {
 			DPRINTF(k_DBG_UI, ("Actor %#.8lx m_curAction:\n", this));
-			DPRINTF(k_DBG_UI, ("  m_curAction.m_sequence->m_sequenceID     :%ld\n", 
+			DPRINTF(k_DBG_UI, ("  m_curAction.m_sequence->m_sequenceID     :%ld\n",
 							m_curAction->GetSequence()->GetSequenceID()));
 			DQItem		*item = m_curAction->GetSequence()->GetItem();
 			g_director->DumpItem(item);
 		}
 	}
-	DPRINTF(k_DBG_UI, (" ------------------\n"));		
+	DPRINTF(k_DBG_UI, (" ------------------\n"));
 
 	DPRINTF(k_DBG_UI, ("  m_actionQueue         :%d\n", m_actionQueue.GetNumItems()));
 	if (m_actionQueue.GetNumItems() > 0) {
-		for (size_t i = 0; i < m_actionQueue.GetNumItems(); i++) 
+		for (size_t i = 0; i < m_actionQueue.GetNumItems(); i++)
         {
 		    Action * action = NULL;
 			m_actionQueue.GetQueueItem(i, action);
@@ -2844,14 +2784,13 @@ void UnitActor::DumpActor(void)
 				DPRINTF(k_DBG_UI, ("  action.m_finished       :%ld\n", action->Finished()));
 				DPRINTF(k_DBG_UI, ("  action.m_sequence       :%#.8lx\n", action->GetSequence()));
 				if (action->GetSequence()) {
-					DPRINTF(k_DBG_UI, ("  action.m_sequence->m_sequenceID:%ld\n", 
+					DPRINTF(k_DBG_UI, ("  action.m_sequence->m_sequenceID:%ld\n",
 									action->GetSequence()->GetSequenceID()));
 					g_director->DumpItem(action->GetSequence()->GetItem());
 				}
 			}
 		}
 	}
-	DPRINTF(k_DBG_UI, (" ------------------\n"));		
+	DPRINTF(k_DBG_UI, (" ------------------\n"));
 }
 #endif
-

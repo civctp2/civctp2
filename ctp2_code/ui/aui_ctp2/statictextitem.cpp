@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -41,11 +28,9 @@ StaticTextItem::StaticTextItem(
 	aui_TextBase( text ),
 	aui_Static( retval, id, x, y, width, height, text )
 {
-	
 
 
 	m_infoId = textId;
 	m_category = category;
 	m_itemType = itemType;
 }
-

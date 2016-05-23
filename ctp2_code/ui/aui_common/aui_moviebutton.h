@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,9 +43,7 @@ class aui_Movie;
 class aui_Surface;
 
 
-
 #define k_AUI_MOVIEBUTTON_LDL_MOVIE		"movie"
-
 
 
 class aui_MovieButton : public aui_Button
@@ -80,18 +78,16 @@ protected:
 
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( MBCHAR *movie );
-	
+
 public:
 	aui_Movie *SetMovie( const MBCHAR *movie );
 	aui_Movie *GetMovie( void ) const { return m_movie; }
 
 	void SetFullScreen(bool on) { m_fullScreen = on; }
 
-	
 	virtual AUI_ERRCODE Idle( void );
 
-	
-	
+
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -106,5 +102,4 @@ protected:
 	bool m_fullScreen;
 };
 
-
-#endif 
+#endif

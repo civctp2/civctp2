@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -82,7 +82,7 @@ InstallationData::InstallationData(ID id,
 
 
 
-	
+
 	ENQUEUE();
 }
 
@@ -96,7 +96,6 @@ void InstallationData::Serialize(CivArchive &archive)
 	if(archive.IsStoring()) {
 		GameObj::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_visibility)+sizeof(m_visibility));
-
 
 		archive<<(uint32)(m_lesser != NULL);
 		if (m_lesser)
@@ -122,7 +121,6 @@ void InstallationData::Serialize(CivArchive &archive)
 			m_greater = new InstallationData(archive);
 	}
 }
-
 
 
 void InstallationData::DoVision()
@@ -156,7 +154,7 @@ void InstallationData::DoVision()
 		sint32 ls = GetDistance(this, oinst, sint32(maxVisionRange));
 		if(ls > maxrsq)
 			continue;
-		
+
 		if(ls <= hisrsq && !(m_visibility & (1 << oinst->m_owner))) {
 			if(g_theTerrainImprovementDB->Get(oinst->m_type)->GetCanSee() &
 			   g_theTerrainImprovementDB->Get(m_type)->GetCanSee()) {
@@ -165,7 +163,7 @@ void InstallationData::DoVision()
 		}
 
 		if(ls <= myrsq && !(oinst->m_visibility & (1 << m_owner))) {
-			
+
 			if (g_theTerrainImprovementDB->Get(oinst->m_type)->GetCanSee() &
 				g_theTerrainImprovementDB->Get(m_type)->GetCanSee()) {
 				oinst->m_visibility |= 1 << m_owner;
@@ -173,7 +171,6 @@ void InstallationData::DoVision()
 		}
 	}
 
-	
 	if(unitutil_GetMaxVisionRange() > maxVisionRange) {
 		maxVisionRange = unitutil_GetMaxVisionRange();
 	}
@@ -211,7 +208,6 @@ void InstallationData::DoVision()
 	}
 }
 
-
 void InstallationData::CheckVision(sint32 owner)
 {
 	MapPoint topleft = m_point;
@@ -247,7 +243,7 @@ void InstallationData::CheckVision(sint32 owner)
 	}
 
 	if(!canBeSeen) {
-		
+
 		maxVisionRange = unitutil_GetMaxVisionRange();
 		maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 		topleft = m_point;
@@ -260,7 +256,7 @@ void InstallationData::CheckVision(sint32 owner)
 		sint32 un = unitArray.Num();
 		for(i = 0; i < un; i++) {
 			UnitData *ud = unitArray[i].AccessData();
-			sint32 ls = UnitData::GetDistance(Installation(m_id), 
+			sint32 ls = UnitData::GetDistance(Installation(m_id),
 											  ud, sint32(maxVisionRange));
 			if(ls > maxrsq)
 				continue;
@@ -277,12 +273,12 @@ void InstallationData::CheckVision(sint32 owner)
 		}
 	}
 
-	if(canBeSeen) { 
+	if(canBeSeen) {
 		m_visibility |= (1 << owner);
 	}
 }
 
-sint32 InstallationData::GetDistance(InstallationData* inst1, 
+sint32 InstallationData::GetDistance(InstallationData* inst1,
 									 InstallationData* inst2,
 									 sint32 wrapRange)
 {
@@ -313,7 +309,7 @@ void InstallationData::RebuildQuadTree()
 	if(m_greater)
 		((InstallationData*)m_greater)->RebuildQuadTree();
 }
-	
+
 void InstallationData::UseAirfield()
 {
 	m_airfieldLastUsed = g_turn->GetRound();
@@ -348,7 +344,7 @@ void InstallationData::ChangeOwner(sint32 toOwner)
 	{
 		g_player[toOwner]->AddInstallation(Installation(m_id));
 	}
-	
+
 	m_owner = toOwner;
 
 	if(toOwner >= 0)
@@ -359,6 +355,6 @@ void InstallationData::ChangeOwner(sint32 toOwner)
 
 void InstallationData::SetVisible(sint32 player)
 {
-	m_visibility |= (1 << player); 
+	m_visibility |= (1 << player);
 	g_tiledMap->RedrawTile(&m_point);
 }

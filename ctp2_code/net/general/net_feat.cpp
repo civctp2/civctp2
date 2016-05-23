@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -117,7 +117,7 @@ void NetFeatTracker::Packetize(uint8 * buf, uint16 & size)
 
 	PUSHLONG(g_featTracker->m_activeList->GetCount());
 	PointerList<Feat>::Walker walk(g_featTracker->m_activeList);
-	while (walk.IsValid()) 
+	while (walk.IsValid())
 	{
 		Feat * feat = walk.GetObj();
 		PUSHLONG(feat->GetType());
@@ -179,7 +179,7 @@ void NetFeatTracker::Unpacketize(uint16 id, uint8 * buf, uint16 size)
 		sint32	featIndex;
 		sint32	player;
 		sint32	turn;
-		
+
 		PULLLONG(featIndex);
 		PULLLONG(player);
 		PULLLONG(turn);

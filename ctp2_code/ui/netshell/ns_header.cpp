@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,7 +70,6 @@ ns_Header::ns_Header(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 ns_Header::ns_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -105,18 +104,15 @@ ns_Header::ns_Header(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 AUI_ERRCODE ns_Header::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
 
-
 AUI_ERRCODE ns_Header::InitCommon( void )
 {
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
 {

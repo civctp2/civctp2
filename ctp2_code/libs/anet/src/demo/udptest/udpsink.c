@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -69,9 +69,9 @@ void main(int argc, char *argv[])
 		exit(1);
 	}
 	memset((caddr_t)&my_addr, 0, sizeof(struct sockaddr_in));
-	my_addr.sin_family = AF_INET; 
-	my_addr.sin_port = htons(port); 
-	my_addr.sin_addr.s_addr = htons(INADDR_ANY); 
+	my_addr.sin_family = AF_INET;
+	my_addr.sin_port = htons(port);
+	my_addr.sin_addr.s_addr = htons(INADDR_ANY);
 
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, pe->p_proto)) < 0) {
 		printf("socket error:%d\n", errno);

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
@@ -36,33 +36,33 @@
 #ifndef GAMESOUNDS_H__
 #define GAMESOUNDS_H__
 
-struct GameSoundData 
+struct GameSoundData
 {
 	sint32		id;
 	MBCHAR *    name;
 };
 
-enum GAMESOUNDS 
+enum GAMESOUNDS
 {
 	GAMESOUNDS_SPACE_LAUNCH,
 
 	GAMESOUNDS_BUILDING_STARTED,
 	GAMESOUNDS_BUILDING_COMPLETE,
-	
+
 	GAMESOUNDS_GOODY_BOGUS,
 	GAMESOUNDS_GOODY_CITY,
 	GAMESOUNDS_GOODY_GOLD,
 	GAMESOUNDS_GOODY_ADVANCE,
 	GAMESOUNDS_GOODY_UNIT,
-	
+
 	GAMESOUNDS_SETTLE_CITY,
 
 	GAMESOUNDS_NET_YOUR_TURN,
 
 	GAMESOUNDS_EXPLOSION,
 
-    GAMESOUNDS_DEFAULT_FAIL, 
-    GAMESOUNDS_DEFAULT_CLICK, 
+    GAMESOUNDS_DEFAULT_FAIL,
+    GAMESOUNDS_DEFAULT_CLICK,
 	GAMESOUNDS_BUTTON_PRESS,
 
 	GAMESOUNDS_CHEER_CASTLE,
@@ -92,7 +92,6 @@ enum GAMESOUNDS
 	GAMESOUNDS_DISBANDED,
 	GAMESOUNDS_CHAT_MESSAGE,
 
-	
 	GAMESOUNDS_ADVANCE,
 	GAMESOUNDS_BOO,
 	GAMESOUNDS_CHANGE_GOV,
@@ -130,14 +129,12 @@ enum GAMESOUNDS
 	GAMESOUNDS_HACKNEYED,
 	GAMESOUNDS_ARCHER_A,
 	GAMESOUNDS_ARCHER_B,
-	GAMESOUNDS_ARCHER_C, 
-	GAMESOUNDS_ARCHER_D, 
+	GAMESOUNDS_ARCHER_C,
+	GAMESOUNDS_ARCHER_D,
 
-	
 
 	GAMESOUNDS_MAX
 };
-
 
 sint32 gamesounds_GetGameSoundID(sint32 gamesound);
 

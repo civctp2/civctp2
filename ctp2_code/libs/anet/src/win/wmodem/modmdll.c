@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,119 +29,118 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 // Wrapper to adapt the simple packetizing serial driver to Zobel's comm API.
 //
-// $Log: modmdll.c $ 
-// Revision 1.11  1997/10/01 21:52:27  anitalee 
-// return ser error values 
-// Revision 1.10  1997/09/27 01:43:00  dkegel 
-// Should allow freeze/thaw of modem sessions, as long as thaw-er is child of freeze-r. 
-// Revision 1.9  1997/04/02 00:50:24  dkegel 
-// 1. Changed default init string to one that gets it to do status 
-// codes on us robotics (the kind that have dipswitches that turn status 
-// codes off by default!) 
-// 2. Don't check status until we've sent init string - 'cause on 
-// some modems you can't! 
-// 3. Fixed bug in checking return value of MyHMSendString() 
-// 4. Always produce log file 
-// Revision 1.8  1997/03/10 06:05:52  dkegel 
-// 1. Jerry's unified serial/modem driver code. 
-// 2. Dan hardcoded serial driver to ignore baud rate, always use 38400. 
+// $Log: modmdll.c $
+// Revision 1.11  1997/10/01 21:52:27  anitalee
+// return ser error values
+// Revision 1.10  1997/09/27 01:43:00  dkegel
+// Should allow freeze/thaw of modem sessions, as long as thaw-er is child of freeze-r.
+// Revision 1.9  1997/04/02 00:50:24  dkegel
+// 1. Changed default init string to one that gets it to do status
+// codes on us robotics (the kind that have dipswitches that turn status
+// codes off by default!)
+// 2. Don't check status until we've sent init string - 'cause on
+// some modems you can't!
+// 3. Fixed bug in checking return value of MyHMSendString()
+// 4. Always produce log file
+// Revision 1.8  1997/03/10 06:05:52  dkegel
+// 1. Jerry's unified serial/modem driver code.
+// 2. Dan hardcoded serial driver to ignore baud rate, always use 38400.
 // Revision 1.7  1997/03/09 02:50:55  dkegel
 // Obey special 'stop' variable;
 // obey baud rate;
 // fix hangup
 // revision 1.6  1997/03/08 01:45:38  dkegel
 // Jerry's new modem driver.
-// Revision 1.5  1997/03/01 21:04:30  dkegel 
-// Got rid of compiler warning by if 0'ing a dprint 
-// Revision 1.4  1997/01/31 02:44:19  dkegel 
-// Updated dependencies, converted to ddprint.h. 
-// Revision 1.3  1996/12/13 23:15:06  jgraebner 
-// Fixed invalid pointer reference. 
-// Revision 1.2  1996/12/13 00:16:25  dkegel 
-// nodeID now a byte array instead of a structure.  Not used, just zero. 
-// Revision 1.1  1996/12/12 22:09:32  dkegel 
-// Initial revision 
-// Revision 1.21  1996/09/10 05:46:23  dkegel 
-// Don't rely on Greenleaf to know what IRQ to use- set it every time. 
-// Fixes a bug where the IRQ setting last chosen overrides 
-// new setting if new setting is 'DEFAULT'. 
-// Revision 1.20  1996/09/06 23:08:18  dkegel 
-// Replaced commGroupSubtract with commSetParam. 
-// Revision 1.19  1996/07/01 20:52:46  dkegel 
-// Check sessionID during ramp check; catches open cables. 
-// Revision 1.18  1996/07/01 19:15:56  dkegel 
-// Use correct bit of req->flags to decide whether to dial. 
-// Revision 1.17  1996/06/30 22:22:50  dkegel 
-// Loopback test now triggered by -Ktest 
-// Revision 1.16  1996/06/30 21:17:09  dkegel 
-// Send a ramp after connection, get ramp from peer, and report errors to log. 
-// (Can't be fatal, since partner might not have ramp code.) 
-// Revision 1.15  1996/06/29 17:56:06  dkegel 
-// 1. No longer use HMReset etc. until we've verified that driver is 
-// sending characters properly, as HMReset locks up if IRQ is wrong. 
-// 2. Detect 'driver not sending characters' condition during initial 
-// reset attempt, return comm_STATUS_FULL to indicate IRQ problem. 
-// 3. Don't try to hang up if we never even took the darn thing offhook; 
-// this saves a LOT of time if modem is not responding at all. 
-// Revision 1.14  1996/06/26 18:04:08  dkegel 
-// Added sessionId to log. 
-// Revision 1.13  1996/06/25 21:16:46  dkegel 
-// Added modem log file (modem.log) always generated when dialing/answering. 
-// Revision 1.12  1996/06/25 20:05:16  dkegel 
-// 1. Return comm_STATUS_BAD_VERSION if commInitReq wrong size. 
-// 2. Support commInitReq.dialing_method. 
-// Revision 1.11  1996/06/25 18:51:02  dkegel 
-// Added support for non-standard irq's back in. 
-// Now checks hwirq and baseadr for validity before using. 
-// Revision 1.9  1996/06/24 18:23:08  dkegel 
-// Added hwirq and baseadr parameters to ser_config to allow non-standard 
-// irq's. 
-// Revision 1.8  1996/06/05 19:54:55  dkegel 
-// Supra makes us wait longer for responses. 
-// This will make aborting painfully slow, but oh well. 
-// Revision 1.7  1996/05/22 00:45:32  dkegel 
-// Remove "Driver" from driver description. 
-// Revision 1.6  1996/05/15 02:09:44  dkegel 
-// 1. Return standard comm_STATUS codes in status field of response from 
-// commInit. 
-// 2. Increased dialing timeout to 60 seconds, decreased ok timeout to 1 second. 
-// 3. Fixed call completion code checking to handle modems with non-standard 
-// "no dial tone" message. 
-// Revision 1.5  1996/05/14 23:23:58  dkegel 
-// 1. Eat any and all keystrokes in the buffer at commTerm() time. 
-// (Yes, this is a kludge) 
-// 2. Only wait one second for modem to respond, not three. 
-// Revision 1.4  1996/05/10 21:33:50  dkegel 
-// 1. Retry modem reset up to four times. 
-// 2. Recognize BUSY, ERROR, etc.. modem result codes. 
-// 3. Clear buffers before many HM commands in hopes of working around 
-// possible problems in HM commands if garbage is in buffer. 
-// Revision 1.3  1996/05/09 20:28:15  dkegel 
-// 1. Longer timeout, especially on answer. 
-// 2. Allow lookup of our own address, i.e. commInit can now return PLAYER_ME 
-// 3. Easier to read modem init code 
-// 4. Moved hangup code to subroutine, but don't call it yet before 
-// dialling... seems to cause problems. 
-// Revision 1.2  1996/05/09 01:57:49  dkegel 
-// 1. Abort dial if user hits a key. 
-// 2. Call commTerm to hang up if something weird happens during dialing. 
-// 3. Change driver name and flags to be right for modem. 
-// Revision 1.1  1996/05/07 00:29:34  dkegel 
-// Initial revision 
-// Revision 1.4  1996/04/30 21:00:12  dkegel 
-// Added "comm_DRIVER_IS_FAST" to capabilities on theory that 
-// speed will always be 19200 and there will only be two users. 
-// Revision 1.3  1996/03/06 23:46:38  dkegel 
-// Shell can't handle drivers that don't need phone numbers and don't allow 
-// gamelists, so turn on the allows_gamelist bit. 
-// Revision 1.2  1996/02/29 01:36:48  dkegel 
-// 1. Implemented commSayHi etc. 
-// 2. Implemented new dpEnumTransports capabilities signature. 
-// 3. Implemented new parameters to commInit. 
-// Revision 1.1  1996/02/25 04:50:57  dkegel 
-// Initial revision 
+// Revision 1.5  1997/03/01 21:04:30  dkegel
+// Got rid of compiler warning by if 0'ing a dprint
+// Revision 1.4  1997/01/31 02:44:19  dkegel
+// Updated dependencies, converted to ddprint.h.
+// Revision 1.3  1996/12/13 23:15:06  jgraebner
+// Fixed invalid pointer reference.
+// Revision 1.2  1996/12/13 00:16:25  dkegel
+// nodeID now a byte array instead of a structure.  Not used, just zero.
+// Revision 1.1  1996/12/12 22:09:32  dkegel
+// Initial revision
+// Revision 1.21  1996/09/10 05:46:23  dkegel
+// Don't rely on Greenleaf to know what IRQ to use- set it every time.
+// Fixes a bug where the IRQ setting last chosen overrides
+// new setting if new setting is 'DEFAULT'.
+// Revision 1.20  1996/09/06 23:08:18  dkegel
+// Replaced commGroupSubtract with commSetParam.
+// Revision 1.19  1996/07/01 20:52:46  dkegel
+// Check sessionID during ramp check; catches open cables.
+// Revision 1.18  1996/07/01 19:15:56  dkegel
+// Use correct bit of req->flags to decide whether to dial.
+// Revision 1.17  1996/06/30 22:22:50  dkegel
+// Loopback test now triggered by -Ktest
+// Revision 1.16  1996/06/30 21:17:09  dkegel
+// Send a ramp after connection, get ramp from peer, and report errors to log.
+// (Can't be fatal, since partner might not have ramp code.)
+// Revision 1.15  1996/06/29 17:56:06  dkegel
+// 1. No longer use HMReset etc. until we've verified that driver is
+// sending characters properly, as HMReset locks up if IRQ is wrong.
+// 2. Detect 'driver not sending characters' condition during initial
+// reset attempt, return comm_STATUS_FULL to indicate IRQ problem.
+// 3. Don't try to hang up if we never even took the darn thing offhook;
+// this saves a LOT of time if modem is not responding at all.
+// Revision 1.14  1996/06/26 18:04:08  dkegel
+// Added sessionId to log.
+// Revision 1.13  1996/06/25 21:16:46  dkegel
+// Added modem log file (modem.log) always generated when dialing/answering.
+// Revision 1.12  1996/06/25 20:05:16  dkegel
+// 1. Return comm_STATUS_BAD_VERSION if commInitReq wrong size.
+// 2. Support commInitReq.dialing_method.
+// Revision 1.11  1996/06/25 18:51:02  dkegel
+// Added support for non-standard irq's back in.
+// Now checks hwirq and baseadr for validity before using.
+// Revision 1.9  1996/06/24 18:23:08  dkegel
+// Added hwirq and baseadr parameters to ser_config to allow non-standard
+// irq's.
+// Revision 1.8  1996/06/05 19:54:55  dkegel
+// Supra makes us wait longer for responses.
+// This will make aborting painfully slow, but oh well.
+// Revision 1.7  1996/05/22 00:45:32  dkegel
+// Remove "Driver" from driver description.
+// Revision 1.6  1996/05/15 02:09:44  dkegel
+// 1. Return standard comm_STATUS codes in status field of response from
+// commInit.
+// 2. Increased dialing timeout to 60 seconds, decreased ok timeout to 1 second.
+// 3. Fixed call completion code checking to handle modems with non-standard
+// "no dial tone" message.
+// Revision 1.5  1996/05/14 23:23:58  dkegel
+// 1. Eat any and all keystrokes in the buffer at commTerm() time.
+// (Yes, this is a kludge)
+// 2. Only wait one second for modem to respond, not three.
+// Revision 1.4  1996/05/10 21:33:50  dkegel
+// 1. Retry modem reset up to four times.
+// 2. Recognize BUSY, ERROR, etc.. modem result codes.
+// 3. Clear buffers before many HM commands in hopes of working around
+// possible problems in HM commands if garbage is in buffer.
+// Revision 1.3  1996/05/09 20:28:15  dkegel
+// 1. Longer timeout, especially on answer.
+// 2. Allow lookup of our own address, i.e. commInit can now return PLAYER_ME
+// 3. Easier to read modem init code
+// 4. Moved hangup code to subroutine, but don't call it yet before
+// dialling... seems to cause problems.
+// Revision 1.2  1996/05/09 01:57:49  dkegel
+// 1. Abort dial if user hits a key.
+// 2. Call commTerm to hang up if something weird happens during dialing.
+// 3. Change driver name and flags to be right for modem.
+// Revision 1.1  1996/05/07 00:29:34  dkegel
+// Initial revision
+// Revision 1.4  1996/04/30 21:00:12  dkegel
+// Added "comm_DRIVER_IS_FAST" to capabilities on theory that
+// speed will always be 19200 and there will only be two users.
+// Revision 1.3  1996/03/06 23:46:38  dkegel
+// Shell can't handle drivers that don't need phone numbers and don't allow
+// gamelists, so turn on the allows_gamelist bit.
+// Revision 1.2  1996/02/29 01:36:48  dkegel
+// 1. Implemented commSayHi etc.
+// 2. Implemented new dpEnumTransports capabilities signature.
+// 3. Implemented new parameters to commInit.
+// Revision 1.1  1996/02/25 04:50:57  dkegel
+// Initial revision
 //
-
 
 /*************************************************************************************
 
@@ -216,14 +215,14 @@ static int commPortIsAvailable(const char *name)
 	HANDLE h;
 
 	memset(&SecurityAttributes, 0, sizeof(SECURITY_ATTRIBUTES));
-	SecurityAttributes.nLength = sizeof( SECURITY_ATTRIBUTES ); 
+	SecurityAttributes.nLength = sizeof( SECURITY_ATTRIBUTES );
 
 	h = CreateFile(name, GENERIC_READ | GENERIC_WRITE,
 		0,                    // exclusive access
 		&SecurityAttributes,
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL, NULL);
-	
+
 	if (INVALID_HANDLE_VALUE != h) {
 		CloseHandle(h);
 		return TRUE;
@@ -299,7 +298,7 @@ commEnumPorts(
 	DPRINT(("commEnumPorts: %d port(s) found.\n", nports));
 	return TRUE;
 }
-		
+
 /*-------------------------------------------------------------------------
  Notifies stub of new serial handle or ask it to destroy its copy (by
  passing INVALID_HANDLE_VALUE) so new one can be created.
@@ -382,7 +381,7 @@ static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, long
 				if (*p == '\n' || *p == '\r')
 					break;
 				else if (*p != 0) {
-					buflen--; 
+					buflen--;
 					p++;
 				}
 			}
@@ -394,7 +393,6 @@ static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, long
 	DPRINT(("myHMInputLine: Returns buffer '%s', time remaining %d\n", buf, timeout));
 	return timeout;
 }
-
 
 static int logfd = __ERROR;
 
@@ -408,7 +406,6 @@ static void fdclose(void)
 {
   if (logfd != __ERROR)  close(logfd);
 }
-
 
 /*************************************************************************************
 
@@ -432,15 +429,15 @@ int cdecl my_ddprintf(const char *	__format,  ...)
     int     len;
     char    buf[1024];
   	va_list	argptr;
-  
+
     va_start(argptr, __format);
-  
+
   	len = vsprintf(buf, __format, argptr);
-  
+
   	va_end(argptr);
-  
+
     fdprint(buf);
-  
+
   	return(len);
 }
 #endif
@@ -495,7 +492,7 @@ static int MyHMSendString(ser_t *ser, char *s, long *stop)
 		  if (!strncmp(response, "0", sizeof("0") - 1)) ok = TRUE;
 		  DPRINT(("myHMSendString: response is '%s'\n", response));
 	  }
-  } 
+  }
   while (!ok);
 
   return !ok;
@@ -540,7 +537,6 @@ static int MyHMDial(ser_t *ser, char *s, int dialing_method)
   return FALSE;
 }
 
-
 /*************************************************************************************
 
                                   MyHMReset()
@@ -554,7 +550,7 @@ static int MyHMReset(ser_t *ser, int ntries, long *stop)
 
 {
 	int i;
-	
+
 	for (i = 0; i < ntries; i++)
 	{
 		if (stop && *stop)
@@ -566,14 +562,13 @@ static int MyHMReset(ser_t *ser, int ntries, long *stop)
 	return 1;
 }
 
-
 /*************************************************************************************
 
                                   HangUp()
 
 **************************************************************************************/
 
-void serio_Sleep(serio_t *serio, int ms) 
+void serio_Sleep(serio_t *serio, int ms)
 {
 	while (ms > 0) {
 		serio_poll(serio);
@@ -594,9 +589,9 @@ static void HangUp(void)
 
 	DPRINT(("HangUp: Starting at %ld\n", time(0)));
 
-	if (!already_hungup) 
+	if (!already_hungup)
 	{
-		for (i = 0; i<2; i++) 
+		for (i = 0; i<2; i++)
 		{
 			DPRINT(("HangUp: Trying to hang up %ld\n", time(0)));
 
@@ -613,16 +608,15 @@ static void HangUp(void)
 			if (err == 0) break;
 		}
 		DPRINT(("HangUp: Sending hangup string %ld\n", time(0)));
-		
+
 		serio_Sleep(&ser->serio, 1000);
 		err = MyHMSendString(ser, "ATH0", 0);
 		DPRINT(("HangUp: DONE Sendint hangup string %ld\n", time(0)));
 	}
-	
+
 	EscapeCommFunction(serio_get_handle(&ser->serio), CLRDTR); // hope this hangs up modem and puts us in command mode
 	DPRINT(("HangUp: Done at %ld\n", time(0)));
 }
-
 
 /*************************************************************************************
 
@@ -646,9 +640,9 @@ static void HangUp(void)
 
  Optional Parameters (set to 0 if unused):
  req->hwirq = set to 12345 if swirq is to be obeyed
- req->swirq = pointer to volatile abort flag; if *(char *)req->swirq, 
+ req->swirq = pointer to volatile abort flag; if *(char *)req->swirq,
   dialing aborted
- 
+
  req->baseadr;      If nonzero, use this as the comm port handle!
 
  On exit,
@@ -672,30 +666,30 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 	int i;
 	int mode;
 	int bNewConnection = 0;
-	
+
 	already_hungup = FALSE;
 	if (resp == NULL) resp = &respDummy;
-	
-	if (!req) 
+
+	if (!req)
 	{
 		resp->status = comm_STATUS_BUG;
 		return FALSE;
 	}
-	
-	if (req->reqLen != sizeof(commInitReq_t)) 
+
+	if (req->reqLen != sizeof(commInitReq_t))
 	{
 		resp->status = comm_STATUS_BAD_VERSION;
 		return FALSE;
 	}
-	
+
 	ser = ser_create();
-	if (!ser) 
+	if (!ser)
 	{
 		resp->status = comm_STATUS_BUG;
 		return FALSE;
 	}
-	
-	if (ser_adr2hdl(ser, &req->sessionId, TRUE) != ser_HDL_ME) 
+
+	if (ser_adr2hdl(ser, &req->sessionId, TRUE) != ser_HDL_ME)
 	{
 		resp->status = comm_STATUS_BUG;
 		return FALSE;
@@ -725,7 +719,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 				return FALSE;
 			}
 			use_regmo = TRUE;
-			strcpy(szPortName, regmo.AttachedTo);	
+			strcpy(szPortName, regmo.AttachedTo);
 		} else {
 			sprintf(szPortName, "COM%d", req->portnum + 1);
 
@@ -763,21 +757,21 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 		if (GetEnvironmentVariable(DPSTUB,strhandle,MAX_HSTR))
 			bNewConnection = 1;
 	}
-	
+
 	mode = O_RDWR | O_CREAT | O_BINARY;
-	if (req->flags & comm_INIT_FLAGS_RESUME) 
+	if (req->flags & comm_INIT_FLAGS_RESUME)
 		mode |= O_APPEND;
 	else
 		mode |= O_TRUNC;
     logfd = open("modem.log", mode, 0644);
     sprintf(message, "log started. (mode %o, sessionId %x)\r\n", mode, req->sessionId);
     fdprint(message);
-	
+
 #ifdef MY_LOG
 	dp_dprintf_set(my_ddprintf);
 #endif
 
-	if (req->flags & comm_INIT_FLAGS_RESUME) 
+	if (req->flags & comm_INIT_FLAGS_RESUME)
 	{
 		fdprint("Connection resumed.  End of log.\r\n");
 #ifndef MY_LOG
@@ -795,13 +789,13 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 	// Talk to the modem in command mode
 	if (!EscapeCommFunction(serio_get_handle(&ser->serio), SETDTR))
 		return FALSE;
-	
+
 	/* Set up a variable to look at if the user wants to stop dialing or answering */
 	if (12345 == req->hwirq)
 		stop = (long *) req->swint;
 	else
 		stop = 0;
-	
+
     /* Don't check result of reset, since some modems don't return result
 	 * codes by default (e.g. USRobotics that have dipswitches)
 	 */
@@ -822,7 +816,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 		fdprint("'\r\n");
 		serio_purge_read(&ser->serio);
 		serio_purge_write(&ser->serio);
-		if (MyHMSendString(ser, regmo.Init[i], stop)) 
+		if (MyHMSendString(ser, regmo.Init[i], stop))
 		{
 			fdprint("modem returns an error!\n");
 			resp->status = comm_STATUS_BAD_INITSTRING;
@@ -843,7 +837,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 	serio_purge_read(&ser->serio);
 	serio_purge_write(&ser->serio);
 	// If we are the originator, initiate the conversation
-	if (req->phonenum && req->phonenum[0] && req->phonenum[0] != '-') 
+	if (req->phonenum && req->phonenum[0] && req->phonenum[0] != '-')
 	{
 		fdprint("dialing '");
 		fdprint(req->phonenum);
@@ -856,11 +850,11 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 			fdclose();
 			return FALSE;
 		}
-	} 
-	else 
+	}
+	else
 	{  // If we are the answerer, answer the phone
 		fdprint("setting autoanswer register to 1\r\n");
-		if (MyHMSendString(ser, "ATS0=1", stop)) 
+		if (MyHMSendString(ser, "ATS0=1", stop))
 		{
 			fdprint("modem returns an error!\n");
 			resp->status = comm_STATUS_NO_RESPONSE;
@@ -876,10 +870,10 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 		fdclose();
 		return FALSE;
 	}
-	
+
 	do {  // Wait for the connection to be established
 		int err;
-		
+
 		timeout = myHMInputLine(ser,timeout,response,sizeof(response), stop);
 		if (timeout < 0) {
 			fdprint("timeout!\r\n");
@@ -894,7 +888,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 			fdclose();
 			return FALSE;
 		}
-		
+
 		fdprint("got '");
 		fdprint(response);
 		fdprint("'\r\n");
@@ -909,7 +903,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 			err = comm_STATUS_NO_DIALTONE;
 		else if (!strncmp(response, "NO ANSWER",    sizeof("NO ANSWER") - 1)   )
 			err = comm_STATUS_NO_ANSWER;
-		
+
 		if (err) {
 			fdprint("modem reports call not completed.\n");
 			resp->status = err;
@@ -917,9 +911,9 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 			fdclose();
 			return FALSE;
 		}
-	} 
+	}
 	while (strncmp(response, "CONNECT", sizeof("CONNECT") - 1) != 0);
-	
+
 	resp->status = comm_STATUS_OK;
 	DPRINT(("wmodem:commInit: using new handle %x\n", req->baseadr));
 	if (bNewConnection &&
@@ -932,10 +926,9 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 #ifndef MY_LOG
 	fdclose();
 #endif
-	
+
 	return TRUE;
 }
-
 
 /*************************************************************************************
 
@@ -944,7 +937,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 **************************************************************************************/
 
 /*
- *  Tear down the communications driver.  
+ *  Tear down the communications driver.
  *
  *  Return FALSE on error.
  */
@@ -952,7 +945,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 DLLEXPORT int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 
 {
-  if (ser && (!req || (req->flags == 0))) 
+  if (ser && (!req || (req->flags == 0)))
   {
 	char strhandle[MAX_HSTR];
     DPRINT(("commTerm: hanging up\n"));
@@ -962,7 +955,7 @@ DLLEXPORT int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 		notifystub(INVALID_HANDLE_VALUE);
   }
 
-  if (ser) 
+  if (ser)
   {
     DPRINT(("commTerm: destroying ser\n"));
     ser_destroy(ser);
@@ -978,7 +971,6 @@ DLLEXPORT int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 #endif
   return(TRUE);
 }
-
 
 
 /*************************************************************************************
@@ -1027,7 +1019,6 @@ DLLEXPORT int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_
 }
 
 
-
 /*************************************************************************************
 
                                commPlayerInfo()
@@ -1052,10 +1043,9 @@ DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_
   static ser_adr_t kludgeAdr;
   ser_hdl_t h;
 
-
   if (resp == NULL)  return(FALSE);
 
-  if (req == NULL) 
+  if (req == NULL)
   {
     resp->status = ser_RES_BAD;
     return(FALSE);
@@ -1065,14 +1055,14 @@ DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_
     h = ser_HDL_ME;
   else if (req->player == PLAYER_YOU)
     h = ser_HDL_YOU;
-  else 
+  else
   {
     resp->status = 1;
     return FALSE;
   }
 
     // index into nodes table and fill in response
-  if ((resp->status = ser_hdl2adr(ser, h, &kludgeAdr)) != ser_RES_OK) 
+  if ((resp->status = ser_hdl2adr(ser, h, &kludgeAdr)) != ser_RES_OK)
   {
     return FALSE;
   }
@@ -1085,7 +1075,6 @@ DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_
 
   return(TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -1106,7 +1095,6 @@ DLLEXPORT int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
   commTxFullReq_t reqDummy;
   commTxFullResp_t  respDummy;
 
-
   if (req  == NULL)  req  = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL)  resp = &respDummy;
 
@@ -1115,7 +1103,6 @@ DLLEXPORT int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
 
   return(FALSE);
 }
-
 
 /*************************************************************************************
 
@@ -1131,15 +1118,13 @@ DLLEXPORT int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
  *  that the packet has been (or ever will be) sent.
  */
 
-
 DLLEXPORT int cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
 
 {
   commTxPktResp_t   respDummy;
 
-
   if (resp == NULL) resp = &respDummy;
-  if (req == NULL) 
+  if (req == NULL)
   {
     resp->status = 3;
     return FALSE;
@@ -1147,7 +1132,7 @@ DLLEXPORT int cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
 
   //DPRINT(("commTxPkt: dest h:%x, length %d\n", req->dest, req->length));
   // Abort if no good place to send packet.
-  if ((req->dest != PLAYER_YOU || ser->yourAdr == ser_ADR_NONE) && (req->dest != PLAYER_BROADCAST)) 
+  if ((req->dest != PLAYER_YOU || ser->yourAdr == ser_ADR_NONE) && (req->dest != PLAYER_BROADCAST))
   {
     resp->status = 1;
     return FALSE;
@@ -1157,7 +1142,6 @@ DLLEXPORT int cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
 
   return(resp->status == 0);
 }
-
 
 /*************************************************************************************
 
@@ -1184,7 +1168,6 @@ DLLEXPORT int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 
   return(FALSE);
 }
-
 
 /*************************************************************************************
 
@@ -1222,7 +1205,6 @@ DLLEXPORT int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
   return (resp->status == ser_RES_OK);
 }
 
-
 /*************************************************************************************
 
                                commScanAddr()
@@ -1243,12 +1225,11 @@ DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *res
   commScanAddrResp_t respDummy;
   ser_adr_t          adr;
 
-
   if (req == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
 
   // convert into our internal address
-  if (sscanf(req->printable, "SERIAL:%x", &adr) != 1) 
+  if (sscanf(req->printable, "SERIAL:%x", &adr) != 1)
   {
     resp->status = 1;
     return(FALSE);
@@ -1262,7 +1243,6 @@ DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *res
 
   return (TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -1284,11 +1264,10 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
   commPrintAddrResp_t respDummy;
   char                printable[50];
 
-
   if (req ==  NULL)  req = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
 
-  if ((req->length != sizeof(ser_adr_t)) || (req->address == NULL)) 
+  if ((req->length != sizeof(ser_adr_t)) || (req->address == NULL))
   {
     resp->status = 1;
 
@@ -1297,9 +1276,9 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
 
   sprintf(printable, "SERIAL:%x", *(ser_adr_t *) req->address);
 
-  if (req->printable != NULL) 
+  if (req->printable != NULL)
   {
-    if (req->size < strlen(printable) + 1) 
+    if (req->size < strlen(printable) + 1)
     {
       resp->status = 2;
       return(FALSE);
@@ -1312,7 +1291,6 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
 
   return(TRUE);
 }
-
 
 /*************************************************************************************
 
@@ -1336,7 +1314,6 @@ DLLEXPORT int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_
   return(FALSE);
 }
 
-
 /*************************************************************************************
 
                                commGroupFree()
@@ -1358,7 +1335,6 @@ DLLEXPORT int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *
   return (FALSE);
 }
 
-
 /*************************************************************************************
 
                                commGroupAdd()
@@ -1378,7 +1354,6 @@ DLLEXPORT int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *res
 
     return(FALSE);
 }
-
 
 /*************************************************************************************
 
@@ -1419,7 +1394,6 @@ DLLEXPORT int cdecl commSetParam(commSetParamReq_t * req, commSetParamResp_t *  
 }
 
 
-
 /*************************************************************************************
 
                                commSayHi()
@@ -1438,7 +1412,7 @@ DLLEXPORT int cdecl commSetParam(commSetParamReq_t * req, commSetParamResp_t *  
  *      "DWANGO:<opponent player id>"
  *
  *    for null modem setup:
- *      "SERIAL:<opponent player id>"          
+ *      "SERIAL:<opponent player id>"
  *
  *    for modem setup:
  *      "SERIAL:<opponent player id>;<modem init and dial string>"
@@ -1452,11 +1426,10 @@ DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
   commSayHiResp_t respDummy;
   ser_hdl_t h;
 
-
   if (req  == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
 
-  if (req->length == 0) 
+  if (req->length == 0)
   {
     resp->status = 1;
 
@@ -1466,14 +1439,14 @@ DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
   h = ser_adr2hdl(ser, req->address, TRUE);
   // Upper layer won't send packets to itself, but it can't tell
   // that until it sees PLAYER_ME.
-  if (h == ser_HDL_ME) 
+  if (h == ser_HDL_ME)
   {
     resp->player = PLAYER_ME;
     resp->status = 0;
     return TRUE;
   }
 
-  if (h == ser_HDL_YOU) 
+  if (h == ser_HDL_YOU)
   {
     resp->player = PLAYER_YOU;
     resp->status = 0;
@@ -1484,7 +1457,6 @@ DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 
   return FALSE;
 }
-
 
 
 /*************************************************************************************
@@ -1505,7 +1477,6 @@ DLLEXPORT int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
 {
   commSayByeReq_t  reqDummy;
   commSayByeResp_t respDummy;
-
 
   if (req  == NULL) req  = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL) resp = &respDummy;
@@ -1529,17 +1500,17 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
     case DLL_PROCESS_ATTACH:
       // do any startup stuff here
     return(TRUE);
- 
+
     case DLL_PROCESS_DETACH:
       // do any shutdown stuff here
     return(TRUE);
 
     case DLL_THREAD_ATTACH:
     return(TRUE);
- 
+
     case DLL_THREAD_DETACH:
     return(TRUE);
   }
- 
+
   return(TRUE);
 }

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "tech_memmap.h"
@@ -31,7 +21,6 @@ bool tech_MemMap::GetFileExtension(char const * filename, char * extension)
 }
 
 
-
 unsigned char *tech_MemMap::GetFileBits
 (
 	const char *    filename,
@@ -46,7 +35,7 @@ unsigned char *tech_MemMap::GetFileBits
 
 	if ( !f )
 		return NULL;
-	
+
 	if (fseek(f, 0, SEEK_END) == 0) {
 		filesize = ftell(f);
 	} else {
@@ -78,7 +67,6 @@ unsigned char *tech_MemMap::GetFileBits
 
 	return bits;
 }
-
 
 
 void tech_MemMap::ReleaseFileBits( unsigned char *&bits )

@@ -49,13 +49,12 @@
 #include "ErrMsg.h"
 #include "FeatTracker.h"
 #include "GovernmentRecord.h"
-#include "player.h"             // g_player    
+#include "player.h"             // g_player
 #include "StrDB.h"              // g_theStringDB
 #include "Unit.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
 #include "wonderutil.h"
-
 
 #define shiftbit(i) uint64(uint64(0x01) << uint64(i))
 
@@ -68,7 +67,6 @@ for (i=0,cur_built=built_improvements;cur_built!=0;cur_built>>=1,i++) \
 		(rec = buildingutil_Get(i, owner))->recordFunc())
 
 
-
 void buildingutil_Initialize()
 {
 }
@@ -77,7 +75,7 @@ sint32 buildingutil_GetProductionCost(const sint32 building_type, const sint32 o
 {
 	const BuildingRecord * rec = buildingutil_Get(building_type, owner);
 	Assert(rec);
-	
+
 	return rec ? rec->GetProductionCost() : 0;
 }
 
@@ -115,8 +113,7 @@ sint32 buildingutil_GetBlgUpkeep(const sint32 building_type, const sint32 owner)
 	return buildingutil_Get(building_type, owner)->GetUpkeep();
 }
 
-
-sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements, 
+sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
 												sint32 wonderLevel, const sint32 owner)
 {
 	sint32 lowcost = 0x7fffffff;
@@ -147,7 +144,7 @@ bool buildingutil_GetDesignatesCapitol(const uint64 built_improvements, const si
 	return false;
 }
 
-void buildingutil_GetDefendersBonus(const uint64 built_improvements, 
+void buildingutil_GetDefendersBonus(const uint64 built_improvements,
      double &bonus, const sint32 owner)
 {
 	bonus = 0.0;
@@ -159,7 +156,7 @@ void buildingutil_GetDefendersBonus(const uint64 built_improvements,
 	}
 }
 
-void buildingutil_GetHappinessIncrement(const uint64 built_improvements, 
+void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
      sint32 &bonus, const sint32 owner)
 {
 	double wonderCathedralIncrease = 0.0;
@@ -174,10 +171,10 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 	{
 		sint32 inc;
 		rec->GetHappyInc(inc);
-#if 0 // Sitting on the dock of the bay ... 
+#if 0 // Sitting on the dock of the bay ...
 		if(rec->GetIsReligious())
-      // sint32(double(whatever) * 0)?  
-			inc -= sint32(double(inc) * 0); 
+      // sint32(double(whatever) * 0)?
+			inc -= sint32(double(inc) * 0);
 #endif
 		if(rec->GetCathedral())
 		{
@@ -198,7 +195,6 @@ bool buildingutil_GetDoubleTelevangelism(uint64 built_improvements, const sint32
 	return false;
 }
 
-
 bool buildingutil_GetNoUnhappyPeople(const uint64 built_improvements, const sint32 owner)
 {
 	FOREACH_BUILT(GetNoUnhappyPeople, owner)
@@ -208,7 +204,6 @@ bool buildingutil_GetNoUnhappyPeople(const uint64 built_improvements, const sint
 
 	return false;
 }
-
 
 double buildingutil_GetLowerCrime(const uint64 built_improvements, const sint32 owner)
 {
@@ -413,7 +408,6 @@ bool buildingutil_GetTelevision(const uint64 built_improvements, const sint32 ow
 	return false;
 }
 
-
 bool buildingutil_GetCityWalls(const uint64 built_improvements, const sint32 owner)
 {
 	FOREACH_BUILT(GetCityWalls, owner)
@@ -448,7 +442,7 @@ bool buildingutil_GetAirport(const uint64 built_improvements, const sint32 owner
 	return false;
 }
 
-bool buildingutil_HaveFoodVat(const uint64 built_improvements, 
+bool buildingutil_HaveFoodVat(const uint64 built_improvements,
                                     double &food_to_pollution_coef, const sint32 owner)
 {
 	bool atLeastOne = false;
@@ -516,7 +510,6 @@ double buildingutil_GetIncreaseSciencePerPop(const uint64 built_improvements, co
 
 	return sci;
 }
-
 
 bool buildingutil_GetForceField(const uint64 built_improvements, const sint32 owner)
 {
@@ -733,7 +726,6 @@ sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements, const sint32 
 
 	return amt;
 }
-
 
 	//Bit(Int)   EnergyHunger
 	//Bit(Int)   EnergyHungerPerPop

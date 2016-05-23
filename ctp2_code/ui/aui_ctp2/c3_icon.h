@@ -1,5 +1,3 @@
-
-
 #ifndef __C3_ICON_H__
 #define __C3_ICON_H__
 
@@ -9,7 +7,6 @@ class aui_Surface;
 
 enum COLOR;
 enum MAPICON;
-
 
 class c3_Icon : public c3_Static {
 public:
@@ -28,7 +25,6 @@ public:
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(void);
 
@@ -44,6 +40,5 @@ private:
 	COLOR	m_color;
 	MAPICON	m_mapIcon;
 };
-
 
 #endif

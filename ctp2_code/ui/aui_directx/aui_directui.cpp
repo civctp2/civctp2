@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
 // - When not set, this file does not do anything at all.
 //
@@ -34,11 +34,9 @@
 
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
 
 #include "civ3_main.h"
-
 
 #include "aui_mouse.h"
 #include "aui_keyboard.h"
@@ -52,7 +50,6 @@ extern BOOL			g_exclusiveMode;
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
-
 
 #include "display.h"
 
@@ -70,7 +67,7 @@ aui_DirectUI::aui_DirectUI
 	sint32 height,
 	sint32 bpp,
 	MBCHAR *ldlFilename,
-	BOOL useExclusiveMode 
+	BOOL useExclusiveMode
 )
 :
     aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
@@ -101,7 +98,7 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
     	HRESULT const   hr  = CoInitialize(NULL);
         m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
     }
-#endif 
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -137,7 +134,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 
 	if (g_createDirectDrawOnSecondary)
 	{
-		coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
+		coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW |
 					DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN;
 	}
 
@@ -154,7 +151,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 		m_hwnd,
 		0, 0,
 
-		g_ScreenWidth, 
+		g_ScreenWidth,
 		g_ScreenHeight,
 		TRUE );
 
@@ -277,7 +274,6 @@ AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 	AUI_ERRCODE		auiErr;
 	BOOL			exclusive = TRUE;
 
-	
 	aui_DirectMouse *mouse = new aui_DirectMouse( &auiErr, "CivMouse", exclusive );
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -327,7 +323,7 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 	}
 
 	while ( ShowCursor( TRUE ) < 0 )
-		; 
+		;
 
 	if ( m_minimize || m_exclusiveMode )
 	{
@@ -353,8 +349,7 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	::ShowWindow(m_hwnd, SW_SHOWMAXIMIZED);
 
 	while ( ShowCursor( FALSE ) >= 0 )
-		; 
-
+		;
 
 	if (g_exclusiveMode)
 	{
@@ -377,7 +372,6 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 
 		main_HideTaskBar();
 
-		
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
@@ -393,4 +387,4 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	return FlushDirtyList();
 }
 
-#endif  // __AUI_USE_DIRECTX__ 
+#endif  // __AUI_USE_DIRECTX__

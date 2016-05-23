@@ -1,16 +1,7 @@
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_action.h"
 
-
 #include "MessageBoxDialog.h"
-
 
 #include "aui_ldl.h"
 #include "c3ui.h"
@@ -25,11 +16,9 @@
 #include "soundmanager.h"
 #include "gamesounds.h"
 
-
 extern C3UI *g_c3ui;
 
 MessageBoxDialog *s_messageBoxDialog;
-
 
 void MessageBoxDialog::Information(const MBCHAR *message,
 								   const MBCHAR *id,
@@ -42,7 +31,7 @@ void MessageBoxDialog::Information(const MBCHAR *message,
 	{
 		g_theCriticalMessagesPrefs=new CriticalMessagesPrefs;
 	}
-	
+
 	if(g_theCriticalMessagesPrefs->IsEnabled(id))
 	{
 		s_messageBoxDialog = new MessageBoxDialog(message, id, callback, userData, okText, NULL);
@@ -52,13 +41,12 @@ void MessageBoxDialog::Information(const MBCHAR *message,
 	}
 	else
 	{
-		if(callback) 
+		if(callback)
 		{
 			callback(true, userData);
 		}
 	}
 }
-
 
 void MessageBoxDialog::Query(const MBCHAR *message,
 							 const MBCHAR *id,
@@ -77,7 +65,7 @@ void MessageBoxDialog::Query(const MBCHAR *message,
 	}
 	else
 	{
-		if(callback) 
+		if(callback)
 		{
 			callback(true, userData);
 		}
@@ -95,8 +83,7 @@ void MessageBoxDialog::TextQuery(const MBCHAR *message,
 	s_messageBoxDialog->m_textField->Show();
 	s_messageBoxDialog->m_dontShowButton->Hide();
 }
-	
-	
+
 
 MessageBoxDialog::MessageBoxDialog(const MBCHAR *message,
 								   const MBCHAR *id,
@@ -122,10 +109,8 @@ m_userData(userData)
 
 	m_window->SetType(AUI_WINDOW_TYPE_POPUP);
 
-	
 	g_c3ui->AddWindow(m_window);
 
-	
 	Assert(m_messageDisplay);
 	Assert(m_leftButton);
 	Assert(m_rightButton);
@@ -133,8 +118,7 @@ m_userData(userData)
 
 	m_isTextQuery = false;
 
-	
-	
+
 	const MBCHAR *str = g_theStringDB->GetNameStr(message);
 	if(str) {
 		m_messageDisplay->SetText(str);
@@ -142,24 +126,20 @@ m_userData(userData)
 		m_messageDisplay->SetText(message);
 	}
 
-	
 	if(cancelText) {
-		
+
 		Assert(okText);
 		m_leftButton->SetText(g_theStringDB->GetNameStr(okText));
 
-		
 		m_rightButton->SetText(g_theStringDB->GetNameStr(cancelText));
 	} else {
-		
+
 		m_leftButton->Hide();
 
-		
 		Assert(okText);
 		m_rightButton->SetText(g_theStringDB->GetNameStr(okText));
 	}
 
-	
 	m_leftButton->SetActionFuncAndCookie(
 		LeftButtonActionCallback, this);
 	m_rightButton->SetActionFuncAndCookie(
@@ -169,10 +149,8 @@ m_userData(userData)
 	m_dontShowButton->SetActionFuncAndCookie(
 		DontShowButtonActionCallback, this);
 
-	
 	m_window->SetStronglyModal(true);
 
-	
 	m_window->Show();
 	g_soundManager->AddGameSound(GAMESOUNDS_POPUP);
 
@@ -191,10 +169,9 @@ m_userData(userData)
 	m_closing = false;
 }
 
-
 MessageBoxDialog::~MessageBoxDialog()
 {
-	
+
 	m_window->Hide();
 	g_c3ui->RemoveWindow(m_window->Id());
 	aui_Ldl::DeleteHierarchyFromRoot("MessageBoxDialog");
@@ -228,20 +205,18 @@ private:
 	MessageBoxDialog *  m_dialog;
 };
 
-
 void MessageBoxDialog::LeftButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	MessageBoxDialog *dialog =
 		static_cast<MessageBoxDialog*>(cookie);
 
 	if(dialog->m_closing) {
-		
+
 		return;
 	}
 
@@ -249,10 +224,8 @@ void MessageBoxDialog::LeftButtonActionCallback(aui_Control *control,
 
 	static char text[256];
 
-	
 	g_c3ui->AddDestructiveAction(new DismissMessageBoxAction(dialog));
 
-	
 	if(dialog->m_callback) {
 		if(dialog->m_isTextQuery) {
 			dialog->m_textField->GetFieldText(text, 255);
@@ -269,20 +242,18 @@ void MessageBoxDialog::LeftButtonActionCallback(aui_Control *control,
 	}
 }
 
-
 void MessageBoxDialog::RightButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	MessageBoxDialog *dialog =
 		static_cast<MessageBoxDialog*>(cookie);
 
 	if(dialog->m_closing) {
-		
+
 		return;
 	}
 
@@ -290,10 +261,8 @@ void MessageBoxDialog::RightButtonActionCallback(aui_Control *control,
 
 	static char text[256];
 
-	
 	g_c3ui->AddAction(new DismissMessageBoxAction(dialog));
 
-	
 	if(dialog->m_callback) {
 		if(dialog->m_isTextQuery) {
 			dialog->m_textField->GetFieldText(text, 255);
@@ -311,20 +280,18 @@ void MessageBoxDialog::RightButtonActionCallback(aui_Control *control,
 	}
 }
 
-
 void MessageBoxDialog::TextFieldActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != AUI_TEXTFIELD_ACTION_EXECUTE)
 		return;
 
-	
 	MessageBoxDialog *dialog =
 		static_cast<MessageBoxDialog*>(cookie);
 
 	if(dialog->m_closing) {
-		
+
 		return;
 	}
 
@@ -332,10 +299,8 @@ void MessageBoxDialog::TextFieldActionCallback(aui_Control *control,
 
 	char text[256];
 
-	
 	g_c3ui->AddAction(new DismissMessageBoxAction(dialog));
 
-	
 	if(dialog->m_callback) {
 		if(dialog->m_isTextQuery) {
 			dialog->m_textField->GetFieldText(text, 255);
@@ -349,15 +314,13 @@ void MessageBoxDialog::TextFieldActionCallback(aui_Control *control,
 
 }
 
-
 void MessageBoxDialog::DontShowButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	MessageBoxDialog *dialog =
 		static_cast<MessageBoxDialog*>(cookie);
 

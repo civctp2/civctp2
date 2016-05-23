@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef __WORMHOLE_H__
 #define __WORMHOLE_H__
@@ -31,11 +30,11 @@ private:
 	sint32 m_horizontalMoves;
 	sint32 m_topY, m_bottomY;
 	sint32 m_discoverer;
-	GoodActor	*m_actor;	
+	GoodActor	*m_actor;
 
-	sint32 m_discoveredAt; 
-                  
-	
+	sint32 m_discoveredAt;
+
+
 
 
 	PointerList<EntryRecord> *m_entries;

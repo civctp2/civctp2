@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
 #include "c3.h"
 
 #include "pixelutils.h"
@@ -41,7 +27,6 @@ Pixel16 *RGB32ToRGB16(char *buf, uint16 width, uint16 height)
 	unsigned short  *destPixel = (unsigned short *)malloc(width * height * 2);
 	unsigned long	*srcPixel = (unsigned long *)buf;
 
-	
 
 	outBuf = destPixel;
 
@@ -52,27 +37,23 @@ Pixel16 *RGB32ToRGB16(char *buf, uint16 width, uint16 height)
 		unsigned short int r, g, b;
 		unsigned char a;
 
-		
 		r = (unsigned short int) ((pix & 0x000000FF) >> 0);
 		g = (unsigned short int) ((pix & 0x0000FF00) >> 8);
 		b = (unsigned short int) ((pix & 0x00FF0000) >> 16);
-		
-		
+
 		a = (unsigned char) ((pix & 0xFF000000) >> 24);
 
-		
 		if (g_is565Format)
-			*destPixel = (unsigned short int)(((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));		
+			*destPixel = (unsigned short int)(((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));
 		else
 			*destPixel = (Pixel16) (((r & 0xF8) << 7) | ((g & 0xF8) << 2) | ((b & 0xF8) >> 3));
-		
+
 		destPixel++;
 		srcPixel++;
 	}
 
 	return (Pixel16 *)outBuf;
 }
-
 
 void pixelutils_ComputeBlendTable(void)
 {
@@ -101,13 +82,11 @@ void RGB32Info(Pixel32 pixel, Pixel16 *outPixel, unsigned char *alpha)
 
 	*alpha = (unsigned char) a;
 
-	
 	if (g_is565Format)
 		*outPixel = (Pixel16) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));
 	else
 		*outPixel = (Pixel16) (((r & 0xF8) << 7) | ((g & 0xF8) << 2) | ((b & 0xF8) >> 3));
 }
-
 
 void pixelutils_ComputeRGBTable(void)
 {
@@ -137,7 +116,7 @@ Pixel16 pixelutils_RGB(int r,int g,int b)
 		return gRGBTable[(r<<10) | (g<<5) | b];
 }
 
-Pixel32 ComponentsToRGB32(Pixel16 r, Pixel16 g, Pixel16 b, Pixel16 a) 
+Pixel32 ComponentsToRGB32(Pixel16 r, Pixel16 g, Pixel16 b, Pixel16 a)
 {
 	Pixel32		pix32;
 
@@ -153,7 +132,7 @@ Pixel16 pixelutils_Desaturate(Pixel16 pixel)
 	Pixel16		tempPix;
 	sint32		ave;
 
-	if (g_is565Format) 
+	if (g_is565Format)
 	{
 		ave = (((pixel & 0xF800)>>11) + ((pixel & 0x07E0) >> 6) + (pixel & 0x001F)+128)>>2;
 
@@ -166,7 +145,6 @@ Pixel16 pixelutils_Desaturate(Pixel16 pixel)
 
 	return tempPix;
 }
-
 
 
 #if 0
@@ -193,7 +171,6 @@ Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, short blend)
 
 }
 
-
 Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 {
 	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
@@ -212,14 +189,12 @@ Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 	return ((r<<11) | (g<<5) | b);
 }
 
-
 Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
 	sint32 rb2, g2;
 	sint32 rb0, g0;
 
 	rb2 = (pixel2 & 0xF81F);
-	
 
 
 	rb0 = ((rb2<<5)+((blend*((pixel1 & 0xF81F)-rb2))>>5)) & 0xF81F;
@@ -230,12 +205,10 @@ Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 	return (Pixel16)(rb0|g0);
 }
 
-
 Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
 {
   return ((pixel&0xF7DF)>>1);
 }
-
 
 Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 {
@@ -244,18 +217,17 @@ Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 	r = (pixel & 0xF800) >> 10;
 	if (r > 0x001F)
    		r = 0x001F;
-	
+
 	g = (pixel & 0x07E0) >> 4;
 	if (g > 0x003F)
    		g = 0x003F;
-	
+
 	b = (pixel & 0x001F) << 1;
 	if (b > 0x001F)
    		b = 0x001F;
 
    return ((r<<11) | (g<<5) | b);
 }
-
 
 Pixel16 pixelutils_PercentDarken_565(Pixel16 pixel, sint32 percent)
 {
@@ -276,7 +248,6 @@ Pixel16 pixelutils_PercentDarken_565(Pixel16 pixel, sint32 percent)
 
 	return ((r<<11) | (g<<5) | b);
 }
-
 
 Pixel16 pixelutils_PercentLighten_565(Pixel16 pixel, sint32 percent)
 {
@@ -304,7 +275,6 @@ Pixel16 pixelutils_PercentLighten_565(Pixel16 pixel, sint32 percent)
 	return ((r<<11) | (g<<5) | b);
 }
 
-
 Pixel16 pixelutils_Desaturate_565(Pixel16 pixel)
 {
 	sint32 ave = (((pixel & 0xF800) >> 11) + ((pixel & 0x07E0) >> 6) + (pixel & 0x001F)) / 3;
@@ -313,7 +283,6 @@ Pixel16 pixelutils_Desaturate_565(Pixel16 pixel)
 }
 #endif
 
-
 Pixel32 pixelutils_Blend32_565(Pixel32 pixel1, Pixel32 pixel2, short blend);
 Pixel32 pixelutils_Additive32_565(Pixel32 pixel1, Pixel32 pixel2);
 Pixel32 pixelutils_BlendFast32_565(sint32 pixel1, sint32 pixel2, sint32 blend);
@@ -321,7 +290,6 @@ Pixel32 pixelutils_Shadow32_565(Pixel32 pixel);
 Pixel32 pixelutils_Lightening32_565(Pixel16 pixel);
 Pixel32 pixelutils_PercentDarken32_565(Pixel32 pixel, sint32 percent);
 Pixel32 pixelutils_PercentLighten32_565(Pixel32 pixel, sint32 percent);
-
 
 
 Pixel32 pixelutils_Blend32_555(Pixel32 pixel1, Pixel32 pixel2, short blend);

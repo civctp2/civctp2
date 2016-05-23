@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 //
 // - Added music screen key by ahenobarb.
 // - Start the great library with the current research project of the player.
-// - Disabled restart key in network, hot seat and email gmase, by 
+// - Disabled restart key in network, hot seat and email gmase, by
 //   Martin Gühmann.
 // - Opening the score tab of the info window does not close other windows
 //   anymore like the other tabs. - Aug 7th 2005 Martin Gühmann
@@ -143,21 +143,21 @@ extern ResourceMap		*g_resourceMap;
 extern Background	*g_background;
 extern WorkWindow	*g_workWindow;
 
-extern StatusWindow	*g_statusWindow; 
-extern Player		**g_player; 
-extern World        *g_theWorld; 
-extern SelectedItem *g_selected_item; 
+extern StatusWindow	*g_statusWindow;
+extern Player		**g_player;
+extern World        *g_theWorld;
+extern SelectedItem *g_selected_item;
 extern Pollution	*g_thePollution ;
 
 extern BOOL			g_helpMode;
 
 extern Network g_network;
 
-extern HWND gHwnd; 
+extern HWND gHwnd;
 
 extern sint32		g_is_rand_test;
-extern SelectedItem *g_selected_item; 
-extern TurnCount	*g_turn; 
+extern SelectedItem *g_selected_item;
+extern TurnCount	*g_turn;
 
 #ifdef _PLAYTEST
 extern CommandLine	g_commandLine;
@@ -170,17 +170,17 @@ extern sint32		g_debugOwner;
 
 extern CivApp		*g_civApp;
 
-extern sint32		g_isKMScreen;	
+extern sint32		g_isKMScreen;
 extern ControlPanelWindow *g_controlPanel;
 
 
 
 
 #include "profileDB.h"
-extern ProfileDB *g_theProfileDB; 
+extern ProfileDB *g_theProfileDB;
 
 #include "director.h"
-extern Director *g_director; 
+extern Director *g_director;
 
 #include "c3_utilitydialogbox.h"
 c3_UtilityPlayerListPopup *g_networkPlayersScreen = NULL;
@@ -243,7 +243,7 @@ void init_keymap() {
 	if ( !theKeyMap )
 		theKeyMap = new KEYMAP(FALSE);
 
-} 
+}
 
 void init_defaultKeymap() {
 	if(!theKeyMap)
@@ -251,10 +251,10 @@ void init_defaultKeymap() {
 }
 
 void cleanup_keymap()
-{ 
-	delete theKeyMap; 
+{
+	delete theKeyMap;
 	theKeyMap = NULL;
-} 
+}
 
 
 
@@ -301,7 +301,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	BOOL isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
 	Unit city;
 
-	
 	if ( g_isKMScreen) {
 		switch(wParam) {
 			case VK_ESCAPE:
@@ -309,17 +308,17 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			case VK_RIGHT + 256:
 			case VK_UP + 256:
 			case VK_DOWN + 256:
-			case 29: 
-			case 28: 
-				
+			case 29:
+			case 28:
+
 				return TRUE;
 			default:
-				
+
 				km_screen_remapKey( wParam, lParam );
 				return TRUE;
 		}
 	}
-	
+
 #ifdef _PLAYTEST
 	if(commandMode) {
 		switch(wParam) {
@@ -337,23 +336,22 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 
 
-	
+
 	if (wParam == VK_ESCAPE) {
-		
+
 		extern OptionsWindow *g_optionsWindow;
-		
+
 		if(g_c3ui->TopWindow() && g_c3ui->TopWindow() == DipWizard::GetWindow()) {
-			
-			
+
 		} else if(g_keyboardHandlers.GetTail()) {
 			g_keyboardHandlers.GetTail()->kh_Close();
 		} else if (g_civApp->IsGameLoaded()) {
-			if(g_currentMessageWindow && 
+			if(g_currentMessageWindow &&
 			   g_currentMessageWindow->GetMessage() &&
 			   (g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))) {
 				g_currentMessageWindow->GetMessage()->Minimize();
 			} else if(g_modalMessage) {
-				
+
 				Message *msg = g_modalMessage->GetMessage();
 				if(msg && g_theMessagePool->IsValid(*msg)) {
 					Assert(msg->IsAlertBox());
@@ -361,16 +359,16 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 					if(data->GetNumButtons() <= 2 && data->GetNumButtons() > 0) {
 						data->GetButton(0)->Callback();
 					}
-				}	
+				}
 			} else if (g_optionsWindow && g_c3ui->GetWindow(g_optionsWindow->Id())) {
-				
+
 				optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 			} else if(g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam)) {
-				
+
 			} else if(g_battleViewWindow) {
 				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 			} else {
-				
+
 				optionsscreen_Initialize();
 				optionsscreen_displayMyWindow(1);
 			}
@@ -378,19 +376,16 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 
-	
 	aui_Window *topWindow = g_c3ui->TopWindow();
 	if(topWindow && (!g_controlPanel || topWindow != g_controlPanel->GetWindow()) && topWindow != g_statusWindow) {
 		if(topWindow->HandleKey(wParam))
 			return 0;
 	}
 
-	
-	
+
 	if (!theKeyMap) return 0;
 
-	
-	if (g_slicEngine && g_slicEngine->RunKeyboardTrigger(static_cast<char>(wParam))) 
+	if (g_slicEngine && g_slicEngine->RunKeyboardTrigger(static_cast<char>(wParam)))
 	{
 		return 0;
 	}
@@ -399,8 +394,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 
-	KEY_FUNCTION	kf = theKeyMap->get_function(wParam); 
-	if (kf != KEY_FUNCTION_NOOP) 
+	KEY_FUNCTION	kf = theKeyMap->get_function(wParam);
+	if (kf != KEY_FUNCTION_NOOP)
 	{
 		g_selected_item->RegisterUIClick();
 	}
@@ -417,22 +412,22 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	switch (kf) {
 #ifdef _PLAYTEST
-	case KEY_FUNCTION_ENTER_COMMAND: 
+	case KEY_FUNCTION_ENTER_COMMAND:
 		segmentlist_Display();
 		break;
 	case KEY_FUNCTION_ENTER_COMMAND_ALTERNATE:
-		commandMode = TRUE; 
-		move = FALSE; 
+		commandMode = TRUE;
+		move = FALSE;
 		break;
 #endif
-    case KEY_FUNCTION_NOOP: return FALSE; 
+    case KEY_FUNCTION_NOOP: return FALSE;
     case KEY_FUNCTION_MOVE_NORTHWEST: d = NORTHWEST; move = TRUE; break;
-    case KEY_FUNCTION_MOVE_NORTH: d = NORTH; move = TRUE; break; 
-    case KEY_FUNCTION_MOVE_NORTHEAST: d = NORTHEAST; move = TRUE; break; 
-    case KEY_FUNCTION_MOVE_WEST: d = WEST; move = TRUE; break; 
-    case KEY_FUNCTION_MOVE_EAST: d = EAST; move = TRUE; break; 
-    case KEY_FUNCTION_MOVE_SOUTHWEST: d = SOUTHWEST; move = TRUE; break; 
-    case KEY_FUNCTION_MOVE_SOUTH: d = SOUTH; move = TRUE; break; 
+    case KEY_FUNCTION_MOVE_NORTH: d = NORTH; move = TRUE; break;
+    case KEY_FUNCTION_MOVE_NORTHEAST: d = NORTHEAST; move = TRUE; break;
+    case KEY_FUNCTION_MOVE_WEST: d = WEST; move = TRUE; break;
+    case KEY_FUNCTION_MOVE_EAST: d = EAST; move = TRUE; break;
+    case KEY_FUNCTION_MOVE_SOUTHWEST: d = SOUTHWEST; move = TRUE; break;
+    case KEY_FUNCTION_MOVE_SOUTH: d = SOUTH; move = TRUE; break;
     case KEY_FUNCTION_MOVE_SOUTHEAST: d = SOUTHEAST; move = TRUE; break;
 
 	case KEY_FUNCTION_ENTRENCH:
@@ -470,11 +465,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			if(g_theOrderDB->GetNamedItem("ORDER_SPACE_LAUNCH", index)) {
 				g_controlPanel->BeginOrderDelivery(g_theOrderDB->Access(index));
 			}
-			
+
 			return TRUE;
 		}
 		break;
-	case KEY_FUNCTION_DESCEND:		
+	case KEY_FUNCTION_DESCEND:
 		g_selected_item->Descend();
 		break;
 	case KEY_FUNCTION_PILLAGE:
@@ -505,13 +500,13 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-		
+
 
 
 
 
 		break;
-	case KEY_FUNCTION_EXPEL:		
+	case KEY_FUNCTION_EXPEL:
 	{
 		sint32 order;
 		if(!g_theOrderDB->GetNamedItem("ORDER_EXPEL", order))
@@ -524,7 +519,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-			
+
 
 
 
@@ -536,8 +531,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			g_selected_item->Sleep();
 		}
 		break;
-    case KEY_FUNCTION_NEXT_ITEM: 
-        g_selected_item->NextItem(); 
+    case KEY_FUNCTION_NEXT_ITEM:
+        g_selected_item->NextItem();
 		move = FALSE;
         break;
 
@@ -558,7 +553,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
         }
 		break;
 
-	case KEY_FUNCTION_PLANT_NUKE:				
+	case KEY_FUNCTION_PLANT_NUKE:
 	{
 		sint32 order;
 		if(!g_theOrderDB->GetNamedItem("ORDER_PLANT_NUKE", order))
@@ -572,9 +567,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-	
+
 		break;
-	case KEY_FUNCTION_BIOINFECT:				
+	case KEY_FUNCTION_BIOINFECT:
 	{
 		sint32 order;
 		if(!g_theOrderDB->GetNamedItem("ORDER_BIO_INFECT", order))
@@ -588,9 +583,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-	
+
 		break;
-	case KEY_FUNCTION_NANOTERROR:				
+	case KEY_FUNCTION_NANOTERROR:
 	{
 		sint32 order;
 		if(!g_theOrderDB->GetNamedItem("ORDER_NANO_INFECT", order))
@@ -604,9 +599,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-	
+
 		break;
-	case KEY_FUNCTION_CREATE_PARK:				
+	case KEY_FUNCTION_CREATE_PARK:
 	{
 		sint32 order;
 		if(!g_theOrderDB->GetNamedItem("ORDER_CREATE_PARK", order))
@@ -619,7 +614,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-	
+
 		break;
 	case KEY_FUNCTION_REFORM:
 	{
@@ -634,7 +629,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 	}
-	
+
 		break;
 
 	case KEY_FUNCTION_OPEN_WORK_VIEW:
@@ -675,7 +670,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			close_AllScreens();
 			TradeManager::Display();
 			TradeManager::SetMode(TRADE_MANAGER_MARKET);
-			
+
 		}
 		break;
 	case KEY_FUNCTION_OPEN_DIPLOMACY:
@@ -711,9 +706,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 		}
 		break;
-		
-		
-		
+
+
     case KEY_FUNCTION_ZOOM_IN1:
         if (g_tiledMap) {
 			g_tiledMap->ZoomIn();
@@ -729,15 +723,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	case KEY_FUNCTION_CENTER_MAP:
 	{
-		PLAYER_INDEX s_player; 
-		ID s_item; 
-		SELECT_TYPE s_state; 
+		PLAYER_INDEX s_player;
+		ID s_item;
+		SELECT_TYPE s_state;
 		g_selected_item->GetTopCurItem(s_player, s_item, s_state);
 
         MapPoint pos;
 		switch(s_state) {
 			case SELECT_TYPE_LOCAL_ARMY:
-			{	
+			{
 				Army army(s_item);
 				army.GetPos(pos);
 				g_radarMap->CenterMap(pos);
@@ -746,7 +740,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				break;
 			}
 			case SELECT_TYPE_LOCAL_CITY:
-			{	
+			{
 				Unit unit(s_item);
 				unit.GetPos(pos);
 				g_radarMap->CenterMap(pos);
@@ -762,14 +756,12 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_SAVE_GAME:
 		if(g_network.IsActive()) {
 			if(g_network.IsHost()) {
-				
-				
+
 				g_isScenario = FALSE;
 				loadsavescreen_displayMyWindow(LSS_SAVE_MP);
 			}
 		} else {
-			
-			
+
 			g_isScenario = FALSE;
 
 			loadsavescreen_displayMyWindow(LSS_SAVE_GAME);
@@ -779,28 +771,28 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		if(!g_network.IsActive()) {
 			loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 		}
-		break;						
-	case KEY_FUNCTION_REMAP_KEYBOARD:	
+		break;
+	case KEY_FUNCTION_REMAP_KEYBOARD:
 		open_KeyMappingScreen();
 		break;
-	
+
     case KEY_FUNCTION_KEYBOARD_SELECT_UNIT:
-         g_selected_item->KeyboardSelectFirstUnit(); 
+         g_selected_item->KeyboardSelectFirstUnit();
 		 move = FALSE;
-		 break; 
+		 break;
 
 #ifdef _PLAYTEST
     case KEY_FUNCTION_RAND_TEST:
-       g_is_rand_test=TRUE; 
-         return TRUE; 
+       g_is_rand_test=TRUE;
+         return TRUE;
 		 break;
 #endif
-        
+
 #if 0
 	case KEY_FUNCTION_ENDSLICE:
 		if(g_network.IsActive()) {
 			if(g_network.IsMyTurn() ||
-			   (g_network.IsHost() && 
+			   (g_network.IsHost() &&
 				g_player[g_selected_item->GetCurPlayer()]->IsRobot())) {
 				g_turn->EndThisSliceBeginNewSlice();
 			}
@@ -810,31 +802,31 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		move = FALSE;
 		break;
 #endif
-    case KEY_FUNCTION_ENDTURN: 
+    case KEY_FUNCTION_ENDTURN:
 #ifdef _PLAYTEST
-        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
-           break; 
+        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
+           break;
 
 		if(g_network.IsActive()) {
 			g_turn->NetworkEndTurn();
 		} else {
             g_selected_item->Deselect(g_selected_item->GetCurPlayer());
 
-			
 
-			
+
+
 			NewTurnCount::StartNextPlayer(true);
 
- 			
-          	
-            
-            
-			
 
-			
-			
-            
-            
+
+
+
+
+
+
+
+
+
 
 			g_tiledMap->InvalidateMix();
 			g_tiledMap->InvalidateMap();
@@ -845,11 +837,10 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		move = FALSE;
         break;
 #endif
-    
-    case KEY_FUNCTION_NEXT_ROUND:   
 
-		
-		
+    case KEY_FUNCTION_NEXT_ROUND:
+
+
 		if(g_modalMessage) {
 			Message *msg = g_modalMessage->GetMessage();
 			if(g_theMessagePool->IsValid(*msg)) {
@@ -858,49 +849,47 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				if(data->GetNumButtons() <= 2 && data->GetNumButtons() > 0) {
 					data->GetButton(0)->Callback();
 				}
-			}	
+			}
 		} else if(g_utilityTextMessage) {
 			g_utilityTextMessage->m_callback(FALSE);
 			g_utilityTextMessage->RemoveWindow();
 		} else {
-			
-			
+
 			if(g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer()) {
 				DPRINTF(k_DBG_GAMESTATE, ("Keypress end turn, %d\n", g_selected_item->GetCurPlayer()));
 				g_selected_item->RegisterManualEndTurn();
-				g_director->AddEndTurn(); 
+				g_director->AddEndTurn();
 			}
 			else
 			{
-				
-				
-				
+
+
 			}
 		}
-        break; 
+        break;
 
     case KEY_FUNCTION_SAVE_WORLD :
 		if (g_civApp->IsGameLoaded() && !g_network.IsClient()) {
 			g_civApp->AutoSave(g_selected_item->GetVisiblePlayer(), true);
 
-			
-			
-			
 
-			
+
+
+
+
 		}
 		move = FALSE ;
 		break ;
-        
+
     case KEY_FUNCTION_LOAD_WORLD :
 		if (g_civApp->IsGameLoaded() && !g_network.IsActive()) {
 			{
 				g_civApp->PostLoadQuickSaveAction(g_selected_item->GetVisiblePlayer());
-				
-				
-				
-				
-				
+
+
+
+
+
 			}
 			move = FALSE ;
 		}
@@ -909,25 +898,24 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
     case KEY_FUNCTION_QUIT:
 		optionwarningscreen_displayMyWindow(OWS_QUIT);
 
-
         return 1;
         break;
 
 #ifdef _PLAYTEST
     case KEY_FUNCTION_GAMESTATE_DEBUG:
         g_theWorld->GamestateDebug();
-        for (i=0; i<2; i++) { 
-            g_player[i]->GamestateDebug(); 
+        for (i=0; i<2; i++) {
+            g_player[i]->GamestateDebug();
         }
-        return TRUE; 
+        return TRUE;
 		break;
 #endif
-	
+
     case KEY_FUNCTION_GROUP_ARMY:
 	{
 		Army a;
 		if(g_selected_item->GetSelectedArmy(a)) {
-			if(g_network.IsClient()) 
+			if(g_network.IsClient())
             {
 				CellUnitList units;
 				Cell *cell = g_theWorld->GetCell(a->RetPos());
@@ -944,13 +932,13 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 									   GEA_Army, a.m_id,
 									   GEA_End);
 			}
-		}	
+		}
 
 		return TRUE;
 	}
 	break;
-	case KEY_FUNCTION_UNGROUP_ARMY:	
-	{	
+	case KEY_FUNCTION_UNGROUP_ARMY:
+	{
 		Army a;
 		if(g_selected_item->GetSelectedArmy(a)) {
 			if(g_network.IsClient()) {
@@ -961,35 +949,34 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 									   GEA_End);
 			}
 		}
-		
 
-		return TRUE; 
+		return TRUE;
 	}
 	break;
 	case KEY_FUNCTION_PROCESS_UNIT_ORDERS:
 		if(isMyTurn) {
 			g_gevManager->Pause();
-			for 
+			for
             (
-                sint32 i = 0; 
-                i < g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Num(); 
+                sint32 i = 0;
+                i < g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Num();
                 i++
-            ) 
+            )
             {
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Access(i),
 									   GEA_End);
 			}
 			g_gevManager->Resume();
-			
+
 		}
 		break;
 	case KEY_FUNCTION_EXECUTE_ORDERS:
 		if(isMyTurn)
 		{
-			PLAYER_INDEX s_player; 
-			ID s_item; 
-			SELECT_TYPE s_state; 
+			PLAYER_INDEX s_player;
+			ID s_item;
+			SELECT_TYPE s_state;
 			g_selected_item->GetTopCurItem(s_player, s_item, s_state);
 			Army army(s_item);
 			if (s_state == SELECT_TYPE_LOCAL_ARMY && army.IsValid())
@@ -1029,7 +1016,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 #if 0
 	case KEY_FUNCTION_CRC:
 		if(g_debugOwner != k_DEBUG_OWNER_CRC) {
-            if (!g_dataCheck) { 
+            if (!g_dataCheck) {
                 g_dataCheck = new DataCheck();
             }
 			g_debugOwner = k_DEBUG_OWNER_CRC;
@@ -1038,14 +1025,14 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		} else {
 			g_debugOwner = k_DEBUG_OWNER_NONE;
 		}
-		break;	
+		break;
 #endif
 #endif
 	case KEY_FUNCTION_HELP_MODE_TOGGLE:
 		break;
 
 	case KEY_FUNCTION_CHAT_KEY:
-		if (g_chatBox) 
+		if (g_chatBox)
         {
 			g_chatBox->SetActive(!g_chatBox->IsActive());
 		}
@@ -1066,10 +1053,10 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		if ( g_network.IsHost() ) {
 			g_networkPlayersScreen->EnableButtons();
 		}
-		else if ( g_network.IsClient() ) {		
+		else if ( g_network.IsClient() ) {
 			g_networkPlayersScreen->DisableButtons();
 		}
-		
+
 		break;
 	case KEY_FUNCTION_CIV_TAB:
 		if(g_controlPanel) {
@@ -1096,12 +1083,12 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			g_controlPanel->SetTab(CP_TAB_TILEIMP);
 		}
 		break;
-		
+
 	case KEY_FUNCTION_CONTROL_NEXT:
 #if 0
 		if(g_controlPanel) {
 
-			if(g_cp_productionTab && 
+			if(g_cp_productionTab &&
 			   (g_cp_productionTab->GetMode() == PRODTAB_MODE_CHANGE ||
 				g_cp_productionTab->GetMode() == PRODTAB_MODE_QUEUE)) {
 				c3_ListBox *plist = g_cp_productionTab->GetPurchaseList();
@@ -1121,7 +1108,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 #if 0
 		if(g_controlPanel) {
 
-			if(g_cp_productionTab && 
+			if(g_cp_productionTab &&
 			   (g_cp_productionTab->GetMode() == PRODTAB_MODE_CHANGE ||
 				g_cp_productionTab->GetMode() == PRODTAB_MODE_QUEUE)) {
 				c3_ListBox *plist = g_cp_productionTab->GetPurchaseList();
@@ -1137,7 +1124,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 #endif
 		break;
-	case KEY_FUNCTION_CLOSE:		
+	case KEY_FUNCTION_CLOSE:
 		if(g_currentMessageWindow) {
 			if(g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())) {
 				g_currentMessageWindow->GetMessage()->Kill();
@@ -1150,7 +1137,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				if(data->GetNumButtons() <= 2 && data->GetNumButtons() > 0) {
 					data->GetButton(0)->Callback();
 				}
-			}	
+			}
 		}
 
 		break;
@@ -1189,7 +1176,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	case KEY_FUNCTION_CLEAR_QUEUE:
-		if(g_controlPanel 
+		if(g_controlPanel
 
 			) {
 			Unit city;
@@ -1204,10 +1191,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		break;
-	case KEY_FUNCTION_OPEN_MESSAGE: 
+	case KEY_FUNCTION_OPEN_MESSAGE:
 		{
-			
-			
+
 			extern sint32 g_modalWindow;
 			if (g_modalWindow == 0) {
 				if(g_currentMessageWindow) {
@@ -1218,7 +1204,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 					}
 				} else if(g_selected_item) {
 					sint32 visPlayer = g_selected_item->GetVisiblePlayer();
-					
+
 					if(g_player[visPlayer] && g_player[visPlayer]->m_messages->Num() > 0) {
 						sint32 m;
 						for(m = 0; m < g_player[visPlayer]->m_messages->Num(); m++) {
@@ -1234,7 +1220,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	case KEY_FUNCTION_EXECUTE_EYEPOINT:
 		{
-			
+
 			if(g_currentMessageWindow) {
 				if(g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())) {
 					g_currentMessageWindow->GetMessage()->AccessData()->EyePointCallback(0);
@@ -1264,8 +1250,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
-	
-	case KEY_FUNCTION_TRADE_SUMMARY:    
+	case KEY_FUNCTION_TRADE_SUMMARY:
 		if (!g_modalWindow) {
 			close_AllScreens();
 			TradeManager::Display();
@@ -1293,9 +1278,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 					close_AllScreens();
 					EditQueue::Display(CityWindow::GetCityData(city));
 				}
-		} 
+		}
 		break;
-	}		
+	}
 	case KEY_FUNCTION_CITY_MANAGEMENT:
 		if(!g_modalWindow && g_player[g_selected_item->GetVisiblePlayer()]) {
 			close_AllScreens();
@@ -1331,15 +1316,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			InfoWindow::Open();
 		}
 		break;
-	
+
 	case KEY_FUNCTION_RESTART:
 		//Added by Martin Gühmann to disable also the restart key in network
 		//games, hot seat games and email games.
-		if(!g_modalWindow 
-		&& !g_theProfileDB->IsScenario() 
+		if(!g_modalWindow
+		&& !g_theProfileDB->IsScenario()
 		&& !g_isScenario
 		&& !g_network.IsActive()
-		&& !g_turn->IsHotSeat() 
+		&& !g_turn->IsHotSeat()
 		&& !g_turn->IsEmail()
 		) {
 			optionwarningscreen_displayMyWindow(OWS_RESTART) ;
@@ -1349,7 +1334,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_NEW_GAME:
 		if(!g_modalWindow) {
 
-			optionwarningscreen_displayMyWindow(OWS_QUITTOSHELL);	
+			optionwarningscreen_displayMyWindow(OWS_QUITTOSHELL);
 		}
 		break;
 
@@ -1358,14 +1343,14 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			soundscreen_displayMyWindow();
 		}
 		break;
-		
+
 	// MUSIC added by ahenobarb
 	case KEY_FUNCTION_MUSIC_OPTIONS:
 		if(!g_modalWindow) {
 			musicscreen_displayMyWindow();
 		}
 		break;
-		
+
 	case KEY_FUNCTION_GRAPHICS_OPTIONS:
 		if(!g_modalWindow) {
 			graphicsscreen_displayMyWindow();
@@ -1383,18 +1368,18 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	default :
-        Assert(FALSE); 
+        Assert(FALSE);
     }
-    
+
     if (move && isMyTurn) {
-		
-		PLAYER_INDEX s_player; 
-		ID s_item; 
-		SELECT_TYPE s_state; 
-        
+
+		PLAYER_INDEX s_player;
+		ID s_item;
+		SELECT_TYPE s_state;
+
 		g_selected_item->GetTopCurItem(s_player, s_item, s_state);
-		
-		switch(s_state) { 
+
+		switch(s_state) {
 			case SELECT_TYPE_LOCAL_ARMY:
 			{
 				Army army(s_item);
@@ -1407,14 +1392,14 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 										   GEA_Army, army.m_id,
 										   GEA_Direction, d,
 										   GEA_End);
-					
+
 					g_selected_item->DidKeyboardMove();
 				}
 				break;
 			}
-				
-			default: 
-				break; 
+
+			default:
+				break;
 		}
 	}
 

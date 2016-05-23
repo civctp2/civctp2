@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -39,7 +39,7 @@ class aui_Region;
 #define k_REGION_ATTRIBUTE_DISABLED		0x00000002
 #define k_REGION_ATTRIBUTE_DRAGDROP		0x00000004
 
-#define k_AUI_REGION_DRAWFLAG_UPDATE					0x00000001 
+#define k_AUI_REGION_DRAWFLAG_UPDATE					0x00000001
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER				0x00000002
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY				0x00000004
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEINSIDE			0x00000008
@@ -135,15 +135,12 @@ public:
 	uint32	&Id( void ) { return m_id; }
 	uint32	Attributes( void ) const { return m_attributes; }
 
-	
 	virtual AUI_ERRCODE	Move( sint32 x, sint32 y );
 	virtual AUI_ERRCODE Offset( sint32 dx, sint32 dy );
 	virtual AUI_ERRCODE	Resize( sint32 width, sint32 height );
 
-	
 	virtual AUI_ERRCODE	Adjust( void );
 
-	
 	sint32	X( void ) const { return m_x; }
 	sint32	Y( void ) const { return m_y; }
 	sint32	Width( void ) const { return m_width; }
@@ -156,12 +153,10 @@ public:
 
 	tech_WLList<aui_Region *>	*ChildList( void ) const { return m_childList; }
 
-	
 	BOOL	IsInside( DWORD point ) const;
 	BOOL	IsInside( LPPOINT point ) const;
 	BOOL	IsInside( LONG x, LONG y ) const;
 
-	
 	virtual AUI_ERRCODE	Show( void );
 	virtual AUI_ERRCODE	Hide( void );
 	virtual AUI_ERRCODE	ShowThis( void );
@@ -169,14 +164,13 @@ public:
 	AUI_ERRCODE	ShowChildren( void );
 	AUI_ERRCODE	HideChildren( void );
 
-	
-	
-	
-	
+
+
+
+
 	AUI_ERRCODE Reset( void );
 	virtual AUI_ERRCODE ResetThis( void );
 
-	
 	AUI_ERRCODE	Enable( BOOL enable );
 	AUI_ERRCODE EnableDragDrop( BOOL enable );
 
@@ -192,29 +186,27 @@ public:
 	AUI_ERRCODE	HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt = TRUE );
 	void MouseDispatch( aui_MouseEvent *input, BOOL handleIt );
 
-	
 	void MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt );
 	void EditModeModifyRegion( RECT rect );
-	static void EditModeClear( void ) 
+	static void EditModeClear( void )
 			{ s_editChild = NULL;
 			  s_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
 			  s_editSelectionCount = 0;
 			  s_editSelectionCurrent = 0; }
 
-	AUI_ERRCODE ExpandRect( RECT *rect ); 
+	AUI_ERRCODE ExpandRect( RECT *rect );
 	AUI_ERRCODE AddUndo( void );
 	void        PurgeUndoList( void );
 	AUI_ERRCODE UndoEdit( void );
 
-	
 	uint32 GetDrawMask() const { return(m_drawMask); }
-	uint32 SetDrawMask(uint32 drawMask);	
-											
+	uint32 SetDrawMask(uint32 drawMask);
 
-	
-	
-	
-	
+
+
+
+
+
 	virtual uint32 ShouldDraw(uint32 draw = k_AUI_REGION_DRAWFLAG_UPDATE);
 
 	virtual AUI_ERRCODE Draw(
@@ -230,20 +222,16 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 ) { return AUI_ERRCODE_OK; }
 
-	
 	virtual AUI_ERRCODE Idle( void ) { return AUI_ERRCODE_OK; }
 
-	
 	virtual AUI_ERRCODE	AddChild( aui_Region *child );
 	virtual AUI_ERRCODE InsertChild( aui_Region *child, sint32 index );
 	virtual AUI_ERRCODE	RemoveChild( uint32 regionId );
 	aui_Region			*GetChild( uint32 regionId );
 
-	
 	aui_Region	*GetChildByIndex(sint32 index);
 	sint32		NumChildren(void);
 
-	
 	virtual void DeleteChildren();
 
 	BOOL	IgnoreEvents( BOOL ignore );
@@ -262,11 +250,9 @@ public:
 	BOOL IsBlind( void ) const { return m_blind; }
 	BOOL SetBlindness( BOOL blind );
 
-	
-	
+
 	AUI_ERRCODE DoneInstantiating();
 
-	
 	virtual bool CanAttract() { return false; }
 	virtual void SetAttract(bool on, uint32 ticksSinceStart) {}
 	virtual bool GetAttracting() { return false; }
@@ -274,7 +260,6 @@ public:
 	virtual const MBCHAR *GetLdlBlock();
 	virtual void SetLdlBlock(const MBCHAR *ldlblock);
 
-	
 	typedef void (*ShowHideCallback)(aui_Region *region, void *userData);
 	void SetShowCallback(ShowHideCallback callback, void *userData = NULL)
 	{ m_showCallback = callback; m_showCallbackData = userData; }
@@ -282,13 +267,13 @@ public:
 	{ m_hideCallback = callback; m_hideCallbackData = userData; }
 
 protected:
-	aui_Region() 
+	aui_Region()
     :
         aui_Base                    (),
         m_id                        (0),
         m_x                         (0),
         m_y                         (0),
-        m_width                     (0),	
+        m_width                     (0),
         m_height                    (0),
         m_dim                       (new aui_Dimension()),
         m_attributes                (0),
@@ -302,7 +287,7 @@ protected:
         m_ignoreEvents              (false),
         m_isMouseInside             (false),
         //	aui_MouseEvent	m_mouseState;
-        m_xLastTime                 (0),	
+        m_xLastTime                 (0),
         m_yLastTime                 (0),
         m_noChange                  (false),
         m_noChangeTime              (0),
@@ -312,7 +297,7 @@ protected:
         m_doubleClickTimeOut        (0),
         // POINT		m_doubleClickOldPos;
         m_ldlBlock                  (NULL),
-        // POINT		m_editGrabPoint;			
+        // POINT		m_editGrabPoint;
         m_editGrabPointAttributes   (0),
         m_showCallback              (NULL),
         m_hideCallback              (NULL),
@@ -330,7 +315,7 @@ protected:
     // @todo Remove later
 	AUI_ERRCODE InitCommon
     (
-        uint32 id, 
+        uint32 id,
 		sint32 x,
 		sint32 y,
 		sint32 width,
@@ -345,76 +330,72 @@ protected:
         InitCommon();
         return AUI_ERRCODE_OK;
     };
-	
+
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
-	
 	BOOL HasHeirarchyChanged( void ) const;
 	void ResetHeirarchyChanged( void );
 	virtual aui_DragDropWindow *CreateDragDropWindow( aui_Control *dragDropItem );
 	virtual void DestroyDragDropWindow( aui_DragDropWindow *ddw );
 
-	uint32		m_id;			
+	uint32		m_id;
 
-	sint32		m_x;			
-	sint32		m_y;			
-	sint32		m_width;		
-	sint32		m_height;		
+	sint32		m_x;
+	sint32		m_y;
+	sint32		m_width;
+	sint32		m_height;
 
-	aui_Dimension	*m_dim;		
+	aui_Dimension	*m_dim;
 
-	uint32		m_attributes;	
+	uint32		m_attributes;
 
-	aui_Region	*m_parent;		
+	aui_Region	*m_parent;
 	tech_WLList<aui_Region *> *m_childList;
-								
+
 	BOOL		m_childListChanged;
 
-	BOOL		m_blind;		
+	BOOL		m_blind;
 
-	AUI_ERRCODE	m_mouseCode;	
-								
+	AUI_ERRCODE	m_mouseCode;
 
-	uint32		m_draw;			
-	uint32		m_drawMask;		
+	uint32		m_draw;
+	uint32		m_drawMask;
 
-	BOOL		m_ignoreEvents;	
+	BOOL		m_ignoreEvents;
 
 	BOOL		m_isMouseInside;
 	aui_MouseEvent	m_mouseState;
 
-	sint32		m_xLastTime;	
-	sint32		m_yLastTime;	
+	sint32		m_xLastTime;
+	sint32		m_yLastTime;
 
-	BOOL		m_noChange;		
-	uint32		m_noChangeTime;	
+	BOOL		m_noChange;
+	uint32		m_noChangeTime;
 
 	uint32		m_doubleLClickStartWaitTime;
-								
+
 	uint32		m_doubleRClickStartWaitTime;
-								
-	BOOL		m_doubleClickingInside;	
-	uint32		m_doubleClickTimeOut;	
-	POINT		m_doubleClickOldPos;	
 
-	MBCHAR     *m_ldlBlock;  
+	BOOL		m_doubleClickingInside;
+	uint32		m_doubleClickTimeOut;
+	POINT		m_doubleClickOldPos;
 
-	
-	POINT				m_editGrabPoint;			
+	MBCHAR     *m_ldlBlock;
+
+	POINT				m_editGrabPoint;
 	uint32				m_editGrabPointAttributes;
 
-	
 	ShowHideCallback	m_showCallback;
 	ShowHideCallback	m_hideCallback;
 	void				*m_showCallbackData;
 	void				*m_hideCallbackData;
 
-	
-	
-	
+
+
+
 
 	typedef void (MouseEventCallback)( aui_MouseEvent *mouseData );
-	
+
 	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData) {};
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData) {};
 
@@ -431,7 +412,7 @@ protected:
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData) {};
 	virtual void	MouseRDragInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData) {};
-	
+
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData) {};
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
@@ -440,19 +421,19 @@ protected:
 	virtual void	MouseRGrabOutside(aui_MouseEvent * mouseData) {};
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData) {};
-	
+
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDoubleClickOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDoubleClickOutside(aui_MouseEvent * mouseData);
-	
+
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
-	
+
 	void			MouseMoveOverEdit(aui_MouseEvent * mouseData) {};
 	void			MouseMoveAwayEdit(aui_MouseEvent * mouseData) {};
 	void			MouseMoveInsideEdit(aui_MouseEvent * mouseData) {};
 	void			MouseMoveOutsideEdit(aui_MouseEvent * mouseData) {};
-	
+
 	void			MouseLDragOverEdit(aui_MouseEvent * mouseData);
 	void			MouseLDragAwayEdit(aui_MouseEvent * mouseData);
 	void			MouseLDragInsideEdit(aui_MouseEvent * mouseData);
@@ -490,8 +471,7 @@ private:
 	static uint32		                s_editSelectionCurrent;
 	static aui_Region *                 s_editChild;
 	static uint32	        	        s_editModeStatus;
-	static tech_WLList<aui_Undo *> *    s_undoList; 
+	static tech_WLList<aui_Undo *> *    s_undoList;
 };
 
-
-#endif 
+#endif

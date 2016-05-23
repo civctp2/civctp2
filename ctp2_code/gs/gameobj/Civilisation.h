@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - pragma commented out
-// - Fixed city style enumeration removed. 
+// - Fixed city style enumeration removed.
 // - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -48,9 +48,9 @@ class Civilisation;
 // City style values
 //
 // Valid values range from 0 up to (not including) the number of records of
-// g_theCityStyleDB. Some special values have been defined here, because 
+// g_theCityStyleDB. Some special values have been defined here, because
 // CityStyleRecord is a generated file.
-// 
+//
 // CITY_STYLE_EDITOR	: use the value from the scenario editor.
 // CITY_STYLE_GENERIC	: use the value from a less specific object (e.g. a
 //                        city may inherit the style from its civilisation).
@@ -98,7 +98,6 @@ public:
    	//sint32 GetIncreaseBoatMovement( void ) { return AccessData()->GetIncreaseBoatMovement(); }
    	//sint32 GetIncreaseHp( void ) { return AccessData()->GetIncreaseHp(); }
 
-	
 	void ResetCiv(sint32 newCivIndex, GENDER gender) { AccessData()->ResetCiv(newCivIndex, gender); }
 } ;
 

@@ -1,5 +1,3 @@
-
-
 #pragma once
 #ifndef __FLI_WHEN_H__
 #define __FLI_WHEN_H__
@@ -15,7 +13,7 @@ class FliWhen
 	sint32 m_refCount;
 
 public:
-	FliWhen() 
+	FliWhen()
 	{
 		m_var = NULL;
 		m_refCount = 0;

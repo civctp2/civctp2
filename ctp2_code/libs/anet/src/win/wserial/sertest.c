@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -145,7 +145,7 @@ test1 ()
 	else
 		printf("Test f fail\n");
 #endif
-	
+
 	ser_destroy(ser);
 
 	//printf("pass\n");
@@ -161,6 +161,3 @@ main()
 	printf("Pass\n");
 	exit(0);
 }
-
-
-

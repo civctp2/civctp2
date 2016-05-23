@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ ptimer_t ptimer_data[NPMAX];
 
 #ifdef _WIN32
 
-
 /*------------------------------------------------------------------------
  Sets highest priority on current process.  Should be called near the
   beginning of application.
@@ -36,7 +35,7 @@ ptimer_t ptimer_data[NPMAX];
 void ptimer_disableInterrupt()
 {
 #if 0
-	__asm { 
+	__asm {
 		__asm cli
 	}
 #else
@@ -52,7 +51,7 @@ void ptimer_disableInterrupt()
 void ptimer_enableInterrupt()
 {
 #if 0
-	__asm { 
+	__asm {
 		__asm sti
 	}
 #else
@@ -125,13 +124,13 @@ void ptimer_dumpToFile(char *file)
 	ptimer_zeroAll();
 	starttime = rdtsc();
 	ptimer_Enter(0, "dummy call");
-	ptimer_Exit(0, 0); 
+	ptimer_Exit(0, 0);
 	endtime = rdtsc();
 	difftime = endtime - starttime;
 	fprintf(fp, "time for firsttime ptimer enter/exit call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);
 	starttime = rdtsc();
 	ptimer_Enter(0, "dummy call");
-	ptimer_Exit(0, 0); 
+	ptimer_Exit(0, 0);
 	endtime = rdtsc();
 	difftime = endtime - starttime;
 	fprintf(fp, "time for secondtime ptimer enter/exit call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);
@@ -142,7 +141,7 @@ void ptimer_dumpToFile(char *file)
 	difftime = endtime - starttime;
 	fprintf(fp, "time for firsttime ptimer_Enter call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);
 	starttime = rdtsc();
-	ptimer_Exit(0, 0); 
+	ptimer_Exit(0, 0);
 	endtime = rdtsc();
 	difftime = endtime - starttime;
 	fprintf(fp, "time for firsttime ptimer_Exit call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);
@@ -152,7 +151,7 @@ void ptimer_dumpToFile(char *file)
 	difftime = endtime - starttime;
 	fprintf(fp, "time for secondtime ptimer_Enter call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);
 	starttime = rdtsc();
-	ptimer_Exit(0, 0); 
+	ptimer_Exit(0, 0);
 	endtime = rdtsc();
 	difftime = endtime - starttime;
 	fprintf(fp, "time for secondtime ptimer_Exit call: %I64d ticks %10.3f us\n", difftime, ((float)difftime * 1000000) / rdtsc_per_sec);

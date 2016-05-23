@@ -11,7 +11,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
  * - Added the possibility of a default value from another entry. (Aug 26th 2005 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 .* - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
- * - Added support for default values taken from other databases like the 
+ * - Added support for default values taken from other databases like the
  *   Const database. (9-Dec-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
@@ -44,7 +44,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ names: names ',' name
 			newnode->next = NULL;
 			$$.list = newnode;
 		}
-		
+
 		;
 
 name: NAME
@@ -202,7 +202,7 @@ name: NAME
 		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_FLOAT);
 		$$.nameValue.v.floatValue = $3.fval;
 	}
-		
+
 	| NAME '=' STRINGVALUE
 	{
 		$$.nameValue.name = $1.name;
@@ -288,5 +288,3 @@ int main(int argc, char **argv)
 	}
 	exit(errorFound);
 }
-
-		

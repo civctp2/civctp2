@@ -7,22 +7,20 @@
 #include "SlicSymbol.h"
 #include "SlicBuiltinEnum.h"
 
-class SlicNamedSymbol : public SlicSymbolData 
+class SlicNamedSymbol : public SlicSymbolData
 {
 protected:
-	
+
 	sint32 m_index;
 
-	
 	uint8 m_fromFile;
-	
 
-	
+
 	char *m_name;
-	
 
-	
-	
+
+
+
 
 public:
 	SlicNamedSymbol(const char *name, SLIC_SYM type);
@@ -37,7 +35,6 @@ public:
 
 	void Init(const char *name);
 
-
 	void Serialize(CivArchive &archive);
 	void PostSerialize();
 	virtual SLIC_SYM_SERIAL_TYPE GetSerializeType() { return SLIC_SYM_SERIAL_NAMED; }
@@ -50,7 +47,7 @@ public:
 
 };
 
-class SlicParameterSymbol : public SlicNamedSymbol 
+class SlicParameterSymbol : public SlicNamedSymbol
 {
 private:
 	sint32 m_parameterIndex;
@@ -72,7 +69,7 @@ public:
 	bool IsParameter() const { return TRUE; }
 };
 
-class SlicBuiltinNamedSymbol : public SlicNamedSymbol 
+class SlicBuiltinNamedSymbol : public SlicNamedSymbol
 {
 	SLIC_BUILTIN m_builtin;
 public:
@@ -92,5 +89,5 @@ public:
 	bool IsBuiltin() const { return true; }
 	SLIC_BUILTIN GetBuiltin() { return m_builtin; }
 };
- 
+
 #endif

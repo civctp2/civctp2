@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __C3AI_H__

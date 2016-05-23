@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "TaxRate.h"
 #include "civarchive.h"
@@ -26,10 +24,10 @@ extern Player **g_player;
 void TaxRate::Serialize(CivArchive &archive)
 {
     if (archive.IsStoring()) {
-        archive << m_science; 
+        archive << m_science;
 		archive << m_science_before_anarchy;
-    } else { 
-        archive >> m_science; 
+    } else {
+        archive >> m_science;
 		archive >> m_science_before_anarchy;
     }
 }
@@ -55,8 +53,8 @@ uint32 TaxRate_TaxRate_GetVersion(void)
 void TaxRate::SetTaxRates(double s, sint32 owner)
 {
 	Assert(0.0 <= s);
-    Assert(s <= 1.0); 
-	
+    Assert(s <= 1.0);
+
 	if(s > g_theGovernmentDB->Get(g_player[owner]->m_government_type)->GetMaxScienceRate())
 		s = g_theGovernmentDB->Get(g_player[owner]->m_government_type)->GetMaxScienceRate();
 

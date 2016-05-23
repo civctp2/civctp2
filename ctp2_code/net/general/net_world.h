@@ -1,4 +1,3 @@
-
 #ifndef NET_WORLD_H__
 #define NET_WORLD_H__
 

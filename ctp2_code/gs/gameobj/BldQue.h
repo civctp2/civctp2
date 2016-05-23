@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,19 +43,19 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>      
+// #include <>
 
 //----------------------------------------------------------------------------
 // Export overview
 //----------------------------------------------------------------------------
 
 class   BuildQueue;
-struct  BuildNode; 
+struct  BuildNode;
 
-enum    CAUSE_REMOVE_BUILD_ITEM 
+enum    CAUSE_REMOVE_BUILD_ITEM
 {
 	CAUSE_REMOVE_BUILD_ITEM_MANUAL,
-	CAUSE_REMOVE_BUILD_ITEM_ILLEGAL, 
+	CAUSE_REMOVE_BUILD_ITEM_ILLEGAL,
 	CAUSE_REMOVE_BUILD_ITEM_NETWORK,
 	CAUSE_REMOVE_BUILD_ITEM_BUILT,
 };
@@ -69,7 +69,7 @@ enum    CAUSE_REMOVE_BUILD_ITEM
 
 class CivArchive;
 class MapPoint;
-class CityData; 
+class CityData;
 class UnitRecord;
 template <class T> class PointerList;
 
@@ -80,21 +80,21 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-struct BuildNode 
-{ 
-	sint32  m_cost; 
-	sint32  m_type; 
-	sint32  m_category; 
-	uint8   m_flags; 
+struct BuildNode
+{
+	sint32  m_cost;
+	sint32  m_type;
+	sint32  m_category;
+	uint8   m_flags;
 };
 
-class BuildQueue 
-{ 
+class BuildQueue
+{
 private:
 	PointerList<BuildNode> *    m_list;
-	
+
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -158,15 +158,14 @@ public:
 	bool InsertTail(sint32 cat, sint32 t, sint32 cost);
 	void ReplaceHead(sint32 cat, sint32 item_type, sint32 cost);
 	void Serialize(CivArchive &archive) ;
-	
+
 	BuildNode *GetHead(void);
 	PointerList<BuildNode> *GetList() const { return m_list; }
 
 	void ResetOwner(sint32 new_owner);
 	void Dump(const sint32 shieldstore, MBCHAR *s);
 	void RemoveHead();
-	
-	
+
 	bool RemoveNode(BuildNode *node, CAUSE_REMOVE_BUILD_ITEM cause);
 	bool RemoveNodeByIndex(sint32 index, CAUSE_REMOVE_BUILD_ITEM cause);
 	bool InsertAfter(BuildNode *targetNode, BuildNode *node);
@@ -180,7 +179,7 @@ public:
 	sint32 GetPercentCompleted(sint32 shieldstore) const;
 	sint32 GetFrontCost();
 
-	void RemoveObjectsOfType(sint32 cat, sint32 type, 
+	void RemoveObjectsOfType(sint32 cat, sint32 type,
 							 CAUSE_REMOVE_BUILD_ITEM cause);
 	void RemoveIllegalItems(bool isClientAck = false);
 
@@ -205,9 +204,6 @@ private:
 	void SynchroniseNetworkData(void) const;
 };
 
-
 uint32 BldQue_BuildQueue_GetVersion(void) ;
 
 #endif
-
-

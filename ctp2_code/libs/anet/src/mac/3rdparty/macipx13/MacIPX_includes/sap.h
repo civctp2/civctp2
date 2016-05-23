@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Copyright (C) 1992-1994 Novell, Inc.
  * All rights reserved.
  */
- 
+
 #ifndef __SAP_H_INCLUDED__
 #define __SAP_H_INCLUDED__
 
@@ -51,7 +51,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma options align=mac68k
 #endif
 typedef struct
- {                                        
+ {
     unsigned short   SAPPacketType;          /* 2 or 4 */
     unsigned short   serverType;             /* assigned by Novell */
     unsigned char    serverName[48];         /* service name */
@@ -163,7 +163,7 @@ extern pascal short  AdvertiseService(
          unsigned short  __serviceSocket,
 		 unsigned long	 *__advertisingHandle );
 
-extern pascal short FreeQueryServicesList( 
+extern pascal short FreeQueryServicesList(
          SAP_RESPONSE_LIST_ENTRY *__listP );
 
 extern pascal short QueryServices(

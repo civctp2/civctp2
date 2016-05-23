@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,7 @@
 //----------------------------------------------------------------------------
 
 class   TiledMap;
-struct  TILEHITMASK; 
+struct  TILEHITMASK;
 
 #define k_BORDER_SOLID              0
 #define k_BORDER_DASHED             1
@@ -109,19 +109,18 @@ class GoodActor;
 class Path;
 class TerrainImprovementRecord;
 class TileInfo;
-class Unit; 
+class Unit;
 class UnitActor;
 
 //----------------------------------------------------------------------------
 // Declarations
 //----------------------------------------------------------------------------
 
-
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
 
-struct TILEHITMASK 
+struct TILEHITMASK
 {
 	uint16      start;
 	uint16      end;
@@ -140,7 +139,6 @@ public:
 	TileInfo		*GetTileInfoStoragePtr(MapPoint &pos);
 	sint32			Initialize(RECT *rect);
 
-  
 	void			InitGrid(sint32 maxPixelsPerGridRectX,sint32 maxPixelsPerGridRectY);
 	void			DeleteGrid(void);
 	void			CheckRectAgainstGrid(RECT &rect, aui_DirtyList *list);
@@ -168,11 +166,10 @@ public:
 	void			UpdateMixFromMap(aui_Surface *mixSurf);
 	void			OffsetMixDirtyRects(sint32 deltaX, sint32 deltaY);
 
-
 	void			LoadTileset(void);
 
 	sint16			TryRiver(BOOL c, BOOL n, BOOL ne, BOOL e, BOOL se, BOOL s, BOOL sw, BOOL w, BOOL nw, BOOL cwater);
-	bool			TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, uint16 s, 
+	bool			TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, uint16 s,
 									uint16 sw, uint16 w, uint16 nw, uint16 *newIndex);
 	void			TryMegaTiles(MapPoint &pos, BOOL regenTilenum);
 	void			PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
@@ -206,7 +203,6 @@ public:
 		*height = g_theWorld->GetHeight();
 	}
 
-
 	sint32          GetMapWidth() const
 	{
 		return g_theWorld->GetWidth();
@@ -221,7 +217,6 @@ public:
 	sint32			RepaintTiles(RECT *repaintRect);
 	sint32			RepaintTilesClipped(RECT *repaintRect);
 
-	
 	sint32			RepaintImprovements(RECT *repaintRect,bool clip=false);
 	sint32			RepaintHats(RECT *repaintRect,bool clip=false);
 	sint32          RepaintBorders(RECT *repaintRect, bool clip=false);
@@ -236,19 +231,17 @@ public:
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
 	void			PaintGoodActor(GoodActor *actor, bool fog = false);
 
-	
 	void			ProcessUnit(Unit unit);
 	void			ProcessUnit(CellUnitList *list);
 
-	
 	void			ColorMagnitudeToRGB(uint8 col, sint32 *r, sint32 *g, sint32 *b);
 	void			DrawSomeText
     (
-        bool            mixingPort, 
-        MBCHAR const *  text, 
-        sint32          tx, 
-        sint32          ty, 
-        COLORREF        bgColorRef, 
+        bool            mixingPort,
+        MBCHAR const *  text,
+        sint32          tx,
+        sint32          ty,
+        COLORREF        bgColorRef,
         COLORREF        fgColorRef
     );
 
@@ -265,7 +258,7 @@ public:
 	float           num_rects;
 
 #endif
-	
+
 	void			PaintArmyActors(MapPoint &pos);
 
 	void			PaintUnitActor(UnitActor *actor, bool fog = false);
@@ -278,7 +271,6 @@ public:
 	sint32			OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY, sint32 layer);
 	sint32			OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY);
 
-	
 	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
 	bool			IsScrolling() const { return m_isScrolling;};
@@ -297,9 +289,9 @@ public:
 						m_smoothOffsetX = xoff;
 						m_smoothOffsetY = yoff;
 					};
-	
-	
-	
+
+
+
 
 	sint32			RedrawHat(aui_Surface *surface, sint32 i, sint32 j,bool clip=false);
 	sint32          RedrawBorders(aui_Surface *surface, sint32 i, sint32 j, bool clip = false);
@@ -307,45 +299,42 @@ public:
 	void			RedrawTileClipped(const MapPoint *point);
 	void			BlackTile(aui_Surface *surface, const MapPoint *point);
 
-
 	bool			DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip=false);
-	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
-													sint32 type, sint32 x, sint32 y, 
+	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
+													sint32 type, sint32 x, sint32 y,
 													uint16 index, bool fog, sint32 percentComplete);
 													//Added by Martin Gühmann sint32 percentComplete by Martin Gühmann
 
 	void            DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip=false);
 
-	
 	void	DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y);
 	sint32	DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32	DrawBlendedTileClipped(aui_Surface *surface, const MapPoint &pos,sint32 x, sint32 y, Pixel16 color, sint32 blend);
 	sint32	DrawBlendedOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,Pixel16 color, sint32 blend, sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32	DrawDitheredTileClipped(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
 	sint32	DrawDitheredOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color);
-	
-	
-	sint32			DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
+
+	sint32			DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32			DrawOverlayIntoSurface(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y);
-	sint32			DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
+	sint32			DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
 												Pixel16 color);
-	void			DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
+	void			DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
 													sint32 destWidth, sint32 destHeight, Pixel16 color);
 	sint32			DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blendValue);
-	void			DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
+	void			DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
 								 sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blendValue);
 	sint32			DrawColorizedOverlay(Pixel16 *data, aui_Surface *surf, sint32 x, sint32 y, Pixel16 color=0x0000);
 	sint32			DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pixel16 color=0x0000);
 	sint32			DrawColorizedOverlayIntoSurface(Pixel16 *data, aui_Surface *surf, sint32 x, sint32 y, Pixel16 color);
 	sint32			DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color);
 	void			DrawDitheredOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, Pixel16 color);
-	sint32			DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
+	sint32			DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
 										Pixel16 color, sint32 blend, sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void			DrawBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, 
+	void			DrawBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
 												Pixel16 color, sint32 blend, sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void			DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
-											sint32 destWidth, sint32 destHeight, 
+	void			DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,
+											sint32 destWidth, sint32 destHeight,
 											sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	void			DrawScaledOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
@@ -353,8 +342,8 @@ public:
 	void			DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blend);
 
 	sint32			DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, BOOL fogged);
-	void			DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y, 
-												sint32 destWidth, sint32 destHeight, 
+	void			DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y,
+												sint32 destWidth, sint32 destHeight,
 												BOOL fogged);
 
 	sint32			DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y);
@@ -367,18 +356,15 @@ public:
 
 	sint32			DrawTileBorder(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
 	void			DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
-	
-	
-	Pixel16	    average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
 
+	Pixel16	    average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
 
 	void			DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
-	void			ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1, Pixel16 *pix2, 
-							sint32 pos, Pixel16 destPixel, short transparency, Pixel16 outlineColor, 
+	void			ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1, Pixel16 *pix2,
+							sint32 pos, Pixel16 destPixel, short transparency, Pixel16 outlineColor,
 							sint32 flags = k_OVERLAY_FLAG_NORMAL);
 	sint32	    ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
-
 
 	void		Blt(aui_Surface *surf);
 
@@ -388,7 +374,6 @@ public:
 	bool        TileIsVisible(sint32 mapX, sint32 mapY, sint32 mapZ = 0);
 #endif
 	bool		TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect = NULL);
-
 
 	double		GetScale(void) { return m_scale; }
 	void		SetScale(double s) { m_scale = s; }
@@ -401,7 +386,7 @@ public:
 	void		DrawLabel(aui_Surface *surface, sint32 color, sint32 x, sint32 y);
 
 	void        SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint32 x, sint32 y);
-	void        DrawNumber(aui_Surface *surface, sint32 num, sint32 color, 
+	void        DrawNumber(aui_Surface *surface, sint32 num, sint32 color,
 	                sint32 x, sint32 y);
 
 	void		HandleCheat(MapPoint &pos);
@@ -450,7 +435,7 @@ public:
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
 	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,
-								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
+								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted,
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
@@ -468,7 +453,7 @@ public:
 	void		AddVisible(MapPoint& pos, double& radius) { m_localVision->AddVisible(pos, radius); };
 	void		RemoveVisible(MapPoint& pos, double& radius) { m_localVision->RemoveVisible(pos, radius); };
 
-	aui_Surface *GetSurface(void) { return m_surface; } 
+	aui_Surface *GetSurface(void) { return m_surface; }
 
 	TILEHITMASK	*GetTileHitMask( void ) { return m_tileHitMask; }
 	void		GetMapBounds( RECT &rect ) { rect = m_mapBounds; }
@@ -493,21 +478,19 @@ public:
 	bool   HasVisibleCity       (const MapPoint &pos) const;
 	void DrawNationalBorders(aui_Surface *surface, MapPoint &pos);
 
-	
-	
-	
-	
+
+
+
+
 	void SetZoomLevel(sint32 level);
-	
+
 	void SetZoomCallback(void (*callback)()) { m_zoomCallback = callback; }
 
-	
-	bool CanZoomIn() const;		
-	bool ZoomIn();				
-	bool CanZoomOut() const;	
-	bool ZoomOut();				
+	bool CanZoomIn() const;
+	bool ZoomIn();
+	bool CanZoomOut() const;
+	bool ZoomOut();
 
-	
 	sint32 GetZoomLevel() const { return m_zoomLevel; }
 	sint32 GetZoomTilePixelWidth() const { return m_zoomTilePixelWidth[m_zoomLevel];}
 	sint32 GetZoomTilePixelHeight() const { return m_zoomTilePixelHeight[m_zoomLevel];}
@@ -516,23 +499,21 @@ public:
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
 protected:
-    struct GridRect 
+    struct GridRect
     {
 	    RECT		rect;
 	    BOOL		dirty;
     };
-	
+
 	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
 
-	
 	void ZoomHitMask();
 
-	
 	void ZoomUpdate(sint32 zoomLevel);
 
-	
-	
-	
+
+
+
 	sint32	m_zoomLevel;
 	sint32	m_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS];
 	sint32	m_zoomTilePixelHeight[k_MAX_ZOOM_LEVELS];
@@ -541,36 +522,32 @@ protected:
 	double	m_zoomTileScale[k_MAX_ZOOM_LEVELS];
 	void	(*m_zoomCallback)();
 
-	
 	bool				 m_isScrolling;
 
-	aui_Surface		*m_surface;			
-	aui_Surface		*m_mapSurface;		
+	aui_Surface		*m_surface;
+	aui_Surface		*m_mapSurface;
 
-	
-	aui_Surface		*m_lockedSurface;	
+	aui_Surface		*m_lockedSurface;
 	uint8			*m_surfBase;
 	sint32			m_surfWidth;
 	sint32			m_surfHeight;
 	sint32			m_surfPitch;
 	BOOL			m_surfIsLocked;
 
-	RECT			m_displayRect;		
-	RECT			m_surfaceRect;		
-	
-	RECT			m_mapBounds;		
-	RECT			m_mapViewRect;		
+	RECT			m_displayRect;
+	RECT			m_surfaceRect;
+
+	RECT			m_mapBounds;
+	RECT			m_mapViewRect;
 
 	double			m_scale;
 	sint32			m_smoothOffsetX,m_smoothOffsetY;
 	sint32			m_smoothLastX,m_smoothLastY;
 
-	
 	bool						m_overlayActive;
 	TerrainImprovementRecord	*m_overlayRec;
 	MapPoint					m_overlayPos;
 	Pixel16						m_overlayColor;
-
 
 	TILEHITMASK		m_tileHitMask[k_TILE_GRID_HEIGHT];
 
@@ -583,7 +560,7 @@ protected:
 	aui_DirtyList	*m_mixDirtyList;
 	aui_DirtyList	*m_oldMixDirtyList;
 	Vision			*m_localVision;
-	BOOL			m_nextPlayer; 
+	BOOL			m_nextPlayer;
 
 	PLAYER_INDEX    m_oldPlayer;
 	aui_BitmapFont	*m_font;
@@ -592,7 +569,6 @@ protected:
 	sint32			m_gridWidth;
 	sint32			m_gridHeight;
 
-	
 	float			m_one_over_gridWidth;
 	float			m_one_over_gridHeight;
 
@@ -602,4 +578,3 @@ protected:
 };
 
 #endif
-

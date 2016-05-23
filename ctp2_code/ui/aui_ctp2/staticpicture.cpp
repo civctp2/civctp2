@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "staticpicture.h"
 
@@ -18,7 +17,6 @@
 extern CivPaths		*g_civPaths;
 extern aui_UI		*g_ui;
 
-
 StaticPicture::StaticPicture(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -36,7 +34,6 @@ StaticPicture::StaticPicture(
 	*retval = InitCommon( ldlBlock, picture );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 StaticPicture::StaticPicture(
@@ -61,14 +58,12 @@ StaticPicture::StaticPicture(
 }
 
 
-
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	MBCHAR *name =
 		block->GetString( picture ? picture : k_AUI_STATICIMAGE_LDL_IMAGE );
 	Assert( name != NULL );
@@ -78,17 +73,16 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 		Assert( AUI_SUCCESS(errcode) );
 		return errcode;
 	}
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
 {
 	MBCHAR filename[_MAX_PATH];
 
-	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) 
+	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename))
     {
 	    AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
@@ -102,17 +96,15 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
 }
 
 
-
 StaticPicture::~StaticPicture()
 {
 	delete m_picture;
 }
 
 
-
 AUI_ERRCODE StaticPicture::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -137,14 +129,14 @@ AUI_ERRCODE StaticPicture::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 void StaticPicture::SetPicture(MBCHAR *picture)
 {
 	MBCHAR filename[_MAX_PATH];
-	
+
     delete m_picture;
-	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) 
+	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename))
     {
 	    AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
-	} 
-    else 
+	}
+    else
     {
 		m_picture = NULL;
 	}
@@ -153,4 +145,3 @@ void StaticPicture::SetPicture(MBCHAR *picture)
 	ToWindow(&rect);
 	m_window->AddDirtyRect(&rect);
 }
-

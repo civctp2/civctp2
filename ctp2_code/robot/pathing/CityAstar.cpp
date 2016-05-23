@@ -30,12 +30,12 @@
 //   - Bypassing of unexplored tiles
 //   - Linking cities on different continents.
 //   - Building of undersea tunnels
-// - Added owner argument to to FindRoadPath function so that m_owner 
+// - Added owner argument to to FindRoadPath function so that m_owner
 //   can be set in that function. The result is that the path finding
 //   routine takes unexplored tiles into consideration, by Martin Gühmann.
 // - Road path generation is no more dependent on tile move costs for units,
 //   but on pw costs per tile.
-// - Road path may go through foreign territory but is even more expensive 
+// - Road path may go through foreign territory but is even more expensive
 //   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
 // - Road costs are now based on all the tile improvements a tile has,
 //   including those that are under construction. (17-Jan-2008 Martin Gühmann)

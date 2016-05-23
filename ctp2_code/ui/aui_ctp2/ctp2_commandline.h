@@ -1,5 +1,3 @@
-
-
 #ifndef __CTP2_COMMANDLINE_H__
 #define __CTP2_COMMANDLINE_H__
 
@@ -8,12 +6,12 @@
 
 #define k_MAX_COMMAND_LINE_LENGTH		256
 
-class ctp2_CommandLine 
+class ctp2_CommandLine
 {
 public:
 	ctp2_CommandLine(aui_Surface *surface, RECT *clRect);
 	~ctp2_CommandLine();
-	
+
 	void	Draw(void);
 
 	void	HandleKeypress(WPARAM wParam, LPARAM lParam);
@@ -30,6 +28,4 @@ private:
 	sint32				m_end;
 };
 
-
-#endif 
-
+#endif

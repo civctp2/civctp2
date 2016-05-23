@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ ns_Improvements::ns_Improvements()
     m_stringtable   (NULL)
 {
 	Assert(g_theBuildingDB->NumRecords() <= k_IMPROVEMENTS_MAX );
-	sint32      numImprovements = 
+	sint32      numImprovements =
         std::min<sint32>(k_IMPROVEMENTS_MAX, g_theBuildingDB->NumRecords());
 
 	AUI_ERRCODE errcode         = AUI_ERRCODE_OK;

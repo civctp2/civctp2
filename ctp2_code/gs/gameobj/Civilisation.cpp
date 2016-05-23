@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -45,7 +45,6 @@
 #include "World.h"			    // g_theWorld
 #include "net_vision.h"
 #include "ctpai.h"
-
 
 
 void Civilisation::KillCivilisation()
@@ -120,7 +119,7 @@ PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 		}
 	}
 
-	if (pi == PLAYER_INDEX_INVALID) 
+	if (pi == PLAYER_INDEX_INVALID)
 	{
 		// Maximum number of players reached: add as Barbarians.
 		pi = PLAYER_INDEX_VANDALS;
@@ -136,7 +135,7 @@ PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 // Description: Create a new (AI) player
 //
 // Parameters : pi          : player index
-//              old_owner   : player index of "parent" civilisation 
+//              old_owner   : player index of "parent" civilisation
 //
 // Globals    : g_player    : player data
 //              g_network   : Multiplayer data
@@ -153,17 +152,17 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 	g_player[pi] = new Player
 	    (PLAYER_INDEX(pi), 0, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM, GENDER_RANDOM);
 
-	if (g_network.IsActive()) 
+	if (g_network.IsActive())
 	{
 		g_network.AddCivilization
 		    (pi, PLAYER_TYPE_ROBOT, g_player[pi]->GetCivilisation()->GetCivilisation());
 	}
-	
+
 	g_selected_item->AddPlayer(pi);
-	
+
 	if (pi != PLAYER_INDEX_VANDALS && 			// Barbarians do not inherit
 	    (old_owner >= 0) && g_player[old_owner]
-	   ) 
+	   )
 	{
 	    delete g_player[pi]->m_advances;
 		g_player[pi]->m_advances = new Advances(*(g_player[old_owner]->m_advances));
@@ -173,11 +172,11 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 
 	CtpAi::AddPlayer(pi);
 
-	if (g_network.IsHost()) 
+	if (g_network.IsHost())
 	{
 		g_network.Block(old_owner);
 		g_network.QueuePacketToAll(new NetPlayer(g_player[pi]));
-		
+
 		for (uint16 y = 0; y < g_theWorld->GetYHeight(); y += k_VISION_STEP)
 		{
 			g_network.QueuePacketToAll(new NetVision(pi, y, k_VISION_STEP));

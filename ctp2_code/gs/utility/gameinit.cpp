@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -33,10 +33,10 @@
 // - Fixed scenarios that allow players other than player 1 to be played,
 //   by Martin Gühmann
 // - Added multiplayer to single player game conversion for testing.
-// - Prevent assigning the same civilisation index twice, while keeping the 
+// - Prevent assigning the same civilisation index twice, while keeping the
 //   human player selection.
-// - TradePool is fixed on reload if the number of goods in the 
-//   savegame differs from the number of goods in the database. 
+// - TradePool is fixed on reload if the number of goods in the
+//   savegame differs from the number of goods in the database.
 //   - June 4th 2005 Martin Gühmann
 // - Allowed for nPlayers to be 2 or 3 - JJB 2005/06/28
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
@@ -48,7 +48,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h" 
+#include "c3.h"
 #include "gameinit.h"
 
 #include "A_Star_Heuristic_Cost.h"
@@ -150,7 +150,6 @@
 #include "Wormhole.h"
 #include "XY_Coordinates.h"
 
-
 extern void Astar_Init();
 extern void Astar_Cleanup();
 
@@ -166,11 +165,10 @@ extern ControlPanelWindow *g_controlPanel;
 extern BOOL               g_aPlayerIsDead;
 extern sint32             g_numGoods; // To fix games with altered ressource database
 extern sint32             *g_newGoods;
-extern DebugWindow *g_debugWindow; 
+extern DebugWindow *g_debugWindow;
 extern sint32 g_abort_parse;
 extern sint32 g_oldRandSeed;
 extern sint32 g_cheat_age;
-
 
 StringDB                    *g_theStringDB=NULL;
 OzoneDatabase               *g_theUVDB=NULL;
@@ -270,7 +268,6 @@ MBCHAR g_citysize_filename[_MAX_PATH];
 MBCHAR g_featdb_filename[_MAX_PATH];
 MBCHAR g_endgameobject_filename[_MAX_PATH];
 
-
 MBCHAR g_goal_db_filename[_MAX_PATH];
 MBCHAR g_personality_db_filename[_MAX_PATH];
 MBCHAR g_squad_class_db_filename[_MAX_PATH];
@@ -293,13 +290,12 @@ sint32 gameinit_GetCivForSlot(sint32 slot);
 
 sint32 g_scenarioUsePlayerNumber = 0;
 
-
 BOOL                      g_setDifficultyUponLaunch = FALSE;
 sint32                    g_difficultyToSetUponLaunch = 0;
 BOOL                      g_setBarbarianRiskUponLaunch = FALSE;
 sint32                    g_barbarianRiskUponLaunch = 0;
 
-SelectedItem *g_selected_item	= NULL; 
+SelectedItem *g_selected_item	= NULL;
 
 BOOL g_startEmailGame = FALSE;
 BOOL g_startHotseatGame = FALSE;
@@ -331,16 +327,16 @@ namespace
 //----------------------------------------------------------------------------
 void CreateBarbarians(sint32 const diff)
 {
-	if (g_theProfileDB->IsAIOn()) 
+	if (g_theProfileDB->IsAIOn())
 	{
-		g_player[PLAYER_INDEX_VANDALS]      = 
+		g_player[PLAYER_INDEX_VANDALS]      =
 		    new Player(PLAYER_INDEX_VANDALS, diff, PLAYER_TYPE_ROBOT,
 		               CIV_INDEX_VANDALS, GENDER_MALE
 		              );
 	}
-	else 
+	else
 	{
-		g_player[PLAYER_INDEX_VANDALS]      = 
+		g_player[PLAYER_INDEX_VANDALS]      =
 		    new Player(PLAYER_INDEX_VANDALS, diff, PLAYER_TYPE_HUMAN,
 		               CIV_INDEX_RANDOM, GENDER_RANDOM
 		              );
@@ -382,22 +378,21 @@ void CreateInitialHuman
 	                      ? g_theProfileDB->GetCivIndex()
 	                      : requestedCiv;
 
-	g_player[index]     = new Player(index, diff, PLAYER_TYPE_HUMAN, civ, 
+	g_player[index]     = new Player(index, diff, PLAYER_TYPE_HUMAN, civ,
 	                                 g_theProfileDB->GetGender()
 	                                );
 
-	// Set the selected player so that the game starts with the first turn 
+	// Set the selected player so that the game starts with the first turn
 	// and the correct player.
 	g_selected_item->SetPlayerOnScreen(index);
 	g_selected_item->SetCurPlayer(index);
 
-	// Make sure that the current player is kept by turning it into the stop 
+	// Make sure that the current player is kept by turning it into the stop
 	// player.
 	NewTurnCount::SetStopPlayer(index);
 }
 
 }; // namespace
-
 
 //----------------------------------------------------------------------------
 
@@ -407,14 +402,13 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 	sint32 settler = -1;
 
 	sint32 n = g_theUnitDB->NumRecords();
-	for (i=0; i<n; i++) { 
+	for (i=0; i<n; i++) {
 		if (g_theUnitDB->Get(i)->GetSettleLand()) {
 			settler = i;
 			break;
 		}
 	}
 
-	
 	if (settler == -1) {
 		settler = 0;
 	}
@@ -433,21 +427,21 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		return 0;
 
 	Unit id;
-	for (i=1; i<nPlayers; i++) 
+	for (i=1; i<nPlayers; i++)
 	{
 		if (g_player[i]==NULL)
 			continue;
 
 		sint32 which = i - 1;
-		if(which == humanStart) 
+		if(which == humanStart)
 		{
-			if(i != 1) 
+			if(i != 1)
 			{
 				which = 1;
 			}
-		} 
-		else 
-			if(i == 1) 
+		}
+		else
+			if(i == 1)
 			{
 				which = humanStart;
 			}
@@ -456,21 +450,21 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 			break;
 
 		sint32 nUnits = 1;
-		if(g_network.IsLaunchHost()) 
+		if(g_network.IsLaunchHost())
 		{
 			nUnits = s_networkSettlers[i];
-			
+
 			if (nUnits < 1 && i != PLAYER_INDEX_VANDALS)
 				nUnits = 1;
-		} 
-		else 
+		}
+		else
 		{
 			if((g_startHotseatGame || g_startEmailGame) &&
-			   g_hsPlayerSetup[i].isHuman) 
+			   g_hsPlayerSetup[i].isHuman)
 			{
 				nUnits = 1;
-			} 
-			else 
+			}
+			else
 				if (g_player[i]->IsRobot())
 				{
 					nUnits = drec->GetAIStartUnits();
@@ -486,18 +480,18 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		if (nUnits < 1)
 			nUnits = 1;
 
-		for(j = 0; j < nUnits; j++) 
+		for(j = 0; j < nUnits; j++)
 		{
-			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(), 
-										  FALSE, CAUSE_NEW_ARMY_INITIAL); 
+			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(),
+										  FALSE, CAUSE_NEW_ARMY_INITIAL);
 		}
 
 #ifdef _DEBUG
-		sint32 age; 
+		sint32 age;
 		g_theProfileDB->SetCheatAge(g_cheat_age);
 		if (g_theProfileDB->GetCheatAge(age)) {
 		for(; j <9; j++) {
-			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(), 
+			id =  g_player[i]->CreateUnit(settler, player_start_list[which], Unit(),
 			                              FALSE, CAUSE_NEW_ARMY_INITIAL);
 		}
 		}
@@ -513,60 +507,60 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 	sint32 n = g_theUnitDB->NumRecords();
 	sint32 i;
 	if(!uFile) {
-		for (i=0; i<n; i++) { 
+		for (i=0; i<n; i++) {
 			if (!g_theUnitDB->Get(i)->GetHasPopAndCanBuild() &&
-				!g_theUnitDB->Get(i)->GetIsTrader() 
-				) { 
-				
-				do { 
+				!g_theUnitDB->Get(i)->GetIsTrader()
+				) {
+
+				do {
 					pos.y++;
-					if (g_theWorld->GetYHeight()<= pos.y) { 
-						pos.x++; 
-						pos.y = 2; 
-					} 
-					if (g_theWorld->GetXWidth()<=pos.x) { 
-						return; 
+					if (g_theWorld->GetYHeight()<= pos.y) {
+						pos.x++;
+						pos.y = 2;
+					}
+					if (g_theWorld->GetXWidth()<=pos.x) {
+						return;
 					}
 				}  while(!g_theWorld->CanEnter(pos, g_theUnitDB->Get(i)->GetMovementType()));
-				
-				Unit id1 = g_player[player]->CreateUnit(i, pos, Unit(), 
-				                                        FALSE, CAUSE_NEW_ARMY_INITIAL); 
-				id1.SetIsProfessional(TRUE); 
+
+				Unit id1 = g_player[player]->CreateUnit(i, pos, Unit(),
+				                                        FALSE, CAUSE_NEW_ARMY_INITIAL);
+				id1.SetIsProfessional(TRUE);
 			}
 		}
-		pos.x++; 
+		pos.x++;
 	} else {
 		fscanf(uFile, "%ld\n", &n);
 
 		sint32 *uids = new sint32[n];
-		
+
 		for (i=0; i<n; i++) {
 			fscanf(uFile, "%ld\n", &uids[i]);
 		}
 		fclose(uFile);
-		
+
 		for (i=0; i<n; i++) {
 			sint32 uid = uids[i];
 			if (!g_theUnitDB->Get(uid)->GetHasPopAndCanBuild() &&
-				!g_theUnitDB->Get(uid)->GetIsTrader() 
-				) { 
-				
-				do { 
+				!g_theUnitDB->Get(uid)->GetIsTrader()
+				) {
+
+				do {
 					pos.y++;
-					if (g_theWorld->GetYHeight()<= pos.y) { 
-						pos.x++; 
-						pos.y = 2; 
-					} 
+					if (g_theWorld->GetYHeight()<= pos.y) {
+						pos.x++;
+						pos.y = 2;
+					}
 					if (g_theWorld->GetXWidth()<=pos.x) {
 						delete [] uids;
-						return; 
+						return;
 					}
 				}  while(!g_theWorld->CanEnter(pos, g_theUnitDB->Get(uid)->GetMovementType()));
 
-				Unit id1 = g_player[player]->CreateUnit(uid, pos, Unit(), 
-				                                        FALSE, CAUSE_NEW_ARMY_INITIAL); 
-				id1.SetIsProfessional(TRUE); 
-				
+				Unit id1 = g_player[player]->CreateUnit(uid, pos, Unit(),
+				                                        FALSE, CAUSE_NEW_ARMY_INITIAL);
+				id1.SetIsProfessional(TRUE);
+
 			}
 		}
 
@@ -576,66 +570,65 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 
 void gameinit_PlaceInitalUnits()
 {
-	sint32 j; 
-	MapPoint pos; 
-		
-	for (j=0; j<k_MAX_PLAYERS; j++) { 
+	sint32 j;
+	MapPoint pos;
+
+	for (j=0; j<k_MAX_PLAYERS; j++) {
 		if(!g_player[j]) continue;
 		pos.x = static_cast<sint16>(j * 2);
 		pos.y = 2;
 		gameinit_SpewUnits(j, pos);
-	}	
+	}
 }
 
 sint32 gameinit_InitializeGameFiles(void)
 {
 	MBCHAR const fn[] = "InitializeGameFiles";
 
-	g_abort_parse = FALSE; 
+	g_abort_parse = FALSE;
 
 	FILE * fin = c3files_fopen(C3DIR_GAMEDATA, "gamefile.txt", "r");
 	if (!fin)
 	{
-		c3errors_ErrorDialog(fn, "Missing game file"); 
+		c3errors_ErrorDialog(fn, "Missing game file");
 		g_abort_parse = TRUE;
-		return FALSE; 
+		return FALSE;
 	}
 
 	MBCHAR str1[_MAX_PATH];
-	int r = fscanf(fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog(fn, "Missing strings file"); 
+	int r = fscanf(fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog(fn, "Missing strings file");
 		g_abort_parse = TRUE;
-		return FALSE; 
+		return FALSE;
 	}
 
-	MBCHAR dir[_MAX_PATH]; 
+	MBCHAR dir[_MAX_PATH];
 	dir[0] = 0;
 	sprintf(g_stringdb_filename, "%s%s", dir, str1);
 
 	r = fscanf (fin, "%s", str1);
 	if (r == EOF) {
-		c3errors_ErrorDialog(fn, "Missing sounds file"); 
-		return FALSE; 
+		c3errors_ErrorDialog(fn, "Missing sounds file");
+		return FALSE;
 	}
 	sprintf(g_sounddb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1);	  
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing constants file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing constants file");
+		return FALSE;
 	}
 
-	sprintf (g_constdb_filename, "%s%s", dir, str1); 
+	sprintf (g_constdb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1);	  
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing Age file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing Age file");
+		return FALSE;
 	}
-	sprintf (g_agedb_filename, "%s%s", dir, str1); 
+	sprintf (g_agedb_filename, "%s%s", dir, str1);
 
-	
 	r = fscanf( fin, "%s", str1 );
 	if ( r == EOF ) {
 		c3errors_ErrorDialog( fn, "Missing Throne file" );
@@ -643,79 +636,77 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf( g_thronedb_filename, "%s%s", dir, str1 );
 
-	
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing TerrainIconDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing TerrainIconDB file");
+		return FALSE;
 	}
-	sprintf (g_terrainicondb_filename, "%s%s", dir, str1); 
+	sprintf (g_terrainicondb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing terrain file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing terrain file");
+		return FALSE;
 	}
-	sprintf (g_terrain_filename, "%s%s", dir, str1); 
+	sprintf (g_terrain_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing AdvanceIconDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing AdvanceIconDB file");
+		return FALSE;
 	}
-	sprintf (g_advanceicondb_filename, "%s%s", dir, str1); 
+	sprintf (g_advanceicondb_filename, "%s%s", dir, str1);
 
 	SPLASH_STRING("Loading Advance DB...");
-	r=fscanf (fin, "%s", str1); 
+	r=fscanf (fin, "%s", str1);
 	if (r == EOF) {
-	c3errors_ErrorDialog  (fn, "Missing advances file"); 
-		return FALSE; 
+	c3errors_ErrorDialog  (fn, "Missing advances file");
+		return FALSE;
 	}
-	sprintf (g_advancedb_filename, "%s%s", dir, str1); 
+	sprintf (g_advancedb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing concepts file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing concepts file");
+		return FALSE;
 	}
-	sprintf (g_conceptdb_filename, "%s%s", dir, str1); 
-	
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing MapIconDB file"); 
-		return FALSE; 
-	}
-	sprintf (g_mapicondb_filename, "%s%s", dir, str1); 
+	sprintf (g_conceptdb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing tile improvements file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing MapIconDB file");
+		return FALSE;
 	}
-	sprintf (g_tileimprovementdb_filename, "%s%s", dir, str1); 
+	sprintf (g_mapicondb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing TileImprovmentIconDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing tile improvements file");
+		return FALSE;
 	}
-	sprintf (g_tileimprovementicondb_filename, "%s%s", dir, str1); 
+	sprintf (g_tileimprovementdb_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing TileImprovmentIconDB file");
+		return FALSE;
+	}
+	sprintf (g_tileimprovementicondb_filename, "%s%s", dir, str1);
 
 	SPLASH_STRING("Loading Sprite DB...");
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing sprite file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing sprite file");
+		return FALSE;
 	}
-	sprintf (g_spritestatedb_filename, "%s%s", dir, str1); 
+	sprintf (g_spritestatedb_filename, "%s%s", dir, str1);
 
-
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing Special Effect ID file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing Special Effect ID file");
+		return FALSE;
 	}
-	sprintf (g_specialeffectdb_filename, "%s%s", dir, str1); 
+	sprintf (g_specialeffectdb_filename, "%s%s", dir, str1);
 
 	r = fscanf(fin, "%s", str1);
 	if(r == EOF) {
@@ -726,19 +717,18 @@ sint32 gameinit_InitializeGameFiles(void)
 
 	r = fscanf(fin, "%s", str1);
 	if (r == EOF) {
-		c3errors_ErrorDialog  (fn, "Missing GoodsSpriteID file"); 
-		return FALSE; 
+		c3errors_ErrorDialog  (fn, "Missing GoodsSpriteID file");
+		return FALSE;
 	}
 	sprintf(g_goodsspritestatedb_filename, "%s%s", dir, str1);
 
 	r = fscanf(fin, "%s", str1);
 	if (r == EOF) {
-		c3errors_ErrorDialog  (fn, "Missing GoodsSpriteID file"); 
-		return FALSE; 
+		c3errors_ErrorDialog  (fn, "Missing GoodsSpriteID file");
+		return FALSE;
 	}
 	sprintf(g_cityspritestatedb_filename, "%s%s", dir, str1);
 
-	
 	r = fscanf( fin, "%s", str1 );
 	if ( r == EOF ) {
 		c3errors_ErrorDialog( fn, "Missing BranchID file" );
@@ -746,111 +736,111 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf( g_branchdb_filename, "%s%s", dir, str1 );
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing UnitIconDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing UnitIconDB file");
+		return FALSE;
 	}
-	sprintf (g_uniticondb_filename, "%s%s", dir, str1); 
+	sprintf (g_uniticondb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing Units file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing Units file");
+		return FALSE;
 	}
-	
-	sprintf (g_unitdb_filename, "%s%s", dir, str1); 
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing wonder file"); 
-		return FALSE; 
-	}
-	sprintf (g_wonder_filename, "%s%s", dir, str1); 
-	
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing WonderIconDB file"); 
-		return FALSE; 
-	}
-	sprintf (g_wondericondb_filename, "%s%s", dir, str1); 
+	sprintf (g_unitdb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing WonderMovieDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing wonder file");
+		return FALSE;
 	}
-	sprintf (g_wondermoviedb_filename, "%s%s", dir, str1); 
+	sprintf (g_wonder_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing VictoryMovieDB file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing WonderIconDB file");
+		return FALSE;
 	}
-	sprintf (g_victorymoviedb_filename, "%s%s", dir, str1); 
+	sprintf (g_wondericondb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing improvement file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing WonderMovieDB file");
+		return FALSE;
 	}
-	sprintf (g_improve_filename, "%s%s", dir, str1); 
-	
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing UnitIconDB file"); 
-		return FALSE; 
-	}
-	sprintf (g_improveicondb_filename, "%s%s", dir, str1); 
+	sprintf (g_wondermoviedb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing pollution file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing VictoryMovieDB file");
+		return FALSE;
 	}
-	sprintf (g_pollution_filename, "%s%s", dir, str1); 
+	sprintf (g_victorymoviedb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing global warming pollution file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing improvement file");
+		return FALSE;
 	}
-	sprintf (g_global_warming_filename, "%s%s", dir, str1); 
+	sprintf (g_improve_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing ozone pollution file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing UnitIconDB file");
+		return FALSE;
 	}
-	sprintf (g_ozone_filename, "%s%s", dir, str1); 
+	sprintf (g_improveicondb_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing government file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing pollution file");
+		return FALSE;
 	}
-	sprintf (g_government_filename, "%s%s", dir, str1); 
+	sprintf (g_pollution_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing government icondb file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing global warming pollution file");
+		return FALSE;
 	}
-	sprintf (g_governmenticondb_filename, "%s%s", dir, str1); 
+	sprintf (g_global_warming_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing population file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing ozone pollution file");
+		return FALSE;
 	}
-	sprintf (g_pop_filename, "%s%s", dir, str1); 
+	sprintf (g_ozone_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing difficulty file"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing government file");
+		return FALSE;
 	}
-	sprintf (g_difficultydb_filename, "%s%s", dir, str1); 
+	sprintf (g_government_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing government icondb file");
+		return FALSE;
+	}
+	sprintf (g_governmenticondb_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing population file");
+		return FALSE;
+	}
+	sprintf (g_pop_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing difficulty file");
+		return FALSE;
+	}
+	sprintf (g_difficultydb_filename, "%s%s", dir, str1);
 
 	r = fscanf(fin, "%s", str1);
 	if(r == EOF) {
@@ -914,7 +904,7 @@ sint32 gameinit_InitializeGameFiles(void)
 		return FALSE;
 	}
 	sprintf(g_messageiconfdb_filename, "%s%s", dir, str1);
-	
+
 	r = fscanf(fin, "%s", str1);
 	if (r==EOF) {
 		c3errors_ErrorDialog(fn, "Missing Goods Icon Filename database");
@@ -943,73 +933,73 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf(g_playlistdb_filename, "%s%s", dir, str1);
 
-	
-	
-	
-	
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing squad classes DB filename"); 
-		return FALSE; 
-	}
-	sprintf (g_squad_class_db_filename, "%s%s", dir, str1); 
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing goals DB filename"); 
-		return FALSE; 
-	}
-	sprintf (g_goal_db_filename, "%s%s", dir, str1); 
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing wonder build lists DB filename"); 
-		return FALSE; 
-	}
-	sprintf (g_wonder_buildlist_db_filename, "%s%s", dir, str1); 
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing building build lists DB filename"); 
-		return FALSE; 
-	}
-	sprintf (g_building_buildlist_db_filename, "%s%s", dir, str1); 
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing unit build lists DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing squad classes DB filename");
+		return FALSE;
 	}
-	sprintf (g_unit_buildlist_db_filename, "%s%s", dir, str1); 
+	sprintf (g_squad_class_db_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing improvement lists DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing goals DB filename");
+		return FALSE;
 	}
-	sprintf (g_improvement_list_db_filename, "%s%s", dir, str1); 
+	sprintf (g_goal_db_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing strategies DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing wonder build lists DB filename");
+		return FALSE;
 	}
-	sprintf (g_strategy_db_filename, "%s%s", dir, str1); 
+	sprintf (g_wonder_buildlist_db_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing build list sequence DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing building build lists DB filename");
+		return FALSE;
 	}
-	sprintf (g_buildlist_sequence_db_filename, "%s%s", dir, str1); 
+	sprintf (g_building_buildlist_db_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing diplomacy DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing unit build lists DB filename");
+		return FALSE;
 	}
-	sprintf (g_diplomacy_db_filename, "%s%s", dir, str1); 
-	
+	sprintf (g_unit_buildlist_db_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing improvement lists DB filename");
+		return FALSE;
+	}
+	sprintf (g_improvement_list_db_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing strategies DB filename");
+		return FALSE;
+	}
+	sprintf (g_strategy_db_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing build list sequence DB filename");
+		return FALSE;
+	}
+	sprintf (g_buildlist_sequence_db_filename, "%s%s", dir, str1);
+
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing diplomacy DB filename");
+		return FALSE;
+	}
+	sprintf (g_diplomacy_db_filename, "%s%s", dir, str1);
+
 	r = fscanf(fin, "%s", str1);
 	if(r == EOF) {
 		c3errors_ErrorDialog(fn, "Missing city size DB filename");
@@ -1030,7 +1020,7 @@ sint32 gameinit_InitializeGameFiles(void)
 		return FALSE;
 	}
 	sprintf(g_diplomacy_threat_filename, "%s%s", dir, str1);
-	
+
 	r = fscanf(fin, "%s", str1);
 	if(r == EOF) {
 		c3errors_ErrorDialog(fn, "Missing advance list DB filename");
@@ -1038,12 +1028,12 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf(g_advance_list_db_filename, "%s%s", dir, str1);
 
-	r = fscanf (fin, "%s", str1); 
-	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing personality DB filename"); 
-		return FALSE; 
+	r = fscanf (fin, "%s", str1);
+	if (r == EOF) {
+		c3errors_ErrorDialog  (fn, "Missing personality DB filename");
+		return FALSE;
 	}
-	sprintf (g_personality_db_filename, "%s%s", dir, str1); 
+	sprintf (g_personality_db_filename, "%s%s", dir, str1);
 
 	r = fscanf(fin, "%s", str1);
 	if(r == EOF) {
@@ -1073,10 +1063,9 @@ sint32 gameinit_InitializeGameFiles(void)
 	}
 	sprintf(g_age_city_style_db_filename, "%s%s", dir, str1);
 
-	
 	c3files_fclose(fin);
 
-	return TRUE; 
+	return TRUE;
 }
 
 
@@ -1084,28 +1073,26 @@ sint32 gameinit_InitializeGameFiles(void)
 
 sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 {
-	g_debugWindow->SetDebugMask(k_DBG_AI); 
+	g_debugWindow->SetDebugMask(k_DBG_AI);
 
 	g_theProfileDB->SetNPlayers(3); // What's this?
-	
+
 	sint32 nPlayers = g_theProfileDB->GetNPlayers();
 
-	
 	g_theOrderPond	= new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
 	g_theUnseenPond	= new Pool<UnseenCell>(INITIAL_CHUNK_LIST_SIZE);
 
-	
 	g_theProfileDB->SetTutorialAdvice(FALSE);
 
 
 
 
 
-	
-	
+
+
 	uint32 seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
 	srand(seed);
-	g_rand = new RandomGenerator(seed); 
+	g_rand = new RandomGenerator(seed);
 
 
 
@@ -1133,7 +1120,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	MapPoint	mapSize;
 	constutil_GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
-	
 	g_theWorld = new World(mapSize,
 	                       g_theProfileDB->IsXWrap(),
 	                       g_theProfileDB->IsYWrap());
@@ -1141,10 +1127,9 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theWorld->CreateTheWorld(g_player_start_list,
 	                           g_player_start_score);
 
-
 	sint32 i;
-	for(i = 0; i < nPlayers - 1; i++) 
-		if(g_player_start_list[i].x < 0) 
+	for(i = 0; i < nPlayers - 1; i++)
+		if(g_player_start_list[i].x < 0)
 		{
 			nPlayers = i + 1;
 			break;
@@ -1156,19 +1141,19 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_turn = new TurnCount();
 
-	g_selected_item = new SelectedItem(nPlayers); 
+	g_selected_item = new SelectedItem(nPlayers);
 
 
 
 
-	
-	
-	
+
+
+
 
 	SPLASH_STRING("Allocating Object Pools...");
 
-	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()), 
-	                                   sint16(g_theWorld->GetYHeight()), 
+	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()),
+	                                   sint16(g_theWorld->GetYHeight()),
 	                                   g_theWorld->IsYwrap());
 
 	g_theInstallationTree = new InstallationQuadTree(sint16(g_theWorld->GetXWidth()),
@@ -1201,13 +1186,13 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
     {
 		return FALSE;
     }
-	
+
 	g_theProfileDB->SetTutorialAdvice(FALSE);
 	g_theProfileDB->SetThroneRoom(FALSE);
 	g_theProfileDB->SetDifficulty(0);
 	g_theProfileDB->SetRiskLevel(0);
 	g_theProfileDB->SetNonRandomCivs(TRUE);
-	
+
 
 
 
@@ -1227,12 +1212,10 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theAgreementPool = new AgreementPool() ;
 	Assert(g_theAgreementPool) ;
 
-	
 	delete g_theMessagePool;
 	g_theMessagePool = new MessagePool() ;
 	Assert(g_theMessagePool) ;
 
-	
 	delete g_theCriticalMessagesPrefs;
 	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs();
 	Assert(g_theCriticalMessagesPrefs) ;
@@ -1243,7 +1226,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theInstallationPool->RebuildQuadTree();
 
 	g_wormhole = NULL;
-	
+
 	g_theWonderTracker = new WonderTracker();
 
 	g_theAchievementTracker = new AchievementTracker();
@@ -1262,19 +1245,18 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_deadPlayer = new PointerList<Player>;
 
-
 	sint32 diff = g_theProfileDB->GetDifficulty();
 
 	CreateBarbarians(diff);
 
 	sint32 civ = g_theProfileDB->GetCivIndex();
-	
-	// TODO: check if the fixed index 1 is correct here, 
+
+	// TODO: check if the fixed index 1 is correct here,
 	//       and whether the start/stop player have to be set.
-	g_player[1] = new Player(PLAYER_INDEX(1), 
-							 diff, 
-							 PLAYER_TYPE_HUMAN, 
-							 civ, 
+	g_player[1] = new Player(PLAYER_INDEX(1),
+							 diff,
+							 PLAYER_TYPE_HUMAN,
+							 civ,
 							 g_theProfileDB->GetGender());
 
 	s_networkSettlers[1] = 1;
@@ -1283,20 +1265,19 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	for (i=2; i<nPlayers; i++)
 	{
-		if (g_theProfileDB->IsAIOn() && 
-			((!g_network.IsNetworkLaunch() || 
+		if (g_theProfileDB->IsAIOn() &&
+			((!g_network.IsNetworkLaunch() ||
 			i > g_network.GetNumHumanPlayers()) ||
-			(g_network.IsNetworkLaunch() && 
-			g_theProfileDB->NoHumanPlayersOnHost() && 
-			i==g_network.GetNumHumanPlayers()))) 
+			(g_network.IsNetworkLaunch() &&
+			g_theProfileDB->NoHumanPlayersOnHost() &&
+			i==g_network.GetNumHumanPlayers())))
 		{
 
 
-
-			g_player[i] = new Player(PLAYER_INDEX(i), 
-									 diff, 
-									 PLAYER_TYPE_ROBOT, 
-									 CIV_INDEX_RANDOM, 
+			g_player[i] = new Player(PLAYER_INDEX(i),
+									 diff,
+									 PLAYER_TYPE_ROBOT,
+									 CIV_INDEX_RANDOM,
 									 GENDER_RANDOM);
 		}
 		else
@@ -1307,7 +1288,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	}
 
 #ifdef _DEBUG
-	if (g_theProfileDB->IsDiplomacyLogOn()) 
+	if (g_theProfileDB->IsDiplomacyLogOn())
     {
 		g_theDiplomacyLog = new Diplomacy_Log;
 	}
@@ -1322,21 +1303,21 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	SPLASH_STRING("Creating AI Interface's...");
 
-	if (g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch()) 
+	if (g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch())
 	{
-		PLAYER_INDEX ai_players[k_MAX_PLAYERS]; 
+		PLAYER_INDEX ai_players[k_MAX_PLAYERS];
 		sint32 next = 0;
-		
-		for (i=0; i< k_MAX_PLAYERS; i++) 
+
+		for (i=0; i< k_MAX_PLAYERS; i++)
 			if(g_player[i] && g_player[i]->IsRobot())
 				ai_players[next++] = PLAYER_INDEX(i);
-		
-		if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch()) 
+
+		if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch())
 			g_theProfileDB->SetAI(TRUE);
-	} 
-	else 
+	}
+	else
 	{
-		for(i = 0; i < k_MAX_PLAYERS; i++) 
+		for(i = 0; i < k_MAX_PLAYERS; i++)
 			if(g_player[i])
 				g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
 	}
@@ -1351,25 +1332,24 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 
 
-	
-	if ( g_selected_item && g_player[g_selected_item->GetVisiblePlayer()] ) 
+
+	if ( g_selected_item && g_player[g_selected_item->GetVisiblePlayer()] )
 	{
-		
-		
-		
-			
-		
+
+
+
+
+
 		g_selected_item->Refresh();
 	}
 
-	
 	g_theWorld->A_star_heuristic->Update();
 
 	g_theWorld->RecalculateZOC();
 
-	
-	
-	
+
+
+
 	g_player[1]->m_gold->SetLevel(1000000);
 	g_player[1]->m_materialPool->AddMaterials(1000000);
 
@@ -1384,7 +1364,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_turn->SetHotSeat(FALSE);
 	g_turn->SetEmail(FALSE);
-	
+
 	g_startHotseatGame = FALSE;
 	g_startEmailGame = FALSE;
 
@@ -1406,22 +1386,21 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		}
 	}
 
-	
-	if (g_setDifficultyUponLaunch) 
+	if (g_setDifficultyUponLaunch)
 	{
 		g_theProfileDB->SetDifficulty(g_difficultyToSetUponLaunch);
 		g_setDifficultyUponLaunch = FALSE;
 	}
 
-	if (g_setBarbarianRiskUponLaunch) 
+	if (g_setBarbarianRiskUponLaunch)
 	{
 		g_theProfileDB->SetRiskLevel(g_barbarianRiskUponLaunch);
 		g_setBarbarianRiskUponLaunch = FALSE;
 	}
 
 
-	
-	
+
+
 	infowin_SetMinRoundForGraphs(0);
 
 	return 1;
@@ -1429,10 +1408,9 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 sint32 gameinit_GetCivForSlot(sint32 slot)
 {
-	
 
 	if(g_network.IsLaunchHost()) {
-		
+
 		if(slot > g_network.GetNumHumanPlayers()) {
 			sint32 firstRobot = g_network.GetNumHumanPlayers() + 1;
 			NSAIPlayerInfo *nsaipi = g_network.GetNSAIPlayerInfo(slot - firstRobot);
@@ -1440,23 +1418,21 @@ sint32 gameinit_GetCivForSlot(sint32 slot)
 				return nsaipi->m_civ;
 			}
 		} else {
-			
+
 			NSPlayerInfo *nspi = g_network.GetNSPlayerInfo(slot - 1);
 			if(nspi)
 				return nspi->m_civ;
 		}
 	}
 
-	
-	
+
 	switch(g_startInfoType) {
 		case STARTINFOTYPE_NONE:
-		case STARTINFOTYPE_NOLOCS:	
+		case STARTINFOTYPE_NOLOCS:
 		case STARTINFOTYPE_POSITIONSFIXED:
 			return CIV_INDEX_RANDOM;
 		case STARTINFOTYPE_CIVSFIXED:
-			
-			
+
 			if (slot-1 >= g_theWorld->GetNumStartingPositions()) {
 				return CIV_INDEX_RANDOM;
 			} else {
@@ -1466,7 +1442,6 @@ sint32 gameinit_GetCivForSlot(sint32 slot)
 			return CIV_INDEX_RANDOM;
 	}
 }
-
 
 
 sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
@@ -1481,15 +1456,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theProfileDB->SetNPlayers(2);
 	}
 	sint32 nPlayers = g_theProfileDB->GetNPlayers();
-	Assert(2 <= nPlayers); 
-
+	Assert(2 <= nPlayers);
 
 	g_theOrderPond = new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
 	g_theUnseenPond = new Pool<UnseenCell>(INITIAL_CHUNK_LIST_SIZE);
 
-	if(g_network.IsActive() 
-	|| g_network.IsNetworkLaunch() 
-	|| g_startHotseatGame 
+	if(g_network.IsActive()
+	|| g_network.IsNetworkLaunch()
+	|| g_startHotseatGame
 	|| g_startEmailGame
 	){
 		g_theProfileDB->SetTutorialAdvice(FALSE);
@@ -1497,25 +1471,24 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	// Removed the auto-tutorial on low difficulty, since it causes
 	// more problems than it solves - JJB
 
-	if (&archive) { 
-		g_rand = new RandomGenerator(archive); 
-	} else { 
+	if (&archive) {
+		g_rand = new RandomGenerator(archive);
+	} else {
 #ifdef _DEBUG
-	FILE * fin = fopen ("dbgseed.txt", "r"); 
+	FILE * fin = fopen ("dbgseed.txt", "r");
 
-	if (fin) { 
-		fscanf (fin, "%d", &seed); 
-	} else { 
-
+	if (fin) {
+		fscanf (fin, "%d", &seed);
+	} else {
 
 		seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
 
-		fin = fopen("logs\\oldseed.txt", "w"); 
-		fprintf (fin, "%d\n", seed); 
+		fin = fopen("logs\\oldseed.txt", "w");
+		fprintf (fin, "%d\n", seed);
 	}
 
 	DPRINTF(k_DBG_FIX, ("** RANDOM SEED %d\n", seed));
-	fclose (fin); 
+	fclose (fin);
 #else
 
 	seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
@@ -1523,7 +1496,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	srand(seed);
 
-	g_rand = new RandomGenerator(seed); 
+	g_rand = new RandomGenerator(seed);
 	}
 
 
@@ -1545,13 +1518,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing the Map...");
 
-	bool loadEverything = 
+	bool loadEverything =
         !g_isScenario || (g_startInfoType == STARTINFOTYPE_NOLOCS);
 
-	if (&archive) { 
+	if (&archive) {
 		g_theWorld = new World(archive) ;
 		if(
-		
 
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)) {
 			sint32 x, y;
@@ -1574,7 +1546,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		MapPoint	mapSize;
 		constutil_GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
-		
 		g_theWorld = new World(mapSize,
 		                       g_theProfileDB->IsXWrap(),
 		                       g_theProfileDB->IsYWrap());
@@ -1583,7 +1554,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		                           g_player_start_score);
 
 #ifdef _DEBUG
-		if (!g_network.IsActive()) { 
+		if (!g_network.IsActive()) {
 			Assert(g_player_start_list[1].x >= 0);
 		}
 #endif
@@ -1591,25 +1562,25 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		nPlayers = g_theProfileDB->GetNPlayers();
 		for(sint32 i = 0; i < nPlayers - 1; i++) {
 			if(g_player_start_list[i].x < 0) {
-				nPlayers = i + 1; 
+				nPlayers = i + 1;
 				break;
 			}
 		}
 
 		Assert(nPlayers <= k_MAX_PLAYERS);
-		if (k_MAX_PLAYERS < nPlayers) { 
-			exit(0); 
-		} 
+		if (k_MAX_PLAYERS < nPlayers) {
+			exit(0);
+		}
 		g_theProfileDB->SetNPlayers(nPlayers);
 
 	}
 
 	Assert(g_theWorld);
 
-	if (&archive && loadEverything){ 
+	if (&archive && loadEverything){
 		g_turn = new TurnCount(archive);
-	} else { 
-		g_turn = new TurnCount(); 
+	} else {
+		g_turn = new TurnCount();
 		if(g_network.IsActive() || g_network.IsNetworkLaunch()) {
 			sint32 startAge = g_network.GetStartingAge();
 			if(startAge != 0) {
@@ -1618,23 +1589,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 	}
 
-	if (&archive && loadEverything){ 
-		g_selected_item = new SelectedItem(archive); 
-	}else { 
-		g_selected_item = new SelectedItem(nPlayers); 
+	if (&archive && loadEverything){
+		g_selected_item = new SelectedItem(archive);
+	}else {
+		g_selected_item = new SelectedItem(nPlayers);
 	}
 
 
 
 
-	
-	
-	
+
+
+
 
 	SPLASH_STRING("Allocating Object Pools...");
 
-	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()), 
-	                                   sint16(g_theWorld->GetYHeight()), 
+	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()),
+	                                   sint16(g_theWorld->GetYHeight()),
 	                                   g_theWorld->IsYwrap());
 
 	g_theInstallationTree = new InstallationQuadTree(sint16(g_theWorld->GetXWidth()),
@@ -1644,9 +1615,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	if (&archive && loadEverything)
 		g_theUnitPool = new UnitPool(archive);
 	else
-		g_theUnitPool = new UnitPool(); 
+		g_theUnitPool = new UnitPool();
 	Assert(g_theUnitPool);
-	
+
 	if(&archive && loadEverything)
 		g_theArmyPool = new ArmyPool(archive);
 	else
@@ -1670,15 +1641,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 
 		g_theTradePool->RecreateActors();
-	} 
+	}
 	else
 		g_theTradePool = new TradePool();
 
-    // 55 is probably the last save game version for CTP1 
-	if (&archive && loadEverything && (g_saveFileVersion < 55)) 
+    // 55 is probably the last save game version for CTP1
+	if (&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		g_theTradeOfferPool = new TradeOfferPool(archive);
-	} 
+	}
     else
     {
 		g_theTradeOfferPool = new TradeOfferPool();
@@ -1691,10 +1662,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_thePollution = new Pollution();
 	Assert(g_thePollution);
 
-	if (&archive && loadEverything && (g_saveFileVersion < 55)) 
+	if (&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		g_theTopTen = new TopTen(archive);
-	} 
+	}
     else
     {
 		g_theTopTen = new TopTen();
@@ -1703,38 +1674,38 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	if (&archive) 
+	if (&archive)
     {
         delete g_slicEngine;
         g_slicEngine = new SlicEngine(archive);
 		g_slicEngine->PostSerialize();
-	} 
-    else 
+	}
+    else
     {
-        if (!SlicEngine::Reload(g_slic_filename)) 
+        if (!SlicEngine::Reload(g_slic_filename))
         {
 			return FALSE;
 		}
 
-		if (!g_network.IsActive() && !g_network.IsNetworkLaunch()) 
+		if (!g_network.IsActive() && !g_network.IsNetworkLaunch())
         {
 			g_slicEngine->SetTutorialActive(g_theProfileDB->IsTutorialAdvice());
 			g_slicEngine->SetTutorialPlayer(g_theProfileDB->GetPlayerIndex());
 
-			if (g_theProfileDB->IsTutorialAdvice()) 
+			if (g_theProfileDB->IsTutorialAdvice())
             {
-				if (g_slicEngine->Load(g_tutorial_filename, k_TUTORIAL_FILE)) 
+				if (g_slicEngine->Load(g_tutorial_filename, k_TUTORIAL_FILE))
                 {
 					g_slicEngine->Link();
 				}
-				
+
 				g_theProfileDB->SetThroneRoom(FALSE);
 				g_theProfileDB->SetDifficulty(0);
 				g_theProfileDB->SetRiskLevel(0);
 				g_theProfileDB->SetNonRandomCivs(TRUE);
 			}
-		} 
-        else 
+		}
+        else
         {
 			g_theProfileDB->SetTutorialAdvice(FALSE);
 		}
@@ -1751,8 +1722,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	if (&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive) ;
-	} 
-    else 
+	}
+    else
     {
 		g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
 	}
@@ -1767,7 +1738,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	if (&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		g_theAgreementPool = new AgreementPool(archive) ;
-	} 
+	}
     else
     {
 		g_theAgreementPool = new AgreementPool() ;
@@ -1781,7 +1752,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theMessagePool = new MessagePool() ;
 	Assert(g_theMessagePool) ;
 
-	
 	delete g_theCriticalMessagesPrefs;
 	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
 	Assert(g_theCriticalMessagesPrefs) ;
@@ -1794,18 +1764,17 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	g_theInstallationPool->RebuildQuadTree();
 
-	
 	if (&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		sint32 wormholeExists;
 		archive >> wormholeExists;
         g_wormhole = (wormholeExists) ? new Wormhole(archive) : NULL;
-	} 
-    else 
+	}
+    else
     {
 		g_wormhole = NULL;
 	}
-	
+
 	if(&archive && loadEverything) {
 		g_theWonderTracker = new WonderTracker(archive);
 	} else {
@@ -1816,19 +1785,19 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
     {
 		g_theAchievementTracker = new AchievementTracker(archive);
 	}
-    else 
+    else
     {
 		g_theAchievementTracker = new AchievementTracker();
 	}
 
-	if (&archive) 
+	if (&archive)
     {
 		delete g_exclusions;
 		g_exclusions = new Exclusions(archive);
-	} 
-    else 
+	}
+    else
     {
-	    // Exclusions not used	
+	    // Exclusions not used
 	}
 
 	if(&archive && loadEverything) {
@@ -1840,8 +1809,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	if(&archive && loadEverything && (g_saveFileVersion < 55))
     {
 		g_theTradeBids = new TradeBids(archive);
-	} 
-    else 
+	}
+    else
     {
 		g_theTradeBids = new TradeBids;
 	}
@@ -1866,14 +1835,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	sint32 numPlayersLoaded = 0;
 
-	
 	sint32 i, j;
-	if (&archive) 
+	if (&archive)
 	{
-		for (i = 0; i < k_MAX_PLAYERS; i++) 
+		for (i = 0; i < k_MAX_PLAYERS; i++)
 		{
 			archive >> playerAlive;
-			if (playerAlive) 
+			if (playerAlive)
 			{
 				g_player[i] = new Player(archive);
 
@@ -1883,16 +1851,16 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		sint32 num;
 		archive >> num;
-		for (i = 0; i < num; i++) 
+		for (i = 0; i < num; i++)
 		{
 			g_deadPlayer->AddTail(new Player(archive));
 		}
 
-		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) 
+		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)
 		{
 			CreateBarbarians(diff);
 
-			switch (g_startInfoType) 
+			switch (g_startInfoType)
 			{
 			default:
 			// case STARTINFOTYPE_NONE:
@@ -1900,7 +1868,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 			case STARTINFOTYPE_CIVS:
 				{
-					sint32 const	positionCount	= 
+					sint32 const	positionCount	=
 						g_theWorld->GetNumStartingPositions();
 
 					Assert(numPlayersLoaded == 0);
@@ -1911,22 +1879,22 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 						// Should have been prevented in the game setup screen
 						g_theProfileDB->SetPlayerIndex(positionCount);
 					}
-					
+
 					// Add the human player
 					sint32 const	humanIndex	= g_theProfileDB->GetPlayerIndex();
 					sint32		civ			= gameinit_GetCivForSlot(humanIndex);
 					if (civ == CIV_INDEX_RANDOM)
 					{
 						civ = g_theProfileDB->GetCivIndex();
-					}	
-					
+					}
+
 					sint32 usedPositions[k_MAX_START_POINTS];
 					sint32 usedCivs = 0;
 					memset(usedPositions, 0, sizeof(usedPositions));
-					
-					for (j = 0; j < positionCount; ++j) 
+
+					for (j = 0; j < positionCount; ++j)
 					{
-						if (g_theWorld->GetStartingPointCiv(j) == civ) 
+						if (g_theWorld->GetStartingPointCiv(j) == civ)
 						{
 							usedPositions[j] = 1;
 							usedCivs++;
@@ -1934,41 +1902,41 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 						}
 					}
 					Assert(j < positionCount);
-					if (j >= positionCount) 
+					if (j >= positionCount)
 					{
 						civ = g_theWorld->GetStartingPointCiv(0);
 						usedPositions[0] = 1;
 						usedCivs++;
 						j = 0;
 					}
-					
+
 					CreateInitialHuman(diff, humanIndex, civ);
 					g_player[humanIndex]->m_starting_index = j;
-					
+
 					// Add robots
 					Assert(g_useScenarioCivs <= positionCount);
-					for (i = 1; (i <= g_useScenarioCivs) && (i < positionCount); ++i) 
+					for (i = 1; (i <= g_useScenarioCivs) && (i < positionCount); ++i)
 					{
 						if (i != humanIndex)
 						{
 							civ				= gameinit_GetCivForSlot(i);
 							sint32 whichCiv = (civ == CIV_INDEX_RANDOM) ? positionCount : 0;
-						
-							for (; whichCiv < positionCount; ++whichCiv) 
+
+							for (; whichCiv < positionCount; ++whichCiv)
 							{
 								if (usedPositions[whichCiv])
 									continue;
-								
+
 								if (g_theWorld->GetStartingPointCiv(whichCiv) == civ)
 									break;
 							}
-						
-							if (whichCiv >= positionCount) 
+
+							if (whichCiv >= positionCount)
 							{
-								// Random, or position already assigned. 
+								// Random, or position already assigned.
 								// Find an(other) unassigned random position.
 								whichCiv = g_rand->Next(positionCount);
-								while (usedPositions[whichCiv]) 
+								while (usedPositions[whichCiv])
 								{
 									whichCiv++;
 									if (whichCiv >= positionCount)
@@ -1976,17 +1944,17 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 								}
 
 								// Prevent identical civ assignments
-								sint32 const	locationCiv	= 
+								sint32 const	locationCiv	=
 									g_theWorld->GetStartingPointCiv(whichCiv);
-								civ	= (locationCiv < 0) 
-									  ? CIV_INDEX_RANDOM 
+								civ	= (locationCiv < 0)
+									  ? CIV_INDEX_RANDOM
 									  : locationCiv;
 							}
 
-							g_player[i] = new Player(PLAYER_INDEX(i), 
+							g_player[i] = new Player(PLAYER_INDEX(i),
 													 diff,
 													 PLAYER_TYPE_ROBOT,
-													 civ, 
+													 civ,
 													 GENDER_RANDOM
 													);
 							g_player[i]->m_starting_index = whichCiv;
@@ -2002,9 +1970,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 // Added by Martin Gühmann
 // No difference between STARTINFOTYPE_CIVSFIXED and STARTINFOTYPE_POSITIONSFIXED
 				{
-					Assert(numPlayersLoaded == 0);					
+					Assert(numPlayersLoaded == 0);
 					Assert(g_useScenarioCivs <= g_theWorld->GetNumStartingPositions());
-					
+
 					Assert(g_theProfileDB->GetPlayerIndex() <= g_useScenarioCivs);
 					if(g_theProfileDB->GetPlayerIndex() > g_useScenarioCivs){
 						g_theProfileDB->SetPlayerIndex(g_useScenarioCivs);
@@ -2015,13 +1983,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					sint32		civ			= gameinit_GetCivForSlot(humanIndex);
 					CreateInitialHuman(diff, humanIndex, civ);
 
-					for (i = 1; i <= g_useScenarioCivs; ++i) 
+					for (i = 1; i <= g_useScenarioCivs; ++i)
 					{
 						if (i != humanIndex)
 						{
 							civ	= gameinit_GetCivForSlot(i);
-							g_player[i] = new Player(PLAYER_INDEX(i), 
-													 diff, 
+							g_player[i] = new Player(PLAYER_INDEX(i),
+													 diff,
 													 PLAYER_TYPE_ROBOT,
 													 civ,
 													 GENDER_RANDOM
@@ -2034,14 +2002,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				break;
 			} // switch
 		}
-	} 
-    else 
+	}
+    else
     {
 		//
 		//	Normal game code
 		CreateBarbarians(diff);
 
-		sint32 netIndex = 0; 
+		sint32 netIndex = 0;
 		NSPlayerInfo *nspi = NULL;
 		sint32 civ = g_theProfileDB->GetCivIndex();
 		if(g_network.IsLaunchHost()) {
@@ -2051,7 +2019,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			}
 		}
 
-		sint32 const		humanIndex	= 
+		sint32 const		humanIndex	=
 			(nspi) ? 1 : g_theProfileDB->GetPlayerIndex();
 		CreateInitialHuman(diff, humanIndex, civ);
 
@@ -2059,7 +2027,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		{
 			g_player[humanIndex]->m_gold->SetLevel(nspi->m_civpoints);
 			s_networkSettlers[humanIndex] = nspi->m_settlers;
-			if (strlen(nspi->m_name) > 0) 
+			if (strlen(nspi->m_name) > 0)
 			{
 				g_player[humanIndex]->m_civilisation->AccessData()->
 					SetLeaderName(nspi->m_name);
@@ -2070,7 +2038,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			s_networkSettlers[humanIndex] = 1;
 			if ((strlen(g_theProfileDB->GetLeaderName()) > 0) &&
 				!g_theProfileDB->IsTutorialAdvice()
-			   ) 
+			   )
 			{
 				g_player[humanIndex]->m_civilisation->AccessData()->
 					SetLeaderName(g_theProfileDB->GetLeaderName());
@@ -2079,15 +2047,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		sint32 firstRobot = -1;
 
-		for (i = 1; i < nPlayers; ++i) 
+		for (i = 1; i < nPlayers; ++i)
 		{
 		  if (i != humanIndex)
 		  {
-			if (g_theProfileDB->IsAIOn() && 
+			if (g_theProfileDB->IsAIOn() &&
 				((!g_network.IsNetworkLaunch() || i > g_network.GetNumHumanPlayers()) ||
 				 (g_network.IsNetworkLaunch() && g_theProfileDB->NoHumanPlayersOnHost() && i==g_network.GetNumHumanPlayers()))) {
-				
-				
+
 
 				NSAIPlayerInfo *nsaipi = NULL;
 				if(g_network.IsLaunchHost()) {
@@ -2106,14 +2073,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					g_player[i]->m_gold->SetLevel(nsaipi->m_civpoints);
 					s_networkSettlers[i] = nsaipi->m_settlers;
 				} else {
-					g_player[i] = new Player(PLAYER_INDEX(i), 
-											 diff, 
-											 PLAYER_TYPE_ROBOT, 
-											 CIV_INDEX_RANDOM, 
+					g_player[i] = new Player(PLAYER_INDEX(i),
+											 diff,
+											 PLAYER_TYPE_ROBOT,
+											 CIV_INDEX_RANDOM,
 											 GENDER_RANDOM);
 					s_networkSettlers[i] = 1;
 				}
-			} else { 
+			} else {
 				if(!g_network.IsLaunchHost()) {
 					g_player[i] = new Player(PLAYER_INDEX(i), diff, PLAYER_TYPE_HUMAN, CIV_INDEX_RANDOM, GENDER_RANDOM);
 					s_networkSettlers[i] = 1;
@@ -2122,8 +2089,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 					civ = nspi ? nspi->m_civ : CIV_INDEX_RANDOM;
 
-					
-					
+
 					g_player[i] = new Player(PLAYER_INDEX(i),
 											 diff,
 											 PLAYER_TYPE_HUMAN,
@@ -2141,12 +2107,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					} else {
 						s_networkSettlers[i] = 1;
 					}
-					
+
 				}
 			}
 		  } // if (i != humanIndex)
 		} // for
-
 
 		if(g_network.IsLaunchHost() && g_network.TeamsEnabled()) {
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
@@ -2170,7 +2135,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 #ifdef _DEBUG
-	if (g_theProfileDB->IsDiplomacyLogOn()) 
+	if (g_theProfileDB->IsDiplomacyLogOn())
 	{
 		g_theDiplomacyLog = new Diplomacy_Log;
 	}
@@ -2179,7 +2144,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 #endif
 
 	bool createRobotInterface = true;
-	
+
 	SPLASH_STRING("Initializing A-star Pathing...");
 	roboinit_Initalize(archive);
 	CtpAi::Cleanup();
@@ -2189,12 +2154,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theWorld->SetAllMoveCost();
 		g_theWorld->A_star_heuristic->Update();
 		SPLASH_STRING("Load AI data elements...");
-		
+
 		CtpAi::Load(archive);
 		createRobotInterface = false;
 		if(!g_theProfileDB->IsAIOn()) {
-			
-			
+
 			for(i = 0; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i])
 					g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
@@ -2215,10 +2179,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		if(g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch() )
 		{
-			PLAYER_INDEX ai_players[k_MAX_PLAYERS]; 
+			PLAYER_INDEX ai_players[k_MAX_PLAYERS];
 
 			sint32 next = 0;
-		
+
 			for (i=0; i< k_MAX_PLAYERS; i++)
 			{
 				if(g_player[i] && g_player[i]->IsRobot())
@@ -2252,7 +2216,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		if ( mouseFile )
 		{
 			fclose( mouseFile );
-			
+
 			gameinit_PlaceInitalUnits();
 		}
 		else
@@ -2262,35 +2226,34 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 #else
 		numPlaced = gameinit_PlaceInitalUnits(g_theProfileDB->GetNPlayers(), g_player_start_list);
 #endif
-		if(numPlaced < g_theProfileDB->GetNPlayers() - 1) { 
-			for (sint32 n = numPlaced; n < k_MAX_PLAYERS; n++) 
+		if(numPlaced < g_theProfileDB->GetNPlayers() - 1) {
+			for (sint32 n = numPlaced; n < k_MAX_PLAYERS; n++)
             {
 				delete g_player[n];
 				g_player[n] = NULL;
 			}
 		}
-	} 
-    else if (g_isScenario && (g_startInfoType != STARTINFOTYPE_NOLOCS)) 
+	}
+    else if (g_isScenario && (g_startInfoType != STARTINFOTYPE_NOLOCS))
     {
 		sint32 landSettler = -1;
 		sint32 seaSettler = -1;
 		sint32 spaceSettler = -1;
-		
+
 		sint32 n = g_theUnitDB->NumRecords();
-		for (i=0; i<n; i++) { 
+		for (i=0; i<n; i++) {
 			if (g_theUnitDB->Get(i)->GetSettleLand() && landSettler < 0) {
-				
-				
-				landSettler = i; 
+
+				landSettler = i;
 			} else if(g_theUnitDB->Get(i)->GetSettleWater()) {
 				seaSettler = i;
 			} else if(g_theUnitDB->Get(i)->GetSettleSpace()) {
 				spaceSettler = i;
 			}
-		} 
-		
-		if (landSettler == -1 && seaSettler == -1 && spaceSettler == -1) { 
-			c3errors_FatalDialog("gameinit", "Could not find a land settler"); 
+		}
+
+		if (landSettler == -1 && seaSettler == -1 && spaceSettler == -1) {
+			c3errors_FatalDialog("gameinit", "Could not find a land settler");
 		}
 
 		for(i = 1; i < k_MAX_PLAYERS; i++) {
@@ -2318,20 +2281,20 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theWorld->SetAllMoveCost();
 
   #if defined(USE_TEST_MP_AS_SP)
-		if (g_network.IsActive() || g_network.IsNetworkLaunch() || 
+		if (g_network.IsActive() || g_network.IsNetworkLaunch() ||
 			g_turn->IsEmail()	 || g_turn->IsHotSeat()
 		   )
 		{
 			// No action: keep current setup.
 		}
-		else 
+		else
 		{
-			// Convert MP game to SP game for testing. 
+			// Convert MP game to SP game for testing.
 			for (size_t i = 0; i < k_MAX_PLAYERS; ++i)
 			{
 				if (g_player[i])
 				{
-					if (i == g_theProfileDB->GetPlayerIndex()) 
+					if (i == g_theProfileDB->GetPlayerIndex())
 					{
 						g_player[i]->SetPlayerType(PLAYER_TYPE_HUMAN);
 						g_selected_item->SetPlayerOnScreen(i);
@@ -2342,7 +2305,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					else
 					{
 						g_player[i]->SetPlayerType(PLAYER_TYPE_ROBOT);
-					} 
+					}
 				}
 				else
 				{
@@ -2358,7 +2321,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		g_aPlayerIsDead = FALSE;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
-			
+
 			if(g_player[i]) {
 				if(g_player[i]->IsHuman()) {
 					g_player[i]->RecreateMessageIcons();
@@ -2368,14 +2331,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				}
 			}
 
-			
 			if(g_player[i]) {
 				g_player[i]->m_hasGlobalRadar = wonderutil_GetGlobalRadar(g_player[i]->m_builtWonders);
 			}
 		}
 	}
 
-	if (g_selected_item && 
+	if (g_selected_item &&
 		g_player[g_selected_item->GetVisiblePlayer()] &&
 		!g_turn->IsHotSeat()
 	   )
@@ -2389,13 +2351,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	g_theWorld->RecalculateZOC();
 
 #ifdef _DEBUG
-	
+
 	{
 		for (sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
-			for (sint32 y = 0; y < g_theWorld->GetYHeight(); y++) 
+			for (sint32 y = 0; y < g_theWorld->GetYHeight(); y++)
             {
 				Cell *cell = g_theWorld->GetCell(x, y);
-				for (sint32 u = 0; u < cell->GetNumUnits(); u++) 
+				for (sint32 u = 0; u < cell->GetNumUnits(); u++)
                 {
 					Assert(cell->AccessUnit(u).IsValid());
 				}
@@ -2451,11 +2413,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 			g_player[i]->m_playerType = PLAYER_TYPE_ROBOT;
 		}
-		
+
 		g_player[g_scenarioUsePlayerNumber]->m_playerType = PLAYER_TYPE_HUMAN;
 		g_selected_item->SetPlayerOnScreen(g_scenarioUsePlayerNumber);
 
-		//Set current player the selected player so that the 
+		//Set current player the selected player so that the
 		//game starts with the first turn and the correct player.
 		g_selected_item->SetCurPlayer(g_scenarioUsePlayerNumber);
 		//Make sure that the current player is kept by turning it
@@ -2466,19 +2428,19 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_scenarioUsePlayerNumber = 0;
 	}
 
-	if (!(&archive) || g_isScenario) 
+	if (!(&archive) || g_isScenario)
 	{
-		if (g_startHotseatGame || g_startEmailGame) 
+		if (g_startHotseatGame || g_startEmailGame)
 		{
 			bool foundFirstHuman = false;
 
-			for(i = 1; i < g_theProfileDB->GetNPlayers(); i++) 
+			for(i = 1; i < g_theProfileDB->GetNPlayers(); i++)
 			{
 				Assert(g_player[i]);
 				if(!g_player[i])
 					continue;
 
-				if (g_hsPlayerSetup[i].isHuman && !foundFirstHuman) 
+				if (g_hsPlayerSetup[i].isHuman && !foundFirstHuman)
 				{
 					NewTurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 					g_selected_item->SetPlayerOnScreen(i);
@@ -2496,7 +2458,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					if(strlen(g_hsPlayerSetup[i].name) > 0)
 						g_player[i]->m_civilisation->AccessData()->SetLeaderName(g_hsPlayerSetup[i].name);
 
-					if (i == 1) 
+					if (i == 1)
 					{
 						g_theProfileDB->SetLeaderName(g_hsPlayerSetup[i].name);
 					}
@@ -2508,12 +2470,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
         g_turn->SetHotSeat(g_startHotseatGame);
         g_turn->SetEmail(g_startEmailGame);
-	} 
-	
+	}
+
 	g_startHotseatGame = FALSE;
 	g_startEmailGame = FALSE;
 
-	
 	if (g_setDifficultyUponLaunch) {
 		g_theProfileDB->SetDifficulty(g_difficultyToSetUponLaunch);
 		g_setDifficultyUponLaunch = FALSE;
@@ -2535,14 +2496,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 }
 
 
-
 void gameinit_CleanupMessages(void)
 {
 	if (g_player)
     {
-    	for(size_t i = 0; i < k_MAX_PLAYERS; i++) 
+    	for(size_t i = 0; i < k_MAX_PLAYERS; i++)
         {
-		    if (g_player[i]) 
+		    if (g_player[i])
             {
 			    g_player[i]->m_messages->KillList();
             }
@@ -2588,8 +2548,8 @@ void gameinit_Cleanup(void)
 	allocated::clear(g_theInstallationTree);
 	allocated::clear(g_theUnitTree);
 	allocated::clear(g_selected_item);
-	allocated::clear(g_theTradePool); 
-	allocated::clear(g_theTradeOfferPool); 
+	allocated::clear(g_theTradePool);
+	allocated::clear(g_theTradeOfferPool);
 	allocated::clear(g_turn);
 	allocated::clear(g_theWorld);
 	allocated::clear(g_theGameSettings);
@@ -2603,12 +2563,11 @@ void gameinit_Cleanup(void)
 	allocated::clear(g_theTradeBids);
 	allocated::clear(g_eventTracker);
 	allocated::clear(g_wormhole);
-	
+
 	allocated::clear(g_theOrderPond);
 	allocated::clear(g_theUnseenPond);
 
 	allocated::clear(g_featTracker);
-
 
 
 #ifdef _DEBUG
@@ -2643,10 +2602,10 @@ sint32 gameinit_ResetForNetwork()
 	delete g_theUnitPool;
 	g_theUnitPool = new UnitPool;
 
-	delete g_theTradePool; 
+	delete g_theTradePool;
 	g_theTradePool = new TradePool;
 
-	delete g_theTradeOfferPool; 
+	delete g_theTradeOfferPool;
 	g_theTradeOfferPool = new TradeOfferPool;
 
 	delete g_theArmyPool;
@@ -2661,7 +2620,6 @@ sint32 gameinit_ResetForNetwork()
 	return 0;
 }
 
-
 void gameinit_ResetMapSize()
 {
 	radarwindow_Cleanup();
@@ -2670,43 +2628,43 @@ void gameinit_ResetMapSize()
 	delete g_tiledMap;
 	g_tiledMap = new TiledMap(mapsize);
 	g_tiledMap->LoadTileset();
-	
-	RECT rect = 
+
+	RECT rect =
 	{
-		g_background->X(), 
-		g_background->Y(), 
+		g_background->X(),
+		g_background->Y(),
 		g_background->X() + g_background->Width(),
-		g_background->Y() + g_background->Height() 
+		g_background->Y() + g_background->Height()
 	};
-	
-	for (int i = 0; i < k_MAX_PLAYERS; i++) 
+
+	for (int i = 0; i < k_MAX_PLAYERS; i++)
     {
-		if (g_player[i]) 
+		if (g_player[i])
         {
 			delete g_player[i]->m_vision;
 			g_player[i]->m_vision = new Vision(i);
 		}
 	}
-	
+
 	g_tiledMap->Initialize(&rect);
 	g_tiledMap->Refresh();
-	
+
 	radarwindow_Initialize();
 	radarwindow_Display();
-	
+
 	g_tiledMap->PostProcessMap();
 	g_tiledMap->Refresh();
-	
+
 	g_theWorld->NumberContinents();
-	
+
 	g_background->Draw();
-	
+
     delete g_theUnitTree;
-    g_theUnitTree = 
+    g_theUnitTree =
         new QuadTree<Unit>(mapsize.x, mapsize.y, g_theWorld->IsYwrap());
 
     delete g_theInstallationTree;
-    g_theInstallationTree = 
+    g_theInstallationTree =
         new InstallationQuadTree(mapsize.x, mapsize.y, g_theWorld->IsYwrap());
 
     delete g_theInstallationPool;

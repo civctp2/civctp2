@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "ns_headerswitch.h"
 
@@ -40,7 +39,6 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 }
 
 
-
 ns_HeaderSwitch::ns_HeaderSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -78,7 +76,6 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 }
 
 
-
 AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -89,19 +86,16 @@ AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ns_HeaderSwitch::InitCommon( MBCHAR *icon )
 {
 	m_icon = NULL;
 
 	if ( icon ) SetIcon( icon );
 
-	
 	SetNumStates( k_NS_HEADERSWITCH_DEFAULTNUMSTATES );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 ns_HeaderSwitch::~ns_HeaderSwitch()
@@ -114,7 +108,6 @@ ns_HeaderSwitch::~ns_HeaderSwitch()
 }
 
 
-
 AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
 {
 	Assert( icon != NULL );
@@ -122,7 +115,6 @@ AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
 
 	aui_Image *prevImage = m_icon;
 
-	
 	m_icon = g_ui->LoadImage( icon );
 	Assert( m_icon != NULL );
 	if ( !m_icon ) return AUI_ERRCODE_LOADFAILED;
@@ -133,14 +125,12 @@ AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
 }
 
 
-
 AUI_ERRCODE ns_HeaderSwitch::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
 
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -149,12 +139,10 @@ AUI_ERRCODE ns_HeaderSwitch::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
-	if ( m_pattern ) 
+	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
-	
-	
+
 	aui_Radio::DrawThis( surface, x, y );
 
 	if ( IsOn() )
@@ -162,7 +150,6 @@ AUI_ERRCODE ns_HeaderSwitch::DrawThis(
 	else
 		primitives_BevelRect16( surface, &rect, 2, 0, 16, 16 );
 
-	
 	if ( m_icon )
 	{
 		RECT srcRect =
@@ -173,7 +160,6 @@ AUI_ERRCODE ns_HeaderSwitch::DrawThis(
 			m_icon->TheSurface()->Height()
 		};
 
-		
 		g_ui->TheBlitter()->Blt(
 			surface,
 			( rect.right + rect.left - srcRect.right ) / 2,

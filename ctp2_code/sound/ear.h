@@ -1,34 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef _WINDOWS_
 	#error EAR only runs under Windows!!!
 #endif
-
 
 #ifndef _EAR_IAS
 #define _EAR_IAS
@@ -37,9 +9,7 @@
 #include <stdlib.h>
 #endif
 
-
 #pragma pack( push, before_include1 )
-
 
 #pragma pack(1)
 
@@ -48,7 +18,7 @@
 
 
 
-	
+
 	#ifdef _DEBUG
 		#define EARIAS_DLL_FILENAME "dll\\sound\\earias.dll"
 		#define EARPDS_DLL_FILENAME "dll\\sound\\earpds.dll"
@@ -57,7 +27,7 @@
 		#define EARPDS_DLL_FILENAME "dll\\sound\\earpds.dll"
 	#endif
 #else
-	
+
 	#ifdef _DEBUG
 		#define EARIAS_DLL_FILENAME "earias_d.dll"
 		#define EARPDS_DLL_FILENAME "earpds_d.dll"
@@ -151,22 +121,22 @@
 
 
 
-#define EAR_ALL_CHANNELS    0 
+#define EAR_ALL_CHANNELS    0
 
 #define EAR_CHAN_STATIC			 0x0001
-#define EAR_CHAN_DISCRETE		 0x0000 
+#define EAR_CHAN_DISCRETE		 0x0000
 
 #define EAR_CHAN_QUEUED			 0x0002
-#define EAR_CHAN_DYNAMIC		 0x0000 
+#define EAR_CHAN_DYNAMIC		 0x0000
 
 #define EAR_CHAN_SOUNDTRACK		 0x000E
 #define EAR_CHAN_SOUNDTRACK_CD	 0x0006
 #define EAR_CHAN_SOUNDTRACK_MIDI 0x000A
 
 #define EAR_CHAN_LOWPRIORITY	 0x0010
-#define EAR_CHAN_MEDPRIORITY	 0x0030	
-#define EAR_CHAN_HIPRIORITY		 0x0070	
-#define EAR_CHAN_NEVERIGNORE	 0x0000 
+#define EAR_CHAN_MEDPRIORITY	 0x0030
+#define EAR_CHAN_HIPRIORITY		 0x0070
+#define EAR_CHAN_NEVERIGNORE	 0x0000
 
 #define EAR_CHAN_FADEROFF		 0x0000
 #define EAR_CHAN_FADERFAST		 0x0100
@@ -182,17 +152,17 @@
 
 #define EAR_CTRL_GETCONTROLS		0x00000000
 #define EAR_CTRL_MUTE				0x00000001
-#define EAR_CTRL_UNMUTE				0x00000003	
+#define EAR_CTRL_UNMUTE				0x00000003
 #define EAR_CTRL_PAUSE				0x00000004
-#define EAR_CTRL_UNPAUSE			0x0000000C	
+#define EAR_CTRL_UNPAUSE			0x0000000C
 #define EAR_CTRL_MAKELOWPRIORITY	0x00000010
-#define EAR_CTRL_MAKEMEDPRIORITY	0x00000030	
-#define EAR_CTRL_MAKEHIPRIORITY		0x00000070	
-#define EAR_CTRL_MAKENEVERIGNORE	0x000000F0	
+#define EAR_CTRL_MAKEMEDPRIORITY	0x00000030
+#define EAR_CTRL_MAKEHIPRIORITY		0x00000070
+#define EAR_CTRL_MAKENEVERIGNORE	0x000000F0
 #define EAR_CTRL_MAKESTATIC			0x00000100
-#define EAR_CTRL_MAKEDISCRETE		0x00000300	
+#define EAR_CTRL_MAKEDISCRETE		0x00000300
 #define EAR_CTRL_MAKEQUEUED			0x00000400
-#define EAR_CTRL_MAKEDYNAMIC		0x00000C00	
+#define EAR_CTRL_MAKEDYNAMIC		0x00000C00
 #define EAR_CTRL_MAKEFADERFAST		0x00001000
 #define EAR_CTRL_MAKEFADERMED		0x00003000
 #define EAR_CTRL_MAKEFADERSLOW		0x00007000
@@ -226,7 +196,7 @@
 
 
 enum EAR_ERROR_TABLE
- {	
+ {
 
 
 
@@ -290,13 +260,13 @@ enum EAR_ERROR_TABLE
 
 
 
-#define EAR_SOS_THRU_AIR	   33	
-#define EAR_SOS_THRU_VAPOR	 1545	
-#define EAR_SOS_THRU_WATER	 1785	
-#define EAR_SOS_THRU_SILVER	 2841	
-#define EAR_SOS_THRU_GRANITE 4252	
-#define EAR_SOS_THRU_IRON	 5354	
-#define EAR_SOS_THRU_GLASS	 5905	
+#define EAR_SOS_THRU_AIR	   33
+#define EAR_SOS_THRU_VAPOR	 1545
+#define EAR_SOS_THRU_WATER	 1785
+#define EAR_SOS_THRU_SILVER	 2841
+#define EAR_SOS_THRU_GRANITE 4252
+#define EAR_SOS_THRU_IRON	 5354
+#define EAR_SOS_THRU_GLASS	 5905
 
 
 
@@ -307,38 +277,38 @@ enum EAR_ERROR_TABLE
 
 
 
-#define EAR_REV_OPENAIR			0	
-#define EAR_REV_PADDEDCELL		1	
-#define EAR_REV_ROOM			2	
-#define EAR_REV_CUBICLE			3	
-#define EAR_REV_TUNNEL			4	
-#define EAR_REV_HALFPIPE		5	
-#define EAR_REV_HALL			6	
-#define EAR_REV_STADIUM			7	
-#define EAR_REV_CAVERN			8	
-#define EAR_REV_ARENA			9	
+#define EAR_REV_OPENAIR			0
+#define EAR_REV_PADDEDCELL		1
+#define EAR_REV_ROOM			2
+#define EAR_REV_CUBICLE			3
+#define EAR_REV_TUNNEL			4
+#define EAR_REV_HALFPIPE		5
+#define EAR_REV_HALL			6
+#define EAR_REV_STADIUM			7
+#define EAR_REV_CAVERN			8
+#define EAR_REV_ARENA			9
 
-#define EAR_REVSZ_DEFAULT		0	
-#define EAR_REVSZ_SMALL			1	
-#define EAR_REVSZ_MEDIUM	   10   
-#define EAR_REVSZ_LARGE		   20	
-#define EAR_REVSZ_HUGE		   30	
-#define EAR_REVSZ_UNENDING	  100	
-
-
+#define EAR_REVSZ_DEFAULT		0
+#define EAR_REVSZ_SMALL			1
+#define EAR_REVSZ_MEDIUM	   10
+#define EAR_REVSZ_LARGE		   20
+#define EAR_REVSZ_HUGE		   30
+#define EAR_REVSZ_UNENDING	  100
 
 
 
-#define	EAR_ENVD_SEALEVEL		0	
-#define EAR_ENVD_ALTDISP	16000	
-#define EAR_ENVD_MEANTEMP		0	
+
+
+#define	EAR_ENVD_SEALEVEL		0
+#define EAR_ENVD_ALTDISP	16000
+#define EAR_ENVD_MEANTEMP		0
 #define EAR_ENVD_SPOFSOUND	   EAR_SOS_THRU_AIR
-#define	EAR_ENVD_TIMEOUT	  500	
-#define EAR_ENVD_DIFFUSION   1500	
-#define EAR_ENVD_FREQUENCY	22050	
-#define EAR_ENVD_BITRATE	   16	
-#define EAR_ENVD_MEDIUM		  air	
-#define EAR_ENVD_AMBMASK	 6000	
+#define	EAR_ENVD_TIMEOUT	  500
+#define EAR_ENVD_DIFFUSION   1500
+#define EAR_ENVD_FREQUENCY	22050
+#define EAR_ENVD_BITRATE	   16
+#define EAR_ENVD_MEDIUM		  air
+#define EAR_ENVD_AMBMASK	 6000
 #define EAR_ENVD_REVERB		   EAR_REV_OPENAIR
 #define EAR_ENVD_ROOMSIZE	   EAR_REVSZ_DEFAULT
 #define EAR_ENVD_SWEETSPOT		0
@@ -380,7 +350,7 @@ typedef struct
 
 #ifdef __cplusplus
 	__inline VOID Default(VOID)
-	 {	size				= sizeof(EAR_ENVIRONMENT);	
+	 {	size				= sizeof(EAR_ENVIRONMENT);
 		sea_level			= EAR_ENVD_SEALEVEL;
 		altitude_dispersion	= EAR_ENVD_ALTDISP;
 		mean_temperature	= EAR_ENVD_MEANTEMP;
@@ -398,12 +368,11 @@ typedef struct
 
 		memset(&reserved_for_future, 0, 28);
 
-	 } 
+	 }
 
 #endif
 
  }	EAR_ENVIRONMENT;
-
 
 #define EAR_EVENT_SHUTDOWN_IMMEDIATE	0x00000000
 #define EAR_EVENT_SHUTDOWN_PLAYOUT		0x00000001
@@ -444,7 +413,6 @@ typedef struct
 
 #define EAR_ALL_MATRICES	  0
 
-
 #define EAR_MAX_MATRIX_POINTS	128
 #define EAR_ALL_MATRIX_POINTS	 -1
 
@@ -471,19 +439,18 @@ typedef struct
 #define EAR_KING_RIGHT_REAR		7
 #define EAR_KING_REAR_CENTER	8
 
-
-#define EAR_KING_FRONT_FACE		9	
-#define EAR_KING_REAR_FACE	   10	
-#define EAR_KING_LEFT_FACE	   11	
-#define EAR_KING_RIGHT_FACE	   12	
-#define EAR_KING_LEFT_BISECT   13	
-#define EAR_KING_RIGHT_BISECT  14	
-#define EAR_KING_FOUR_CORNERS  15	
-#define EAR_KING_FOUR_CENTERS  16	
-#define EAR_KING_FOUR_LESS_LF  17	
-#define EAR_KING_FOUR_LESS_RF  18   
-#define EAR_KING_FOUR_LESS_RR  19   
-#define EAR_KING_FOUR_LESS_LR  20   
+#define EAR_KING_FRONT_FACE		9
+#define EAR_KING_REAR_FACE	   10
+#define EAR_KING_LEFT_FACE	   11
+#define EAR_KING_RIGHT_FACE	   12
+#define EAR_KING_LEFT_BISECT   13
+#define EAR_KING_RIGHT_BISECT  14
+#define EAR_KING_FOUR_CORNERS  15
+#define EAR_KING_FOUR_CENTERS  16
+#define EAR_KING_FOUR_LESS_LF  17
+#define EAR_KING_FOUR_LESS_RF  18
+#define EAR_KING_FOUR_LESS_RR  19
+#define EAR_KING_FOUR_LESS_LR  20
 
 
 
@@ -526,16 +493,15 @@ typedef struct
 	WORD	stages;
 	WORD	stage_size;
 	DWORD	first;
-	
+
 #ifdef __cplusplus
 	__inline VOID Default(VOID)
-	 {	size				= sizeof(EAR_MACRO);	
+	 {	size				= sizeof(EAR_MACRO);
 		type				= EAR_MACRO_NULL;
 		stages				= 0;
 		stage_size			= NULL;
 		first				= NULL;
 
-		
 
 
 
@@ -557,7 +523,8 @@ typedef struct
 
 
 
-	 } 
+
+	 }
 
 #endif
 
@@ -591,7 +558,6 @@ typedef DWORD (__stdcall *DPROCDDDD)(DWORD,DWORD,DWORD,DWORD);
 typedef DWORD (__stdcall *DPROCDDDDD)(DWORD,DWORD,DWORD,DWORD,DWORD);
 typedef DWORD (__stdcall *DPROCDDDDDD)(DWORD,DWORD,DWORD,DWORD,DWORD,DWORD);
 
-
 #define EAR_MONIKER "EAR Interactive Around-Sound"
 
 #define EAR_WAVE_NAME_LENGTH _MAX_PATH
@@ -602,65 +568,63 @@ typedef DWORD (__stdcall *DPROCDDDDDD)(DWORD,DWORD,DWORD,DWORD,DWORD,DWORD);
 
 
 
-#define EAR_TYPE_WAVE			0x0000  
-#define EAR_TYPE_PATCH			0x0001	
-#define EAR_TYPE_RESOURCE		0x0002	
-#define EAR_TYPE_PRESET			0x0003	
-#define EAR_TYPE_RAW			0x0004	
-#define EAR_TYPE_MOD			0x0005	
-#define EAR_TYPE_MIDI			0x0006	
+#define EAR_TYPE_WAVE			0x0000
+#define EAR_TYPE_PATCH			0x0001
+#define EAR_TYPE_RESOURCE		0x0002
+#define EAR_TYPE_PRESET			0x0003
+#define EAR_TYPE_RAW			0x0004
+#define EAR_TYPE_MOD			0x0005
+#define EAR_TYPE_MIDI			0x0006
 
-#define EAR_TYPE_MP1			0x000A	
-#define EAR_TYPE_MP2			0x000B	
-#define EAR_TYPE_MP3			0x000C	
-#define EAR_TYPE_MP4AUDIO		0x000D	
-#define EAR_TYPE_MP4MIDI		0x000E	
+#define EAR_TYPE_MP1			0x000A
+#define EAR_TYPE_MP2			0x000B
+#define EAR_TYPE_MP3			0x000C
+#define EAR_TYPE_MP4AUDIO		0x000D
+#define EAR_TYPE_MP4MIDI		0x000E
 
-#define EAR_TYPE_DOLBYPROLOGIC	0x0014	
-#define EAR_TYPE_DOLBYSURROUND	0x0015	
-#define EAR_TYPE_DOLBYDIGITAL	0x0016	
+#define EAR_TYPE_DOLBYPROLOGIC	0x0014
+#define EAR_TYPE_DOLBYSURROUND	0x0015
+#define EAR_TYPE_DOLBYDIGITAL	0x0016
 
-#define EAR_TYPE_DTS			0x001A	
+#define EAR_TYPE_DTS			0x001A
 
-#define EAR_TYPE_REDBOOK		0x001E	
-#define EAR_TYPE_ADPCM			0x001F	
+#define EAR_TYPE_REDBOOK		0x001E
+#define EAR_TYPE_ADPCM			0x001F
 
+#define EAR_TYPE_AVS			0x0080
 
-#define EAR_TYPE_AVS			0x0080	
-
-
-#define EAR_TYPE_IS_08BIT		0x0000 
-#define EAR_TYPE_IS_16BIT		0x0100 
-#define EAR_TYPE_IS_SAMP11		0x0000 
-#define EAR_TYPE_IS_SAMP22		0x0200 
-#define EAR_TYPE_IS_SAMP44		0x0600 
-#define EAR_TYPE_IS_MONO		0x0000 
-#define EAR_TYPE_IS_STEREO		0x0800 
-#define EAR_TYPE_IS_QUAD		0x1000 
-#define EAR_TYPE_IS_5DOT1		0x1800 
-#define EAR_TYPE_IS_FILE		0x0000 
-#define EAR_TYPE_IS_RESOURCE	0x2000 
-#define EAR_TYPE_IS_HMMIO		0x4000 
-#define EAR_TYPE_IS_HANDLE		0x6000 
+#define EAR_TYPE_IS_08BIT		0x0000
+#define EAR_TYPE_IS_16BIT		0x0100
+#define EAR_TYPE_IS_SAMP11		0x0000
+#define EAR_TYPE_IS_SAMP22		0x0200
+#define EAR_TYPE_IS_SAMP44		0x0600
+#define EAR_TYPE_IS_MONO		0x0000
+#define EAR_TYPE_IS_STEREO		0x0800
+#define EAR_TYPE_IS_QUAD		0x1000
+#define EAR_TYPE_IS_5DOT1		0x1800
+#define EAR_TYPE_IS_FILE		0x0000
+#define EAR_TYPE_IS_RESOURCE	0x2000
+#define EAR_TYPE_IS_HMMIO		0x4000
+#define EAR_TYPE_IS_HANDLE		0x6000
 
 
 
 
 
-#define EAR_100	10000 
+#define EAR_100	10000
 #define EAR_90	 9000
 #define EAR_80	 8000
-#define EAR_75   7500 
+#define EAR_75   7500
 #define EAR_70	 7000
 #define EAR_60	 6000
-#define EAR_50	 5000 
+#define EAR_50	 5000
 #define EAR_40	 4000
 #define EAR_30	 3000
-#define EAR_25	 2500 
+#define EAR_25	 2500
 #define EAR_20	 2000
-#define EAR_10	 1000 
+#define EAR_10	 1000
 #define EAR_05	  500
-#define EAR_01	  100 
+#define EAR_01	  100
 #define EAR_00		0
 
 
@@ -732,7 +696,7 @@ typedef DWORD (__stdcall *DPROCDDDDDD)(DWORD,DWORD,DWORD,DWORD,DWORD,DWORD);
 
 
 
-#define EAR_PRI_ALWAYS		   0 
+#define EAR_PRI_ALWAYS		   0
 #define EAR_PRI_LOW			   1
 #define EAR_PRI_MED			  50
 #define EAR_PRI_HI			 100
@@ -748,14 +712,12 @@ typedef DWORD (__stdcall *DPROCDDDDDD)(DWORD,DWORD,DWORD,DWORD,DWORD,DWORD);
 
 
 
-#define EAR_QUEUE_TAIL		0 
+#define EAR_QUEUE_TAIL		0
 #define EAR_QUEUE_HEAD		1
 #define EAR_QUEUE_FORCE		2
 
-
-typedef enum 
- {	
-
+typedef enum
+ {
 
 
 	user_defined_1,
@@ -773,57 +735,55 @@ typedef enum
 
 typedef WORD EAR_RINGS;
 
-typedef struct 
+typedef struct
  {	LONG x;
 	LONG y;
 	LONG z;
  } EAR_XYZ;
 
-
-typedef struct 
+typedef struct
  {	WORD	size;
-	EAR_XYZ	xyz;	
-	EAR_XYZ	rpy;	
+	EAR_XYZ	xyz;
+	EAR_XYZ	rpy;
 #ifdef __cplusplus
 	__inline VOID Default(VOID)
 	 {	size = sizeof(EAR_USER);
 		memset(&xyz, 0, sizeof(EAR_XYZ) * 2);
-	 } 
+	 }
 #endif
  }EAR_USER;
 
-
-typedef struct 
- {	WORD		size;					
-	WORD		type;					
-	DWORD		location;				
-	DWORD		cue;					
-	WORD		channel;				
-	WORD		matrix;					
-	WORD		minimum_volume;			
-	WORD		maximum_volume;			
-	DWORD		outer_range;			
-	DWORD		inner_range;			
-	DWORD		performance_flags;		
-	DWORD		macros;					
-	DWORD		static_data;			
-	WORD		static_azimuth;			
-	WORD		static_delay;			
-	LONG		timeout_after;			
-	LONG		expire_after;			
-	DWORD		insert;					
-	DWORD		environment;			
-	WORD		priority;				
-	WORD		modulation;				
-	WORD		transposition;			
-	WORD		advancement;			
-	WORD		trigger_range;			
-	WORD		merge_flags;			
-	DWORD		merge_with;				
+typedef struct
+ {	WORD		size;
+	WORD		type;
+	DWORD		location;
+	DWORD		cue;
+	WORD		channel;
+	WORD		matrix;
+	WORD		minimum_volume;
+	WORD		maximum_volume;
+	DWORD		outer_range;
+	DWORD		inner_range;
+	DWORD		performance_flags;
+	DWORD		macros;
+	DWORD		static_data;
+	WORD		static_azimuth;
+	WORD		static_delay;
+	LONG		timeout_after;
+	LONG		expire_after;
+	DWORD		insert;
+	DWORD		environment;
+	WORD		priority;
+	WORD		modulation;
+	WORD		transposition;
+	WORD		advancement;
+	WORD		trigger_range;
+	WORD		merge_flags;
+	DWORD		merge_with;
 	BYTE		reserved_for_future[20];
-	EAR_DU		distance_unit;			
-	EAR_XYZ		cartesian;				
-	EAR_RINGS	rings[8];				
+	EAR_DU		distance_unit;
+	EAR_XYZ		cartesian;
+	EAR_RINGS	rings[8];
 #ifdef __cplusplus
 	__inline VOID Default(VOID)
 	 {	size				= sizeof(EAR_OBJECT);
@@ -833,8 +793,8 @@ typedef struct
 		channel				= 1;
 		matrix				= EAR_MAT_CIRCLE;
 		minimum_volume		= 0;
-		maximum_volume		= EAR_100;	
-		outer_range			= 10000;	
+		maximum_volume		= EAR_100;
+		outer_range			= 10000;
 		inner_range			= 0;
 		performance_flags	= EAR_PERF_DEFAULT;
 		macros				= 0;
@@ -843,8 +803,8 @@ typedef struct
 		static_delay		= 0;
 		timeout_after		= 0;
 		expire_after		= 0;
-		modulation			= EAR_100; 
-		transposition		= EAR_100; 
+		modulation			= EAR_100;
+		transposition		= EAR_100;
 		advancement			= 0;
 		priority			= EAR_PRI_ALWAYS;
 		insert				= EAR_QUEUE_TAIL;
@@ -863,12 +823,11 @@ typedef struct
 
 		memset(&reserved_for_future, 0, 20);
 
-	 } 
+	 }
 #endif
  }  EAR_OBJECT;
 
-
-typedef struct 
+typedef struct
  {	WORD	size;
 	DWORD	patch_id;
 	DWORD	cue;
@@ -881,7 +840,7 @@ typedef struct
 
 		memset(&cartesian, 0, sizeof(EAR_XYZ));
 
-	 } 
+	 }
 #endif
  } EAR_PATCH;
 
@@ -950,10 +909,9 @@ extern UINT WM_EAR_CALLBACK;
 
 extern BOOL EP_RegisterEarServiceTable(BOOL bForceDirectSound);
 extern VOID EP_ClearEarServiceTable(VOID);
- 
-#endif 
 
+#endif
 
 #pragma pack( pop, before_include1 )
 
-#endif 
+#endif

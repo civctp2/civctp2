@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ class SettleMap
 public:
 	struct SettleTarget
 	{
-		SettleTarget() 
+		SettleTarget()
 		:   m_value (0.0),
 		    m_pos   ()
 		{ ; };
@@ -76,7 +76,7 @@ public:
 
 	void HandleCityGrowth(const Unit & city);
 
-	void GetSettleTargets(const PLAYER_INDEX &player, 
+	void GetSettleTargets(const PLAYER_INDEX &player,
 	                      SettleMap::SettleTargetList & targets) const;
 
 	bool HasSettleTargets(const PLAYER_INDEX &player, bool isWater) const;
@@ -84,7 +84,7 @@ public:
 	bool CanSettlePos(const MapPoint & rc_pos) const;
 
 	void SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle);
-	
+
 	double GetValue(const MapPoint & rc_pos) const;
 
 private:

@@ -14,15 +14,15 @@ class Unit;
 
 class ArmyPool : public ObjPool
 {
-	
-	
-	
-	
 
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 
 public:
 	ArmyData *AccessArmy(const uint32 id)
@@ -60,5 +60,5 @@ public:
 };
 
 extern ArmyPool *g_theArmyPool;
-	
+
 #endif

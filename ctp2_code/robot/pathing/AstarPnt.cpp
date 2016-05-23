@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 // Compiler flags
 //
 // None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -46,11 +46,11 @@ bool AstarPoint::Identical(const AstarPoint &rhs) const
 void AstarPoint::Clear()
 {
     m_flags = 0xcdcdcdcdu;
-    m_parent = (AstarPoint *) 0xcdcdcdcd; 
-    m_next = (AstarPoint *) 0xcdcdcdcd; 
-    m_pos.x = (sint16) 0xcdcd; 
-    m_past_cost = (float) 0xcdcdcdcd; 
-    m_entry_cost = (float) 0xcdcdcdcd; 
-    m_future_cost = (float) 0xcdcdcdcd; 
+    m_parent = (AstarPoint *) 0xcdcdcdcd;
+    m_next = (AstarPoint *) 0xcdcdcdcd;
+    m_pos.x = (sint16) 0xcdcd;
+    m_past_cost = (float) 0xcdcdcdcd;
+    m_entry_cost = (float) 0xcdcdcdcd;
+    m_future_cost = (float) 0xcdcdcdcd;
     m_total_cost = (float) 0xcdcdcdcd;
 }

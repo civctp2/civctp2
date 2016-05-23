@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Game file handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -74,12 +74,10 @@ enum SAVEINFOLOAD
 class CivArchive;
 
 
-
 struct CivGuid {
 	sint32 civIndex;
 	GUID guid;
 };
-
 
 
 class SaveInfo {
@@ -88,28 +86,27 @@ public:
 	SaveInfo(SaveInfo *copyMe);
 	~SaveInfo();
 
-	MBCHAR					gameName[_MAX_PATH];		
-	MBCHAR					fileName[_MAX_PATH];		
-	MBCHAR					pathName[_MAX_PATH];		
-	MBCHAR					leaderName[k_MAX_NAME_LEN];	
-	MBCHAR					civName[k_MAX_NAME_LEN];	
-	MBCHAR					note[_MAX_PATH];			
-	sint32					radarMapWidth;				
+	MBCHAR					gameName[_MAX_PATH];
+	MBCHAR					fileName[_MAX_PATH];
+	MBCHAR					pathName[_MAX_PATH];
+	MBCHAR					leaderName[k_MAX_NAME_LEN];
+	MBCHAR					civName[k_MAX_NAME_LEN];
+	MBCHAR					note[_MAX_PATH];
+	sint32					radarMapWidth;
 	sint32					radarMapHeight;
 	Pixel16					*radarMapData;
-	sint32					powerGraphWidth;			
+	sint32					powerGraphWidth;
 	sint32					powerGraphHeight;
 	Pixel16					*powerGraphData;
-	sint32					numCivs;					
-	MBCHAR					civList[k_MAX_PLAYERS][k_MAX_NAME_LEN]; 
-	CivGuid                 networkGUID[k_MAX_PLAYERS]; 
+	sint32					numCivs;
+	MBCHAR					civList[k_MAX_PLAYERS][k_MAX_NAME_LEN];
+	CivGuid                 networkGUID[k_MAX_PLAYERS];
 
-	
-	nf_GameSetup gameSetup; 
+	nf_GameSetup gameSetup;
 
 	struct OptionScreenSettings
 	{
-		
+
 		BOOL	tutorialadvice;
 		BOOL	leftrightclickmove;
 		BOOL	autocycleturn;
@@ -117,7 +114,6 @@ public:
 		BOOL	battleview;
 		BOOL	monument;
 
-		
 		BOOL	walk;
 		BOOL	goods;
 		BOOL	attack;
@@ -129,18 +125,15 @@ public:
 		BOOL	movie;
 		BOOL	grid;
 
-		
 		sint32	sfxVolume;
 		sint32	musicVolume;
 		sint32	voiceVolume;
 
-		
 		BOOL	autoRepeat;
 		BOOL	randomOrder;
 		BOOL	musicOn;
 	} options;
 
-	
 	BOOL isScenario;
 	STARTINFOTYPE startInfoType;
 	sint32 numPositions;
@@ -148,18 +141,17 @@ public:
 
 	SAVEINFOLOAD	loadType;
 
-	
-	
-	
+
+
+
 	MBCHAR			*scenarioName;
 
-	
-	
+
 	sint32		playerCivIndexList[k_MAX_PLAYERS];
 
-	
 
-	
+
+
 	BOOL	showLabels;
 	sint32	startingPlayer;
 };
@@ -168,11 +160,10 @@ class GameInfo {
 public:
 	GameInfo();
 	~GameInfo();
-	MBCHAR					name[_MAX_PATH];			
-	MBCHAR					path[_MAX_PATH];			
-	PointerList<SaveInfo>	*files;						
+	MBCHAR					name[_MAX_PATH];
+	MBCHAR					path[_MAX_PATH];
+	PointerList<SaveInfo>	*files;
 };
-
 
 class GameFile
 {
@@ -249,7 +240,6 @@ extern sint32 g_startInfoType;
 extern sint32 g_isScenario;
 extern sint32 g_useScenarioCivs;
 extern MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
-
 
 extern sint32 g_showUnitLabels;
 extern sint32 g_startingPlayer;

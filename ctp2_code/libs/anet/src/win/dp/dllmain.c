@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -40,15 +40,15 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 	case DLL_PROCESS_ATTACH:
 		procRefCount++;
 		break;
-	
+
 	case DLL_PROCESS_DETACH:
 		procRefCount--;
 		break;
-	
+
 	case DLL_THREAD_ATTACH:
 		threadRefCount++;
 		break;
-		
+
 	case DLL_THREAD_DETACH:
 		threadRefCount--;
 		break;
@@ -72,7 +72,6 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 		//MessageBox( NULL, "Bug - too many threads trying to use DP", "DP DLL Error", MB_OK|MB_ICONERROR );
 		return FALSE;
 	}
-	
+
 	return(TRUE);
 }
- 

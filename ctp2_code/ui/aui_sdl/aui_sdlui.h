@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
 	virtual ~aui_SDLUI();
 
 protected:
-	aui_SDLUI() 
+	aui_SDLUI()
     :   aui_UI              (),
         aui_SDL             ()
     { ; };
@@ -61,7 +61,7 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	virtual AUI_ERRCODE AltTabOut( void );
 	virtual AUI_ERRCODE AltTabIn( void );
 	AUI_ERRCODE CreateNativeScreen( BOOL useExclusiveMode );
@@ -85,6 +85,6 @@ protected:
 
 typedef aui_SDLUI aui_NativeUI;
 
-#endif 
+#endif
 
-#endif 
+#endif

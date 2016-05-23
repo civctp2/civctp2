@@ -3,7 +3,7 @@
  * Project      : Call To Power 2
  * File type    : C/C++ header
  * Description  : SLIC interpreter functions
- * Id           : $Id:$
+ * Id           : $Id$
  *
  *----------------------------------------------------------------------------
  *
@@ -11,7 +11,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -28,8 +28,8 @@
  *   - Slic database access
  *   - Slic database size access
  * - slicif_cleanup() added.
- * - Replaced slicif_is_sym by slicif_is_name function. This function is 
- *   modelled slicif_find_db_index but without error message if this 
+ * - Replaced slicif_is_sym by slicif_is_name function. This function is
+ *   modelled slicif_find_db_index but without error message if this
  *   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
  * - Added bitwise operators
  * - Added database array access. (Sep 16th 2005 Martin Gühmann)
@@ -83,7 +83,7 @@ typedef enum {
 	SOP_PUSHD,
 	SOP_PUSHI,
 	SOP_PUSHV,
-	SOP_POP, 
+	SOP_POP,
 	SOP_ARGE,
 	SOP_ARGID,
 	SOP_ARGS,
@@ -98,24 +98,23 @@ typedef enum {
 	SOP_AND,
 	SOP_OR,
 	SOP_NOT,
-	SOP_BNT,  
-	SOP_BNEV, 
-	SOP_SARGS, 
-	SOP_ARGST, 
+	SOP_BNT,
+	SOP_BNEV,
+	SOP_SARGS,
+	SOP_ARGST,
 	SOP_OCLS,
 
-	
-	SOP_PUSHA, 
-	SOP_AINDX, 
-	SOP_ASSNA, 
-    SOP_RET,   
-	SOP_ASSNM, 
-	SOP_PUSHM, 
-	SOP_PUSHAM, 
-	SOP_ASSNAM, 
-	SOP_LINE, 
-	SOP_LBRK, 
-	SOP_EVENT, 
+	SOP_PUSHA,
+	SOP_AINDX,
+	SOP_ASSNA,
+    SOP_RET,
+	SOP_ASSNM,
+	SOP_PUSHM,
+	SOP_PUSHAM,
+	SOP_ASSNAM,
+	SOP_LINE,
+	SOP_LBRK,
+	SOP_EVENT,
 	SOP_ASIZE,
 
 //Added by Martin Gühmann for database support
@@ -135,7 +134,7 @@ typedef enum {
 	SOP_DBNAMEARRAY,
 	SOP_DBNAMECONSTARRAY,
 
-	SOP_NOP 
+	SOP_NOP
 } SOP;
 
 #include "slicif_sym.h"
@@ -161,7 +160,7 @@ struct PSlicObject {
 	int *m_parameters;
 	int m_num_parameters;
 	SF_RET m_return_type;
-	
+
 	int m_from_file;
 	int m_is_alert;
 	int m_is_help;
@@ -242,7 +241,6 @@ void slicif_get_local_name(char *localName, char *name);
 
 void slicif_add_prototype(char *name);
 
-
 void slicif_start_for();
 void slicif_for_expression();
 void slicif_for_continue();
@@ -276,7 +274,6 @@ void slicif_check_num_args();
 
 int slicif_find_db(const char *dbname, void **dbptr);
 int slicif_find_db_index(void *dbptr, const char *name);
-
 
 int slicif_find_file(char *filename, char *fullpath);
 void slicif_report_error(char *s);

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,9 +38,7 @@
 
 #include "c3_header.h"
 
-
 extern aui_UI *g_ui;
-
 
 
 c3_Header::c3_Header(
@@ -76,7 +74,6 @@ c3_Header::c3_Header(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Header::c3_Header(
@@ -117,12 +114,10 @@ c3_Header::c3_Header(
 }
 
 
-
 AUI_ERRCODE c3_Header::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE c3_Header::InitCommon( void )
@@ -131,18 +126,16 @@ AUI_ERRCODE c3_Header::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE c3_Header::CreateSwitches( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	
-	
+
+
+
 	aui_Switch		*dummyItemControl = new aui_Switch(&errcode, aui_UniqueId(), 0, 0, 0, m_height);
 	AddChild( dummyItemControl );
 
-	
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -178,7 +171,6 @@ AUI_ERRCODE c3_Header::CreateSwitches( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 c3_Header::~c3_Header()

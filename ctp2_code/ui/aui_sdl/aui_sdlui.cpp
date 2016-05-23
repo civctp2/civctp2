@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_SDL__
 //
 //----------------------------------------------------------------------------
@@ -29,11 +29,9 @@
 
 #include "c3.h"
 
-
 #ifdef __AUI_USE_SDL__
 
 #include "civ3_main.h"
-
 
 #include "aui_mouse.h"
 #include "aui_keyboard.h"
@@ -47,7 +45,6 @@ extern BOOL			g_exclusiveMode;
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
-
 
 #include "display.h"
 
@@ -67,13 +64,13 @@ aui_SDLUI::aui_SDLUI
 	sint32 height,
 	sint32 bpp,
 	MBCHAR *ldlFilename,
-	BOOL useExclusiveMode 
+	BOOL useExclusiveMode
 )
 :   aui_UI              (),
     aui_SDL             (),
     m_X11Display        (0)
 {
-	
+
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -81,7 +78,6 @@ aui_SDLUI::aui_SDLUI
 	Assert( aui_Base::GetBaseRefCount() == 2 );
 	g_ui = aui_Base::GetBaseRefCount() == 2 ? this : NULL;
 
-	
 	*retval = aui_UI::InitCommon( hinst, hwnd, bpp, ldlFilename );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -108,7 +104,6 @@ aui_SDLUI::aui_SDLUI
 }
 
 
-
 AUI_ERRCODE aui_SDLUI::InitCommon()
 {
 	m_savedMouseAnimFirstIndex = 0;
@@ -117,7 +112,6 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
@@ -132,7 +126,6 @@ AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
 	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
@@ -144,7 +137,7 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if (!m_lpdds) {
 		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
 	}
-	
+
 	m_primary = new aui_SDLSurface(
 		&errcode,
 		m_width,
@@ -183,11 +176,9 @@ aui_SDLUI::~aui_SDLUI( void )
 #endif
 }
 
-
 AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 {
-	
-	
+
 	if (m_mouse) {
 		m_mouse->GetAnimIndexes(&m_savedMouseAnimFirstIndex, &m_savedMouseAnimLastIndex);
 		m_savedMouseAnimCurIndex = m_mouse->GetCurrentCursorIndex();
@@ -209,13 +200,11 @@ AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 }
 
 
-
 AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 {
 	AUI_ERRCODE		auiErr;
 	BOOL			exclusive = TRUE;
 
-	
 	aui_SDLMouse *mouse = new aui_SDLMouse( &auiErr, "CivMouse", exclusive );
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -240,7 +229,6 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 {
@@ -269,7 +257,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 #if 0
 	while ( ShowCursor( TRUE ) < 0 )
-		; 
+		;
 
 	if ( m_minimize || m_exclusiveMode )
 	{
@@ -286,7 +274,6 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 }
 
 
-
 AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
 	assert(0);
@@ -300,8 +287,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	::ShowWindow(m_hwnd, SW_SHOWMAXIMIZED);
 
 	while ( ShowCursor( FALSE ) >= 0 )
-		; 
-
+		;
 
 	if (g_exclusiveMode) {
 		RestoreMouse();
@@ -320,7 +306,6 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 
 		main_HideTaskBar();
 
-		
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
@@ -336,5 +321,4 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	return FlushDirtyList();
 }
 
-
-#endif  // __AUI_USE_SDL__ 
+#endif  // __AUI_USE_SDL__

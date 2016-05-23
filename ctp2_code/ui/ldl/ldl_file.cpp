@@ -1,4 +1,3 @@
-
 #include "c3.h"
 
 #include "ldl_file.hpp"
@@ -24,7 +23,6 @@ BOOL ldl::ReadData(const char *fname )
 
 	return TRUE;
 }
-
 
 ldl_datablock *ldl::FindDataBlock(const char *szName, ldl_datablock *dbParent )
 {

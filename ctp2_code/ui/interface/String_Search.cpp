@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "String_Search.h"
 
@@ -15,14 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif 
-
+#endif
 
 char *  String_Search::s_key            = NULL;
 int     String_Search::s_key_length     = 0;
 bool    String_Search::s_case_sensitive = false;
 int     String_Search::s_skip_table[NUM_CHAR_VALUES];
-
 
 void String_Search::Set_Search_Key
 (
@@ -38,18 +27,17 @@ void String_Search::Set_Search_Key
 
 	for (int j = 0; j < s_key_length; j++)
 	{
-        char key_char = 
+        char key_char =
             (s_case_sensitive) ? s_key[j] : static_cast<char>(tolower(s_key[j]));
 
 		s_skip_table[key_char] = s_key_length - j - 1;
-	} 
+	}
 }
-
 
 bool String_Search::Search
 (
 	char const *    my_string,
-	char *          new_key 
+	char *          new_key
 )
 {
 	if (new_key)
@@ -74,7 +62,7 @@ bool String_Search::Search
 		{
 			key_char    = static_cast<char>(tolower(s_key[j]));
 			string_char = static_cast<char>(tolower(my_string[i]));
-		} 
+		}
 
 		while (string_char != key_char)
 		{
@@ -96,13 +84,12 @@ bool String_Search::Search
 			{
 				key_char    = static_cast<char>(tolower(s_key[j]));
 				string_char = static_cast<char>(tolower(my_string[i]));
-			} 
-		} 
-	} 
-	
+			}
+		}
+	}
+
 	return true;
 }
-
 
 void String_Search::Set_Case_Sensitive
 (
@@ -112,7 +99,6 @@ void String_Search::Set_Case_Sensitive
 	s_case_sensitive = case_sensitive;
 }
 
-
 #ifdef TEST_STRING_SEARCH
 int main()
 {
@@ -121,27 +107,22 @@ int main()
 
 	key[0] = 0;
 
-	
 	printf("Enter main string\n");
 	gets(my_string);
 
-	
 	while (strcmp(key, "STOP"))
 	{
-		
+
 		printf("Enter the search key. 'STOP' to end.\n");
 		gets(key);
 
-		
 		String_Search::Set_Search_Key(key);
 
-		
 		if (String_Search::Search(my_string))
 			printf("YES\n");
 		else
 			printf("NO\n");
 
-
-	} 
+	}
 }
-#endif 
+#endif

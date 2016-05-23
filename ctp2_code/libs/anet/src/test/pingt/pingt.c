@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -230,7 +230,7 @@ void pingt_destroy(pingt_t *ptest)
 }
 
 /*--------------------------------------------------------------------------
- Destroy pingt test pair. 
+ Destroy pingt test pair.
 --------------------------------------------------------------------------*/
 void pingt_pair_destroy(pingt_pair_t *pair)
 {
@@ -481,7 +481,7 @@ int pingt_pair_poll_ping(pingt_pair_t *pair, clock_t now, clock_t end)
 		pair->pingt[1] = NULL;
 		return pair->status;
 	}
-	
+
 	/* just make sure they don't disconnect. */
 	for (i = 0; i < 2; i++) {
 		connected = pingt_poll(pair->pingt[i], 1);
@@ -539,7 +539,6 @@ int pingt_pair_poll_keepalive(pingt_pair_t *pair, clock_t now, clock_t end)
 	}
 	return pair->status;
 }
-
 
 /*-----------------------------------------------------------------------
  Unit test main loop.

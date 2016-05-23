@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Bindery support routines specifically for MacIPX.
  */
- 
+
 #ifndef __BINDERY_H_INCLUDED__
 #define __BINDERY_H_INCLUDED__
 
@@ -99,5 +99,5 @@ extern pascal short	MacIPXScanBinderyObject(
 											char 			*objectHasProperties,
 											char 			*objectFlag,
 											char 			*objectSecurity);
-												
+
 #endif  /* __BINDERY_H_INCLUDED__ */

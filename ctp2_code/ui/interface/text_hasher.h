@@ -12,20 +12,18 @@ template <class DATA_TYPE>  class Translation;
 
 size_t const                MAX_KEY_CHARS   = 40;
 
-
-template <class DATA_TYPE> 
+template <class DATA_TYPE>
 class Translation
 {
 public:
-	TCHAR *         m_key;						
-	DATA_TYPE       m_data;					
-	Translation *   m_next;				
+	TCHAR *         m_key;
+	DATA_TYPE       m_data;
+	Translation *   m_next;
 
-	
 	Translation
 	(
-		TCHAR *     the_key,					
-		DATA_TYPE   the_data			
+		TCHAR *     the_key,
+		DATA_TYPE   the_data
 	)
     :
         m_key       (the_key),
@@ -52,14 +50,14 @@ public:
 
 
 
-template <class DATA_TYPE> 
+template <class DATA_TYPE>
 class Text_Hasher
 {
 public:
 	Text_Hasher
 	(
-		size_t      size,						
-		DATA_TYPE   untranslated_value	
+		size_t      size,
+		DATA_TYPE   untranslated_value
 	);
 
 	~Text_Hasher();
@@ -110,8 +108,8 @@ protected:
 template <class DATA_TYPE>
 Text_Hasher<DATA_TYPE>::Text_Hasher
 (
-	size_t      size,							
-	DATA_TYPE   untranslated_value		
+	size_t      size,
+	DATA_TYPE   untranslated_value
 )
 :
     m_hash_table            (NULL),
@@ -120,7 +118,7 @@ Text_Hasher<DATA_TYPE>::Text_Hasher
 	m_untranslated          (untranslated_value)
 {
 	m_hash_table = new Translation<DATA_TYPE> *[m_hash_table_size];
-    std::fill(m_hash_table, m_hash_table + m_hash_table_size, 
+    std::fill(m_hash_table, m_hash_table + m_hash_table_size,
               (Translation<DATA_TYPE> *) NULL
              );
 }
@@ -139,7 +137,7 @@ Text_Hasher<DATA_TYPE>::~Text_Hasher()
 {
 	for (size_t i = 0; i < m_hash_table_size; ++i)
 	{
-		for 
+		for
         (
             Translation<DATA_TYPE> * translation = m_hash_table[i];
             translation;
@@ -149,9 +147,9 @@ Text_Hasher<DATA_TYPE>::~Text_Hasher()
 			Translation<DATA_TYPE> * trash_me = translation;
 			translation = translation->m_next;
 			delete trash_me;
-		} 
-	} 
-	
+		}
+	}
+
 	delete [] m_hash_table;
 }
 
@@ -196,8 +194,8 @@ DATA_TYPE Text_Hasher<DATA_TYPE>::Look_Up_Data
 		{
             delete [] lowerCaseKey;
 			return translation->m_data;
-		} 
-	} 
+		}
+	}
 
     delete [] lowerCaseKey;
 	return m_untranslated;
@@ -214,13 +212,12 @@ void Text_Hasher<DATA_TYPE>::Add_To_Hash_Table
 )
 {
 	size_t                      hash_location   = Hash_The_String(key);
-	Translation<DATA_TYPE> *    translation     = 
+	Translation<DATA_TYPE> *    translation     =
         new Translation<DATA_TYPE>(key, the_data);
 
 	translation->m_next         = m_hash_table[hash_location];
 	m_hash_table[hash_location] = translation;
 }
-
 
 
 template <class DATA_TYPE>
@@ -229,10 +226,10 @@ size_t Text_Hasher<DATA_TYPE>::Hash_The_String
 	const _TCHAR * key
 )
 {
-	size_t          a               = 31415;						
-	size_t const    b               = 27183;				
-	size_t          hash_location   = 0;				
-	for 
+	size_t          a               = 31415;
+	size_t const    b               = 27183;
+	size_t          hash_location   = 0;
+	for
     (
         size_t chars_used = 0;
         (chars_used < MAX_KEY_CHARS) && (*key);
@@ -242,11 +239,10 @@ size_t Text_Hasher<DATA_TYPE>::Hash_The_String
         hash_location   = (hash_location*a + abs(*key)) % m_hash_table_size;
         a               = a * b % (m_hash_table_size - 1);
         ++key;
-	} 
+	}
 
 	Assert(hash_location < m_hash_table_size);
     return (hash_location < m_hash_table_size) ? hash_location : 0;
 }
 
-#endif 
-
+#endif

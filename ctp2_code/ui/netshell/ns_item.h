@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __NS_ITEM_H__
 #define __NS_ITEM_H__
-
 
 #include "aui_item.h"
 #include "aui_surface.h"
@@ -55,7 +43,6 @@ protected:
 		const MBCHAR *name,
 		MBCHAR *ldlBlock);
 };
-
 
 
 class ns_HPlayerItem : public c3_ListItem
@@ -137,7 +124,7 @@ template<class T,class NetShellT>
 class ns_Item : public aui_Item
 {
 public:
-	
+
 	ns_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -158,7 +145,7 @@ protected:
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateNetShellObject( T *object );
-	
+
 public:
 	NetShellT	*GetNetShellObject( void ) const { return m_netShellT; }
 
@@ -203,7 +190,6 @@ ns_Item<T,NetShellT>::ns_Item(
 }
 
 
-
 template<class T,class NetShellT>
 ns_Item<T,NetShellT>::ns_Item(
 	AUI_ERRCODE *retval,
@@ -220,7 +206,7 @@ ns_Item<T,NetShellT>::ns_Item(
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-	
+
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -231,14 +217,12 @@ ns_Item<T,NetShellT>::ns_Item(
 }
 
 
-
 template<class T,class NetShellT>
 AUI_ERRCODE ns_Item<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	
+
 	return InitCommon();
 }
-
 
 
 template<class T,class NetShellT>
@@ -250,13 +234,12 @@ AUI_ERRCODE ns_Item<T,NetShellT>::InitCommon( void )
 	m_textflags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
 		k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER;
 
-	
+
 
 
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 template<class T,class NetShellT>
@@ -271,7 +254,6 @@ AUI_ERRCODE ns_Item<T,NetShellT>::CreateNetShellObject( T *object )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 template<class T,class NetShellT>
@@ -291,13 +273,11 @@ ns_Item<T,NetShellT>::~ns_Item()
 }
 
 
-
 template<class T,class NetShellT>
 AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon( MBCHAR *icon )
 {
 	aui_Image *prevImage = m_icon;
 
-	
 	if ( icon )
 	{
 		m_icon = g_ui->LoadImage( icon );
@@ -326,7 +306,7 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -335,20 +315,19 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	InflateRect( &rect, -2, -2 );
 
-	
 
 
 
 
 
 
-	
+
+
 	if ( m_icon )
 	{
-		
+
 
 
 
@@ -360,7 +339,7 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 
 
 
-		
+
 
 
 		RECT srcRect =
@@ -371,7 +350,6 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 			m_icon->TheSurface()->Height()
 		};
 
-		
 		if ( destRect.left < destRect.right
 		&&   destRect.top < destRect.bottom )
 			g_ui->TheBlitter()->Blt(
@@ -383,7 +361,6 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 				k_AUI_BLITTER_FLAG_CHROMAKEY );
 	}
 
-	
 	DrawThisText(
 		surface,
 		&rect );
@@ -394,4 +371,4 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-#endif 
+#endif

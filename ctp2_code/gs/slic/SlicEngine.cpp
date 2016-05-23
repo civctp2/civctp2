@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,7 +41,7 @@
 //   - IsWater           Gets whether a location is water.
 // - Enable end turn button when unblanking.
 // - Removed a syntax error by Klaus Kaan
-// - Function by Solver: IsOnSameContinent - Checks if two locations are 
+// - Function by Solver: IsOnSameContinent - Checks if two locations are
 //   on same continent.
 // - Added AddSlaves function modelled after the AddPops function.
 // - Prevented crash with a missing Slic file.
@@ -64,7 +64,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SlicEngine.h"    
+#include "SlicEngine.h"
 
 #include <iterator>
 #include <list>
@@ -173,7 +173,6 @@ namespace
     PLAYER_INDEX const      SINGLE_PLAYER_DEFAULT               = 1;
 } // namespace
 
-
 SlicEngine::SlicEngine()
 :   m_tutorialActive        (FALSE),
 	m_tutorialPlayer        (SINGLE_PLAYER_DEFAULT),
@@ -201,7 +200,7 @@ SlicEngine::SlicEngine()
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i) 
+	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i)
 	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
@@ -212,7 +211,7 @@ SlicEngine::SlicEngine()
 	std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
 	std::fill(m_builtin_desc, m_builtin_desc + SLIC_BUILTIN_MAX, (SlicStructDescription *) NULL);
 	std::fill(m_researchText, m_researchText + 256, 0);
-	std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL); 
+	std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL);
 
 	AddStructs(true);
 	AddBuiltinFunctions();
@@ -246,7 +245,7 @@ SlicEngine::SlicEngine(CivArchive &archive)
 	m_contextStack          (new PointerList<SlicObject>),
 	m_breakRequested        (false)
 {
-	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i) 
+	for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i)
 	{
 		m_triggerLists[i] = new PointerList<SlicSegment>;
 	}
@@ -257,7 +256,7 @@ SlicEngine::SlicEngine(CivArchive &archive)
     std::fill(m_builtins, m_builtins + SLIC_BUILTIN_MAX, (SlicSymbolData const *) NULL);
     std::fill(m_builtin_desc, m_builtin_desc + SLIC_BUILTIN_MAX, (SlicStructDescription *) NULL);
     std::fill(m_researchText, m_researchText + 256, 0);
-    std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL); 
+    std::fill(m_modFunc, m_modFunc + mod_MAX, (SlicModFunc *) NULL);
 
 	AddStructs(true);
 	AddBuiltinFunctions();
@@ -289,10 +288,10 @@ SlicEngine::~SlicEngine()
 	// m_loadGameName: reference only
     KillCurrentMessage();
 	delete m_currentMessage;
-	
+
 	size_t  i;
 
-    for (i = 0; i < TRIGGER_LIST_MAX; ++i) 
+    for (i = 0; i < TRIGGER_LIST_MAX; ++i)
     {
         if (m_triggerLists[i])
         {
@@ -301,9 +300,9 @@ SlicEngine::~SlicEngine()
         }
 	}
 
-	for (i = 0; i < k_MAX_PLAYERS; ++i) 
+	for (i = 0; i < k_MAX_PLAYERS; ++i)
     {
-		if (m_records[i]) 
+		if (m_records[i])
         {
 			m_records[i]->DeleteAll();
 			delete m_records[i];
@@ -322,11 +321,10 @@ SlicEngine::~SlicEngine()
         delete m_uiExecuteObjects;
     }
 
-	for (i = 0; i < mod_MAX; ++i) 
+	for (i = 0; i < mod_MAX; ++i)
     {
 	    delete m_modFunc[i];
     }
-
 
     delete m_segmentHash;
 	delete m_functionHash;
@@ -335,17 +333,17 @@ SlicEngine::~SlicEngine()
     delete m_uiHash;
     delete m_symTab;
 
-	for (i = 0; i < SLIC_BUILTIN_MAX; ++i) 
+	for (i = 0; i < SLIC_BUILTIN_MAX; ++i)
     {
 		delete m_builtin_desc[i];
         // m_builtins[i] not deleted: managed through m_symTab
 	}
     delete [] m_builtin_desc;
     delete [] m_builtins;
-	
+
 	slicif_cleanup();
 
-    if (g_theMessagePool) 
+    if (g_theMessagePool)
     {
 		g_theMessagePool->NotifySlicReload();
 	}
@@ -405,7 +403,6 @@ void SlicEngine::Serialize(CivArchive &archive)
 		archive.Store((uint8*)m_timer, sizeof(m_timer));
 		archive.Store((uint8*)m_triggerKey, sizeof(m_triggerKey));
 
-		
 		archive.PutUINT8(static_cast<uint8>(m_doResearchOnUnblank));
 		archive << m_researchOwner;
 		archive.Store((uint8*)m_researchText, sizeof(m_researchText));
@@ -419,9 +416,9 @@ void SlicEngine::Serialize(CivArchive &archive)
         delete m_symTab;
 		m_symTab = new SlicSymTab(archive);
 
-	    for (i = 0; i < k_MAX_PLAYERS; ++i) 
+	    for (i = 0; i < k_MAX_PLAYERS; ++i)
         {
-		    if (m_records[i]) 
+		    if (m_records[i])
             {
 			    m_records[i]->DeleteAll();
 			    delete m_records[i];
@@ -519,7 +516,7 @@ void SlicEngine::Execute(SlicObject *obj)
 	if (obj->IsValid()  &&
         ((obj->GetSegment()->GetFilenum() != k_TUTORIAL_FILE) || g_theProfileDB->IsTutorialAdvice()) &&
 		(!g_theCriticalMessagesPrefs || g_theCriticalMessagesPrefs->IsEnabled(obj->GetSegment()->GetName()))
-       ) 
+       )
     {
 		obj->Execute();
 	}
@@ -563,15 +560,15 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsSecondRowUnit);
 	m_functionHash->Add(new Slic_IsFlankingUnit);
 	m_functionHash->Add(new Slic_IsBombardingUnit);
-	m_functionHash->Add(new Slic_IsWormholeProbe);  
-	m_functionHash->Add(new Slic_IsUnderseaCity);   
-	m_functionHash->Add(new Slic_IsSpaceCity);      
-	m_functionHash->Add(new Slic_IsSpaceUnit);      
-	m_functionHash->Add(new Slic_IsWonderType);     
-	m_functionHash->Add(new Slic_IsCounterBombardingUnit); 
-	m_functionHash->Add(new Slic_IsCleric);         
-	m_functionHash->Add(new Slic_IsSlaver);         
-	m_functionHash->Add(new Slic_IsActiveDefender); 
+	m_functionHash->Add(new Slic_IsWormholeProbe);
+	m_functionHash->Add(new Slic_IsUnderseaCity);
+	m_functionHash->Add(new Slic_IsSpaceCity);
+	m_functionHash->Add(new Slic_IsSpaceUnit);
+	m_functionHash->Add(new Slic_IsWonderType);
+	m_functionHash->Add(new Slic_IsCounterBombardingUnit);
+	m_functionHash->Add(new Slic_IsCleric);
+	m_functionHash->Add(new Slic_IsSlaver);
+	m_functionHash->Add(new Slic_IsActiveDefender);
 	m_functionHash->Add(new Slic_IsDiplomat);
 	m_functionHash->Add(new Slic_IsInRegion);
 	m_functionHash->Add(new Slic_UnitHasFlag);
@@ -730,7 +727,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_ClearOrders);
 	m_functionHash->Add(new Slic_SetTimerGranularity);
 
-	
 	m_functionHash->Add(new Slic_SetUnit);
 	m_functionHash->Add(new Slic_SetUnitByIndex);
 	m_functionHash->Add(new Slic_SetCity);
@@ -750,7 +746,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_ToggleVeteran);
 	m_functionHash->Add(new Slic_IsVeteran);
 
-	
 	m_functionHash->Add(new Slic_CantAttackUnit);
 	m_functionHash->Add(new Slic_CantAttackCity);
 	m_functionHash->Add(new Slic_CityCantRiotOrRevolt);
@@ -796,7 +791,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_CivilizationIndex);
 	m_functionHash->Add(new Slic_ExitToDesktop);
 
-	
 	m_functionHash->Add(new Slic_Import);
 	m_functionHash->Add(new Slic_Export);
 
@@ -805,9 +799,9 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetArmyByIndex);
 	m_functionHash->Add(new Slic_GetCityByIndex);
 
-	
-	
-	
+
+
+
 
 	m_functionHash->Add(new Slic_LogRegardEvent);
 	m_functionHash->Add(new Slic_GetPublicRegard);
@@ -835,9 +829,9 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_EffectiveWarWith);
 
 
-	
-	
-	
+
+
+
 
 	m_functionHash->Add(new Slic_HasAgreementWithAnyone);
 	m_functionHash->Add(new Slic_HasAgreement);
@@ -847,31 +841,27 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetLastHotwarAttack);
 	m_functionHash->Add(new Slic_GetLastColdwarAttack);
 
-	
-	
-	
+
+
+
 	m_functionHash->Add(new Slic_GetNuclearLaunchTarget);
 	m_functionHash->Add(new Slic_TargetNuclearAttack);
 
-	
-	
+
 	m_functionHash->Add(new Slic_GetMapHeight);
 	m_functionHash->Add(new Slic_GetMapWidth);
 
 	m_functionHash->Add(new Slic_AddFeat);
 
-	
 	m_functionHash->Add(new Slic_IsFortress);
 
 	m_functionHash->Add(new Slic_Distance);
 	m_functionHash->Add(new Slic_SquaredDistance);
 	m_functionHash->Add(new Slic_HasGood);
 
-	
 	m_functionHash->Add(new Slic_GetRiotLevel);
 	m_functionHash->Add(new Slic_GetRevolutionLevel);
 
-	
 	m_functionHash->Add(new Slic_CityFoodDelta);
 	m_functionHash->Add(new Slic_PlayerWagesExp);
 	m_functionHash->Add(new Slic_PlayerWorkdayExp);
@@ -885,7 +875,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetUnitFromCell);
 
 
-	
 	m_functionHash->Add(new Slic_TradePointsInUse);
 
 	m_functionHash->Add(new Slic_CityIsValid);
@@ -896,13 +885,11 @@ void SlicEngine::AddBuiltinFunctions()
 
 	m_functionHash->Add(new Slic_CityIsNamed);
 
-	
 	m_functionHash->Add(new Slic_StringCompare);
-	m_functionHash->Add(new Slic_CityNameCompare);	
+	m_functionHash->Add(new Slic_CityNameCompare);
 	m_functionHash->Add(new Slic_ChangeGlobalRegard);
 	m_functionHash->Add(new Slic_SetCityVisible);
 
-	
 	m_functionHash->Add(new Slic_IsCivilian);
 
 	m_functionHash->Add(new Slic_GetArmyFromUnit);
@@ -915,9 +902,8 @@ void SlicEngine::AddBuiltinFunctions()
 
 	m_functionHash->Add(new Slic_MinimizeAction);
 
-	
 	m_functionHash->Add(new Slic_SetAllCitiesVisible);
-	
+
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
 
@@ -1006,25 +992,24 @@ void SlicEngine::Link()
         m_segmentHash = new SlicSegmentHash(k_SEGMENT_HASH_SIZE);
     }
 
-    if (!m_symTab) 
+    if (!m_symTab)
     {
         m_symTab = new SlicSymTab(0);
     }
 
     m_segmentHash->SetSize(g_slicNumEntries);
 
-    for (sint32 i = 0; i < g_slicNumEntries; i++) 
+    for (sint32 i = 0; i < g_slicNumEntries; i++)
     {
         SlicSegment * seg = new SlicSegment(i);
         m_segmentHash->Add(seg->GetName(), seg);
     }
 
     m_segmentHash->LinkTriggerSymbols(m_uiHash);
-	
+
     slicif_init();
     AddModFuncs();
 }
-
 
 extern "C" char slic_parser_error_text[1024];
 
@@ -1038,10 +1023,10 @@ bool SlicEngine::Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum)
 	slicif_init();
 	slicif_set_file_num(filenum);
 
-    bool isParsedOk = 
-        (SLIC_ERROR_OK == 
+    bool isParsedOk =
+        (SLIC_ERROR_OK ==
             slicif_run_parser(const_cast<MBCHAR *>(a_File.c_str()), symStart)
-        );    
+        );
 
 	if (!isParsedOk)
     {
@@ -1058,7 +1043,7 @@ void SlicEngine::AddTrigger(SlicSegment *trigger, TRIGGER_LIST which)
 		if(m_triggerLists[t]->Find(trigger))
 			return;
 	}
-	
+
 	PointerList<SlicSegment>::PointerListNode *node;
 
 	for(t = sint32(which) - 1; t >= 0; t--) {
@@ -1105,7 +1090,7 @@ PointerList<SlicRecord> *SlicEngine::GetRecords(sint32 player)
 void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 								   SlicSegment *segment)
 {
-    if (!m_records[player]) 
+    if (!m_records[player])
     {
         m_records[player] = new PointerList<SlicRecord>;
     }
@@ -1117,7 +1102,7 @@ void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
         walk.Next()
     )
     {
-        if (walk.GetObj()->GetSegment() == segment) 
+        if (walk.GetObj()->GetSegment() == segment)
         {
             return;
 	  }
@@ -1125,7 +1110,7 @@ void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 
     m_records[player]->AddTail(new SlicRecord(player, title, text, segment));
 
-    if (g_tutorialWin && title) 
+    if (g_tutorialWin && title)
     {
         g_tutorialWin->AddToList(title, m_records[player]->GetCount() - 1);
     }
@@ -1144,7 +1129,7 @@ bool SlicEngine::IsTimerExpired(sint32 timer) const
 
 	return time(0) >= static_cast<time_t>(m_timer[timer]);
 }
-		
+
 void SlicEngine::StartTimer(sint32 timer, time_t duration)
 {
 	Assert(timer >= 0);
@@ -1167,17 +1152,17 @@ void SlicEngine::StopTimer(sint32 timer)
 
 	m_timer[timer] = NOT_IN_USE;
 }
-	
+
 void SlicEngine::SetTutorialActive(BOOL on)
-{ 
+{
 	if(!on && m_tutorialActive) {
 		RunTrigger(TRIGGER_LIST_TUTORIAL_OFF,
 				   ST_END);
 	}
 
-	m_tutorialActive = on; 
+	m_tutorialActive = on;
 	if(!m_tutorialActive) {
-		
+
 		EnableMessageClass(k_NON_TUTORIAL_MESSAGE_CLASS);
 		if(g_player && g_player[m_tutorialPlayer]) {
 			sint32 i;
@@ -1195,9 +1180,9 @@ void SlicEngine::SetTutorialActive(BOOL on)
 
 void SlicEngine::EnableMessageClass(sint32 mclass)
 {
-	for (sint32 i = m_disabledClasses->Num() - 1; i >= 0; --i) 
+	for (sint32 i = m_disabledClasses->Num() - 1; i >= 0; --i)
 	{
-		if (m_disabledClasses->Access(i) == mclass) 
+		if (m_disabledClasses->Access(i) == mclass)
 		{
 			m_disabledClasses->DelIndex(i);
 		}
@@ -1211,9 +1196,9 @@ void SlicEngine::DisableMessageClass(sint32 mclass)
 
 bool SlicEngine::IsMessageClassDisabled(sint32 mclass) const
 {
-	for (sint32 i = 0; i < m_disabledClasses->Num(); ++i) 
+	for (sint32 i = 0; i < m_disabledClasses->Num(); ++i)
 	{
-		if (m_disabledClasses->Access(i) == mclass) 
+		if (m_disabledClasses->Access(i) == mclass)
 		{
 			return true;
 		}
@@ -1223,7 +1208,7 @@ bool SlicEngine::IsMessageClassDisabled(sint32 mclass) const
 
 void SlicEngine::ProcessUITriggers()
 {
-    for 
+    for
     (
         SlicObject *    obj = m_uiExecuteObjects->RemoveHead();
         obj;
@@ -1243,7 +1228,7 @@ void SlicEngine::RunYearlyTriggers()
         walk.Next()
     )
     {
-        if (walk.GetObj()->IsEnabled()) 
+        if (walk.GetObj()->IsEnabled())
         {
 		Execute(new SlicObject(walk.GetObj()));
 	  }
@@ -1290,7 +1275,7 @@ void SlicEngine::RunCityPopTriggers(const Unit &city)
 		walk.Next();
 	}
 }
-	
+
 void SlicEngine::RunClickedUnitTriggers(const Unit &unit)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CLICKED_UNIT]);
@@ -1362,7 +1347,7 @@ void SlicEngine::RunIdleTriggers(sint32 seconds)
 
 void SlicEngine::RunUnitMovedTriggers(const Unit &u)
 {
-	
+
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_UNIT_MOVED]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
@@ -1438,14 +1423,14 @@ void SlicEngine::RunDiscoveryTriggers(AdvanceType adv, PLAYER_INDEX p)
 		walk.Next();
 	}
 }
-	
+
 void SlicEngine::RunContactTriggers(const Unit &unit1, const Unit &unit2)
 {
-	if (    unit1.IsValid() 
+	if (    unit1.IsValid()
          &&	unit2.IsValid()
          && g_player[unit1.GetOwner()]
          && g_player[unit2.GetOwner()]
-       ) 
+       )
     {
 	    PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CONTACT]);
 	    while(walk.IsValid()) {
@@ -1477,7 +1462,6 @@ void SlicEngine::RunAttackTriggers(const Unit &unit1, const Unit &unit2)
 		walk.Next();
 	}
 }
-
 
 void SlicEngine::RunTradeScreenTriggers()
 {
@@ -1531,7 +1515,6 @@ void SlicEngine::RunSameGoodAsTradedTriggers(sint32 good, const Unit &city1)
 		walk.Next();
 	}
 }
-	
 
 void SlicEngine::RunUnitQueueTriggers()
 {
@@ -1547,7 +1530,6 @@ void SlicEngine::RunUnitQueueTriggers()
 		walk.Next();
 	}
 }
-	
 
 void SlicEngine::RunProductionQueueTriggers()
 {
@@ -1563,7 +1545,6 @@ void SlicEngine::RunProductionQueueTriggers()
 		walk.Next();
 	}
 }
-	
 
 void SlicEngine::RunDiplomaticScreenTriggers()
 {
@@ -1609,7 +1590,6 @@ void SlicEngine::RunCreateMixedStackTriggers()
 		walk.Next();
 	}
 }
-	
 
 void SlicEngine::RunAutoArrangeOffTriggers()
 {
@@ -1670,7 +1650,7 @@ void SlicEngine::RunActiveDefenseTriggers(const Unit &defender, const Unit &aggr
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[defender.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[aggressor.GetOwner()]->m_civilisation);
 			obj->AddUnit(defender);
@@ -1687,7 +1667,7 @@ void SlicEngine::RunIndulgenceTriggers(const Unit &cleric, const Unit &city)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[cleric.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddUnit(cleric);
@@ -1704,7 +1684,7 @@ void SlicEngine::RunTerrorismTriggers(const Unit &terrorist, const Unit &target)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[terrorist.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[target.GetOwner()]->m_civilisation);
 			obj->AddUnit(terrorist);
@@ -1721,7 +1701,7 @@ void SlicEngine::RunConversionTriggers(const Unit &cleric, const Unit &city)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[cleric.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddUnit(cleric);
@@ -1738,7 +1718,7 @@ void SlicEngine::RunWonderStartedTriggers(const Unit &city, sint32 wondertype)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddCity(city);
 			obj->AddWonder(wondertype);
@@ -1754,7 +1734,7 @@ void SlicEngine::RunWonderFinishedTriggers(const Unit &city, sint32 wondertype)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddCity(city);
 			obj->AddWonder(wondertype);
@@ -1772,7 +1752,7 @@ void SlicEngine::RunUnitSightedTriggers(const Unit &sighted, const Unit &sighted
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[sighted.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[sightedby.GetOwner()]->m_civilisation);
 			obj->AddUnit(sighted);
@@ -1784,14 +1764,13 @@ void SlicEngine::RunUnitSightedTriggers(const Unit &sighted, const Unit &sighted
 }
 #endif
 
-
 void SlicEngine::RunEnslavementTriggers(const Unit &slaver, const Unit &city)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_ENSLAVEMENT]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[slaver.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddUnit(slaver);
@@ -1802,14 +1781,14 @@ void SlicEngine::RunEnslavementTriggers(const Unit &slaver, const Unit &city)
 	}
 }
 
-void SlicEngine::RunSettlerEnslavedTriggers(const Unit &slaver, 
+void SlicEngine::RunSettlerEnslavedTriggers(const Unit &slaver,
 											sint32 settlerOwner)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_SETTLERENSLAVED]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[slaver.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[settlerOwner]->m_civilisation);
 			obj->AddUnit(slaver);
@@ -1818,8 +1797,8 @@ void SlicEngine::RunSettlerEnslavedTriggers(const Unit &slaver,
 		walk.Next();
 	}
 }
-	
-void SlicEngine::RunVictoryEnslavementTriggers(const Unit &slaver, 
+
+void SlicEngine::RunVictoryEnslavementTriggers(const Unit &slaver,
 											   sint32 slavee,
 											   Unit &hc)
 {
@@ -1827,7 +1806,7 @@ void SlicEngine::RunVictoryEnslavementTriggers(const Unit &slaver,
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[slaver.GetOwner()]->m_civilisation);
 			obj->AddCivilisation(*g_player[slavee]->m_civilisation);
 			obj->AddUnit(slaver);
@@ -1838,14 +1817,13 @@ void SlicEngine::RunVictoryEnslavementTriggers(const Unit &slaver,
 	}
 }
 
-
 void SlicEngine::RunUnitLaunchedTriggers(const Unit &launchee)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_UNIT_LAUNCHED]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[launchee.GetOwner()]->m_civilisation);
 			obj->AddUnit(launchee);
 			Execute(obj);
@@ -1860,7 +1838,7 @@ void SlicEngine::RunUnitBeginTurnTriggers(const Unit &unit)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[unit.GetOwner()]->m_civilisation);
 			obj->AddUnit(unit);
 			Execute(obj);
@@ -1872,14 +1850,14 @@ void SlicEngine::RunUnitBeginTurnTriggers(const Unit &unit)
 		walk.Next();
 	}
 }
-	
+
 void SlicEngine::RunPopMovedTriggers(const Unit &city)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_POP_MOVED]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddCity(city);
 			Execute(obj);
@@ -1995,7 +1973,7 @@ void SlicEngine::RunCityCapturedTriggers(sint32 newowner, sint32 oldowner, const
 		walk.Next();
 	}
 }
-	
+
 void SlicEngine::RunTradeOfferTriggers(const TradeOffer &offer)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_TRADE_OFFER]);
@@ -2019,8 +1997,7 @@ void SlicEngine::RunTreatyBrokenTriggers(sint32 pl1, sint32 pl2, const Agreement
 			SlicObject *obj = new SlicObject(walk.GetObj());
 			obj->AddCivilisation(*g_player[pl1]->m_civilisation);
 			obj->AddCivilisation(*g_player[pl2]->m_civilisation);
-			
-			
+
 			Execute(obj);
 		}
 		walk.Next();
@@ -2084,7 +2061,6 @@ void SlicEngine::RunMiscUnitDeathTriggers(const Unit &unit)
 	}
 }
 
-
 void SlicEngine::RunDiscoveryTradedTriggers(sint32 pl1, sint32 pl2, AdvanceType adv)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_DISCOVERY_TRADED]);
@@ -2104,14 +2080,14 @@ void SlicEngine::RunUITriggers(const MBCHAR *controlName)
 {
 	DPRINTF(k_DBG_UI, ("SLIC: control %s used\n", controlName));
 
-	SlicUITrigger * trig = 
+	SlicUITrigger * trig =
 		controlName ? m_uiHash->Access(controlName) : NULL;
 
 	if(trig) {
 		SlicSegment *seg = trig->GetSegment();
 		if(seg && seg->IsEnabled()) {
 			m_uiExecuteObjects->AddTail(new SlicObject(seg));
-			
+
 		}
 	}
 }
@@ -2137,7 +2113,7 @@ void SlicEngine::RunPopMovedOffGoodTriggers(const Unit &city)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddCity(city);
 			Execute(obj);
@@ -2152,7 +2128,7 @@ void SlicEngine::RunWastingWorkTriggers(const Unit &city)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(*g_player[city.GetOwner()]->m_civilisation);
 			obj->AddCity(city);
 			Execute(obj);
@@ -2167,14 +2143,14 @@ void SlicEngine::RunPublicWorksTaxTriggers(sint32 owner)
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
-			
+
 			obj->AddCivilisation(owner);
 			Execute(obj);
 		}
 		walk.Next();
 	}
 }
-	
+
 void SlicEngine::RunWonderAlmostDoneTriggers(const Unit &city, sint32 wonder)
 {
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_WONDER_ALMOST_DONE]);
@@ -2246,7 +2222,7 @@ void SlicEngine::RunForeignTradeRouteTriggers(TradeRoute &route, sint32 gold)
 
 void SlicEngine::RunUnitDoneMovingTriggers(const Unit &unit)
 {
-	
+
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_UNIT_DONE_MOVING]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
@@ -2266,17 +2242,15 @@ void SlicEngine::RunPiracyTriggers(const TradeRoute &route, const Unit &unit)
 		if(walk.GetObj()->IsEnabled()) {
 			SlicObject *obj = new SlicObject(walk.GetObj());
 
-			
 			obj->AddCivilisation(route.GetSource().GetOwner());
-			
+
 			obj->AddCivilisation(route.GetDestination().GetOwner());
-			
+
 			obj->AddCivilisation(*g_player[unit.GetOwner()]->m_civilisation);
 			obj->AddUnit(unit);
 
-			
 			obj->AddCity(route.GetSource());
-			
+
 			obj->AddCity(route.GetDestination());
 
 			ROUTE_TYPE type;
@@ -2454,7 +2428,7 @@ void SlicEngine::RunTrigger(TRIGGER_LIST tlist, ...)
 						break;
 					case ST_UNIT:
 						u = va_arg(vl, Unit);
-						if (u.IsValid()) 
+						if (u.IsValid())
                         {
 							obj->AddUnit(u);
 						} else {
@@ -2463,7 +2437,7 @@ void SlicEngine::RunTrigger(TRIGGER_LIST tlist, ...)
 						break;
 					case ST_CITY:
 						u = va_arg(vl, Unit);
-						if (u.IsValid()) 
+						if (u.IsValid())
                         {
 							obj->AddCity(u);
 						} else {
@@ -2560,9 +2534,9 @@ bool SlicEngine::IsKeyPressed(MBCHAR key) const
 
 bool SlicEngine::RunKeyboardTrigger(MBCHAR key)
 {
-	for (size_t i = 0; i < k_MAX_TRIGGER_KEYS; i++) 
+	for (size_t i = 0; i < k_MAX_TRIGGER_KEYS; i++)
 	{
-		if (m_triggerKey[i] == key) 
+		if (m_triggerKey[i] == key)
 		{
 			m_currentKeyTrigger = key;
 			RunTrigger(TRIGGER_LIST_KEY_PRESSED, ST_END);
@@ -2576,7 +2550,7 @@ bool SlicEngine::RunKeyboardTrigger(MBCHAR key)
 
 void SlicEngine::BlankScreen(bool blank)
 {
-	if (m_blankScreen != blank) 
+	if (m_blankScreen != blank)
 	{
 		m_blankScreen = blank;
 		g_tiledMap->InvalidateMap();
@@ -2640,7 +2614,7 @@ void SlicEngine::AddConst(const MBCHAR *name, sint32 value)
 bool SlicEngine::FindConst(const MBCHAR *name, sint32 *value) const
 {
 	SlicConst * sc = m_constHash->Access(name);
-	if (sc) 
+	if (sc)
 	{
 		*value = sc->GetValue();
 		return true;
@@ -2652,9 +2626,9 @@ void SlicEngine::AddStructArray(bool createSymbols, SlicStructDescription *desc,
 {
 	m_builtin_desc[which] = desc;
 
-	if (createSymbols) 
+	if (createSymbols)
     {
-        SlicBuiltinNamedSymbol *    newSymbol = 
+        SlicBuiltinNamedSymbol *    newSymbol =
 		    new SlicBuiltinNamedSymbol(which, desc->GetName(), new SlicArray(desc));
 		m_builtins[which] = newSymbol;  // not deleted, managed through m_symTab
         m_symTab->Add(newSymbol);
@@ -2665,9 +2639,9 @@ void SlicEngine::AddStruct(bool createSymbols, SlicStructDescription *desc, SLIC
 {
     m_builtin_desc[which] = desc;
 
-    if (createSymbols) 
+    if (createSymbols)
     {
-        SlicBuiltinNamedSymbol *    newSymbol = 
+        SlicBuiltinNamedSymbol *    newSymbol =
 		    new SlicBuiltinNamedSymbol(which, desc->GetName(), desc);
         m_builtins[which] = newSymbol;  // not deleted, managed through m_symTab
 		m_symTab->Add(newSymbol);
@@ -2721,12 +2695,10 @@ SlicSymbolData const * SlicEngine::GetBuiltinSymbol(SLIC_BUILTIN which) const
 	return m_builtins[which];
 }
 
-
 void SlicEngine::AddSymbol(SlicNamedSymbol *sym)
 {
 	m_symTab->Add(sym);
 }
-
 
 void SlicEngine::SetContext(SlicObject *obj)
 {
@@ -2771,7 +2743,7 @@ SlicStructDescription *SlicEngine::GetStructDescription(SLIC_BUILTIN which)
 void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context, SlicStack *stack,
 					   MessageData *message)
 {
-	
+
 	Assert(!m_atBreak);
 	if(m_atBreak)
 		return;
@@ -2780,8 +2752,7 @@ void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context,
 	m_breakContext = context;
 	m_breakContext->CopyFromBuiltins();
 	m_breakContext->AddRef();
-	
-	
+
 	m_atBreak = true;
 
 #ifdef CTP2_ENABLE_SLICDEBUG
@@ -2791,7 +2762,7 @@ void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context,
 
 void SlicEngine::Continue()
 {
-	
+
 	Assert(m_atBreak);
 	if(!m_atBreak)
 		return;
@@ -2803,14 +2774,14 @@ void SlicEngine::Continue()
 	m_breakContext->Release();
     m_breakContext = NULL;
 
-	if (!m_atBreak) 
+	if (!m_atBreak)
     {
-	    for 
+	    for
         (
             SlicObject * oldContext = m_contextStack->RemoveTail();
             oldContext;
             oldContext = m_contextStack->RemoveTail()
-        ) 
+        )
         {
 			SetContext(oldContext);
 			oldContext->Continue();
@@ -2900,44 +2871,44 @@ void SlicEngine::AddDatabases()
 																		  g_OrderRecord_Accessors,
 																		  g_Order_Tokens,
 																		  k_Num_OrderRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<TerrainImprovementRecord, 
-									TerrainImprovementRecordAccessorInfo>("TerrainImprovementDB", 
+	m_dbHash->Add(new SlicDBConduit<TerrainImprovementRecord,
+									TerrainImprovementRecordAccessorInfo>("TerrainImprovementDB",
 																		  g_theTerrainImprovementDB,
 																		  g_TerrainImprovementRecord_Accessors,
 																		  g_TerrainImprovement_Tokens,
 																		  k_Num_TerrainImprovementRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<GovernmentRecord, 
+	m_dbHash->Add(new SlicDBConduit<GovernmentRecord,
 									GovernmentRecordAccessorInfo>("GovernmentDB", g_theGovernmentDB,
 																  g_GovernmentRecord_Accessors,
 																  g_Government_Tokens,
 																  k_Num_GovernmentRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<StrategyRecord, 
+	m_dbHash->Add(new SlicDBConduit<StrategyRecord,
 									StrategyRecordAccessorInfo>("StrategyDB", g_theStrategyDB,
 																  g_StrategyRecord_Accessors,
 																  g_Strategy_Tokens,
 																  k_Num_StrategyRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<DiplomacyRecord, 
+	m_dbHash->Add(new SlicDBConduit<DiplomacyRecord,
 									DiplomacyRecordAccessorInfo>("DiplomacyDB", g_theDiplomacyDB,
 																  g_DiplomacyRecord_Accessors,
 																  g_Diplomacy_Tokens,
 																  k_Num_DiplomacyRecord_Tokens));
 	//The rest of the new databases available through slic added by Martin Gühmann
-	m_dbHash->Add(new SlicDBConduit<PersonalityRecord, 
+	m_dbHash->Add(new SlicDBConduit<PersonalityRecord,
 									PersonalityRecordAccessorInfo>("PersonalityDB", g_thePersonalityDB,
 																  g_PersonalityRecord_Accessors,
 																  g_Personality_Tokens,
 																  k_Num_PersonalityRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<AdvanceBranchRecord, 
+	m_dbHash->Add(new SlicDBConduit<AdvanceBranchRecord,
 									AdvanceBranchRecordAccessorInfo>("AdvanceBranchDB", g_theAdvanceBranchDB,
 																  g_AdvanceBranchRecord_Accessors,
 																  g_AdvanceBranch_Tokens,
 																  k_Num_AdvanceBranchRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<AdvanceListRecord, 
+	m_dbHash->Add(new SlicDBConduit<AdvanceListRecord,
 									AdvanceListRecordAccessorInfo>("AdvanceListDB", g_theAdvanceListDB,
 																  g_AdvanceListRecord_Accessors,
 																  g_AdvanceList_Tokens,
 																  k_Num_AdvanceListRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<AgeCityStyleRecord, 
+	m_dbHash->Add(new SlicDBConduit<AgeCityStyleRecord,
 									AgeCityStyleRecordAccessorInfo>("AgeCityStyleDB", g_theAgeCityStyleDB,
 																  g_AgeCityStyleRecord_Accessors,
 																  g_AgeCityStyle_Tokens,
@@ -2946,37 +2917,37 @@ void SlicEngine::AddDatabases()
 																  g_AgeRecord_Accessors,
 																  g_Age_Tokens,
 																  k_Num_AgeRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<BuildingBuildListRecord, 
+	m_dbHash->Add(new SlicDBConduit<BuildingBuildListRecord,
 									BuildingBuildListRecordAccessorInfo>("BuildingBuildListDB", g_theBuildingBuildListDB,
 																  g_BuildingBuildListRecord_Accessors,
 																  g_BuildingBuildList_Tokens,
 																  k_Num_BuildingBuildListRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<BuildListSequenceRecord, 
+	m_dbHash->Add(new SlicDBConduit<BuildListSequenceRecord,
 									BuildListSequenceRecordAccessorInfo>("BuildListSequenceDB", g_theBuildListSequenceDB,
 																  g_BuildListSequenceRecord_Accessors,
 																  g_BuildListSequence_Tokens,
 																  k_Num_BuildListSequenceRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<CitySizeRecord, 
+	m_dbHash->Add(new SlicDBConduit<CitySizeRecord,
 									CitySizeRecordAccessorInfo>("CitySizeDB", g_theCitySizeDB,
 																  g_CitySizeRecord_Accessors,
 																  g_CitySize_Tokens,
 																  k_Num_CitySizeRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<CityStyleRecord, 
+	m_dbHash->Add(new SlicDBConduit<CityStyleRecord,
 									CityStyleRecordAccessorInfo>("CityStyleDB", g_theCityStyleDB,
 																  g_CityStyleRecord_Accessors,
 																  g_CityStyle_Tokens,
 																  k_Num_CityStyleRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<DiplomacyProposalRecord, 
+	m_dbHash->Add(new SlicDBConduit<DiplomacyProposalRecord,
 									DiplomacyProposalRecordAccessorInfo>("DiplomacyProposalDB", g_theDiplomacyProposalDB,
 																  g_DiplomacyProposalRecord_Accessors,
 																  g_DiplomacyProposal_Tokens,
 																  k_Num_DiplomacyProposalRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<DiplomacyThreatRecord, 
+	m_dbHash->Add(new SlicDBConduit<DiplomacyThreatRecord,
 									DiplomacyThreatRecordAccessorInfo>("DiplomacyThreatDB", g_theDiplomacyThreatDB,
 																  g_DiplomacyThreatRecord_Accessors,
 																  g_DiplomacyThreat_Tokens,
 																  k_Num_DiplomacyThreatRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<EndGameObjectRecord, 
+	m_dbHash->Add(new SlicDBConduit<EndGameObjectRecord,
 									EndGameObjectRecordAccessorInfo>("EndGameObjectDB", g_theEndGameObjectDB,
 																  g_EndGameObjectRecord_Accessors,
 																  g_EndGameObject_Tokens,
@@ -2989,7 +2960,7 @@ void SlicEngine::AddDatabases()
 																  g_IconRecord_Accessors,
 																  g_Icon_Tokens,
 																  k_Num_IconRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<ImprovementListRecord, 
+	m_dbHash->Add(new SlicDBConduit<ImprovementListRecord,
 									ImprovementListRecordAccessorInfo>("ImprovementListDB", g_theImprovementListDB,
 																  g_ImprovementListRecord_Accessors,
 																  g_ImprovementList_Tokens,
@@ -3002,12 +2973,12 @@ void SlicEngine::AddDatabases()
 																  g_SoundRecord_Accessors,
 																  g_Sound_Tokens,
 																  k_Num_SoundRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<SpecialAttackInfoRecord, 
+	m_dbHash->Add(new SlicDBConduit<SpecialAttackInfoRecord,
 									SpecialAttackInfoRecordAccessorInfo>("SpecialAttackInfoDB", g_theSpecialAttackInfoDB,
 																  g_SpecialAttackInfoRecord_Accessors,
 																  g_SpecialAttackInfo_Tokens,
 																  k_Num_SpecialAttackInfoRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<SpecialEffectRecord, 
+	m_dbHash->Add(new SlicDBConduit<SpecialEffectRecord,
 									SpecialEffectRecordAccessorInfo>("SpecialEffectDB", g_theSpecialEffectDB,
 																  g_SpecialEffectRecord_Accessors,
 																  g_SpecialEffect_Tokens,
@@ -3016,62 +2987,62 @@ void SlicEngine::AddDatabases()
 																  g_SpriteRecord_Accessors,
 																  g_Sprite_Tokens,
 																  k_Num_SpriteRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<UnitBuildListRecord, 
+	m_dbHash->Add(new SlicDBConduit<UnitBuildListRecord,
 									UnitBuildListRecordAccessorInfo>("UnitBuildListDB", g_theUnitBuildListDB,
 																  g_UnitBuildListRecord_Accessors,
 																  g_UnitBuildList_Tokens,
 																  k_Num_UnitBuildListRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<WonderBuildListRecord, 
+	m_dbHash->Add(new SlicDBConduit<WonderBuildListRecord,
 									WonderBuildListRecordAccessorInfo>("WonderBuildListDB", g_theWonderBuildListDB,
 																  g_WonderBuildListRecord_Accessors,
 																  g_WonderBuildList_Tokens,
 																  k_Num_WonderBuildListRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<WonderMovieRecord, 
+	m_dbHash->Add(new SlicDBConduit<WonderMovieRecord,
 									WonderMovieRecordAccessorInfo>("WonderMovieDB", g_theWonderMovieDB,
 																  g_WonderMovieRecord_Accessors,
 																  g_WonderMovie_Tokens,
 																  k_Num_WonderMovieRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<CivilisationRecord, 
+	m_dbHash->Add(new SlicDBConduit<CivilisationRecord,
 									CivilisationRecordAccessorInfo>("CivilisationDB", g_theCivilisationDB,
 																  g_CivilisationRecord_Accessors,
 																  g_Civilisation_Tokens,
 																  k_Num_CivilisationRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<RiskRecord, 
+	m_dbHash->Add(new SlicDBConduit<RiskRecord,
 									RiskRecordAccessorInfo>("RiskDB", g_theRiskDB,
 																  g_RiskRecord_Accessors,
 																  g_Risk_Tokens,
 																  k_Num_RiskRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<DifficultyRecord, 
+	m_dbHash->Add(new SlicDBConduit<DifficultyRecord,
 									DifficultyRecordAccessorInfo>("DifficultyDB", g_theDifficultyDB,
 																  g_DifficultyRecord_Accessors,
 																  g_Difficulty_Tokens,
 																  k_Num_DifficultyRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<PollutionRecord, 
+	m_dbHash->Add(new SlicDBConduit<PollutionRecord,
 									PollutionRecordAccessorInfo>("PollutionDB", g_thePollutionDB,
 																  g_PollutionRecord_Accessors,
 																  g_Pollution_Tokens,
 																  k_Num_PollutionRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<GlobalWarmingRecord, 
+	m_dbHash->Add(new SlicDBConduit<GlobalWarmingRecord,
 									GlobalWarmingRecordAccessorInfo>("GlobalWarmingDB", g_theGlobalWarmingDB,
 																	  g_GlobalWarmingRecord_Accessors,
 																	  g_GlobalWarming_Tokens,
 																	  k_Num_GlobalWarmingRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<MapIconRecord, 
+	m_dbHash->Add(new SlicDBConduit<MapIconRecord,
 									MapIconRecordAccessorInfo>("MapIconDB", g_theMapIconDB,
 																g_MapIconRecord_Accessors,
 																g_MapIcon_Tokens,
 																k_Num_MapIconRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<MapRecord, 
+	m_dbHash->Add(new SlicDBConduit<MapRecord,
 									MapRecordAccessorInfo>("MapDB", g_theMapDB,
 															g_MapRecord_Accessors,
 															g_Map_Tokens,
 															k_Num_MapRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<ConceptRecord, 
+	m_dbHash->Add(new SlicDBConduit<ConceptRecord,
 									ConceptRecordAccessorInfo>("ConceptDB", g_theConceptDB,
 															   g_ConceptRecord_Accessors,
 															   g_Concept_Tokens,
 															   k_Num_ConceptRecord_Tokens));
-	m_dbHash->Add(new SlicDBConduit<ConstRecord, 
+	m_dbHash->Add(new SlicDBConduit<ConstRecord,
 									ConstRecordAccessorInfo>("ConstDB", g_theConstDB,
 															   g_ConstRecord_Accessors,
 															   g_Const_Tokens,
@@ -3088,7 +3059,7 @@ SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 
 void SlicEngine::AddModFuncs()
 {
-	for (size_t i = 0; i < mod_MAX; ++i) 
+	for (size_t i = 0; i < mod_MAX; ++i)
 	{
 		delete m_modFunc[i];
 		m_modFunc[i] = NULL;
@@ -3098,7 +3069,7 @@ void SlicEngine::AddModFuncs()
 	SMF_2A(mod_CanCityBuildUnit, ST_CITY, ST_INT);
 	SMF_2A(mod_CanCityBuildBuilding, ST_CITY, ST_INT);
 	SMF_2A(mod_CanCityBuildWonder, ST_CITY, ST_INT);
-	
+
 	SMF_2A(mod_CityHappiness, ST_CITY, ST_INT);
 	SMF_3A(mod_UnitAttack, ST_UNIT, ST_UNIT, ST_INT);
 	SMF_3A(mod_UnitRangedAttack, ST_UNIT, ST_UNIT, ST_INT);
@@ -3109,7 +3080,7 @@ sint32 SlicEngine::CallMod(MOD_FUNC modFunc, sint32 def, ...)
 {
 	Assert(modFunc > mod_INVALID);
 	Assert(modFunc < mod_MAX);
-	
+
 	SlicModFunc *mf = m_modFunc[modFunc];
 	if(!mf) return def;
 
@@ -3129,7 +3100,7 @@ sint32 SlicEngine::CallMod(MOD_FUNC modFunc, sint32 def, ...)
 
 	for(arg = 0; arg < mf->GetNumArgs(); arg++) {
 		SlicSymbolData *sym;
-		switch(mf->GetArg(arg)) {			
+		switch(mf->GetArg(arg)) {
 			case ST_UNIT:
 				u.m_id = va_arg(vl, uint32);
 				sym = new SlicSymbolData(SLIC_SYM_UNIT);
@@ -3190,7 +3161,7 @@ sint32 SlicEngine::CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 playe
 {
 	SlicSegment *seg = GetSegment(name);
 	if(!seg) return false;
-	
+
 	SlicArgList *slicArgs =  new SlicArgList;
 	SlicSymbolData *sym;
 	sym = new SlicSymbolData(SLIC_SYM_IVAR);

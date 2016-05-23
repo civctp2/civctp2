@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Road drawing.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -57,7 +57,7 @@
 #define k_T_INTERSECT		3
 #define k_X_INTERSECT		4
 
-enum ROAD 
+enum ROAD
 {
 	ROAD_DEFAULT,
 	ROAD_SOUTH = 0,
@@ -82,4 +82,3 @@ enum ROAD
 };
 
 #endif
-

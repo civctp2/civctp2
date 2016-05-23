@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -119,7 +119,7 @@ SlicSegment::SlicSegment()
 // Returns    : -
 //
 // Remark(s)  : - The stored object will be deleted after copying its data.
-//              - Event handlers and Slic user functions will be registered. 
+//              - Event handlers and Slic user functions will be registered.
 //
 //----------------------------------------------------------------------------
 SlicSegment::SlicSegment(sint32 slicifIndex)
@@ -177,9 +177,9 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 		free(pobj->m_parameters);
 	}
 
-	if (m_type == SLIC_OBJECT_HANDLEEVENT) 
+	if (m_type == SLIC_OBJECT_HANDLEEVENT)
 	{
-		switch (pobj->m_priority) 
+		switch (pobj->m_priority)
 		{
 			case SLIC_PRI_PRE:     m_priority = GEV_PRI_Pre;         break;
 			case SLIC_PRI_POST:    m_priority = GEV_PRI_Post;        break;
@@ -204,7 +204,7 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 	if (g_slicEngine)
 	{
 		SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
-		
+
 		if (sym)
 		{
 			if((sym->GetType() == SLIC_SYM_ID) ||
@@ -374,7 +374,7 @@ void SlicSegment::operator delete(void *ptr)
 	SlicSegment * seg = static_cast<SlicSegment *>(ptr);
 	if (seg)
 	{
-		if ((SLIC_OBJECT_HANDLEEVENT == seg->m_type) && 
+		if ((SLIC_OBJECT_HANDLEEVENT == seg->m_type) &&
 		    (GEV_MAX != seg->m_event) &&
 		    g_gevManager
 		   )
@@ -443,10 +443,10 @@ void SlicSegment::Serialize(CivArchive &archive)
 		m_code = (uint8*)malloc(m_codeSize);
 		archive.Load((uint8*)m_code, m_codeSize);
 
-		if (m_num_trigger_symbols < 1) {  
-			m_trigger_symbols_indices = NULL; 
-			m_trigger_symbols = NULL; 
-		} else { 
+		if (m_num_trigger_symbols < 1) {
+			m_trigger_symbols_indices = NULL;
+			m_trigger_symbols = NULL;
+		} else {
 			m_trigger_symbols_indices = new sint32[m_num_trigger_symbols];
 			archive.Load((uint8*)m_trigger_symbols_indices, m_num_trigger_symbols * sizeof(sint32));
 		}
@@ -494,7 +494,7 @@ void SlicSegment::AddSpecials(SlicObject *obj)
 		PLAYER_INDEX	player ;
 		ID	item ;
 		SELECT_TYPE	state ;
-		
+
 		g_selected_item->GetTopCurItem(player, item, state);
 		if(state == SELECT_TYPE_LOCAL_ARMY) {
 			Army army = Army(item);
@@ -510,17 +510,15 @@ void SlicSegment::LinkTriggerSymbols()
 		return;
 
 	if(m_num_trigger_symbols <= 0) {
-		
-		
-		
+
+
 		Assert(FALSE);
 		return;
 	}
 
 	if(m_uiComponent != NULL) {
-		
-		
-		
+
+
 		return;
 	}
 
@@ -540,7 +538,7 @@ void SlicSegment::LinkParameterSymbols()
 	if(m_type != SLIC_OBJECT_FUNCTION)
 		return;
 
-	delete [] m_parameter_symbols;	
+	delete [] m_parameter_symbols;
 	m_parameter_symbols = (m_num_parameters > 0) ? new SlicSymbolData *[m_num_parameters] : NULL;
 	for(sint32 i = 0; i < m_num_parameters; i++) {
 		m_parameter_symbols[i] = g_slicEngine->GetSymbol(m_parameter_indices[i]);
@@ -572,7 +570,7 @@ void SlicSegmentHash::SetSize(sint32 size)
 	m_segments = new SlicSegment *[m_numSegments ? m_numSegments : 1];
 	memset(m_segments, 0, sizeof(SlicSegment *) * m_numSegments);
 }
-	
+
 void SlicSegmentHash::Add(const char *name, SlicSegment *seg)
 {
 	if(m_segments) {
@@ -587,9 +585,9 @@ SFN_ERROR SlicSegment::Call(SlicArgList *args, SlicObject *&obj)
 	if(m_type != SLIC_OBJECT_FUNCTION)
 		return SFN_ERROR_NOT_A_FUNCTION;
 
-	obj = new SlicObject(this);	
+	obj = new SlicObject(this);
 	obj->SetArgList(args);
-	obj->AddRef(); 
+	obj->AddRef();
 	obj->CopyFromBuiltins();
 
 	g_slicEngine->Execute(obj);
@@ -614,7 +612,7 @@ GAME_EVENT_HOOK_DISPOSITION SlicSegment::GEVHookCallback(GAME_EVENT type, GameEv
 		SlicObject *so = new SlicObject(this);
 		so->AddRef();
 		so->Snarf(args);
-		so->SetResult((sint32)GEV_HD_Continue); 
+		so->SetResult((sint32)GEV_HD_Continue);
 		g_slicEngine->Execute(so);
 
 		GAME_EVENT_HOOK_DISPOSITION disp = (GAME_EVENT_HOOK_DISPOSITION) so->GetResult();
@@ -627,7 +625,7 @@ GAME_EVENT_HOOK_DISPOSITION SlicSegment::GEVHookCallback(GAME_EVENT type, GameEv
 		switch(disp)
 		{
 		default:
-			if (g_theProfileDB && g_theProfileDB->IsDebugSlic()) 
+			if (g_theProfileDB && g_theProfileDB->IsDebugSlic())
 			{
 				c3errors_ErrorDialog("Slic", "Bad return from event handler");
 			}
@@ -664,7 +662,7 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_PUSHV:
 			case SOP_PUSHA:
 			case SOP_ARGID:
-			case SOP_ARGS: 
+			case SOP_ARGS:
 			case SOP_ARGST:
 			case SOP_CALL:
 			case SOP_CALLR:
@@ -676,7 +674,7 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_ASSNA:
 			case SOP_EVENT:
 			case SOP_ASIZE:
-				
+
 				codePtr += sizeof(int);
 				break;
 			case SOP_PUSHD:
@@ -685,12 +683,12 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_PUSHM:
 			case SOP_PUSHAM:
 			case SOP_BUTN:
-				
+
 				codePtr += sizeof(int);
 				codePtr += sizeof(int);
 				break;
 			case SOP_STOP:
-				
+
 				atEnd = TRUE;
 				break;
 			case SOP_END:
@@ -700,28 +698,28 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 			case SOP_MULT:
 			case SOP_EXP:
 			case SOP_BAND:
-			case SOP_DIV: 
-			case SOP_EQ:  
-			case SOP_GT:  
-			case SOP_LT:  
-			case SOP_GTE: 
-			case SOP_LTE: 
-			case SOP_POP: 
+			case SOP_DIV:
+			case SOP_EQ:
+			case SOP_GT:
+			case SOP_LT:
+			case SOP_GTE:
+			case SOP_LTE:
+			case SOP_POP:
 			case SOP_TRIG:
 			case SOP_ARGE:
-			case SOP_NEQ: 
+			case SOP_NEQ:
 			case SOP_AND:
-			case SOP_OR: 
+			case SOP_OR:
 			case SOP_NOT:
 			case SOP_SARGS:
 			case SOP_RET:
 			case SOP_NEG:
 			case SOP_SBLK:
-				
+
 				break;
-			case SOP_LINE: 
+			case SOP_LINE:
 			case SOP_LBRK:
-				
+
 				codePtr--;
 				return codePtr;
 
@@ -760,20 +758,18 @@ bool SlicSegment::GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, 
 
 		line = *((sint32 *)codePtr);
 		codePtr += sizeof(sint32);
-	
+
 		offset = *((sint32 *)codePtr);
-		
-		
-		
+
+
 		if(offset < 0) {
 			offset = SlicFrame::FindFileOffset(m_filename, line);
 			*((sint32 *)codePtr) = offset;
 		}
 		codePtr += sizeof(int);
-		
+
 		codePtr += sizeof(SlicConditional*);
 
-		
 		if(firstLineNum < 0) {
 			firstLineNum = line;
 			firstLineOffset = offset;
@@ -798,11 +794,10 @@ sint32 SlicSegment::FindLineNumber(sint32 offset)
 		Assert(op == SOP_LINE || op == SOP_LBRK);
 		if(op != SOP_LINE && op != SOP_LBRK)
 			return curLine;
-			
+
 		codePtr++;
 		curLine = *(sint32 *)codePtr;
-		
-		
+
 		if((codePtr - m_code) >= (sint32)(offset - ((sizeof(int) * 2) + sizeof(SlicConditional*) + 1))) {
 			return curLine;
 		}
@@ -824,7 +819,7 @@ uint8 *SlicSegment::GetCodePointer(sint32 lineNumber)
 		Assert(codePtr);
 		if(!codePtr)
 			return NULL;
-		
+
 		SOP op = (SOP)*codePtr;
 		Assert(op == SOP_LINE || op == SOP_LBRK);
 		if(op != SOP_LINE && op != SOP_LBRK)
@@ -867,7 +862,7 @@ bool SlicSegment::LineHasBreak(sint32 lineNumber, bool &conditional)
 	}
 	return false;
 }
-	
+
 void SlicSegment::SetBreak(sint32 lineNumber, bool setBreak)
 {
 	uint8 *codePtr = GetCodePointer(lineNumber);
@@ -922,4 +917,3 @@ void SlicSegment::Cleanup(void)
 	delete s_segmentPond;
 	s_segmentPond = NULL;
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,8 +32,8 @@
 // Modifications from the original Activision code:
 //
 // - Variable 'or' renamed, because this a reserved symbol (same as ||) now.
-// - Modifed db_add_bit_pair function to allow bit pairs to have default 
-//   values so that when two records are merged, only the bit is merged 
+// - Modifed db_add_bit_pair function to allow bit pairs to have default
+//   values so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Portability improved (ctplinuxfan).
 // - Added method to determine the number of entries that should be parsed
@@ -128,7 +128,7 @@ bool copy_file(char const * srcFName, char const * dstFName)
 	       ) > 0) {
 		wrote = fwrite((void *)&buf, sizeof(char),
 		               read, outFile);
-		
+
 	}
 
 	fclose(outFile);
@@ -245,7 +245,7 @@ void db_maybe_copy(char * newFilePath)
         fclose(oldFile);
         hasChanges = db_files_differ(oldFilePath, newFilePath);
 
-	    if (hasChanges) 
+	    if (hasChanges)
 	    {
 			char backupPath[PATH_MAX] = { 0 };
 			sprintf(backupPath, "%s.old", oldFilePath);
@@ -290,7 +290,7 @@ void db_end_record(char *name)
 	fclose(outfile);
 
 	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
-	
+
 	sprintf(filename, "%s" FILE_SEP "%sRecord.cpp.new",
 	        db_get_code_directory(), name);
 
@@ -378,7 +378,7 @@ void db_add_simple
 		g_record->AddDatum(a_Type, toAdd, a_Size->minSize, a_Size->maxSize);
 		free(toAdd);
 	}
-}	
+}
 
 void db_add_bits(struct namelist *list, struct fieldsize *size)
 {

@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -36,7 +36,6 @@
 #include "SlicFunc.h"
 #include "civarchive.h"
 #include "profileDB.h"
-
 
 namespace
 {
@@ -73,20 +72,19 @@ SlicNamedSymbol::~SlicNamedSymbol()
 	delete [] m_name;
 }
 
-
 void SlicNamedSymbol::Serialize(CivArchive &archive)
 {
-	if (archive.IsStoring()) 
+	if (archive.IsStoring())
     {
 		archive.StoreChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
         size_t  len = strlen(m_name);
 		archive << static_cast<uint16>(len);
 		archive.Store((uint8*)m_name, len);
-	} 
-    else 
+	}
+    else
     {
 		archive.LoadChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
-        uint16 len;	
+        uint16 len;
         archive >> len;
 		m_name = new char[len + 1];
 		archive.Load((uint8*)m_name, len);
@@ -130,7 +128,7 @@ void SlicParameterSymbol::Serialize(CivArchive &archive)
 
 	SlicNamedSymbol::Serialize(archive);
 }
-	
+
 BOOL SlicParameterSymbol::GetIntValue(sint32 &value) const
 {
 	SlicObject *context = g_slicEngine->GetContext();
@@ -169,7 +167,7 @@ BOOL SlicParameterSymbol::GetPos(MapPoint &pos) const
 	}
 	return argList->GetPos(m_parameterIndex, pos);
 }
-	
+
 BOOL SlicParameterSymbol::GetUnit(Unit &u) const
 {
 	SlicObject *context = g_slicEngine->GetContext();
@@ -182,7 +180,7 @@ BOOL SlicParameterSymbol::GetUnit(Unit &u) const
 	}
 	return argList->GetUnit(m_parameterIndex, u);
 }
-	
+
 BOOL SlicParameterSymbol::GetArmy(Army &a) const
 {
 	SlicObject *context = g_slicEngine->GetContext();
@@ -211,11 +209,11 @@ BOOL SlicParameterSymbol::GetCity(Unit &c) const
 
 void SlicBuiltinNamedSymbol::Serialize(CivArchive &archive)
 {
-	if (archive.IsStoring()) 
+	if (archive.IsStoring())
     {
 		archive.PutUINT8(static_cast<uint8>(m_builtin));
-	} 
-    else 
+	}
+    else
     {
 		m_builtin = static_cast<enum SLIC_BUILTIN>(archive.GetUINT8());
 	}

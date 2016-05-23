@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,13 +54,13 @@ private:
 public:
 	PlasmaGenerator2() { m_refCount = 0; }
 
-#if !defined(USE_COM_REPLACEMENT)	
+#if !defined(USE_COM_REPLACEMENT)
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
 	STDMETHOD(Generate) (sint8 *map, sint32 width, sint32 height,
-	                     IC3Rand *randgen, 
+	                     IC3Rand *randgen,
 	                     const double *settings, sint32 numSettings);
 #else
 	virtual ~PlasmaGenerator2();

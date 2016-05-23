@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -55,12 +55,12 @@ void gslog_print(char *fmt, ...)
 		return;
 
     FILE * f = fopen("logs" FILE_SEP "gslog.txt", (s_initialized) ? "a" : "w");
-	if (!s_initialized) 
+	if (!s_initialized)
 	{
 		std::fill(s_populationHack, s_populationHack + k_MAX_PLAYERS, 0);
 		s_initialized = true;
 	}
-	
+
 	char buf[k_MAX_NAME_LEN];
 	va_list vl;
 	va_start(vl, fmt);
@@ -84,7 +84,7 @@ void gslog_dipprint(char *fmt, ...)
 
 	FILE * f = fopen("logs" FILE_SEP "diplog.txt", (s_dip_initialized) ? "a" : "w");
 	s_dip_initialized = true;
-	
+
 	char buf[k_MAX_NAME_LEN];
 	va_list vl;
 	va_start(vl, fmt);
@@ -108,20 +108,17 @@ void gslog_LogPlayerStats(sint32 player)
 
 	if (!pl) return;
 
-	
 
 	gslog_print("[Player %d] [Turn %d]\n", player, pl->m_current_round);
 
-	
-	
+
 	sint32 totalFood = 0, totalFoodCrime = 0, totalFoodConsumed = 0;
 
 	UnitDynamicArray *cityList = pl->GetAllCitiesList();
 	sint32 cityIndex;
-	
-	
-	
-	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+
+
+	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
     {
 		CityData * cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
@@ -133,7 +130,6 @@ void gslog_LogPlayerStats(sint32 player)
 		totalFoodConsumed   += static_cast<sint32>(cityData->GetConsumedFood());
 	}
 
-	
 	sint32 percentFoodCrime = totalFood ?
 		((totalFoodCrime * 100) / totalFood) : 0;
 	sint32 percentFoodConsumed = totalFood ?
@@ -145,15 +141,14 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("  Food Consumed: %d (%d%%)\n", totalFoodConsumed, percentFoodConsumed);
 	gslog_print("  Food Stored: %d (%d%%)\n", totalFood - (totalFoodConsumed + totalFoodCrime), percentFoodStored);
 
-	
-	
+
 	sint32 totalProduction = 0, totalProductionCrime = 0,
 		totalProductionUnitUpkeep = 0, totalProductionPublicWorks = 0;
 
-	
-	
-	
-	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+
+
+
+	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
     {
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
@@ -162,10 +157,8 @@ void gslog_LogPlayerStats(sint32 player)
 		totalProductionPublicWorks  += cityData->ComputeMaterialsPaid(pl->m_materialsTax);
 	}
 
-	
 	totalProductionUnitUpkeep = pl->GetReadinessCost();
 
-	
 	sint32 percentProductionCrime = totalProduction ?
 		((totalProductionCrime * 100) / totalProduction) : 0;
 	sint32 percentProductionUnitUpkeep = totalProduction ?
@@ -180,15 +173,13 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("  Total Production: %d\n", totalProduction);
 	gslog_print("  Production Crime: %d (%d%%)\n", totalProductionCrime, percentProductionCrime);
 	gslog_print("  Production Unit Upkeep: %d (%d%%)\n", totalProductionUnitUpkeep, percentProductionUnitUpkeep);
-	gslog_print("  Production PW: %d (%d%%)\n", totalProductionPublicWorks, percentProductionPublicWorks);	
+	gslog_print("  Production PW: %d (%d%%)\n", totalProductionPublicWorks, percentProductionPublicWorks);
 
-	
 	sint32 totalCommerce = 0, totalCommerceCrime = 0,
 		totalCommerceWages = 0, totalCommerceBuildingUpkeep = 0,
 		totalCommerceScience = 0, totalTrade = 0;
 
-	
-	
+
 	sint32  wonderReduction = wonderutil_GetDecreaseMaintenance(pl->GetBuiltWonders());
 	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
 	{
@@ -205,7 +196,6 @@ void gslog_LogPlayerStats(sint32 player)
 		totalTrade                  += cityData->GetNetCityGold();
 	}
 
-	
 	sint32 percentCommerceCrime = totalCommerce ?
 		((totalCommerceCrime * 100) / totalCommerce) : 0;
 	sint32 percentCommerceWages = totalCommerce ?
@@ -243,7 +233,7 @@ void gslog_LogPlayerStats(sint32 player)
 		pop += g_player[player]->m_all_cities->Access(i).PopCount();
 		partialPop += g_player[player]->m_all_cities->Access(i).CD()->GetPartialPopulation();
 	}
-	
+
 	sint32 totalPartialPop = (pop * k_PEOPLE_PER_POPULATION) + partialPop;
 	gslog_print("  Total population: %d/%d, +%d\n", pop, totalPartialPop, totalPartialPop - s_populationHack[player]);
 	s_populationHack[player] = totalPartialPop;
@@ -262,7 +252,7 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("  Total Units: %d\n", totalUnits);
 	gslog_print("  Total Military Units: %d\n", totalMilUnits);
 	gslog_print("  Total Attack Strength: %d\n", totalOffense);
-	
+
 	double s;
 	g_player[player]->m_tax_rate->GetScienceTaxRate(s);
 	gslog_print("  Settings:\n");
@@ -271,8 +261,8 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("         Workday: %d\n", g_player[player]->m_global_happiness->GetUnitlessWorkday());
 	gslog_print("           Wages: %d\n", g_player[player]->m_global_happiness->GetUnitlessWages());
 	gslog_print("         Rations: %d\n", g_player[player]->m_global_happiness->GetUnitlessRations());
-	
+
 	gslog_print("  Current research: %s\n", g_theAdvanceDB->Get(g_player[player]->m_advances->GetResearching())->GetNameText());
-	
-#endif 
+
+#endif
 }

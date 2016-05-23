@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Get arguments to deletePlayerLocal right.  Sheesh.
  Revision 1.13  1997/03/10 03:30:33  dkegel
  1. Added dpGroup_DeletePlayerFromAllGroups for when players die.
- 2. Fixed horrible bug in addplayertogroup/deleteplayerfromgroup - 
+ 2. Fixed horrible bug in addplayertogroup/deleteplayerfromgroup -
  had args to memmove backwards.
  Revision 1.12  1997/03/09 03:52:37  dkegel
  Added a little more dprint info on group operations.
@@ -312,7 +312,7 @@ static dp_result_t dpGroup_SendAddGroupPacket(
 		/* call dpSwapUserDelGroup to byte swap pkt.b.del) */
 		dpSwapUserDelGroup(&pkt.b.del);
 	}
-	
+
     if (dest == PLAYER_BROADCAST)
 		err = dp_broadcast_reliable(dp, &pkt, pktlen, &errHdl);
 	else
@@ -576,7 +576,6 @@ DP_API dp_result_t dpCreateGroup(
 	/* Notify all existing systems about new group */
 	return dpGroup_SendAddGroupPacket(dp, pg, PLAYER_BROADCAST, dp_USER_ADDGROUP_PACKET_ID);
 }
-
 
 /*----------------------------------------------------------------------
  Destroy the given group; removes the group from the game session.

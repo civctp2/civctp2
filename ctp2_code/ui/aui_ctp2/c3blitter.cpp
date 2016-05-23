@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -39,15 +39,12 @@
 
 #include "c3blitter.h"
 
-
 extern sint32	g_is565Format;
 extern BOOL		g_useDDBlit;
 
-
-C3Blitter::C3Blitter() 
+C3Blitter::C3Blitter()
 :	_Blt16To16Fast	(&C3Blitter::Blt16To16Fast)
 { ; };
-
 
 AUI_ERRCODE C3Blitter::Blt16To16(
 	aui_Surface *destSurf,
@@ -56,10 +53,10 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-	if ((flags & k_AUI_BLITTER_FLAG_FAST)) 
+	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
-		
-#ifdef _TRY_ALL_BLITTERS	
+
+#ifdef _TRY_ALL_BLITTERS
 	    static int  which_blit  = 0;
 
   	   	switch(which_blit)
@@ -70,14 +67,13 @@ AUI_ERRCODE C3Blitter::Blt16To16(
   	   	}
 
 	   	which_blit ++;
-	 
+
 		if(which_blit>2)
 		   which_blit = 0;
-		
-	   
+
 #endif
 		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else {	
+	} else {
 		if (g_useDDBlit)
 			return aui_NativeBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
@@ -91,7 +87,7 @@ AUI_ERRCODE C3Blitter::ColorBlt16(
 	uint32 color,
 	uint32 flags )
 {
-	if (g_useDDBlit) 
+	if (g_useDDBlit)
 		return aui_NativeBlitter::ColorBlt16(destSurf, destRect, color, flags);
 	else
 		return aui_Blitter::ColorBlt16(destSurf, destRect, color, flags);
@@ -115,7 +111,7 @@ AUI_ERRCODE C3Blitter::StretchBlt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-	if (g_useDDBlit) 
+	if (g_useDDBlit)
 		return aui_NativeBlitter::StretchBlt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 	else
 		return aui_Blitter::StretchBlt16To16(destSurf, destRect, srcSurf, srcRect, flags);
@@ -170,22 +166,20 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 			{
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
 
-				
 				const uint16 *stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 
 				destBuf -= destPitch;
 
-				
 				do
 				{
-					
-					
 
-					
+
+
+
 					destBuf += destPitch;
 #ifdef _MSC_VER
 					__asm {
-			  		
+
 
 
 
@@ -206,7 +200,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 				  			mov		edi, destBuf
 							test	ecx, ecx
 							jz		L3
-L0:						
+L0:
 							mov		eax, [esi]
 							mov		ebx, [esi+4]
 							mov		[edi], eax
@@ -239,24 +233,21 @@ L2:
 			{
 				const sint32 scanWidth = srcRect->right - srcRect->left;
 
-				
 				const sint32 destDiff = destPitch - scanWidth;
 				const sint32 srcDiff = srcPitch - scanWidth;
 
-				
 				uint16 *stopHorizontal = srcBuf + scanWidth;
 				const uint16 *stopVertical = srcBuf +
 					srcPitch * ( srcRect->bottom - srcRect->top );
 				destBuf--;
 
-				
 				const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
 
 				do
 				{
 					do
 					{
-						
+
 						if ( *srcBuf != chromakey )
 							*++destBuf = *srcBuf;
 						else
@@ -270,15 +261,14 @@ L2:
 			}
 			else
 			{
-				
-				
+
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
-			
+
 			if ( !wasSrcLocked )
 			{
 				AUI_ERRCODE errcode = srcSurf->Unlock( (LPVOID)origSrcBuf );
-				
+
 				if ( !AUI_SUCCESS(errcode) )
 					retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 			}
@@ -287,7 +277,7 @@ L2:
 		if ( !wasDestLocked )
 		{
 			AUI_ERRCODE errcode = destSurf->Unlock( (LPVOID)origDestBuf );
-			
+
 			if ( !AUI_SUCCESS(errcode) )
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
@@ -319,7 +309,6 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
 		uint16 *    origDestBuf     = destBuf;
@@ -334,52 +323,49 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
+
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
-			
+
 			uint16 *origSrcBuf = srcBuf;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
 
-				
 				const uint16 *stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 
 				destBuf -= destPitch;
 
-				
 				do
 				{
-					
 
 
-					
 
-					
-					
-					
+
+
+
+
+
 
 					destBuf += destPitch;
-					
+
 #ifdef _MSC_VER
 					_asm
 					{
 						mov eax, scanWidth
 						mov esi, srcBuf
-						mov ecx, eax 
+						mov ecx, eax
 						mov edi, destBuf
 						mov edx, 8
-						shr eax, 3	 
-						and ecx, 0x7 
+						shr eax, 3
+						and ecx, 0x7
 						add eax, 0
 						jz  MMXCopyDone
-						
+
 				_CopyMMX:
 						movq mm0,[esi]
 						movq [edi],mm0
@@ -387,15 +373,14 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 						add  edi, edx
 						dec  eax
 						jnz  _CopyMMX
-	
+
 						emms
-	
+
 				MMXCopyDone:
-	
-						
+
 	   					shr ecx,1
 	   					rep movsw
-					}	
+					}
 #else // _MSCVER
 //					assert(0);
                     //printf("%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
@@ -422,11 +407,10 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 
                         "MMXCopyDone:                \n\t"
 
-
                         "shrl %%ecx                   \n\t"
                         "rep movsw                        \n\t"
 
-                        : 
+                        :
                         : "a" (scanWidth), "S" (srcBuf), "D" (destBuf)
                         : "%edx", "%ecx", "cc"
                         );
@@ -437,24 +421,21 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 			{
 				const sint32 scanWidth = srcRect->right - srcRect->left;
 
-				
 				const sint32 destDiff = destPitch - scanWidth;
 				const sint32 srcDiff = srcPitch - scanWidth;
 
-				
 				uint16 *stopHorizontal = srcBuf + scanWidth;
 				const uint16 *stopVertical = srcBuf +
 					srcPitch * ( srcRect->bottom - srcRect->top );
 				destBuf--;
 
-				
 				const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
 
 				do
 				{
 					do
 					{
-						
+
 						if ( *srcBuf != chromakey )
 							*++destBuf = *srcBuf;
 						else
@@ -468,15 +449,14 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 			}
 			else
 			{
-				
-				
+
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
-			
+
 			if ( !wasSrcLocked )
 			{
 				AUI_ERRCODE errcode = srcSurf->Unlock( (LPVOID)origSrcBuf );
-				
+
 				if ( !AUI_SUCCESS(errcode) )
 					retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 			}
@@ -485,7 +465,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 		if ( !wasDestLocked )
 		{
 			AUI_ERRCODE errcode = destSurf->Unlock( (LPVOID)origDestBuf );
-			
+
 			if ( !AUI_SUCCESS(errcode) )
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
@@ -518,13 +498,11 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
+
 		uint16 *origDestBuf = destBuf;
 
-		
 		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
 		bool        wasSrcLocked    = srcBuf != NULL;
 		if (wasSrcLocked)
@@ -535,46 +513,43 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
+
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
-			
+
 			uint16 *origSrcBuf = srcBuf;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
 
-				
 				const uint16 *stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 
 				destBuf -= destPitch;
 
-				
 				do
 				{
-					
 
 
-					
+
+
 					destBuf += destPitch;
 #ifdef _MSC_VER
 					_asm
 			  		{
 						mov eax, scanWidth
 						mov esi, srcBuf
-						mov ecx, eax 
+						mov ecx, eax
 						mov edi, destBuf
 						mov edx, 8
-						shr eax, 3	 
-						and ecx, 0x7 
+						shr eax, 3
+						and ecx, 0x7
 						add eax, 0
 						jz  FPUCopyDone
-						
+
 					_CopyFPU:
 						fild  qword ptr [esi]
 						fistp qword ptr [edi]
@@ -582,9 +557,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 						add edi, edx
 						dec eax
 						jnz _CopyFPU
-					
+
 					FPUCopyDone:
-						
+
 					   	shr ecx,1
 					   	rep movsw
 					}
@@ -597,24 +572,21 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 			{
 				const sint32 scanWidth = srcRect->right - srcRect->left;
 
-				
 				const sint32 destDiff = destPitch - scanWidth;
 				const sint32 srcDiff = srcPitch - scanWidth;
 
-				
 				uint16 *stopHorizontal = srcBuf + scanWidth;
 				const uint16 *stopVertical = srcBuf +
 					srcPitch * ( srcRect->bottom - srcRect->top );
 				destBuf--;
 
-				
 				const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
 
 				do
 				{
 					do
 					{
-						
+
 						if ( *srcBuf != chromakey )
 							*++destBuf = *srcBuf;
 						else
@@ -628,15 +600,14 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 			}
 			else
 			{
-				
-				
+
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
-			
+
 			if ( !wasSrcLocked )
 			{
 				AUI_ERRCODE errcode = srcSurf->Unlock( (LPVOID)origSrcBuf );
-				
+
 				if ( !AUI_SUCCESS(errcode) )
 					retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 			}
@@ -645,7 +616,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 		if ( !wasDestLocked )
 		{
 			AUI_ERRCODE errcode = destSurf->Unlock( (LPVOID)origDestBuf );
-			
+
 			if ( !AUI_SUCCESS(errcode) )
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
@@ -662,20 +633,20 @@ bool C3Blitter::CheckMMXTechnology(void)
 #ifdef _MSC_VER
     __try {
             _asm {
-                    mov eax, 1      
-                                    
-					_emit 0fh		
+                    mov eax, 1
+
+					_emit 0fh
 					_emit 0a2h
-                    mov RegEDX, edx 
+                    mov RegEDX, edx
             }
     } __except(EXCEPTION_EXECUTE_HANDLER) { retval = false; }
 
     if(retval == false)
-       return false;           
+       return false;
 
-    if (RegEDX & 0x800000)          
+    if (RegEDX & 0x800000)
     {
-       __try { _asm emms }          
+       __try { _asm emms }
        __except(EXCEPTION_EXECUTE_HANDLER) { retval = false; }
     }
 #else // _MSC_VER
@@ -688,28 +659,27 @@ bool C3Blitter::CheckMMXTechnology(void)
             :
             : "%eax", "memory"
             );
-        } 
+        }
     catch(...) {
-        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);	
-        retval = false; 
+        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
+        retval = false;
         }
 
     if(retval == false)
-       return false;           
+       return false;
 
-    if (RegEDX & 0x800000)          
+    if (RegEDX & 0x800000)
     {
-    try { __asm__ (" emms            \n\t"); }          
+    try { __asm__ (" emms            \n\t"); }
     catch(...) {
-        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);	
-        retval = false; 
+        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
+        retval = false;
         }
     }
-    
-    printf("%s L%d: MMX-Test succeded!\n", __FILE__, __LINE__);	
+
+    printf("%s L%d: MMX-Test succeded!\n", __FILE__, __LINE__);
 #endif // _MSC_VER
-    
-    
+
     return retval;
 }
 

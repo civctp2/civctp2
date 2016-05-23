@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -119,7 +119,6 @@ void ChatBox::AddText(MBCHAR *text)
 {
 	m_chatWindow->GetTextBox()->AppendHyperText(text);
 
-	
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 }
@@ -145,7 +144,7 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 {
 	COLOR		color = g_colorSet->ComputePlayerColor(playerNum);
 	COLORREF	colorRef = g_colorSet->GetColorRef(color);
-	
+
 	MBCHAR			coloredText[_MAX_PATH];
 
 	m_chatWindow->ColorizeString(coloredText, text, colorRef);
@@ -158,7 +157,7 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 
 	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL) {
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									gamesounds_GetGameSoundID(GAMESOUNDS_CHAT_MESSAGE),
 									0,
 									0);
@@ -219,7 +218,6 @@ AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 	Move(0, g_radarWindow->Y() - m_height);
 
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -249,14 +247,13 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 		return;
 
 	ChatWindow		*chatWindow = (ChatWindow *)cookie;
-	
+
 	MBCHAR			str[k_CHATBOX_LINE_LENGTH];
 
 	chatWindow->GetTextField()->GetFieldText(str, k_CHATBOX_LINE_LENGTH);
 	chatWindow->GetTextField()->SetFieldText("");
 
-	
-	if (strlen(str) == 0 || !strcmp(str, "\n")) 
+	if (strlen(str) == 0 || !strcmp(str, "\n"))
 	{
 		chatWindow->GetChatBox()->SetActive(FALSE);
 		return;
@@ -273,19 +270,19 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 {
 	// Does nothing
-	if (!strcmp(s, "pacman")) 
+	if (!strcmp(s, "pacman"))
 	{
 		return TRUE;
 	}
 
 	// Does nothing
-	else if (!strcmp(s, "toe")) 
+	else if (!strcmp(s, "toe"))
 	{
 		return TRUE;
 	}
 
 	// Sets the game on auto-endturn for the given number of turns
-	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) 
+	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive())
 	{
 		extern BOOL gDone;
 #ifdef __AUI_USE_DIRECTX__
@@ -296,11 +293,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			temp++;
 
 		sint32 n = atoi(temp);
-		
-		for (sint32 i = 0; i < n && !gDone; i++) 
+
+		for (sint32 i = 0; i < n && !gDone; i++)
 		{
 			NewTurnCount::StartNextPlayer(false);
-			
+
 			g_director->NextPlayer();
 			do
 			{
@@ -314,9 +311,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 						gDone = TRUE;
 
 					TranslateMessage(&msg);
-					
+
 					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B) 
+						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
 
@@ -338,9 +335,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	}
 #if 0
-	else if (!strcmp(s, "/A") && !g_network.IsActive()) 
+	else if (!strcmp(s, "/A") && !g_network.IsActive())
 	{
-		if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
+		if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
 			return TRUE;
 
 		if(g_network.IsActive())
@@ -350,7 +347,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		else
 		{
 			g_selected_item->Deselect(g_selected_item->GetCurPlayer());
- 			g_turn->EndThisTurnBeginNewTurn();	
+ 			g_turn->EndThisTurnBeginNewTurn();
 			g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
 
 			NewTurnCount::StartNextPlayer(true);
@@ -371,7 +368,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	// Sets the whole world for all players unexplored
 	else if (!strcmp(s, "/resetlos") && !g_network.IsActive())
 	{
-		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+		for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 		{
 			if (g_player[i])
 			{
@@ -381,7 +378,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		g_director->AddCopyVision();
 	}
 #if 0
-	else if(!strcmp(s, "/goodmode") && !g_network.IsActive()) 
+	else if(!strcmp(s, "/goodmode") && !g_network.IsActive())
 	{
 		extern sint32 g_placeGoodsMode;
 		g_placeGoodsMode = !g_placeGoodsMode;
@@ -419,9 +416,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 		return TRUE;
 	}
-	
+
 	// Turns the given player into a robot player
-	else if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) 
+	else if(!strncmp(s, "/attach", 7) && !g_network.IsActive())
 	{
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
@@ -434,18 +431,18 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
-				
+
 				if(g_network.IsClient() && !g_network.IsMyTurn())
 					return FALSE;
 			}
-			
+
 			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
 		}
 	}
 
 	// Turns the given player into a human player
-	else if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) 
+	else if(!strncmp(s, "/detach", 7) && !g_network.IsActive())
 	{
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
@@ -460,7 +457,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
 
-				g_player[player]->m_playerType = 
+				g_player[player]->m_playerType =
 				    g_network.IsHost() ? PLAYER_TYPE_HUMAN : PLAYER_TYPE_NETWORK;
 			}
 			else
@@ -471,16 +468,16 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	}
 #if 0
-    else if (!strncmp(s, "/demo", 5) && !g_network.IsActive()) 
+    else if (!strncmp(s, "/demo", 5) && !g_network.IsActive())
     {
-		sint32 i, n; 
+		sint32 i, n;
 		extern BOOL gDone;
 		MSG	msg;
-		
+
 		MBCHAR *temp = s+5;
 		while(isspace(*temp))
 			temp++;
-		
+
 		n = atoi(temp);
 
 		for (i=0; i<(n) && !gDone; i++) {
@@ -489,36 +486,36 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				g_controlPanel->Idle();
 				if (g_civApp)
 					g_civApp->Process();
-				
+
 				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) ) {
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
-					
+
 					TranslateMessage(&msg);
-					
+
 					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B) 
+						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
-					
+
 					DispatchMessage(&msg);
 				}
 
 			} while (g_selected_item && !gDone &&
-					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())); 
+					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()));
 
 		}
 		return TRUE;
 	}
 #endif
 
-	// Sets the names of the leader, the country 
+	// Sets the names of the leader, the country
 	// and the personal discription, to the names from the database
 	else if(!strncmp(s, "/resetstrings", 13))
 	{
-		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+		for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 		{
-			if (g_player[i]) 
+			if (g_player[i])
 			{
 				g_player[i]->m_civilisation->AccessData()->ResetStrings();
 			}
@@ -552,7 +549,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
 
 	// Displays the AI settle value of a cell on the map
-	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) 
+	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive())
 	{
 		if(g_graphicsOptions->IsCellTextOn())
 		{
@@ -577,11 +574,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
-				
+
 				if(g_network.IsClient() && !g_network.IsMyTurn())
 					return FALSE;
 			}
-			
+
 			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 			{
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
@@ -596,7 +593,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 #if defined (_DEBUG) || defined(USE_LOGGING)
 	// Sets the debug logging player
-	else if(!strncmp(s, "/debugplayer", 12) && !g_network.IsActive()) 
+	else if(!strncmp(s, "/debugplayer", 12) && !g_network.IsActive())
 	{
 		MBCHAR *arg = s + 12;
 		while(isspace(*arg))

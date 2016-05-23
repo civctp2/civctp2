@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 //
 // __AUI_USE_SDL__
 // Use SDL instead of DirectX.
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,7 +61,7 @@ C3UI::C3UI
 	sint32 height,
 	sint32 bpp,
 	MBCHAR *ldlFilename,
-	BOOL useExclusiveMode 
+	BOOL useExclusiveMode
 )
 :
 #if defined(__AUI_USE_SDL__)
@@ -94,7 +94,7 @@ C3UI::C3UI
 C3UI::~C3UI()
 {
     // Execute the registered cleanup functions.
-    for 
+    for
     (
         std::list<UiCleanupCallback>::iterator p = m_cleanupActions.begin();
         p != m_cleanupActions.end();
@@ -148,5 +148,5 @@ bool C3UI::TopWindowIsNonBackground(void) const
 {
 	return TopWindow()                                          &&
            (TopWindow()->Type() != AUI_WINDOW_TYPE_BACKGROUND)  &&
-		   (TopWindow()->Type() != AUI_WINDOW_TYPE_SINKING); 
+		   (TopWindow()->Type() != AUI_WINDOW_TYPE_SINKING);
 }

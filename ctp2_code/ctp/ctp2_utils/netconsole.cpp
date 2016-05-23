@@ -66,9 +66,9 @@ static void initWinsock()
 		return;
 	}
 
-	WORD wVersionRequested = MAKEWORD(1, 1);        
-	WSADATA wsaData;                                                        
-	int nErrorStatus;                                                       
+	WORD wVersionRequested = MAKEWORD(1, 1);
+	WSADATA wsaData;
+	int nErrorStatus;
 
 	nErrorStatus = WSAStartup(wVersionRequested, &wsaData);
 
@@ -77,7 +77,7 @@ static void initWinsock()
 	}
 
 	if( LOBYTE(wsaData.wVersion) != LOBYTE(wVersionRequested) ||  HIBYTE(wsaData.wVersion) != HIBYTE(wVersionRequested) ) {
-		WSACleanup();   
+		WSACleanup();
 		return;
 	}
 
@@ -126,7 +126,7 @@ NetConsole::NetConsole(uint16 port)
 			m_listenSock = -1;
 		} else {
 			if(listen(m_listenSock, 1) < 0) {
-				
+
 				c3errors_ErrorDialog("NetConsole", "Can't listen on port");
 #if defined(WIN32)
 				closesocket(m_listenSock);
@@ -190,7 +190,6 @@ void NetConsole::Idle()
 		}
 	}
 
-	
 	tv.tv_sec = 0;
 	tv.tv_usec = 0;
 	sint32 st = select(maxSock + 1, &readFds, 0, 0, &tv);
@@ -223,7 +222,7 @@ void NetConsole::Idle()
 
 		for(i = 0; i < k_MAX_CONNECTIONS; i++) {
 			if(m_connections[i] >= 0 && FD_ISSET(m_connections[i], &readFds)) {
-				
+
 				uint8 buf[k_MAX_SOCK_READ];
 				sint32 r = recv(m_connections[i], (char *)buf, k_MAX_SOCK_READ - 1, 0);
 				if(r < 0) {
@@ -256,14 +255,12 @@ void NetConsole::Print(const char *fmt, ...)
 
 void NetConsole::Print(const char *fmt, va_list vl)
 {
-	
-	
+
 	static char buf[33000];
 	sint32 len;
 	vsprintf((char *)buf, fmt, vl);
 	len = strlen(buf);
 
-	
 	char *c = buf;
 	while(*c && c < buf+len && len < k_MAX_SOCK_READ) {
 		if(*c == '\n') {

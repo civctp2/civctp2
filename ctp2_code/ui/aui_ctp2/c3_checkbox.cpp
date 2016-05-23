@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3_checkbox.h"
 
@@ -38,7 +36,6 @@ c3_CheckBox::c3_CheckBox(
 }
 
 
-
 c3_CheckBox::c3_CheckBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -67,7 +64,6 @@ c3_CheckBox::c3_CheckBox(
 }
 
 
-
 AUI_ERRCODE c3_CheckBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	sint32		bevelWidth=k_C3_CHECKBOX_DEFAULT_BEVELWIDTH;
@@ -75,7 +71,7 @@ AUI_ERRCODE c3_CheckBox::InitCommonLdl( MBCHAR *ldlBlock )
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
+
 	if (block->GetAttributeType( k_C3_CHECKBOX_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_CHECKBOX_LDL_BEVELWIDTH );
 	}
@@ -84,15 +80,13 @@ AUI_ERRCODE c3_CheckBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_CheckBox::InitCommon( sint32 bevelWidth )
 {
 	m_bevelWidth = bevelWidth;
-	
+
 	SetNumStates(2);
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE c3_CheckBox::DrawThis(
@@ -100,7 +94,7 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -119,21 +113,20 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 	if (m_bevelWidth > 0)
 		primitives_BevelRect16( surface, &rect, m_bevelWidth, IsOn()?1:0, 16, 16 );
 
-	
 	uint32 bordWidth = m_bevelWidth ? m_bevelWidth*2 : 2;
 	RECT checkrect = { bordWidth,bordWidth, m_height - bordWidth, m_height - bordWidth };
 	OffsetRect(&checkrect, m_x+x, m_y+y);
 	ToWindow(&checkrect);
 	primitives_BevelRect16(surface, &checkrect, m_bevelWidth, 1, 16,16);
-	
+
 	if(GetState()) {
-		uint32 off = 5; 
-		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.top+off, 
+		uint32 off = 5;
+		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.top+off,
 										 checkrect.right-off,checkrect.bottom-off,g_colorSet->GetColor(COLOR_RED));
-		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.bottom-off, 
+		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.bottom-off,
 										 checkrect.right-off,checkrect.top+off, g_colorSet->GetColor(COLOR_RED));
 	}
-	
+
 	RECT textrect = { m_height+bordWidth,0, m_width-bordWidth-m_height, m_height };
 	OffsetRect(&textrect, m_x+x, m_y+y);
 	ToWindow(&textrect);
@@ -141,11 +134,9 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 		surface,
 		&textrect );
 
-	
-	
+
 	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
 	{
-		
 
 		uint16 *pixel;
 
@@ -153,15 +144,13 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 		Assert( AUI_SUCCESS(errcode) );
 		if ( AUI_SUCCESS(errcode) )
 		{
-			
+
 			uint16 *origPixel = pixel;
 
-			
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
 
-			
 			uint16 *stopHorizontal = pixel + width;
 			const uint16 *stopVertical = pixel +
 				pitch * ( rect.bottom - rect.top );
@@ -171,9 +160,9 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 				do
 				{
 					*pixel = pixelutils_BlendFast(
-						*pixel,	
-						0x0000,	
-						24 );	
+						*pixel,
+						0x0000,
+						24 );
 
 				} while ( ++pixel != stopHorizontal );
 

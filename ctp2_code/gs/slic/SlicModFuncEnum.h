@@ -1,4 +1,3 @@
-
 #ifndef MOD_FUNC_ENUM_H__
 #define MOD_FUNC_ENUM_H__
 
@@ -12,7 +11,7 @@ enum MOD_FUNC {
 	mod_UnitAttack,
 	mod_UnitRangedAttack,
 	mod_UnitDefense,
-	
+
 	mod_MAX
 };
 

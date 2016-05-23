@@ -83,50 +83,41 @@ extern GameEventManager *   g_gevManager;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class GameEventManager 
+class GameEventManager
 {
 public:
 	GameEventManager();
 	~GameEventManager();
 
-	
+
 
 
 	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, ...);
 
-	
 	GAME_EVENT_ERR ArglistAddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 								   GameEventArgList *argList);
 
-	
 	GAME_EVENT_ERR Process();
 
-	
 	GAME_EVENT_ERR ProcessHead();
 
-	
 	GameEvent *FindFirstEvent(GAME_EVENT type);
 
-	
 	GameEvent *FindNextEvent(GameEvent *current, GAME_EVENT type);
 
-	
 	GAME_EVENT_ERR AddCallback(GAME_EVENT type, GAME_EVENT_PRIORITY pri,
 							   GameEventHookCallback *cb);
 
-	
 	void RemoveCallback(GAME_EVENT type, GameEventHookCallback *cb);
 
-	
 	GAME_EVENT_ERR ActivateHook
 	(
-	    GAME_EVENT          type, 
-	    GameEventArgList *  args, 
-	    sint32              startIndex, 
+	    GAME_EVENT          type,
+	    GameEventArgList *  args,
+	    sint32              startIndex,
 	    sint32 &            resumeIndex
 	);
 
-	
 	GAME_EVENT GetEventIndex(const MBCHAR *name) const;
 	const char *GetEventName(GAME_EVENT ev) const;
 
@@ -136,10 +127,8 @@ public:
 	char ArgChar(GAME_EVENT type, size_t index) const;
 	size_t GetNumArgs(GAME_EVENT type) const;
 
-	
 	void GotUserInput();
 
-	
 	void SetNeedUserInput() { m_needUserInput = true; }
 	bool NeedUserInput() { return m_needUserInput; }
 
@@ -151,18 +140,15 @@ public:
 	void Dump();
 #endif
 
-	
 
 	bool IsProcessing() const { return m_processing; }
 
-	
 
 	sint32 GetNextSerial() const { return m_serial; }
 
-	
 	bool EventsPending() const;
 
-	
+
 
 
 	static char* ArgCharToName(char want);
@@ -184,17 +170,13 @@ private:
 	std::list<GameEvent*>   m_eventHistory;
 #endif
 
-	
 	GameEventHook *m_hooks[GEV_MAX];
 
-	
 	bool m_processing;
 
-	
 
 	GAME_EVENT m_processingEvent;
 
-	
 	sint32 m_serial;
 
 	bool m_needUserInput;

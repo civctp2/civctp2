@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,19 +21,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Test of table propagation
 
  Usage: dptabt driver n
- or:    dptabt driver n hostnum nextAddress  
+ or:    dptabt driver n hostnum nextAddress
 
  This test program measures the performance of the dptab module.
- It measures the time it takes various things to propagate around a ring 
+ It measures the time it takes various things to propagate around a ring
  of n hosts.  The things sent around the ring include:
- * a single small (four-byte) table entry 
+ * a single small (four-byte) table entry
  * a single table entry deletion
  * a block of 10 small (four-byte) table entries
- * a single large (10kbyte) table entry 
+ * a single large (10kbyte) table entry
  The results are reported in seconds per hop for the small entries,
  and bytes per second for the large entries.
 
- The first form spawns n processes using the second form, and waits for 
+ The first form spawns n processes using the second form, and waits for
  them all to finish.  I.e. for i=0..n, it executes
     dptabt driver i ((i+1 mod n) + 1).0.0.0
  For example, if driver is wloop.dll, and N == 2, it executes:
@@ -47,13 +47,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  This assumes we're using one of Marshall's loopback drivers,
  which assign the address 1.0.0.0 to the first host, 2.0.0.0 to the second,
- etc.  The expression ((i+2) mod n + 1).0.0.0 is the address of the 'next' 
+ etc.  The expression ((i+2) mod n + 1).0.0.0 is the address of the 'next'
  host to be opened, the one with i one higher than this host.
  We might later add the ability to specify a list of real network addresses
  rather than having the first form synthesize loopback driver addresses.
 
-
- The second form expects a driver filename, its host number, and the network 
+ The second form expects a driver filename, its host number, and the network
  address of the 'next' host in the ring.  It creates a ring of hosts
  forwarding a table to each other, and measures performance of the code
  that propagates table entries around the ring.  See the function
@@ -99,7 +98,6 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 /**
 * Constants
 */
@@ -125,7 +123,6 @@ MSVC's warning level is set to 4.
 #define TRUE 1
 #define FALSE 0
 #endif
-
 
 /**
 * Types
@@ -159,7 +156,6 @@ typedef struct tabtResult_s {
 	int packetLoss;
 } tabtResult_t;
 
-
 /**
 * Global variables
 */
@@ -173,7 +169,6 @@ playerHdl_t su_src;
 playerHdl_t it_src;
 playerHdl_t it_num;
 clock_t dpio_now;
-
 
 /**
 * Methods
@@ -208,7 +203,6 @@ static char key2a_buf2[256];
 /* You can use this one for the second key in a printf */
 #define key2a2(key, keylen) key2buf(key, keylen, key2a_buf2)
 
-
 /*-------------------------------------------------------------------------
  Write the results to the log file
 -------------------------------------------------------------------------*/
@@ -217,7 +211,7 @@ writeReport(
 	FILE* log,
 	tabtResult_t* res)
 {
-	printf("Node %d: Writing report; gotSingleSmallTime is %f\n", 
+	printf("Node %d: Writing report; gotSingleSmallTime is %f\n",
 			res->thisHost, results.singleSmallTime);
 	if (res->thisHost < 1) {
 		fprintf(log, "Table Ring Test\nhosts %d\nDriver %s\npktloss %d%%\n",
@@ -241,7 +235,7 @@ writeReport(
 		fprintf(log, "deleteTime %f seconds (%f seconds/hop)\n",
 				res->deleteTime, res->deleteTime / res->n_hosts);
 #endif
-	} 
+	}
 }
 
 /*-------------------------------------------------------------------------
@@ -264,7 +258,6 @@ readReport(
 	}
 }
 
-
 /*-------------------------------------------------------------------------
  Stop the test
 -------------------------------------------------------------------------*/
@@ -283,7 +276,6 @@ abortTest(
 	exit(exitCode);
 }
 
-
 /*-------------------------------------------------------------------------
  Stop the test if something went wrong that we thought would never happen.
  Useful when assertions print and exit, instead of going to a debugger.
@@ -300,7 +292,6 @@ void myassert(int x, int lineno)
 }
 #endif
 
-
 /*-------------------------------------------------------------------------
  Timeout
 -------------------------------------------------------------------------*/
@@ -314,7 +305,6 @@ int timer_handler(int sigtype)
 	return 0;
 }
 
-
 /*-------------------------------------------------------------------------
  Handle a signal (^C or similar)
 -------------------------------------------------------------------------*/
@@ -326,10 +316,9 @@ signalHandler(
 	abortTest(logFile, 4, "Test terminated at user request.\n", &results);
 }
 
-
 /*-------------------------------------------------------------------------
- This is called by the dptab_handlePacket when a new variable arrives or 
- an old one is deleted.  
+ This is called by the dptab_handlePacket when a new variable arrives or
+ an old one is deleted.
  Note the time of the callback in the result block.
 -------------------------------------------------------------------------*/
 int dp_PASCAL
@@ -375,9 +364,9 @@ table_cb(
 			default:
 				;
 			}
-			printf("Node %d: Got variable from h:%x; table %s, subkey %s; len %d\n", 
+			printf("Node %d: Got variable from h:%x; table %s, subkey %s; len %d\n",
 				results.thisHost,
-				src, 
+				src,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total);
@@ -393,9 +382,9 @@ table_cb(
 			default:
 				;
 			}
-			printf("Node %d: Got delete variable from h:%x; table %s, subkey %s\n", 
+			printf("Node %d: Got delete variable from h:%x; table %s, subkey %s\n",
 				results.thisHost,
-				src, 
+				src,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen));
 		}
@@ -407,7 +396,6 @@ table_cb(
 	(void) context;
 	return TRUE;
 }
-
 
 /*-------------------------------------------------------------------------
  Check for network packets and handle them.
@@ -465,7 +453,6 @@ void poll_test(dpio_t *dpio, dptab_t *tab)
 	}
 }
 
-
 /*-------------------------------------------------------------------------
  Run a single copy of the test.
  Return value is 0 on success.
@@ -505,7 +492,7 @@ void poll_test(dpio_t *dpio, dptab_t *tab)
 	dptabt wloop.dll 1 1.0.0.0          (host 2 = slave)
  the sequence of events is
     host step action
-    h1   #4  waits for SU 
+    h1   #4  waits for SU
 	h2   #3  subscribes to 1 from h1, sends "SU" to h1, waits for "sU"
 	h1   #5  Gets "SU", publishes table 1 to h2
 	h1   #6  subscribe's h2's table 1 onto table 2, sends "SU" to h2
@@ -526,7 +513,7 @@ void poll_test(dpio_t *dpio, dptab_t *tab)
 	dptabt wloop.dll 3 1.0.0.0          (host 4 = slave)
  the sequence of events is
     host step action
-    h1   #4  waits for SU 
+    h1   #4  waits for SU
 	h2   #3  subscribes to 1 from next, sends "SU" to next, waits for "SU"
 	h3   #3  subscribes to 1 from next, sends "SU" to next, waits for "SU"
 	h4   #3  subscribes to 1 from next, sends "SU" to next, waits for "SU"
@@ -538,7 +525,7 @@ void poll_test(dpio_t *dpio, dptab_t *tab)
  and the variable's trip around the ring looks like this:
     h1 -> h2 -> h3 -> h4 -> h1 again
 -------------------------------------------------------------------------*/
-int 
+int
 run_one_node(
 	int childNum,
 	char *sNextAdr,
@@ -560,7 +547,7 @@ run_one_node(
 	dp_transport_t dll;
 	char nbuf[dpio_MAXLEN_UNRELIABLE];
 	char dplogname[200];
-	
+
 	char fname[256];
 	int startLoopAt = 0;
 	int i;
@@ -578,7 +565,7 @@ run_one_node(
 	} else
 		assert ((logFile = fopen(fname, "w")) != NULL);
 	#ifdef WIN32
-		srand(GetTickCount());		
+		srand(GetTickCount());
 	#endif
 
 	/* 1. Initialize dpio and dptab */
@@ -835,7 +822,6 @@ run_one_node(
 	return 0;
 }
 
-
 /*-------------------------------------------------------------------------
  Run n copies of the test.
  Return value is 0 on success.
@@ -852,7 +838,7 @@ run_n_nodes(
 
 	childArgs[0] = exe;
 	childArgs[1] = results.driver;
-	
+
 	if ((procs = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate process handle storage.\n", NULL);
 	if((result = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
@@ -870,7 +856,7 @@ run_n_nodes(
 		#else
 			Warning: Must choose one of the above defines.
 		#endif
-		printf("Launching %s %s %s %s %s %s\n", 
+		printf("Launching %s %s %s %s %s %s\n",
 				childArgs[0],
 				childArgs[1],
 				childArgs[2],
@@ -904,7 +890,6 @@ run_n_nodes(
 	writeReport(logFile, &results);
 	return 0;
 }
-
 
 /*-------------------------------------------------------------------------
  Entry point

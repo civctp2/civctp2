@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -35,7 +22,6 @@
 
 extern C3UI			*g_c3ui;
 
-
 TextTab::TextTab(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -44,17 +30,16 @@ TextTab::TextTab(
 	void *cookie)
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Tab( retval, id, ldlBlock, ActionFunc, cookie),
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
-	
+
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER
 		| k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 }
-
 
 
 TextTab::TextTab(
@@ -77,7 +62,7 @@ TextTab::TextTab(
 	aui_Tab( retval, id, x, y, width, height, paneWidth, paneHeight, ActionFunc, cookie, selected ),
 	PatternBase( pattern )
 {
-	
+
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER
 		| k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY
@@ -85,26 +70,22 @@ TextTab::TextTab(
 }
 
 
-
 AUI_ERRCODE TextTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
-	
+
+
 	if ( !m_draw )
 		m_draw = k_AUI_REGION_DRAWFLAG_UPDATE;
 	else
 	{
-		
-		
+
 		if ( IsOn()
 		&&   (m_draw & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE)
 		&&   !(m_draw & k_AUI_REGION_DRAWFLAG_UPDATE) )
 			return AUI_ERRCODE_DONTDRAWCHILDREN;
 	}
 
-	
-	
+
 	BOOL drawPane = m_draw & (
 		k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE |
 		k_AUI_REGION_DRAWFLAG_UPDATE );
@@ -122,10 +103,9 @@ AUI_ERRCODE TextTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		m_pane->X() + m_pane->Width(),
 		m_pane->Y() + m_pane->Height()
 	};
-	
+
 	OffsetRect( &paneRect, rect.left, rect.top );
 
-	
 	if ( m_pattern )
 	{
 		m_pattern->Draw( surface, &rect );
@@ -139,7 +119,6 @@ AUI_ERRCODE TextTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		surface,
 		&rect );
 
-	
 	AUI_TABGROUP_ALIGNMENT a = ((aui_TabGroup *)m_parent)->
 		GetTabGroupAlignment();
 
@@ -175,7 +154,7 @@ AUI_ERRCODE TextTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-	
+
 	DrawThisText(surface, &rect);
 
 	if ( surface == m_window->TheSurface() )

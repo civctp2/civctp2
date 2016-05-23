@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -126,17 +126,13 @@ void Crater::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 	for(sint32 i = 0; i < numCraters; i++) {
 		sint32 radius = randgen->Next(maxRadius) + 1;
 
-		
 		sint32 cx = randgen->Next(outwidth);
 		sint32 cy = randgen->Next(outheight);
 
-		
 		sint32 x, y;
 
-		
 		sint32 ax, ay;
 
-		
 		sint32 rx, ry;
 
 		sint32 rsq = radius * radius;

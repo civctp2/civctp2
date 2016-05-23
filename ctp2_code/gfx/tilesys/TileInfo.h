@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized casts and removed some warnings in .NET. 
+// - Standardized casts and removed some warnings in .NET.
 //   - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ class CivArchive;
 
 typedef uint16 TILEINDEX;
 
-class TileInfo 
+class TileInfo
 {
 public:
 	TileInfo();
@@ -114,7 +114,7 @@ public:
 	void Serialize(CivArchive &archive);
 
 private:
-	
+
 	sint8			m_riverPiece;
 	uint8			m_megaInfo;
 	uint8			m_terrainType;
@@ -123,9 +123,9 @@ private:
 	TILEINDEX		m_tileNum;
 
 	uint8			m_transitions[k_NUM_TRANSITIONS];
-	
+
 	GoodActor		*m_goodActor;
-	
+
 	friend class NetCellList;
 	friend class NetCell;
 	friend class NetUnseenCell;

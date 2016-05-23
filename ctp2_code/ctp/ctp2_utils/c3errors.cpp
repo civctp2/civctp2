@@ -55,7 +55,7 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	va_end(list);
 
 	Assert(FALSE);
-	
+
 	Report("Fatal error.  Aborting.\n");
 
 #ifdef WIN32
@@ -66,10 +66,9 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 #endif
 #endif
 #endif
-	
+
 	exit(-1);
 }
-
 
 void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 {
@@ -96,7 +95,7 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION);
 
 	Assert(FALSE);
-	
+
 	Report("Fatal error.  Aborting.\n");
 
 #if defined(WIN32)
@@ -110,7 +109,6 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 
 	exit(-1) ;
 }
-
 
 void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 {
@@ -130,7 +128,6 @@ void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 
 	MessageBox(NULL, str, dbTitle, MB_OK | MB_ICONEXCLAMATION) ;
 }
-
 
 void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 {
@@ -171,13 +168,12 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 //	MessageBox(NULL, szFmtTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
 	sint32 result = MessageBox(NULL, Tmp, szTitle, MB_YESNO | MB_ICONEXCLAMATION);
 
-
 #if defined(WIN32)
 	LocalFree(szTitle);
 #else
    free(szTitle);
 #endif
-	
+
 #ifndef _DEBUG
 	extern bool g_autoAltTab;
 	if(g_autoAltTab && g_ui) {
@@ -191,4 +187,3 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 
 	return;
 }
-

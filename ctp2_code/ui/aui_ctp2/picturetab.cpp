@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -17,7 +5,6 @@
 #include "aui_window.h"
 
 #include "picturetab.h"
-
 
 PictureTab::PictureTab(
 	AUI_ERRCODE *retval,
@@ -46,10 +33,9 @@ PictureTab::PictureTab(
 {
 }
 
-
 AUI_ERRCODE PictureTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -72,7 +58,7 @@ AUI_ERRCODE PictureTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	}
 	else
 	{
-		
+
 	}
 
 	if ( surface == m_window->TheSurface() )

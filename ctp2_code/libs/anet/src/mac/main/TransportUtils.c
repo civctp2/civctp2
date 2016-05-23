@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,12 +46,12 @@ void CenterOnCurrentScreen(Rect* theRect) {
 
 	if (gScreenRect.left == -1 && gScreenRect.right == -1 && gScreenRect.top == -1 && gScreenRect.bottom == -1)
 		gScreenRect = (**GetMainDevice()).gdRect;
-	
+
 	topLeft.h = gScreenRect.left + ((gScreenRect.right - gScreenRect.left) - (theRect->right - theRect->left)) / 2;
 	topLeft.v = gScreenRect.top + ((gScreenRect.bottom - gScreenRect.top) - (theRect->bottom - theRect->top)) / 2;
-	
+
 	OffsetRect(theRect, topLeft.h, topLeft.v);
-	
+
 }
 void ColorDebugStr(StringPtr theString) {
 	RestoreDeviceClut(GetMainDevice());

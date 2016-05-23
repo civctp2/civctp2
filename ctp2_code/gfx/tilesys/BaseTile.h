@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Base Tile
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __BASETILE_H__
@@ -54,7 +54,7 @@ public:
 	uint8	GetBaseType(void) const { return m_baseType; }
 	void	SetBaseType(uint8 type) { m_baseType = type; }
 
-	BOOL	GetTransitionFlag(sint16 flagNum) 
+	BOOL	GetTransitionFlag(sint16 flagNum)
 	{
 		switch (flagNum) {
 		case 0: return m_flags & k_BTF_TRANSITION0;

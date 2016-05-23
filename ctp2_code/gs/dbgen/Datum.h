@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
-// - Added alias names and the possibility to have default values from 
+// - Added alias names and the possibility to have default values from
 //   other entries. (Aug 26th 2005 Martin Gühmann)
-// - Added support for default values taken from other databases like the 
+// - Added support for default values taken from other databases like the
 //   Const database. (9-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
@@ -69,9 +69,9 @@ public:
 
 	Datum
 	(
-	    std::string const & a_Name, 
+	    std::string const & a_Name,
 	    DATUM_TYPE const &  a_Type  = DATUM_NONE
-	) 
+	)
 	:
 	    m_Name          (a_Name),
 	    m_type          (a_Type),

@@ -1,22 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __AI_CELL_H__
 #define __AI_CELL_H__ 1
 
-#define k_TERRRAIN_TYPE_MASK 0xf8000000  
+#define k_TERRRAIN_TYPE_MASK 0xf8000000
 #define k_TERRRAIN_TYPE_SHIFT 27
 
 #define k_SHIFTED_TERRAIN_FOREST (TERRAIN_FOREST<<k_TERRRAIN_TYPE_SHIFT)
@@ -38,32 +24,31 @@
 #define k_SHIFTED_TERRAIN_WATER_TRENCH (TERRAIN_WATER_TRENCH<<k_TERRRAIN_TYPE_SHIFT)
 #define k_SHIFTED_TERRAIN_WATER_RIFT (TERRAIN_WATER_RIFT<<k_TERRRAIN_TYPE_SHIFT)
 #define k_SHIFTED_TERRAIN_DEAD (TERRAIN_DEAD<<k_TERRRAIN_TYPE_SHIFT)
-#define k_SHIFTED_TERRAIN_UNEXPLORED (TERRAIN_UNEXPLORED<<k_TERRRAIN_TYPE_SHIFT)   
+#define k_SHIFTED_TERRAIN_UNEXPLORED (TERRAIN_UNEXPLORED<<k_TERRRAIN_TYPE_SHIFT)
 
-
-enum GRADIENT_BITS { 
-   GRADIENT_0_FIVE, 
-   GRADIENT_1_SIX, 
-   GRADIENT_2_SEVEN, 
-   GRADIENT_3_SEVEN, 
-   GRADIENT_4_SEVEN, 
+enum GRADIENT_BITS {
+   GRADIENT_0_FIVE,
+   GRADIENT_1_SIX,
+   GRADIENT_2_SEVEN,
+   GRADIENT_3_SEVEN,
+   GRADIENT_4_SEVEN,
    NUM_GRADIENT
 };
 
-struct MapPointData; 
+struct MapPointData;
 
-class AiMain; 
-class CivArchive; 
+class AiMain;
+class CivArchive;
 
-class AiCell { 
+class AiCell {
 
-	uint32 flag0; 
+	uint32 flag0;
 
 public:
 
-	AiCell(); 
-    
-    void Serialize(CivArchive &archive); 
+	AiCell();
+
+    void Serialize(CivArchive &archive);
 
     sint32 Get(const GRADIENT_BITS g) const ;
     void Set(const GRADIENT_BITS g, sint32 val);

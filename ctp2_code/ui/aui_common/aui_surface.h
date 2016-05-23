@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Surface (part of the screen) 
+// Description  : Surface (part of the screen)
 //
 //----------------------------------------------------------------------------
 //
@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 
 #ifndef __AUI_SURFACE_H__
 #define __AUI_SURFACE_H__
-
 
 #include "aui_base.h"
 #ifdef USE_SDL
@@ -69,7 +68,7 @@ enum AUI_SURFACE_LOCKOP
 class aui_Surface : public aui_Base
 {
 public:
-	
+
 	aui_Surface(
 		AUI_ERRCODE *retval,
 		sint32 width,
@@ -87,10 +86,10 @@ protected:
 
 public:
 	virtual BOOL IsThisA( uint32 classId )
-	{	
+	{
 		return classId == m_surfaceClassId;
 	}
-	
+
 	sint32 Width( void ) const { return m_width; }
 	sint32 Height( void ) const { return m_height; }
 	sint32 BitsPerPixel( void ) const { return m_bpp; }
@@ -107,8 +106,7 @@ public:
 
 	BOOL IsPrimary( void ) const { return m_isPrimary; }
 
-	
-	
+
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
@@ -122,7 +120,7 @@ public:
 #else
 	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
 #endif
-	
+
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
 
 	virtual AUI_ERRCODE BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
@@ -142,36 +140,35 @@ protected:
 #endif
 	AUI_ERRCODE ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op );
 
-	sint32	m_width;		
-	sint32	m_height;		
-	sint32	m_bpp;			
-	sint32	m_Bpp;			
-	sint32	m_bytewidth;	
-	sint32	m_pitch;		
-	sint32	m_size;			
-	uint8	*m_buffer;		
-	
-	HDC		m_hdc;			
+	sint32	m_width;
+	sint32	m_height;
+	sint32	m_bpp;
+	sint32	m_Bpp;
+	sint32	m_bytewidth;
+	sint32	m_pitch;
+	sint32	m_size;
+	uint8	*m_buffer;
+
+	HDC		m_hdc;
 	bool	m_dcIsGot;
 	HBITMAP	m_hbitmap;
 	HBITMAP	m_holdbitmap;
 
-	AUI_SURFACE_PIXELFORMAT m_pixelFormat; 
-	uint32	m_chromaKey;	
+	AUI_SURFACE_PIXELFORMAT m_pixelFormat;
+	uint32	m_chromaKey;
 
-	BOOL	m_isPrimary;	
+	BOOL	m_isPrimary;
 
-	BOOL	m_allocated;	
+	BOOL	m_allocated;
 	uint8	*m_saveBuffer;
 
-	aui_SurfaceSubset m_locklist[ k_SURFACE_MAXLOCK ]; 
-	sint32	m_locksRemain;	
+	aui_SurfaceSubset m_locklist[ k_SURFACE_MAXLOCK ];
+	sint32	m_locksRemain;
 
 private:
-	
+
 	BOOL IsLocked( RECT *rect );
 	BOOL IsLocked( LPVOID buffer );
 };
 
-
-#endif 
+#endif

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -88,7 +88,7 @@ void readPlayerAddresses (char *playerFname)
 	FILE					*playerFile = NULL;
 	char 					buf[256];
 	playerHdl_t		HMaster = PLAYER_ME;
-	
+
 	playerFile = fopen (playerFname, "r");
 	if (!playerFile) {
 		printf ("Unable to open player file %s\n", playerFname);
@@ -96,7 +96,7 @@ void readPlayerAddresses (char *playerFname)
 	}
 	while (fgets (buf, 255, playerFile) && (N_Players < 8)) {
 		sscanf (buf, "%s", printable);
-		
+
 		/*  Convert partner's address to binary for use with commSayHi */
 		scanReq.printable = printable;
 		scanReq.address = adrBuf;
@@ -105,7 +105,7 @@ void readPlayerAddresses (char *playerFname)
 			printf("Unable to scan player address, error: %d\n", scanResp.status);
 			return;
 		}
-	
+
 		/*  Open a comm handle to the partner's address */
 		dest = dpio_openHdl(dpio, adrBuf, NULL, NULL);
 		if (dest == PLAYER_NONE) {
@@ -124,7 +124,6 @@ void readPlayerAddresses (char *playerFname)
 		printf ("Found %d players, Master is %d\n", N_Players, AllPlayers[0]);
 	}
 }
-
 
 /*  Start up comm system, chat with otherPlayer. */
 /*  If otherPlayer is NULL or empty, prompt user for other player's address. */
@@ -202,7 +201,7 @@ void chatTest(char *otherPlayer, int broadcast)
 				printf("Unable to scan player address, error: %d\n", scanResp.status);
 				return;
 			}
-	
+
 			/*  Open a comm handle to the partner's address */
 			dest = dpio_openHdl(dpio, adrBuf, NULL, NULL);
 			if (dest == PLAYER_NONE) {
@@ -214,7 +213,7 @@ void chatTest(char *otherPlayer, int broadcast)
 			N_Players = 1;
 		}
 	}
-	
+
 	raw_init();
     for (;;) {
         char ch;
@@ -244,21 +243,21 @@ void chatTest(char *otherPlayer, int broadcast)
 			}
 		} else if (err != dp_RES_EMPTY && err != dp_RES_AGAIN)
 				printf("Error %d receiving packet\n", err);
-		
+
 		/*  see about sending data */
 		if (raw_kbhit()) {
 		    ch = raw_getc();
 			putch(ch);
 			/*  Do a linefeed when we need to */
 			if (ch == 13) putch(10);
-	
+
 			/*  see if user wants to esc */
 			if (ch == 0x1b) break;
-	
+
 			buf[0] = buf[1] = 'Q';
 			buf[2] = ch;
 			buf[3] = 0;
-			
+
    			if (useReliable)
 				err = dpio_put_reliable(dpio, AllPlayers, N_Players, buf, strlen(buf), NULL);
 			else
@@ -324,8 +323,7 @@ void packetTest(int packetLen)
 	char		buf[1000];
 	char		ch;
 	/*  rough guess at size of commbuf in packets */
-	int			prestuff=1024/(packetLen+20);	
-
+	int			prestuff=1024/(packetLen+20);
 
 	commTxPktReq_t	txReq;
 	commTxPktResp_t	txResp;
@@ -503,8 +501,8 @@ void onewayTestTx(int packetLen)
 		if (commTxPkt(&txReq, &txResp)) {
 			now = clock();
 			txrxok++;
-			/* print out how long since last send, and how long 
-			 * this commTxPkt() took 
+			/* print out how long since last send, and how long
+			 * this commTxPkt() took
 			 */
 			printf("txrxok %d txrx %d interval %d duration %d\n",txrxok, txrx, now - last, now - before_send);
 			last = now;
@@ -527,7 +525,6 @@ void quickTest(int packetLen)
 	commTxPktResp_t		txResp;
 	/* commRxPktReq_t		rxReq; */
 	/* commRxPktResp_t		rxResp; */
-
 
 	/*  send a packet so the other side assigns a playerHdl_t */
 	/*  and starts sending packets */
@@ -701,7 +698,7 @@ int main( int argc, char *argv[] )
 	commInitReq.baud = 19200;
 	commInitReq.hwirq = 0;
 	commInitReq.portnum = 1;
-	commInitReq.sessionId = rand() | (rand() << 16);	
+	commInitReq.sessionId = rand() | (rand() << 16);
 	commInitReq.reqLen = sizeof(commInitReq_t);
 
 	ProcessCommandLine(argc, argv);
@@ -755,7 +752,7 @@ int main( int argc, char *argv[] )
 		/*  Chat via (transport DLL argv[2]) with (user at address argv[3]) */
 		chatTest(adrString, FALSE);
 		break;
-		
+
 	default:
 		printf("bogus argument %c\n",cmd);
 		exit(1);
@@ -767,5 +764,3 @@ int main( int argc, char *argv[] )
 
     return(0);
 }
-
-

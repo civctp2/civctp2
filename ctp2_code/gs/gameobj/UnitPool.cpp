@@ -39,9 +39,7 @@
 #include "StrDB.h"
 
 
-
 extern StringDB     *g_theStringDB;
-
 
 
 #include "civ3_main.h"
@@ -50,14 +48,12 @@ extern StringDB     *g_theStringDB;
 
 #include "GWCiv.h"
 
-
 extern int g_gameWatchID;
 #endif
 
 UnitPool::UnitPool () : ObjPool (k_BIT_GAME_OBJ_TYPE_UNIT)
 {
 }
-
 
 UnitPool::UnitPool(CivArchive &archive) : ObjPool(k_BIT_GAME_OBJ_TYPE_UNIT)
 {
@@ -72,18 +68,18 @@ Unit UnitPool::Create (
     UnitActor *actor)
 {
 	UnitData *ptr = NULL;
-	Unit id(NewKey(k_BIT_GAME_OBJ_TYPE_UNIT)); 
+	Unit id(NewKey(k_BIT_GAME_OBJ_TYPE_UNIT));
 
-	Assert(owner < PLAYER_INDEX_INVALID); 
+	Assert(owner < PLAYER_INDEX_INVALID);
 
 	sint32 trans_t = 0;
 	g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetTransType(trans_t);
-	ptr = new UnitData(t, trans_t, id, owner, pos, hc, actor); 
+	ptr = new UnitData(t, trans_t, id, owner, pos, hc, actor);
 
 	Assert(ptr);
 
 #ifndef _NO_GAME_WATCH
-	
+
 	static char unitName[256];
 	strcpy(unitName, g_theStringDB->GetNameStr(g_theUnitDB->Get(t)->GetName()));
 	sint32 unitCost = g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetShieldCost();
@@ -98,7 +94,6 @@ Unit UnitPool::Create (
 }
 
 
-
 Unit UnitPool::Create (
     const sint32 t,
     const PLAYER_INDEX owner,
@@ -106,15 +101,15 @@ Unit UnitPool::Create (
 {
 	UnitData *ptr = NULL;
 	Unit id(NewKey(k_BIT_GAME_OBJ_TYPE_UNIT));
-	
+
 	Assert(owner < PLAYER_INDEX_INVALID);
-	
+
 	sint32 trans_t = 0;
 	g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetTransType(trans_t);
 	ptr = new UnitData(t, trans_t, id, owner, actor_pos);
 
 	Assert(ptr);
-	
+
 	Insert(ptr);
 	return id;
 }
@@ -188,4 +183,3 @@ const UnitRecord *UnitPool::GetDBRec(const Unit id) const
 		return g_theUnitDB->Get(id.GetType());
 	}
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -54,12 +54,12 @@ extern TiledMap			*g_tiledMap;
 extern Director			*g_director;
 
 EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
-: 
+:
     Actor                       (ss),
     m_pos                       (pos),
     m_savePos                   (),
-    m_shX                       (0), 
-    m_shY                       (0), 
+    m_shX                       (0),
+    m_shY                       (0),
     m_effectSpriteGroup         (NULL),
     m_facing                    (0),
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
@@ -69,14 +69,14 @@ EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
     m_curEffectAction           (EFFECTACTION_NONE),
     m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
 //    m_playerNum;
-    m_effectVisibility          (0), 
-//    m_effectSaveVisibility; 
+    m_effectVisibility          (0),
+//    m_effectSaveVisibility;
     m_dieAtTick                 (0),
-//    m_directionalAttack; 
-    m_needsToDie                (false), 
-    m_killNow                   (false), 
+//    m_directionalAttack;
+    m_needsToDie                (false),
+    m_killNow                   (false),
     m_generateDeath             (false),
-    m_bVisSpecial               (false) 
+    m_bVisSpecial               (false)
 {
     if (ss && g_effectSpriteGroupList)
     {
@@ -85,7 +85,6 @@ EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
                 (ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION) 0);
     }
 }
-
 
 EffectActor::~EffectActor()
 {
@@ -104,22 +103,21 @@ void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)
 	delete m_spriteState;
 	m_spriteState = ss;
 
-	
 	m_effectSpriteGroup = (EffectSpriteGroup *)g_effectSpriteGroupList->GetSprite(ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION)0);
 
 }
 
 void EffectActor::Process(void)
 {
-	
 
-	
-	
-	
-	
+
+
+
+
+
 	if(!m_curAction)
 		GetNextAction();
-			
+
 	if (m_curAction) {
 
 		if(GetActionQueueNumItems() > 0)
@@ -127,11 +125,11 @@ void EffectActor::Process(void)
 		else
 			m_curAction->Process();
 
-			
-		
-		
-		
-		if (m_curAction->Finished()) 
+
+
+
+
+		if (m_curAction->Finished())
 		{
 			MapPoint  end;
 			m_curAction->GetEndMapPoint(end);
@@ -142,24 +140,20 @@ void EffectActor::Process(void)
 			GetNextAction();
 		}
 	}
-	
-	
+
 	if (m_curAction != NULL) {
 		sint32 x, y;
 
 		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
 
-		
-		
+
 		m_shX = m_x = x;
 		m_shY = m_y = y;
 
-
 		POINT curPt;
 
-		
 		if (m_curAction->GetPath() != NULL) {
-			
+
 			curPt = m_curAction->GetPosition();
 
 			m_shX = m_x = curPt.x;
@@ -177,17 +171,17 @@ void EffectActor::Process(void)
 		}
 		else
 		{
-			
+
 			m_facing = m_curAction->GetFacing();
 		}
-		
+
 		m_frame = m_curAction->GetSpriteFrame();
-		
+
 		m_transparency = m_curAction->GetTransparency();
-		
-		
-		
-		
+
+
+
+
 		if(GetNeedsToDie() && m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT)
 		{
 			SetKillNow();
@@ -198,23 +192,21 @@ void EffectActor::Process(void)
 
 void EffectActor::EndTurnProcess(void)
 {
-	
 
-	
-	while(GetActionQueueNumItems() > 0) 
+
+	while(GetActionQueueNumItems() > 0)
 	{
 		GetNextAction(k_doInvisible);
 		MapPoint  end;
 		m_curAction->GetEndMapPoint(end);
-		if (end.x != 0 || end.y != 0) 
+		if (end.x != 0 || end.y != 0)
 		{
 			m_pos = end;
 		}
 	}
 
-	
 
-	if (m_curAction != NULL) 
+	if (m_curAction != NULL)
 	{
 		sint32 x, y;
 
@@ -223,32 +215,28 @@ void EffectActor::EndTurnProcess(void)
 		m_shX = m_x = x;
 		m_shY = m_y = y;
 
-		
 		m_frame = m_curAction->GetSpriteFrame();
 
-		
 		m_transparency = m_curAction->GetTransparency();
 
 		POINT curPt;
 
-		
 		if (m_curAction->GetPath() != NULL) {
-			
+
 			curPt = m_curAction->GetPosition();
 
 			m_shX = m_x = curPt.x;
 			m_shY = m_y = curPt.y;
 		}
 
-		
 		m_facing = m_curAction->GetFacing();
 
-		
-		
-		
+
+
+
 		if(GetNeedsToDie())
 		{
-			SetDieAtTick(0);  
+			SetDieAtTick(0);
 			SetKillNow();
 		}
 	}
@@ -262,48 +250,45 @@ void EffectActor::GetNextAction(BOOL isVisible)
 	m_curAction = NULL;
 
 //	Action *pendingAction = LookAtNextAction(); // Not used
-		
-		
-	if (numItems > 0) 
+
+	if (numItems > 0)
 	{
 
-		
 		m_actionQueue.Dequeue(m_curAction);
 
-		
-		
-				
+
+
+
 		MapPoint curStartMapPoint, curEndMapPoint;
 		m_curAction->GetStartMapPoint(curStartMapPoint);
 		m_curAction->GetEndMapPoint(curEndMapPoint);
-			
+
 		if (m_curAction)
 		{
 			m_curEffectAction = (EFFECTACTION)m_curAction->GetActionType();
 		}
 		else
 		{
-			
+
 			Assert(FALSE);
 		}
 	}
 	else
 	{
-		
+
 		if(numItems <= 0)
 		{
-			
-			
-			
-			
 
-			
+
+
+
+
+
 			SetKillNow();
 		}
-		
+
 	}
 }
-
 
 void EffectActor::AddAction(Action *actionObj)
 {
@@ -329,8 +314,8 @@ void EffectActor::Draw(void)
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset, 
-								m_shX+xoffset, m_shY+yoffset, m_facing, 
+	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
+								m_shX+xoffset, m_shY+yoffset, m_facing,
 								g_tiledMap->GetScale(), m_transparency, color, flags,
 								m_curAction->SpecialDelayProcess());
 }
@@ -342,21 +327,19 @@ void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-
 	if (m_transparency < 15) {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 	BOOL specialDelayProcess = FALSE;
 
 	if (m_curAction) {
 		specialDelayProcess = m_curAction->SpecialDelayProcess();
 	}
-	
-	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset, 
-								m_shX+xoffset, m_shY+yoffset, m_facing, 
+
+	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
+								m_shX+xoffset, m_shY+yoffset, m_facing,
 								g_tiledMap->GetScale(), m_transparency, color, flags, specialDelayProcess);
 }
-
 
 void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags)
 {
@@ -364,18 +347,17 @@ void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uin
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-
 	if (m_transparency < 15) {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 	BOOL specialDelayProcess = FALSE;
 
 	if (m_curAction) {
 		specialDelayProcess = m_curAction->SpecialDelayProcess();
 	}
-	
-	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset, 
-								m_shX+xoffset, m_shY+yoffset, m_facing, 
+
+	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
+								m_shX+xoffset, m_shY+yoffset, m_facing,
 								g_tiledMap->GetScale(), m_transparency, color, flags, specialDelayProcess);
 }
 
@@ -421,7 +403,7 @@ void EffectActor::GetBoundingRect(RECT *rect) const
 
 	POINT	hotPoint = m_effectSpriteGroup->GetHotPoint(m_curEffectAction, m_facing);
 	double	scale = g_tiledMap->GetScale();
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 	rect->left = 0;
@@ -431,4 +413,3 @@ void EffectActor::GetBoundingRect(RECT *rect) const
 
 	OffsetRect(rect, m_x+xoff, m_y+yoff);
 }
-

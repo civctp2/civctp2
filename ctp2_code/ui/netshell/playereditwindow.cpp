@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -44,11 +44,9 @@
 
 #include "netshell.h"
 
-
 #include "playereditwindow.h"
 #include "playerselectwindow.h"
 #include "ns_customlistbox.h"
-
 
 PlayerEditWindow::PlayerEditWindow(
 	AUI_ERRCODE *retval )
@@ -72,7 +70,6 @@ PlayerEditWindow::PlayerEditWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE PlayerEditWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -85,13 +82,11 @@ AUI_ERRCODE PlayerEditWindow::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-	
 	aui_Control *control;
 
 	control = new c3_Static(
@@ -248,7 +243,6 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_PLAYERINFOTEXTFIELD ] = control;
 
-
 	control = new aui_Button(
 		&errcode,
 		aui_UniqueId(),
@@ -266,11 +260,9 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
 
-	
 	aui_Ldl::SetupHeirarchyFromRoot( "playereditwindow" );
 
 
-	
 	aui_Action *action;
 
 	action = new OKButtonAction;
@@ -284,9 +276,7 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ]->SetAction( action );
 
 
-	
 	SetStronglyModal( TRUE );
-
 
 	return AUI_ERRCODE_OK;
 }
@@ -294,7 +284,6 @@ AUI_ERRCODE PlayerEditWindow::CreateControls( void )
 PlayerEditWindow::~PlayerEditWindow()
 {
 }
-
 
 void PlayerEditWindow::SetPlayerSetup(nf_PlayerSetup *p)
 {
@@ -392,7 +381,6 @@ AUI_ERRCODE PlayerEditWindow::SetParent( aui_Region *region )
 				PlayerEditWindow::CONTROL_PLAYERINFOTEXTFIELD)))->
 					SetFieldText(m_playersetup->GetDescription());
 
-
 		}
 		else
 		{
@@ -427,12 +415,10 @@ AUI_ERRCODE PlayerEditWindow::SetParent( aui_Region *region )
 				PlayerEditWindow::CONTROL_PLAYERINFOTEXTFIELD)))->
 					SetFieldText("");
 
-
 		}
 	}
 	return ns_Window::SetParent( region );
 }
-
 
 void PlayerEditWindow::OKButtonAction::Execute(
 	aui_Control *control,
@@ -452,7 +438,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 	char location[ k_PS_MAXLEN + 1 ];
 	int experience = 0;
 	char info[nf_PLAYERDESCLEN + 1];
-
 
 	((aui_TextField *)
 	 (p->FindControl( PlayerEditWindow::CONTROL_PLAYERNAMETEXTFIELD)))->
@@ -482,7 +467,7 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		for (size_t i = 0; i < sg->ChildList()->L(); ++i)
 		{
 			if ( p->FindControl(
-					PlayerEditWindow::CONTROL_EXPERIENCE0CHECKBOX + i ) == radio 
+					PlayerEditWindow::CONTROL_EXPERIENCE0CHECKBOX + i ) == radio
 			   )
 			{
 				experience = i;
@@ -495,7 +480,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 	 (p->FindControl( PlayerEditWindow::CONTROL_PLAYERINFOTEXTFIELD)))->
 		GetFieldText(info, nf_PLAYERDESCLEN);
 
-
 	if(p->GetPlayerSetup()) {
 		if(p->GetMode() == p->EDIT || p->GetMode() == p->EDIT_GAMESETUP) {
 
@@ -504,7 +488,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 			p->GetPlayerSetup()->SetEmail(email);
 			p->GetPlayerSetup()->SetLocation(location);
 			p->GetPlayerSetup()->SetExperience(experience);
-
 
 			p->GetPlayerSetup()->SetDescription(info);
 
@@ -525,7 +508,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		p->GetPlayerSetup()->SetLocation(location);
 		p->GetPlayerSetup()->SetExperience(experience);
 
-
 		p->GetPlayerSetup()->SetDescription(info);
 
 		p->GetPlayerSetup()->Update();
@@ -538,7 +520,6 @@ void PlayerEditWindow::OKButtonAction::Execute(
 		g_netshell->GetCurrentScreen()->RemoveWindow(p->Id());
 		w->Update();
 }
-
 
 void PlayerEditWindow::CancelButtonAction::Execute(
 	aui_Control *control,

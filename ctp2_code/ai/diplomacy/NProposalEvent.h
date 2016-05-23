@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __NEW_PROPOSAL_EVENT_H__
 #define __NEW_PROPOSAL_EVENT_H__

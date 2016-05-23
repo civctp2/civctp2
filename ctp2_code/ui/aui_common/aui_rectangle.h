@@ -1,21 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_RECTANGLE_H__
 #define __AUI_RECTANGLE_H__
 
@@ -105,5 +87,4 @@ BOOL Rectangle_GetErasers(
 	sint32 dx, sint32 dy,
 	sint32 width, sint32 height );
 
-
-#endif 
+#endif

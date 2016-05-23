@@ -2,8 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : net_chat allow MP players to chat whith each other 
-// Id           : $Id:$
+// Description  : net_chat allow MP players to chat whith each other
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ NetChat::~NetChat()
 	delete [] m_str;
 }
 
-void 
+void
 NetChat::Packetize(uint8 *buf, uint16 &size)
 {
 	buf[0] = k_PACKET_CHAT_ID >> 8;
@@ -65,11 +65,11 @@ NetChat::Packetize(uint8 *buf, uint16 &size)
 	size += m_len * sizeof(MBCHAR);
 }
 
-void 
+void
 NetChat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	Assert(MAKE_CIV3_ID(buf[0], buf[1]) == k_PACKET_CHAT_ID);
-	
+
 	sint32 pos = 2;
 	PULLLONG(m_destmask);
 	PULLSHORT(m_len);
@@ -91,7 +91,7 @@ NetChat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 			if(!g_player[p]) continue;
 
 			if(m_destmask & (1 << p) && p != g_network.GetPlayerIndex() &&
-			   p != g_network.IdToIndex(id) && 
+			   p != g_network.IdToIndex(id) &&
 			   g_player[p]->IsNetwork()) {
 				g_network.QueuePacket(g_network.IndexToId(p), this);
 			}

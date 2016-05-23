@@ -48,7 +48,7 @@
 // - Made file compilable in Win32 Test configuration.
 // - Option added to select whether an army is selected or a city is selected,
 //   if both options are available. (Oct 8th 2005 Martin Gühmann)
-// - Added option to avoid an end turn if there are cities with empty build 
+// - Added option to avoid an end turn if there are cities with empty build
 //   queues. (Oct. 22nd 2005 Martin Gühmann)
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
@@ -138,7 +138,7 @@ class ProfileVar
 {
 public:
     ProfileVar(char *name, PROF_VAR_TYPE type, sint32 *numValue,
-               char *stringValue, bool visible) 
+               char *stringValue, bool visible)
     :
         m_name          (name),
         m_type          (type),
@@ -222,7 +222,6 @@ private:
 
     sint32	m_logPlayerStats;
 
-
     sint32	m_sfxVolume;
     sint32	m_voiceVolume;
     sint32	m_musicVolume;
@@ -237,7 +236,6 @@ private:
     sint32    m_combatLog;
 
     sint32	m_useLeftClick;
-
 
     sint32	m_showZoomedCombat;
     sint32	m_useFingerprinting;
@@ -340,23 +338,23 @@ private:
     sint32 m_richness;
 
     /// Close message box when clicking the eyepoint.
-    sint32 m_closeEyepoint;        
+    sint32 m_closeEyepoint;
     /// The # to use when opening colors#.txt.
-    sint32 m_colorSet;             
+    sint32 m_colorSet;
     /// Show cost and effects of expensive actions.
-    sint32 m_showExpensive;        
+    sint32 m_showExpensive;
     /// Show order button when any unit is capable.
-    sint32 m_showOrderUnion;       
+    sint32 m_showOrderUnion;
     /// Add the most recent messages at the top.
-    sint32 m_recentAtTop;          
+    sint32 m_recentAtTop;
     /// Data directory "include" path(s)
-    MBCHAR m_ruleSets[MAX_PATH];   
+    MBCHAR m_ruleSets[MAX_PATH];
     /// Opens/selects a city instead of an army.
-    sint32 m_cityClick;            
+    sint32 m_cityClick;
     /// End turn even if there are empty build queues (human player only)
-    sint32 m_endTurnWithEmptyBuildQueues; 
+    sint32 m_endTurnWithEmptyBuildQueues;
     /// Allow the application to run in the background with autoturn
-    sint32 m_runInBackground;      
+    sint32 m_runInBackground;
     /// Automatically expiry treaties after a number of turns
     sint32 m_autoExpireTreatyTurn;
     /// Enable city capture options pop-up
@@ -367,32 +365,32 @@ private:
     sint32 m_smoothBorders;
     /// emod new profile options
     /// enables civ flags
-    sint32 m_CivFlags;   
+    sint32 m_CivFlags;
     /// adds population defense to AI cities
-    sint32 m_AICityDefenderBonus; 
+    sint32 m_AICityDefenderBonus;
     /// after entrenching chance barbs makes cities
     sint32 m_BarbarianCities;
     /// increased unhapiness for city's with differnt culture owners
-    sint32 m_SectarianHappiness; 
+    sint32 m_SectarianHappiness;
     /// when city revolts population dies
     sint32 m_RevoltCasualties;
     /// when city revolts it may spawn barbarians
-    sint32 m_RevoltInsurgents; 
+    sint32 m_RevoltInsurgents;
     /// chance barabarians make a camp tileimp
     sint32 m_BarbarianCamps;
     /// chance barbarians will reproduce
-    sint32 m_BarbarianSpawnsBarbarian; 
+    sint32 m_BarbarianSpawnsBarbarian;
     /// sinking flag enabled?
     /// ai ships don't sink
-    sint32 m_AINoSinking; 
+    sint32 m_AINoSinking;
     /// gold unit support
-    sint32 m_GoldPerUnitSupport; 
+    sint32 m_GoldPerUnitSupport;
     //gold per city
-    sint32 m_GoldPerCity; 
+    sint32 m_GoldPerCity;
     /// empty ai units spawn cheapest unit
-    sint32 m_AIMilitiaUnit; 
+    sint32 m_AIMilitiaUnit;
     /// human player cant create settlers
-    sint32 m_OneCityChallenge; 
+    sint32 m_OneCityChallenge;
     /// energy demand-supply ratio affects production and gold
     sint32 m_NRG;
     sint32 m_ruin;
@@ -462,14 +460,13 @@ public:
     void SetPlayerIndex(PLAYER_INDEX index)             { m_playerNumber = index; }
     void SetGender(GENDER gender)                       { m_gender = gender; }
 
-
     void SetMapSize(MAPSIZE size)                       { m_mapSize = size; }
 
     void SetDifficulty(uint32 x);
     void SetRiskLevel(uint32 x)                         { Assert((x>=0) && (x<5)); m_risklevel = x; }
     void SetPowerPoints(sint32 powerPoints)             { m_powerPoints = powerPoints; }
 
-    void SetGenocideRule(BOOL rule)                     { m_genocide = rule; } 
+    void SetGenocideRule(BOOL rule)                     { m_genocide = rule; }
     void SetTradeRule(BOOL rule)                        { m_trade = rule; }
     void SetSimpleCombatRule(BOOL rule)                 { m_simplecombat = rule; }
     void SetPollutionRule(BOOL rule);
@@ -556,15 +553,12 @@ public:
 
     void SetMoveHoldTime(sint32 t)                      { m_moveHoldTime = t; }
 
-
     void SetUnitSpeed(sint32 speed)                     { m_unitSpeed = speed; }
     void SetMouseSpeed(sint32 speed)                    { m_mouseSpeed = speed; }
-
 
     void SetLeftHandedMouse(BOOL lefty)                 { m_leftHandedMouse = lefty; }
 
     void SetCityBuiltMessage(BOOL on)                   { m_cityBuiltMessage = on; }
-
 
     void SetDontSave(BOOL on)                           { m_dontSave = on; }
 
@@ -588,7 +582,7 @@ public:
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
     void SetOneCity(BOOL on)                            { m_OneCityChallenge = on; }
     void SetRevoltInsurgents (BOOL on)                  { m_RevoltInsurgents = on; }
-    void SetAICityDefenderBonus(BOOL on)                { m_AICityDefenderBonus = on; } 
+    void SetAICityDefenderBonus(BOOL on)                { m_AICityDefenderBonus = on; }
     void SetBarbarianCities(BOOL on)                    { m_BarbarianCities = on; }
     void SetSectarianHappiness(BOOL on)                 { m_SectarianHappiness = on; }
     void SetRevoltCasualties(BOOL on)                   { m_RevoltCasualties = on; }
@@ -610,7 +604,6 @@ public:
     void SetSPStartingAge(sint32 x)                     { m_spStartingAge = x; }
     void SetSPEndingAge(sint32 x)                       { m_spEndingAge = x; }
     void SetShowCityProduction(BOOL on)                 { m_showCityProduction = on; }
-
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
 
@@ -765,10 +758,8 @@ public:
     BOOL        GetShowCityNames()              { return m_showCityNames; }
     BOOL        GetShowTradeRoutes()            { return m_showTradeRoutes; }
 
-
     sint32      GetUnitSpeed(void)              { return m_unitSpeed; }
     sint32      GetMouseSpeed(void)             { return m_mouseSpeed; }
-
 
     sint32      GetLeftHandedMouse(void)        { return m_leftHandedMouse; }
 
@@ -842,7 +833,7 @@ public:
 
 //emod new profile flags later to be gameplay rules options
     BOOL    IsCivFlags()                        { return m_CivFlags; } //emod3
-    BOOL    IsAICityDefenderBonus()             { return m_AICityDefenderBonus; }   
+    BOOL    IsAICityDefenderBonus()             { return m_AICityDefenderBonus; }
     BOOL    IsBarbarianCities()                 { return m_BarbarianCities; }
     BOOL    IsSectarianHappiness()              { return m_SectarianHappiness; }
     BOOL    IsBarbarianCamps()                  { return m_BarbarianCamps; }

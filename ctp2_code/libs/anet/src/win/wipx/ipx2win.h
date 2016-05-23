@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef IPX2WIN_H
 #define IPX2WIN_H 1
 
-#include <windows.h> 
+#include <windows.h>
 #include <windowsx.h>
-#include <wsipx.h>   
+#include <wsipx.h>
 #include "commapi.h"			// For caller-friendly error codes
 
 #define IPX2_MAX_USERDATALEN 512
@@ -48,29 +48,25 @@ typedef SOCKADDR_IPX  IPXPEER;    // Winsock's address of peer
 #define ipx2_HDL_BROADCAST	0	    /* The first entry in IPXINSTANCE.peers is for broadcast  */
 #define ipx2_HDL_ME			    1	    /* The 2nd entry is for my own host address               */
 
-
 typedef struct _IPXINSTANCE       // IPX Instance Struct  (Gee, in C++, this would be an object)
 {
   SOCKET        socket;           // WinSock socket
 
   int           nexthandle;       // next available peer handle (next unused peers[] element)
   IPXPEER       peers[MAX_PEERS]; // Peer info (indexed with peer handle)
-} 
+}
 IPXINSTANCE;
-
 
 // substitution literals for DOS IPX types
 #define ipx2_hdl_t    IPXHANDLE
 #define ipx2_result_t int
 #define ipx2_t        IPXINSTANCE
 
-
 // IPXWIN Function Result Codes.  same as interface our caller inherits from...
 #define ipx2_RES_OK		  comm_STATUS_OK
 #define ipx2_RES_FULL	  comm_STATUS_FULL
 #define ipx2_RES_EMPTY	  comm_STATUS_EMPTY
 #define ipx2_RES_BAD	  comm_STATUS_BAD
-
 
 // IPXWIN Functions
 
@@ -86,7 +82,6 @@ int           IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHAN
 
 int           IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *len, IPXHANDLE *hsrc, IPXPEER *srcaddr);
 
-
 #define ipx2_create(socket, stat)               IPXWIN_Create(socket, stat)
 
 #define ipx2_destroy(ipx)                       IPXWIN_Destroy(ipx)
@@ -98,6 +93,5 @@ int           IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *len, IPXHA
 #define ipx2_put(ipx, buf, len, dest)           IPXWIN_PutPacket(ipx, buf, len, dest)
 
 #define ipx2_get(ipx, buf, len, srcHdl, srcAdr) IPXWIN_GetPacket(ipx, buf, len, srcHdl, srcAdr)
-
 
 #endif

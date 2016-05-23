@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -26,14 +13,12 @@ char		*tileutils_StripTIF2Mem(char *filename, uint16 *width, uint16 *height);
 
 Pixel16		*tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height);
 
-
 void		tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 void		tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 void		tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 char		tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 char		tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr);
 Pixel16		*tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 *dataLen);
-
 
 
 void		tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr, BOOL sourceDataIs565);

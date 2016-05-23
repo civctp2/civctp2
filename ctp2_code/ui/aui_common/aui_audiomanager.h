@@ -1,20 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_AUDIOMANAGER_H__
 #define __AUI_AUDIOMANAGER_H__
 
-
 #include "aui_base.h"
-
 
 class aui_Sound;
 
@@ -55,5 +42,4 @@ protected:
 	BOOL m_useAudio;
 };
 
-
-#endif 
+#endif

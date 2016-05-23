@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -59,7 +59,6 @@ class Order;
 
 size_t const	MAX_UNIT_COUNT = k_MAX_ARMY_SIZE;
 
-
 class Army : public ID
 {
 public:
@@ -89,7 +88,7 @@ public:
 	const Unit &Get(sint32 i) const;
 	bool IsPresent(Unit &u);
 
-	bool Insert(const Unit &id); 
+	bool Insert(const Unit &id);
 
 	PLAYER_INDEX GetOwner() const;
 	void SetOwner(PLAYER_INDEX p);
@@ -98,7 +97,7 @@ public:
 	void SortByAttack();
 	void SortByDefense();
 
-	uint32 GetMovementType() const; 
+	uint32 GetMovementType() const;
 	bool   CanEnter(const MapPoint &point) const;
 
 	bool IsAtLeastOneMoveLand() const;
@@ -120,7 +119,7 @@ public:
 	bool IsEnemy(Unit defender) const;
 	bool IsEnemy(Army &defender) const;
 
-	double GetHPModifier(); 
+	double GetHPModifier();
 
 	bool IsAsleep() const;
 	bool IsEntrenched() const;
@@ -166,12 +165,12 @@ public:
 	bool CanPlantNuke(double &chance, double &escape_chance,
 					  sint32 &uindex);
 	bool CanPlantNuke(double &chance, double &escape_chance);
-	bool CanSlaveRaid(double &success, double &death, 
+	bool CanSlaveRaid(double &success, double &death,
 					  sint32 &timer, sint32 &amount,
 					  sint32 &uindex);
-	bool CanSlaveRaid(double &success, double &death, 
+	bool CanSlaveRaid(double &success, double &death,
 					  sint32 &timer, sint32 &amount);
-	bool IsSlaveRaidPossible(const MapPoint &point, 
+	bool IsSlaveRaidPossible(const MapPoint &point,
 							 double &success, double &death, sint32 &timer, sint32 &amount,
 							 sint32 &uindex, bool &target_is_city, Unit &target_city, Unit &home_city);
 
@@ -233,8 +232,8 @@ public:
 
 	bool HasLeftMap() const;
 
-	void CurMinMovementPoints(double &cur) const; 
-	void MinMovementPoints(double &cur) const; 
+	void CurMinMovementPoints(double &cur) const;
+	void MinMovementPoints(double &cur) const;
 
 	bool CanBombard(const MapPoint &point);
 	bool CanBombard();
@@ -277,7 +276,7 @@ public:
 	void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const ;
 
 	bool CanMove() const;
-	
+
 	bool CanAdvertise() const;
 
 	bool CanBeachAssault();

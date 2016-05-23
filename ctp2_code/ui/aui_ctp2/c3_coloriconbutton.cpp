@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3_coloriconbutton.h"
 
@@ -26,7 +13,6 @@
 #include "pixelutils.h"
 #include "colorset.h"
 #include "CivPaths.h"
-
 
 #include "primitives.h"
 
@@ -76,7 +62,7 @@ c3_ColorIconButton::c3_ColorIconButton(
 	m_filename = NULL;
 
 	SetRect(&m_pictureRect, 0, 0, 0, 0);
-	
+
 	InitCommon(ldlBlock, TRUE);
 }
 
@@ -86,7 +72,7 @@ AUI_ERRCODE c3_ColorIconButton::Resize(sint32 width, sint32 height)
 
 	errcode = aui_Button::Resize(width, height);
 
-	if (errcode == AUI_ERRCODE_OK) 
+	if (errcode == AUI_ERRCODE_OK)
 		ResizePictureRect();
 
 	return errcode;
@@ -95,9 +81,7 @@ void c3_ColorIconButton::ResizePictureRect(void)
 {
 	sint32 destHeight, destWidth;
 
-
 	if (GetImage(0) && GetImage(0)->TheSurface()) {
-
 
 		sint32 pictureWidth = GetImage(0)->TheSurface()->Width();
 		sint32 pictureHeight = GetImage(0)->TheSurface()->Height();
@@ -110,31 +94,30 @@ void c3_ColorIconButton::ResizePictureRect(void)
 
 		if (m_shrinkToFit) {
 			double pictureRat = (double)pictureWidth / (double)pictureHeight;
-			
+
 			if (pictureRat < 1.0) {
-				
+
 				iconRect.right =  (sint32)((double)destHeight * pictureRat);
 				iconRect.bottom = destHeight;
 			} else {
-				
+
 				iconRect.right = destWidth;
 				iconRect.bottom = (sint32)((double)destWidth / pictureRat);
 			}
 		}
-		
+
 		if (buttonRect.right > iconRect.right)  {
 			OffsetRect(&iconRect, buttonRect.right/2 - iconRect.right/2, 0);
 		} else {
 			OffsetRect(&iconRect, iconRect.right/2 - buttonRect.right/2, 0);
 		}
-		
+
 		if (buttonRect.bottom > iconRect.bottom) {
 			OffsetRect(&iconRect, 0, buttonRect.bottom/2 - iconRect.bottom/2);
 		} else {
 			OffsetRect(&iconRect, 0, iconRect.bottom/2 - buttonRect.bottom/2);
 		}
 
-		
 		m_pictureRect = iconRect;
 	}
 }
@@ -148,12 +131,11 @@ void c3_ColorIconButton::SetIcon(MBCHAR *name)
 	m_filename = new MBCHAR[_MAX_PATH];
 
 
-
 	strcpy(m_filename, name);
 
 	if (strcmp(m_filename, ""))
 		SetImage(m_filename, 0);
-	else 
+	else
 		SetImage(NULL, 0);
 
 
@@ -193,14 +175,12 @@ c3_ColorIconButton::~c3_ColorIconButton()
 	delete [] m_filename;
 }
 
-
 AUI_ERRCODE c3_ColorIconButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
-
 
 	RECT rect = { 0, 0, m_width, m_height };
 
@@ -229,7 +209,6 @@ AUI_ERRCODE c3_ColorIconButton::DrawThis( aui_Surface *surface, sint32 x, sint32
 	}
 
 
-
 	pictureRect = rect;
 	InflateRect( &pictureRect, -1, -1 );
 	DrawImage(surface, &pictureRect, 0, AUI_IMAGEBASE_SUBSTATE_STATE);
@@ -250,29 +229,24 @@ void c3_ColorIconButton::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
 	{
 		if ( !GetWhichSeesMouse() ) {
-			
+
 			SetWhichSeesMouse( this );
-		
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 
-			
-			
-			
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-			
 			m_isRepeating = FALSE;
 
 			if ( !HandleGameSpecificLeftClick( this ) )
@@ -286,11 +260,9 @@ void c3_ColorIconButton::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -298,7 +270,6 @@ void c3_ColorIconButton::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 	else
 		MouseLDropOutside( mouseData );
 }
-
 
 void c3_ColorIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
@@ -310,21 +281,17 @@ void c3_ColorIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
-		
 		m_isRepeating = TRUE;
 		m_repeatCount = 0;
 		m_startWaitTime = mouseData->time;
@@ -338,7 +305,6 @@ void c3_ColorIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -347,29 +313,24 @@ void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 
-			
-			
-			
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-			
 			m_isRepeating = FALSE;
 
 			if ( !HandleGameSpecificLeftClick( this ) )
@@ -382,11 +343,9 @@ void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -396,23 +355,18 @@ void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void c3_ColorIconButton::MouseRDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( GetMouseOwnership() == this )
 	{
-		
+
 		ReleaseMouseOwnership();
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 	}
 }
-

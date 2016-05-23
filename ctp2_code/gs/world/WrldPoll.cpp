@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -210,7 +210,6 @@ void World::FloodCity(Cell *c)
 }
 
 
-
 void World::FloodArmies(Cell *c)
 {
 	Assert(c);
@@ -224,7 +223,6 @@ void World::FloodArmies(Cell *c)
 		}
 	}
 }
-
 
 void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
 {
@@ -310,7 +308,7 @@ void World::RemoveBeaches()
 	sint32	x, y;
 
 	Cell	*c ;
-	
+
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
 
@@ -357,7 +355,7 @@ void World::GWPhase(const sint32 phase)
 	const GlobalWarmingRecord* gwrec = GetGlobalWarmingDBRec();
 
 	double	baseProbability = 0.0;
-	
+
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
 
@@ -381,7 +379,7 @@ void World::GWPhase(const sint32 phase)
 					Assert(!g_theTerrainDB->Get(terrain)->GetMovementTypeShallowWater());
 					if (IsNextToWater(x, y) && !IsMountain(x, y))
 						baseProbability = gwrec->GetPollutionNextToOcean();
-					
+
 					newtype = ChangeType(baseProbability, terrain);
 					bool wasLand = IsLand(x,y) || IsMountain(x,y);
 
@@ -397,7 +395,7 @@ void World::GWPhase(const sint32 phase)
 							c->m_search_count = -3;
 							newtype = GetTerrainChangeType(&TerrainRecord::GetMovementTypeShallowWater);
 						}
-						
+
 						c->m_terrain_type = (sint8)newtype;
 						if(terrain != newtype)
 						{
@@ -554,7 +552,7 @@ void World::FloodRivers(void)
 
 	sint32 const    h = GetHeight();
 	sint32 const    w = GetWidth();
-	
+
 	for(y = 0; y < h; y++)
 	{
 		for(x = 0; x < w; x++)
@@ -596,7 +594,7 @@ void World::FloodRivers(void)
 				for(o = 0; o < 4; o++)
 				{
 					static MapPoint pnt;
-					
+
 					pnt.x = sint16(x+offset_pass2[o][0]);
 					pnt.y = sint16(y+offset_pass2[o][1]);
 
@@ -700,87 +698,87 @@ void World::RegenerateRivers()
 			if(tt == TERRAIN_FOREST) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 30;
-					
+
 			} else if(tt == TERRAIN_PLAINS) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 10;
-					
+
 			} else if(tt == TERRAIN_TUNDRA) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_GLACIER) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_GRASSLAND) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 20;
-					
+
 			} else if(tt == TERRAIN_DESERT) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = -10;
-					
+
 			} else if(tt == TERRAIN_SWAMP) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 40;
-					
+
 			} else if(tt == TERRAIN_JUNGLE) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 30;
-					
+
 			} else if(tt == TERRAIN_MOUNTAIN) {
 				map[y * m_size.x + x] = k_MOUNTAIN_HEIGHT;
 				wetmap[y * m_size.x + x] = 10;
-					
+
 			} else if(tt == TERRAIN_HILL) {
 				map[y * m_size.x + x] = k_HILL_HEIGHT;
 				wetmap[y * m_size.x + x] = 10;
-					
+
 			} else if(tt == TERRAIN_WATER_SHALLOW) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_DEEP) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_VOLCANO) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_BEACH) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_SHELF) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_TRENCH) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WATER_RIFT) {
 				map[y * m_size.x + x] = k_WATER_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_DEAD) {
 				map[y * m_size.x + x] = k_GROUND_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_BROWN_HILL) {
 				map[y * m_size.x + x] = k_HILL_HEIGHT;
 				wetmap[y * m_size.x + x] = -10;
-					
+
 			} else if(tt == TERRAIN_BROWN_MOUNTAIN) {
 				map[y * m_size.x + x] = k_MOUNTAIN_HEIGHT;
 				wetmap[y * m_size.x + x] = -10;
-					
+
 			} else if(tt == TERRAIN_WHITE_HILL) {
 				map[y * m_size.x + x] = k_HILL_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
-					
+
 			} else if(tt == TERRAIN_WHITE_MOUNTAIN) {
 				map[y * m_size.x + x] = k_MOUNTAIN_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;

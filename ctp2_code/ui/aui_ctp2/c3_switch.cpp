@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3_switch.h"
 
@@ -16,7 +14,6 @@
 #include "ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
-
 
 c3_Switch::c3_Switch(
 	AUI_ERRCODE *retval,
@@ -36,7 +33,6 @@ c3_Switch::c3_Switch(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 c3_Switch::c3_Switch(
@@ -65,14 +61,13 @@ c3_Switch::c3_Switch(
 }
 
 
-
 AUI_ERRCODE c3_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
+
 	sint32		bevelWidth=k_C3_SWITCH_DEFAULT_BEVELWIDTH;
 	if (block->GetAttributeType( k_C3_SWITCH_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_SWITCH_LDL_BEVELWIDTH );
@@ -80,7 +75,6 @@ AUI_ERRCODE c3_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return InitCommon(bevelWidth);
 }
-
 
 
 AUI_ERRCODE c3_Switch::InitCommon( sint32 bevelWidth )
@@ -91,13 +85,12 @@ AUI_ERRCODE c3_Switch::InitCommon( sint32 bevelWidth )
 }
 
 
-
 AUI_ERRCODE c3_Switch::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -116,14 +109,12 @@ AUI_ERRCODE c3_Switch::DrawThis(
 	if (m_bevelWidth > 0)
 		primitives_BevelRect16( surface, &rect, m_bevelWidth, (IsOn() ? 1 : 0), 16, 16 );
 
-	
 	RECT down = rect;
 	down.left += 2;
 	down.top += 2;
 	DrawThisText(
 		surface,
 		IsOn() ? &down : &rect );
-
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );

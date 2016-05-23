@@ -1,12 +1,4 @@
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #include "TilesControlPanel.h"
 

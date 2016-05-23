@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -33,12 +33,11 @@
 //   question. (May 20th 2006 Martin Gühmann)
 // - Corrected delete operator for array.
 // - Improved settle radius determination on city growth.
-// 
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "settlemap.h"
-
 
 #include "boundingrect.h"
 #include "Cell.h"
@@ -51,7 +50,7 @@
 #include "StrategyRecord.h"
 #include "TerrainRecord.h"
 #include "UnitRecord.h"
-#include <utility> 
+#include <utility>
 #include <vector>
 #include "World.h"		            // g_theWorld
 
@@ -62,9 +61,7 @@ namespace
 
 SettleMap SettleMap::s_settleMap;
 
-
 MapGrid<double>::MapGridArray MapGrid<double>::s_scratch;
-
 
 SettleMap::SettleMap()
 :
@@ -77,7 +74,7 @@ SettleMap::SettleMap()
 //
 // Name       : SettleMap::ComputeSettleValue
 //
-// Description: Calculates a settling score for the given position, which is 
+// Description: Calculates a settling score for the given position, which is
 //              independent of unit abilities to settle at a certain location.
 //              The settle score is the sum of scores of tiles in a radius of
 //              two tiles around the given position.
@@ -97,7 +94,7 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 	sint32 score = 0;
 	RadiusIterator it(pos, k_minimum_settle_city_size);
 
-	for (it.Start(); !it.End(); it.Next()) 
+	for (it.Start(); !it.End(); it.Next())
 	{
 		const Cell * cell = g_theWorld->GetCell(it.Pos());
 		if (!cell->GetCityOwner())
@@ -118,7 +115,6 @@ void SettleMap::Cleanup()
     m_invalidCells.Resize(0, 0, false);
 }
 
-
 void SettleMap::Initialize()
 {
 	size_t const    x_size  = g_theWorld->GetWidth();
@@ -127,7 +123,7 @@ void SettleMap::Initialize()
 	MapPoint xy_pos;
 
 	m_settleValues.Clear();
-	m_settleValues.Resize(x_size, y_size, 1); 
+	m_settleValues.Resize(x_size, y_size, 1);
 	m_invalidCells.Resize(x_size, y_size, 0);
 
 	for (rc_pos.x = 0; static_cast<size_t>(rc_pos.x) < x_size; rc_pos.x++)
@@ -145,11 +141,11 @@ void SettleMap::Initialize()
 				   ( (xy_pos.y >= k_minimum_settle_city_size) &&
 				     (xy_pos.y + k_minimum_settle_city_size <= y_size)
                    )
-                 ) 
+                 )
                  &&
                  (  g_theWorld->IsXwrap() ||
 					( (xy_pos.x >= k_minimum_settle_city_size) &&
-					  (xy_pos.x + k_minimum_settle_city_size <= (x_size * 2)) 
+					  (xy_pos.x + k_minimum_settle_city_size <= (x_size * 2))
                     )
                  )
                )
@@ -177,16 +173,15 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	/// This does not account for future growth (city spacing may become too tight), but it also
 	/// prevents any overlap.
 	radius += radius + 1;
-	
+
 	// Mark tiles near to the grown city as not worth to settle at all
 	RadiusIterator it(cityPos, radius);
-	for (it.Start(); !it.End(); it.Next()) 
+	for (it.Start(); !it.End(); it.Next())
 	{
 		MapPoint    clearPos = it.Pos();
 		m_invalidCells.Set(clearPos.x, clearPos.y, TRUE);
 	}
 
-	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32                  min_settle_distance = 0;
 	strategy.GetMinSettleDistance(min_settle_distance);
@@ -194,13 +189,13 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	// Mark tiles further away as having only half the usual value
 	/// \todo Optimise using CircleIterator, to skip computing values for the already invalidated tiles.
 	RadiusIterator settleIt(cityPos, min_settle_distance);
-	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
+	for (settleIt.Start(); !settleIt.End(); settleIt.Next())
 	{
 		MapPoint        claimPos    = settleIt.Pos();
 		double const    new_value   = ComputeSettleValue(claimPos) * 0.5;
 		m_settleValues.SetGridValue(claimPos, new_value);
 	}
-	
+
 	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
 }
 
@@ -289,7 +284,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	{
 		unit = player_ptr->m_all_units->Access(i);
 		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
-		
+
 		Assert(rec);
 		if(!rec) continue;
 
@@ -341,7 +336,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 		}
 
-
 		if(!CanSettlePos(rc_pos))
 			continue;
 
@@ -379,22 +373,18 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 
 	targets.sort(std::greater<SettleTarget>());
 
-	
 	sint16 max_water_cont = g_theWorld->GetMaxWaterContinent() - g_theWorld->GetMinWaterContinent();
 	sint16 max_land_cont  = g_theWorld->GetMaxLandContinent () - g_theWorld->GetMinLandContinent ();
 
-	
 	std::vector<sint16> water_continent_count(max_water_cont, 0);
 	std::vector<sint16>  land_continent_count(max_land_cont,  0);
 	bool   is_land;
 	sint16 cont;
 
-	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32 min_settle_distance = 0;
 	(void) strategy.GetMinSettleDistance(min_settle_distance);
 
-	
 	SettleMap::SettleTargetList::iterator iter  = targets.begin();
 	SettleMap::SettleTargetList::iterator tmp_iter;
 
@@ -444,7 +434,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 #endif _DEBUG
 		Assert(cont >= 0);
 
-		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||  
+		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||
 			(!is_land && (water_continent_count[cont] >= k_targets_per_continent)))
 		{
 			iter = targets.erase(iter);
@@ -514,7 +504,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	{
 		unit = player_ptr->m_all_units->Access(i);
 		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
-		
+
 		Assert(rec);
 		if(!rec) continue;
 
@@ -566,7 +556,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 		}
 
-
 		if(!CanSettlePos(rc_pos))
 			continue;
 
@@ -607,18 +596,15 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	sint16 max_water_cont = g_theWorld->GetMaxWaterContinent() - g_theWorld->GetMinWaterContinent();
 	sint16 max_land_cont  = g_theWorld->GetMaxLandContinent () - g_theWorld->GetMinLandContinent ();
 
-	
 	std::vector<sint16> water_continent_count(max_water_cont, 0);
 	std::vector<sint16>  land_continent_count(max_land_cont,  0);
 	bool   is_land;
 	sint16 cont;
 
-	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32 min_settle_distance = 0;
 	(void) strategy.GetMinSettleDistance(min_settle_distance);
 
-	
 	SettleMap::SettleTargetList::iterator iter  = targets.begin();
 	SettleMap::SettleTargetList::iterator tmp_iter;
 
@@ -635,7 +621,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 #endif _DEBUG
 		Assert(cont >= 0);
 
-		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||  
+		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||
 			(!is_land && (water_continent_count[cont] >= k_targets_per_continent)))
 		{
 			iter = targets.erase(iter);
@@ -689,12 +675,10 @@ bool SettleMap::CanSettlePos(const MapPoint & rc_pos) const
     return !m_invalidCells.Get(rc_pos.x, rc_pos.y);
 }
 
-
 void SettleMap::SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle)
 {
     m_invalidCells.Set(rc_pos.x, rc_pos.y, !can_settle);
 }
-
 
 double SettleMap::GetValue(const MapPoint &rc_pos) const
 {

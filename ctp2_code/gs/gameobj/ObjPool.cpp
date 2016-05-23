@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,8 +37,7 @@
 #define k_OBJPOOL_VERSION_MAJOR		0
 #define k_OBJPOOL_VERSION_MINOR		0
 
-
-ObjPool::ObjPool(uint32 it) 
+ObjPool::ObjPool(uint32 it)
 :
     m_id_type   (it),
     m_nObjs     (0)
@@ -60,13 +59,13 @@ ObjPool::~ObjPool()
 uint32 ObjPool::NewKey(uint32 t)
 {
 	ID  tmpId;
-	
+
 	do
 	{
 		tmpId.m_id = (t | (m_nObjs & k_ID_KEY_MASK));
 		++m_nObjs;
 	} while (IsValid(tmpId));   // exists already
-	
+
 	return tmpId.m_id;
 }
 
@@ -92,19 +91,19 @@ void ObjPool::Insert(GameObj *p)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Inserting object id 0x%lx\n", p->m_id));
 	Assert(p->m_id != 0);
-	GameObj_Insert(&m_table[Key(p->m_id)], p); 
+	GameObj_Insert(&m_table[Key(p->m_id)], p);
 }
 
 void ObjPool::Del(GameObj *p)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id 0x%lx\n", p->m_id));
-	GameObj_Delete(&m_table[Key(p->m_id)], p->m_id); 
+	GameObj_Delete(&m_table[Key(p->m_id)], p->m_id);
 }
 
-void ObjPool::Del(const ID &id) 
+void ObjPool::Del(const ID &id)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id 0x%lx\n", (uint32)id));
-	GameObj_Delete(&m_table[Key(id.m_id)], id.m_id); 
+	GameObj_Delete(&m_table[Key(id.m_id)], id.m_id);
 }
 
 sint32 ObjPool::Num(void) const
@@ -125,7 +124,7 @@ uint32 ObjPool_ObjPool_GetVersion(void)
 
 void ObjPool::Serialize(CivArchive &archive)
 {
-	if (archive.IsStoring()) 
+	if (archive.IsStoring())
 	{
 		archive.StoreChunk((uint8 *)&m_id_type, ((uint8 *)&m_nObjs)+sizeof(m_nObjs));
 	}
