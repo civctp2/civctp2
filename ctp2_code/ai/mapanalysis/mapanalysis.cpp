@@ -61,7 +61,7 @@
 #include <limits>
 
 template<>
-MapGrid < sint32 >::MapGridArray MapGrid < sint32 >::s_scratch;
+MapGrid<sint32>::MapGridArray MapGrid<sint32>::s_scratch = {};
 
 MapAnalysis MapAnalysis::s_mapAnalysis;
 
