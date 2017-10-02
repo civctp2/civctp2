@@ -31,34 +31,34 @@
 // - Unloaded icons. These were causing an exit-popup in the debug version.
 // - Turn display for capitalization and infrastructure does not show
 //   anymore the number of turns to completion in the list box of the build
-//   manager and city manager, by Martin Gühmann.
+//   manager and city manager, by Martin Gï¿½hmann.
 // - Turn display on the turn button under the image button is disabled for
-//   capitalization and infrastructure as well, by Martin Gühmann.
+//   capitalization and infrastructure as well, by Martin Gï¿½hmann.
 // - Rush buy costs aren't shown anymore for capitalization and
-//   infrastructure, by Martin Gühmann.
+//   infrastructure, by Martin Gï¿½hmann.
 // - Rush buy costs aren't shown anymore for items that aren't at the front
-//   of the build queue, by Martin Gühmann.
+//   of the build queue, by Martin Gï¿½hmann.
 // - Turn count on the turn count button is now updated when another item is
-//   selected than the first item of the build queue, by Martin Gühmann.
+//   selected than the first item of the build queue, by Martin Gï¿½hmann.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
 // - Net food and net production are now displayed insted of gross food and
 //   gross production. So it is done for science and gold. This helps the
 //   player better to know how much food is needed, as a negative amount is
-//   displayed if the city starves. - April 6th 2005 Martin Gühmann
+//   displayed if the city starves. - April 6th 2005 Martin Gï¿½hmann
 // - Added OptimizeSpecialists function for specialists optimisation option.
-//   - April 7th 2005 Martin Gühmann
+//   - April 7th 2005 Martin Gï¿½hmann
 // - The Project method now updates also the sprite of the city to support
 //   new turns to next pop feature, when you change the specialist
 //   distribution, unfortunatly it does work as exspected.
-//   - April 23rd 2005 Martin Gühmann
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin Gühmann)
-// - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+//   - April 23rd 2005 Martin Gï¿½hmann
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gï¿½hmann
+// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standartized code (May 21st 2006 Martin Gï¿½hmann)
+// - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin Gï¿½hmann)
+// - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin Gï¿½hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 // - Completely redesigned the window. Removed all the tabs, and added them
 //	 to sections of the window that are always visible. (28-Mar-2009 Maq)
 //
@@ -102,7 +102,7 @@
 #include "colorset.h"               // g_colorSet
 
 #include "BldQue.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Happy.h"
 #include "PopRecord.h"				// g_thePopDB
 #include "UnitData.h"
@@ -137,7 +137,7 @@ extern ProjectFile                  *g_GreatLibPF;
 
 #include "network.h"
 
-#include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include <algorithm>    // std::fill
 #include "ArmyPool.h"	// g_armyPool
 #include "buildingutil.h"
@@ -263,7 +263,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "OptimizeSpecialistButton"))
 	{
-		// Added by Martin Gühmann for specialist optimization option:
+		// Added by Martin Gï¿½hmann for specialist optimization option:
 		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
@@ -388,7 +388,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			Assert(m_unitButtons[unitButton]);
 			if(m_unitButtons[unitButton]) {
 				m_unitButtons[unitButton]->Enable(FALSE);
-				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)unitButton);
+				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)(intptr_t)unitButton);
 			}
 
 			unitButton++;
@@ -805,7 +805,7 @@ void CityWindow::Update()
 	}
 
 	if(m_globalFood) {
-		// Display net food instead of gross food. - Martin Gühmann
+		// Display net food instead of gross food. - Martin Gï¿½hmann
 		sprintf(buf, "%d", m_cityData->GetNetCityFood());
 		m_globalFood->SetText(buf);
 	}
@@ -821,7 +821,7 @@ void CityWindow::Update()
 	}
 
 	if(m_globalProduction) {
-		// Display net production instead of gross production - Martin Gühmann
+		// Display net production instead of gross production - Martin Gï¿½hmann
 		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
 	}
@@ -884,7 +884,7 @@ void CityWindow::UpdateBuildTabs()
 	MBCHAR buf[20];
 	if(turnCountButton) {
 		sint32 turns = m_cityData->HowMuchLonger();
-		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
+		//Added by Martin Gï¿½hmann to disable the turn count display for capitalization and infrastructure
 		if(turns >= 0 && turns < 0x7fffffff
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
@@ -1021,7 +1021,7 @@ void CityWindow::UpdateCostsGives()
 
 	if(m_cityData->GetBuildQueue()->GetLen() < 1
 	|| m_cityData->AlreadyBoughtFront()
-	//Added by Martin Gühmann to disable the rush buy cost in the case of infrastructure and capitalization
+	//Added by Martin Gï¿½hmann to disable the rush buy cost in the case of infrastructure and capitalization
 	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
 	// Make sure that costs aren't displayed if the first item is not selected
@@ -1457,21 +1457,21 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	Governor & governor = Governor::GetGovernor(playerId);
 
-	Timer t;
+/*	Timer t;
 	t.start();
 
 	DPRINTF(k_DBG_AI, ("\n"));
 	DPRINTF(k_DBG_AI, ("// ADJUST SPECIALIST SETTINGS -- Turn %d\n",   g_player[playerId]->GetCurRound()));
 	DPRINTF(k_DBG_AI, ("//                               Player %d\n", playerId));
-
+*/
 	g_player[playerId]->PreResourceCalculation(s_cityWindow->m_cityData);
 	governor.AssignPopulation(s_cityWindow->m_cityData);
 
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %f ms\n", t.getElapsedTimeInMilliSec()));
+/*	DPRINTF(k_DBG_AI, ("//  elapsed time = %f ms\n", t.getElapsedTimeInMilliSec()));
 	DPRINTF(k_DBG_AI, ("\n"));
 
 	t.stop();
-
+*/
 	s_cityWindow->Project();
 
 	s_cityWindow->Update();
@@ -1572,7 +1572,7 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	}
 	s_cityWindow->UpdateBuildTabButtons();
 
-	//Added by Martin Gühmann to update the turn count display of the image button
+	//Added by Martin Gï¿½hmann to update the turn count display of the image button
 	ctp2_Button *	turnCountButton = (ctp2_Button *) aui_Ldl::GetObject
 		(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton");
 
@@ -1584,7 +1584,7 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 						    	  ?	s_cityWindow->m_cityData->HowMuchLonger()
 							      : s_cityWindow->m_cityData->HowMuchLonger(node->m_cost);
 
-		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
+		//Added by Martin Gï¿½hmann to disable the turn count display for capitalization and infrastructure
 		MBCHAR buf[20];
 		if ((turns >= 0)											&&
 			(turns < 0x7fffffff)									&&
@@ -1756,7 +1756,7 @@ void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlo
 					}
 				}
 				char buf[20];
-				//Added by Martin Gühmann to remove number of turn
+				//Added by Martin Gï¿½hmann to remove number of turn
 				//display in the Build Manager and City Manager
 				//if infrastructure or capilization is displayed.
 				if(turns < 0 || turns == 0x7fffffff
@@ -2282,13 +2282,13 @@ void CityWindow::FillHappinessList()
 		{
 			ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
 			happyAmount->SetDrawCallbackAndCookie
-			    (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawHappyIcons, (void *)(intptr_t)happies[i].amount, false);
 		}
 		else
 		{
 			ctp2_Static *   unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
 			unhappyAmount->SetDrawCallbackAndCookie
-			    (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawUnhappyIcons, (void *)(intptr_t)happies[i].amount, false);
 		}
 
 		char buf[20];
@@ -2310,7 +2310,7 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 								  RECT &rect,
 								  void *cookie )
 {
-	sint32 amount = (sint32)cookie;
+	sint32 amount = (intptr_t)cookie;
 	aui_Image *im = s_cityWindow->m_unhappyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2351,7 +2351,7 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 								  void *cookie )
 {
 
-	sint32 amount = (sint32)cookie;
+	sint32 amount = (intptr_t)cookie;
 	aui_Image *im = s_cityWindow->m_happyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2389,7 +2389,7 @@ static int cw_comparePollutionItems(const void *item1, const void *item2)
 	ctp2_ListItem *i1 = *(ctp2_ListItem **)item1;
 	ctp2_ListItem *i2 = *(ctp2_ListItem **)item2;
 
-	return (sint32)i1->GetUserData() - (sint32)i2->GetUserData();
+	return (intptr_t)i1->GetUserData() - (intptr_t)i2->GetUserData();
 }
 
 void CityWindow::FillPollutionList()
@@ -2438,7 +2438,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",m_cityData->GetPopulationPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)m_cityData->GetPopulationPollution());
+			item->SetUserData((void *)(intptr_t)m_cityData->GetPopulationPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2454,7 +2454,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",m_cityData->GetProductionPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)m_cityData->GetProductionPollution());
+			item->SetUserData((void *)(intptr_t)m_cityData->GetProductionPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2501,7 +2501,7 @@ void CityWindow::FillPollutionList()
 					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 					sprintf(interp,"%d",(sint32) value);
 					sublabel->SetText(interp);
-					item->SetUserData((void *)(sint32)value);
+					item->SetUserData((void *)(intptr_t)value);
 					allAbsItems[numAbsItems++] = item;
 				}
 			}
@@ -2567,7 +2567,7 @@ void CityWindow::UnitButtonCallback(aui_Control *control, uint32 action, uint32 
 	Assert(s_cityWindow);
 	if(!s_cityWindow) return;
 
-	sint32 which = (sint32)cookie;
+	sint32 which = (intptr_t)cookie;
 	ctp2_Button *button = s_cityWindow->m_unitButtons[which];
 	Assert(button);
 	if(button) {

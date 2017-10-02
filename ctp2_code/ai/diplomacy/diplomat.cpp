@@ -71,7 +71,7 @@
 #include "dynarr.h"
 #include "World.h"
 #include "Cell.h"
-#include "gold.h"
+#include "Gold.h"
 #include "AdvanceListRecord.h"
 #include "AdvanceRecord.h"
 #include "UnitData.h"
@@ -96,7 +96,7 @@
 #include "ctpai.h"
 #include "GSLogs.h"
 #include "profileDB.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "CivilisationRecord.h"
 #include "Civilisation.h"
 #include "TurnCnt.h"            // g_turn
@@ -113,6 +113,11 @@
 #include "gfx_options.h"
 #include "net_diplomacy.h"
 #include "RandGen.h"            // g_rand
+
+#ifdef __linux__
+#include "../ctp/cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 extern sint32 g_saveFileVersion;
 

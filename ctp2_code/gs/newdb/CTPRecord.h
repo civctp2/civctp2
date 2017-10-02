@@ -53,7 +53,7 @@ public:
 #if defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
     enum { INDEX_INVALID = -1 }; // Compiler bug workaround
 #else
-    static sint32 const INDEX_INVALID   = -1;
+    static sint32 const INDEX_INVALID;
 #endif
 
 	CTPRecord()

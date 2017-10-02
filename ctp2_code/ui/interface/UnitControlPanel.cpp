@@ -26,8 +26,8 @@
 //
 // - Option added to select which order buttons are displayed for an army.
 // - Added unit display name.
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gï¿½hmann)
+// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gï¿½hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -515,13 +515,13 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	sprintf(valueString, "%d", (sint32)(unit.GetDBRec()->GetFirepower()));
 	m_singleSelectionFirepower->SetText(valueString);
 
-	m_singleSelectionFuel->SetDrawCallbackAndCookie(FuelBarDrawCallback, (void *)unit.m_id);
+	m_singleSelectionFuel->SetDrawCallbackAndCookie(FuelBarDrawCallback, (void *)(uintptr_t)unit.m_id);
 
 	m_singleSelectionHealth->SetDrawCallbackAndCookie(
 		HealthBarActionCallback, reinterpret_cast<void*>(unit.m_id));
 
 	if(m_curCargo >= 0) {
-		m_singleSelectionIcon->SetDrawCallbackAndCookie(DrawCargoCallback, (void *)unit.m_id, false);
+		m_singleSelectionIcon->SetDrawCallbackAndCookie(DrawCargoCallback, (void *)(uintptr_t)unit.m_id, false);
 		if(cargo > 0) {
 			m_singleSelectionIcon->SetImageMapCallback(TransportImageCallback, (void *)this);
 		} else {
@@ -601,7 +601,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(
 					MultiButtonActionCallback, &m_multiPair[multiIndex]);
 				if(army.IsValid() && army.Num() == 1) {
-					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)army[0].m_id);
+					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)(uintptr_t)army[0].m_id);
 				} else {
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 				}
@@ -670,7 +670,7 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 			if(unitIconName && strcmp(unitIconName, "NULL")) {
 				m_armySelectionButton[armyIndex]->ExchangeImage(0, 0,
 																unitIconName);
-				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)army[armyIndex].m_id);
+				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)(uintptr_t)army[armyIndex].m_id);
 			} else {
 				m_armySelectionButton[armyIndex]->ExchangeImage(0, 0, NULL);
 				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, NULL);
@@ -742,7 +742,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 						butt->SetImage(icon, 1);
 						butt->Enable(TRUE);
 						m_transportSelectionCargo[i] = cargoList->Access(i).m_id;
-						m_transportSelectionHealth[i]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)cargoList->Access(i).m_id);
+						m_transportSelectionHealth[i]->SetDrawCallbackAndCookie(HealthBarActionCallback, (void *)(uintptr_t)cargoList->Access(i).m_id);
 					}
 				}
 			}
@@ -1031,7 +1031,7 @@ void UnitControlPanel::NextUnitButtonActionCallback(aui_Control *control,
 AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 	aui_Surface *surface, RECT &rect, void *cookie)
 {
-	Unit        unit        (reinterpret_cast<uint32>(cookie));
+	Unit        unit        ((uint32_t)((uintptr_t)cookie));
 
 	AUI_ERRCODE errorCode =
 		g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
@@ -1070,7 +1070,7 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static *control,
  												  aui_Surface *surface, RECT &rect, void *cookie)
 {
-	Unit        u  (reinterpret_cast<uint32>(cookie));
+	Unit        u  ((uint32)(uintptr_t)(cookie));
 	AUI_ERRCODE errCode = g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 
 	if(errCode != AUI_ERRCODE_OK)
@@ -1191,7 +1191,7 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static *control,
 										 RECT &rect,
 										 void *cookie)
 {
-	Unit theTransport   (reinterpret_cast<uint32>(cookie));
+	Unit theTransport   ((uint32)(uintptr_t)(cookie));
 	if (!theTransport.IsValid())
 		return AUI_ERRCODE_OK;
 

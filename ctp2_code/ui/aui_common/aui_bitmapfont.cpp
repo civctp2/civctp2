@@ -42,8 +42,8 @@
 //  add
 //      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code (May 21th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@
 #if defined(_JAPANESE)
 #include "japanese.h"
 #endif
-
+#pragma GCC optimize 0
 namespace
 {
     bool    SUPPORT_MBCS      = false;
@@ -237,7 +237,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	if ( g_ui->GetBitmapFontResource()->FindFile( fullPath, m_ttffile ) )
 		strncpy( m_ttffile, fullPath, MAX_PATH );
 
-	sint32 error = TT_Open_Face(s_ttEngine, m_ttffile, &m_ttFace);
+	sint32 error = TT_Open_Face(s_ttEngine, CI_FixName(m_ttffile), &m_ttFace);
 	Assert( error == 0 );
 	if ( error ) return AUI_ERRCODE_HACK;
 

@@ -43,8 +43,9 @@ private:
 #endif
 
 public:
-	FaultGenerator() { m_refCount = 0; }
-
+	FaultGenerator();
+	virtual ~FaultGenerator();
+	
 #if !defined(USE_COM_REPLACEMENT)
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
@@ -54,7 +55,6 @@ public:
 	                     IC3Rand *randgen,
 	                     const double *settings, sint32 numSettings);
 #else
-	virtual ~FaultGenerator();
 	virtual uint32 AddRef();
 	virtual uint32 Release();
 	virtual void Generate(sint8 *map, sint32 width, sint32 height,

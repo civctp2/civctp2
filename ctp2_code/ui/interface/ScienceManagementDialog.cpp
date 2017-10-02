@@ -27,7 +27,7 @@
 // - Display the cost for the player, not the base advancement cost.
 // - Start the great library with the current research project of the player.
 // - Reduced the length of the generated advance effect string.
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -477,7 +477,7 @@ AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control
 	colorRect.bottom	-= 1;
 
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
-		g_colorSet->GetPlayerColor(reinterpret_cast<sint32>(cookie)), 0));
+		g_colorSet->GetPlayerColor(reinterpret_cast<intptr_t>(cookie)), 0));
 }
 
 AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *control,
@@ -490,7 +490,7 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 	colorRect.right		-= 1;
 	colorRect.bottom	-= 1;
 
-	sint32 index = reinterpret_cast<sint32>(cookie);
+	sint32 index = reinterpret_cast<intptr_t>(cookie);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
@@ -513,9 +513,9 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item1->GetUserData()));
+		reinterpret_cast<intptr_t>(item1->GetUserData()));
 	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item2->GetUserData()));
+		reinterpret_cast<intptr_t>(item2->GetUserData()));
 
 
 	if(!column || ((column != g_selected_item->GetVisiblePlayer()) &&
@@ -554,7 +554,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	ctp2_ListItem * item    = listbox ? (ctp2_ListItem *)listbox->GetSelectedItem() : NULL;
 	if (!item) return;
 
-	sint32          index   = reinterpret_cast<sint32>(item->GetUserData());
+	sint32          index   = reinterpret_cast<intptr_t>(item->GetUserData());
 
 	MBCHAR givesText[k_MAX_GL_ENTRY];
 	MBCHAR linkText[k_MAX_GL_ENTRY];

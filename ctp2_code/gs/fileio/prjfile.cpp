@@ -116,10 +116,10 @@ void * mapFile(char const *path, long *size, PFPath &pfp)
 {
     void *ptr;
     struct stat tmpstat = { 0 };
-    if (stat(path, &tmpstat) != 0) {
+    if (stat(CI_FixName(path), &tmpstat) != 0) {
     	return NULL;
     }
-    int fd = open(path, O_RDONLY);
+    int fd = open(CI_FixName(path), O_RDONLY);
     if (fd < 0) {
         return NULL;
     }
@@ -383,7 +383,7 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
     DIR *dir;
     struct dirent *dent = 0;
     struct stat tmpstat;
-    dir = opendir(m_paths[path].dos_path);
+    dir = opendir(CI_FixName(m_paths[path].dos_path));
     if (!dir)
 #endif
     {
@@ -567,7 +567,7 @@ int ProjectFile::addPath_ZMS(char const * path)
         (mapFile(path, &fsize, m_paths[pathnum])
         );
 #endif
-    if (fbase == NULL) {
+if (fbase == NULL) {
         sprintf(m_error_string, "Could not open file \"%s\"", path);
         return(0);
     }

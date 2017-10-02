@@ -28,12 +28,12 @@
 // - Repaired memory leaks.
 // - Reimplemented ** as vector of *, to make it less error prone.
 // - Load default strings if they are missing in the database so that mods
-//   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
+//   also have a full set of strings. (Jan 30th 2006 Martin Gï¿½hmann)
 // - If a nested import occurs, it is ignored instead of canceling the
-//   string loading. (Jan 30th 2006 Martin Gühmann)
+//   string loading. (Jan 30th 2006 Martin Gï¿½hmann)
 // - Added export method so that the string database in the system can be
-//   written to one textfile. Only experiental. (Jan 30th 2006 Martin Gühmann)
-// - Loading of default strings ignores now scenario paths. (9-Apr-2007 Martin Gühmann)
+//   written to one textfile. Only experiental. (Jan 30th 2006 Martin Gï¿½hmann)
+// - Loading of default strings ignores now scenario paths. (9-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -100,10 +100,13 @@ size_t ComputeHashIndex(MBCHAR const * id)
 			// add a character
 			hash += (unsigned char)(*p++);
 			// rotate hash
-			if ((short)hash >= 0)
+			//if ((short)hash >= 0)
+			if((hash&0x8000)) {	//SEB Pandora
 				hash <<= 1;
-			else
-				hash <<= 1, ++hash;
+				++hash;
+			} else {
+				hash <<= 1;
+			}
 		}
 #endif
 		return static_cast<size_t>(hash % STRDB_NUM_HEADS);
@@ -270,7 +273,8 @@ bool StringDB::AddStrNode
 
 bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 {
-	return GetStrNode(GetHead(get_id), get_id, new_text);
+	StringRecord const * tmp = GetHead(get_id);
+	return GetStrNode(tmp, get_id, new_text);
 }
 
 //----------------------------------------------------------------------------

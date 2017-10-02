@@ -27,18 +27,18 @@
 //
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin Gï¿½hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue no cost or turns are shown anymore, by Martin Gühmann.
+//   build queue no cost or turns are shown anymore, by Martin Gï¿½hmann.
 // - Rush buy button should be disabled when it is not the player's turn
 //   unfortunatly the button state is not updated on the end turn event.
 // - Made update of rush buy button possible when (only) the gold of the
 //   player has changed.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gühmann)
-// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gühmann)
-// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin Gühmann)
+// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gï¿½hmann)
+// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gï¿½hmann)
+// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -366,7 +366,7 @@ CityData *CityControlPanel::GetSelectedCity()
 	ctp2_ListItem *selItem = (ctp2_ListItem *)m_cityListDropDown->GetListBox()->GetSelectedItem();
 	if(!selItem) return NULL;
 	Unit u;
-	u.m_id = (uint32)selItem->GetUserData();
+	u.m_id = (uintptr_t)selItem->GetUserData();
 	if(!u.IsValid()) return NULL;
 	return u.CD();
 }
@@ -502,7 +502,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_currentItem		= head ? head->m_type : -1;
 	m_currentTurns		= turns;
 	m_buildItemProgressBar->SetDrawCallbackAndCookie
-		(ProgressDrawCallback, (void *) m_currentCity.m_id);
+		(ProgressDrawCallback, (void *) (uintptr_t)m_currentCity.m_id);
 
 	if(numberOfItems < 1) {
 		ClearBuildItem();
@@ -826,7 +826,7 @@ void CityControlPanel::SelectedCity()
 	for(i = 0; i < numberOfItems; i++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
 		if(item) {
-			Unit thisCity; thisCity.m_id = (uint32)item->GetUserData();
+			Unit thisCity; thisCity.m_id = (uintptr_t)item->GetUserData();
 			if(thisCity.m_id == newCity.m_id) {
 				m_cityListDropDown->SetSelectedItem(i);
 				break;
@@ -870,7 +870,7 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 												   RECT &rect,
 												   void *cookie)
 {
-	Unit city; city.m_id = (uint32)cookie;
+	Unit city; city.m_id = (uintptr_t)cookie;
 
 	g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 

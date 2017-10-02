@@ -29,6 +29,8 @@ extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
 
+extern BOOL g_SDL_flags;
+
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 

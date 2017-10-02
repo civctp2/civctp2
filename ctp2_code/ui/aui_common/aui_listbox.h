@@ -269,7 +269,7 @@ protected:
 
 	void SendSelectCallback(
 		AUI_LISTBOX_ACTION action = AUI_LISTBOX_ACTION_SELECT,
-		uint32 data = 0 );
+		uintptr_t data = 0 );
 
 	AUI_ERRCODE	StartSelecting( void );
 	friend class aui_DropDown;

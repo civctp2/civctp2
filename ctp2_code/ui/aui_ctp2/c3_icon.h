@@ -2,6 +2,8 @@
 #define __C3_ICON_H__
 
 #include "c3_static.h"
+#include "colorset.h"
+#include "tileset.h"
 
 class aui_Surface;
 

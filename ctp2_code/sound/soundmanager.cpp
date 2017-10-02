@@ -1015,6 +1015,15 @@ void SoundManager::StupidPlaySound(const sint32 &soundID)
 	}
 }
 
+void
+SoundManager::PlaySound(const MBCHAR *fullFilename, const bool &bNoWait)
+{
+#if !defined(USE_SDL)
+	PlaySound(fullname, NULL,
+	          (SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
+#endif
+}
+
 void SoundManager::ReleaseSoundDriver()
 {
 	if (m_usePlaySound) return;

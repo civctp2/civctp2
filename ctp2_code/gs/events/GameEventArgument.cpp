@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,17 +49,17 @@
 #include "SlicFrame.h"
 #include "GameEventManager.h"    // g_gevManager
 
-GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid)
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg, bool isAlwaysValid)
 {
-	Init(type, vl, isAlwaysValid);
+	Init(type, &arg, isAlwaysValid);
 }
-
-GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, ...)
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const sint32 arg, bool isAlwaysValid)
 {
-	va_list vl;
-	va_start(vl, type);
-	Init(type, &vl);
-	va_end(vl);
+	Init(type, &arg, isAlwaysValid);
+}
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPoint& arg, bool isAlwaysValid)
+{
+	Init(type, &arg, isAlwaysValid);
 }
 
 GameEventArgument::GameEventArgument(CivArchive &archive)
@@ -93,7 +93,7 @@ void GameEventArgument::Serialize(CivArchive &archive)
 	}
 }
 
-void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid)
+void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, const void* arg, bool isAlwaysValid)
 {
 	m_IsAlwaysValid = isAlwaysValid;
 	m_type = type;
@@ -113,60 +113,60 @@ void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlway
 
 	switch(m_type) {
 		case GEA_Army:
-			army = va_arg(*vl, Army);
+			army = *(Army*)arg;
 			m_data.m_id = army.m_id;
 			break;
 		case GEA_Unit:
-			unit = va_arg(*vl, Unit);
+			unit = *(Unit*)arg;
 			m_data.m_id = unit.m_id;
 			break;
 		case GEA_City:
-			unit = va_arg(*vl, Unit);
+			unit = *(Unit*)arg;
 			m_data.m_id = unit.m_id;
 			break;
 		case GEA_Gold:
-			value = va_arg(*vl, sint32);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 		case GEA_Path:
-			path = va_arg(*vl, Path *);
+			path = *(Path**)arg;
 			m_data.m_ptr = (void *)path;
 			break;
 		case GEA_MapPoint:
-			pos = va_arg(*vl, MapPoint);
+			pos = *(MapPoint*)arg;
 			m_data.m_pos.x = pos.x;
 			m_data.m_pos.y = pos.y;
 
 			break;
 
 		case GEA_Player:
-			value = va_arg(*vl, sint32);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 
 		case GEA_Int:
-			value = va_arg(*vl, sint32);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 		case GEA_Direction:
-			value = va_arg(*vl, WORLD_DIRECTION);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 
 		case GEA_Wonder:
-			value = va_arg(*vl, sint32);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 		case GEA_Advance:
-			value = va_arg(*vl, sint32);
+			value = *(sint32*)arg;
 			m_data.m_value = value;
 			break;
 		case GEA_Improvement:
-			imp = va_arg(*vl, TerrainImprovement);
+			imp = *(TerrainImprovement*)arg;
 			m_data.m_id = imp.m_id;
 			break;
 		case GEA_TradeRoute:
-			route = va_arg(*vl, TradeRoute);
+			route = *(TradeRoute*)arg;
 			m_data.m_id = route.m_id;
 			break;
 

@@ -91,12 +91,12 @@
 
 #include "profileai.h"
 #include "debugassert.h"
-#include "goal.h"
+#include "Goal.h"
 #include "Scheduler.h"
-#include "Agent.h"
+#include "agent.h"
 #include "ArmyData.h"
 #include "agent.h"
-#include "squad_strength.h"
+#include "squad_Strength.h"
 #include "ctpaidebug.h"
 
 #include "GoalRecord.h"

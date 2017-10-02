@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Arrays can now be parsed sequentially, if their values are in sequence
-//   without being separated of any other tokens. (Sep 3rd 2005 Martin Gühmann)
+//   without being separated of any other tokens. (Sep 3rd 2005 Martin Gï¿½hmann)
 // - Repaired memory leaks
 //
 //----------------------------------------------------------------------------
@@ -37,6 +37,10 @@
 #include "DBLexer.h"
 #include "DBTokens.h"
 #include "StrDB.h"
+
+#if !defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
+sint32 const CTPRecord::INDEX_INVALID   = -1;
+#endif
 
 bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElements)
 {

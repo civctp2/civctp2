@@ -36,7 +36,7 @@
 //
 // - Fix sea city sprite bug. (7.11.2003) by NelsonAndBronte.
 // - Make sure cities created by the scenario editor keep their size and
-//   style. (9.11.2003) by Martin Gühmann.
+//   style. (9.11.2003) by Martin Gï¿½hmann.
 // - Enable log generation for the non-debug versions.
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
@@ -51,24 +51,24 @@
 // - Standardised min/max usage.
 // - Addition of new NeedMoreFood function to figure out wheather a city
 //   needs more food, so that the AI can build new food tile improvements,
-//   by Martin Gühmann.
+//   by Martin Gï¿½hmann.
 // - Possible solution for bug #14 by Klaus Kaan
 // - Make city growth/starvation work for PBEM.
 // - Modified the bug #14 solution: use a new - debugger confirmed - message.
 // - Recompute the defense bonus when selling a building.
 // - Splitted and cleaned various functions to have better access to resource
 //   estimation without the need to recalculate everything when adjusting
-//   population assignment for instnce. - April 4th 2005 Martin Gühmann
+//   population assignment for instnce. - April 4th 2005 Martin Gï¿½hmann
 // - Updated NeedMoreFood function for better estimation.
-//   - April 4th 2005 Martin Gühmann
+//   - April 4th 2005 Martin Gï¿½hmann
 // - Changed CollectResources to add in the food, production, and gold from the resource.
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, ideally
-//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
+//   such code should only be put at one place. - April 12th 2005 Martin Gï¿½hmann
 // - Track city growth with updated TurnsToNextPop method - PFT 29 mar 05
 // - Improved running time of TurnsToNextPop method and removed superflous call
 //   of TurnsToNextPop methods, as private member m_turnsNextPop was never
 //   accessed by a get method or was used in any other method.
-//   - April 23rd 2005 Martin Gühmann
+//   - April 23rd 2005 Martin Gï¿½hmann
 // - CityStyleOnly code added to CanBuildUnit, CanBuildBuilding, CanBuildWonder;
 //   Checks if the style of city matches the citystyle flag for the unit,
 //   building, or wonder - by E April 20th 2005
@@ -82,27 +82,27 @@
 //   city has a building required to build the unit or wonder. - by E
 //   April 30th 2005
 // - Moved m_distanceToGood reinitialization to serialize method, to handle
-//   modified Ressource database on reload. - May 19th 2005 Martin Gühmann
+//   modified Ressource database on reload. - May 19th 2005 Martin Gï¿½hmann
 // - Fixed reload of savegames with different number of goods in their
-//   database than in the games database. - June 5th 2005 Martin Gühmann
+//   database than in the games database. - June 5th 2005 Martin Gï¿½hmann
 // - Fixed the large memory leaks - when opening the city window - that were
 //   introduced by Martin's fix.
 // - Prevent crashes when killing a city twice.
 // - Redesigned Copy method so that it doesn't abuse the serialize method
 //   anymore. Replaces Fromafar's large memory fix, for some reason it made
-//   crash the game anyway. - Jul. 5th 2005 Martin Gühmann
+//   crash the game anyway. - Jul. 5th 2005 Martin Gï¿½hmann
 // - If capitalisation or infrastructure first item in the build queue, an
-//   item can now rush bought that is inserted before. - Jul. 23rd 2005 Martin Gühmann
-// - Replaced some member names for clarity. - Aug 6th 2005 Martin Gühmann
-// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin Gühmann
-// - Fixed Gold isn't added twice to income. - Aug 6th 2005 Martin Gühmann
-// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gühmann
-// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
-// - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
+//   item can now rush bought that is inserted before. - Jul. 23rd 2005 Martin Gï¿½hmann
+// - Replaced some member names for clarity. - Aug 6th 2005 Martin Gï¿½hmann
+// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin Gï¿½hmann
+// - Fixed Gold isn't added twice to income. - Aug 6th 2005 Martin Gï¿½hmann
+// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gï¿½hmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gï¿½hmann)
+// - Removed more unused methods. (Aug 12th 2005 Martin Gï¿½hmann)
 // - NeedsCityGood added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
 //   requiring a good in the radius or if the city is buying it before a it can be
 //   built. (Sept 29nd 2005 by E)
-// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gï¿½hmann)
 // - Implemented EnablesGood for buildings, wonders and tile improvements now they
 //   give goods to a city by E November 5th 2005
 // - Goodexport Bonuses - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience
@@ -127,11 +127,11 @@
 // - CantTrade flag for Goods now works by E 4-26-2006 (outcomment to allow for CanCollectGood)
 // - CanCollectGood bool added by E to check goods for
 //   CantTrade or Available and Vanish Advances 4-27-2006
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gï¿½hmann)
+// - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin Gï¿½hmann)
 // - Made good requirements consistent with each, all requirements are now
 //   the same: The city needs more goods that it buys and collects than it
-//   sells. (April 30th 2006 Martin Gühmann)
+//   sells. (April 30th 2006 Martin Gï¿½hmann)
 // - Add AddsASlave to goods for beginturn. If you have the good then a slave
 //   is added each turn you have that good. E 5-12-2006
 // - CivilisationOnly added to CanBuildBuilding and CnBuildWonder E 5-12-2006
@@ -188,11 +188,11 @@
 // - Added code so cities with a trade route through them can collect some gold
 //   this could be implemented by a wonder of feat (in the future) or should it
 //   be standard? it would add value to cities. - E 6.10.2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 // - Added CityExpansion and CitySlum code
 // - The CityInfluenceChanged event is now valid after conquest that destroyed
-//   the city. (26-Jan-2008 Martin Gühmann)
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+//   the city. (26-Jan-2008 Martin Gï¿½hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gï¿½hmann)
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
@@ -202,7 +202,7 @@
 // - Prevented city from building gaia controller buildings unless science
 //   victory race has started. (01-Jul-2009 Maq)
 // - When a city is settled in foreign territory, its the national borders
-//   will expand as they should be. (13-Jul-2009 Martin Gühmann)
+//   will expand as they should be. (13-Jul-2009 Martin Gï¿½hmann)
 // - Changed science formula to deduct crime after the government coefficient
 //   like all other resources. (22-Jul-2009 Maq)
 // - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
@@ -844,13 +844,13 @@ void CityData::Initialize(sint32 settlerType)
 	}
 	else
 	{
-		//Added by Martin Gühmann to make sure that also cities
+		//Added by Martin Gï¿½hmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
 			numPops = ScenarioEditor::CitySize();
 	}
 
-	//Added by Martin Gühmann to make sure that also cities created by the editor
+	//Added by Martin Gï¿½hmann to make sure that also cities created by the editor
 	//have a size.
 	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
 	{
@@ -952,7 +952,7 @@ void CityData::Initialize(sint32 settlerType)
 	else
 		name = civData->GetAnyCityName();
 
-	//Added by Martin Gühmann to make sure that cities created
+	//Added by Martin Gï¿½hmann to make sure that cities created
 	//by the scenario editor keep their style
 	if ((settlerType == CITY_STYLE_EDITOR) && ScenarioEditor::PlaceCityMode())
 	{
@@ -5174,10 +5174,10 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	{
 		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 
-		penalty = std::min
+		penalty = std::min<float>
 		                  (
 		                   1.0,
-		                   std::max(0.0, 1.0 - penalty * 0.01)
+		                   std::max<float>(0.0, 1.0 - penalty * 0.01)
 		                  );
 
 		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * penalty);
@@ -6143,10 +6143,10 @@ void CityData::CheckSwitchProductionPenalty(sint32 newCat)
 
 		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 
-		penalty = std::min
+		penalty = std::min<float>
 						  (
 						   1.0,
-						   std::max(0.0, 1.0 - penalty * 0.01)
+						   std::max<float>(0.0, 1.0 - penalty * 0.01)
 						  );
 
 		s = static_cast<sint32>(static_cast<double>(GetStoredCityProduction()) * penalty);

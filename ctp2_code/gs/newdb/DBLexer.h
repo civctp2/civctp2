@@ -30,7 +30,7 @@
 //   more details  _____ by MrBaggins Jan-04
 //
 //   * Added PeekAheadText member function prototype
-// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
