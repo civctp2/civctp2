@@ -339,8 +339,13 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 			CTPDisplayMode *mode = g_displayModes->GetHead();
 
-			g_ScreenWidth = mode->width;
-			g_ScreenHeight = mode->height;
+			if(mode) {
+				g_ScreenWidth = mode->width;
+				g_ScreenHeight = mode->height;
+			} else {
+				g_ScreenWidth = 800;
+				g_ScreenHeight = 600;
+			}
 		}
 	}
 
