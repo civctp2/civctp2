@@ -504,7 +504,6 @@ ctp2_SOURCES = \
 	../ai/diplomacy/proposalanalysis.cpp \
 	../ai/strategy/scheduler/Plan.cpp \
 	../ai/strategy/scheduler/scheduler.cpp \
-	../ai/strategy/goals/ctpgoal.cpp \
 	../ai/strategy/goals/Goal.cpp \
 	../ai/strategy/squads/Squad.cpp \
 	../ai/strategy/squads/squad_Strength.cpp \

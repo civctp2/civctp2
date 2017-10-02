@@ -14,6 +14,7 @@ AC_PROG_MAKE_SET
 
 AC_PROG_CC(cl gcc cc KCC CC egcs)
 AC_PROG_CXX(cl g++ gcc cxx c++ cc++ KCC CC egcs)
+AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 AC_PROG_LIBTOOL
 AC_LANG(C++)
 AM_PROG_LEX
@@ -35,6 +36,7 @@ else
    AC_SUBST(YFLAGS)
    AC_DEFINE(AUTOMAKE_INVOKES_YACC,1,[Defined when automake runs yacc and renames the output files])
 fi
+AM_CONDITIONAL([WIN32], false)
 AC_PATH_PROG(UNZIP,unzip,no)
 if test "x$UNZIP" == "xno"
 then
