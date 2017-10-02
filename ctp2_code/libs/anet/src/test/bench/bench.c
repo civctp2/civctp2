@@ -30,6 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <ctype.h>
+#include <stdint.h>
 
 /* #include "anet.h" */
 #include "dp2.h"
@@ -1640,7 +1642,7 @@ static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *
 			break;
 
 		case 'd':
-			*piresult = (int) (bench->dp);
+			*piresult = (uintptr_t) (bench->dp);
 			break;
 
 		case 'h':
@@ -2068,6 +2070,11 @@ prog_cmd_res_t benchCmd_LoseHost(prog_process_t *process, const char *params, vo
 	err = dpio_closeHdl(bench->dp->dpio, bench->dp->hMaster);
 	return prog_cmd_RES_CONTINUE;
 }
+
+// HACK seb
+playerHdl_t dpid2commHdl(
+	dp_t *dp,
+	dpid_t id);
 
 /*
  * benchCmd_LosePeerWithRank

@@ -43,11 +43,11 @@ enumapp.o: ../enumapp.c ../../../../h/dp.h ../../../../h/enumapps.h
 dpmem.o: ../dpmem.c ../../../../h/anet.h
 	$(CC) -c ../dpmem.c -o dpmem.o
 launchparams.o: ../../../dp/launchparams.c ../../../../h/dp2.h ../../../../h/launchparams.h
-	$(CC) -c  -Werror ../../../dp/launchparams.c -o launchparams.o
+	$(CC) -c   ../../../dp/launchparams.c -o launchparams.o
 dp2.o: ../../../dp/dp2.c ../../../../h/dp2.h
-	$(CC) -c  -Werror ../../../dp/dp2.c -o dp2.o
+	$(CC) -c   ../../../dp/dp2.c -o dp2.o
 dpio.o: ../../../dp/dpio.c ../../../../h/dpio.h
-	$(CC) -c -Werror ../../../dp/dpio.c -o dpio.o
+	$(CC) -c  ../../../dp/dpio.c -o dpio.o
 hkeytab.o: ../../../dp/hkeytab.c ../../../../h/hkeytab.h
 	$(CC) -c ../../../dp/hkeytab.c -o hkeytab.o
 dptab.o:  ../../../dp/dptab.c ../../../../h/dptab.h

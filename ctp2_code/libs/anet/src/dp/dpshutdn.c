@@ -71,7 +71,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		} else if (dp->players) {
 			int i;
 			void *buf;
-			int len;
+			size_t len;
 			char subkey[dp_KEY_MAXLEN];
 			int subkeylen;
 			dpid_t id;
