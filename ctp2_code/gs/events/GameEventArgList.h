@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +54,8 @@ class CivArchive;
 class GameEventArgList
 {
 public:
-	GameEventArgList(va_list * vl = NULL, GAME_EVENT eventType = GEV_MAX);
+	GameEventArgList(const GAME_EVENT_ARGUMENT* argTypes, const void** args, GAME_EVENT eventType);
+	GameEventArgList();
 	GameEventArgList(CivArchive &archive);
 	~GameEventArgList();
 	void Serialize(CivArchive &archive);

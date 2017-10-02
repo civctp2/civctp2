@@ -56,6 +56,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef LINUX
+#include <unistd.h>
+#endif
+
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
 extern nf_GameSetup			g_gamesetup;

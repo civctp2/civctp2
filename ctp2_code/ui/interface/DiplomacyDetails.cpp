@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - To display the captital of a civ and you know were it is no embassy is
-//   necessary anymore. (10-Feb-2008 Martin Gühmann)
+//   necessary anymore. (10-Feb-2008 Martin Gï¿½hmann)
 // - Instead of cities with wonders all cities are displayed if there is an
-//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin Gühmann)
+//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@
 #include "ctp2_hypertextbox.h"
 
 static DiplomacyDetails     *s_DiplomacyDetails;
-static MBCHAR               *s_DiplomacyDetailsBlock = "DiplomacyDetails";
+static const MBCHAR         *s_DiplomacyDetailsBlock = "DiplomacyDetails";
 
 #define k_INT_FLAG_COL      0
 #define k_INT_NATION_COL    1
@@ -278,7 +278,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * flag = (ctp2_Static *) item->GetChildByIndex(k_INT_FLAG_COL))
 					{
-						flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
+						flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)(intptr_t)p, false);
 						flag->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
@@ -292,7 +292,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * regard = (ctp2_Static *) item->GetChildByIndex(k_INT_REGARD_COL))
 					{
-						regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *) p, true);
+						regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)(intptr_t) p, true);
 #if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
@@ -304,7 +304,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * strength = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))
 					{
-						strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *) p, true);
+						strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *) (intptr_t)p, true);
 #if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
@@ -316,17 +316,17 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * embassy = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))
 					{
-						embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *) p, true);
+						embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *) (intptr_t)p, true);
 						embassy->SetActionFuncAndCookie(SelectItem, item);
 					}
 
 					if (ctp2_Static * treaty = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))
 					{
-						treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *) p, true);
+						treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *) (intptr_t)p, true);
 						treaty->SetActionFuncAndCookie(SelectItem, item);
 					}
 
-					item->SetUserData((void*)p);
+					item->SetUserData((void*)(intptr_t)p);
 					sm_list->AddItem(item);
 				}
 			}
@@ -644,7 +644,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerColor(ctp2_Static *control,
 												 void *cookie)
 {
 
-	sint32 player = (sint32)cookie;
+	sint32 player = (intptr_t)cookie;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -662,7 +662,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerFlag(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
-	sint32 player = (sint32)cookie;
+	sint32 player = (intptr_t)cookie;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -701,7 +701,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 {
 	MBCHAR *imageName = NULL;
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
-	sint32 p = (sint32)cookie;
+	sint32 p = (intptr_t)cookie;
 
 
 
@@ -756,7 +756,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 												   RECT &rect,
 												   void *cookie)
 {
-	sint32 p = (sint32)cookie;
+	sint32 p = (intptr_t)cookie;
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[detailPlayer]) return AUI_ERRCODE_OK;
@@ -821,7 +821,7 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
-	sint32 p = (sint32)cookie;
+	sint32 p = (intptr_t)cookie;
 
 
 
@@ -872,7 +872,7 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 											 RECT &rect,
 											 void *cookie)
 {
-	sint32 p = (sint32)cookie;
+	sint32 p = (intptr_t)cookie;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
 	sint32 x = 0;

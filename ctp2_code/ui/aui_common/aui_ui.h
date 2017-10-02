@@ -28,7 +28,7 @@
 // - Moved CalculateHash() to aui_Base
 // - Prevented processing of uninitialised input
 // - Added graphics DirectX built in double buffering and extended it
-//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
+//   to manual tripple buffering. (1-Jan-2010 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 

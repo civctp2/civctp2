@@ -25,7 +25,7 @@
 //
 // - Option added to close a message box automatically on eyepoint clicking.
 // - Messages are closed if an open command is executed and there is already
-//   an open messages, enables left click close. (Oct 16th 2005 Martin Gühmann)
+//   an open messages, enables left click close. (Oct 16th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@
 #include "player.h"
 #include "director.h"
 #include "profileDB.h"				// g_theProfileDB
+#include "soundmanager.h" // g_soundManager
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;
@@ -93,8 +94,13 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
     {
 		MBCHAR filename[_MAX_PATH];
 		g_civPaths->FindFile(C3DIR_SOUNDS, wavName, filename);
+#ifdef __linux__
+		if (g_soundManager)
+			g_soundManager->PlaySound(filename, false);
+#else				
 		PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME);
-	}
+#endif
+}
 }
 
 

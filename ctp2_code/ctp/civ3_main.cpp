@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gï¿½hmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gï¿½hmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gï¿½hmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin Gühmann)
+//   debugging significantly. (09-Aug-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -280,6 +280,11 @@ BOOL g_noAssertDialogs = FALSE;
 BOOL g_runInBackground = FALSE;
 BOOL g_eventLog = FALSE;
 
+#if 0
+Uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
+#else
+Uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
+#endif
 
 BOOL g_use_profile_process = FALSE;
 
@@ -546,8 +551,11 @@ int ui_Initialize(void)
 
 	g_c3ui->RegisterObject(aui_Factory::new_Keyboard(auiErr));
 
-#if !defined(__GNUC__)
 	SPLASH_STRING("Creating Movie manager...");
+#if defined(__AUI_USE_SDL__)
+	//SDL movie manager is in aui_movie.cpp
+	g_c3ui->RegisterObject(new aui_MovieManager());
+#else
 	g_c3ui->RegisterObject(new aui_DirectMovieManager());
 #endif
 
@@ -1170,6 +1178,16 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_noAssertDialogs = (NULL != strstr(szCmdLine, "noassertdialogs"));
 	g_runInBackground = (NULL != strstr(szCmdLine, "runinbackground"));
 
+#if defined(__AUI_USE_SDL__)
+	if (strstr(szCmdLine, "fullscreen"))
+		g_SDL_flags = g_SDL_flags|SDL_FULLSCREEN;
+	if (strstr(szCmdLine, "hwsurface"))
+		g_SDL_flags = g_SDL_flags|SDL_HWSURFACE;
+	else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
+	if (strstr(szCmdLine, "openglblit"))
+	g_SDL_flags = g_SDL_flags|SDL_OPENGLBLIT;
+#endif
+	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
 
 	g_createDirectDrawOnSecondary = (NULL != strstr(szCmdLine, "multimon"));

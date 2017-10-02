@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 
 	g_spriteEditWindow->m_loopInProgress = false;
 
-   	if ((int)cookie)
+   	if ((intptr_t)cookie)
 		g_spriteEditWindow->LoadSprite();
 	else
 		g_spriteEditWindow->SaveSprite();
@@ -183,7 +183,7 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->SetAnimation((sint32)cookie);
+	g_spriteEditWindow->SetAnimation((intptr_t)cookie);
 	g_spriteEditWindow->m_frame             = 0;
 	g_spriteEditWindow->m_facing            = k_DEFAULTSPRITEFACING;
 	g_spriteEditWindow->m_loopInProgress    = false;;
@@ -199,7 +199,7 @@ void StepCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->AddFrame((sint32)cookie);
+	g_spriteEditWindow->AddFrame((intptr_t)cookie);
 	g_spriteEditWindow->m_loopInProgress = false;
 
 }
@@ -216,7 +216,7 @@ void PlayCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	g_spriteEditWindow->m_loopInProgress = !g_spriteEditWindow->m_loopInProgress;
 	g_spriteEditWindow->m_stopAfterLoop  = false;
 
-	if ((int)cookie)
+	if ((intptr_t)cookie)
 		g_spriteEditWindow->m_stopAfterLoop = true;
 
 	if (g_spriteEditWindow->m_loopInProgress)
@@ -231,7 +231,7 @@ void FacingCallback( aui_Control *control, uint32 action, uint32 data, void *coo
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->AddFacing((sint32)cookie);
+	g_spriteEditWindow->AddFacing((intptr_t)cookie);
 
 }
 

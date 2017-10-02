@@ -49,6 +49,8 @@ public:
         virtual BOOL IsOK( void ) const;
 	virtual AUI_ERRCODE Blank(const uint32 &color);
 
+	virtual void Flip();
+
 	static uint32 m_SDLSurfaceClassId;
 
 	SDL_mutex* m_bltMutex;

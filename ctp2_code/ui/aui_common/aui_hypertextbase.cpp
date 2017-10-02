@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -153,7 +153,7 @@ AUI_ERRCODE aui_HyperTextBase::SetHyperText
 	if (hyperText)
     {
         strncpy(m_hyperText, hyperText, std::min(maxlen, m_hyperMaxLen));
-        m_hyperCurLen = std::min(m_hyperMaxLen, strlen(m_hyperText));
+        m_hyperCurLen = std::min<size_t>(m_hyperMaxLen, strlen(m_hyperText));
     	return AddHyperStatics(NULL);
     }
     else

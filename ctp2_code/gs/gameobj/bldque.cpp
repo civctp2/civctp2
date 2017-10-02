@@ -36,16 +36,16 @@
 // - Allow infastructure and capitalisation when loading the build queue
 //   (modification as posted by Peter Triggs).
 // - Players are now notified if someone starts to build the first wonder
-//   from the database. - Feb. 23rd 2005 Martin Gühmann
-// - Added assignment operator. - Jul 16th 2005 Martin Gühmann
-// - Removed old endgame database, doesn't seem to be uses. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//   from the database. - Feb. 23rd 2005 Martin Gï¿½hmann
+// - Added assignment operator. - Jul 16th 2005 Martin Gï¿½hmann
+// - Removed old endgame database, doesn't seem to be uses. (Aug 29th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Report (wonder) start of second item when deleting the first item.
 // - Improved handling of multiple build queue actions in a turn.
 // - Add PopCostsToBuild to allow for Units with higher than 1 (BuildingRemovesaPop)
 //   population cost to be removed from a city.
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gï¿½hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -623,10 +623,10 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 				double penalty =
 					static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 
-				penalty = std::min
+				penalty = std::min<float>
 								  (
 								   1.0,
-								   std::max(0.0, 1.0 - penalty * 0.01)
+								   std::max<float>(0.0, 1.0 - penalty * 0.01)
 								  );
 
 				s = static_cast<sint32>(static_cast<double>(shieldstore) * penalty);

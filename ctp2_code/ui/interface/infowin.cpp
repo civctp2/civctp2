@@ -964,7 +964,7 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 	infoGraph->SetYAxisName("Pollution");
 
 	double curRound = g_turn->GetRound();
-    double minRound = std::max(0.0, curRound - 20.0);
+    double minRound = std::max<double>(0.0, curRound - 20.0);
 	double minPower = 0.0;
 	double maxPower = 10.0;
 

@@ -32,7 +32,7 @@
 /// \brief  Action types for processing by the director
 
 #include "c3.h"
-#include "DirectorActions.h"
+#include "directoractions.h"
 
 #include "EffectActor.h"        // EffectActor destructor
 

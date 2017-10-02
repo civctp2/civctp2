@@ -37,48 +37,48 @@
 // - Modified UDUnitTypeCanSettle so that it checks for a CanSettleOn
 //   unit property so that modders can make  settling terrain-specific. - E
 // - Fixed a broken comparision in UDUnitTypeCanSettle so that it now allows
-//   settling again. - Mar. 1st 2005 Martin Gühmann
+//   settling again. - Mar. 1st 2005 Martin Gï¿½hmann
 // - When a city is conquered vision is now removed afterwards the city data
 //   has changed hand. That allows the creation of UnseenCell's with the
 //   current owner. If you loose a city to someone else you know who the
 //   b*st*rd is. When changing hands the city isn't anymore removed and
-//   then added back to the wolrd. - Mar. 4th 2005 Martin Gühmann
+//   then added back to the wolrd. - Mar. 4th 2005 Martin Gï¿½hmann
 // - Added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show
 //   # turns until city grows
 // - Implemented immobile units (set MaxMovePoints equal to 0 in units.txt)
 //   PFT 17 Mar 05
-// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
+// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gï¿½hmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData. - Aug 6th 2005 Martin Gühmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//   CityData. - Aug 6th 2005 Martin Gï¿½hmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Added city data to "settle too close"-report.
 // - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006
 // - Added MoveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006 by E
 // - Old settle terrain flags are ignored if new CanSettleOn terrain flags are
-//   defined. (April 22nd 2006 Martin Gühmann)
-// - Fixed the unit attack boni. (June 4th 2006 Martin Gühmann)
+//   defined. (April 22nd 2006 Martin Gï¿½hmann)
+// - Fixed the unit attack boni. (June 4th 2006 Martin Gï¿½hmann)
 // - Fixed spy defense chance. Spy defence chance is now used instead of 100%
 //   and wonder does not reduce spy defence chance to 50% if there is a better
-//   spy. (June 4th 2006 Martin Gühmann)
+//   spy. (June 4th 2006 Martin Gï¿½hmann)
 // - Added IncreaseBoatMovement and CivHP as a civ attribute (July 2, 2006 by E)
 // - Added Civ Attack Bonuses (July 2, 2006 by E)
 // - Repaired memory leaks
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gï¿½hmann)
 // - Total fuel, total move points and total hp calculation moved into their own
-//   methods. (Dec 24th 2006 Martin Gühmann)
-// - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
+//   methods. (Dec 24th 2006 Martin Gï¿½hmann)
+// - Completed SetType() method. (Dec 24th 2006 Martin Gï¿½hmann)
 // - added IsReligion bools 1-23-2007
 // - Added SpawnsBarbarian code from ArmyData
 // - Moved Harvest to BeginTurn from ArmyData 5-24-2007
 // - Added DestroyOnePerCiv to ResetCityOwner 6-4-2007
 // - Added Elite Bonus 6-6-2007
 // - Added LeaderBonus if in Stack - Like Cradle 6-6-2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 // - ChangeArmy has no effect if a unit and its new army do not share the
-//   same tile. (7-Nov-2007 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+//   same tile. (7-Nov-2007 Martin Gï¿½hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gï¿½hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gï¿½hmann)
 // - Modified GetAttack, GetOffense and GetDefense. Added GetRanged. Also added
 //	 GetDefCounterAttack for new combat option defenders. (07-Mar-2009 Maq)
 // - Modified Bombard so ranged units and defenders use same bonuses as they
@@ -484,14 +484,14 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 	if(rec->GetMoveBonus(bonus))
 	{
 		m_movement_points -= bonus;
-		m_movement_points = std::max(m_movement_points, 0.0);
+		m_movement_points = std::max<double>(m_movement_points, 0.0);
 		ClearFlag(k_UDF_FIRST_MOVE);
 	}
 
 	if(!Flag(k_UDF_PACMAN) && !rec->HasMoveBonus())   //needed to add this flag because it seemed to affect movebonus too
 	{
 		m_movement_points -= cost;
-		m_movement_points = std::max(m_movement_points, 0.0);
+		m_movement_points = std::max<double>(m_movement_points, 0.0);
 		ClearFlag(k_UDF_FIRST_MOVE);
 	}
 
@@ -563,7 +563,7 @@ sint32 UnitData::ResetMovement()
 	else if (rec->GetLossMoveToDmgTwo())
 	{
 		m_movement_points =
-			std::max(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
+			std::max<double>(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
 	}
 	else
 	{
@@ -4143,7 +4143,7 @@ bool UnitData::StoppedBySpies(const Unit &c)
 
 		if (wonderutil_GetSpiesEverywhere(g_player[c.GetOwner()]->GetBuiltWonders()))
 		{
-			chance = std::max(0.5, chance);
+			chance = std::max<double>(0.5, chance);
 		}
 
 		if(chance > 0.001)

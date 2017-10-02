@@ -64,6 +64,8 @@
 #include "SlicEngine.h"
 #include "SlicSegment.h"
 
+#ifdef CTP2_ENABLE_SLICDEBUG
+
 extern C3UI			*g_c3ui;
 SegmentList *g_segmentList = NULL;
 
@@ -291,3 +293,5 @@ void SegmentListItem::Open()
 {
 	sourcelist_Display(m_segment);
 }
+
+#endif

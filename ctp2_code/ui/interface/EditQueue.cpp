@@ -28,20 +28,20 @@
 // - Start the great library with the current research project of the player.
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin Gï¿½hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue turns are shown anymore, by Martin Gühmann.
-// - Disabled rush buy button when it is not your turn by Martin Gühmann.
+//   build queue turns are shown anymore, by Martin Gï¿½hmann.
+// - Disabled rush buy button when it is not your turn by Martin Gï¿½hmann.
 // - Repaired CtD when double-clicking on an empty build queue - caused by
 //   the changes above.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gï¿½hmann
+// - Made Build Manager window non-modal. - July 24th 2005 Martin Gï¿½hmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gï¿½hmann)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -984,7 +984,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(pl->m_all_cities->Access(i).GetName());
-			item->SetUserData((void *)pl->m_all_cities->Access(i).m_id);
+			item->SetUserData((void *)(intptr_t)pl->m_all_cities->Access(i).m_id);
 			m_cityDropDown->AddItem(item);
 
 			if(m_cityData && pl->m_all_cities->Access(i).m_id == m_cityData->GetHomeCity().m_id)
@@ -1008,7 +1008,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(walk.GetObj()->m_cityData->GetName());
-			item->SetUserData((void *)walk.GetObj()->m_cityData->GetHomeCity().m_id);
+			item->SetUserData((void *)(intptr_t)walk.GetObj()->m_cityData->GetHomeCity().m_id);
 
 			m_multiCityList->AddItem(item);
 			walk.Next();
@@ -1066,7 +1066,7 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
-		// Added by Martin Gühmann to disable the rushbuy button and rush
+		// Added by Martin Gï¿½hmann to disable the rushbuy button and rush
 		// buy costs if the first item is capitalization or infrastructure
 
 		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
@@ -1974,7 +1974,7 @@ void EditQueue::CityDropDown(aui_Control *control, uint32 action, uint32 data, v
 		ctp2_ListItem *item = (ctp2_ListItem *)s_editQueue->m_cityDropDown->GetListBox()->GetItemByIndex(s_editQueue->m_cityDropDown->GetSelectedItem());
 		Assert(item);
 		if(item) {
-			Unit city((uint32)item->GetUserData());
+			Unit city((uint32)(uintptr_t)item->GetUserData());
 			CityData *cd = CityWindow::GetCityData(city);
 			if(cd != s_editQueue->m_cityData) {
 				SetCity(cd);
@@ -2001,7 +2001,7 @@ void EditQueue::PreviousCity(aui_Control *control, uint32 action, uint32 data, v
 	if(!item) return;
 
 	static Unit city;
-	city.m_id = (uint32)item->GetUserData();
+	city.m_id = (uintptr_t)item->GetUserData();
 	SetCity(CityWindow::GetCityData(city));
 }
 
@@ -2021,7 +2021,7 @@ void EditQueue::NextCity(aui_Control *control, uint32 action, uint32 data, void 
 	if(!item) return;
 
 	static Unit city;
-	city.m_id = (uint32)item->GetUserData();
+	city.m_id = (uintptr_t)item->GetUserData();
 	SetCity(CityWindow::GetCityData(city));
 }
 
@@ -2087,7 +2087,7 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
-	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)(sint32)cookie;
+	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)(intptr_t)cookie;
 	Assert(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI);
 
 	if(eqAction == EDIT_QUEUE_MULTI_ACTION_OVERWRITE) {

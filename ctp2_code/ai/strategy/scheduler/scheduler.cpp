@@ -61,7 +61,7 @@
 #include <algorithm>
 #include <list>
 
-#include "goal.h"
+#include "Goal.h"
 #include "Plan.h"
 #include "agent.h"
 
@@ -77,7 +77,7 @@
 #include "gfx_options.h"
 #include "Army.h"
 #include "ArmyData.h"
-#include "CityData.h"
+#include "citydata.h"
 #include "World.h"
 
 namespace

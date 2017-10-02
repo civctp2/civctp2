@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -32,10 +32,13 @@
 
 #include "tiffutils.h"
 #include <tiffio.h>
+#ifndef __linux__
+#define CI_FixName(a) a
+#endif
 
 char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
-	TIFF * tif = TIFFOpen(filename, "r");
+	TIFF * tif = TIFFOpen(CI_FixName(filename), "r");
 	if (tif)
 	{
 		uint32 w, h;
@@ -76,7 +79,7 @@ char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	char    *image = NULL;
 	uint32  w=0, h=0;
-	TIFF    *tif = TIFFOpen(filename, "r");
+	TIFF    *tif = TIFFOpen(CI_FixName(filename), "r");
 
 	if (tif) {
 		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
@@ -120,7 +123,7 @@ char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 
 int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 {
-	TIFF *  tif = TIFFOpen(filename, "r");
+	TIFF *  tif = TIFFOpen(CI_FixName(filename), "r");
 
 	if (tif)
     {
@@ -142,7 +145,7 @@ int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
 {
 	uint32  w=0, h=0;
-	TIFF    *tif = TIFFOpen(filename, "r");
+	TIFF    *tif = TIFFOpen(CI_FixName(filename), "r");
 
 	if (tif)
     {
@@ -214,7 +217,7 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 
 char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
-	TIFF *  tif = TIFFOpen(filename, "r");
+	TIFF *  tif = TIFFOpen(CI_FixName(filename), "r");
 	if (!tif)
 	   return NULL;
 

@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gï¿½hmann)
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@
 #include "StrDB.h"
 #include "GameEventManager.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "player.h"
 
 #include "Diplomat.h"

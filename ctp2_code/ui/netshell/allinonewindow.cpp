@@ -28,11 +28,11 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gï¿½hmann)
 // - The ages in the summary are now displayed correctly.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code. (May 29th 2006 Martin Gühmann)
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code. (May 29th 2006 Martin Gï¿½hmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -112,6 +112,9 @@ DialogBoxWindow *g_exclusionsWindow = NULL;
 
 
 
+#ifdef LINUX
+#include <unistd.h>
+#endif
 
 #define k_GUIDDATA_ID 2
 #define k_SCENARIO_INFO_ID 3
@@ -4084,7 +4087,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 #ifdef WIN32
 			Sleep( k_PACKET_DELAY );
 #else
-			usleep( k_PACKET_DELAY );
+			usleep( k_PACKET_DELAY * 1000 );
 #endif
 			w->UpdateGameSetup();
 		}

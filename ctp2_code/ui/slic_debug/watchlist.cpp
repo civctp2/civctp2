@@ -30,6 +30,7 @@
 
 #include "c3.h"
 
+#ifdef CTP2_ENABLE_SLICDEBUG
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -415,3 +416,5 @@ void WatchListItem::WatchVariableDeleted(SlicSymbolData *symbol)
 		}
 	}
 }
+
+#endif

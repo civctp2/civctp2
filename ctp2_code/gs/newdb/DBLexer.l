@@ -6,7 +6,7 @@
 int g_dblexerLineNumber;
 %}
 
-string 		\"[^\"\n]*[\"\n]
+string 		\"[^\"\r?\n]*[\"\r?\n]
 name		[a-zA-Z]+[a-zA-Z0-9_]*
 
 %%
@@ -21,10 +21,10 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 -?[0-9]+\.[0-9]* { return k_Token_Float; }
 -?[0-9]+      { return k_Token_Int; }
 
-[ \t]     { }
-\n        { g_dblexerLineNumber++; }
-#.*\n       { g_dblexerLineNumber++; }
-\/\/.*\n	{ g_dblexerLineNumber++; }
+[ \t\r]     { }
+\r?\n       { g_dblexerLineNumber++; }
+#.*\r?\n    { g_dblexerLineNumber++; }
+\/\/.*\r?\n	{ g_dblexerLineNumber++; }
 .           { return yytext[0]; }
 
 %%

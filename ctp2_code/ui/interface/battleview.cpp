@@ -33,7 +33,7 @@
 #include "battleview.h"
 
 #include <algorithm>
-#include "aui_factory.h"
+#include "aui_Factory.h"
 #include "aui_blitter.h"
 #include "c3ui.h"
 #include "battleviewactor.h"

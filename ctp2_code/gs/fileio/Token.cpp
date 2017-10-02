@@ -35,13 +35,13 @@
 // - Fix Token::Next() for japanese sjis code
 // - Prevented crash on missing input file.
 // - Load default strings if they are missing in the database so that mods
-//   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
-// - Removed unused tokens. (July 15th 2006 Martin Gühmann)
+//   also have a full set of strings. (Jan 30th 2006 Martin Gï¿½hmann)
+// - Removed unused tokens. (July 15th 2006 Martin Gï¿½hmann)
 // - Added new token so that the loading of default strings in scenarios
-//   can be skipped. (9-Apr-2007 Martin Gühmann)
+//   can be skipped. (9-Apr-2007 Martin Gï¿½hmann)
 // - Old default string skip token does not prevent loading default strings
-//   in scenarios anymore. (9-Apr-2007 Martin Gühmann)
-// - Scenario path can now be ignored. (9-Apr-2007 Martin Gühmann)
+//   in scenarios anymore. (9-Apr-2007 Martin Gï¿½hmann)
+// - Scenario path can now be ignored. (9-Apr-2007 Martin Gï¿½hmann)
 // - Improved handling of "unexpected" EOF, caused by incorrect input.
 //
 //----------------------------------------------------------------------------
@@ -449,15 +449,6 @@ sint32 Token::Next()
 		m_cur = getc(m_fin);
 		m_val_string_len = 0;
 		while (m_cur != '\"' && m_val_string_len < k_MAX_TEXT_LEN) {
-
-
-
-
-
-
-
-
-
 			if (m_cur == EOF){
 				m_current_type = TOKEN_MISSING_QUOTE;
 				m_val_string[m_val_string_len] = 0;
@@ -561,6 +552,9 @@ sint32 Token::Next()
 	if(GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS
 	|| GetType() == TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS
 	){
+#warning TODO
+#if 1//0
+		
 		if(g_civPaths->GetCurScenarioPath()     == NULL        // Load only defaults if this isn't a scenario
 		&& g_civPaths->GetCurScenarioPackPath() == NULL
 		|| GetType() == TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS  // But not if you have this token
@@ -570,7 +564,7 @@ sint32 Token::Next()
 
 		return Next();
 	}
-
+#endif
 	return GetType();
 }
 
