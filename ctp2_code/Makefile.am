@@ -31,6 +31,8 @@ CTP2_LIBANET_LDADD = \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
 CTP2_LIBOSNOWIN32_LDADD = \
 	os/nowin32/libosnowin32.la
+CTP2_LIBTTF_LDADD = \
+	libs/freetype-1.3.1/lib/.libs/libttf.a -ldl
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
@@ -52,7 +54,8 @@ ctp2_LDADD = \
 	gs/world/libgsworld.la \
 	sound/libsound.la \
 	$(CTP2_LIBANET_LDADD) \
-	$(CTP2_LIBOSNOWIN32_LDADD)
+	$(CTP2_LIBOSNOWIN32_LDADD) \
+	$(CTP2_LIBTTF_LDADD)
 
 ctp2_LDFLAGS = \
 	$(CTP2_LDFLAGS)
