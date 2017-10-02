@@ -155,6 +155,9 @@ else
 	])
 fi
 AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
+
+AX_SUBDIRS_CONFIGURE([ctp2_code/libs/freetype-1.3.1], [--enable-shared=no], [], [], [])
+
 AC_DEFINE(_BFR_,1,[Build final release])
 AC_SUBST(_BFR_)
 AC_SUBST(CTP2_ENABLE_SLICDEBUG)
