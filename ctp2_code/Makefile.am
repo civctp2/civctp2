@@ -84,8 +84,10 @@ ctp2_SOURCES = \
 	ctp/civ3_main.cpp \
 	ctp/civapp.cpp \
 	ctp/display.cpp \
+	ctp/cifm.cpp \
 	gfx/layers/citylayer.cpp \
 	gfx/spritesys/directorevent.cpp \
+	gfx/spritesys/DirectorActions.cpp \
 	net/general/net_achievement.cpp \
 	net/general/net_action.cpp \
 	net/general/net_agreement.cpp \
@@ -236,7 +238,6 @@ ctp2_SOURCES = \
 	ui/aui_ctp2/battleorderbox.cpp \
 	ui/aui_ctp2/battleorderboxactions.cpp \
 	ui/aui_ctp2/bevellesswindow.cpp \
-	ui/aui_ctp2/buttonbank.cpp \
 	ui/aui_ctp2/c3_button.cpp \
 	ui/aui_ctp2/c3_checkbox.cpp \
 	ui/aui_ctp2/c3_coloredstatic.cpp \
@@ -528,12 +529,9 @@ ctp2_SOURCES = \
 	ai/diplomacy/proposalanalysis.cpp \
 	ai/strategy/scheduler/Plan.cpp \
 	ai/strategy/scheduler/scheduler.cpp \
-	ai/strategy/goals/ctpgoal.cpp \
 	ai/strategy/goals/Goal.cpp \
-	ai/strategy/squads/Squad.cpp \
 	ai/strategy/squads/squad_Strength.cpp \
 	ai/strategy/agents/agent.cpp \
-	ai/strategy/agents/ctpagent.cpp \
 	ai/mapanalysis/boundingrect.cpp \
 	ai/mapanalysis/mapanalysis.cpp \
 	ai/mapanalysis/settlemap.cpp \
