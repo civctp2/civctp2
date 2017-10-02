@@ -83,7 +83,7 @@
 #include "Scheduler.h"
 #include "Goal.h"
 #include "GoalRecord.h"                     // g_theGoalDB
-#include "Agent.h"
+#include "agent.h"
 #include "mapanalysis.h"
 #include "governor.h"
 #include "AgreementMatrix.h"

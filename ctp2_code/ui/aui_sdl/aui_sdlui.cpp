@@ -90,6 +90,10 @@ aui_SDLUI::aui_SDLUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
+	/**retval = aui_UI::CreateScreen();
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;*/
+
 #if defined(HAVE_X11)
 	char *dispname = getenv("DISPLAY");
 	if (dispname) {
@@ -148,6 +152,19 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	if(!m_secondary) {
+		m_secondary = new aui_SDLSurface(
+			&errcode,
+			m_width,
+			m_height,
+			m_bpp,
+			NULL,
+			FALSE );
+		Assert( AUI_NEWOK(m_primary,errcode) );
+		assert( AUI_NEWOK(m_primary,errcode) );
+		if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+	}
 
 	m_pixelFormat = m_primary->PixelFormat();
 

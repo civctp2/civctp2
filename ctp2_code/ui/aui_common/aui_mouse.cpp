@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,7 +59,11 @@ LPCRITICAL_SECTION aui_Mouse::m_lpcs = NULL;
 SDL_mutex *aui_Mouse::m_lpcs = NULL;
 #endif
 
+#ifdef __AUI_USE_SDL__
+#define k_AUI_MOUSE_THREAD_SLEEP_TIME	10000
+#else
 #define k_AUI_MOUSE_THREAD_SLEEP_TIME	10
+#endif
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
@@ -67,6 +71,19 @@ extern CivApp		*g_civApp;
 #ifdef USE_SDL
 #include <SDL.h>
 #include <SDL_thread.h>
+#endif
+
+#ifdef LINUX
+#include <unistd.h>
+#endif
+ 
+#ifdef __AUI_USE_SDL__
+BOOL g_mouseShouldTerminateThread = FALSE;
+BOOL g_mouseThreadSuspend = FALSE;
+sint32 g_oldX = 0;
+sint32 g_oldY = 0;
+sint32 g_oldW = 0;
+sint32 g_oldH = 0;
 #endif
 
 aui_Mouse::aui_Mouse
@@ -125,7 +142,8 @@ AUI_ERRCODE aui_Mouse::InitCommon( void )
         int x = 0, y = 0;
         Uint8 state = SDL_GetMouseState(&x, &y);
         m_data.position.x = x;
-        m_data.position.y = y;
+		m_data.position.y = y;
+		g_oldX = g_oldY = g_oldW = g_oldH = 0;
 #endif
 
 	if ( !m_mouseRefCount++ )
@@ -492,7 +510,9 @@ AUI_ERRCODE aui_Mouse::End( void )
 		else
 			TerminateThread( m_thread, 1 );
 #elif defined(__AUI_USE_SDL__)
-		SDL_KillThread(m_thread);
+		g_mouseShouldTerminateThread = TRUE;
+		//SDL_KillThread(m_thread);
+		SDL_WaitThread(m_thread, NULL);
 #endif
 
 		Erase();
@@ -539,6 +559,8 @@ AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 		return AUI_ERRCODE_OK;
 	}
 #ifdef __AUI_USE_SDL__
+	g_mouseThreadSuspend = TRUE;
+	m_suspendCount++;
 	return AUI_ERRCODE_OK;
 #elif defined(__AUI_USE_DIRECTX__)
 	SetEvent( m_suspendEvent );
@@ -581,6 +603,8 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 	}
 
 #ifdef __AUI_USE_SDL__
+	g_mouseThreadSuspend = FALSE;
+	m_suspendCount = 0;
 	return AUI_ERRCODE_OK;
 #elif defined(__AUI_USE_DIRECTX__)
 	if ( ResumeThread( m_thread ) != 0xffffffff )
@@ -640,6 +664,9 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 
 	while ( !mouse->ShouldTerminateThread()  )
 	{
+#ifdef __AUI_USE_SDL__
+		/*if(!g_mouseThreadSuspend)*/ {
+#endif
 		mouse->HandleAnim();
 
 		(void) mouse->GetInput();
@@ -647,7 +674,29 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 		mouse->ReactToInput();
 
 		mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
+#ifdef __AUI_USE_SDL__0
+			// Draw the mouse on SDL Screen now
+			SDL_Surface * screen = SDL_GetVideoSurface();
+			POINT hotspot;
+			mouse->GetHotspot(&hotspot.x, &hotspot.y);
 
+			if(g_oldW>0 && g_oldH>0) {
+				SDL_UpdateRect(screen, g_oldX, g_oldY, g_oldW, g_oldH);
+			}
+			sint32 dX = mouse->X() - hotspot.x;
+			sint32 dY = mouse->Y() - hotspot.y;
+			sint32 dW = k_MOUSE_MAXSIZE;
+			sint32 dH = k_MOUSE_MAXSIZE;
+			if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
+			if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
+			if(dX+dW>screen->w) dW = screen->w-dX;
+			if(dY+dH>screen->h) dH = screen->h-dY;
+			if(dW>0 && dH>0) {
+				SDL_UpdateRect(screen, dX, dY, dW, dH);
+			}
+			g_oldX = dX; g_oldY = dY; g_oldW = dW; g_oldH = dH;
+#endif
+		}
 #ifdef WIN32
 		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
 #elif defined(LINUX)
@@ -718,6 +767,8 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 {
 	if ( IsHidden() || (!*m_curCursor)) return AUI_ERRCODE_OK;
 
+	if ((*m_curCursor)==NULL) return AUI_ERRCODE_OK;
+	
 	POINT hotspot;
 	(*m_curCursor)->GetHotspot(hotspot);
 
@@ -773,7 +824,20 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		&mixRect,
 		k_AUI_BLITTER_FLAG_COPY | k_AUI_BLITTER_FLAG_FAST);
 	Assert( errcode == AUI_ERRCODE_OK );
-
+#ifdef __AUI_USE_SDL__0
+	SDL_Surface * screen = SDL_GetVideoSurface();
+	sint32 dX = rect.left;
+	sint32 dY = rect.top;
+	sint32 dW = mixRect.right - mixRect.left;
+	sint32 dH = mixRect.bottom - mixRect.top;
+	if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
+	if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
+	if(dW>0 && dH>0) {
+		if(dX+dW>screen->w) dW = screen->w-dX;
+		if(dY+dH>screen->h) dH = screen->h-dY;
+		SDL_UpdateRect(screen, dX, dY, dW, dH);
+	}
+#endif
 	if ( m_reset ) m_reset = FALSE;
 	else if ( (-k_MOUSE_MAXSIZE < dx && dx < k_MOUSE_MAXSIZE)
 	&&        (-k_MOUSE_MAXSIZE < dy && dy < k_MOUSE_MAXSIZE) )
@@ -810,6 +874,19 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 			&fixRect,
 			k_AUI_BLITTER_FLAG_COPY | k_AUI_BLITTER_FLAG_FAST);
 		Assert( errcode == AUI_ERRCODE_OK );
+#ifdef __AUI_USE_SDL__0
+		dX = fixX;
+		dY = fixY;
+		dW = fixRect.right - fixRect.left;
+		dH = fixRect.bottom - fixRect.top;
+		if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
+		if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
+		if(dW>0 && dH>0) {
+			if(dX+dW>screen->w) dW = screen->w-dX;
+			if(dY+dH>screen->h) dH = screen->h-dY;
+			SDL_UpdateRect(screen, dX, dY, dW, dH);
+		}
+#endif
 	}
 
 	errcode = g_ui->TheBlitter()->Blt(
@@ -829,6 +906,19 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 		&rect,
 		k_AUI_BLITTER_FLAG_CHROMAKEY );
 	Assert( errcode == AUI_ERRCODE_OK );
+#ifdef __AUI_USE_SDL__0
+	dX = rect.left;
+	dY = rect.top;
+	dW = rect.right - rect.left;
+	dH = rect.bottom - rect.top;
+	if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
+	if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
+	if(dW>0 && dH>0) {
+		if(dX+dW>screen->w) dW = screen->w-dX;
+		if(dY+dH>screen->h) dH = screen->h-dY;
+		SDL_UpdateRect(screen, dX, dY, dW, dH);
+	}
+#endif
 
 	errcode = g_ui->BltToSecondary(
 		mixRect.left,

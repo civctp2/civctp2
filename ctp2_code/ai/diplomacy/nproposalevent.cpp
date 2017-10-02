@@ -53,7 +53,7 @@
 #include "network.h"
 #include "pollution.h"
 #include "director.h"
-#include "gold.h"
+#include "Gold.h"
 
 
 STDEHANDLER(General_NewProposalEvent)

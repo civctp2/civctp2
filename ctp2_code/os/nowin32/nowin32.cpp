@@ -25,10 +25,12 @@
 #include <gtk/gtk.h>
 #endif
 
+#include "cifm.h"
+
 char*
 _fullpath(char* absolute, const char* relative, size_t bufsize)
 {
-	char ret[MAX_PATH] = { 0 };
+	static char ret[MAX_PATH] = { 0 };
 	char *dest = (absolute == NULL) ? ret : absolute;
 	size_t size = (absolute == NULL) ? MAX_PATH : bufsize;
 
@@ -36,11 +38,11 @@ _fullpath(char* absolute, const char* relative, size_t bufsize)
 		getcwd(dest, size - 1);
 		dest[size - 1] = '\0';
 	} else if (relative[0] == FILE_SEPC) {
-		strncpy(dest, relative, size - 1);
+		strncpy(dest, CI_FixName(relative), size - 1);
 		dest[size - 1] = '\0';
 	} else {
 #ifdef __USE_GNU
-		char *abs = canonicalize_file_name(relative);
+		char *abs = canonicalize_file_name(CI_FixName(relative));
 		if (abs) {
 			strncpy(dest, abs, size - 1);
 			dest[size - 1] = '\0';
@@ -50,7 +52,7 @@ _fullpath(char* absolute, const char* relative, size_t bufsize)
 		}
 #elif defined(BSD) || defined(__USE_BSD)
 		char rlpath[PATH_MAX] = { 0 };
-		char *abs = realpath(relative, rlpath);
+		char *abs = realpath(CI_FixName(relative), rlpath);
 		if (abs) {
 			if (!absolute) {
 				return strdup(rlpath);

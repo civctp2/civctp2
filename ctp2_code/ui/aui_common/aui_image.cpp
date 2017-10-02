@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevented.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 
 	if ( !filename ) return AUI_ERRCODE_INVALIDPARAM;
 
-	strncpy( m_filename, filename, MAX_PATH );
+	strncpy( m_filename, CI_FixName(filename), MAX_PATH );
 
 	if (g_ui && g_ui->TheMemMap())
 	{

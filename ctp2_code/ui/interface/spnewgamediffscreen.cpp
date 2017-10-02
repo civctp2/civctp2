@@ -48,9 +48,9 @@
 #include "spnewgamewindow.h"
 #include "spnewgamediffscreen.h"
 
-#include "ctp2_ListBox.h"
-#include "ctp2_ListItem.h"
-#include "ctp2_static.h"
+#include "ctp2_listbox.h"
+#include "ctp2_listitem.h"
+#include "ctp2_Static.h"
 #include "DifficultyRecord.h"
 #include "RiskRecord.h"
 

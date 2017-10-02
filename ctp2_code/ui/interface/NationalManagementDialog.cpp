@@ -29,11 +29,11 @@
 //   it displays the correct value.  John Bytheway, late 2003
 // - Disabled rush buy button when it is not the players turn by John Bytheway.
 // - No rush buy costs are displayed if all selected items are capitalization
-//   or infrastructure, by Martin Gühmann.
+//   or infrastructure, by Martin Gï¿½hmann.
 // - No turn numbers aren't shown anymore in the listbox if the build item is
-//   infrastructure or capitalization, by Martin Gühmann.
+//   infrastructure or capitalization, by Martin Gï¿½hmann.
 // - Rush buy button is disabled when it is not the players turn,
-//   by Martin Gühmann.
+//   by Martin Gï¿½hmann.
 // - #01 Added a third tab to the dialog that shows the nuber of experts and
 //   military units in each city.
 //   (L. Hirth 6/2004)
@@ -43,12 +43,12 @@
 //   gross production. So it is done for science and gold. This helps the
 //   player better to know how much food is needed, as a negative amount is
 //   displayed if the city starves. Gold is now displayed in red if it is
-//   critical. - April 6th 2005 Martin Gühmann
-// - Added City Manager button and functions callback. - July 24th 2005 Martin Gühmann
+//   critical. - April 6th 2005 Martin Gï¿½hmann
+// - Added City Manager button and functions callback. - July 24th 2005 Martin Gï¿½hmann
 // - National Manager window will always be displayed on top of other
-//   windows when activated. - July 24th 2005 Martin Gühmann
+//   windows when activated. - July 24th 2005 Martin Gï¿½hmann
 // - Corrected crashes with mods.
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -450,7 +450,7 @@ void NationalManagementDialog::UpdateGovernor()
 	{
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -580,7 +580,7 @@ void NationalManagementDialog::UpdateRushBuy()
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -682,14 +682,14 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_PRODUCTION)) {
-		// Use net production instead gross production. - Martin Gühmann
+		// Use net production instead gross production. - Martin Gï¿½hmann
 		sprintf(stringBuffer, "%d", cityData->GetNetCityProduction());
 		column->SetText(stringBuffer);
 		column->SetTextColor(colorNorm);
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FOOD)) {
-		// Use net food instead of gross food. - Martin Gühmann
+		// Use net food instead of gross food. - Martin Gï¿½hmann
 		sint32 food = cityData->GetNetCityFood();
 		sprintf(stringBuffer, "%d", food);
 		column->SetText(stringBuffer);
@@ -704,7 +704,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		sint32 gold = cityData->GetNetCityGold();
 		sprintf(stringBuffer, "%d", gold);
 		column->SetText(stringBuffer);
-		if (gold < 0) { // Gold is critical display in red as well. - Martin Gühmann
+		if (gold < 0) { // Gold is critical display in red as well. - Martin Gï¿½hmann
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else
@@ -846,7 +846,7 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 			static MBCHAR stringBuffer[32];
 			sint32 turns = cityData->HowMuchLonger();
 			if (turns == 0x7fffffff
-			//Added by Martin Gühmann to disable the turn display in case of capitalization and infrastructure
+			//Added by Martin Gï¿½hmann to disable the turn display in case of capitalization and infrastructure
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 				sprintf(stringBuffer, "---");
@@ -1007,7 +1007,7 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1069,8 +1069,8 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uintptr_t>(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uintptr_t>(item2->GetUserData());
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
@@ -1152,8 +1152,8 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uintptr_t>(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uintptr_t>(item2->GetUserData());
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
@@ -1216,8 +1216,8 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uintptr_t>(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uintptr_t>(item2->GetUserData());
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
@@ -1308,7 +1308,7 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 			static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1368,7 +1368,7 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 	if(selectedList->L() == 1) {
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 		    selectedList->GetAtIndex(0)
 		    ))->GetUserData());
@@ -1410,7 +1410,7 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 				selectedList->GetAtIndex(selectIndex)));
 
 			Unit city;
-			city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+			city.m_id = reinterpret_cast<uintptr_t>(item->GetUserData());
 
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}
@@ -1436,7 +1436,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
+		city.m_id = reinterpret_cast<uintptr_t>(
 			static_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1457,7 +1457,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 			selectedList->GetAtIndex(selectIndex2)));
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+		city.m_id = reinterpret_cast<uintptr_t>(item->GetUserData());
 
 		city.GetCityData()->SetUseGovernor(!governorStatus);
 
@@ -1487,7 +1487,7 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 			selectedList->GetAtIndex(selectIndex)));
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+		city.m_id = reinterpret_cast<uintptr_t>(item->GetUserData());
 
 		city.GetCityData()->SetBuildListSequenceIndex(
 			static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
@@ -1530,7 +1530,7 @@ void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *contro
 			selectedList->GetAtIndex(selectIndex)));
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+		city.m_id = reinterpret_cast<uintptr_t>(item->GetUserData());
 
 		city.GetCityData()->InsertBuildItem(
 			city.GetCityData()->GetBuildQueue()->GetLen() ? 0 : -1,
@@ -1560,7 +1560,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 			selectedList->GetAtIndex(selectIndex)));
 
 		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+		city.m_id = reinterpret_cast<uintptr_t>(item->GetUserData());
 
 		// JJB removed the following:
 		// and replaced it with the following:
@@ -1703,7 +1703,7 @@ Unit NationalManagementDialog::GetSelectedCity()
 
 	if(!item) return city;
 
-	city.m_id = (uint32)item->GetUserData();
+	city.m_id = (uintptr_t)item->GetUserData();
 	return city;
 }
 
@@ -1774,7 +1774,7 @@ void NationalManagementDialog::MirrorSelectedCities()
 	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
 
-		uint32 cityId   = reinterpret_cast<uint32>
+		uint32 cityId   = reinterpret_cast<uintptr_t>
                             (static_cast<ctp2_ListItem*>
                                 (visList->GetItemByIndex
                                     (selectedList->GetAtIndex(selectIndex))
@@ -1790,7 +1790,7 @@ void NationalManagementDialog::MirrorSelectedCities()
         {
 		    for (sint32 i = 0; i < (*p)->NumItems(); ++i)
             {
-			    uint32 invisId  = reinterpret_cast<uint32>
+			    uint32 invisId  = reinterpret_cast<uintptr_t>
                                     (static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))
                                         ->GetUserData()
                                     );

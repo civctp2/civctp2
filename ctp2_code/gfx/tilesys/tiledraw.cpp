@@ -404,7 +404,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else
 				break;
 			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gï¿½hmann
 			drewSomething = true;
 		}
 	}
@@ -427,12 +427,12 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			if (percent < 50)
 			{
 				index = 0;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gï¿½hmann
 			}
 			else if (percent < 100)
 			{
 				index = 1;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gï¿½hmann
 			}
 			else
 			{
@@ -452,7 +452,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				else
 				{
 					index = 2;
-					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gï¿½hmann
 				}
 			}
 			drewSomething = true;
@@ -504,7 +504,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
 												   sint32 type, sint32 x, sint32 y,
 												   uint16 index, bool fog, sint32 percentComplete)
-												   //Added sint32 percentComplete by Martin Gühmann
+												   //Added sint32 percentComplete by Martin Gï¿½hmann
 {
 	Pixel16		*data = NULL;
 
@@ -3140,7 +3140,8 @@ L0:
                                     goto L1;
                                 pedx = tileData[ax];
                                 if (pedx == 0)
-                                    goto L2;
+									goto L2;
+								++pedx;
                                 tileData[ax] = pedx;
                                 dx = pedx[-1];
                                 goto L1;

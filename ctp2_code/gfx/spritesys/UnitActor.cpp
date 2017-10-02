@@ -1792,13 +1792,13 @@ void UnitActor::DrawHealthBar(void)
 	{
 		if (stackSize > 1 && myCell->GetNumUnits())
 		{
-			ratio = std::max(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
+			ratio = std::max<double>(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
 		}
 		else
 		{
 			if (m_healthPercent < 0)
 			{
-				ratio = std::max(0.0, m_unitID.GetHP() / m_unitID->CalculateTotalHP());
+				ratio = std::max<double>(0.0, m_unitID.GetHP() / m_unitID->CalculateTotalHP());
 			}
 			else
 			{
@@ -1808,7 +1808,7 @@ void UnitActor::DrawHealthBar(void)
 	}
 	else
 	{
-		ratio = std::max(0.0, m_healthPercent);
+		ratio = std::max<double>(0.0, m_healthPercent);
 	}
 
 	POINT	iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);

@@ -436,7 +436,7 @@ void TiledMap::DrawLegalMove
 			currMovementPoints	   -= GetEntryCost(sel_army, currPos);
 			if (isFirstMove)
 			{
-				currMovementPoints  = std::max(currMovementPoints, 0.0);
+				currMovementPoints  = std::max<double>(currMovementPoints, 0.0);
 				isFirstMove			= false;
 			}
 		}
@@ -702,7 +702,7 @@ void TiledMap::DrawLegalMove
 
 			if (isFirstMove)
 			{
-				currMovementPoints = std::max(currMovementPoints, 0.0);
+				currMovementPoints = std::max<double>(currMovementPoints, 0.0);
 				// isFirstMove not reset yet: used for count later.
 			}
 		}
@@ -722,7 +722,7 @@ void TiledMap::DrawLegalMove
 			count -= cost;
 			if (isFirstMove)
 			{
-                count		= std::max(count, 0.0);
+                count		= std::max<double>(count, 0.0);
 				isFirstMove = false;
 			}
 		}

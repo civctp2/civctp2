@@ -25,11 +25,11 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 // - Events that should go into the event queue are only added if all their
-//   arguments are valid. (7-Nov-2007 Martin Gühmann)
+//   arguments are valid. (7-Nov-2007 Martin Gï¿½hmann)
 // - Events whose arguments became invalid between call and execution are not
-//   executed and an error message is given. (7-Nov-2007 Martin Gühmann)
+//   executed and an error message is given. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -123,24 +123,204 @@ GameEventManager::~GameEventManager()
 	}
 }
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1 };
+const void* args[] = { NULL };
+return AddEvent(insert, type, argTypes, args);
+}
+	 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2 };
+const void* args[] = { &a1 };
+return AddEvent(insert, type, argTypes, args);
+}
+	 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3 };
+const void* args[] = { &a1, &a2 };
+return AddEvent(insert, type, argTypes, args);
+}
+	 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4 };
+const void* args[] = { &a1, &a2, &a3 };
+return AddEvent(insert, type, argTypes, args);
+}
+	 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5 };
+const void* args[] = { &a1, &a2, &a3, &a4 };
+return AddEvent(insert, type, argTypes, args);
+}
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5, int a5,
+	GAME_EVENT_ARGUMENT t6)
+	 {
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5, t6 };
+const void* args[] = { &a1, &a2, &a3, &a4, &a5 };
+return AddEvent(insert, type, argTypes, args);
+}
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, const MapPoint& a1,
+	GAME_EVENT_ARGUMENT t2)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2 };
+const void* args[] = { &a1 };
+return AddEvent(insert, type, argTypes, args);
+}
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3 };
+const void* args[] = { &a1, &a2 };
+return AddEvent(insert, type, argTypes, args);
+}
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+	GAME_EVENT_ARGUMENT t4)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4 };
+const void* args[] = { &a1, &a2, &a3 };
+return AddEvent(insert, type, argTypes, args);
+}
 
-GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
-										  GAME_EVENT type, ...)
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4 };
+const void* args[] = { &a1, &a2, &a3 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+	GAME_EVENT_ARGUMENT t4)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4 };
+const void* args[] = { &a1, &a2, &a3 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5 };
+const void* args[] = { &a1, &a2, &a3, &a4 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5 };
+const void* args[] = { &a1, &a2, &a3, &a4 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, Path* a2,
+	GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5 };
+const void* args[] = { &a1, &a2, &a3, &a4 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5, int a5,
+	GAME_EVENT_ARGUMENT t6)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5, t6 };
+const void* args[] = { &a1, &a2, &a3, &a4, &a5 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, int a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5, const MapPoint& a5,
+	GAME_EVENT_ARGUMENT t6)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5, t6 };
+const void* args[] = { &a1, &a2, &a3, &a4, &a5 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+	GAME_EVENT_ARGUMENT t1, int a1,
+	GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+	GAME_EVENT_ARGUMENT t3, int a3,
+	GAME_EVENT_ARGUMENT t4, int a4,
+	GAME_EVENT_ARGUMENT t5, int a5,
+	GAME_EVENT_ARGUMENT t6, int a6,
+	GAME_EVENT_ARGUMENT t7, int a7,
+	GAME_EVENT_ARGUMENT t8)
+{
+const GAME_EVENT_ARGUMENT argTypes[] = { t1, t2, t3, t4, t5, t6, t7, t8 };
+const void* args[] = { &a1, &a2, &a3, &a4, &a5, &a6, &a7 };
+return AddEvent(insert, type, argTypes, args);
+}
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, 
+	const GAME_EVENT_ARGUMENT* argTypes, const void** args)
 {
 	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-
-
-
-
-
-
-
 
 	if(g_slicEngine->AtBreak()) {
 		return GEV_ERR_AtBreak;
@@ -151,11 +331,7 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 	}
 	EVENTLOG(("AddEvent: %s(", g_eventDescriptions[type].name));
 
-	va_list vl;
-	va_start(vl, type);
-
-	bool argsOk = VerifyArgs(type, &vl);
-	va_end(vl);
+	bool argsOk = VerifyArgs(type, argTypes, args);
 
 	EVENTLOG(("): Serial: %d\n", m_serial));
 
@@ -164,11 +340,7 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 		return GEV_ERR_WrongArguments;
 	}
 
-	va_start(vl, type);
-
-	GameEventArgList *argList = new GameEventArgList(&vl, type);
-
-	va_end(vl);
+	GameEventArgList *argList = new GameEventArgList(argTypes, args, type);
 
 	return ArglistAddEvent(insert, type, argList);
 }
@@ -483,7 +655,7 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
     return count;
 }
 
-bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
+bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* argTypes, const void** args)
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
@@ -497,10 +669,11 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 	GAME_EVENT_ARGUMENT nextArg;
 
 	sint32 argNum = 0;
+	uint32 givenArgNum = 0;
 	bool isOptional = false;
 
 	while(!done) {
-		nextArg = va_arg(*vl, GAME_EVENT_ARGUMENT);
+		nextArg = argTypes[givenArgNum];
 
 		if(nextArg == GEA_End && *argString == 0)
 			return true;
@@ -555,68 +728,68 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		switch(nextArg) {
 			case GEA_Army:
 				if(!CheckArg(argNum, *argString, GEAC_ARMY)) return false;
-				a = va_arg(*vl, Army);
+				a = *(Army*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", a.m_id);
 				break;
 			case GEA_Unit:
 				if(!CheckArg(argNum, *argString, GEAC_UNIT)) return false;
-				u = va_arg(*vl, Unit);
+				u = *(Unit*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", u.m_id);
 				break;
 			case GEA_City:
 				if(!CheckArg(argNum, *argString, GEAC_CITY)) return false;
-				c = va_arg(*vl, Unit);
+				c = *(Unit*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", c.m_id);
 				break;
 			case GEA_Gold:
 				if(!CheckArg(argNum, *argString, GEAC_GOLD)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Path:
 				if(!CheckArg(argNum, *argString, GEAC_PATH)) return false;
-				path = va_arg(*vl, Path *);
+				path = *(Path**)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", path);
 				break;
 			case GEA_MapPoint:
 				if(!CheckArg(argNum, *argString, GEAC_MAPPOINT)) return false;
-				pos = va_arg(*vl, MapPoint);
+				pos = *(MapPoint*)args[givenArgNum];
 				EVENTLOG(("(%d,%d), ", pos.x, pos.y));
 				break;
 			case GEA_Player:
 				if(!CheckArg(argNum, *argString, GEAC_PLAYER)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Int:
 				if(!CheckArg(argNum, *argString, GEAC_INT)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Direction:
 				if(!CheckArg(argNum, *argString, GEAC_DIRECTION)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 
 			case GEA_Wonder:
 				if(!CheckArg(argNum, *argString, GEAC_WONDER)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Advance:
 				if(!CheckArg(argNum, *argString, GEAC_ADVANCE)) return false;
-				value = va_arg(*vl, sint32);
+				value = *(sint32*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Improvement:
 				if(!CheckArg(argNum, *argString, GEAC_IMPROVEMENT)) return false;
-				imp = va_arg(*vl, TerrainImprovement);
+				imp = *(TerrainImprovement*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", imp.m_id);
 				break;
 			case GEA_TradeRoute:
 				if(!CheckArg(argNum, *argString, GEAC_TRADEROUTE)) return false;
-				route = va_arg(*vl, TradeRoute);
+				route = *(TradeRoute*)args[givenArgNum];
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", route.m_id);
 				break;
 			case GEA_End:
@@ -632,6 +805,7 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 				return false;
 		}
 		argString++;
+		givenArgNum++;
 	}
 	return false;
 }

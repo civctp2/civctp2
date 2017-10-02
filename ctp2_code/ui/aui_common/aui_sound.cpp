@@ -41,7 +41,7 @@ AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 	if ( !filename )
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	strncpy ( m_filename, filename, MAX_PATH );
+	strncpy ( m_filename, CI_FixName(filename), MAX_PATH );
 
 	m_format = (aui_SoundFormat *)
 		g_ui->TheMemMap()->GetFileFormat ( m_filename );

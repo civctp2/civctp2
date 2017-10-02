@@ -26,7 +26,7 @@
 //
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include "SelItem.h"
 #include "player.h"
 #include "Sci.h"
-#include "gold.h"
+#include "Gold.h"
 #include "prjfile.h"
 
 #include "greatlibrary.h"
@@ -550,7 +550,7 @@ sint32 sci_advancescreen_loadList( void )
 			{
 				child->SetText(str);
 			}
-			item->SetUserData((void*)i);
+			item->SetUserData((void*)(intptr_t)i);
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
@@ -572,7 +572,7 @@ sint32 sci_advancescreen_loadList( void )
 		s_advanceList->SelectItem(index);
 		ctp2_ListItem *	item =
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
-		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
+		isIndexOk = (research == reinterpret_cast<intptr_t>(item->GetUserData()));
 	}
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);
@@ -619,7 +619,7 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 
 
 
-	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
+	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)(intptr_t)item->GetUserData());
 
 	if ( advanceTurns == -1 ) {
 		sprintf( str, "-" );

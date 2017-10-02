@@ -236,7 +236,7 @@ size_t Text_Hasher<DATA_TYPE>::Hash_The_String
         ++chars_used
     )
     {
-        hash_location   = (hash_location*a + abs(*key)) % m_hash_table_size;
+        hash_location   = (hash_location*a + labs(*key)) % m_hash_table_size;
         a               = a * b % (m_hash_table_size - 1);
         ++key;
 	}

@@ -5,6 +5,7 @@
 #define __VICTORYMOVIEWIN__
 
 #include "aui_action.h"
+#include "GameOver.h"
 
 class Sequence;
 enum GAME_OVER;

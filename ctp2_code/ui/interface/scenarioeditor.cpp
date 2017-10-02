@@ -25,37 +25,37 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, by Martin Gühmann.
+//   dependent, by Martin Gï¿½hmann.
 // - Make sure that newly created cities have the size as displayed in the
-//   CityPopSpinner, by Martin Gühmann.
+//   CityPopSpinner, by Martin Gï¿½hmann.
 // - Corrected wrap handling, by Fromafar.
-// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
-// - Memory leaks fixed, by Martin Gühmann and Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gï¿½hmann.
+// - Memory leaks fixed, by Martin Gï¿½hmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
-//   first time in a game session, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+//   first time in a game session, by Martin Gï¿½hmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin Gï¿½hmann.
 // - Fixed player spinners in the scenario editor so that the last player
 //   is still accessable even if players before in the row were killed,
-//   by Martin Gühmann.
+//   by Martin Gï¿½hmann.
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-// - Fix of a crash by Martin Gühmann. If you selected a city changed the
+// - Fix of a crash by Martin Gï¿½hmann. If you selected a city changed the
 //   player, the city was destroyed by in game events, conquest, starvation
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
-// - Added icons and tooltips to city style buttons, by Martin Gühmann.
+// - Added icons and tooltips to city style buttons, by Martin Gï¿½hmann.
 // - Repaired backwards compatibility and possible crashes.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gï¿½hmann)
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gï¿½hmann)
 // - Spinner callbacks are added at the end so that they aren't called due to
-//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gühmann)
+//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gï¿½hmann)
 // - Switching between players now updates the city list of the main control
-//   panel city tab. (Feb 4th 2007 Martin Gühmann)
+//   panel city tab. (Feb 4th 2007 Martin Gï¿½hmann)
 // - TODO add show Enemy Health and Debug AI buttons to Unit Tab
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 // - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -131,7 +131,7 @@
 #include "RiskRecord.h"
 
 #include "Cell.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "TerrImprove.h"
 #include "civapp.h"
 
@@ -150,7 +150,7 @@
 #include "newturncount.h"
 #include "TurnYearStatus.h"
 #include "MaterialPool.h"
-#include "gold.h"
+#include "Gold.h"
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
@@ -261,7 +261,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
     m_brushSize                 (1),
     m_unitIndex                 (-1),
     m_cityStyle                 (CITY_STYLE_EDITOR), 	//displayed in the CityPopSpinner to new created cities.
- 	m_newPopSize                (1), 	//Added by Martin Gühmann to add the pop number
+ 	m_newPopSize                (1), 	//Added by Martin Gï¿½hmann to add the pop number
     m_startLocMode              (SCEN_START_LOC_MODE_NONE),
     m_haveRegion                (false),
     m_mapMode                   (SCEN_MAP_NONE),
@@ -320,7 +320,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin)
 		{
-			//Added by Martin Gühmann to make sure that the Scenario Editor
+			//Added by Martin Gï¿½hmann to make sure that the Scenario Editor
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
@@ -744,7 +744,7 @@ void ScenarioEditor::PopulateTerrainList()
 
 		m_terrainSwitches[t] = sw;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainSwitch, (void *)t);
+		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainSwitch, (void *)(intptr_t)t);
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)trec->GetNameText());
 
 		col++;
@@ -846,7 +846,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 			sw->SetImage((char *)iconname, 1);
 		}
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)ui);
+		sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)(intptr_t)ui);
 
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
 
@@ -858,7 +858,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 		{
 			sw->SetState(1);
 		}
-		sw->SetActionFuncAndCookie(ScenarioEditor::ExcludeSwitch, (void *)ui);
+		sw->SetActionFuncAndCookie(ScenarioEditor::ExcludeSwitch, (void *)(intptr_t)ui);
 		col++;
 		if(col >= k_UNIT_COLS_PER_ROW) {
 			col = 0;
@@ -872,7 +872,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 		Assert(curItem && curItemBox);
 		for (sint32 dis = col; dis < k_UNIT_COLS_PER_ROW; dis++) {
 			ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(dis * 2);
-			sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)-1);
+			sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)(intptr_t)-1);
 			Assert(sw);
 			if(sw) sw->Enable(FALSE);
 		}
@@ -892,7 +892,7 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-	//Added by Martin Gühmann so that there are now as much buttons
+	//Added by Martin Gï¿½hmann so that there are now as much buttons
 	//as city styles.
 	for (sint32 cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
 		if(col == 0) {
@@ -916,7 +916,7 @@ void ScenarioEditor::PopulateCityList()
 		Assert(sw);
 		if(!sw) break;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)cs);
+		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)(intptr_t)cs);
 		col++;
 		if(col >= k_CITY_COLS_PER_ROW) {
 			col = 0;
@@ -924,8 +924,8 @@ void ScenarioEditor::PopulateCityList()
 			curItemBox = NULL;
 		}
 
-//Added by Martin Gühmann to give the city buttons an icon.
-//Added by Martin Gühmann to show the according city style name in the tooltip.
+//Added by Martin Gï¿½hmann to give the city buttons an icon.
+//Added by Martin Gï¿½hmann to show the according city style name in the tooltip.
 
 // Modified to allow buttons not to have an icon:
 // - moved down check to prevent a premature break
@@ -1019,7 +1019,7 @@ void ScenarioEditor::PopulateTerrainImprovementList()  //emod1 note  use this fo
 
 		m_terrainImpSwitches[t] = sw;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainImprovementSwitch, (void *)t);
+		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainImprovementSwitch, (void *)(intptr_t)t);
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
 
 		col++;
@@ -1060,7 +1060,7 @@ void ScenarioEditor::RehideUnitSwitches()
 		Assert(sw);
 		if(!sw) break;
 
-		if((sint32)sw->GetCookie() < 0) {
+		if((intptr_t)sw->GetCookie() < 0) {
 
 			sw->Enable(FALSE);
 		}
@@ -1124,7 +1124,7 @@ sint32 ScenarioEditor::CityStyle()
     return (s_scenarioEditor) ? s_scenarioEditor->m_cityStyle : CITY_STYLE_EDITOR;
 }
 
-//Added by Martin Gühmann to make
+//Added by Martin Gï¿½hmann to make
 //shure that newly created cities
 //have the same pop size as displayed in
 //the CityPopSpinner
@@ -1199,7 +1199,7 @@ void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 actio
 	if (action == AUI_SWITCH_ACTION_PRESS)
 		DisableErase();
 
-	sint32 ter = (sint32)cookie;
+	sint32 ter = (intptr_t)cookie;
 
 	if(s_scenarioEditor->m_terrainImpSwitches[ter]->GetState() == 0) {
 		s_scenarioEditor->m_paintTerrainImprovement = -1;
@@ -1235,7 +1235,7 @@ void ScenarioEditor::TerrainSwitch(aui_Control *control, uint32 action, uint32 d
 	if (action == AUI_SWITCH_ACTION_PRESS)
 		DisableErase();
 
-	sint32 ter = (sint32)cookie;
+	sint32 ter = (intptr_t)cookie;
 	if(s_scenarioEditor->m_terrainSwitches[ter]->GetState() == 0) {
 		s_scenarioEditor->m_paintTerrain = -1;
 		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAIN) {
@@ -1261,13 +1261,13 @@ void ScenarioEditor::ExcludeSwitch(aui_Control *control, uint32 action, uint32 d
 {
 	if(( action != AUI_SWITCH_ACTION_ON) && (action != AUI_SWITCH_ACTION_OFF) )
 		return;
-	BOOL isExcluded = g_exclusions->IsUnitExcluded((sint32)cookie);
-	g_exclusions->ExcludeUnit((sint32)cookie, !isExcluded);
+	BOOL isExcluded = g_exclusions->IsUnitExcluded((intptr_t)cookie);
+	g_exclusions->ExcludeUnit((intptr_t)cookie, !isExcluded);
 }
 void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_SWITCH_ACTION_OFF) {
-		if(s_scenarioEditor && s_scenarioEditor->m_unitIndex == (sint32)cookie) {
+		if(s_scenarioEditor && s_scenarioEditor->m_unitIndex == (intptr_t)cookie) {
 			s_scenarioEditor->m_unitIndex = -1;
 			if(s_scenarioEditor->m_mapMode == SCEN_MAP_UNIT) {
 				s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
@@ -1318,7 +1318,7 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 	Assert(s_scenarioEditor);
 	if (s_scenarioEditor)
     {
-		s_scenarioEditor->m_unitIndex   = (sint32) cookie;
+		s_scenarioEditor->m_unitIndex   = (intptr_t) cookie;
 		s_scenarioEditor->m_mapMode     = SCEN_MAP_UNIT;
 	}
 }
@@ -1326,7 +1326,7 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_SWITCH_ACTION_OFF) {
-		if (s_scenarioEditor && s_scenarioEditor->m_cityStyle == (sint32)cookie)
+		if (s_scenarioEditor && s_scenarioEditor->m_cityStyle == (intptr_t)cookie)
         {
 			s_scenarioEditor->m_cityStyle = CITY_STYLE_EDITOR;
 			if(s_scenarioEditor->m_mapMode == SCEN_MAP_CITY) {
@@ -1378,7 +1378,7 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 	Assert(s_scenarioEditor);
 	if (s_scenarioEditor)
     {
-		s_scenarioEditor->m_cityStyle   = (sint32) cookie;
+		s_scenarioEditor->m_cityStyle   = (intptr_t) cookie;
 		s_scenarioEditor->m_mapMode     = SCEN_MAP_CITY;
 	}
 }
@@ -1461,7 +1461,7 @@ void ScenarioEditor::TabCallback(aui_Control *control, uint32 action, uint32 dat
 	Assert(s_scenarioEditor);
 	if (s_scenarioEditor)
     {
-	    s_scenarioEditor->SetTab((SCEN_TAB)(sint32)cookie);
+	    s_scenarioEditor->SetTab((SCEN_TAB)(intptr_t)cookie);
     }
 }
 
@@ -1471,7 +1471,7 @@ void ScenarioEditor::UnitTabButton(aui_Control *control, uint32 action, uint32 d
 
 	Assert(s_scenarioEditor);
 	if(s_scenarioEditor) {
-		s_scenarioEditor->PopulateUnitList((SCEN_UNIT_CAT)(sint32)cookie);
+		s_scenarioEditor->PopulateUnitList((SCEN_UNIT_CAT)(intptr_t)cookie);
 	}
 }
 
@@ -1483,7 +1483,7 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-	//Added by Martin Gühmann to make shure
+	//Added by Martin Gï¿½hmann to make shure
 	//newly created cities have the same pop
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
@@ -1736,7 +1736,7 @@ void ScenarioEditor::CivModeSwitch(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	sint32 i;
-	SCEN_START_LOC_MODE newMode = (SCEN_START_LOC_MODE)(sint32)cookie;
+	SCEN_START_LOC_MODE newMode = (SCEN_START_LOC_MODE)(intptr_t)cookie;
 
 	if(action == AUI_SWITCH_ACTION_OFF) {
 		if(s_scenarioEditor->m_mapMode == SCEN_MAP_STARTFLAGS) {
@@ -1944,7 +1944,7 @@ void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint3
 		return;
 
 	textBox->SetText(text);
-	item->SetUserData((void *)userData);
+	item->SetUserData((void *)(intptr_t)userData);
 	a_List->AddItem(item);
 }
 
@@ -1982,7 +1982,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
-			dbindex = (sint32)selItem->GetUserData();
+			dbindex = (intptr_t)selItem->GetUserData();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theBuildingDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theBuildingDB->NumRecords())
@@ -2003,7 +2003,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
-			dbindex = (sint32)selItem->GetUserData();
+			dbindex = (intptr_t)selItem->GetUserData();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theWonderDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theWonderDB->NumRecords())
@@ -2026,7 +2026,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			break;
 		}
 		case SCEN_ADD_ADVANCES:
-			dbindex = (sint32) selItem->GetUserData();
+			dbindex = (intptr_t) selItem->GetUserData();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theAdvanceDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theAdvanceDB->NumRecords())
@@ -2092,7 +2092,7 @@ void ScenarioEditor::AddRemoveButton(aui_Control *control, uint32 action, uint32
 	Unit city;
 	BOOL haveCity = g_selected_item->GetSelectedCity(city);
 
-	dbindex = (sint32)selItem->GetUserData();
+	dbindex = (intptr_t)selItem->GetUserData();
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
@@ -2224,7 +2224,7 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-		// Added by Martin Gühmann to prevent a crash if you use the
+		// Added by Martin Gï¿½hmann to prevent a crash if you use the
 		// Scenario Editor to select a city, change the player without deselecting
 		// it, destroy this city by conquest or slic or starvation and switching back
 		// to that player.
@@ -2252,7 +2252,7 @@ void ScenarioEditor::BrushSize(aui_Control *control, uint32 action, uint32 data,
 	Assert(s_scenarioEditor);
 	if (s_scenarioEditor)
     {
-    	s_scenarioEditor->m_brushSize = (sint32)cookie;
+    	s_scenarioEditor->m_brushSize = (intptr_t)cookie;
     }
 }
 
@@ -2664,7 +2664,7 @@ void ScenarioEditor::FileAction(FileDialog *dialog, uint32 action, const MBCHAR 
 	if(!s_scenarioEditor) return;
 
 	Assert(dialog == s_scenarioEditor->m_fileDialog);
-	uint32 mode = (uint32)cookie;
+	uint32 mode = (intptr_t)cookie;
 
 	if(action == k_FILE_DIALOG_CANCEL) return;
 
@@ -2843,7 +2843,7 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
-//Added by Martin Gühmann
+//Added by Martin Gï¿½hmann
 
 //----------------------------------------------------------------------------
 //
@@ -2910,15 +2910,7 @@ void ScenarioEditor::MapSize(aui_Control *control, uint32 action, uint32 data, v
 		return;
 
 	MessageBoxDialog::Query( "str_ldl_Confirm_Restart", "ConfirmMapSizeRestart",
-		ScenarioEditor::ChangeMapSizeCallback, (void*)mapSize );
-
-
-
-
-
-
-
-
+		ScenarioEditor::ChangeMapSizeCallback, (void*)(intptr_t)mapSize );
 }
 
 void ScenarioEditor::ChangeMapSizeCallback(bool response, void *userData)
@@ -2926,7 +2918,7 @@ void ScenarioEditor::ChangeMapSizeCallback(bool response, void *userData)
 	if(!response)
 		return;
 
-	g_theProfileDB->SetMapSize((MAPSIZE)(sint32)userData);
+	g_theProfileDB->SetMapSize((MAPSIZE)(intptr_t)userData);
 
 	g_civApp->PostRestartGameAction();
 
@@ -3142,7 +3134,7 @@ void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 
 				continue;
 			s_scenarioEditor->m_otherMapSwitch[i]->SetState(0);
 		}
-		s_scenarioEditor->m_mapMode =  (SCEN_MAP_MODE)(sint32)cookie;
+		s_scenarioEditor->m_mapMode =  (SCEN_MAP_MODE)(intptr_t)cookie;
 	}
 }
 
@@ -3242,7 +3234,7 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-//Added by Martin Gühmann to get the last player in the game.
+//Added by Martin Gï¿½hmann to get the last player in the game.
 sint32 ScenarioEditor::GetLastPlayer()
 {
 	sint32 players = 0;

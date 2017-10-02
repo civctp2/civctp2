@@ -280,6 +280,7 @@
 
 #ifdef LINUX
 #include <time.h>
+#include <unistd.h>
 #endif
 
 extern ScreenManager *          g_screenManager;
@@ -566,7 +567,7 @@ namespace Os
 	void Sleep(uint32 milliSeconds)
 	{
 #ifdef HAVE_UNISTD_H
-		usleep(milliSeconds);
+		usleep(milliSeconds*1000);
 #elif defined(WIN32)
 		::Sleep(milliSeconds);
 #elif defined(LINUX)
@@ -1271,6 +1272,17 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 #ifdef WIN32
     // COM needed for DirectX/Movies
 	CoInitialize(NULL);
+#endif
+#ifdef __AUI_USE_SDL__
+        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO; //why no audio?
+#if defined(_DEBUG) || defined(DEBUG)
+        flags |= SDL_INIT_NOPARACHUTE;
+#endif// _DEBUG || DEBUG
+        int rc = SDL_Init(flags);
+        if (rc != 0) {
+                fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
+                return -1;
+        }
 #endif
 
 	Splash::Initialize();

@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Unload font when something fails.
-// - Added left, center and right to textblttype. (Aug 16th 2005 Martin Gühmann)
+// - Added left, center and right to textblttype. (Aug 16th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 

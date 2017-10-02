@@ -30,7 +30,7 @@
 //
 // - Modified GetSettleTargets so that no settle targets are found that cannot
 //   be settled, because the player does not has any units for the tile in
-//   question. (May 20th 2006 Martin Gühmann)
+//   question. (May 20th 2006 Martin Gï¿½hmann)
 // - Corrected delete operator for array.
 // - Improved settle radius determination on city growth.
 //
@@ -61,6 +61,7 @@ namespace
 
 SettleMap SettleMap::s_settleMap;
 
+template<>
 MapGrid<double>::MapGridArray MapGrid<double>::s_scratch;
 
 SettleMap::SettleMap()

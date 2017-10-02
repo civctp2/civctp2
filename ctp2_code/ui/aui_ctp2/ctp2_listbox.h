@@ -47,10 +47,11 @@ class ctp2_Listbox;
 #include "ctp2_inttypes.h"  // sint32, uint32
 #include "patternbase.h"    // PatternBase
 #include "windows.h"        // BOOL, POINT
+#include "ctp2_listitem.h"	// ctp2_ListItem
 
 struct  aui_MouseEvent;
 class   aui_Surface;
-class   ctp2_ListItem;
+//class   ctp2_ListItem;
 class   ctp2_MenuButton;
 
 class ctp2_ListBox : public aui_ListBox, public PatternBase

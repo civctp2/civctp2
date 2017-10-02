@@ -34,7 +34,7 @@ void MessageBoxDialog::Information(const MBCHAR *message,
 
 	if(g_theCriticalMessagesPrefs->IsEnabled(id))
 	{
-		s_messageBoxDialog = new MessageBoxDialog(message, id, callback, userData, okText, NULL);
+		s_messageBoxDialog = new MessageBoxDialog(message, id, (void*)callback, userData, okText, NULL);
 		s_messageBoxDialog->m_leftButton->Hide();
 		if(!allowDontShow)
 			s_messageBoxDialog->m_dontShowButton->Hide();
@@ -61,7 +61,7 @@ void MessageBoxDialog::Query(const MBCHAR *message,
 	}
 	if(g_theCriticalMessagesPrefs->IsEnabled(id))
 	{
-		s_messageBoxDialog = new MessageBoxDialog(message, id, callback, userData, okText, cancelText);
+		s_messageBoxDialog = new MessageBoxDialog(message, id, (void*)callback, userData, okText, cancelText);
 	}
 	else
 	{
@@ -78,7 +78,7 @@ void MessageBoxDialog::TextQuery(const MBCHAR *message,
 								 const MBCHAR *okText,
 								 const MBCHAR *cancelText)
 {
-	s_messageBoxDialog = new MessageBoxDialog(message, NULL, callback, userData, okText, cancelText);
+	s_messageBoxDialog = new MessageBoxDialog(message, NULL, (void*)callback, userData, okText, cancelText);
 	s_messageBoxDialog->m_isTextQuery = true;
 	s_messageBoxDialog->m_textField->Show();
 	s_messageBoxDialog->m_dontShowButton->Hide();

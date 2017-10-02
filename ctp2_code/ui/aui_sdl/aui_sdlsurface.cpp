@@ -40,7 +40,7 @@ aui_SDLSurface::aui_SDLSurface(
         SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
 	if ( !(m_lpdds = lpdds) )
 	{
-		m_lpdds = SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+		m_lpdds = (isPrimary)?SDL_GetVideoSurface():SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
 		if ( m_lpdds == NULL )
 		{
 			*retval = AUI_ERRCODE_MEMALLOCFAILED;
@@ -71,6 +71,8 @@ aui_SDLSurface::aui_SDLSurface(
 
 	m_pitch = m_lpdds->pitch;
 	m_size = m_pitch * m_height;
+
+	SetChromaKey( m_chromaKey = 0x00000000 );
 }
 
 
@@ -95,7 +97,7 @@ aui_SDLSurface::~aui_SDLSurface()
 
 
 uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
-    int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, color); //|SDL_RLEACCEL ?
+    int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, /*SDL_MapRGB(m_lpdds->format, color>>16, (color>>8)&0xff, color&0xff)*/color); //|SDL_RLEACCEL ?
     //hr == 0 if succeded!
     //printf("%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
 
@@ -103,7 +105,7 @@ uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
         return aui_Surface::SetChromaKey( color ); //sets aui_Surface.m_chromaKey and returns last value!
 
     //return AUI_ERRCODE_OK;  //this is not sensible, should retrun last color key!?!
-    printf("%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
+    //printf("%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
     return (uint32)-1; //better?
     }
 
@@ -124,7 +126,7 @@ AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){
     SDL_LockMutex(m_bltMutex);
     //printf("%s L%d: Locking mutex!\n", __FILE__, __LINE__);
     if (SDL_MUSTLOCK(m_lpdds)) {
-        printf("%s L%d: Locking surface! Check this!\n", __FILE__, __LINE__);
+//        printf("%s L%d: Locking surface! Check this!\n", __FILE__, __LINE__);
         if (SDL_LockSurface(m_lpdds) < 0) {
             fprintf(stderr, "Cannot lock surface: %s\n", SDL_GetError());
             return AUI_ERRCODE_SURFACELOCKFAILED;
@@ -169,6 +171,15 @@ AUI_ERRCODE aui_SDLSurface::Blank(const uint32 &color)
 		return AUI_ERRCODE_OK;
 
 	return AUI_ERRCODE_BLTFAILED;
+}
+
+void aui_SDLSurface::Flip()
+{
+#if 0
+	if(m_isPrimary)
+		SDL_Flip(m_lpdds);
+	// else?
+#endif
 }
 
 #endif

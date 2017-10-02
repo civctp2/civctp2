@@ -4,7 +4,7 @@
 #include "cheatkey.h"
 
 typedef struct {
-	int val[ CHEATKEY_LENGTH ];
+	unsigned int val[ CHEATKEY_LENGTH ];
 } cheatkey_t, *LP_cheatkey_t;
 
 

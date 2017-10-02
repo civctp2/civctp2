@@ -27,7 +27,7 @@
 //
 // - Standardised min/max usage.
 // - Prevented crashes in destructor with uninitialised m_stringTable.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -574,6 +574,9 @@ aui_Control *aui_Control::SetKeyboardFocus( void )
 	return prevFocus;
 }
 
+#ifndef WIN32
+extern class aui_Win* g_winFocus;
+#endif
 
 AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 {
@@ -588,7 +591,6 @@ AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 #ifdef WIN32
 	    SetFocus(g_ui->TheHWND());
 #else
-        extern class aui_Win* g_winFocus;
         g_winFocus = 0;
 #endif
     }

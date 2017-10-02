@@ -13,6 +13,8 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include "windows.h"
+#include "cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
 #endif
 #include "ldlif.h"
 
@@ -29,7 +31,7 @@ extern int ldl_parse_error;
 
 %}
 
-string 		\"[^\"\n]*[\"\n]
+string 		\"[^\"\n]*[\"\r\n]
 name		[a-zA-Z]+[a-zA-Z0-9_]*
 
 %x incl
@@ -38,7 +40,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 %%
 
 ^import	{ BEGIN(incl); }
-<incl>[ \t]* {}
+<incl>[ \t\r]* {}
 <incl>\"    { BEGIN(fname); }
 <fname>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
   			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
@@ -128,7 +130,7 @@ false           { return VFALSE; }
 					return VSTRING;
 				}
 #.*\n             { g_ldlLineNumber++; }
-[ \t]			{ }
+[ \t\r]			{ }
 \n				{ g_ldlLineNumber++; }
 \$              { }
 .				{ return yytext[0]; }

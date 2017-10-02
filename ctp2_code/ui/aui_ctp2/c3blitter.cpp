@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standartized code (May 21st 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
 
-#ifdef _TRY_ALL_BLITTERS
+#if defined(_TRY_ALL_BLITTERS) && !defined(__arm__)
 	    static int  which_blit  = 0;
 
   	   	switch(which_blit)
@@ -125,6 +125,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	uint32 flags )
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
+#ifdef __arm__
+	assert(0);
+#else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
@@ -172,27 +175,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 
 				do
 				{
-
-
-
-
 					destBuf += destPitch;
 #ifdef _MSC_VER
 					__asm {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 							mov		ecx, scanWidth
 				  			mov		esi, srcBuf
 				  			mov     edx, ecx
@@ -282,6 +267,7 @@ L2:
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
 	}
+#endif	//__arm__
 	return retcode;
 }
 
@@ -293,6 +279,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	uint32 flags )
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
+#ifdef __arm__
+	assert(0);
+#else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
@@ -470,7 +459,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
 	}
-
+#endif	//__arm__
 	return retcode;
 }
 
@@ -482,6 +471,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 	uint32 flags )
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
+#ifdef __arm__
+	assert(0);
+#else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
@@ -621,12 +613,15 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
 		}
 	}
-
+#endif
 	return retcode;
 }
 
 bool C3Blitter::CheckMMXTechnology(void)
 {
+#ifdef __arm__
+	return false;
+#else
     bool retval = true;
     DWORD RegEDX = 0;
 
@@ -681,10 +676,14 @@ bool C3Blitter::CheckMMXTechnology(void)
 #endif // _MSC_VER
 
     return retval;
+#endif
 }
 
 void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 {
+#ifdef __arm__
+	memcpy(dest, src, len);
+#else
 #ifdef _MSC_VER
 	__asm {
 		mov		esi, src
@@ -708,4 +707,5 @@ End:	add		ecx, eax
 #else // _MSC_VER
 	assert(0);
 #endif // _MSC_VER
+#endif
 }
