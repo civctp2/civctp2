@@ -26,7 +26,7 @@
 //
 // - Added option to use multiple data directories.
 // - Memory leak/crash fix
-// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gühmann)
+// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -36,6 +36,8 @@
 
 #ifdef WIN32
 #include <shlobj.h>
+#else
+#define mkdir(a, b) mkdir(CI_FixName(a), b)
 #endif
 
 CivPaths *g_civPaths;
@@ -96,10 +98,25 @@ CivPaths::CivPaths ()
 	fscanf(fin, "%s", m_saveMapPath);
 	fscanf(fin, "%s", m_saveClipsPath);
 
+	ReplaceFileSeperator(m_hdPath);
+	ReplaceFileSeperator(m_cdPath);
+	ReplaceFileSeperator(m_defaultPath);
+	ReplaceFileSeperator(m_localizedPath);
+	ReplaceFileSeperator(m_dataPath);
+	ReplaceFileSeperator(m_scenariosPath);
+	ReplaceFileSeperator(m_savePath);
+	ReplaceFileSeperator(m_saveGamePath);
+	ReplaceFileSeperator(m_saveQueuePath);
+	ReplaceFileSeperator(m_saveMPPath);
+	ReplaceFileSeperator(m_saveSCENPath);
+	ReplaceFileSeperator(m_saveMapPath);
+	ReplaceFileSeperator(m_saveClipsPath);
+
 	for (size_t dir = 0; dir < C3DIR_MAX; ++dir)
     {
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
 		fscanf (fin, "%s", m_assetPaths[dir]);
+		ReplaceFileSeperator(m_assetPaths[dir]);
 	}
 
 	fclose(fin);
@@ -224,9 +241,9 @@ MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR 
 		Assert(s != NULL);
 
 #ifdef WIN32
-		r = _stat(fullPath, &tmpstat);
+		r = _stat(s, &tmpstat);
 #else
-		r = stat(fullPath, &tmpstat);
+		r = stat(CI_FixName(s), &tmpstat);
 #endif
 
 		if (!r) {
@@ -237,6 +254,36 @@ MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR 
 	}
 }
 
+void CivPaths::ReplaceFileSeperator(MBCHAR* path)
+{
+#ifdef LINUX
+	MBCHAR* oldChar;
+	MBCHAR* newChar;
+	MBCHAR newPath[_MAX_PATH];
+ 
+	oldChar=path;
+	newChar=newPath;
+
+	while (*oldChar && newChar < newPath+_MAX_PATH-1)
+	{
+		if (*oldChar == '\\' || *oldChar == '/')
+		{
+			strncpy(newChar,FILE_SEP,newPath+_MAX_PATH-newChar);
+			newChar+=strlen(FILE_SEP);
+		}
+		else
+		{
+			*newChar=*oldChar;
+			newChar++;
+		}
+		oldChar++;
+	}
+
+	*newChar = '\0';
+
+	strncpy(path,newPath,_MAX_PATH);
+#endif
+}
 
 MBCHAR *CivPaths::GetSavePath(C3SAVEDIR dir, MBCHAR *path)
 {
@@ -313,9 +360,9 @@ MBCHAR *CivPaths::MakeAssetPath
 	Assert(s != NULL);
 
 #ifdef WIN32
-	r = _stat(fullPath, &tmpstat);
+	r = _stat(s, &tmpstat);
 #else
-	r = stat(fullPath, &tmpstat);
+	r = stat(CI_FixName(s), &tmpstat);
 #endif
 
 	if (!r) return fullPath;
