@@ -53,7 +53,11 @@ echo "server"
 install -d ${BUILD}/server/etc
 install -m 0644 server/README2.txt ${BUILD}/server/README2.txt
 install server/etc/*2 server/etc/htget server/etc/servfil ${BUILD}/server/etc
-install -m 0644 server/etc/{anet2env,*.lst,*.in,*.tpl,*.pl} ${BUILD}/server/etc
+install -m 0644 server/etc/anet2env ${BUILD}/server/etc
+install -m 0644 server/etc/*.lst ${BUILD}/server/etc
+install -m 0644 server/etc/*.in ${BUILD}/server/etc
+install -m 0644 server/etc/*.tpl ${BUILD}/server/etc
+install -m 0644 server/etc/*.pl ${BUILD}/server/etc
 # install whichever servers were built
 case $1 in 
 "" )

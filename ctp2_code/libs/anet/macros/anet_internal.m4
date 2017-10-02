@@ -16,7 +16,7 @@ dnl      Anonymous unions must be disabled via AM_CPPFLAGS
 dnl         AC_DEFINE(__NO_ANONYMOUS_UNIONS__,1,[Define to 1 if anonymous unions should be disabled])
 
 	 AC_MSG_CHECKING([for location of libbsd.a])
-         for libdir in $LD_LIBRARY_PATH /lib /usr/lib /usr/local/lib ; do
+         for libdir in $LD_LIBRARY_PATH /lib /usr/lib /usr/local/lib /mnt/utmp/codeblocks/usr/lib ; do
             if test -f $libdir/libbsd.a; then
                LIBBSD_COMPAT=$libdir/libbsd.a
                break
@@ -36,10 +36,10 @@ dnl         AC_DEFINE(__NO_ANONYMOUS_UNIONS__,1,[Define to 1 if anonymous unions
 	 ac_OpClass="UNIX"
    esac
 
-   ANET_CFLAGS_NORMAL="-DNDEBUG -O3 -Werror"
-   ANET_CFLAGS_DEBUG="-DDEBUG -g -Werror"
-   ANET_CFLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Werror"
-   ANET_CFLAGS_LOG="-DNDEBUG -DPRNT -O3 -Werror"
+   ANET_CFLAGS_NORMAL="-DNDEBUG -O3"
+   ANET_CFLAGS_DEBUG="-DDEBUG -g"
+   ANET_CFLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg"
+   ANET_CFLAGS_LOG="-DNDEBUG -DPRNT -O3"
 
    AM_CONDITIONAL(UNIX, test x$ac_OpClass = xUNIX)
    AM_CONDITIONAL(LINUX, test x$ac_OpSystem = xLINUX)
