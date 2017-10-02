@@ -161,6 +161,7 @@
   void
   Print_Memory( void )
   {
+#if 0
     /* create glyph */
     error = TT_New_Glyph( face, &glyph );
     if ( error )
@@ -214,7 +215,7 @@
                gettext( "total memory usage" ) );
 
     printf( "\n" );
-
+#endif
     return;
 
   Failure:
@@ -860,7 +861,7 @@
       goto Failure;
     }
 
-    FOOTPRINT( initial_overhead );
+/*    FOOTPRINT( initial_overhead );*/
 
     /* Open and Load face */
 
@@ -879,7 +880,7 @@
       goto Failure;
     }
 
-    FOOTPRINT( face_object );
+/*    FOOTPRINT( face_object );*/
 
     /* get face properties and allocate preload arrays */
 
