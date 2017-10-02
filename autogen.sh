@@ -14,6 +14,11 @@ automake --foreign --add-missing --copy
 echo "Running autoconf..."
 autoconf
 echo " "
+echo "Bootstraping anet now"
+cd ctp2_code/libs/anet
+make bootstrap
+echo " "
+cd ../../..
 echo "Bootstraping complete."
 echo " "
 echo "You may run ./configure and then make to compile CTP2."
