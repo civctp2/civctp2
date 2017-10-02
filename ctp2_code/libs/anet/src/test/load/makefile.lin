@@ -1,5 +1,5 @@
 PACK=__attribute__ ((packed))
-OPT=-DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../../h -I../../../dp -I../../../../demo/utils
+OPT=-DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../../h -I../../../dp -I../../../../demo/utils -Wno-format
 COPT=$(FLAGS) $(OPT)
 BUILD=../../../../linux86
 CC=gcc
