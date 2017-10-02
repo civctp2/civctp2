@@ -71,9 +71,9 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 		if(which_blit>2)
 		   which_blit = 0;
 
-#endif
-		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
+	   return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
 	} else {
+#endif
 		if (g_useDDBlit)
 			return aui_NativeBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
