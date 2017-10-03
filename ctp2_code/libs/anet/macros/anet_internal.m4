@@ -29,7 +29,7 @@ dnl         AC_DEFINE(__NO_ANONYMOUS_UNIONS__,1,[Define to 1 if anonymous unions
          if test -n "$LIBBSD_COMPAT"; then
             AC_MSG_RESULT([$LIBBSD_COMPAT])
          else
-            AC_MSG_ERROR([not found])
+            AC_MSG_RESULT([not found])
          fi
 	 
          ac_OpSystem="LINUX"
