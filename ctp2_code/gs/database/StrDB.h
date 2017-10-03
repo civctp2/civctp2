@@ -119,7 +119,7 @@ private:
 	void					AssignIndex(StringRecord * & ptr);
 	void					Btree2Array(void);
 	StringRecord * &		GetHead(MBCHAR const * id);
-	StringRecord const * const &
+	StringRecord const *
 							GetHead(MBCHAR const * id) const;
 	bool					GetIndexNode
 	(
