@@ -134,14 +134,16 @@ StringDB::~StringDB()
 	}
 }
 
-StringRecord const * const & StringDB::GetHead(MBCHAR const * id) const
+StringRecord const * StringDB::GetHead(MBCHAR const * id) const
 {
-	return m_head[ComputeHashIndex(id)];
+	int h = ComputeHashIndex(id);
+	return m_head[h];
 }
 
 StringRecord * & StringDB::GetHead(MBCHAR const * id)
 {
-	return m_head[ComputeHashIndex(id)];
+	int h = ComputeHashIndex(id);
+	return m_head[h];
 }
 
 //----------------------------------------------------------------------------
