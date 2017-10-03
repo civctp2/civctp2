@@ -239,7 +239,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 
 	sint32 error = TT_Open_Face(s_ttEngine, CI_FixName(m_ttffile), &m_ttFace);
 	Assert( error == 0 );
-	if ( error ) return AUI_ERRCODE_HACK;
+	if ( error ) { fprintf(stderr, "Font %s (%s) failled\n", m_ttffile, fullPath); AUI_ERRCODE_HACK;}
 
 	error = TT_Get_Face_Properties( m_ttFace, &m_ttFaceProperties );
 	Assert( error == 0 );
