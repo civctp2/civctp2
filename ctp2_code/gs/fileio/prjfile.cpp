@@ -20,35 +20,42 @@
 #include <unistd.h>
 #endif
 #endif // !WIN32
+#include <stdint.h>
 
 #include "CivPaths.h"       // g_civPaths
 
 #define MAX_ENTRIES_PER_TABLE 100
 #define ZFSFLAG_DELETED 0x0001
 
+#ifdef __linux__
+#pragma pack(push, 0)
+#endif
 struct ZFS_RENTRY {
     char      rname[MAX_RECORDNAME_LENGTH];
-    long      offset;
-    long      rnum;
-    long      size;
-    long      time;
-    long      flags;
+    int32_t   offset;
+    int32_t   rnum;
+    int32_t   size;
+    int32_t   time;
+    int32_t   flags;
 };
 
 struct ZFS_DTABLE {
-    long          next_dtable;
+    int32_t       next_dtable;
     ZFS_RENTRY    rentry[MAX_ENTRIES_PER_TABLE];
 };
 
 struct ZFS_FHEADER {
     char      filetag[4];
-    long      version;
-    long      max_recordname_length;
-    long      max_entries_per_table;
-    long      num_rentries;
-    long      encrypt_key;
-    long      dtable_head;
+    int32_t   version;
+    int32_t   max_recordname_length;
+    int32_t   max_entries_per_table;
+    int32_t   num_rentries;
+    int32_t   encrypt_key;
+    int32_t   dtable_head;
 };
+#ifdef __linux__
+#pragma pack(pop, 0)
+#endif
 
 char *strcasecpy(char *out, char const * in)
 {
