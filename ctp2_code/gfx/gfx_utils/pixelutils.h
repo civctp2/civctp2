@@ -38,40 +38,40 @@ void pixelutils_ComputeBlendTable(void);
 
 
 
-inline Pixel16 pixelutils_Blend(Pixel16 pixel1, Pixel16 pixel2, short blend)
+inline Pixel16 pixelutils_Blend(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
 {
-	short			r1, g1, b1, r2, g2, b2;
-	short			r0, g0, b0;
+	uint16_t			r1, g1, b1, r2, g2, b2;
+	uint16_t			r0, g0, b0;
 	extern sint32		g_is565Format;
-	extern short	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
+	extern uint16_t	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
 
 	if (g_is565Format)
 	{
-		r1 = (short)((pixel1 & 0xF800) >> 10) ;
-		g1 = (short)((pixel1 & 0x07E0) >> 5);
-		b1 = (short)((pixel1 & 0x001F) << 1) ;
+		r1 = (uint16_t)((pixel1 & 0xF800) >> 10) ;
+		g1 = (uint16_t)((pixel1 & 0x07E0) >> 5);
+		b1 = (uint16_t)((pixel1 & 0x001F) << 1) ;
 
-		r2 = (short)((pixel2 & 0xF800) >> 10);
-		g2 = (short)((pixel2 & 0x07E0) >> 5);
-		b2 = (short)((pixel2 & 0x001F) << 1);
+		r2 = (uint16_t)((pixel2 & 0xF800) >> 10);
+		g2 = (uint16_t)((pixel2 & 0x07E0) >> 5);
+		b2 = (uint16_t)((pixel2 & 0x001F) << 1);
 
-		r0 = (short)((gPixelTable[blend][r1][r2] & 0xFFFE) << 10) ;
-		g0 = (short)(gPixelTable[blend][g1][g2] << 5) ;
-		b0 = (short)(gPixelTable[blend][b1][b2] >> 1) ;
+		r0 = (uint16_t)((gPixelTable[blend][r1][r2] & 0xFFFE) << 10) ;
+		g0 = (uint16_t)(gPixelTable[blend][g1][g2] << 5) ;
+		b0 = (uint16_t)(gPixelTable[blend][b1][b2] >> 1) ;
 	}
 	else
 	{
-		r1 = (short)((pixel1 & 0x7C00) >> 9) ;
-		g1 = (short)((pixel1 & 0x03E0) >> 4) ;
-		b1 = (short)((pixel1 & 0x001F) << 1) ;
+		r1 = (uint16_t)((pixel1 & 0x7C00) >> 9) ;
+		g1 = (uint16_t)((pixel1 & 0x03E0) >> 4) ;
+		b1 = (uint16_t)((pixel1 & 0x001F) << 1) ;
 
-		r2 = (short)((pixel2 & 0x7C00) >> 9) ;
-		g2 = (short)((pixel2 & 0x03E0) >> 4) ;
-		b2 = (short)((pixel2 & 0x001F) << 1) ;
+		r2 = (uint16_t)((pixel2 & 0x7C00) >> 9) ;
+		g2 = (uint16_t)((pixel2 & 0x03E0) >> 4) ;
+		b2 = (uint16_t)((pixel2 & 0x001F) << 1) ;
 
-		r0 = (short)((gPixelTable[blend][r1][r2] & 0xFFFE) << 9) ;
-		g0 = (short)((gPixelTable[blend][g1][g2] & 0xFFFE) << 4) ;
-		b0 = (short)(gPixelTable[blend][b1][b2] >> 1) ;
+		r0 = (uint16_t)((gPixelTable[blend][r1][r2] & 0xFFFE) << 9) ;
+		g0 = (uint16_t)((gPixelTable[blend][g1][g2] & 0xFFFE) << 4) ;
+		b0 = (uint16_t)(gPixelTable[blend][b1][b2] >> 1) ;
 	}
 
 	return static_cast<Pixel16>(r0 | g0 | b0);
@@ -81,7 +81,7 @@ inline Pixel16 pixelutils_Additive(Pixel16 pixel1, Pixel16 pixel2)
 {
 	extern sint32		g_is565Format;
 
-	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
+	Pixel16				r, g, b, sum = (uint16_t)(pixel2 & 0x1F) ;
 
 	if (g_is565Format)
 	{
@@ -151,7 +151,7 @@ inline Pixel16 pixelutils_Shadow(Pixel16 pixel)
       return static_cast<Pixel16>((pixel&0xF7DF)>>1);
 	else
 	{
-	    short				r, g, b;
+	    uint16_t				r, g, b;
 
 		r = (pixel & 0x7C00) >> 11;
 		g = (pixel & 0x03E0) >> 6;
@@ -165,7 +165,7 @@ inline Pixel16 pixelutils_Shadow(Pixel16 pixel)
 
 inline Pixel16 pixelutils_Lightening(Pixel16 pixel)
 {
-	short		r, g, b;
+	uint16_t		r, g, b;
 	extern sint32		g_is565Format;
 
 	if (g_is565Format)
@@ -318,11 +318,11 @@ Pixel16 pixelutils_Convert555to565(Pixel16 pixel);
 
 
 
-inline Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, short blend)
+inline Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
 {
 	Pixel16			r1, g1, b1, r2, g2, b2;
 	Pixel16			r0, g0, b0;
-	extern short	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
+	extern uint16_t	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
 
 	r1 = ((pixel1 & 0xF800) >> 10) ;
 	g1 = ((pixel1 & 0x07E0) >> 5);
@@ -342,7 +342,7 @@ inline Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, short blend)
 
 inline Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 {
-	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
+	Pixel16				r, g, b, sum = (uint16_t)(pixel2 & 0x1F) ;
 
 	r = ((pixel1 & 0xF800) >> 11) + sum;
 	g = ((pixel1 & 0x07E0) >> 5)  + (sum << 1);
@@ -382,7 +382,7 @@ inline Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
 
 inline Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 {
-	short r, g, b;
+	uint16_t r, g, b;
 
 	r = (pixel & 0xF800) >> 10;
 	if (r > 0x001F)
@@ -452,7 +452,7 @@ inline Pixel16 pixelutils_Desaturate_565(Pixel16 pixel)
 	return ((Pixel16)(((ave & 0x1F) << 11) | ((ave & 0x3F) << 6) | (ave & 0x1F)));
 }
 
-Pixel32 pixelutils_Blend32_565(Pixel32 pixel1, Pixel32 pixel2, short blend);
+Pixel32 pixelutils_Blend32_565(Pixel32 pixel1, Pixel32 pixel2, uint16_t blend);
 Pixel32 pixelutils_Additive32_565(Pixel32 pixel1, Pixel32 pixel2);
 Pixel32 pixelutils_BlendFast32_565(sint32 pixel1, sint32 pixel2, sint32 blend);
 
@@ -471,11 +471,11 @@ Pixel16 pixelutils_Desaturate_565(Pixel16 pixel);
 
 
 
-inline Pixel16 pixelutils_Blend_555(Pixel16 pixel1, Pixel16 pixel2, short blend)
+inline Pixel16 pixelutils_Blend_555(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
 {
 	Pixel16			r1, g1, b1, r2, g2, b2;
 	Pixel16			r0, g0, b0;
-	extern short	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
+	extern uint16_t	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
 
 	r1 = ((pixel1 & 0x7C00) >> 9) ;
 	g1 = ((pixel1 & 0x03E0) >> 4) ;
@@ -494,7 +494,7 @@ inline Pixel16 pixelutils_Blend_555(Pixel16 pixel1, Pixel16 pixel2, short blend)
 
 inline Pixel16 pixelutils_Additive_555(Pixel16 pixel1, Pixel16 pixel2)
 {
-	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
+	Pixel16				r, g, b, sum = (uint16_t)(pixel2 & 0x1F) ;
 
 	r = ((pixel1 & 0x7C00) >> 10) + sum;
 	g = ((pixel1 & 0x03E0) >> 5)  + sum;
@@ -528,7 +528,7 @@ inline Pixel16 pixelutils_Shadow_555(Pixel16 pixel)
 
 inline Pixel16 pixelutils_Lightening_555(Pixel16 pixel)
 {
-	short		r, g, b;
+	uint16_t		r, g, b;
 	r = (pixel & 0x7C00) >> 9;
 	if (r > 0x001F)
 		r = 0x001F;
@@ -597,7 +597,7 @@ inline Pixel16 pixelutils_Desaturate_555(Pixel16 pixel)
 	return static_cast<Pixel16>(((ave & 0x1F) << 10) | ((ave & 0x1F) << 5) | (ave & 0x1f));
 }
 
-Pixel32 pixelutils_Blend32_555(Pixel32 pixel1, Pixel32 pixel2, short blend);
+Pixel32 pixelutils_Blend32_555(Pixel32 pixel1, Pixel32 pixel2, uint16_t blend);
 Pixel32 pixelutils_Additive32_555(Pixel32 pixel1, Pixel32 pixel2);
 Pixel32 pixelutils_BlendFast32_555(Pixel32 pixel1,Pixel32 pixel2, sint32 blend);
 
