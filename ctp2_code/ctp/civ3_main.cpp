@@ -1616,6 +1616,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #endif
 
 #ifdef __GNUC__
+	XInitThreads();
 	ParseCommandLine(iCmdShow, pSzCmdLine);
 #else
 	ParseCommandLine(szCmdLine);
