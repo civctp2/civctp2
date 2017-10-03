@@ -62,7 +62,7 @@ namespace
 SettleMap SettleMap::s_settleMap;
 
 template<>
-MapGrid<double>::MapGridArray MapGrid<double>::s_scratch;
+MapGrid<double>::MapGridArray MapGrid<double>::s_scratch = {};
 
 SettleMap::SettleMap()
 :
