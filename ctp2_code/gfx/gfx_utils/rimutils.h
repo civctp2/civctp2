@@ -6,14 +6,20 @@
 
 #define RFLAG_BIT_ENCODING 0x0001
 
+#ifdef __linux__
+#pragma pack(push, 1)
+#endif
 struct RIMHeader {
     char  tag[4];
-    int   version;
-    short width;
-    short height;
-    short pitch;
-    short flags;
+    int32_t   version;
+    uint16_t width;
+    uint16_t height;
+    uint16_t pitch;
+    uint16_t flags;
 };
+#ifdef __linux__
+#pragma pack(pop)
+#endif
 
 extern int write_rim(char *fname, unsigned char *data, int width,
                      int height, int pitch, int is_565);
