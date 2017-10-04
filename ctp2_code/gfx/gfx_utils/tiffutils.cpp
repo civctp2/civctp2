@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : tiff image format utilities
-// Id           : $Id$
+// Id           : $Id: tiffutils.cpp 705 2007-03-12 18:45:23Z Fromafar $
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2
+// This material has been developed at apolyton.net by the Apolyton CtP2 
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -62,6 +62,7 @@ char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, siz
 				memcpy(destImage, raster, npixels * sizeof(uint32));
 
 				_TIFFfree(raster);
+				TIFFClose(tif);
 
 				*width = (uint16)w;
 				*height = (uint16)h;
@@ -70,10 +71,14 @@ char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, siz
 			}
 		}
 		TIFFClose(tif);
+	} else {
+		printf("tiffutils_LoadTIF: failed to load %s\n", filename);
 	}
+
 
 	return NULL;
 }
+
 
 char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
@@ -113,7 +118,10 @@ char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 		}
 
 		TIFFClose(tif);
+	} else {
+		printf("TIF2mem: failed to load %s\n", filename);
 	}
+
 
 	*width = (uint16)w;
 	*height = (uint16)h;
@@ -121,11 +129,12 @@ char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 	return image;
 }
 
+
 int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 {
 	TIFF *  tif = TIFFOpen(CI_FixName(filename), "r");
 
-	if (tif)
+	if (tif) 
     {
 	    uint32  w   = 0;
         uint32  h   = 0;
@@ -137,6 +146,8 @@ int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 
 		*width = (uint16)w;
 		*height = (uint16)h;
+	} else {
+		printf("TIFGetMetrics: failed to load %s\n", filename);
 	}
 
 	return 0;
@@ -147,7 +158,7 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 	uint32  w=0, h=0;
 	TIFF    *tif = TIFFOpen(CI_FixName(filename), "r");
 
-	if (tif)
+	if (tif) 
     {
 		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
@@ -156,9 +167,9 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 		size_t  npixels     = w * h;
 		char *  raster      = (char *) _TIFFmalloc(npixels * sizeof(uint32));
 
-        if (raster)
+        if (raster) 
         {
-			if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0))
+			if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0)) 
             {
 				char * imagePtr     = (char *)buffer;
 				char * rasterPtr    = raster + (bytesPerRow * (h-1));
@@ -174,6 +185,7 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 						imagePtrCopy = (uint16 *)imagePtr;
 						rasterPtrCopy = (uint32 *)rasterPtr;
 
+
 						for (i=0; i<(sint32)w; i++) {
 							pixel = *rasterPtrCopy++;
 							*imagePtrCopy++ = (uint16)(((pixel & 0x000000F8) << 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x00F80000) >> 19));
@@ -187,6 +199,7 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 
 						imagePtrCopy = (uint16 *)imagePtr;
 						rasterPtrCopy = (uint32 *)rasterPtr;
+
 
 						for (i=0; i<(sint32)w; i++) {
 							pixel = *rasterPtrCopy++;
@@ -204,6 +217,8 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 		}
 
 		TIFFClose(tif);
+	} else {
+		printf("TIFLoadIntoBuffer16: failed to load %s\n", filename);
 	}
 
 	*width = (uint16)w;
@@ -218,8 +233,10 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
 	TIFF *  tif = TIFFOpen(CI_FixName(filename), "r");
-	if (!tif)
+	if (!tif) {
+		printf("StripTIF2Mem: failed to load %s\n", filename);
 	   return NULL;
+	}
 
 	*width = static_cast<uint16>(-1);
 	*height = static_cast<uint16>(-1);
@@ -246,14 +263,14 @@ char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *
 	for (uint32 row = 0; row < imageLength; row += RowsPerStrip)
 	{
 		tsize_t nrow = (row + RowsPerStrip > imageLength ? imageLength - row : RowsPerStrip);
-		if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1)
+		if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1) 
         {
             /// @todo Check free(buf)?
 			return NULL;
-		}
-        else
+		} 
+        else 
         {
-			for (tsize_t l = 0; l < nrow; l++)
+			for (tsize_t l = 0; l < nrow; l++) 
             {
 				memcpy(outBufPtr, &buf[l * LineSize], imageWidth * 4);
 				outBufPtr += imageWidth * 4;
@@ -269,3 +286,4 @@ char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *
 
 	return outBuf;
 }
+
