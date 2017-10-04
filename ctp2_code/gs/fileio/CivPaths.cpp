@@ -358,6 +358,7 @@ MBCHAR *CivPaths::MakeAssetPath
 
 	s = _fullpath(fullPath, tempPath, _MAX_PATH);
 	Assert(s != NULL);
+	if(!s) return NULL;
 
 #ifdef WIN32
 	r = _stat(s, &tmpstat);
