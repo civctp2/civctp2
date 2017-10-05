@@ -53,10 +53,11 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
+#ifndef __linux__
 	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
 
-#if defined(_TRY_ALL_BLITTERS) && !defined(__arm__)
+#if defined(_TRY_ALL_BLITTERS)
 	    static int  which_blit  = 0;
 
   	   	switch(which_blit)
@@ -70,10 +71,12 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 
 		if(which_blit>2)
 		   which_blit = 0;
-
-	   return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else {
+		   
 #endif
+	   return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
+	} else
+#endif
+	{
 		if (g_useDDBlit)
 			return aui_NativeBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
