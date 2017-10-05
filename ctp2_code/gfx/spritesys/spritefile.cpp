@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevention, small clean-ups.
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Fixed crashes when zooming out and exiting the program.
 //
 //----------------------------------------------------------------------------
@@ -542,8 +542,8 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	s->AllocateFrameArrays(data16);
 
 	uint16		j;
-	size_t		ssizes[k_MAX_FACINGS][512];
-	size_t		msizes[k_MAX_FACINGS][512];
+	uint32		ssizes[k_MAX_FACINGS][512];
+	uint32		msizes[k_MAX_FACINGS][512];
 
 	for (j=0; j<k_NUM_FACINGS; j++)
 	{
@@ -552,12 +552,12 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	}
 
 	uint16		i;
-	size_t		actual_size;
+	uint32		actual_size;
 
 	for (j=0; j<k_NUM_FACINGS; j++)
 	{
       	// Read normal size sprites
-		size_t  size            = ssizes[j][0];
+		uint32  size            = ssizes[j][0];
 		uint8 * CompressedData  = new uint8[size];
 
 		if (m_version>k_SPRITEFILE_VERSION1)
