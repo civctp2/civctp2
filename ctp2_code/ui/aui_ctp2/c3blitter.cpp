@@ -622,7 +622,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 bool C3Blitter::CheckMMXTechnology(void)
 {
-#ifdef __arm__
+#ifdef __linux__
 	return false;
 #else
     bool retval = true;
@@ -684,7 +684,7 @@ bool C3Blitter::CheckMMXTechnology(void)
 
 void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 {
-#ifdef __arm__
+#ifdef __linux__
 	memcpy(dest, src, len);
 #else
 #ifdef _MSC_VER

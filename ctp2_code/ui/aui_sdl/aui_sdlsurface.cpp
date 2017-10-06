@@ -72,7 +72,7 @@ aui_SDLSurface::aui_SDLSurface(
 	m_pitch = m_lpdds->pitch;
 	m_size = m_pitch * m_height;
 
-	SetChromaKey( m_chromaKey = 0x00000000 );
+	//SetChromaKey( m_chromaKey = 0x00000000 );
 }
 
 
