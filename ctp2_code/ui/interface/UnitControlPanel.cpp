@@ -138,6 +138,9 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 	m_curHealth = -1;
 	m_curCargo = -2;
 
+	m_lastSelectionUnit = -1;
+	m_lastSelectedArmyCount = -1;
+
 	for(int multiIndex = 0; multiIndex <
 		NUMBER_OF_MULTIPLE_SELECTION_BUTTONS; multiIndex++) {
 
