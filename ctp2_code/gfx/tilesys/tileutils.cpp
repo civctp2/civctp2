@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -572,9 +572,9 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 	}
 
 	Pixel16 *               tableStart          = table;
-	unsigned short int *    firstNonEmptyPtr    = table;
+	uint16 *    			firstNonEmptyPtr    = table;
 	table++;
-	unsigned short int *    endLinePtr          = table;
+	uint16 *    			endLinePtr          = table;
 	table++;
 
 	Pixel16	*               startOfData         = outBuf;
