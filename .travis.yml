@@ -8,6 +8,7 @@ addons:
     packages:
     - libsdl1.2-dev
     - libsdl-mixer1.2-dev
+    - libsdl-image1.2-dev
     - byacc
     - gtk+-2.0-dev
     - gcc-5
@@ -23,5 +24,5 @@ before_install:
 
 script: 
     - ./autogen.sh
-    - CFLAGS="$CFLAGS -w" CXXFLAGS="$CXXFLAGS -w" ./configure
+    - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -w -fuse-ld=gpold" ./configure --enable-silent-rules
     - make
