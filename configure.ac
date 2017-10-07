@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR(ctp2_code/os/autoconf/config)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET
