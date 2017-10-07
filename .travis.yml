@@ -23,5 +23,5 @@ before_install:
 
 script: 
     - ./autogen.sh
-    - ./configure
+    - CFLAGS="$CFLAGS -w" CXXFLAGS="$CXXFLAGS -w" ./configure
     - make
