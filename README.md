@@ -7,3 +7,6 @@ This is the Apolyton version of *Call to Power II* source code based on the rele
 This version build on Linux (i386 and x86_64), Pandora and Pyra.
 
 Note that datas are not include in this repo, you'll need to get it from Original CD or from GoG version.
+
+![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
+
