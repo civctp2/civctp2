@@ -1587,11 +1587,12 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	appstrings_Initialize();
 
-	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 #ifdef USE_GTK
-	gtk_set_locale();
+//	gtk_set_locale();
 	gtk_init(&iCmdShow, &pSzCmdLine);
 #endif
+	std::setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
+	std::setlocale(LC_NUMERIC, "C");
 
 #ifdef __AUI_USE_DIRECTX__
 	if (!main_CheckDirectX()) {
@@ -1691,6 +1692,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (1) { //there is a break;)
+			SDL_PumpEvents();
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
                             ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
