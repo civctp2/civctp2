@@ -1,0 +1,21 @@
+language: cpp
+sudo: true
+dist: trusty
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libsdl1.2-dev
+    - libsdl-mixer1.2-dev
+    - byacc
+    - gtk+-2.0-dev
+compiler:
+    - g++
+
+#Build steps
+
+script: 
+    - ./autogen.sh
+    - ./configure
+    - make
