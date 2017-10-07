@@ -56,7 +56,6 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_LockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
-
 		if (!g_secondaryKeyboardEventQueue.empty()) {
 			gotEvent = TRUE;
 			event = g_secondaryKeyboardEventQueue.front();
@@ -146,8 +145,8 @@ void aui_SDLKeyboard::convertSDLKeyboardEvent(SDL_KeyboardEvent &sdlevent,
 {
 	auievent.down = (sdlevent.state & SDL_PRESSED) ? TRUE : FALSE;
 	auievent.key = convertSDLKey(sdlevent.keysym);
-	printf("convertSDLKeyboardEvent(): %08x %08x %c\n", auievent.key,
-               sdlevent.keysym.sym, sdlevent.keysym.sym);
+	/*printf("convertSDLKeyboardEvent(): %08x %d %08x %c\n", auievent.key,
+		(sdlevent.state & SDL_PRESSED) ? TRUE : FALSE, sdlevent.keysym.sym, (sdlevent.keysym.sym>' ' && sdlevent.keysym.sym<127)?sdlevent.keysym.sym:' ');*/
 }
 
 uint32 aui_SDLKeyboard::convertSDLKey(SDL_keysym keysym)
