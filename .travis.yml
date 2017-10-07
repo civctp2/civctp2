@@ -10,10 +10,16 @@ addons:
     - libsdl-mixer1.2-dev
     - byacc
     - gtk+-2.0-dev
+    - gcc-5
+    - g++-5
+
 compiler:
     - g++
 
 #Build steps
+before_install:
+    - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
+    - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
 
 script: 
     - ./autogen.sh
