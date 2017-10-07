@@ -51,7 +51,7 @@
 
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg, bool isAlwaysValid)
 {
-	Init(type, &arg, isAlwaysValid);
+	Init(type, arg, isAlwaysValid);
 }
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, const sint32 arg, bool isAlwaysValid)
 {
