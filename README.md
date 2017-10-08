@@ -10,7 +10,7 @@ Note that datas are not include in this repo, you'll need to get it from Origina
 
 ![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
 
-For now, this version doesn't support CD Audio or Ripped CD Track, so you will have no music.
+This version should support CD Audio music, and also support Ripped CD Audio compressed as ogg (like found in the GoG version). The Audio tracks should be Named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
 
 ## Building
 
