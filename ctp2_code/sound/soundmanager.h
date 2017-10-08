@@ -164,8 +164,10 @@ private:
 #if !defined(USE_SDL)
 	HREDBOOK				m_redbook;
 #else
-    SDL_CD                  *m_cdrom;
-    Uint32                  m_SDLInitFlags;
+	SDL_CD                  *m_cdrom;
+	BOOL					m_useOggTracks;
+	Uint32                  m_SDLInitFlags;
+	Mix_Music				*m_oggTrack;
 #endif
 	uint32					m_timeToCheckCD;
 	sint32					m_numTracks;

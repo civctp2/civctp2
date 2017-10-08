@@ -34,7 +34,7 @@
 // - #pragmas commented out
 // - Includes fixed for case sensitive filesystems
 // - Added sdl sound and cdrom support
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -94,7 +94,9 @@ SoundManager::SoundManager()
 #if !defined(USE_SDL)
     m_redbook                   (0),
 #else
-    m_cdrom                     (0),
+	m_cdrom                     (0),
+	m_useOggTracks				(false),
+	m_oggTrack					(0),
     m_SDLInitFlags              (SDL_INIT_NOPARACHUTE),
 #endif
     m_timeToCheckCD             (0),
@@ -210,7 +212,14 @@ void SoundManager::CleanupSoundDriver()
 void SoundManager::InitRedbook()
 {
 #if defined(USE_SDL)
-    if (!m_cdrom) {
+	// check if Ogg Tracks are present first
+	if( !m_useOggTracks) {
+		if(CI_FileExists("music/Track02.ogg")) {
+			m_useOggTracks = true;
+			printf("Detected Ogg Music track, using that instead of CD Audio\n");
+		}
+	}
+    if (!m_cdrom && !m_useOggTracks) {
         int errcode = SDL_Init(SDL_INIT_CDROM | m_SDLInitFlags);
 
         Assert(0 == errcode);
@@ -259,6 +268,10 @@ void SoundManager::InitRedbook()
 void SoundManager::CleanupRedbook()
 {
 #if defined(USE_SDL)
+	if (m_oggTrack) {
+		Mix_FreeMusic(m_oggTrack);
+		m_oggTrack = NULL;
+	}
     if (m_cdrom) {
         SDL_CDClose(m_cdrom);
         m_cdrom = 0;
@@ -280,7 +293,16 @@ void SoundManager::ProcessRedbook()
 
 	if (GetTickCount() > m_timeToCheckCD) {
 #if defined(USE_SDL)
-        CDstatus status;
+		CDstatus status;
+		if(m_useOggTracks) {
+			if(!Mix_PlayingMusic()) {
+				if (m_curTrack != -1)
+				PickNextTrack();
+
+			if (m_curTrack != -1 && !m_stopRedbookTemporarily)
+				StartMusic(m_curTrack);
+			}
+		}
         if (m_cdrom) {
             status = SDL_CDStatus(m_cdrom);
 #else
@@ -649,6 +671,15 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 		if (m_redbook)
 			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
 #else
+		if (m_useOggTracks) {
+			// Assume max volume is 10...
+			sint32 scaledVolume = (sint32)((double)volume * 12.7);
+			if (scaledVolume > MIX_MAX_VOLUME) {
+				Mix_VolumeMusic(MIX_MAX_VOLUME);
+			} else {
+				Mix_VolumeMusic(scaledVolume);
+			}
+		}
         if (m_cdrom) {
             // TODO: found nothing in reference
         }
@@ -866,7 +897,7 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 {
 	m_stopRedbookTemporarily = FALSE;
 
-	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD()) return;
+	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD() || !m_useOggTracks) return;
 
 	if (m_noSound) return;
 
@@ -875,6 +906,37 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	if (m_curTrack == -1) return;
 
 #if defined(USE_SDL)
+	if(m_useOggTracks) {
+		// first search number of tracks
+		sint32 numTracks = 1;
+		char buf[60];
+		do {
+			numTracks++;
+			sprintf(buf, "music/Track%02d.ogg", numTracks);
+		} while(CI_FileExists(buf));
+		// setting up
+		if (numTracks-1 <= s_startTrack) return;
+		
+		m_numTracks = numTracks-1; // start at 2
+
+		m_numTracks = numTracks;
+		
+		sint32 trackNum = InTrackNum;
+		if (trackNum < 0) trackNum = 0;
+		if (trackNum > m_numTracks) trackNum = m_numTracks;
+	
+		m_curTrack = trackNum;
+
+		sprintf(buf, "music/Track%02d.ogg", m_curTrack+1);
+
+		m_oggTrack = Mix_LoadMUS(CI_FixName(buf));
+		if(m_oggTrack)
+			Mix_PlayMusic(m_oggTrack, 1);
+		else
+			printf("Error, music track %s not found\n", buf);
+		
+		return;
+	}
     if (!m_cdrom) {
         return;
     }
