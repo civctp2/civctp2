@@ -9,6 +9,7 @@ extern "C" {
 
 FILE* ci_fopen(const char* name, const char* mode);
 const char* CI_FixName(const char* name);
+int CI_FileExists(const char* name);
 
 #ifdef __cplusplus
 };

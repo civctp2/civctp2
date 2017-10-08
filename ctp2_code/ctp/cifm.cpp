@@ -7,7 +7,6 @@
 #include <dirent.h>
 
 #include "cifm.h"
-#pragma GCC optimize 0
 
 bool ci_FileExists(const char* name) {
     if(!name) return true;
@@ -161,3 +160,11 @@ const char* CI_FixName(const char* name)
     
     return fixedname;
 }
+
+int CI_FileExists(const char* name)
+{
+    if (ci_FileExists(name))
+        return 1;
+    return 0;
+}
+    
