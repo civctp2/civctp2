@@ -907,19 +907,18 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 
 #if defined(USE_SDL)
 	if(m_useOggTracks) {
-		// first search number of tracks
-		sint32 numTracks = 1;
 		char buf[60];
-		do {
-			numTracks++;
-			sprintf(buf, "music/Track%02d.ogg", numTracks);
-		} while(CI_FileExists(buf));
+		if(!m_numTracks) {
+			// first search number of tracks
+			sint32 numTracks = 1;
+			do {
+				numTracks++;
+				sprintf(buf, "music/Track%02d.ogg", numTracks);
+			} while(CI_FileExists(buf));
+			m_numTracks = numTracks-1; // start at 2
+		}
 		// setting up
-		if (numTracks-1 <= s_startTrack) return;
-		
-		m_numTracks = numTracks-1; // start at 2
-
-		m_numTracks = numTracks;
+		if (m_numTracks <= s_startTrack) return;
 		
 		sint32 trackNum = InTrackNum;
 		if (trackNum < 0) trackNum = 0;
@@ -928,7 +927,11 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 		m_curTrack = trackNum;
 
 		sprintf(buf, "music/Track%02d.ogg", m_curTrack+1);
-
+		// clean previous if there
+		if(m_oggTrack) {
+			Mix_FreeMusic(m_oggTrack);
+			m_oggTrack = NULL;
+		}
 		m_oggTrack = Mix_LoadMUS(CI_FixName(buf));
 		if(m_oggTrack)
 			Mix_PlayMusic(m_oggTrack, 1);
@@ -999,6 +1002,13 @@ void SoundManager::TerminateMusic(void)
 	if (m_usePlaySound) return;
 
 #if !defined(USE_SDL)
+	if (m_useOggTracks) {
+		Mix_StopMUS();
+		if(m_oggTrack) {
+			Mix_FreeMusic(m_oggTrack);
+			m_oggTrack = NULL;
+		}
+	}
 	if (!m_redbook) return;
 #else
     if (!m_cdrom) return;
