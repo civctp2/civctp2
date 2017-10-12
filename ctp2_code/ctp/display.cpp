@@ -177,7 +177,8 @@ void display_EnumerateDisplayModes(void)
 			// We might get modes multiple times for each bpp
 			// supported. Thus, check if we got it already.
 			if (!display_IsLegalResolution(modes[i]->w,
-			                               modes[i]->h)) {
+										   modes[i]->h)
+										&& (modes[i]->h>=600)) {
 				CTPDisplayMode *mode = new CTPDisplayMode;
 				if (!mode)
 					return;
