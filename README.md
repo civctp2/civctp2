@@ -52,7 +52,7 @@ Note that this is a Windows game, where file name is on a Case Insensitive file 
 When the build is over, you need to copy the main CTP2 executable, plus mapgen library to the program folder (wich is `ctp2_program/ctp`).
 for the executable, it will be something like: `cp -v ctp2_code/ctp2 ~/ctp2/ctp2_program/ctp/`
 The mapgen libraries will go to `ctp2_program/ctp/dll/map/` .
-So do something like `cp -v ctp2_code/mapgen/.libs/*.so ~/ctp2/ctp2_program/ctp/mapgen/dll/map/`
+So do something like `cp -v ctp2_code/mapgen/.libs/*.so ~/ctp2/ctp2_program/ctp/dll/map/`
 
 ## Running
 When everything is setup, simply go to the program folder, for example with `cd ~/ctp2/ctp2_program/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be usefull.
