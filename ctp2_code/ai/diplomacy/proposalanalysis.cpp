@@ -12,7 +12,7 @@
 #include "AgreementMatrix.h"
 #include "GSLogs.h"
 #include "mapanalysis.h"
-#include "gold.h"
+#include "Gold.h"
 #include "DiplomacyProposalRecord.h"
 #include "diplomacyutil.h"
 

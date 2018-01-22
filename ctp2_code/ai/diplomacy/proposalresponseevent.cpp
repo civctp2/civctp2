@@ -41,7 +41,7 @@
 #include "UnitData.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Diplomat.h"
 #include "mapanalysis.h"
 #include "AgreementMatrix.h"
@@ -51,14 +51,7 @@
 #include "pollution.h"
 #include "newturncount.h"
 #include "Sci.h"
-#include "gold.h"
-
-
-
-
-
-
-
+#include "Gold.h"
 
 STDEHANDLER(LandForPeace_ProposalResponseEvent)
 {
