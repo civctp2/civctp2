@@ -55,7 +55,7 @@
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "civscenarios.h"
-#include "globals.h"
+#include "Globals.h"
 #include "profileDB.h"                  // g_theProfileDB
 #include "CivilisationRecord.h"
 #include "CivilisationPool.h"
@@ -64,7 +64,7 @@
 #include "spnewgametribescreen.h"
 #include "spnewgamemapsizescreen.h"
 #include "StrDB.h"                      // g_theStringDB
-#include "agerecord.h"					// g_theAgeDB
+#include "AgeRecord.h"					// g_theAgeDB
 #include "agesscreen.h"
 
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;

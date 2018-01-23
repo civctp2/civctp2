@@ -102,7 +102,7 @@
 #include "colorset.h"               // g_colorSet
 
 #include "BldQue.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Happy.h"
 #include "PopRecord.h"				// g_thePopDB
 #include "UnitData.h"
@@ -137,7 +137,7 @@ extern ProjectFile                  *g_GreatLibPF;
 
 #include "network.h"
 
-#include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include <algorithm>    // std::fill
 #include "ArmyPool.h"	// g_armyPool
 #include "buildingutil.h"

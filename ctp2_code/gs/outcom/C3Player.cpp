@@ -43,7 +43,7 @@
 #include "Army.h"
 #include "cellunitlist.h"
 #include "TaxRate.h"
-#include "gold.h"
+#include "Gold.h"
 
 #include "bset.h"
 #include "citydata.h"
@@ -873,7 +873,7 @@ void C3Player::GetCityCrimePrevention(uint32 city_id, BOOL *is_unknown_id,
 #endif
 }
 
-long C3Player::GetCitySizePopEffect(uint32 city_id, BOOL *is_unknown_id,
+BOOL C3Player::GetCitySizePopEffect(uint32 city_id, BOOL *is_unknown_id,
    sint32 *m_city_size_penalty)
 {
     CityData *cd = GetCityData(city_id, is_unknown_id);

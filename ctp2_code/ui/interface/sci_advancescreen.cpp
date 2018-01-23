@@ -50,7 +50,7 @@
 #include "SelItem.h"
 #include "player.h"
 #include "Sci.h"
-#include "gold.h"
+#include "Gold.h"
 #include "prjfile.h"
 
 #include "greatlibrary.h"

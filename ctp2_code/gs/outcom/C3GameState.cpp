@@ -20,7 +20,7 @@
 #include "ic3DipReq.h"
 #include "bset.h"
 #include "UnitPool.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Strengths.h"
 #include "pollution.h"
 #include "UnitDynArr.h"

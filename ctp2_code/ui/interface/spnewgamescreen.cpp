@@ -60,7 +60,7 @@
 #include "custommapscreen.h"
 #include "gamefile.h"
 #include "gameinit.h"
-#include "globals.h"
+#include "Globals.h"
 #include "hotseatlist.h"
 #include "initialplaywindow.h"
 #include "loadsavewindow.h"
