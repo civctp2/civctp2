@@ -1,5 +1,0 @@
-#
-# $Id: $
-#
-SUBDIRS = \
-	gtest

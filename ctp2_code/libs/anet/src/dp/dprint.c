@@ -234,12 +234,7 @@ dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...)						/* printf-style arguments on stack (if any) */
 {
-#include <stdarg.h>
-    #ifdef	_M_ALPHA
-	va_list argptr = { NULL , 0 };
-    #else
-	va_list argptr = NULL;
-    #endif
+	va_list argptr;
 	int		atomic = FALSE;
 	int		len = 0;
 	int		writeMe;					/* Write this message? */
