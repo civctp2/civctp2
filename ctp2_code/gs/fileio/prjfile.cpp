@@ -28,26 +28,26 @@
 
 struct ZFS_RENTRY {
     char      rname[MAX_RECORDNAME_LENGTH];
-    long      offset;
-    long      rnum;
-    long      size;
-    long      time;
-    long      flags;
+    uint32_t  offset;
+    uint32_t  rnum;
+    uint32_t  size;
+    uint32_t  time;
+    uint32_t  flags;
 };
 
 struct ZFS_DTABLE {
-    long          next_dtable;
+    uint32_t      next_dtable;
     ZFS_RENTRY    rentry[MAX_ENTRIES_PER_TABLE];
 };
 
 struct ZFS_FHEADER {
     char      filetag[4];
-    long      version;
-    long      max_recordname_length;
-    long      max_entries_per_table;
-    long      num_rentries;
-    long      encrypt_key;
-    long      dtable_head;
+    uint32_t  version;
+    uint32_t  max_recordname_length;
+    uint32_t  max_entries_per_table;
+    uint32_t  num_rentries;
+    uint32_t  encrypt_key;
+    uint32_t  dtable_head;
 };
 
 char *strcasecpy(char *out, char const * in)
