@@ -47,7 +47,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -94,18 +94,14 @@
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX
 #include <windows.h>
-#else
-#include "windows.h"
-#endif // WIN32
 
-#include "minmax.h"
-
-#if defined(WIN32)
 #include <tchar.h>
 
 #include <ddraw.h>
 #include <dinput.h>
-#endif
+#else
+#include "windows.h"
+#endif // WIN32
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -121,8 +117,11 @@
 #if defined(__GNUC__)
 #define _MAX_PATH PATH_MAX
 #endif // __GNUC__
+
+#if defined(__cplusplus)
 #include "c3debug.h"
 #include "c3errors.h"
 #include "aui.h"
+#endif
 
 #endif // __C3_H__

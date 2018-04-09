@@ -132,7 +132,6 @@
 #include "BuildingBuildListRecord.h"
 #include "BuildingRecord.h"
 #include "BuildListSequenceRecord.h"
-#include "c3math.h"
 #include "Cell.h"
 #include "cellunitlist.h"
 #include "CityAstar.h"

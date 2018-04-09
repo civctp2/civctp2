@@ -47,7 +47,7 @@ class CivArchive;
 
 #include "Ic3CivArchive.h"
 #include "ctp2_inttypes.h"
-#include <SDL_endian.h>
+#include <SDL/SDL_endian.h>
 
 #define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
 #define k_ARCHIVE_MAGIC_VALUE_2	'U-98'

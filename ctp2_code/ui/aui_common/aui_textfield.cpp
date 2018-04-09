@@ -404,7 +404,7 @@ AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 #ifdef __AUI_USE_DIRECTX__
 void aui_TextField::HitEnter( HWND hwnd )
 #else
-void aui_TextField::HitEnter(); // Is this ; intended?
+void aui_TextField::HitEnter()
 #endif // __AUI_USE_DIRECTX__
 {
 #ifdef __AUI_USE_DIRECTX__

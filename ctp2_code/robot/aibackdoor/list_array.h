@@ -139,14 +139,14 @@ int list_array<LIST_DATA_TYPE>::Append_Data
     }
     else
     {
-        _ASSERTE(0 < chunk_size);
+		Assert(0 < chunk_size);
 
 		size_t const    needed_chunks =
             (old_size - initial_size + chunk_size) / chunk_size;
 
 		if ((static_cast<int>(needed_chunks) >= max_chunks) && (max_chunks >= 0))
 		{
-			_ASSERTE(needed_chunks < static_cast<size_t>(max_chunks));
+			Assert(needed_chunks < static_cast<size_t>(max_chunks));
 		}
 		else
 		{
@@ -172,7 +172,7 @@ void list_array<LIST_DATA_TYPE>::Set_Data
 	int n
 )
 {
-	_ASSERTE((n >= 0) && (static_cast<size_t>(n) < data_list.size()));
+	Assert((n >= 0) && (static_cast<size_t>(n) < data_list.size()));
 	data_list[n] = the_data;
 }
 

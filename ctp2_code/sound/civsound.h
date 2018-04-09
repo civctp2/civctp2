@@ -48,11 +48,10 @@
 #undef STREAM_TYPE
 #endif
 
-#if !defined(USE_SDL)
-#  include "mss.h"
+#if defined(USE_SDL)
+#include <SDL/SDL_mixer.h>
 #else
-#  include <SDL.h>
-#  include <SDL_mixer.h>
+#include "mss.h"
 #endif
 
 class CivSound {

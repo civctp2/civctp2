@@ -39,9 +39,12 @@
 #include "c3.h"
 #include "allinonewindow.h"
 
+#include <algorithm>
+#include <chrono>
+#include <thread>
+
 #include "AgeRecord.h"
 #include "agesscreen.h"
-#include <algorithm>
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "aui_radio.h"
@@ -4080,12 +4083,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetClosed( FALSE );
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
-			/// @todo Use Os::Sleep
-#ifdef WIN32
-			Sleep( k_PACKET_DELAY );
-#else
-			usleep( k_PACKET_DELAY );
-#endif
+			std::this_thread::sleep_for(std::chrono::milliseconds(k_PACKET_DELAY));
 			w->UpdateGameSetup();
 		}
 		g_netfunc->Leave();

@@ -27,16 +27,19 @@
 #error "WIN32 defined, but included windows.h from os/nowin32!"
 #endif
 
+#define HAVE_UNISTD_H
+
 #include <assert.h>
 #include <strings.h>
-#include "tchar.h"
+#include <limits.h>
 #include "ctp2_inttypes.h"
 
 /* Windows data types */
 #define BOOL uint32
 #define FALSE 0
 #define TRUE 1
-typedef char   CHAR;
+typedef char CHAR;
+typedef char TCHAR;
 typedef uint32 COLORREF;
 typedef sint32 GUID;
 typedef sint32 HRESULT;
@@ -158,7 +161,6 @@ typedef struct hwnd_t* HWND;
 #define WM_MBUTTONDOWN 0x0207
 #define WM_MBUTTONUP   0x0208
 /* Makros */
-#define _ASSERTE(x) assert(x)
 #define CALLBACK
 #ifdef WORDS_BIGENDIAN
 #define HIWORD(w) ((WORD)(w))

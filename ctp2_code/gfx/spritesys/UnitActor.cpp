@@ -105,7 +105,7 @@ extern PointerList<Player> *g_deadPlayer;
 #define k_SHIELD_ON_TIME        650
 #define k_SHIELD_OFF_TIME       150
 
-#ifndef _DEBUG_MEMORY
+#ifdef _DEBUG_MEMORY
 #define STOMPCHECK() if (m_curAction) { Assert(_CrtIsMemoryBlock(m_curAction, sizeof(Action),NULL,NULL,NULL));}
 #else
 #define STOMPCHECK() ;

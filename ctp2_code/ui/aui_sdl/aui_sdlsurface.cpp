@@ -6,8 +6,7 @@
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "aui_sdlsurface.h"
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL/SDL_thread.h>
 
 uint32 aui_SDLSurface::m_SDLSurfaceClassId = aui_UniqueId();
 
@@ -37,7 +36,7 @@ aui_SDLSurface::aui_SDLSurface(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-        SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
+	SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
 	if ( !(m_lpdds = lpdds) )
 	{
 		m_lpdds = SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);

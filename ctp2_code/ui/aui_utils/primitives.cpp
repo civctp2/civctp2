@@ -33,8 +33,6 @@
 #include "c3.h"
 #include "primitives.h"
 
-#include "c3math.h"
-
 #include "Globals.h"
 
 #include "aui.h"
@@ -920,11 +918,9 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 	return PRIMITIVES_ERRCODE_OK;
 }
 
-
-
-
-
-
+constexpr sint32 sgn(sint32 x) {
+	return x >= 0 ? 1 : -1;
+}
 
 PRIMITIVES_ERRCODE primitives_DrawLine16(
 	aui_Surface *pSurface,
@@ -938,16 +934,14 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	Assert(pSurface);
 	if(pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 dx,dy,sdx,sdy,absdx,absdy,num,den;
-
-	dx = x2-x1;
-	dy = y2-y1;
-	sdx = SGN(dx);
-	sdy = SGN(dy);
-	absdx = ABS(dx);
-	absdy = ABS(dy);
-	num = absdy >> 1;
-	den = absdx >> 1;
+	sint32 dx = x2-x1;
+	sint32 dy = y2-y1;
+	sint32 sdx = sgn(dx);
+	sint32 sdy = sgn(dy);
+	sint32 absdx = abs(dx);
+	sint32 absdy = abs(dy);
+	sint32 num = absdy >> 1;
+	sint32 den = absdx >> 1;
 
 	uint8 *pSurfBase;
 

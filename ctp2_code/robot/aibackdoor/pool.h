@@ -124,7 +124,7 @@ Pool<DATA_TYPE>::Pool
     next_element            (0),
     next_free_element_list  (i_chunk_size, i_chunk_size, i_max_chunks)
 {
-	_ASSERTE(chunk_size > 0);
+	Assert(chunk_size > 0);
 
 	Prepare_New_Chunk();
 }

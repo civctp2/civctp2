@@ -28,6 +28,9 @@
  *
  *----------------------------------------------------------------------------
  */
+#pragma once
+
+#include "ctp2_config.h"
 
 #ifdef _DEBUG
 
@@ -45,10 +48,9 @@ extern "C" {
 void Debug_Open (void);
 void Debug_Close (void);
 
-#ifdef WIN32
+#if defined(WIN32)
 void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID);
-#endif // WIN32
-#ifdef LINUX
+#elif defined(LINUX)
 void Debug_SetProcessName(char const * szProcessName);
 #endif
 

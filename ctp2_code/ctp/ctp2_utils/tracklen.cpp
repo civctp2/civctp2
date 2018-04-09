@@ -43,7 +43,7 @@
 #include <unistd.h>
 #endif
 #ifdef USE_SDL
-#include <SDL_cdrom.h>
+#include <SDL/SDL_cdrom.h>
 #endif
 #include "cheatkey.h"
 

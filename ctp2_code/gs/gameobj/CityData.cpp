@@ -4945,8 +4945,9 @@ bool CityData::BuildWonder(sint32 type)
 
 		sprintf(error_msg, "Cannot build wonder %d",
 			type);
-
+#ifdef WIN32
 		_RPT0(_CRT_WARN, error_msg);
+#endif
 #endif
 		return false;
 	}

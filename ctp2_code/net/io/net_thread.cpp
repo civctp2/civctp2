@@ -32,6 +32,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
+#include <chrono>
+#include <thread>
+
 #include "net_thread.h"
 #include "net_types.h"
 #include "net_util.h"
@@ -217,18 +221,13 @@ void NetThread::Run()
 {
 	TPacketData *packet;
 
-#if defined(_DEBUG)
-#ifndef USE_SDL
+#if defined(_DEBUG) && defined(WIN32)
 	Os::SetThreadName("NetThread::Run");
 #endif
-#endif
 
-	while(!m_exit) {
-#ifdef WIN32
-		Sleep(100);
-#else
-		usleep(100);
-#endif
+	while (!m_exit) {
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
+
 		if(m_anet) {
 			if(m_dp) {
 

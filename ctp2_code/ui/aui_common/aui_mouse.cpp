@@ -34,6 +34,9 @@
 #include "c3.h"
 #include "aui_mouse.h"
 
+#include <chrono>
+#include <thread>
+
 #include "aui_Factory.h"
 #include "aui_ui.h"
 
@@ -63,11 +66,6 @@ SDL_mutex *aui_Mouse::m_lpcs = NULL;
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
-
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
 
 aui_Mouse::aui_Mouse
 (
@@ -648,11 +646,7 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 
 		mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
 
-#ifdef WIN32
-		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
-#elif defined(LINUX)
-		usleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
-#endif
+		std::this_thread::sleep_for(std::chrono::milliseconds(k_AUI_MOUSE_THREAD_SLEEP_TIME));
 	}
 
 	return 0;

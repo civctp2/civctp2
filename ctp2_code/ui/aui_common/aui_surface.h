@@ -27,14 +27,17 @@
 // - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __AUI_SURFACE_H__
 #define __AUI_SURFACE_H__
 
 #include "aui_base.h"
 #ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 #endif
 
 enum AUI_SURFACE_PIXELFORMAT

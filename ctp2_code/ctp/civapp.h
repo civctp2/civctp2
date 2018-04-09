@@ -197,7 +197,7 @@ private:
 	MBCHAR m_filename[k_AUI_LDL_MAXBLOCK + 1];
 };
 
-#if 0   // never used
+/*   // never used
 class LoadSaveGameMapAction : public aui_Action
 {
 public:
@@ -224,7 +224,7 @@ public:
 private:
 	MBCHAR m_filename[k_AUI_LDL_MAXBLOCK + 1];
 };
-#endif
+*/
 
 class LoadScenarioGameAction : public aui_Action
 {

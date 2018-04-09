@@ -37,17 +37,12 @@
 #include "aui_movie.h"
 
 #ifdef __AUI_USE_SDL__
-#include <SDL.h>
-#ifdef USE_SDL_FFMPEG
-#include <SDL_ffmpeg.h>
-#endif
-#include <SDL_mixer.h>
-#include <SDL_syswm.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
+#include <SDL/SDL_syswm.h>
 #include "soundmanager.h"		// g_soundManager
 #include "aui_sdlsurface.h"
-#ifdef USE_SDL_FFMPEG
-SDL_ffmpegFile* film;
-#endif
+
 Mix_Chunk achunk;
 
 int m_moviechannel;
