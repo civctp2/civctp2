@@ -255,36 +255,3 @@ void yyerror(char *err)
 	printf("Line %d: %s\n", g_line_number, err);
 	s_done = 1;
 }
-
-int yyparse();
-
-int main(int argc, char **argv)
-{
-	int	errorFound	= 1;	/* Not started yet */
-	int arg;
-	char *outputDir = NULL;
-	g_generateRequirementWarnings = 1;
-
-	for(arg = 1; arg < argc; arg++) {
-		if(argv[arg][0] == '-') {
-			if(strcmp(argv[arg], "-r") == 0) {
-				g_generateRequirementWarnings = 0;
-			}
-		} else {
-			outputDir = argv[arg];
-		}
-	}
-
-	if(!outputDir) {
-		fprintf(stderr, "Usage: [-r] %s <outputdir>\n", argv[0]);
-		exit(errorFound);
-	}
-
-	db_set_output_dir(outputDir);
-	g_line_number = 1;
-	for (s_done = 0; !s_done; /* s_done updated in yyparse */ )
-	{
-		errorFound = yyparse();
-	}
-	exit(errorFound);
-}
