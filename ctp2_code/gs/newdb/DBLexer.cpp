@@ -114,7 +114,7 @@ DBLexer::~DBLexer()
 	}
 }
 
-void DBLexer::SetTokens(char **tokens, sint32 maxToken)
+void DBLexer::SetTokens(const char **tokens, sint32 maxToken)
 {
 
 	Assert(maxToken > k_Token_Custom_Base);
