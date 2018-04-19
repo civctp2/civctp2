@@ -148,7 +148,7 @@ void Datum::SetDBRefValue(struct defaultDBField &d)
 
 void Datum::ExportBitGroupParser(FILE *outfile, char *recordName)
 {
-	fprintf(outfile, "static char *s_%s_%s_BitNames[] = {\n", recordName, m_name);
+	fprintf(outfile, "static const char *s_%s_%s_BitNames[] = {\n", recordName, m_name);
 	sint32 numBits = 0;
 	struct namelist *node = m_groupList;
 	while(node) {

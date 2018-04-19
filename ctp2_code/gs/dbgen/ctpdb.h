@@ -132,7 +132,7 @@ void db_add_string_ids(struct namelist *list, struct fieldsize *size);
 void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpairtype *pairtype);
 void db_add_grouped_bits(char *groupName, struct namelist *list);
 
-void db_set_output_dir(char *dir);
+void db_set_output_dir(const char *dir);
 void db_add_parse_num(sint32 parseNum);
 
 #if defined(__cplusplus)

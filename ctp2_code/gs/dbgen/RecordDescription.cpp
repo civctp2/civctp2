@@ -209,7 +209,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
     // Global variables
 	fprintf(outfile, "extern %sRecordAccessorInfo      g_%sRecord_Accessors[];\n", m_name, m_name);
 	fprintf(outfile, "extern CTPDatabase<%sRecord> *   g_the%sDB;\n\n", m_name, m_name);
-	fprintf(outfile, "extern char * g_%s_Tokens[];\n", m_name);
+	fprintf(outfile, "extern const char * g_%s_Tokens[];\n", m_name);
 
     // Multiple include guard
 	fprintf(outfile, "\n#endif\n");
@@ -789,7 +789,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 {
 	char nicename[k_MAX_STRING];
 
-	fprintf(outfile, "char *g_%s_Tokens[] =\n", m_name);
+	fprintf(outfile, "const char *g_%s_Tokens[] =\n", m_name);
 	fprintf(outfile, "{\n");
 	PointerList<Datum>::Walker walk(&m_datumList);
 	while(walk.IsValid()) {
