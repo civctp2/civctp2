@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gï¿½hmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gï¿½hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin G?hmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin G?hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin G?hmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin G?hmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gï¿½hmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin G?hmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gï¿½hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G?hmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin Gï¿½hmann)
+//   debugging significantly. (09-Aug-2008 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -177,7 +177,7 @@
 #include <X11/Xlib.h>
 #endif
 #ifdef USE_GTK
-#include <gtk/gtk.h>
+#include <gtk-3.0/gtk/gtk.h>
 #endif
 
 #if defined(_DEBUG)
@@ -1584,6 +1584,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 	}
 #endif
+#ifdef USE_GTK
+	gtk_init(&iCmdShow, &pSzCmdLine);
+#endif
 
 	appstrings_Initialize();
 
@@ -1852,7 +1855,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
 			SDLKCONV(SDLK_CARET, '^');
 			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', 'Â¬');
+			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
 			SDLKCONV(SDLK_UP, SDLK_UP + 256);
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
 			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
@@ -1893,7 +1896,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_KP_EQUALS, '=');
 			SDLKCONVSHIFT(SDLK_1, '1', '!');
 			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', 'Â£');
+			SDLKCONVSHIFT(SDLK_3, '3', '£');
 			SDLKCONVSHIFT(SDLK_4, '4', '$');
 			SDLKCONVSHIFT(SDLK_5, '5', '%');
 			SDLKCONVSHIFT(SDLK_6, '6', '^');

@@ -42,9 +42,9 @@
 // - Keep the user's leader name when the data is consistent.
 // - Skip begin turn handling when loading from a file.
 // - Fixed a repetitive memory leak in the Great Libary caused by
-//   scenario loading, by Martin G�hmann.
+//   scenario loading, by Martin G?hmann.
 // - Removed some redundant code, because it is already done
-//   somewhere else, by Martin G�hmann.
+//   somewhere else, by Martin G?hmann.
 //
 //----------------------------------------------------------------------------
 //
@@ -68,32 +68,32 @@
 // - Used the new ColorSet option to select civilisation colors.
 // - Memory leak repaired: clean up the turn counter override information.
 // - Hot seat handling improved.
-// - Static member of StatusBar is now deleted correctly, by Martin G�hmann.
+// - Static member of StatusBar is now deleted correctly, by Martin G?hmann.
 // - Cleaned up music screen.
 // - The civilisation index from the profile is now reset if it is too high.
-//   This prevents the game from crashing. - April 12th 2005 Martin G�hmann
+//   This prevents the game from crashing. - April 12th 2005 Martin G?hmann
 // - Added crash prevention during game loading.
 // - Added another civilisation index check.
 // - Option added to include multiple data directories.
 // - Added Slic segment cleanup.
-// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin G�hmann)
-// - Made progress bar more fluently. (Aug 22nd 2005 Martin G�hmann)
-// - Removed the old endgame and installation databases. (Aug 29th 2005 Martin G�hmann)
+// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin G?hmann)
+// - Made progress bar more fluently. (Aug 22nd 2005 Martin G?hmann)
+// - Removed the old endgame and installation databases. (Aug 29th 2005 Martin G?hmann)
 // - Removed old sprite state databases, removed olf good's icon
-//   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin G�hmann)
-// - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin G�hmann)
-// - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin G�hmann)
-// - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin G�hmann)
-// - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin G�hmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin G�hmann)
-// - Replaced old pollution database by new one. (July 15th 2006 Martin G�hmann)
-// - Replaced old global warming database by new one. (July 15th 2006 Martin G�hmann)
-// - Added new map icon database. (3-Mar-2007 Martin G�hmann)
-// - Replaced old map database by new one. (27-Mar-2007 Martin G�hmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin G�hmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin G�hmann)
-// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin G�hmann)
-// - Games can now be saved if the visible player is a robot. (30-Jan-2008 Martin G�hmann)
+//   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin G?hmann)
+// - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin G?hmann)
+// - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin G?hmann)
+// - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin G?hmann)
+// - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin G?hmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin G?hmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin G?hmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin G?hmann)
+// - Added new map icon database. (3-Mar-2007 Martin G?hmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin G?hmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin G?hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin G?hmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin G?hmann)
+// - Games can now be saved if the visible player is a robot. (30-Jan-2008 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -278,10 +278,8 @@
 #include "GWCiv.h"
 #endif
 
-#ifdef LINUX
-#include <time.h>
-#include <unistd.h>
-#endif
+#include <thread>
+#include <chrono>
 
 extern ScreenManager *          g_screenManager;
 extern OzoneDatabase            *g_theUVDB;
@@ -566,16 +564,7 @@ namespace Os
 
 	void Sleep(uint32 milliSeconds)
 	{
-#ifdef HAVE_UNISTD_H
-		usleep(milliSeconds*1000);
-#elif defined(WIN32)
-		::Sleep(milliSeconds);
-#elif defined(LINUX)
-		struct timespec backgroundSleepTime;
-		backgroundSleepTime.tv_sec  = 0;
-		backgroundSleepTime.tv_nsec = 1000000 * milliSeconds;
-		nanosleep(&backgroundSleepTime, NULL);
-#endif
+		std::this_thread::sleep_for(std::chrono::milliseconds(milliSeconds));
 	}
 } // namespace Os
 

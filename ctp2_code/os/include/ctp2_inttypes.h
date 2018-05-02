@@ -9,7 +9,7 @@
 
 #include "ctp2_config.h"
 
-#if defined(WIN32)
+#if defined(_MSC_VER)
 
 typedef signed char          schar;
 typedef unsigned char        uchar;
@@ -45,6 +45,6 @@ typedef uint32_t             uint32;
 typedef int64_t              sint64;
 typedef uint64_t             uint64;
 
-#endif// !defined(_MSCVER)
+#endif// !defined(_MSC_VER)
 
 #endif
