@@ -9,7 +9,7 @@
 #define __MAPGEN_H__
 
 #if !defined(USE_COM_REPLACEMENT)
-#include <OBJBASE.H>
+#include <objbase.h>
 interface IC3Rand;
 
 typedef HRESULT (STDAPICALLTYPE *CreateMapGenerator)(IUnknown **u);

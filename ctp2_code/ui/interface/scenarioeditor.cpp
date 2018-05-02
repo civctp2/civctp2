@@ -131,7 +131,7 @@
 #include "RiskRecord.h"
 
 #include "Cell.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "TerrImprove.h"
 #include "civapp.h"
 
@@ -150,7 +150,7 @@
 #include "newturncount.h"
 #include "TurnYearStatus.h"
 #include "MaterialPool.h"
-#include "gold.h"
+#include "Gold.h"
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"

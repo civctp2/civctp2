@@ -177,7 +177,7 @@
 #include <X11/Xlib.h>
 #endif
 #ifdef USE_GTK
-#include <gtk/gtk.h>
+#include <gtk-3.0/gtk/gtk.h>
 #endif
 
 #if defined(_DEBUG)
@@ -1566,14 +1566,13 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 	}
 #endif
+#ifdef USE_GTK
+	gtk_init(&iCmdShow, &pSzCmdLine);
+#endif
 
 	appstrings_Initialize();
 
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
-#ifdef USE_GTK
-	gtk_set_locale();
-	gtk_init(&iCmdShow, &pSzCmdLine);
-#endif
 
 #ifdef __AUI_USE_DIRECTX__
 	if (!main_CheckDirectX()) {
