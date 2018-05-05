@@ -6397,7 +6397,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 						break;
 				}
 				strcat(buf, buf2);
-				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity());
+				sprintf(buf2, " to city %d", (int)tradeOffers->Get(j).GetToCity());
 
 				strcat(buf, buf2);
 				primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,

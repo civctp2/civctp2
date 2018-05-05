@@ -422,7 +422,7 @@ char *DebugMemory_FastStrdup  (const char *string)
 {
 	char *memory;
 
-	memory = strdup (string);
+	memory = _strdup (string);
 
 	if (!memory)
 	{

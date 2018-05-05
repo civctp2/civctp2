@@ -396,12 +396,11 @@ BOOL CALLBACK Debug_EnumSymbolsCallback
 BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext)
 {
 	#ifndef _BFR_
-		int					err;
 
 		// Seems that SysEnumerateSymbols changed???
 #if defined(_MSC_VER) && (_MSC_VER < 1400)
 		if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
-			err = GetLastError();
+			int err = GetLastError();
 			LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
 
 			return FALSE;
@@ -911,7 +910,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, in
 	caller = call_stack[index];
 	int offset;
 	caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
-	sprintf(buff, "[%s]", caller_name, buff);
+	sprintf(buff, "[%s]", caller_name);
 	index++;
 
 	while ((index < number) && (call_stack[index] != 0)) {

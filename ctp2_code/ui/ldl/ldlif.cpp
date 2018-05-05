@@ -90,7 +90,7 @@ void ldlif_init_log()
 #ifdef _DEBUG
 	FILE *f = fopen("ldlparselog.txt", "w");
 	if(f) {
-		fprintf(f, "%d\n", time(0));
+		fprintf(f, "%" PRId64 "\n", time(0));
 		fclose(f);
 	}
 #endif
