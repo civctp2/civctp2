@@ -97,6 +97,9 @@
 #include "ctp/c3.h"
 
 #include "ai/strategy/goals/Goal.h"
+
+#include <inttypes.h>
+
 using namespace std;
 
 const Utility Goal::BAD_UTILITY = -99999999;
@@ -2225,8 +2228,8 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[1024];
-		sprintf(buff, "\t %9x,\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
-		        this,
+		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+            (uintptr_t)this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
 		        target_pos.x,

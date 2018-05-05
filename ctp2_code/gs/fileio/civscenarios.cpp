@@ -167,7 +167,7 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 		MBCHAR		scenListName[_MAX_PATH];
 		int		r;
 
-		sprintf(scenPath, "%s%s%s%#.4d", packPath, FILE_SEP, k_SCENARIO_FOLDER_PREFIX, i, k_SCENARIO_INFO_FILENAME);
+		sprintf(scenPath, "%s%s%s%#.4d", packPath, FILE_SEP, k_SCENARIO_FOLDER_PREFIX, i);
 		sprintf(scenListName, "%s%s%s", scenPath, FILE_SEP, k_SCENARIO_INFO_FILENAME);
 
 #ifdef WIN32

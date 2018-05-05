@@ -67,6 +67,8 @@
 #include "ctp/c3.h"
 #include "ui/interface/controlpanelwindow.h"
 
+#include <inttypes.h>
+
 #include <algorithm>                    // std::fill
 #include "ui/aui_common/aui.h"
 #include "ui/aui_common/aui_uniqueid.h"
@@ -3732,19 +3734,19 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 	sprintf( c, g_theStringDB->GetNameStr("str_ldl_comma") );
 
 	if ( trillion ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld%s%.3ld", trillion, c, billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld%s%.3" PRIu64, trillion, c, billion, c, million, c, thousand, c, temp );
 	}
 	else if ( billion ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld", billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3" PRIu64, billion, c, million, c, thousand, c, temp );
 	}
 	else if ( million ) {
-		sprintf( s, "%ld%s%.3ld%s%.3ld", million, c, thousand, c, temp );
+		sprintf( s, "%ld%s%.3ld%s%.3" PRIu64, million, c, thousand, c, temp );
 	}
 	else if ( thousand ) {
-		sprintf( s, "%ld%s%.3ld", thousand, c, temp );
+		sprintf( s, "%ld%s%.3" PRIu64, thousand, c, temp );
 	}
 	else {
-		sprintf( s, "%ld", temp );
+		sprintf( s, "%" PRIu64, temp );
 	}
 }
 

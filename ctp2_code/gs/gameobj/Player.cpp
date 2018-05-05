@@ -6783,7 +6783,7 @@ void Player::DisplayWWR()
     m_global_happiness->DisplayWWR();
 
     char str[80];
-    sprintf(str, "  readiness level %d cost %d  %%  %3.1f",  m_readiness->GetLevel(),
+    sprintf(str, "  readiness level %d cost  %3.1f  %%  %3.1f",  m_readiness->GetLevel(),
         m_readiness->GetCost(),
         100.0 * m_readiness->GetPecentLastTurn());
 	g_debugWindow->AddText(str);
@@ -6791,7 +6791,7 @@ void Player::DisplayWWR()
 	g_debugWindow->AddText(str);
     double tmp;
     m_tax_rate->GetScienceTaxRate(tmp);
-    sprintf(str, "  science %% %3.1f science current %d", tmp, 100.0 * m_science->GetLevel());
+    sprintf(str, "  science %% %3.1f science current %3.1f", tmp, 100.0 * m_science->GetLevel());
 	g_debugWindow->AddText(str);
     sprintf(str, "  gold %d", m_gold->GetLevel());
 	g_debugWindow->AddText(str);

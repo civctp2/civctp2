@@ -68,6 +68,8 @@
 #include "ctp/c3.h"
 #include "gfx/tilesys/tiledmap.h"               // tiledraw.h does not exist
 
+#include <inttypes.h>
+
 #include "ui/aui_common/aui.h"
 #include "ui/aui_sdl/aui_sdlsurface.h"
 #include "ui/aui_common/aui_bitmapfont.h"
@@ -4916,7 +4918,7 @@ void TiledMap::DrawChatText()
 			if(g_network.IsActive()) {
 				if(g_network.IsSpeedStyle() && g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
 					time_t const timeleft = g_network.GetTurnEndsAt() - time(0);
-					sprintf(timebuf, "%s: %d", g_theStringDB->GetNameStr("NETWORK_TIME_LEFT"), timeleft);
+					sprintf(timebuf, "%s: %" PRId64, g_theStringDB->GetNameStr("NETWORK_TIME_LEFT"), timeleft);
 					timeRect.right = timeRect.left + m_font->GetStringWidth(timebuf);
 					m_font->DrawString(tempSurf, &timeRect, &timeRect, timebuf, 0, GetColorRef(COLOR_BLACK), 0);
 					OffsetRect(&timeRect, -1, -1);
