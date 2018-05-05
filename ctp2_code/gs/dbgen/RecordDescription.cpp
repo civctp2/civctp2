@@ -519,8 +519,8 @@ void RecordDescription::ExportMethods(FILE *outfile)
 	fprintf(outfile, "    ~%sRecord();\n", m_name);
 	fprintf(outfile, "    %sRecord const & operator = (%sRecord const & rval);\n\n", m_name, m_name);
 
-	fprintf(outfile, "    void Init();\n", m_name);
-	fprintf(outfile, "    void Serialize(CivArchive &archive);\n\n", m_name);
+	fprintf(outfile, "    void Init();\n");
+	fprintf(outfile, "    void Serialize(CivArchive &archive);\n\n");
 
 	fprintf(outfile, "    void CheckRequiredFields(DBLexer *lex);\n");
 	fprintf(outfile, "    sint32 Parse(DBLexer *lex, sint32 numRecords);\n\n");

@@ -63,6 +63,7 @@
 #endif
 #include <time.h>
 #include <errno.h>
+#include <inttypes.h>
 
 #include "gs/dbgen/RecordDescription.h"
 
@@ -278,16 +279,16 @@ bool db_files_differ(char const * newFilePath, char const * oldFilePath)
 void db_maybe_copy(char * newFilePath)
 {
 	char oldpath[PATH_MAX];
-	getcwd(oldpath, PATH_MAX);
+	_getcwd(oldpath, PATH_MAX);
 
-	chdir(db_get_code_directory());
+	_chdir(db_get_code_directory());
 
 	char oldFilePath[PATH_MAX];
 	strcpy(oldFilePath, newFilePath);
 
 	char *dot = strrchr(oldFilePath, '.');
 	if(!dot) {
-		chdir(oldpath);
+		_chdir(oldpath);
 		return;
 	}
 	*dot = 0;
@@ -328,8 +329,8 @@ void db_maybe_copy(char * newFilePath)
 		}
     }
 
-	unlink(newFilePath);
-	chdir(oldpath);
+	_unlink(newFilePath);
+	_chdir(oldpath);
 }
 
 void db_end_record(char *name)
@@ -365,7 +366,7 @@ void db_end_record(char *name)
 	FILE * stamp = fopen(filename, "w");
 	Assert(stamp);
 	if(stamp) {
-		fprintf(stamp, "//%d\n", time(0));
+		fprintf(stamp, "//%" PRId64 "\n", time(0));
 		fclose(stamp);
 	}
 
