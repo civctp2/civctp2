@@ -1,7 +1,7 @@
 #ifndef __CTP_FINGER_H__
 #define __CTP_FINGER_H__
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 #define k_FINGERPRINT_ASSET			"GGMX01.wav"
 #define k_FINGERPRINT_ASSET_DIR		C3DIR_SOUNDS

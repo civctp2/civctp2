@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "fliif.h"
-#include "FliSymbol.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliSymbol.h"
 #include "civarchive.h"
-#include "dynarr.h"
-#include "FliOutputProc.h"
-#include "FliEngine.h"
-#include "FliSetFunc.h"
-#include "pointerlist.h"
-#include "FliRule.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robotcom/fuzzy/FliOutputProc.h"
+#include "robotcom/fuzzy/FliEngine.h"
+#include "robotcom/fuzzy/FliSetFunc.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "robotcom/fuzzy/FliRule.h"
 
 FliSymbol::FliSymbol(char *name, double *internal, double initvalue, FLI_SYM type)
 {

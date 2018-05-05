@@ -28,25 +28,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "dialogboxwindow.h"
+#include "ctp/c3.h"
+#include "ui/netshell/dialogboxwindow.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_progressbar.h"
-#include "aui_screen.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_progressbar.h"
+#include "ui/aui_common/aui_screen.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "netshell.h"
-#include "ns_chatbox.h"
-#include "ns_customlistbox.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_chatbox.h"
+#include "ui/netshell/ns_customlistbox.h"
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
-#include "spnewgamewindow.h"
+#include "ui/interface/spnewgamewindow.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 DialogBoxWindow::DialogBoxWindow(
 	AUI_ERRCODE *retval,

@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "UIUtils.h"
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_control.h"
-#include "aui_bitmapfont.h"
-#include "c3ui.h"
+#include "ctp/c3.h"
+#include "ui/interface/UIUtils.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_ctp2/c3ui.h"
 
 extern C3UI			*g_c3ui;
 

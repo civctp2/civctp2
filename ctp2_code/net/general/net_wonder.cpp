@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "net_wonder.h"
-#include "WonderTracker.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_wonder.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "net/io/net_util.h"
 
 void NetWonderTracker::Packetize(uint8 *buf, uint16 &size)
 {

@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "fliif.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/fliif.h"
 #include <stdio.h>
 #include <stdarg.h>
-#include "FliEngine.h"
-#include "FliSymbol.h"
-#include "FliSetFunc.h"
-#include "FliWhen.h"
+#include "robotcom/fuzzy/FliEngine.h"
+#include "robotcom/fuzzy/FliSymbol.h"
+#include "robotcom/fuzzy/FliSetFunc.h"
+#include "robotcom/fuzzy/FliWhen.h"
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 #define k_FLI_MAX_CODE_SIZE 32768
 

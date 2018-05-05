@@ -31,13 +31,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Events.h"
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "SelItem.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Events.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 STDEHANDLER(SoundCreateCityEvent)
 {

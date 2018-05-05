@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "splash.h"
+#include "ctp/c3.h"
+#include "ui/interface/splash.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "c3ui.h"
-#include "colorset.h"               // g_colorSet
-#include "Globals.h"
-#include "pixelutils.h"
-#include "primitives.h"
-#include "profileDB.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gs/utility/Globals.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"
 
 extern C3UI	*   g_c3ui;
 

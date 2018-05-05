@@ -64,9 +64,9 @@ string ID_SPY_MAKE_FRIEND_DS("ID_SPY_MAKE_FRIEND_DS");
 string ID_ADVICE_MAKE_FRIEND_DS("ID_ADVICE_MAKE_FRIEND_DS");
 string ID_NEWS_MAKE_FRIEND_DS("ID_NEWS_MAKE_FRIEND_DS");
 
-#include "ctp2.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
+#include "ai/ctp2/ctp2.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
 
 vector<Player> Player::s_players(g_numPlayers);
 vector<Scheduler> Scheduler::s_scheduler(g_numPlayers);

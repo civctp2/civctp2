@@ -4,9 +4,9 @@
 #ifndef _TERRIMPROVEPOOL_H_
 #define _TERRIMPROVEPOOL_H_
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "TerrImprove.h"
+#include "gs/gameobj/TerrImprove.h"
 
 class CivArchive;
 

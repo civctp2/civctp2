@@ -29,60 +29,60 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "net_action.h"
+#include "ctp/c3.h"
+#include "net/general/net_action.h"
 
-#include "Cell.h"
+#include "gs/world/Cell.h"
 
-#include "network.h"
-#include "net_util.h"
-#include "net_info.h"
-#include "net_rand.h"
-#include "net_terrain.h"
-#include "net_traderoute.h"
-#include "net_unit.h"
-#include "World.h"                      // g_theWorld
-#include "player.h"                     // g_player
-#include "SelItem.h"                    // g_selected_item
-#include "TradeOffer.h"
-#include "Readiness.h"
-#include "installation.h"
-#include "TerrImprove.h"
-#include "installationpool.h"
-#include "AICause.h"
-#include "DiplomaticRequest.h"
-#include "DiplomaticRequestPool.h"
-#include "message.h"
-#include "MessagePool.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "TurnCnt.h"                    // g_turn
-#include "AICause.h"
-#include "Advances.h"
-#include "MaterialPool.h"
-#include "TerrImprovePool.h"
-#include "net_playerdata.h"
-#include "UnitPool.h"                   // g_theUnitPool
-#include "Order.h"
-#include "ArmyPool.h"
-#include "tiledmap.h"                   // g_tiledMap
-#include "radarmap.h"                   // g_radarMap
-#include "ArmyData.h"
-#include "TradeOfferPool.h"             // g_theTradeOfferPool
-#include "Agreement.h"
-#include "AgreementPool.h"              // g_theAgreementPool
-#include "AdvanceRecord.h"
-#include "TradePool.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "newturncount.h"
-#include "GameEventManager.h"
-#include "director.h"
-#include "Diplomat.h"
-#include "battleviewwindow.h"
-#include "c3ui.h"
-#include "aui_button.h"
-#include "gstypes.h"                    // TERRAIN_TYPES
+#include "net/general/network.h"
+#include "net/io/net_util.h"
+#include "net/general/net_info.h"
+#include "net/general/net_rand.h"
+#include "net/general/net_terrain.h"
+#include "net/general/net_traderoute.h"
+#include "net/general/net_unit.h"
+#include "gs/world/World.h"                      // g_theWorld
+#include "gs/gameobj/Player.h"                     // g_player
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gs/gameobj/TradeOffer.h"
+#include "gs/gameobj/Readiness.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/installationpool.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/utility/TurnCnt.h"                    // g_turn
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "net/general/net_playerdata.h"
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
+#include "ui/aui_ctp2/radarmap.h"                   // g_radarMap
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/TradeOfferPool.h"             // g_theTradeOfferPool
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/AgreementPool.h"              // g_theAgreementPool
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/utility/newturncount.h"
+#include "gs/events/GameEventManager.h"
+#include "gfx/spritesys/director.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ui/interface/battleviewwindow.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_button.h"
+#include "gs/utility/gstypes.h"                    // TERRAIN_TYPES
 
 extern C3UI *g_c3ui;
 

@@ -37,7 +37,7 @@
 #ifndef __CIVPATHS_H__
 #define __CIVPATHS_H__ 1
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 #include <vector>	// list did not work: crashes on begin() for empty list
 
 

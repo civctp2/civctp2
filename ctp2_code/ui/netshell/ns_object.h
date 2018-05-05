@@ -28,8 +28,8 @@
 #ifndef __NS_OBJECT_H__
 #define __NS_OBJECT_H__
 
-#include "netfunc.h"
-#include "ns_accessor.h"
+#include "ui/netshell/netfunc.h"
+#include "ui/netshell/ns_accessor.h"
 
 template <class T, class NetShellT>
 

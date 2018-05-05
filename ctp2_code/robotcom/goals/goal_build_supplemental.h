@@ -12,7 +12,7 @@
 #ifndef __GOAL_BUILD_SUP_H__
 #define __GOAL_BUILD_SUP_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

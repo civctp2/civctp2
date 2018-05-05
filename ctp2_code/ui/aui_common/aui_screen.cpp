@@ -28,11 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_window.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "aui_screen.h"
+#include "ui/aui_common/aui_screen.h"
 
 
 aui_Screen::aui_Screen(

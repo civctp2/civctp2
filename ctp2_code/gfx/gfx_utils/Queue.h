@@ -54,7 +54,7 @@ template <class T> class Queue;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"    // Assert
+#include "ctp/ctp2_utils/c3debug.h"    // Assert
 
 //----------------------------------------------------------------------------
 // Class declarations

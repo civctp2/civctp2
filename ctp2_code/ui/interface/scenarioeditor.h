@@ -45,9 +45,9 @@ class ctp2_Button;
 
 class ctp2_DropDown;
 
-#include "civscenarios.h"
-#include "MapPoint.h"
-#include "gstypes.h"
+#include "gs/fileio/civscenarios.h"
+#include "gs/world/MapPoint.h"
+#include "gs/utility/gstypes.h"
 
 enum SCEN_START_LOC_MODE {
 	SCEN_START_LOC_MODE_NONE,

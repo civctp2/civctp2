@@ -56,15 +56,15 @@ typedef void (* UiCleanupCallback) (void);
 //----------------------------------------------------------------------------
 
 #if defined(__AUI_USE_SDL__)
-#include "aui_sdlui.h"
+#include "ui/aui_sdl/aui_sdlui.h"
 #else
-#include "aui_directui.h"
+#include "ui/aui_directx/aui_directui.h"
 #endif
-#include "pattern.h"
-#include "icon.h"
-#include "picture.h"
-#include "aui_resource.h"
-#include "aui_window.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/icon.h"
+#include "ui/aui_ctp2/picture.h"
+#include "ui/aui_common/aui_resource.h"
+#include "ui/aui_common/aui_window.h"
 
 //----------------------------------------------------------------------------
 // Class declarations

@@ -3,8 +3,8 @@
 #ifndef __AI_MAIN_H__
 #define __AI_MAIN_H__ 1
 
-#include "ic3GameState.h"
-#include "gstypes.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "gs/utility/gstypes.h"
 
 #define k_UNIT_STRENGTH_COEF 1.0
 #define k_PRODUCTION_STRENGTH_COEF 0.2

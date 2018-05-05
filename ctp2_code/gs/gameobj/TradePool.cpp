@@ -1,17 +1,17 @@
-#include "c3.h"
-#include "TradePool.h"
-#include "citylayer.h"
-#include "TradeRouteData.h"
-#include "director.h"
-#include "TerrainRecord.h"
-#include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
-#include "TradeDynArr.h"
-#include "profileDB.h"
-#include "ResourceRecord.h"
-#include "Globals.h"
-#include "Events.h"
-#include "GameEventUser.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TradePool.h"
+#include "gfx/layers/citylayer.h"
+#include "gs/gameobj/TradeRouteData.h"
+#include "gfx/spritesys/director.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "gs/utility/TradeDynArr.h"
+#include "gs/database/profileDB.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
 
 class aui_Surface;
 

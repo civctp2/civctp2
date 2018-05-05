@@ -1,9 +1,9 @@
 #ifndef _BMH_GW_CIV_RECORD_H_
 #define _BMH_GW_CIV_RECORD_H_
 
-#include "GWCivDLL.h"
+#include "GameWatch/gwciv/GWCivDLL.h"
 
-#include "GWRecord.h"
+#include "GameWatch/gamewatch/GWRecord.h"
 
 class GWUnitRecord;
 

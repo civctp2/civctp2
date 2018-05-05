@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "aui_ui.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_sound.h"
+#include "ui/aui_common/aui_sound.h"
 
 
 aui_Sound::aui_Sound(

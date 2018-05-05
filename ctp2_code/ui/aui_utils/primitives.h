@@ -36,13 +36,13 @@
 #ifndef __PRIMITIVES_H__
 #define __PRIMITIVES_H__
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
 class aui_Surface;
 class aui_Image;
 class Pattern;
 //enum AUI_TABGROUP_ALIGNMENT;
-#include "aui_tabgroup.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
 enum PRIMITIVES_ERRCODE
 {

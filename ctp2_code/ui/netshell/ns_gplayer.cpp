@@ -25,14 +25,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_stringtable.h"
-#include "netshell.h"
-#include "ns_gplayer.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_gplayer.h"
 
-#include "ns_tribes.h"
-#include "ns_playersetup.h"
+#include "ui/netshell/ns_tribes.h"
+#include "ui/netshell/ns_playersetup.h"
 
 
 ns_GPlayer::ns_GPlayer(NETFunc::Player * player)

@@ -30,15 +30,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Gold.h"
-#include "civarchive.h"
-#include "network.h"
+#include "gs/gameobj/Gold.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "net/general/network.h"
 
-#include "ConstRecord.h"
+#include "gs/newdb/ConstRecord.h"
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 Gold::Gold(PLAYER_INDEX const owner)
 :	m_level(0),

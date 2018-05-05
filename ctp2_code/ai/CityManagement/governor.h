@@ -76,10 +76,10 @@ class Governor;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "citydata.h"
-#include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
-#include "StrategyRecord.h" // StrategyRecord
-#include "settlemap.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
+#include "gs/newdb/StrategyRecord.h" // StrategyRecord
+#include "ai/mapanalysis/settlemap.h"
 
 class Path;
 class CivArchive;

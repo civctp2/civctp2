@@ -35,10 +35,10 @@
 #ifndef __RESOURCEMAP_H__
 #define __RESOURCEMAP_H__
 
-#include "patternbase.h"
-#include "aui_control.h"
-#include "Unit.h"
-#include "MapPoint.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/world/MapPoint.h"
 
 #define k_RESOURCEMAP_DEFAULT_SCALE				0
 #define k_RESOURCEMAP_LDL_SCALE					"scale"

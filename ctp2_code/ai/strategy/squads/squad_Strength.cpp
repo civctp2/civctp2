@@ -36,16 +36,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "squad_Strength.h"
+#include "ctp/c3.h"
+#include "ai/strategy/squads/squad_Strength.h"
 
-#include "agent.h"
-#include "cellunitlist.h"
-#include "UnitRecord.h"
-#include "World.h"
-#include "ctpaidebug.h"
-#include "mapanalysis.h"
-#include "MapPoint.h"           // MapPoint
+#include "ai/strategy/agents/agent.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/world/World.h"
+#include "ai/ctpaidebug.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/world/MapPoint.h"           // MapPoint
 
 Squad_Strength::Squad_Strength(const Army& army)
 {

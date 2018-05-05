@@ -32,8 +32,8 @@
 #ifndef __TRADE_ASTAR_H__
 #define __TRADE_ASTAR_H__ 1
 
-#include "gstypes.h"
-#include "Astar.h"
+#include "gs/utility/gstypes.h"
+#include "robot/pathing/Astar.h"
 
 class TradeAstar : public Astar {
 

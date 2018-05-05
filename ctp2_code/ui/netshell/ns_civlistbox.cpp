@@ -25,22 +25,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ns_civlistbox.h"
+#include "ctp/c3.h"
+#include "ui/netshell/ns_civlistbox.h"
 
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_window.h"
-#include "aui_item.h"
-#include "c3_ranger.h"
-#include "pattern.h"
-#include "primitives.h"
-#include "colorset.h"       // g_colorSet
-#include "ns_header.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_ctp2/c3_ranger.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"       // g_colorSet
+#include "ui/netshell/ns_header.h"
 
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 ns_CivListBox::ns_CivListBox(
 	AUI_ERRCODE *retval,

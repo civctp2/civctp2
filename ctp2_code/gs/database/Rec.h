@@ -39,7 +39,7 @@ class CivArchive;
 
 #define k_MAX_OBSOLETE 8
 
-#include "dbtypes.h"    // StringId
+#include "gs/database/dbtypes.h"    // StringId
 
 class Record {
 public:

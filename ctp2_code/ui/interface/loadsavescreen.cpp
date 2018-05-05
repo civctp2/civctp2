@@ -38,51 +38,51 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
-#include "aui_uniqueid.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listbox.h"
-#include "c3_listitem.h"
-#include "c3_static.h"
-#include "c3_utilitydialogbox.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "civ3_main.h"
-#include "civapp.h"
-#include "Civilisation.h"
-#include "CivilisationRecord.h"
-#include "civscenarios.h"               // g_civScenarios
-#include "ctp2_button.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ctp/civ3_main.h"
+#include "ctp/civapp.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/fileio/civscenarios.h"               // g_civScenarios
+#include "ui/aui_ctp2/ctp2_button.h"
 #ifdef WIN32
 #include <direct.h>
 #endif // WIN32
-#include "gamefile.h"                   // SAVE_LEADER_NAME_SIZE
-#include "gameinit.h"
-#include "Globals.h"                    // allocated::reassign
-#include "hotseatlist.h"
-#include "initialplaywindow.h"
+#include "gs/fileio/gamefile.h"                   // SAVE_LEADER_NAME_SIZE
+#include "gs/utility/gameinit.h"
+#include "gs/utility/Globals.h"                    // allocated::reassign
+#include "ui/interface/hotseatlist.h"
+#include "ui/interface/initialplaywindow.h"
 #ifdef WIN32
 #include <io.h>
 #endif // WIN32
-#include "keypress.h"
-#include "loadsavewindow.h"
-#include "MessageBoxDialog.h"
-#include "netshell.h"                   // g_gamesetup
-#include "ns_gamesetup.h"
-#include "optionswindow.h"
-#include "player.h"                     // g_player
-#include "profileDB.h"                  // g_theProfileDB
-#include "spnewgamediffscreen.h"
-#include "spnewgameplayersscreen.h"
-#include "spnewgametribescreen.h"
-#include "StrDB.h"                      // g_theStringDB
-#include "TurnYearStatus.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/MessageBoxDialog.h"
+#include "ui/netshell/netshell.h"                   // g_gamesetup
+#include "ui/netshell/ns_gamesetup.h"
+#include "ui/interface/optionswindow.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "ui/interface/spnewgamediffscreen.h"
+#include "ui/interface/spnewgameplayersscreen.h"
+#include "ui/interface/spnewgametribescreen.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "ui/interface/TurnYearStatus.h"
 
 #ifndef WIN32
 #include <sys/types.h>

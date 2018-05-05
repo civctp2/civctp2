@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "EffectActor.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/EffectActor.h"
 
-#include "aui.h"
-#include "pixelutils.h"
-#include "tileutils.h"
+#include "ui/aui_common/aui.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
 
-#include "FacedSpriteWshadow.h"
-#include "EffectSpriteGroup.h"
-#include "SpriteState.h"
-#include "Actor.h"
-#include "SpriteGroupList.h"
-#include "tiledmap.h"
-#include "Anim.h"
-#include "Action.h"
-#include "director.h"
-#include "colorset.h"
-#include "maputils.h"
+#include "gfx/spritesys/FacedSpriteWshadow.h"
+#include "gfx/spritesys/EffectSpriteGroup.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/Action.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gfx/tilesys/maputils.h"
 
 #define k_doInvisible FALSE
 

@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "aui_hypertextbox.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "aui_ui.h"
-#include "aui_window.h"
-#include "aui_uniqueid.h"
-#include "aui_ranger.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,

@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "picture.h"
-#include "aui_window.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/picture.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "picturetab.h"
+#include "ui/aui_ctp2/picturetab.h"
 
 PictureTab::PictureTab(
 	AUI_ERRCODE *retval,

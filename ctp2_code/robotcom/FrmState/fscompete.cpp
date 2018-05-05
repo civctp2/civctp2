@@ -1,63 +1,63 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3player.h"
-#include "ic3Rand.h"
-#include "ic3world.h"
-#include "ic3UnitDB.h"
-#include "AgreementTypes.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3Rand.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
+#include "gs/gameobj/AgreementTypes.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
-#include "matrix.h"
-#include "ailog.h"
+#include "robotcom/planner/sorted_array.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/ailog.h"
 
-#include "bset.h"
-#include "MapPoint.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/world/MapPoint.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "aicell.h"
-#include "AiMap.h"
-#include "RouteUtilityList.h"
-#include "WonderTbl.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/Alloc/RouteUtilityList.h"
+#include "robotcom/aimgr/WonderTbl.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "InstBidList.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Alloc/InstBidList.h"
 
-#include "ForeignAgent.h"
-#include "ForeignCity.h"
+#include "robotcom/Agent/ForeignAgent.h"
+#include "robotcom/Agent/ForeignCity.h"
 
 #include "Foreigner.h"
 
 
-#include "fscompete.h"
+#include "robotcom/FrmState/fscompete.h"
 
-#include "ArmyGoal.h"
-#include "GoalDefense.h"
-#include "GlExpl.h"
-#include "GlAttck.h"
-#include "GlSettl.h"
-#include "GlRoute.h"
-#include "glfreight.h"
-#include "GlTrans.h"
-#include "GlEnslave.h"
-#include "Goal_Perimeter.h"
-#include "Goal_Patrol.h"
-#include "GoalMapTarget.h"
-#include "GoalCityTarget.h"
-#include "Goal_Attack_Region.h"
-#include "GoalRetreat.h"
-#include "GoalSally.h"
+#include "robotcom/goals/ArmyGoal.h"
+#include "robotcom/goals/GoalDefense.h"
+#include "robotcom/goals/GlExpl.h"
+#include "robotcom/goals/GlAttck.h"
+#include "robotcom/goals/GlSettl.h"
+#include "robotcom/goals/GlRoute.h"
+#include "robotcom/goals/glfreight.h"
+#include "robotcom/goals/GlTrans.h"
+#include "robotcom/goals/GlEnslave.h"
+#include "robotcom/goals/Goal_Perimeter.h"
+#include "robotcom/goals/Goal_Patrol.h"
+#include "robotcom/goals/GoalMapTarget.h"
+#include "robotcom/goals/GoalCityTarget.h"
+#include "robotcom/goals/Goal_Attack_Region.h"
+#include "robotcom/goals/GoalRetreat.h"
+#include "robotcom/goals/GoalSally.h"
 
-#include "FzOut.h"
-#include "GoalInst.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/goals/GoalInst.h"
 
 #include "Plan.h"
 
@@ -66,24 +66,24 @@
 
 
 
-#include "unitflow.h"
+#include "robotcom/planner/unitflow.h"
 
-#include "aip.h"
+#include "robotcom/planner/aip.h"
 
-#include "squad.h"
+#include "robotcom/planner/squad.h"
 
-#include "goal.h"
+#include "robotcom/planner/goal.h"
 
 #include "Plan.h"
 
 #include "Scheduler.h"
 
-#include "planner.h"
+#include "robotcom/planner/planner.h"
 
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

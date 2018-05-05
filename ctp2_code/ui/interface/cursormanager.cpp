@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_mouse.h"
+#include "ui/aui_common/aui_mouse.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "cursormanager.h"
+#include "ui/interface/cursormanager.h"
 
 extern C3UI			*g_c3ui;
 

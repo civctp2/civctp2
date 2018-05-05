@@ -31,7 +31,7 @@
 #ifndef __AUI_DRAGDROPWINDOW_H__
 #define __AUI_DRAGDROPWINDOW_H__
 
-#include "aui_window.h"
+#include "ui/aui_common/aui_window.h"
 
 
 class aui_DragDropWindow : public aui_Window

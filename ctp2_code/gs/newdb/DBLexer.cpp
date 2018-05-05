@@ -32,13 +32,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "DBLexer.h"
-#include "StringHash.h"
-#include "pointerlist.h"
-#include "DBTokens.h"
-#include "StrDB.h"
-#include "c3files.h"
+#include "ctp/c3.h"
+#include "gs/newdb/DBLexer.h"
+#include "gs/slic/StringHash.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/newdb/DBTokens.h"
+#include "gs/database/StrDB.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 #include <ctype.h>
 

@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "AttractWindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/AttractWindow.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "aui_region.h"
-#include "aui_control.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_region.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "pixelutils.h"
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "colorset.h"           // g_colorSet
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
 
 extern C3UI			*g_c3ui;
 

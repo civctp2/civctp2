@@ -1,36 +1,36 @@
-#include "c3.h"
-#include "messagewin.h"
+#include "ctp/c3.h"
+#include "ui/interface/messagewin.h"
 
-#include "Globals.h"        // allocated::...
-#include "SelItem.h"        // g_selected_item
+#include "gs/utility/Globals.h"        // allocated::...
+#include "ui/aui_ctp2/SelItem.h"        // g_selected_item
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "aui_static.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "textbox.h"
+#include "ui/aui_ctp2/textbox.h"
 
-#include "textbutton.h"
-#include "aui_button.h"
-#include "aui_window.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "message.h"
+#include "gs/gameobj/message.h"
 
-#include "c3windows.h"
-#include "messageiconwindow.h"
-#include "messagewindow.h"
-#include "messageactions.h"
-#include "messagelist.h"
-#include "messagemodal.h"
-#include "messageadvice.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messagelist.h"
+#include "ui/interface/messagemodal.h"
+#include "ui/interface/messageadvice.h"
 
-#include "controlpanelwindow.h"
+#include "ui/interface/controlpanelwindow.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI	*           g_c3ui;
 extern MessageModal *   g_modalMessage;

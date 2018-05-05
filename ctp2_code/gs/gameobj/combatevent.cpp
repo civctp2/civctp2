@@ -28,22 +28,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "combatevent.h"
-#include "Events.h"
-#include "CTP2Combat.h"
-#include "GameEventUser.h"
-#include "Army.h"
-#include "MapPoint.h"
-#include "World.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "ArmyData.h"
-#include "director.h"
-#include "battleviewwindow.h"
-#include "c3ui.h"
-#include "aui_button.h"
-#include "Globals.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/combatevent.h"
+#include "gs/gameobj/Events.h"
+#include "gs/gameobj/CTP2Combat.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Army.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gfx/spritesys/director.h"
+#include "ui/interface/battleviewwindow.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_button.h"
+#include "gs/utility/Globals.h"
 extern C3UI *g_c3ui;
 
 STDEHANDLER(RunCombatEvent)

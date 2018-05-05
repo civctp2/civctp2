@@ -34,7 +34,7 @@
 #ifndef __BASETILE_H__
 #define __BASETILE_H__
 
-#include "tileutils.h"
+#include "gfx/tilesys/tileutils.h"
 
 #define k_BTF_TRANSITION0		0x01
 #define k_BTF_TRANSITION1		0x02

@@ -44,36 +44,36 @@
 // - Added View capitol on minimap (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "colorset.h"               // g_colorSet
-#include "radarmap.h"
+#include "ctp/c3.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/radarmap.h"
 
 #include <algorithm>
 
-#include "aui.h"
-#include "aui_Factory.h"
-#include "aui_blitter.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
-#include "c3ui.h"
-#include "player.h"                 // g_player
-#include "World.h"                  // g_theWorld
-#include "Cell.h"
-#include "UnseenCell.h"
-#include "citydata.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "pixelutils.h"
-#include "SelItem.h"                // g_selected_item
-#include "tiledmap.h"               // g_tiledMap
-#include "director.h"
-#include "maputils.h"
-#include "primitives.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "pointerlist.h"
-#include "terrainutil.h"
-#include "Scheduler.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/world/World.h"                  // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/world/UnseenCell.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/gameobj/terrainutil.h"
+#include "ai/strategy/scheduler/Scheduler.h"
 
 extern C3UI				*g_c3ui;
 extern PointerList<Player> *g_deadPlayer;

@@ -56,7 +56,7 @@ class Vision;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 class CivArchive;
 class UnseenCellQuadTree;

@@ -34,29 +34,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // Pre-compiled header
-#include "UnitSpriteGroup.h"    // Own declarations: consistency check
+#include "ctp/c3.h"                 // Pre-compiled header
+#include "gfx/spritesys/UnitSpriteGroup.h"    // Own declarations: consistency check
 
 #include <memory>               // std::unique_ptr
-#include "tiffutils.h"
-#include "pixelutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "c3errors.h"
-#include "primitives.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "FacedSprite.h"
-#include "Sprite.h"
-#include "screenmanager.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/spritesys/screenmanager.h"
 
-#include "CivPaths.h"           // g_civPaths
-#include "c3files.h"
+#include "gs/fileio/CivPaths.h"           // g_civPaths
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "SpriteFile.h"
-#include "Anim.h"
+#include "gfx/spritesys/SpriteFile.h"
+#include "gfx/spritesys/Anim.h"
 
-#include "colorset.h"           // g_colorSet
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern ScreenManager	*g_screenManager;
 

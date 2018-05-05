@@ -1,16 +1,16 @@
-#include "c3.h"
-#include "aui_switch.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_switch.h"
 
-#include "aui_ui.h"
-#include "aui_window.h"
-#include "aui_action.h"
-#include "aui_blitter.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 aui_Switch::aui_Switch(
 	AUI_ERRCODE *retval,

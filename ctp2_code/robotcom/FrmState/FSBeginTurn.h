@@ -3,7 +3,7 @@
 #ifndef __FS_BEGIN_TURN__
 #define __FS_BEGIN_TURN__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 class ArmyAgent;
 class CivArchive;

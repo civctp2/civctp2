@@ -4,13 +4,13 @@
 #ifndef __EFFECTACTOR_H__
 #define __EFFECTACTOR_H__
 
-#include "Actor.h"
-#include "EffectSpriteGroup.h"
-#include "pixelutils.h"
-#include "Queue.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "tech_wllist.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/EffectSpriteGroup.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/Queue.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class SpriteState;
 class SpriteGroup;

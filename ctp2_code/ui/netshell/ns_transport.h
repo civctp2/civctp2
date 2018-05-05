@@ -28,7 +28,7 @@
 #ifndef __NS_TRANSPORT_H__
 #define __NS_TRANSPORT_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class ns_Transport : public ns_Object<NETFunc::Transport, ns_Transport>
 {

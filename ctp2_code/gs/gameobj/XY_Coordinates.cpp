@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifndef TEST_XY_COORDS
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 #endif
 
@@ -25,7 +25,7 @@ public:
 
 #endif
 
-#include "XY_Coordinates.h"
+#include "gs/gameobj/XY_Coordinates.h"
 
 
 

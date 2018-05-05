@@ -1,23 +1,23 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 
-#include "AllocWGF.h"
-#include "FlatPtr.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3Government.h"
-#include "ic3Population.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3Government.h"
+#include "user-robotcom/outcom/ic3Population.h"
 
 #include "aimain.h"
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "CityAgent.h"
-#include "wotp.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Alloc/wotp.h"
 
-#include "FzOut.h"
-#include "gold.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/aimgr/gold.h"
 
 
 extern double fz_wgf_prod;

@@ -2,8 +2,8 @@
 #ifndef __WORMHOLE_H__
 #define __WORMHOLE_H__
 
-#include "MapPoint.h"
-#include "Unit.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
 
 class CivArchive;
 class GoodActor;

@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "aui_switch.h"
-#include "aui_window.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "aui_switchgroup.h"
+#include "ui/aui_common/aui_switchgroup.h"
 
 
 aui_SwitchGroup::aui_SwitchGroup(

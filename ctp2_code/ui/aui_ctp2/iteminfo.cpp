@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "iteminfo.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/iteminfo.h"
 
 ItemInfo::ItemInfo(void)
 {

@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "EndTurnButton.h"
+#include "ui/interface/EndTurnButton.h"
 
-#include "aui_ldl.h"
-#include "ctp2_button.h"
-#include "newturncount.h"
-#include "SelItem.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "gs/utility/newturncount.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "AttractWindow.h"
-#include "director.h"
+#include "ui/interface/AttractWindow.h"
+#include "gfx/spritesys/director.h"
 
 EndTurnButton::EndTurnButton(MBCHAR *ldlBlock) :
 m_endTurn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnButton")))

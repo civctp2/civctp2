@@ -29,88 +29,88 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
-#include "c3_static.h"
-#include "tech_wllist.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_common/tech_wllist.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "c3dropdown.h"
-#include "aui_listbox.h"
-#include "c3_listbox.h"
-#include "c3dropdown.h"
+#include "ui/aui_ctp2/c3dropdown.h"
+#include "ui/aui_common/aui_listbox.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3dropdown.h"
 
-#include "controlsheet.h"
-#include "statictextbox.h"
-#include "c3_hypertextbox.h"
+#include "ui/aui_ctp2/controlsheet.h"
+#include "ui/interface/statictextbox.h"
+#include "ui/aui_ctp2/c3_hypertextbox.h"
 
-#include "pixelutils.h"
-#include "c3_switch.h"
-#include "colorset.h"               // g_colorSet
-#include "tileset.h"
-#include "c3_icon.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gfx/tilesys/tileset.h"
+#include "ui/aui_ctp2/c3_icon.h"
 
-#include "c3slider.h"
-#include "thermometer.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/thermometer.h"
 
-#include "textbutton.h"
-#include "textswitch.h"
-#include "aui_switchgroup.h"
-#include "picturebutton.h"
-#include "aui_button.h"
-#include "c3_button.h"
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/textswitch.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_ctp2/picturebutton.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "aui_listbox.h"
-#include "c3_listbox.h"
+#include "ui/aui_common/aui_listbox.h"
+#include "ui/aui_ctp2/c3_listbox.h"
 
-#include "StrDB.h"                  // g_theStringDB
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "Advances.h"
-#include "Globals.h"
-#include "AdvanceRecord.h"
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/utility/Globals.h"
+#include "gs/newdb/AdvanceRecord.h"
 
-#include "player.h"
-#include "Readiness.h"
-#include "SelItem.h"
-#include "ObjPool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Readiness.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "debugwindow.h"
+#include "ui/interface/debugwindow.h"
 
-#include "UnitData.h"
-#include "player.h"                 // g_player
-#include "PlayHap.h"
-#include "SelItem.h"                // g_selected_item
-#include "Sci.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/gameobj/PlayHap.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/gameobj/Sci.h"
 
-#include "chart.h"
+#include "ui/aui_ctp2/chart.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "sci_advancescreen.h"
+#include "ui/interface/sci_advancescreen.h"
 
-#include "c3windows.h"
-#include "sciencewindow.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/interface/sciencewindow.h"
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
-#include "UIUtils.h"
-#include "screenutils.h"
+#include "ui/interface/UIUtils.h"
+#include "ui/interface/screenutils.h"
 
-#include "sciencewin.h"
-#include "keypress.h"
+#include "ui/interface/sciencewin.h"
+#include "ui/aui_ctp2/keypress.h"
 
-#include "AdvanceBranchRecord.h"
-#include "c3math.h"		            // AsPercentage
+#include "gs/newdb/AdvanceBranchRecord.h"
+#include "ctp/ctp2_utils/c3math.h"		            // AsPercentage
 
 extern sint32			    g_modalWindow;
 extern C3UI					*g_c3ui;

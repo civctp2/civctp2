@@ -49,7 +49,7 @@ class NetFeatTracker;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "net_packet.h"	// Packetizer interface
+#include "net/general/net_packet.h"	// Packetizer interface
 
 //----------------------------------------------------------------------------
 // Class declarations

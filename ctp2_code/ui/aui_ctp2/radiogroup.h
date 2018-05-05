@@ -4,8 +4,8 @@
 #ifndef __RADIOGROUP_H__
 #define __RADIOGROUP_H__
 
-#include "aui_switchgroup.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 class RadioGroup : public aui_SwitchGroup, public PatternBase

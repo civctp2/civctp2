@@ -1,27 +1,27 @@
-#include "c3.h"
-#include "messagemodal.h"
+#include "ctp/c3.h"
+#include "ui/interface/messagemodal.h"
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_button.h"
-#include "aui_static.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_hypertextbox.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
-#include "SlicButton.h"
-#include "ctp2_button.h"
-#include "aui_dimension.h"
+#include "gs/slic/SlicButton.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_common/aui_dimension.h"
 
-#include "message.h"
-#include "MessageData.h"
-#include "messageactions.h"
-#include "messagewindow.h"
-#include "messageeyepoint.h"
-#include "player.h"             // g_player
-#include "SelItem.h"            // g_selected_item
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessageData.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messageeyepoint.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
 
 extern C3UI			*g_c3ui;
 

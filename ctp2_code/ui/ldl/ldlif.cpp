@@ -1,17 +1,17 @@
-#include "c3.h"
-#include "ldlif.h"
-#include "CivPaths.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ui/ldl/ldlif.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "StringHash.h"
-#include "pointerlist.h"
-#include "AvlTree.h"
+#include "gs/slic/StringHash.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ctp/ctp2_utils/AvlTree.h"
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 #include "ldl_attr.hpp"
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
 class LDLString {
 	char *m_name;

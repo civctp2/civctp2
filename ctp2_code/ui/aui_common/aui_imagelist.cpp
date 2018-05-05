@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "aui_imagelist.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_imagelist.h"
 
 aui_ImageList::aui_ImageListInfo::~aui_ImageListInfo()
 {

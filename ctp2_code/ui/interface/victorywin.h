@@ -4,8 +4,8 @@
 #ifndef __VICTORYWIN_H__
 #define __VICTORYWIN_H__
 
-#include "ctp2_listitem.h"
-#include "aui_action.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_common/aui_action.h"
 
 class Unit;
 class c3_PopupWindow;

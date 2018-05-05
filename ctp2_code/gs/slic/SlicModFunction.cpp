@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "SlicEngine.h"
-#include "SlicModFunction.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicModFunction.h"
 
 SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
 {

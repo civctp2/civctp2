@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "thronedb.h"
+#include "gs/database/thronedb.h"
 
-#include "c3errors.h"
-#include "Token.h"
-#include "ErrMsg.h"
-#include "civarchive.h"
-#include "SoundRecord.h"
-#include "c3files.h"
-#include "StrDB.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/fileio/Token.h"
+#include "gs/utility/ErrMsg.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/SoundRecord.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/database/StrDB.h"
 
 extern sint32	g_abort_parse;
 extern StringDB	*g_theStringDB;

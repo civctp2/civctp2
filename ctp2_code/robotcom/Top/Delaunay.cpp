@@ -1,9 +1,9 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "geom2d.h"
-#include "Delaunay.h"
+#include "robotcom/Top/geom2d.h"
+#include "robotcom/Top/Delaunay.h"
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 
 
 extern Memory_Manager *g_memory_QuadEdge;

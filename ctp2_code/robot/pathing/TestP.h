@@ -2,7 +2,7 @@
 #ifndef __TEST_PATH__
 #define __TEST_PATH__
 
-#include "Astar.h"
+#include "robot/pathing/Astar.h"
 
 class TestPath : public Astar
 

@@ -1,6 +1,6 @@
 #include <windows.h>
 
-#include "ear_util.h"
+#include "sound/ear_util.h"
 
 
 

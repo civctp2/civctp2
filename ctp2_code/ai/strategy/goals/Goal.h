@@ -49,12 +49,12 @@
 
 class Goal;
 
-#include "scheduler_types.h"
-#include "Plan.h"
-#include "squad_Strength.h"
-#include "MapPoint.h"
-#include "Army.h"
-#include "Unit.h"
+#include "ai/strategy/scheduler/scheduler_types.h"
+#include "ai/strategy/scheduler/Plan.h"
+#include "ai/strategy/squads/squad_Strength.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
 
 class Agent;
 

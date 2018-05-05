@@ -69,21 +69,21 @@
 
 class CityData;
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
-#include "BldQue.h"
-#include "HappyTracker.h"           // HAPPY_REASON
+#include "gs/gameobj/BldQue.h"
+#include "gs/gameobj/HappyTracker.h"           // HAPPY_REASON
 
-#include "UnitDynArr.h"
-#include "TradeDynArr.h"
-#include "Resources.h"
-#include "GWRecord.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/gameobj/Resources.h"
+#include "GameWatch/gamewatch/GWRecord.h"
 
-#include "CityRadius.h"
+#include "gs/gameobj/CityRadius.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "CitySizeRecord.h"
+#include "gs/newdb/CitySizeRecord.h"
 
 #define k_CITYDATA_VERSION_MAJOR    0
 #define k_CITYDATA_VERSION_MINOR    0

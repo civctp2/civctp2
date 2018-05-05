@@ -25,9 +25,9 @@ enum {
 	k_INFOWIN_POLLUTION_SETTING
 };
 
-#include "aui_action.h"     // AUI_ACTION_BASIC
-#include "c3_listitem.h"    // c3_ListItem
-#include "Unit.h"           // Unit
+#include "ui/aui_common/aui_action.h"     // AUI_ACTION_BASIC
+#include "ui/aui_ctp2/c3_listitem.h"    // c3_ListItem
+#include "gs/gameobj/Unit.h"           // Unit
 
 class LineGraph;
 

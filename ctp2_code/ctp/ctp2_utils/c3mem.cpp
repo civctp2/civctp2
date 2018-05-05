@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "debugmemory.h"
-#include "c3debug.h"
+#include "ctp/c3.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "ctp/ctp2_utils/c3debug.h"
 
 sint32 g_check_mem;
 

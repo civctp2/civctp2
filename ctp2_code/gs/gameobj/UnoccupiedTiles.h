@@ -4,8 +4,8 @@
 #ifndef __UNOCCUPIED_TILES_H__
 #define __UNOCCUPIED_TILES_H__
 
-#include "Unit.h"
-#include "EmptyTile.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/EmptyTile.h"
 
 #define k_MAX_TILES_IN_LIST	22
 

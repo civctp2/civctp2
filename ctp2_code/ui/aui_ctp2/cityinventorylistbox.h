@@ -4,7 +4,7 @@
 #ifndef __CITYINVENTORYLISTBOX_H__
 #define __CITYINVENTORYLISTBOX_H__
 
-#include "c3listbox.h"
+#include "ui/aui_ctp2/c3listbox.h"
 
 class Unit;
 

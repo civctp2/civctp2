@@ -36,8 +36,8 @@
 #ifndef __BACKGROUND_H__
 #define __BACKGROUND_H__
 
-#include "aui_window.h"
-#include "MapPoint.h"
+#include "ui/aui_common/aui_window.h"
+#include "gs/world/MapPoint.h"
 
 
 

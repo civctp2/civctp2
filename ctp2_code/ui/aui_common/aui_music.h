@@ -1,7 +1,7 @@
 #ifndef __AUI_MUSIC_H__
 #define __AUI_MUSIC_H__
 
-#include "aui_base.h"
+#include "ui/aui_common/aui_base.h"
 #ifdef USE_SDL
 #include <SDL/SDL.h>
 #include <SDL/SDL_cdrom.h>

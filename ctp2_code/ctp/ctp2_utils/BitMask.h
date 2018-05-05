@@ -1,7 +1,7 @@
 #ifndef BIT_MASK_H__
 #define BIT_MASK_H__
 
-#include "civarchive.h"
+#include "robot/aibackdoor/civarchive.h"
 
 #define SIZE_IN_BYTES(bitSize) ((bitSize + 7) / 8)
 

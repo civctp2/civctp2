@@ -52,38 +52,38 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "NationalManagementDialog.h"
+#include "ctp/c3.h"
+#include "ui/interface/NationalManagementDialog.h"
 
-#include "aui_ldl.h"
-#include "BuildingRecord.h"
-#include "BuildListSequenceRecord.h"
-#include "c3ui.h"
-#include "CityControlPanel.h"
-#include "citydata.h"
-#include "ctp2_button.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "ctp2_Tab.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/BuildListSequenceRecord.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/interface/CityControlPanel.h"
+#include "gs/gameobj/citydata.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
 
-#include "GameEventManager.h"
-#include "MessageBoxDialog.h"
-#include "player.h"
-#include "SelItem.h"
-#include "StrDB.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"
-#include "EditQueue.h"
-#include "citywindow.h"
+#include "gs/events/GameEventManager.h"
+#include "ui/interface/MessageBoxDialog.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "ui/interface/EditQueue.h"
+#include "ui/interface/citywindow.h"
 
-#include "colorset.h"                   // g_colorSet
-#include "ConstRecord.h"                // g_theConstDB
-#include "director.h"
-#include "network.h"
-#include "Globals.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "gs/newdb/ConstRecord.h"                // g_theConstDB
+#include "gfx/spritesys/director.h"
+#include "net/general/network.h"
+#include "gs/utility/Globals.h"
 
 extern C3UI *g_c3ui;
 

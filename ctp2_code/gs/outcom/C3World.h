@@ -2,7 +2,7 @@
 #ifndef __C3World_H__
 #define __C3World_H__
 
-#include "ic3world.h"
+#include "gs/outcom/ic3world.h"
 
 class World;
 

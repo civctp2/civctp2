@@ -4,7 +4,7 @@
 #ifndef _NET_DEBUG_H_
 #define _NET_DEBUG_H_
 
-#include "net_types.h"
+#include "net/io/net_types.h"
 
 extern "C" char* netdebug_NetErrToString(NET_ERR err);
 

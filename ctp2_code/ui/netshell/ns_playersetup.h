@@ -28,7 +28,7 @@
 #ifndef __NS_PLAYERSETUP_H__
 #define __NS_PLAYERSETUP_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 #define k_PS_MAXLEN 48
 

@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "prjfile.h"
+#include "ctp/c3.h"
+#include "gs/fileio/prjfile.h"
 
 #include <windows.h>
 
@@ -21,7 +21,7 @@
 #endif
 #endif // !WIN32
 
-#include "CivPaths.h"       // g_civPaths
+#include "gs/fileio/CivPaths.h"       // g_civPaths
 
 #define MAX_ENTRIES_PER_TABLE 100
 #define ZFSFLAG_DELETED 0x0001

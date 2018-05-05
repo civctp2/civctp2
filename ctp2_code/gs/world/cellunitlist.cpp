@@ -39,27 +39,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "cellunitlist.h"
+#include "ctp/c3.h"
+#include "gs/world/cellunitlist.h"
 
-#include "World.h"
-#include "player.h"
-#include "UnitRec.h"
-#include "DB.h"
-#include "WonderRecord.h"
-#include "SelItem.h"
-#include "Army.h"
-#include "network.h"
-#include "SlicEngine.h"
-#include "Cell.h"
-#include "UnitDynArr.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "MoveFlags.h"
-#include "wonderutil.h"
-#include "GameEventManager.h"
-#include "TerrainRecord.h"	    // TerrainRecord
-#include "RandGen.h"            // g_rand
+#include "gs/world/World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/database/DB.h"
+#include "gs/newdb/WonderRecord.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Army.h"
+#include "net/general/network.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/world/Cell.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/newdb/TerrainRecord.h"	    // TerrainRecord
+#include "gs/utility/RandGen.h"            // g_rand
 
 // Visibility cheat flags
 extern sint32 g_god;

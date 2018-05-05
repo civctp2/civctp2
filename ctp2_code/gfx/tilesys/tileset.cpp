@@ -32,25 +32,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "tileset.h"
+#include "ctp/c3.h"
+#include "gfx/tilesys/tileset.h"
 
-#include "World.h"
+#include "gs/world/World.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "tiffutils.h"
-#include "BaseTile.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/tilesys/BaseTile.h"
 
-#include "tiledmap.h"   // g_tiledMap
+#include "gfx/tilesys/tiledmap.h"   // g_tiledMap
 
-#include "CivPaths.h"   // g_civPaths
-#include "rimutils.h"
-#include "MapIconRecord.h"
+#include "gs/fileio/CivPaths.h"   // g_civPaths
+#include "gfx/gfx_utils/rimutils.h"
+#include "gs/newdb/MapIconRecord.h"
 
-#include "prjfile.h"
+#include "gs/fileio/prjfile.h"
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

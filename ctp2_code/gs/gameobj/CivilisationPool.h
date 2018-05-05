@@ -38,9 +38,9 @@
 
 class CivilisationPool;
 
-#include "ObjPool.h"
-#include "GameObj_types.h"
-#include "Civilisation.h"
+#include "gs/gameobj/ObjPool.h"
+#include "gs/gameobj/GameObj_types.h"
+#include "gs/gameobj/Civilisation.h"
 
 template <class T> class SimpleDynamicArray;
 

@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_music.h"
+#include "ui/aui_common/aui_music.h"
 
 
 aui_Music::aui_Music() :

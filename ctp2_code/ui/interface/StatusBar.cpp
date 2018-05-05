@@ -28,12 +28,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "StatusBar.h"
+#include "ui/interface/StatusBar.h"
 
-#include "aui_ldl.h"
-#include "ctp2_Static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
 
 MBCHAR *StatusBar::m_text = NULL;
 std::list<StatusBar*> StatusBar::m_list;

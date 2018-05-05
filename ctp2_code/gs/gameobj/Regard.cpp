@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "Regard.h"
-#include "civarchive.h"
-#include "player.h"
-#include "StrDB.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Regard.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/StrDB.h"
 extern	StringDB	*g_theStringDB ;
 
 
 
 
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player **g_player;
 
-#include "network.h"
+#include "net/general/network.h"
 
 Regard::Regard()
 {

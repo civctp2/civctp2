@@ -27,14 +27,14 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_wonders.h"
+#include "ui/netshell/ns_wonders.h"
 
 #include <algorithm>
-#include "aui_stringtable.h"
-#include "StrDB.h"              // g_theStringDB
-#include "WonderRecord.h"       // g_theWonderDB
+#include "ui/aui_common/aui_stringtable.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/newdb/WonderRecord.h"       // g_theWonderDB
 
 
 ns_Wonders *    g_nsWonders = NULL;

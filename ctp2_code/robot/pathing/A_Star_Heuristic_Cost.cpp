@@ -29,13 +29,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                     // pre-compiled header
+#include "ctp/c3.h"                     // pre-compiled header
 
-#include "A_Star_Heuristic_Cost.h"  // own declarations: consistency check
+#include "robot/pathing/A_Star_Heuristic_Cost.h"  // own declarations: consistency check
 
 #include <algorithm>                // std::fill
 #include <limits>                   // DBL_MAX
-#include "World.h"                  // g_theWorld
+#include "gs/world/World.h"                  // g_theWorld
 
 namespace
 {

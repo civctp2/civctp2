@@ -34,8 +34,8 @@
 #ifndef __TRADE_BIDS_H__
 #define __TRADE_BIDS_H__
 
-#include "Unit.h"
-#include "message.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/message.h"
 
 class CivArchive;
 template <class T> class PointerList;

@@ -44,30 +44,30 @@
 /// \file   UnseenCell.cpp
 /// \brief  Handling of tiles that are not currently visible (definitions)
 
-#include "c3.h"
-#include "UnseenCell.h"
+#include "ctp/c3.h"
+#include "gs/world/UnseenCell.h"
 
-#include "Cell.h"
-#include "citydata.h"
-#include "civarchive.h"
-#include "ConstRecord.h"		// g_theConstDB
-#include "director.h"           // g_director
-#include "dynarr.h"
-#include "installationtree.h"
-#include "pointerlist.h"
-#include "QuadTree.h"
-#include "ResourceRecord.h"
-#include "SelItem.h"            // g_selected_item
-#include "SpriteState.h"
-#include "TerrainImprovementRecord.h"
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "TerrImprove.h"
-#include "tiledmap.h"           // g_tiledMap
-#include "TileInfo.h"
-#include "UnitActor.h"
-#include "UnitData.h"
-#include "World.h"              // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/gameobj/citydata.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/ConstRecord.h"		// g_theConstDB
+#include "gfx/spritesys/director.h"           // g_director
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/installationtree.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/spritesys/SpriteState.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/world/World.h"              // g_theWorld
 
 namespace
 {

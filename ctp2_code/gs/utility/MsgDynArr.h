@@ -4,8 +4,8 @@
 #ifndef __MESSAGE_DYNAMIC_ARRAY_H__
 #define __MESSAGE_DYNAMIC_ARRAY_H__
 
-#include "message.h"
-#include "dynarr.h"
+#include "gs/gameobj/message.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class MessageDynamicArray : public DynamicArray<Message> {
 

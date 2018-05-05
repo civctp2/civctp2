@@ -52,8 +52,8 @@ class GameEventHookCallback;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "GameEventArgList.h"   // GameEventArgList
-#include "GameEventTypes.h"     // GAME_EVENT...
+#include "gs/events/GameEventArgList.h"   // GameEventArgList
+#include "gs/events/GameEventTypes.h"     // GAME_EVENT...
 
 //----------------------------------------------------------------------------
 // Class declarations

@@ -29,8 +29,8 @@
 #ifndef __THRONECONTROL_H__
 #define __THRONECONTROL_H__
 
-#include "patternbase.h"
-#include "aui_control.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_control.h"
 
 #define k_THRONE_LDL_BLENDSPEED		"blendspeed"
 

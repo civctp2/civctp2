@@ -1,8 +1,8 @@
 #ifndef __C3_SWITCH_H__
 #define __C3_SWITCH_H__
 
-#include "patternbase.h"
-#include "aui_switch.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_switch.h"
 
 #define k_C3_SWITCH_DEFAULTNUMSTATES		2
 #define k_C3_SWITCH_DEFAULT_BEVELWIDTH		2

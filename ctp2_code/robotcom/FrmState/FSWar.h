@@ -3,7 +3,7 @@
 #ifndef __FS_WAR_H__
 #define __FS_WAR_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 FRAMESTATE(FSBeginWar);
 FRAMESTATE(FSUpdateThreat);

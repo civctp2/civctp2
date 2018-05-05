@@ -28,11 +28,11 @@
 #ifndef __NS_GAMESETUP_H__
 #define __NS_GAMESETUP_H__
 
-#include "ns_object.h"
-#include "ns_tribes.h"
-#include "ns_units.h"
-#include "ns_improvements.h"
-#include "ns_wonders.h"
+#include "ui/netshell/ns_object.h"
+#include "ui/netshell/ns_tribes.h"
+#include "ui/netshell/ns_units.h"
+#include "ui/netshell/ns_improvements.h"
+#include "ui/netshell/ns_wonders.h"
 
 #define k_NS_MAX_HUMANS		4
 #define k_NS_MAX_PLAYERS	8

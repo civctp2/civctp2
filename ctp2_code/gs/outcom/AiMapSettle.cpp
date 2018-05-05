@@ -1,15 +1,15 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "XY_Coordinates.h"
-#include "Cell.h"
-#include "World.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
 extern World *g_theWorld;
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "MoveFlags.h"
+#include "gs/utility/MoveFlags.h"
 
 
 

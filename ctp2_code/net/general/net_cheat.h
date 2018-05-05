@@ -1,7 +1,7 @@
 #ifndef __NET_CHEAT_H__
 #define __NET_CHEAT_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 enum NET_CHEAT {
 	NET_CHEAT_CREATE_UNIT,

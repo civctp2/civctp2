@@ -4,7 +4,7 @@
 #ifndef __WORKWIN_H__
 #define __WORKWIN_H__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 AUI_ACTION_BASIC(WorkWinCleanupAction);
 AUI_ACTION_BASIC(WorkWinUpdateAction);

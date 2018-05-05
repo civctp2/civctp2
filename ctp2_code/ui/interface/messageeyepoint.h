@@ -9,9 +9,9 @@ class MessageEyePointListbox;
 class MessageEyePointListItem;
 class MessageEyePointStandard;
 
-#include "auitypes.h"       // AUI_ERRCODE
-#include "c3_listitem.h"
-#include "ctp2_inttypes.h"  // sintN
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "os/include/ctp2_inttypes.h"  // sintN
 
 class aui_Button;
 class c3_DropDown;

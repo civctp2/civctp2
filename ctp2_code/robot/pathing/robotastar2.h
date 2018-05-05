@@ -32,7 +32,7 @@
 #ifndef __ROBOT_ASTAR2_H__
 #define __ROBOT_ASTAR2_H__ 1
 
-#include "UnitAstar.h"
+#include "robot/pathing/UnitAstar.h"
 
 class RobotAstar2 : public UnitAstar
 {

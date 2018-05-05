@@ -34,14 +34,14 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
 #define STRSAFE_NO_DEPRECATE
 
 
-#include "vidplay.h"
+#include "ui/aui_utils/vidplay.h"
 
 #include <crtdbg.h> 
 

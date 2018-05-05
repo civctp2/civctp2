@@ -1,17 +1,17 @@
-#include "c3.h"
-#include "WonderTbl.h"
-#include "FlatPtr.h"
+#include "ctp/c3.h"
+#include "robotcom/aimgr/WonderTbl.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
-#include "ic3GameState.h"
-#include "ic3Wonder.h"
-#include "ic3Science.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
+#include "user-robotcom/outcom/ic3Science.h"
 
 
 #include "aimain.h"
-#include "WonderBlg.h"
-#include "CityAgent.h"
+#include "robotcom/aimgr/WonderBlg.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "GoalWonder.h"
+#include "robotcom/goals/GoalWonder.h"
 
 ZEROMEM(WonderTableFlat);
 ZEROMEM(WonderTablePtr);

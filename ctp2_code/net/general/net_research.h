@@ -4,7 +4,7 @@
 #ifndef __NET_RESEARCH_H__
 #define __NET_RESEARCH_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 class Advances;
 
 class NetResearch : public Packetizer

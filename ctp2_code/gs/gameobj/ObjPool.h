@@ -37,10 +37,10 @@
 
 class ObjPool;
 
-#include "ctp2_inttypes.h"          // uint32
-#include "GameObj.h"
-#include "Globals.h"                // k_GAME_OBJ_TYPE_...
-#include "ID.h"
+#include "os/include/ctp2_inttypes.h"          // uint32
+#include "gs/gameobj/GameObj.h"
+#include "gs/utility/Globals.h"                // k_GAME_OBJ_TYPE_...
+#include "gs/gameobj/ID.h"
 
 size_t const    k_OBJ_POOL_TABLE_SIZE       = 1024;
 

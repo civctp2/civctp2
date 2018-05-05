@@ -1,10 +1,10 @@
 #ifndef __CTP2_TEXTBUFFER__
 #define __CTP2_TEXTBUFFER__
 
-#include "aui_bitmapfont.h"
-#include "aui_surface.h"
-#include "pixelutils.h"
-#include "colorset.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_common/aui_surface.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"
 
 class ctp2_TextBuffer
 {

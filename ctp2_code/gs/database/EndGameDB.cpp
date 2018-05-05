@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "c3errors.h"
-#include "EndGameDB.h"
-#include "Token.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/database/EndGameDB.h"
+#include "gs/fileio/Token.h"
 #include "civarchive.h"
-#include "EndGameToken.h"
-#include "StrDB.h"
+#include "gs/database/EndGameToken.h"
+#include "gs/database/StrDB.h"
 
 extern StringDB *g_theStringDB;
 

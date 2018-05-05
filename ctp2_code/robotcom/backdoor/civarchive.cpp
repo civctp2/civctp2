@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "c3types.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
 #include "civarchive.h"
-#include "ic3CivArchive.h"
+#include "user-robotcom/outcom/ic3CivArchive.h"
 
 #ifdef _DEBUG
 

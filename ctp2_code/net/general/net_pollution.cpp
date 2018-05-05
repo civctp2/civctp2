@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "net_pollution.h"
-#include "network.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_pollution.h"
+#include "net/general/network.h"
+#include "net/io/net_util.h"
 
-#include "pollution.h"
-#include "PollutionConst.h"
+#include "gs/gameobj/pollution.h"
+#include "gs/gameobj/PollutionConst.h"
 
 extern Pollution *g_thePollution;
 

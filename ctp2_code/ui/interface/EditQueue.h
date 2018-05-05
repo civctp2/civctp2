@@ -45,8 +45,8 @@ class ctp2_TextField;
 class ctp2_Button;
 class ctp2_ListItem;
 
-#include "pointerlist.h"
-#include "Unit.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/gameobj/Unit.h"
 
 enum EDIT_QUEUE_MODE {
 	EDIT_QUEUE_MODE_SINGLE,

@@ -1,22 +1,22 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_uniqueid.h"
-#include "aui_blitter.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_blitter.h"
 
-#include "pattern.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "messageiconwindow.h"
-#include "messagewindow.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/messagewindow.h"
 
-#include "test.h"
-#include "testwindow.h"
+#include "ui/interface/test.h"
+#include "ui/interface/testwindow.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "iconbutton.h"
+#include "ui/aui_ctp2/iconbutton.h"
 
 extern C3UI				*g_c3ui;
 

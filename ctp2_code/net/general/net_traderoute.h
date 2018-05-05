@@ -4,7 +4,7 @@
 #ifndef _NET_TRADEROUTE_H_
 #define _NET_TRADEROUTE_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class TradeRouteData;
 

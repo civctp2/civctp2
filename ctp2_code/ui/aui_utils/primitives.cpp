@@ -30,24 +30,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "primitives.h"
+#include "ctp/c3.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "Globals.h"
+#include "gs/utility/Globals.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "aui_image.h"
-#include "pattern.h"
-#include "aui_blitter.h"
-#include "aui_tabgroup.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "pixelutils.h"
-#include "textutils.h"
-#include "tileset.h"
-#include "colorset.h"               // g_colorSet
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/textutils.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
 extern sint32		g_is565Format;
 extern C3UI			*g_c3ui;
@@ -3009,7 +3009,7 @@ PRIMITIVES_ERRCODE primitives_DrawFrame16(
 	return PRIMITIVES_ERRCODE_OK;
 }
 
-#include "tileutils.h"
+#include "gfx/tilesys/tileutils.h"
 
 void primitives_HackTileDraw(aui_Surface *pSurface)
 {
@@ -3069,8 +3069,8 @@ void primitives_HackTileDraw(aui_Surface *pSurface)
 }
 
 
-#include "tiledmap.h"
-#include "tileset.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/tilesys/tileset.h"
 
 extern TiledMap *g_tiledMap;
 

@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3Wonder.h"
-#include "WonderBlg.h"
-#include "FlatPtr.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
+#include "robotcom/aimgr/WonderBlg.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "FzOut.h"
-#include "bset.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robot/aibackdoor/bset.h"
 
 ZEROMEM(WonderBlgFlat);
 ZEROMEM(WonderBlgPtr);

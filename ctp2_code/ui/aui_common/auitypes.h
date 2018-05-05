@@ -1,7 +1,7 @@
 #ifndef __AUITYPES_H__
 #define __AUITYPES_H__
 
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_inttypes.h"
 
 enum AUI_ERRCODE
 {

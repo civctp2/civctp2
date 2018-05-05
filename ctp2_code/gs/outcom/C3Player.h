@@ -2,7 +2,7 @@
 #ifndef __C3PLAYER_H__
 #define __C3PLAYER_H__
 
-#include "ic3player.h"
+#include "gs/outcom/ic3player.h"
 class Player;
 class CivArchive;
 class CityData;

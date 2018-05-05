@@ -7,11 +7,11 @@
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-#include "aui_moviemanager.h"
-#include "aui_directmovie.h"
-#include "aui_resource.h"
+#include "ui/aui_common/aui_moviemanager.h"
+#include "ui/aui_directx/aui_directmovie.h"
+#include "ui/aui_common/aui_resource.h"
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 class aui_DirectMovieManager : public aui_MovieManager
 {

@@ -83,12 +83,12 @@ class UnseenInstallationInfo;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "civarchive.h"
-#include "ctp2_inttypes.h"    // sintN, uintN
-#include "MapPoint.h"         // MapPoint
-#include "player.h"           // PLAYER_INDEX
-#include "TerrImproveData.h"  // TERRAIN_IMPROVEMENT
-#include "Cell.h"             // k_MASK_ENV_RIV_CUR
+#include "robot/aibackdoor/civarchive.h"
+#include "os/include/ctp2_inttypes.h"    // sintN, uintN
+#include "gs/world/MapPoint.h"         // MapPoint
+#include "gs/gameobj/Player.h"           // PLAYER_INDEX
+#include "gs/gameobj/TerrImproveData.h"  // TERRAIN_IMPROVEMENT
+#include "gs/world/Cell.h"             // k_MASK_ENV_RIV_CUR
 
 template <class T> class PointerList;
 class TileInfo;

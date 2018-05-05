@@ -4,8 +4,8 @@
 #ifndef __CONTROLSHEET_H__
 #define __CONTROLSHEET_H__
 
-#include "aui_control.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class ControlSheet : public aui_Control, public PatternBase
 {

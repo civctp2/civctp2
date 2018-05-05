@@ -28,7 +28,7 @@
 #ifndef __NS_GAME_H__
 #define __NS_GAME_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class ns_Game : public ns_Object<NETFunc::Game, ns_Game>
 {

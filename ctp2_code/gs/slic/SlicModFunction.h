@@ -3,8 +3,8 @@
 
 #define k_MAX_MOD_FUNC_ARGS 8
 
-#include "SlicModFuncEnum.h"
-#include "SlicEngine.h"
+#include "gs/slic/SlicModFuncEnum.h"
+#include "gs/slic/SlicEngine.h"
 
 class SlicModFunc {
 public:

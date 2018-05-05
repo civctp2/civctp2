@@ -44,29 +44,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Cell.h"
-#include "TerrainRecord.h"
-#include "TerrImprove.h"
-#include "TerrainImprovementRecord.h"
-#include "ResourceRecord.h" // For accessing the goods on the terrain
+#include "gs/world/Cell.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/ResourceRecord.h" // For accessing the goods on the terrain
 
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "TileInfo.h"
-#include "GoodyHuts.h"
-#include "UnitRec.h"
-#include "TradeDynArr.h"
-#include "cellunitlist.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "player.h"
-#include "terrainutil.h"
-#include "MoveFlags.h"
-#include "Globals.h"
-#include "World.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gs/gameobj/GoodyHuts.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/utility/Globals.h"
+#include "gs/world/World.h"
 #include <limits>           // std::numeric_limits<sint16>::max()
 
 extern void WhackScreen();

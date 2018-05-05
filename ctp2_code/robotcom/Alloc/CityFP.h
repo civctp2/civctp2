@@ -7,7 +7,7 @@ class CityAgent;
 template <class T> class DynamicArray;
 template <class T> class BSet;
 
-#include "CityList.h"
+#include "robotcom/Alloc/CityList.h"
 
 class FPVal : public CityVal {
 public:

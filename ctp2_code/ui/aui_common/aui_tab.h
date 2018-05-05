@@ -32,7 +32,7 @@
 #ifndef __AUI_TAB_H__
 #define __AUI_TAB_H__
 
-#include "aui_radio.h"
+#include "ui/aui_common/aui_radio.h"
 
 
 class aui_Tab : public aui_Radio

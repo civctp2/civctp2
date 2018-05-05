@@ -15,9 +15,9 @@ class ctp2_Button;
 
 typedef sint32 StringId;
 
-#include "diplomattypes.h"
+#include "ai/diplomacy/diplomattypes.h"
 
-#include "ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
 
 enum DW_CREATE_MODE {
 	DW_CREATE_MODE_NONE,

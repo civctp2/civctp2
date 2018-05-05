@@ -32,30 +32,30 @@
 /// \file   CityEspionage.cpp
 /// \brief  City espionage screen display (definitions)
 
-#include "c3.h"
-#include "cityespionage.h"
+#include "ctp/c3.h"
+#include "ui/interface/cityespionage.h"
 
-#include "aui_ldl.h"
-#include "BuildingRecord.h"     // g_theBuildingDB
-#include "c3ui.h"               // C3UI
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "citydata.h"
-#include "citywindow.h"         // InventoryItemInfo
-#include "ctp2_button.h"
-#include "ctp2_listitem.h"
-#include "ctp2_listbox.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "gstypes.h"            // k_MAX_ARMY_SIZE
-#include "IconRecord.h"
-#include "SlicObject.h"
-#include "StrDB.h"              // g_theStringDB
-#include "stringutils.h"
-#include "Unit.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"       // g_theWonderDB
-#include "World.h"              // g_theWorld
+#include "ui/aui_common/aui_ldl.h"
+#include "gs/newdb/BuildingRecord.h"     // g_theBuildingDB
+#include "ui/aui_ctp2/c3ui.h"               // C3UI
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/citydata.h"
+#include "ui/interface/citywindow.h"         // InventoryItemInfo
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "gs/utility/gstypes.h"            // k_MAX_ARMY_SIZE
+#include "gs/newdb/IconRecord.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/utility/stringutils.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"       // g_theWonderDB
+#include "gs/world/World.h"              // g_theWorld
 
 extern C3UI *   g_c3ui;
 

@@ -26,18 +26,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_Factory.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_Factory.h"
 
-#include "aui_directsurface.h"
-#include "aui_directmouse.h"
-#include "aui_directkeyboard.h"
+#include "ui/aui_directx/aui_directsurface.h"
+#include "ui/aui_directx/aui_directmouse.h"
+#include "ui/aui_directx/aui_directkeyboard.h"
 
-#include "aui_sdlsurface.h"
-#include "aui_sdlmouse.h"
-#include "aui_sdlkeyboard.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
+#include "ui/aui_sdl/aui_sdlmouse.h"
+#include "ui/aui_sdl/aui_sdlkeyboard.h"
 
-#include "c3ui.h"   // C3UI
+#include "ui/aui_ctp2/c3ui.h"   // C3UI
 
 extern C3UI *   g_c3ui;
 

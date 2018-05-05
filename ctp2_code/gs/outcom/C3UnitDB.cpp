@@ -1,19 +1,19 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 
-#include "globals.h"
-#include "C3GameState.h"
+#include "gs/utility/Globals.h"
+#include "gs/outcom/C3GameState.h"
 
-#include "C3UnitDB.h"
+#include "gs/outcom/C3UnitDB.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
-#include "MapPoint.h"
-#include "UnitRecord.h"
+#include "gs/world/MapPoint.h"
+#include "gs/newdb/UnitRecord.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
 extern World *g_theWorld;
 extern StringDB *g_theStringDB;
@@ -23,7 +23,7 @@ extern BOOL UnitCanCarry(sint32 dest, sint32 src);
 #include "ConstDB.h"
 extern ConstDB *g_theConstDB;
 
-#include "Readiness.h"
+#include "gs/gameobj/Readiness.h"
 
 STDMETHODIMP C3UnitDB::QueryInterface(REFIID riid, void **obj)
 {

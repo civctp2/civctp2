@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "ctpregistry.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/ctpregistry.h"
 
 #if defined(WIN32)
 

@@ -59,29 +59,29 @@ extern class aui_UI *	g_ui;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_action.h"			// aui_Action
-#include "aui_audiomanager.h"	// aui_AudioManager
-#include "aui_bitmapfont.h"		// aui_BitmapFont
-#include "aui_blitter.h"		// aui_Blitter
-#include "aui_control.h"		// aui_Control
-#include "aui_cursor.h"			// aui_Cursor
-#include "aui_dirtylist.h"		// aui_DirtyList
-#include "aui_image.h"			// aui_Image
-#include "aui_joystick.h"		// aui_Joystick
-#include "aui_keyboard.h"		// aui_Keyboard
-#include "aui_ldl.h"			// aui_Ldl
-#include "aui_memmap.h"			// aui_MemMap
-#include "aui_mouse.h"			// aui_Mouse, aui_MouseEvent
-#include "aui_moviemanager.h"	// aui_MovieManager
-#include "aui_region.h"			// aui_Region
-#include "aui_resource.h"		// aui_Resource
-#include "aui_sound.h"			// aui_Sound
-#include "aui_static.h"			// aui_Static
-#include "aui_surface.h"		// aui_Surface
-#include "aui_window.h"			// aui_Window
-#include "auitypes.h"			// AUI_...
-#include "c3types.h"			// MBCHAR, sint32, uint32
-#include "tech_wllist.h"		// tech_WLList
+#include "ui/aui_common/aui_action.h"			// aui_Action
+#include "ui/aui_common/aui_audiomanager.h"	// aui_AudioManager
+#include "ui/aui_common/aui_bitmapfont.h"		// aui_BitmapFont
+#include "ui/aui_common/aui_blitter.h"		// aui_Blitter
+#include "ui/aui_common/aui_control.h"		// aui_Control
+#include "ui/aui_common/aui_cursor.h"			// aui_Cursor
+#include "ui/aui_common/aui_dirtylist.h"		// aui_DirtyList
+#include "ui/aui_common/aui_image.h"			// aui_Image
+#include "ui/aui_common/aui_joystick.h"		// aui_Joystick
+#include "ui/aui_common/aui_keyboard.h"		// aui_Keyboard
+#include "ui/aui_common/aui_ldl.h"			// aui_Ldl
+#include "ui/aui_common/aui_memmap.h"			// aui_MemMap
+#include "ui/aui_common/aui_mouse.h"			// aui_Mouse, aui_MouseEvent
+#include "ui/aui_common/aui_moviemanager.h"	// aui_MovieManager
+#include "ui/aui_common/aui_region.h"			// aui_Region
+#include "ui/aui_common/aui_resource.h"		// aui_Resource
+#include "ui/aui_common/aui_sound.h"			// aui_Sound
+#include "ui/aui_common/aui_static.h"			// aui_Static
+#include "ui/aui_common/aui_surface.h"		// aui_Surface
+#include "ui/aui_common/aui_window.h"			// aui_Window
+#include "ui/aui_common/auitypes.h"			// AUI_...
+#include "ctp/c3types.h"			// MBCHAR, sint32, uint32
+#include "ui/aui_common/tech_wllist.h"		// tech_WLList
 
 class aui_Movie;
 

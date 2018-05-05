@@ -82,15 +82,15 @@ class TechListItem;
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30;
 
-#include "GreatLibraryTypes.h"
+#include "ui/interface/GreatLibraryTypes.h"
 
 //----------------------------------------------------------------------------
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_listitem.h"
-#include "keyboardhandler.h"
-#include "CTPRecord.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
+#include "gs/newdb/CTPRecord.h"
 
 class Chart;
 class ctp2_HyperTextBox;

@@ -28,11 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ObjPool.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/ObjPool.h"
 
 #include <algorithm>        // std::fill
-#include "civarchive.h"
+#include "robot/aibackdoor/civarchive.h"
 
 #define k_OBJPOOL_VERSION_MAJOR		0
 #define k_OBJPOOL_VERSION_MINOR		0

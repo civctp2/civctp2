@@ -28,19 +28,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SpriteGroupList.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/SpriteGroupList.h"
 
-#include "c3errors.h"
-#include "c3files.h"
-#include "CivPaths.h"               // g_civPaths
-#include "EffectSpriteGroup.h"
-#include "Globals.h"                // allocated::clear, allocated::reassign
-#include "GoodSpriteGroup.h"
-#include "progresswindow.h"
-#include "Sprite.h"
-#include "StrDB.h"                  // g_theStringDB
-#include "UnitSpriteGroup.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/fileio/CivPaths.h"               // g_civPaths
+#include "gfx/spritesys/EffectSpriteGroup.h"
+#include "gs/utility/Globals.h"                // allocated::clear, allocated::reassign
+#include "gfx/spritesys/GoodSpriteGroup.h"
+#include "ui/interface/progresswindow.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gfx/spritesys/UnitSpriteGroup.h"
 
 extern ProgressWindow * g_theProgressWindow;
 

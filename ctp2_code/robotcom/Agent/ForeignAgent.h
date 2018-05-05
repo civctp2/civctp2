@@ -3,7 +3,7 @@
 #ifndef __FOREIGN_AGENT_H__
 #define __FOREIGN_AGENT_H__ 1
 
-#include "Agent.h"
+#include "robotcom/Agent/Agent.h"
 
 enum ARMY_TARGET_TYPE {
     ARMY_TARGET_TYPE_MILITARY,

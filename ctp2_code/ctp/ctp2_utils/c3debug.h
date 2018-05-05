@@ -47,8 +47,8 @@
 #ifndef __C3DEBUG_H__
 #define __C3DEBUG_H__
 
-#include "ctp2_config.h"
-#include "c3.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3.h"
 #undef Assert
 
 #if defined(_DEBUG) || defined(SHOW_ASSERTS)
@@ -56,7 +56,7 @@
 #ifndef _AIDLL
 	#define Assert(x)				{ if (!(x)) c3debug_Assert(#x, __FILE__, __LINE__); }
 #else
-	#include "c3ai.h"
+	#include "robotcom/aimgr/c3ai.h"
 	#define Assert(x)				{ if (!(x)) c3ai_Assert(#x, __FILE__, __LINE__); }
 #endif
 

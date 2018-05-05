@@ -119,20 +119,20 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Advances.h"           // Advances, AdvanceType
-#include "AgreementTypes.h"     // AGREEMENT_TYPE
-#include "AICause.h"            // CAUSE_..., ERR_BUILD_INST
-#include "directions.h"         // WORLD_DIRECTION
-#include "GameObj_types.h"      // CIV_INDEX, GENDER
-#include "GameOver.h"           // GAME_OVER
-#include "gstypes.h"            // k_MAX_PLAYERS
-#include "MapPoint.h"           // MapPoint
-#include "PollutionConst.h"     // k_MAX_EVENT_POLLUTION_TURNS, etc.
-#include "TradeRoute.h"         // TradeRoute, ROUTE_TYPE
-#include "Readiness.h"          // READINESS_LEVEL
-#include "Strengths.h"          // STRENGTH_CAT
-#include "Unit.h"               // UNIT_COMMAND
-#include "GreatLibraryTypes.h"  // DATABASE
+#include "gs/gameobj/Advances.h"           // Advances, AdvanceType
+#include "gs/gameobj/AgreementTypes.h"     // AGREEMENT_TYPE
+#include "gs/outcom/AICause.h"            // CAUSE_..., ERR_BUILD_INST
+#include "gs/utility/directions.h"         // WORLD_DIRECTION
+#include "gs/gameobj/GameObj_types.h"      // CIV_INDEX, GENDER
+#include "gs/gameobj/GameOver.h"           // GAME_OVER
+#include "gs/utility/gstypes.h"            // k_MAX_PLAYERS
+#include "gs/world/MapPoint.h"           // MapPoint
+#include "gs/gameobj/PollutionConst.h"     // k_MAX_EVENT_POLLUTION_TURNS, etc.
+#include "gs/gameobj/TradeRoute.h"         // TradeRoute, ROUTE_TYPE
+#include "gs/gameobj/Readiness.h"          // READINESS_LEVEL
+#include "gs/gameobj/Strengths.h"          // STRENGTH_CAT
+#include "gs/gameobj/Unit.h"               // UNIT_COMMAND
+#include "ui/interface/GreatLibraryTypes.h"  // DATABASE
 
 template <class T> class DynamicArray;
 template <class T> class Database;

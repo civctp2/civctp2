@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_server.h"
+#include "ui/netshell/ns_server.h"
 
 
 ns_Server::ns_Server(NETFunc::Server * server)

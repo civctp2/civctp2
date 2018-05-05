@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "net_diff.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_diff.h"
+#include "net/io/net_util.h"
 
-#include "Diffcly.h"
-#include "player.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/gameobj/Player.h"
 
 extern Player** g_player;
 

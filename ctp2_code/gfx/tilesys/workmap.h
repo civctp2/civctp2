@@ -34,10 +34,10 @@
 #ifndef __WORKMAP_H__
 #define __WORKMAP_H__
 
-#include "patternbase.h"
-#include "aui_control.h"
-#include "Unit.h"
-#include "MapPoint.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/world/MapPoint.h"
 
 #define k_MAX_WORKERS	21
 

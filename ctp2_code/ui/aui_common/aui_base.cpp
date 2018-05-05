@@ -26,8 +26,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_base.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_base.h"
 
 sint32 aui_Base::m_baseRefCount = 0;
 

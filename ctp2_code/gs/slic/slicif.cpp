@@ -43,22 +43,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "slicif.h"
+#include "ctp/c3.h"
+#include "gs/slic/slicif.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
 
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "GameEventManager.h"
-#include "SlicStruct.h"
-#include "SlicNamedSymbol.h"
-#include "SlicArray.h"
-#include "profileDB.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/slic/SlicStruct.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/SlicArray.h"
+#include "gs/database/profileDB.h"
 
-#include "SlicDBConduit.h"
+#include "gs/slic/SlicDBConduit.h"
 
 #define k_MAX_PAREN_LEVEL 128
 

@@ -1,9 +1,9 @@
-#include "ctp2_config.h"
-#include "c3.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_SDL__
 
-#include "aui_sdlmouse.h"
+#include "ui/aui_sdl/aui_sdlmouse.h"
 
 aui_SDLMouse::aui_SDLMouse(
    AUI_ERRCODE *retval,

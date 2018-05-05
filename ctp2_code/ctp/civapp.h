@@ -39,7 +39,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "windows.h"            // HINSTANCE, MBCHAR
+#include <windows.h>            // HINSTANCE, MBCHAR
 
 //----------------------------------------------------------------------------
 //
@@ -55,9 +55,9 @@ class CivApp;
 //
 //----------------------------------------------------------------------------
 
-#include "aui_ldl.h"
-#include "aui_action.h"     // aui_Action
-#include "ctp2_inttypes.h"  // sint32, uint32
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"     // aui_Action
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
 class CivArchive;
 
 //----------------------------------------------------------------------------

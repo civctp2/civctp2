@@ -28,31 +28,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_button.h"
-#include "aui_static.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "aui_hypertextbox.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "message.h"
-#include "MessageData.h"
-#include "messageactions.h"
-#include "messageeyepoint.h"
-#include "messageresponse.h"
-#include "messageiconwindow.h"
-#include "messagewindow.h"
-#include "MessagePool.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessageData.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messageeyepoint.h"
+#include "ui/interface/messageresponse.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/messagewindow.h"
+#include "gs/gameobj/MessagePool.h"
 
-#include "TurnYearStatus.h"
+#include "ui/interface/TurnYearStatus.h"
 
 extern C3UI			*g_c3ui;
 extern StringDB		*g_theStringDB;

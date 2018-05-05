@@ -37,32 +37,32 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "dynarr.h"
-#include "SelItem.h"        // g_selected_item
-#include "MapPoint.h"
-#include "Path.h"
-#include "World.h"          // g_theWorld
-#include "ID.h"
-#include "Army.h"
-#include "Order.h"
-#include "cellunitlist.h"
-#include "player.h"         // g_player
-#include "controlpanelwindow.h"
-#include "OrderRecord.h"
-#include "aui_surface.h"
-#include "maputils.h"
-#include "primitives.h"
-#include "tiledmap.h"
-#include "colorset.h"       // g_colorSet
-#include "director.h"
-#include "textutils.h"
-#include "MoveFlags.h"
-#include "ArmyData.h"
-#include "TerrainRecord.h"
-#include "UnitData.h"
+#include "ui/aui_common/aui.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"        // g_selected_item
+#include "gs/world/MapPoint.h"
+#include "robot/pathing/Path.h"
+#include "gs/world/World.h"          // g_theWorld
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Order.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/Player.h"         // g_player
+#include "ui/interface/controlpanelwindow.h"
+#include "gs/newdb/OrderRecord.h"
+#include "ui/aui_common/aui_surface.h"
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/gfx_utils/colorset.h"       // g_colorSet
+#include "gfx/spritesys/director.h"
+#include "ui/aui_utils/textutils.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/UnitData.h"
 
 #define k_TURN_BOX_SIZE_MINIMUM     4
 #define k_TURN_BOX_SIZE             8

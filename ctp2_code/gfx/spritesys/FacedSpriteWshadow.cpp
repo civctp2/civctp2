@@ -29,21 +29,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "FacedSpriteWshadow.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/FacedSpriteWshadow.h"
 
-#include "tiffutils.h"
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "c3errors.h"
-#include "screenmanager.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gfx/spritesys/screenmanager.h"
 
-#include "aui.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "Sprite.h"
+#include "gfx/spritesys/Sprite.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern ScreenManager *g_screenManager;
 

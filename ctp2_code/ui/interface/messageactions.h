@@ -1,9 +1,9 @@
 #ifndef __MESSAGE_ACTIONS_H__
 #define __MESSAGE_ACTIONS_H__
 
-#include "aui_action.h"
-#include "message.h"
-#include "messagewindow.h"
+#include "ui/aui_common/aui_action.h"
+#include "gs/gameobj/message.h"
+#include "ui/interface/messagewindow.h"
 
 class c3_DropDown;
 

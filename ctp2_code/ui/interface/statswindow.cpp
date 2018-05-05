@@ -29,46 +29,46 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "statswindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/statswindow.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "pixelutils.h"
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "c3_button.h"
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "c3_static.h"
-#include "c3_coloredstatic.h"
-#include "c3_switch.h"
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_coloredstatic.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
-#include "c3window.h"
-#include "c3windows.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3windows.h"
 
-#include "tiledmap.h"                   // g_tiledMap
-#include "colorset.h"                   // g_colorSet
-#include "SelItem.h"                    // g_selected_item
-#include "player.h"                     // g_player
-#include "UnitDynArr.h"
+#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/utility/UnitDynArr.h"
 
-#include "screenutils.h"
+#include "ui/interface/screenutils.h"
 
-#include "UIUtils.h"
-#include "bevellesswindow.h"
+#include "ui/interface/UIUtils.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
 
-#include "network.h"
-#include "victorywin.h"
+#include "net/general/network.h"
+#include "ui/interface/victorywin.h"
 
-#include "spnewgamewindow.h"
+#include "ui/interface/spnewgamewindow.h"
 
-#include "MessageBoxDialog.h"
+#include "ui/interface/MessageBoxDialog.h"
 
 extern sint32       g_ScreenWidth;
 extern sint32       g_ScreenHeight;

@@ -102,8 +102,8 @@ class   SlicArgList;
 class   SlicFunc;
 class   SlicStringToToken;
 
-#include "dbtypes.h"                // StringId;
-#include "GameEventDescription.h"
+#include "gs/database/dbtypes.h"                // StringId;
+#include "gs/events/GameEventDescription.h"
 class Army;
 class CivArchive;
 class GameEventArgList;

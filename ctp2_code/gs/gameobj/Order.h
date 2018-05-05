@@ -14,7 +14,7 @@ enum ORDER_RESULT {
 	ORDER_RESULT_SUCCEEDED_INCOMPLETE,
 };
 
-#include "Unit.h"       // UNIT_ORDER_TYPE
+#include "gs/gameobj/Unit.h"       // UNIT_ORDER_TYPE
 
 struct OrderInfo {
 	UNIT_ORDER_TYPE m_type;
@@ -30,9 +30,9 @@ extern OrderInfo g_orderInfo[];
 extern sint32 g_numOrderInfo;
 extern sint32 g_orderInfoMap[UNIT_ORDER_MAX];
 
-#include "GameEventDescription.h"
-#include "cursormanager.h"
-#include "MapPoint.h"
+#include "gs/events/GameEventDescription.h"
+#include "ui/interface/cursormanager.h"
+#include "gs/world/MapPoint.h"
 
 class CivArchive;
 class GameEventArgList;

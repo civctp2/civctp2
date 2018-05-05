@@ -29,52 +29,52 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "trademanager.h"
+#include "ctp/c3.h"
+#include "ui/interface/trademanager.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
 extern C3UI *g_c3ui;
 
-#include "ctp2_Window.h"
-#include "ctp2_listbox.h"
-#include "ctp2_button.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_hypertextbox.h"
-#include "ctp2_Tab.h"
-#include "ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
-#include "ResourceRecord.h"
-#include "Unit.h"
-#include "citydata.h"
-#include "player.h"
-#include "tradeutil.h"
-#include "TradeRouteData.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/tradeutil.h"
+#include "gs/gameobj/TradeRouteData.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
-#include "aui_blitter.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_common/aui_blitter.h"
 
-#include "GameEventManager.h"
-#include "GameEventUser.h"
-#include "Events.h"
-#include "StrDB.h"
-#include "stringutils.h"
-#include "SlicContext.h"
-#include "TradeRoute.h"
-#include "IconRecord.h"
-#include "c3slider.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
+#include "gs/database/StrDB.h"
+#include "gs/utility/stringutils.h"
+#include "gs/slic/SlicContext.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/newdb/IconRecord.h"
+#include "ui/aui_ctp2/c3slider.h"
 
-#include "AgreementMatrix.h"
-#include "Diplomat.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/diplomacy/Diplomat.h"
 
-#include "network.h"
-#include "net_action.h"
-#include "tiledmap.h"
+#include "net/general/network.h"
+#include "net/general/net_action.h"
+#include "gfx/tilesys/tiledmap.h"
 
 static TradeManager *   s_tradeManager      = NULL;
 static MBCHAR *         s_tradeManagerBlock = "TradeManager";

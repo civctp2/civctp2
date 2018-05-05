@@ -30,32 +30,32 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicObject.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicObject.h"
 
-#include "SlicEngine.h"
-#include "SlicSegment.h"
-#include "dynarr.h"
-#include "UnitDynArr.h"
-#include "MapPoint.h"
-#include "Unit.h"
-#include "Civilisation.h"
-#include "Advances.h"
-#include "SlicFrame.h"
-#include "MessageData.h"
-#include "MessagePool.h"
-#include "player.h"             // g_player
-#include "SelItem.h"            // g_selected_item
-#include "SlicButton.h"
-#include "network.h"
-#include "civapp.h"
-#include "messagewin.h"
-#include "TradeBids.h"
-#include "messagewindow.h"
-#include "stringutils.h"
-#include "TurnCnt.h"            // g_turn
-#include "Globals.h"
-#include "controlpanelwindow.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSegment.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gs/slic/SlicButton.h"
+#include "net/general/network.h"
+#include "ctp/civapp.h"
+#include "ui/interface/messagewin.h"
+#include "gs/gameobj/TradeBids.h"
+#include "ui/interface/messagewindow.h"
+#include "gs/utility/stringutils.h"
+#include "gs/utility/TurnCnt.h"            // g_turn
+#include "gs/utility/Globals.h"
+#include "ui/interface/controlpanelwindow.h"
 
 extern ControlPanelWindow * g_controlPanel;
 extern CivApp			*   g_civApp;

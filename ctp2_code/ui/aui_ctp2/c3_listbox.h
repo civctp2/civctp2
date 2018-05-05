@@ -4,8 +4,8 @@
 #ifndef __C3_LISTBOX__
 #define __C3_LISTBOX__
 
-#include "patternbase.h"
-#include "aui_listbox.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_listbox.h"
 
 #define k_C3_LISTBOX_LDL_BEVELWIDTH		"bevelwidth"
 #define k_C3_LISTBOX_LDL_BEVELTYPE		"beveltype"

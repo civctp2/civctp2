@@ -29,10 +29,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pixelutils.h"
-#include "spriteutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
 
 extern sint32 g_is565Format;
 

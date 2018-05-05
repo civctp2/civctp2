@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_audiomanager.h"
+#include "ui/aui_common/aui_audiomanager.h"
 
 
 aui_AudioManager::aui_AudioManager()

@@ -56,17 +56,17 @@ class Diplomat;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "civarchive.h"             // CivArchive
-#include "ctp2_inttypes.h"          // sintN, uintN
-#include "dbtypes.h"                // StringId
-#include "DiplomacyRecord.h"        // DiplomacyRecord
-#include "diplomattypes.h"          // ai, AiState, Motivation, Threat, etc.
+#include "robot/aibackdoor/civarchive.h"             // CivArchive
+#include "os/include/ctp2_inttypes.h"          // sintN, uintN
+#include "gs/database/dbtypes.h"                // StringId
+#include "gs/newdb/DiplomacyRecord.h"        // DiplomacyRecord
+#include "ai/diplomacy/diplomattypes.h"          // ai, AiState, Motivation, Threat, etc.
 #include "Foreigner.h"              // Foreigner
-#include "PersonalityRecord.h"      // PersonalityRecord
-#include "player.h"                 // PLAYER_INDEX, k_MAX_PLAYERS
-#include "SlicContext.h"            // SlicContext
-#include "StrategyRecord.h"         // StrategyRecord
-#include "Unit.h"                   // Unit
+#include "gs/newdb/PersonalityRecord.h"      // PersonalityRecord
+#include "gs/gameobj/Player.h"                 // PLAYER_INDEX, k_MAX_PLAYERS
+#include "gs/slic/SlicContext.h"            // SlicContext
+#include "gs/newdb/StrategyRecord.h"         // StrategyRecord
+#include "gs/gameobj/Unit.h"                   // Unit
 
 //----------------------------------------------------------------------------
 // Class declarations

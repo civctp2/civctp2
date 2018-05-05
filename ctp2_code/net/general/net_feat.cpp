@@ -28,12 +28,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // general settings
-#include "net_feat.h"       // own declarations: consistency check
+#include "ctp/c3.h"             // general settings
+#include "net/general/net_feat.h"       // own declarations: consistency check
 
-#include "FeatTracker.h"    // g_featTracker
-#include "net_packet.h"     // k_PACKET_FEAT_TRACKER_ID
-#include "net_util.h"       // PULL..., PUSH...
+#include "gs/gameobj/FeatTracker.h"    // g_featTracker
+#include "net/general/net_packet.h"     // k_PACKET_FEAT_TRACKER_ID
+#include "net/io/net_util.h"       // PULL..., PUSH...
 
 namespace
 {

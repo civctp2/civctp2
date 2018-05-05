@@ -7,10 +7,10 @@
 
 class C3Scroller;
 
-#include "aui_control.h"    // ControlActionCallback
-#include "aui_ranger.h"
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "patternbase.h"
+#include "ui/aui_common/aui_control.h"    // ControlActionCallback
+#include "ui/aui_common/aui_ranger.h"
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "ui/aui_ctp2/patternbase.h"
 
 class aui_Surface;
 

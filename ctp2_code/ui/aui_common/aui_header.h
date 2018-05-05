@@ -1,8 +1,8 @@
 #ifndef __AUI_HEADER_H__
 #define __AUI_HEADER_H__
 
-#include "aui_switchgroup.h"
-#include "aui_action.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_common/aui_action.h"
 
 
 #define k_AUI_HEADER_LDL_SWITCH		"switch"

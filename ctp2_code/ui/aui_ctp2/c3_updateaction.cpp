@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "aui_control.h"
-#include "c3_updateaction.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/c3_updateaction.h"
 
 c3_UpdateAction *c3_UpdateAction::CopyMe(void)
 {

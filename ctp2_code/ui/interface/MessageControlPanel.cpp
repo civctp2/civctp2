@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "MessageControlPanel.h"
+#include "ui/interface/MessageControlPanel.h"
 
 
 

@@ -43,7 +43,7 @@
 
 #if defined(_PLAYTEST) || defined(USE_LOGGING)
 
-#include "cellunitlist.h"
+#include "gs/world/cellunitlist.h"
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	#define AI_DPRINTF(mask, player, goal_type, army_id, x) { if (CtpAiDebug::DebugLogCheck(player, goal_type, army_id)) DPRINTF(mask,x); }

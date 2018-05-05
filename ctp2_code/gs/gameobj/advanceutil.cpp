@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "AdvanceRecord.h"
-#include "advanceutil.h"
+#include "ctp/c3.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/advanceutil.h"
 
 sint32 s_nukeAdvance = -1;
 sint32 s_alienLife = -1;

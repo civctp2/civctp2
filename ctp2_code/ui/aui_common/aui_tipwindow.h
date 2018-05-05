@@ -1,7 +1,7 @@
 #ifndef __AUI_TIPWINDOW_H__
 #define __AUI_TIPWINDOW_H__
 
-#include "aui_window.h"
+#include "ui/aui_common/aui_window.h"
 
 class aui_Static;
 

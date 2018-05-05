@@ -25,15 +25,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "textutils.h"
+#include "ctp/c3.h"
+#include "ui/aui_utils/textutils.h"
 
-#include "aui.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "primitives.h"
-#include "colorset.h"               // g_colorSet
-#include "CivPaths.h"               // g_civPaths
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gs/fileio/CivPaths.h"               // g_civPaths
 
 HFONT				g_hFont;
 

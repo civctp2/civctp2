@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "EmptyTile.h"
+#include "gs/gameobj/EmptyTile.h"
 
 EmptyTile::EmptyTile(MapPoint &pos, sint32 f, sint32 p, sint32 g)
 {

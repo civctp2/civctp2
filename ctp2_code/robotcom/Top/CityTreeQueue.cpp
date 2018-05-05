@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3GameState.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "CityTreeQueue.h"
-#include "FlatPtr.h"
+#include "robotcom/Top/CityTreeQueue.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
-#include "CityTree.h"
-#include "CityVertex.h"
-#include "CityAgent.h"
+#include "robotcom/Top/CityTree.h"
+#include "robotcom/Top/CityVertex.h"
+#include "robotcom/Agent/CityAgent.h"
 
 ZEROMEM(CityTreeQueueFlat);
 ZEROMEM(CityTreeQueuePtr);

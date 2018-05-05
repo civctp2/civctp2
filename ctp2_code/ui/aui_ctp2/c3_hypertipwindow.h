@@ -1,8 +1,8 @@
 #ifndef __C3_HYPERTIPWINDOW_H__
 #define __C3_HYPERTIPWINDOW_H__
 
-#include "aui_tipwindow.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_tipwindow.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class aui_HyperTextBox;
 

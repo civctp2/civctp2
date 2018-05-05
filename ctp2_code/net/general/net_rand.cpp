@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "net_rand.h"
-#include "net_util.h"
-#include "RandGen.h"
+#include "ctp/c3.h"
+#include "net/general/net_rand.h"
+#include "net/io/net_util.h"
+#include "gs/utility/RandGen.h"
 
 extern RandomGenerator *g_rand;
 

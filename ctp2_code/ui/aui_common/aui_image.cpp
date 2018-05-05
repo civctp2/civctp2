@@ -28,14 +28,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_blitter.h"
-#include "aui_Factory.h"
-#include "aui_image.h"
-#include "aui_memmap.h"
-#include "aui_pixel.h"
-#include "aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_common/aui_memmap.h"
+#include "ui/aui_common/aui_pixel.h"
+#include "ui/aui_common/aui_ui.h"
 
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,

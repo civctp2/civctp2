@@ -28,20 +28,20 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "World.h"
-#include "Cell.h"
-#include "Unit.h"
-#include "directions.h"
-#include "GameEventUser.h"
-#include "Events.h"
-#include "tiledmap.h"
-#include "network.h"
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "cellunitlist.h"
-#include "AICause.h"
-#include "World.h"             // g_theWorld
+#include "ctp/c3.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/directions.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "net/general/network.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/outcom/AICause.h"
+#include "gs/world/World.h"             // g_theWorld
 
 STDEHANDLER(CutImprovementsEvent)
 {

@@ -25,12 +25,12 @@
 // - added linux specific code
 //
 //----------------------------------------------------------------------------
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include <stdio.h>
 
 #ifdef _WIN32
-#include "windows.h"
+#include <windows.h>
 #include "mbstring.h"
 #include "mmsystem.h"
 #elif defined(LINUX)
@@ -45,9 +45,9 @@
 #ifdef USE_SDL
 #include <SDL/SDL_cdrom.h>
 #endif
-#include "cheatkey.h"
+#include "ctp/ctp2_utils/cheatkey.h"
 
-#include "tracklen.h"
+#include "ctp/ctp2_utils/tracklen.h"
 
 #ifdef tracklen_LOGGING
 

@@ -6,7 +6,7 @@
 
 class Icon;
 
-#include "aui_image.h"
+#include "ui/aui_common/aui_image.h"
 
 class Icon : public aui_Image
 {

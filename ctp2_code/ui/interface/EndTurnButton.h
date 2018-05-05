@@ -4,8 +4,8 @@
 #ifndef ___BMH_END_TURN_BUTTON_HEADER
 #define ___BMH_END_TURN_BUTTON_HEADER
 
-#include "Globals.h"
-#include "player.h" // PLAYER_INDEX
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h" // PLAYER_INDEX
 
 class aui_Control;
 class ctp2_Button;

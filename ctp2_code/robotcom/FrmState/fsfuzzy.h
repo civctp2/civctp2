@@ -3,7 +3,7 @@
 #ifndef __FS_FUZZY_H__
 #define __FS_FUZZY_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 class AiMain;
 class CivArchive;

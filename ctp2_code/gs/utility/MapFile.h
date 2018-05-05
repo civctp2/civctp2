@@ -48,9 +48,9 @@ class MapFile;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3types.h"        // MBCHAR, uintN, sintN
-#include "civarchive.h"	    // CivArchive
-#include "StrDB.h"          // g_theStringDB
+#include "ctp/c3types.h"        // MBCHAR, uintN, sintN
+#include "robot/aibackdoor/civarchive.h"	    // CivArchive
+#include "gs/database/StrDB.h"          // g_theStringDB
 
 template <class T> class CTPDatabase;
 

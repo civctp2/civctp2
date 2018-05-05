@@ -4,7 +4,7 @@
 #ifndef __VIDEOWINDOW_H__
 #define __VIDEOWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 
 class VideoWindow : public C3Window

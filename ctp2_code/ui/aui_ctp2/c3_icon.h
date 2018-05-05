@@ -1,7 +1,7 @@
 #ifndef __C3_ICON_H__
 #define __C3_ICON_H__
 
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_static.h"
 
 class aui_Surface;
 

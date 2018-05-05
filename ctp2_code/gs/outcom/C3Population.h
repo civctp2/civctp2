@@ -3,7 +3,7 @@
 #ifndef __C3Population_H__
 #define __C3Population_H__ 1
 
-#include "ic3Population.h"
+#include "gs/outcom/ic3Population.h"
 
 class Player ;
 class CivArchive ;

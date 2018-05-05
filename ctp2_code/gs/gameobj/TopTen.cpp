@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "TopTen.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TopTen.h"
 
-#include "c3debug.h"
-#include "civarchive.h"
-#include "gamefile.h"
-#include "Globals.h"
-#include "player.h"         // g_player
-#include "UnitData.h"
-#include "World.h"
+#include "ctp/ctp2_utils/c3debug.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"         // g_player
+#include "gs/gameobj/UnitData.h"
+#include "gs/world/World.h"
 
 TopTen::TopTen()
 {

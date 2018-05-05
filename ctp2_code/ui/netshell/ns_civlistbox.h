@@ -4,8 +4,8 @@
 #ifndef __NS_CIVLISTBOX__
 #define __NS_CIVLISTBOX__
 
-#include "patternbase.h"
-#include "aui_listbox.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_listbox.h"
 
 #define k_NS_CIVLISTBOX_LDL_BEVELWIDTH		"bevelwidth"
 #define k_NS_CIVLISTBOX_LDL_BEVELTYPE		"beveltype"

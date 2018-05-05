@@ -1,11 +1,11 @@
-#include "c3.h"
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "ctp2_MenuButton.h"
-#include "ctp2_Menu.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/ctp2_MenuButton.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
 
-#include "gamesounds.h"
-#include "soundmanager.h"
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 

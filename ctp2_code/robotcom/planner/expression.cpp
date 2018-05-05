@@ -3,19 +3,19 @@
 
 
 
-#include "c3.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
 #include <ctype.h>
 
 #include "math.h"
 #include "common.h"
-#include "linked_list.h"
-#include "globals.h"
+#include "robotcom/planner/linked_list.h"
+#include "user-robotcom/shared/globals.h"
 #include "aimain.h"
-#include "iparser.h"
-#include "expressionP.h"
+#include "robotcom/planner/iparser.h"
+#include "robotcom/planner/expressionP.h"
 
 
 

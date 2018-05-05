@@ -1,7 +1,7 @@
 #ifndef __GOAL_TRANSPORT_H__
 #define __GOAL_TRANSPORT_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 class CivArchive;
 

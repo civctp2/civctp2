@@ -3,7 +3,7 @@
 #ifndef __GOAL_WONDER_H__
 #define __GOAL_WONDER_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 class CivArchive;

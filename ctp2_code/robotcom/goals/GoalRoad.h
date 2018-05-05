@@ -4,7 +4,7 @@
 class CityAgent;
 struct MapPointData;
 
-#include "GoalInst.h"
+#include "robotcom/goals/GoalInst.h"
 
 class GoalRoad : public GoalInstallation {
 

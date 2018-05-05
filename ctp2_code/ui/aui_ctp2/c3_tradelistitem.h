@@ -5,7 +5,7 @@
 #ifndef __C3_TRADELISTITEM_H__
 #define __C3_TRADELISTITEM_H__
 
-#include "c3_listitem.h"
+#include "ui/aui_ctp2/c3_listitem.h"
 
 class aui_Surface;
 class TradeRoute;

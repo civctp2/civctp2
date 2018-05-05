@@ -137,7 +137,7 @@ typedef enum {
 	SOP_NOP
 } SOP;
 
-#include "slicif_sym.h"
+#include "gs/slic/slicif_sym.h"
 
 typedef enum {
 	SF_RET_INT,

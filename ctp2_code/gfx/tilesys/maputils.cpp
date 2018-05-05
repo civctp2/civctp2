@@ -26,13 +26,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui.h"
-#include "tiledmap.h"
-#include "maputils.h"
-#include "profileDB.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/database/profileDB.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
 extern ProfileDB	*g_theProfileDB;
 extern TiledMap		*g_tiledMap;

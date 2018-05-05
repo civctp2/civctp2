@@ -28,26 +28,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventArgument.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventArgument.h"
 
-#include "Unit.h"
-#include "MapPoint.h"
-#include "Army.h"
-#include "Path.h"
-#include "player.h"
-#include "TerrImprove.h"
-#include "civarchive.h"
-#include "TradeRoute.h"
-#include "player.h"              // g_player
-#include "AdvanceRecord.h"       // g_theAdvanceDB
-#include "WonderRecord.h"        // g_theWonderDB
-#include "profileDB.h"           // g_theProfileDB
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "SlicFrame.h"
-#include "GameEventManager.h"    // g_gevManager
+#include "gs/gameobj/Unit.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Army.h"
+#include "robot/pathing/Path.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/Player.h"              // g_player
+#include "gs/newdb/AdvanceRecord.h"       // g_theAdvanceDB
+#include "gs/newdb/WonderRecord.h"        // g_theWonderDB
+#include "gs/database/profileDB.h"           // g_theProfileDB
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/events/GameEventManager.h"    // g_gevManager
 
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid)
 {

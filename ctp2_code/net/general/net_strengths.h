@@ -4,7 +4,7 @@
 #ifndef __NET_STRENGTHS_H__
 #define __NET_STRENGTHS_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetStrengths : public Packetizer
 {

@@ -1,19 +1,19 @@
 #ifndef __NS_CUSTOMLISTBOX_H__
 #define __NS_CUSTOMLISTBOX_H__
 
-#include "ns_listbox.h"
-#include "ns_session.h"
-#include "ns_lobby.h"
-#include "ns_game.h"
-#include "ns_player.h"
-#include "ns_rplayer.h"
-#include "ns_gplayer.h"
-#include "ns_server.h"
-#include "ns_transport.h"
-#include "ns_playersetup.h"
-#include "ns_gamesetup.h"
-#include "ns_aiplayer.h"
-#include "ns_aiplayersetup.h"
+#include "ui/netshell/ns_listbox.h"
+#include "ui/netshell/ns_session.h"
+#include "ui/netshell/ns_lobby.h"
+#include "ui/netshell/ns_game.h"
+#include "ui/netshell/ns_player.h"
+#include "ui/netshell/ns_rplayer.h"
+#include "ui/netshell/ns_gplayer.h"
+#include "ui/netshell/ns_server.h"
+#include "ui/netshell/ns_transport.h"
+#include "ui/netshell/ns_playersetup.h"
+#include "ui/netshell/ns_gamesetup.h"
+#include "ui/netshell/ns_aiplayer.h"
+#include "ui/netshell/ns_aiplayersetup.h"
 
 class ns_HPlayerListBox;
 

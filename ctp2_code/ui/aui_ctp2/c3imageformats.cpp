@@ -26,8 +26,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                     // Pre-compiled header
-#include "c3imageformats.h"         // Own declarations: consistency check
+#include "ctp/c3.h"                     // Pre-compiled header
+#include "ui/aui_ctp2/c3imageformats.h"         // Own declarations: consistency check
 
 #ifdef WIN32
 #include <io.h>
@@ -44,18 +44,18 @@
 #if defined(__AUI_USE_SDL__)
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include "aui_sdlsurface.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
 #endif
 
-#include "aui.h"
-#include "aui_image.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "pixelutils.h"
-#include "prjfile.h"
-#include "rimutils.h"
-#include "targautils.h"
-#include "tiffutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/fileio/prjfile.h"
+#include "gfx/gfx_utils/rimutils.h"
+#include "gfx/gfx_utils/targautils.h"
+#include "gfx/gfx_utils/tiffutils.h"
 
 extern ProjectFile *    g_ImageMapPF;
 extern sint32           g_is565Format;

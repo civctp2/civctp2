@@ -55,8 +55,8 @@ enum POPUP_BORDER {
 	POPUP_BORDER_MAX
 };
 
-#include "c3window.h"
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 class c3_Static;
 class c3_Button;
 class ctp2_Button;

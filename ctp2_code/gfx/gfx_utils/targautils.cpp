@@ -30,11 +30,11 @@
 /// \file   targautils.cpp
 /// \brief  Targa (.tga) file support
 
-#include "c3.h"
-#include "targautils.h"
+#include "ctp/c3.h"
+#include "gfx/gfx_utils/targautils.h"
 
 #include <algorithm>
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 extern sint32		g_is565Format;
 
 #define BYTES_PER_PIXEL 2

@@ -43,7 +43,7 @@ class MapPoint;
 class Unit;
 
 
-#include "TerrainImprovementRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
 
 void terrainutil_Initialize();
 

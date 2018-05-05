@@ -98,7 +98,7 @@ typedef int         DriveIdType;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"	// uint8, sint32
+#include "os/include/ctp2_inttypes.h"	// uint8, sint32
 
 template <class T> class PointerList;
 

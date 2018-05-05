@@ -27,18 +27,18 @@
 //-Added view relations button (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "radarwindow.h"
+#include "ui/interface/radarwindow.h"
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "ctp2_Switch.h"
-#include "radarmap.h"
-#include "gameinit.h"		// g_startHotseatGame
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_Switch.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/utility/gameinit.h"		// g_startHotseatGame
 
 ctp2_Window *g_radarWindow = NULL;
 

@@ -2,13 +2,13 @@
 #ifndef __AIP2_H__
 #define __AIP2_H__
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
 #include <string>
 #include <vector>
-#include "c3debugstl.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
 
-#include "diplomattypes.h"
+#include "ai/diplomacy/diplomattypes.h"
 
 class DipAIP {
 public:

@@ -63,10 +63,10 @@ enum LSMS_TYPE
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "pointerlist.h"
-#include "gamefile.h"
-#include "c3_popupwindow.h"
-#include "c3_listitem.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/fileio/gamefile.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_listitem.h"
 
 class c3_Static;
 class c3_Button;

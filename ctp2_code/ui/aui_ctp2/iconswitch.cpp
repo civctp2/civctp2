@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "pattern.h"
-#include "icon.h"
-#include "aui_window.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/icon.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "iconswitch.h"
+#include "ui/aui_ctp2/iconswitch.h"
 
 IconSwitch::IconSwitch(
 	AUI_ERRCODE *retval,

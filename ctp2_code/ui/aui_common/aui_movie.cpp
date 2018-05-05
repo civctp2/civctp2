@@ -28,20 +28,20 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_surface.h"
-#include "aui_rectangle.h"
-#include "aui_mouse.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_mouse.h"
 
-#include "aui_movie.h"
+#include "ui/aui_common/aui_movie.h"
 
 #ifdef __AUI_USE_SDL__
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_syswm.h>
-#include "soundmanager.h"		// g_soundManager
-#include "aui_sdlsurface.h"
+#include "sound/soundmanager.h"		// g_soundManager
+#include "ui/aui_sdl/aui_sdlsurface.h"
 
 Mix_Chunk achunk;
 

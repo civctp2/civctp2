@@ -30,28 +30,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ProposalResponseEvent.h"
+#include "ctp/c3.h"
+#include "ai/diplomacy/ProposalResponseEvent.h"
 
 #include <algorithm>            // std::max, std::min
-#include "ProposalAnalysis.h"
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
-#include "AICause.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "AgreementMatrix.h"
-#include "player.h"
-#include "AdvanceRecord.h"
-#include "Strengths.h"
-#include "pollution.h"
-#include "newturncount.h"
-#include "Sci.h"
-#include "Gold.h"
+#include "ai/diplomacy/ProposalAnalysis.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/outcom/AICause.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/Player.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Strengths.h"
+#include "gs/gameobj/pollution.h"
+#include "gs/utility/newturncount.h"
+#include "gs/gameobj/Sci.h"
+#include "gs/gameobj/Gold.h"
 
 STDEHANDLER(LandForPeace_ProposalResponseEvent)
 {

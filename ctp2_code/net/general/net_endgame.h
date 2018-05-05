@@ -4,7 +4,7 @@
 #ifndef __NET_ENDGAME_H_
 #define __NET_ENDGAME_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetEndGame : public Packetizer
 {

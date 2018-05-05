@@ -36,25 +36,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "settlemap.h"
+#include "ctp/c3.h"
+#include "ai/mapanalysis/settlemap.h"
 
 #include <functional>
 
-#include "boundingrect.h"
-#include "Cell.h"
-#include "citydata.h"
-#include "CityInfluenceIterator.h"
-#include "CitySizeRecord.h"
-#include "Diplomat.h"
-#include "gfx_options.h"
-#include "mapanalysis.h"
-#include "StrategyRecord.h"
-#include "TerrainRecord.h"
-#include "UnitRecord.h"
+#include "ai/mapanalysis/boundingrect.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "gs/newdb/CitySizeRecord.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/newdb/StrategyRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/UnitRecord.h"
 #include <utility>
 #include <vector>
-#include "World.h"		            // g_theWorld
+#include "gs/world/World.h"		            // g_theWorld
 
 namespace
 {

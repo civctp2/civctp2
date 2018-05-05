@@ -4,7 +4,7 @@
 #ifndef __VICTORYMOVIEWIN__
 #define __VICTORYMOVIEWIN__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 class Sequence;
 enum GAME_OVER;

@@ -4,8 +4,8 @@
 #ifndef __SLIC_NAMED_SYMBOL_H__
 #define __SLIC_NAMED_SYMBOL_H__
 
-#include "SlicSymbol.h"
-#include "SlicBuiltinEnum.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicBuiltinEnum.h"
 
 class SlicNamedSymbol : public SlicSymbolData
 {

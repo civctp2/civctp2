@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ShortcutPad.h"
+#include "ui/interface/ShortcutPad.h"
 
-#include "aui_ldl.h"
-#include "citywindow.h"
-#include "ctp2_button.h"
-#include "SelItem.h"
-#include "screenutils.h"
-#include "trademanager.h"
-#include "unitmanager.h"
-#include "greatlibrary.h"
-#include "World.h"
-#include "ArmyData.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/interface/citywindow.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/interface/screenutils.h"
+#include "ui/interface/trademanager.h"
+#include "ui/interface/unitmanager.h"
+#include "ui/interface/greatlibrary.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/ArmyData.h"
 
 namespace Shortcuts {
 

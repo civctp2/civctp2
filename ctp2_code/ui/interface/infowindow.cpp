@@ -30,19 +30,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "infowindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/infowindow.h"
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "ctp2_button.h"
-#include "ctp2_Tab.h"
-#include "ctp2_TabGroup.h"
-#include "ctp2_Window.h"
-#include "Globals.h"            // allocated::clear
-#include "rankingtab.h"
-#include "scoretab.h"
-#include "WonderTab.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "gs/utility/Globals.h"            // allocated::clear
+#include "ui/interface/rankingtab.h"
+#include "ui/interface/scoretab.h"
+#include "ui/interface/WonderTab.h"
 
 extern C3UI *       g_c3ui;
 

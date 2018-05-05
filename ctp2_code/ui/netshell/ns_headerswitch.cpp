@@ -1,17 +1,17 @@
-#include "c3.h"
-#include "ns_headerswitch.h"
+#include "ctp/c3.h"
+#include "ui/netshell/ns_headerswitch.h"
 
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_window.h"
-#include "aui_action.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "pattern.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 ns_HeaderSwitch::ns_HeaderSwitch(
 	AUI_ERRCODE *retval,

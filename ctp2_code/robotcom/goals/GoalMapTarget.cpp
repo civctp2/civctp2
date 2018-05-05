@@ -1,41 +1,41 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3world.h"
-#include "ic3UnitDB.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3Rand.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3Rand.h"
 
 #include "aimain.h"
-#include "AiMap.h"
-#include "airndcnt.h"
-#include "Agreement.h"
-#include "Cont.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "gs/gameobj/Agreement.h"
+#include "robotcom/Top/Cont.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "order.h"
+#include "user-robotcom/shared/order.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
-#include "bset.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "ForeignAgent.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Agent/ForeignAgent.h"
 #include "Foreigner.h"
-#include "scienceagent.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "GoalMapTarget.h"
+#include "robotcom/goals/GoalMapTarget.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 
 

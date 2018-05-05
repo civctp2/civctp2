@@ -28,10 +28,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Resources.h"
-#include "civarchive.h"
-#include "ResourceRecord.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Resources.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/ResourceRecord.h"
 
 Resources::Resources()
 {

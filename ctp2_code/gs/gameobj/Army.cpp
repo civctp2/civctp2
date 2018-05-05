@@ -33,14 +33,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Army.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Army.h"
 
-#include "ArmyPool.h"       // g_theArmyPool
-#include "ArmyData.h"
-#include "Globals.h"
-#include "player.h"         // g_player
-#include "SelItem.h"        // g_selected_item
+#include "gs/gameobj/ArmyPool.h"       // g_theArmyPool
+#include "gs/gameobj/ArmyData.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"         // g_player
+#include "ui/aui_ctp2/SelItem.h"        // g_selected_item
 
 bool Army::IsValid() const
 {

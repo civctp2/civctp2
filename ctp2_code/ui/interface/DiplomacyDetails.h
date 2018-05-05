@@ -11,9 +11,9 @@ class DiplomacyProposalRecord;
 class SlicObject;
 class Unit;
 
-#include "ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
 
-#include "diplomattypes.h"
+#include "ai/diplomacy/diplomattypes.h"
 
 class DiplomacyDetails
 {

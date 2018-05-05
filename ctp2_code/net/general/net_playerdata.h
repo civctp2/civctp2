@@ -4,9 +4,9 @@
 #ifndef __NET_PLAYERDATA_H__
 #define __NET_PLAYERDATA_H__
 
-#include "pointerlist.h"
-#include "net_hash.h"
-#include "dynarr.h"
+#include "ctp/ctp2_utils/PointerList.h"
+#include "net/general/net_hash.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class UnitDynamicArray;
 

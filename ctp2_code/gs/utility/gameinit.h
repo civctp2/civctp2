@@ -7,10 +7,10 @@
 
 struct HotseatPlayerSetup;
 
-#include "civarchive.h"     // CivArchive
-#include "ctp2_inttypes.h"  // sint32
-#include "gstypes.h"        // k_MAX_PLAYERS
-#include "MapPoint.h"       // MapPoint
+#include "robot/aibackdoor/civarchive.h"     // CivArchive
+#include "os/include/ctp2_inttypes.h"  // sint32
+#include "gs/utility/gstypes.h"        // k_MAX_PLAYERS
+#include "gs/world/MapPoint.h"       // MapPoint
 
 sint32 gameinit_InitializeGameFiles(void);
 sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive);

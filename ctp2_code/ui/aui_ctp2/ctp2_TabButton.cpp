@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ctp2_TabButton.h"
+#include "ui/aui_ctp2/ctp2_TabButton.h"
 
 #include <string>
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "ctp2_Tab.h"
-#include "ctp2_TabGroup.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
 extern C3UI	*g_c3ui;
 

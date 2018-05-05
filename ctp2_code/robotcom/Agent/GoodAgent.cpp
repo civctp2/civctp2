@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 
-#include "GoodAgent.h"
+#include "robotcom/Agent/GoodAgent.h"
 
 #include "civarchive.h"
-#include "FlatPtr.h"
-#include "MapPoint.h"
+#include "robotcom/backdoor/FlatPtr.h"
+#include "gs/world/MapPoint.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
 

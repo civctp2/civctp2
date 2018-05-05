@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Test|Win32">
+      <Configuration>Test</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <ProjectGuid>{81F8E65A-5BB2-495B-B76C-6E655D31E1B4}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
+    <OutDir>.\Test\</OutDir>
+    <IntDir>.\Test\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules />
+    <CodeAnalysisRuleAssemblies />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\libs\freetype\lib\;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\robot\utility;..\robot\pathing;..\libs\freetype\;..\civ3\;..\civ3\civ3_utils\;..\civ3\civ3_rsrc\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_common;..\ui\aui_utils\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\libs\dxmedia\classes\base;..\libs\dxmedia\include;..\mm\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\ui.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\ui.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\ui.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\ctp\ctp2_utils;..\robotcom\backdoor;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\gs\outcom;..\robotcom\incom;..\robot\utility;..\robot\pathing;..\libs\freetype-1.3.1\lib;..\civ3\;..\civ3\civ3_utils\;..\civ3\civ3_rsrc\;..\gfx\spritesys\;..\os\include;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_common;..\ui\aui_utils\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\ui\ldl;..\libs\tiff\;..\libs\anet\h\;..\libs\dxmedia\classes\base;..\libs\dxmedia\include;..\ctp;..\gs\slic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AI_BACKDOOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\ui.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\ui.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\ui.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\libs\freetype\utils;..\libs\freetype\win32;..\gs\slic;..\robotcom\backdoor;..\ui\interface;..\gs\outcom;..\robotcom\incom;..\robot\utility;..\robot\pathing;..\libs\freetype\;..\civ3\;..\civ3\civ3_utils\;..\civ3\civ3_rsrc\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_common;..\ui\aui_utils\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\ui\ldl;..\libs\tiff\;..\libs\anet\h\;..\libs\dxmedia\classes\base;..\libs\dxmedia\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_AI_BACKDOOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Test\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Test\ui.pch</PrecompiledHeaderOutputFile>
+      <ObjectFileName>.\Test\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Test\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Test\ui.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Test\ui.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="aui_ctp2\background.h" />
+    <ClInclude Include="aui_ctp2\battleorderbox.h" />
+    <ClInclude Include="aui_ctp2\battleorderboxactions.h" />
+    <ClInclude Include="aui_ctp2\bevellesswindow.h" />
+    <ClInclude Include="aui_ctp2\c3blitter.h" />
+    <ClInclude Include="aui_ctp2\c3dropdown.h" />
+    <ClInclude Include="aui_ctp2\c3fancywindow.h" />
+    <ClInclude Include="aui_ctp2\c3imageformats.h" />
+    <ClInclude Include="aui_ctp2\c3listbox.h" />
+    <ClInclude Include="aui_ctp2\c3memmap.h" />
+    <ClInclude Include="aui_ctp2\c3scroller.h" />
+    <ClInclude Include="aui_ctp2\c3slider.h" />
+    <ClInclude Include="aui_ctp2\c3spinner.h" />
+    <ClInclude Include="aui_ctp2\c3textfield.h" />
+    <ClInclude Include="aui_ctp2\c3thumb.h" />
+    <ClInclude Include="aui_ctp2\c3ui.h" />
+    <ClInclude Include="aui_ctp2\c3window.h" />
+    <ClInclude Include="aui_ctp2\c3windows.h" />
+    <ClInclude Include="aui_ctp2\c3_button.h" />
+    <ClInclude Include="aui_ctp2\c3_coloredstatic.h" />
+    <ClInclude Include="aui_ctp2\c3_dropdown.h" />
+    <ClInclude Include="aui_ctp2\c3_header.h" />
+    <ClInclude Include="aui_ctp2\c3_headerswitch.h" />
+    <ClInclude Include="aui_ctp2\c3_listbox.h" />
+    <ClInclude Include="aui_ctp2\c3_listitem.h" />
+    <ClInclude Include="aui_ctp2\c3_ranger.h" />
+    <ClInclude Include="aui_ctp2\c3_static.h" />
+    <ClInclude Include="aui_ctp2\c3_thumb.h" />
+    <ClInclude Include="aui_ctp2\c3_tradelistitem.h" />
+    <ClInclude Include="aui_ctp2\chart.h" />
+    <ClInclude Include="aui_ctp2\checkbox.h" />
+    <ClInclude Include="aui_ctp2\cityinventorylistbox.h" />
+    <ClInclude Include="aui_ctp2\coloriconbutton.h" />
+    <ClInclude Include="aui_ctp2\coloriconswitch.h" />
+    <ClInclude Include="aui_ctp2\controlsheet.h" />
+    <ClInclude Include="aui_ctp2\directvideo.h" />
+    <ClInclude Include="aui_ctp2\GrabItem.h" />
+    <ClInclude Include="aui_ctp2\icon.h" />
+    <ClInclude Include="aui_ctp2\iconbutton.h" />
+    <ClInclude Include="aui_ctp2\iconswitch.h" />
+    <ClInclude Include="aui_ctp2\icontab.h" />
+    <ClInclude Include="aui_ctp2\iteminfo.h" />
+    <ClInclude Include="aui_ctp2\keymap.h" />
+    <ClInclude Include="aui_ctp2\keypress.h" />
+    <ClInclude Include="aui_ctp2\LineGraph.h" />
+    <ClInclude Include="aui_ctp2\pattern.h" />
+    <ClInclude Include="aui_ctp2\patternbase.h" />
+    <ClInclude Include="aui_ctp2\picture.h" />
+    <ClInclude Include="aui_ctp2\picturebutton.h" />
+    <ClInclude Include="aui_ctp2\pictureswitch.h" />
+    <ClInclude Include="aui_ctp2\picturetab.h" />
+    <ClInclude Include="aui_ctp2\radarcontrol.h" />
+    <ClInclude Include="aui_ctp2\radarwindow.h" />
+    <ClInclude Include="aui_ctp2\radiogroup.h" />
+    <ClInclude Include="aui_ctp2\SelItem.h" />
+    <ClInclude Include="aui_ctp2\statictextitem.h" />
+    <ClInclude Include="aui_ctp2\statuswindow.h" />
+    <ClInclude Include="aui_ctp2\textbox.h" />
+    <ClInclude Include="aui_ctp2\textbutton.h" />
+    <ClInclude Include="aui_ctp2\textradio.h" />
+    <ClInclude Include="aui_ctp2\textswitch.h" />
+    <ClInclude Include="aui_ctp2\texttab.h" />
+    <ClInclude Include="aui_ctp2\TextTable.h" />
+    <ClInclude Include="aui_ctp2\thermometer.h" />
+    <ClInclude Include="aui_ctp2\thumbnailmap.h" />
+    <ClInclude Include="aui_ctp2\tilecontrol.h" />
+    <ClInclude Include="aui_ctp2\tipwindow.h" />
+    <ClInclude Include="aui_ctp2\videowindow.h" />
+    <ClInclude Include="aui_ctp2\workcontrol.h" />
+    <ClInclude Include="aui_common\aui.h" />
+    <ClInclude Include="aui_common\auicfg.h" />
+    <ClInclude Include="aui_common\auidebug.h" />
+    <ClInclude Include="aui_common\auitypes.h" />
+    <ClInclude Include="aui_common\aui_action.h" />
+    <ClInclude Include="aui_common\aui_animate.h" />
+    <ClInclude Include="aui_common\aui_audiomanager.h" />
+    <ClInclude Include="aui_common\aui_base.h" />
+    <ClInclude Include="aui_common\aui_blitter.h" />
+    <ClInclude Include="aui_common\aui_button.h" />
+    <ClInclude Include="aui_common\aui_control.h" />
+    <ClInclude Include="aui_common\aui_cursor.h" />
+    <ClInclude Include="aui_common\aui_dimension.h" />
+    <ClInclude Include="aui_common\aui_dirtylist.h" />
+    <ClInclude Include="aui_common\aui_dropdown.h" />
+    <ClInclude Include="aui_common\aui_font.h" />
+    <ClInclude Include="aui_common\aui_header.h" />
+    <ClInclude Include="aui_common\aui_image.h" />
+    <ClInclude Include="aui_common\aui_imagebase.h" />
+    <ClInclude Include="aui_common\aui_input.h" />
+    <ClInclude Include="aui_common\aui_item.h" />
+    <ClInclude Include="aui_common\aui_joystick.h" />
+    <ClInclude Include="aui_common\aui_keyboard.h" />
+    <ClInclude Include="aui_common\aui_ldl.h" />
+    <ClInclude Include="aui_common\aui_listbox.h" />
+    <ClInclude Include="aui_common\aui_memmap.h" />
+    <ClInclude Include="aui_common\aui_mouse.h" />
+    <ClInclude Include="aui_common\aui_music.h" />
+    <ClInclude Include="aui_common\aui_pixel.h" />
+    <ClInclude Include="aui_common\aui_progressbar.h" />
+    <ClInclude Include="aui_common\aui_radio.h" />
+    <ClInclude Include="aui_common\aui_ranger.h" />
+    <ClInclude Include="aui_common\aui_rectangle.h" />
+    <ClInclude Include="aui_common\aui_region.h" />
+    <ClInclude Include="aui_common\aui_resource.h" />
+    <ClInclude Include="aui_common\aui_screen.h" />
+    <ClInclude Include="aui_common\aui_shell.h" />
+    <ClInclude Include="aui_common\aui_sound.h" />
+    <ClInclude Include="aui_common\aui_soundbase.h" />
+    <ClInclude Include="aui_common\aui_static.h" />
+    <ClInclude Include="aui_common\aui_stringtable.h" />
+    <ClInclude Include="aui_common\aui_surface.h" />
+    <ClInclude Include="aui_common\aui_switch.h" />
+    <ClInclude Include="aui_common\aui_switchgroup.h" />
+    <ClInclude Include="aui_common\aui_tab.h" />
+    <ClInclude Include="aui_common\aui_tabgroup.h" />
+    <ClInclude Include="aui_common\aui_textbase.h" />
+    <ClInclude Include="aui_common\aui_textbox.h" />
+    <ClInclude Include="aui_common\aui_textfield.h" />
+    <ClInclude Include="aui_common\aui_thumb.h" />
+    <ClInclude Include="aui_common\aui_tipwindow.h" />
+    <ClInclude Include="aui_common\aui_ui.h" />
+    <ClInclude Include="aui_common\aui_undo.h" />
+    <ClInclude Include="aui_common\aui_uniqueid.h" />
+    <ClInclude Include="aui_common\aui_win.h" />
+    <ClInclude Include="aui_common\aui_window.h" />
+    <ClInclude Include="aui_common\Dxver.h" />
+    <ClInclude Include="aui_common\tech_memory.h" />
+    <ClInclude Include="aui_common\tech_wllist.h" />
+    <ClInclude Include="aui_directx\aui_directaudiomanager.h" />
+    <ClInclude Include="aui_directx\aui_directblitter.h" />
+    <ClInclude Include="aui_directx\aui_directinput.h" />
+    <ClInclude Include="aui_directx\aui_directjoystick.h" />
+    <ClInclude Include="aui_directx\aui_directkeyboard.h" />
+    <ClInclude Include="aui_directx\aui_directmouse.h" />
+    <ClInclude Include="aui_directx\aui_directsound.h" />
+    <ClInclude Include="aui_directx\aui_directsurface.h" />
+    <ClInclude Include="aui_directx\aui_directui.h" />
+    <ClInclude Include="aui_directx\aui_directwindow.h" />
+    <ClInclude Include="aui_directx\aui_directx.h" />
+    <ClInclude Include="aui_utils\primitives.h" />
+    <ClInclude Include="aui_utils\textutils.h" />
+    <ClInclude Include="interface\advancespad.h" />
+    <ClInclude Include="interface\ancientwindows.h" />
+    <ClInclude Include="interface\backgroundwin.h" />
+    <ClInclude Include="interface\citypad.h" />
+    <ClInclude Include="interface\citystatuswin.h" />
+    <ClInclude Include="interface\citystatuswindow.h" />
+    <ClInclude Include="interface\cityviewwin.h" />
+    <ClInclude Include="interface\cityviewwindow.h" />
+    <ClInclude Include="interface\civstatuswin.h" />
+    <ClInclude Include="interface\civstatuswindow.h" />
+    <ClInclude Include="interface\controlpanel.h" />
+    <ClInclude Include="interface\controlpanelwindow.h" />
+    <ClInclude Include="interface\cp_cityselection.h" />
+    <ClInclude Include="interface\cp_macrotab.h" />
+    <ClInclude Include="interface\cp_microtab.h" />
+    <ClInclude Include="interface\cp_productiontab.h" />
+    <ClInclude Include="interface\cp_tileimp.h" />
+    <ClInclude Include="interface\cp_tradetab.h" />
+    <ClInclude Include="interface\cp_unitstab.h" />
+    <ClInclude Include="interface\cv_citytabgroup.h" />
+    <ClInclude Include="interface\cv_happinesstab.h" />
+    <ClInclude Include="interface\cv_pollutiontab.h" />
+    <ClInclude Include="interface\cv_statuscontrol.h" />
+    <ClInclude Include="interface\cv_tradetabgroup.h" />
+    <ClInclude Include="interface\debugwindow.h" />
+    <ClInclude Include="interface\DipWin.h" />
+    <ClInclude Include="interface\DipWindow.h" />
+    <ClInclude Include="interface\fliwin.h" />
+    <ClInclude Include="interface\fliwindow.h" />
+    <ClInclude Include="interface\greatlibrary.h" />
+    <ClInclude Include="interface\greatlibrarywindow.h" />
+    <ClInclude Include="interface\helpcity.h" />
+    <ClInclude Include="interface\helptile.h" />
+    <ClInclude Include="interface\helpunit.h" />
+    <ClInclude Include="interface\initialplaywindow.h" />
+    <ClInclude Include="interface\knowledgewin.h" />
+    <ClInclude Include="interface\knowledgewindow.h" />
+    <ClInclude Include="interface\messageactions.h" />
+    <ClInclude Include="interface\messageadvice.h" />
+    <ClInclude Include="interface\messageeyepoint.h" />
+    <ClInclude Include="interface\messageiconbutton.h" />
+    <ClInclude Include="interface\messageiconwindow.h" />
+    <ClInclude Include="interface\messagelist.h" />
+    <ClInclude Include="interface\messagemodal.h" />
+    <ClInclude Include="interface\messageresponse.h" />
+    <ClInclude Include="interface\messagewin.h" />
+    <ClInclude Include="interface\messagewindow.h" />
+    <ClInclude Include="interface\objectpad.h" />
+    <ClInclude Include="interface\playerpad.h" />
+    <ClInclude Include="interface\pollutionpad.h" />
+    <ClInclude Include="interface\queuewin.h" />
+    <ClInclude Include="interface\queuewindow.h" />
+    <ClInclude Include="interface\radarwin.h" />
+    <ClInclude Include="interface\splash.h" />
+    <ClInclude Include="interface\spnewgamewindow.h" />
+    <ClInclude Include="interface\spwindow.h" />
+    <ClInclude Include="interface\statictextbox.h" />
+    <ClInclude Include="interface\statswindow.h" />
+    <ClInclude Include="interface\test.h" />
+    <ClInclude Include="interface\tilepad.h" />
+    <ClInclude Include="interface\toolbar.h" />
+    <ClInclude Include="interface\tradewin.h" />
+    <ClInclude Include="interface\tradewindow.h" />
+    <ClInclude Include="interface\turnwindow.h" />
+    <ClInclude Include="interface\unitpad.h" />
+    <ClInclude Include="interface\unitpadwindow.h" />
+    <ClInclude Include="interface\unitstatuswin.h" />
+    <ClInclude Include="interface\unitstatuswindow.h" />
+    <ClInclude Include="interface\workwin.h" />
+    <ClInclude Include="interface\workwindow.h" />
+    <ClInclude Include="ldl\ldl.h" />
+    <ClInclude Include="ldl\ldl_attr.hpp" />
+    <ClInclude Include="ldl\ldl_data.hpp" />
+    <ClInclude Include="ldl\ldl_file.hpp" />
+    <ClInclude Include="ldl\ldl_memmap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aui_ctp2\background.cpp" />
+    <ClCompile Include="aui_ctp2\battleorderbox.cpp" />
+    <ClCompile Include="aui_ctp2\battleorderboxactions.cpp" />
+    <ClCompile Include="aui_ctp2\bevellesswindow.cpp" />
+    <ClCompile Include="aui_ctp2\c3blitter.cpp" />
+    <ClCompile Include="aui_ctp2\c3dropdown.cpp" />
+    <ClCompile Include="aui_ctp2\c3fancywindow.cpp" />
+    <ClCompile Include="aui_ctp2\c3imageformats.cpp" />
+    <ClCompile Include="aui_ctp2\c3listbox.cpp" />
+    <ClCompile Include="aui_ctp2\c3memmap.cpp" />
+    <ClCompile Include="aui_ctp2\c3scroller.cpp" />
+    <ClCompile Include="aui_ctp2\c3slider.cpp" />
+    <ClCompile Include="aui_ctp2\c3spinner.cpp" />
+    <ClCompile Include="aui_ctp2\c3textfield.cpp" />
+    <ClCompile Include="aui_ctp2\c3thumb.cpp" />
+    <ClCompile Include="aui_ctp2\c3ui.cpp" />
+    <ClCompile Include="aui_ctp2\c3window.cpp" />
+    <ClCompile Include="aui_ctp2\c3windows.cpp" />
+    <ClCompile Include="aui_ctp2\c3_button.cpp" />
+    <ClCompile Include="aui_ctp2\c3_coloredstatic.cpp" />
+    <ClCompile Include="aui_ctp2\c3_dropdown.cpp" />
+    <ClCompile Include="aui_ctp2\c3_header.cpp" />
+    <ClCompile Include="aui_ctp2\c3_headerswitch.cpp" />
+    <ClCompile Include="aui_ctp2\c3_listbox.cpp" />
+    <ClCompile Include="aui_ctp2\c3_listitem.cpp" />
+    <ClCompile Include="aui_ctp2\c3_ranger.cpp" />
+    <ClCompile Include="aui_ctp2\c3_static.cpp" />
+    <ClCompile Include="aui_ctp2\c3_thumb.cpp" />
+    <ClCompile Include="aui_ctp2\c3_tradelistitem.cpp" />
+    <ClCompile Include="aui_ctp2\chart.cpp" />
+    <ClCompile Include="aui_ctp2\checkbox.cpp" />
+    <ClCompile Include="aui_ctp2\cityinventorylistbox.cpp" />
+    <ClCompile Include="aui_ctp2\coloriconbutton.cpp" />
+    <ClCompile Include="aui_ctp2\coloriconswitch.cpp" />
+    <ClCompile Include="aui_ctp2\controlsheet.cpp" />
+    <ClCompile Include="aui_ctp2\directvideo.cpp" />
+    <ClCompile Include="aui_ctp2\GrabItem.cpp" />
+    <ClCompile Include="aui_ctp2\icon.cpp" />
+    <ClCompile Include="aui_ctp2\iconbutton.cpp" />
+    <ClCompile Include="aui_ctp2\iconswitch.cpp" />
+    <ClCompile Include="aui_ctp2\icontab.cpp" />
+    <ClCompile Include="aui_ctp2\iteminfo.cpp" />
+    <ClCompile Include="aui_ctp2\keymap.cpp" />
+    <ClCompile Include="aui_ctp2\keypress.cpp" />
+    <ClCompile Include="aui_ctp2\LineGraph.cpp" />
+    <ClCompile Include="aui_ctp2\pattern.cpp" />
+    <ClCompile Include="aui_ctp2\patternbase.cpp" />
+    <ClCompile Include="aui_ctp2\picture.cpp" />
+    <ClCompile Include="aui_ctp2\picturebutton.cpp" />
+    <ClCompile Include="aui_ctp2\pictureswitch.cpp" />
+    <ClCompile Include="aui_ctp2\picturetab.cpp" />
+    <ClCompile Include="aui_ctp2\radarcontrol.cpp" />
+    <ClCompile Include="aui_ctp2\radarwindow.cpp" />
+    <ClCompile Include="aui_ctp2\radiogroup.cpp" />
+    <ClCompile Include="aui_ctp2\SelItem.cpp" />
+    <ClCompile Include="aui_ctp2\statictextitem.cpp" />
+    <ClCompile Include="aui_ctp2\statuswindow.cpp" />
+    <ClCompile Include="aui_ctp2\textbox.cpp" />
+    <ClCompile Include="aui_ctp2\textbutton.cpp" />
+    <ClCompile Include="aui_ctp2\textradio.cpp" />
+    <ClCompile Include="aui_ctp2\textswitch.cpp" />
+    <ClCompile Include="aui_ctp2\texttab.cpp" />
+    <ClCompile Include="aui_ctp2\TextTable.cpp" />
+    <ClCompile Include="aui_ctp2\thermometer.cpp" />
+    <ClCompile Include="aui_ctp2\thumbnailmap.cpp" />
+    <ClCompile Include="aui_ctp2\tilecontrol.cpp" />
+    <ClCompile Include="aui_ctp2\tipwindow.cpp" />
+    <ClCompile Include="aui_ctp2\videowindow.cpp" />
+    <ClCompile Include="aui_ctp2\workcontrol.cpp" />
+    <ClCompile Include="aui_common\aui_action.cpp" />
+    <ClCompile Include="aui_common\aui_animate.cpp" />
+    <ClCompile Include="aui_common\aui_audiomanager.cpp" />
+    <ClCompile Include="aui_common\aui_base.cpp" />
+    <ClCompile Include="aui_common\aui_blitter.cpp" />
+    <ClCompile Include="aui_common\aui_button.cpp" />
+    <ClCompile Include="aui_common\aui_control.cpp" />
+    <ClCompile Include="aui_common\aui_cursor.cpp" />
+    <ClCompile Include="aui_common\aui_dimension.cpp" />
+    <ClCompile Include="aui_common\aui_dirtylist.cpp" />
+    <ClCompile Include="aui_common\aui_dropdown.cpp" />
+    <ClCompile Include="aui_common\aui_font.cpp" />
+    <ClCompile Include="aui_common\aui_header.cpp" />
+    <ClCompile Include="aui_common\aui_image.cpp" />
+    <ClCompile Include="aui_common\aui_imagebase.cpp" />
+    <ClCompile Include="aui_common\aui_input.cpp" />
+    <ClCompile Include="aui_common\aui_item.cpp" />
+    <ClCompile Include="aui_common\aui_joystick.cpp" />
+    <ClCompile Include="aui_common\aui_keyboard.cpp" />
+    <ClCompile Include="aui_common\aui_ldl.cpp" />
+    <ClCompile Include="aui_common\aui_listbox.cpp" />
+    <ClCompile Include="aui_common\aui_memmap.cpp" />
+    <ClCompile Include="aui_common\aui_mouse.cpp" />
+    <ClCompile Include="aui_common\aui_music.cpp" />
+    <ClCompile Include="aui_common\aui_pixel.cpp" />
+    <ClCompile Include="aui_common\aui_progressbar.cpp" />
+    <ClCompile Include="aui_common\aui_radio.cpp" />
+    <ClCompile Include="aui_common\aui_ranger.cpp" />
+    <ClCompile Include="aui_common\aui_rectangle.cpp" />
+    <ClCompile Include="aui_common\aui_region.cpp" />
+    <ClCompile Include="aui_common\aui_regiondispatch.cpp" />
+    <ClCompile Include="aui_common\aui_screen.cpp" />
+    <ClCompile Include="aui_common\aui_shell.cpp" />
+    <ClCompile Include="aui_common\aui_sound.cpp" />
+    <ClCompile Include="aui_common\aui_soundbase.cpp" />
+    <ClCompile Include="aui_common\aui_static.cpp" />
+    <ClCompile Include="aui_common\aui_stringtable.cpp" />
+    <ClCompile Include="aui_common\aui_surface.cpp" />
+    <ClCompile Include="aui_common\aui_switch.cpp" />
+    <ClCompile Include="aui_common\aui_switchgroup.cpp" />
+    <ClCompile Include="aui_common\aui_tab.cpp" />
+    <ClCompile Include="aui_common\aui_tabgroup.cpp" />
+    <ClCompile Include="aui_common\aui_textbase.cpp" />
+    <ClCompile Include="aui_common\aui_textbox.cpp" />
+    <ClCompile Include="aui_common\aui_textfield.cpp" />
+    <ClCompile Include="aui_common\aui_thumb.cpp" />
+    <ClCompile Include="aui_common\aui_tipwindow.cpp" />
+    <ClCompile Include="aui_common\aui_ui.cpp" />
+    <ClCompile Include="aui_common\aui_undo.cpp" />
+    <ClCompile Include="aui_common\aui_uniqueid.cpp" />
+    <ClCompile Include="aui_common\aui_win.cpp" />
+    <ClCompile Include="aui_common\aui_window.cpp" />
+    <ClCompile Include="aui_directx\aui_directaudiomanager.cpp" />
+    <ClCompile Include="aui_directx\aui_directblitter.cpp" />
+    <ClCompile Include="aui_directx\aui_directinput.cpp" />
+    <ClCompile Include="aui_directx\aui_directjoystick.cpp" />
+    <ClCompile Include="aui_directx\aui_directkeyboard.cpp" />
+    <ClCompile Include="aui_directx\aui_directmouse.cpp" />
+    <ClCompile Include="aui_directx\aui_directsound.cpp" />
+    <ClCompile Include="aui_directx\aui_directsurface.cpp" />
+    <ClCompile Include="aui_directx\aui_directui.cpp" />
+    <ClCompile Include="aui_directx\aui_directwindow.cpp" />
+    <ClCompile Include="aui_directx\aui_directx.cpp" />
+    <ClCompile Include="aui_utils\primitives.cpp" />
+    <ClCompile Include="aui_utils\textutils.cpp" />
+    <ClCompile Include="interface\advancespad.cpp" />
+    <ClCompile Include="interface\ancientwindows.cpp" />
+    <ClCompile Include="interface\backgroundwin.cpp" />
+    <ClCompile Include="interface\citypad.cpp" />
+    <ClCompile Include="interface\citystatuswin.cpp" />
+    <ClCompile Include="interface\citystatuswindow.cpp" />
+    <ClCompile Include="interface\cityviewwin.cpp" />
+    <ClCompile Include="interface\cityviewwindow.cpp" />
+    <ClCompile Include="interface\civstatuswin.cpp" />
+    <ClCompile Include="interface\civstatuswindow.cpp" />
+    <ClCompile Include="interface\controlpanel.cpp" />
+    <ClCompile Include="interface\controlpanelwindow.cpp" />
+    <ClCompile Include="interface\cp_cityselection.cpp" />
+    <ClCompile Include="interface\cp_macrotab.cpp" />
+    <ClCompile Include="interface\cp_microtab.cpp" />
+    <ClCompile Include="interface\cp_productiontab.cpp" />
+    <ClCompile Include="interface\cp_tileimp.cpp" />
+    <ClCompile Include="interface\cp_tradetab.cpp" />
+    <ClCompile Include="interface\cp_unitstab.cpp" />
+    <ClCompile Include="interface\cv_citytabgroup.cpp" />
+    <ClCompile Include="interface\cv_happinesstab.cpp" />
+    <ClCompile Include="interface\cv_pollutiontab.cpp" />
+    <ClCompile Include="interface\cv_statuscontrol.cpp" />
+    <ClCompile Include="interface\cv_tradetabgroup.cpp" />
+    <ClCompile Include="interface\debugwindow.cpp" />
+    <ClCompile Include="interface\DipWin.cpp" />
+    <ClCompile Include="interface\DipWindow.cpp" />
+    <ClCompile Include="interface\fliwin.cpp" />
+    <ClCompile Include="interface\fliwindow.cpp" />
+    <ClCompile Include="interface\greatlibrary.cpp" />
+    <ClCompile Include="interface\greatlibrarywindow.cpp" />
+    <ClCompile Include="interface\helpcity.cpp" />
+    <ClCompile Include="interface\helptile.cpp" />
+    <ClCompile Include="interface\helpunit.cpp" />
+    <ClCompile Include="interface\initialplayscreen.cpp" />
+    <ClCompile Include="interface\initialplaywindow.cpp" />
+    <ClCompile Include="interface\knowledgewin.cpp" />
+    <ClCompile Include="interface\knowledgewindow.cpp" />
+    <ClCompile Include="interface\messageactions.cpp" />
+    <ClCompile Include="interface\messageadvice.cpp" />
+    <ClCompile Include="interface\messageeyepoint.cpp" />
+    <ClCompile Include="interface\messageiconbutton.cpp" />
+    <ClCompile Include="interface\messageiconwindow.cpp" />
+    <ClCompile Include="interface\messagelist.cpp" />
+    <ClCompile Include="interface\messagemodal.cpp" />
+    <ClCompile Include="interface\messageresponse.cpp" />
+    <ClCompile Include="interface\messagewin.cpp" />
+    <ClCompile Include="interface\messagewindow.cpp" />
+    <ClCompile Include="interface\objectpad.cpp" />
+    <ClCompile Include="interface\playerpad.cpp" />
+    <ClCompile Include="interface\pollutionpad.cpp" />
+    <ClCompile Include="interface\queuewin.cpp" />
+    <ClCompile Include="interface\queuewindow.cpp" />
+    <ClCompile Include="interface\radarwin.cpp" />
+    <ClCompile Include="interface\splash.cpp" />
+    <ClCompile Include="interface\spNewGameScreen.cpp" />
+    <ClCompile Include="interface\spnewgamewindow.cpp" />
+    <ClCompile Include="interface\spscreen.cpp" />
+    <ClCompile Include="interface\spwindow.cpp" />
+    <ClCompile Include="interface\statictextbox.cpp" />
+    <ClCompile Include="interface\statswindow.cpp" />
+    <ClCompile Include="interface\test.cpp" />
+    <ClCompile Include="interface\tilepad.cpp" />
+    <ClCompile Include="interface\toolbar.cpp" />
+    <ClCompile Include="interface\tradewin.cpp" />
+    <ClCompile Include="interface\tradewindow.cpp" />
+    <ClCompile Include="interface\turnwindow.cpp" />
+    <ClCompile Include="interface\unitpad.cpp" />
+    <ClCompile Include="interface\unitpadwindow.cpp" />
+    <ClCompile Include="interface\unitstatuswin.cpp" />
+    <ClCompile Include="interface\unitstatuswindow.cpp" />
+    <ClCompile Include="interface\workwin.cpp" />
+    <ClCompile Include="interface\workwindow.cpp" />
+    <ClCompile Include="ldl\ldl_attr.cpp" />
+    <ClCompile Include="ldl\ldl_data.cpp" />
+    <ClCompile Include="ldl\ldl_data_info.cpp" />
+    <ClCompile Include="ldl\ldl_file.cpp" />
+    <ClCompile Include="ldl\ldl_memmap.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

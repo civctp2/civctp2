@@ -20,7 +20,7 @@ class CivArchive;
 #define k_REGARD_VERSION_MAJOR	0
 #define k_REGARD_VERSION_MINOR	0
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 class Regard
 	{

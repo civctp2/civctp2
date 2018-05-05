@@ -4,7 +4,7 @@
 #ifndef __NET_GUID_H__
 #define __NET_GUID_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetGuid : public Packetizer
 {

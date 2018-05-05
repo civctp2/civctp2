@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "c3ui.h"
-#include "CivPaths.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gs/fileio/CivPaths.h"
 
-#include "pixelutils.h"
-#include "icon.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/icon.h"
 
 extern C3UI		*g_c3ui;
 

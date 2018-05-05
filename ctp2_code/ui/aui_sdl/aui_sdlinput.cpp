@@ -1,9 +1,9 @@
-#include "ctp2_config.h"
-#include "c3.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3.h"
 
 #if defined(__AUI_USE_SDL__)
 
-#include "aui_sdlinput.h"
+#include "ui/aui_sdl/aui_sdlinput.h"
 
 aui_SDLInput::aui_SDLInput(AUI_ERRCODE *retval, BOOL useExclusiveMode)
 {

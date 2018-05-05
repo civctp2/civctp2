@@ -1,8 +1,8 @@
 #ifndef __AUI_IMAGELIST_H__
 #define __AUI_IMAGELIST_H__
 
-#include "aui_image.h"
-#include "aui_imagebase.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_common/aui_imagebase.h"
 
 class aui_ImageList {
 public:

@@ -68,8 +68,8 @@ enum ASTAR_ENTRY_TYPE
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"      // sintN, uintN
-#include "MapPoint.h"           // MapPoint
+#include "os/include/ctp2_inttypes.h"      // sintN, uintN
+#include "gs/world/MapPoint.h"           // MapPoint
 // BOOL
 // SHRT_MAX
 

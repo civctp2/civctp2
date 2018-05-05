@@ -1,7 +1,7 @@
 #ifndef NET_WORLD_H__
 #define NET_WORLD_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetWorld : public Packetizer
 {

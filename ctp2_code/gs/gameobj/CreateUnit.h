@@ -31,8 +31,8 @@
 #ifndef __CREATE_UNIT_H__
 #define __CREATE_UNIT_H__
 
-#include "MapPoint.h"
-#include "Unit.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
 
 class CreateUnitRequest {
 public:

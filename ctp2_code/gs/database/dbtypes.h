@@ -33,7 +33,7 @@
 #ifndef DB_TYPES_H_
 #define DB_TYPES_H_
 
-#include "ctp2_inttypes.h"  // sint32
+#include "os/include/ctp2_inttypes.h"  // sint32
 
 typedef sint32 StringId;
 StringId const STRING_INDEX_INVALID = -1;

@@ -31,16 +31,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEvent.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEvent.h"
 
-#include "GameEventArgList.h"
-#include "GameEventManager.h"   // g_gevManager
+#include "gs/events/GameEventArgList.h"
+#include "gs/events/GameEventManager.h"   // g_gevManager
 
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicFrame.h"
-#include "SlicSegment.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/slic/SlicSegment.h"
 
 GameEvent::GameEvent
 (

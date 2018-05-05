@@ -1,38 +1,38 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "fsfuzzy.h"
+#include "robotcom/FrmState/fsfuzzy.h"
 #include "civarchive.h"
 
-#include "ic3GameState.h"
-#include "ic3Science.h"
-#include "ic3player.h"
-#include "ic3world.h"
-#include "ic3Government.h"
-#include "ic3Wonder.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3Science.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3Government.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
 
-#include "Agreement.h"
+#include "gs/gameobj/Agreement.h"
 
 #include "aimain.h"
-#include "AiMap.h"
-#include "airndcnt.h"
-#include "AiStats.h"
-#include "gold.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "robotcom/aimgr/AiStats.h"
+#include "robotcom/aimgr/gold.h"
 
 #include "Foreigner.h"
-#include "ForeignAgent.h"
-#include "scienceagent.h"
+#include "robotcom/Agent/ForeignAgent.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "GlOvertime.h"
+#include "robotcom/goals/GlOvertime.h"
 
-#include "OTUtilityList.h"
+#include "robotcom/Alloc/OTUtilityList.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 extern double fz_land_continents_full_of_friends;
 extern double fz_land_continents_full;
 extern double fz_closest_capitol;
@@ -42,16 +42,16 @@ extern double fz_i_want_to_stop_others_who_pollute ;
 
 extern double fz_unit_to_city_best_human_ratio;
 
-#include "Cont.h"
+#include "robotcom/Top/Cont.h"
 
-#include "fliif.h"
-#include "FliEngine.h"
-#include "fsfuzzy.h"
-#include "FliSymbol.h"
-#include "AllocWGF.h"
-#include "ForeignCity.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliEngine.h"
+#include "robotcom/FrmState/fsfuzzy.h"
+#include "robotcom/fuzzy/FliSymbol.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "robotcom/Agent/ForeignCity.h"
 #include "Foreigner.h"
-#include "ic3Population.h"
+#include "user-robotcom/outcom/ic3Population.h"
 
 extern double fz_count;
 

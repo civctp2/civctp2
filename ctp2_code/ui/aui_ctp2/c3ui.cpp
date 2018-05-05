@@ -30,12 +30,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3ui.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "aui.h"
-#include "aui_keyboard.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_common/aui_surface.h"
 
 //----------------------------------------------------------------------------
 //

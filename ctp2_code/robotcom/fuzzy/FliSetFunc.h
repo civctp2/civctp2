@@ -5,7 +5,7 @@
 
 typedef int SFTYPE;
 class FliSymbol;
-#include "fliif.h"
+#include "robotcom/fuzzy/fliif.h"
 
 class FliSetFunc {
 private:

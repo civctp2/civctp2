@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Token.h"
-#include "civarchive.h"
+#include "gs/fileio/Token.h"
+#include "robot/aibackdoor/civarchive.h"
 
-#include "PlayListDB.h"
-#include "c3files.h"
+#include "gs/database/PlayListDB.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 enum TOKEN_PLAYLIST {
 	TOKEN_PLAYLIST_NUM_SONGS = TOKEN_MAX+1,

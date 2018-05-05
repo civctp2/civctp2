@@ -1,20 +1,20 @@
-#include "c3.h"
-#include "c3_hypertipwindow.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3_hypertipwindow.h"
 
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
-#include "aui_blitter.h"
-#include "aui_hypertextbox.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "pattern.h"
-#include "pixelutils.h"
-#include "primitives.h"
-#include "colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/pattern.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 c3_HyperTipWindow::c3_HyperTipWindow(
 	AUI_ERRCODE *retval,

@@ -1,9 +1,9 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3_utilitydialogbox.h"
-#include "c3dialogs.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
+#include "ui/interface/c3dialogs.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
 extern Player **g_player;
 

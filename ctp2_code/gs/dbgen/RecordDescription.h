@@ -51,11 +51,11 @@
 #define k_MAX_STRING        256
 class   RecordDescription;
 
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "ctpdb.h"          // DATUM_TYPE, namelist, etc.
-#include "Datum.h"          // Datum
-#include "MemberClass.h"    // MemberClass
-#include "pointerlist.h"    // PointerList
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "gs/dbgen/ctpdb.h"          // DATUM_TYPE, namelist, etc.
+#include "gs/dbgen/Datum.h"          // Datum
+#include "gs/dbgen/MemberClass.h"    // MemberClass
+#include "ctp/ctp2_utils/pointerlist.h"    // PointerList
 
 class RecordDescription
 {

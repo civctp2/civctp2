@@ -4,9 +4,9 @@
 #ifndef _DIPLOMATICREQUESTPOOL_H_
 #define _DIPLOMATICREQUESTPOOL_H_
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "DiplomaticRequest.h"
+#include "gs/gameobj/DiplomaticRequest.h"
 
 enum REQUEST_TYPE ;
 

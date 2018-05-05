@@ -46,7 +46,7 @@
 
 class Plan;
 
-#include "scheduler_types.h"
+#include "ai/strategy/scheduler/scheduler_types.h"
 
 class Plan
 {

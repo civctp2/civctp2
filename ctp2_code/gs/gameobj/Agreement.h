@@ -4,8 +4,8 @@
 #ifndef __AGREEMENT_H__
 #define __AGREEMENT_H__
 
-#include "ID.h"
-#include "AgreementData.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/AgreementData.h"
 
 class Unit;
 

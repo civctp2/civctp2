@@ -4,11 +4,11 @@
 #ifndef __ENDGAME_DB_H__
 #define __ENDGAME_DB_H__
 
-#include "Rec.h"
-#include "DB.h"
-#include "EndGameRecord.h"
-#include "c3files.h"
-#include "Token.h"
+#include "gs/database/Rec.h"
+#include "gs/database/DB.h"
+#include "gs/database/EndGameRecord.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/fileio/Token.h"
 
 class EndGameDatabase : public Database<EndGameRecord> {
 private:

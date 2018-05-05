@@ -1,21 +1,21 @@
-#include "c3.h"
-#include "iconbutton.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/iconbutton.h"
 
-#include "aui.h"
-#include "pattern.h"
-#include "icon.h"
-#include "aui_window.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/icon.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "pixelutils.h"
-#include "colorset.h"       // g_colorSet
-#include "CivPaths.h"       // g_civPaths
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"       // g_colorSet
+#include "gs/fileio/CivPaths.h"       // g_civPaths
+#include "ui/aui_utils/primitives.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 extern C3UI			*g_c3ui;
 
 IconButton::IconButton(

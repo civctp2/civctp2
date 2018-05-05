@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "network.h"
-#include "net_agreement.h"
-#include "net_util.h"
-#include "net_gameobj.h"
-#include "net_info.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_agreement.h"
+#include "net/io/net_util.h"
+#include "net/general/net_gameobj.h"
+#include "net/general/net_info.h"
 
-#include "Agreement.h"
-#include "AgreementPool.h"
-#include "player.h"
-#include "AgreementDynArr.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/AgreementPool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/AgreementDynArr.h"
 
 extern AgreementPool *g_theAgreementPool;
 extern Player **g_player;

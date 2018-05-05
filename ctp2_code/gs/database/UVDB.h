@@ -9,7 +9,7 @@ class Token;
 
 #define k_MAX_RESOURCES	64
 
-#include "dbtypes.h"
+#include "gs/database/dbtypes.h"
 
 enum DEAD_TILE_TYPE
 	{

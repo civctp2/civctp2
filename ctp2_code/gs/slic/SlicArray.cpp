@@ -28,19 +28,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "slicif.h"
-#include "SlicArray.h"
-#include "civarchive.h"
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "SlicStack.h"
-#include "SlicNamedSymbol.h"
-#include "SlicStruct.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "SlicFrame.h"
-#include "profileDB.h"
+#include "ctp/c3.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicArray.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/SlicStruct.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/database/profileDB.h"
 
 #define k_DEFAULT_SLICARRAY_SIZE 1
 

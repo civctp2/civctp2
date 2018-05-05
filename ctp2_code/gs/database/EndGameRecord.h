@@ -4,7 +4,7 @@
 #ifndef __ENDGAME_RECORD_H__
 #define __ENDGAME_RECORD_H__
 
-#include "Rec.h"
+#include "gs/database/Rec.h"
 class Token;
 
 class EndGameRecord : public Record

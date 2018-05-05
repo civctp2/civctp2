@@ -37,7 +37,7 @@
 #ifndef __C3TYPES_H__
 #define __C3TYPES_H__
 
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_inttypes.h"
 
 typedef char				MBCHAR;
 

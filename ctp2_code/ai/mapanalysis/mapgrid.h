@@ -37,9 +37,9 @@
 #include <valarray>
 #include <sstream>
 
-#include "c3debugstl.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 #define RELAX_SHARED_SIDE (1.0)
 #define RELAX_DIAGONAL (0.41)

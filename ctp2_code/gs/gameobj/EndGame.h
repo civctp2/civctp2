@@ -5,7 +5,7 @@
 #define __ENDGAME_H__
 
 class CivArchive;
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 class EndGame {
 private:

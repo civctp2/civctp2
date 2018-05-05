@@ -1,8 +1,8 @@
 #ifndef __AUI_IMAGE_H__
 #define __AUI_IMAGE_H__
 
-#include "aui_base.h"
-#include "aui_memmap.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_memmap.h"
 
 #define  k_DEFAULT_CHROMA_RED	255
 #define  k_DEFAULT_CHROMA_GREEN	0

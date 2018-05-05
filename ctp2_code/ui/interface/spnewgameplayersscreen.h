@@ -42,9 +42,9 @@
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_control.h"        // aui_Control
-#include "auitypes.h"			// AUI_ERRCODE
-#include "ctp2_inttypes.h"      // sint32, uint32
+#include "ui/aui_common/aui_control.h"        // aui_Control
+#include "ui/aui_common/auitypes.h"			// AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"      // sint32, uint32
 
 //----------------------------------------------------------------------------
 // Declarations

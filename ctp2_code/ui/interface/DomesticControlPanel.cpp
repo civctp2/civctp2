@@ -32,31 +32,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "DomesticControlPanel.h"
+#include "ctp/c3.h"
+#include "ui/interface/DomesticControlPanel.h"
 
 #ifndef WIN32
 #include <sstream>
 #else
 #include <strstream>
 #endif
-#include "AdvanceRecord.h"
-#include "aui_ldl.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "aui_surface.h"
-#include "IconRecord.h"
-#include "player.h"
-#include "sci_advancescreen.h"
-#include "SelItem.h"
-#include "pixelutils.h"
-#include "primitives.h"
-#include "colorset.h"           // g_colorSet
-#include "pollution.h"
-#include "GovernmentRecord.h"
-#include "aui_bitmapfont.h"
-#include "c3math.h"             // AsPercentage
-#include "c3ui.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_common/aui_surface.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/gameobj/Player.h"
+#include "ui/interface/sci_advancescreen.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "gs/gameobj/pollution.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ctp/ctp2_utils/c3math.h"             // AsPercentage
+#include "ui/aui_ctp2/c3ui.h"
 
 extern Pollution            *g_thePollution;
 

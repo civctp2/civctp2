@@ -30,8 +30,8 @@
 /// \file   AstarPnt.cpp
 /// \brief  Point properties for the A-star pathfinding algorithm
 
-#include "c3.h"
-#include "astarpnt.h"
+#include "ctp/c3.h"
+#include "robot/pathing/astarpnt.h"
 
 /// Determine whether this point is identical to another one.
 /// \param rhs The other point

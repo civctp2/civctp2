@@ -29,8 +29,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // Precompiled header
-#include "worldutils.h"     // Own declarations
+#include "ctp/c3.h"             // Precompiled header
+#include "gs/world/worldutils.h"     // Own declarations
 
 const MapRecord *worldutils_FindBestMapSizeMatch(sint32 w, sint32 h)
 {

@@ -36,7 +36,7 @@
 #ifndef ___BMH_NATIONAL_MANAGEMENT_DIALOG_HEADER
 #define ___BMH_NATIONAL_MANAGEMENT_DIALOG_HEADER
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
 class aui_Control;
 class ctp2_Button;

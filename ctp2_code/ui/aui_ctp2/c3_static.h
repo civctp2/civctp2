@@ -31,8 +31,8 @@
 #ifndef __C3_STATIC_H__
 #define __C3_STATIC_H__
 
-#include "aui_static.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 #define k_C3_STATIC_LDL_BEVELWIDTH			"bevelwidth"
 #define k_C3_STATIC_LDL_BEVELTYPE			"beveltype"

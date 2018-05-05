@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "FliFuncTab.h"
-#include "fliif.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/FliFuncTab.h"
+#include "robotcom/fuzzy/fliif.h"
 
 #define k_FLI_FUNC_HASH_SIZE 512
 

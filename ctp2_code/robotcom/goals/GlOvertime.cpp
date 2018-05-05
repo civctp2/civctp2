@@ -1,20 +1,20 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "ic3player.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
 
-#include "GlOvertime.h"
+#include "robotcom/goals/GlOvertime.h"
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3world.h"
 #include "aimain.h"
-#include "gold.h"
+#include "robotcom/aimgr/gold.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 GoalOvertime::GoalOvertime(AiMain *init_ai, CityAgent *ca)
 {

@@ -6,7 +6,7 @@
 class aui_DirectBlitter;
 typedef aui_DirectBlitter aui_NativeBlitter;
 
-#include "aui_blitter.h"
+#include "ui/aui_common/aui_blitter.h"
 
 
 class aui_DirectBlitter : public aui_Blitter

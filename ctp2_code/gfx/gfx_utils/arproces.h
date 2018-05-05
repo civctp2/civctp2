@@ -5,8 +5,8 @@
 #ifndef ARPROCES_H__
 #define ARPROCES_H__
 
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "pixeltypes.h"     // Pixel32
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "gfx/gfx_utils/pixeltypes.h"     // Pixel32
 
 sint32 RealConvolution(Pixel32 *InImage,
 							   uint32 Col, uint32 Row,

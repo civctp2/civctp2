@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ldl_memmap.h"
+#include "ui/ldl/ldl_memmap.h"
 
 
 unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )

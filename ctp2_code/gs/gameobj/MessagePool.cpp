@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "Unit.h"
-#include "player.h"
-#include "MessageData.h"
-#include "message.h"
-#include "MessagePool.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessagePool.h"
 
-#include "network.h"
-#include "civarchive.h"
-#include "Globals.h"
+#include "net/general/network.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/Globals.h"
 
 
 

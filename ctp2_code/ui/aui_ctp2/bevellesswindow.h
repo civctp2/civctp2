@@ -4,8 +4,8 @@
 #ifndef __BEVELLESSWINDOW_H__
 #define __BEVELLESSWINDOW_H__
 
-#include "aui_window.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 

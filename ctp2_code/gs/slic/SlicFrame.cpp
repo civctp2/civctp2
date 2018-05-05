@@ -43,31 +43,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
-#include "SlicSegment.h"
-#include "SlicError.h"
-#include "slicif.h"
-#include "SlicStack.h"
-#include "SlicFrame.h"
-#include "SlicFunc.h"
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "MessageData.h"
-#include "TurnCnt.h"            // g_turn
-#include "UnitDynArr.h"
-#include "SlicObject.h"
-#include "SlicButton.h"
-#include "MapPoint.h"
-#include "SlicStruct.h"
-#include "SlicNamedSymbol.h"
-#include "SlicConditional.h"
-#include "GameEventManager.h"
-#include "SlicArray.h"
-#include "profileDB.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicError.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/slic/SlicFunc.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/utility/TurnCnt.h"            // g_turn
+#include "gs/utility/UnitDynArr.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicButton.h"
+#include "gs/world/MapPoint.h"
+#include "gs/slic/SlicStruct.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/SlicConditional.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/slic/SlicArray.h"
+#include "gs/database/profileDB.h"
 
 //Added by Martin Gühmann for database access
-#include "SlicDBConduit.h"
+#include "gs/slic/SlicDBConduit.h"
 #include <math.h>
 
 extern "C" FILE *debuglog;

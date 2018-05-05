@@ -53,10 +53,10 @@ class InitPlayWindow;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "aui_window.h"     // AUI_WINDOW_TYPE
-#include "auitypes.h"       // AUI_ERRCODE
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "c3window.h"       // C3Window
+#include "ui/aui_common/aui_window.h"     // AUI_WINDOW_TYPE
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "ui/aui_ctp2/c3window.h"       // C3Window
 
 class aui_Control;
 class c3_Button;

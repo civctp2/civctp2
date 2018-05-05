@@ -30,26 +30,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_listbox.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_listbox.h"
 
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_window.h"
-#include "aui_dragdropwindow.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_item.h"
-#include "aui_ranger.h"
-#include "aui_header.h"
-#include "aui_switch.h"
-#include "aui_action.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_dragdropwindow.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_common/aui_header.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "ctp2_listitem.h"
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 #ifdef USE_SDL
 #include <SDL/SDL.h>

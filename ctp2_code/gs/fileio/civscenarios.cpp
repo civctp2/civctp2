@@ -25,13 +25,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "CivPaths.h"
-#include "civscenarios.h"
-#include "gamefile.h"
+#include "gs/fileio/CivPaths.h"
+#include "gs/fileio/civscenarios.h"
+#include "gs/fileio/gamefile.h"
 
 #ifndef WIN32
 #include <sys/types.h>

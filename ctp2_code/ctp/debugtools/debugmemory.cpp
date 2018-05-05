@@ -45,12 +45,12 @@
 
 #ifdef _DEBUG
 
-#include "debugmemory.h"	// own declarations
+#include "ctp/debugtools/debugmemory.h"	// own declarations
 
-#include "log.h"
-#include "debugcallstack.h"
-#include "debugassert.h"
-#include "breakpoint.h"
+#include "ctp/debugtools/log.h"
+#include "ctp/debugtools/debugcallstack.h"
+#include "ctp/debugtools/debugassert.h"
+#include "ctp/debugtools/breakpoint.h"
 #include <windows.h>
 #include <string.h>
 

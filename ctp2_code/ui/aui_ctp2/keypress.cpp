@@ -39,101 +39,101 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pixelutils.h"
-#include "UnitSpriteGroup.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_window.h"
-#include "radarwindow.h"
-#include "statuswindow.h"
-#include "primitives.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/interface/radarwindow.h"
+#include "ui/aui_ctp2/statuswindow.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "c3debug.h"
-#include "c3cmdline.h"
+#include "ctp/ctp2_utils/c3debug.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
 
-#include "keymap.h"
+#include "ui/aui_ctp2/keymap.h"
 
-#include "player.h"
-#include "gamefile.h"
+#include "gs/gameobj/Player.h"
+#include "gs/fileio/gamefile.h"
 
-#include "network.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "net_rand.h"
+#include "net/general/network.h"
+#include "net/general/net_action.h"
+#include "net/general/net_info.h"
+#include "net/general/net_rand.h"
 
-#include "tiledmap.h"
-#include "background.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "civ3_main.h"
-#include "pollution.h"
-#include "SelItem.h"
-#include "newturncount.h"
-#include "TurnCnt.h"
-#include "AICause.h"
-#include "radarmap.h"
-#include "DataCheck.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/background.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "ctp/civ3_main.h"
+#include "gs/gameobj/pollution.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/utility/newturncount.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/outcom/AICause.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/utility/DataCheck.h"
 
-#include "km_screen.h"
-#include "screenutils.h"
-#include "optionswindow.h"
-#include "resourcemap.h"
+#include "ui/interface/km_screen.h"
+#include "ui/interface/screenutils.h"
+#include "ui/interface/optionswindow.h"
+#include "gfx/tilesys/resourcemap.h"
 
-#include "civapp.h"
-#include "Order.h"
+#include "ctp/civapp.h"
+#include "gs/gameobj/Order.h"
 
-#include "controlpanelwindow.h"
-#include "c3_listbox.h"
-#include "aui_ranger.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_common/aui_ranger.h"
 
-#include "loadsavewindow.h"
-#include "ArmyPool.h"
-#include "GameSettings.h"
-#include "messagemodal.h"
-#include "MessagePool.h"
-#include "SlicButton.h"
-#include "messagewindow.h"
-#include "messageactions.h"
-#include "workwindow.h"
-#include "workwin.h"
+#include "ui/interface/loadsavewindow.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/GameSettings.h"
+#include "ui/interface/messagemodal.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/slic/SlicButton.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/workwindow.h"
+#include "ui/interface/workwin.h"
 
-#include "SlicEngine.h"
+#include "gs/slic/SlicEngine.h"
 
-#include "segmentlist.h"
+#include "ui/slic_debug/segmentlist.h"
 
-#include "UnitData.h"
-#include "citydata.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
 
-#include "GameEventManager.h"
-#include "CTP2Combat.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/CTP2Combat.h"
 
-#include "armymanagerwindow.h"
-#include "ctp2_Window.h"
-#include "optionwarningscreen.h"
+#include "ui/interface/armymanagerwindow.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/interface/optionwarningscreen.h"
 
-#include "dipwizard.h"
-#include "keypress.h"
-#include "sciencevictorydialog.h"
-#include "citywindow.h"
-#include "infowindow.h"
-#include "cityespionage.h"
-#include "trademanager.h"
-#include "EditQueue.h"
-#include "soundscreen.h"
+#include "ui/interface/dipwizard.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/interface/sciencevictorydialog.h"
+#include "ui/interface/citywindow.h"
+#include "ui/interface/infowindow.h"
+#include "ui/interface/cityespionage.h"
+#include "ui/interface/trademanager.h"
+#include "ui/interface/EditQueue.h"
+#include "ui/interface/soundscreen.h"
 // music added by ahenobarb
-#include "musicscreen.h"
-#include "graphicsscreen.h"
-#include "gameplayoptions.h"
-#include "OrderRecord.h"
-#include "ProfileEdit.h"
-#include "cellunitlist.h"
-#include "ArmyData.h"
-#include "MainControlPanel.h"
-#include "UnitControlPanel.h"
+#include "ui/interface/musicscreen.h"
+#include "ui/interface/graphicsscreen.h"
+#include "ui/interface/gameplayoptions.h"
+#include "gs/newdb/OrderRecord.h"
+#include "ui/interface/ProfileEdit.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/ArmyData.h"
+#include "ui/interface/MainControlPanel.h"
+#include "ui/interface/UnitControlPanel.h"
 
 extern C3UI			*g_c3ui;
 extern BOOL			gSuspended;
@@ -176,23 +176,23 @@ extern ControlPanelWindow *g_controlPanel;
 
 
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 extern ProfileDB *g_theProfileDB;
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 extern Director *g_director;
 
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 c3_UtilityPlayerListPopup *g_networkPlayersScreen = NULL;
 extern c3_UtilityTextMessagePopup		*g_utilityTextMessage;
 
-#include "chatbox.h"
+#include "ui/interface/chatbox.h"
 extern ChatBox		*g_chatBox;
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 extern StringDB		*g_theStringDB;
 
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 
 extern MessageModal *g_modalMessage;
 extern MessagePool *g_theMessagePool;
@@ -200,10 +200,10 @@ extern MessageWindow	*g_currentMessageWindow;
 
 extern sint32 g_modalWindow;
 
-#include "debugwindow.h"
+#include "ui/interface/debugwindow.h"
 extern DebugWindow		*g_debugWindow;
 
-#include "battleviewwindow.h"
+#include "ui/interface/battleviewwindow.h"
 extern BattleViewWindow *g_battleViewWindow;
 
 PointerList<KeyboardHandler> g_keyboardHandlers;

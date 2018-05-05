@@ -4,8 +4,8 @@
 #ifndef _INSTALLATIONPOOL_H_
 #define _INSTALLATIONPOOL_H_
 
-#include "ObjPool.h"
-#include "installation.h"
+#include "gs/gameobj/ObjPool.h"
+#include "gs/gameobj/installation.h"
 
 class CivArchive;
 

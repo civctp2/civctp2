@@ -4,8 +4,8 @@
 #ifndef _NET_CHAT_H_
 #define _NET_CHAT_H_
 
-#include "net_packet.h"
-#include "net_const.h"
+#include "net/general/net_packet.h"
+#include "net/general/net_const.h"
 
 class NetChat : public Packetizer
 {

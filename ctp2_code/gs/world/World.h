@@ -61,15 +61,15 @@ enum MAP_GENERATOR
 #define k_WORLD_VERSION_MAJOR	0
 #define k_WORLD_VERSION_MINOR	0
 
-#include "MapPoint.h"
-#include "CityRadius.h"
-#include "StartingPosition.h"
-#include "XY_Coordinates.h"
-#include "dbtypes.h"
-#include "gstypes.h"
-#include "Cell.h"
-#include "MoveFlags.h"
-#include "GlobalWarmingRecord.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/fileio/StartingPosition.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/database/dbtypes.h"
+#include "gs/utility/gstypes.h"
+#include "gs/world/Cell.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/newdb/GlobalWarmingRecord.h"
 
 class MapPoint;
 class CivArchive ;
@@ -94,7 +94,7 @@ template <class T> class PQueue;
 struct DistItem;
 
 #if defined(USE_COM_REPLACEMENT)
-#include "IMapGen.h"
+#include "mapgen/IMapGen.h"
 #include <ltdl.h>
 #else
 interface IMapGenerator;

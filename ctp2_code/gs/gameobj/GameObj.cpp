@@ -29,11 +29,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameObj.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/GameObj.h"
 
-#include "c3errors.h"
-#include "civarchive.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "robot/aibackdoor/civarchive.h"
 
 GameObj::GameObj(uint32 i)
 :

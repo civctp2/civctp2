@@ -1,4 +1,4 @@
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 #define TestControl(p) { Assert(AUI_NEWOK(p, errcode)) ; if (!AUI_NEWOK(p, errcode)) return (FALSE) ; }
 #define RemoveControl(p) { if (p) delete p ; p = NULL ; }

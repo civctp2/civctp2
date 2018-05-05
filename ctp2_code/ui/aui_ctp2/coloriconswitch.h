@@ -5,7 +5,7 @@
 #define __COLORICONSWITCH_H__
 
 
-#include "c3_switch.h"
+#include "ui/aui_ctp2/c3_switch.h"
 
 
 class Picture;

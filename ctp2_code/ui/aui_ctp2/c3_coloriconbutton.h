@@ -36,7 +36,7 @@
 #ifndef __C3_COLORICONBUTTON_H__
 #define __C3_COLORICONBUTTON_H__
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
 
 enum C3_COLORICONBUTTON_ACTION {

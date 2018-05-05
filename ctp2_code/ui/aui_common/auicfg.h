@@ -34,6 +34,6 @@
 #define __AUI_USE_SDL__ 1
 #endif
 
-#include "aui_gamespecific.h"
+#include "ui/aui_common/aui_gamespecific.h"
 
 #endif

@@ -8,7 +8,7 @@
 #define SHOW_MESSAGE_OFFSET_ABSOLUTE 0
 #define SHOW_MESSAGE_OFFSET_RELATIVE 1
 
-#include "player.h"     // PLAYER_INDEX
+#include "gs/gameobj/Player.h"     // PLAYER_INDEX
 
 class Message;
 class MessageList;

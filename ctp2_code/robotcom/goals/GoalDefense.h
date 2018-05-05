@@ -3,7 +3,7 @@
 #ifndef __GOAL_RECRUIT_DEFENSE_H__
 #define __GOAL_RECRUIT_DEFENSE_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

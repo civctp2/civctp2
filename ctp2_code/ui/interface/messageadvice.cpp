@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_button.h"
-#include "aui_static.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "c3listbox.h"
+#include "ui/aui_ctp2/c3listbox.h"
 
-#include "messageactions.h"
-#include "messagewindow.h"
-#include "messageadvice.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messageadvice.h"
 
 extern C3UI			*g_c3ui;
 

@@ -3,8 +3,8 @@
 #ifndef __AI_MAP_H__
 #define __AI_MAP_H__
 
-#include "dynarr.h"
-#include "aicell.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robotcom/Top/aicell.h"
 #include "priorityqueue.h"
 
 class AiCell;
@@ -25,7 +25,7 @@ enum GRADIENT_BITS;
 #define k_MINECELLX 15
 #define k_MINECELLY 15
 
-#include "TerrImproveData.h"
+#include "gs/gameobj/TerrImproveData.h"
 
 enum INSTALLATION_TYPES {
     INSTALLATION_LISTENING_POSTS=0,

@@ -37,8 +37,8 @@
 
 class aui_MovieButton;
 
-#include "aui_button.h"
-#include "auitypes.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/auitypes.h"
 class aui_Movie;
 class aui_Surface;
 

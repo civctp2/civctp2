@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Checksum.h"
+#include "gs/utility/Checksum.h"
 
 #define k_A_INIT 0x01234567
 #define k_B_INIT 0x89abcdef

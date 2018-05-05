@@ -30,14 +30,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SpriteGroup.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/SpriteGroup.h"
 
 #include <algorithm>    // std::fill
-#include "Anim.h"
-#include "pixelutils.h"
-#include "Sprite.h"
-#include "Token.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gs/fileio/Token.h"
 
 SpriteGroup::SpriteGroup(GROUPTYPE type)
 :

@@ -1,7 +1,7 @@
 #ifndef _NET_CIV_H_
 #define _NET_CIV_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 class CivilisationData;
 
 class NetCivilization : public Packetizer

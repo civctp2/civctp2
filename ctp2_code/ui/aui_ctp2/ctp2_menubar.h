@@ -35,9 +35,9 @@
 #ifndef __CTP2_MENUBAR_H__
 #define __CTP2_MENUBAR_H__
 
-#include "aui_window.h"
-#include "ctp2_Menu.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 

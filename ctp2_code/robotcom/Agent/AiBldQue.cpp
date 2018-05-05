@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "AiBldQue.h"
+#include "ctp/c3.h"
+#include "robotcom/Agent/AiBldQue.h"
 
 #include "civarchive.h"
 
-#include "bset.h"
-#include "IMapPointData.h"
-#include "globals.h"
-#include "ic3GameState.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "ArmyAgent.h"
-#include "bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robot/aibackdoor/bset.h"
 
 AiBuildNode::AiBuildNode()
 {

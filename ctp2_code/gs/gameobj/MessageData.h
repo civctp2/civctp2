@@ -34,9 +34,9 @@
 #ifndef __MESSAGEDATA_H__
 #define __MESSAGEDATA_H__
 
-#include "GameObj.h"
-#include "ID.h"
-#include "MapPoint.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/ID.h"
+#include "gs/world/MapPoint.h"
 
 class CivArchive;
 class SlicObject ;

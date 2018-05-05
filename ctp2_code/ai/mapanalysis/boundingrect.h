@@ -5,7 +5,7 @@
 #ifndef __BOUNDING_RECT_H__
 #define __BOUNDING_RECT_H__
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 
 

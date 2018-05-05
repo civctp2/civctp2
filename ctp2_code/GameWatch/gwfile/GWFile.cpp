@@ -1,4 +1,4 @@
-#include "GWFile.h"
+#include "GameWatch/gwfile/GWFile.h"
 
 #include <errno.h>
 #include <direct.h>

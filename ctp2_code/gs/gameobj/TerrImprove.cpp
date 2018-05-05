@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "TerrImprove.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TerrImprove.h"
 
-#include "net_info.h"             // NetInfo
-#include "network.h"              // g_network
-#include "player.h"               // g_player
-#include "SelItem.h"              // g_selected_item
-#include "TerrImprovePool.h"      // g_theTerrainImprovementPool
-#include "World.h"                // g_theWorld
+#include "net/general/net_info.h"             // NetInfo
+#include "net/general/network.h"              // g_network
+#include "gs/gameobj/Player.h"               // g_player
+#include "ui/aui_ctp2/SelItem.h"              // g_selected_item
+#include "gs/gameobj/TerrImprovePool.h"      // g_theTerrainImprovementPool
+#include "gs/world/World.h"                // g_theWorld
 
 void TerrainImprovement::KillImprovement()
 {

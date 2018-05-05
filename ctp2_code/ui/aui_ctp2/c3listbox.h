@@ -4,8 +4,8 @@
 #ifndef __C3LISTBOX_H__
 #define __C3LISTBOX_H__
 
-#include "aui_listbox.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_listbox.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class aui_Surface;
 

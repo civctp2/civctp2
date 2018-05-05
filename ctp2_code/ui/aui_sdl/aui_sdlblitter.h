@@ -3,7 +3,7 @@
 
 #ifdef __AUI_USE_SDL__
 
-#include "aui_blitter.h"
+#include "ui/aui_common/aui_blitter.h"
 
 class aui_SDLBlitter : public aui_Blitter
 {

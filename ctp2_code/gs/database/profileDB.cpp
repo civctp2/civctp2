@@ -64,22 +64,22 @@
 // -Added display relations options (7-Jan-10 EPW)
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "profileDB.h"
+#include "ctp/c3.h"
+#include "gs/database/profileDB.h"
 
-#include "AgreementData.h"      // k_EXPIRATION_NEVER
-#include "c3errors.h"
-#include "Civilisation.h"
-#include "CivPaths.h"           // g_civPaths
-#include "Diffcly.h"
-#include "DifficultyRecord.h"   // g_theDifficultyDB
-#include "Diplomacy_Log.h"
-#include "GameSettings.h"       // g_theGameSettings
-#include "Globals.h"
-#include "player.h"             // g_player
-#include "soundmanager.h"       // g_soundManager
-#include "StrDB.h"              // g_theStringDB
-#include "Token.h"
+#include "gs/gameobj/AgreementData.h"      // k_EXPIRATION_NEVER
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/fileio/CivPaths.h"           // g_civPaths
+#include "gs/gameobj/Diffcly.h"
+#include "gs/newdb/DifficultyRecord.h"   // g_theDifficultyDB
+#include "gs/gameobj/Diplomacy_Log.h"
+#include "gs/gameobj/GameSettings.h"       // g_theGameSettings
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "sound/soundmanager.h"       // g_soundManager
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/fileio/Token.h"
 
 extern Diplomacy_Log *      g_theDiplomacyLog;
 

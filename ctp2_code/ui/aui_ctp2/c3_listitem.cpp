@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "aui.h"
-#include "aui_item.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_bitmapfont.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_bitmapfont.h"
 
-#include "pattern.h"
-#include "patternbase.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/patternbase.h"
 
-#include "c3_listitem.h"
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_static.h"
 
 c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, MBCHAR const * ldlBlock)
 :

@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_ldl.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "SlicEngine.h"
-#include "civapp.h"
+#include "gs/slic/SlicEngine.h"
+#include "ctp/civapp.h"
 
 extern BOOL			g_helpMode;
 extern SlicEngine	*g_slicEngine;

@@ -28,11 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_rectangle.h"
+#include "ui/aui_common/aui_rectangle.h"
 
-#include "aui_dirtylist.h"
+#include "ui/aui_common/aui_dirtylist.h"
 
 
 aui_DirtyList::aui_DirtyList(

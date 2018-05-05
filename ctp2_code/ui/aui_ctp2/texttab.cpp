@@ -1,24 +1,24 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "pattern.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
-#include "aui_bitmapfont.h"
-#include "aui_tabgroup.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "colorset.h"           // g_colorSet
-#include "textutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_utils/textutils.h"
 
-#include "texttab.h"
+#include "ui/aui_ctp2/texttab.h"
 
-#include "SlicEngine.h"         // g_slicEngine
+#include "gs/slic/SlicEngine.h"         // g_slicEngine
 
 extern C3UI			*g_c3ui;
 

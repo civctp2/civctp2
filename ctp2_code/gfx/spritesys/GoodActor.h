@@ -58,13 +58,13 @@ class GoodActor;
 //
 //----------------------------------------------------------------------------
 
-#include "Actor.h"              // Actor
-#include "civarchive.h"         // CivArchive
-#include "ctp2_inttypes.h"      // sint32, uint16
-#include "GoodSpriteGroup.h"    // GOODACTION
-#include "Queue.h"              // Queue
-#include "SpriteGroup.h"        // LOADTYPE
-#include "World.h"              // MapPoint
+#include "gfx/spritesys/Actor.h"              // Actor
+#include "robot/aibackdoor/civarchive.h"         // CivArchive
+#include "os/include/ctp2_inttypes.h"      // sint32, uint16
+#include "gfx/spritesys/GoodSpriteGroup.h"    // GOODACTION
+#include "gfx/gfx_utils/Queue.h"              // Queue
+#include "gfx/spritesys/SpriteGroup.h"        // LOADTYPE
+#include "gs/world/World.h"              // MapPoint
 
 class Action;
 class Anim;

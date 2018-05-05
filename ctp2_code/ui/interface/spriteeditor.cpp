@@ -28,79 +28,79 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "spriteeditor.h"
+#include "ctp/c3.h"
+#include "ui/interface/spriteeditor.h"
 
-#include "aui.h"
-#include "aui_blitter.h"
-#include "aui_dimension.h"
-#include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "director.h"           // g_director
-
-
-#include "maputils.h"
-#include "pixelutils.h"
-#include "primitives.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_dimension.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/spritesys/director.h"           // g_director
 
 
-
-
-#include "ctp2_button.h"
-#include "c3textfield.h"
+#include "gfx/tilesys/maputils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
 
 
 
-#include "c3_static.h"
-#include "c3_coloredstatic.h"
-#include "c3_switch.h"
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
 
 
 
-#include "c3window.h"
-#include "c3windows.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_coloredstatic.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
 
 
 
-#include "tiledmap.h"
-
-#include "colorset.h"
-#include "SelItem.h"
-#include "player.h"
-#include "UnitDynArr.h"
-#include "screenutils.h"
-#include "UIUtils.h"
-#include "bevellesswindow.h"
-#include "network.h"
-#include "victorywin.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3windows.h"
 
 
 
 
-#include "spnewgamewindow.h"
+#include "gfx/tilesys/tiledmap.h"
+
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/UnitDynArr.h"
+#include "ui/interface/screenutils.h"
+#include "ui/interface/UIUtils.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
+#include "net/general/network.h"
+#include "ui/interface/victorywin.h"
 
 
 
 
-#include "UnitSpriteGroup.h"
-#include "FacedSprite.h"
-#include "Sprite.h"
-#include "screenmanager.h"
-#include "CivPaths.h"
-#include "c3files.h"
-#include "SpriteFile.h"
-#include "Anim.h"
-#include "colorset.h"
-#include "Token.h"
-#include "profileDB.h"
+#include "ui/interface/spnewgamewindow.h"
 
-#include "Actor.h"
+
+
+
+#include "gfx/spritesys/UnitSpriteGroup.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gfx/spritesys/SpriteFile.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/fileio/Token.h"
+#include "gs/database/profileDB.h"
+
+#include "gfx/spritesys/Actor.h"
 
 
 

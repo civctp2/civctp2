@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "C3World.h"
-#include "C3Rand.h"
-#include "C3Player.h"
-#include "AgreementTypes.h"
-#include "MapPoint.h"
+#include "user-robotcom/shared/globals.h"
+#include "gs/outcom/C3World.h"
+#include "gs/outcom/C3Rand.h"
+#include "gs/outcom/C3Player.h"
+#include "gs/gameobj/AgreementTypes.h"
+#include "gs/world/MapPoint.h"
 
-#include "OA_Pillage.h"
+#include "robotcom/goals/OA_Pillage.h"
 
 #include "aimain.h"
-#include "bset.h"
-#include "ArmyAgent.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
 #include "Foreigner.h"
 
 extern double fz_auto_pillage_chance;

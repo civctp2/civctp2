@@ -28,22 +28,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_ldl.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3textfield.h"
-#include "c3_header.h"
-#include "c3_ranger.h"
-#include "pattern.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "ui/aui_ctp2/c3_header.h"
+#include "ui/aui_ctp2/c3_ranger.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "netshell.h"
-#include "ns_string.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_string.h"
 
-#include "ns_chatbox.h"
+#include "ui/netshell/ns_chatbox.h"
 
 ns_ChatBox::ns_ChatBox(
 	AUI_ERRCODE *retval,

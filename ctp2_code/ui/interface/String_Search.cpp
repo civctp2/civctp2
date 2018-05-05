@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "String_Search.h"
+#include "ctp/c3.h"
+#include "ui/interface/String_Search.h"
 
 #include <algorithm>
 #ifdef TEST_STRING_SEARCH

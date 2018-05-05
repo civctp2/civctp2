@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "FliOutputProc.h"
-#include "FliSetFunc.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/FliOutputProc.h"
+#include "robotcom/fuzzy/FliSetFunc.h"
 
 void FliOutputProc::Init(double scalar, FliSetFunc *function)
 {

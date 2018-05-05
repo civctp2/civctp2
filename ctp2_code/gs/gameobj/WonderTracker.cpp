@@ -28,21 +28,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "WonderTracker.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/WonderTracker.h"
 
-#include "civarchive.h"
-#include "Globals.h"        // k_GAME_OBJ_TYPE_WONDER
-#include "player.h"
-#include "network.h"
-#include "net_info.h"
-#include "Unit.h"
-#include "UnitDynArr.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "WonderRecord.h"
-#include "wonderutil.h"
-#include "UnitPool.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/Globals.h"        // k_GAME_OBJ_TYPE_WONDER
+#include "gs/gameobj/Player.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/UnitPool.h"
 
 extern sint32 g_saveFileVersion;
 

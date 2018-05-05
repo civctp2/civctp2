@@ -2,7 +2,7 @@
 #ifndef __LINEDANCE_H__
 #define __LINEDANCE_H__
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
 class CellUnitList;
 

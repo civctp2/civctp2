@@ -26,16 +26,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicNamedSymbol.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicNamedSymbol.h"
 
-#include "SlicSymbol.h"
-#include "SlicArray.h"
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "SlicFunc.h"
-#include "civarchive.h"
-#include "profileDB.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicArray.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicFunc.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/database/profileDB.h"
 
 namespace
 {

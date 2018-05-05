@@ -1,85 +1,85 @@
 #define INITGUID
-#include "c3.h"
-#include "c3errors.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/utility/Globals.h"
 
-#include "aui.h"
-#include "debugwindow.h"
+#include "ui/aui_common/aui.h"
+#include "ui/interface/debugwindow.h"
 extern DebugWindow *g_debugWindow;
 
 #include "ConstDB.h"
 extern ConstDB *g_theConstDB;
 
-#include "dynarr.h"
-#include "SelItem.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"
 extern SelectedItem *g_selected_item;
 
-#include "TurnCnt.h"
+#include "gs/utility/TurnCnt.h"
 extern TurnCount *g_turn;
 
-#include "bset.h"
-#include "player.h"
-#include "Unit.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
 
 #include <objbase.h>
-#include "IRobot.h"
-#include "C3GameState.h"
+#include "robotcom/InCom/IRobot.h"
+#include "gs/outcom/C3GameState.h"
 
-#include "aicause.h"
+#include "gs/outcom/AICause.h"
 
-#include "IMapGen.h"
-#include "ic3BlgDB.h"
-#include "ic3Rand.h"
+#include "mapgen/IMapGen.h"
+#include "gs/outcom/ic3BlgDB.h"
+#include "gs/outcom/ic3Rand.h"
 
-#include "C3UnitDB.h"
-#include "C3BlgDB.h"
-#include "C3InstDB.h"
-#include "CivPaths.h"
-#include "C3TerrDB.h"
-#include "C3ErrorReport.h"
-#include "C3String.h"
-#include "C3Rand.h"
-#include "C3Player.h"
-#include "C3World.h"
-#include "C3Science.h"
-#include "C3Government.h"
-#include "C3Wonder.h"
-#include "C3Population.h"
+#include "gs/outcom/C3UnitDB.h"
+#include "gs/outcom/C3BlgDB.h"
+#include "gs/outcom/C3InstDB.h"
+#include "gs/fileio/CivPaths.h"
+#include "gs/outcom/C3TerrDB.h"
+#include "gs/outcom/C3ErrorReport.h"
+#include "gs/outcom/C3String.h"
+#include "gs/outcom/C3Rand.h"
+#include "gs/outcom/C3Player.h"
+#include "gs/outcom/C3World.h"
+#include "gs/outcom/C3Science.h"
+#include "gs/outcom/C3Government.h"
+#include "gs/outcom/C3Wonder.h"
+#include "gs/outcom/C3Population.h"
 #include "RobotAstar.h"
-#include "c3endgamedb.h"
+#include "gs/outcom/c3endgamedb.h"
 
-#include "aui_surface.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "maputils.h"
-#include "primitives.h"
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "tileset.h"
+#include "gfx/tilesys/tileset.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "ic3DipReq.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/outcom/ic3DipReq.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "C3Trade.h"
-#include "TradeOffer.h"
+#include "gs/outcom/C3Trade.h"
+#include "gs/gameobj/TradeOffer.h"
 
-#include "SlicObject.h"
-#include "SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
 
-#include "TradeOfferPool.h"
-#include "UnitDynArr.h"
-#include "UnitData.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "tiledmap.h"
-#include "radarmap.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/radarmap.h"
 
-#include "Civilisation.h"
+#include "gs/gameobj/Civilisation.h"
 
-#include "debugmemory.h"
-#include "log.h"
-#include "debugcallstack.h"
-#include "player.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "ctp/debugtools/log.h"
+#include "ctp/debugtools/debugcallstack.h"
+#include "gs/gameobj/Player.h"
 
 extern World *g_theWorld;
 extern ProfileDB *g_theProfileDB;
@@ -87,20 +87,20 @@ extern Player **g_player;
 extern TiledMap		*g_tiledMap;
 extern RadarMap		*g_radarMap;
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 extern TiledMap *g_tiledMap;
 
-#include "chatbox.h"
+#include "ui/interface/chatbox.h"
 extern ChatBox  *g_chatBox;
 
-#include "network.h"
-#include "net_info.h"
-#include "net_action.h"
-#include "order.h"
-#include "director.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "net/general/net_action.h"
+#include "gs/gameobj/Order.h"
+#include "gfx/spritesys/director.h"
 
-#include "AdvanceRecord.h"
-#include "UnitRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/UnitRecord.h"
 
 #define NO_TIMING_FILENAME_YET "notiming.txt"
 
@@ -1501,7 +1501,7 @@ BOOL RobotInterface::IsComLoaded(const sint32 p) const
 	return FALSE;
 }
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 extern ProfileDB *g_theProfileDB;
 extern RobotInterface *g_robot_interface;
 

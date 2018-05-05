@@ -26,19 +26,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_window.h"
-#include "primitives.h"
-#include "tiledmap.h"
-#include "BaseTile.h"
-#include "TileInfo.h"
-#include "maputils.h"
-#include "primitives.h"
-#include "aui_control.h"
-#include "tilecontrol.h"
-#include "GoodActor.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/tilesys/BaseTile.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/tilecontrol.h"
+#include "gfx/spritesys/GoodActor.h"
 
 extern TiledMap			*g_tiledMap;
 

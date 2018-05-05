@@ -1,9 +1,9 @@
 #ifndef __SLIC_SYMBOL_H__
 #define __SLIC_SYMBOL_H__
 
-#include "slicif.h"
-#include "SlicTriggerLists.h"
-#include "SlicStack.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicTriggerLists.h"
+#include "gs/slic/SlicStack.h"
 
 class SlicSegment;
 typedef sint32 StringId;
@@ -21,7 +21,7 @@ class Army;
 template <class T> class PointerList;
 class TerrainImprovement;
 
-#include "GameEventTypes.h"
+#include "gs/events/GameEventTypes.h"
 
 enum SLIC_SYM_SERIAL_TYPE {
 	SLIC_SYM_SERIAL_GENERIC,

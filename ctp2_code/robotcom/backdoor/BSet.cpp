@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "bset.h"
-#include "ic3CivArchive.h"
+#include "ctp/c3.h"
+#include "robot/aibackdoor/bset.h"
+#include "user-robotcom/outcom/ic3CivArchive.h"
 #include "civarchive.h"
 
 BSetID::BSetID ()

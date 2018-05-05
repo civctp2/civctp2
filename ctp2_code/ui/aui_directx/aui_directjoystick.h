@@ -5,8 +5,8 @@
 
 #if (DIRECTINPUT_VERSION >= 0x0500)
 
-#include "aui_joystick.h"
-#include "aui_directinput.h"
+#include "ui/aui_common/aui_joystick.h"
+#include "ui/aui_directx/aui_directinput.h"
 
 class aui_DirectJoystick : public aui_Joystick, public aui_DirectInput
 {

@@ -35,7 +35,7 @@
 #include <list>       // std::list
 #include <utility>    // std::pair
 
-#include "Goal_And_Squad_Types.h"
+#include "ai/strategy/scheduler/Goal_And_Squad_Types.h"
 
 enum GOAL_RESULT
 {

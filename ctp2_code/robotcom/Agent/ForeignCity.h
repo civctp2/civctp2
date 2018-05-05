@@ -3,7 +3,7 @@
 #ifndef __FOREIGN_CITY_H__
 #define __FOREIGN_CITY_H__ 1
 
-#include "Agent.h"
+#include "robotcom/Agent/Agent.h"
 
 struct MapPointData;
 

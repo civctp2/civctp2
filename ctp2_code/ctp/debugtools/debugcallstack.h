@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-#include "log.h"
+#include "ctp/debugtools/log.h"
 #include <stdio.h>
 
 void DebugCallStack_Open (void);

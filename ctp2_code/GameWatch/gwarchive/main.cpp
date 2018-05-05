@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "GWArchive.h"
+#include "GameWatch/gwarchive/GWArchive.h"
 
 void main(int argc, char **argv)
 {

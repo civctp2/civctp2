@@ -6,9 +6,9 @@
 
 class SpriteEditWindow;
 
-#include "c3window.h"       // C3Window
-#include "ctp2_inttypes.h"  // sintNN, uintNN
-#include "MapPoint.h"       // MapPoint
+#include "ui/aui_ctp2/c3window.h"       // C3Window
+#include "os/include/ctp2_inttypes.h"  // sintNN, uintNN
+#include "gs/world/MapPoint.h"       // MapPoint
 // AUI_ERRCODE, AUI_WINDOW_TYPE
 // BOOL, MBCHAR, RECT
 

@@ -29,18 +29,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "battleview.h"
+#include "ctp/c3.h"
+#include "ui/interface/battleview.h"
 
 #include <algorithm>
-#include "aui_Factory.h"
-#include "aui_blitter.h"
-#include "c3ui.h"
-#include "battleviewactor.h"
-#include "battle.h"
-#include "battleevent.h"
-#include "GameEventManager.h"
-#include "CTP2Combat.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/spritesys/battleviewactor.h"
+#include "ui/interface/battle.h"
+#include "ui/interface/battleevent.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/CTP2Combat.h"
 
 extern C3UI					*g_c3ui;
 

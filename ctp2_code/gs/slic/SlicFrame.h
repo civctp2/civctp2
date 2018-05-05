@@ -31,11 +31,11 @@
 #ifndef __SLIC_FRAME_H__
 #define __SLIC_FRAME_H__
 
-#include "SlicError.h"
+#include "gs/slic/SlicError.h"
 
-#include "slicif.h"
-#include "SlicFunc.h"
-#include "SlicStack.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicFunc.h"
+#include "gs/slic/SlicStack.h"
 
 class SlicSegment;
 class SlicStack;

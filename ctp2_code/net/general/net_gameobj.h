@@ -34,7 +34,7 @@
 #ifndef _NET_GAMEOBJ_H_
 #define _NET_GAMEOBJ_H_
 
-#include "net_hash.h"
+#include "net/general/net_hash.h"
 
 class GameObj;
 

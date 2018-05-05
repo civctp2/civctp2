@@ -3,9 +3,9 @@
 #ifndef __OA_PARADROP__
 #define __OA_PARADROP__ 1
 
-#include "Oa.h"
-#include "dynarr.h"
-#include "MapPoint.h"
+#include "robotcom/goals/Oa.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/world/MapPoint.h"
 
 class ArmyAgent;
 typedef struct {

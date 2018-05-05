@@ -43,7 +43,7 @@ template <class T> class PointerList;
 #define k_MAX_DBL_TOKEN 1024
 #define k_TOKEN_HISTORY_SIZE 2
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 class DBToken
 {

@@ -65,53 +65,53 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "tiledmap.h"               // tiledraw.h does not exist
+#include "ctp/c3.h"
+#include "gfx/tilesys/tiledmap.h"               // tiledraw.h does not exist
 
-#include "aui.h"
-#include "aui_sdlsurface.h"
-#include "aui_bitmapfont.h"
-#include "ConstRecord.h"			// g_theConstDB
-#include "pixelutils.h"
-#include "primitives.h"
-#include "background.h"
-#include "pointerlist.h"
-#include "dynarr.h"
-#include "SelItem.h"                // g_selected_item
-#include "player.h"
-#include "World.h"                  // g_theWorld
-#include "Cell.h"
-#include "Unit.h"
-#include "TerrImprove.h"
-#include "TerrImproveData.h"
-#include "TileInfo.h"
-#include "tileset.h"
-#include "BaseTile.h"
-#include "colorset.h"               // g_colorSet
-#include "maputils.h"
-#include "textutils.h"
-#include "citydata.h"
-#include "UnitData.h"
-#include "TileDrawRoad.h"
-#include "director.h"
-#include "screenmanager.h"
-#include "UnitActor.h"
-#include "UnseenCell.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "network.h"
-#include "chatlist.h"
-#include "pointerlist.h"
-#include "StrDB.h"
-#include "terrainutil.h"
-#include "TerrainRecord.h"
-#include "TerrImprove.h"
-#include "TerrainImprovementRecord.h"
-#include "TerrImprovePool.h"
-#include "Civilisation.h"
-#include "BuildingRecord.h"    //emod
-#include "WonderRecord.h"    //emod
-#include "buildingutil.h"
-#include "wonderutil.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "gs/newdb/ConstRecord.h"			// g_theConstDB
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/background.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/gameobj/Player.h"
+#include "gs/world/World.h"                  // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/tilesys/BaseTile.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_utils/textutils.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/UnitData.h"
+#include "gfx/tilesys/TileDrawRoad.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/world/UnseenCell.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "net/general/network.h"
+#include "net/general/chatlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/newdb/BuildingRecord.h"    //emod
+#include "gs/newdb/WonderRecord.h"    //emod
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/wonderutil.h"
 
 extern Background	*g_background;
 extern ScreenManager *g_screenManager;

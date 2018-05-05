@@ -26,14 +26,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ControlTabPanel.h"
+#include "ctp/c3.h"
+#include "ui/interface/ControlTabPanel.h"
 
-#include "CityControlPanel.h"
-#include "DomesticControlPanel.h"
-#include "MessageControlPanel.h"
-#include "TilesControlPanel.h"
-#include "UnitControlPanel.h"
+#include "ui/interface/CityControlPanel.h"
+#include "ui/interface/DomesticControlPanel.h"
+#include "ui/interface/MessageControlPanel.h"
+#include "ui/interface/TilesControlPanel.h"
+#include "ui/interface/UnitControlPanel.h"
 
 namespace
 {

@@ -2,8 +2,8 @@
 #ifndef __CIVILISATION_DYNAMIC_ARRAY_H__
 #define __CIVILISATION_DYNAMIC_ARRAY_H__
 
-#include "Civilisation.h"
-#include "dynarr.h"
+#include "gs/gameobj/Civilisation.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class CivilisationDynamicArray : public DynamicArray<Civilisation> {
 

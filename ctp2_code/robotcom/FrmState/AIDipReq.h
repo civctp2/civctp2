@@ -2,7 +2,7 @@
 #ifndef __AI_DIP_REQ_H__
 #define __AI_DIP_REQ_H__
 
-#include "ic3DipReq.h"
+#include "user-robotcom/outcom/ic3DipReq.h"
 
 class AiMain;
 class Foreigner;

@@ -4,8 +4,8 @@
 class aui_FileFormat;
 class aui_MemMap;
 
-#include "aui_base.h"
-#include "tech_memmap.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/tech_memmap.h"
 
 class aui_FileFormat : public aui_Base
 {

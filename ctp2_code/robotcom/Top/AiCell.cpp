@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3world.h"
-#include "IMapPointData.h"
-#include "ic3GameState.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 #include "civarchive.h"
 
-#include "aicell.h"
+#include "robotcom/Top/aicell.h"
 
-#include "FzOut.h"
-#include "bit_table.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robot/aibackdoor/bit_table.h"
 
 AiCell::AiCell()
 {
@@ -48,7 +48,7 @@ AiCellPtr::~AiCellPtr()
     return;
 }
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 extern Memory_Manager *g_memory_AiCellPtr;
 void* AiCellPtr::operator new(size_t byte_size)
 {

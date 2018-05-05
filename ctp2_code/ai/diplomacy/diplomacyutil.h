@@ -1,7 +1,7 @@
 #ifndef DIPLOMACY_UTIL_H__
 #define DIPLOMACY_UTIL_H__
 
-#include "diplomattypes.h"
+#include "ai/diplomacy/diplomattypes.h"
 
 class DiplomacyProposalRecord;
 class DiplomacyThreatRecord;

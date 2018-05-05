@@ -41,8 +41,8 @@
 
 class Datum;
 
-#include "ctp2_inttypes.h"  // sint32
-#include "ctpdb.h"          // DATUM_TYPE, dbvalue, etc.
+#include "os/include/ctp2_inttypes.h"  // sint32
+#include "gs/dbgen/ctpdb.h"          // DATUM_TYPE, dbvalue, etc.
 
 class Datum
 {

@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "QuickSlic.h"
+#include "ctp/c3.h"
+#include "gs/slic/QuickSlic.h"
 
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "SlicSegment.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSegment.h"
 
 
 

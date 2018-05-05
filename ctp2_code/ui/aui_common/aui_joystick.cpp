@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "aui_joystick.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_joystick.h"
 
 aui_Joystick::aui_Joystick()
 :	aui_Base	(),

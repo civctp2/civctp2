@@ -142,7 +142,7 @@ extern ColorSet *	g_colorSet;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "pixeltypes.h" // Pixel16
+#include "gfx/gfx_utils/pixeltypes.h" // Pixel16
 
 //----------------------------------------------------------------------------
 // Class declarations

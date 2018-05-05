@@ -1,16 +1,16 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 
-#include "C3BlgDB.h"
+#include "gs/outcom/C3BlgDB.h"
 
-#include "globals.h"
-#include "C3GameState.h"
+#include "gs/utility/globals.h"
+#include "gs/outcom/C3GameState.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 #include "civarchive.h"
-#include "BuildingRecord.h"
-#include "StrDB.h"
-#include "buildingutil.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/buildingutil.h"
 
 extern StringDB *g_theStringDB;
 

@@ -40,12 +40,12 @@
 #ifndef ___BMH_RADAR_MAP_HEADER
 #define ___BMH_RADAR_MAP_HEADER
 
-#include "aui_control.h"
-#include "MapPoint.h"
-#include "patternbase.h"
-#include "Unit.h"
-#include "pixeltypes.h"
-#include "profileDB.h"
+#include "ui/aui_common/aui_control.h"
+#include "gs/world/MapPoint.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "gs/gameobj/Unit.h"
+#include "gfx/gfx_utils/pixeltypes.h"
+#include "gs/database/profileDB.h"
 
 enum C3_RADAR_ACTION {
 	C3_RADAR_ACTION_NULL,

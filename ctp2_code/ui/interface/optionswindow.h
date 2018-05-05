@@ -4,7 +4,7 @@
 #ifndef OPTIONSWINDOW_FLAG
 #define OPTIONSWINDOW_FLAG
 
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
 class c3_Static;
 class c3_Button;

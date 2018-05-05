@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "ear.h"
+#include "sound/ear.h"
 
 HMODULE EAR_DLL;
 

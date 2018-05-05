@@ -47,19 +47,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_bitmapfont.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_bitmapfont.h"
 
 #include <algorithm>
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_pixel.h"
-#include "aui_rectangle.h"
-#include "aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_pixel.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_ui.h"
 #include <locale.h>
 
 #if defined(_JAPANESE)
-#include "japanese.h"
+#include "gs/utility/japanese.h"
 #endif
 
 namespace

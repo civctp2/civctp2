@@ -4,7 +4,7 @@
 #ifndef CTP2_TAB_H__
 #define CTP2_TAB_H__
 
-#include "aui_control.h"
+#include "ui/aui_common/aui_control.h"
 
 class ctp2_TabButton;
 class ctp2_Static;

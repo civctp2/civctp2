@@ -32,50 +32,50 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "armymanagerwindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/armymanagerwindow.h"
 
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_blitter.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "Army.h"
-#include "ArmyData.h"
-#include "ArmyPool.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/ArmyPool.h"
 
-#include "ctp2_Window.h"
-#include "ctp2_textfield.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_textfield.h"
 
-#include "World.h"
-#include "Cell.h"
-#include "IconRecord.h"
-#include "UnitRecord.h"
-#include "ctp2_Switch.h"
-#include "SelItem.h"
-#include "ctp2_listitem.h"
-#include "ctp2_listbox.h"
-#include "ctp2_Static.h"
-#include "ctp2_button.h"
-#include "player.h"
-#include "AICause.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "ui/aui_ctp2/ctp2_Switch.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "gs/gameobj/Player.h"
+#include "gs/outcom/AICause.h"
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "GameEventUser.h"
-#include "Events.h"
-#include "primitives.h"
-#include "colorset.h"           // g_colorSet
-#include "gfx_options.h"        // g_graphicsOptions
-#include "tiledmap.h"           // g_tiledMap->ColorMagnitudeToRGB()
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "gfx/gfx_utils/gfx_options.h"        // g_graphicsOptions
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap->ColorMagnitudeToRGB()
 
-#include "network.h"
+#include "net/general/network.h"
 
-#include "UnitPool.h"
-#include "profileDB.h"          // g_theProfileDB
-#include "UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "gs/gameobj/UnitData.h"
 
 extern C3UI *g_c3ui;
 

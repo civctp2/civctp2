@@ -28,21 +28,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Globals.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "QuadTree.h"
-#include "Cell.h"
-#include "installation.h"
-#include "installationtree.h"
-#include "player.h"
-#include "cellunitlist.h"
-#include "UnitDynArr.h"
-#include "network.h"
-#include "net_info.h"
-#include "TerrImprove.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/gameobj/Player.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/utility/UnitDynArr.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/TerrImprove.h"
 
 extern QuadTree<Unit> *g_theUnitTree;
 extern InstallationQuadTree  *g_theInstallationTree;

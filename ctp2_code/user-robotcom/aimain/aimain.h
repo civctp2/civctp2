@@ -3,24 +3,24 @@
 #ifndef __AI_MAIN_H__
 #define __AI_MAIN_H__ 1
 
-#include "ctp.h"
-#include "aicause.h"
-#include "order.h"
+#include "user-robotcom/shared/ctp.h"
+#include "user-robotcom/shared/aicause.h"
+#include "user-robotcom/shared/order.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3world.h"
-#include "ic3RobotAstar.h"
-#include "ic3UnitDB.h"
-#include "ic3BlgDB.h"
-#include "ic3InstDB.h"
-#include "ic3TerrDB.h"
-#include "ic3DipReq.h"
-#include "ic3GameState.h"
-#include "ic3CivArchive.h"
-#include "ic3Rand.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3RobotAstar.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
+#include "user-robotcom/outcom/ic3TerrDB.h"
+#include "user-robotcom/outcom/ic3DipReq.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3CivArchive.h"
+#include "user-robotcom/outcom/ic3Rand.h"
 
-#include "mappointdata.h"
+#include "user-robotcom/shared/mappointdata.h"
 
 class AiMain
 {

@@ -43,7 +43,7 @@ class ctp2_DropDown;
 class CityData;
 class aui_Surface;
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
 class CityControlPanel {
 public:

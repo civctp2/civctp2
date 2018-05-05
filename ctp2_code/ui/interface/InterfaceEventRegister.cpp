@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "InterfaceEventRegister.h"
+#include "ui/interface/InterfaceEventRegister.h"
 
-#include "GameEventManager.h"
+#include "gs/events/GameEventManager.h"
 
 
 

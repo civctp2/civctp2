@@ -33,27 +33,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventManager.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventManager.h"
 
-#include "c3errors.h"
-#include "c3debug.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3debug.h"
 
-#include "GameEventHook.h"
-#include "GameEventDescription.h"
-#include "GameEventArgList.h"
-#include "GameEventArgument.h"
-#include "GameEvent.h"
+#include "gs/events/GameEventHook.h"
+#include "gs/events/GameEventDescription.h"
+#include "gs/events/GameEventArgList.h"
+#include "gs/events/GameEventArgument.h"
+#include "gs/events/GameEvent.h"
 
-#include "Army.h"
-#include "Unit.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
 
-#include "SlicEngine.h"
-#include "TerrImprove.h"
-#include "TradeRoute.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TradeRoute.h"
 
-#include "director.h"
-#include "SelItem.h"                // g_selected_item
+#include "gfx/spritesys/director.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
 
 GameEventManager *g_gevManager = NULL;
 

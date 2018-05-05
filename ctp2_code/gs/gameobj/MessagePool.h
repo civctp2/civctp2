@@ -7,10 +7,10 @@
 class MessagePool;
 typedef sint32 MESSAGE_TYPE;
 
-#include "civarchive.h"	// CivArchive
-#include "message.h"	// MessageData
-#include "ObjPool.h"	// ObjPool
-#include "player.h"		// PLAYER_INDEX
+#include "robot/aibackdoor/civarchive.h"	// CivArchive
+#include "gs/gameobj/message.h"	// MessageData
+#include "gs/gameobj/ObjPool.h"	// ObjPool
+#include "gs/gameobj/Player.h"		// PLAYER_INDEX
 
 #define k_HACK_RECONSTITUTED_CLASS 0x72adc754
 

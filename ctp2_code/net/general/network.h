@@ -67,10 +67,10 @@ enum    NETSTATE
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "net_io.h"
-#include "net_const.h"
-#include "gstypes.h"
-#include "GameEventDescription.h"
+#include "net/io/net_io.h"
+#include "net/general/net_const.h"
+#include "gs/utility/gstypes.h"
+#include "gs/events/GameEventDescription.h"
 
 class UnitData;
 class Packetizer;
@@ -111,7 +111,7 @@ struct Response;
 class ChatList;
 class CellUnitList;
 
-#include "player.h" // PLAYER_INDEX
+#include "gs/gameobj/Player.h" // PLAYER_INDEX
 
 #ifdef _DEBUG
 class aui_Surface;

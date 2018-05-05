@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_utils/primitives.h"
 
-#include "ctp2_commandline.h"
+#include "ui/aui_ctp2/ctp2_commandline.h"
 
 #define k_CTP2_COMMANDLINE_FONT_FILE	"lucon.ttf"
 #define k_CTP2_COMMANDLINE_FONT_SIZE	8

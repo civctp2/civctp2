@@ -31,52 +31,52 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "sci_advancescreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/sci_advancescreen.h"
 
-#include "aui_uniqueid.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "c3_listitem.h"
-#include "ctp2_Static.h"
-#include "c3ui.h"
-#include "ctp2_listbox.h"
-#include "ctp2_hypertextbox.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "Advances.h"
-#include "AdvanceRecord.h"
-#include "StrDB.h"
-#include "SelItem.h"
-#include "player.h"
-#include "Sci.h"
-#include "Gold.h"
-#include "prjfile.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/database/StrDB.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Sci.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/fileio/prjfile.h"
 
-#include "greatlibrary.h"
+#include "ui/interface/greatlibrary.h"
 
-#include "screenutils.h"
+#include "ui/interface/screenutils.h"
 
-#include "spnewgamewindow.h"
-#include "sciencewin.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/sciencewin.h"
 
-#include "keypress.h"
-#include "keyboardhandler.h"
-#include "IconRecord.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
+#include "gs/newdb/IconRecord.h"
 
-#include "UnitRecord.h"
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "TerrainImprovementRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
 
-#include "terrainutil.h"
+#include "gs/gameobj/terrainutil.h"
 
-#include "colorset.h"
-#include "GovernmentRecord.h"
-#include "buildingutil.h"
-#include "wonderutil.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 extern Director		*g_director;
 
 extern C3UI			*g_c3ui;
@@ -85,10 +85,10 @@ extern GreatLibrary	*g_greatLibrary;
 
 extern ScienceWin	*g_scienceWin;
 
-#include "ScienceManagementDialog.h"
+#include "ui/interface/ScienceManagementDialog.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
 extern SoundManager	*g_soundManager;
 
 static C3Window		*s_sci_advanceScreen	= NULL;

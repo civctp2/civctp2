@@ -54,13 +54,13 @@ template <class T> struct	aui_ResourceElement;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_base.h"
-#include "auitypes.h"		// AUI_...
-#include "c3debug.h"		// Assert
-#include "c3files.h"		// C3DIR...
-#include "c3types.h"		// MBCHAR, sint32, uint32
-#include "CivPaths.h"		// g_civPaths
-#include "tech_wllist.h"	// ListPos, tech_WLList
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/auitypes.h"		// AUI_...
+#include "ctp/ctp2_utils/c3debug.h"		// Assert
+#include "ctp/ctp2_utils/c3files.h"		// C3DIR...
+#include "ctp/c3types.h"		// MBCHAR, sint32, uint32
+#include "gs/fileio/CivPaths.h"		// g_civPaths
+#include "ui/aui_common/tech_wllist.h"	// ListPos, tech_WLList
 
 //----------------------------------------------------------------------------
 // Class declarations

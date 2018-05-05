@@ -43,22 +43,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "CityAstar.h"
+#include "ctp/c3.h"
+#include "robot/pathing/CityAstar.h"
 
-#include "AgreementMatrix.h"    // Allow alliance checking
-#include "Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
-#include "c3errors.h"
-#include "Diplomat.h"           // To be able to retrieve the current strategy
-#include "Globals.h"
-#include "MoveFlags.h"
-#include "Path.h"
-#include "player.h"             // g_player
-#include "StrategyRecord.h"     // For accessing the strategy database
-#include "TerrainImprovementRecord.h"
-#include "terrainutil.h"
-#include "TerrImprove.h"
-#include "World.h"              // g_theWorld
+#include "ai/diplomacy/AgreementMatrix.h"    // Allow alliance checking
+#include "robot/pathing/Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ai/diplomacy/Diplomat.h"           // To be able to retrieve the current strategy
+#include "gs/utility/Globals.h"
+#include "gs/utility/MoveFlags.h"
+#include "robot/pathing/Path.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/newdb/StrategyRecord.h"     // For accessing the strategy database
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/world/World.h"              // g_theWorld
 
 CityAstar g_city_astar;
 

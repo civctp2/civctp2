@@ -5,8 +5,8 @@
 #ifndef __C3_DROPDOWN_H__
 #define __C3_DROPDOWN_H__
 
-#include "aui_dropdown.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_dropdown.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class c3_DropDown : public aui_DropDown, public PatternBase
 {

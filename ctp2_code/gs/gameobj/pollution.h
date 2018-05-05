@@ -58,8 +58,8 @@ class Pollution;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "player.h"
-#include "PollutionConst.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/PollutionConst.h"
 class CivArchive;
 class MapPoint;
 

@@ -1,7 +1,7 @@
 #ifndef __AUI_STATIC_H__
 #define __AUI_STATIC_H__
 
-#include "aui_control.h"
+#include "ui/aui_common/aui_control.h"
 
 
 class aui_Static : public aui_Control

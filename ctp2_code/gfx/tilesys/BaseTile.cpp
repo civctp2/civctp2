@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "TileInfo.h"
-#include "tileset.h"
-#include "BaseTile.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/tilesys/BaseTile.h"
 
 BaseTile::BaseTile()
 :

@@ -82,7 +82,7 @@ class aui_TextBase;
 #define k_AUI_TEXTBASE_LDL_VERTCENTER			"vertcenter"
 #define k_AUI_TEXTBASE_LDL_WORDWRAP				"wordwrap"
 
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_inttypes.h"
 class aui_Surface;
 class aui_BitmapFont;
 

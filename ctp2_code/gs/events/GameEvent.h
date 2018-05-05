@@ -49,9 +49,9 @@ class GameEvent;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"          // sint32
-#include "GameEventDescription.h"   // GAME_EVENT
-#include "GameEventTypes.h"         // GAME_EVENT_ERR
+#include "os/include/ctp2_inttypes.h"          // sint32
+#include "gs/events/GameEventDescription.h"   // GAME_EVENT
+#include "gs/events/GameEventTypes.h"         // GAME_EVENT_ERR
 
 class GameEventArgList;
 

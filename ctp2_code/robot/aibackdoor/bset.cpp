@@ -28,9 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "bset.h"
-#include "civarchive.h"
+#include "ctp/c3.h"
+#include "robot/aibackdoor/bset.h"
+#include "robot/aibackdoor/civarchive.h"
 
 BSetID::BSetID ()
 

@@ -29,13 +29,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Globals.h"
-#include "keymap.h"
-#include "CivPaths.h"
-#include "c3files.h"
-#include "c3errors.h"
-#include "controlpanelwindow.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "ui/aui_ctp2/keymap.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/interface/controlpanelwindow.h"
 
 extern CivPaths *g_civPaths;
 

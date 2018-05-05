@@ -37,8 +37,8 @@
 class TurnYearStatus;
 struct sTurnLengthOverride;
 
-#include "c3types.h"    // MBCHAR, uint32
-#include "player.h"     // PLAYER_INDEX
+#include "ctp/c3types.h"    // MBCHAR, uint32
+#include "gs/gameobj/Player.h"     // PLAYER_INDEX
 
 class aui_Control;
 class ctp2_Button;

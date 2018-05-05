@@ -4,7 +4,7 @@
 #ifndef OPTIONWARNING_FLAG
 #define		OPTIONWARNING_FLAG
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 sint32 optionwarningscreen_displayMyWindow(uint32 warning);
 sint32 optionwarningscreen_removeMyWindow(uint32 action);

@@ -32,7 +32,7 @@
 #ifndef __STR_REC_H__
 #define __STR_REC_H__ 1
 
-#include "dbtypes.h"
+#include "gs/database/dbtypes.h"
 
 class StringRecord {
 

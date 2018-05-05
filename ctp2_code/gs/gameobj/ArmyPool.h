@@ -4,8 +4,8 @@
 #ifndef __ARMY_POOL_H__
 #define __ARMY_POOL_H__
 
-#include "ObjPool.h"
-#include "Army.h"
+#include "gs/gameobj/ObjPool.h"
+#include "gs/gameobj/Army.h"
 
 class Army;
 class ArmyData;

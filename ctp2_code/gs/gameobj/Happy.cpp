@@ -42,41 +42,41 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // Pre-compiled header
-#include "Happy.h"              // Own declarations: consistency check
+#include "ctp/c3.h"                 // Pre-compiled header
+#include "gs/gameobj/Happy.h"              // Own declarations: consistency check
 
-#include "civarchive.h"
-#include "player.h"             // g_player
-#include "ConstRecord.h"        // g_theConstDB
-#include "UnitPool.h"
-#include "citydata.h"
-#include "SelItem.h"            // g_theSelectedItem
-#include "TurnCnt.h"
-#include "MapPoint.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/newdb/ConstRecord.h"        // g_theConstDB
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/citydata.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_theSelectedItem
+#include "gs/utility/TurnCnt.h"
+#include "gs/world/MapPoint.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
-#include "BuildingRecord.h"
-#include "cellunitlist.h"
-#include "WonderRecord.h"
-#include "HappyTracker.h"
-#include "Diffcly.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "PlayHap.h"
-#include "gamefile.h"
-#include "buildingutil.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/HappyTracker.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/gameobj/PlayHap.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/gameobj/buildingutil.h"
 
-#include "UnitData.h"
-#include "Cell.h"
-#include "GovernmentRecord.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/GovernmentRecord.h"
 
-#include "wonderutil.h"
-#include "FeatTracker.h"
-#include "DifficultyRecord.h"   //EMOD
-#include "GameSettings.h"
-#include "profileDB.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/newdb/DifficultyRecord.h"   //EMOD
+#include "gs/gameobj/GameSettings.h"
+#include "gs/database/profileDB.h"
 
 
 

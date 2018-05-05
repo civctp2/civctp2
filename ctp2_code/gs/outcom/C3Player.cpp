@@ -29,49 +29,49 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "globals.h"
-#include "C3Player.h"
-#include "MapPoint.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "BuildingRecord.h"
+#include "ctp/c3.h"
+#include "gs/utility/globals.h"
+#include "gs/outcom/C3Player.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/newdb/BuildingRecord.h"
 #include "civarchive.h"
-#include "TradeRoute.h"
-#include "Army.h"
-#include "cellunitlist.h"
-#include "TaxRate.h"
-#include "Gold.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/Army.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/TaxRate.h"
+#include "gs/gameobj/Gold.h"
 
-#include "bset.h"
-#include "citydata.h"
-#include "UnitData.h"
-#include "Happy.h"
-#include "DB.h"
-#include "WonderRecord.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/database/DB.h"
+#include "gs/newdb/WonderRecord.h"
 #include "ConstDB.h"
-#include "aicause.h"
+#include "gs/outcom/AICause.h"
 
 
-#include "TradeRoute.h"
-#include "Agreement.h"
-#include "Cell.h"
-#include "order.h"
-#include "TradeBids.h"
-#include "C3Trade.h"
-#include "Regard.h"
-#include "EndGame.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/TradeBids.h"
+#include "gs/outcom/C3Trade.h"
+#include "gs/gameobj/Regard.h"
+#include "gs/gameobj/EndGame.h"
 
-#include "network.h"
+#include "net/general/network.h"
 
-#include "Diplomacy_Log.h"
-#include "UnitRecord.h"
+#include "gs/gameobj/Diplomacy_Log.h"
+#include "gs/newdb/UnitRecord.h"
 
 extern Diplomacy_Log *g_theDiplomacyLog;
 
-#include "GovernmentRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
 
 
 STDMETHODIMP C3Player::QueryInterface(REFIID riid, void **obj)
@@ -737,11 +737,11 @@ BOOL C3Player::AiUnloadAllTransportsInArmy(BOOL *is_unknown_id,
 
 #ifdef _DEBUG
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "primitives.h"
-#include "aui_window.h"
-#include "debugwindow.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/interface/debugwindow.h"
 extern DebugWindow *g_debugWindow;
 void C3Player::Dprint(char *str)
 {

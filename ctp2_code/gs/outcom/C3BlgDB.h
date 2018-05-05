@@ -3,7 +3,7 @@
 #ifndef __C3BuildingDB_H__
 #define __C3BuildingDB_H__ 1
 
-#include "ic3BlgDB.h"
+#include "gs/outcom/ic3BlgDB.h"
 
 class Player;
 class CivArchive;

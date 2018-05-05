@@ -1,24 +1,24 @@
-#include "c3.h"
-#include "workeractor.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/workeractor.h"
 
-#include "aui.h"
-#include "pixelutils.h"
-#include "SelItem.h"                // g_selected_item
-#include "tileutils.h"
-#include "Unit.h"
+#include "ui/aui_common/aui.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gfx/tilesys/tileutils.h"
+#include "gs/gameobj/Unit.h"
 
-#include "FacedSprite.h"
-#include "UnitSpriteGroup.h"
-#include "SpriteState.h"
-#include "Actor.h"
-#include "SpriteGroupList.h"
-#include "tiledmap.h"               // g_tiledMap
-#include "Anim.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gfx/spritesys/Anim.h"
 
-#include "ActorPath.h"
-#include "Action.h"
-#include "director.h"               // g_director
-#include "maputils.h"
+#include "gfx/spritesys/ActorPath.h"
+#include "gfx/spritesys/Action.h"
+#include "gfx/spritesys/director.h"               // g_director
+#include "gfx/tilesys/maputils.h"
 
 extern SpriteGroupList	*g_unitSpriteGroupList;
 

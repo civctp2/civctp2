@@ -1,51 +1,51 @@
-#include "c3.h"
-#include "c3types.h"
-#include "c3errors.h"
-#include "globals.h"
-#include "ic3UnitDB.h"
-#include "ic3Science.h"
-#include "ic3Wonder.h"
-#include "ic3BlgDB.h"
-#include "ic3Population.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3Science.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
+#include "user-robotcom/outcom/ic3Population.h"
 #include "ic3endgamedb.h"
 
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
 #include "aimain.h"
-#include "gold.h"
+#include "robotcom/aimgr/gold.h"
 
 #include "common.h"
 
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
-#include "matrix.h"
-#include "grassfire.h"
+#include "robotcom/planner/sorted_array.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "InstBidList.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Alloc/InstBidList.h"
 
 
-#include "unitflow.h"
-#include "aip.h"
-#include "squad.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/aip.h"
+#include "robotcom/planner/squad.h"
 
-#include "goal.h"
-#include "ArmyGoal.h"
-#include "goal_build_supplemental.h"
-#include "Goal_Build_List.h"
+#include "robotcom/planner/goal.h"
+#include "robotcom/goals/ArmyGoal.h"
+#include "robotcom/goals/goal_build_supplemental.h"
+#include "robotcom/goals/Goal_Build_List.h"
 
-#include "WonderTbl.h"
+#include "robotcom/aimgr/WonderTbl.h"
 
 #include "Scheduler.h"
-#include "planner.h"
-#include "strategic_map.h"
+#include "robotcom/planner/planner.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 
 

@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_ldl.h"
-#include "aui_ranger.h"
-#include "aui_window.h"
-#include "aui_surface.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "aui_textbox.h"
+#include "ui/aui_common/aui_textbox.h"
 
 
 aui_TextBox::aui_TextBox(

@@ -1,20 +1,20 @@
-#include "c3.h"
-#include "globals.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
 
 #include "common.h"
-#include "linked_list.h"
-#include "strategic_ai_forward.h"
-#include "unitflow.h"
-#include "squad.h"
-#include "goal.h"
+#include "robotcom/planner/linked_list.h"
+#include "robotcom/planner/strategic_ai_forward.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/squad.h"
+#include "robotcom/planner/goal.h"
 
 
 #include "semi_dynamic_array.h"
@@ -22,14 +22,14 @@
 #include "pool.h"
 
 #include "Plan.h"
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
 #include "aimain.h"
 
 #include "Scheduler.h"
-#include "planner.h"
+#include "robotcom/planner/planner.h"
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
 
 ZEROMEM(PlanFlat);

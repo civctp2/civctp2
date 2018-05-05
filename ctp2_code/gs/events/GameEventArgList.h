@@ -34,14 +34,14 @@
 #ifndef __GAME_EVENT_ARG_LIST_H__
 #define __GAME_EVENT_ARG_LIST_H__
 
-#include "GameEventTypes.h"
-#include "GameEvent.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/events/GameEvent.h"
 
 template <class T> class PointerList;
 
 class GameEventArgument;
-#include "ID.h"
-#include "MapPoint.h"
+#include "gs/gameobj/ID.h"
+#include "gs/world/MapPoint.h"
 
 class Unit;
 class MapPoint;

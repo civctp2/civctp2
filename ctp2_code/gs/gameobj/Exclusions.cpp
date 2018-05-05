@@ -25,15 +25,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Exclusions.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Exclusions.h"
 
 #include <algorithm>
 
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "civarchive.h"
-#include "UnitRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/UnitRecord.h"
 
 Exclusions *g_exclusions = NULL;
 

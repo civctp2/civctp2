@@ -1,7 +1,7 @@
 #ifndef __DR_DEBUG_H
 #define __DR_DEBUG_H
 
-#include "debugmemory.h"
+#include "ctp/debugtools/debugmemory.h"
 
 
 #ifndef _DEBUG_MEMORY

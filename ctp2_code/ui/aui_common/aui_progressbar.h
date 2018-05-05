@@ -1,7 +1,7 @@
 #ifndef __AUI_PROGRESSBAR_H__
 #define __AUI_PROGRESSBAR_H__
 
-#include "aui_control.h"
+#include "ui/aui_common/aui_control.h"
 
 
 enum AUI_PROGRESSBAR_ORIENTATION

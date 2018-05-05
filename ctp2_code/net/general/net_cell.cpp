@@ -31,23 +31,23 @@
 /// \file   net_cell.cpp
 /// \brief  Multiplayer cell packet handling (definitions)
 
-#include "c3.h"
-#include "net_cell.h"
+#include "ctp/c3.h"
+#include "net/general/net_cell.h"
 
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "Globals.h"        // k_GAME_OBJ_TERRAIN_IMPROVEMENT
-#include "GoodActor.h"
-#include "GoodyHuts.h"
-#include "net_util.h"
-#include "network.h"
-#include "ObjPool.h"
-#include "TerrImprove.h"
-#include "TerrImprovePool.h"
-#include "tiledmap.h"
-#include "TileInfo.h"
-#include "TradeDynArr.h"
-#include "World.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/utility/Globals.h"        // k_GAME_OBJ_TERRAIN_IMPROVEMENT
+#include "gfx/spritesys/GoodActor.h"
+#include "gs/gameobj/GoodyHuts.h"
+#include "net/io/net_util.h"
+#include "net/general/network.h"
+#include "gs/gameobj/ObjPool.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/world/World.h"
 
 #define SEND_MOVE_COST
 

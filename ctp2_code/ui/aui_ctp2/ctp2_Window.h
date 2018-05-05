@@ -34,9 +34,9 @@
 #ifndef __CTP2_WINDOW_H__
 #define __CTP2_WINDOW_H__
 
-#include "aui_window.h"
-#include "patternbase.h"
-#include "pointerlist.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 class ctp2_Window;
 

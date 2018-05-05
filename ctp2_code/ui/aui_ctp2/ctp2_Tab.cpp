@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
 
-#include "aui_action.h"
-#include "aui_ldl.h"
-#include "ctp2_Static.h"
-#include "ctp2_TabButton.h"
-#include "ctp2_TabGroup.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_TabButton.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
 ctp2_Tab::ctp2_Tab(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 				   ControlActionCallback *ActionFunc, void *cookie) :

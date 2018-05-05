@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "CitySpriteGroup.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/CitySpriteGroup.h"
 
-#include "primitives.h"
-#include "screenmanager.h"
-#include "Sprite.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "gfx/spritesys/Sprite.h"
 
 extern ScreenManager *  g_screenManager;
 

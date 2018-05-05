@@ -3,7 +3,7 @@
 #ifndef __GOAL_ENSLAVE_H__
 #define __GOAL_ENSLAVE_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 class AiMain;
 class CivArchive;

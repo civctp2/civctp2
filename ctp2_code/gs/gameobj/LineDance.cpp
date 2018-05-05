@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "LineDance.h"
-#include "cellunitlist.h"
+#include "gs/gameobj/LineDance.h"
+#include "gs/world/cellunitlist.h"
 
-#include "battleview.h"
-#include "bset.h"
+#include "ui/interface/battleview.h"
+#include "robot/aibackdoor/bset.h"
 
 extern UnitDatabase		*g_theUnitDB;
 extern BattleViewWindow	*g_battleViewWindow;

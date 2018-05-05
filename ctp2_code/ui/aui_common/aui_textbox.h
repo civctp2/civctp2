@@ -1,7 +1,7 @@
 #ifndef __AUI_TEXTBOX_H__
 #define __AUI_TEXTBOX_H__
 
-#include "aui_listbox.h"
+#include "ui/aui_common/aui_listbox.h"
 
 class aui_Static;
 

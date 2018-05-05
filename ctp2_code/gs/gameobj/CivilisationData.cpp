@@ -32,25 +32,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Globals.h"
-#include "CivilisationRecord.h"
-#include "CivilisationData.h"
-#include "Civilisation.h"
-#include "profileDB.h"
-#include "StrDB.h"
-#include "network.h"
-#include "civarchive.h"
-#include "player.h"
-#include "UnitDynArr.h"
-#include "citydata.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/gameobj/CivilisationData.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/database/profileDB.h"
+#include "gs/database/StrDB.h"
+#include "net/general/network.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/citydata.h"
 
 extern	StringDB                *g_theStringDB ;
 
 extern	ProfileDB               *g_theProfileDB;
 
-#include "CivilisationPool.h"	// CIV_INDEX_INVALID
-#include "CityStyleRecord.h"	// g_theCityStyleDB
+#include "gs/gameobj/CivilisationPool.h"	// CIV_INDEX_INVALID
+#include "gs/newdb/CityStyleRecord.h"	// g_theCityStyleDB
 
 //----------------------------------------------------------------------------
 //

@@ -1,30 +1,25 @@
-#include "c3.h"
-#include "globals.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
 #include "aimain.h"
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 #include "common.h"
 
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
 
 
 
-#include "ailog.h"
-#include "dr_debug.h"
-
-
-
-
-
+#include "robotcom/planner/ailog.h"
+#include "robotcom/planner/dr_debug.h"
 
 
 
@@ -36,8 +31,13 @@
 
 
 
-#include "Agent.h"
-#include "ai_match.h"
+
+
+
+
+
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/planner/ai_match.h"
 
 
 

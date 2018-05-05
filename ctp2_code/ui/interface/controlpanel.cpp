@@ -1,86 +1,86 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "c3_static.h"
-#include "c3_coloredswitch.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_coloredswitch.h"
 
-#include "statuswindow.h"
-#include "controlpanelwindow.h"
+#include "ui/aui_ctp2/statuswindow.h"
+#include "ui/interface/controlpanelwindow.h"
 
-#include "workwin.h"
-#include "debugwindow.h"
+#include "ui/interface/workwin.h"
+#include "ui/interface/debugwindow.h"
 
-#include "textbutton.h"
-#include "iconbutton.h"
-#include "picturebutton.h"
-#include "coloriconbutton.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/iconbutton.h"
+#include "ui/aui_ctp2/picturebutton.h"
+#include "ui/aui_ctp2/coloriconbutton.h"
 
-#include "c3thumb.h"
-#include "c3slider.h"
-#include "c3scroller.h"
-#include "c3spinner.h"
+#include "ui/aui_ctp2/c3thumb.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3scroller.h"
+#include "ui/aui_ctp2/c3spinner.h"
 
-#include "checkbox.h"
-#include "textswitch.h"
-#include "coloriconswitch.h"
+#include "ui/aui_ctp2/checkbox.h"
+#include "ui/aui_ctp2/textswitch.h"
+#include "ui/aui_ctp2/coloriconswitch.h"
 
-#include "texttab.h"
-#include "aui_tabgroup.h"
+#include "ui/aui_ctp2/texttab.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "aui_static.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "aui_item.h"
-#include "c3listbox.h"
-#include "textbox.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_ctp2/c3listbox.h"
+#include "ui/aui_ctp2/textbox.h"
 
-#include "c3dropdown.h"
+#include "ui/aui_ctp2/c3dropdown.h"
 
-#include "c3textfield.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
-#include "c3listbox.h"
-#include "cityinventorylistbox.h"
+#include "ui/aui_ctp2/c3listbox.h"
+#include "ui/aui_ctp2/cityinventorylistbox.h"
 
-#include "aui_progressbar.h"
+#include "ui/aui_common/aui_progressbar.h"
 
-#include "tiledmap.h"
-#include "c3windows.h"
-#include "workwindow.h"
-#include "CivPaths.h"
-#include "videoutils.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/interface/workwindow.h"
+#include "gs/fileio/CivPaths.h"
+#include "gfx/gfx_utils/videoutils.h"
 
 #include "toolbar.h"
 
-#include "controlsheet.h"
-#include "TerrImproveData.h"
-#include "TerrImprovePool.h"
-#include "MapPoint.h"
-#include "tiledmap.h"
-#include "player.h"
-#include "SelItem.h"
+#include "ui/aui_ctp2/controlsheet.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/world/MapPoint.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
 #include "InstDB.h"
 
-#include "bevellesswindow.h"
-#include "radarwindow.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
+#include "ui/interface/radarwindow.h"
 
-#include "UIUtils.h"
+#include "ui/interface/UIUtils.h"
 
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "citymanager.h"
-#include "citywindow.h"
-#include "screenutils.h"
+#include "ui/interface/citymanager.h"
+#include "ui/interface/citywindow.h"
+#include "ui/interface/screenutils.h"
 
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
-#include "TurnCnt.h"
+#include "gs/utility/TurnCnt.h"
 
 
 extern sint32		g_ScreenWidth;

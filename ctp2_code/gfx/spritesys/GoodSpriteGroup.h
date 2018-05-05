@@ -39,7 +39,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include "windows.h"          // POINT
+#include <windows.h>          // POINT
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -61,9 +61,9 @@ enum GOODACTION {
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"    // sint32, uint16
-#include "pixeltypes.h"		// Pixel16
-#include "SpriteGroup.h"	// SpriteGroup, GROUPTYPE
+#include "os/include/ctp2_inttypes.h"    // sint32, uint16
+#include "gfx/gfx_utils/pixeltypes.h"		// Pixel16
+#include "gfx/spritesys/SpriteGroup.h"	// SpriteGroup, GROUPTYPE
 
 class aui_Surface;
 

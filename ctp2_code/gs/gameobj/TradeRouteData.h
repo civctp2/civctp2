@@ -37,13 +37,13 @@
 
 class TradeRouteData;
 
-#include "GameObj.h"
-#include "Unit.h"
-#include "TradeRoute.h"
-#include "dynarr.h"
-#include "MapPoint.h"
-#include "CityRadius.h"
-#include "Army.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/gameobj/Army.h"
 
 #define k_TRADEROUTE_NO_PATH		0
 #define k_TRADEROUTE_ORIGINAL_PATH	1

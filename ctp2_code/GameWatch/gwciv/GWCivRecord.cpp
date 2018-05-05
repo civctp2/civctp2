@@ -1,4 +1,4 @@
-#include "GWCivRecord.h"
+#include "GameWatch/gwciv/GWCivRecord.h"
 
 class GWUnitRecord {
 public:

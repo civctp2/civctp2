@@ -36,21 +36,21 @@
 /// \file   Vision.cpp
 /// \brief  Handling of tile visibility (definitions)
 
-#include "c3.h"
-#include "Vision.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Vision.h"
 
-#include "Army.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "civarchive.h"
-#include "dynarr.h"
-#include "player.h"                   // g_player
-#include "net_info.h"
-#include "network.h"
-#include "SelItem.h"                  // g_selected_item
-#include "tiledmap.h"                 // g_tiledMap
-#include "UnseenCellQuadTree.h"
-#include "World.h"                    // g_theWorld
+#include "gs/gameobj/Army.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/Player.h"                   // g_player
+#include "net/general/net_info.h"
+#include "net/general/network.h"
+#include "ui/aui_ctp2/SelItem.h"                  // g_selected_item
+#include "gfx/tilesys/tiledmap.h"                 // g_tiledMap
+#include "gs/world/UnseenCellQuadTree.h"
+#include "gs/world/World.h"                    // g_theWorld
 
 extern sint32 g_god;
 

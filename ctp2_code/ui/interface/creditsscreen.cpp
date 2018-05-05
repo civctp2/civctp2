@@ -30,31 +30,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "creditsscreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/creditsscreen.h"
 
 #include <algorithm>	            // std::fill
-#include "aui_action.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_Factory.h"
-#include "aui_blitter.h"
-#include "aui_stringtable.h"
-#include "aui_static.h"
-#include "aui_button.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "Globals.h"                // allocated::clear
-#include "UIUtils.h"
-#include "primitives.h"
-#include "soundmanager.h"           // g_soundManager
-#include "aui_bitmapfont.h"
-#include "MessageBoxDialog.h"
-#include "colorset.h"               // g_colorSet
-#include "StrDB.h"					// g_theStringDB
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "gs/utility/Globals.h"                // allocated::clear
+#include "ui/interface/UIUtils.h"
+#include "ui/aui_utils/primitives.h"
+#include "sound/soundmanager.h"           // g_soundManager
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/interface/MessageBoxDialog.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gs/database/StrDB.h"					// g_theStringDB
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;

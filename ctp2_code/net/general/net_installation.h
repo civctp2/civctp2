@@ -4,7 +4,7 @@
 #ifndef _NET_INSTALLATION_H_
 #define _NET_INSTALLATION_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetInstallation : public Packetizer
 {

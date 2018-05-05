@@ -37,9 +37,9 @@
 
 
 struct MapPointData;
-#include "MapPoint.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
 
 #define HEURISTIC_TILES_PER_GRID 4

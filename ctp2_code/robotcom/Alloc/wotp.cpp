@@ -1,24 +1,24 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
-#include "ic3Government.h"
-#include "ic3Science.h"
-#include "ic3player.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3Government.h"
+#include "user-robotcom/outcom/ic3Science.h"
+#include "user-robotcom/outcom/ic3player.h"
 
 #include "aimain.h"
-#include "gold.h"
-#include "AllocWGF.h"
-#include "CityAgent.h"
+#include "robotcom/aimgr/gold.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "scienceagent.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "FzOut.h"
-#include "wotp.h"
-#include "ArmyAgent.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/Alloc/wotp.h"
+#include "robotcom/Agent/ArmyAgent.h"
 
 #define k_MIN_UTILITY -1000000.0
 

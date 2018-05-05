@@ -1,36 +1,36 @@
-#include "c3.h"
-#include "chart.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/chart.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_window.h"
-#include "aui_bitmapfont.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_bitmapfont.h"
 
-#include "pixelutils.h"
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "c3_hypertipwindow.h"
-#include "aui_hypertextbox.h"
+#include "ui/aui_ctp2/c3_hypertipwindow.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "colorset.h"           // g_colorSet
-#include "c3windows.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_ctp2/c3windows.h"
 
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "c3ui.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "AdvanceRecord.h"
-#include "player.h"
-#include "SelItem.h"
-#include "Advances.h"
-#include "prjfile.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/fileio/prjfile.h"
 
-#include "StrDB.h"
-#include "IconRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/IconRecord.h"
 
-#include "advanceutil.h"
-#include "ldl_file.hpp"
+#include "gs/gameobj/advanceutil.h"
+#include "ui/ldl/ldl_file.hpp"
 
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;

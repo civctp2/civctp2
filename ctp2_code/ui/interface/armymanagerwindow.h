@@ -4,12 +4,12 @@
 class ArmyListNode;
 class ArmyManagerWindow;
 
-#include "MapPoint.h"
-#include "Army.h"
-#include "Unit.h"
-#include "aui_control.h"    // aui_Control
-#include "ctp2_inttypes.h"  // uint32
-#include "gstypes.h"        // k_MAX_ARMY_SIZE
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
+#include "ui/aui_common/aui_control.h"    // aui_Control
+#include "os/include/ctp2_inttypes.h"  // uint32
+#include "gs/utility/gstypes.h"        // k_MAX_ARMY_SIZE
 
 class ctp2_Window;
 class ctp2_ListItem;

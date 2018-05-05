@@ -36,30 +36,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Unit.h"
-#include "unitutil.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/unitutil.h"
 
-#include "UnitRecord.h"
-#include "World.h"
-#include "SpecialAttackInfoRecord.h"
-#include "UnitActor.h"
-#include "Cell.h"
-#include "Army.h"
-#include "cellunitlist.h"
-#include "UnitData.h"
-#include "ConstRecord.h"
-#include "GameEventUser.h"
-#include "player.h"
-#include "AICause.h"
-#include "FeatTracker.h"
-#include "buildingutil.h"
-#include "terrainutil.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/world/World.h"
+#include "gs/newdb/SpecialAttackInfoRecord.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Army.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Player.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/terrainutil.h"
 
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
 
-#include "CitySizeRecord.h"
+#include "gs/newdb/CitySizeRecord.h"
 
 static sint32 s_smallCityMaxSize;
 static sint32 s_maxCitySquaredRadius;

@@ -4,10 +4,10 @@
 #ifndef __MESSAGE_WINDOW_H__
 #define __MESSAGE_WINDOW_H__
 
-#include "c3_popupwindow.h"
-#include "aui_textbase.h"
-#include "message.h"
-#include "aui_hypertextbox.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "gs/gameobj/message.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
 class aui_Static;
 class aui_Button;

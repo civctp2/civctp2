@@ -53,7 +53,7 @@ enum AUI_SWITCH_ACTION
 
 #define k_AUI_SWITCH_DEFAULTNUMSTATES	2
 
-#include "aui_control.h"
+#include "ui/aui_common/aui_control.h"
 
 class aui_Switch : public aui_Control
 {

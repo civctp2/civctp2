@@ -35,24 +35,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "spnewgameplayersscreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/spnewgameplayersscreen.h"
 
-#include "aui_uniqueid.h"
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "colorset.h"                   // g_colorSet
-#include "ctp2_spinner.h"
-#include "ctp2_Static.h"
-#include "keypress.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "spnewgamewindow.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/aui_ctp2/ctp2_spinner.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "ui/interface/spnewgamewindow.h"
 
 extern C3UI         *g_c3ui;
 

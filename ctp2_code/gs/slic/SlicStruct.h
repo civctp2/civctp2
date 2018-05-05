@@ -46,10 +46,10 @@
 
 #include <vector>		// std::vector
 
-#include "slicif.h"
-#include "SlicStack.h"
-#include "SlicSymbol.h"
-#include "SlicBuiltinEnum.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicBuiltinEnum.h"
 
 class SlicStruct;
 class SlicSymbolData;

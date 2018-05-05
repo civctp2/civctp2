@@ -1,15 +1,15 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_surface.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
-#include "textutils.h"
-#include "colorset.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_utils/textutils.h"
+#include "gfx/gfx_utils/colorset.h"
 
-#include "tipwindow.h"
+#include "ui/aui_ctp2/tipwindow.h"
 
 extern C3UI *g_c3ui;
 

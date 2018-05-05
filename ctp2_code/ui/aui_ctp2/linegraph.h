@@ -65,8 +65,8 @@ enum eRankingCategories
 class  LineGraph;
 struct LineGraphData;
 
-#include "aui_control.h"
-#include "ctp2_inttypes.h"
+#include "ui/aui_common/aui_control.h"
+#include "os/include/ctp2_inttypes.h"
 
 class aui_EditText;
 class aui_Surface;

@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "installationpool.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "civarchive.h"
-#include "Globals.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/installationpool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/Globals.h"
 
 InstallationPool::InstallationPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_INSTALLATION)
 {

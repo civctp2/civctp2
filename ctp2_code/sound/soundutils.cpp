@@ -1,3 +1,3 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "soundutils.h"
+#include "sound/soundutils.h"

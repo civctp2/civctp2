@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_uniqueid.h"
-#include "aui_control.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_control.h"
 
-#include "aui_dragdropwindow.h"
+#include "ui/aui_common/aui_dragdropwindow.h"
 
 
 aui_DragDropWindow::aui_DragDropWindow(

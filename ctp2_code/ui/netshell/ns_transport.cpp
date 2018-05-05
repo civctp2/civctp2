@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_transport.h"
+#include "ui/netshell/ns_transport.h"
 
 
 ns_Transport::ns_Transport(NETFunc::Transport * transport)

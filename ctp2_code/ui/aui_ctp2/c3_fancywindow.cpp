@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_uniqueid.h"
-#include "c3window.h"
-#include "c3_static.h"
-#include "c3_button.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "c3_fancywindow.h"
+#include "ui/aui_ctp2/c3_fancywindow.h"
 
 extern C3UI						*g_c3ui;
 

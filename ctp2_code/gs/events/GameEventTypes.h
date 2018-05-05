@@ -34,7 +34,7 @@
 #ifndef GAME_EVENT_TYPES_H_
 #define GAME_EVENT_TYPES_H_
 
-#include "GameEventDescription.h"
+#include "gs/events/GameEventDescription.h"
 
 enum GAME_EVENT_INSERT {
 	GEV_INSERT_Front,

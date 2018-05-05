@@ -1,6 +1,6 @@
-#include "c3.h"
-#include "net_debug.h"
-#include "net_types.h"
+#include "ctp/c3.h"
+#include "net/io/net_debug.h"
+#include "net/io/net_types.h"
 
 #ifdef _DEBUG
 char* netdebug_NetErrToString(NET_ERR err)

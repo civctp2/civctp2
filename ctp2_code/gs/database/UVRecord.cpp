@@ -1,18 +1,18 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #if 0
-#include "c3errors.h"
-#include "civarchive.h"
-#include "Token.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/Token.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 #include "AdvDB.h"
 #include "TerrRec.h"
-#include "DB.h"
+#include "gs/database/DB.h"
 #include "GovRec.h"
-#include "UVRecord.h"
+#include "gs/database/UVRecord.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 enum TOKEN_UV_POLLUTION
 	{
 	TOKEN_OZONE_TRIGGER = TOKEN_MAX + 1,

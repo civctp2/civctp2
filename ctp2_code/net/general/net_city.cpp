@@ -34,30 +34,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "network.h"
-#include "net_city.h"
-#include "net_unit.h"
+#include "net/general/network.h"
+#include "net/general/net_city.h"
+#include "net/general/net_unit.h"
 
-#include "net_util.h"
+#include "net/io/net_util.h"
 
-#include "UnitData.h"
-#include "citydata.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
 
-#include "UnitPool.h"
-#include "player.h"
-#include "AICause.h"
-#include "Unit.h"
-#include "BldQue.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/BldQue.h"
 
-#include "ResourceRecord.h"
-#include "Resources.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/gameobj/Resources.h"
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "MainControlPanel.h"
-#include "SelItem.h"
+#include "ui/interface/MainControlPanel.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 NetCity::NetCity(UnitData* unit, BOOL isInitial) :
 	m_unitData(unit)

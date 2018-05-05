@@ -32,8 +32,8 @@
 #ifndef __CITY_ASTAR_H__
 #define __CITY_ASTAR_H__ 1
 
-#include "gstypes.h"
-#include "Astar.h"
+#include "gs/utility/gstypes.h"
+#include "robot/pathing/Astar.h"
 
 class CityAstar : public Astar
 {

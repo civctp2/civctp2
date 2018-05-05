@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "battleviewactor.h"
-#include "EffectActor.h"
-#include "battleviewwindow.h"
+#include "gfx/spritesys/battleviewactor.h"
+#include "gfx/spritesys/EffectActor.h"
+#include "ui/interface/battleviewwindow.h"
 
-#include "battleevent.h"
+#include "ui/interface/battleevent.h"
 
-#include "soundmanager.h"
+#include "sound/soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 extern BattleViewWindow	*g_battleViewWindow;

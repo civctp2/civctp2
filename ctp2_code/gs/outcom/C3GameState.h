@@ -2,7 +2,7 @@
 #ifndef __C3GAMESTATE_H__
 #define __C3GAMESTATE_H__
 
-#include "ic3GameState.h"
+#include "gs/outcom/ic3GameState.h"
 
 class RobotAstar;
 class C3UnitDB;

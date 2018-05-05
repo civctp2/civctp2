@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "C3GameState.h"
-#include "C3ErrorReport.h"
-#include "c3debug.h"
-#include "c3errors.h"
+#include "gs/utility/Globals.h"
+#include "gs/outcom/C3GameState.h"
+#include "gs/outcom/C3ErrorReport.h"
+#include "ctp/ctp2_utils/c3debug.h"
+#include "ctp/ctp2_utils/c3errors.h"
 #include "civarchive.h"
 
 STDMETHODIMP C3ErrorReport::QueryInterface(REFIID riid, void **obj)

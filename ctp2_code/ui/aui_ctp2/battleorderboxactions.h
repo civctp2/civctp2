@@ -1,9 +1,9 @@
 #ifndef __AUI_BATTLEORDERBOXACTIONS_H__
 #define __AUI_BATTLEORDERBOXACTIONS_H__
 
-#include "aui_action.h"
-#include "Army.h"
-#include "Unit.h"
+#include "ui/aui_common/aui_action.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
 
 class BattleOrderBox;
 class aui_Control;

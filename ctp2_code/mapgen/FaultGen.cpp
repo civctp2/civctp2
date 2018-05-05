@@ -1,23 +1,23 @@
 /**
  * $Id$
  */
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 #else
-#include "noCOMBase.h"
+#include "os/include/noCOMBase.h"
 #endif
 
 #if defined(WIN32)
-#include "c3.h"
+#include "ctp/c3.h"
 #endif
 
 #include <algorithm>
-#include "FaultGen.h"
+#include "mapgen/FaultGen.h"
 #include <stdlib.h>
-#include "IC3Rand.h"
+#include "gs/outcom/IC3Rand.h"
 
 #ifndef GEOMETRIC
 #if !defined(USE_COM_REPLACEMENT)

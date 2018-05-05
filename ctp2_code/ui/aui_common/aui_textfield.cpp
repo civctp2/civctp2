@@ -1,20 +1,20 @@
-#include "c3.h"
-#include "aui_textfield.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_textfield.h"
 
-#include "aui_ui.h"
-#include "aui_window.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "chatbox.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
+#include "ui/interface/chatbox.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 #ifdef __AUI_USE_SDL__
-#include "aui_sdlsurface.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
 #endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;

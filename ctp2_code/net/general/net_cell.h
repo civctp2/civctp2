@@ -54,7 +54,7 @@ class NetCellUnitOrder;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "net_packet.h" // Packetizer
+#include "net/general/net_packet.h" // Packetizer
 class Cell;
 
 //----------------------------------------------------------------------------

@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
 #if (DIRECTINPUT_VERSION >= 0x0500)
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_directjoystick.h"
+#include "ui/aui_directx/aui_directjoystick.h"
 
 
 BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID data );

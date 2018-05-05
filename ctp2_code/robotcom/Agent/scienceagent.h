@@ -2,7 +2,7 @@
 #ifndef __SCIENCE_AGENT_H__
 #define __SCIENCE_AGENT_H__ 1
 
-#include "Agent.h"
+#include "robotcom/Agent/Agent.h"
 
 class AiMain;
 class BSetID;

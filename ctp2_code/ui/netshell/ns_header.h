@@ -1,8 +1,8 @@
 #ifndef __NS_HEADER_H__
 #define __NS_HEADER_H__
 
-#include "ns_listbox.h"
-#include "aui_header.h"
+#include "ui/netshell/ns_listbox.h"
+#include "ui/aui_common/aui_header.h"
 
 class ns_Header : public aui_Header
 {

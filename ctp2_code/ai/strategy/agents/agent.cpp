@@ -44,27 +44,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "agent.h"
+#include "ctp/c3.h"
+#include "ai/strategy/agents/agent.h"
 
-#include "gfx_options.h"
-#include "robotastar2.h"
-#include "CityAstar.h"
-#include "Cell.h"
-#include "Unit.h"
-#include "player.h"
-#include "Events.h"
-#include "Order.h"
-#include "GameEventUser.h"
-#include "CTPDatabase.h"
-#include "OrderRecord.h"    // g_theOrderDB
-#include "GoalRecord.h"
-#include "UnitRecord.h"
-#include "mapanalysis.h"
-#include "ctpaidebug.h"
-#include "ctpai.h"
-#include "GoalRecord.h"
-#include "Goal.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "robot/pathing/robotastar2.h"
+#include "robot/pathing/CityAstar.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Events.h"
+#include "gs/gameobj/Order.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/newdb/CTPDatabase.h"
+#include "gs/newdb/OrderRecord.h"    // g_theOrderDB
+#include "gs/newdb/GoalRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/ctpaidebug.h"
+#include "ai/ctpai.h"
+#include "gs/newdb/GoalRecord.h"
+#include "ai/strategy/goals/Goal.h"
 
 extern MapPoint  g_mp_size;
 extern CityAstar g_city_astar;

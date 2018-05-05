@@ -27,13 +27,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TradeBids.h"
-#include "pointerlist.h"
-#include "civarchive.h"
-#include "player.h"
-#include "MessagePool.h"
-#include "gamefile.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TradeBids.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/fileio/gamefile.h"
 
 extern Player **g_player;
 extern MessagePool *g_theMessagePool;

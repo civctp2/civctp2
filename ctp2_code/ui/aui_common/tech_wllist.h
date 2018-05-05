@@ -34,7 +34,7 @@
 #ifndef __TECH_WLLIST_H__
 #define __TECH_WLLIST_H__
 
-#include "tech_memory.h"
+#include "ui/aui_common/tech_memory.h"
 
 
 

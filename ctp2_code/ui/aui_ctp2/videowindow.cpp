@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "aui.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
 
-#include "c3errors.h"
-#include "aui_control.h"
-#include "pattern.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "aui_Factory.h"
-#include "CivPaths.h"
-#include "c3ui.h"
-#include "directvideo.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "gs/fileio/CivPaths.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/directvideo.h"
 
-#include "videowindow.h"
+#include "ui/aui_ctp2/videowindow.h"
 
 #ifdef __AUI_USE_DIRECTX__
 extern DirectVideo		*g_video;

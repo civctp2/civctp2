@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 #include "ldl_attr.hpp"
-#include "ldl_data.hpp"
-#include "ldl_memmap.h"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_memmap.h"
 
-#include "ldlif.h"
+#include "ui/ldl/ldlif.h"
 
 ldl::ldl(const char *fname, const char *outputDir, BOOL bUseInternalMemmap )
 {

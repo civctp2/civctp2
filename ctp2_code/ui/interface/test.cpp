@@ -1,22 +1,22 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_window.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "message.h"
-#include "MessageData.h"
-#include "MessagePool.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/gameobj/MessagePool.h"
 
-#include "messageiconwindow.h"
-#include "messagewindow.h"
-#include "messagewin.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messagewin.h"
 
-#include "test.h"
+#include "ui/interface/test.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
 extern C3UI			*g_c3ui;
 extern	MessagePool					*g_theMessagePool;

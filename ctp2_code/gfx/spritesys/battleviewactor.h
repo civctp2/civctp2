@@ -57,14 +57,14 @@ class BattleViewActor;
 //
 //----------------------------------------------------------------------------
 
-#include "Actor.h"            // Actor
-#include "Anim.h"             // Anim
-#include "ctp2_inttypes.h"    // sint32, uint32
-#include "pixelutils.h"
-#include "Queue.h"            // Queue
-#include "Unit.h"
-#include "UnitSpriteGroup.h"  // UnitSpriteGroup
-#include "World.h"            // MapPoint
+#include "gfx/spritesys/Actor.h"            // Actor
+#include "gfx/spritesys/Anim.h"             // Anim
+#include "os/include/ctp2_inttypes.h"    // sint32, uint32
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/Queue.h"            // Queue
+#include "gs/gameobj/Unit.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"  // UnitSpriteGroup
+#include "gs/world/World.h"            // MapPoint
 
 class Action;
 class aui_Surface;

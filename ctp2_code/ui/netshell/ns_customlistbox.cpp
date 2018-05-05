@@ -31,22 +31,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_customlistbox.h"
-#include "ns_civlistbox.h"
-#include "allinonewindow.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_customlistbox.h"
+#include "ui/netshell/ns_civlistbox.h"
+#include "ui/netshell/allinonewindow.h"
 
-#include "c3_button.h"
-#include "aui_stringtable.h"
-#include "aui_bitmapfont.h"
-#include "ns_gplayer.h"
-#include "ns_aiplayer.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/netshell/ns_gplayer.h"
+#include "ui/netshell/ns_aiplayer.h"
 
-#include "ns_tribes.h"
-#include "ns_spinner.h"
-#include "ns_string.h"
+#include "ui/netshell/ns_tribes.h"
+#include "ui/netshell/ns_spinner.h"
+#include "ui/netshell/ns_string.h"
 
 sint32 ns_TransportListBox::m_version = 102;
 

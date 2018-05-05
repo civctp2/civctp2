@@ -31,7 +31,7 @@
 #ifndef __GEOMETRIC_H__
 #define __GEOMETRIC_H__ 1
 
-#include "IMapGen.h"
+#include "mapgen/IMapGen.h"
 
 class Geometric : public IMapGenerator
 {

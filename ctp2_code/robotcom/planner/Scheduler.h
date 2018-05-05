@@ -2,7 +2,7 @@
 #define __Scheduler_h__
 
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
 #define PLANS_IN_RED_BLACK_TREE
 

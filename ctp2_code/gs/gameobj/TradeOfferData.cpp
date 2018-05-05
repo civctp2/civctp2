@@ -28,16 +28,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TradeOfferData.h"
-#include "civarchive.h"
-#include "player.h"
-#include "Gold.h"
-#include "network.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TradeOfferData.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Gold.h"
+#include "net/general/network.h"
+#include "net/general/net_action.h"
+#include "net/general/net_info.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
 
 extern Player **g_player;
 

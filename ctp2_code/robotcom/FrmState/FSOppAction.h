@@ -3,7 +3,7 @@
 #ifndef __FRAME_OPPORTUNITY_ACTIONS_H__
 #define __FRAME_OPPORTUNITY_ACTIONS_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 FRAMESTATE(FS_Opportunity_Actions);
 

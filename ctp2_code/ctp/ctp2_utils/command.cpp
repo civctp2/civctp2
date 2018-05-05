@@ -1,4 +1,4 @@
-#include "command.h"
+#include "ctp/ctp2_utils/command.h"
 
 CommandLineParser::CommandLineParser()
 {

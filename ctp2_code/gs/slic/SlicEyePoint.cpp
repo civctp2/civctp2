@@ -25,19 +25,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicEyePoint.h"
-#include "civarchive.h"
-#include "colorset.h"
-#include "radarmap.h"
-#include "message.h"
-#include "tiledmap.h"
-#include "SelItem.h"
-#include "UnitPool.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "director.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicEyePoint.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/gameobj/message.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "gfx/spritesys/director.h"
 
 extern RadarMap *g_radarMap;
 extern TiledMap	*g_tiledMap;

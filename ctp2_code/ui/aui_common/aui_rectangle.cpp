@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "aui_rectangle.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_rectangle.h"
 
 
 

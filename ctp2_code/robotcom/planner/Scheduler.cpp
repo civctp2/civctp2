@@ -1,45 +1,45 @@
-#include "c3.h"
-#include "globals.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 #include "civarchive.h"
 #include <Limits>
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
 #include "aimain.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "InstBidList.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Alloc/InstBidList.h"
 
 #include "common.h"
 
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
+#include "robotcom/planner/sorted_array.h"
 #include "list_array.h"
 
 #include "pool.h"
-#include "pointer_pool.h"
+#include "robotcom/backdoor/pointer_pool.h"
 
-#include "Red_Black_Tree.h"
+#include "robotcom/planner/Red_Black_Tree.h"
 
-#include "unitflow.h"
-#include "aip.h"
-#include "squad.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/aip.h"
+#include "robotcom/planner/squad.h"
 
-#include "goal.h"
-#include "GlSettl.h"
+#include "robotcom/planner/goal.h"
+#include "robotcom/goals/GlSettl.h"
 
 #include "Scheduler.h"
-#include "planner.h"
+#include "robotcom/planner/planner.h"
 
-#include "ailog.h"
-#include "Wallclock.h"
+#include "robotcom/planner/ailog.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
 #define LOG_SCHEDULER
 

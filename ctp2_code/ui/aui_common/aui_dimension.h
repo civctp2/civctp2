@@ -1,7 +1,7 @@
 #ifndef __AUI_DIMENSION_H__
 #define __AUI_DIMENSION_H__
 
-#include "aui_base.h"
+#include "ui/aui_common/aui_base.h"
 
 class aui_Region;
 

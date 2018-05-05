@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_hypertextbase.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_hypertextbase.h"
 
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "aui_surface.h"
-#include "aui_bitmapfont.h"
-#include "aui_static.h"
-#include "ldl_data.hpp"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/ldl/ldl_data.hpp"
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,

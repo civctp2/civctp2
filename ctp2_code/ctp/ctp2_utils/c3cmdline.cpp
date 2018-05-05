@@ -39,97 +39,97 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 #ifdef _PLAYTEST
-#include "c3cmdline.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
 
-#include "CivilisationRecord.h"
-#include "ConstRecord.h"
-#include "c3ui.h"
-#include "debugmemory.h"
-#include "log.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/newdb/ConstRecord.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "ctp/debugtools/log.h"
 
-#include "player.h"
-#include "Strengths.h"
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "background.h"
-#include "statuswindow.h"
-#include "civ3_main.h"
-#include "DataCheck.h"
-#include "MapPoint.h"
-#include "TradePool.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "World.h"
-#include "TerrImprove.h"
-#include "Readiness.h"
-#include "gamefile.h"
-#include "TradeOffer.h"
-#include "Cell.h"
-#include "MaterialPool.h"
-#include "Advances.h"
-#include "AdvanceRecord.h"
-#include "StrDB.h"
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "director.h"
-#include "maputils.h"
-#include "Regard.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Strengths.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/background.h"
+#include "ui/aui_ctp2/statuswindow.h"
+#include "ctp/civ3_main.h"
+#include "gs/utility/DataCheck.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/Readiness.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/gameobj/TradeOffer.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/gameobj/Regard.h"
 
-#include "profileDB.h"
-#include "Order.h"
+#include "gs/database/profileDB.h"
+#include "gs/gameobj/Order.h"
 
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "statswindow.h"
-#include "controlpanelwindow.h"
-#include "chatbox.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "ui/interface/statswindow.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "ui/interface/chatbox.h"
 
-#include "Score.h"
-#include "Happy.h"
+#include "gs/gameobj/Score.h"
+#include "gs/gameobj/Happy.h"
 
-#include "debugwindow.h"
+#include "ui/interface/debugwindow.h"
 
-#include "SlicSymbol.h"
-#include "SlicNamedSymbol.h"
-#include "sliccmd.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/sliccmd.h"
 /** \todo Unique header names */
 #ifndef WIN32
 #include "ysc.tab.h"
 #else
-#include "sc.tab.h"
+#include "gs/slic/sc.tab.h"
 #endif
 
-#include "watchlist.h"
+#include "ui/slic_debug/watchlist.h"
 
-#include "UnitRecord.h"
-#include "DBLexer.h"
-#include "TerrainRecord.h"
-#include "ResourceRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/DBLexer.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/ResourceRecord.h"
 
-#include "GoalRecord.h"
-#include "UnitBuildListRecord.h"
-#include "WonderBuildListRecord.h"
-#include "BuildingBuildListRecord.h"
-#include "ImprovementListRecord.h"
-#include "StrategyRecord.h"
-#include "BuildListSequenceRecord.h"
-#include "DiplomacyRecord.h"
-#include "AdvanceListRecord.h"
-#include "PersonalityRecord.h"
+#include "gs/newdb/GoalRecord.h"
+#include "gs/newdb/UnitBuildListRecord.h"
+#include "gs/newdb/WonderBuildListRecord.h"
+#include "gs/newdb/BuildingBuildListRecord.h"
+#include "gs/newdb/ImprovementListRecord.h"
+#include "gs/newdb/StrategyRecord.h"
+#include "gs/newdb/BuildListSequenceRecord.h"
+#include "gs/newdb/DiplomacyRecord.h"
+#include "gs/newdb/AdvanceListRecord.h"
+#include "gs/newdb/PersonalityRecord.h"
 
-#include "wonderutil.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "Diplomat.h"
-#include "AgreementMatrix.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/diplomacy/AgreementMatrix.h"
 
-#include "Globals.h"
-#include "cellunitlist.h"
-#include "ctpaidebug.h"
+#include "gs/utility/Globals.h"
+#include "gs/world/cellunitlist.h"
+#include "ai/ctpaidebug.h"
 
-#include "gfx_options.h"
+#include "gfx/gfx_utils/gfx_options.h"
 
 extern DebugWindow *g_debugWindow;
 
@@ -164,39 +164,39 @@ extern C3UI                 *g_c3ui;
 extern sint32               g_check_mem;
 extern sint32               g_robotMessages;
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "primitives.h"
-#include "tiledmap.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "SelItem.h"
-#include "network.h"
-#include "net_chat.h"
-#include "net_cheat.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "net/general/network.h"
+#include "net/general/net_chat.h"
+#include "net/general/net_cheat.h"
 
-#include "Readiness.h"
-#include "Agreement.h"
-#include "DiplomaticRequestData.h"
-#include "DiplomaticRequest.h"
-#include "Actor.h"
-#include "UnitActor.h"
-#include "SpriteState.h"
-#include "SpriteFile.h"
+#include "gs/gameobj/Readiness.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/SpriteFile.h"
 
-#include "gameinit.h"
-#include "AICause.h"
-#include "TurnCnt.h"
+#include "gs/utility/gameinit.h"
+#include "gs/outcom/AICause.h"
+#include "gs/utility/TurnCnt.h"
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 
-#include "AttractWindow.h"
-#include "screenutils.h"
+#include "ui/interface/AttractWindow.h"
+#include "ui/interface/screenutils.h"
 
-#include "UnitPool.h"
+#include "gs/gameobj/UnitPool.h"
 
-#include "MapFile.h"
+#include "gs/utility/MapFile.h"
 
-#include "GameEventManager.h"
+#include "gs/events/GameEventManager.h"
 
 extern TurnCount *g_turn;
 
@@ -239,21 +239,21 @@ extern BOOL           g_ai_revolt = TRUE;
 
 extern void WhackScreen();
 
-#include "Diplomacy_Log.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 extern Director *g_director;
 
 extern BOOL	g_drawArmyClumps;
 
-#include "sciencewin.h"
-#include "greatlibrary.h"
-#include "infowin.h"
-#include "optionswindow.h"
-#include "km_screen.h"
-#include "NationalManagementDialog.h"
-#include "ScienceManagementDialog.h"
+#include "ui/interface/sciencewin.h"
+#include "ui/interface/greatlibrary.h"
+#include "ui/interface/infowin.h"
+#include "ui/interface/optionswindow.h"
+#include "ui/interface/km_screen.h"
+#include "ui/interface/NationalManagementDialog.h"
+#include "ui/interface/ScienceManagementDialog.h"
 
 CommandLine g_commandLine;
 
@@ -1602,7 +1602,7 @@ void SetGoodsCommand::Execute(sint32 argc, char **argv)
 
 #ifdef DUMP_ASTAR
 
-#include "debugcallstack.h"
+#include "ctp/debugtools/debugcallstack.h"
 void DumpAstarCommand::Execute(sint32 argc, char **argv)
 {
    	extern cDebugCallStackSet g_astarCallStackSet;
@@ -1655,8 +1655,8 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 	CtpAiDebug::SetDebugArmies(unit_list);
 }
 
-#include "GoodSpriteGroup.h"
-#include "UnitSpriteGroup.h"
+#include "gfx/spritesys/GoodSpriteGroup.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"
 
 void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 {

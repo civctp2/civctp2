@@ -27,14 +27,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Diffcly.h"
-#include "DifficultyRecord.h"
-#include "civarchive.h"
-#include "mapanalysis.h"
-#include "TurnYearStatus.h"
-#include "StrDB.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ui/interface/TurnYearStatus.h"
+#include "gs/database/StrDB.h"
 
 Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 {

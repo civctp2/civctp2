@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_static.h"
+#include "ui/aui_common/aui_static.h"
 
 
 aui_Static::aui_Static

@@ -27,14 +27,14 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_improvements.h"
+#include "ui/netshell/ns_improvements.h"
 
 #include <algorithm>
-#include "aui_stringtable.h"
-#include "BuildingRecord.h"     // g_theBuildingDB
-#include "StrDB.h"              // g_theStringDB
+#include "ui/aui_common/aui_stringtable.h"
+#include "gs/newdb/BuildingRecord.h"     // g_theBuildingDB
+#include "gs/database/StrDB.h"              // g_theStringDB
 
 ns_Improvements * g_nsImprovements = NULL;
 

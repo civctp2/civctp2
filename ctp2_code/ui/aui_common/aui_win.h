@@ -31,7 +31,7 @@
 #ifndef __AUI_WIN_H__
 #define __AUI_WIN_H__
 
-#include "aui_control.h"
+#include "ui/aui_common/aui_control.h"
 
 
 class aui_Win : public aui_Control

@@ -21,9 +21,9 @@ class ScreenResListItem;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "auitypes.h"           // AUI_ERRCODE
-#include "c3_listitem.h"        // c3_ListItem
-#include "ctp2_inttypes.h"      // sint32, uint32
+#include "ui/aui_common/auitypes.h"           // AUI_ERRCODE
+#include "ui/aui_ctp2/c3_listitem.h"        // c3_ListItem
+#include "os/include/ctp2_inttypes.h"      // sint32, uint32
 
 class   aui_Control;
 struct  CTPDisplayMode;

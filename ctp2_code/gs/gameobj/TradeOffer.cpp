@@ -1,15 +1,15 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "TradeOffer.h"
-#include "civarchive.h"
-#include "TradeOfferPool.h"
-#include "player.h"
-#include "net_info.h"
-#include "network.h"
+#include "gs/gameobj/TradeOffer.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/Player.h"
+#include "net/general/net_info.h"
+#include "net/general/network.h"
 
-#include "message.h"
-#include "MessageData.h"
-#include "trademanager.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessageData.h"
+#include "ui/interface/trademanager.h"
 
 extern Player **g_player;
 

@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "TilesControlPanel.h"
+#include "ui/interface/TilesControlPanel.h"
 
 
 

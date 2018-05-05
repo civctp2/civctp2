@@ -7,8 +7,8 @@
 
 class MessageList;
 
-#include "player.h"         // PLAYER_INDEX
-#include "tech_wllist.h"    // tech_WLList
+#include "gs/gameobj/Player.h"         // PLAYER_INDEX
+#include "ui/aui_common/tech_wllist.h"    // tech_WLList
 
 class Message;
 class MessageIconWindow;

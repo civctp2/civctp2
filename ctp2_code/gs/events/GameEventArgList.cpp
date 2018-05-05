@@ -28,19 +28,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventArgList.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventArgList.h"
 
 #include <algorithm>
-#include "Army.h"
-#include "civarchive.h"
-#include "GameEventArgument.h"
-#include "pointerlist.h"
-#include "MapPoint.h"
-#include "TerrImprove.h"
-#include "TradeRoute.h"
-#include "Unit.h"
-#include "GameEventDescription.h"
+#include "gs/gameobj/Army.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/events/GameEventArgument.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/events/GameEventDescription.h"
 
 GameEventArgList::GameEventArgList(va_list *vl, GAME_EVENT eventType)
 {

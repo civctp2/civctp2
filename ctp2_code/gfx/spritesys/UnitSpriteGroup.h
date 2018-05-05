@@ -9,7 +9,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include "windows.h"          // BOOL, POINT
+#include <windows.h>          // BOOL, POINT
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -37,10 +37,10 @@ enum UNITACTION
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Action.h"         // GAME_ACTION
-#include "ctp2_inttypes.h"  // sint32, uint16
-#include "pixeltypes.h"		// Pixel16
-#include "SpriteGroup.h"	// SpriteGroup, GROUPTYPE
+#include "gfx/spritesys/Action.h"         // GAME_ACTION
+#include "os/include/ctp2_inttypes.h"  // sint32, uint16
+#include "gfx/gfx_utils/pixeltypes.h"		// Pixel16
+#include "gfx/spritesys/SpriteGroup.h"	// SpriteGroup, GROUPTYPE
 
 class aui_Surface;
 

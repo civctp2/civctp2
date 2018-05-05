@@ -7,7 +7,7 @@
 
 class C3MemMap;
 
-#include "aui_memmap.h"
+#include "ui/aui_common/aui_memmap.h"
 
 class aui_FileFormat;
 

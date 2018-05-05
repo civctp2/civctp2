@@ -32,8 +32,8 @@
 #ifndef __AUI_LISTBOX_H__
 #define __AUI_LISTBOX_H__
 
-#include "aui_control.h"
-#include "aui_header.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_header.h"
 
 class aui_Item;
 class aui_Ranger;

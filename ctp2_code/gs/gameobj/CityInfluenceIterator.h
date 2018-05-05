@@ -52,8 +52,8 @@ class CityInfluenceIterator;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "MapPoint.h"	    // MapPoint, RadiusIterator
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "gs/world/MapPoint.h"	    // MapPoint, RadiusIterator
 
 //----------------------------------------------------------------------------
 // Declarations

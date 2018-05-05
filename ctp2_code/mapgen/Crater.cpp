@@ -29,17 +29,17 @@
 // - Removed c3.h include, it is unecessary. - Jul 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 
 #endif
 
-#include "Crater.h"
+#include "mapgen/Crater.h"
 #include <stdlib.h>
-#include "IC3Rand.h"
+#include "gs/outcom/IC3Rand.h"
 
 #if defined(USE_COM_REPLACEMENT)
 extern "C" IMapGenerator *CoCreateMapGenerator()

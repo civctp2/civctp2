@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ldl_file.hpp"
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
 #include "ldl_attr.hpp"
 
 int ldl_datablock::GetInt( const char *szName )

@@ -30,12 +30,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // Precompiled header with general items
-#include "GameEventHook.h"      // Own declarations (consistency check)
+#include "ctp/c3.h"                 // Precompiled header with general items
+#include "gs/events/GameEventHook.h"      // Own declarations (consistency check)
 
 #include <algorithm>            // std::for_each
 #include <functional>           // std::unary_function
-#include "GameEventManager.h"   // EVENTLOG
+#include "gs/events/GameEventManager.h"   // EVENTLOG
 
 namespace
 {

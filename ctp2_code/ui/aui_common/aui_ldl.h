@@ -31,8 +31,8 @@
 #ifndef __AUI_LDL_H__
 #define __AUI_LDL_H__
 
-#include "aui_base.h"
-#include "aui_control.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_control.h"
 
 class aui_Region;
 class aui_Dimension;

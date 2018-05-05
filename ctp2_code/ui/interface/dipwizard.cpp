@@ -35,57 +35,57 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "dipwizard.h"
+#include "ctp/c3.h"
+#include "ui/interface/dipwizard.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "ctp2_Window.h"
-#include "ctp2_Menu.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Tab.h"
-#include "ctp2_TabButton.h"
-#include "ctp2_TabGroup.h"
-#include "ctp2_spinner.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabButton.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_spinner.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "diplomacywindow.h"
-#include "diplomacyutil.h"
-#include "Diplomat.h"
+#include "ui/interface/diplomacywindow.h"
+#include "ai/diplomacy/diplomacyutil.h"
+#include "ai/diplomacy/Diplomat.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "StrDB.h"
-#include "DiplomacyProposalRecord.h"
-#include "DiplomacyThreatRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/DiplomacyProposalRecord.h"
+#include "gs/newdb/DiplomacyThreatRecord.h"
 
-#include "AdvanceRecord.h"
-#include "Unit.h"
-#include "SlicObject.h"
-#include "stringutils.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/utility/stringutils.h"
 
-#include "player.h"
-#include "Civilisation.h"
-#include "UnitDynArr.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/utility/UnitDynArr.h"
 
-#include "GameEventUser.h"
-#include "Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
 
-#include "DiplomacyDetails.h"
-#include "AgreementMatrix.h"
-#include "Gold.h"
+#include "ui/interface/DiplomacyDetails.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/Gold.h"
 
-#include "network.h"
-#include "UnitData.h"
+#include "net/general/network.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "primitives.h"
-#include "colorset.h"                   // g_colorSet
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
 
 extern C3UI       *g_c3ui;
 

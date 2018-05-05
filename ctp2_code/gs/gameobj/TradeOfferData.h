@@ -34,10 +34,10 @@
 #ifndef _TRADEOFFERDATA_H_
 #define _TRADEOFFERDATA_H_
 
-#include "Unit.h"
-#include "GameObj.h"
-#include "ID.h"
-#include "TradeRouteData.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/TradeRouteData.h"
 
 class CivArchive;
 

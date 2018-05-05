@@ -54,81 +54,81 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "tiledmap.h"
+#include "ctp/c3.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "AICause.h"
+#include "gs/outcom/AICause.h"
 #include <algorithm>                    // std::fill
-#include "ArmyData.h"
-#include "aui.h"
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_Factory.h"
-#include "aui_dirtylist.h"
-#include "aui_stringtable.h"
-#include "background.h"
-#include "BaseTile.h"
-#include "c3errors.h"
-#include "c3_popupwindow.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "citydata.h"
-#include "CityInfluenceIterator.h"
-#include "CityRadius.h"
-#include "civarchive.h"
-#include "CivPaths.h"                   // g_civPaths
-#include "colorset.h"                   // g_colorSet
-#include "controlpanelwindow.h"         // g_controlPanel
-#include "ctp2_button.h"
-#include "ctp2_Window.h"
-#include "director.h"                   // g_director
-#include "EffectActor.h"
-#include "gamefile.h"
-#include "gfx_options.h"
-#include "GoodActor.h"
-#include "GoodyHuts.h"
-#include "grabitem.h"
-#include "MapPoint.h"
-#include "maputils.h"
-#include "MoveFlags.h"
-#include "network.h"
-#include "pixelutils.h"
-#include "player.h"                     // g_player
-#include "pointerlist.h"
-#include "primitives.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "radarmap.h"                   // g_radarMap
-#include "radarwindow.h"
-#include "ResourceRecord.h"
-#include "scenarioeditor.h"
-#include "screenmanager.h"
-#include "SelItem.h"                    // g_selected_item
-#include "SlicEngine.h"
-#include "Sprite.h"
-#include "spriteeditor.h"
-#include "StrDB.h"                      // g_theStringDB
-#include "TerrainImprovementRecord.h"
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "TerrImprove.h"
-#include "TerrImproveData.h"
-#include "TerrImprovePool.h"
-#include "tiffutils.h"
-#include "TileDrawRoad.h"
-#include "TileInfo.h"
-#include "tileset.h"
-#include "tileutils.h"
-#include "TradeRoute.h"
-#include "TradeRouteData.h"
-#include "TurnCnt.h"                    // g_turn
-#include "UnitActor.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "UnitSpriteGroup.h"
-#include "UnseenCell.h"
-#include "World.h"                      // g_theWorld
+#include "gs/gameobj/ArmyData.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_dirtylist.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/background.h"
+#include "gfx/tilesys/BaseTile.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "gs/gameobj/CityRadius.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/CivPaths.h"                   // g_civPaths
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/interface/controlpanelwindow.h"         // g_controlPanel
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "gfx/spritesys/director.h"                   // g_director
+#include "gfx/spritesys/EffectActor.h"
+#include "gs/fileio/gamefile.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "gfx/spritesys/GoodActor.h"
+#include "gs/gameobj/GoodyHuts.h"
+#include "ui/aui_ctp2/grabitem.h"
+#include "gs/world/MapPoint.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/utility/MoveFlags.h"
+#include "net/general/network.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "ui/aui_ctp2/radarmap.h"                   // g_radarMap
+#include "ui/interface/radarwindow.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "ui/interface/scenarioeditor.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gs/slic/SlicEngine.h"
+#include "gfx/spritesys/Sprite.h"
+#include "ui/interface/spriteeditor.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/tilesys/TileDrawRoad.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/TradeRouteData.h"
+#include "gs/utility/TurnCnt.h"                    // g_turn
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"
+#include "gs/world/UnseenCell.h"
+#include "gs/world/World.h"                      // g_theWorld
 
 extern C3UI             *g_c3ui;
 extern sint32           g_is565Format;

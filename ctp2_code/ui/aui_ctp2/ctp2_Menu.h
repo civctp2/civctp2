@@ -2,7 +2,7 @@
 #define CTP2_MENU_H__
 
 
-#include "ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
 
 class ctp2_Window;
 class ctp2_ListBox;

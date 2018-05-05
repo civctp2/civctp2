@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "c3types.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
 
-#include "ErrMsg.h"
+#include "gs/utility/ErrMsg.h"
 
 #ifdef LPRNT
 FILE *lprint_fout;

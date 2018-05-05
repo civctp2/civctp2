@@ -28,21 +28,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TurnYearStatus.h"
+#include "ctp/c3.h"
+#include "ui/interface/TurnYearStatus.h"
 
 #include <sstream>
-#include "aui_ldl.h"
-#include "ctp2_button.h"
-#include "newturncount.h"
-#include "StrDB.h"
-#include "ctp2_Static.h"
-#include "SelItem.h"
-#include "player.h"
-#include "primitives.h"
-#include "colorset.h"           // g_colorSet
-#include "gamefile.h"           // g_isScenario
-#include "CivPaths.h"           // g_civPaths
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "gs/utility/newturncount.h"
+#include "gs/database/StrDB.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "gs/fileio/gamefile.h"           // g_isScenario
+#include "gs/fileio/CivPaths.h"           // g_civPaths
 
 sTurnLengthOverride *TurnYearStatus::s_pTurnLengthOverride    = NULL;
 uint32               TurnYearStatus::s_turnLengthOverrideSize = 0;

@@ -6,7 +6,7 @@
 
 class ScoreTab;
 
-#include "Score.h"  // SCORE_CAT_MAX
+#include "gs/gameobj/Score.h"  // SCORE_CAT_MAX
 class aui_StringTable;
 class ctp2_ListBox;
 class ctp2_ListItem;

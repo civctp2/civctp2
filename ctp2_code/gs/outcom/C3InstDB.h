@@ -3,7 +3,7 @@
 #ifndef __C3InstDB_H__
 #define __C3InstDB_H__ 1
 
-#include "ic3InstDB.h"
+#include "gs/outcom/ic3InstDB.h"
 
 class Player;
 class CivArchive;

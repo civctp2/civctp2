@@ -38,7 +38,7 @@ class aui_Control;
 class DiplomacyProposalRecord;
 class SlicObject;
 
-#include "ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
 
 enum DIP_WIZ_STAGE {
 	DIP_WIZ_STAGE_NONE = -1,
@@ -67,7 +67,7 @@ enum DIP_WIZ_VIEW_TYPE {
 	DIP_WIZ_VIEW_TYPE_MAX
 };
 
-#include "diplomattypes.h"
+#include "ai/diplomacy/diplomattypes.h"
 
 class DipWizard
 {

@@ -32,7 +32,7 @@
 #ifndef __AVL_HEAP_H__
 #define  __AVL_HEAP_H__
 
-#include "astarpnt.h"
+#include "robot/pathing/astarpnt.h"
 
 #define AVLHEAP_SIZE ((4096)/sizeof(AstarPoint))
 

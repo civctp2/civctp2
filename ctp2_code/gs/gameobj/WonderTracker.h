@@ -37,7 +37,7 @@
 class CivArchive;
 class Unit;
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 class WonderTracker {
 private:

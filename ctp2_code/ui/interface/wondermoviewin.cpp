@@ -28,27 +28,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
-#include "aui_uniqueid.h"
-#include "aui_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
-#include "wondermoviewindow.h"
-#include "wondermoviewin.h"
+#include "ui/interface/wondermoviewindow.h"
+#include "ui/interface/wondermoviewin.h"
 
-#include "WonderRecord.h"
-#include "WonderMovieRecord.h"
-#include "StrDB.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/WonderMovieRecord.h"
+#include "gs/database/StrDB.h"
 
-#include "soundmanager.h"
+#include "sound/soundmanager.h"
 
-#include "director.h"
-#include "IconRecord.h"
-#include "greatlibrary.h"
-#include "SlicObject.h"
+#include "gfx/spritesys/director.h"
+#include "gs/newdb/IconRecord.h"
+#include "ui/interface/greatlibrary.h"
+#include "gs/slic/SlicObject.h"
 
 extern C3UI				*g_c3ui;
 extern SoundManager		*g_soundManager;

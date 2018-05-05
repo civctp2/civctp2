@@ -33,8 +33,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_ui.h"
-#include "aui_directx.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_directx/aui_directx.h"
 
 
 

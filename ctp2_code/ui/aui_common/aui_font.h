@@ -1,7 +1,7 @@
 #ifndef __AUI_FONT_H__
 #define __AUI_FONT_H__
 
-#include "aui_base.h"
+#include "ui/aui_common/aui_base.h"
 
 #define k_AUI_FONT_MAXFONTNAME	32
 

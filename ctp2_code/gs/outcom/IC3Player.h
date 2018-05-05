@@ -3,8 +3,8 @@
 #define __IC3PLAYER_H__
 
 #include <OBJBASE.H>
-#include "IMapPointData.h"
-#include "gstypes.h"
+#include "gs/outcom/IMapPointData.h"
+#include "gs/utility/gstypes.h"
 
 typedef sint32 PLAYER_INDEX;
 enum AGREEMENT_TYPE;

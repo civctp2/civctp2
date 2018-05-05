@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_window.h"
-#include "aui_surface.h"
-#include "aui_rectangle.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_rectangle.h"
 
-#include "aui_win.h"
+#include "ui/aui_common/aui_win.h"
 
 
 BOOL aui_Win::m_registered = FALSE;

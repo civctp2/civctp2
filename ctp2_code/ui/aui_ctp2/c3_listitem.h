@@ -8,8 +8,8 @@
 class c3_ListItem;
 class SingleListItem;
 
-#include "aui_item.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class c3_ListItem : public aui_Item, public PatternBase
 {

@@ -31,8 +31,8 @@
 #ifndef __AUI_DROPDOWN_H__
 #define __AUI_DROPDOWN_H__
 
-#include "aui_control.h"
-#include "aui_listbox.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_listbox.h"
 
 class aui_Surface;
 class aui_Button;

@@ -31,7 +31,7 @@
 #ifndef __AUI_RADIO_H__
 #define __AUI_RADIO_H__
 
-#include "aui_switch.h"
+#include "ui/aui_common/aui_switch.h"
 
 
 class aui_Radio : public aui_Switch

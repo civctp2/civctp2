@@ -32,21 +32,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Events.h"
-#include "TurnCntEvent.h"
-#include "TurnCnt.h"
-#include "GameEventUser.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Events.h"
+#include "gs/utility/TurnCntEvent.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/events/GameEventUser.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
-#include "profileDB.h"
-#include "director.h"
-#include "network.h"
-#include "ctpai.h"
-#include "newturncount.h"
+#include "gs/database/profileDB.h"
+#include "gfx/spritesys/director.h"
+#include "net/general/network.h"
+#include "ai/ctpai.h"
+#include "gs/utility/newturncount.h"
 
-#include "Diplomat.h"
+#include "ai/diplomacy/Diplomat.h"
 
 STDEHANDLER(BeginTurnEvent)
 {

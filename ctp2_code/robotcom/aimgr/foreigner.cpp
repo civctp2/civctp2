@@ -1,28 +1,28 @@
-#include "c3.h"
-#include "IRobot.h"
+#include "ctp/c3.h"
+#include "robotcom/InCom/IRobot.h"
 #include "civarchive.h"
-#include "Agreement.h"
+#include "gs/gameobj/Agreement.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 #include "Foreigner.h"
-#include "AiMap.h"
-#include "ic3world.h"
+#include "robotcom/Top/AiMap.h"
+#include "user-robotcom/outcom/ic3world.h"
 
-#include "ForeignAgent.h"
-#include "ForeignCity.h"
-#include "MapPoint.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ForeignAgent.h"
+#include "robotcom/Agent/ForeignCity.h"
+#include "gs/world/MapPoint.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
-#include "ic3player.h"
-#include "diplomatictypes.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/shared/diplomatictypes.h"
 
-#include "airndcnt.h"
-#include "Cont.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "robotcom/Top/Cont.h"
 
-#include "C3Player.h"
+#include "gs/outcom/C3Player.h"
 
 extern double fz_com_city_scale;
 extern double fz_com_city_decay;

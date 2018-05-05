@@ -31,8 +31,8 @@ class aui_Movie;
 class aui_MovieFormat;
 class aui_AviMovieFormat;
 
-#include "aui_base.h"
-#include "aui_memmap.h" // aui_FileFormat
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_memmap.h" // aui_FileFormat
 
 class aui_Surface;
 

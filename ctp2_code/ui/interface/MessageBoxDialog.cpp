@@ -1,20 +1,20 @@
-#include "c3.h"
-#include "aui_action.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "MessageBoxDialog.h"
+#include "ui/interface/MessageBoxDialog.h"
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "ctp2_textfield.h"
-#include "StrDB.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_textfield.h"
+#include "gs/database/StrDB.h"
 
-#include "CriticalMessagesPrefs.h"
+#include "gs/gameobj/CriticalMessagesPrefs.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
 
 extern C3UI *g_c3ui;
 

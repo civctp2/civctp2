@@ -49,32 +49,32 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3ui.h"
-#include "aui.h"
-#include "pattern.h"
-#include "primitives.h"
-#include "InfoBar.h"
-#include "c3cmdline.h"
-#include "c3windows.h"
-#include "aui_uniqueid.h"
-#include "Cell.h"
-#include "World.h"
-#include "StrDB.h"
-#include "TerrainRecord.h"
-#include "Unit.h"
-#include "SelItem.h"
-#include "player.h"
-#include "Civilisation.h"
-#include "tiledmap.h"
-#include "TerrainImprovementRecord.h"
-#include "citydata.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/InfoBar.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/citydata.h"
 
-#include "ResourceRecord.h"     // Access g_theResourceDB for goods info, PFT 05 Mar 05
-#include "UnitData.h"
-#include "UnseenCell.h"         // Unseen cell info is needed
-#include "gfx_options.h"        // g_graphicsOptions
-#include "profileDB.h"          // g_theProfileDB
+#include "gs/newdb/ResourceRecord.h"     // Access g_theResourceDB for goods info, PFT 05 Mar 05
+#include "gs/gameobj/UnitData.h"
+#include "gs/world/UnseenCell.h"         // Unseen cell info is needed
+#include "gfx/gfx_utils/gfx_options.h"        // g_graphicsOptions
+#include "gs/database/profileDB.h"          // g_theProfileDB
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;

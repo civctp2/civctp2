@@ -4,8 +4,8 @@
 #ifndef _TERRIMPROVE_H_
 #define _TERRIMPROVE_H_
 
-#include "ID.h"
-#include "TerrImproveData.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/TerrImproveData.h"
 
 template <class T> class DynamicArray;
 

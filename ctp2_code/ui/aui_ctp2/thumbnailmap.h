@@ -50,12 +50,12 @@ enum    C3_THUMBNAIL_ACTION
 
 #define k_THUMBNAIL_CITY_BLINK_RATE		1000
 
-#include "patternbase.h"
-#include "aui_control.h"
-#include "colorset.h"				// COLOR
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "gfx/gfx_utils/colorset.h"				// COLOR
 
-#include "Unit.h"
-#include "dynarr.h"
+#include "gs/gameobj/Unit.h"
+#include "robot/aibackdoor/dynarr.h"
 class CivArchive;
 class aui_Surface;
 class MapPoint;

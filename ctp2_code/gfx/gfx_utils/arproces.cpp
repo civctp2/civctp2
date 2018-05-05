@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "arproces.h"
+#include "ctp/c3.h"
+#include "gfx/gfx_utils/arproces.h"
 
 #include <algorithm>        // std::min, std::max
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
 #define MINSAMPLEVAL		0
 #define MAXSAMPLEVAL		255

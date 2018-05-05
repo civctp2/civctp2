@@ -1,7 +1,7 @@
 #ifndef __BATTLEEVENT_H__
 #define __BATTLEEVENT_H__
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 
 

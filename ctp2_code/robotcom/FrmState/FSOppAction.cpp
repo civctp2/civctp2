@@ -1,11 +1,11 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 #include "aimain.h"
 
-#include "FSOppAction.h"
-#include "Oa.h"
+#include "robotcom/FrmState/FSOppAction.h"
+#include "robotcom/goals/Oa.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

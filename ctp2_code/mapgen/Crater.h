@@ -31,7 +31,7 @@
 #ifndef __CRATER_H__
 #define __CRATER_H__ 1
 
-#include "IMapGen.h"
+#include "mapgen/IMapGen.h"
 
 class Crater : public IMapGenerator
 {

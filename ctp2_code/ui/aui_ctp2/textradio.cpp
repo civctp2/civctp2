@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "pattern.h"
-#include "aui_window.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
 
-#include "textradio.h"
+#include "ui/aui_ctp2/textradio.h"
 
 
 

@@ -12,7 +12,7 @@
 #ifndef __GOAL_RUSTLE_H__
 #define __GOAL_RUSTLE_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

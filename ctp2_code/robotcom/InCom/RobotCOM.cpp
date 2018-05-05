@@ -1,28 +1,28 @@
 #define INITGUID
-#include "c3.h"
-#include "IRobot.h"
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3world.h"
-#include "RobotCOM.h"
-#include "ic3GameState.h"
+#include "ctp/c3.h"
+#include "robotcom/InCom/IRobot.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "robotcom/InCom/RobotCOM.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 #include "civarchive.h"
-#include "ic3DipReq.h"
+#include "user-robotcom/outcom/ic3DipReq.h"
 #include "IC3Trade.h"
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
-#include "aip.h"
-#include "planner.h"
+#include "robotcom/planner/sorted_array.h"
+#include "robotcom/planner/aip.h"
+#include "robotcom/planner/planner.h"
 #include "ic3endgamedb.h"
 
-#include "debugmemory.h"
-#include "debugcallstack.h"
-#include "log.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "ctp/debugtools/debugcallstack.h"
+#include "ctp/debugtools/log.h"
 
-#include "fliif.h"
+#include "robotcom/fuzzy/fliif.h"
 
 
 
@@ -40,24 +40,24 @@ extern LONG _cdecl c3ai_CivExceptionHandler (LPEXCEPTION_POINTERS exception_poin
 	#define C3EXCEPT	;
 #endif
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 
-#include "geom2d.h"
+#include "robotcom/Top/geom2d.h"
 Memory_Manager* g_memory_Point2d;
 
-#include "CityEdge.h"
+#include "robotcom/Top/CityEdge.h"
 Memory_Manager* g_memory_CityEdge;
 
-#include "CityTree.h"
+#include "robotcom/Top/CityTree.h"
 Memory_Manager* g_memory_CityTree;
 
-#include "CityVertex.h"
+#include "robotcom/Top/CityVertex.h"
 Memory_Manager* g_memory_CityVertex;
 
-#include "Delaunay.h"
+#include "robotcom/Top/Delaunay.h"
 Memory_Manager* g_memory_QuadEdge;
 
-#include "aicell.h"
+#include "robotcom/Top/aicell.h"
 Memory_Manager* g_memory_AiCellPtr;
 
 STDAPI CoCreateInstanceRobotCom(IUnknown *&obj)

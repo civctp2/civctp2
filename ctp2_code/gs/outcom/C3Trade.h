@@ -3,7 +3,7 @@
 #define __C3TRADE_H__
 
 #include "IC3Trade.h"
-#include "TradeOffer.h"
+#include "gs/gameobj/TradeOffer.h"
 
 class C3TradeOffer : public IC3TradeOffer
 {

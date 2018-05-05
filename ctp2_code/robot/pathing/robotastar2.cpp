@@ -31,28 +31,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "robotastar2.h"
+#include "ctp/c3.h"
+#include "robot/pathing/robotastar2.h"
 
-#include "Globals.h"
+#include "gs/utility/Globals.h"
 
-#include "dynarr.h"
-#include "Path.h"
-#include "UnitAstar.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/pathing/Path.h"
+#include "robot/pathing/UnitAstar.h"
 
-#include "World.h"          // g_theWorld
-#include "dynarr.h"
-#include "player.h"
-#include "RandGen.h"
-#include "UnitRec.h"
-#include "Unit.h"
-#include "civarchive.h"
-#include "UnitRecord.h"
-#include "ArmyData.h"
-#include "Cell.h"
-#include "Diplomat.h"
-#include "profileDB.h"      // g_theProfileDB
-#include "ctpaidebug.h"
+#include "gs/world/World.h"          // g_theWorld
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/RandGen.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/gameobj/Unit.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/world/Cell.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "gs/database/profileDB.h"      // g_theProfileDB
+#include "ai/ctpaidebug.h"
 
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
 

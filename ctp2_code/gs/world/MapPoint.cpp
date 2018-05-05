@@ -32,16 +32,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // pre-compiled header
-#include "MapPoint.h"           // own declarations: consistency check
+#include "ctp/c3.h"                 // pre-compiled header
+#include "gs/world/MapPoint.h"           // own declarations: consistency check
 
 #include <algorithm>
 
-#include "civarchive.h"
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
-#include "directions.h"
-#include "c3math.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/utility/directions.h"
+#include "ctp/ctp2_utils/c3math.h"
 
 MapPoint g_mp_size;
 

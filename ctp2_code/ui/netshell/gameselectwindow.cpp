@@ -37,42 +37,42 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_screen.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_screen.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3_button.h"
-#include "c3_static.h"
-#include "loadsavewindow.h"
-
-
-#include "netshell.h"
-#include "ns_customlistbox.h"
-#include "ns_civlistbox.h"
-#include "passwordscreen.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/interface/loadsavewindow.h"
 
 
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_customlistbox.h"
+#include "ui/netshell/ns_civlistbox.h"
+#include "ui/netshell/passwordscreen.h"
 
 
-#include "gameselectwindow.h"
-#include "allinonewindow.h"
-#include "playerselectwindow.h"
-#include "passwordscreen.h"
 
-#include "netshell_game.h"
 
-#include "scenariowindow.h"
+#include "ui/netshell/gameselectwindow.h"
+#include "ui/netshell/allinonewindow.h"
+#include "ui/netshell/playerselectwindow.h"
+#include "ui/netshell/passwordscreen.h"
 
-#include "spnewgamewindow.h"
+#include "ui/netshell/netshell_game.h"
+
+#include "ui/interface/scenariowindow.h"
+
+#include "ui/interface/spnewgamewindow.h"
 
 extern LoadSaveWindow *g_loadsaveWindow;
 
-#include "profileDB.h"
-#include "AgeRecord.h"
+#include "gs/database/profileDB.h"
+#include "gs/newdb/AgeRecord.h"
 
 GameSelectWindow *g_gameSelectWindow = NULL;
 StartSelectingWindow *g_startSelectingWindow = NULL;

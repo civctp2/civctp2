@@ -1,7 +1,7 @@
 #ifndef EVENT_TRACKER_H
 #define EVENT_TRACKER_H
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 void trackerevent_Initialize();
 void trackerevent_Cleanup();

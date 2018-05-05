@@ -36,9 +36,9 @@
 #ifndef __C3_FANCYWINDOW_H__
 #define __C3_FANCYWINDOW_H__
 
-#include "aui_ldl.h"
-#include "c3window.h"
-#include "c3_button.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_button.h"
 
 class c3_Static;
 

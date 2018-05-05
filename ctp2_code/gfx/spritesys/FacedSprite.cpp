@@ -29,21 +29,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "FacedSprite.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/FacedSprite.h"
 
-#include "tiffutils.h"
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "screenmanager.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "gfx/spritesys/screenmanager.h"
 
-#include "aui.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "Sprite.h"
-#include "tiledmap.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern ScreenManager *g_screenManager;
 extern TiledMap		*g_tiledMap;

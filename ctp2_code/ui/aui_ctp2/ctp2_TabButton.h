@@ -4,7 +4,7 @@
 #ifndef CTP2_TAB_BUTTON_H__
 #define CTP2_TAB_BUTTON_H__
 
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
 class ctp2_TabGroup;
 

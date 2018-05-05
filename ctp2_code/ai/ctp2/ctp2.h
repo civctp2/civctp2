@@ -21,7 +21,7 @@
 #include <stdarg.h>
 #include <time.h>
 
-#include "ctp_types.h"
-#include "ctp_debug.h"
+#include "ai/ctp2/ctp_types.h"
+#include "ai/ctp2/ctp_debug.h"
 
 #endif

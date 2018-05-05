@@ -37,8 +37,8 @@
 
 class CTPRecord;
 
-#include "ctp2_inttypes.h"      // sint32
-#include "dbtypes.h"            // StringId
+#include "os/include/ctp2_inttypes.h"      // sint32
+#include "gs/database/dbtypes.h"            // StringId
 class DBLexer;
 
 class CTPRecord

@@ -5,14 +5,14 @@
 #pragma once
 #endif
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #if defined(__AUI_USE_SDL__)
 
 #include <queue>
 
-#include "aui_keyboard.h"
-#include "aui_sdlinput.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_sdl/aui_sdlinput.h"
 
 // See aui_sdlkeyboard.cpp to understand this queue/mutex
 extern std::queue<SDL_Event> g_secondaryKeyboardEventQueue;

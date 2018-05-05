@@ -31,44 +31,44 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "gs/world/World.h"
 
-#include "Globals.h"
-#include "XY_Coordinates.h"
-#include "Cell.h"
-#include "StrDB.h"
-#include "TerrainRecord.h"
-#include "GlobalWarmingRecord.h"
-#include "UVDB.h"
-#include "RandGen.h"
-#include "citydata.h"
-#include "ConstRecord.h"
-#include "network.h"
-#include "GoodyHuts.h"
-#include "tiledmap.h"
-#include "player.h"
-#include "TerrImprovePool.h"
-#include "UnitData.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/Cell.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/GlobalWarmingRecord.h"
+#include "gs/database/UVDB.h"
+#include "gs/utility/RandGen.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/newdb/ConstRecord.h"
+#include "net/general/network.h"
+#include "gs/gameobj/GoodyHuts.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "net_info.h"
-#include "AICause.h"
-#include "installationtree.h"
-#include "radarmap.h"
-#include "cellunitlist.h"
+#include "net/general/net_info.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/installationtree.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/world/cellunitlist.h"
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 
-#include "UnitRecord.h"
+#include "gs/newdb/UnitRecord.h"
 
-#include "MoveFlags.h"
+#include "gs/utility/MoveFlags.h"
 
-#include "SlicEngine.h"
-#include "SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
 
-#include "terrainutil.h"
-#include "tradeutil.h"
-#include "GameEventManager.h"           // g_gevManager
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/tradeutil.h"
+#include "gs/events/GameEventManager.h"           // g_gevManager
 
 extern  OzoneDatabase   *g_theUVDB ;
 extern  RadarMap        *g_radarMap;

@@ -31,8 +31,8 @@
 #ifndef __AUI_TEXTFIELD_H__
 #define __AUI_TEXTFIELD_H__
 
-#include "aui_bitmapfont.h"
-#include "aui_win.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_common/aui_win.h"
 
 
 enum AUI_TEXTFIELD_ACTION

@@ -4,7 +4,7 @@
 #ifndef KEYPRESS_H
 #define KEYPRESS_H 1
 
-#include "keymap.h"
+#include "ui/aui_ctp2/keymap.h"
 
 class KeyboardHandler;
 

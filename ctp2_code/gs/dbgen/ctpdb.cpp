@@ -44,9 +44,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
-#include "ctpdb.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/dbgen/ctpdb.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -59,12 +59,12 @@
 #include <windows.h>
 #include <direct.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 #include <time.h>
 #include <errno.h>
 
-#include "RecordDescription.h"
+#include "gs/dbgen/RecordDescription.h"
 
 RecordDescription * g_record = NULL;
 

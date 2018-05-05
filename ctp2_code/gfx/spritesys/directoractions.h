@@ -91,10 +91,10 @@ class DQActionBeginScheduler;
 //
 //----------------------------------------------------------------------------
 
-#include "GameOver.h"
-#include "MapPoint.h"
-#include "message.h"
-#include "Unit.h"
+#include "gs/gameobj/GameOver.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/Unit.h"
 
 class UnitActor;
 class EffectActor;

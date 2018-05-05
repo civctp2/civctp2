@@ -34,7 +34,7 @@
 #ifndef _NET_INFO_H_
 #define _NET_INFO_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 enum NET_INFO_CODE {
 	NET_INFO_CODE_PLAYER_INDEX,					// 0x0000

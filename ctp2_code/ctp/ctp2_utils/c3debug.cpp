@@ -32,7 +32,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
@@ -41,15 +41,15 @@
 #include <dirent.h>
 #endif
 
-#include "aui.h"
-#include "debugwindow.h"
-#include "civ3_main.h"
-#include "netconsole.h"
-#include "c3files.h"
+#include "ui/aui_common/aui.h"
+#include "ui/interface/debugwindow.h"
+#include "ctp/civ3_main.h"
+#include "ctp/ctp2_utils/netconsole.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 #ifndef _NO_GAME_WATCH
 
-#include "GameWatch.h"
+#include "GameWatch/gamewatch/GameWatch.h"
 
 extern int g_gameWatchID;
 #endif

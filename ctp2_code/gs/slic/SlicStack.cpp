@@ -28,14 +28,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicStack.h"
-#include "Unit.h"
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "SlicNamedSymbol.h"
-#include "Army.h"
-#include "profileDB.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/gameobj/Army.h"
+#include "gs/database/profileDB.h"
 
 SlicStack::SlicStack()
 {

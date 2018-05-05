@@ -29,16 +29,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "dynarr.h"
-#include "Path.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/pathing/Path.h"
 
-#include "MapPoint.h"
-#include "Cell.h"
-#include "World.h"
-#include "Army.h"
-#include "ArmyData.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
 
 void Direction::Serialize(CivArchive &archive)
 

@@ -130,9 +130,9 @@ class MapPoint;
 
 #define CELL_COLOR 1
 
-#include "gstypes.h"    // TERRAIN_TYPES
-#include "player.h"     // PLAYER_INDEX
-#include "Unit.h"
+#include "gs/utility/gstypes.h"    // TERRAIN_TYPES
+#include "gs/gameobj/Player.h"     // PLAYER_INDEX
+#include "gs/gameobj/Unit.h"
 
 
 class Cell {

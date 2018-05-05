@@ -1,7 +1,7 @@
 #ifndef __GOOD_AGENT_H__
 #define __GOOD_AGENT_H__ 1
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
 class CivArchive;
 struct MapPointData;

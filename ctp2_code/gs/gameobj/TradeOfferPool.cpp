@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "TradeOfferPool.h"
-#include "player.h"
-#include "dynarr.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/Player.h"
+#include "robot/aibackdoor/dynarr.h"
 
-#include "Globals.h"
-#include "gamefile.h"
+#include "gs/utility/Globals.h"
+#include "gs/fileio/gamefile.h"
 
 extern Player **g_player;
 

@@ -1,7 +1,7 @@
 #ifndef _BMH_GW_RECORDER_H_
 #define _BMH_GW_RECORDER_H_
 
-#include "DLLTypes.h"
+#include "GameWatch/gamewatch/DLLTypes.h"
 
 class GWRecorder;
 

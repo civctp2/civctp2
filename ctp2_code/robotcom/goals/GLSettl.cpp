@@ -1,33 +1,33 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include "civarchive.h"
-#include "IMapPointData.h"
-#include "ic3world.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3world.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "AiMap.h"
+#include "robotcom/Top/AiMap.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 extern double fz_settle_value_coef;
 extern double fz_settle_bonus_space;
 extern double fz_settle_bonus_water;
 extern double fz_settle_bonus_island;
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "Cont.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Top/Cont.h"
 
-#include "GlSettl.h"
+#include "robotcom/goals/GlSettl.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 #define LOG_GOALSETTLE true
 

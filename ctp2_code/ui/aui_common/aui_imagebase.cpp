@@ -29,14 +29,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_imagebase.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_imagebase.h"
 
-#include "aui_blitter.h"
-#include "aui_ldl.h"
-#include "aui_surface.h"
-#include "aui_ui.h"
-#include "ldl_data.hpp"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/ldl/ldl_data.hpp"
 
 MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST] =
 {

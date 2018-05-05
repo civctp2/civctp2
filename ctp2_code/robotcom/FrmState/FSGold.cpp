@@ -1,27 +1,27 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "FSGold.h"
+#include "robotcom/FrmState/FSGold.h"
 #include "civarchive.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3Population.h"
-#include "ic3TerrDB.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3Population.h"
+#include "user-robotcom/outcom/ic3TerrDB.h"
 
 #include "aimain.h"
-#include "gold.h"
+#include "robotcom/aimgr/gold.h"
 
-#include "CityAgent.h"
-#include "scienceagent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "GlOvertime.h"
+#include "robotcom/goals/GlOvertime.h"
 
-#include "OTUtilityList.h"
+#include "robotcom/Alloc/OTUtilityList.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 FSAllocScience::FSAllocScience()
 {

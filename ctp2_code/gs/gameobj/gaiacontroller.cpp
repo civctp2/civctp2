@@ -26,33 +26,33 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include <functional>
 
-#include "FeatTracker.h"
-#include "newturncount.h"
-#include "player.h"
-#include "AdvanceRecord.h"
-#include "BuildingRecord.h"
-#include "TerrainImprovementRecord.h"
-#include "WonderRecord.h"
-#include "citydata.h"
-#include "CityInfluenceIterator.h"
-#include "World.h"
-#include "installation.h"
-#include "UnitData.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/utility/newturncount.h"
+#include "gs/gameobj/Player.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "GameEventManager.h"
-#include "gaiacontroller.h"
-#include "EndGameObjectRecord.h"
-#include "TerrImprove.h"
-#include "Cell.h"
-#include "terrainutil.h"
-#include "MaterialPool.h"
-#include "mapanalysis.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/gaiacontroller.h"
+#include "gs/newdb/EndGameObjectRecord.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "ai/mapanalysis/mapanalysis.h"
 
 
 uint64 GaiaController::sm_endgameImprovements = 0x0;

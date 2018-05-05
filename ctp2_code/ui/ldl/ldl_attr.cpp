@@ -28,9 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 #include "ldl_attr.hpp"
 
 ldl_attribute *ldl_attribute::GetCopy()

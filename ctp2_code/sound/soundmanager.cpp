@@ -38,15 +38,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "soundmanager.h"
-#include "pointerlist.h"
-#include "profileDB.h"
-#include "SoundRecord.h"
-#include "CivPaths.h"
-#include "c3files.h"
-#include "PlayListDB.h"
-#include "gamesounds.h"
+#include "ctp/c3.h"
+#include "sound/soundmanager.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/database/profileDB.h"
+#include "gs/newdb/SoundRecord.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/database/PlayListDB.h"
+#include "sound/gamesounds.h"
 #include <iostream>
 #include <cctype>
 

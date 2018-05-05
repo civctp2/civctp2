@@ -46,22 +46,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Token.h"
+#include "ctp/c3.h"
+#include "gs/fileio/Token.h"
 
-#include "c3errors.h"
-#include "c3files.h"
-#include "ErrMsg.h"
-#include "Globals.h"
-#include "StrDB.h"              // g_theStringDB
-#include "CivPaths.h"           // g_CivPaths
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/utility/ErrMsg.h"
+#include "gs/utility/Globals.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/fileio/CivPaths.h"           // g_CivPaths
 #ifndef __MAKESPR__
-#include "AdvanceRecord.h"
-#include "BuildingRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/BuildingRecord.h"
 #endif
 
 #if defined(_JAPANESE)
-#include "japanese.h"
+#include "gs/utility/japanese.h"
 #endif
 
 extern sint32 g_abort_parse;

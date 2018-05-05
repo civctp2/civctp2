@@ -25,22 +25,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ns_window.h"
+#include "ctp/c3.h"
+#include "ui/netshell/ns_window.h"
 
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_blitter.h"
-#include "aui_image.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "aui_control.h"
-#include "aui_action.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 ns_Window::ns_Window(
 	AUI_ERRCODE *retval,

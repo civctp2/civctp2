@@ -36,7 +36,7 @@
 #define __SLICFUNCAI_H__
 
 
-#include "SlicFunc.h"	// SLICFUNC, SFR
+#include "gs/slic/SlicFunc.h"	// SLICFUNC, SFR
 
 
 

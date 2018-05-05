@@ -4,7 +4,7 @@
 #ifndef __NET_REPORT_H__
 #define __NET_REPORT_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 enum NET_REPORT {
 	NET_REPORT_READY_FOR_DATA,

@@ -32,19 +32,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SpecialAttackWindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/SpecialAttackWindow.h"
 
-#include "ArmyData.h"
-#include "aui_uniqueid.h"
-#include "colorset.h"               // g_colorSet
-#include "c3_static.h"
-#include "c3ui.h"
-#include "maputils.h"
-#include "player.h"
-#include "primitives.h"
-#include "SelItem.h"
-#include "World.h"
+#include "gs/gameobj/ArmyData.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/world/World.h"
 
 extern C3UI             *g_c3ui;
 

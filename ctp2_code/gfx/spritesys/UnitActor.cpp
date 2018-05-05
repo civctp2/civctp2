@@ -64,38 +64,38 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "UnitActor.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/UnitActor.h"
 
-#include "AgeCityStyleRecord.h"
-#include "ArmyData.h"
-#include "aui_bitmapfont.h"
-#include "BuildingRecord.h"
-#include "cellunitlist.h"
-#include "CityStyleRecord.h"
-#include "citywindow.h"         // s_cityWindow
-#include "Civilisation.h"
-#include "colorset.h"           // g_colorset
-#include "CTPRecord.h"
-#include "debugmemory.h"
-#include "director.h"           // g_director
-#include "maputils.h"
-#include "player.h"             // g_player
-#include "primitives.h"
-#include "profileDB.h"          // g_theProfileDB
-#include "screenmanager.h"
-#include "SelItem.h"            // g_selected_item
-#include "SpriteGroupList.h"
-#include "SpriteState.h"
-#include "soundmanager.h"       // g_soundManager
-#include "tiledmap.h"           // g_tiledMap
-#include "UnitData.h"
-#include "UnitPool.h"           // g_theUnitPool
-#include "UnitRecord.h"
-#include "WonderRecord.h"
-#include "wonderutil.h"
-#include "buildingutil.h"
-#include "gamefile.h" // g_saveFileVersion
+#include "gs/newdb/AgeCityStyleRecord.h"
+#include "gs/gameobj/ArmyData.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/newdb/CityStyleRecord.h"
+#include "ui/interface/citywindow.h"         // s_cityWindow
+#include "gs/gameobj/Civilisation.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorset
+#include "gs/newdb/CTPRecord.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "gfx/spritesys/director.h"           // g_director
+#include "gfx/tilesys/maputils.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "gfx/spritesys/screenmanager.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "sound/soundmanager.h"       // g_soundManager
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"           // g_theUnitPool
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/fileio/gamefile.h" // g_saveFileVersion
 
 extern SpriteGroupList     *g_unitSpriteGroupList;
 extern SpriteGroupList     *g_citySpriteGroupList;

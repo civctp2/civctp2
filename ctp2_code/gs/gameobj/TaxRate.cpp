@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "TaxRate.h"
-#include "civarchive.h"
-#include "SlicEngine.h"
-#include "DB.h"
-#include "GovernmentRecord.h"
-#include "player.h"
-#include "network.h"
-#include "net_info.h"
-#include "net_action.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TaxRate.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/database/DB.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Player.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "net/general/net_action.h"
 
 extern Player **g_player;
 

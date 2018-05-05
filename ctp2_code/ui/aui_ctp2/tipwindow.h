@@ -4,8 +4,8 @@
 #ifndef __TIPWINDOW_H__
 #define __TIPWINDOW_H__
 
-#include "c3window.h"
-#include "aui_textbase.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_common/aui_textbase.h"
 
 
 class TipWindow : public C3Window, public aui_TextBase

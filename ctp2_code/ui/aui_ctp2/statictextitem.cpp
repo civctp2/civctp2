@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_window.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "statictextitem.h"
-#include "textutils.h"
+#include "ui/aui_ctp2/statictextitem.h"
+#include "ui/aui_utils/textutils.h"
 
-#include "colorset.h"
+#include "gfx/gfx_utils/colorset.h"
 
 StaticTextItem::StaticTextItem(
 	AUI_ERRCODE *retval,

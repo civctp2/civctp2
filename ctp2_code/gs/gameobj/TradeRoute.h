@@ -28,9 +28,9 @@ enum ROUTE_TYPE {
 	ROUTE_TYPE_SLAVE,
 };
 
-#include "DB.h"     // StringId
-#include "ID.h"     // ID
-#include "player.h" // PLAYER_INDEX
+#include "gs/database/DB.h"     // StringId
+#include "gs/gameobj/ID.h"     // ID
+#include "gs/gameobj/Player.h" // PLAYER_INDEX
 
 template <class T> class DynamicArray;
 class TradeRouteData;

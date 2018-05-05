@@ -42,10 +42,10 @@
 template <class T> class DynamicArray;
 #define k_FUDGE_MAX_ARMY_SIZE 9
 
-#include "AICause.h"
-#include "ctp2_inttypes.h"
-#include "civarchive.h"
-#include "player.h"
+#include "gs/outcom/AICause.h"
+#include "os/include/ctp2_inttypes.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
 
 template <class T> class DynamicArray
 {

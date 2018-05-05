@@ -31,25 +31,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 #include "Foreigner.h"
 
 #include <functional>
 
-#include "player.h"
-#include "Army.h"
-#include "ArmyData.h"
-#include "Diplomat.h"               // For human-human Email and HotSeat diplomacy
-#include "World.h"
-#include "newturncount.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "ai/diplomacy/Diplomat.h"               // For human-human Email and HotSeat diplomacy
+#include "gs/world/World.h"
+#include "gs/utility/newturncount.h"
 
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "stringutils.h"
-#include "StrDB.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/utility/stringutils.h"
+#include "gs/database/StrDB.h"
 
-#include "civarchive.h"
-#include "GSLogs.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/GSLogs.h"
 
 extern sint32 g_saveFileVersion;
 

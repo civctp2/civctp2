@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "ctp2_Static.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_ui.h"             // g_ui
-#include "aui_window.h"
-#include "aui_gamespecific.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"             // g_ui
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_gamespecific.h"
 
-#include "patternbase.h"
-#include "pattern.h"
-#include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 ctp2_Static::ctp2_Static(
 	AUI_ERRCODE *retval,

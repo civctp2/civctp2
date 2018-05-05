@@ -45,23 +45,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "slicfuncai.h"
+#include "ctp/c3.h"
+#include "gs/slic/slicfuncai.h"
 
-#include "Unit.h"
-#include "AgreementMatrix.h"
-#include "Army.h"
-#include "Scheduler.h"
-#include "diplomattypes.h"
-#include "slicif.h"
-#include "StrDB.h"
+#include "gs/gameobj/Unit.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/Army.h"
+#include "ai/strategy/scheduler/Scheduler.h"
+#include "ai/diplomacy/diplomattypes.h"
+#include "gs/slic/slicif.h"
+#include "gs/database/StrDB.h"
 extern StringDB *g_theStringDB;
 
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "player.h"
-#include "ProposalAnalysis.h"
-#include "SlicSymbol.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/gameobj/Player.h"
+#include "ai/diplomacy/ProposalAnalysis.h"
+#include "gs/slic/SlicSymbol.h"
 
 namespace
 {

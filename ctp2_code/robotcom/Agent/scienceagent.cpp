@@ -1,25 +1,25 @@
-#include "c3.h"
-#include "MapPoint.h"
+#include "ctp/c3.h"
+#include "gs/world/MapPoint.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
-#include "ic3GameState.h"
-#include "ic3UnitDB.h"
-#include "ic3Government.h"
-#include "ic3Science.h"
-#include "ic3InstDB.h"
-#include "ic3BlgDB.h"
-#include "ic3Wonder.h"
-#include "ic3TerrDB.h"
+#include "robotcom/backdoor/FlatPtr.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3Government.h"
+#include "user-robotcom/outcom/ic3Science.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
+#include "user-robotcom/outcom/ic3TerrDB.h"
 
 #include "aimain.h"
-#include "aicell.h"
-#include "AiMap.h"
-#include "airndcnt.h"
-#include "aicause.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "user-robotcom/shared/aicause.h"
 
-#include "scienceagent.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 extern double fz_sci_unit_mil;
 extern double fz_sci_unit_specialability ;
@@ -65,15 +65,15 @@ extern double fz_sci_plantime;
 
 
 
-#include "InstBidList.h"
-#include "GoalInst.h"
-#include "GoodAgent.h"
-#include "BldAgent.h"
+#include "robotcom/Alloc/InstBidList.h"
+#include "robotcom/goals/GoalInst.h"
+#include "robotcom/Agent/GoodAgent.h"
+#include "robotcom/Agent/BldAgent.h"
 
-#include "gold.h"
-#include "AllocWGF.h"
-#include "WonderBlg.h"
-#include "WonderTbl.h"
+#include "robotcom/aimgr/gold.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "robotcom/aimgr/WonderBlg.h"
+#include "robotcom/aimgr/WonderTbl.h"
 
 
 

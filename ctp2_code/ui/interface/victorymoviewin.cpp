@@ -28,42 +28,42 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
-#include "aui_uniqueid.h"
-#include "aui_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
-#include "victorymoviewindow.h"
-#include "victorymoviewin.h"
-#include "GameOver.h"
-#include "victorywin.h"
-#include "victorywindow.h"
-#include "infowin.h"
-#include "EndgameWindow.h"
+#include "ui/interface/victorymoviewindow.h"
+#include "ui/interface/victorymoviewin.h"
+#include "gs/gameobj/GameOver.h"
+#include "ui/interface/victorywin.h"
+#include "ui/interface/victorywindow.h"
+#include "ui/interface/infowin.h"
+#include "ui/interface/EndgameWindow.h"
 
-#include "moviedb.h"
-#include "StrDB.h"
-#include "AgeRecord.h"
-#include "WonderRecord.h"
+#include "gs/database/moviedb.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/newdb/WonderRecord.h"
 
-#include "screenutils.h"
-#include "EndGame.h"
+#include "ui/interface/screenutils.h"
+#include "gs/gameobj/EndGame.h"
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 extern MovieDB			*g_theVictoryMovieDB;
 extern C3UI				*g_c3ui;
 extern VictoryWindow	*g_victoryWindow;
 
-#include "soundmanager.h"
+#include "sound/soundmanager.h"
 extern SoundManager		*g_soundManager;
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 extern SelectedItem		*g_selected_item;
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player			**g_player;
 
 VictoryMovieWindow		*g_victoryMovieWindow = NULL;

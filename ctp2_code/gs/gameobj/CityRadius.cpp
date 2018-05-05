@@ -28,16 +28,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "MapPoint.h"
-#include "CityRadius.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
 extern World *g_theWorld;
 extern MapPoint g_mp_size;
 
-#include "directions.h"	// NOWHERE
+#include "gs/utility/directions.h"	// NOWHERE
 
 //----------------------------------------------------------------------------
 //

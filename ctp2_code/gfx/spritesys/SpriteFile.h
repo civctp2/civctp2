@@ -102,8 +102,8 @@ typedef struct
 
 #define k_SPRITEFILE_HEADER_SIZE	(sizeof(uint32) + sizeof(uint32) + sizeof(uint32))
 
-#include "c3.h"
-#include "Action.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/Action.h"
 
 class Sprite;
 class FacedSprite;

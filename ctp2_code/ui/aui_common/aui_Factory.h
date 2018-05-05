@@ -31,9 +31,9 @@
 #ifndef __aui_Factory__h__
 #define __aui_Factory__h__ 1
 
-#include "aui_surface.h"
-#include "aui_mouse.h"
-#include "aui_keyboard.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_common/aui_keyboard.h"
 
 class aui_Factory {
 public:

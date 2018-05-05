@@ -30,22 +30,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GoodSpriteGroup.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/GoodSpriteGroup.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 #include <memory>         // std::unique_ptr
-#include "tiffutils.h"
-#include "pixelutils.h"
-#include "primitives.h"
-#include "FacedSprite.h"
-#include "Sprite.h"
-#include "screenmanager.h"
-#include "CivPaths.h"
-#include "c3files.h"
-#include "SpriteFile.h"
-#include "Anim.h"
-#include "Token.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gfx/spritesys/SpriteFile.h"
+#include "gfx/spritesys/Anim.h"
+#include "gs/fileio/Token.h"
 
 extern CivPaths *g_civPaths;
 extern ScreenManager *g_screenManager;

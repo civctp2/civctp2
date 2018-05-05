@@ -32,26 +32,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "spnewgamemapshapescreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/spnewgamemapshapescreen.h"
 
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "aui_radio.h"
-#include "aui_switchgroup.h"
-#include "aui_uniqueid.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "profileDB.h"			// WORLD_SHAPE
-#include "custommapscreen.h"
-#include "spnewgamewindow.h"
-#include "keypress.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_radio.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/database/profileDB.h"			// WORLD_SHAPE
+#include "ui/interface/custommapscreen.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/aui_ctp2/keypress.h"
 #include <vector>
 
 extern C3UI			*g_c3ui;

@@ -2,8 +2,8 @@
 #ifndef __AGREEMENT_DYNAMIC_ARRAY_H__
 #define __AGREEMENT_DYNAMIC_ARRAY_H__
 
-#include "Agreement.h"
-#include "dynarr.h"
+#include "gs/gameobj/Agreement.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class AgreementDynamicArray : public DynamicArray<Agreement> {
 

@@ -31,9 +31,9 @@
 #ifndef __AUI_MOUSE_H__
 #define __AUI_MOUSE_H__
 
-#include "aui_base.h"
-#include "aui_input.h"
-#include "tech_wllist.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_input.h"
+#include "ui/aui_common/tech_wllist.h"
 
 #ifdef USE_SDL
 #include <SDL/SDL.h>

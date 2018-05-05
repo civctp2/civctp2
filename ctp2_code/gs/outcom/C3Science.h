@@ -3,7 +3,7 @@
 #ifndef __C3Science_H__
 #define __C3Science_H__ 1
 
-#include "ic3Science.h"
+#include "gs/outcom/ic3Science.h"
 
 class Player;
 class CivArchive;

@@ -1,16 +1,16 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
-#include "allinonewindow.h"
-#include "spnewgametribescreen.h"
+#include "ui/netshell/allinonewindow.h"
+#include "ui/interface/spnewgametribescreen.h"
 
-#include "ns_tribes.h"
+#include "ui/netshell/ns_tribes.h"
 
-#include "ns_item.h"
+#include "ui/netshell/ns_item.h"
 
 
 ns_ListItem::ns_ListItem(

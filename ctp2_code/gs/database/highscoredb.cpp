@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "c3errors.h"
-#include "c3files.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "Token.h"
-#include "ErrMsg.h"
-#include "civarchive.h"
-#include "StrDB.h"
+#include "gs/fileio/Token.h"
+#include "gs/utility/ErrMsg.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/database/StrDB.h"
 
-#include "highscoredb.h"
+#include "gs/database/highscoredb.h"
 
 extern sint32	g_abort_parse;
 extern StringDB	*g_theStringDB;

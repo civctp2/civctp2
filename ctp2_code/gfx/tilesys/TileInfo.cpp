@@ -29,22 +29,22 @@
 /// \file   TileInfo.cpp
 /// \brief  Tile information (definitions)
 
-#include "c3.h"
-#include "TileInfo.h"
+#include "ctp/c3.h"
+#include "gfx/tilesys/TileInfo.h"
 
 #include <algorithm>        // std::fill
-#include "civarchive.h"
-#include "GoodActor.h"
-#include "profileDB.h"      // g_theProfileDB
+#include "robot/aibackdoor/civarchive.h"
+#include "gfx/spritesys/GoodActor.h"
+#include "gs/database/profileDB.h"      // g_theProfileDB
 
 #if 0   // referenced from unreachable code only
 
-#include "pixelutils.h"
-#include "player.h"         // g_player
-#include "SelItem.h"        // g_selected_item
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "tileutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"         // g_player
+#include "ui/aui_ctp2/SelItem.h"        // g_selected_item
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gfx/tilesys/tileutils.h"
 
 extern sint32			g_fog_toggle;
 extern sint32			g_god;

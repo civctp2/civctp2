@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "aui.h"
-#include "aui_surface.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "screenmanager.h"
+#include "gfx/spritesys/screenmanager.h"
 
 ScreenManager::ScreenManager()
 :

@@ -1,35 +1,35 @@
-#include "c3.h"
-#include "globals.h"
-#include "IMapPointData.h"
-#include "ic3Population.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3Population.h"
 
-#include "FSBeginTurn.h"
-#include "aicell.h"
-#include "AiMap.h"
-#include "ic3GameState.h"
+#include "robotcom/FrmState/FSBeginTurn.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/Top/AiMap.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 #include "Foreigner.h"
-#include "gold.h"
+#include "robotcom/aimgr/gold.h"
 
-#include "bset.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 #include "civarchive.h"
 
-#include "CityGrowth.h"
+#include "robotcom/Alloc/CityGrowth.h"
 
-#include "FzOut.h"
-#include "wotp.h"
-#include "Cont.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/Alloc/wotp.h"
+#include "robotcom/Top/Cont.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
-#include "scienceagent.h"
-#include "AllocWGF.h"
-#include "ic3Wonder.h"
+#include "robotcom/Agent/scienceagent.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "user-robotcom/outcom/ic3Wonder.h"
 
 extern double fz_pop_food_max;
 extern double fz_pop_food_min;

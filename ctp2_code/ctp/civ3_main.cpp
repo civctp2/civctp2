@@ -64,100 +64,100 @@
 /// \mainpage
 /// \image html "../common/images/wallpaper1_640x480_2.jpg"
 
-#include "c3.h"         // Pre-compiled header
-#include "civ3_main.h"  // Own declarations: consistency check
+#include "ctp/c3.h"         // Pre-compiled header
+#include "ctp/civ3_main.h"  // Own declarations: consistency check
 
-#include "AdvanceRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
 #include <algorithm>                    // std::fill
-#include "ancientwindows.h"
-#include "appstrings.h"
-#include "aui.h"
-#include "aui_directmoviemanager.h"
-#include "aui_Factory.h"
-#include "aui_ldl.h"
-#include "background.h"
-#include "backgroundwin.h"
-#include "bevellesswindow.h"
-#include "BuildingRecord.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3blitter.h"
-#include "c3cmdline.h"
-#include "c3debug.h"                    // c3debug_ExceptionStackTrace
-#include "c3errors.h"
-#include "c3memmap.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "c3windows.h"
-#include "civapp.h"
-#include "CivPaths.h"                   // g_civPaths
-#include "civscenarios.h"               // g_civScenarios
+#include "ui/interface/ancientwindows.h"
+#include "ctp/ctp2_utils/appstrings.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_directx/aui_directmoviemanager.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/background.h"
+#include "ui/interface/backgroundwin.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3blitter.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
+#include "ctp/ctp2_utils/c3debug.h"                    // c3debug_ExceptionStackTrace
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_ctp2/c3memmap.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ctp/civapp.h"
+#include "gs/fileio/CivPaths.h"                   // g_civPaths
+#include "gs/fileio/civscenarios.h"               // g_civScenarios
 #include <clocale>
-#include "colorset.h"
-#include "controlpanelwindow.h"         // g_controlPanel
-#include "ctp2_listitem.h"
-#include "ctp2_listbox.h"
-#include "ctp2_menubar.h"
-#include "ctp2_Window.h"
-#include "ctpregistry.h"
-#include "cursormanager.h"
-#include "DB.h"
-#include "debugmemory.h"
-#include "debugwindow.h"
-#include "director.h"
-#include "ErrMsg.h"
-#include "gamefile.h"
-#include "gameinit.h"
-#include "GameOver.h"
-#include "Globals.h"                    // allocated::clear, allocated::reassign
-#include "grabitem.h"
-#include "greatlibrary.h"
-#include "helptile.h"
-#include "icon.h"
-#include "initialplaywindow.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/interface/controlpanelwindow.h"         // g_controlPanel
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_menubar.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ctp/ctp2_utils/ctpregistry.h"
+#include "ui/interface/cursormanager.h"
+#include "gs/database/DB.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "ui/interface/debugwindow.h"
+#include "gfx/spritesys/director.h"
+#include "gs/utility/ErrMsg.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/utility/gameinit.h"
+#include "gs/gameobj/GameOver.h"
+#include "gs/utility/Globals.h"                    // allocated::clear, allocated::reassign
+#include "ui/aui_ctp2/grabitem.h"
+#include "ui/interface/greatlibrary.h"
+#include "ui/interface/helptile.h"
+#include "ui/aui_ctp2/icon.h"
+#include "ui/interface/initialplaywindow.h"
 #include <iomanip>                      // std::setfill, std::setw
-#include "keypress.h"
-#include "MainControlPanel.h"
-#include "messagewin.h"
-#include "network.h"
-#include "pattern.h"
-#include "picture.h"
-#include "pixelutils.h"
-#include "player.h"
-#include "pollution.h"
-#include "primitives.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "radarmap.h"
-#include "radarwindow.h"
-#include "RoboInit.h"
-#include "scenariowindow.h"
-#include "screenmanager.h"
-#include "SelItem.h"
-#include "sliccmd.h"                    // sliccmd_clear_symbols
-#include "SpecialEffectRecord.h"
-#include "splash.h"                     // g_splash_old, SPLASH_STRING
-#include "spnewgamewindow.h"
-#include "Sprite.h"
-#include "SpriteGroupList.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/interface/MainControlPanel.h"
+#include "ui/interface/messagewin.h"
+#include "net/general/network.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/picture.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/pollution.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/interface/radarwindow.h"
+#include "robot/utility/RoboInit.h"
+#include "ui/interface/scenariowindow.h"
+#include "gfx/spritesys/screenmanager.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/slic/sliccmd.h"                    // sliccmd_clear_symbols
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "ui/interface/splash.h"                    // g_splash_old, SPLASH_STRING
+#include "ui/interface/spnewgamewindow.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/spritesys/SpriteGroupList.h"
 #include <sstream>                      // std::basic_stringstream
-#include "statswindow.h"
-#include "statuswindow.h"
-#include "StrDB.h"                      // g_theStringDB
+#include "ui/interface/statswindow.h"
+#include "ui/aui_ctp2/statuswindow.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
 #include <string>                       // std::basic_string
-#include "TerrainRecord.h"
-#include "tiledmap.h"
-#include "TradePool.h"
-#include "TurnCnt.h"                    // g_turn
-#include "UnitPool.h"                   // g_theUnitPool
-#include "UnitSpriteGroup.h"
-#include "workwin.h"
-#include "workwindow.h"
-#include "World.h"                      // g_theWorld
+#include "gs/newdb/TerrainRecord.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/utility/TurnCnt.h"                    // g_turn
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "gfx/spritesys/UnitSpriteGroup.h"
+#include "ui/interface/workwin.h"
+#include "ui/interface/workwindow.h"
+#include "gs/world/World.h"                      // g_theWorld
 
 #if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
-#include "directvideo.h"
-#include "videoutils.h"
+#include "ui/aui_ctp2/directvideo.h"
+#include "gfx/gfx_utils/videoutils.h"
 #endif
 
 #ifdef LINUX
@@ -171,7 +171,7 @@
 #if defined(USE_SDL)
 #include <SDL.h>
 #include <SDL_mixer.h>
-#include "aui_sdlkeyboard.h"
+#include "ui/aui_sdl/aui_sdlkeyboard.h"
 #endif
 #ifdef HAVE_X11
 #include <X11/Xlib.h>
@@ -181,10 +181,10 @@
 #endif
 
 #if defined(_DEBUG)
-#include "debug.h"          // Os::SetThreadName
+#include "ctp/debugtools/debug.h"          // Os::SetThreadName
 #endif // _DEBUG
 
-#include "SlicSegment.h"    // SlicSegment::Cleanup
+#include "gs/slic/SlicSegment.h"    // SlicSegment::Cleanup
 
 extern Background *     g_background;
 

@@ -9,7 +9,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include "windows.h"    // POINT
+#include <windows.h>    // POINT
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -30,7 +30,7 @@ enum EFFECTACTION {
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "SpriteGroup.h"
+#include "gfx/spritesys/SpriteGroup.h"
 
 class aui_Surface;
 

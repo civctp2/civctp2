@@ -40,15 +40,15 @@
 
 class UnitActor;
 
-#include "Action.h"             // Action, GAME_ACTION
-#include "Actor.h"              // Actor
-#include "Anim.h"               // Anim
-#include "ctp2_inttypes.h"      // sintN, uintN
-#include "MapPoint.h"           // MapPoint
-#include "Queue.h"
-#include "SpriteGroup.h"        // GROUPTYPE, LOADTYPE
-#include "Unit.h"               // SPECATTACK, Unit
-#include "UnitSpriteGroup.h"    // UNITACTION
+#include "gfx/spritesys/Action.h"             // Action, GAME_ACTION
+#include "gfx/spritesys/Actor.h"              // Actor
+#include "gfx/spritesys/Anim.h"               // Anim
+#include "os/include/ctp2_inttypes.h"      // sintN, uintN
+#include "gs/world/MapPoint.h"           // MapPoint
+#include "gfx/gfx_utils/Queue.h"
+#include "gfx/spritesys/SpriteGroup.h"        // GROUPTYPE, LOADTYPE
+#include "gs/gameobj/Unit.h"               // SPECATTACK, Unit
+#include "gfx/spritesys/UnitSpriteGroup.h"    // UNITACTION
 
 class aui_Surface;
 class CivArchive;
@@ -56,10 +56,10 @@ class SpriteState;
 // BOOL, POINT, RECT
 
 #if 0
-#include "pixelutils.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "tech_wllist.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class SpriteGroup;
 class ProjectileActor;

@@ -45,51 +45,51 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                     // pre-compiled
-#include "World.h"                  // own declarations, g_theWorld
-#include "worldutils.h"
+#include "ctp/c3.h"                     // pre-compiled
+#include "gs/world/World.h"                  // own declarations, g_theWorld
+#include "gs/world/worldutils.h"
 
-#include "A_Star_Heuristic_Cost.h"
-#include "AICause.h"
+#include "robot/pathing/A_Star_Heuristic_Cost.h"
+#include "gs/outcom/AICause.h"
 #include <algorithm>
 #if defined(DUMP_TERRAIN_HEIGHT_MAPS)
 #include "bmp_io.h"
 #endif
-#include "c3errors.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "citydata.h"
-#include "civarchive.h"
-#include "ConstRecord.h"            // g_theConstDB
-#include "dynarr.h"
-#include "gamefile.h"
-#include "Globals.h"
-#include "GoodyHuts.h"
-#include "MoveFlags.h"
-#include "network.h"
-#include "player.h"                 // g_player
-#include "PQueue.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "RandGen.h"                // g_rand
-#include "ResourceRecord.h"
-#include "StartingPosition.h"
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "tiledmap.h"               // g_tiledMap
-#include "TileInfo.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/citydata.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/newdb/ConstRecord.h"            // g_theConstDB
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/GoodyHuts.h"
+#include "gs/utility/MoveFlags.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/utility/PQueue.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "gs/utility/RandGen.h"                // g_rand
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/fileio/StartingPosition.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gfx/tilesys/TileInfo.h"
 #include <vector>
-#include "WorldDistance.h"
-#include "tradeutil.h"              // constutil_GetMapSizeMapPoint
-#include "StrDB.h"
-#include "MessageBoxDialog.h"
+#include "gs/world/WorldDistance.h"
+#include "gs/gameobj/tradeutil.h"              // constutil_GetMapSizeMapPoint
+#include "gs/database/StrDB.h"
+#include "ui/interface/MessageBoxDialog.h"
 
 #if defined(USE_COM_REPLACEMENT)
 #include <ltdl.h>
 #else
 #include <initguid.h>
 #endif
-#include "C3Rand.h"
-#include "IMapGen.h"
+#include "gs/outcom/C3Rand.h"
+#include "mapgen/IMapGen.h"
 
 extern MapPoint g_mp_size;
 

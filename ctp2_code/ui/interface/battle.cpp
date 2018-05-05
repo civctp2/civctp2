@@ -30,29 +30,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "battle.h"
+#include "ctp/c3.h"
+#include "ui/interface/battle.h"
 
-#include "Army.h"
-#include "World.h"                  // g_theWorld
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "player.h"                 // g_player
-#include "colorset.h"               // g_colorSet
+#include "gs/gameobj/Army.h"
+#include "gs/world/World.h"                  // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
-#include "battleevent.h"
-#include "battleviewactor.h"
-#include "EffectActor.h"
-#include "soundmanager.h"
-#include "SpriteState.h"
+#include "ui/interface/battleevent.h"
+#include "gfx/spritesys/battleviewactor.h"
+#include "gfx/spritesys/EffectActor.h"
+#include "sound/soundmanager.h"
+#include "gfx/spritesys/SpriteState.h"
 
-#include "UnitRecord.h"
-#include "SpecialEffectRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
 
-#include "terrainutil.h"
-#include "unitutil.h"
-#include "ArmyData.h"
-#include "UnitData.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/UnitData.h"
 
 
 Battle::Battle() :

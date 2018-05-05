@@ -31,21 +31,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "AgreementMatrix.h"
+#include "ctp/c3.h"
+#include "ai/diplomacy/AgreementMatrix.h"
 
 #include <vector>
 
-#include "civarchive.h"
-#include "player.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
 
-#include "diplomacyutil.h"
-#include "DiplomacyProposalRecord.h"
-#include "newturncount.h"
-#include "ctpai.h"
-#include "MoveFlags.h"
-#include "Diplomat.h"
-#include "radarmap.h"
+#include "ai/diplomacy/diplomacyutil.h"
+#include "gs/newdb/DiplomacyProposalRecord.h"
+#include "gs/utility/newturncount.h"
+#include "ai/ctpai.h"
+#include "gs/utility/MoveFlags.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ui/aui_ctp2/radarmap.h"
 
 ai::Agreement       AgreementMatrix::s_badAgreement;
 AgreementMatrix     AgreementMatrix::s_agreements;

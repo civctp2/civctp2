@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3player.h"
-#include "ic3UnitDB.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
 
-#include "OA_Paradrop.h"
+#include "robotcom/goals/OA_Paradrop.h"
 
-#include "ArmyAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
 #include "aimain.h"
 
 #include "Foreigner.h"
-#include "ForeignCity.h"
-#include "bset.h"
+#include "robotcom/Agent/ForeignCity.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "AiMap.h"
+#include "robotcom/Top/AiMap.h"
 
 Opportunity_Action_Paradrop::Opportunity_Action_Paradrop ()
 {

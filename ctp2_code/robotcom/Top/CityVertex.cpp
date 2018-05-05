@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "MapPoint.h"
-#include "geom2d.h"
-#include "Delaunay.h"
+#include "ctp/c3.h"
+#include "gs/world/MapPoint.h"
+#include "robotcom/Top/geom2d.h"
+#include "robotcom/Top/Delaunay.h"
 
-#include "CityVertex.h"
-#include "FlatPtr.h"
+#include "robotcom/Top/CityVertex.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "CityTree.h"
-#include "CityEdge.h"
-#include "CityAgent.h"
+#include "robotcom/Top/CityTree.h"
+#include "robotcom/Top/CityEdge.h"
+#include "robotcom/Agent/CityAgent.h"
 
 ZEROMEM(CityVertexFlat);
 ZEROMEM(CityVertexPtr);
@@ -73,7 +73,7 @@ void CityVertexPtr::Load(CivArchive &archive, sint32 pcount, uint8 nmask[])
 {
 }
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 extern Memory_Manager *g_memory_CityVertex;
 void* CityVertex::operator new(size_t byte_size)
 {

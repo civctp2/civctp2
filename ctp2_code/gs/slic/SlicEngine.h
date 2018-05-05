@@ -98,15 +98,15 @@ template <class T> class SimpleDynamicArray;
 
 typedef sint32 AdvanceType;
 
-#include "Advances.h"           // AdvanceType
-#include "BldQue.h"             // BuildNode
-#include "SlicBuiltinEnum.h"
-#include "SlicTriggerLists.h"
-#include "message.h"
-#include "slicif_sym.h"
-#include "SlicModFuncEnum.h"
-#include "c3types.h"            // MBCHAR, sint32
-#include "player.h"             // PLAYER_INDEX
+#include "gs/gameobj/Advances.h"           // AdvanceType
+#include "gs/gameobj/BldQue.h"             // BuildNode
+#include "gs/slic/SlicBuiltinEnum.h"
+#include "gs/slic/SlicTriggerLists.h"
+#include "gs/gameobj/message.h"
+#include "gs/slic/slicif_sym.h"
+#include "gs/slic/SlicModFuncEnum.h"
+#include "ctp/c3types.h"            // MBCHAR, sint32
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
 
 class SlicEngine
 {

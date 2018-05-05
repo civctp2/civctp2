@@ -47,10 +47,10 @@ extern sint32 const         INDEX_TRIBE_INVALID;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "aui_control.h"    // aui_Control
-#include "c3types.h"        // MBCHAR, sint32, uint32
-#include "Civilisation.h"   // GENDER
-#include "ctp2_listitem.h"
+#include "ui/aui_common/aui_control.h"    // aui_Control
+#include "ctp/c3types.h"        // MBCHAR, sint32, uint32
+#include "gs/gameobj/Civilisation.h"   // GENDER
+#include "ui/aui_ctp2/ctp2_listitem.h"
 
 //----------------------------------------------------------------------------
 // Declarations

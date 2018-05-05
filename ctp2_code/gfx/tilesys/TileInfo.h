@@ -61,8 +61,8 @@ class TileInfo;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"
-#include "MapPoint.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/world/MapPoint.h"
 
 class GoodActor;
 class CivArchive;

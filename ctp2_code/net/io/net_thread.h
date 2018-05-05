@@ -4,11 +4,11 @@
 #ifndef __NET_THREAD_H__
 #define __NET_THREAD_H__
 
-#include "net_io.h"
-#include "anet.h"
-#include "net_array.h"
-#include "pointerlist.h"
-#include "net_anet.h"
+#include "net/io/net_io.h"
+#include "libs/anet/h/anet.h"
+#include "net/io/net_array.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "net/io/net_anet.h"
 #ifdef USE_SDL
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>

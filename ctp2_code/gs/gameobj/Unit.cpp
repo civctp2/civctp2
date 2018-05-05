@@ -57,52 +57,52 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Unit.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Unit.h"
 
-#include "Globals.h"
-#include "GWRecord.h"
-#include "ConstRecord.h"        // g_theConstDB
-#include "StrDB.h"              // g_theStringDB
-#include "DB.h"
-#include "UnitRec.h"
-#include "dynarr.h"
-#include "UnitDynArr.h"
-#include "citydata.h"
-#include "cellunitlist.h"
-#include "player.h"             // g_player
-#include "pollution.h"
-#include "World.h"              // g_theWorld
-#include "UnitData.h"
-#include "network.h"
-#include "net_info.h"
-#include "UnitPool.h"           // g_theUnitPool
-#include "RandGen.h"            // g_rand
-#include "aui.h"
-#include "primitives.h"
-#include "director.h"           // g_director
-#include "tech_wllist.h"
-#include "Readiness.h"
-#include "AICause.h"
-#include "SlicEngine.h"
-#include "HappyTracker.h"
-#include "Cell.h"
-#include "TradeOfferPool.h"
-#include "ArmyPool.h"
-#include "ArmyData.h"
-#include "TradeBids.h"
-#include "SelItem.h"            // g_selected_item
-#include "WonderRecord.h"
-#include "gamesounds.h"
-#include "SpecialAttackInfoRecord.h"
-#include "SpecialEffectRecord.h"
-#include "GameEventManager.h"
-#include "unitutil.h"
-#include "ctpai.h"
-#include "gamefile.h"
-#include "TerrainRecord.h"
-#include "SlicObject.h"
-#include "profileDB.h"
+#include "gs/utility/Globals.h"
+#include "GameWatch/gamewatch/GWRecord.h"
+#include "gs/newdb/ConstRecord.h"        // g_theConstDB
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/database/DB.h"
+#include "gs/newdb/UnitRec.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/gameobj/pollution.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/gameobj/UnitData.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/UnitPool.h"           // g_theUnitPool
+#include "gs/utility/RandGen.h"            // g_rand
+#include "ui/aui_common/aui.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/spritesys/director.h"           // g_director
+#include "ui/aui_common/tech_wllist.h"
+#include "gs/gameobj/Readiness.h"
+#include "gs/outcom/AICause.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/gameobj/HappyTracker.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/TradeBids.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gs/newdb/WonderRecord.h"
+#include "sound/gamesounds.h"
+#include "gs/newdb/SpecialAttackInfoRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/unitutil.h"
+#include "ai/ctpai.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/database/profileDB.h"
 
 extern Pollution *  g_thePollution;
 

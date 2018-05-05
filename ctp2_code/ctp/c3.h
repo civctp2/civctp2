@@ -54,8 +54,8 @@
 #ifndef __C3_H__
 #define __C3_H__
 
-#include "ctp2_config.h"
-#include "c3types.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3types.h"
 
 #if defined(_MSC_VER)
 
@@ -79,7 +79,6 @@
 #define _SECURE_SCL_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
-#define _CRT_SECURE_NO_WARNINGS
 #define _HAS_ITERATOR_DEBUGGING		0	// this one may be more interesting
 //#define _SECURE_SCL_THROWS 1
 #endif
@@ -100,7 +99,7 @@
 #include <ddraw.h>
 #include <dinput.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif // WIN32
 
 #include <stdio.h>
@@ -119,9 +118,9 @@
 #endif // __GNUC__
 
 #if defined(__cplusplus)
-#include "c3debug.h"
-#include "c3errors.h"
-#include "aui.h"
+#include "ctp/ctp2_utils/c3debug.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_common/aui.h"
 #endif
 
 #endif // __C3_H__

@@ -29,22 +29,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Civilisation.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Civilisation.h"
 
-#include "civarchive.h"
-#include "player.h"			    // g_player
-#include "CivilisationRecord.h"
-#include "CivilisationPool.h"	// g_theCivilisationPool
-#include "network.h"
-#include "SelItem.h"			// g_selected_item
-#include "AICause.h"
-#include "profileDB.h"			// g_theProfileDB
-#include "net_player.h"
-#include "AdvanceRecord.h"
-#include "World.h"			    // g_theWorld
-#include "net_vision.h"
-#include "ctpai.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"			    // g_player
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/gameobj/CivilisationPool.h"	// g_theCivilisationPool
+#include "net/general/network.h"
+#include "ui/aui_ctp2/SelItem.h"			// g_selected_item
+#include "gs/outcom/AICause.h"
+#include "gs/database/profileDB.h"			// g_theProfileDB
+#include "net/general/net_player.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/world/World.h"			    // g_theWorld
+#include "net/general/net_vision.h"
+#include "ai/ctpai.h"
 
 
 void Civilisation::KillCivilisation()

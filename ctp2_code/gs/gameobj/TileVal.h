@@ -4,7 +4,7 @@
 #ifndef TILE_VALUE_H
 #define TILE_VALUE_H 1
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 struct TileValue
 

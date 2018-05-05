@@ -54,8 +54,8 @@ class HappyTimer;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "HappyTracker.h"   // HAPPY_REASON, HappyTracker
-#include "player.h"         // PLAYER_INDEX, Player
+#include "gs/gameobj/HappyTracker.h"   // HAPPY_REASON, HappyTracker
+#include "gs/gameobj/Player.h"         // PLAYER_INDEX, Player
 
 class CityData;
 class CivArchive;

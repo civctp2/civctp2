@@ -31,29 +31,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_mouse.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_mouse.h"
 
 #include <chrono>
 #include <thread>
 
-#include "aui_Factory.h"
-#include "aui_ui.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_blitter.h"
-#include "aui_cursor.h"
-#include "aui_window.h"
-#include "aui_rectangle.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_cursor.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "aui_hypertextbox.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 sint32 aui_Mouse::m_mouseRefCount = 0;
 #ifdef __AUI_USE_DIRECTX__
@@ -64,7 +64,7 @@ SDL_mutex *aui_Mouse::m_lpcs = NULL;
 
 #define k_AUI_MOUSE_THREAD_SLEEP_TIME	10
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp		*g_civApp;
 
 aui_Mouse::aui_Mouse

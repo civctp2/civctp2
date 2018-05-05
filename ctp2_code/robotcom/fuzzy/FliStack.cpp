@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "FliStack.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/FliStack.h"
 
 void FliStack::Clear()
 {

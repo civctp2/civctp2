@@ -39,9 +39,9 @@
 
 class Civilisation;
 
-#include "ID.h"
-#include "GameObj_types.h"
-#include "CivilisationData.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/GameObj_types.h"
+#include "gs/gameobj/CivilisationData.h"
 
 //----------------------------------------------------------------------------
 //

@@ -8,9 +8,9 @@ class NetUnit;
 class NetUnitMove;
 class NetUnitHP;
 
-#include "net_packet.h"
-#include "MapPoint.h"
-#include "Unit.h"
+#include "net/general/net_packet.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
 
 class UnitData;
 

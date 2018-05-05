@@ -4,8 +4,8 @@
 #ifndef __TEXTSWITCH_H__
 #define __TEXTSWITCH_H__
 
-#include "aui_switch.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 class TextSwitch : public aui_Switch, public PatternBase

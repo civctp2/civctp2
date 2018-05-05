@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "aui_screen.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_screen.h"
 
-#include "aui_shell.h"
+#include "ui/aui_common/aui_shell.h"
 
 
 aui_Shell::aui_Shell(

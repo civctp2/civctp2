@@ -3,8 +3,8 @@
  */
 #define INITGUID
 
-#include "c3.h"
-#include "PlasmaGen1.h"
+#include "ctp/c3.h"
+#include "mapgen/PlasmaGen1.h"
 #include <stdlib.h>
 
 

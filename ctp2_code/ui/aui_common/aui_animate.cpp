@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_animate.h"
+#include "ui/aui_common/aui_animate.h"
 
 
 

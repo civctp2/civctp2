@@ -1,9 +1,9 @@
 #ifndef __NS_CHATBOX_H__
 #define __NS_CHATBOX_H__
 
-#include "textbox.h"
-#include "aui_action.h"
-#include "netfunc.h"
+#include "ui/aui_ctp2/textbox.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/netshell/netfunc.h"
 
 class aui_TextField;
 class aui_Button;

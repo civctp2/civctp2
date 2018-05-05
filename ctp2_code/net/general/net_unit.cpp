@@ -28,27 +28,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "network.h"
-#include "net_unit.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_unit.h"
+#include "net/io/net_util.h"
 
-#include "UnitData.h"
-#include "UnitPool.h"           // g_theUnitPool
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
-#include "player.h"             // g_player
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"           // g_theUnitPool
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/gameobj/Player.h"             // g_player
 
-#include "DB.h"
-#include "UnitRec.h"
-#include "SelItem.h"            // g_selected_item
-#include "director.h"           // g_director
-#include "tech_wllist.h"
+#include "gs/database/DB.h"
+#include "gs/newdb/UnitRec.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/spritesys/director.h"           // g_director
+#include "ui/aui_common/tech_wllist.h"
 
-#include "Cell.h"
+#include "gs/world/Cell.h"
 
-#include "AICause.h"
-#include "ctpai.h"
+#include "gs/outcom/AICause.h"
+#include "ai/ctpai.h"
 
 //----------------------------------------------------------------------------
 //

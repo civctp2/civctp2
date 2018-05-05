@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "GameEventHook.h"
-#include "Events.h"
-#include "EventTracker.h"
-#include "Unit.h"
-#include "GameEventArgList.h"
-#include "GameEventManager.h"
-#include "newturncount.h"
-#include "UnitData.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventHook.h"
+#include "gs/gameobj/Events.h"
+#include "gs/gameobj/EventTracker.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/events/GameEventArgList.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/utility/newturncount.h"
+#include "gs/gameobj/UnitData.h"
 
 EventTracker::EventTracker()
 {

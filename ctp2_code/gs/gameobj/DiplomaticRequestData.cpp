@@ -28,31 +28,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "DiplomaticRequestData.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "Globals.h"
-#include "AdvanceRecord.h"
-#include "player.h"
-#include "Unit.h"
-#include "TurnCnt.h"
-#include "Agreement.h"
-#include "message.h"
-#include "DiplomaticRequest.h"
-#include "MessageData.h"
-#include "MessagePool.h"
-#include "StrDB.h"
-#include "UnitData.h"
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "AICause.h"
+#include "gs/utility/Globals.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/outcom/AICause.h"
 
-#include "network.h"
-#include "net_info.h"
-#include "net_action.h"
-#include "SelItem.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "net/general/net_action.h"
+#include "ui/aui_ctp2/SelItem.h"
 extern SelectedItem *g_selected_item;
 
 	extern	StringDB	*g_theStringDB ;
@@ -64,10 +64,10 @@ extern SelectedItem *g_selected_item;
 
 
 
-#include "Diplomacy_Log.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
-#include "TradePool.h"
+#include "gs/gameobj/TradePool.h"
 extern TradePool *g_theTradePool;
 
 

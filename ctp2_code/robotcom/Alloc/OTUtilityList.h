@@ -3,7 +3,7 @@
 #ifndef __OVERTIME_UTILITY_H__
 #define __OVERTIME_UTILITY_H__ 1
 
-#include "GlOvertime.h"
+#include "robotcom/goals/GlOvertime.h"
 
 class CivArchive;
 class CityAgent;

@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #include <stdarg.h>
 
-#include "FliEngine.h"
-#include "FliSymTab.h"
-#include "FliFuncTab.h"
-#include "FliRule.h"
-#include "pointerlist.h"
-#include "fliif.h"
-#include "FliAction.h"
+#include "robotcom/fuzzy/FliEngine.h"
+#include "robotcom/fuzzy/FliSymTab.h"
+#include "robotcom/fuzzy/FliFuncTab.h"
+#include "robotcom/fuzzy/FliRule.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliAction.h"
 
-#include "ic3GameState.h"
-#include "ic3ErrorReport.h"
-#include "ic3String.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3ErrorReport.h"
+#include "user-robotcom/outcom/ic3String.h"
 #include "aimain.h"
 
 #define k_INITIAL_SYMTAB_SIZE 64

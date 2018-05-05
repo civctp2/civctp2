@@ -4,8 +4,8 @@
 #ifndef __MESSAGEICONWINDOW_H__
 #define __MESSAGEICONWINDOW_H__
 
-#include "aui_window.h"
-#include "messagewindow.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/interface/messagewindow.h"
 
 #define k_MESSAGE_ICON_PICTURE_WARNING		"ups001.tga"
 #define k_MESSAGE_ICON_PICTURE_DIPLOMATIC	"ups002.tga"

@@ -4,10 +4,10 @@
 #ifndef SCENARIOWINDOW_FLAG
 #define	SCENARIOWINDOW_FLAG
 
-#include "c3_popupwindow.h"
-#include "spnewgamewindow.h"
-#include "aui_control.h"
-#include "aui_action.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_action.h"
 
 class ctp2_Window;
 class ctp2_Button;

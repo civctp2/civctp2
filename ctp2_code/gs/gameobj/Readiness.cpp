@@ -34,30 +34,30 @@
 // EMOD TODO outcommented but in place to do GoldHunger for Units 1-17-2006
 //Also need to add in Player and Citydata??
 
-#include "c3.h"
-#include "Readiness.h"
-#include "civarchive.h"
-#include "DB.h"
-#include "GovernmentRecord.h"
-#include "Unit.h"
-#include "network.h"
-#include "WonderRecord.h"
-#include "player.h"
-#include "AICause.h"
-#include "UnitRec.h"
-#include "Army.h"
-#include "dynarr.h"
-#include "TurnCnt.h"
-#include "SlicSegment.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "UnitData.h"
-#include "wonderutil.h"
-#include "DifficultyRecord.h"
-#include "GameSettings.h"
-#include "profileDB.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Readiness.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/database/DB.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "net/general/network.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/Player.h"
+#include "gs/outcom/AICause.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/gameobj/Army.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "gs/gameobj/GameSettings.h"
+#include "gs/database/profileDB.h"
 
-#include "GameEventManager.h"   // g_gevManager
+#include "gs/events/GameEventManager.h"   // g_gevManager
 
 MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
 :

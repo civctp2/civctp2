@@ -49,7 +49,7 @@ STDMETHOD_ (void, Load) (THIS_ uint8 *pbData, uint32 ulLen) PURE ;
 STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 };
 #else
-#include "noCOMBase.h"
+#include "os/include/noCOMBase.h"
 
 class IC3CivArchive : public IUnknown {
 public:

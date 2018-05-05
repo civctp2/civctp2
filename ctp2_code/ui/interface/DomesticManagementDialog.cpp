@@ -1,15 +1,15 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "DomesticManagementDialog.h"
+#include "ui/interface/DomesticManagementDialog.h"
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "CauseAndEffectTab.h"
-#include "ctp2_button.h"
-#include "ctp2_Window.h"
-#include "GovernmentTab.h"
-#include "network.h"
-#include "ctp2_TabGroup.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/interface/CauseAndEffectTab.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/interface/GovernmentTab.h"
+#include "net/general/network.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
 extern C3UI *g_c3ui;
 

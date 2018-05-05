@@ -43,10 +43,10 @@
 
 class Army;
 
-#include "AICause.h"
-#include "ID.h"
-#include "player.h"
-#include "Unit.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
 
 class CivArchive;
 class Path;

@@ -24,7 +24,7 @@
 #include <stdarg.h>
 #include <time.h>
 
-#include "ctp-types.h"
+#include "user-robotcom/shared/ctp-types.h"
 
 #include <crtdbg.h>
 #define Assert(x) _ASSERTE(x)

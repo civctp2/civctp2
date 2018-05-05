@@ -28,21 +28,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #if !defined(USE_COM_REPLACEMENT)
 #define INITGUID
 
-#include "c3.h"
+#include "ctp/c3.h"
 #else
-#include "noCOMBase.h"
+#include "os/include/noCOMBase.h"
 #endif
 
 #include <algorithm>
 #include <cstdlib>
-#include "IC3Rand.h"
-#include "PlasmaGen2.h"
+#include "gs/outcom/IC3Rand.h"
+#include "mapgen/PlasmaGen2.h"
 
 #if defined(USE_COM_REPLACEMENT)
 extern "C" IMapGenerator *CoCreateMapGenerator()

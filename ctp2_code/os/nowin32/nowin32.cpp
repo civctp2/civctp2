@@ -1,4 +1,4 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifndef WIN32
 
@@ -13,7 +13,7 @@
 #include <ctype.h>
 #include <SDL/SDL_timer.h>
 
-#include "windows.h"
+#include "os/nowin32/windows.h"
 
 #ifdef USE_GTK
 #include <gtk/gtk.h>

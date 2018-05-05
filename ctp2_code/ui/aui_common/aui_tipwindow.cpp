@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_static.h"
-#include "aui_blitter.h"
-#include "aui_tipwindow.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_tipwindow.h"
 
-#include "pixelutils.h"
-#include "primitives.h"
-#include "colorset.h"   // g_colorSet
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"   // g_colorSet
 
 aui_TipWindow::aui_TipWindow(
 	AUI_ERRCODE *retval,

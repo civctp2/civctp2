@@ -1,21 +1,21 @@
-#include "c3.h"
-#include "unittabbutton.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/unittabbutton.h"
 
-#include "aui.h"
-#include "aui_window.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "colorset.h"                   // g_colorSet
-#include "pattern.h"
-#include "primitives.h"
-#include "c3_coloriconbutton.h"
-#include "thermometer.h"
-#include "Unit.h"
-#include "UnitRec.h"
-#include "battleorderboxactions.h"
-#include "c3_coloredstatic.h"
-#include "UIUtils.h"
-#include "UnitData.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/c3_coloriconbutton.h"
+#include "ui/aui_ctp2/thermometer.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/newdb/UnitRec.h"
+#include "ui/aui_ctp2/battleorderboxactions.h"
+#include "ui/aui_ctp2/c3_coloredstatic.h"
+#include "ui/interface/UIUtils.h"
+#include "gs/gameobj/UnitData.h"
 
 
 

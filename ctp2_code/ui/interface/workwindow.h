@@ -33,7 +33,7 @@
 #ifndef __WORKWINDOW_H__
 #define __WORKWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class WorkWindow : public C3Window
 {

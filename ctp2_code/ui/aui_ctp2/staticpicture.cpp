@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "staticpicture.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/staticpicture.h"
 
-#include "aui.h"
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "aui_window.h"
-#include "aui_blitter.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_blitter.h"
 
-#include "CivPaths.h"
+#include "gs/fileio/CivPaths.h"
 
-#include "picture.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/picture.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern CivPaths		*g_civPaths;
 extern aui_UI		*g_ui;

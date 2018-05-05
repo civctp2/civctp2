@@ -129,13 +129,13 @@ enum SEQ_ACTOR {
 //
 //----------------------------------------------------------------------------
 
-#include "aui.h"
-#include "aui_mouse.h"
-#include "Queue.h"
-#include "pointerlist.h"
-#include "directoractions.h"
-#include "gamesounds.h"
-#include "Unit.h"               // Unit, SPECATTACK
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "gfx/gfx_utils/Queue.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gfx/spritesys/directoractions.h"
+#include "sound/gamesounds.h"
+#include "gs/gameobj/Unit.h"               // Unit, SPECATTACK
 
 class TradeRoute;
 class UnitActor;

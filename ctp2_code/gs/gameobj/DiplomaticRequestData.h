@@ -34,17 +34,17 @@
 #ifndef __DIPLOMATICREQUESTDATA_H__
 #define __DIPLOMATICREQUESTDATA_H__
 
-#include "GameObj.h"
-#include "ID.h"
-#include "Gold.h"
-#include "Unit.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/Unit.h"
 
 typedef sint32 AdvanceType;
 
 class CivArchive;
 
-#include "DiplomaticTypes.h"
-#include "player.h"
+#include "gs/gameobj/DiplomaticTypes.h"
+#include "gs/gameobj/Player.h"
 
 class DiplomaticRequestData : public GameObj
 	{

@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "slicif.h"
-#include "CivPaths.h"
-#include "c3errors.h"
-#include "StrDB.h"
+#include "ctp/c3.h"
+#include "gs/slic/slicif.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/database/StrDB.h"
 
 extern CivPaths *g_civPaths;
 extern StringDB *g_theStringDB;

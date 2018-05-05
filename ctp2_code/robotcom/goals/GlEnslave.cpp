@@ -1,28 +1,28 @@
-#include "c3.h"
-#include "globals.h"
-#include "dynarr.h"
-#include "IMapPointData.h"
-#include "ic3player.h"
-#include "ic3world.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
 
 #include "civarchive.h"
-#include "FlatPtr.h"
-#include "bset.h"
+#include "robotcom/backdoor/FlatPtr.h"
+#include "robot/aibackdoor/bset.h"
 
 #include "aimain.h"
-#include "AiMap.h"
-#include "GlEnslave.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/goals/GlEnslave.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "ForeignAgent.h"
-#include "ForeignCity.h"
+#include "robotcom/Agent/ForeignAgent.h"
+#include "robotcom/Agent/ForeignCity.h"
 #include "Foreigner.h"
 
-#include "ArmyAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
 
 ZEROMEM(GoalEnslaveFlat);
 ZEROMEM(GoalEnslavePtr);

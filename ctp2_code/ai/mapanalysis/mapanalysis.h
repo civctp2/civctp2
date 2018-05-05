@@ -40,10 +40,10 @@
 
 class MapAnalysis;
 
-#include "mapgrid.h"
-#include "citydata.h"
-#include "boundingrect.h"
-#include "bit_table.h"
+#include "ai/mapanalysis/mapgrid.h"
+#include "gs/gameobj/citydata.h"
+#include "ai/mapanalysis/boundingrect.h"
+#include "robot/aibackdoor/bit_table.h"
 
 #define SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS
 

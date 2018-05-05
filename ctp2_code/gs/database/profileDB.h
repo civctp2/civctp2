@@ -119,16 +119,16 @@ enum WORLD_SHAPE
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"            // Assert
-#include "c3types.h"            // MBCHAR, sint..., uint...
-#include "civarchive.h"         // CivArchive
-#include "Civilisation.h"       // GENDER
-#include "Globals.h"            // MAPSIZE
-#include "gstypes.h"            // PLAYER_INDEX
-#include "MapPoint.h"           // MapPoint
-#include "pointerlist.h"        // PointerList
-#include "SimpleDynArr.h"       // SimpleDynamicArray
-#include "gfx_options.h"        // for debugai
+#include "ctp/ctp2_utils/c3debug.h"            // Assert
+#include "ctp/c3types.h"            // MBCHAR, sint..., uint...
+#include "robot/aibackdoor/civarchive.h"         // CivArchive
+#include "gs/gameobj/Civilisation.h"       // GENDER
+#include "gs/utility/Globals.h"            // MAPSIZE
+#include "gs/utility/gstypes.h"            // PLAYER_INDEX
+#include "gs/world/MapPoint.h"           // MapPoint
+#include "ctp/ctp2_utils/pointerlist.h"        // PointerList
+#include "gs/utility/SimpleDynArr.h"       // SimpleDynamicArray
+#include "gfx/gfx_utils/gfx_options.h"        // for debugai
 
 //----------------------------------------------------------------------------
 // Class declarations

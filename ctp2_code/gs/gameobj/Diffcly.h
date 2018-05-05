@@ -35,7 +35,7 @@
 
 class Difficulty;
 
-#include "player.h" // PLAYER_INDEX
+#include "gs/gameobj/Player.h" // PLAYER_INDEX
 class CivArchive;
 
 #define k_DIFFICULTY_VERSION_MAJOR	0

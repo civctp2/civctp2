@@ -26,21 +26,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_ldl.h"
-#include "aui_ui.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "aui_button.h"
-#include "ctp2_menubar.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_ctp2/ctp2_menubar.h"
 
-#include "aui_action.h"
-#include "ctp2_MenuButton.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/ctp2_MenuButton.h"
 
 
 

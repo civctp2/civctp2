@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "EndGameDB.h"
-#include "Token.h"
-#include "EndGameToken.h"
+#include "ctp/c3.h"
+#include "gs/database/EndGameDB.h"
+#include "gs/fileio/Token.h"
+#include "gs/database/EndGameToken.h"
 #include "civarchive.h"
-#include "StrDB.h"
-#include "AdvanceRecord.h"
-#include "SoundRecord.h"
-#include "IconRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/SoundRecord.h"
+#include "gs/newdb/IconRecord.h"
 
 static BOOL s_abort_endgame_parse;
 extern StringDB *g_theStringDB;

@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-#include "log.h"
+#include "ctp/debugtools/log.h"
 
 
 

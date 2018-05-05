@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "net_util.h"
-#include "net_report.h"
-#include "network.h"
-#include "net_info.h"
+#include "ctp/c3.h"
+#include "net/io/net_util.h"
+#include "net/general/net_report.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
 
 NetReport::NetReport(NET_REPORT type)
 {

@@ -22,19 +22,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "net_diplomacy.h"
+#include "ctp/c3.h"
+#include "net/general/net_diplomacy.h"
 
-#include "network.h"
-#include "net_packet.h"
-#include "net_info.h"
-#include "net_util.h"
-#include "player.h"             // g_player
-#include "SelItem.h"            // g_selected_item
-#include "Diplomat.h"
-#include "diplomattypes.h"
-#include "GameEventManager.h"
-#include "AgreementMatrix.h"
+#include "net/general/network.h"
+#include "net/general/net_packet.h"
+#include "net/general/net_info.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/diplomacy/diplomattypes.h"
+#include "gs/events/GameEventManager.h"
+#include "ai/diplomacy/AgreementMatrix.h"
 
 namespace
 {

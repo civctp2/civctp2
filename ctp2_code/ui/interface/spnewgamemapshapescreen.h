@@ -32,8 +32,8 @@
 #ifndef __SPNEWGAMEMAPSHAPESCREEN_H__
 #define __SPNEWGAMEMAPSHAPESCREEN_H__
 
-#include "ctp2_inttypes.h"  // sint32
-#include "aui_control.h"    // aui_Control
+#include "os/include/ctp2_inttypes.h"  // sint32
+#include "ui/aui_common/aui_control.h"    // aui_Control
 
 sint32 spnewgamemapshapescreen_displayMyWindow(BOOL viewMode = FALSE, sint32 useMode = 0);
 sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action);

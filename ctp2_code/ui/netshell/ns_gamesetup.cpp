@@ -51,10 +51,10 @@
   ADD -----> OCC One City Change option -> if enable human cant build unit type IsSettler.
 */
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_gamesetup.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_gamesetup.h"
 
 
 sint32 nf_GameSetup::m_version = 105;

@@ -29,31 +29,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "NProposalEvent.h"
+#include "ctp/c3.h"
+#include "ai/diplomacy/NProposalEvent.h"
 
 #include <algorithm>            // std::max, std::min
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
-#include "player.h"
-#include "Strengths.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "AdvanceRecord.h"
-#include "AgreementMatrix.h"
-#include "newturncount.h"
-#include "SelItem.h"			// g_selected_item
-#include "ctpai.h"
-#include "ProposalAnalysis.h"
-#include "UnitData.h"
-#include "UnitPool.h"			// g_theUnitPool
-#include "network.h"
-#include "pollution.h"
-#include "director.h"
-#include "Gold.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Strengths.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/utility/newturncount.h"
+#include "ui/aui_ctp2/SelItem.h"			// g_selected_item
+#include "ai/ctpai.h"
+#include "ai/diplomacy/ProposalAnalysis.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"			// g_theUnitPool
+#include "net/general/network.h"
+#include "gs/gameobj/pollution.h"
+#include "gfx/spritesys/director.h"
+#include "gs/gameobj/Gold.h"
 
 
 STDEHANDLER(General_NewProposalEvent)

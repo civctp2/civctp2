@@ -1,36 +1,36 @@
-#include "c3.h"
-#include "globals.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "IMapPointData.h"
-#include "ic3player.h"
-#include "ic3Government.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3Government.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
-#include "ic3Population.h"
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3Population.h"
+#include "user-robotcom/outcom/ic3world.h"
 
 #include "aimain.h"
-#include "aicell.h"
-#include "AiMap.h"
-#include "airndcnt.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/aimgr/airndcnt.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "AiBldQue.h"
-#include "bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Agent/AiBldQue.h"
+#include "robot/aibackdoor/bset.h"
 #include "civarchive.h"
-#include "ForeignAgent.h"
-#include "ForeignCity.h"
+#include "robotcom/Agent/ForeignAgent.h"
+#include "robotcom/Agent/ForeignCity.h"
 #include "Foreigner.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 extern double fz_min_happiness;
 extern double fz_max_crime;
@@ -38,19 +38,19 @@ extern double fz_min_food_factor;
 
 extern double fz_i_agreed_to_stop_polluting;
 
-#include "InstBidList.h"
-#include "GoalInst.h"
+#include "robotcom/Alloc/InstBidList.h"
+#include "robotcom/goals/GoalInst.h"
 
-#include "BldAgent.h"
+#include "robotcom/Agent/BldAgent.h"
 
-#include "ArmyGoal.h"
-#include "glblg.h"
-#include "glfreight.h"
+#include "robotcom/goals/ArmyGoal.h"
+#include "robotcom/goals/glblg.h"
+#include "robotcom/goals/glfreight.h"
 
-#include "AllocWGF.h"
-#include "wotp.h"
+#include "robotcom/Alloc/AllocWGF.h"
+#include "robotcom/Alloc/wotp.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

@@ -28,18 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "PQueue.h"
-#include "Cell.h"
-#include "player.h"
-#include "UnitDynArr.h"
-#include "WorldDistance.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "Happy.h"
-#include "directions.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/utility/PQueue.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/WorldDistance.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/utility/directions.h"
 
 extern Player **g_player;
 

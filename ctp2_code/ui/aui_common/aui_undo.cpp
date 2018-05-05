@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "aui_ui.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_undo.h"
+#include "ui/aui_common/aui_undo.h"
 
 
 aui_Undo::aui_Undo(

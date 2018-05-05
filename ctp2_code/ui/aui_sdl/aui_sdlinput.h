@@ -5,12 +5,12 @@
 #pragma once
 #endif
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #if defined(__AUI_USE_SDL__)
 
-#include "aui_input.h"
-#include "aui_sdl.h"
+#include "ui/aui_common/aui_input.h"
+#include "ui/aui_sdl/aui_sdl.h"
 
 class aui_SDLInput : public virtual aui_Input, public aui_SDL
 {

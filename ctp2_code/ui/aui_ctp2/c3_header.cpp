@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "c3_headerswitch.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_headerswitch.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "c3_header.h"
+#include "ui/aui_ctp2/c3_header.h"
 
 extern aui_UI *g_ui;
 

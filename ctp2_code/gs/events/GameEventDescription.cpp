@@ -1,3 +1,3 @@
 #define MAKE_EVENT_DESCRIPTIONS 1
 
-#include "GameEventDescription.h"
+#include "gs/events/GameEventDescription.h"

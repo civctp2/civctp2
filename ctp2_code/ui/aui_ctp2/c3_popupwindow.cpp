@@ -31,21 +31,21 @@
 /// \file c3_popupwindow.cpp
 /// \brief Pop-up window (definitions)
 
-#include "c3.h"
-#include "c3_popupwindow.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "keypress.h"
-#include "pattern.h"
-#include "primitives.h"
-#include "UIUtils.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/interface/UIUtils.h"
 
 c3_PopupWindow::c3_PopupWindow
 (

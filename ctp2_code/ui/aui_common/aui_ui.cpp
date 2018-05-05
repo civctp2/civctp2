@@ -40,28 +40,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // Precompiled header
-#include "aui_ui.h"         // Own declarations
+#include "ctp/c3.h"             // Precompiled header
+#include "ui/aui_common/aui_ui.h"         // Own declarations
 
-#include "aui_action.h"
-#include "aui_blitter.h"
-#include "aui_control.h"
-#include "aui_dirtylist.h"
-#include "aui_joystick.h"
-#include "aui_keyboard.h"
-#include "aui_ldl.h"
-#include "aui_mouse.h"
-#include "aui_rectangle.h"
-#include "aui_region.h"
-#include "aui_static.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_window.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_dirtylist.h"
+#include "ui/aui_common/aui_joystick.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_region.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 #if defined(__AUI_USE_DIRECTX__)
-#include "dxver.h"
+#include "ui/aui_common/dxver.h"
 extern BOOL g_exclusiveMode;
 #endif
 

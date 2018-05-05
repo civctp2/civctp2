@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "C3GameState.h"
-#include "C3String.h"
-#include "c3errors.h"
-#include "StrDB.h"
+#include "gs/utility/Globals.h"
+#include "gs/outcom/C3GameState.h"
+#include "gs/outcom/C3String.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/database/StrDB.h"
 #include "civarchive.h"
 
 extern StringDB *g_theStringDB;

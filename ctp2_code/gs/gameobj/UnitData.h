@@ -48,16 +48,16 @@
 class UnitData;
 class VisibilityDurationArray;
 
-#include "Unit.h"
-#include "GameObj.h"
-#include "MapPoint.h"
-#include "Unit.h"
-#include "citydata.h"
-#include "Army.h"
-#include "Order.h"          // ORDER_RESULT
-#include "player.h"         // k_MAX_PLAYERS
-#include "UnitActor.h"      // UnitActor
-#include "UnitRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Order.h"          // ORDER_RESULT
+#include "gs/gameobj/Player.h"         // k_MAX_PLAYERS
+#include "gfx/spritesys/UnitActor.h"      // UnitActor
+#include "gs/newdb/UnitRecord.h"
 
 class UnitList;
 class citydata;

@@ -28,26 +28,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
-#include "c3windows.h"
-#include "workwindow.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/interface/workwindow.h"
 
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "resourcemap.h"
-#include "workmap.h"
+#include "gfx/tilesys/resourcemap.h"
+#include "gfx/tilesys/workmap.h"
 
-#include "workwin.h"
+#include "ui/interface/workwin.h"
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;

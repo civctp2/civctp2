@@ -30,8 +30,8 @@
 /// \file   Actor.cpp
 /// \brief  Base actor class
 
-#include "c3.h"
-#include "Actor.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/Actor.h"
 
 Actor::Actor(SpriteState * ss)
 :

@@ -31,8 +31,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_control.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_control.h"
 
 #include <string>
 #ifndef WIN32
@@ -41,20 +41,20 @@
 #include <strstream>
 #endif
 
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_uniqueid.h"
-#include "aui_tipwindow.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
-#include "aui_stringtable.h"
-#include "StrDB.h"              // g_theStringDB
-#include "StatusBar.h"
-#include "aui_imagelist.h"
-#include "aui_static.h"
-#include "ldl_data.hpp"
-#include "ldl_file.hpp"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_tipwindow.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "ui/interface/StatusBar.h"
+#include "ui/aui_common/aui_imagelist.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 static const MBCHAR *k_AUI_CONTROL_NUMBER_OF_LAYERS		= "numberoflayers";
 static const MBCHAR *k_AUI_CONTROL_IMAGES_PER_LAYER		= "imagesperlayer";

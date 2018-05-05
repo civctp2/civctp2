@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "C3Population.h"
+#include "gs/outcom/C3Population.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
-#include "DB.h"
+#include "gs/database/DB.h"
 
 	extern	enum POPTYPE ;
 
@@ -14,11 +14,11 @@
 
 	extern	Player	**g_player ;
 
-#include "bset.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "WonderRecord.h"
-#include "Happy.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/Happy.h"
 
 
 

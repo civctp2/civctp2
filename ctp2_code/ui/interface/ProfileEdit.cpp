@@ -30,28 +30,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_ui.h"
-#include "c3ui.h"
-#include "ctp2_Window.h"
-#include "aui_ldl.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_button.h"
-#include "ctp2_textfield.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_textfield.h"
 
-#include "profileDB.h"
-#include "MessageBoxDialog.h"
-#include "ProfileEdit.h"
-#include "StrDB.h"
+#include "gs/database/profileDB.h"
+#include "ui/interface/MessageBoxDialog.h"
+#include "ui/interface/ProfileEdit.h"
+#include "gs/database/StrDB.h"
 
-#include "CriticalMessagesPrefs.h"
+#include "gs/gameobj/CriticalMessagesPrefs.h"
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp *g_civApp;
 
-#include "SpriteGroupList.h"
+#include "gfx/spritesys/SpriteGroupList.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
 extern C3UI *g_c3ui;

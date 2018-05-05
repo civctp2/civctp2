@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "FliSymTab.h"
-#include "fliif.h"
-#include "FliSymbol.h"
-#include "FliEngine.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/FliSymTab.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliSymbol.h"
+#include "robotcom/fuzzy/FliEngine.h"
 
 #define k_FLI_SYM_HASH_SIZE 512
 

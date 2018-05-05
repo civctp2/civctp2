@@ -31,19 +31,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include <chrono>
 #include <thread>
 
-#include "net_thread.h"
-#include "net_types.h"
-#include "net_util.h"
-#include "SimpleDynArr.h"
-#include "zlib.h"
+#include "net/io/net_thread.h"
+#include "net/io/net_types.h"
+#include "net/io/net_util.h"
+#include "gs/utility/SimpleDynArr.h"
+#include "libs/zlib/zlib.h"
 
 #if defined(_DEBUG)
-#include "debug.h"  // Os::SetThreadName
+#include "ctp/debugtools/debug.h"  // Os::SetThreadName
 #endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,

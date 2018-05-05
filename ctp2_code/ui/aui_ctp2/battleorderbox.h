@@ -7,11 +7,11 @@
 
 class BattleOrderBox;
 
-#include "controlsheet.h"
-#include "pixelutils.h"
-#include "colorset.h"
-#include "Unit.h"
-#include "unittabbutton.h"
+#include "ui/aui_ctp2/controlsheet.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/gameobj/Unit.h"
+#include "ui/aui_ctp2/unittabbutton.h"
 
 #define k_MAX_BOB_UNITS		9
 

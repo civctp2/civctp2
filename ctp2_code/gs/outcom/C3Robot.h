@@ -9,7 +9,7 @@ typedef HRESULT (STDAPICALLTYPE *DebugInitProc)(void *, void *, void *, char *, 
 
 
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 enum CAUSE_REMOVE_ARMY;
 enum CAUSE_NEW_ARMY;

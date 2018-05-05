@@ -32,18 +32,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3files.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "appstrings.h"
-#include "civ3_main.h"
-#include "CivPaths.h"
-#include "c3errors.h"
-#include "c3ui.h"
-#include "pointerlist.h"
-#include "profileDB.h"
-#include "soundmanager.h"
-#include "tracklen.h"
+#include "ctp/ctp2_utils/appstrings.h"
+#include "ctp/civ3_main.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/database/profileDB.h"
+#include "sound/soundmanager.h"
+#include "ctp/ctp2_utils/tracklen.h"
 
 #ifdef HAVE_STRING_H
 #include <string.h>

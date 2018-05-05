@@ -1,9 +1,9 @@
 #ifndef _BMH_GW_CIV_H_
 #define _BMH_GW_CIV_H_
 
-#include "GWCivDLL.h"
+#include "GameWatch/gwciv/GWCivDLL.h"
 
-#include "GWRecorder.h"
+#include "GameWatch/gamewatch/GWRecorder.h"
 
 class GWCivDllHeader GWCiv : public GWRecorder {
 public:

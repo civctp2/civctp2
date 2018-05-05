@@ -30,24 +30,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_region.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_region.h"
 
-#include "AttractWindow.h"
-#include "aui_control.h"
-#include "aui_dimension.h"
-#include "aui_dragdropwindow.h"
-#include "aui_ldl.h"
-#include "aui_rectangle.h"
-#include "aui_ui.h"
-#include "aui_undo.h"
-#include "aui_uniqueid.h"
-#include "aui_window.h"
-#include "gamesounds.h"
-#include "Globals.h"
-#include "soundmanager.h"
-#include "StatusBar.h"
-#include "ldl_data.hpp"
+#include "ui/interface/AttractWindow.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_dimension.h"
+#include "ui/aui_common/aui_dragdropwindow.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_undo.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_window.h"
+#include "sound/gamesounds.h"
+#include "gs/utility/Globals.h"
+#include "sound/soundmanager.h"
+#include "ui/interface/StatusBar.h"
+#include "ui/ldl/ldl_data.hpp"
 
 extern SoundManager		*g_soundManager;
 

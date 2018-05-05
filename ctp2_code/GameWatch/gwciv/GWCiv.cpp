@@ -1,6 +1,6 @@
-#include "GWCiv.h"
+#include "GameWatch/gwciv/GWCiv.h"
 
-#include "GWCivRecord.h"
+#include "GameWatch/gwciv/GWCivRecord.h"
 
 DllExport GWCiv gwCiv;
 

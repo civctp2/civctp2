@@ -41,8 +41,8 @@ class Squad_Strength;
 class Army;
 class MapPoint;
 
-#include "ctp2_inttypes.h"      // sintN
-#include "scheduler_types.h"
+#include "os/include/ctp2_inttypes.h"      // sintN
+#include "ai/strategy/scheduler/scheduler_types.h"
 
 class Squad_Strength
 {

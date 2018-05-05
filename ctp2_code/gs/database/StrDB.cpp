@@ -37,13 +37,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3files.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "StrRec.h"
-#include "StrDB.h"
+#include "gs/database/StrRec.h"
+#include "gs/database/StrDB.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern sint32   g_abort_parse;
 extern bool g_load_defaults;
@@ -639,7 +639,7 @@ bool StringDB::Parse(MBCHAR * filename)
 	return true;
 }
 
-#include "CivPaths.h"
+#include "gs/fileio/CivPaths.h"
 extern CivPaths *g_civPaths;
 
 void StringDB::Export(MBCHAR * file)

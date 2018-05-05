@@ -1,9 +1,9 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "display.h"
+#include "ctp/display.h"
 
-#include "pointerlist.h"
-#include "appstrings.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ctp/ctp2_utils/appstrings.h"
 
 #define COMPILE_MULTIMON_STUBS
 #ifdef __AUI_USE_DIRECTX__
@@ -29,7 +29,7 @@ extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
 #ifdef WIN32

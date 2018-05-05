@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Sci.h"
-#include "civarchive.h"
-#include "ctpai.h"
-#include "player.h"
-#include "AgreementMatrix.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitPool.h"
+#include "gs/gameobj/Sci.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "ai/ctpai.h"
+#include "gs/gameobj/Player.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
 
 Science::Science()
 

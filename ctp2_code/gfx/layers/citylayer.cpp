@@ -28,28 +28,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui.h"
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "primitives.h"
-#include "tiledmap.h"
-#include "MapPoint.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "maputils.h"
-#include "dynarr.h"
-#include "director.h"
-#include "SelItem.h"
-#include "aui_surface.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gfx/tilesys/maputils.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gfx/spritesys/director.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/aui_common/aui_surface.h"
 
 extern TiledMap			*g_tiledMap;
 extern SelectedItem		*g_selected_item;
 
-#include "background.h"
+#include "ui/aui_ctp2/background.h"
 extern Background		*g_background;
 
-#include "screenmanager.h"
+#include "gfx/spritesys/screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
 #define k_TRADE_DASH_LEN 10

@@ -1,29 +1,29 @@
 // TODO - remove file?
 // - Is this file Obsolete????????????????
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "C3Wonder.h"
+#include "gs/outcom/C3Wonder.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
-#include "WonderRecord.h"
+#include "gs/newdb/WonderRecord.h"
 
-#include "StrDB.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "Exclusions.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Exclusions.h"
 
-#include "BldQue.h"
-#include "Exclusions.h"
-#include "globals.h"
+#include "gs/gameobj/BldQue.h"
+#include "gs/gameobj/Exclusions.h"
+#include "gs/utility/Globals.h"
 
-#include "WonderTracker.h"
+#include "gs/gameobj/WonderTracker.h"
 
-#include "wonderutil.h"
+#include "gs/gameobj/wonderutil.h"
 
 
 

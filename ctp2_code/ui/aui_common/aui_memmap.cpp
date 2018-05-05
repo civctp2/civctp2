@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_memmap.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_memmap.h"
 
-#include "aui_image.h"
-#include "aui_sound.h"
-#include "aui_movie.h"
+#include "ui/aui_common/aui_image.h"
+#include "ui/aui_common/aui_sound.h"
+#include "ui/aui_common/aui_movie.h"
 
 /// Create an aui_FileFormat object
 /// \param  filename The file to use

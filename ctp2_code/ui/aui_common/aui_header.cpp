@@ -28,16 +28,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_header.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_header.h"
 
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_listbox.h"
-#include "aui_switch.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_listbox.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 aui_Header::aui_Header(
 	AUI_ERRCODE *retval,

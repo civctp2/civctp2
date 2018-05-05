@@ -1,30 +1,30 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
-#include "ic3RobotAstar.h"
-#include "ic3player.h"
-#include "dynarr.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3RobotAstar.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "robot/aibackdoor/dynarr.h"
 #include "aimain.h"
 
 #include "common.h"
 
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
-#include "unitflow.h"
-#include "squad.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/squad.h"
 
-#include "planner.h"
+#include "robotcom/planner/planner.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
-#include "bset.h"
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "squad_strength.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/planner/squad_strength.h"
 
 
 

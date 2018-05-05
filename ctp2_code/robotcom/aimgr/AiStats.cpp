@@ -1,18 +1,18 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "AiStats.h"
-#include "FlatPtr.h"
+#include "robotcom/aimgr/AiStats.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "bset.h"
-#include "airndcnt.h"
-#include "CityAgent.h"
-#include "ArmyAgent.h"
-#include "gold.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/aimgr/gold.h"
 
 char g_label[k_NUM_STATS][100] =
 {

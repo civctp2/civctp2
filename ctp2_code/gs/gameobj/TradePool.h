@@ -4,9 +4,9 @@
 #ifndef _TRADEPOOL_H_
 #define _TRADEPOOL_H_
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "TradeRoute.h"
+#include "gs/gameobj/TradeRoute.h"
 
 class TradeRouteData;
 enum ROUTE_TYPE;

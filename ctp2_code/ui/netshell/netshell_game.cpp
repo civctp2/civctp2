@@ -1,20 +1,20 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "netshell.h"
+#include "ui/netshell/netshell.h"
 
-#include "allinonewindow.h"
-#include "loadsavewindow.h"
-#include "scenariowindow.h"
+#include "ui/netshell/allinonewindow.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/scenariowindow.h"
 
-#include "initialplaywindow.h"
+#include "ui/interface/initialplaywindow.h"
 
-#include "network.h"
-#include "civapp.h"
+#include "net/general/network.h"
+#include "ctp/civapp.h"
 
-#include "netshell_game.h"
-#include "civscenarios.h"
+#include "ui/netshell/netshell_game.h"
+#include "gs/fileio/civscenarios.h"
 extern CivScenarios *g_civScenarios;
 
 extern CivApp *g_civApp;

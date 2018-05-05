@@ -1,19 +1,19 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "C3InstDB.h"
+#include "gs/outcom/C3InstDB.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
-#include "TerrainRecord.h"
+#include "gs/newdb/TerrainRecord.h"
 #include "InstDB.h"
-#include "TerrImproveData.h"
-#include "AdvanceRecord.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TerrImprovePool.h"
-#include "Cell.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/world/Cell.h"
 
 extern InstallationDatabase *g_theInstallationDB;
 extern World *g_theWorld;

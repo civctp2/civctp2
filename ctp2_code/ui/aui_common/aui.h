@@ -34,7 +34,7 @@
 #include <tchar.h>
 #include <mbstring.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 
 #include <math.h>
@@ -43,12 +43,12 @@
 #include <limits.h>
 #include <string.h>
 
-#include "ldl.h"
-#include "freetype.h"
+#include "ui/ldl/ldl.h"
+#include "ui/freetype/freetype.h"
 
-#include "auicfg.h"
-#include "auitypes.h"
-#include "auidebug.h"
+#include "ui/aui_common/auicfg.h"
+#include "ui/aui_common/auitypes.h"
+#include "ui/aui_common/auidebug.h"
 
 
 #if defined(WIN32)

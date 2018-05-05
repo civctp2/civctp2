@@ -142,14 +142,14 @@ enum
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "player.h"             // PLAYER_INDEX
-#include "ctp2_inttypes.h"      // sint32
-#include "c3window.h"
-#include "c3_button.h"
-#include "aui_stringtable.h"
-#include "Unit.h"
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
+#include "os/include/ctp2_inttypes.h"      // sint32
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "gs/gameobj/Unit.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 class Unit;
 class aui_TabGroup;

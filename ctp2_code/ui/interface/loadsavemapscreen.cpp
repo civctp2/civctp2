@@ -27,30 +27,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "loadsavemapwindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/loadsavemapwindow.h"
 
-#include "civ3_main.h"
-#include "civapp.h"
-#include "gamefile.h"
+#include "ctp/civ3_main.h"
+#include "ctp/civapp.h"
+#include "gs/fileio/gamefile.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
-#include "ns_gamesetup.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/netshell/ns_gamesetup.h"
 
-#include "c3ui.h"
-#include "c3window.h"
-#include "c3_static.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "c3_listbox.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_listbox.h"
 
-#include "initialplaywindow.h"
-#include "spnewgamewindow.h"
+#include "ui/interface/initialplaywindow.h"
+#include "ui/interface/spnewgamewindow.h"
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

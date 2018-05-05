@@ -1,29 +1,29 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "Goal_Attack_Region.h"
+#include "robotcom/goals/Goal_Attack_Region.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "FzOut.h"
-#include "AiMap.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/Top/AiMap.h"
 
 Goal_Attack_Region::Goal_Attack_Region()
 {

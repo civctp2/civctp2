@@ -30,7 +30,7 @@
 #ifndef __STRING_HASH_H__
 #define __STRING_HASH_H__
 
-#include "civarchive.h"
+#include "robot/aibackdoor/civarchive.h"
 
 #ifdef COM_INTERFACE
 #define ARCHIVE IC3CivArchive *

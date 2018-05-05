@@ -32,7 +32,7 @@
 #ifndef __SLIC_OBJECT_H__
 #define __SLIC_OBJECT_H__
 
-#include "SlicContext.h"
+#include "gs/slic/SlicContext.h"
 
 class ID;
 class CivArchive ;

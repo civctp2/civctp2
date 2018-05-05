@@ -34,9 +34,9 @@
 #ifndef __AGREEMENTDATA_H__
 #define __AGREEMENTDATA_H__
 
-#include "GameObj.h"
-#include "Unit.h"
-#include "gstypes.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/gstypes.h"
 
 class CivArchive;
 
@@ -46,7 +46,7 @@ typedef sint32 AdvanceType;
 #define k_EXPIRATION_NEVER		(sint32)(-1)
 
 
-#include "AgreementTypes.h"
+#include "gs/gameobj/AgreementTypes.h"
 
 class AgreementData : public GameObj
 {

@@ -28,12 +28,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Globals.h"
-#include "TradeAstar.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "robot/pathing/TradeAstar.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/Player.h"
 
 
 extern World *g_theWorld;

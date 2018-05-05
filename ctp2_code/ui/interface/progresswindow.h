@@ -33,9 +33,9 @@
 #ifndef __UI__INTERFACE__PROGRESSWINDOW_H__
 #define __UI__INTERFACE__PROGRESSWINDOW_H__ 1
 
-#include "c3_popupwindow.h"
-#include "aui_progressbar.h"
-#include "tech_wllist.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_common/aui_progressbar.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class ProgressWindow : public c3_PopupWindow
 {

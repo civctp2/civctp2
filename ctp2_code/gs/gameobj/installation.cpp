@@ -1,16 +1,16 @@
-#include "c3.h"
-#include "installation.h"
-#include "installationpool.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/installationpool.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
-#include "network.h"
-#include "net_info.h"
-#include "SelItem.h"
-#include "director.h"
-#include "terrainutil.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/spritesys/director.h"
+#include "gs/gameobj/terrainutil.h"
 
 extern Player **g_player;
 extern World *g_theWorld;

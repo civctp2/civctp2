@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "aui_window.h"
-#include "aui_action.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "aui_radio.h"
+#include "ui/aui_common/aui_radio.h"
 
 
 aui_Radio::aui_Radio(

@@ -50,29 +50,29 @@ template <class DATA_TYPE> class list_array;
 template <class DATA_TYPE, class KEY_TYPE> class sorted_array;
 template <class T> class semi_dynamic_array;
 
-#include "Squad_And_Goal_Types.h"
+#include "robotcom/planner/Squad_And_Goal_Types.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
-#include "matrix.h"
+#include "robotcom/planner/sorted_array.h"
+#include "robotcom/planner/matrix.h"
 
-#include "unitflow.h"
+#include "robotcom/planner/unitflow.h"
 
-#include "aip.h"
+#include "robotcom/planner/aip.h"
 
-#include "squad.h"
+#include "robotcom/planner/squad.h"
 
-#include "goal.h"
+#include "robotcom/planner/goal.h"
 
 #include "Plan.h"
 
 #include "Scheduler.h"
 
-#include "planner.h"
+#include "robotcom/planner/planner.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 #endif

@@ -2,8 +2,8 @@
  * $Id$
  */
 
-#include "c3.h"
-#include "appstrings.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/appstrings.h"
 
 #if defined(HAVE_SYS_TYPES_H)
 #include <sys/types.h>
@@ -15,9 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "c3errors.h"
-#include "ctp2_config.h"
-#include "c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3types.h"
 
 static MBCHAR **    s_appStrings        = NULL;
 static size_t	    s_numAppStrings     = 0;

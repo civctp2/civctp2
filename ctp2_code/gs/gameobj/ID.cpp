@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ID.h"
-#include "civarchive.h"
+#include "gs/gameobj/ID.h"
+#include "robot/aibackdoor/civarchive.h"
 
 void ID::Serialize(CivArchive &archive)
 	{

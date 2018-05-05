@@ -1,8 +1,8 @@
 #ifndef __CTP2_COMMANDLINE_H__
 #define __CTP2_COMMANDLINE_H__
 
-#include "aui_surface.h"
-#include "aui_bitmapfont.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_bitmapfont.h"
 
 #define k_MAX_COMMAND_LINE_LENGTH		256
 

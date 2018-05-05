@@ -1,7 +1,7 @@
 #ifndef __FS_MST_H__
 #define __FS_MST_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 class CityVertex;
 class CityTree;

@@ -28,12 +28,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
-#include "ctp2_Tab.h"
-#include "ctp2_TabButton.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabButton.h"
 
 ctp2_TabGroup::ctp2_TabGroup(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							 ControlActionCallback *ActionFunc, void *cookie) :

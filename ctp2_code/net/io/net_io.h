@@ -4,7 +4,7 @@
 #ifndef _NETIO_H_
 #define _NETIO_H_
 
-#include "net_types.h"
+#include "net/io/net_types.h"
 
 class NetIOResponse
 {

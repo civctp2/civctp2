@@ -3,8 +3,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_mouse.h"
-#include "aui_directinput.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_directx/aui_directinput.h"
 
 
 

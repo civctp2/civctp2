@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3window.h"
-#include "dialogboxwindow.h"
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3ui.h"
-#include "aui_switchgroup.h"
-#include "aui_uniqueid.h"
-#include "textradio.h"
-#include "c3textfield.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/netshell/dialogboxwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/textradio.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
-#include "netshell.h"
-#include "gameselectwindow.h"
-#include "lobbywindow.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/gameselectwindow.h"
+#include "ui/netshell/lobbywindow.h"
 
-#include "passwordscreen.h"
+#include "ui/netshell/passwordscreen.h"
 
-#include "spnewgamewindow.h"
+#include "ui/interface/spnewgamewindow.h"
 
 extern C3UI			*g_c3ui;
 

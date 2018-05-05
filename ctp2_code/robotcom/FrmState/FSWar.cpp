@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "globals.h"
-#include "IMapPointData.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "FSWar.h"
-#include "aicell.h"
-#include "AiMap.h"
-#include "ic3GameState.h"
+#include "robotcom/FrmState/FSWar.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/Top/AiMap.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 #include "Foreigner.h"
 
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "Wallclock.h"
+#include "robotcom/backdoor/Wallclock.h"
 extern Wall_Clock *g_wall_clock;
 
 

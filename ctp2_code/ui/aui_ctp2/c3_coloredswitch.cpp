@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "c3_coloredswitch.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3_coloredswitch.h"
 
-#include "aui.h"
-#include "aui_ui.h"
-#include "aui_action.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "colorset.h"               // g_colorSet
-#include "pattern.h"
-#include "patternbase.h"
-#include "pixelutils.h"
-#include "primitives.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 

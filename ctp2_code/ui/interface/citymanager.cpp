@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "aui.h"
-#include "aui_window.h"
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_blitter.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_blitter.h"
 
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "UIUtils.h"
+#include "ui/interface/UIUtils.h"
 
-#include "citymanager.h"
-#include "c3ui.h"
+#include "ui/interface/citymanager.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
 extern C3UI *g_c3ui;
 

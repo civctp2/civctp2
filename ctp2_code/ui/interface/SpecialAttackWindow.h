@@ -36,7 +36,7 @@
 #ifndef __SPECIAL_ATTACK_WINDOW__H__
 #define __SPECIAL_ATTACK_WINDOW__H__ 1
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class MapPoint;
 

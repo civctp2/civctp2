@@ -29,28 +29,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // Pre-compiled header
-#include "SlicSegment.h"        // Own declarations: consistency check
+#include "ctp/c3.h"                 // Pre-compiled header
+#include "gs/slic/SlicSegment.h"        // Own declarations: consistency check
 
-#include "SlicError.h"
-#include "slicif.h"
-#include "SlicStack.h"
-#include "SlicFrame.h"
-#include "civarchive.h"
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "SlicObject.h"
-#include "Unit.h"
-#include "SelItem.h"
+#include "gs/slic/SlicError.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/slic/SlicFrame.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/gameobj/Unit.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "TurnCnt.h"
+#include "gs/utility/TurnCnt.h"
 
-#include "GameEventManager.h"
-#include "SlicNamedSymbol.h"
-#include "SlicConditional.h"
-#include "SlicConst.h"
-#include "profileDB.h"
-#include "pool.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/SlicConditional.h"
+#include "gs/slic/SlicConst.h"
+#include "gs/database/profileDB.h"
+#include "robot/aibackdoor/pool.h"
 
 namespace
 {

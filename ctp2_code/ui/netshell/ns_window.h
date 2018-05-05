@@ -2,7 +2,7 @@
 #define __NS_WINDOW_H__
 
 
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
 #define k_NS_WINDOW_TILE_LDL_NAME		"tile"
 #define k_NS_WINDOW_RETIRED_LDL_NAME	"retired"

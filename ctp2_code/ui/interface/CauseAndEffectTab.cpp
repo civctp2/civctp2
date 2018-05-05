@@ -40,36 +40,36 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "CauseAndEffectTab.h"
+#include "ui/interface/CauseAndEffectTab.h"
 
-#include "aui_ldl.h"
-#include "aui_region.h"
-#include "buildingutil.h"
-#include "c3math.h"                     // AsPercentage
-#include "c3slider.h"
-#include "colorset.h"                   // g_colorSet
-#include "ctp2_button.h"
-#include "ctp2_spinner.h"
-#include "ctp2_Static.h"
-#include "ctp2_Tab.h"
-#include "DomesticManagementDialog.h"
-#include "FeatTracker.h"				// g_featTracker
-#include "governor.h"                   // To allow automatic slider optimization
-#include "GovernmentRecord.h"
-#include "Happy.h"
-#include "network.h"
-#include "pixelutils.h"
-#include "player.h"
-#include "PopRecord.h"					// g_thePopDB
-#include "primitives.h"
-#include "profileDB.h"					// g_theProfileDB
-#include "SelItem.h"
-#include "StrDB.h"
-#include "UnitData.h"
-#include "UnitDynArr.h"
-#include "wonderutil.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_region.h"
+#include "gs/gameobj/buildingutil.h"
+#include "ctp/ctp2_utils/c3math.h"                     // AsPercentage
+#include "ui/aui_ctp2/c3slider.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_spinner.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/interface/DomesticManagementDialog.h"
+#include "gs/gameobj/FeatTracker.h"				// g_featTracker
+#include "ai/CityManagement/governor.h"                   // To allow automatic slider optimization
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Happy.h"
+#include "net/general/network.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"
+#include "gs/newdb/PopRecord.h"					// g_thePopDB
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"					// g_theProfileDB
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/wonderutil.h"
 
 static sint32 k_ONE_FIVE__NEG_TWO_TWO_CONVERSION = 3;
 static sint32 k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION = 2;

@@ -31,64 +31,64 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "greatlibrarywindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/greatlibrarywindow.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_static.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "pattern.h"
-#include "primitives.h"
-#include "greatlibrary.h"
-
-
-
-
-#include "World.h"
-#include "StrDB.h"
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "AdvanceRecord.h"
-#include "TerrainImprovementRecord.h"
-
-#include "TerrainRecord.h"
-#include "ConceptRecord.h"
-#include "GovernmentRecord.h"
-#include "prjfile.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/interface/greatlibrary.h"
 
 
 
 
-#include "c3ui.h"
-#include "aui_tabgroup.h"
-#include "directvideo.h"
-#include "CivPaths.h"
-#include "ctp2_hypertextbox.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
+#include "gs/world/World.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
 
-#include "aui_ldl.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/ConceptRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/fileio/prjfile.h"
 
-#include "colorset.h"
-#include "textutils.h"
-#include "debugwindow.h"
-#include "soundmanager.h"
 
-#include "UnitRecord.h"
-#include "IconRecord.h"
-#include "IconRecord.h"
-#include "TerrainRecord.h"
 
-#include "wonderutil.h"
 
-#include "text_hasher.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_tabgroup.h"
+#include "ui/aui_ctp2/directvideo.h"
+#include "gs/fileio/CivPaths.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
 
-#include "ResourceRecord.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "OrderRecord.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_utils/textutils.h"
+#include "ui/interface/debugwindow.h"
+#include "sound/soundmanager.h"
 
-#include "stringutils.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+
+#include "gs/gameobj/wonderutil.h"
+
+#include "ui/interface/text_hasher.h"
+
+#include "gs/newdb/ResourceRecord.h"
+
+#include "gs/newdb/OrderRecord.h"
+
+#include "gs/utility/stringutils.h"
 
 
 const int GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK = 999;

@@ -3,7 +3,7 @@
 #ifndef __C3Government_H__
 #define __C3Government_H__ 1
 
-#include "ic3Government.h"
+#include "gs/outcom/ic3Government.h"
 
 class Player;
 class CivArchive;

@@ -1,7 +1,7 @@
 #ifndef xCHAT_LIST_H__
 #define xCHAT_LIST_H__
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 #define k_CHAT_TEXT_TIME 15
 

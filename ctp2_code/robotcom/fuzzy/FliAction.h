@@ -12,7 +12,7 @@ template <class T> class PointerList;
 class AiMain;
 class FliEngine;
 
-#include "fliif.h"
+#include "robotcom/fuzzy/fliif.h"
 
 class FliAction {
 private:

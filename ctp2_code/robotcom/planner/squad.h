@@ -2,9 +2,9 @@
 #define __squads_h__
 
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
 
 

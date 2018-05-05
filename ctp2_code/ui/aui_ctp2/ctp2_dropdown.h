@@ -35,8 +35,8 @@
 #ifndef __CTP2_DROPDOWN_H__
 #define __CTP2_DROPDOWN_H__
 
-#include "aui_dropdown.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_dropdown.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class ctp2_ListItem;
 

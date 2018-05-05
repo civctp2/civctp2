@@ -30,26 +30,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TradeRouteData.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/TradeRouteData.h"
 
 #include <algorithm>
-#include "TradeRoute.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
-#include "Path.h"
-#include "TradeAstar.h"
-#include "Cell.h"
-#include "CityRadius.h"
-#include "TerrainRecord.h"
-#include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
-#include "network.h"
-#include "ResourceRecord.h"
-#include "UnitData.h"
-#include "radarmap.h"
-#include "tradeutil.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/Player.h"
+#include "robot/pathing/Path.h"
+#include "robot/pathing/TradeAstar.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "net/general/network.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/gameobj/UnitData.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/gameobj/tradeutil.h"
 
 
 extern TradeAstar g_theTradeAstar;

@@ -3,8 +3,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_input.h"
-#include "aui_directx.h"
+#include "ui/aui_common/aui_input.h"
+#include "ui/aui_directx/aui_directx.h"
 
 
 class aui_DirectInput : public virtual aui_Input, public aui_DirectX

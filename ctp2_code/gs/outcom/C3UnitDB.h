@@ -3,7 +3,7 @@
 #ifndef __C3UnitDB_H__
 #define __C3UnitDB_H__ 1
 
-#include "ic3UnitDB.h"
+#include "gs/outcom/ic3UnitDB.h"
 
 class Player;
 class CivArchive;

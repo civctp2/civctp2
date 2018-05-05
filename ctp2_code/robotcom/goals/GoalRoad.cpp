@@ -1,26 +1,26 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3world.h"
-#include "ic3InstDB.h"
-#include "ic3player.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
+#include "user-robotcom/outcom/ic3player.h"
 
-#include "GoalRoad.h"
-#include "FlatPtr.h"
+#include "robotcom/goals/GoalRoad.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
-#include "TerrImproveData.h"
-#include "CityAgent.h"
-#include "ic3RobotAstar.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "user-robotcom/outcom/ic3RobotAstar.h"
 #include "aimain.h"
-#include "aicause.h"
-#include "scienceagent.h"
+#include "user-robotcom/shared/aicause.h"
+#include "robotcom/Agent/scienceagent.h"
 
 extern double fz_inst_threat_threshold;
 extern double fz_inst_road_coef;
 
 #include "Scheduler.h"
-#include "planner.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/planner.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
 
 

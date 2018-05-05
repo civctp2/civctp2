@@ -4,8 +4,8 @@
 #ifndef __UNITTABBUTTON_H__
 #define __UNITTABBUTTON_H__
 
-#include "aui_control.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 #define k_DEFAULT_HEALTHBAR_HEIGHT	4
 #define k_CARGO_CAPACITY			5

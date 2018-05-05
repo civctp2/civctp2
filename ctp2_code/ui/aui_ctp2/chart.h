@@ -5,7 +5,7 @@
 #ifndef __CHART_H__
 #define __CHART_H__
 
-#include "ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
 
 
 #define k_CHART_LDL_BUTTON			"button"

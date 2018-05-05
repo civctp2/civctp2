@@ -52,8 +52,8 @@ struct aui_JoystickEvent
 	}
 };
 
-#include "aui_base.h"
-#include "aui_input.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_input.h"
 
 class aui_Joystick : public aui_Base, public virtual aui_Input
 {

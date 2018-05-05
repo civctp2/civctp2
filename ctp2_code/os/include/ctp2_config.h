@@ -8,7 +8,7 @@
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #elif defined(_MSC_VER)
-#include "config_win32.h"
+#include "os/include/config_win32.h"
 #else
 #error "Unsupported build environment."
 #endif

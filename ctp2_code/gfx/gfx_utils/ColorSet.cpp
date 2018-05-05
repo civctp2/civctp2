@@ -35,16 +35,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "colorset.h"
+#include "ctp/c3.h"
+#include "gfx/gfx_utils/colorset.h"
 
 #include <algorithm>
 
-#include "c3errors.h"
-#include "c3files.h"
-#include "pixelutils.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gfx/gfx_utils/pixelutils.h"
 #include <stdexcept>    // std::exception, std::runtime_error
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern sint32 g_is565Format;
 

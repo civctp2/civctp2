@@ -29,22 +29,22 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "CityInfluenceIterator.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "CityRadius.h"
-#include "World.h"
-#include "Cell.h"
-#include "CitySizeRecord.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/CitySizeRecord.h"
 
-#include "directions.h"
-#include "UnitData.h"
+#include "gs/utility/directions.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "network.h"
+#include "net/general/network.h"
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 
 namespace
 {

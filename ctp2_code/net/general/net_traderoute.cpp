@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "network.h"
-#include "net_traderoute.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_traderoute.h"
+#include "net/io/net_util.h"
 
-#include "TradeRouteData.h"
-#include "TradePool.h"
+#include "gs/gameobj/TradeRouteData.h"
+#include "gs/gameobj/TradePool.h"
 
-#include "director.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Cell.h"
+#include "gfx/spritesys/director.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
 
-#include "TradeDynArr.h"
+#include "gs/utility/TradeDynArr.h"
 
-#include "trademanager.h"
+#include "ui/interface/trademanager.h"
 
 extern Director *g_director;
 extern World *g_theWorld;

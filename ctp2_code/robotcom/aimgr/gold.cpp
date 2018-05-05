@@ -1,20 +1,20 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 
 #include "civarchive.h"
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
 
 #include "aimain.h"
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "gold.h"
-#include "FlatPtr.h"
+#include "robotcom/aimgr/gold.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
-#include "FzOut.h"
-#include "CityAgent.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/Agent/CityAgent.h"
 
 extern double fz_budget_income_new_blg;
 extern double fz_budget_income_wages;

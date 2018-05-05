@@ -4,19 +4,19 @@
 #define __ARMY_AGENT_H__
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
 
 
 
 
-#include "Agent.h"
+#include "robotcom/Agent/Agent.h"
 
 enum CAUSE_REMOVE_ARMY;
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 #define MINIMUM_MOVEMENT_POINTS_TO_MOVE (16.0)
 

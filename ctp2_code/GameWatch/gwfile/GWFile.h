@@ -1,9 +1,9 @@
 #ifndef _BMH_GW_FILE_H_
 #define _BMH_GW_FILE_H_
 
-#include "GWFileDLL.h"
+#include "GameWatch/gwfile/GWFileDLL.h"
 
-#include "GWDelivery.h"
+#include "GameWatch/gamewatch/GWDelivery.h"
 
 class GWFileDllHeader GWFile : public GWDelivery {
 public:

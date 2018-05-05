@@ -1,9 +1,9 @@
 #ifndef __C3_COLOREDSWITCH_H__
 #define __C3_COLOREDSWITCH_H__
 
-#include "patternbase.h"
-#include "aui_switch.h"
-#include "colorset.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_switch.h"
+#include "gfx/gfx_utils/colorset.h"
 
 #define k_C3_COLOREDSWITCH_DEFAULTNUMSTATES		2
 #define k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH		2

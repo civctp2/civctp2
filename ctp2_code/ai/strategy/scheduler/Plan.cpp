@@ -86,20 +86,20 @@
 /// @todo Check what happens when the m_the_agent references
 ///       become invalid through delete.
 
-#include "c3.h"
-#include "Plan.h"
+#include "ctp/c3.h"
+#include "ai/strategy/scheduler/Plan.h"
 
-#include "profileai.h"
-#include "debugassert.h"
-#include "Goal.h"
-#include "Scheduler.h"
-#include "agent.h"
-#include "ArmyData.h"
-#include "agent.h"
-#include "squad_Strength.h"
-#include "ctpaidebug.h"
+#include "ai/profileai.h"
+#include "ctp/debugtools/debugassert.h"
+#include "ai/strategy/goals/Goal.h"
+#include "ai/strategy/scheduler/Scheduler.h"
+#include "ai/strategy/agents/agent.h"
+#include "gs/gameobj/ArmyData.h"
+#include "ai/strategy/agents/agent.h"
+#include "ai/strategy/squads/squad_Strength.h"
+#include "ai/ctpaidebug.h"
 
-#include "GoalRecord.h"
+#include "gs/newdb/GoalRecord.h"
 
 //----------------------------------------------------------------------------
 //

@@ -28,31 +28,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "profileai.h"
+#include "ai/profileai.h"
 
-#include "Scheduler.h"
+#include "ai/strategy/scheduler/Scheduler.h"
 
-#include "MotivationEvent.h"
+#include "ai/diplomacy/MotivationEvent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "player.h"
-#include "Strengths.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Strengths.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "GoalRecord.h"
-#include "Goal.h"
-#include "Gold.h"
-#include "stringutils.h"
-#include "ctpai.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/newdb/GoalRecord.h"
+#include "ai/strategy/goals/Goal.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/utility/stringutils.h"
+#include "ai/ctpai.h"
 
-#include "pollution.h"
+#include "gs/gameobj/pollution.h"
 extern Pollution *g_thePollution;
 
 STDEHANDLER(MotivationEvent)

@@ -31,27 +31,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "tileimptracker.h"
+#include "ctp/c3.h"
+#include "ui/interface/tileimptracker.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "aui_uniqueid.h"
-#include "c3window.h"
-#include "c3_static.h"
-#include "gstypes.h"            // TERRAIN_TYPES
-#include "primitives.h"
-#include "SelItem.h"
-#include "TerrImprovePool.h"
-#include "player.h"
-#include "maputils.h"
-#include "World.h"
-#include "Cell.h"
-#include "colorset.h"           // g_colorSet
-#include "profileDB.h"          // g_theProfileDB
-#include "terrainutil.h"
-#include "TerrainRecord.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "gs/utility/gstypes.h"            // TERRAIN_TYPES
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/Player.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainRecord.h"
 
 extern C3UI             *g_c3ui;
 

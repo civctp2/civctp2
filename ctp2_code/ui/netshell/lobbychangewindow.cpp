@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3textfield.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
-#include "netshell.h"
-#include "ns_customlistbox.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_customlistbox.h"
 
-#include "passwordscreen.h"
+#include "ui/netshell/passwordscreen.h"
 
-#include "lobbychangewindow.h"
-#include "lobbywindow.h"
+#include "ui/netshell/lobbychangewindow.h"
+#include "ui/netshell/lobbywindow.h"
 
 LobbyChangeWindow::LobbyChangeWindow(
 	AUI_ERRCODE *retval )

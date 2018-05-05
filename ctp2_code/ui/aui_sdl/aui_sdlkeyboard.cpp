@@ -1,16 +1,16 @@
-#include "ctp2_config.h"
-#include "c3.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3.h"
 
 #if defined(__AUI_USE_SDL__)
 
 #include <SDL/SDL.h>
-#include "aui_sdlkeyboard.h"
-#include "aui_ui.h"
-#include "c3ui.h"
+#include "ui/aui_sdl/aui_sdlkeyboard.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
 extern C3UI		*g_c3ui;
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp	*g_civApp;
 
 // We have to have a secondary keyboard event queue from which

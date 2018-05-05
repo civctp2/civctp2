@@ -64,85 +64,85 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "citywindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/citywindow.h"
 
-#include "ctp2_Window.h"
-#include "citydata.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "ctp2_button.h"
-#include "c3ui.h"
-#include "pointerlist.h"
-#include "ctp2_Static.h"
-#include "player.h"
-#include "SelItem.h"
-#include "ctp2_spinner.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_hypertextbox.h"
-#include "ctp2_TabGroup.h"
-#include "ctp2_Tab.h"
-#include "aui_image.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "gs/gameobj/citydata.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/aui_ctp2/ctp2_spinner.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_common/aui_image.h"
 
-#include "aui_blitter.h"
+#include "ui/aui_common/aui_blitter.h"
 
-#include "EditQueue.h"
+#include "ui/interface/EditQueue.h"
 
-#include "BuildingRecord.h"
-#include "BuildListSequenceRecord.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"
-#include "IconRecord.h"
-#include "CitySizeRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/BuildListSequenceRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/newdb/CitySizeRecord.h"
 
-#include "StrDB.h"
-#include "ConstRecord.h"
-#include "colorset.h"               // g_colorSet
+#include "gs/database/StrDB.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
-#include "BldQue.h"
-#include "Gold.h"
-#include "Happy.h"
-#include "PopRecord.h"				// g_thePopDB
-#include "UnitData.h"
+#include "gs/gameobj/BldQue.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/newdb/PopRecord.h"				// g_thePopDB
+#include "gs/gameobj/UnitData.h"
 
-#include "SlicContext.h"
-#include "stringutils.h"
+#include "gs/slic/SlicContext.h"
+#include "gs/utility/stringutils.h"
 
-#include "screenutils.h"
-#include "greatlibrary.h"
+#include "ui/interface/screenutils.h"
+#include "ui/interface/greatlibrary.h"
 
-#include "resourcemap.h"
+#include "gfx/tilesys/resourcemap.h"
 extern ResourceMap                  *g_resourceMap;
 
-#include "workwin.h"
+#include "ui/interface/workwin.h"
 
-#include "prjfile.h"
+#include "gs/fileio/prjfile.h"
 extern ProjectFile                  *g_GreatLibPF;
 
-#include "HappyTracker.h"
+#include "gs/gameobj/HappyTracker.h"
 
-#include "NationalManagementDialog.h"
-#include "governor.h"
+#include "ui/interface/NationalManagementDialog.h"
+#include "ai/CityManagement/governor.h"
 
-#include "World.h"
-#include "Cell.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
 
-#include "GameEventManager.h"
+#include "gs/events/GameEventManager.h"
 
-#include "MessageBoxDialog.h"
+#include "ui/interface/MessageBoxDialog.h"
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 
-#include "network.h"
+#include "net/general/network.h"
 
-#include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include "gs/outcom/AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include <algorithm>    // std::fill
-#include "ArmyPool.h"	// g_armyPool
-#include "buildingutil.h"
+#include "gs/gameobj/ArmyPool.h"	// g_armyPool
+#include "gs/gameobj/buildingutil.h"
 
-#include "Timer.h"
+#include "ctp/debugtools/Timer.h"
 
 extern C3UI                         *g_c3ui;
 

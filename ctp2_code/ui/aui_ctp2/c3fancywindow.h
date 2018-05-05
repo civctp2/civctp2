@@ -36,8 +36,8 @@
 #ifndef __C3FancyWindow_H__
 #define __C3FancyWindow_H__
 
-#include "c3window.h"
-#include "aui_ldl.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_common/aui_ldl.h"
 
 class c3_Button;
 

@@ -1,7 +1,7 @@
 #ifndef __AUI_TABGROUP_H__
 #define __AUI_TABGROUP_H__
 
-#include "aui_switchgroup.h"
+#include "ui/aui_common/aui_switchgroup.h"
 
 class aui_Tab;
 

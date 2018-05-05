@@ -28,23 +28,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "MapPoint.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TerrImproveData.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TerrImproveData.h"
 
-#include "tileutils.h"
-#include "tileset.h"
-#include "tiledmap.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "TileDrawRoad.h"
+#include "gfx/tilesys/TileDrawRoad.h"
 
-#include "directions.h"
+#include "gs/utility/directions.h"
 
 extern World *g_theWorld;
 

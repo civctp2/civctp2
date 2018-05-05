@@ -31,10 +31,10 @@
 /// \file   DirectorActions.cpp
 /// \brief  Action types for processing by the director
 
-#include "c3.h"
-#include "directoractions.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/directoractions.h"
 
-#include "EffectActor.h"        // EffectActor destructor
+#include "gfx/spritesys/EffectActor.h"        // EffectActor destructor
 
 DQActionInvokeResearchAdvance::~DQActionInvokeResearchAdvance()
 {

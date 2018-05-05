@@ -20,9 +20,9 @@ class c3_EditButton;
 #define k_C3_EDITBUTTON_DEFAULTMIN			0
 #define k_C3_EDITBUTTON_DEFAULTMAX			100
 
-#include "patternbase.h"
-#include "aui_action.h"
-#include "aui_button.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_button.h"
 
 class aui_Surface;
 class C3TextField;

@@ -11,9 +11,9 @@ class ns_HPlayerItem;
 
 #define k_TRIBES_MAX 100
 
-#include "ns_item.h"
-#include "c3_dropdown.h"
-#include "aui_stringtable.h"
+#include "ui/netshell/ns_item.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_common/aui_stringtable.h"
 
 
 class ns_Tribes

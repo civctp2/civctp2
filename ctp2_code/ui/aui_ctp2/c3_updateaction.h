@@ -4,7 +4,7 @@
 #ifndef __C3_UPDATEACTION_H__
 #define __C3_UPDATEACTION_H__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 class c3_UpdateAction;
 

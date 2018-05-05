@@ -1,42 +1,42 @@
-#include "c3.h"
-#include "dynarr.h"
+#include "ctp/c3.h"
+#include "robot/aibackdoor/dynarr.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
-#include "bset.h"
+#include "gs/outcom/IMapPointData.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "ic3GameState.h"
-#include "ic3world.h"
-#include "ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
 
 #include "aimain.h"
-#include "AiMap.h"
+#include "robotcom/Top/AiMap.h"
 
-#include "unitflow.h"
+#include "robotcom/planner/unitflow.h"
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 #include "semi_dynamic_array.h"
-#include "sorted_array.h"
-#include "aip.h"
-#include "planner.h"
+#include "robotcom/planner/sorted_array.h"
+#include "robotcom/planner/aip.h"
+#include "robotcom/planner/planner.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 extern double fz_min_force_matching_percent;
 extern double fz_max_force_matching_percent;
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "ForeignAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Agent/ForeignAgent.h"
 #include "Foreigner.h"
 
-#include "GlAttck.h"
+#include "robotcom/goals/GlAttck.h"
 
-#include "ailog.h"
-#include "squad_strength.h"
+#include "robotcom/planner/ailog.h"
+#include "robotcom/planner/squad_strength.h"
 
 #define LOG_GOAL_ATTACK true
 

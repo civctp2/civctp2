@@ -30,7 +30,7 @@
  */
 #pragma once
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #ifdef _DEBUG
 

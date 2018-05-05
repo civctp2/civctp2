@@ -9,9 +9,9 @@
 
 class aui_StringTable;
 
-#include "aui_base.h"
-#include "auitypes.h"       // AUI_ERRCODE
-#include "ctp2_inttypes.h"  // sint32
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"  // sint32
 
 class ldl_datablock;
 // MBCHAR

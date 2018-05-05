@@ -3,7 +3,7 @@
 #define __IC3WORLD_H__
 
 #include <OBJBASE.H>
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 #undef INTERFACE
 #define INTERFACE IC3World

@@ -29,72 +29,72 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "infowin.h"
+#include "ctp/c3.h"
+#include "ui/interface/infowin.h"
 
-#include "aui.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_ranger.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listbox.h"
-#include "c3_static.h"
-#include "c3ui.h"
-#include "c3windows.h"
-#include "colorset.h"               // g_colorSet
-#include "controlpanelwindow.h"     // g_controlPanel
-#include "controlsheet.h"
-#include "Globals.h"                // allocated::clear
-#include "infowindow.h"
-#include "pixelutils.h"
-#include "player.h"                 // g_player
-#include "radarmap.h"
-#include "screenutils.h"
-#include "staticpicture.h"
-#include "textbox.h"
-#include "textbutton.h"
-#include "thermometer.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitDynArr.h"
-#include "UnitRec.h"
-#include "World.h"                  // g_theWorld
-#include "workmap.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/interface/controlpanelwindow.h"     // g_controlPanel
+#include "ui/aui_ctp2/controlsheet.h"
+#include "gs/utility/Globals.h"                // allocated::clear
+#include "ui/interface/infowindow.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/interface/screenutils.h"
+#include "ui/aui_ctp2/staticpicture.h"
+#include "ui/aui_ctp2/textbox.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/thermometer.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/world/World.h"                  // g_theWorld
+#include "gfx/tilesys/workmap.h"
 
-#include "StrDB.h"                  // g_theStringDB
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "Advances.h"
-#include "TopTen.h"
-#include "AgeRecord.h"
-#include "Score.h"
-#include "DifficultyRecord.h"
-#include "Diffcly.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "pollution.h"
-#include "EndGame.h"
-#include "WonderTracker.h"
-#include "Civilisation.h"
-#include "CivilisationPool.h"       // g_theCivilisationPool;
-#include "CivPaths.h"               // g_civPaths
-#include "SelItem.h"                // g_selected_item
-#include "BldQue.h"
-#include "ObjPool.h"
-#include "Cell.h"
-#include "c3files.h"
-#include "pointerlist.h"
-#include "linegraph.h"
-#include "TurnCnt.h"                // g_turn
-#include "Strengths.h"
-#include "UnitPool.h"               // g_theUnitPool
-#include "keypress.h"
-#include "wonderutil.h"
-#include "EventTracker.h"
-#include "GameSettings.h"
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/TopTen.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/gameobj/Score.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "gs/gameobj/pollution.h"
+#include "gs/gameobj/EndGame.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/CivilisationPool.h"       // g_theCivilisationPool;
+#include "gs/fileio/CivPaths.h"               // g_civPaths
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/gameobj/BldQue.h"
+#include "gs/gameobj/ObjPool.h"
+#include "gs/world/Cell.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/aui_ctp2/linegraph.h"
+#include "gs/utility/TurnCnt.h"                // g_turn
+#include "gs/gameobj/Strengths.h"
+#include "gs/gameobj/UnitPool.h"               // g_theUnitPool
+#include "ui/aui_ctp2/keypress.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/EventTracker.h"
+#include "gs/gameobj/GameSettings.h"
 
 extern sint32                   g_ScreenWidth;
 extern sint32                   g_ScreenHeight;

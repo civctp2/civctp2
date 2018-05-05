@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_game.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_game.h"
 
 
 ns_Game::ns_Game(NETFunc::Game * game)

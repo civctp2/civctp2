@@ -4,7 +4,7 @@
 #ifndef __NET_ACHIEVEMENT_H__
 #define __NET_ACHIEVEMENT_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetAchievementTracker : public Packetizer
 {

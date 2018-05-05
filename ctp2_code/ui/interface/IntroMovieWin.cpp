@@ -28,26 +28,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
-#include "aui_uniqueid.h"
-#include "aui_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
-#include "IntroMovieWindow.h"
-#include "IntroMovieWin.h"
+#include "ui/interface/IntroMovieWindow.h"
+#include "ui/interface/IntroMovieWin.h"
 
-#include "moviedb.h"
-#include "StrDB.h"
-#include "AgeRecord.h"
-#include "WonderRecord.h"
+#include "gs/database/moviedb.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/newdb/WonderRecord.h"
 
-#include "initialplaywindow.h"
-#include "soundmanager.h"
+#include "ui/interface/initialplaywindow.h"
+#include "sound/soundmanager.h"
 
-#include "wonderutil.h"
+#include "gs/gameobj/wonderutil.h"
 
 extern MovieDB			*g_theVictoryMovieDB;
 extern C3UI				*g_c3ui;

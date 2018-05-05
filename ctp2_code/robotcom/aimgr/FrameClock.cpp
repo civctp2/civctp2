@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "FrameClock.h"
+#include "robotcom/aimgr/FrameClock.h"
 #include "civarchive.h"
 
 

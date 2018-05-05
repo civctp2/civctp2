@@ -37,7 +37,7 @@
 #ifndef __PLASMA_GEN_1_H__
 #define __PLASMA_GEN_1_H__
 
-#include "IMapGen.h"
+#include "mapgen/IMapGen.h"
 
 class PlasmaGenerator2 : public IMapGenerator
 {

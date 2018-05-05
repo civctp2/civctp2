@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
 
 uint32 aui_UniqueId( void )

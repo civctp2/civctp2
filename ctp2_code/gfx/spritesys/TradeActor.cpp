@@ -30,36 +30,36 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
+#include "ui/aui_common/aui.h"
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
-#include "SelItem.h"
-#include "pixelutils.h"
-#include "tileutils.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/tileutils.h"
 
-#include "SelItem.h"
-#include "FacedSprite.h"
-#include "GoodSpriteGroup.h"
-#include "SpriteState.h"
-#include "Actor.h"
-#include "SpriteGroupList.h"
-#include "tiledmap.h"
-#include "Anim.h"
-#include "TradeActor.h"
-#include "GoodActor.h"
-#include "StrDB.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/GoodSpriteGroup.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/TradeActor.h"
+#include "gfx/spritesys/GoodActor.h"
+#include "gs/database/StrDB.h"
 
-#include "ActorPath.h"
-#include "Action.h"
-#include "director.h"
-#include "maputils.h"
-#include "Cell.h"
-#include "ResourceRecord.h"
+#include "gfx/spritesys/ActorPath.h"
+#include "gfx/spritesys/Action.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/ResourceRecord.h"
 
 extern SpriteGroupList	*g_goodSpriteGroupList;
 

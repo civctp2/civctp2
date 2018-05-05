@@ -1,44 +1,44 @@
-#include "c3.h"
-#include "globals.h"
-#include "C3GameState.h"
-#include "C3UnitDB.h"
-#include "C3BlgDB.h"
-#include "C3InstDB.h"
-#include "CivPaths.h"
-#include "C3TerrDB.h"
-#include "C3ErrorReport.h"
-#include "C3String.h"
-#include "C3Rand.h"
-#include "C3Player.h"
-#include "C3World.h"
-#include "C3Science.h"
-#include "C3Government.h"
-#include "C3Wonder.h"
-#include "C3Population.h"
-#include "c3endgamedb.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "gs/outcom/C3GameState.h"
+#include "gs/outcom/C3UnitDB.h"
+#include "gs/outcom/C3BlgDB.h"
+#include "gs/outcom/C3InstDB.h"
+#include "gs/fileio/CivPaths.h"
+#include "gs/outcom/C3TerrDB.h"
+#include "gs/outcom/C3ErrorReport.h"
+#include "gs/outcom/C3String.h"
+#include "gs/outcom/C3Rand.h"
+#include "gs/outcom/C3Player.h"
+#include "gs/outcom/C3World.h"
+#include "gs/outcom/C3Science.h"
+#include "gs/outcom/C3Government.h"
+#include "gs/outcom/C3Wonder.h"
+#include "gs/outcom/C3Population.h"
+#include "gs/outcom/c3endgamedb.h"
 
-#include "ic3DipReq.h"
-#include "bset.h"
-#include "UnitPool.h"
-#include "Gold.h"
-#include "Strengths.h"
-#include "pollution.h"
-#include "UnitDynArr.h"
-#include "profileDB.h"
-#include "TradePool.h"
-#include "TradeDynArr.h"
-#include "order.h"
+#include "gs/outcom/ic3DipReq.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/Strengths.h"
+#include "gs/gameobj/pollution.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/database/profileDB.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/gameobj/Order.h"
 
 #include "RobotAstar.h"
 
 #include "ConstDB.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
 
-#include "GameSettings.h"
+#include "gs/gameobj/GameSettings.h"
 
-#include "network.h"
+#include "net/general/network.h"
 
 
 extern Player **g_player;
@@ -583,7 +583,7 @@ STDMETHODIMP_(sint32) C3GameState::GetOrderMaxGoldCost()
 	return max;
 }
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 
 STDMETHODIMP_(void) C3GameState::ProcessGraphicsCallback()
 {
@@ -593,7 +593,7 @@ STDMETHODIMP_(void) C3GameState::ProcessGraphicsCallback()
 		g_civApp->ProcessGraphicsCallback();
 }
 
-#include "TurnCnt.h"
+#include "gs/utility/TurnCnt.h"
 
 STDMETHODIMP_(sint32) C3GameState::GetTurn()
 {

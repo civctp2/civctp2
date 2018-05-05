@@ -39,7 +39,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include "windows.h"          // BOOL, FILE
+#include <windows.h>          // BOOL, FILE
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -76,10 +76,10 @@ enum LOADTYPE {
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Action.h"
-#include "ctp2_inttypes.h"	// sint32, uint16
-#include "FacedSprite.h"
-#include "Token.h"
+#include "gfx/spritesys/Action.h"
+#include "os/include/ctp2_inttypes.h"	// sint32, uint16
+#include "gfx/spritesys/FacedSprite.h"
+#include "gs/fileio/Token.h"
 
 class Anim;
 class aui_Surface;

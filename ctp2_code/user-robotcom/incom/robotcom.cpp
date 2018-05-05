@@ -1,19 +1,19 @@
 #define INITGUID
 
-#include "ctp.h"
-#include "globals.h"
-#include "aicause.h"
-#include "order.h"
+#include "user-robotcom/shared/ctp.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/shared/aicause.h"
+#include "user-robotcom/shared/order.h"
 
-#include "RobotCOM.h"
+#include "robotcom/InCom/RobotCOM.h"
 #include "aimain.h"
 
-#include "IRobot.h"
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3world.h"
-#include "ic3GameState.h"
-#include "ic3DipReq.h"
+#include "robotcom/InCom/IRobot.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3DipReq.h"
 #include "IC3Trade.h"
 #include "ic3endgamedb.h"
 

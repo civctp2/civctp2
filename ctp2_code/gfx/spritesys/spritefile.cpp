@@ -31,27 +31,27 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SpriteFile.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/SpriteFile.h"
 
-#include "pixelutils.h"
-#include "tiffutils.h"
-#include "spriteutils.h"
-#include "c3files.h"
-#include "c3errors.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "Sprite.h"
-#include "FacedSprite.h"
-#include "FacedSpriteWshadow.h"
-#include "SpriteGroup.h"
-#include "UnitSpriteGroup.h"
-#include "GoodSpriteGroup.h"
-#include "CitySpriteGroup.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gfx/spritesys/FacedSprite.h"
+#include "gfx/spritesys/FacedSpriteWshadow.h"
+#include "gfx/spritesys/SpriteGroup.h"
+#include "gfx/spritesys/UnitSpriteGroup.h"
+#include "gfx/spritesys/GoodSpriteGroup.h"
+#include "gfx/spritesys/CitySpriteGroup.h"
 
-#include "EffectSpriteGroup.h"
-#include "Anim.h"
-#include "CivPaths.h"               // g_civPaths
-#include "profileDB.h"              // g_theProfileDB
+#include "gfx/spritesys/EffectSpriteGroup.h"
+#include "gfx/spritesys/Anim.h"
+#include "gs/fileio/CivPaths.h"               // g_civPaths
+#include "gs/database/profileDB.h"              // g_theProfileDB
 
 #ifdef __MAKESPR__
 unsigned char g_compression_buff[COM_BUFF_SIZE];

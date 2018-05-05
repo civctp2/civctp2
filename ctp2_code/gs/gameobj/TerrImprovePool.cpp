@@ -28,23 +28,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TerrImprovePool.h"
-#include "World.h"
-#include "Cell.h"
-#include "TerrainRecord.h"
-#include "installationtree.h"
-#include "SlicEngine.h"
-#include "tiledmap.h"
-#include "player.h"
-#include "Vision.h"
-#include "Globals.h"
-#include "terrainutil.h"
-#include "TerrainImprovementRecord.h"
-#include "SoundRecord.h"
-#include "soundmanager.h"
-#include "SelItem.h"
-#include "network.h"                    // g_network
+#include "ctp/c3.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/slic/SlicEngine.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/SoundRecord.h"
+#include "sound/soundmanager.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "net/general/network.h"                    // g_network
 
 TerrainImprovementPool::TerrainImprovementPool()
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)

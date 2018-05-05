@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "UnitDynArr.h"
-#include "MapPoint.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/MapPoint.h"
 
 
 UnitDynamicArray::UnitDynamicArray() : DynamicArray<Unit>()

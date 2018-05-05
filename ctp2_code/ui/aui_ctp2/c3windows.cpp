@@ -28,69 +28,69 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "statuswindow.h"
-#include "tipwindow.h"
-#include "controlpanelwindow.h"
-#include "debugwindow.h"
-#include "c3_popupwindow.h"
-#include "radarwindow.h"
+#include "ui/aui_ctp2/statuswindow.h"
+#include "ui/aui_ctp2/tipwindow.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "ui/interface/debugwindow.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/interface/radarwindow.h"
 
-#include "textbutton.h"
-#include "iconbutton.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/iconbutton.h"
 
-#include "c3thumb.h"
-#include "c3slider.h"
-#include "c3scroller.h"
-#include "c3spinner.h"
+#include "ui/aui_ctp2/c3thumb.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3scroller.h"
+#include "ui/aui_ctp2/c3spinner.h"
 
-#include "checkbox.h"
-#include "textswitch.h"
+#include "ui/aui_ctp2/checkbox.h"
+#include "ui/aui_ctp2/textswitch.h"
 
-#include "textradio.h"
-#include "radiogroup.h"
+#include "ui/aui_ctp2/textradio.h"
+#include "ui/aui_ctp2/radiogroup.h"
 
-#include "texttab.h"
-#include "aui_tabgroup.h"
+#include "ui/aui_ctp2/texttab.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "aui_item.h"
-#include "c3listbox.h"
-#include "textbox.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_ctp2/c3listbox.h"
+#include "ui/aui_ctp2/textbox.h"
 
-#include "c3dropdown.h"
+#include "ui/aui_ctp2/c3dropdown.h"
 
-#include "c3textfield.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "c3windows.h"
+#include "ui/aui_ctp2/c3windows.h"
 
-#include "CivPaths.h"
-#include "videoutils.h"
+#include "gs/fileio/CivPaths.h"
+#include "gfx/gfx_utils/videoutils.h"
 
-#include "workwin.h"
-#include "statswindow.h"
-#include "workwindow.h"
+#include "ui/interface/workwin.h"
+#include "ui/interface/statswindow.h"
+#include "ui/interface/workwindow.h"
 
-#include "backgroundwin.h"
-#include "workwin.h"
+#include "ui/interface/backgroundwin.h"
+#include "ui/interface/workwin.h"
 
-#include "thumbnailmap.h"
+#include "ui/aui_ctp2/thumbnailmap.h"
 
-#include "player.h"
-#include "ID.h"
-#include "SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/ID.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "screenutils.h"
-#include "GameSettings.h"
+#include "ui/interface/screenutils.h"
+#include "gs/gameobj/GameSettings.h"
 
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
 
 extern sint32 g_ScreenWidth;

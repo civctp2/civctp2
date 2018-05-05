@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_ui.h"
-#include "aui_directaudiomanager.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_directx/aui_directaudiomanager.h"
 
-#include "aui_directsound.h"
+#include "ui/aui_directx/aui_directsound.h"
 
 
 aui_DirectSound::aui_DirectSound(

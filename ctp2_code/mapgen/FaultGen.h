@@ -31,7 +31,7 @@
 #ifndef __FAULTGEN_H__
 #define __FAULTGEN_H__ 1
 
-#include "IMapGen.h"
+#include "mapgen/IMapGen.h"
 
 class FaultGenerator : public IMapGenerator
 {

@@ -29,10 +29,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ctpaidebug.h"
-#include "Army.h"
+#include "ai/ctpaidebug.h"
+#include "gs/gameobj/Army.h"
 
 #if defined(_PLAYTEST) || defined(USE_LOGGING)
 

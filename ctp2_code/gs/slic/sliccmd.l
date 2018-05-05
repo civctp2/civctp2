@@ -1,7 +1,7 @@
 %{
 #include "scyaccdefs.h"
 #include "sliccmd.h"
-#include "sc.tab.h"
+#include "gs/slic/sc.tab.h"
 #include <stdlib.h>
 #include <string.h>
 #ifdef WIN32

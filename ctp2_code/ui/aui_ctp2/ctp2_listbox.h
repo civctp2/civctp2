@@ -40,13 +40,13 @@ class ctp2_Listbox;
 #define k_CTP2_LISTBOX_LDL_BORDER_WIDTH     "borderwidth"
 #define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT    "borderheight"
 
-#include "aui_control.h"    // ControlActionCallback
-#include "aui_listbox.h"    // aui_ListBox
-#include "auitypes.h"       // AUI_ERRCODE
-#include "c3types.h"        // MBCHAR
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "patternbase.h"    // PatternBase
-#include "windows.h"        // BOOL, POINT
+#include "ui/aui_common/aui_control.h"    // ControlActionCallback
+#include "ui/aui_common/aui_listbox.h"    // aui_ListBox
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "ctp/c3types.h"        // MBCHAR
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "ui/aui_ctp2/patternbase.h"    // PatternBase
+#include <windows.h>        // BOOL, POINT
 
 struct  aui_MouseEvent;
 class   aui_Surface;

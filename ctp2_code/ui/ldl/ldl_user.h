@@ -4,6 +4,6 @@
 #include "ldl_attr.hpp"
 #include "ldl_data.hpp"
 #include "ldl_file.hpp"
-#include "ldl_memmap.h"
+#include "ui/ldl/ldl_memmap.h"
 
 #endif

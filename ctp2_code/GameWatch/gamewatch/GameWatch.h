@@ -1,7 +1,7 @@
 #ifndef _BMH_GAME_WATCH_H_
 #define _BMH_GAME_WATCH_H_
 
-#include "DLLTypes.h"
+#include "GameWatch/gamewatch/DLLTypes.h"
 
 
 

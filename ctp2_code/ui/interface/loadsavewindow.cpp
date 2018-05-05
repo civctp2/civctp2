@@ -34,39 +34,39 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "loadsavewindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/loadsavewindow.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_control.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_imagebase.h"
-#include "aui_textbase.h"
-#include "aui_textfield.h"
-#include "aui_stringtable.h"
-#include "aui_tabgroup.h"
-#include "c3ui.h"
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3_listbox.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "texttab.h"
-#include "pointerlist.h"
-#include "c3textfield.h"
-#include "colorset.h"               // g_colorSet
-#include "player.h"                 // g_player
-#include "StrDB.h"                  // g_theStringDB
-#include "profileDB.h"              // g_theProfileDB
-#include "TurnCnt.h"                // g_turn
-#include "spnewgamewindow.h"
-#include "linegraph.h"
-#include "radarmap.h"
-#include "pixelutils.h"
-#include "SelItem.h"                // g_selected_item
-#include "TurnYearStatus.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_tabgroup.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/texttab.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "gs/utility/TurnCnt.h"                // g_turn
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/aui_ctp2/linegraph.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "ui/interface/TurnYearStatus.h"
 
 extern C3UI							*g_c3ui;
 extern sint32						g_is565Format;

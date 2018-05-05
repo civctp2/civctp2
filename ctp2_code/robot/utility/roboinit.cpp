@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "RoboInit.h"
+#include "ctp/c3.h"
+#include "robot/utility/RoboInit.h"
 
-#include "UnitAstar.h"
-#include "ctpai.h"
-#include "AgreementMatrix.h"
-#include "mapanalysis.h"
+#include "robot/pathing/UnitAstar.h"
+#include "ai/ctpai.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/mapanalysis/mapanalysis.h"
 
 UnitAstar * g_theUnitAstar  = NULL;
 

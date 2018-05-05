@@ -3,7 +3,7 @@
 #ifndef __Pirate_Marker__
 #define __Pirate_Marker__ 1
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
 class CityAgent;
 class CivArchive;

@@ -36,9 +36,9 @@
 #ifndef __PATH_H__
 #define __PATH_H__
 
-#include "astarpnt.h"
-#include "dynarr.h"
-#include "directions.h"
+#include "robot/pathing/astarpnt.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/directions.h"
 
 struct Direction {
 

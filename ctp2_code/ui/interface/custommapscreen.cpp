@@ -35,32 +35,32 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "aui_switch.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "aui_action.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "ConstRecord.h"
+#include "gs/newdb/ConstRecord.h"
 
-#include "RandGen.h"
+#include "gs/utility/RandGen.h"
 
-#include "civapp.h"
-#include "profileDB.h"
+#include "ctp/civapp.h"
+#include "gs/database/profileDB.h"
 
-#include "spnewgamewindow.h"
-#include "custommapscreen.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/custommapscreen.h"
 
-#include "keypress.h"
-#include "colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/keypress.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
 extern C3UI					*g_c3ui;
 

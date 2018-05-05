@@ -1,21 +1,21 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "net_player.h"
-#include "net_util.h"
+#include "net/general/net_player.h"
+#include "net/io/net_util.h"
 
-#include "player.h"
-#include "Advances.h"
-#include "bset.h"
-#include "MaterialPool.h"
-#include "TaxRate.h"
-#include "dynarr.h"
-#include "bset.h"
-#include "network.h"
-#include "Unit.h"
-#include "Score.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Advances.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/TaxRate.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/aibackdoor/bset.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Score.h"
 
-#include "MainControlPanel.h"
-#include "controlpanelwindow.h"
+#include "ui/interface/MainControlPanel.h"
+#include "ui/interface/controlpanelwindow.h"
 
 extern Player** g_player;
 

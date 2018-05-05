@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "CityGrowth.h"
-#include "FlatPtr.h"
+#include "robotcom/Alloc/CityGrowth.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "dynarr.h"
-#include "bset.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
-#include "FzOut.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 GrowTime::GrowTime()
 {

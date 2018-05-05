@@ -37,49 +37,49 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ArmyEvent.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/ArmyEvent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Army.h"
-#include "Order.h"
-#include "ArmyData.h"
-#include "MapPoint.h"
-#include "World.h"
-#include "Cell.h"
-#include "UnitData.h"
-#include "ArmyData.h"
-#include "WonderRecord.h"
-#include "player.h"
-#include "AICause.h"
-#include "ConstRecord.h"
-#include "RandGen.h"
-#include "UnitPool.h"
-#include "director.h"
-#include "MoveFlags.h"
-#include "directions.h"
-#include "network.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SelItem.h"
-#include "UnitRecord.h"
-#include "wonderutil.h"
-#include "ArmyPool.h"
-#include "CTP2Combat.h"
-#include "net_action.h"
-#include "MainControlPanel.h"
-#include "gamesounds.h"
-#include "soundmanager.h"
-#include "Diplomat.h"
-#include "CriticalMessagesPrefs.h"
-#include "Barbarians.h"			// EMOD
-#include "RiskRecord.h"			// Add for barb code
-#include "GameSettings.h"		// EMOD
-#include "GovernmentRecord.h"   // EMOD to access government data
-#include "DifficultyRecord.h"   // EMOD
-#include "CivilisationPool.h"
-#include "Happy.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/Player.h"
+#include "gs/outcom/AICause.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/utility/RandGen.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gfx/spritesys/director.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/utility/directions.h"
+#include "net/general/network.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/CTP2Combat.h"
+#include "net/general/net_action.h"
+#include "ui/interface/MainControlPanel.h"
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "gs/gameobj/CriticalMessagesPrefs.h"
+#include "gs/gameobj/Barbarians.h"			// EMOD
+#include "gs/newdb/RiskRecord.h"			// Add for barb code
+#include "gs/gameobj/GameSettings.h"		// EMOD
+#include "gs/newdb/GovernmentRecord.h"   // EMOD to access government data
+#include "gs/newdb/DifficultyRecord.h"   // EMOD
+#include "gs/gameobj/CivilisationPool.h"
+#include "gs/gameobj/Happy.h"
 
 extern ArmyPool		*g_theArmyPool;
 

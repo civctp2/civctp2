@@ -35,37 +35,37 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "spnewgamewindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/spnewgamewindow.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_imagebase.h"
-#include "aui_textbase.h"
-#include "aui_textfield.h"
-#include "aui_stringtable.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "c3_switch.h"
-#include "c3_static.h"
-#include "c3_checkbox.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "civscenarios.h"
-#include "Globals.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "CivilisationRecord.h"
-#include "CivilisationPool.h"
-#include "c3textfield.h"
-#include "loadsavemapwindow.h"
-#include "spnewgametribescreen.h"
-#include "spnewgamemapsizescreen.h"
-#include "StrDB.h"                      // g_theStringDB
-#include "AgeRecord.h"					// g_theAgeDB
-#include "agesscreen.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_checkbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "gs/fileio/civscenarios.h"
+#include "gs/utility/Globals.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/gameobj/CivilisationPool.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "ui/interface/loadsavemapwindow.h"
+#include "ui/interface/spnewgametribescreen.h"
+#include "ui/interface/spnewgamemapsizescreen.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "gs/newdb/AgeRecord.h"					// g_theAgeDB
+#include "ui/interface/agesscreen.h"
 
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 

@@ -39,9 +39,9 @@
 #ifndef __SOUNDMANAGER_H__
 #define __SOUNDMANAGER_H__
 
-#include "civsound.h"
-#include "pointerlist.h"
-#include "gamesounds.h"
+#include "sound/civsound.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "sound/gamesounds.h"
 
 #if defined(USE_SDL)
 #include <SDL/SDL.h>

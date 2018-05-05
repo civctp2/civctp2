@@ -77,7 +77,7 @@ enum SPRITETYPE
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
 class aui_Surface;
 class Token;

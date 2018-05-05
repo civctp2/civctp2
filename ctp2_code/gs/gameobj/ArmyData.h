@@ -52,16 +52,16 @@
 
 class ArmyData;
 
-#include "GameObj.h"
-#include "Unit.h"
-#include "TradeRoute.h"
-#include "cellunitlist.h"
-#include "CityRadius.h"
-#include "MapPoint.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/world/MapPoint.h"
 
-#include "GameEventTypes.h"
-#include "GameEventDescription.h"
-#include "UnitRecord.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/events/GameEventDescription.h"
+#include "gs/newdb/UnitRecord.h"
 
 class CivArchive;
 class Path;
@@ -86,7 +86,7 @@ enum ORDER_TEST {
     ORDER_TEST_NO_MOVEMENT
 };
 
-#include "Army.h"
+#include "gs/gameobj/Army.h"
 
 class KillRecord {
 public:

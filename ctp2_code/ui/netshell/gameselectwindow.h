@@ -1,9 +1,9 @@
 #ifndef __GAMESELECTWINDOW_H__
 #define __GAMESELECTWINDOW_H__
 
-#include "ns_window.h"
-#include "aui_action.h"
-#include "ns_customlistbox.h"
+#include "ui/netshell/ns_window.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/netshell/ns_customlistbox.h"
 
 class GameSelectWindow;
 extern GameSelectWindow *g_gameSelectWindow;

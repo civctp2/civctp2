@@ -30,59 +30,59 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "aui_radio.h"
-#include "aui_switchgroup.h"
-#include "aui_uniqueid.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_radio.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "spnewgamewindow.h"
-#include "spnewgamediffscreen.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/spnewgamediffscreen.h"
 
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "DifficultyRecord.h"
-#include "RiskRecord.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "gs/newdb/RiskRecord.h"
 
-#include "keypress.h"
+#include "ui/aui_ctp2/keypress.h"
 
 //original tribe screen includes
 
-#include "c3.h"                     // Precompiled header
-#include "spnewgametribescreen.h"   // Own declarations: consistency check
+#include "ctp/c3.h"                     // Precompiled header
+#include "ui/interface/spnewgametribescreen.h"   // Own declarations: consistency check
 
-#include "aui_radio.h"
-#include "aui_switchgroup.h"
-#include "aui_uniqueid.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "c3_popupwindow.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3textfield.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "Civilisation.h"
-#include "CivilisationRecord.h"
-#include "gamefile.h"
-#include "keypress.h"
-#include "player.h"                 // g_player
-#include "profileDB.h"              // g_theProfileDB
-#include "SelItem.h"
-#include "spnewgamewindow.h"
-#include "StrDB.h"                  // g_theStringDB
-#include "textradio.h"
+#include "ui/aui_common/aui_radio.h"
+#include "ui/aui_common/aui_switchgroup.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/fileio/gamefile.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "ui/aui_ctp2/textradio.h"
 #include <vector>                   // std::vector
 //end includes
 

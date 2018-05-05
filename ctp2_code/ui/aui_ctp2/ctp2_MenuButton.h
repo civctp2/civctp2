@@ -28,7 +28,7 @@
 #ifndef CTP2_MENUBUTTON_H__
 #define CTP2_MENUBUTTON_H__
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
 class ctp2_Menu;
 

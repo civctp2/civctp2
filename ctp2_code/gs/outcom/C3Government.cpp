@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "C3Government.h"
+#include "gs/outcom/C3Government.h"
 
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
 #include "ConstDB.h"
 #include "DiffDB.h"
-#include "GovernmentRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
 
 extern Player	**g_player ;
 extern ConstDB *g_theConstDB;

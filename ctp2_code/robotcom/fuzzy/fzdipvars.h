@@ -2,7 +2,7 @@
 #ifndef __FZDIPVARS_H__
 #define __FZDIPVARS_H__
 
-#include "diplomatictypes.h"
+#include "user-robotcom/shared/diplomatictypes.h"
 
 extern double fz_war_with_him;
 extern double fz_cease_fire_with_him;

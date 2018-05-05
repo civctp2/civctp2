@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_session.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_session.h"
 
 
 ns_Session::ns_Session(NETFunc::Session * session)

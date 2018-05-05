@@ -53,9 +53,9 @@ class	Gold;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "c3types.h"			// MBCHAR, sint..., uint...
-#include "civarchive.h"			// CivArchive
-#include "gstypes.h"			// PLAYER_INDEX
+#include "ctp/c3types.h"			// MBCHAR, sint..., uint...
+#include "robot/aibackdoor/civarchive.h"			// CivArchive
+#include "gs/utility/gstypes.h"			// PLAYER_INDEX
 
 //----------------------------------------------------------------------------
 // Class declarations

@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "net_types.h"
-#include "net_io.h"
+#include "net/io/net_types.h"
+#include "net/io/net_io.h"
 
 NetIO::~NetIO()
 {

@@ -31,40 +31,40 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ScienceManagementDialog.h"
+#include "ctp/c3.h"
+#include "ui/interface/ScienceManagementDialog.h"
 
-#include "AdvanceRecord.h"
-#include "aui_blitter.h"
-#include "aui_ldl.h"
-#include "aui_switch.h"
-#include "BuildingRecord.h"
-#include "c3ui.h"
-#include "colorset.h"               // g_colorSet
-#include "ctp2_button.h"
-#include "ctp2_hypertextbox.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "c3_listitem.h"
-#include "Globals.h"                // allocated::...
-#include "GovernmentRecord.h"
-#include "greatlibrary.h"           // k_MAX_GL_ENTRY
-#include "IconRecord.h"
-#include "player.h"
-#include "prjfile.h"
-#include "sci_advancescreen.h"
-#include "Sci.h"
-#include "screenutils.h"
-#include "SelItem.h"
-#include "StrDB.h"
-#include "TerrainImprovementRecord.h"
-#include "terrainutil.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"
-#include "wonderutil.h"
-#include "buildingutil.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_switch.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "gs/utility/Globals.h"                // allocated::...
+#include "gs/newdb/GovernmentRecord.h"
+#include "ui/interface/greatlibrary.h"           // k_MAX_GL_ENTRY
+#include "gs/newdb/IconRecord.h"
+#include "gs/gameobj/Player.h"
+#include "gs/fileio/prjfile.h"
+#include "ui/interface/sci_advancescreen.h"
+#include "gs/gameobj/Sci.h"
+#include "ui/interface/screenutils.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/buildingutil.h"
 
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;

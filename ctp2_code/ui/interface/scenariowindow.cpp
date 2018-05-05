@@ -28,38 +28,38 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_imagebase.h"
-#include "aui_textbase.h"
-#include "aui_textfield.h"
-#include "aui_stringtable.h"
-#include "c3ui.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_textfield.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_textfield.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "civscenarios.h"
+#include "gs/fileio/civscenarios.h"
 
-#include "spnewgamewindow.h"
-#include "scenariowindow.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/scenariowindow.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "loadsavewindow.h"
-#include "scenarioeditor.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/scenarioeditor.h"
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 
 extern StringDB                     *g_theStringDB;
 extern CivScenarios                 *g_civScenarios;

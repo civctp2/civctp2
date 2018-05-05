@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "CounterResponseEvent.h"
+#include "ctp/c3.h"
+#include "ai/diplomacy/CounterResponseEvent.h"
 
 #include <algorithm>    // std::max
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "AICause.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "ProposalAnalysis.h"
-#include "AgreementMatrix.h"
-#include "Strengths.h"
+#include "gs/outcom/AICause.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/diplomacy/ProposalAnalysis.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/Strengths.h"
 
 
 STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)

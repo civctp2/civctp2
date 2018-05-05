@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "network.h"
-#include "net_tradeoffer.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_tradeoffer.h"
+#include "net/io/net_util.h"
 
-#include "TradeOfferPool.h"
-#include "TradeOfferData.h"
-#include "TradeOffer.h"
-#include "UnitPool.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/TradeOfferData.h"
+#include "gs/gameobj/TradeOffer.h"
+#include "gs/gameobj/UnitPool.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player **g_player;
 extern UnitPool *g_theUnitPool;
 

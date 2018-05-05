@@ -3,7 +3,7 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_sound.h"
+#include "ui/aui_common/aui_sound.h"
 
 
 

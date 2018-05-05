@@ -2,7 +2,7 @@
 #define __Red_Black_Tree_h__
 
 #include "common.h"
-#include "pointer_pool.h"
+#include "robotcom/backdoor/pointer_pool.h"
 
 #define RED 1
 #define BLACK 0

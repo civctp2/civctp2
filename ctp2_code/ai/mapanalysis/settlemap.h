@@ -44,11 +44,11 @@ class SettleMap;
 size_t const    k_minimum_settle_city_size  = 2;
 size_t const    k_targets_per_continent     = 25;
 
-#include "bit_table.h"
-#include "mapgrid.h"
-#include "MapPoint.h"
-#include "player.h"
-#include "Unit.h"
+#include "robot/aibackdoor/bit_table.h"
+#include "ai/mapanalysis/mapgrid.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
 
 class SettleMap
 {

@@ -38,61 +38,61 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "director.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/director.h"
 
-#include "Action.h"
-#include "Actor.h"
+#include "gfx/spritesys/Action.h"
+#include "gfx/spritesys/Actor.h"
 #include <algorithm>                // std::fill
-#include "Anim.h"
-#include "Army.h"
-#include "background.h"
-#include "backgroundwin.h"
-#include "battleviewwindow.h"       // g_battleViewWindow
-#include "c3errors.h"
-#include "c3ui.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "citydata.h"
-#include "colorset.h"
-#include "cursormanager.h"
-#include "debugmemory.h"
-#include "dynarr.h"
-#include "EffectActor.h"
-#include "GameEventManager.h"
-#include "gamesounds.h"
-#include "Globals.h"
-#include "maputils.h"
-#include "MessagePool.h"
-#include "messagewin.h"
-#include "net_info.h"
-#include "network.h"
-#include "pixelutils.h"
-#include "player.h"                 // g_player
-#include "primitives.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "radarmap.h"               // g_radarMap
-#include "sci_advancescreen.h"
-#include "screenutils.h"
-#include "SelItem.h"                // g_selected_item
-#include "soundmanager.h"           // g_soundManager
-#include "SpriteGroupList.h"
-#include "SpriteRecord.h"
-#include "SpriteState.h"
-#include "spriteutils.h"
-#include "tech_wllist.h"
-#include "tiledmap.h"               // g_tiledMap
-#include "tileutils.h"
-#include "TradeActor.h"
-#include "TurnCnt.h"                // g_turn
-#include "Unit.h"
-#include "UnitActor.h"
-#include "UnitData.h"
-#include "UnitDynArr.h"
-#include "UnitRecord.h"
-#include "victorymoviewin.h"
-#include "wondermoviewin.h"
-#include "World.h"                  // g_theWorld
+#include "gfx/spritesys/Anim.h"
+#include "gs/gameobj/Army.h"
+#include "ui/aui_ctp2/background.h"
+#include "ui/interface/backgroundwin.h"
+#include "ui/interface/battleviewwindow.h"       // g_battleViewWindow
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/citydata.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/interface/cursormanager.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gfx/spritesys/EffectActor.h"
+#include "gs/events/GameEventManager.h"
+#include "sound/gamesounds.h"
+#include "gs/utility/Globals.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/gameobj/MessagePool.h"
+#include "ui/interface/messagewin.h"
+#include "net/general/net_info.h"
+#include "net/general/network.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "ui/aui_utils/primitives.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "ui/aui_ctp2/radarmap.h"               // g_radarMap
+#include "ui/interface/sci_advancescreen.h"
+#include "ui/interface/screenutils.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "sound/soundmanager.h"           // g_soundManager
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gs/newdb/SpriteRecord.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "ui/aui_common/tech_wllist.h"
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/spritesys/TradeActor.h"
+#include "gs/utility/TurnCnt.h"                // g_turn
+#include "gs/gameobj/Unit.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/newdb/UnitRecord.h"
+#include "ui/interface/victorymoviewin.h"
+#include "ui/interface/wondermoviewin.h"
+#include "gs/world/World.h"                  // g_theWorld
 
 extern SpriteGroupList *    g_unitSpriteGroupList;
 extern Background *         g_background;

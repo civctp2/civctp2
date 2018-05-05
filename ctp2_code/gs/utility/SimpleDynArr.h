@@ -7,8 +7,8 @@
 
 template <class T> class SimpleDynamicArray;
 
-#include "civarchive.h"
-#include "ctp2_inttypes.h"  // sint32
+#include "robot/aibackdoor/civarchive.h"
+#include "os/include/ctp2_inttypes.h"  // sint32
 
 template <class T> class SimpleDynamicArray
 {

@@ -4,8 +4,8 @@
 #ifndef _INSTALLATION_DATA_H_
 #define _INSTALLATION_DATA_H_
 
-#include "GameObj.h"
-#include "MapPoint.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/world/MapPoint.h"
 
 class CivArchive;
 

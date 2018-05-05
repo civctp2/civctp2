@@ -71,8 +71,8 @@ class CellUnitList;
 //
 //----------------------------------------------------------------------------
 
-#include "Unit.h"
-#include "gstypes.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/gstypes.h"
 
 template <class T> class DynamicArray;
 

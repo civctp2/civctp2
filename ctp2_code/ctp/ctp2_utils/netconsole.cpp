@@ -25,9 +25,9 @@
 // - added linux specific code
 //
 //----------------------------------------------------------------------------
-#include "c3.h"
-#include "netconsole.h"
-#include "c3cmdline.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/netconsole.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
 #if defined(WIN32)
 #include <winsock.h>
 #elif defined(LINUX)

@@ -26,50 +26,50 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "resourcemap.h"
+#include "ctp/c3.h"
+#include "gfx/tilesys/resourcemap.h"
 
-#include "aui.h"
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_Factory.h"
-#include "aui_ldl.h"
-#include "aui_window.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "primitives.h"
-#include "Globals.h"
-#include "player.h"                     // g_player
-#include "dynarr.h"
-#include "SelItem.h"                    // g_selected_item
-#include "director.h"                   // g_director
-#include "tiledmap.h"                   // g_tiledMap
-#include "BaseTile.h"
-#include "TileInfo.h"
-#include "tileset.h"
-#include "colorset.h"                   // g_colorSet
-#include "Unit.h"
-#include "UnitPool.h"                   // g_theUnitPool
-#include "c3_updateaction.h"
-#include "Actor.h"
-#include "UnitActor.h"
-#include "World.h"                      // g_theWorld
-#include "Cell.h"
-#include "MapPoint.h"
-#include "WonderRecord.h"
-#include "c3ui.h"
-#include "GoodActor.h"
-#include "citydata.h"
-#include "textutils.h"
-#include "maputils.h"
-#include "SlicEngine.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "CityRadius.h"
-#include "StrDB.h"                      // g_theStringDB
-#include "UnitData.h"
-#include "GameEventManager.h"
-#include "CityInfluenceIterator.h"
-#include "ldl_user.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gfx/spritesys/director.h"                   // g_director
+#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
+#include "gfx/tilesys/BaseTile.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/tileset.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "ui/aui_ctp2/c3_updateaction.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/world/World.h"                      // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/world/MapPoint.h"
+#include "gs/newdb/WonderRecord.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/spritesys/GoodActor.h"
+#include "gs/gameobj/citydata.h"
+#include "ui/aui_utils/textutils.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "gs/gameobj/CityRadius.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "gs/gameobj/UnitData.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "ui/ldl/ldl_user.h"
 
 #define k_NUDGE		48
 

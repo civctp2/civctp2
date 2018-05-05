@@ -29,18 +29,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "battleviewactor.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/battleviewactor.h"
 
 #include <algorithm>
-#include "aui_surface.h"
-#include "colorset.h"
-#include "director.h"           // g_director
-#include "primitives.h"
-#include "soundmanager.h"       // g_soundManager
-#include "SpriteGroupList.h"
-#include "SpriteState.h"
-#include "tiledmap.h"           // g_tiledMap
+#include "ui/aui_common/aui_surface.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gfx/spritesys/director.h"           // g_director
+#include "ui/aui_utils/primitives.h"
+#include "sound/soundmanager.h"       // g_soundManager
+#include "gfx/spritesys/SpriteGroupList.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
 
 extern SpriteGroupList *        g_unitSpriteGroupList;
 

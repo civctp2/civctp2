@@ -28,14 +28,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_tabgroup.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "aui_ui.h"
-#include "aui_tab.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_tab.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 aui_TabGroup::aui_TabGroup(
 	AUI_ERRCODE *retval,

@@ -28,8 +28,8 @@
 #ifndef __CTP2_SWITCH_H__
 #define __CTP2_SWITCH_H__
 
-#include "patternbase.h"
-#include "aui_switch.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_switch.h"
 
 #define k_CTP2_SWITCH_DEFAULTNUMSTATES		2
 #define k_CTP2_SWITCH_DEFAULT_BEVELWIDTH		2

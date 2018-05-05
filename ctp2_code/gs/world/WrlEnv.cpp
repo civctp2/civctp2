@@ -32,31 +32,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Cell.h"
-#include "StrDB.h"
-#include "TerrainRecord.h"
-#include "installation.h"
-#include "installationtree.h"
-#include "CityRadius.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/gameobj/CityRadius.h"
 #ifdef _DEBUG
-#include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
 #endif
-#include "TradeDynArr.h"
-#include "RandGen.h"
-#include "tiledmap.h"
-#include "network.h"
-#include "net_info.h"
-#include "TerrImprove.h"
-#include "terrainutil.h"
-#include "ResourceRecord.h"
-#include "MoveFlags.h"
-#include "Unit.h"
-#include "Globals.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/utility/RandGen.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/Globals.h"
 
 extern RandomGenerator *g_rand;
 extern TiledMap *g_tiledMap;

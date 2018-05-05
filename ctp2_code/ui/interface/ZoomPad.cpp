@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ZoomPad.h"
+#include "ui/interface/ZoomPad.h"
 
-#include "tiledmap.h"
-#include "aui_ldl.h"
-#include "ctp2_button.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
 ZoomPad::ZoomPad(MBCHAR *ldlBlock) :
 m_zoomIn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "ZoomPad.ZoomInButton"))),

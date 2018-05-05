@@ -2,7 +2,7 @@
 #ifndef __ASTAR_QUEUE__
 #define __ASTAR_QUEUE__ 1
 
-#include "astarpnt.h"
+#include "robot/pathing/astarpnt.h"
 
 class AstarQueue {
 

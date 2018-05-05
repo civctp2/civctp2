@@ -29,13 +29,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "Sprite.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "gfx/spritesys/Sprite.h"
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 
 extern sint32		g_is565Format;
 extern TiledMap		*g_tiledMap;

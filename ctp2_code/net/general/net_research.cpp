@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "net_research.h"
-#include "net_util.h"
-#include "Advances.h"
-#include "player.h"
+#include "ctp/c3.h"
+#include "net/general/net_research.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/Player.h"
 
 extern Player **g_player;
 

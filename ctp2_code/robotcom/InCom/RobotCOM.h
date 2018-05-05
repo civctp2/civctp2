@@ -5,7 +5,7 @@
 
 #include <OBJBASE.H>
 
-#include "IRobot.h"
+#include "robotcom/InCom/IRobot.h"
 class AiMain;
 
 enum CAUSE_REMOVE_ARMY;

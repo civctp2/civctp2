@@ -4,8 +4,8 @@
 #ifndef __DIPLOMATICREQUEST_DYNAMIC_ARRAY_H__
 #define __DIPLOMATICREQUEST_DYNAMIC_ARRAY_H__
 
-#include "DiplomaticRequest.h"
-#include "dynarr.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class DiplomaticRequestDynamicArray : public DynamicArray<DiplomaticRequest> {
 

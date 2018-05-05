@@ -1,23 +1,23 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_tipwindow.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_tipwindow.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "messageiconbutton.h"
-#include "messageactions.h"
-#include "messagewin.h"
-#include "messagewindow.h"
-#include "messagelist.h"
-#include "messageiconwindow.h"
-#include "filenamedb.h"
+#include "ui/interface/messageiconbutton.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messagewin.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messagelist.h"
+#include "ui/interface/messageiconwindow.h"
+#include "gs/database/filenamedb.h"
 
-#include "c3ui.h"
-#include "SelItem.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 extern C3UI				*g_c3ui;
 extern ProfileDB		*g_theProfileDB;

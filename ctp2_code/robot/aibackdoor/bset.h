@@ -16,8 +16,8 @@ enum BSET_STACK
     BSET_GREATER_DONE
 };
 
-#include "ctp2_inttypes.h"
-#include "Ic3CivArchive.h" // struct IC3CivArchive;
+#include "os/include/ctp2_inttypes.h"
+#include "gs/outcom/ic3CivArchive.h" // struct IC3CivArchive;
 class CivArchive;
 
 class BSetID

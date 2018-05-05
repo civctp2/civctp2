@@ -2,8 +2,8 @@
 #define __AIP_h__
 
 
-#include "Squad_And_Goal_Types.h"
-#include "iparser.h"
+#include "robotcom/planner/Squad_And_Goal_Types.h"
+#include "robotcom/planner/iparser.h"
 
 
 template <class DATA_TYPE, class KEY_TYPE> class sorted_array;

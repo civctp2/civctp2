@@ -60,10 +60,10 @@ class GameEventManager;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "GameEventTypes.h"
-#include "GameEventDescription.h"
-#include "GameEventArgument.h"
-#include "pointerlist.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/events/GameEventDescription.h"
+#include "gs/events/GameEventArgument.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 class GameEvent;
 class GameEventHookCallback;

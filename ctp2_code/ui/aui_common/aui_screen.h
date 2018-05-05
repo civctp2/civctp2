@@ -1,8 +1,8 @@
 #ifndef __AUI_SCREEN_H__
 #define __AUI_SCREEN_H__
 
-#include "aui_base.h"
-#include "tech_wllist.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class aui_Window;
 

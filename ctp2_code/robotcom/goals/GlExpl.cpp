@@ -1,33 +1,33 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
-#include "ic3player.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3player.h"
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "GlExpl.h"
+#include "robotcom/goals/GlExpl.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "Agent.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "FzOut.h"
-#include "AiMap.h"
-#include "scienceagent.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3world.h"
 
 GoalExplore::GoalExplore()
 {

@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "ic3GameState.h"
-#include "ic3BlgDB.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
 #include "aimain.h"
 
-#include "Agent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/Agent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "glblg.h"
+#include "robotcom/goals/glblg.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 GoalBuildingFlat::~GoalBuildingFlat()
 {

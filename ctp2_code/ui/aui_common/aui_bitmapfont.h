@@ -71,11 +71,11 @@ class aui_BitmapFont;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "aui_base.h"       // aui_Base
-#include "aui_surface.h"    // aui_Surface
-#include "ctp2_inttypes.h"  // uint8, uint16, sint32
-#include "freetype.h"       // TT_...
-#include "tech_wllist.h"
+#include "ui/aui_common/aui_base.h"       // aui_Base
+#include "ui/aui_common/aui_surface.h"    // aui_Surface
+#include "os/include/ctp2_inttypes.h"  // uint8, uint16, sint32
+#include "ui/freetype/freetype.h"       // TT_...
+#include "ui/aui_common/tech_wllist.h"
 // AUI_ERRCODE, COLORREF, MBCHAR, POINT, RECT
 
 //----------------------------------------------------------------------------

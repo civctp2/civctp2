@@ -29,16 +29,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "gs/world/World.h"
 
-#include "bset.h"
-#include "Cell.h"
-#include "directions.h"
-#include "dynarr.h"
-#include "mapanalysis.h"
-#include "MoveFlags.h"
-#include "Unit.h"
+#include "robot/aibackdoor/bset.h"
+#include "gs/world/Cell.h"
+#include "gs/utility/directions.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/gameobj/Unit.h"
 
 #define INVALID_CONTINENT -2
 #define SEARCHING_CONTINENT -1

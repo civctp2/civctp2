@@ -1,19 +1,19 @@
-#include "c3.h"
-#include "c3types.h"
-#include "c3errors.h"
-#include "FlatPtr.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
 #include "aimain.h"
 
 
 #include "common.h"
-#include "linked_list.h"
-#include "strategic_ai_forward.h"
-#include "unitflow.h"
-#include "squad.h"
-#include "goal.h"
-#include "squad_strength.h"
+#include "robotcom/planner/linked_list.h"
+#include "robotcom/planner/strategic_ai_forward.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/squad.h"
+#include "robotcom/planner/goal.h"
+#include "robotcom/planner/squad_strength.h"
 
 #define LOG_GOAL true
 

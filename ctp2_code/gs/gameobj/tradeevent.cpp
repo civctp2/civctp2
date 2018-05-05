@@ -1,11 +1,11 @@
-#include "c3.h"
-#include "tradeevent.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/tradeevent.h"
 
-#include "TradeRoute.h"
-#include "GameEventUser.h"
-#include "Events.h"
-#include "Army.h"
-#include "TradeRouteData.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/TradeRouteData.h"
 
 STDEHANDLER(KillTradeRouteEvent)
 {

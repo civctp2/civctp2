@@ -33,7 +33,7 @@
 #if defined(WIN32)
 #include <windows.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 
 #ifdef __cplusplus

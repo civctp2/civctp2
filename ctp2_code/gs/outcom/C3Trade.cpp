@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "C3Trade.h"
+#include "ctp/c3.h"
+#include "gs/outcom/C3Trade.h"
 #include "civarchive.h"
-#include "globals.h"
-#include "player.h"
-#include "UnitPool.h"
-#include "UnitDynArr.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/utility/UnitDynArr.h"
 
 extern Player **g_player;
 extern UnitPool *g_theUnitPool;

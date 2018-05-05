@@ -38,8 +38,8 @@
 class CellText;
 class GraphicOptions;
 
-#include "Army.h"             // Army
-#include "ctp2_inttypes.h"    // uintN
+#include "gs/gameobj/Army.h"             // Army
+#include "os/include/ctp2_inttypes.h"    // uintN
 class MapPoint;
 template <class T> class AvlTree;
 

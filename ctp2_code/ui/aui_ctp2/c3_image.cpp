@@ -1,9 +1,9 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "c3_image.h"
+#include "ui/aui_ctp2/c3_image.h"
 
 c3_Image::c3_Image(
 	AUI_ERRCODE *retval,

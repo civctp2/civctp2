@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "AchievementTracker.h"
-#include "civarchive.h"
-#include "player.h"
-#include "network.h"
-#include "net_info.h"
-#include "gamefile.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/AchievementTracker.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/fileio/gamefile.h"
 
 extern Player **g_player;
 

@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_Factory.h"
-#include "c3blitter.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_ctp2/c3blitter.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "picture.h"
+#include "ui/aui_ctp2/picture.h"
 
 extern C3UI		*g_c3ui;
 

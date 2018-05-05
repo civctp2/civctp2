@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "reactevent.h"
+#include "ai/diplomacy/reactevent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "AICause.h"
-#include "player.h"
-#include "c3_utilitydialogbox.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
-#include "SlicObject.h"
-#include "SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
 
-#include "Diplomat.h"
+#include "ai/diplomacy/Diplomat.h"
 
 STDEHANDLER(ReactEvent)
 {

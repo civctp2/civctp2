@@ -1,19 +1,19 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 
-#include "globals.h"
-#include "C3GameState.h"
+#include "gs/utility/Globals.h"
+#include "gs/outcom/C3GameState.h"
 
-#include "c3endgamedb.h"
+#include "gs/outcom/c3endgamedb.h"
 
-#include "player.h"
-#include "EndGameDB.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/EndGameDB.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 #include "civarchive.h"
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
 extern EndGameDatabase *g_theEndGameDB;
 extern World *g_theWorld;
@@ -22,7 +22,7 @@ extern StringDB *g_theStringDB;
 #include "ConstDB.h"
 extern ConstDB *g_theConstDB;
 
-#include "Readiness.h"
+#include "gs/gameobj/Readiness.h"
 
 STDMETHODIMP C3EndGameDB::QueryInterface(REFIID riid, void **obj)
 {

@@ -5,12 +5,12 @@
 #ifndef __aui_sdl__aui_sdlsurface_h__
 #define __aui_sdl__aui_sdlsurface_h__ 1
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #if defined(__AUI_USE_SDL__)
 
-#include "aui_surface.h"
-#include "aui_sdl.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_sdl/aui_sdl.h"
 
 class aui_SDLSurface : public aui_Surface, public aui_SDL {
 public:

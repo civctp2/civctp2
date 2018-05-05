@@ -27,18 +27,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // Pre-compiled header
-#include "net_happy.h"      // Own declarations: consistency check
+#include "ctp/c3.h"             // Pre-compiled header
+#include "net/general/net_happy.h"      // Own declarations: consistency check
 
-#include "network.h"
-#include "net_util.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "Happy.h"
-#include "UnitPool.h"       // g_theUnitPool
-#include "PlayHap.h"
-#include "player.h"         // g_player
+#include "net/general/network.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/gameobj/UnitPool.h"       // g_theUnitPool
+#include "gs/gameobj/PlayHap.h"
+#include "gs/gameobj/Player.h"         // g_player
 
 NetHappy::NetHappy(Unit city, Happy *data, BOOL isInitial)
 {

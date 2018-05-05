@@ -31,8 +31,8 @@
 #ifndef __AUI_SHELL_H__
 #define __AUI_SHELL_H__
 
-#include "aui_base.h"
-#include "tech_wllist.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class aui_Screen;
 

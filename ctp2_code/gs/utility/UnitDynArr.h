@@ -4,8 +4,8 @@
 #ifndef __UNIT_DYNAMIC_ARRAY_H__
 #define __UNIT_DYNAMIC_ARRAY_H__ 1
 
-#include "dynarr.h"
-#include "Unit.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/Unit.h"
 
 class UnitDynamicArray : public DynamicArray<Unit> {
 

@@ -1,16 +1,16 @@
-#include "c3.h"
-#include "globals.h"
-#include "bset.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "robot/aibackdoor/bset.h"
 #include "aimain.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "OA_Entrench.h"
+#include "robotcom/goals/OA_Entrench.h"
 
-#include "AiMap.h"
+#include "robotcom/Top/AiMap.h"
 
-#include "order.h"
+#include "user-robotcom/shared/order.h"
 
 
 

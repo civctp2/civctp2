@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "ctp2_Menu.h"
-#include "aui_ldl.h"
-#include "ctp2_Window.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "c3ui.h"
-#include "pointerlist.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "StrDB.h"
-#include "ctp2_MenuButton.h"
+#include "gs/database/StrDB.h"
+#include "ui/aui_ctp2/ctp2_MenuButton.h"
 
 extern  C3UI				*g_c3ui;
 

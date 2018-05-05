@@ -4,7 +4,7 @@
 #ifndef __PICTURE_H__
 #define __PICTURE_H__
 
-#include "aui_image.h"
+#include "ui/aui_common/aui_image.h"
 
 class aui_Surface;
 

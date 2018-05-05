@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "SlicRecord.h"
-#include "SlicEngine.h"
-#include "MessagePool.h"
-#include "civarchive.h"
-#include "player.h"
-#include "dynarr.h"
-#include "SlicSegment.h"
-#include "slicif.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicRecord.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/gameobj/MessagePool.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/slicif.h"
 
 extern MessagePool *g_theMessagePool;
 extern Player **g_player;

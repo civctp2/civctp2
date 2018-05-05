@@ -29,12 +29,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "aui_rectangle.h"
+#include "ui/aui_common/aui_rectangle.h"
 
 
 sint32 aui_Surface::m_surfaceRefCount = 0;

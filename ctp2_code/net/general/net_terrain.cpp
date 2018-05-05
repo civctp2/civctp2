@@ -28,17 +28,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "net_terrain.h"
+#include "ctp/c3.h"
+#include "net/general/net_terrain.h"
 
-#include "gstypes.h"            // TERRAIN_TYPES
-#include "network.h"
-#include "net_util.h"
-#include "TerrImprove.h"
-#include "TerrImprovePool.h"
-#include "World.h"              // g_theWorld
-#include "player.h"             // g_player
-#include "tiledmap.h"           // g_tiledMap
+#include "gs/utility/gstypes.h"            // TERRAIN_TYPES
+#include "net/general/network.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/gameobj/Player.h"             // g_player
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
 
 //----------------------------------------------------------------------------
 //

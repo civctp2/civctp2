@@ -28,17 +28,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "net_civ.h"
-#include "network.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_civ.h"
+#include "net/general/network.h"
+#include "net/io/net_util.h"
 
-#include "CivilisationPool.h"
-#include "CivilisationRecord.h"
+#include "gs/gameobj/CivilisationPool.h"
+#include "gs/newdb/CivilisationRecord.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
 extern Player **g_player;
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;

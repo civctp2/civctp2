@@ -5,7 +5,7 @@
 #ifndef __aui_sdl__aui_sdl__h__
 #define __aui_sdl__aui_sdl__h__ 1
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #if defined(__AUI_USE_SDL__)
 

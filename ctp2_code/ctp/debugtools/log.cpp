@@ -1,7 +1,7 @@
 #ifdef _DEBUG
-#include "c3.h"
-#include "log.h"
-#include "breakpoint.h"
+#include "ctp/c3.h"
+#include "ctp/debugtools/log.h"
+#include "ctp/debugtools/breakpoint.h"
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>

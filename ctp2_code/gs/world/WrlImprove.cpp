@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "gs/world/World.h"
 
-#include "Cell.h"
-#include "installationtree.h"
-#include "TerrainRecord.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/newdb/TerrainRecord.h"
 
 sint32 Terrain::GetFood() const
 {

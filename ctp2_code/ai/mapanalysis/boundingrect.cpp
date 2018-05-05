@@ -25,8 +25,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "boundingrect.h"
+#include "ctp/c3.h"
+#include "ai/mapanalysis/boundingrect.h"
 
 #include <algorithm>        // std::max, std::min
 

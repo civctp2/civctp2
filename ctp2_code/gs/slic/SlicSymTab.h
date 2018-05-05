@@ -1,9 +1,9 @@
 #ifndef __SLIC_SYM_TAB_H__
 #define __SLIC_SYM_TAB_H__
 
-#include "StringHash.h"
-#include "SlicSymbol.h"
-#include "SlicNamedSymbol.h"
+#include "gs/slic/StringHash.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicNamedSymbol.h"
 
 #define k_SLIC_SYM_TAB_HASH_SIZE 256
 

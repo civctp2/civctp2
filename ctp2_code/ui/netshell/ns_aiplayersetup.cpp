@@ -25,8 +25,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ns_aiplayersetup.h"
+#include "ctp/c3.h"
+#include "ui/netshell/ns_aiplayersetup.h"
 
 sint32 nf_AIPlayer::m_version = 102;
 

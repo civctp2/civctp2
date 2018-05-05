@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "SpriteState.h"
-#include "civarchive.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "robot/aibackdoor/civarchive.h"
 
 
 

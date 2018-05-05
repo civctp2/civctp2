@@ -33,100 +33,100 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
-#include "Cell.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/world/Cell.h"
 
-#include "network.h"
-#include "net_info.h"
-#include "net_util.h"
-#include "net_action.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "net/io/net_util.h"
+#include "net/general/net_action.h"
 
-#include "UnitData.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Advances.h"
-#include "AdvanceRecord.h"
-#include "citydata.h"
-#include "UnitPool.h"
-#include "ArmyPool.h"
-#include "TradeOffer.h"
-#include "TradeOfferPool.h"
-#include "TerrImprove.h"
-#include "TerrImprovePool.h"
-#include "installation.h"
-#include "PlayHap.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/TradeOffer.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/PlayHap.h"
 
-#include "QuadTree.h"
-#include "Vision.h"
-#include "TaxRate.h"
-#include "Gold.h"
-#include "Sci.h"
-#include "message.h"
-#include "MessagePool.h"
-#include "DiplomaticRequest.h"
-#include "DiplomaticRequestPool.h"
-#include "Agreement.h"
-#include "AgreementPool.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/gameobj/TaxRate.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/Sci.h"
+#include "gs/gameobj/message.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/AgreementPool.h"
 
-#include "GoodyHuts.h"
+#include "gs/gameobj/GoodyHuts.h"
 
-#include "WonderRecord.h"
+#include "gs/newdb/WonderRecord.h"
 
-#include "newturncount.h"
+#include "gs/utility/newturncount.h"
 
-#include "SelItem.h"
-#include "TurnCnt.h"
-#include "c3ui.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/utility/TurnCnt.h"
+#include "ui/aui_ctp2/c3ui.h"
 extern TurnCount *g_turn;
 extern C3UI					*g_c3ui;
 
-#include "pixelutils.h"
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "aui.h"
-#include "ctp2_Window.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
 
-#include "tiledmap.h"
-#include "background.h"
-#include "radarmap.h"
-#include "radarwindow.h"
-#include "director.h"
-#include "AICause.h"
-#include "CivPaths.h"
-#include "installationpool.h"
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "HappyTracker.h"
-#include "WonderTracker.h"
-#include "AchievementTracker.h"
-#include "ArmyData.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/background.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/interface/radarwindow.h"
+#include "gfx/spritesys/director.h"
+#include "gs/outcom/AICause.h"
+#include "gs/fileio/CivPaths.h"
+#include "gs/gameobj/installationpool.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
+#include "gs/gameobj/HappyTracker.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/AchievementTracker.h"
+#include "gs/gameobj/ArmyData.h"
 
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "TradePool.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/gameobj/TradePool.h"
 
-#include "Globals.h"
+#include "gs/utility/Globals.h"
 
-#include "wonderutil.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "GameEventManager.h"
+#include "gs/events/GameEventManager.h"
 
-#include "ctpai.h"
-#include "GameOver.h"
+#include "ai/ctpai.h"
+#include "gs/gameobj/GameOver.h"
 
-#include "settlemap.h"
+#include "ai/mapanalysis/settlemap.h"
 
-#include "MainControlPanel.h"
+#include "ui/interface/MainControlPanel.h"
 
-#include "citywindow.h"
-#include "EditQueue.h"
+#include "ui/interface/citywindow.h"
+#include "ui/interface/EditQueue.h"
 
-#include "DomesticManagementDialog.h"
-#include "unitmanager.h"
-#include "armymanagerwindow.h"
-#include "trademanager.h"
+#include "ui/interface/DomesticManagementDialog.h"
+#include "ui/interface/unitmanager.h"
+#include "ui/interface/armymanagerwindow.h"
+#include "ui/interface/trademanager.h"
 
 extern Background	*g_background;
 extern RadarMap     *g_radarMap;
@@ -137,8 +137,8 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern void player_ActivateSpaceButton(sint32 pl);
 extern void network_VerifyGameData();
 
-#include "FeatTracker.h"	// Propagate feats
-#include "MaterialPool.h"	// Propagate PW
+#include "gs/gameobj/FeatTracker.h"	// Propagate feats
+#include "gs/gameobj/MaterialPool.h"	// Propagate PW
 
 const uint32 NetInfo::m_args[NET_INFO_CODE_NULL] = {
 	// this array tells how many arguments each NET_INFO has

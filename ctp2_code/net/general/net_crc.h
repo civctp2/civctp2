@@ -33,7 +33,7 @@
 #endif
 #ifndef __NET_CRC_H__
 #define __NET_CRC_H__
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 #define k_MAX_DBS 40
 

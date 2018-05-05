@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventUser.h"
-#include "SelItemEvent.h"
-#include "Events.h"
-#include "SelItem.h"
-#include "controlpanelwindow.h"
-#include "ctp2_Static.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventUser.h"
+#include "ui/aui_ctp2/SelItemEvent.h"
+#include "gs/gameobj/Events.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
 
 STDEHANDLER(SelItemArmyMovedEvent)
 {

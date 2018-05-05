@@ -1,11 +1,11 @@
-#include "c3.h"
-#include "aui_window.h"
-#include "aui_surface.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "pattern.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "ns_spinner.h"
+#include "ui/netshell/ns_spinner.h"
 
 
 ns_Spinner::ns_Spinner(

@@ -1,25 +1,25 @@
-#include "c3.h"
-#include "c3types.h"
-#include "c3errors.h"
-#include "globals.h"
-#include "ic3player.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
 #include "aimain.h"
 
 #include "common.h"
 
 #include "list_array.h"
 
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
-#include "aip.h"
+#include "robotcom/planner/aip.h"
 
-#include "AIP_Manager.h"
+#include "robotcom/planner/AIP_Manager.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 
 

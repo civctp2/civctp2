@@ -30,21 +30,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "sliccmd.h"
-#include "SlicEngine.h"
-#include "SlicSymbol.h"
-#include "SlicNamedSymbol.h"
-#include "SlicStruct.h"
+#include "gs/slic/sliccmd.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "gs/slic/SlicStruct.h"
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "sc.tab.h"
-#include "StrDB.h"
-#include "SlicDBConduit.h"
-#include "profileDB.h"
+#include "gs/slic/sc.tab.h"
+#include "gs/database/StrDB.h"
+#include "gs/slic/SlicDBConduit.h"
+#include "gs/database/profileDB.h"
 
 
 PointerList<SlicSymbolData> *s_symbolList = NULL;

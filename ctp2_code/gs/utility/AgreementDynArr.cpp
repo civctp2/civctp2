@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Unit.h"
-#include "Advances.h"
-#include "AgreementDynArr.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/utility/AgreementDynArr.h"
 
 AgreementDynamicArray::AgreementDynamicArray() : DynamicArray<Agreement>()
 	{

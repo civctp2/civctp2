@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "c3memmap.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3memmap.h"
 
-#include "c3imageformats.h" // TargaImageFormat, TiffImageFormat
+#include "ui/aui_ctp2/c3imageformats.h" // TargaImageFormat, TiffImageFormat
 
 /// Create an aui_FileFormat object
 /// \param  filename The file to use

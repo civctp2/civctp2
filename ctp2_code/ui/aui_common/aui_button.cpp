@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_action.h"
-#include "aui_window.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "aui_button.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "gamesounds.h"
-#include "soundmanager.h"
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"
 
 extern SoundManager		*g_soundManager;
 

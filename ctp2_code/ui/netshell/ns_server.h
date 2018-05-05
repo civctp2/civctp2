@@ -28,7 +28,7 @@
 #ifndef __NS_SERVER_H__
 #define __NS_SERVER_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class ns_Server : public ns_Object<NETFunc::Server, ns_Server>
 {

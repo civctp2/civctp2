@@ -31,19 +31,19 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
-#include "Unit.h"
-#include "player.h"
-#include "StrDB.h"
-#include "CivilisationRecord.h"
-#include "CivilisationPool.h"
-#include "civarchive.h"
-#include "RandGen.h"
-#include "SimpleDynArr.h"
-#include "profileDB.h"
-#include "network.h"
-#include "Globals.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/StrDB.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/gameobj/CivilisationPool.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/RandGen.h"
+#include "gs/utility/SimpleDynArr.h"
+#include "gs/database/profileDB.h"
+#include "net/general/network.h"
+#include "gs/utility/Globals.h"
 
 extern	Player	**g_player ;
 

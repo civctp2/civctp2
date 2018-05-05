@@ -1,7 +1,7 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "TradeDynArr.h"
-#include "MapPoint.h"
+#include "gs/utility/TradeDynArr.h"
+#include "gs/world/MapPoint.h"
 
 
 TradeDynamicArray::TradeDynamicArray() : DynamicArray<TradeRoute>()

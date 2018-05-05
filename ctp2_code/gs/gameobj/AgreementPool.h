@@ -6,12 +6,12 @@
 
 class AgreementPool;
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
 class AgreementData;
 class Agreement;
 
-#include "AgreementTypes.h"
+#include "gs/gameobj/AgreementTypes.h"
 
 class AgreementPool : public ObjPool
 {

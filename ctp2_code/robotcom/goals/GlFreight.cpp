@@ -1,16 +1,16 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
 #include "aimain.h"
 
-#include "glfreight.h"
+#include "robotcom/goals/glfreight.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 #include "Plan.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 GoalFreightFlat::~GoalFreightFlat()
 {

@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "globals.h"
-#include "bset.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "robot/aibackdoor/bset.h"
 #include "aimain.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "oa_loot.h"
+#include "robotcom/goals/oa_loot.h"
 
-#include "AiMap.h"
-#include "ic3BlgDB.h"
-#include "ic3player.h"
+#include "robotcom/Top/AiMap.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
+#include "user-robotcom/outcom/ic3player.h"
 
-#include "order.h"
+#include "user-robotcom/shared/order.h"
 
 
 

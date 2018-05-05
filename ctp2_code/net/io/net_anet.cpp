@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "net_io.h"
-#include "net_anet.h"
-#include "net_util.h"
-#include "net_types.h"
+#include "ctp/c3.h"
+#include "net/io/net_io.h"
+#include "net/io/net_anet.h"
+#include "net/io/net_util.h"
+#include "net/io/net_types.h"
 
-#include "anet.h"
+#include "libs/anet/h/anet.h"
 
-#include "netfunc.h"
-#include "netshell.h"
+#include "ui/netshell/netfunc.h"
+#include "ui/netshell/netshell.h"
 
 extern NETFunc *g_netfunc;
 

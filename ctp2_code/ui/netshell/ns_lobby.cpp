@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_lobby.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_lobby.h"
 
 
 ns_Lobby::ns_Lobby(NETFunc::Lobby * lobby)

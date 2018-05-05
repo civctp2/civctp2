@@ -28,18 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_window.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "aui_Factory.h"
+#include "ui/aui_common/aui_Factory.h"
 
-#include "aui_blitter.h"
-#include "aui_control.h"
-#include "aui_rectangle.h"
-#include "aui_surface.h"
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"           // C3UI
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_rectangle.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"           // C3UI
 
 extern C3UI *   g_c3ui;
 

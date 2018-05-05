@@ -34,8 +34,8 @@
 #ifndef ASTAR_H
 #define ASTAR_H 1
 
-#include "astarpnt.h"
-#include "priorityqueue.h"
+#include "robot/pathing/astarpnt.h"
+#include "robot/aibackdoor/priorityqueue.h"
 
 class MapPoint;
 class AstarPoint;

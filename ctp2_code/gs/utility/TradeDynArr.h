@@ -4,8 +4,8 @@
 #ifndef _TRADEDYNARR_H_
 #define _TRADEDYNARR_H_
 
-#include "dynarr.h"
-#include "TradeRoute.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/TradeRoute.h"
 
 class TradeDynamicArray : public DynamicArray<TradeRoute>
 {

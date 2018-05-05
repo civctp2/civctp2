@@ -1,16 +1,16 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "ic3GameState.h"
-#include "Fuzzy_Variables.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "robotcom/fuzzy/Fuzzy_Variables.h"
 #include "aimain.h"
 
-#include "FzOut.h"
-#include "fliif.h"
-#include "FliEngine.h"
-#include "FliSymbol.h"
+#include "robotcom/fuzzy/FzOut.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliEngine.h"
+#include "robotcom/fuzzy/FliSymbol.h"
 
-#include "diplomatictypes.h"
+#include "user-robotcom/shared/diplomatictypes.h"
 
 double fz_freight_reserve;
 double fz_personality_aggression;

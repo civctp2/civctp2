@@ -31,23 +31,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
-#include "Globals.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/utility/Globals.h"
 
-#include "astarpnt.h"
-#include "Astar.h"
-#include "AVLHeap.h"
+#include "robot/pathing/astarpnt.h"
+#include "robot/pathing/Astar.h"
+#include "robot/pathing/AVLHeap.h"
 
-#include "dynarr.h"
-#include "Path.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/pathing/Path.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "RandGen.h"
-#include "Cell.h"
-#include "priorityqueue.h"
-#include "A_Star_Heuristic_Cost.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/utility/RandGen.h"
+#include "gs/world/Cell.h"
+#include "robot/aibackdoor/priorityqueue.h"
+#include "robot/pathing/A_Star_Heuristic_Cost.h"
 
 extern World *g_theWorld;
 extern RandomGenerator *g_rand;
@@ -397,7 +397,7 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
 #endif
 
 #ifdef A_STAR_TRACK_CALLSTACK
-#include "debugcallstack.h"
+#include "ctp/debugtools/debugcallstack.h"
 
 cDebugCallStackSet g_astarCallStackSet(5);
 #endif

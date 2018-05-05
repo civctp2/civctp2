@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "Readiness.h"
-#include "net_ready.h"
-#include "player.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Readiness.h"
+#include "net/general/net_ready.h"
+#include "gs/gameobj/Player.h"
+#include "net/io/net_util.h"
 
 extern Player **g_player;
 

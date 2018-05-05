@@ -1,18 +1,18 @@
 #ifndef __NS_ITEM_H__
 #define __NS_ITEM_H__
 
-#include "aui_item.h"
-#include "aui_surface.h"
-#include "aui_window.h"
-#include "aui_blitter.h"
-#include "aui_uniqueid.h"
-#include "aui_ui.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "c3_static.h"
-#include "c3_listitem.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_listitem.h"
 
-#include "netfunc.h"
-#include "ns_aiplayersetup.h"
+#include "ui/netshell/netfunc.h"
+#include "ui/netshell/ns_aiplayersetup.h"
 
 #define k_NS_ITEM_MAXTEXT			100
 #define k_NS_ITEM_DEFAULTWIDTH		60

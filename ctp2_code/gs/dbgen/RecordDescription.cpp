@@ -68,8 +68,8 @@
 //   Const database. (9-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
 
@@ -82,16 +82,16 @@
 #define NOMINMAX
 #include <windows.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 
-#include "minmax.h"
+#include "ctp/ctp2_utils/minmax.h"
 #include <algorithm>
 #include <set>
 #include <string>
 
-#include "ctpdb.h"
-#include "RecordDescription.h"
+#include "gs/dbgen/ctpdb.h"
+#include "gs/dbgen/RecordDescription.h"
 
 extern "C" int g_generateRequirementWarnings;
 
@@ -582,19 +582,19 @@ void RecordDescription::ExportMemberClasses(FILE *outfile)
 void RecordDescription::ExportCode(FILE *outfile)
 {
     // Pre-compiled header
-	fprintf(outfile, "#include \"c3.h\"\n");
+	fprintf(outfile, "#include \"ctp/c3.h\"\n");
 
     // Own declarations (consistency check)
 	fprintf(outfile, "#include \"%sRecord.h\"\n\n", m_name);
 
     // Common include files
     fprintf(outfile, "#include <algorithm>\n");
-	fprintf(outfile, "#include \"BitArray.h\"\n");
-	fprintf(outfile, "#include \"c3errors.h\"\n");
-	fprintf(outfile, "#include \"CTPDatabase.h\"\n");
-	fprintf(outfile, "#include \"DBLexer.h\"\n");
-	fprintf(outfile, "#include \"DBTokens.h\"\n");
-	fprintf(outfile, "#include \"StrDB.h\"\n");
+	fprintf(outfile, "#include \"gs/newdb/BitArray.h\"\n");
+	fprintf(outfile, "#include \"ctp/ctp2_utils/c3errors.h\"\n");
+	fprintf(outfile, "#include \"gs/newdb/CTPDatabase.h\"\n");
+	fprintf(outfile, "#include \"gs/newdb/DBLexer.h\"\n");
+	fprintf(outfile, "#include \"gs/newdb/DBTokens.h\"\n");
+	fprintf(outfile, "#include \"gs/database/StrDB.h\"\n");
 	fprintf(outfile, "\n");
 
     // Include files generated from input

@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "ic3BlgDB.h"
+#include "ctp/c3.h"
+#include "user-robotcom/outcom/ic3BlgDB.h"
 
-#include "AiBldQue.h"
+#include "robotcom/Agent/AiBldQue.h"
 
 #include "civarchive.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "BldAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/BldAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 void BuildingAgentFlat::Serialize (CivArchive &archive)
 {

@@ -1,7 +1,7 @@
 #ifndef __TESTWINDOW_H__
 #define __TESTWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class IconButton;
 

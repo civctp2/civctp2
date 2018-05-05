@@ -6,8 +6,8 @@
 
 #include <queue>
 
-#include "GameEventTypes.h"
-#include "GameEventHook.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/events/GameEventHook.h"
 
 
 

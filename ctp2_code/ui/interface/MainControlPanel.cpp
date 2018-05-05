@@ -29,24 +29,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "MainControlPanel.h"
+#include "ctp/c3.h"
+#include "ui/interface/MainControlPanel.h"
 
-#include "aui_progressbar.h"
-#include "aui_uniqueid.h"
-#include "CityControlPanel.h"
-#include "ControlTabPanel.h"
-#include "DomesticControlPanel.h"
-#include "EndTurnButton.h"
-#include "Events.h"
-#include "GameEventUser.h"
-#include "MessageControlPanel.h"
-#include "ShortcutPad.h"
-#include "StatusBar.h"
-#include "TilesControlPanel.h"
-#include "TurnYearStatus.h"
-#include "UnitControlPanel.h"
-#include "ZoomPad.h"
+#include "ui/aui_common/aui_progressbar.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/interface/CityControlPanel.h"
+#include "ui/interface/ControlTabPanel.h"
+#include "ui/interface/DomesticControlPanel.h"
+#include "ui/interface/EndTurnButton.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "ui/interface/MessageControlPanel.h"
+#include "ui/interface/ShortcutPad.h"
+#include "ui/interface/StatusBar.h"
+#include "ui/interface/TilesControlPanel.h"
+#include "ui/interface/TurnYearStatus.h"
+#include "ui/interface/UnitControlPanel.h"
+#include "ui/interface/ZoomPad.h"
 
 MainControlPanel *       g_mainControlPanel = NULL;
 

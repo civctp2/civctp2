@@ -31,50 +31,50 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
-#include "c3ui.h"
-#include "c3_popupwindow.h"
-#include "c3_static.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "ctp2_button.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "network.h"
-#include "netshell.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "net/general/network.h"
+#include "ui/netshell/netshell.h"
 
 // New includes for the new interface
 // because we return to the main menu now, not the SP menu
-#include "initialplaywindow.h"
+#include "ui/interface/initialplaywindow.h"
 
-#include "graphicsscreen.h"
-#include "soundscreen.h"
-#include "gameplayoptions.h"
-#include "optionwarningscreen.h"
-#include "loadsavewindow.h"
-#include "km_screen.h"
-#include "musicscreen.h"
+#include "ui/interface/graphicsscreen.h"
+#include "ui/interface/soundscreen.h"
+#include "ui/interface/gameplayoptions.h"
+#include "ui/interface/optionwarningscreen.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/km_screen.h"
+#include "ui/interface/musicscreen.h"
 
-#include "screenutils.h"
-#include "optionswindow.h"
+#include "ui/interface/screenutils.h"
+#include "ui/interface/optionswindow.h"
 
-#include "gamesounds.h"
-#include "GameSettings.h"
+#include "sound/gamesounds.h"
+#include "gs/gameobj/GameSettings.h"
 
-#include "keypress.h"
-#include "TurnCnt.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "gs/utility/TurnCnt.h"
 
-#include "scenarioeditor.h"
-#include "scorewarn.h"
+#include "ui/interface/scenarioeditor.h"
+#include "ui/interface/scorewarn.h"
 
-#include "MessageBoxDialog.h"
-#include "StrDB.h"
-#include "profileDB.h"
+#include "ui/interface/MessageBoxDialog.h"
+#include "gs/database/StrDB.h"
+#include "gs/database/profileDB.h"
 
 extern C3UI					*g_c3ui;
 extern c3_PopupWindow		*g_scorewarn;

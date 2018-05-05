@@ -1,18 +1,18 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
-#include "ic3InstDB.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "InstBidList.h"
+#include "robotcom/Alloc/InstBidList.h"
 
-#include "GoalInst.h"
-#include "GoalRoad.h"
+#include "robotcom/goals/GoalInst.h"
+#include "robotcom/goals/GoalRoad.h"
 
 InstallationBidList::InstallationBidList(sint32 ni)
 {

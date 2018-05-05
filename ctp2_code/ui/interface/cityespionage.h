@@ -40,9 +40,9 @@
 
 class CityEspionage;
 
-#include "auitypes.h"           // AUI_ERRCODE
-#include "ctp2_inttypes.h"      // uint32
-#include "Unit.h"               // Unit
+#include "ui/aui_common/auitypes.h"           // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"      // uint32
+#include "gs/gameobj/Unit.h"               // Unit
 class aui_Control;
 class ctp2_Button;
 class ctp2_ListBox;

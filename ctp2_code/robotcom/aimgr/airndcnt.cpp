@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "airndcnt.h"
+#include "ctp/c3.h"
+#include "robotcom/aimgr/airndcnt.h"
 #include "civarchive.h"
 #include "aimain.h"
 

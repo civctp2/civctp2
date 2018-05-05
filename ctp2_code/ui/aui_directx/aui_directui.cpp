@@ -32,26 +32,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "civ3_main.h"
+#include "ctp/civ3_main.h"
 
-#include "aui_mouse.h"
-#include "aui_keyboard.h"
-#include "aui_joystick.h"
-#include "aui_directsurface.h"
-#include "aui_directmouse.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_common/aui_joystick.h"
+#include "ui/aui_directx/aui_directsurface.h"
+#include "ui/aui_directx/aui_directmouse.h"
 
-#include "aui_directui.h"
+#include "ui/aui_directx/aui_directui.h"
 
 extern BOOL			g_exclusiveMode;
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp		*g_civApp;
 
-#include "display.h"
+#include "ctp/display.h"
 
 extern BOOL					g_createDirectDrawOnSecondary;
 extern sint32				g_ScreenWidth;

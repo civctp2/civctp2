@@ -28,11 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "Sprite.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "gfx/spritesys/Sprite.h"
 
 BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 					 uint16 transparency, Pixel16 outlineColor, uint16 flags)

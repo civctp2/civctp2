@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_directinput.h"
+#include "ui/aui_directx/aui_directinput.h"
 
 
 aui_DirectInput::aui_DirectInput

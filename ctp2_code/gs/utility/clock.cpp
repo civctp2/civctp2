@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "clock.h"
+#include "ctp/c3.h"
+#include "gs/utility/clock.h"
 
 static int start_time_ms;
 

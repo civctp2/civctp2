@@ -83,12 +83,12 @@ enum SP_NEWGAME_STR
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3window.h"
-#include "c3_dropdown.h"
-#include "aui_ldl.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
 class aui_Control;
 class c3_Static;
@@ -104,7 +104,7 @@ class aui_TextField;
 class C3TextField;
 class aui_StringTable;
 
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
 //----------------------------------------------------------------------------
 // Declarations

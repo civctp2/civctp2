@@ -3,7 +3,7 @@
 #ifndef __GOAL_EXPLORE_H__
 #define __GOAL_EXPLORE_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

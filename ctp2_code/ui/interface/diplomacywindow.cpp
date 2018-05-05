@@ -29,57 +29,57 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "diplomacywindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/diplomacywindow.h"
 
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_blitter.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "ctp2_listbox.h"
-#include "ctp2_Static.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
 
-#include "Diplomat.h"
-#include "diplomacyutil.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/diplomacy/diplomacyutil.h"
 
-#include "SelItem.h"
-#include "player.h"
-#include "StrDB.h"
-#include "Civilisation.h"
-#include "UnitDynArr.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/utility/UnitDynArr.h"
 
-#include "GameEventUser.h"
-#include "Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
 
-#include "pixelutils.h"
-#include "colorset.h"                   // g_colorSet
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
 
-#include "DiplomacyProposalRecord.h"
-#include "DiplomacyThreatRecord.h"
-#include "AdvanceRecord.h"
+#include "gs/newdb/DiplomacyProposalRecord.h"
+#include "gs/newdb/DiplomacyThreatRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
 
-#include "SlicObject.h"
-#include "stringutils.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/utility/stringutils.h"
 
-#include "Gold.h"
+#include "gs/gameobj/Gold.h"
 
-#include "ctp2_spinner.h"
+#include "ui/aui_ctp2/ctp2_spinner.h"
 
-#include "intelligencewindow.h"
-#include "AttractWindow.h"
+#include "ui/interface/intelligencewindow.h"
+#include "ui/interface/AttractWindow.h"
 
-#include "ctp2_TabGroup.h"
-#include "ctp2_Tab.h"
-#include "ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "AgreementMatrix.h"
-#include "DiplomacyDetails.h"
-#include "Diplomat.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ui/interface/DiplomacyDetails.h"
+#include "ai/diplomacy/Diplomat.h"
 
 extern C3UI                   *g_c3ui;
 

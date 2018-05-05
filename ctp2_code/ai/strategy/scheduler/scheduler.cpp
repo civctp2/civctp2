@@ -53,31 +53,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Scheduler.h"
+#include "ctp/c3.h"
+#include "ai/strategy/scheduler/Scheduler.h"
 
-#include "profileai.h"
+#include "ai/profileai.h"
 
 #include <algorithm>
 #include <list>
 
-#include "Goal.h"
-#include "Plan.h"
-#include "agent.h"
+#include "ai/strategy/goals/Goal.h"
+#include "ai/strategy/scheduler/Plan.h"
+#include "ai/strategy/agents/agent.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "player.h"
-#include "Diplomat.h"
-#include "CTPDatabase.h"
-#include "GoalRecord.h"
-#include "ctpaidebug.h"
-#include "AgreementMatrix.h"
-#include "gfx_options.h"
-#include "Army.h"
-#include "ArmyData.h"
-#include "citydata.h"
-#include "World.h"
+#include "gs/gameobj/Player.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "gs/newdb/CTPDatabase.h"
+#include "gs/newdb/GoalRecord.h"
+#include "ai/ctpaidebug.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/world/World.h"
 
 namespace
 {

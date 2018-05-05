@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "tech_memmap.h"
+#include "ui/aui_common/tech_memmap.h"
 
 
 

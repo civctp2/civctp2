@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_region.h"
+#include "ui/aui_common/aui_region.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 extern SelectedItem		*g_selected_item;
 

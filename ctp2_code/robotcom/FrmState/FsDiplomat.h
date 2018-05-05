@@ -4,8 +4,8 @@
 
 interface IC3DiplomaticRequest;
 
-#include "FrameState.h"
-#include "fliif.h"
+#include "robotcom/FrmState/FrameState.h"
+#include "robotcom/fuzzy/fliif.h"
 
 interface IC3TradeOffer;
 class Foreigner;

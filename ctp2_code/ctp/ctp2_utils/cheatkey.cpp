@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "windows.h"
+#include "ctp/c3.h"
+#include <windows.h>
 
-#include "cheatkey.h"
+#include "ctp/ctp2_utils/cheatkey.h"
 
 typedef struct {
 	int val[ CHEATKEY_LENGTH ];

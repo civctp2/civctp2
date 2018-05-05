@@ -4,14 +4,14 @@
 #ifndef __NET_ARMY_H__
 #define __NET_ARMY_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class ArmyList;
 class ArmyData;
 
 typedef sint32 PLAYER_INDEX;
-#include "AICause.h"
-#include "cellunitlist.h"
+#include "gs/outcom/AICause.h"
+#include "gs/world/cellunitlist.h"
 
 class NetNewArmy : public Packetizer
 {

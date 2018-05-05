@@ -4,7 +4,7 @@
 #ifndef __NET_VISION_H__
 #define __NET_VISION_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 #define k_VISION_STEP 7
 

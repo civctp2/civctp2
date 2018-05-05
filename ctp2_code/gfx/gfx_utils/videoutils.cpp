@@ -1,15 +1,15 @@
-#include "c3.h"
-#include "aui.h"
-#include "CivPaths.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "gs/fileio/CivPaths.h"
 
-#include "c3ui.h"
-#include "directvideo.h"
-#include "pattern.h"
-#include "c3window.h"
-#include "videowindow.h"
-#include "textbutton.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/directvideo.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/videowindow.h"
+#include "ui/aui_ctp2/textbutton.h"
 
-#include "videoutils.h"
+#include "gfx/gfx_utils/videoutils.h"
 
 #define k_VIDEO_WINDOW_ID			20000
 #define k_ID_VIDEOWINDOW_CLOSE_BOX	20001

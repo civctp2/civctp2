@@ -4,18 +4,18 @@
 #define __ARMY_GOAL_H__ 1
 
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
 
 
 
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
 
-#include "unitflow.h"
-#include "goal.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/goal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

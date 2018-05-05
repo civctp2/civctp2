@@ -6,7 +6,7 @@
 
 class CreditsWindow;
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class aui_Control;
 class aui_Static;

@@ -56,7 +56,7 @@ class FacedSprite;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Sprite.h"
+#include "gfx/spritesys/Sprite.h"
 
 class aui_Surface;
 class Token;

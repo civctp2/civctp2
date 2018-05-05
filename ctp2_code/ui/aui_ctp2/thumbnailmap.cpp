@@ -27,29 +27,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "thumbnailmap.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/thumbnailmap.h"
 
-#include "aui.h"
-#include "aui_Factory.h"
-#include "aui_blitter.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
-#include "c3ui.h"
-#include "player.h"             // g_player
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
-#include "Cell.h"
-#include "UnseenCell.h"
-#include "citydata.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
-#include "SelItem.h"            // g_selected_item
-#include "tiledmap.h"           // g_tiledMap
-#include "primitives.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/world/Cell.h"
+#include "gs/world/UnseenCell.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "ui/aui_utils/primitives.h"
 
 extern C3UI				*g_c3ui;
 

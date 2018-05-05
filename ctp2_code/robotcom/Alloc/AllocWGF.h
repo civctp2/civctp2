@@ -1,7 +1,7 @@
 #ifndef __AllocWGF_H__
 #define __AllocWGF_H__ 1
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
 class CivArchive;
 

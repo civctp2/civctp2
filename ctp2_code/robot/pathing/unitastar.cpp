@@ -41,43 +41,43 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "UnitAstar.h"
+#include "ctp/c3.h"
+#include "robot/pathing/UnitAstar.h"
 
-#include "Globals.h"
+#include "gs/utility/Globals.h"
 
-#include "dynarr.h"
-#include "Path.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robot/pathing/Path.h"
 
 // Added by Calvitix
 // Had to include those files to determine if the army encounters a possible
 // danger on its way. Of course the is only danger if an ennemy army is
 // encountered and not an ally.
-#include "Diplomat.h"
-#include "AgreementMatrix.h"
-#include "ArmyData.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/gameobj/ArmyData.h"
 
-#include "Army.h"
-#include "Unit.h"
-#include "cellunitlist.h"
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld, GROUND_Z, SPACE_Z
-#include "Cell.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"              // g_theWorld, GROUND_Z, SPACE_Z
+#include "gs/world/Cell.h"
 
-#include "dynarr.h"
-#include "player.h"
-#include "RandGen.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"
-#include "TerrainRecord.h"
-#include "UnitData.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/RandGen.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "UnseenCell.h"
-#include "MoveFlags.h"
-#include "wonderutil.h"
+#include "gs/world/UnseenCell.h"
+#include "gs/utility/MoveFlags.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "A_Star_Heuristic_Cost.h"
-#include "terrainutil.h"
+#include "robot/pathing/A_Star_Heuristic_Cost.h"
+#include "gs/gameobj/terrainutil.h"
 
 #define MARK_UNUSED     0xcdcdcdcd
 

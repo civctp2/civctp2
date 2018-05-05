@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "C3Rand.h"
-#include "RandGen.h"
-#include "civarchive.h"
+#include "ctp/c3.h"
+#include "gs/outcom/C3Rand.h"
+#include "gs/utility/RandGen.h"
+#include "robot/aibackdoor/civarchive.h"
 
 extern RandomGenerator *g_rand;
 

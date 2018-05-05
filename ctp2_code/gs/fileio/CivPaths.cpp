@@ -30,9 +30,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3files.h"
-#include "CivPaths.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/fileio/CivPaths.h"
 
 #ifdef WIN32
 #include <shlobj.h>
@@ -40,7 +40,7 @@
 
 CivPaths *g_civPaths;
 
-#include "prjfile.h"
+#include "gs/fileio/prjfile.h"
 extern ProjectFile *g_ImageMapPF;
 
 

@@ -31,41 +31,41 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "cellunitlist.h"
-#include "Army.h"
-#include "UnitPool.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/UnitPool.h"
 
-#include "aui.h"
-#include "aui_window.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "SpriteState.h"
+#include "gfx/spritesys/SpriteState.h"
 
-#include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
-#include "c3_coloredstatic.h"
-#include "controlsheet.h"
-#include "textbutton.h"
-#include "c3_coloriconbutton.h"
-#include "unittabbutton.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/c3_coloredstatic.h"
+#include "ui/aui_ctp2/controlsheet.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/c3_coloriconbutton.h"
+#include "ui/aui_ctp2/unittabbutton.h"
 
-#include "thermometer.h"
-#include "UIUtils.h"
+#include "ui/aui_ctp2/thermometer.h"
+#include "ui/interface/UIUtils.h"
 
-#include "battleorderbox.h"
-#include "battleorderboxactions.h"
+#include "ui/aui_ctp2/battleorderbox.h"
+#include "ui/aui_ctp2/battleorderboxactions.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "primitives.h"
-#include "UnitRecord.h"
-#include "IconRecord.h"
-#include "UnitData.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/gameobj/UnitData.h"
 
 #define k_UNIT_FRAME_THICKNESS	2
 

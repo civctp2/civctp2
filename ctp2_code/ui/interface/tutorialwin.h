@@ -4,8 +4,8 @@
 #ifndef __TUTORIALWIN_H__
 #define __TUTORIALWIN_H__
 
-#include "c3_listitem.h"
-#include "c3_listbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_listbox.h"
 
 class c3_PopupWindow;
 class c3_Button;

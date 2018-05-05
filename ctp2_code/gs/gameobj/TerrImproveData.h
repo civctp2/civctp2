@@ -34,9 +34,9 @@
 #ifndef _TERRIMPROVEDATA_H_
 #define _TERRIMPROVEDATA_H_
 
-#include "GameObj.h"
-#include "MapPoint.h"
-#include "gstypes.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/world/MapPoint.h"
+#include "gs/utility/gstypes.h"
 
 #if 0
 enum TERRAIN_IMPROVEMENT {
@@ -62,7 +62,7 @@ enum TERRAIN_IMPROVEMENT {
 typedef sint32 TERRAIN_IMPROVEMENT;
 #endif
 
-#include "ID.h"
+#include "gs/gameobj/ID.h"
 
 class TerrainImprovementData : public GameObj
 {

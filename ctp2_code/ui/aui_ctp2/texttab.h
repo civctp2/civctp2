@@ -4,8 +4,8 @@
 #ifndef __TEXTTAB_H__
 #define __TEXTTAB_H__
 
-#include "aui_tab.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_tab.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 class TextTab : public aui_Tab, public PatternBase

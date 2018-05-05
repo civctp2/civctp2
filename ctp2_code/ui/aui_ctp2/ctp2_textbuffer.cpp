@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "ctp2_textbuffer.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/ctp2_textbuffer.h"
 
-#include "c3ui.h"
-#include "colorset.h"                   // g_colorSet
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
 
 extern C3UI		*g_c3ui;
 

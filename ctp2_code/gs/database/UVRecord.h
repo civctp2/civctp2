@@ -16,7 +16,7 @@
 #ifndef __UV_RECORD_H__
 #define __UV_RECORD_H__
 
-#include "Rec.h"
+#include "gs/database/Rec.h"
 class Token;
 
 #define MAX_RESOURCES	64

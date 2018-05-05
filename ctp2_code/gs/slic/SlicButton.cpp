@@ -29,15 +29,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicButton.h"
-#include "SlicObject.h"
-#include "StrDB.h"
-#include "civarchive.h"
-#include "SlicSegment.h"
-#include "SlicEngine.h"
-#include "SlicFrame.h"
-#include "message.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicButton.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/database/StrDB.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicFrame.h"
+#include "gs/gameobj/message.h"
 
 extern StringDB *g_theStringDB;
 

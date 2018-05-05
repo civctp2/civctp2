@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "Globals.h"
-#include "player.h"
-#include "Unit.h"
-#include "MessageData.h"
-#include "MsgDynArr.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/utility/MsgDynArr.h"
 
 MessageDynamicArray::MessageDynamicArray() : DynamicArray<Message>()
 	{

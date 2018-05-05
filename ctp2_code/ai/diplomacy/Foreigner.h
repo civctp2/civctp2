@@ -40,12 +40,12 @@
 struct  RegardEvent;
 class   Foreigner;
 
-#include "civarchive.h"
-#include "ctp2_inttypes.h"
-#include "dbtypes.h"
-#include "diplomattypes.h"
-#include "DiplomacyRecord.h"
-#include "MapPoint.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/database/dbtypes.h"
+#include "ai/diplomacy/diplomattypes.h"
+#include "gs/newdb/DiplomacyRecord.h"
+#include "gs/world/MapPoint.h"
 
 
 

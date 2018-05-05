@@ -3,7 +3,7 @@
 #ifndef __C3TerrDB_H__
 #define __C3TerrDB_H__ 1
 
-#include "ic3TerrDB.h"
+#include "gs/outcom/ic3TerrDB.h"
 
 class Player;
 class CivArchive;

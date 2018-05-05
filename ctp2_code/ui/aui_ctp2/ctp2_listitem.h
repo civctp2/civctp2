@@ -37,10 +37,10 @@
 
 class ctp2_ListItem;
 
-#include "aui_item.h"       // aui_Item
-#include "auitypes.h"       // AUI_ERRCODE
-#include "ctp2_inttypes.h"  // sint32
-#include "patternbase.h"    // PatternBase
+#include "ui/aui_common/aui_item.h"       // aui_Item
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"  // sint32
+#include "ui/aui_ctp2/patternbase.h"    // PatternBase
 
 class aui_Surface;
 

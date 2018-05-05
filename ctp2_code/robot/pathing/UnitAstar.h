@@ -36,9 +36,9 @@
 #ifndef __UNIT_ASTAR__
 #define __UNIT_ASTAR__ 1
 
-#include "Astar.h"
-#include "Army.h"
-#include "squad_Strength.h"
+#include "robot/pathing/Astar.h"
+#include "gs/gameobj/Army.h"
+#include "ai/strategy/squads/squad_Strength.h"
 
 class Cell;
 class CityData;

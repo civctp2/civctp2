@@ -39,12 +39,12 @@ typedef long sint32;
 typedef unsigned long uint32;
 #else
 
-#include "GameEventManager.h"
-#include "ConstRecord.h"	// g_theConstDB
-#include "Unit.h"
-#include "MapPoint.h"
-#include "battle.h"
-#include "dynarr.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/newdb/ConstRecord.h"	// g_theConstDB
+#include "gs/gameobj/Unit.h"
+#include "gs/world/MapPoint.h"
+#include "ui/interface/battle.h"
+#include "robot/aibackdoor/dynarr.h"
 
 #define k_COMBAT_WIDTH 4
 #define k_COMBAT_HEIGHT 7

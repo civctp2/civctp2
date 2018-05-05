@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "SlicConditional.h"
-#include "sliccmd.h"
-#include "sc.tab.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicConditional.h"
+#include "gs/slic/sliccmd.h"
+#include "gs/slic/sc.tab.h"
 
 SlicConditional::SlicConditional(const char *expression)
 {

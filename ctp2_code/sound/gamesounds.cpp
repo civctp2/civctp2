@@ -32,10 +32,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "SoundRecord.h"
+#include "ctp/c3.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
+#include "gs/newdb/SoundRecord.h"
 
 extern SoundManager	*g_soundManager;
 

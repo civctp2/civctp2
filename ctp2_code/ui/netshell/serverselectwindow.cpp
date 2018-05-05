@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_button.h"
-#include "aui_textfield.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_textfield.h"
 
-#include "c3_button.h"
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "netshell.h"
-#include "ns_customlistbox.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_customlistbox.h"
 
-#include "serverselectwindow.h"
-#include "playerselectwindow.h"
-#include "passwordscreen.h"
-#include "dialogboxwindow.h"
+#include "ui/netshell/serverselectwindow.h"
+#include "ui/netshell/playerselectwindow.h"
+#include "ui/netshell/passwordscreen.h"
+#include "ui/netshell/dialogboxwindow.h"
 
 static DialogBoxWindow *s_dbw = NULL;
 

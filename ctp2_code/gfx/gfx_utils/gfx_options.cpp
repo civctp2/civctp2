@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "gfx_options.h"
+#include "ctp/c3.h"
+#include "gfx/gfx_utils/gfx_options.h"
 
-#include "AvlTree.h"
+#include "ctp/ctp2_utils/AvlTree.h"
 
-#include "Army.h"
-#include "ArmyData.h"
-#include "Globals.h"
-#include "ctpaidebug.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/utility/Globals.h"
+#include "ai/ctpaidebug.h"
 
 GraphicsOptions * g_graphicsOptions = NULL;
 

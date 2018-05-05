@@ -2,22 +2,22 @@
 #pragma once
 #endif
 
-#include "c3.h"
-#include "aui.h"
-#include "aui_item.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "TradeRoute.h"
-#include "citydata.h"
-#include "StrDB.h"
-#include "Unit.h"
-#include "UnitData.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
 #include "tradewin.h"
 
-#include "c3_static.h"
-#include "c3_tradelistitem.h"
-#include "pattern.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_tradelistitem.h"
+#include "ui/aui_ctp2/pattern.h"
 
 extern StringDB			*g_theStringDB;
 

@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "MapPoint.h"
-#include "ic3InstDB.h"
+#include "gs/world/MapPoint.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "GoalInst.h"
-#include "AiMap.h"
+#include "robotcom/goals/GoalInst.h"
+#include "robotcom/Top/AiMap.h"
 
 GoalInstallation::GoalInstallation()
 {

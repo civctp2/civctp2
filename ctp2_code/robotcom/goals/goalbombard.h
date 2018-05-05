@@ -12,7 +12,7 @@
 #ifndef __GOAL_BOMBARD_H__
 #define __GOAL_BOMBARD_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

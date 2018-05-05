@@ -28,18 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Order.h"
-#include "Path.h"
-#include "TurnCnt.h"
-#include "civarchive.h"
-#include "pool.h"
-#include "GameEventArgList.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Order.h"
+#include "robot/pathing/Path.h"
+#include "gs/utility/TurnCnt.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "robot/aibackdoor/pool.h"
+#include "gs/events/GameEventArgList.h"
 
 #include <vector>
-#include "c3debugstl.h"
-#include "OrderRecord.h"
-#include "GameEventManager.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
+#include "gs/newdb/OrderRecord.h"
+#include "gs/events/GameEventManager.h"
 
 extern TurnCount *g_turn;
 extern Pool<Order> *g_theOrderPond;

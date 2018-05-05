@@ -59,9 +59,9 @@ enum	SPRITELISTERR
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "Action.h"			// GAME_ACTION
-#include "c3types.h"		// uint8, uint32
-#include "SpriteGroup.h"	// GROUPTYPE, LOADTYPE, SpriteGroup
+#include "gfx/spritesys/Action.h"			// GAME_ACTION
+#include "ctp/c3types.h"		// uint8, uint32
+#include "gfx/spritesys/SpriteGroup.h"	// GROUPTYPE, LOADTYPE, SpriteGroup
 
 //----------------------------------------------------------------------------
 // Class declarations

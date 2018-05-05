@@ -38,45 +38,45 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // pre-compiled header
-#include "Advances.h"           // own declarations
+#include "ctp/c3.h"                 // pre-compiled header
+#include "gs/gameobj/Advances.h"           // own declarations
 
-#include "AdvanceRecord.h"
-#include "civarchive.h"
-#include "player.h"             // g_player
-#include "WonderRecord.h"
-#include "AgeRecord.h"
-#include "StrDB.h"              // g_theStringDB
-#include "network.h"
-#include "net_info.h"
-#include "net_action.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "QuickSlic.h"
-#include "Civilisation.h"
-#include "AICause.h"
-#include "SelItem.h"            // g_selected_item
-#include "UnitActor.h"
-#include "tiledmap.h"           // g_tiledMap
-#include "Unit.h"
-#include "Sci.h"
-#include "Gold.h"
-#include "DifficultyRecord.h"   // g_theDifficultyDB
-#include "Diffcly.h"
-#include "profileDB.h"          // g_theProfileDB
-#include "ConstRecord.h"        // g_theConstDB
-#include "RandGen.h"            // g_rand
-#include "statswindow.h"
-#include "CivilisationPool.h"   // g_theCivilisationPool
-#include "GameSettings.h"
-#include "AgeRecord.h"
-#include "BuildingRecord.h"
-#include "UnitDynArr.h"
-#include "UnitRecord.h"
-#include "UnitData.h"
-#include "buildingutil.h"
-#include "wonderutil.h"
-#include "MainControlPanel.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "net/general/net_action.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/QuickSlic.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/outcom/AICause.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Sci.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/newdb/DifficultyRecord.h"   // g_theDifficultyDB
+#include "gs/gameobj/Diffcly.h"
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "gs/newdb/ConstRecord.h"        // g_theConstDB
+#include "gs/utility/RandGen.h"            // g_rand
+#include "ui/interface/statswindow.h"
+#include "gs/gameobj/CivilisationPool.h"   // g_theCivilisationPool
+#include "gs/gameobj/GameSettings.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/wonderutil.h"
+#include "ui/interface/MainControlPanel.h"
 #include <stdexcept>            // overflow_error
 
 namespace

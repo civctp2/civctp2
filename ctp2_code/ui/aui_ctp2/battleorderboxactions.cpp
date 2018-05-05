@@ -1,32 +1,32 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
+#include "ui/aui_common/aui.h"
 
-#include "aui_button.h"
-#include "c3_coloriconbutton.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_ctp2/c3_coloriconbutton.h"
 
-#include "dynarr.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "Army.h"
-#include "cellunitlist.h"
-#include "MapPoint.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Cell.h"
-#include "Order.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Army.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Order.h"
 
-#include "controlpanelwindow.h"
+#include "ui/interface/controlpanelwindow.h"
 
-#include "pixelutils.h"
-#include "colorset.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"
 
-#include "battleorderbox.h"
-#include "battleorderboxactions.h"
-#include "profileDB.h"
+#include "ui/aui_ctp2/battleorderbox.h"
+#include "ui/aui_ctp2/battleorderboxactions.h"
+#include "gs/database/profileDB.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 extern SelectedItem	*g_selected_item;
 extern UnitPool		*g_theUnitPool;

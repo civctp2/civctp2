@@ -28,39 +28,39 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_control.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"
-#include "aui_imagebase.h"
-#include "aui_textbase.h"
-#include "aui_textfield.h"
-#include "aui_stringtable.h"
-#include "aui_tabgroup.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_tabgroup.h"
 
-#include "c3ui.h"
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3_listbox.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3textfield.h"
-#include "colorset.h"
-#include "texttab.h"
-#include "pointerlist.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_ctp2/texttab.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "StrDB.h"
-#include "profileDB.h"
+#include "gs/database/StrDB.h"
+#include "gs/database/profileDB.h"
 
-#include "spnewgamewindow.h"
-#include "loadsavemapwindow.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/loadsavemapwindow.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "radarmap.h"
+#include "ui/aui_ctp2/radarmap.h"
 
 extern C3UI							*g_c3ui;
 extern StringDB						*g_theStringDB;

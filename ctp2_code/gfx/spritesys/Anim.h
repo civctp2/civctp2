@@ -58,8 +58,8 @@ enum ANIMTYPE
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"  // uint16, etc.
-#include "Token.h"          // Token
+#include "os/include/ctp2_inttypes.h"  // uint16, etc.
+#include "gs/fileio/Token.h"          // Token
 
 //----------------------------------------------------------------------------
 // Class declarations

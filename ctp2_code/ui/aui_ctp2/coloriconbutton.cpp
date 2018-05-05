@@ -1,25 +1,25 @@
-#include "c3.h"
-#include "coloriconbutton.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/coloriconbutton.h"
 
-#include "aui.h"
-#include "aui_action.h"
-#include "pattern.h"
-#include "icon.h"
-#include "aui_window.h"
-#include "aui_surface.h"
-#include "aui_ldl.h"
-#include "tipwindow.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/icon.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/tipwindow.h"
 
-#include "pixelutils.h"
-#include "colorset.h"
-#include "CivPaths.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/fileio/CivPaths.h"
 
-#include "primitives.h"
-#include "c3_button.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/c3_button.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI			*g_c3ui;
 extern CivPaths		*g_civPaths;

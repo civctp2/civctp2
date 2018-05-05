@@ -4,7 +4,7 @@
 #ifndef __DEBUGWINDOW_H__
 #define __DEBUGWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class TextBox;
 

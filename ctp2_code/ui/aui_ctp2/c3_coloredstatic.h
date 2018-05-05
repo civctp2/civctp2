@@ -1,8 +1,8 @@
 #ifndef __C3_COLOREDSTATIC_H__
 #define __C3_COLOREDSTATIC_H__
 
-#include "colorset.h"
-#include "c3_static.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_ctp2/c3_static.h"
 
 class aui_Surface;
 

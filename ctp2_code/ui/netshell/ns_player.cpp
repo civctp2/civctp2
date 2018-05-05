@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "netshell.h"
-#include "ns_player.h"
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_player.h"
 
 ns_Player::ns_Player(NETFunc::Player * player)
 :	ns_Object<NETFunc::Player, ns_Player>(player)

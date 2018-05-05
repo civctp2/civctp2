@@ -38,19 +38,19 @@
 #ifndef __SCHEDULER_H__
 #define __SCHEDULER_H__
 
-#include "scheduler_types.h"
+#include "ai/strategy/scheduler/scheduler_types.h"
 
-#include "squad_Strength.h"
-#include "StrategyRecord.h"
+#include "ai/strategy/squads/squad_Strength.h"
+#include "gs/newdb/StrategyRecord.h"
 
 #include <vector>
 #include <utility>
 #include <deque>
 
-#include "c3debugstl.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
 
-#include "civarchive.h"
-#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "robot/aibackdoor/civarchive.h"
+#include "ai/strategy/goals/Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
 
 class GoalRecord;
 class Scheduler;

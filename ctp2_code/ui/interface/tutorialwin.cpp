@@ -28,34 +28,34 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "c3ui.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_switch.h"
-#include "c3_listbox.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "ui/aui_ctp2/c3_listbox.h"
 
-#include "SlicEngine.h"
-#include "player.h"
-#include "SelItem.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "pointerlist.h"
-#include "SlicRecord.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gs/slic/SlicRecord.h"
 
-#include "profileDB.h"
+#include "gs/database/profileDB.h"
 
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
-#include "UIUtils.h"
-#include "screenutils.h"
+#include "ui/interface/UIUtils.h"
+#include "ui/interface/screenutils.h"
 
-#include "tutorialwin.h"
+#include "ui/interface/tutorialwin.h"
 
 extern C3UI			*g_c3ui;
 extern Player		**g_player;

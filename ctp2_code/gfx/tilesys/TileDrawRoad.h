@@ -34,7 +34,7 @@
 #ifndef __TILEDRAWROAD_H__
 #define __TILEDRAWROAD_H__
 
-#include "directions.h"
+#include "gs/utility/directions.h"
 
 #define k_BIT_SOUTH			(1 << SOUTH    )
 #define k_BIT_SOUTHWEST		(1 << SOUTHWEST)

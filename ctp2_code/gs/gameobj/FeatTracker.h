@@ -70,10 +70,10 @@ sint32 const	USE_CURRENT_ROUND			= -1;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3types.h"			// MBCHAR, sint32
-#include "civarchive.h"			// CivArchive
-#include "pointerlist.h"		// PointerList
-#include "Unit.h"				// Unit
+#include "ctp/c3types.h"			// MBCHAR, sint32
+#include "robot/aibackdoor/civarchive.h"			// CivArchive
+#include "ctp/ctp2_utils/pointerlist.h"		// PointerList
+#include "gs/gameobj/Unit.h"				// Unit
 
 //----------------------------------------------------------------------------
 // Class declarations

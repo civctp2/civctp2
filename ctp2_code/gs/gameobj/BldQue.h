@@ -73,8 +73,8 @@ class CityData;
 class UnitRecord;
 template <class T> class PointerList;
 
-#include "player.h" // PLAYER_INDEX
-#include "Unit.h"   // Unit
+#include "gs/gameobj/Player.h" // PLAYER_INDEX
+#include "gs/gameobj/Unit.h"   // Unit
 
 //----------------------------------------------------------------------------
 // Class declarations

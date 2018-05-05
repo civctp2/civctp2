@@ -4,7 +4,7 @@
 #ifndef __PICTUREBUTTON_H__
 #define __PICTUREBUTTON_H__
 
-#include "aui_button.h"
+#include "ui/aui_common/aui_button.h"
 
 class Picture;
 

@@ -31,7 +31,7 @@ DECLARE_INTERFACE_(IMapGenerator, IUnknown)
 };
 #else
 
-#include "noCOMBase.h"
+#include "os/include/noCOMBase.h"
 
 class IC3Rand;
 

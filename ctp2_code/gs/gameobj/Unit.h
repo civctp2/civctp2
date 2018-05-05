@@ -55,18 +55,18 @@
 
 class Unit;
 
-#include "UnitTypes.h"
+#include "gs/gameobj/UnitTypes.h"
 
-#include "ID.h"
-#include "dbtypes.h"
-#include "directions.h"     // WORLD_DIRECTION
-#include "Advances.h"       // AdvanceType
-#include "AICause.h"        // CAUSE_...
-#include "HappyTracker.h"   // HAPPY_REASON
-#include "MapPoint.h"       // MapPoint
-#include "Order.h"          // ORDER_RESULT
-#include "OrderRecord.h"    // For order valid check
-#include "player.h"         // PLAYER_INDEX
+#include "gs/gameobj/ID.h"
+#include "gs/database/dbtypes.h"
+#include "gs/utility/directions.h"     // WORLD_DIRECTION
+#include "gs/gameobj/Advances.h"       // AdvanceType
+#include "gs/outcom/AICause.h"        // CAUSE_...
+#include "gs/gameobj/HappyTracker.h"   // HAPPY_REASON
+#include "gs/world/MapPoint.h"       // MapPoint
+#include "gs/gameobj/Order.h"          // ORDER_RESULT
+#include "gs/newdb/OrderRecord.h"    // For order valid check
+#include "gs/gameobj/Player.h"         // PLAYER_INDEX
 
 class CityData;
 class UnitData;

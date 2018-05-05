@@ -29,37 +29,37 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "initialplaywindow.h"  // initialplayscreen.h does not exist
+#include "ctp/c3.h"
+#include "ui/interface/initialplaywindow.h"  // initialplayscreen.h does not exist
 
-#include "civ3_main.h"
-#include "civapp.h"
+#include "ctp/civ3_main.h"
+#include "ctp/civapp.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "c3_static.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "CivPaths.h"           // g_civPaths
-#include "ctp2_listitem.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_listbox.h"
-#include "ctp2_Static.h"
-#include "gameinit.h"
-#include "loadsavewindow.h"
-#include "netshell.h"
-#include "optionswindow.h"
-#include "profileDB.h"          // g_theProfileDB
-#include "scenariowindow.h"
-#include "screenutils.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "gs/fileio/CivPaths.h"           // g_civPaths
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/utility/gameinit.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/netshell/netshell.h"
+#include "ui/interface/optionswindow.h"
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "ui/interface/scenariowindow.h"
+#include "ui/interface/screenutils.h"
 #include <string>               // std::basic_string
-#include "UIUtils.h"
+#include "ui/interface/UIUtils.h"
 
 extern  C3UI				*g_c3ui;
 extern  CivApp				*g_civApp;

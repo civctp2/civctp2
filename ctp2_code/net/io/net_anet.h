@@ -4,10 +4,10 @@
 #ifndef _ANETIO_H_
 #define _ANETIO_H_
 
-#include "net_io.h"
-#include "anet.h"
-#include "net_array.h"
-#include "pointerlist.h"
+#include "net/io/net_io.h"
+#include "libs/anet/h/anet.h"
+#include "net/io/net_array.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 #define CIV3_SPECIES 1504
 

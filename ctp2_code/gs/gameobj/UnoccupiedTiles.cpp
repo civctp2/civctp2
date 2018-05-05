@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "TileVal.h"
-#include "citydata.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "MapPoint.h"
-#include "UnoccupiedTiles.h"
+#include "gs/gameobj/TileVal.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/UnoccupiedTiles.h"
 
 
 

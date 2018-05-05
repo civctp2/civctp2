@@ -12,9 +12,9 @@
 #ifndef __GOAL_CITY_TARGET_H__
 #define __GOAL_CITY_TARGET_H__ 1
 
-#include "ArmyGoal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
 enum GOAL_TYPE;
 struct MapPointData;

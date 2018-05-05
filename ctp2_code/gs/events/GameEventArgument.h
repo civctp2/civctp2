@@ -34,12 +34,12 @@
 #ifndef __GAME_EVENT_ARGUMENT_H__
 #define __GAME_EVENT_ARGUMENT_H__
 
-#include "GameEventTypes.h"
-#include "GameEvent.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/events/GameEvent.h"
 
-#include "ID.h"
-#include "MapPoint.h"
-#include "GameEventManager.h"    // g_gevManager
+#include "gs/gameobj/ID.h"
+#include "gs/world/MapPoint.h"
+#include "gs/events/GameEventManager.h"    // g_gevManager
 
 class Unit;
 class MapPoint;

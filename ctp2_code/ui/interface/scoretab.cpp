@@ -1,17 +1,17 @@
-#include "c3.h"
-#include "scoretab.h"
+#include "ctp/c3.h"
+#include "ui/interface/scoretab.h"
 
-#include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "player.h"
-#include "profileDB.h"
-#include "Score.h"
-#include "SelItem.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/profileDB.h"
+#include "gs/gameobj/Score.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "GameSettings.h"
+#include "gs/gameobj/GameSettings.h"
 
 extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );
 

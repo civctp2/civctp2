@@ -4,9 +4,9 @@
 #ifndef _NET_ORDER_H_
 #define _NET_ORDER_H_
 
-#include "net_packet.h"
-#include "Army.h"
-#include "MapPoint.h"
+#include "net/general/net_packet.h"
+#include "gs/gameobj/Army.h"
+#include "gs/world/MapPoint.h"
 
 class Path;
 enum UNIT_ORDER_TYPE;

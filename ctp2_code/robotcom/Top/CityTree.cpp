@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "CityTree.h"
-#include "FlatPtr.h"
+#include "ctp/c3.h"
+#include "robotcom/Top/CityTree.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
-#include "CityEdge.h"
-#include "CityVertex.h"
-#include "CityAgent.h"
+#include "robotcom/Top/CityEdge.h"
+#include "robotcom/Top/CityVertex.h"
+#include "robotcom/Agent/CityAgent.h"
 
 ZEROMEM(CityTreeFlat);
 ZEROMEM(CityTreePtr);
@@ -81,7 +81,7 @@ CityTree::CityTree(CityVertex *v)
     v->m_next = NULL;
 }
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 extern Memory_Manager *g_memory_CityTree;
 void* CityTree::operator new(size_t byte_size)
 {

@@ -60,15 +60,15 @@ class MainControlPanel;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_progressbar.h"    // aui_ProgressBar
-#include "c3types.h"            // MBCHAR
-#include "cellunitlist.h"       // CellUnitList
-#include "ControlTabPanel.h"    // ControlTabPanel
-#include "EndTurnButton.h"      // EndTurnButton
-#include "player.h"             // PLAYER_INDEX
-#include "ShortcutPad.h"        // ShortCutPad
-#include "StatusBar.h"          // StatusBar
-#include "TurnYearStatus.h"     // TurnYearStatus
+#include "ui/aui_common/aui_progressbar.h"    // aui_ProgressBar
+#include "ctp/c3types.h"            // MBCHAR
+#include "gs/world/cellunitlist.h"       // CellUnitList
+#include "ui/interface/ControlTabPanel.h"    // ControlTabPanel
+#include "ui/interface/EndTurnButton.h"      // EndTurnButton
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
+#include "ui/interface/ShortcutPad.h"        // ShortCutPad
+#include "ui/interface/StatusBar.h"          // StatusBar
+#include "ui/interface/TurnYearStatus.h"     // TurnYearStatus
 
 //----------------------------------------------------------------------------
 // Class declarations

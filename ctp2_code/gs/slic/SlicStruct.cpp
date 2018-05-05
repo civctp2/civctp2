@@ -29,13 +29,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SlicStruct.h"
-#include "SlicSymbol.h"
-#include "SlicEngine.h"
-#include "SlicNamedSymbol.h"
-#include "civarchive.h"
-#include "gamefile.h"
+#include "ctp/c3.h"
+#include "gs/slic/SlicStruct.h"
+#include "gs/slic/SlicSymbol.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicNamedSymbol.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/gamefile.h"
 
 namespace
 {

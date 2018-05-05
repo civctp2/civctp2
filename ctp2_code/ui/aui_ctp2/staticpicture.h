@@ -3,7 +3,7 @@
 
 class Picture;
 
-#include "aui_static.h"
+#include "ui/aui_common/aui_static.h"
 
 
 #define k_AUI_STATICIMAGE_LDL_IMAGE "image"

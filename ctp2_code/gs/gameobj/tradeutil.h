@@ -33,10 +33,10 @@
 #ifndef TRADEUTIL_H__
 #define TRADEUTIL_H__
 
-#include "ConstRecord.h"
-#include "ctp2_inttypes.h"
-#include "Unit.h"
-#include "Globals.h"         // MAPSIZE
+#include "gs/newdb/ConstRecord.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/Globals.h"         // MAPSIZE
 
 sint32 const    DISTANCE_UNKNOWN    = 10000;
 

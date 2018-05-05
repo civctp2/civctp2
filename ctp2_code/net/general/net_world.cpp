@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "net_world.h"
-#include "World.h"
-#include "net_util.h"
-#include "ResourceRecord.h"
+#include "ctp/c3.h"
+#include "net/general/net_world.h"
+#include "gs/world/World.h"
+#include "net/io/net_util.h"
+#include "gs/newdb/ResourceRecord.h"
 
 void NetWorld::Packetize(uint8 *buf, uint16 &size)
 {

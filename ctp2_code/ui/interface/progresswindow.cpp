@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "progresswindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/progresswindow.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "c3_static.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
 
 extern C3UI *   g_c3ui;
 

@@ -5,7 +5,7 @@
 #ifndef __STATSWINDOW_H__
 #define __STATSWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 enum SW {
 	SW_NO_CITIES,

@@ -4,9 +4,9 @@
 #ifndef _TRADEOFFER_H_
 #define _TRADEOFFER_H_
 
-#include "ID.h"
-#include "Unit.h"
-#include "TradeOfferData.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/TradeOfferData.h"
 
 class TradeOffer : public ID {
 public:

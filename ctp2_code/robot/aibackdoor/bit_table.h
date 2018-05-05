@@ -52,7 +52,7 @@ class Bit_Table;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "civarchive.h" // CivArchive
+#include "robot/aibackdoor/civarchive.h" // CivArchive
 
 //----------------------------------------------------------------------------
 // Class declarations

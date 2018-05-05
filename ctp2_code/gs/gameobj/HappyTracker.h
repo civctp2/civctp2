@@ -48,7 +48,7 @@ enum HAPPY_REASON
 	HAPPY_REASON_MAX
 };
 
-#include "dbtypes.h"    // StringId
+#include "gs/database/dbtypes.h"    // StringId
 class CivArchive;
 
 class HappyTracker

@@ -29,34 +29,34 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_button.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "SlicButton.h"
+#include "gs/slic/SlicButton.h"
 
-#include "colorset.h"
-#include "pixelutils.h"
-#include "radarmap.h"
-#include "c3_dropdown.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
 
-#include "messageiconwindow.h"
-#include "messagewin.h"
-#include "messagewindow.h"
-#include "messagelist.h"
-#include "messageadvice.h"
-#include "messagemodal.h"
-#include "messageactions.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/messagewin.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/interface/messagelist.h"
+#include "ui/interface/messageadvice.h"
+#include "ui/interface/messagemodal.h"
+#include "ui/interface/messageactions.h"
 
-#include "MessagePool.h"
+#include "gs/gameobj/MessagePool.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "SelItem.h"
-#include "player.h"
-#include "director.h"
-#include "profileDB.h"				// g_theProfileDB
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gfx/spritesys/director.h"
+#include "gs/database/profileDB.h"				// g_theProfileDB
 
 extern RadarMap			*g_radarMap;
 extern C3UI				*g_c3ui;

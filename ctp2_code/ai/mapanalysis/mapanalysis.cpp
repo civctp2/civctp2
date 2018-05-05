@@ -35,28 +35,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "mapanalysis.h"
+#include "ctp/c3.h"
+#include "ai/mapanalysis/mapanalysis.h"
 
-#include "Army.h"
-#include "ArmyData.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "citydata.h"
-#include "player.h"
-#include "dynarr.h"
-#include "UnitDynArr.h"
-#include "c3debug.h"
-#include "CitySizeRecord.h"
-#include "World.h"
-#include "TradeRouteData.h"
-#include "Cell.h"
-#include "Strengths.h"
-#include "AgreementMatrix.h"
-#include "Diplomat.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Player.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/UnitDynArr.h"
+#include "ctp/ctp2_utils/c3debug.h"
+#include "gs/newdb/CitySizeRecord.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TradeRouteData.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Strengths.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/diplomacy/Diplomat.h"
 
-#include "Scheduler.h"
+#include "ai/strategy/scheduler/Scheduler.h"
 #include <vector>
 #include <limits>
 

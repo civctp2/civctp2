@@ -1,12 +1,12 @@
-#include "c3.h"
-#include "patternbase.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/patternbase.h"
 
-#include "aui.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI *g_c3ui;
 

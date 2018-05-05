@@ -4,8 +4,8 @@
 #ifndef __C3DROPDOWN_H__
 #define __C3DROPDOWN_H__
 
-#include "aui_dropdown.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_dropdown.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class aui_Surface;
 

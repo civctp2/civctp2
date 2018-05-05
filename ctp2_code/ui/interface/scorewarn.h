@@ -1,7 +1,7 @@
 #ifndef __SCOREWARN_H__
 #define __SCOREWARN_H__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 
 void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );

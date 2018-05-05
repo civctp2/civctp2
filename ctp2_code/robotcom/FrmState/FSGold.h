@@ -2,7 +2,7 @@
 #ifndef __FS_GOLD_H__
 #define __FS_GOLD_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 class FSAllocScience : public FrameState {
 

@@ -4,7 +4,7 @@
 #ifndef __UI_TEST_H__
 #define __UI_TEST_H__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 
 class Button1Action : public aui_Action

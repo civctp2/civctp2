@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "aui_window.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "radiogroup.h"
+#include "ui/aui_ctp2/radiogroup.h"
 
 
 RadioGroup::RadioGroup(

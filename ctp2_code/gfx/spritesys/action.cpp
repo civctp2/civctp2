@@ -29,22 +29,22 @@
 /// \file   Action.cpp
 /// \brief  Action on the screen
 
-#include "c3.h"
-#include "Action.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/Action.h"
 
-#include "ActorPath.h"
-#include "Anim.h"
-#include "UnitActor.h"
+#include "gfx/spritesys/ActorPath.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/UnitActor.h"
 #if 0
-#include "Actor.h"
-#include "debugmemory.h"
-#include "director.h"       // g_director
-#include "EffectActor.h"
-#include "pixelutils.h"
-#include "profileDB.h"      // g_theProfileDB
-#include "spriteutils.h"
-#include "tech_wllist.h"
-#include "Unit.h"
+#include "gfx/spritesys/Actor.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "gfx/spritesys/director.h"       // g_director
+#include "gfx/spritesys/EffectActor.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/database/profileDB.h"      // g_theProfileDB
+#include "gfx/spritesys/spriteutils.h"
+#include "ui/aui_common/tech_wllist.h"
+#include "gs/gameobj/Unit.h"
 #endif
 
 #define STOMPCHECK()

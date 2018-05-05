@@ -140,8 +140,8 @@ enum TOKEN_TYPES
 
 #define k_MAX_TOKEN_LEN _MAX_PATH
 
-#include "c3files.h"
-#include "dbtypes.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/database/dbtypes.h"
 class StringDB;
 
 struct TokenData {

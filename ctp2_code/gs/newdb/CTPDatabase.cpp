@@ -85,14 +85,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "CTPDatabase.h"
-#include "DBLexer.h"
-#include "DBTokens.h"
-#include "StrDB.h"
-#include "pointerlist.h"
+#include "ctp/c3.h"
+#include "gs/newdb/CTPDatabase.h"
+#include "gs/newdb/DBLexer.h"
+#include "gs/newdb/DBTokens.h"
+#include "gs/database/StrDB.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
-#include "GovernmentRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
 
 #define k_INITIAL_DB_SIZE 10
 #define k_GROW_DB_STEP 10
@@ -691,137 +691,137 @@ template <class T> sint32 CTPDatabase<T>::FindRecordNameIndex(const char *str) c
 	return CTPRecord::INDEX_INVALID;
 }
 
-#include "IconRecord.h" // 0
+#include "gs/newdb/IconRecord.h" // 0
 template class CTPDatabase<IconRecord>;
 
-#include "SoundRecord.h" // 1
+#include "gs/newdb/SoundRecord.h" // 1
 template class CTPDatabase<SoundRecord>;
 
-#include "TerrainRecord.h" // 2
+#include "gs/newdb/TerrainRecord.h" // 2
 template class CTPDatabase<TerrainRecord>;
 
-#include "ResourceRecord.h" // 3
+#include "gs/newdb/ResourceRecord.h" // 3
 template class CTPDatabase<ResourceRecord>;
 
-#include "AgeRecord.h" // 4
+#include "gs/newdb/AgeRecord.h" // 4
 template class CTPDatabase<AgeRecord>;
 
-#include "AdvanceRecord.h" // 5
+#include "gs/newdb/AdvanceRecord.h" // 5
 template class CTPDatabase<AdvanceRecord>;
 
-#include "AdvanceBranchRecord.h" // 6
+#include "gs/newdb/AdvanceBranchRecord.h" // 6
 template class CTPDatabase<AdvanceBranchRecord>;
 
-#include "FeatRecord.h" // 7
+#include "gs/newdb/FeatRecord.h" // 7
 template class CTPDatabase<FeatRecord>;
 
-#include "WonderRecord.h" // 8
+#include "gs/newdb/WonderRecord.h" // 8
 template class CTPDatabase<WonderRecord>;
 
-#include "WonderMovieRecord.h" // 9
+#include "gs/newdb/WonderMovieRecord.h" // 9
 template class CTPDatabase<WonderMovieRecord>;
 
-#include "BuildingRecord.h" // 10
+#include "gs/newdb/BuildingRecord.h" // 10
 template class CTPDatabase<BuildingRecord>;
 
 #ifndef __TILETOOL__
 
-#include "UnitRecord.h" // 11
+#include "gs/newdb/UnitRecord.h" // 11
 template class CTPDatabase<UnitRecord>;
 
-#include "SpriteRecord.h" // 12
+#include "gs/newdb/SpriteRecord.h" // 12
 template class CTPDatabase<SpriteRecord>;
 
-#include "GovernmentRecord.h" // 13
+#include "gs/newdb/GovernmentRecord.h" // 13
 template class CTPDatabase<GovernmentRecord>;
 
-#include "SpecialAttackInfoRecord.h" // 14
+#include "gs/newdb/SpecialAttackInfoRecord.h" // 14
 template class CTPDatabase<SpecialAttackInfoRecord>;
 
-#include "SpecialEffectRecord.h" // 15
+#include "gs/newdb/SpecialEffectRecord.h" // 15
 template class CTPDatabase<SpecialEffectRecord>;
 
-#include "TerrainImprovementRecord.h" // 26
+#include "gs/newdb/TerrainImprovementRecord.h" // 26
 template class CTPDatabase<TerrainImprovementRecord>;
 
-#include "OrderRecord.h" // 17
+#include "gs/newdb/OrderRecord.h" // 17
 template class CTPDatabase<OrderRecord>;
 
-#include "GoalRecord.h" // 18
+#include "gs/newdb/GoalRecord.h" // 18
 template class CTPDatabase<GoalRecord>;
 
-#include "UnitBuildListRecord.h" // 19
+#include "gs/newdb/UnitBuildListRecord.h" // 19
 template class CTPDatabase<UnitBuildListRecord>;
 
-#include "BuildingBuildListRecord.h" // 20
+#include "gs/newdb/BuildingBuildListRecord.h" // 20
 template class CTPDatabase<BuildingBuildListRecord>;
 
-#include "WonderBuildListRecord.h" // 21
+#include "gs/newdb/WonderBuildListRecord.h" // 21
 template class CTPDatabase<WonderBuildListRecord>;
 
-#include "ImprovementListRecord.h" // 22
+#include "gs/newdb/ImprovementListRecord.h" // 22
 template class CTPDatabase<ImprovementListRecord>;
 
-#include "StrategyRecord.h" // 23
+#include "gs/newdb/StrategyRecord.h" // 23
 template class CTPDatabase<StrategyRecord>;
 
-#include "BuildListSequenceRecord.h" // 24
+#include "gs/newdb/BuildListSequenceRecord.h" // 24
 template class CTPDatabase<BuildListSequenceRecord>;
 
-#include "DiplomacyRecord.h" // 25
+#include "gs/newdb/DiplomacyRecord.h" // 25
 template class CTPDatabase<DiplomacyRecord>;
 
-#include "AdvanceListRecord.h" // 26
+#include "gs/newdb/AdvanceListRecord.h" // 26
 template class CTPDatabase<AdvanceListRecord>;
 
-#include "CitySizeRecord.h" // 27
+#include "gs/newdb/CitySizeRecord.h" // 27
 template class CTPDatabase<CitySizeRecord>;
 
-#include "PopRecord.h" // 28
+#include "gs/newdb/PopRecord.h" // 28
 template class CTPDatabase<PopRecord>;
 
-#include "DiplomacyProposalRecord.h" // 29
+#include "gs/newdb/DiplomacyProposalRecord.h" // 29
 template class CTPDatabase<DiplomacyProposalRecord>;
 
-#include "DiplomacyThreatRecord.h" // 30
+#include "gs/newdb/DiplomacyThreatRecord.h" // 30
 template class CTPDatabase<DiplomacyThreatRecord>;
 
-#include "PersonalityRecord.h" // 31
+#include "gs/newdb/PersonalityRecord.h" // 31
 template class CTPDatabase<PersonalityRecord>;
 
-#include "EndGameObjectRecord.h" // 32
+#include "gs/newdb/EndGameObjectRecord.h" // 32
 template class CTPDatabase<EndGameObjectRecord>;
 
-#include "CityStyleRecord.h" // 33
+#include "gs/newdb/CityStyleRecord.h" // 33
 template class CTPDatabase<CityStyleRecord>;
 
-#include "AgeCityStyleRecord.h" // 34
+#include "gs/newdb/AgeCityStyleRecord.h" // 34
 template class CTPDatabase<AgeCityStyleRecord>;
 
-#include "CivilisationRecord.h" // 35
+#include "gs/newdb/CivilisationRecord.h" // 35
 template class CTPDatabase<CivilisationRecord>;
 
-#include "RiskRecord.h" // 36
+#include "gs/newdb/RiskRecord.h" // 36
 template class CTPDatabase<RiskRecord>;
 
-#include "DifficultyRecord.h" // 37
+#include "gs/newdb/DifficultyRecord.h" // 37
 template class CTPDatabase<DifficultyRecord>;
 
-#include "PollutionRecord.h" // 38
+#include "gs/newdb/PollutionRecord.h" // 38
 template class CTPDatabase<PollutionRecord>;
 
-#include "GlobalWarmingRecord.h" // 39
+#include "gs/newdb/GlobalWarmingRecord.h" // 39
 template class CTPDatabase<GlobalWarmingRecord>;
 
-#include "MapIconRecord.h" // 40
+#include "gs/newdb/MapIconRecord.h" // 40
 template class CTPDatabase<MapIconRecord>;
 
-#include "MapRecord.h" // 41
+#include "gs/newdb/MapRecord.h" // 41
 template class CTPDatabase<MapRecord>;
 
-#include "ConceptRecord.h" // 42
+#include "gs/newdb/ConceptRecord.h" // 42
 template class CTPDatabase<ConceptRecord>;
 
-#include "ConstRecord.h" // 43
+#include "gs/newdb/ConstRecord.h" // 43
 template class CTPDatabase<ConstRecord>;
 #endif // __TILETOOL__

@@ -1,8 +1,8 @@
 #ifndef __SERVERSELECTWINDOW_H__
 #define __SERVERSELECTWINDOW_H__
 
-#include "ns_window.h"
-#include "aui_action.h"
+#include "ui/netshell/ns_window.h"
+#include "ui/aui_common/aui_action.h"
 
 
 class ServerSelectWindow : public ns_Window

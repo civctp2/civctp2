@@ -40,21 +40,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "buildingutil.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/buildingutil.h"
 
-#include "BuildingRecord.h"
-#include "c3errors.h"
-#include "civarchive.h"
-#include "ErrMsg.h"
-#include "FeatTracker.h"
-#include "GovernmentRecord.h"
-#include "player.h"             // g_player
-#include "StrDB.h"              // g_theStringDB
-#include "Unit.h"
-#include "WonderRecord.h"
-#include "WonderTracker.h"
-#include "wonderutil.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/ErrMsg.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/gameobj/Unit.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/wonderutil.h"
 
 #define shiftbit(i) uint64(uint64(0x01) << uint64(i))
 

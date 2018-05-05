@@ -34,11 +34,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "aui_ui.h"
-#include "StrDB.h"      // g_theStringDB
+#include "ui/aui_common/aui_ui.h"
+#include "gs/database/StrDB.h"      // g_theStringDB
 
 extern aui_UI *g_ui;
 

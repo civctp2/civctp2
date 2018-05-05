@@ -29,13 +29,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_blitter.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_blitter.h"
 
 #include <algorithm>          // std::fill, std::max, std::min
-#include "aui_surface.h"
-#include "aui_dirtylist.h"
-#include "aui_pixel.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_dirtylist.h"
+#include "ui/aui_common/aui_pixel.h"
 
 AUI_ERRCODE aui_Blitter::Blt(
 	aui_Surface *destSurf,

@@ -28,25 +28,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "UnitPool.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/UnitPool.h"
 
-#include "civarchive.h"
-#include "Globals.h"
-#include "gstypes.h"
-#include "UnitRec.h"
-#include "UnitData.h"
-#include "StrDB.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/Globals.h"
+#include "gs/utility/gstypes.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/database/StrDB.h"
 
 
 extern StringDB     *g_theStringDB;
 
 
-#include "civ3_main.h"
+#include "ctp/civ3_main.h"
 
 #ifndef _NO_GAME_WATCH
 
-#include "GWCiv.h"
+#include "GameWatch/gwciv/GWCiv.h"
 
 extern int g_gameWatchID;
 #endif

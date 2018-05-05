@@ -7,13 +7,13 @@
 
 class NetShell;
 
-#include "aui_shell.h"
-#include "aui_action.h"
-#include "aui_ui.h"
-#include "netfunc.h"
-#include "ns_gamesetup.h"
-#include "ns_playersetup.h"
-#include "ns_string.h"
+#include "ui/aui_common/aui_shell.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/netshell/netfunc.h"
+#include "ui/netshell/ns_gamesetup.h"
+#include "ui/netshell/ns_playersetup.h"
+#include "ui/netshell/ns_string.h"
 
 class aui_Screen;
 class aui_Window;

@@ -1,25 +1,25 @@
-#include "c3.h"
-#include "Unit.h"
-#include "player.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Player.h"
 
-#include "DiplomaticRequestPool.h"
-#include "MessagePool.h"
-#include "StrDB.h"
-#include "network.h"
-#include "net_action.h"
-#include "civarchive.h"
-#include "DiplDynArr.h"
-#include "MsgDynArr.h"
-#include "TurnCnt.h"
-#include "Globals.h"
-#include "gamefile.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/database/StrDB.h"
+#include "net/general/network.h"
+#include "net/general/net_action.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/utility/DiplDynArr.h"
+#include "gs/utility/MsgDynArr.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/utility/Globals.h"
+#include "gs/fileio/gamefile.h"
 
 extern	StringDB	*g_theStringDB ;
 
 extern	Player	**g_player ;
 extern TurnCount *g_turn;
 
-#include "Diplomacy_Log.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
 

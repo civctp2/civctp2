@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "RandGen.h"
+#include "gs/utility/RandGen.h"
 extern RandomGenerator *g_rand;
 
 extern HWND gHwnd;

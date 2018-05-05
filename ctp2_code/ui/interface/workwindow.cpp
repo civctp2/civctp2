@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_control.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
 
-#include "pattern.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "workwindow.h"
+#include "ui/interface/workwindow.h"
 
 extern TiledMap *g_tiledMap;
 

@@ -1,19 +1,19 @@
-#include "globals.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TestP.h"
-#include "tiledmap.h"
-#include "pixelutils.h"
-#include "UnitAstar.h"
-#include "SelItem.h"
+#include "gs/utility/globals.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "robot/pathing/TestP.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "robot/pathing/UnitAstar.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 
 
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "primitives.h"
-#include "player.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_utils/primitives.h"
+#include "gs/gameobj/Player.h"
 
 UnitAstar *g_theTestPather;
 

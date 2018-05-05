@@ -1,25 +1,25 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
 
-#include "citydata.h"
-#include "C3World.h"
-#include "Cell.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TerrImprove.h"
-#include "Wormhole.h"
-#include "UnitRecord.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/outcom/C3World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/Wormhole.h"
+#include "gs/newdb/UnitRecord.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
 #include "civarchive.h"
-#include "TerrImproveData.h"
-#include "cellunitlist.h"
-#include "installationtree.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/gameobj/installationtree.h"
 #include "InstDB.h"
-#include "MoveFlags.h"
+#include "gs/utility/MoveFlags.h"
 
-#include "UnitData.h"
+#include "gs/gameobj/UnitData.h"
 
 extern InstallationQuadTree  *g_theInstallationTree;
 

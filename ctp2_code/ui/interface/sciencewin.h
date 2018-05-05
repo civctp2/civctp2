@@ -4,10 +4,10 @@
 #ifndef __SCIENCEWIN_H__
 #define __SCIENCEWIN_H__
 
-#include "c3_listitem.h"
-#include "aui_stringtable.h"
-#include "c3_updateaction.h"
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/c3_updateaction.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 
 class C3Window;
 class c3_Static;

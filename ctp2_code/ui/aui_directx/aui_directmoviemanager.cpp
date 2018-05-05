@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "aui_directmoviemanager.h"
+#include "ctp/c3.h"
+#include "ui/aui_directx/aui_directmoviemanager.h"
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
 
 

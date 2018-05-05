@@ -4,9 +4,9 @@
 #ifndef _TRADEOFFERPOOL_H_
 #define _TRADEOFFERPOOL_H_
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "TradeOffer.h"
+#include "gs/gameobj/TradeOffer.h"
 
 class CivArchive;
 template <class T> class DynamicArray;

@@ -4,7 +4,7 @@
 #ifndef __IC3RAND_H__
 #define __IC3RAND_H__
 
-#include "ctp2_inttypes.h"  // sint32
+#include "os/include/ctp2_inttypes.h"  // sint32
 
 #if !defined(USE_COM_REPLACEMENT)
 #include <OBJBASE.H>
@@ -23,7 +23,7 @@ DECLARE_INTERFACE_(IC3Rand, IUnknown)
 	STDMETHOD_(sint32, Next) (THIS_ sint32 range) PURE;
 };
 #else
-#include "noCOMBase.h"
+#include "os/include/noCOMBase.h"
 
 class IC3Rand : public IUnknown
 {

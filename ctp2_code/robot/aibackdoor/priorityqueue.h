@@ -34,7 +34,7 @@
 #ifndef __DA_PRIORITY_QUEUE__
 #define __DA_PRIORITY_QUEUE__ 1
 
-#include "dynarr.h"
+#include "robot/aibackdoor/dynarr.h"
 
 template <class T> class DAPriorityQueue {
 	DynamicArray<T*> m_queue;

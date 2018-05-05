@@ -28,9 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "tiffutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
 #include <tiffio.h>
 
 char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, size_t *size)

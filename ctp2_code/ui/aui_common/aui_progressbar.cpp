@@ -25,17 +25,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_progressbar.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_progressbar.h"
 
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "aui_blitter.h"
-#include "aui_surface.h"
-#include "aui_window.h"
-#include "aui_animate.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_animate.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 aui_ProgressBar::aui_ProgressBar(
 	AUI_ERRCODE *retval,

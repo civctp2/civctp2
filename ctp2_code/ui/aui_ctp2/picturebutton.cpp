@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "picturebutton.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/picturebutton.h"
 
-#include "aui.h"
-#include "picture.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/picture.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI *g_c3ui;
 

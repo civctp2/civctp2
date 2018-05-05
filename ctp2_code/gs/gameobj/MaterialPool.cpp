@@ -28,14 +28,14 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "MaterialPool.h"
-#include "civarchive.h"
-#include "network.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "player.h"
-#include "ConstRecord.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "net/general/network.h"
+#include "net/general/net_action.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/Player.h"
+#include "gs/newdb/ConstRecord.h"
 
 extern Player **g_player;
 

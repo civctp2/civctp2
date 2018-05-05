@@ -1,10 +1,10 @@
-#include "GWArchive.h"
+#include "GameWatch/gwarchive/GWArchive.h"
 
 #include <errno.h>
 #include <direct.h>
 
-#include "GWDelivery.h"
-#include "GWRecorder.h"
+#include "GameWatch/gamewatch/GWDelivery.h"
+#include "GameWatch/gamewatch/GWRecorder.h"
 
 DllExport GWArchive gwArchive;
 

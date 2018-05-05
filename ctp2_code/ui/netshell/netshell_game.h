@@ -32,7 +32,7 @@
 // Should match the value in anet.inf
 #define GAMEID 1504
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 AUI_ACTION_BASIC(DestroyInitialPlayScreenAction);
 

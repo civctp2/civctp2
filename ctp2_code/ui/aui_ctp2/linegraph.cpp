@@ -32,30 +32,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "linegraph.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/linegraph.h"
 
 #include <memory>
 
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_Factory.h"
-#include "aui_stringtable.h"
-#include "aui_window.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_window.h"
 
-#include "c3ui.h"
-#include "c3blitter.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3blitter.h"
 
-#include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
-#include "gstypes.h"                // PLAYER_INDEX_VANDALS
-#include "player.h"                 // k_MAX_PLAYERS
-#include "primitives.h"
-#include "textutils.h"
-#include "TurnCnt.h"                // g_turn
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "gs/utility/gstypes.h"                // PLAYER_INDEX_VANDALS
+#include "gs/gameobj/Player.h"                 // k_MAX_PLAYERS
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_utils/textutils.h"
+#include "gs/utility/TurnCnt.h"                // g_turn
 
-#include "EventTracker.h"
-#include "Strengths.h"
+#include "gs/gameobj/EventTracker.h"
+#include "gs/gameobj/Strengths.h"
 
 extern C3UI                    *g_c3ui;
 extern PointerList<Player>     *g_deadPlayer;

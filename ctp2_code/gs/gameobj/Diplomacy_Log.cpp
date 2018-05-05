@@ -1,24 +1,24 @@
-#include "c3.h"
-#include "Diplomacy_Log.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 
-#include "MapPoint.h"
-#include "ArmyData.h"
-#include "Order.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/Order.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 extern SelectedItem *g_selected_item;
 
 
 
 
-#include "TurnCnt.h"
+#include "gs/utility/TurnCnt.h"
 extern TurnCount *g_turn;
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player **g_player;
 
-#include "AgreementTypes.h"
-#include "DiplomaticTypes.h"
+#include "gs/gameobj/AgreementTypes.h"
+#include "gs/gameobj/DiplomaticTypes.h"
 
 Diplomacy_Log::Diplomacy_Log()
 {

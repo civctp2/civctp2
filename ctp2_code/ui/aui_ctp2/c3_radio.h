@@ -1,8 +1,8 @@
 #ifndef __C3_RADIO_H__
 #define __C3_RADIO_H__
 
-#include "patternbase.h"
-#include "aui_radio.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_radio.h"
 
 #define k_C3_RADIO_DEFAULTNUMSTATES		2
 #define k_C3_RADIO_DEFAULT_BEVELWIDTH		2

@@ -4,8 +4,8 @@
 #ifndef __TEXTRADIO_H__
 #define __TEXTRADIO_H__
 
-#include "aui_radio.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_radio.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 class TextRadio : public aui_Radio, public PatternBase

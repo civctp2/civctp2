@@ -3,11 +3,11 @@
 
 class Battle;
 
-#include "Army.h"           // Army
-#include "dbtypes.h"
-#include "battleview.h"
-#include "cellunitlist.h"   // CellUnitList
-#include "colorset.h"
+#include "gs/gameobj/Army.h"           // Army
+#include "gs/database/dbtypes.h"
+#include "ui/interface/battleview.h"
+#include "gs/world/cellunitlist.h"   // CellUnitList
+#include "gfx/gfx_utils/colorset.h"
 
 class Battle {
 public:

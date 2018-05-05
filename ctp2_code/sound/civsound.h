@@ -51,7 +51,7 @@
 #if defined(USE_SDL)
 #include <SDL/SDL_mixer.h>
 #else
-#include "mss.h"
+#include "libs/miles/mss.h"
 #endif
 
 class CivSound {

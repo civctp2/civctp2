@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "C3DipReq.h"
+#include "ctp/c3.h"
+#include "gs/outcom/C3DipReq.h"
 #include "civarchive.h"
-#include "globals.h"
+#include "gs/utility/globals.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player **g_player;
 
 C3DiplomaticRequest::C3DiplomaticRequest(const DiplomaticRequest &request,

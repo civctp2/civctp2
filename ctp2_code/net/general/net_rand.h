@@ -4,7 +4,7 @@
 #ifndef _NET_RAND_H_
 #define _NET_RAND_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetRand : public Packetizer
 {

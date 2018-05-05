@@ -3,7 +3,7 @@
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-#include "aui_movie.h"
+#include "ui/aui_common/aui_movie.h"
 
 class aui_DirectSurface;
 

@@ -29,11 +29,11 @@
 #ifndef __GAIA_CONTROLLER_H__
 #define __GAIA_CONTROLLER_H__
 
-#include "bit_table.h"
+#include "robot/aibackdoor/bit_table.h"
 #include <list>
 #include <utility>
-#include "MapPoint.h"
-#include "c3debugstl.h"
+#include "gs/world/MapPoint.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
 
 typedef std::list<MapPoint> MapPoint_List;
 typedef std::list<std::pair<sint32, MapPoint> > Scored_MapPoint_List;

@@ -1,7 +1,7 @@
 #ifndef __LDL_MEMMAP_H__
 #define __LDL_MEMMAP_H__
 
-#include "tech_memmap.h"
+#include "ui/aui_common/tech_memmap.h"
 
 class tech_MemMap;
 

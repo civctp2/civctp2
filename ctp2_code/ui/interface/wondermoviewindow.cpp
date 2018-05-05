@@ -29,21 +29,21 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_moviebutton.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_movie.h"
+#include "ui/aui_common/aui_moviebutton.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_movie.h"
 
-#include "c3window.h"
-#include "pattern.h"
-#include "patternbase.h"
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "wondermoviewindow.h"
-#include "wondermoviewin.h"
-#include "ctp2_hypertextbox.h"
+#include "ui/interface/wondermoviewindow.h"
+#include "ui/interface/wondermoviewin.h"
+#include "ui/aui_ctp2/ctp2_hypertextbox.h"
 
 
 WonderMovieWindow::WonderMovieWindow(

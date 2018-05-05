@@ -56,8 +56,8 @@
  *----------------------------------------------------------------------------
  */
 #include <stdio.h>
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -36,24 +36,24 @@
 /// \file   InitialPlayWindow.cpp
 /// \brief  The first window to display (defnitions).
 
-#include "c3.h"
-#include "initialplaywindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/initialplaywindow.h"
 
-#include "aui.h"
-#include "aui_imagebase.h"
-#include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "aui_surface.h"
-#include "aui_uniqueid.h"           // aui_UniqueId
-#include "aui_textbase.h"
-#include "aui_textfield.h"
-#include "c3_button.h"
-#include "c3_static.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "spnewgamewindow.h"        // spNew_ctp2_Button
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_uniqueid.h"           // aui_UniqueId
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/interface/spnewgamewindow.h"        // spNew_ctp2_Button
 
 InitPlayWindow::InitPlayWindow
 (

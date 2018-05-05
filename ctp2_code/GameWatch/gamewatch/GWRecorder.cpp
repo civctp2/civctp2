@@ -1,6 +1,6 @@
-#include "GWRecorder.h"
+#include "GameWatch/gamewatch/GWRecorder.h"
 
-#include "GWRecord.h"
+#include "GameWatch/gamewatch/GWRecord.h"
 
 DllExport GWRecorderList GWRecorder::recordingSystems;
 

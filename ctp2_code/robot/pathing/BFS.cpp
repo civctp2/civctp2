@@ -1,27 +1,27 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "BFS.h"
+#include "robot/pathing/BFS.h"
 
-#include "astarpnt.h"
-#include "AVLHeap.h"
+#include "robot/pathing/astarpnt.h"
+#include "robot/pathing/AVLHeap.h"
 extern AVLHeap g_astar_mem;
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 extern Player **g_player;
 
-#include "Cell.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 extern World *g_theWorld;
 
-#include "Unit.h"
-#include "UnitData.h"
-#include "citydata.h"
-#include "Happy.h"
-#include "ArmyData.h"
-#include "GovernmentRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/newdb/GovernmentRecord.h"
 
 extern uint32 g_search_count;
 

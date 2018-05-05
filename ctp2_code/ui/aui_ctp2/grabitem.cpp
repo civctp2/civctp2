@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "grabitem.h"
+#include "ui/aui_ctp2/grabitem.h"
 
 GrabItem	*g_grabbedItem = NULL;
 

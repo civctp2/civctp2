@@ -32,8 +32,8 @@
 
 #ifdef __AUI_USE_SDL__
 
-#include "aui_ui.h"
-#include "aui_sdl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_sdl/aui_sdl.h"
 #if defined(HAVE_X11)
 #include <X11/Xlib.h>
 #endif

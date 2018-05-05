@@ -28,25 +28,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Globals.h"
+#include "gs/utility/Globals.h"
 
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "tileutils.h"
-#include "tiffutils.h"
-#include "targautils.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "gfx/tilesys/tileutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/targautils.h"
 
-#include "BaseTile.h"
-#include "tileset.h"
+#include "gfx/tilesys/BaseTile.h"
+#include "gfx/tilesys/tileset.h"
 
-#include "Token.h"
-#include "CivPaths.h"
+#include "gs/fileio/Token.h"
+#include "gs/fileio/CivPaths.h"
 
-#include "arproces.h"
-#include "terrainutil.h"
-#include "TerrainRecord.h"
+#include "gfx/gfx_utils/arproces.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainRecord.h"
 
 extern CivPaths		*g_civPaths;
 

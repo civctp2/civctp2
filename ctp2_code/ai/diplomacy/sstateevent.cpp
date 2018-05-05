@@ -39,32 +39,32 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "SStateEvent.h"
+#include "ai/diplomacy/SStateEvent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "AICause.h"
+#include "gs/outcom/AICause.h"
 
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "player.h"
-#include "governor.h"
-#include "StrategyRecord.h"
-#include "newturncount.h"
-#include "AgreementMatrix.h"
-#include "ctpai.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "gs/gameobj/Player.h"
+#include "ai/CityManagement/governor.h"
+#include "gs/newdb/StrategyRecord.h"
+#include "gs/utility/newturncount.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/ctpai.h"
 
-#include "GovernmentRecord.h"
-#include "wonderutil.h"
-#include "DifficultyRecord.h"   //EMOD
-#include "GameSettings.h"
-#include "profileDB.h"			// g_theProfileDB
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/newdb/DifficultyRecord.h"   //EMOD
+#include "gs/gameobj/GameSettings.h"
+#include "gs/database/profileDB.h"			// g_theProfileDB
 
 //----------------------------------------------------------------------------
 //

@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
 #include "aimain.h"
 
-#include "GlTrans.h"
+#include "robotcom/goals/GlTrans.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
-#include "GlSettl.h"
+#include "robotcom/goals/GlSettl.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 ZEROMEM(GoalTransportFlat);
 ZEROMEM(GoalTransportPtr);

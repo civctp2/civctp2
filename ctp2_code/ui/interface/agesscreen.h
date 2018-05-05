@@ -5,9 +5,9 @@
 #ifndef __AGESSCREEN_H__
 #define __AGESSCREEN_H__
 
-#include "aui_control.h"        // aui_Control
-#include "auitypes.h"           // AUI_ERRCODE
-#include "ctp2_inttypes.h"      // sint32
+#include "ui/aui_common/aui_control.h"        // aui_Control
+#include "ui/aui_common/auitypes.h"           // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"      // sint32
 
 sint32 agesscreen_displayMyWindow(bool viewMode = false);
 sint32 agesscreen_removeMyWindow(uint32 action);

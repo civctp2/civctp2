@@ -1,7 +1,7 @@
 #ifndef __AUI_CURSOR_H__
 #define __AUI_CURSOR_H__
 
-#include "aui_image.h"
+#include "ui/aui_common/aui_image.h"
 
 
 class aui_Cursor : public aui_Image

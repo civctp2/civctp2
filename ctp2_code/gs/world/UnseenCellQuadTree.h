@@ -2,8 +2,8 @@
 #ifndef _UNSEEN_CELL_QUAD_TREE_H_
 #define _UNSEEN_CELL_QUAD_TREE_H_
 
-#include "QuadTree.h"
-#include "UnseenCell.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/world/UnseenCell.h"
 
 class UnseenCellQuadTree : public QuadTree<UnseenCellCarton>
 {

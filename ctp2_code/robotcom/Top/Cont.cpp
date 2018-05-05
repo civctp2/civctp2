@@ -1,24 +1,24 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Cont.h"
+#include "robotcom/Top/Cont.h"
 
-#include "globals.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3world.h"
 
-#include "bset.h"
-#include "dynarr.h"
-#include "FlatPtr.h"
+#include "robot/aibackdoor/bset.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "aicell.h"
+#include "robotcom/Top/aicell.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "CityTree.h"
-#include "AiMap.h"
+#include "robotcom/Top/CityTree.h"
+#include "robotcom/Top/AiMap.h"
 
 
 

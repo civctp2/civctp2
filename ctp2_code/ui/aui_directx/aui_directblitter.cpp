@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "aui_directsurface.h"
+#include "ctp/c3.h"
+#include "ui/aui_directx/aui_directsurface.h"
 
-#include "aui_directblitter.h"
+#include "ui/aui_directx/aui_directblitter.h"
 
 #ifdef __AUI_USE_DIRECTX__
 

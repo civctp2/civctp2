@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "FliSetFunc.h"
-#include "fliif.h"
-#include "FliSymbol.h"
+#include "ctp/c3.h"
+#include "robotcom/fuzzy/FliSetFunc.h"
+#include "robotcom/fuzzy/fliif.h"
+#include "robotcom/fuzzy/FliSymbol.h"
 
 FliSetFunc::FliSetFunc(char *name, FliSymbol *variable, SFTYPE type,
 					   double center, double width)

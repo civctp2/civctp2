@@ -4,8 +4,8 @@
 #ifndef __THERMOMETER_H__
 #define __THERMOMETER_H__
 
-#include "aui_control.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 #define k_THERMOMETER_PERCENT_FILLED "percent"
 #define k_THERMOMETER_COLOR			 "color"

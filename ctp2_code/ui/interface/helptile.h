@@ -12,7 +12,7 @@ void helptile_Cleanup( void );
 void helptile_displayData(const MapPoint&);
 void helptile_setPosition(const MapPoint&);
 
-#include "c3_listitem.h"
+#include "ui/aui_ctp2/c3_listitem.h"
 
 class TileImprovementListItem : public c3_ListItem
 {

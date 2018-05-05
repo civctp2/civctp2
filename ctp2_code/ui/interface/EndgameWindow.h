@@ -4,8 +4,8 @@
 #ifndef _BMH_END_GAME_WINDOW_H_
 #define _BMH_END_GAME_WINDOW_H_
 
-#include "c3window.h"
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 
 class aui_Control;
 class aui_Static;

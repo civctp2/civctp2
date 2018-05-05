@@ -2,13 +2,13 @@
 #ifndef __CITY_AGENT_H__
 #define __CITY_AGENT_H__ 1
 
-#include "Agent.h"
-#include "MapPoint.h"
+#include "robotcom/Agent/Agent.h"
+#include "gs/world/MapPoint.h"
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 class AiMain;
 class BSetID;
@@ -356,7 +356,7 @@ public:
     void EnqueueBuildFreight(AiMain * ai,
                const double utility);
 
-#include "cityagentblg.h"
+#include "robotcom/Agent/cityagentblg.h"
 
     sint32 PretestContructBuilding(AiMain *ai, sint32 building_type);
 	BOOL PretestBuildingBuildTime(AiMain *ai, sint32 building_type);
@@ -486,7 +486,7 @@ public:
 
     sint32 GetNumMusicians() const { return m_num_musicians; }
 
-#include "CityAgentPop.h"
+#include "robotcom/Agent/CityAgentPop.h"
 
     void ResetSquad(Squad *new_squad);
 

@@ -1,15 +1,15 @@
 #ifndef __ALLINONEWINDOW_H__
 #define __ALLINONEWINDOW_H__
 
-#include "ns_aiplayersetup.h"
-#include "ns_window.h"
-#include "aui_action.h"
-#include "ns_string.h"
-#include "ns_gamesetup.h"
-#include "ns_units.h"
-#include "ns_improvements.h"
-#include "ns_wonders.h"
-#include "gamefile.h"
+#include "ui/netshell/ns_aiplayersetup.h"
+#include "ui/netshell/ns_window.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/netshell/ns_string.h"
+#include "ui/netshell/ns_gamesetup.h"
+#include "ui/netshell/ns_units.h"
+#include "ui/netshell/ns_improvements.h"
+#include "ui/netshell/ns_wonders.h"
+#include "gs/fileio/gamefile.h"
 
 class aui_Switch;
 class aui_StringTable;
@@ -26,7 +26,7 @@ extern AllinoneWindow *g_allinoneWindow;
 #define k_PPT_PRIVATE	1
 
 
-#include "StartingPosition.h"
+#include "gs/fileio/StartingPosition.h"
 
 struct ns_ScenarioInfo {
 	uint8 isScenario;

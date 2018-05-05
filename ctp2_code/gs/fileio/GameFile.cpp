@@ -40,74 +40,74 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "gamefile.h"
+#include "ctp/c3.h"
+#include "gs/fileio/gamefile.h"
 
-#include "AchievementTracker.h"
-#include "AdvanceRecord.h"
-#include "Advances.h"
-#include "AgeRecord.h"
-#include "AgreementPool.h"         // g_theAgreementPool
+#include "gs/gameobj/AchievementTracker.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/newdb/AgeRecord.h"
+#include "gs/gameobj/AgreementPool.h"         // g_theAgreementPool
 #include <algorithm>
-#include "ArmyPool.h"
-#include "BldQue.h"
-#include "BuildingRecord.h"
-#include "c3errors.h"
-#include "c3files.h"
-#include "Cell.h"
-#include "citydata.h"
-#include "civ3_main.h"
-#include "civapp.h"
-#include "civarchive.h"
-#include "CivilisationPool.h"       // g_theCivilisationPool
-#include "CivilisationRecord.h"
-#include "CivPaths.h"               // g_civPaths
-#include "civscenarios.h"
-#include "ctpai.h"
-#include "Diffcly.h"
-#include "DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
-#include "EventTracker.h"
-#include "Exclusions.h"
-#include "FeatTracker.h"
-#include "gameinit.h"
-#include "GameSettings.h"
-#include "Gold.h"
-#include "installation.h"
-#include "installationpool.h"       // g_theInstallationPool
-#include "MessagePool.h"            // g_theMessagePool
-#include "netshell_game.h"
-#include "pixelutils.h"
-#include "player.h"                 // g_player
-#include "pollution.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "progresswindow.h"
-#include "RandGen.h"                // g_rand
-#include "RoboInit.h"
-#include "Sci.h"
-#include "SelItem.h"                // g_selected_item
-#include "SlicEngine.h"
-#include "soundmanager.h"           // g_soundManager
-#include "StrDB.h"                  // g_theStringDB
-#include "TaxRate.h"
-#include "TerrainRecord.h"
-#include "TerrImprovePool.h"        // g_theTerrainImprovementPool
-#include "thronedb.h"               // g_theThroneDB
-#include "TopTen.h"
-#include "TradeBids.h"
-#include "TradeOfferPool.h"
-#include "TradePool.h"
-#include "TurnCnt.h"                // g_turn
-#include "UnitData.h"
-#include "UnitPool.h"               // g_theUnitPool
-#include "UVDB.h"
-#include "WonderRecord.h"
-#include "WonderTracker.h"
-#include "World.h"                  // g_theWorld
-#include "Wormhole.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/BldQue.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/ctp2_utils/c3files.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/citydata.h"
+#include "ctp/civ3_main.h"
+#include "ctp/civapp.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/CivilisationPool.h"       // g_theCivilisationPool
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/fileio/CivPaths.h"               // g_civPaths
+#include "gs/fileio/civscenarios.h"
+#include "ai/ctpai.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
+#include "gs/gameobj/EventTracker.h"
+#include "gs/gameobj/Exclusions.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/utility/gameinit.h"
+#include "gs/gameobj/GameSettings.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/installationpool.h"       // g_theInstallationPool
+#include "gs/gameobj/MessagePool.h"            // g_theMessagePool
+#include "ui/netshell/netshell_game.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/gameobj/pollution.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "ui/interface/progresswindow.h"
+#include "gs/utility/RandGen.h"                // g_rand
+#include "robot/utility/RoboInit.h"
+#include "gs/gameobj/Sci.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/slic/SlicEngine.h"
+#include "sound/soundmanager.h"           // g_soundManager
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gs/gameobj/TaxRate.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/TerrImprovePool.h"        // g_theTerrainImprovementPool
+#include "gs/database/thronedb.h"               // g_theThroneDB
+#include "gs/gameobj/TopTen.h"
+#include "gs/gameobj/TradeBids.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/utility/TurnCnt.h"                // g_turn
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"               // g_theUnitPool
+#include "gs/database/UVDB.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/world/World.h"                  // g_theWorld
+#include "gs/gameobj/Wormhole.h"
 #include <zlib.h>
 
 #ifndef _NO_GAME_WATCH
-#include "GameWatch.h"
+#include "GameWatch/gamewatch/GameWatch.h"
 extern int g_gameWatchID;
 #endif
 

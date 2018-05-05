@@ -3,7 +3,7 @@
 #ifndef __FLI_SYMBOL_H__
 #define __FLI_SYMBOL_H__
 
-#include "fliif.h"
+#include "robotcom/fuzzy/fliif.h"
 
 enum FLI_SYM {
 	FLI_SYM_INPUT,

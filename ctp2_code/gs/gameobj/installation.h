@@ -4,8 +4,8 @@
 #ifndef _INSTALLATION_H_
 #define _INSTALLATION_H_
 
-#include "ID.h"
-#include "installationdata.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/installationdata.h"
 
 class TerrainImprovementRecord;
 

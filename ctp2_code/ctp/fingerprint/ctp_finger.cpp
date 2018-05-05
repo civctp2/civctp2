@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "CivPaths.h"
-#include "verify.h"
-#include "ctp_finger.h"
+#include "gs/fileio/CivPaths.h"
+#include "ctp/fingerprint/verify.h"
+#include "ctp/fingerprint/ctp_finger.h"
 
 extern CivPaths		*g_civPaths;
 

@@ -26,13 +26,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameSettings.h"
-#include "profileDB.h"
-#include "civarchive.h"
-#include "network.h"
-#include "player.h"
-#include "EndGame.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/GameSettings.h"
+#include "gs/database/profileDB.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/EndGame.h"
 
 extern ProfileDB *g_theProfileDB;
 extern Player **g_player;

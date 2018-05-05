@@ -1,7 +1,7 @@
 #ifndef __AUI_BLITTER_H__
 #define __AUI_BLITTER_H__
 
-#include "aui_base.h"
+#include "ui/aui_common/aui_base.h"
 
 class aui_Surface;
 class aui_DirtyList;

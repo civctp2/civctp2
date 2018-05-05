@@ -30,28 +30,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "musicscreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/musicscreen.h"
 
-#include "aui_stringtable.h"
-#include "aui_uniqueid.h"
-#include "c3_button.h"
-#include "c3_checkbox.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "c3_popupwindow.h"
-#include "c3_static.h"
-#include "c3_switch.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "ctp2_button.h"
-#include "Globals.h"            // allocated::clear
-#include "keypress.h"
-#include "musictrackscreen.h"
-#include "profileDB.h"          // g_theProfileDB
-#include "soundmanager.h"       // g_soundManager
-#include "spnewgamewindow.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_checkbox.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_switch.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "gs/utility/Globals.h"            // allocated::clear
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/interface/musictrackscreen.h"
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "sound/soundmanager.h"       // g_soundManager
+#include "ui/interface/spnewgamewindow.h"
 
 extern C3UI *   g_c3ui;
 extern BOOL     g_musicTrackChosen;

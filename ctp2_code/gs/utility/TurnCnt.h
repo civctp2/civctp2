@@ -34,7 +34,7 @@
 #ifndef __TURN_COUNT_H__
 #define __TURN_COUNT_H__
 
-#include "newturncount.h"
+#include "gs/utility/newturncount.h"
 
 class CivArchive ;
 template <class T> class SimpleDynamicArray;

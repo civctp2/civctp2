@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "net_strengths.h"
-#include "net_util.h"
-#include "Strengths.h"
-#include "player.h"
-#include "TurnCnt.h"
-#include "Score.h"
+#include "ctp/c3.h"
+#include "net/general/net_strengths.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/Strengths.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/gameobj/Score.h"
 
 extern TurnCount *g_turn;
 extern Player **g_player;

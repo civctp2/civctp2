@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3files.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3files.h"
 
-#include "CriticalMessagesPrefs.h"
+#include "gs/gameobj/CriticalMessagesPrefs.h"
 
 //----------------------------------------------------------------------------
 //

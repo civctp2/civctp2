@@ -41,17 +41,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "ctp2_config.h"
-#include "Datum.h"
+#include "os/include/ctp2_config.h"
+#include "gs/dbgen/Datum.h"
 
 #if defined(WIN32)
 #include <windows.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 
-#include "ctpdb.h"
-#include "RecordDescription.h"
+#include "gs/dbgen/ctpdb.h"
+#include "gs/dbgen/RecordDescription.h"
 
 char const * Datum::BitPairTypeString(void)
 {

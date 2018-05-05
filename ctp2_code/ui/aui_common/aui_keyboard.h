@@ -44,7 +44,7 @@
 #endif
 
 // Not really a library, but needed in the export section
-#include "ctp2_inttypes.h"	// uint##
+#include "os/include/ctp2_inttypes.h"	// uint##
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -108,8 +108,8 @@ struct aui_KeyboardEvent
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "aui_base.h"
-#include "aui_input.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_input.h"
 
 //----------------------------------------------------------------------------
 // Class declarations

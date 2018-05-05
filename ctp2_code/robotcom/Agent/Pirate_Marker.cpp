@@ -1,8 +1,8 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #include "civarchive.h"
-#include "bset.h"
-#include "Pirate_Marker.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/Pirate_Marker.h"
 
 Pirate_Marker::Pirate_Marker(const sint32 owner, const uint32 id,
    const sint32 round)

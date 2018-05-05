@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_ldl.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "bevellesswindow.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
 
 
 BevelLessWindow::BevelLessWindow(

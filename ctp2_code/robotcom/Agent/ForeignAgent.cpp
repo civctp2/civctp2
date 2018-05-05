@@ -1,26 +1,26 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 
-#include "ic3GameState.h"
-#include "ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
 #include "aimain.h"
-#include "ic3player.h"
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
 
-#include "bset.h"
-#include "ForeignAgent.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/ForeignAgent.h"
 
-#include "goal.h"
-#include "GlEnslave.h"
-#include "goalbombard.h"
-#include "goalrustle.h"
-#include "GoalExpel.h"
-#include "GoalSally.h"
+#include "robotcom/planner/goal.h"
+#include "robotcom/goals/GlEnslave.h"
+#include "robotcom/goals/goalbombard.h"
+#include "robotcom/goals/goalrustle.h"
+#include "robotcom/goals/GoalExpel.h"
+#include "robotcom/goals/GoalSally.h"
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
 #include "civarchive.h"
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 #include "Foreigner.h"
 
 ForeignAgent::ForeignAgent()

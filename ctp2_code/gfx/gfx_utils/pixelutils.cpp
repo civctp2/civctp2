@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "pixelutils.h"
+#include "gfx/gfx_utils/pixelutils.h"
 #ifdef WIN32
 #include <windows.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 
 short		gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];

@@ -1,8 +1,8 @@
 #ifndef __ATTRACT_WINDOW_H__
 #define __ATTRACT_WINDOW_H__
 
-#include "c3window.h"
-#include "pointerlist.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 struct AttractRegion {
 	aui_Region *m_region;

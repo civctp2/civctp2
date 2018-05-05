@@ -37,7 +37,7 @@
 
 class aui_Input;
 
-#include "auitypes.h"   // AUI_ERRCODE
+#include "ui/aui_common/auitypes.h"   // AUI_ERRCODE
 
 class aui_Input
 {

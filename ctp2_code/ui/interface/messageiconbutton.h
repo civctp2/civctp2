@@ -33,7 +33,7 @@
 #ifndef __MESSAGEICONBUTTON_H__
 #define __MESSAGEICONBUTTON_H__
 
-#include "aui_button.h"
+#include "ui/aui_common/aui_button.h"
 
 
 class MessageIconButton : public aui_Button

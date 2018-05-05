@@ -34,7 +34,7 @@
 #ifndef CTP2_SPINNER_H__
 #define CTP2_SPINNER_H__
 
-#include "aui_ranger.h"
+#include "ui/aui_common/aui_ranger.h"
 
 class ctp2_Spinner : public aui_Ranger
 {

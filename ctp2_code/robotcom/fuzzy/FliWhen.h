@@ -2,7 +2,7 @@
 #ifndef __FLI_WHEN_H__
 #define __FLI_WHEN_H__
 
-#include "FliSymbol.h"
+#include "robotcom/fuzzy/FliSymbol.h"
 
 class FliWhen
 {

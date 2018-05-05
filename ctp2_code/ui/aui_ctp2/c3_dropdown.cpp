@@ -28,24 +28,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_window.h"
-#include "aui_uniqueid.h"
-#include "aui_surface.h"
-#include "aui_ranger.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_ranger.h"
 
-#include "c3ui.h"
-#include "c3_listbox.h"
-#include "c3_button.h"
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "pattern.h"
-#include "pixelutils.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "c3_dropdown.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
 
 extern C3UI		*g_c3ui;
 

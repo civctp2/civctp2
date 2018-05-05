@@ -1,8 +1,8 @@
 #ifndef __AUI_HYPERTEXTBOX_H__
 #define __AUI_HYPERTEXTBOX_H__
 
-#include "aui_hypertextbase.h"
-#include "aui_control.h"
+#include "ui/aui_common/aui_hypertextbase.h"
+#include "ui/aui_common/aui_control.h"
 
 class aui_Ranger;
 

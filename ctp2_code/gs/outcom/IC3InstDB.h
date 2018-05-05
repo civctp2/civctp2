@@ -5,7 +5,7 @@
 
 #include <OBJBASE.H>
 
-#include "TerrImproveData.h"
+#include "gs/gameobj/TerrImproveData.h"
 
 DEFINE_GUID(CLSID_IC3InstDB,
     0x08420cc0,

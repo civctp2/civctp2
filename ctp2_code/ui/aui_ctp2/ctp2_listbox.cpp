@@ -28,35 +28,35 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ctp2_listitem.h"
-#include "ctp2_listbox.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
 
-#include "aui.h"
+#include "ui/aui_common/aui.h"
 
-#include "aui_ui.h"                 // g_ui
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_ranger.h"
-#include "aui_window.h"
-#include "aui_item.h"
-#include "aui_switch.h"
-#include "aui_blitter.h"
+#include "ui/aui_common/aui_ui.h"                 // g_ui
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_item.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_blitter.h"
 
-#include "c3_header.h"
-#include "c3_ranger.h"
-#include "c3_listitem.h"
+#include "ui/aui_ctp2/c3_header.h"
+#include "ui/aui_ctp2/c3_ranger.h"
+#include "ui/aui_ctp2/c3_listitem.h"
 
-#include "ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
 
-#include "pattern.h"
-#include "primitives.h"
-#include "colorset.h"               // g_colorSet
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
-#include "ctp2_MenuButton.h"
-#include "aui_dragdropwindow.h"
+#include "ui/aui_ctp2/ctp2_MenuButton.h"
+#include "ui/aui_common/aui_dragdropwindow.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 uint32 ctp2_ListBox::m_ctp2_listboxClassId = aui_UniqueId();
 

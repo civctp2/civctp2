@@ -30,45 +30,45 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_surface.h"
-#include "aui_bitmapfont.h"
-#include "aui_stringtable.h"
-#include "aui_uniqueid.h"
-#include "pixelutils.h"
-#include "primitives.h"
-#include "aui_ranger.h"
-#include "c3ui.h"
-#include "background.h"
-#include "c3_hypertextbox.h"
-#include "c3textfield.h"
-#include "tiledmap.h"               // g_tiledMap
-#include "chatbox.h"
-#include "network.h"                // g_network
-#include "SelItem.h"                // g_selected_item
-#include "newturncount.h"
-#include "TurnCnt.h"                // g_turn
-#include "civapp.h"
-#include "controlpanelwindow.h"     // g_controlPanel
-#include "director.h"               // g_director
-#include "radarmap.h"               // g_radarMap
-#include "Civilisation.h"
-#include "player.h"                 // g_player
-#include "SlicEngine.h"
-#include "radarwindow.h"
-#include "ctp2_Window.h"
-#include "colorset.h"               // g_colorSet
-#include "gamesounds.h"
-#include "soundmanager.h"           // g_soundManager
-#include "XY_Coordinates.h"
-#include "World.h"                  // g_theWorld;
-#include "tiledmap.h"               // g_tiledMap
-#include "gfx_options.h"
-#include "GameEventManager.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/background.h"
+#include "ui/aui_ctp2/c3_hypertextbox.h"
+#include "ui/aui_ctp2/c3textfield.h"
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "ui/interface/chatbox.h"
+#include "net/general/network.h"                // g_network
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/utility/newturncount.h"
+#include "gs/utility/TurnCnt.h"                // g_turn
+#include "ctp/civapp.h"
+#include "ui/interface/controlpanelwindow.h"     // g_controlPanel
+#include "gfx/spritesys/director.h"               // g_director
+#include "ui/aui_ctp2/radarmap.h"               // g_radarMap
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/slic/SlicEngine.h"
+#include "ui/interface/radarwindow.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"           // g_soundManager
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"                  // g_theWorld;
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gfx/gfx_utils/gfx_options.h"
+#include "gs/events/GameEventManager.h"
 
 #if defined (_DEBUG) || defined(USE_LOGGING)
-#include "ctpaidebug.h"
+#include "ai/ctpaidebug.h"
 #endif
 
 extern MBCHAR       g_slic_filename[_MAX_PATH];

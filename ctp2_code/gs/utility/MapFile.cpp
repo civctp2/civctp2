@@ -34,31 +34,31 @@
 /// \file   gs/utility/MapFile.cpp
 /// \brief  Map file handling (definitions)
 
-#include "c3.h"
-#include "MapFile.h"
+#include "ctp/c3.h"
+#include "gs/utility/MapFile.h"
 
-#include "AdvanceRecord.h"              // g_theAdvanceDB
+#include "gs/newdb/AdvanceRecord.h"              // g_theAdvanceDB
 #include <algorithm>
-#include "AICause.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "civarchive.h"
-#include "Civilisation.h"
-#include "CTPDatabase.h"
-#include "dbtypes.h"                    // k_MAX_NAME_LEN
-#include "director.h"                   // g_director
-#include "MessageBoxDialog.h"           // MessageBoxDialog
-#include "net_util.h"                   // PULL/PUSH macros
-#include "player.h"                     // g_player
-#include "profileDB.h"
-#include "TerrainImprovementRecord.h"
-#include "TerrImprove.h"
-#include "tiledmap.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "unitutil.h"
-#include "Vision.h"
-#include "World.h"                      // g_theWorld
+#include "gs/outcom/AICause.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/newdb/CTPDatabase.h"
+#include "gs/database/dbtypes.h"                    // k_MAX_NAME_LEN
+#include "gfx/spritesys/director.h"                   // g_director
+#include "ui/interface/MessageBoxDialog.h"           // MessageBoxDialog
+#include "net/io/net_util.h"                   // PULL/PUSH macros
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/database/profileDB.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/world/World.h"                      // g_theWorld
 
 #define k_TERRAIN_HEADER 'TERR'
 #define k_TERRAIN_ENV_HEADER 'TENV'

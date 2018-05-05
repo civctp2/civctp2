@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_action.h"
-#include "aui_static.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_common/aui_static.h"
 
-#include "aui_tab.h"
+#include "ui/aui_common/aui_tab.h"
 
 
 aui_Tab::aui_Tab(

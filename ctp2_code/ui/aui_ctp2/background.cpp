@@ -28,29 +28,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
+#include "ui/aui_common/aui.h"
 
-#include "background.h"
+#include "ui/aui_ctp2/background.h"
 
-#include "tiledmap.h"
-#include "dynarr.h"
-#include "SelItem.h"
-#include "cursormanager.h"
-#include "c3window.h"
-#include "c3ui.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/interface/cursormanager.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "messageactions.h"
-#include "messagewindow.h"
-#include "InfoBar.h"
-#include "profileDB.h"
+#include "ui/interface/messageactions.h"
+#include "ui/interface/messagewindow.h"
+#include "ui/aui_ctp2/InfoBar.h"
+#include "gs/database/profileDB.h"
 
-#include "controlpanelwindow.h"
-#include "StatusBar.h"
-#include "scenarioeditor.h"
-#include "ctp2_Static.h"
-#include "aui_ldl.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "ui/interface/StatusBar.h"
+#include "ui/interface/scenarioeditor.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_common/aui_ldl.h"
 
 extern CursorManager	*g_cursorManager;
 extern C3UI				*g_c3ui;

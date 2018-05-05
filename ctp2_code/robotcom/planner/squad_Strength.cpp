@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "MapPoint.h"
+#include "ctp/c3.h"
+#include "gs/world/MapPoint.h"
 
 #include "civarchive.h"
-#include "FlatPtr.h"
+#include "robotcom/backdoor/FlatPtr.h"
 
-#include "ic3UnitDB.h"
-#include "ic3world.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
+#include "user-robotcom/outcom/ic3world.h"
 #include "aimain.h"
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
 
 

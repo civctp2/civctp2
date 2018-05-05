@@ -1,11 +1,11 @@
-#include "ctp2_config.h"
-#include "c3.h"
+#include "os/include/ctp2_config.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_SDL__
 
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "aui_sdlsurface.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
 #include <SDL/SDL_thread.h>
 
 uint32 aui_SDLSurface::m_SDLSurfaceClassId = aui_UniqueId();

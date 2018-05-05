@@ -9,8 +9,8 @@
 
 class UnitControlPanel;
 
-#include "Army.h"           // Army
-#include "Unit.h"           // Unit
+#include "gs/gameobj/Army.h"           // Army
+#include "gs/gameobj/Unit.h"           // Unit
 
 class aui_Control;
 class aui_Region;

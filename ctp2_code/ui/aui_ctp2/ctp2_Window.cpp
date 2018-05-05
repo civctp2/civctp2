@@ -1,21 +1,21 @@
-#include "c3.h"
-#include "ctp2_Window.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "aui_ldl.h"
-#include "aui_ui.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "c3ui.h"
-#include "ctp2_Static.h"
-#include "StrDB.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/database/StrDB.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern C3UI *g_c3ui;
 

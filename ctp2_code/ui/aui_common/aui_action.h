@@ -74,9 +74,9 @@ public:                                 \
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_base.h"			// aui_Base
-#include "aui_control.h"		// aui_Control
-#include "c3types.h"			// uint32
+#include "ui/aui_common/aui_base.h"			// aui_Base
+#include "ui/aui_common/aui_control.h"		// aui_Control
+#include "ctp/c3types.h"			// uint32
 
 //----------------------------------------------------------------------------
 // Class declarations

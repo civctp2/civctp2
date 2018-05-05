@@ -34,63 +34,63 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "TurnCnt.h"
+#include "ctp/c3.h"
+#include "gs/utility/TurnCnt.h"
 
-#include "A_Star_Heuristic_Cost.h"
-#include "AgreementPool.h"          // g_theAgreementPool
-#include "AICause.h"
-#include "Barbarians.h"
-#include "BuildingRecord.h"
-#include "buildingutil.h"
-#include "Cell.h"
-#include "citydata.h"
-#include "civarchive.h"
-#include "CivPaths.h"               // g_civPaths
-#include "colorset.h"
-#include "ConstRecord.h"            // g_theConstDB
-#include "DB.h"
-#include "debugmemory.h"
-#include "Diffcly.h"
-#include "DifficultyRecord.h"
-#include "Diplomacy_Log.h"
-#include "DiplomaticRequestData.h"
-#include "DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
-#include "director.h"               // g_director
-#include "dynarr.h"
-#include "GameEventManager.h"
-#include "gamefile.h"
-#include "GameOver.h"
-#include "GameSettings.h"
-#include "gamesounds.h"
-#include "GovernmentRecord.h"
-#include "MaterialPool.h"
-#include "messagemodal.h"
-#include "messagewin.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "net_rand.h"
-#include "net_ready.h"
-#include "network.h"
-#include "player.h"                 // g_player
-#include "pollution.h"
-#include "profileDB.h"              // g_theProfileDB
-#include "radarmap.h"               // g_radarMap
-#include "Readiness.h"
-#include "Score.h"
-#include "SelItem.h"                // g_selected_item
-#include "SimpleDynArr.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "soundmanager.h"           // g_soundManager
-#include "StrDB.h"                  // g_theStringDB
-#include "tiledmap.h"               // g_tiledMap
-#include "UnitData.h"
-#include "UnitDynArr.h"
-#include "UnitRecord.h"
-#include "XY_Coordinates.h"
-#include "World.h"                  // g_theWorld
+#include "robot/pathing/A_Star_Heuristic_Cost.h"
+#include "gs/gameobj/AgreementPool.h"          // g_theAgreementPool
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Barbarians.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/citydata.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/CivPaths.h"               // g_civPaths
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/newdb/ConstRecord.h"            // g_theConstDB
+#include "gs/database/DB.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "gs/gameobj/Diffcly.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "gs/gameobj/Diplomacy_Log.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
+#include "gfx/spritesys/director.h"               // g_director
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/gameobj/GameOver.h"
+#include "gs/gameobj/GameSettings.h"
+#include "sound/gamesounds.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "ui/interface/messagemodal.h"
+#include "ui/interface/messagewin.h"
+#include "net/general/net_action.h"
+#include "net/general/net_info.h"
+#include "net/general/net_rand.h"
+#include "net/general/net_ready.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Player.h"                 // g_player
+#include "gs/gameobj/pollution.h"
+#include "gs/database/profileDB.h"              // g_theProfileDB
+#include "ui/aui_ctp2/radarmap.h"               // g_radarMap
+#include "gs/gameobj/Readiness.h"
+#include "gs/gameobj/Score.h"
+#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
+#include "gs/utility/SimpleDynArr.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "sound/soundmanager.h"           // g_soundManager
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
+#include "gs/gameobj/UnitData.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"                  // g_theWorld
 
 extern Diplomacy_Log *  g_theDiplomacyLog;
 extern MessageModal *   g_modalMessage;

@@ -3,26 +3,26 @@
 #ifndef __AGENT_H__
 #define __AGENT_H__ 1
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
 
 
 
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
-#include "unitflow.h"
-#include "squad.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/squad.h"
 
-#include "dr_debug.h"
+#include "robotcom/planner/dr_debug.h"
 
-#include "ailog.h"
-
-
+#include "robotcom/planner/ailog.h"
 
 
-#include "strategic_ai_forward.h"
+
+
+#include "robotcom/planner/strategic_ai_forward.h"
 
 enum AGENT_TYPE {
     AGENT_TYPE_UNKNOWN,

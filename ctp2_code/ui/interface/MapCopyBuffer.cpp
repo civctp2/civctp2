@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "MapCopyBuffer.h"
-#include "MapPoint.h"
-#include "Cell.h"
-#include "World.h"
-#include "CityRadius.h"
+#include "ctp/c3.h"
+#include "ui/interface/MapCopyBuffer.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/CityRadius.h"
 
 MapCopyBuffer::MapCopyBuffer()
 {

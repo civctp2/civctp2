@@ -33,7 +33,7 @@
 #ifndef __WORLDUTILS__h__
 #define __WORLDUTILS__h__ 1
 
-#include "MapRecord.h"
+#include "gs/newdb/MapRecord.h"
 
 const MapRecord *worldutils_FindBestMapSizeMatch(sint32 w, sint32 h);
 double *worldutils_CreateSettings(const MapRecord *mapRec, sint32 level, sint32 &numSettings);

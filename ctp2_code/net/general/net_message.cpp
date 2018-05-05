@@ -28,16 +28,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "network.h"
-#include "net_message.h"
-#include "net_packet.h"
-#include "net_util.h"
-#include "MessageData.h"
-#include "MessagePool.h"
-#include "UnitDynArr.h"
-#include "net_info.h"
-#include "player.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_message.h"
+#include "net/general/net_packet.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/MessageData.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/utility/UnitDynArr.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/Player.h"
 
 extern Player **g_player;
 

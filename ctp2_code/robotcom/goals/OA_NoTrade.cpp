@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "globals.h"
-#include "ic3player.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
-#include "OA_NoTrade.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/goals/OA_NoTrade.h"
 
 #include "Foreigner.h"
 

@@ -6,32 +6,32 @@
 
 
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ldl.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "c3ui.h"
-#include "ctp2_Static.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "timelinetab.h"
+#include "ui/interface/timelinetab.h"
 
-#include "linegraph.h"
+#include "ui/aui_ctp2/linegraph.h"
 
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "aui_stringtable.h"
+#include "ui/aui_common/aui_stringtable.h"
 
-#include "colorset.h"
+#include "gfx/gfx_utils/colorset.h"
 
-#include "rankingtab.h"
+#include "ui/interface/rankingtab.h"
 
-#include "EventTracker.h"
+#include "gs/gameobj/EventTracker.h"
 
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
 extern C3UI *g_c3ui;
 extern StringDB *g_theStringDB;

@@ -29,16 +29,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "CivilisationRecord.h"
-#include "StrDB.h"
+#include "gs/newdb/CivilisationRecord.h"
+#include "gs/database/StrDB.h"
 
-#include "aui_uniqueid.h"
+#include "ui/aui_common/aui_uniqueid.h"
 
-#include "ns_item.h"
+#include "ui/netshell/ns_item.h"
 
-#include "ns_tribes.h"
+#include "ui/netshell/ns_tribes.h"
 
 ns_Tribes *g_nsTribes = NULL;
 

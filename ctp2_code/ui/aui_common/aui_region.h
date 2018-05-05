@@ -96,10 +96,10 @@ enum AUI_EDIT_MODE_STATUS
 	AUI_EDIT_MODE_LAST
 };
 
-#include "aui_base.h"        // aui_Base
-#include "aui_dimension.h"
-#include "aui_mouse.h"       // aui_MouseEvent
-#include "ctp2_inttypes.h"   // sintN, uintN
+#include "ui/aui_common/aui_base.h"        // aui_Base
+#include "ui/aui_common/aui_dimension.h"
+#include "ui/aui_common/aui_mouse.h"       // aui_MouseEvent
+#include "os/include/ctp2_inttypes.h"   // sintN, uintN
 
 class aui_Control;
 class aui_Dimension;

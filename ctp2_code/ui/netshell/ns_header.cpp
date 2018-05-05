@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "ns_header.h"
+#include "ctp/c3.h"
+#include "ui/netshell/ns_header.h"
 
-#include "aui_ui.h"
-#include "aui_uniqueid.h"
-#include "ns_headerswitch.h"
-#include "aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/netshell/ns_headerswitch.h"
+#include "ui/aui_common/aui_ldl.h"
 
-#include "ldl_file.hpp"
+#include "ui/ldl/ldl_file.hpp"
 
 ns_Header::ns_Header(
 	AUI_ERRCODE *retval,

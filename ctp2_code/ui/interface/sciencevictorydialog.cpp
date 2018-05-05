@@ -28,31 +28,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "sciencevictorydialog.h"
+#include "ctp/c3.h"
+#include "ui/interface/sciencevictorydialog.h"
 
-#include "aui_blitter.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "citydata.h"
-#include "civarchive.h"
-#include "colorset.h"           // g_colorSet
-#include "ctp2_button.h"
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "EditQueue.h"
-#include "gaiacontroller.h"
-#include "Globals.h"            // k_GAME_OBJ_TYPE_IMPROVEMENT
-#include "installation.h"
-#include "player.h"
-#include "radarmap.h"
-#include "SelItem.h"
-#include "StrDB.h"
-#include "UnitDynArr.h"
-#include "World.h"
-#include "citywindow.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gs/gameobj/citydata.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gfx/gfx_utils/colorset.h"           // g_colorSet
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/interface/EditQueue.h"
+#include "gs/gameobj/gaiacontroller.h"
+#include "gs/utility/Globals.h"            // k_GAME_OBJ_TYPE_IMPROVEMENT
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/StrDB.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/World.h"
+#include "ui/interface/citywindow.h"
 
 extern C3UI		*g_c3ui;
 

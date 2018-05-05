@@ -6,8 +6,8 @@
 
 class DiplomaticRequest;
 
-#include "ID.h"
-#include "DiplomaticRequestData.h"
+#include "gs/gameobj/ID.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
 
 class DiplomaticRequest : public ID
 {

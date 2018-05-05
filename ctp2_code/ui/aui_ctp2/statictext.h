@@ -4,7 +4,7 @@
 #ifndef __STATICTEXT_H__
 #define __STATICTEXT_H__
 
-#include "aui_static.h"
+#include "ui/aui_common/aui_static.h"
 #include "textbase.h"
 
 #define k_STATICTEXT_LDL_TEXTSIZE	"textsize"

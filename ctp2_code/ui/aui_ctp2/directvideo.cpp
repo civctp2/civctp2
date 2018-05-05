@@ -16,17 +16,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "directvideo.h"
+#include "ui/aui_ctp2/directvideo.h"
 
-#include "aui.h"
-#include "aui_directui.h"
-#include "aui_window.h"
-#include "aui_directsurface.h"
-#include "c3errors.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_directx/aui_directui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_directx/aui_directsurface.h"
+#include "ctp/ctp2_utils/c3errors.h"
 #include "errors.h"
 //#include "RefTime.h"
 

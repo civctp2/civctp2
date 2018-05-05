@@ -71,11 +71,11 @@ enum SELECT_MODE {
 	SELECT_MODE_MAX
 };
 
-#include "MapPoint.h"
-#include "Path.h"
-#include "Army.h"
-#include "Unit.h"
-#include "gstypes.h"
+#include "gs/world/MapPoint.h"
+#include "robot/pathing/Path.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/utility/gstypes.h"
 
 class Unit;
 class CivArchive;

@@ -28,7 +28,7 @@
 #ifndef __NS_AIPLAYERSETUP_H__
 #define __NS_AIPLAYERSETUP_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class nf_AIPlayer:public NETFunc::AIPlayer {
 public:

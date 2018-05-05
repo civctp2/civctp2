@@ -182,8 +182,8 @@ enum NET_ACTION {
 
 #define k_MAX_NET_ACTION_ARGS 7
 
-#include "net_packet.h"     // Packetizer
-#include "ctp2_inttypes.h"  // uint<n>
+#include "net/general/net_packet.h"     // Packetizer
+#include "os/include/ctp2_inttypes.h"  // uint<n>
 
 class NetAction : public Packetizer
 {

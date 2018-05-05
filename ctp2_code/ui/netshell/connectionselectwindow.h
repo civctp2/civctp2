@@ -1,8 +1,8 @@
 #ifndef __CONNECTIONSELECTWINDOW_H__
 #define __CONNECTIONSELECTWINDOW_H__
 
-#include "ns_window.h"
-#include "aui_action.h"
+#include "ui/netshell/ns_window.h"
+#include "ui/aui_common/aui_action.h"
 
 class aui_StringTable;
 

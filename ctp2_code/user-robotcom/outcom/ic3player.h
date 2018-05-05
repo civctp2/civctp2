@@ -3,7 +3,7 @@
 #define __IC3PLAYER_H__
 
 #include <OBJBASE.H>
-#include "mappointdata.h"
+#include "user-robotcom/shared/mappointdata.h"
 
 typedef sint32 PLAYER_INDEX;
 enum AGREEMENT_TYPE;

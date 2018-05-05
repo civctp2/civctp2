@@ -29,23 +29,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "net_vision.h"
+#include "ctp/c3.h"
+#include "net/general/net_vision.h"
 
-#include "gstypes.h"        // TERRAIN_TYPES
-#include "net_util.h"
-#include "Vision.h"
-#include "player.h"         // g_player
-#include "tiledmap.h"       // g_tiledMap
-#include "radarmap.h"       // g_radarMap
-#include "UnseenCell.h"
-#include "TileInfo.h"
-#include "Vision.h"
-#include "TerrImprove.h"
-#include "pointerlist.h"
-#include "UnitActor.h"
-#include "SpriteState.h"
-#include "UnitRecord.h"
+#include "gs/utility/gstypes.h"        // TERRAIN_TYPES
+#include "net/io/net_util.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/gameobj/Player.h"         // g_player
+#include "gfx/tilesys/tiledmap.h"       // g_tiledMap
+#include "ui/aui_ctp2/radarmap.h"       // g_radarMap
+#include "gs/world/UnseenCell.h"
+#include "gfx/tilesys/TileInfo.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gs/newdb/UnitRecord.h"
 
 //----------------------------------------------------------------------------
 //

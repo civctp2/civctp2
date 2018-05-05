@@ -4,7 +4,7 @@
 #ifndef __PICTURETAB_H__
 #define __PICTURETAB_H__
 
-#include "aui_tab.h"
+#include "ui/aui_common/aui_tab.h"
 
 class Picture;
 

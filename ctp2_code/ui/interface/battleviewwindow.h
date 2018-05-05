@@ -1,8 +1,8 @@
 #ifndef __BATTLEVIEWWINDOW_H__
 #define __BATTLEVIEWWINDOW_H__
 
-#include "c3window.h"
-#include "aui_action.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_common/aui_action.h"
 
 
 

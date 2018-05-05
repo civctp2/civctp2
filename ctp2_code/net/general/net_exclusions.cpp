@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "net_exclusions.h"
-#include "Exclusions.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_exclusions.h"
+#include "gs/gameobj/Exclusions.h"
+#include "net/io/net_util.h"
 
 void NetExclusions::Packetize(uint8 *buf, uint16 &size)
 {

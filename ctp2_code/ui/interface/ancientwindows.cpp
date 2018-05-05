@@ -1,22 +1,22 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "aui_static.h"
-#include "c3_static.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "c3window.h"
-#include "c3windows.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3windows.h"
 
-#include "bevellesswindow.h"
-#include "radarwindow.h"
-#include "statswindow.h"
-#include "controlpanelwindow.h"
+#include "ui/aui_ctp2/bevellesswindow.h"
+#include "ui/interface/radarwindow.h"
+#include "ui/interface/statswindow.h"
+#include "ui/interface/controlpanelwindow.h"
 
-#include "ancientwindows.h"
+#include "ui/interface/ancientwindows.h"
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;

@@ -2,7 +2,7 @@
 #ifndef __CIVARCHIVE_H__
 #define __CIVARCHIVE_H__
 
-#include "ic3CivArchive.h"
+#include "user-robotcom/outcom/ic3CivArchive.h"
 
 #include <SDL/SDL_endian.h>
 

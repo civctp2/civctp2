@@ -4,7 +4,7 @@
 #ifndef _BMH_THRONE_DB_H_
 #define _BMH_THRONE_DB_H_
 
-#include "dbtypes.h"
+#include "gs/database/dbtypes.h"
 
 class CivArchive;
 class Token;

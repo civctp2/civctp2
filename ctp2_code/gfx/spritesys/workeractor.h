@@ -4,11 +4,11 @@
 #ifndef __WORKERACTOR_H__
 #define __WORKERACTOR_H__
 
-#include "Actor.h"              // Actor
-#include "ctp2_inttypes.h"      // sint32, uint16
-#include "Queue.h"              // Queue
-#include "UnitSpriteGroup.h"    // UNITACTION
-#include "World.h"              // MapPoint
+#include "gfx/spritesys/Actor.h"              // Actor
+#include "os/include/ctp2_inttypes.h"      // sint32, uint16
+#include "gfx/gfx_utils/Queue.h"              // Queue
+#include "gfx/spritesys/UnitSpriteGroup.h"    // UNITACTION
+#include "gs/world/World.h"              // MapPoint
 
 class Action;
 class Anim;

@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "net_achievement.h"
-#include "AchievementTracker.h"
-#include "net_util.h"
+#include "ctp/c3.h"
+#include "net/general/net_achievement.h"
+#include "gs/gameobj/AchievementTracker.h"
+#include "net/io/net_util.h"
 
 void NetAchievementTracker::Packetize(uint8 *buf, uint16 &size)
 {

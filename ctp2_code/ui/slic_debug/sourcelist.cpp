@@ -28,45 +28,45 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef CTP2_ENABLE_SLICDEBUG
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_static.h"
-#include "aui_hypertextbox.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_common/aui_hypertextbox.h"
 
-#include "c3_static.h"
-#include "thermometer.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/thermometer.h"
 
-#include "textbutton.h"
-#include "c3_button.h"
+#include "ui/aui_ctp2/textbutton.h"
+#include "ui/aui_ctp2/c3_button.h"
 
-#include "c3textfield.h"
+#include "ui/aui_ctp2/c3textfield.h"
 
-#include "c3listbox.h"
-#include "c3_listbox.h"
-#include "aui_listbox.h"
+#include "ui/aui_ctp2/c3listbox.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_common/aui_listbox.h"
 
-#include "c3window.h"
-#include "c3windows.h"
-#include "c3_popupwindow.h"
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3windows.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
-#include "keypress.h"
+#include "ui/aui_ctp2/keypress.h"
 
-#include "sourcelist.h"
+#include "ui/slic_debug/sourcelist.h"
 
-#include "SlicEngine.h"
-#include "SlicSegment.h"
-#include "SlicConditional.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicSegment.h"
+#include "gs/slic/SlicConditional.h"
 
-#include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"               // g_colorSet
 
 extern C3UI			*g_c3ui;
 

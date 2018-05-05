@@ -6,10 +6,10 @@
 
 class Message;
 
-#include "Advances.h"       // AdvanceType
-#include "ID.h"             // ID
-#include "MessageData.h"    // MESSAGE_RESPONSE_TYPE, MESSAGE_TYPE
-#include "player.h"         // PLAYER_INDEX
+#include "gs/gameobj/Advances.h"       // AdvanceType
+#include "gs/gameobj/ID.h"             // ID
+#include "gs/gameobj/MessageData.h"    // MESSAGE_RESPONSE_TYPE, MESSAGE_TYPE
+#include "gs/gameobj/Player.h"         // PLAYER_INDEX
 
 class Message : public ID
 {

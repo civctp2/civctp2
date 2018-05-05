@@ -5,12 +5,12 @@
 #ifndef __aui_sdl__aui_sdljoystick_h__
 #define __aui_sdl__aui_sdljoystick_h__ 1
 
-#include "ctp2_config.h"
+#include "os/include/ctp2_config.h"
 
 #if defined(__AUI_USE_SDL__)
 
-#include "aui_joystick.h"
-#include "aui_sdlinput.h"
+#include "ui/aui_common/aui_joystick.h"
+#include "ui/aui_sdl/aui_sdlinput.h"
 
 class aui_SDLJoystick : public aui_Joystick, public aui_SDLInput {
 public:

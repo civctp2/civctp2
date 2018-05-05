@@ -32,36 +32,36 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GoodyHuts.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/GoodyHuts.h"
 
-#include "c3math.h"         // AsPercentage
-#include "player.h"
-#include "RandGen.h"
-#include "AICause.h"
-#include "Unit.h"
-#include "civarchive.h"
-#include "Advances.h"
-#include "CivPaths.h"       // g_civPaths
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "UnitDynArr.h"
-#include "UnitData.h"
-#include "soundmanager.h"   // g_soundManager
-#include "gamesounds.h"
-#include "network.h"
-#include "tiledmap.h"
-#include "Barbarians.h"
-#include "profileDB.h"      // g_theProfileDB
-#include "RiskRecord.h"
-#include "AdvanceRecord.h"
-#include "SelItem.h"
-#include "GameSettings.h"
-#include "Exclusions.h"
-#include "UnitRecord.h"
-#include "GameEventManager.h"
+#include "ctp/ctp2_utils/c3math.h"         // AsPercentage
+#include "gs/gameobj/Player.h"
+#include "gs/utility/RandGen.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Unit.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/fileio/CivPaths.h"       // g_civPaths
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/UnitData.h"
+#include "sound/soundmanager.h"   // g_soundManager
+#include "sound/gamesounds.h"
+#include "net/general/network.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/Barbarians.h"
+#include "gs/database/profileDB.h"      // g_theProfileDB
+#include "gs/newdb/RiskRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/GameSettings.h"
+#include "gs/gameobj/Exclusions.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/events/GameEventManager.h"
 
-#include "MainControlPanel.h"
+#include "ui/interface/MainControlPanel.h"
 
 extern Player **g_player;
 extern RandomGenerator *g_rand;

@@ -28,11 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "greatlibrary.h"
-#include "SlicObject.h"
-#include "stringutils.h"
-#include "text_hasher.h"
+#include "ctp/c3.h"
+#include "ui/interface/greatlibrary.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/utility/stringutils.h"
+#include "ui/interface/text_hasher.h"
 
 //----------------------------------------------------------------------------
 //

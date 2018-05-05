@@ -1,27 +1,27 @@
-#include "c3.h"
-#include "dynarr.h"
+#include "ctp/c3.h"
+#include "robot/aibackdoor/dynarr.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
-#include "ic3UnitDB.h"
+#include "gs/outcom/IMapPointData.h"
+#include "user-robotcom/outcom/ic3UnitDB.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "AiMap.h"
+#include "robotcom/Top/AiMap.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
-#include "bset.h"
-#include "ArmyAgent.h"
-#include "CityAgent.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "goal_build_supplemental.h"
+#include "robotcom/goals/goal_build_supplemental.h"
 
-#include "ailog.h"
+#include "robotcom/planner/ailog.h"
 
 #define LOG_GOAL_BUILD_SUPPLEMENTAL true
 

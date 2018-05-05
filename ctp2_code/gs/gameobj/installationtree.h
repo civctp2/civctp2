@@ -4,8 +4,8 @@
 #ifndef _INSTALALLATIONTREE_H_
 #define _INSTALALLATIONTREE_H_
 
-#include "QuadTree.h"
-#include "installation.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/gameobj/installation.h"
 
 class InstallationQuadTree : public QuadTree<Installation>
 {

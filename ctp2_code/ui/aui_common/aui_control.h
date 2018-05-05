@@ -33,12 +33,12 @@
 #ifndef __AUI_CONTROL_H__
 #define __AUI_CONTROL_H__
 
-#include "aui_region.h"
-#include "aui_imagebase.h"
-#include "aui_textbase.h"
-#include "aui_soundbase.h"
-#include "aui_keyboard.h"
-#include "aui_joystick.h"
+#include "ui/aui_common/aui_region.h"
+#include "ui/aui_common/aui_imagebase.h"
+#include "ui/aui_common/aui_textbase.h"
+#include "ui/aui_common/aui_soundbase.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_common/aui_joystick.h"
 
 #include <utility>
 

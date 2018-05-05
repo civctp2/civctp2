@@ -3,7 +3,7 @@
 #ifndef __D_MAP_POINT_H__
 #define __D_MAP_POINT_H__
 
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
 class CivArchive;
 

@@ -64,13 +64,13 @@ enum SAVEINFOLOAD
 	SAVEINFOLOAD_MAX
 };
 
-#include "pixeltypes.h"
-#include "pointerlist.h"
-#include "ns_gamesetup.h"
-#include "MapPoint.h"
-#include "StartingPosition.h"
-#include "civscenarios.h"
-#include "CivilisationPool.h"
+#include "gfx/gfx_utils/pixeltypes.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/netshell/ns_gamesetup.h"
+#include "gs/world/MapPoint.h"
+#include "gs/fileio/StartingPosition.h"
+#include "gs/fileio/civscenarios.h"
+#include "gs/gameobj/CivilisationPool.h"
 class CivArchive;
 
 

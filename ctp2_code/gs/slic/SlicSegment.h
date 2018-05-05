@@ -31,13 +31,13 @@
 #ifndef __SLIC_SEGMENT_H__
 #define __SLIC_SEGMENT_H__
 
-#include "slicif.h"
-#include "StringHash.h"
-#include "GameEventHook.h"
-#include "GameEventHook.h"
-#include "SlicError.h"
-#include "SlicFunc.h"
-#include "gstypes.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/StringHash.h"
+#include "gs/events/GameEventHook.h"
+#include "gs/events/GameEventHook.h"
+#include "gs/slic/SlicError.h"
+#include "gs/slic/SlicFunc.h"
+#include "gs/utility/gstypes.h"
 
 class SlicSegment;
 class SlicStack;

@@ -5,7 +5,7 @@
 
 #include <OBJBASE.H>
 
-#include "improvementtypes.h"
+#include "user-robotcom/shared/improvementtypes.h"
 
 DEFINE_GUID(CLSID_IC3InstDB,
     0x08420cc0,

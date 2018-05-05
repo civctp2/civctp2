@@ -29,18 +29,18 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_ui.h"
+#include "ui/aui_common/aui_ui.h"
 
-#include "aui_directkeyboard.h"
+#include "ui/aui_directx/aui_directkeyboard.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 extern C3UI		*g_c3ui;
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp	*g_civApp;
 
 aui_DirectKeyboard::aui_DirectKeyboard(AUI_ERRCODE *retval)

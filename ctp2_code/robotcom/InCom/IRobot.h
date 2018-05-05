@@ -15,7 +15,7 @@ DEFINE_GUID(CLSID_IRobot,
 #undef INTERFACE
 #define INTERFACE IRobot
 
-#include "gstypes.h"
+#include "gs/utility/gstypes.h"
 
 
 interface IC3DiplomaticRequest;

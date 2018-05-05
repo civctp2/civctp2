@@ -28,29 +28,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "network.h"
-#include "net_diplomacy.h"
-#include "net_action.h"
+#include "net/general/network.h"
+#include "net/general/net_diplomacy.h"
+#include "net/general/net_action.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "net_info.h"
-#include "player.h"
-#include "citydata.h"
-#include "UnitData.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "net/general/net_info.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "diplomattypes.h"
-#include "Diplomat.h"
+#include "ai/diplomacy/diplomattypes.h"
+#include "ai/diplomacy/Diplomat.h"
 
-#include "ctpai.h"
+#include "ai/ctpai.h"
 
-#include "newturncount.h"
-#include "director.h"
+#include "gs/utility/newturncount.h"
+#include "gfx/spritesys/director.h"
 
-#include "net_city.h"
-#include "net_happy.h"
+#include "net/general/net_city.h"
+#include "net/general/net_happy.h"
 
 STDEHANDLER(NetBeginTurnEvent)
 {

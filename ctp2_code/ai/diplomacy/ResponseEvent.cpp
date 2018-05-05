@@ -30,28 +30,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ResponseEvent.h"
+#include "ai/diplomacy/ResponseEvent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
 
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "AICause.h"
-#include "player.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Player.h"
 
-#include "Diplomat.h"
-#include "mapanalysis.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 extern SelectedItem *g_selected_item;
 
-#include "network.h"
-#include "TurnCnt.h"
+#include "net/general/network.h"
+#include "gs/utility/TurnCnt.h"
 
 STDEHANDLER(NewProposalEvent)
 {

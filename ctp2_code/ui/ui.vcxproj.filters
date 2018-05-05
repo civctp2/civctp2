@@ -1,0 +1,1312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="aui_common">
+      <UniqueIdentifier>{70f26f18-655d-411b-a6de-77660ef61b41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="aui_utils">
+      <UniqueIdentifier>{9d0568b6-5cb7-4625-9e32-158961e44b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="aui_directx">
+      <UniqueIdentifier>{c017432f-9e3f-4a3b-b5ce-111cedddb321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="aui_ctp2">
+      <UniqueIdentifier>{4e435a82-829a-464f-ac88-e83cdfd1c8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ldl">
+      <UniqueIdentifier>{5402ca02-8b63-4a67-9239-61474b0313fe}</UniqueIdentifier>
+      <Extensions>.cpp .hpp .h</Extensions>
+    </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{28c56115-3b36-40d0-b9cd-720a012be120}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aui_common\aui.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_action.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_animate.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_audiomanager.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_base.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_blitter.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_button.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_control.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_cursor.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_dimension.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_dirtylist.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_dropdown.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_font.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_header.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_image.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_imagebase.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_input.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_item.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_joystick.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_keyboard.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_ldl.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_listbox.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_memmap.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_mouse.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_music.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_pixel.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_progressbar.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_radio.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_ranger.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_rectangle.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_region.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_resource.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_screen.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_shell.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_sound.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_soundbase.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_static.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_stringtable.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_surface.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_switch.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_switchgroup.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_tab.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_tabgroup.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_textbase.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_textbox.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_textfield.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_thumb.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_tipwindow.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_ui.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_undo.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_uniqueid.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_win.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\aui_window.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\auicfg.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\auidebug.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\auitypes.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\Dxver.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\tech_memory.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_common\tech_wllist.h">
+      <Filter>aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_utils\primitives.h">
+      <Filter>aui_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_utils\textutils.h">
+      <Filter>aui_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directaudiomanager.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directblitter.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directinput.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directjoystick.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directkeyboard.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directmouse.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directsound.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directsurface.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directui.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directwindow.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_directx\aui_directx.h">
+      <Filter>aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\background.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\battleorderbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\battleorderboxactions.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\bevellesswindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_button.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_coloredstatic.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_dropdown.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_header.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_headerswitch.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_listbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_listitem.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_ranger.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_static.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_thumb.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3_tradelistitem.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3blitter.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3dropdown.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3fancywindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3imageformats.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3listbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3memmap.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3scroller.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3slider.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3spinner.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3textfield.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3thumb.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3ui.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3window.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\c3windows.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\chart.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\checkbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\cityinventorylistbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\coloriconbutton.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\coloriconswitch.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\controlsheet.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\directvideo.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\GrabItem.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\icon.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\iconbutton.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\iconswitch.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\icontab.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\iteminfo.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\keymap.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\keypress.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\LineGraph.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\pattern.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\patternbase.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\picture.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\picturebutton.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\pictureswitch.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\picturetab.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\radarcontrol.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\radarwindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\radiogroup.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\SelItem.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\statictextbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\statictextitem.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\statuswindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\textbox.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\textbutton.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\textradio.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\textswitch.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\texttab.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\TextTable.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\thumbnailmap.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\tilecontrol.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\tipwindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\videowindow.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\workcontrol.h">
+      <Filter>aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="ldl\ldl.h">
+      <Filter>ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="ldl\ldl_attr.hpp">
+      <Filter>ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="ldl\ldl_data.hpp">
+      <Filter>ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="ldl\ldl_file.hpp">
+      <Filter>ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="ldl\ldl_memmap.h">
+      <Filter>ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\advancespad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\ancientwindows.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\backgroundwin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\citypad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\citystatuswin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\citystatuswindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cityviewwin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cityviewwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\civstatuswin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\civstatuswindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\controlpanel.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\controlpanelwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_cityselection.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_macrotab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_microtab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_productiontab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_tileimp.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_tradetab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cp_unitstab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cv_citytabgroup.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cv_happinesstab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cv_pollutiontab.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cv_statuscontrol.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\cv_tradetabgroup.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\debugwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\DipWin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\DipWindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\fliwin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\fliwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\greatlibrary.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\greatlibrarywindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\helpcity.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\helptile.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\helpunit.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\initialplaywindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\knowledgewin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\knowledgewindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageactions.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageadvice.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageeyepoint.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageiconbutton.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageiconwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messagelist.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messagemodal.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messageresponse.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messagewin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\messagewindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\objectpad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\playerpad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\pollutionpad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\queuewin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\queuewindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\radarwin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\splash.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\statswindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\test.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\spnewgamewindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\spwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="aui_ctp2\thermometer.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\tilepad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\toolbar.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\tradewin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\tradewindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\turnwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\unitpad.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\unitpadwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\unitstatuswin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\unitstatuswindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\workwin.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\workwindow.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aui_common\aui_action.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_animate.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_audiomanager.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_base.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_blitter.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_button.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_control.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_cursor.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_dimension.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_dirtylist.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_dropdown.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_font.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_header.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_image.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_imagebase.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_input.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_item.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_joystick.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_keyboard.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_ldl.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_listbox.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_memmap.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_mouse.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_music.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_pixel.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_progressbar.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_radio.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_ranger.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_rectangle.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_region.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_regiondispatch.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_screen.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_shell.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_sound.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_soundbase.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_static.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_stringtable.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_surface.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_switch.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_switchgroup.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_tab.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_tabgroup.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_textbase.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_textbox.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_textfield.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_thumb.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_tipwindow.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_ui.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_undo.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_uniqueid.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_win.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_common\aui_window.cpp">
+      <Filter>aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_utils\primitives.cpp">
+      <Filter>aui_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_utils\textutils.cpp">
+      <Filter>aui_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directaudiomanager.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directblitter.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directinput.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directjoystick.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directkeyboard.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directmouse.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directsound.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directsurface.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directui.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directwindow.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_directx\aui_directx.cpp">
+      <Filter>aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\background.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\battleorderbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\battleorderboxactions.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\bevellesswindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_button.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_coloredstatic.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_dropdown.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_header.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_headerswitch.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_listbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_listitem.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_ranger.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_static.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_thumb.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3_tradelistitem.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3blitter.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3dropdown.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3fancywindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3imageformats.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3listbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3memmap.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3scroller.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3slider.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3spinner.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3textfield.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3thumb.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3ui.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3window.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\c3windows.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\chart.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\checkbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\cityinventorylistbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\coloriconbutton.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\coloriconswitch.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\controlsheet.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\directvideo.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\GrabItem.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\icon.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\iconbutton.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\iconswitch.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\icontab.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\iteminfo.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\keymap.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\keypress.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\LineGraph.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\pattern.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\patternbase.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\picture.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\picturebutton.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\pictureswitch.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\picturetab.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\radarcontrol.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\radarwindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\radiogroup.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\SelItem.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\statictextbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\statictextitem.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\statuswindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\textbox.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\textbutton.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\textradio.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\textswitch.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\texttab.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\TextTable.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\thumbnailmap.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\tilecontrol.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\tipwindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\videowindow.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\workcontrol.cpp">
+      <Filter>aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="ldl\ldl_attr.cpp">
+      <Filter>ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="ldl\ldl_data.cpp">
+      <Filter>ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="ldl\ldl_data_info.cpp">
+      <Filter>ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="ldl\ldl_file.cpp">
+      <Filter>ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="ldl\ldl_memmap.cpp">
+      <Filter>ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\advancespad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\ancientwindows.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\backgroundwin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\citypad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\citystatuswin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\citystatuswindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cityviewwin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cityviewwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\civstatuswin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\civstatuswindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\controlpanel.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\controlpanelwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_cityselection.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_macrotab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_microtab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_productiontab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_tileimp.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_tradetab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cp_unitstab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cv_citytabgroup.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cv_happinesstab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cv_pollutiontab.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cv_statuscontrol.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\cv_tradetabgroup.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\debugwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\DipWin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\DipWindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\fliwin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\fliwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\greatlibrary.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\greatlibrarywindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\helpcity.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\helptile.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\helpunit.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\initialplayscreen.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\initialplaywindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\knowledgewin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\knowledgewindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageactions.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageadvice.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageeyepoint.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageiconbutton.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageiconwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messagelist.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messagemodal.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messageresponse.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messagewin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\messagewindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\objectpad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\playerpad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\pollutionpad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\queuewin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\queuewindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\radarwin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\splash.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\statswindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\test.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\spNewGameScreen.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\spnewgamewindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\spscreen.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\spwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="aui_ctp2\thermometer.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\tilepad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\toolbar.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\tradewin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\tradewindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\turnwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\unitpad.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\unitpadwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\unitstatuswin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\unitstatuswindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\workwin.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\workwindow.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

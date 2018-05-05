@@ -1,8 +1,8 @@
 #ifndef __C3_CHECKBOX_H__
 #define __C3_CHECKBOX_H__
 
-#include "patternbase.h"
-#include "aui_switch.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_switch.h"
 
 #define k_C3_CHECKBOX_DEFAULTNUMSTATES		2
 #define k_C3_CHECKBOX_DEFAULT_BEVELWIDTH		2

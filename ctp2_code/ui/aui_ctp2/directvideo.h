@@ -15,8 +15,8 @@ enum DVFLAGS {
 #include <amstream.h>
 #include <ddstream.h>
 
-#include "aui_directui.h"
-#include "aui_window.h"
+#include "ui/aui_directx/aui_directui.h"
+#include "ui/aui_common/aui_window.h"
 
 class DirectVideo
 {

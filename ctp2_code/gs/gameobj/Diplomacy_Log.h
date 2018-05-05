@@ -6,9 +6,9 @@
 
 class Diplomacy_Log;
 
-#include "AgreementTypes.h"
-#include "player.h"
-#include "DiplomaticTypes.h"
+#include "gs/gameobj/AgreementTypes.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/DiplomaticTypes.h"
 class MapPoint;
 
 #define k_REGARD_STACK_MAX 10

@@ -36,11 +36,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "civsound.h"
-#include "SoundRecord.h"
-#include "prjfile.h"
+#include "sound/civsound.h"
+#include "gs/newdb/SoundRecord.h"
+#include "gs/fileio/prjfile.h"
 
 #if defined(USE_SDL)
 #include <SDL/SDL_rwops.h>

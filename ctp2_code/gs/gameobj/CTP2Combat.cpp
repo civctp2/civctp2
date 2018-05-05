@@ -31,28 +31,28 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifndef TEST_APP
 
-#include "cellunitlist.h"
-#include "UnitRecord.h"
-#include "UnitData.h"
-#include "AICause.h"
-#include "RandGen.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/outcom/AICause.h"
+#include "gs/utility/RandGen.h"
 
-#include "battleevent.h"
-#include "battleview.h"
-#include "battle.h"
-#include "battleviewwindow.h"
-#include "director.h"
+#include "ui/interface/battleevent.h"
+#include "ui/interface/battleview.h"
+#include "ui/interface/battle.h"
+#include "ui/interface/battleviewwindow.h"
+#include "gfx/spritesys/director.h"
 
-#include "SelItem.h"
-#include "player.h"
-#include "profileDB.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/profileDB.h"
 
-#include "World.h"
-#include "Cell.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
 
 #else
 
@@ -64,9 +64,9 @@
 
 #endif
 
-#include "debugmemory.h"
+#include "ctp/debugtools/debugmemory.h"
 
-#include "CTP2Combat.h"
+#include "gs/gameobj/CTP2Combat.h"
 
 CTP2Combat *g_theCurrentBattle = NULL;
 

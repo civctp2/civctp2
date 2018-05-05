@@ -28,10 +28,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_Factory.h"
-#include "aui_cursor.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_cursor.h"
 
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,

@@ -1,11 +1,11 @@
-#include "c3.h"
-#include "network.h"
-#include "net_installation.h"
-#include "net_util.h"
-#include "installationpool.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "net/general/network.h"
+#include "net/general/net_installation.h"
+#include "net/io/net_util.h"
+#include "gs/gameobj/installationpool.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
 extern Player **g_player;
 extern World *g_theWorld;

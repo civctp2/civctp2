@@ -37,13 +37,13 @@
 class HotseatListItem;
 class HotseatList;
 
-#include "c3_button.h"          // c3_Button
-#include "c3_listbox.h"         // c3_ListBox
-#include "c3_listitem.h"
-#include "c3_popupwindow.h"     // c3_PopupWindow
-#include "aui_action.h"
-#include "keyboardhandler.h"
-#include "player.h"             // PLAYER_INDEX
+#include "ui/aui_ctp2/c3_button.h"          // c3_Button
+#include "ui/aui_ctp2/c3_listbox.h"         // c3_ListBox
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"     // c3_PopupWindow
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
 
 typedef void (HotseatListCallback)(sint32 launch,
 								   sint32 player,

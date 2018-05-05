@@ -4,9 +4,9 @@
 #ifndef __C3_THUMB_H__
 #define __C3_THUMB_H__
 
-#include "aui_thumb.h"
-#include "patternbase.h"
-#include "aui_soundbase.h"
+#include "ui/aui_common/aui_thumb.h"
+#include "ui/aui_ctp2/patternbase.h"
+#include "ui/aui_common/aui_soundbase.h"
 
 class c3_Thumb : public aui_Thumb, public PatternBase
 {

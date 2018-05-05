@@ -31,25 +31,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "StrDB.h"
-#include "ErrMsg.h"
-#include "civarchive.h"
-#include "player.h"
-#include "moviedb.h"
-#include "AgeRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/utility/ErrMsg.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/moviedb.h"
+#include "gs/newdb/AgeRecord.h"
 
-#include "WonderTracker.h"
+#include "gs/gameobj/WonderTracker.h"
 
-#include "AdvanceRecord.h"
-#include "AgeRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/AgeRecord.h"
 
-#include "WonderRecord.h"
-#include "wonderutil.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "GameSettings.h"
+#include "gs/gameobj/GameSettings.h"
 
 #define shiftbit(i) uint64(uint64(0x01) << uint64(i))
 #define FOREACH_WNDR(func) \

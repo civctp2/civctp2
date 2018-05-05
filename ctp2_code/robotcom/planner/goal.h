@@ -2,7 +2,7 @@
 #define __Goal_h__
 
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
 
 

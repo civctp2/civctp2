@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "SpriteStateDB.h"
+#include "gfx/spritesys/SpriteStateDB.h"
 #include "civarchive.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 #ifdef __SPRITETEST__
 	#define CHECKSERIALIZE			;

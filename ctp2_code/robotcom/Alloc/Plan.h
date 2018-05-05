@@ -7,16 +7,16 @@
 
 
 #include "common.h"
-#include "linked_list.h"
+#include "robotcom/planner/linked_list.h"
 
 
-#include "unitflow.h"
-#include "goal.h"
+#include "robotcom/planner/unitflow.h"
+#include "robotcom/planner/goal.h"
 
 
-#include "strategic_ai_forward.h"
+#include "robotcom/planner/strategic_ai_forward.h"
 
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
 class CivArchive;
 

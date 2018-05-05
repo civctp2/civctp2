@@ -10,8 +10,8 @@ class aui_Control;
 class ctp2_Button;
 class C3Slider;
 
-#include "Unit.h"
-#include "pointerlist.h"
+#include "gs/gameobj/Unit.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 struct CreateListData {
 	Unit m_source;

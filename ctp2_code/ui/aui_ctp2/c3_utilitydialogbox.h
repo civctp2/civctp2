@@ -5,9 +5,9 @@
 #ifndef __C3_UTILITYDIALOGBOX_H__
 #define __C3_UTILITYDIALOGBOX_H__
 
-#include "c3_listitem.h"
-#include "aui_action.h"
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_common/aui_action.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 
 class Unit;
 class c3_PopupWindow;

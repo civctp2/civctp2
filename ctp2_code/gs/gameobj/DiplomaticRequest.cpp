@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "civarchive.h"
-#include "player.h"
-#include "Unit.h"
-#include "DiplomaticRequestData.h"
-#include "DiplomaticRequest.h"
-#include "DiplomaticRequestPool.h"
-#include "network.h"
-#include "net_info.h"
-#include "AICause.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
+#include "gs/gameobj/DiplomaticRequest.h"
+#include "gs/gameobj/DiplomaticRequestPool.h"
+#include "net/general/network.h"
+#include "net/general/net_info.h"
+#include "gs/outcom/AICause.h"
 
 extern	Player	**g_player ;
 

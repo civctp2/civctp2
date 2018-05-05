@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_surface.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "aui_pixel.h"
+#include "ui/aui_common/aui_pixel.h"
 
 namespace
 {

@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "debugwindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/debugwindow.h"
 
-#include "aui.h"
-#include "aui_control.h"
-#include "c3cmdline.h"
-#include "c3ui.h"
-#include "colorset.h"       // g_colorSet
-#include "pattern.h"
-#include "primitives.h"
-#include "textbox.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "gfx/gfx_utils/colorset.h"       // g_colorSet
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_ctp2/textbox.h"
 
 extern C3UI				*g_c3ui;
 

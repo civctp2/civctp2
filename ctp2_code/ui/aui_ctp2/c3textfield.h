@@ -4,8 +4,8 @@
 #ifndef __C3TEXTFIELD_H__
 #define __C3TEXTFIELD_H__
 
-#include "aui_textfield.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_textfield.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 #define k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH		2
 #define k_C3_TEXTFIELD_LDL_BEVELWIDTH			"bevelwidth"

@@ -1,23 +1,23 @@
-#include "c3.h"
-#include "graphicsresscreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/graphicsresscreen.h"
 
-#include "profileDB.h"      // g_theProfileDB
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "ctp2_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "aui_switch.h"
-#include "aui_uniqueid.h"
-#include "spnewgamewindow.h"
-#include "graphicsscreen.h"
-#include "keypress.h"
-#include "tiledmap.h"       // g_tiledMap;
-#include "civapp.h"
-#include "SpriteGroupList.h"
+#include "gs/database/profileDB.h"      // g_theProfileDB
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_switch.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/graphicsscreen.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "gfx/tilesys/tiledmap.h"       // g_tiledMap;
+#include "ctp/civapp.h"
+#include "gfx/spritesys/SpriteGroupList.h"
 
 extern C3UI					*g_c3ui;
 extern sint32				g_isGridOn;

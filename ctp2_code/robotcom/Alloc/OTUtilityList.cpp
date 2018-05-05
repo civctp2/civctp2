@@ -1,14 +1,14 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "OTUtilityList.h"
+#include "robotcom/Alloc/OTUtilityList.h"
 
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 #include "civarchive.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 extern double fz_rushbuy_max_utility;
 

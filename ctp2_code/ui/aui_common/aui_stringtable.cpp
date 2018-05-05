@@ -28,15 +28,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui_stringtable.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_stringtable.h"
 
 #include <algorithm>
-#include "aui_ldl.h"
-#include "aui_ui.h"
-#include "StrDB.h"              // g_theStringDB
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_ui.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 #define k_AUI_STRINGTABLE_LDL_NUMSTRINGS		"numstrings"
 #define k_AUI_STRINGTABLE_LDL_STRING			"string"

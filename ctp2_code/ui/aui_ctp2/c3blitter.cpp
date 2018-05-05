@@ -29,15 +29,15 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "aui_sdlsurface.h"
-#include "aui_directsurface.h"
-#include "aui_rectangle.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
+#include "ui/aui_directx/aui_directsurface.h"
+#include "ui/aui_common/aui_rectangle.h"
 
-#include "c3blitter.h"
+#include "ui/aui_ctp2/c3blitter.h"
 
 extern sint32	g_is565Format;
 extern BOOL		g_useDDBlit;

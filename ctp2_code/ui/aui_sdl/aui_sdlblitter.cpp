@@ -1,9 +1,9 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_SDL__
-#include "aui_sdlsurface.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
 
-#include "aui_sdlblitter.h"
+#include "ui/aui_sdl/aui_sdlblitter.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 

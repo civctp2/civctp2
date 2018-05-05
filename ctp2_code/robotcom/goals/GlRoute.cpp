@@ -1,22 +1,22 @@
-#include "c3.h"
-#include "globals.h"
-#include "ic3player.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3player.h"
 
-#include "GlRoute.h"
-#include "globals.h"
+#include "robotcom/goals/GlRoute.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
-#include "FlatPtr.h"
-#include "bset.h"
-#include "ic3TerrDB.h"
+#include "robotcom/backdoor/FlatPtr.h"
+#include "robot/aibackdoor/bset.h"
+#include "user-robotcom/outcom/ic3TerrDB.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
-#include "airndcnt.h"
-#include "FzOut.h"
+#include "robotcom/aimgr/airndcnt.h"
+#include "robotcom/fuzzy/FzOut.h"
 
-#include "TradeRouteData.h"
+#include "gs/gameobj/TradeRouteData.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
 
 extern double fz_gold_2_production;

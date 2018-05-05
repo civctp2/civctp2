@@ -4,10 +4,10 @@
 #ifndef __SLIC_BUILTIN_H__
 #define __SLIC_BUILTIN_H__
 
-#include "SlicStack.h"
-#include "SlicStruct.h"
-#include "SlicBuiltinEnum.h"
-#include "SlicSymbol.h"
+#include "gs/slic/SlicStack.h"
+#include "gs/slic/SlicStruct.h"
+#include "gs/slic/SlicBuiltinEnum.h"
+#include "gs/slic/SlicSymbol.h"
 
 #define SLICSTRUCT(name, type) \
 class SlicStruct_##name : public SlicStructDescription {\

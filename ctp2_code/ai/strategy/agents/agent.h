@@ -44,21 +44,21 @@
 
 class Agent;
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
-#include "scheduler_types.h"
-#include "squad_Strength.h"
-#include "Army.h"               // Army
-#include "MapPoint.h"           // MapPoint
-#include "Path.h"
-#include "player.h"             // PLAYER_INDEX
-#include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
-#include "GameEventTypes.h"
-#include "c3debugstl.h"
-#include "Army.h"
-#include "ArmyData.h"
-#include "World.h"          // g_theWorld
+#include "ai/strategy/goals/Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "ai/strategy/scheduler/scheduler_types.h"
+#include "ai/strategy/squads/squad_Strength.h"
+#include "gs/gameobj/Army.h"               // Army
+#include "gs/world/MapPoint.h"           // MapPoint
+#include "robot/pathing/Path.h"
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
+#include "ai/strategy/scheduler/scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
+#include "gs/events/GameEventTypes.h"
+#include "ctp/ctp2_utils/c3debugstl.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/world/World.h"          // g_theWorld
 
 class Agent
 {

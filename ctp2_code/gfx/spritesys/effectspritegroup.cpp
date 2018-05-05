@@ -29,16 +29,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "EffectSpriteGroup.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/EffectSpriteGroup.h"
 
 #include <memory>	                // std::unique_ptr
 
-#include "Actor.h"
-#include "Anim.h"
-#include "SpriteFile.h"
-#include "Sprite.h"
-#include "Token.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/SpriteFile.h"
+#include "gfx/spritesys/Sprite.h"
+#include "gs/fileio/Token.h"
 
 void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)

@@ -4,7 +4,7 @@
 #ifndef __EMPTY_TILE_H__
 #define __EMPTY_TILE_H__
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 class EmptyTile
 	{

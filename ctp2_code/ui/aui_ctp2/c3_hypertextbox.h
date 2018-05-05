@@ -36,8 +36,8 @@
 #ifndef __C3_HYPERTEXTBOX_H__
 #define __C3_HYPERTEXTBOX_H__
 
-#include "aui_hypertextbox.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_hypertextbox.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 class aui_Static;
 

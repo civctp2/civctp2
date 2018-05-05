@@ -10,7 +10,7 @@
 #define k_MAX_PERCENT		128
 #define k_PERCENT_SHIFT		7
 
-#include "pixeltypes.h"
+#include "gfx/gfx_utils/pixeltypes.h"
 
 
 

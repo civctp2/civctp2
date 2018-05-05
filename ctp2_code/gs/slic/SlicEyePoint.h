@@ -4,8 +4,8 @@
 #ifndef __SLIC_EYE_POINT_H__
 #define __SLIC_EYE_POINT_H__
 
-#include "MapPoint.h"
-#include "Unit.h"
+#include "gs/world/MapPoint.h"
+#include "gs/gameobj/Unit.h"
 
 class CivArchive;
 class Message;

@@ -4,8 +4,8 @@
 #ifndef __BFS_H__
 #define __BFS_H__ 1
 
-#include "astarpnt.h"
-#include "priorityqueue.h"
+#include "robot/pathing/astarpnt.h"
+#include "robot/aibackdoor/priorityqueue.h"
 
 class AstarPoint;
 class MapPoint;

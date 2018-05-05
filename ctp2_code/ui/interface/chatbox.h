@@ -4,9 +4,9 @@
 #ifndef __CHATBOX_H__
 #define __CHATBOX_H__
 
-#include "primitives.h"
-#include "colorset.h"
-#include "c3window.h"
+#include "ui/aui_utils/primitives.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "ui/aui_ctp2/c3window.h"
 
 #define k_CHATBOX_LINE_LENGTH			60
 

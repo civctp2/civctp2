@@ -35,30 +35,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "SelItem.h"    // SelItemClick.h does not exist
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/SelItem.h"    // SelItemClick.h does not exist
 
-#include "Army.h"
-#include "armymanagerwindow.h"
-#include "aui.h"
-#include "aui_mouse.h"
-#include "aui_uniqueid.h"
-#include "Cell.h"
-#include "citywindow.h"
-#include "controlpanelwindow.h"
-#include "GameEventManager.h"
-#include "gfx_options.h"
-#include "helptile.h"
-#include "Path.h"
-#include "player.h"
-#include "profileDB.h"
-#include "QuickSlic.h"
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "World.h"
+#include "gs/gameobj/Army.h"
+#include "ui/interface/armymanagerwindow.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "gs/world/Cell.h"
+#include "ui/interface/citywindow.h"
+#include "ui/interface/controlpanelwindow.h"
+#include "gs/events/GameEventManager.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "ui/interface/helptile.h"
+#include "robot/pathing/Path.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/profileDB.h"
+#include "gs/slic/QuickSlic.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/world/World.h"
 
 void SelectedItem::SetupClickFunctions()
 {

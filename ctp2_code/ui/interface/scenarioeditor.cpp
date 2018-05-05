@@ -60,101 +60,101 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3ui.h"
-#include "scenarioeditor.h"
-#include "aui_ldl.h"
-#include "ctp2_Window.h"
-#include "controlpanelwindow.h"
+#include "ctp/c3.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/interface/scenarioeditor.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/interface/controlpanelwindow.h"
 
-#include "TerrainRecord.h"
-#include "IconRecord.h"
-#include "UnitRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "gs/newdb/UnitRecord.h"
 
-#include "ctp2_listbox.h"
-#include "ctp2_listitem.h"
-#include "aui_imagelist.h"
-#include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_Switch.h"
-#include "ctp2_spinner.h"
-#include "aui_switch.h" //emod
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_common/aui_imagelist.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Switch.h"
+#include "ui/aui_ctp2/ctp2_spinner.h"
+#include "ui/aui_common/aui_switch.h" //emod
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
-#include "Unit.h"
-#include "citydata.h"
-#include "UnitData.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/UnitData.h"
 
-#include "CityStyleRecord.h"    // To have the appropiate number on the city style tab
-#include "DifficultyRecord.h"   // g_theDifficultyDB
+#include "gs/newdb/CityStyleRecord.h"    // To have the appropiate number on the city style tab
+#include "gs/newdb/DifficultyRecord.h"   // g_theDifficultyDB
 
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "AdvanceRecord.h"
-#include "GovernmentRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
 
-#include "SelItem.h"
+#include "ui/aui_ctp2/SelItem.h"
 
-#include "WonderTracker.h"
-#include "wonderutil.h"
-#include "player.h"
-#include "Advances.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Advances.h"
 
-#include "director.h"
-#include "tiledmap.h"
-#include "radarmap.h"
-#include "TurnCnt.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "gs/utility/TurnCnt.h"
 
-#include "Civilisation.h"
-#include "aui_tipwindow.h"
+#include "gs/gameobj/Civilisation.h"
+#include "ui/aui_common/aui_tipwindow.h"
 
-#include "loadsavewindow.h"
-#include "GameSettings.h"
+#include "ui/interface/loadsavewindow.h"
+#include "gs/gameobj/GameSettings.h"
 
-#include "World.h"
+#include "gs/world/World.h"
 
-#include "c3_utilitydialogbox.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
 
-#include "scenariowindow.h"
+#include "ui/interface/scenariowindow.h"
 
-#include "profileDB.h"
-#include "CivilisationRecord.h"
+#include "gs/database/profileDB.h"
+#include "gs/newdb/CivilisationRecord.h"
 
-#include "MapCopyBuffer.h"
+#include "ui/interface/MapCopyBuffer.h"
 
-#include "FileDialog.h"
-#include "MapFile.h"
-#include "CivPaths.h"
-#include "ctp2_dropdown.h"
+#include "ui/interface/FileDialog.h"
+#include "gs/utility/MapFile.h"
+#include "gs/fileio/CivPaths.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
 
-#include "RiskRecord.h"
+#include "gs/newdb/RiskRecord.h"
 
-#include "Cell.h"
-#include "AICause.h"
-#include "TerrImprove.h"
-#include "civapp.h"
+#include "gs/world/Cell.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "ctp/civapp.h"
 
-#include "ctp2_textfield.h"
+#include "ui/aui_ctp2/ctp2_textfield.h"
 
-#include "terrainutil.h"
-#include "cellunitlist.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/world/cellunitlist.h"
 
-#include "GameOver.h"
+#include "gs/gameobj/GameOver.h"
 
-#include "Exclusions.h"
-#include "SlicEngine.h"
-#include "MessageBoxDialog.h"
+#include "gs/gameobj/Exclusions.h"
+#include "gs/slic/SlicEngine.h"
+#include "ui/interface/MessageBoxDialog.h"
 
-#include "MainControlPanel.h"
-#include "newturncount.h"
-#include "TurnYearStatus.h"
-#include "MaterialPool.h"
-#include "Gold.h"
-#include "cursormanager.h"
-#include "network.h"
-#include "AttractWindow.h"
-#include "gfx_options.h"
+#include "ui/interface/MainControlPanel.h"
+#include "gs/utility/newturncount.h"
+#include "ui/interface/TurnYearStatus.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/Gold.h"
+#include "ui/interface/cursormanager.h"
+#include "net/general/network.h"
+#include "ui/interface/AttractWindow.h"
+#include "gfx/gfx_utils/gfx_options.h"
 
 extern C3UI *               g_c3ui;
 extern sint32               g_fog_toggle;

@@ -16,8 +16,8 @@ enum STARTINFOTYPE {
 	STARTINFOTYPE_NOLOCS,
 };
 
-#include "ctp2_inttypes.h"
-#include "MapPoint.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/world/MapPoint.h"
 
 struct StartingPosition {
 	MapPoint point;

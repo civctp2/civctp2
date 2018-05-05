@@ -81,20 +81,20 @@ extern TiledMap *   g_tiledMap;
 //----------------------------------------------------------------------------
 
 #ifndef __SPRITETEST__
-#include "aui.h"
-#include "aui_mouse.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_mouse.h"
 #else
 #include "mouse.h"
 #endif
-#include "colorset.h"
-#include "directions.h"     // WORLD_DIRECTION
-#include "MapPoint.h"       // MapPoint
-#include "pixelutils.h"     // Pixel types
-#include "SelItem.h"
-#include "tileset.h"        // TileSet
-#include "tileutils.h"
-#include "Vision.h"
-#include "World.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/utility/directions.h"     // WORLD_DIRECTION
+#include "gs/world/MapPoint.h"       // MapPoint
+#include "gfx/gfx_utils/pixelutils.h"     // Pixel types
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/tilesys/tileset.h"        // TileSet
+#include "gfx/tilesys/tileutils.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/world/World.h"
 
 class Army;
 class aui_BitmapFont;

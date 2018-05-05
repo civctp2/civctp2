@@ -4,7 +4,7 @@
 #ifndef __C3_IMAGE_H__
 #define __C3_IMAGE_H__
 
-#include "aui_image.h"
+#include "ui/aui_common/aui_image.h"
 
 class c3_Image : public aui_Image
 {

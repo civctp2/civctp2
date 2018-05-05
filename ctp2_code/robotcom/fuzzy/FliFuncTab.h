@@ -5,8 +5,8 @@
 
 #define COM_INTERFACE
 
-#include "StringHash.h"
-#include "FliSetFunc.h"
+#include "gs/slic/StringHash.h"
+#include "robotcom/fuzzy/FliSetFunc.h"
 
 class FliFuncTab : public StringHash<FliSetFunc>
 {

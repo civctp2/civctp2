@@ -40,7 +40,7 @@
 #include <windows.h>    // BOOL, LPSTR, GUID, HMONITOR, RECT, etc.
 #include <ddraw.h>      // LPDDSURFACEDESC, etc.
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif // WIN32
 
 struct DisplayDevice {

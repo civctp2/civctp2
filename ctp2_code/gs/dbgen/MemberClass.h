@@ -40,9 +40,9 @@
 
 class MemberClass;
 
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "ctpdb.h"          // DATUM_TYPE, namelist, etc.
-#include "pointerlist.h"    // PointerList
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
+#include "gs/dbgen/ctpdb.h"          // DATUM_TYPE, namelist, etc.
+#include "ctp/ctp2_utils/pointerlist.h"    // PointerList
 
 class MemberClass
 {

@@ -4,7 +4,7 @@
 #ifndef __TOPTEN_H__
 #define __TOPTEN_H__
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
 class CivArchive ;
 

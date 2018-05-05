@@ -33,7 +33,7 @@
 #ifndef __NET_MESSAGE_H__
 #define __NET_MESSAGE_H__
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetMessage : public Packetizer
 {

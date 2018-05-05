@@ -26,11 +26,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Anim.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/Anim.h"
 
 #include <algorithm>    // std::copy
-#include "director.h"   // g_director
+#include "gfx/spritesys/director.h"   // g_director
 
 Anim::Anim()
 :

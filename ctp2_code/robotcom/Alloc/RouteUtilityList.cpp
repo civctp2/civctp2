@@ -1,17 +1,17 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "RouteUtilityList.h"
+#include "robotcom/Alloc/RouteUtilityList.h"
 
-#include "globals.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
-#include "bset.h"
+#include "robot/aibackdoor/bset.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "CityAgent.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "GlRoute.h"
+#include "robotcom/goals/GlRoute.h"
 
 RouteUtilityList::RouteUtilityList()
 {

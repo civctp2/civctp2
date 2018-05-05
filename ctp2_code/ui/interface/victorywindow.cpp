@@ -1,18 +1,18 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
 
-#include "aui.h"
-#include "aui_control.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_control.h"
 
-#include "pattern.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "victorywindow.h"
-#include "victorywin.h"
+#include "ui/interface/victorywindow.h"
+#include "ui/interface/victorywin.h"
 
 extern C3UI *g_c3ui;
 

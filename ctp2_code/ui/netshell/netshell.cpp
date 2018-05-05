@@ -29,26 +29,26 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "netshell.h"
+#include "ctp/c3.h"
+#include "ui/netshell/netshell.h"
 
 #include <algorithm>
-#include "allinonewindow.h"
-#include "aui_button.h"
-#include "aui_screen.h"
-#include "connectionselectwindow.h"
-#include "ctp2_button.h"
-#include "gameselectwindow.h"
-#include "Globals.h"
-#include "lobbywindow.h"
-#include "lobbychangewindow.h"
-#include "netshell_game.h"
-#include "ns_customlistbox.h"
-#include "ns_tribes.h"
-#include "passwordscreen.h"
-#include "playereditwindow.h"
-#include "playerselectwindow.h"
-#include "serverselectwindow.h"
+#include "ui/netshell/allinonewindow.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_screen.h"
+#include "ui/netshell/connectionselectwindow.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/netshell/gameselectwindow.h"
+#include "gs/utility/Globals.h"
+#include "ui/netshell/lobbywindow.h"
+#include "ui/netshell/lobbychangewindow.h"
+#include "ui/netshell/netshell_game.h"
+#include "ui/netshell/ns_customlistbox.h"
+#include "ui/netshell/ns_tribes.h"
+#include "ui/netshell/passwordscreen.h"
+#include "ui/netshell/playereditwindow.h"
+#include "ui/netshell/playerselectwindow.h"
+#include "ui/netshell/serverselectwindow.h"
 
 extern void EnterMainMenu(void);
 extern void LeaveMainMenu(void);

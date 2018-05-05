@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "pattern.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_ctp2/pattern.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "statuswindow.h"
+#include "ui/aui_ctp2/statuswindow.h"
 
-#include "c3cmdline.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
 
 AUI_ERRCODE StatusWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {

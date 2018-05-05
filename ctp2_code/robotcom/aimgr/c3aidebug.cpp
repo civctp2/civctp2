@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "c3ai.h"
+#include "ctp/c3.h"
+#include "robotcom/aimgr/c3ai.h"
 
 #ifdef _DEBUG
 

@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "aui_input.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_input.h"
 
 aui_Input::aui_Input()
 :	m_acquired	(false)

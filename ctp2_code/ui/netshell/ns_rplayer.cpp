@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_rplayer.h"
+#include "ui/netshell/ns_rplayer.h"
 
 
 ns_RPlayer::ns_RPlayer(NETFunc::Player * player)

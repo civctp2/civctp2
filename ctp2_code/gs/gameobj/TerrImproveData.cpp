@@ -35,30 +35,30 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Cell.h"
-#include "TerrImproveData.h"
-#include "civarchive.h"
-#include "tiledmap.h"
-#include "TerrainRecord.h"
-#include "player.h"
-#include "installation.h"
-#include "Vision.h"
-#include "TerrImprove.h"
-#include "dynarr.h"
-#include "installationtree.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/TerrImproveData.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/gameobj/installationtree.h"
 
-#include "network.h"
-#include "terrainutil.h"
-#include "TerrainImprovementRecord.h"
-#include "MaterialPool.h"
+#include "net/general/network.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/gameobj/MaterialPool.h"
 
-#include "GameEventManager.h"
-#include "directions.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/utility/directions.h"
 
-#include "CityInfluenceIterator.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
 
 TerrainImprovementData::TerrainImprovementData(ID id,
 											   sint32 owner,

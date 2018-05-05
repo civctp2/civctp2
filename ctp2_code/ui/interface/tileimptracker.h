@@ -1,7 +1,7 @@
 #ifndef __TILE_IMP_TRACKER_WINDOW
 #define __TILE_IMP_TRACKER_WINDOW
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 class MapPoint;
 

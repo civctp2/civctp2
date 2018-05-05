@@ -1,6 +1,6 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "StrRec.h"
+#include "gs/database/StrRec.h"
 
 StringRecord::StringRecord()
 

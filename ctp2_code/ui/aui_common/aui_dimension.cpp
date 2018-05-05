@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "aui_region.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_region.h"
 
-#include "aui_dimension.h"
+#include "ui/aui_common/aui_dimension.h"
 
 
 aui_Dimension::aui_Dimension( aui_Region *parent )

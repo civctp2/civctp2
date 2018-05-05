@@ -27,23 +27,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
 #ifdef __AUI_USE_SDL__
 
-#include "civ3_main.h"
+#include "ctp/civ3_main.h"
 
-#include "aui_mouse.h"
-#include "aui_keyboard.h"
-#include "aui_joystick.h"
-#include "aui_sdlsurface.h"
-#include "aui_sdlmouse.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ui/aui_common/aui_keyboard.h"
+#include "ui/aui_common/aui_joystick.h"
+#include "ui/aui_sdl/aui_sdlsurface.h"
+#include "ui/aui_sdl/aui_sdlmouse.h"
 
-#include "aui_sdlui.h"
+#include "ui/aui_sdl/aui_sdlui.h"
 
 extern BOOL			g_exclusiveMode;
 
-#include "civapp.h"
+#include "ctp/civapp.h"
 extern CivApp		*g_civApp;
 
 #include "display.h"

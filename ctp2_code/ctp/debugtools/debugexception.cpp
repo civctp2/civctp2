@@ -1,10 +1,10 @@
 #ifdef _DEBUG
 
-#include "debugexception.h"
-#include "debugassert.h"
-#include "debugcallstack.h"
-#include "breakpoint.h"
-#include "log.h"
+#include "ctp/debugtools/debugexception.h"
+#include "ctp/debugtools/debugassert.h"
+#include "ctp/debugtools/debugcallstack.h"
+#include "ctp/debugtools/breakpoint.h"
+#include "ctp/debugtools/log.h"
 #include <windows.h>
 
 

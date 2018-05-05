@@ -3,7 +3,7 @@
 #ifndef __OA_LOOT__
 #define __OA_LOOT__ 1
 
-#include "Oa.h"
+#include "robotcom/goals/Oa.h"
 
 class Opportunity_Action_Loot : public Opportunity_Action {
 

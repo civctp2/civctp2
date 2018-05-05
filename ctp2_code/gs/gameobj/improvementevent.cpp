@@ -25,10 +25,10 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventUser.h"
-#include "TerrImprove.h"
-#include "Events.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/Events.h"
 
 STDEHANDLER(ImprovementAddTurnEvent)
 {

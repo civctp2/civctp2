@@ -4,8 +4,8 @@
 #ifndef __NET_SHINY_HAPPY_CODE_H__
 #define __NET_SHINY_HAPPY_CODE_H__
 
-#include "net_packet.h"
-#include "Unit.h"
+#include "net/general/net_packet.h"
+#include "gs/gameobj/Unit.h"
 
 class Happy;
 class PlayerHappiness;

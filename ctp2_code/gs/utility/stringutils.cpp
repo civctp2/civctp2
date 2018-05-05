@@ -32,16 +32,16 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "StrDB.h"
-#include "SlicContext.h"
-#include "stringutils.h"
-#include "sliccmd.h"
-#include "sc.tab.h"
+#include "gs/database/StrDB.h"
+#include "gs/slic/SlicContext.h"
+#include "gs/utility/stringutils.h"
+#include "gs/slic/sliccmd.h"
+#include "gs/slic/sc.tab.h"
 
 #if defined(_JAPANESE)
-#include "japanese.h"
+#include "gs/utility/japanese.h"
 #endif
 
 void stringutils_HackColor(BOOL on)

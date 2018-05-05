@@ -35,8 +35,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_surface.h"
-#include "aui_directx.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_directx/aui_directx.h"
 
 
 class aui_DirectSurface : public aui_Surface, public aui_DirectX

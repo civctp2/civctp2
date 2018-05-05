@@ -7,7 +7,7 @@
 class NetPlayer;
 class NetAddPlayer;
 
-#include "net_packet.h"     // Packetizer
+#include "net/general/net_packet.h"     // Packetizer
 class Player;
 
 class NetPlayer : public Packetizer

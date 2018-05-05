@@ -1,14 +1,14 @@
-#include "c3.h"
-#include "aui_soundbase.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_soundbase.h"
 
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "aui_sound.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_sound.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
 
-#include "ldl_data.hpp"
+#include "ui/ldl/ldl_data.hpp"
 
 extern SoundManager		*g_soundManager;
 

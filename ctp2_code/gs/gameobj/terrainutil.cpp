@@ -59,41 +59,41 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "terrainutil.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/terrainutil.h"
 
-#include "TerrainRecord.h"
+#include "gs/newdb/TerrainRecord.h"
 #ifndef __TILETOOL__
-#include "MapPoint.h"
-#include "World.h"
-#include "TerrainImprovementRecord.h"
-#include "Cell.h"
-#include "player.h"
-#include "UnitDynArr.h"
-#include "QuadTree.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "director.h"
-#include "SelItem.h"
-#include "MaterialPool.h"
-#include "gaiacontroller.h"
-#include "AgreementMatrix.h"
-#include "ConstRecord.h"
-#include "installation.h"
-#include "CityInfluenceIterator.h"
-#include "tiledmap.h"
-#include "AdvanceRecord.h"
-#include "network.h"
-#include "Civilisation.h"
-#include "citydata.h"  //for wonder tileimps located in city radius
-#include "installation.h"
-#include "installationpool.h"
-#include "installationtree.h"           // g_theInstallationTree
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "UnitRecord.h"
-#include "WonderTracker.h"				// to check for gaia controller wonder
-#include "wonderutil.h"					// to check for gaia controller wonder
+#include "gs/world/MapPoint.h"
+#include "gs/world/World.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/Player.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gfx/spritesys/director.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/gaiacontroller.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/citydata.h"  //for wonder tileimps located in city radius
+#include "gs/gameobj/installation.h"
+#include "gs/gameobj/installationpool.h"
+#include "gs/gameobj/installationtree.h"           // g_theInstallationTree
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/WonderTracker.h"				// to check for gaia controller wonder
+#include "gs/gameobj/wonderutil.h"					// to check for gaia controller wonder
 
 extern QuadTree<Unit> *g_theUnitTree;
 #endif

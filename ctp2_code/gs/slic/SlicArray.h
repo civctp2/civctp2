@@ -4,8 +4,8 @@
 #ifndef __SLIC_ARRAY_H__
 #define __SLIC_ARRAY_H__
 
-#include "slicif.h"
-#include "SlicStack.h"
+#include "gs/slic/slicif.h"
+#include "gs/slic/SlicStack.h"
 
 enum SS_TYPE;
 class CivArchive;

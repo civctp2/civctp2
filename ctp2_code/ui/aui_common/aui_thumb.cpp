@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "aui_ui.h"
-#include "aui_blitter.h"
-#include "aui_window.h"
-#include "aui_action.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_action.h"
 
-#include "aui_thumb.h"
+#include "ui/aui_common/aui_thumb.h"
 
 
 aui_Thumb::aui_Thumb(

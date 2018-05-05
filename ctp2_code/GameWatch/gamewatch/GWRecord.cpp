@@ -1,4 +1,4 @@
-#include "GWRecord.h"
+#include "GameWatch/gamewatch/GWRecord.h"
 
 DllExport int GWRecord::uniqueID = 0;
 

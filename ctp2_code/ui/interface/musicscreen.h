@@ -12,8 +12,8 @@ enum MS_STRING {
 	MS_STRING_RANDOM_OFF
 };
 
-#include "auitypes.h"       // AUI_ERRCODE
-#include "ctp2_inttypes.h"  // sint32, uint32
+#include "ui/aui_common/auitypes.h"       // AUI_ERRCODE
+#include "os/include/ctp2_inttypes.h"  // sint32, uint32
 class aui_Control;
 
 sint32 musicscreen_displayMyWindow();

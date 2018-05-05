@@ -28,13 +28,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "AVLHeap.h"
-#include "pixelutils.h"
+#include "robot/pathing/AVLHeap.h"
+#include "gfx/gfx_utils/pixelutils.h"
 
-#include "XY_Coordinates.h"
-#include "World.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
 
 extern World *g_theWorld;
 

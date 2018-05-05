@@ -210,95 +210,95 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "citydata.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/citydata.h"
 
-#include "AdvanceRecord.h"
-#include "Advances.h"
-#include "advanceutil.h"
-#include "AgeCityStyleRecord.h"
-#include "Agreement.h"
-#include "AgreementTypes.h"
-#include "AICause.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/advanceutil.h"
+#include "gs/newdb/AgeCityStyleRecord.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/AgreementTypes.h"
+#include "gs/outcom/AICause.h"
 #include <algorithm>                    // std::max, std::min
-#include "ArmyData.h"
-#include "ArmyPool.h"
-#include "Barbarians.h"
-#include "BuildingRecord.h"
-#include "buildingutil.h"
-#include "c3errors.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "Checksum.h"
-#include "CityInfluenceIterator.h"
-#include "CitySizeRecord.h"
-#include "CityStyleRecord.h"
-#include "civarchive.h"
-#include "CivilisationPool.h"
-#include "colorset.h"
-#include "ConstRecord.h"                    // g_theConstDB
-#include "DB.h"
-#include "DifficultyRecord.h"
-#include "Diplomat.h"                   // To be able to retrieve the current strategy
-#include "director.h"                   // g_director
-#include "EditQueue.h"
-#include "Exclusions.h"
-#include "FeatTracker.h"
-#include "gaiacontroller.h"				// To check buildings needed for science victory
-#include "GameEventManager.h"
-#include "gamefile.h"
-#include "GameSettings.h"
-#include "Globals.h"
-#include "Gold.h"
-#include "GovernmentRecord.h"
-#include "Happy.h"
-#include "HappyTracker.h"
-#include "installationtree.h"
-#include "MaterialPool.h"
-#include "MessagePool.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "network.h"
-#include "player.h"                     // g_player
-#include "pollution.h"
-#include "PopRecord.h"
-#include "profileDB.h"                  // g_theProfileDB
-#include "RandGen.h"                    // g_rand
-#include "Readiness.h"
-#include "ResourceRecord.h"
-#include "RiskRecord.h"  //add for barb code
-#include "scenarioeditor.h"
-#include "Score.h"
-#include "SelItem.h"                    // g_selected_item
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "SlicSegment.h"
-#include "soundmanager.h"               // g_soundManager
-#include "SpecialAttackInfoRecord.h"
-#include "SpecialEffectRecord.h"
-#include "StrategyRecord.h"             // For accessing the strategy database
-#include "StrDB.h"                      // g_theStringDB
-#include "TaxRate.h"
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "TerrainImprovementRecord.h"   //EMOD
-#include "TerrImprovePool.h"            //EMOD
-#include "tiledmap.h"
-#include "TopTen.h"
-#include "TradeOffer.h"
-#include "TradeOfferPool.h"
-#include "TradePool.h"
-#include "TradeRoute.h"
-#include "TurnCnt.h"                    // g_turn
-#include "UnitActor.h"
-#include "UnitData.h"
-#include "UnitPool.h"                   // g_theUnitPool
-#include "UnitRecord.h"
-#include "unitutil.h"
-#include "WonderRecord.h"
-#include "WonderTracker.h"
-#include "wonderutil.h"
-#include "World.h"                      // g_theWorld
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/Barbarians.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/gameobj/buildingutil.h"
+#include "ctp/ctp2_utils/c3errors.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/utility/Checksum.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "gs/newdb/CitySizeRecord.h"
+#include "gs/newdb/CityStyleRecord.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/gameobj/CivilisationPool.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gs/newdb/ConstRecord.h"                    // g_theConstDB
+#include "gs/database/DB.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "ai/diplomacy/Diplomat.h"                   // To be able to retrieve the current strategy
+#include "gfx/spritesys/director.h"                   // g_director
+#include "ui/interface/EditQueue.h"
+#include "gs/gameobj/Exclusions.h"
+#include "gs/gameobj/FeatTracker.h"
+#include "gs/gameobj/gaiacontroller.h"				// To check buildings needed for science victory
+#include "gs/events/GameEventManager.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/gameobj/GameSettings.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Happy.h"
+#include "gs/gameobj/HappyTracker.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/MessagePool.h"
+#include "net/general/net_action.h"
+#include "net/general/net_info.h"
+#include "net/general/network.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/gameobj/pollution.h"
+#include "gs/newdb/PopRecord.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
+#include "gs/utility/RandGen.h"                    // g_rand
+#include "gs/gameobj/Readiness.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/newdb/RiskRecord.h"  //add for barb code
+#include "ui/interface/scenarioeditor.h"
+#include "gs/gameobj/Score.h"
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
+#include "sound/soundmanager.h"               // g_soundManager
+#include "gs/newdb/SpecialAttackInfoRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "gs/newdb/StrategyRecord.h"             // For accessing the strategy database
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "gs/gameobj/TaxRate.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/TerrainImprovementRecord.h"   //EMOD
+#include "gs/gameobj/TerrImprovePool.h"            //EMOD
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/gameobj/TopTen.h"
+#include "gs/gameobj/TradeOffer.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/utility/TurnCnt.h"                    // g_turn
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "gs/newdb/UnitRecord.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/world/World.h"                      // g_theWorld
 
 extern Pollution *      g_thePollution;
 extern TopTen *         g_theTopTen;

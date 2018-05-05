@@ -33,23 +33,23 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "agesscreen.h"
+#include "ctp/c3.h"
+#include "ui/interface/agesscreen.h"
 
-#include "AgeRecord.h"
-#include "aui_stringtable.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3ui.h"
-#include "c3window.h"
-#include "ctp2_dropdown.h"
-#include "dialogboxwindow.h"
-#include "Globals.h"                // allocated::...
-#include "ns_gamesetup.h"
-#include "ns_item.h"
-#include "spnewgamewindow.h"
-#include "StrDB.h"                  // g_theStringDB
-#include "profileDB.h"              // g_theProfileDB
+#include "gs/newdb/AgeRecord.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/netshell/dialogboxwindow.h"
+#include "gs/utility/Globals.h"                // allocated::...
+#include "ui/netshell/ns_gamesetup.h"
+#include "ui/netshell/ns_item.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "gs/database/StrDB.h"                  // g_theStringDB
+#include "gs/database/profileDB.h"              // g_theProfileDB
 
 extern nf_GameSetup g_gamesetup;
 extern C3UI	*       g_c3ui;

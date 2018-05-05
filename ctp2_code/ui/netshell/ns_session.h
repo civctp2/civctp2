@@ -28,7 +28,7 @@
 #ifndef __NS_SESSION_H__
 #define __NS_SESSION_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class ns_Session : public ns_Object<NETFunc::Session, ns_Session>
 {

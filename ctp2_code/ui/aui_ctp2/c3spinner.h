@@ -4,8 +4,8 @@
 #ifndef __C3SPINNER_H__
 #define __C3SPINNER_H__
 
-#include "aui_ranger.h"
-#include "patternbase.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_ctp2/patternbase.h"
 
 
 class C3Spinner : public aui_Ranger, public PatternBase

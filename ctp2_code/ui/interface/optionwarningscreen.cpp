@@ -28,31 +28,31 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "civ3_main.h"
-#include "civapp.h"
+#include "ctp/civ3_main.h"
+#include "ctp/civapp.h"
 
-#include "c3window.h"
-#include "c3_popupwindow.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
 
-#include "ctp2_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "netshell.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3slider.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/netshell/netshell.h"
 
-#include "spnewgamewindow.h"
-#include "optionswindow.h"
-#include "loadsavewindow.h"
-#include "optionwarningscreen.h"
+#include "ui/interface/spnewgamewindow.h"
+#include "ui/interface/optionswindow.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/optionwarningscreen.h"
 
-#include "keypress.h"
-#include "keyboardhandler.h"
+#include "ui/aui_ctp2/keypress.h"
+#include "ui/aui_ctp2/keyboardhandler.h"
 class WarningKeyboardHandler : public KeyboardHandler
 {
 public:
@@ -66,7 +66,7 @@ WarningKeyboardHandler s_warningKeyboardHandler;
 extern CivApp				*g_civApp;
 extern C3UI					*g_c3ui;
 
-#include "network.h"
+#include "net/general/network.h"
 extern Network				g_network;
 
 static uint32	s_currentWarning = OWS_OWSTOTAL;

@@ -35,8 +35,8 @@
 #ifndef __GREATLIBRARYWINDOW_H__
 #define __GREATLIBRARYWINDOW_H__
 
-#include "greatlibrary.h"
-#include "SlicObject.h"
+#include "ui/interface/greatlibrary.h"
+#include "gs/slic/SlicObject.h"
 
 class aui_SwitchGroup;
 class aui_Static;

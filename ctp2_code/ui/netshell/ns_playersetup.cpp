@@ -25,9 +25,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ns_playersetup.h"
+#include "ui/netshell/ns_playersetup.h"
 
 sint32 nf_PlayerSetup::m_version = 103;
 

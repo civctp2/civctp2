@@ -1,10 +1,10 @@
-#include "c3.h"
-#include "HappyTracker.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/HappyTracker.h"
 
 #include <algorithm>
-#include "civarchive.h"
-#include "gamefile.h"
-#include "StrDB.h"          // g_theStringDB
+#include "robot/aibackdoor/civarchive.h"
+#include "gs/fileio/gamefile.h"
+#include "gs/database/StrDB.h"          // g_theStringDB
 
 StringId HappyTracker::sm_happinessNames[HAPPY_REASON_MAX];
 

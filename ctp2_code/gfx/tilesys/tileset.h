@@ -315,8 +315,8 @@ enum MAPICON {
 	MAPICON_MAX   //this returns the total number or Icons
 };
 
-#include "gstypes.h"
-#include "pixeltypes.h"     // Pixel16
+#include "gs/utility/gstypes.h"
+#include "gfx/gfx_utils/pixeltypes.h"     // Pixel16
 
 class BaseTile;
 

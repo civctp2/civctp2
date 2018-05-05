@@ -5,7 +5,7 @@
 #ifndef __NETFUNC_H__
 #define __NETFUNC_H__
 
-#include "anet.h"
+#include "libs/anet/h/anet.h"
 #include <locale>
 #include <iterator>
 #include <stdio.h>

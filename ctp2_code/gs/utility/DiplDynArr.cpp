@@ -1,9 +1,9 @@
-#include "c3.h"
-#include "Globals.h"
-#include "player.h"
-#include "Unit.h"
-#include "DiplomaticRequestData.h"
-#include "DiplDynArr.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
+#include "gs/utility/DiplDynArr.h"
 
 DiplomaticRequestDynamicArray::DiplomaticRequestDynamicArray() : DynamicArray<DiplomaticRequest>()
 	{

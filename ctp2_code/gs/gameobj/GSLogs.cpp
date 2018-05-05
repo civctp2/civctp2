@@ -25,24 +25,24 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GSLogs.h"
-#include "player.h"
-#include "StrDB.h"
-#include "citydata.h"
-#include "UnitDynArr.h"
-#include "Unit.h"
-#include "UnitRecord.h"
-#include "AdvanceRecord.h"
-#include "Advances.h"
-#include "UnitData.h"
-#include "buildingutil.h"
-#include "wonderutil.h"
-#include "Sci.h"
-#include "TaxRate.h"
-#include "PlayHap.h"
-#include "profileDB.h"
-#include "c3math.h"		// AsPercentage
+#include "ctp/c3.h"
+#include "gs/gameobj/GSLogs.h"
+#include "gs/gameobj/Player.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/gameobj/Sci.h"
+#include "gs/gameobj/TaxRate.h"
+#include "gs/gameobj/PlayHap.h"
+#include "gs/database/profileDB.h"
+#include "ctp/ctp2_utils/c3math.h"		// AsPercentage
 
 static bool s_initialized		= false;
 static bool s_dip_initialized	= false;

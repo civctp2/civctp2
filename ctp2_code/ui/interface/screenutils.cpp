@@ -32,60 +32,60 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "screenutils.h"
+#include "ctp/c3.h"
+#include "ui/interface/screenutils.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "aui_button.h"
+#include "ui/aui_common/aui_button.h"
 
-#include "c3window.h"
-#include "workwindow.h"
-#include "workwin.h"
-#include "sciencewin.h"
-#include "infowindow.h"
-#include "victorywindow.h"
-#include "victorywin.h"
-#include "greatlibrary.h"
-#include "optionswindow.h"
-#include "citywindow.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/interface/workwindow.h"
+#include "ui/interface/workwin.h"
+#include "ui/interface/sciencewin.h"
+#include "ui/interface/infowindow.h"
+#include "ui/interface/victorywindow.h"
+#include "ui/interface/victorywin.h"
+#include "ui/interface/greatlibrary.h"
+#include "ui/interface/optionswindow.h"
+#include "ui/interface/citywindow.h"
 
-#include "km_screen.h"
-#include "EndgameWindow.h"
-#include "creditsscreen.h"
+#include "ui/interface/km_screen.h"
+#include "ui/interface/EndgameWindow.h"
+#include "ui/interface/creditsscreen.h"
 
-#include "tutorialwin.h"
+#include "ui/interface/tutorialwin.h"
 
-#include "debugwindow.h"
+#include "ui/interface/debugwindow.h"
 
-#include "debugmemory.h"
+#include "ctp/debugtools/debugmemory.h"
 
-#include "player.h"
-#include "SelItem.h"
-#include "profileDB.h"
-#include "network.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/profileDB.h"
+#include "net/general/network.h"
 
-#include "director.h"
+#include "gfx/spritesys/director.h"
 
-#include "diplomacywindow.h"
-#include "DomesticManagementDialog.h"
-#include "NationalManagementDialog.h"
+#include "ui/interface/diplomacywindow.h"
+#include "ui/interface/DomesticManagementDialog.h"
+#include "ui/interface/NationalManagementDialog.h"
 
-#include "trademanager.h"
-#include "ScienceManagementDialog.h"
-#include "unitmanager.h"
-#include "sciencevictorydialog.h"
+#include "ui/interface/trademanager.h"
+#include "ui/interface/ScienceManagementDialog.h"
+#include "ui/interface/unitmanager.h"
+#include "ui/interface/sciencevictorydialog.h"
 
-#include "battleviewwindow.h"
-#include "scenarioeditor.h"
-#include "EditQueue.h"
+#include "ui/interface/battleviewwindow.h"
+#include "ui/interface/scenarioeditor.h"
+#include "ui/interface/EditQueue.h"
 
-#include "dipwizard.h"
+#include "ui/interface/dipwizard.h"
 
-#include "sciencevictorydialog.h"
+#include "ui/interface/sciencevictorydialog.h"
 
 extern C3UI                 *g_c3ui;
 extern WorkWindow           *g_workWindow;

@@ -1,8 +1,8 @@
 #ifndef __AUI_SOUND_H__
 #define __AUI_SOUND_H__
 
-#include "aui_base.h"
-#include "aui_memmap.h"
+#include "ui/aui_common/aui_base.h"
+#include "ui/aui_common/aui_memmap.h"
 
 
 class aui_SoundFormat : public aui_FileFormat

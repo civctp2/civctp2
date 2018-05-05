@@ -1,13 +1,13 @@
-#include "c3.h"
-#include "player.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/Player.h"
 
-#include "C3Science.h"
+#include "gs/outcom/C3Science.h"
 
-#include "AdvanceRecord.h"
+#include "gs/newdb/AdvanceRecord.h"
 #include "civarchive.h"
-#include "Advances.h"
+#include "gs/gameobj/Advances.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
 extern StringDB *g_theStringDB;
 

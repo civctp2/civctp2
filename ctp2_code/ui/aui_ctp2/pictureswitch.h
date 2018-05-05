@@ -4,7 +4,7 @@
 #ifndef __PICTURESWITCH_H__
 #define __PICTURESWITCH_H__
 
-#include "aui_switch.h"
+#include "ui/aui_common/aui_switch.h"
 
 class Pattern;
 class Picture;

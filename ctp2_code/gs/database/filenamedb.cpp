@@ -1,10 +1,10 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "filenamedb.h"
-#include "civarchive.h"
+#include "gs/database/filenamedb.h"
+#include "robot/aibackdoor/civarchive.h"
 
-#include "Token.h"
-#include "c3files.h"
+#include "gs/fileio/Token.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 extern sint32 g_abort_parse;
 

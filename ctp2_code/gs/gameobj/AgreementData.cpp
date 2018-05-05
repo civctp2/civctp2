@@ -30,34 +30,34 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "Globals.h"
-#include "player.h"
-#include "Unit.h"
-#include "Gold.h"
-#include "Advances.h"
-#include "AgreementData.h"
-#include "TurnCnt.h"
-#include "Civilisation.h"
-#include "DiplomaticRequestData.h"
-#include "AdvanceRecord.h"
-#include "UnitPool.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "UnitData.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Cell.h"
-#include "ConstRecord.h"
+#include "gs/utility/Globals.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Gold.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/AgreementData.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/DiplomaticRequestData.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/world/Cell.h"
+#include "gs/newdb/ConstRecord.h"
 
-#include "Agreement.h"
+#include "gs/gameobj/Agreement.h"
 
-#include "network.h"
+#include "net/general/network.h"
 
-#include "AICause.h"
-#include "AgreementPool.h"
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/AgreementPool.h"
 
 extern	Player	**g_player ;
 extern	TurnCount	*g_turn ;
@@ -66,7 +66,7 @@ extern World *g_theWorld;
 
 extern AgreementPool *g_theAgreementPool;
 
-#include "Diplomacy_Log.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
 

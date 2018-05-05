@@ -28,7 +28,7 @@
 #ifndef __NS_PLAYER_H__
 #define __NS_PLAYER_H__
 
-#include "ns_object.h"
+#include "ui/netshell/ns_object.h"
 
 class ns_Player : public ns_Object<NETFunc::Player, ns_Player>
 {

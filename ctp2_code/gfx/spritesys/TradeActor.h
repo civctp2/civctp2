@@ -4,12 +4,12 @@
 #ifndef __TRADEACTOR_H__
 #define __TRADEACTOR_H__
 
-#include "Actor.h"
-#include "GoodSpriteGroup.h"
-#include "Queue.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TradeRoute.h"
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/GoodSpriteGroup.h"
+#include "gfx/gfx_utils/Queue.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/gameobj/TradeRoute.h"
 
 class SpriteState;
 class SpriteGroup;

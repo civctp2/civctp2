@@ -41,10 +41,10 @@
 class CityWindow;
 class InventoryItemInfo;
 
-#include "auitypes.h"           // AUI_ERRCODE
-#include "citydata.h"
-#include "ctp2_inttypes.h"      // sint32, uint32
-#include "gstypes.h"
+#include "ui/aui_common/auitypes.h"           // AUI_ERRCODE
+#include "gs/gameobj/citydata.h"
+#include "os/include/ctp2_inttypes.h"      // sint32, uint32
+#include "gs/utility/gstypes.h"
 
 class ctp2_Window;
 class CityData;

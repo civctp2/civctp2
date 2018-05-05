@@ -34,12 +34,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "c3types.h"
+#include "ctp/c3.h"
+#include "ctp/c3types.h"
 
-#include "c3errors.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "civarchive.h"
+#include "robot/aibackdoor/civarchive.h"
 
 #ifndef USE_COM_REPLACEMENT
 STDMETHODIMP CivArchive::QueryInterface(REFIID riid, void **obj)

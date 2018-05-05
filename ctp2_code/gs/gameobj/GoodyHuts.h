@@ -61,8 +61,8 @@ enum GOODY
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "ctp2_inttypes.h"      // uint32
-#include "player.h"             // PLAYER_INDEX
+#include "os/include/ctp2_inttypes.h"      // uint32
+#include "gs/gameobj/Player.h"             // PLAYER_INDEX
 
 class CivArchive;
 class MapPoint;

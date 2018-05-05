@@ -1,12 +1,12 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #include "civarchive.h"
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "ic3GameState.h"
+#include "user-robotcom/outcom/ic3GameState.h"
 #include "aimain.h"
 
-#include "GoalWonder.h"
-#include "CityAgent.h"
+#include "robotcom/goals/GoalWonder.h"
+#include "robotcom/Agent/CityAgent.h"
 
 GoalWonderFlat::~GoalWonderFlat()
 {

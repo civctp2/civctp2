@@ -3,7 +3,7 @@
 #ifndef __OA_PILLAGE__
 #define __OA_PILLAGE__ 1
 
-#include "Oa.h"
+#include "robotcom/goals/Oa.h"
 
 class Opportunity_Action_Pillage : public Opportunity_Action {
 

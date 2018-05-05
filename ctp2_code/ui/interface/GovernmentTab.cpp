@@ -1,24 +1,24 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "GovernmentTab.h"
+#include "ui/interface/GovernmentTab.h"
 
-#include "aui_ldl.h"
-#include "ctp2_button.h"
-#include "ctp2_dropdown.h"
-#include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "GovernmentRecord.h"
-#include "player.h"
-#include "SelItem.h"
-#include "StrDB.h"
-#include "colorset.h"                   // g_colorSet
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/Player.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/database/StrDB.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
 
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "DomesticManagementDialog.h"
-#include "UnitDynArr.h"
-#include "UnitRecord.h"
-#include "MessageBoxDialog.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
+#include "ui/interface/DomesticManagementDialog.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/newdb/UnitRecord.h"
+#include "ui/interface/MessageBoxDialog.h"
 
 template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 {

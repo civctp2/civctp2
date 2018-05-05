@@ -29,7 +29,7 @@ void *Log_GetLoggingPtr(void);
 void Log_AddLoggingClasses(void);
 void Hash_Init(void);
 
-#include "log_on.h"
+#include "ctp/debugtools/log_on.h"
 
 void Log_Enable (LogClass log_class);
 

@@ -1,8 +1,8 @@
-#include "c3.h"
-#include "ActorPath.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/ActorPath.h"
 
-#include "maputils.h"           // maputils_MapXY2PixelXY
-#include "spriteutils.h"        // spriteutils_DeltaToFacing
+#include "gfx/tilesys/maputils.h"           // maputils_MapXY2PixelXY
+#include "gfx/spritesys/spriteutils.h"        // spriteutils_DeltaToFacing
 
 ActorPath::ActorPath(uint16 numPoints)
 {

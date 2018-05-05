@@ -4,7 +4,7 @@
 #ifndef __STATICTEXTBOX_H__
 #define __STATICTEXTBOX_H__
 
-#include "aui_static.h"
+#include "ui/aui_common/aui_static.h"
 
 
 class StaticTextBox : public aui_Static

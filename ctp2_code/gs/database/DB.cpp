@@ -33,12 +33,12 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "DB.h"
-#include "civarchive.h"
+#include "gs/database/DB.h"
+#include "robot/aibackdoor/civarchive.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 extern StringDB *g_theStringDB;
 
 template <class T> Database<T>::Database()

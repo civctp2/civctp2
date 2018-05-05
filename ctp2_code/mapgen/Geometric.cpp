@@ -1,11 +1,11 @@
 /**
  * $Id$
  */
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 
 #if defined(WIN32)
-#include "c3.h"
+#include "ctp/c3.h"
 #endif
 
 #if defined(HAVE_STRING_H)
@@ -13,10 +13,10 @@
 #endif
 
 #include <algorithm>
-#include "Geometric.h"
-#include "FaultGen.h"
+#include "mapgen/Geometric.h"
+#include "mapgen/FaultGen.h"
 #include <stdlib.h>
-#include "IC3Rand.h"
+#include "gs/outcom/IC3Rand.h"
 
 struct georect {
 	int x, y, w, h;

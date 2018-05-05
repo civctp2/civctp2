@@ -7,8 +7,8 @@
 
 class ForeignTradeBidInfo;
 
-#include "ctp2_inttypes.h"
-#include "Unit.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gs/gameobj/Unit.h"
 
 class ForeignTradeBidInfo
 {

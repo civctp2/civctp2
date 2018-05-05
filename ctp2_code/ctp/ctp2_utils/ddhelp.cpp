@@ -1,4 +1,4 @@
-#include "c3.h"
+#include "ctp/c3.h"
 #if !defined(__AUI_USE_SDL__)
 #include <ddraw.h>
 

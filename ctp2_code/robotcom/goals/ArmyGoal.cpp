@@ -1,23 +1,23 @@
-#include "c3.h"
-#include "globals.h"
-#include "dynarr.h"
-#include "IMapPointData.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/outcom/IMapPointData.h"
 #include "civarchive.h"
 
-#include "AiMap.h"
-#include "aicell.h"
-#include "airndcnt.h"
+#include "robotcom/Top/AiMap.h"
+#include "robotcom/Top/aicell.h"
+#include "robotcom/aimgr/airndcnt.h"
 
-#include "ic3GameState.h"
-#include "ic3player.h"
-#include "ic3world.h"
-#include "ic3Rand.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3player.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3Rand.h"
 #include "aimain.h"
 #include "Foreigner.h"
 
-#include "ArmyAgent.h"
-#include "CityAgent.h"
-#include "InstBidList.h"
+#include "robotcom/Agent/ArmyAgent.h"
+#include "robotcom/Agent/CityAgent.h"
+#include "robotcom/Alloc/InstBidList.h"
 
 
 
@@ -26,33 +26,33 @@
 
 
 #include "common.h"
-#include "linked_list.h"
-#include "sorted_array.h"
+#include "robotcom/planner/linked_list.h"
+#include "robotcom/planner/sorted_array.h"
 
-#include "unitflow.h"
+#include "robotcom/planner/unitflow.h"
 
-#include "aip.h"
+#include "robotcom/planner/aip.h"
 
-#include "squad.h"
-#include "Cont.h"
+#include "robotcom/planner/squad.h"
+#include "robotcom/Top/Cont.h"
 
-#include "goal.h"
-#include "ArmyGoal.h"
+#include "robotcom/planner/goal.h"
+#include "robotcom/goals/ArmyGoal.h"
 
 #include "Plan.h"
 
 #include "Scheduler.h"
-#include "squad_strength.h"
+#include "robotcom/planner/squad_strength.h"
 
-#include "planner.h"
-#include "scienceagent.h"
+#include "robotcom/planner/planner.h"
+#include "robotcom/Agent/scienceagent.h"
 
-#include "dr_debug.h"
-#include "matrix.h"
-#include "grassfire.h"
-#include "strategic_map.h"
+#include "robotcom/planner/dr_debug.h"
+#include "robotcom/planner/matrix.h"
+#include "robotcom/planner/grassfire.h"
+#include "robotcom/Top/strategic_map.h"
 
-#include "debugmemory.h"
+#include "ctp/debugtools/debugmemory.h"
 
 #define LOG_ARMYGOAL true
 

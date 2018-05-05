@@ -4,7 +4,7 @@
 #ifndef __INFOBAR_H__
 #define __INFOBAR_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 #define k_MAX_INFOBAR_TEXT 1024
 #define k_INFOBAR_HEIGHT 17

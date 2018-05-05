@@ -37,9 +37,9 @@
 
 class UnitPool;
 
-#include "ObjPool.h"
+#include "gs/gameobj/ObjPool.h"
 
-#include "Unit.h"
+#include "gs/gameobj/Unit.h"
 
 class UnitData;
 class CivArchive;

@@ -1,21 +1,21 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "ThreatResponseEvent.h"
+#include "ai/diplomacy/ThreatResponseEvent.h"
 
-#include "Events.h"
-#include "GameEventUser.h"
-#include "Unit.h"
-#include "StrDB.h"
-#include "GameEventManager.h"
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/database/StrDB.h"
+#include "gs/events/GameEventManager.h"
 
-#include "AICause.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "AgreementMatrix.h"
-#include "ProposalAnalysis.h"
-#include "UnitPool.h"
+#include "gs/outcom/AICause.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/diplomacy/ProposalAnalysis.h"
+#include "gs/gameobj/UnitPool.h"
 
-#include "player.h"
+#include "gs/gameobj/Player.h"
 
 STDEHANDLER(DefaultReject_ThreatResponseEvent)
 {

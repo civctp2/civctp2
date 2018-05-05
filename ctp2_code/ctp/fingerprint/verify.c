@@ -4,12 +4,12 @@
  Username and password verification utilities.
 --------------------------------------------------------------------------*/
 
-#include "ctp2_config.h"
-#include "ctp2_inttypes.h"
+#include "os/include/ctp2_config.h"
+#include "os/include/ctp2_inttypes.h"
 #include <stdio.h>
 #include <windows.h>
 
-#include "resource.h"
+#include "ctp/ctp2_rsrc/resource.h"
 #include "shroud.h"
 #include "verify.h"
 

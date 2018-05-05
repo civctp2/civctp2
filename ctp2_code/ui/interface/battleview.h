@@ -11,7 +11,7 @@ class BattleView;
 #define k_BATTLEVIEW_DEFAULT_DEFENDER_FACING		5
 #define k_MAX_UNITS_PER_SIDE		                12
 
-#include "pointerlist.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 class BattleViewActor;
 class aui_Surface;

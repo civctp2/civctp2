@@ -4,8 +4,8 @@
 #ifndef __TEXTUTILS_H
 #define __TEXTUTILS_H
 
-#include "pixelutils.h"
-#include "colorset.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"
 
 class aui_Surface;
 

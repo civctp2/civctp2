@@ -4,7 +4,7 @@
 #include <set>
 #include <string>
 
-#include "c3files.h"
+#include "ctp/ctp2_utils/c3files.h"
 
 #ifndef WIN32
 #include <stdio.h>

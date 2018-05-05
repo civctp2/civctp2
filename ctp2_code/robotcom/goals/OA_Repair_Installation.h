@@ -3,9 +3,9 @@
 #ifndef __OA_REPAIR_INSTALLATION__
 #define __OA_REPAIR_INSTALLATION__ 1
 
-#include "Oa.h"
+#include "robotcom/goals/Oa.h"
 
-#include "MapPoint.h"
+#include "gs/world/MapPoint.h"
 
 struct MapPointData;
 

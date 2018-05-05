@@ -28,33 +28,33 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Globals.h"
+#include "ctp/c3.h"
+#include "gs/utility/Globals.h"
 
-#include "PlayHap.h"
-#include "player.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "ConstRecord.h"
-#include "aui.h"
-#include "aui_surface.h"
-#include "primitives.h"
-#include "aui_window.h"
-#include "debugwindow.h"
-#include "Unit.h"
-#include "dynarr.h"
-#include "UnitDynArr.h"
-#include "Cell.h"
-#include "installationtree.h"
+#include "gs/gameobj/PlayHap.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/newdb/ConstRecord.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/interface/debugwindow.h"
+#include "gs/gameobj/Unit.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/installationtree.h"
 
-#include "GovernmentRecord.h"
-#include "terrainutil.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/gameobj/terrainutil.h"
 
-#include "civarchive.h"
-#include "network.h"
-#include "GovernmentRecord.h"
+#include "robot/aibackdoor/civarchive.h"
+#include "net/general/network.h"
+#include "gs/newdb/GovernmentRecord.h"
 
-#include "Army.h"
+#include "gs/gameobj/Army.h"
 
 extern DebugWindow *g_debugWindow;
 

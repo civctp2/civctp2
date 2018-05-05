@@ -41,16 +41,16 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "debugcallstack.h"
+#include "ctp/debugtools/debugcallstack.h"
 
-#include "log.h"
-#include "debugcallstack.h"
+#include "ctp/debugtools/log.h"
+#include "ctp/debugtools/debugcallstack.h"
 #ifdef WIN32
 #include <windows.h>
 #else
-#include "windows.h"
+#include "os/nowin32/windows.h"
 #endif
 #include <string.h>
 #include <stdio.h>
@@ -59,7 +59,7 @@
 #endif
 
 #ifndef _DEBUG
-#include "log_off.h"
+#include "ctp/debugtools/log_off.h"
 #endif
 
 static bool debug_dump_whole_stack = false;

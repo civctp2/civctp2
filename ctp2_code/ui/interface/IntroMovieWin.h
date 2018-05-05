@@ -4,7 +4,7 @@
 #ifndef __INTROMOVIEWIN__
 #define __INTROMOVIEWIN__
 
-#include "aui_action.h"
+#include "ui/aui_common/aui_action.h"
 
 void intromoviewin_Initialize(void);
 void intromoviewin_DisplayIntroMovie(void);

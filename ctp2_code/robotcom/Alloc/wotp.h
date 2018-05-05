@@ -3,7 +3,7 @@
 
 class CivArchive;
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 
 class WillOfThePeopleFlat{
 protected:

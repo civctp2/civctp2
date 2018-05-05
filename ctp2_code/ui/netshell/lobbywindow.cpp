@@ -30,33 +30,33 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "lobbywindow.h"
+#include "ctp/c3.h"
+#include "ui/netshell/lobbywindow.h"
 
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_screen.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_screen.h"
 
-#include "netshell.h"
-#include "ns_chatbox.h"
-#include "ns_customlistbox.h"
-#include "dialogboxwindow.h"
-
-
+#include "ui/netshell/netshell.h"
+#include "ui/netshell/ns_chatbox.h"
+#include "ui/netshell/ns_customlistbox.h"
+#include "ui/netshell/dialogboxwindow.h"
 
 
-#include "c3_static.h"
-#include "c3_button.h"
-#include "textradio.h"
-#include "c3textfield.h"
 
-#include "playereditwindow.h"
-#include "playerselectwindow.h"
-#include "allinonewindow.h"
-#include "passwordscreen.h"
 
-#include "ctp2_Switch.h"
-#include "spnewgamewindow.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/c3_button.h"
+#include "ui/aui_ctp2/textradio.h"
+#include "ui/aui_ctp2/c3textfield.h"
+
+#include "ui/netshell/playereditwindow.h"
+#include "ui/netshell/playerselectwindow.h"
+#include "ui/netshell/allinonewindow.h"
+#include "ui/netshell/passwordscreen.h"
+
+#include "ui/aui_ctp2/ctp2_Switch.h"
+#include "ui/interface/spnewgamewindow.h"
 
 static DialogBoxWindow *	s_dbw				= NULL;
 static time_t				s_startedLeavingAt	= 0;

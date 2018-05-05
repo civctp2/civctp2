@@ -5,9 +5,9 @@
 #define __C3BLITTER_H__
 
 #ifdef __AUI_USE_DIRECTX__
-#include "aui_directblitter.h"
+#include "ui/aui_directx/aui_directblitter.h"
 #elif defined(__AUI_USE_SDL__)
-#include "aui_sdlblitter.h"
+#include "ui/aui_sdl/aui_sdlblitter.h"
 #endif // __AUI_USE_SDL__
 
 class aui_Surface;

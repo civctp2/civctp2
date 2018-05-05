@@ -3,9 +3,9 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include "aui_audiomanager.h"
-#include "aui_directsound.h"
-#include "aui_resource.h"
+#include "ui/aui_common/aui_audiomanager.h"
+#include "ui/aui_directx/aui_directsound.h"
+#include "ui/aui_common/aui_resource.h"
 
 
 #define DS3D_LISTENERDOPPLERFACTOR DS3D_DEFAULTDOPPLERFACTOR

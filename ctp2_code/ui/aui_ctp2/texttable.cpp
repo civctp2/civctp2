@@ -1,22 +1,22 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_surface.h"
-#include "aui_window.h"
-#include "aui_ldl.h"
-#include "c3scroller.h"
-#include "c3ui.h"
-#include "pattern.h"
-#include "aui_static.h"
-#include "textswitch.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_ctp2/c3scroller.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_ctp2/textswitch.h"
 
-#include "primitives.h"
-#include "textutils.h"
-#include "colorset.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_utils/textutils.h"
+#include "gfx/gfx_utils/colorset.h"
 
-#include "texttable.h"
-#include "c3windows.h"
+#include "ui/aui_ctp2/texttable.h"
+#include "ui/aui_ctp2/c3windows.h"
 
 extern C3UI			*g_c3ui;
 

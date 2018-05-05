@@ -21,9 +21,9 @@ enum CITYSIZE {
 	CITYSIZE_MAX
 };
 
-#include "ctp2_inttypes.h"
-#include "pixeltypes.h"
-#include "SpriteGroup.h"
+#include "os/include/ctp2_inttypes.h"
+#include "gfx/gfx_utils/pixeltypes.h"
+#include "gfx/spritesys/SpriteGroup.h"
 
 class CitySpriteGroup : public SpriteGroup
 {

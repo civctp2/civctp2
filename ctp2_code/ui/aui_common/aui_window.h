@@ -62,10 +62,10 @@ enum AUI_WINDOW_TYPE
 #define k_WINDOW_ATTRIBUTE_DRAGGABLE		0x00000080
 #define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
 
-#include "aui_region.h"
-#include "aui_dirtylist.h"
-#include "aui_mouse.h"
-#include "pointerlist.h"
+#include "ui/aui_common/aui_region.h"
+#include "ui/aui_common/aui_dirtylist.h"
+#include "ui/aui_common/aui_mouse.h"
+#include "ctp/ctp2_utils/pointerlist.h"
 
 //class aui_UI;
 class aui_Mouse;

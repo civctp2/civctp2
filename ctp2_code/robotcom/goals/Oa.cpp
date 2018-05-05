@@ -1,5 +1,5 @@
-#include "c3.h"
-#include "Oa.h"
+#include "ctp/c3.h"
+#include "robotcom/goals/Oa.h"
 
 Opportunity_Action::Opportunity_Action()
 {

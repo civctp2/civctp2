@@ -1,7 +1,7 @@
-#include "c3.h"
-#include "diplomacyutil.h"
-#include "DiplomacyProposalRecord.h"
-#include "DiplomacyThreatRecord.h"
+#include "ctp/c3.h"
+#include "ai/diplomacy/diplomacyutil.h"
+#include "gs/newdb/DiplomacyProposalRecord.h"
+#include "gs/newdb/DiplomacyThreatRecord.h"
 
 sint32 s_proposal_to_db_map[PROPOSAL_MAX];
 PROPOSAL_TYPE s_db_to_proposal_map[PROPOSAL_MAX];

@@ -38,7 +38,7 @@
 
 class InfoWindow;
 
-#include "ctp2_inttypes.h"  // uint32
+#include "os/include/ctp2_inttypes.h"  // uint32
 
 class aui_Control;
 class ctp2_Button;

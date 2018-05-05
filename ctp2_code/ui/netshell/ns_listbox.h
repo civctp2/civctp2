@@ -32,18 +32,18 @@
 #ifndef __NS_LISTBOX_H__
 #define __NS_LISTBOX_H__
 
-#include "aui.h"
-#include "ns_civlistbox.h"
-#include "aui_ranger.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "aui_bitmapfont.h"
-#include "ns_item.h"
-#include "ns_header.h"
-#include "ns_headerswitch.h"
+#include "ui/aui_common/aui.h"
+#include "ui/netshell/ns_civlistbox.h"
+#include "ui/aui_common/aui_ranger.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/netshell/ns_item.h"
+#include "ui/netshell/ns_header.h"
+#include "ui/netshell/ns_headerswitch.h"
 
-#include "netfunc.h"
-#include "ldl_data.hpp"
+#include "ui/netshell/netfunc.h"
+#include "ui/ldl/ldl_data.hpp"
 
 template<class T,class NetShellT>
 class ns_ListBox : public ns_CivListBox, public NETFunc::ListHandler<T>

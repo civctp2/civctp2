@@ -1,7 +1,7 @@
 #ifndef _NET_POLLUTION_H_
 #define _NET_POLLUTION_H_
 
-#include "net_packet.h"
+#include "net/general/net_packet.h"
 
 class NetPollution : public Packetizer
 {

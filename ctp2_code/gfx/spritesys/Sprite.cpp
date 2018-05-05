@@ -30,25 +30,25 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "Sprite.h"
+#include "ctp/c3.h"
+#include "gfx/spritesys/Sprite.h"
 
-#include "pixelutils.h"
-#include "tiffutils.h"
-#include "targautils.h"
-#include "spriteutils.h"
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/tiffutils.h"
+#include "gfx/gfx_utils/targautils.h"
+#include "gfx/spritesys/spriteutils.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "aui.h"
-#include "aui_surface.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_surface.h"
 
-#include "SpriteFile.h"
-#include "Anim.h"
-#include "screenmanager.h"
+#include "gfx/spritesys/SpriteFile.h"
+#include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/screenmanager.h"
 
-#include "tiledmap.h"
+#include "gfx/tilesys/tiledmap.h"
 
-#include "Token.h"
+#include "gs/fileio/Token.h"
 
 extern sint32 g_is565Format;
 extern ScreenManager *g_screenManager;

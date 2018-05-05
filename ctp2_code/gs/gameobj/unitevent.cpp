@@ -30,29 +30,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "UnitEvent.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/UnitEvent.h"
 
-#include "AICause.h"
-#include "Army.h"
-#include "ArmyData.h"
-#include "Cell.h"
-#include "cellunitlist.h"
-#include "cityespionage.h"
-#include "director.h"                   // g_director
-#include "Events.h"
-#include "GameEventUser.h"
-#include "net_info.h"
-#include "network.h"                    // g_network
-#include "Order.h"
-#include "player.h"                     // g_player
-#include "SlicEngine.h"                 // g_slicEngine
-#include "SlicObject.h"
-#include "tiledmap.h"                   // g_tiledMap
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "World.h"                      // g_theWorld
+#include "gs/outcom/AICause.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/world/Cell.h"
+#include "gs/world/cellunitlist.h"
+#include "ui/interface/cityespionage.h"
+#include "gfx/spritesys/director.h"                   // g_director
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "net/general/net_info.h"
+#include "net/general/network.h"                    // g_network
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/slic/SlicEngine.h"                 // g_slicEngine
+#include "gs/slic/SlicObject.h"
+#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/world/World.h"                      // g_theWorld
 
 STDEHANDLER(KillUnitEvent)
 {

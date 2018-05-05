@@ -64,143 +64,143 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "controlpanelwindow.h"
+#include "ctp/c3.h"
+#include "ui/interface/controlpanelwindow.h"
 
 #include <algorithm>                    // std::fill
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "aui_tab.h"
-#include "aui_ldl.h"
-#include "aui_button.h"
-#include "aui_ranger.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_tab.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_button.h"
+#include "ui/aui_common/aui_ranger.h"
 
-#include "pattern.h"
-#include "pointerlist.h"
-#include "primitives.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ctp/ctp2_utils/pointerlist.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "pixelutils.h"
-#include "maputils.h"
-#include "terrainutil.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/tilesys/maputils.h"
+#include "gs/gameobj/terrainutil.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
-#include "citywindow.h"
-#include "background.h"
-#include "tiledmap.h"
-#include "radarwindow.h"
-#include "InfoBar.h"
-#include "network.h"
-#include "OrderRecord.h"
+#include "ui/interface/citywindow.h"
+#include "ui/aui_ctp2/background.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/interface/radarwindow.h"
+#include "ui/aui_ctp2/InfoBar.h"
+#include "net/general/network.h"
+#include "gs/newdb/OrderRecord.h"
 
-#include "newturncount.h"
+#include "gs/utility/newturncount.h"
 
-#include "gameplayoptions.h"
-#include "graphicsscreen.h"
-#include "soundscreen.h"
+#include "ui/interface/gameplayoptions.h"
+#include "ui/interface/graphicsscreen.h"
+#include "ui/interface/soundscreen.h"
 // music added by ahenobarb
-#include "musicscreen.h"
-#include "optionwarningscreen.h"
-#include "loadsavewindow.h"
-#include "km_screen.h"
-#include "optionswindow.h"
-#include "infowindow.h"
-#include "MessagePool.h"
-#include "message.h"
+#include "ui/interface/musicscreen.h"
+#include "ui/interface/optionwarningscreen.h"
+#include "ui/interface/loadsavewindow.h"
+#include "ui/interface/km_screen.h"
+#include "ui/interface/optionswindow.h"
+#include "ui/interface/infowindow.h"
+#include "gs/gameobj/MessagePool.h"
+#include "gs/gameobj/message.h"
 
-#include "cursormanager.h"
-#include "debugwindow.h"
+#include "ui/interface/cursormanager.h"
+#include "ui/interface/debugwindow.h"
 
-#include "c3cmdline.h"
-#include "SelItem.h"                    // g_selected_item
-#include "player.h"                     // g_player
-#include "c3window.h"
-#include "ctp2_Window.h"
-#include "ctp2_Menu.h"
-#include "ctp2_Static.h"
-#include "ctp2_Switch.h"
+#include "ctp/ctp2_utils/c3cmdline.h"
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gs/gameobj/Player.h"                     // g_player
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_Menu.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_Switch.h"
 
-#include "ctp2_menubar.h"
-#include "ctp2_Window.h"
-#include "ctp2_button.h"
-#include "ctp2_listitem.h"
-#include "ctp2_listbox.h"
-#include "ctp2_dropdown.h"
+#include "ui/aui_ctp2/ctp2_menubar.h"
+#include "ui/aui_ctp2/ctp2_Window.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/ctp2_listitem.h"
+#include "ui/aui_ctp2/ctp2_listbox.h"
+#include "ui/aui_ctp2/ctp2_dropdown.h"
 
-#include "c3_static.h"
+#include "ui/aui_ctp2/c3_static.h"
 
-#include "IconRecord.h"
-#include "SelItem.h"
-#include "TurnCnt.h"
-#include "UnitPool.h"                   // g_theUnitPool
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
-#include "StrDB.h"                      // g_theStringDB
-#include "screenutils.h"
-#include "Advances.h"
-#include "AdvanceRecord.h"
-#include "advanceutil.h"
-#include "ArmyData.h"
-#include "cellunitlist.h"
-#include "Cell.h"
-#include "World.h"                      // g_theWorld
-#include "director.h"                   // g_director
-#include "Events.h"
-#include "GameEventUser.h"
-#include "TerrainRecord.h"
+#include "gs/newdb/IconRecord.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/database/StrDB.h"                      // g_theStringDB
+#include "ui/interface/screenutils.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/gameobj/advanceutil.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/world/cellunitlist.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"                      // g_theWorld
+#include "gfx/spritesys/director.h"                   // g_director
+#include "gs/gameobj/Events.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/newdb/TerrainRecord.h"
 
-#include "pixelutils.h"
-#include "colorset.h"                   // g_colorSet
-#include "primitives.h"
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "ui/aui_utils/primitives.h"
 
-#include "trademanager.h"
+#include "ui/interface/trademanager.h"
 
-#include "MainControlPanel.h"
-#include "EditQueue.h"
-#include "diplomacywindow.h"
-#include "dipwizard.h"
-#include "cityespionage.h"
+#include "ui/interface/MainControlPanel.h"
+#include "ui/interface/EditQueue.h"
+#include "ui/interface/diplomacywindow.h"
+#include "ui/interface/dipwizard.h"
+#include "ui/interface/cityespionage.h"
 
-#include "civ3_main.h"
+#include "ctp/civ3_main.h"
 
-#include "ctp2_Tab.h"
-#include "ctp2_TabButton.h"
-#include "ctp2_TabGroup.h"
+#include "ui/aui_ctp2/ctp2_Tab.h"
+#include "ui/aui_ctp2/ctp2_TabButton.h"
+#include "ui/aui_ctp2/ctp2_TabGroup.h"
 
-#include "armymanagerwindow.h"
+#include "ui/interface/armymanagerwindow.h"
 
-#include "ProfileEdit.h"
-#include "c3_utilitydialogbox.h"
-#include "NationalManagementDialog.h"
-#include "MessageBoxDialog.h"
+#include "ui/interface/ProfileEdit.h"
+#include "ui/aui_ctp2/c3_utilitydialogbox.h"
+#include "ui/interface/NationalManagementDialog.h"
+#include "ui/interface/MessageBoxDialog.h"
 
-#include "tileimptracker.h"
+#include "ui/interface/tileimptracker.h"
 
-#include "filenamedb.h"
-#include "messageiconwindow.h"
-#include "scenarioeditor.h"
+#include "gs/database/filenamedb.h"
+#include "ui/interface/messageiconwindow.h"
+#include "ui/interface/scenarioeditor.h"
 
-#include "progresswindow.h"
-#include "aui_progressbar.h"
-#include "aui_tipwindow.h"
+#include "ui/interface/progresswindow.h"
+#include "ui/aui_common/aui_progressbar.h"
+#include "ui/aui_common/aui_tipwindow.h"
 
-#include "Order.h"
+#include "gs/gameobj/Order.h"
 
-#include "soundmanager.h"
-#include "gamesounds.h"
+#include "sound/soundmanager.h"
+#include "sound/gamesounds.h"
 
-#include "km_screen.h"
-#include "keymap.h"
+#include "ui/interface/km_screen.h"
+#include "ui/aui_ctp2/keymap.h"
 
-#include "ConstRecord.h"
+#include "gs/newdb/ConstRecord.h"
 
-#include "profileDB.h"
-#include "helptile.h"
+#include "gs/database/profileDB.h"
+#include "ui/interface/helptile.h"
 
-#include "SpecialAttackWindow.h"
-#include "gameinit.h"                   // g_startHotseatGame
+#include "ui/interface/SpecialAttackWindow.h"
+#include "gs/utility/gameinit.h"                   // g_startHotseatGame
 #include <string>                       // std::string
 
 extern ProgressWindow *g_theProgressWindow;

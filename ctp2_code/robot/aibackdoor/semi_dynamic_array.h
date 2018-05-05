@@ -3,7 +3,7 @@
 
 #ifndef MALLOC
 	#ifdef _DEBUG
-		#include "debugmemory.h"
+		#include "ctp/debugtools/debugmemory.h"
 	#else
 		#ifndef REALLOC
 			#define REALLOC(buf,size) realloc (buf,size)

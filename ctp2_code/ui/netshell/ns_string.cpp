@@ -1,11 +1,11 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui_ui.h"
-#include "aui_ldl.h"
-#include "ldl_data.hpp"
-#include "ns_string.h"
+#include "ui/aui_common/aui_ui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/ldl/ldl_data.hpp"
+#include "ui/netshell/ns_string.h"
 
-#include "StrDB.h"
+#include "gs/database/StrDB.h"
 
 extern StringDB	*g_theStringDB;
 

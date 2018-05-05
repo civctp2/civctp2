@@ -2,7 +2,7 @@
 #ifndef __C3STRING_H__
 #define __C3STRING_H__
 
-#include "ic3String.h"
+#include "gs/outcom/ic3String.h"
 #include "civarchive.h"
 
 class C3String : public IC3String

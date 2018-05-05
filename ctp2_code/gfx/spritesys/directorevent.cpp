@@ -30,29 +30,29 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "GameEventUser.h"
-#include "Events.h"
+#include "ctp/c3.h"
+#include "gs/events/GameEventUser.h"
+#include "gs/gameobj/Events.h"
 
-#include "Army.h"
-#include "ArmyData.h"
-#include "director.h"
-#include "tiledmap.h"
-#include "SelItem.h"
-#include "UnitActor.h"
-#include "UnitData.h"
-#include "unitutil.h"
-#include "UnitPool.h"
-#include "player.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Player.h"
 
-#include "soundmanager.h"
+#include "sound/soundmanager.h"
 
-#include "SoundRecord.h"
-#include "SpecialEffectRecord.h"
-#include "SpecialAttackInfoRecord.h"
+#include "gs/newdb/SoundRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "gs/newdb/SpecialAttackInfoRecord.h"
 
-#include "network.h"
-#include "profileDB.h"
+#include "net/general/network.h"
+#include "gs/database/profileDB.h"
 
 STDEHANDLER(DirectorMoveUnitsEvent)
 {

@@ -1,7 +1,7 @@
 #ifndef __AUI_HYPERTEXTBASE_H__
 #define __AUI_HYPERTEXTBASE_H__
 
-#include "tech_wllist.h"
+#include "ui/aui_common/tech_wllist.h"
 
 class aui_Static;
 class aui_Surface;

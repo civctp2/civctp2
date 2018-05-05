@@ -1,7 +1,7 @@
 #ifndef __FS_ALLOC_H__
 #define __FS_ALLOC_H__ 1
 
-#include "FrameState.h"
+#include "robotcom/FrmState/FrameState.h"
 
 FRAMESTATE(FSSetTaxes);
 

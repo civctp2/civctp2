@@ -31,41 +31,41 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "aui.h"
-#include "aui_ldl.h"
-#include "aui_uniqueid.h"
-#include "aui_stringtable.h"
-#include "c3window.h"
-#include "c3ui.h"
-#include "c3_static.h"
-#include "ctp2_button.h"
-#include "c3_listbox.h"
-#include "c3_listitem.h"
-#include "c3_popupwindow.h"
-#include "MapPoint.h"
-#include "maputils.h"
-#include "tilecontrol.h"
+#include "ctp/c3.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_uniqueid.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_ctp2/c3window.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/c3_static.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_ctp2/c3_listbox.h"
+#include "ui/aui_ctp2/c3_listitem.h"
+#include "ui/aui_ctp2/c3_popupwindow.h"
+#include "gs/world/MapPoint.h"
+#include "gfx/tilesys/maputils.h"
+#include "ui/aui_ctp2/tilecontrol.h"
 
-#include "Cell.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TerrainRecord.h"
-#include "StrDB.h"
-#include "TerrImprove.h"
-#include "TerrImprovePool.h"
+#include "gs/world/Cell.h"
+#include "gs/gameobj/XY_Coordinates.h"
+#include "gs/world/World.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/database/StrDB.h"
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/TerrImprovePool.h"
 
-#include "c3_dropdown.h"
-#include "spnewgamewindow.h"
+#include "ui/aui_ctp2/c3_dropdown.h"
+#include "ui/interface/spnewgamewindow.h"
 
-#include "helptile.h"
+#include "ui/interface/helptile.h"
 
-#include "ResourceRecord.h"
+#include "gs/newdb/ResourceRecord.h"
 
-#include "UnseenCell.h" //Unseen cell info is needed
-#include "tiledmap.h"
-#include "SelItem.h"
-#include "player.h"
+#include "gs/world/UnseenCell.h" //Unseen cell info is needed
+#include "gfx/tilesys/tiledmap.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "gs/gameobj/Player.h"
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;

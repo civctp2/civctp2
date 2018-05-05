@@ -4,7 +4,7 @@
 #ifndef __PATTERN_H__
 #define __PATTERN_H__
 
-#include "aui_image.h"
+#include "ui/aui_common/aui_image.h"
 
 
 class Pattern : public aui_Image

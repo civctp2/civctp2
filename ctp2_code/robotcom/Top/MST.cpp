@@ -1,36 +1,36 @@
-#include "c3.h"
-#include "globals.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
 #include "civarchive.h"
 
-#include "geom2d.h"
-#include "Delaunay.h"
+#include "robotcom/Top/geom2d.h"
+#include "robotcom/Top/Delaunay.h"
 
-#include "globals.h"
-#include "ic3GameState.h"
-#include "ic3world.h"
-#include "ic3RobotAstar.h"
-#include "ic3InstDB.h"
+#include "user-robotcom/shared/globals.h"
+#include "user-robotcom/outcom/ic3GameState.h"
+#include "user-robotcom/outcom/ic3world.h"
+#include "user-robotcom/outcom/ic3RobotAstar.h"
+#include "user-robotcom/outcom/ic3InstDB.h"
 
 #include "aimain.h"
-#include "bset.h"
-#include "AiMap.h"
+#include "robot/aibackdoor/bset.h"
+#include "robotcom/Top/AiMap.h"
 
-#include "MST.h"
+#include "robotcom/Top/MST.h"
 
-#include "Cont.h"
-#include "CityAgent.h"
+#include "robotcom/Top/Cont.h"
+#include "robotcom/Agent/CityAgent.h"
 
-#include "CityEdge.h"
-#include "CityVertex.h"
-#include "CityTree.h"
-#include "CityTreeQueue.h"
-#include "FlatPtr.h"
-#include "scienceagent.h"
+#include "robotcom/Top/CityEdge.h"
+#include "robotcom/Top/CityVertex.h"
+#include "robotcom/Top/CityTree.h"
+#include "robotcom/Top/CityTreeQueue.h"
+#include "robotcom/backdoor/FlatPtr.h"
+#include "robotcom/Agent/scienceagent.h"
 
 extern QuadEdge *g_quad_edge_head;
 extern QuadEdge *g_quad_edge_tail;
 
-#include "FzOut.h"
+#include "robotcom/fuzzy/FzOut.h"
 extern double fz_inst_road_coef;
 
 

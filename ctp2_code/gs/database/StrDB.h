@@ -61,10 +61,10 @@ extern	StringDB *	g_theStringDB;
 // Project dependencies
 //----------------------------------------------------------------------------
 
-#include "c3types.h"	// MBCHAR
-#include "dbtypes.h"	// StringId
-#include "StrRec.h"		// StringRecord
-#include "Token.h"		// Token
+#include "ctp/c3types.h"	// MBCHAR
+#include "gs/database/dbtypes.h"	// StringId
+#include "gs/database/StrRec.h"		// StringRecord
+#include "gs/fileio/Token.h"		// Token
 
 //----------------------------------------------------------------------------
 // Class declarations

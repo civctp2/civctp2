@@ -1,16 +1,16 @@
-#include "c3.h"
-#include "globals.h"
-#include "c3types.h"
-#include "c3errors.h"
+#include "ctp/c3.h"
+#include "user-robotcom/shared/globals.h"
+#include "ctp/c3types.h"
+#include "ctp/ctp2_utils/c3errors.h"
 
-#include "IMapPointData.h"
+#include "gs/outcom/IMapPointData.h"
 
-#include "CityEdge.h"
-#include "FlatPtr.h"
+#include "robotcom/Top/CityEdge.h"
+#include "robotcom/backdoor/FlatPtr.h"
 #include "civarchive.h"
 
-#include "CityVertex.h"
-#include "CityAgent.h"
+#include "robotcom/Top/CityVertex.h"
+#include "robotcom/Agent/CityAgent.h"
 
 ZEROMEM(CityEdgeFlat);
 ZEROMEM(CityEdgePtr);
@@ -85,7 +85,7 @@ CityEdge::CityEdge(const double w, CityVertex *start_v, CityVertex *dest_v)
 }
 
 
-#include "Memory_Manager.h"
+#include "robotcom/backdoor/Memory_Manager.h"
 extern Memory_Manager *g_memory_CityEdge;
 void* CityEdge::operator new(size_t byte_size)
 {

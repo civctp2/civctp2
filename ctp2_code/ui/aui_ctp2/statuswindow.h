@@ -4,7 +4,7 @@
 #ifndef __STATUSWINDOW_H__
 #define __STATUSWINDOW_H__
 
-#include "c3window.h"
+#include "ui/aui_ctp2/c3window.h"
 
 
 class StatusWindow : public C3Window

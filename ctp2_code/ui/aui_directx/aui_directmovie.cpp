@@ -19,20 +19,20 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "c3ui.h"
+#include "ui/aui_ctp2/c3ui.h"
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
-#include "aui_directui.h"
-#include "aui_directsurface.h"
+#include "ui/aui_directx/aui_directui.h"
+#include "ui/aui_directx/aui_directsurface.h"
 
-#include "aui_directmovie.h"
+#include "ui/aui_directx/aui_directmovie.h"
 
-#include "CivPaths.h"			// g_civPaths
+#include "gs/fileio/CivPaths.h"			// g_civPaths
 //#include "RefTime.h"			// UNITS, MILLISECONDS
-#include "soundmanager.h"		// g_soundManager
+#include "sound/soundmanager.h"		// g_soundManager
 
 const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
 const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9

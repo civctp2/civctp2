@@ -1,13 +1,13 @@
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "aui.h"
-#include "aui_window.h"
-#include "pattern.h"
-#include "picture.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/pattern.h"
+#include "ui/aui_ctp2/picture.h"
 
-#include "primitives.h"
+#include "ui/aui_utils/primitives.h"
 
-#include "pictureswitch.h"
+#include "ui/aui_ctp2/pictureswitch.h"
 
 PictureSwitch::PictureSwitch(
 	AUI_ERRCODE *retval,

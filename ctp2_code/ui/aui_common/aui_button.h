@@ -45,8 +45,8 @@ enum AUI_BUTTON_ACTION
 	AUI_BUTTON_ACTION_LAST
 };
 
-#include "aui_control.h"
-#include "aui_keyboard.h"
+#include "ui/aui_common/aui_control.h"
+#include "ui/aui_common/aui_keyboard.h"
 class aui_Image;
 class aui_Surface;
 

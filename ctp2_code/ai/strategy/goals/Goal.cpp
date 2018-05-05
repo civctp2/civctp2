@@ -94,46 +94,46 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
+#include "ctp/c3.h"
 
-#include "Goal.h"
+#include "ai/strategy/goals/Goal.h"
 using namespace std;
 
 const Utility Goal::BAD_UTILITY = -99999999;
 const Utility Goal::MAX_UTILITY =  99999999;
 
-#include "ConstRecord.h"
-#include "GoalRecord.h"
-#include "OrderRecord.h"
-#include "StrategyRecord.h"
-#include "WonderRecord.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/newdb/GoalRecord.h"
+#include "gs/newdb/OrderRecord.h"
+#include "gs/newdb/StrategyRecord.h"
+#include "gs/newdb/WonderRecord.h"
 
-#include "advanceutil.h"
-#include "terrainutil.h"
-#include "wonderutil.h"
+#include "gs/gameobj/advanceutil.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/wonderutil.h"
 
-#include "squad_Strength.h"
-#include "agent.h"
-#include "ArmyPool.h"
-#include "ArmyData.h"
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "CityInfluenceIterator.h"
-#include "ctpai.h"
-#include "Diplomat.h"
-#include "Barbarians.h"
-#include "mapanalysis.h"
-#include "settlemap.h"
-#include "AgreementMatrix.h"
-#include "CityAstar.h"
+#include "ai/strategy/squads/squad_Strength.h"
+#include "ai/strategy/agents/agent.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/CityInfluenceIterator.h"
+#include "ai/ctpai.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "gs/gameobj/Barbarians.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/mapanalysis/settlemap.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "robot/pathing/CityAstar.h"
 
-#include "debugassert.h"
+#include "ctp/debugtools/debugassert.h"
 
-#include "gstypes.h"
-#include "gfx_options.h"
-#include "World.h"
+#include "gs/utility/gstypes.h"
+#include "gfx/gfx_utils/gfx_options.h"
+#include "gs/world/World.h"
 
-#include "ctpaidebug.h"
+#include "ai/ctpaidebug.h"
 
 extern CityAstar g_city_astar;
 

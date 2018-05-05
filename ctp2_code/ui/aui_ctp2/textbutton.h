@@ -7,7 +7,7 @@
 
 
 
-#include "c3_button.h"
+#include "ui/aui_ctp2/c3_button.h"
 
 #define k_TEXTBUTTON_MAXTEXT	64
 

@@ -35,11 +35,11 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "netfunc.h"
+#include "ctp/c3.h"
+#include "ui/netshell/netfunc.h"
 
 #if defined(_DEBUG)
-#include "debug.h"      	// Os::SetThreadName
+#include "ctp/debugtools/debug.h"      	// Os::SetThreadName
 #endif
 
 #ifdef USE_SDL

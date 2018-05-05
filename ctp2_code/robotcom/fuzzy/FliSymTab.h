@@ -5,9 +5,9 @@
 
 #define COM_INTERFACE
 
-#include "StringHash.h"
-#include "FliSymbol.h"
-#include "fliif.h"
+#include "gs/slic/StringHash.h"
+#include "robotcom/fuzzy/FliSymbol.h"
+#include "robotcom/fuzzy/fliif.h"
 
 class FliSymTab : public StringHash<FliSymbol>
 {

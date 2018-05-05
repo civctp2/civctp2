@@ -34,10 +34,10 @@
 
 class aui_MovieManager;
 
-#include "aui_base.h"       // aui_Base
-#include "aui_movie.h"
-#include "aui_resource.h"
-#include "c3files.h"        // C3DIR
+#include "ui/aui_common/aui_base.h"       // aui_Base
+#include "ui/aui_common/aui_movie.h"
+#include "ui/aui_common/aui_resource.h"
+#include "ctp/ctp2_utils/c3files.h"        // C3DIR
 
 class aui_MovieManager : aui_Base
 {

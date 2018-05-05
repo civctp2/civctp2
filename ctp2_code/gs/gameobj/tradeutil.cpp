@@ -34,17 +34,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "tradeutil.h"
-#include "World.h"
-#include "ResourceRecord.h"
-#include "Unit.h"
-#include "citydata.h"
-#include "TradeAstar.h"
-#include "Path.h"
-#include "AgreementMatrix.h"
-#include "ConstRecord.h"
-#include "World.h"
+#include "ctp/c3.h"
+#include "gs/gameobj/tradeutil.h"
+#include "gs/world/World.h"
+#include "gs/newdb/ResourceRecord.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/citydata.h"
+#include "robot/pathing/TradeAstar.h"
+#include "robot/pathing/Path.h"
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/world/World.h"
 
 extern TradeAstar g_theTradeAstar;
 

@@ -5,8 +5,8 @@
 #ifndef __STATICTEXTITEM_H__
 #define __STATICTEXTITEM_H__
 
-#include "aui_static.h"
-#include "iteminfo.h"
+#include "ui/aui_common/aui_static.h"
+#include "ui/aui_ctp2/iteminfo.h"
 
 class StaticTextItem : public aui_Static, public ItemInfo
 {
