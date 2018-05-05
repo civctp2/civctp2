@@ -1719,13 +1719,14 @@ void CtpAi::Resize()
 #endif
 
 	AgreementMatrix::s_agreements.Resize(s_maxPlayers);
-	Diplomat::ResizeAll(s_maxPlayers);
 
 	sint16 resolution = 10;
 	MapAnalysis::GetMapAnalysis().Resize( s_maxPlayers,
 										  (sint16) g_theWorld->GetWidth(),
 										  (sint16) g_theWorld->GetHeight(),
 										  resolution);
+
+  Diplomat::ResizeAll(s_maxPlayers);
 
 	Governor::ResizeAll(s_maxPlayers);
 }
