@@ -35,6 +35,8 @@
 #include "c3.h"                 // pre-compiled header
 #include "MapPoint.h"           // own declarations: consistency check
 
+#include <algorithm>
+
 #include "civarchive.h"
 #include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld

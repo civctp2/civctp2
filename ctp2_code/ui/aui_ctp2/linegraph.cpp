@@ -35,6 +35,8 @@
 #include "c3.h"
 #include "linegraph.h"
 
+#include <memory>
+
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_Factory.h"
@@ -54,10 +56,6 @@
 
 #include "EventTracker.h"
 #include "Strengths.h"
-
-#ifdef LINUX
-#include <memory>
-#endif
 
 extern C3UI                    *g_c3ui;
 extern PointerList<Player>     *g_deadPlayer;
@@ -593,7 +591,7 @@ void LineGraph::GenrateGraph(sint32     &infoXCount,
 	infoXCount = 0;
 
 	AUI_ERRCODE                     errcode     = AUI_ERRCODE_OK;
-	std::auto_ptr<aui_StringTable>  stringTable (new aui_StringTable(&errcode, "InfoStrings"));
+	std::unique_ptr<aui_StringTable>  stringTable (new aui_StringTable(&errcode, "InfoStrings"));
 
 	SetXAxisName(stringTable->GetString(6));
 	SetYAxisName("Power");

@@ -52,6 +52,8 @@
 #include <ras.h>
 #endif
 
+#include <algorithm>
+
 namespace
 {
     char const  COUNT_MAX   = 255u;

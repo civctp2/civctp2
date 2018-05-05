@@ -39,8 +39,8 @@ private:
 
 	ctp2_Button *m_closeButton;
 
-	std::auto_ptr<CauseAndEffectTab>	m_causeAndEffectTab;
-	std::auto_ptr<GovernmentTab>		m_governmentTab;
+	std::unique_ptr<CauseAndEffectTab>	m_causeAndEffectTab;
+	std::unique_ptr<GovernmentTab>		m_governmentTab;
 };
 
 extern DomesticManagementDialog *g_domesticManagementDialog;

@@ -82,7 +82,7 @@ RecordDescription * g_record = NULL;
 
 // located in ctpdb.y and ctpdb.l
 extern "C" int yyparse();
-extern "C" void yyset_in(FILE * input);
+extern "C" void yyrestart(FILE * input);
 extern "C" int s_done;
 extern "C" int g_line_number;
 extern "C" int g_generateRequirementWarnings;
@@ -123,7 +123,7 @@ int main(int argc, const char **argv)
 			printf("Coundn't open file: %s", outputDir);
 			exit(errorFound);
 		}
-		yyset_in(input);
+    yyrestart(input);
 		outputDir = ".";
 	}
 	db_set_output_dir(outputDir);

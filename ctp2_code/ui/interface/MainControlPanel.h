@@ -48,7 +48,7 @@
 // Library imports
 //----------------------------------------------------------------------------
 
-#include <memory>               // std::auto_ptr
+#include <memory>               // std::unique_ptr
 
 //----------------------------------------------------------------------------
 // Exported names
@@ -109,11 +109,11 @@ public:
 	static aui_ProgressBar* GetProgressBar();
 
 private:
-	std::auto_ptr<ControlTabPanel>  m_controlTabPanel;
-	std::auto_ptr<EndTurnButton>    m_endTurnButton;
-	std::auto_ptr<ShortcutPad>      m_shortcutPad;
-	std::auto_ptr<StatusBar>        m_statusBar;
-	std::auto_ptr<TurnYearStatus>   m_turnYearStatus;
+	std::unique_ptr<ControlTabPanel>  m_controlTabPanel;
+	std::unique_ptr<EndTurnButton>    m_endTurnButton;
+	std::unique_ptr<ShortcutPad>      m_shortcutPad;
+	std::unique_ptr<StatusBar>        m_statusBar;
+	std::unique_ptr<TurnYearStatus>   m_turnYearStatus;
 };
 
 extern MainControlPanel *g_mainControlPanel;
