@@ -684,7 +684,7 @@ void Datum::ExportInitialization(FILE *outfile)
 void Datum::ExportSerializationStoring(FILE *outfile){
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
-			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+			fprintf(outfile, "        // Free stringID not implemented\n");
 		}
 		else if(m_type == DATUM_STRUCT){
 			fprintf(outfile, "\n        {\n");
@@ -752,7 +752,7 @@ void Datum::ExportSerializationLoading(FILE *outfile)
 {
 	if(m_maxSize == k_MAX_SIZE_VARIABLE) {
 		if(m_type == DATUM_STRINGID){
-			fprintf(outfile, "        // Free stringID not implemented\n", m_name);
+			fprintf(outfile, "        // Free stringID not implemented\n");
 		}
 		else if(m_type == DATUM_STRUCT){
 			fprintf(outfile, "\n        {\n");
@@ -900,23 +900,23 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "%sfor (index = 0; index < m_num%s; ++index)\n", ind, m_name);
-			fprintf(outfile, "%s{\n");
+			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    delete m_%s[index];\n", ind, m_name);
-			fprintf(outfile, "%s}\n");
+			fprintf(outfile, "%s}\n", ind);
 			fprintf(outfile, "%sdelete [] m_%s;\n", ind, m_name);
 			fprintf(outfile, "%sm_%s = NULL;\n", ind, m_name);
 
 			fprintf(outfile, "%sif (rval.m_num%s > 0)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%s = new char * [rval.m_num%s];\n", ind, m_name, m_name);
-			fprintf(outfile, "%s}\n\n");
+			fprintf(outfile, "%s}\n\n", ind);
 
 			fprintf(outfile, "%s// copy string elements of %s[]\n", ind, m_name);
 			fprintf(outfile, "%sfor (index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
-			fprintf(outfile, "%s{\n");
+			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%s[index] = new char [strlen(rval.m_%s[index])+1];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s    strcpy(m_%s[index], rval.m_%s[index]);\n", ind, m_name, m_name);
-			fprintf(outfile, "%s}\n");
+			fprintf(outfile, "%s}\n", ind);
 			fprintf(outfile, "%sm_num%s = rval.m_num%s;\n\n", ind, m_name, m_name);
 			break;
 		}
@@ -1097,7 +1097,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 					fprintf(outfile, "    // replace array m_%s\n", m_name);
 					fprintf(outfile, "    if (m_num%s != rval.m_num%s)\n", m_name, m_name);
 					fprintf(outfile, "    {\n");
-					fprintf(outfile, "        delete [] m_%s;\n", m_name, m_name);
+					fprintf(outfile, "        delete [] m_%s;\n", m_name);
 					fprintf(outfile, "        m_%s = new %s [rval.m_num%s];\n", m_name, VarTypeString(), m_name);
 					fprintf(outfile, "    }\n");
 				}
