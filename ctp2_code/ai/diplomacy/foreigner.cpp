@@ -34,6 +34,8 @@
 #include "c3.h"
 #include "Foreigner.h"
 
+#include <functional>
+
 #include "player.h"
 #include "Army.h"
 #include "ArmyData.h"

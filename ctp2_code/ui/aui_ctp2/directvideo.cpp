@@ -28,7 +28,11 @@
 #include "aui_directsurface.h"
 #include "c3errors.h"
 #include "errors.h"
-#include "RefTime.h"
+//#include "RefTime.h"
+
+const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
+const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9
+const LONGLONG UNITS = (NANOSECONDS / 100);      // 10 ^ 7
 
 DirectVideo::DirectVideo()
 :

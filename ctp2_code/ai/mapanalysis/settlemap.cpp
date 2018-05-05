@@ -39,6 +39,8 @@
 #include "c3.h"
 #include "settlemap.h"
 
+#include <functional>
+
 #include "boundingrect.h"
 #include "Cell.h"
 #include "citydata.h"

@@ -67,7 +67,7 @@
 #include <amstream.h>
 #include <ddstream.h>
 #include <mmstream.h>
-#include <reftime.h>
+//#include <reftime.h>
 #endif // __AUI_USE_DIRECTMEDIA__
 
 #endif

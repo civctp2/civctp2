@@ -27,13 +27,15 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 #include "c3.h"
+
 #include "ns_wonders.h"
 
+#include <algorithm>
 #include "aui_stringtable.h"
 #include "StrDB.h"              // g_theStringDB
 #include "WonderRecord.h"       // g_theWonderDB
+
 
 ns_Wonders *    g_nsWonders = NULL;
 
@@ -43,7 +45,7 @@ ns_Wonders::ns_Wonders()
 {
 	Assert(g_theWonderDB->NumRecords() <= k_WONDERS_MAX);
     sint32      numWonders  =
-        std::min<sint32>(k_WONDERS_MAX, g_theWonderDB->NumRecords());
+        std::min(k_WONDERS_MAX, g_theWonderDB->NumRecords());
 
 	AUI_ERRCODE errcode     = AUI_ERRCODE_OK;
 	m_stringtable = new aui_StringTable( &errcode, numWonders );

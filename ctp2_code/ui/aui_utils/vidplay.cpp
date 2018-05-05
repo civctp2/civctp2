@@ -40,10 +40,16 @@
 
 #define STRSAFE_NO_DEPRECATE
 
-#include "streams.h"
+
+#include "vidplay.h"
+
+#include <crtdbg.h> 
+
+#include <algorithm>
 
 #include "mpconfig.h"
-#include "vidplay.h"
+
+#define DbgLog(_x_) 0
 
 //
 // CBaseVideoPlayer constructor
@@ -75,10 +81,10 @@ HRESULT CBaseVideoPlayer::GetInterfaces(HWND hWndApp)
 {
     HRESULT  hr ;
     hr = m_pGraph->QueryInterface(IID_IMediaControl, (LPVOID *)&m_pMC) ;
-    ASSERT(SUCCEEDED(hr) && m_pMC) ;
+    _ASSERT(SUCCEEDED(hr) && m_pMC) ;
 
     hr = m_pGraph->QueryInterface(IID_IMediaEventEx, (LPVOID *)&m_pME) ;
-    ASSERT(SUCCEEDED(hr) && m_pME) ;
+    _ASSERT(SUCCEEDED(hr) && m_pME) ;
 
     //
     // Also set up the event notification so that the main window gets
@@ -86,7 +92,7 @@ HRESULT CBaseVideoPlayer::GetInterfaces(HWND hWndApp)
     //
     hr = m_pME->SetNotifyWindow((OAHWND) hWndApp, WM_PLAY_EVENT,
         (ULONG)(LPVOID)m_pME) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
 
     m_eState = Stopped ;  // graph has been built
 
@@ -359,7 +365,7 @@ HRESULT CDVDPlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWSU
     GetInterfaces(hWndApp) ;
 
     hr = GetColorKeyInternal() ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
 
     return S_OK ;
 }
@@ -373,14 +379,14 @@ HRESULT CDVDPlayer::GetInterfaces(HWND hWndApp)
 
     HRESULT  hr ;
     hr = m_pDvdGB->GetFiltergraph(&m_pGraph) ;
-    ASSERT(SUCCEEDED(hr) && m_pGraph) ;
+    _ASSERT(SUCCEEDED(hr) && m_pGraph) ;
 
     // Now get the DVD-specific interfaces (though we don't use them in this app).
     hr = m_pDvdGB->GetDvdInterface(IID_IDvdControl, (LPVOID *)&m_pDvdC) ;
-    ASSERT(SUCCEEDED(hr) && m_pDvdC) ;
+    _ASSERT(SUCCEEDED(hr) && m_pDvdC) ;
 
     hr = m_pDvdGB->GetDvdInterface(IID_IDvdInfo, (LPVOID *)&m_pDvdI) ;
-    ASSERT(SUCCEEDED(hr) && m_pDvdI) ;
+    _ASSERT(SUCCEEDED(hr) && m_pDvdI) ;
 
     return CBaseVideoPlayer::GetInterfaces(hWndApp) ;  // get the standard interfaces
 }
@@ -410,7 +416,7 @@ HRESULT CDVDPlayer::ClearGraph()
 //
 HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM /* = NULL */)
 {
-    ASSERT(NULL == pOvM) ; // we don't need pOvM passed in
+    _ASSERT(NULL == pOvM) ; // we don't need pOvM passed in
 
     // Get color key from MixerPinConfig interface via IDvdGraphBuilder
     IMixerPinConfig2  *pMPC ;
@@ -419,7 +425,7 @@ HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM /* = NULL */)
     if (SUCCEEDED(hr))
     {
         hr = pMPC->GetColorKey(NULL, &dwColorKey) ;
-        ASSERT(SUCCEEDED(hr)) ;
+        _ASSERT(SUCCEEDED(hr)) ;
         SetColorKey(dwColorKey) ;
 
         //  Set mode to stretch - that way we don't fight the overlay
@@ -834,25 +840,25 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
 
     // Get the video renderer's (only) in pin
     hr = pVR->EnumPins(&pEnumPins) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
     hr = pEnumPins->Next(1, &pPinVR, &ul) ;
-    ASSERT(S_OK == hr  &&  1 == ul)  ;
+    _ASSERT(S_OK == hr  &&  1 == ul)  ;
     pPinVR->QueryDirection(&pd) ;
-    ASSERT(PINDIR_INPUT == pd) ;
+    _ASSERT(PINDIR_INPUT == pd) ;
     pEnumPins->Release() ;
 
     // Disconnect VR from upstream filter and put OvMixer in between them
     hr = pPinVR->ConnectedTo(&pPinConnectedTo) ;
-    ASSERT(SUCCEEDED(hr) && pPinConnectedTo) ;
+    _ASSERT(SUCCEEDED(hr) && pPinConnectedTo) ;
     hr = m_pGraph->Disconnect(pPinVR) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
     hr = m_pGraph->Disconnect(pPinConnectedTo) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
 
     // Now connect the upstream filter's out pin to OvM's in pin
     // (and remove Video Renderer from the graph).
     hr = pOvM->EnumPins(&pEnumPins) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
     int  iInConns  = 0 ;
     while (iInConns == 0  &&   // input pin not connected yet
         S_OK == pEnumPins->Next(1, &pPinOvM, &ul) && 1 == ul)  // pin left to try
@@ -863,7 +869,7 @@ HRESULT CFilePlayer::PutVideoThroughOvM(IBaseFilter *pOvM, IBaseFilter *pVR)
             if (0 == iInConns) // We want to connect only one input pin
             {
                 hr = m_pGraph->Connect(pPinConnectedTo, pPinOvM) ; // , NULL) ;  // direct??
-                ASSERT(SUCCEEDED(hr)) ;
+                _ASSERT(SUCCEEDED(hr)) ;
                 if (FAILED(hr))
                     DbgLog((LOG_ERROR, 0, TEXT("ERROR: m_pGraph->Connect() failed (Error 0x%lx)"), hr)) ;
                 else
@@ -993,11 +999,11 @@ HRESULT CFilePlayer::BuildGraph(HWND hWndApp, LPDIRECTDRAW pDDObj, LPDIRECTDRAWS
 
     // Get IDDrawExclModeVideo interface of the OvMixer and store it
     hr = pOvM->QueryInterface(IID_IDDrawExclModeVideo, (LPVOID *)&m_pDDXM) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
 
     // Get the color key to be used and store it
     hr = GetColorKeyInternal(pOvM) ;
-    ASSERT(SUCCEEDED(hr)) ;
+    _ASSERT(SUCCEEDED(hr)) ;
 
     pOvM->Release() ;  // done with it
 
@@ -1032,21 +1038,21 @@ HRESULT CFilePlayer::GetColorKeyInternal(IBaseFilter *pOvM)
     DWORD       dwColorKey ;
     IMixerPinConfig  *pMPC ;
     HRESULT  hr = pOvM->EnumPins(&pEnumPins) ;
-    ASSERT(pEnumPins) ;
+    _ASSERT(pEnumPins) ;
     while (S_OK == pEnumPins->Next(1, &pPin, &ul)  &&  1 == ul)  // try all pins
     {
         pPin->QueryDirection(&pd) ;
         if (PINDIR_INPUT == pd)  // only the 1st in pin
         {
             hr = pPin->QueryInterface(IID_IMixerPinConfig, (LPVOID *) &pMPC) ;
-            ASSERT(SUCCEEDED(hr) && pMPC) ;
+            _ASSERT(SUCCEEDED(hr) && pMPC) ;
             hr = pMPC->GetColorKey(NULL, &dwColorKey) ;  // just get the physical color
             SetColorKey(dwColorKey) ;
 
             //  Set mode to stretch - that way we don't fight the overlay
             //  mixer about the exact way to fix the aspect ratio
             pMPC->SetAspectRatioMode(AM_ARMODE_STRETCHED);
-            ASSERT(SUCCEEDED(hr)) ;
+            _ASSERT(SUCCEEDED(hr)) ;
             pMPC->Release() ;
             pPin->Release() ; // exiting early; release pin
             break ;   // we are done

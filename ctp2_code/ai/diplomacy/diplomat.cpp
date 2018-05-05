@@ -57,6 +57,8 @@
 #include "Diplomat.h"
 
 #include <algorithm>            // std::min
+#include <functional>
+
 #include "c3errors.h"
 #include "MoveFlags.h"
 #include "MapPoint.h"

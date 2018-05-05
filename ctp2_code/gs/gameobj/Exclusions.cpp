@@ -27,6 +27,9 @@
 
 #include "c3.h"
 #include "Exclusions.h"
+
+#include <algorithm>
+
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "civarchive.h"

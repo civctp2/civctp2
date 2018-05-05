@@ -34,7 +34,7 @@
 #include "GoodSpriteGroup.h"
 
 #include "c3errors.h"
-#include <memory>         // std::auto_ptr
+#include <memory>         // std::unique_ptr
 #include "tiffutils.h"
 #include "pixelutils.h"
 #include "primitives.h"
@@ -90,7 +90,7 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 
 void GoodSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -103,7 +103,7 @@ void GoodSpriteGroup::LoadBasic(MBCHAR const * filename)
 
 void GoodSpriteGroup::LoadFull(MBCHAR const * filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -116,7 +116,7 @@ void GoodSpriteGroup::LoadFull(MBCHAR const * filename)
 
 void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)

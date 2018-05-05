@@ -37,7 +37,7 @@
 #include "c3.h"                 // Pre-compiled header
 #include "UnitSpriteGroup.h"    // Own declarations: consistency check
 
-#include <memory>               // std::auto_ptr
+#include <memory>               // std::unique_ptr
 #include "tiffutils.h"
 #include "pixelutils.h"
 
@@ -251,7 +251,7 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 
 void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -267,7 +267,7 @@ void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
 
 void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -281,7 +281,7 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
 
 void UnitSpriteGroup::LoadFull(MBCHAR const * filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -294,7 +294,7 @@ void UnitSpriteGroup::LoadFull(MBCHAR const * filename)
 
 void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_UNIT, version_id, compression_mode)

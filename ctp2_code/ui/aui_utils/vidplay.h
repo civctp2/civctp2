@@ -47,9 +47,11 @@
 // Library imports
 //----------------------------------------------------------------------------
 
-#include <ddraw.h>          // LPDIRECTDRAW
 #include <string>           // std::basic_string
+
 #include <windows.h>        // Lots of definitions
+#include <ddraw.h>          // LPDIRECTDRAW
+#include <Dshow.h>
 
 //----------------------------------------------------------------------------
 // Exported names

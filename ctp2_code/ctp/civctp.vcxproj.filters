@@ -1,0 +1,4964 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="CTP">
+      <UniqueIdentifier>{6a334cab-e2bb-4aae-9c85-708754a34813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTP\ctp2_rsrc">
+      <UniqueIdentifier>{3ff62680-c40f-4624-a843-75a4c003fac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTP\ctp2_utils">
+      <UniqueIdentifier>{19a0b2e2-294f-459b-ba71-fdd4e7b76900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTP\debugtools">
+      <UniqueIdentifier>{76e5f27a-8ca4-409b-b2d8-68103f2210b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CTP\fingerprint">
+      <UniqueIdentifier>{6f09ea40-3a11-4986-8cc7-f45a76122671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx">
+      <UniqueIdentifier>{c96d7880-fc1f-4960-b251-31ee4c2b639c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\spritesys">
+      <UniqueIdentifier>{6fa99c63-be56-4eb6-9806-369850a0eb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\spritesys\Actors">
+      <UniqueIdentifier>{d839a63b-d049-4b88-ba72-218fbc8c5338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\spritesys\Sprites">
+      <UniqueIdentifier>{f7d5fb7e-f3c8-47a9-af6d-8c2991ebfe3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\tilesys">
+      <UniqueIdentifier>{d5a70fff-af14-4169-b4fc-af4e1fb80e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\tilesys\maputils">
+      <UniqueIdentifier>{e69b9289-4436-4126-a121-9eb117a7a474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\gfx_utils">
+      <UniqueIdentifier>{0e40ed21-ca40-4cf3-8989-8b2b6c0ed4f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gfx\layers">
+      <UniqueIdentifier>{5e9e8842-a53d-4fe9-b50c-ecd196c95835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs">
+      <UniqueIdentifier>{a097e3b8-5968-4885-b769-7351a9363f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\database">
+      <UniqueIdentifier>{b7151270-d082-4178-9e9b-b6c5e7fc213d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\gameobj">
+      <UniqueIdentifier>{294941c5-6964-4755-a2f0-a5a40340e5a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\utility">
+      <UniqueIdentifier>{0e5cd696-5ab1-4822-94f7-46937f3c7ce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\world">
+      <UniqueIdentifier>{cda21c9f-ea09-459e-9183-aac7e8c76c87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\fileio">
+      <UniqueIdentifier>{2321d5d0-b1e2-4710-88a2-1d58fd1f63ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\slic">
+      <UniqueIdentifier>{ae91a5e4-f743-44b3-86ea-4a1d3f984c99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\events">
+      <UniqueIdentifier>{39354d65-bb9c-4cf7-bf4c-eb9264295eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\newdb">
+      <UniqueIdentifier>{445ee479-a92d-48fe-ab3e-51a3a1e31207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gs\newdb\ai database">
+      <UniqueIdentifier>{6bef2d7d-f025-4921-8d3f-f2f688179b0c}</UniqueIdentifier>
+      <Extensions>*.cpp *.h</Extensions>
+    </Filter>
+    <Filter Include="gs\outcom">
+      <UniqueIdentifier>{7f4f1f49-fcd0-4301-ad45-a042eb8ead51}</UniqueIdentifier>
+      <Extensions>*.h *.cpp</Extensions>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{e18e2629-7488-4515-8d73-47e3892111f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\general">
+      <UniqueIdentifier>{b4f71bba-d651-49d2-a34b-e42d26907057}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\io">
+      <UniqueIdentifier>{8969f54a-7b55-4612-859b-9b5583300053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="robot">
+      <UniqueIdentifier>{c3d56a4e-855f-424e-a875-3b882f7b97b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="robot\utility No. 1">
+      <UniqueIdentifier>{92b2bac0-92dc-48f9-af41-727a1352c87f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="robot\pathing">
+      <UniqueIdentifier>{c875e57b-0431-425f-97e3-036707a0c459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="robot\aibackdoor">
+      <UniqueIdentifier>{27590229-5ab5-4318-88af-ad04c333e6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os">
+      <UniqueIdentifier>{441d752c-0636-43f9-a77b-0062998e2bee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os\include">
+      <UniqueIdentifier>{5ad61628-2bbc-44c8-a0de-80b8d33e5b06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{cbdd3579-8625-4cf6-931f-77f661d019ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_common">
+      <UniqueIdentifier>{20875675-1491-4fed-92a5-8a6028a8859e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_utils">
+      <UniqueIdentifier>{8bb62971-8221-4341-91fe-e61036386bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_directx">
+      <UniqueIdentifier>{52fb7d3b-b91f-4925-8397-f1bef4067617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_sdl">
+      <UniqueIdentifier>{af724a34-9634-45d2-bba1-c35c9bbb6eed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_ctp2">
+      <UniqueIdentifier>{2a8d4390-1362-4bf2-95df-036863d0325a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\aui_ctp2\Original">
+      <UniqueIdentifier>{7c1159e4-ff90-4efb-bcc1-24083966911f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ldl">
+      <UniqueIdentifier>{28c2ff5f-2fbf-4f2e-9e34-49253e55982c}</UniqueIdentifier>
+      <Extensions>.cpp .hpp .h</Extensions>
+    </Filter>
+    <Filter Include="ui\interface">
+      <UniqueIdentifier>{b175b476-16dc-40fb-aecc-5d5f5aebff6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_MainUI">
+      <UniqueIdentifier>{63491e93-d3da-4a3c-8bbf-5e72bdf24f0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_MainUI\ctp2_ControlPanel">
+      <UniqueIdentifier>{d436578f-f64a-457f-8543-a3677ef89c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs">
+      <UniqueIdentifier>{8b9c7fbd-4d37-4e91-9667-0988436b96a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\Etc">
+      <UniqueIdentifier>{a2e10ae0-09e8-42c6-9216-fa8cada94c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Utility">
+      <UniqueIdentifier>{92569018-890f-4ecf-93e9-30a51a3a5be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs">
+      <UniqueIdentifier>{5516060a-efad-41bc-a865-2c118f0da96c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\DomesticManagement">
+      <UniqueIdentifier>{584604f0-8c83-4721-ad59-3fa6c29850a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\City_Management">
+      <UniqueIdentifier>{2a854b1a-469a-4b22-ad97-99a23023ae76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\Science">
+      <UniqueIdentifier>{e0434321-c856-4f3a-9a64-b15e4904abf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\NationalManagement">
+      <UniqueIdentifier>{94f6dd96-165a-4282-b0e1-523d9a9a7b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\MessageBox">
+      <UniqueIdentifier>{1246c23a-47a0-474b-ac60-39352010dc98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\BattleView">
+      <UniqueIdentifier>{d6e6a1d8-bf7a-4568-900c-1988ec7c441e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\InformationDialog">
+      <UniqueIdentifier>{4063b629-89fa-4b80-9bef-87051dd76921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\interface\ctp2_Dialogs\ScienceVictory">
+      <UniqueIdentifier>{f5b1e1a8-3eac-472f-baab-8ed692e40705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\freetype No. 1">
+      <UniqueIdentifier>{a18212e1-fe89-49d1-a00a-048292cd7d89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\netshell">
+      <UniqueIdentifier>{7cb76c37-0687-44ff-95e3-17ea5d74c8bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\slic_debug">
+      <UniqueIdentifier>{1f26a00f-ce11-4d00-9e0a-be6905186d88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{16afcc70-9e0f-4a31-aeab-1a40897b23c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai">
+      <UniqueIdentifier>{6a73896e-901f-4b55-ac10-b4d7bd20a3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\Diplomacy">
+      <UniqueIdentifier>{f2549042-56f4-4b90-8a4d-fa5e352af540}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\Diplomacy\EventHandlers">
+      <UniqueIdentifier>{28a8331e-ff9b-4ee9-b607-abc0206ffba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\strategy">
+      <UniqueIdentifier>{66e27ac6-8022-4101-8c8e-7f3b125344cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\strategy\scheduler">
+      <UniqueIdentifier>{efa60f0c-5263-42d8-884d-458e63e6b22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\strategy\goals">
+      <UniqueIdentifier>{1cccb6f6-7dec-45da-aee6-b1bb8c21b2d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\strategy\squads">
+      <UniqueIdentifier>{62981059-b47d-4b8e-a8e0-9e0b8c103cda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\strategy\agents">
+      <UniqueIdentifier>{eb399ffd-e3aa-4ae5-a38c-411f07160d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ai\MapAnalysis">
+      <UniqueIdentifier>{2f5916ad-df12-458a-9a83-47005a5cbb32}</UniqueIdentifier>
+      <Extensions>*.cpp *.h</Extensions>
+    </Filter>
+    <Filter Include="ai\CityManagement">
+      <UniqueIdentifier>{f41ea19c-c1ac-4abf-986d-f79965e53119}</UniqueIdentifier>
+      <Extensions>*.cpp *.h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ctp2_rsrc\civ3.rc">
+      <Filter>CTP\ctp2_rsrc</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ctp2_rsrc\resource.h">
+      <Filter>CTP\ctp2_rsrc</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\appstrings.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\AvlTree.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\BitMask.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3cmdline.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3cpu.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3debug.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3debugstl.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3errors.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\c3files.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\cheatkey.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\ctpregistry.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\ddhelp.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\minmax.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\netconsole.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\PointerList.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ctp2_utils\tracklen.h">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\breakpoint.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\debug.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\debugassert.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\debugcallstack.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\debugexception.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\debugmemory.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\log.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\log_on.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="debugtools\Timer.h">
+      <Filter>CTP\debugtools</Filter>
+    </ClInclude>
+    <ClInclude Include="fingerprint\ctp_finger.h">
+      <Filter>CTP\fingerprint</Filter>
+    </ClInclude>
+    <ClInclude Include="fingerprint\Shroud.h">
+      <Filter>CTP\fingerprint</Filter>
+    </ClInclude>
+    <ClInclude Include="fingerprint\Verify.h">
+      <Filter>CTP\fingerprint</Filter>
+    </ClInclude>
+    <ClInclude Include="c3.h">
+      <Filter>CTP</Filter>
+    </ClInclude>
+    <ClInclude Include="c3types.h">
+      <Filter>CTP</Filter>
+    </ClInclude>
+    <ClInclude Include="civ3_main.h">
+      <Filter>CTP</Filter>
+    </ClInclude>
+    <ClInclude Include="civapp.h">
+      <Filter>CTP</Filter>
+    </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>CTP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Action.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Actor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\ActorPath.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Anim.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\BattleViewActor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\EffectActor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\GoodActor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\TradeActor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\UnitActor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\workeractor.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\CitySpriteGroup.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\EffectSpriteGroup.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\FacedSprite.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\FacedSpriteWshadow.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\GoodSpriteGroup.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Sprite.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\SpriteFile.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\SpriteGroup.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\SpriteGroupList.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\SpriteList.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\SpriteState.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\spriteutils.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\UnitSpriteGroup.h">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Director.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\DirectorActions.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\directorevent.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\screenmanager.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\maputils.h">
+      <Filter>gfx\tilesys\maputils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\BaseTile.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\resourcemap.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\tiledmap.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\TileDrawRoad.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\TileInfo.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\TileSet.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\tileutils.h">
+      <Filter>gfx\tilesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\arproces.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\colorset.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\gfx_options.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\pixelutils.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\rimutils.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\targautils.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\tiffutils.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\videoutils.h">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\layers\citylayer.h">
+      <Filter>gfx\layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\gfx_utils\Queue.h">
+      <Filter>gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\DB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\FilenameDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\highscoredb.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\MovieDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\PlayListDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\profileDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\Rec.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\StrDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\StrRec.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\thronedb.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\UVDB.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\database\UVRecord.h">
+      <Filter>gs\database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\AchievementTracker.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Advances.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\advanceutil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Agreement.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\AgreementData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\AgreementPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Army.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\ArmyData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\ArmyEvent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\ArmyPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Barbarians.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\BldQue.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\buildingutil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CityData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CityEvent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CityInfluenceIterator.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CityRadius.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Civilisation.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CivilisationData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CivilisationPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\combatevent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CreateUnit.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CriticalMessagesPrefs.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\CTP2Combat.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Diffcly.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Diplomacy_Log.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\DiplomacyOffer.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\DiplomaticRequest.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\DiplomaticRequestData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\DiplomaticRequestPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Events.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\EventTracker.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Exclusions.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\FeatTracker.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\GaiaController.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\GameObj.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\GameOver.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\GameSettings.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Gold.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\GoodyHuts.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Happy.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\ID.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\improvementevent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\installation.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\installationdata.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\installationpool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\installationtree.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\MaterialPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Message.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\MessageData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\MessagePool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\ObjPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Order.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Player.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\PlayerEvent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\PlayHap.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Pollution.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\PollutionConst.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Readiness.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Regard.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Resources.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Sci.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Score.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Strengths.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TaxRate.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\terrainutil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TerrImprove.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TerrImproveData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TerrImprovePool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TopTen.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeBids.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\tradeevent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeOffer.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeOfferData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeOfferPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradePool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeRoute.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\TradeRouteData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\tradeutil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Unit.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\UnitData.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\UnitEvent.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\UnitPool.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\UnitUtil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Vision.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\WonderTracker.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\wonderutil.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\Wormhole.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\gameobj\XY_Coordinates.h">
+      <Filter>gs\gameobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\AgreementDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\Checksum.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\CivDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\clock.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\DataCheck.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\DiplDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\ErrMsg.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\gameinit.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\Globals.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\MapFile.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\MsgDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\NewTurnCount.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\PQueue.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\QuadTree.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\RandGen.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\SimpleDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\StringUtils.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\TradeDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\TurnCnt.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\TurnCntEvent.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\utility\UnitDynArr.h">
+      <Filter>gs\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\Cell.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\CellUnitList.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\MapPoint.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\StartingPosition.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\UnseenCell.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\UnseenCellQuadTree.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\World.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\WorldDistance.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\worldevent.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\world\worldutils.h">
+      <Filter>gs\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\CivPaths.h">
+      <Filter>gs\fileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\CivScenarios.h">
+      <Filter>gs\fileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\GameFile.h">
+      <Filter>gs\fileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\prjfile.h">
+      <Filter>gs\fileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\fileio\Token.h">
+      <Filter>gs\fileio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\QuickSlic.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\sc.tab.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicArray.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicBuiltin.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicButton.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\sliccmd.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicConditional.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicConst.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicContext.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicDBConduit.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicEngine.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicError.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicEyePoint.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicFrame.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicFunc.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\slicfuncai.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\slicif.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\slicif_sym.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicModFuncEnum.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicModFunction.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicNamedSymbol.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicObject.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicRecord.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicSegment.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicStack.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicStruct.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicSymbol.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\SlicSymTab.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\StringHash.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\y.tab.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEvent.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventArgList.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventArgument.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventDescription.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventHook.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventManager.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\events\GameEventTypes.h">
+      <Filter>gs\events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\AdvanceListRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\BuildingBuildListRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\BuildListSequenceRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DiplomacyRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\GoalRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\ImprovementListRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\PersonalityRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\StrategyRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\UnitBuildListRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\WonderBuildListRecord.h">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\AdvanceBranchRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\AdvanceRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\AgeCityStyleRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\AgeRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\BitArray.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\BuildingRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CitySizeRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CityStyleRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CivilisationRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\ConceptRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\ConstRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CTPDatabase.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CTPRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\CultureRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DBLexer.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DBTokens.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DifficultyRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DiplomacyProposalRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\DiplomacyThreatRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\EndGameObjectRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\FeatRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\GlobalWarmingRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\GovernmentRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\IconRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\LeaderRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\MapIconRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\MapRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\OrderRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\PollutionRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\PopRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\ReligionRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\ResourceRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\RiskRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\SoundRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\SpecialAttackInfoRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\SpecialEffectRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\SpriteRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\TerrainImprovementRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\TerrainRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\UnitpromotionRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\UnitRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\WonderMovieRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\newdb\WonderRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\outcom\AICause.h">
+      <Filter>gs\outcom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\outcom\C3Rand.h">
+      <Filter>gs\outcom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\outcom\Ic3CivArchive.h">
+      <Filter>gs\outcom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\outcom\IC3Rand.h">
+      <Filter>gs\outcom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\chatlist.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_achievement.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_action.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_agreement.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_army.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_cell.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_chat.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_cheat.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_city.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_civ.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_crc.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_diff.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_diplomacy.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_endgame.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_exclusions.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_feat.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_gameobj.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_guid.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_happy.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_hash.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_info.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_installation.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_keys.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_message.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_order.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_packet.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_player.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_pollution.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_rand.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_ready.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_report.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_research.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_strengths.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_terrain.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_tradeoffer.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_traderoute.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_unit.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_vision.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_wonder.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\net_world.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\network.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\general\networkevent.h">
+      <Filter>net\general</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_anet.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_array.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_debug.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_error.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_io.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_list.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_thread.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_types.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\net\io\net_util.h">
+      <Filter>net\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\utility\RoboInit.h">
+      <Filter>robot\utility No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\A_Star_Heuristic_Cost.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\Astar.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\AstarPnt.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\AVLHeap.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\CityAstar.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\Path.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\RobotAstar2.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\TradeAstar.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\pathing\UnitAstar.h">
+      <Filter>robot\pathing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\AVL.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\Bit_Table.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\BSet.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\civarchive.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\common.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\DynArr.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\list_array.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\pool.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\priorityqueue.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\sdl_endian.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\robot\aibackdoor\semi_dynamic_array.h">
+      <Filter>robot\aibackdoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\os\include\config_win32.h">
+      <Filter>os\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\os\include\ctp2_config.h">
+      <Filter>os\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\os\include\ctp2_inttypes.h">
+      <Filter>os\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_action.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_animate.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_audiomanager.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_base.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_bitmapfont.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_blitter.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_button.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_control.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_cursor.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_dimension.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_dirtylist.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_dragdropwindow.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_dropdown.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_Factory.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_font.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_gamespecific.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_header.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_hypertextbase.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_hypertextbox.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_image.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_imagebase.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_imagelist.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_input.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_item.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_joystick.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_keyboard.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_ldl.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_listbox.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_memmap.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_mouse.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_movie.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_moviebutton.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_moviemanager.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_music.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_pixel.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_progressbar.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_radio.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_ranger.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_rectangle.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_region.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_resource.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_screen.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_shell.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_sound.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_soundbase.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_static.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_stringtable.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_surface.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_switch.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_switchgroup.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_tab.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_tabgroup.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_textbase.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_textbox.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_textfield.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_thumb.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_tipwindow.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_ui.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_undo.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_uniqueid.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_win.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\aui_window.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\auicfg.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\auidebug.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\auitypes.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\dxver.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\tech_memmap.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\tech_memory.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_common\tech_wllist.h">
+      <Filter>ui\aui_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_utils\primitives.h">
+      <Filter>ui\aui_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_utils\textutils.h">
+      <Filter>ui\aui_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_utils\vidplay.h">
+      <Filter>ui\aui_utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directaudiomanager.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directblitter.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directinput.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directjoystick.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directkeyboard.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directmouse.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directmovie.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directmoviemanager.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directsound.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directsurface.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directui.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_directx\aui_directx.h">
+      <Filter>ui\aui_directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdl.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlinput.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdljoystick.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlkeyboard.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlmouse.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlsound.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlsurface.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\background.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\battleorderbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\battleorderboxactions.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\bevellesswindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_button.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_checkbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_coloredstatic.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_coloredswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_coloriconbutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_dropdown.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_fancywindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_header.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_headerswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_hypertextbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_hypertipwindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_icon.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_image.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_listbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_listitem.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_popupwindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_radio.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_ranger.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_slidometer.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_static.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_switch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_thumb.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_updateaction.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3_utilitydialogbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3blitter.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3dropdown.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3fancywindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3imageformats.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3listbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3memmap.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3scroller.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3slider.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3spinner.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3textfield.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3thumb.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3ui.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3window.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\c3windows.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\chart.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\checkbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\cityinventorylistbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\coloriconbutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\coloriconswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\controlsheet.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\directvideo.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\grabitem.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\icon.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\iconbutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\iconswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\icontab.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\InfoBar.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\iteminfo.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\keyboardhandler.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\keymap.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\keypress.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\linegraph.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\pattern.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\patternbase.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\picture.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\picturebutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\pictureswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\picturetab.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\radarmap.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\radiogroup.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\SelItem.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\SelItemEvent.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\staticpicture.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\statictextitem.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\statuswindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\textbox.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\textbutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\textradio.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\textswitch.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\texttab.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\thermometer.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\thronecontrol.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\thumbnailmap.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\tilecontrol.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\tipwindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\unittabbutton.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\videowindow.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\tilesys\workmap.h">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_button.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_commandline.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_dropdown.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_hypertextbox.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_listbox.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_listitem.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_Menu.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_menubar.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_MenuButton.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_spinner.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_static.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_Switch.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_Tab.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_TabButton.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_TabGroup.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_textbuffer.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_textfield.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_ctp2\ctp2_Window.h">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl.h">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl.tab.h">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl_attr.hpp">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl_data.hpp">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl_file.hpp">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldl_memmap.h">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\ldl\ldlif.h">
+      <Filter>ui\ldl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\CityControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\DomesticControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\MessageControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\TilesControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\UnitControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ControlTabPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\EndTurnButton.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\MainControlPanel.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ShortcutPad.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\StatusBar.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\TurnYearStatus.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ZoomPad.h">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\controlpanelwindow.h">
+      <Filter>ui\interface\ctp2_MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\interfaceevent.h">
+      <Filter>ui\interface\ctp2_MainUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\agesscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ancientwindows.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\armymanagerwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Ui\interface\AttractWindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\backgroundwin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\c3dialogs.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ChatBox.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\cityespionage.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\citymanager.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\creditsscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\CursorManager.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\custommapscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\debugwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\DiplomacyDetails.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\diplomacywindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\dipwizard.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\editqueue.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\FileDialog.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\gameplayoptions.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\graphicsresscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\graphicsscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\greatlibrary.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\greatlibrarywindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\helptile.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\hotseatlist.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\infowin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\initialplaywindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\intelligencewindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Ui\interface\IntroMovieWin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Ui\interface\IntroMovieWindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\km_screen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\loadsavemapwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\loadsavewindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\MapCopyBuffer.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageactions.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageadvice.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageeyepoint.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageiconbutton.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageiconwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messagelist.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messagemodal.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messageresponse.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messagewin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\messagewindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\musicscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\musictrackscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\optionswindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\optionwarningscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ProfileEdit.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\progresswindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\radarwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\scenarioeditor.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\scenariowindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\sciencewin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\scorewarn.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\screenutils.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\soundscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\SpecialAttackWindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\splash.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamediffscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamemapshapescreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamemapsizescreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgameplayersscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamerandomcustomscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamerulesscreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgametribescreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spnewgamewindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\spriteeditor.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\statictextbox.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\statswindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\String_Search.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\Text_Hasher.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\tileimptracker.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\trademanager.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\tutorialwin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\UIUtils.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\unitmanager.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\victorymoviewin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\VictoryMovieWindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\victorywin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\victorywindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\wondermoviewin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\WonderMovieWindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\workwin.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\workwindow.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\InterfaceEventRegister.h">
+      <Filter>ui\interface\ctp2_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\CauseAndEffectTab.h">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\DomesticManagementDialog.h">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\GovernmentTab.h">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\citywindow.h">
+      <Filter>ui\interface\ctp2_Dialogs\City_Management</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\sci_advancescreen.h">
+      <Filter>ui\interface\ctp2_Dialogs\Science</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\ScienceManagementDialog.h">
+      <Filter>ui\interface\ctp2_Dialogs\Science</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\NationalManagementDialog.h">
+      <Filter>ui\interface\ctp2_Dialogs\NationalManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\MessageBoxDialog.h">
+      <Filter>ui\interface\ctp2_Dialogs\MessageBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\Battle.h">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\BattleEvent.h">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\BattleView.h">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\BattleViewWindow.h">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\infowindow.h">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\rankingtab.h">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\scoretab.h">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\timelinetab.h">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\WonderTab.h">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\interface\sciencevictorydialog.h">
+      <Filter>ui\interface\ctp2_Dialogs\ScienceVictory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\freetype\freetype.h">
+      <Filter>ui\freetype No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\freetype\fterrid.h">
+      <Filter>ui\freetype No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\freetype\ftnameid.h">
+      <Filter>ui\freetype No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\allinonewindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\connectionselectwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\dialogboxwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\gameselectwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\lobbychangewindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\lobbywindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\netfunc.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\netshell.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\netshell_game.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_accessor.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_aiplayer.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_aiplayersetup.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_chatbox.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_civlistbox.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_customlistbox.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_game.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_gamesetup.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_gplayer.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_header.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_headerswitch.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_improvements.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_item.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_listbox.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_lobby.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_object.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_player.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_playersetup.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_rplayer.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_server.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_session.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_spinner.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_string.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_transport.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_tribes.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_units.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_window.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\ns_wonders.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\passwordscreen.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\playereditwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\playerselectwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\netshell\serverselectwindow.h">
+      <Filter>ui\netshell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\slic_debug\segmentlist.h">
+      <Filter>ui\slic_debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\slic_debug\sourcelist.h">
+      <Filter>ui\slic_debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\slic_debug\watchlist.h">
+      <Filter>ui\slic_debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sound\civsound.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sound\GameSounds.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libs\miles\MSS.H">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sound\soundevent.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sound\SoundManager.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\CounterResponseEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\DStateEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\MotivationEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\NProposalEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\ProposalResponseEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\ReactEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\RegardEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\RejectResponseEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\ResponseEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\SStateEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\ThreatResponseEvent.h">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\AgreementMatrix.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\diplomacyutil.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\Diplomat.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\DiplomatTypes.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\Foreigner.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\diplomacy\ProposalAnalysis.h">
+      <Filter>ai\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Scheduler\Goal_And_Squad_Types.h">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Scheduler\Plan.h">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Scheduler\Scheduler.h">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Scheduler\scheduler_types.h">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Goals\Goal.h">
+      <Filter>ai\strategy\goals</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Squads\squad_strength.h">
+      <Filter>ai\strategy\squads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\strategy\Agents\agent.h">
+      <Filter>ai\strategy\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\mapanalysis\BoundingRect.h">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\mapanalysis\mapanalysis.h">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\mapanalysis\mapgrid.h">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\mapanalysis\SettleMap.h">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\CityManagement\Governor.h">
+      <Filter>ai\CityManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\CtpAi.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ai\CtpAiDebug.h">
+      <Filter>ai</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ctp2_utils\appstrings.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3cmdline.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3cpu.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3debug.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3errors.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3files.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\c3mem.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\cheatkey.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\ctpregistry.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\ddhelp.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\netconsole.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ctp2_utils\tracklen.cpp">
+      <Filter>CTP\ctp2_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\debug.c">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\debugassert.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\debugcallstack.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\debugexception.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\debugmemory.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\log.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtools\Timer.cpp">
+      <Filter>CTP\debugtools</Filter>
+    </ClCompile>
+    <ClCompile Include="fingerprint\ctp_finger.cpp">
+      <Filter>CTP\fingerprint</Filter>
+    </ClCompile>
+    <ClCompile Include="fingerprint\Endecode.c">
+      <Filter>CTP\fingerprint</Filter>
+    </ClCompile>
+    <ClCompile Include="fingerprint\Shroud.c">
+      <Filter>CTP\fingerprint</Filter>
+    </ClCompile>
+    <ClCompile Include="fingerprint\Verify.c">
+      <Filter>CTP\fingerprint</Filter>
+    </ClCompile>
+    <ClCompile Include="c3.cpp">
+      <Filter>CTP</Filter>
+    </ClCompile>
+    <ClCompile Include="civ3_main.cpp">
+      <Filter>CTP</Filter>
+    </ClCompile>
+    <ClCompile Include="civapp.cpp">
+      <Filter>CTP</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>CTP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\action.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\Actor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\ActorPath.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\Anim.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\BattleViewActor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\EffectActor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\GoodActor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\TradeActor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\UnitActor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\workeractor.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\CitySpriteGroup.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\EffectSpriteGroup.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\FacedSprite.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\FacedSpriteWshadow.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\GoodSpriteGroup.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\Sprite.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteFile.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteGroup.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteGroupList.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteHitTest.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteList.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\spritelow555.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\spritelow565.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\SpriteState.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\spriteutils.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\UnitSpriteGroup.cpp">
+      <Filter>gfx\spritesys\Sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\Director.cpp">
+      <Filter>gfx\spritesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\DirectorActions.cpp">
+      <Filter>gfx\spritesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\directorevent.cpp">
+      <Filter>gfx\spritesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\screenmanager.cpp">
+      <Filter>gfx\spritesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\maputils.cpp">
+      <Filter>gfx\tilesys\maputils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\BaseTile.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\resourcemap.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\TiledMap.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\tiledraw.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\TileDrawRoad.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\TileHighlight.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\TileInfo.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\TileSet.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\tileutils.cpp">
+      <Filter>gfx\tilesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\arproces.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\ColorSet.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\gfx_options.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\pixelutils.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\targautils.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\tiffutils.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\gfx_utils\videoutils.cpp">
+      <Filter>gfx\gfx_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\layers\citylayer.cpp">
+      <Filter>gfx\layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\DB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\FilenameDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\highscoredb.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\MovieDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\PlayListDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\profileDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\Rec.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\StrDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\StrRec.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\thronedb.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\UVDB.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\database\UVRecord.cpp">
+      <Filter>gs\database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\AchievementTracker.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Advances.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\advanceutil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Agreement.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\AgreementData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\AgreementPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Army.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\ArmyData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\ArmyEvent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\ArmyPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Barbarians.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\BldQue.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\buildingutil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CityData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CityEvent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CityInfluenceIterator.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CityRadius.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Civilisation.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CivilisationData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CivilisationPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\combatevent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CriticalMessagesPrefs.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\CTP2Combat.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Diffcly.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Diplomacy_Log.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\DiplomaticRequest.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\DiplomaticRequestData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\DiplomaticRequestPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Events.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\EventTracker.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Exclusions.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\FeatTracker.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\GaiaController.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\GameObj.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\GameSettings.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Gold.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\GoodyHuts.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\GSLogs.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Happy.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\HappyTracker.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\ID.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\improvementevent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\installation.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\installationdata.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\installationpool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\MaterialPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Message.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\MessageData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\MessagePool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\ObjPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Order.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Player.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\PlayerEvent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\PlayerTurn.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\PlayHap.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Pollution.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Readiness.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Regard.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Resources.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Sci.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Score.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Strengths.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TaxRate.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\terrainutil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TerrImprove.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TerrImproveData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TerrImprovePool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TopTen.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeBids.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\tradeevent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeOffer.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeOfferData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeOfferPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradePool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeRoute.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\TradeRouteData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\tradeutil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Unit.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\UnitData.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\UnitEvent.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\UnitPool.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\UnitUtil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Vision.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\WonderTracker.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\wonderutil.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\Wormhole.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\gameobj\XY_Coordinates.cpp">
+      <Filter>gs\gameobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\AgreementDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\checksum.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\CivDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\clock.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\DataCheck.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\DiplDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\ErrMsg.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\gameinit.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\MapFile.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\MsgDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\NewTurnCount.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\RandGen.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\StringUtils.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\TradeDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\TurnCnt.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\TurnCntEvent.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\utility\UnitDynArr.cpp">
+      <Filter>gs\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\Cell.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\CellUnitList.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\MapPoint.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\UnseenCell.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WldGen.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WorldDistance.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\worldevent.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\worldutils.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrldCity.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrldCont.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrldPoll.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrlEnv.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrlImprove.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\world\WrlUnit.cpp">
+      <Filter>gs\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\fileio\CivPaths.cpp">
+      <Filter>gs\fileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\fileio\CivScenarios.cpp">
+      <Filter>gs\fileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\fileio\GameFile.cpp">
+      <Filter>gs\fileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\fileio\prjfile.cpp">
+      <Filter>gs\fileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\fileio\Token.cpp">
+      <Filter>gs\fileio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\lex.sc.c">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\lex.yy.c">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\QuickSlic.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\sc.tab.c">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicArray.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicBuiltin.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicButton.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\sliccmd.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicConditional.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicConst.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicContext.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicEngine.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicEyePoint.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicFrame.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicFunc.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\slicfuncai.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\slicif.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\sliciffile.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicModFunction.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicNamedSymbol.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\slicobject.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicRecord.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicSegment.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicStack.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicStruct.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicSymbol.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\SlicSymTab.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\slic\y.tab.c">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEvent.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEventArgList.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEventArgument.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEventDescription.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEventHook.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\events\GameEventManager.cpp">
+      <Filter>gs\events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\AdvanceListRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\BuildingBuildListRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\BuildListSequenceRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\DiplomacyRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\GoalRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\ImprovementListRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\PersonalityRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\StrategyRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\UnitBuildListRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\WonderBuildListRecord.cpp">
+      <Filter>gs\newdb\ai database</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\AdvanceBranchRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\AdvanceRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\AgeCityStyleRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\AgeRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\BuildingRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CitySizeRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CityStyleRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CivilisationRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\ConceptRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\ConstRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CTPDatabase.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CTPRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\CultureRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\DBLexer.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\DifficultyRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\DiplomacyProposalRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\DiplomacyThreatRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\EndGameObjectRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\FeatRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\GlobalWarmingRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\GovernmentRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\IconRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\LeaderRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\lex.dbl.c">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\MapIconRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\MapRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\OrderRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\PollutionRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\PopRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\ReligionRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\ResourceRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\RiskRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\SoundRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\SpecialAttackInfoRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\SpecialEffectRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\SpriteRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\TerrainImprovementRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\TerrainRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\UnitpromotionRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\UnitRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\WonderMovieRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\WonderRecord.cpp">
+      <Filter>gs\newdb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\outcom\c3rand.cpp">
+      <Filter>gs\outcom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_achievement.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_action.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_agreement.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_army.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_cell.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_chat.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_cheat.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_city.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_civ.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_crc.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_diff.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_diplomacy.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_endgame.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_exclusions.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_feat.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_gameobj.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_gamesettings.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_guid.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_happy.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_info.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_installation.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_keys.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_message.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_order.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_player.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_pollution.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_rand.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_ready.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_report.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_research.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_strengths.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_terrain.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_tradeoffer.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_traderoute.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_unit.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_vision.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_wonder.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\net_world.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\network.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\general\networkevent.cpp">
+      <Filter>net\general</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\io\net_anet.cpp">
+      <Filter>net\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\io\net_debug.cpp">
+      <Filter>net\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\io\net_io.cpp">
+      <Filter>net\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\net\io\net_thread.cpp">
+      <Filter>net\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\utility\RandTest.cpp">
+      <Filter>robot\utility No. 1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\utility\RoboInit.cpp">
+      <Filter>robot\utility No. 1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\A_Star_Heuristic_Cost.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\Astar.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\AstarPnt.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\AVLHeap.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\CityAstar.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\Path.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\RobotAstar2.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\TradeAstar.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\pathing\UnitAstar.cpp">
+      <Filter>robot\pathing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\aibackdoor\BSet.cpp">
+      <Filter>robot\aibackdoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\robot\aibackdoor\civarchive.cpp">
+      <Filter>robot\aibackdoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_action.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_animate.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_audiomanager.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_base.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_bitmapfont.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_blitter.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_button.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_control.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_cursor.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_dimension.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_dirtylist.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_dragdropwindow.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_dropdown.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_Factory.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_font.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_gamespecific.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_header.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_hypertextbase.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_hypertextbox.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_image.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_imagebase.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_imagelist.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_input.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_item.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_joystick.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_keyboard.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_ldl.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_listbox.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_memmap.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_mouse.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_movie.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_moviebutton.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_moviemanager.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_music.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_pixel.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_progressbar.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_radio.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_ranger.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_rectangle.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_region.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_regiondispatch.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_screen.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_shell.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_sound.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_soundbase.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_static.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_stringtable.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_surface.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_switch.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_switchgroup.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_tab.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_tabgroup.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_textbase.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_textbox.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_textfield.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_thumb.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_tipwindow.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_ui.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_undo.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_uniqueid.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_win.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\aui_window.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_common\tech_memmap.cpp">
+      <Filter>ui\aui_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_utils\primitives.cpp">
+      <Filter>ui\aui_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_utils\textutils.cpp">
+      <Filter>ui\aui_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_utils\vidplay.cpp">
+      <Filter>ui\aui_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directaudiomanager.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directblitter.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directinput.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directjoystick.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directkeyboard.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directmouse.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directmovie.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directmoviemanager.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directsound.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directsurface.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directui.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_directx\aui_directx.cpp">
+      <Filter>ui\aui_directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdl.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlinput.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdljoystick.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlkeyboard.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlmouse.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlsound.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlsurface.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\background.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\battleorderbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\battleorderboxactions.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\bevellesswindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_button.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_checkbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_coloredstatic.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_coloredswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_coloriconbutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_dropdown.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_fancywindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_header.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_headerswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_hypertextbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_hypertipwindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_icon.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_image.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_listbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_listitem.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_popupwindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_radio.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_ranger.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_slidometer.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_static.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_switch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_thumb.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_updateaction.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3_utilitydialogbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3blitter.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3dropdown.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3fancywindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3imageformats.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3listbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3memmap.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3scroller.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3slider.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3spinner.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3textfield.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3thumb.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3ui.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3window.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\c3windows.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\chart.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\checkbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\cityinventorylistbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\coloriconbutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\coloriconswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\controlsheet.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\directvideo.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\grabitem.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\icon.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\iconbutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\iconswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\icontab.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\InfoBar.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\iteminfo.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\keymap.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\keypress.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\linegraph.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\pattern.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\patternbase.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\picture.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\picturebutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\pictureswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\picturetab.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\radarmap.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\radiogroup.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\SelItem.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\SelItemClick.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\SelItemEvent.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\staticpicture.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\statictextitem.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\statuswindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\textbox.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\textbutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\textradio.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\textswitch.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\texttab.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\thermometer.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\thronecontrol.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\thumbnailmap.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\tilecontrol.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\tipwindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\unittabbutton.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\videowindow.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\tilesys\workmap.cpp">
+      <Filter>ui\aui_ctp2\Original</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_button.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_commandline.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_dropdown.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_hypertextbox.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_listbox.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_listitem.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_Menu.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_menubar.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_MenuButton.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_spinner.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_static.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_Switch.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_Tab.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_TabButton.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_TabGroup.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_textbuffer.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_textfield.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_ctp2\ctp2_Window.cpp">
+      <Filter>ui\aui_ctp2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl.tab.c">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl_attr.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl_data.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl_data_info.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl_file.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldl_memmap.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\ldlif.cpp">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\ldl\lex.ldl.c">
+      <Filter>ui\ldl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\CityControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\DomesticControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\MessageControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\TilesControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\UnitControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel\ctp2_ControlPanelTabs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ControlTabPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\EndTurnButton.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\MainControlPanel.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ShortcutPad.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\StatusBar.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\TurnYearStatus.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ZoomPad.cpp">
+      <Filter>ui\interface\ctp2_MainUI\ctp2_ControlPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\controlpanelwindow.cpp">
+      <Filter>ui\interface\ctp2_MainUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\interfaceevent.cpp">
+      <Filter>ui\interface\ctp2_MainUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\agesscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ancientwindows.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\armymanagerwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ui\interface\AttractWindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\backgroundwin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\c3dialogs.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ChatBox.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\CityEspionage.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\citymanager.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\creditsscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\CursorManager.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\custommapscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\debugwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\DiplomacyDetails.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\diplomacywindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\dipwizard.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\editqueue.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\FileDialog.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\gameplayoptions.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\graphicsresscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\graphicsscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\greatlibrary.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\greatlibrary_util.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\greatlibrarywindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\helptile.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\hotseatlist.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\infowin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\initialplayscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\initialplaywindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\intelligencewindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ui\interface\IntroMovieWin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ui\interface\IntroMovieWindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\km_screen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\loadsavemapscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\loadsavemapwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\loadsavescreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\loadsavewindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\MapCopyBuffer.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageactions.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageadvice.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageeyepoint.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageiconbutton.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageiconwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messagelist.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messagemodal.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messageresponse.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messagewin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\messagewindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\musicscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\musictrackscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\optionsscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\optionswindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\optionwarningscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ProfileEdit.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\progresswindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\radarwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\scenarioeditor.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\scenarioscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\scenariowindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\sciencewin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\scorewarn.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\screenutils.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\soundscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\SpecialAttackWindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\splash.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamediffscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamemapshapescreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamemapsizescreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgameplayersscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamerandomcustomscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamerulesscreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spNewGameScreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgametribescreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spnewgamewindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\spriteeditor.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\statictextbox.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\statswindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\String_Search.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\tileimptracker.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\trademanager.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\tutorialwin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\UIUtils.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\unitmanager.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\victorymoviewin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\VictoryMovieWindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\victorywin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\victorywindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\wondermoviewin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\WonderMovieWindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\workwin.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\workwindow.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\InterfaceEventRegister.cpp">
+      <Filter>ui\interface\ctp2_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\CauseAndEffectTab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\DomesticManagementDialog.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\GovernmentTab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\DomesticManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\citywindow.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\City_Management</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\sci_advancescreen.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\Science</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\ScienceManagementDialog.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\Science</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\NationalManagementDialog.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\NationalManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\MessageBoxDialog.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\MessageBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\Battle.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\BattleEvent.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\BattleView.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\BattleViewWindow.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\BattleView</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\infowindow.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\rankingtab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\scoretab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\timelinetab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\WonderTab.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\InformationDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\interface\sciencevictorydialog.cpp">
+      <Filter>ui\interface\ctp2_Dialogs\ScienceVictory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\allinonewindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\connectionselectwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\dialogboxwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\gameselectwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\lobbychangewindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\lobbywindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\netfunc.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\netshell.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\netshell_game.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_aiplayer.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_aiplayersetup.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_chatbox.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_civlistbox.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_customlistbox.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_game.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_gamesetup.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_gplayer.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_header.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_headerswitch.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_improvements.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_item.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_lobby.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_player.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_playersetup.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_rplayer.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_server.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_session.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_spinner.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_string.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_transport.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_tribes.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_units.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_window.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\ns_wonders.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\passwordscreen.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\playereditwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\playerselectwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\netshell\serverselectwindow.cpp">
+      <Filter>ui\netshell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\slic_debug\segmentlist.cpp">
+      <Filter>ui\slic_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\slic_debug\sourcelist.cpp">
+      <Filter>ui\slic_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\slic_debug\watchlist.cpp">
+      <Filter>ui\slic_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sound\civsound.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sound\GameSounds.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sound\soundevent.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sound\SoundManager.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\CounterResponseEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\DStateEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\MotivationEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\NProposalEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\ProposalResponseEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\ReactEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\RegardEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\RejectResponseEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\ResponseEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\SStateEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\ThreatResponseEvent.cpp">
+      <Filter>ai\Diplomacy\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\AgreementMatrix.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\diplomacyutil.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\Diplomat.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\diplomattypes.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\Foreigner.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\diplomacy\ProposalAnalysis.cpp">
+      <Filter>ai\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\strategy\Scheduler\Plan.cpp">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\strategy\Scheduler\Scheduler.cpp">
+      <Filter>ai\strategy\scheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\strategy\Goals\Goal.cpp">
+      <Filter>ai\strategy\goals</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\strategy\Squads\squad_Strength.cpp">
+      <Filter>ai\strategy\squads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\strategy\Agents\agent.cpp">
+      <Filter>ai\strategy\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\mapanalysis\BoundingRect.cpp">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\mapanalysis\MapAnalysis.cpp">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\mapanalysis\SettleMap.cpp">
+      <Filter>ai\MapAnalysis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\CityManagement\Governor.cpp">
+      <Filter>ai\CityManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\CtpAi.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ai\CtpAiDebug.cpp">
+      <Filter>ai</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ctp2_rsrc\CivCTP.ico" />
+    <Image Include="ctp2_rsrc\icon1.ico" />
+    <Image Include="ctp2_rsrc\icon2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\gs\slic\slic.l">
+      <Filter>gs\slic</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\slic\slic.y">
+      <Filter>gs\slic</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\slic\sliccmd.l">
+      <Filter>gs\slic</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\slic\sliccmd.y">
+      <Filter>gs\slic</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\diplomacy.cdb">
+      <Filter>gs\newdb\ai database</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Goal.cdb">
+      <Filter>gs\newdb\ai database</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\personality.cdb">
+      <Filter>gs\newdb\ai database</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Strategy.cdb">
+      <Filter>gs\newdb\ai database</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\advance.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\building.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\citysize.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\citystyle.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Civilisation.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Concept.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Const.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\culture.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\DBLexer.l">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Difficulty.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\DiplomacyProposal.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\DiplomacyThreat.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\EndGameObject.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\feat.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\GlobalWarming.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\government.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\icon.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Leader.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Map.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\order.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Pollution.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\pop.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\GS\newdb\religion.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Risk.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\terrain.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\TerrainImprovement.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\unit.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\unitpromotion.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\wonder.cdb">
+      <Filter>gs\newdb</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\ui\ldl\ldl.l">
+      <Filter>ui\ldl</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\ui\ldl\ldl.y">
+      <Filter>ui\ldl</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

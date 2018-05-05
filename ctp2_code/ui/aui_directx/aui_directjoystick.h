@@ -18,8 +18,8 @@ public:
 		uint32 lMax = 1000);
 	virtual ~aui_DirectJoystick();
 
-	void SetDevice( LPDIRECTINPUTDEVICE device ) { m_lpdid = device;};
-	LPDIRECTINPUTDEVICE Device( void ) { return m_lpdid;};
+	void SetDevice( LPDIRECTINPUTDEVICE8 device ) { m_lpdid = device;};
+	LPDIRECTINPUTDEVICE8 Device( void ) { return m_lpdid;};
 
 	void SetDeviceName( MBCHAR *name ) { strcpy( m_deviceName, name ); };
 	MBCHAR *DeviceName( void ) { return m_deviceName; };

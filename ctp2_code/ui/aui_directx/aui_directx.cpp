@@ -13,7 +13,7 @@
 
 
 LPDIRECTDRAW aui_DirectX::m_lpdd =		NULL;
-LPDIRECTINPUT aui_DirectX::m_lpdi =		NULL;
+LPDIRECTINPUT8 aui_DirectX::m_lpdi =		NULL;
 sint32 aui_DirectX::m_directXRefCount =	0;
 uint32 aui_DirectX::m_directXClassId =	aui_UniqueId();
 BOOL aui_DirectX::m_b_created_dd = FALSE;
@@ -31,7 +31,7 @@ void aui_DirectX::DD( LPDIRECTDRAW lpdd )
 }
 
 
-void aui_DirectX::DI( LPDIRECTINPUT lpdi )
+void aui_DirectX::DI( LPDIRECTINPUT8 lpdi )
 {
 	Assert( !m_lpdi );
 	if( !m_lpdi )
@@ -62,10 +62,11 @@ AUI_ERRCODE aui_DirectX::InitCommon( BOOL useExclusiveMode )
 
 	if ( !m_lpdi )
 	{
-		HRESULT hr = DirectInputCreate(
+		HRESULT hr = DirectInput8Create(
 			g_ui->TheHINSTANCE(),
 			g_ui->DXVer() < 0x500 ? 0x0300 : DIRECTINPUT_VERSION,
-			&m_lpdi,
+      IID_IDirectInput8,
+      (void**)&m_lpdi,
 			NULL );
 		Assert( hr == DD_OK );
 		if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
