@@ -5508,7 +5508,7 @@ void UpgradeCity::Execute(sint32 argc, char** argv)
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	Unit u = g_player[player]->GetCityFromIndex(city_idx);
 
-	SpriteState *newSS = new SpriteState(90+upgLevel);
+	SpriteStatePtr newSS(new SpriteState(90+upgLevel));
 
 	u.GetActor()->ChangeType(newSS, u.GetType(),  u, TRUE);
 }

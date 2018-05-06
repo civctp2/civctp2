@@ -1140,12 +1140,12 @@ uint64 Unit::GetImprovements() const
 	return GetData()->GetImprovements();
 }
 
-void Unit::SetSpriteState(SpriteState *s)
+void Unit::SetSpriteState(SpriteStatePtr s)
 {
 	AccessData()->SetSpriteState(s);
 }
 
-SpriteState * Unit::GetSpriteState() const
+SpriteStatePtr Unit::GetSpriteState() const
 {
 	return GetData()->GetSpriteState();
 }

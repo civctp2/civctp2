@@ -4,9 +4,10 @@
 #ifndef __TRADEACTOR_H__
 #define __TRADEACTOR_H__
 
+#include <deque>
+
 #include "gfx/spritesys/Actor.h"
 #include "gfx/spritesys/GoodSpriteGroup.h"
-#include "gfx/gfx_utils/Queue.h"
 #include "gs/gameobj/XY_Coordinates.h"
 #include "gs/world/World.h"
 #include "gs/gameobj/TradeRoute.h"
@@ -20,13 +21,13 @@ class Action;
 class TradeActor : public Actor
 {
 public:
-	TradeActor(TradeRoute newRoute);
-	TradeActor(TradeActor *copy);
+	explicit TradeActor(TradeRoute newRoute);
+	//TradeActor(TradeActor *copy);
 	~TradeActor();
 
 	virtual void	Process(void);
 
-	void			AddAction(Action *actionObj);
+  void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
@@ -70,11 +71,7 @@ protected:
 	sint32							m_frame;
 	uint16							m_transparency;
 
-	Action							*m_curAction;
 	GOODACTION						m_curGoodAction;
-
-	Queue<Action *>					m_actionQueue;
-
 };
 
 #endif

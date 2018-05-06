@@ -56,12 +56,12 @@ class BattleViewActor;
 // Project imports
 //
 //----------------------------------------------------------------------------
+#include <deque>
 
 #include "gfx/spritesys/Actor.h"            // Actor
 #include "gfx/spritesys/Anim.h"             // Anim
 #include "os/include/ctp2_inttypes.h"    // sint32, uint32
 #include "gfx/gfx_utils/pixelutils.h"
-#include "gfx/gfx_utils/Queue.h"            // Queue
 #include "gs/gameobj/Unit.h"
 #include "gfx/spritesys/UnitSpriteGroup.h"  // UnitSpriteGroup
 #include "gs/world/World.h"            // MapPoint
@@ -82,14 +82,14 @@ class SpriteState;
 class BattleViewActor : public Actor
 {
 public:
-	BattleViewActor(SpriteState *ss, Unit id, sint32 type, const MapPoint &pos,
+	BattleViewActor(SpriteStatePtr ss, Unit id, sint32 type, const MapPoint &pos,
 			  sint32 owner);
 
 	~BattleViewActor();
 
 	virtual void	Process(void);
 	void			DumpAllActions(void);
-	void			AddAction(Action *actionObj);
+	void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(BOOL isVisible = TRUE);
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 
@@ -131,15 +131,6 @@ public:
         return m_unitID;
     };
 
-	Action			*GetCurAction(void) const { return m_curAction; }
-
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	uint32			GetActionQueueNumItems(void) const
-    {
-        return m_actionQueue.GetNumItems();
-    }
-
 	bool			HasDeath(void) const
     {
         return m_unitSpriteGroup->HasDeath();
@@ -170,10 +161,8 @@ protected:
 	sint32				m_frame;
 	uint16				m_transparency;
 
-	Action				*m_curAction;
 	UNITACTION			m_curUnitAction;
 
-	Queue<Action *>		m_actionQueue;
 	GROUPTYPE			m_type;
 	uint32				m_spriteID;
 

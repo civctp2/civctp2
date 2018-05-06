@@ -63,7 +63,8 @@
 
 extern SpriteGroupList	*g_goodSpriteGroupList;
 
-TradeActor::TradeActor(TradeRoute newRoute)
+TradeActor::TradeActor(TradeRoute newRoute) :
+    Actor(SpriteStatePtr())
 {
 	GROUPTYPE		type;
 
@@ -96,25 +97,21 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_frame = 0;
 
 	AddIdle();
-
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 }
-
+/*
 TradeActor::TradeActor(TradeActor *copy)
 {
 	*this = *copy;
-	m_curAction	= new Action(m_curAction);
-}
+	m_curAction.reset(new Action(*m_curAction));
+}*/
 
 TradeActor::~TradeActor()
 {
-	delete m_curAction;
 }
 
 void TradeActor::AddIdle(void)
 {
-	delete m_curAction;
-	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_INTERRUPT);
+	m_curAction.reset(new Action(GOODACTION_IDLE, ACTIONEND_INTERRUPT));
 	m_curAction->SetAnim(CreateAnim(GOODACTION_IDLE));
 	m_curGoodAction = GOODACTION_IDLE;
 }
@@ -211,13 +208,11 @@ void TradeActor::Process(void)
 
 void TradeActor::GetNextAction(void)
 {
-	if (m_curAction) {
-		delete m_curAction;
-		m_curAction = NULL;
-	}
+  m_curAction.reset();
 
-	if (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(m_curAction);
+  if (!m_actionQueue.Empty()) {
+    m_curAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
 		if (m_curAction) {
 			m_curGoodAction = (GOODACTION)m_curAction->GetActionType();
 		} else {
@@ -229,16 +224,15 @@ void TradeActor::GetNextAction(void)
 	}
 }
 
-void TradeActor::AddAction(Action *actionObj)
+void TradeActor::AddAction(ActionPtr actionObj)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return;
 
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
+	Assert(actionObj);
+	if (!actionObj) return;
 
-
-	m_actionQueue.Enqueue(actionObj);
+	m_actionQueue.Push(actionObj);
 
 	if (m_curAction) {
 		if (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) {

@@ -29,13 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "ctp/c3.h"
+#include "ui/interface/battleevent.h"
+
+#include <utility>
 
 #include "gfx/spritesys/battleviewactor.h"
 #include "gfx/spritesys/EffectActor.h"
 #include "ui/interface/battleviewwindow.h"
-
-#include "ui/interface/battleevent.h"
-
 #include "sound/soundmanager.h"
 
 extern SoundManager		*g_soundManager;
@@ -222,12 +222,11 @@ void BattleEvent::ProcessAttack(void)
 
 					Anim *  anim = actor->CreateAnim(UNITACTION_ATTACK);
 					if (anim) {
-						Action			*action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND);
+						ActionPtr action(new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND));
 
 						action->SetAnim(anim);
-						actor->AddAction(action);
+						actor->AddAction(std::move(action));
 					} else {
-
 						finished = TRUE;
 					}
 
@@ -285,25 +284,22 @@ void BattleEvent::ProcessExplode(void)
 			if (!m_animating) {
 
 				if (actor) {
-					Action		*action = NULL;
+					ActionPtr	action;
 
 					Anim *  anim = actor->CreateAnim(EFFECTACTION_PLAY);
 					if (anim == NULL) {
 						anim = actor->CreateAnim(EFFECTACTION_FLASH);
-						if (anim)
-                        {
-							action = new Action(EFFECTACTION_FLASH, ACTIONEND_ANIMEND);
-                        }
-						else
-                        {
+						if (anim) {
+							action.reset(new Action(EFFECTACTION_FLASH, ACTIONEND_ANIMEND));
+            } else {
 							Assert(FALSE);
-                        }
+            }
 					} else {
-						action = new Action(EFFECTACTION_PLAY, ACTIONEND_ANIMEND);
+						action.reset(new Action(EFFECTACTION_PLAY, ACTIONEND_ANIMEND));
 					}
 
 					action->SetAnim(anim);
-					actor->AddAction(action);
+					actor->AddAction(std::move(action));
 					actor->Process();
 
 					if(data->explodeVictim) {
@@ -373,7 +369,7 @@ void BattleEvent::ProcessDeath(void)
 				finished = FALSE;
 
 				if (!m_animating) {
-					Action		*action;
+					ActionPtr action;
 					Anim		*anim;
 
 
@@ -381,15 +377,15 @@ void BattleEvent::ProcessDeath(void)
 
 					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
 
-						action = new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND);
+						action.reset(new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND));
 						anim = actor->MakeFakeDeath();
 					} else {
-						action = new Action(UNITACTION_VICTORY, ACTIONEND_ANIMEND);
+						action.reset(new Action(UNITACTION_VICTORY, ACTIONEND_ANIMEND));
 						anim = actor->CreateAnim(UNITACTION_VICTORY);
 					}
 
 					action->SetAnim(anim);
-					actor->AddAction(action);
+					actor->AddAction(std::move(action));
 
 					if (g_soundManager)
 						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(),

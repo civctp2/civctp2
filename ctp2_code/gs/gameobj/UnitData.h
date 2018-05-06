@@ -45,6 +45,8 @@
 #ifndef __UNIT_DATA_H__
 #define __UNIT_DATA_H__ 1
 
+#include <memory>
+
 class UnitData;
 class VisibilityDurationArray;
 
@@ -56,6 +58,7 @@ class VisibilityDurationArray;
 #include "gs/gameobj/Army.h"
 #include "gs/gameobj/Order.h"          // ORDER_RESULT
 #include "gs/gameobj/Player.h"         // k_MAX_PLAYERS
+#include "gfx/spritesys/SpriteState.h"
 #include "gfx/spritesys/UnitActor.h"      // UnitActor
 #include "gs/newdb/UnitRecord.h"
 
@@ -181,7 +184,6 @@ private:
 class UnitData : public GameObj,
                  public CityRadiusCallback
 {
-
 private:
 
 
@@ -214,7 +216,7 @@ private:
 	UnitDynamicArray   *m_cargo_list;
 	CityData *m_city_data;
 
-	SpriteState *m_sprite_state;
+	SpriteStatePtr m_sprite_state;
 
 	UnitActor *m_actor;
 
@@ -237,7 +239,6 @@ private:
 #endif
 
 public:
-
 #ifdef _DEBUG
 	char m_text[80];
 #endif
@@ -385,19 +386,8 @@ public:
 	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 
 
-	void SetSpriteState(SpriteState *s) { m_sprite_state = s; };
-	SpriteState * GetSpriteState() const { return m_sprite_state; };
-
-
-
-
-
-
-
-
-
-
-
+	void SetSpriteState(SpriteStatePtr s) { m_sprite_state = s; };
+	SpriteStatePtr GetSpriteState() const { return m_sprite_state; };
 
 	void SetActor(UnitActor *a) { m_actor = a; };
 	UnitActor * GetActor() const { return m_actor; };

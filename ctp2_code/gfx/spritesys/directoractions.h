@@ -45,7 +45,7 @@
 //
 //----------------------------------------------------------------------------
 
-// none
+#include "gfx/spritesys/SpriteState.h"
 
 //----------------------------------------------------------------------------
 //
@@ -255,19 +255,19 @@ public:
 class DQActionMorph : public DQAction
 {
 public:
-	DQActionMorph()
+
+  DQActionMorph()
     :
         DQAction        (),
         morphing_actor  (NULL),
-        ss              (NULL),
         type            (0),
         id              ()
     {};
 
-	UnitActor					*morphing_actor;
-	SpriteState					*ss;
-	sint32				        type;
-	Unit						id;
+	UnitActor      *morphing_actor;
+	SpriteStatePtr  ss;
+	sint32          type;
+	Unit            id;
 };
 
 class DQActionHideShow : public DQAction

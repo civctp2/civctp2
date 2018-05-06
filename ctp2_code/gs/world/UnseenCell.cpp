@@ -203,16 +203,16 @@ UnseenCell::UnseenCell(const MapPoint & point)
 
 			if (actor) {
 
-				SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
+				SpriteStatePtr newSS(new SpriteState(city.GetSpriteState()->GetIndex()));
 
 				UnitActor *newActor = new UnitActor(newSS,
-												    city,
-												    city.GetType(),
-												    point,
-												    city.GetOwner(),
-												    TRUE,
-												    city.GetVisionRange(),
-												    city.CD()->GetDesiredSpriteIndex());
+												                    city,
+												                    city.GetType(),
+												                    point,
+												                    city.GetOwner(),
+												                    TRUE,
+												                    city.GetVisionRange(),
+												                    city.CD()->GetDesiredSpriteIndex());
 
 				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
 										    | actor->GetUnitVisibility());

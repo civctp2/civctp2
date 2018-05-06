@@ -39,8 +39,8 @@
 // Library imports
 //
 //----------------------------------------------------------------------------
-
-// none
+#include <deque>
+#include <memory>
 
 //----------------------------------------------------------------------------
 //
@@ -128,12 +128,11 @@ enum SEQ_ACTOR {
 // Project imports
 //
 //----------------------------------------------------------------------------
-
 #include "ui/aui_common/aui.h"
 #include "ui/aui_common/aui_mouse.h"
-#include "gfx/gfx_utils/Queue.h"
 #include "ctp/ctp2_utils/pointerlist.h"
 #include "gfx/spritesys/directoractions.h"
+#include "gfx/spritesys/SpriteState.h"
 #include "sound/gamesounds.h"
 #include "gs/gameobj/Unit.h"               // Unit, SPECATTACK
 
@@ -222,7 +221,7 @@ private:
 class Director
 {
 public:
-	Director(void);
+  Director(void);
 	~Director(void);
 
 	Sequence		*NewSequence(void);
@@ -285,9 +284,9 @@ public:
 	void			AddWinnerLoser(Unit victor, Unit dead);
 	void			AddDeath(Unit dead);
 	void			AddDeathWithSound(Unit dead, sint32 soundID);
-	void			AddProjectileAttack(Unit shooting, Unit target, SpriteState *projectile_state, SpriteState *projectileEnd_state, sint32 projectile_Path);
+	void			AddProjectileAttack(Unit shooting, Unit target, SpriteStatePtr projectile_state, SpriteStatePtr projectileEnd_state, sint32 projectile_Path);
 	void			AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID);
-	void			AddMorphUnit(UnitActor *morphingActor, SpriteState *ss, sint32 type,  Unit id);
+	void			AddMorphUnit(UnitActor *morphingActor, SpriteStatePtr ss, sint32 type,  Unit id);
 	void			AddHide(Unit hider);
 	void			AddShow(Unit hider);
 	void			AddWork(Unit worker);

@@ -2590,6 +2590,9 @@
     <ClInclude Include="..\ai\CtpAiDebug.h">
       <Filter>ai</Filter>
     </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\ActionQueue.h">
+      <Filter>gfx\spritesys\Actors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ctp2_utils\appstrings.cpp">
@@ -4835,6 +4838,9 @@
     </ClCompile>
     <ClCompile Include="..\ai\CtpAiDebug.cpp">
       <Filter>ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\ActionQueue.cpp">
+      <Filter>gfx\spritesys\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

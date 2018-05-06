@@ -282,16 +282,20 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <MinimalRebuild>true</MinimalRebuild>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <AdditionalIncludeDirectories>..\;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\libs\freetype\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\libs\miles;..\libs\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Debug\civctp.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ctp/c3.h</PrecompiledHeaderFile>
       <ObjectFileName>.\Debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -313,7 +317,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>CivCTP_dbg.exe</OutputFile>
       <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;imagehlp.lib;..\libs\GameWatch\gamewatch.lib;..\libs\GameWatch\gwciv.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\ui\freetype\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -607,6 +611,7 @@ rem                                                 if                          
     <ClInclude Include="..\gfx\gfx_utils\videoutils.h" />
     <ClInclude Include="..\gfx\layers\citylayer.h" />
     <ClInclude Include="..\gfx\spritesys\Action.h" />
+    <ClInclude Include="..\gfx\spritesys\ActionQueue.h" />
     <ClInclude Include="..\gfx\spritesys\Actor.h" />
     <ClInclude Include="..\gfx\spritesys\ActorPath.h" />
     <ClInclude Include="..\gfx\spritesys\Anim.h" />
@@ -1405,6 +1410,7 @@ rem                                                 if                          
     <ClCompile Include="..\gfx\gfx_utils\videoutils.cpp" />
     <ClCompile Include="..\gfx\layers\citylayer.cpp" />
     <ClCompile Include="..\gfx\spritesys\action.cpp" />
+    <ClCompile Include="..\gfx\spritesys\ActionQueue.cpp" />
     <ClCompile Include="..\gfx\spritesys\Actor.cpp" />
     <ClCompile Include="..\gfx\spritesys\ActorPath.cpp" />
     <ClCompile Include="..\gfx\spritesys\Anim.cpp" />

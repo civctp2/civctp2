@@ -349,7 +349,7 @@ void UnitData::Create(const sint32 t,
 	else
 		m_city_data = NULL;
 
-	m_sprite_state = new SpriteState(rec->GetDefaultSprite()->GetValue());
+	m_sprite_state.reset(new SpriteState(rec->GetDefaultSprite()->GetValue()));
 
 	m_visibility = 0;
 	m_temp_visibility = 0;

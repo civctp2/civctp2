@@ -4,6 +4,8 @@
 #ifndef __ACTORPATH_H__
 #define __ACTORPATH_H__
 
+#include <memory>
+
 enum POINTSPOSTYPE {
 	POINTSPOSTYPE_STARTPOS,
 	POINTSPOSTYPE_ENDPOS,
@@ -33,5 +35,7 @@ protected:
 	uint16		m_numFrames;
 	BOOL		m_finished;
 };
+
+typedef std::shared_ptr<ActorPath> ActorPathPtr;
 
 #endif

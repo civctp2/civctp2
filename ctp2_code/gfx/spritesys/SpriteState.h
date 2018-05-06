@@ -4,6 +4,8 @@
 #ifndef __SPRITE_STATE_H__
 #define __SPRITE_STATE_H__
 
+#include <memory>
+
 class CivArchive ;
 
 class SpriteState {
@@ -32,5 +34,7 @@ public:
 	void Serialize(CivArchive &archive) ;
 
 };
+
+typedef std::shared_ptr<SpriteState> SpriteStatePtr;
 
 #endif

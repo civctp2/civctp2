@@ -69,6 +69,8 @@
 
 class CityData;
 
+#include "gfx/spritesys/SpriteState.h"
+
 #include "gs/gameobj/Unit.h"
 
 #include "gs/gameobj/BldQue.h"

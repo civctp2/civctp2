@@ -401,7 +401,7 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 
 
-		SpriteState *ss = new SpriteState(0);
+		SpriteStatePtr ss(new SpriteState(0));
 		Unit		unitID;
 
 		uint16 dbIndex;

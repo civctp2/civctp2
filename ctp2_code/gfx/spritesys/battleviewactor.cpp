@@ -44,32 +44,27 @@
 
 extern SpriteGroupList *        g_unitSpriteGroupList;
 
-BattleViewActor::BattleViewActor
-(
-    SpriteState *       ss,
-    Unit                id,
-    sint32              unitType,
-    const MapPoint &    pos,
-    sint32              owner
-)
-:
-    Actor               (ss),
-	m_pos               (pos),
-	m_unitID            (id),
-	m_unitDBIndex       (unitType),
-	m_playerNum         (owner),
-    m_unitSpriteGroup   (NULL),
-	m_facing            (k_DEFAULTSPRITEFACING),
-	m_frame             (0),
-	m_transparency      (15),
-	m_curAction         (NULL),
-	m_curUnitAction     (UNITACTION_NONE),
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-	m_type              (GROUPTYPE_UNIT),
-	m_spriteID          (0),
-    m_hitPoints         (0.0),
-    m_hitPointsMax      (0.0),
-	m_isFortified       (false)
+BattleViewActor::BattleViewActor(
+    SpriteStatePtr ss,
+    Unit id,
+    sint32 unitType,
+    const MapPoint &pos,
+    sint32 owner):
+        Actor(ss),
+        m_pos               (pos),
+        m_unitID            (id),
+        m_unitDBIndex       (unitType),
+        m_playerNum         (owner),
+        m_unitSpriteGroup   (NULL),
+        m_facing            (k_DEFAULTSPRITEFACING),
+        m_frame             (0),
+        m_transparency      (15),
+        m_curUnitAction     (UNITACTION_NONE),
+        m_type              (GROUPTYPE_UNIT),
+        m_spriteID          (0),
+        m_hitPoints         (0.0),
+        m_hitPointsMax      (0.0),
+        m_isFortified       (false)
 {
     if (ss)
     {
@@ -96,8 +91,6 @@ BattleViewActor::~BattleViewActor()
     {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 	}
-
-	delete m_curAction;
 }
 
 void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
@@ -110,13 +103,12 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	if (anim && (!m_actionQueue.Empty() || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-	delete m_curAction;
-	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
+	m_curAction.reset(new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT));
 	m_curAction->SetAnim(anim);
 	m_curUnitAction = UNITACTION_IDLE;
 
@@ -136,7 +128,7 @@ void BattleViewActor::Process(void)
 
 	if (m_curAction)
 	{
-		if(GetActionQueueNumItems() > 0)
+		if(!m_actionQueue.Empty())
 			m_curAction->Process(LookAtNextAction());
 		else
 			m_curAction->Process();
@@ -162,42 +154,38 @@ void BattleViewActor::DumpAllActions(void)
 
 	if (m_curAction) {
 		m_facing = m_curAction->GetFacing();
-		delete m_curAction;
-		m_curAction = NULL;
+		m_curAction.reset();
 	}
 
-	Action *deadAction=NULL;
-	while (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(deadAction);
-		if (deadAction != NULL) {
+	ActionPtr deadAction;
+	while (!m_actionQueue.Empty()) {
+    deadAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
+		if (deadAction) {
 			m_facing = deadAction->GetFacing();
-			delete deadAction;
-			deadAction = NULL;
+			deadAction.reset();
 		}
 	}
 }
 
 void BattleViewActor::GetNextAction(BOOL isVisible)
 {
-	uint32 numItems = GetActionQueueNumItems();
+  m_curAction.reset();
 
-	delete m_curAction;
-	m_curAction = NULL;
+	ActionPtr pendingAction = LookAtNextAction();
 
-	Action *pendingAction = LookAtNextAction();
-
-	while(numItems > 0 && pendingAction->GetActionType() == UNITACTION_NONE)
+	while(!m_actionQueue.Empty() && pendingAction->GetActionType() == UNITACTION_NONE)
 	{
-		m_actionQueue.Dequeue(m_curAction);
-		delete m_curAction;
-		m_curAction = NULL;
+    m_curAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
+		m_curAction.reset();
 		pendingAction = LookAtNextAction();
 	}
 
-	if (numItems > 0)
+	if (!m_actionQueue.Empty())
 	{
-
-		m_actionQueue.Dequeue(m_curAction);
+    m_curAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
 
 		if (m_curAction) {
 			m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
@@ -207,12 +195,11 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 	}
 	else
 	{
-
 		AddIdle();
 	}
 }
 
-void BattleViewActor::AddAction(Action *actionObj)
+void BattleViewActor::AddAction(ActionPtr actionObj)
 {
 	Assert(m_unitSpriteGroup && actionObj);
 	if (!m_unitSpriteGroup || !actionObj) return;
@@ -222,7 +209,7 @@ void BattleViewActor::AddAction(Action *actionObj)
 		m_playerNum = m_unitID.GetOwner();
 	}
 
-	m_actionQueue.Enqueue(actionObj);
+	m_actionQueue.Push(actionObj);
 }
 
 Anim *BattleViewActor::CreateAnim(UNITACTION action)

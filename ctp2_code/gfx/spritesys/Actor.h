@@ -47,6 +47,8 @@
 
 #include <windows.h>            // POINT
 
+#include <memory>
+
 //----------------------------------------------------------------------------
 //
 // Exported names
@@ -58,9 +60,6 @@ class Actor;
 #define k_ACTOR_CENTER_OFFSET_X		48
 #define k_ACTOR_CENTER_OFFSET_Y		48
 
-// "fix" bug #4 by kaan
-#define k_MAX_ACTION_QUEUE_SIZE		12
-
 //----------------------------------------------------------------------------
 //
 // Project imports
@@ -68,6 +67,10 @@ class Actor;
 //----------------------------------------------------------------------------
 
 #include "os/include/ctp2_inttypes.h"      // sint32
+
+#include "gfx/spritesys/ActionQueue.h"
+#include "gfx/spritesys/SpriteState.h"
+
 
 class Action;
 class Anim;
@@ -82,7 +85,12 @@ class SpriteState;
 class Actor
 {
 public:
-	Actor(SpriteState * ss = NULL);
+  typedef std::shared_ptr<Action> ActionPtr;
+  typedef std::shared_ptr<const Action> ActionConstPtr;
+
+  explicit Actor(SpriteStatePtr ss);
+  Actor(const Actor &rhs);
+  Actor &operator=(const Actor &rhs);
 
 	void	SetX(sint32 x) { m_x = x; }
 	void	SetY(sint32 y) { m_y = y; }
@@ -95,14 +103,19 @@ public:
 	POINT	GetPos(void) const { POINT p; p.x = m_x; p.y = m_y; return p; }
 	bool	GetMorphing(void) const { return m_morphing; }
 
-	SpriteState * GetSpriteState(void) const { return m_spriteState; }
-	void SetSpriteState(SpriteState *ss) { m_spriteState = ss; }
+	SpriteStatePtr GetSpriteState(void) const { return m_spriteState; }
+	void SetSpriteState(SpriteStatePtr ss) { m_spriteState = ss; }
 
 	virtual void	SetAnim(Anim *a)  {};
 	virtual void	Process(void)     {};
 
 	bool	IsActive () const { return m_isactive; };
 	void	SetActive(bool active) { m_isactive = active; };
+
+  ActionQueue::ActionPtr &LookAtNextAction(void) { return m_actionQueue.Back(); }
+  virtual void AddAction(ActionPtr actionObj) = 0;
+  std::size_t GetActionQueueNumItems() const;
+  ActionConstPtr GetCurAction(void) const { return m_curAction; }
 
 protected:
 #ifdef _ACTOR_DRAW_OPTIMIZATION
@@ -116,13 +129,16 @@ protected:
 
 	sint32			m_x;
 	sint32			m_y;
-	SpriteState		*m_spriteState;
+	SpriteStatePtr m_spriteState;
 
 	bool			m_morphing;
 
 	sint32			m_animPos;
 
-	virtual bool    ActionMove(Action *actionObj) { return false; };
+  ActionQueue m_actionQueue;
+  ActionPtr   m_curAction;
+
+	virtual bool ActionMove(ActionPtr) { return false; };
 };
 
 #endif

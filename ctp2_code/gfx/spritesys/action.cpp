@@ -49,96 +49,82 @@
 
 #define STOMPCHECK()
 
-Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, sint32 specialDelayProcess)
-:
+Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, sint32 specialDelayProcess) :
     m_actionType                (actionType),
     m_endCondition              (endCondition),
-	m_curAnim                   (NULL),
-	m_curPath                   (NULL),
-	m_maxActionCounter          (0),
-	m_curActionCounter          (0),
-	m_animPos                   (startAnimPos),
-	m_animDelayEnd              (0),
-	m_animElapsed               (0),
-	m_animLastFrameTime         (0),
-	m_delay                     (0),
-	m_itIsTimeToAct             (false),
-	m_finished                  (false),
-	m_loopAnimFinished          (false),
-	m_specialDelayProcess       (specialDelayProcess),
+	  m_curAnim                   (NULL),
+	  m_maxActionCounter          (0),
+	  m_curActionCounter          (0),
+	  m_animPos                   (startAnimPos),
+	  m_animDelayEnd              (0),
+	  m_animElapsed               (0),
+	  m_animLastFrameTime         (0),
+	  m_delay                     (0),
+	  m_itIsTimeToAct             (false),
+	  m_finished                  (false),
+	  m_loopAnimFinished          (false),
+	  m_specialDelayProcess       (specialDelayProcess),
     m_startMapPoint             (),
-	m_endMapPoint               (),
-	m_facing                    (k_DEFAULTSPRITEFACING),
-	m_sound_effect_id           (-1),
-	m_unitsVisibility           (0),
-	m_unitVisionRange           (0),
-	m_numRevealedActors         (0),
-	m_revealedActors            (NULL),
-	m_moveActors                (NULL),
-	m_numOActors                (0),
+	  m_endMapPoint               (),
+	  m_facing                    (k_DEFAULTSPRITEFACING),
+	  m_sound_effect_id           (-1),
+	  m_unitsVisibility           (0),
+	  m_unitVisionRange           (0),
+	  m_numRevealedActors         (0),
+	  m_revealedActors            (NULL),
+	  m_moveActors                (NULL),
+	  m_numOActors                (0),
     m_specialUnitEffectsAction  (),
-    m_sequence                  (NULL)
-{ ; }
+    m_sequence                  (NULL) {
+}
 
-Action::Action(Action const & a_Original)
+Action::Action(const Action &rhs)
 :
-    m_actionType                (a_Original.m_actionType),
-    m_endCondition              (a_Original.m_endCondition),
+    m_actionType                (rhs.m_actionType),
+    m_endCondition              (rhs.m_endCondition),
 	m_curAnim                   (NULL),
-	m_curPath                   (NULL),
-	m_maxActionCounter          (a_Original.m_maxActionCounter),
-	m_curActionCounter          (a_Original.m_curActionCounter),
-	m_animPos                   (a_Original.m_animPos),
-	m_animDelayEnd              (a_Original.m_animDelayEnd),
-	m_animElapsed               (a_Original.m_animElapsed),
-	m_animLastFrameTime         (a_Original.m_animLastFrameTime),
-	m_delay                     (a_Original.m_delay),
-	m_itIsTimeToAct             (a_Original.m_itIsTimeToAct),
-	m_finished                  (a_Original.m_finished),
-	m_loopAnimFinished          (a_Original.m_loopAnimFinished),
-	m_specialDelayProcess       (a_Original.m_specialDelayProcess),
-    m_startMapPoint             (a_Original.m_startMapPoint),
-	m_endMapPoint               (a_Original.m_endMapPoint),
-	m_facing                    (a_Original.m_facing),
-	m_sound_effect_id           (a_Original.m_sound_effect_id),
-	m_unitsVisibility           (a_Original.m_unitsVisibility),
-	m_unitVisionRange           (a_Original.m_unitVisionRange),
-	m_numRevealedActors         (a_Original.m_numRevealedActors),
+	m_maxActionCounter          (rhs.m_maxActionCounter),
+	m_curActionCounter          (rhs.m_curActionCounter),
+	m_animPos                   (rhs.m_animPos),
+	m_animDelayEnd              (rhs.m_animDelayEnd),
+	m_animElapsed               (rhs.m_animElapsed),
+	m_animLastFrameTime         (rhs.m_animLastFrameTime),
+	m_delay                     (rhs.m_delay),
+	m_itIsTimeToAct             (rhs.m_itIsTimeToAct),
+	m_finished                  (rhs.m_finished),
+	m_loopAnimFinished          (rhs.m_loopAnimFinished),
+	m_specialDelayProcess       (rhs.m_specialDelayProcess),
+    m_startMapPoint             (rhs.m_startMapPoint),
+	m_endMapPoint               (rhs.m_endMapPoint),
+	m_facing                    (rhs.m_facing),
+	m_sound_effect_id           (rhs.m_sound_effect_id),
+	m_unitsVisibility           (rhs.m_unitsVisibility),
+	m_unitVisionRange           (rhs.m_unitVisionRange),
+	m_numRevealedActors         (rhs.m_numRevealedActors),
 	m_revealedActors            (NULL),
 	m_moveActors                (NULL),
-	m_numOActors                (a_Original.m_numOActors),
-    m_specialUnitEffectsAction  (a_Original.m_specialUnitEffectsAction),
+	m_numOActors                (rhs.m_numOActors),
+    m_specialUnitEffectsAction  (rhs.m_specialUnitEffectsAction),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
-    m_sequence                  (a_Original.m_sequence)
+    /// done : Action dows not own sequence object, shallow copy is OK
+    m_sequence                  (rhs.m_sequence)
 {
-    if (a_Original.m_curAnim)
+    if (rhs.m_curAnim)
     {
-        m_curAnim = new Anim(*a_Original.m_curAnim);
+        m_curAnim = new Anim(*rhs.m_curAnim);
     }
 
     /// @todo Check copying of m_curPath, m_moveActors, m_revealedActors (NULLed in original code)
 }
 
-/// @todo Remove when no longer used
-Action::Action(Action *copyme)
-{
-	*this = *copyme;
-
-	if (copyme->GetAnim()) {
-		m_curAnim = new Anim(*copyme->GetAnim());
-	}
-
-	m_curPath = NULL;
-	m_moveActors = NULL;
-	m_revealedActors = NULL;
-}
-
 Action::~Action(void)
 {
-	delete m_curPath;
 	delete m_curAnim;
+  m_curAnim = NULL;
 	delete[] m_moveActors;
+  m_moveActors = NULL;
 	delete[] m_revealedActors;
+  m_revealedActors = NULL;
 }
 
 void Action::Process(void)
@@ -195,13 +181,13 @@ void Action::Process(void)
 
 }
 
-void Action::Process(Action *pendingAction)
+void Action::Process(ActionPtr pendingAction)
 {
 #ifndef _TEST
 	STOMPCHECK();
 #endif
 
-	if(pendingAction != this )
+	if(pendingAction.get() != this )
 		Process();
 
 	if (m_endCondition == ACTIONEND_INTERRUPT || Finished())
@@ -241,8 +227,7 @@ void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 	STOMPCHECK();
 #endif
 
-	delete m_curPath;
-	m_curPath = new ActorPath(x1, y1, x2, y2);
+	m_curPath.reset(new ActorPath(x1, y1, x2, y2));
 
 	m_maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS;
 
@@ -289,7 +274,7 @@ sint32 Action::GetFacing(void)
 #endif
 
 	if (m_curPath)
-    {
+  {
 		m_facing = m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter);
 	}
     // else: No action: keep current facing
@@ -315,4 +300,13 @@ uint16 Action::GetTransparency(void) const
 	}
 
 	return trans;
+}
+
+void Action::SetMoveActors(UnitActor **moveActors, sint32 numOActors) {
+  m_moveActors = moveActors;
+  m_numOActors = numOActors;
+}
+
+void Action::SetRevealedActors(UnitActor **revealedActors) { 
+  m_revealedActors = revealedActors; 
 }

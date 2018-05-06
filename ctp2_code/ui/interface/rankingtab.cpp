@@ -36,6 +36,8 @@
 #include "ui/interface/rankingtab.h"
 
 #include <algorithm>            // std::fill
+#include <memory>               // std::auto_ptr
+
 #include "ui/aui_common/aui_ldl.h"
 #include "ui/aui_common/aui_stringtable.h"
 #include "ui/aui_common/aui_uniqueid.h"
@@ -52,7 +54,6 @@
 #include "gs/utility/gstypes.h"
 #include "ui/interface/infowin.h"            // InfoPlayerListItem should be moved to somewhere else so that infowin.h can be removed
 #include "ui/aui_ctp2/linegraph.h"
-#include <memory>               // std::auto_ptr
 #include "gs/gameobj/Player.h"
 #include "gs/database/StrDB.h"              // g_theStringDB
 #include "gs/gameobj/Strengths.h"

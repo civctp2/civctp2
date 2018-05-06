@@ -42,7 +42,9 @@
 //
 //----------------------------------------------------------------------------
 
-// none
+#include <memory>
+
+#include "gfx/spritesys/ActorPath.h"
 
 //----------------------------------------------------------------------------
 //
@@ -98,11 +100,14 @@ enum  GAME_ACTION
 #include "gfx/spritesys/directoractions.h"    // DQAction
 #include "gs/world/MapPoint.h"           // MapPoint
 
-class ActorPath;
 class Anim;
 // POINT
 class Sequence;
 class UnitActor;
+
+class Action;
+typedef std::shared_ptr<Action> ActionPtr;
+typedef std::shared_ptr<const Action> ActionConstPtr;
 
 //----------------------------------------------------------------------------
 //
@@ -114,10 +119,8 @@ class Action
 {
 public:
 	Action(sint32 actionType=0, ACTIONEND endCondition=ACTIONEND_PATHEND, sint32 startAnimPos = 0, sint32 specialDelayProcess = 0);
-    Action(Action const & a_Original);
-	Action(Action *copyme); // @todo Remove when no longer used
-
-    virtual ~Action(void);
+  Action(const Action &rhs);
+  virtual ~Action(void);
 
 	sint32			GetActionType(void) const { return (m_actionType > 0 ) ? m_actionType : 0; }
 	void			SetActionType(sint32 action) { m_actionType=action;};
@@ -130,10 +133,10 @@ public:
 	sint32			GetAnimElapsed(void) const { return m_animElapsed; }
 	sint32			GetAnimLastFrameTime(void) const { return m_animLastFrameTime; }
 
-	ActorPath *     GetPath(void) const { return m_curPath; }
+	ActorPathPtr GetPath(void) const { return m_curPath; }
 
 	virtual void	Process(void);
-	void			Process(Action *pendingAction);
+	void			Process(ActionPtr pendingAction);
 
 	void			SetAnim(Anim *anim);
 	void			CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2);
@@ -173,17 +176,14 @@ public:
 	void			SetItIsTimeToAct(bool act) { m_itIsTimeToAct = act; }
 	bool			GetItIsTimeToAct() const { return m_itIsTimeToAct; }
 
-	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
+  void			SetRevealedActors(UnitActor **revealedActors);
 	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
 	void			SetNumRevealedActors(sint32 num) { m_numRevealedActors = num; }
 	sint32			GetNumRevealedActors(void) const { return m_numRevealedActors; }
 
-	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors)
-    {
-        m_moveActors = moveActors;
-        m_numOActors = numOActors;
-    }
-	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
+  void			SetMoveActors(UnitActor **moveActors, sint32 numOActors);
+
+  UnitActor		**GetMoveActors(void) const { return m_moveActors; }
 
 	void			SetNumOActors(sint32 val) { m_numOActors = val; }
 	sint32			GetNumOActors(void) const { return m_numOActors; }
@@ -207,8 +207,8 @@ public:
 protected:
 	ACTIONEND			m_endCondition;
 
-	Anim				*m_curAnim;
-	ActorPath			*m_curPath;
+	Anim         *m_curAnim;
+	ActorPathPtr m_curPath;
 
 	sint32				m_maxActionCounter;
 	sint32				m_curActionCounter;

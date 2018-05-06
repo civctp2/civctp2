@@ -379,8 +379,8 @@ void Battle::AddUnitExplosion(BattleEvent *event, BOOL isDefender, Unit theUnit)
 
 
 	EffectActor		*explodeActor = NULL;
-	SpriteState		*explosionState = new SpriteState(g_theSpecialEffectDB->Get(
-																				g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_EXPLOSION_LAND_1"))->GetValue());
+	SpriteStatePtr explosionState(new SpriteState(
+      g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_EXPLOSION_LAND_1"))->GetValue()));
 
 	if (explosionState && explosionState->GetIndex() != -1) {
 		MapPoint		pos = theUnit.RetPos();

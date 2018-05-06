@@ -57,12 +57,12 @@ class GoodActor;
 // Project imports
 //
 //----------------------------------------------------------------------------
+#include <deque>
 
 #include "gfx/spritesys/Actor.h"              // Actor
 #include "robot/aibackdoor/civarchive.h"         // CivArchive
 #include "os/include/ctp2_inttypes.h"      // sint32, uint16
 #include "gfx/spritesys/GoodSpriteGroup.h"    // GOODACTION
-#include "gfx/gfx_utils/Queue.h"              // Queue
 #include "gfx/spritesys/SpriteGroup.h"        // LOADTYPE
 #include "gs/world/World.h"              // MapPoint
 
@@ -80,17 +80,16 @@ class GoodActor : public Actor
 {
 public:
     GoodActor(sint32 index, MapPoint const & pos);
-    GoodActor(GoodActor const & a_Original);
-    GoodActor(GoodActor * copy); /// @todo Remove when no longer needed
+    GoodActor(GoodActor const & rhs);
     GoodActor(CivArchive & archive);
 
     virtual ~GoodActor();
-    GoodActor & operator = (GoodActor const & a_Original);
+    GoodActor & operator = (GoodActor const & rhs);
 
 	virtual void	Process(void);
 
 	void			PositionActor(MapPoint &pos);
-	void			AddAction(Action *actionObj);
+  void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
@@ -125,9 +124,7 @@ protected:
 	sint32              m_index;
 	MapPoint			m_pos;
 	GoodSpriteGroup	*   m_goodSpriteGroup;
-	Action *            m_curAction;
 	GOODACTION			m_curGoodAction;
-	Queue<Action *>		m_actionQueue;
 	LOADTYPE			m_loadType;
 };
 

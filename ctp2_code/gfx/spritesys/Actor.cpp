@@ -33,8 +33,9 @@
 #include "ctp/c3.h"
 #include "gfx/spritesys/Actor.h"
 
-Actor::Actor(SpriteState * ss)
-:
+#include "gfx/spritesys/SpriteState.h"
+
+Actor::Actor(SpriteStatePtr ss) :
 #if defined(_ACTOR_DRAW_OPTIMIZATION)
     m_paintTwice    (0),
     m_oldOffsetX    (-1),
@@ -48,3 +49,31 @@ Actor::Actor(SpriteState * ss)
     m_morphing      (false),
     m_animPos       (0)
 { }
+
+Actor::Actor(const Actor &rhs) {
+  *this = rhs;
+}
+
+Actor &Actor::operator=(const Actor &rhs) {
+  if (this != &rhs) {
+#if defined(_ACTOR_DRAW_OPTIMIZATION)
+    _paintTwice = rhs._paintTwice;
+    m_oldOffsetX = rhs.m_oldOffsetX;
+    m_oldOffsetY = rhs.m_oldOffsetY;
+    m_oldFrame = rhs.m_oldFrame;
+#endif
+    m_isactive = rhs.m_isactive;
+    m_x = rhs.m_x;
+    m_y = rhs.m_y;
+    m_spriteState.reset(rhs.m_spriteState ? new SpriteState(*rhs.m_spriteState) : NULL);
+    m_morphing = rhs.m_morphing;
+    m_animPos = rhs.m_animPos;
+    m_actionQueue = rhs.m_actionQueue; // Performs deep copy
+  }
+
+  return *this;
+}
+
+std::size_t Actor::GetActionQueueNumItems() const {
+  return m_actionQueue.Size();
+}

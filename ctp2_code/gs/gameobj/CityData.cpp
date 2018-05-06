@@ -3892,7 +3892,7 @@ void CityData::UpdateSprite(void)
 	if (PopCount() == 0) return;
 
 	UnitActor	*actor = m_home_city.GetActor();
-	SpriteState *ss = m_home_city.GetSpriteState();
+	SpriteStatePtr ss = m_home_city.GetSpriteState();
 	sint32	type = m_home_city.GetType();
 
 	g_director->AddMorphUnit(actor, ss, type, m_home_city);

@@ -38,6 +38,8 @@
 #ifndef __UNITACTOR_H__
 #define __UNITACTOR_H__
 
+#include <deque>
+
 class UnitActor;
 
 #include "gfx/spritesys/Action.h"             // Action, GAME_ACTION
@@ -45,7 +47,6 @@ class UnitActor;
 #include "gfx/spritesys/Anim.h"               // Anim
 #include "os/include/ctp2_inttypes.h"      // sintN, uintN
 #include "gs/world/MapPoint.h"           // MapPoint
-#include "gfx/gfx_utils/Queue.h"
 #include "gfx/spritesys/SpriteGroup.h"        // GROUPTYPE, LOADTYPE
 #include "gs/gameobj/Unit.h"               // SPECATTACK, Unit
 #include "gfx/spritesys/UnitSpriteGroup.h"    // UNITACTION
@@ -70,7 +71,7 @@ class ActorPath;
 class UnitActor : public Actor
 {
 public:
-	UnitActor(SpriteState *ss, Unit id, sint32 type, const MapPoint &pos,
+	UnitActor(SpriteStatePtr ss, Unit id, sint32 type, const MapPoint &pos,
 			  sint32 owner, BOOL isUnseenCellActor, double visionRange,
 			  sint32 citySprite);
 	UnitActor(CivArchive &archive);
@@ -80,7 +81,7 @@ public:
 	void			GetIDAndType
     (
         sint32              owner,
-        SpriteState *       ss,
+        SpriteStatePtr      ss,
         Unit                id,
         sint32              unitType,
         MapPoint const &    pos,
@@ -97,8 +98,8 @@ public:
 
 	void			Initialize(void);
 
-	void			ChangeImage(SpriteState *ss, sint32 type, Unit id);
-	void			ChangeType(SpriteState *ss, sint32 type, Unit id, BOOL updateVision);
+	void			ChangeImage(SpriteStatePtr ss, sint32 type, Unit id);
+	void			ChangeType(SpriteStatePtr ss, sint32 type, Unit id, BOOL updateVision);
 
 	void			SetSize(sint32 size) { m_size = size; }
 	sint32			GetSize(void) const { return m_size; }
@@ -106,16 +107,16 @@ public:
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			EndTurnProcess(void);
-	Action 			*WillMorph(void) const;
-	Action			*WillDie(void) const;
-	void			AddAction(Action *actionObj);
+	ActionPtr	WillMorph(void) const;
+	ActionPtr	WillDie(void) const;
+  void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(bool isVisible = true);
 	void			AddIdle(bool NoIdleJustDelay = false);
 	void			ActionQueueUpIdle(bool NoIdleJustDelay = false);
 
-	Anim *          CreateAnim(UNITACTION action);
-	Anim			*MakeFakeDeath(void);
-	Anim			*MakeFaceoff(void);
+	Anim *CreateAnim(UNITACTION action);
+	Anim *MakeFakeDeath(void);
+	Anim *MakeFaceoff(void);
 
 	bool			HasThisAnim(UNITACTION action) const
 	{
@@ -160,12 +161,6 @@ public:
 
 	sint32			GetNextPop(void) const { return m_nextPop;}
 
-	Action			*GetCurAction(void) const { return m_curAction; }
-
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
-
 	bool			HasDeath(void) const { return m_unitSpriteGroup->HasDeath(); }
 	bool			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
 
@@ -192,11 +187,11 @@ public:
 	void			SetKillNow(void) { m_killNow = TRUE; }
 	BOOL			GetKillNow(void) const { return m_killNow; }
 
-	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
-	void			SaveRevealedActors(UnitActor **revealedActors) { m_savedRevealedActors = revealedActors; }
+  void			SetRevealedActors(UnitActor **revealedActors);
+  void			SaveRevealedActors(UnitActor **revealedActors);
 	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
 
-	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors) { m_moveActors = moveActors; m_numOActors = numOActors; }
+  void			SetMoveActors(UnitActor **moveActors, sint32 numOActors);
 	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
 	sint32			GetNumOActors(void) const { return m_numOActors; }
 
@@ -252,10 +247,10 @@ public:
 #endif
 	sint32          m_refCount;
 
-	bool			ActionMove	       (Action *actionObj);
-	bool			ActionAttack       (Action *actionObj,sint32 facing);
-	bool			ActionSpecialAttack(Action *actionObj,sint32 facing);
-	bool            TryAnimation       (Action *actionObj,UNITACTION action);
+	bool			ActionMove	       (ActionPtr actionObj) override;
+	bool			ActionAttack       (ActionPtr actionObj, sint32 facing);
+	bool			ActionSpecialAttack(ActionPtr actionObj, sint32 facing);
+	bool      TryAnimation       (ActionPtr actionObj, UNITACTION action);
 
 	void			TerminateLoopingSound	(uint32 sound_type);
 	void			AddSound				(uint32 sound_type, sint32 sound_id);
@@ -280,10 +275,7 @@ protected:
 	sint32				m_frame;
 	uint16				m_transparency;
 
-	Action				*m_curAction;
 	UNITACTION			m_curUnitAction;
-
-	Queue<Action *>		m_actionQueue;
 
 	RECT				m_heraldRect;
 

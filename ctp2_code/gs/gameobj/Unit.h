@@ -51,9 +51,12 @@
 #ifndef __UNIT_H__
 #define __UNIT_H__ 1
 
+#include <memory>
 #include <string>
 
 class Unit;
+
+#include "gfx/spritesys/SpriteState.h"
 
 #include "gs/gameobj/UnitTypes.h"
 
@@ -90,7 +93,7 @@ private:
 	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 
 public:
-	Unit () : ID() { return; } ;
+  Unit () : ID() { return; } ;
 	Unit (sint32 val) : ID (val) { return; };
 	Unit (uint32 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
@@ -361,17 +364,17 @@ public:
 	bool GetNeedsNoSupport() const;
 	sint32 GetShieldCost() const;
 
-	void SetSpriteState(SpriteState *s);
-	SpriteState * GetSpriteState() const;
+	void SetSpriteState(SpriteStatePtr s);
+	SpriteStatePtr GetSpriteState() const;
 	void SetActor(UnitActor *a);
 	UnitActor * GetActor() const;
 
-	SpriteState * GetPrimaryProjectileState();
-	SpriteState * GetPrimaryProjectileEndState();
+	SpriteStatePtr GetPrimaryProjectileState();
+	SpriteStatePtr GetPrimaryProjectileEndState();
 	sint32        GetPrimaryProjectilePath();
 
-	SpriteState * GetSecondaryProjectileState();
-	SpriteState * GetSecondaryProjectileEndState();
+	SpriteStatePtr GetSecondaryProjectileState();
+	SpriteStatePtr GetSecondaryProjectileEndState();
 	sint32        GetSecondaryProjectilePath();
 
 	bool IsEntrenched() const;

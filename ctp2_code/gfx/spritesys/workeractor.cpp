@@ -31,16 +31,14 @@ namespace
 
 WorkerActor::WorkerActor(sint32 index, const MapPoint &pos, sint32 x, sint32 y)
 :
-    Actor               (),
-	m_facing            (0),
-	m_frame             (0),
-	m_transparency      (TRANSPARENCY_DEFAULT),
-	m_index             (index),
+    Actor               (SpriteStatePtr()),
+    m_facing            (0),
+    m_frame             (0),
+    m_transparency      (TRANSPARENCY_DEFAULT),
+    m_index             (index),
     m_pos               (pos),
     m_unitSpriteGroup   (NULL),
-    m_curAction         (NULL),
-    m_curUnitAction     (),
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE)
+    m_curUnitAction     ()
 {
 	SetPos(x, y);
 
@@ -56,12 +54,11 @@ WorkerActor::WorkerActor(sint32 index, const MapPoint &pos, sint32 x, sint32 y)
 
 WorkerActor::~WorkerActor()
 {
-    delete m_curAction;
 }
 
 void WorkerActor::AddIdle(void)
 {
-	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_ANIMEND);
+	m_curAction.reset(new Action(UNITACTION_IDLE, ACTIONEND_ANIMEND));
 	m_curAction->SetAnim(CreateAnim(UNITACTION_IDLE));
 	m_curUnitAction = UNITACTION_IDLE;
 }
@@ -108,37 +105,37 @@ void WorkerActor::Process(void)
 
 void WorkerActor::GetNextAction(void)
 {
-	delete m_curAction;
-	m_curAction = NULL;
+	m_curAction.reset();
 
-	if (m_actionQueue.GetNumItems() > 0)
+	if (!m_actionQueue.Empty())
     {
-		m_actionQueue.Dequeue(m_curAction);
-		if (m_curAction)
+      m_curAction = m_actionQueue.Back();
+      m_actionQueue.Pop();
+		  if (m_curAction)
         {
-			m_curUnitAction = (UNITACTION) m_curAction->GetActionType();
-		}
-        else
+	  		  m_curUnitAction = (UNITACTION) m_curAction->GetActionType();
+		    }
+      else
         {
-			Assert(FALSE);
-		}
-	}
-    else
+		  	  Assert(FALSE);
+		    }
+	  }
+  else
     {
-		AddIdle();
-	}
+  		AddIdle();
+	  }
 }
 
-void WorkerActor::AddAction(Action *actionObj)
+void WorkerActor::AddAction(ActionPtr actionObj)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return;
 
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
+	Assert(actionObj);
+	if (actionObj) return;
 
 
-	m_actionQueue.Enqueue(actionObj);
+	m_actionQueue.Push(actionObj);
 
 	if (m_curAction)
     {

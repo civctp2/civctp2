@@ -41,6 +41,8 @@
 #include "ctp/c3.h"
 #include "gfx/spritesys/director.h"
 
+#include <utility>
+
 #include "gfx/spritesys/Action.h"
 #include "gfx/spritesys/Actor.h"
 #include <algorithm>                // std::fill
@@ -794,7 +796,7 @@ void Director::ActionFinished(Sequence *seq)
 		m_lastSequenceID = seq->GetSequenceID();
 		seq->Release();
 		if (seq->GetRefCount() <= 0)
-        {
+    {
 			SaveFinishedItem(item);
 			SetActionFinished(TRUE);
 		}
@@ -1659,8 +1661,8 @@ void Director::AddTeleport
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddProjectileAttack(Unit shooting, Unit target, SpriteState *projectile_state,
-									SpriteState *projectileEnd_state, sint32 projectile_Path)
+void Director::AddProjectileAttack(Unit shooting, Unit target, SpriteStatePtr projectile_state,
+									SpriteStatePtr projectileEnd_state, sint32 projectile_Path)
 {
 	DQActionMoveProjectile	*action = new DQActionMoveProjectile;
 	DQItem					*item = new DQItem(DQITEM_MOVEPROJECTILE, action, dh_projectileMove);
@@ -1914,7 +1916,7 @@ void Director::AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack)
 		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos())
 	   )
 	{
-		AddProjectileAttack(attacker, attacked, NULL, new SpriteState(spriteID), 0);
+		AddProjectileAttack(attacker, attacked, NULL, SpriteStatePtr(new SpriteState(spriteID)), 0);
 	}
 }
 
@@ -1984,7 +1986,7 @@ void Director::AddDeathWithSound(Unit dead, sint32 soundID)
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddMorphUnit(UnitActor *morphingActor, SpriteState *ss, sint32 type,  Unit id)
+void Director::AddMorphUnit(UnitActor *morphingActor, SpriteStatePtr ss, sint32 type,  Unit id)
 {
 	if (morphingActor == NULL) return;
 
@@ -2358,12 +2360,7 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		return;
 	}
 
-	Action *actionObj = new Action();
-
-	Assert(actionObj != NULL);
-
-	if (actionObj == NULL)
-		return;
+	ActionPtr actionObj(new Action());
 
 	MapPoint  oldP=action->move_oldPos;
 	MapPoint  newP=action->move_newPos;
@@ -2388,7 +2385,7 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	actionObj->SetMoveActors(action->moveActors, action->moveArraySize);
 
-	if(!theActor->ActionMove(actionObj))
+	if(!theActor->ActionMove(std::move(actionObj)))
 	{
 		g_director->ActionFinished(seq);
 		return;
@@ -2470,10 +2467,7 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 
 	if (projectileEnd && g_director->TileIsVisibleToPlayer(startPos))
 	{
-		Action *actionObj= NULL;
-
-
-
+		ActionPtr actionObj;
 
 		Anim * anim = projectileEnd->CreateAnim(EFFECTACTION_PLAY);
 		if (anim == NULL)
@@ -2488,19 +2482,19 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 			}
 			else
 			{
-				actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
+				actionObj.reset(new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND));
 			}
 		}
 		else
 		{
-			actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
+			actionObj.reset(new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND));
 		}
 
 		Assert(actionObj);
 		if (actionObj)
 		{
 			actionObj->SetAnim(anim);
-			projectileEnd->AddAction(actionObj);
+			projectileEnd->AddAction(std::move(actionObj));
 			g_director->ActiveEffectAdd(projectileEnd);
 
 			// Management taken over by director, no longer managed by item queue.
@@ -2543,14 +2537,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	sint32 facingIndex=spriteutils_DeltaToFacing(deltax,deltay);
 
-	Action * ActionObj = new Action();
-
-	Assert(ActionObj != NULL);
-	if (ActionObj == NULL)
-	{
-		c3errors_ErrorDialog("Director", "Could not allocate attacker action object");
-		return;
-	}
+	ActionPtr ActionObj(new Action());
 
 	ActionObj->SetSequence(seq);
 	seq->AddRef();
@@ -2558,7 +2545,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	ActionObj->SetStartMapPoint(action->attacker_Pos);
 	ActionObj->SetEndMapPoint  (action->attacker_Pos);
 
-	theAttacker->ActionAttack(ActionObj,facingIndex);
+	theAttacker->ActionAttack(std::move(ActionObj), facingIndex);
 
 	if (playerInvolved && (executeType == DHEXECUTE_NORMAL))
 	{
@@ -2577,15 +2564,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	{
 		facingIndex=spriteutils_DeltaToFacing(-deltax,-deltay);
 
-		ActionObj = new Action();
-
-		Assert(ActionObj != NULL);
-
-		if (ActionObj == NULL)
-		{
-			c3errors_ErrorDialog("Director", "Could not allocate defender action object");
-			return;
-		}
+		ActionObj.reset(new Action());
 
 		ActionObj->SetSequence(seq);
 		seq->AddRef();
@@ -2593,7 +2572,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		ActionObj->SetStartMapPoint(action->defender_Pos);
 		ActionObj->SetEndMapPoint  (action->defender_Pos);
 
-		theDefender->ActionAttack(ActionObj,facingIndex);
+		theDefender->ActionAttack(std::move(ActionObj), facingIndex);
 
 		if(playerInvolved)
 		   defenderVisible = true;
@@ -2657,14 +2636,7 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 
 	if (attackerCanAttack)
 	{
-		Action *AttackerActionObj = new Action();
-
-		Assert(AttackerActionObj != NULL);
-		if (AttackerActionObj == NULL)
-		{
-			c3errors_ErrorDialog("Director", "Could not allocate attacker action object");
-			return;
-		}
+		ActionPtr AttackerActionObj(new Action());
 
 		AttackerActionObj->SetStartMapPoint(action->attacker_Pos);
 		AttackerActionObj->SetEndMapPoint  (action->attacker_Pos);
@@ -2674,9 +2646,8 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 		AttackerActionObj->SetSequence(seq);
 		seq->AddRef();
 
-		if(!theAttacker->ActionSpecialAttack(AttackerActionObj,facingIndex))
+		if(!theAttacker->ActionSpecialAttack(AttackerActionObj, facingIndex))
 		{
-			delete AttackerActionObj;
 			g_director->ActionFinished(seq);
 			return;
 		}
@@ -2697,14 +2668,7 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 
 	if (defenderIsAttackable)
 	{
-		Action *DefenderActionObj = new Action();
-
-		Assert(DefenderActionObj != NULL);
-		if (DefenderActionObj == NULL)
-		{
-			c3errors_ErrorDialog("Director", "Could not allocate defender action object");
-			return;
-		}
+		ActionPtr DefenderActionObj(new Action());
 
 		DefenderActionObj->SetStartMapPoint(action->defender_Pos);
 		DefenderActionObj->SetEndMapPoint  (action->defender_Pos);
@@ -2714,9 +2678,8 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 		DefenderActionObj->SetSequence(seq);
 		seq->AddRef();
 
-		if(!theDefender->ActionSpecialAttack(DefenderActionObj,facingIndex))
+		if(!theDefender->ActionSpecialAttack(std::move(DefenderActionObj), facingIndex))
 		{
-			delete DefenderActionObj;
 			g_director->ActionFinished(seq);
 			return;
 		}
@@ -2808,7 +2771,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		theDead->SetHealthPercent(-1.0);
 		theDead->SetTempStackSize(0);
 
-		Action *deadActionObj = new Action(	(UNITACTION)deathActionType, ACTIONEND_ANIMEND);
+		ActionPtr deadActionObj(new Action(	(UNITACTION)deathActionType, ACTIONEND_ANIMEND));
 		Assert(deadActionObj != NULL);
 		if (deadActionObj == NULL)
 		{
@@ -2842,7 +2805,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			}
 		}
 
-		theDead->AddAction(deadActionObj);
+		theDead->AddAction(std::move(deadActionObj));
 
 		if (g_director->TileIsVisibleToPlayer(action->dead_Pos)
 				&& executeType == DHEXECUTE_NORMAL) {
@@ -2868,8 +2831,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		}
 		else
 		{
-			Action *victorActionObj = new Action((UNITACTION)victorActionType, ACTIONEND_ANIMEND);
-			Assert(victorActionObj != NULL);
+			ActionPtr victorActionObj(new Action((UNITACTION)victorActionType, ACTIONEND_ANIMEND));
 			if (victorActionObj == NULL)
 			{
 				c3errors_ErrorDialog("Director", "Internal Failure to create victory action");
@@ -2898,7 +2860,7 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 				}
 			}
 
-			theVictor->AddAction(victorActionObj);
+			theVictor->AddAction(std::move(victorActionObj));
 		}
 
 		if (g_director->TileIsVisibleToPlayer(action->victor_Pos) && executeType == DHEXECUTE_NORMAL)
@@ -2982,10 +2944,10 @@ void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(actor);
 	if (!actor) return;
 
-	Action *actionObj = new Action(UNITACTION_WORK, ACTIONEND_ANIMEND);
+	ActionPtr actionObj(new Action(UNITACTION_WORK, ACTIONEND_ANIMEND));
 
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
+	Assert(actionObj);
+	if (actionObj) return;
 
 	actionObj->SetStartMapPoint(action->working_pos);
 	actionObj->SetEndMapPoint(action->working_pos);
@@ -2999,7 +2961,7 @@ void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		anim = actor->CreateAnim(UNITACTION_MOVE);
 
 		if (!anim) {
-			delete actionObj;
+			actionObj.reset();
 			g_director->ActionFinished(seq);
 			return;
 		}
@@ -3010,7 +2972,7 @@ void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	actionObj->SetAnim(anim);
 
-	actor->AddAction(actionObj);
+	actor->AddAction(std::move(actionObj));
 
 	if (g_soundManager)
 	{
@@ -3124,7 +3086,7 @@ void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
 	DQActionCombatFlash	*action = (DQActionCombatFlash *)itemAction;
 
-	SpriteState		*ss = new SpriteState(99);
+	SpriteStatePtr ss(new SpriteState(99));
 	EffectActor		*flash = new EffectActor(ss, action->flash_pos);
 
 	Anim *anim = flash->CreateAnim(EFFECTACTION_PLAY);
@@ -3136,9 +3098,9 @@ void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	if (anim)
 	{
-		Action * actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
+		ActionPtr actionObj(new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND));
 		actionObj->SetAnim(anim);
-		flash->AddAction(actionObj);
+		flash->AddAction(std::move(actionObj));
 		g_director->ActiveEffectAdd(flash);
 	}
 
@@ -3299,20 +3261,15 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(theAttacked != NULL);
 	if (theAttacked == NULL) return;
 
-	Action *AttackedActionObj = NULL;
+	ActionPtr AttackedActionObj;
 
-	Action * AttackerActionObj = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-	Assert(AttackerActionObj != NULL);
-	if (AttackerActionObj == NULL) return;
+	ActionPtr AttackerActionObj(new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT));
 
 	AttackerActionObj->SetSequence(NULL);
 
 	if (attackedIsAttackable)
 	{
-		AttackedActionObj = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		Assert(AttackedActionObj != NULL);
-		if (AttackedActionObj == NULL) return;
-
+		AttackedActionObj.reset(new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT));
 		AttackedActionObj->SetSequence(NULL);
 	}
 
@@ -3331,9 +3288,6 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	if (AttackerAnim == NULL)
 	{
 		theAttacker->AddIdle(TRUE);
-		delete AttackerActionObj;
-		delete AttackedActionObj;
-
 		return;
 	}
 	AttackerActionObj->SetAnim(AttackerAnim);
@@ -3348,8 +3302,6 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		if (AttackedAnim == NULL)
 		{
 			theAttacked->AddIdle(TRUE);
-			delete AttackedActionObj;
-			AttackedActionObj = NULL;
 		}
 	}
 
@@ -3377,7 +3329,7 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	AttackerActionObj->SetUnitVisionRange(theAttacker->GetUnitVisionRange());
 	AttackerActionObj->SetUnitsVisibility(theAttacker->GetUnitVisibility());
 
-	theAttacker->AddAction(AttackerActionObj);
+	theAttacker->AddAction(std::move(AttackerActionObj));
 
 	bool attackedVisible = true;
 
@@ -3388,7 +3340,7 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 			AttackedActionObj->SetUnitVisionRange(theAttacked->GetUnitVisionRange());
 
 			AttackedActionObj->SetUnitsVisibility(theAttacker->GetUnitVisibility());
-			theAttacked->AddAction(AttackedActionObj);
+			theAttacked->AddAction(std::move(AttackedActionObj));
 		}
 
 		attackedVisible = g_director->TileIsVisibleToPlayer(action->faceoff_attacked_pos);
@@ -3497,16 +3449,16 @@ void dh_speceffect(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		return;
 	}
 
-	SpriteState		*ss = new SpriteState(spriteID);
+	SpriteStatePtr ss(new SpriteState(spriteID));
 	EffectActor		*effectActor = new EffectActor(ss, pos);
 
 	Anim *  anim = effectActor->CreateAnim(EFFECTACTION_PLAY);
 
 	if (anim)
 	{
-		Action * actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
+		ActionPtr actionObj(new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND));
 		actionObj->SetAnim(anim);
-		effectActor->AddAction(actionObj);
+		effectActor->AddAction(std::move(actionObj));
 		g_director->ActiveEffectAdd(effectActor);
 
 		if (g_soundManager)
@@ -3532,17 +3484,10 @@ void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		g_director->ActionFinished(seq);
 		return;
 	}
-	Action *AttackerActionObj = NULL;
-
-	AttackerActionObj = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
-										theAttacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
-										theAttacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK));
-	Assert(AttackerActionObj != NULL);
-	if (AttackerActionObj == NULL)
-	{
-		c3errors_ErrorDialog("Director", "Could not allocate attacker action object");
-		return;
-	}
+	ActionPtr AttackerActionObj(
+      new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
+                 theAttacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
+                 theAttacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK)));
 
 	AttackerActionObj->SetSequence(seq);
 	seq->AddRef();
@@ -3594,7 +3539,7 @@ void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		}
 	}
 
-	theAttacker->AddAction(AttackerActionObj);
+	theAttacker->AddAction(std::move(AttackerActionObj));
 
 	bool attackerVisible = g_director->TileIsVisibleToPlayer(action->attackpos_attacker_pos);
 

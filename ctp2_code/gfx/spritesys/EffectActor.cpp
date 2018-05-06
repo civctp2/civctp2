@@ -53,8 +53,7 @@ extern SpriteGroupList	*g_effectSpriteGroupList;
 extern TiledMap			*g_tiledMap;
 extern Director			*g_director;
 
-EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
-:
+EffectActor::EffectActor(SpriteStatePtr ss, const MapPoint & pos):
     Actor                       (ss),
     m_pos                       (pos),
     m_savePos                   (),
@@ -65,9 +64,7 @@ EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
     m_frame                     (0),
 //    m_transparency;
-    m_curAction                 (NULL),
     m_curEffectAction           (EFFECTACTION_NONE),
-    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
 //    m_playerNum;
     m_effectVisibility          (0),
 //    m_effectSaveVisibility;
@@ -92,42 +89,26 @@ EffectActor::~EffectActor()
     {
 	    g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
     }
-
-    /// @todo Check moving m_spriteState delete to Actor
-	delete m_spriteState;
-	m_spriteState = NULL;
 }
 
-void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)
+void EffectActor::ChangeType(SpriteStatePtr ss, sint32 type,  Unit id)
 {
-	delete m_spriteState;
 	m_spriteState = ss;
 
 	m_effectSpriteGroup = (EffectSpriteGroup *)g_effectSpriteGroupList->GetSprite(ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION)0);
-
 }
 
 void EffectActor::Process(void)
 {
-
-
-
-
-
-
 	if(!m_curAction)
 		GetNextAction();
 
 	if (m_curAction) {
 
-		if(GetActionQueueNumItems() > 0)
+		if(!m_actionQueue.Empty())
 			m_curAction->Process(LookAtNextAction());
 		else
 			m_curAction->Process();
-
-
-
-
 
 		if (m_curAction->Finished())
 		{
@@ -194,7 +175,7 @@ void EffectActor::EndTurnProcess(void)
 {
 
 
-	while(GetActionQueueNumItems() > 0)
+	while(!m_actionQueue.Empty())
 	{
 		GetNextAction(k_doInvisible);
 		MapPoint  end;
@@ -246,15 +227,15 @@ void EffectActor::GetNextAction(BOOL isVisible)
 {
 	uint32 numItems = GetActionQueueNumItems();
 
-	delete m_curAction;
-	m_curAction = NULL;
+	m_curAction.reset();
 
 //	Action *pendingAction = LookAtNextAction(); // Not used
 
 	if (numItems > 0)
 	{
 
-		m_actionQueue.Dequeue(m_curAction);
+    m_curAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
 
 
 
@@ -290,12 +271,12 @@ void EffectActor::GetNextAction(BOOL isVisible)
 	}
 }
 
-void EffectActor::AddAction(Action *actionObj)
+void EffectActor::AddAction(ActionPtr actionObj)
 {
 	Assert(m_effectSpriteGroup && actionObj);
 	if (!m_effectSpriteGroup || !actionObj) return;
 
-	m_actionQueue.Enqueue(actionObj);
+	m_actionQueue.Push(actionObj);
 }
 
 Anim *EffectActor::CreateAnim(EFFECTACTION action)

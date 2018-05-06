@@ -4,10 +4,11 @@
 #ifndef __EFFECTACTOR_H__
 #define __EFFECTACTOR_H__
 
+#include <deque>
+
 #include "gfx/spritesys/Actor.h"
 #include "gfx/spritesys/EffectSpriteGroup.h"
 #include "gfx/gfx_utils/pixelutils.h"
-#include "gfx/gfx_utils/Queue.h"
 #include "gs/gameobj/XY_Coordinates.h"
 #include "gs/world/World.h"
 #include "ui/aui_common/tech_wllist.h"
@@ -23,15 +24,15 @@ typedef sint32 UnitDBIndex;
 class EffectActor : public Actor
 {
 public:
-	EffectActor(SpriteState *ss, const MapPoint &pos);
+	EffectActor(SpriteStatePtr ss, const MapPoint &pos);
 	virtual ~EffectActor();
 
-	void ChangeType(SpriteState *ss, sint32 type, Unit id);
+	void ChangeType(SpriteStatePtr ss, sint32 type, Unit id);
 
 	virtual void	Process(void);
 	void			EndTurnProcess(void);
 
-	void			AddAction(Action *actionObj);
+  void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(BOOL isVisible = TRUE);
 
 	Anim *          CreateAnim(EFFECTACTION action);
@@ -54,10 +55,6 @@ public:
 	uint16			GetHeight(void) const;
 
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
-
-	Action			*GetCurAction(void) const { return m_curAction; }
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
 
 	void			SetGenerateDeath(BOOL val) { m_generateDeath = val; }
 	BOOL			GetGenerateDeath(void) const { return m_generateDeath; }
@@ -94,10 +91,7 @@ protected:
 	sint32						m_frame;
 	uint16						m_transparency;
 
-	Action						*m_curAction;
 	EFFECTACTION				m_curEffectAction;
-
-	Queue<Action *>				m_actionQueue;
 
 	sint32						m_playerNum;
 	uint32						m_effectVisibility;

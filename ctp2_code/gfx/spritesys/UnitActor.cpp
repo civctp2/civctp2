@@ -106,7 +106,8 @@ extern PointerList<Player> *g_deadPlayer;
 #define k_SHIELD_OFF_TIME       150
 
 #ifdef _DEBUG_MEMORY
-#define STOMPCHECK() if (m_curAction) { Assert(_CrtIsMemoryBlock(m_curAction, sizeof(Action),NULL,NULL,NULL));}
+#define STOMPCHECK() ;
+//#define STOMPCHECK() if (m_curAction) { Assert(_CrtIsMemoryBlock(m_curAction.get(), sizeof(Action),NULL,NULL,NULL));}
 #else
 #define STOMPCHECK() ;
 #endif
@@ -120,13 +121,13 @@ namespace
 
 };	// namespace
 
-UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
+UnitActor::UnitActor(SpriteStatePtr ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
 :
     Actor                       (ss),
-	m_refCount                  (1),
+    m_refCount                  (1),
     m_pos                       (pos),
-	m_savePos                   (),
+    m_savePos                   (),
     m_unitID                    (id),
     m_unitDBIndex               (unitType),
     m_playerNum                 (owner),
@@ -136,18 +137,14 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_facing                    (k_DEFAULTSPRITEFACING),
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
     m_frame                     (0),
-//	uint16				m_transparency;
-    m_curAction                 (NULL),
     m_curUnitAction             (UNITACTION_NONE),
-    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
-//	RECT				m_heraldRect;
-	m_unitVisibility            (0),
+    m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
     m_directionalAttack         (false),
     m_needsToDie                (false),
     m_needsToVictor             (false),
     m_killNow                   (false),
-	m_unitVisionRange           (visionRange),
+    m_unitVisionRange           (visionRange),
     m_newUnitVisionRange        (0.0),
     m_numRevealedActors         (0),
     m_revealedActors            (NULL),
@@ -222,9 +219,7 @@ UnitActor::UnitActor(CivArchive &archive)
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
     m_frame                     (0),
 //	uint16				m_transparency;
-    m_curAction                 (NULL),
     m_curUnitAction             (UNITACTION_NONE),
-    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
 //	RECT				m_heraldRect;
 	m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
@@ -279,80 +274,83 @@ UnitActor::UnitActor(CivArchive &archive)
 
 void UnitActor::Initialize(void)
 {
-	RECT			tmpRect = {0, 0, 10, 16};
+  RECT			tmpRect = {0, 0, 10, 16};
 
-	m_heraldRect = tmpRect;
-	m_bVisSpecial = FALSE;
-	m_animPos = 0;
-	m_needsToDie = FALSE;
-	m_needsToVictor = FALSE;
-	m_killNow = FALSE;
-	m_numOActors = 0;
-	m_curUnitAction			= UNITACTION_NONE;
-	m_transparency			= 0;
-	m_numRevealedActors		= 0;
+  m_heraldRect = tmpRect;
+  m_bVisSpecial = FALSE;
+  m_animPos = 0;
+  m_needsToDie = FALSE;
+  m_needsToVictor = FALSE;
+  m_killNow = FALSE;
+  m_numOActors = 0;
+  m_curUnitAction			= UNITACTION_NONE;
+  m_transparency			= 0;
+  m_numRevealedActors		= 0;
 
-	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
-	{
-		m_holdingCurAnimPos[i] = 0;
-		m_holdingCurAnimDelayEnd[i] = 0;
-		m_holdingCurAnimElapsed[i] = 0;
-		m_holdingCurAnimLastFrameTime[i] = 0;
-		m_holdingCurAnimSpecialDelayProcess = FALSE;
-	}
+  for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
+  {
+	  m_holdingCurAnimPos[i] = 0;
+	  m_holdingCurAnimDelayEnd[i] = 0;
+	  m_holdingCurAnimElapsed[i] = 0;
+	  m_holdingCurAnimLastFrameTime[i] = 0;
+	  m_holdingCurAnimSpecialDelayProcess = FALSE;
+  }
 
-	if (m_type == GROUPTYPE_UNIT)
-	{
-		m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
-	}
-	else
-	{
-		m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
-	}
+  if (m_type == GROUPTYPE_UNIT)
+  {
+	  m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
+  }
+  else
+  {
+	  m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
+  }
 
-	m_loadType = LOADTYPE_BASIC;
+  m_loadType = LOADTYPE_BASIC;
 
-	Assert(m_unitSpriteGroup);
-	if(m_unitSpriteGroup) {
-		m_directionalAttack	= m_unitSpriteGroup->HasDirectional();
-	} else {
-		m_directionalAttack = FALSE;
-	}
+  Assert(m_unitSpriteGroup);
+  if(m_unitSpriteGroup) {
+	  m_directionalAttack	= m_unitSpriteGroup->HasDirectional();
+  } else {
+	  m_directionalAttack = FALSE;
+  }
 
-	m_savePos.x = m_savePos.y = 0;
+  m_savePos.x = m_savePos.y = 0;
 
-	m_x = 0;
-	m_y = 0;
+  m_x = 0;
+  m_y = 0;
 
-	m_frame = 0;
+  m_frame = 0;
 
-	m_curAction = NULL;
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
+  m_curAction.reset();
 
 
-	m_numSavedRevealedActors = 0;
-	m_savedRevealedActors = m_revealedActors = NULL;
-	m_moveActors = NULL;
-	m_hiddenUnderStack = FALSE;
-	m_isTransported = FALSE;
+  m_numSavedRevealedActors = 0;
+  m_savedRevealedActors = m_revealedActors = NULL;
+  m_moveActors = NULL;
+  m_hiddenUnderStack = FALSE;
+  m_isTransported = FALSE;
 
-	m_hidden = FALSE;
+  m_hidden = FALSE;
 
-	m_isFortifying = FALSE;
-	m_isFortified = FALSE;
-	m_hasCityWalls = FALSE;
-	m_hasForceField = FALSE;
+  m_isFortifying = FALSE;
+  m_isFortified = FALSE;
+  m_hasCityWalls = FALSE;
+  m_hasForceField = FALSE;
 
-	m_shieldFlashOnTime = 0;
-	m_shieldFlashOffTime = 0;
+  m_shieldFlashOnTime = 0;
+  m_shieldFlashOffTime = 0;
 
-	m_activeListRef = 0;
+  m_activeListRef = 0;
 
-	m_healthPercent = -1.0;
+  m_healthPercent = -1.0;
 
-	m_tempStackSize = 0;
+  m_tempStackSize = 0;
 
-	AddIdle();
+  AddIdle();
+
+#ifndef _TEST
+  STOMPCHECK();
+#endif
 }
 
 void UnitActor::AddVision(void)
@@ -396,7 +394,7 @@ void UnitActor::PositionActor(MapPoint &pos)
 void UnitActor::GetIDAndType
 (
     sint32              owner,
-    SpriteState *       ss,
+    SpriteStatePtr      ss,
     Unit                id,
     sint32              unitType,
     MapPoint const &    pos,
@@ -458,7 +456,6 @@ UnitActor::~UnitActor()
 
 	delete [] m_savedRevealedActors;
 	delete [] m_revealedActors;
-	delete m_spriteState;
 }
 
 void UnitActor::Hide(void)
@@ -471,7 +468,7 @@ void UnitActor::Show(void)
 	m_hidden = FALSE;
 }
 
-void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
+void UnitActor::ChangeImage(SpriteStatePtr ss, sint32 type, Unit id)
 {
 	if (id.IsValid() && id.IsCity()) {
 		id.GetPop(m_size);//put the city's pop into the actor's m_size
@@ -540,19 +537,16 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 	m_loadType = LOADTYPE_BASIC;
 }
 
-void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVision)
+void UnitActor::ChangeType(SpriteStatePtr ss, sint32 type,  Unit id, BOOL updateVision)
 {
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-	if (g_soundManager)
-		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
+  if (g_soundManager) {
+    g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
+  }
 
-    if (m_spriteState != ss)
-    {
-        delete m_spriteState;
-        m_spriteState = ss;
-    }
+  m_spriteState = ss;
 	m_unitID = id;
 
 	ChangeImage(ss, type, id);
@@ -601,25 +595,21 @@ void UnitActor::AddIdle(bool NoIdleJustDelay)
 		anim = CreateAnim(UNITACTION_MOVE);
 	}
 
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	if (anim && (!m_actionQueue.Empty() || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-	Action * idleAction =
-        new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
+	ActionPtr idleAction(new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay));
 
     if (NoIdleJustDelay)
     {
-		idleAction->SetFacing(m_facing);
-	}
+		  idleAction->SetFacing(m_facing);
+	  }
 
 	idleAction->SetAnim(anim);
 
-	AddAction(idleAction);
-
-
-
+	AddAction(std::move(idleAction));
 
 	if (g_soundManager)
 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
@@ -635,30 +625,25 @@ void UnitActor::ActionQueueUpIdle(bool NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
+	if (anim && (!m_actionQueue.Empty() || NoIdleJustDelay))
 	{
 		anim->SetNoIdleJustDelay(TRUE);
 	}
 
-	Action *	tempCurAction	=
-		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
+	ActionPtr tempCurAction(new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay));
 
 	tempCurAction->SetAnim(anim);
 
-
-
-
-	m_actionQueue.Enqueue(tempCurAction);
+	m_actionQueue.Push(std::move(tempCurAction));
 }
 
 void UnitActor::GetNextAction(bool isVisible)
 {
-	delete m_curAction;
-	m_curAction = NULL;
+	m_curAction.reset();
 
-	if (GetActionQueueNumItems() > 0) {
-
-		m_actionQueue.Dequeue(m_curAction);
+	if (!m_actionQueue.Empty()) {
+    m_curAction = m_actionQueue.Back();
+		m_actionQueue.Pop();
 
 		Assert(m_curAction);
 		if (!m_curAction)
@@ -669,18 +654,13 @@ void UnitActor::GetNextAction(bool isVisible)
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
 
-
-
-
-
-	} else {
+  } else {
 		return;
 	}
 
 
-	if(m_curAction->m_actionType == UNITACTION_ATTACK )
+	if (m_curAction->m_actionType == UNITACTION_ATTACK )
 	{
-
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
 
@@ -838,11 +818,8 @@ void UnitActor::Process(void)
 			||
 			m_curAction->m_actionType == UNITACTION_FAKE_DEATH) {
 			SetKillNow();
-			delete m_curAction;
-			m_curAction = NULL;
-		} else
-		{
-
+			m_curAction.reset();
+		} else {
 			GetNextAction();
 		}
 
@@ -896,14 +873,14 @@ void UnitActor::Process(void)
 
 }
 
-Action *UnitActor::WillDie(void) const
+ActionPtr UnitActor::WillDie(void) const
 {
 #ifndef _TEST
 	STOMPCHECK();
 #endif
 	sint32		type;
 
-	if (m_curAction != NULL) {
+	if (m_curAction) {
 		type = m_curAction->m_actionType;
 		if (type == UNITACTION_VICTORY)
 		{
@@ -916,12 +893,8 @@ Action *UnitActor::WillDie(void) const
 		}
 	}
 
-	size_t  numItems = GetActionQueueNumItems();
-
-	for (size_t i = 0; i < numItems; ++i)
+  for(const ActionPtr &action : m_actionQueue.Container())
     {
-    	Action * action = NULL;
-		m_actionQueue.GetQueueItem(i, action);
 		if (action)
         {
 			type = action->m_actionType;
@@ -939,7 +912,7 @@ Action *UnitActor::WillDie(void) const
 	return NULL;
 }
 
-Action *UnitActor::WillMorph(void) const
+ActionPtr UnitActor::WillMorph(void) const
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -950,11 +923,8 @@ Action *UnitActor::WillMorph(void) const
 		return m_curAction;
 	}
 
-	size_t numItems = GetActionQueueNumItems();
-	for (size_t i = 0; i < numItems; ++i)
-    {
-        Action * action = NULL;
-		m_actionQueue.GetQueueItem(i, action);
+  for (const ActionPtr &action : m_actionQueue.Container())
+  {
 		if (action && (action->m_actionType == UNITACTION_MORPH))
 		{
 			return action;
@@ -983,13 +953,13 @@ void UnitActor::DumpAllActions(void)
 			m_curAction->m_actionType != UNITACTION_FACE_OFF) {
 			g_director->ActionFinished(m_curAction->GetSequence());
 		}
-		delete m_curAction;
-		m_curAction = NULL;
+		m_curAction.reset();
 	}
 
-	Action *deadAction=NULL;
-	while (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(deadAction);
+	ActionPtr deadAction;
+	while (!m_actionQueue.Empty()) {
+    deadAction = m_actionQueue.Back();
+    m_actionQueue.Pop();
 		if (deadAction != NULL) {
 			m_facing = deadAction->GetFacing();
 
@@ -1003,8 +973,7 @@ void UnitActor::DumpAllActions(void)
 				g_director->ActionFinished(deadAction->GetSequence());
 			}
 
-			delete deadAction;
-			deadAction = NULL;
+      deadAction.reset();
 		} else {
 
 			Assert(FALSE);
@@ -1033,7 +1002,7 @@ void UnitActor::EndTurnProcess(void)
 
 }
 
-void UnitActor::AddAction(Action *actionObj)
+void UnitActor::AddAction(ActionPtr actionObj)
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -1041,13 +1010,7 @@ void UnitActor::AddAction(Action *actionObj)
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return;
 
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-
-
-
-
+	Assert(actionObj);
 
 	if (g_theUnitPool) {
 		if(g_theUnitPool->IsValid(GetUnitID()))
@@ -1056,8 +1019,7 @@ void UnitActor::AddAction(Action *actionObj)
 		}
 	}
 
-	m_actionQueue.Enqueue(actionObj);
-
+	m_actionQueue.Push(actionObj);
 
 	if (m_curAction) {
 		if (m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT) {
@@ -2403,8 +2365,8 @@ void UnitActor::Serialize(CivArchive &archive)
 		archive >> m_unitVisibility;
 
 		m_pos.Serialize(archive);
-		delete m_spriteState;
-		m_spriteState = new SpriteState(archive);
+		m_spriteState;
+		m_spriteState.reset(new SpriteState(archive));
 	}
 }
 
@@ -2459,7 +2421,7 @@ void UnitActor::FullLoad(UNITACTION action)
 
 
 
-bool UnitActor::ActionMove(Action *actionObj)
+bool UnitActor::ActionMove(ActionPtr actionObj)
 {
 	Assert(actionObj != NULL);
 
@@ -2513,7 +2475,7 @@ bool UnitActor::ActionMove(Action *actionObj)
 }
 
 
-bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
+bool UnitActor::ActionAttack(ActionPtr actionObj, sint32 facing)
 {
 	Assert(actionObj != NULL);
 
@@ -2546,7 +2508,7 @@ bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 	return true;
 }
 
-bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
+bool UnitActor::ActionSpecialAttack(ActionPtr actionObj,sint32 facing)
 {
 	Assert(actionObj != NULL);
 
@@ -2580,7 +2542,7 @@ bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 	return true;
 }
 
-bool UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
+bool UnitActor::TryAnimation(ActionPtr actionObj,UNITACTION action)
 {
 	FullLoad(action);
 
@@ -2651,6 +2613,19 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
 {
 	if (g_soundManager)
  		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,GetUnitID());
+}
+
+void UnitActor::SetRevealedActors(UnitActor **revealedActors) { 
+  m_revealedActors = revealedActors; 
+}
+
+void UnitActor::SaveRevealedActors(UnitActor **revealedActors) { 
+  m_savedRevealedActors = revealedActors; 
+}
+
+void UnitActor::SetMoveActors(UnitActor **moveActors, sint32 numOActors) { 
+  m_moveActors = moveActors; 
+  m_numOActors = numOActors; 
 }
 
 //----------------------------------------------------------------------------
@@ -2771,12 +2746,10 @@ void UnitActor::DumpActor(void)
 	}
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 
-	DPRINTF(k_DBG_UI, ("  m_actionQueue         :%d\n", m_actionQueue.GetNumItems()));
-	if (m_actionQueue.GetNumItems() > 0) {
-		for (size_t i = 0; i < m_actionQueue.GetNumItems(); i++)
-        {
-		    Action * action = NULL;
-			m_actionQueue.GetQueueItem(i, action);
+	DPRINTF(k_DBG_UI, ("  m_actionQueue         :%d\n", m_actionQueue.Size()));
+	if (!m_actionQueue.Empty()) {
+    unsigned i = 0;
+    for (const ActionPtr &action : m_actionQueue.Container()) {
 			DPRINTF(k_DBG_UI, ("  m_actionQueue Item      :%u\n", i));
 
 			if (action) {
@@ -2789,6 +2762,7 @@ void UnitActor::DumpActor(void)
 					g_director->DumpItem(action->GetSequence()->GetItem());
 				}
 			}
+      ++i;
 		}
 	}
 	DPRINTF(k_DBG_UI, (" ------------------\n"));

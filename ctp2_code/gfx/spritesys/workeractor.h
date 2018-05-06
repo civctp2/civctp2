@@ -4,9 +4,10 @@
 #ifndef __WORKERACTOR_H__
 #define __WORKERACTOR_H__
 
+#include <deque>
+
 #include "gfx/spritesys/Actor.h"              // Actor
 #include "os/include/ctp2_inttypes.h"      // sint32, uint16
-#include "gfx/gfx_utils/Queue.h"              // Queue
 #include "gfx/spritesys/UnitSpriteGroup.h"    // UNITACTION
 #include "gs/world/World.h"              // MapPoint
 
@@ -23,7 +24,7 @@ public:
 
 	virtual void	Process(void);
 
-	void			AddAction(Action *actionObj);
+  void			AddAction(ActionPtr actionObj) override;
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
@@ -49,9 +50,7 @@ protected:
 	sint32              m_index;
 	MapPoint			m_pos;
 	UnitSpriteGroup	*   m_unitSpriteGroup;
-	Action *            m_curAction;
 	UNITACTION			m_curUnitAction;
-	Queue<Action *>		m_actionQueue;
 };
 
 #endif
