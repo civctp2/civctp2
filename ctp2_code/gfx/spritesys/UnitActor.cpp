@@ -2740,8 +2740,8 @@ void UnitActor::DumpActor(void)
 			DPRINTF(k_DBG_UI, ("Actor %#.8lx m_curAction:\n", this));
 			DPRINTF(k_DBG_UI, ("  m_curAction.m_sequence->m_sequenceID     :%ld\n",
 							m_curAction->GetSequence()->GetSequenceID()));
-			DQItem		*item = m_curAction->GetSequence()->GetItem();
-			g_director->DumpItem(item);
+			DQItemPtr	item = m_curAction->GetSequence()->GetItem();
+			g_director->DumpItem(item.get());
 		}
 	}
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
@@ -2759,7 +2759,7 @@ void UnitActor::DumpActor(void)
 				if (action->GetSequence()) {
 					DPRINTF(k_DBG_UI, ("  action.m_sequence->m_sequenceID:%ld\n",
 									action->GetSequence()->GetSequenceID()));
-					g_director->DumpItem(action->GetSequence()->GetItem());
+					g_director->DumpItem(action->GetSequence()->GetItem().get());
 				}
 			}
       ++i;

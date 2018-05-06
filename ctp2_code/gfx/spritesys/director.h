@@ -39,7 +39,7 @@
 // Library imports
 //
 //----------------------------------------------------------------------------
-#include <deque>
+#include <list>
 #include <memory>
 
 //----------------------------------------------------------------------------
@@ -123,6 +123,9 @@ enum SEQ_ACTOR {
 #define k_DEFAULT_FPS				10
 #define k_ELAPSED_CEILING			100
 
+#include <list>
+#include <memory>
+
 //----------------------------------------------------------------------------
 //
 // Project imports
@@ -130,7 +133,6 @@ enum SEQ_ACTOR {
 //----------------------------------------------------------------------------
 #include "ui/aui_common/aui.h"
 #include "ui/aui_common/aui_mouse.h"
-#include "ctp/ctp2_utils/pointerlist.h"
 #include "gfx/spritesys/directoractions.h"
 #include "gfx/spritesys/SpriteState.h"
 #include "sound/gamesounds.h"
@@ -154,13 +156,21 @@ template <class T> class tech_WLList;
 typedef void (DQHandler)(DQAction *action, Sequence *seq, DHEXECUTE executeType);
 
 
-class DQItem {
-public:
+class DQItem;
+typedef std::shared_ptr<DQItem> DQItemPtr;
+typedef std::weak_ptr<DQItem> DQItemWeakPtr;
+
+class DQItem : std::enable_shared_from_this<DQItem> {
+private:
 	DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler);
-	~DQItem();
+
+public:
+  static DQItemPtr CreatePtr(DQITEM_TYPE type, DQAction *action, DQHandler *handler);
+  ~DQItem();
 
 	void			SetOwner(sint32 owner) { m_owner = (sint8)owner; }
 	sint32			GetOwner(void) { return (sint32) m_owner; }
+
 public:
 	DQITEM_TYPE		m_type;
 	uint8			m_addedToSavedList;
@@ -172,44 +182,41 @@ public:
 };
 
 
-
-
-
-
-
-
-
 class Sequence
 {
 public:
 	Sequence(sint32 seqID = 0)
     :
         m_sequenceID    (seqID),
-        m_refCount      (0),
-        m_item          (NULL)
+        m_refCount      (0)
 	{
 		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = FALSE;
 		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = FALSE;
 	}
 
-	~Sequence() {}
+	~Sequence() {
+    m_item.reset();
+  }
 
 	sint32 GetSequenceID(void) { return m_sequenceID; }
 	void	AddRef(void) { m_refCount++; }
 	void	Release(void) { m_refCount--; }
 	sint32	GetRefCount(void) { return m_refCount; }
 
-	void	SetItem(DQItem *item) { m_item = item; }
-	DQItem	*GetItem(void) { return m_item; }
+	void	SetItem(DQItemWeakPtr item) { m_item = item; }
+	DQItemPtr	GetItem(void) { 
+    Assert(!m_item.expired())
+    return m_item.lock(); 
+  }
 
 	void	SetAddedToActiveList(SEQ_ACTOR which, BOOL added) { m_addedToActiveList[which] = added; }
 	BOOL	GetAddedToActiveList(SEQ_ACTOR which) { return m_addedToActiveList[which]; }
 
 private:
-	sint32		m_sequenceID;
-	sint32		m_refCount;
-	DQItem *    m_item;
-	BOOL		m_addedToActiveList[SEQ_ACTOR_MAX];
+	sint32        m_sequenceID;
+	sint32        m_refCount;
+  DQItemWeakPtr m_item;
+	BOOL          m_addedToActiveList[SEQ_ACTOR_MAX];
 };
 
 
@@ -239,11 +246,11 @@ public:
 
 	void			ActionFinished(Sequence *seq);
 
-	void			HandleFinishedItem(DQItem *item);
-	void			SaveFinishedItem(DQItem *item);
+	void			HandleFinishedItem(DQItemPtr item);
+	void			SaveFinishedItem(DQItemPtr item);
 	void			GarbageCollectItems(void);
 
-	void			ProcessImmediately(DQItem *item);
+	void			ProcessImmediately(DQItemPtr item);
 
 	void			CatchUp(void);
 	bool			CaughtUp(void);
@@ -397,11 +404,9 @@ public:
 	sint32							m_curSequenceID;
 	sint32							m_lastSequenceID;
 
-	PointerList<DQItem>				*m_dispatchedItems;
-	PointerList<DQItem>				*m_savedItems;
-	PointerList<DQItem>				*m_itemQueue;
-
-	PointerList<DQItem>::Walker		*m_itemWalker;
+	std::list<DQItemPtr>				m_dispatchedItems;
+  std::list<DQItemPtr>				m_savedItems;
+  std::list<DQItemPtr>				m_itemQueue;
 
 	Sequence *m_holdSchedulerSequence;
 
