@@ -50,18 +50,15 @@
 #ifndef ARMY_DATA_H__
 #define ARMY_DATA_H__
 
-class ArmyData;
-
-#include "gs/gameobj/GameObj.h"
-#include "gs/gameobj/Unit.h"
-#include "gs/gameobj/TradeRoute.h"
-#include "gs/world/cellunitlist.h"
-#include "gs/gameobj/CityRadius.h"
-#include "gs/world/MapPoint.h"
-
-#include "gs/events/GameEventTypes.h"
 #include "gs/events/GameEventDescription.h"
+#include "gs/events/GameEventTypes.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/TradeRoute.h"
+#include "gs/gameobj/Unit.h"
 #include "gs/newdb/UnitRecord.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/cellunitlist.h"
 
 class CivArchive;
 class Path;
@@ -184,7 +181,7 @@ public:
     bool IsPatrolling() const;
     void SetPatrolling(bool p);
 
-    void GetActors(Unit &excludeMe, UnitActor **restOfStack);
+    void GetActors(Unit &excludeMe, std::vector<std::weak_ptr<UnitActor> > &restOfStack);
 
     void GroupArmy(Army &addme);
     void GroupAllUnits();

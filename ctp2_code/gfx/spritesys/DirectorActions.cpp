@@ -43,8 +43,6 @@ DQActionInvokeResearchAdvance::~DQActionInvokeResearchAdvance()
 
 DQActionMoveProjectile::DQActionMoveProjectile()
 :
-    pshooting_actor     (NULL),
-    ptarget_actor       (NULL),
     pmove_oldPos        (),
     pmove_newPos        (),
     end_projectile      (NULL),

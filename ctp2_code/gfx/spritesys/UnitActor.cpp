@@ -67,35 +67,35 @@
 #include "ctp/c3.h"
 #include "gfx/spritesys/UnitActor.h"
 
-#include "gs/newdb/AgeCityStyleRecord.h"
-#include "gs/gameobj/ArmyData.h"
-#include "ui/aui_common/aui_bitmapfont.h"
-#include "gs/newdb/BuildingRecord.h"
-#include "gs/world/cellunitlist.h"
-#include "gs/newdb/CityStyleRecord.h"
-#include "ui/interface/citywindow.h"         // s_cityWindow
-#include "gs/gameobj/Civilisation.h"
-#include "gfx/gfx_utils/colorset.h"           // g_colorset
-#include "gs/newdb/CTPRecord.h"
 #include "ctp/debugtools/debugmemory.h"
-#include "gfx/spritesys/director.h"           // g_director
-#include "gfx/tilesys/maputils.h"
-#include "gs/gameobj/Player.h"             // g_player
-#include "ui/aui_utils/primitives.h"
-#include "gs/database/profileDB.h"          // g_theProfileDB
-#include "gfx/spritesys/screenmanager.h"
-#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "gfx/gfx_utils/colorset.h"           // g_colorset
 #include "gfx/spritesys/SpriteGroupList.h"
 #include "gfx/spritesys/SpriteState.h"
-#include "sound/soundmanager.h"       // g_soundManager
+#include "gfx/spritesys/director.h"           // g_director
+#include "gfx/spritesys/screenmanager.h"
+#include "gfx/tilesys/maputils.h"
 #include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "gs/database/profileDB.h"          // g_theProfileDB
+#include "gs/fileio/gamefile.h" // g_saveFileVersion
+#include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/Civilisation.h"
+#include "gs/gameobj/Player.h"             // g_player
 #include "gs/gameobj/UnitData.h"
 #include "gs/gameobj/UnitPool.h"           // g_theUnitPool
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/newdb/AgeCityStyleRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/CTPRecord.h"
+#include "gs/newdb/CityStyleRecord.h"
 #include "gs/newdb/UnitRecord.h"
 #include "gs/newdb/WonderRecord.h"
-#include "gs/gameobj/wonderutil.h"
-#include "gs/gameobj/buildingutil.h"
-#include "gs/fileio/gamefile.h" // g_saveFileVersion
+#include "gs/world/cellunitlist.h"
+#include "sound/soundmanager.h"       // g_soundManager
+#include "ui/aui_common/aui_bitmapfont.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "ui/aui_utils/primitives.h"
+#include "ui/interface/citywindow.h"         // s_cityWindow
 
 extern SpriteGroupList     *g_unitSpriteGroupList;
 extern SpriteGroupList     *g_citySpriteGroupList;
@@ -146,10 +146,6 @@ UnitActor::UnitActor(SpriteStatePtr ss, Unit id, sint32 unitType, const MapPoint
     m_killNow                   (false),
     m_unitVisionRange           (visionRange),
     m_newUnitVisionRange        (0.0),
-    m_numRevealedActors         (0),
-    m_revealedActors            (NULL),
-    m_numSavedRevealedActors    (0),
-    m_savedRevealedActors       (NULL),
     m_bVisSpecial               (false),
     m_moveActors                (NULL),
     m_numOActors                (0),
@@ -194,15 +190,6 @@ UnitActor::UnitActor(SpriteStatePtr ss, Unit id, sint32 unitType, const MapPoint
 	Initialize();
 }
 
-
-
-
-
-
-
-
-
-
 UnitActor::UnitActor(CivArchive &archive)
 :
     Actor                       (NULL),
@@ -227,12 +214,8 @@ UnitActor::UnitActor(CivArchive &archive)
     m_needsToDie                (false),
     m_needsToVictor             (false),
     m_killNow                   (false),
-	m_unitVisionRange           (0.0),
+    m_unitVisionRange           (0.0),
     m_newUnitVisionRange        (0.0),
-    m_numRevealedActors         (0),
-    m_revealedActors            (NULL),
-    m_numSavedRevealedActors    (0),
-    m_savedRevealedActors       (NULL),
     m_bVisSpecial               (false),
     m_moveActors                (NULL),
     m_numOActors                (0),
@@ -285,7 +268,6 @@ void UnitActor::Initialize(void)
   m_numOActors = 0;
   m_curUnitAction			= UNITACTION_NONE;
   m_transparency			= 0;
-  m_numRevealedActors		= 0;
 
   for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
   {
@@ -324,9 +306,9 @@ void UnitActor::Initialize(void)
   m_curAction.reset();
 
 
-  m_numSavedRevealedActors = 0;
-  m_savedRevealedActors = m_revealedActors = NULL;
-  m_moveActors = NULL;
+  m_savedRevealedActors.clear();
+  m_revealedActors.clear();
+  m_moveActors.clear();
   m_hiddenUnderStack = FALSE;
   m_isTransported = FALSE;
 
@@ -453,9 +435,6 @@ UnitActor::~UnitActor()
 		    g_citySpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_BASIC);
         }
 	}
-
-	delete [] m_savedRevealedActors;
-	delete [] m_revealedActors;
 }
 
 void UnitActor::Hide(void)
@@ -664,22 +643,6 @@ void UnitActor::GetNextAction(bool isVisible)
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	m_curAction->SetSpecialDelayProcess(m_holdingCurAnimSpecialDelayProcess);
 
 	MapPoint curStartMapPoint, curEndMapPoint;
@@ -687,30 +650,30 @@ void UnitActor::GetNextAction(bool isVisible)
 	m_curAction->GetStartMapPoint(curStartMapPoint);
 	m_curAction->GetEndMapPoint(curEndMapPoint);
 
+  auto &moveActors = m_curAction->GetMoveActors();
+  long i, j;
 
-
-
-	int i, j;
 	if((j = i = m_curAction->GetNumOActors()) > 0)
 	{
 		i--;
-		UnitActor **moveActors = m_curAction->GetMoveActors();
-		for(; i>=0; i--)
+		for(; i >= 0; --i)
 		{
-			if(moveActors[i] != NULL)
-				moveActors[i]->SetHiddenUnderStack(TRUE);
+      if (!moveActors[i].expired()) {
+        moveActors[i].lock()->SetHiddenUnderStack(TRUE);
+      }
 
 			if(!m_isUnseenCellActor &&
 				m_playerNum == g_selected_item->GetVisiblePlayer()) {
 			}
 		}
-		m_curAction->SetNumOActors(0 - j);
+		// @TODO: whats is this?
+    m_curAction->SetNumOActors(0 - j);
 	}
 
 	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE)
 	{
 
-		if(!m_curAction->GetIsSpecialActionType())
+		if (!m_curAction->GetIsSpecialActionType())
 		{
 			if(m_isTransported == k_TRANSPORTADDONLY)
 			{
@@ -719,40 +682,30 @@ void UnitActor::GetNextAction(bool isVisible)
 			}
 		}
 
-		if(m_savedRevealedActors != NULL)
+		if (!m_savedRevealedActors.empty())
 		{
-			for (sint32 i=0; i<m_numSavedRevealedActors; i++) {
-				UnitActor * tempActor = m_savedRevealedActors[i];
-				Assert(tempActor != NULL);
-				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
+			for (UnitActorWeakPtr tempActor : m_savedRevealedActors) {
+				Assert(!tempActor.expired());
+				if (!tempActor.expired())
+					tempActor.lock()->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
 			}
 
-			delete[] m_savedRevealedActors;
-			m_savedRevealedActors = NULL;
-			m_numSavedRevealedActors = 0;
-
+			m_savedRevealedActors.clear();
 		}
 
-
-
-
-
-		UnitActor **revealedActors = m_curAction->GetRevealedActors();
-		if (revealedActors) {
-			for (sint32 i=0; i<m_curAction->GetNumRevealedActors(); i++) {
-				UnitActor * tempActor = revealedActors[i];
-				Assert(tempActor != NULL);
-				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
+		auto &revealedActors = m_curAction->GetRevealedActors();
+		if (!revealedActors.empty()) {
+			for(auto tempActor : revealedActors) {
+				Assert(!tempActor.expired());
+        if (!tempActor.expired()) {
+          tempActor.lock()->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
+        }
 			}
 
 			SaveRevealedActors(revealedActors);
 
-			m_numRevealedActors = 0;
-			m_revealedActors = NULL;
-			m_curAction->SetRevealedActors(NULL);
-			m_curAction->SetNumRevealedActors(0);
+			m_revealedActors.clear();
+			m_curAction->SetRevealedActors(std::vector<UnitActorWeakPtr>());
 		}
 	}
 
@@ -770,10 +723,6 @@ void UnitActor::Process(void)
 		DumpFullLoad();
 
 		AddIdle(m_facing != 3);
-
-
-
-
 	}
 
 	if (!m_curAction)
@@ -791,23 +740,20 @@ void UnitActor::Process(void)
 			PositionActor(pos);
 		}
 
-		UnitActor **moveActors = m_curAction->GetMoveActors();
+		auto &moveActors = m_curAction->GetMoveActors();
 
-		if(moveActors != NULL)
+		if(!moveActors.empty())
 		{
-
 			sint32 num = abs(m_curAction->GetNumOActors());
-
 			m_curAction->SetNumOActors(num);
 
-			for (int i = num-1; i >= 0; i--)
+			for(std::weak_ptr<UnitActor> actor : moveActors)
 			{
-				if(moveActors[i] != NULL)
-				   moveActors[i]->PositionActor(m_pos);
+				if(!actor.expired())
+          actor.lock()->PositionActor(m_pos);
 
 			}
-			delete moveActors;
-			m_curAction->SetMoveActors(NULL, NULL);
+			m_curAction->SetMoveActors(std::vector<std::weak_ptr<UnitActor> >());
 		}
 
 		if (m_curAction->m_actionType != UNITACTION_IDLE &&
@@ -981,13 +927,6 @@ void UnitActor::DumpAllActions(void)
 		}
 	}
 }
-
-
-
-
-
-
-
 
 void UnitActor::EndTurnProcess(void)
 {
@@ -1419,16 +1358,6 @@ void UnitActor::DrawForceField(bool fogged)
 														g_tiledMap->GetZoomTilePixelWidth(),
 														g_tiledMap->GetZoomTileGridHeight(),
 														fogged);
-
-
-
-
-
-
-
-
-
-
 	}
 }
 
@@ -1487,7 +1416,7 @@ bool UnitActor::Draw(bool fogged)
 	bool	drawShield              = true;
 	bool	drawSelectionBrackets   = false;
 
-	if (selectedUnit.IsValid() && selectedUnit.GetActor() == this)
+	if (selectedUnit.IsValid() && selectedUnit.GetActor().get() == this)
 	{
 		drawSelectionBrackets = true;
 		if (GetTickCount() > m_shieldFlashOffTime)
@@ -2375,25 +2304,6 @@ LOADTYPE UnitActor::GetLoadType(void) const
     return (m_unitSpriteGroup) ? m_loadType : LOADTYPE_NONE;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void UnitActor::FullLoad(UNITACTION action)
 {
 
@@ -2417,9 +2327,6 @@ void UnitActor::FullLoad(UNITACTION action)
 
 	Assert(group == m_unitSpriteGroup);
 }
-
-
-
 
 bool UnitActor::ActionMove(ActionPtr actionObj)
 {
@@ -2615,17 +2522,16 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
  		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,GetUnitID());
 }
 
-void UnitActor::SetRevealedActors(UnitActor **revealedActors) { 
+void UnitActor::SetRevealedActors(const UnitActorVec &revealedActors) {
   m_revealedActors = revealedActors; 
 }
 
-void UnitActor::SaveRevealedActors(UnitActor **revealedActors) { 
+void UnitActor::SaveRevealedActors(const UnitActorVec &revealedActors) {
   m_savedRevealedActors = revealedActors; 
 }
 
-void UnitActor::SetMoveActors(UnitActor **moveActors, sint32 numOActors) { 
+void UnitActor::SetMoveActors(const UnitActorVec &moveActors) {
   m_moveActors = moveActors; 
-  m_numOActors = numOActors; 
 }
 
 //----------------------------------------------------------------------------

@@ -44,8 +44,6 @@
 
 #include <memory>
 
-#include "gfx/spritesys/ActorPath.h"
-
 //----------------------------------------------------------------------------
 //
 // Exported names
@@ -96,9 +94,10 @@ enum  GAME_ACTION
 //
 //----------------------------------------------------------------------------
 
-#include "os/include/ctp2_inttypes.h"      // sintNN, uintNN
+#include "gfx/spritesys/ActorPath.h"
 #include "gfx/spritesys/directoractions.h"    // DQAction
 #include "gs/world/MapPoint.h"           // MapPoint
+#include "os/include/ctp2_inttypes.h"      // sintNN, uintNN
 
 class Anim;
 // POINT
@@ -176,17 +175,14 @@ public:
 	void			SetItIsTimeToAct(bool act) { m_itIsTimeToAct = act; }
 	bool			GetItIsTimeToAct() const { return m_itIsTimeToAct; }
 
-  void			SetRevealedActors(UnitActor **revealedActors);
-	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
-	void			SetNumRevealedActors(sint32 num) { m_numRevealedActors = num; }
-	sint32			GetNumRevealedActors(void) const { return m_numRevealedActors; }
+  void			SetRevealedActors(const std::vector<std::weak_ptr<UnitActor> > &revealedActors);
+  const std::vector<std::weak_ptr<UnitActor> > &GetRevealedActors(void) const { return m_revealedActors; }
 
-  void			SetMoveActors(UnitActor **moveActors, sint32 numOActors);
+  void			SetMoveActors(const std::vector<std::weak_ptr<UnitActor> > &moveActors);
+  void SetNumOActors(long numOActors) { m_numOActors = numOActors; }
+  long GetNumOActors() const { return m_numOActors; }
 
-  UnitActor		**GetMoveActors(void) const { return m_moveActors; }
-
-	void			SetNumOActors(sint32 val) { m_numOActors = val; }
-	sint32			GetNumOActors(void) const { return m_numOActors; }
+  const std::vector<std::weak_ptr<UnitActor> > &GetMoveActors(void) const { return m_moveActors; }
 
 	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
 	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
@@ -228,16 +224,15 @@ protected:
 	MapPoint			m_endMapPoint;
 
 	sint32				m_facing;
-	sint32              m_sound_effect_id;
+	sint32        m_sound_effect_id;
 
 	uint32				m_unitsVisibility;
 
 	double				m_unitVisionRange;
 
-	sint32				m_numRevealedActors;
-	UnitActor			**m_revealedActors;
-	UnitActor			**m_moveActors;
-	sint32				m_numOActors;
+	std::vector<std::weak_ptr<UnitActor> > m_revealedActors;
+  std::vector<std::weak_ptr<UnitActor> > m_moveActors;
+  long m_numOActors;
 
 	DQAction			m_specialUnitEffectsAction;
 

@@ -50,17 +50,17 @@
 class UnitData;
 class VisibilityDurationArray;
 
-#include "gs/gameobj/Unit.h"
-#include "gs/gameobj/GameObj.h"
-#include "gs/world/MapPoint.h"
-#include "gs/gameobj/Unit.h"
-#include "gs/gameobj/citydata.h"
-#include "gs/gameobj/Army.h"
-#include "gs/gameobj/Order.h"          // ORDER_RESULT
-#include "gs/gameobj/Player.h"         // k_MAX_PLAYERS
 #include "gfx/spritesys/SpriteState.h"
 #include "gfx/spritesys/UnitActor.h"      // UnitActor
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/GameObj.h"
+#include "gs/gameobj/Order.h"          // ORDER_RESULT
+#include "gs/gameobj/Player.h"         // k_MAX_PLAYERS
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/citydata.h"
 #include "gs/newdb/UnitRecord.h"
+#include "gs/world/MapPoint.h"
 
 class UnitList;
 class citydata;
@@ -83,10 +83,6 @@ class VisibilityDurationArray
 public:
 	VisibilityDurationArray() {
 		sint32 i;
-
-
-
-
 
 		m_array_index = 0;
 		for(i = 0; i < k_DEFAULT_VIS_DURATION_SIZE; i++) {
@@ -114,13 +110,6 @@ public:
 		Assert(duration >= 0);
 
 		Assert(duration <= k_DEFAULT_VIS_DURATION_SIZE);
-
-
-
-
-
-
-
 
 		sint32 index = GetArrayIndex(player);
 		for(sint32 i = 0; i < duration; i++) {
@@ -218,7 +207,7 @@ private:
 
 	SpriteStatePtr m_sprite_state;
 
-	UnitActor *m_actor;
+	std::shared_ptr<UnitActor> m_actor;
 
 	VisibilityDurationArray m_temp_visibility_array;
 	Unit m_transport;
@@ -245,7 +234,7 @@ public:
 
 	UnitData(const sint32 t, const sint32 trans_t, const Unit &i,
 	         const PLAYER_INDEX o, const MapPoint &center_point, const Unit hc,
-	         UnitActor *actor = NULL);
+            std::shared_ptr<UnitActor> actor = std::shared_ptr<UnitActor>());
 	UnitData(const sint32 t, const sint32 trans_t, const Unit &i,
 	         const PLAYER_INDEX o, const MapPoint &actor_pos);
 	void Create(const sint32 t, const sint32 trans_t, const Unit &i,
@@ -389,8 +378,8 @@ public:
 	void SetSpriteState(SpriteStatePtr s) { m_sprite_state = s; };
 	SpriteStatePtr GetSpriteState() const { return m_sprite_state; };
 
-	void SetActor(UnitActor *a) { m_actor = a; };
-	UnitActor * GetActor() const { return m_actor; };
+	void SetActor(std::shared_ptr<UnitActor> a) { m_actor = a; };
+  std::shared_ptr<UnitActor> GetActor() const { return m_actor; };
 
 	bool IsCity() const { return m_city_data != NULL; }
 	void GetPop(sint32 &p)const;

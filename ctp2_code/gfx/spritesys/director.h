@@ -39,8 +39,11 @@
 // Library imports
 //
 //----------------------------------------------------------------------------
+
+#include <deque>
 #include <list>
 #include <memory>
+#include <vector>
 
 //----------------------------------------------------------------------------
 //
@@ -145,7 +148,6 @@ class EffectActor;
 class TradeActor;
 class aui_Surface;
 class Battle;
-template <class T> class tech_WLList;
 
 //----------------------------------------------------------------------------
 //
@@ -228,6 +230,8 @@ private:
 class Director
 {
 public:
+  typedef std::vector<std::weak_ptr<UnitActor> > UnitActorVec;
+
   Director(void);
 	~Director(void);
 
@@ -259,31 +263,23 @@ public:
 
 	bool			IsProcessing();
 
-	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported);
+	void			AddMoveProcess(std::shared_ptr<UnitActor> top, std::shared_ptr<UnitActor> dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported);
 
-    void AddMove
-    (
-        Unit                mover,
-        MapPoint const &    oldPos,
-        MapPoint const &    newPos,
-        sint32              numRevealed,
-        UnitActor **        revealedActors,
-        sint32              numRest,
-        UnitActor **        restOfStack,
-        bool                isTransported,
-        sint32              soundID
-    );
+  void AddMove(
+    Unit                mover,
+    MapPoint const &    oldPos,
+    MapPoint const &    newPos,
+    const UnitActorVec &revealedActors,
+    const UnitActorVec &restOfStack,
+    bool                isTransported,
+    sint32              soundID);
 
-	void AddTeleport
-    (
-        Unit                top,
-        MapPoint const &    oldPos,
-        MapPoint const &    newPos,
-        sint32              numRevealed,
-        UnitActor **        revealedActors,
-		sint32              arraySize,
-        UnitActor **        moveActors
-    );
+	void AddTeleport(
+    Unit                top,
+    MapPoint const &    oldPos,
+    MapPoint const &    newPos,
+    const UnitActorVec  &revealedActors,
+    const UnitActorVec  &moveActors);
 
 	void			AddAttack(Unit attacker, Unit attacked);
 	void			AddAttackPos(Unit attacker, MapPoint const & pos);
@@ -293,16 +289,16 @@ public:
 	void			AddDeathWithSound(Unit dead, sint32 soundID);
 	void			AddProjectileAttack(Unit shooting, Unit target, SpriteStatePtr projectile_state, SpriteStatePtr projectileEnd_state, sint32 projectile_Path);
 	void			AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID);
-	void			AddMorphUnit(UnitActor *morphingActor, SpriteStatePtr ss, sint32 type,  Unit id);
+	void			AddMorphUnit(std::shared_ptr<UnitActor> morphingActor, SpriteStatePtr ss, sint32 type,  Unit id);
 	void			AddHide(Unit hider);
 	void			AddShow(Unit hider);
 	void			AddWork(Unit worker);
 	void			AddFastKill(Unit dead);
 	void			AddRemoveVision(const MapPoint &pos, double range);
 	void			AddAddVision(const MapPoint &pos, double range);
-	void			AddSetVisibility(UnitActor *actor, uint32 visibility);
-	void			AddSetOwner(UnitActor *actor, sint32 owner);
-	void			AddSetVisionRange(UnitActor *actor, double range);
+	void			AddSetVisibility(std::shared_ptr<UnitActor> actor, uint32 visibility);
+	void			AddSetOwner(std::shared_ptr<UnitActor> actor, sint32 owner);
+	void			AddSetVisionRange(std::shared_ptr<UnitActor> actor, double range);
 	void			AddCombatFlash(MapPoint const & pos);
 	void			AddCopyVision(void);
 	void			AddCenterMap(const MapPoint &pos);
@@ -321,8 +317,8 @@ public:
 	void			AddInvokeResearchAdvance(MBCHAR *text);
 	void            AddBeginScheduler(sint32 player);
 
-	void			ActiveUnitAdd(UnitActor *unitActor);
-	void			ActiveUnitRemove(UnitActor *unitActor);
+	void			ActiveUnitAdd(std::shared_ptr<UnitActor> unitActor);
+	void			ActiveUnitRemove(std::shared_ptr<UnitActor> unitActor);
 
 	void			ActiveEffectAdd(EffectActor *effectActor);
 	void			ActiveEffectRemove(EffectActor *effectActor);
@@ -349,7 +345,7 @@ public:
 	void			OffsetActiveEffects(sint32 deltaX, sint32 deltaY);
 	void			OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
 
-	UnitActor		*GetClickedActiveUnit(aui_MouseEvent *mouse);
+	std::shared_ptr<UnitActor> GetClickedActiveUnit(aui_MouseEvent *mouse);
 
 	void			NextPlayer(BOOL forcedUpdate = FALSE);
 
@@ -357,10 +353,9 @@ public:
 	void			SetMasterCurTime(uint32 val) {m_masterCurTime = val;}
 	sint32			GetAverageFPS(void) const { return m_averageFPS; }
 
-	void		Kill(UnitActor *actor);
-	void        FastKill(UnitActor *actor);
-
-	void        FastKill(EffectActor *actor);
+	void Kill(std::shared_ptr<UnitActor> actor);
+	void FastKill(std::shared_ptr<UnitActor> actor);
+	void FastKill(EffectActor *actor);
 
 	BOOL		GetActionFinished(void) { return m_actionFinished; }
 	void		SetActionFinished(BOOL finished = TRUE) { m_actionFinished = finished; }
@@ -376,11 +371,14 @@ public:
 
 	void NotifyResync();
 
+  typedef std::deque<std::shared_ptr<UnitActor> > UnitActorList;
+  UnitActorList m_activeUnitList;
 
-	tech_WLList<UnitActor *>		*m_activeUnitList;
+  typedef std::deque<EffectActor *> EffectActorList;
+  EffectActorList m_activeEffectList;
 
-	tech_WLList<EffectActor *>		*m_activeEffectList;
-	tech_WLList<TradeActor *>		*m_tradeActorList;
+  typedef std::deque<TradeActor *> TradeActorList;
+  TradeActorList m_tradeActorList;
 
 	BOOL							m_nextPlayer;
 

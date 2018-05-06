@@ -29,46 +29,45 @@
 #include "ctp/c3.h"
 #include "gfx/tilesys/resourcemap.h"
 
-#include "ui/aui_common/aui.h"
-#include "ui/aui_common/aui_blitter.h"
-#include "ui/aui_common/aui_surface.h"
-#include "ui/aui_common/aui_Factory.h"
-#include "ui/aui_common/aui_ldl.h"
-#include "ui/aui_common/aui_window.h"
-#include "ui/aui_common/aui_stringtable.h"
-
-#include "ui/aui_utils/primitives.h"
-#include "gs/utility/Globals.h"
-#include "gs/gameobj/Player.h"                     // g_player
-#include "robot/aibackdoor/dynarr.h"
-#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
+#include "gfx/spritesys/Actor.h"
+#include "gfx/spritesys/GoodActor.h"
+#include "gfx/spritesys/UnitActor.h"
 #include "gfx/spritesys/director.h"                   // g_director
-#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
 #include "gfx/tilesys/BaseTile.h"
 #include "gfx/tilesys/TileInfo.h"
-#include "gfx/tilesys/tileset.h"
-#include "gfx/gfx_utils/colorset.h"                   // g_colorSet
-#include "gs/gameobj/Unit.h"
-#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
-#include "ui/aui_ctp2/c3_updateaction.h"
-#include "gfx/spritesys/Actor.h"
-#include "gfx/spritesys/UnitActor.h"
-#include "gs/world/World.h"                      // g_theWorld
-#include "gs/world/Cell.h"
-#include "gs/world/MapPoint.h"
-#include "gs/newdb/WonderRecord.h"
-#include "ui/aui_ctp2/c3ui.h"
-#include "gfx/spritesys/GoodActor.h"
-#include "gs/gameobj/citydata.h"
-#include "ui/aui_utils/textutils.h"
 #include "gfx/tilesys/maputils.h"
-#include "gs/slic/SlicEngine.h"
-#include "gs/database/profileDB.h"                  // g_theProfileDB
-#include "gs/gameobj/CityRadius.h"
+#include "gfx/tilesys/tiledmap.h"                   // g_tiledMap
+#include "gfx/tilesys/tileset.h"
 #include "gs/database/StrDB.h"                      // g_theStringDB
-#include "gs/gameobj/UnitData.h"
+#include "gs/database/profileDB.h"                  // g_theProfileDB
 #include "gs/events/GameEventManager.h"
 #include "gs/gameobj/CityInfluenceIterator.h"
+#include "gs/gameobj/CityRadius.h"
+#include "gs/gameobj/Player.h"                     // g_player
+#include "gs/gameobj/Unit.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"                   // g_theUnitPool
+#include "gs/gameobj/citydata.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/utility/Globals.h"
+#include "gs/world/Cell.h"
+#include "gs/world/MapPoint.h"
+#include "gs/world/World.h"                      // g_theWorld
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/aui_Factory.h"
+#include "ui/aui_common/aui_blitter.h"
+#include "ui/aui_common/aui_ldl.h"
+#include "ui/aui_common/aui_stringtable.h"
+#include "ui/aui_common/aui_surface.h"
+#include "ui/aui_common/aui_window.h"
+#include "ui/aui_ctp2/SelItem.h"                    // g_selected_item
+#include "ui/aui_ctp2/c3_updateaction.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/aui_utils/textutils.h"
 #include "ui/ldl/ldl_user.h"
 
 #define k_NUDGE		48
@@ -427,7 +426,7 @@ BOOL ResourceMap::DrawACity(aui_Surface *pSurface, MapPoint const & pos, void *c
 	Unit		city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	UnitActor * actor = city.GetActor();
+	UnitActorPtr actor = city.GetActor();
 	if (!actor) return FALSE;
 
 	sint32		mapWidth, mapHeight;
@@ -460,7 +459,7 @@ BOOL ResourceMap::DrawALandCity(aui_Surface *pSurface, MapPoint const & pos, voi
 	Unit		city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	UnitActor	*actor = city.GetActor();
+	UnitActorPtr actor = city.GetActor();
 	if (!actor) return FALSE;
 
 	sint32		mapWidth, mapHeight;

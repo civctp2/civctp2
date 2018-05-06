@@ -31,28 +31,26 @@
 //----------------------------------------------------------------------------
 
 #include "ctp/c3.h"
-#include "gs/events/GameEventUser.h"
-#include "gs/gameobj/Events.h"
 
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/spritesys/directorevent.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/database/profileDB.h"
+#include "gs/events/GameEventUser.h"
 #include "gs/gameobj/Army.h"
 #include "gs/gameobj/ArmyData.h"
-#include "gfx/spritesys/director.h"
-#include "gfx/tilesys/tiledmap.h"
-#include "ui/aui_ctp2/SelItem.h"
-#include "gfx/spritesys/UnitActor.h"
-#include "gs/gameobj/UnitData.h"
-#include "gs/gameobj/unitutil.h"
-#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/Events.h"
 #include "gs/gameobj/Player.h"
-
-#include "sound/soundmanager.h"
-
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"
+#include "gs/gameobj/unitutil.h"
 #include "gs/newdb/SoundRecord.h"
-#include "gs/newdb/SpecialEffectRecord.h"
 #include "gs/newdb/SpecialAttackInfoRecord.h"
-
+#include "gs/newdb/SpecialEffectRecord.h"
 #include "net/general/network.h"
-#include "gs/database/profileDB.h"
+#include "sound/soundmanager.h"
+#include "ui/aui_ctp2/SelItem.h"
 
 STDEHANDLER(DirectorMoveUnitsEvent)
 {
@@ -82,22 +80,20 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 
 	sint32 numRevealed = 0;
 
-	UnitActor **restOfStack = NULL;
-	sint32 numRest = a->Num() - 1;
+	const sint32 numRest = a->Num() - 1;
+
+  Director::UnitActorVec restOfStack;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
 		a->GetActors(top_src, restOfStack);
 	}
 
-	UnitActor	**revealedActors = NULL;
+  Director::UnitActorVec revealedActors;
 
 	if (numRevealed > 0) {
 
 		// Something missing here.
 
-	} else {
-		revealedActors = NULL;
 	}
 
 	MapPoint newPos = to;
@@ -113,11 +109,16 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	}
 
 	if (!to.IsNextTo(from)) {
-		g_director->AddTeleport(top_src, from, newPos, numRevealed, revealedActors,
-								numRest, restOfStack);
+		g_director->AddTeleport(top_src, from, newPos, revealedActors, restOfStack);
 	} else {
-		g_director->AddMove(top_src, from, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, FALSE, top_src.GetMoveSoundID());
+		g_director->AddMove(
+      top_src,
+      from,
+      newPos,
+      revealedActors,
+		  restOfStack,
+      false,
+      top_src.GetMoveSoundID());
 
 	}
 

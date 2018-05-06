@@ -144,80 +144,81 @@
 #include "ctp/c3.h"
 #include "gs/gameobj/ArmyData.h"
 
-#include "gs/gameobj/advanceutil.h"
-#include "gs/gameobj/Agreement.h"
-#include "ai/diplomacy/AgreementMatrix.h"
-#include "gs/gameobj/AgreementPool.h"
-#include "gs/outcom/AICause.h"
 #include <algorithm>                    // std::min
-#include "gs/newdb/AdvanceRecord.h"
-#include "gs/gameobj/Advances.h"
-#include "gs/gameobj/ArmyPool.h"
-#include "gs/gameobj/Barbarians.h"
-#include "gs/newdb/BuildingRecord.h"
-#include "gs/gameobj/buildingutil.h"
-#include "gs/world/Cell.h"
-#include "gs/world/cellunitlist.h"
-#include "ui/interface/citywindow.h"
-#include "gs/newdb/ConstRecord.h"
-#include "gs/gameobj/CTP2Combat.h"
-#include "gs/newdb/DifficultyRecord.h"
-#include "gs/gameobj/Diplomacy_Log.h"
-#include "ai/diplomacy/Diplomat.h"
-#include "gfx/spritesys/director.h"
 #include <functional>                   // std::mem_fun_ref
+
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ai/diplomacy/Diplomat.h"
+#include "ai/mapanalysis/mapanalysis.h"
+#include "ai/strategy/scheduler/Scheduler.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/database/StrDB.h"
+#include "gs/database/profileDB.h"
 #include "gs/events/GameEventArgList.h"
 #include "gs/events/GameEventArgument.h"
 #include "gs/events/GameEventManager.h"
+#include "gs/gameobj/Advances.h"
+#include "gs/gameobj/Agreement.h"
+#include "gs/gameobj/AgreementPool.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/Barbarians.h"
+#include "gs/gameobj/CTP2Combat.h"
+#include "gs/gameobj/Diplomacy_Log.h"
 #include "gs/gameobj/GameSettings.h"
-#include "sound/gamesounds.h"
 #include "gs/gameobj/Gold.h"
 #include "gs/gameobj/GoodyHuts.h"
-#include "gs/newdb/GovernmentRecord.h"
 #include "gs/gameobj/HappyTracker.h"
-#include "ai/mapanalysis/mapanalysis.h"
 #include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/gameobj/TradeRouteData.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/advanceutil.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/pollution.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/newdb/DifficultyRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/newdb/OrderRecord.h"
+#include "gs/newdb/RiskRecord.h"
+#include "gs/newdb/SoundRecord.h"
+#include "gs/newdb/SpecialAttackInfoRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/outcom/AICause.h"
+#include "gs/slic/QuickSlic.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
+#include "gs/slic/SlicSegment.h"
 #include "gs/utility/MoveFlags.h"
+#include "gs/utility/QuadTree.h"                   // g_theUnitTree
+#include "gs/utility/RandGen.h"                    // g_rand
+#include "gs/utility/TurnCnt.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
+#include "gs/world/cellunitlist.h"
 #include "net/general/net_action.h"
 #include "net/general/net_info.h"
 #include "net/general/net_order.h"
 #include "net/general/network.h"
-#include "gs/gameobj/Order.h"
-#include "gs/newdb/OrderRecord.h"
-#include "gs/gameobj/Player.h"
-#include "gs/gameobj/pollution.h"
-#include "gs/utility/QuadTree.h"                   // g_theUnitTree
-#include "gs/slic/QuickSlic.h"
-#include "gs/database/profileDB.h"
-#include "ui/aui_ctp2/radarmap.h"
-#include "gs/utility/RandGen.h"                    // g_rand
-#include "gs/newdb/RiskRecord.h"
-#include "ai/strategy/scheduler/Scheduler.h"
-#include "ui/aui_ctp2/SelItem.h"
-#include "gs/slic/SlicEngine.h"
-#include "gs/slic/SlicObject.h"
-#include "gs/slic/SlicSegment.h"
-#include "sound/soundmanager.h"               // g_soundManager
-#include "gs/newdb/SoundRecord.h"
-#include "gs/newdb/SpecialAttackInfoRecord.h"
-#include "gs/newdb/SpecialEffectRecord.h"
-#include "gs/database/StrDB.h"
-#include "gs/newdb/TerrainImprovementRecord.h"
-#include "gs/newdb/TerrainRecord.h"
-#include "gs/gameobj/terrainutil.h"
-#include "gs/gameobj/TerrImprovePool.h"
-#include "gfx/tilesys/tiledmap.h"
-#include "gs/gameobj/TradePool.h"
-#include "gs/gameobj/TradeRouteData.h"
-#include "gs/utility/TurnCnt.h"
-#include "gfx/spritesys/UnitActor.h"
 #include "robot/pathing/UnitAstar.h"
-#include "gs/gameobj/UnitData.h"
-#include "gs/newdb/UnitRecord.h"
-#include "gs/gameobj/unitutil.h"
-#include "gs/newdb/WonderRecord.h"
-#include "gs/gameobj/wonderutil.h"
-#include "gs/world/World.h"
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"               // g_soundManager
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/aui_ctp2/radarmap.h"
+#include "ui/interface/citywindow.h"
 
 extern AgreementPool *  g_theAgreementPool;
 extern Diplomacy_Log *  g_theDiplomacyLog;
@@ -1109,15 +1110,15 @@ bool ArmyData::IsPatrolling() const
 }
 
 
-void ArmyData::GetActors(Unit &excludeMe, UnitActor **restOfStack)
+void ArmyData::GetActors(Unit &excludeMe, std::vector<std::weak_ptr<UnitActor> > &restOfStack)
 {
-    sint32			n = 0;
+    sint32 n = 0;
 
-    for(sint32 i = 0; i < m_nElements; i++)
+    for(sint32 i = 0; i < m_nElements; ++i)
     {
-        UnitActor * a = m_array[i].GetActor();
+        UnitActorPtr a = m_array[i].GetActor();
         if (a != excludeMe.GetActor()) {
-            restOfStack[n++] = a;
+            restOfStack.push_back(a);
         }
     }
 }
@@ -2851,16 +2852,15 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 //----------------------------------------------------------------------------
 void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray &revealedUnits)
 {
+	const sint32 numRevealed = revealedUnits.Num();
+  Director::UnitActorVec revealedActors;
+  revealedActors.reserve(numRevealed);
 
-	UnitActor	**revealedActors = NULL;
-
-	sint32 numRevealed = revealedUnits.Num();
-	sint32 numActors = 0;
+  sint32 numActors = 0;
 	if (numRevealed > 0) {
-		revealedActors = new UnitActor*[numRevealed];
-		for (sint32 i=0; i<numRevealed; i++) {
+		for (sint32 i = 0; i < numRevealed; ++i) {
 			if(revealedUnits[i].IsValid()) {
-				revealedActors[numActors++] = revealedUnits[i].GetActor();
+        revealedActors.push_back(revealedUnits[i].GetActor());
 			}
 		}
 	}
@@ -2870,17 +2870,22 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 	if(!top_src.IsValid())
 		top_src = m_array[0];
 
-	UnitActor **restOfStack = NULL;
-	sint32 numRest = m_nElements - 1;
+	const sint32 numRest = m_nElements - 1;
+  Director::UnitActorVec restOfStack;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
 		GetActors(top_src, restOfStack);
 	}
 
 	MapPoint newPos(npos);
-	g_director->AddMove(top_src, opos, newPos, numActors, revealedActors,
-						numRest, restOfStack, false, top_src.GetMoveSoundID());
+	g_director->AddMove(
+    top_src,
+    opos,
+    newPos,
+    revealedActors,
+		restOfStack,
+    false,
+    top_src.GetMoveSoundID());
 
 }
 
@@ -7624,7 +7629,6 @@ void ArmyData::MoveActors(const MapPoint &pos,
 
 	sint32 numRevealed = revealedUnits.Num();
 
-	UnitActor **restOfStack = NULL;
 	sint32 numRest = 0;
 
 	Unit nonDead;
@@ -7650,36 +7654,46 @@ void ArmyData::MoveActors(const MapPoint &pos,
 		return;
 	}
 
-	if (numRest > 0) {
-		sint32 n = 0;
-		restOfStack = new (UnitActor* [numRest]);
+  Director::UnitActorVec restOfStack;
+
+  if (numRest > 0) {
+		restOfStack.reserve(numRest);
+
 		for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].Flag(k_UDF_TELEPORT_DEATH) && m_array[i].m_id != top_src.m_id) {
-				restOfStack[n++] = m_array[i].GetActor();
+        restOfStack.push_back(m_array[i].GetActor());
 			}
 		}
 
 	}
 
-	UnitActor	**revealedActors;
-
-	if (numRevealed > 0) {
-		revealedActors = new UnitActor*[numRevealed];
-		for (sint32 i=0; i<numRevealed; i++) {
-			revealedActors[i] = revealedUnits[i].GetActor();
-		}
-	} else {
-		revealedActors = NULL;
+	  Director::UnitActorVec revealedActors;
+	
+    if (numRevealed > 0) {
+		  revealedActors.resize(numRevealed);
+		  for (sint32 i = 0; i < numRevealed; ++i) {
+			  revealedActors[i] = revealedUnits[i].GetActor();
+		  }
 	}
 
 	MapPoint newPos = pos;
 
 	if (teleport || !(top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) {
-		g_director->AddTeleport(top_src, m_pos, newPos, numRevealed, revealedActors,
-								numRest, restOfStack);
+		g_director->AddTeleport(
+      top_src, 
+      m_pos, 
+      newPos, 
+      revealedActors,
+      restOfStack);
 	} else {
-		g_director->AddMove(top_src, m_pos, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, false, top_src.GetMoveSoundID());
+		g_director->AddMove(
+      top_src,
+      m_pos,
+      newPos,
+      revealedActors,
+		  restOfStack,
+      false,
+      top_src.GetMoveSoundID());
 
 	}
 
@@ -8121,21 +8135,23 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 		return true;
 	}
 
-	UnitActor	**revealedActors = NULL;
-	sint32		numRevealed = 0;
-
-	UnitActor **restOfStack = NULL;
-	sint32 numRest = m_nElements - 1;
+  Director::UnitActorVec restOfStack;
+  sint32 numRest = m_nElements - 1;
 
 	if (numRest > 0)
 	{
-		restOfStack = new (UnitActor* [numRest]);
 		GetActors(top_src, restOfStack);
 	}
 
 	MapPoint directorDoesntLikeConsts = pos;
-	g_director->AddMove(top_src, m_pos, directorDoesntLikeConsts, numRevealed, revealedActors,
-							numRest, restOfStack, true, top_src.GetMoveSoundID());
+	g_director->AddMove(
+    top_src, 
+    m_pos, 
+    directorDoesntLikeConsts, 
+    Director::UnitActorVec(),
+		restOfStack, 
+    true, 
+    top_src.GetMoveSoundID());
 
 	UpdateZOCForRemoval();
 
@@ -8588,7 +8604,7 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 	{
 		if(ta.GetActor())
 		{
-			UnitActor *actor = ta.GetActor();
+			UnitActorPtr actor = ta.GetActor();
 
 			if(!actor->HasThisAnim(UNITACTION_ATTACK))
 			{

@@ -39,8 +39,11 @@
 #define __UNITACTOR_H__
 
 #include <deque>
+#include <memory>
 
 class UnitActor;
+typedef std::shared_ptr<UnitActor> UnitActorPtr;
+typedef std::weak_ptr<UnitActor> UnitActorWeakPtr;
 
 #include "gfx/spritesys/Action.h"             // Action, GAME_ACTION
 #include "gfx/spritesys/Actor.h"              // Actor
@@ -71,10 +74,12 @@ class ActorPath;
 class UnitActor : public Actor
 {
 public:
-	UnitActor(SpriteStatePtr ss, Unit id, sint32 type, const MapPoint &pos,
-			  sint32 owner, BOOL isUnseenCellActor, double visionRange,
-			  sint32 citySprite);
-	UnitActor(CivArchive &archive);
+  typedef std::vector<UnitActorWeakPtr> UnitActorVec;
+
+  UnitActor(SpriteStatePtr ss, Unit id, sint32 type, const MapPoint &pos,
+			      sint32 owner, BOOL isUnseenCellActor, double visionRange,
+			      sint32 citySprite);
+	explicit UnitActor(CivArchive &archive);
 
 	~UnitActor();
 
@@ -187,19 +192,18 @@ public:
 	void			SetKillNow(void) { m_killNow = TRUE; }
 	BOOL			GetKillNow(void) const { return m_killNow; }
 
-  void			SetRevealedActors(UnitActor **revealedActors);
-  void			SaveRevealedActors(UnitActor **revealedActors);
-	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
+  void			SetRevealedActors(const UnitActorVec &revealedActors);
+  void			SaveRevealedActors(const UnitActorVec &revealedActors);
+  const UnitActorVec &GetRevealedActors(void) const { return m_revealedActors; }
 
-  void			SetMoveActors(UnitActor **moveActors, sint32 numOActors);
-	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
-	sint32			GetNumOActors(void) const { return m_numOActors; }
+  void			SetMoveActors(const UnitActorVec &moveActors);
+  const UnitActorVec &GetMoveActors(void) const { return m_moveActors; }
 
 	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
 	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
 
 	void			SetIsTransported(sint32 val) { m_isTransported = val; }
-	sint32			GetIsTransported() const { return m_isTransported; }
+	sint32		GetIsTransported() const { return m_isTransported; }
 
 	void			GetBoundingRect(RECT *rect) const;
 
@@ -289,14 +293,12 @@ protected:
 	double				m_unitVisionRange;
 	double              m_newUnitVisionRange;
 
-	sint32				m_numRevealedActors;
-	UnitActor			**m_revealedActors;
-	sint32				m_numSavedRevealedActors;
-	UnitActor			**m_savedRevealedActors;
+  UnitActorVec m_revealedActors;
+  UnitActorVec m_savedRevealedActors;
 
 	BOOL				m_bVisSpecial;
 
-	UnitActor			**m_moveActors;
+  UnitActorVec m_moveActors;
 	sint32				m_numOActors;
 	BOOL				m_hidden;
 	BOOL				m_hiddenUnderStack;

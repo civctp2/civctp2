@@ -410,19 +410,19 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		double		visionRange = g_theUnitDB->Get(dbIndex, g_player[m_owner]->GetGovernmentType())->GetVisionRange();
 
 
-		m_ucell->m_actor = new UnitActor(ss,
-											unitID,
-											(sint32)dbIndex,
-											m_ucell->m_point,
-											m_ucell->m_cityOwner,
-											TRUE,
-											visionRange,
-											m_ucell->m_citySpriteIndex);
-		m_ucell->m_actor->SetUnitVisibility(1 << m_owner);
+		m_ucell->m_actor.reset(
+      new UnitActor(ss,
+                    unitID,
+                    (sint32)dbIndex,
+                    m_ucell->m_point,
+                    m_ucell->m_cityOwner,
+                    TRUE,
+                    visionRange,
+                    m_ucell->m_citySpriteIndex));
 
-		m_ucell->m_actor->SetSize(citySize);
-
-		m_ucell->m_actor->ChangeImage(ss, dbIndex, unitID);
+    m_ucell->m_actor->SetUnitVisibility(1 << m_owner);
+    m_ucell->m_actor->SetSize(citySize);
+    m_ucell->m_actor->ChangeImage(ss, dbIndex, unitID);
 	}
 	m_ucell->m_citySize = citySize;
 

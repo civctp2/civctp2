@@ -94,79 +94,80 @@
 #include "ctp/c3.h"
 #include "gs/gameobj/UnitData.h"
 
+#include <algorithm>                    // std::max
+
+#include "ai/diplomacy/AgreementMatrix.h"
+#include "ctp/ctp2_utils/BitMask.h"
+#include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/director.h"
+#include "gfx/tilesys/tiledmap.h"
+#include "gs/database/StrDB.h"
+#include "gs/database/profileDB.h"
+#include "gs/events/GameEventManager.h"
 #include "gs/gameobj/AchievementTracker.h"
-#include "gs/newdb/AdvanceRecord.h"
 #include "gs/gameobj/Advances.h"
 #include "gs/gameobj/Agreement.h"
-#include "ai/diplomacy/AgreementMatrix.h"
-#include "gs/outcom/AICause.h"
-#include <algorithm>                    // std::max
 #include "gs/gameobj/ArmyData.h"
 #include "gs/gameobj/ArmyPool.h"
 #include "gs/gameobj/Barbarians.h"
-#include "ctp/ctp2_utils/BitMask.h"
-#include "robot/aibackdoor/bset.h"
-#include "gs/newdb/BuildingRecord.h"
-#include "gs/gameobj/buildingutil.h"
-#include "gs/world/Cell.h"
-#include "gs/world/cellunitlist.h"
-#include "gs/gameobj/citydata.h"
-#include "ui/interface/citywindow.h"
 #include "gs/gameobj/CivilisationPool.h"
-#include "gs/newdb/ConstRecord.h"
 #include "gs/gameobj/Diffcly.h"
-#include "gfx/spritesys/director.h"
 #include "gs/gameobj/FeatTracker.h"
 #include "gs/gameobj/GameObj.h"
-#include "gs/events/GameEventManager.h"
-#include "sound/gamesounds.h"
 #include "gs/gameobj/Gold.h"
 #include "gs/gameobj/HappyTracker.h"
+#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/Order.h"
+#include "gs/gameobj/Player.h"
+#include "gs/gameobj/Readiness.h"
+#include "gs/gameobj/TerrImprovePool.h"
+#include "gs/gameobj/TradeBids.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/TradePool.h"
+#include "gs/gameobj/Vision.h"
+#include "gs/gameobj/WonderTracker.h"
+#include "gs/gameobj/Wormhole.h"
+#include "gs/gameobj/buildingutil.h"
+#include "gs/gameobj/citydata.h"
 #include "gs/gameobj/installation.h"
 #include "gs/gameobj/installationtree.h"
-#include "gs/gameobj/MaterialPool.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/gameobj/wonderutil.h"
+#include "gs/newdb/AdvanceRecord.h"
+#include "gs/newdb/BuildingRecord.h"
+#include "gs/newdb/ConstRecord.h"
+#include "gs/newdb/GovernmentRecord.h"
+#include "gs/newdb/RiskRecord.h"
+#include "gs/newdb/SpecialAttackInfoRecord.h"
+#include "gs/newdb/SpecialEffectRecord.h"
+#include "gs/newdb/SpriteRecord.h"
+#include "gs/newdb/TerrainImprovementRecord.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/UnitRecord.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/outcom/AICause.h"
+#include "gs/slic/SlicEngine.h"
+#include "gs/slic/SlicObject.h"
 #include "gs/utility/MoveFlags.h"
+#include "gs/utility/QuadTree.h"                   // g_theUnitTree
+#include "gs/utility/RandGen.h"
+#include "gs/utility/TurnCnt.h"
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"
+#include "gs/world/cellunitlist.h"
 #include "net/general/net_action.h"
 #include "net/general/net_info.h"
 #include "net/general/net_unit.h"
 #include "net/general/network.h"
-#include "gs/gameobj/Order.h"
-#include "gs/gameobj/Player.h"
-#include "gs/database/profileDB.h"
-#include "gs/utility/QuadTree.h"                   // g_theUnitTree
-#include "gs/utility/RandGen.h"
-#include "gs/gameobj/Readiness.h"
-#include "gs/newdb/RiskRecord.h"
-#include "ui/aui_ctp2/SelItem.h"
-#include "gs/slic/SlicEngine.h"
-#include "gs/slic/SlicObject.h"
+#include "robot/aibackdoor/bset.h"
+#include "sound/gamesounds.h"
 #include "sound/soundmanager.h"               // g_soundManager
-#include "gs/newdb/SpecialAttackInfoRecord.h"
-#include "gs/newdb/SpecialEffectRecord.h"
-#include "gs/newdb/SpriteRecord.h"
-#include "gfx/spritesys/SpriteState.h"
-#include "gs/database/StrDB.h"
-#include "gs/newdb/TerrainImprovementRecord.h"
-#include "gs/newdb/TerrainRecord.h"
-#include "gs/gameobj/terrainutil.h"
-#include "gs/gameobj/TerrImprovePool.h"
-#include "gfx/tilesys/tiledmap.h"
-#include "gs/gameobj/TradeBids.h"
-#include "gs/gameobj/TradeOfferPool.h"
-#include "gs/gameobj/TradePool.h"
-#include "gs/utility/TurnCnt.h"
-#include "gfx/spritesys/UnitActor.h"
-#include "gs/utility/UnitDynArr.h"
-#include "gs/newdb/UnitRecord.h"
-#include "gs/gameobj/unitutil.h"
+#include "ui/aui_ctp2/SelItem.h"
+#include "ui/interface/citywindow.h"
 #include "ui/interface/victorymoviewin.h"
-#include "gs/gameobj/Vision.h"
-#include "gs/newdb/WonderRecord.h"
-#include "gs/gameobj/WonderTracker.h"
-#include "gs/gameobj/wonderutil.h"
-#include "gs/world/World.h"
-#include "gs/gameobj/Wormhole.h"
-#include "gs/newdb/GovernmentRecord.h"
 
 #ifdef _DEBUG
 #include "ui/aui_common/aui.h"
@@ -175,17 +176,14 @@
 
 extern bool UnitCanCarry(sint32 dest, sint32 src, sint32 government);
 
-UnitData::UnitData
-(
-    const sint32        t,
-    const sint32        trans_t,
-    const Unit &        i,
-    const PLAYER_INDEX  o,
-    const MapPoint &    center_pos,
-    const Unit          hc,
-    UnitActor *         actor
-)
-:
+UnitData::UnitData(
+  const sint32        t,
+  const sint32        trans_t,
+  const Unit &        i,
+  const PLAYER_INDEX  o,
+  const MapPoint &    center_pos,
+  const Unit          hc,
+  std::shared_ptr<UnitActor> actor) :
     GameObj(i.m_id)
 {
 	m_pos = center_pos;
@@ -205,9 +203,9 @@ UnitData::UnitData
 		}
 		m_actor->SetNewUnitVisionRange((GetVisionRange()));
 	} else {
-		m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, center_pos,
-								m_owner, false, (GetVisionRange()),
-								m_city_data ? m_city_data->GetDesiredSpriteIndex() : -1);
+		m_actor.reset(new UnitActor(m_sprite_state, Unit(m_id), m_type, center_pos,
+								                m_owner, false, (GetVisionRange()),
+								                m_city_data ? m_city_data->GetDesiredSpriteIndex() : -1));
 		m_actor->SetUnitVisionRange((GetVisionRange()));
 		m_actor->SetUnitVisibility(m_visibility);
 
@@ -215,15 +213,12 @@ UnitData::UnitData
 	}
 }
 
-UnitData::UnitData
-(
-    const sint32        t,
-    const sint32        trans_t,
-    const Unit &        i,
-    const PLAYER_INDEX  o,
-    const MapPoint &    actor_pos
-)
-:
+UnitData::UnitData(
+  const sint32        t,
+  const sint32        trans_t,
+  const Unit &        i,
+  const PLAYER_INDEX  o,
+  const MapPoint &    actor_pos) :
     GameObj(i.m_id)
 {
 	Create(t, trans_t, i, o);
@@ -231,8 +226,8 @@ UnitData::UnitData
 	m_visibility = 0xffffffff;
 	m_temp_visibility = 0xffffffff;
 	m_radar_visibility = 0xffffffff;
-	m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
-							m_owner, false, (GetVisionRange()), -1);
+	m_actor.reset(new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
+							                m_owner, false, (GetVisionRange()), -1));
 	m_actor->SetUnitVisionRange((GetVisionRange()));
 
 	m_pos = actor_pos;
@@ -382,7 +377,6 @@ UnitData::~UnitData()
 {
 	delete m_cargo_list;
 	delete m_city_data;
-	delete m_actor;
 	delete m_roundTheWorldMask;
 	delete m_lesser;
 	delete m_greater;
@@ -2348,12 +2342,11 @@ void UnitData::Serialize(CivArchive &archive)
 		else
 			m_cargo_list=NULL;
 
-		archive>>tmp ;
+		archive >> tmp ;
 		delete m_city_data;
-        m_city_data = (tmp) ? new CityData(archive) : NULL;
+    m_city_data = (tmp) ? new CityData(archive) : NULL;
 
-        delete m_actor;
-		m_actor = new UnitActor(archive);
+		m_actor.reset(new UnitActor(archive));
 
 		m_sprite_state = m_actor->GetSpriteState();
 

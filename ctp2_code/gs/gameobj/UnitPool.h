@@ -56,7 +56,7 @@ public:
 	UnitPool();
 	UnitPool(CivArchive &archive) ;
 
-	Unit Create (sint32 t, const PLAYER_INDEX owner, const MapPoint &pos, const Unit hc, UnitActor *actor = NULL);
+	Unit Create (sint32 t, const PLAYER_INDEX owner, const MapPoint &pos, const Unit hc, std::shared_ptr<UnitActor> actor = std::shared_ptr<UnitActor>());
 	Unit Create (sint32 t, const PLAYER_INDEX owner, const MapPoint &actor_pos);
 
 	UnitData * AccessUnit(uint32 id) {  return (UnitData * ) Access(id); };

@@ -51,7 +51,7 @@
 // Library imports
 //----------------------------------------------------------------------------
 
-// None
+#include <memory>
 
 //----------------------------------------------------------------------------
 // Exported names
@@ -145,51 +145,19 @@ class UnseenCell
 
 public:
 	uint32  m_env;
-
 	sint16  m_terrain_type;
 	sint16  m_move_cost;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	uint16  m_flags;
 	sint8   m_bioInfectedOwner;
 	sint8   m_nanoInfectedOwner;
-
 	sint8   m_convertedOwner;
 	sint8   m_franchiseOwner;
 	sint8   m_injoinedOwner;
 	sint8   m_happinessAttackOwner;
-
 	sint16  m_citySize;
 	sint16  m_cityOwner;
 	sint16  m_citySpriteIndex;
-
-
-
-
-
-
-
-
-
 	sint8   m_cell_owner;
-
-
-
-
 	uint32  m_slaveBits;
 
 private:
@@ -203,11 +171,8 @@ private:
 	PointerList<UnseenInstallationInfo> *m_installations;
 	PointerList<UnseenImprovementInfo> *m_improvements;
 
-
-
-
 	MBCHAR *m_cityName;
-	UnitActor *m_actor;
+  std::shared_ptr<UnitActor> m_actor;
 
 	sint32 m_poolIndex;
 	/// The ID of the city that owns the tile.
@@ -233,7 +198,7 @@ public:
 	sint32 GetCitySize() const { return m_citySize; }
 	uint32 GetVisibleCityOwner() const { return m_visibleCityOwner; }
 	const MBCHAR *GetCityName() const { return m_cityName; }
-	UnitActor *GetActor() const { return m_actor; }
+  std::shared_ptr<UnitActor> GetActor() const { return m_actor; }
 
 	bool    IsBioInfected           (void) const   { return 0 != (m_flags & k_UCF_IS_BIOINFECTED)         ; }
 	bool    IsNanoInfected          (void) const   { return 0 != (m_flags & k_UCF_IS_NANOINFECTED)        ; }

@@ -60,49 +60,50 @@
 #include "ctp/c3.h"
 #include "gs/gameobj/Unit.h"
 
-#include "gs/utility/Globals.h"
 #include "GameWatch/gamewatch/GWRecord.h"
-#include "gs/newdb/ConstRecord.h"        // g_theConstDB
-#include "gs/database/StrDB.h"              // g_theStringDB
-#include "gs/database/DB.h"
-#include "gs/newdb/UnitRec.h"
-#include "robot/aibackdoor/dynarr.h"
-#include "gs/utility/UnitDynArr.h"
-#include "gs/gameobj/citydata.h"
-#include "gs/world/cellunitlist.h"
-#include "gs/gameobj/Player.h"             // g_player
-#include "gs/gameobj/pollution.h"
-#include "gs/world/World.h"              // g_theWorld
-#include "gs/gameobj/UnitData.h"
-#include "net/general/network.h"
-#include "net/general/net_info.h"
-#include "gs/gameobj/UnitPool.h"           // g_theUnitPool
-#include "gs/utility/RandGen.h"            // g_rand
-#include "ui/aui_common/aui.h"
-#include "ui/aui_utils/primitives.h"
+#include "ai/ctpai.h"
+#include "gfx/spritesys/UnitActor.h"
 #include "gfx/spritesys/director.h"           // g_director
-#include "ui/aui_common/tech_wllist.h"
-#include "gs/gameobj/Readiness.h"
-#include "gs/outcom/AICause.h"
-#include "gs/slic/SlicEngine.h"
-#include "gs/gameobj/HappyTracker.h"
-#include "gs/world/Cell.h"
-#include "gs/gameobj/TradeOfferPool.h"
-#include "gs/gameobj/ArmyPool.h"
+#include "gs/database/DB.h"
+#include "gs/database/StrDB.h"              // g_theStringDB
+#include "gs/database/profileDB.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/fileio/gamefile.h"
 #include "gs/gameobj/ArmyData.h"
+#include "gs/gameobj/ArmyPool.h"
+#include "gs/gameobj/HappyTracker.h"
+#include "gs/gameobj/Player.h"             // g_player
+#include "gs/gameobj/Readiness.h"
 #include "gs/gameobj/TradeBids.h"
-#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
-#include "gs/newdb/WonderRecord.h"
-#include "sound/gamesounds.h"
+#include "gs/gameobj/TradeOfferPool.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/UnitPool.h"           // g_theUnitPool
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/pollution.h"
+#include "gs/gameobj/unitutil.h"
+#include "gs/newdb/ConstRecord.h"        // g_theConstDB
 #include "gs/newdb/SpecialAttackInfoRecord.h"
 #include "gs/newdb/SpecialEffectRecord.h"
-#include "gs/events/GameEventManager.h"
-#include "gs/gameobj/unitutil.h"
-#include "ai/ctpai.h"
-#include "gs/fileio/gamefile.h"
 #include "gs/newdb/TerrainRecord.h"
+#include "gs/newdb/UnitRec.h"
+#include "gs/newdb/WonderRecord.h"
+#include "gs/outcom/AICause.h"
+#include "gs/slic/SlicEngine.h"
 #include "gs/slic/SlicObject.h"
-#include "gs/database/profileDB.h"
+#include "gs/utility/Globals.h"
+#include "gs/utility/RandGen.h"            // g_rand
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"              // g_theWorld
+#include "gs/world/cellunitlist.h"
+#include "net/general/net_info.h"
+#include "net/general/network.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "sound/gamesounds.h"
+#include "ui/aui_common/aui.h"
+#include "ui/aui_common/tech_wllist.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
+#include "ui/aui_utils/primitives.h"
 
 extern Pollution *  g_thePollution;
 
@@ -1150,12 +1151,12 @@ SpriteStatePtr Unit::GetSpriteState() const
 	return GetData()->GetSpriteState();
 }
 
-void Unit::SetActor(UnitActor *a)
+void Unit::SetActor(UnitActorPtr a)
 {
 	AccessData()->SetActor(a);
 }
 
-UnitActor * Unit::GetActor() const
+UnitActorPtr Unit::GetActor() const
 {
 	return GetData()->GetActor();
 }

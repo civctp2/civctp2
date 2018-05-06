@@ -249,9 +249,8 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
 	m_processingEvent       = event->GetType();
 
 	EVENTLOG(("ProcessEvent: %s Serial: %d\n",
-              g_eventDescriptions[m_processingEvent].name,
-			  event->GetSerial()
-            ));
+            g_eventDescriptions[m_processingEvent].name,
+			      event->GetSerial()));
 
 	GAME_EVENT_ERR  err     = event->Process();
 

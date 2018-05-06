@@ -1345,7 +1345,7 @@ Unit Player::CreateCity(
                         const sint32 t,
                         const MapPoint &pos,
                         CAUSE_NEW_CITY cause,
-                        UnitActor *actor,
+                        UnitActorPtr actor,
                         sint32 settlerType)
 
 {

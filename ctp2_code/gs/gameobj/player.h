@@ -57,7 +57,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// None
+#include <memory>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -409,8 +409,8 @@ public:
 									   sint32 &killedBy);
 
 	bool AddCityReferenceToPlayer(Unit id,  CAUSE_NEW_CITY cause);
-	Unit CreateCity(const sint32 t, const MapPoint &pos,  CAUSE_NEW_CITY cause,
-					UnitActor *actor, sint32 settlerType);
+  Unit CreateCity(const sint32 t, const MapPoint &pos, CAUSE_NEW_CITY cause,
+                  std::shared_ptr<UnitActor> actor, sint32 settlerType);
 
 	bool RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner,
 			const Unit &his_unit, UNIT_ORDER_TYPE attack_type);

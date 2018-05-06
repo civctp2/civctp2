@@ -65,7 +65,7 @@ Unit UnitPool::Create (
     const PLAYER_INDEX owner,
     const MapPoint &pos,
     const Unit hc,
-    UnitActor *actor)
+    std::shared_ptr<UnitActor> actor)
 {
 	UnitData *ptr = NULL;
 	Unit id(NewKey(k_BIT_GAME_OBJ_TYPE_UNIT));

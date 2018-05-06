@@ -70,18 +70,14 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	  m_sound_effect_id           (-1),
 	  m_unitsVisibility           (0),
 	  m_unitVisionRange           (0),
-	  m_numRevealedActors         (0),
-	  m_revealedActors            (NULL),
-	  m_moveActors                (NULL),
-	  m_numOActors                (0),
+    m_numOActors(0),
     m_specialUnitEffectsAction  (),
     m_sequence                  (NULL) {
 }
 
-Action::Action(const Action &rhs)
-:
-    m_actionType                (rhs.m_actionType),
-    m_endCondition              (rhs.m_endCondition),
+Action::Action(const Action &rhs):
+  m_actionType                (rhs.m_actionType),
+  m_endCondition              (rhs.m_endCondition),
 	m_curAnim                   (NULL),
 	m_maxActionCounter          (rhs.m_maxActionCounter),
 	m_curActionCounter          (rhs.m_curActionCounter),
@@ -94,17 +90,14 @@ Action::Action(const Action &rhs)
 	m_finished                  (rhs.m_finished),
 	m_loopAnimFinished          (rhs.m_loopAnimFinished),
 	m_specialDelayProcess       (rhs.m_specialDelayProcess),
-    m_startMapPoint             (rhs.m_startMapPoint),
+  m_startMapPoint             (rhs.m_startMapPoint),
 	m_endMapPoint               (rhs.m_endMapPoint),
 	m_facing                    (rhs.m_facing),
 	m_sound_effect_id           (rhs.m_sound_effect_id),
 	m_unitsVisibility           (rhs.m_unitsVisibility),
 	m_unitVisionRange           (rhs.m_unitVisionRange),
-	m_numRevealedActors         (rhs.m_numRevealedActors),
-	m_revealedActors            (NULL),
-	m_moveActors                (NULL),
-	m_numOActors                (rhs.m_numOActors),
-    m_specialUnitEffectsAction  (rhs.m_specialUnitEffectsAction),
+  m_numOActors                (0),
+  m_specialUnitEffectsAction  (rhs.m_specialUnitEffectsAction),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
     /// done : Action dows not own sequence object, shallow copy is OK
     m_sequence                  (rhs.m_sequence)
@@ -121,10 +114,6 @@ Action::~Action(void)
 {
 	delete m_curAnim;
   m_curAnim = NULL;
-	delete[] m_moveActors;
-  m_moveActors = NULL;
-	delete[] m_revealedActors;
-  m_revealedActors = NULL;
 }
 
 void Action::Process(void)
@@ -144,17 +133,6 @@ void Action::Process(void)
 	m_animElapsed = m_curAnim->GetElapsed();
 	m_animLastFrameTime = m_curAnim->GetLastFrameTime();
 
-
-
-
-
-
-
-
-
-
-
-
 	m_specialDelayProcess = m_curAnim->GetWeAreInDelay() && (m_actionType == UNITACTION_IDLE);
 	if (m_specialDelayProcess)
     {
@@ -162,10 +140,6 @@ void Action::Process(void)
 	}
 
 	m_curActionCounter++;
-
-
-
-
 
 	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished())
 	{
@@ -302,11 +276,11 @@ uint16 Action::GetTransparency(void) const
 	return trans;
 }
 
-void Action::SetMoveActors(UnitActor **moveActors, sint32 numOActors) {
+void Action::SetMoveActors(const std::vector<std::weak_ptr<UnitActor> > &moveActors) {
   m_moveActors = moveActors;
-  m_numOActors = numOActors;
+  m_numOActors = m_moveActors.size();
 }
 
-void Action::SetRevealedActors(UnitActor **revealedActors) { 
+void Action::SetRevealedActors(const std::vector<std::weak_ptr<UnitActor> > &revealedActors) {
   m_revealedActors = revealedActors; 
 }

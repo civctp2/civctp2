@@ -45,7 +45,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "gfx/spritesys/SpriteState.h"
+#include <vector>
+#include <memory>
 
 //----------------------------------------------------------------------------
 //
@@ -91,6 +92,7 @@ class DQActionBeginScheduler;
 //
 //----------------------------------------------------------------------------
 
+#include "gfx/spritesys/SpriteState.h"
 #include "gs/gameobj/GameOver.h"
 #include "gs/world/MapPoint.h"
 #include "gs/gameobj/message.h"
@@ -118,26 +120,18 @@ public:
 class DQActionMove : public DQAction
 {
 public:
-	DQActionMove()
-    :
+	DQActionMove() :
         DQAction        (),
-        move_actor      (NULL),
         move_oldPos     (),
         move_newPos     (),
-        moveArraySize   (0),
-        moveActors      (NULL),
-        numRevealed     (0),
-        revealedActors  (NULL),
         move_soundID    (CTPRecord::INDEX_INVALID)
     {};
 
-	UnitActor					*move_actor;
+	std::weak_ptr<UnitActor> move_actor;
 	MapPoint					move_oldPos;
 	MapPoint					move_newPos;
-	sint32						moveArraySize;
-	UnitActor					**moveActors;
-	sint32						numRevealed;
-	UnitActor					**revealedActors;
+  std::vector<std::weak_ptr<UnitActor> > moveActors;
+  std::vector<std::weak_ptr<UnitActor> > revealedActors;
 	sint32						move_soundID;
 };
 
@@ -147,8 +141,8 @@ public:
 	DQActionMoveProjectile();
 	~DQActionMoveProjectile();
 
-	UnitActor					*pshooting_actor;
-	UnitActor					*ptarget_actor;
+	std::weak_ptr<UnitActor> pshooting_actor;
+	std::weak_ptr<UnitActor> ptarget_actor;
 	MapPoint					pmove_oldPos;
 	MapPoint					pmove_newPos;
 	EffectActor					*end_projectile;
@@ -171,8 +165,6 @@ public:
 	DQActionAttack()
     :
         DQAction        (),
-        attacker        (NULL),
-        defender        (NULL),
         attacker_Pos    (),
         defender_Pos    (),
         attacker_ID     (0),
@@ -181,8 +173,8 @@ public:
         defender_IsCity (false)
     {};
 
-	UnitActor					*attacker;
-	UnitActor					*defender;
+	std::weak_ptr<UnitActor> attacker;
+	std::weak_ptr<UnitActor> defender;
 	MapPoint					attacker_Pos;
 	MapPoint					defender_Pos;
 	sint32						attacker_ID;
@@ -197,34 +189,16 @@ public:
 	DQActionAttackPos()
     :
         DQAction                (),
-        attackpos_attacker      (NULL),
         attackpos_attacker_pos  (),
         attackpos_target_pos    (),
         attackpos_soundID       (CTPRecord::INDEX_INVALID)
     {};
 
-	UnitActor					*attackpos_attacker;
+	std::weak_ptr<UnitActor> attackpos_attacker;
 	MapPoint					attackpos_attacker_pos;
 	MapPoint					attackpos_target_pos;
 	sint32						attackpos_soundID;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class DQActionDeath : public DQAction
 {
@@ -232,8 +206,6 @@ public:
 	DQActionDeath()
     :
         DQAction            (),
-        death_dead          (NULL),
-        death_victor        (NULL),
         dead_id             (0),
         victor_id           (0),
         victor_Pos          (),
@@ -242,8 +214,8 @@ public:
         victor_soundID      (CTPRecord::INDEX_INVALID)
     {};
 
-	UnitActor					*death_dead;
-	UnitActor					*death_victor;
+	std::shared_ptr<UnitActor> death_dead;
+	std::weak_ptr<UnitActor> death_victor;
 	sint32						dead_id;
 	sint32						victor_id;
 	MapPoint					victor_Pos;
@@ -259,12 +231,11 @@ public:
   DQActionMorph()
     :
         DQAction        (),
-        morphing_actor  (NULL),
         type            (0),
         id              ()
     {};
 
-	UnitActor      *morphing_actor;
+	std::weak_ptr<UnitActor> morphing_actor;
 	SpriteStatePtr  ss;
 	sint32          type;
 	Unit            id;
@@ -276,11 +247,10 @@ public:
 	DQActionHideShow()
     :
         DQAction        (),
-        hiding_actor    (NULL),
         hiding_pos      ()
     {}
 
-	UnitActor *     hiding_actor;
+	std::weak_ptr<UnitActor> hiding_actor;
 	MapPoint		hiding_pos;
 };
 
@@ -290,12 +260,11 @@ public:
 	DQActionWork()
     :
         DQAction        (),
-        working_actor   (NULL),
         working_pos     (),
         working_soundID (CTPRecord::INDEX_INVALID)
     {};
 
-	UnitActor*      working_actor;
+	std::weak_ptr<UnitActor> working_actor;
 	MapPoint		working_pos;
 	sint32			working_soundID;
 
@@ -306,11 +275,10 @@ class DQActionFastKill : public DQAction
 public:
 	DQActionFastKill()
     :
-        DQAction    (),
-        dead        (NULL)
+        DQAction    ()
     {};
 
-	UnitActor *     dead;
+	std::shared_ptr<UnitActor> dead;
 };
 
 class DQActionVision : public DQAction
@@ -328,11 +296,10 @@ public:
 	DQActionSetOwner()
     :
         DQAction        (),
-        setowner_actor  (NULL),
         owner           (PLAYER_UNASSIGNED)
     {};
 
-	UnitActor *     setowner_actor;
+	std::weak_ptr<UnitActor> setowner_actor;
 	sint32			owner;
 };
 
@@ -342,11 +309,10 @@ public:
 	DQActionSetVisibility()
     :
         DQAction            (),
-        setvisibility_actor (NULL),
         visibilityFlag      (0)
     {};
 
-	UnitActor *     setvisibility_actor;
+	std::weak_ptr<UnitActor> setvisibility_actor;
 	uint32			visibilityFlag;
 };
 
@@ -355,11 +321,10 @@ class DQActionSetVisionRange : public DQAction
 public:
 	DQActionSetVisionRange()
     :
-        DQAction                (),
-        setvisionrange_actor    (NULL)
+        DQAction                ()
     {}
 
-	UnitActor *     setvisionrange_actor;
+	std::weak_ptr<UnitActor> setvisionrange_actor;
 	double			range;
 };
 
@@ -370,21 +335,6 @@ public:
 
 	MapPoint					flash_pos;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class DQActionCopyVision : public DQAction
 {
@@ -483,16 +433,14 @@ public:
 	DQActionFaceoff()
     :
         DQAction                (),
-        faceoff_attacker        (NULL),
         faceoff_attacker_pos    (),
-        faceoff_attacked        (NULL),
         faceoff_attacked_pos    ()
     {};
 	~DQActionFaceoff() {}
 
-	UnitActor *     faceoff_attacker;
+	std::weak_ptr<UnitActor> faceoff_attacker;
 	MapPoint	    faceoff_attacker_pos;
-	UnitActor *     faceoff_attacked;
+	std::weak_ptr<UnitActor> faceoff_attacked;
 	MapPoint	    faceoff_attacked_pos;
 };
 
@@ -501,12 +449,11 @@ class DQActionTerminateFaceOff : public DQAction
 public:
 	DQActionTerminateFaceOff()
     :
-        DQAction    (),
-        faceroffer  (NULL)
+        DQAction    ()
     {};
 	~DQActionTerminateFaceOff() {}
 
-	UnitActor *     faceroffer;
+	std::weak_ptr<UnitActor> faceroffer;
 };
 
 class DQActionTerminateSound : public DQAction

@@ -172,27 +172,19 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 			if(m_unitData->m_visibility & (1 << g_selected_item->GetVisiblePlayer())) {
 				sint32 numRevealed = revealed.Num();
-				UnitActor **revealedActors;
-				if(numRevealed > 0) {
-					revealedActors = new UnitActor*[numRevealed];
-					for (sint32 i=0; i<numRevealed; i++)
-						revealedActors[i] = revealed[i].GetActor();
-				} else {
-					revealedActors = NULL;
-				}
+        Director::UnitActorVec revealedActors(numRevealed);
+        for (sint32 i = 0; i < numRevealed; ++i) {
+          revealedActors[i] = revealed[i].GetActor();
+        }
 
-
-
-
-
-
-
-
-
-
-
-				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors,
-										NULL, NULL, FALSE, uid.GetMoveSoundID());
+				g_director->AddMove(
+          uid,
+          pnt, 
+          m_unitData->m_pos, 
+          revealedActors,
+          Director::UnitActorVec(), 
+          false, 
+          uid.GetMoveSoundID());
 			}
 		}
 #if 0
@@ -221,15 +213,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 	} else {
 		if(g_network.DeadUnit(uint32(uid))) {
-
-
-
-
-
-
-
-
-
 			return;
 		}
 
@@ -478,12 +461,19 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
 
 	sint32 numRevealed = revealed.Num();
-	UnitActor **revealedActors = new UnitActor*[numRevealed];
-	for (sint32 i=0; i<numRevealed; i++)
-		revealedActors[i] = revealed[i].GetActor();
+	Director::UnitActorVec revealedActors(numRevealed);
+  for (sint32 i = 0; i < numRevealed; ++i) {
+    revealedActors[i] = revealed[i].GetActor();
+  }
 
-	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors,
-							NULL, NULL, FALSE, u.GetMoveSoundID());
+	g_director->AddMove(
+    u,
+    oldPos,
+    ud->m_pos,
+    revealedActors,
+    Director::UnitActorVec(),
+    false,
+    u.GetMoveSoundID());
 }
 
 void NetUnitHP::Packetize(uint8 *buf, uint16 &size)

@@ -2312,7 +2312,7 @@ void TiledMap::PaintArmyActors(MapPoint &pos)
 BOOL g_show_ai_dbg = 0;
 #endif
 
-void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
+void TiledMap::PaintUnitActor(std::shared_ptr<UnitActor> actor, bool fog)
 {
 	Assert(actor != NULL);
 	if (actor == NULL) return;
@@ -2552,7 +2552,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 			&&  m_localVision->GetLastSeen(pos, ucell))
 			{
 
-				UnitActor	*actor = ucell.m_unseenCell->GetActor();
+				UnitActorPtr actor = ucell.m_unseenCell->GetActor();
 
 				if (actor)
 				{
@@ -2575,7 +2575,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					}
 				}
 
-				UnitActor *actor = top.GetActor();
+				UnitActorPtr actor = top.GetActor();
 
 
 				if (g_player[top.GetOwner()] && !Player::IsThisPlayerARobot(top.GetOwner())) {
@@ -2726,7 +2726,7 @@ TiledMap::ProcessUnit(Unit unit)
 {
     if (unit.IsValid())
     {
-        UnitActor * actor = unit.GetActor();
+        UnitActorPtr actor = unit.GetActor();
         if (actor && !actor->IsActive())
         {
             actor->Process();
@@ -2756,7 +2756,7 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 	MapPoint			pos;
 	TileInfo			*curTileInfo;
 	GoodActor			*curGoodActor;
-	UnitActor			*curUnitActor;
+	UnitActorPtr curUnitActor;
 	Unit				unit;
 	Cell				*CurrentCell=NULL;
 
@@ -2888,7 +2888,7 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 			UnseenCellCarton		ucell;
 			if (m_localVision && m_localVision->GetLastSeen(pos, ucell)) {
 
-				UnitActor	*actor = ucell.m_unseenCell->GetActor();
+				UnitActorPtr actor = ucell.m_unseenCell->GetActor();
 
 				if (actor) {
 					actor->SetX(pixelX);
@@ -2899,7 +2899,7 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 
 				if (!g_theWorld->GetTopVisibleUnit(pos, top)) continue;
 
-				UnitActor *actor = top.GetActor();
+				UnitActorPtr actor = top.GetActor();
 
 				if (actor->IsActive()) {
 					Unit	second;
@@ -2933,106 +2933,6 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return 0;
 }
 
@@ -4520,7 +4420,7 @@ sint32 TiledMap::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 	return len;
 }
 
-UnitActor *TiledMap::GetClickedUnit(aui_MouseEvent *data)
+UnitActorPtr TiledMap::GetClickedUnit(aui_MouseEvent *data)
 {
 	sint32				mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth, &mapHeight);
@@ -4545,7 +4445,7 @@ UnitActor *TiledMap::GetClickedUnit(aui_MouseEvent *data)
 
 			if (!g_theWorld->GetTopVisibleUnit(pos, top)) continue;
 
-			UnitActor *actor = top.GetActor();
+			UnitActorPtr actor = top.GetActor();
 
 			if (actor->IsActive()) {
 				Unit	second;

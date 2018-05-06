@@ -47,27 +47,27 @@
 #include "ctp/c3.h"
 #include "gs/world/UnseenCell.h"
 
-#include "gs/world/Cell.h"
-#include "gs/gameobj/citydata.h"
-#include "robot/aibackdoor/civarchive.h"
-#include "gs/newdb/ConstRecord.h"		// g_theConstDB
-#include "gfx/spritesys/director.h"           // g_director
-#include "robot/aibackdoor/dynarr.h"
-#include "gs/gameobj/installationtree.h"
 #include "ctp/ctp2_utils/pointerlist.h"
-#include "gs/utility/QuadTree.h"
-#include "gs/newdb/ResourceRecord.h"
-#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
 #include "gfx/spritesys/SpriteState.h"
+#include "gfx/spritesys/UnitActor.h"
+#include "gfx/spritesys/director.h"           // g_director
+#include "gfx/tilesys/TileInfo.h"
+#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
+#include "gs/gameobj/TerrImprove.h"
+#include "gs/gameobj/UnitData.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/gameobj/installationtree.h"
+#include "gs/gameobj/terrainutil.h"
+#include "gs/newdb/ConstRecord.h"		// g_theConstDB
+#include "gs/newdb/ResourceRecord.h"
 #include "gs/newdb/TerrainImprovementRecord.h"
 #include "gs/newdb/TerrainRecord.h"
-#include "gs/gameobj/terrainutil.h"
-#include "gs/gameobj/TerrImprove.h"
-#include "gfx/tilesys/tiledmap.h"           // g_tiledMap
-#include "gfx/tilesys/TileInfo.h"
-#include "gfx/spritesys/UnitActor.h"
-#include "gs/gameobj/UnitData.h"
+#include "gs/utility/QuadTree.h"
+#include "gs/world/Cell.h"
 #include "gs/world/World.h"              // g_theWorld
+#include "robot/aibackdoor/civarchive.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "ui/aui_ctp2/SelItem.h"            // g_selected_item
 
 namespace
 {
@@ -78,17 +78,15 @@ namespace
     /// \param      a_Actor  actor to release
     /// \remarks    The actor is reference counted
     /// \todo       Move to UnitActor
-    void ReleaseActor(UnitActor * & a_Actor)
+    void ReleaseActor(UnitActorPtr &a_Actor)
     {
         if (a_Actor)
         {
 		    if (--a_Actor->m_refCount <= 0)
-            {
+        {
 			    g_director->ActiveUnitRemove(a_Actor);
-			    delete a_Actor;
+			    a_Actor.reset();
 		    }
-
-            a_Actor = NULL;
 	    }
     }
 }
@@ -133,7 +131,6 @@ UnseenCell::UnseenCell(const MapPoint & point)
 	m_installations                 (new PointerList<UnseenInstallationInfo>),
 	m_improvements                  (new PointerList<UnseenImprovementInfo>),
 	m_cityName                      (NULL),
-	m_actor                         (NULL),
 	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
@@ -199,20 +196,20 @@ UnseenCell::UnseenCell(const MapPoint & point)
 
 			CityData *cityData = city.GetData()->GetCityData();
 
-			UnitActor *actor = city.GetActor();
+			UnitActorPtr actor = city.GetActor();
 
 			if (actor) {
 
 				SpriteStatePtr newSS(new SpriteState(city.GetSpriteState()->GetIndex()));
 
-				UnitActor *newActor = new UnitActor(newSS,
+				UnitActorPtr newActor(new UnitActor(newSS,
 												                    city,
 												                    city.GetType(),
 												                    point,
 												                    city.GetOwner(),
 												                    TRUE,
 												                    city.GetVisionRange(),
-												                    city.CD()->GetDesiredSpriteIndex());
+												                    city.CD()->GetDesiredSpriteIndex()));
 
 				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
 										    | actor->GetUnitVisibility());
@@ -303,7 +300,6 @@ UnseenCell::UnseenCell()
 	m_installations                 (new PointerList<UnseenInstallationInfo>),
 	m_improvements                  (new PointerList<UnseenImprovementInfo>),
 	m_cityName                      (NULL),
-	m_actor                         (NULL),
 	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
@@ -328,9 +324,9 @@ UnseenCell::UnseenCell(UnseenCell *old)
 {
 	int realPoolIndex = m_poolIndex;
 	*this = *old;
-	m_poolIndex = realPoolIndex;
+	 m_poolIndex = realPoolIndex;
 
-	if(m_actor) {
+	if (m_actor) {
 		m_actor->m_refCount++;
 	}
 
@@ -403,7 +399,6 @@ UnseenCell::UnseenCell(CivArchive &archive)
 	m_installations                 (NULL),
 	m_improvements                  (NULL),
 	m_cityName                      (NULL),
-	m_actor                         (NULL),
 	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
@@ -944,7 +939,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		ReleaseActor(m_actor);
 		if (hasActor)
 		{
-			m_actor = new UnitActor(archive);
+			m_actor.reset(new UnitActor(archive));
 		}
 
 		delete m_tileInfo;

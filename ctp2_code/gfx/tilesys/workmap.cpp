@@ -595,7 +595,6 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint const & pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
-	UnitActor	*actor;
 	sint32		x, y;
 	Unit		city;
 	sint32		mapWidth, mapHeight;
@@ -603,7 +602,7 @@ BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint const & pos, void *conte
 	city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	actor = city.GetActor();
+  UnitActorPtr actor = city.GetActor();
 	if (!actor) return FALSE;
 
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
@@ -639,7 +638,6 @@ BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint const & pos, void *conte
 BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint const & pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
-	UnitActor	*actor;
 	sint32		x, y;
 	Unit		city;
 	sint32		mapWidth, mapHeight;
@@ -647,7 +645,7 @@ BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint const & pos, void *c
 	city = g_theWorld->GetCell(pos)->GetCity();
 	if (city.m_id == 0) return FALSE;
 
-	actor = city.GetActor();
+  UnitActorPtr actor = city.GetActor();
 	if (!actor) return FALSE;
 
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);

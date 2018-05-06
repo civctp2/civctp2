@@ -1844,12 +1844,15 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 690 );
 
 	m_gameLoaded = TRUE;
-	g_gevManager->Resume();
-	g_gevManager->Process();
+	//g_gevManager->Resume();
+	//g_gevManager->Process();
 
 	g_theProgressWindow->StartCountingTo( 700 );
 
 	g_director->CatchUp();
+
+  g_gevManager->Resume();
+  g_gevManager->Process();
 
 	g_theProgressWindow->StartCountingTo( 710 );
 

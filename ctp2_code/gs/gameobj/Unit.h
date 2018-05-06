@@ -366,8 +366,8 @@ public:
 
 	void SetSpriteState(SpriteStatePtr s);
 	SpriteStatePtr GetSpriteState() const;
-	void SetActor(UnitActor *a);
-	UnitActor * GetActor() const;
+	void SetActor(std::shared_ptr<UnitActor> a);
+  std::shared_ptr<UnitActor> GetActor() const;
 
 	SpriteStatePtr GetPrimaryProjectileState();
 	SpriteStatePtr GetPrimaryProjectileEndState();

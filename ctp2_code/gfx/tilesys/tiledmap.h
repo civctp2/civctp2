@@ -48,7 +48,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// BOOL, MBCHAR, RECT, etc.
+#include <memory>
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -261,7 +261,7 @@ public:
 
 	void			PaintArmyActors(MapPoint &pos);
 
-	void			PaintUnitActor(UnitActor *actor, bool fog = false);
+	void			PaintUnitActor(std::shared_ptr<UnitActor> actor, bool fog = false);
 
 	void			PaintEffectActor(EffectActor *actor);
 
@@ -391,7 +391,7 @@ public:
 
 	void		HandleCheat(MapPoint &pos);
 
-	UnitActor	*GetClickedUnit(aui_MouseEvent *data);
+  std::shared_ptr<UnitActor> GetClickedUnit(aui_MouseEvent *data);
 
 	bool		PointInMask(POINT hitPt) const;
 	bool		MousePointToTilePos(POINT point, MapPoint &tilePos) const;
