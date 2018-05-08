@@ -378,7 +378,7 @@ public:
 	void SetSpriteState(SpriteStatePtr s) { m_sprite_state = s; };
 	SpriteStatePtr GetSpriteState() const { return m_sprite_state; };
 
-	void SetActor(std::shared_ptr<UnitActor> a) { m_actor = a; };
+	void ResetActor() { m_actor.reset(); };
   std::shared_ptr<UnitActor> GetActor() const { return m_actor; };
 
 	bool IsCity() const { return m_city_data != NULL; }

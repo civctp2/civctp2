@@ -307,7 +307,7 @@ void Unit::FastKill()
 	if(GetActor()) {
 		if(g_director)
 			g_director->FastKill(GetActor());
-		AccessData()->SetActor(NULL);
+		AccessData()->ResetActor();
 	} else {
 		Assert(false);
 	}
@@ -1151,9 +1151,9 @@ SpriteStatePtr Unit::GetSpriteState() const
 	return GetData()->GetSpriteState();
 }
 
-void Unit::SetActor(UnitActorPtr a)
+void Unit::ResetActor()
 {
-	AccessData()->SetActor(a);
+  AccessData()->ResetActor();
 }
 
 UnitActorPtr Unit::GetActor() const

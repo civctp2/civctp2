@@ -1588,7 +1588,7 @@ void Director::AddDeath(Unit dead) {
 
   ActiveUnitAdd(dead.GetActor());
 
-  dead.SetActor(NULL); // Now action owns dead's actor
+  dead.ResetActor(); // Now action owns dead's actor
   m_itemQueue.push_back(item);
 }
 
@@ -1607,7 +1607,7 @@ void Director::AddDeathWithSound(Unit dead, sint32 soundID) {
   action->dead_soundID = soundID;
   action->victor_soundID = 0;
 
-  dead.SetActor(NULL);  // Now action owns dead's actor
+  dead.ResetActor();  // Now action owns dead's actor
   m_itemQueue.push_back(item);
 }
 
@@ -1687,7 +1687,7 @@ void Director::AddFastKill(Unit dead) {
 
   action->dead = actor;
 
-  dead.SetActor(NULL);
+  dead.ResetActor();
   m_itemQueue.push_back(item);  // Now action owns dead's actor
 }
 
