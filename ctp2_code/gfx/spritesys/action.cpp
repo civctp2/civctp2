@@ -34,7 +34,9 @@
 
 #include "gfx/spritesys/ActorPath.h"
 #include "gfx/spritesys/Anim.h"
+#include "gfx/spritesys/Sequence.h"
 #include "gfx/spritesys/UnitActor.h"
+
 #if 0
 #include "gfx/spritesys/Actor.h"
 #include "ctp/debugtools/debugmemory.h"
@@ -71,8 +73,7 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	  m_unitsVisibility           (0),
 	  m_unitVisionRange           (0),
     m_numOActors(0),
-    m_specialUnitEffectsAction  (),
-    m_sequence                  (NULL) {
+    m_specialUnitEffectsAction  () {
 }
 
 Action::Action(const Action &rhs):
@@ -99,7 +100,7 @@ Action::Action(const Action &rhs):
   m_numOActors                (0),
   m_specialUnitEffectsAction  (rhs.m_specialUnitEffectsAction),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
-    /// done : Action dows not own sequence object, shallow copy is OK
+    /// done : Action does not own sequence object
     m_sequence                  (rhs.m_sequence)
 {
     if (rhs.m_curAnim)
@@ -283,4 +284,12 @@ void Action::SetMoveActors(const std::vector<std::weak_ptr<UnitActor> > &moveAct
 
 void Action::SetRevealedActors(const std::vector<std::weak_ptr<UnitActor> > &revealedActors) {
   m_revealedActors = revealedActors; 
+}
+
+void Action::SetSequence(std::weak_ptr<Sequence> seq) {
+  m_sequence = seq; 
+}
+
+std::weak_ptr<Sequence> Action::GetSequence(void) const {
+  return m_sequence; 
 }

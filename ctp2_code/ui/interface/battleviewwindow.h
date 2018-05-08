@@ -1,13 +1,10 @@
 #ifndef __BATTLEVIEWWINDOW_H__
 #define __BATTLEVIEWWINDOW_H__
 
+#include <memory>
+
 #include "ui/aui_ctp2/c3window.h"
 #include "ui/aui_common/aui_action.h"
-
-
-
-
-
 
 class Battle;
 class BattleView;
@@ -19,7 +16,7 @@ class Sequence;
 
 class BattleViewWindow : public C3Window {
 public:
-	static void Initialize(Sequence *seq);
+	static void Initialize(std::weak_ptr<Sequence> seq);
 	static void Cleanup(void);
 
 	BattleViewWindow(
@@ -42,8 +39,8 @@ public:
 	void GetAttackerPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
 	void GetDefenderPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
 
-	void SetSequence(Sequence *seq) { m_sequence = seq; }
-	Sequence *GetSequence(void) { return m_sequence; }
+	void SetSequence(std::weak_ptr<Sequence> seq) { m_sequence = seq; }
+	std::weak_ptr<Sequence> GetSequence(void) { return m_sequence; }
 
 
 	const BattleView *GetBattleView() const { return(m_battleView); }
@@ -104,8 +101,7 @@ private:
 	ctp2_Static				*m_fortifiedBonusText;
 	ctp2_Static				*m_fortifiedBonusValue;
 
-	Sequence				*m_sequence;
-
+	std::weak_ptr<Sequence>  m_sequence;
 };
 
 

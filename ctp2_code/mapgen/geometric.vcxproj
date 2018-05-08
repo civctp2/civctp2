@@ -180,6 +180,7 @@
       <PrecompiledHeaderOutputFile>.\geometri\geometric.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\geometri\</ObjectFileName>
       <ProgramDataBaseFileName>.\geometri\</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>

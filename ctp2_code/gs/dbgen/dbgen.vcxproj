@@ -237,6 +237,7 @@
       <PrecompiledHeaderOutputFile>.\Release\dbgen.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Midl>
       <TypeLibraryName>.\Release\dbgen.tlb</TypeLibraryName>

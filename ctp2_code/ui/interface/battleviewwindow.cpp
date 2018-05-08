@@ -1,31 +1,30 @@
 #include "ctp/c3.h"
 #include "ui/interface/battleviewwindow.h"
 
+#include "gfx/gfx_utils/pixelutils.h"
+#include "gfx/spritesys/battleviewactor.h"
+#include "gfx/spritesys/director.h"  // g_director
+#include "gfx/tilesys/tiledmap.h"
+#include "gfx/tilesys/tileset.h"
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/CTP2Combat.h"
+#include "gs/newdb/TerrainRecord.h"
+#include "gs/world/World.h"  // g_theWorld
+#include "net/general/network.h"
+#include "sound/soundmanager.h"
+#include "ui/aui_common/aui_blitter.h"
 #include "ui/aui_common/aui_control.h"
-#include "ui/aui_ctp2/ctp2_Static.h"
-#include "ui/aui_ctp2/ctp2_button.h"
-#include "ui/aui_ctp2/c3_icon.h"
-#include "ui/aui_ctp2/c3ui.h"
-#include "ui/aui_common/aui_uniqueid.h"
 #include "ui/aui_common/aui_ldl.h"
 #include "ui/aui_common/aui_stringtable.h"
-#include "ui/aui_common/aui_blitter.h"
-#include "gfx/gfx_utils/pixelutils.h"
-#include "ui/aui_utils/primitives.h"
-#include "gfx/tilesys/tileset.h"
-#include "gfx/tilesys/tiledmap.h"
-#include "gfx/spritesys/battleviewactor.h"
-#include "ui/interface/battleview.h"
-#include "ui/interface/battle.h"
-#include "gs/world/World.h"                  // g_theWorld
-#include "gfx/spritesys/director.h"               // g_director
-#include "gs/gameobj/CTP2Combat.h"
-#include "gs/events/GameEventManager.h"
+#include "ui/aui_common/aui_uniqueid.h"
 #include "ui/aui_ctp2/SelItem.h"
-#include "net/general/network.h"
-#include "gs/newdb/TerrainRecord.h"
-#include "sound/soundmanager.h"
-
+#include "ui/aui_ctp2/c3_icon.h"
+#include "ui/aui_ctp2/c3ui.h"
+#include "ui/aui_ctp2/ctp2_Static.h"
+#include "ui/aui_ctp2/ctp2_button.h"
+#include "ui/aui_utils/primitives.h"
+#include "ui/interface/battle.h"
+#include "ui/interface/battleview.h"
 #include "ui/ldl/ldl_data.hpp"
 #include "ui/ldl/ldl_file.hpp"
 
@@ -80,7 +79,7 @@ void RemoveBattleViewAction::Execute(aui_Control *control, uint32 action, uint32
 }
 
 
-void BattleViewWindow::Initialize(Sequence *seq)
+void BattleViewWindow::Initialize(SequenceWeakPtr seq)
 {
 	AUI_ERRCODE		errcode;
 
@@ -100,7 +99,7 @@ void BattleViewWindow::Initialize(Sequence *seq)
 
 void BattleViewWindow::Cleanup(void)
 {
-	Sequence	*seq = NULL;
+	SequenceWeakPtr	seq;
 
 	if (g_battleViewWindow) {
 		seq = g_battleViewWindow->GetSequence();
@@ -157,8 +156,7 @@ BattleViewWindow::BattleViewWindow
     m_fortBonusValue        (NULL),
     m_fortBonusImage        (NULL),
     m_fortifiedBonusText    (NULL),
-    m_fortifiedBonusValue   (NULL),
-    m_sequence              (NULL)
+    m_fortifiedBonusValue   (NULL)
 {
 	InitCommonLdl(ldlBlock);
 }

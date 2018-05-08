@@ -56,7 +56,7 @@ extern SoundManager		*g_soundManager;
 WonderMovieWindow		*g_wonderMovieWindow = NULL;
 
 
-void wondermoviewin_Initialize(Sequence *seq)
+void wondermoviewin_Initialize(SequenceWeakPtr seq)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -112,9 +112,10 @@ void wondermoviewin_DisplayWonderMovie(sint32 id)
 
 void wondermoviewin_Cleanup()
 {
-	Sequence *seq=NULL;
-	if (g_wonderMovieWindow) {
-		seq = g_wonderMovieWindow->GetSequence();
+  SequenceWeakPtr seq;
+
+  if (g_wonderMovieWindow) {
+    seq = g_wonderMovieWindow->GetSequence();
 
 		g_c3ui->RemoveWindow(g_wonderMovieWindow->Id());
 

@@ -4,12 +4,14 @@
 #ifndef __VICTORYMOVIEWIN__
 #define __VICTORYMOVIEWIN__
 
+#include <memory>
+
 #include "ui/aui_common/aui_action.h"
 
 class Sequence;
 enum GAME_OVER;
 
-void victorymoviewin_Initialize(Sequence *seq);
+void victorymoviewin_Initialize(std::weak_ptr<Sequence> seq);
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason);
 
 void victorymoviewin_Cleanup();

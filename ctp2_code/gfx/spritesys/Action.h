@@ -193,8 +193,8 @@ public:
 	void			SetSpecialUnitEffectsAction(DQAction action) { m_specialUnitEffectsAction = action; }
 	DQAction		GetSpecialUnitEffectsAction(void) const { return m_specialUnitEffectsAction; }
 
-	void			SetSequence(Sequence *seq) { m_sequence = seq; }
-	Sequence		*GetSequence(void) const { return m_sequence; }
+  void SetSequence(std::weak_ptr<Sequence> seq);
+  std::weak_ptr<Sequence> GetSequence(void) const;
 
 	void			SetSoundEffect(sint32 sound_id) { m_sound_effect_id = sound_id; }
 	sint32  		GetSoundEffect(void) const { return m_sound_effect_id; }
@@ -236,7 +236,7 @@ protected:
 
 	DQAction			m_specialUnitEffectsAction;
 
-	Sequence			*m_sequence;
+	std::weak_ptr<Sequence> m_sequence;
 };
 
 #endif

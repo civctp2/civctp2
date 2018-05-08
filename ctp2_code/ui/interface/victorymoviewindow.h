@@ -4,6 +4,8 @@
 #ifndef __VICTORYMOVIEWINDOW_H__
 #define __VICTORYMOVIEWINDOW_H__
 
+#include <memory>
+
 class aui_MovieButton;
 class c3_Static;
 class Sequence;
@@ -43,14 +45,14 @@ public:
 	void SetMovie(MBCHAR *filename);
 	void SetVictoryName(MBCHAR *name);
 
-	Sequence *GetSequence(void) { return m_sequence; }
-	void SetSequence(Sequence *seq) { m_sequence = seq; }
+	std::weak_ptr<Sequence> GetSequence(void) { return m_sequence; }
+	void SetSequence(std::weak_ptr<Sequence> seq) { m_sequence = seq; }
 
 private:
 	aui_MovieButton		*m_movieButton;
 	c3_Static			*m_wonderName;
 
-	Sequence			*m_sequence;
+  std::weak_ptr<Sequence>	m_sequence;
 };
 
 #endif

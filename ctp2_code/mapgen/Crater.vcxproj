@@ -213,6 +213,7 @@
       <PrecompiledHeaderOutputFile>.\Crater__\Crater.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\Crater__\</ObjectFileName>
       <ProgramDataBaseFileName>.\Crater__\</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>

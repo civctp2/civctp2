@@ -447,6 +447,7 @@
       <PrecompiledHeaderOutputFile>.\fault___\fault.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\fault___\</ObjectFileName>
       <ProgramDataBaseFileName>.\fault___\</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>

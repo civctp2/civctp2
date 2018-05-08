@@ -418,7 +418,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FunctionLevelLinking>false</FunctionLevelLinking>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -432,6 +432,7 @@
       <PrecompiledHeaderFile>ctp/c3.h</PrecompiledHeaderFile>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -618,6 +619,7 @@ rem                                                 if                          
     <ClInclude Include="..\gfx\spritesys\BattleViewActor.h" />
     <ClInclude Include="..\gfx\spritesys\CitySpriteGroup.h" />
     <ClInclude Include="..\gfx\spritesys\Director.h" />
+    <ClInclude Include="..\gfx\spritesys\DirectorActionHandlers.h" />
     <ClInclude Include="..\gfx\spritesys\DirectorActions.h" />
     <ClInclude Include="..\gfx\spritesys\directorevent.h" />
     <ClInclude Include="..\gfx\spritesys\EffectActor.h" />
@@ -627,6 +629,7 @@ rem                                                 if                          
     <ClInclude Include="..\gfx\spritesys\GoodActor.h" />
     <ClInclude Include="..\gfx\spritesys\GoodSpriteGroup.h" />
     <ClInclude Include="..\gfx\spritesys\screenmanager.h" />
+    <ClInclude Include="..\gfx\spritesys\Sequence.h" />
     <ClInclude Include="..\gfx\spritesys\Sprite.h" />
     <ClInclude Include="..\gfx\spritesys\SpriteFile.h" />
     <ClInclude Include="..\gfx\spritesys\SpriteGroup.h" />
@@ -1417,6 +1420,7 @@ rem                                                 if                          
     <ClCompile Include="..\gfx\spritesys\BattleViewActor.cpp" />
     <ClCompile Include="..\gfx\spritesys\CitySpriteGroup.cpp" />
     <ClCompile Include="..\gfx\spritesys\Director.cpp" />
+    <ClCompile Include="..\gfx\spritesys\DirectorActionHandlers.cpp" />
     <ClCompile Include="..\gfx\spritesys\DirectorActions.cpp" />
     <ClCompile Include="..\gfx\spritesys\directorevent.cpp" />
     <ClCompile Include="..\gfx\spritesys\EffectActor.cpp" />
@@ -1426,6 +1430,7 @@ rem                                                 if                          
     <ClCompile Include="..\gfx\spritesys\GoodActor.cpp" />
     <ClCompile Include="..\gfx\spritesys\GoodSpriteGroup.cpp" />
     <ClCompile Include="..\gfx\spritesys\screenmanager.cpp" />
+    <ClCompile Include="..\gfx\spritesys\Sequence.cpp" />
     <ClCompile Include="..\gfx\spritesys\Sprite.cpp" />
     <ClCompile Include="..\gfx\spritesys\SpriteFile.cpp" />
     <ClCompile Include="..\gfx\spritesys\SpriteGroup.cpp" />

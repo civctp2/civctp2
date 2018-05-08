@@ -115,7 +115,7 @@ static aui_StringTable	*s_advanceString = NULL;
 
 static sint32 s_oldResearching = -1;
 
-static Sequence		*s_screenSequence = NULL;
+static SequenceWeakPtr		s_screenSequence;
 
 static bool *s_scienceGoalTree=NULL;
 
@@ -210,7 +210,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 
 
 
-sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequence *seq )
+sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, SequenceWeakPtr seq )
 {
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
@@ -273,9 +273,9 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 
 
-		if (s_screenSequence) {
+		if (!s_screenSequence.expired()) {
 			g_director->ActionFinished(s_screenSequence);
-			s_screenSequence = NULL;
+			s_screenSequence.reset();
 		}
 	}
 

@@ -2593,6 +2593,12 @@
     <ClInclude Include="..\gfx\spritesys\ActionQueue.h">
       <Filter>gfx\spritesys\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\Sequence.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfx\spritesys\DirectorActionHandlers.h">
+      <Filter>gfx\spritesys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ctp2_utils\appstrings.cpp">
@@ -4841,6 +4847,12 @@
     </ClCompile>
     <ClCompile Include="..\gfx\spritesys\ActionQueue.cpp">
       <Filter>gfx\spritesys\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\Sequence.cpp">
+      <Filter>gfx\spritesys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gfx\spritesys\DirectorActionHandlers.cpp">
+      <Filter>gfx\spritesys</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -236,9 +236,9 @@ STDEHANDLER(DirectorActionSuccessful)
 
 STDEHANDLER(DirectorReallyBeginScheduler)
 {
-	if(g_director->m_holdSchedulerSequence != NULL) {
+	if (!g_director->m_holdSchedulerSequence.expired()) {
 		g_director->ActionFinished(g_director->m_holdSchedulerSequence);
-		g_director->m_holdSchedulerSequence = NULL;
+		g_director->m_holdSchedulerSequence.reset();
 	}
 	return GEV_HD_Continue;
 }

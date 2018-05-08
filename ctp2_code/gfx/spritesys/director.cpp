@@ -39,91 +39,71 @@
 //----------------------------------------------------------------------------
 
 #include "ctp/c3.h"
-#include "gfx/spritesys/director.h"
+#include "gfx/spritesys/Director.h"
 
 #include <inttypes.h>
 
-#include <algorithm>                // std::fill
+#include <algorithm>  // std::fill
 #include <utility>
 
+#include "ctp/ctp2_utils/c3errors.h"
+#include "ctp/debugtools/debugmemory.h"
+#include "gfx/gfx_utils/colorset.h"
+#include "gfx/gfx_utils/pixelutils.h"
 #include "gfx/spritesys/Action.h"
 #include "gfx/spritesys/Actor.h"
 #include "gfx/spritesys/Anim.h"
-#include "gs/gameobj/Army.h"
-#include "ui/aui_ctp2/background.h"
-#include "ui/interface/backgroundwin.h"
-#include "ui/interface/battleviewwindow.h"       // g_battleViewWindow
-#include "ctp/ctp2_utils/c3errors.h"
-#include "ui/aui_ctp2/c3ui.h"
-#include "gs/world/Cell.h"
-#include "gs/world/cellunitlist.h"
-#include "gs/gameobj/citydata.h"
-#include "gfx/gfx_utils/colorset.h"
-#include "ui/interface/cursormanager.h"
-#include "ctp/debugtools/debugmemory.h"
-#include "robot/aibackdoor/dynarr.h"
 #include "gfx/spritesys/EffectActor.h"
-#include "gs/events/GameEventManager.h"
-#include "sound/gamesounds.h"
-#include "gs/utility/Globals.h"
-#include "gfx/tilesys/maputils.h"
-#include "gs/gameobj/MessagePool.h"
-#include "ui/interface/messagewin.h"
-#include "net/general/net_info.h"
-#include "net/general/network.h"
-#include "gfx/gfx_utils/pixelutils.h"
-#include "gs/gameobj/Player.h"                 // g_player
-#include "ui/aui_utils/primitives.h"
-#include "gs/database/profileDB.h"              // g_theProfileDB
-#include "ui/aui_ctp2/radarmap.h"               // g_radarMap
-#include "ui/interface/sci_advancescreen.h"
-#include "ui/interface/screenutils.h"
-#include "ui/aui_ctp2/SelItem.h"                // g_selected_item
-#include "sound/soundmanager.h"           // g_soundManager
-#include "gfx/spritesys/SpriteGroupList.h"
-#include "gs/newdb/SpriteRecord.h"
 #include "gfx/spritesys/SpriteState.h"
-#include "gfx/spritesys/spriteutils.h"
-#include "ui/aui_common/tech_wllist.h"
-#include "gfx/tilesys/tiledmap.h"               // g_tiledMap
-#include "gfx/tilesys/tileutils.h"
 #include "gfx/spritesys/TradeActor.h"
-#include "gs/utility/TurnCnt.h"                // g_turn
-#include "gs/gameobj/Unit.h"
 #include "gfx/spritesys/UnitActor.h"
+#include "gfx/tilesys/maputils.h"
+#include "gfx/tilesys/tiledmap.h"  // g_tiledMap
+#include "gfx/tilesys/tileutils.h"
+#include "gs/database/profileDB.h"  // g_theProfileDB
+#include "gs/events/GameEventManager.h"
+#include "gs/gameobj/Army.h"
+#include "gs/gameobj/Player.h"  // g_player
+#include "gs/gameobj/Unit.h"
 #include "gs/gameobj/UnitData.h"
-#include "gs/utility/UnitDynArr.h"
+#include "gs/gameobj/citydata.h"
+#include "gs/newdb/SpriteRecord.h"
 #include "gs/newdb/UnitRecord.h"
-#include "ui/interface/victorymoviewin.h"
-#include "ui/interface/wondermoviewin.h"
-#include "gs/world/World.h"                  // g_theWorld
-
-extern SpriteGroupList *    g_unitSpriteGroupList;
-extern Background *         g_background;
-extern C3UI	*               g_c3ui;
-extern MessagePool *        g_theMessagePool;
+#include "gs/utility/Globals.h"
+#include "gs/utility/TurnCnt.h"  // g_turn
+#include "gs/utility/UnitDynArr.h"
+#include "gs/world/Cell.h"
+#include "gs/world/World.h"  // g_theWorld
+#include "gs/world/cellunitlist.h"
+#include "net/general/network.h"
+#include "robot/aibackdoor/dynarr.h"
+#include "sound/gamesounds.h"
+#include "sound/soundmanager.h"  // g_soundManager
+#include "ui/aui_common/tech_wllist.h"
+#include "ui/aui_ctp2/SelItem.h"   // g_selected_item
+#include "ui/aui_ctp2/radarmap.h"  // g_radarMap
+#include "ui/aui_utils/primitives.h"
+#include "ui/interface/cursormanager.h"
 
 #ifdef _PLAYTEST
-extern BOOL				    g_doingFastRounds;
+extern BOOL g_doingFastRounds;
 #endif
 
-DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
-:
-    m_type              (type),
-    m_addedToSavedList  (FALSE),
-    m_owner             (PLAYER_UNASSIGNED),
-    m_round             (0),
-    m_action            (action),
-    m_handler           (handler),
-    m_sequence          (NULL)
-{
-	if (g_turn)
-	{
-		m_round = static_cast<uint16>(g_turn->GetRound());
-	}
+DQItem::DQItem(DQITEM_TYPE type, DQAction* action, DQHandler* handler)
+    : m_type(type),
+      m_addedToSavedList(FALSE),
+      m_owner(PLAYER_UNASSIGNED),
+      m_round(0),
+      m_action(action),
+      m_handler(handler) {
+  if (g_turn) {
+    m_round = static_cast<uint16>(g_turn->GetRound());
+  }
 }
 
-DQItemPtr DQItem::CreatePtr(DQITEM_TYPE type, DQAction *action, DQHandler *handler) {
+DQItemPtr DQItem::CreatePtr(DQITEM_TYPE type,
+                            DQAction* action,
+                            DQHandler* handler) {
   DQItemPtr item(new DQItem(type, action, handler));
 
   if (g_director) {
@@ -134,872 +114,807 @@ DQItemPtr DQItem::CreatePtr(DQITEM_TYPE type, DQAction *action, DQHandler *handl
   return item;
 }
 
-DQItem::~DQItem()
-{
-	//DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
-	delete m_sequence;
-	delete m_action;
+DQItem::~DQItem() {
+  // DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
+  delete m_action;
 }
 
-#define k_MAX_DISPATCHED_QUEUE_ITEMS		1000
-#define k_MAX_SAVED_SEQUENCES				1000
+SequenceWeakPtr DQItem::getSequence() {
+  return m_sequence;
+}
+
+#define k_MAX_DISPATCHED_QUEUE_ITEMS 1000
+#define k_MAX_SAVED_SEQUENCES 1000
 
 Director::Director(void)
-:
-    m_nextPlayer                (FALSE),
-    m_masterCurTime             (0),
-    m_lastTickCount             (0),
-    m_timeLogIndex              (0),
-    m_averageElapsed            (0),
-    m_averageFPS                (k_DEFAULT_FPS),
-    m_actionFinished            (TRUE),
-    m_paused                    (FALSE),
-    m_processingActiveUnits     (FALSE),
-    m_processingActiveEffects   (FALSE),
-    m_curSequenceID             (0),
-    m_lastSequenceID            (0),
-    m_holdSchedulerSequence     (NULL),
-    m_pendingGameActions        (0),
-    m_endTurnRequested          (false)
-{
-	std::fill(m_timeLog, m_timeLog + k_TIME_LOG_SIZE, 0);
+    : m_nextPlayer(FALSE),
+      m_masterCurTime(0),
+      m_lastTickCount(0),
+      m_timeLogIndex(0),
+      m_averageElapsed(0),
+      m_averageFPS(k_DEFAULT_FPS),
+      m_actionFinished(TRUE),
+      m_paused(FALSE),
+      m_processingActiveUnits(FALSE),
+      m_processingActiveEffects(FALSE),
+      m_curSequenceID(0),
+      m_lastSequenceID(0),
+      m_pendingGameActions(0),
+      m_endTurnRequested(false) {
+  std::fill(m_timeLog, m_timeLog + k_TIME_LOG_SIZE, 0);
 }
 
-Director::~Director(void)
-{
-}
+Director::~Director(void) {}
 
-void Director::Kill(UnitActorPtr actor)
-{
-	actor->DumpAllActions();
+void Director::Kill(UnitActorPtr actor) {
+  actor->DumpAllActions();
 
-  UnitActorList::iterator actorIt = std::find_if(
-      m_activeUnitList.begin(), 
-      m_activeUnitList.end(), 
-      [&](UnitActorPtr &a) { return a == actor; });
+  UnitActorList::iterator actorIt =
+      std::find_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                   [&](UnitActorPtr& a) { return a == actor; });
 
-	if (actorIt != m_activeUnitList.end())
-	{
-		if (m_processingActiveUnits)
-		{
-			actor->SetKillNow();
-		}
-		else
-		{
-			m_activeUnitList.erase(actorIt);
-		}
-	}
-}
-
-void Director::FastKill(UnitActorPtr actor)
-{
-	actor->DumpAllActions();
-
-  UnitActorList::iterator actorIt = std::find_if(
-    m_activeUnitList.begin(),
-    m_activeUnitList.end(),
-    [&](UnitActorPtr &a) { return a == actor; });
-
-  if (actorIt != m_activeUnitList.end())
-	{
-		if (m_processingActiveUnits)
-		{
-			actor->SetKillNow();
-		}
-		else
-		{
+  if (actorIt != m_activeUnitList.end()) {
+    if (m_processingActiveUnits) {
+      actor->SetKillNow();
+    } else {
       m_activeUnitList.erase(actorIt);
-		}
-	}
+    }
+  }
 }
 
-void Director::FastKill(EffectActor *actor)
-{
-  EffectActorList::iterator actorIt = std::find(m_activeEffectList.begin(), m_activeEffectList.end(), actor);
+void Director::FastKill(UnitActorPtr actor) {
+  actor->DumpAllActions();
 
-	if (actorIt != m_activeEffectList.end())
-	{
-		if (m_processingActiveEffects)
-		{
-			actor->SetKillNow();
-		}
-		else
-		{
-			m_activeEffectList.erase(actorIt);
-			delete actor;
-		}
-	}
+  UnitActorList::iterator actorIt =
+      std::find_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                   [&](UnitActorPtr& a) { return a == actor; });
+
+  if (actorIt != m_activeUnitList.end()) {
+    if (m_processingActiveUnits) {
+      actor->SetKillNow();
+    } else {
+      m_activeUnitList.erase(actorIt);
+    }
+  }
 }
 
-void Director::UpdateTimingClock(void)
-{
-	sint32  elapsed;
+void Director::FastKill(EffectActor* actor) {
+  EffectActorList::iterator actorIt =
+      std::find(m_activeEffectList.begin(), m_activeEffectList.end(), actor);
 
-	if (m_lastTickCount == 0) {
-		elapsed = 1000/k_DEFAULT_FPS;
-	} else {
-		elapsed = GetTickCount() - m_lastTickCount;
-	}
-
-	if (elapsed > k_ELAPSED_CEILING)
-		elapsed = k_ELAPSED_CEILING;
-
-	m_lastTickCount = GetTickCount();
-
-	m_timeLog[m_timeLogIndex++] = elapsed;
-
-	if (m_timeLogIndex >= k_TIME_LOG_SIZE)
-	{
-		sint32		timeSum=0;
-		for (sint32 i=0; i<k_TIME_LOG_SIZE; i++)
-			timeSum += m_timeLog[i];
-
-		m_averageElapsed = (timeSum / k_TIME_LOG_SIZE);
-
-		if (m_averageElapsed > 0)
-		{
-			m_averageFPS = 1000 / m_averageElapsed;
-		}
-		else
-		{
-			m_averageFPS = k_DEFAULT_FPS;
-		}
-
-		m_timeLogIndex = 0;
-	}
-
-	m_masterCurTime += elapsed;
+  if (actorIt != m_activeEffectList.end()) {
+    if (m_processingActiveEffects) {
+      actor->SetKillNow();
+    } else {
+      m_activeEffectList.erase(actorIt);
+      delete actor;
+    }
+  }
 }
 
-void Director::Process(void)
-{
-	UpdateTimingClock();
+void Director::UpdateTimingClock(void) {
+  sint32 elapsed;
 
-	static uint32 nextTime = 0;
+  if (m_lastTickCount == 0) {
+    elapsed = 1000 / k_DEFAULT_FPS;
+  } else {
+    elapsed = GetTickCount() - m_lastTickCount;
+  }
 
-	if (GetTickCount() > nextTime)
-	{
-		HandleNextAction();
+  if (elapsed > k_ELAPSED_CEILING)
+    elapsed = k_ELAPSED_CEILING;
 
-		ProcessActiveUnits();
-		ProcessActiveEffects();
+  m_lastTickCount = GetTickCount();
 
-		ProcessTradeRouteAnimations();
-		if(g_tiledMap)
-			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
+  m_timeLog[m_timeLogIndex++] = elapsed;
 
-		nextTime = GetTickCount() + 75;
-	}
+  if (m_timeLogIndex >= k_TIME_LOG_SIZE) {
+    sint32 timeSum = 0;
+    for (sint32 i = 0; i < k_TIME_LOG_SIZE; i++)
+      timeSum += m_timeLog[i];
+
+    m_averageElapsed = (timeSum / k_TIME_LOG_SIZE);
+
+    if (m_averageElapsed > 0) {
+      m_averageFPS = 1000 / m_averageElapsed;
+    } else {
+      m_averageFPS = k_DEFAULT_FPS;
+    }
+
+    m_timeLogIndex = 0;
+  }
+
+  m_masterCurTime += elapsed;
 }
 
-void Director::PauseDirector(BOOL pause)
-{
-	m_paused = pause;
+void Director::Process(void) {
+  UpdateTimingClock();
+
+  static uint32 nextTime = 0;
+
+  if (GetTickCount() > nextTime) {
+    HandleNextAction();
+
+    ProcessActiveUnits();
+    ProcessActiveEffects();
+
+    ProcessTradeRouteAnimations();
+    if (g_tiledMap)
+      g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
+
+    nextTime = GetTickCount() + 75;
+  }
+}
+
+void Director::PauseDirector(BOOL pause) {
+  m_paused = pause;
 }
 
 #ifdef _DEBUG
 
-void Director::DumpItem(DQItem *item)
-{
-	switch(item->m_type)
-	{
-	case DQITEM_MOVE:
-	{
-		DQActionMove *action = (DQActionMove *)item->m_action;
+void Director::DumpItem(DQItem* item) {
+  switch (item->m_type) {
+    case DQITEM_MOVE: {
+      DQActionMove* action = (DQActionMove*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Move\n"));
-		DPRINTF(k_DBG_UI, ("  move_actor         :%#.8lx\n", action->move_actor));
-		DPRINTF(k_DBG_UI, ("  move_oldPos        :%d,%d\n", action->move_oldPos.x, action->move_oldPos.y));
-		DPRINTF(k_DBG_UI, ("  move_newPos        :%d,%d\n", action->move_newPos.x, action->move_newPos.y));
-		DPRINTF(k_DBG_UI, ("  moveArraySize      :%" PRIu64 "\n", action->moveActors.size()));
-		DPRINTF(k_DBG_UI, ("  moveActors         :"));
-		for(UnitActorWeakPtr a : action->moveActors)
-		{
-			DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
-		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  numRevealed        :%" PRIu64 "\n", action->revealedActors.size()));
-		DPRINTF(k_DBG_UI, ("  revealedActors     :"));
-    for (UnitActorWeakPtr a : action->revealedActors) {
-      DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
-    }		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  move_soundID       :%d\n", action->move_soundID));
-	}
-		break;
-	case DQITEM_MOVEPROJECTILE:
-	{
-		DQActionMoveProjectile *action = (DQActionMoveProjectile *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Move\n"));
+      DPRINTF(k_DBG_UI, ("  move_actor         :%#.8lx\n", action->move_actor));
+      DPRINTF(k_DBG_UI, ("  move_oldPos        :%d,%d\n", action->move_oldPos.x,
+                         action->move_oldPos.y));
+      DPRINTF(k_DBG_UI, ("  move_newPos        :%d,%d\n", action->move_newPos.x,
+                         action->move_newPos.y));
+      DPRINTF(k_DBG_UI, ("  moveArraySize      :%" PRIu64 "\n",
+                         action->moveActors.size()));
+      DPRINTF(k_DBG_UI, ("  moveActors         :"));
+      for (UnitActorWeakPtr a : action->moveActors) {
+        DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
+      }
+      DPRINTF(k_DBG_UI, ("\n"));
+      DPRINTF(k_DBG_UI, ("  numRevealed        :%" PRIu64 "\n",
+                         action->revealedActors.size()));
+      DPRINTF(k_DBG_UI, ("  revealedActors     :"));
+      for (UnitActorWeakPtr a : action->revealedActors) {
+        DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
+      }
+      DPRINTF(k_DBG_UI, ("\n"));
+      DPRINTF(k_DBG_UI, ("  move_soundID       :%d\n", action->move_soundID));
+    } break;
+    case DQITEM_MOVEPROJECTILE: {
+      DQActionMoveProjectile* action = (DQActionMoveProjectile*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
-		DPRINTF(k_DBG_UI, ("  pshooting_actor    :%#.8lx\n", action->pshooting_actor));
-		DPRINTF(k_DBG_UI, ("  ptarget_actor      :%#.8lx\n", action->ptarget_actor));
-		DPRINTF(k_DBG_UI, ("  pmove_oldPos       :%d,%d\n", action->pmove_oldPos.x, action->pmove_oldPos.y));
-		DPRINTF(k_DBG_UI, ("  pmove_newPos       :%d,%d\n", action->pmove_newPos.x, action->pmove_newPos.y));
-		DPRINTF(k_DBG_UI, ("  end_projectile     :%#.8lx\n", action->end_projectile));
-		DPRINTF(k_DBG_UI, ("  projectile_path    :%d\n", action->projectile_path));
-	}
-		break;
-	case DQITEM_SPECEFFECT :
-		{
-		DQActionSpecialEffect *action = (DQActionSpecialEffect *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Move Projectile\n"));
+      DPRINTF(k_DBG_UI,
+              ("  pshooting_actor    :%#.8lx\n", action->pshooting_actor));
+      DPRINTF(k_DBG_UI,
+              ("  ptarget_actor      :%#.8lx\n", action->ptarget_actor));
+      DPRINTF(k_DBG_UI, ("  pmove_oldPos       :%d,%d\n",
+                         action->pmove_oldPos.x, action->pmove_oldPos.y));
+      DPRINTF(k_DBG_UI, ("  pmove_newPos       :%d,%d\n",
+                         action->pmove_newPos.x, action->pmove_newPos.y));
+      DPRINTF(k_DBG_UI,
+              ("  end_projectile     :%#.8lx\n", action->end_projectile));
+      DPRINTF(k_DBG_UI,
+              ("  projectile_path    :%d\n", action->projectile_path));
+    } break;
+    case DQITEM_SPECEFFECT: {
+      DQActionSpecialEffect* action = (DQActionSpecialEffect*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Special Effect\n"));
-		DPRINTF(k_DBG_UI, ("  speceffect_pos       :%d,%d\n", action->speceffect_pos.x, action->speceffect_pos.y));
-		DPRINTF(k_DBG_UI, ("  speceffect_spriteID    :%d\n", action->speceffect_spriteID));
-		DPRINTF(k_DBG_UI, ("  speceffect_soundID    :%d\n", action->speceffect_soundID));
-		}
-		break;
-	case DQITEM_ATTACK:
-	{
-		DQActionAttack *action = (DQActionAttack *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Special Effect\n"));
+      DPRINTF(k_DBG_UI, ("  speceffect_pos       :%d,%d\n",
+                         action->speceffect_pos.x, action->speceffect_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  speceffect_spriteID    :%d\n", action->speceffect_spriteID));
+      DPRINTF(k_DBG_UI,
+              ("  speceffect_soundID    :%d\n", action->speceffect_soundID));
+    } break;
+    case DQITEM_ATTACK: {
+      DQActionAttack* action = (DQActionAttack*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Attack\n"));
-		DPRINTF(k_DBG_UI, ("  attacker			:%#.8lx\n", action->attacker));
-		DPRINTF(k_DBG_UI, ("  defender			:%#.8lx\n", action->defender));
-		DPRINTF(k_DBG_UI, ("  attacker_Pos      :%d,%d\n", action->attacker_Pos.x, action->attacker_Pos.y));
-		DPRINTF(k_DBG_UI, ("  defender_Pos      :%d,%d\n", action->defender_Pos.x, action->defender_Pos.y));
-		DPRINTF(k_DBG_UI, ("  attacker_soundID  :%d\n", action->attacker_ID));
-		DPRINTF(k_DBG_UI, ("  defender_soundID  :%d\n", action->defender_ID));
-	}
-		break;
-	case DQITEM_ATTACKPOS:
-	{
-		DQActionAttackPos *action = (DQActionAttackPos *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Attack\n"));
+      DPRINTF(k_DBG_UI,
+              ("  attacker			:%#.8lx\n", action->attacker));
+      DPRINTF(k_DBG_UI,
+              ("  defender			:%#.8lx\n", action->defender));
+      DPRINTF(k_DBG_UI, ("  attacker_Pos      :%d,%d\n", action->attacker_Pos.x,
+                         action->attacker_Pos.y));
+      DPRINTF(k_DBG_UI, ("  defender_Pos      :%d,%d\n", action->defender_Pos.x,
+                         action->defender_Pos.y));
+      DPRINTF(k_DBG_UI, ("  attacker_soundID  :%d\n", action->attacker_ID));
+      DPRINTF(k_DBG_UI, ("  defender_soundID  :%d\n", action->defender_ID));
+    } break;
+    case DQITEM_ATTACKPOS: {
+      DQActionAttackPos* action = (DQActionAttackPos*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
-		DPRINTF(k_DBG_UI, ("  attackpos_attacker     :%#.8lx\n", action->attackpos_attacker));
-		DPRINTF(k_DBG_UI, ("  attackpos_attacker_pos :%d,%d\n", action->attackpos_attacker_pos.x, action->attackpos_attacker_pos.y));
-		DPRINTF(k_DBG_UI, ("  attackpos_target_pos   :%d,%d\n", action->attackpos_target_pos.x, action->attackpos_target_pos.y));
-		DPRINTF(k_DBG_UI, ("  attackpos_soundID      :%d\n", action->attackpos_soundID));
-	}
-		break;
-	case DQITEM_SPECATTACK:
-	{
-		DQActionAttack *action = (DQActionAttack *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Attack Pos\n"));
+      DPRINTF(k_DBG_UI, ("  attackpos_attacker     :%#.8lx\n",
+                         action->attackpos_attacker));
+      DPRINTF(k_DBG_UI, ("  attackpos_attacker_pos :%d,%d\n",
+                         action->attackpos_attacker_pos.x,
+                         action->attackpos_attacker_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  attackpos_target_pos   :%d,%d\n",
+               action->attackpos_target_pos.x, action->attackpos_target_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  attackpos_soundID      :%d\n", action->attackpos_soundID));
+    } break;
+    case DQITEM_SPECATTACK: {
+      DQActionAttack* action = (DQActionAttack*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Special Attack\n"));
-		DPRINTF(k_DBG_UI, ("  sa_attacker        ::%#.8lx\n"  , action->attacker));
-		DPRINTF(k_DBG_UI, ("  sa_attacked        ::%#.8lx\n"  , action->defender));
-		DPRINTF(k_DBG_UI, ("  sa_attacker_pos    ::%d,%d\n", action->attacker_Pos.x, action->attacker_Pos.y));
-		DPRINTF(k_DBG_UI, ("  sa_attacked_pos    ::%d,%d\n", action->defender_Pos.x, action->defender_Pos.y));
-		DPRINTF(k_DBG_UI, ("  sa_soundID         ::%d\n",       action->attacker_ID));
-		DPRINTF(k_DBG_UI, ("  sa_spriteID        ::%d\n",       action->defender_ID));
-	}
-		break;
-	case DQITEM_DEATH:
-	{
-		DQActionDeath *action = (DQActionDeath *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Special Attack\n"));
+      DPRINTF(k_DBG_UI, ("  sa_attacker        ::%#.8lx\n", action->attacker));
+      DPRINTF(k_DBG_UI, ("  sa_attacked        ::%#.8lx\n", action->defender));
+      DPRINTF(k_DBG_UI, ("  sa_attacker_pos    ::%d,%d\n",
+                         action->attacker_Pos.x, action->attacker_Pos.y));
+      DPRINTF(k_DBG_UI, ("  sa_attacked_pos    ::%d,%d\n",
+                         action->defender_Pos.x, action->defender_Pos.y));
+      DPRINTF(k_DBG_UI, ("  sa_soundID         ::%d\n", action->attacker_ID));
+      DPRINTF(k_DBG_UI, ("  sa_spriteID        ::%d\n", action->defender_ID));
+    } break;
+    case DQITEM_DEATH: {
+      DQActionDeath* action = (DQActionDeath*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Death\n"));
-		DPRINTF(k_DBG_UI, ("  death_dead         :%#.8lx\n", action->death_dead.get()));
-		DPRINTF(k_DBG_UI, ("  death_victor       :%#.8lx\n", action->death_victor));
-		DPRINTF(k_DBG_UI, ("  victor_Pos         :%d,%d\n", action->victor_Pos.x, action->victor_Pos.y));
-		DPRINTF(k_DBG_UI, ("  dead_Pos           :%d,%d\n", action->dead_Pos.x, action->dead_Pos.y));
-		DPRINTF(k_DBG_UI, ("  dead_soundID       :%d\n", action->dead_soundID));
-		DPRINTF(k_DBG_UI, ("  victor_soundID     :%d\n", action->victor_soundID));
-	}
-		break;
-	case DQITEM_MORPH:
-	{
-		DQActionMorph *action = (DQActionMorph *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Death\n"));
+      DPRINTF(k_DBG_UI, ("  death_dead         :%#.8lx\n", action->death_dead));
+      DPRINTF(k_DBG_UI,
+              ("  death_victor       :%#.8lx\n", action->death_victor));
+      DPRINTF(k_DBG_UI, ("  victor_Pos         :%d,%d\n", action->victor_Pos.x,
+                         action->victor_Pos.y));
+      DPRINTF(k_DBG_UI, ("  dead_Pos           :%d,%d\n", action->dead_Pos.x,
+                         action->dead_Pos.y));
+      DPRINTF(k_DBG_UI, ("  dead_soundID       :%d\n", action->dead_soundID));
+      DPRINTF(k_DBG_UI, ("  victor_soundID     :%d\n", action->victor_soundID));
+    } break;
+    case DQITEM_MORPH: {
+      DQActionMorph* action = (DQActionMorph*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Morph\n"));
-		DPRINTF(k_DBG_UI, ("  morphing_actor     :%#.8lx\n", action->morphing_actor));
-		DPRINTF(k_DBG_UI, ("  ss                 :%#.8lx (%d)\n", action->ss, action->ss->GetIndex()));
-		DPRINTF(k_DBG_UI, ("  type               :%d\n", action->type));
-		DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", action->id));
-	}
-		break;
-	case DQITEM_HIDE:
-	{
-		DQActionHideShow *action = (DQActionHideShow *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Morph\n"));
+      DPRINTF(k_DBG_UI,
+              ("  morphing_actor     :%#.8lx\n", action->morphing_actor));
+      DPRINTF(k_DBG_UI, ("  ss                 :%#.8lx (%d)\n", action->ss,
+                         action->ss->GetIndex()));
+      DPRINTF(k_DBG_UI, ("  type               :%d\n", action->type));
+      DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", action->id));
+    } break;
+    case DQITEM_HIDE: {
+      DQActionHideShow* action = (DQActionHideShow*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Hide\n"));
-		DPRINTF(k_DBG_UI, ("  hiding_actor       :%#.8lx\n", action->hiding_actor));
-		DPRINTF(k_DBG_UI, ("  hiding_pos         :%d,%d\n", action->hiding_pos.x, action->hiding_pos.y));
-	}
-		break;
-	case DQITEM_SHOW:
-	{
-		DQActionHideShow *action = (DQActionHideShow *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Hide\n"));
+      DPRINTF(k_DBG_UI,
+              ("  hiding_actor       :%#.8lx\n", action->hiding_actor));
+      DPRINTF(k_DBG_UI, ("  hiding_pos         :%d,%d\n", action->hiding_pos.x,
+                         action->hiding_pos.y));
+    } break;
+    case DQITEM_SHOW: {
+      DQActionHideShow* action = (DQActionHideShow*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Show\n"));
-		DPRINTF(k_DBG_UI, ("  hiding_actor       :%#.8lx\n", action->hiding_actor));
-		DPRINTF(k_DBG_UI, ("  hiding_pos         :%d,%d\n", action->hiding_pos.x, action->hiding_pos.y));
-	}
-		break;
-	case DQITEM_WORK:
-	{
-		DQActionWork *action = (DQActionWork *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Show\n"));
+      DPRINTF(k_DBG_UI,
+              ("  hiding_actor       :%#.8lx\n", action->hiding_actor));
+      DPRINTF(k_DBG_UI, ("  hiding_pos         :%d,%d\n", action->hiding_pos.x,
+                         action->hiding_pos.y));
+    } break;
+    case DQITEM_WORK: {
+      DQActionWork* action = (DQActionWork*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Work\n"));
-		DPRINTF(k_DBG_UI, ("  working_actor      :%#.8lx\n", action->working_actor));
-		DPRINTF(k_DBG_UI, ("  working_pos        :%d,%d\n", action->working_pos.x, action->working_pos.y));
-		DPRINTF(k_DBG_UI, ("  working_soundID    :%d\n", action->working_soundID));
-	}
-		break;
-	case DQITEM_FASTKILL:
-	{
-		DQActionFastKill *action = (DQActionFastKill *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Work\n"));
+      DPRINTF(k_DBG_UI,
+              ("  working_actor      :%#.8lx\n", action->working_actor));
+      DPRINTF(k_DBG_UI, ("  working_pos        :%d,%d\n", action->working_pos.x,
+                         action->working_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  working_soundID    :%d\n", action->working_soundID));
+    } break;
+    case DQITEM_FASTKILL: {
+      DQActionFastKill* action = (DQActionFastKill*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Fast Kill\n"));
-		DPRINTF(k_DBG_UI, ("  dead               :%#.8lx\n", action->dead.get()));
-	}
-		break;
-	case DQITEM_ADDVISION:
-	{
-		DQActionVision *action = (DQActionVision *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Fast Kill\n"));
+      DPRINTF(k_DBG_UI, ("  dead               :%#.8lx\n", action->dead.get()));
+    } break;
+    case DQITEM_ADDVISION: {
+      DQActionVision* action = (DQActionVision*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Add Vision\n"));
-		DPRINTF(k_DBG_UI, ("  vision_pos         :%d,%d\n", action->vision_pos.x, action->vision_pos.y));
-		DPRINTF(k_DBG_UI, ("  vision_range       :%#.2f\n", action->vision_range));
-	}
-		break;
-	case DQITEM_REMOVEVISION:
-	{
-		DQActionVision *action = (DQActionVision *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Add Vision\n"));
+      DPRINTF(k_DBG_UI, ("  vision_pos         :%d,%d\n", action->vision_pos.x,
+                         action->vision_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  vision_range       :%#.2f\n", action->vision_range));
+    } break;
+    case DQITEM_REMOVEVISION: {
+      DQActionVision* action = (DQActionVision*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Remove Vision\n"));
-		DPRINTF(k_DBG_UI, ("  vision_pos         :%d,%d\n", action->vision_pos.x, action->vision_pos.y));
-		DPRINTF(k_DBG_UI, ("  vision_range       :%#.2f\n", action->vision_range));
-	}
-		break;
-	case DQITEM_SETOWNER:
-	{
-		DQActionSetOwner *action = (DQActionSetOwner *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Remove Vision\n"));
+      DPRINTF(k_DBG_UI, ("  vision_pos         :%d,%d\n", action->vision_pos.x,
+                         action->vision_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  vision_range       :%#.2f\n", action->vision_range));
+    } break;
+    case DQITEM_SETOWNER: {
+      DQActionSetOwner* action = (DQActionSetOwner*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Set Owner\n"));
-		DPRINTF(k_DBG_UI, ("  setowner_actor     :%#.8lx\n", action->setowner_actor));
-		DPRINTF(k_DBG_UI, ("  owner              :%d\n", action->owner));
-	}
-		break;
-	case DQITEM_SETVISIBILITY: {
-		DQActionSetVisibility *action = (DQActionSetVisibility *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Set Owner\n"));
+      DPRINTF(k_DBG_UI,
+              ("  setowner_actor     :%#.8lx\n", action->setowner_actor));
+      DPRINTF(k_DBG_UI, ("  owner              :%d\n", action->owner));
+    } break;
+    case DQITEM_SETVISIBILITY: {
+      DQActionSetVisibility* action = (DQActionSetVisibility*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Set Visibility\n"));
-		DPRINTF(k_DBG_UI, ("  setowner_actor     :%#.8lx\n", action->setvisibility_actor));
-		DPRINTF(k_DBG_UI, ("  owner              :%#.8lx\n", action->visibilityFlag));
-	  }
-		break;
-	case DQITEM_SETVISIONRANGE: {
-		DQActionSetVisionRange *action = (DQActionSetVisionRange *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Set Visibility\n"));
+      DPRINTF(k_DBG_UI,
+              ("  setowner_actor     :%#.8lx\n", action->setvisibility_actor));
+      DPRINTF(k_DBG_UI,
+              ("  owner              :%#.8lx\n", action->visibilityFlag));
+    } break;
+    case DQITEM_SETVISIONRANGE: {
+      DQActionSetVisionRange* action = (DQActionSetVisionRange*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Set Vision Range\n"));
-		DPRINTF(k_DBG_UI, ("  setvisibility_actor:%#.8lx\n", action->setvisionrange_actor));
-		DPRINTF(k_DBG_UI, ("  visibilityFlag     :%#.2f\n", action->range));
-	  }
-		break;
-	case DQITEM_COMBATFLASH: {
-		DQActionCombatFlash *action = (DQActionCombatFlash *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Set Vision Range\n"));
+      DPRINTF(k_DBG_UI,
+              ("  setvisibility_actor:%#.8lx\n", action->setvisionrange_actor));
+      DPRINTF(k_DBG_UI, ("  visibilityFlag     :%#.2f\n", action->range));
+    } break;
+    case DQITEM_COMBATFLASH: {
+      DQActionCombatFlash* action = (DQActionCombatFlash*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
-		DPRINTF(k_DBG_UI, ("  flash_pos         :%d,%d\n", action->flash_pos.x, action->flash_pos.y));
-	  }
-		break;
-	case DQITEM_TELEPORT: {
+      DPRINTF(k_DBG_UI, ("Combat Flash\n"));
+      DPRINTF(k_DBG_UI, ("  flash_pos         :%d,%d\n", action->flash_pos.x,
+                         action->flash_pos.y));
+    } break;
+    case DQITEM_TELEPORT: {
+      DQActionMove* action = (DQActionMove*)item->m_action;
 
-		DQActionMove *action = (DQActionMove *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Move\n"));
+      DPRINTF(k_DBG_UI,
+              ("  teleport_actor         :%#.8lx\n", action->move_actor));
+      DPRINTF(k_DBG_UI, ("  teleport_oldPos        :%d,%d\n",
+                         action->move_oldPos.x, action->move_oldPos.y));
+      DPRINTF(k_DBG_UI, ("  teleport_newPos        :%d,%d\n",
+                         action->move_newPos.x, action->move_newPos.y));
+      DPRINTF(k_DBG_UI, ("  teleport_moveArraySize      :%" PRIu64 "\n",
+                         action->moveActors.size()));
+      DPRINTF(k_DBG_UI, ("  teleport_moveActors         :"));
+      for (auto a : action->moveActors) {
+        DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
+      }
+      DPRINTF(k_DBG_UI, ("\n"));
+      DPRINTF(k_DBG_UI, ("  teleport_numRevelead        :%" PRIu64 "\n",
+                         action->revealedActors.size()));
+      DPRINTF(k_DBG_UI, ("  teleport_revealedActors     :"));
 
-		DPRINTF(k_DBG_UI, ("Move\n"));
-		DPRINTF(k_DBG_UI, ("  teleport_actor         :%#.8lx\n", action->move_actor));
-		DPRINTF(k_DBG_UI, ("  teleport_oldPos        :%d,%d\n", action->move_oldPos.x, action->move_oldPos.y));
-		DPRINTF(k_DBG_UI, ("  teleport_newPos        :%d,%d\n", action->move_newPos.x, action->move_newPos.y));
-		DPRINTF(k_DBG_UI, ("  teleport_moveArraySize      :%" PRIu64 "\n", action->moveActors.size()));
-		DPRINTF(k_DBG_UI, ("  teleport_moveActors         :"));
-		for (auto a : action->moveActors) {
-			DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
-		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  teleport_numRevelead        :%" PRIu64 "\n", action->revealedActors.size()));
-		DPRINTF(k_DBG_UI, ("  teleport_revealedActors     :"));
+      for (auto a : action->revealedActors) {
+        DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
+      }
+      DPRINTF(k_DBG_UI, ("\n"));
+    } break;
+    case DQITEM_COPYVISION: {
+      //		DQActionCopyVision *action = (DQActionCopyVision
+      //*)item->m_action;
 
-    for (auto a : action->revealedActors) {
-			DPRINTF(k_DBG_UI, ("%#.8lx  ", a.lock().get()));
-		}
-		DPRINTF(k_DBG_UI, ("\n"));
-	  }
-		break;
-	case DQITEM_COPYVISION: {
-//		DQActionCopyVision *action = (DQActionCopyVision *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Copy Vision from Gamestate\n"));
+    } break;
+    case DQITEM_CENTERMAP: {
+      DQActionCenterMap* action = (DQActionCenterMap*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Copy Vision from Gamestate\n"));
-	  }
-		break;
-	case DQITEM_CENTERMAP : {
-		DQActionCenterMap *action = (DQActionCenterMap *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Center Map\n"));
+      DPRINTF(k_DBG_UI, ("  centerMap_pos    :%d,%d\n", action->centerMap_pos.x,
+                         action->centerMap_pos.y));
+    } break;
+    case DQITEM_SELECTUNIT: {
+      DQActionUnitSelection* action = (DQActionUnitSelection*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Center Map\n"));
-		DPRINTF(k_DBG_UI, ("  centerMap_pos    :%d,%d\n", action->centerMap_pos.x, action->centerMap_pos.y));
-	  }
-		break;
-	case DQITEM_SELECTUNIT : {
-		DQActionUnitSelection *action = (DQActionUnitSelection *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Select Unit\n"));
+      DPRINTF(k_DBG_UI, ("  flags     :%#.8lx\n", action->flags));
+    } break;
+    case DQITEM_ENDTURN: {
+      //		DQActionEndTurn *action = (DQActionEndTurn
+      //*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Select Unit\n"));
-		DPRINTF(k_DBG_UI, ("  flags     :%#.8lx\n", action->flags));
-	  }
-		break;
-	case DQITEM_ENDTURN : {
-//		DQActionEndTurn *action = (DQActionEndTurn *)item->m_action;
+      DPRINTF(k_DBG_UI, ("End Turn from Gamestate\n"));
+    } break;
+    case DQITEM_BATTLE: {
+      //		DQActionBattle *action = (DQActionBattle
+      //*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("End Turn from Gamestate\n"));
-	  }
-		break;
-	case DQITEM_BATTLE : {
-//		DQActionBattle *action = (DQActionBattle *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Battle\n"));
+    } break;
+    case DQITEM_PLAYSOUND: {
+      DQActionPlaySound* action = (DQActionPlaySound*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Battle\n"));
-	  }
-		break;
-	case DQITEM_PLAYSOUND : {
-		DQActionPlaySound *action = (DQActionPlaySound *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Play Sound\n"));
+      DPRINTF(k_DBG_UI,
+              ("  playsound_soundID    :%d\n", action->playsound_soundID));
+      DPRINTF(k_DBG_UI, ("  playsound_pos        :%d,%d\n",
+                         action->playsound_pos.x, action->playsound_pos.y));
+    } break;
+    case DQITEM_PLAYWONDERMOVIE: {
+      DQActionPlayWonderMovie* action =
+          (DQActionPlayWonderMovie*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Play Sound\n"));
-		DPRINTF(k_DBG_UI, ("  playsound_soundID    :%d\n", action->playsound_soundID));
-		DPRINTF(k_DBG_UI, ("  playsound_pos        :%d,%d\n", action->playsound_pos.x, action->playsound_pos.y));
-	  }
-		break;
-	case DQITEM_PLAYWONDERMOVIE : {
-		DQActionPlayWonderMovie *action = (DQActionPlayWonderMovie *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Play Wonder Movie\n"));
+      DPRINTF(k_DBG_UI,
+              ("  which                :%ld\n", action->playwondermovie_which));
+    } break;
+    case DQITEM_PLAYVICTORYMOVIE: {
+      DQActionPlayVictoryMovie* action =
+          (DQActionPlayVictoryMovie*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Play Wonder Movie\n"));
-		DPRINTF(k_DBG_UI, ("  which                :%ld\n", action->playwondermovie_which));
-	  }
-		break;
-	case DQITEM_PLAYVICTORYMOVIE : {
-		DQActionPlayVictoryMovie *action = (DQActionPlayVictoryMovie *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Play Victory Movie\n"));
+      DPRINTF(k_DBG_UI, ("  reason                :%ld\n",
+                         action->playvictorymovie_reason));
+    } break;
+    case DQITEM_MESSAGE: {
+      //		DQActionMessage *action = (DQActionMessage
+      //*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Play Victory Movie\n"));
-		DPRINTF(k_DBG_UI, ("  reason                :%ld\n", action->playvictorymovie_reason));
-	  }
-		break;
-	case DQITEM_MESSAGE : {
-//		DQActionMessage *action = (DQActionMessage *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Message from Gamestate\n"));
+    } break;
+    case DQITEM_FACEOFF: {
+      DQActionFaceoff* action = (DQActionFaceoff*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Message from Gamestate\n"));
-	  }
-		break;
-	case DQITEM_FACEOFF : {
-		DQActionFaceoff *action = (DQActionFaceoff *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Faceoff\n"));
+      DPRINTF(k_DBG_UI,
+              ("  faceoff_attacker   :%#.8lx\n", action->faceoff_attacker));
+      DPRINTF(k_DBG_UI,
+              ("  faceoff_attacked   :%#.8lx\n", action->faceoff_attacked));
+      DPRINTF(k_DBG_UI,
+              ("  faceoff_attacker_pos :%d,%d\n",
+               action->faceoff_attacker_pos.x, action->faceoff_attacker_pos.y));
+      DPRINTF(k_DBG_UI,
+              ("  faceoff_attacked_pos :%d,%d\n",
+               action->faceoff_attacked_pos.x, action->faceoff_attacked_pos.y));
+    } break;
+    case DQITEM_TERMINATE_FACEOFF: {
+      DQActionTerminateFaceOff* action =
+          (DQActionTerminateFaceOff*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  faceoff_attacker   :%#.8lx\n", action->faceoff_attacker));
-		DPRINTF(k_DBG_UI, ("  faceoff_attacked   :%#.8lx\n", action->faceoff_attacked));
-		DPRINTF(k_DBG_UI, ("  faceoff_attacker_pos :%d,%d\n", action->faceoff_attacker_pos.x, action->faceoff_attacker_pos.y));
-		DPRINTF(k_DBG_UI, ("  faceoff_attacked_pos :%d,%d\n", action->faceoff_attacked_pos.x, action->faceoff_attacked_pos.y));
-	  }
-		break;
-	case DQITEM_TERMINATE_FACEOFF : {
-		DQActionTerminateFaceOff *action = (DQActionTerminateFaceOff *)item->m_action;
+      DPRINTF(k_DBG_UI, ("Terminate Faceoff\n"));
+      DPRINTF(k_DBG_UI, ("  faceroffer   :%#.8lx\n", action->faceroffer));
+    } break;
+    case DQITEM_TERMINATE_SOUND: {
+      DQActionTerminateSound* action = (DQActionTerminateSound*)item->m_action;
 
-		DPRINTF(k_DBG_UI, ("Terminate Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  faceroffer   :%#.8lx\n", action->faceroffer));
-	  }
-		break;
-	case DQITEM_TERMINATE_SOUND : {
-		DQActionTerminateSound *action = (DQActionTerminateSound *)item->m_action;
-
-		DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
-		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", action->terminate_sound_unit));
-		break;
-	  }
-	case DQITEM_BEGIN_SCHEDULER:
-	{
-		DQActionBeginScheduler *action = (DQActionBeginScheduler*)item->m_action;
-		DPRINTF(k_DBG_UI, ("Begin Scheduler\n"));
-		DPRINTF(k_DBG_UI, ("  player: %d\n", action->player));
-		break;
-	}
-	}
+      DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
+      DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n",
+                         action->terminate_sound_unit));
+      break;
+    }
+    case DQITEM_BEGIN_SCHEDULER: {
+      DQActionBeginScheduler* action = (DQActionBeginScheduler*)item->m_action;
+      DPRINTF(k_DBG_UI, ("Begin Scheduler\n"));
+      DPRINTF(k_DBG_UI, ("  player: %d\n", action->player));
+      break;
+    }
+  }
 }
 
 #endif
 
 #ifdef _DEBUG
 
-void Director::DumpInfo(void)
-{
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
-	DPRINTF(k_DBG_UI, ("Director Dump:\n"));
-	DPRINTF(k_DBG_UI, (" m_curSequenceID  :%d\n", m_curSequenceID));
-	DPRINTF(k_DBG_UI, (" m_lastSequenceID :%d\n", m_lastSequenceID));
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
-	DPRINTF(k_DBG_UI, (" Dispatched Items:\n"));
-	DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_dispatchedItems.size()));
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
+void Director::DumpInfo(void) {
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, ("Director Dump:\n"));
+  DPRINTF(k_DBG_UI, (" m_curSequenceID  :%d\n", m_curSequenceID));
+  DPRINTF(k_DBG_UI, (" m_lastSequenceID :%d\n", m_lastSequenceID));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, (" Dispatched Items:\n"));
+  DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_dispatchedItems.size()));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
 
-  for (const DQItemPtr &i : m_dispatchedItems) {
+  for (const DQItemPtr& i : m_dispatchedItems) {
     DumpItem(i.get());
   }
-  
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
-	DPRINTF(k_DBG_UI, (" Active Units:\n"));
-	DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_activeUnitList.size()));
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
+
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, (" Active Units:\n"));
+  DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_activeUnitList.size()));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
 
   for (UnitActorPtr a : m_activeUnitList) {
     a->DumpActor();
   }
 
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
-	DPRINTF(k_DBG_UI, (" Queued Items:\n"));
-	DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_itemQueue.size()));
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, (" Queued Items:\n"));
+  DPRINTF(k_DBG_UI, (" Count:%" PRIu64 "\n", m_itemQueue.size()));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
 
-  for (const DQItemPtr &i : m_itemQueue) {
+  for (const DQItemPtr& i : m_itemQueue) {
     DumpItem(i.get());
   }
 
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
+  DPRINTF(k_DBG_UI, (" ------------------\n"));
 }
 #endif
 
-void Director::HandleNextAction(void)
-{
-	if (m_paused) return;
+void Director::HandleNextAction(void) {
+  if (m_paused)
+    return;
 
-	while (!m_itemQueue.empty() && GetActionFinished())
-	{
-		DQItemPtr item = m_itemQueue.front();
+  while (!m_itemQueue.empty() && GetActionFinished()) {
+    DQItemPtr item = m_itemQueue.front();
     m_itemQueue.pop_front();
 
-		Assert(item->m_handler != NULL);
-		if (item->m_handler != NULL)
-		{
-			SetActionFinished(FALSE);
+    SetActionFinished(FALSE);
+    m_dispatchedItems.push_back(item);
+    DHEXECUTE executeType = DHEXECUTE_NORMAL;
 
-			m_dispatchedItems.push_back(item);
+    if (item->m_round < g_turn->GetRound() - 1 ||
+        (!g_theProfileDB->IsEnemyMoves() && item->GetOwner() != -1 &&
+         item->GetOwner() != g_selected_item->GetVisiblePlayer()) ||
+        (!g_theProfileDB->IsUnitAnim() && item->GetOwner() != -1 &&
+         g_player[item->GetOwner()] != NULL &&
+         g_player[item->GetOwner()]->IsRobot())) {
+      executeType = DHEXECUTE_IMMEDIATE;
+    }
 
-			DHEXECUTE		executeType = DHEXECUTE_NORMAL;
+    Assert(item->m_handler != NULL);
+    item->m_handler(item->m_action, item->getSequence(), executeType);
 
-			if
-			  (
-			       item->m_round < g_turn->GetRound() - 1
-			    ||
-			       (
-			            !g_theProfileDB->IsEnemyMoves()
-			         &&  item->GetOwner() != -1
-			         &&  item->GetOwner() != g_selected_item->GetVisiblePlayer()
-			       )
-			    ||
-			       (
-			            !g_theProfileDB->IsUnitAnim()
-			         &&  item->GetOwner() != -1
-			         &&  g_player[item->GetOwner()] != NULL
-			         &&  g_player[item->GetOwner()]->IsRobot()
-			       )
-			  )
-			{
-				executeType = DHEXECUTE_IMMEDIATE;
-			}
-
-			item->m_handler(item->m_action, item->m_sequence, executeType);
-
-			if (item->m_type == DQITEM_ADDVISION ||
-				item->m_type == DQITEM_REMOVEVISION)
-				HandleNextAction();
-		}
-	}
+    if (item->m_type == DQITEM_ADDVISION || item->m_type == DQITEM_REMOVEVISION)
+      HandleNextAction();
+  }
 }
 
-void Director::ActionFinished(Sequence *seq)
-{
-	if (!seq) {
-		if (!m_dispatchedItems.empty()) {
+void Director::ActionFinished(SequenceWeakPtr seq) {
+  if (seq.expired()) {
+    if (!m_dispatchedItems.empty()) {
       DQItemPtr item = m_dispatchedItems.front();
       m_dispatchedItems.pop_front();
-			Assert(item->m_sequence == NULL);
-		}
+      Assert(false);
+    }
 
-		SetActionFinished(TRUE);
-		return;
-	}
+    SetActionFinished(TRUE);
+    return;
+  }
 
-	if (seq->GetSequenceID() == m_lastSequenceID) {
-		seq->Release();
-		if (seq->GetRefCount() <= 0) {
-			SaveFinishedItem(seq->GetItem());
+  SequencePtr sequence(seq);
 
-			SetActionFinished(TRUE);
-		}
-		return;
-	}
+  if (sequence->GetSequenceID() == m_lastSequenceID) {
+    sequence->Release();
+    if (sequence->GetRefCount() <= 0) {
+      SaveFinishedItem(sequence->GetItem());
+      SetActionFinished(TRUE);
+    }
+    return;
+  }
 
   DQItemPtr item;
   if (!m_dispatchedItems.empty()) {
-		item = m_dispatchedItems.front();
+    item = m_dispatchedItems.front();
     m_dispatchedItems.pop_front();
-	} else {
-//		sint32 NoDispatchedItem = 0;
+  } else {
+    return;
+  }
 
-		return;
-	}
-
-	if (!item->m_sequence)
-    {
-#ifdef _DEBUG
-	    DPRINTF(k_DBG_UI, (" ------------------\n"));
-	    DPRINTF(k_DBG_UI, ("*** Null Sequence Finished\n"));
-	    DumpItem(item.get());
-	    DPRINTF(k_DBG_UI, (" ------------------\n"));
-#endif
-		return;
-	}
-
-	if (item->m_sequence->GetSequenceID() == seq->GetSequenceID()) {
-		m_lastSequenceID = seq->GetSequenceID();
-		seq->Release();
-		if (seq->GetRefCount() <= 0) {
-			SaveFinishedItem(item);
-			SetActionFinished(TRUE);
-		}
-	}
-    else
-    {
-		if (item->m_sequence->GetSequenceID() < seq->GetSequenceID()) {
-			m_lastSequenceID = seq->GetSequenceID();
+  if (item->getSequence().lock()->GetSequenceID() ==
+      sequence->GetSequenceID()) {
+    m_lastSequenceID = sequence->GetSequenceID();
+    sequence->Release();
+    if (sequence->GetRefCount() <= 0) {
+      SaveFinishedItem(item);
+      SetActionFinished(TRUE);
+    }
+  } else {
+    if (item->getSequence().lock()->GetSequenceID() <
+        sequence->GetSequenceID()) {
+      m_lastSequenceID = sequence->GetSequenceID();
       // @TODO check if we really want do this
       // delete m_dispatchedItems->RemoveHead();
       m_dispatchedItems.pop_front();
-		}
+    }
 
-		SetActionFinished(TRUE);
-	}
+    SetActionFinished(TRUE);
+  }
 }
 
-Sequence *Director::NewSequence(void)
-{
-	return new Sequence(++m_curSequenceID);
+SequencePtr Director::NewSequence(void) {
+  return std::make_shared<Sequence>(++m_curSequenceID);
 }
 
-void Director::HandleFinishedItem(DQItemPtr item)
-{
-	Assert(item);
-	if (!item) return;
+void Director::HandleFinishedItem(DQItemPtr item) {
+  Assert(item);
 
-	Sequence *seq = item->m_sequence;
+  SequencePtr seq = item->getSequence().lock();
 
-	BOOL	removePrimaryFromActiveList = FALSE;
-	BOOL	removeSecondaryFromActiveList = FALSE;
+  const bool removePrimaryFromActiveList =
+      seq->GetAddedToActiveList(SEQ_ACTOR_PRIMARY);
+  const bool removeSecondaryFromActiveList =
+      seq->GetAddedToActiveList(SEQ_ACTOR_SECONDARY);
 
-	if (seq) {
-		removePrimaryFromActiveList = seq->GetAddedToActiveList(SEQ_ACTOR_PRIMARY);
-		removeSecondaryFromActiveList = seq->GetAddedToActiveList(SEQ_ACTOR_SECONDARY);
-	}
-
-    switch (item->m_type)
-    {
-    default:
-//  case DQITEM_ADDVISION:
-//  case DQITEM_ATTACK:
-//  case DQITEM_BATTLE:
-//  case DQITEM_CENTERMAP:
-//  case DQITEM_COMBATFLASH:
-//  case DQITEM_COPYVISION:
-//  case DQITEM_ENDTURN:
-//  case DQITEM_FACEOFF:
-//  case DQITEM_FASTKILL:
-//  case DQITEM_HIDE:
-//  case DQITEM_MESSAGE:
-//  case DQITEM_MORPH:
-//  case DQITEM_MOVEPROJECTILE:
-//  case DQITEM_PLAYSOUND:
-//  case DQITEM_PLAYVICTORYMOVIE:
-//  case DQITEM_PLAYWONDERMOVIE:
-//  case DQITEM_REMOVEVISION:
-//  case DQITEM_SPECEFFECT:
-//  case DQITEM_SELECTUNIT:
-//  case DQITEM_SETOWNER:
-//  case DQITEM_SETVISIBILITY:
-//  case DQITEM_SETVISIONRANGE:
-//  case DQITEM_SHOW:
-//  case DQITEM_TELEPORT:
-//  case DQITEM_TERMINATE_FACEOFF:
-        // Does not contain actions that have to be removed
-        break;
-
-	case DQITEM_MOVE: {
-		DQActionMove	*action = (DQActionMove *)item->m_action;
-			if (removePrimaryFromActiveList)
-				if (action && !action->move_actor.expired())
-				{
-					ActiveUnitRemove(action->move_actor.lock());
-					if (!action->move_actor.lock()->IsActive())
-						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->move_actor.lock()->GetUnitID());
-				}
-		}
-		break;
-	case DQITEM_ATTACKPOS:
-		{
-		DQActionAttackPos	*action = (DQActionAttackPos *)item->m_action;
-		if (removePrimaryFromActiveList)
-			if (action && !action->attackpos_attacker.expired())
-			{
-				ActiveUnitRemove(action->attackpos_attacker.lock());
-				if (!action->attackpos_attacker.lock()->IsActive())
-					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->attackpos_attacker.lock()->GetUnitID());
-			}
-		}
-		break;
-	case DQITEM_SPECATTACK:
-		{
-		 DQActionAttack	*action = (DQActionAttack *)item->m_action;
-		 if (removePrimaryFromActiveList) {
-			if (action && !action->attacker.expired())
-			{
-				ActiveUnitRemove(action->attacker.lock());
-				if (!action->attacker.lock()->IsActive())
-					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->attacker.lock()->GetUnitID());
-			}
-		}
-		if (removeSecondaryFromActiveList)
-		{
-			if (action && !action->defender.expired())
-			{
-				ActiveUnitRemove(action->defender.lock());
-				if (!action->defender.lock()->IsActive())
-					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->defender.lock()->GetUnitID());
-			}
-		}
-							}
-		break;
-	case DQITEM_DEATH: {
-		DQActionDeath	*action = (DQActionDeath *)item->m_action;
-		if (removePrimaryFromActiveList) {
-			if (action && action->death_dead) {
-				ActiveUnitRemove(action->death_dead);
-				if (!action->death_dead->IsActive())
-					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->dead_id);
-			}
-		}
-		if (removeSecondaryFromActiveList) {
-			if (action && !action->death_victor.expired()) {
-				ActiveUnitRemove(action->death_victor.lock());
-				if (!action->death_victor.lock()->IsActive())
-					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->victor_id);
-			}
-		}
-		}
-		break;
-	case DQITEM_WORK: {
-		DQActionWork	*action = (DQActionWork *)item->m_action;
-			if (removePrimaryFromActiveList)
-				if (action && !action->working_actor.expired()) {
-					ActiveUnitRemove(action->working_actor.lock());
-					if (!action->working_actor.lock()->IsActive())
-						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->working_actor.lock()->GetUnitID());
-				}
-		}
-		break;
-	}
+  switch (item->m_type) {
+    case DQITEM_MOVE: {
+      DQActionMove* action = (DQActionMove*)item->m_action;
+      if (removePrimaryFromActiveList)
+        if (action && !action->move_actor.expired()) {
+          ActiveUnitRemove(action->move_actor.lock());
+          if (!action->move_actor.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(
+                SOUNDTYPE_SFX, action->move_actor.lock()->GetUnitID());
+        }
+    } break;
+    case DQITEM_ATTACKPOS: {
+      DQActionAttackPos* action = (DQActionAttackPos*)item->m_action;
+      if (removePrimaryFromActiveList)
+        if (action && !action->attackpos_attacker.expired()) {
+          ActiveUnitRemove(action->attackpos_attacker.lock());
+          if (!action->attackpos_attacker.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(
+                SOUNDTYPE_SFX, action->attackpos_attacker.lock()->GetUnitID());
+        }
+    } break;
+    case DQITEM_SPECATTACK: {
+      DQActionAttack* action = (DQActionAttack*)item->m_action;
+      if (removePrimaryFromActiveList) {
+        if (action && !action->attacker.expired()) {
+          ActiveUnitRemove(action->attacker.lock());
+          if (!action->attacker.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(
+                SOUNDTYPE_SFX, action->attacker.lock()->GetUnitID());
+        }
+      }
+      if (removeSecondaryFromActiveList) {
+        if (action && !action->defender.expired()) {
+          ActiveUnitRemove(action->defender.lock());
+          if (!action->defender.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(
+                SOUNDTYPE_SFX, action->defender.lock()->GetUnitID());
+        }
+      }
+    } break;
+    case DQITEM_DEATH: {
+      DQActionDeath* action = (DQActionDeath*)item->m_action;
+      if (removePrimaryFromActiveList) {
+        if (action && action->death_dead) {
+          ActiveUnitRemove(action->death_dead);
+          if (!action->death_dead->IsActive())
+            g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,
+                                                  action->dead_id);
+        }
+      }
+      if (removeSecondaryFromActiveList) {
+        if (action && !action->death_victor.expired()) {
+          ActiveUnitRemove(action->death_victor.lock());
+          if (!action->death_victor.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,
+                                                  action->victor_id);
+        }
+      }
+    } break;
+    case DQITEM_WORK: {
+      DQActionWork* action = (DQActionWork*)item->m_action;
+      if (removePrimaryFromActiveList)
+        if (action && !action->working_actor.expired()) {
+          ActiveUnitRemove(action->working_actor.lock());
+          if (!action->working_actor.lock()->IsActive())
+            g_soundManager->TerminateLoopingSound(
+                SOUNDTYPE_SFX, action->working_actor.lock()->GetUnitID());
+        }
+    } break;
+      //  case DQITEM_ADDVISION:
+      //  case DQITEM_ATTACK:
+      //  case DQITEM_BATTLE:
+      //  case DQITEM_CENTERMAP:
+      //  case DQITEM_COMBATFLASH:
+      //  case DQITEM_COPYVISION:
+      //  case DQITEM_ENDTURN:
+      //  case DQITEM_FACEOFF:
+      //  case DQITEM_FASTKILL:
+      //  case DQITEM_HIDE:
+      //  case DQITEM_MESSAGE:
+      //  case DQITEM_MORPH:
+      //  case DQITEM_MOVEPROJECTILE:
+      //  case DQITEM_PLAYSOUND:
+      //  case DQITEM_PLAYVICTORYMOVIE:
+      //  case DQITEM_PLAYWONDERMOVIE:
+      //  case DQITEM_REMOVEVISION:
+      //  case DQITEM_SPECEFFECT:
+      //  case DQITEM_SELECTUNIT:
+      //  case DQITEM_SETOWNER:
+      //  case DQITEM_SETVISIBILITY:
+      //  case DQITEM_SETVISIONRANGE:
+      //  case DQITEM_SHOW:
+      //  case DQITEM_TELEPORT:
+      //  case DQITEM_TERMINATE_FACEOFF:
+      // Does not contain actions that have to be removed
+    default: {
+    }
+  }
 }
 
-void Director::SaveFinishedItem(DQItemPtr item)
-{
-	if (item->m_addedToSavedList) return;
+void Director::SaveFinishedItem(DQItemPtr item) {
+  if (item->m_addedToSavedList)
+    return;
 
-	item->m_addedToSavedList = TRUE;
+  item->m_addedToSavedList = TRUE;
 
-	m_savedItems.push_back(item);
+  m_savedItems.push_back(item);
 }
 
-void Director::GarbageCollectItems(void)
-{
-	while (!m_savedItems.empty())
-    {
+void Director::GarbageCollectItems(void) {
+  while (!m_savedItems.empty()) {
     DQItemPtr item = m_savedItems.front();
     m_savedItems.pop_front();
     HandleFinishedItem(item);
-	}
+  }
 }
 
-void Director::ProcessImmediately(DQItemPtr item)
-{
-	item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_IMMEDIATE);
+void Director::ProcessImmediately(DQItemPtr item) {
+  item->m_handler(item->m_action, item->getSequence(), DHEXECUTE_IMMEDIATE);
 }
 
-void Director::CatchUp(void)
-{
+void Director::CatchUp(void) {
   m_activeUnitList.erase(
-    std::remove_if(m_activeUnitList.begin(),
-                    m_activeUnitList.end(),
-                    [](UnitActorPtr a) { return a->WillDie(); }),
-    m_activeUnitList.end());
-    
-  for (UnitActorPtr &a : m_activeUnitList) {
+      std::remove_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                     [](UnitActorPtr a) { return a->WillDie(); }),
+      m_activeUnitList.end());
+
+  for (UnitActorPtr& a : m_activeUnitList) {
     a->EndTurnProcess();
   }
 
-	while(!m_itemQueue.empty())
-    {
-		DQItemPtr item = m_itemQueue.front();
+  while (!m_itemQueue.empty()) {
+    DQItemPtr item = m_itemQueue.front();
     m_itemQueue.pop_front();
 
-		Assert(item->m_handler != NULL);
-		if (item->m_handler != NULL)
-		{
-			m_dispatchedItems.push_back(item);
+    m_dispatchedItems.push_back(item);
 
- 			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_IMMEDIATE);
-		}
-	}
+    Assert(item->m_handler != NULL);
+    item->m_handler(item->m_action, item->getSequence(), DHEXECUTE_IMMEDIATE);
+  }
 
   m_activeUnitList.erase(
-    std::remove_if(m_activeUnitList.begin(),
-      m_activeUnitList.end(),
-      [](UnitActorPtr a) { return a->WillDie(); }),
-    m_activeUnitList.end());
+      std::remove_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                     [](UnitActorPtr a) { return a->WillDie(); }),
+      m_activeUnitList.end());
 
-  for (UnitActorPtr &a : m_activeUnitList) {
+  for (UnitActorPtr& a : m_activeUnitList) {
     a->EndTurnProcess();
   }
 
-	GarbageCollectItems();
+  GarbageCollectItems();
 
-	if (!g_network.IsActive()) {
-
-		KillAllActiveEffects();
-		if (g_soundManager)
-			g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
-	}
+  if (!g_network.IsActive()) {
+    KillAllActiveEffects();
+    if (g_soundManager)
+      g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
+  }
 }
 
-bool Director::CaughtUp(void)
-{
-	return m_itemQueue.empty();
+bool Director::CaughtUp(void) {
+  return m_itemQueue.empty();
 }
 
-bool Director::TileIsVisibleToPlayer(MapPoint &pos)
-{
+bool Director::TileIsVisibleToPlayer(MapPoint& pos) {
 #if defined(_PLAYTEST)
-    if (g_doingFastRounds) return false;
+  if (g_doingFastRounds)
+    return false;
 #endif
 
-    return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
+  return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
 }
 
-void Director::ActiveUnitAdd(UnitActorPtr unitActor)
-{
-	if(unitActor == NULL)
-		return;
+void Director::ActiveUnitAdd(UnitActorPtr unitActor) {
+  if (unitActor == NULL)
+    return;
 
-	if(!unitActor->IsActive())
-		m_activeUnitList.push_front(unitActor);
+  if (!unitActor->IsActive())
+    m_activeUnitList.push_front(unitActor);
 
-	unitActor->SetActive(true);
+  unitActor->SetActive(true);
 
-	unitActor->AddActiveListRef();
+  unitActor->AddActiveListRef();
 }
 
-void Director::ActiveUnitRemove(UnitActorPtr unitActor)
-{
-	if (!unitActor)
-	  return;
+void Director::ActiveUnitRemove(UnitActorPtr unitActor) {
+  if (!unitActor)
+    return;
 
   UnitActorList::const_iterator removeIt =
-    std::find(m_activeUnitList.begin(), m_activeUnitList.end(), unitActor);
+      std::find(m_activeUnitList.begin(), m_activeUnitList.end(), unitActor);
 
-  if (removeIt != m_activeUnitList.end() && unitActor->ReleaseActiveListRef() <= 0) {
+  if (removeIt != m_activeUnitList.end() &&
+      unitActor->ReleaseActiveListRef() <= 0) {
     m_activeUnitList.erase(removeIt);
     unitActor->SetActive(false);
     // Prevent getting stuck waiting for a deleted item.
@@ -1009,40 +924,37 @@ void Director::ActiveUnitRemove(UnitActorPtr unitActor)
   }
 }
 
-void Director::ActiveEffectAdd(EffectActor *effectActor)
-{
-	Assert(effectActor);
-	
-  if (std::find(m_activeEffectList.begin(), m_activeEffectList.end(), effectActor) == m_activeEffectList.end()) {
+void Director::ActiveEffectAdd(EffectActor* effectActor) {
+  Assert(effectActor);
+
+  if (std::find(m_activeEffectList.begin(), m_activeEffectList.end(),
+                effectActor) == m_activeEffectList.end()) {
     m_activeEffectList.push_front(effectActor);
   }
 }
 
-void Director::ActiveEffectRemove(EffectActor *effectActor)
-{
-  EffectActorList::const_iterator it = std::find(m_activeEffectList.begin(), m_activeEffectList.end(), effectActor);
+void Director::ActiveEffectRemove(EffectActor* effectActor) {
+  EffectActorList::const_iterator it = std::find(
+      m_activeEffectList.begin(), m_activeEffectList.end(), effectActor);
   if (it != m_activeEffectList.end()) {
     m_activeEffectList.erase(it);
   }
 }
 
-void Director::TradeActorCreate(TradeRoute newRoute)
-{
-  if (std::find_if(m_tradeActorList.begin(),
-                   m_tradeActorList.end(),
-                   [&](TradeActor *t) { return t->GetRouteID() == newRoute; }) == m_tradeActorList.end()) {
+void Director::TradeActorCreate(TradeRoute newRoute) {
+  if (std::find_if(m_tradeActorList.begin(), m_tradeActorList.end(),
+                   [&](TradeActor* t) {
+                     return t->GetRouteID() == newRoute;
+                   }) == m_tradeActorList.end()) {
     m_tradeActorList.push_front(new TradeActor(newRoute));
   }
 }
 
-void Director::TradeActorDestroy(TradeRoute routeToDestroy)
-{
-  TradeActorList::const_iterator removeIt =
-    std::find_if(
-      m_tradeActorList.begin(), 
-      m_tradeActorList.end(), 
-      [&](TradeActor *t) { return t->GetRouteID() == routeToDestroy; });
-  
+void Director::TradeActorDestroy(TradeRoute routeToDestroy) {
+  TradeActorList::const_iterator removeIt = std::find_if(
+      m_tradeActorList.begin(), m_tradeActorList.end(),
+      [&](TradeActor* t) { return t->GetRouteID() == routeToDestroy; });
+
   if (removeIt != m_tradeActorList.end()) {
     delete (*removeIt);
     m_tradeActorList.erase(removeIt);
@@ -1083,13 +995,13 @@ uint32 Director::ProcessActiveUnits(void) {
   if (m_activeUnitList.empty())
     return 0;
 
-	m_processingActiveUnits = TRUE;
+  m_processingActiveUnits = TRUE;
 
-  for (UnitActorPtr &uActor : m_activeUnitList) {
+  for (UnitActorPtr& uActor : m_activeUnitList) {
     uActor->Process();
   }
 
-	m_processingActiveUnits = FALSE;
+  m_processingActiveUnits = FALSE;
 
   UnitActorList toRemove;
   std::copy_if(m_activeUnitList.begin(), m_activeUnitList.end(),
@@ -1105,174 +1017,161 @@ uint32 Director::ProcessActiveUnits(void) {
     i->DumpAllActions();
   }
 
-	return 0;
+  return 0;
 }
 
-uint32 Director::ProcessActiveEffects(void)
-{
-	if (m_activeEffectList.empty())
+uint32 Director::ProcessActiveEffects(void) {
+  if (m_activeEffectList.empty())
     return 0;
 
-	m_processingActiveEffects = TRUE;
+  m_processingActiveEffects = TRUE;
 
-  for (EffectActor *eActor : m_activeEffectList) {
+  for (EffectActor* eActor : m_activeEffectList) {
     eActor->Process();
   }
 
-	m_processingActiveEffects = FALSE;
+  m_processingActiveEffects = FALSE;
 
-  EffectActorList::iterator toRemoveIt = std::remove_if(
-      m_activeEffectList.begin(),
-      m_activeEffectList.end(),
-      [](EffectActor *e) { return e->GetKillNow(); });
+  EffectActorList::iterator toRemoveIt =
+      std::remove_if(m_activeEffectList.begin(), m_activeEffectList.end(),
+                     [](EffectActor* e) { return e->GetKillNow(); });
 
-  for (EffectActorList::iterator i = toRemoveIt; i != m_activeEffectList.end(); ++i) {
+  for (EffectActorList::iterator i = toRemoveIt; i != m_activeEffectList.end();
+       ++i) {
     delete *i;
   }
 
   m_activeEffectList.erase(toRemoveIt, m_activeEffectList.end());
 
-	return 0;
+  return 0;
 }
 
-void Director::ProcessTradeRouteAnimations(void)
-{
-	if (!g_theProfileDB->IsTradeAnim())
+void Director::ProcessTradeRouteAnimations(void) {
+  if (!g_theProfileDB->IsTradeAnim())
     return;
 
-  for (TradeActor *tActor : m_tradeActorList) {
+  for (TradeActor* tActor : m_tradeActorList) {
     tActor->Process();
   }
 }
 
-void Director::OffsetActiveUnits(sint32 deltaX, sint32 deltaY)
-{
-  for (UnitActorPtr &uActor : m_activeUnitList) {
+void Director::OffsetActiveUnits(sint32 deltaX, sint32 deltaY) {
+  for (UnitActorPtr& uActor : m_activeUnitList) {
     uActor->SetX(uActor->GetX() + deltaX);
     uActor->SetY(uActor->GetY() + deltaY);
   }
 }
 
-void Director::OffsetActiveEffects(sint32 deltaX, sint32 deltaY)
-{
-  for (EffectActor *eActor : m_activeEffectList) {
+void Director::OffsetActiveEffects(sint32 deltaX, sint32 deltaY) {
+  for (EffectActor* eActor : m_activeEffectList) {
     eActor->SetX(eActor->GetX() + deltaX);
     eActor->SetY(eActor->GetY() + deltaY);
   }
 }
 
-void Director::OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY)
-{
-  for (TradeActor *tActor : m_tradeActorList) {
+void Director::OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY) {
+  for (TradeActor* tActor : m_tradeActorList) {
     tActor->SetX(tActor->GetX() + deltaX);
     tActor->SetY(tActor->GetY() + deltaY);
   }
 }
 
-uint32 Director::KillAllActiveEffects()
-{
-  for (EffectActor *eActor : m_activeEffectList) {
+uint32 Director::KillAllActiveEffects() {
+  for (EffectActor* eActor : m_activeEffectList) {
     delete eActor;
   }
   m_activeEffectList.clear();
 
-	return 0;
+  return 0;
 }
 
-void Director::NextPlayer(BOOL forcedUpdate)
-{
+void Director::NextPlayer(BOOL forcedUpdate) {
 #ifdef _PLAYTEST
-	if (!g_doingFastRounds &&
-		(!g_network.IsActive() || g_player[g_selected_item->GetVisiblePlayer()]->IsRobot())) {
-		return;
-	}
+  if (!g_doingFastRounds &&
+      (!g_network.IsActive() ||
+       g_player[g_selected_item->GetVisiblePlayer()]->IsRobot())) {
+    return;
+  }
 #else
-	return; // Next code isn't used, should it be used?
+  return;  // Next code isn't used, should it be used?
 #endif
-	m_nextPlayer = TRUE;
+  m_nextPlayer = TRUE;
 
   m_activeUnitList.erase(
-    std::remove_if(m_activeUnitList.begin(),
-      m_activeUnitList.end(),
-      [](UnitActorPtr a) { return a->WillDie(); }),
-    m_activeUnitList.end());
+      std::remove_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                     [](UnitActorPtr a) { return a->WillDie(); }),
+      m_activeUnitList.end());
 
-  for (UnitActorPtr &a : m_activeUnitList) {
+  for (UnitActorPtr& a : m_activeUnitList) {
     a->EndTurnProcess();
   }
 
-	while(!m_itemQueue.empty())
-	{
-		DQItemPtr item = m_itemQueue.front();
+  while (!m_itemQueue.empty()) {
+    DQItemPtr item = m_itemQueue.front();
     m_itemQueue.pop_front();
 
-		Assert(item->m_handler != NULL);
-		if (item->m_handler != NULL)
-		{
-			m_dispatchedItems.push_back(item);
+    m_dispatchedItems.push_back(item);
 
-			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_NORMAL);
-		}
-	}
+    Assert(item->m_handler != NULL);
+    item->m_handler(item->m_action, item->getSequence(), DHEXECUTE_NORMAL);
+  }
 
   if (!g_network.IsActive() || forcedUpdate) {
     m_activeUnitList.erase(
-      std::remove_if(m_activeUnitList.begin(),
-        m_activeUnitList.end(),
-        [](UnitActorPtr a) { return a->WillDie(); }),
-      m_activeUnitList.end());
+        std::remove_if(m_activeUnitList.begin(), m_activeUnitList.end(),
+                       [](UnitActorPtr a) { return a->WillDie(); }),
+        m_activeUnitList.end());
 
-    for (UnitActorPtr &a : m_activeUnitList) {
+    for (UnitActorPtr& a : m_activeUnitList) {
       a->EndTurnProcess();
     }
   }
 
-	if (!g_network.IsActive())
-	{
-		if(g_tiledMap)
-			g_tiledMap->NextPlayer();
+  if (!g_network.IsActive()) {
+    if (g_tiledMap)
+      g_tiledMap->NextPlayer();
 
-		KillAllActiveEffects();
+    KillAllActiveEffects();
 
-		if (g_soundManager)
-			g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
-	}
+    if (g_soundManager)
+      g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
+  }
 }
 
-void Director::DrawActiveUnits(RECT *paintRect, sint32 layer)
-{
-	m_nextPlayer = FALSE;
+void Director::DrawActiveUnits(RECT* paintRect, sint32 layer) {
+  m_nextPlayer = FALSE;
 
-  for (UnitActorPtr &uActor : m_activeUnitList) {
+  for (UnitActorPtr& uActor : m_activeUnitList) {
     MapPoint pos = uActor->GetPos();
 
-    sint32	    tileX;
+    sint32 tileX;
     maputils_MapX2TileX(pos.x, pos.y, &tileX);
 
     if (maputils_TilePointInTileRect(tileX, pos.y, paintRect)) {
-      if (uActor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+      if (uActor->GetUnitVisibility() &
+          (1 << g_selected_item->GetVisiblePlayer())) {
         g_tiledMap->PaintUnitActor(uActor);
       }
     }
   }
 }
 
-void Director::DrawActiveEffects(RECT *paintRect, sint32 layer)
-{
+void Director::DrawActiveEffects(RECT* paintRect, sint32 layer) {
   EffectActorList::iterator toRemoveIt = std::remove_if(
-    m_activeEffectList.begin(),
-    m_activeEffectList.end(),
-    [](EffectActor *e) { return e->GetActionQueueNumItems() <= 0 && e->GetKillNow(); });
+      m_activeEffectList.begin(), m_activeEffectList.end(), [](EffectActor* e) {
+        return e->GetActionQueueNumItems() <= 0 && e->GetKillNow();
+      });
 
-  for (EffectActorList::iterator i = toRemoveIt; i != m_activeEffectList.end(); ++i) {
+  for (EffectActorList::iterator i = toRemoveIt; i != m_activeEffectList.end();
+       ++i) {
     delete *i;
   }
 
   m_activeEffectList.erase(toRemoveIt, m_activeEffectList.end());
 
-  for (EffectActor *actor : m_activeEffectList) {
+  for (EffectActor* actor : m_activeEffectList) {
     MapPoint pos = actor->GetPos();
-    sint32		tileX = 0;
+    sint32 tileX = 0;
 
     maputils_MapX2TileX(pos.x, pos.y, &tileX);
 
@@ -1284,14 +1183,13 @@ void Director::DrawActiveEffects(RECT *paintRect, sint32 layer)
   }
 }
 
-void Director::DrawTradeRouteAnimations(RECT *paintRect, sint32 layer)
-{
-	if (!g_theProfileDB->IsTradeAnim())
+void Director::DrawTradeRouteAnimations(RECT* paintRect, sint32 layer) {
+  if (!g_theProfileDB->IsTradeAnim())
     return;
 
-  for (TradeActor *tActor : m_tradeActorList) {
-    MapPoint	pos = tActor->GetCurrentPos();
-    sint32		tileX = 0;
+  for (TradeActor* tActor : m_tradeActorList) {
+    MapPoint pos = tActor->GetCurrentPos();
+    sint32 tileX = 0;
 
     maputils_MapX2TileX(pos.x, pos.y, &tileX);
 
@@ -1300,25 +1198,24 @@ void Director::DrawTradeRouteAnimations(RECT *paintRect, sint32 layer)
 
     tActor->Draw(g_tiledMap->GetLocalVision());
 
-    RECT			tempRect;
+    RECT tempRect;
     tActor->GetBoundingRect(&tempRect);
     g_tiledMap->AddDirtyRectToMix(tempRect);
   }
 }
 
-UnitActorPtr Director::GetClickedActiveUnit(aui_MouseEvent *data)
-{
-  POINT   mouse = data->position;
+UnitActorPtr Director::GetClickedActiveUnit(aui_MouseEvent* data) {
+  POINT mouse = data->position;
 
-  for (UnitActorPtr &actor : m_activeUnitList) {
+  for (UnitActorPtr& actor : m_activeUnitList) {
     actor->Process();
     MapPoint pos = actor->GetPos();
     if (g_tiledMap->TileIsVisible(pos.x, pos.y)) {
-      RECT	actorRect;
+      RECT actorRect;
 
       SetRect(&actorRect, actor->GetX(), actor->GetY(),
-        actor->GetX() + (sint32)actor->GetWidth(),
-        actor->GetY() + (sint32)actor->GetHeight());
+              actor->GetX() + (sint32)actor->GetWidth(),
+              actor->GetY() + (sint32)actor->GetHeight());
 
       if (PtInRect(&actorRect, mouse)) {
         return actor;
@@ -1326,2034 +1223,741 @@ UnitActorPtr Director::GetClickedActiveUnit(aui_MouseEvent *data)
     }
   }
 
-	return UnitActorPtr();
+  return UnitActorPtr();
 }
 
-bool Director::IsProcessing()
-{
-	return (!m_itemQueue.empty());
+bool Director::IsProcessing() {
+  return (!m_itemQueue.empty());
 }
 
-void Director::AddMoveProcess(UnitActorPtr top, UnitActorPtr dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported)
-{
-}
+void Director::AddMoveProcess(UnitActorPtr top,
+                              UnitActorPtr dest,
+                              sint32 arraySize,
+                              UnitActor** moveActors,
+                              BOOL isTransported) {}
 
-void Director::AddMove(
-  Unit                mover,
-  MapPoint const &    oldPos,
-  MapPoint const &    newPos,
-  const UnitActorVec  &revealedActors,
-  const UnitActorVec  &restOfStack,
-  bool                isTransported,
-  sint32              soundID)
-{
-	UnitActorPtr actor = mover.GetActor();
+void Director::AddMove(Unit mover,
+                       MapPoint const& oldPos,
+                       MapPoint const& newPos,
+                       const UnitActorVec& revealedActors,
+                       const UnitActorVec& restOfStack,
+                       bool isTransported,
+                       sint32 soundID) {
+  UnitActorPtr actor = mover.GetActor();
 
-	Assert(!mover.IsCity());
+  Assert(!mover.IsCity());
 
-	Assert(actor->GetUnitID() == mover.m_id);
+  Assert(actor->GetUnitID() == mover.m_id);
 
-	if(g_theProfileDB->IsEnemyMoves() &&
-	   mover.GetOwner() != g_selected_item->GetVisiblePlayer() &&
-	   (mover.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
-	   !TileWillBeCompletelyVisible(newPos.x, newPos.y)) {
-		AddCenterMap(newPos);
-	}
+  if (g_theProfileDB->IsEnemyMoves() &&
+      mover.GetOwner() != g_selected_item->GetVisiblePlayer() &&
+      (mover.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
+      !TileWillBeCompletelyVisible(newPos.x, newPos.y)) {
+    AddCenterMap(newPos);
+  }
 
-	actor->SetHiddenUnderStack(FALSE);
+  actor->SetHiddenUnderStack(FALSE);
 
-	if (actor->GetIsTransported() == FALSE && isTransported)
-	{
-		actor->SetIsTransported(k_TRANSPORTREMOVEONLY);
-	}
-	else if (actor->GetIsTransported() == k_TRANSPORTREMOVEONLY && !isTransported)
-	{
-		actor->SetIsTransported(k_TRANSPORTADDONLY);
-	}
+  if (actor->GetIsTransported() == FALSE && isTransported) {
+    actor->SetIsTransported(k_TRANSPORTREMOVEONLY);
+  } else if (actor->GetIsTransported() == k_TRANSPORTREMOVEONLY &&
+             !isTransported) {
+    actor->SetIsTransported(k_TRANSPORTADDONLY);
+  }
 
-	DQActionMove		*action = new DQActionMove;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_MOVE, action, dh_move));
+  DQActionMove* action = new DQActionMove;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_MOVE, action, dh_move));
 
-	item->SetOwner(mover.GetOwner());
+  item->SetOwner(mover.GetOwner());
 
-	action->move_actor    = actor;
-	action->move_oldPos   = oldPos;
-	action->move_newPos   = newPos;
-	action->move_soundID  = soundID;
+  action->move_actor = actor;
+  action->move_oldPos = oldPos;
+  action->move_newPos = newPos;
+  action->move_soundID = soundID;
 
   if (!restOfStack.empty()) {
     action->moveActors = restOfStack;
   }
-	action->revealedActors = revealedActors;
+  action->revealedActors = revealedActors;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddTeleport(
-  Unit                top,
-  MapPoint const &    oldPos,
-  MapPoint const &    newPos,
-  const UnitActorVec  &revealedActors,
-  const UnitActorVec  &moveActors)
-{
-	DQActionMove		*action = new DQActionMove;
-	DQItemPtr	item(DQItem::CreatePtr(DQITEM_TELEPORT, action, dh_teleport));
-	item->SetOwner(top.GetOwner());
+void Director::AddTeleport(Unit top,
+                           MapPoint const& oldPos,
+                           MapPoint const& newPos,
+                           const UnitActorVec& revealedActors,
+                           const UnitActorVec& moveActors) {
+  DQActionMove* action = new DQActionMove;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_TELEPORT, action, dh_teleport));
+  item->SetOwner(top.GetOwner());
 
-	action->move_actor     = top.GetActor();
-	action->move_oldPos    = oldPos;
-	action->move_newPos    = newPos;
-	action->moveActors     = moveActors;
-	action->revealedActors = revealedActors;
+  action->move_actor = top.GetActor();
+  action->move_oldPos = oldPos;
+  action->move_newPos = newPos;
+  action->moveActors = moveActors;
+  action->revealedActors = revealedActors;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddProjectileAttack(Unit shooting, Unit target, SpriteStatePtr projectile_state,
-									SpriteStatePtr projectileEnd_state, sint32 projectile_Path)
-{
-	DQActionMoveProjectile	*action = new DQActionMoveProjectile;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_MOVEPROJECTILE, action, dh_projectileMove));
-	item->SetOwner(shooting.GetOwner());
+void Director::AddProjectileAttack(Unit shooting,
+                                   Unit target,
+                                   SpriteStatePtr projectile_state,
+                                   SpriteStatePtr projectileEnd_state,
+                                   sint32 projectile_Path) {
+  DQActionMoveProjectile* action = new DQActionMoveProjectile;
+  DQItemPtr item(
+      DQItem::CreatePtr(DQITEM_MOVEPROJECTILE, action, dh_projectileMove));
+  item->SetOwner(shooting.GetOwner());
 
-	EffectActor *projectileEnd = new EffectActor(projectileEnd_state, target.RetPos());
+  EffectActor* projectileEnd =
+      new EffectActor(projectileEnd_state, target.RetPos());
 
-	action->pshooting_actor = shooting.GetActor();
-	action->ptarget_actor = target.GetActor();
-	action->end_projectile = projectileEnd;
-	action->projectile_path = projectile_Path;
-	action->pmove_oldPos = shooting.RetPos();
-	action->pmove_newPos = target.RetPos();
+  action->pshooting_actor = shooting.GetActor();
+  action->ptarget_actor = target.GetActor();
+  action->end_projectile = projectileEnd;
+  action->projectile_path = projectile_Path;
+  action->pmove_oldPos = shooting.RetPos();
+  action->pmove_newPos = target.RetPos();
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID)
-{
-	DQActionSpecialEffect	*action = new DQActionSpecialEffect;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_SPECEFFECT, action, dh_speceffect));
+void Director::AddSpecialEffect(MapPoint& pos,
+                                sint32 spriteID,
+                                sint32 soundID) {
+  DQActionSpecialEffect* action = new DQActionSpecialEffect;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_SPECEFFECT, action, dh_speceffect));
 
-	action->speceffect_pos = pos;
-	action->speceffect_spriteID = spriteID;
-	action->speceffect_soundID = soundID;
+  action->speceffect_pos = pos;
+  action->speceffect_spriteID = spriteID;
+  action->speceffect_soundID = soundID;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddCombatFlash(MapPoint const & pos)
-{
-	DQActionCombatFlash	*   action  = new DQActionCombatFlash;
-	action->flash_pos = pos;
+void Director::AddCombatFlash(MapPoint const& pos) {
+  DQActionCombatFlash* action = new DQActionCombatFlash;
+  action->flash_pos = pos;
 
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_COMBATFLASH, action, dh_combatflash));
-	m_itemQueue.push_back(item);
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_COMBATFLASH, action, dh_combatflash));
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddCopyVision(void)
-{
-	DQActionCopyVision	*action = new DQActionCopyVision;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_COPYVISION, action, dh_copyVision));
+void Director::AddCopyVision(void) {
+  DQActionCopyVision* action = new DQActionCopyVision;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_COPYVISION, action, dh_copyVision));
 
-	action->copyVision = TRUE;
+  action->copyVision = TRUE;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddCenterMap(const MapPoint &pos)
-{
-	DQActionCenterMap	*action = new DQActionCenterMap;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_CENTERMAP, action, dh_centerMap));
+void Director::AddCenterMap(const MapPoint& pos) {
+  DQActionCenterMap* action = new DQActionCenterMap;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_CENTERMAP, action, dh_centerMap));
 
-	action->centerMap_pos = pos;
+  action->centerMap_pos = pos;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddSelectUnit(uint32 flags)
-{
-	DQActionUnitSelection	*action = new DQActionUnitSelection;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_SELECTUNIT, action, dh_selectUnit));
+void Director::AddSelectUnit(uint32 flags) {
+  DQActionUnitSelection* action = new DQActionUnitSelection;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_SELECTUNIT, action, dh_selectUnit));
 
-	action->flags = flags;
+  action->flags = flags;
 
-	m_itemQueue.push_back(item);
+  m_itemQueue.push_back(item);
 }
 
-void Director::AddEndTurn(void)
-{
-	DPRINTF(k_DBG_GAMESTATE, ("Director::AddEndTurn, curPlayer = %d\n", g_selected_item->GetCurPlayer()));
-
-	if(g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer())
-	{
-		static sint32 last_turn_processed = -1;
-		if(last_turn_processed != g_player[g_selected_item->GetCurPlayer()]->m_current_round) {
-			last_turn_processed = g_player[g_selected_item->GetCurPlayer()]->m_current_round;
-
-			g_gevManager->Pause();
-
-			Player *p = g_player[g_selected_item->GetCurPlayer()];
-			p->m_endingTurn = TRUE;
-
-			for(sint32 i = 0; i < p->m_all_armies->Num(); i++)
-			{
-//				IncrementPendingGameActions();
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
-									   GEA_Army, p->m_all_armies->Access(i).m_id,
-									   GEA_End);
-			}
-
-			g_player[g_selected_item->GetCurPlayer()]->m_endingTurn = FALSE;
-			g_gevManager->Resume();
-		}
-	}
-
-	if(m_pendingGameActions > 0 || m_endTurnRequested)
-	{
-		DPRINTF(k_DBG_GAMESTATE, ("Director::AddEndTurn, but there are %d pending actions (or it was already requested), not doing it yet.\n", m_pendingGameActions));
-		m_endTurnRequested = true;
-		return;
-	}
-
-	static sint32 lastPlayer = -1;
-	static sint32 lastRound = -1;
-
-	if(g_selected_item->GetCurPlayer() == lastPlayer &&
-	   g_player[lastPlayer] && g_player[lastPlayer]->m_current_round == lastRound) {
-		
-    for(DQItemPtr &item : m_itemQueue) {
-			if(item->m_type == DQITEM_ENDTURN) {
-				DPRINTF(k_DBG_GAMESTATE, ("Skipping duplicate end turn for %d,%d\n", lastPlayer, lastRound));
-				return;
-			}
-		}
-	}
-
-	lastPlayer = g_selected_item->GetCurPlayer();
-	if(g_player[lastPlayer])
-	{
-		lastRound = g_player[lastPlayer]->m_current_round;
-	}
-	else
-	{
-		lastRound = -1;
-	}
-
-	DQActionEndTurn		*action = new DQActionEndTurn;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_ENDTURN, action, dh_endTurn));
-
-	action->endTurn = TRUE;
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddAttack(Unit attacker, Unit defender)
-{
-	UnitActorPtr attackerActor;
-	UnitActorPtr defenderActor;
-
-	DQActionAttack		*action = new DQActionAttack;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_ATTACK, action, dh_attack));
-	item->SetOwner(attacker.GetOwner());
-
-	action->defender_IsCity = FALSE;
-
-	if (attacker != Unit())
-	{
-		attackerActor = attacker.GetActor();
-		action->attacker = attackerActor;
-		action->attacker_Pos = attacker.RetPos();
-		action->attacker_ID		= attacker.GetAttackSoundID();
-		action->attacker_IsCity = attacker.IsCity();
-
-		attackerActor->SetHealthPercent(attacker.GetHP() / attacker->CalculateTotalHP());
-
-		Army army = attacker.GetArmy();
-		if (army.IsValid())
-		{
-			attackerActor->SetTempStackSize(army.Num());
-		}
-	}
-
-	if (defender != Unit())
-	{
-		defenderActor			= defender.GetActor();
-		action->defender		= defenderActor;
-		action->defender_Pos    = defender.RetPos();
-		action->defender_ID		= defender.GetAttackSoundID();
-		action->defender_IsCity = defender.IsCity();
-
-		defenderActor->SetHealthPercent(defender.GetHP() / defender->CalculateTotalHP());
-
-		CellUnitList *unitList;
-		unitList = g_theWorld->GetCell(defender.RetPos())->UnitArmy();
-		sint32 num = 1;
-		if (unitList != NULL)
-			num = unitList->Num();
-		defenderActor->SetTempStackSize(num);
-	}
-
-	m_itemQueue.push_back(item);
-
-	Player *    visiblePlayer   = g_player[g_selected_item->GetVisiblePlayer()];
-	if (visiblePlayer && visiblePlayer->IsVisible(attacker.RetPos()))
-	{
-		if (attacker.m_id != 0)
-		{
-			AddCombatFlash(attacker.RetPos());
-		}
-	}
-
-	if (visiblePlayer && visiblePlayer->IsVisible(defender.RetPos()))
-	{
-		if (defender.m_id != 0) {
-			AddCombatFlash(defender.RetPos());
-		}
-	}
-}
-
-void Director::AddAttackPos(Unit attacker, MapPoint const & pos)
-{
-	DQActionAttackPos *     action  = new DQActionAttackPos;
-	action->attackpos_attacker      = attacker.GetActor();
-	action->attackpos_attacker_pos  = attacker.RetPos();
-	action->attackpos_target_pos    = pos;
-	action->attackpos_soundID       = attacker.GetAttackSoundID();
-
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_ATTACKPOS, action, dh_attackpos));
-	item->SetOwner(attacker.GetOwner());
-	m_itemQueue.push_back(item);
-
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
-	   )
-	{
-		AddCombatFlash(pos);
-	}
-}
-
-void Director::AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack)
-{
-	sint32              soundID;
-	sint32              spriteID;
-	if (!attacker.GetSpecialAttackInfo(attack, &soundID, &spriteID))
-	{
-		return;
-	}
-
-	UnitActorPtr          attackerActor   = attacker.IsValid() ? attacker.GetActor() : NULL;
-	UnitActorPtr          defenderActor   = attacked.IsValid() ? attacked.GetActor() : NULL;
-
-	DQActionAttack	*   action          = new DQActionAttack;
-	action->attacker        = attackerActor;
-	action->defender        = defenderActor;
-	action->attacker_Pos    = attacker.RetPos();
-	action->defender_Pos    = attacked.RetPos();
-	action->attacker_IsCity = attacker.IsCity();
-	action->defender_IsCity = attacked.IsCity();
-	action->attacker_ID     = soundID;
-	action->defender_ID     = spriteID;
-
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_SPECATTACK, action, dh_specialAttack));
-	item->SetOwner(attacker.GetOwner());
-
-	m_itemQueue.push_back(item);
-
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos())
-	   )
-	{
-		AddProjectileAttack(attacker, attacked, NULL, SpriteStatePtr(new SpriteState(spriteID)), 0);
-	}
-}
-
-void Director::AddWinnerLoser(Unit victor, Unit dead)
-{
-	Assert(victor.GetActor());
-	Assert(dead.GetActor());
-
-	DQActionDeath		*action = new DQActionDeath;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
-	item->SetOwner(victor.GetOwner());
-
-	action->death_victor = victor.GetActor();
-	action->victor_id = victor.m_id;
-	action->death_dead = dead.GetActor();
-	action->dead_id = dead.m_id;
-	action->victor_Pos = victor.RetPos();
-	action->dead_Pos = dead.RetPos();
-
-	action->dead_soundID = dead.GetDeathSoundID();
-	action->victor_soundID = victor.GetVictorySoundID();
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddDeath(Unit dead)
-{
-	Assert(dead.GetActor());
-
-	DQActionDeath		*action = new DQActionDeath;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
-	item->SetOwner(dead.GetOwner());
-
-	action->death_dead	= dead.GetActor();
-	action->dead_id		= dead.m_id;
-	action->victor_id	= 0;
-	action->victor_Pos	= dead.RetPos();
-	action->dead_Pos	= dead.RetPos();
-	action->dead_soundID	= dead.GetDeathSoundID();
-	action->victor_soundID	= 0;
-
-	ActiveUnitAdd(dead.GetActor());
-
-	dead.SetActor(NULL); // Now action owns actor
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddDeathWithSound(Unit dead, sint32 soundID)
-{
-	Assert(dead.GetActor());
-
-	DQActionDeath		*action = new DQActionDeath;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
-	item->SetOwner(dead.GetOwner());
-
-	action->death_dead = dead.GetActor();
-	action->dead_id = dead.m_id;
-	action->victor_id = 0;
-	action->victor_Pos = dead.RetPos();
-	action->dead_Pos = dead.RetPos();
-	action->dead_soundID = soundID;
-	action->victor_soundID = 0;
-
-	dead.SetActor(NULL); // Now action owns actor
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddMorphUnit(UnitActorPtr morphingActor, SpriteStatePtr ss, sint32 type,  Unit id)
-{
-	if (morphingActor == NULL) return;
-
-	DQActionMorph	*action = new DQActionMorph;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_MORPH, action, dh_morphUnit));
-
-	action->morphing_actor = morphingActor;
-	action->ss = ss;
-	action->type = type;
-	action->id = id;
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddHide(Unit hider)
-{
-	UnitActorPtr actor = hider.GetActor();
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionHideShow	*action = new DQActionHideShow;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_HIDE, action, dh_hide));
-
-	action->hiding_actor = actor;
-	action->hiding_pos = hider.RetPos();
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddShow(Unit hider)
-{
-	UnitActorPtr actor = hider.GetActor();
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionHideShow	*action = new DQActionHideShow;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_SHOW, action, dh_show));
-
-	action->hiding_actor = actor;
-	action->hiding_pos = hider.RetPos();
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddWork(Unit worker)
-{
-	UnitActorPtr actor = worker.GetActor();
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionWork	*action = new DQActionWork;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_WORK, action, dh_work));
-	item->SetOwner(worker.GetOwner());
-
-	action->working_actor = actor;
-	action->working_pos = worker.RetPos();
-	action->working_soundID = worker.GetWorkSoundID();
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddFastKill(Unit dead)
-{
-	UnitActorPtr actor = dead.GetActor();
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionFastKill	*action = new DQActionFastKill;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_FASTKILL, action, dh_fastkill));
-
-	action->dead = actor;
-
-	dead.SetActor(NULL); // Now action owns actor
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddRemoveVision(const MapPoint &pos, double range)
-{
-	DQActionVision		*action = new DQActionVision;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_REMOVEVISION, action, dh_removeVision));
-
-	action->vision_pos = pos;
-	action->vision_range = range;
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddAddVision(const MapPoint &pos, double range)
-{
-	DQActionVision *    action  = new DQActionVision;
-	action->vision_pos          = pos;
-	action->vision_range        = range;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_ADDVISION, action, dh_addVision));
-}
-
-void Director::AddSetVisibility(UnitActorPtr actor, uint32 visibility)
-{
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionSetVisibility * action  = new DQActionSetVisibility;
-	action->setvisibility_actor     = actor;
-	action->visibilityFlag          = visibility;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_SETVISIBILITY, action, dh_setVisibility));
-}
-
-void Director::AddSetOwner(UnitActorPtr actor, sint32 owner)
-{
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionSetOwner *  action  = new DQActionSetOwner;
-	action->setowner_actor      = actor;
-	action->owner               = owner;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_SETOWNER, action, dh_setOwner));
-}
-
-void Director::AddSetVisionRange(UnitActorPtr actor, double range)
-{
-	Assert(actor);
-	if (!actor) return;
-
-	DQActionSetVisionRange *    action  = new DQActionSetVisionRange;
-	action->setvisionrange_actor        = actor;
-	action->range                       = range;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_SETVISIONRANGE, action, dh_setVisionRange));
-}
-
-void Director::AddBattle(Battle *battle)
-{
-	Assert(battle);
-	if (!battle) return;
-
-	DQActionBattle *    action  = new DQActionBattle;
-	action->battle              = battle;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_BATTLE, action, dh_battle));
-}
-
-void Director::AddPlaySound(sint32 soundID, MapPoint const & pos)
-{
-	if (soundID <= 0) return;
-
-	DQActionPlaySound * action  = new DQActionPlaySound;
-	action->playsound_soundID   = soundID;
-	action->playsound_pos       = pos;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_PLAYSOUND, action, dh_playSound));
-}
-
-void Director::AddGameSound(GAMESOUNDS sound)
-{
-	AddPlaySound(gamesounds_GetGameSoundID((sint32) sound), MapPoint());
-}
-
-void Director::AddPlayWonderMovie(sint32 which)
-{
-	Assert(which >= 0);
-	if (which < 0) return;
-
-	DQActionPlayWonderMovie	*   action  = new DQActionPlayWonderMovie;
-	action->playwondermovie_which       = which;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_PLAYWONDERMOVIE, action, dh_playWonderMovie));
-}
-
-void Director::AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOOL previouslyLost)
-{
-	if (previouslyWon || previouslyLost)
-	{
-		PLAYER_INDEX	player = g_selected_item->GetVisiblePlayer();
-
-		if (g_player[player] && !g_player[player]->m_isDead)
-		{
-			return;
-		}
-	}
-
-	DQActionPlayVictoryMovie *  action  = new DQActionPlayVictoryMovie;
-	action->playvictorymovie_reason     = reason;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_PLAYVICTORYMOVIE, action, dh_playVictoryMovie));
-}
-
-void Director::AddMessage(const Message & message)
-{
-	DQActionMessage	*   action  = new DQActionMessage;
-	action->message             = message;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_MESSAGE, action, dh_message));
-}
-
-void Director::AddFaceoff(Unit &attacker, Unit &defender)
-{
-	DQActionFaceoff	*   action  = new DQActionFaceoff;
-
-	if (attacker.IsValid())
-	{
-		action->faceoff_attacker        = attacker.GetActor();
-		action->faceoff_attacker_pos    = attacker.RetPos();
-	}
-
-	if (defender.IsValid())
-	{
-		action->faceoff_attacked        = defender.GetActor();
-		action->faceoff_attacked_pos    = defender.RetPos();
-	}
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_FACEOFF, action, dh_faceoff));
-}
-
-void Director::AddTerminateFaceoff(Unit &faceroffer)
-{
-	DQActionTerminateFaceOff	*action = new DQActionTerminateFaceOff;
-	DQItemPtr item(DQItem::CreatePtr(DQITEM_TERMINATE_FACEOFF, action, dh_terminateFaceoff));
-
-	if (faceroffer.IsValid())
-	{
-		action->faceroffer = faceroffer.GetActor();
-		item->SetOwner(faceroffer.GetOwner());
-	}
-
-	m_itemQueue.push_back(item);
-}
-
-void Director::AddTerminateSound(Unit &unit)
-{
-	if (unit.IsValid())
-	{
-		DQActionTerminateSound *    action  = new DQActionTerminateSound;
-		action->terminate_sound_unit        = unit;
-
-		m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_TERMINATE_SOUND, action, dh_terminateSound));
-	}
-}
-
-void Director::AddInvokeThroneRoom(void)
-{
-	DQActionInvokeThroneRoom *  action = new DQActionInvokeThroneRoom;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_INVOKE_THRONE_ROOM, action, dh_invokeThroneRoom));
-}
-
-void Director::AddInvokeResearchAdvance(MBCHAR * message)
-{
-	DQActionInvokeResearchAdvance * action = new DQActionInvokeResearchAdvance;
-	if (message)
-	{
-		MBCHAR * mess = new MBCHAR[strlen(message)+1];
-		strcpy(mess, message);
-		action->message = mess;
-	}
-
-	m_itemQueue.push_back(
-      DQItem::CreatePtr(DQITEM_INVOKE_RESEARCH_ADVANCE, action, dh_invokeResearchAdvance));
-}
-
-void Director::AddBeginScheduler(sint32 player)
-{
-	Assert(player == g_selected_item->GetCurPlayer());
-	if(player != g_selected_item->GetCurPlayer())
-		return;
-
-	DPRINTF(k_DBG_GAMESTATE, ("Director::AddBeginScheduler(%d)\n", player));
-
-	DQActionBeginScheduler *    action = new DQActionBeginScheduler;
-	action->player = player;
-
-	m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_BEGIN_SCHEDULER, action, dh_beginScheduler));
-}
-
-
-BOOL Director::TileWillBeCompletelyVisible(sint32 x, sint32 y)
-{
-	RECT tempViewRect = *g_tiledMap->GetMapViewRect();
-
-  for (DQItemPtr item : m_itemQueue) {
-		if (item->m_type == DQITEM_CENTERMAP) {
-			DQActionCenterMap	*action = (DQActionCenterMap *)item->m_action;
-			if (action) {
-				MapPoint pos = action->centerMap_pos;
-				g_radarMap->ComputeCenteredMap(pos, &tempViewRect);
-			}
-		}
-	}
-
-	return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
-}
-
-void Director::IncrementPendingGameActions()
-{
-	m_pendingGameActions++;
-}
-
-void Director::DecrementPendingGameActions()
-{
-	m_pendingGameActions--;
-	Assert(m_pendingGameActions >= 0);
-
-	if(m_pendingGameActions <= 0) {
-		m_pendingGameActions = 0;
-		if(m_endTurnRequested) {
-			Player *pl = g_player[g_selected_item->GetCurPlayer()];
-			if(pl &&
-			   (!g_network.IsActive() ||
-				(g_network.IsLocalPlayer(g_selected_item->GetCurPlayer())))) {
-				m_endTurnRequested = false;
-				DPRINTF(k_DBG_GAMESTATE, ("Adding from DecrementPendingGameActions, %d\n", g_selected_item->GetCurPlayer()));
-				AddEndTurn();
-			}
-		}
-	}
-}
-
-void Director::ReloadAllSprites()
-{
-	sint32 p, i;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		if(!g_player[p]) continue;
-		//PFT  29 mar 05
-		//cycle through human players' cities
-		if(g_player[g_selected_item->GetVisiblePlayer()]->IsHuman()){
-			for(i = 0; i < g_player[p]->m_all_cities->Num(); i++) {
-				Unit u = g_player[p]->m_all_cities->Access(i);
-
-				//recover the number of turns until the city next produces a pop from it's current state
-				//CityData *cityData = u.GetData()->GetCityData();
-				//cityData->TurnsToNextPop();
-
-				UnitActorPtr actor = u.GetActor();
-				u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
-				actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
-			}
-		}
-		for(i = 0; i < g_player[p]->m_all_units->Num(); i++) {
-			Unit u = g_player[p]->m_all_units->Access(i);
-			UnitActorPtr actor = u.GetActor();
-			u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
-			actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
-		}
-	}
-}
-
-void Director::NotifyResync()
-{
-	m_endTurnRequested = false;
-	m_pendingGameActions = 0;
-}
-
-void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionMove	*action	= (DQActionMove *)itemAction;
-	UnitActorPtr theActor	= action->move_actor.lock();
-	uint32			maxActionCounter	= 1;
-	sint32			speed				= g_theProfileDB->GetUnitSpeed();
-	BOOL			visible				= FALSE;
-
-	Assert(theActor != NULL);
-
-	if (theActor==NULL)
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	ActionPtr actionObj(new Action());
-
-	MapPoint  oldP=action->move_oldPos;
-	MapPoint  newP=action->move_newPos;
-
-	actionObj->SetSequence(seq);
-	seq->AddRef();
-
-	actionObj->SetStartMapPoint(oldP);
-	actionObj->SetEndMapPoint  (newP);
-
-	actionObj->CreatePath(oldP.x,oldP.y,newP.x,newP.y);
-
-	theActor->PositionActor(oldP);
-
-	if (g_theProfileDB->IsUnitAnim())
-		maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS - speed;
-
-	actionObj->SetMaxActionCounter(maxActionCounter);
-	actionObj->SetCurActionCounter(0);
-
-	actionObj->SetSoundEffect(action->move_soundID);
-
-	actionObj->SetMoveActors(action->moveActors);
-
-	if(!theActor->ActionMove(std::move(actionObj)))
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	visible =   g_director->TileIsVisibleToPlayer(oldP)||
-	            g_director->TileIsVisibleToPlayer(newP);
-
-	if (visible && executeType == DHEXECUTE_NORMAL)
-	{
-		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-		g_director->ActiveUnitAdd(theActor);
-
-		if (g_selected_item->GetVisiblePlayer()!= theActor->GetPlayerNum()
-			&& !g_tiledMap->TileIsVisible(theActor->GetPos().x, theActor->GetPos().y))
-		{
-			g_radarMap->CenterMap(theActor->GetPos());
-			g_tiledMap->Refresh();
-			g_tiledMap->InvalidateMap();
-			g_tiledMap->InvalidateMix();
-			background_draw_handler(g_background);
-		}
-	}
-	else
-	{
-		if (theActor->WillDie())
-			g_director->FastKill(theActor);
-		else
-			theActor->EndTurnProcess();
-	}
-}
-
-void dh_teleport(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionMove	*action = (DQActionMove *)itemAction;
-
-	UnitActorPtr theActor = action->move_actor.lock();
-
-	if (theActor == NULL) return;
-
-	if (!action->revealedActors.empty())
-	{
-    for (UnitActorWeakPtr a : action->revealedActors)
-		{
-			if (!a.expired())
-				a.lock()->SetVisSpecial(TRUE);
-		}
-	}
-
-	theActor->PositionActor(action->move_newPos);
-
-	for (auto moveActor : action->moveActors)
-	{
-		moveActor.lock()->PositionActor(action->move_newPos);
-	}
-
-	g_director->ActionFinished(seq);
-}
-
-void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionMoveProjectile	*action = (DQActionMoveProjectile *)itemAction;
-
-	EffectActor			*projectileEnd = action->end_projectile;
-	UnitActorPtr shootingActor = action->pshooting_actor.lock();
-	UnitActorPtr targetActor = action->ptarget_actor.lock();
-	MapPoint			startPos = action->pmove_oldPos;
-	MapPoint			endPos = action->pmove_newPos;
-
-	Assert(shootingActor != NULL && targetActor != NULL);
-
-	if (shootingActor == NULL || targetActor == NULL)
-		return;
-
-	if (projectileEnd && g_director->TileIsVisibleToPlayer(startPos))
-	{
-		ActionPtr actionObj;
-
-		Anim * anim = projectileEnd->CreateAnim(EFFECTACTION_PLAY);
-		if (anim == NULL)
-		{
-
-			anim = projectileEnd->CreateAnim(EFFECTACTION_FLASH);
-			Assert(anim != NULL);
-			if (anim == NULL)
-			{
-				g_director->ActionFinished(seq);
-				return;
-			}
-			else
-			{
-				actionObj.reset(new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND));
-			}
-		}
-		else
-		{
-			actionObj.reset(new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND));
-		}
-
-		Assert(actionObj);
-		if (actionObj)
-		{
-			actionObj->SetAnim(anim);
-			projectileEnd->AddAction(std::move(actionObj));
-			g_director->ActiveEffectAdd(projectileEnd);
-
-			// Management taken over by director, no longer managed by item queue.
-			action->end_projectile = NULL;
-		}
-		else
-		{
-			delete anim;
-		}
-	}
-
-	g_director->ActionFinished(seq);
-}
-
-void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionAttack	*action = (DQActionAttack *)itemAction;
-
-	UnitActorPtr theAttacker = action->attacker.lock();
-	UnitActorPtr theDefender = action->defender.lock();
-
-	Assert(theAttacker != NULL);
-	Assert(theDefender != NULL);
-
-	if ((theAttacker == NULL)||(theDefender == NULL)) return;
-
-//	bool attackerVisible = g_director->TileIsVisibleToPlayer(action->attacker_Pos);
-	bool defenderVisible = g_director->TileIsVisibleToPlayer(action->defender_Pos);
-
-	bool playerInvolved  = (theDefender->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) ||
-					  (theAttacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
-
-	POINT  AttackerPoints, DefenderPoints;
-
-	maputils_MapXY2PixelXY(action->attacker_Pos.x, action->attacker_Pos.y, AttackerPoints);
-	maputils_MapXY2PixelXY(action->defender_Pos.x, action->defender_Pos.y, DefenderPoints);
-
-	sint32  deltax=DefenderPoints.x-AttackerPoints.x;
-	sint32  deltay=DefenderPoints.y-AttackerPoints.y;
-
-	sint32 facingIndex=spriteutils_DeltaToFacing(deltax,deltay);
-
-	ActionPtr ActionObj(new Action());
-
-	ActionObj->SetSequence(seq);
-	seq->AddRef();
-
-	ActionObj->SetStartMapPoint(action->attacker_Pos);
-	ActionObj->SetEndMapPoint  (action->attacker_Pos);
-
-	theAttacker->ActionAttack(std::move(ActionObj), facingIndex);
-
-	if (playerInvolved && (executeType == DHEXECUTE_NORMAL))
-	{
-		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-		g_director->ActiveUnitAdd(theAttacker);
-	}
-	else
-	{
-		if (theAttacker->WillDie())
-			g_director->FastKill(theAttacker);
-		else
-			theAttacker->EndTurnProcess();
-	}
-
-	if (!action->defender_IsCity)
-	{
-		facingIndex=spriteutils_DeltaToFacing(-deltax,-deltay);
-
-		ActionObj.reset(new Action());
-
-		ActionObj->SetSequence(seq);
-		seq->AddRef();
-
-		ActionObj->SetStartMapPoint(action->defender_Pos);
-		ActionObj->SetEndMapPoint  (action->defender_Pos);
-
-		theDefender->ActionAttack(std::move(ActionObj), facingIndex);
-
-		if(playerInvolved)
-		   defenderVisible = true;
-
-		if(defenderVisible && (executeType == DHEXECUTE_NORMAL))
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_SECONDARY, TRUE);
-			g_director->ActiveUnitAdd(theDefender);
-		}
-		else
-		{
-			if (theDefender->WillDie())
-				g_director->FastKill(theDefender);
-			else
-				theDefender->EndTurnProcess();
-		}
-	}
-}
-
-void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionAttack	*action = (DQActionAttack *)itemAction;
-
-	UnitActorPtr theAttacker = action->attacker.lock();
-	UnitActorPtr theDefender = action->defender.lock();
-
-	Assert(theAttacker != NULL);
-	Assert(theDefender != NULL);
-
-	if (theAttacker == NULL) return;
-	if (theDefender == NULL) return;
-
-	BOOL attackerCanAttack = !action->attacker_IsCity;
-	BOOL defenderIsAttackable = !action->defender_IsCity;
-
-	if (!attackerCanAttack && !defenderIsAttackable)
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	sint32 facingIndex;
-	POINT  AttackerPoints, DefenderPoints;
-
-	maputils_MapXY2PixelXY(action->attacker_Pos.x,
-	                       action->attacker_Pos.y,
-	                       AttackerPoints
-	                      );
-	maputils_MapXY2PixelXY(action->defender_Pos.x,
-	                       action->defender_Pos.y,
-	                       DefenderPoints
-	                      );
-
-	sint32  deltax=DefenderPoints.x-AttackerPoints.x;
-	sint32  deltay=DefenderPoints.y-AttackerPoints.y;
-
-	if(action->attacker_ID >= 0) {
-
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, action->attacker_ID, 0, 0);
-	}
-
-	if (attackerCanAttack)
-	{
-		ActionPtr AttackerActionObj(new Action());
-
-		AttackerActionObj->SetStartMapPoint(action->attacker_Pos);
-		AttackerActionObj->SetEndMapPoint  (action->attacker_Pos);
-
-		facingIndex=spriteutils_DeltaToFacing(deltax,deltay);
-
-		AttackerActionObj->SetSequence(seq);
-		seq->AddRef();
-
-		if(!theAttacker->ActionSpecialAttack(AttackerActionObj, facingIndex))
-		{
-			g_director->ActionFinished(seq);
-			return;
-		}
-
-		if (g_director->TileIsVisibleToPlayer(action->attacker_Pos) && executeType == DHEXECUTE_NORMAL)
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-			g_director->ActiveUnitAdd(theAttacker);
-		}
-		else
-		{
-			if (theAttacker->WillDie())
-				g_director->FastKill(theAttacker);
-			else
-				theAttacker->EndTurnProcess();
-		}
-	}
-
-	if (defenderIsAttackable)
-	{
-		ActionPtr DefenderActionObj(new Action());
-
-		DefenderActionObj->SetStartMapPoint(action->defender_Pos);
-		DefenderActionObj->SetEndMapPoint  (action->defender_Pos);
-
-		facingIndex=spriteutils_DeltaToFacing(-deltax,-deltay);
-
-		DefenderActionObj->SetSequence(seq);
-		seq->AddRef();
-
-		if(!theDefender->ActionSpecialAttack(std::move(DefenderActionObj), facingIndex))
-		{
-			g_director->ActionFinished(seq);
-			return;
-		}
-
-		if (g_director->TileIsVisibleToPlayer(action->defender_Pos) && executeType == DHEXECUTE_NORMAL)
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_SECONDARY, TRUE);
-			g_director->ActiveUnitAdd(theDefender);
-		}
-		else
-		{
-			if (theDefender->WillDie())
-				g_director->FastKill(theDefender);
-			else
-				theDefender->EndTurnProcess();
-		}
-	}
-}
-
-void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionDeath * action              = (DQActionDeath *)itemAction;
-	UnitActorPtr      theDead             = action->death_dead;
-	UnitActorPtr      theVictor           = action->death_victor.lock();
-	Anim *          deathAnim           = NULL;
-	Anim *          victorAnim          = NULL;
-	sint32		    deathActionType     = UNITACTION_NONE;
-	sint32          victorActionType    = UNITACTION_NONE;
-
-	if (theDead != NULL && !theDead->GetNeedsToDie())
-	{
-		theDead->SetNeedsToDie(TRUE);
-
-		if(theDead->HasDeath())
-		{
-			if (theDead->GetLoadType() != LOADTYPE_FULL)
-				theDead->FullLoad(UNITACTION_VICTORY);
-
-			deathAnim = theDead->CreateAnim((UNITACTION)deathActionType); // deathAnim must be deleted
-
-			if(deathAnim)
-			{
-				deathActionType = UNITACTION_VICTORY;
-			}
-			else
-			{
-				deathActionType = UNITACTION_FAKE_DEATH;
-				deathAnim = theDead->MakeFakeDeath();
-			}
-		}
-		else
-		{
-			deathActionType = UNITACTION_FAKE_DEATH;
-			deathAnim = theDead->MakeFakeDeath();
-		}
-	}
-	else
-	{
-		theDead = NULL;
-	}
-
-	if(theVictor != NULL && !theVictor->GetNeedsToDie())
-	{
-		g_director->ActiveUnitRemove(theVictor);
-
-		theVictor->SetNeedsToVictor(TRUE);
-
-		if(theVictor->HasDeath())
-		{
-		}
-		else
-		{
-			if (theVictor->GetLoadType() != LOADTYPE_FULL) {
-				theVictor->FullLoad(UNITACTION_VICTORY);
-			}
-
-			victorActionType = UNITACTION_VICTORY;
-
-			victorAnim = theVictor->CreateAnim((UNITACTION)victorActionType);
-			if (victorAnim == NULL)
-			{
-				theVictor = NULL;
-			}
-		}
-	}
-
-	if(theDead != NULL )
-	{
-		theDead->SetHealthPercent(-1.0);
-		theDead->SetTempStackSize(0);
-
-		ActionPtr deadActionObj(new Action(	(UNITACTION)deathActionType, ACTIONEND_ANIMEND));
-		Assert(deadActionObj != NULL);
-		if (deadActionObj == NULL)
-		{
-			c3errors_ErrorDialog("Director", "Internal Failure to create death action");
-			delete deathAnim;
-			delete victorAnim;
-			return;
-		}
-
-		deadActionObj->SetSequence(seq);
-		seq->AddRef();
-
-		deadActionObj->SetStartMapPoint(action->dead_Pos);
-		deadActionObj->SetEndMapPoint(action->dead_Pos);
-
-		deadActionObj->SetAnim(deathAnim);
-
-		deadActionObj->SetUnitVisionRange(theDead->GetUnitVisionRange());
-		deadActionObj->SetUnitsVisibility(theDead->GetUnitVisibility());
-		deadActionObj->SetFacing(theDead->GetFacing());
-
-		if (g_soundManager)
-			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)theDead->GetUnitID());
-
-		if (g_soundManager) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == theDead->GetPlayerNum()) ||
-				(theDead->GetUnitVisibility() & (1 << visiblePlayer))) {
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)theDead->GetUnitID(), action->dead_soundID,
-									theDead->GetPos().x, theDead->GetPos().y);
-			}
-		}
-
-		theDead->AddAction(std::move(deadActionObj));
-
-		if (g_director->TileIsVisibleToPlayer(action->dead_Pos)
-				&& executeType == DHEXECUTE_NORMAL) {
-			seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-			g_director->ActiveUnitAdd(theDead);
-		} else {
-			if (theDead->WillDie()) {
-				g_director->FastKill(theDead);
-			} else {
-				theDead->EndTurnProcess();
-			}
-		}
-	}
-
-	if(theVictor != NULL)
-	{
-		theVictor->SetHealthPercent(-1.0);
-		theVictor->SetTempStackSize(0);
-
-		if(theVictor->HasDeath() || victorAnim == NULL)
-		{
-			theVictor->ActionQueueUpIdle();
-		}
-		else
-		{
-			ActionPtr victorActionObj(new Action((UNITACTION)victorActionType, ACTIONEND_ANIMEND));
-			if (victorActionObj == NULL)
-			{
-				c3errors_ErrorDialog("Director", "Internal Failure to create victory action");
-				delete deathAnim;
-				delete victorAnim;
-				return;
-			}
-			victorActionObj->SetSequence(seq);
-			seq->AddRef();
-			victorActionObj->SetStartMapPoint(action->victor_Pos);
-			victorActionObj->SetEndMapPoint(action->victor_Pos);
-
-			victorActionObj->SetAnim(victorAnim);
-
-			victorActionObj->SetUnitVisionRange(theVictor->GetUnitVisionRange());
-			victorActionObj->SetUnitsVisibility(theVictor->GetUnitVisibility());
-
-			if (g_soundManager)
-				g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)theVictor->GetUnitID());
-			if (g_soundManager) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == theVictor->GetPlayerNum()) ||
-					(theVictor->GetUnitVisibility() & (1 << visiblePlayer))) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)theVictor->GetUnitID(), action->victor_soundID,
-											theVictor->GetPos().x, theVictor->GetPos().y);
-				}
-			}
-
-			theVictor->AddAction(std::move(victorActionObj));
-		}
-
-		if (g_director->TileIsVisibleToPlayer(action->victor_Pos) && executeType == DHEXECUTE_NORMAL)
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_SECONDARY, TRUE);
-			g_director->ActiveUnitAdd(theVictor);
-		}
-		else
-		{
-			if (theVictor->WillDie())
-			{
-				g_director->FastKill(theVictor);
-			}
-			else
-			{
-				theVictor->EndTurnProcess();
-			}
-		}
-	}
-}
-
-void dh_morphUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionMorph   *action = (DQActionMorph *)itemAction;
-
-	UnitActorPtr theActor = action->morphing_actor.lock();
-
-	Assert(theActor != NULL);
-	if (theActor)
-	{
-		theActor->ChangeType(action->ss, action->type, action->id, FALSE);
-	}
-
-	g_director->ActionFinished(seq);
-}
-
-void dh_hide(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionHideShow	*action = (DQActionHideShow *)itemAction;
-
-	Assert(action);
-	if (!action) return;
-
-	UnitActorPtr actor = action->hiding_actor.lock();
-
-	Assert(actor);
-	if (!actor) return;
-
-	actor->Hide();
-
-	g_director->ActionFinished(seq);
-}
-
-void dh_show(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionHideShow	*action = (DQActionHideShow *)itemAction;
-
-	Assert(action);
-	if (!action) return;
-
-	UnitActorPtr actor = action->hiding_actor.lock();
-
-	Assert(actor);
-	if (!actor) return;
-
-	actor->PositionActor(action->hiding_pos);
-	actor->Show();
-
-	g_director->ActionFinished(seq);
-}
-
-void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionWork	*action = (DQActionWork *)itemAction;
-
-	Assert(action);
-	if (!action) return;
-
-	UnitActorPtr actor = action->working_actor.lock();
-
-	Assert(actor);
-	if (!actor) return;
-
-	ActionPtr actionObj(new Action(UNITACTION_WORK, ACTIONEND_ANIMEND));
-
-	Assert(actionObj);
-	if (actionObj) return;
-
-	actionObj->SetStartMapPoint(action->working_pos);
-	actionObj->SetEndMapPoint(action->working_pos);
-
-	if (actor->GetLoadType() != LOADTYPE_FULL)
-		actor->FullLoad(UNITACTION_WORK);
-
-	Anim	*anim = actor->CreateAnim(UNITACTION_WORK);
-	if (anim == NULL)
-	{
-		anim = actor->CreateAnim(UNITACTION_MOVE);
-
-		if (!anim) {
-			actionObj.reset();
-			g_director->ActionFinished(seq);
-			return;
-		}
-	}
-
-	actionObj->SetSequence(seq);
-	seq->AddRef();
-
-	actionObj->SetAnim(anim);
-
-	actor->AddAction(std::move(actionObj));
-
-	if (g_soundManager)
-	{
-		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == actor->GetPlayerNum()) ||
-			(actor->GetUnitVisibility() & (1 << visiblePlayer))) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)actor->GetUnitID(), action->working_soundID,
-									actor->GetPos().x, actor->GetPos().y);
-		}
-	}
-
-	if (g_director->TileIsVisibleToPlayer(action->working_pos) && executeType == DHEXECUTE_NORMAL)
-	{
-		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-		g_director->ActiveUnitAdd(actor);
-	}
-	else
-	{
-		if (actor->WillDie())
-		{
-			g_director->FastKill(actor);
-		}
-		else
-		{
-			actor->EndTurnProcess();
-		}
-	}
-}
-
-void dh_fastkill(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType) {
-  DQActionFastKill	*action = (DQActionFastKill *)itemAction;
-
-  Assert(action);
-  if (!action) {
+void Director::AddEndTurn(void) {
+  DPRINTF(k_DBG_GAMESTATE, ("Director::AddEndTurn, curPlayer = %d\n",
+                            g_selected_item->GetCurPlayer()));
+
+  if (g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
+    static sint32 last_turn_processed = -1;
+    if (last_turn_processed !=
+        g_player[g_selected_item->GetCurPlayer()]->m_current_round) {
+      last_turn_processed =
+          g_player[g_selected_item->GetCurPlayer()]->m_current_round;
+
+      g_gevManager->Pause();
+
+      Player* p = g_player[g_selected_item->GetCurPlayer()];
+      p->m_endingTurn = TRUE;
+
+      for (sint32 i = 0; i < p->m_all_armies->Num(); i++) {
+        //				IncrementPendingGameActions();
+        g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute, GEA_Army,
+                               p->m_all_armies->Access(i).m_id, GEA_End);
+      }
+
+      g_player[g_selected_item->GetCurPlayer()]->m_endingTurn = FALSE;
+      g_gevManager->Resume();
+    }
+  }
+
+  if (m_pendingGameActions > 0 || m_endTurnRequested) {
+    DPRINTF(k_DBG_GAMESTATE,
+            ("Director::AddEndTurn, but there are %d pending actions (or it "
+             "was already requested), not doing it yet.\n",
+             m_pendingGameActions));
+    m_endTurnRequested = true;
     return;
   }
 
-  g_director->FastKill(action->dead);
-  g_director->ActionFinished(seq);
+  static sint32 lastPlayer = -1;
+  static sint32 lastRound = -1;
+
+  if (g_selected_item->GetCurPlayer() == lastPlayer && g_player[lastPlayer] &&
+      g_player[lastPlayer]->m_current_round == lastRound) {
+    for (DQItemPtr& item : m_itemQueue) {
+      if (item->m_type == DQITEM_ENDTURN) {
+        DPRINTF(k_DBG_GAMESTATE, ("Skipping duplicate end turn for %d,%d\n",
+                                  lastPlayer, lastRound));
+        return;
+      }
+    }
+  }
+
+  lastPlayer = g_selected_item->GetCurPlayer();
+  if (g_player[lastPlayer]) {
+    lastRound = g_player[lastPlayer]->m_current_round;
+  } else {
+    lastRound = -1;
+  }
+
+  DQActionEndTurn* action = new DQActionEndTurn;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_ENDTURN, action, dh_endTurn));
+
+  action->endTurn = TRUE;
+
+  m_itemQueue.push_back(item);
 }
 
-void dh_removeVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionVision	*action = (DQActionVision *)itemAction;
+void Director::AddAttack(Unit attacker, Unit defender) {
+  UnitActorPtr attackerActor;
+  UnitActorPtr defenderActor;
 
-	Assert(action);
-	if (!action) return;
+  DQActionAttack* action = new DQActionAttack;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_ATTACK, action, dh_attack));
+  item->SetOwner(attacker.GetOwner());
 
-	if(g_tiledMap)
-		g_tiledMap->RemoveVisible(action->vision_pos, action->vision_range);
+  action->defender_IsCity = FALSE;
 
-	g_director->ActionFinished(seq);
+  if (attacker != Unit()) {
+    attackerActor = attacker.GetActor();
+    action->attacker = attackerActor;
+    action->attacker_Pos = attacker.RetPos();
+    action->attacker_ID = attacker.GetAttackSoundID();
+    action->attacker_IsCity = attacker.IsCity();
+
+    attackerActor->SetHealthPercent(attacker.GetHP() /
+                                    attacker->CalculateTotalHP());
+
+    Army army = attacker.GetArmy();
+    if (army.IsValid()) {
+      attackerActor->SetTempStackSize(army.Num());
+    }
+  }
+
+  if (defender != Unit()) {
+    defenderActor = defender.GetActor();
+    action->defender = defenderActor;
+    action->defender_Pos = defender.RetPos();
+    action->defender_ID = defender.GetAttackSoundID();
+    action->defender_IsCity = defender.IsCity();
+
+    defenderActor->SetHealthPercent(defender.GetHP() /
+                                    defender->CalculateTotalHP());
+
+    CellUnitList* unitList;
+    unitList = g_theWorld->GetCell(defender.RetPos())->UnitArmy();
+    sint32 num = 1;
+    if (unitList != NULL)
+      num = unitList->Num();
+    defenderActor->SetTempStackSize(num);
+  }
+
+  m_itemQueue.push_back(item);
+
+  Player* visiblePlayer = g_player[g_selected_item->GetVisiblePlayer()];
+  if (visiblePlayer && visiblePlayer->IsVisible(attacker.RetPos())) {
+    if (attacker.m_id != 0) {
+      AddCombatFlash(attacker.RetPos());
+    }
+  }
+
+  if (visiblePlayer && visiblePlayer->IsVisible(defender.RetPos())) {
+    if (defender.m_id != 0) {
+      AddCombatFlash(defender.RetPos());
+    }
+  }
 }
 
-void dh_addVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionVision	*action = (DQActionVision *)itemAction;
+void Director::AddAttackPos(Unit attacker, MapPoint const& pos) {
+  DQActionAttackPos* action = new DQActionAttackPos;
+  action->attackpos_attacker = attacker.GetActor();
+  action->attackpos_attacker_pos = attacker.RetPos();
+  action->attackpos_target_pos = pos;
+  action->attackpos_soundID = attacker.GetAttackSoundID();
 
-	Assert(action);
-	if (!action) return;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_ATTACKPOS, action, dh_attackpos));
+  item->SetOwner(attacker.GetOwner());
+  m_itemQueue.push_back(item);
 
-	g_tiledMap->AddVisible(action->vision_pos, action->vision_range);
-
-	g_director->ActionFinished(seq);
+  if (g_player[g_selected_item->GetVisiblePlayer()] &&
+      g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)) {
+    AddCombatFlash(pos);
+  }
 }
 
-void dh_setVisibility(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionSetVisibility	*action = (DQActionSetVisibility *)itemAction;
+void Director::AddSpecialAttack(Unit attacker,
+                                Unit attacked,
+                                SPECATTACK attack) {
+  sint32 soundID;
+  sint32 spriteID;
+  if (!attacker.GetSpecialAttackInfo(attack, &soundID, &spriteID)) {
+    return;
+  }
 
-	UnitActorPtr actor = action ? action->setvisibility_actor.lock() : NULL;
-	Assert(actor);
-	if (!actor) return;
+  UnitActorPtr attackerActor = attacker.IsValid() ? attacker.GetActor() : NULL;
+  UnitActorPtr defenderActor = attacked.IsValid() ? attacked.GetActor() : NULL;
 
-	actor->SetUnitVisibility(action->visibilityFlag);
+  DQActionAttack* action = new DQActionAttack;
+  action->attacker = attackerActor;
+  action->defender = defenderActor;
+  action->attacker_Pos = attacker.RetPos();
+  action->defender_Pos = attacked.RetPos();
+  action->attacker_IsCity = attacker.IsCity();
+  action->defender_IsCity = attacked.IsCity();
+  action->attacker_ID = soundID;
+  action->defender_ID = spriteID;
 
-	g_director->ActionFinished(seq);
+  DQItemPtr item(
+      DQItem::CreatePtr(DQITEM_SPECATTACK, action, dh_specialAttack));
+  item->SetOwner(attacker.GetOwner());
+
+  m_itemQueue.push_back(item);
+
+  if (g_player[g_selected_item->GetVisiblePlayer()] &&
+      g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(
+          attacked.RetPos())) {
+    AddProjectileAttack(attacker, attacked, NULL,
+                        SpriteStatePtr(new SpriteState(spriteID)), 0);
+  }
 }
 
-void dh_setOwner(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionSetOwner	*action = (DQActionSetOwner *)itemAction;
+void Director::AddWinnerLoser(Unit victor, Unit dead) {
+  Assert(victor.GetActor());
+  Assert(dead.GetActor());
 
-	UnitActorPtr actor(action ? action->setowner_actor.lock() : NULL);
-	Assert(actor);
-	if (!actor) return;
+  DQActionDeath* action = new DQActionDeath;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
+  item->SetOwner(victor.GetOwner());
 
-	actor->SetPlayerNum(action->owner);
+  action->death_victor = victor.GetActor();
+  action->victor_id = victor.m_id;
+  action->death_dead = dead.GetActor();
+  action->dead_id = dead.m_id;
+  action->victor_Pos = victor.RetPos();
+  action->dead_Pos = dead.RetPos();
 
-	g_director->ActionFinished(seq);
+  action->dead_soundID = dead.GetDeathSoundID();
+  action->victor_soundID = victor.GetVictorySoundID();
 
+  m_itemQueue.push_back(item);
 }
 
-void dh_setVisionRange(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionSetVisionRange	*action = (DQActionSetVisionRange *)itemAction;
+void Director::AddDeath(Unit dead) {
+  Assert(dead.GetActor());
 
-	UnitActorPtr actor = action ? action->setvisionrange_actor.lock() : NULL;
-	Assert(actor);
-	if (!actor) return;
+  DQActionDeath* action = new DQActionDeath;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
+  item->SetOwner(dead.GetOwner());
 
-	actor->SetUnitVisionRange(action->range);
+  action->death_dead = dead.GetActor();
+  action->dead_id = dead.m_id;
+  action->victor_id = 0;
+  action->victor_Pos = dead.RetPos();
+  action->dead_Pos = dead.RetPos();
+  action->dead_soundID = dead.GetDeathSoundID();
+  action->victor_soundID = 0;
 
-	g_director->ActionFinished(seq);
+  ActiveUnitAdd(dead.GetActor());
+
+  dead.SetActor(NULL); // Now action owns dead's actor
+  m_itemQueue.push_back(item);
 }
 
-void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionCombatFlash	*action = (DQActionCombatFlash *)itemAction;
+void Director::AddDeathWithSound(Unit dead, sint32 soundID) {
+  Assert(dead.GetActor());
 
-	SpriteStatePtr ss(new SpriteState(99));
-	EffectActor		*flash = new EffectActor(ss, action->flash_pos);
+  DQActionDeath* action = new DQActionDeath;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_DEATH, action, dh_death));
+  item->SetOwner(dead.GetOwner());
 
-	Anim *anim = flash->CreateAnim(EFFECTACTION_PLAY);
-	if (anim == NULL)
-	{
-		anim = flash->CreateAnim(EFFECTACTION_FLASH);
-		Assert(anim != NULL);
-	}
+  action->death_dead = dead.GetActor();
+  action->dead_id = dead.m_id;
+  action->victor_id = 0;
+  action->victor_Pos = dead.RetPos();
+  action->dead_Pos = dead.RetPos();
+  action->dead_soundID = soundID;
+  action->victor_soundID = 0;
 
-	if (anim)
-	{
-		ActionPtr actionObj(new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND));
-		actionObj->SetAnim(anim);
-		flash->AddAction(std::move(actionObj));
-		g_director->ActiveEffectAdd(flash);
-	}
-
-	g_director->ActionFinished(seq);
+  dead.SetActor(NULL);  // Now action owns dead's actor
+  m_itemQueue.push_back(item);
 }
 
-void dh_copyVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-//	DQActionCopyVision	*action = (DQActionCopyVision *)itemAction;
+void Director::AddMorphUnit(UnitActorPtr morphingActor,
+                            SpriteStatePtr ss,
+                            sint32 type,
+                            Unit id) {
+  if (morphingActor == NULL)
+    return;
 
-	g_tiledMap->CopyVision();
-	g_radarMap->Update();
-	g_director->ActionFinished(seq);
+  DQActionMorph* action = new DQActionMorph;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_MORPH, action, dh_morphUnit));
+
+  action->morphing_actor = morphingActor;
+  action->ss = ss;
+  action->type = type;
+  action->id = id;
+
+  m_itemQueue.push_back(item);
 }
 
-void dh_centerMap(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionCenterMap	*action = (DQActionCenterMap *)itemAction;
+void Director::AddHide(Unit hider) {
+  UnitActorPtr actor = hider.GetActor();
+  Assert(actor);
+  if (!actor)
+    return;
 
-	if(!g_selected_item->GetIsPathing()) {
+  DQActionHideShow* action = new DQActionHideShow;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_HIDE, action, dh_hide));
 
-		g_radarMap->CenterMap(action->centerMap_pos);
+  action->hiding_actor = actor;
+  action->hiding_pos = hider.RetPos();
 
-		g_tiledMap->Refresh();
-		g_tiledMap->InvalidateMap();
-		g_tiledMap->InvalidateMix();
-
-		background_draw_handler(g_background);
-	}
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(item);
 }
 
-void dh_selectUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionUnitSelection	*action = (DQActionUnitSelection *)itemAction;
+void Director::AddShow(Unit hider) {
+  UnitActorPtr actor = hider.GetActor();
+  Assert(actor);
+  if (!actor)
+    return;
 
-	g_selected_item->DirectorUnitSelection(action->flags);
+  DQActionHideShow* action = new DQActionHideShow;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_SHOW, action, dh_show));
 
-	g_director->ActionFinished(seq);
+  action->hiding_actor = actor;
+  action->hiding_pos = hider.RetPos();
+
+  m_itemQueue.push_back(item);
 }
 
-void dh_endTurn(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-//	DQActionEndTurn	*action = (DQActionEndTurn *)itemAction;
+void Director::AddWork(Unit worker) {
+  UnitActorPtr actor = worker.GetActor();
+  Assert(actor);
+  if (!actor)
+    return;
 
-	g_director->ActionFinished(seq);
+  DQActionWork* action = new DQActionWork;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_WORK, action, dh_work));
+  item->SetOwner(worker.GetOwner());
 
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
-						   GEA_Player, g_selected_item->GetCurPlayer(),
-						   GEA_End);
+  action->working_actor = actor;
+  action->working_pos = worker.RetPos();
+  action->working_soundID = worker.GetWorkSoundID();
+
+  m_itemQueue.push_back(item);
 }
 
-void dh_battle(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionBattle	*action = (DQActionBattle *)itemAction;
+void Director::AddFastKill(Unit dead) {
+  UnitActorPtr actor = dead.GetActor();
+  Assert(actor);
+  if (!actor)
+    return;
 
-	if(g_battleViewWindow)
-	{
-		BattleViewWindow::Cleanup();
-	}
+  DQActionFastKill* action = new DQActionFastKill;
+  DQItemPtr item(DQItem::CreatePtr(DQITEM_FASTKILL, action, dh_fastkill));
 
-	BattleViewWindow::Initialize(seq);
+  action->dead = actor;
 
-	if(g_battleViewWindow)
-	{
-		g_battleViewWindow->SetupBattle(action->battle);
-		g_c3ui->AddWindow(g_battleViewWindow);
-		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
-	}
+  dead.SetActor(NULL);
+  m_itemQueue.push_back(item);  // Now action owns dead's actor
 }
 
-void dh_playSound(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionPlaySound	*action = (DQActionPlaySound *)itemAction;
+void Director::AddRemoveVision(const MapPoint& pos, double range) {
+  DQActionVision* action = new DQActionVision;
+  DQItemPtr item(
+      DQItem::CreatePtr(DQITEM_REMOVEVISION, action, dh_removeVision));
 
-	if (!g_soundManager) return;
+  action->vision_pos = pos;
+  action->vision_range = range;
 
-	g_soundManager->AddSound(SOUNDTYPE_SFX, 0, action->playsound_soundID,
-							action->playsound_pos.x, action->playsound_pos.y);
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(item);
 }
 
-void dh_playWonderMovie(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionPlayWonderMovie	*action = (DQActionPlayWonderMovie *)itemAction;
+void Director::AddAddVision(const MapPoint& pos, double range) {
+  DQActionVision* action = new DQActionVision;
+  action->vision_pos = pos;
+  action->vision_range = range;
 
-	Assert(action);
-	if (!action) return;
-
-	sint32		which = action->playwondermovie_which;
-
-	wondermoviewin_Initialize(seq);
-	wondermoviewin_DisplayWonderMovie(which);
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_ADDVISION, action, dh_addVision));
 }
 
-void dh_playVictoryMovie(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionPlayVictoryMovie	*action = (DQActionPlayVictoryMovie *)itemAction;
+void Director::AddSetVisibility(UnitActorPtr actor, uint32 visibility) {
+  Assert(actor);
+  if (!actor)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionSetVisibility* action = new DQActionSetVisibility;
+  action->setvisibility_actor = actor;
+  action->visibilityFlag = visibility;
 
-	GAME_OVER		reason = action->playvictorymovie_reason;
-
-	victorymoviewin_Initialize(seq);
-	victorymoviewin_DisplayVictoryMovie(reason);
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_SETVISIBILITY, action, dh_setVisibility));
 }
 
-void dh_message(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionMessage	*action = (DQActionMessage *)itemAction;
+void Director::AddSetOwner(UnitActorPtr actor, sint32 owner) {
+  Assert(actor);
+  if (!actor)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionSetOwner* action = new DQActionSetOwner;
+  action->setowner_actor = actor;
+  action->owner = owner;
 
-	if (g_theMessagePool->IsValid(action->message)) {
-		if(action->message.IsAlertBox()) {
-			if(!messagewin_IsModalMessageDisplayed()) {
-				messagewin_CreateModalMessage(action->message);
-			}
-		} else {
-			if(!action->message.AccessData()->GetMessageWindow()) {
-				messagewin_CreateMessage( action->message );
-			}
-			if(action->message.IsInstantMessage()
-					// JJB added this to prevent instant messages showing
-					// out of turn in hotseat games.
-					// With the existing behaviour they would show immediately
-					// which would often mean that they show on the wrong players
-					// turn.
-					 && g_selected_item->GetVisiblePlayer() == action->message.GetOwner()
-				) {
-				action->message.Show();
-			}
-		}
-	}
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_SETOWNER, action, dh_setOwner));
 }
 
-void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionFaceoff	*action = (DQActionFaceoff *)itemAction;
+void Director::AddSetVisionRange(UnitActorPtr actor, double range) {
+  Assert(actor);
+  if (!actor)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionSetVisionRange* action = new DQActionSetVisionRange;
+  action->setvisionrange_actor = actor;
+  action->range = range;
 
-	UnitActorPtr theAttacker = action->faceoff_attacker.lock();
-	UnitActorPtr theAttacked = action->faceoff_attacked.lock();
-
-	bool		attackedIsAttackable = true;
-
-	Assert(theAttacker != NULL);
-	if (theAttacker == NULL) return;
-
-	Assert(theAttacked != NULL);
-	if (theAttacked == NULL) return;
-
-	ActionPtr AttackedActionObj;
-
-	ActionPtr AttackerActionObj(new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT));
-
-	AttackerActionObj->SetSequence(NULL);
-
-	if (attackedIsAttackable)
-	{
-		AttackedActionObj.reset(new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT));
-		AttackedActionObj->SetSequence(NULL);
-	}
-
-	AttackerActionObj->SetStartMapPoint(action->faceoff_attacker_pos);
-	AttackerActionObj->SetEndMapPoint(action->faceoff_attacker_pos);
-
-	if (attackedIsAttackable)
-	{
-		AttackedActionObj->SetStartMapPoint(action->faceoff_attacked_pos);
-		AttackedActionObj->SetEndMapPoint(action->faceoff_attacked_pos);
-	}
-
-	Anim	*AttackedAnim = NULL;
-
-	Anim * AttackerAnim = theAttacker->MakeFaceoff();
-	if (AttackerAnim == NULL)
-	{
-		theAttacker->AddIdle(TRUE);
-		return;
-	}
-	AttackerActionObj->SetAnim(AttackerAnim);
-
-	if (attackedIsAttackable)
-	{
-		if (theAttacked->GetLoadType() != LOADTYPE_FULL)
-			theAttacked->FullLoad(UNITACTION_IDLE);
-
-		AttackedAnim = theAttacked->MakeFaceoff();
-
-		if (AttackedAnim == NULL)
-		{
-			theAttacked->AddIdle(TRUE);
-		}
-	}
-
-	POINT AttackerPoints, AttackedPoints;
-
-	maputils_MapXY2PixelXY(action->faceoff_attacker_pos.x,
-	                       action->faceoff_attacker_pos.y,
-	                       AttackerPoints
-	                      );
-	maputils_MapXY2PixelXY(action->faceoff_attacked_pos.x,
-	                       action->faceoff_attacked_pos.y,
-	                       AttackedPoints
-	                      );
-
-	AttackerActionObj->SetFacing(spriteutils_DeltaToFacing(AttackedPoints.x - AttackerPoints.x,
-		AttackedPoints.y - AttackerPoints.y));
-
-	if(AttackedAnim != NULL)
-	{
-		AttackedActionObj->SetAnim(AttackedAnim);
-		AttackedActionObj->SetFacing(spriteutils_DeltaToFacing(AttackerPoints.x - AttackedPoints.x,
-			AttackerPoints.y - AttackedPoints.y));
-	}
-
-	AttackerActionObj->SetUnitVisionRange(theAttacker->GetUnitVisionRange());
-	AttackerActionObj->SetUnitsVisibility(theAttacker->GetUnitVisibility());
-
-	theAttacker->AddAction(std::move(AttackerActionObj));
-
-	bool attackedVisible = true;
-
-	if (attackedIsAttackable)
-	{
-		if(AttackedAnim != NULL)
-		{
-			AttackedActionObj->SetUnitVisionRange(theAttacked->GetUnitVisionRange());
-
-			AttackedActionObj->SetUnitsVisibility(theAttacker->GetUnitVisibility());
-			theAttacked->AddAction(std::move(AttackedActionObj));
-		}
-
-		attackedVisible = g_director->TileIsVisibleToPlayer(action->faceoff_attacked_pos);
-
-		if (theAttacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
-			theAttacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
-			attackedVisible = TRUE;
-
-		if(attackedVisible && executeType == DHEXECUTE_NORMAL)
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_SECONDARY, TRUE);
-			g_director->ActiveUnitAdd(theAttacked);
-		}
-		else
-		{
-			if (theAttacked->WillDie())
-			{
-				g_director->FastKill(theAttacked);
-			}
-			else
-			{
-				theAttacked->EndTurnProcess();
-			}
-		}
-	}
-
-	BOOL attackerVisible = g_director->TileIsVisibleToPlayer(action->faceoff_attacker_pos);
-
-	if (theAttacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
-		theAttacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) {
-		attackerVisible = TRUE;
-		attackedVisible = TRUE;
-	}
-	if (attackerVisible && attackedVisible && executeType == DHEXECUTE_NORMAL)
-	{
-		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-		g_director->ActiveUnitAdd(theAttacker);
-	}
-	else
-	{
-		if (theAttacker->WillDie())
-		{
-			g_director->FastKill(theAttacker);
-		}
-		else
-		{
-			theAttacker->EndTurnProcess();
-		}
-	}
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_SETVISIONRANGE, action, dh_setVisionRange));
 }
 
-void dh_terminateFaceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionTerminateFaceOff	*action = (DQActionTerminateFaceOff *)itemAction;
+void Director::AddBattle(Battle* battle) {
+  Assert(battle);
+  if (!battle)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionBattle* action = new DQActionBattle;
+  action->battle = battle;
 
-	UnitActorPtr facerOffer = action->faceroffer.lock();
-
-	if (facerOffer) {
-
-		facerOffer->SetHealthPercent(-1.0);
-		facerOffer->SetTempStackSize(0);
-
-		g_director->ActiveUnitRemove(facerOffer);
-	}
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_BATTLE, action, dh_battle));
 }
 
-void dh_terminateSound(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionTerminateSound	*action = (DQActionTerminateSound *)itemAction;
+void Director::AddPlaySound(sint32 soundID, MapPoint const& pos) {
+  if (soundID <= 0)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionPlaySound* action = new DQActionPlaySound;
+  action->playsound_soundID = soundID;
+  action->playsound_pos = pos;
 
-	if (g_soundManager)
-		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->terminate_sound_unit.m_id);
-
-	g_director->ActionFinished(seq);
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_PLAYSOUND, action, dh_playSound));
 }
 
-void dh_speceffect(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionSpecialEffect *action = (DQActionSpecialEffect *)itemAction;
-
-	Assert(action);
-	if (!action) {
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	MapPoint		pos = action->speceffect_pos;
-	sint32			soundID = action->speceffect_soundID;
-	sint32			spriteID = action->speceffect_spriteID;
-
-	if (!g_tiledMap->GetLocalVision()->IsVisible(pos))
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	SpriteStatePtr ss(new SpriteState(spriteID));
-	EffectActor		*effectActor = new EffectActor(ss, pos);
-
-	Anim *  anim = effectActor->CreateAnim(EFFECTACTION_PLAY);
-
-	if (anim)
-	{
-		ActionPtr actionObj(new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND));
-		actionObj->SetAnim(anim);
-		effectActor->AddAction(std::move(actionObj));
-		g_director->ActiveEffectAdd(effectActor);
-
-		if (g_soundManager)
-		{
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
-		}
-	}
-
-	g_director->ActionFinished(seq);
+void Director::AddGameSound(GAMESOUNDS sound) {
+  AddPlaySound(gamesounds_GetGameSoundID((sint32)sound), MapPoint());
 }
 
-void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionAttackPos	*action = (DQActionAttackPos *)itemAction;
+void Director::AddPlayWonderMovie(sint32 which) {
+  Assert(which >= 0);
+  if (which < 0)
+    return;
 
-	Assert(action);
-	if (!action) return;
+  DQActionPlayWonderMovie* action = new DQActionPlayWonderMovie;
+  action->playwondermovie_which = which;
 
-	UnitActorPtr theAttacker = action->attackpos_attacker.lock();
-
-	Assert(theAttacker != NULL);
-	if (theAttacker == NULL || theAttacker->GetNeedsToDie()) {
-		g_director->ActionFinished(seq);
-		return;
-	}
-	ActionPtr AttackerActionObj(
-      new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
-                 theAttacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
-                 theAttacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK)));
-
-	AttackerActionObj->SetSequence(seq);
-	seq->AddRef();
-
-	AttackerActionObj->SetStartMapPoint(action->attackpos_attacker_pos);
-	AttackerActionObj->SetEndMapPoint(action->attackpos_attacker_pos);
-
-	Anim	*AttackerAnim = NULL;
-
-	if (theAttacker->GetLoadType() != LOADTYPE_FULL)
-		theAttacker->FullLoad(UNITACTION_ATTACK);
-
-	AttackerAnim = theAttacker->CreateAnim(UNITACTION_ATTACK);
-
-	if (AttackerAnim == NULL)
-		AttackerAnim = theAttacker->CreateAnim(UNITACTION_IDLE);
-
-	AttackerActionObj->SetAnim(AttackerAnim);
-
-	POINT AttackerPoints, AttackedPoints;
-
-	maputils_MapXY2PixelXY(action->attackpos_attacker_pos.x,
-	                       action->attackpos_attacker_pos.y,
-	                       AttackerPoints
-	                      );
-	maputils_MapXY2PixelXY(action->attackpos_target_pos.x,
-	                       action->attackpos_target_pos.y,
-	                       AttackedPoints
-	                      );
-
-	AttackerActionObj->SetFacing(spriteutils_DeltaToFacing(AttackedPoints.x - AttackerPoints.x,
-		AttackedPoints.y - AttackerPoints.y));
-
-	AttackerActionObj->SetUnitVisionRange(theAttacker->GetUnitVisionRange());
-	AttackerActionObj->SetUnitsVisibility(theAttacker->GetUnitVisibility());
-
-	if (g_soundManager)
-		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)theAttacker->GetUnitID());
-
-	if (g_soundManager)
-	{
-		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == theAttacker->GetPlayerNum()) ||
-			(theAttacker->GetUnitVisibility() & (1 << visiblePlayer)))
-		{
-			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)theAttacker->GetUnitID(),
-								action->attackpos_soundID,
-								theAttacker->GetPos().x, theAttacker->GetPos().y);
-		}
-	}
-
-	theAttacker->AddAction(std::move(AttackerActionObj));
-
-	bool attackerVisible = g_director->TileIsVisibleToPlayer(action->attackpos_attacker_pos);
-
-	if (attackerVisible && executeType == DHEXECUTE_NORMAL)
-	{
-		seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-		g_director->ActiveUnitAdd(theAttacker);
-	}
-	else
-	{
-		if (theAttacker->WillDie())
-		{
-			g_director->FastKill(theAttacker);
-		}
-		else
-		{
-			theAttacker->EndTurnProcess();
-		}
-	}
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_PLAYWONDERMOVIE, action, dh_playWonderMovie));
 }
 
-void dh_invokeThroneRoom(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	g_director->ActionFinished(seq);
+void Director::AddPlayVictoryMovie(GAME_OVER reason,
+                                   BOOL previouslyWon,
+                                   BOOL previouslyLost) {
+  if (previouslyWon || previouslyLost) {
+    PLAYER_INDEX player = g_selected_item->GetVisiblePlayer();
+
+    if (g_player[player] && !g_player[player]->m_isDead) {
+      return;
+    }
+  }
+
+  DQActionPlayVictoryMovie* action = new DQActionPlayVictoryMovie;
+  action->playvictorymovie_reason = reason;
+
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_PLAYVICTORYMOVIE, action, dh_playVictoryMovie));
 }
 
-void dh_invokeResearchAdvance(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionInvokeResearchAdvance *action = (DQActionInvokeResearchAdvance *)itemAction;
+void Director::AddMessage(const Message& message) {
+  DQActionMessage* action = new DQActionMessage;
+  action->message = message;
 
-	if (!action)
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
-
-	sci_advancescreen_displayMyWindow(action->message, 0, seq);
-
-	delete action->message;
-	action->message = NULL;
+  m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_MESSAGE, action, dh_message));
 }
 
-void dh_beginScheduler(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	DQActionBeginScheduler *action = (DQActionBeginScheduler *)itemAction;
+void Director::AddFaceoff(Unit& attacker, Unit& defender) {
+  DQActionFaceoff* action = new DQActionFaceoff;
 
-	if(!action)
-	{
-		g_director->ActionFinished(seq);
-		return;
-	}
+  if (attacker.IsValid()) {
+    action->faceoff_attacker = attacker.GetActor();
+    action->faceoff_attacker_pos = attacker.RetPos();
+  }
 
-#ifdef _DEBUG
-	static bool isCurrentPlayerOk = true; // static, to report the error only once
-	if (isCurrentPlayerOk)
-	{
-		isCurrentPlayerOk = action->player == g_selected_item->GetCurPlayer();
-		Assert(isCurrentPlayerOk);
-	}
-#endif
+  if (defender.IsValid()) {
+    action->faceoff_attacked = defender.GetActor();
+    action->faceoff_attacked_pos = defender.RetPos();
+  }
 
-	if(g_network.IsHost())
-	{
-		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BEGIN_SCHEDULER, action->player));
-	}
+  m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_FACEOFF, action, dh_faceoff));
+}
 
-	Assert(g_director->m_holdSchedulerSequence == NULL);
-	if(!g_network.IsActive() || g_network.IsLocalPlayer(action->player))
-	{
-		g_director->SetHoldSchedulerSequence(seq);
-	}
-	else
-	{
-		g_director->SetHoldSchedulerSequence(NULL);
-	}
+void Director::AddTerminateFaceoff(Unit& faceroffer) {
+  DQActionTerminateFaceOff* action = new DQActionTerminateFaceOff;
+  DQItemPtr item(
+      DQItem::CreatePtr(DQITEM_TERMINATE_FACEOFF, action, dh_terminateFaceoff));
 
-	g_gevManager->Pause();
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginScheduler,
-						   GEA_Player, action->player,
-						   GEA_End);
-	g_gevManager->Resume();
+  if (faceroffer.IsValid()) {
+    action->faceroffer = faceroffer.GetActor();
+    item->SetOwner(faceroffer.GetOwner());
+  }
 
-	if(g_director->m_holdSchedulerSequence == NULL) {
-		g_director->ActionFinished(seq);
-	}
+  m_itemQueue.push_back(item);
+}
+
+void Director::AddTerminateSound(Unit& unit) {
+  if (unit.IsValid()) {
+    DQActionTerminateSound* action = new DQActionTerminateSound;
+    action->terminate_sound_unit = unit;
+
+    m_itemQueue.push_back(
+        DQItem::CreatePtr(DQITEM_TERMINATE_SOUND, action, dh_terminateSound));
+  }
+}
+
+void Director::AddInvokeThroneRoom(void) {
+  DQActionInvokeThroneRoom* action = new DQActionInvokeThroneRoom;
+
+  m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_INVOKE_THRONE_ROOM, action,
+                                          dh_invokeThroneRoom));
+}
+
+void Director::AddInvokeResearchAdvance(MBCHAR* message) {
+  DQActionInvokeResearchAdvance* action = new DQActionInvokeResearchAdvance;
+  if (message) {
+    MBCHAR* mess = new MBCHAR[strlen(message) + 1];
+    strcpy(mess, message);
+    action->message = mess;
+  }
+
+  m_itemQueue.push_back(DQItem::CreatePtr(DQITEM_INVOKE_RESEARCH_ADVANCE,
+                                          action, dh_invokeResearchAdvance));
+}
+
+void Director::AddBeginScheduler(sint32 player) {
+  Assert(player == g_selected_item->GetCurPlayer());
+  if (player != g_selected_item->GetCurPlayer())
+    return;
+
+  DPRINTF(k_DBG_GAMESTATE, ("Director::AddBeginScheduler(%d)\n", player));
+
+  DQActionBeginScheduler* action = new DQActionBeginScheduler;
+  action->player = player;
+
+  m_itemQueue.push_back(
+      DQItem::CreatePtr(DQITEM_BEGIN_SCHEDULER, action, dh_beginScheduler));
+}
+
+BOOL Director::TileWillBeCompletelyVisible(sint32 x, sint32 y) {
+  RECT tempViewRect = *g_tiledMap->GetMapViewRect();
+
+  for (DQItemPtr item : m_itemQueue) {
+    if (item->m_type == DQITEM_CENTERMAP) {
+      DQActionCenterMap* action = (DQActionCenterMap*)item->m_action;
+      if (action) {
+        MapPoint pos = action->centerMap_pos;
+        g_radarMap->ComputeCenteredMap(pos, &tempViewRect);
+      }
+    }
+  }
+
+  return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
+}
+
+void Director::IncrementPendingGameActions() {
+  m_pendingGameActions++;
+}
+
+void Director::DecrementPendingGameActions() {
+  m_pendingGameActions--;
+  Assert(m_pendingGameActions >= 0);
+
+  if (m_pendingGameActions <= 0) {
+    m_pendingGameActions = 0;
+    if (m_endTurnRequested) {
+      Player* pl = g_player[g_selected_item->GetCurPlayer()];
+      if (pl && (!g_network.IsActive() ||
+                 (g_network.IsLocalPlayer(g_selected_item->GetCurPlayer())))) {
+        m_endTurnRequested = false;
+        DPRINTF(k_DBG_GAMESTATE,
+                ("Adding from DecrementPendingGameActions, %d\n",
+                 g_selected_item->GetCurPlayer()));
+        AddEndTurn();
+      }
+    }
+  }
+}
+
+void Director::ReloadAllSprites() {
+  sint32 p, i;
+  for (p = 0; p < k_MAX_PLAYERS; p++) {
+    if (!g_player[p])
+      continue;
+    // PFT  29 mar 05
+    // cycle through human players' cities
+    if (g_player[g_selected_item->GetVisiblePlayer()]->IsHuman()) {
+      for (i = 0; i < g_player[p]->m_all_cities->Num(); i++) {
+        Unit u = g_player[p]->m_all_cities->Access(i);
+
+        // recover the number of turns until the city next produces a pop from
+        // it's current state  CityData *cityData = u.GetData()->GetCityData();
+        // cityData->TurnsToNextPop();
+
+        UnitActorPtr actor = u.GetActor();
+        u.GetSpriteState()->SetIndex(
+            u.GetDBRec()->GetDefaultSprite()->GetValue());
+        actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
+      }
+    }
+    for (i = 0; i < g_player[p]->m_all_units->Num(); i++) {
+      Unit u = g_player[p]->m_all_units->Access(i);
+      UnitActorPtr actor = u.GetActor();
+      u.GetSpriteState()->SetIndex(
+          u.GetDBRec()->GetDefaultSprite()->GetValue());
+      actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
+    }
+  }
+}
+
+void Director::NotifyResync() {
+  m_endTurnRequested = false;
+  m_pendingGameActions = 0;
 }

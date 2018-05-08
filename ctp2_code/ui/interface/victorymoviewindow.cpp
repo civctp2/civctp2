@@ -52,8 +52,6 @@ VictoryMovieWindow::VictoryMovieWindow(
 									 :
 C3Window(retval, id, ldlBlock, bpp, type)
 {
-	m_sequence = NULL;
-
 	*retval = InitCommonLdl(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -73,8 +71,6 @@ VictoryMovieWindow::VictoryMovieWindow(
 									 :
 C3Window( retval, id, x, y, width, height, bpp, pattern, type )
 {
-	m_sequence = NULL;
-
 	*retval = InitCommon();
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;

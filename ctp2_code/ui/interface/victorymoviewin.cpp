@@ -71,7 +71,7 @@ VictoryMovieWindow		*g_victoryMovieWindow = NULL;
 static GAME_OVER		s_result;
 
 
-void victorymoviewin_Initialize(Sequence *seq)
+void victorymoviewin_Initialize(SequenceWeakPtr seq)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -165,7 +165,7 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 
 void victorymoviewin_Cleanup()
 {
-	Sequence	*seq = NULL;
+	SequenceWeakPtr	seq;
 
 	if (g_victoryMovieWindow) {
 		seq = g_victoryMovieWindow->GetSequence();

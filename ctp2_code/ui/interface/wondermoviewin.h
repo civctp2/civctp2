@@ -9,7 +9,7 @@
 
 class Sequence;
 
-void wondermoviewin_Initialize(Sequence *seq);
+void wondermoviewin_Initialize(std::weak_ptr<Sequence> seq);
 void wondermoviewin_DisplayWonderMovie(sint32 id);
 
 void wondermoviewin_Cleanup();
