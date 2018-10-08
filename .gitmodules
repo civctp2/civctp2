@@ -3,4 +3,4 @@
 	url = https://github.com/LynxAbraxas/ctp2_git-svn
 [submodule "ctp2CD"]
 	path = ctp2CD
-	url = https://gitlab.com/lynxabraxas/ctp2CD.git
+	url = ../ctp2CD.git
