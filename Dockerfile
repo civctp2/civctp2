@@ -18,3 +18,8 @@ RUN cd ctp2 && \
     ./configure --enable-silent-rules && \
     make && \
     make install
+
+
+COPY ctp2CD/ /opt/ctp2/
+
+COPY /ctp2/ctp2_data/ /opt/ctp2/ctp2_data/
