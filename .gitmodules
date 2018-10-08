@@ -1,0 +1,3 @@
+[submodule "ctp2"]
+	path = ctp2
+	url = https://github.com/LynxAbraxas/ctp2_git-svn
