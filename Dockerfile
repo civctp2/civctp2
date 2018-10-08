@@ -16,5 +16,5 @@ RUN cd ctp2 && \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" \
     ./configure --enable-silent-rules && \
-    make -j"$(nproc)" && \
-    make -j"$(nproc)" install
+    make && \
+    make install
