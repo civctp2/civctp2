@@ -16,10 +16,13 @@ RUN cd ctp2 && \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" \
     ./configure --enable-silent-rules && \
-    make && \
-    make install
+    make
 
 
 COPY ctp2CD/ /opt/ctp2/
 
-COPY /ctp2/ctp2_data/ /opt/ctp2/ctp2_data/
+RUN cp -r /ctp2/ctp2_data/ /opt/ctp2/
+
+RUN cp -v /ctp2/ctp2_code/ctp2 /opt/ctp2/
+
+RUN cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
