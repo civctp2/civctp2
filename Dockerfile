@@ -25,3 +25,7 @@ COPY ctp2CD/ /opt/ctp2/
 RUN cp -r /ctp2/ctp2_data/ /opt/ctp2/
 
 RUN cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
+
+WORKDIR /opt/ctp2/ctp2_program/ctp/
+
+CMD ["./ctp2"]
