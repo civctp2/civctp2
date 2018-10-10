@@ -29,3 +29,9 @@ RUN cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
 WORKDIR /opt/ctp2/ctp2_program/ctp/
 
 CMD ["./ctp2"]
+
+ENV USERNAME diUser
+RUN useradd -m $USERNAME && \
+    echo "$USERNAME:$USERNAME" | chpasswd && \
+    usermod --shell /bin/bash $USERNAME && \
+    usermod -aG video $USERNAME
