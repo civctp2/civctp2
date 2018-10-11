@@ -10,6 +10,7 @@ docker run -it \
        --volume=$XAUTH:$XAUTH:rw \
        --device=/dev/dri:/dev/dri \
        --device=/dev/snd:/dev/snd \
+       --env="ALSA_CARD=1" \
        --env="XAUTHORITY=${XAUTH}" \
        --env="DISPLAY" \
        --user="diUser" \
