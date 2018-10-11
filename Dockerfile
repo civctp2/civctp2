@@ -34,4 +34,4 @@ ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
     echo "$USERNAME:$USERNAME" | chpasswd && \
     usermod --shell /bin/bash $USERNAME && \
-    usermod -aG video $USERNAME
+    usermod -aG video,audio $USERNAME

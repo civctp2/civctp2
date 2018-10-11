@@ -9,6 +9,7 @@ docker run -it \
        --volume=$XSOCK:$XSOCK:rw \
        --volume=$XAUTH:$XAUTH:rw \
        --device=/dev/dri:/dev/dri \
+       --device=/dev/snd:/dev/snd \
        --env="XAUTHORITY=${XAUTH}" \
        --env="DISPLAY" \
        --user="diUser" \
