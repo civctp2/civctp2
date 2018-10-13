@@ -5,12 +5,13 @@ FROM ubuntu:16.04 as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev build-essential \
-    automake libtool unzip flex
+    automake libtool unzip flex libbsd-dev
 
 COPY ctp2/ /ctp2/
 
 RUN cd /ctp2 && \
     make bootstrap && \
+    LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules && \
     make && \
     make install
