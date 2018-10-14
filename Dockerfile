@@ -6,7 +6,15 @@ FROM ubuntu:14.04 as builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev build-essential \
     automake libtool unzip flex libbsd-dev \
-    libltdl-dev
+    libltdl-dev \
+    cvs
+
+### build freetype-1.3.1
+RUN cvs -d :pserver:anonymous@cvs.sv.nongnu.org:/sources/freetype checkout -r 1.3 freetype && \
+    cd freetype && \
+    ./configure && \
+    make && \
+    make install
 
 COPY ctp2/ /ctp2/
 
