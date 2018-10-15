@@ -7,11 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev build-essential \
     automake libtool unzip flex libbsd-dev \
     libltdl-dev \
-    cvs
+    wget ca-certificates
 
 ### build freetype-1.3.1
-RUN cvs -d :pserver:anonymous@cvs.sv.nongnu.org:/sources/freetype checkout -r 1.3 freetype && \
-    cd freetype && \
+RUN wget http://sourceforge.net/projects/freetype/files/freetype/1.3.1/freetype-1.3.1.tar.gz && \
+    tar xvf freetype-1.3.1.tar.gz && \
+    cd freetype-1.3.1 && \
     ./configure && \
     make && \
     make install
