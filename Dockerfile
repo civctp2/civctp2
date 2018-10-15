@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ### build freetype-1.3.1
 COPY misc/ftdump-newer-GCC.patch /root/
+
 RUN wget http://sourceforge.net/projects/freetype/files/freetype/1.3.1/freetype-1.3.1.tar.gz && \
     tar xvf freetype-1.3.1.tar.gz && \
     cd freetype-1.3.1 && \
@@ -19,6 +20,10 @@ RUN wget http://sourceforge.net/projects/freetype/files/freetype/1.3.1/freetype-
     ./configure && \
     make && \
     make install
+    
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
+### freetype-1.3.1 built
+
 
 COPY ctp2/ /ctp2/
 
