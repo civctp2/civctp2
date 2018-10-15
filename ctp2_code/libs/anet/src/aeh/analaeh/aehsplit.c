@@ -40,9 +40,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 static void exitUsage(char *msg)
 {
-	printf("\
-Usage: aehsplit <-c crash_dir> <crashlog>\n\
-	Read crashes from <crashlog>, write out analyzed text files to
+	printf("Usage: aehsplit <-c crash_dir> <crashlog>\n\
+	Read crashes from <crashlog>, write out analyzed text files to\
 	crash_dir in a format suitable for use by crshmail.pl.\n\
 	<-c crash_dir>   Index unique crashes by signature in crash_dir.\n\
 	%s\n", msg);
@@ -309,7 +308,7 @@ int main(int argc, char *argv[])
 			fprintf(fp_dat, "l:%ld o:%ld", filelen, offset);
 			fclose(fp_dat);
 		}
-
+		(void)now;
 		aeh_Destroy(&aeh);	/* Clear the aeh in preparation for next read */
 	}
 

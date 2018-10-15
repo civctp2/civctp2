@@ -203,7 +203,7 @@ double Happy::CalcBase(Player *p)
 
 double Happy::CalcSize(CityData &cd, Player *p)
 {
-	m_size	= p->GetBigCityScale() * std::min(p->GetBigCityOffset(), 0.0);
+	m_size	= p->GetBigCityScale() * std::min<float>(p->GetBigCityOffset(), 0.0);
 	m_tracker->SetHappiness(HAPPY_REASON_CITY_SIZE, m_size);
 	return m_size;
 }
@@ -295,7 +295,7 @@ double Happy::CalcDistanceFromCapitol(CityData & cd, Player * p)
 		}
 
 		m_dist_to_capitol =
-		    std::max(0.0,
+		    std::max<float>(0.0,
 		             cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
 		                        GetMinEmpireDistance()
 		            );
@@ -511,7 +511,7 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
 		double total_crime = 0.01 * base_crime;
 		total_crime += cops * total_crime;
-		m_crime = std::min(1.0, total_crime * p->GetCrimeCoef());
+		m_crime = std::min<float>(1.0, total_crime * p->GetCrimeCoef());
 		if(m_crime < 0.0)
 			m_crime = 0.0;
 	}

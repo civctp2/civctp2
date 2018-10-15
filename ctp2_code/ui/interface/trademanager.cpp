@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected non-standard syntax.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -485,7 +485,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))
                         {
 							nation->SetDrawCallbackAndCookie
-                                (DrawNationColumn, (void *)data->m_destination.GetOwner());
+                                (DrawNationColumn, (void *)(intptr_t)data->m_destination.GetOwner());
 						}
 
 						item->SetCompareCallback(CompareCreateItems);
@@ -728,7 +728,7 @@ void TradeManager::UpdateSummaryList()
 
 			if (ctp2_Static * piracy = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))
             {
-				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)(intptr_t)route.m_id);
 			}
 
 			MBCHAR buf[20];
@@ -752,10 +752,10 @@ void TradeManager::UpdateSummaryList()
 			if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))
             {
 				nation->SetDrawCallbackAndCookie
-                    (DrawNationColumn, (void *)route.GetDestination().GetOwner());
+                    (DrawNationColumn, (void *)(intptr_t)route.GetDestination().GetOwner());
 			}
 
-			item->SetUserData((void *)route.m_id);
+			item->SetUserData((void *)(intptr_t)route.m_id);
 			item->SetCompareCallback(CompareSummaryItems);
 
 			m_summaryList->AddItem(item);
@@ -778,7 +778,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 
 	Assert(s_tradeManager);
 	if(!s_tradeManager) return;
-	bool breakInstead = sint32(cookie) != 0;
+	bool breakInstead = intptr_t(cookie) != 0;
 
 //	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
 	if(!breakInstead) {
@@ -815,7 +815,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 		ctp2_ListItem *item = (ctp2_ListItem *)s_tradeManager->m_summaryList->GetSelectedItem();
 		if(!item) return;
 
-		TradeRoute route((uint32)item->GetUserData());
+		TradeRoute route((uint32)(uintptr_t)item->GetUserData());
 		Assert(route.IsValid());
 		if(!route.IsValid()) return;
 
@@ -912,8 +912,8 @@ sint32 TradeManager::CompareCreateItems(ctp2_ListItem *item1, ctp2_ListItem *ite
 
 sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	TradeRoute route1 = TradeRoute(uint32(item1->GetUserData()));
-	TradeRoute route2 = TradeRoute(uint32(item2->GetUserData()));
+	TradeRoute route1 = TradeRoute((uint32)uintptr_t(item1->GetUserData()));
+	TradeRoute route2 = TradeRoute((uint32)uintptr_t(item2->GetUserData()));
 
 	Assert(route1.IsValid());
 	Assert(route2.IsValid());
@@ -992,7 +992,7 @@ AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
 										   RECT &rect,
 										   void *cookie)
 {
-	sint32 player = (sint32)cookie;
+	sint32 player = (intptr_t)cookie;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -1015,7 +1015,7 @@ AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
 										   RECT &rect,
 										   void *cookie)
 {
-	TradeRoute route((uint32)cookie);
+	TradeRoute route((uint32)(uintptr_t)cookie);
 	if(!route.IsValid()) return AUI_ERRCODE_OK;
 
 	Pixel16 color = 0xffff;

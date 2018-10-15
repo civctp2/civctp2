@@ -26,9 +26,9 @@
 // Modifications from the original Activision code:
 //
 // - Added second World::GetGood method, usefull if you already have a Cell
-//   pointer. - May 18th 2005 Martin Gühmann
-// - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gühmann)
-// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gühmann)
+//   pointer. - May 18th 2005 Martin Gï¿½hmann
+// - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gï¿½hmann)
+// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ struct DistItem;
 
 #if defined(USE_COM_REPLACEMENT)
 #include "IMapGen.h"
-#include <ltdl.h>
+#include <dlfcn.h>
 #else
 interface IMapGenerator;
 #endif
@@ -164,7 +164,7 @@ class World : public CityRadiusCallback
 #ifndef USE_COM_REPLACEMENT
     HINSTANCE       m_current_plugin;
 #else
-    lt_dlhandle     m_current_plugin;
+    void*           m_current_plugin;
 #endif
 	BOOL            m_isInsideRadius;
 	uint32          m_ignoreCity;

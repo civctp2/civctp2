@@ -962,8 +962,8 @@ unsigned long aeh_getSignature(const aeh_t *aeh)
 				i, mod_index, aeh->nmod));
 			return 0;
 		}
-		crc = dp_crc32_inc((char *)&aeh->mod[mod_index-1].crc, sizeof(long), crc);
-		crc = dp_crc32_inc((char *)&aeh->stk[i].offset_addr, sizeof(long), crc);
+		crc = dp_crc32_inc((unsigned char *)&aeh->mod[mod_index-1].crc, sizeof(long), crc);
+		crc = dp_crc32_inc((unsigned char *)&aeh->stk[i].offset_addr, sizeof(long), crc);
 	}
 	return ~crc;	/* Return one's complement as per crc32 spec */
 }

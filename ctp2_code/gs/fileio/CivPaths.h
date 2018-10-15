@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to use multiple data directories.
-// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gühmann)
+// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -132,6 +132,7 @@ public:
                 GetExtraDataPaths(void) const;
 	void	    InsertExtraDataPath(MBCHAR const * path);
 	void	    ResetExtraDataPaths(void);
+	void 		ReplaceFileSeperator(MBCHAR* path);
 
 protected:
 

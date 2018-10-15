@@ -1,5 +1,5 @@
 CC=gcc
-OPT=-Wall -I../../../../h -I../.. -I../../../../demo/utils -I../../../dp -I- -Ddp_ANET2 -DUNIX -DNO_NETWORK -D__NO_ANONYMOUS_UNIONS__
+OPT=-Wall -I../../../../h -I../.. -I../../../../demo/utils -I../../../dp -I- -Ddp_ANET2 -DUNIX -DNO_NETWORK -D__NO_ANONYMOUS_UNIONS__ -Wno-error
 COPT=$(FLAGS) $(OPT)
 ANALCRSH=analcrsh$(SUFFIX)
 MODCRC=modcrc$(SUFFIX)

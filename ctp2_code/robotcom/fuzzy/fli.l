@@ -31,7 +31,7 @@ int include_stack_ptr = 0;
 
 number	-?(([0-9]+)|([0-9]*\.[0-9]+))
 name	[a-zA-Z_][a-zA-Z_0-9]*
-string  \"[^\"\n]*[\"\n]
+string  \"[^\"\r?\n]*[\"\r?\n]
 
 %%
 #include            {FLPRINTF(("Got #include\n"));
@@ -133,8 +133,8 @@ when        { return WHEN; }
 
 {number} 	{ yylval.value = atof(yytext); return NUMBER; }
 {name}		{ yylval.name = (char *)strdup(yytext); return NAME; }
-\/\/.*\n	{ fli_lineNumber++; }
-\n			{ fli_lineNumber++; }
+\/\/.*\r?\n	{ fli_lineNumber++; }
+\r?\n		{ fli_lineNumber++; }
 [ \t]		{ }
 ;			{ /* semicolons are silently ignored for the benefit of
 				 C programmers. */ }

@@ -114,7 +114,7 @@ static int aeh_map_algRead(aeh_map_t *aehmap, char *algpath) {
 	char buffer[BUFFER_SIZE], *ptr;
 	char name[BUFFER_SIZE];
 	unsigned address;
-	unsigned prefadr = 0;
+	unsigned long prefadr = 0;
 	fh = fopen(algpath, "rb");
 	if (!fh)
 		return aeh_RES_EMPTY;
@@ -153,7 +153,9 @@ static int aeh_map_algRead(aeh_map_t *aehmap, char *algpath) {
 		}
 	}
 	fclose (fh);
-	if (*((unsigned short*)buffer) != aeh_map_func_alg_MAGIC) {
+	unsigned short s;
+	memcpy(&s, buffer, sizeof(s));
+	if (s != aeh_map_func_alg_MAGIC) {
 		/* .alg corrupted; delete it */
 		aehDPRINT(("aeh_map_Load: corrupted .alg file\n"));
 		aeh_map_Unload(aehmap, 0);
@@ -256,8 +258,9 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 	/* search through until '  Address' found; also get preferred address */
 	aehDPRINT(("call aeh_map_Load time %d\n", GetTickCount()));
 	done = 0;
+	char* dummy;
 	while (!done) {
-		fgets (buffer, BUFFER_SIZE, fp);
+		dummy = fgets (buffer, BUFFER_SIZE, fp);
 		if (feof (fp))
 			done = 1;
 		if (strncmp(buffer, " Preferred", strlen(" Preferred")-1) == 0)
@@ -274,11 +277,11 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 	else
 		aehDPRINT(("didn't get preferred adr\n"));
 	aehmap->load_addr = prefadr;
-	fgets (buffer, BUFFER_SIZE, fp);  /* ignore single blank line */
+	dummy = fgets (buffer, BUFFER_SIZE, fp);  /* ignore single blank line */
 
 	/* get every line containing a function name and an address */
 	while (!done) {
-		fgets (buffer, BUFFER_SIZE, fp);
+		dummy = fgets (buffer, BUFFER_SIZE, fp);
 
 		/* line must start with ' 0nnn:' where n is a number */
 		if ((buffer[0] == ' ') && (buffer[1] == '0') && (buffer[5] == ':') &&
@@ -289,6 +292,7 @@ static int aeh_map_Load(aeh_map_t *aehmap)
 		if (feof (fp))
 			done = 1;
 	}
+	(void)dummy;
 	fclose (fp);
 	aehDPRINT(("exit aeh_map_Load time %d\n", GetTickCount()));
 	return aeh_RES_OK;

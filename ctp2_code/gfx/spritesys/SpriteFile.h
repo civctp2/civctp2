@@ -92,13 +92,18 @@ enum SPRITEFILEERR
 
 
 
-
+#ifdef __linux__
+#pragma pack(push, 1)
+#endif
 typedef struct
 {
-  unsigned num_records;
-  unsigned offset_to_special_data;
+  uint32 num_records;
+  uint32 offset_to_special_data;
 
 } SPRITEFILE_2_0;
+#ifdef __linux__
+#pragma pack(pop)
+#endif
 
 #define k_SPRITEFILE_HEADER_SIZE	(sizeof(uint32) + sizeof(uint32) + sizeof(uint32))
 

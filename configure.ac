@@ -7,13 +7,14 @@ AC_CONFIG_AUX_DIR(ctp2_code/os/autoconf/config)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET
 
 AC_PROG_CC(cl gcc cc KCC CC egcs)
 AC_PROG_CXX(cl g++ gcc cxx c++ cc++ KCC CC egcs)
+AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
 AC_PROG_LIBTOOL
 AC_LANG(C++)
 AM_PROG_LEX
@@ -35,6 +36,7 @@ else
    AC_SUBST(YFLAGS)
    AC_DEFINE(AUTOMAKE_INVOKES_YACC,1,[Defined when automake runs yacc and renames the output files])
 fi
+AM_CONDITIONAL([WIN32], false)
 AC_PATH_PROG(UNZIP,unzip,no)
 if test "x$UNZIP" == "xno"
 then
@@ -153,6 +155,9 @@ else
 	])
 fi
 AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
+
+AX_SUBDIRS_CONFIGURE([ctp2_code/libs/freetype-1.3.1], [--enable-shared=no], [], [], [])
+
 AC_DEFINE(_BFR_,1,[Build final release])
 AC_SUBST(_BFR_)
 AC_SUBST(CTP2_ENABLE_SLICDEBUG)

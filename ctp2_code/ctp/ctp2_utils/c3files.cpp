@@ -25,10 +25,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added some casts. (Aug 7th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added some casts. (Aug 7th 2005 Martin Gï¿½hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Improved CTP2 disk detection.
-// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gühmann)
+// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,11 +57,13 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
-#ifdef LINUX
+#ifdef __linux__
 #include <linux/fs.h>
 #include <linux/iso_fs.h>
 #include <errno.h>
 #include <dirent.h>
+#include "cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
 #endif
 
 extern C3UI *       g_c3ui;
@@ -105,7 +107,7 @@ FILE* c3files_fopen(C3DIR dirID, MBCHAR const * s1, MBCHAR const * s2, bool chec
 
 FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)
 {
-	return freopen(s1, s2, file);
+	return freopen(CI_FixName(s1), s2, file);
 }
 
 sint32 c3files_fclose(FILE *file)
@@ -293,7 +295,7 @@ bool c3files_PathIsValid(MBCHAR *path)
 	return !_stat(path, &tmpstat);
 #else
 	struct stat  tmpstat;
-	return !stat(path, &tmpstat);
+	return !stat(CI_FixName(path), &tmpstat);
 #endif
 }
 
@@ -303,7 +305,7 @@ bool c3files_CreateDirectory(MBCHAR *path)
 	return CreateDirectory(path, NULL) != FALSE; // BOOL to bool conversion
 #else
 	mode_t mask = 0777;
-	return mkdir(path, mask) == 0;
+	return mkdir(CI_FixName(path), mask) == 0;
 #endif
 }
 
@@ -370,7 +372,7 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 
 	FindClose(lpFileList);
 #elif defined(LINUX)
-        DIR *dir = opendir(path);
+        DIR *dir = opendir(CI_FixName(path));
 	if (!dir)
 		return FALSE;
 	struct dirent *dent = NULL;
@@ -439,6 +441,9 @@ bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND
 
 bool c3files_HasLegalCD()
 {
+#if 1
+	bool success = true;
+#else
 	bool success = false;
 
 	if (g_soundManager)
@@ -493,19 +498,25 @@ bool c3files_HasLegalCD()
     {
 		g_soundManager->InitRedbook();
 	}
-
+#endif
 	return success;
 }
 
 void c3files_InitializeCD(void)
 {
+#if 0
 	c3files_GetCDDrives();
 	(void) c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
+#endif
 }
 
 bool c3files_HasCD(void)
 {
+#if 0
 	return g_hasCD;
+#else
+	return true;
+#endif
 }
 
 DriveIdType c3files_GetCtpCdId(void)

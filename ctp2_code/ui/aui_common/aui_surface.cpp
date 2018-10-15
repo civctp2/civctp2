@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
-// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
+// - Added back buffering capability. (1-Jan-2010 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -200,7 +200,6 @@ uint32 aui_Surface::SetChromaKey( uint32 color )
 uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 {
 	sint32 r = red, g = green, b = blue;
-
 	switch ( m_Bpp )
 	{
 	case 1:
@@ -234,7 +233,7 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 #else
 			return SetChromaKey(	((r & 0xF8) << 8) |
 						((g & 0xFC) << 3) | //pixbug FC
-						((g & 0xF8) >> 3));
+						((b & 0xF8) >> 3));
 #endif
 
 
@@ -255,7 +254,6 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 		Assert( FALSE );
 		break;
 	}
-
 	return (uint32)-1;
 }
 

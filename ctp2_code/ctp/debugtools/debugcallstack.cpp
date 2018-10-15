@@ -36,8 +36,8 @@
 //
 // - Fix unreferenced warnings in regular compilation by placing intialization
 //   of buff and err inside #ifndef statements.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added alternative show leaks function. (Sep 15th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Added alternative show leaks function. (Sep 15th 2005 Martin Gï¿½hmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -60,6 +60,10 @@
 
 #ifndef _DEBUG
 #include "log_off.h"
+#endif
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
 #endif
 
 static bool debug_dump_whole_stack = false;

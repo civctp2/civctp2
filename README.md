@@ -25,9 +25,10 @@ Please **be aware** that it may not be 100% accurate for the current `master` st
 This is the Apolyton version of *Call to Power II* source code based on the released source code of Call to Power II, without the patch. It has been stripped of comments, but is otherwise complete as far as Activision code goes. It was originally built using Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that it works with the .NET compiler as well.
 This version build on Linux (i386 and x86_64), Pandora and Pyra.
 
-Note that datas are not included in this repo, you'll need to get it from Original CD or from [GoG version](https://www.gog.com/game/call_to_power_2).
 
-![screenshot](https://raw.githubusercontent.com/ptitSeb/ctp2/master/screenshot.png "screenshot of CTP2 running on Linux")
+Note that datas are not include in this repo, you'll need to get it from Original CD or from GoG version.
+
+![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
 
 This version should support CD Audio music, and also support Ripped CD Audio compressed as ogg (like found in the GoG version). The Audio tracks should be Named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
 
@@ -40,6 +41,7 @@ You will also need `byacc`
 On debian and friend it's `sudo apt install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev` to install all this.
 
 The build itself is pretty classing and straight forward:
+
 
 ```
 ./autogen.sh
@@ -68,7 +70,8 @@ Put those folder in you `home` path or anywhere else, for example `~/ctp2`
 
 ### Use Apolyton datas
 You then need to copy updated datas from this git over the original data. Simply `cp -r ctp2_data/* ~/ctp2/ctp2_data` should do the trick.
-Note that this is a Windows game, where file name is on a Case Insensitive file system. This version of the CTP2 handle this, and file name can have any case, but the `cp` command may not overwrite file that have different case. If you have strange behavior or think the data is not up-to-date, check that you don't have 2 copies of files, with different case (or lowercase everything if needed). Using the GoG version, no renaming is needed.
+
+Note that this is a Windows game, where file name is on a Case Insensitive file system. This version of the CTP2 handle this, and file name can have any case, but the `cp` command may not overwrite file that have different case. If you have strange behavour or think the data is not up-to-date, check that you don't have 2 copies of files, with different case (or lowercase everything if needed). Using the GoG version, no renaming is needed.
 
 ### Copy Linux executable
 When the build is over, you need to copy the main CTP2 executable, plus mapgen library to the program folder (wich is `ctp2_program/ctp`).
@@ -77,4 +80,5 @@ The mapgen libraries will go to `ctp2_program/ctp/dll/map/` .
 So do something like `cp -v ctp2_code/mapgen/.libs/*.so ~/ctp2/ctp2_program/ctp/dll/map/`
 
 ## Running
-When everything is setup, simply go to the program folder, for example with `cd ~/ctp2/ctp2_program/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be useful.
+
+When everything is setup, simply go to the program folder, for example with `cd ~/ctp2/ctp2_program/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be usefull.

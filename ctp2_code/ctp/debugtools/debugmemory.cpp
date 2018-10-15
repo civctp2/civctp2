@@ -37,9 +37,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added alternative leak report. (Sep 9th 2005 Martin Gühmann)
-// - Increased the stack size to be reported. (Sep 9th 2005 Martin Gühmann)
-// - Added more fill bytes for enhanced memory reporting. (1-Jan-2010 Martin Gühmann)
+// - Added alternative leak report. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Increased the stack size to be reported. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Added more fill bytes for enhanced memory reporting. (1-Jan-2010 Martin Gï¿½hmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -53,9 +53,10 @@
 #include "breakpoint.h"
 #include <windows.h>
 #include <string.h>
-
-
-
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 
 

@@ -12,7 +12,7 @@
 #include "AgreementMatrix.h"
 #include "GSLogs.h"
 #include "mapanalysis.h"
-#include "gold.h"
+#include "Gold.h"
 #include "DiplomacyProposalRecord.h"
 #include "diplomacyutil.h"
 
@@ -375,32 +375,32 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_GIVE_ADVANCE:
 	{
@@ -465,12 +465,12 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	case PROPOSAL_OFFER_REDUCE_POLLUTION:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+            scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_POLLUTION:
 
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration)
-			scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = std::min<double>((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_MAP:
 

@@ -25,24 +25,24 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified by Martin Gühmann on October the 28th: line added in
+// - Modified by Martin Gï¿½hmann on October the 28th: line added in
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
 // - Clears the research goal of the player, when an item is selected that
-//   enabling advance has been researched already, by Martin Gühmann.
-// - The tech goal can now also set for tile improvements, by Martin Gühmann.
+//   enabling advance has been researched already, by Martin Gï¿½hmann.
+// - The tech goal can now also set for tile improvements, by Martin Gï¿½hmann.
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Fixed display of topics after the fixing of the alphanumerical
-//   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
-// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
-// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gühmann)
+//   indexing of the databases. (Sep 13th 2005 Martin Gï¿½hmann)
+// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gï¿½hmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin Gï¿½hmann)
+// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1675,7 +1675,7 @@ void GreatLibrary::HandleListButton
 
 		if (item)
 		{
-		    int const   index = reinterpret_cast<int>(item->GetUserData());
+		    int const   index = (intptr_t)item->GetUserData();
     		SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
         }
     }
@@ -2143,7 +2143,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 	if(!box) return;
 
 	box->SetText(name);
-	item->SetUserData((void *) index);
+	item->SetUserData((void *) (intptr_t)index);
 	m_topics_list->AddItem(item);
 }
 

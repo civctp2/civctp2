@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -194,7 +194,7 @@ sint32 WonderTab::CompareWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 	if(column==2)
 	{
-		return (sint32)item1->GetUserData() - (sint32)item2->GetUserData();
+		return (intptr_t)item1->GetUserData() - (intptr_t)item2->GetUserData();
 	}
 	else
 	{

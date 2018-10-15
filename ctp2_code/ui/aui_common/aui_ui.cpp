@@ -31,12 +31,12 @@
 // Modifications from the original Activision code:
 //
 // - Moved CalculateHash to aui_Base
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Prevented processing of uninitialised input
 // - Marked DirectX specific items
 // - Handled race condition with mouse initialisation at startup
 // - Added graphics DirectX built in double buffering and extended it
-//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
+//   to manual tripple buffering. (1-Jan-2010 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -268,13 +268,14 @@ AUI_ERRCODE aui_UI::CreateScreen( void )
 
 	// Has to be added in aui_DirectUI, because we need the hdc from the DirectX screen
 	// do get a 16 bit HDC instead of a 15 bit one. Actally, this is an ugly solution.
-/*	if(m_secondary == NULL)
+#ifdef LINUX
+	if(m_secondary == NULL)
 	{
 		m_secondary = new aui_Surface( &retcode, m_width, m_height, m_bpp, 0, NULL, FALSE );
 		Assert( AUI_NEWOK(m_secondary,retcode) );
 		if ( !AUI_NEWOK(m_secondary,retcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
-	}*/
-
+	}
+#endif
 	m_pixelFormat = m_primary->PixelFormat();
 
 	return retcode;
@@ -1102,7 +1103,28 @@ AUI_ERRCODE aui_UI::Draw( void )
 	{
 		ShowSelectedRegion( m_editRegion );
 	}
-
+#ifdef __AUI_USE_SDL__
+	// refresh screen
+	SDL_Surface * screen = SDL_GetVideoSurface();
+	/*if(m_dirtyRectInfoList->L()) {
+		ListPos position = m_dirtyRectInfoList->GetHeadPosition();
+		for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- ) {
+			DirtyRectInfo *dri = m_dirtyRectInfoList->GetNext( position );
+			sint32 dX = dri->rect.left + dri->window->X();
+			sint32 dY = dri->rect.top + dri->window->Y();
+			sint32 dW = dri->rect.right - dri->rect.left;
+			sint32 dH = dri->rect.bottom - dri->rect.top;
+			if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
+			if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
+			if(dX+dW>screen->w) dW = screen->w-dX;
+			if(dY+dH>screen->h) dH = screen->h-dY;
+			if(dW>0 && dH>0) {
+				SDL_UpdateRect(screen, dX, dY, dW, dH);
+			}
+		}
+	}*/
+	SDL_Flip(screen);
+#endif
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );
 
@@ -1918,7 +1940,7 @@ AUI_ERRCODE aui_UI::BltSecondaryToPrimary
                          uint32       flags
                         )
 {
-	if(m_blitter == NULL)
+	if((m_blitter == NULL) || (m_secondary == NULL))
 		return AUI_ERRCODE_NOBLITTER;
 
 	RECT rect = {0, 0, SecondaryWidth(), SecondaryHeight()};

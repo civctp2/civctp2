@@ -59,6 +59,7 @@ aui_TextField::aui_TextField(
 	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie ),
 #ifndef __AUI_USE_DIRECTX__
 	m_Font( NULL ),
+	m_Text( NULL ),
 #endif
 	m_holdfont( NULL )
 {
@@ -215,6 +216,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	ReleaseDC( m_hwnd, hdc );
 #else
+	m_Text=new MBCHAR[m_maxFieldLen+1];
 	m_Text[m_maxFieldLen] = '\0';
 	if (text == NULL)
 		*m_Text = '\0';
@@ -275,8 +277,8 @@ aui_TextField::~aui_TextField()
 		g_ui->UnloadBitmapFont(m_Font);;
 		m_Font = NULL;
 	}
-
-	delete[] m_Text;
+	if(m_Text)
+		delete[] m_Text;
 #endif
 }
 
@@ -404,7 +406,7 @@ AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 #ifdef __AUI_USE_DIRECTX__
 void aui_TextField::HitEnter( HWND hwnd )
 #else
-void aui_TextField::HitEnter(); // Is this ; intended?
+void aui_TextField::HitEnter() // Is this ; intended?
 #endif // __AUI_USE_DIRECTX__
 {
 #ifdef __AUI_USE_DIRECTX__
