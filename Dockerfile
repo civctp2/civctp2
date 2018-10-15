@@ -10,10 +10,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget ca-certificates
 
 ### build freetype-1.3.1
+COPY misc/ftdump-newer-GCC.patch /root/
 RUN wget http://sourceforge.net/projects/freetype/files/freetype/1.3.1/freetype-1.3.1.tar.gz && \
     tar xvf freetype-1.3.1.tar.gz && \
     cd freetype-1.3.1 && \
     wget 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' -O config.sub `# support for newer CPUs`  && \
+    patch -d test -i /root/ftdump-newer-GCC.patch && \
     ./configure && \
     make && \
     make install
