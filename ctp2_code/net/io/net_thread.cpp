@@ -27,7 +27,7 @@
 //
 // - Repaired memory leaks.
 // - Display the main thread function name in the debugger.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -227,7 +227,7 @@ void NetThread::Run()
 #ifdef WIN32
 		Sleep(100);
 #else
-		usleep(100);
+		usleep(100*1000);
 #endif
 		if(m_anet) {
 			if(m_dp) {

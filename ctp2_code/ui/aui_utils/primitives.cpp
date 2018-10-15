@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code (May 21st 2006 Martin Gï¿½hmann)
+// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -227,19 +227,26 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 	{
 		double src_x = sRect.left + (dst_x0 - dRect.left) * src_dx;
 		if (bFilter) src_x -= 0.5;
-		uint16 *pSrcPixel = &pSrcBase[srow * ((uint32 )floor(src_y))];
+		sint32 tmp_y = srow * ((uint32 )floor(src_y));
+		if(tmp_y<0) tmp_y = 0;
+		uint16 *pSrcPixel1 = &pSrcBase[tmp_y];
+		tmp_y = srow * ((uint32 )floor(src_y+(bFilter?1:0)));
+		if(tmp_y<0) tmp_y = 0;
+		uint16 *pSrcPixel2 = &pSrcBase[tmp_y];
 		double fy = src_y - floor(src_y);
 		for (sint32 i=0;i<width;i++)
 		{
-			uint32 x = uint32(floor(src_x));
+			sint32 x = sint32(floor(src_x));
+			uint32 x0 = (x<0)?0:x;
+			uint32 x1 = (x+1>=srow)?(srow-1):(x+1);
 			if (!bFilter)
 			{
-				pDstPixel[i] = pSrcPixel[x];
+				pDstPixel[i] = pSrcPixel1[x0];
 			}
 			else
 			{
-				uint16 c0 = pSrcPixel[x], c1 = pSrcPixel[x+1];
-				uint16 c2 = pSrcPixel[x + srow], c3 = pSrcPixel[x + srow + 1];
+				uint16 c0 = pSrcPixel1[x0], c1 = pSrcPixel1[x1];
+				uint16 c2 = pSrcPixel2[x0], c3 = pSrcPixel2[x1];
 				double f0, f1, f2, f3;
 				double fx = src_x - floor(src_x);
 				f1 = 1.0 - fy;

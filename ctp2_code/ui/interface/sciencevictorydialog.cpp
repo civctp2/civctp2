@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 29th 2006 Martin Gühmann)
+// - Standardized code (May 29th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -461,8 +461,8 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uintptr_t>(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uintptr_t>(item2->GetUserData());
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());

@@ -76,7 +76,7 @@ protected:
 	MBCHAR m_filename[ MAX_PATH + 1 ];
 	aui_SoundFormat *m_format;
 	uint8 *m_data;
-	uint32 m_size;
+	size_t m_size;
 };
 
 

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -42,17 +42,18 @@
 #include "Unit.h"
 #include "GameEventDescription.h"
 
-GameEventArgList::GameEventArgList(va_list *vl, GAME_EVENT eventType)
+GameEventArgList::GameEventArgList(const GAME_EVENT_ARGUMENT* argTypes, const void** args, GAME_EVENT eventType)
 {
-	std::fill(m_argLists,
-	          m_argLists + GEA_End,
-	          (PointerList<GameEventArgument> *) NULL
-	         );
-
+	GAME_EVENT_ARGUMENT argType;
+	for(argType = GEA_Null; argType < GEA_End; argType = (GAME_EVENT_ARGUMENT)(sint32(argType) + 1)) {
+		m_argLists[argType] = NULL;
+	}
+	
 	char *argString = g_eventDescriptions[eventType].args;
 
-	while(vl) {
-		GAME_EVENT_ARGUMENT arg = va_arg(*vl, GAME_EVENT_ARGUMENT);
+	uint32 currentArg = 0;
+	while(1) {
+		GAME_EVENT_ARGUMENT arg = argTypes[currentArg];
 		Assert(arg > GEA_Null);
 		Assert(arg <= GEA_End);
 		if(arg <= GEA_Null || arg >= GEA_End)
@@ -61,10 +62,20 @@ GameEventArgList::GameEventArgList(va_list *vl, GAME_EVENT eventType)
 		if(!m_argLists[arg]) {
 			m_argLists[arg] = new PointerList<GameEventArgument>;
 		}
-		m_argLists[arg]->AddTail(new GameEventArgument(arg, vl, *argString == '$'));
+		m_argLists[arg]->AddTail(new GameEventArgument(arg, args[currentArg], *argString == '$'));
 
 		argString++;
 		argString++;
+
+		currentArg++;
+	}
+}
+
+GameEventArgList::GameEventArgList()
+{
+	GAME_EVENT_ARGUMENT arg;
+	for(arg = GEA_Null; arg < GEA_End; arg = (GAME_EVENT_ARGUMENT)(sint32(arg) + 1)) {
+		m_argLists[arg] = NULL;
 	}
 }
 

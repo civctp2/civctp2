@@ -14,6 +14,10 @@
 #include "ns_gamesetup.h"
 #include "ns_aiplayer.h"
 #include "ns_aiplayersetup.h"
+#ifdef __linux__
+#include "cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 class ns_HPlayerListBox;
 
@@ -124,7 +128,7 @@ public:
 					t->SetKey(&(this->curkey));
 					if(t->Load(file) == NETFunc::OK) {
 
-						InsertItem(t);
+						this->InsertItem(t);
 					}
 					else {
 						delete t;
@@ -133,24 +137,24 @@ public:
 				} while(t);
 			}
 			fclose(file);
-			if(size())
-				SelectItem((sint32)0);
+			if(this->size())
+				this->SelectItem((sint32)0);
 		}
 	}
 
 	void InsertItem(NFT *t) {
-		NextKey();
+		this->NextKey();
 		t->SetKey(&(this->curkey));
-		Insert(Add(t));
+		this->Insert(this->Add(t));
 	}
 
 	void ChangeItem(NFT *t) {
-		Change(Chg(t));
+		this->Change(this->Chg(t));
 	}
 
 	void DeleteItem(NFT *t) {
-		Delete(t);
-		Del(t);
+		this->Delete(t);
+		this->Del(t);
 	}
 
 	AUI_ERRCODE Save(void) {
@@ -165,24 +169,24 @@ public:
 
 			sint32 first = -1;
 			sint32 j = 0;
-			typename ns_FileDataListBox<NFT,NST>::iterator i = begin();
-			for(; i!=end(); i++, j++) {
-				if ( FindItem( *i ) == GetSelectedItem() )
+			typename ns_FileDataListBox<NFT,NST>::iterator i = this->begin();
+			for(; i!=this->end(); i++, j++) {
+				if ( this->FindItem( *i ) == this->GetSelectedItem() )
 				{
 					(*i)->SetKey(&(this->curkey));
 					(*i)->Save(file);
-					NextKey();
+					this->NextKey();
 
 					first = j;
 					break;
 				}
 			}
-			for(i=begin(), j=0; i!=end(); i++, j++) {
+			for(i=this->begin(), j=0; i!=this->end(); i++, j++) {
 				if ( j != first )
 				{
 					(*i)->SetKey(&(this->curkey));
 					(*i)->Save(file);
-					NextKey();
+					this->NextKey();
 				}
 			}
 			fclose(file);

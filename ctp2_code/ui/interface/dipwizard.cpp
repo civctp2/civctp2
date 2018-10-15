@@ -24,14 +24,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added emissary photo to the diplomatic manager by Martin Gühmann
+// - Added emissary photo to the diplomatic manager by Martin Gï¿½hmann
 // - Diplomatic proposals/responses sent from UI get the highest priority possible
 //   so that the AI won't override them: DipWizard::SendCallback
 // - Repaired crashes when the emissary photo is missing.
-// - Added female leader images. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added female leader images. (Aug 20th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - removed new diplo attempt - E 12.27.2006
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ ctp2_Static       *DipWizard::m_createButtons = NULL,
                   *DipWizard::m_parchment = NULL,
                   *DipWizard::m_responseDiplomat;
 
-//Added by Martin Gühmann to display the emissary photo of recipient
+//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 ctp2_Static       *DipWizard::m_emissary_photo = NULL;
 
 ctp2_DropDown     *DipWizard::m_nations = NULL;
@@ -178,7 +178,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		Assert(m_toneButtons[i]);
 
 		if(m_toneButtons[i]) {
-			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, (void *)i);
+			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, (void *)(intptr_t)i);
 		}
 
 		MBCHAR labelName[k_MAX_NAME_LEN];
@@ -237,7 +237,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
@@ -265,7 +265,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_viewThreat = -1;
 
 	m_sendCounter = false;
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 	//Makes shure that the default image is never shown not even for one or two seconds
 	if (m_emissary_photo)
 	{
@@ -434,8 +434,8 @@ void DipWizard::FillProposalLists()
 	for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
 		m_propList[i]->Clear();
 		m_exchList[i]->Clear();
-		m_propList[i]->SetActionFuncAndCookie(PropListCallback, (void *)i);
-		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)i);
+		m_propList[i]->SetActionFuncAndCookie(PropListCallback, (void *)(intptr_t)i);
+		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)(intptr_t)i);
 	}
 
 	const Diplomat & diplomat =
@@ -567,7 +567,7 @@ void DipWizard::FillProposalLists()
 				if(!item)
 					break;
 
-				item->SetUserData((void *)i);
+				item->SetUserData((void *)(intptr_t)i);
 
 				ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 				Assert(text);
@@ -615,7 +615,7 @@ void DipWizard::FillRecipientLists()
 				g_player[pl]->m_civilisation->GetCountryName(buf);
 				label->SetText(buf);
 
-				item->SetUserData((void *)pl);
+				item->SetUserData((void *)(intptr_t)pl);
 
 				m_nations->AddItem(item);
 			}
@@ -632,7 +632,7 @@ void DipWizard::AddProposalItem(ctp2_ListBox *propList, const DiplomacyProposalR
 			if(label) {
 				label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 			}
-			propItem->SetUserData((void *)rec->GetIndex());
+			propItem->SetUserData((void *)(intptr_t)rec->GetIndex());
 			propList->AddItem(propItem);
 		}
 	}
@@ -652,13 +652,13 @@ void DipWizard::SetNation(sint32 pl)
 
 	ctp2_ListBox *nationList = (ctp2_ListBox *)m_nations->GetListBox();
 	ctp2_ListItem *item = (ctp2_ListItem *)nationList->GetSelectedItem();
-	if(!item || (pl != (sint32)item->GetUserData())) {
+	if(!item || (pl != (intptr_t)item->GetUserData())) {
 		sint32 i;
 		for(i = 0; i < nationList->NumItems(); i++) {
 
 			item = (ctp2_ListItem *)nationList->GetItemByIndex(i);
 			Assert(item);
-			if(item && (pl == (sint32)item->GetUserData())) {
+			if(item && (pl == (intptr_t)item->GetUserData())) {
 				m_nations->SetSelectedItem(i);
 				break;
 			}
@@ -1271,7 +1271,7 @@ void DipWizard::UpdateDetails()
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
-			//Added by Martin Gühmann to display the emissary photo of recipient
+			//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 			DisplayDiplomat(m_recipient);
 			DisplayParchment(g_selected_item->GetVisiblePlayer());
 			if(m_recipient >= 0) {
@@ -1290,12 +1290,12 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 
-				//Modified by Martin Gühmann to display the emissary photo of recipient
+				//Modified by Martin Gï¿½hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(m_viewSender);
 
 			} else if(m_viewResponseType == RESPONSE_COUNTER) {
-				//Modified by Martin Gühmann to display the emissary photo of recipient
+				//Modified by Martin Gï¿½hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewSender);
 				DisplayParchment(m_viewRecipient);
 				SlicObject so;
@@ -1303,7 +1303,7 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 			} else if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
-				//Added by Martin Gühmann to display the emissary photo of recipient
+				//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				SlicObject so;
@@ -1311,7 +1311,7 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizRecipient"), so, text);
 				st->SetText(text);
 			} else {
-				//Added by Martin Gühmann to display the emissary photo of recipient
+				//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 				DisplayDiplomat(-1);
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				st->SetText("");
@@ -1511,7 +1511,7 @@ void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 d
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 tone = (sint32)cookie;
+	sint32 tone = (intptr_t)cookie;
 	Assert(tone >= 0);
 	Assert(tone < DIPLOMATIC_TONE_MAX);
 	if(tone < 0 || tone >= DIPLOMATIC_TONE_MAX) return;
@@ -1529,13 +1529,13 @@ void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu((intptr_t)item->GetUserData())) {
 			SetProposal(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetProposal((sint32)item->GetUserData());
+				SetProposal((intptr_t)item->GetUserData());
 			else
-				m_menuProposal = (sint32)item->GetUserData();
+				m_menuProposal = (intptr_t)item->GetUserData();
 		}
 	}
 }
@@ -1550,13 +1550,13 @@ void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu((intptr_t)item->GetUserData())) {
 			SetExchange(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetExchange((sint32)item->GetUserData());
+				SetExchange((intptr_t)item->GetUserData());
 			else
-				m_menuExchange = (sint32)item->GetUserData();
+				m_menuExchange = (intptr_t)item->GetUserData();
 		}
 	}
 }
@@ -1571,7 +1571,7 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_ListItem *item = (ctp2_ListItem *)m_nations->GetListBox()->GetSelectedItem();
 	if(!item) SetNation(-1);
-	else SetNation((sint32)item->GetUserData());
+	else SetNation((intptr_t)item->GetUserData());
 	UpdateButtons();
 }
 
@@ -1719,7 +1719,7 @@ void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 
 
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_PROPOSAL,
-			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+			GetCategoryName(DIP_WIZ_PROP_TAB(sint32((intptr_t)cookie))));
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1737,7 +1737,7 @@ void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 
 
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_EXCHANGE,
-			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+			GetCategoryName(DIP_WIZ_PROP_TAB(sint32((intptr_t)cookie))));
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1875,7 +1875,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
-				arg.cityId = (sint32)cookie;
+				arg.cityId = (intptr_t)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -1887,7 +1887,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
-				arg.advanceType = (sint32)cookie;
+				arg.advanceType = (intptr_t)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -1897,13 +1897,13 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
-				arg.gold = (sint32)cookie;
+				arg.gold = (intptr_t)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-				arg.playerId = (sint32)cookie;
+				arg.playerId = (intptr_t)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
-				arg.percent = (double) ((sint32) cookie) / 100.0;
+				arg.percent = (double) ((intptr_t) cookie) / 100.0;
 				break;
 			default:
 
@@ -2062,7 +2062,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
 				continue;
 		}
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, (void *)(intptr_t)city.m_id);
 	}
 }
 
@@ -2150,7 +2150,7 @@ void DipWizard::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)(intptr_t)a);
 	}
 }
 
@@ -2172,7 +2172,7 @@ void DipWizard::AddStopResearchItems(ctp2_Menu *menu, sint32 playerId)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)(intptr_t)a);
 	}
 }
 
@@ -2188,7 +2188,7 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, (void *)(intptr_t)p);
 	}
 }
 
@@ -2448,20 +2448,20 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 			ctp2_ListItem *item = (ctp2_ListItem *)m_threatList->GetSelectedItem();
 			Assert(item);
 			if(item) {
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = (intptr_t)item->GetUserData();
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(m_threat);
 				Assert(rec);
 				if(rec) {
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-							m_threatArg.cityId = (sint32)cookie;
+							m_threatArg.cityId = (intptr_t)cookie;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-							m_threatArg.playerId = (sint32)cookie;
+							m_threatArg.playerId = (intptr_t)cookie;
 							break;
 						case k_DiplomacyThreat_Arg1_AgreementId_Bit:
-							m_threatArg.agreementId = (sint32)cookie;
+							m_threatArg.agreementId = (intptr_t)cookie;
 							break;
 						default:
 
@@ -2538,15 +2538,15 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ThreatContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ThreatContextMenu((intptr_t)item->GetUserData())) {
 			SetThreat(-1);
 			m_sendButton->Enable(FALSE);
 		} else {
 			m_sendButton->Enable(TRUE);
 			if(!m_proposalDataPending)
-				SetThreat((sint32)item->GetUserData());
+				SetThreat((intptr_t)item->GetUserData());
 			else
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = (intptr_t)item->GetUserData();
 		}
 	}
 }
@@ -2622,7 +2622,7 @@ void DipWizard::NotifyThreatRejected(const Response &resp, const Response &sende
 
 void DipWizard::DisplayDiplomat(sint32 player)
 {
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin Gï¿½hmann to display the emissary photo of recipient
 	if (m_emissary_photo)
 	{
 		MBCHAR const *	fileName	= NULL;
@@ -2647,7 +2647,7 @@ AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,
 							  RECT &rect,
 							  void *cookie)
 {
-	sint32 pl = (sint32)cookie;
+	sint32 pl = (intptr_t)cookie;
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetPlayerColor(pl));
 	return AUI_ERRCODE_OK;
 }

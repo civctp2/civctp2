@@ -51,8 +51,8 @@ extern int include_stack_ptr;
 extern int g_slicWarnUndeclared;
 
 %}
-string 		\"[^\"\n]*[\"\n]
-slicid      \'[^\'\n]*[\'\n]
+string 		\"[^\"\r?\n]*[\"\r?\n]
+slicid      \'[^\'\r?\n]*[\'\r?\n]
 stringid    ID_[a-zA-Z_0-9]+
 name		[a-zA-Z]+[a-zA-Z0-9_]*
 
@@ -182,7 +182,7 @@ Return      { return KW_RETURN; }
 				return STRING;
 			}
 
-\/\/.*\n	{
+\/\/.*\r?\n	{
               g_slicLineNumber++;
               slicif_register_line(g_slicLineNumber, -1);
             }
@@ -202,7 +202,7 @@ Return      { return KW_RETURN; }
 		return EXP;
 		}
 \|\|    { return OR; }
-\n		{
+\r?\n		{
             g_slicLineNumber++;
             slicif_register_line(g_slicLineNumber, -1);
         }

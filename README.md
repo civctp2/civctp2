@@ -7,18 +7,9 @@
 All contributions are on-hold until project maintainer for github repo is found.
 For details please follow discussion here: https://github.com/ptitSeb/ctp2/issues/3#issuecomment-427801575
 
-# Actual README file
-
 ### Original readme files
 - [Activision CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Activision%20CTP2%20Source%20Code_Readme.txt)
 - [Apolyton CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Apolyton%20CTP2%20Source%20Code_Readme.txt)
-
-### New readme file candidate
-
-Currently there is [no official README file](https://github.com/civctp2/civctp2/issues/3) for this project, but below is proposed one based on @ptitSeb's version, for the code on [his branch](https://github.com/civctp2/civctp2/tree/ptitSeb).
-Please **be aware** that it may not be 100% accurate for the current `master` state, since his code has significant updates ahead of current master branch.
-
-@ptitSeb's README file starts here:
 
 ## About
 
@@ -27,7 +18,7 @@ This version build on Linux (i386 and x86_64), Pandora and Pyra.
 
 Note that datas are not included in this repo, you'll need to get it from Original CD or from [GoG version](https://www.gog.com/game/call_to_power_2).
 
-![screenshot](https://raw.githubusercontent.com/ptitSeb/ctp2/master/screenshot.png "screenshot of CTP2 running on Linux")
+![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
 
 This version should support CD Audio music, and also support Ripped CD Audio compressed as ogg (like found in the GoG version). The Audio tracks should be Named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
 

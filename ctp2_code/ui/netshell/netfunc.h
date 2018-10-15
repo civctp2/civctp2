@@ -173,7 +173,7 @@ public:
 
         if (i == this->end())
         {
-			push_back(t);
+			this->push_back(t);
 			return t;
 		}
         else
@@ -191,7 +191,7 @@ public:
 		if (i != this->end())
         {
 			delete *i;
-			erase(i);
+			this->erase(i);
 		}
 	}
 
@@ -202,7 +202,7 @@ public:
 		if (i == this->end())
         {
 			T *n = new T(*t);
-			push_back(n);
+			this->push_back(n);
 			return n;
 		}
         else
@@ -223,7 +223,7 @@ public:
         {
 			for (typename List<T>::iterator i = l->begin(); i != l->end(); ++i)
             {
-				Add(new T(**i));
+				this->Add(new T(**i));
             }
         }
 	}

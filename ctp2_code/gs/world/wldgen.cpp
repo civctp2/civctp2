@@ -29,18 +29,18 @@
 // Modifications from the original Activision code:
 //
 // - X-wrap added to A* heuristics costs
-// - Implemented CalcTerrainFreightCost by Martin Gühmann
+// - Implemented CalcTerrainFreightCost by Martin Gï¿½hmann
 // - Resolved ambiguous sqrt call.
 // - Standardised min/max usage.
 // - Repaired memory leaks.
 // - Force a good value recalculation on reload if the ressouce database was
-//   modified (goods added removed). - May 19th 2005 Martin Gühmann
+//   modified (goods added removed). - May 19th 2005 Martin Gï¿½hmann
 // - Wrap handling improved
 // - Using /importmap to import a text map no longer causes the river mouths
 //   to be deleted - 2005-07-01 Shaun Dove
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin Gï¿½hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -84,7 +84,7 @@
 #include "MessageBoxDialog.h"
 
 #if defined(USE_COM_REPLACEMENT)
-#include <ltdl.h>
+#include <dlfcn.h>
 #else
 #include <initguid.h>
 #endif
@@ -270,8 +270,7 @@ World::~World()
 #ifndef USE_COM_REPLACEMENT
 		FreeLibrary(m_current_plugin);
 #else
-		lt_dlclose(m_current_plugin);
-		lt_dlexit();
+		dlclose(m_current_plugin);
 #endif
 	}
 }
@@ -2527,7 +2526,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #ifndef USE_COM_REPLACEMENT
 	HINSTANCE plugin;
 #else
-	lt_dlhandle plugin;
+	void* plugin;
 #endif
 	const char *name = g_theProfileDB->MapPluginName(pass);
 	if(stricmp(name, "none") == 0)
@@ -2535,30 +2534,28 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #ifndef USE_COM_REPLACEMENT
 	plugin = LoadLibrary(name);
 #else
-	int rc = lt_dlinit();
-	if (0 != rc) {
-		return NULL;
-	}
-	plugin = lt_dlopen(name);
+	char* name_so = strdup(name);
+	char *p = strrchr(name_so, '.');
+	if(p) strcpy(p, ".so");	// quickly change .dll to .so
+	//printf("DLL, open %s => %s\n", name, CI_FixName(name_so));
+	plugin = dlopen(CI_FixName(name_so), RTLD_LAZY);
+	free(name_so);
 #endif
 	if(plugin == NULL) {
-		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
-#ifdef USE_COM_REPLACEMENT
-		lt_dlexit();
-#endif
+	//	c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
+	fprintf(stderr, "Could not load library %s, using builtin map generator: %s", name, dlerror());
 		return NULL;
 	}
 #ifndef USE_COM_REPLACEMENT
 	CreateMapGenerator creator = (CreateMapGenerator)GetProcAddress(plugin, "CoCreateMapGenerator");
 #else
-	CreateMapGenerator creator = (CreateMapGenerator)lt_dlsym(plugin, "CoCreateMapGenerator");
+	CreateMapGenerator creator = (CreateMapGenerator)dlsym(plugin, "CoCreateMapGenerator");
 #endif
 	if(creator == NULL) {
 #ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
 #else
-		lt_dlclose(plugin);
-		lt_dlexit();
+		dlclose(plugin);
 #endif
 		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
 		return NULL;
@@ -2574,8 +2571,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
 #else
-		lt_dlclose(plugin);
-		lt_dlexit();
+		dlclose(plugin);
 #endif
 		return NULL;
 	}
@@ -2600,8 +2596,7 @@ void World::FreeMapPlugin()
 #ifndef USE_COM_REPLACEMENT
 	FreeLibrary(m_current_plugin);
 #else
-	lt_dlclose(m_current_plugin);
-	lt_dlexit();
+	dlclose(m_current_plugin);
 #endif
 	m_current_plugin = NULL;
 }

@@ -49,10 +49,10 @@ alsire        { return ALLOWS_SINGLE_RECORD; }
 				  return NUMBER;
 			  }
 \.\.          { return RANGE; }
-#.*\n         { g_line_number++; }
-\/\/.*\n      { g_line_number++; }
+#.*\r?\n      { g_line_number++; }
+\/\/.*\r?\n   { g_line_number++; }
 [ \t]         {}
-\n            { g_line_number++; }
+\r?\n         { g_line_number++; }
 \r            {}
 .             { return yytext[0]; }
 

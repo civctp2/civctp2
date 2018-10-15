@@ -31,6 +31,8 @@ CTP2_LIBANET_LDADD = \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
 CTP2_LIBOSNOWIN32_LDADD = \
 	os/nowin32/libosnowin32.la
+CTP2_LIBTTF_LDADD = \
+	libs/freetype-1.3.1/lib/.libs/libttf.a -ldl
 endif
 CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
@@ -52,7 +54,8 @@ ctp2_LDADD = \
 	gs/world/libgsworld.la \
 	sound/libsound.la \
 	$(CTP2_LIBANET_LDADD) \
-	$(CTP2_LIBOSNOWIN32_LDADD)
+	$(CTP2_LIBOSNOWIN32_LDADD) \
+	$(CTP2_LIBTTF_LDADD)
 
 ctp2_LDFLAGS = \
 	$(CTP2_LDFLAGS)
@@ -84,8 +87,10 @@ ctp2_SOURCES = \
 	ctp/civ3_main.cpp \
 	ctp/civapp.cpp \
 	ctp/display.cpp \
+	ctp/cifm.cpp \
 	gfx/layers/citylayer.cpp \
 	gfx/spritesys/directorevent.cpp \
+	gfx/spritesys/DirectorActions.cpp \
 	net/general/net_achievement.cpp \
 	net/general/net_action.cpp \
 	net/general/net_agreement.cpp \
@@ -236,7 +241,6 @@ ctp2_SOURCES = \
 	ui/aui_ctp2/battleorderbox.cpp \
 	ui/aui_ctp2/battleorderboxactions.cpp \
 	ui/aui_ctp2/bevellesswindow.cpp \
-	ui/aui_ctp2/buttonbank.cpp \
 	ui/aui_ctp2/c3_button.cpp \
 	ui/aui_ctp2/c3_checkbox.cpp \
 	ui/aui_ctp2/c3_coloredstatic.cpp \
@@ -528,12 +532,9 @@ ctp2_SOURCES = \
 	ai/diplomacy/proposalanalysis.cpp \
 	ai/strategy/scheduler/Plan.cpp \
 	ai/strategy/scheduler/scheduler.cpp \
-	ai/strategy/goals/ctpgoal.cpp \
 	ai/strategy/goals/Goal.cpp \
-	ai/strategy/squads/Squad.cpp \
 	ai/strategy/squads/squad_Strength.cpp \
 	ai/strategy/agents/agent.cpp \
-	ai/strategy/agents/ctpagent.cpp \
 	ai/mapanalysis/boundingrect.cpp \
 	ai/mapanalysis/mapanalysis.cpp \
 	ai/mapanalysis/settlemap.cpp \

@@ -32,7 +32,7 @@
 //
 // - Reimplemented containers as vectors, to make it less error prone.
 // - Load default strings if they are missing in the database so that mods
-//   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
+//   also have a full set of strings. (Jan 30th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,9 +53,9 @@
 // Export overview
 //----------------------------------------------------------------------------
 
-class	StringDB;
+//class	StringDB;
 
-extern	StringDB *	g_theStringDB;
+//extern	StringDB *	g_theStringDB;
 
 //----------------------------------------------------------------------------
 // Project dependencies
@@ -119,7 +119,7 @@ private:
 	void					AssignIndex(StringRecord * & ptr);
 	void					Btree2Array(void);
 	StringRecord * &		GetHead(MBCHAR const * id);
-	StringRecord const * const &
+	StringRecord const *
 							GetHead(MBCHAR const * id) const;
 	bool					GetIndexNode
 	(
@@ -137,5 +137,7 @@ private:
 	bool					ParseAStringEntry            (Token *strToken);
 	bool					ParseAStringEntryNoDuplicates(Token *strToken);
 };
+
+extern	StringDB *	g_theStringDB;
 
 #endif	// Multiple include guard

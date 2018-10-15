@@ -10,7 +10,7 @@
 #include "ctpai.h"
 #include "AgreementMatrix.h"
 
-#include "aicause.h"
+#include "AICause.h"
 
 #include "Diplomat.h"
 #include "mapanalysis.h"

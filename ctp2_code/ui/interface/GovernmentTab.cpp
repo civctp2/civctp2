@@ -457,7 +457,7 @@ std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 
 			currentSelection.first = true;
 
-			currentSelection.second = reinterpret_cast<sint32>
+			currentSelection.second = (intptr_t)
 				(currentItem->GetUserData());
 		}
 	}

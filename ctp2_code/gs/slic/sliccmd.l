@@ -11,6 +11,9 @@
 #endif
 #include "slicif.h"
 
+#undef min
+#define min(a,b) ((a) < (b) ? (a) : (b))
+
 int my_scinput(char *buf, int max_size);
 
 #undef YY_INPUT
@@ -19,8 +22,8 @@ int my_scinput(char *buf, int max_size);
 extern int sliccmd_first_token;
 %}
 
-string 		\"[^\"\n]*[\"\n]
-slicid      \'[^\'\n]*[\'\n]
+string 		\"[^\"\r?\n]*[\"\r?\n]
+slicid      \'[^\'\r?\n]*[\'\r?\n]
 stringid    ID_[a-zA-Z_0-9]+
 name		[a-zA-Z]+[a-zA-Z0-9_#]*
 
@@ -67,7 +70,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 				return STRING;
 			}
 
-\/\/.*\n	{ }
+\/\/.*\r?\n	{ }
 \{ 			{ return yytext[0]; }
 \} 			{ return yytext[0]; }
 
@@ -81,7 +84,7 @@ name		[a-zA-Z]+[a-zA-Z0-9_#]*
 !=      { return NEQ; }
 &&      { return AND; }
 \|\|    { return OR; }
-\n		{ }
+\r?\n		{ }
 .		{ return yytext[0]; }
 
 %%

@@ -7,5 +7,6 @@ ANET_SRCDIR = anet
 endif
 
 SUBDIRS = \
-	$(ANET_SRCDIR)
+	$(ANET_SRCDIR) \
+	freetype-1.3.1
 

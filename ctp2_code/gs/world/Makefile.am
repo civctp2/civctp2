@@ -25,6 +25,7 @@ libgsworld_la_SOURCES = \
 	MapPoint.cpp \
 	UnseenCell.cpp \
 	wldgen.cpp \
+	worldutils.cpp \
 	WorldDistance.cpp \
 	worldevent.cpp \
 	WrldCity.cpp \

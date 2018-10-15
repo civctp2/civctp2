@@ -25,12 +25,12 @@
 // Modifications from the original Activision code:
 //
 // - Devided caravan costs by 10 so that we don't have to update const.txt.
-//   This allows better mod compatibility. - May 7th 2005 Martin Gühmann
-// - Removed .NET warnings - May 7th 2005 Martin Gühmann
-// - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
+//   This allows better mod compatibility. - May 7th 2005 Martin Gï¿½hmann
+// - Removed .NET warnings - May 7th 2005 Martin Gï¿½hmann
+// - Standardized trade route cost calculation. - June 5th 2005 Martin Gï¿½hmann
 // - Added note that trade pact deals shouldn't be hardcoded 6.13.2007
-// - Added some functionality from the old const database. (5-Aug-2007 Martin Gühmann)
-// - Corrected meridian calculation. (29-Oct-2007 Martin Gühmann)
+// - Added some functionality from the old const database. (5-Aug-2007 Martin Gï¿½hmann)
+// - Corrected meridian calculation. (29-Oct-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
-        return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+        return static_cast<sint32>(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0));
     }
 
 	return DISTANCE_UNKNOWN;
@@ -95,7 +95,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 	              static_cast<double>
 	                (source.RetPos().NormalizedDistance(destination.RetPos()));
 
-	return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+	return static_cast<sint32>(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
 
 // Maybe move the following to worldutils

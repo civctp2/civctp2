@@ -30,7 +30,7 @@
 //
 // - Added SDL support.
 // - Replaced typename T in specialized template member function by the
-//   the type for that the function is specialized, by Martin Gühmann.
+//   the type for that the function is specialized, by Martin Gï¿½hmann.
 // - Display the main thread function name in the debugger.
 //
 //----------------------------------------------------------------------------
@@ -489,6 +489,7 @@ dp_serverInfo_t *NETFunc::Server::GetServer(void) {
 	return &server;
 }
 
+template<>
 bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET && Equals((KeyStruct *)m->GetBody())) {
 		Destroy();
@@ -522,6 +523,7 @@ bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::Server>::SetKey(void) {
 	key.buf[0] = dp_KEY_SERVERPINGS;
 
@@ -1034,10 +1036,12 @@ bool NETFunc::AIPlayers::Handle(dp_t *p, Message *m, dpid_t from) {
 	return false;
 }
 
+template<>
 bool NETFunc::ListHandler<NETFunc::AIPlayer>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::AIPlayer>::SetKey(void) {
 }
 
@@ -1155,6 +1159,7 @@ bool NETFunc::Player::IsReadyToLaunch(void) {
 NETFunc::Player NETFunc::player = Player();
 dp_uid_t NETFunc::userId = dp_UID_NONE;
 
+template<>
 bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET) {
 		Destroy();
@@ -1195,6 +1200,7 @@ bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::Player>::SetKey(void) {
 	key.buf[0] = dp_KEY_PLAYERS;
 	key.len = 1;
@@ -1562,7 +1568,7 @@ bool NETFunc::Session::IsCurrentSession(void) {
 
 NETFunc::Session NETFunc::session = Session();
 
-
+template<>
 bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET && Equals((KeyStruct *)m->GetBody())) {
 		Destroy();
@@ -1596,6 +1602,7 @@ bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::Session>::SetKey(void) {
 	key.buf[0] = dp_KEY_SESSIONS;
 	key.len = 1;
@@ -1657,7 +1664,7 @@ bool NETFunc::Lobby::IsBad(void) {
 
 NETFunc::Lobby NETFunc::lobby = Lobby();
 
-
+template<>
 bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET && Equals((KeyStruct *)m->GetBody())) {
 		Destroy();
@@ -1691,12 +1698,13 @@ bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::Lobby>::SetKey(void) {
 	key.buf[0] = dp_KEY_SESSIONS;
 	key.len = 1;
 }
 
-
+template<>
 bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 	if(m->GetCode() == Message::RESET && Equals((KeyStruct *)m->GetBody())) {
 		Destroy();
@@ -1739,6 +1747,7 @@ bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 	return false;
 }
 
+template<>
 void NETFunc::ListHandler<NETFunc::Game>::SetKey(void) {
 	key.buf[0] = dp_KEY_SESSIONS;
 	key.len = 1;

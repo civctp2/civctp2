@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,13 +57,14 @@ struct SimpleMapPoint // And we have to redefine it here?
 class GameEventArgument
 {
 public:
-	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid = false);
-	GameEventArgument(GAME_EVENT_ARGUMENT type, ...);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const void* arg, bool isAlwaysValid = false);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const sint32 arg, bool isAlwaysValid = false);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPoint& arg, bool isAlwaysValid = false);
 	GameEventArgument(CivArchive &archive);
 	~GameEventArgument();
 	void Serialize(CivArchive &archive);
 
-	void Init(GAME_EVENT_ARGUMENT type, va_list *vl,  bool isAlwaysValid = false);
+	void Init(GAME_EVENT_ARGUMENT type, const void* arg,  bool isAlwaysValid = false);
 
 	GAME_EVENT_ARGUMENT GetType() const { return m_type; }
 

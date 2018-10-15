@@ -32,24 +32,24 @@
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
 // - Option added to include multiple data directories.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Option added to select whether an army is selected or a city is selected,
-//   if both options are available. (Oct 8th 2005 Martin Gühmann)
-// - DebugSlic and GoodAnim are now part of the advance options. (Oct 16th 2005 Martin Gühmann)
+//   if both options are available. (Oct 8th 2005 Martin Gï¿½hmann)
+// - DebugSlic and GoodAnim are now part of the advance options. (Oct 16th 2005 Martin Gï¿½hmann)
 // - Added option to avoid an end turn if there are cities with empty build
-//   queues. (Oct. 22nd 2005 Martin Gühmann)
+//   queues. (Oct. 22nd 2005 Martin Gï¿½hmann)
 // - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gï¿½hmann)
 // - Options CityClick, EndTurnWithEmptyBuildQueues and RunInBackground
-//   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
+//   removed from advance options since they do not work. (May 21st 2006 Martin Gï¿½hmann)
 // - Made automatic treaty ending an option.
-// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
+// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gï¿½hmann)
 // - Added additional options, most to be implemented later
 // - Implemented NRG - option to ccalculate energy ratio affecting production and demand
 // - Added DebugAI option
-// - Made the upgrade option show up in the debug version. (19-May-2007 Martin Gühmann)
-// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Made the upgrade option show up in the debug version. (19-May-2007 Martin Gï¿½hmann)
+// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gï¿½hmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
@@ -155,8 +155,12 @@ ProfileDB::ProfileDB()
     m_useRedbookAudio                   (FALSE),
     m_requireCD                         (FALSE),
     m_protected                         (FALSE),
-    m_tryWindowsResolution              (TRUE),
-    m_useDirectXBlitter                 (TRUE),
+	m_tryWindowsResolution              (TRUE),
+#ifdef __AUI_USE_SDL__
+	m_useDirectXBlitter                 (FALSE),
+#else
+	m_useDirectXBlitter                 (TRUE),
+#endif
     m_screenResWidth                    (640),
     m_screenResHeight                   (480),
     m_zoomedCombatAlways                (FALSE),

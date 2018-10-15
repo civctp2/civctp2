@@ -34,11 +34,11 @@
 // - Import order modified to enable GCC compilation (no functional change).
 // - Option added to enable viewing info on actions that are too expensive.
 // - Modified GetWorldShape function to allow four possible shapes instead
-//   of two by Martin Gühmann
+//   of two by Martin Gï¿½hmann
 // - Option added to close a messagebox automatically on eyepoint clicking.
 // - Changed the value for an assert to make the assert fire only when the
 //   NumPlayers is higher the maximum number of players the game currently
-//   supports by Martin Gühmann.
+//   supports by Martin Gï¿½hmann.
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
@@ -47,18 +47,18 @@
 // - Added world shape handling.
 // - Made file compilable in Win32 Test configuration.
 // - Option added to select whether an army is selected or a city is selected,
-//   if both options are available. (Oct 8th 2005 Martin Gühmann)
+//   if both options are available. (Oct 8th 2005 Martin Gï¿½hmann)
 // - Added option to avoid an end turn if there are cities with empty build
-//   queues. (Oct. 22nd 2005 Martin Gühmann)
+//   queues. (Oct. 22nd 2005 Martin Gï¿½hmann)
 // - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gï¿½hmann)
 // - Made automatic treaty ending an option.
 // - Made city capture options an option.
-// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
+// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gï¿½hmann)
 // - Added Army Names and Civflags options
 // - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
 // - Removed new rules attempt - E 12.27.2006
-// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gï¿½hmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
@@ -70,7 +70,7 @@
 // - Added display capitol stuff (5-Jan-10 EPW)
 // - Added display relotionship options (7-Jan-10 EPW)
 // - Disabled the CD-check in the retail version, so that the Apolyton Edition
-//   can be used with the good old games version. (27-Feb-2010 Martin Gühmann)
+//   can be used with the good old games version. (27-Feb-2010 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -447,7 +447,7 @@ public:
 
 
 
-    //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
+    //Added by Martin Gï¿½hmann to avoid an assert if NumPlayer is under the maximum supported players.
     void SetNPlayers(uint32 n)                          { Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
 
     void SetLeaderName(MBCHAR const *name)              { strcpy(m_leaderName, name); }
@@ -519,7 +519,11 @@ public:
     void SetRequireCD(BOOL require)                     { m_requireCD = require; }
     void SetProtected(BOOL pro)                         { m_protected = pro; }
     void SetTryWindowsResolution(BOOL tryIt)            { m_tryWindowsResolution = tryIt; }
+#ifdef __AUI_USE_SDL__
+    void SetUseDirectXBlitter(BOOL tryIt)               { m_useDirectXBlitter = FALSE; (void)tryIt; } // disabled on SDL
+#else
     void SetUseDirectXBlitter(BOOL tryIt)               { m_useDirectXBlitter = tryIt; }
+#endif
     void SetScreenResWidth(sint32 width)                { m_screenResWidth = width; }
     void SetScreenResHeight(sint32 height)              { m_screenResHeight = height; }
 
@@ -705,7 +709,11 @@ public:
 #endif
 
     BOOL        IsTryWindowsResolution() const  { return m_tryWindowsResolution; }
+#ifdef __AUI_USE_SDL__
+    BOOL        IsUseDirectXBlitter() const     { return FALSE; }
+#else
     BOOL        IsUseDirectXBlitter() const     { return m_useDirectXBlitter; }
+#endif
     sint32      GetScreenResWidth() const       { return m_screenResWidth; }
     sint32      GetScreenResHeight() const      { return m_screenResHeight; }
 

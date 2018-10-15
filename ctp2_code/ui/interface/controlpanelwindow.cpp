@@ -32,22 +32,22 @@
 //   play.
 // - Start the great library with the current research project of the player.
 // - Added option to add new messages at the top.
-// - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gühmann
+// - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gï¿½hmann
 // - Fixed the crossed sword bug that was caused by the previous bug fix,
-//   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
+//   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gï¿½hmann
 // - Added unit display name.
 // - Relaxed Assert for invisible buttons with mods.
 // - Prevented crashes with mods.
-// - Added special attack window. (Aug 15th 2005 Martin Gühmann)
+// - Added special attack window. (Aug 15th 2005 Martin Gï¿½hmann)
 // - Removed unused methods: FillBank, ClearButtons and AddButton.
-//   (Aug 16th 2005 Martin Gühmann)
+//   (Aug 16th 2005 Martin Gï¿½hmann)
 // - Restored Fifth Tileimp Button Bank by E 2-27-2007
 // - TODO fix obsolete tileimp defect
 // - TODO add buttons for orders button bank
 // - TODO create scroll bar like CityStyles in Scenario Editor for
 //   Orders and tileimprovements so they are not limited
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -58,8 +58,8 @@
 //   CityPanelRebuild - notice the strange immediate return) are never called,
 //   and some variables (e.g. m_mainDropDown) are not NULL-initialised in the
 //   constructor. Maybe this is some leftover of the CTP1 code?
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standatized code (May 21st 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standatized code (May 21st 2006 Martin Gï¿½hmann)
 // - None of the unit or order stuff is used here? see UnitControlPanel.cpp
 //
 //----------------------------------------------------------------------------
@@ -420,7 +420,7 @@ TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void 
 	if (action != (uint32)AUI_SWITCH_ACTION_ON)
 		return;
 
-	uint32 index=(uint32)cookie;
+	uint32 index=(uintptr_t)cookie;
 
 	if (index>=CP_TILEIMP_MAX)
 		return;
@@ -450,7 +450,7 @@ TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *c
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint32(cookie));
+	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint32((intptr_t)cookie));
 
 	if (rec==NULL)
 		return;
@@ -485,7 +485,7 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 
 	if (item)
 	{
-		Message theMessage((uint32)item->GetCookie());
+		Message theMessage((uint32_t)(uintptr_t)item->GetCookie());
 
 		if (g_theMessagePool->IsValid(theMessage))
 		{
@@ -581,7 +581,7 @@ HideControlPanel()
 void controlpanelwindow_DisbandCity(bool response, void *userData)
 {
 	if(response) {
-		Unit city(reinterpret_cast<uint32>(userData));
+		Unit city((uint32_t)(uintptr_t)(userData));
 		if(city.IsValid()) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}
@@ -610,7 +610,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		}
 	}
 
-	switch((sint32)cookie) {
+	switch((intptr_t)cookie) {
 		case k_CONTEXT_CITY_VIEW:
 			if(haveCity) CityWindow::Display(city.CD());
 			break;
@@ -665,7 +665,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				}
 			}
 
-			sint32 orderIndex = (sint32)cookie;
+			sint32 orderIndex = (intptr_t)cookie;
 			if(orderIndex >= 0 && orderIndex < g_theOrderDB->NumRecords()) {
 				const OrderRecord *order=g_theOrderDB->Get(orderIndex);
 				g_controlPanel->BeginOrderDelivery((OrderRecord *)order);
@@ -961,7 +961,7 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
-	switch ((sint32)cookie)
+	switch ((intptr_t)cookie)
 	{
    	case	CP_MENU_ITEM_0:
 			gameplayoptions_displayMyWindow();
@@ -1827,7 +1827,7 @@ ControlPanelWindow::OrderDeliveryUpdate()
 				} else {
 					g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
 				}
-// Added by Martin Gühmann to fix the crossed sword bug
+// Added by Martin Gï¿½hmann to fix the crossed sword bug
 			}
 			else if(g_theWorld->HasCity(pos)
 			&&      g_theWorld->GetCity(pos)->GetOwner() != army->GetOwner()
@@ -2338,7 +2338,7 @@ void ControlPanelWindow::SetMessageRead(Message const & msg)
 
 		if(!item)
 			break;
-		Message imsg; imsg.m_id = (uint32)item->GetCookie();
+		Message imsg; imsg.m_id = (uintptr_t)item->GetCookie();
 		if(imsg.m_id == msg.m_id) {
 			ctp2_Static *staticContainer = (ctp2_Static *)item->GetChildByIndex(0);
 			if(!staticContainer)
@@ -3554,7 +3554,7 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	const	TerrainImprovementRecord *rec;
 	bool	show_button,grey_button;
 
-	rec = g_theTerrainImprovementDB->Get((sint32)m_tileImpButtons[button]->GetCookie());
+	rec = g_theTerrainImprovementDB->Get((intptr_t)m_tileImpButtons[button]->GetCookie());
 
 	Assert(rec != NULL);
 
@@ -3611,7 +3611,7 @@ ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
 	const	TerrainRecord *rec;
 	const	IconRecord *irec;
 
-   	rec = g_theTerrainDB->Get(sint32(m_terraFormButtons[button]->GetCookie()));
+   	rec = g_theTerrainDB->Get(intptr_t(m_terraFormButtons[button]->GetCookie()));
 
    	Assert(rec != NULL);
 
@@ -3751,7 +3751,7 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 void ControlPanelWindow::TabCallback(aui_Control *control, uint32 action,
 									 uint32 data, void *cookie)
 {
-	CP_TAB tab = (CP_TAB)(sint32)cookie;
+	CP_TAB tab = (CP_TAB)(intptr_t)cookie;
 
 	if(action == ctp2_Tab::ACTION_ACTIVATED) {
 

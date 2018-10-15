@@ -37,12 +37,15 @@ extern "C" IMapGenerator *CoCreateMapGenerator()
 	return gen;
 }
 
+#endif
+#endif
 FaultGenerator::~FaultGenerator()
 {
 }
-#endif
-#endif
-
+FaultGenerator::FaultGenerator()
+{ 
+	m_refCount = 0; 
+}
 #if !defined(USE_COM_REPLACEMENT)
 STDMETHODIMP FaultGenerator::QueryInterface(REFIID riid, void **obj)
 {

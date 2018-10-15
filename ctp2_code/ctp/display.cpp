@@ -29,6 +29,8 @@ extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
 
+extern BOOL g_SDL_flags;
+
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
@@ -138,7 +140,7 @@ void display_EnumerateDisplayModes(void)
 #else
 	SDL_PixelFormat fmt = { 0 };
 	fmt.BitsPerPixel = 16;
-	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
+	SDL_Rect **modes = SDL_ListModes(/*&fmt*/NULL, SDL_FULLSCREEN);
 
 	g_displayModes = new PointerList<CTPDisplayMode>;
 
@@ -175,7 +177,8 @@ void display_EnumerateDisplayModes(void)
 			// We might get modes multiple times for each bpp
 			// supported. Thus, check if we got it already.
 			if (!display_IsLegalResolution(modes[i]->w,
-			                               modes[i]->h)) {
+										   modes[i]->h)
+										&& (modes[i]->h>=600)) {
 				CTPDisplayMode *mode = new CTPDisplayMode;
 				if (!mode)
 					return;
@@ -337,8 +340,13 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 
 			CTPDisplayMode *mode = g_displayModes->GetHead();
 
-			g_ScreenWidth = mode->width;
-			g_ScreenHeight = mode->height;
+			if(mode) {
+				g_ScreenWidth = mode->width;
+				g_ScreenHeight = mode->height;
+			} else {
+				g_ScreenWidth = 800;
+				g_ScreenHeight = 600;
+			}
 		}
 	}
 

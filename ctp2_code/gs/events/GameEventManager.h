@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ class GameEvent;
 class GameEventHookCallback;
 class GameEventArgList;
 class GameEventHook;
+class Path;
 
 //----------------------------------------------------------------------------
 // General declarations
@@ -89,10 +90,100 @@ public:
 	GameEventManager();
 	~GameEventManager();
 
-
-
-
-	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type, ...);
+private:
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				const GAME_EVENT_ARGUMENT* argTypes, const void** args);
+public:
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, Path*,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT);
+	GAME_EVENT_ERR AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, const MapPoint&,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT, int,
+		GAME_EVENT_ARGUMENT);
 
 	GAME_EVENT_ERR ArglistAddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 								   GameEventArgList *argList);
@@ -148,9 +239,6 @@ public:
 
 	bool EventsPending() const;
 
-
-
-
 	static char* ArgCharToName(char want);
 	static char* ArgToName(GAME_EVENT_ARGUMENT want);
 
@@ -160,7 +248,7 @@ public:
 	GameEvent* GetHeadEvent(){ return m_eventList->GetHead(); };
 private:
 	bool CheckArg(sint32 num, char got, char want);
-	bool VerifyArgs(GAME_EVENT type, va_list *vl);
+	bool VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* argTypes, const void** args);
 
 	/// Unhandled events
 	PointerList<GameEvent> *m_eventList;
@@ -173,7 +261,6 @@ private:
 	GameEventHook *m_hooks[GEV_MAX];
 
 	bool m_processing;
-
 
 	GAME_EVENT m_processingEvent;
 

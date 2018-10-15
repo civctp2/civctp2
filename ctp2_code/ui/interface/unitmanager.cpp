@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Enable selection of transported units from the tactical info tab.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Handled crash when disbanding armies at the main screen while the unit
 //   manager was shown.
 // - Changed occurances of UnitRecord::GetMaxHP to
@@ -392,7 +392,7 @@ void UnitManager::UpdateStatsList()
 					child->SetText(buf);
 				}
 
-				item->SetUserData((void *)i);
+				item->SetUserData((void *)(intptr_t)i);
 				item->SetCompareCallback(CompareStatItems);
 
 				m_statsList->AddItem(item);
@@ -476,9 +476,9 @@ void UnitManager::UpdateTacticalList()
 
 		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_HEALTH_COL);
 		if(child) {
-			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
+			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)(intptr_t)u.m_id);
 		}
-		item->SetUserData((void *)u.m_id);
+		item->SetUserData((void *)(intptr_t)u.m_id);
 		item->SetCompareCallback(CompareTacticalItems);
 		m_tacticalList->AddItem(item);
 	}
@@ -644,8 +644,8 @@ void UnitManager::UpdateAdviceText()
 
 sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	sint32 idx1 = (sint32)item1->GetUserData();
-	sint32 idx2 = (sint32)item2->GetUserData();
+	sint32 idx1 = (intptr_t)item1->GetUserData();
+	sint32 idx2 = (intptr_t)item2->GetUserData();
 	const UnitRecord *rec1 = g_theUnitDB->Get(idx1);
 	const UnitRecord *rec2 = g_theUnitDB->Get(idx2);
 
@@ -697,8 +697,8 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	Unit u1; u1.m_id = (uint32)item1->GetUserData();
-	Unit u2; u2.m_id = (uint32)item2->GetUserData();
+	Unit u1; u1.m_id = (uintptr_t)item1->GetUserData();
+	Unit u2; u2.m_id = (uintptr_t)item2->GetUserData();
 	if(!u1.IsValid() || !u2.IsValid())
 		return 0;
 
@@ -807,7 +807,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	if(err != AUI_ERRCODE_OK)
 		return err;
 
-	Unit u ((uint32) cookie);
+	Unit u ((uint32)(uintptr_t) cookie);
 	Assert(u.IsValid());
 	if(!u.IsValid())
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -927,7 +927,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
     ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
 	if(!item) return;
 
-	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
+	Unit u((uint32)(uintptr_t)(item->GetUserData()));
 	Assert(u.IsValid());
 
 	if (u.IsValid())
@@ -1015,7 +1015,7 @@ void UnitManager::DisbandSelected()
 
 		if(theList == m_tacticalList) {
 
-			Unit u; u.m_id = (uint32)item->GetUserData();
+			Unit u; u.m_id = (uintptr_t)item->GetUserData();
 
 			m_lastDisbandedUnit = u.m_id;
 			if(g_network.IsClient()) {
@@ -1026,7 +1026,7 @@ void UnitManager::DisbandSelected()
 								   GEA_End);
 		} else if(theList == m_statsList) {
 
-			sint32 unitType = (sint32)item->GetUserData();
+			sint32 unitType = (intptr_t)item->GetUserData();
 			sint32 i;
 			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 			Assert(pl);

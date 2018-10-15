@@ -29,7 +29,6 @@
 // - Added size argument to Set*Data methods for increasing portability
 //
 //----------------------------------------------------------------------------
-
 #include "c3.h"
 #include "Sprite.h"
 

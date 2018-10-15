@@ -8,6 +8,10 @@
 #include <stdarg.h>
 #include <crtdbg.h>
 #include <mmsystem.h>
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 LogClass LOG_FATAL = "Fatal";
 LogClass LOG_ERR = "Error";
