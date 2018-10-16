@@ -581,13 +581,13 @@ public:
     BOOL		IsUseRedbookAudio() const		{ return m_useRedbookAudio; }
 
 #ifdef _BFR_
-    BOOL		IsRequireCD() const				{ return TRUE; }
+	BOOL		IsRequireCD() const				{ return FALSE; }
 #else
     BOOL		IsRequireCD() const				{ return m_requireCD; }
 #endif
 
 #ifdef _BFR_
-    BOOL		IsProtected() const				{ return TRUE;}
+	BOOL		IsProtected() const				{ return FALSE;}
 #else
     BOOL		IsProtected() const				{ return m_protected;}
 #endif
