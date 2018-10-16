@@ -1,7 +1,7 @@
 ################################################################################
 # builder
 ################################################################################
-FROM ubuntu:14.04 as builder
+FROM i386/ubuntu:14.04 as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev build-essential \
@@ -29,7 +29,7 @@ COPY ctp2/ /ctp2/
 
 RUN cd /ctp2 && \
     make bootstrap && \
-    LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/" \
+    LD_LIBRARY_PATH="/usr/lib/i386-linux-gnu/" \
     CFLAGS="-fpermissive -Wl,--no-as-needed -m32" \
     CXXFLAGS="-fpermissive -Wl,--no-as-needed -m32" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules && \
