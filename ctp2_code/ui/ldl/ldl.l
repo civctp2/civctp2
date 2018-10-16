@@ -16,6 +16,8 @@
 #include <windows.h>
 #else
 #include "windows.h"
+#include "cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
 #endif
 #include "ldlif.h"
 

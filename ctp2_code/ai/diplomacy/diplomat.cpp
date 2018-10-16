@@ -129,6 +129,12 @@ using namespace std;
 #include "net_diplomacy.h"
 
 #include "RandGen.h"
+
+#ifdef __linux__
+#include "../ctp/cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
+
 extern	RandomGenerator *g_rand;
 
 using namespace ai;

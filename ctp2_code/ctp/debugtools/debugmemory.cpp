@@ -51,6 +51,11 @@
 #include <windows.h>		
 #include <string.h>
 
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
+
 #ifndef WIN32
 #include <stdlib.h>
 #endif

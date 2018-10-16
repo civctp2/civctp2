@@ -8,6 +8,10 @@
 
 
 #include "GWCivRecord.h"
+#ifdef __linux__
+#include "../../ctp/cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 
 class GWUnitRecord {
