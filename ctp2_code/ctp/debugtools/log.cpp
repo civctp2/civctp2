@@ -23,6 +23,11 @@ typedef int time_t
 #include <SDL.h>
 #endif
 
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
+
 LogClass LOG_FATAL = "Fatal";
 LogClass LOG_ERR = "Error";
 LogClass LOG_WARN = "Warning";

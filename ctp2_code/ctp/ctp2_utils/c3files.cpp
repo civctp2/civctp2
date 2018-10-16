@@ -75,6 +75,8 @@
 #include <mntent.h>
 #include <paths.h>
 #include <pwd.h>
+#include "cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
 #endif
 
 extern ProfileDB *g_theProfileDB;
@@ -99,7 +101,7 @@ FILE* c3files_fopen(C3DIR dirID, const MBCHAR *s1, const MBCHAR *s2)
 
 FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)
 {
-	return freopen(s1, s2, file);
+	return freopen(CI_FixName(s1), s2, file);
 }
 
 sint32 c3files_fclose(FILE *file)
@@ -292,7 +294,7 @@ bool c3files_PathIsValid(MBCHAR *path)
 #if defined(WIN32)
    r = _stat(path, &tmpstat);
 #else
-   r = stat(path, &tmpstat);
+   r = stat(CI_FixName(path), &tmpstat);
 #endif
 
 	if (!r) return TRUE;
@@ -305,7 +307,7 @@ bool c3files_CreateDirectory(const MBCHAR *path)
 	return CreateDirectory((const LPCSTR *) path, NULL);
 #else
 	mode_t mask = 0777;
-	return mkdir(path, mask);
+	return mkdir(CI_FixName(path), mask);
 #endif
 }
 
@@ -369,7 +371,7 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 
 	FindClose(lpFileList);
 #else
-        DIR *dir = opendir(path);
+        DIR *dir = opendir(CI_FixName(path));
 	if (!dir)
 		return FALSE;
 	struct dirent *dent = NULL;

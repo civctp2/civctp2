@@ -57,6 +57,12 @@
 #include "targautils.h"
 #include "rimutils.h"
 
+#ifdef __linux__
+#include "cifm.h"
+#else
+#define CI_FixName(a) a
+#endif
+
 #include "prjfile.h"
 extern ProjectFile *g_ImageMapPF;
 
@@ -72,13 +78,13 @@ AUI_ERRCODE TiffImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 	uint16	width, height;
 	uint16  *buffer;
 
-	TIFGetMetrics( filename, &width, &height);
+	TIFGetMetrics( CI_FixName(filename), &width, &height);
 
 	assert(0);
 	errcode = image->LoadEmpty( width, height, 16 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
-		c3errors_ErrorDialog("TIF Load", "Unable to find the file '%s'", filename);
+		c3errors_ErrorDialog("TIF Load", "Unable to find the file '%s'", CI_FixName(filename));
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
@@ -93,7 +99,7 @@ AUI_ERRCODE TiffImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 	{
 		BOOL		is565 = (surface->PixelFormat() == AUI_SURFACE_PIXELFORMAT_565);
 
-		TIFLoadIntoBuffer16( filename, &width, &height, (uint16)surface->Pitch(), buffer, is565);
+		TIFLoadIntoBuffer16( CI_FixName(filename), &width, &height, (uint16)surface->Pitch(), buffer, is565);
 
 		errcode = surface->Unlock( buffer );
 
@@ -120,15 +126,15 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 	int		bpp;
 
 #ifdef _WIN322
-	if (_access(filename, 0) != 0) {
+	if (_access(CI_FixName(filename), 0) != 0) {
 #else
 	struct stat st;
-	if (stat(filename, &st) != 0) {
+	if (stat(CI_FixName(filename), &st) != 0) {
 #endif
-		return LoadRIM(filename, image);
+		return LoadRIM(CI_FixName(filename), image);
 	}
 
-	if (!Get_TGA_Dimension(filename, width, height, bpp)) {
+	if (!Get_TGA_Dimension(CI_FixName(filename), width, height, bpp)) {
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
@@ -140,9 +146,9 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
 		MBCHAR	s[200];
-		sprintf(s, "Unable to load the file '%s' (w:%d, h:%d)", filename, width, height);
+		sprintf(s, "Unable to load the file '%s' (w:%d, h:%d)", CI_FixName(filename), width, height);
 		DPRINTF(k_DBG_FIX, (s));
-		c3errors_ErrorDialog("Targa Load", s, filename);
+		c3errors_ErrorDialog("Targa Load", s, CI_FixName(filename));
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
@@ -155,7 +161,7 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-		if (Load_TGA_File(filename, (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE))
+		if (Load_TGA_File(CI_FixName(filename), (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE))
         {
 		    errcode = surface->Unlock( buffer );
 
@@ -223,14 +229,14 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
     strcpy(rname, basename);
     rlen = strlen(rname);
     if (rlen < 3) {
-		c3errors_ErrorDialog("Targa Load", "Invalid filename '%s'", filename);
+		c3errors_ErrorDialog("Targa Load", "Invalid filename '%s'", CI_FixName(filename));
         return AUI_ERRCODE_LOADFAILED;
     }
     rname[rlen - 3] = 'r';
     rname[rlen - 2] = 'i';
     rname[rlen - 1] = 'm';
 
-    void * buffer = g_ImageMapPF ? g_ImageMapPF->getData(rname, &size) : NULL;
+    void * buffer = g_ImageMapPF ? g_ImageMapPF->getData(CI_FixName(rname), &size) : NULL;
 
     if (buffer == NULL) {
 		c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", rname);
@@ -274,7 +280,7 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(const MBCHAR *filename, aui_Image *image)
 	image->AttachSurface(as);
     } else {
 	fprintf(stderr, "aui_Image: Failed to load %s: %s\n",
-		filename, SDL_GetError());
+		CI_FixName(filename), SDL_GetError());
 	errcode = AUI_ERRCODE_LOADFAILED;
     }
 #else

@@ -59,6 +59,10 @@
 #ifndef _DEBUG
 #include "log_off.h"
 #endif
+#ifdef __linux__
+#include "../cifm.h"
+#define fopen(a, b) ci_fopen(a, b)
+#endif
 
 static int Debug_FunctionNameOpen (const char *map_file_name);
 
