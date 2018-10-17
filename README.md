@@ -1,3 +1,5 @@
+![civctp2 build status](https://api.travis-ci.org/civctp2/civctp2.png "civctp2 build status")
+
 #### civctp2
 - git svn import of http://ctp2.darkdust.net/anonsvn/
 - original hosting: https://ctp2.darkdust.net/
