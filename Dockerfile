@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     automake libtool unzip flex
 
 COPY ctp2/ /ctp2/
+COPY ctp2CD/ /opt/ctp2/
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
@@ -30,8 +31,6 @@ RUN cd /ctp2 && \
     make && \
     make install
 
-
-COPY ctp2CD/ /opt/ctp2/
 
 RUN cp -r /ctp2/ctp2_data/ /opt/ctp2/
 
