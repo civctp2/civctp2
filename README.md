@@ -1,4 +1,4 @@
-![civctp2 build status](https://api.travis-ci.org/civctp2/civctp2.png "civctp2 build status")
+[![Build Status](https://travis-ci.com/civctp2/civctp2.svg?branch=master)](https://travis-ci.com/civctp2/civctp2)
 
 #### civctp2
 - git svn import of http://ctp2.darkdust.net/anonsvn/
