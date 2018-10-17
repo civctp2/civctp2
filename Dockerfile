@@ -9,6 +9,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY ctp2/ /ctp2/
 
+ENV USERNAME diUser
+RUN useradd -m $USERNAME && \
+    echo "$USERNAME:$USERNAME" | chpasswd && \
+    usermod --shell /bin/bash $USERNAME && \
+    usermod -aG video,audio $USERNAME
+
+ENV HOME /opt
+RUN chown -R $USERNAME:$USERNAME /opt/
+RUN chown -R $USERNAME:$USERNAME /ctp2/
+USER $USERNAME
+
 RUN cd /ctp2 && \
     ./autogen.sh && \
     CC=/usr/bin/gcc-5 \
@@ -29,9 +40,3 @@ RUN cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
 WORKDIR /opt/ctp2/ctp2_program/ctp/
 
 CMD ["./ctp2"]
-
-ENV USERNAME diUser
-RUN useradd -m $USERNAME && \
-    echo "$USERNAME:$USERNAME" | chpasswd && \
-    usermod --shell /bin/bash $USERNAME && \
-    usermod -aG video,audio $USERNAME
