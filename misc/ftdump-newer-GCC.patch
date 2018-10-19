@@ -1,0 +1,32 @@
+--- ftdump.c.original	2004-12-21 06:26:50.000000000 -0500
++++ ftdump.c	2004-12-21 06:57:27.000000000 -0500
+@@ -140,8 +140,14 @@
+     old_memory += *var;
+   }
+ 
+-#define FOOTPRINT( field )  Save_Memory( &memory_footprint.##field )
+-
++#define FT_initial_overhead  memory_footprint.initial_overhead
++#define FT_face_object       memory_footprint.face_object
++#define FT_glyph_object      memory_footprint.glyph_object
++#define FT_first_instance    memory_footprint.first_instance
++#define FT_second_instance   memory_footprint.second_instance
++     
++#define FOOTPRINT( field )  Save_Memory( &FT_ ## field )
++  
+ 
+   static void
+   Print_Mem( long  val, char*  string )
+@@ -152,10 +158,8 @@
+              string );
+   }
+ 
+-#define PRINT_MEM( field, string ) \
+-          Print_Mem( memory_footprint.##field, string )
+-
+-
++ #define PRINT_MEM( field, string )  Print_Mem( FT_ ## field, string )
++ 
+   /* Print the memory footprint */
+ 
+   void
