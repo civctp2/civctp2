@@ -8,7 +8,7 @@ FTLIBDIR = lib
 FTTESTDIR = test
 FTPODIR = po
 
-all: ttlib tttest ttpo
+all: ttlib ttpo
 
 debug: ttlibdebug tttest ttpo
 
