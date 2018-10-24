@@ -201,7 +201,7 @@ BuildingRecord.cpp \
 BuildingRecord.h: BuildingRecord.stamp
 
 BuildingRecord.stamp: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB) \
-		CivilisationRecord.h \
+		CivilisationRecord.h WonderRecord.h \
 		TerrainImprovementRecord.h
 	$(CTPDB) . < $<
 	touch $@
@@ -510,11 +510,9 @@ WonderMovieRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 	touch $@
 
 WonderRecord.cpp \
-WonderRecord.h: WonderRecord.stamp
+WonderRecord.h: WonderRecord.stamp BuildingRecord.stamp FeatRecord.stamp
 
 WonderRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb \
-		BuildingRecord.h \
-		FeatRecord.h \
 		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
