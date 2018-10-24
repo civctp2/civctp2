@@ -17,6 +17,9 @@ addons:
 compiler:
     - g++
 
+services:
+    - docker
+
 #Build steps
 before_install:
     - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
@@ -26,3 +29,4 @@ script:
     - ./autogen.sh
     - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" ./configure --enable-silent-rules
     - make
+    - ./docker_build.sh
