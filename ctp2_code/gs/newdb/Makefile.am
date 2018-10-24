@@ -201,7 +201,7 @@ BuildingRecord.cpp \
 BuildingRecord.h: BuildingRecord.stamp
 
 BuildingRecord.stamp: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB) \
-		CivilisationRecord.h WonderRecord.h \
+		CivilisationRecord.h \
 		TerrainImprovementRecord.h
 	$(CTPDB) . < $<
 	touch $@
@@ -251,7 +251,9 @@ ConstRecord.stamp: $(ctp2_code)/gs/newdb/Const.cdb $(CTPDB)
 CultureRecord.cpp \
 CultureRecord.h: CultureRecord.stamp
 
-CultureRecord.stamp: $(ctp2_code)/gs/newdb/culture.cdb $(CTPDB)
+CultureRecord.stamp: $(ctp2_code)/gs/newdb/culture.cdb \
+		BuildingRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -296,7 +298,9 @@ EndGameObjectRecord.stamp: $(ctp2_code)/gs/newdb/EndGameObject.cdb \
 FeatRecord.cpp \
 FeatRecord.h: FeatRecord.stamp
 
-FeatRecord.stamp: $(ctp2_code)/gs/newdb/feat.cdb $(CTPDB)
+FeatRecord.stamp: $(ctp2_code)/gs/newdb/feat.cdb \
+		BuildingRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -476,7 +480,9 @@ UnitBuildListRecord.stamp: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 UnitpromotionRecord.cpp \
 UnitpromotionRecord.h: UnitpromotionRecord.stamp
 
-UnitpromotionRecord.stamp: $(ctp2_code)/gs/newdb/unitpromotion.cdb $(CTPDB)
+UnitpromotionRecord.stamp: $(ctp2_code)/gs/newdb/unitpromotion.cdb \
+		BuildingRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
@@ -506,7 +512,10 @@ WonderMovieRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 WonderRecord.cpp \
 WonderRecord.h: WonderRecord.stamp
 
-WonderRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
+WonderRecord.stamp: $(ctp2_code)/gs/newdb/wonder.cdb \
+		BuildingRecord.h \
+		FeatRecord.h \
+		$(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 
