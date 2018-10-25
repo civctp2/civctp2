@@ -720,7 +720,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 70 );
 
-	size_t ulLen = 0;
+	uint32 ulLen = 0;
 	n = c3files_fread(&ulLen, sizeof(ulLen), 1, fpLoad);
 	Assert(n==1);
 	if (n!=1)
@@ -739,7 +739,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 90 );
 
-	size_t	compressedSize = 0;
+	uint32	compressedSize = 0;
 	n = c3files_fread(&compressedSize, sizeof(compressedSize), 1, fpLoad);
 	Assert(n==1);
 	if (n!=1)
