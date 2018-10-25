@@ -25,4 +25,4 @@ before_install:
 script: 
     - ./autogen.sh
     - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" ./configure --enable-silent-rules
-    - make
+    - make -j"$(nproc)"
