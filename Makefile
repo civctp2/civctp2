@@ -56,7 +56,7 @@ bootstrap: bootstrap-anet
 	autoheader
 	libtoolize --force --copy
 	automake --foreign --add-missing --copy
-	autoconf
+	autoreconf --force --install
 	@echo " "
 	@echo "Bootstraping complete."
 	@echo " "
