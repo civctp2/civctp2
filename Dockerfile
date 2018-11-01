@@ -18,7 +18,6 @@ RUN chown -R $USERNAME:$USERNAME /opt/
 USER $USERNAME
 
 COPY --chown=diUser:diUser ./ /ctp2/
-COPY --chown=diUser:diUser ctp2CD/ /opt/ctp2/
 
 RUN cd /ctp2 && \
     ./autogen.sh && \
@@ -30,11 +29,3 @@ RUN cd /ctp2 && \
     make && \
     make install
 
-
-RUN cp -r /ctp2/ctp2_data/ /opt/ctp2/
-
-RUN cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
-
-WORKDIR /opt/ctp2/ctp2_program/ctp/
-
-CMD ["./ctp2"]
