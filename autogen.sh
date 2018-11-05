@@ -14,6 +14,21 @@ automake --foreign --add-missing --copy
 echo "Running autoconf..."
 autoconf
 echo " "
+echo "Preparing freetype 1.3"
+cd ctp2_code/libs/freetype-1.3.1
+echo "Running aclocal..."
+aclocal
+echo "Running autoheader..."
+autoheader
+echo "Running libtoolize..."
+libtoolize --force --copy
+#echo "Running automake..."
+#automake --foreign --add-missing --copy
+echo "Running autoconf..."
+autoconf
+#hack hack hack
+cp ft_conf.h.am ft_conf.h.in
+cd ../../..
 echo "Bootstraping anet now"
 cd ctp2_code/libs/anet
 make bootstrap
