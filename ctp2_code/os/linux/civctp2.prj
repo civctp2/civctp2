@@ -1868,7 +1868,7 @@ module.source.files=\
 	../../../ctp2_code/gfx/spritesys/EffectActor.cpp\
 	../../../ctp2_code/gfx/spritesys/Actor.cpp\
 	../../../ctp2_code/gfx/spritesys/ProjectileSpriteGroup.cpp\
-	../../../ctp2_code/gfx/spritesys/goodactor.cpp\
+	../../../ctp2_code/gfx/spritesys/GoodActor.cpp\
 	../../../ctp2_code/gfx/spritesys/TradeActor.cpp\
 	../../../ctp2_code/gfx/spritesys/effectspritegroup.cpp\
 	../../../ctp2_code/gfx/spritesys/spriteutils.cpp\

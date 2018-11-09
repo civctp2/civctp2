@@ -23,7 +23,7 @@ libgfxspritesys_la_SOURCES = \
 	Anim.cpp \
 	battleviewactor.cpp \
 	EffectActor.cpp \
-	goodactor.cpp \
+	GoodActor.cpp \
 	TradeActor.cpp \
 	UnitActor.cpp \
 	workeractor.cpp \
