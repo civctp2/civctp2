@@ -283,11 +283,13 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 				g_unitSpriteGroupList->RefreshBasicLoads(GROUPTYPE_UNIT);
 			}
 		}
-		// @todo fix updating good anims option mid-game.
-		// This doesn't work for goods, unlike units above.
 		if (s_goodAnimToggled) {
 			if (g_civApp->IsGameLoaded()) {
 				g_goodSpriteGroupList->RefreshBasicLoads(GROUPTYPE_GOOD);
+			}
+			if (g_tiledMap) {
+			        g_tiledMap->ReloadGoodActors(); // reloads goods according to g_theProfileDB->IsGoodAnim()
+				g_tiledMap->InvalidateMap();
 			}
 		}
 	}
