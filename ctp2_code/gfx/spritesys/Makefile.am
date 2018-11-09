@@ -31,7 +31,7 @@ libgfxspritesys_la_SOURCES = \
 	effectspritegroup.cpp \
 	FacedSprite.cpp \
 	FacedSpriteWshadow.cpp \
-	goodspritegroup.cpp \
+	GoodSpriteGroup.cpp \
 	Sprite.cpp \
 	spritefile.cpp \
 	SpriteGroup.cpp \

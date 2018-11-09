@@ -348,7 +348,7 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		break;
 	case GS_GOODANIMS:
 		func = &ProfileDB::SetGoodAnim;
-		//s_goodAnimToggled = TRUE;
+		s_goodAnimToggled = TRUE;
 		break;
 	case GS_CITYPROD:
 		func = &ProfileDB::SetShowCityProduction;
