@@ -65,6 +65,8 @@
 extern aui_UI		*g_ui;
 
 
+c3_ListBox *c3_ListBox::ms_mouseFocusListBox = NULL;
+
 c3_ListBox::c3_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -150,6 +152,9 @@ c3_ListBox::c3_ListBox(
 
 c3_ListBox::~c3_ListBox()
 {
+	if (this == ms_mouseFocusListBox){
+		ms_mouseFocusListBox = NULL;
+	}
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
@@ -480,4 +485,51 @@ AUI_ERRCODE c3_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	}
 
 	return AUI_ERRCODE_OK;
+}
+
+void c3_ListBox::ForceScroll(sint32 deltaX, sint32 deltaY){
+    m_scrollDx = 0;
+    m_scrollDy = (deltaY == 0) ? 0 : ((deltaY < 0) ? -1 : 1);
+    ScrollList();
+    }
+
+void c3_ListBox::MouseMoveInside( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseMoveInside(mouseData);
+    c3_ListBox::SetMouseFocusListBox(this);
+    }
+
+void c3_ListBox::MouseMoveOver( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseMoveOver(mouseData);
+    c3_ListBox::SetMouseFocusListBox(this);
+    }
+
+void c3_ListBox::MouseMoveOutside( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseMoveOutside(mouseData);
+    }
+
+void c3_ListBox::MouseMoveAway( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseMoveAway(mouseData);
+    c3_ListBox::SetMouseFocusListBox(NULL);
+    }
+
+void c3_ListBox::MouseLDragOver( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseLDragOver(mouseData);
+    c3_ListBox::SetMouseFocusListBox(this);
+    }
+
+void c3_ListBox::MouseRDragOver( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseRDragOver(mouseData);
+    c3_ListBox::SetMouseFocusListBox(this);
+    }
+
+void c3_ListBox::MouseRDragAway( aui_MouseEvent *mouseData ){
+    if (IsDisabled()) return;
+    aui_ListBox::MouseRDragAway(mouseData);
+    c3_ListBox::SetMouseFocusListBox(NULL);
 }
